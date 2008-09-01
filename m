@@ -1,116 +1,102 @@
-From: Will Wagner <will_wagner@carallon.com>
-Date: Mon, 01 Sep 2008 16:15:37 +0100
-Subject: [Buildroot] xserver help
-In-Reply-To: <46a136670808291113v4695d5dcm1f6d8fa893869b8a@mail.gmail.com>
-References: <48B83724.2060709@carallon.com>
-	<46a136670808291113v4695d5dcm1f6d8fa893869b8a@mail.gmail.com>
-Message-ID: <48BC0719.1010306@carallon.com>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Mon,  1 Sep 2008 08:33:12 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/iperf
+Message-ID: <20080901153312.CAFEE3C6B6@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-John Voltz wrote:
+Author: jacmet
+Date: 2008-09-01 08:33:12 -0700 (Mon, 01 Sep 2008)
+New Revision: 23296
 
-> First you need to decide whether you want to use the tinyX (also known 
-> as kdrive or framebuffer X) or the modular X.org server.
+Log:
+iperf: convert to Makefile.autotools.in format
 
-I need modular X.org
+Modified:
+   trunk/buildroot/package/iperf/iperf.mk
 
-  Then you need
-> the X libraries, I would just select them all, unless your file system 
-> space is limited. Then select the fonts you want. And last, if you are 
-> building the modular system, you need the xdriver_xf86-video-intel for 
-> your video, then the mouse (xdriver_xf86-input-mouse) and keyboard 
-> (xdriver_xf86-input-keyboard) drivers.
 
-Have done all this. Not sure which X applications I need.
-
-  You will need to create an
-> xorg.conf file for your system as well, and save it to 
-> /etc/X11/xorg.conf. I think there is an example in the default target 
-> skeleton directory in buildroot.
-
-I am able to create a config file with X -configure
-
-I could not find any examples in buildroot
-
-When I try starting X I get the following:
-
-# X -config xorg.conf.new
-_XSERVTransSocketOpenCOTSServer: Unable to open socket for inet6
-_XSERVTransOpen: transport open failed for inet6/vip:0
-_XSERVTransMakeAllCOTSServerListeners: failed to open listener for inet6
-
-X.Org X Server 1.4.1
-Release Date: 5 September 2007
-X Protocol Version 11, Revision 0
-Build Operating System: Linux 2.6.25-2-486 i686
-Current Operating System: Linux vip 2.6.26.3 #6 SMP PREEMPT Fri Aug 29 19:25:41
-BST 2008 i686
-Build Date: 29 August 2008  05:46:10PM
-
-         Before reporting problems, check http://wiki.x.org
-         to make sure that you have the latest version.
-Module Loader present
-Markers: (--) probed, (**) from config file, (==) default setting,
-         (++) from command line, (!!) notice, (II) informational,
-         (WW) warning, (EE) error, (NI) not implemented, (??) unknown.
-(==) Log file: "/usr/var/log/Xorg.0.log", Time: Thu Jan 12 21:48:14 2006
-(++) Using config file: "xorg.conf.new"
-(WW) intel: No matching Device section for instance (BusID PCI:0:2:1) found
-(II) Module "ddc" already built-in
-(II) Module "i2c" already built-in
-(EE) intel(0): SDVO: No active TMDS outputs (0x0000)
-(EE) intel(0): SDVO: No active TMDS outputs (0x0000)
-(EE) intel(0): Couldn't get SDVO clock rate multiplier
-(EE) intel(0): Couldn't get SDVO clock rate multiplier
-(EE) intel(0): Output Unknown-1 enabled but has no modes
-(EE) intel(0): Output Unknown-2 enabled but has no modes
-(II) Module "ramdac" already bui[  333.575105] [drm] Initialized i915 1.6.0 2006
-0119 on minor 0
-lt-in
-modprobe: /etc/modprobe.d: No such file or directory
-(EE) intel(0): Couldn't get SDVO clock rate multiplier
-(EE) intel(0): Couldn't get SDVO clock rate multiplier
-(EE) AIGLX error: dlopen of /usr/lib/dri/i915_dri.so failed (File not found)
-(EE) AIGLX: reverting to software rendering
-sh: /usr/bin/xkbcomp: not found
-(EE) Error compiling keymap (server-0)
-(EE) XKB: Couldn't compile keymap
-(EE) XKB: Couldn't open rules file /usr/share/X11/xkb/rules/xorg
-Could not init font path element /usr/lib/X11/fonts/OTF, removing from list!
-
-Fatal server error:
-could not open default font 'fixed'
-
-Looking at what is in the root filesystem there indeed doesn't seem to be a fixed font 
-folder but I can't find a package that would add them.
-
-> 
-> On your first boot you will also need to run fontconfig to build your 
-> font cache, or it will take bloody ages for any applications to start in 
-> X. Make sure your fonts end up in /usr/share/X11/fonts, or make a 
-> symbolic link to them from there.
-> 
-
-I have lib fontconfig built but there is no application fontconfig. Do you mean you have 
-to run the fc-cache command?
-
-Also buildroot puts all the fonts into /usr/lib/X11/fonts but adding the sym link doesn't 
-seem to help. Seems like all the font paths are a bit messed up and not sure quite where 
-they should reside.
-
-I guess this isn't a buildroot problem per se and so I'll try on the freedesktop list.
-
-Thanks for your help.
-
-Will
-
--- 
-------------------------------------------------------------------------
-Will Wagner                                     will_wagner at carallon.com
-Senior Project Engineer                  Office Tel: +44 (0)20 7371 2032
-Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
-------------------------------------------------------------------------
+Changeset:
+Modified: trunk/buildroot/package/iperf/iperf.mk
+===================================================================
+--- trunk/buildroot/package/iperf/iperf.mk	2008-09-01 15:30:49 UTC (rev 23295)
++++ trunk/buildroot/package/iperf/iperf.mk	2008-09-01 15:33:12 UTC (rev 23296)
+@@ -7,67 +7,13 @@
+ IPERF_VERSION:=2.0.2
+ IPERF_SOURCE:=iperf-$(IPERF_VERSION).tar.gz
+ IPERF_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/iperf
+-IPERF_DIR:=$(BUILD_DIR)/iperf-$(IPERF_VERSION)
+-IPERF_CAT:=$(ZCAT)
++IPERF_AUTORECONF:=NO
++IPERF_INSTALL_STAGING:=NO
++IPERF_INSTALL_TARGET:=YES
++IPERF_INSTALL_TARGET_OPT:=DESTDIR=$(TARGET_DIR) install-strip
++IPERF_CONF_ENV:=ac_cv_func_malloc_0_nonnull=yes
++IPERF_CONF_OPT:=--disable-dependency-tracking --disable-web100 $(DISABLE_IPV6)
+ 
+-$(DL_DIR)/$(IPERF_SOURCE):
+-	$(WGET) -P $(DL_DIR) $(IPERF_SITE)/$(IPERF_SOURCE)
++IPERF_DEPENDENCIES:=uclibc
+ 
+-$(IPERF_DIR)/.unpacked: $(DL_DIR)/$(IPERF_SOURCE)
+-	$(IPERF_CAT) $(DL_DIR)/$(IPERF_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(IPERF_DIR) package/iperf/ iperf\*.patch
+-	$(CONFIG_UPDATE) $(IPERF_DIR)
+-	touch $(IPERF_DIR)/.unpacked
+-
+-$(IPERF_DIR)/.configured: $(IPERF_DIR)/.unpacked
+-	(cd $(IPERF_DIR); rm -rf config.cache; \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		$(TARGET_CONFIGURE_ARGS) \
+-		ac_cv_func_malloc_0_nonnull=yes \
+-		./configure \
+-		--with-gnu-ld \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		$(DISABLE_IPV6) \
+-		--disable-dependency-tracking \
+-		--disable-web100 \
+-		--prefix=/usr \
+-		--exec-prefix=/usr \
+-		--bindir=/usr/bin \
+-		--sbindir=/usr/sbin \
+-		--libexecdir=/usr/sbin \
+-		--sysconfdir=/etc \
+-		--datadir=/usr/share \
+-		--localstatedir=/var \
+-		--mandir=/usr/man \
+-		--infodir=/usr/info \
+-		--includedir=$(STAGING_DIR)/usr/include \
+-	)
+-	touch $(IPERF_DIR)/.configured
+-
+-$(IPERF_DIR)/src/iperf: $(IPERF_DIR)/.configured
+-	$(MAKE) CC=$(TARGET_CC) -C $(IPERF_DIR)
+-	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(IPERF_DIR)/src/iperf
+-
+-$(TARGET_DIR)/usr/bin/iperf: $(IPERF_DIR)/src/iperf
+-	cp $(IPERF_DIR)/src/iperf $(TARGET_DIR)/usr/bin/iperf
+-
+-iperf: $(TARGET_DIR)/usr/bin/iperf
+-
+-iperf-source: $(DL_DIR)/$(IPERF_SOURCE)
+-
+-iperf-clean:
+-	rm -f $(TARGET_DIR)/usr/bin/iperf
+-	-$(MAKE) -C $(IPERF_DIR) clean
+-
+-iperf-dirclean:
+-	rm -rf $(IPERF_DIR)
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(strip $(BR2_PACKAGE_IPERF)),y)
+-TARGETS+=iperf
+-endif
++$(eval $(call AUTOTARGETS,package,iperf))
