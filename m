@@ -1,80 +1,139 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon,  1 Sep 2008 03:51:31 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package:  libconfig
-Message-ID: <20080901105131.B130B3C66E@busybox.net>
+From: udmd-eric wann <udmderic@gmail.com>
+Date: Mon, 1 Sep 2008 21:34:55 +0800
+Subject: [Buildroot] build qtopia4 error
+Message-ID: <46361d9e0809010634u7a2860cbsa38ebac8798635be@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-09-01 03:51:31 -0700 (Mon, 01 Sep 2008)
-New Revision: 23291
+Hi:
 
-Log:
-package: add libconfig package
-
-Added:
-   trunk/buildroot/package/libconfig/
-   trunk/buildroot/package/libconfig/Config.in
-   trunk/buildroot/package/libconfig/libconfig.mk
-
-Modified:
-   trunk/buildroot/package/Config.in
+     Sorry if my questions is stupid, I am a complete newbie for qtopia.
+     I am using buildroot-20080820.tar.bz2, my target is arm (arm926t).
+     I try to enable qtopia4 package, this is my part setting for qtopia
 
 
-Changeset:
-Modified: trunk/buildroot/package/Config.in
-===================================================================
---- trunk/buildroot/package/Config.in	2008-08-31 21:56:48 UTC (rev 23290)
-+++ trunk/buildroot/package/Config.in	2008-09-01 10:51:31 UTC (rev 23291)
-@@ -77,6 +77,7 @@
- if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
- source "package/less/Config.in"
- endif
-+source "package/libconfig/Config.in"
- source "package/libdaemon/Config.in"
- source "package/libelf/Config.in"
- source "package/libevent/Config.in"
 
-Added: trunk/buildroot/package/libconfig/Config.in
-===================================================================
---- trunk/buildroot/package/libconfig/Config.in	                        (rev 0)
-+++ trunk/buildroot/package/libconfig/Config.in	2008-09-01 10:51:31 UTC (rev 23291)
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_LIBCONFIG
-+	bool "libconfig"
-+	help
-+	  Libconfig is a simple library for manipulating structured
-+	  configuration files. The file format is more compact and more
-+	  readable than XML. And unlike XML, it is type-aware, so it is
-+	  not necessary to do string parsing in application code.
-+
-+	  http://www.hyperrealm.com/libconfig/
+           #
+           # other GUIs
+           #
 
-Added: trunk/buildroot/package/libconfig/libconfig.mk
-===================================================================
---- trunk/buildroot/package/libconfig/libconfig.mk	                        (rev 0)
-+++ trunk/buildroot/package/libconfig/libconfig.mk	2008-09-01 10:51:31 UTC (rev 23291)
-@@ -0,0 +1,20 @@
-+#############################################################
-+#
-+# libconfig
-+#
-+#############################################################
-+LIBCONFIG_VERSION:=1.3
-+LIBCONFIG_SOURCE:=libconfig-$(LIBCONFIG_VERSION).tar.gz
-+LIBCONFIG_SITE:=http://www.hyperrealm.com/libconfig/
-+LIBCONFIG_AUTORECONF:=NO
-+LIBCONFIG_INSTALL_STAGING:=YES
-+LIBCONFIG_INSTALL_TARGET:=YES
-+LIBCONFIG_INSTALL_TARGET_OPT:=DESTDIR=$(TARGET_DIR) install-strip
-+
-+ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
-+LIBCONFIG_CONF_OPT:=--disable-cxx
-+endif
-+
-+LIBCONFIG_DEPENDENCIES = uclibc
-+
-+$(eval $(call AUTOTARGETS,package,libconfig))
+           BR2_PACKAGE_QTOPIA4=y
+           # BR2_PACKAGE_QTOPIA4_DEBUG is not set
+           BR2_PACKAGE_QTOPIA4_SHARED=y
+           # BR2_PACKAGE_QTOPIA4_STATIC is not set
+           BR2_PACKAGE_QTOPIA4_LICENSE_TYPE_GPL=y
+           # BR2_PACKAGE_QTOPIA4_LICENSE_TYPE_COMMERCIAL is not set
+           BR2_PACKAGE_QTOPIA4_GPL_LICENSE_APPROVED=y
+           # BR2_PACKAGE_QTOPIA4_QT3SUPPORT is not set
+           BR2_PACKAGE_QTOPIA4_DEPTHS="-depths 24,16,8"
+           # BR2_PACKAGE_QTOPIA4_GIF is not set
+           # BR2_PACKAGE_QTOPIA4_LIBMNG is not set
+           BR2_PACKAGE_QTOPIA4_NOJPEG=y
+           # BR2_PACKAGE_QTOPIA4_SYSTEMJPEG is not set
+           # BR2_PACKAGE_QTOPIA4_QTJPEG is not set
+           BR2_PACKAGE_QTOPIA4_NOPNG=y
+           # BR2_PACKAGE_QTOPIA4_SYSTEMPNG is not set
+           # BR2_PACKAGE_QTOPIA4_QTPNG is not set
+           BR2_PACKAGE_QTOPIA4_NOTIFF=y
+           # BR2_PACKAGE_QTOPIA4_SYSTEMTIFF is not set
+           # BR2_PACKAGE_QTOPIA4_QTTIFF is not set
+           BR2_PACKAGE_QTOPIA4_QTZLIB=y
+           # BR2_PACKAGE_QTOPIA4_SYSTEMZLIB is not set
+           BR2_PACKAGE_QTOPIA4_NOFREETYPE=y
+           # BR2_PACKAGE_QTOPIA4_QTFREETYPE is not set
+           # BR2_PACKAGE_QTOPIA4_SYSTEMFREETYPE is not set
+           BR2_PACKAGE_QTOPIA4_EMB_PLATFORM="arm"
+           # BR2_PACKAGE_QTOPIA4_SQL_MODULE is not set
+           # BR2_PACKAGE_QTOPIA4_XMLPATTERNS is not set
+           # BR2_PACKAGE_QTOPIA4_SVG is not set
+           # BR2_PACKAGE_QTOPIA4_WEBKIT is not set
+           # BR2_PACKAGE_QTOPIA4_OPENSSL is not set
+           ?
+              and then I got the following error:
+
+           ....[many warning for sqlite3.c]
+
+           ../../../3rdparty/sqlite/sqlite3.c:56791: warning:
+comparison between signed and unsigned
+           ../../../3rdparty/sqlite/sqlite3.c: In function 'flagPragma':
+           ../../../3rdparty/sqlite/sqlite3.c:56940: warning:
+comparison between signed and unsigned
+           ../../../3rdparty/sqlite/sqlite3.c: In function
+'sqlite3InitCallback':
+           ../../../3rdparty/sqlite/sqlite3.c:57987: warning: unused
+parameter 'argc'
+           ../../../3rdparty/sqlite/sqlite3.c:57987: warning: unused
+parameter 'azColName'
+           ../../../3rdparty/sqlite/sqlite3.c: In function 'sqlite3InitOne':
+           ../../../3rdparty/sqlite/sqlite3.c:58172: warning:
+comparison between signed and unsigned
+           ../../../3rdparty/sqlite/sqlite3.c: In function 'sqlite3JoinType':
+           ../../../3rdparty/sqlite/sqlite3.c:58845: warning:
+comparison between signed and unsigned
+           ../../../3rdparty/sqlite/sqlite3.c:58852: warning:
+comparison between signed and unsigned
+           ../../../3rdparty/sqlite/sqlite3.c: In function
+'matchOrderByTermToExprList':
+           ../../../3rdparty/sqlite/sqlite3.c:60145: warning: unused
+parameter 'idx'
+           ../../../3rdparty/sqlite/sqlite3.c: In function
+'sqlite3TriggersExist':
+           ../../../3rdparty/sqlite/sqlite3.c:63197: warning: unused
+parameter 'pParse'
+           ../../../3rdparty/sqlite/sqlite3.c: In function 'sqlite3RunVacuum':
+           ../../../3rdparty/sqlite/sqlite3.c:64192: warning:
+comparison is always true due to limited range of data type
+           ../../../3rdparty/sqlite/sqlite3.c:64290: warning:
+comparison between signed and unsigned
+           ../../../3rdparty/sqlite/sqlite3.c: In function 'sqlite3VtabUnlock':
+           ../../../3rdparty/sqlite/sqlite3.c:64427: warning:
+comparison between signed and unsigned
+           ../../../3rdparty/sqlite/sqlite3.c: In function 'bestIndex':
+           ../../../3rdparty/sqlite/sqlite3.c:66755: warning:
+comparison between signed and unsigned
+           ../../../3rdparty/sqlite/sqlite3.c: In function 'sqlite3WhereBegin':
+           ../../../3rdparty/sqlite/sqlite3.c:67119: warning:
+comparison between signed and unsigned
+           ../../../3rdparty/sqlite/sqlite3.c:67328: warning:
+comparison between signed and unsigned
+           ../../../3rdparty/sqlite/sqlite3.c: In function 'yyStackOverflow':
+           ../../../3rdparty/sqlite/sqlite3.c:69408: warning: unused
+parameter 'yypMinor'
+           ../../../3rdparty/sqlite/sqlite3.c: In function 'yy_syntax_error':
+           ../../../3rdparty/sqlite/sqlite3.c:70866: warning: unused
+parameter 'yymajor'
+           ../../../3rdparty/sqlite/sqlite3.c: In function 'binCollFunc':
+           ../../../3rdparty/sqlite/sqlite3.c:72008: warning: unused
+parameter 'NotUsed'
+           ../../../3rdparty/sqlite/sqlite3.c: In function
+'nocaseCollatingFunc':
+           ../../../3rdparty/sqlite/sqlite3.c:72031: warning: unused
+parameter 'NotUsed'
+           ../../../3rdparty/sqlite/sqlite3.c: In function 'sqlite3_close':
+           ../../../3rdparty/sqlite/sqlite3.c:72114: warning:
+comparison between signed and unsigned
+           ../../../3rdparty/sqlite/sqlite3.c: In function 'sqlite3_interrupt':
+           ../../../3rdparty/sqlite/sqlite3.c:72388: warning:
+comparison between signed and unsigned
+           ../../../3rdparty/sqlite/sqlite3.c:72388: warning:
+comparison between signed and unsigned
+           make[4]: *** [.obj/release-shared-emb-arm/sqlite3.o] Error 1
+           make[3]: *** [sub-sqlite-make_default] Error 2
+           make[2]: *** [sub-sqldrivers-make_default] Error 2
+           make[1]: *** [sub-plugins-make_default-ordered] Error 2
+           make: ***
+[/home/ericwann/buildroot/build_arm/qt-embedded-linux-opensource-src-4.4.0/.compiled]
+Error 2
+
+
+           So what's wrong with my setting? Thanks for your help.
+           And How should I do?
+
+
+           Best Regards
+
+
+           Eric Wann
