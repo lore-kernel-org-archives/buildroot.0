@@ -1,44 +1,36 @@
-From: Steven Woody <narkewoody@gmail.com>
-Date: Mon, 1 Sep 2008 16:02:48 +0800
-Subject: [Buildroot] Login exited
-Message-ID: <ed4892840809010102n6293e75ejc6caf1dd57a954db@mail.gmail.com>
+From: Daniel Laird <daniel.j.laird@nxp.com>
+Date: Mon, 1 Sep 2008 02:06:45 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package: games
+ games/ace_of_penguins games/gnuch etc...
+In-Reply-To: <COL102-DS131551BA49AC350CABE3EFDC630@phx.gbl>
+References: <20080829132737.BF3503C864@busybox.net>
+	<20080829153841.37df370c@atmel.com>
+	<BD79186B4FD85F4B8E60E381CAEE19097AE654@mi8nycmail19.Mi8.com>
+	<19223815.post@talk.nabble.com>
+	<COL102-DS131551BA49AC350CABE3EFDC630@phx.gbl>
+Message-ID: <19250901.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-The buildroot I am using is the 080831 snapshot. Now I see the boot
-prompt finally!  But I can't login:
+I have just tried to patch various games packages and java ones
+jamvm (packages/java/jamvm) works fine patch-version and patch-version.arch
+work
 
----
-Welcome to uClibc
-uClibc login: root
-Dec 31 17:01:05 nlmt auth.info login[195]: root login on 'ttyS0'
-Dec 31 17:01:05 nlmt daemon.info init: init: process '/sbin/getty -L
-ttyS0 115200 vt100' (pid 195) exited. Scheduling for restart.
-Dec 31 17:0
+ace_of_penguins - the libtool patch fails I think this a fault with libtool
+patch not the dir move
+lxdoom - patch target works
+rubix - patch target works
+gnuchess - patch target works
+vice - patch target works
 
+So I think the move is fine and that the issues are with making the libtool
+patch apply to more targets
+Daniel Laird
 
-Welcome to uClibc
-uClibc login: default
-Dec 31 17:01:05 nlmt daemon.info init: init: process '/sbin/getty -L
-ttyS0 115200 vt100' (pid 195) exited. Scheduling for restart.
-Dec 31 17:0
----
-
-And, I got see a suspicious messages just after the kernel booted:
-
----
-VFS: Mounted root (cramfs filesystem) readonly.
-Freeing init memory: 84K
-Error -3 while decompressing!
-c0925384(-7384812)->c3e38000(4096)
----
-
-I think I am so near to success, please help me! Thanks.
-
--
-narke
+-- 
+View this message in context: http://www.nabble.com/svn-commit%3A-trunk-buildroot-package%3A-games-games-ace_of_penguins-games-gnuch-etc...-tp19219940p19250901.html
+Sent from the BuildRoot mailing list archive at Nabble.com.
