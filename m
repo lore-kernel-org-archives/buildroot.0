@@ -1,46 +1,31 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Tue, 30 Sep 2008 23:29:10 +0200
-Subject: [Buildroot] wake on ring support
-In-Reply-To: <811828.28896.qm@web26001.mail.ukl.yahoo.com>
-References: <BAY107-W4782F02FE41BDF61DCBA39D430@phx.gbl>
-	<811828.28896.qm@web26001.mail.ukl.yahoo.com>
-Message-ID: <20080930212910.GE26825@mx.loc>
+From: Steven Woody <narkewoody@gmail.com>
+Date: Mon, 1 Sep 2008 09:57:49 +0800
+Subject: [Buildroot] Still "Can't open /dev/tty1[2,3]", Please HELP
+Message-ID: <ed4892840808311857w6532170co3ae626bb8dae34a2@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Sep 30, 2008 at 09:07:06PM +0000, Will C wrote:
->> I am trying to get wake on ring working on an advantech
->> board with linux (built using buildroot, kernel version
->> 2.6.24). I can make linux go to sleep using the command echo
->> standby >/sys/power/state. But I am unable to wake it up
->> using wake on ring. Advantech documents applying 5 volts on
->> some pin to wake it up. Is there any parameter in buildroot
->> config which enables/disables this support? It does work
->> with windows Xp.
->
->I'm not sure if buildroot has specific support for this or not.
+After guess and guess and build and burn,  my rootfs still can not
+boot, it always get "Can't open /dev/tty1[2,3...]" after kernel loaded
+just load it.  I attached the full boot message and my buildroot
+.config, I hope, with best regards, someone could help me.
 
-This is unrelated to buildroot per se.
+Thanks in advance.
 
-I don't know what you mean with "ring", but, as Will wrote below, you
-can possibly use either ether-wake and/or rtcwake both of which are
-provided in busybox. Please refer to docs/README for further details on
-how to configure busybox to suite your needs.
->
->If it works in XP then it should work in Linux without using +5v on that pin. What is the device you are using to wake up the board? If you know what kind of bus it is connected to (and are using acpi) look in
->/proc/acpi/wakeup to see if it is wakeup enabled:
->
->cat /proc/acpi/wakeup
->
->if not do (for example with PCI0 device) :
->
->echo PCI0 > /proc/acpi/wakeup
->
->then try going to standby. If it works you will probably want to add it to your init scipts so that it is enabled whenever it goes into standby.
->
->Of course if it is a NIC then you also need to use ethtool, e.g:
->
->/usr/sbin/ethtool -s eth0 wol g
+
+-
+narke
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: .config
+Type: application/octet-stream
+Size: 16747 bytes
+Desc: not available
+Url : http://lists.busybox.net/pipermail/buildroot/attachments/20080901/3f3e1450/attachment-0002.obj 
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: bootmsg.txt
+Url: http://lists.busybox.net/pipermail/buildroot/attachments/20080901/3f3e1450/attachment-0002.txt 
