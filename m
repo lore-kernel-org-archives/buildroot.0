@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon,  1 Sep 2008 08:33:18 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/iperf
-Message-ID: <20080901153318.7F4883C786@busybox.net>
+Date: Mon,  1 Sep 2008 14:16:36 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/cups
+Message-ID: <20080901211636.6E3D23C6DD@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,31 +9,28 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-09-01 08:33:17 -0700 (Mon, 01 Sep 2008)
-New Revision: 23298
+Date: 2008-09-01 14:16:35 -0700 (Mon, 01 Sep 2008)
+New Revision: 23299
 
 Log:
-iperf: don't silently enable C++ support in toolchain
+cups: fix help text
 
 Modified:
-   trunk/buildroot/package/iperf/Config.in
+   trunk/buildroot/package/cups/Config.in
 
 
 Changeset:
-Modified: trunk/buildroot/package/iperf/Config.in
+Modified: trunk/buildroot/package/cups/Config.in
 ===================================================================
---- trunk/buildroot/package/iperf/Config.in	2008-09-01 15:33:15 UTC (rev 23297)
-+++ trunk/buildroot/package/iperf/Config.in	2008-09-01 15:33:17 UTC (rev 23298)
-@@ -1,8 +1,11 @@
- config BR2_PACKAGE_IPERF
- 	bool "iperf"
--	select BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_INSTALL_LIBSTDCPP
+--- trunk/buildroot/package/cups/Config.in	2008-09-01 15:33:17 UTC (rev 23298)
++++ trunk/buildroot/package/cups/Config.in	2008-09-01 21:16:35 UTC (rev 23299)
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_CUPS
+ 	bool "cups"
  	help
- 	  Internet Protocol bandwidth measuring tool for measuring
- 	  TCP/UDP performance.
+-		The Common Unix Print Subsystem
++	  The Common Unix Print Subsystem
  
- 	  http://dast.nlanr.net/projects/iperf/
-+
-+comment "iperf requires a toolchain with C++ support enabled"
-+	depends on !BR2_INSTALL_LIBSTDCPP
+-		http://www.cups.org
+-
++	  http://www.cups.org
