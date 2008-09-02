@@ -1,45 +1,36 @@
-From: hamish at uclibc.org <hamish@uclibc.org>
-Date: Mon,  1 Sep 2008 17:54:50 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/python
-Message-ID: <20080902005450.098BF3C685@busybox.net>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Tue, 2 Sep 2008 10:58:37 +1000
+Subject: [Buildroot] Still "Can't open /dev/tty1[2,3]", Please HELP
+In-Reply-To: <ed4892840808311857w6532170co3ae626bb8dae34a2@mail.gmail.com>
+References: <ed4892840808311857w6532170co3ae626bb8dae34a2@mail.gmail.com>
+Message-ID: <20080902005836.GA1637@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: hamish
-Date: 2008-09-01 17:54:49 -0700 (Mon, 01 Sep 2008)
-New Revision: 23300
+On Mon, Sep 01, 2008 at 09:57:49AM +0800, Steven Woody wrote:
+> After guess and guess and build and burn,  my rootfs still can not
+> boot, it always get "Can't open /dev/tty1[2,3...]" after kernel loaded
+> just load it.  I attached the full boot message and my buildroot
+> .config, I hope, with best regards, someone could help me.
 
-Log:
-Update to Python 2.4.5 (latest patch rev of 2.4)
-Remove the test suite before building, else it will fail to compile depending on what modules have been configured.
+I couldn't work out where your target_skeleton and device table are
+coming from based on your config. Do you have a device table, and does
+it have those /dev/tty1,2,3,4 devices?
+
+Maybe you could post the output of the build process.
+
+> VFS: Mounted root (cramfs filesystem) readonly.
+> Freeing init memory: 84K
+> mkdir: cannot create directory '/dev/pts': Read-only file system
+> mount: mounting devpts on /dev/pts failed: No such file or directory
+
+Your inittab is obviously trying to make directories in a read-only file
+system which isn't going to work. Not that it's related.
 
 
-Modified:
-   trunk/buildroot/package/python/python.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/python/python.mk
-===================================================================
---- trunk/buildroot/package/python/python.mk	2008-09-01 21:16:35 UTC (rev 23299)
-+++ trunk/buildroot/package/python/python.mk	2008-09-02 00:54:49 UTC (rev 23300)
-@@ -3,7 +3,7 @@
- # python
- #
- #############################################################
--PYTHON_VERSION=2.4.2
-+PYTHON_VERSION=2.4.5
- PYTHON_VERSION_SHORT=2.4
- PYTHON_SOURCE:=Python-$(PYTHON_VERSION).tar.bz2
- PYTHON_SITE:=http://python.org/ftp/python/$(PYTHON_VERSION)
-@@ -124,6 +124,7 @@
- ifneq ($(BR2_PACKAGE_PYTHON_SSL),y)
- 	export PYTHON_DISABLE_SSL=1
- endif
-+	rm -rf $(PYTHON_DIR)/Lib/test
- 	LD_LIBRARY_PATH=$(STAGING_DIR)/lib
- 	$(MAKE) CC=$(TARGET_CC) -C $(PYTHON_DIR) install \
- 		DESTDIR=$(TARGET_DIR) CROSS_COMPILE=yes \
+Hamish
+-- 
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
