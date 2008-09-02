@@ -1,45 +1,45 @@
-From: Steven Woody <narkewoody@gmail.com>
-Date: Tue, 2 Sep 2008 08:47:12 +0800
-Subject: [Buildroot] Login exited
-In-Reply-To: <ed4892840809010102n6293e75ejc6caf1dd57a954db@mail.gmail.com>
-References: <ed4892840809010102n6293e75ejc6caf1dd57a954db@mail.gmail.com>
-Message-ID: <ed4892840809011747w183e8e8bma1451d38c40e65c0@mail.gmail.com>
+From: hamish at uclibc.org <hamish@uclibc.org>
+Date: Mon,  1 Sep 2008 17:54:50 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/python
+Message-ID: <20080902005450.098BF3C685@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Author: hamish
+Date: 2008-09-01 17:54:49 -0700 (Mon, 01 Sep 2008)
+New Revision: 23300
 
-The buildroot I am using is the 080831 snapshot, the busybox is
-1.11.2. Now I see the boot
-prompt finally!  But I can't login:
+Log:
+Update to Python 2.4.5 (latest patch rev of 2.4)
+Remove the test suite before building, else it will fail to compile depending on what modules have been configured.
 
----
-Welcome to uClibc
-uClibc login: root
-Dec 31 17:01:05 nlmt auth.info login[195]: root login on 'ttyS0'
-Dec 31 17:01:05 nlmt daemon.info init: init: process '/sbin/getty -L
-ttyS0 115200 vt100' (pid 195) exited. Scheduling for restart.
-Dec 31 17:0
 
-Welcome to uClibc
-uClibc login: default
-Dec 31 17:01:05 nlmt daemon.info init: init: process '/sbin/getty -L
-ttyS0 115200 vt100' (pid 195) exited. Scheduling for restart.
-Dec 31 17:0
----
+Modified:
+   trunk/buildroot/package/python/python.mk
 
-And, I got see a suspicious messages just after the kernel booted:
----
-VFS: Mounted root (cramfs filesystem) readonly.
-Freeing init memory: 84K
-Error -3 while decompressing!
-c0925384(-7384812)->c3e38000(4096)
----
 
-I think I am so near to success, please help me! Thanks.
-
--
-narke
+Changeset:
+Modified: trunk/buildroot/package/python/python.mk
+===================================================================
+--- trunk/buildroot/package/python/python.mk	2008-09-01 21:16:35 UTC (rev 23299)
++++ trunk/buildroot/package/python/python.mk	2008-09-02 00:54:49 UTC (rev 23300)
+@@ -3,7 +3,7 @@
+ # python
+ #
+ #############################################################
+-PYTHON_VERSION=2.4.2
++PYTHON_VERSION=2.4.5
+ PYTHON_VERSION_SHORT=2.4
+ PYTHON_SOURCE:=Python-$(PYTHON_VERSION).tar.bz2
+ PYTHON_SITE:=http://python.org/ftp/python/$(PYTHON_VERSION)
+@@ -124,6 +124,7 @@
+ ifneq ($(BR2_PACKAGE_PYTHON_SSL),y)
+ 	export PYTHON_DISABLE_SSL=1
+ endif
++	rm -rf $(PYTHON_DIR)/Lib/test
+ 	LD_LIBRARY_PATH=$(STAGING_DIR)/lib
+ 	$(MAKE) CC=$(TARGET_CC) -C $(PYTHON_DIR) install \
+ 		DESTDIR=$(TARGET_DIR) CROSS_COMPILE=yes \
