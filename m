@@ -1,34 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 02 Sep 2008 15:29:06 +0200
-Subject: [Buildroot] Make error
-In-Reply-To: <ed4892840808310213w4e9edea5wa69beac5ebf7c7eb@mail.gmail.com>
-	(Steven Woody's message of "Sun\, 31 Aug 2008 17\:13\:20 +0800")
-References: <ed4892840808301750t13e320a6ne218b2a0e96168f@mail.gmail.com>
-	<87od3966tr.fsf@macbook.be.48ers.dk>
-	<ed4892840808310034y2b352388q9dd2ff90a614ee13@mail.gmail.com>
-	<ed4892840808310213w4e9edea5wa69beac5ebf7c7eb@mail.gmail.com>
-Message-ID: <87bpz6vfq5.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Tue,  2 Sep 2008 06:54:56 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/file
+Message-ID: <20080902135456.460643C66C@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Steven" == Steven Woody <narkewoody@gmail.com> writes:
+Author: jacmet
+Date: 2008-09-02 06:54:55 -0700 (Tue, 02 Sep 2008)
+New Revision: 23305
 
-Hi,
+Log:
+file: bump version and use official upstream instead of Debian
 
- Steven> Wait a moment ...!   After I turned on the 'avahi' in networking
- Steven> section and run make, I got the following error instead:
+Debian is a bit too volatile.
 
- Steven> cannot find -lintl
- Steven> collect2: ld returned 1 exit status
- Steven> make[3]: *** [libavahi-common.la] Error 1
+Modified:
+   trunk/buildroot/package/file/file.mk
 
- Steven> What do I do? Thanks.
 
-Strange. Avahi should depend (and select) libintl if you use a
-toolchain with locales enabled. Could you post your config please?
-
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/package/file/file.mk
+===================================================================
+--- trunk/buildroot/package/file/file.mk	2008-09-02 11:14:04 UTC (rev 23304)
++++ trunk/buildroot/package/file/file.mk	2008-09-02 13:54:55 UTC (rev 23305)
+@@ -3,9 +3,9 @@
+ # file
+ #
+ #############################################################
+-FILE_VERSION:=4.24
+-FILE_SOURCE:=file_$(FILE_VERSION).orig.tar.gz
+-FILE_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/f/file
++FILE_VERSION:=4.26
++FILE_SOURCE:=file-$(FILE_VERSION).tar.gz
++FILE_SITE:=ftp://ftp.astron.com/pub/file/
+ FILE_SOURCE_DIR:=$(BUILD_DIR)/file-$(FILE_VERSION)
+ FILE_DIR1:=$(TOOL_BUILD_DIR)/file-$(FILE_VERSION)-host
+ FILE_DIR2:=$(BUILD_DIR)/file-$(FILE_VERSION)-target
