@@ -1,36 +1,45 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon,  1 Sep 2008 14:16:36 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/cups
-Message-ID: <20080901211636.6E3D23C6DD@busybox.net>
+From: Steven Woody <narkewoody@gmail.com>
+Date: Tue, 2 Sep 2008 08:47:12 +0800
+Subject: [Buildroot] Login exited
+In-Reply-To: <ed4892840809010102n6293e75ejc6caf1dd57a954db@mail.gmail.com>
+References: <ed4892840809010102n6293e75ejc6caf1dd57a954db@mail.gmail.com>
+Message-ID: <ed4892840809011747w183e8e8bma1451d38c40e65c0@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-09-01 14:16:35 -0700 (Mon, 01 Sep 2008)
-New Revision: 23299
+Hi,
 
-Log:
-cups: fix help text
+The buildroot I am using is the 080831 snapshot, the busybox is
+1.11.2. Now I see the boot
+prompt finally!  But I can't login:
 
-Modified:
-   trunk/buildroot/package/cups/Config.in
+---
+Welcome to uClibc
+uClibc login: root
+Dec 31 17:01:05 nlmt auth.info login[195]: root login on 'ttyS0'
+Dec 31 17:01:05 nlmt daemon.info init: init: process '/sbin/getty -L
+ttyS0 115200 vt100' (pid 195) exited. Scheduling for restart.
+Dec 31 17:0
 
+Welcome to uClibc
+uClibc login: default
+Dec 31 17:01:05 nlmt daemon.info init: init: process '/sbin/getty -L
+ttyS0 115200 vt100' (pid 195) exited. Scheduling for restart.
+Dec 31 17:0
+---
 
-Changeset:
-Modified: trunk/buildroot/package/cups/Config.in
-===================================================================
---- trunk/buildroot/package/cups/Config.in	2008-09-01 15:33:17 UTC (rev 23298)
-+++ trunk/buildroot/package/cups/Config.in	2008-09-01 21:16:35 UTC (rev 23299)
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_CUPS
- 	bool "cups"
- 	help
--		The Common Unix Print Subsystem
-+	  The Common Unix Print Subsystem
- 
--		http://www.cups.org
+And, I got see a suspicious messages just after the kernel booted:
+---
+VFS: Mounted root (cramfs filesystem) readonly.
+Freeing init memory: 84K
+Error -3 while decompressing!
+c0925384(-7384812)->c3e38000(4096)
+---
+
+I think I am so near to success, please help me! Thanks.
+
 -
-+	  http://www.cups.org
+narke
