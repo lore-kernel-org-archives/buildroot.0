@@ -1,91 +1,118 @@
-From: Steven Woody <narkewoody@gmail.com>
-Date: Tue, 2 Sep 2008 18:27:34 +0800
-Subject: [Buildroot] Still "Can't open /dev/tty1[2,3]", Please HELP
-In-Reply-To: <MJEBLBOLLBKOACLOGNPBEEIHCBAA.e.krueper@solcon-systemtechnik.de>
-References: <ed4892840809011839w2b021ec5v26159eefa8389e41@mail.gmail.com>
-	<MJEBLBOLLBKOACLOGNPBEEIHCBAA.e.krueper@solcon-systemtechnik.de>
-Message-ID: <ed4892840809020327s1f9447e4g4cf60ce2920d2e10@mail.gmail.com>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Tue,  2 Sep 2008 04:07:50 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/bridge-utils
+Message-ID: <20080902110750.49CD93C658@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Sep 2, 2008 at 2:24 PM, Emil Kruper
-<e.krueper@solcon-systemtechnik.de> wrote:
->>But I still like to know what you mentioned 'device table'. I want to
->>ask, what is and where is the 'device table'?  I dont find the
->>concepts in buildroot on-line doucments.  Thanks.
->
-> Have a look at target/generic/device_table.txt and
-> target/generic/mini_device_table.txt.
+Author: jacmet
+Date: 2008-09-02 04:07:49 -0700 (Tue, 02 Sep 2008)
+New Revision: 23302
 
-sorry for the stupid ... I append the exact file with the folllowing line
-  /usr/local              d       755     0       0       -       -
-   -       -       -
-to ensure the target/generic/device_table.txt really works.  But after
-full build, I don't find /usr/local under the root. So,,,  what
-'device_table.txt' should I go to use?
+Log:
+bridge: convert to Makefile.autotools.in format
 
-> You define by the buildroot config which file is used to generate the
-> targets device table.
+Modified:
+   trunk/buildroot/package/bridge-utils/bridge.mk
 
-Where is the definition for the target device table file name?  Thanks.
 
->
-> Best regards
->
-> Emil Kruper
->
-> Von: buildroot-bounces at uclibc.org
-> [mailto:buildroot-bounces at uclibc.org]Im Auftrag von Steven Woody
-> Gesendet: Dienstag, 2. September 2008 03:40
-> An: buildroot at uclibc.org
-> Betreff: Re: [Buildroot] Still "Can't open /dev/tty1[2,3]", Please HELP
->
->
-> On Tue, Sep 2, 2008 at 8:58 AM, Hamish Moffatt <hamish@cloud.net.au> wrote:
->
->> I couldn't work out where your target_skeleton and device table are
->> coming from based on your config. Do you have a device table, and does
->> it have those /dev/tty1,2,3,4 devices?
->
-> The problem had gone away after I add udev to the packages.  I am not
-> sure whether the absence of udev is really the reason that cause the
-> previous "can't open /dev/tty?" problems.
->
-> But I still like to know what you mentioned 'device table'. I want to
-> ask, what is and where is the 'device table'?  I dont find the
-> concepts in buildroot on-line doucments.  Thanks.
->
->>
->> Maybe you could post the output of the build process.
->>
->>> VFS: Mounted root (cramfs filesystem) readonly.
->>> Freeing init memory: 84K
->>> mkdir: cannot create directory '/dev/pts': Read-only file system
->>> mount: mounting devpts on /dev/pts failed: No such file or directory
->>
->> Your inittab is obviously trying to make directories in a read-only file
->> system which isn't going to work. Not that it's related.
->>
->
-> Yes, you are right. I did not notice it at first time.  But it was
-> corrected.
->
-> You may see in my another post, I now can get the login prompt, and my
-> problem switchs to "Why I can not login". I hope I can get your help
-> in that thread.
->
-> Best Regards,
-> narke
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
->
+Changeset:
+Modified: trunk/buildroot/package/bridge-utils/bridge.mk
+===================================================================
+--- trunk/buildroot/package/bridge-utils/bridge.mk	2008-09-02 09:00:23 UTC (rev 23301)
++++ trunk/buildroot/package/bridge-utils/bridge.mk	2008-09-02 11:07:49 UTC (rev 23302)
+@@ -1,71 +1,28 @@
+ #############################################################
+ #
+-# bridgeutils - User Space Program For Controlling Bridging
++# bridge-utils - User Space Program For Controlling Bridging
+ #
+ #############################################################
+ #
+-BRIDGE_VERSION=1.0.6
+-BRIDGE_SOURCE_URL=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/bridge/
+-BRIDGE_SOURCE=bridge-utils-$(BRIDGE_VERSION).tar.gz
+-BRIDGE_BUILD_DIR=$(BUILD_DIR)/bridge-utils-$(BRIDGE_VERSION)
+-BRIDGE_TARGET_BINARY:=usr/sbin/brctl
++BRIDGE_VERSION:=1.0.6
++BRIDGE_SOURCE:=bridge-utils-$(BRIDGE_VERSION).tar.gz
++BRIDGE_SITE=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/bridge/
++BRIDGE_INSTALL_STAGING:=NO
++BRIDGE_INSTALL_TARGET:=YES
++BRIDGE_INSTALL_TARGET_OPT:=DESTDIR=$(TARGET_DIR) install
++BRIDGE_CONF_OPT:=--with-linux-headers=$(LINUX_HEADERS_DIR) $(DISABLE_NLS)
++BRIDGE_DEPENDENCIES:=uclibc
+ 
+-$(DL_DIR)/$(BRIDGE_SOURCE):
+-	 $(WGET) -P $(DL_DIR) $(BRIDGE_SOURCE_URL)/$(BRIDGE_SOURCE)
++$(eval $(call AUTOTARGETS,package,bridge))
+ 
+-$(BRIDGE_BUILD_DIR)/.unpacked: $(DL_DIR)/$(BRIDGE_SOURCE)
+-	$(ZCAT) $(DL_DIR)/$(BRIDGE_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	patch -p1 -d $(BRIDGE_BUILD_DIR) < package/bridge-utils/bridge.patch
+-	touch $(BRIDGE_BUILD_DIR)/.unpacked
++# bridge has no install-strip target
++$(BRIDGE_HOOK_POST_INSTALL): $(BRIDGE_TARGET_INSTALL_TARGET)
++	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/usr/sbin/brctl
++	touch $@
+ 
+-$(BRIDGE_BUILD_DIR)/.configured: $(BRIDGE_BUILD_DIR)/.unpacked
+-	(cd $(BRIDGE_BUILD_DIR); rm -rf config.cache; \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		$(TARGET_CONFIGURE_ARGS) \
+-		./configure \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		--prefix=/usr \
+-		--exec-prefix=/usr \
+-		--bindir=/usr/bin \
+-		--sbindir=/usr/sbin \
+-		--libdir=/lib \
+-		--libexecdir=/usr/lib \
+-		--sysconfdir=/etc \
+-		--datadir=/usr/share \
+-		--localstatedir=/var \
+-		--mandir=/usr/man \
+-		--infodir=/usr/info \
+-		$(DISABLE_NLS) \
+-		--with-linux-headers=$(LINUX_HEADERS_DIR) \
+-	)
+-	touch $(BRIDGE_BUILD_DIR)/.configured
+-
+-$(BRIDGE_BUILD_DIR)/brctl/brctl: $(BRIDGE_BUILD_DIR)/.configured
+-	$(MAKE) -C $(BRIDGE_BUILD_DIR)
+-
+-$(TARGET_DIR)/$(BRIDGE_TARGET_BINARY): $(BRIDGE_BUILD_DIR)/brctl/brctl
+-	cp -af $(BRIDGE_BUILD_DIR)/brctl/brctl $(TARGET_DIR)/$(BRIDGE_TARGET_BINARY)
+-	$(STRIPCMD) $(TARGET_DIR)/$(BRIDGE_TARGET_BINARY)
+-	#cp -af $(BRIDGE_BUILD_DIR)/brctl/brctld $(TARGET_DIR)/usr/sbin/
+-	#$(STRIPCMD) $(TARGET_DIR)/usr/sbin/brctld
+-
+-bridge-utils: $(TARGET_DIR)/$(BRIDGE_TARGET_BINARY)
+-
+-bridge-utils-source: $(DL_DIR)/$(BRIDGE_SOURCE)
+-
+-bridge-utils-clean:
+-	#$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(BRIDGE_BUILD_DIR) uninstall
+-	-$(MAKE) -C $(BRIDGE_BUILD_DIR) clean
+-
+-bridge-utils-dirclean:
+-	rm -rf $(BRIDGE_BUILD_DIR)
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(strip $(BR2_PACKAGE_BRIDGE)),y)
+-TARGETS+=bridge-utils
+-endif
++# bridge has no uninstall target
++$(BUILD_DIR)/bridge-$(BRIDGE_VERSION)/.stamp_cleaned:
++	$(call MESSAGE,"Cleaning up")
++	rm -f $(addprefix $(TARGET_DIR)/usr/,lib/libbridge.a \
++		include/libbridge.h man/man8/brctl.8 sbin/brctl)
++	touch $@
