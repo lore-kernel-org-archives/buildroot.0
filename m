@@ -1,35 +1,50 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue,  2 Sep 2008 06:54:59 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/file
-Message-ID: <20080902135459.34CAB3C68B@busybox.net>
+From: Patrick <pf@stollmann.de>
+Date: Tue, 02 Sep 2008 16:08:18 +0200
+Subject: [Buildroot] Script Preprocessor
+Message-ID: <20080902140742.29048.qmail@bux.stollmann.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-09-02 06:54:58 -0700 (Tue, 02 Sep 2008)
-New Revision: 23306
-
-Log:
-file: select zlib
-
-file depends on zlib, so make it visible in kconfig.
-
-Modified:
-   trunk/buildroot/package/file/Config.in
+Hello
+Currently im thinking about a way to handel our init scripts.
 
 
-Changeset:
-Modified: trunk/buildroot/package/file/Config.in
-===================================================================
---- trunk/buildroot/package/file/Config.in	2008-09-02 13:54:55 UTC (rev 23305)
-+++ trunk/buildroot/package/file/Config.in	2008-09-02 13:54:58 UTC (rev 23306)
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_FILE
- 	bool "file"
-+	select BR2_PACKAGE_ZLIB
- 	help
- 	  Program to identify a file's format by scanning binary data
- 	  for known patterns.
+In some Scripts we have some ugly code like
+
+##########
+fw_printenv device >/tmp/device
+. /tmp/device
+
+if [ "$device" = "X" ]
+then
+echo This is device X
+fi
+
+if [ "$device" = "X" -o "$device" = "Y"]
+then
+echo This is device X or Y
+fi
+##########
+
+This is not the way it should be.
+This could be resolved on build time.
+Did anybody know a solution?
+
+I could write a Script which could preprocess a file like this. A line 
+begins with"#X" meens if [ "$device" = "X" ] then ..... fi
+
+##########
+fw_printenv device >/tmp/device
+. /tmp/device
+
+#X echo This is device X
+#X||Y echo This is device X or Y
+##########
+
+Maybe there is already a solution?
+
+Best regards
+Patrick Fischer
