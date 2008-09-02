@@ -1,66 +1,68 @@
 From: =?us-ascii?Q?Emil_Kruper?= <e.krueper@solcon-systemtechnik.de>
 Date: Tue, 2 Sep 2008 08:24:32 +0200
-Subject: [Buildroot] Login exited
-In-Reply-To: <ed4892840809011747w183e8e8bma1451d38c40e65c0@mail.gmail.com>
-Message-ID: <MJEBLBOLLBKOACLOGNPBGEIHCBAA.e.krueper@solcon-systemtechnik.de>
+Subject: [Buildroot] Still "Can't open /dev/tty1[2,3]", Please HELP
+In-Reply-To: <ed4892840809011839w2b021ec5v26159eefa8389e41@mail.gmail.com>
+Message-ID: <MJEBLBOLLBKOACLOGNPBEEIHCBAA.e.krueper@solcon-systemtechnik.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alter the device table file you have selected in your buildroot config (for
-example target/generic/device_table.txt) and rebuild your system. By default
-these files don't fit your needs.
+>But I still like to know what you mentioned 'device table'. I want to
+>ask, what is and where is the 'device table'?  I dont find the
+>concepts in buildroot on-line doucments.  Thanks.
 
-In particular have a look at the section # Normal system devices, I think
-this could be the origin of your problems.
+Have a look at target/generic/device_table.txt and
+target/generic/mini_device_table.txt.
+You define by the buildroot config which file is used to generate the
+targets device table.
 
-Best regards,
+Best regards
 
 Emil Kruper
 
-
------Ursprungliche Nachricht-----
 Von: buildroot-bounces at uclibc.org
 [mailto:buildroot-bounces at uclibc.org]Im Auftrag von Steven Woody
-Gesendet: Dienstag, 2. September 2008 02:47
-An: buildroot at uclibc.org; busybox at busybox.net
-Betreff: Re: [Buildroot] Login exited
+Gesendet: Dienstag, 2. September 2008 03:40
+An: buildroot at uclibc.org
+Betreff: Re: [Buildroot] Still "Can't open /dev/tty1[2,3]", Please HELP
 
 
-Hi,
+On Tue, Sep 2, 2008 at 8:58 AM, Hamish Moffatt <hamish@cloud.net.au> wrote:
 
-The buildroot I am using is the 080831 snapshot, the busybox is
-1.11.2. Now I see the boot
-prompt finally!  But I can't login:
+> I couldn't work out where your target_skeleton and device table are
+> coming from based on your config. Do you have a device table, and does
+> it have those /dev/tty1,2,3,4 devices?
 
----
-Welcome to uClibc
-uClibc login: root
-Dec 31 17:01:05 nlmt auth.info login[195]: root login on 'ttyS0'
-Dec 31 17:01:05 nlmt daemon.info init: init: process '/sbin/getty -L
-ttyS0 115200 vt100' (pid 195) exited. Scheduling for restart.
-Dec 31 17:0
+The problem had gone away after I add udev to the packages.  I am not
+sure whether the absence of udev is really the reason that cause the
+previous "can't open /dev/tty?" problems.
 
-Welcome to uClibc
-uClibc login: default
-Dec 31 17:01:05 nlmt daemon.info init: init: process '/sbin/getty -L
-ttyS0 115200 vt100' (pid 195) exited. Scheduling for restart.
-Dec 31 17:0
----
+But I still like to know what you mentioned 'device table'. I want to
+ask, what is and where is the 'device table'?  I dont find the
+concepts in buildroot on-line doucments.  Thanks.
 
-And, I got see a suspicious messages just after the kernel booted:
----
-VFS: Mounted root (cramfs filesystem) readonly.
-Freeing init memory: 84K
-Error -3 while decompressing!
-c0925384(-7384812)->c3e38000(4096)
----
+>
+> Maybe you could post the output of the build process.
+>
+>> VFS: Mounted root (cramfs filesystem) readonly.
+>> Freeing init memory: 84K
+>> mkdir: cannot create directory '/dev/pts': Read-only file system
+>> mount: mounting devpts on /dev/pts failed: No such file or directory
+>
+> Your inittab is obviously trying to make directories in a read-only file
+> system which isn't going to work. Not that it's related.
+>
 
-I think I am so near to success, please help me! Thanks.
+Yes, you are right. I did not notice it at first time.  But it was
+corrected.
 
--
+You may see in my another post, I now can get the login prompt, and my
+problem switchs to "Why I can not login". I hope I can get your help
+in that thread.
+
+Best Regards,
 narke
 _______________________________________________
 buildroot mailing list
