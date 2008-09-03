@@ -1,17 +1,7 @@
-From: Daniel Laird <daniel.j.laird@nxp.com>
-Date: Wed, 3 Sep 2008 00:03:49 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package: games
- games/ace_of_penguins games/gnuch etc...
-In-Reply-To: <87y729k956.fsf@macbook.be.48ers.dk>
-References: <20080829132737.BF3503C864@busybox.net>
-	<20080829153841.37df370c@atmel.com>
-	<BD79186B4FD85F4B8E60E381CAEE19097AE654@mi8nycmail19.Mi8.com>
-	<19223815.post@talk.nabble.com>
-	<COL102-DS131551BA49AC350CABE3EFDC630@phx.gbl>
-	<19250901.post@talk.nabble.com>
-	<BD79186B4FD85F4B8E60E381CAEE1909812D2F@mi8nycmail19.Mi8.com>
-	<87y729k956.fsf@macbook.be.48ers.dk>
-Message-ID: <19283994.post@talk.nabble.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Wed, 3 Sep 2008 08:43:14 -0700
+Subject: [Buildroot] [buildroot 0004804]: lzo1x.h not found
+Message-ID: <d461c7098297d7918cf72a8f1db5197f@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,14 +9,41 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-Apologies,
-Thats what comes from patching one tree and using a different one for
-testing :-(
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=4804 
+====================================================================== 
+Reported By:                iceman_im
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   4804
+Category:                   Other
+Reproducibility:            have not tried
+Severity:                   crash
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             09-03-2008 08:43 PDT
+Last Modified:              09-03-2008 08:43 PDT
+====================================================================== 
+Summary:                    lzo1x.h not found
+Description: 
+I try to make a compilation for arm architecutre for an AT91sam9260EK board
+and I have a compilation error in mtd_orig...
 
-Is there any reason to not do the same for audio packages (the list in the
-audio menu).
+Looks like lzo1x.h could not be found but :
 
-Daniel
--- 
-View this message in context: http://www.nabble.com/svn-commit%3A-trunk-buildroot-package%3A-games-games-ace_of_penguins-games-gnuch-etc...-tp19219940p19283994.html
-Sent from the BuildRoot mailing list archive at Nabble.com.
+# find -name lzo1x.h
+./build_arm_wchar/lzo-2.03/include/lzo/lzo1x.h
+./build_arm_wchar/staging_dir/usr/include/lzo/lzo1x.h
+
+====================================================================== 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+09-03-08 08:43  iceman_im      New Issue                                    
+09-03-08 08:43  iceman_im      Status                   new => assigned     
+09-03-08 08:43  iceman_im      Assigned To               => buildroot       
+======================================================================
