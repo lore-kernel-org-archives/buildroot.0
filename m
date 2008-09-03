@@ -1,57 +1,47 @@
-From: hartleys <hartleys@visionengravers.com>
-Date: Tue, 2 Sep 2008 14:15:50 -0400
-Subject: [Buildroot] svn commit: trunk/buildroot/package:
-	gamesgames/ace_of_penguins games/gnuch etc...
-In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE1909812D2F@mi8nycmail19.Mi8.com>
-References: <20080829132737.BF3503C864@busybox.net><20080829153841.37df370c@atmel.com><BD79186B4FD85F4B8E60E381CAEE19097AE654@mi8nycmail19.Mi8.com><19223815.post@talk.nabble.com><COL102-DS131551BA49AC350CABE3EFDC630@phx.gbl><19250901.post@talk.nabble.com>
-	<BD79186B4FD85F4B8E60E381CAEE1909812D2F@mi8nycmail19.Mi8.com>
-Message-ID: <BD79186B4FD85F4B8E60E381CAEE1909812D51@mi8nycmail19.Mi8.com>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Wed, 3 Sep 2008 10:59:13 +1000
+Subject: [Buildroot] Login exited
+In-Reply-To: <ed4892840809020809r69eb6383wda4db62d49058959@mail.gmail.com>
+References: <ed4892840809011747w183e8e8bma1451d38c40e65c0@mail.gmail.com>
+	<MJEBLBOLLBKOACLOGNPBGEIHCBAA.e.krueper@solcon-systemtechnik.de>
+	<ed4892840809020426s36489484t7ca0a5dd2863733e@mail.gmail.com>
+	<20080902130749.GA12634@cloud.net.au>
+	<ed4892840809020809r69eb6383wda4db62d49058959@mail.gmail.com>
+Message-ID: <20080903005913.GC7857@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Tuesday, September 02, 2008 10:49 AM, hartleys wrote:
->> I have just tried to patch various games packages and java ones jamvm
+On Tue, Sep 02, 2008 at 11:09:25PM +0800, Steven Woody wrote:
+> On Tue, Sep 2, 2008 at 9:07 PM, Hamish Moffatt <hamish@cloud.net.au> wrote:
+> > On Tue, Sep 02, 2008 at 07:26:44PM +0800, Steven Woody wrote:
+> >> I think the origin of the "can't open /dev/ttySxxx" problem is differ
+> >> with the origin of the "getty exited" problem.  And, for the former, I
+> >> think it has nothing to do with my device_table.txt,  since if I
+> >> comment out the following line in etc/inittab:
+> >>    ::sysinit:/bin/mount -t tmpfs -o size=64k,mode=0755 none /dev
+> >> and replace it with
+> >>    ::sysinit:/bin/mount -t tmpfs -o size=64k,mode=0755 none /dev
+> >> then, the "can't open /dev/ttySxxx" problem gone away.  so I think,
+> >
+> > What is the difference between these two lines? I don't see one.
+> 
+> Sorry for the careless.  The correct one should be:
+>    ::sysinit:/bin/mount -t tmpfs none /dev
+> That is, without any option.
 
->> (packages/java/jamvm) works fine patch-version and patch-version.arch
+That's strange, because those options for tmpfs are valid. The only
+problem I can see is that 64k might not be large enough. I don't know
+how much space device nodes take - they don't have data but they do have
+meta-data of course.
 
->> work
->>
->> ace_of_penguins - the libtool patch fails I think this a fault with 
->> libtool patch not the dir move lxdoom - patch target works rubix - 
->> patch target works gnuchess - patch target works vice - patch target 
->> works
->>
->> So I think the move is fine and that the issues are with making the 
->> libtool patch apply to more targets Daniel Laird
->
-> Daniel, I still don't see how the patches can be applied correctly
-with
-> the current rule in Makefile.autotools.in.
+> I will put an eye to the decompressing error, but by far I have not
+> figure out why the root files system is possibly incomplete.
 
-Dumb, dumb, dumb.... Ok. I get how the patches are installed...
+Incomplete because of the decompression error, I mean.
 
-In the comments at the top of Makefile.autotools.in there is an example
-of the AUTOTARGETS call:
-
-$(eval $(call AUTOTARGETS,foo))
-
-At some point another argument was added to the call:
-
-$(eval $(call AUTOTARGETS,package_dir,foo))
-
-This is explained later in the file but I missed it. For the package I
-was trying to patch/build in a subdirectory of package/customize I had
-the package_dir argument set wrong. After I chaged it my source does get
-patched correctly.
-
-> I tried to test it this morning by building one of the games packages
-> (gnuchess) and it never even gets processed. I think there needs to be
-> a games.mk in package/games that does a:
->
-> include package/games/*/*.mk
-
-BTW, as far as I can tell this is still needed to get any of the games
-to build.
+Hamish
+-- 
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
