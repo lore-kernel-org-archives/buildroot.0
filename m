@@ -1,24 +1,22 @@
 From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Wed, 3 Sep 2008 15:26:24 +1000
-Subject: [Buildroot] modifying autoreconf parameters
-Message-ID: <20080903052624.GB11847@cloud.net.au>
+Date: Wed, 3 Sep 2008 15:35:25 +1000
+Subject: [Buildroot] XYZ_AUTORECONF = YES results in two autoreconf runs
+Message-ID: <20080903053525.GA12148@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A package I'm working on needs to pass extra args to autoreconf
-(specifically -I... because it has .m4 files in a subdirectory).
+Looking at Makefile.autotools.in, it appears that autoreconf is run
+twice is XYZ_AUTORECONF = YES.
 
-I tried adding a FOO_AUTORECONF_CONF_OPT variable, but it's more
-complicated than that because package/autoconf/autoconf.mk overrides
-the options to aclocal, which is where the switch really needs to go.
-Does anyone know why, or have a proposed solution?
+The xyz-configure target depends on xyz-autoreconf, and the
+xyz-configure target itself runs autoreconf again.
 
-For now I'm using the post-extract hook to symlink the relevant file
-into the default search path.
+Does anyone know a good reason for this?
 
+thanks
 Hamish
 -- 
 Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
