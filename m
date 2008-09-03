@@ -1,35 +1,44 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Wed, 3 Sep 2008 11:00:06 +1000
-Subject: [Buildroot] Login exited
-In-Reply-To: <ed4892840809020810h71632bfdh370015793ae688f5@mail.gmail.com>
-References: <ed4892840809011747w183e8e8bma1451d38c40e65c0@mail.gmail.com>
-	<MJEBLBOLLBKOACLOGNPBGEIHCBAA.e.krueper@solcon-systemtechnik.de>
-	<ed4892840809020426s36489484t7ca0a5dd2863733e@mail.gmail.com>
-	<20080902130749.GA12634@cloud.net.au>
-	<ed4892840809020809r69eb6383wda4db62d49058959@mail.gmail.com>
-	<ed4892840809020810h71632bfdh370015793ae688f5@mail.gmail.com>
-Message-ID: <20080903010006.GD7857@cloud.net.au>
+From: correa at uclibc.org <correa@uclibc.org>
+Date: Tue,  2 Sep 2008 18:09:30 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/qtopia4
+Message-ID: <20080903010930.20F863C3F8@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Sep 02, 2008 at 11:10:27PM +0800, Steven Woody wrote:
-> On Tue, Sep 2, 2008 at 11:09 PM, Steven Woody <narkewoody@gmail.com> wrote:
-> >> Maybe you could boot your system with the command line "init=/bin/sh" so
-> >> that it skips all start up scripts and see what happens?
-> >
-> > Okay, I will try next when I go office.
-> 
-> sorry, I forgot to ask: where to put the command line?
+Author: correa
+Date: 2008-09-02 18:09:29 -0700 (Tue, 02 Sep 2008)
+New Revision: 23307
 
-Your boot loader should allow you to specify the command line to the
-kernel. Or the default is set as a kernel configuration option - run
-"make linux-menuconfig" etc.
+Log:
+Qtopia: don't build sqlite driver when SQL module is disabled.
 
-Which boot loader are you using? U-Boot, RedBoot, ... ?
+Modified:
+   trunk/buildroot/package/qtopia4/qtopia4.mk
 
-Hamish
--- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+
+Changeset:
+Modified: trunk/buildroot/package/qtopia4/qtopia4.mk
+===================================================================
+--- trunk/buildroot/package/qtopia4/qtopia4.mk	2008-09-02 13:54:58 UTC (rev 23306)
++++ trunk/buildroot/package/qtopia4/qtopia4.mk	2008-09-03 01:09:29 UTC (rev 23307)
+@@ -182,11 +182,17 @@
+ endif
+ ifeq ($(BR2_PACKAGE_QTOPIA4_SQLITE),y)
+ QTOPIA4_CONFIGURE+= -qt-sql-sqlite
++else
++QTOPIA4_CONFIGURE+= -no-sql-sqlite
+ endif
+ ifeq ($(BR2_PACKAGE_QTOPIA4_SQLITE2),y)
+ QTOPIA4_CONFIGURE+= -qt-sql-sqlite2
+ endif
++else
+ # By default, no SQL driver is turned on by configure.
++# but it seams sqlite isn't disabled despite what says
++# configure --help
++QTOPIA4_CONFIGURE+= -no-sql-sqlite
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_QTOPIA4_XMLPATTERNS),y)
