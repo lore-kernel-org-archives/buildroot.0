@@ -1,98 +1,47 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 3 Sep 2008 21:27:35 -0700
-Subject: [Buildroot] [buildroot 0002724]: freetype-2.3.5 configure fails
-Message-ID: <4a3c532043c71c129dd7051626aaf533@busybox.net>
+From: Steven Woody <narkewoody@gmail.com>
+Date: Thu, 4 Sep 2008 13:34:14 +0800
+Subject: [Buildroot] Login exited
+In-Reply-To: <20080904020018.GC16933@cloud.net.au>
+References: <ed4892840809010102n6293e75ejc6caf1dd57a954db@mail.gmail.com>
+	<ed4892840809011747w183e8e8bma1451d38c40e65c0@mail.gmail.com>
+	<200809031950.49148.vda.linux@googlemail.com>
+	<ed4892840809031850y32161b46qc99547711ab535a7@mail.gmail.com>
+	<20080904020018.GC16933@cloud.net.au>
+Message-ID: <ed4892840809032234h62607fb2oac8847e3da884e44@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Thu, Sep 4, 2008 at 10:00 AM, Hamish Moffatt <hamish@cloud.net.au> wrote:
+> On Thu, Sep 04, 2008 at 09:50:01AM +0800, Steven Woody wrote:
+>> Okay, we leave this 'decompressing' error for a moment.  I rebuilt
+>
+> Actually on second reading I think that is a result of trying to mount
+> configfs on /config, and nothing to do with the root filesystem itself.
+>
+>> (mostly using default options from buildroot) a very small rootfs
+>> image, 780k cramfs.  This time, it boots without the 'decompressing'
+>> error message, I still can not login in.  It's same: whatever user
+>> name I inputed, the getty restarted and I get nothing but another
+>> prompt.
+>>
+>> If you experts can not guess what's is going on here, I hope you can
+>> tell me how to debug this kind of problem.  Tks.
+>
+> Did you try booting with init=/bin/sh as I suggested two days ago? Or
+> modify your inittab to present you with a shell without needing to
+> login? This will help to break down the problem dramatically.
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=2724 
-====================================================================== 
-Reported By:                seek
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   2724
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             04-02-2008 06:54 PDT
-Last Modified:              09-03-2008 21:27 PDT
-====================================================================== 
-Summary:                    freetype-2.3.5 configure fails
-Description: 
-Building of freetype-2.3.5 stops with this error:
+I did init=/bin/sh as you suggested and reported the result to the
+list.  Again, the result is:  there is nothing I can do after rootfs
+was loaded by kernel.  I can type in characters can see the echo of
+what I typed on the screen, but no any other outputs.  Does this has
+something to do with my read-only file system type (cramfs)?
 
-checking for x86_64-pc-linux-gnu-gcc... x86_64-pc-linux-gnu
-checking for x86_64-pc-linux-gnu-gcc... (cached) x86_64-pc-linux-gnu
-checking for x86_64-pc-linux-gnu-gcc... (cached) x86_64-pc-linux-gnu
-checking for suffix of native executables... ./configure: line 3392:
-x86_64-pc-linux-gnu: command not found
-configure: error: native C compiler is not working
-make[1]: *** [setup] Fehler 1
-
-freetype-2.2.1 works as expected.
-
-
-
-====================================================================== 
-
----------------------------------------------------------------------- 
- antialize - 08-17-08 01:54  
----------------------------------------------------------------------- 
-The bug is still there:
-
-cd builds/unix; ./configure  "--target=i686-linux" "--host=i686-linux"
-"--build=x86_64-pc-linux-gnu" "--prefix=/usr" "--exec-prefix=/usr"
-"--bindir=/usr/bin" "--sbindir=/usr/sbin" "--libdir=/usr/lib"
-"--libexecdir=/usr/lib" "--sysconfdir=/etc" "--datadir=/usr/share"
-"--localstatedir=/var" "--includedir=/usr/include" "--mandir=/usr/man"
-"--infodir=/usr/info" " "
-configure: WARNING: you should use --build, --host, --target
-configure: WARNING: invalid host type:
-...
-checking for suffix of native executables... ./configure: line 3392:
-x86_64-pc-linux-gnu: command not found
-configure: error: native C compiler is not working
-
- 
-
----------------------------------------------------------------------- 
- antialize - 08-07-08 11:47  
----------------------------------------------------------------------- 
-The bug is on line 43 in build/configure.raw
-It saies
-AC_CHECK_PROG(CC_BUILD, ${build}-gcc, ${build-gcc})
-It should be
-AC_CHECK_PROG(CC_BUILD, ${build}-gcc, ${build}-gcc)
-
-It seems this bug has already been fixed upstream, can we get a vertion
-bump? 
-
----------------------------------------------------------------------- 
- hmoffatt - 09-03-08 21:27  
----------------------------------------------------------------------- 
-Can you modify your package/freetype/Config.in to change 2.3.5 to 2.3.7,
-run "make menuconfig" and save, then try a build and tell us if it works? 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-04-02-08 06:54  seek           New Issue                                    
-04-02-08 06:54  seek           Status                   new => assigned     
-04-02-08 06:54  seek           Assigned To               => buildroot       
-08-07-08 09:43  antialize      Note Added: 0010314                          
-08-07-08 09:45  antialize      Note Edited: 0010314                         
-08-07-08 10:25  antialize      Issue Monitored: antialize                    
-08-07-08 11:47  antialize      Note Added: 0010324                          
-08-17-08 01:54  antialize      Note Edited: 0010314                         
-09-03-08 21:27  hmoffatt       Note Added: 0010984                          
-======================================================================
+>
+> Hamish
+> --
+> Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+>
