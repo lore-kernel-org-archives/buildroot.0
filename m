@@ -1,49 +1,26 @@
-From: hamish at uclibc.org <hamish@uclibc.org>
-Date: Wed,  3 Sep 2008 18:19:53 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package
-Message-ID: <20080904011953.5CF893C675@busybox.net>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Thu, 4 Sep 2008 11:20:13 +1000
+Subject: [Buildroot] XYZ_AUTORECONF = YES results in two autoreconf runs
+In-Reply-To: <20080903053525.GA12148@cloud.net.au>
+References: <20080903053525.GA12148@cloud.net.au>
+Message-ID: <20080904012013.GB16933@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: hamish
-Date: 2008-09-03 18:19:52 -0700 (Wed, 03 Sep 2008)
-New Revision: 23313
+On Wed, Sep 03, 2008 at 03:35:25PM +1000, Hamish Moffatt wrote:
+> Looking at Makefile.autotools.in, it appears that autoreconf is run
+> twice is XYZ_AUTORECONF = YES.
+> 
+> The xyz-configure target depends on xyz-autoreconf, and the
+> xyz-configure target itself runs autoreconf again.
+> 
+> Does anyone know a good reason for this?
 
-Log:
-Fix duplicate $(AUTORECONF) run in autoreconf and configure targets
+I guess not - changed in r23313.
 
-
-Modified:
-   trunk/buildroot/package/Makefile.autotools.in
-
-
-Changeset:
-Modified: trunk/buildroot/package/Makefile.autotools.in
-===================================================================
---- trunk/buildroot/package/Makefile.autotools.in	2008-09-04 01:05:17 UTC (rev 23312)
-+++ trunk/buildroot/package/Makefile.autotools.in	2008-09-04 01:19:52 UTC (rev 23313)
-@@ -192,17 +192,15 @@
- $(BUILD_DIR)/%/.stamp_autoconfigured:
- 	$(call MESSAGE,"Running autoreconf")
- 	$(Q)cd $(@D)/$($(PKG)_SUBDIR) && $(AUTORECONF)
-+# if the package uses libtool, patch it for cross-compiling in buildroot
-+	$(Q)for i in `find $(@D)/$($(PKG)_SUBDIR) -name ltmain.sh`; do \
-+		toolchain/patch-kernel.sh $${i%/*} package buildroot-libtool.patch; \
-+		done
- 	$(Q)touch $@
- 
- # Configuring
- $(BUILD_DIR)/%/.stamp_configured:
- 	$(call MESSAGE,"Configuring")
--	$(Q)if test "$($(PKG)_AUTORECONF)" = "YES"; then \
--		cd $(@D)/$($(PKG)_SUBDIR) && $(AUTORECONF); \
--		for i in `find $(@D)/$($(PKG)_SUBDIR) -name ltmain.sh`; do \
--			../../toolchain/patch-kernel.sh $${i%/*} ../../package buildroot-libtool.patch; \
--		done \
--	fi
- 	cd $(@D)/$($(PKG)_SUBDIR) && rm -f config.cache && \
- 	$(TARGET_CONFIGURE_OPTS) \
- 	$(TARGET_CONFIGURE_ARGS) \
+Hamish
+-- 
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
