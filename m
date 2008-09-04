@@ -1,99 +1,74 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Fri, 5 Sep 2008 00:35:33 +1000
-Subject: [Buildroot] Makefile.autotools.in stamp files
-	breaks	multipleprojects
-In-Reply-To: <1D28C7EE66C2440FB30AEE54DA90C54B@aeglos>
-References: <20080904025034.GA18148@cloud.net.au>
-	<1D28C7EE66C2440FB30AEE54DA90C54B@aeglos>
-Message-ID: <20080904143533.GA28601@cloud.net.au>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Thu, 4 Sep 2008 08:25:46 -0700
+Subject: [Buildroot] [buildroot 0004804]: lzo1x.h not found
+Message-ID: <49d48bc3ed3b93d6bc656e33a4cf3fc3@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Sep 04, 2008 at 06:02:27AM +0200, Ulf Samuelsson wrote:
->> As previously discussed, Makefile.autotools.in creates stamp files in
->> $(BUILD_DIR)/$(PKG) such as .stamp_installed. This will prevent the
->> package being properly installed into multiple projects built out of the
->> same source tree. (The first project will build ok but subsequent
->> projects won't install the files.)
->>
->> I see a few solutions;
->>
->> 1. Each autotools-using package could (optionally?) specify the name of
->> a test target file to use, instead of using an explicit stamp file.
->> Hans-Christian sent a patch for this already.
->>
->
-> That seems to be a good solution, except that if the build breaks after
-> that file has been installed, other neccessary files might not be copied.
-> You have to ensure that this is the last file that gets installed by the  
-> package build.
-> Even if this happens, then it could break if the package version gets  
-> updated
-> and the install order changes.
 
-Yes it's a bit fragile. Most packages that don't use stamp files
-probably just choose a random file, or the main binary - doing the same
-for the autotools packages won't be any worse.
+The following issue has been REOPENED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=4804 
+====================================================================== 
+Reported By:                iceman_im
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   4804
+Category:                   Other
+Reproducibility:            have not tried
+Severity:                   crash
+Priority:                   normal
+Status:                     feedback
+====================================================================== 
+Date Submitted:             09-03-2008 08:43 PDT
+Last Modified:              09-04-2008 08:25 PDT
+====================================================================== 
+Summary:                    lzo1x.h not found
+Description: 
+I try to make a compilation for arm architecutre for an AT91sam9260EK board
+and I have a compilation error in mtd_orig...
 
->> Obseleting (some or all of) the stamp files wouldn't be bad anyway. Many
->> of them could be replaced with actual targets, eg Makefile depends on
->> running configure (rather than using .stamp_configured).
->>
->> 2. The .stamp_install files could be put somewhere under $(TARGET_DIR)
->> instead of $(BUILD_DIR); they'd need to be stripped out by the various
->> generators in target/.. though.
->
-> You can install the stamps in "project_build_<arch>/<project>/.stamps"
-> as long as the make clean stuff cleans that up as well.
->
-> Populating the target file system with stamps is not a good idea.
+Looks like lzo1x.h could not be found but :
 
-I'd prefer to use real files, but that will require us to update every
-package that uses autotools in order to get the benefits. Using a stamp
-file in project_build_$arch/$project/ somewhere is a good partial
-solution though.
+# find -name lzo1x.h
+./build_arm_wchar/lzo-2.03/include/lzo/lzo1x.h
+./build_arm_wchar/staging_dir/usr/include/lzo/lzo1x.h
 
->> 3. Sharing $(BUILD_DIR) between multiple projects should be scrapped. In
->> practice, redefining BUILD_DIR = $(PROJECT_BUILD_DIR) would do it.
->
-> Packages which can be configured by buildroot should remain in $(BUILD_DIR)
-> while packages that can be configured should be in $(PROJECT_BUILD_DIR).
-> Until this happens you should not have projects with different options or
-> use a separate buildroot tree.
->
-> You can have projects which have totally different set of packages.
->
->>
->> I think sharing $(BUILD_DIR) between multiple projects is quite broken.
->> The only benefit is that the packages only need to be compiled once.
->
-> Which is a significant time saving, if you have to build multiple projects.
+====================================================================== 
 
-Negligible with modern hardware, IMHO. I've got about 6 projects built
-in my working tree, all sharing the toolchain.. from scratch each of them 
-would take under 10 minutes to build, and not long to do an incremental
-build.
+---------------------------------------------------------------------- 
+ hmoffatt - 09-03-08 18:40  
+---------------------------------------------------------------------- 
+Fixed in r23315.. thanks
 
-Longer if you're building X I suppose.
+Please consider sending compile error logs in English (eg set LANG=C
+before compiling). Thanks 
 
-We'd be better off having separate build directories but trying to get
-ccache to do its thing.
+---------------------------------------------------------------------- 
+ iceman_im - 09-04-08 08:25  
+---------------------------------------------------------------------- 
+Sorry for the french error log, next time it will be in english.
+Thanks for the fix but I allready have the same problem...
 
->> - different projects might be using different compilers or different
->>  compiler flags, and the right ones won't be used for each project.
->> - same for different kernel headers potentially.
->
-> If you want different options for the toolchain, you need to use a 
-> separate buildroot tree.
+In fact the build works find for an ext2 file system but crashed for a
+jffs2 one... 
 
-It'd be better if that was enforced in some way - right now you would
-just get silent breakage.
-
-
-
-Hamish
--- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+09-03-08 08:43  iceman_im      New Issue                                    
+09-03-08 08:43  iceman_im      Status                   new => assigned     
+09-03-08 08:43  iceman_im      Assigned To               => buildroot       
+09-03-08 18:40  hmoffatt       Status                   assigned => closed  
+09-03-08 18:40  hmoffatt       Note Added: 0010974                          
+09-03-08 18:40  hmoffatt       Resolution               open => fixed       
+09-04-08 08:21  iceman_im      Issue Monitored: iceman_im                    
+09-04-08 08:22  iceman_im      Issue End Monitor: iceman_im                    
+09-04-08 08:25  iceman_im      Status                   closed => feedback  
+09-04-08 08:25  iceman_im      Resolution               fixed => reopened   
+09-04-08 08:25  iceman_im      Note Added: 0011004                          
+======================================================================
