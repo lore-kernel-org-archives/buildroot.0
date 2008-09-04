@@ -1,98 +1,98 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Thu, 4 Sep 2008 06:02:27 +0200
-Subject: [Buildroot] Makefile.autotools.in stamp files breaks
-	multipleprojects
-References: <20080904025034.GA18148@cloud.net.au>
-Message-ID: <1D28C7EE66C2440FB30AEE54DA90C54B@aeglos>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Wed, 3 Sep 2008 21:27:35 -0700
+Subject: [Buildroot] [buildroot 0002724]: freetype-2.3.5 configure fails
+Message-ID: <4a3c532043c71c129dd7051626aaf533@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> As previously discussed, Makefile.autotools.in creates stamp files in
-> $(BUILD_DIR)/$(PKG) such as .stamp_installed. This will prevent the
-> package being properly installed into multiple projects built out of the
-> same source tree. (The first project will build ok but subsequent
-> projects won't install the files.)
->
-> I see a few solutions;
->
-> 1. Each autotools-using package could (optionally?) specify the name of
-> a test target file to use, instead of using an explicit stamp file.
-> Hans-Christian sent a patch for this already.
->
 
-That seems to be a good solution, except that if the build breaks after
-that file has been installed, other neccessary files might not be copied.
-You have to ensure that this is the last file that gets installed by the 
-package build.
-Even if this happens, then it could break if the package version gets 
-updated
-and the install order changes.
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=2724 
+====================================================================== 
+Reported By:                seek
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   2724
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             04-02-2008 06:54 PDT
+Last Modified:              09-03-2008 21:27 PDT
+====================================================================== 
+Summary:                    freetype-2.3.5 configure fails
+Description: 
+Building of freetype-2.3.5 stops with this error:
 
-> Obseleting (some or all of) the stamp files wouldn't be bad anyway. Many
-> of them could be replaced with actual targets, eg Makefile depends on
-> running configure (rather than using .stamp_configured).
->
-> 2. The .stamp_install files could be put somewhere under $(TARGET_DIR)
-> instead of $(BUILD_DIR); they'd need to be stripped out by the various
-> generators in target/.. though.
+checking for x86_64-pc-linux-gnu-gcc... x86_64-pc-linux-gnu
+checking for x86_64-pc-linux-gnu-gcc... (cached) x86_64-pc-linux-gnu
+checking for x86_64-pc-linux-gnu-gcc... (cached) x86_64-pc-linux-gnu
+checking for suffix of native executables... ./configure: line 3392:
+x86_64-pc-linux-gnu: command not found
+configure: error: native C compiler is not working
+make[1]: *** [setup] Fehler 1
 
-You can install the stamps in "project_build_<arch>/<project>/.stamps"
-as long as the make clean stuff cleans that up as well.
-
-Populating the target file system with stamps is not a good idea.
-
-> 3. Sharing $(BUILD_DIR) between multiple projects should be scrapped. In
-> practice, redefining BUILD_DIR = $(PROJECT_BUILD_DIR) would do it.
-
-Packages which can be configured by buildroot should remain in $(BUILD_DIR)
-while packages that can be configured should be in $(PROJECT_BUILD_DIR).
-Until this happens you should not have projects with different options or
-use a separate buildroot tree.
-
-You can have projects which have totally different set of packages.
-
->
-> I think sharing $(BUILD_DIR) between multiple projects is quite broken.
-> The only benefit is that the packages only need to be compiled once.
-
-Which is a significant time saving, if you have to build multiple projects.
-
-> As a negative though, we've got packages not being installed
-> properly due to stamp files (the problem above).
-
-That is a bug which was introduced by the Makefile.autotools.in, so this 
-file needs to be fixed.
-
-> - different projects might be using different compilers or different
->  compiler flags, and the right ones won't be used for each project.
-> - same for different kernel headers potentially.
-
-If you want different options for the toolchain, you need to use a separate 
-buildroot tree.
-
-> - We've already got exceptions for packages which can be customised,
->  like busybox and the kernel.
->
->
-> Hamish
-> -- 
+freetype-2.2.1 works as expected.
 
 
-Best Regards
-Ulf Samuelsson                ulf at atmel.com
-Atmel Nordic AB
-Mail:  Box 2033, 174 02 Sundbyberg, Sweden
-Visit:  Kavalleriv?gen 24, 174 58 Sundbyberg, Sweden
-Phone +46 (8) 441 54 22     Fax +46 (8) 441 54 29
-GSM    +46 (706) 22 44 57
 
+====================================================================== 
 
-Technical support when I am not available:
-AT90 AVR Applications Group: mailto:avr at atmel.com
-AT91 ARM Applications Group: mailto:at91support at atmel.com
-AVR32 Applications Group        mailto:avr32 at atmel.com
-http://www.avrfreaks.net/;            http://avr32linux.org/
-http://www.at91.com/ ;                 http://www.linux4sam.org/ 
+---------------------------------------------------------------------- 
+ antialize - 08-17-08 01:54  
+---------------------------------------------------------------------- 
+The bug is still there:
+
+cd builds/unix; ./configure  "--target=i686-linux" "--host=i686-linux"
+"--build=x86_64-pc-linux-gnu" "--prefix=/usr" "--exec-prefix=/usr"
+"--bindir=/usr/bin" "--sbindir=/usr/sbin" "--libdir=/usr/lib"
+"--libexecdir=/usr/lib" "--sysconfdir=/etc" "--datadir=/usr/share"
+"--localstatedir=/var" "--includedir=/usr/include" "--mandir=/usr/man"
+"--infodir=/usr/info" " "
+configure: WARNING: you should use --build, --host, --target
+configure: WARNING: invalid host type:
+...
+checking for suffix of native executables... ./configure: line 3392:
+x86_64-pc-linux-gnu: command not found
+configure: error: native C compiler is not working
+
+ 
+
+---------------------------------------------------------------------- 
+ antialize - 08-07-08 11:47  
+---------------------------------------------------------------------- 
+The bug is on line 43 in build/configure.raw
+It saies
+AC_CHECK_PROG(CC_BUILD, ${build}-gcc, ${build-gcc})
+It should be
+AC_CHECK_PROG(CC_BUILD, ${build}-gcc, ${build}-gcc)
+
+It seems this bug has already been fixed upstream, can we get a vertion
+bump? 
+
+---------------------------------------------------------------------- 
+ hmoffatt - 09-03-08 21:27  
+---------------------------------------------------------------------- 
+Can you modify your package/freetype/Config.in to change 2.3.5 to 2.3.7,
+run "make menuconfig" and save, then try a build and tell us if it works? 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+04-02-08 06:54  seek           New Issue                                    
+04-02-08 06:54  seek           Status                   new => assigned     
+04-02-08 06:54  seek           Assigned To               => buildroot       
+08-07-08 09:43  antialize      Note Added: 0010314                          
+08-07-08 09:45  antialize      Note Edited: 0010314                         
+08-07-08 10:25  antialize      Issue Monitored: antialize                    
+08-07-08 11:47  antialize      Note Added: 0010324                          
+08-17-08 01:54  antialize      Note Edited: 0010314                         
+09-03-08 21:27  hmoffatt       Note Added: 0010984                          
+======================================================================
