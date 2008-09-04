@@ -1,43 +1,50 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Thu, 4 Sep 2008 12:09:40 +1000
-Subject: [Buildroot] svn commit: trunk/buildroot/package/fltk
-In-Reply-To: <87vdxlu3zi.fsf@macbook.be.48ers.dk>
-References: <20080827201919.E9B3DF8006@busybox.net>
-	<20080828002656.GB10828@cloud.net.au>
-	<87vdxlu3zi.fsf@macbook.be.48ers.dk>
-Message-ID: <20080904020940.GA17987@cloud.net.au>
+From: hamish at uclibc.org <hamish@uclibc.org>
+Date: Wed,  3 Sep 2008 19:30:57 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/dependencies
+Message-ID: <20080904023057.53A113C7CA@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Aug 28, 2008 at 07:02:09AM +0200, Peter Korsgaard wrote:
->  Hamish> I think those comments are kind of helpful. Otherwise, if you know a
->  Hamish> package exists but can't find it in menuconfig, you need to open up
->  Hamish> Config.in to find the dependencies.
-> 
-> Sometimes they are, but having tons of those lines listed for all X
-> programs when you haven't selected X is imho not.
+Author: hamish
+Date: 2008-09-03 19:30:56 -0700 (Wed, 03 Sep 2008)
+New Revision: 23316
 
-That's fair.
+Log:
+Applied change from Ben Nizette and Hans-Christian Egtvedt to
+correctly detect version of gcc on recent distros.  Supplied 
+patch was against git and didn't apply cleanly to svn, so applied 
+by hand.
 
-> We should probably move X applications / libraries to it's own sub
-> menu.
 
-Good solution, then all the X applications could be disabled and
-replaced with a single comment if X libraries are not enabled.
+Modified:
+   trunk/buildroot/toolchain/dependencies/dependencies.sh
 
->  Hamish> Alternatively the package could use select instead of depends.
-> 
-> Yeah, but that wouldn't work here as there's multiple providers of X
-> (and anyway, including a monster like X behind your back isn't really
-> userfriendly either).
 
-Very true!
-
-thanks
-Hamish
-
--- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+Changeset:
+Modified: trunk/buildroot/toolchain/dependencies/dependencies.sh
+===================================================================
+--- trunk/buildroot/toolchain/dependencies/dependencies.sh	2008-09-04 01:39:40 UTC (rev 23315)
++++ trunk/buildroot/toolchain/dependencies/dependencies.sh	2008-09-04 02:30:56 UTC (rev 23316)
+@@ -188,7 +188,8 @@
+ 	exit 1;
+ fi;
+ 
+-COMPILER_VERSION=$($COMPILER --version 2>&1 | $XSED -e 's/^.*(.CC) \([0-9\.]\)/\1/g' -e "s/[-\ ].*//g" -e '1q')
++COMPILER_VERSION=$($COMPILER -v 2>&1 | $XSED -n '/^gcc version/p' |
++	$XSED -e 's/^gcc version \([0-9\.]\)/\1/g' -e 's/[-\ ].*//g' -e '1q')
+ if [ -z "$COMPILER_VERSION" ] ; then
+ 	echo "gcc installed:		    FALSE"
+ 	/bin/echo -e "\n\nYou must install 'gcc' on your build machine\n";
+@@ -215,7 +216,8 @@
+ 	#exit 1
+ fi
+ if [ ! -z "$CXXCOMPILER" ] ; then
+-	CXXCOMPILER_VERSION=$($CXXCOMPILER --version 2>&1 | $XSED -e 's/^.*(.CC) \([0-9\.]\)/\1/g' -e "s/[-\ ].*//g" -e '1q')
++	CXXCOMPILER_VERSION=$($CXXCOMPILER -v 2>&1 | $XSED -n '/^gcc version/p' |
++		$XSED -e 's/^gcc version \([0-9\.]\)/\1/g' -e 's/[-\ ].*//g' -e '1q')
+ 	if [ -z "$CXXCOMPILER_VERSION" ] ; then
+ 		echo "c++ installed:		    FALSE"
+ 		/bin/echo -e "\nYou may have to install 'g++' on your build machine\n"
