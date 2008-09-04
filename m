@@ -1,42 +1,50 @@
-From: hamish at uclibc.org <hamish@uclibc.org>
-Date: Wed,  3 Sep 2008 19:39:23 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/bridge-utils
-Message-ID: <20080904023923.968803C7D7@busybox.net>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Thu, 4 Sep 2008 12:50:35 +1000
+Subject: [Buildroot] Makefile.autotools.in stamp files breaks multiple
+	projects
+Message-ID: <20080904025034.GA18148@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: hamish
-Date: 2008-09-03 19:39:23 -0700 (Wed, 03 Sep 2008)
-New Revision: 23318
+As previously discussed, Makefile.autotools.in creates stamp files in
+$(BUILD_DIR)/$(PKG) such as .stamp_installed. This will prevent the
+package being properly installed into multiple projects built out of the
+same source tree. (The first project will build ok but subsequent
+projects won't install the files.)
 
-Log:
-Override the uninstall target rather than the clean target
-Also, don't actually create the .stamp_uninstalled but remove the
-.stamp_installed file instead (ala the overridden target).
+I see a few solutions;
+
+1. Each autotools-using package could (optionally?) specify the name of
+a test target file to use, instead of using an explicit stamp file.
+Hans-Christian sent a patch for this already.
+
+Obseleting (some or all of) the stamp files wouldn't be bad anyway. Many
+of them could be replaced with actual targets, eg Makefile depends on
+running configure (rather than using .stamp_configured).
+
+2. The .stamp_install files could be put somewhere under $(TARGET_DIR)
+instead of $(BUILD_DIR); they'd need to be stripped out by the various
+generators in target/.. though.
+
+3. Sharing $(BUILD_DIR) between multiple projects should be scrapped. In
+practice, redefining BUILD_DIR = $(PROJECT_BUILD_DIR) would do it.
 
 
-Modified:
-   trunk/buildroot/package/bridge-utils/bridge.mk
+I think sharing $(BUILD_DIR) between multiple projects is quite broken.
+The only benefit is that the packages only need to be compiled once. As
+a negative though, we've got
+- packages not being installed properly due to stamp files (the problem
+  above).
+- different projects might be using different compilers or different
+  compiler flags, and the right ones won't be used for each project.
+- same for different kernel headers potentially.
+- We've already got exceptions for packages which can be customised,
+  like busybox and the kernel.
 
 
-Changeset:
-Modified: trunk/buildroot/package/bridge-utils/bridge.mk
-===================================================================
---- trunk/buildroot/package/bridge-utils/bridge.mk	2008-09-04 02:34:42 UTC (rev 23317)
-+++ trunk/buildroot/package/bridge-utils/bridge.mk	2008-09-04 02:39:23 UTC (rev 23318)
-@@ -22,8 +22,9 @@
- 	touch $@
- 
- # bridge has no uninstall target
--$(BUILD_DIR)/bridge-$(BRIDGE_VERSION)/.stamp_cleaned:
--	$(call MESSAGE,"Cleaning up")
-+$(BUILD_DIR)/bridge-$(BRIDGE_VERSION)/.stamp_uninstalled:
-+	$(call MESSAGE,"Uninstalling")
- 	rm -f $(addprefix $(TARGET_DIR)/usr/,lib/libbridge.a \
- 		include/libbridge.h man/man8/brctl.8 sbin/brctl)
--	touch $@
-+	rm -f $(@D)/.stamp_target_installed
-+
+Hamish
+-- 
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
