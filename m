@@ -1,59 +1,61 @@
-From: hamish at uclibc.org <hamish@uclibc.org>
-Date: Wed,  3 Sep 2008 18:39:41 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/mtd/mtd-utils
-Message-ID: <20080904013941.329723C731@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Wed, 3 Sep 2008 18:40:54 -0700
+Subject: [Buildroot] [buildroot 0004804]: lzo1x.h not found
+Message-ID: <9800cd7b256d7cd16b7f13c1549e6f64@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: hamish
-Date: 2008-09-03 18:39:40 -0700 (Wed, 03 Sep 2008)
-New Revision: 23315
 
-Log:
-Remove lzo patches which aren't required with latest liblzo package updates
+The following issue has been CLOSED 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=4804 
+====================================================================== 
+Reported By:                iceman_im
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   4804
+Category:                   Other
+Reproducibility:            have not tried
+Severity:                   crash
+Priority:                   normal
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
+====================================================================== 
+Date Submitted:             09-03-2008 08:43 PDT
+Last Modified:              09-03-2008 18:40 PDT
+====================================================================== 
+Summary:                    lzo1x.h not found
+Description: 
+I try to make a compilation for arm architecutre for an AT91sam9260EK board
+and I have a compilation error in mtd_orig...
 
+Looks like lzo1x.h could not be found but :
 
-Removed:
-   trunk/buildroot/package/mtd/mtd-utils/mtd-utils-1.1.0-target-llzo.patch
-   trunk/buildroot/package/mtd/mtd-utils/mtd-utils-1.1.0-target-lzo-header.patch
+# find -name lzo1x.h
+./build_arm_wchar/lzo-2.03/include/lzo/lzo1x.h
+./build_arm_wchar/staging_dir/usr/include/lzo/lzo1x.h
 
+====================================================================== 
 
-Changeset:
-Deleted: trunk/buildroot/package/mtd/mtd-utils/mtd-utils-1.1.0-target-llzo.patch
-===================================================================
---- trunk/buildroot/package/mtd/mtd-utils/mtd-utils-1.1.0-target-llzo.patch	2008-09-04 01:35:34 UTC (rev 23314)
-+++ trunk/buildroot/package/mtd/mtd-utils/mtd-utils-1.1.0-target-llzo.patch	2008-09-04 01:39:40 UTC (rev 23315)
-@@ -1,10 +0,0 @@
--diff -urN mtd-utils-1.1.0-0rig/Makefile mtd-utils-1.1.0/Makefile
----- mtd-utils-1.1.0-0rig/Makefile	2007-08-03 15:55:51.000000000 +0200
--+++ mtd-utils-1.1.0/Makefile	2007-09-27 08:20:55.000000000 +0200
--@@ -58,7 +58,7 @@
-- 			$(BUILDDIR)/compr_zlib.o \
-- 			$(BUILDDIR)/compr_lzo.o \
-- 			$(BUILDDIR)/compr.o
---	$(CC) $(LDFLAGS) -o $@ $^ -lz -llzo2
--+	$(CC) $(LDFLAGS) -o $@ $^ -lz -llzo
-- 
+---------------------------------------------------------------------- 
+ hmoffatt - 09-03-08 18:40  
+---------------------------------------------------------------------- 
+Fixed in r23315.. thanks
 
-Deleted: trunk/buildroot/package/mtd/mtd-utils/mtd-utils-1.1.0-target-lzo-header.patch
-===================================================================
---- trunk/buildroot/package/mtd/mtd-utils/mtd-utils-1.1.0-target-lzo-header.patch	2008-09-04 01:35:34 UTC (rev 23314)
-+++ trunk/buildroot/package/mtd/mtd-utils/mtd-utils-1.1.0-target-lzo-header.patch	2008-09-04 01:39:40 UTC (rev 23315)
-@@ -1,14 +0,0 @@
--diff -urN mtd-utils-1.1.0-0rig/compr_lzo.c mtd-utils-1.1.0/compr_lzo.c
----- mtd-utils-1.1.0-0rig/compr_lzo.c	2007-08-03 15:55:51.000000000 +0200
--+++ mtd-utils-1.1.0/compr_lzo.c	2007-09-27 08:18:05.000000000 +0200
--@@ -26,7 +26,7 @@
-- #include <string.h>
-- #include <asm/types.h>
-- #include <linux/jffs2.h>
---#include <lzo/lzo1x.h>
--+#include <lzo1x.h>
-- #include "compr.h"
-- 
-- extern int page_size;
-- $(BUILDDIR)/flash_eraseall: $(BUILDDIR)/crc32.o $(BUILDDIR)/flash_eraseall.o
-- 	$(CC) $(LDFLAGS) -o $@ $^
+Please consider sending compile error logs in English (eg set LANG=C
+before compiling). Thanks 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+09-03-08 08:43  iceman_im      New Issue                                    
+09-03-08 08:43  iceman_im      Status                   new => assigned     
+09-03-08 08:43  iceman_im      Assigned To               => buildroot       
+09-03-08 18:40  hmoffatt       Status                   assigned => closed  
+09-03-08 18:40  hmoffatt       Note Added: 0010974                          
+======================================================================
