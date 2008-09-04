@@ -1,62 +1,59 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 3 Sep 2008 18:37:30 -0700
-Subject: [Buildroot] [buildroot 0004794]: Add new package eeprog to buildroot
-Message-ID: <48117be959fa899d0fcf3e8aabc895d5@busybox.net>
+From: hamish at uclibc.org <hamish@uclibc.org>
+Date: Wed,  3 Sep 2008 18:39:41 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/mtd/mtd-utils
+Message-ID: <20080904013941.329723C731@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: hamish
+Date: 2008-09-03 18:39:40 -0700 (Wed, 03 Sep 2008)
+New Revision: 23315
 
-The following issue has been CLOSED 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=4794 
-====================================================================== 
-Reported By:                gustavoz
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   4794
-Category:                   New Features
-Reproducibility:            always
-Severity:                   feature
-Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             08-29-2008 08:09 PDT
-Last Modified:              09-03-2008 18:37 PDT
-====================================================================== 
-Summary:                    Add new package eeprog to buildroot
-Description: 
-Add the eeprog (i2c eeprom userland programmer) package to buildroot.
+Log:
+Remove lzo patches which aren't required with latest liblzo package updates
 
-====================================================================== 
 
----------------------------------------------------------------------- 
- hmoffatt - 09-03-08 18:37  
----------------------------------------------------------------------- 
-Thanks, patch applied as r23314.
+Removed:
+   trunk/buildroot/package/mtd/mtd-utils/mtd-utils-1.1.0-target-llzo.patch
+   trunk/buildroot/package/mtd/mtd-utils/mtd-utils-1.1.0-target-lzo-header.patch
 
-I modified it slightly - you need to pass CFLAGS="$(TARGET_CFLAGS)" down
-to the submake too, else eeprog's Makefile's default CFLAGS are used. 
 
----------------------------------------------------------------------- 
- hmoffatt - 09-03-08 18:37  
----------------------------------------------------------------------- 
-Fixed in r23314 
+Changeset:
+Deleted: trunk/buildroot/package/mtd/mtd-utils/mtd-utils-1.1.0-target-llzo.patch
+===================================================================
+--- trunk/buildroot/package/mtd/mtd-utils/mtd-utils-1.1.0-target-llzo.patch	2008-09-04 01:35:34 UTC (rev 23314)
++++ trunk/buildroot/package/mtd/mtd-utils/mtd-utils-1.1.0-target-llzo.patch	2008-09-04 01:39:40 UTC (rev 23315)
+@@ -1,10 +0,0 @@
+-diff -urN mtd-utils-1.1.0-0rig/Makefile mtd-utils-1.1.0/Makefile
+---- mtd-utils-1.1.0-0rig/Makefile	2007-08-03 15:55:51.000000000 +0200
+-+++ mtd-utils-1.1.0/Makefile	2007-09-27 08:20:55.000000000 +0200
+-@@ -58,7 +58,7 @@
+- 			$(BUILDDIR)/compr_zlib.o \
+- 			$(BUILDDIR)/compr_lzo.o \
+- 			$(BUILDDIR)/compr.o
+--	$(CC) $(LDFLAGS) -o $@ $^ -lz -llzo2
+-+	$(CC) $(LDFLAGS) -o $@ $^ -lz -llzo
+- 
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-08-29-08 08:09  gustavoz       New Issue                                    
-08-29-08 08:09  gustavoz       Status                   new => assigned     
-08-29-08 08:09  gustavoz       Assigned To               => buildroot       
-08-29-08 08:09  gustavoz       File Added: buildroot-eeprog.patch               
-    
-09-03-08 18:37  hmoffatt       Note Added: 0010954                          
-09-03-08 18:37  hmoffatt       Status                   assigned => closed  
-09-03-08 18:37  hmoffatt       Note Added: 0010964                          
-======================================================================
+Deleted: trunk/buildroot/package/mtd/mtd-utils/mtd-utils-1.1.0-target-lzo-header.patch
+===================================================================
+--- trunk/buildroot/package/mtd/mtd-utils/mtd-utils-1.1.0-target-lzo-header.patch	2008-09-04 01:35:34 UTC (rev 23314)
++++ trunk/buildroot/package/mtd/mtd-utils/mtd-utils-1.1.0-target-lzo-header.patch	2008-09-04 01:39:40 UTC (rev 23315)
+@@ -1,14 +0,0 @@
+-diff -urN mtd-utils-1.1.0-0rig/compr_lzo.c mtd-utils-1.1.0/compr_lzo.c
+---- mtd-utils-1.1.0-0rig/compr_lzo.c	2007-08-03 15:55:51.000000000 +0200
+-+++ mtd-utils-1.1.0/compr_lzo.c	2007-09-27 08:18:05.000000000 +0200
+-@@ -26,7 +26,7 @@
+- #include <string.h>
+- #include <asm/types.h>
+- #include <linux/jffs2.h>
+--#include <lzo/lzo1x.h>
+-+#include <lzo1x.h>
+- #include "compr.h"
+- 
+- extern int page_size;
+- $(BUILDDIR)/flash_eraseall: $(BUILDDIR)/crc32.o $(BUILDDIR)/flash_eraseall.o
+- 	$(CC) $(LDFLAGS) -o $@ $^
