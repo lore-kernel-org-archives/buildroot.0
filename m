@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 4 Sep 2008 17:50:13 -0700
-Subject: [Buildroot] [buildroot 0004804]: lzo1x.h not found
-Message-ID: <17c8cfcc4bbb83ca8557f77b52d34446@busybox.net>
+Date: Thu, 4 Sep 2008 17:59:06 -0700
+Subject: [Buildroot] [buildroot 0002724]: freetype-2.3.5 configure fails
+Message-ID: <1d09e819fd6837074e954d2c3bf08837@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,137 +11,153 @@ To: buildroot@busybox.net
 
 A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=4804 
+http://busybox.net/bugs/view.php?id=2724 
 ====================================================================== 
-Reported By:                iceman_im
+Reported By:                seek
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   4804
-Category:                   Other
-Reproducibility:            have not tried
-Severity:                   crash
+Issue ID:                   2724
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   major
 Priority:                   normal
-Status:                     feedback
+Status:                     assigned
 ====================================================================== 
-Date Submitted:             09-03-2008 08:43 PDT
-Last Modified:              09-04-2008 17:50 PDT
+Date Submitted:             04-02-2008 06:54 PDT
+Last Modified:              09-04-2008 17:59 PDT
 ====================================================================== 
-Summary:                    lzo1x.h not found
+Summary:                    freetype-2.3.5 configure fails
 Description: 
-I try to make a compilation for arm architecutre for an AT91sam9260EK board
-and I have a compilation error in mtd_orig...
+Building of freetype-2.3.5 stops with this error:
 
-Looks like lzo1x.h could not be found but :
+checking for x86_64-pc-linux-gnu-gcc... x86_64-pc-linux-gnu
+checking for x86_64-pc-linux-gnu-gcc... (cached) x86_64-pc-linux-gnu
+checking for x86_64-pc-linux-gnu-gcc... (cached) x86_64-pc-linux-gnu
+checking for suffix of native executables... ./configure: line 3392:
+x86_64-pc-linux-gnu: command not found
+configure: error: native C compiler is not working
+make[1]: *** [setup] Fehler 1
 
-# find -name lzo1x.h
-./build_arm_wchar/lzo-2.03/include/lzo/lzo1x.h
-./build_arm_wchar/staging_dir/usr/include/lzo/lzo1x.h
+freetype-2.2.1 works as expected.
+
+
 
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- hmoffatt - 09-03-08 18:40  
+ antialize - 08-17-08 01:54  
 ---------------------------------------------------------------------- 
-Fixed in r23315.. thanks
+The bug is still there:
 
-Please consider sending compile error logs in English (eg set LANG=C
-before compiling). Thanks 
+cd builds/unix; ./configure  "--target=i686-linux" "--host=i686-linux"
+"--build=x86_64-pc-linux-gnu" "--prefix=/usr" "--exec-prefix=/usr"
+"--bindir=/usr/bin" "--sbindir=/usr/sbin" "--libdir=/usr/lib"
+"--libexecdir=/usr/lib" "--sysconfdir=/etc" "--datadir=/usr/share"
+"--localstatedir=/var" "--includedir=/usr/include" "--mandir=/usr/man"
+"--infodir=/usr/info" " "
+configure: WARNING: you should use --build, --host, --target
+configure: WARNING: invalid host type:
+...
+checking for suffix of native executables... ./configure: line 3392:
+x86_64-pc-linux-gnu: command not found
+configure: error: native C compiler is not working
 
----------------------------------------------------------------------- 
- iceman_im - 09-04-08 08:25  
----------------------------------------------------------------------- 
-Sorry for the french error log, next time it will be in english.
-Thanks for the fix but I allready have the same problem...
-
-In fact the build works find for an ext2 file system but crashed for a
-jffs2 one... 
-
----------------------------------------------------------------------- 
- vintonc - 09-04-08 14:30  
----------------------------------------------------------------------- 
-I have the same issue.  I have verified that lzo and lzo-devel are
-installed on the host system, they were suggested as possible causes of
-the issue elsewhere. It will build for ext2 only just fine. I am currently
-trying to build for jffs2 only.  I am running R23324, newer than the fixed
-note indicates.
-
-/home/vintonc/buildroot/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-gcc
--I. -I./include
--I/home/vintonc/buildroot/buildroot/toolchain_build_arm/linux/include
--I/home/vintonc/buildroot/buildroot/build_arm/staging_dir/usr/include -Os 
--I/home/vintonc/buildroot/buildroot/build_arm/staging_dir/usr/include
--I/home/vintonc/buildroot/buildroot/build_arm/staging_dir/include
---sysroot=/home/vintonc/buildroot/buildroot/build_arm/staging_dir/
--isysroot /home/vintonc/buildroot/buildroot/build_arm/staging_dir
--mtune=arm920t -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -g -c -o
-/home/vintonc/buildroot/buildroot/build_arm/mtd_orig/compr_lzo.o
-compr_lzo.c -g
--Wp,-MD,/home/vintonc/buildroot/buildroot/build_arm/mtd_orig/.compr_lzo.c.dep
-compr_lzo.c:29:19: error: lzo1x.h: No such file or directory
-compr_lzo.c: In function 'jffs2_lzo_cmpr':
-compr_lzo.c:56: error: 'LZO_E_OK' undeclared (first use in this function)
-compr_lzo.c:56: error: (Each undeclared identifier is reported only once
-compr_lzo.c:56: error: for each function it appears in.)
-compr_lzo.c: In function 'jffs2_lzo_decompress':
-compr_lzo.c:76: error: 'LZO_E_OK' undeclared (first use in this function)
-compr_lzo.c: In function 'jffs2_lzo_init':
-compr_lzo.c:95: error: 'LZO1X_999_MEM_COMPRESS' undeclared (first use in
-this function)
-make[1]: ***
-[/home/vintonc/buildroot/buildroot/build_arm/mtd_orig/compr_lzo.o] Error
-1
-rm /home/vintonc/buildroot/buildroot/build_arm/mtd_orig/ftl_check.o
-/home/vintonc/buildroot/buildroot/build_arm/mtd_orig/mkfs.jffs.o
-/home/vintonc/buildroot/buildroot/build_arm/mtd_orig/doc_loadbios.o
-/home/vintonc/buildroot/buildroot/build_arm/mtd_orig/flash_erase.o
-/home/vintonc/buildroot/buildroot/build_arm/mtd_orig/ftl_format.o
-/home/vintonc/buildroot/buildroot/build_arm/mtd_orig/nanddump.o
-make[1]: Leaving directory
-`/home/vintonc/buildroot/buildroot/build_arm/mtd_orig'
-make: ***
-[/home/vintonc/buildroot/buildroot/build_arm/mtd_orig/flash_erase] Error
-2
-[vintonc at discovery buildroot]$ svn info
-Path: .
-URL: svn://uclibc.org/trunk/buildroot
-Repository Root: svn://uclibc.org
-Repository UUID: 69ca8d6d-28ef-0310-b511-8ec308f3f277
-Revision: 23324
-Node Kind: directory
-Schedule: normal
-Last Changed Author: hamish
-Last Changed Rev: 23319
-Last Changed Date: 2008-09-04 01:50:31 -0400 (Thu, 04 Sep 2008) 
+ 
 
 ---------------------------------------------------------------------- 
- hmoffatt - 09-04-08 17:50  
+ antialize - 08-07-08 11:47  
 ---------------------------------------------------------------------- 
-After updating from svn you need to make mtd-host-dirclean and
-mtd-dirclean, because the old patches have already been applied and need
-to be undone.
+The bug is on line 43 in build/configure.raw
+It saies
+AC_CHECK_PROG(CC_BUILD, ${build}-gcc, ${build-gcc})
+It should be
+AC_CHECK_PROG(CC_BUILD, ${build}-gcc, ${build}-gcc)
 
-Can you please try this and update the issue if you still have trouble?
-I have built mtd-utils.git successfully with these patches removed and the
-latest lzo in the tree.
+It seems this bug has already been fixed upstream, can we get a vertion
+bump? 
 
-Sorry for my ignorance of French :) 
+---------------------------------------------------------------------- 
+ hmoffatt - 09-03-08 21:27  
+---------------------------------------------------------------------- 
+Can you modify your package/freetype/Config.in to change 2.3.5 to 2.3.7,
+run "make menuconfig" and save, then try a build and tell us if it works? 
+
+---------------------------------------------------------------------- 
+ antialize - 09-04-08 10:32  
+---------------------------------------------------------------------- 
+Something changed at some point and i am able to build 2.3.5 from plain
+svn.
+
+Using the following patch i can bulid both 2.3.5 and 2.3.7
+
+Index: package/freetype/freetype.mk
+===================================================================
+--- package/freetype/freetype.mk        (revision 23182)
++++ package/freetype/freetype.mk        (working copy)
+@@ -16,7 +16,7 @@
+
+ $(FREETYPE_DIR)/.unpacked: $(DL_DIR)/$(FREETYPE_SOURCE)
+        $(FREETYPE_CAT) $(DL_DIR)/$(FREETYPE_SOURCE) | tar -C $(BUILD_DIR)
+$(TAR_OPTIONS) -
+-       toolchain/patch-kernel.sh $(FREETYPE_DIR) package/freetype/
+\*.patch
++       echo freetype-$(FREETYPE_VERSION)\*.patch | grep -q '*' ||
+toolchain/patch-kernel.sh $(FREETYPE_DIR) package/freetype/
+        $(CONFIG_UPDATE) $(FREETYPE_DIR)
+        $(CONFIG_UPDATE) $(FREETYPE_DIR)/builds/unix
+        touch $@
+Index: package/freetype/Config.in
+===================================================================
+--- package/freetype/Config.in  (revision 23182)
++++ package/freetype/Config.in  (working copy)
+@@ -19,9 +19,13 @@
+        config BR2_FREETYPE_VERSION_2_3_5
+                bool "Freetype 2.3.5"
+
++       config BR2_FREETYPE_VERSION_2_3_7
++               bool "Freetype 2.3.7"
++
+ endchoice
+
+ config BR2_FREETYPE_VERSION
+        string
+        default "2.2.1"         if BR2_FREETYPE_VERSION_2_2_1
+        default "2.3.5"         if BR2_FREETYPE_VERSION_2_3_5
++       default "2.3.7"         if BR2_FREETYPE_VERSION_2_3_7 
+
+---------------------------------------------------------------------- 
+ hmoffatt - 09-04-08 17:59  
+---------------------------------------------------------------------- 
+Is there any need to support both 2.3.5 and 2.3.7, or should the newer
+version replace the older one?
+
+The change to the patch command is wrong I'm sorry.
+
+- toolchain/patch-kernel.sh $(FREETYPE_DIR) package/freetype/ \*.patch
++ echo freetype-$(FREETYPE_VERSION)\*.patch | grep -q '*' ||
+toolchain/patch-kernel.sh $(FREETYPE_DIR) package/freetype/
+
+This will apply ALL patches, if there are any that match the version (not
+just that version's patches). Instead the last argument should simply be
+modified:
+
+- toolchain/patch-kernel.sh $(FREETYPE_DIR) package/freetype/ \*.patch
++ toolchain/patch-kernel.sh $(FREETYPE_DIR) package/freetype/
+freetype-$(FREETYPE_VERSION)-\*.patch 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-09-03-08 08:43  iceman_im      New Issue                                    
-09-03-08 08:43  iceman_im      Status                   new => assigned     
-09-03-08 08:43  iceman_im      Assigned To               => buildroot       
-09-03-08 18:40  hmoffatt       Status                   assigned => closed  
-09-03-08 18:40  hmoffatt       Note Added: 0010974                          
-09-03-08 18:40  hmoffatt       Resolution               open => fixed       
-09-04-08 08:21  iceman_im      Issue Monitored: iceman_im                    
-09-04-08 08:22  iceman_im      Issue End Monitor: iceman_im                    
-09-04-08 08:25  iceman_im      Status                   closed => feedback  
-09-04-08 08:25  iceman_im      Resolution               fixed => reopened   
-09-04-08 08:25  iceman_im      Note Added: 0011004                          
-09-04-08 14:30  vintonc        Note Added: 0011054                          
-09-04-08 17:50  hmoffatt       Note Added: 0011074                          
+04-02-08 06:54  seek           New Issue                                    
+04-02-08 06:54  seek           Status                   new => assigned     
+04-02-08 06:54  seek           Assigned To               => buildroot       
+08-07-08 09:43  antialize      Note Added: 0010314                          
+08-07-08 09:45  antialize      Note Edited: 0010314                         
+08-07-08 10:25  antialize      Issue Monitored: antialize                    
+08-07-08 11:47  antialize      Note Added: 0010324                          
+08-17-08 01:54  antialize      Note Edited: 0010314                         
+09-03-08 21:27  hmoffatt       Note Added: 0010984                          
+09-04-08 10:32  antialize      Note Added: 0011014                          
+09-04-08 17:59  hmoffatt       Note Added: 0011084                          
 ======================================================================
