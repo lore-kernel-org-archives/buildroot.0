@@ -1,67 +1,74 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 5 Sep 2008 10:08:27 -0700
-Subject: [Buildroot] [buildroot 0004824]: at91sam9263ek build fails due to
-	CFG_DEBUG being undefined
-Message-ID: <ab9971a465c3ee5c4ad849512cb174a8@bugs.uclibc.org>
+From: danieljlaird at hotmail.com <danieljlaird@hotmail.com>
+Date: Fri, 5 Sep 2008 18:44:05 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/freetype
+In-Reply-To: <20080905010349.6D501F800B@busybox.net>
+	<87iqtagbry.fsf@macbook.be.48ers.dk>
+References: <20080905010349.6D501F800B@busybox.net>
+	<87iqtagbry.fsf@macbook.be.48ers.dk>
+Message-ID: <COL102-DS8F90489E9F7026AD165EEDC580@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+I use freetype etc so I will look into 'auto tooling' it within the next 
+couple of weeks.
+I am currently testing version bumps of GLIB, GTK, CAIRO, PIXMAN etc.  Once 
+done will feedback.
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=4824 
-====================================================================== 
-Reported By:                john_schimandle
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   4824
-Category:                   Architecture Specific
-Reproducibility:            sometimes
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             09-05-2008 10:08 PDT
-Last Modified:              09-05-2008 10:08 PDT
-====================================================================== 
-Summary:                    at91sam9263ek build fails due to CFG_DEBUG being
-undefined
-Description: 
-project_build_arm/at91sam9263ek/at91bootstrap-2.3/board/at91sam9263ek/dataflash/at91sam9263ek.h
+As well as trying to do the dir move stuff.
+As indicated I hope to move all the block device stuff and xml tools stuff 
+next.
 
-has the statement
+Cheers
+Dan
 
-#undef CFG_DEBUG
+--------------------------------------------------
+From: "Peter Korsgaard" <jacmet@uclibc.org>
+Sent: Friday, September 05, 2008 10:52 AM
+To: <buildroot@uclibc.org>
+Subject: Re: [Buildroot] svn commit: trunk/buildroot/package/freetype
 
-This statement causes the compile of
-project_build_arm/at91sam9263ek/at91bootstrap-2.3/driver/dataflash.c to
-fail because the debug functions
-in project_build_arm/at91sam9263ek/at91bootstrap-2.3/driver/debug.c were
-not compiled.
-
-To fix the defect just change the offending line to
-
-#define CFG_DEBUG
-
-You could also make a more extensive fix that would actually make the
-debugging optional but that would required surrounding all calls to debug
-functions in all .c files with #ifdef CFG_DEBUG. This is more work and I
-don't know if this is necessary because this is the bootstrap loader.
-
-Only reproduceable if you are building for the at91sam9263ek because this
-is the only .h file that has a undef for CFG_DEBUG. All other device
-include files have the define instead.
-====================================================================== 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-09-05-08 10:08  john_schimandleNew Issue                                    
-09-05-08 10:08  john_schimandleStatus                   new => assigned     
-09-05-08 10:08  john_schimandleAssigned To               => buildroot       
-09-05-08 10:08  john_schimandleFile Added: at91sam9263ek.h                    
-======================================================================
+>>>>>> "hamish" == hamish  <hamish@uclibc.org> writes:
+>
+> Hi,
+>
+> hamish> Author: hamish
+> hamish> Date: 2008-09-04 18:03:45 -0700 (Thu, 04 Sep 2008)
+> hamish> New Revision: 23325
+>
+> hamish> Log:
+> hamish> Version bump to 2.3.7
+> hamish> This package should be converted to use Makefile.autotools.in
+> hamish> by someone who uses it..
+>
+> Heh ;)
+>
+> hamish> Changeset:
+> hamish> Modified: trunk/buildroot/package/freetype/Config.in
+> hamish> 
+> ===================================================================
+> hamish> --- trunk/buildroot/package/freetype/Config.in 2008-09-04 16:16:47 
+> UTC (rev 23324)
+> hamish> +++ trunk/buildroot/package/freetype/Config.in 2008-09-05 01:03:45 
+> UTC (rev 23325)
+> hamish> @@ -16,12 +16,12 @@
+> hamish>  config BR2_FREETYPE_VERSION_2_2_1
+> hamish>  bool "Freetype 2.2.1"
+>
+> hamish> - config BR2_FREETYPE_VERSION_2_3_5
+> hamish> - bool "Freetype 2.3.5"
+> hamish> + config BR2_FREETYPE_VERSION_2_3_7
+> hamish> + bool "Freetype 2.3.7"
+>
+> Please use 2_3_x like we do it for busybox and haserl so kconfig will
+> do the right thing when you update your buildroot snapshot.
+>
+> -- 
+> Bye, Peter Korsgaard
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+> 
