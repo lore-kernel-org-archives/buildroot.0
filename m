@@ -1,157 +1,68 @@
-From: laird at uclibc.org <laird@uclibc.org>
-Date: Fri,  5 Sep 2008 05:06:50 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package:  audio
-Message-ID: <20080905120650.45FB73C67A@busybox.net>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Fri, 5 Sep 2008 22:53:03 +1000
+Subject: [Buildroot] svn commit: trunk/buildroot/package/freetype
+In-Reply-To: <87iqtagbry.fsf@macbook.be.48ers.dk>
+References: <20080905010349.6D501F800B@busybox.net>
+	<87iqtagbry.fsf@macbook.be.48ers.dk>
+Message-ID: <20080905125303.GA31755@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: laird
-Date: 2008-09-05 05:06:50 -0700 (Fri, 05 Sep 2008)
-New Revision: 23330
+On Fri, Sep 05, 2008 at 11:52:33AM +0200, Peter Korsgaard wrote:
+>  hamish> Changeset:
+>  hamish> Modified: trunk/buildroot/package/freetype/Config.in
+>  hamish> ===================================================================
+>  hamish> --- trunk/buildroot/package/freetype/Config.in	2008-09-04 16:16:47 UTC (rev 23324)
+>  hamish> +++ trunk/buildroot/package/freetype/Config.in	2008-09-05 01:03:45 UTC (rev 23325)
+>  hamish> @@ -16,12 +16,12 @@
+>  hamish>  	config BR2_FREETYPE_VERSION_2_2_1
+>  hamish>  		bool "Freetype 2.2.1"
+>  
+>  hamish> -	config BR2_FREETYPE_VERSION_2_3_5
+>  hamish> -		bool "Freetype 2.3.5"
+>  hamish> +	config BR2_FREETYPE_VERSION_2_3_7
+>  hamish> +		bool "Freetype 2.3.7"
+> 
+> Please use 2_3_x like we do it for busybox and haserl so kconfig will
+> do the right thing when you update your buildroot snapshot.
 
-Log:
-audio: Move all audio packages into audio subdir
+Hi Peter,
 
-Moved all audio packages into a subdir called audio.
-I then created a Config.in and made sure that a audio.mk 
-existed.
-
-Daniel Laird
-
-
-Added:
-   trunk/buildroot/package/audio/
-   trunk/buildroot/package/audio/Config.in
-   trunk/buildroot/package/audio/alsa-lib/
-   trunk/buildroot/package/audio/alsa-utils/
-   trunk/buildroot/package/audio/asterisk/
-   trunk/buildroot/package/audio/audio.mk
-   trunk/buildroot/package/audio/aumix/
-   trunk/buildroot/package/audio/festival/
-   trunk/buildroot/package/audio/libid3tag/
-   trunk/buildroot/package/audio/libmad/
-   trunk/buildroot/package/audio/libogg/
-   trunk/buildroot/package/audio/libsndfile/
-   trunk/buildroot/package/audio/libvorbis/
-   trunk/buildroot/package/audio/madplay/
-   trunk/buildroot/package/audio/mpg123/
-   trunk/buildroot/package/audio/speex/
-
-Removed:
-   trunk/buildroot/package/alsa-lib/
-   trunk/buildroot/package/alsa-utils/
-   trunk/buildroot/package/asterisk/
-   trunk/buildroot/package/aumix/
-   trunk/buildroot/package/festival/
-   trunk/buildroot/package/libid3tag/
-   trunk/buildroot/package/libmad/
-   trunk/buildroot/package/libogg/
-   trunk/buildroot/package/libsndfile/
-   trunk/buildroot/package/libvorbis/
-   trunk/buildroot/package/madplay/
-   trunk/buildroot/package/mpg123/
-   trunk/buildroot/package/speex/
-
-Modified:
-   trunk/buildroot/package/Config.in
+That sounds good but I'm not really sure what you mean?
 
 
-Changeset:
-Modified: trunk/buildroot/package/Config.in
-===================================================================
---- trunk/buildroot/package/Config.in	2008-09-05 12:05:47 UTC (rev 23329)
-+++ trunk/buildroot/package/Config.in	2008-09-05 12:06:50 UTC (rev 23330)
-@@ -285,28 +285,9 @@
- source "package/xfsprogs/Config.in"
- endif
- 
--menuconfig BR2_AUDIO_SUPPORT
--	bool "Audio libraries and applications"
--	default y
--	help
--	  Support for audio libraries and applications
-+# Audio support
-+source "package/audio/Config.in"
- 
--if BR2_AUDIO_SUPPORT
--source "package/alsa-lib/Config.in"
--source "package/alsa-utils/Config.in"
--source "package/asterisk/Config.in"
--source "package/aumix/Config.in"
--source "package/libid3tag/Config.in"
--source "package/libmad/Config.in"
--source "package/libogg/Config.in"
--source "package/libsndfile/Config.in"
--source "package/libvorbis/Config.in"
--source "package/madplay/Config.in"
--source "package/mpg123/Config.in"
--source "package/speex/Config.in"
--source "package/festival/Config.in"
--endif
--
- menuconfig BR2_GRAPHIC_SUPPORT
- 	bool "Graphic libraries and applications (graphic/text)"
- 	default y
+choice
+	prompt "BusyBox Version"
+	depends on BR2_PACKAGE_BUSYBOX
+	default BR2_BUSYBOX_VERSION_1_12_X
+	help
+	  Select the version of BusyBox you wish to use.
 
-Added: trunk/buildroot/package/audio/Config.in
-===================================================================
---- trunk/buildroot/package/audio/Config.in	                        (rev 0)
-+++ trunk/buildroot/package/audio/Config.in	2008-09-05 12:06:50 UTC (rev 23330)
-@@ -0,0 +1,21 @@
-+menuconfig BR2_AUDIO_SUPPORT
-+	bool "Audio libraries and applications"
-+	default y
-+	help
-+	  Support for audio libraries and applications
-+
-+if BR2_AUDIO_SUPPORT
-+source "package/audio/alsa-lib/Config.in"
-+source "package/audio/alsa-utils/Config.in"
-+source "package/audio/asterisk/Config.in"
-+source "package/audio/aumix/Config.in"
-+source "package/audio/libid3tag/Config.in"
-+source "package/audio/libmad/Config.in"
-+source "package/audio/libogg/Config.in"
-+source "package/audio/libsndfile/Config.in"
-+source "package/audio/libvorbis/Config.in"
-+source "package/audio/madplay/Config.in"
-+source "package/audio/mpg123/Config.in"
-+source "package/audio/speex/Config.in"
-+source "package/audio/festival/Config.in"
-+endif
+	config BR2_BUSYBOX_VERSION_1_2_2_1
+		bool "BusyBox 1.2.2.1"
+		depends on BR2_DEPRECATED
 
-Copied: trunk/buildroot/package/audio/alsa-lib (from rev 23309, trunk/buildroot/package/alsa-lib)
+	[...]
+endchoice
 
-Copied: trunk/buildroot/package/audio/alsa-utils (from rev 23309, trunk/buildroot/package/alsa-utils)
+config BR2_BUSYBOX_VERSION
+	string
+	default "1.2.2.1"	if BR2_BUSYBOX_VERSION_1_2_2_1
+	default "1.6.1"		if BR2_BUSYBOX_VERSION_1_6_1
+	default "1.7.5"		if BR2_BUSYBOX_VERSION_1_7_X
+	default "1.8.3"		if BR2_BUSYBOX_VERSION_1_8_X
+	default "1.9.2"		if BR2_BUSYBOX_VERSION_1_9_X
+	default "1.10.4"	if BR2_BUSYBOX_VERSION_1_10_X
+	default "1.11.2"	if BR2_BUSYBOX_VERSION_1_11_X
+	default "1.12.0"	if BR2_BUSYBOX_VERSION_1_12_X
 
-Copied: trunk/buildroot/package/audio/asterisk (from rev 23309, trunk/buildroot/package/asterisk)
 
-Added: trunk/buildroot/package/audio/audio.mk
-===================================================================
---- trunk/buildroot/package/audio/audio.mk	                        (rev 0)
-+++ trunk/buildroot/package/audio/audio.mk	2008-09-05 12:06:50 UTC (rev 23330)
-@@ -0,0 +1 @@
-+include package/audio/*/*.mk
+How's it different?
 
-Copied: trunk/buildroot/package/audio/aumix (from rev 23309, trunk/buildroot/package/aumix)
-
-Copied: trunk/buildroot/package/audio/festival (from rev 23309, trunk/buildroot/package/festival)
-
-Copied: trunk/buildroot/package/audio/libid3tag (from rev 23309, trunk/buildroot/package/libid3tag)
-
-Copied: trunk/buildroot/package/audio/libmad (from rev 23309, trunk/buildroot/package/libmad)
-
-Copied: trunk/buildroot/package/audio/libogg (from rev 23309, trunk/buildroot/package/libogg)
-
-Copied: trunk/buildroot/package/audio/libsndfile (from rev 23309, trunk/buildroot/package/libsndfile)
-
-Copied: trunk/buildroot/package/audio/libvorbis (from rev 23309, trunk/buildroot/package/libvorbis)
-
-Copied: trunk/buildroot/package/audio/madplay (from rev 23309, trunk/buildroot/package/madplay)
-
-Copied: trunk/buildroot/package/audio/mpg123 (from rev 23309, trunk/buildroot/package/mpg123)
-
-Copied: trunk/buildroot/package/audio/speex (from rev 23309, trunk/buildroot/package/speex)
+Thanks and regards
+Hamish
+-- 
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
