@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 5 Sep 2008 08:04:57 -0700
+Date: Fri, 5 Sep 2008 08:12:59 -0700
 Subject: [Buildroot] [buildroot 0004804]: lzo1x.h not found
-Message-ID: <04870ff6a912ebc338c92a841a8f18bb@busybox.net>
+Message-ID: <0f6498dee0c5d7ab22abf9c4e3e443d4@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -25,7 +25,7 @@ Priority:                   normal
 Status:                     feedback
 ====================================================================== 
 Date Submitted:             09-03-2008 08:43 PDT
-Last Modified:              09-05-2008 08:04 PDT
+Last Modified:              09-05-2008 08:12 PDT
 ====================================================================== 
 Summary:                    lzo1x.h not found
 Description: 
@@ -266,6 +266,32 @@ failed.
 That's your system's xargs crashing.. nothing to do with buildroot.. :-|
 I'm not sure what to suggest sorry. 
 
+---------------------------------------------------------------------- 
+ vintonc - 09-05-08 08:12  
+---------------------------------------------------------------------- 
+Your suggestion to make mtd-host-dirclean and mtd-dirclean worked.  I when
+back and did a make distclean just to be sure nothing else was cached that
+could cause a problem.  This is my first time using buildroot so I still
+need to determine if my build results are a problem or not. Thanks for the
+help.
+
+/home/vintonc/buildroot/buildroot/build_arm/staging_dir/usr/bin/fakeroot
+--
+/home/vintonc/buildroot/buildroot/project_build_arm/uclibc/_fakeroot.rootfs.arm.jffs2
+rootdir=/home/vintonc/buildroot/buildroot/project_build_arm/uclibc/root
+table='target/generic/mini_device_table.txt'
+mkfs.jffs2: skipping device_table entry '/dev': no parent directory!
+mkfs.jffs2: skipping device_table entry '/tmp': no parent directory!
+mkfs.jffs2: skipping device_table entry '/etc': no parent directory!
+mkfs.jffs2: skipping device_table entry '/sys': no parent directory!
+mkfs.jffs2: skipping device_table entry '/config': no parent directory!
+mkfs.jffs2: skipping device_table entry '/proc': no parent directory!
+mkfs.jffs2: skipping device_table entry '/root': no parent directory!
+-rw-r--r-- 1 vintonc vintonc 2041644 2008-09-04 22:59
+/home/vintonc/buildroot/buildroot/binaries/uclibc/rootfs.arm.jffs2
+rm -f
+/home/vintonc/buildroot/buildroot/project_build_arm/uclibc/.fakeroot* 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -285,4 +311,5 @@ Date Modified   Username       Field                    Change
 09-05-08 06:40  iceman_im      Note Added: 0011114                          
 09-05-08 06:45  iceman_im      Note Edited: 0011114                         
 09-05-08 08:04  hmoffatt       Note Added: 0011124                          
+09-05-08 08:12  vintonc        Note Added: 0011134                          
 ======================================================================
