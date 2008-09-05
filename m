@@ -1,58 +1,276 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Fri, 5 Sep 2008 23:09:18 +1000
-Subject: [Buildroot] Login exited
-In-Reply-To: <ed4892840809050038j3d0be1edjca3226465afedfdb@mail.gmail.com>
-References: <ed4892840809010102n6293e75ejc6caf1dd57a954db@mail.gmail.com>
-	<ed4892840809011747w183e8e8bma1451d38c40e65c0@mail.gmail.com>
-	<200809031950.49148.vda.linux@googlemail.com>
-	<ed4892840809031850y32161b46qc99547711ab535a7@mail.gmail.com>
-	<20080904020018.GC16933@cloud.net.au>
-	<ed4892840809032234h62607fb2oac8847e3da884e44@mail.gmail.com>
-	<20080904142912.GB28250@cloud.net.au>
-	<ed4892840809040849x7505c56ft98135e1535dc0fcc@mail.gmail.com>
-	<20080905010758.GA22747@cloud.net.au>
-	<ed4892840809050038j3d0be1edjca3226465afedfdb@mail.gmail.com>
-Message-ID: <20080905130918.GB31755@cloud.net.au>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Fri, 5 Sep 2008 06:40:52 -0700
+Subject: [Buildroot] [buildroot 0004804]: lzo1x.h not found
+Message-ID: <9e77b951046fdb3c4b4ab53071ce2f54@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Sep 05, 2008 at 03:38:31PM +0800, Steven Woody wrote:
-> PS.  I just noticed, there is an error line when I run 'make' to get
-> my rootfs image, it is:
->  ...
->  rootdir=/root/buildroot/project_build_arm/uclibc/root
->  table='target/generic/mini_device_table.txt'
->  /root/buildroot/build_arm/cramfs-1.1/mkcramfs: invalid option -- l
->  rm -f /root/buildroot/project_build_arm/uclibc/.fakeroot*
-> 
-> I checked, there is no a -l option for mkcramfs, but the buildroot
-> does try to use it.  Anyway, the cramfs is created successfully, but I
-> am not sure it is not a problem.
 
--l is for a little endian file system, so if it's producing a file
-system with the wrong endianness, yes that's a big problem.
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=4804 
+====================================================================== 
+Reported By:                iceman_im
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   4804
+Category:                   Other
+Reproducibility:            have not tried
+Severity:                   crash
+Priority:                   normal
+Status:                     feedback
+====================================================================== 
+Date Submitted:             09-03-2008 08:43 PDT
+Last Modified:              09-05-2008 06:40 PDT
+====================================================================== 
+Summary:                    lzo1x.h not found
+Description: 
+I try to make a compilation for arm architecutre for an AT91sam9260EK board
+and I have a compilation error in mtd_orig...
 
-I'm assuming your target is little-endian. (By the way the
-buildroot.config you attached to the next message was actually some sort
-of configure log, not a buildroot configuration - so I couldn't check
-that).
+Looks like lzo1x.h could not be found but :
 
-Your mkcramfs build must have got wrong, or you're missing the patches
-or something. Specifically you must have
-target/cramfs/cramfs-02-endian.patch - it's dated 2005 so I can't
-believe it's just a case of an old version.
+# find -name lzo1x.h
+./build_arm_wchar/lzo-2.03/include/lzo/lzo1x.h
+./build_arm_wchar/staging_dir/usr/include/lzo/lzo1x.h
 
-Can you check if you have that patch? Perhaps you can "make
-cramfs-dirclean", then make again, and if you still see the problem then
-post a build log from "make cramfs-dirclean cramfs".
+====================================================================== 
 
-It's unfortunate that mkcramfs doesn't bomb out when passed invalid
-options..
+---------------------------------------------------------------------- 
+ hmoffatt - 09-03-08 18:40  
+---------------------------------------------------------------------- 
+Fixed in r23315.. thanks
+
+Please consider sending compile error logs in English (eg set LANG=C
+before compiling). Thanks 
+
+---------------------------------------------------------------------- 
+ iceman_im - 09-04-08 08:25  
+---------------------------------------------------------------------- 
+Sorry for the french error log, next time it will be in english.
+Thanks for the fix but I allready have the same problem...
+
+In fact the build works find for an ext2 file system but crashed for a
+jffs2 one... 
+
+---------------------------------------------------------------------- 
+ vintonc - 09-04-08 14:30  
+---------------------------------------------------------------------- 
+I have the same issue.  I have verified that lzo and lzo-devel are
+installed on the host system, they were suggested as possible causes of
+the issue elsewhere. It will build for ext2 only just fine. I am currently
+trying to build for jffs2 only.  I am running R23324, newer than the fixed
+note indicates.
+
+/home/vintonc/buildroot/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-gcc
+-I. -I./include
+-I/home/vintonc/buildroot/buildroot/toolchain_build_arm/linux/include
+-I/home/vintonc/buildroot/buildroot/build_arm/staging_dir/usr/include -Os 
+-I/home/vintonc/buildroot/buildroot/build_arm/staging_dir/usr/include
+-I/home/vintonc/buildroot/buildroot/build_arm/staging_dir/include
+--sysroot=/home/vintonc/buildroot/buildroot/build_arm/staging_dir/
+-isysroot /home/vintonc/buildroot/buildroot/build_arm/staging_dir
+-mtune=arm920t -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64 -g -c -o
+/home/vintonc/buildroot/buildroot/build_arm/mtd_orig/compr_lzo.o
+compr_lzo.c -g
+-Wp,-MD,/home/vintonc/buildroot/buildroot/build_arm/mtd_orig/.compr_lzo.c.dep
+compr_lzo.c:29:19: error: lzo1x.h: No such file or directory
+compr_lzo.c: In function 'jffs2_lzo_cmpr':
+compr_lzo.c:56: error: 'LZO_E_OK' undeclared (first use in this function)
+compr_lzo.c:56: error: (Each undeclared identifier is reported only once
+compr_lzo.c:56: error: for each function it appears in.)
+compr_lzo.c: In function 'jffs2_lzo_decompress':
+compr_lzo.c:76: error: 'LZO_E_OK' undeclared (first use in this function)
+compr_lzo.c: In function 'jffs2_lzo_init':
+compr_lzo.c:95: error: 'LZO1X_999_MEM_COMPRESS' undeclared (first use in
+this function)
+make[1]: ***
+[/home/vintonc/buildroot/buildroot/build_arm/mtd_orig/compr_lzo.o] Error
+1
+rm /home/vintonc/buildroot/buildroot/build_arm/mtd_orig/ftl_check.o
+/home/vintonc/buildroot/buildroot/build_arm/mtd_orig/mkfs.jffs.o
+/home/vintonc/buildroot/buildroot/build_arm/mtd_orig/doc_loadbios.o
+/home/vintonc/buildroot/buildroot/build_arm/mtd_orig/flash_erase.o
+/home/vintonc/buildroot/buildroot/build_arm/mtd_orig/ftl_format.o
+/home/vintonc/buildroot/buildroot/build_arm/mtd_orig/nanddump.o
+make[1]: Leaving directory
+`/home/vintonc/buildroot/buildroot/build_arm/mtd_orig'
+make: ***
+[/home/vintonc/buildroot/buildroot/build_arm/mtd_orig/flash_erase] Error
+2
+[vintonc at discovery buildroot]$ svn info
+Path: .
+URL: svn://uclibc.org/trunk/buildroot
+Repository Root: svn://uclibc.org
+Repository UUID: 69ca8d6d-28ef-0310-b511-8ec308f3f277
+Revision: 23324
+Node Kind: directory
+Schedule: normal
+Last Changed Author: hamish
+Last Changed Rev: 23319
+Last Changed Date: 2008-09-04 01:50:31 -0400 (Thu, 04 Sep 2008) 
+
+---------------------------------------------------------------------- 
+ hmoffatt - 09-04-08 17:50  
+---------------------------------------------------------------------- 
+After updating from svn you need to make mtd-host-dirclean and
+mtd-dirclean, because the old patches have already been applied and need
+to be undone.
+
+Can you please try this and update the issue if you still have trouble?
+I have built mtd-utils.git successfully with these patches removed and the
+latest lzo in the tree.
+
+Sorry for my ignorance of French :) 
+
+---------------------------------------------------------------------- 
+ iceman_im - 09-05-08 06:40  
+---------------------------------------------------------------------- 
+Still unsolved an now i have an another error a the same time.
+during a clean just before the previous one.
+
+Checking build system dependencies:
+BUILDROOT_DL_DIR clean:                         Ok
+CC clean:                                       Ok
+CXX clean:                                      Ok
+CPP clean:                                      Ok
+CFLAGS clean:                                   Ok
+INCLUDES clean:                                 Ok
+CXXFLAGS clean:                                 Ok
+which installed:                                Ok
+sed works:                                      Ok (/bin/sed)
+GNU make version '3.81':                        Ok
+C compiler '/usr/lib/ccache/gcc'
+C compiler version '4.1.2':                     Ok
+C++ compiler '/usr/lib/ccache/g++'
+C++ compiler version '4.1.2':                   Ok
+awk installed:                                  Ok
+bison installed:                                Ok
+flex installed:                                 Ok
+gettext installed:                              Ok
+makeinfo installed:                             Ok
+Build system dependencies:                      Ok
+
+rm -rf
+/home/assensg/Bureau/Buildroot/buildroot/project_build_arm_wchar/at91sam9260pf/buildroot-config
+mkdir -p
+/home/assensg/Bureau/Buildroot/buildroot/project_build_arm_wchar/at91sam9260pf
+cp -dpRf package/config/buildroot-config
+/home/assensg/Bureau/Buildroot/buildroot/project_build_arm_wchar/at91sam9260pf/buildroot-config
+rm -rf
+/home/assensg/Bureau/Buildroot/buildroot/project_build_arm_wchar/at91sam9260pf/root/usr/include
+/home/assensg/Bureau/Buildroot/buildroot/project_build_arm_wchar/at91sam9260pf/root/usr/lib/pkgconfig
+find
+/home/assensg/Bureau/Buildroot/buildroot/project_build_arm_wchar/at91sam9260pf/root/usr/lib
+-name '*.a' -delete
+find
+/home/assensg/Bureau/Buildroot/buildroot/project_build_arm_wchar/at91sam9260pf/root/lib
+-name '*.a' -delete
+find
+/home/assensg/Bureau/Buildroot/buildroot/project_build_arm_wchar/at91sam9260pf/root/usr/lib
+-name '*.la' -delete
+find
+/home/assensg/Bureau/Buildroot/buildroot/project_build_arm_wchar/at91sam9260pf/root/lib
+-name '*.la' -delete
+/usr/bin/make -j20 \
+                MEMORY=dataflashcard \
+               
+CROSS_COMPILE=/home/assensg/Bureau/Buildroot/buildroot/build_arm_wchar/staging_dir/usr/bin/arm-linux-uclibc-
+\
+                -C
+/home/assensg/Bureau/Buildroot/buildroot/project_build_arm_wchar/at91sam9260pf/at91bootstrap-2.3
+\
+                at91sam9260dfc_defconfig
+make[1]: Entering directory
+`/home/assensg/Bureau/Buildroot/buildroot/project_build_arm_wchar/at91sam9260pf/at91bootstrap-2.3'
+find . -type f \( -name .depend \
+                -o -name '*.srec' \
+                -o -name '*.elf' \
+                -o -name '*.map' \
+                -o -name '*.o' \
+                -o -name '*~' \) \
+                -print0 \
+                | xargs -0 rm -f
+xargs: xargs.c:445: main: Assertion `bc_ctl.arg_max <= (131072-2048)'
+failed.
+/bin/sh: line 7: 16391 Done                    find . -type f \( -name
+.depend -o -name '*.srec' -o -name '*.elf' -o -name '*.map' -o -name '*.o'
+-o -name '*~' \) -print0
+     16392 Aborted                 | xargs -0 rm -f
+make[1]: *** [clean] Error 134
+make[1]: Target `at91sam9260dfc_defconfig' not remade because of errors.
+make[1]: Leaving directory
+`/home/assensg/Bureau/Buildroot/buildroot/project_build_arm_wchar/at91sam9260pf/at91bootstrap-2.3'
+make: ***
+[/home/assensg/Bureau/Buildroot/buildroot/project_build_arm_wchar/at91sam9260pf/at91bootstrap-2.3/.configured]
+Erreur 2
+CC="/usr/lib/ccache/gcc" CROSS=
+CFLAGS=-I/home/assensg/Bureau/Buildroot/buildroot/toolchain_build_arm_wchar/linux/include
+\
+                /usr/bin/make -j20
+LINUXDIR=/home/assensg/Bureau/Buildroot/buildroot/project_build_arm_wchar/at91sam9260pf/linux-2.6.26.3
+\
+               
+BUILDDIR=/home/assensg/Bureau/Buildroot/buildroot/toolchain_build_arm_wchar/mtd_orig
+\
+                -C
+/home/assensg/Bureau/Buildroot/buildroot/toolchain_build_arm_wchar/mtd_orig
+mkfs.jffs2
+make[1]: Entering directory
+`/home/assensg/Bureau/Buildroot/buildroot/toolchain_build_arm_wchar/mtd_orig'
+mkdir -p
+/home/assensg/Bureau/Buildroot/buildroot/toolchain_build_arm_wchar/mtd_orig
+gcc -I./include -O2 -Wall -g -c -o
+/home/assensg/Bureau/Buildroot/buildroot/toolchain_build_arm_wchar/mtd_orig/compr_lzo.o
+compr_lzo.c -g
+-Wp,-MD,/home/assensg/Bureau/Buildroot/buildroot/toolchain_build_arm_wchar/mtd_orig/.compr_lzo.c.dep
+compr_lzo.c:29:23: error: lzo/lzo1x.h: No such file or directory
+compr_lzo.c: In function 'jffs2_lzo_cmpr':
+compr_lzo.c:54: warning: implicit declaration of function
+'lzo1x_999_compress'
+compr_lzo.c:56: error: 'LZO_E_OK' undeclared (first use in this function)
+compr_lzo.c:56: error: (Each undeclared identifier is reported only once
+compr_lzo.c:56: error: for each function it appears in.)
+compr_lzo.c: In function 'jffs2_lzo_decompress':
+compr_lzo.c:74: warning: implicit declaration of function
+'lzo1x_decompress_safe'
+compr_lzo.c:76: error: 'LZO_E_OK' undeclared (first use in this function)
+compr_lzo.c: In function 'jffs2_lzo_init':
+compr_lzo.c:95: error: 'LZO1X_999_MEM_COMPRESS' undeclared (first use in
+this function)
+make[1]: ***
+[/home/assensg/Bureau/Buildroot/buildroot/toolchain_build_arm_wchar/mtd_orig/compr_lzo.o]
+Error 1
+make[1]: Target `mkfs.jffs2' not remade because of errors.
+make[1]: Leaving directory
+`/home/assensg/Bureau/Buildroot/buildroot/toolchain_build_arm_wchar/mtd_orig'
+make: ***
+[/home/assensg/Bureau/Buildroot/buildroot/toolchain_build_arm_wchar/mtd_orig/mkfs.jffs2]
+Erreur 2
+rm -f
+/home/assensg/Bureau/Buildroot/buildroot/project_build_arm_wchar/at91sam9260pf/.fakeroot*
 
 
-Hamish
--- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+09-03-08 08:43  iceman_im      New Issue                                    
+09-03-08 08:43  iceman_im      Status                   new => assigned     
+09-03-08 08:43  iceman_im      Assigned To               => buildroot       
+09-03-08 18:40  hmoffatt       Status                   assigned => closed  
+09-03-08 18:40  hmoffatt       Note Added: 0010974                          
+09-03-08 18:40  hmoffatt       Resolution               open => fixed       
+09-04-08 08:21  iceman_im      Issue Monitored: iceman_im                    
+09-04-08 08:22  iceman_im      Issue End Monitor: iceman_im                    
+09-04-08 08:25  iceman_im      Status                   closed => feedback  
+09-04-08 08:25  iceman_im      Resolution               fixed => reopened   
+09-04-08 08:25  iceman_im      Note Added: 0011004                          
+09-04-08 14:30  vintonc        Note Added: 0011054                          
+09-04-08 17:50  hmoffatt       Note Added: 0011074                          
+09-05-08 06:40  iceman_im      Note Added: 0011114                          
+======================================================================
