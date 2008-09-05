@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 5 Sep 2008 06:40:52 -0700
+Date: Fri, 5 Sep 2008 08:04:57 -0700
 Subject: [Buildroot] [buildroot 0004804]: lzo1x.h not found
-Message-ID: <9e77b951046fdb3c4b4ab53071ce2f54@bugs.uclibc.org>
+Message-ID: <04870ff6a912ebc338c92a841a8f18bb@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -25,7 +25,7 @@ Priority:                   normal
 Status:                     feedback
 ====================================================================== 
 Date Submitted:             09-03-2008 08:43 PDT
-Last Modified:              09-05-2008 06:40 PDT
+Last Modified:              09-05-2008 08:04 PDT
 ====================================================================== 
 Summary:                    lzo1x.h not found
 Description: 
@@ -129,9 +129,9 @@ latest lzo in the tree.
 Sorry for my ignorance of French :) 
 
 ---------------------------------------------------------------------- 
- iceman_im - 09-05-08 06:40  
+ iceman_im - 09-05-08 06:45  
 ---------------------------------------------------------------------- 
-Still unsolved an now i have an another error a the same time.
+Still unsolved and now i have an another error a the same time.
 during a clean just before the previous one.
 
 Checking build system dependencies:
@@ -255,6 +255,16 @@ Erreur 2
 rm -f
 /home/assensg/Bureau/Buildroot/buildroot/project_build_arm_wchar/at91sam9260pf/.fakeroot*
 
+ 
+
+---------------------------------------------------------------------- 
+ hmoffatt - 09-05-08 08:04  
+---------------------------------------------------------------------- 
+xargs: xargs.c:445: main: Assertion `bc_ctl.arg_max <= (131072-2048)'
+failed.
+
+That's your system's xargs crashing.. nothing to do with buildroot.. :-|
+I'm not sure what to suggest sorry. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
@@ -273,4 +283,6 @@ Date Modified   Username       Field                    Change
 09-04-08 14:30  vintonc        Note Added: 0011054                          
 09-04-08 17:50  hmoffatt       Note Added: 0011074                          
 09-05-08 06:40  iceman_im      Note Added: 0011114                          
+09-05-08 06:45  iceman_im      Note Edited: 0011114                         
+09-05-08 08:04  hmoffatt       Note Added: 0011124                          
 ======================================================================
