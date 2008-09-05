@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 4 Sep 2008 14:30:20 -0700
+Date: Thu, 4 Sep 2008 17:50:13 -0700
 Subject: [Buildroot] [buildroot 0004804]: lzo1x.h not found
-Message-ID: <d7e8c0514912531c2c361c92af806cd2@busybox.net>
+Message-ID: <17c8cfcc4bbb83ca8557f77b52d34446@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -25,7 +25,7 @@ Priority:                   normal
 Status:                     feedback
 ====================================================================== 
 Date Submitted:             09-03-2008 08:43 PDT
-Last Modified:              09-04-2008 14:30 PDT
+Last Modified:              09-04-2008 17:50 PDT
 ====================================================================== 
 Summary:                    lzo1x.h not found
 Description: 
@@ -115,6 +115,19 @@ Last Changed Author: hamish
 Last Changed Rev: 23319
 Last Changed Date: 2008-09-04 01:50:31 -0400 (Thu, 04 Sep 2008) 
 
+---------------------------------------------------------------------- 
+ hmoffatt - 09-04-08 17:50  
+---------------------------------------------------------------------- 
+After updating from svn you need to make mtd-host-dirclean and
+mtd-dirclean, because the old patches have already been applied and need
+to be undone.
+
+Can you please try this and update the issue if you still have trouble?
+I have built mtd-utils.git successfully with these patches removed and the
+latest lzo in the tree.
+
+Sorry for my ignorance of French :) 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -130,4 +143,5 @@ Date Modified   Username       Field                    Change
 09-04-08 08:25  iceman_im      Resolution               fixed => reopened   
 09-04-08 08:25  iceman_im      Note Added: 0011004                          
 09-04-08 14:30  vintonc        Note Added: 0011054                          
+09-04-08 17:50  hmoffatt       Note Added: 0011074                          
 ======================================================================
