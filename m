@@ -1,37 +1,32 @@
-From: Markus Heidelberg <markus.heidelberg@web.de>
-Date: Sat, 6 Sep 2008 23:44:19 +0200
-Subject: [Buildroot] [PATCH] svn commit: trunk/buildroot/package: audio
-In-Reply-To: <87wshpvvxa.fsf@macbook.be.48ers.dk>
-References: <20080905120650.45FB73C67A@busybox.net>
-	<87wshpvvxa.fsf@macbook.be.48ers.dk>
-Message-ID: <200809062344.19860.markus.heidelberg@web.de>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Sat,  6 Sep 2008 15:39:58 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/audio/speex
+Message-ID: <20080906223958.F240F3C683@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard, 06.09.2008:
-> >>>>> "laird" == laird  <laird@uclibc.org> writes:
-> 
->  laird> Author: laird
->  laird> Date: 2008-09-05 05:06:50 -0700 (Fri, 05 Sep 2008)
->  laird> New Revision: 23330
-> 
->  laird> Log:
->  laird> audio: Move all audio packages into audio subdir
-> 
-> Argh, that was pretty broken. Please test your changes and be more
-> careful next time.
+Author: jacmet
+Date: 2008-09-06 15:39:58 -0700 (Sat, 06 Sep 2008)
+New Revision: 23350
 
-Another one, but this is the last one.
+Log:
+speex: fix paths (broken by r23330)
+
+Patch by Markus Heidelberg <markus.heidelberg@web.de>
+
+Modified:
+   trunk/buildroot/package/audio/speex/speex.mk
 
 
-diff --git a/package/audio/speex/speex.mk b/package/audio/speex/speex.mk
-index 0ffd203..31b0b63 100644
---- a/package/audio/speex/speex.mk
-+++ b/package/audio/speex/speex.mk
-@@ -23,7 +23,7 @@ ifeq ($(BR2_PACKAGE_SPEEX_ARM5E),y)
+Changeset:
+Modified: trunk/buildroot/package/audio/speex/speex.mk
+===================================================================
+--- trunk/buildroot/package/audio/speex/speex.mk	2008-09-06 20:49:40 UTC (rev 23349)
++++ trunk/buildroot/package/audio/speex/speex.mk	2008-09-06 22:39:58 UTC (rev 23350)
+@@ -23,7 +23,7 @@
  	SPEEX_CONF_OPT += --enable-arm5e-asm
  endif
  
