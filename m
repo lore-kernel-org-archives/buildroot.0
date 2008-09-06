@@ -1,37 +1,31 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Sat,  6 Sep 2008 15:39:58 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/audio/speex
-Message-ID: <20080906223958.F240F3C683@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 07 Sep 2008 00:40:50 +0200
+Subject: [Buildroot] [PATCH] svn commit: trunk/buildroot/package: audio
+In-Reply-To: <200809062344.19860.markus.heidelberg@web.de> (Markus
+	Heidelberg's message of "Sat\, 6 Sep 2008 23\:44\:19 +0200")
+References: <20080905120650.45FB73C67A@busybox.net>
+	<87wshpvvxa.fsf@macbook.be.48ers.dk>
+	<200809062344.19860.markus.heidelberg@web.de>
+Message-ID: <87od30ucct.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-09-06 15:39:58 -0700 (Sat, 06 Sep 2008)
-New Revision: 23350
+>>>>> "Markus" == Markus Heidelberg <markus.heidelberg@web.de> writes:
 
-Log:
-speex: fix paths (broken by r23330)
+Hi,
 
-Patch by Markus Heidelberg <markus.heidelberg@web.de>
+ laird> Log:
+ laird> audio: Move all audio packages into audio subdir
+ >> 
+ >> Argh, that was pretty broken. Please test your changes and be more
+ >> careful next time.
 
-Modified:
-   trunk/buildroot/package/audio/speex/speex.mk
+ Markus> Another one, but this is the last one.
 
+Thanks, committed.
 
-Changeset:
-Modified: trunk/buildroot/package/audio/speex/speex.mk
-===================================================================
---- trunk/buildroot/package/audio/speex/speex.mk	2008-09-06 20:49:40 UTC (rev 23349)
-+++ trunk/buildroot/package/audio/speex/speex.mk	2008-09-06 22:39:58 UTC (rev 23350)
-@@ -23,7 +23,7 @@
- 	SPEEX_CONF_OPT += --enable-arm5e-asm
- endif
- 
--$(eval $(call AUTOTARGETS,package,speex))
-+$(eval $(call AUTOTARGETS,package/audio,speex))
- 
- $(SPEEX_TARGET_BUILD): $(SPEEX_TARGET_CONFIGURE)
- 	$(call MESSAGE,"Building")
+-- 
+Bye, Peter Korsgaard
