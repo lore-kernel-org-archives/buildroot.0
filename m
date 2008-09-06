@@ -1,62 +1,26 @@
-From: Markus Heidelberg <markus.heidelberg@web.de>
-Date: Sat, 6 Sep 2008 18:09:27 +0200
-Subject: [Buildroot] [PATCH] svn commit: trunk/buildroot/package: audio
-In-Reply-To: <200809061559.45793.michel@crondor.net>
-References: <20080905120650.45FB73C67A@busybox.net>
-	<200809061559.45793.michel@crondor.net>
-Message-ID: <200809061809.27876.markus.heidelberg@web.de>
+From: Matt Wood <mattwood2000@gmx.net>
+Date: Sat, 06 Sep 2008 20:12:10 +0200
+Subject: [Buildroot] make menuconfig fails - festival??
+Message-ID: <20080906181210.248920@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Michel Wilson, 06.09.2008:
-> On Friday 05 September 2008 14:06:50 laird at uclibc.org wrote:
-> > Author: laird
-> > Date: 2008-09-05 05:06:50 -0700 (Fri, 05 Sep 2008)
-> > New Revision: 23330
-> >
-> > Log:
-> > audio: Move all audio packages into audio subdir
-> >
-> > Moved all audio packages into a subdir called audio.
-> > I then created a Config.in and made sure that a audio.mk
-> > existed.
-> 
-> You missed some paths in package/audio/festival, see the attached patch.
+I just checked out the latest snapshot of buildroot and when I try to run make menuconfig, I get the following error:
 
-There were also some old paths in the Config.in, see patch below.
+...
+...
+...
+/usr/bin/gcc -DCURSES_LOC="<ncurses.h>" -DLOCALE  -g -O2  mconf.o zconf.tab.o lxdialog/checklist.o lxdialog/util.o lxdialog/inputbox.o lxdialog/textbox.o lxdialog/yesno.o lxdialog/menubox.o -lncursesw -o mconf
+make[1]: Leaving directory `/usr/arm/buildroot/package/config'
+target/device/KwikByte/Config.in:78 warning: Overlong line
+toolchain/external-toolchain/Config.in:17 warning: Overlong line
+package/ipsec-tools/Config.in:7 warning: Overlong line
+package/audio/festival/Config.in:11: can't open file "package/festival/speech-tools/Config.in"
 
-> Note: it's my first contribution to buildroot, hopefully the patch etc. are in
-> the correct format.
-
-It applied. I don't know whether inline patches are preferred over
-attachments. You'd have the possibility to comment on specific lines then.
-
-Markus
-
-
-diff --git a/package/audio/festival/Config.in b/package/audio/festival/Config.in
-index 209c95b..4141e7a 100644
---- a/package/audio/festival/Config.in
-+++ b/package/audio/festival/Config.in
-@@ -8,15 +8,15 @@ help
- if BR2_PACKAGE_FESTIVAL
- 
- 	menu "speech tools"
--		source "package/festival/speech-tools/Config.in"
-+		source "package/audio/festival/speech-tools/Config.in"
- 	endmenu
- 
- 	menu "festival lexicons"
--		source "package/festival/lexicons/Config.in"
-+		source "package/audio/festival/lexicons/Config.in"
- 	endmenu
- 
- 	menu "festival voices"
--		source "package/festival/voices/Config.in"
-+		source "package/audio/festival/voices/Config.in"
- 	endmenu
- 
- endif
+Any ideas?  Thanks, Matt.
+-- 
+GMX Kostenlose Spiele: Einfach online spielen und Spa? haben mit Pastry Passion!
+http://games.entertainment.gmx.net/de/entertainment/games/free/puzzle/6169196
