@@ -1,36 +1,31 @@
 From: Markus Heidelberg <markus.heidelberg@web.de>
-Date: Sun, 7 Sep 2008 01:15:02 +0200
-Subject: [Buildroot] [PATCH] concierge: fix paths
-Message-ID: <200809070115.02913.markus.heidelberg@web.de>
+Date: Sun, 7 Sep 2008 01:15:13 +0200
+Subject: [Buildroot] [PATCH] xapp_xman: fix paths
+Message-ID: <200809070115.13870.markus.heidelberg@web.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-concierge: fix paths
+xapp_xman: fix paths
 
 ---
- package/java/concierge/concierge.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/x11r7/xapp_xman/xapp_xman.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/java/concierge/concierge.mk b/package/java/concierge/concierge.mk
-index e080b20..7426f4c 100644
---- a/package/java/concierge/concierge.mk
-+++ b/package/java/concierge/concierge.mk
-@@ -20,11 +20,11 @@ $(TARGET_DIR)/usr/lib/concierge/: $(DL_DIR)/concierge
- 	mkdir -p $(TARGET_DIR)/usr/lib
- 	mkdir -p $(TARGET_DIR)/usr/lib/concierge
- 	cp -dpf $(DL_DIR)/concierge/* $(TARGET_DIR)/usr/lib/concierge/
--	cp -dpf package/concierge/files/init.xargs $(TARGET_DIR)/usr/lib/concierge/
-+	cp -dpf package/java/concierge/files/init.xargs $(TARGET_DIR)/usr/lib/concierge/
- 	touch -c $@
+diff --git a/package/x11r7/xapp_xman/xapp_xman.mk b/package/x11r7/xapp_xman/xapp_xman.mk
+index cc55734..4e207fd 100644
+--- a/package/x11r7/xapp_xman/xapp_xman.mk
++++ b/package/x11r7/xapp_xman/xapp_xman.mk
+@@ -16,7 +16,7 @@ $(XAPP_XMAN_DIR)/.extracted: $(DL_DIR)/$(XAPP_XMAN_SOURCE)
+ 	touch $@
  
- $(TARGET_DIR)/usr/bin/concierge:
--	cp -dpf package/concierge/files/concierge $(TARGET_DIR)/usr/bin/
-+	cp -dpf package/java/concierge/files/concierge $(TARGET_DIR)/usr/bin/
- 	chmod +x $(TARGET_DIR)/usr/bin/concierge
- 	touch -c $@
+ $(XAPP_XMAN_DIR)/.patched: $(XAPP_XMAN_DIR)/.extracted
+-	toolchain/patch-kernel.sh $(XAPP_XMAN_DIR) package/xapp_xman/ xapp_xman\*.patch
++	toolchain/patch-kernel.sh $(XAPP_XMAN_DIR) package/x11r7/xapp_xman/ xapp_xman\*.patch
+ 	touch $@
  
+ $(XAPP_XMAN_DIR)/.configured: $(XAPP_XMAN_DIR)/.patched
 -- 
 1.5.6.4
