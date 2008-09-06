@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Sat,  6 Sep 2008 13:49:09 -0700 (PDT)
+Date: Sat,  6 Sep 2008 13:49:12 -0700 (PDT)
 Subject: [Buildroot] svn commit: trunk/buildroot/package/audio/festival
-Message-ID: <20080906204909.6466B3C360@busybox.net>
+Message-ID: <20080906204912.C1A453C65A@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,29 +9,39 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-09-06 13:49:08 -0700 (Sat, 06 Sep 2008)
-New Revision: 23339
+Date: 2008-09-06 13:49:12 -0700 (Sat, 06 Sep 2008)
+New Revision: 23340
 
 Log:
-festival: fix paths (broken by r23330)
+festival: fix more paths (broken by r23330)
 
-Patch by Michel Wilson <michel@crondor.net>
+Patch by Markus Heidelberg <markus.heidelberg@web.de>
 
 Modified:
-   trunk/buildroot/package/audio/festival/festival.mk
+   trunk/buildroot/package/audio/festival/Config.in
 
 
 Changeset:
-Modified: trunk/buildroot/package/audio/festival/festival.mk
+Modified: trunk/buildroot/package/audio/festival/Config.in
 ===================================================================
---- trunk/buildroot/package/audio/festival/festival.mk	2008-09-06 16:45:07 UTC (rev 23338)
-+++ trunk/buildroot/package/audio/festival/festival.mk	2008-09-06 20:49:08 UTC (rev 23339)
-@@ -1,4 +1,4 @@
--include package/festival/speech-tools/speech-tools.mk
--include package/festival/festival/festival.mk
--include package/festival/voices/festvox.mk
--include package/festival/lexicons/festlex.mk
-+include package/audio/festival/speech-tools/speech-tools.mk
-+include package/audio/festival/festival/festival.mk
-+include package/audio/festival/voices/festvox.mk
-+include package/audio/festival/lexicons/festlex.mk
+--- trunk/buildroot/package/audio/festival/Config.in	2008-09-06 20:49:08 UTC (rev 23339)
++++ trunk/buildroot/package/audio/festival/Config.in	2008-09-06 20:49:12 UTC (rev 23340)
+@@ -8,15 +8,15 @@
+ if BR2_PACKAGE_FESTIVAL
+ 
+ 	menu "speech tools"
+-		source "package/festival/speech-tools/Config.in"
++		source "package/audio/festival/speech-tools/Config.in"
+ 	endmenu
+ 
+ 	menu "festival lexicons"
+-		source "package/festival/lexicons/Config.in"
++		source "package/audio/festival/lexicons/Config.in"
+ 	endmenu
+ 
+ 	menu "festival voices"
+-		source "package/festival/voices/Config.in"
++		source "package/audio/festival/voices/Config.in"
+ 	endmenu
+ 
+ endif
