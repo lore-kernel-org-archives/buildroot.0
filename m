@@ -1,46 +1,46 @@
-From: Michel Wilson <michel@crondor.net>
-Date: Sat, 6 Sep 2008 15:59:45 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package:  audio
-In-Reply-To: <20080905120650.45FB73C67A@busybox.net>
-References: <20080905120650.45FB73C67A@busybox.net>
-Message-ID: <200809061559.45793.michel@crondor.net>
+From: Hodgson, Simon <Simon.Hodgson@nortechonline.co.uk>
+Date: Sat, 6 Sep 2008 16:42:58 +0100
+Subject: [Buildroot] Problems with make BOARD=...........
+Message-ID: <B44D4D5BF344094DABB900C4E0F6E35301A1A1DDE3@srv02.nortechonline.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Friday 05 September 2008 14:06:50 laird at uclibc.org wrote:
-> Author: laird
-> Date: 2008-09-05 05:06:50 -0700 (Fri, 05 Sep 2008)
-> New Revision: 23330
->
-> Log:
-> audio: Move all audio packages into audio subdir
->
-> Moved all audio packages into a subdir called audio.
-> I then created a Config.in and made sure that a audio.mk
-> existed.
->
-> Daniel Laird
->
 Hi,
 
-You missed some paths in package/audio/festival, see the attached patch.
-Note: it's my first contribution to buildroot, hopefully the patch etc. are in 
-the correct format.
+I'm trying to make our buildroot build a simple single step repeatable build.
 
-Regards,
+I've got a 'working' copy of buildroot which has become a bit of a mess, so I've done the following.
 
-Michel Wilson.
--- 
-Michel Wilson     michel at crondor.net
-PGP key ID        0xD2CB4B7E
+* make saveconfig on the 'working' copy
 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: festival.diff
-Type: text/x-patch
-Size: 644 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20080906/6282a543/attachment.bin 
+* Got a clean copy of buildroot from the svn repository
+
+* Added that copy of buildroot into our company svn repository
+
+* Copied local/at91sam9260dfc/ from the 'working' buildroot to the 'clean' buildroot
+
+* Added the local folder also to our internal svn repository
+
+* rm -rf * on the clean buildroot, svn update to get everything nice and clean
+
+* make defconfig
+
+* make BOARD=at91sam9260dfc
+
+This then goes off and builds everything, but I have two problems:
+
+ 1. It stops and asks some questions... I thought I'd provided all the answers in the config.
+
+ 2. It the 'clean' binaries are vastly different to the 'working' ones, the new kernel is 1.7M in size rather than 924K, suggesting that it's not built what I asked for, (Can't test as this kernel is too big for my hardware)
+
+Has anyone got any idea where I'm going wrong and what I might be able to do to put it right? I can supply my config files if required.
+
+
+Thanks
+
+
+
+Simon
