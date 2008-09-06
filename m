@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Sat,  6 Sep 2008 13:49:15 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/audio/alsa-lib
-Message-ID: <20080906204915.E00E03C66F@busybox.net>
+Date: Sat,  6 Sep 2008 13:49:18 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/audio/alsa-utils
+Message-ID: <20080906204918.DD9EE3C679@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,27 +9,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-09-06 13:49:15 -0700 (Sat, 06 Sep 2008)
-New Revision: 23341
+Date: 2008-09-06 13:49:18 -0700 (Sat, 06 Sep 2008)
+New Revision: 23342
 
 Log:
-alsa-lib: fix paths (broken by r23330)
+alsa-utils: fix paths (broken by r23330)
 
 Modified:
-   trunk/buildroot/package/audio/alsa-lib/alsa-lib.mk
+   trunk/buildroot/package/audio/alsa-utils/alsa-utils.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/audio/alsa-lib/alsa-lib.mk
+Modified: trunk/buildroot/package/audio/alsa-utils/alsa-utils.mk
 ===================================================================
---- trunk/buildroot/package/audio/alsa-lib/alsa-lib.mk	2008-09-06 20:49:12 UTC (rev 23340)
-+++ trunk/buildroot/package/audio/alsa-lib/alsa-lib.mk	2008-09-06 20:49:15 UTC (rev 23341)
-@@ -26,7 +26,7 @@
+--- trunk/buildroot/package/audio/alsa-utils/alsa-utils.mk	2008-09-06 20:49:15 UTC (rev 23341)
++++ trunk/buildroot/package/audio/alsa-utils/alsa-utils.mk	2008-09-06 20:49:18 UTC (rev 23342)
+@@ -16,7 +16,7 @@
  
- $(ALSA_LIB_DIR)/.unpacked: $(DL_DIR)/$(ALSA_LIB_SOURCE)
- 	$(ALSA_LIB_CAT) $(DL_DIR)/$(ALSA_LIB_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(ALSA_LIB_DIR) package/alsa-lib/ alsa-lib-$(ALSA_LIB_VERSION)\*.patch*
-+	toolchain/patch-kernel.sh $(ALSA_LIB_DIR) package/audio/alsa-lib/ alsa-lib-$(ALSA_LIB_VERSION)\*.patch*
- 	$(CONFIG_UPDATE) $(ALSA_LIB_DIR)
+ $(ALSA_UTILS_DIR)/.unpacked: $(DL_DIR)/$(ALSA_UTILS_SOURCE)
+ 	$(ALSA_UTILS_CAT) $(DL_DIR)/$(ALSA_UTILS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(ALSA_UTILS_DIR) package/alsa-utils/ alsa-utils-$(ALSA_UTILS_VERSION)\*.patch\*
++	toolchain/patch-kernel.sh $(ALSA_UTILS_DIR) package/audio/alsa-utils/ alsa-utils-$(ALSA_UTILS_VERSION)\*.patch\*
+ 	$(CONFIG_UPDATE) $(ALSA_UTILS_DIR)
  	touch $@
  
