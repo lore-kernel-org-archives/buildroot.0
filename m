@@ -1,31 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 07 Sep 2008 00:40:50 +0200
-Subject: [Buildroot] [PATCH] svn commit: trunk/buildroot/package: audio
-In-Reply-To: <200809062344.19860.markus.heidelberg@web.de> (Markus
-	Heidelberg's message of "Sat\, 6 Sep 2008 23\:44\:19 +0200")
-References: <20080905120650.45FB73C67A@busybox.net>
-	<87wshpvvxa.fsf@macbook.be.48ers.dk>
-	<200809062344.19860.markus.heidelberg@web.de>
-Message-ID: <87od30ucct.fsf@macbook.be.48ers.dk>
+From: Markus Heidelberg <markus.heidelberg@web.de>
+Date: Sun, 7 Sep 2008 01:15:02 +0200
+Subject: [Buildroot] [PATCH] concierge: fix paths
+Message-ID: <200809070115.02913.markus.heidelberg@web.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Markus" == Markus Heidelberg <markus.heidelberg@web.de> writes:
+concierge: fix paths
 
-Hi,
+---
+ package/java/concierge/concierge.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
- laird> Log:
- laird> audio: Move all audio packages into audio subdir
- >> 
- >> Argh, that was pretty broken. Please test your changes and be more
- >> careful next time.
-
- Markus> Another one, but this is the last one.
-
-Thanks, committed.
-
+diff --git a/package/java/concierge/concierge.mk b/package/java/concierge/concierge.mk
+index e080b20..7426f4c 100644
+--- a/package/java/concierge/concierge.mk
++++ b/package/java/concierge/concierge.mk
+@@ -20,11 +20,11 @@ $(TARGET_DIR)/usr/lib/concierge/: $(DL_DIR)/concierge
+ 	mkdir -p $(TARGET_DIR)/usr/lib
+ 	mkdir -p $(TARGET_DIR)/usr/lib/concierge
+ 	cp -dpf $(DL_DIR)/concierge/* $(TARGET_DIR)/usr/lib/concierge/
+-	cp -dpf package/concierge/files/init.xargs $(TARGET_DIR)/usr/lib/concierge/
++	cp -dpf package/java/concierge/files/init.xargs $(TARGET_DIR)/usr/lib/concierge/
+ 	touch -c $@
+ 
+ $(TARGET_DIR)/usr/bin/concierge:
+-	cp -dpf package/concierge/files/concierge $(TARGET_DIR)/usr/bin/
++	cp -dpf package/java/concierge/files/concierge $(TARGET_DIR)/usr/bin/
+ 	chmod +x $(TARGET_DIR)/usr/bin/concierge
+ 	touch -c $@
+ 
 -- 
-Bye, Peter Korsgaard
+1.5.6.4
