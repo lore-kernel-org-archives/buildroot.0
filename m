@@ -1,46 +1,62 @@
-From: Hodgson, Simon <Simon.Hodgson@nortechonline.co.uk>
-Date: Sat, 6 Sep 2008 16:42:58 +0100
-Subject: [Buildroot] Problems with make BOARD=...........
-Message-ID: <B44D4D5BF344094DABB900C4E0F6E35301A1A1DDE3@srv02.nortechonline.net>
+From: Markus Heidelberg <markus.heidelberg@web.de>
+Date: Sat, 6 Sep 2008 18:09:27 +0200
+Subject: [Buildroot] [PATCH] svn commit: trunk/buildroot/package: audio
+In-Reply-To: <200809061559.45793.michel@crondor.net>
+References: <20080905120650.45FB73C67A@busybox.net>
+	<200809061559.45793.michel@crondor.net>
+Message-ID: <200809061809.27876.markus.heidelberg@web.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Michel Wilson, 06.09.2008:
+> On Friday 05 September 2008 14:06:50 laird at uclibc.org wrote:
+> > Author: laird
+> > Date: 2008-09-05 05:06:50 -0700 (Fri, 05 Sep 2008)
+> > New Revision: 23330
+> >
+> > Log:
+> > audio: Move all audio packages into audio subdir
+> >
+> > Moved all audio packages into a subdir called audio.
+> > I then created a Config.in and made sure that a audio.mk
+> > existed.
+> 
+> You missed some paths in package/audio/festival, see the attached patch.
 
-I'm trying to make our buildroot build a simple single step repeatable build.
+There were also some old paths in the Config.in, see patch below.
 
-I've got a 'working' copy of buildroot which has become a bit of a mess, so I've done the following.
+> Note: it's my first contribution to buildroot, hopefully the patch etc. are in
+> the correct format.
 
-* make saveconfig on the 'working' copy
+It applied. I don't know whether inline patches are preferred over
+attachments. You'd have the possibility to comment on specific lines then.
 
-* Got a clean copy of buildroot from the svn repository
-
-* Added that copy of buildroot into our company svn repository
-
-* Copied local/at91sam9260dfc/ from the 'working' buildroot to the 'clean' buildroot
-
-* Added the local folder also to our internal svn repository
-
-* rm -rf * on the clean buildroot, svn update to get everything nice and clean
-
-* make defconfig
-
-* make BOARD=at91sam9260dfc
-
-This then goes off and builds everything, but I have two problems:
-
- 1. It stops and asks some questions... I thought I'd provided all the answers in the config.
-
- 2. It the 'clean' binaries are vastly different to the 'working' ones, the new kernel is 1.7M in size rather than 924K, suggesting that it's not built what I asked for, (Can't test as this kernel is too big for my hardware)
-
-Has anyone got any idea where I'm going wrong and what I might be able to do to put it right? I can supply my config files if required.
+Markus
 
 
-Thanks
-
-
-
-Simon
+diff --git a/package/audio/festival/Config.in b/package/audio/festival/Config.in
+index 209c95b..4141e7a 100644
+--- a/package/audio/festival/Config.in
++++ b/package/audio/festival/Config.in
+@@ -8,15 +8,15 @@ help
+ if BR2_PACKAGE_FESTIVAL
+ 
+ 	menu "speech tools"
+-		source "package/festival/speech-tools/Config.in"
++		source "package/audio/festival/speech-tools/Config.in"
+ 	endmenu
+ 
+ 	menu "festival lexicons"
+-		source "package/festival/lexicons/Config.in"
++		source "package/audio/festival/lexicons/Config.in"
+ 	endmenu
+ 
+ 	menu "festival voices"
+-		source "package/festival/voices/Config.in"
++		source "package/audio/festival/voices/Config.in"
+ 	endmenu
+ 
+ endif
