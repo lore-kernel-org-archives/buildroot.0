@@ -1,20 +1,37 @@
-From: Douglas Lane <dougsterlster@gmail.com>
-Date: Sat, 6 Sep 2008 22:30:24 +0200
-Subject: [Buildroot] NRPE and NSCA
-Message-ID: <81b4dea00809061330h637eba9fu14f7353ed3c8ef1d@mail.gmail.com>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Sat,  6 Sep 2008 13:49:09 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/audio/festival
+Message-ID: <20080906204909.6466B3C360@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Guys,
+Author: jacmet
+Date: 2008-09-06 13:49:08 -0700 (Sat, 06 Sep 2008)
+New Revision: 23339
 
-Just wanted to find out if anybody has attempted to port NRPE and NSCA into
-buildroot? If you have, please let me know.
+Log:
+festival: fix paths (broken by r23330)
 
-Thanks
-Doug
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080906/f03c853d/attachment.htm 
+Patch by Michel Wilson <michel@crondor.net>
+
+Modified:
+   trunk/buildroot/package/audio/festival/festival.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/audio/festival/festival.mk
+===================================================================
+--- trunk/buildroot/package/audio/festival/festival.mk	2008-09-06 16:45:07 UTC (rev 23338)
++++ trunk/buildroot/package/audio/festival/festival.mk	2008-09-06 20:49:08 UTC (rev 23339)
+@@ -1,4 +1,4 @@
+-include package/festival/speech-tools/speech-tools.mk
+-include package/festival/festival/festival.mk
+-include package/festival/voices/festvox.mk
+-include package/festival/lexicons/festlex.mk
++include package/audio/festival/speech-tools/speech-tools.mk
++include package/audio/festival/festival/festival.mk
++include package/audio/festival/voices/festvox.mk
++include package/audio/festival/lexicons/festlex.mk
