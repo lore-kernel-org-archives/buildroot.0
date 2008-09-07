@@ -1,28 +1,30 @@
-From: Markus Heidelberg <markus.heidelberg@web.de>
-Date: Sun, 7 Sep 2008 01:15:24 +0200
-Subject: [Buildroot] [PATCH] mysql_client: fix paths
-Message-ID: <200809070115.24694.markus.heidelberg@web.de>
+From: Hiroshi Shinji <hiroshi.shinji@gmail.com>
+Date: Sun, 7 Sep 2008 12:00:50 +0900
+Subject: [Buildroot] add No-IP.com client package
+Message-ID: <d6a0e5a20809062000o452c9d20j89538eb18e27c057@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mysql_client: fix paths
+Hi,
 
----
- package/database/mysql_client/mysql_client.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+I made the package that add No-IP.com client to buildroot.
+This client automatically updates the dynamic DNS that No-IP.com provides.
+( http://www.no-ip.com/ )
 
-diff --git a/package/database/mysql_client/mysql_client.mk b/package/database/mysql_client/mysql_client.mk
-index 910db92..2b26dfb 100644
---- a/package/database/mysql_client/mysql_client.mk
-+++ b/package/database/mysql_client/mysql_client.mk
-@@ -27,4 +27,4 @@ MYSQL_CLIENT_CONF_OPT = \
- 	--enable-thread-safe-client \
- 	$(ENABLE_DEBUG)
- 
--$(eval $(call AUTOTARGETS,package,mysql_client))
-+$(eval $(call AUTOTARGETS,package/database,mysql_client))
+Please review this patch.
+
+Regards,
+
 -- 
-1.5.6.4
+Hiroshi Shinji
+hiroshi.shinji at gmail.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: noip.patch
+Type: application/octet-stream
+Size: 3865 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20080907/b46f3b12/attachment.obj 
