@@ -1,23 +1,42 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 07 Sep 2008 08:15:06 +0200
-Subject: [Buildroot] [PATCH] jffs2: cleanup
-In-Reply-To: <200809061226.56529.markus.heidelberg@web.de> (Markus
-	Heidelberg's message of "Sat\, 6 Sep 2008 12\:26\:55 +0200")
-References: <200809061226.56529.markus.heidelberg@web.de>
-Message-ID: <87bpz0scr9.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Sun,  7 Sep 2008 07:31:28 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/java/concierge
+Message-ID: <20080907143128.BE7033C360@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Markus" == Markus Heidelberg <markus.heidelberg@web.de> writes:
+Author: jacmet
+Date: 2008-09-07 07:31:28 -0700 (Sun, 07 Sep 2008)
+New Revision: 23351
 
- Markus> * remove needless help in invisible config options
- Markus> * correct wrong indenting
- Markus> * remove unused BR2 variables for default pagesize and devfile
+Log:
+concierge: fix paths
 
-Thanks, committed.
+Patch by Markus Heidelberg <markus.heidelberg@web.de>
 
--- 
-Bye, Peter Korsgaard
+Modified:
+   trunk/buildroot/package/java/concierge/concierge.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/java/concierge/concierge.mk
+===================================================================
+--- trunk/buildroot/package/java/concierge/concierge.mk	2008-09-06 22:39:58 UTC (rev 23350)
++++ trunk/buildroot/package/java/concierge/concierge.mk	2008-09-07 14:31:28 UTC (rev 23351)
+@@ -20,11 +20,11 @@
+ 	mkdir -p $(TARGET_DIR)/usr/lib
+ 	mkdir -p $(TARGET_DIR)/usr/lib/concierge
+ 	cp -dpf $(DL_DIR)/concierge/* $(TARGET_DIR)/usr/lib/concierge/
+-	cp -dpf package/concierge/files/init.xargs $(TARGET_DIR)/usr/lib/concierge/
++	cp -dpf package/java/concierge/files/init.xargs $(TARGET_DIR)/usr/lib/concierge/
+ 	touch -c $@
+ 
+ $(TARGET_DIR)/usr/bin/concierge:
+-	cp -dpf package/concierge/files/concierge $(TARGET_DIR)/usr/bin/
++	cp -dpf package/java/concierge/files/concierge $(TARGET_DIR)/usr/bin/
+ 	chmod +x $(TARGET_DIR)/usr/bin/concierge
+ 	touch -c $@
+ 
