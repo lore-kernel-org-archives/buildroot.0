@@ -1,36 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 07 Sep 2008 20:57:10 +0200
-Subject: [Buildroot] directive without effect
-In-Reply-To: <200809071913.19696.markus.heidelberg@web.de> (Markus
-	Heidelberg's message of "Sun\, 7 Sep 2008 19\:13\:19 +0200")
-References: <200809071913.19696.markus.heidelberg@web.de>
-Message-ID: <87vdx7pywp.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Sun,  7 Sep 2008 11:58:23 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/module-init-tools
+Message-ID: <20080907185823.1DBE23C650@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Markus" == Markus Heidelberg <markus.heidelberg@web.de> writes:
+Author: jacmet
+Date: 2008-09-07 11:58:22 -0700 (Sun, 07 Sep 2008)
+New Revision: 23357
 
- Markus> Hello,
+Log:
+module-init-tools: check correct symbol for cross-depmod
 
- Markus> revision r19279 from 27.07.2007 uses an invalid variable name
- Markus> CONFIG_BR2_PACKAGE_LINUX, so that the if-statement is always
- Markus> false. I don't know the state, when the change was commited,
- Markus> so I'm not sure what to do.
+Reported by Markus Heidelberg
 
- Markus> a) remove CONFIG_ because BR2_PACKAGE_LINUX does exist
- Markus> b) revert the commit as it apparently didn't cause problems
- Markus> without setting HOST_SOURCE
+Modified:
+   trunk/buildroot/package/module-init-tools/module-init-tools.mk
 
-A seems to me to be the correct thing to do - The reason why there
-haven't been any bug reports is that the line is only used when 'make
-source' is used (E.G. for downloading all package sources in advance
-so you can do the rest of the work offline), which is probably not a
-really common thing to do ..
 
-I'll commit a fix.
-
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/package/module-init-tools/module-init-tools.mk
+===================================================================
+--- trunk/buildroot/package/module-init-tools/module-init-tools.mk	2008-09-07 14:31:45 UTC (rev 23356)
++++ trunk/buildroot/package/module-init-tools/module-init-tools.mk	2008-09-07 18:58:22 UTC (rev 23357)
+@@ -109,7 +109,7 @@
+ cross-depmod26-dirclean:
+ 	rm -rf $(MODULE_INIT_TOOLS_DIR2)
+ 
+-ifeq ($(strip $(CONFIG_BR2_PACKAGE_LINUX)),y)
++ifeq ($(strip $(BR2_PACKAGE_LINUX)),y)
+ HOST_SOURCE+=module-init-tools-source
+ endif
+ 
