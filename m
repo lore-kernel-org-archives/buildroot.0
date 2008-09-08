@@ -1,22 +1,44 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Sun, 7 Sep 2008 23:59:31 +0200
-Subject: [Buildroot] directive without effect
-In-Reply-To: <200809071913.19696.markus.heidelberg@web.de>
-References: <200809071913.19696.markus.heidelberg@web.de>
-Message-ID: <20080907215931.GB28010@mx.loc>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Sun, 7 Sep 2008 18:55:59 -0700
+Subject: [Buildroot] [buildroot 0004834]: add new package (No-IP.com client)
+	to buildroot
+Message-ID: <ee203765ecdf917c2f90a6b9df8159d8@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Sep 07, 2008 at 07:13:19PM +0200, Markus Heidelberg wrote:
->Hello,
->
->revision r19279 from 27.07.2007 uses an invalid variable name
->CONFIG_BR2_PACKAGE_LINUX, so that the if-statement is always false. I don't
->know the state, when the change was commited, so I'm not sure what to do.
->
->a) remove CONFIG_ because BR2_PACKAGE_LINUX does exist
 
-indeed. Thanks for noticing it!
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=4834 
+====================================================================== 
+Reported By:                hshinji
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   4834
+Category:                   New Features
+Reproducibility:            N/A
+Severity:                   feature
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             09-07-2008 18:55 PDT
+Last Modified:              09-07-2008 18:55 PDT
+====================================================================== 
+Summary:                    add new package (No-IP.com client) to buildroot
+Description: 
+This client automatically updates the dynamic DNS that No-IP.com provides.
+( http://www.no-ip.com/ )
+====================================================================== 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+09-07-08 18:55  hshinji        New Issue                                    
+09-07-08 18:55  hshinji        Status                   new => assigned     
+09-07-08 18:55  hshinji        Assigned To               => buildroot       
+09-07-08 18:55  hshinji        File Added: noip.patch                       
+======================================================================
