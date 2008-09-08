@@ -1,42 +1,55 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Mon, 8 Sep 2008 23:43:12 +1000
-Subject: [Buildroot] Makefile.autotools.in stamp files breaks
-	multiple	projects
-In-Reply-To: <20080908153954.5ad16cc0@atmel.com>
-References: <20080904025034.GA18148@cloud.net.au>
-	<20080905043047.GA25440@cloud.net.au>
-	<20080908153954.5ad16cc0@atmel.com>
-Message-ID: <20080908134312.GA11819@cloud.net.au>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 8 Sep 2008 11:05:13 -0700
+Subject: [Buildroot] [buildroot 0004844]: Bridge-utils broken under kernel
+	2.4
+Message-ID: <9c9a430c5df95c308bdba453625a9722@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Sep 08, 2008 at 03:39:54PM +0200, Hans-Christian Egtvedt wrote:
-> On Fri, 5 Sep 2008 14:30:47 +1000
-> Hamish Moffatt <hamish@cloud.net.au> wrote:
-> 
-> > On Thu, Sep 04, 2008 at 12:50:35PM +1000, Hamish Moffatt wrote:
-> > > 2. The .stamp_install files could be put somewhere under
-> > > $(TARGET_DIR) instead of $(BUILD_DIR); they'd need to be stripped
-> > > out by the various generators in target/.. though.
-> > 
-> > Here's my patch to move the target-installed and post-install-hook
-> > stamps to $(PROJECT_BUILD_DIR)/.stamp/$(PKG)_xyz instead of
-> > $(BUILD_DIR)/$(PKG)/.stamp_xyz, so that these actions will be repeated
-> > for each project.
-> > 
-> > Any comments before I commit it?
-> > 
-> 
-> I think it sounds nice, I did not look into the patch in detail but the
-> solution seems good. The stamp directory could even be visible IMHO.
 
-That's true, I might rename it to $(PROJECT_BUILD_DIR)/autotools-stamps.
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=4844 
+====================================================================== 
+Reported By:                Feynman
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   4844
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   block
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             09-08-2008 11:05 PDT
+Last Modified:              09-08-2008 11:05 PDT
+====================================================================== 
+Summary:                    Bridge-utils broken under kernel 2.4
+Description: 
+Snapshot buildroot-20080905
 
-Thanks for your feedback. I'll commit tomorrow.
+The bridge-utils package compiles but the brctl command fails.
+The error message is:
+# brctl addbr br0
+add bridge failed: Invalid argument
 
-Hamish
--- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+I think this is a problem with the bridge-utils 1.4. The former version
+1.06 works fine.
+
+My configuration is: 386, kernel 2.4, busybox 1.11.x
+The project is openMGB, a RDC based NAS with WAP.
+
+
+====================================================================== 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+09-08-08 11:05  Feynman        New Issue                                    
+09-08-08 11:05  Feynman        Status                   new => assigned     
+09-08-08 11:05  Feynman        Assigned To               => buildroot       
+======================================================================
