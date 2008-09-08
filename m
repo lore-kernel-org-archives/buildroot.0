@@ -1,63 +1,32 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 8 Sep 2008 11:26:39 -0700
-Subject: [Buildroot] [buildroot 0004844]: Bridge-utils broken under kernel
-	2.4
-Message-ID: <eae1346279f2e6596bea5c75d2566fd7@busybox.net>
+From: Markus Heidelberg <markus.heidelberg@web.de>
+Date: Tue, 9 Sep 2008 01:15:34 +0200
+Subject: [Buildroot] [PATCH] Ignore errors on rmdir in clean-targets
+In-Reply-To: <200809081055.50940.michel@crondor.net>
+References: <200809081055.50940.michel@crondor.net>
+Message-ID: <200809090115.35311.markus.heidelberg@web.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Michel Wilson, 08.09.2008:
+> Inline this time, hopefully KMail is not a 'broken mailer' in this regard.
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=4844 
-====================================================================== 
-Reported By:                Feynman
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   4844
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   block
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             09-08-2008 11:05 PDT
-Last Modified:              09-08-2008 11:26 PDT
-====================================================================== 
-Summary:                    Bridge-utils broken under kernel 2.4
-Description: 
-Snapshot buildroot-20080905
+The patch is malformed, it contains some wrapped lines. The same for your
+"disable cursor in X" patch.
 
-The bridge-utils package compiles but the brctl command fails.
-The error message is:
-# brctl addbr br0
-add bridge failed: Invalid argument
+I use KMail, too. But because of inline patches and text formatting, I use
+gvim as mail editor. You have to disable the line length (default 78) then.
+My setting is: gvim -f --cmd "set tw=78" %f
+Then you have the limited line length with text formatting and can add patches
+by pasting or reading in with :r
 
-I think this is a problem with the bridge-utils 1.4. The former version
-1.06 works fine.
+You can disable the line length without using an external editor and the patch
+should arrive find, but then you loose the automatic text formatting of KMail.
+You cannot have both at once.
 
-My configuration is: 386, kernel 2.4, busybox 1.11.x
-The project is openMGB, a RDC based NAS with WAP.
+There is also a trick, but I don't think the usage is widespread. See the file
+Documentation/email-clients.txt in the Linux source tree.
 
-
-====================================================================== 
-
----------------------------------------------------------------------- 
- jacmet - 09-08-08 11:26  
----------------------------------------------------------------------- 
-I don't have access to any system with a 2.4 kernel anymore - Does it work
-if you change the version in bridge.mk back to v1.06? If so, please report
-the problem with bridge-utils upstream. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-09-08-08 11:05  Feynman        New Issue                                    
-09-08-08 11:05  Feynman        Status                   new => assigned     
-09-08-08 11:05  Feynman        Assigned To               => buildroot       
-09-08-08 11:26  jacmet         Note Added: 0011194                          
-======================================================================
+Markus
