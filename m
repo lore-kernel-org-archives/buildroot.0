@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 8 Sep 2008 11:05:13 -0700
+Date: Mon, 8 Sep 2008 11:26:39 -0700
 Subject: [Buildroot] [buildroot 0004844]: Bridge-utils broken under kernel
 	2.4
-Message-ID: <9c9a430c5df95c308bdba453625a9722@bugs.uclibc.org>
+Message-ID: <eae1346279f2e6596bea5c75d2566fd7@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +10,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=4844 
 ====================================================================== 
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             09-08-2008 11:05 PDT
-Last Modified:              09-08-2008 11:05 PDT
+Last Modified:              09-08-2008 11:26 PDT
 ====================================================================== 
 Summary:                    Bridge-utils broken under kernel 2.4
 Description: 
@@ -46,10 +46,18 @@ The project is openMGB, a RDC based NAS with WAP.
 
 ====================================================================== 
 
+---------------------------------------------------------------------- 
+ jacmet - 09-08-08 11:26  
+---------------------------------------------------------------------- 
+I don't have access to any system with a 2.4 kernel anymore - Does it work
+if you change the version in bridge.mk back to v1.06? If so, please report
+the problem with bridge-utils upstream. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
 09-08-08 11:05  Feynman        New Issue                                    
 09-08-08 11:05  Feynman        Status                   new => assigned     
 09-08-08 11:05  Feynman        Assigned To               => buildroot       
+09-08-08 11:26  jacmet         Note Added: 0011194                          
 ======================================================================
