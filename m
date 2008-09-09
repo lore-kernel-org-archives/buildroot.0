@@ -1,81 +1,26 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 9 Sep 2008 00:27:37 -0700
-Subject: [Buildroot] [buildroot 0004844]: Bridge-utils broken under kernel
-	2.4
-Message-ID: <5b5158aae56af4704e1be136202e1c9b@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 09 Sep 2008 09:31:11 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/package/procps
+In-Reply-To: <20080909020653.2F0063C2B9@busybox.net> (hamish@uclibc.org's
+	message of "Mon\, 8 Sep 2008 19\:06\:53 -0700 \(PDT\)")
+References: <20080909020653.2F0063C2B9@busybox.net>
+Message-ID: <87ej3tlqrk.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "hamish" == hamish  <hamish@uclibc.org> writes:
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=4844 
-====================================================================== 
-Reported By:                Feynman
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   4844
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   block
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             09-08-2008 11:05 PDT
-Last Modified:              09-09-2008 00:27 PDT
-====================================================================== 
-Summary:                    Bridge-utils broken under kernel 2.4
-Description: 
-Snapshot buildroot-20080905
+ hamish> Author: hamish
+ hamish> Date: 2008-09-08 19:06:52 -0700 (Mon, 08 Sep 2008)
+ hamish> New Revision: 23360
 
-The bridge-utils package compiles but the brctl command fails.
-The error message is:
-# brctl addbr br0
-add bridge failed: Invalid argument
+ hamish> Log:
+ hamish> Support building without WCHAR support
 
-I think this is a problem with the bridge-utils 1.4. The former version
-1.06 works fine.
+Thanks, don't forget to push this patch upstream.
 
-My configuration is: 386, kernel 2.4, busybox 1.11.x
-The project is openMGB, a RDC based NAS with WAP.
-
-
-====================================================================== 
-
----------------------------------------------------------------------- 
- jacmet - 09-08-08 11:26  
----------------------------------------------------------------------- 
-I don't have access to any system with a 2.4 kernel anymore - Does it work
-if you change the version in bridge.mk back to v1.06? If so, please report
-the problem with bridge-utils upstream. 
-
----------------------------------------------------------------------- 
- hmoffatt - 09-08-08 18:11  
----------------------------------------------------------------------- 
-1.4 seems to use /sys/class/net which wouldn't exist on linux 2.4 
-
----------------------------------------------------------------------- 
- jacmet - 09-09-08 00:27  
----------------------------------------------------------------------- 
-The README claims to only use sysfs stuff on 2.6 kernels, but I don't see
-any fallback code. Probably the README is just stale - The bridge-utils
-upsteam tarball seems pretty broken in general (no configure, configure.in
-using wrong version, stale README, ..)
-
-I don't have a problem with reverting to 1.06 if that fixes the bug
-reporter's issue. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-09-08-08 11:05  Feynman        New Issue                                    
-09-08-08 11:05  Feynman        Status                   new => assigned     
-09-08-08 11:05  Feynman        Assigned To               => buildroot       
-09-08-08 11:26  jacmet         Note Added: 0011194                          
-09-08-08 18:11  hmoffatt       Note Added: 0011214                          
-09-09-08 00:27  jacmet         Note Added: 0011224                          
-======================================================================
+-- 
+Bye, Peter Korsgaard
