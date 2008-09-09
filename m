@@ -1,48 +1,89 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue,  9 Sep 2008 01:50:18 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
-Message-ID: <20080909085018.D77743C650@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Tue, 9 Sep 2008 06:15:46 -0700
+Subject: [Buildroot] [buildroot 0004844]: Bridge-utils broken under kernel
+	2.4
+Message-ID: <352f05e03e01959824663dac578c557f@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-09-09 01:50:18 -0700 (Tue, 09 Sep 2008)
-New Revision: 23362
 
-Log:
-busybox: 1.11.2 patch
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=4844 
+====================================================================== 
+Reported By:                Feynman
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   4844
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   block
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             09-08-2008 11:05 PDT
+Last Modified:              09-09-2008 06:15 PDT
+====================================================================== 
+Summary:                    Bridge-utils broken under kernel 2.4
+Description: 
+Snapshot buildroot-20080905
 
-Added:
-   trunk/buildroot/package/busybox/busybox-1.11.2-kbdmode.patch
+The bridge-utils package compiles but the brctl command fails.
+The error message is:
+# brctl addbr br0
+add bridge failed: Invalid argument
+
+I think this is a problem with the bridge-utils 1.4. The former version
+1.06 works fine.
+
+My configuration is: 386, kernel 2.4, busybox 1.11.x
+The project is openMGB, a RDC based NAS with WAP.
 
 
-Changeset:
-Added: trunk/buildroot/package/busybox/busybox-1.11.2-kbdmode.patch
-===================================================================
---- trunk/buildroot/package/busybox/busybox-1.11.2-kbdmode.patch	                        (rev 0)
-+++ trunk/buildroot/package/busybox/busybox-1.11.2-kbdmode.patch	2008-09-09 08:50:18 UTC (rev 23362)
-@@ -0,0 +1,21 @@
-+--- busybox-1.11.2/console-tools/kbd_mode.c	Thu Aug 21 21:40:12 2008
-++++ busybox-1.11.2-kbdmode/console-tools/kbd_mode.c	Wed Sep  3 23:52:26 2008
-+@@ -2,7 +2,7 @@
-+ /*
-+  * Mini kbd_mode implementation for busybox
-+  *
-+- * Copyright (C) 2007 Lo?c Greni? <loic.grenie@gmail.com>
-++ * Copyright (C) 2007 Loic Grenie <loic.grenie@gmail.com>
-+  *   written using Andries Brouwer <aeb@cwi.nl>'s kbd_mode from
-+  *   console-utils v0.2.3, licensed under GNU GPLv2
-+  *
-+@@ -46,7 +46,8 @@
-+ 		printf("The keyboard is in %s mode\n", mode);
-+ 	} else {
-+ 		opt = opt & UNICODE ? 3 : opt >> 1;
-+-		xioctl(fd, KDSKBMODE, opt);
-++		/* double cast prevents warnings about widening conversion */
-++		xioctl(fd, KDSKBMODE, (void*)(ptrdiff_t)opt);
-+ 	}
-+ 
-+ 	if (ENABLE_FEATURE_CLEAN_UP)
+====================================================================== 
+
+---------------------------------------------------------------------- 
+ jacmet - 09-08-08 11:26  
+---------------------------------------------------------------------- 
+I don't have access to any system with a 2.4 kernel anymore - Does it work
+if you change the version in bridge.mk back to v1.06? If so, please report
+the problem with bridge-utils upstream. 
+
+---------------------------------------------------------------------- 
+ hmoffatt - 09-08-08 18:11  
+---------------------------------------------------------------------- 
+1.4 seems to use /sys/class/net which wouldn't exist on linux 2.4 
+
+---------------------------------------------------------------------- 
+ jacmet - 09-09-08 00:27  
+---------------------------------------------------------------------- 
+The README claims to only use sysfs stuff on 2.6 kernels, but I don't see
+any fallback code. Probably the README is just stale - The bridge-utils
+upsteam tarball seems pretty broken in general (no configure, configure.in
+using wrong version, stale README, ..)
+
+I don't have a problem with reverting to 1.06 if that fixes the bug
+reporter's issue. 
+
+---------------------------------------------------------------------- 
+ hmoffatt - 09-09-08 06:15  
+---------------------------------------------------------------------- 
+Do we need to support 2.4? I don't think you can build it using buildroot?
+I would've expected a project that is using current buildroot and current
+busybox to also run a current kernel.. 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+09-08-08 11:05  Feynman        New Issue                                    
+09-08-08 11:05  Feynman        Status                   new => assigned     
+09-08-08 11:05  Feynman        Assigned To               => buildroot       
+09-08-08 11:26  jacmet         Note Added: 0011194                          
+09-08-08 18:11  hmoffatt       Note Added: 0011214                          
+09-09-08 00:27  jacmet         Note Added: 0011224                          
+09-09-08 06:15  hmoffatt       Note Added: 0011234                          
+======================================================================
