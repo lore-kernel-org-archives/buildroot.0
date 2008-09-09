@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 9 Sep 2008 06:15:46 -0700
+Date: Tue, 9 Sep 2008 08:39:38 -0700
 Subject: [Buildroot] [buildroot 0004844]: Bridge-utils broken under kernel
 	2.4
-Message-ID: <352f05e03e01959824663dac578c557f@busybox.net>
+Message-ID: <db6d82e983be50023a5325bf3b6cc6db@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             09-08-2008 11:05 PDT
-Last Modified:              09-09-2008 06:15 PDT
+Last Modified:              09-09-2008 08:39 PDT
 ====================================================================== 
 Summary:                    Bridge-utils broken under kernel 2.4
 Description: 
@@ -76,6 +76,12 @@ Do we need to support 2.4? I don't think you can build it using buildroot?
 I would've expected a project that is using current buildroot and current
 busybox to also run a current kernel.. 
 
+---------------------------------------------------------------------- 
+ jacmet - 09-09-08 08:39  
+---------------------------------------------------------------------- 
+I don't personally have any interest in 2.4, but if we can keep it working
+with small effort, then that's fine with me. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -86,4 +92,5 @@ Date Modified   Username       Field                    Change
 09-08-08 18:11  hmoffatt       Note Added: 0011214                          
 09-09-08 00:27  jacmet         Note Added: 0011224                          
 09-09-08 06:15  hmoffatt       Note Added: 0011234                          
+09-09-08 08:39  jacmet         Note Added: 0011244                          
 ======================================================================
