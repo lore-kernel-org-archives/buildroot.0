@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 9 Sep 2008 08:49:28 -0700
+Date: Tue, 9 Sep 2008 16:57:43 -0700
 Subject: [Buildroot] [buildroot 0004844]: Bridge-utils broken under kernel
 	2.4
-Message-ID: <24aaa544fb01a2b5052d804c96557467@busybox.net>
+Message-ID: <4f8be8179165fb693c41040ed428ac01@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             09-08-2008 11:05 PDT
-Last Modified:              09-09-2008 08:49 PDT
+Last Modified:              09-09-2008 16:57 PDT
 ====================================================================== 
 Summary:                    Bridge-utils broken under kernel 2.4
 Description: 
@@ -133,6 +133,15 @@ Thanks in advance.
 ---------------------------------------------------------------------- 
 Please set BRIDGE_AUTORECONF to NO and try again 
 
+---------------------------------------------------------------------- 
+ hmoffatt - 09-09-08 16:57  
+---------------------------------------------------------------------- 
+Recent busybox has brctl built in - maybe that will work on 2.4? Better
+than reverting bridge-utils to an old version.
+
+Although according to the changelog not a lot changed between 1.06 and 1.4
+anyway (I'm not sure why the version number jumped so much) 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -146,4 +155,5 @@ Date Modified   Username       Field                    Change
 09-09-08 08:39  jacmet         Note Added: 0011244                          
 09-09-08 08:47  Feynman        Note Added: 0011254                          
 09-09-08 08:49  jacmet         Note Added: 0011264                          
+09-09-08 16:57  hmoffatt       Note Added: 0011274                          
 ======================================================================
