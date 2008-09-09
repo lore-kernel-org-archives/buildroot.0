@@ -1,73 +1,81 @@
-From: hamish at uclibc.org <hamish@uclibc.org>
-Date: Mon,  8 Sep 2008 19:06:53 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/procps
-Message-ID: <20080909020653.2F0063C2B9@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Tue, 9 Sep 2008 00:27:37 -0700
+Subject: [Buildroot] [buildroot 0004844]: Bridge-utils broken under kernel
+	2.4
+Message-ID: <5b5158aae56af4704e1be136202e1c9b@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: hamish
-Date: 2008-09-08 19:06:52 -0700 (Mon, 08 Sep 2008)
-New Revision: 23360
 
-Log:
-Support building without WCHAR support
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=4844 
+====================================================================== 
+Reported By:                Feynman
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   4844
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   block
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             09-08-2008 11:05 PDT
+Last Modified:              09-09-2008 00:27 PDT
+====================================================================== 
+Summary:                    Bridge-utils broken under kernel 2.4
+Description: 
+Snapshot buildroot-20080905
+
+The bridge-utils package compiles but the brctl command fails.
+The error message is:
+# brctl addbr br0
+add bridge failed: Invalid argument
+
+I think this is a problem with the bridge-utils 1.4. The former version
+1.06 works fine.
+
+My configuration is: 386, kernel 2.4, busybox 1.11.x
+The project is openMGB, a RDC based NAS with WAP.
 
 
-Added:
-   trunk/buildroot/package/procps/procps-wchar.patch
+====================================================================== 
 
-Modified:
-   trunk/buildroot/package/procps/Config.in
+---------------------------------------------------------------------- 
+ jacmet - 09-08-08 11:26  
+---------------------------------------------------------------------- 
+I don't have access to any system with a 2.4 kernel anymore - Does it work
+if you change the version in bridge.mk back to v1.06? If so, please report
+the problem with bridge-utils upstream. 
 
+---------------------------------------------------------------------- 
+ hmoffatt - 09-08-08 18:11  
+---------------------------------------------------------------------- 
+1.4 seems to use /sys/class/net which wouldn't exist on linux 2.4 
 
-Changeset:
-Modified: trunk/buildroot/package/procps/Config.in
-===================================================================
---- trunk/buildroot/package/procps/Config.in	2008-09-08 07:26:12 UTC (rev 23359)
-+++ trunk/buildroot/package/procps/Config.in	2008-09-09 02:06:52 UTC (rev 23360)
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_PROCPS
- 	bool "procps"
- 	select BR2_PACKAGE_NCURSES
--	depends on BR2_USE_WCHAR
- 	help
- 	  Standard informational utilities and process-handling tools.
- 	  Provides things like kill, ps, uptime, free, top, etc...
+---------------------------------------------------------------------- 
+ jacmet - 09-09-08 00:27  
+---------------------------------------------------------------------- 
+The README claims to only use sysfs stuff on 2.6 kernels, but I don't see
+any fallback code. Probably the README is just stale - The bridge-utils
+upsteam tarball seems pretty broken in general (no configure, configure.in
+using wrong version, stale README, ..)
 
-Added: trunk/buildroot/package/procps/procps-wchar.patch
-===================================================================
---- trunk/buildroot/package/procps/procps-wchar.patch	                        (rev 0)
-+++ trunk/buildroot/package/procps/procps-wchar.patch	2008-09-09 02:06:52 UTC (rev 23360)
-@@ -0,0 +1,29 @@
-+--- procps-3.2.7/proc/escape.c	2005-01-06 07:50:26.000000000 +1100
-++++ procps-3.2.7.fixed/proc/escape.c	2008-09-09 11:55:57.000000000 +1000
-+@@ -15,7 +15,7 @@
-+ #include "escape.h"
-+ #include "readproc.h"
-+ 
-+-#if (__GNU_LIBRARY__ >= 6)
-++#if (__GNU_LIBRARY__ >= 6) && (!defined(__UCLIBC__) || defined(__UCLIBC_HAS_WCHAR__))
-+ # include <wchar.h>
-+ # include <wctype.h>
-+ # include <stdlib.h>  /* MB_CUR_MAX */
-+@@ -23,7 +23,7 @@
-+ # include <langinfo.h>
-+ #endif
-+ 
-+-#if (__GNU_LIBRARY__ >= 6)
-++#if (__GNU_LIBRARY__ >= 6) && (!defined(__UCLIBC__) || defined(__UCLIBC_HAS_WCHAR__))
-+ static int escape_str_utf8(char *restrict dst, const char *restrict src, int bufsize, int *maxcells){
-+   int my_cells = 0;
-+   int my_bytes = 0;
-+@@ -123,7 +123,7 @@
-+   "********************************"
-+   "********************************";
-+   
-+-#if (__GNU_LIBRARY__ >= 6)
-++#if (__GNU_LIBRARY__ >= 6) && (!defined(__UCLIBC__) || defined(__UCLIBC_HAS_WCHAR__))
-+   static int utf_init=0;
-+   
-+   if(utf_init==0){
+I don't have a problem with reverting to 1.06 if that fixes the bug
+reporter's issue. 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+09-08-08 11:05  Feynman        New Issue                                    
+09-08-08 11:05  Feynman        Status                   new => assigned     
+09-08-08 11:05  Feynman        Assigned To               => buildroot       
+09-08-08 11:26  jacmet         Note Added: 0011194                          
+09-08-08 18:11  hmoffatt       Note Added: 0011214                          
+09-09-08 00:27  jacmet         Note Added: 0011224                          
+======================================================================
