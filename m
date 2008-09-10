@@ -1,40 +1,80 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 10 Sep 2008 08:57:27 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
-In-Reply-To: <20080910013227.GA12253@cloud.net.au> (Hamish Moffatt's message
-	of "Wed\, 10 Sep 2008 11\:32\:27 +1000")
-References: <20080909085015.CBF7C3C608@busybox.net>
-	<20080910013227.GA12253@cloud.net.au>
-Message-ID: <871vzsh4iw.fsf@macbook.be.48ers.dk>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Wed, 10 Sep 2008 00:30:13 -0700
+Subject: [Buildroot] [buildroot 0004384]: GCC 4.3.1 fails with cannot
+	compute suffix of object files
+Message-ID: <862f24f6d8118f7b54d2d9781b120fab@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Hamish" == Hamish Moffatt <hamish@cloud.net.au> writes:
 
-Hi,
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=4384 
+====================================================================== 
+Reported By:                kreuters
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   4384
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             07-31-2008 04:57 PDT
+Last Modified:              09-10-2008 00:30 PDT
+====================================================================== 
+Summary:                    GCC 4.3.1 fails with cannot compute suffix of object
+files
+Description: 
+from buildroot-20080731.tar.bz, only things selected are gcc 4.3.1 and
+EABI.
 
- Hamish> Actually that was deliberate. I noticed that after I changed
- Hamish> package/busybox/Config.in, I still had
 
- Hamish> BR2_BUSYBOX_VERSION_1_11_X=y
- Hamish> BR2_BUSYBOX_VERSION="1.11.1"
+checking for arm-linux-uclibcgnueabi-gcc... 
+/home/dikkie/Documents/dns323/uclibc/buildroot/toolchain_build_arm/gcc-4.3.1-initial/./gcc/xgcc
+-B/home/dikkie/Documents/dns323/uclibc/buildroot/toolchain_build_arm/gcc-4.3.1-initial/./gcc/
+-B/home/dikkie/Documents/dns323/uclibc/buildroot/build_arm/staging_dir/usr/arm-linux-uclibcgnueabi/bin/
+-B/home/dikkie/Documents/dns323/uclibc/buildroot/build_arm/staging_dir/usr/arm-linux-uclibcgnueabi/lib/
+-isystem
+/home/dikkie/Documents/dns323/uclibc/buildroot/build_arm/staging_dir/usr/arm-linux-uclibcgnueabi/include
+-isystem
+/home/dikkie/Documents/dns323/uclibc/buildroot/build_arm/staging_dir/usr/arm-linux-uclibcgnueabi/sys-include
 
- Hamish> until next time I ran a menuconfig/oldconfig/etc. If the patches are
- Hamish> removed immediately upon version bump but you don't update your config,
- Hamish> you'll be building without those patches. :(
+checking for suffix of object files... configure: error: cannot compute
+suffix of object files: cannot compile
 
- Hamish> I wonder if BR2_BUSYBOX_VERSION should be determined by the Makefiles
- Hamish> rather than through the config system, so that this can't happen?
+====================================================================== 
 
-Notice that this isn't a busybox specific issue - It's everywhere we
-have a version selection. Maybe it could be done in the makefile, but
-I do find it quite handy to have it all in the Config.in.
+---------------------------------------------------------------------- 
+ antezedens - 09-10-08 00:30  
+---------------------------------------------------------------------- 
+For those eager to get gcc-4.3.1 running. I've found out that gcc does not
+find the shared objects of two libs. The attached patch points gcc to the
+right directories. It is just a quick fix but it should do until there is
+an official bugfix. This is what to do:
 
-Maybe the solution is simply to teach people to run make oldconfig
-whenever they rebase?
+make   <= will stop with the above error
 
--- 
-Bye, Peter Korsgaard
+cd buildroot/toolchain_build_ARCH
+
+patch -p2 < gcc-4.3.1-compile.patch
+rm -Rf gcc-4.3.1-initial
+
+make   <= should compile 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+07-31-08 04:57  kreuters       New Issue                                    
+07-31-08 04:57  kreuters       Status                   new => assigned     
+07-31-08 04:57  kreuters       Assigned To               => buildroot       
+09-03-08 09:05  haizaar        Issue Monitored: haizaar                     
+09-10-08 00:29  antezedens     File Added: gcc-4.3.1-compile.patch              
+     
+09-10-08 00:30  antezedens     Note Added: 0011294                          
+======================================================================
