@@ -1,88 +1,39 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 10 Sep 2008 04:27:19 -0700
-Subject: [Buildroot] [buildroot 0004384]: GCC 4.3.1 fails with cannot
-	compute suffix of object files
-Message-ID: <5afeffcf35079cf4fe98fed258207231@busybox.net>
+From: Michel Wilson <michel@crondor.net>
+Date: Wed, 10 Sep 2008 13:52:14 +0200
+Subject: [Buildroot] [PATCH] Option to disable cursor in X; retry
+In-Reply-To: <20080910110310.GB18852@cloud.net.au>
+References: <20080910081259.GB24785@aeon.hgd.crondor.net>
+	<20080910110310.GB18852@cloud.net.au>
+Message-ID: <200809101352.14211.michel@crondor.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Wednesday 10 September 2008 13:03:10 Hamish Moffatt wrote:
+> Does this disable the cursor completely, or add the ability to disable
+> it through an API or configuration item?
+>
+> Because if it just plain disables the cursor that doesn't seem to be
+> appropriate for a compile time option. (Not that it's your fault of
+> course.)
+>
+>
+> Hamish
+You are as surprised as I was, because it is indeed a configure-time option to 
+disable it, by default. Note that it's only the root window which is affected. 
+I think it's possible to still have a cursor, by providing a cursor theme or 
+something like that, but I haven't tested.
+Question is: should this be included or not? I feel it's a useful option to 
+have, because it's the simplest way of disabling the cursor. I tried a 
+transparent cursor theme (see http://matchbox-project.org/sources/utils/), but 
+didn't get it to work, yet. More elegant would be a xorg.conf option with the 
+same effect, but I'm not sure if I'm up to that ;)
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=4384 
-====================================================================== 
-Reported By:                kreuters
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   4384
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             07-31-2008 04:57 PDT
-Last Modified:              09-10-2008 04:27 PDT
-====================================================================== 
-Summary:                    GCC 4.3.1 fails with cannot compute suffix of object
-files
-Description: 
-from buildroot-20080731.tar.bz, only things selected are gcc 4.3.1 and
-EABI.
+Regards,
 
-
-checking for arm-linux-uclibcgnueabi-gcc... 
-/home/dikkie/Documents/dns323/uclibc/buildroot/toolchain_build_arm/gcc-4.3.1-initial/./gcc/xgcc
--B/home/dikkie/Documents/dns323/uclibc/buildroot/toolchain_build_arm/gcc-4.3.1-initial/./gcc/
--B/home/dikkie/Documents/dns323/uclibc/buildroot/build_arm/staging_dir/usr/arm-linux-uclibcgnueabi/bin/
--B/home/dikkie/Documents/dns323/uclibc/buildroot/build_arm/staging_dir/usr/arm-linux-uclibcgnueabi/lib/
--isystem
-/home/dikkie/Documents/dns323/uclibc/buildroot/build_arm/staging_dir/usr/arm-linux-uclibcgnueabi/include
--isystem
-/home/dikkie/Documents/dns323/uclibc/buildroot/build_arm/staging_dir/usr/arm-linux-uclibcgnueabi/sys-include
-
-checking for suffix of object files... configure: error: cannot compute
-suffix of object files: cannot compile
-
-====================================================================== 
-
----------------------------------------------------------------------- 
- antezedens - 09-10-08 00:30  
----------------------------------------------------------------------- 
-For those eager to get gcc-4.3.1 running. I've found out that gcc does not
-find the shared objects of two libs. The attached patch points gcc to the
-right directories. It is just a quick fix but it should do until there is
-an official bugfix. This is what to do:
-
-make   <= will stop with the above error
-
-cd buildroot/toolchain_build_ARCH
-
-patch -p2 < gcc-4.3.1-compile.patch
-rm -Rf gcc-4.3.1-initial
-
-make   <= should compile 
-
----------------------------------------------------------------------- 
- haizaar - 09-10-08 04:27  
----------------------------------------------------------------------- 
-Issuing 'export
-LD_LIBRARY_PATH=$PWD/toolchain_build_arm/mpfr/lib:$LD_LIBRARY_PATH' from
-the top of your buildroot tree makes build happy. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-07-31-08 04:57  kreuters       New Issue                                    
-07-31-08 04:57  kreuters       Status                   new => assigned     
-07-31-08 04:57  kreuters       Assigned To               => buildroot       
-09-03-08 09:05  haizaar        Issue Monitored: haizaar                     
-09-10-08 00:29  antezedens     File Added: gcc-4.3.1-compile.patch              
-     
-09-10-08 00:30  antezedens     Note Added: 0011294                          
-09-10-08 04:27  haizaar        Note Added: 0011304                          
-======================================================================
+Michel Wilson.
+-- 
+Michel Wilson     michel at crondor.net
+PGP key ID        0xD2CB4B7E
