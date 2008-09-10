@@ -1,28 +1,88 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Wed, 10 Sep 2008 21:03:10 +1000
-Subject: [Buildroot] [PATCH] Option to disable cursor in X; retry
-In-Reply-To: <20080910081259.GB24785@aeon.hgd.crondor.net>
-References: <20080910081259.GB24785@aeon.hgd.crondor.net>
-Message-ID: <20080910110310.GB18852@cloud.net.au>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Wed, 10 Sep 2008 04:27:19 -0700
+Subject: [Buildroot] [buildroot 0004384]: GCC 4.3.1 fails with cannot
+	compute suffix of object files
+Message-ID: <5afeffcf35079cf4fe98fed258207231@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Sep 10, 2008 at 10:12:59AM +0200, Michel Wilson wrote:
-> Adds an option to disable the root cursor in X. Ideal for display-only
-> systems where a cursor only gets in the way. This is the
-> non-line-wrapped version of the patch ;)
 
-Does this disable the cursor completely, or add the ability to disable
-it through an API or configuration item?
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=4384 
+====================================================================== 
+Reported By:                kreuters
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   4384
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             07-31-2008 04:57 PDT
+Last Modified:              09-10-2008 04:27 PDT
+====================================================================== 
+Summary:                    GCC 4.3.1 fails with cannot compute suffix of object
+files
+Description: 
+from buildroot-20080731.tar.bz, only things selected are gcc 4.3.1 and
+EABI.
 
-Because if it just plain disables the cursor that doesn't seem to be
-appropriate for a compile time option. (Not that it's your fault of
-course.)
 
+checking for arm-linux-uclibcgnueabi-gcc... 
+/home/dikkie/Documents/dns323/uclibc/buildroot/toolchain_build_arm/gcc-4.3.1-initial/./gcc/xgcc
+-B/home/dikkie/Documents/dns323/uclibc/buildroot/toolchain_build_arm/gcc-4.3.1-initial/./gcc/
+-B/home/dikkie/Documents/dns323/uclibc/buildroot/build_arm/staging_dir/usr/arm-linux-uclibcgnueabi/bin/
+-B/home/dikkie/Documents/dns323/uclibc/buildroot/build_arm/staging_dir/usr/arm-linux-uclibcgnueabi/lib/
+-isystem
+/home/dikkie/Documents/dns323/uclibc/buildroot/build_arm/staging_dir/usr/arm-linux-uclibcgnueabi/include
+-isystem
+/home/dikkie/Documents/dns323/uclibc/buildroot/build_arm/staging_dir/usr/arm-linux-uclibcgnueabi/sys-include
 
-Hamish
--- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+checking for suffix of object files... configure: error: cannot compute
+suffix of object files: cannot compile
+
+====================================================================== 
+
+---------------------------------------------------------------------- 
+ antezedens - 09-10-08 00:30  
+---------------------------------------------------------------------- 
+For those eager to get gcc-4.3.1 running. I've found out that gcc does not
+find the shared objects of two libs. The attached patch points gcc to the
+right directories. It is just a quick fix but it should do until there is
+an official bugfix. This is what to do:
+
+make   <= will stop with the above error
+
+cd buildroot/toolchain_build_ARCH
+
+patch -p2 < gcc-4.3.1-compile.patch
+rm -Rf gcc-4.3.1-initial
+
+make   <= should compile 
+
+---------------------------------------------------------------------- 
+ haizaar - 09-10-08 04:27  
+---------------------------------------------------------------------- 
+Issuing 'export
+LD_LIBRARY_PATH=$PWD/toolchain_build_arm/mpfr/lib:$LD_LIBRARY_PATH' from
+the top of your buildroot tree makes build happy. 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+07-31-08 04:57  kreuters       New Issue                                    
+07-31-08 04:57  kreuters       Status                   new => assigned     
+07-31-08 04:57  kreuters       Assigned To               => buildroot       
+09-03-08 09:05  haizaar        Issue Monitored: haizaar                     
+09-10-08 00:29  antezedens     File Added: gcc-4.3.1-compile.patch              
+     
+09-10-08 00:30  antezedens     Note Added: 0011294                          
+09-10-08 04:27  haizaar        Note Added: 0011304                          
+======================================================================
