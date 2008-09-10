@@ -1,42 +1,40 @@
-From: sddnd <sddndw@gmail.com>
-Date: Wed, 10 Sep 2008 11:22:50 +0800
-Subject: [Buildroot] autoreconf problem
-Message-ID: <161618df0809092022u53bfaaf2y2609a40c0ab8dfc1@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 10 Sep 2008 08:57:27 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
+In-Reply-To: <20080910013227.GA12253@cloud.net.au> (Hamish Moffatt's message
+	of "Wed\, 10 Sep 2008 11\:32\:27 +1000")
+References: <20080909085015.CBF7C3C608@busybox.net>
+	<20080910013227.GA12253@cloud.net.au>
+Message-ID: <871vzsh4iw.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear devs:
+>>>>> "Hamish" == Hamish Moffatt <hamish@cloud.net.au> writes:
 
-I use buildroot on my Gentoo Linux box to develop my project.
-Previously it worked like a charm, until I upgraded my gentoo system.
+Hi,
 
-Now the gentoo use autoconf-2.62, it breaks the AUTORECONF stuffs in
-buildroot.
-Many packages which need AUTORECONF complain about version mismatches.
+ Hamish> Actually that was deliberate. I noticed that after I changed
+ Hamish> package/busybox/Config.in, I still had
 
-I found that alrought buildroot has host-automake, host-autoconf, host-m4
-... etc built,
-but they are not used.
-All these still invoke the _really_ host ones.
+ Hamish> BR2_BUSYBOX_VERSION_1_11_X=y
+ Hamish> BR2_BUSYBOX_VERSION="1.11.1"
 
-Currently I don't have any better idea to solve this.
-I just downgraded the autoconf to 2.61 on my gentoo box.
+ Hamish> until next time I ran a menuconfig/oldconfig/etc. If the patches are
+ Hamish> removed immediately upon version bump but you don't update your config,
+ Hamish> you'll be building without those patches. :(
 
-I think the host-* way is good, we can trap all these (buildroot's
-autoconf-2.61 ...)
-in our buildroot environment.
-But I don't know how to feed all the necessities to our autoreconf.
-Use env variables to set AUTOCONF, AUTOHEADER, AUTOMAKE, ACLOCAL, AUTOPOINT
-.... ?
+ Hamish> I wonder if BR2_BUSYBOX_VERSION should be determined by the Makefiles
+ Hamish> rather than through the config system, so that this can't happen?
 
-Any idea ? Or any one has the similar problems?
+Notice that this isn't a busybox specific issue - It's everywhere we
+have a version selection. Maybe it could be done in the makefile, but
+I do find it quite handy to have it all in the Config.in.
 
-Thanks.
+Maybe the solution is simply to teach people to run make oldconfig
+whenever they rebase?
 
-Regards.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080910/9c549c65/attachment.htm 
+-- 
+Bye, Peter Korsgaard
