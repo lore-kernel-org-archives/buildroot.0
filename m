@@ -1,47 +1,42 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Wed, 10 Sep 2008 11:32:27 +1000
-Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
-In-Reply-To: <20080909085015.CBF7C3C608@busybox.net>
-References: <20080909085015.CBF7C3C608@busybox.net>
-Message-ID: <20080910013227.GA12253@cloud.net.au>
+From: sddnd <sddndw@gmail.com>
+Date: Wed, 10 Sep 2008 11:22:50 +0800
+Subject: [Buildroot] autoreconf problem
+Message-ID: <161618df0809092022u53bfaaf2y2609a40c0ab8dfc1@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Sep 09, 2008 at 01:50:15AM -0700, jacmet at uclibc.org wrote:
-> Author: jacmet
-> Date: 2008-09-09 01:50:15 -0700 (Tue, 09 Sep 2008)
-> New Revision: 23361
-> 
-> Log:
-> busybox: remove stale busybox 1.11.1 patches
-> 
-> Hamish, don't forget to remove those when you bump the version
-> 
-> Removed:
->    trunk/buildroot/package/busybox/busybox-1.11.1-ash.patch
->    trunk/buildroot/package/busybox/busybox-1.11.1-basename.patch
->    trunk/buildroot/package/busybox/busybox-1.11.1-modutils.patch
->    trunk/buildroot/package/busybox/busybox-1.11.1-tar.patch
+Dear devs:
 
-Hi Peter,
+I use buildroot on my Gentoo Linux box to develop my project.
+Previously it worked like a charm, until I upgraded my gentoo system.
 
-Actually that was deliberate. I noticed that after I changed
-package/busybox/Config.in, I still had
+Now the gentoo use autoconf-2.62, it breaks the AUTORECONF stuffs in
+buildroot.
+Many packages which need AUTORECONF complain about version mismatches.
 
-BR2_BUSYBOX_VERSION_1_11_X=y
-BR2_BUSYBOX_VERSION="1.11.1"
+I found that alrought buildroot has host-automake, host-autoconf, host-m4
+... etc built,
+but they are not used.
+All these still invoke the _really_ host ones.
 
-until next time I ran a menuconfig/oldconfig/etc. If the patches are
-removed immediately upon version bump but you don't update your config,
-you'll be building without those patches. :(
+Currently I don't have any better idea to solve this.
+I just downgraded the autoconf to 2.61 on my gentoo box.
 
-I wonder if BR2_BUSYBOX_VERSION should be determined by the Makefiles
-rather than through the config system, so that this can't happen?
+I think the host-* way is good, we can trap all these (buildroot's
+autoconf-2.61 ...)
+in our buildroot environment.
+But I don't know how to feed all the necessities to our autoreconf.
+Use env variables to set AUTOCONF, AUTOHEADER, AUTOMAKE, ACLOCAL, AUTOPOINT
+.... ?
 
-Regards,
-Hamish
--- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+Any idea ? Or any one has the similar problems?
+
+Thanks.
+
+Regards.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080910/9c549c65/attachment.htm 
