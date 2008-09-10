@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 9 Sep 2008 16:57:43 -0700
+Date: Tue, 9 Sep 2008 17:01:14 -0700
 Subject: [Buildroot] [buildroot 0004844]: Bridge-utils broken under kernel
 	2.4
-Message-ID: <4f8be8179165fb693c41040ed428ac01@busybox.net>
+Message-ID: <a6b9f99cbd93cadc03cd68face86a761@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             09-08-2008 11:05 PDT
-Last Modified:              09-09-2008 16:57 PDT
+Last Modified:              09-09-2008 17:01 PDT
 ====================================================================== 
 Summary:                    Bridge-utils broken under kernel 2.4
 Description: 
@@ -142,6 +142,15 @@ than reverting bridge-utils to an old version.
 Although according to the changelog not a lot changed between 1.06 and 1.4
 anyway (I'm not sure why the version number jumped so much) 
 
+---------------------------------------------------------------------- 
+ hmoffatt - 09-09-08 17:01  
+---------------------------------------------------------------------- 
+According to the comments in busybox's brctl it doesn't use sysfs so it
+should work on 2.4
+
+It only has the basic bridge control functionality though - no STP. I'm
+not sure if you'd be using STP in a wifi environment anyway 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -156,4 +165,5 @@ Date Modified   Username       Field                    Change
 09-09-08 08:47  Feynman        Note Added: 0011254                          
 09-09-08 08:49  jacmet         Note Added: 0011264                          
 09-09-08 16:57  hmoffatt       Note Added: 0011274                          
+09-09-08 17:01  hmoffatt       Note Added: 0011284                          
 ======================================================================
