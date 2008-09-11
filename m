@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 11 Sep 2008 02:06:45 -0700
+Date: Thu, 11 Sep 2008 02:08:46 -0700
 Subject: [Buildroot] [buildroot 0004804]: lzo1x.h not found
-Message-ID: <fa3567243f71b1b2ed1406e25cbd38c3@busybox.net>
+Message-ID: <f4f6dae2a35e042bacec8371cc951fea@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,7 +9,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-A NOTE has been added to this issue. 
+The following issue has been set as RELATED TO issue 0004894. 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=4804 
 ====================================================================== 
@@ -25,7 +25,7 @@ Priority:                   normal
 Status:                     feedback
 ====================================================================== 
 Date Submitted:             09-03-2008 08:43 PDT
-Last Modified:              09-11-2008 02:06 PDT
+Last Modified:              09-11-2008 02:08 PDT
 ====================================================================== 
 Summary:                    lzo1x.h not found
 Description: 
@@ -38,6 +38,10 @@ Looks like lzo1x.h could not be found but :
 ./build_arm_wchar/lzo-2.03/include/lzo/lzo1x.h
 ./build_arm_wchar/staging_dir/usr/include/lzo/lzo1x.h
 
+======================================================================
+Relationships       ID      Summary
+----------------------------------------------------------------------
+related to          0004894 host lzo and zlib can't be built within...
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
@@ -486,4 +490,6 @@ Date Modified   Username       Field                    Change
 09-11-08 02:02  iceman_im      Resolution               fixed => reopened   
 09-11-08 02:02  iceman_im      Note Added: 0011384                          
 09-11-08 02:06  hmoffatt       Note Added: 0011394                          
+09-11-08 02:08  hmoffatt       Issue cloned             0004894             
+09-11-08 02:08  hmoffatt       Relationship added       related to 0004894  
 ======================================================================
