@@ -1,50 +1,56 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Thu, 11 Sep 2008 13:58:43 +0200
-Subject: [Buildroot] [PATCH v2 1/1] openssl: convert	to
- Makefile.autotools.in and bump version to 0.9.8g
-In-Reply-To: <1218605958.12416.6.camel@localhost>
-References: <1218542611-21908-1-git-send-email-hans-christian.egtvedt@atmel.com>
-	<20080813032408.GA1773@cloud.net.au>
-	<1218605958.12416.6.camel@localhost>
-Message-ID: <20080911135843.2c66d713@atmel.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Thu, 11 Sep 2008 05:41:28 -0700
+Subject: [Buildroot] [buildroot 0004904]: fsck.cramfs: asm/page.h is missing
+Message-ID: <6a823cbc22f26536f2b2e4ae0867bbdc@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 13 Aug 2008 07:39:18 +0200
-Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> wrote:
 
-> On Wed, 2008-08-13 at 13:24 +1000, Hamish Moffatt wrote:
-> > On Tue, Aug 12, 2008 at 02:03:31PM +0200, Hans-Christian Egtvedt
-> > wrote:
-> > > This patch converts building of OpenSSL to use
-> > > Makefile.autotools.in and bumps
-> > 
-> > OpenSSL doesn't use autotools though, so is this a good idea?
-> > 
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=4904 
+====================================================================== 
+Reported By:                maleadt
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   4904
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             09-11-2008 05:41 PDT
+Last Modified:              09-11-2008 05:41 PDT
+====================================================================== 
+Summary:                    fsck.cramfs: asm/page.h is missing
+Description: 
+When compiling fsck in buildroot, the compilation fails due to a missing
+"asm/page.h". This file effectively is not present on my system. It seems
+that "asm/page.h" is included in order to define PAGE_SIZE.
 
-<snipp override of configure rule>
+When replacing this include statement with the following routine extracted
+from mkswap.c (which serves the same purpose, defining PAGE_SIZE), the
+build successfully continues.
 
-> > Once you've overriden the CONFIGURE stage, is there much benefit
-> > left in using Makefile.autotools.in?
-> > 
-> 
-> The Makefile is smaller now, and IMHO easier to read.
-> 
-> Installation of man pages, info pages and header/development works
-> better now.
-> 
-> I though the autotools was not purely for autotools stuff, but a way
-> to make every package simpler to read and install in a more general
-> way?
-> 
+#ifdef HAVE_sys_user_h
+				/* Note: <sys/user.h> says: for gdb only */
+#include <sys/user.h>		/* for PAGE_SIZE and PAGE_SHIFT */
+#else
+#ifdef HAVE_asm_page_h
+#include <asm/page.h>	
+#endif
+#endif
+====================================================================== 
 
-No other comments for using Makefile.autotools.in for not autotools
-packages? I still find Makefile.autotools.in much smoother than the old
-style package.mk. To generalize packages must be a win-win?
-
--- 
-Best regards,
-Hans-Christian Egtvedt
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+09-11-08 05:41  maleadt        New Issue                                    
+09-11-08 05:41  maleadt        Status                   new => assigned     
+09-11-08 05:41  maleadt        Assigned To               => buildroot       
+======================================================================
