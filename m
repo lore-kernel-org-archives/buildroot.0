@@ -1,7 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 11 Sep 2008 05:41:28 -0700
-Subject: [Buildroot] [buildroot 0004904]: fsck.cramfs: asm/page.h is missing
-Message-ID: <6a823cbc22f26536f2b2e4ae0867bbdc@busybox.net>
+Date: Thu, 11 Sep 2008 05:44:29 -0700
+Subject: [Buildroot] [buildroot 0004914]: Large file support missing,
+	however selected
+Message-ID: <e4a06eb52971333aa3b50f6db966b1f7@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,46 +12,56 @@ To: buildroot@busybox.net
 
 The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=4904 
+http://busybox.net/bugs/view.php?id=4914 
 ====================================================================== 
 Reported By:                maleadt
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   4904
+Issue ID:                   4914
 Category:                   Architecture Specific
-Reproducibility:            always
+Reproducibility:            sometimes
 Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             09-11-2008 05:41 PDT
-Last Modified:              09-11-2008 05:41 PDT
+Date Submitted:             09-11-2008 05:44 PDT
+Last Modified:              09-11-2008 05:44 PDT
 ====================================================================== 
-Summary:                    fsck.cramfs: asm/page.h is missing
+Summary:                    Large file support missing, however selected
 Description: 
-When compiling fsck in buildroot, the compilation fails due to a missing
-"asm/page.h". This file effectively is not present on my system. It seems
-that "asm/page.h" is included in order to define PAGE_SIZE.
+Sometimes, my build failed with some cryptic errors like:
+swapon.c:87: error: expected declaration specifiers or '...' before
+'swapon'
+swapon.c:87: error: expected declaration specifiers or '...' before
+'path'
+swapon.c:87: error: expected declaration specifiers or '...' before
+'flags'
+swapon.c:87: warning: type defaults to 'int' in declaration of
+'_syscall2'
+swapon.c:89: error: expected declaration specifiers or '...' before
+'swapoff'
+swapon.c:89: error: expected declaration specifiers or '...' before
+'path'
+swapon.c:89: warning: type defaults to 'int' in declaration of
+'_syscall1'
 
-When replacing this include statement with the following routine extracted
-from mkswap.c (which serves the same purpose, defining PAGE_SIZE), the
-build successfully continues.
+A quick google turned up that this failure is caused by "Large File
+Support" not being checked. It seems that some dependency is not being
+checked by the menuconfig.
 
-#ifdef HAVE_sys_user_h
-				/* Note: <sys/user.h> says: for gdb only */
-#include <sys/user.h>		/* for PAGE_SIZE and PAGE_SHIFT */
-#else
-#ifdef HAVE_asm_page_h
-#include <asm/page.h>	
-#endif
-#endif
+Anyhow, even with the LFS option checked, the build still fails sometimes!
+I cannot pinpoint the cause of this bug, but to fix it I need to enter the
+menuconfig once more, uncheck and recheck the LFS option, exit from the
+menuconfig, and answer "Yes" when menuconfig asks whether the
+configuration should be saved. After doing this, the build successfully
+continues.
 ====================================================================== 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-09-11-08 05:41  maleadt        New Issue                                    
-09-11-08 05:41  maleadt        Status                   new => assigned     
-09-11-08 05:41  maleadt        Assigned To               => buildroot       
+09-11-08 05:44  maleadt        New Issue                                    
+09-11-08 05:44  maleadt        Status                   new => assigned     
+09-11-08 05:44  maleadt        Assigned To               => buildroot       
 ======================================================================
