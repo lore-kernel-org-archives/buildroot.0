@@ -1,35 +1,48 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Thu, 11 Sep 2008 23:06:30 +1000
-Subject: [Buildroot] [PATCH v2 1/1] openssl: convert
-	to	Makefile.autotools.in and bump version to 0.9.8g
-In-Reply-To: <20080911135843.2c66d713@atmel.com>
-References: <1218542611-21908-1-git-send-email-hans-christian.egtvedt@atmel.com>
-	<20080813032408.GA1773@cloud.net.au>
-	<1218605958.12416.6.camel@localhost>
-	<20080911135843.2c66d713@atmel.com>
-Message-ID: <20080911130630.GA29167@cloud.net.au>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Thu, 11 Sep 2008 06:45:15 -0700
+Subject: [Buildroot] [buildroot 0004934]: mk.jjfs2  no parent directory
+Message-ID: <dcdcaf030f873303c243ef4df27ee1e5@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Sep 11, 2008 at 01:58:43PM +0200, Hans-Christian Egtvedt wrote:
-> On Wed, 13 Aug 2008 07:39:18 +0200
-> Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> wrote:
-> > I though the autotools was not purely for autotools stuff, but a way
-> > to make every package simpler to read and install in a more general
-> > way?
-> 
-> No other comments for using Makefile.autotools.in for not autotools
-> packages? I still find Makefile.autotools.in much smoother than the old
-> style package.mk. To generalize packages must be a win-win?
 
-I guess if it works then it's ok to use it for now. If it breaks in the
-future we can fix it then. I suppose the OpenSSL developers have
-deliberately chosen to mimic the autoconf configure interface given how
-well known it is, so it fits Makefile.autotools.in too.
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=4934 
+====================================================================== 
+Reported By:                iceman_im
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   4934
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             09-11-2008 06:45 PDT
+Last Modified:              09-11-2008 06:45 PDT
+====================================================================== 
+Summary:                    mk.jjfs2  no parent directory
+Description: 
+Error while building jffs2 rootfs.
 
-Hamish
--- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+rootdir=/home/assensg/Desktop/buildroot/project_build_arm_wchar/at91sam9260pf/root
+table='target/device/Atmel/root/device_table.txt'
+mkfs.jffs2: skipping device_table entry '/dev': no parent directory!
+mkfs.jffs2: skipping device_table entry '/tmp': no parent directory!
+mkfs.jffs2: skipping device_table entry '/etc': no parent directory!
+
+====================================================================== 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+09-11-08 06:45  iceman_im      New Issue                                    
+09-11-08 06:45  iceman_im      Status                   new => assigned     
+09-11-08 06:45  iceman_im      Assigned To               => buildroot       
+======================================================================
