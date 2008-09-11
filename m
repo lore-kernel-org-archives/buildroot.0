@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 11 Sep 2008 02:02:04 -0700
+Date: Thu, 11 Sep 2008 02:06:45 -0700
 Subject: [Buildroot] [buildroot 0004804]: lzo1x.h not found
-Message-ID: <296885b9e8f6768b2bd12e8f1cbdc59c@bugs.busybox.net>
+Message-ID: <fa3567243f71b1b2ed1406e25cbd38c3@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,7 +9,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been REOPENED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=4804 
 ====================================================================== 
@@ -25,7 +25,7 @@ Priority:                   normal
 Status:                     feedback
 ====================================================================== 
 Date Submitted:             09-03-2008 08:43 PDT
-Last Modified:              09-11-2008 02:02 PDT
+Last Modified:              09-11-2008 02:06 PDT
 ====================================================================== 
 Summary:                    lzo1x.h not found
 Description: 
@@ -444,6 +444,21 @@ Error 2
 
 Thank you in advance 
 
+---------------------------------------------------------------------- 
+ hmoffatt - 09-11-08 02:06  
+---------------------------------------------------------------------- 
+lzo/lzo1x.h is the correct file but you just don't have it.. and you're
+missing zlib.h as well. This is not the same problem as the original
+report though it's still a problem.
+
+It appears to be a problem building host-mtd.. I couldn't find somewhere
+that builds a host zlib. You might need to install a zlib-dev package on
+your system or similar, same for lzma. We should maybe be building this
+within buildroot.
+
+I'd prefer to start a new bug report for this if you wouldn't mind, it's
+not the same problem and this report is very long already. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -470,4 +485,5 @@ Date Modified   Username       Field                    Change
 09-11-08 02:02  iceman_im      Status                   closed => feedback  
 09-11-08 02:02  iceman_im      Resolution               fixed => reopened   
 09-11-08 02:02  iceman_im      Note Added: 0011384                          
+09-11-08 02:06  hmoffatt       Note Added: 0011394                          
 ======================================================================
