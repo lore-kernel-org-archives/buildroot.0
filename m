@@ -1,34 +1,34 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Wed, 10 Sep 2008 23:26:17 +1000
-Subject: [Buildroot] [PATCH] Option to disable cursor in X; retry
-In-Reply-To: <200809101352.14211.michel@crondor.net>
-References: <20080910081259.GB24785@aeon.hgd.crondor.net>
-	<20080910110310.GB18852@cloud.net.au>
-	<200809101352.14211.michel@crondor.net>
-Message-ID: <20080910132617.GA21310@cloud.net.au>
+From: hamish at uclibc.org <hamish@uclibc.org>
+Date: Wed, 10 Sep 2008 18:59:05 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/python
+Message-ID: <20080911015905.1BC303C632@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Sep 10, 2008 at 01:52:14PM +0200, Michel Wilson wrote:
-> You are as surprised as I was, because it is indeed a configure-time option to 
-> disable it, by default. Note that it's only the root window which is affected. 
-> I think it's possible to still have a cursor, by providing a cursor theme or 
-> something like that, but I haven't tested.
-> Question is: should this be included or not? I feel it's a useful option to 
-> have, because it's the simplest way of disabling the cursor. I tried a 
+Author: hamish
+Date: 2008-09-10 18:59:04 -0700 (Wed, 10 Sep 2008)
+New Revision: 23372
 
-Sure, if it's useful to you there's no reason why it shouldn't go in.
+Log:
+Export site package directory location for use by other packages
 
-I usually stay out of packages that I don't use personally, but since
-I've challenged you about this it's only fair that I commit the patch
-:-) It's in as r23371.
-
-Thanks for sending the patch again. Sometimes patches slip through.
+Modified:
+   trunk/buildroot/package/python/python.mk
 
 
-Hamish
--- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+Changeset:
+Modified: trunk/buildroot/package/python/python.mk
+===================================================================
+--- trunk/buildroot/package/python/python.mk	2008-09-10 13:16:23 UTC (rev 23371)
++++ trunk/buildroot/package/python/python.mk	2008-09-11 01:59:04 UTC (rev 23372)
+@@ -12,6 +12,7 @@
+ PYTHON_BINARY:=python
+ PYTHON_TARGET_BINARY:=usr/bin/python
+ PYTHON_DEPS:=
++PYTHON_SITE_PACKAGE_DIR=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_SHORT)/site-packages
+ 
+ BR2_PYTHON_DISABLED_MODULES=dbm zipfile
+ 
