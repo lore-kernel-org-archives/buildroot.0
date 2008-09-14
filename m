@@ -1,28 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 15 Sep 2008 20:32:04 +0200
-Subject: [Buildroot] 2.6.26 crashes on at91sam9260ek
-In-Reply-To: <76d9e2a30809150900r5749d886r40425c5b8809b508@mail.gmail.com>
-	(Hai Zaar's message of "Mon\, 15 Sep 2008 19\:00\:33 +0300")
-References: <76d9e2a30809150900r5749d886r40425c5b8809b508@mail.gmail.com>
-Message-ID: <87iqsxb6qj.fsf@macbook.be.48ers.dk>
+From: Christopher Taylor <chtaylo3@gmail.com>
+Date: Sat, 13 Sep 2008 21:33:32 -0400
+Subject: [Buildroot] gadget uevents not detected by udevmonitor
+Message-ID: <2590773a0809131833r4fc274f0x43a442201b456200@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Hai" == Hai Zaar <haizaar@haizaar.com> writes:
+I'e configured hotplug and netlink sockets in my kernel 2.6.24 config file
+and I've insmoded g_serial.  When I run udevmonitor I'm not seeing uevents
+when I plug in the usb cable to the usb device port.  I am however getting
+the gadget serial messages:
+gs_disconnect: Gadget Serial disconnected
+gs_setup_complete: status error, status=0, actual-16, length=18
+gs_disconnect: Gadget Serial disconnected
+gs_set_config: gadget Serial configured, full speec CDC-ACM config
 
- Hai> Good day, list!
+I'm 100% sure this is an error on my part when building everything, but I'm
+not sure where.
 
- Hai> I've had at91sam9260ek board running find with 2.6.24.7. The binaries
- Hai> were built using buildroot r22989 (snapshot from end of the Jul).
- Hai> Several day ago I've updated to recent buildroot and switched to
- Hai> kernel 2.6.26.3 (latest one advertised by buildroot menuconfig).
+My whole intent here is to get uevents into my application via a netlink
+socket.  I have no intent of running udev, but I do intent on listening on
+that the netlink socket just like udev does so I can tell immediately when a
+usb event occurs.
 
-Sorry I don't have access to any at91 boards (Ulf, you told me long
-time ago you could provide me with one) - Does the new kernel work
-with the old file system and/or old kernel with new file system?
+Any advice would be appreciated.
 
--- 
-Bye, Peter Korsgaard
+-Chris
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080913/ce26ab83/attachment.htm 
