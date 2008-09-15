@@ -1,7 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 15 Sep 2008 08:33:13 -0700
-Subject: [Buildroot] [buildroot 0004974]: Wrong name for linux-2.6.26 patch
-Message-ID: <af5161da1a267dbbe0d89200606e2f42@bugs.uclibc.org>
+Date: Mon, 15 Sep 2008 08:36:03 -0700
+Subject: [Buildroot] [buildroot 0004984]: toolchain/patch-kernel.sh does not
+	handle globbing properly
+Message-ID: <d01ad4f3e01dca61083ae1b2bb22aaf3@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,36 +12,37 @@ To: buildroot@busybox.net
 
 The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=4974 
+http://busybox.net/bugs/view.php?id=4984 
 ====================================================================== 
 Reported By:                haizaar
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   4974
+Issue ID:                   4984
 Category:                   Other
 Reproducibility:            always
 Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             09-15-2008 08:33 PDT
-Last Modified:              09-15-2008 08:33 PDT
+Date Submitted:             09-15-2008 08:36 PDT
+Last Modified:              09-15-2008 08:36 PDT
 ====================================================================== 
-Summary:                    Wrong name for linux-2.6.26 patch
+Summary:                    toolchain/patch-kernel.sh does not handle globbing
+properly
 Description: 
-The commit 23188 added
-target/device/Atmel/arch-arm/kernel-patches-2.6.26/2.6.26-at91.patch.gz
-file. 
-It should be called linux-2.6.26-at91.ptach.gz and just
-2.6.26-at91.patch.gz, since makefiles search for linux-\*patch{.,.gz,.bz2}
-patter.
+passing arguments that includes '*' (like `linux-\*patch\*) simply does not
+work!
+
+Attached patch to fix it.
 ====================================================================== 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-09-15-08 08:33  haizaar        New Issue                                    
-09-15-08 08:33  haizaar        Status                   new => assigned     
-09-15-08 08:33  haizaar        Assigned To               => buildroot       
+09-15-08 08:36  haizaar        New Issue                                    
+09-15-08 08:36  haizaar        Status                   new => assigned     
+09-15-08 08:36  haizaar        Assigned To               => buildroot       
+09-15-08 08:36  haizaar        File Added: patch-kernel.sh-globbing.patch       
+            
 ======================================================================
