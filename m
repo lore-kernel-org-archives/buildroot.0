@@ -1,38 +1,52 @@
-From: Hai Zaar <haizaar@haizaar.com>
-Date: Tue, 16 Sep 2008 10:21:24 +0300
-Subject: [Buildroot] 2.6.26 crashes on at91sam9260ek
-In-Reply-To: <87iqsxb6qj.fsf@macbook.be.48ers.dk>
-References: <76d9e2a30809150900r5749d886r40425c5b8809b508@mail.gmail.com>
-	<87iqsxb6qj.fsf@macbook.be.48ers.dk>
-Message-ID: <cfb54190809160021g5bd3ae86o291a3f813d58f67f@mail.gmail.com>
+From: Daniel Laird <daniel.j.laird@nxp.com>
+Date: Tue, 16 Sep 2008 10:54:29 +0100
+Subject: [Buildroot] Freetype and Makefile.autotools.in
+Message-ID: <1221558869.12213.4.camel@lnx32dtp04>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Sep 15, 2008 at 9:32 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Hai" == Hai Zaar <haizaar@haizaar.com> writes:
->
->  Hai> Good day, list!
->
->  Hai> I've had at91sam9260ek board running find with 2.6.24.7. The binaries
->  Hai> were built using buildroot r22989 (snapshot from end of the Jul).
->  Hai> Several day ago I've updated to recent buildroot and switched to
->  Hai> kernel 2.6.26.3 (latest one advertised by buildroot menuconfig).
->
-> Sorry I don't have access to any at91 boards (Ulf, you told me long
-> time ago you could provide me with one) - Does the new kernel work
-> with the old file system and/or old kernel with new file system?
-It does not even come the the stage to talk about file system. It
-crashes way before it tries to mount ramdisk.
+I had an attempt today at changing the freetype.mk file to use
+autotools.in.  see below:
 
->
-> --
-> Bye, Peter Korsgaard
->
+#############################################################
+#
+# freetype
+#
+#############################################################
+FREETYPE_VERSION = $(strip $(subst ",, $(BR2_FREETYPE_VERSION)))
+FREETYPE_SITE =
+http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/freetype
+FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
+FREETYPE_INSTALL_STAGING = YES
+FREETYPE_INSTALL_TARGET = YES
+FREETYPE_MAKE_OPT = CCexe="$(HOSTCC)"
+FREETYPE_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR)/usr install-strip
+FREETYPE_DEPENDENCIES = uclibc pkgconfig
 
+$(eval $(call AUTOTARGETS,package,freetype))
 
+However the problem is that the auto patching of ltmain.sh fails so the
+build never happens.
+I have seen this before where I have packages that cannot be patched by
+buildroot-libtool.patch 
 
--- 
-Zaar
+See below:
+Applying buildroot-libtool.patch using plaintext: 
+patching file ltmain.sh
+Hunk #1 FAILED at 273.
+Hunk #2 succeeded at 4886 (offset 2478 lines).
+Hunk #3 FAILED at 5030.
+Hunk #4 FAILED at 5374.
+Hunk #5 succeeded at 5059 with fuzz 1 (offset -564 lines).
+Hunk #6 FAILED at 5384.
+4 out of 6 hunks FAILED -- saving rejects to file ltmain.sh.rej
+
+Perhaps we could have an option that allows the auto-patching of libtool
+to be applied?
+something like PKGNAME_LIBTOOL_PATCH (default yes)
+
+What do people think?
+Daniel Laird
