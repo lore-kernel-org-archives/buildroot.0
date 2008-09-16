@@ -1,44 +1,89 @@
-From: Hai Zaar <haizaar@haizaar.com>
-Date: Tue, 16 Sep 2008 13:33:29 +0300
-Subject: [Buildroot] 2.6.26 crashes on at91sam9260ek
-In-Reply-To: <87y71s8jxe.fsf@macbook.be.48ers.dk>
-References: <76d9e2a30809150900r5749d886r40425c5b8809b508@mail.gmail.com>
-	<87iqsxb6qj.fsf@macbook.be.48ers.dk>
-	<cfb54190809160021g5bd3ae86o291a3f813d58f67f@mail.gmail.com>
-	<87y71s8jxe.fsf@macbook.be.48ers.dk>
-Message-ID: <76d9e2a30809160333s6da1130cm97908f5d66b83c30@mail.gmail.com>
+From: =?ISO-8859-1?Q?St=E9phane?= Mancini <stephane.mancini@grenoble-inp.fr>
+Date: Tue, 16 Sep 2008 17:31:48 +0200
+Subject: [Buildroot] Login on a ttyS fails
+Message-ID: <1221579108.7973.21.camel@chip.lis.inpg.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Sep 16, 2008 at 1:27 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Hai" == Hai Zaar <haizaar@haizaar.com> writes:
->
-> Hi,
->
->  >> Sorry I don't have access to any at91 boards (Ulf, you told me long
->  >> time ago you could provide me with one) - Does the new kernel work
->  >> with the old file system and/or old kernel with new file system?
->  Hai> It does not even come the the stage to talk about file system. It
->  Hai> crashes way before it tries to mount ramdisk.
->
-> Ahh, sorry - I missed that. So it seems like the Atmel patches are
-> buggy.
-The crash happens regardless whether I apply 2.6.2-at91 patch or not.
+Hi,
+I'm trying to set up linux on a Xilinx platform.
+The boot starts but the root login fails 
+after prompting :
 
-> I don't know anything about them or why they're not upstream,
-> but I guess from here on it's up to you (and the Atmel people) to
-> debug it or move back to the old kernel.
-Ok. Thanks for your input anyway.
 
->
-> --
-> Bye, Peter Korsgaard
->
+I've made some prompt in login.c (busybox) and I have the following
 
+################ LOG ######################
+boot stuff 
+init started: BusyBox v1.12.0 (2008-09-16 16:37:51 CEST)
+command='/bin/mount -t proc proc /proc' action=1 tty='/dev/null'
+
+command='/etc/init.d/rcS' action=1 tty=''
+
+command='/sbin/getty -L ttyUL0 57600 vt100 ' action=2 tty='/dev/ttyUL0'
+
+command='/bin/touch /var/log/messages' action=1 tty='/dev/null'
+
+command='/sbin/reboot' action=32 tty=''
+
+command='/sbin/swapoff -a' action=64 tty='/dev/null'
+
+Welcome to the Erik's uClibc development environment.
+(none) login: root
+Dec 31 17:00:12 login[169]: root login succeeded  on the TTY : 'ttyUL0'
+-> /bin/ash
+Dec 31 17:00:12 login[169]: Run t
+
+
+Welcome to the Erik's uClibc development environment.
+(none) login: 
+
+#######
+
+I've modified the login.c text to be sure of which code is executing.
+
+It appears that it goes up to the call to the shell. But, then, nothing
+happens. 
+I've put a 
+	syslog(LOG_INFO, "Get to the shell ash!!\n");
+at the begining of ash.c:ash_main(int argc UNUSED_PARAM, char **argv)
+It's never displayed !
+
+I've also modified inittab to execute "ash" instead of "/init" but
+nothing happen also.
+
+It seems that there's a trouble with the shell......
+
+I'm using the Xilinx UARTLITE and the driver comming with linux 2.6.26.2
+
+Maybe there's something wrong with this device but it seems to work
+perfectly since I can see all the boot process !
+
+Please, can you tell me :
+ what are the configuration parameters to be set to run a a shell on
+this tty properly ?
+To mean, in buildroot, busybox, libc, linux, etc ....
+
+I set the console on ttyUL0. Is it correct ?
+
+Greetings !
+
+St?phane Mancini
 
 
 -- 
-Zaar
+|St?phane Mancini   Ma?tre de Conference ENSIMAG/GIPSA-lab DIS
+| Tel : 04 76 57 43 58
+| 961 rue de la Houille Blanche
+| Domaine universitaire - BP 46
+| 38402 Saint Martin d'H?res cedex
+| Email : stephane.mancini at grenoble-inp.fr
+| http://www.lis.inpg.fr/pages_perso/mancini
+================================================
+Join us for the DASIP'08 Conference
+ULB, Bruxelles, Belgique
+Visit http://www.ecsi.org/dasip/
+================================================
