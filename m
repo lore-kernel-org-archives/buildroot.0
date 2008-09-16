@@ -1,33 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 16 Sep 2008 22:42:30 +0200
-Subject: [Buildroot] Missing binaries
-In-Reply-To: <1221137619.9222.1.camel@tim-desktop> (maleadt@gmail.com's
-	message of "Thu\, 11 Sep 2008 14\:53\:39 +0200")
-References: <1221137619.9222.1.camel@tim-desktop>
-Message-ID: <8763ov6cw9.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Tue, 16 Sep 2008 13:53:45 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/project
+Message-ID: <20080916205345.D2BE83C8C6@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "MALEADt" == MALEADt  <maleadt@gmail.com> writes:
+Author: jacmet
+Date: 2008-09-16 13:53:45 -0700 (Tue, 16 Sep 2008)
+New Revision: 23411
 
- MALEADt> Hi,
- MALEADt> I have been working with buildroot lately, and every time I created a
- MALEADt> toolchain, several binaries seemed to be missing. These binaries
- MALEADt> included: tar, xargs, sed, mount & umount.
+Log:
+Makefile: support relative paths for out of tree builds
 
- MALEADt> As it seems, these binaries all get properly compiled, but just not
- MALEADt> included in the final filesystem. I only needed to copy them from the
- MALEADt> somewhere in the build_xxx folder, to the toolchain.
+And complain if the output directory cannot be created.
 
- MALEADt> Is this a problem of mine, or is anybody else experiencing
- MALEADt> this problem?
+Modified:
+   trunk/buildroot/project/Makefile.in
 
-I cannot seem to reproduce this - Are you by any chance using Ubuntu
-and/or using dash as shell? Maybe it has issues with the shell tests
-(E.G. findutils.mk:58)
 
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/project/Makefile.in
+===================================================================
+--- trunk/buildroot/project/Makefile.in	2008-09-16 19:35:42 UTC (rev 23410)
++++ trunk/buildroot/project/Makefile.in	2008-09-16 20:53:45 UTC (rev 23411)
+@@ -30,7 +30,8 @@
+ BASE_DIR:=$(shell pwd)
+ ifdef O
+ ifeq ("$(origin O)", "command line")
+-BASE_DIR := $(O)
++BASE_DIR := $(shell mkdir -p $(O) && cd $(O) && pwd)
++$(if $(BASE_DIR),, $(error output directory "$(O)" does not exist))
+ endif
+ endif
+ 
