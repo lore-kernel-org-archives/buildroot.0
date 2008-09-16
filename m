@@ -1,34 +1,49 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 16 Sep 2008 20:37:09 +0200
-Subject: [Buildroot] Login on a ttyS fails
-In-Reply-To: <1221579108.7973.21.camel@chip.lis.inpg.fr> (=?utf-8?Q?=22St?=
-	=?utf-8?Q?=C3=A9phane?= Mancini"'s message of "Tue\,
-	16 Sep 2008 17\:31\:48 +0200")
-References: <1221579108.7973.21.camel@chip.lis.inpg.fr>
-Message-ID: <873ak07x9m.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Tue, 16 Sep 2008 11:44:54 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/generic:
+	target_busybox_skeleton/etc target_skele etc...
+Message-ID: <20080916184454.787513C851@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "St?phane" == St?phane Mancini <stephane.mancini@grenoble-inp.fr> writes:
+Author: jacmet
+Date: 2008-09-16 11:44:54 -0700 (Tue, 16 Sep 2008)
+New Revision: 23409
 
- St?phane> Hi,
- St?phane> I'm trying to set up linux on a Xilinx platform.
- St?phane> The boot starts but the root login fails 
- St?phane> after prompting :
+Log:
+target/generic: add uartlite ttyULx devices to securetty
+
+Modified:
+   trunk/buildroot/target/generic/target_busybox_skeleton/etc/securetty
+   trunk/buildroot/target/generic/target_skeleton/etc/securetty
 
 
-Probably you have CONFIG_FEATURE_SECURETTY enabled in busybox and
-haven't added ttyUL0 to /etc/securetty.
+Changeset:
+Modified: trunk/buildroot/target/generic/target_busybox_skeleton/etc/securetty
+===================================================================
+--- trunk/buildroot/target/generic/target_busybox_skeleton/etc/securetty	2008-09-16 16:07:35 UTC (rev 23408)
++++ trunk/buildroot/target/generic/target_busybox_skeleton/etc/securetty	2008-09-16 18:44:54 UTC (rev 23409)
+@@ -10,3 +10,7 @@
+ ttyS1
+ ttyS2
+ ttyS3
++ttyUL0
++ttyUL1
++ttyUL2
++ttyUL3
 
-I'll add it to securetty of target/generic shortly.
-
- St?phane> I'm using the Xilinx UARTLITE and the driver comming with
- St?phane> linux 2.6.26.2
-
-My driver afaik works correctly.
-
--- 
-Bye, Peter Korsgaard
+Modified: trunk/buildroot/target/generic/target_skeleton/etc/securetty
+===================================================================
+--- trunk/buildroot/target/generic/target_skeleton/etc/securetty	2008-09-16 16:07:35 UTC (rev 23408)
++++ trunk/buildroot/target/generic/target_skeleton/etc/securetty	2008-09-16 18:44:54 UTC (rev 23409)
+@@ -10,3 +10,7 @@
+ ttyS1
+ ttyS2
+ ttyS3
++ttyUL0
++ttyUL1
++ttyUL2
++ttyUL3
