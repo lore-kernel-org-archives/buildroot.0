@@ -1,34 +1,44 @@
-From: Fathi Boudra <fboudra@gmail.com>
-Date: Wed, 17 Sep 2008 13:12:34 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
-In-Reply-To: <87tzflp4yw.fsf@macbook.be.48ers.dk>
-References: <20080621194717.98BEF3C725@busybox.net>
-	<1214130344.2605.8.camel@localhost>
-	<87myldra6q.fsf@macbook.be.48ers.dk> <20080622201857.GC10734@mx.loc>
-	<87tzflp4yw.fsf@macbook.be.48ers.dk>
-Message-ID: <6a2e33620809170412g35ce7528qc18bf714ed12fbd1@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 17 Sep 2008 13:31:23 +0200
+Subject: [Buildroot] Login on a ttyS fails
+In-Reply-To: <1221648506.30276.10.camel@chip.lis.inpg.fr> (=?utf-8?Q?=22St?=
+	=?utf-8?Q?=C3=A9phane?= Mancini"'s message of "Wed\,
+	17 Sep 2008 12\:48\:26 +0200")
+References: <1221579108.7973.21.camel@chip.lis.inpg.fr>
+	<873ak07x9m.fsf@macbook.be.48ers.dk>
+	<1221648506.30276.10.camel@chip.lis.inpg.fr>
+Message-ID: <874p4f2elw.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "St?phane" == St?phane Mancini <stephane.mancini@grenoble-inp.fr> writes:
+
 Hi,
 
- Bernhard> Exactly. And you can see from this exact discussion on why
->  Bernhard> the thing in svn is wrong.
->
-> Wrong? What's wrong about it? I don't recollect seeing anything about
-> it being wrong.
->
+ St?phane> Thanks Peter,
+ St?phane> Yes, you're right the driver works correctly.
 
+Good ;)
 
-what about backport "add decimal float handling" commit from Bernhard's git
-repo. ?
+ St?phane> The behavior of busybox is very strange : the main of
+ St?phane> appletlib.c sometime stops before doing anything. The
+ St?phane> prompt I've inserted don't appear : they could be not
+ St?phane> reached or never displayed ...  Is there a way to trace the
+ St?phane> shell running ?
 
-cheers,
+strace?
 
-Fathi
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080917/3feafd7f/attachment.htm 
+Do you still have problems logging in after updating to r23409 (and
+rebuilding from scratch)?
+
+ St?phane> Do you mind to send me a configuration file for a ML405
+ St?phane> board that works ?
+
+Sorry, I don't have access to a ML405. I've used systems with my
+uartlite driver and buildroot without problems though.
+
+-- 
+Bye, Peter Korsgaard
