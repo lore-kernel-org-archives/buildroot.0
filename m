@@ -1,35 +1,84 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 17 Sep 2008 14:34:27 +0200
-Subject: [Buildroot] Login on a ttyS fails
-In-Reply-To: <1221654253.30276.18.camel@chip.lis.inpg.fr> (=?utf-8?Q?=22St?=
-	=?utf-8?Q?=C3=A9phane?= Mancini"'s message of "Wed\,
-	17 Sep 2008 14\:24\:13 +0200")
-References: <1221579108.7973.21.camel@chip.lis.inpg.fr>
-	<873ak07x9m.fsf@macbook.be.48ers.dk>
-	<1221648506.30276.10.camel@chip.lis.inpg.fr>
-	<874p4f2elw.fsf@macbook.be.48ers.dk>
-	<1221652957.30276.16.camel@chip.lis.inpg.fr>
-	<1221654253.30276.18.camel@chip.lis.inpg.fr>
-Message-ID: <8763ov0x4c.fsf@macbook.be.48ers.dk>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Wed, 17 Sep 2008 05:42:46 -0700
+Subject: [Buildroot] [buildroot 0001554]: make menuconfig failed
+Message-ID: <90e8ca114bcf702a5ca0f2a28d12888b@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "St?phane" == St?phane Mancini <stephane.mancini@grenoble-inp.fr> writes:
 
- St?phane> Well, I've tried to launch ash after the boot instead of init.
- St?phane> I get a kernel panic :
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=1554 
+====================================================================== 
+Reported By:                AndyI
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   1554
+Category:                   Other
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             10-24-2007 08:28 PDT
+Last Modified:              09-17-2008 05:42 PDT
+====================================================================== 
+Summary:                    make menuconfig failed
+Description: 
+$ uname -a
+CYGWIN_NT-5.2 server00 1.5.24(0.156/4/2) 2007-01-31 10:57 i686 Cygwin
 
- St?phane> init has generated signal 4 but has no handler for it
+$ make menuconfig HOST_LOADLIBES="-lcurses -lintl"
+make CC="/usr/bin/gcc" -C package/config conf mconf
+make[1]: Entering directory `/buildroot/package/config'
+/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
+-O2
+-c conf.c -o conf.o
+/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
+-O2
+-c kxgettext.c -o kxgettext.o
+/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
+-O2
+-c mconf.c -o mconf.o
+/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
+-O2 -
+I. -c zconf.tab.c -o zconf.tab.o
+/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE -g
+-O2
+-lcurses -lintl conf.o  zconf.tab.o -o conf
+conf.o: In function `check_stdin':
+/buildroot/package/config/conf.c:60: undefined reference to
+`_libintl_gettext'
+/buildroot/package/config/conf.c:61: undefined reference to
+`_libintl_gettext'
+/buildroot/package/config/conf.c:62: undefined reference to
+`_libintl_gettext'
+conf.o: In function `check_conf':
+/buildroot/package/config/conf.c:486: undefined reference to
+`_libintl_gettext'
+conf.o: In function `main':
+/buildroot/package/config/conf.c:626: undefined reference to
+`_libintl_gettext'
+conf.o:/buildroot/package/config/conf.c:544: more undefined references to
+`_libi
+ntl_gettext' follow
+collect2: ld returned 1 exit status
+make[1]: *** [conf] Error 1
+make[1]: Leaving directory `/buildroot/package/config'
+make: *** [package/config/mconf] Error 2
 
- St?phane> Kernel panic - not syncing: Attempted to kill init!
+====================================================================== 
 
- St?phane> Rebooting in 180 seconds..
-
-Did you by any change configure buildroot for hardware floating point
-and not enable the FPU emulation in the kernel?
-
--- 
-Bye, Peter Korsgaard
+---------------------------------------------------------------------- 
+ AndyI - 09-17-08 05:42  
+---------------------------------------------------------------------- 
+Please close this issue. And issue 1512.
+Problem fixed in SVN 22449
+>>>>>>>
+package/config: cygwin fix
+- pass HOST_LOADLIBES down to make mconf for cygwin
+- fix link-order WRT HOST_LOADLIBES
