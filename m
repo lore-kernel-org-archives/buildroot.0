@@ -1,28 +1,27 @@
-From: <bogus@does.not.exist.com>
-Date: Mon, 15 Sep 2008 17:22:34 -0000
-Subject: No subject
-Message-ID: <mailman.2.1221658224.15341.buildroot@uclibc.org>
+From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
+Date: Wed, 17 Sep 2008 15:56:13 +0200
+Subject: [Buildroot] [RFC 1/1] libupnp: add package libupnp
+In-Reply-To: <1221656399-25047-1-git-send-email-hans-christian.egtvedt@atmel.com>
+References: <1221656399-25047-1-git-send-email-hans-christian.egtvedt@atmel.com>
+Message-ID: <20080917155613.47690d1c@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>>>>
-And add uClibc-0.9.29-cygwin_host_loadlibes.patch
-for solved identical problem during build uClibc 
+On Wed, 17 Sep 2008 14:59:59 +0200
+Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> wrote:
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-10-24-07 08:28  AndyI          New Issue                                    
-10-24-07 08:28  AndyI          Status                   new => assigned     
-10-24-07 08:28  AndyI          Assigned To               => buildroot       
-10-24-07 08:28  AndyI          File Added: fix_cygwin_HOST_LOADLIBES.patch      
-             
-10-24-07 08:28  AndyI          File Added:
-uClibc-0.9.29-cygwin_host_loadlibes.patch                    
-10-24-07 08:29  AndyI          Issue Monitored: AndyI                       
-09-17-08 05:42  AndyI          Note Added: 0011544                          
-09-17-08 06:30  bernhardf      Status                   assigned => closed  
-======================================================================
+<snipp>
+
+> +LIBUPNP_DEPENDENCIES:=uclibc
+> +
+
+The LIBUPNP_DEPENDENCIES is not needed AFAICT, so I'll scratch that.
+
+<snipp>
+
+-- 
+Best regards,
+Hans-Christian Egtvedt
