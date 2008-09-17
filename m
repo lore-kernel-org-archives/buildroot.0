@@ -1,32 +1,54 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 17 Sep 2008 16:06:14 +0200
-Subject: [Buildroot] [RFC 1/1] libupnp: add package libupnp
-In-Reply-To: <1221656399-25047-1-git-send-email-hans-christian.egtvedt@atmel.com>
-	(Hans-Christian Egtvedt's message of "Wed\,
-	17 Sep 2008 14\:59\:59 +0200")
-References: <1221656399-25047-1-git-send-email-hans-christian.egtvedt@atmel.com>
-Message-ID: <873ajyzx2h.fsf@macbook.be.48ers.dk>
+From: =?ISO-8859-1?Q?St=E9phane?= Mancini <stephane.mancini@grenoble-inp.fr>
+Date: Wed, 17 Sep 2008 16:09:10 +0200
+Subject: [Buildroot] Login on a ttyS fails
+In-Reply-To: <8763ov0x4c.fsf@macbook.be.48ers.dk>
+References: <1221579108.7973.21.camel@chip.lis.inpg.fr>
+	<873ak07x9m.fsf@macbook.be.48ers.dk>
+	<1221648506.30276.10.camel@chip.lis.inpg.fr>
+	<874p4f2elw.fsf@macbook.be.48ers.dk>
+	<1221652957.30276.16.camel@chip.lis.inpg.fr>
+	<1221654253.30276.18.camel@chip.lis.inpg.fr>
+	<8763ov0x4c.fsf@macbook.be.48ers.dk>
+Message-ID: <1221660550.30276.25.camel@chip.lis.inpg.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Hans-Christian" == Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> writes:
+Yes that's it !
+It's working.
 
- Hans-Christian> This patch adds libupnp package to Buildroot. libupnp
- Hans-Christian> provides developers with an API that are compliant
- Hans-Christian> with version 1.0 of the Universal Plug and Play
- Hans-Christian> Device Architecture Specification.
+Please, if you come to Grenoble, I would be happy to offer you a beer !
 
-Looks good.
 
- Hans-Christian> +LIBUPNP_INSTALL_STAGING:=YES
- Hans-Christian> +LIBUPNP_INSTALL_TARGET_OPT:=DESTDIR=$(TARGET_DIR) install-strip
 
-Not related to libupnp, but I think we should make install-strip the
-default instead of install-exec - For what packages is install-exec
-ever the right target?
 
+Le mercredi 17 septembre 2008 ? 14:34 +0200, Peter Korsgaard a ?crit :
+> >>>>> "St?phane" == St?phane Mancini <stephane.mancini@grenoble-inp.fr> writes:
+> 
+>  St?phane> Well, I've tried to launch ash after the boot instead of init.
+>  St?phane> I get a kernel panic :
+> 
+>  St?phane> init has generated signal 4 but has no handler for it
+> 
+>  St?phane> Kernel panic - not syncing: Attempted to kill init!
+> 
+>  St?phane> Rebooting in 180 seconds..
+> 
+> Did you by any change configure buildroot for hardware floating point
+> and not enable the FPU emulation in the kernel?
+> 
 -- 
-Bye, Peter Korsgaard
+|St?phane Mancini   Ma?tre de Conference ENSIMAG/GIPSA-lab DIS
+| Tel : 04 76 57 43 58
+| 961 rue de la Houille Blanche
+| Domaine universitaire - BP 46
+| 38402 Saint Martin d'H?res cedex
+| Email : stephane.mancini at grenoble-inp.fr
+| http://www.lis.inpg.fr/pages_perso/mancini
+================================================
+Join us for the DASIP'08 Conference
+ULB, Bruxelles, Belgique
+Visit http://www.ecsi.org/dasip/
+================================================
