@@ -1,74 +1,89 @@
-From: Weber, Bernd <BWEBE@dolby.com>
-Date: Wed, 17 Sep 2008 08:53:39 -0700
-Subject: [Buildroot] Problem cross compiling for MIPS and shared
-	libgcc_snot found
-In-Reply-To: <05BB196AB3DA6C4BBE11AB6C957581FE0FBECF4F@sfo-exch-01.dolby.net>
+From: Venu Nayar <venu@nayar.org>
+Date: Wed, 17 Sep 2008 10:38:22 -0700
+Subject: [Buildroot] Buildroot fails building LTP on PowerPC 32
+In-Reply-To: <05BB196AB3DA6C4BBE11AB6C957581FE0FD0D22B@sfo-exch-01.dolby.net>
 References: <05BB196AB3DA6C4BBE11AB6C957581FE0FBECF4F@sfo-exch-01.dolby.net>
-Message-ID: <05BB196AB3DA6C4BBE11AB6C957581FE0FD0D22B@sfo-exch-01.dolby.net>
+	<05BB196AB3DA6C4BBE11AB6C957581FE0FD0D22B@sfo-exch-01.dolby.net>
+Message-ID: <5F61BB18979D4CFA93D7D93A65209B77@wovensystems.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+I am trying to use buildroot to build the LTP package for a 32-bit PowerPC
+target. Large file systems are also turned off. It fails with the following
+errors while compiling fsstress.c. Any suggestions on how to fix this?
 
- 
+Thanks,
+Venu
 
-I didn't get any expert advise on this yet but I found a way around the
-issue. I know that his is probably a dirty hack and will not end up in
-the repository but if anybody else ever has this problem and needs a
-solution here is one:
-
---- gcc-4.0.4.bak/Makefile.in         2006-04-04 14:04:37.000000000
--0700
-
-+++ gcc-4.0.4/Makefile.in    2008-09-16 12:06:36.150561000 -0700
-
-@@ -214,7 +214,8 @@
-
- RAW_CXX_TARGET_EXPORTS = \
-
-          $(BASE_TARGET_EXPORTS) \
-
-          CXX_FOR_TARGET="$(RAW_CXX_FOR_TARGET)"; export CXX_FOR_TARGET;
-\
-
--        CXX="$(RAW_CXX_FOR_TARGET)"; export CXX;
-
-+        CXX="$(RAW_CXX_FOR_TARGET)"; export CXX; \
-
-+        CC="$(RAW_CXX_FOR_TARGET)"; export CC;
-
- 
-
-By redefining the CC variable in the gcc Makefile the libstdc++ build
-has all necessary information and can build against the shared libgcc
-and with symbolic versioning.
-
-If anybody has a better, more permanent solution, please post. Thanks!
-
- 
-
--Bernd
-
-________________________________
-
-This message (including any attachments) may contain confidential
-information intended for a specific individual and purpose. If you are
-not the intended recipient, delete this message. If you are not the
-intended recipient, disclosing, copying, distributing, or taking any
-action based on this message is strictly prohibited. 
-
-
-
-
------------------------------------------
-This message (including any attachments) may contain confidential
-information intended for a specific individual and purpose.  If you
-are not the intended recipient, delete this message.  If you are
-not the intended recipient, disclosing, copying, distributing, or
-taking any action based on this message is strictly prohibited.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080917/c0b09d6f/attachment.htm 
+fsstress.c:256: warning: 'struct stat64' declared inside parameter list
+fsstress.c:256: warning: its scope is only this definition or declaration,
+which is probably not what you want
+fsstress.c:269: warning: 'struct stat64' declared inside parameter list
+fsstress.c:271: error: expected declaration specifiers or '...' before
+'off64_t'
+fsstress.c: In function 'main':
+fsstress.c:406: warning: implicit declaration of function 'lseek64'
+fsstress.c:406: error: 'off64_t' undeclared (first use in this function)
+fsstress.c:406: error: (Each undeclared identifier is reported only once
+fsstress.c:406: error: for each function it appears in.)
+fsstress.c: In function 'doproc':
+fsstress.c:705: error: storage size of 'statbuf' isn't known
+fsstress.c:713: warning: implicit declaration of function 'stat64'
+fsstress.c:705: warning: unused variable 'statbuf'
+fsstress.c: At top level:
+fsstress.c:953: warning: 'struct stat64' declared inside parameter list
+fsstress.c:954: error: conflicting types for 'lstat64_path'
+fsstress.c:256: error: previous declaration of 'lstat64_path' was here
+fsstress.c: In function 'lstat64_path':
+fsstress.c:959: warning: implicit declaration of function 'lstat64'
+fsstress.c: At top level:
+fsstress.c:1256: warning: 'struct stat64' declared inside parameter list
+fsstress.c:1257: error: conflicting types for 'stat64_path'
+fsstress.c:269: error: previous declaration of 'stat64_path' was here
+fsstress.c:1299: error: expected declaration specifiers or '...' before
+'off64_t'
+fsstress.c: In function 'truncate64_path':
+fsstress.c:1305: warning: implicit declaration of function 'truncate64'
+fsstress.c:1305: error: 'length' undeclared (first use in this function)
+fsstress.c:1310: error: too many arguments to function 'truncate64_path'
+fsstress.c: In function 'dread_f':
+fsstress.c:1752: error: 'off64_t' undeclared (first use in this function)
+fsstress.c:1752: error: expected ';' before 'off'
+fsstress.c:1753: error: storage size of 'stb' isn't known
+fsstress.c:1778: warning: implicit declaration of function 'fstat64'
+fsstress.c:1813: error: 'off' undeclared (first use in this function)
+fsstress.c:1753: warning: unused variable 'stb'
+fsstress.c: In function 'dwrite_f':
+fsstress.c:1843: error: 'off64_t' undeclared (first use in this function)
+fsstress.c:1843: error: expected ';' before 'off'
+fsstress.c:1844: error: storage size of 'stb' isn't known
+fsstress.c:1893: error: 'off' undeclared (first use in this function)
+fsstress.c:1844: warning: unused variable 'stb'
+fsstress.c: In function 'getdents_f':
+fsstress.c:2053: warning: implicit declaration of function 'readdir64'
+fsstress.c:2053: warning: comparison between pointer and integer
+fsstress.c: In function 'read_f':
+fsstress.c:2191: error: 'off64_t' undeclared (first use in this function)
+fsstress.c:2191: error: expected ';' before 'off'
+fsstress.c:2192: error: storage size of 'stb' isn't known
+fsstress.c:2229: error: 'off' undeclared (first use in this function)
+fsstress.c:2192: warning: unused variable 'stb'
+fsstress.c: In function 'stat_f':
+fsstress.c:2403: error: storage size of 'stb' isn't known
+fsstress.c:2403: warning: unused variable 'stb'
+fsstress.c: In function 'truncate_f':
+fsstress.c:2482: error: 'off64_t' undeclared (first use in this function)
+fsstress.c:2482: error: expected ';' before 'off'
+fsstress.c:2483: error: storage size of 'stb' isn't known
+fsstress.c:2503: error: 'off' undeclared (first use in this function)
+fsstress.c:2505: error: too many arguments to function 'truncate64_path'
+fsstress.c:2483: warning: unused variable 'stb'
+fsstress.c: In function 'write_f':
+fsstress.c:2600: error: 'off64_t' undeclared (first use in this function)
+fsstress.c:2600: error: expected ';' before 'off'
+fsstress.c:2601: error: storage size of 'stb' isn't known
+fsstress.c:2630: error: 'off' undeclared (first use in this function)
+fsstress.c:2601: warning: unused variable 'stb'
