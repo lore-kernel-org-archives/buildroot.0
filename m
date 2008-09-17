@@ -1,35 +1,32 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 17 Sep 2008 16:03:41 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
-In-Reply-To: <6a2e33620809170445g3c1c8e61t5c413c6a415db5c9@mail.gmail.com>
-	(Fathi Boudra's message of "Wed\, 17 Sep 2008 13\:45\:42 +0200")
-References: <20080621194717.98BEF3C725@busybox.net>
-	<1214130344.2605.8.camel@localhost>
-	<87myldra6q.fsf@macbook.be.48ers.dk> <20080622201857.GC10734@mx.loc>
-	<87tzflp4yw.fsf@macbook.be.48ers.dk>
-	<6a2e33620809170412g35ce7528qc18bf714ed12fbd1@mail.gmail.com>
-	<87zlm70zyc.fsf@macbook.be.48ers.dk>
-	<6a2e33620809170445g3c1c8e61t5c413c6a415db5c9@mail.gmail.com>
-Message-ID: <87k5dazx6q.fsf@macbook.be.48ers.dk>
+Date: Wed, 17 Sep 2008 16:06:14 +0200
+Subject: [Buildroot] [RFC 1/1] libupnp: add package libupnp
+In-Reply-To: <1221656399-25047-1-git-send-email-hans-christian.egtvedt@atmel.com>
+	(Hans-Christian Egtvedt's message of "Wed\,
+	17 Sep 2008 14\:59\:59 +0200")
+References: <1221656399-25047-1-git-send-email-hans-christian.egtvedt@atmel.com>
+Message-ID: <873ajyzx2h.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fathi" == Fathi Boudra <fboudra@gmail.com> writes:
+>>>>> "Hans-Christian" == Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> writes:
 
- Fathi> what about backport "add decimal float handling" commit from
- Fathi> Bernhard's git repo. ?
+ Hans-Christian> This patch adds libupnp package to Buildroot. libupnp
+ Hans-Christian> provides developers with an API that are compliant
+ Hans-Christian> with version 1.0 of the Universal Plug and Play
+ Hans-Christian> Device Architecture Specification.
 
- Fathi>     Please refresh my memory - What does that fix?
+Looks good.
 
+ Hans-Christian> +LIBUPNP_INSTALL_STAGING:=YES
+ Hans-Christian> +LIBUPNP_INSTALL_TARGET_OPT:=DESTDIR=$(TARGET_DIR) install-strip
 
- Fathi> Fix gcc-4.3.x build failure on missing fenv.h.
- Fathi> To workaround the issue, we need --disable-decimal-float
- Fathi> so $(GCC_DECIMAL_FLOAT) was introduced.
-
-Ok, I'll merge that chunk.
+Not related to libupnp, but I think we should make install-strip the
+default instead of install-exec - For what packages is install-exec
+ever the right target?
 
 -- 
 Bye, Peter Korsgaard
