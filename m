@@ -1,24 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 17 Sep 2008 21:47:27 +0200
-Subject: [Buildroot] oprofile build error related to gcc
-In-Reply-To: <ccdbf7fe0809171138q281529d6tf964e5bec4a1ffbe@mail.gmail.com> (J.
-	Lee's message of "Wed\, 17 Sep 2008 11\:38\:16 -0700")
-References: <ccdbf7fe0809171138q281529d6tf964e5bec4a1ffbe@mail.gmail.com>
-Message-ID: <87k5dav9kg.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Wed, 17 Sep 2008 14:33:20 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/pcre
+Message-ID: <20080917213320.62BE93C670@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J" == J Lee <jameslee05@gmail.com> writes:
+Author: jacmet
+Date: 2008-09-17 14:33:19 -0700 (Wed, 17 Sep 2008)
+New Revision: 23416
 
- J> I got this error while I was building oprofile for a powerpc target.
- J> I have checked gcc directories but I did not see any gcc_s_nof.
- J> How can I get around this?
+Log:
+pcre: fixup paths in pcre-config
 
-I don't know right away, but oprofile got updated this morning to 0.94
-- Could you give that a try?
+Modified:
+   trunk/buildroot/package/pcre/pcre.mk
 
--- 
-Bye, Peter Korsgaard
+
+Changeset:
+Modified: trunk/buildroot/package/pcre/pcre.mk
+===================================================================
+--- trunk/buildroot/package/pcre/pcre.mk	2008-09-17 11:45:37 UTC (rev 23415)
++++ trunk/buildroot/package/pcre/pcre.mk	2008-09-17 21:33:19 UTC (rev 23416)
+@@ -20,5 +20,8 @@
+ $(eval $(call AUTOTARGETS,package,pcre))
+ 
+ $(PCRE_HOOK_POST_INSTALL): $(PCRE_TARGET_INSTALL_TARGET)
++	$(SED) 's,^prefix=.*,prefix=$(STAGING_DIR)/usr,' \
++		-e 's,^exec_prefix=.*,exec_prefix=$(STAGING_DIR)/usr,' \
++		$(STAGING_DIR)/usr/bin/pcre-config
+ 	rm -rf $(TARGET_DIR)/usr/share/doc/pcre
+ 	touch $@
