@@ -1,55 +1,63 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Wed, 17 Sep 2008 12:33:21 +0200
-Subject: [Buildroot] Cannot build uclibc++ against
-	toolchain	(dl_iterate_phdr & __tls_get_addr)
-In-Reply-To: <97e646690809170233k12f5ae5iad2048e8197a3ef8@mail.gmail.com>
-References: <97e646690809170233k12f5ae5iad2048e8197a3ef8@mail.gmail.com>
-Message-ID: <20080917103321.GB21123@mx.loc>
+From: =?ISO-8859-1?Q?St=E9phane?= Mancini <stephane.mancini@grenoble-inp.fr>
+Date: Wed, 17 Sep 2008 12:48:26 +0200
+Subject: [Buildroot] Login on a ttyS fails
+In-Reply-To: <873ak07x9m.fsf@macbook.be.48ers.dk>
+References: <1221579108.7973.21.camel@chip.lis.inpg.fr>
+	<873ak07x9m.fsf@macbook.be.48ers.dk>
+Message-ID: <1221648506.30276.10.camel@chip.lis.inpg.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Sep 17, 2008 at 11:33:33AM +0200, Flemming Madsen wrote:
->Hello
->
->First of all: Thank you codepoet folks for all this wonderful stuff!
+Thanks Peter,
+Yes, you're right the driver works correctly.
 
-s/codepoet//
+The behavior of busybox is very strange :
+the main of appletlib.c sometime stops before doing anything. The prompt
+I've inserted don't appear : they could be not reached or never
+displayed ...
+Is there a way to trace the shell running ?
 
-not all of us are erik ;)
->
->I am having touble building uclibc++ Upon linking the .so file i get the
->output below.
 
->I am using gcc 4.2.4 and uClibc 0.9.29 since these were the defaults (Full
->.config attached)
+Do you mind to send me a configuration file for a ML405 board that
+works ?
 
->arm-linux-uclibc-gcc -Wl,--warn-common -Wl,--warn-once -Wl,-z,combreloc
->-Wl,-z,defs -nodefaultlibs -shared -Wl,-soname,libuClibc++.so.0 `echo ""`
->-Wl,-s -o libuClibc++-0.2.2.so algorithm.o associative_base.o bitset.o
->char_traits.o complex.o del_op.o del_opnt.o del_opv.o del_opvnt.o deque.o
->eh_alloc.o eh_globals.o exception.o fstream.o func_exception.o iomanip.o
->ios.o iostream.o istream.o iterator.o limits.o list.o locale.o map.o
->new_handler.o new_op.o new_opnt.o new_opv.o new_opvnt.o numeric.o ostream.o
->queue.o set.o sstream.o stack.o stdexcept.o streambuf.o string.o utility.o
->valarray.o vector.o abi/abi.o abi/libsupc/cp-demangle.o abi/libsupc/eh_arm.o
->abi/libsupc/eh_aux_runtime.o abi/libsupc/eh_call.o abi/libsupc/eh_catch.o
->abi/libsupc/eh_exception.o abi/libsupc/eh_personality.o
->abi/libsupc/eh_term_handler.o abi/libsupc/eh_terminate.o
->abi/libsupc/eh_throw.o abi/libsupc/eh_type.o abi/libsupc/eh_unex_handler.o
->abi/libsupc/guard.o abi/libsupc/tinfo.o abi/libsupc/tinfo2.o
->abi/libsupc/vec.o abi/libsupc/vterminate.o abi/libgcc_eh/gthr-gnat.o
->abi/libgcc_eh/unwind-c.o abi/libgcc_eh/unwind-dw2-fde-glibc.o
->abi/libgcc_eh/unwind-dw2.o abi/libgcc_eh/unwind-sjlj.o
->-L/opt/toolchain-stable/t26/usr/bin/../lib/gcc/arm-linux-uclibc/4.2.4/ -lc
->-lgcc -ldl -Wl,--as-needed -lgcc_s -Wl,--no-as-needed
->eh_globals.o: In function `__cxa_get_globals':
->eh_globals.cpp:(.text+0xc): undefined reference to `__tls_get_addr'
+Greetings
 
-i'm quite sure that 0.9.29 didn't have TLS support.
+St?phane
 
->abi/libgcc_eh/unwind-dw2-fde-glibc.o: In function `_Unwind_Find_FDE':
->unwind-dw2-fde-glibc.c:(.text+0x17b8): undefined reference to `
->dl_iterate_phdr'
+
+Le mardi 16 septembre 2008 ? 20:37 +0200, Peter Korsgaard a ?crit :
+> >>>>> "St?phane" == St?phane Mancini <stephane.mancini@grenoble-inp.fr> writes:
+> 
+>  St?phane> Hi,
+>  St?phane> I'm trying to set up linux on a Xilinx platform.
+>  St?phane> The boot starts but the root login fails 
+>  St?phane> after prompting :
+> 
+> 
+> Probably you have CONFIG_FEATURE_SECURETTY enabled in busybox and
+> haven't added ttyUL0 to /etc/securetty.
+> 
+> I'll add it to securetty of target/generic shortly.
+> 
+>  St?phane> I'm using the Xilinx UARTLITE and the driver comming with
+>  St?phane> linux 2.6.26.2
+> 
+> My driver afaik works correctly.
+> 
+-- 
+|St?phane Mancini   Ma?tre de Conference ENSIMAG/GIPSA-lab DIS
+| Tel : 04 76 57 43 58
+| 961 rue de la Houille Blanche
+| Domaine universitaire - BP 46
+| 38402 Saint Martin d'H?res cedex
+| Email : stephane.mancini at grenoble-inp.fr
+| http://www.lis.inpg.fr/pages_perso/mancini
+================================================
+Join us for the DASIP'08 Conference
+ULB, Bruxelles, Belgique
+Visit http://www.ecsi.org/dasip/
+================================================
