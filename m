@@ -1,37 +1,27 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Thu, 18 Sep 2008 10:58:53 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package/audio/aumix
-In-Reply-To: <87bpylq1a1.fsf@macbook.be.48ers.dk>
-References: <20080918084256.E277B3C64F@busybox.net>
-	<87bpylq1a1.fsf@macbook.be.48ers.dk>
-Message-ID: <20080918105853.116bb837@atmel.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 18 Sep 2008 10:58:52 +0200
+Subject: [Buildroot] Lighttpd and PCRE
+In-Reply-To: <48D2160D.5060308@netcentral.co.uk> (Nick Peirson's message of
+	"Thu\, 18 Sep 2008 09\:49\:17 +0100")
+References: <48D0CDD3.4070604@netcentral.co.uk>
+	<87ljxqsbep.fsf@macbook.be.48ers.dk>
+	<48D20A45.6030308@netcentral.co.uk>
+	<48D2160D.5060308@netcentral.co.uk>
+Message-ID: <87r67homnn.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 18 Sep 2008 10:57:42 +0200
-Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>> "Nick" == Nick Peirson <nick@netcentral.co.uk> writes:
 
-> >>>>> "egtvedt" == egtvedt  <egtvedt@uclibc.org> writes:
-> 
-> Hi,
-> 
->  egtvedt> Log:
->  egtvedt> aumix: fix install rule to target to support multiple
->  egtvedt> projects
-> 
->  egtvedt> This patch will let aumix depend on an installed file on the
->  egtvedt> target root file system instead of touched file.
-> 
-> How about converting it to Makefile.autotools.in while you're at it?
-> ;)
-> 
+Hi,
 
-I noticed that as well ;) But I do not really use the package, just
-noticed the bug.
+ Nick> lighttpd is now compiling happily and running with PCRE
+ Nick> support. Thank you very much for your help!
+
+You're welcome.
 
 -- 
-Best regards,
-Hans-Christian Egtvedt
+Bye, Peter Korsgaard
