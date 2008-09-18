@@ -1,29 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 18 Sep 2008 11:11:14 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package/audio/aumix
-In-Reply-To: <20080918105853.116bb837@atmel.com> (Hans-Christian Egtvedt's
-	message of "Thu\, 18 Sep 2008 10\:58\:53 +0200")
-References: <20080918084256.E277B3C64F@busybox.net>
-	<87bpylq1a1.fsf@macbook.be.48ers.dk>
-	<20080918105853.116bb837@atmel.com>
-Message-ID: <87abe5om31.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Thu, 18 Sep 2008 02:22:42 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot
+Message-ID: <20080918092242.108343C667@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Hans-Christian" == Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> writes:
+Author: jacmet
+Date: 2008-09-18 02:22:41 -0700 (Thu, 18 Sep 2008)
+New Revision: 23424
 
-Hi,
+Log:
+Config.in: Don't special case atmel targets for image suffix
 
- >> How about converting it to Makefile.autotools.in while you're at it?
+It's confusing to have different behaviour of target independent options.
+As reported by HcE on IRC.
 
- Hans-Christian> I noticed that as well ;) But I do not really use the
- Hans-Christian> package, just noticed the bug.
+Modified:
+   trunk/buildroot/Config.in
 
-There's lots of buildroot packages I don't use either, but that
-doesn't stop me from working on them ;)
 
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/Config.in
+===================================================================
+--- trunk/buildroot/Config.in	2008-09-18 08:42:56 UTC (rev 23423)
++++ trunk/buildroot/Config.in	2008-09-18 09:22:41 UTC (rev 23424)
+@@ -126,8 +126,7 @@
+ 
+ config BR2_ROOTFS_SUFFIX
+ 	string "Custom root fs suffix"
+-	default "$(DATE)" if BR2_TARGET_ATMEL
+-	default "" if !BR2_TARGET_ATMEL
++	default ""
+ 	help
+ 	  Add a custom string to the end of the root file system name.
+ 
