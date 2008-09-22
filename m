@@ -1,36 +1,38 @@
-From: Fathi Boudra <fboudra@gmail.com>
-Date: Mon, 22 Sep 2008 16:43:13 +0200
-Subject: [Buildroot] broken build rootfs workflow
-In-Reply-To: <87iqssyyxh.fsf@macbook.be.48ers.dk>
-References: <6a2e33620809180148i7f4c3829jb7857a8adf90bcfa@mail.gmail.com>
-	<6a2e33620809180253t4b32032eu399ab6734076f367@mail.gmail.com>
-	<87iqssyyxh.fsf@macbook.be.48ers.dk>
-Message-ID: <6a2e33620809220743m4a0d01b2gfabedc6bc9c6cc99@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 22 Sep 2008 17:15:41 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/package:  libconfuse
+In-Reply-To: <48D785BB.6040906@atmel.com> (Hans-Christian Egtvedt's message of
+	"Mon\, 22 Sep 2008 13\:47\:07 +0200")
+References: <20080922081105.960D6F8008@busybox.net>
+	<48D77844.3040602@atmel.com> <87wsh4v20e.fsf@macbook.be.48ers.dk>
+	<48D785BB.6040906@atmel.com>
+Message-ID: <87wsh4rz36.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->  Fathi> My configuration file is copied properly, then a bunch of sed
->  Fathi> commands modify it inside .oldconfig ???  I guess if I provide
->  Fathi> my own configuration file, I don't want my file modified by
->  Fathi> random sed commands ?
->
-> Well, it has to do that as quite some packages needs to know if those
-> features are enabled or not - Please just configure buildroot (under
-> toolchain) to match what you want.
->
+>>>>> "Hans-Christian" == Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> writes:
 
+Hi,
 
-what about use case that require uClibc or busybox configuration changes ?
+ Hans-Christian> It is more what the norm is for Buildroot. Should we
+ Hans-Christian> keep the DEPENDENCIES in even if it is just uClibc?
+ Hans-Christian> There is nothing specific about this in the
+ Hans-Christian> Makefile.autotools.in, so perhaps we can have a short
+ Hans-Christian> discussion here to settle it once and for all?
 
-Maybe a rule to use provided configurations files without changes is needed
-?
+I wouldn't mind dropping the uclibc dependencies, but the
+INSTALL_{TARGET,STAGING} defaults are probably a bit too hard for
+people to remember/understand.
 
-cheers,
+ Hans-Christian> IMHO it is fine to keep it in, but the makefile looks
+ Hans-Christian> more tidy the less there is in it. Perhaps better to
+ Hans-Christian> add some documentation to Makefile.autotools.in about
+ Hans-Christian> _DEPENDENCIES that uclibc is default.
 
-Fathi
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20080922/254d2551/attachment.htm 
+Yeah, that would be good.
+
+-- 
+Bye, Peter Korsgaard
