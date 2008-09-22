@@ -1,31 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 22 Sep 2008 14:03:09 +0200
-Subject: [Buildroot] Date in kernel file name
-In-Reply-To: <48D7742E.9030209@eubus.net> (Lars Lockenvitz's message of "Mon\,
-	22 Sep 2008 12\:32\:14 +0200")
-References: <48D7742E.9030209@eubus.net>
-Message-ID: <87fxnsv14y.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Mon, 22 Sep 2008 05:04:05 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
+Message-ID: <20080922120405.BE2FE3C64D@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Lars" == Lars Lockenvitz <l.lockenvitz@eubus.net> writes:
+Author: jacmet
+Date: 2008-09-22 05:04:05 -0700 (Mon, 22 Sep 2008)
+New Revision: 23454
 
- Lars> Hello,
- Lars> does anyone know where the setting is, that defines the suffix to the 
- Lars> kernel?
- Lars> Course, my problem is that I want the kernel output file without the 
- Lars> datecode!
+Log:
+target/linux/advanced: don't hardcode date suffix
 
-I take it you use target/linux/Makefile.in.advanced? It has:
+Use ROOTFS_SUFFIX instead of hardcoding -$(DATE).
 
-# File name for the Linux kernel binary
-LINUX26_KERNEL_NAME:=$(BOARD_NAME)-linux-$(LINUX26_VERSION)-$(DATE)$(KERNEL_EXT)
+Reported by Lars Lockenvitz.
 
-It should probably use $(ROOTFS_SUFFIX) instead so it uses whatever is
-configured for the rootfs. I'll fix it in svn.
+Modified:
+   trunk/buildroot/target/linux/Makefile.in.advanced
 
--- 
-Bye, Peter Korsgaard
+
+Changeset:
+Modified: trunk/buildroot/target/linux/Makefile.in.advanced
+===================================================================
+--- trunk/buildroot/target/linux/Makefile.in.advanced	2008-09-22 11:54:17 UTC (rev 23453)
++++ trunk/buildroot/target/linux/Makefile.in.advanced	2008-09-22 12:04:05 UTC (rev 23454)
+@@ -162,7 +162,7 @@
+ 
+ # -----------------------------------------------------------------------------
+ # File name for the Linux kernel binary
+-LINUX26_KERNEL_NAME:=$(BOARD_NAME)-linux-$(LINUX26_VERSION)-$(DATE)$(KERNEL_EXT)
++LINUX26_KERNEL_NAME:=$(BOARD_NAME)-linux-$(LINUX26_VERSION)$(ROOTFS_SUFFIX)$(KERNEL_EXT)
+ 
+ 
+ ifeq ($(BOARD_NAME),)
