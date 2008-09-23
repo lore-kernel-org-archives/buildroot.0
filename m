@@ -1,54 +1,34 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 23 Sep 2008 03:36:17 -0700
-Subject: [Buildroot] [buildroot 0005114]: Version of asterisk in package
-	(1.6) does not compile out of the box
-Message-ID: <2dd7c85a2f24af0c66ce08ce0088ec7b@bugs.uclibc.org>
+From: Fathi Boudra <fboudra@gmail.com>
+Date: Tue, 23 Sep 2008 16:05:19 +0200
+Subject: [Buildroot] broken build rootfs workflow
+In-Reply-To: <6a2e33620809220743m4a0d01b2gfabedc6bc9c6cc99@mail.gmail.com>
+References: <6a2e33620809180148i7f4c3829jb7857a8adf90bcfa@mail.gmail.com>
+	<6a2e33620809180253t4b32032eu399ab6734076f367@mail.gmail.com>
+	<87iqssyyxh.fsf@macbook.be.48ers.dk>
+	<6a2e33620809220743m4a0d01b2gfabedc6bc9c6cc99@mail.gmail.com>
+Message-ID: <6a2e33620809230705k4b7f2985o2d701f19e5d13fbb@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Thanks to Bernard Reutner-Fischer, he find a solution to my issue.
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=5114 
-====================================================================== 
-Reported By:                nickpeirson
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   5114
-Category:                   Other
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             09-23-2008 03:36 PDT
-Last Modified:              09-23-2008 03:36 PDT
-====================================================================== 
-Summary:                    Version of asterisk in package (1.6) does not
-compile out of the box
-Description: 
-The asterisk package within buildroot tries to compile asterisk 1.6-beta6
-since revision 21494
-(http://buildroot.uclibc.org/cgi-bin/viewcvs.cgi/trunk/buildroot/package/asterisk/asterisk.mk?rev=21494&view=diff&r1=21494&r2=21493&p1=trunk/buildroot/package/asterisk/asterisk.mk&p2=/trunk/buildroot/package/asterisk/asterisk.mk),
-however the build proccess hasn't been updated along side it. The asterisk
-project has major changes between 1.2, 1.4 and 1.6, including the way it
-compiles.
+for the track: builroot configuration file is propagated to
+uClibc/buildroot.
 
-As the package hasn't been updated to take this into account, the package
-no longer compiles out of the box. Would it be possible to look at making
-this package work again? Either with the current stable release, 1.4, or
-the 1.6 branch (currently on -rc6) which is about to be released? I'm
-happy to provide any help I can with this.
-====================================================================== 
+My uClibc was modified because it isn't synced to buildroot configuration.
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-09-23-08 03:36  nickpeirson    New Issue                                    
-09-23-08 03:36  nickpeirson    Status                   new => assigned     
-09-23-08 03:36  nickpeirson    Assigned To               => buildroot       
-======================================================================
+example:
+You must enable IPV6 in buildroot if you want to have IPV6 support in
+uClibc.
+Otherwise, it will be automatically disable in uClibc configuration file,
+whatever you set inside.
+
+cheers,
+
+Fathi
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20080923/5507531e/attachment.htm 
