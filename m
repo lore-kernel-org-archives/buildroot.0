@@ -1,38 +1,54 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 22 Sep 2008 17:15:41 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package:  libconfuse
-In-Reply-To: <48D785BB.6040906@atmel.com> (Hans-Christian Egtvedt's message of
-	"Mon\, 22 Sep 2008 13\:47\:07 +0200")
-References: <20080922081105.960D6F8008@busybox.net>
-	<48D77844.3040602@atmel.com> <87wsh4v20e.fsf@macbook.be.48ers.dk>
-	<48D785BB.6040906@atmel.com>
-Message-ID: <87wsh4rz36.fsf@macbook.be.48ers.dk>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Tue, 23 Sep 2008 03:36:17 -0700
+Subject: [Buildroot] [buildroot 0005114]: Version of asterisk in package
+	(1.6) does not compile out of the box
+Message-ID: <2dd7c85a2f24af0c66ce08ce0088ec7b@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Hans-Christian" == Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> writes:
 
-Hi,
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=5114 
+====================================================================== 
+Reported By:                nickpeirson
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   5114
+Category:                   Other
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             09-23-2008 03:36 PDT
+Last Modified:              09-23-2008 03:36 PDT
+====================================================================== 
+Summary:                    Version of asterisk in package (1.6) does not
+compile out of the box
+Description: 
+The asterisk package within buildroot tries to compile asterisk 1.6-beta6
+since revision 21494
+(http://buildroot.uclibc.org/cgi-bin/viewcvs.cgi/trunk/buildroot/package/asterisk/asterisk.mk?rev=21494&view=diff&r1=21494&r2=21493&p1=trunk/buildroot/package/asterisk/asterisk.mk&p2=/trunk/buildroot/package/asterisk/asterisk.mk),
+however the build proccess hasn't been updated along side it. The asterisk
+project has major changes between 1.2, 1.4 and 1.6, including the way it
+compiles.
 
- Hans-Christian> It is more what the norm is for Buildroot. Should we
- Hans-Christian> keep the DEPENDENCIES in even if it is just uClibc?
- Hans-Christian> There is nothing specific about this in the
- Hans-Christian> Makefile.autotools.in, so perhaps we can have a short
- Hans-Christian> discussion here to settle it once and for all?
+As the package hasn't been updated to take this into account, the package
+no longer compiles out of the box. Would it be possible to look at making
+this package work again? Either with the current stable release, 1.4, or
+the 1.6 branch (currently on -rc6) which is about to be released? I'm
+happy to provide any help I can with this.
+====================================================================== 
 
-I wouldn't mind dropping the uclibc dependencies, but the
-INSTALL_{TARGET,STAGING} defaults are probably a bit too hard for
-people to remember/understand.
-
- Hans-Christian> IMHO it is fine to keep it in, but the makefile looks
- Hans-Christian> more tidy the less there is in it. Perhaps better to
- Hans-Christian> add some documentation to Makefile.autotools.in about
- Hans-Christian> _DEPENDENCIES that uclibc is default.
-
-Yeah, that would be good.
-
--- 
-Bye, Peter Korsgaard
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+09-23-08 03:36  nickpeirson    New Issue                                    
+09-23-08 03:36  nickpeirson    Status                   new => assigned     
+09-23-08 03:36  nickpeirson    Assigned To               => buildroot       
+======================================================================
