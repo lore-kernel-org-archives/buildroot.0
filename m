@@ -1,27 +1,41 @@
-From: Hinko Kocevar <hinko.kocevar@cetrtapot.si>
-Date: Wed, 24 Sep 2008 15:14:47 +0200
-Subject: [Buildroot] Standalone toolchain
-Message-ID: <48DA3D47.5060204@cetrtapot.si>
+From: egtvedt at uclibc.org <egtvedt@uclibc.org>
+Date: Wed, 24 Sep 2008 06:38:18 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/games/lxdoom
+Message-ID: <20080924133818.68B393C2C9@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Author: egtvedt
+Date: 2008-09-24 06:38:17 -0700 (Wed, 24 Sep 2008)
+New Revision: 23468
 
-Is it possible to create a toolchain and then transfer it to another machine or just another folder, and have it work?
+Log:
+lxdoom: add dependency to a xserver in Makefile
 
-I've experienced the case where I only transferred staging_dir and put it somewhere and when I tried compiling some software compiler was lacking some header files. Creating absolute path link to newly created toolchain dir to point to staging_dir where it was taken from solved the problem..
+This patch corrects the commit r23467 and replaces uclibc with
+xserver_xorg-server in LXDOOM_DEPENDENCIES.
 
-Thank you,
-Hinko
+Signed-off-by: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
 
--- 
-?ETRTA POT, d.o.o., Kranj
-Planina 3
-4000 Kranj
-Slovenia, Europe
-Tel. +386 (0) 4 280 66 03
-E-mail: hinko.kocevar at cetrtapot.si
-Http: www.cetrtapot.si
+
+
+Modified:
+   trunk/buildroot/package/games/lxdoom/lxdoom.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/games/lxdoom/lxdoom.mk
+===================================================================
+--- trunk/buildroot/package/games/lxdoom/lxdoom.mk	2008-09-24 13:17:07 UTC (rev 23467)
++++ trunk/buildroot/package/games/lxdoom/lxdoom.mk	2008-09-24 13:38:17 UTC (rev 23468)
+@@ -15,6 +15,6 @@
+ 		--includedir=/usr/include --enable-shared \
+ 		$(DISABLE_NLS)
+ 
+-LXDOOM_DEPENDENCIES = uclibc
++LXDOOM_DEPENDENCIES = xserver_xorg-server
+ 
+ $(eval $(call AUTOTARGETS,package/games,lxdoom))
