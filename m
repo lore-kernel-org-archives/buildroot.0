@@ -1,41 +1,23 @@
-From: egtvedt at uclibc.org <egtvedt@uclibc.org>
-Date: Wed, 24 Sep 2008 06:38:18 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/games/lxdoom
-Message-ID: <20080924133818.68B393C2C9@busybox.net>
+From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+Date: Wed, 24 Sep 2008 15:46:35 +0200
+Subject: [Buildroot] Standalone toolchain
+In-Reply-To: <48DA3D47.5060204@cetrtapot.si>
+References: <48DA3D47.5060204@cetrtapot.si>
+Message-ID: <20080924134635.GA14882@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: egtvedt
-Date: 2008-09-24 06:38:17 -0700 (Wed, 24 Sep 2008)
-New Revision: 23468
+On Wed, Sep 24, 2008 at 03:14:47PM +0200, Hinko Kocevar wrote:
+>Hi,
+>
+>Is it possible to create a toolchain and then transfer it to another machine or just another folder, and have it work?
 
-Log:
-lxdoom: add dependency to a xserver in Makefile
-
-This patch corrects the commit r23467 and replaces uclibc with
-xserver_xorg-server in LXDOOM_DEPENDENCIES.
-
-Signed-off-by: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-
-
-
-Modified:
-   trunk/buildroot/package/games/lxdoom/lxdoom.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/games/lxdoom/lxdoom.mk
-===================================================================
---- trunk/buildroot/package/games/lxdoom/lxdoom.mk	2008-09-24 13:17:07 UTC (rev 23467)
-+++ trunk/buildroot/package/games/lxdoom/lxdoom.mk	2008-09-24 13:38:17 UTC (rev 23468)
-@@ -15,6 +15,6 @@
- 		--includedir=/usr/include --enable-shared \
- 		$(DISABLE_NLS)
- 
--LXDOOM_DEPENDENCIES = uclibc
-+LXDOOM_DEPENDENCIES = xserver_xorg-server
- 
- $(eval $(call AUTOTARGETS,package/games,lxdoom))
+This is supposed to work, yes. The keyword is sysroot support.
+Either configure your BR2_STAGING_DIR to e.g. /opt/my-target-tripplet
+or just move the staging dir wherever you want and use the proper
+--sysroot and -isysroot.
+>
+>I've experienced the case where I only transferred staging_dir and put it somewhere and when I tried compiling some software compiler was lacking some header files. Creating absolute path link to newly created toolchain dir to point to staging_dir where it was taken from solved the problem..
