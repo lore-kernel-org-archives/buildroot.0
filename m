@@ -1,89 +1,35 @@
-From: egtvedt at uclibc.org <egtvedt@uclibc.org>
-Date: Wed, 24 Sep 2008 05:06:59 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package:  sdl_net
-Message-ID: <20080924120700.012E6F8008@busybox.net>
+From: Alex Rades <alerades@gmail.com>
+Date: Wed, 24 Sep 2008 14:25:41 +0200
+Subject: [Buildroot] Buildroot with a custom kernel
+In-Reply-To: <1B0F60C9E236904CB364F9EF52E0AFD9026139CB@sma10.technidata-ag.com>
+References: <ea7358da0809230856u39726ed6k90c06c8cdbb8a2b@mail.gmail.com>
+	<2590773a0809231029o75f55b61u58eb59f18d4421fd@mail.gmail.com>
+	<1B0F60C9E236904CB364F9EF52E0AFD9026139CB@sma10.technidata-ag.com>
+Message-ID: <ea7358da0809240525x54000084sa81fff0e4ca16b8c@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: egtvedt
-Date: 2008-09-24 05:06:59 -0700 (Wed, 24 Sep 2008)
-New Revision: 23463
+On Tue, Sep 23, 2008 at 7:57 PM, Bussmann, Paul
+<Paul.Bussmann@technidata.com> wrote:
+>> 2) tarball up your custom kernel and place it in the dl dir.  Make
+>> sure you name is according to what you have in your buildroot config
+>> for the kernel version.  BR will then assume you've already dl'ed the
+>> kernel and use your version.
+>
+> I already tried this with 2.6.17 on ARM. Resulting in everything _looked_
+> fine at first but my board instantly rebooted when I tried to use TCP stuff.
+> It is indeed related to BR's toolchain, because if I use the manufacture's
+> (Ka-Ro) toolchain to compile the kernel, it works.
+> So I asked on this mailing list about getting a 2.6.17-supporting Buildroot
+> environment (2008-08-25) with the following answer (2008-08-26):
+>
+>> 2.6.17 was released around Jun 18  2006. I'd ask those people for a
+>> vaguely recent kernel.
+>
+> So I'd be very interested if you have similar success.
 
-Log:
-SDL_net: add new package SDL_net
-
-This patch adds a new package SDL_net. SDL_net is a small, low-level,
-cross-platform network library, that can be used with the Simple DirectMedia
-Layer library (SDL).
-
-http://www.libsdl.org/projects/SDL_net/
-
-Signed-off-by: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-
-
-
-Added:
-   trunk/buildroot/package/sdl_net/
-   trunk/buildroot/package/sdl_net/Config.in
-   trunk/buildroot/package/sdl_net/sdl_net.mk
-
-Modified:
-   trunk/buildroot/package/Config.in
-
-
-Changeset:
-Modified: trunk/buildroot/package/Config.in
-===================================================================
---- trunk/buildroot/package/Config.in	2008-09-24 12:00:57 UTC (rev 23462)
-+++ trunk/buildroot/package/Config.in	2008-09-24 12:06:59 UTC (rev 23463)
-@@ -320,6 +320,7 @@
- source "package/sdl/Config.in"
- source "package/sdl_image/Config.in"
- source "package/sdl_mixer/Config.in"
-+source "package/sdl_net/Config.in"
- source "package/sdl_ttf/Config.in"
- source "package/tiff/Config.in"
- 
-
-Added: trunk/buildroot/package/sdl_net/Config.in
-===================================================================
---- trunk/buildroot/package/sdl_net/Config.in	                        (rev 0)
-+++ trunk/buildroot/package/sdl_net/Config.in	2008-09-24 12:06:59 UTC (rev 23463)
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_SDL_NET
-+	bool "SDL_net"
-+	depends on BR2_PACKAGE_SDL
-+	help
-+	  SDL_net is a small, low-level, cross-platform network library, that
-+	  can be used with the Simple DirectMedia Layer library (SDL).
-+
-+	  http://www.libsdl.org/projects/SDL_net/
-
-Added: trunk/buildroot/package/sdl_net/sdl_net.mk
-===================================================================
---- trunk/buildroot/package/sdl_net/sdl_net.mk	                        (rev 0)
-+++ trunk/buildroot/package/sdl_net/sdl_net.mk	2008-09-24 12:06:59 UTC (rev 23463)
-@@ -0,0 +1,20 @@
-+#############################################################
-+#
-+# SDL_net: network addon for SDL
-+#
-+#############################################################
-+SDL_NET_VERSION:=1.2.7
-+SDL_NET_SITE:=http://www.libsdl.org/projects/SDL_net/release
-+
-+SDL_NET_CONF_OPT = --localstatedir=/var \
-+		--with-sdl-prefix=$(STAGING_DIR)/usr \
-+		--with-sdl-exec-prefix=$(STAGING_DIR)/usr
-+
-+SDL_NET_INSTALL_STAGING = YES
-+SDL_NET_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install
-+
-+SDL_NET_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
-+
-+SDL_NET_DEPENDENCIES = sdl
-+
-+$(eval $(call AUTOTARGETS,package,SDL_net))
+I've been the whole day fiddling with makefiles but i can't get it
+working.. too intricate.
