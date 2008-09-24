@@ -1,8 +1,7 @@
 From: egtvedt at uclibc.org <egtvedt@uclibc.org>
-Date: Wed, 24 Sep 2008 05:53:45 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/games: doom-wad
-	lxdoom
-Message-ID: <20080924125345.D233B3C2C9@busybox.net>
+Date: Wed, 24 Sep 2008 06:03:22 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/games:  prboom
+Message-ID: <20080924130322.DDC39F8008@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,156 +9,118 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: egtvedt
-Date: 2008-09-24 05:53:45 -0700 (Wed, 24 Sep 2008)
-New Revision: 23464
+Date: 2008-09-24 06:03:22 -0700 (Wed, 24 Sep 2008)
+New Revision: 23465
 
 Log:
-doom-wad: split out and fix installation of Doom shareware wad file
+prboom: add new games package PrBoom
 
-This patch splits the installation of the shareware WAD file into a separate
-package. The wad file will also be installed into /usr/share/games/doom
-directory, since the client will search this directory when starting.
+This patch adds a new package PrBoom. PrBoom is a Doom and Doom ][ client which
+uses the SDL library for graphics, sound and network. It also supports OpenGL,
+but this has not been enabled in this package since few embedded platforms
+support OpenGL.
 
-The Makefile rule has also been altered to use tools defined by Buildroot to
-extract and install the wad file. The package is also multiple project safe
-now.
+PrBoom allows you to play the good old game on newer hardware. It even supports
+higher resolution and better rendring, while still keeping the old style alive.
+
+http://prboom.sourceforge.net/
 
 Signed-off-by: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
 
 
 
 Added:
-   trunk/buildroot/package/games/doom-wad/
-   trunk/buildroot/package/games/doom-wad/Config.in
-   trunk/buildroot/package/games/doom-wad/doom-wads.mk
-
-Removed:
-   trunk/buildroot/package/games/lxdoom/lxdoom-wad.mk
+   trunk/buildroot/package/games/prboom/
+   trunk/buildroot/package/games/prboom/Config.in
+   trunk/buildroot/package/games/prboom/prboom.mk
 
 Modified:
    trunk/buildroot/package/games/Config.in
-   trunk/buildroot/package/games/lxdoom/Config.in
 
 
 Changeset:
 Modified: trunk/buildroot/package/games/Config.in
 ===================================================================
---- trunk/buildroot/package/games/Config.in	2008-09-24 12:06:59 UTC (rev 23463)
-+++ trunk/buildroot/package/games/Config.in	2008-09-24 12:53:45 UTC (rev 23464)
-@@ -6,6 +6,7 @@
- 
- if BR2_GAMES
- source "package/games/ace_of_penguins/Config.in"
-+source "package/games/doom-wad/Config.in"
+--- trunk/buildroot/package/games/Config.in	2008-09-24 12:53:45 UTC (rev 23464)
++++ trunk/buildroot/package/games/Config.in	2008-09-24 13:03:22 UTC (rev 23465)
+@@ -10,6 +10,7 @@
  source "package/games/gnuchess/Config.in"
  source "package/games/lxdoom/Config.in"
  source "package/games/magiccube4d/Config.in"
++source "package/games/prboom/Config.in"
+ source "package/games/rubix/Config.in"
+ source "package/games/vice/Config.in"
+ source "package/games/xboard/Config.in"
 
-Added: trunk/buildroot/package/games/doom-wad/Config.in
+Added: trunk/buildroot/package/games/prboom/Config.in
 ===================================================================
---- trunk/buildroot/package/games/doom-wad/Config.in	                        (rev 0)
-+++ trunk/buildroot/package/games/doom-wad/Config.in	2008-09-24 12:53:45 UTC (rev 23464)
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_DOOM_WAD
-+	bool "shareware Doom WAD file"
-+	depends on BR2_PACKAGE_LXDOOM
+--- trunk/buildroot/package/games/prboom/Config.in	                        (rev 0)
++++ trunk/buildroot/package/games/prboom/Config.in	2008-09-24 13:03:22 UTC (rev 23465)
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_PRBOOM
++	bool "PrBoom"
++	select BR2_PACKAGE_SDL
++	select BR2_PACKAGE_SDL_MIXER
++	select BR2_PACKAGE_SDL_NET
 +	help
-+          This will install the shareware wad data file for the doom game.
++	  PrBoom is a Doom client which allows you to play the good old game on
++	  newer hardware. It even supports higher resolution and better
++	  rendring, while still keeping the old style alive.
 +
-+          The wad file will be placed in the /usr/share/games/doom directory.
++	  http://prboom.sourceforge.net/
 
-Added: trunk/buildroot/package/games/doom-wad/doom-wads.mk
+Added: trunk/buildroot/package/games/prboom/prboom.mk
 ===================================================================
---- trunk/buildroot/package/games/doom-wad/doom-wads.mk	                        (rev 0)
-+++ trunk/buildroot/package/games/doom-wad/doom-wads.mk	2008-09-24 12:53:45 UTC (rev 23464)
-@@ -0,0 +1,35 @@
+--- trunk/buildroot/package/games/prboom/prboom.mk	                        (rev 0)
++++ trunk/buildroot/package/games/prboom/prboom.mk	2008-09-24 13:03:22 UTC (rev 23465)
+@@ -0,0 +1,50 @@
 +#############################################################
 +#
-+# doom-wad
++# PrBoom
 +#
 +#############################################################
++PRBOOM_VERSION:=2.4.7
 +
-+DOOM_WAD_VERSION = 1.8
-+DOOM_WAD_SOURCE = doom-$(DOOM_WAD_VERSION).wad.gz
-+DOOM_WAD_SITE = ftp://ftp.idsoftware.com/idstuff/doom/
-+DOOM_WAD_DIR=$(BUILD_DIR)/doom-wad-$(DOOM_WAD_VERSION)
++PRBOOM_DEPENDENCIES = sdl SDL_net sdl_mixer
 +
-+$(DL_DIR)/$(DOOM_WAD_SOURCE):
-+	 $(WGET) -P $(DL_DIR) $(DOOM_WAD_SITE)/$(DOOM_WAD_SOURCE)
++$(eval $(call AUTOTARGETS,package/games,prboom))
 +
-+doom-wad-source: $(DL_DIR)/$(DOOM_WAD_SOURCE)
-+
-+$(DOOM_WAD_DIR)/.unpacked: $(DL_DIR)/$(DOOM_WAD_SOURCE)
-+	$(INSTALL) -D $(DL_DIR)/$(DOOM_WAD_SOURCE) $(DOOM_WAD_DIR)/$(DOOM_WAD_SOURCE)
-+	$(ZCAT) $(DOOM_WAD_DIR)/$(DOOM_WAD_SOURCE) > \
-+		$(DOOM_WAD_DIR)/doom-$(DOOM_WAD_VERSION).wad
++$(PRBOOM_TARGET_EXTRACT):
++	$(ZCAT) $(DL_DIR)/$(PRBOOM_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
++	$(CONFIG_UPDATE) $(PRBOOM_DIR)/autotools
 +	touch $@
 +
-+$(TARGET_DIR)/usr/share/games/doom/doom1.wad: $(DOOM_WAD_DIR)/.unpacked
-+	$(INSTALL) -D $(DOOM_WAD_DIR)/doom-$(DOOM_WAD_VERSION).wad $@
-+
-+doom-wad: $(TARGET_DIR)/usr/share/games/doom/doom1.wad
-+
-+#############################################################
-+#
-+# Toplevel Makefile options
-+#
-+#############################################################
-+ifeq ($(strip $(BR2_PACKAGE_DOOM_WAD)),y)
-+TARGETS+=doom-wad
++$(PRBOOM_TARGET_CONFIGURE):
++	(cd $(PRBOOM_DIR); \
++		$(TARGET_CONFIGURE_ARGS) \
++		$(TARGET_CONFIGURE_OPTS) \
++		./configure \
++		--target=$(GNU_TARGET_NAME) \
++		--host=$(GNU_TARGET_NAME) \
++		--build=$(GNU_HOST_NAME) \
++		--prefix=/usr \
++		--oldincludedir=$(STAGING_DIR)/usr/include \
++		--with-sdl-prefix=$(STAGING_DIR)/usr \
++		--with-sdl-exec-prefix=$(STAGING_DIR)/usr \
++		--disable-cpu-opt \
++		--disable-sdltest \
++		--disable-gl \
++		--without-x \
++	)
++ifeq ($(BR2_ENDIAN),"BIG")
++	$(SED) 's,.*#undef WORDS_BIGENDIAN.*,#define WORDS_BIGENDIAN 1,g' $(PRBOOM_DIR)/config.h
 +endif
-
-Modified: trunk/buildroot/package/games/lxdoom/Config.in
-===================================================================
---- trunk/buildroot/package/games/lxdoom/Config.in	2008-09-24 12:06:59 UTC (rev 23463)
-+++ trunk/buildroot/package/games/lxdoom/Config.in	2008-09-24 12:53:45 UTC (rev 23464)
-@@ -2,8 +2,3 @@
- 	bool "lxdoom"
- 	help
- 	  This is the linux version of the popular doom game.
--config BR2_PACKAGE_LXDOOM_WAD
--	bool "lxdoom-wad"
--	depends on BR2_PACKAGE_LXDOOM
--	help
--	  This is the shareware wad data files for the doom game.
-
-Deleted: trunk/buildroot/package/games/lxdoom/lxdoom-wad.mk
-===================================================================
---- trunk/buildroot/package/games/lxdoom/lxdoom-wad.mk	2008-09-24 12:06:59 UTC (rev 23463)
-+++ trunk/buildroot/package/games/lxdoom/lxdoom-wad.mk	2008-09-24 12:53:45 UTC (rev 23464)
-@@ -1,35 +0,0 @@
--#############################################################
--#
--# lxdoom-wad
--#
--#############################################################
--
--LXDOOM_WAD_VERSION = 1.8
--LXDOOM_WAD_SOURCE = doom-$(LXDOOM_WAD_VERSION).wad.gz
--LXDOOM_WAD_SITE = ftp://ftp.idsoftware.com/idstuff/doom/
--LXDOOM_WAD_DIR=$(BUILD_DIR)/lxdoom-$(LXDOOM_WAD_VERSION)-wad
--
--$(DL_DIR)/$(LXDOOM_WAD_SOURCE):
--	 $(WGET) -P $(DL_DIR) $(LXDOOM_WAD_SITE)/$(LXDOOM_WAD_SOURCE)
--
--$(LXDOOM_WAD_DIR)/.unpacked: $(DL_DIR)/$(LXDOOM_WAD_SOURCE)
--	mkdir -p $(LXDOOM_WAD_DIR)
--	cp -f $(DL_DIR)/$(LXDOOM_WAD_SOURCE) $(LXDOOM_WAD_DIR)
--	gunzip -d $(LXDOOM_WAD_DIR)/$(LXDOOM_WAD_SOURCE)
--	touch $@
--
--$(LXDOOM_WAD_DIR)/.installed: $(LXDOOM_WAD_DIR)/.unpacked
--	cp -f $(LXDOOM_WAD_DIR)/* $(TARGET_DIR)/usr/games
--	touch $@
--
--lxdoom-wad: lxdoom $(LXDOOM_WAD_DIR)/.installed
--
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(strip $(BR2_PACKAGE_LXDOOM_WAD)),y)
--TARGETS+=lxdoom-wad
--endif
--
++	touch $@
++
++$(PRBOOM_TARGET_INSTALL_TARGET):
++	$(INSTALL) -D $(PRBOOM_DIR)/src/prboom $(TARGET_DIR)/usr/games/prboom
++	$(INSTALL) -D $(PRBOOM_DIR)/src/prboom-game-server $(TARGET_DIR)/usr/games/prboom-game-server
++	$(INSTALL) -D $(PRBOOM_DIR)/data/prboom.wad $(TARGET_DIR)/usr/share/games/doom/prboom.wad
++	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/games/prboom
++	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/games/prboom-game-server
++
++$(PRBOOM_TARGET_CLEAN):
++	rm -rf $(TARGET_DIR)/usr/share/games/doom/prboom.wad
++	rm -rf $(TARGET_DIR)/usr/games/prboom-game-server
++	rm -rf $(TARGET_DIR)/usr/games/prboom
++	-$(MAKE) -C $(PRBOOM_DIR) clean
