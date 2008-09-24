@@ -1,35 +1,27 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Wed, 24 Sep 2008 15:19:38 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package/games/lxdoom
-In-Reply-To: <20080924131707.7856FF8008@busybox.net>
-References: <20080924131707.7856FF8008@busybox.net>
-Message-ID: <20080924151938.390e2c13@atmel.com>
+From: Hinko Kocevar <hinko.kocevar@cetrtapot.si>
+Date: Wed, 24 Sep 2008 15:14:47 +0200
+Subject: [Buildroot] Standalone toolchain
+Message-ID: <48DA3D47.5060204@cetrtapot.si>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 24 Sep 2008 06:17:07 -0700 (PDT)
-egtvedt at uclibc.org wrote:
+Hi,
 
-> Author: egtvedt
-> Date: 2008-09-24 06:17:07 -0700 (Wed, 24 Sep 2008)
-> New Revision: 23467
-> 
-> Log:
-> lxdoom: make package depend on X11 server
-> 
-> lxdoom depends on a X11 server to be built, this patch will only show
-> lxdoom if a X11 server is selected and add xserver_xorg-server to the
-> dependency list.
-> 
+Is it possible to create a toolchain and then transfer it to another machine or just another folder, and have it work?
 
-Sorry, obviously missing a vital part of the patch here. I will revert
-and recommit.
+I've experienced the case where I only transferred staging_dir and put it somewhere and when I tried compiling some software compiler was lacking some header files. Creating absolute path link to newly created toolchain dir to point to staging_dir where it was taken from solved the problem..
 
-<snipp patch>
+Thank you,
+Hinko
 
 -- 
-Best regards,
-Hans-Christian Egtvedt
+?ETRTA POT, d.o.o., Kranj
+Planina 3
+4000 Kranj
+Slovenia, Europe
+Tel. +386 (0) 4 280 66 03
+E-mail: hinko.kocevar at cetrtapot.si
+Http: www.cetrtapot.si
