@@ -1,93 +1,45 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Thu, 25 Sep 2008 09:10:05 +0200
-Subject: [Buildroot] AT91SAM9263 JFFS2 problems
-In-Reply-To: <20080924140533.7230@gmx.net>
-References: <20080924140533.7230@gmx.net>
-Message-ID: <20080925091005.3bf2eaaa@atmel.com>
+From: Ram kumar <ramkumar.research@gmail.com>
+Date: Thu, 25 Sep 2008 16:22:25 +0530
+Subject: [Buildroot] undefined macro: AM_PROG_LIBTOOL (buildroot failure)
+In-Reply-To: <87k5gtyb0x.fsf@macbook.be.48ers.dk>
+References: <6306c640805281409v1bf5384ag2c1353fd4aead298@mail.gmail.com>
+	<87k5gtyb0x.fsf@macbook.be.48ers.dk>
+Message-ID: <6306c640809250352j54395362u4ee59f7d28fbc5f5@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 24 Sep 2008 16:05:33 +0200
-"Matt Wood" <mattwood2000@gmx.net> wrote:
+hi peter,
 
-Hi Matt (-;
 
-> Hi, has anyone seen problems booting an AT91SAM9263-EK board with the
-> JFFS2 filesystem created by buildroot?  I used to be able to boot no
-> problem with an older version of buildroot, but not with the latest.
-> I'm getting the following kernel panic:
-> 
-> VFS: Mounted root (jffs2
-> filesystem). Freeing init memory:
-> 136K Warning: unable to open an initial
-> console. Kernel panic - not syncing: No init found.  Try passing
-> init= option to kernel.
-> 
-> I've loaded the NAND flash as follows:
-> 
 
-If your NAND flash is properly partitioned in the board code, the
-layout will show up as the following below.
-
-> 0x00000000 - at91bootstrap
+On Fri, Jun 13, 2008 at 2:19 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Ram" == Ram kumar <ramkumar.research@gmail.com> writes:
 >
-
-mtd0
-
-> 0x00020000 - u-boot
+>  Ram> hi,
 >
-
-mtd1
-
-> 0x00200000 - kernel
+>  Ram>      Iam trying to build a development environment using
+>  Ram> buildroot for my atmel eval kit (AT91SAM9260 ek).I follow the
+>  Ram> instruaction in the website http://
+>  Ram> www.linux4sam.org/twiki/bin/view/Linux4SAM/BuildRoot. But my
+>  Ram> buildroot fails when it is trying to build libusb.
 >
+>  Ram> First the buildroot throws 404 file not found error since
+>  Ram> http://ftp.debian.org /pool/main/libu/libusb/ doesn't have
+>  Ram> libusb_0.1.12-9.diff.gz which buildroot looks for......so i
+>  Ram> edited the /buildroot/package/libusb/libusb.mk file to download
+>  Ram> libusb_0.1.12-11.diff.gz which is present in the FTP server.
+>
+> libusb missed a dependency on host-libtool and patch version bumped.
+> Fixed in r22311-r22313.
 
-mtd2
+can you just tell me....how to download the patch and apply it ?????
 
-> 0x00400000 - JFFS2
-> 
+Once upon a time.I have downloaded the buildroot from this website.
 
-mtd3
+Please guide me to compile with this patch
 
-> My bootargs are "mem=64M console=ttyS0,115200 root=/dev/mtdblock1 rw
-> rootfstype=jffs2"
-> 
-
-Try root=mtd3, you do not need to specify /dev/mtdblock1.
-
-> The strange thing is if I change the bootargs to root=/dev/mtdblock0,
-> I get a ton of jffs2 oob and ecc errors, but after a while, it gives
-> me the login prompt.
-> 
-
-This is just weird, could you post the output from the kernel boot at
-http://pastebin.org/ or something similar?
-
-> My JFFS2 memory type options are:
-> Page Size:  0x800
-> Erase Block Size:  0x20000
-> Not using clean marker.
-> 
-
-These options seems right, 2048 bytes pages and 128 kB erase blocks.
-
-> These options never gave me a problem before.
-> 
-> The only other thing I can think of is a message I get after a build
-> of buildroot about skipping dev, tmp, and etc while creating the RFS:
-> 
-> table='target/device/Atmel/root/device_table.txt'
-> mkfs.jffs2: skipping device_table entry '/dev': no parent directory!
-> mkfs.jffs2: skipping device_table entry '/tmp': no parent directory!
-> mkfs.jffs2: skipping device_table entry '/etc': no parent directory!
-
-I see these as well, but they do not impact the generated image.
-
-<snipp>
-
--- 
-Best regards,
-Hans-Christian Egtvedt
+Regards,
+Ram
