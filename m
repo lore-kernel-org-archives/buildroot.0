@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 25 Sep 2008 08:18:34 -0700
+Date: Thu, 25 Sep 2008 08:49:11 -0700
 Subject: [Buildroot] [buildroot 0003004]: undefined reference problem
-Message-ID: <556af0f785fa15a9cbfa47d8ac4ff1ab@bugs.busybox.net>
+Message-ID: <0a726a16e8db35b6ed112128048cb058@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -25,7 +25,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             04-21-2008 01:17 PDT
-Last Modified:              09-25-2008 08:18 PDT
+Last Modified:              09-25-2008 08:49 PDT
 ====================================================================== 
 Summary:                    undefined reference problem
 Description: 
@@ -289,6 +289,14 @@ undefined reference to `index'
 collect2: ld returned 1 exit status
 make[2]: *** [asterisk] Error 1 
 
+---------------------------------------------------------------------- 
+ nickpeirson - 09-25-08 08:49  
+---------------------------------------------------------------------- 
+Have submitted bug and patch to asterisk re the index error:
+http://bugs.digium.com/view.php?id=13557
+
+The fix is to replace the call to "index" with the call to "strchr". 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -314,4 +322,5 @@ Date Modified   Username       Field                    Change
 04-22-08 07:50  gebecom        Note Added: 0006954                          
 09-25-08 07:08  nickpeirson    Issue Monitored: nickpeirson                    
 09-25-08 08:18  nickpeirson    Note Added: 0011984                          
+09-25-08 08:49  nickpeirson    Note Added: 0011994                          
 ======================================================================
