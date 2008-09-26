@@ -1,44 +1,49 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Fri, 26 Sep 2008 07:04:09 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/project
-Message-ID: <20080926140409.17D7E3C368@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Fri, 26 Sep 2008 09:41:42 -0700
+Subject: [Buildroot] [buildroot 0005164]: r23017 breaks largefile handling
+	in bash
+Message-ID: <a36cc532589503843fe9daa5f5ca0da1@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-09-26 07:04:08 -0700 (Fri, 26 Sep 2008)
-New Revision: 23518
 
-Log:
-project/Makefile.in: workaround issue with out-of-tree builds
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=5164 
+====================================================================== 
+Reported By:                razzor
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   5164
+Category:                   New Features
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             09-26-2008 09:41 PDT
+Last Modified:              09-26-2008 09:41 PDT
+====================================================================== 
+Summary:                    r23017 breaks largefile handling in bash
+Description: 
+with r23017 applied, bash can't handle big files:
+$ cat < testfile.4097MB > /dev/null
+-sh: testfile.4097MB: Value too large for defined data type
 
-Other packages might also support Linux-style out of tree builds
-with the O=<dir> syntax (E.G. Busybox does). As make automatically
-forwards command line variable definitions those packages get very
-confused. Fix this by telling make to not do so
-
-Modified:
-   trunk/buildroot/project/Makefile.in
+After reverting that hunk, bash worked as expected.
+Tested on a x86 r23076 Build.
 
 
-Changeset:
-Modified: trunk/buildroot/project/Makefile.in
-===================================================================
---- trunk/buildroot/project/Makefile.in	2008-09-26 14:00:26 UTC (rev 23517)
-+++ trunk/buildroot/project/Makefile.in	2008-09-26 14:04:08 UTC (rev 23518)
-@@ -32,6 +32,12 @@
- ifeq ("$(origin O)", "command line")
- BASE_DIR := $(shell mkdir -p $(O) && cd $(O) && pwd)
- $(if $(BASE_DIR),, $(error output directory "$(O)" does not exist))
-+
-+# other packages might also support Linux-style out of tree builds
-+# with the O=<dir> syntax (E.G. Busybox does). As make automatically
-+# forwards command line variable definitions those packages get very
-+# confused. Fix this by telling make to not do so
-+MAKEOVERRIDES =
- endif
- endif
- 
+====================================================================== 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+09-26-08 09:41  razzor         New Issue                                    
+09-26-08 09:41  razzor         Status                   new => assigned     
+09-26-08 09:41  razzor         Assigned To               => buildroot       
+======================================================================
