@@ -1,44 +1,48 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 27 Sep 2008 07:06:24 -0700
-Subject: [Buildroot] [buildroot 0005174]: Patch for directfb(add gfxdrive
-	select options)
-Message-ID: <3d00981b294f041be5205974a5d9e64c@bugs.uclibc.org>
+From: Michel Wilson <michel@crondor.net>
+Date: Sat, 27 Sep 2008 18:15:39 +0200
+Subject: [Buildroot] .la files libdir breakage
+Message-ID: <200809271815.39682.michel@crondor.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=5174 
-====================================================================== 
-Reported By:                Devix
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   5174
-Category:                   New Features
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             09-27-2008 07:06 PDT
-Last Modified:              09-27-2008 07:06 PDT
-====================================================================== 
-Summary:                    Patch for directfb(add gfxdrive select options)
-Description: 
-Thsi patch add gfx drivere select options into directfb package.
-====================================================================== 
+I have my buildroot working dir in /usr/local/src/buildroot. In 
+package/Makefile.autotools.in, line 230, there is the following fragment:
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-09-27-08 07:06  Devix          New Issue                                    
-09-27-08 07:06  Devix          Status                   new => assigned     
-09-27-08 07:06  Devix          Assigned To               => buildroot       
-09-27-08 07:06  Devix          File Added:
-directfb-1.0.1-add-gfxdriver-select-options.patch                    
-======================================================================
+    for i in $$(find $(STAGING_DIR)/usr/lib/ -name "*.la"); do \
+        cp $$i $$i~; \
+        $(SED) "s:\(['= ]\)/usr:\\1$(STAGING_DIR)/usr:g" $$i; \
+    done
+
+It blindly replaces all occurences of =/usr with =$(STAGING_DIR)/usr, in *all* 
+.la-files in the staging dir, each time a package using autotools is 
+installed. After installing a few of them, it results in the following madness 
+(wrapped for clarity):
+
+libdir='/usr/local/src/buildroot/build_i686/staging_dir/usr/local/src/buildro
+ot/build_i686/staging_dir/usr/local/src/buildroot/build_i686/staging_dir/usr/
+local/src/buildroot/build_i686/staging_dir/usr/local/src/buildroot/build_i686
+/staging_dir/usr/local/src/buildroot/build_i686/staging_dir/usr/local/src/bui
+ldroot/build_i686/staging_dir/usr/local/src/buildroot/build_i686/staging_dir/
+usr/local/src/buildroot/build_i686/staging_dir/usr/local/src/buildroot/build_
+i686/staging_dir/usr/local/src/buildroot/build_i686/staging_dir/usr/local/src
+/buildroot/build_i686/staging_dir/usr/local/src/buildroot/build_i686/staging_
+dir/usr/local/src/buildroot/build_i686/staging_dir/usr/local/src/buildroot/bu
+ild_i686/staging_dir/usr/local/src/buildroot/build_i686/staging_dir/usr/local
+/src/buildroot/build_i686/staging_dir/usr/local/src/buildroot/build_i686/stag
+ing_dir/usr/lib'
+
+Oops ;) Would it be an idea to patch the .la-files before installing them, 
+when they are still in the build directory? I think this would ensure that 
+they're only patched once.
+
+Regards,
+
+Michel.
+-- 
+Michel Wilson     michel at crondor.net
+PGP key ID        0xD2CB4B7E
