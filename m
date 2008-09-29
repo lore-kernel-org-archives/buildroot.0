@@ -1,86 +1,53 @@
-From: Matuschka, Sebastian <Sebastian.Matuschka@gcd-solutions.de>
-Date: Mon, 29 Sep 2008 10:08:59 +0200
-Subject: [Buildroot] xkb.c:2169: relocation truncated to fit
-Message-ID: <49ED01FC03EE524BB7BB258E8F93BFF32B26FF@bfl-exchange-1.BFL.local>
+From: Hinko Kocevar <hinko.kocevar@cetrtapot.si>
+Date: Mon, 29 Sep 2008 10:49:34 +0200
+Subject: [Buildroot] Standalone toolchain
+In-Reply-To: <20080924134635.GA14882@mx.loc>
+References: <48DA3D47.5060204@cetrtapot.si> <20080924134635.GA14882@mx.loc>
+Message-ID: <48E0969E.9090509@cetrtapot.si>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Bernhard Reutner-Fischer wrote:
+> On Wed, Sep 24, 2008 at 03:14:47PM +0200, Hinko Kocevar wrote:
+>> Hi,
+>>
+>> Is it possible to create a toolchain and then transfer it to another machine or just another folder, and have it work?
+> 
+> This is supposed to work, yes. The keyword is sysroot support.
+> Either configure your BR2_STAGING_DIR to e.g. /opt/my-target-tripplet
+> or just move the staging dir wherever you want and use the proper
+> --sysroot and -isysroot.
 
-I always get this error and don't know what the reason is:
+Like I posted earlier it works if I add --sysroot= to CFLAGS.
+But I can't seem to get libtool to pass --sysroot= variable to the final link command in tslib package:
 
-Making all in fbdev
-make[4]: Entering directory
-`/atmel/buildrootBT/build_avr32/xserver_xorg-server-1.4.1/hw/kdrive/fbde
-v'
-/bin/sh ../../../libtool --tag=CC   --mode=link
-/atmel/buildrootBT/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-gc
-c -Os  -I/atmel/buildrootBT/build_avr32/staging_dir/usr/include
--I/atmel/buildrootBT/build_avr32/staging_dir/include
---sysroot=/atmel/buildrootBT/build_avr32/staging_dir/ -isysroot
-/atmel/buildrootBT/build_avr32/staging_dir -msoft-float
--D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -g -O2
--o Xfbdev fbinit.o libfbdev.a -lXfont -lXau -lfontenc -lpixman-1 -lXdmcp
-../../../dix/libdix.la ../../../config/libconfig.a
-../../../hw/kdrive/src/libkdrive.a ../../../hw/kdrive/linux/liblinux.a
-../../../fb/libfb.la ../../../mi/libmi.la ../../../xfixes/libxfixes.la
-../../../Xext/libXext.la ../../../dbe/libdbe.la
-../../../XTrap/libxtrap.la ../../../record/librecord.la
-../../../render/librender.la ../../../randr/librandr.la
-../../../damageext/libdamageext.la ../../../miext/damage/libdamage.la
-../../../miext/shadow/libshadow.la ../../../Xi/libXi.la
-../../../xkb/libxkb.la ../../../xkb/libxkbstubs.la
-../../../composite/libcomposite.la ../../../dix/libxpstubs.la
-../../../os/libos.la ../../../hw/kdrive/src/libkdrivestubs.a -lXfont
--lXau -lfontenc -lpixman-1 -lXdmcp    -lm  -lm
-/atmel/buildrootBT/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-gc
-c -Os -I/atmel/buildrootBT/build_avr32/staging_dir/usr/include
--I/atmel/buildrootBT/build_avr32/staging_dir/include
---sysroot=/atmel/buildrootBT/build_avr32/staging_dir/ -isysroot
-/atmel/buildrootBT/build_avr32/staging_dir -msoft-float
--D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -g -O2
--o Xfbdev fbinit.o  libfbdev.a ../../../dix/.libs/libdix.a
-../../../config/libconfig.a ../../../hw/kdrive/src/libkdrive.a
-../../../hw/kdrive/linux/liblinux.a ../../../fb/.libs/libfb.a
-../../../mi/.libs/libmi.a ../../../xfixes/.libs/libxfixes.a
-../../../Xext/.libs/libXext.a ../../../dbe/.libs/libdbe.a
-../../../XTrap/.libs/libxtrap.a ../../../record/.libs/librecord.a
-../../../render/.libs/librender.a ../../../randr/.libs/librandr.a
-../../../damageext/.libs/libdamageext.a
-../../../miext/damage/.libs/libdamage.a
-../../../miext/shadow/.libs/libshadow.a ../../../Xi/.libs/libXi.a
-../../../xkb/.libs/libxkb.a ../../../xkb/.libs/libxkbstubs.a
-../../../composite/.libs/libcomposite.a ../../../dix/.libs/libxpstubs.a
-../../../os/.libs/libos.a ../../../hw/kdrive/src/libkdrivestubs.a
-/atmel/buildrootBT/build_avr32/staging_dir/usr/lib/libXfont.so
-/atmel/buildrootBT/build_avr32/staging_dir/usr/lib/libXau.so
-/atmel/buildrootBT/build_avr32/staging_dir/usr/lib/libfontenc.so
-/atmel/buildrootBT/build_avr32/staging_dir/usr/lib/libpixman-1.so
-/atmel/buildrootBT/build_avr32/staging_dir/usr/lib/libXdmcp.so -lm
--Wl,--rpath -Wl,/atmel/buildrootBT/build_avr32/staging_dir/usr/lib
--Wl,--rpath -Wl,/atmel/buildrootBT/build_avr32/staging_dir/usr/lib
-../../../xkb/.libs/libxkb.a(xkb.o): In function `ProcXkbSetMap':
-/atmel/buildrootBT/build_avr32/xserver_xorg-server-1.4.1/xkb/xkb.c:2169:
-relocation truncated to fit: R_AVR32_9UW_PCREL against `.text'+865c
+
+...
+Making all in src
+make[3]: Entering directory `/work/git/sdk.git/cris-uclibc/build/tslib-trunk/src'
+/bin/sh ../libtool --tag=CC   --mode=link cris-linux-uclibc-gcc -DPLUGIN_DIR=\"/usr/lib/ts/\" -DTS_CONF=\"/etc/ts.conf\"  -DTSLIB_INTERNAL -fvisibility=hidden -DGCC_HASCLASSVISIBILITY -Os -pipe -funit-at-a-time -DLINUX -DLINUX_SYSTEM -D_REENTRANT -mno-mul-bug-workaround -Wall --sysroot=/work/git/sdk.git/toolchain -version-info 1:1:1 -release 0.0 -export-dynamic  -o libts.la -rpath /usr/lib ts_attach.lo ts_close.lo ts_config.lo ts_error.lo ts_fd.lo ts_load_module.lo ts_open.lo ts_parse_vars.lo ts_read.lo ts_read_raw.lo -ldl -ldl
+cris-linux-uclibc-gcc -shared  .libs/ts_attach.o .libs/ts_close.o .libs/ts_config.o .libs/ts_error.o .libs/ts_fd.o .libs/ts_load_module.o .libs/ts_open.o .libs/ts_parse_vars.o .libs/ts_read.o .libs/ts_read_raw.o  -ldl  -mno-mul-bug-workaround -Wl,-soname -Wl,libts-0.0.so.0 -o .libs/libts-0.0.so.0.1.1
+/work/git/sdk.git/toolchain/usr/bin/../lib/gcc/cris-linux-uclibc/4.3.1/../../../../cris-linux-uclibc/bin/ld: crti.o: No such file: No such file or directory
 collect2: ld returned 1 exit status
-make[4]: *** [Xfbdev] Fehler 1
-make[4]: Leaving directory
-`/atmel/buildrootBT/build_avr32/xserver_xorg-server-1.4.1/hw/kdrive/fbde
-v'
-make[3]: *** [all-recursive] Fehler 1
-make[3]: Leaving directory
-`/atmel/buildrootBT/build_avr32/xserver_xorg-server-1.4.1/hw/kdrive'
-make[2]: *** [all-recursive] Fehler 1
-make[2]: Leaving directory
-`/atmel/buildrootBT/build_avr32/xserver_xorg-server-1.4.1/hw'
-make[1]: *** [all-recursive] Fehler 1
-make[1]: Leaving directory
-`/atmel/buildrootBT/build_avr32/xserver_xorg-server-1.4.1'
+make[3]: *** [libts.la] Error 1
+make[3]: Leaving directory `/work/git/sdk.git/cris-uclibc/build/tslib-trunk/src'
 
-Searching the web was not helpful. What can I try to get rid of this
-error?
-I'm using the latest Buildroot. AVR32 ATSTK1002
-Regards
-Sebastian
+Manually adding --sysroot to gcc link command solves the problem, but it is not 'the way to go'. I've tried
+adding -Wl--sysroot=.. but with no avail.
+
+What switches must be used for libtool to pass sysroot parameter to the linker?
+
+Thank you,
+Hinko
+
+-- 
+?ETRTA POT, d.o.o., Kranj
+Planina 3
+4000 Kranj
+Slovenia, Europe
+Tel. +386 (0) 4 280 66 03
+E-mail: hinko.kocevar at cetrtapot.si
+Http: www.cetrtapot.si
