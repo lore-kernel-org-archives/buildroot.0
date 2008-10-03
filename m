@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 2 Oct 2008 22:11:55 -0700
+Date: Thu, 2 Oct 2008 23:00:10 -0700
 Subject: [Buildroot] [buildroot 0005214]: make uclibc-config fails,
 	as sed does not exist.
-Message-ID: <08422e74a70e4618eafe17a00176f30d@busybox.net>
+Message-ID: <11e62b5013323021330238c34a0e9dbd@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +10,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=5214 
 ====================================================================== 
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             10-02-2008 22:11 PDT
-Last Modified:              10-02-2008 22:11 PDT
+Last Modified:              10-02-2008 23:00 PDT
 ====================================================================== 
 Summary:                    make uclibc-config fails, as sed does not exist.
 Description: 
@@ -63,10 +63,18 @@ make menuconfig
 make uclibc-config
 ====================================================================== 
 
+---------------------------------------------------------------------- 
+ mjd - 10-02-08 23:00  
+---------------------------------------------------------------------- 
+The above patch to buildroot fixes the problem for me. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
 10-02-08 22:11  mjd            New Issue                                    
 10-02-08 22:11  mjd            Status                   new => assigned     
 10-02-08 22:11  mjd            Assigned To               => buildroot       
+10-02-08 22:12  mjd            Issue Monitored: mjd                         
+10-02-08 22:59  mjd            File Added: uclibc-sed-1.diff                    
+10-02-08 23:00  mjd            Note Added: 0012594                          
 ======================================================================
