@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 3 Oct 2008 01:11:27 -0700
+Date: Fri, 3 Oct 2008 08:18:34 -0700
 Subject: [Buildroot] [buildroot 0005214]: make uclibc-config fails,
 	as sed does not exist.
-Message-ID: <d669bdad3df9fa73f783ee3b63fd6762@busybox.net>
+Message-ID: <ea5686aa4e684a2ac7e534254dd8b9e0@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             10-02-2008 22:11 PDT
-Last Modified:              10-03-2008 01:11 PDT
+Last Modified:              10-03-2008 08:18 PDT
 ====================================================================== 
 Summary:                    make uclibc-config fails, as sed does not exist.
 Description: 
@@ -81,6 +81,38 @@ Does Buildroot build sed if the host is missing it?
 ---------------------------------------------------------------------- 
 this is not correct, no. Works in my tree.. 
 
+---------------------------------------------------------------------- 
+ mjd - 10-03-08 08:18  
+---------------------------------------------------------------------- 
+egtvedt said:
+> The rule seems a bit weird for me
+
+True.  I had a look around.  uclibc-menuconfig has this rule:
+
+uclibc-menuconfig: host-sed $(UCLIBC_DIR)/.config
+        $(MAKE1) -C $(UCLIBC_DIR) \
+                PREFIX=$(TOOL_BUILD_DIR)/uClibc_dev/ \
+                DEVEL_PREFIX=/usr/ \
+                RUNTIME_PREFIX=$(TOOL_BUILD_DIR)/uClibc_dev/ \
+                HOSTCC="$(HOSTCC)" \
+                menuconfig && \
+        touch -c $(UCLIBC_DIR)/.config
+
+Maybe it's "host-sed", not what I suggested.  I just tried host-sed, and
+it works for me.
+
+Regarding what happens if there's no platform sed, I don't know.
+
+bernhardf said:
+> this is not correct, no. Works in my tree.. 
+
+Sorry, I don't understand what you mean.
+
+Do you mean your tree works with this change, or without?
+
+If without, please use a fresh tree from today, and follow the steps I
+gave. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -92,4 +124,5 @@ Date Modified   Username       Field                    Change
 10-02-08 23:00  mjd            Note Added: 0012594                          
 10-03-08 00:29  egtvedt        Note Added: 0012624                          
 10-03-08 01:11  bernhardf      Note Added: 0012634                          
+10-03-08 08:18  mjd            Note Added: 0012674                          
 ======================================================================
