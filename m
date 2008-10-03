@@ -1,62 +1,42 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 2 Oct 2008 23:32:11 -0700
-Subject: [Buildroot] [buildroot 0005224]: Default kernell headers version
-	(2.6.26.2) doesn't match default stable kernel (2.6.26.3)
-Message-ID: <5aed7048a193a56871b1196ff902ba1c@bugs.uclibc.org>
+From: egtvedt at uclibc.org <egtvedt@uclibc.org>
+Date: Fri,  3 Oct 2008 00:24:35 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
+Message-ID: <20081003072435.23341F8006@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: egtvedt
+Date: 2008-10-03 00:24:34 -0700 (Fri, 03 Oct 2008)
+New Revision: 23580
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=5224 
-====================================================================== 
-Reported By:                mjd
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   5224
-Category:                   Other
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             10-02-2008 23:32 PDT
-Last Modified:              10-02-2008 23:32 PDT
-====================================================================== 
-Summary:                    Default kernell headers version (2.6.26.2) doesn't
-match default stable kernel (2.6.26.3)
-Description: 
-After selecting the latest stable kernel (2.6.26.3), uClibc still tries to
-install header files from 2.6.26.2.
+Log:
+linux: fix copy of Busybox config to target directory
 
-How to reproduce:
+This patch fixes bug report #5204. The Busybox config was not copied from the
+correct place.
 
-tar -xjf ../dl/buildroot-svn-snapshot.tar.bz2
-cd buildroot
-cp target/device/Atmel/at91sam9260dfc/at91sam9260dfc_defconfig .config
-make menuconfig
-  Choose "Kernel"
-    Choose "Linux Kernel Version"
-      Choose "Latest stable kernel (2.6.26.3)"
-  Exit and save
-  
-[mjd at mjd buildroot]$ grep BR2_DEFAULT_KERNEL_HEADERS .config
-BR2_DEFAULT_KERNEL_HEADERS="2.6.26.2"
+Signed-off-by: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
 
-Even if you hand-edit BR2_DEFAULT_KERNEL_HEADERS to be 2.6.26.3, a further
-run of "make menuconfig" will return BR2_DEFAULT_KERNEL_HEADERS to be
-2.6.26.2.
-====================================================================== 
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-10-02-08 23:32  mjd            New Issue                                    
-10-02-08 23:32  mjd            Status                   new => assigned     
-10-02-08 23:32  mjd            Assigned To               => buildroot       
-======================================================================
+
+Modified:
+   trunk/buildroot/target/linux/Makefile.in.advanced
+
+
+Changeset:
+Modified: trunk/buildroot/target/linux/Makefile.in.advanced
+===================================================================
+--- trunk/buildroot/target/linux/Makefile.in.advanced	2008-10-02 15:02:38 UTC (rev 23579)
++++ trunk/buildroot/target/linux/Makefile.in.advanced	2008-10-03 07:24:34 UTC (rev 23580)
+@@ -428,7 +428,7 @@
+ 
+ $(TARGET_DIR)/boot/busybox.config: $(BUSYBOX_DIR)/.config
+ 	mkdir -p $(TARGET_DIR)/boot
+-	cp -dpf .config $(TARGET_DIR)/boot/busybox.config
++	cp -dpf $(BUSYBOX_DIR)/.config $(TARGET_DIR)/boot/busybox.config
+ 
+ /tftpboot/$(LINUX26_KERNEL_NAME): $(LINUX26_KERNEL)
+ 	-mkdir -p /tftpboot
