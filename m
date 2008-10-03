@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 3 Oct 2008 16:47:33 -0700
+Date: Fri, 3 Oct 2008 16:49:43 -0700
 Subject: [Buildroot] [buildroot 0005234]: Selecting MTD utils from git
 	doesn't give you the HEAD
-Message-ID: <48dc91b71ce0d2fb33d5a38c2d3f9b64@busybox.net>
+Message-ID: <e6e39cace8bb49699c2d1e9758df1fee@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             10-03-2008 09:40 PDT
-Last Modified:              10-03-2008 16:47 PDT
+Last Modified:              10-03-2008 16:49 PDT
 ====================================================================== 
 Summary:                    Selecting MTD utils from git doesn't give you the
 HEAD
@@ -89,6 +89,12 @@ Hi bernhardf, I like that idea.  However my config.in-fu is not yet good
 enough to do what you suggested.  If you want to do it, could you (or
 someone else) write it and try it out please? 
 
+---------------------------------------------------------------------- 
+ mjd - 10-03-08 16:49  
+---------------------------------------------------------------------- 
+Guys, there may be a problem with using mtd-util from HEAD.  Please give me
+a little time to work out what's happening with that code. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -100,4 +106,5 @@ Date Modified   Username       Field                    Change
 10-03-08 09:42  mjd            Note Added: 0012684                          
 10-03-08 10:01  bernhardf      Note Added: 0012694                          
 10-03-08 16:47  mjd            Note Added: 0012714                          
+10-03-08 16:49  mjd            Note Added: 0012724                          
 ======================================================================
