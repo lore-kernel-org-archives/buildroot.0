@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 3 Oct 2008 09:42:04 -0700
+Date: Fri, 3 Oct 2008 10:01:37 -0700
 Subject: [Buildroot] [buildroot 0005234]: Selecting MTD utils from git
 	doesn't give you the HEAD
-Message-ID: <532a9ee2ed7a6e52612f1f2e0680f030@bugs.uclibc.org>
+Message-ID: <897d203ae68477a704ba7b1f6ed18ac3@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             10-03-2008 09:40 PDT
-Last Modified:              10-03-2008 09:42 PDT
+Last Modified:              10-03-2008 10:01 PDT
 ====================================================================== 
 Summary:                    Selecting MTD utils from git doesn't give you the
 HEAD
@@ -67,6 +67,21 @@ buildroot-mtcba-g1-pristine/package/mtd/mtd-utils.git/mtd.mk	2008-08-03
 MTD_URL:=http://git.infradead.org/mtd-utils.git?a=snapshot;h=$(MTD_VERSION);sf=tgz
  MTD_HOST_DIR:= $(TOOL_BUILD_DIR)/mtd-utils-$(MTD_VERSION) 
 
+---------------------------------------------------------------------- 
+ bernhardf - 10-03-08 10:01  
+---------------------------------------------------------------------- 
+may i suggest you add a
+config BR2_PACKAGE_MTD_UTILS_GIT_REVISION
+  string "git revision"
+  default "HEAD" if !BR2_avr
+  default "the_previous_hash" if BR2_avr32
+  help
+    Here you can enter the git revision you want to use.
+    Usually this will be "HEAD", but if you could add some other
+    hash here.
+
+Just a thought.. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -76,4 +91,5 @@ Date Modified   Username       Field                    Change
 10-03-08 09:40  mjd            File Added: mtd-utils-git-from-head-1.diff       
             
 10-03-08 09:42  mjd            Note Added: 0012684                          
+10-03-08 10:01  bernhardf      Note Added: 0012694                          
 ======================================================================
