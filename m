@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 3 Oct 2008 17:01:24 -0700
+Date: Fri, 3 Oct 2008 18:43:20 -0700
 Subject: [Buildroot] [buildroot 0005214]: make uclibc-config fails,
 	as sed does not exist.
-Message-ID: <c48354843312313adb09ac0502536473@busybox.net>
+Message-ID: <ec898e6a609a11381432893d05d745a7@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             10-02-2008 22:11 PDT
-Last Modified:              10-03-2008 17:01 PDT
+Last Modified:              10-03-2008 18:43 PDT
 ====================================================================== 
 Summary:                    make uclibc-config fails, as sed does not exist.
 Description: 
@@ -120,6 +120,16 @@ There is a problem with my fix - it makes sure sed exists, but for some
 reason, it forces recompilation of uclibc.  So please don't apply this fix
 yet.  I am looking at the problem now. 
 
+---------------------------------------------------------------------- 
+ mjd - 10-03-08 18:43  
+---------------------------------------------------------------------- 
+I think the solution is that host-sed should come first, ie,
+
+ $(UCLIBC_DIR)/.oldconfig: host-sed $(UCLIBC_DIR)/.patched
+$(UCLIBC_CONFIG_FILE)
+
+This matches the other targets in uclibc.mk. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -133,4 +143,5 @@ Date Modified   Username       Field                    Change
 10-03-08 01:11  bernhardf      Note Added: 0012634                          
 10-03-08 08:18  mjd            Note Added: 0012674                          
 10-03-08 17:01  mjd            Note Added: 0012734                          
+10-03-08 18:43  mjd            Note Added: 0012744                          
 ======================================================================
