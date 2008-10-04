@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 3 Oct 2008 16:49:43 -0700
-Subject: [Buildroot] [buildroot 0005234]: Selecting MTD utils from git
-	doesn't give you the HEAD
-Message-ID: <e6e39cace8bb49699c2d1e9758df1fee@busybox.net>
+Date: Fri, 3 Oct 2008 17:01:24 -0700
+Subject: [Buildroot] [buildroot 0005214]: make uclibc-config fails,
+	as sed does not exist.
+Message-ID: <c48354843312313adb09ac0502536473@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,99 +12,125 @@ To: buildroot@busybox.net
 
 A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=5234 
+http://busybox.net/bugs/view.php?id=5214 
 ====================================================================== 
 Reported By:                mjd
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   5234
+Issue ID:                   5214
 Category:                   Other
 Reproducibility:            always
-Severity:                   minor
+Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             10-03-2008 09:40 PDT
-Last Modified:              10-03-2008 16:49 PDT
+Date Submitted:             10-02-2008 22:11 PDT
+Last Modified:              10-03-2008 17:01 PDT
 ====================================================================== 
-Summary:                    Selecting MTD utils from git doesn't give you the
-HEAD
+Summary:                    make uclibc-config fails, as sed does not exist.
 Description: 
-If you turn on BR2_PACKAGE_MTD_UTILS_GIT, you can get the mtd-utils
-source code from the Linux MTD project's GIT server, rather than use
-source that is 1 or 2 years old.
+I am getting the following failure from a fresh checkout of buildroot:
 
-I would have thought that the whole point of this is so that you can
-get the latest-and-greatest mtd-utils source.  But
-package/mtd/mtd-utils.git/mtd.mk hard-codes a particular (now
-out-of-date)
-version of mtd-utils.
+<yada yada>
+/home/mjd/wrk/buildroot-sym-1/toolchain_build_arm/bin/sed -i -e
+'s,^CROSS_COMPILER_PREFIX=.*,CROSS_COMPILER_PREFIX="/home/mjd/wrk/buildroot-sym-1/build_arm/staging_dir/usr/bin/arm-linux-uclibc-",g'
+\
+                -e 's,# TARGET_arm is not set,TARGET_arm=y,g' \
+                -e 's,^TARGET_ARCH=".*",TARGET_ARCH=\"arm\",g' \
+                -e
+'s,^KERNEL_SOURCE=.*,KERNEL_SOURCE=\"/home/mjd/wrk/buildroot-sym-1/toolchain_build_arm/linux\",g'
+\
+                -e
+'s,^KERNEL_HEADERS=.*,KERNEL_HEADERS=\"/home/mjd/wrk/buildroot-sym-1/toolchain_build_arm/linux/include\",g'
+\
+                -e 's,^RUNTIME_PREFIX=.*,RUNTIME_PREFIX=\"/\",g' \
+                -e 's,^DEVEL_PREFIX=.*,DEVEL_PREFIX=\"/usr/\",g' \
+                -e
+'s,^SHARED_LIB_LOADER_PREFIX=.*,SHARED_LIB_LOADER_PREFIX=\"/lib\",g' \
+               
+/home/mjd/wrk/buildroot-sym-1/toolchain_build_arm/uClibc-0.9.29/.oldconfig
+make: /home/mjd/wrk/buildroot-sym-1/toolchain_build_arm/bin/sed: Command
+not found
 
-This patch ensures that getting mtd-utils source from git gets the head
-from Linux MTD.
+How to reproduce:
+
+tar -xjf ../dl/buildroot-svn-snapshot.tar.bz2
+cd buildroot
+cp target/device/Atmel/at91sam9260dfc/at91sam9260dfc_defconfig .config
+make menuconfig
+# Immediately exit and save without changing any values
+make uclibc-config
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- mjd - 10-03-08 09:42  
+ mjd - 10-02-08 23:00  
 ---------------------------------------------------------------------- 
-diff -x config -u -r
-buildroot-mtcba-g1-pristine/package/mtd/mtd-utils.git/mtd.mk
-buildroot-mtcba-g1/package/mtd/mtd-utils.git/mtd.mk
----
-buildroot-mtcba-g1-pristine/package/mtd/mtd-utils.git/mtd.mk	2008-08-03
-14:11:27.000000000 +1000
-+++ buildroot-mtcba-g1/package/mtd/mtd-utils.git/mtd.mk	2008-09-30
-17:45:07.000000000 +1000
-@@ -3,7 +3,7 @@
- # mtd provides jffs2 utilities
- #
- #############################################################
--MTD_VERSION:=fcb52ccc99679460640386c297023f852b108f68
-+MTD_VERSION:=HEAD
- MTD_SOURCE:=mtd-utils-$(MTD_VERSION).tar.gz
-
-MTD_URL:=http://git.infradead.org/mtd-utils.git?a=snapshot;h=$(MTD_VERSION);sf=tgz
- MTD_HOST_DIR:= $(TOOL_BUILD_DIR)/mtd-utils-$(MTD_VERSION) 
+The above patch to buildroot fixes the problem for me. 
 
 ---------------------------------------------------------------------- 
- bernhardf - 10-03-08 10:01  
+ egtvedt - 10-03-08 00:29  
 ---------------------------------------------------------------------- 
-may i suggest you add a
-config BR2_PACKAGE_MTD_UTILS_GIT_REVISION
-  string "git revision"
-  default "HEAD" if !BR2_avr
-  default "the_previous_hash" if BR2_avr32
-  help
-    Here you can enter the git revision you want to use.
-    Usually this will be "HEAD", but if you could add some other
-    hash here.
+Is this patch allways correct? The rule seems a bit weird for me, I would
+assume something like sed-host-installed or something similar.
 
-Just a thought.. 
+Does Buildroot build sed if the host is missing it? 
 
 ---------------------------------------------------------------------- 
- mjd - 10-03-08 16:47  
+ bernhardf - 10-03-08 01:11  
 ---------------------------------------------------------------------- 
-Hi bernhardf, I like that idea.  However my config.in-fu is not yet good
-enough to do what you suggested.  If you want to do it, could you (or
-someone else) write it and try it out please? 
+this is not correct, no. Works in my tree.. 
 
 ---------------------------------------------------------------------- 
- mjd - 10-03-08 16:49  
+ mjd - 10-03-08 08:18  
 ---------------------------------------------------------------------- 
-Guys, there may be a problem with using mtd-util from HEAD.  Please give me
-a little time to work out what's happening with that code. 
+egtvedt said:
+> The rule seems a bit weird for me
+
+True.  I had a look around.  uclibc-menuconfig has this rule:
+
+uclibc-menuconfig: host-sed $(UCLIBC_DIR)/.config
+        $(MAKE1) -C $(UCLIBC_DIR) \
+                PREFIX=$(TOOL_BUILD_DIR)/uClibc_dev/ \
+                DEVEL_PREFIX=/usr/ \
+                RUNTIME_PREFIX=$(TOOL_BUILD_DIR)/uClibc_dev/ \
+                HOSTCC="$(HOSTCC)" \
+                menuconfig && \
+        touch -c $(UCLIBC_DIR)/.config
+
+Maybe it's "host-sed", not what I suggested.  I just tried host-sed, and
+it works for me.
+
+Regarding what happens if there's no platform sed, I don't know.
+
+bernhardf said:
+> this is not correct, no. Works in my tree.. 
+
+Sorry, I don't understand what you mean.
+
+Do you mean your tree works with this change, or without?
+
+If without, please use a fresh tree from today, and follow the steps I
+gave. 
+
+---------------------------------------------------------------------- 
+ mjd - 10-03-08 17:01  
+---------------------------------------------------------------------- 
+There is a problem with my fix - it makes sure sed exists, but for some
+reason, it forces recompilation of uclibc.  So please don't apply this fix
+yet.  I am looking at the problem now. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-10-03-08 09:40  mjd            New Issue                                    
-10-03-08 09:40  mjd            Status                   new => assigned     
-10-03-08 09:40  mjd            Assigned To               => buildroot       
-10-03-08 09:40  mjd            File Added: mtd-utils-git-from-head-1.diff       
-            
-10-03-08 09:42  mjd            Note Added: 0012684                          
-10-03-08 10:01  bernhardf      Note Added: 0012694                          
-10-03-08 16:47  mjd            Note Added: 0012714                          
-10-03-08 16:49  mjd            Note Added: 0012724                          
+10-02-08 22:11  mjd            New Issue                                    
+10-02-08 22:11  mjd            Status                   new => assigned     
+10-02-08 22:11  mjd            Assigned To               => buildroot       
+10-02-08 22:12  mjd            Issue Monitored: mjd                         
+10-02-08 22:59  mjd            File Added: uclibc-sed-1.diff                    
+10-02-08 23:00  mjd            Note Added: 0012594                          
+10-03-08 00:29  egtvedt        Note Added: 0012624                          
+10-03-08 01:11  bernhardf      Note Added: 0012634                          
+10-03-08 08:18  mjd            Note Added: 0012674                          
+10-03-08 17:01  mjd            Note Added: 0012734                          
 ======================================================================
