@@ -1,37 +1,54 @@
-From: suffecool at comcast.net <suffecool@comcast.net>
-Date: Mon, 06 Oct 2008 17:54:23 +0000
-Subject: [Buildroot] buildroot not listening to my project linux config file
-Message-ID: <100620081754.11188.48EA50CF0004169800002BB422058860140401010C0A00009A9C@comcast.net>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Mon,  6 Oct 2008 11:52:02 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
+Message-ID: <20081006185202.94BA03C732@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I have saved my project config files using "make saveconfig", once I had all my configuration set for my project.
-My project name is "samdev", so this copied the four config files into buildroot/local/samdev.
-The "master" buildroot config file has the following final three lines:
+Author: jacmet
+Date: 2008-10-06 11:52:02 -0700 (Mon, 06 Oct 2008)
+New Revision: 23602
 
-% tail -n 3 ./local/samdev/samdev.config
-BR2_PACKAGE_LINUX_KCONFIG="./local/samdev/linux-2.6.24.config"
-BR2_PACKAGE_BUSYBOX_CONFIG="./local/samdev/busybox-1.12.1.config"
-BR2_UCLIBC_CONFIG="./local/samdev/uclibc-0.9.29.config"
+Log:
+busybox: 1.12.1 grep fix
 
-I then did a clean so I could test my saved config, and ran "make BOARD=samdev".
-Once everything was compiled, I noticed that although uClibc and busybox were compiled correctly, the kernel was not.  In other words:
+Added:
+   trunk/buildroot/package/busybox/busybox-1.12.1-grep.patch
 
-./local/samdev/uclibc-0.9.29.config matched the config file ./toolchain_build_arm/uClibc-0.9.29/.config
 
-./local/samdev/busybox-1.12.1.config matched the config file ./project_build_arm/samdev/busyboy-1.12.1/.config
-
-but
-
-./local/samdev/linux-2.6.24.config did NOT match the config file ./project_build_arm/samdev/linux-2.6.24/.config
-
-I'm not sure where the linux kernel got its .config file from, but it certainly wasn't the one I specified.
-
-If this is a make error, I guess I'll submit a bug report.
-If it is user error, please enlighten me on what I am doing wrong.
-Thanks.
-
---Kevin S.
+Changeset:
+Added: trunk/buildroot/package/busybox/busybox-1.12.1-grep.patch
+===================================================================
+--- trunk/buildroot/package/busybox/busybox-1.12.1-grep.patch	                        (rev 0)
++++ trunk/buildroot/package/busybox/busybox-1.12.1-grep.patch	2008-10-06 18:52:02 UTC (rev 23602)
+@@ -0,0 +1,27 @@
++--- busybox-1.12.1/findutils/grep.c	Sun Sep 28 20:04:28 2008
+++++ busybox-1.12.1-grep/findutils/grep.c	Wed Oct  1 00:45:49 2008
++@@ -363,12 +363,22 @@
++ 						 * (unless -v: -Fov doesnt print anything at all) */
++ 						if (found)
++ 							print_line(gl->pattern, strlen(gl->pattern), linenum, ':');
++-					} else {
+++					} else while (1) {
+++						char old = line[gl->matched_range.rm_eo];
++ 						line[gl->matched_range.rm_eo] = '\0';
++ 						print_line(line + gl->matched_range.rm_so,
++ 								gl->matched_range.rm_eo - gl->matched_range.rm_so,
++ 								linenum, ':');
++-					}
+++						line[gl->matched_range.rm_eo] = old;
+++#if !ENABLE_EXTRA_COMPAT
+++						break;
+++#else
+++						if (re_search(&gl->compiled_regex, line, line_len,
+++								gl->matched_range.rm_eo, line_len - gl->matched_range.rm_eo, 
+++								&gl->matched_range) < 0)
+++							break;
+++#endif
+++					} 
++ 				} else {
++ 					print_line(line, line_len, linenum, ':');
++ 				}
