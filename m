@@ -1,39 +1,22 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon,  6 Oct 2008 08:11:16 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libpng
-Message-ID: <20081006151116.2BE723C682@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 06 Oct 2008 17:12:21 +0200
+Subject: [Buildroot] [PATCH] Bump libpng version
+In-Reply-To: <20081006164317.7b026e39@surf> (Thomas Petazzoni's message of
+	"Mon\, 6 Oct 2008 16\:43\:17 +0200")
+References: <20081006164317.7b026e39@surf>
+Message-ID: <87wsgl3gh6.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-10-06 08:11:15 -0700 (Mon, 06 Oct 2008)
-New Revision: 23601
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Log:
-png: bump version
+ Thomas> Upgrade libpng to 1.2.32
+ Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Upgrade libpng to 1.2.32
+Thanks, committed as r23601.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Modified:
-   trunk/buildroot/package/libpng/libpng.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/libpng/libpng.mk
-===================================================================
---- trunk/buildroot/package/libpng/libpng.mk	2008-10-06 15:04:46 UTC (rev 23600)
-+++ trunk/buildroot/package/libpng/libpng.mk	2008-10-06 15:11:15 UTC (rev 23601)
-@@ -21,7 +21,7 @@
- # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
- # USA
- 
--LIBPNG_VERSION:=1.2.25
-+LIBPNG_VERSION:=1.2.32
- LIBPNG_DIR:=$(BUILD_DIR)/libpng-$(LIBPNG_VERSION)
- LIBPNG_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/libpng
- LIBPNG_SOURCE:=libpng-$(LIBPNG_VERSION).tar.bz2
+-- 
+Bye, Peter Korsgaard
