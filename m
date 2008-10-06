@@ -1,22 +1,20 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 06 Oct 2008 11:23:27 +0200
-Subject: [Buildroot] [PATCH] ncftp version update
-In-Reply-To: <gc8hcr$eil$9@ger.gmane.org> (Micha Nelissen's message of "Sat\,
-	04 Oct 2008 21\:47\:23 +0200")
-References: <gc8hcr$eil$9@ger.gmane.org>
-Message-ID: <87wsgm5b74.fsf@macbook.be.48ers.dk>
+From: Mark Jackson <mpfj@mimc.co.uk>
+Date: Mon, 06 Oct 2008 13:34:51 +0100
+Subject: [Buildroot] [PATCH] Support for new MIMC200 board
+Message-ID: <48EA05EB.7020807@mimc.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Micha" == Micha Nelissen <micha@neli.hopto.org> writes:
+Please consider the following patch which adds support for a new AVR32 based board.
 
- Micha> Hi,
- Micha> Here is a patch to update ncftp version (old does not exist anymore).
+The board is closely based on Atmel's NGW100 reference board, but has an extra 8MByte FLASH and 128KByte FRAM.
 
-Thanks, committed as r23594.
+The compressed patch is 66k, so I've stuck it on our website.
 
--- 
-Bye, Peter Korsgaard
+http://www.mimc.co.uk/mimc200-new-board.patch.bz2
+
+Thanks
+Mark
