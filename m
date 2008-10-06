@@ -1,36 +1,26 @@
-From: Nick Peirson <nick@netcentral.co.uk>
-Date: Mon, 6 Oct 2008 17:20:58 +0100
-Subject: [Buildroot] proftpd does not compile
-In-Reply-To: <gcdcjp$v98$1@ger.gmane.org>
-References: <gc8fta$bif$1@ger.gmane.org> <48E9CB77.8060808@netcentral.co.uk>
-	<gcdcjp$v98$1@ger.gmane.org>
-Message-ID: <48EA3AEA.7070206@netcentral.co.uk>
+From: Micha Nelissen <micha@neli.hopto.org>
+Date: Mon, 06 Oct 2008 18:00:41 +0200
+Subject: [Buildroot] [PATCH] enhance directfb configurability
+In-Reply-To: <d6cda7730810060855n6f1f710cmb149c7b3165ef29d@mail.gmail.com>
+References: <gc8h2p$eil$2@ger.gmane.org>
+	<d6cda7730810060855n6f1f710cmb149c7b3165ef29d@mail.gmail.com>
+Message-ID: <48EA3629.3030504@neli.hopto.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Micha Nelissen wrote:
-> I'm not sure if you understood me right. The problem is that bcopy is
-> declared twice (I get a redefinition warning). It is *not* that bcopy is
-> undefined.
->
-> If I'm wrong please correct me, thanks.
->   
+Thiago A. Corr?a wrote:
+> I'm not sure if forcing static lib on everyone is the right thing. If
+> there is only one application on the system that depends on DirectFB,
+> it might save some bytes, but if there are more than 1, shared lib
+> would be prefered.
 
-I think I misunderstood you. It looks like there was a patch to resolve 
-bcopy related issues in the buildroot repository, but it was removed:
-http://busybox.net/lists/buildroot/2008-June/009198.html
+Wouldn't shared lib linking be the default? The static variant would 
+need to be referenced explicitly by someone who wants to use it; but at 
+least it's available. It also would only exist in the staging_dir, not 
+the target dir.
 
-Not sure if it helps it would help with the issue your seeing or not?
-
--- 
-Regards
-
-Nick Peirson
-
---
-Internet Central Ltd is a limited company registered in England. Registered number: 3079542. Registered office: Ivy House Foundry, Hanley, Stoke-on-Trent ST1 3NR.
-
-This message is private and confidential. If you have received this message in error, please notify us and remove it from your system.
+Thanks,
+Micha
