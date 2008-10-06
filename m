@@ -1,34 +1,26 @@
-From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Mon, 6 Oct 2008 12:55:49 -0300
-Subject: [Buildroot] [PATCH] enhance directfb configurability
-In-Reply-To: <gc8h2p$eil$2@ger.gmane.org>
-References: <gc8h2p$eil$2@ger.gmane.org>
-Message-ID: <d6cda7730810060855n6f1f710cmb149c7b3165ef29d@mail.gmail.com>
+From: Micha Nelissen <micha@neli.hopto.org>
+Date: Mon, 06 Oct 2008 17:58:45 +0200
+Subject: [Buildroot] proftpd does not compile
+In-Reply-To: <48E9CB77.8060808@netcentral.co.uk>
+References: <gc8fta$bif$1@ger.gmane.org> <48E9CB77.8060808@netcentral.co.uk>
+Message-ID: <gcdcjp$v98$1@ger.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
----------- Forwarded message ----------
-From: Thiago A. Corr?a <thiago.correa@gmail.com>
-Date: Mon, Oct 6, 2008 at 12:00 PM
-Subject: Re: [Buildroot] [PATCH] enhance directfb configurability
-To: Micha Nelissen <micha@neli.hopto.org>
+Nick Peirson wrote:
+> You need to enable UCLIBC_SUSV3_LEGACY and/or UCLIBC_SUSV3_LEGACY_MACROS 
+> (not sure exactly which combination, can anyone shed any light?) to 
+> provide bcopy, bzero, index, etc. Alternatively you can submit an 
+> upstream patch to proftpd, or patch it locally, to replace bcopy with 
+> memmove as per:
 
+I'm not sure if you understood me right. The problem is that bcopy is 
+declared twice (I get a redefinition warning). It is *not* that bcopy is 
+undefined.
 
-[...]
-> +               --with-inputdrivers=$(DIRECTFB_INPUT) \
-> +               --enable-static \
+If I'm wrong please correct me, thanks.
 
-I'm not sure if forcing static lib on everyone is the right thing. If
-there is only one application on the system that depends on DirectFB,
-it might save some bytes, but if there are more than 1, shared lib
-would be prefered.
-
-The rest seams to be quite good improvements.
-
-Kind Regards,
-  Thiago A. Correa
-
-PS: Sorry, forgot to include the list address.
+Micha
