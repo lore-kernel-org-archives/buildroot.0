@@ -1,57 +1,44 @@
-From: Nick Peirson <nick@netcentral.co.uk>
-Date: Mon, 6 Oct 2008 09:25:27 +0100
-Subject: [Buildroot] proftpd does not compile
-In-Reply-To: <gc8fta$bif$1@ger.gmane.org>
-References: <gc8fta$bif$1@ger.gmane.org>
-Message-ID: <48E9CB77.8060808@netcentral.co.uk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Mon,  6 Oct 2008 02:11:57 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/docs
+Message-ID: <20081006091157.BA2213C664@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Micha Nelissen wrote:
-> Further some warnings about bcopy also, I guess:
->
-> #undef HAVE_BCOPY
-> should be
-> #define HAVE_BCOPY 1
->
-> Obviously this is not a correct patch, but not sure about correct one?
-> Kernel headers broken? configure script broken? toolchain headers?
->   
-You need to enable UCLIBC_SUSV3_LEGACY and/or UCLIBC_SUSV3_LEGACY_MACROS 
-(not sure exactly which combination, can anyone shed any light?) to 
-provide bcopy, bzero, index, etc. Alternatively you can submit an 
-upstream patch to proftpd, or patch it locally, to replace bcopy with 
-memmove as per:
+Author: jacmet
+Date: 2008-10-06 02:11:57 -0700 (Mon, 06 Oct 2008)
+New Revision: 23590
 
-http://www.opengroup.org/onlinepubs/000095399/functions/bcopy.html
+Log:
+README: document out-of-tree build support
 
--- 
-Regards
-
-Nick Peirson
-
-Developer
-
-Internet Central Ltd
-
-Tel: +44 (0)1782 667788
-Fax: +44 (0)1782 667799
-Email: nick at netcentral.co.uk
-Web: http://www.internet-central.net
-
-Innovation Centre
-Keele Science Park
-Keele
-Staffordshire
-ST5 5NB
-
-Registered office: Ivy House Foundry, Hanley, Stoke-on-Trent  ST1 3NR
-
-Registered in England. Reg. No. 3079542
-VAT Reg No. GB 655 657 108
+Modified:
+   trunk/buildroot/docs/README
 
 
-"This communication is confidential to the addressee shown in the main text of the message. It must not be disclosed to or used by anyone other than the addressee unless disclosure is a legal requirement or has been agreed to by a separate written agreement. The company scans for but accepts no responsibility for viruses and it is the addressee's responsibility to scan attachments."
+Changeset:
+Modified: trunk/buildroot/docs/README
+===================================================================
+--- trunk/buildroot/docs/README	2008-10-06 08:56:48 UTC (rev 23589)
++++ trunk/buildroot/docs/README	2008-10-06 09:11:57 UTC (rev 23590)
+@@ -26,6 +26,17 @@
+ and issue "make source" there, then copy the content of your dl/ dir to
+ the build-host.
+ 
++Building out-of-tree:
++=====================
++
++Buildroot supports building out of tree with a syntax similar
++to the Linux kernel. To use it, add O=<directory> to the
++make command line, E.G.:
++
++$ make O=/tmp/build
++
++And all the output files will be located under /tmp/build.
++
+ More finegrained configuration:
+ ===============================
+ 
