@@ -1,37 +1,22 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon,  6 Oct 2008 02:23:08 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/ncftp
-Message-ID: <20081006092308.8D8C63C632@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 06 Oct 2008 11:23:27 +0200
+Subject: [Buildroot] [PATCH] ncftp version update
+In-Reply-To: <gc8hcr$eil$9@ger.gmane.org> (Micha Nelissen's message of "Sat\,
+	04 Oct 2008 21\:47\:23 +0200")
+References: <gc8hcr$eil$9@ger.gmane.org>
+Message-ID: <87wsgm5b74.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-10-06 02:23:08 -0700 (Mon, 06 Oct 2008)
-New Revision: 23594
+>>>>> "Micha" == Micha Nelissen <micha@neli.hopto.org> writes:
 
-Log:
-ncftp: bump version
+ Micha> Hi,
+ Micha> Here is a patch to update ncftp version (old does not exist anymore).
 
-Patch by Micha Nelissen
+Thanks, committed as r23594.
 
-Modified:
-   trunk/buildroot/package/ncftp/ncftp.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/ncftp/ncftp.mk
-===================================================================
---- trunk/buildroot/package/ncftp/ncftp.mk	2008-10-06 09:16:43 UTC (rev 23593)
-+++ trunk/buildroot/package/ncftp/ncftp.mk	2008-10-06 09:23:08 UTC (rev 23594)
-@@ -3,7 +3,7 @@
- # ncftp client
- #
- #############################################################
--NCFTP_VERSION:=3.2.1
-+NCFTP_VERSION:=3.2.2
- NCFTP_SOURCE:=ncftp-$(NCFTP_VERSION)-src.tar.bz2
- NCFTP_SITE:=ftp://ftp.ncftp.com/ncftp
- NCFTP_DIR:=$(BUILD_DIR)/ncftp-$(NCFTP_VERSION)
+-- 
+Bye, Peter Korsgaard
