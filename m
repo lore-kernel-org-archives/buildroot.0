@@ -1,7 +1,7 @@
 From: wberrier at uclibc.org <wberrier@uclibc.org>
-Date: Mon,  6 Oct 2008 12:09:15 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/bash
-Message-ID: <20081006190915.298B13C7B0@busybox.net>
+Date: Mon,  6 Oct 2008 12:14:41 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/ccache
+Message-ID: <20081006191441.EF9D33C7C5@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,41 +9,56 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: wberrier
-Date: 2008-10-06 12:09:14 -0700 (Mon, 06 Oct 2008)
-New Revision: 23603
+Date: 2008-10-06 12:14:41 -0700 (Mon, 06 Oct 2008)
+New Revision: 23604
 
 Log:
-bash.mk:
--Force some autoconf options so that job control
- is turned on.
- (Otherwise these checks fail when cross compiling.
-  And when job control is disabled, bash can't be
-  the default shell)
+ccache:
+-Allow user to specify custom ccache location.
+
+This allows you to build a toolchain and put it on
+ an nfs share so other people can use the toolchain
+ without errors about the ccache dir missing.
 
 
 Modified:
-   trunk/buildroot/package/bash/bash.mk
+   trunk/buildroot/toolchain/ccache/Config.in
+   trunk/buildroot/toolchain/ccache/ccache.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/bash/bash.mk
+Modified: trunk/buildroot/toolchain/ccache/Config.in
 ===================================================================
---- trunk/buildroot/package/bash/bash.mk	2008-10-06 18:52:02 UTC (rev 23602)
-+++ trunk/buildroot/package/bash/bash.mk	2008-10-06 19:09:14 UTC (rev 23603)
-@@ -36,6 +36,16 @@
- 		$(TARGET_CONFIGURE_ARGS) \
- 		CCFLAGS_FOR_BUILD="$(HOST_CFLAGS)" \
- 		ac_cv_func_setvbuf_reversed=no \
-+		ac_cv_have_decl_sys_siglist=yes \
-+		bash_cv_job_control_missing=present \
-+		bash_cv_sys_named_pipes=present \
-+		bash_cv_unusable_rtsigs=no \
-+		bash_cv_func_ctype_nonascii=yes \
-+		bash_cv_decl_under_sys_siglist=yes \
-+		bash_cv_ulimit_maxfds=yes \
-+		bash_cv_getcwd_malloc=yes \
-+		bash_cv_func_sigsetjmp=present \
-+		bash_cv_printf_a_format=yes \
- 		./configure \
- 		--target=$(GNU_TARGET_NAME) \
- 		--host=$(GNU_TARGET_NAME) \
+--- trunk/buildroot/toolchain/ccache/Config.in	2008-10-06 19:09:14 UTC (rev 23603)
++++ trunk/buildroot/toolchain/ccache/Config.in	2008-10-06 19:14:41 UTC (rev 23604)
+@@ -7,3 +7,13 @@
+ 	help
+ 	    Enable ccache support?
+ 
++config BR2_CCACHE_DIR
++	string "ccache dir location?"
++	depends on BR2_CCACHE
++	default "$(TOOL_BUILD_DIR)/ccache-$(CCACHE_VER)/cache"
++	help
++	    Where ccache should store cached files.
++
++comment "ccache dir location?       - disabled (requires ccache support)"
++	depends on !BR2_CCACHE
++
+
+Modified: trunk/buildroot/toolchain/ccache/ccache.mk
+===================================================================
+--- trunk/buildroot/toolchain/ccache/ccache.mk	2008-10-06 19:09:14 UTC (rev 23603)
++++ trunk/buildroot/toolchain/ccache/ccache.mk	2008-10-06 19:14:41 UTC (rev 23604)
+@@ -24,8 +24,9 @@
+ 	# Should probably patch things to use a relative path.
+ 	$(SED) "s,getenv(\"CCACHE_PATH\"),\"$(STAGING_DIR)/usr/bin-ccache\",g" \
+ 		$(CCACHE_DIR1)/execute.c
+-	# WARNING - this will break if the toolchain build dir is deleted.
+-	$(SED) "s,getenv(\"CCACHE_DIR\"),\"$(CCACHE_DIR1)/cache\",g" \
++	# WARNING - this will break if the toolchain build dir is deleted
++	#	when using the default cache dir location.
++	$(SED) "s,getenv(\"CCACHE_DIR\"),\"$(BR2_CCACHE_DIR)\",g" \
+ 		$(CCACHE_DIR1)/ccache.c
+ 	mkdir -p $(CCACHE_DIR1)/cache
+ 	touch $@
