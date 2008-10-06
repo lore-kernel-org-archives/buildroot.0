@@ -1,54 +1,49 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon,  6 Oct 2008 11:52:02 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
-Message-ID: <20081006185202.94BA03C732@busybox.net>
+From: wberrier at uclibc.org <wberrier@uclibc.org>
+Date: Mon,  6 Oct 2008 12:09:15 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/bash
+Message-ID: <20081006190915.298B13C7B0@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-10-06 11:52:02 -0700 (Mon, 06 Oct 2008)
-New Revision: 23602
+Author: wberrier
+Date: 2008-10-06 12:09:14 -0700 (Mon, 06 Oct 2008)
+New Revision: 23603
 
 Log:
-busybox: 1.12.1 grep fix
+bash.mk:
+-Force some autoconf options so that job control
+ is turned on.
+ (Otherwise these checks fail when cross compiling.
+  And when job control is disabled, bash can't be
+  the default shell)
 
-Added:
-   trunk/buildroot/package/busybox/busybox-1.12.1-grep.patch
+
+Modified:
+   trunk/buildroot/package/bash/bash.mk
 
 
 Changeset:
-Added: trunk/buildroot/package/busybox/busybox-1.12.1-grep.patch
+Modified: trunk/buildroot/package/bash/bash.mk
 ===================================================================
---- trunk/buildroot/package/busybox/busybox-1.12.1-grep.patch	                        (rev 0)
-+++ trunk/buildroot/package/busybox/busybox-1.12.1-grep.patch	2008-10-06 18:52:02 UTC (rev 23602)
-@@ -0,0 +1,27 @@
-+--- busybox-1.12.1/findutils/grep.c	Sun Sep 28 20:04:28 2008
-++++ busybox-1.12.1-grep/findutils/grep.c	Wed Oct  1 00:45:49 2008
-+@@ -363,12 +363,22 @@
-+ 						 * (unless -v: -Fov doesnt print anything at all) */
-+ 						if (found)
-+ 							print_line(gl->pattern, strlen(gl->pattern), linenum, ':');
-+-					} else {
-++					} else while (1) {
-++						char old = line[gl->matched_range.rm_eo];
-+ 						line[gl->matched_range.rm_eo] = '\0';
-+ 						print_line(line + gl->matched_range.rm_so,
-+ 								gl->matched_range.rm_eo - gl->matched_range.rm_so,
-+ 								linenum, ':');
-+-					}
-++						line[gl->matched_range.rm_eo] = old;
-++#if !ENABLE_EXTRA_COMPAT
-++						break;
-++#else
-++						if (re_search(&gl->compiled_regex, line, line_len,
-++								gl->matched_range.rm_eo, line_len - gl->matched_range.rm_eo, 
-++								&gl->matched_range) < 0)
-++							break;
-++#endif
-++					} 
-+ 				} else {
-+ 					print_line(line, line_len, linenum, ':');
-+ 				}
+--- trunk/buildroot/package/bash/bash.mk	2008-10-06 18:52:02 UTC (rev 23602)
++++ trunk/buildroot/package/bash/bash.mk	2008-10-06 19:09:14 UTC (rev 23603)
+@@ -36,6 +36,16 @@
+ 		$(TARGET_CONFIGURE_ARGS) \
+ 		CCFLAGS_FOR_BUILD="$(HOST_CFLAGS)" \
+ 		ac_cv_func_setvbuf_reversed=no \
++		ac_cv_have_decl_sys_siglist=yes \
++		bash_cv_job_control_missing=present \
++		bash_cv_sys_named_pipes=present \
++		bash_cv_unusable_rtsigs=no \
++		bash_cv_func_ctype_nonascii=yes \
++		bash_cv_decl_under_sys_siglist=yes \
++		bash_cv_ulimit_maxfds=yes \
++		bash_cv_getcwd_malloc=yes \
++		bash_cv_func_sigsetjmp=present \
++		bash_cv_printf_a_format=yes \
+ 		./configure \
+ 		--target=$(GNU_TARGET_NAME) \
+ 		--host=$(GNU_TARGET_NAME) \
