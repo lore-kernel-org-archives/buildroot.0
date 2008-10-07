@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 7 Oct 2008 06:20:05 -0700
+Date: Tue, 7 Oct 2008 06:36:20 -0700
 Subject: [Buildroot] [buildroot 0005234]: Selecting MTD utils from git
 	doesn't give you the HEAD
-Message-ID: <3814d7c8a69ba57f9e66193d22c96f47@busybox.net>
+Message-ID: <fbc38b7030c84d5b651db1cdea4079f5@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             10-03-2008 09:40 PDT
-Last Modified:              10-07-2008 06:20 PDT
+Last Modified:              10-07-2008 06:36 PDT
 ====================================================================== 
 Summary:                    Selecting MTD utils from git doesn't give you the
 HEAD
@@ -149,6 +149,31 @@ So by all means submit a patch which makes a recent revision compile but
 please don't use the HEAD symbolic name. Even better if you can use a
 tagged released version rather than a commit id. 
 
+---------------------------------------------------------------------- 
+ mjd - 10-07-08 06:36  
+---------------------------------------------------------------------- 
+All good points, but if the menu says "git", but it gives you a certain
+non-HEAD snapshot, it violates the "principle of least surprise".  And I
+was certainly surprised to find out the "git" version was several months
+old.  
+
+(How did I find out it wasn't HEAD?  I wanted features in the latest
+upstream version that were missing in the buildroot one, and wasted
+several days making mods to the out-of-date one that I then had to port to
+the latest version)
+
+If I select "mtd-utils from git", it pretty much sets the expectation of a
+moving target.  If you can't afford the moving target, don't choose the git
+version! :-)
+
+As a way forward, if we don't make the "git" choice use the HEAD, can we
+update the menus to say the date of the version we've endorsed (that's
+what the "git" option at the moment effectively does)?  
+
+For better or worse, we already have the mechanisms to support different
+patches for different versions of MTD.  If I provide a version that DOES
+update itself when upstream mtd-utils changes, is that ok? 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -165,4 +190,5 @@ Date Modified   Username       Field                    Change
 10-07-08 00:07  mjd            Note Added: 0012914                          
 10-07-08 06:17  hmoffatt       Note Added: 0012984                          
 10-07-08 06:20  hmoffatt       Note Added: 0012994                          
+10-07-08 06:36  mjd            Note Added: 0013004                          
 ======================================================================
