@@ -1,61 +1,81 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Tue, 7 Oct 2008 10:43:45 +0200
-Subject: [Buildroot] [BR-AVR32] [PATCH] Support for new MIMC200 board
-In-Reply-To: <48EB1EDF.6070209@mimc.co.uk>
-References: <48EA05EB.7020807@mimc.co.uk> <20081007074128.12613e2c@hcegtvedt>
-	<48EB1EDF.6070209@mimc.co.uk>
-Message-ID: <20081007104345.59bacec2@hcegtvedt>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 7 Oct 2008 10:54:40 +0200
+Subject: [Buildroot] Issue when compiling libpng and directfb
+Message-ID: <20081007105440.05399a80@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 07 Oct 2008 09:33:35 +0100
-Mark Jackson <mpfj@mimc.co.uk> wrote:
+Hi,
 
-> Hans-Christian Egtvedt wrote:
-> > On Mon, 06 Oct 2008 13:34:51 +0100
-> > Mark Jackson <mpfj@mimc.co.uk> wrote:
-> > 
-> >> Please consider the following patch which adds support for a new
-> >> AVR32 based board.
-> >>
-> >> The board is closely based on Atmel's NGW100 reference board, but
-> >> has an extra 8MByte FLASH and 128KByte FRAM.
-> >>
-> >> The compressed patch is 66k, so I've stuck it on our website.
-> >>
-> >> http://www.mimc.co.uk/mimc200-new-board.patch.bz2
-> >>
-> > 
-> > Could you post it in plain text attachment/inline instead? It is a
-> > bit hard to comment on a compressed patch file ;)
-> 
-> Urm ... the patch is about 220k uncompressed.  I thought it was a
-> "bad thing" to post such a large patch.
-> 
-> However, I'm happy to do so if you want !!
-> 
+With current Buildroot SVN, I have an issue when trying to build libpng
+and directfb: the configure script cannot find that zlib is installed.
 
-Hmm, that was a bit large, yes.
+The configure script tries to compile a simple program that makes a
+call to zlibVersion() using the -lz option. But the
+-L$(STAGING_DIR)/usr/lib/ option is not passed to gcc (the -I options
+are correct however), so the compilation fails and configure complains
+that it can't find the configure script.
 
-You must split up your patch, it contains far more than just a new
-board. Each patch should only add/change one feature in Buildroot.
+In package/Makefile.in, it seems that the library path is passed in
+TARGET_CONFIGURE_OPTS, using LD :
 
-I would also recommend that you get all the kernel and U-Boot stuff
-upstream first, and then go for the Buildroot stuff.
+ LD="$(TARGET_LD) $(TARGET_LDFLAGS)" \
 
-> > Is the patch based on the latest uclibc.org repo or Buildroot for
-> > AVR32 release (v2.2.0)?
-> 
-> The latest svn (actually r23594).
-> 
+In the config.log, I see reference to the correct -L paths, but these
+paths seem to be removed when testing the compilation of the sample
+zlib program.
 
-Then it is better if you post it to uclibc.org mailing list, I import
-stuff from uclibc.org, so eventually it will end up in my fork() as
-well.
+I workarounded the problem by using the two following patches, but I'm
+quite sure they are not the proper fix.
+
+I don't know if it's important, but I'm using an external toolchain
+(that has been previously compiled by Buildroot a long time ago).
+
+Any clue ?
+
+Thanks,
+
+Thomas
+
+---
+ package/directfb/directfb.mk |    1 +
+ 1 file changed, 1 insertion(+)
+
+Index: buildroot/package/directfb/directfb.mk
+===================================================================
+--- buildroot.orig/package/directfb/directfb.mk
++++ buildroot/package/directfb/directfb.mk
+@@ -38,6 +38,7 @@
+ 	(cd $(DIRECTFB_DIR); rm -f config.cache; \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		$(TARGET_CONFIGURE_ARGS) \
++	LDFLAGS="$(TARGET_LDFLAGS)" \
+ 	ac_cv_header_linux_wm97xx_h=no \
+ 	ac_cv_header_linux_sisfb_h=no \
+ 	ac_cv_header_asm_page_h=no \
+
+---
+ package/libpng/libpng.mk |    1 +
+ 1 file changed, 1 insertion(+)
+
+Index: buildroot/package/libpng/libpng.mk
+===================================================================
+--- buildroot.orig/package/libpng/libpng.mk
++++ buildroot/package/libpng/libpng.mk
+@@ -42,6 +42,7 @@
+ 	(cd $(LIBPNG_DIR); rm -rf config.cache; \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		$(TARGET_CONFIGURE_ARGS) \
++		LDFLAGS="$(TARGET_LDFLAGS)" \
+ 		ac_cv_have_decl_malloc=yes \
+ 		gl_cv_func_malloc_0_nonnull=yes \
+ 		ac_cv_func_malloc_0_nonnull=yes \
 
 -- 
-Best regards,
-Hans-Christian Egtvedt
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
