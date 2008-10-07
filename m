@@ -1,68 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Oct 2008 16:56:10 +0200
-Subject: [Buildroot] Issue with libtool while building/linking fontconfig
-Message-ID: <20081007165610.4de3f377@surf>
+From: Wade Berrier <wberrier@gmail.com>
+Date: Tue, 07 Oct 2008 09:52:09 -0600
+Subject: [Buildroot] svn commit: trunk/buildroot/package/vsftpd
+References: <20081006224641.F0B81F8008@busybox.net>
+	<20081007055134.GF5127@cloud.net.au>
+Message-ID: <gcg0k4$7ap$1@ger.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hamish Moffatt wrote:
 
-When building/linking fontconfig, I hit the following problem:
+> On Mon, Oct 06, 2008 at 03:46:41PM -0700,
+> wberrier at uclibc.org wrote:
+>> Added: trunk/buildroot/package/vsftpd/vsftpd-init
+>> ===================================================================
+>> --- trunk/buildroot/package/vsftpd/vsftpd-init                              
+>> (rev 0)
+>> +++ trunk/buildroot/package/vsftpd/vsftpd-init       2008-10-06 22:46:41 UTC
+>> (rev 23611)
+> 
+> Too bad this can't be disabled - as soon as this package is installed
+> the init script will be run on boot. Some users may not want this.
 
-=======================================================================
-/bin/bash ../libtool --tag=CC --mode=link /usr/local/uclibc-0.9.28-2/arm//bin/arm-linux-gcc -Os  -I/home/thomas/local/buildroot/build_arm/staging_dir/include -I/home/thomas/local/buildroot/build_arm/staging_dir/usr/include -I/usr/local/uclibc-0.9.28-2/arm//arm-linux/include  -g -O2  -L/home/thomas/local/buildroot/build_arm/staging_dir/lib -L/home/thomas/local/buildroot/build_arm/staging_dir/usr/lib -o fc-cache  fc-cache.o ../src/libfontconfig.la
-/usr/local/uclibc-0.9.28-2/arm//bin/arm-linux-gcc -Os -I/home/thomas/local/buildroot/build_arm/staging_dir/include -I/home/thomas/local/buildroot/build_arm/staging_dir/usr/include -I/usr/local/uclibc-0.9.28-2/arm//arm-linux/include -g -O2 -o fc-cache fc-cache.o  -L/home/thomas/local/buildroot/build_arm/staging_dir/lib -L/home/thomas/local/buildroot/build_arm/staging_dir/usr/lib ../src/.libs/libfontconfig.so   -Wl,--rpath -Wl,/home/thomas/local/buildroot/build_arm/fontconfig-2.6.0/src/.libs
-/usr/local/uclibc-0.9.28-2/arm/lib/gcc/arm-linux-uclibc/3.4.5/../../../../arm-linux-uclibc/bin/ld.real: warning: libfreetype.so.6, needed by ../src/.libs/libfontconfig.so, not found (try using -rpath or -rpath-link)
-/usr/local/uclibc-0.9.28-2/arm/lib/gcc/arm-linux-uclibc/3.4.5/../../../../arm-linux-uclibc/bin/ld.real: warning: libexpat.so.1, needed by ../src/.libs/libfontconfig.so, not found (try using -rpath or -rpath-link)
-../src/.libs/libfontconfig.so: undefined reference to `FT_Get_PS_Font_Info'
-../src/.libs/libfontconfig.so: undefined reference to `FT_Init_FreeType'
-../src/.libs/libfontconfig.so: undefined reference to `XML_SetElementHandler'
-../src/.libs/libfontconfig.so: undefined reference to `FT_Get_Sfnt_Name'
-../src/.libs/libfontconfig.so: undefined reference to `FT_Load_Glyph'
-../src/.libs/libfontconfig.so: undefined reference to `FT_Done_Face'
-../src/.libs/libfontconfig.so: undefined reference to `XML_SetDoctypeDeclHandler'
-../src/.libs/libfontconfig.so: undefined reference to `FT_Get_Char_Index'
-../src/.libs/libfontconfig.so: undefined reference to `XML_ParserFree'
-../src/.libs/libfontconfig.so: undefined reference to `FT_Get_Sfnt_Table'
-../src/.libs/libfontconfig.so: undefined reference to `FT_Has_PS_Glyph_Names'
-../src/.libs/libfontconfig.so: undefined reference to `XML_SetCharacterDataHandler'
-../src/.libs/libfontconfig.so: undefined reference to `FT_Get_Glyph_Name'
-../src/.libs/libfontconfig.so: undefined reference to `FT_Select_Charmap'
-../src/.libs/libfontconfig.so: undefined reference to `XML_ErrorString'
-../src/.libs/libfontconfig.so: undefined reference to `XML_ParseBuffer'
-../src/.libs/libfontconfig.so: undefined reference to `FT_Get_Next_Char'
-../src/.libs/libfontconfig.so: undefined reference to `FT_Load_Sfnt_Table'
-../src/.libs/libfontconfig.so: undefined reference to `XML_ParserCreate'
-../src/.libs/libfontconfig.so: undefined reference to `FT_Done_FreeType'
-../src/.libs/libfontconfig.so: undefined reference to `FT_Get_Sfnt_Name_Count'
-../src/.libs/libfontconfig.so: undefined reference to `FT_Select_Size'
-../src/.libs/libfontconfig.so: undefined reference to `FT_Get_X11_Font_Format'
-../src/.libs/libfontconfig.so: undefined reference to `XML_SetUserData'
-../src/.libs/libfontconfig.so: undefined reference to `FT_Get_BDF_Property'
-../src/.libs/libfontconfig.so: undefined reference to `XML_GetErrorCode'
-../src/.libs/libfontconfig.so: undefined reference to `FT_Get_First_Char'
-../src/.libs/libfontconfig.so: undefined reference to `XML_GetBuffer'
-../src/.libs/libfontconfig.so: undefined reference to `FT_New_Face'
-../src/.libs/libfontconfig.so: undefined reference to `XML_GetCurrentLineNumber'
-collect2: ld returned 1 exit status
-=======================================================================
+Really?  I would think if users didn't want it started they wouldn't include
+it in their config.
 
-The ../src/.libs/libfontconfig.so properly references the .la files of
-libexpat and libfreetype. If I had these path to the .la files to the
-big libtool command line, then it links properly.
+I see config/init handled a bit differently in different projects.  Is there
+no set standard?
 
-Any clue about this problem ?
+It seems convenient to have a default config set up and installed.  That way
+not everyone has to write their own custom config and init scripts.  And
+for those who want a custom config, it should be easily allowable to
+integrate custom configs.  I like how samba does it:
 
-libtool really drives me crazy.
+$(INSTALL) -m 0755 package/samba/S91smb $(TARGET_DIR)/etc/init.d
+@if [ ! -f $(TARGET_DIR)/etc/samba/smb.conf ]; then \
+                $(INSTALL) -m 0755 -D package/samba/simple.conf
+$(TARGET_DIR)/etc/samba/smb.conf; \
+fi
 
-Thanks,
+It installs a base sample config, unless a user has a custom config already
+in $(TARGET_DIR).
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Opinions?  Feedback?
+
+I imagine that most people run into this same issue with their projects.
+
+Or, how is everyone else solving this issue?
+
+Wade
