@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 7 Oct 2008 06:17:29 -0700
+Date: Tue, 7 Oct 2008 06:20:05 -0700
 Subject: [Buildroot] [buildroot 0005234]: Selecting MTD utils from git
 	doesn't give you the HEAD
-Message-ID: <665a4143f5f101dd7875330bd7df835b@busybox.net>
+Message-ID: <3814d7c8a69ba57f9e66193d22c96f47@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             10-03-2008 09:40 PDT
-Last Modified:              10-07-2008 06:17 PDT
+Last Modified:              10-07-2008 06:20 PDT
 ====================================================================== 
 Summary:                    Selecting MTD utils from git doesn't give you the
 HEAD
@@ -135,6 +135,20 @@ the patch problem.
 I think it really needs manual intervention, which is how it came to be
 how it is now. 
 
+---------------------------------------------------------------------- 
+ hmoffatt - 10-07-08 06:20  
+---------------------------------------------------------------------- 
+Re: HEAD not compiling in fec.c, this is why the package shouldn't just
+track HEAD :)
+
+Better to patch fec.c to use memcopy/memset instead of bcopy/bzero I
+think; the latter are only enabled if configured that way in uclibc, and
+even then I've had problems in the past.
+
+So by all means submit a patch which makes a recent revision compile but
+please don't use the HEAD symbolic name. Even better if you can use a
+tagged released version rather than a commit id. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -150,4 +164,5 @@ Date Modified   Username       Field                    Change
 10-06-08 22:00  egtvedt        Note Added: 0012904                          
 10-07-08 00:07  mjd            Note Added: 0012914                          
 10-07-08 06:17  hmoffatt       Note Added: 0012984                          
+10-07-08 06:20  hmoffatt       Note Added: 0012994                          
 ======================================================================
