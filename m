@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 7 Oct 2008 06:36:20 -0700
+Date: Tue, 7 Oct 2008 06:46:23 -0700
 Subject: [Buildroot] [buildroot 0005234]: Selecting MTD utils from git
 	doesn't give you the HEAD
-Message-ID: <fbc38b7030c84d5b651db1cdea4079f5@busybox.net>
+Message-ID: <31b880b0232d616dc8abe9364e4e8bcf@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             10-03-2008 09:40 PDT
-Last Modified:              10-07-2008 06:36 PDT
+Last Modified:              10-07-2008 06:46 PDT
 ====================================================================== 
 Summary:                    Selecting MTD utils from git doesn't give you the
 HEAD
@@ -150,7 +150,7 @@ please don't use the HEAD symbolic name. Even better if you can use a
 tagged released version rather than a commit id. 
 
 ---------------------------------------------------------------------- 
- mjd - 10-07-08 06:36  
+ mjd - 10-07-08 06:38  
 ---------------------------------------------------------------------- 
 All good points, but if the menu says "git", but it gives you a certain
 non-HEAD snapshot, it violates the "principle of least surprise".  And I
@@ -167,12 +167,45 @@ moving target.  If you can't afford the moving target, don't choose the git
 version! :-)
 
 As a way forward, if we don't make the "git" choice use the HEAD, can we
-update the menus to say the date of the version we've endorsed (that's
-what the "git" option at the moment effectively does)?  
+update the menus to say the date of the version we've endorsed, instead of
+saying "git"?  (That's what the "git" option at the moment effectively
+does)?  After all, when "git" is selected, it doesn't even use git! :-)
+
+
 
 For better or worse, we already have the mechanisms to support different
 patches for different versions of MTD.  If I provide a version that DOES
-update itself when upstream mtd-utils changes, is that ok? 
+update itself when upstream mtd-utils changes, is that ok?
+
+ 
+
+---------------------------------------------------------------------- 
+ hmoffatt - 10-07-08 06:46  
+---------------------------------------------------------------------- 
+Fair points. I think I had it track HEAD initially but ran into those two
+problems I mentioned, specifically that
+1. it wouldn't download updated versions, and
+2. it's difficult to manage patches.
+
+http://busybox.net/bugs/view.php?id=1 could be solved by using git to check out
+the source (and then you'd
+probably have to do it every time you ran make, which would be slow),
+rather than HTTP. I didn't feel like writing a package for GIT itself just
+to solve this.
+If there's some way to get a daily snapshot via HTTP that might be an
+improvement.
+
+http://busybox.net/bugs/view.php?id=2 is harder. Any given patch might be needed
+for a range of versions
+only. Later versions may not compile without patches.
+
+I think http://busybox.net/bugs/view.php?id=2 means that you really have to add
+new versions by hand, but I'm
+happy to be proven wrong.
+
+I'm happy for us to change the naming/Config.in etc to advertise that this
+is not the latest from GIT but a particular GIT snapshot. Patch gratefully
+accepted or else I'll look at it myself later in the week. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
@@ -191,4 +224,6 @@ Date Modified   Username       Field                    Change
 10-07-08 06:17  hmoffatt       Note Added: 0012984                          
 10-07-08 06:20  hmoffatt       Note Added: 0012994                          
 10-07-08 06:36  mjd            Note Added: 0013004                          
+10-07-08 06:38  mjd            Note Edited: 0013004                         
+10-07-08 06:46  hmoffatt       Note Added: 0013014                          
 ======================================================================
