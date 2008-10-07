@@ -1,35 +1,42 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Tue, 7 Oct 2008 07:41:28 +0200
-Subject: [Buildroot] [BR-AVR32] [PATCH] Support for new MIMC200 board
-In-Reply-To: <48EA05EB.7020807@mimc.co.uk>
-References: <48EA05EB.7020807@mimc.co.uk>
-Message-ID: <20081007074128.12613e2c@hcegtvedt>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Tue, 7 Oct 2008 16:48:30 +1100
+Subject: [Buildroot] svn commit: trunk/buildroot/package:  logrotate
+In-Reply-To: <20081006204112.DFD173C807@busybox.net>
+References: <20081006204112.DFD173C807@busybox.net>
+Message-ID: <20081007054830.GE5127@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 06 Oct 2008 13:34:51 +0100
-Mark Jackson <mpfj@mimc.co.uk> wrote:
+On Mon, Oct 06, 2008 at 01:41:12PM -0700, wberrier at uclibc.org wrote:
+> Added: trunk/buildroot/package/logrotate/logrotate.conf
+> ===================================================================
+> --- trunk/buildroot/package/logrotate/logrotate.conf	                        (rev 0)
+> +++ trunk/buildroot/package/logrotate/logrotate.conf	2008-10-06 20:41:12 UTC (rev 23610)
+> @@ -0,0 +1,14 @@
+> +compress
+> +
+> +include /etc/logrotate.d
+> +
+> +/var/log/messages /var/log/auth.log /var/log/user.log {
+> +	rotate 7
+> +	daily
+> +	delaycompress
+> +	missingok
+> +	sharedscripts
+> +	postrotate
+> +		/usr/bin/killall -HUP syslogd
+> +	endscript
+> +}
 
-> Please consider the following patch which adds support for a new
-> AVR32 based board.
-> 
-> The board is closely based on Atmel's NGW100 reference board, but has
-> an extra 8MByte FLASH and 128KByte FRAM.
-> 
-> The compressed patch is 66k, so I've stuck it on our website.
-> 
-> http://www.mimc.co.uk/mimc200-new-board.patch.bz2
-> 
+I don't like including this configuration by default. I don't think it
+can easily be overridden (it's copied in after the target_skeleton), and
+most systems don't have /var/log/auth.log etc by default.
 
-Could you post it in plain text attachment/inline instead? It is a bit
-hard to comment on a compressed patch file ;)
+Same for packages that include init scripts by default :(
 
-Is the patch based on the latest uclibc.org repo or Buildroot for AVR32
-release (v2.2.0)?
-
+Hamish
 -- 
-Best regards,
-Hans-Christian Egtvedt
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
