@@ -1,29 +1,32 @@
-From: Micha Nelissen <micha@neli.hopto.org>
-Date: Tue, 07 Oct 2008 23:14:25 +0200
-Subject: [Buildroot] proftpd does not compile
-In-Reply-To: <20081007205949.GF5178@mx.loc>
-References: <gc8fta$bif$1@ger.gmane.org>
-	<48E9CB77.8060808@netcentral.co.uk>	<gcdcjp$v98$1@ger.gmane.org>
-	<48EA3AEA.7070206@netcentral.co.uk>	<gcghe9$fb1$1@ger.gmane.org>
-	<20081007205949.GF5178@mx.loc>
-Message-ID: <gcgjfq$m07$1@ger.gmane.org>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Wed, 8 Oct 2008 10:17:41 +1100
+Subject: [Buildroot] svn commit: trunk/buildroot/package
+In-Reply-To: <20081007170827.CCA4AF801A@busybox.net>
+References: <20081007170827.CCA4AF801A@busybox.net>
+Message-ID: <20081007231741.GA7236@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernhard Reutner-Fischer wrote:
-> On Tue, Oct 07, 2008 at 10:39:28PM +0200, Micha Nelissen wrote:
->> Could be but this seems to replace all bcopy uses with memcpy? That 
->> seems a workaround to me, not really solving the root problem.
-> 
-> Using memcpy et al instead of bcopy, bzero, etc. certainly is the proper
-> thing to do. Fix your application not to rely on legacy stuff that was
-> _obsoleted_ (not deprecated, but really obsoleted) a decade ago.
+On Tue, Oct 07, 2008 at 10:08:27AM -0700, wberrier at uclibc.org wrote:
+> Changeset:
+> Modified: trunk/buildroot/package/Makefile.autotools.in
+> ===================================================================
+> --- trunk/buildroot/package/Makefile.autotools.in	2008-10-07 17:08:25 UTC (rev 23619)
+> +++ trunk/buildroot/package/Makefile.autotools.in	2008-10-07 17:08:27 UTC (rev 23620)
+> @@ -125,7 +125,7 @@
+>  #	ACLOCAL="$(ACLOCAL)"
+>  
+>  # Automatically detect tar --strip-path/components option
+> -TAR_STRIP_COMPONENTS = $(shell tar --help | grep strip-path > /dev/null ; if test $$? = 0 ; then echo '--strip-path' ; else echo '--strip-components' ; fi)
+> +TAR_STRIP_COMPONENTS := $(shell $(CONFIG_SHELL) -c '$(TAR) --help | grep strip-path > /dev/null ; if test $$? = 0 ; then echo '--strip-path' ; else echo '--strip-components' ; fi')
 
-Yes the patch is perfectly acceptable to me, but I didn't want to offend 
-the one who removed that patch ;-). I assume there was some reason to 
-remove it.
+Is there any reason we don't set SHELL=$(CONFIG_SHELL), rather than
+using this $(shell $(CONFIG_SHELL) -c '...') construct everywhere?
 
-Micha
+
+Hamish
+-- 
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
