@@ -1,81 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Oct 2008 10:54:40 +0200
-Subject: [Buildroot] Issue when compiling libpng and directfb
-Message-ID: <20081007105440.05399a80@surf>
+From: Mark Jackson <mpfj@mimc.co.uk>
+Date: Tue, 07 Oct 2008 10:07:25 +0100
+Subject: [Buildroot] [BR-AVR32] [PATCH] Support for new MIMC200 board
+In-Reply-To: <20081007104345.59bacec2@hcegtvedt>
+References: <48EA05EB.7020807@mimc.co.uk>	<20081007074128.12613e2c@hcegtvedt>	<48EB1EDF.6070209@mimc.co.uk>
+	<20081007104345.59bacec2@hcegtvedt>
+Message-ID: <48EB26CD.4010003@mimc.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hans-Christian Egtvedt wrote:
 
-With current Buildroot SVN, I have an issue when trying to build libpng
-and directfb: the configure script cannot find that zlib is installed.
+<snip>
 
-The configure script tries to compile a simple program that makes a
-call to zlibVersion() using the -lz option. But the
--L$(STAGING_DIR)/usr/lib/ option is not passed to gcc (the -I options
-are correct however), so the compilation fails and configure complains
-that it can't find the configure script.
+> You must split up your patch, it contains far more than just a new
+> board. Each patch should only add/change one feature in Buildroot.
+> 
+> I would also recommend that you get all the kernel and U-Boot stuff
+> upstream first, and then go for the Buildroot stuff.
 
-In package/Makefile.in, it seems that the library path is passed in
-TARGET_CONFIGURE_OPTS, using LD :
+Ho, hum.  I was kinda hoping to put that off ... too lazy, too many other things to do !!.
+But I guess I just need to buckle down and get it sorted.
 
- LD="$(TARGET_LD) $(TARGET_LDFLAGS)" \
+In fact the u-boot stuff *is* already upstream ... the u-boot patch is a bit of a hang over.  Oops.
 
-In the config.log, I see reference to the correct -L paths, but these
-paths seem to be removed when testing the compilation of the sample
-zlib program.
+the linux stuff was a bit of a sticking point ... Atmel's AVR32 patches are all based on 2.6.25.10.
+But I'm guessing that if I submit my new RTC support code won't it only be added to the latest kernels ?
 
-I workarounded the problem by using the two following patches, but I'm
-quite sure they are not the proper fix.
+How can I submit my RTC code *and* still use 2.6.25.10 ?
 
-I don't know if it's important, but I'm using an external toolchain
-(that has been previously compiled by Buildroot a long time ago).
+I know I could use Haavard's latest linux (2.6.27.??), but then that's moving further away from
+the buildroot "all-in-one" principal !?!
 
-Any clue ?
+Any ideas ?
 
-Thanks,
+>>> Is the patch based on the latest uclibc.org repo or Buildroot for
+>>> AVR32 release (v2.2.0)?
+>> The latest svn (actually r23594).
+> 
+> Then it is better if you post it to uclibc.org mailing list, I import
+> stuff from uclibc.org, so eventually it will end up in my fork() as
+> well.
 
-Thomas
+Okay ... will do.
 
----
- package/directfb/directfb.mk |    1 +
- 1 file changed, 1 insertion(+)
-
-Index: buildroot/package/directfb/directfb.mk
-===================================================================
---- buildroot.orig/package/directfb/directfb.mk
-+++ buildroot/package/directfb/directfb.mk
-@@ -38,6 +38,7 @@
- 	(cd $(DIRECTFB_DIR); rm -f config.cache; \
- 		$(TARGET_CONFIGURE_OPTS) \
- 		$(TARGET_CONFIGURE_ARGS) \
-+	LDFLAGS="$(TARGET_LDFLAGS)" \
- 	ac_cv_header_linux_wm97xx_h=no \
- 	ac_cv_header_linux_sisfb_h=no \
- 	ac_cv_header_asm_page_h=no \
-
----
- package/libpng/libpng.mk |    1 +
- 1 file changed, 1 insertion(+)
-
-Index: buildroot/package/libpng/libpng.mk
-===================================================================
---- buildroot.orig/package/libpng/libpng.mk
-+++ buildroot/package/libpng/libpng.mk
-@@ -42,6 +42,7 @@
- 	(cd $(LIBPNG_DIR); rm -rf config.cache; \
- 		$(TARGET_CONFIGURE_OPTS) \
- 		$(TARGET_CONFIGURE_ARGS) \
-+		LDFLAGS="$(TARGET_LDFLAGS)" \
- 		ac_cv_have_decl_malloc=yes \
- 		gl_cv_func_malloc_0_nonnull=yes \
- 		ac_cv_func_malloc_0_nonnull=yes \
-
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Thanks for the feedback.
+Mark
