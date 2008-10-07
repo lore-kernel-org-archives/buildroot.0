@@ -1,41 +1,24 @@
 From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Tue, 7 Oct 2008 16:48:30 +1100
-Subject: [Buildroot] svn commit: trunk/buildroot/package:  logrotate
-In-Reply-To: <20081006204112.DFD173C807@busybox.net>
-References: <20081006204112.DFD173C807@busybox.net>
-Message-ID: <20081007054830.GE5127@cloud.net.au>
+Date: Tue, 7 Oct 2008 16:51:34 +1100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/vsftpd
+In-Reply-To: <20081006224641.F0B81F8008@busybox.net>
+References: <20081006224641.F0B81F8008@busybox.net>
+Message-ID: <20081007055134.GF5127@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Oct 06, 2008 at 01:41:12PM -0700, wberrier at uclibc.org wrote:
-> Added: trunk/buildroot/package/logrotate/logrotate.conf
+On Mon, Oct 06, 2008 at 03:46:41PM -0700, wberrier at uclibc.org wrote:
+> Added: trunk/buildroot/package/vsftpd/vsftpd-init
 > ===================================================================
-> --- trunk/buildroot/package/logrotate/logrotate.conf	                        (rev 0)
-> +++ trunk/buildroot/package/logrotate/logrotate.conf	2008-10-06 20:41:12 UTC (rev 23610)
-> @@ -0,0 +1,14 @@
-> +compress
-> +
-> +include /etc/logrotate.d
-> +
-> +/var/log/messages /var/log/auth.log /var/log/user.log {
-> +	rotate 7
-> +	daily
-> +	delaycompress
-> +	missingok
-> +	sharedscripts
-> +	postrotate
-> +		/usr/bin/killall -HUP syslogd
-> +	endscript
-> +}
+> --- trunk/buildroot/package/vsftpd/vsftpd-init	                        (rev 0)
+> +++ trunk/buildroot/package/vsftpd/vsftpd-init	2008-10-06 22:46:41 UTC (rev 23611)
 
-I don't like including this configuration by default. I don't think it
-can easily be overridden (it's copied in after the target_skeleton), and
-most systems don't have /var/log/auth.log etc by default.
+Too bad this can't be disabled - as soon as this package is installed
+the init script will be run on boot. Some users may not want this.
 
-Same for packages that include init scripts by default :(
 
 Hamish
 -- 
