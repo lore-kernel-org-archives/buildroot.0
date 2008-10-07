@@ -1,71 +1,153 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Tue, 7 Oct 2008 11:16:05 +0200
-Subject: [Buildroot] [BR-AVR32] [PATCH] Support for new MIMC200 board
-In-Reply-To: <48EB26CD.4010003@mimc.co.uk>
-References: <48EA05EB.7020807@mimc.co.uk> <20081007074128.12613e2c@hcegtvedt>
-	<48EB1EDF.6070209@mimc.co.uk> <20081007104345.59bacec2@hcegtvedt>
-	<48EB26CD.4010003@mimc.co.uk>
-Message-ID: <20081007111605.129b9d3e@hcegtvedt>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Tue, 7 Oct 2008 06:17:29 -0700
+Subject: [Buildroot] [buildroot 0005234]: Selecting MTD utils from git
+	doesn't give you the HEAD
+Message-ID: <665a4143f5f101dd7875330bd7df835b@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 07 Oct 2008 10:07:25 +0100
-Mark Jackson <mpfj@mimc.co.uk> wrote:
 
-> Hans-Christian Egtvedt wrote:
-> 
-> <snip>
-> 
-> > You must split up your patch, it contains far more than just a new
-> > board. Each patch should only add/change one feature in Buildroot.
-> > 
-> > I would also recommend that you get all the kernel and U-Boot stuff
-> > upstream first, and then go for the Buildroot stuff.
-> 
-> Ho, hum.  I was kinda hoping to put that off ... too lazy, too many
-> other things to do !!. But I guess I just need to buckle down and get
-> it sorted.
-> 
-> In fact the u-boot stuff *is* already upstream ... the u-boot patch
-> is a bit of a hang over.  Oops.
-> 
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=5234 
+====================================================================== 
+Reported By:                mjd
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   5234
+Category:                   Other
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             10-03-2008 09:40 PDT
+Last Modified:              10-07-2008 06:17 PDT
+====================================================================== 
+Summary:                    Selecting MTD utils from git doesn't give you the
+HEAD
+Description: 
+If you turn on BR2_PACKAGE_MTD_UTILS_GIT, you can get the mtd-utils
+source code from the Linux MTD project's GIT server, rather than use
+source that is 1 or 2 years old.
 
-In 1.3.5 perhaps? Version 1.3.4 is default in BR now AFAIK.
+I would have thought that the whole point of this is so that you can
+get the latest-and-greatest mtd-utils source.  But
+package/mtd/mtd-utils.git/mtd.mk hard-codes a particular (now
+out-of-date)
+version of mtd-utils.
 
-I think I just applied a patch to my development three which added your
-board...
+This patch ensures that getting mtd-utils source from git gets the head
+from Linux MTD.
+====================================================================== 
 
-> the linux stuff was a bit of a sticking point ... Atmel's AVR32
-> patches are all based on 2.6.25.10. But I'm guessing that if I submit
-> my new RTC support code won't it only be added to the latest kernels ?
-> 
-> How can I submit my RTC code *and* still use 2.6.25.10 ?
-> 
+---------------------------------------------------------------------- 
+ mjd - 10-03-08 09:42  
+---------------------------------------------------------------------- 
+diff -x config -u -r
+buildroot-mtcba-g1-pristine/package/mtd/mtd-utils.git/mtd.mk
+buildroot-mtcba-g1/package/mtd/mtd-utils.git/mtd.mk
+---
+buildroot-mtcba-g1-pristine/package/mtd/mtd-utils.git/mtd.mk	2008-08-03
+14:11:27.000000000 +1000
++++ buildroot-mtcba-g1/package/mtd/mtd-utils.git/mtd.mk	2008-09-30
+17:45:07.000000000 +1000
+@@ -3,7 +3,7 @@
+ # mtd provides jffs2 utilities
+ #
+ #############################################################
+-MTD_VERSION:=fcb52ccc99679460640386c297023f852b108f68
++MTD_VERSION:=HEAD
+ MTD_SOURCE:=mtd-utils-$(MTD_VERSION).tar.gz
 
-Ah, you will need to submit the RTC code for the latest kernel, and add
-a backported version for Buildroot.
+MTD_URL:=http://git.infradead.org/mtd-utils.git?a=snapshot;h=$(MTD_VERSION);sf=tgz
+ MTD_HOST_DIR:= $(TOOL_BUILD_DIR)/mtd-utils-$(MTD_VERSION) 
 
-It is a bit tricky the transition period before you have your stuff
-applied to the different projects.
+---------------------------------------------------------------------- 
+ bernhardf - 10-03-08 10:01  
+---------------------------------------------------------------------- 
+may i suggest you add a
+config BR2_PACKAGE_MTD_UTILS_GIT_REVISION
+  string "git revision"
+  default "HEAD" if !BR2_avr
+  default "the_previous_hash" if BR2_avr32
+  help
+    Here you can enter the git revision you want to use.
+    Usually this will be "HEAD", but if you could add some other
+    hash here.
 
-> I know I could use Haavard's latest linux (2.6.27.??), but then
-> that's moving further away from the buildroot "all-in-one"
-> principal !?!
-> 
-> Any ideas ?
-> 
+Just a thought.. 
 
-It is fine to use 2.6.27 in Buildroot, I'll make a release later today
-which takes advantage of that.
+---------------------------------------------------------------------- 
+ mjd - 10-03-08 16:47  
+---------------------------------------------------------------------- 
+Hi bernhardf, I like that idea.  However my config.in-fu is not yet good
+enough to do what you suggested.  If you want to do it, could you (or
+someone else) write it and try it out please? 
 
-We have a new board coming out soon, and the patches are made for
-2.6.27-rcN.
+---------------------------------------------------------------------- 
+ mjd - 10-03-08 16:49  
+---------------------------------------------------------------------- 
+Guys, there may be a problem with using mtd-util from HEAD.  Please give me
+a little time to work out what's happening with that code. 
 
-<snipp>
+---------------------------------------------------------------------- 
+ egtvedt - 10-06-08 22:00  
+---------------------------------------------------------------------- 
+There is also no need to special handle AVR32. AVR32 works fine with the
+latest release of MTD. 
 
--- 
-Best regards,
-Hans-Christian Egtvedt
+---------------------------------------------------------------------- 
+ mjd - 10-07-08 00:07  
+---------------------------------------------------------------------- 
+I'm not sure why yet, but at the moment, I can build "mtd-host", but I
+can't build "mtd".
+
+mtd-utils-HEAD has a file called "fec.c".  This file is trying to use
+bcopy and bzero.  It also has macros to work out whether it has to fake
+the existence of bcopy and bzero.
+
+The compile warnings and link errors I get are that there's a mismatch
+between the definitions of those internals, and what's in fec.c.
+
+Does anyone else have this problem?  Does fec.c compile for your target? 
+
+---------------------------------------------------------------------- 
+ hmoffatt - 10-07-08 06:17  
+---------------------------------------------------------------------- 
+I think that using HEAD by default is not a good idea. I did this
+originally.
+
+Problem is that it'll download head once, but nothing will cause it to
+download head again (unless you remove the .tar.gz from the sources
+directory). AND you don't know what version you have either if you want
+to rebuild later.
+
+Also, the patches won't necessarily apply to a later version.
+
+A configuration option would be an improvement though it doesn't solve
+the patch problem.
+
+I think it really needs manual intervention, which is how it came to be
+how it is now. 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+10-03-08 09:40  mjd            New Issue                                    
+10-03-08 09:40  mjd            Status                   new => assigned     
+10-03-08 09:40  mjd            Assigned To               => buildroot       
+10-03-08 09:40  mjd            File Added: mtd-utils-git-from-head-1.diff       
+            
+10-03-08 09:42  mjd            Note Added: 0012684                          
+10-03-08 10:01  bernhardf      Note Added: 0012694                          
+10-03-08 16:47  mjd            Note Added: 0012714                          
+10-03-08 16:49  mjd            Note Added: 0012724                          
+10-06-08 22:00  egtvedt        Note Added: 0012904                          
+10-07-08 00:07  mjd            Note Added: 0012914                          
+10-07-08 06:17  hmoffatt       Note Added: 0012984                          
+======================================================================
