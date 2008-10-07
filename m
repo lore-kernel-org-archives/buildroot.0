@@ -1,39 +1,40 @@
-From: egtvedt at uclibc.org <egtvedt@uclibc.org>
-Date: Tue,  7 Oct 2008 00:32:41 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
-Message-ID: <20081007073241.348C1F8008@busybox.net>
+From: Mark Jackson <mpfj@mimc.co.uk>
+Date: Tue, 07 Oct 2008 09:33:35 +0100
+Subject: [Buildroot] [BR-AVR32] [PATCH] Support for new MIMC200 board
+In-Reply-To: <20081007074128.12613e2c@hcegtvedt>
+References: <48EA05EB.7020807@mimc.co.uk> <20081007074128.12613e2c@hcegtvedt>
+Message-ID: <48EB1EDF.6070209@mimc.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: egtvedt
-Date: 2008-10-07 00:32:40 -0700 (Tue, 07 Oct 2008)
-New Revision: 23615
+Hans-Christian Egtvedt wrote:
+> On Mon, 06 Oct 2008 13:34:51 +0100
+> Mark Jackson <mpfj@mimc.co.uk> wrote:
+> 
+>> Please consider the following patch which adds support for a new
+>> AVR32 based board.
+>>
+>> The board is closely based on Atmel's NGW100 reference board, but has
+>> an extra 8MByte FLASH and 128KByte FRAM.
+>>
+>> The compressed patch is 66k, so I've stuck it on our website.
+>>
+>> http://www.mimc.co.uk/mimc200-new-board.patch.bz2
+>>
+> 
+> Could you post it in plain text attachment/inline instead? It is a bit
+> hard to comment on a compressed patch file ;)
 
-Log:
-uclibc: fix path to ARCH_CFLAGS when compiling the test suite
+Urm ... the patch is about 220k uncompressed.  I thought it was a "bad thing" to post such a large patch.
 
-Signed-off-by: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
+However, I'm happy to do so if you want !!
 
+> Is the patch based on the latest uclibc.org repo or Buildroot for AVR32
+> release (v2.2.0)?
 
+The latest svn (actually r23594).
 
-Modified:
-   trunk/buildroot/toolchain/uClibc/uclibc.mk
-
-
-Changeset:
-Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
-===================================================================
---- trunk/buildroot/toolchain/uClibc/uclibc.mk	2008-10-07 07:24:41 UTC (rev 23614)
-+++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2008-10-07 07:32:40 UTC (rev 23615)
-@@ -585,7 +585,7 @@
- 
- $(UCLIBC_DIR)/test/unistd/errno:
- 	$(MAKE) -C $(UCLIBC_DIR)/test \
--	ARCH_CFLAGS=-I$(STAGING_DIR)/include \
-+	ARCH_CFLAGS=-I$(STAGING_DIR)/usr/include \
- 	UCLIBC_ONLY=1 TEST_INSTALLED_UCLIBC=1 compile
- 
- $(TARGET_DIR)/root/uClibc/test/unistd/errno: $(UCLIBC_DIR)/test/unistd/errno
+Mark
