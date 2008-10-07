@@ -1,32 +1,28 @@
-From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Tue, 7 Oct 2008 17:31:20 -0300
-Subject: [Buildroot] [PATCH] enhance directfb configurability
-In-Reply-To: <d6cda7730810061008v71de4b85xc39765cf99e1ab17@mail.gmail.com>
-References: <gc8h2p$eil$2@ger.gmane.org>
-	<d6cda7730810060855n6f1f710cmb149c7b3165ef29d@mail.gmail.com>
-	<48EA3629.3030504@neli.hopto.org>
-	<d6cda7730810061008v71de4b85xc39765cf99e1ab17@mail.gmail.com>
-Message-ID: <d6cda7730810071331r4da3f876s1288b70eb038934@mail.gmail.com>
+From: Micha Nelissen <micha@neli.hopto.org>
+Date: Tue, 07 Oct 2008 22:39:28 +0200
+Subject: [Buildroot] proftpd does not compile
+In-Reply-To: <48EA3AEA.7070206@netcentral.co.uk>
+References: <gc8fta$bif$1@ger.gmane.org>
+	<48E9CB77.8060808@netcentral.co.uk>	<gcdcjp$v98$1@ger.gmane.org>
+	<48EA3AEA.7070206@netcentral.co.uk>
+Message-ID: <gcghe9$fb1$1@ger.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->> Wouldn't shared lib linking be the default? The static variant would need to
->> be referenced explicitly by someone who wants to use it; but at least it's
->> available. It also would only exist in the staging_dir, not the target dir.
->>
->
-> Hmmm I'm not sure about the linking order. But then you are saying
-> that even with --enable-static DirectFB will build the shared lib too?
-> Others like Qt (embedded and desktop) only builds the static if you
-> specify you want the static. I apply here and give it a try then. :)
->
+Nick Peirson wrote:
+> I think I misunderstood you. It looks like there was a patch to resolve 
+> bcopy related issues in the buildroot repository, but it was removed:
+> http://busybox.net/lists/buildroot/2008-June/009198.html
+> 
+> Not sure if it helps it would help with the issue your seeing or not?
 
-Ok, it built both static and shared. Seams ok, so I commited (r23621)
-with some small fixes.
-Thanks!
+Could be but this seems to replace all bcopy uses with memcpy? That 
+seems a workaround to me, not really solving the root problem.
 
-Kind Regards,
-   Thiago A. Correa
+Anyway, the umode_t problem is a compilation error so more problematic 
+at this point. (The bcopy thing is "only" a compilation warning).
+
+Micha
