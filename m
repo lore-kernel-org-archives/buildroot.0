@@ -1,37 +1,35 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Tue, 7 Oct 2008 16:19:41 +1100
-Subject: [Buildroot] [buildroot 0005234]: Selecting MTD utils from
-	git	doesn't give you the HEAD
-In-Reply-To: <532a9ee2ed7a6e52612f1f2e0680f030@bugs.uclibc.org>
-References: <532a9ee2ed7a6e52612f1f2e0680f030@bugs.uclibc.org>
-Message-ID: <20081007051941.GD5127@cloud.net.au>
+From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
+Date: Tue, 7 Oct 2008 07:41:28 +0200
+Subject: [Buildroot] [BR-AVR32] [PATCH] Support for new MIMC200 board
+In-Reply-To: <48EA05EB.7020807@mimc.co.uk>
+References: <48EA05EB.7020807@mimc.co.uk>
+Message-ID: <20081007074128.12613e2c@hcegtvedt>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Oct 03, 2008 at 09:42:04AM -0700, bugs at busybox.net wrote:
->  #############################################################
-> -MTD_VERSION:=fcb52ccc99679460640386c297023f852b108f68
-> +MTD_VERSION:=HEAD
+On Mon, 06 Oct 2008 13:34:51 +0100
+Mark Jackson <mpfj@mimc.co.uk> wrote:
 
-Not a good idea. I did this originally.
+> Please consider the following patch which adds support for a new
+> AVR32 based board.
+> 
+> The board is closely based on Atmel's NGW100 reference board, but has
+> an extra 8MByte FLASH and 128KByte FRAM.
+> 
+> The compressed patch is 66k, so I've stuck it on our website.
+> 
+> http://www.mimc.co.uk/mimc200-new-board.patch.bz2
+> 
 
-Problem is that it'll download head once, but nothing will cause it to
-download head again (unless you remove the .tar.gz from the sources
-directory). AND you don't know what version you have either if you want
-to rebuild later.
+Could you post it in plain text attachment/inline instead? It is a bit
+hard to comment on a compressed patch file ;)
 
-Also, the patches won't necessarily apply to a later version.
+Is the patch based on the latest uclibc.org repo or Buildroot for AVR32
+release (v2.2.0)?
 
-A configuration option would be an improvement though it doesn't solve
-the patch problem.
-
-I think it really needs manual intervention, which is how it came to be
-how it is now.
-
-
-Hamish
 -- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+Best regards,
+Hans-Christian Egtvedt
