@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 7 Oct 2008 17:10:10 -0700
+Date: Tue, 7 Oct 2008 17:54:22 -0700
 Subject: [Buildroot] [buildroot 0005234]: Selecting MTD utils from git
 	doesn't give you the HEAD
-Message-ID: <973a09451c87609078f277b033255e45@busybox.net>
+Message-ID: <7ad0fe65bfbec820c7f3db4736197bf1@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             10-03-2008 09:40 PDT
-Last Modified:              10-07-2008 17:10 PDT
+Last Modified:              10-07-2008 17:54 PDT
 ====================================================================== 
 Summary:                    Selecting MTD utils from git doesn't give you the
 HEAD
@@ -224,6 +224,13 @@ Yeah I know, a bit grotty.
 Is it possible to have both?  That is, we rename what is currently "git"
 to become just another dated snapshot, and "git" becomes HEAD? 
 
+---------------------------------------------------------------------- 
+ mjd - 10-07-08 17:54  
+---------------------------------------------------------------------- 
+Reported fec.c/bcopy problem to upstream:
+
+  http://lists.infradead.org/pipermail/linux-mtd/2008-October/023173.html 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -245,4 +252,5 @@ Date Modified   Username       Field                    Change
 10-07-08 06:46  hmoffatt       Note Added: 0013014                          
 10-07-08 06:46  hmoffatt       Note Edited: 0013014                         
 10-07-08 17:10  mjd            Note Added: 0013024                          
+10-07-08 17:54  mjd            Note Added: 0013034                          
 ======================================================================
