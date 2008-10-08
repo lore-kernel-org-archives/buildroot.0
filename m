@@ -1,21 +1,64 @@
-From: =?UTF-8?B?RGFuaWVsIE55c3Ryw7Zt?= <daniel.nystrom@timeterminal.se>
-Date: Wed, 08 Oct 2008 14:52:20 +0200
-Subject: [Buildroot] Both cramfs + jffs2 in buildroot?
-Message-ID: <48ECAD04.6070209@timeterminal.se>
+From: Muktabh Anchlia <m_anchlia@hotmail.com>
+Date: Wed, 8 Oct 2008 14:08:56 +0000
+Subject: [Buildroot] wake on ring support
+In-Reply-To: <811828.28896.qm@web26001.mail.ukl.yahoo.com>
+References: <BAY107-W4782F02FE41BDF61DCBA39D430@phx.gbl>
+	<811828.28896.qm@web26001.mail.ukl.yahoo.com>
+Message-ID: <BAY107-W5694BBA76945A42C1155919D3B0@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-(Sorry if this has been a topic earlier, but it's really hard to search
-the mailing archive)
+Hi Will,
+Is there a way I can wake up Linux from standby mode by keyboard? Even that doesn't seem to work. I have to restart to come out of standby.
 
-Is it possible in Buildroot to make both a read-only rootfs and a second
-writable filesystem?
+Thanks
+Muktabh
 
-A common setup is using cramfs for / and mounting a jffs2 on /mnt/flash,
-and then make a symlink of /etc to point at /mnt/flash/etc where all
-config files are writable.
+" I don't take sides, just the racing line "
 
-Is this possible to achive with Buildroot?
+
+> Date: Tue, 30 Sep 2008 21:07:06 +0000
+> From: willjcroz at yahoo.co.uk
+> Subject: Re: [Buildroot] wake on ring support
+> To: buildroot at uclibc.org
+> CC: m_anchlia at hotmail.com
+> 
+> > I am trying to get wake on ring working on an advantech
+> > board with linux (built using buildroot, kernel version
+> > 2.6.24). I can make linux go to sleep using the command echo
+> > standby >/sys/power/state. But I am unable to wake it up
+> > using wake on ring. Advantech documents applying 5 volts on
+> > some pin to wake it up. Is there any parameter in buildroot
+> > config which enables/disables this support? It does work
+> > with windows Xp.
+> 
+> I'm not sure if buildroot has specific support for this or not.
+> 
+> If it works in XP then it should work in Linux without using +5v on that pin. What is the device you are using to wake up the board? If you know what kind of bus it is connected to (and are using acpi) look in
+> /proc/acpi/wakeup to see if it is wakeup enabled:
+> 
+> cat /proc/acpi/wakeup
+> 
+> if not do (for example with PCI0 device) :
+> 
+> echo PCI0 > /proc/acpi/wakeup
+> 
+> then try going to standby. If it works you will probably want to add it to your init scipts so that it is enabled whenever it goes into standby.
+> 
+> Of course if it is a NIC then you also need to use ethtool, e.g:
+> 
+> /usr/sbin/ethtool -s eth0 wol g
+> 
+> 
+> regards,
+> 
+> Will Crozier
+> 
+> 
+>       
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20081008/874f1118/attachment.htm 
