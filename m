@@ -1,64 +1,49 @@
-From: Muktabh Anchlia <m_anchlia@hotmail.com>
-Date: Wed, 8 Oct 2008 14:08:56 +0000
-Subject: [Buildroot] wake on ring support
-In-Reply-To: <811828.28896.qm@web26001.mail.ukl.yahoo.com>
-References: <BAY107-W4782F02FE41BDF61DCBA39D430@phx.gbl>
-	<811828.28896.qm@web26001.mail.ukl.yahoo.com>
-Message-ID: <BAY107-W5694BBA76945A42C1155919D3B0@phx.gbl>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 08 Oct 2008 20:36:36 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/package/directfb
+In-Reply-To: <20081007202927.B2E04F802A@busybox.net> (correa@uclibc.org's
+	message of "Tue\, 7 Oct 2008 13\:29\:27 -0700 \(PDT\)")
+References: <20081007202927.B2E04F802A@busybox.net>
+Message-ID: <87d4ibx7bf.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Will,
-Is there a way I can wake up Linux from standby mode by keyboard? Even that doesn't seem to work. I have to restart to come out of standby.
+>>>>> "correa" == correa  <correa@uclibc.org> writes:
 
-Thanks
-Muktabh
+ correa> Author: correa
+ correa> Date: 2008-10-07 13:29:27 -0700 (Tue, 07 Oct 2008)
+ correa> New Revision: 23621
 
-" I don't take sides, just the racing line "
+ correa> Log:
+ correa> widen options to configure directfb, patch by Micha Nelissen <micha@neli.hopto.org>
 
+ correa> +
+ correa> +config BR2_PACKAGE_DIRECTFB_XSERVER
+ correa> +        bool "build with X server backend"
 
-> Date: Tue, 30 Sep 2008 21:07:06 +0000
-> From: willjcroz at yahoo.co.uk
-> Subject: Re: [Buildroot] wake on ring support
-> To: buildroot at uclibc.org
-> CC: m_anchlia at hotmail.com
-> 
-> > I am trying to get wake on ring working on an advantech
-> > board with linux (built using buildroot, kernel version
-> > 2.6.24). I can make linux go to sleep using the command echo
-> > standby >/sys/power/state. But I am unable to wake it up
-> > using wake on ring. Advantech documents applying 5 volts on
-> > some pin to wake it up. Is there any parameter in buildroot
-> > config which enables/disables this support? It does work
-> > with windows Xp.
-> 
-> I'm not sure if buildroot has specific support for this or not.
-> 
-> If it works in XP then it should work in Linux without using +5v on that pin. What is the device you are using to wake up the board? If you know what kind of bus it is connected to (and are using acpi) look in
-> /proc/acpi/wakeup to see if it is wakeup enabled:
-> 
-> cat /proc/acpi/wakeup
-> 
-> if not do (for example with PCI0 device) :
-> 
-> echo PCI0 > /proc/acpi/wakeup
-> 
-> then try going to standby. If it works you will probably want to add it to your init scipts so that it is enabled whenever it goes into standby.
-> 
-> Of course if it is a NIC then you also need to use ethtool, e.g:
-> 
-> /usr/sbin/ethtool -s eth0 wol g
-> 
-> 
-> regards,
-> 
-> Will Crozier
-> 
-> 
->       
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20081008/874f1118/attachment.htm 
+Doesn't this need to depend on the various X implementations
+(E.G. BR2_PACKAGE_XORG || ..XORG7 || ..TINYX ?
+
+ correa> +config BR2_PACKAGE_DIRECTFB_PNG
+ correa> +        bool "enable PNG support"
+ correa> +        default y
+ correa> +        depends on BR2_PACKAGE_DIRECTFB
+ correa> +	select BR2_PACKAGE_LIBPNG
+ correa> +	select BR2_PACKAGE_ZLIB
+
+Indentation seems wrong. Actually it's right here and wrong everywhere
+else. Config.in uses tabs for indentation, not spaces (and help text
+is tab+2 spaces).
+
+ correa> +config BR2_PACKAGE_DIRECTFB_GIF
+ correa> +        bool "enable GIF support"
+ correa> +        default y
+ correa> +        depends on BR2_PACKAGE_DIRECTFB
+
+Is that built in, or do you need to select libgif or similar?
+
+-- 
+Bye, Peter Korsgaard
