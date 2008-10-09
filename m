@@ -1,60 +1,44 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Thu, 9 Oct 2008 09:57:47 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package/directfb
-In-Reply-To: <d6cda7730810082206nd6cc641wbcf9f3e2f5513672@mail.gmail.com>
-References: <20081007202927.B2E04F802A@busybox.net>
-	<87d4ibx7bf.fsf@macbook.be.48ers.dk>
-	<d6cda7730810082206nd6cc641wbcf9f3e2f5513672@mail.gmail.com>
-Message-ID: <20081009075747.GA31080@mx.loc>
+From: Hinko Kocevar <hinko.kocevar@cetrtapot.si>
+Date: Thu, 09 Oct 2008 10:16:29 +0200
+Subject: [Buildroot] Both cramfs + jffs2 in buildroot?
+In-Reply-To: <48ECAD04.6070209@timeterminal.se>
+References: <48ECAD04.6070209@timeterminal.se>
+Message-ID: <48EDBDDD.2030206@cetrtapot.si>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Oct 09, 2008 at 02:06:58AM -0300, Thiago A. Corr?a wrote:
->Hi Peter,
->
->>  correa> +
->>  correa> +config BR2_PACKAGE_DIRECTFB_XSERVER
->>  correa> +        bool "build with X server backend"
->>
->> Doesn't this need to depend on the various X implementations
->> (E.G. BR2_PACKAGE_XORG || ..XORG7 || ..TINYX ?
->>
->
->I suppose it should, yes. Sorry, I didn't notice.
->Btw, we really need a better check for X. something like the linux
->kernel with BR2_HAS_X that is set on either X implementation.
->XORG for instance is an empty folder in package/xorg. When/if that
->changes, we need to revisit all packages, quite anoying.
+Daniel Nystr?m wrote:
+> (Sorry if this has been a topic earlier, but it's really hard to search
+> the mailing archive)
+> 
+> Is it possible in Buildroot to make both a read-only rootfs and a second
+> writable filesystem?
+> 
+> A common setup is using cramfs for / and mounting a jffs2 on /mnt/flash,
+> and then make a symlink of /etc to point at /mnt/flash/etc where all
+> config files are writable.
+> 
+> Is this possible to achive with Buildroot?
 
-That's the reason why we have BR2_PACKAGE_XSERVER_none; See
-package/Config.in
->
->>  correa> +config BR2_PACKAGE_DIRECTFB_PNG
->>  correa> +        bool "enable PNG support"
->>  correa> +        default y
->>  correa> +        depends on BR2_PACKAGE_DIRECTFB
->>  correa> +      select BR2_PACKAGE_LIBPNG
->>  correa> +      select BR2_PACKAGE_ZLIB
->>
->> Indentation seems wrong. Actually it's right here and wrong everywhere
->> else. Config.in uses tabs for indentation, not spaces (and help text
->> is tab+2 spaces).
->>
->
->Unfortunally I can't see that using vi. Since it's not Python, I
->honestly don't see the space/tab being relevant.
+Why not.
 
-It is relevant since it is the style that is perused in this project.
-Try something like :match Error '\(^\s\(\s\s\)[^[:alnum:]]\|\s\+$\)'
-you get the idea..
->
->>  correa> +config BR2_PACKAGE_DIRECTFB_GIF
->>  correa> +        bool "enable GIF support"
+You'll need to look at the target/jffs2.mk and target/cramfs.mk. Maybe
+buildroot code has to be modified to allow both fs being built at once.
+Also kernel configuration must be fixed to support one more MTD
+partition. Provide your own boot scripts and implement the logic of
+mounting the jffs etc.
 
-Can you please strip all "enable" and "compile" off those bools. They
-are highly redundant.
+HTH,
+Hinko
 
-TIA
+-- 
+?ETRTA POT, d.o.o., Kranj
+Planina 3
+4000 Kranj
+Slovenia, Europe
+Tel. +386 (0) 4 280 66 03
+E-mail: hinko.kocevar at cetrtapot.si
+Http: www.cetrtapot.si
