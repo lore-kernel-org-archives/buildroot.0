@@ -1,50 +1,61 @@
-From: correa at uclibc.org <correa@uclibc.org>
-Date: Wed,  8 Oct 2008 22:06:43 -0700 (PDT)
+From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
+Date: Thu, 9 Oct 2008 02:06:58 -0300
 Subject: [Buildroot] svn commit: trunk/buildroot/package/directfb
-Message-ID: <20081009050643.525103C755@busybox.net>
+In-Reply-To: <87d4ibx7bf.fsf@macbook.be.48ers.dk>
+References: <20081007202927.B2E04F802A@busybox.net>
+	<87d4ibx7bf.fsf@macbook.be.48ers.dk>
+Message-ID: <d6cda7730810082206nd6cc641wbcf9f3e2f5513672@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: correa
-Date: 2008-10-08 22:06:42 -0700 (Wed, 08 Oct 2008)
-New Revision: 23629
+Hi Peter,
 
-Log:
-Fix dependencies in directfb config options
+>  correa> +
+>  correa> +config BR2_PACKAGE_DIRECTFB_XSERVER
+>  correa> +        bool "build with X server backend"
+>
+> Doesn't this need to depend on the various X implementations
+> (E.G. BR2_PACKAGE_XORG || ..XORG7 || ..TINYX ?
+>
 
-Modified:
-   trunk/buildroot/package/directfb/Config.in
+I suppose it should, yes. Sorry, I didn't notice.
+Btw, we really need a better check for X. something like the linux
+kernel with BR2_HAS_X that is set on either X implementation.
+XORG for instance is an empty folder in package/xorg. When/if that
+changes, we need to revisit all packages, quite anoying.
 
+>  correa> +config BR2_PACKAGE_DIRECTFB_PNG
+>  correa> +        bool "enable PNG support"
+>  correa> +        default y
+>  correa> +        depends on BR2_PACKAGE_DIRECTFB
+>  correa> +      select BR2_PACKAGE_LIBPNG
+>  correa> +      select BR2_PACKAGE_ZLIB
+>
+> Indentation seems wrong. Actually it's right here and wrong everywhere
+> else. Config.in uses tabs for indentation, not spaces (and help text
+> is tab+2 spaces).
+>
 
-Changeset:
-Modified: trunk/buildroot/package/directfb/Config.in
-===================================================================
---- trunk/buildroot/package/directfb/Config.in	2008-10-08 23:22:11 UTC (rev 23628)
-+++ trunk/buildroot/package/directfb/Config.in	2008-10-09 05:06:42 UTC (rev 23629)
-@@ -17,6 +17,7 @@
-         bool "build with X server backend"
-         default n
-         depends on BR2_PACKAGE_DIRECTFB
-+	depends on BR2_PACKAGE_XSERVER_x11r7 || BR2_PACKAGE_XSERVER_tinyx
- 
- config BR2_PACKAGE_DIRECTFB_UNIQUE
-         bool "enable unique window manager"
-@@ -63,7 +64,6 @@
-         default y
-         depends on BR2_PACKAGE_DIRECTFB
- 	select BR2_PACKAGE_LIBPNG
--	select BR2_PACKAGE_ZLIB
- 
- config BR2_PACKAGE_DIRECTFB_TSLIB
-         bool "enable touchscreen support"
-@@ -75,6 +75,7 @@
-         bool "enable GIF support"
-         default y
-         depends on BR2_PACKAGE_DIRECTFB
-+	select BR2_PACKAGE_LIBUNGIF
- 
- config BR2_PACKAGE_DIRECTFB_JPEG
-         bool "enable JPEG support"
+Unfortunally I can't see that using vi. Since it's not Python, I
+honestly don't see the space/tab being relevant.
+
+>  correa> +config BR2_PACKAGE_DIRECTFB_GIF
+>  correa> +        bool "enable GIF support"
+>  correa> +        default y
+>  correa> +        depends on BR2_PACKAGE_DIRECTFB
+>
+> Is that built in, or do you need to select libgif or similar?
+>
+
+It seams to depend on libgif, so another select is missing. I was able
+to catch the ZLIB select missing in the original patch and added it
+myself, but I guess I didn't notice this one as I already had libgif
+selected.
+
+Fixes in -r23629
+
+Kind Regards,
+    Thiago A. Correa
