@@ -1,41 +1,44 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Thu, 9 Oct 2008 11:42:28 +1100
-Subject: [Buildroot] Both cramfs + jffs2 in buildroot?
-In-Reply-To: <48ECAD04.6070209@timeterminal.se>
-References: <48ECAD04.6070209@timeterminal.se>
-Message-ID: <20081009004228.GA12878@cloud.net.au>
+From: Ormund Williams <ormundw@panix.com>
+Date: Wed, 08 Oct 2008 21:25:52 -0400
+Subject: [Buildroot] svn commit: trunk/buildroot/package/directfb
+In-Reply-To: <20081007202927.B2E04F802A@busybox.net>
+References: <20081007202927.B2E04F802A@busybox.net>
+Message-ID: <1223515552.3276.52.camel@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Oct 08, 2008 at 02:52:20PM +0200, Daniel Nystr?m wrote:
-> (Sorry if this has been a topic earlier, but it's really hard to search
-> the mailing archive)
+On Tue, 2008-10-07 at 13:29 -0700, correa at uclibc.org wrote:
+> Author: correa
+> Date: 2008-10-07 13:29:27 -0700 (Tue, 07 Oct 2008)
+> New Revision: 23621
 > 
-> Is it possible in Buildroot to make both a read-only rootfs and a second
-> writable filesystem?
+> Log:
+> widen options to configure directfb, patch by Micha Nelissen <micha@neli.hopto.org>
 > 
-> A common setup is using cramfs for / and mounting a jffs2 on /mnt/flash,
-> and then make a symlink of /etc to point at /mnt/flash/etc where all
-> config files are writable.
+> Modified:
+>    trunk/buildroot/package/directfb/Config.in
+>    trunk/buildroot/package/directfb/directfb.mk
 > 
-> Is this possible to achive with Buildroot?
+> 
+> Changeset:
+> Modified: trunk/buildroot/package/directfb/Config.in
+> ===================================================================
+> --- trunk/buildroot/package/directfb/Config.in	2008-10-07 17:08:27 UTC (rev 23620)
+> +++ trunk/buildroot/package/directfb/Config.in	2008-10-07 20:29:27 UTC (rev 23621)
+> @@ -1,15 +1,10 @@
+--snip--
 
-No, there's no support for building two file systems with different
-contents.
+I get the following error with this patch:
 
-There might be better ways to handle this anyway, like copying /etc from
-the cramfs to the rw jffs2 on the first bootup?
-
-With regard to mounting /mnt/flash/etc onto /etc, I don't think a
-symlink will work - you need to use/run stuff from /etc before the
-second file system can be mounted. I suggest a minimal /etc in the root,
-enough to get the other file system mounted, and then "mount --bind" the 
-new /etc over the top.
+checking for directfb-csource... no
+configure: error: Could not find a directfb-csource in your PATH
+make: ***
+[/home/ormund/buildroot/buildroot/build_i686/DirectFB-1.2.6/.configured]
+Error 1
 
 
-Hamish
--- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+__
+Ormund
