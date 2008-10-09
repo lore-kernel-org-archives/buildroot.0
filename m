@@ -1,61 +1,57 @@
 From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Thu, 9 Oct 2008 02:06:58 -0300
+Date: Thu, 9 Oct 2008 02:21:00 -0300
 Subject: [Buildroot] svn commit: trunk/buildroot/package/directfb
-In-Reply-To: <87d4ibx7bf.fsf@macbook.be.48ers.dk>
+In-Reply-To: <1223515552.3276.52.camel@localhost.localdomain>
 References: <20081007202927.B2E04F802A@busybox.net>
-	<87d4ibx7bf.fsf@macbook.be.48ers.dk>
-Message-ID: <d6cda7730810082206nd6cc641wbcf9f3e2f5513672@mail.gmail.com>
+	<1223515552.3276.52.camel@localhost.localdomain>
+Message-ID: <d6cda7730810082221w6019c604occa5158abac583f2@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
-
->  correa> +
->  correa> +config BR2_PACKAGE_DIRECTFB_XSERVER
->  correa> +        bool "build with X server backend"
+On Wed, Oct 8, 2008 at 10:25 PM, Ormund Williams <ormundw@panix.com> wrote:
+> On Tue, 2008-10-07 at 13:29 -0700, correa at uclibc.org wrote:
+>> Author: correa
+>> Date: 2008-10-07 13:29:27 -0700 (Tue, 07 Oct 2008)
+>> New Revision: 23621
+>>
+>> Log:
+>> widen options to configure directfb, patch by Micha Nelissen <micha@neli.hopto.org>
+>>
+>> Modified:
+>>    trunk/buildroot/package/directfb/Config.in
+>>    trunk/buildroot/package/directfb/directfb.mk
+>>
+>>
+>> Changeset:
+>> Modified: trunk/buildroot/package/directfb/Config.in
+>> ===================================================================
+>> --- trunk/buildroot/package/directfb/Config.in        2008-10-07 17:08:27 UTC (rev 23620)
+>> +++ trunk/buildroot/package/directfb/Config.in        2008-10-07 20:29:27 UTC (rev 23621)
+>> @@ -1,15 +1,10 @@
+> --snip--
 >
-> Doesn't this need to depend on the various X implementations
-> (E.G. BR2_PACKAGE_XORG || ..XORG7 || ..TINYX ?
+> I get the following error with this patch:
 >
-
-I suppose it should, yes. Sorry, I didn't notice.
-Btw, we really need a better check for X. something like the linux
-kernel with BR2_HAS_X that is set on either X implementation.
-XORG for instance is an empty folder in package/xorg. When/if that
-changes, we need to revisit all packages, quite anoying.
-
->  correa> +config BR2_PACKAGE_DIRECTFB_PNG
->  correa> +        bool "enable PNG support"
->  correa> +        default y
->  correa> +        depends on BR2_PACKAGE_DIRECTFB
->  correa> +      select BR2_PACKAGE_LIBPNG
->  correa> +      select BR2_PACKAGE_ZLIB
->
-> Indentation seems wrong. Actually it's right here and wrong everywhere
-> else. Config.in uses tabs for indentation, not spaces (and help text
-> is tab+2 spaces).
->
-
-Unfortunally I can't see that using vi. Since it's not Python, I
-honestly don't see the space/tab being relevant.
-
->  correa> +config BR2_PACKAGE_DIRECTFB_GIF
->  correa> +        bool "enable GIF support"
->  correa> +        default y
->  correa> +        depends on BR2_PACKAGE_DIRECTFB
->
-> Is that built in, or do you need to select libgif or similar?
+> checking for directfb-csource... no
+> configure: error: Could not find a directfb-csource in your PATH
+> make: ***
+> [/home/ormund/buildroot/buildroot/build_i686/DirectFB-1.2.6/.configured]
+> Error 1
 >
 
-It seams to depend on libgif, so another select is missing. I was able
-to catch the ZLIB select missing in the original patch and added it
-myself, but I guess I didn't notice this one as I already had libgif
-selected.
+I have no idea what directfb-csource is.
+This just works for me when compiling for AVR32.
 
-Fixes in -r23629
+I also don't have it on my search path either:
+localhost directfb # which directfb-csource
+which: no directfb-csource in
+(/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/bin:/usr/i686-pc-linux-gnu/gcc-bin/4.1.2:/usr/kde/4.0/sbin:/usr/kde/4.0/bin)
+
+So It can't be coming from the host. Did it work at all before?
+Perhaps it's one of the new options?
 
 Kind Regards,
-    Thiago A. Correa
+   Thiago A. Correa
