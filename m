@@ -1,37 +1,30 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Fri, 10 Oct 2008 01:25:15 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/kernel-headers
-Message-ID: <20081010082515.5F6723C922@busybox.net>
+From: Hinko Kocevar <hinko.kocevar@cetrtapot.si>
+Date: Fri, 10 Oct 2008 12:59:15 +0200
+Subject: [Buildroot] openssl error
+In-Reply-To: <88372fcb0810090804n520b72d3hf2160d5cf7b4f802@mail.gmail.com>
+References: <88372fcb0810090151s1f9650b1u17252c27f9899d65@mail.gmail.com>	
+	<48EE0394.90003@cetrtapot.si>
+	<88372fcb0810090804n520b72d3hf2160d5cf7b4f802@mail.gmail.com>
+Message-ID: <48EF3583.9020107@cetrtapot.si>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-10-10 01:25:15 -0700 (Fri, 10 Oct 2008)
-New Revision: 23649
+Daniel Lerch wrote:
+> I have enabled this option, but the problem persists.
 
-Log:
-kernel-headers: bump 2.6.25.x / 2.6.26.x versions
+Maybe your arch is forcing it to no (like for cris) or some package selects/de-selects it. See Kconfig files that select BR2_LARGEFILE.
 
-Modified:
-   trunk/buildroot/toolchain/kernel-headers/Config.in
+HTH,
+Hinko
 
-
-Changeset:
-Modified: trunk/buildroot/toolchain/kernel-headers/Config.in
-===================================================================
---- trunk/buildroot/toolchain/kernel-headers/Config.in	2008-10-10 08:25:02 UTC (rev 23648)
-+++ trunk/buildroot/toolchain/kernel-headers/Config.in	2008-10-10 08:25:15 UTC (rev 23649)
-@@ -112,8 +112,8 @@
- 	default "2.6.22.10"	if BR2_KERNEL_HEADERS_2_6_22
- 	default "2.6.23"	if BR2_KERNEL_HEADERS_2_6_23
- 	default "2.6.24.7"	if BR2_KERNEL_HEADERS_2_6_24
--	default "2.6.25.15"	if BR2_KERNEL_HEADERS_2_6_25
--	default "2.6.26.2"	if BR2_KERNEL_HEADERS_2_6_26
-+	default "2.6.25.18"	if BR2_KERNEL_HEADERS_2_6_25
-+	default "2.6.26.6"	if BR2_KERNEL_HEADERS_2_6_26
- 	default "2.6.27"	if BR2_KERNEL_HEADERS_2_6_27
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 
+-- 
+?ETRTA POT, d.o.o., Kranj
+Planina 3
+4000 Kranj
+Slovenia, Europe
+Tel. +386 (0) 4 280 66 03
+E-mail: hinko.kocevar at cetrtapot.si
+Http: www.cetrtapot.si
