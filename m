@@ -1,52 +1,59 @@
-From: laird at uclibc.org <laird@uclibc.org>
-Date: Fri, 10 Oct 2008 07:41:18 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libxml2
-Message-ID: <20081010144118.CB0E13C933@busybox.net>
+From: Montes, Jacques <Jacques.Montes@wavecom.com>
+Date: Fri, 10 Oct 2008 19:18:58 +0200
+Subject: [Buildroot] ARM.extab section required for elf2flt
+Message-ID: <86C6E24AEF127E40984B146FB917A60F04795ABE@FRILMEX01.wm.corp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: laird
-Date: 2008-10-10 07:41:18 -0700 (Fri, 10 Oct 2008)
-New Revision: 23656
+I'm using an ARM mmu less toolchain generated with buildroot and with elf2flt.
 
-Log:
-package/libxml2/libxml2.mk: Bounce version to 2.6.32
+Everything seems to go well toolchain / uclibc / busybox / root File System , but I want to compile a simple main application, the linker complains about the ARM.extab section which is not present in the elf2flt.ld.
 
-Bounce the version to 2.6.32.
-And deal with the left over .rej files.
-
-Daniel Laird
-
-
-Modified:
-   trunk/buildroot/package/libxml2/libxml2.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/libxml2/libxml2.mk
-===================================================================
---- trunk/buildroot/package/libxml2/libxml2.mk	2008-10-10 13:50:38 UTC (rev 23655)
-+++ trunk/buildroot/package/libxml2/libxml2.mk	2008-10-10 14:41:18 UTC (rev 23656)
-@@ -3,7 +3,7 @@
- # libxml2
- #
- #############################################################
--LIBXML2_VERSION = 2.6.31
-+LIBXML2_VERSION = 2.6.32
- LIBXML2_SOURCE = libxml2-sources-$(LIBXML2_VERSION).tar.gz
- LIBXML2_SITE = ftp://xmlsoft.org/libxml2
- LIBXML2_INSTALL_STAGING = YES
-@@ -23,6 +23,10 @@
  
- $(eval $(call AUTOTARGETS,package,libxml2))
+
+I had to make a workaround for elf2flt because it is not installed in the correct staging_dir/usr directory, but is seems to work.
+
  
-+$(LIBXML2_HOOK_POST_EXTRACT):
-+	rm -f $(LIBXML2_DIR)/win32/Makefile.msvc.rej
-+	rm -f $(LIBXML2_DIR)/macos/src/XMLTestPrefix.h.rej
-+
- $(LIBXML2_HOOK_POST_INSTALL):
- 	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/xml2-config
- 	$(SED) "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/xml2-config
+
+Thanks
+
+ 
+
+ 
+
+ 
+
+  <http://www.wavecom.com> 
+
+Jacques Montes
+Technical Marketing Manager
+jacques.montes at wavecom.com <mailto:jacques.montes@wavecom.com> 
+Tel: +33 1 46 29 43 73
+Fax: +33 1 46 29 40 55
+Mobile: +33 6 10 58 57 52 
+
+Wavecom S.A.
+3 esplanade du Foncet
+Issy-les-Moulineaux
+92442 Cedex - France
+www.wavecom.com <http://www.wavecom.com>  
+
+This message and any attachments (the "Message") are confidential and intended solely for the addressees. Any unauthorized modification, edition, use or dissemination is prohibited. Neither Wavecom nor any of its subsidiaries shall be liable for the Message if altered, changed, falsified or edited, diffused without authorization. 
+
+Ce message et toutes les pi?ces jointes (le "Message") sont confidentiels et ?tablis ? l'intention exclusive de ses destinataires. Toute modification, ?dition, utilisation ou diffusion non autoris?e est interdite. Wavecom et ses filiales d?clinent toute responsabilit? au titre de ce Message s'il a ?t? alt?r?, d?form?, falsifi? ou ?dit?, diffus? sans autorisation.
+
+ 
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20081010/7ce246be/attachment.htm 
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: image/gif
+Size: 4050 bytes
+Desc: image001.gif
+Url : http://busybox.net/lists/buildroot/attachments/20081010/7ce246be/attachment.gif 
