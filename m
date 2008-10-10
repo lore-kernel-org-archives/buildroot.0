@@ -1,59 +1,61 @@
-From: Montes, Jacques <Jacques.Montes@wavecom.com>
-Date: Fri, 10 Oct 2008 19:18:58 +0200
-Subject: [Buildroot] ARM.extab section required for elf2flt
-Message-ID: <86C6E24AEF127E40984B146FB917A60F04795ABE@FRILMEX01.wm.corp.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Fri, 10 Oct 2008 11:30:39 -0700
+Subject: [Buildroot] [buildroot 0004894]: host lzo and zlib can't be built
+	within buildroot
+Message-ID: <b8bcac0a09ddcafe9d479db0de22dd81@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm using an ARM mmu less toolchain generated with buildroot and with elf2flt.
 
-Everything seems to go well toolchain / uclibc / busybox / root File System , but I want to compile a simple main application, the linker complains about the ARM.extab section which is not present in the elf2flt.ld.
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=4894 
+====================================================================== 
+Reported By:                hmoffatt
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   4894
+Category:                   Other
+Reproducibility:            have not tried
+Severity:                   crash
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             09-11-2008 02:08 PDT
+Last Modified:              10-10-2008 11:30 PDT
+====================================================================== 
+Summary:                    host lzo and zlib can't be built within buildroot
+Description: 
+host-mtd requires liblzo and zlib headers and libraries, but nothing in
+buildroot builds them.
 
- 
+It's not clear if we should build these in buildroot or expect them to be
+installed on the host system through the normal package manager.. zlib is
+pretty common for example, though lzo less though.
+======================================================================
+Relationships       ID      Summary
+----------------------------------------------------------------------
+related to          0004804 lzo1x.h not found
+====================================================================== 
 
-I had to make a workaround for elf2flt because it is not installed in the correct staging_dir/usr directory, but is seems to work.
+---------------------------------------------------------------------- 
+ john_schimandle - 10-10-08 11:30  
+---------------------------------------------------------------------- 
+Is there a known workaround for this problem? I noticed the Makefile in
+toolchain_build_arm/mtd_orig limits the include file search path to the
+local include directory (-I ./include). 
 
- 
-
-Thanks
-
- 
-
- 
-
- 
-
-  <http://www.wavecom.com> 
-
-Jacques Montes
-Technical Marketing Manager
-jacques.montes at wavecom.com <mailto:jacques.montes@wavecom.com> 
-Tel: +33 1 46 29 43 73
-Fax: +33 1 46 29 40 55
-Mobile: +33 6 10 58 57 52 
-
-Wavecom S.A.
-3 esplanade du Foncet
-Issy-les-Moulineaux
-92442 Cedex - France
-www.wavecom.com <http://www.wavecom.com>  
-
-This message and any attachments (the "Message") are confidential and intended solely for the addressees. Any unauthorized modification, edition, use or dissemination is prohibited. Neither Wavecom nor any of its subsidiaries shall be liable for the Message if altered, changed, falsified or edited, diffused without authorization. 
-
-Ce message et toutes les pi?ces jointes (le "Message") sont confidentiels et ?tablis ? l'intention exclusive de ses destinataires. Toute modification, ?dition, utilisation ou diffusion non autoris?e est interdite. Wavecom et ses filiales d?clinent toute responsabilit? au titre de ce Message s'il a ?t? alt?r?, d?form?, falsifi? ou ?dit?, diffus? sans autorisation.
-
- 
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20081010/7ce246be/attachment.htm 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: image/gif
-Size: 4050 bytes
-Desc: image001.gif
-Url : http://busybox.net/lists/buildroot/attachments/20081010/7ce246be/attachment.gif 
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+09-11-08 02:08  hmoffatt       New Issue                                    
+09-11-08 02:08  hmoffatt       Status                   new => assigned     
+09-11-08 02:08  hmoffatt       Assigned To               => buildroot       
+09-11-08 02:08  hmoffatt       Issue generated from     0004804             
+09-11-08 02:08  hmoffatt       Relationship added       related to 0004804  
+10-10-08 11:30  john_schimandleNote Added: 0013184                          
+======================================================================
