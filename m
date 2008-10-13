@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 13 Oct 2008 04:47:58 -0700
+Date: Mon, 13 Oct 2008 04:50:16 -0700
 Subject: [Buildroot] [buildroot 0005394]: xedit compilation fails
-Message-ID: <c4cd567a7f6b7fe77d817539d070ce72@busybox.net>
+Message-ID: <664ce541334598e6bee2da066c172a71@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,7 +9,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=5394 
 ====================================================================== 
@@ -25,7 +25,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             10-13-2008 04:47 PDT
-Last Modified:              10-13-2008 04:47 PDT
+Last Modified:              10-13-2008 04:50 PDT
 ====================================================================== 
 Summary:                    xedit compilation fails
 Description: 
@@ -119,10 +119,17 @@ A workaround to get it to work: add -lxcb-xlib -lxcb -lXpm -lXext -lXdmcp
 to the link command line.
 ====================================================================== 
 
+---------------------------------------------------------------------- 
+ tpetazzoni - 10-13-08 04:50  
+---------------------------------------------------------------------- 
+The problem is similar with xclock, xev and probably other basic X11
+applications. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
 10-13-08 04:47  tpetazzoni     New Issue                                    
 10-13-08 04:47  tpetazzoni     Status                   new => assigned     
 10-13-08 04:47  tpetazzoni     Assigned To               => buildroot       
+10-13-08 04:50  tpetazzoni     Note Added: 0013444                          
 ======================================================================
