@@ -1,65 +1,26 @@
-From: egtvedt at uclibc.org <egtvedt@uclibc.org>
-Date: Mon, 13 Oct 2008 01:10:36 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/openssl
-Message-ID: <20081013081036.2CF4A3C84C@busybox.net>
+From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+Date: Mon, 13 Oct 2008 10:40:48 +0200
+Subject: [Buildroot] BR2_PACKAGE_BUSYBOX_CONFIG and Atmel targets
+In-Reply-To: <48F3016E.9080308@control.lth.se>
+References: <48F1CE78.3040908@control.lth.se>
+	<20081013081228.14f1e6c7@hcegtvedt>
+	<48F2EF1B.70102@control.lth.se> <20081013073057.GA9429@mx.loc>
+	<48F3016E.9080308@control.lth.se>
+Message-ID: <20081013084048.GB9429@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: egtvedt
-Date: 2008-10-13 01:10:35 -0700 (Mon, 13 Oct 2008)
-New Revision: 23663
+On Mon, Oct 13, 2008 at 10:06:06AM +0200, Anders Blomdell wrote:
 
-Log:
-openssl: fix architecture specified when configuring openssl
+>> Did you read docs/README and try what's documented there (see
+>> "finegrained")?
+>No, missed that (or more correctly I interpreted that setting
+>BR2_PACKAGE_BUSYBOX_CONFIG should be equivalent).
 
-This patch will default to linux-generic32, unless a known optimized
-architecture is selected.
+It's supposed to override any config- or board-imposed configfile(s). If
+it's broken in svn then bug somebody to fix it.
 
-As of today it will select optimized config for; avr32, ia64, powerpc and
-x86_64.
-
-This fixes bug #5344.
-
-Signed-off-by: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-
-
-
-Modified:
-   trunk/buildroot/package/openssl/openssl.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/openssl/openssl.mk
-===================================================================
---- trunk/buildroot/package/openssl/openssl.mk	2008-10-12 11:20:08 UTC (rev 23662)
-+++ trunk/buildroot/package/openssl/openssl.mk	2008-10-13 08:10:35 UTC (rev 23663)
-@@ -6,13 +6,21 @@
- OPENSSL_VERSION:=0.9.8g
- OPENSSL_SITE:=http://www.openssl.org/source
- 
--OPENSSL_TARGET_ARCH:=
--ifeq ($(BR2_i386),y)
--OPENSSL_TARGET_ARCH:=generic32
-+OPENSSL_TARGET_ARCH=generic32
-+
-+# Some architectures are optimized in OpenSSL
-+ifeq ($(BR2_ARCH),avr32)
-+OPENSSL_TARGET_ARCH=avr32
- endif
--ifeq ($(OPENSSL_TARGET_ARCH),)
--OPENSSL_TARGET_ARCH:=$(ARCH)
-+ifeq ($(BR2_ARCH),ia64)
-+OPENSSL_TARGET_ARCH=ia64
- endif
-+ifeq ($(BR2_ARCH),powerpc)
-+OPENSSL_TARGET_ARCH=ppc
-+endif
-+ifeq ($(BR2_ARCH),x86_64)
-+OPENSSL_TARGET_ARCH=x86_64
-+endif
- 
- OPENSSL_INSTALL_STAGING = YES
- OPENSSL_INSTALL_STAGING_OPT = INSTALL_PREFIX=$(STAGING_DIR) install
+cheers,
