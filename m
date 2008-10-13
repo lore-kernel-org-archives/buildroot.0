@@ -1,62 +1,49 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 13 Oct 2008 03:24:32 -0700
-Subject: [Buildroot] [buildroot 0005374]: Cannot compile libpng, directfb,
-	and other packages due to missing -L option
-Message-ID: <420cca809853eda1871a3d5fb5936cfc@busybox.net>
+From: Anders Blomdell <anders.blomdell@control.lth.se>
+Date: Mon, 13 Oct 2008 12:28:41 +0200
+Subject: [Buildroot] BR2_PACKAGE_BUSYBOX_CONFIG and Atmel targets
+In-Reply-To: <87k5cc24h4.fsf@macbook.be.48ers.dk>
+References: <48F1CE78.3040908@control.lth.se>
+	<87k5cc24h4.fsf@macbook.be.48ers.dk>
+Message-ID: <48F322D9.4070409@control.lth.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Peter Korsgaard wrote:
+>>>>>> "Anders" == Anders Blomdell <anders.blomdell@control.lth.se> writes:
+> 
+> Hi,
+> 
+>  Anders> in target/device/Atmel/atngw100/Makefile.in there is a line
+>  Anders> BR2_PACKAGE_BUSYBOX_CONFIG:=$(BOARD_PATH)/busybox-1.9.1.config
+> 
+> Yes, this is done so specific boards can enforce certain
+> busybox/uclibc configurations. For most boards this is fine, but you
+> can ofcause start to question it for evaluation boards.
+To me it looks like this diminishes the value of buildroot for these boards, I
+would suggest something like the attached patch (i.e. providing board specific
+defaults without forcing the user to always use them)
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=5374 
-====================================================================== 
-Reported By:                tpetazzoni
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   5374
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   block
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             10-13-2008 03:24 PDT
-Last Modified:              10-13-2008 03:24 PDT
-====================================================================== 
-Summary:                    Cannot compile libpng, directfb, and other packages
-due to missing -L option
-Description: 
-With current Buildroot SVN, I have an issue when trying to build libpng
-and directfb: the configure script cannot find that zlib is installed.
+> Either change the config that it points to or don't select that board
+> (or create your own board config based on the atngw).
+And put these restrictions in the buildroot documentation, so others will find
+it sooner than I did...
 
-The configure script tries to compile a simple program that makes a
-call to zlibVersion() using the -lz option. But the
--L$(STAGING_DIR)/usr/lib/ option is not passed to gcc (the -I options
-are correct however), so the compilation fails and configure complains
-that it can't find the configure script.
+Regards
 
-In package/Makefile.in, it seems that the library path is passed in
-TARGET_CONFIGURE_OPTS, using LD :
 
- LD="$(TARGET_LD) $(TARGET_LDFLAGS)" \
+Anders
 
-In the config.log, I see reference to the correct -L paths, but these
-paths seem to be removed when testing the compilation of the sample
-zlib program.
 
-I'm using the following patches to workaround the problem, but I don't
-think these are the proper fixes.
-====================================================================== 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-10-13-08 03:24  tpetazzoni     New Issue                                    
-10-13-08 03:24  tpetazzoni     Status                   new => assigned     
-10-13-08 03:24  tpetazzoni     Assigned To               => buildroot       
-======================================================================
+-- 
+Anders Blomdell                  Email: anders.blomdell at control.lth.se
+Department of Automatic Control
+Lund University                  Phone:    +46 46 222 4625
+P.O. Box 118                     Fax:      +46 46 138118
+SE-221 00 Lund, Sweden
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: atmel_buildroot.patch
+Url: http://busybox.net/lists/buildroot/attachments/20081013/bb270309/attachment.txt 
