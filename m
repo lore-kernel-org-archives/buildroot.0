@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 13 Oct 2008 03:20:10 -0700
-Subject: [Buildroot] [buildroot 0005174]: Patch for directfb(add gfxdrive
-	select options)
-Message-ID: <6d67b47c03c0693e184172532ca0f2cd@busybox.net>
+Date: Mon, 13 Oct 2008 03:24:32 -0700
+Subject: [Buildroot] [buildroot 0005374]: Cannot compile libpng, directfb,
+	and other packages due to missing -L option
+Message-ID: <420cca809853eda1871a3d5fb5936cfc@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,48 +10,53 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-A NOTE has been added to this issue. 
+The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=5174 
+http://busybox.net/bugs/view.php?id=5374 
 ====================================================================== 
-Reported By:                Devix
+Reported By:                tpetazzoni
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   5174
-Category:                   New Features
+Issue ID:                   5374
+Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   minor
+Severity:                   block
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             09-27-2008 07:06 PDT
-Last Modified:              10-13-2008 03:20 PDT
+Date Submitted:             10-13-2008 03:24 PDT
+Last Modified:              10-13-2008 03:24 PDT
 ====================================================================== 
-Summary:                    Patch for directfb(add gfxdrive select options)
+Summary:                    Cannot compile libpng, directfb, and other packages
+due to missing -L option
 Description: 
-Thsi patch add gfx drivere select options into directfb package.
+With current Buildroot SVN, I have an issue when trying to build libpng
+and directfb: the configure script cannot find that zlib is installed.
+
+The configure script tries to compile a simple program that makes a
+call to zlibVersion() using the -lz option. But the
+-L$(STAGING_DIR)/usr/lib/ option is not passed to gcc (the -I options
+are correct however), so the compilation fails and configure complains
+that it can't find the configure script.
+
+In package/Makefile.in, it seems that the library path is passed in
+TARGET_CONFIGURE_OPTS, using LD :
+
+ LD="$(TARGET_LD) $(TARGET_LDFLAGS)" \
+
+In the config.log, I see reference to the correct -L paths, but these
+paths seem to be removed when testing the compilation of the sample
+zlib program.
+
+I'm using the following patches to workaround the problem, but I don't
+think these are the proper fixes.
 ====================================================================== 
-
----------------------------------------------------------------------- 
- tpetazzoni - 10-13-08 03:20  
----------------------------------------------------------------------- 
-The patch doesn't apply anymore, and a similar functionnality has been
-added in r23621. Not all gfx drivers have been added in r23621, but they
-can trivially be added.
-
-I'd suggest to mark this bug as fixed by r23621. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-09-27-08 07:06  Devix          New Issue                                    
-09-27-08 07:06  Devix          Status                   new => assigned     
-09-27-08 07:06  Devix          Assigned To               => buildroot       
-09-27-08 07:06  Devix          File Added:
-directfb-1.0.1-add-gfxdriver-select-options.patch                    
-09-27-08 08:46  Devix          Issue Monitored: Devix                       
-09-27-08 08:46  Devix          Issue End Monitor: Devix                     
-09-27-08 08:46  Devix          Issue Monitored: Devix                       
-10-13-08 03:20  tpetazzoni     Note Added: 0013424                          
+10-13-08 03:24  tpetazzoni     New Issue                                    
+10-13-08 03:24  tpetazzoni     Status                   new => assigned     
+10-13-08 03:24  tpetazzoni     Assigned To               => buildroot       
 ======================================================================
