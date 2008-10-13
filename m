@@ -1,58 +1,65 @@
-From: Anders Blomdell <anders.blomdell@control.lth.se>
-Date: Mon, 13 Oct 2008 10:06:06 +0200
-Subject: [Buildroot] BR2_PACKAGE_BUSYBOX_CONFIG and Atmel targets
-In-Reply-To: <20081013073057.GA9429@mx.loc>
-References: <48F1CE78.3040908@control.lth.se>
-	<20081013081228.14f1e6c7@hcegtvedt>
-	<48F2EF1B.70102@control.lth.se> <20081013073057.GA9429@mx.loc>
-Message-ID: <48F3016E.9080308@control.lth.se>
+From: egtvedt at uclibc.org <egtvedt@uclibc.org>
+Date: Mon, 13 Oct 2008 01:10:36 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/openssl
+Message-ID: <20081013081036.2CF4A3C84C@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernhard Reutner-Fischer wrote:
-> On Mon, Oct 13, 2008 at 08:47:55AM +0200, Anders Blomdell wrote:
->> Hans-Christian Egtvedt wrote:
->>> On Sun, 12 Oct 2008 12:16:24 +0200
->>> Anders Blomdell <anders.blomdell@control.lth.se> wrote:
->>>
->>>> in target/device/Atmel/atngw100/Makefile.in there is a line
->>>>
->>>> BR2_PACKAGE_BUSYBOX_CONFIG:=$(BOARD_PATH)/busybox-1.9.1.config
->>>>
->>>> unfortunately this makes it impossible to change busybox config 
->>>> (primarily I want to turn off telnet) to a custom version. What is
->>>> the correct way to handle this?
->>>>
->>> Well, naming indicates that you will need to add a
->>> busybox-<version>.config file.
->> And change the Makfile.in as well, IMHO that is the wrong path to follow.
->>> It is probably a good idea to scrap the <version> part as well, just
->>> have a generic busybox.config file. Kconfig options should not change
->>> that often, and user will be asked to answer yes/no to new features
->>> most times.
->> Is there any good reason at all to unconditionally ignore the busybox 
->> config choosen by the user (many of the Atmel boards and a few other 
->> does this)? Would a patch that just removes all these unconditional 
->> configurations be accepted, or is there any deep reason for not allowing 
->> Atmel users choose their own busybox configuration (and in the default 
->> case choose the buildroot default instead of a board specific one)?
-> 
-> Did you read docs/README and try what's documented there (see
-> "finegrained")?
-No, missed that (or more correctly I interpreted that setting
-BR2_PACKAGE_BUSYBOX_CONFIG should be equivalent).
+Author: egtvedt
+Date: 2008-10-13 01:10:35 -0700 (Mon, 13 Oct 2008)
+New Revision: 23663
 
-Regards
+Log:
+openssl: fix architecture specified when configuring openssl
 
-Anders Blomdell
+This patch will default to linux-generic32, unless a known optimized
+architecture is selected.
+
+As of today it will select optimized config for; avr32, ia64, powerpc and
+x86_64.
+
+This fixes bug #5344.
+
+Signed-off-by: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
 
 
--- 
-Anders Blomdell                  Email: anders.blomdell at control.lth.se
-Department of Automatic Control
-Lund University                  Phone:    +46 46 222 4625
-P.O. Box 118                     Fax:      +46 46 138118
-SE-221 00 Lund, Sweden
+
+Modified:
+   trunk/buildroot/package/openssl/openssl.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/openssl/openssl.mk
+===================================================================
+--- trunk/buildroot/package/openssl/openssl.mk	2008-10-12 11:20:08 UTC (rev 23662)
++++ trunk/buildroot/package/openssl/openssl.mk	2008-10-13 08:10:35 UTC (rev 23663)
+@@ -6,13 +6,21 @@
+ OPENSSL_VERSION:=0.9.8g
+ OPENSSL_SITE:=http://www.openssl.org/source
+ 
+-OPENSSL_TARGET_ARCH:=
+-ifeq ($(BR2_i386),y)
+-OPENSSL_TARGET_ARCH:=generic32
++OPENSSL_TARGET_ARCH=generic32
++
++# Some architectures are optimized in OpenSSL
++ifeq ($(BR2_ARCH),avr32)
++OPENSSL_TARGET_ARCH=avr32
+ endif
+-ifeq ($(OPENSSL_TARGET_ARCH),)
+-OPENSSL_TARGET_ARCH:=$(ARCH)
++ifeq ($(BR2_ARCH),ia64)
++OPENSSL_TARGET_ARCH=ia64
+ endif
++ifeq ($(BR2_ARCH),powerpc)
++OPENSSL_TARGET_ARCH=ppc
++endif
++ifeq ($(BR2_ARCH),x86_64)
++OPENSSL_TARGET_ARCH=x86_64
++endif
+ 
+ OPENSSL_INSTALL_STAGING = YES
+ OPENSSL_INSTALL_STAGING_OPT = INSTALL_PREFIX=$(STAGING_DIR) install
