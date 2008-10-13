@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 13 Oct 2008 03:34:41 -0700
-Subject: [Buildroot] [buildroot 0005364]: fontconfig compilations sometimes
-	failed with parallel build
-Message-ID: <a1ce8abaaee3775a2943eff0eb2e8322@busybox.net>
+Date: Mon, 13 Oct 2008 04:47:58 -0700
+Subject: [Buildroot] [buildroot 0005394]: xedit compilation fails
+Message-ID: <c4cd567a7f6b7fe77d817539d070ce72@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,55 +9,120 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-A NOTE has been added to this issue. 
+The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=5364 
+http://busybox.net/bugs/view.php?id=5394 
 ====================================================================== 
 Reported By:                tpetazzoni
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   5364
-Category:                   Other
-Reproducibility:            sometimes
-Severity:                   major
+Issue ID:                   5394
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             10-13-2008 03:15 PDT
-Last Modified:              10-13-2008 03:34 PDT
+Date Submitted:             10-13-2008 04:47 PDT
+Last Modified:              10-13-2008 04:47 PDT
 ====================================================================== 
-Summary:                    fontconfig compilations sometimes failed with
-parallel build
+Summary:                    xedit compilation fails
 Description: 
-fontconfig is affected by a compile bug that only occurs from time to time
-when parallel compilation is enabled. The bug is described at
-https://bugs.freedesktop.org/show_bug.cgi?id=16464.
+The compilation of xedit fails, because the libraries used by some
+libraries that xedit is linked with are not listed in the link command
+line, and xedit doesn't seem to use libtool.
 
-The attached patch includes the fix for fontconfig in buildroot. However,
-it modifies a Makefile.am file, so running automake is needed, but I'm not
-sure Buildroot will do that automatically (as the bug only occurs
-sometimes, it's quite hard to test whether the fix properly works or
-not).
+Example:
+/usr/local/uclibc-0.9.29/arm/usr//bin/arm-linux-gcc -Os 
+-I/home/thomas/local/buildroot/build_arm/staging_dir/include
+-I/home/thomas/local/buildroot/build_arm/staging_dir/usr/include
+-I/usr/local/uclibc-0.9.29/arm/usr//arm-linux/include  -g -O2 
+-L/home/thomas/local/buildroot/build_arm/staging_dir/lib
+-L/home/thomas/local/buildroot/build_arm/staging_dir/usr/lib -o xedit 
+xedit-commands.o xedit-hook.o xedit-ispell.o xedit-lisp.o xedit-options.o
+xedit-realpath.o xedit-strcasecmp.o xedit-util.o xedit-xedit.o
+xedit-print.o xedit-printdialog.o libre.a liblisp.a libmp.a -lXaw8 -lXmu
+-lXt -lX11 -lSM -lICE -lXau   -lXprintUtil -lXt -lX11 -lSM -lICE -lXp
+-lXau   -lm 
+/usr/local/uclibc-0.9.29/arm/usr/bin/../lib/gcc/arm-linux-uclibcgnueabi/4.2.4/../../../../arm-linux-uclibcgnueabi/bin/ld:
+warning: libXext.so.6, needed by
+/home/thomas/local/buildroot/build_arm/staging_dir/usr/lib/libXaw8.so, not
+found (try using -rpath or -rpath-link)
+/usr/local/uclibc-0.9.29/arm/usr/bin/../lib/gcc/arm-linux-uclibcgnueabi/4.2.4/../../../../arm-linux-uclibcgnueabi/bin/ld:
+warning: libXpm.so.4, needed by
+/home/thomas/local/buildroot/build_arm/staging_dir/usr/lib/libXaw8.so, not
+found (try using -rpath or -rpath-link)
+/usr/local/uclibc-0.9.29/arm/usr/bin/../lib/gcc/arm-linux-uclibcgnueabi/4.2.4/../../../../arm-linux-uclibcgnueabi/bin/ld:
+warning: libxcb-xlib.so.0, needed by
+/home/thomas/local/buildroot/build_arm/staging_dir/usr/lib/libX11.so, not
+found (try using -rpath or -rpath-link)
+/usr/local/uclibc-0.9.29/arm/usr/bin/../lib/gcc/arm-linux-uclibcgnueabi/4.2.4/../../../../arm-linux-uclibcgnueabi/bin/ld:
+warning: libxcb.so.1, needed by
+/home/thomas/local/buildroot/build_arm/staging_dir/usr/lib/libX11.so, not
+found (try using -rpath or -rpath-link)
+/home/thomas/local/buildroot/build_arm/staging_dir/usr/lib/libX11.so:
+undefined reference to `xcb_connection_has_error'
+/home/thomas/local/buildroot/build_arm/staging_dir/usr/lib/libX11.so:
+undefined reference to `xcb_xlib_lock'
+/home/thomas/local/buildroot/build_arm/staging_dir/usr/lib/libX11.so:
+undefined reference to `xcb_poll_for_reply'
+/home/thomas/local/buildroot/build_arm/staging_dir/usr/lib/libX11.so:
+undefined reference to `xcb_get_maximum_request_length'
+/home/thomas/local/buildroot/build_arm/staging_dir/usr/lib/libX11.so:
+undefined reference to `xcb_xlib_unlock'
+/home/thomas/local/buildroot/build_arm/staging_dir/usr/lib/libXaw8.so:
+undefined reference to `XpmReadFileToPixmap'
+/home/thomas/local/buildroot/build_arm/staging_dir/usr/lib/libXaw8.so:
+undefined reference to `XShapeQueryExtension'
+/home/thomas/local/buildroot/build_arm/staging_dir/usr/lib/libXp.so:
+undefined reference to `XMissingExtension'
+/home/thomas/local/buildroot/build_arm/staging_dir/usr/lib/libX11.so:
+undefined reference to `xcb_get_file_descriptor'
+/home/thomas/local/buildroot/build_arm/staging_dir/usr/lib/libX11.so:
+undefined reference to `xcb_connect'
+/home/thomas/local/buildroot/build_arm/staging_dir/usr/lib/libX11.so:
+undefined reference to `xcb_wait_for_reply'
+/home/thomas/local/buildroot/build_arm/staging_dir/usr/lib/libXp.so:
+undefined reference to `XextRemoveDisplay'
+/home/thomas/local/buildroot/build_arm/staging_dir/usr/lib/libX11.so:
+undefined reference to `xcb_get_setup'
+/home/thomas/local/buildroot/build_arm/staging_dir/usr/lib/libXp.so:
+undefined reference to `XextCreateExtension'
+/home/thomas/local/buildroot/build_arm/staging_dir/usr/lib/libX11.so:
+undefined reference to `xcb_send_request'
+/home/thomas/local/buildroot/build_arm/staging_dir/usr/lib/libX11.so:
+undefined reference to `xcb_wait_for_event'
+/home/thomas/local/buildroot/build_arm/staging_dir/usr/lib/libX11.so:
+undefined reference to `xcb_flush'
+/home/thomas/local/buildroot/build_arm/staging_dir/usr/lib/libX11.so:
+undefined reference to `xcb_poll_for_event'
+/home/thomas/local/buildroot/build_arm/staging_dir/usr/lib/libXaw8.so:
+undefined reference to `XShapeCombineMask'
+/home/thomas/local/buildroot/build_arm/staging_dir/usr/lib/libXp.so:
+undefined reference to `XextFindDisplay'
+/home/thomas/local/buildroot/build_arm/staging_dir/usr/lib/libX11.so:
+undefined reference to `xcb_parse_display'
+/home/thomas/local/buildroot/build_arm/staging_dir/usr/lib/libXp.so:
+undefined reference to `XextAddDisplay'
+/home/thomas/local/buildroot/build_arm/staging_dir/usr/lib/libX11.so:
+undefined reference to `xcb_generate_id'
+/home/thomas/local/buildroot/build_arm/staging_dir/usr/lib/libX11.so:
+undefined reference to `xcb_disconnect'
+/home/thomas/local/buildroot/build_arm/staging_dir/usr/lib/libX11.so:
+undefined reference to `xcb_get_request_sent'
+/home/thomas/local/buildroot/build_arm/staging_dir/usr/lib/libX11.so:
+undefined reference to `xcb_connect_to_display_with_auth_info'
+collect2: ld returned 1 exit status
 
+A workaround to get it to work: add -lxcb-xlib -lxcb -lXpm -lXext -lXdmcp
+to the link command line.
 ====================================================================== 
-
----------------------------------------------------------------------- 
- tpetazzoni - 10-13-08 03:34  
----------------------------------------------------------------------- 
-After testing, it seems that patching Makefile.am is not sufficient to
-re-run automake.
-
-What should be done in this case ? Provide a patch that also fixes the
-generated Makefile ? Run automake before compiling fontconfig ? 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-10-13-08 03:15  tpetazzoni     New Issue                                    
-10-13-08 03:15  tpetazzoni     Status                   new => assigned     
-10-13-08 03:15  tpetazzoni     Assigned To               => buildroot       
-10-13-08 03:15  tpetazzoni     File Added: parallel-compilation-fix.patch       
-            
-10-13-08 03:34  tpetazzoni     Note Added: 0013434                          
+10-13-08 04:47  tpetazzoni     New Issue                                    
+10-13-08 04:47  tpetazzoni     Status                   new => assigned     
+10-13-08 04:47  tpetazzoni     Assigned To               => buildroot       
 ======================================================================
