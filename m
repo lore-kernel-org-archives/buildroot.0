@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 13 Oct 2008 09:11:06 -0700
-Subject: [Buildroot] [buildroot 0003564]: libgtk.mk redefines
-	PKG_CONFIG_PATH, not necessary
-Message-ID: <07ae83d9872baebec2c99e4acf848cbf@bugs.uclibc.org>
+Date: Mon, 13 Oct 2008 09:13:36 -0700
+Subject: [Buildroot] [buildroot 0003554]: Make libgtk2 visible with DirectFB
+	and not just XORG
+Message-ID: <625d1a265ce744295fe4e5226051eef5@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,42 +12,41 @@ To: buildroot@busybox.net
 
 A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=3564 
+http://busybox.net/bugs/view.php?id=3554 
 ====================================================================== 
 Reported By:                daniellaird
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   3564
+Issue ID:                   3554
 Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   minor
+Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             06-03-2008 05:03 PDT
-Last Modified:              10-13-2008 09:11 PDT
+Date Submitted:             06-03-2008 05:00 PDT
+Last Modified:              10-13-2008 09:13 PDT
 ====================================================================== 
-Summary:                    libgtk.mk redefines PKG_CONFIG_PATH, not necessary
+Summary:                    Make libgtk2 visible with DirectFB and not just XORG
 Description: 
-libgtk.mk currently redefines PKG_CONFIG_PATH.  This is not necessary as
-specified in configure enviroment.  In my case I have added
-usr/local/lib/pkgconfig as well and without this fix I need to edit
-multiple makefiles not just package/Makefile.in.  
+libgtk2 is currently dependent on XORG being selected in some form or
+another.  You may only have DirectFB is which case gtk is currently not
+selectable.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- tpetazzoni - 10-13-08 09:11  
+ tpetazzoni - 10-13-08 09:13  
 ---------------------------------------------------------------------- 
 Fixed by r23204, please close this bug. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-06-03-08 05:03  daniellaird    New Issue                                    
-06-03-08 05:03  daniellaird    Status                   new => assigned     
-06-03-08 05:03  daniellaird    Assigned To               => buildroot       
-06-03-08 05:03  daniellaird    File Added: libgtk_build_fix.patch               
-    
-10-13-08 09:11  tpetazzoni     Note Added: 0013474                          
+06-03-08 05:00  daniellaird    New Issue                                    
+06-03-08 05:00  daniellaird    Status                   new => assigned     
+06-03-08 05:00  daniellaird    Assigned To               => buildroot       
+06-03-08 05:00  daniellaird    File Added: gtk_and_directfb_support.patch       
+            
+10-13-08 09:13  tpetazzoni     Note Added: 0013484                          
 ======================================================================
