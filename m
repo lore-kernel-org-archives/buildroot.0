@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 13 Oct 2008 09:04:22 -0700
-Subject: [Buildroot] [buildroot 0005404]: Bogus check on internal toolchain
-	configuration
-Message-ID: <c3e871adb00e5206e786f8945d11a38d@bugs.uclibc.org>
+Date: Mon, 13 Oct 2008 09:07:08 -0700
+Subject: [Buildroot] [buildroot 0004224]: DirectFB Makefile does not support
+	1.0.x / 1.2.x and Examples not supported
+Message-ID: <54abc9754ab54d9aaf68a93276e77ac7@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,60 +10,68 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=5404 
+http://busybox.net/bugs/view.php?id=4224 
 ====================================================================== 
-Reported By:                tpetazzoni
+Reported By:                daniellaird
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   5404
-Category:                   Other
+Issue ID:                   4224
+Category:                   New Features
 Reproducibility:            always
-Severity:                   major
+Severity:                   feature
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             10-13-2008 09:04 PDT
-Last Modified:              10-13-2008 09:04 PDT
+Date Submitted:             07-21-2008 05:03 PDT
+Last Modified:              10-13-2008 09:07 PDT
 ====================================================================== 
-Summary:                    Bogus check on internal toolchain configuration
+Summary:                    DirectFB Makefile does not support 1.0.x / 1.2.x and
+Examples not supported
 Description: 
-package/libglib2/libglib2.mk and package/libglib2/Config.in both test
-BR2_ENABLE_LOCALE to know whether libiconv shoud be compiled (when
-BR2_ENABLE_LOCALE is not set, the toolchain doesn't have support for
-locales, so an external iconv library is needed, while when
-BR2_ENABLE_LOCALE is set, we can use the internal iconv implementation of
-the C library).
-
-The problem is that these checks are completely bogus when using an
-external toolchain, which is a common use case with Buildroot.
-BR2_ENABLE_LOCALE is not set, but the toolchain might have iconv support.
-So, because of libglib2's dependency, Buildroot compiles GNU libiconv and
-installs it to the staging_dir. The configure script of libglib then
-detects that an internal iconv implementation is available and decides to
-use. But the compilation of libglib2 fails later due to the following test
-in glib/gconvert.c:
-
-#if !defined(USE_LIBICONV_GNU) && defined (_LIBICONV_H)
-#error GNU libiconv not in use but included iconv.h is from libiconv
-#endif
-
-USE_LIBICONV_GNU is not defined because the ./configure script has found
-that the internal implementation of iconv by the C library was present.
-_LIBICONV_H is defined because GNU libiconv has been installed in the
-staging_dir, including its header file.
-
-I don't know how such a problem should be handled. What's the Buildroot
-policy for that kind of internal vs. external toolchain configuration
-issues ?
+DirectFB makefile supports out of date version and does not support the
+building of examples. 
+This patch adds support for 1.0.X and 1.2.x building and DirectFB examples
+as well
 ====================================================================== 
+
+---------------------------------------------------------------------- 
+ Correa - 07-21-08 05:21  
+---------------------------------------------------------------------- 
+Is there a reason to support multiple versions? If possible, we would
+rather avoid having to choose versions and keep the latest one only. 
+
+---------------------------------------------------------------------- 
+ daniellaird - 07-21-08 05:31  
+---------------------------------------------------------------------- 
+Yes, The DirectFB API version has moved on.  DirectFB 1.2 is the latest
+version but some packages will not compile against DirectFB 1.2.  
+Where I work we are moving to DirectFB 1.2.X but the transition window
+means supporting both in the short term.
+With a completely new DirectFB (DFB 2.0) being planned for the future that
+will will change the API significantly then we will need support for DFB1.X
+vs DFB2.X anyway so this change will again be useful then.
+I am in no position to move buildroot to 1.2.x series but require support
+for it.
+This seemed the best option. 
+
+---------------------------------------------------------------------- 
+ tpetazzoni - 10-13-08 09:07  
+---------------------------------------------------------------------- 
+DirectFB support has recently been improved. Could you rebase your patch
+against the latest Buildroot version ? 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-10-13-08 09:04  tpetazzoni     New Issue                                    
-10-13-08 09:04  tpetazzoni     Status                   new => assigned     
-10-13-08 09:04  tpetazzoni     Assigned To               => buildroot       
+07-21-08 05:03  daniellaird    New Issue                                    
+07-21-08 05:03  daniellaird    Status                   new => assigned     
+07-21-08 05:03  daniellaird    Assigned To               => buildroot       
+07-21-08 05:03  daniellaird    File Added: directfb_update.patch                
+   
+07-21-08 05:21  Correa         Note Added: 0009874                          
+07-21-08 05:31  daniellaird    Note Added: 0009884                          
+10-13-08 09:07  tpetazzoni     Note Added: 0013464                          
 ======================================================================
