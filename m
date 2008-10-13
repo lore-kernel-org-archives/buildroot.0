@@ -1,49 +1,63 @@
-From: Anders Blomdell <anders.blomdell@control.lth.se>
-Date: Mon, 13 Oct 2008 12:28:41 +0200
-Subject: [Buildroot] BR2_PACKAGE_BUSYBOX_CONFIG and Atmel targets
-In-Reply-To: <87k5cc24h4.fsf@macbook.be.48ers.dk>
-References: <48F1CE78.3040908@control.lth.se>
-	<87k5cc24h4.fsf@macbook.be.48ers.dk>
-Message-ID: <48F322D9.4070409@control.lth.se>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 13 Oct 2008 03:29:35 -0700
+Subject: [Buildroot] [buildroot 0005384]: xclock should not be linked
+	against iconv
+Message-ID: <de47e1d27834026ef9a5df9590080697@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard wrote:
->>>>>> "Anders" == Anders Blomdell <anders.blomdell@control.lth.se> writes:
-> 
-> Hi,
-> 
->  Anders> in target/device/Atmel/atngw100/Makefile.in there is a line
->  Anders> BR2_PACKAGE_BUSYBOX_CONFIG:=$(BOARD_PATH)/busybox-1.9.1.config
-> 
-> Yes, this is done so specific boards can enforce certain
-> busybox/uclibc configurations. For most boards this is fine, but you
-> can ofcause start to question it for evaluation boards.
-To me it looks like this diminishes the value of buildroot for these boards, I
-would suggest something like the attached patch (i.e. providing board specific
-defaults without forcing the user to always use them)
 
-> Either change the config that it points to or don't select that board
-> (or create your own board config based on the atngw).
-And put these restrictions in the buildroot documentation, so others will find
-it sooner than I did...
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=5384 
+====================================================================== 
+Reported By:                tpetazzoni
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   5384
+Category:                   Other
+Reproducibility:            always
+Severity:                   block
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             10-13-2008 03:29 PDT
+Last Modified:              10-13-2008 03:29 PDT
+====================================================================== 
+Summary:                    xclock should not be linked against iconv
+Description: 
+The current xapp_xclock.mk does:
 
-Regards
+XAPP_XCLOCK_CONF_OPT = LDFLAGS="-liconv"
 
+which forces the library flags -liconv to be passed on every compilation.
+However, with uClibc, the iconv functions (iconv_open(), iconv_close())
+are directly part of the C library, and not part of a separate iconv
+library. So with this LDFLAGS value, the compilation fails.
 
-Anders
+The configure.ac file of xclock contains:
 
+AC_SEARCH_LIBS([iconv], [iconv], 
+        [AC_DEFINE(HAVE_ICONV, 1, [Define to 1 if iconv() is
+available.])])
 
--- 
-Anders Blomdell                  Email: anders.blomdell at control.lth.se
-Department of Automatic Control
-Lund University                  Phone:    +46 46 222 4625
-P.O. Box 118                     Fax:      +46 46 138118
-SE-221 00 Lund, Sweden
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: atmel_buildroot.patch
-Url: http://busybox.net/lists/buildroot/attachments/20081013/bb270309/attachment.txt 
+so it should already automatically link with -liconv if needed, or without
+-liconv if not needed.
+
+The attached patch fixes the problem by simply dropping
+XAPP_XCLOCK_CONF_OPT.
+====================================================================== 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+10-13-08 03:29  tpetazzoni     New Issue                                    
+10-13-08 03:29  tpetazzoni     Status                   new => assigned     
+10-13-08 03:29  tpetazzoni     Assigned To               => buildroot       
+10-13-08 03:29  tpetazzoni     File Added: xapp-xclock-remove-liconv            
+       
+======================================================================
