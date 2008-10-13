@@ -1,60 +1,69 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon, 13 Oct 2008 05:42:29 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
-Message-ID: <20081013124229.7FE713C8A1@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 13 Oct 2008 09:04:22 -0700
+Subject: [Buildroot] [buildroot 0005404]: Bogus check on internal toolchain
+	configuration
+Message-ID: <c3e871adb00e5206e786f8945d11a38d@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-10-13 05:42:29 -0700 (Mon, 13 Oct 2008)
-New Revision: 23667
 
-Log:
-busybox: add 1.12.1 modprobe fix
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=5404 
+====================================================================== 
+Reported By:                tpetazzoni
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   5404
+Category:                   Other
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             10-13-2008 09:04 PDT
+Last Modified:              10-13-2008 09:04 PDT
+====================================================================== 
+Summary:                    Bogus check on internal toolchain configuration
+Description: 
+package/libglib2/libglib2.mk and package/libglib2/Config.in both test
+BR2_ENABLE_LOCALE to know whether libiconv shoud be compiled (when
+BR2_ENABLE_LOCALE is not set, the toolchain doesn't have support for
+locales, so an external iconv library is needed, while when
+BR2_ENABLE_LOCALE is set, we can use the internal iconv implementation of
+the C library).
 
-Added:
-   trunk/buildroot/package/busybox/busybox-1.12.1-modprobe.patch
+The problem is that these checks are completely bogus when using an
+external toolchain, which is a common use case with Buildroot.
+BR2_ENABLE_LOCALE is not set, but the toolchain might have iconv support.
+So, because of libglib2's dependency, Buildroot compiles GNU libiconv and
+installs it to the staging_dir. The configure script of libglib then
+detects that an internal iconv implementation is available and decides to
+use. But the compilation of libglib2 fails later due to the following test
+in glib/gconvert.c:
 
+#if !defined(USE_LIBICONV_GNU) && defined (_LIBICONV_H)
+#error GNU libiconv not in use but included iconv.h is from libiconv
+#endif
 
-Changeset:
-Added: trunk/buildroot/package/busybox/busybox-1.12.1-modprobe.patch
-===================================================================
---- trunk/buildroot/package/busybox/busybox-1.12.1-modprobe.patch	                        (rev 0)
-+++ trunk/buildroot/package/busybox/busybox-1.12.1-modprobe.patch	2008-10-13 12:42:29 UTC (rev 23667)
-@@ -0,0 +1,33 @@
-+diff -urN busybox-1.12.1/modutils/modprobe.c busybox-1.12.1-modprobe/modutils/modprobe.c
-+--- busybox-1.12.1/modutils/modprobe.c	2008-09-28 20:04:15.000000000 +0200
-++++ busybox-1.12.1-modprobe/modutils/modprobe.c	2008-10-10 14:36:58.000000000 +0200
-+@@ -263,9 +263,9 @@
-+ 	return TRUE;
-+ }
-+ 
-+-static int include_conf_recursive(struct include_conf_t *conf, const char *filename)
-++static int include_conf_recursive(struct include_conf_t *conf, const char *filename, int flags)
-+ {
-+-	return recursive_action(filename, ACTION_RECURSE,
-++	return recursive_action(filename, ACTION_RECURSE | flags,
-+ 				include_conf_file_act,
-+ 				include_conf_dir_act,
-+ 				conf, 1);
-+@@ -362,7 +362,7 @@
-+ 			char *includefile;
-+ 
-+ 			includefile = skip_whitespace(line_buffer + 8);
-+-			include_conf_recursive(conf, includefile);
-++			include_conf_recursive(conf, includefile, 0);
-+ 		} else if (ENABLE_FEATURE_MODPROBE_BLACKLIST &&
-+ 				(is_conf_command(line_buffer, "blacklist"))) {
-+ 			char *mod;
-+@@ -559,7 +559,7 @@
-+ 		if (ENABLE_FEATURE_2_6_MODULES) {
-+ 			if (include_conf_file(&conf, "/etc/modprobe.conf"))
-+ 				r = TRUE;
-+-			if (include_conf_recursive(&conf, "/etc/modprobe.d"))
-++			if (include_conf_recursive(&conf, "/etc/modprobe.d", ACTION_QUIET))
-+ 				r = TRUE;
-+ 		}
-+ 		if (ENABLE_FEATURE_2_4_MODULES && !r)
+USE_LIBICONV_GNU is not defined because the ./configure script has found
+that the internal implementation of iconv by the C library was present.
+_LIBICONV_H is defined because GNU libiconv has been installed in the
+staging_dir, including its header file.
+
+I don't know how such a problem should be handled. What's the Buildroot
+policy for that kind of internal vs. external toolchain configuration
+issues ?
+====================================================================== 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+10-13-08 09:04  tpetazzoni     New Issue                                    
+10-13-08 09:04  tpetazzoni     Status                   new => assigned     
+10-13-08 09:04  tpetazzoni     Assigned To               => buildroot       
+======================================================================
