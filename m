@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 14 Oct 2008 06:24:47 -0700
-Subject: [Buildroot] [buildroot 0003564]: libgtk.mk redefines
-	PKG_CONFIG_PATH, not necessary
-Message-ID: <7a09f46171e54b24f649e76bbfcf6018@bugs.uclibc.org>
+Date: Tue, 14 Oct 2008 06:26:22 -0700
+Subject: [Buildroot] [buildroot 0003614]: libxslt uses old build system and
+	does not post edit the xslt-config script like libxml2/freetype
+Message-ID: <f2e6ca38e291af45d1b8851aa64d7c7f@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,13 +12,13 @@ To: buildroot@busybox.net
 
 The following issue has been CLOSED 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=3564 
+http://busybox.net/bugs/view.php?id=3614 
 ====================================================================== 
 Reported By:                daniellaird
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   3564
+Issue ID:                   3614
 Category:                   Architecture Specific
 Reproducibility:            always
 Severity:                   minor
@@ -27,37 +27,39 @@ Status:                     closed
 Resolution:                 fixed
 Fixed in Version:           
 ====================================================================== 
-Date Submitted:             06-03-2008 05:03 PDT
-Last Modified:              10-14-2008 06:24 PDT
+Date Submitted:             06-03-2008 05:16 PDT
+Last Modified:              10-14-2008 06:26 PDT
 ====================================================================== 
-Summary:                    libgtk.mk redefines PKG_CONFIG_PATH, not necessary
+Summary:                    libxslt uses old build system and does not post edit
+the xslt-config script like libxml2/freetype
 Description: 
-libgtk.mk currently redefines PKG_CONFIG_PATH.  This is not necessary as
-specified in configure enviroment.  In my case I have added
-usr/local/lib/pkgconfig as well and without this fix I need to edit
-multiple makefiles not just package/Makefile.in.  
+libxslt is built using old build system.  Move to autotargets system and
+make sure config script is post edited correctly.
+Also add option to support conditional crypto support (based upon
+libgcrypt being selected)
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- tpetazzoni - 10-13-08 09:11  
+ daniellaird - 10-14-08 00:05  
 ---------------------------------------------------------------------- 
-Fixed by r23204, please close this bug. 
+Fixed in r23275
+Close this 
 
 ---------------------------------------------------------------------- 
- daniellaird - 10-14-08 06:24  
+ daniellaird - 10-14-08 06:26  
 ---------------------------------------------------------------------- 
-Fixed by r23204 
+Fixed in r23275 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-06-03-08 05:03  daniellaird    New Issue                                    
-06-03-08 05:03  daniellaird    Status                   new => assigned     
-06-03-08 05:03  daniellaird    Assigned To               => buildroot       
-06-03-08 05:03  daniellaird    File Added: libgtk_build_fix.patch               
-    
-10-13-08 09:11  tpetazzoni     Note Added: 0013474                          
-10-14-08 06:24  daniellaird    Note Added: 0013564                          
-10-14-08 06:24  daniellaird    Status                   assigned => closed  
-10-14-08 06:24  daniellaird    Resolution               open => fixed       
+06-03-08 05:16  daniellaird    New Issue                                    
+06-03-08 05:16  daniellaird    Status                   new => assigned     
+06-03-08 05:16  daniellaird    Assigned To               => buildroot       
+06-03-08 05:16  daniellaird    File Added: libxslt_build.patch                  
+ 
+10-14-08 00:05  daniellaird    Note Added: 0013534                          
+10-14-08 06:26  daniellaird    Note Added: 0013574                          
+10-14-08 06:26  daniellaird    Status                   assigned => closed  
+10-14-08 06:26  daniellaird    Resolution               open => fixed       
 ======================================================================
