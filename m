@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 13 Oct 2008 17:00:25 -0700
-Subject: [Buildroot] [buildroot 0003394]: compilation problem :
-	__NR_socketcall, __NR_ipc undefined...
-Message-ID: <b9cd3d1b8c85903c337b0c136c280581@busybox.net>
+Date: Tue, 14 Oct 2008 00:04:19 -0700
+Subject: [Buildroot] [buildroot 0003604]: libxml2 config script
+	(xml2-config) is not edited in the same way as freetype-config
+Message-ID: <3f391fa0d974b93fca868febcbf2beed@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,100 +12,42 @@ To: buildroot@busybox.net
 
 A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=3394 
+http://busybox.net/bugs/view.php?id=3604 
 ====================================================================== 
-Reported By:                rk_appan
+Reported By:                daniellaird
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   3394
+Issue ID:                   3604
 Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   block
+Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             05-22-2008 02:04 PDT
-Last Modified:              10-13-2008 17:00 PDT
+Date Submitted:             06-03-2008 05:12 PDT
+Last Modified:              10-14-2008 00:04 PDT
 ====================================================================== 
-Summary:                    compilation problem : __NR_socketcall, __NR_ipc
-undefined...
+Summary:                    libxml2 config script (xml2-config) is not edited in
+the same way as freetype-config
 Description: 
-I am building uClibc(0.9.29), when i enable the strace for the target, i am
-getting the following errors.  target is arm926t with EABI support.
-
-please provide me inputs as how to get out of this problem..
-
-syscall.c: In function 'get_scno':
-syscall.c:1051: warning: passing argument 4 of 'ptrace' makes integer from
-pointer without a cast
-syscall.c:1080: warning: passing argument 4 of 'ptrace' makes integer from
-pointer without a cast
-syscall.c: In function 'syscall_fixup':
-syscall.c:1350: warning: unused variable 'pid'
-syscall.c: In function 'syscall_enter':
-syscall.c:1928: warning: unused variable 'pid'
-syscall.c: In function 'trace_syscall':
-syscall.c:2408: error: '__NR_socketcall' undeclared (first use in this
-function)
-syscall.c:2408: error: (Each undeclared identifier is reported only once
-syscall.c:2408: error: for each function it appears in.)
-syscall.c:2412: error: '__NR_ipc' undeclared (first use in this function)
-make[2]: *** [syscall.o] Error 1
-make[2]: Leaving directory `/home/kans/buildroot/build_arm/strace-4.5.15'
-make[1]: *** [all] Error 2
-make[1]: Leaving directory `/home/kans/buildroot/build_arm/strace-4.5.15'
-make: *** [/home/kans/buildroot/build_arm/strace-4.5.15/strace] Error 2
-
+libxml2 produces a config script like freetype.  Called xml2-config.  It
+requires that the same SED be done so that cross compilation works.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- tklas - 06-16-08 03:47  
+ daniellaird - 10-14-08 00:04  
 ---------------------------------------------------------------------- 
-I had the same problem. You can try my workaround patch attached above.
-Copy this file to buildroot/package/strace/ and rebuild. 
-
----------------------------------------------------------------------- 
- tpetazzoni - 10-13-08 03:04  
----------------------------------------------------------------------- 
-I confirm that the problem still exists and that the patch fixes the
-issue.
-
-Is it possible to integrate this patch in Buildroot SVN ? 
-
----------------------------------------------------------------------- 
- hbr_in - 10-13-08 17:00  
----------------------------------------------------------------------- 
-Hi,
-
-This happens because a gr8 person renamed a file from
-strace-undef-syscall.patch to strace-undef-syscall.patch.avr32. and hence
-this patch will only apply for avr32 platform. But this is also needed for
-other platform. The gr8 person didnt had time to think so.
-
-This is just a one of the package u have come across. there are other
-packages that are suffering becuase of this mindless renames.
-
-P.S: Sorry that i am letting out my anger. i used to download buildroot
-everyday to keep myself updated. But everytime i found some baseless
-changes/renames done to push everything to avr32. Because of this i had to
-scan all the files & make appropriate changes EVERY NOW and THEN. 
-Small request for people with commit right. Please dont change/rename file
-to suit ur platform. Please remember that other people from other platform
-also use buildroot.
-
-Regards
-Gururaja 
+This can be closed:
+fixed in r23274 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-05-22-08 02:04  rk_appan       New Issue                                    
-05-22-08 02:04  rk_appan       Status                   new => assigned     
-05-22-08 02:04  rk_appan       Assigned To               => buildroot       
-06-16-08 03:45  tklas          File Added:
-strace-armeabi_undefined_syscalls.patch                    
-06-16-08 03:47  tklas          Note Added: 0008284                          
-10-13-08 03:04  tpetazzoni     Note Added: 0013414                          
-10-13-08 17:00  hbr_in         Note Added: 0013504                          
+06-03-08 05:12  daniellaird    New Issue                                    
+06-03-08 05:12  daniellaird    Status                   new => assigned     
+06-03-08 05:12  daniellaird    Assigned To               => buildroot       
+06-03-08 05:12  daniellaird    File Added: libxml2_config_script.patch          
+         
+10-14-08 00:04  daniellaird    Note Added: 0013524                          
 ======================================================================
