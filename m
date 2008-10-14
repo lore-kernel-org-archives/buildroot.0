@@ -1,40 +1,43 @@
-From: suffecool at comcast.net <suffecool@comcast.net>
-Date: Tue, 14 Oct 2008 20:41:59 +0000
-Subject: [Buildroot] cant' seem to turn off uClibc errno and signum messages
-Message-ID: <101420082041.25631.48F50417000954830000641F22070245530401010C0A00009A9C@comcast.net>
+From: Josef Pospisil <J.Pospisil@gmx.net>
+Date: Wed, 15 Oct 2008 01:28:03 +0200
+Subject: [Buildroot] iptables-1.4.1
+In-Reply-To: <48F4E871.1020203@arcor.de>
+References: <1223980023.5936.12.camel@box1>  <48F4E871.1020203@arcor.de>
+Message-ID: <1224026883.5936.3.camel@box1>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Jason,
 
-Can anyone explain to me why turning off both "errno message text" and "signum message text" within uClibc doesn't work?  Turning them off and recompiling doesn't change the size of my generated libuClibc-0.9.29.so file, and running "strings" on this library file shows that the error and signum messages are indeed still there.  The help doc seems to say that turning those options off will save me 3K and 0.5K in space, respectively.  I am not seeing any change in size to my uClibc library.
-
-My .config files are indeed correct.
-
-% cd toolchain_build_arm/uClibc-0.9.29
-% grep MESSAGES .config
-# UCLIBC_HAS_ERRNO_MESSAGES is not set
-# UCLIBC_HAS_SIGNUM_MESSAGES is not set
+You are completely right. Now everything works fine. Thanks alot!
 
 
-% cd toolchain/uClibc
-% grep MESSAGES uClibc-0.9.29.config
-# UCLIBC_HAS_ERRNO_MESSAGES is not set
-# UCLIBC_HAS_SIGNUM_MESSAGES is not set
-
-% cd toolchain_build_arm/uClibc-0.9.29/lib
-% strings libuClibc-0.9.29.so   (this command spits out a bunch of text, including the following...)
-...
-Operation not permitted
-No such file or directory
-No such process
-Interrupted system call
-Input/output error
-No such device or address
-Argument list too long
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20081014/90a91f59/attachment.htm 
+On Tue, 2008-10-14 at 20:44 +0200, Jason Curl wrote:
+> Josef Pospisil wrote:
+> > Hello,
+> >
+> > i am really new to linux and buildroot so sorry if my question is a dumb
+> > question.
+> > I built my own buildroot system everything works fine so far. But i want
+> > to install my own (patched) iptables. So installed iptables
+> > with ./configure make and make install. But when i try to execute the
+> > command iptables i get an error that it cant find the file or directory
+> > even if the iptables binary is there and its within the $PATH. If i do
+> > strace iptables it says the same that it could not find the file or
+> > directory. 
+> >
+> > Can anyone help me with this problem plz?
+> >   
+> If you built it yourself, are you using the right compiler? For example, 
+> I'd get the same error when running a cross compiled uclibc binary on a 
+> glibc only system, even though they're both x86. If you use buildroot 
+> somehow, you might want to provide more info.
+> 
+> > Thanks,
+> >
+> > Josef Pospisil
+> >
+> >   
