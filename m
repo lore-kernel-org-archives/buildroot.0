@@ -1,55 +1,32 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 14 Oct 2008 00:05:39 -0700
-Subject: [Buildroot] [buildroot 0003614]: libxslt uses old build system and
-	does not post edit the xslt-config script like libxml2/freetype
-Message-ID: <db4e840cb3599e272621a0e88042f6d8@bugs.uclibc.org>
+From: Daniel Lerch <dlerch@gmail.com>
+Date: Tue, 14 Oct 2008 10:30:57 +0200
+Subject: [Buildroot] grub: bad url
+Message-ID: <88372fcb0810140130xd44cdecwbe573285f4ef4b3c@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=3614 
-====================================================================== 
-Reported By:                daniellaird
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   3614
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             06-03-2008 05:16 PDT
-Last Modified:              10-14-2008 00:05 PDT
-====================================================================== 
-Summary:                    libxslt uses old build system and does not post edit
-the xslt-config script like libxml2/freetype
-Description: 
-libxslt is built using old build system.  Move to autotargets system and
-make sure config script is post edited correctly.
-Also add option to support conditional crypto support (based upon
-libgcrypt being selected)
-====================================================================== 
+Grub don't work because the url:
 
----------------------------------------------------------------------- 
- daniellaird - 10-14-08 00:05  
----------------------------------------------------------------------- 
-Fixed in r23275
-Close this 
+http://ftp.debian.org/debian/pool/main/g/grub/grub_0.97-35.diff.gz
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-06-03-08 05:16  daniellaird    New Issue                                    
-06-03-08 05:16  daniellaird    Status                   new => assigned     
-06-03-08 05:16  daniellaird    Assigned To               => buildroot       
-06-03-08 05:16  daniellaird    File Added: libxslt_build.patch                  
- 
-10-14-08 00:05  daniellaird    Note Added: 0013534                          
-======================================================================
+is not correct
+
+
+$ cat target/x86/grub/grub.mk | grep diff
+GRUB_PATCH:=grub_0.97-35.diff.gz
+
+
+Please, check it.
+
+-- 
+Daniel Lerch
+project: www.opendomo.com
+blog: h4ck1t.blogspot.com
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20081014/85226a62/attachment.htm 
