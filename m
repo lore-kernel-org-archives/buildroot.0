@@ -1,32 +1,44 @@
-From: Daniel Lerch <dlerch@gmail.com>
-Date: Tue, 14 Oct 2008 10:30:57 +0200
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Tue, 14 Oct 2008 19:56:49 +1100
 Subject: [Buildroot] grub: bad url
-Message-ID: <88372fcb0810140130xd44cdecwbe573285f4ef4b3c@mail.gmail.com>
+In-Reply-To: <88372fcb0810140130xd44cdecwbe573285f4ef4b3c@mail.gmail.com>
+References: <88372fcb0810140130xd44cdecwbe573285f4ef4b3c@mail.gmail.com>
+Message-ID: <20081014085648.GA25625@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Tue, Oct 14, 2008 at 10:30:57AM +0200, Daniel Lerch wrote:
+> Hi,
+> 
+> Grub don't work because the url:
+> 
+> http://ftp.debian.org/debian/pool/main/g/grub/grub_0.97-35.diff.gz
+> 
+> is not correct
+> 
+> 
+> $ cat target/x86/grub/grub.mk | grep diff
+> GRUB_PATCH:=grub_0.97-35.diff.gz
+> 
+> 
+> Please, check it.
 
-Grub don't work because the url:
+You are welcome to submit a patch. (That'd be more helpful than
+demanding a solution.)
 
-http://ftp.debian.org/debian/pool/main/g/grub/grub_0.97-35.diff.gz
+Suggestions include
+1. Getting that same version from snapshot.debian.net instead, eg
+http://snapshot.debian.net/archive/2008/03/29/debian/pool/main/g/grub/grub_0.97-35.diff.gz
 
-is not correct
+2. Updating to a newer version. -47 looks like being in the next Debian
+release, so that should be good for 18 months or so.
+http://ftp.debian.org/debian/pool/main/g/grub/grub_0.97-47.diff.gz
+In this case the rest of our package may also need amendment.
 
-
-$ cat target/x86/grub/grub.mk | grep diff
-GRUB_PATCH:=grub_0.97-35.diff.gz
-
-
-Please, check it.
-
+Thanks,
+Hamish
 -- 
-Daniel Lerch
-project: www.opendomo.com
-blog: h4ck1t.blogspot.com
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20081014/85226a62/attachment.htm 
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
