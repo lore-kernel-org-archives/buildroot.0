@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 15 Oct 2008 10:31:59 -0700
+Date: Wed, 15 Oct 2008 10:38:09 -0700
 Subject: [Buildroot] [buildroot 0005434]: changing option in uClibc
 	menuconfig doesn't cause recompile of uClibc library
-Message-ID: <f7d83a788ed566a03826c1f94b3a2780@bugs.uclibc.org>
+Message-ID: <fc9dc21481ca9ed9fe5c4d8a81e3bdf5@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +10,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=5434 
 ====================================================================== 
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             10-15-2008 10:31 PDT
-Last Modified:              10-15-2008 10:31 PDT
+Last Modified:              10-15-2008 10:38 PDT
 ====================================================================== 
 Summary:                    changing option in uClibc menuconfig doesn't cause
 recompile of uClibc library
@@ -43,10 +43,16 @@ The only way I was able to force a recompile was to blow everything away
 with a "make clean" and start from scratch.
 ====================================================================== 
 
+---------------------------------------------------------------------- 
+ bernhardf - 10-15-08 10:38  
+---------------------------------------------------------------------- 
+This is fixed in 0.9.30-rc2. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
 10-15-08 10:31  suffecool      New Issue                                    
 10-15-08 10:31  suffecool      Status                   new => assigned     
 10-15-08 10:31  suffecool      Assigned To               => buildroot       
+10-15-08 10:38  bernhardf      Note Added: 0013644                          
 ======================================================================
