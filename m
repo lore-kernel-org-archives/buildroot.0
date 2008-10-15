@@ -1,64 +1,51 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 15 Oct 2008 10:46:11 -0700
-Subject: [Buildroot] [buildroot 0005434]: changing option in uClibc
-	menuconfig doesn't cause recompile of uClibc library
-Message-ID: <ee44e309bbdb838719a121b0b03c1e66@bugs.uclibc.org>
+From: John Schimandle <john_schimandle@hotmail.com>
+Date: Wed, 15 Oct 2008 11:33:03 -0700
+Subject: [Buildroot] packages and architecture specific include files
+Message-ID: <COL0-DAV11C424D48AB40570B8D5048D300@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+I'm adding additional application software to my buildroot environment and
+trying to integrated it into the system as it was designed but I'm running
+into a problem and have not found any documentation that resolves this
+issue. It's probably something simple.
+ 
+First of all my application is trying to access the GPIO capabillities of
+the processor to turn on and off various outputs to control functions on the
+board. The processor is the at91sam9263 arm processor. The functions and
+macros are defined in gpio.h which for this environment is located at
+project_build_arm/at91sam9263ek/linux/2.6.24/include/asm/arch/gpio. This is
+a symbolic link path. The actual physical path is
+project_build_arm/at91sam9263ek/linux/2.6.24/include/asm/arch-arm/gpio and
+I'm assuming the symbolic link is set so that packages can specify
+<asm/arch/xxxx.h> and the code is more portable.
+ 
+My difficulty is in setting up the package .mk file so the code will compile
+and somehow I need to put a -I option with the
+project_build_arm/at91sam9263ek/linux/2.6.24/include path so the gcc
+compiler can find the include file. I'm assuming this goes in the package
+mk file during the configure stage. I could just specify the path as a
+constant but then I would have to change it every time I change to a new
+linux kernel version or if buildroot changes the directory structure. There
+are variables that can be used in the package .mk file like BUILD_DIR and
+STAGING_DIR but these don't point to the directory I need. I'm wondering if
+there is a well defined variable or set of variables that could be used to
+construct the target architecture linux include file path. Or possibly there
+is a buildroot configuration problem at the menuconfig level.
+ 
+Documentation states that the STAGING_DIR holds include files but gpio.h was
+not found here.
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=5434 
-====================================================================== 
-Reported By:                suffecool
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   5434
-Category:                   Other
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             10-15-2008 10:31 PDT
-Last Modified:              10-15-2008 10:46 PDT
-====================================================================== 
-Summary:                    changing option in uClibc menuconfig doesn't cause
-recompile of uClibc library
-Description: 
-After successfully compiling the libuClibc-0.9.29.so library, I changed the
-.config file to turn off the UCLIBC_HAS_ERRNO_MESSAGES and
-UCLIBC_HAS_SIGNUM_MESSAGES options, and reran the make command. The
-applicable code was not recompiled, and my uClibc library remained
-unchanged. The only output I get is:
-  STRIP -x -R .note -R .comment lib/libpthread.a
-  AR cr lib/libpthread.a
-
-The only way I was able to force a recompile was to blow everything away
-with a "make clean" and start from scratch.
-====================================================================== 
-
----------------------------------------------------------------------- 
- bernhardf - 10-15-08 10:38  
----------------------------------------------------------------------- 
-This is fixed in 0.9.30-rc2. 
-
----------------------------------------------------------------------- 
- suffecool - 10-15-08 10:46  
----------------------------------------------------------------------- 
-Ah. Thanks for the heads-up. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-10-15-08 10:31  suffecool      New Issue                                    
-10-15-08 10:31  suffecool      Status                   new => assigned     
-10-15-08 10:31  suffecool      Assigned To               => buildroot       
-10-15-08 10:38  bernhardf      Note Added: 0013644                          
-10-15-08 10:46  suffecool      Note Added: 0013654                          
-======================================================================
+C Code include statement
+ 
+#include <asm/arch/gpio.h>
+ 
+Regards,
+ 
+John
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20081015/4d0e6d7e/attachment.htm 
