@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 15 Oct 2008 10:38:09 -0700
+Date: Wed, 15 Oct 2008 10:46:11 -0700
 Subject: [Buildroot] [buildroot 0005434]: changing option in uClibc
 	menuconfig doesn't cause recompile of uClibc library
-Message-ID: <fc9dc21481ca9ed9fe5c4d8a81e3bdf5@bugs.busybox.net>
+Message-ID: <ee44e309bbdb838719a121b0b03c1e66@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             10-15-2008 10:31 PDT
-Last Modified:              10-15-2008 10:38 PDT
+Last Modified:              10-15-2008 10:46 PDT
 ====================================================================== 
 Summary:                    changing option in uClibc menuconfig doesn't cause
 recompile of uClibc library
@@ -48,6 +48,11 @@ with a "make clean" and start from scratch.
 ---------------------------------------------------------------------- 
 This is fixed in 0.9.30-rc2. 
 
+---------------------------------------------------------------------- 
+ suffecool - 10-15-08 10:46  
+---------------------------------------------------------------------- 
+Ah. Thanks for the heads-up. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -55,4 +60,5 @@ Date Modified   Username       Field                    Change
 10-15-08 10:31  suffecool      Status                   new => assigned     
 10-15-08 10:31  suffecool      Assigned To               => buildroot       
 10-15-08 10:38  bernhardf      Note Added: 0013644                          
+10-15-08 10:46  suffecool      Note Added: 0013654                          
 ======================================================================
