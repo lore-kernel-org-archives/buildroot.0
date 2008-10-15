@@ -1,40 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Oct 2008 16:49:30 +0200
-Subject: [Buildroot] [PATCH] Bump up libgtk2 version
-Message-ID: <20081015164930.6a6fc189@surf>
+From: Anders Blomdell <anders.blomdell@control.lth.se>
+Date: Wed, 15 Oct 2008 18:04:58 +0200
+Subject: [Buildroot] [PATCH] Obey BR2_PACKAGE_BUSYBOX_CONFIG on atngw100
+In-Reply-To: <87k5cc24h4.fsf@macbook.be.48ers.dk>
+References: <48F1CE78.3040908@control.lth.se>
+	<87k5cc24h4.fsf@macbook.be.48ers.dk>
+Message-ID: <48F614AA.4030307@control.lth.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump up libgtk2 version
+Resend of patch thet was at end of a previous discussion
+('BR2_PACKAGE_BUSYBOX_CONFIG and Atmel targets'), in the hope that someone
+eventually picks it up...
 
-The version of libgtk2 currently used doesn't build when built against
-DirectFB. The issue has been fixed in a later version of the 2.12.x
-series, so let's upgrade to this version.
+Regards
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libgtk2/libgtk2.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Anders Blomdell
 
-Index: buildroot/package/libgtk2/libgtk2.mk
-===================================================================
---- buildroot.orig/package/libgtk2/libgtk2.mk
-+++ buildroot/package/libgtk2/libgtk2.mk
-@@ -3,7 +3,7 @@
- # libgtk2.0
- #
- #############################################################
--LIBGTK2_VERSION = 2.12.6
-+LIBGTK2_VERSION = 2.12.12
- LIBGTK2_SOURCE = gtk+-$(LIBGTK2_VERSION).tar.bz2
- LIBGTK2_SITE = ftp://ftp.gtk.org/pub/gtk/2.12
- LIBGTK2_AUTORECONF = NO
 
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Anders Blomdell                  Email: anders.blomdell at control.lth.se
+Department of Automatic Control
+Lund University                  Phone:    +46 46 222 4625
+P.O. Box 118                     Fax:      +46 46 138118
+SE-221 00 Lund, Sweden
+
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: atmel_buildroot.patch
+Url: http://busybox.net/lists/buildroot/attachments/20081015/a26a45eb/attachment.txt 
