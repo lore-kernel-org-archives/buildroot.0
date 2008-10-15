@@ -1,96 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Oct 2008 16:47:37 +0200
-Subject: [Buildroot] [PATCH] FIx libpng, directfb, dbus, fontconfig,
-	etc. builds
-Message-ID: <20081015164737.51a662cf@surf>
+Date: Wed, 15 Oct 2008 16:49:30 +0200
+Subject: [Buildroot] [PATCH] Bump up libgtk2 version
+Message-ID: <20081015164930.6a6fc189@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Bump up libgtk2 version
 
-The following patch fixes two types of build failures that I
-encountered with different packages :
-
- * Some configure scripts were not able to compile the test programs
-   used to test whether zlib was properly installed. The configure
-   scripts are properly using -lz, but the
-   -L/path/to/staging_dir/usr/lib option was not present, leading to
-   build failure.
-
-   The solution I've found is to set a -L option in LDFLAGS.
-
-   See
-   http://buildroot.uclibc.org/lists/buildroot/2008-October/010909.html
-   for details.
-
- * While linking applications, for example the applications included in
-   the fontconfig package, I had build failures like :
-
-/usr/local/uclibc-0.9.28-2/arm/lib/gcc/arm-linux-uclibc/3.4.5/../../../../arm-linux-uclibc/bin/ld.real:
-warning: libfreetype.so.6, needed by ../src/.libs/libfontconfig.so, not
-found (try using -rpath or -rpath-link)
-
-    this is due to the fact that ld is not able to find the other
-    already installed shared libraries.
-
-    The solution I've found is to add a -Wl,--rpath-link
-    -Wl,/path/to/staging_dir/usr/lib option in LDFLAGS.
-
-    See the thread at
-    http://buildroot.uclibc.org/lists/buildroot/2008-October/010917.html
-    for details.
-
-For both of the problems, I'm not sure about the solutions, but I'm
-sure that the problems exist.
-
-Thanks,
-
-Thomas
-
----
-
-Make sure libraries are visible when building packages
-
-This patch adds an LDFLAGS variable before calling the configure
-script of any package, in order to fix two problems :
-
- * Some configure scripts were not able to compile the test programs
-   used to test whether zlib was properly installed. The configure
-   scripts are properly using -lz, but the
-   -L/path/to/staging_dir/usr/lib option was not present, leading to
-   build failure.
-
- * While linking applications, for example the applications included in
-   the fontconfig package, I had build failures like :
-
-/usr/local/uclibc-0.9.28-2/arm/lib/gcc/arm-linux-uclibc/3.4.5/../../../../arm-linux-uclibc/bin/ld.real:
-warning: libfreetype.so.6, needed by ../src/.libs/libfontconfig.so, not
-found (try using -rpath or -rpath-link)
-
-    this is due to the fact that ld is not able to find the other
-    already installed shared libraries.
+The version of libgtk2 currently used doesn't build when built against
+DirectFB. The issue has been fixed in a later version of the 2.12.x
+series, so let's upgrade to this version.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Makefile.in |    1 +
- 1 file changed, 1 insertion(+)
+ package/libgtk2/libgtk2.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Index: buildroot/package/Makefile.in
+Index: buildroot/package/libgtk2/libgtk2.mk
 ===================================================================
---- buildroot.orig/package/Makefile.in
-+++ buildroot/package/Makefile.in
-@@ -224,6 +224,7 @@
- 		NM_FOR_TARGET="$(TARGET_NM)" \
- 		DEFAULT_ASSEMBLER="$(TARGET_AS)" \
- 		DEFAULT_LINKER="$(TARGET_LD)" \
-+		LDFLAGS="$(TARGET_LDFLAGS) -Wl,--rpath-link -Wl,$(STAGING_DIR)/usr/lib" \
- 		PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)" \
- 		PKG_CONFIG="$(STAGING_DIR)/usr/bin/pkg-config" \
- 		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig:$(PKG_CONFIG_PATH)" \
-
+--- buildroot.orig/package/libgtk2/libgtk2.mk
++++ buildroot/package/libgtk2/libgtk2.mk
+@@ -3,7 +3,7 @@
+ # libgtk2.0
+ #
+ #############################################################
+-LIBGTK2_VERSION = 2.12.6
++LIBGTK2_VERSION = 2.12.12
+ LIBGTK2_SOURCE = gtk+-$(LIBGTK2_VERSION).tar.bz2
+ LIBGTK2_SITE = ftp://ftp.gtk.org/pub/gtk/2.12
+ LIBGTK2_AUTORECONF = NO
 
 -- 
 Thomas Petazzoni, Free Electrons
