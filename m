@@ -1,7 +1,7 @@
 From: laird at uclibc.org <laird@uclibc.org>
-Date: Thu, 16 Oct 2008 05:10:23 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package:  sawman
-Message-ID: <20081016121023.841B23C8CB@busybox.net>
+Date: Thu, 16 Oct 2008 06:16:17 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package: directfb-examples
+Message-ID: <20081016131617.CFFC53C8CB@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,25 +9,29 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: laird
-Date: 2008-10-16 05:10:23 -0700 (Thu, 16 Oct 2008)
-New Revision: 23694
+Date: 2008-10-16 06:16:17 -0700 (Thu, 16 Oct 2008)
+New Revision: 23695
 
 Log:
-package/sawman: Add Package SawMan
+package/directfb-examples: DirectFB examples package
 
-SaWMan is a new window manager module for use with DirectFB. 
-Its main difference to the default module is that it allows one process 
-to be an application and window manager, 
-implementing all kinds of diversity, 
-while SaWMan is only the working horse. 
+Add the DirectFB examples package.
 
-Daniel Laird
+This patch adds the DirectFB examples package to Buildroot. It is
+largely based on a patch written by Daniel Laird, and available at 
+http://bugs.uclibc.org/view.php?id=4224. I only made a few adaptations 
+to get it to work properly.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Daniel Laird <daniel.j.laird@nxp.com>
+
 
 
 Added:
-   trunk/buildroot/package/sawman/
-   trunk/buildroot/package/sawman/Config.in
-   trunk/buildroot/package/sawman/sawman.mk
+   trunk/buildroot/package/directfb-examples/
+   trunk/buildroot/package/directfb-examples/Config.in
+   trunk/buildroot/package/directfb-examples/directfb-examples-1.2.0-remove-bzero.patch
+   trunk/buildroot/package/directfb-examples/directfb-examples.mk
 
 Modified:
    trunk/buildroot/package/Config.in
@@ -36,53 +40,250 @@ Modified:
 Changeset:
 Modified: trunk/buildroot/package/Config.in
 ===================================================================
---- trunk/buildroot/package/Config.in	2008-10-16 09:46:07 UTC (rev 23693)
-+++ trunk/buildroot/package/Config.in	2008-10-16 12:10:23 UTC (rev 23694)
-@@ -318,6 +318,7 @@
- source "package/libungif/Config.in"
- source "package/lite/Config.in"
- source "package/pixman/Config.in"
-+source "package/sawman/Config.in"
- source "package/sdl/Config.in"
- source "package/sdl_image/Config.in"
- source "package/sdl_mixer/Config.in"
+--- trunk/buildroot/package/Config.in	2008-10-16 12:10:23 UTC (rev 23694)
++++ trunk/buildroot/package/Config.in	2008-10-16 13:16:17 UTC (rev 23695)
+@@ -309,6 +309,7 @@
+ 
+ comment "graphic libraries"
+ source "package/directfb/Config.in"
++source "package/directfb-examples/Config.in"
+ source "package/fbdump/Config.in"
+ source "package/fusion/Config.in"
+ source "package/imagemagick/Config.in"
 
-Added: trunk/buildroot/package/sawman/Config.in
+Added: trunk/buildroot/package/directfb-examples/Config.in
 ===================================================================
---- trunk/buildroot/package/sawman/Config.in	                        (rev 0)
-+++ trunk/buildroot/package/sawman/Config.in	2008-10-16 12:10:23 UTC (rev 23694)
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_SAWMAN
-+	bool "SawMan (Window Manager)"
-+	depends on BR2_PACKAGE_DIRECTFB
-+	help
-+	  SaWMan is a new window manager module for use with DirectFB. 
-+          Its main difference to the default module is that it allows 
-+          one process to be an application and window manager, 
-+          implementing all kinds of diversity, while SaWMan is only the 
-+          working horse.
+--- trunk/buildroot/package/directfb-examples/Config.in	                        (rev 0)
++++ trunk/buildroot/package/directfb-examples/Config.in	2008-10-16 13:16:17 UTC (rev 23695)
+@@ -0,0 +1,97 @@
++config BR2_PACKAGE_DIRECTFB_EXAMPLES
++       bool "directfb examples"
++       depends on BR2_PACKAGE_DIRECTFB
 +
-+	   See http://www.directfb.org/downloads/Extras/README.SaWMan
++config BR2_PACKAGE_DIRECTFB_EXAMPLES_ANDI
++       bool "usr/bin/df_andi"
++       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
 +
++config BR2_PACKAGE_DIRECTFB_EXAMPLES_BLTLOAD
++       bool "usr/bin/df_bltload"
++       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
++
++config BR2_PACKAGE_DIRECTFB_EXAMPLES_CPULOAD
++       bool "usr/bin/df_cpuload"
++       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
++
++config BR2_PACKAGE_DIRECTFB_EXAMPLES_DATABUFFER
++       bool "usr/bin/df_databuffer"
++       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
++
++config BR2_PACKAGE_DIRECTFB_EXAMPLES_DIOLOAD
++       bool "usr/bin/df_dioload"
++       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
++
++config BR2_PACKAGE_DIRECTFB_EXAMPLES_DOK
++       bool "usr/bin/df_dok"
++       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
++
++config BR2_PACKAGE_DIRECTFB_EXAMPLES_DRIVERTEST
++       bool "usr/bin/df_drivertest"
++       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
++
++config BR2_PACKAGE_DIRECTFB_EXAMPLES_FIRE
++       bool "usr/bin/df_fire"
++       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
++
++config BR2_PACKAGE_DIRECTFB_EXAMPLES_FLIP
++       bool "usr/bin/df_flip"
++       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
++config BR2_PACKAGE_DIRECTFB_EXAMPLES_FONTS
++       bool "usr/bin/df_fonts"
++       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
++
++config BR2_PACKAGE_DIRECTFB_EXAMPLES_INPUT
++       bool "usr/bin/df_input"
++       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
++
++config BR2_PACKAGE_DIRECTFB_EXAMPLES_JOYSTICK
++       bool "usr/bin/df_joystick"
++       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
++
++config BR2_PACKAGE_DIRECTFB_EXAMPLES_KNUCKLES
++       bool "usr/bin/df_knuckles"
++       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
++
++config BR2_PACKAGE_DIRECTFB_EXAMPLES_LAYER
++       bool "usr/bin/df_layer"
++       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
++
++config BR2_PACKAGE_DIRECTFB_EXAMPLES_NEO
++       bool "usr/bin/df_neo"
++       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
++
++config BR2_PACKAGE_DIRECTFB_EXAMPLES_NETLOAD
++       bool "usr/bin/df_netload"
++       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
++
++config BR2_PACKAGE_DIRECTFB_EXAMPLES_PALETTE
++       bool "usr/bin/df_palette"
++       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
++
++config BR2_PACKAGE_DIRECTFB_EXAMPLES_PARTICLE
++       bool "usr/bin/df_particle"
++       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
++
++config BR2_PACKAGE_DIRECTFB_EXAMPLES_PORTER
++       bool "usr/bin/df_porter"
++       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
++config BR2_PACKAGE_DIRECTFB_EXAMPLES_STRESS
++       bool "usr/bin/df_stress"
++       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
++
++config BR2_PACKAGE_DIRECTFB_EXAMPLES_TEXTURE
++       bool "usr/bin/df_texture"
++       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
++
++config BR2_PACKAGE_DIRECTFB_EXAMPLES_VIDEO
++       bool "usr/bin/df_video"
++       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
++
++config BR2_PACKAGE_DIRECTFB_EXAMPLES_VIDEO_PARTICLE
++       bool "usr/bin/df_video_particle"
++       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
++
++config BR2_PACKAGE_DIRECTFB_EXAMPLES_WINDOW
++       bool "usr/bin/df_window"
++       depends on BR2_PACKAGE_DIRECTFB_EXAMPLES
 
-Added: trunk/buildroot/package/sawman/sawman.mk
+Added: trunk/buildroot/package/directfb-examples/directfb-examples-1.2.0-remove-bzero.patch
 ===================================================================
---- trunk/buildroot/package/sawman/sawman.mk	                        (rev 0)
-+++ trunk/buildroot/package/sawman/sawman.mk	2008-10-16 12:10:23 UTC (rev 23694)
-@@ -0,0 +1,16 @@
+--- trunk/buildroot/package/directfb-examples/directfb-examples-1.2.0-remove-bzero.patch	                        (rev 0)
++++ trunk/buildroot/package/directfb-examples/directfb-examples-1.2.0-remove-bzero.patch	2008-10-16 13:16:17 UTC (rev 23695)
+@@ -0,0 +1,17 @@
++---
++ src/df_knuckles/matrix.c |    2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++Index: directfb-examples-1.2.0/src/df_knuckles/matrix.c
++===================================================================
++--- directfb-examples-1.2.0.orig/src/df_knuckles/matrix.c
+++++ directfb-examples-1.2.0/src/df_knuckles/matrix.c
++@@ -19,7 +19,7 @@
++ static float Cosine[3600];
++ static float Sine[3600];
++ 
++-#define M_CLEAR(m) bzero(m, MATRIX_SIZE)
+++#define M_CLEAR(m) memset(m, 0, MATRIX_SIZE)
++ #define M_IDENTITY(m) memcpy(m, IdentityMatrix, MATRIX_SIZE)
++ 
++ static void MultiplyMatrix(float *A, float *B)
+
+Added: trunk/buildroot/package/directfb-examples/directfb-examples.mk
+===================================================================
+--- trunk/buildroot/package/directfb-examples/directfb-examples.mk	                        (rev 0)
++++ trunk/buildroot/package/directfb-examples/directfb-examples.mk	2008-10-16 13:16:17 UTC (rev 23695)
+@@ -0,0 +1,105 @@
 +#############################################################
 +#
-+# SAWMAN
++# directfb examples
 +#
 +#############################################################
-+SAWMAN_VERSION:=1.2.0-rc1
-+SAWMAN_SOURCE:=SaWMan-$(SAWMAN_VERSION).tar.gz
-+SAWMAN_SITE:=http://www.directfb.org/downloads/Extras
-+SAWMAN_INSTALL_STAGING = YES
-+SAWMAN_INSTALL_TARGET = YES
-+SAWMAN_CONF_ENV = LDFLAGS="-L$(STAGING_DIR)/usr/lib -Wl,--rpath-link -Wl,$(STAGING_DIR)/usr/lib"
-+SAWMAN_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install-strip
-+SAWMAN_DEPENDENCIES = directfb
++DIRECTFB_EXAMPLES_VERSION:=1.2.0
++DIRECTFB_EXAMPLES_SITE:=http://www.directfb.org/downloads/Extras
++DIRECTFB_EXAMPLES_SOURCE = DirectFB-examples-$(DIRECTFB_EXAMPLES_VERSION).tar.gz
++DIRECTFB_EXAMPLES_INSTALL_STAGING = YES
++DIRECTFB_EXAMPLES_INSTALL_TARGET = YES
++DIRECTFB_EXAMPLES_DEPENDENCIES = directfb
 +
-+$(eval $(call AUTOTARGETS,package,sawman))
++DIRECTFB_EXAMPLES_TARGETS_ :=
++DIRECTFB_EXAMPLES_TARGETS_y :=
++
++DIRECTFB_EXAMPLES_TARGETS_$(BR2_PACKAGE_DIRECTFB_EXAMPLES_ANDI) += usr/bin/df_andi
++DIRECTFB_EXAMPLES_TARGETS_$(BR2_PACKAGE_DIRECTFB_EXAMPLES_BLTLOAD) += usr/bin/df_bltload
++DIRECTFB_EXAMPLES_TARGETS_$(BR2_PACKAGE_DIRECTFB_EXAMPLES_CPULOAD) += usr/bin/df_cpuload
++DIRECTFB_EXAMPLES_TARGETS_$(BR2_PACKAGE_DIRECTFB_EXAMPLES_DATABUFFER) += usr/bin/df_databuffer
++DIRECTFB_EXAMPLES_TARGETS_$(BR2_PACKAGE_DIRECTFB_EXAMPLES_DIOLOAD) += usr/bin/df_dioload
++DIRECTFB_EXAMPLES_TARGETS_$(BR2_PACKAGE_DIRECTFB_EXAMPLES_DOK) += usr/bin/df_dok
++DIRECTFB_EXAMPLES_TARGETS_$(BR2_PACKAGE_DIRECTFB_EXAMPLES_DRIVERTEST) += usr/bin/df_drivertest
++DIRECTFB_EXAMPLES_TARGETS_$(BR2_PACKAGE_DIRECTFB_EXAMPLES_FIRE) += usr/bin/df_fire
++DIRECTFB_EXAMPLES_TARGETS_$(BR2_PACKAGE_DIRECTFB_EXAMPLES_FLIP) += usr/bin/df_flip
++DIRECTFB_EXAMPLES_TARGETS_$(BR2_PACKAGE_DIRECTFB_EXAMPLES_FONTS) += usr/bin/df_fonts
++DIRECTFB_EXAMPLES_TARGETS_$(BR2_PACKAGE_DIRECTFB_EXAMPLES_INPUT) += usr/bin/df_input
++DIRECTFB_EXAMPLES_TARGETS_$(BR2_PACKAGE_DIRECTFB_EXAMPLES_JOYSTICK) += usr/bin/df_joystick
++DIRECTFB_EXAMPLES_TARGETS_$(BR2_PACKAGE_DIRECTFB_EXAMPLES_KNUCKLES) += usr/bin/df_knuckles
++DIRECTFB_EXAMPLES_TARGETS_$(BR2_PACKAGE_DIRECTFB_EXAMPLES_LAYER) += usr/bin/df_layer
++DIRECTFB_EXAMPLES_TARGETS_$(BR2_PACKAGE_DIRECTFB_EXAMPLES_NEO) += usr/bin/df_neo
++DIRECTFB_EXAMPLES_TARGETS_$(BR2_PACKAGE_DIRECTFB_EXAMPLES_NETLOAD) += usr/bin/df_netload
++DIRECTFB_EXAMPLES_TARGETS_$(BR2_PACKAGE_DIRECTFB_EXAMPLES_PALETTE) += usr/bin/df_palette
++DIRECTFB_EXAMPLES_TARGETS_$(BR2_PACKAGE_DIRECTFB_EXAMPLES_PARTICLE) += usr/bin/df_particle
++DIRECTFB_EXAMPLES_TARGETS_$(BR2_PACKAGE_DIRECTFB_EXAMPLES_PORTER) += usr/bin/df_porter
++DIRECTFB_EXAMPLES_TARGETS_$(BR2_PACKAGE_DIRECTFB_EXAMPLES_STRESS) += usr/bin/df_stress
++DIRECTFB_EXAMPLES_TARGETS_$(BR2_PACKAGE_DIRECTFB_EXAMPLES_TEXTURE) += usr/bin/df_texture
++DIRECTFB_EXAMPLES_TARGETS_$(BR2_PACKAGE_DIRECTFB_EXAMPLES_VIDEO) += usr/bin/df_video
++DIRECTFB_EXAMPLES_TARGETS_$(BR2_PACKAGE_DIRECTFB_EXAMPLES_VIDEO_PARTICLE) += usr/bin/df_video_particle
++DIRECTFB_EXAMPLES_TARGETS_$(BR2_PACKAGE_DIRECTFB_EXAMPLES_WINDOW) += usr/bin/df_window
++
++$(eval $(call AUTOTARGETS,package,directfb-examples))
++
++$(DIRECTFB_EXAMPLES_TARGET_INSTALL_TARGET): $(DIRECTFB_EXAMPLES_TARGET_INSTALL_STAGING)
++	$(call MESSAGE,"Installing to target")
++	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(DIRECTFB_EXAMPLES_DIR) install
++	$(Q)mkdir -p $(TARGET_DIR)/usr/bin
++	$(Q)mkdir -p $(TARGET_DIR)/usr/share/directfb-examples/
++	$(Q)mkdir -p $(TARGET_DIR)/usr/share/directfb-examples/fonts/
++	for file in $(DIRECTFB_EXAMPLES_TARGETS_y); do \
++	        cp -dpf $(STAGING_DIR)/$$file $(TARGET_DIR)/$$file; \
++	done
++
++	$(Q)cp -rdpf $(STAGING_DIR)/usr/share/directfb-examples/fonts/decker.ttf $(TARGET_DIR)/usr/share/directfb-examples/fonts/
++ifeq ($(BR2_PACKAGE_DIRECTFB_EXAMPLES_ANDI),y)
++	$(Q)cp -rdpf $(STAGING_DIR)/usr/share/directfb-examples/destination_mask.png $(TARGET_DIR)/usr/share/directfb-examples/
++	$(Q)cp -rdpf $(STAGING_DIR)/usr/share/directfb-examples/tux.png $(TARGET_DIR)/usr/share/directfb-examples/
++	$(Q)cp -rdpf $(STAGING_DIR)/usr/share/directfb-examples/wood_andi.jpg $(TARGET_DIR)/usr/share/directfb-examples/
++endif
++ifeq ($(BR2_PACKAGE_DIRECTFB_EXAMPLES_DOK),y)
++	$(Q)cp -rdpf $(STAGING_DIR)/usr/share/directfb-examples/biglogo.png $(TARGET_DIR)/usr/share/directfb-examples/
++	$(Q)cp -rdpf $(STAGING_DIR)/usr/share/directfb-examples/card.png $(TARGET_DIR)/usr/share/directfb-examples/
++	$(Q)cp -rdpf $(STAGING_DIR)/usr/share/directfb-examples/melted.png $(TARGET_DIR)/usr/share/directfb-examples/
++	$(Q)cp -rdpf $(STAGING_DIR)/usr/share/directfb-examples/meter.png $(TARGET_DIR)/usr/share/directfb-examples/
++	$(Q)cp -rdpf $(STAGING_DIR)/usr/share/directfb-examples/pngtest*.png $(TARGET_DIR)/usr/share/directfb-examples/
++	$(Q)cp -rdpf $(STAGING_DIR)/usr/share/directfb-examples/colorkeyed.gif $(TARGET_DIR)/usr/share/directfb-examples/
++	$(Q)cp -rdpf $(STAGING_DIR)/usr/share/directfb-examples/intro.png $(TARGET_DIR)/usr/share/directfb-examples/
++	$(Q)cp -rdpf $(STAGING_DIR)/usr/share/directfb-examples/fish.png $(TARGET_DIR)/usr/share/directfb-examples/
++	$(Q)cp -rdpf $(STAGING_DIR)/usr/share/directfb-examples/swirl.png $(TARGET_DIR)/usr/share/directfb-examples/
++endif
++ifeq ($(BR2_PACKAGE_DIRECTFB_EXAMPLES_DRIVERTEST),y)
++	$(Q)cp -rdpf $(STAGING_DIR)/usr/share/directfb-examples/pngtest.png $(TARGET_DIR)/usr/share/directfb-examples/
++	$(Q)cp -rdpf $(STAGING_DIR)/usr/share/directfb-examples/testmask.png $(TARGET_DIR)/usr/share/directfb-examples/
++endif
++ifeq ($(BR2_PACKAGE_DIRECTFB_EXAMPLES_FONTS),y)
++	$(Q)cp -rdpf $(STAGING_DIR)/usr/share/directfb-examples/fonts/* $(TARGET_DIR)/usr/share/directfb-examples/fonts/
++endif
++ifeq ($(BR2_PACKAGE_DIRECTFB_EXAMPLES_INPUT),y)
++	$(Q)cp -rdpf $(STAGING_DIR)/usr/share/directfb-examples/joystick.png $(TARGET_DIR)/usr/share/directfb-examples/
++	$(Q)cp -rdpf $(STAGING_DIR)/usr/share/directfb-examples/gnu-keys.png $(TARGET_DIR)/usr/share/directfb-examples/
++	$(Q)cp -rdpf $(STAGING_DIR)/usr/share/directfb-examples/gnome-mouse.png $(TARGET_DIR)/usr/share/directfb-examples/
++endif
++ifeq ($(BR2_PACKAGE_DIRECTFB_EXAMPLES_NEO),y)
++	$(Q)cp -rdpf $(STAGING_DIR)/usr/share/directfb-examples/apple-red.png $(TARGET_DIR)/usr/share/directfb-examples/
++	$(Q)cp -rdpf $(STAGING_DIR)/usr/share/directfb-examples/gnome-*.png $(TARGET_DIR)/usr/share/directfb-examples/
++	$(Q)cp -rdpf $(STAGING_DIR)/usr/share/directfb-examples/gnu-*.png $(TARGET_DIR)/usr/share/directfb-examples/
++	$(Q)cp -rdpf $(STAGING_DIR)/usr/share/directfb-examples/background*.jpg $(TARGET_DIR)/usr/share/directfb-examples/
++endif
++ifeq ($(BR2_PACKAGE_DIRECTFB_EXAMPLES_STRESS),y)
++	$(Q)cp -rdpf $(STAGING_DIR)/usr/share/directfb-examples/melted.png $(TARGET_DIR)/usr/share/directfb-examples/
++endif
++ifeq ($(BR2_PACKAGE_DIRECTFB_EXAMPLES_TEXTURE),y)
++	$(Q)cp -rdpf $(STAGING_DIR)/usr/share/directfb-examples/texture.png $(TARGET_DIR)/usr/share/directfb-examples/
++endif
++ifeq ($(BR2_PACKAGE_DIRECTFB_EXAMPLES_VIDEO),y)
++	$(Q)cp -rdpf $(STAGING_DIR)/usr/share/directfb-examples/shot.png $(TARGET_DIR)/usr/share/directfb-examples/
++endif
++ifeq ($(BR2_PACKAGE_DIRECTFB_EXAMPLES_VIDEO_PARTICLE),y)
++	$(Q)cp -rdpf $(STAGING_DIR)/usr/share/directfb-examples/convergence.png $(TARGET_DIR)/usr/share/directfb-examples/
++endif
++ifeq ($(BR2_PACKAGE_DIRECTFB_EXAMPLES_WINDOW),y)
++	$(Q)cp -rdpf $(STAGING_DIR)/usr/share/directfb-examples/desktop.png $(TARGET_DIR)/usr/share/directfb-examples/
++	$(Q)cp -rdpf $(STAGING_DIR)/usr/share/directfb-examples/dfblogo.png $(TARGET_DIR)/usr/share/directfb-examples/
++endif
++	$(Q)touch -c $@
 +
