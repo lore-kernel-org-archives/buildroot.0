@@ -1,9 +1,10 @@
 From: Grant Likely <grant.likely@secretlab.ca>
-Date: Thu, 16 Oct 2008 14:32:30 -0600
-Subject: [Buildroot] [PATCH 3/9] Add support for multilib external toolchains
+Date: Thu, 16 Oct 2008 14:32:51 -0600
+Subject: [Buildroot] [PATCH 7/9] Add last resort setting of
+	$(LINUX26_BINLOC) for kernel	image filename
 In-Reply-To: <20081016203220.15826.26173.stgit@localhost.localdomain>
 References: <20081016203220.15826.26173.stgit@localhost.localdomain>
-Message-ID: <20081016203230.15826.93873.stgit@localhost.localdomain>
+Message-ID: <20081016203251.15826.85564.stgit@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,45 +13,40 @@ To: buildroot@busybox.net
 
 From: Grant Likely <grant.likely@secretlab.ca>
 
-Fix buildroot to work with external toolchains using multilib.  Multilib
-toolchains have several sets of libraries which they can choose between
-depending on the optimization flags.  For example, a single toolchain
-could have libraries compiled for both hard and soft floating point.
-However, buildroot needs copy the correct version of the libraries to
-match the flags used to compile the applications.
-
-This patch adds the CPU optimization flags to the execution of GCC when
-determining the location of the libraries to copy.  Passing the
-optimization flags makes the library linking and copying consistent.
-
-Tested using CodeSourcery PowerPC toolchain on a Xilinx Virtex5 ppc440
-platform.
+When building a custom image type, LINUX26_BINLOC will not get set and
+the image file will not get copied into the binaries directory.  This
+patch adds a last resort setting of the LINUX26_BINLOC value so that
+at the very least it will be the same name as the requested custom
+kernel image format
 ---
 
- toolchain/external-toolchain/ext-tool.mk |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+ target/linux/Makefile.in.advanced |    8 +++++---
+ 1 files changed, 5 insertions(+), 3 deletions(-)
 
 
-diff --git a/toolchain/external-toolchain/ext-tool.mk b/toolchain/external-toolchain/ext-tool.mk
-index bbf430c..ba10dc7 100644
---- a/toolchain/external-toolchain/ext-tool.mk
-+++ b/toolchain/external-toolchain/ext-tool.mk
-@@ -10,7 +10,8 @@ copy_toolchain_lib_root = \
- 	DST="$(strip $2)"; \
- 	STRIP="$(strip $3)"; \
-  \
--	LIB_DIR=`$(TARGET_CC) -print-file-name=$${LIB} | sed -e "s,/$${LIB}\$$,,"`; \
-+	LIB_DIR=`$(TARGET_CC) $(subst ",,$(BR2_TARGET_OPTIMIZATION)) -print-file-name=$${LIB} | sed -e "s,/$${LIB}\$$,,"`; \
-+	MULTILIB=`$(TARGET_CC) $(subst ",,$(BR2_TARGET_OPTIMIZATION)) -print-multi-directory`; \
-  \
- 	if test -z "$${LIB_DIR}"; then \
- 		echo "copy_toolchain_lib_root: lib=$${LIB} not found"; \
-@@ -21,7 +22,7 @@ copy_toolchain_lib_root = \
- 	for FILE in `find $${LIB_DIR} -maxdepth 1 -type l -name "$${LIB}*"`; do \
- 		LIB=`basename $${FILE}`; \
- 		while test \! -z "$${LIB}"; do \
--			echo "copy_toolchain_lib_root lib=$${LIB} dst=$${DST}"; \
-+			echo "copy_toolchain_lib_root multilib=$${MULTILIB} lib=$${LIB} dst=$${DST}"; \
- 			rm -fr $(TARGET_DIR)$${DST}/$${LIB}; \
- 			mkdir -p $(TARGET_DIR)$${DST}; \
- 			if test -h $${LIB_DIR}/$${LIB}; then \
+diff --git a/target/linux/Makefile.in.advanced b/target/linux/Makefile.in.advanced
+index 3018ab3..42384f1 100644
+--- a/target/linux/Makefile.in.advanced
++++ b/target/linux/Makefile.in.advanced
+@@ -147,9 +147,6 @@ endif
+ # --------------
+ # ZIMAGE
+ ifeq ($(LINUX26_FORMAT),zImage)
+-ifeq ($(LINUX26_BINLOC),)
+-LINUX26_BINLOC:=arch/$(KERNEL_ARCH)/boot/$(LINUX26_FORMAT)
+-endif
+ KERNEL_EXT:=.z
+ endif
+ 
+@@ -162,6 +159,11 @@ endif
+ KERNEL_EXT:=.bz
+ endif
+ 
++# --------------
++# Last resort; if BINLOC is not set, then use the target name
++ifeq ($(LINUX26_BINLOC),)
++LINUX26_BINLOC:=arch/$(KERNEL_ARCH)/boot/$(LINUX26_FORMAT)
++endif
+ 
+ # -----------------------------------------------------------------------------
+ # File name for the Linux kernel binary
