@@ -1,55 +1,33 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Thu, 16 Oct 2008 12:28:24 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/config
-Message-ID: <20081016192824.7F6023C8D0@busybox.net>
+From: Grant Likely <grant.likely@secretlab.ca>
+Date: Thu, 16 Oct 2008 14:32:20 -0600
+Subject: [Buildroot] [PATCH 1/9] Typo fix in
+	toolchain/external-toolchain/ext-tool.mk
+Message-ID: <20081016203220.15826.26173.stgit@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-10-16 12:28:23 -0700 (Thu, 16 Oct 2008)
-New Revision: 23697
+From: Grant Likely <grant.likely@secretlab.ca>
 
-Log:
-kconfig: only warn about long help lines, not other types of lines
+Comment block header documentation typo
+---
 
-We have some pretty long depends / default y|n lines in BR, which it
-shouldn't complain about.
-
-Modified:
-   trunk/buildroot/package/config/lex.zconf.c_shipped
-   trunk/buildroot/package/config/zconf.l
+ toolchain/external-toolchain/ext-tool.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
 
-Changeset:
-Modified: trunk/buildroot/package/config/lex.zconf.c_shipped
-===================================================================
---- trunk/buildroot/package/config/lex.zconf.c_shipped	2008-10-16 13:29:13 UTC (rev 23696)
-+++ trunk/buildroot/package/config/lex.zconf.c_shipped	2008-10-16 19:28:23 UTC (rev 23697)
-@@ -815,7 +815,8 @@
- void append_string(const char *str, int size)
- {
- 	int new_size = text_size + size + 1;
--	if (size > 70) {
-+
-+	if ((YY_START == 2 /* HELP */) && (size > 70)) {
- 		fprintf (stderr, "%s:%d warning: Overlong line\n",
- 		current_file->name, current_file->lineno);
- 	}
-
-Modified: trunk/buildroot/package/config/zconf.l
-===================================================================
---- trunk/buildroot/package/config/zconf.l	2008-10-16 13:29:13 UTC (rev 23696)
-+++ trunk/buildroot/package/config/zconf.l	2008-10-16 19:28:23 UTC (rev 23697)
-@@ -49,7 +49,8 @@
- void append_string(const char *str, int size)
- {
- 	int new_size = text_size + size + 1;
--	if (size > 70) {
-+
-+	if ((YY_START == 2 /* HELP */) && (size > 70)) {
- 	        fprintf (stderr, "%s:%d warning: Overlong line\n",
- 			 current_file->name, current_file->lineno);
- 	}
+diff --git a/toolchain/external-toolchain/ext-tool.mk b/toolchain/external-toolchain/ext-tool.mk
+index a830329..bbf430c 100644
+--- a/toolchain/external-toolchain/ext-tool.mk
++++ b/toolchain/external-toolchain/ext-tool.mk
+@@ -3,7 +3,7 @@
+ #
+ # $1: source
+ # $2: destination
+-# $2: strip (y|n)       default is to strip
++# $3: strip (y|n)       default is to strip
+ #
+ copy_toolchain_lib_root = \
+ 	LIB="$(strip $1)"; \
