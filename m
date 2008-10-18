@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 18 Oct 2008 12:37:48 -0700
+Date: Sat, 18 Oct 2008 12:40:34 -0700
 Subject: [Buildroot] [buildroot 0005514]: Xorg VESA driver compilation crash
-Message-ID: <6116bca9654d5e9d1cd82c2c0fe74a58@busybox.net>
+Message-ID: <92371521a477404e0f7055ef4695927e@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,7 +9,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=5514 
 ====================================================================== 
@@ -25,7 +25,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             10-18-2008 12:37 PDT
-Last Modified:              10-18-2008 12:37 PDT
+Last Modified:              10-18-2008 12:40 PDT
 ====================================================================== 
 Summary:                    Xorg VESA driver compilation crash
 Description: 
@@ -226,10 +226,19 @@ make: ***
 Error 2
 ====================================================================== 
 
+---------------------------------------------------------------------- 
+ robang74 - 10-18-08 12:40  
+---------------------------------------------------------------------- 
+This report is not about "Standard's compliance" but "Shared Library
+Support", sorry it was my mistake. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
 10-18-08 12:37  robang74       New Issue                                    
 10-18-08 12:37  robang74       Status                   new => assigned     
 10-18-08 12:37  robang74       Assigned To               => buildroot       
+10-18-08 12:38  robang74       Issue Monitored: robang74                    
+10-18-08 12:39  robang74       File Added: .config                          
+10-18-08 12:40  robang74       Note Added: 0013814                          
 ======================================================================
