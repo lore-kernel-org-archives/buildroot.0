@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 18 Oct 2008 03:52:43 -0700
+Date: Sat, 18 Oct 2008 04:01:32 -0700
 Subject: [Buildroot] [buildroot 0005484]: Matchbox compilation crash into
 	libmatchbox-1.9
-Message-ID: <463f3d2fb7ffdf60f0a4363d69e3f55a@busybox.net>
+Message-ID: <48441d850e70f452b68c48d0abc310ba@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             10-18-2008 03:24 PDT
-Last Modified:              10-18-2008 03:52 PDT
+Last Modified:              10-18-2008 04:01 PDT
 ====================================================================== 
 Summary:                    Matchbox compilation crash into libmatchbox-1.9
 Description: 
@@ -194,6 +194,60 @@ roberto at rafbook:~/gles/buildroot$ ln -sf
 $BR2_STAGING_DIR/usr/include/startup-notification-1.0/libsn $(dirname
 $BR2_STAGING_DIR)/matchbox-window-manager-1.2/src/libsn 
 
+---------------------------------------------------------------------- 
+ robang74 - 10-18-08 04:01  
+---------------------------------------------------------------------- 
+finally it crashes for the same reason of making testes which means that to
+have success in tests is mandatory and a work around are not enough:
+
+[...]
+
+Making all in src
+make[3]: Entering directory
+`/home/roberto/gles/buildroot/build_i586/matchbox-window-manager-1.2/src'
+
+[...]
+
+/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
+-Os  -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/include
+--sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
+/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
+-march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64  -Os 
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/include
+--sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
+/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
+-march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include 
+-L/home/roberto/gles/buildroot/build_i586/staging_dir/usr/lib -o
+matchbox-window-manager  main.o wm.o base_client.o main_client.o
+toolbar_client.o toolbar_client_alt.o dockbar_client.o dialog_client.o
+select_client.o desktop_client.o ewmh.o misc.o client_common.o keys.o
+list.o stack.o composite-engine.o session.o mbtheme.o xml.o
+-L/home/roberto/gles/buildroot/build_i586/staging_dir/home/roberto/gles/buildroot/build_i586/staging_dir/usr/lib
+-lmb -lX11 -lXext -lpng12   
+-L/home/roberto/gles/buildroot/build_i586/staging_dir/usr/lib -lexpat
+-L/home/roberto/gles/buildroot/build_i586/staging_dir/home/roberto/gles/buildroot/build_i586/staging_dir/usr/lib
+-lstartup-notification-1    -lXfixes   -lXcursor   
+/home/roberto/gles/buildroot/build_i586/staging_dir/usr/lib/libmb.so:
+undefined reference to `index'
+collect2: ld returned 1 exit status
+make[3]: *** [matchbox-window-manager] Error 1
+make[3]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/matchbox-window-manager-1.2/src'
+make[2]: *** [all-recursive] Error 1
+make[2]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/matchbox-window-manager-1.2'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/matchbox-window-manager-1.2'
+make: ***
+[/home/roberto/gles/buildroot/build_i586/matchbox-window-manager-1.2/.compiled]
+Error 2 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -204,4 +258,5 @@ Date Modified   Username       Field                    Change
 10-18-08 03:24  robang74       Issue Monitored: robang74                    
 10-18-08 03:30  robang74       Note Added: 0013764                          
 10-18-08 03:52  robang74       Note Added: 0013774                          
+10-18-08 04:01  robang74       Note Added: 0013784                          
 ======================================================================
