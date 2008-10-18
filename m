@@ -1,7 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 18 Oct 2008 06:19:17 -0700
-Subject: [Buildroot] [buildroot 0005494]: Mesa should depend on C++
-Message-ID: <ab983107e36ae0d4db8bd91fa932f1ef@busybox.net>
+Date: Sat, 18 Oct 2008 06:23:14 -0700
+Subject: [Buildroot] [buildroot 0005504]: Mesa: compile process abortion
+	requires a make realclean after
+Message-ID: <1b2d484d2ace77cf19ed510478cb895d@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,62 +12,39 @@ To: buildroot@busybox.net
 
 The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=5494 
+http://busybox.net/bugs/view.php?id=5504 
 ====================================================================== 
 Reported By:                robang74
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   5494
+Issue ID:                   5504
 Category:                   Shared Library Support
 Reproducibility:            always
-Severity:                   minor
+Severity:                   trivial
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             10-18-2008 06:19 PDT
-Last Modified:              10-18-2008 06:19 PDT
+Date Submitted:             10-18-2008 06:23 PDT
+Last Modified:              10-18-2008 06:23 PDT
 ====================================================================== 
-Summary:                    Mesa should depend on C++
+Summary:                    Mesa: compile process abortion requires a make
+realclean after
 Description: 
-Every packaged which depends on Mesa should depends on C++ compiler too,
-otherwise the following crash happens:
+If the Mesa compilation process abort the next time show this errors
+because main 'make' reconfigure the package one first compilation aborts
+but reconfiguration of Mesa require a 'make realclean' before:
 
-[...]
-
-/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-g++
--c -I../../../include -Iinclude -Iinternals -Ilibnurbs/internals
--Ilibnurbs/interface -Ilibnurbs/nurbtess -Wall -Os 
--I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
--I/home/roberto/gles/buildroot/build_i586/staging_dir/include
---sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
-/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
--march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -fPIC -m32 -D_POSIX_SOURCE
--D_POSIX_C_SOURCE=199309L -D_SVID_SOURCE -D_BSD_SOURCE -D_GNU_SOURCE
--DPTHREADS -DUSE_EXTERNAL_DXTN_LIB=1 -DIN_DRI_DRIVER
--DGLX_DIRECT_RENDERING -DGLX_INDIRECT_RENDERING -DHAVE_ALIAS
--DHAVE_POSIX_MEMALIGN -fno-strict-aliasing -DNDEBUG -DLIBRARYBUILD
-libnurbs/interface/bezierEval.cc -o libnurbs/interface/bezierEval.o
-make[6]:
-/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-g++:
-Command not found
-make[6]: *** [libnurbs/interface/bezierEval.o] Error 127
-make[6]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/Mesa-7.0.3/src/glu/sgi'
-make[5]: *** [default] Error 2
-make[5]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/Mesa-7.0.3/src/glu/sgi'
-make[4]: *** [default] Error 2
-make[4]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/Mesa-7.0.3/src/glu'
-make[3]: *** [subdirs] Error 1
-make[3]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/Mesa-7.0.3/src'
-make[2]: *** [default] Error 1
-make[2]: Leaving directory
+_i586/staging_dir" /usr/bin/make -j1 \
+		MKDEP="makedepend -I$gccinc" \
+		CC=/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
+CXX=/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-g++
+CC_FOR_BUILD=/usr/bin/gcc \
+		-C /home/roberto/gles/buildroot/build_i586/Mesa-7.0.3 linux-dri-x86
+make[1]: Entering directory
 `/home/roberto/gles/buildroot/build_i586/Mesa-7.0.3'
-make[1]: *** [linux-dri-x86] Error 2
+Please run 'make realclean' before changing configs
+make[1]: *** [linux-dri-x86] Error 1
 make[1]: Leaving directory
 `/home/roberto/gles/buildroot/build_i586/Mesa-7.0.3'
 make: *** [/home/roberto/gles/buildroot/build_i586/Mesa-7.0.3/.built]
@@ -76,7 +54,7 @@ Error 2
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-10-18-08 06:19  robang74       New Issue                                    
-10-18-08 06:19  robang74       Status                   new => assigned     
-10-18-08 06:19  robang74       Assigned To               => buildroot       
+10-18-08 06:23  robang74       New Issue                                    
+10-18-08 06:23  robang74       Status                   new => assigned     
+10-18-08 06:23  robang74       Assigned To               => buildroot       
 ======================================================================
