@@ -1,26 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 18 Oct 2008 20:55:29 +0200
-Subject: [Buildroot] Madplay improved patch for alsa audio
-In-Reply-To: <gdcqmh$tuu$1@ger.gmane.org> (Micha Nelissen's message of "Sat\,
-	18 Oct 2008 16\:08\:26 +0200")
-References: <gdcqmh$tuu$1@ger.gmane.org>
-Message-ID: <87od1hivha.fsf@macbook.be.48ers.dk>
+From: Roberto A. Foglietta <roberto.foglietta@gmail.com>
+Date: Sat, 18 Oct 2008 20:57:40 +0200
+Subject: [Buildroot] ext2+isofs initrd too big
+Message-ID: <e4c675870810181157u69e5e3d4j3ed89b53a414c6f3@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Micha" == Micha Nelissen <micha@neli.hopto.org> writes:
+Hi,
 
- Micha> Hi,
- Micha> Attached is an improved patch for alsa backend of madplay.
- Micha> * fix allocation of buffer, buffer_size is number of frames
- Micha> * use default 16 bit depth (some hardware has small buffers, 16/24 bit
- Micha> difference is very small)
+ using buildroot I have compiled a system which is big enough to not
+fit in the initrd image (default size is 4Mb but could be enlarged by
+kernel .config). Attached patch prepare a initrd of 16Mb and I can
+enlarge it more in order to put all my system inside. However this is
+not the best solution because has no future itself, initrd image could
+not enlarged forever.
 
-Have you sent this upstream? I don't right away see any in the mad-dev
-archive.
+ I think the good approach should be:
 
+ a) having a buildroot project with kernel, modules, static busybox
+which generate a boot-able iso with initrd.
+ b) having another buildroot project with everything which generate a
+ext2 loop file system.
+
+ The project a) should have a rc.S which mount the ext2 loop (or
+equivalent) and jump on it. I could do it by myself and my question
+is: do you think is there any better way to do it? What could be the
+best way in order to include this behaviour into buildroot?
+
+ Thanks in advance,
 -- 
-Bye, Peter Korsgaard
+/roberto
