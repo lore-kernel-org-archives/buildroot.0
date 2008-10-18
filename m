@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 18 Oct 2008 03:24:24 -0700
+Date: Sat, 18 Oct 2008 03:30:41 -0700
 Subject: [Buildroot] [buildroot 0005484]: Matchbox compilation crash into
 	libmatchbox-1.9
-Message-ID: <141aa835eb91d09ef5de70e3f98ac7a4@busybox.net>
+Message-ID: <b679bd2852fbc3adb52e025d6d675a18@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +10,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=5484 
 ====================================================================== 
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             10-18-2008 03:24 PDT
-Last Modified:              10-18-2008 03:24 PDT
+Last Modified:              10-18-2008 03:30 PDT
 ====================================================================== 
 Summary:                    Matchbox compilation crash into libmatchbox-1.9
 Description: 
@@ -121,6 +121,13 @@ make: ***
 
 ====================================================================== 
 
+---------------------------------------------------------------------- 
+ robang74 - 10-18-08 03:30  
+---------------------------------------------------------------------- 
+workaround waiting for a solution, in libmatchbox-1.9/Makefile.in:
+
+s,SUBDIRS = libmb doc tests, SUBDIRS = libmb doc, 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -128,4 +135,6 @@ Date Modified   Username       Field                    Change
 10-18-08 03:24  robang74       Status                   new => assigned     
 10-18-08 03:24  robang74       Assigned To               => buildroot       
 10-18-08 03:24  robang74       File Added: .config                          
+10-18-08 03:24  robang74       Issue Monitored: robang74                    
+10-18-08 03:30  robang74       Note Added: 0013764                          
 ======================================================================
