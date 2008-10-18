@@ -1,36 +1,43 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 18 Oct 2008 08:58:31 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/docs
-In-Reply-To: <20081014162055.A36573C873@busybox.net> (aldot@uclibc.org's
-	message of "Tue\, 14 Oct 2008 09\:20\:55 -0700 \(PDT\)")
-References: <20081014162055.A36573C873@busybox.net>
-Message-ID: <87prlyo0dk.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Sat, 18 Oct 2008 00:00:35 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libgtk2
+Message-ID: <20081018070035.85E713C814@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "aldot" == aldot  <aldot@uclibc.org> writes:
+Author: jacmet
+Date: 2008-10-18 00:00:35 -0700 (Sat, 18 Oct 2008)
+New Revision: 23707
 
- aldot> Author: aldot
- aldot> Date: 2008-10-14 09:20:55 -0700 (Tue, 14 Oct 2008)
- aldot> New Revision: 23678
+Log:
+Bump up libgtk2 version
 
- aldot> Log:
- aldot> - extend documentation to mention adding package/foo/Config.in to package/Config.in
+Bump up libgtk2 version
 
- aldot> +if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
- aldot> +source "package/procps/Config.in"
- aldot> +endif
- aldot> +</pre>
- aldot> +   <p><strong>Note:</strong><br>
- aldot> +   Generally all packages should live <em>directly</em> in the
- aldot> +   <code>package</code> directory to make it easier to find them.
- aldot> +   </p>
+The version of libgtk2 currently used doesn't build when built against
+DirectFB. The issue has been fixed in a later version of the 2.12.x
+series, so let's upgrade to this version.
 
-Is that the agreement we have? It seems to be counter to the latest
-changes (package/audio, package/database, ..)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
--- 
-Bye, Peter Korsgaard
+Modified:
+   trunk/buildroot/package/libgtk2/libgtk2.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/libgtk2/libgtk2.mk
+===================================================================
+--- trunk/buildroot/package/libgtk2/libgtk2.mk	2008-10-17 14:11:04 UTC (rev 23706)
++++ trunk/buildroot/package/libgtk2/libgtk2.mk	2008-10-18 07:00:35 UTC (rev 23707)
+@@ -3,7 +3,7 @@
+ # libgtk2.0
+ #
+ #############################################################
+-LIBGTK2_VERSION = 2.12.6
++LIBGTK2_VERSION = 2.12.12
+ LIBGTK2_SOURCE = gtk+-$(LIBGTK2_VERSION).tar.bz2
+ LIBGTK2_SITE = ftp://ftp.gtk.org/pub/gtk/2.12
+ LIBGTK2_AUTORECONF = NO
