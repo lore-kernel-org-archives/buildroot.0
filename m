@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 18 Oct 2008 03:30:41 -0700
+Date: Sat, 18 Oct 2008 03:52:43 -0700
 Subject: [Buildroot] [buildroot 0005484]: Matchbox compilation crash into
 	libmatchbox-1.9
-Message-ID: <b679bd2852fbc3adb52e025d6d675a18@busybox.net>
+Message-ID: <463f3d2fb7ffdf60f0a4363d69e3f55a@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             10-18-2008 03:24 PDT
-Last Modified:              10-18-2008 03:30 PDT
+Last Modified:              10-18-2008 03:52 PDT
 ====================================================================== 
 Summary:                    Matchbox compilation crash into libmatchbox-1.9
 Description: 
@@ -128,6 +128,72 @@ workaround waiting for a solution, in libmatchbox-1.9/Makefile.in:
 
 s,SUBDIRS = libmb doc tests, SUBDIRS = libmb doc, 
 
+---------------------------------------------------------------------- 
+ robang74 - 10-18-08 03:52  
+---------------------------------------------------------------------- 
+applaying the workaround in note 0013764 conduce to another crash in
+
+Making all in src
+make[3]: Entering directory
+`/home/roberto/gles/buildroot/build_i586/matchbox-window-manager-1.2/src'
+if
+/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
+-Os  -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/include
+--sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
+/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
+-march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64 -DHAVE_CONFIG_H -I. -I. -I..
+-DDATADIR=\"/usr/share/matchbox\" -DCONFDIR=\"/etc/matchbox\"
+-DPKGDATADIR=\"/usr/share/matchbox/matchbox\"
+-DPREFIX=\"/home/roberto/gles/buildroot/build_i586/staging_dir/usr\" -g
+-Wall -fno-strict-aliasing 
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include/libpng12 
+  -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include/startup-notification-1.0
+        -Os 
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/include
+--sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
+/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
+-march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include -MT
+main.o -MD -MP -MF ".deps/main.Tpo" -c -o main.o main.c; \
+	then mv -f ".deps/main.Tpo" ".deps/main.Po"; else rm -f ".deps/main.Tpo";
+exit 1; fi
+In file included from main.c:21:
+structs.h:60:22: error: libsn/sn.h: No such file or directory
+In file included from main.c:21:
+structs.h:615: error: expected specifier-qualifier-list before
+?SnDisplay?
+make[3]: *** [main.o] Error 1
+make[3]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/matchbox-window-manager-1.2/src'
+make[2]: *** [all-recursive] Error 1
+make[2]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/matchbox-window-manager-1.2'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/matchbox-window-manager-1.2'
+make: ***
+[/home/roberto/gles/buildroot/build_i586/matchbox-window-manager-1.2/.compiled]
+Error 2
+
+the missing file should be found here:
+
+roberto at rafbook:~/gles/buildroot$ find . -name sn.h
+./build_i586/staging_dir/usr/include/startup-notification-1.0/libsn/sn.h
+./build_i586/startup-notification-0.9/libsn/sn.h
+
+however to work around the problem it should link a whole directory in
+this way:
+
+roberto at rafbook:~/gles/buildroot$ ln -sf
+$BR2_STAGING_DIR/usr/include/startup-notification-1.0/libsn $(dirname
+$BR2_STAGING_DIR)/matchbox-window-manager-1.2/src/libsn 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -137,4 +203,5 @@ Date Modified   Username       Field                    Change
 10-18-08 03:24  robang74       File Added: .config                          
 10-18-08 03:24  robang74       Issue Monitored: robang74                    
 10-18-08 03:30  robang74       Note Added: 0013764                          
+10-18-08 03:52  robang74       Note Added: 0013774                          
 ======================================================================
