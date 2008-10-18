@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 18 Oct 2008 04:01:32 -0700
+Date: Sat, 18 Oct 2008 04:19:10 -0700
 Subject: [Buildroot] [buildroot 0005484]: Matchbox compilation crash into
 	libmatchbox-1.9
-Message-ID: <48441d850e70f452b68c48d0abc310ba@busybox.net>
+Message-ID: <551146d9308757710337d5819eac73e4@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             10-18-2008 03:24 PDT
-Last Modified:              10-18-2008 04:01 PDT
+Last Modified:              10-18-2008 04:19 PDT
 ====================================================================== 
 Summary:                    Matchbox compilation crash into libmatchbox-1.9
 Description: 
@@ -248,6 +248,12 @@ make: ***
 [/home/roberto/gles/buildroot/build_i586/matchbox-window-manager-1.2/.compiled]
 Error 2 
 
+---------------------------------------------------------------------- 
+ robang74 - 10-18-08 04:19  
+---------------------------------------------------------------------- 
+N.B.: In spite the .config says kernel headers version is 2.6.27 in real I
+had compiled the toolchain against 2.6.24-19 ubuntu 8.04 kernel source. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -259,4 +265,5 @@ Date Modified   Username       Field                    Change
 10-18-08 03:30  robang74       Note Added: 0013764                          
 10-18-08 03:52  robang74       Note Added: 0013774                          
 10-18-08 04:01  robang74       Note Added: 0013784                          
+10-18-08 04:19  robang74       Note Added: 0013794                          
 ======================================================================
