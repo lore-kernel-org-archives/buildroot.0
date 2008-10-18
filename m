@@ -1,43 +1,25 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Sat, 18 Oct 2008 00:00:35 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libgtk2
-Message-ID: <20081018070035.85E713C814@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 18 Oct 2008 09:01:00 +0200
+Subject: [Buildroot] [PATCH] Bump up libgtk2 version
+In-Reply-To: <20081015164930.6a6fc189@surf> (Thomas Petazzoni's message of
+	"Wed\, 15 Oct 2008 16\:49\:30 +0200")
+References: <20081015164930.6a6fc189@surf>
+Message-ID: <87iqrqo09f.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-10-18 00:00:35 -0700 (Sat, 18 Oct 2008)
-New Revision: 23707
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Log:
-Bump up libgtk2 version
+ Thomas> Bump up libgtk2 version
+ Thomas> The version of libgtk2 currently used doesn't build when
+ Thomas> built against DirectFB. The issue has been fixed in a later
+ Thomas> version of the 2.12.x series, so let's upgrade to this
+ Thomas> version.
 
-Bump up libgtk2 version
+Thanks, comitted as r23707.
 
-The version of libgtk2 currently used doesn't build when built against
-DirectFB. The issue has been fixed in a later version of the 2.12.x
-series, so let's upgrade to this version.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Modified:
-   trunk/buildroot/package/libgtk2/libgtk2.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/libgtk2/libgtk2.mk
-===================================================================
---- trunk/buildroot/package/libgtk2/libgtk2.mk	2008-10-17 14:11:04 UTC (rev 23706)
-+++ trunk/buildroot/package/libgtk2/libgtk2.mk	2008-10-18 07:00:35 UTC (rev 23707)
-@@ -3,7 +3,7 @@
- # libgtk2.0
- #
- #############################################################
--LIBGTK2_VERSION = 2.12.6
-+LIBGTK2_VERSION = 2.12.12
- LIBGTK2_SOURCE = gtk+-$(LIBGTK2_VERSION).tar.bz2
- LIBGTK2_SITE = ftp://ftp.gtk.org/pub/gtk/2.12
- LIBGTK2_AUTORECONF = NO
+-- 
+Bye, Peter Korsgaard
