@@ -1,30 +1,36 @@
-From: John Schimandle <john_schimandle@hotmail.com>
-Date: Fri, 17 Oct 2008 17:07:51 -0700
-Subject: [Buildroot] Atmel file system skeleton missing /sys directory
-Message-ID: <COL0-DAV4103F240DBC50EEFAE20318D2D0@phx.gbl>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 18 Oct 2008 08:58:31 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/docs
+In-Reply-To: <20081014162055.A36573C873@busybox.net> (aldot@uclibc.org's
+	message of "Tue\, 14 Oct 2008 09\:20\:55 -0700 \(PDT\)")
+References: <20081014162055.A36573C873@busybox.net>
+Message-ID: <87prlyo0dk.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm still working through my issues with programming on the at91sam9263ek
-board and discovered a bug in the Atmel root file system skeleton directory.
-The  root file system was missing the /sys directory and that caused sysfs
-to not mount at boot time. I manually added the sys directory to
-target/device/Atmel/root/target_skeleton. removed the
-target_build_arm/at91sam9263ek/.root file, rebuilt buildroot and that fixed
-the problem.
- 
-I would like to propogate the patch into the buildroot system but I don't
-know the appropriate place to fix the problem.
- 
-Any help would be appreciated. Just trying to fix things so other people
-don't run into the same problem.
- 
-Regards,
- 
-John
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20081017/7ffa0f06/attachment.htm 
+>>>>> "aldot" == aldot  <aldot@uclibc.org> writes:
+
+ aldot> Author: aldot
+ aldot> Date: 2008-10-14 09:20:55 -0700 (Tue, 14 Oct 2008)
+ aldot> New Revision: 23678
+
+ aldot> Log:
+ aldot> - extend documentation to mention adding package/foo/Config.in to package/Config.in
+
+ aldot> +if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
+ aldot> +source "package/procps/Config.in"
+ aldot> +endif
+ aldot> +</pre>
+ aldot> +   <p><strong>Note:</strong><br>
+ aldot> +   Generally all packages should live <em>directly</em> in the
+ aldot> +   <code>package</code> directory to make it easier to find them.
+ aldot> +   </p>
+
+Is that the agreement we have? It seems to be counter to the latest
+changes (package/audio, package/database, ..)
+
+-- 
+Bye, Peter Korsgaard
