@@ -1,64 +1,24 @@
-From: John Schimandle <john_schimandle@hotmail.com>
-Date: Sat, 18 Oct 2008 06:49:28 -0700
-Subject: [Buildroot] i386 target root file system missing directories
-In-Reply-To: <877i86m5hb.fsf@macbook.be.48ers.dk>
-References: <COL0-DAV4103F240DBC50EEFAE20318D2D0@phx.gbl><e4c675870810180052g314a2641oe501318f3a343f62@mail.gmail.com>
-	<877i86m5hb.fsf@macbook.be.48ers.dk>
-Message-ID: <COL0-DAV51D06D09F1EBF13F929E6F8D2D0@phx.gbl>
+From: Micha Nelissen <micha@neli.hopto.org>
+Date: Sat, 18 Oct 2008 16:08:26 +0200
+Subject: [Buildroot] Madplay improved patch for alsa audio
+Message-ID: <gdcqmh$tuu$1@ger.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Roberto,
+Hi,
 
-You have to determine the source of the skeleton to find out where the
-problem is located. It took me a while to find it because of all the
-variable indirection that occurs in buildroot. A simple way to track down
-the problem is to just rebuild the root file system from the root directory
-of build root and then inspect the output of make for the source of the
-skeleton.
-
-rm target_build_ARCH/project/.root  # ARCH and project are specific to your
-buildroot configuration
-make >make.log 2>&1
-grep skeleton make.log
-
-You should see a shell command like
-
-cp -fa ......./target_skeleton  target_build_ARCH/project/root
-
-This will give you the source root directory for your skeleton. You can then
-check the source root directory tree for the missing directories. If the
-directories are located here then there is some other problem where they are
-being removed later in the build process.
-
-I also changed the title on this thread because it is not related to the
-Atmel architecture
+Attached is an improved patch for alsa backend of madplay.
+* fix allocation of buffer, buffer_size is number of frames
+* use default 16 bit depth (some hardware has small buffers, 16/24 bit 
+difference is very small)
 
 Regards,
 
-John
-
------Original Message-----
-From: Peter Korsgaard [mailto:jacmet at gmail.com] On Behalf Of Peter Korsgaard
-Sent: Saturday, October 18, 2008 5:51 AM
-To: Roberto A. Foglietta
-Cc: John Schimandle; buildroot at uclibc.org
-Subject: Re: [Buildroot] Atmel file system skeleton missing /sys directory
-
->>>>> "Roberto" == Roberto A Foglietta <roberto.foglietta@gmail.com> writes:
-
-Hi,
-
- Roberto>  Playing with the i386 target I see /proc /sys and sometime
-Roberto> /usr/lib are missing. The last one in particular when no any
-Roberto> package 'mkdir' it the main 'make' fails in running a 'find'
- Roberto> in that not existent directory.
-
-Can you be more specific? target/generic/target_skeleton has both /sys,
-/proc and /usr/lib.
-
---
-Bye, Peter Korsgaard
+Micha
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: madplay-audio-alsa.patch
+Url: http://busybox.net/lists/buildroot/attachments/20081018/329bfa92/attachment.txt 
