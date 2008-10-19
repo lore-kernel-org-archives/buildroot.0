@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Sun, 19 Oct 2008 00:44:25 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/matchbox
-Message-ID: <20081019074425.E0AB43C7BD@busybox.net>
+Date: Sun, 19 Oct 2008 00:44:30 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/acpid
+Message-ID: <20081019074430.EAD7C3C803@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,31 +9,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-10-19 00:44:25 -0700 (Sun, 19 Oct 2008)
-New Revision: 23717
+Date: 2008-10-19 00:44:30 -0700 (Sun, 19 Oct 2008)
+New Revision: 23718
 
 Log:
-package/matchbox: fix BR2_PACKAGE_MATCHBOX_KEYBOARD Kconfig
-
-Fix typo and wrong information in help text (not a cvs snapshot)
+acpid: use $(MAKE) in acpid-clean instead of hardcoding make
 
 Modified:
-   trunk/buildroot/package/matchbox/Config.in
+   trunk/buildroot/package/acpid/acpid.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/matchbox/Config.in
+Modified: trunk/buildroot/package/acpid/acpid.mk
 ===================================================================
---- trunk/buildroot/package/matchbox/Config.in	2008-10-19 04:21:21 UTC (rev 23716)
-+++ trunk/buildroot/package/matchbox/Config.in	2008-10-19 07:44:25 UTC (rev 23717)
-@@ -31,8 +31,8 @@
- 	  A PDA style application launcher or 'item browser'.
+--- trunk/buildroot/package/acpid/acpid.mk	2008-10-19 07:44:25 UTC (rev 23717)
++++ trunk/buildroot/package/acpid/acpid.mk	2008-10-19 07:44:30 UTC (rev 23718)
+@@ -33,7 +33,7 @@
+ acpid-source: $(DL_DIR)/$(ACPID_SOURCE)
  
- config BR2_PACKAGE_MATCHBOX_KEYBOARD
--	bool "Metchbox Virtual Keyboard"
-+	bool "Matchbox Virtual Keyboard"
- 	depends on BR2_PACKAGE_MATCHBOX
- 	select BR2_PACKAGE_XLIB_LIBXTST
- 	help
--	  Virtual Keyboard (developement version from CVS)
-+	  Virtual Keyboard
+ acpid-clean:
+-	-make -C $(ACPID_DIR) clean
++	-$(MAKE) -C $(ACPID_DIR) clean
+ 
+ acpid-dirclean:
+ 	rm -rf $(ACPID_DIR)
