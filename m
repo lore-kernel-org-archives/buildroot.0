@@ -1,31 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 19 Oct 2008 07:58:44 +0200
-Subject: [Buildroot] Madplay improved patch for alsa audio
-In-Reply-To: <48FA3319.600@neli.hopto.org> (Micha Nelissen's message of "Sat\,
-	18 Oct 2008 21\:03\:53 +0200")
-References: <gdcqmh$tuu$1@ger.gmane.org> <87od1hivha.fsf@macbook.be.48ers.dk>
-	<48FA3319.600@neli.hopto.org>
-Message-ID: <87vdvpnn1n.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Sun, 19 Oct 2008 00:44:25 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/matchbox
+Message-ID: <20081019074425.E0AB43C7BD@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Micha" == Micha Nelissen <micha@neli.hopto.org> writes:
+Author: jacmet
+Date: 2008-10-19 00:44:25 -0700 (Sun, 19 Oct 2008)
+New Revision: 23717
 
-Hi,
+Log:
+package/matchbox: fix BR2_PACKAGE_MATCHBOX_KEYBOARD Kconfig
 
- >> Have you sent this upstream? I don't right away see any in the
- >> mad-dev archive.
+Fix typo and wrong information in help text (not a cvs snapshot)
 
- Micha> I haven't sent it upstream. Where is that actually? Should I
- Micha> post it to the patches forum at sourceforge?
+Modified:
+   trunk/buildroot/package/matchbox/Config.in
 
-Like madplay/Config.in says, http://www.underbit.com/products/mad/ or
-more specifically the mad-dev list:
 
-http://www.mars.org/bin/mailman/listinfo/mad-dev
-
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/package/matchbox/Config.in
+===================================================================
+--- trunk/buildroot/package/matchbox/Config.in	2008-10-19 04:21:21 UTC (rev 23716)
++++ trunk/buildroot/package/matchbox/Config.in	2008-10-19 07:44:25 UTC (rev 23717)
+@@ -31,8 +31,8 @@
+ 	  A PDA style application launcher or 'item browser'.
+ 
+ config BR2_PACKAGE_MATCHBOX_KEYBOARD
+-	bool "Metchbox Virtual Keyboard"
++	bool "Matchbox Virtual Keyboard"
+ 	depends on BR2_PACKAGE_MATCHBOX
+ 	select BR2_PACKAGE_XLIB_LIBXTST
+ 	help
+-	  Virtual Keyboard (developement version from CVS)
++	  Virtual Keyboard
