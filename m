@@ -1,53 +1,105 @@
-From: Roberto A. Foglietta <roberto.foglietta@gmail.com>
-Date: Sun, 19 Oct 2008 01:55:49 +0200
-Subject: [Buildroot] ext2+isofs initrd too big
-In-Reply-To: <e4c675870810181256j11da9c1eha5035bedc7a088a4@mail.gmail.com>
-References: <e4c675870810181157u69e5e3d4j3ed89b53a414c6f3@mail.gmail.com>
-	<e4c675870810181256j11da9c1eha5035bedc7a088a4@mail.gmail.com>
-Message-ID: <e4c675870810181655x1bdf8817l114da029a3a9c807@mail.gmail.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Sat, 18 Oct 2008 17:10:07 -0700
+Subject: [Buildroot] [buildroot 0005524]: Matchbox windows manager requires
+	startup notification
+Message-ID: <ee4dc044bbd76280a8e9cc16a05e7a76@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2008/10/18 Roberto A. Foglietta <roberto.foglietta@gmail.com>:
-> 2008/10/18 Roberto A. Foglietta <roberto.foglietta@gmail.com>:
->> Hi,
->>
->>  using buildroot I have compiled a system which is big enough to not
->> fit in the initrd image (default size is 4Mb but could be enlarged by
->> kernel .config). Attached patch prepare a initrd of 16Mb and I can
->> enlarge it more in order to put all my system inside. However this is
->> not the best solution because has no future itself, initrd image could
->> not enlarged forever.
->
->  _Attached patch_ forgot, until now
->
 
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=5524 
+====================================================================== 
+Reported By:                robang74
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   5524
+Category:                   Shared Library Support
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             10-18-2008 17:10 PDT
+Last Modified:              10-18-2008 17:10 PDT
+====================================================================== 
+Summary:                    Matchbox windows manager requires startup
+notification
+Description: 
+roberto at rafbook:~/gles/buildroot$ make clean
 
- a) stripping modules (previous patch was wrong, see below)
+[...]
 
- Using strip on .ko does not work at all without --strip-unneeded.
+roberto at rafbook:~/gles/buildroot$ make
 
- http://mailman.uclinux.org/pipermail/uclinux-dev/2007-January/041616.html
+[...]
 
- strip -R  .comment -R .note -g --strip-unneeded
+Making all in src
+make[3]: Entering directory
+`/home/roberto/gles/buildroot/build_i586/matchbox-window-manager-1.2/src'
+if
+/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
+-Os  -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/include
+--sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
+/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
+-march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64 -DHAVE_CONFIG_H -I. -I. -I..
+-DDATADIR=\"/usr/share/matchbox\" -DCONFDIR=\"/etc/matchbox\"
+-DPKGDATADIR=\"/usr/share/matchbox/matchbox\"
+-DPREFIX=\"/home/roberto/gles/buildroot/build_i586/staging_dir/usr\" -g
+-Wall -fno-strict-aliasing 
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include/libpng12 
+  -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include/startup-notification-1.0
+        -Os 
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/include
+--sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
+/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
+-march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include -MT
+main.o -MD -MP -MF ".deps/main.Tpo" -c -o main.o main.c; \
+	then mv -f ".deps/main.Tpo" ".deps/main.Po"; else rm -f ".deps/main.Tpo";
+exit 1; fi
+In file included from main.c:21:
+structs.h:60:22: error: libsn/sn.h: No such file or directory
+In file included from main.c:21:
+structs.h:615: error: expected specifier-qualifier-list before
+?SnDisplay?
+make[3]: *** [main.o] Error 1
+make[3]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/matchbox-window-manager-1.2/src'
+make[2]: *** [all-recursive] Error 1
+make[2]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/matchbox-window-manager-1.2'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/matchbox-window-manager-1.2'
+make: ***
+[/home/roberto/gles/buildroot/build_i586/matchbox-window-manager-1.2/.compiled]
+Error 2
 
+the missing file belong to startup-notification-0.9
 
- b) bootable iso
+roberto at rafbook:~/gles/buildroot$ find build_i586 -name sn.h
+build_i586/startup-notification-0.9/libsn/sn.h
 
- a line like this is required for initrd and it does not hurt in initramfs case
+SOLUTION: matchbox-window-manager-1.2 should require
+startup-notification-0.9 too, or at least its headers installed.
+====================================================================== 
 
- root=/dev/ram0 initrd=0x00800000,16M
-
- http://www.uwsg.iu.edu/hypermail/linux/kernel/0501.3/1144.html
-
-
-Cheers,
--- 
-/roberto
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: buildroot-svn_r23678.diff
-Url: http://busybox.net/lists/buildroot/attachments/20081019/dcc7d655/attachment.txt 
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+10-18-08 17:10  robang74       New Issue                                    
+10-18-08 17:10  robang74       Status                   new => assigned     
+10-18-08 17:10  robang74       Assigned To               => buildroot       
+======================================================================
