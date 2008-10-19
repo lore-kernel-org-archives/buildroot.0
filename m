@@ -1,55 +1,37 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Sun, 19 Oct 2008 18:05:20 +0200
-Subject: [Buildroot] ext2+isofs initrd too big
-In-Reply-To: <e4c675870810190300h6274b470nefb816ae6798d301@mail.gmail.com>
-References: <e4c675870810181157u69e5e3d4j3ed89b53a414c6f3@mail.gmail.com>
-	<e4c675870810181256j11da9c1eha5035bedc7a088a4@mail.gmail.com>
-	<e4c675870810181655x1bdf8817l114da029a3a9c807@mail.gmail.com>
-	<e4c675870810190300h6274b470nefb816ae6798d301@mail.gmail.com>
-Message-ID: <20081019160520.GI11249@mx.loc>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Sun, 19 Oct 2008 14:48:49 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/x11r7/xlib_libX11
+Message-ID: <20081019214849.2F63C3C84C@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Oct 19, 2008 at 12:00:13PM +0200, Roberto A. Foglietta wrote:
->2008/10/19 Roberto A. Foglietta <roberto.foglietta@gmail.com>:
->> 2008/10/18 Roberto A. Foglietta <roberto.foglietta@gmail.com>:
->>> 2008/10/18 Roberto A. Foglietta <roberto.foglietta@gmail.com>:
->>>> Hi,
->>>>
->>>>  using buildroot I have compiled a system which is big enough to not
->>>> fit in the initrd image (default size is 4Mb but could be enlarged by
->>>> kernel .config). Attached patch prepare a initrd of 16Mb and I can
->>>> enlarge it more in order to put all my system inside. However this is
->>>> not the best solution because has no future itself, initrd image could
->>>> not enlarged forever.
->>>
->>>  _Attached patch_ forgot, until now
->>>
->>
->>
->>  a) stripping modules (previous patch was wrong, see below)
->>
->>  Using strip on .ko does not work at all without --strip-unneeded.
->>
->>  http://mailman.uclinux.org/pipermail/uclinux-dev/2007-January/041616.html
->>
->>  strip -R  .comment -R .note -g --strip-unneeded
->>
->
-> Stripping modules belong to the kernel Makefile.in and Makefile.in.advanced
->
-> Declaring INSTALL_MOD_STRIP=1 in modules_install should be enough,
->however find,xargs,strip has been added also.
->
-> Ciao,
->-- 
->/roberto
+Author: jacmet
+Date: 2008-10-19 14:48:48 -0700 (Sun, 19 Oct 2008)
+New Revision: 23725
+
+Log:
+x11r7/libX11: use install-strip for target install
+
+Saves ~11 MB
+
+Modified:
+   trunk/buildroot/package/x11r7/xlib_libX11/xlib_libX11.mk
 
 
-> linux26-modules: cross-depmod26 $(LINUX26_DIR)/.modules_installed
->+	find $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION) -name \*.ko | xargs strip -R .comment -R .note -g --strip-unneeded
-
-This is wrong. Proper thing to do is $(STIPCMD) $(STRIP_STRIP_UNNEEDED)
+Changeset:
+Modified: trunk/buildroot/package/x11r7/xlib_libX11/xlib_libX11.mk
+===================================================================
+--- trunk/buildroot/package/x11r7/xlib_libX11/xlib_libX11.mk	2008-10-19 19:54:49 UTC (rev 23724)
++++ trunk/buildroot/package/x11r7/xlib_libX11/xlib_libX11.mk	2008-10-19 21:48:48 UTC (rev 23725)
+@@ -10,7 +10,7 @@
+ XLIB_LIBX11_AUTORECONF = NO
+ XLIB_LIBX11_INSTALL_STAGING = YES
+ XLIB_LIBX11_INSTALL_TARGET = YES
+-XLIB_LIBX11_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install-exec install-data
++XLIB_LIBX11_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install-strip
+ XLIB_LIBX11_DEPENDENCIES = libxcb xutil_util-macros xlib_xtrans xlib_libXau xlib_libXdmcp xproto_kbproto xproto_xproto xproto_xextproto xproto_inputproto xproto_xf86bigfontproto xproto_bigreqsproto xproto_xcmiscproto
+ XLIB_LIBX11_CONF_ENV = ac_cv_func_mmap_fixed_mapped=yes CC_FOR_BUILD="/usr/bin/gcc -I$(STAGING_DIR)/usr/include"
+ XLIB_LIBX11_CONF_OPT = --disable-malloc0returnsnull --with-xcb --enable-shared --disable-static
