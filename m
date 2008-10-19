@@ -1,51 +1,109 @@
-From: Roberto A. Foglietta <roberto.foglietta@gmail.com>
-Date: Sun, 19 Oct 2008 12:00:13 +0200
-Subject: [Buildroot] ext2+isofs initrd too big
-In-Reply-To: <e4c675870810181655x1bdf8817l114da029a3a9c807@mail.gmail.com>
-References: <e4c675870810181157u69e5e3d4j3ed89b53a414c6f3@mail.gmail.com>
-	<e4c675870810181256j11da9c1eha5035bedc7a088a4@mail.gmail.com>
-	<e4c675870810181655x1bdf8817l114da029a3a9c807@mail.gmail.com>
-Message-ID: <e4c675870810190300h6274b470nefb816ae6798d301@mail.gmail.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Sun, 19 Oct 2008 03:38:57 -0700
+Subject: [Buildroot] [buildroot 0005564]: Removing initramfs has not
+	complete support
+Message-ID: <85f282868bd2414287b62d423ce052d8@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2008/10/19 Roberto A. Foglietta <roberto.foglietta@gmail.com>:
-> 2008/10/18 Roberto A. Foglietta <roberto.foglietta@gmail.com>:
->> 2008/10/18 Roberto A. Foglietta <roberto.foglietta@gmail.com>:
->>> Hi,
->>>
->>>  using buildroot I have compiled a system which is big enough to not
->>> fit in the initrd image (default size is 4Mb but could be enlarged by
->>> kernel .config). Attached patch prepare a initrd of 16Mb and I can
->>> enlarge it more in order to put all my system inside. However this is
->>> not the best solution because has no future itself, initrd image could
->>> not enlarged forever.
->>
->>  _Attached patch_ forgot, until now
->>
->
->
->  a) stripping modules (previous patch was wrong, see below)
->
->  Using strip on .ko does not work at all without --strip-unneeded.
->
->  http://mailman.uclinux.org/pipermail/uclinux-dev/2007-January/041616.html
->
->  strip -R  .comment -R .note -g --strip-unneeded
->
 
- Stripping modules belong to the kernel Makefile.in and Makefile.in.advanced
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=5564 
+====================================================================== 
+Reported By:                robang74
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   5564
+Category:                   Other
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             10-19-2008 03:38 PDT
+Last Modified:              10-19-2008 03:38 PDT
+====================================================================== 
+Summary:                    Removing initramfs has not complete support
+Description: 
+After initramfs has been enabled (BR2_TARGET_ROOTFS_INITRAMFS=y) 'make'
+recompile the entire kernel properly. Deletion of binaries/$project does
+not hurt anything because 'make' redo all files in that directory. 
 
- Declaring INSTALL_MOD_STRIP=1 in modules_install should be enough,
-however find,xargs,strip has been added also.
+After initramfs has been disabled (# BR2_TARGET_ROOTFS_INITRAMFS is not
+set) clear the binaries/$project directory still does not hurt because
+there will be no any kernel recompilation until 'make linux26-menuconfig'
+take place and then:
 
- Ciao,
--- 
-/roberto
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: buildroot-svn_r23719.diff
-Url: http://busybox.net/lists/buildroot/attachments/20081019/9a33bd4f/attachment.txt 
+/usr/bin/make -j1 HOSTCC="/usr/bin/gcc" HOSTCFLAGS="" ARCH=i386
+CFLAGS_KERNEL="-Os
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/include
+--sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
+/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
+-march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64"
+INSTALL_MOD_PATH=/home/roberto/gles/buildroot/project_build_i586/ugles/root
+CROSS_COMPILE=/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-
+LDFLAGS="-L/home/roberto/gles/buildroot/build_i586/staging_dir/lib
+-L/home/roberto/gles/buildroot/build_i586/staging_dir/usr/lib
+--sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/"
+LZMA="/home/roberto/gles/buildroot/toolchain_build_i586/bin/lzma" -C
+/home/roberto/gles/buildroot/project_build_i586/ugles/linux-2.6.21.7
+prepare
+make[1]: Entering directory
+`/home/roberto/gles/buildroot/project_build_i586/ugles/linux-2.6.21.7'
+  CHK     include/linux/version.h
+  CHK     include/linux/utsrelease.h
+make[1]: Leaving directory
+`/home/roberto/gles/buildroot/project_build_i586/ugles/linux-2.6.21.7'
+touch
+/home/roberto/gles/buildroot/project_build_i586/ugles/linux-2.6.21.7/.depend_done
+/usr/bin/make -j1 HOSTCC="/usr/bin/gcc" HOSTCFLAGS="" ARCH=i386
+CFLAGS_KERNEL="-Os
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/include
+--sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
+/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
+-march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64"
+INSTALL_MOD_PATH=/home/roberto/gles/buildroot/project_build_i586/ugles/root
+CROSS_COMPILE=/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-
+LDFLAGS="-L/home/roberto/gles/buildroot/build_i586/staging_dir/lib
+-L/home/roberto/gles/buildroot/build_i586/staging_dir/usr/lib
+--sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/"
+LZMA="/home/roberto/gles/buildroot/toolchain_build_i586/bin/lzma" \
+		-C /home/roberto/gles/buildroot/project_build_i586/ugles/linux-2.6.21.7
+bzImage
+make[1]: Entering directory
+`/home/roberto/gles/buildroot/project_build_i586/ugles/linux-2.6.21.7'
+  CHK     include/linux/version.h
+  CHK     include/linux/utsrelease.h
+  CHK     include/linux/compile.h
+ 
+/home/roberto/gles/buildroot/project_build_i586/ugles/linux-2.6.21.7/scripts/gen_initramfs_list.sh:
+Cannot open
+'/home/roberto/gles/buildroot/binaries/ugles/rootfs.i586.initramfs_list'
+make[2]: *** [usr/initramfs_data.cpio.gz] Error 1
+make[1]: *** [usr] Error 2
+make[1]: Leaving directory
+`/home/roberto/gles/buildroot/project_build_i586/ugles/linux-2.6.21.7'
+make: ***
+[/home/roberto/gles/buildroot/project_build_i586/ugles/linux-2.6.21.7/arch/i386/boot/bzImage]
+Error 2
+
+
+
+====================================================================== 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+10-19-08 03:38  robang74       New Issue                                    
+10-19-08 03:38  robang74       Status                   new => assigned     
+10-19-08 03:38  robang74       Assigned To               => buildroot       
+======================================================================
