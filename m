@@ -1,21 +1,84 @@
-From: Hai Zaar <haizaar@haizaar.com>
-Date: Mon, 20 Oct 2008 03:28:46 +0200
-Subject: [Buildroot] build should not depend on user's umask
-Message-ID: <76d9e2a30810191828v654590efga2d86f0bb5f5cea6@mail.gmail.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 20 Oct 2008 00:23:27 -0700
+Subject: [Buildroot] [buildroot 0004224]: DirectFB Makefile does not support
+	1.0.x / 1.2.x and Examples not supported
+Message-ID: <192a278814e1a5eec0c77fccdbaf5f7e@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Good day!
 
-Currently, if the user that performs the build sets its umask to say
-027, then some libraries will be installed with 750 permission.
-For example - libz.so
-This fails php-cgi to load, since it runs under lighttpd which in turn
-spawns php-cgi as www-data user, that obviously can not access libz
-library due to a bug I've mentioned.
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=4224 
+====================================================================== 
+Reported By:                daniellaird
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   4224
+Category:                   New Features
+Reproducibility:            always
+Severity:                   feature
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             07-21-2008 05:03 PDT
+Last Modified:              10-20-2008 00:23 PDT
+====================================================================== 
+Summary:                    DirectFB Makefile does not support 1.0.x / 1.2.x and
+Examples not supported
+Description: 
+DirectFB makefile supports out of date version and does not support the
+building of examples. 
+This patch adds support for 1.0.X and 1.2.x building and DirectFB examples
+as well
+====================================================================== 
 
--- 
-Zaar
+---------------------------------------------------------------------- 
+ Correa - 07-21-08 05:21  
+---------------------------------------------------------------------- 
+Is there a reason to support multiple versions? If possible, we would
+rather avoid having to choose versions and keep the latest one only. 
+
+---------------------------------------------------------------------- 
+ daniellaird - 07-21-08 05:31  
+---------------------------------------------------------------------- 
+Yes, The DirectFB API version has moved on.  DirectFB 1.2 is the latest
+version but some packages will not compile against DirectFB 1.2.  
+Where I work we are moving to DirectFB 1.2.X but the transition window
+means supporting both in the short term.
+With a completely new DirectFB (DFB 2.0) being planned for the future that
+will will change the API significantly then we will need support for DFB1.X
+vs DFB2.X anyway so this change will again be useful then.
+I am in no position to move buildroot to 1.2.x series but require support
+for it.
+This seemed the best option. 
+
+---------------------------------------------------------------------- 
+ tpetazzoni - 10-13-08 09:07  
+---------------------------------------------------------------------- 
+DirectFB support has recently been improved. Could you rebase your patch
+against the latest Buildroot version ? 
+
+---------------------------------------------------------------------- 
+ daniellaird - 10-20-08 00:23  
+---------------------------------------------------------------------- 
+examples are in now and DirectFB updated with thanks to Thomas.  
+Will close this. 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+07-21-08 05:03  daniellaird    New Issue                                    
+07-21-08 05:03  daniellaird    Status                   new => assigned     
+07-21-08 05:03  daniellaird    Assigned To               => buildroot       
+07-21-08 05:03  daniellaird    File Added: directfb_update.patch                
+   
+07-21-08 05:21  Correa         Note Added: 0009874                          
+07-21-08 05:31  daniellaird    Note Added: 0009884                          
+10-13-08 09:07  tpetazzoni     Note Added: 0013464                          
+10-20-08 00:23  daniellaird    Note Added: 0013864                          
+======================================================================
