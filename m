@@ -1,38 +1,45 @@
-From: Hai Zaar <haizaar@haizaar.com>
-Date: Mon, 20 Oct 2008 18:23:46 +0200
-Subject: [Buildroot] bug in uclibc.mk in latest tree
-In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE1909B561EC@mi8nycmail19.Mi8.com>
-References: <76d9e2a30810200915s327c04a8we682872f5ff60795@mail.gmail.com>
-	<BD79186B4FD85F4B8E60E381CAEE1909B561EC@mi8nycmail19.Mi8.com>
-Message-ID: <76d9e2a30810200923s7b809891xf9bcb9ac4908793f@mail.gmail.com>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Mon, 20 Oct 2008 11:55:26 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
+Message-ID: <20081020185526.845123C6B6@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Oct 20, 2008 at 6:20 PM, hartleys <hartleys@visionengravers.com> wrote:
-> On Monday, October 20, 2008 9:15 AM, Hai Zaar wrote:
->> After updating to r23746, make fails with the following:
->> toolchain/uClibc/uclibc.mk:654: *** extraneous `endif'.  Stop.
->>
->> It appears that there is extraneous 'endif' at line 559.
->
-> I have a similar problem with r23746.
->
-> toolchain/uClibc/uclibc.mk:440: *** commands commence before first
-> target.  Stop.
->
-> I'm not even sure what is causing the build failure. I am using an
-> external binary toolchain so I don't think uclibc should even be built.
-Exactly! Because that exta endif seems to break boilerplate around
-uclibc makefile.
+Author: jacmet
+Date: 2008-10-20 11:55:26 -0700 (Mon, 20 Oct 2008)
+New Revision: 23747
 
->
-> Hartley
->
+Log:
+toolchain/uclibc: brown paper bag fix for r23746
+
+So much for doing one more "obvious" fix before going home -
+Sorry everyone.
+
+Modified:
+   trunk/buildroot/toolchain/uClibc/uclibc.mk
 
 
-
--- 
-Zaar
+Changeset:
+Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
+===================================================================
+--- trunk/buildroot/toolchain/uClibc/uclibc.mk	2008-10-20 15:23:50 UTC (rev 23746)
++++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2008-10-20 18:55:26 UTC (rev 23747)
+@@ -433,12 +433,9 @@
+ 		PREFIX=$(TOOL_BUILD_DIR)/uClibc_dev/ \
+ 		DEVEL_PREFIX=/usr/ \
+ 		RUNTIME_PREFIX=$(TOOL_BUILD_DIR)/uClibc_dev/ \
+-		HOSTCC="$(HOSTCC)" \
+-ifeq ($(BR2_UCLIBC_VERSION_0_9_28_3),y)
+-		headers install_dev
+-else
+-		headers install_headers
+-endif
++		HOSTCC="$(HOSTCC)" headers \
++		$(if $(BR2_UCLIBC_VERSION_0_9_28_3),install_dev,install_headers)
++
+ 	# Install the kernel headers to the first stage gcc include dir
+ 	# if necessary
+ ifeq ($(LINUX_HEADERS_IS_KERNEL),y)
