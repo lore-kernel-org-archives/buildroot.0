@@ -1,27 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 20 Oct 2008 11:05:16 +0200
-Subject: [Buildroot] Can not compile strace
-In-Reply-To: <76d9e2a30810191813s629af379kedd4da294a8f7cf2@mail.gmail.com>
-	(Hai Zaar's message of "Mon\, 20 Oct 2008 03\:13\:34 +0200")
-References: <76d9e2a30810191813s629af379kedd4da294a8f7cf2@mail.gmail.com>
-Message-ID: <87ljwjljqr.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Mon, 20 Oct 2008 02:40:41 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/x11r7/xlib_libXfont
+Message-ID: <20081020094041.D9EBC3C6DD@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Hai" == Hai Zaar <haizaar@haizaar.com> writes:
+Author: jacmet
+Date: 2008-10-20 02:40:41 -0700 (Mon, 20 Oct 2008)
+New Revision: 23736
 
- Hai> I'm building current buildroot with 2.6.27 for at91sam9260
- Hai> strace fails to compile with the following error:
- Hai> file.c:41:26: error: linux/dirent.h: No such file or directory
+Log:
+x11r7/libXfont: use install-strip for target install
 
- Hai> It looks like build_arm/staging_dir/usr/include/linux/dirent.h does
- Hai> not exist any more.
- Hai> How can I fix that?
+Saves ~800 KB
 
-Thanks for reporting it - Fixed in r23735.
+Modified:
+   trunk/buildroot/package/x11r7/xlib_libXfont/xlib_libXfont.mk
 
--- 
-Bye, Peter Korsgaard
+
+Changeset:
+Modified: trunk/buildroot/package/x11r7/xlib_libXfont/xlib_libXfont.mk
+===================================================================
+--- trunk/buildroot/package/x11r7/xlib_libXfont/xlib_libXfont.mk	2008-10-20 09:04:49 UTC (rev 23735)
++++ trunk/buildroot/package/x11r7/xlib_libXfont/xlib_libXfont.mk	2008-10-20 09:40:41 UTC (rev 23736)
+@@ -9,6 +9,8 @@
+ XLIB_LIBXFONT_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXFONT_AUTORECONF = NO
+ XLIB_LIBXFONT_INSTALL_STAGING = YES
++XLIB_LIBXFONT_INSTALL_TARGET = YES
++XLIB_LIBXFONT_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install-strip
+ XLIB_LIBXFONT_DEPENDENCIES = freetype xlib_libfontenc xlib_xtrans xproto_fontcacheproto xproto_fontsproto xproto_xproto xfont_encodings
+ XLIB_LIBXFONT_CONF_OPT = --enable-shared --disable-static
+ 
