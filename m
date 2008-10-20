@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 20 Oct 2008 12:47:56 -0700
+Date: Mon, 20 Oct 2008 13:15:13 -0700
 Subject: [Buildroot] [buildroot 0005604]: make clean crash on mkfontscale
-Message-ID: <59f240fb2142c93dbde83d167dc20568@busybox.net>
+Message-ID: <95c4b4330a3c40397cf6ab0dcd2fc7d7@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,7 +9,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=5604 
 ====================================================================== 
@@ -25,7 +25,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             10-20-2008 12:47 PDT
-Last Modified:              10-20-2008 12:47 PDT
+Last Modified:              10-20-2008 13:15 PDT
 ====================================================================== 
 Summary:                    make clean crash on mkfontscale
 Description: 
@@ -185,6 +185,14 @@ Error 1
 
 ====================================================================== 
 
+---------------------------------------------------------------------- 
+ robang74 - 10-20-08 13:15  
+---------------------------------------------------------------------- 
+roberto at rafbook:~/gles/buildroot$ svn info | grep Last
+Last Changed Author: jacmet
+Last Changed Rev: 23719
+Last Changed Date: 2008-10-19 09:59:19 +0200 (Sun, 19 Oct 2008) 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -192,4 +200,6 @@ Date Modified   Username       Field                    Change
 10-20-08 12:47  robang74       Status                   new => assigned     
 10-20-08 12:47  robang74       Assigned To               => buildroot       
 10-20-08 12:47  robang74       File Added: .config                          
+10-20-08 12:48  robang74       Issue Monitored: robang74                    
+10-20-08 13:15  robang74       Note Added: 0013904                          
 ======================================================================
