@@ -1,44 +1,78 @@
-From: Grant Likely <grant.likely@secretlab.ca>
-Date: Mon, 20 Oct 2008 08:52:29 -0600
-Subject: [Buildroot] Feedback ?
-In-Reply-To: <20081020154814.060a5b95@surf>
-References: <20081015164737.51a662cf@surf> <20081020154814.060a5b95@surf>
-Message-ID: <20081020145229.GA10604@secretlab.ca>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 20 Oct 2008 08:02:45 -0700
+Subject: [Buildroot] [buildroot 0005364]: fontconfig compilations sometimes
+	failed with parallel build
+Message-ID: <127b6700109b21029005854084f4d6d5@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Oct 20, 2008 at 03:48:14PM +0200, Thomas Petazzoni wrote:
-> Le Wed, 15 Oct 2008 16:47:37 +0200,
-> Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
-> 
-> > Make sure libraries are visible when building packages
-> > 
-> > This patch adds an LDFLAGS variable before calling the configure
-> > script of any package, in order to fix two problems :
-> > 
-> >  * Some configure scripts were not able to compile the test programs
-> >    used to test whether zlib was properly installed. The configure
-> >    scripts are properly using -lz, but the
-> >    -L/path/to/staging_dir/usr/lib option was not present, leading to
-> >    build failure.
-> > 
-> >  * While linking applications, for example the applications included
-> > in the fontconfig package, I had build failures like :
-> > 
-> > /usr/local/uclibc-0.9.28-2/arm/lib/gcc/arm-linux-uclibc/3.4.5/../../../../arm-linux-uclibc/bin/ld.real:
-> > warning: libfreetype.so.6, needed by ../src/.libs/libfontconfig.so,
-> > not found (try using -rpath or -rpath-link)
-> > 
-> >     this is due to the fact that ld is not able to find the other
-> >     already installed shared libraries.
-> 
-> May I have some feedback on this patch ? Without this, Buildroot is
-> just unusable here.
 
-FWIW, this patch looks good to me, but I'm far from the most
-knowledgable person to comment.
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=5364 
+====================================================================== 
+Reported By:                tpetazzoni
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   5364
+Category:                   Other
+Reproducibility:            sometimes
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             10-13-2008 03:15 PDT
+Last Modified:              10-20-2008 08:02 PDT
+====================================================================== 
+Summary:                    fontconfig compilations sometimes failed with
+parallel build
+Description: 
+fontconfig is affected by a compile bug that only occurs from time to time
+when parallel compilation is enabled. The bug is described at
+https://bugs.freedesktop.org/show_bug.cgi?id=16464.
 
-g.
+The attached patch includes the fix for fontconfig in buildroot. However,
+it modifies a Makefile.am file, so running automake is needed, but I'm not
+sure Buildroot will do that automatically (as the bug only occurs
+sometimes, it's quite hard to test whether the fix properly works or
+not).
+
+====================================================================== 
+
+---------------------------------------------------------------------- 
+ tpetazzoni - 10-13-08 03:34  
+---------------------------------------------------------------------- 
+After testing, it seems that patching Makefile.am is not sufficient to
+re-run automake.
+
+What should be done in this case ? Provide a patch that also fixes the
+generated Makefile ? Run automake before compiling fontconfig ? 
+
+---------------------------------------------------------------------- 
+ tpetazzoni - 10-20-08 08:02  
+---------------------------------------------------------------------- 
+It seems that the FOO_AUTORECONF option of Makefile.autotools.in was
+created for that kind of case. However, by reading the current
+Makefile.autotools.in code, I hardly see how FOO_AUTORECONF can do
+something: the AUTORECONF variable is not set:
+
+#AUTORECONF ?= autoreconf -v -i -f -I $(ACLOCAL_STAGING_DIR)
+
+How should this fontconfig building problem be fixed, until a new version
+of fontconfig is released with a fix ? 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+10-13-08 03:15  tpetazzoni     New Issue                                    
+10-13-08 03:15  tpetazzoni     Status                   new => assigned     
+10-13-08 03:15  tpetazzoni     Assigned To               => buildroot       
+10-13-08 03:15  tpetazzoni     File Added: parallel-compilation-fix.patch       
+            
+10-13-08 03:34  tpetazzoni     Note Added: 0013434                          
+10-20-08 08:02  tpetazzoni     Note Added: 0013894                          
+======================================================================
