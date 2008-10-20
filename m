@@ -1,35 +1,47 @@
-From: Roberto A. Foglietta <roberto.foglietta@gmail.com>
-Date: Mon, 20 Oct 2008 14:32:58 +0200
-Subject: [Buildroot] ext2+isofs initrd too big
-In-Reply-To: <e4c675870810200355g55367c71x351b2ed4ff49751f@mail.gmail.com>
-References: <e4c675870810181157u69e5e3d4j3ed89b53a414c6f3@mail.gmail.com>
-	<e4c675870810181256j11da9c1eha5035bedc7a088a4@mail.gmail.com>
-	<e4c675870810181655x1bdf8817l114da029a3a9c807@mail.gmail.com>
-	<e4c675870810190300h6274b470nefb816ae6798d301@mail.gmail.com>
-	<20081019160520.GI11249@mx.loc>
-	<e4c675870810200355g55367c71x351b2ed4ff49751f@mail.gmail.com>
-Message-ID: <e4c675870810200532j2d8412dckfb0593b73eb45938@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 20 Oct 2008 15:48:14 +0200
+Subject: [Buildroot] Feedback ?
+In-Reply-To: <20081015164737.51a662cf@surf>
+References: <20081015164737.51a662cf@surf>
+Message-ID: <20081020154814.060a5b95@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2008/10/20 Roberto A. Foglietta <roberto.foglietta@gmail.com>:
+Le Wed, 15 Oct 2008 16:47:37 +0200,
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
 
- [cut]
+> Make sure libraries are visible when building packages
+> 
+> This patch adds an LDFLAGS variable before calling the configure
+> script of any package, in order to fix two problems :
+> 
+>  * Some configure scripts were not able to compile the test programs
+>    used to test whether zlib was properly installed. The configure
+>    scripts are properly using -lz, but the
+>    -L/path/to/staging_dir/usr/lib option was not present, leading to
+>    build failure.
+> 
+>  * While linking applications, for example the applications included
+> in the fontconfig package, I had build failures like :
+> 
+> /usr/local/uclibc-0.9.28-2/arm/lib/gcc/arm-linux-uclibc/3.4.5/../../../../arm-linux-uclibc/bin/ld.real:
+> warning: libfreetype.so.6, needed by ../src/.libs/libfontconfig.so,
+> not found (try using -rpath or -rpath-link)
+> 
+>     this is due to the fact that ld is not able to find the other
+>     already installed shared libraries.
 
->  I would add another question
->
-> c) what is the smallest X11 fonts set?
->
->  I am going to produce a demo for Italian Linux day (next saturday).
->
+May I have some feedback on this patch ? Without this, Buildroot is
+just unusable here.
 
- d) how can reinstall ALL selected packages in
-project_build_$(ARCH)/$(PROJECT)/root one I deleted that directory
-without doing 'make clean; make'?
+Thanks,
 
- Thanks,
+Thomas
 -- 
-/roberto
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
