@@ -1,78 +1,42 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 20 Oct 2008 08:02:45 -0700
-Subject: [Buildroot] [buildroot 0005364]: fontconfig compilations sometimes
-	failed with parallel build
-Message-ID: <127b6700109b21029005854084f4d6d5@busybox.net>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Mon, 20 Oct 2008 08:23:50 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
+Message-ID: <20081020152350.C04AD3C666@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: jacmet
+Date: 2008-10-20 08:23:50 -0700 (Mon, 20 Oct 2008)
+New Revision: 23746
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=5364 
-====================================================================== 
-Reported By:                tpetazzoni
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   5364
-Category:                   Other
-Reproducibility:            sometimes
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             10-13-2008 03:15 PDT
-Last Modified:              10-20-2008 08:02 PDT
-====================================================================== 
-Summary:                    fontconfig compilations sometimes failed with
-parallel build
-Description: 
-fontconfig is affected by a compile bug that only occurs from time to time
-when parallel compilation is enabled. The bug is described at
-https://bugs.freedesktop.org/show_bug.cgi?id=16464.
+Log:
+toolchain/uclibc: only use make install_headers for 0.9.29+
 
-The attached patch includes the fix for fontconfig in buildroot. However,
-it modifies a Makefile.am file, so running automake is needed, but I'm not
-sure Buildroot will do that automatically (as the bug only occurs
-sometimes, it's quite hard to test whether the fix properly works or
-not).
+0.9.28.3 doesn't have install_headers, so use install_dev there.
 
-====================================================================== 
+Got broken by r23561.
 
----------------------------------------------------------------------- 
- tpetazzoni - 10-13-08 03:34  
----------------------------------------------------------------------- 
-After testing, it seems that patching Makefile.am is not sufficient to
-re-run automake.
+Modified:
+   trunk/buildroot/toolchain/uClibc/uclibc.mk
 
-What should be done in this case ? Provide a patch that also fixes the
-generated Makefile ? Run automake before compiling fontconfig ? 
 
----------------------------------------------------------------------- 
- tpetazzoni - 10-20-08 08:02  
----------------------------------------------------------------------- 
-It seems that the FOO_AUTORECONF option of Makefile.autotools.in was
-created for that kind of case. However, by reading the current
-Makefile.autotools.in code, I hardly see how FOO_AUTORECONF can do
-something: the AUTORECONF variable is not set:
-
-#AUTORECONF ?= autoreconf -v -i -f -I $(ACLOCAL_STAGING_DIR)
-
-How should this fontconfig building problem be fixed, until a new version
-of fontconfig is released with a fix ? 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-10-13-08 03:15  tpetazzoni     New Issue                                    
-10-13-08 03:15  tpetazzoni     Status                   new => assigned     
-10-13-08 03:15  tpetazzoni     Assigned To               => buildroot       
-10-13-08 03:15  tpetazzoni     File Added: parallel-compilation-fix.patch       
-            
-10-13-08 03:34  tpetazzoni     Note Added: 0013434                          
-10-20-08 08:02  tpetazzoni     Note Added: 0013894                          
-======================================================================
+Changeset:
+Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
+===================================================================
+--- trunk/buildroot/toolchain/uClibc/uclibc.mk	2008-10-20 13:57:30 UTC (rev 23745)
++++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2008-10-20 15:23:50 UTC (rev 23746)
+@@ -434,7 +434,11 @@
+ 		DEVEL_PREFIX=/usr/ \
+ 		RUNTIME_PREFIX=$(TOOL_BUILD_DIR)/uClibc_dev/ \
+ 		HOSTCC="$(HOSTCC)" \
++ifeq ($(BR2_UCLIBC_VERSION_0_9_28_3),y)
++		headers install_dev
++else
+ 		headers install_headers
++endif
+ 	# Install the kernel headers to the first stage gcc include dir
+ 	# if necessary
+ ifeq ($(LINUX_HEADERS_IS_KERNEL),y)
