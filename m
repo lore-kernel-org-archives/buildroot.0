@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 20 Oct 2008 00:23:27 -0700
+Date: Mon, 20 Oct 2008 00:24:01 -0700
 Subject: [Buildroot] [buildroot 0004224]: DirectFB Makefile does not support
 	1.0.x / 1.2.x and Examples not supported
-Message-ID: <192a278814e1a5eec0c77fccdbaf5f7e@bugs.uclibc.org>
+Message-ID: <5da07bb8404d4cdbb6b32b4af76e9fc6@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +10,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-A NOTE has been added to this issue. 
+The following issue has been UPDATED. 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=4224 
 ====================================================================== 
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             07-21-2008 05:03 PDT
-Last Modified:              10-20-2008 00:23 PDT
+Last Modified:              10-20-2008 00:24 PDT
 ====================================================================== 
 Summary:                    DirectFB Makefile does not support 1.0.x / 1.2.x and
 Examples not supported
