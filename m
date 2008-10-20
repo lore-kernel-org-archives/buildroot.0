@@ -1,8 +1,7 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 20 Oct 2008 00:56:51 -0700
-Subject: [Buildroot] [buildroot 0005584]: Makefiles for mdadm needs to be
-	updated
-Message-ID: <3c7b213b5046436762d82248a98305ac@bugs.uclibc.org>
+From: Daniel Laird <daniel.j.laird@nxp.com>
+Date: Mon, 20 Oct 2008 01:05:38 -0700 (PDT)
+Subject: [Buildroot]  Unnecessary redefining of PKG_CONFIG_*
+Message-ID: <20064991.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,38 +9,49 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=5584 
-====================================================================== 
-Reported By:                KHAksnes
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   5584
-Category:                   Other
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             10-20-2008 00:56 PDT
-Last Modified:              10-20-2008 00:56 PDT
-====================================================================== 
-Summary:                    Makefiles for mdadm needs to be updated
-Description: 
-The mdadm version used by buildroot svn 23730 is no longer available at the
-debian repositories, the file mdadm_2.6.4-2.diff.gz can't be found at the
-debian repositories.
-Reproduce by configuring any version of buildroot using mdadm and then run
+I have done a quick search in the package subdir and found that PKG_CONFIG_
+variables are being redefined in a number of packages:
 
-make source after clearing the dl directory.
-====================================================================== 
+package/java/classpath/classpath.mk:		--disable-debug
+PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
+package/java/jamvm/jamvm.mk:		--disable-debug
+PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
+package/gqview/gqview.mk:GQVIEW_CONF_OPT =
+PKG_CONFIG_PATH=$(STAGING_DIR)/usr/lib/pkgconfig
+package/audio/libogg/libogg.mk:	
+PKG_CONFIG_PATH="$(STAGING_DIR)/lib/pkconfig:$(STAGING_DIR)/usr/lib/pkgconfig"
+\
+package/audio/libogg/libogg.mk:		PKG_CONFIG_SYSROOT=$(STAGING_DIR) \
+package/audio/libvorbis/libvorbis.mk:	
+PKG_CONFIG_PATH="$(STAGING_DIR)/lib/pkconfig:$(STAGING_DIR)/usr/lib/pkgconfig"
+\
+package/audio/libvorbis/libvorbis.mk:		PKG_CONFIG_SYSROOT=$(STAGING_DIR) \
+package/midori/midori.mk:		PKG_CONFIG_PATH=$(STAGING_DIR)/usr/lib/pkgconfig
+package/pango/pango.mk:		ac_use_included_regex=no gl_cv_c_restrict=no
+PKG_CONFIG_SYSROOT="$(STAGING_DIR)" \
+package/pango/pango.mk:		--enable-explicit-deps=no --disable-debug
+PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig"
+package/matchbox/matchbox.mk:	CFLAGS="$(TARGET_CFLAGS)
+-I$(STAGING_DIR)/usr/include"
+PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
+package/docker/docker.mk:					PKG_CONFIG_SYSROOT="$(STAGING_DIR)" \
+package/docker/docker.mk:				
+PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig"
+package/sylpheed/sylpheed.mk:SYLPHEED_CONF_ENV =
+PKG_CONFIG_PATH=$(STAGING_DIR)/usr/lib/pkgconfig
+package/editors/vim/vim.mk:		PKG_CONFIG_SYSROOT="$(STAGING_DIR)" \
+package/editors/vim/vim.mk:	
+PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig:$(PKG_CONFIG_PATH)" \
+package/editors/vim/vim.mk:		PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
+package/editors/vim/vim.mk:		PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
+package/pcmanfm/pcmanfm.mk:PCMANFM_CONF_ENV =
+PKG_CONFIG_PATH=$(STAGING_DIR)/usr/lib/pkgconfig
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-10-20-08 00:56  KHAksnes       New Issue                                    
-10-20-08 00:56  KHAksnes       Status                   new => assigned     
-10-20-08 00:56  KHAksnes       Assigned To               => buildroot       
-======================================================================
+Anyone know why? I think we should clean this up and one against this?  
+I am happy to do pango as I build this on a regular basis however the other
+packages I could do and wait for feedback......
+Any opinions?
+Daniel Laird
+-- 
+View this message in context: http://www.nabble.com/Unnecessary-redefining-of-PKG_CONFIG_*-tp20064991p20064991.html
+Sent from the BuildRoot mailing list archive at Nabble.com.
