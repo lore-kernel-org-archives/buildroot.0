@@ -1,112 +1,47 @@
-From: laird at uclibc.org <laird@uclibc.org>
-Date: Mon, 20 Oct 2008 00:30:03 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package:  liberation
-Message-ID: <20081020073004.0DBFB3C7ED@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 20 Oct 2008 00:56:51 -0700
+Subject: [Buildroot] [buildroot 0005584]: Makefiles for mdadm needs to be
+	updated
+Message-ID: <3c7b213b5046436762d82248a98305ac@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: laird
-Date: 2008-10-20 00:30:03 -0700 (Mon, 20 Oct 2008)
-New Revision: 23730
 
-Log:
-package/liberation: Add liberation fonts package
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=5584 
+====================================================================== 
+Reported By:                KHAksnes
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   5584
+Category:                   Other
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             10-20-2008 00:56 PDT
+Last Modified:              10-20-2008 00:56 PDT
+====================================================================== 
+Summary:                    Makefiles for mdadm needs to be updated
+Description: 
+The mdadm version used by buildroot svn 23730 is no longer available at the
+debian repositories, the file mdadm_2.6.4-2.diff.gz can't be found at the
+debian repositories.
+Reproduce by configuring any version of buildroot using mdadm and then run
 
-Add the liberation fonts package as this can be used
-by GTK etc and means you have some useful (free) fonts.
+make source after clearing the dl directory.
+====================================================================== 
 
-Signed-off-by: Daniel Laird <daniel.j.laird@nxp.com>
-
-
-
-Added:
-   trunk/buildroot/package/liberation/
-   trunk/buildroot/package/liberation/Config.in
-   trunk/buildroot/package/liberation/liberation.mk
-
-Modified:
-   trunk/buildroot/package/Config.in
-
-
-Changeset:
-Modified: trunk/buildroot/package/Config.in
-===================================================================
---- trunk/buildroot/package/Config.in	2008-10-19 21:49:02 UTC (rev 23729)
-+++ trunk/buildroot/package/Config.in	2008-10-20 07:30:03 UTC (rev 23730)
-@@ -370,6 +370,7 @@
- source "package/cairo/Config.in"
- source "package/pango/Config.in"
- source "package/libdrm/Config.in"
-+source "package/liberation/Config.in"
- source "package/libglib12/Config.in"
- source "package/libglib2/Config.in"
- source "package/libgtk12/Config.in"
-
-Added: trunk/buildroot/package/liberation/Config.in
-===================================================================
---- trunk/buildroot/package/liberation/Config.in	                        (rev 0)
-+++ trunk/buildroot/package/liberation/Config.in	2008-10-20 07:30:03 UTC (rev 23730)
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LIBERATION
-+	bool "Liberation (Free fonts)"
-+	help
-+	  The Liberation Fonts are intended to be replacements for the
-+	  three most commonly used fonts on Microsoft systems:
-+	  Times New Roman, Arial, and Courier New.
-+
-
-Added: trunk/buildroot/package/liberation/liberation.mk
-===================================================================
---- trunk/buildroot/package/liberation/liberation.mk	                        (rev 0)
-+++ trunk/buildroot/package/liberation/liberation.mk	2008-10-20 07:30:03 UTC (rev 23730)
-@@ -0,0 +1,47 @@
-+#############################################################
-+#
-+# liberation
-+#
-+#############################################################
-+LIBERATION_VERSION = 1.04
-+LIBERATION_SITE = http://www.fedorahosted.org/releases/l/i/liberation-fonts
-+LIBERATION_SOURCE = liberation-fonts-$(LIBERATION_VERSION).tar.gz
-+LIBERATION_DIR = $(BUILD_DIR)/liberation-fonts-$(LIBERATION_VERSION)
-+LIBERATION_CAT:=$(ZCAT)
-+
-+$(DL_DIR)/$(LIBERATION_SOURCE):
-+	$(WGET) -P $(DL_DIR) $(LIBERATION_SITE)/$(LIBERATION_SOURCE)
-+
-+liberation-source: $(DL_DIR)/$(LIBERATION_SOURCE)
-+
-+$(LIBERATION_DIR)/.unpacked: $(DL_DIR)/$(LIBERATION_SOURCE)
-+	$(LIBERATION_CAT) $(DL_DIR)/$(LIBERATION_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+	touch $(LIBERATION_DIR)/.unpacked
-+
-+$(STAGING_DIR)/usr/share/fonts/LiberationMono-Bold.ttf: $(LIBERATION_DIR)/.unpacked
-+	-mkdir -p $(STAGING_DIR)/usr/share/fonts/liberation
-+	$(INSTALL) -m0644 $(LIBERATION_DIR)/*.ttf $(STAGING_DIR)/usr/share/fonts/liberation/
-+	touch -c $(STAGING_DIR)/usr/share/fonts/.ttf
-+
-+$(TARGET_DIR)/usr/share/fonts/LiberationMono-Bold.ttf: $(STAGING_DIR)/usr/share/fonts/.ttf
-+	-mkdir -p $(TARGET_DIR)/usr/share/fonts/liberation
-+	$(INSTALL) -m0644 $(LIBERATION_DIR)/*.ttf $(TARGET_DIR)/usr/share/fonts/liberation/
-+	touch -c $(TARGET_DIR)/usr/share/fonts/.ttf
-+
-+liberation: uclibc $(TARGET_DIR)/usr/share/fonts/LiberationMono-Bold.ttf
-+
-+liberation-clean:
-+	rm -rf $(TARGET_DIR)/usr/share/fonts/liberation/
-+	rm -rf $(STAGING_DIR)/usr/share/fonts/liberation/
-+
-+liberation-dirclean:
-+	rm -rf $(LIBERATION_DIR)
-+
-+#############################################################
-+#
-+# Toplevel Makefile options
-+#
-+#############################################################
-+ifeq ($(strip $(BR2_PACKAGE_LIBERATION)),y)
-+TARGETS+=liberation
-+endif
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+10-20-08 00:56  KHAksnes       New Issue                                    
+10-20-08 00:56  KHAksnes       Status                   new => assigned     
+10-20-08 00:56  KHAksnes       Assigned To               => buildroot       
+======================================================================
