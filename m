@@ -1,42 +1,37 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon, 20 Oct 2008 08:23:50 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
-Message-ID: <20081020152350.C04AD3C666@busybox.net>
+From: Hai Zaar <haizaar@haizaar.com>
+Date: Mon, 20 Oct 2008 18:11:56 +0200
+Subject: [Buildroot] Can not compile strace
+In-Reply-To: <87ljwjljqr.fsf@macbook.be.48ers.dk>
+References: <76d9e2a30810191813s629af379kedd4da294a8f7cf2@mail.gmail.com>
+	<87ljwjljqr.fsf@macbook.be.48ers.dk>
+Message-ID: <76d9e2a30810200911q7550aea5lb3db7be649bff385@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-10-20 08:23:50 -0700 (Mon, 20 Oct 2008)
-New Revision: 23746
+On Mon, Oct 20, 2008 at 11:05 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Hai" == Hai Zaar <haizaar@haizaar.com> writes:
+>
+>  Hai> I'm building current buildroot with 2.6.27 for at91sam9260
+>  Hai> strace fails to compile with the following error:
+>  Hai> file.c:41:26: error: linux/dirent.h: No such file or directory
+>
+>  Hai> It looks like build_arm/staging_dir/usr/include/linux/dirent.h does
+>  Hai> not exist any more.
+>  Hai> How can I fix that?
+>
+> Thanks for reporting it - Fixed in r23735.
+Wow! That was fast! Thank you!
+I confirm that it works now.
 
-Log:
-toolchain/uclibc: only use make install_headers for 0.9.29+
-
-0.9.28.3 doesn't have install_headers, so use install_dev there.
-
-Got broken by r23561.
-
-Modified:
-   trunk/buildroot/toolchain/uClibc/uclibc.mk
+>
+> --
+> Bye, Peter Korsgaard
+>
 
 
-Changeset:
-Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
-===================================================================
---- trunk/buildroot/toolchain/uClibc/uclibc.mk	2008-10-20 13:57:30 UTC (rev 23745)
-+++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2008-10-20 15:23:50 UTC (rev 23746)
-@@ -434,7 +434,11 @@
- 		DEVEL_PREFIX=/usr/ \
- 		RUNTIME_PREFIX=$(TOOL_BUILD_DIR)/uClibc_dev/ \
- 		HOSTCC="$(HOSTCC)" \
-+ifeq ($(BR2_UCLIBC_VERSION_0_9_28_3),y)
-+		headers install_dev
-+else
- 		headers install_headers
-+endif
- 	# Install the kernel headers to the first stage gcc include dir
- 	# if necessary
- ifeq ($(LINUX_HEADERS_IS_KERNEL),y)
+
+-- 
+Zaar
