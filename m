@@ -1,62 +1,64 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 20 Oct 2008 13:20:07 -0700
-Subject: [Buildroot] [buildroot 0005614]: make clean + make does not provide
-	a full project rootfs
-Message-ID: <8757169db099d269d815c4bac8219df4@busybox.net>
+From: Roberto A. Foglietta <roberto.foglietta@gmail.com>
+Date: Tue, 21 Oct 2008 01:31:29 +0200
+Subject: [Buildroot] ext2+isofs initrd too big
+In-Reply-To: <e4c675870810200532j2d8412dckfb0593b73eb45938@mail.gmail.com>
+References: <e4c675870810181157u69e5e3d4j3ed89b53a414c6f3@mail.gmail.com>
+	<e4c675870810181256j11da9c1eha5035bedc7a088a4@mail.gmail.com>
+	<e4c675870810181655x1bdf8817l114da029a3a9c807@mail.gmail.com>
+	<e4c675870810190300h6274b470nefb816ae6798d301@mail.gmail.com>
+	<20081019160520.GI11249@mx.loc>
+	<e4c675870810200355g55367c71x351b2ed4ff49751f@mail.gmail.com>
+	<e4c675870810200532j2d8412dckfb0593b73eb45938@mail.gmail.com>
+Message-ID: <e4c675870810201631r2552ef49waa6c5ec760d8c918@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+2008/10/20 Roberto A. Foglietta <roberto.foglietta@gmail.com>:
+> 2008/10/20 Roberto A. Foglietta <roberto.foglietta@gmail.com>:
+>
+>  [cut]
+>
+>>  I would add another question
+>>
+>> c) what is the smallest X11 fonts set?
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=5614 
-====================================================================== 
-Reported By:                robang74
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   5614
-Category:                   Other
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             10-20-2008 13:20 PDT
-Last Modified:              10-20-2008 13:20 PDT
-====================================================================== 
-Summary:                    make clean + make does not provide a full project
-rootfs
-Description: 
-roberto at rafbook:~/gles/buildroot$ make clean
+ ^^^ useless question: depends on what I want let run on my Xserver.
 
-[...]
+ However it is impressing how much space the locale, keyboard and
+fonts require comparing binary code!!!
 
-roberto at rafbook:~/gles/buildroot$ make 
+6100	usr/lib/X11/fonts
+1272	usr/lib/locale
+2348	usr/share/X11/locale
+2600	usr/share/X11/xkb
+===
+12320	42.5% (fonts, locale, xkb)
 
-Size of boot image is 4 sectors -> No emulation
-Total translation table size: 2048
-Total rockridge attributes bytes: 996
-Total directory bytes: 4096
-Path table size(bytes): 34
-Max brk space used 0
-2838 extents written (5 MB)
-echo /home/roberto/gles/buildroot/binaries/ugles/rootfs.i586.iso
-/home/roberto/gles/buildroot/binaries/ugles/rootfs.i586.iso
--rw-r--r-- 1 roberto roberto 5812224 2008-10-20 22:13
-/home/roberto/gles/buildroot/binaries/ugles/rootfs.i586.iso
-rm -f /home/roberto/gles/buildroot/project_build_i586/ugles/.fakeroot*
+80		usr/X11R6
+384		usr/share - X11
+5992	usr/lib - locale - X11/fonts
+2452	usr/bin - Xservers + Xvesa
+====
+8908	30.7% (tinyx)
 
-====================================================================== 
+2056	kernel
+3940	lib/modules
+====
+5996	20.7% (kernel)
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-10-20-08 13:20  robang74       New Issue                                    
-10-20-08 13:20  robang74       Status                   new => assigned     
-10-20-08 13:20  robang74       Assigned To               => buildroot       
-10-20-08 13:20  robang74       File Added: .config                          
-======================================================================
+1768	busybox + rootfs + lib + everything else
+====
+1768	6.1% (system)
+
+28992 	TOTAL
+
+ Fonts installed are good to run tinyx (in any language/kb of he
+world) but not enough to run blackbox, in this case .
+
+
+ Cheers,
+-- 
+/roberto
