@@ -1,36 +1,21 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Sun, 19 Oct 2008 14:49:02 -0700 (PDT)
-Subject: [Buildroot] svn commit:
-	trunk/buildroot/package/x11r7/xserver_xorg-server
-Message-ID: <20081019214902.BCED53C888@busybox.net>
+From: Hai Zaar <haizaar@haizaar.com>
+Date: Mon, 20 Oct 2008 03:13:34 +0200
+Subject: [Buildroot] Can not compile strace
+Message-ID: <76d9e2a30810191813s629af379kedd4da294a8f7cf2@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-10-19 14:49:02 -0700 (Sun, 19 Oct 2008)
-New Revision: 23729
+I'm building current buildroot with 2.6.27 for at91sam9260
 
-Log:
-x11r7/xserver: use install-strip for target install
+strace fails to compile with the following error:
+file.c:41:26: error: linux/dirent.h: No such file or directory
 
-Modified:
-   trunk/buildroot/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+It looks like build_arm/staging_dir/usr/include/linux/dirent.h does
+not exist any more.
+How can I fix that?
 
-
-Changeset:
-Modified: trunk/buildroot/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-===================================================================
---- trunk/buildroot/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk	2008-10-19 21:48:58 UTC (rev 23728)
-+++ trunk/buildroot/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk	2008-10-19 21:49:02 UTC (rev 23729)
-@@ -52,7 +52,7 @@
- 		CFLAGS="-I$(STAGING_DIR)/usr/include/pixman-1"
- 
- XSERVER_XORG_SERVER_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install install-data
--XSERVER_XORG_SERVER_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
-+XSERVER_XORG_SERVER_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install-strip
- 
- # Optional packages
- ifeq ($(strip $(BR2_PACKAGE_TSLIB)),y)
+-- 
+Zaar
