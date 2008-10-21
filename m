@@ -1,112 +1,170 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue, 21 Oct 2008 05:38:31 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package:  memstat
-Message-ID: <20081021123831.C985A3C731@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Tue, 21 Oct 2008 06:46:45 -0700
+Subject: [Buildroot] [buildroot 0005624]: xapp_xfsinfo undefined reference
+	to `bcopy'
+Message-ID: <5ee8c86c3fa0e0c0a62fe04b9292125f@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-10-21 05:38:31 -0700 (Tue, 21 Oct 2008)
-New Revision: 23753
 
-Log:
-package/memstat: add memstat package
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=5624 
+====================================================================== 
+Reported By:                robang74
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   5624
+Category:                   Shared Library Support
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             10-21-2008 06:46 PDT
+Last Modified:              10-21-2008 06:46 PDT
+====================================================================== 
+Summary:                    xapp_xfsinfo undefined reference to `bcopy'
+Description: 
 
-Memstat lists all the processes, executables, and shared
-libraries that are using up virtual memory. It's helpful to
-see how the shared memory is used and which 'old' libs are
-loaded.
+roberto at rafbook:~/gles/buildroot$ make <-- with .config attached
+roberto at rafbook:~/gles/buildroot$ make menuconfig <-- add xfs and xfsinfo
+roberto@rafbook:~/gles/buildroot$ make
 
-Added:
-   trunk/buildroot/package/memstat/
-   trunk/buildroot/package/memstat/Config.in
-   trunk/buildroot/package/memstat/memstat.mk
+[...]
 
-Modified:
-   trunk/buildroot/package/Config.in
+>>> xapp_xfsinfo 1.0.1 Extracting
+>>> xapp_xfsinfo 1.0.1 Patching libtool
+>>> xapp_xfsinfo 1.0.1 Patching package/x11r7/xapp_xfsinfo
+>>> xapp_xfsinfo 1.0.1 Configuring
+cd /home/roberto/gles/buildroot/build_i586/xapp_xfsinfo-1.0.1/ && rm -f
+config.cache && \
+
+[...]
+
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... yes
+checking for gawk... no
+checking for mawk... mawk
+checking whether make sets $(MAKE)... yes
+checking for i586-linux-strip...
+/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-strip
+checking whether to enable maintainer-specific portions of Makefiles...
+no
+checking for i586-linux-gcc...
+/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
+-Os  -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/include
+--sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
+/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
+-march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64
+checking for C compiler default output file name... a.out
+checking whether the C compiler works... yes
+checking whether we are cross compiling... yes
+checking for suffix of executables... 
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether
+/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
+-Os  -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/include
+--sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
+/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
+-march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64 accepts -g... yes
+checking for
+/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
+-Os  -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/include
+--sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
+/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
+-march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64 option to accept ANSI C... none needed
+checking for style of include used by make... GNU
+checking dependency style of
+/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
+-Os  -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/include
+--sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
+/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
+-march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64... gcc3
+checking for a BSD-compatible install... /usr/bin/install -c
+checking pkg-config is at least version 0.9.0... yes
+checking for XFSINFO... yes
+checking build system type... i386-pc-linux-gnu
+checking host system type... i586-pc-linux-gnu
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating config.h
+config.status: executing depfiles commands
+>>> xapp_xfsinfo 1.0.1 Building
+/usr/bin/make -j1  -C
+/home/roberto/gles/buildroot/build_i586/xapp_xfsinfo-1.0.1/
+make[1]: Entering directory
+`/home/roberto/gles/buildroot/build_i586/xapp_xfsinfo-1.0.1'
+/usr/bin/make  all-am
+make[2]: Entering directory
+`/home/roberto/gles/buildroot/build_i586/xapp_xfsinfo-1.0.1'
+if
+/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
+-Os  -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/include
+--sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
+/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
+-march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64 -DHAVE_CONFIG_H -I. -I. -I.     -g -O2 -MT
+xfsinfo-xfsinfo.o -MD -MP -MF ".deps/xfsinfo-xfsinfo.Tpo" \
+	  -c -o xfsinfo-xfsinfo.o `test -f 'xfsinfo.c' || echo './'`xfsinfo.c; \
+	then mv -f ".deps/xfsinfo-xfsinfo.Tpo" ".deps/xfsinfo-xfsinfo.Po"; \
+	else rm -f ".deps/xfsinfo-xfsinfo.Tpo"; exit 1; \
+	fi
+/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
+-Os  -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/include
+--sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
+/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
+-march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64  -g -O2   -o xfsinfo  xfsinfo-xfsinfo.o -lX11 -lFS 
+ 
+/home/roberto/gles/buildroot/build_i586/staging_dir//usr/lib/libFS.so:
+undefined reference to `bcopy'
+collect2: ld returned 1 exit status
+make[2]: *** [xfsinfo] Error 1
+make[2]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/xapp_xfsinfo-1.0.1'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/xapp_xfsinfo-1.0.1'
+make: ***
+[/home/roberto/gles/buildroot/build_i586/xapp_xfsinfo-1.0.1/.stamp_built]
+Error 2
+
+roberto at rafbook:~/gles/buildroot$ ls -al
+/home/roberto/gles/buildroot/build_i586/staging_dir//usr/lib/libFS.so*
+lrwxrwxrwx 1 roberto roberto     14 2008-10-21 15:37
+/home/roberto/gles/buildroot/build_i586/staging_dir//usr/lib/libFS.so ->
+libFS.so.6.0.0
+lrwxrwxrwx 1 roberto roberto     14 2008-10-21 15:37
+/home/roberto/gles/buildroot/build_i586/staging_dir//usr/lib/libFS.so.6 ->
+libFS.so.6.0.0
+-rwxr-xr-x 1 roberto roberto 183026 2008-10-21 15:37
+/home/roberto/gles/buildroot/build_i586/staging_dir//usr/lib/libFS.so.6.0.0
 
 
-Changeset:
-Modified: trunk/buildroot/package/Config.in
-===================================================================
---- trunk/buildroot/package/Config.in	2008-10-21 12:36:43 UTC (rev 23752)
-+++ trunk/buildroot/package/Config.in	2008-10-21 12:38:31 UTC (rev 23753)
-@@ -94,6 +94,7 @@
- source "package/ltp-testsuite/Config.in"
- source "package/ltrace/Config.in"
- source "package/ltt/Config.in"
-+source "package/memstat/Config.in"
- if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
- source "package/module-init-tools/Config.in"
- source "package/modutils/Config.in"
 
-Added: trunk/buildroot/package/memstat/Config.in
-===================================================================
---- trunk/buildroot/package/memstat/Config.in	                        (rev 0)
-+++ trunk/buildroot/package/memstat/Config.in	2008-10-21 12:38:31 UTC (rev 23753)
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_MEMSTAT
-+	bool "memstat"
-+	help
-+	  Memstat lists all the processes, executables, and shared
-+	  libraries that are using up virtual memory. It's helpful to
-+	  see how the shared memory is used and which 'old' libs are
-+	  loaded.
+====================================================================== 
 
-Added: trunk/buildroot/package/memstat/memstat.mk
-===================================================================
---- trunk/buildroot/package/memstat/memstat.mk	                        (rev 0)
-+++ trunk/buildroot/package/memstat/memstat.mk	2008-10-21 12:38:31 UTC (rev 23753)
-@@ -0,0 +1,49 @@
-+#############################################################
-+#
-+# memstat
-+#
-+#############################################################
-+
-+MEMSTAT_VERSION:=0.5
-+MEMSTAT_SOURCE:=memstat_$(MEMSTAT_VERSION).tar.gz
-+MEMSTAT_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/m/memstat
-+MEMSTAT_DIR:=$(BUILD_DIR)/memstat-$(MEMSTAT_VERSION)
-+
-+$(DL_DIR)/$(MEMSTAT_SOURCE):
-+	$(WGET) -P $(DL_DIR) $(MEMSTAT_SITE)/$(MEMSTAT_SOURCE)
-+
-+$(MEMSTAT_DIR)/.unpacked: $(DL_DIR)/$(MEMSTAT_SOURCE)
-+	$(ZCAT) $(DL_DIR)/$(MEMSTAT_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+	toolchain/patch-kernel.sh $(MEMSTAT_DIR) package/memstat/ memstat-$(MEMSTAT_VERSION)\*.patch
-+	touch $@
-+
-+$(MEMSTAT_DIR)/.configured: $(MEMSTAT_DIR)/.unpacked
-+	touch $@
-+
-+$(MEMSTAT_DIR)/memstat: $(MEMSTAT_DIR)/.configured
-+	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) $(@D)/memstat.c -o $@
-+
-+$(TARGET_DIR)/usr/bin/memstat: $(MEMSTAT_DIR)/memstat
-+	[ -e $(TARGET_DIR)/etc/memstat.conf ] || \
-+		$(INSTALL) -m 0644 -D $(^D)/memstat.conf $(TARGET_DIR)/etc
-+	$(INSTALL) -m 0755 -D $^ $@
-+	$(STRIPCMD) $(STRIP_STRIP_ALL) $@
-+
-+memstat: uclibc $(TARGET_DIR)/usr/bin/memstat
-+
-+memstat-source: $(DL_DIR)/$(MEMSTAT_SOURCE)
-+
-+memstat-clean:
-+	rm -f $(MEMSTAT_DIR)/memstat \
-+		$(TARGET_DIR)/etc/memstat.conf $(TARGET_DIR)/usr/bin/memstat
-+
-+memstat-dirclean:
-+	rm -rf $(MEMSTAT_DIR)
-+#############################################################
-+#
-+# Toplevel Makefile options
-+#
-+#############################################################
-+ifeq ($(strip $(BR2_PACKAGE_MEMSTAT)),y)
-+TARGETS+=memstat
-+endif
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+10-21-08 06:46  robang74       New Issue                                    
+10-21-08 06:46  robang74       Status                   new => assigned     
+10-21-08 06:46  robang74       Assigned To               => buildroot       
+10-21-08 06:46  robang74       File Added: .config                          
+======================================================================
