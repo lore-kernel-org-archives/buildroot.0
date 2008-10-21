@@ -1,54 +1,112 @@
-From: laird at uclibc.org <laird@uclibc.org>
-Date: Tue, 21 Oct 2008 05:24:13 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/atk
-Message-ID: <20081021122413.5A24D3C69C@busybox.net>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Tue, 21 Oct 2008 05:38:31 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package:  memstat
+Message-ID: <20081021123831.C985A3C731@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: laird
-Date: 2008-10-21 05:24:12 -0700 (Tue, 21 Oct 2008)
-New Revision: 23751
+Author: jacmet
+Date: 2008-10-21 05:38:31 -0700 (Tue, 21 Oct 2008)
+New Revision: 23753
 
 Log:
-package/atk/atk.mk: Bounce version 
+package/memstat: add memstat package
 
-Bounce version to 1.22.0
+Memstat lists all the processes, executables, and shared
+libraries that are using up virtual memory. It's helpful to
+see how the shared memory is used and which 'old' libs are
+loaded.
 
-Signed-off-by: Daniel Laird <daniel.j.laird@nxp.com>
-
-
+Added:
+   trunk/buildroot/package/memstat/
+   trunk/buildroot/package/memstat/Config.in
+   trunk/buildroot/package/memstat/memstat.mk
 
 Modified:
-   trunk/buildroot/package/atk/atk.mk
+   trunk/buildroot/package/Config.in
 
 
 Changeset:
-Modified: trunk/buildroot/package/atk/atk.mk
+Modified: trunk/buildroot/package/Config.in
 ===================================================================
---- trunk/buildroot/package/atk/atk.mk	2008-10-21 08:56:26 UTC (rev 23750)
-+++ trunk/buildroot/package/atk/atk.mk	2008-10-21 12:24:12 UTC (rev 23751)
-@@ -3,10 +3,9 @@
- # atk
- #
- #############################################################
--ATK_VERSION = 1.9.1
-+ATK_VERSION = 1.22.0
- ATK_SOURCE = atk-$(ATK_VERSION).tar.bz2
--ATK_SITE = ftp://ftp.gtk.org/pub/gtk/v2.10/dependencies
--ATK_AUTORECONF = NO
-+ATK_SITE = http://ftp.gnome.org/pub/gnome/sources/atk/1.22/
- ATK_INSTALL_STAGING = YES
- ATK_INSTALL_TARGET = YES
- ATK_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
-@@ -45,7 +44,7 @@
- ifneq ($(BR2_PACKAGE_XSERVER_none),y)
- ATK_CONF_OPT_X = --with-x \
- 		--x-includes=$(STAGING_DIR)/usr/include/X11 \
--		--x-libraries=$(STAGING_DIR)/usr/lib
-+		--x-libraries=$(STAGING_DIR)/usr/lib --disable-glibtest
- else
- ATK_CONF_OPT_X = --without-x
- endif
+--- trunk/buildroot/package/Config.in	2008-10-21 12:36:43 UTC (rev 23752)
++++ trunk/buildroot/package/Config.in	2008-10-21 12:38:31 UTC (rev 23753)
+@@ -94,6 +94,7 @@
+ source "package/ltp-testsuite/Config.in"
+ source "package/ltrace/Config.in"
+ source "package/ltt/Config.in"
++source "package/memstat/Config.in"
+ if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
+ source "package/module-init-tools/Config.in"
+ source "package/modutils/Config.in"
+
+Added: trunk/buildroot/package/memstat/Config.in
+===================================================================
+--- trunk/buildroot/package/memstat/Config.in	                        (rev 0)
++++ trunk/buildroot/package/memstat/Config.in	2008-10-21 12:38:31 UTC (rev 23753)
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_MEMSTAT
++	bool "memstat"
++	help
++	  Memstat lists all the processes, executables, and shared
++	  libraries that are using up virtual memory. It's helpful to
++	  see how the shared memory is used and which 'old' libs are
++	  loaded.
+
+Added: trunk/buildroot/package/memstat/memstat.mk
+===================================================================
+--- trunk/buildroot/package/memstat/memstat.mk	                        (rev 0)
++++ trunk/buildroot/package/memstat/memstat.mk	2008-10-21 12:38:31 UTC (rev 23753)
+@@ -0,0 +1,49 @@
++#############################################################
++#
++# memstat
++#
++#############################################################
++
++MEMSTAT_VERSION:=0.5
++MEMSTAT_SOURCE:=memstat_$(MEMSTAT_VERSION).tar.gz
++MEMSTAT_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/m/memstat
++MEMSTAT_DIR:=$(BUILD_DIR)/memstat-$(MEMSTAT_VERSION)
++
++$(DL_DIR)/$(MEMSTAT_SOURCE):
++	$(WGET) -P $(DL_DIR) $(MEMSTAT_SITE)/$(MEMSTAT_SOURCE)
++
++$(MEMSTAT_DIR)/.unpacked: $(DL_DIR)/$(MEMSTAT_SOURCE)
++	$(ZCAT) $(DL_DIR)/$(MEMSTAT_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
++	toolchain/patch-kernel.sh $(MEMSTAT_DIR) package/memstat/ memstat-$(MEMSTAT_VERSION)\*.patch
++	touch $@
++
++$(MEMSTAT_DIR)/.configured: $(MEMSTAT_DIR)/.unpacked
++	touch $@
++
++$(MEMSTAT_DIR)/memstat: $(MEMSTAT_DIR)/.configured
++	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) $(@D)/memstat.c -o $@
++
++$(TARGET_DIR)/usr/bin/memstat: $(MEMSTAT_DIR)/memstat
++	[ -e $(TARGET_DIR)/etc/memstat.conf ] || \
++		$(INSTALL) -m 0644 -D $(^D)/memstat.conf $(TARGET_DIR)/etc
++	$(INSTALL) -m 0755 -D $^ $@
++	$(STRIPCMD) $(STRIP_STRIP_ALL) $@
++
++memstat: uclibc $(TARGET_DIR)/usr/bin/memstat
++
++memstat-source: $(DL_DIR)/$(MEMSTAT_SOURCE)
++
++memstat-clean:
++	rm -f $(MEMSTAT_DIR)/memstat \
++		$(TARGET_DIR)/etc/memstat.conf $(TARGET_DIR)/usr/bin/memstat
++
++memstat-dirclean:
++	rm -rf $(MEMSTAT_DIR)
++#############################################################
++#
++# Toplevel Makefile options
++#
++#############################################################
++ifeq ($(strip $(BR2_PACKAGE_MEMSTAT)),y)
++TARGETS+=memstat
++endif
