@@ -1,38 +1,45 @@
-From: Anders Blomdell <anders.blomdell@control.lth.se>
-Date: Tue, 21 Oct 2008 12:09:32 +0200
-Subject: [Buildroot] Backdoors?
-In-Reply-To: <878wsitgk8.fsf@macbook.be.48ers.dk>
-References: <48FD816A.6050101@control.lth.se>
-	<878wsitgk8.fsf@macbook.be.48ers.dk>
-Message-ID: <48FDAA5C.3060700@control.lth.se>
+From: Roberto A. Foglietta <roberto.foglietta@gmail.com>
+Date: Tue, 21 Oct 2008 12:20:37 +0200
+Subject: [Buildroot] ext2+isofs initrd too big
+In-Reply-To: <e4c675870810201631r2552ef49waa6c5ec760d8c918@mail.gmail.com>
+References: <e4c675870810181157u69e5e3d4j3ed89b53a414c6f3@mail.gmail.com>
+	<e4c675870810181256j11da9c1eha5035bedc7a088a4@mail.gmail.com>
+	<e4c675870810181655x1bdf8817l114da029a3a9c807@mail.gmail.com>
+	<e4c675870810190300h6274b470nefb816ae6798d301@mail.gmail.com>
+	<20081019160520.GI11249@mx.loc>
+	<e4c675870810200355g55367c71x351b2ed4ff49751f@mail.gmail.com>
+	<e4c675870810200532j2d8412dckfb0593b73eb45938@mail.gmail.com>
+	<e4c675870810201631r2552ef49waa6c5ec760d8c918@mail.gmail.com>
+Message-ID: <e4c675870810210320i16e09477k5530ae86ef587e1c@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard wrote:
->>>>>> "Anders" == Anders Blomdell <anders.blomdell@control.lth.se> writes:
-> 
-> Hi,
-> 
->  Anders> Nowhere in the documentation, I can find the passwords for:
->  Anders> target/device/Atmel/atngw100/target_skeleton/etc/shadow:avr32:$1$TVWxUVs7$/ze18sFeD6F26w0hgyB6M.:13200:0:99999:7:::
-> 
->  Anders> are they there only to provide a backdoor into generated systems? :-)
-> 
-> I guess so. Atmel people?
-I would suggest removing them (or I could provide you with the passwords for at
-least 3 of them (valka and avr32 took less than a second to find, atmel/root
-about an hour, john-the-ripper still working on the valka/root))
+2008/10/21 Roberto A. Foglietta <roberto.foglietta@gmail.com>:
 
-Regards
+[...]
 
-Anders Blomdell
+>
+> 2056    kernel
+> 3940    lib/modules
+> ====
+> 5996    20.7% (kernel)
+>
+> 1768    busybox + rootfs + lib + everything else
+> ====
+> 1768    6.1% (system)
+>
 
+ For sake of completeness the kernel is for eeepc where its .config
+has been modified in order to have statically built-in all eeepc
+peripherals and modules for every usb pug-able hw. This is the reason
+because it is so big and system too. However reading posts in this
+m-list I realized that this kind of things are not interesting for the
+most of the people living with buildroot.
+
+
+ Cheers,
 -- 
-Anders Blomdell                  Email: anders.blomdell at control.lth.se
-Department of Automatic Control
-Lund University                  Phone:    +46 46 222 4625
-P.O. Box 118                     Fax:      +46 46 138118
-SE-221 00 Lund, Sweden
+/roberto
