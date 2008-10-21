@@ -1,34 +1,35 @@
-From: Anders Blomdell <anders.blomdell@control.lth.se>
-Date: Tue, 21 Oct 2008 09:14:50 +0200
-Subject: [Buildroot] Backdoors?
-Message-ID: <48FD816A.6050101@control.lth.se>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Tue, 21 Oct 2008 01:56:16 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/database/sqlite
+Message-ID: <20081021085616.129553C61F@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Nowhere in the documentation, I can find the passwords for:
+Author: jacmet
+Date: 2008-10-21 01:56:15 -0700 (Tue, 21 Oct 2008)
+New Revision: 23749
 
-target/device/valka/target_skeleton/etc/shadow:root:$1$3P2nFqtv$yuwcUwEGBusYZtAOvzOrF/:13200:0:99999:7:::
-target/device/valka/target_skeleton/etc/shadow:valka:$1$rDBo1uCh$EVSlBaeBgyHiSpZpShyW./:0:0:99999:7:::
-target/device/Atmel/atngw100-base/target_skeleton/etc/shadow:root:$1$OJeedGT3$uG0eWkNhkeq0WO6Wldk1Y.:13200:0:99999:7:::
-target/device/Atmel/atstk100x/target_skeleton/etc/shadow:root:$1$OJeedGT3$uG0eWkNhkeq0WO6Wldk1Y.:13200:0:99999:7:::
-target/device/Atmel/atstk100x/target_skeleton/etc/shadow:avr32:$1$TVWxUVs7$/ze18sFeD6F26w0hgyB6M.:13200:0:99999:7:::
-target/device/Atmel/atngw100-expanded/target_skeleton/etc/shadow:root:$1$OJeedGT3$uG0eWkNhkeq0WO6Wldk1Y.:13200:0:99999:7:::
-target/device/Atmel/atngw100-expanded/target_skeleton/etc/shadow:avr32:$1$TVWxUVs7$/ze18sFeD6F26w0hgyB6M.:13200:0:99999:7:::
-target/device/Atmel/atngw100/target_skeleton/etc/shadow:root:$1$OJeedGT3$uG0eWkNhkeq0WO6Wldk1Y.:13200:0:99999:7:::
-target/device/Atmel/atngw100/target_skeleton/etc/shadow:avr32:$1$TVWxUVs7$/ze18sFeD6F26w0hgyB6M.:13200:0:99999:7:::
+Log:
+sqlite: bump version
 
-are they there only to provide a backdoor into generated systems? :-)
+Modified:
+   trunk/buildroot/package/database/sqlite/sqlite.mk
 
-Regards
 
-Anders Blomdell
-
--- 
-Anders Blomdell                  Email: anders.blomdell at control.lth.se
-Department of Automatic Control
-Lund University                  Phone:    +46 46 222 4625
-P.O. Box 118                     Fax:      +46 46 138118
-SE-221 00 Lund, Sweden
+Changeset:
+Modified: trunk/buildroot/package/database/sqlite/sqlite.mk
+===================================================================
+--- trunk/buildroot/package/database/sqlite/sqlite.mk	2008-10-20 21:29:27 UTC (rev 23748)
++++ trunk/buildroot/package/database/sqlite/sqlite.mk	2008-10-21 08:56:15 UTC (rev 23749)
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-SQLITE_VERSION:=3.6.2
++SQLITE_VERSION:=3.6.4
+ SQLITE_SOURCE:=sqlite-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE:=http://www.sqlite.org
+ SQLITE_DIR:=$(BUILD_DIR)/sqlite-$(SQLITE_VERSION)
