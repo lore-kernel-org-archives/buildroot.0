@@ -1,170 +1,96 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 21 Oct 2008 06:46:45 -0700
-Subject: [Buildroot] [buildroot 0005624]: xapp_xfsinfo undefined reference
-	to `bcopy'
-Message-ID: <5ee8c86c3fa0e0c0a62fe04b9292125f@busybox.net>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Tue, 21 Oct 2008 08:06:06 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/x11r7/xlib_libFS
+Message-ID: <20081021150606.B46983C6C1@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: jacmet
+Date: 2008-10-21 08:06:06 -0700 (Tue, 21 Oct 2008)
+New Revision: 23756
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=5624 
-====================================================================== 
-Reported By:                robang74
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   5624
-Category:                   Shared Library Support
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             10-21-2008 06:46 PDT
-Last Modified:              10-21-2008 06:46 PDT
-====================================================================== 
-Summary:                    xapp_xfsinfo undefined reference to `bcopy'
-Description: 
+Log:
+x11r7/libFS: use memcpy instead of bcopy
 
-roberto at rafbook:~/gles/buildroot$ make <-- with .config attached
-roberto at rafbook:~/gles/buildroot$ make menuconfig <-- add xfs and xfsinfo
-roberto@rafbook:~/gles/buildroot$ make
-
-[...]
-
->>> xapp_xfsinfo 1.0.1 Extracting
->>> xapp_xfsinfo 1.0.1 Patching libtool
->>> xapp_xfsinfo 1.0.1 Patching package/x11r7/xapp_xfsinfo
->>> xapp_xfsinfo 1.0.1 Configuring
-cd /home/roberto/gles/buildroot/build_i586/xapp_xfsinfo-1.0.1/ && rm -f
-config.cache && \
-
-[...]
-
-checking for a BSD-compatible install... /usr/bin/install -c
-checking whether build environment is sane... yes
-checking for gawk... no
-checking for mawk... mawk
-checking whether make sets $(MAKE)... yes
-checking for i586-linux-strip...
-/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-strip
-checking whether to enable maintainer-specific portions of Makefiles...
-no
-checking for i586-linux-gcc...
-/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
--Os  -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
--I/home/roberto/gles/buildroot/build_i586/staging_dir/include
---sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
-/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
--march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64
-checking for C compiler default output file name... a.out
-checking whether the C compiler works... yes
-checking whether we are cross compiling... yes
-checking for suffix of executables... 
-checking for suffix of object files... o
-checking whether we are using the GNU C compiler... yes
-checking whether
-/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
--Os  -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
--I/home/roberto/gles/buildroot/build_i586/staging_dir/include
---sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
-/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
--march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 accepts -g... yes
-checking for
-/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
--Os  -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
--I/home/roberto/gles/buildroot/build_i586/staging_dir/include
---sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
-/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
--march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 option to accept ANSI C... none needed
-checking for style of include used by make... GNU
-checking dependency style of
-/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
--Os  -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
--I/home/roberto/gles/buildroot/build_i586/staging_dir/include
---sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
-/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
--march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64... gcc3
-checking for a BSD-compatible install... /usr/bin/install -c
-checking pkg-config is at least version 0.9.0... yes
-checking for XFSINFO... yes
-checking build system type... i386-pc-linux-gnu
-checking host system type... i586-pc-linux-gnu
-configure: creating ./config.status
-config.status: creating Makefile
-config.status: creating config.h
-config.status: executing depfiles commands
->>> xapp_xfsinfo 1.0.1 Building
-/usr/bin/make -j1  -C
-/home/roberto/gles/buildroot/build_i586/xapp_xfsinfo-1.0.1/
-make[1]: Entering directory
-`/home/roberto/gles/buildroot/build_i586/xapp_xfsinfo-1.0.1'
-/usr/bin/make  all-am
-make[2]: Entering directory
-`/home/roberto/gles/buildroot/build_i586/xapp_xfsinfo-1.0.1'
-if
-/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
--Os  -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
--I/home/roberto/gles/buildroot/build_i586/staging_dir/include
---sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
-/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
--march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -DHAVE_CONFIG_H -I. -I. -I.     -g -O2 -MT
-xfsinfo-xfsinfo.o -MD -MP -MF ".deps/xfsinfo-xfsinfo.Tpo" \
-	  -c -o xfsinfo-xfsinfo.o `test -f 'xfsinfo.c' || echo './'`xfsinfo.c; \
-	then mv -f ".deps/xfsinfo-xfsinfo.Tpo" ".deps/xfsinfo-xfsinfo.Po"; \
-	else rm -f ".deps/xfsinfo-xfsinfo.Tpo"; exit 1; \
-	fi
-/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
--Os  -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
--I/home/roberto/gles/buildroot/build_i586/staging_dir/include
---sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
-/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
--march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64  -g -O2   -o xfsinfo  xfsinfo-xfsinfo.o -lX11 -lFS 
- 
-/home/roberto/gles/buildroot/build_i586/staging_dir//usr/lib/libFS.so:
-undefined reference to `bcopy'
-collect2: ld returned 1 exit status
-make[2]: *** [xfsinfo] Error 1
-make[2]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/xapp_xfsinfo-1.0.1'
-make[1]: *** [all] Error 2
-make[1]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/xapp_xfsinfo-1.0.1'
-make: ***
-[/home/roberto/gles/buildroot/build_i586/xapp_xfsinfo-1.0.1/.stamp_built]
-Error 2
-
-roberto at rafbook:~/gles/buildroot$ ls -al
-/home/roberto/gles/buildroot/build_i586/staging_dir//usr/lib/libFS.so*
-lrwxrwxrwx 1 roberto roberto     14 2008-10-21 15:37
-/home/roberto/gles/buildroot/build_i586/staging_dir//usr/lib/libFS.so ->
-libFS.so.6.0.0
-lrwxrwxrwx 1 roberto roberto     14 2008-10-21 15:37
-/home/roberto/gles/buildroot/build_i586/staging_dir//usr/lib/libFS.so.6 ->
-libFS.so.6.0.0
--rwxr-xr-x 1 roberto roberto 183026 2008-10-21 15:37
-/home/roberto/gles/buildroot/build_i586/staging_dir//usr/lib/libFS.so.6.0.0
+Added:
+   trunk/buildroot/package/x11r7/xlib_libFS/xlib_libFS-susv3-legacy.patch
 
 
-
-====================================================================== 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-10-21-08 06:46  robang74       New Issue                                    
-10-21-08 06:46  robang74       Status                   new => assigned     
-10-21-08 06:46  robang74       Assigned To               => buildroot       
-10-21-08 06:46  robang74       File Added: .config                          
-======================================================================
+Changeset:
+Added: trunk/buildroot/package/x11r7/xlib_libFS/xlib_libFS-susv3-legacy.patch
+===================================================================
+--- trunk/buildroot/package/x11r7/xlib_libFS/xlib_libFS-susv3-legacy.patch	                        (rev 0)
++++ trunk/buildroot/package/x11r7/xlib_libFS/xlib_libFS-susv3-legacy.patch	2008-10-21 15:06:06 UTC (rev 23756)
+@@ -0,0 +1,69 @@
++libFS: use memcpy instead of bcopy
++---
++ src/FSOpenServ.c |    2 +-
++ src/FSlibInt.c   |    2 +-
++ src/FSlibint.h   |    4 ++--
++ src/FSlibos.h    |    2 +-
++ 4 files changed, 5 insertions(+), 5 deletions(-)
++
++Index: libFS-1.0.0/src/FSOpenServ.c
++===================================================================
++--- libFS-1.0.0.orig/src/FSOpenServ.c
+++++ libFS-1.0.0/src/FSOpenServ.c
++@@ -197,7 +197,7 @@
++ 	    errno = ENOMEM;
++ 	    return (FSServer *) 0;
++ 	}
++-	bcopy(ad, alts[i].name, altlen);
+++	memcpy(alts[i].name, ad, altlen);
++ 	alts[i].name[altlen] = '\0';
++ 	ad += altlen + ((4 - (altlen + 2)) & 3);
++     }
++Index: libFS-1.0.0/src/FSlibInt.c
++===================================================================
++--- libFS-1.0.0.orig/src/FSlibInt.c
+++++ libFS-1.0.0/src/FSlibInt.c
++@@ -1127,7 +1127,7 @@
++     long        len;
++ {
++     if (svr->bufptr + (len) <= svr->bufmax) {
++-	bcopy(data, svr->bufptr, (int) len);
+++	memcpy(svr->bufptr, data, (int) len);
++ 	svr->bufptr += ((len) + 3) & ~3;
++     } else {
++ 	_FSSend(svr, data, len);
++Index: libFS-1.0.0/src/FSlibint.h
++===================================================================
++--- libFS-1.0.0.orig/src/FSlibint.h
+++++ libFS-1.0.0/src/FSlibint.h
++@@ -285,7 +285,7 @@
++ #else
++ #define Data(svr, data, len) \
++ 	if (svr->bufptr + (len) <= svr->bufmax) {\
++-		bcopy(data, svr->bufptr, (int)len);\
+++		memcpy(svr->bufptr, data, (int)len);	\
++ 		svr->bufptr += ((len) + 3) & ~3;\
++ 	} else\
++ 		_FSSend(svr, data, len)
++@@ -337,7 +337,7 @@
++ #define STARTITERATE(tpvar,type,start,endcond,decr) \
++   { register char *cpvar; \
++   for (cpvar = (char *) start; endcond; cpvar = NEXTPTR(cpvar,type), decr) { \
++-    type dummy; bcopy (cpvar, (char *) &dummy, SIZEOF(type)); \
+++    type dummy; memcpy ((char *) &dummy, cpvar, SIZEOF(type));			\
++     tpvar = (type *) cpvar;
++ #define ENDITERATE }}
++ 
++Index: libFS-1.0.0/src/FSlibos.h
++===================================================================
++--- libFS-1.0.0.orig/src/FSlibos.h
+++++ libFS-1.0.0/src/FSlibos.h
++@@ -228,7 +228,7 @@
++ #endif
++ 
++ #if (MSKCNT>4)
++-#define COPYBITS(src, dst) bcopy((caddr_t) src, (caddr_t) dst, sizeof(FdSet))
+++#define COPYBITS(src, dst) memcpy((caddr_t) dst, (caddr_t) src, sizeof(FdSet))
++ #define CLEARBITS(buf) bzero((caddr_t) buf, sizeof(FdSet))
++ #define MASKANDSETBITS(dst, b1, b2)  \
++ 		      { int cri;			\
