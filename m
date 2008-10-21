@@ -1,36 +1,38 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Tue, 21 Oct 2008 08:31:12 +0200
-Subject: [Buildroot] Backdoors?
-In-Reply-To: <878wsitgk8.fsf@macbook.be.48ers.dk>
-References: <48FD816A.6050101@control.lth.se>
-	<878wsitgk8.fsf@macbook.be.48ers.dk>
-Message-ID: <48FD7730.1090001@atmel.com>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Tue, 21 Oct 2008 11:50:49 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/x11r7/xapp_xfs
+Message-ID: <20081021185049.898EA3C6F3@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard wrote:
->>>>>> "Anders" == Anders Blomdell <anders.blomdell@control.lth.se> writes:
-> 
-> Hi,
-> 
->  Anders> Nowhere in the documentation, I can find the passwords for:
->  Anders> target/device/Atmel/atngw100/target_skeleton/etc/shadow:avr32:$1$TVWxUVs7$/ze18sFeD6F26w0hgyB6M.:13200:0:99999:7:::
-> 
->  Anders> are they there only to provide a backdoor into generated systems? :-)
-> 
-> I guess so. Atmel people?
-> 
+Author: jacmet
+Date: 2008-10-21 11:50:49 -0700 (Tue, 21 Oct 2008)
+New Revision: 23759
 
-root / roota
-avr32 / avr32!
+Log:
+x11r7/xfs: bump version - fixes CVE-2007-4568
 
-Documented in the AVR32 wiki on avrfreaks.net AFAIK. Did not know they 
-made it into uclibc.org repository.
+For details, see:
+http://lists.freedesktop.org/archives/xorg-announce/2007-October/000416.html
 
-Feel free to remove them.
+Modified:
+   trunk/buildroot/package/x11r7/xapp_xfs/xapp_xfs.mk
 
--- 
-HC
+
+Changeset:
+Modified: trunk/buildroot/package/x11r7/xapp_xfs/xapp_xfs.mk
+===================================================================
+--- trunk/buildroot/package/x11r7/xapp_xfs/xapp_xfs.mk	2008-10-21 17:26:10 UTC (rev 23758)
++++ trunk/buildroot/package/x11r7/xapp_xfs/xapp_xfs.mk	2008-10-21 18:50:49 UTC (rev 23759)
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XAPP_XFS_VERSION = 1.0.4
++XAPP_XFS_VERSION = 1.0.5
+ XAPP_XFS_SOURCE = xfs-$(XAPP_XFS_VERSION).tar.bz2
+ XAPP_XFS_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XFS_AUTORECONF = NO
