@@ -1,37 +1,34 @@
-From: laird at uclibc.org <laird@uclibc.org>
-Date: Wed, 22 Oct 2008 08:01:01 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/cairo
-Message-ID: <20081022150101.12B713C666@busybox.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 22 Oct 2008 17:01:46 +0200
+Subject: [Buildroot] svn commit: trunk/buildroot/package
+In-Reply-To: <20081022124754.407DF3C375@busybox.net>
+References: <20081022124754.407DF3C375@busybox.net>
+Message-ID: <20081022170146.28aaf1ea@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: laird
-Date: 2008-10-22 08:01:00 -0700 (Wed, 22 Oct 2008)
-New Revision: 23766
+Le Wed, 22 Oct 2008 05:47:54 -0700 (PDT),
+laird at uclibc.org a ?crit :
 
-Log:
-package/cairo/cairo.mk: Bounce version and add patches for DirectFB
+> Author: laird
+> Date: 2008-10-22 05:47:53 -0700 (Wed, 22 Oct 2008)
+> New Revision: 23763
 
-Update Cairo to 1.6.4
-Add DirectFB patches as supplied by DirectFB author Dennis Kropp
+This breaks the compilation of libpng for me. The configure script
+thinks that my arm-linux-gcc is not able to generate shared libraries.
+Removing the two added lines fix the problem.
 
-Signed-off-by: Daniel Laird <daniel.j.laird@nxp.com>
+I didn't had this issue with my original patch, but I didn't
+investigate in what way your patch differs from mine.
 
+Sincerly,
 
-
-Added:
-   trunk/buildroot/package/cairo/cairo-1.6.4-directfb-all.patch
-
-Modified:
-   trunk/buildroot/package/cairo/cairo.mk
-
-
-Changeset:
-
-Sorry, the patch is too large to include (1039 lines).
-Please use ViewCVS to see it!
-
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=23766
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
