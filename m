@@ -1,76 +1,138 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Wed, 22 Oct 2008 14:52:53 +0200
-Subject: [Buildroot] [RFC] Avoid make distclean to remove packages
-	from	rootfs
-In-Reply-To: <e4c675870810220506q31952b43ta544bfbdcec64c4e@mail.gmail.com>
-References: <e4c675870810220506q31952b43ta544bfbdcec64c4e@mail.gmail.com>
-Message-ID: <20081022125253.GB25329@mx.loc>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Wed, 22 Oct 2008 07:01:22 -0700
+Subject: [Buildroot] [buildroot 0005564]: Removing initramfs has not
+	complete support
+Message-ID: <27d3ad1808ddfb653be094b3e46e50c2@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Oct 22, 2008 at 02:06:09PM +0200, Roberto A. Foglietta wrote:
->2008/10/21 Roberto A. Foglietta <roberto.foglietta@gmail.com>:
->> 2008/10/21 Roberto A. Foglietta <roberto.foglietta@gmail.com>:
->>> Hi to all,
->>>
->>>  I never used buildroot before 5 days ago but it seems to me that once
->>> a package has been activated in menuconfig a way to remove it from
->>> rootfs is saving .configs, make distclean; make (i.e.: I compiled Xorg
->>> modular and then I move on tinyx but tinyx keyboard was not working
->>> because some incompatible craps remained on the rootfs).
->
-> [cut]
->
->>  A solution could be:
->>
->>  1) make checks for previous .config and un-install all removed packages (*)
->>  2) make saves the current .config into
->> project_build_$ARCH/$project_name/previous.config
->>  3) people who lose some rootfs customization do it because they
->> choose to remove packages (their fault)
->>
->>  (*) supposing all packages have a make uninstall which correctly work
->> otherwise N patches would be delivered to achieve this result.
->>
->
-> A proof of concept of the proposed general solution is attached as
->solution for bug report n.5564
 
-First, bash scripts are not acceptable. The "binary" is something from
-ulf.
->
-> http://busybox.net/bugs/view.php?id=5564
->
-> as you can see checkconfig.sh could be expanded to work on .config
->changes and acts accordingly
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=5564 
+====================================================================== 
+Reported By:                robang74
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   5564
+Category:                   Other
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             10-19-2008 03:38 PDT
+Last Modified:              10-22-2008 07:01 PDT
+====================================================================== 
+Summary:                    Removing initramfs has not complete support
+Description: 
+After initramfs has been enabled (BR2_TARGET_ROOTFS_INITRAMFS=y) 'make'
+recompile the entire kernel properly. Deletion of binaries/$project does
+not hurt anything because 'make' redo all files in that directory. 
 
-no, this is not the proper thing to do.
+After initramfs has been disabled (# BR2_TARGET_ROOTFS_INITRAMFS is not
+set) clear the binaries/$project directory still does not hurt because
+there will be no any kernel recompilation until 'make linux26-menuconfig'
+take place and then:
 
-Your solution #1 is already done.
-Solutiln #2 would be to just
+/usr/bin/make -j1 HOSTCC="/usr/bin/gcc" HOSTCFLAGS="" ARCH=i386
+CFLAGS_KERNEL="-Os
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/include
+--sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
+/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
+-march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64"
+INSTALL_MOD_PATH=/home/roberto/gles/buildroot/project_build_i586/ugles/root
+CROSS_COMPILE=/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-
+LDFLAGS="-L/home/roberto/gles/buildroot/build_i586/staging_dir/lib
+-L/home/roberto/gles/buildroot/build_i586/staging_dir/usr/lib
+--sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/"
+LZMA="/home/roberto/gles/buildroot/toolchain_build_i586/bin/lzma" -C
+/home/roberto/gles/buildroot/project_build_i586/ugles/linux-2.6.21.7
+prepare
+make[1]: Entering directory
+`/home/roberto/gles/buildroot/project_build_i586/ugles/linux-2.6.21.7'
+  CHK     include/linux/version.h
+  CHK     include/linux/utsrelease.h
+make[1]: Leaving directory
+`/home/roberto/gles/buildroot/project_build_i586/ugles/linux-2.6.21.7'
+touch
+/home/roberto/gles/buildroot/project_build_i586/ugles/linux-2.6.21.7/.depend_done
+/usr/bin/make -j1 HOSTCC="/usr/bin/gcc" HOSTCFLAGS="" ARCH=i386
+CFLAGS_KERNEL="-Os
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/include
+--sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
+/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
+-march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64"
+INSTALL_MOD_PATH=/home/roberto/gles/buildroot/project_build_i586/ugles/root
+CROSS_COMPILE=/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-
+LDFLAGS="-L/home/roberto/gles/buildroot/build_i586/staging_dir/lib
+-L/home/roberto/gles/buildroot/build_i586/staging_dir/usr/lib
+--sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/"
+LZMA="/home/roberto/gles/buildroot/toolchain_build_i586/bin/lzma" \
+		-C /home/roberto/gles/buildroot/project_build_i586/ugles/linux-2.6.21.7
+bzImage
+make[1]: Entering directory
+`/home/roberto/gles/buildroot/project_build_i586/ugles/linux-2.6.21.7'
+  CHK     include/linux/version.h
+  CHK     include/linux/utsrelease.h
+  CHK     include/linux/compile.h
+ 
+/home/roberto/gles/buildroot/project_build_i586/ugles/linux-2.6.21.7/scripts/gen_initramfs_list.sh:
+Cannot open
+'/home/roberto/gles/buildroot/binaries/ugles/rootfs.i586.initramfs_list'
+make[2]: *** [usr/initramfs_data.cpio.gz] Error 1
+make[1]: *** [usr] Error 2
+make[1]: Leaving directory
+`/home/roberto/gles/buildroot/project_build_i586/ugles/linux-2.6.21.7'
+make: ***
+[/home/roberto/gles/buildroot/project_build_i586/ugles/linux-2.6.21.7/arch/i386/boot/bzImage]
+Error 2
 
-index 0325132..19aa785 100644
---- a/target/linux/Makefile.in
-+++ b/target/linux/Makefile.in
-@@ -195,7 +195,7 @@ ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
- 	echo "CONFIG_INITRAMFS_ROOT_UID=0" >> $(LINUX26_DIR)/.config
- 	echo "CONFIG_INITRAMFS_ROOT_GID=0" >> $(LINUX26_DIR)/.config
- else
--	echo "CONFIG_INITRAMFS_SOURCE=\"\"" >> $(LINUX26_DIR)/.config
-+	echo "# CONFIG_INITRAMFS_SOURCE is not set" >>
-$(LINUX26_DIR)/.config
- endif
- ifeq ($(BR2_PACKAGE_BUSYBOX_INITRAMFS),y)
- 	# precedence for a small initramfs
 
 
-and your #3 is definitely not correct.
+====================================================================== 
 
-What you seem to be referring to above is that that if you unselect a
-package, it is not automagically -clean and -dircleaned, IIUC.
-Short of just rm -rf *_${YOURARCH}* && make, you could run the
-respective -clean target. Note that alot of them do not cleanup properly
-anyway, i.e. need improvement.
+---------------------------------------------------------------------- 
+ robang74 - 10-22-08 04:57  
+---------------------------------------------------------------------- 
+Proposed solution: 
+
+  linux CONFIG_INITRAMFS_SOURCE should be reset to "" void value
+
+in order to trigger the reset event 
+
+ 1) make should verify the previous .config values which has been changed
+and acts accordingly
+
+ 2) make should save the current .config into a
+project_build_$ARCH/$project/previous.config
+
+ Please take a look to checkconfig.patch
+
+ 
+
+---------------------------------------------------------------------- 
+ robang74 - 10-22-08 07:01  
+---------------------------------------------------------------------- 
+CLOSE THIS REPORT: bug is not any more reproducible in revision 23756 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+10-19-08 03:38  robang74       New Issue                                    
+10-19-08 03:38  robang74       Status                   new => assigned     
+10-19-08 03:38  robang74       Assigned To               => buildroot       
+10-19-08 03:39  robang74       Issue Monitored: robang74                    
+10-22-08 03:29  robang74       Note Added: 0013964                          
+10-22-08 04:56  robang74       File Added: checkconfig.patch                    
+10-22-08 04:57  robang74       Note Edited: 0013964                         
+10-22-08 07:01  robang74       Note Added: 0013994                          
+======================================================================
