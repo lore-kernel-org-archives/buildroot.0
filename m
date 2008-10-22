@@ -1,53 +1,31 @@
-From: laird at uclibc.org <laird@uclibc.org>
-Date: Wed, 22 Oct 2008 08:28:30 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package
-Message-ID: <20081022152830.CCF373C666@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 22 Oct 2008 17:37:43 +0200
+Subject: [Buildroot] Kernel header installed with external toolchain ?
+In-Reply-To: <20081022171035.451de23c@surf> (Thomas Petazzoni's message of
+	"Wed\, 22 Oct 2008 17\:10\:35 +0200")
+References: <20081022171035.451de23c@surf>
+Message-ID: <87r668k5dk.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: laird
-Date: 2008-10-22 08:28:30 -0700 (Wed, 22 Oct 2008)
-New Revision: 23767
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Log:
-package/Makefile.in: Remove rpath fix as it breaks Thomas png build
+ Thomas> Hi,
+ Thomas> I'm using Buildroot with an external toolchain, but after every cleanup
+ Thomas> of the tree, the next 'make' will trigger the download of the kernel
+ Thomas> source code and the installation of kernel headers. I'm wondering why
+ Thomas> this is necessary, since the external toolchain already have the
+ Thomas> headers.
 
-Remove my fix for rpath-link until I can find out why it works for me and not
-Thomas.
+It shouldn't redownload unless you remove your dl dir.
 
-Signed-off-by: Daniel Laird <daniel.j.laird@nxp.com>
+ Thomas> Isn't this a bug of the external toolchain management ?
 
+Sounds like it. Sorry, I'm not using the external toolchain stuff, but
+patches are welcome.
 
-
-Modified:
-   trunk/buildroot/package/Makefile.in
-
-
-Changeset:
-Modified: trunk/buildroot/package/Makefile.in
-===================================================================
---- trunk/buildroot/package/Makefile.in	2008-10-22 15:01:00 UTC (rev 23766)
-+++ trunk/buildroot/package/Makefile.in	2008-10-22 15:28:30 UTC (rev 23767)
-@@ -39,8 +39,7 @@
- ifeq ($(BR2_TOOLCHAIN_SOURCE),y)
- TARGET_CFLAGS=$(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING) \
- 	-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include
--TARGET_LDFLAGS+= -L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib
--TARGET_LDFLAGS+= -Wl,--rpath-link -Wl,$(STAGING_DIR)/lib -Wl,--rpath-link -Wl,$(STAGING_DIR)/usr/lib
-+TARGET_LDFLAGS+=-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib
- ifeq ($(BR2_TOOLCHAIN_SYSROOT),y)
- TARGET_CFLAGS+= $(BR2_SYSROOT) $(BR2_ISYSROOT)
- TARGET_LDFLAGS+= $(BR2_SYSROOT)
-@@ -92,8 +91,7 @@
- else
- TARGET_CFLAGS=$(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING) -I$(STAGING_DIR)/include -I$(STAGING_DIR)/usr/include -I$(TOOLCHAIN_EXTERNAL_PATH)/$(TOOLCHAIN_EXTERNAL_PREFIX)/include
- TARGET_CXXFLAGS=$(TARGET_CFLAGS)
--TARGET_LDFLAGS+= -L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib
--TARGET_LDFLAGS+= -Wl,--rpath-link -Wl,$(STAGING_DIR)/lib -Wl,--rpath-link -Wl,$(STAGING_DIR)/usr/lib
-+TARGET_LDFLAGS=-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib
- endif
- #########################################################################
- #ifeq ($(BR2_ROOTFS_SUFFIX),)
+-- 
+Bye, Peter Korsgaard
