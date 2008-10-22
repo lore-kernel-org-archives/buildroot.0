@@ -1,126 +1,51 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 22 Oct 2008 03:29:19 -0700
-Subject: [Buildroot] [buildroot 0005564]: Removing initramfs has not
-	complete support
-Message-ID: <3c0427afb034012810ed0e299ed9e831@busybox.net>
+From: John Schimandle <john_schimandle@hotmail.com>
+Date: Wed, 22 Oct 2008 04:36:53 -0700
+Subject: [Buildroot] docs/buildroot.html - package make file make command
+	overrides configure script CC setting
+Message-ID: <COL0-DAV36887D7967FE01BD250A468D290@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=5564 
-====================================================================== 
-Reported By:                robang74
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   5564
-Category:                   Other
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             10-19-2008 03:38 PDT
-Last Modified:              10-22-2008 03:29 PDT
-====================================================================== 
-Summary:                    Removing initramfs has not complete support
-Description: 
-After initramfs has been enabled (BR2_TARGET_ROOTFS_INITRAMFS=y) 'make'
-recompile the entire kernel properly. Deletion of binaries/$project does
-not hurt anything because 'make' redo all files in that directory. 
-
-After initramfs has been disabled (# BR2_TARGET_ROOTFS_INITRAMFS is not
-set) clear the binaries/$project directory still does not hurt because
-there will be no any kernel recompilation until 'make linux26-menuconfig'
-take place and then:
-
-/usr/bin/make -j1 HOSTCC="/usr/bin/gcc" HOSTCFLAGS="" ARCH=i386
-CFLAGS_KERNEL="-Os
--I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
--I/home/roberto/gles/buildroot/build_i586/staging_dir/include
---sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
-/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
--march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64"
-INSTALL_MOD_PATH=/home/roberto/gles/buildroot/project_build_i586/ugles/root
-CROSS_COMPILE=/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-
-LDFLAGS="-L/home/roberto/gles/buildroot/build_i586/staging_dir/lib
--L/home/roberto/gles/buildroot/build_i586/staging_dir/usr/lib
---sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/"
-LZMA="/home/roberto/gles/buildroot/toolchain_build_i586/bin/lzma" -C
-/home/roberto/gles/buildroot/project_build_i586/ugles/linux-2.6.21.7
-prepare
-make[1]: Entering directory
-`/home/roberto/gles/buildroot/project_build_i586/ugles/linux-2.6.21.7'
-  CHK     include/linux/version.h
-  CHK     include/linux/utsrelease.h
-make[1]: Leaving directory
-`/home/roberto/gles/buildroot/project_build_i586/ugles/linux-2.6.21.7'
-touch
-/home/roberto/gles/buildroot/project_build_i586/ugles/linux-2.6.21.7/.depend_done
-/usr/bin/make -j1 HOSTCC="/usr/bin/gcc" HOSTCFLAGS="" ARCH=i386
-CFLAGS_KERNEL="-Os
--I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
--I/home/roberto/gles/buildroot/build_i586/staging_dir/include
---sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
-/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
--march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64"
-INSTALL_MOD_PATH=/home/roberto/gles/buildroot/project_build_i586/ugles/root
-CROSS_COMPILE=/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-
-LDFLAGS="-L/home/roberto/gles/buildroot/build_i586/staging_dir/lib
--L/home/roberto/gles/buildroot/build_i586/staging_dir/usr/lib
---sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/"
-LZMA="/home/roberto/gles/buildroot/toolchain_build_i586/bin/lzma" \
-		-C /home/roberto/gles/buildroot/project_build_i586/ugles/linux-2.6.21.7
-bzImage
-make[1]: Entering directory
-`/home/roberto/gles/buildroot/project_build_i586/ugles/linux-2.6.21.7'
-  CHK     include/linux/version.h
-  CHK     include/linux/utsrelease.h
-  CHK     include/linux/compile.h
+I've been stumbling through adding a package to buildroot. Although I did
+make a successful package I did find a potential problem with the
+documenation, buildroot usage and documentation document at
+docs/buildroot.html specifically the section entitled "Extending Buildroot
+with more software". This section describes the package make file in
+package/name/name.mk. It shows an example of the file which I think is
+incorrect. Lines 33 and 34 specify a make statement that overrides the
+variable settings of CC that are set in configure. The overriding action
+causes all makes within the package to have the CC variable set to TARGET_CC
+and not the CC variable defined in the configure script. The CC variable in
+the configure script is set by TARGET_CONFIGURE_OPTS on line 22 of this
+example. TARGET_CONFIGURE_OPTS contains architecture specific information
+for the compiler which is important for some packages.
  
-/home/roberto/gles/buildroot/project_build_i586/ugles/linux-2.6.21.7/scripts/gen_initramfs_list.sh:
-Cannot open
-'/home/roberto/gles/buildroot/binaries/ugles/rootfs.i586.initramfs_list'
-make[2]: *** [usr/initramfs_data.cpio.gz] Error 1
-make[1]: *** [usr] Error 2
-make[1]: Leaving directory
-`/home/roberto/gles/buildroot/project_build_i586/ugles/linux-2.6.21.7'
-make: ***
-[/home/roberto/gles/buildroot/project_build_i586/ugles/linux-2.6.21.7/arch/i386/boot/bzImage]
-Error 2
-
-
-
-====================================================================== 
-
----------------------------------------------------------------------- 
- robang74 - 10-22-08 03:29  
----------------------------------------------------------------------- 
-Proposed solution: 
-
-  linux CONFIG_INITRAMFS_SOURCE should be reset to "" void value
-
-in order to trigger the reset event 
-
- 1) make should verify the previous .config values which has been changed
-and acts accordingly
-
- 2) make should save the current .config into a
-project_build_$ARCH/$project/previous.config 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-10-19-08 03:38  robang74       New Issue                                    
-10-19-08 03:38  robang74       Status                   new => assigned     
-10-19-08 03:38  robang74       Assigned To               => buildroot       
-10-19-08 03:39  robang74       Issue Monitored: robang74                    
-10-22-08 03:29  robang74       Note Added: 0013964                          
-======================================================================
+Original statement in example
+ 
+33  $(FOO_DIR)/$(FOO_BINARY): $(FOO_DIR)/.configured
+34          $(MAKE) CC=$(TARGET_CC) -C $(FOO_DIR)
+ 
+I think the example should have the following statements (line 33 is
+unchanged)
+ 
+33  $(FOO_DIR)/$(FOO_BINARY): $(FOO_DIR)/.configured
+34          $(MAKE) -C $(FOO_DIR)
+ 
+Now the targets see the full CC arguments that were passed to the configure
+script and were written into each Makefile in the package.
+ 
+I don't know if this would be valid for all packages but it seems to me that
+you would want to preserve the CC variable setting that was done with the
+configure script.
+ 
+Again, I'm not sure how to submit this change to the buildroot tree.
+ 
+Regards,
+ 
+John
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20081022/b2f0dc99/attachment-0001.htm 
