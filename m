@@ -1,51 +1,46 @@
-From: John Schimandle <john_schimandle@hotmail.com>
-Date: Wed, 22 Oct 2008 04:36:53 -0700
-Subject: [Buildroot] docs/buildroot.html - package make file make command
-	overrides configure script CC setting
-Message-ID: <COL0-DAV36887D7967FE01BD250A468D290@phx.gbl>
+From: Roberto A. Foglietta <roberto.foglietta@gmail.com>
+Date: Wed, 22 Oct 2008 14:06:09 +0200
+Subject: [Buildroot] [RFC] Avoid make distclean to remove packages from
+	rootfs
+Message-ID: <e4c675870810220506q31952b43ta544bfbdcec64c4e@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I've been stumbling through adding a package to buildroot. Although I did
-make a successful package I did find a potential problem with the
-documenation, buildroot usage and documentation document at
-docs/buildroot.html specifically the section entitled "Extending Buildroot
-with more software". This section describes the package make file in
-package/name/name.mk. It shows an example of the file which I think is
-incorrect. Lines 33 and 34 specify a make statement that overrides the
-variable settings of CC that are set in configure. The overriding action
-causes all makes within the package to have the CC variable set to TARGET_CC
-and not the CC variable defined in the configure script. The CC variable in
-the configure script is set by TARGET_CONFIGURE_OPTS on line 22 of this
-example. TARGET_CONFIGURE_OPTS contains architecture specific information
-for the compiler which is important for some packages.
- 
-Original statement in example
- 
-33  $(FOO_DIR)/$(FOO_BINARY): $(FOO_DIR)/.configured
-34          $(MAKE) CC=$(TARGET_CC) -C $(FOO_DIR)
- 
-I think the example should have the following statements (line 33 is
-unchanged)
- 
-33  $(FOO_DIR)/$(FOO_BINARY): $(FOO_DIR)/.configured
-34          $(MAKE) -C $(FOO_DIR)
- 
-Now the targets see the full CC arguments that were passed to the configure
-script and were written into each Makefile in the package.
- 
-I don't know if this would be valid for all packages but it seems to me that
-you would want to preserve the CC variable setting that was done with the
-configure script.
- 
-Again, I'm not sure how to submit this change to the buildroot tree.
- 
-Regards,
- 
-John
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20081022/b2f0dc99/attachment-0001.htm 
+2008/10/21 Roberto A. Foglietta <roberto.foglietta@gmail.com>:
+> 2008/10/21 Roberto A. Foglietta <roberto.foglietta@gmail.com>:
+>> Hi to all,
+>>
+>>  I never used buildroot before 5 days ago but it seems to me that once
+>> a package has been activated in menuconfig a way to remove it from
+>> rootfs is saving .configs, make distclean; make (i.e.: I compiled Xorg
+>> modular and then I move on tinyx but tinyx keyboard was not working
+>> because some incompatible craps remained on the rootfs).
+
+ [cut]
+
+>  A solution could be:
+>
+>  1) make checks for previous .config and un-install all removed packages (*)
+>  2) make saves the current .config into
+> project_build_$ARCH/$project_name/previous.config
+>  3) people who lose some rootfs customization do it because they
+> choose to remove packages (their fault)
+>
+>  (*) supposing all packages have a make uninstall which correctly work
+> otherwise N patches would be delivered to achieve this result.
+>
+
+ A proof of concept of the proposed general solution is attached as
+solution for bug report n.5564
+
+ http://busybox.net/bugs/view.php?id=5564
+
+ as you can see checkconfig.sh could be expanded to work on .config
+changes and acts accordingly
+
+ Cheers,
+-- 
+/roberto
