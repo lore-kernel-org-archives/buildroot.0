@@ -1,40 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Oct 2008 17:48:24 +0200
-Subject: [Buildroot] Kernel header installed with external toolchain ?
-In-Reply-To: <87r668k5dk.fsf@macbook.be.48ers.dk>
-References: <20081022171035.451de23c@surf> <87r668k5dk.fsf@macbook.be.48ers.dk>
-Message-ID: <20081022174824.1aba1ece@surf>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Wed, 22 Oct 2008 13:12:29 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/x11r7/xapp_xclock
+Message-ID: <20081022201229.12EE73C6D4@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 22 Oct 2008 17:37:43 +0200,
-Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+Author: jacmet
+Date: 2008-10-22 13:12:28 -0700 (Wed, 22 Oct 2008)
+New Revision: 23768
 
->  Thomas> Hi,
->  Thomas> I'm using Buildroot with an external toolchain, but after
->  Thomas> every cleanup of the tree, the next 'make' will trigger the
->  Thomas> download of the kernel source code and the installation of
->  Thomas> kernel headers. I'm wondering why this is necessary, since
->  Thomas> the external toolchain already have the headers.
-> 
-> It shouldn't redownload unless you remove your dl dir.
+Log:
+x11r7/xclock: don't force libiconv link
 
-Yes, you're right, sorry. It doesn't redownload, but re-extract, and
-re-install them.
+Closes #5654.
 
-> Sounds like it. Sorry, I'm not using the external toolchain stuff, but
-> patches are welcome.
+Modified:
+   trunk/buildroot/package/x11r7/xapp_xclock/xapp_xclock.mk
 
-Ok, will try to dig into this someday.
 
-Thanks for your feedback,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Changeset:
+Modified: trunk/buildroot/package/x11r7/xapp_xclock/xapp_xclock.mk
+===================================================================
+--- trunk/buildroot/package/x11r7/xapp_xclock/xapp_xclock.mk	2008-10-22 15:28:30 UTC (rev 23767)
++++ trunk/buildroot/package/x11r7/xapp_xclock/xapp_xclock.mk	2008-10-22 20:12:28 UTC (rev 23768)
+@@ -10,6 +10,4 @@
+ XAPP_XCLOCK_AUTORECONF = NO
+ XAPP_XCLOCK_DEPENDENCIES = xlib_libX11 xlib_libXaw xlib_libXft xlib_libXrender xlib_libxkbfile
+ 
+-XAPP_XCLOCK_CONF_OPT = LDFLAGS="-liconv"
+-
+ $(eval $(call AUTOTARGETS,package/x11r7,xapp_xclock))
