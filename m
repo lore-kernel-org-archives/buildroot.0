@@ -1,30 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Oct 2008 17:01:46 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package
-In-Reply-To: <20081022124754.407DF3C375@busybox.net>
-References: <20081022124754.407DF3C375@busybox.net>
-Message-ID: <20081022170146.28aaf1ea@surf>
+Date: Wed, 22 Oct 2008 17:10:35 +0200
+Subject: [Buildroot] Kernel header installed with external toolchain ?
+Message-ID: <20081022171035.451de23c@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 22 Oct 2008 05:47:54 -0700 (PDT),
-laird at uclibc.org a ?crit :
+Hi,
 
-> Author: laird
-> Date: 2008-10-22 05:47:53 -0700 (Wed, 22 Oct 2008)
-> New Revision: 23763
+I'm using Buildroot with an external toolchain, but after every cleanup
+of the tree, the next 'make' will trigger the download of the kernel
+source code and the installation of kernel headers. I'm wondering why
+this is necessary, since the external toolchain already have the
+headers.
 
-This breaks the compilation of libpng for me. The configure script
-thinks that my arm-linux-gcc is not able to generate shared libraries.
-Removing the two added lines fix the problem.
+Isn't this a bug of the external toolchain management ?
 
-I didn't had this issue with my original patch, but I didn't
-investigate in what way your patch differs from mine.
-
-Sincerly,
+Thanks,
 
 Thomas
 -- 
