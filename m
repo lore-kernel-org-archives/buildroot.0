@@ -1,141 +1,86 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 22 Oct 2008 07:05:46 -0700
-Subject: [Buildroot] [buildroot 0005564]: Removing initramfs has not
-	complete support
-Message-ID: <68f2ad2301e3e0d09cd8da7253b2ad6e@busybox.net>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Wed, 22 Oct 2008 07:39:46 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/x11r7/xlib_libFS
+Message-ID: <20081022143947.08EE43C666@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: jacmet
+Date: 2008-10-22 07:39:46 -0700 (Wed, 22 Oct 2008)
+New Revision: 23765
 
-The following issue has been CLOSED 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=5564 
-====================================================================== 
-Reported By:                robang74
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   5564
-Category:                   Other
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             10-19-2008 03:38 PDT
-Last Modified:              10-22-2008 07:05 PDT
-====================================================================== 
-Summary:                    Removing initramfs has not complete support
-Description: 
-After initramfs has been enabled (BR2_TARGET_ROOTFS_INITRAMFS=y) 'make'
-recompile the entire kernel properly. Deletion of binaries/$project does
-not hurt anything because 'make' redo all files in that directory. 
+Log:
+x11r7/libFS susv3-legacy: update to what got applied upstream
 
-After initramfs has been disabled (# BR2_TARGET_ROOTFS_INITRAMFS is not
-set) clear the binaries/$project directory still does not hurt because
-there will be no any kernel recompilation until 'make linux26-menuconfig'
-take place and then:
+For details, see:
+http://lists.freedesktop.org/archives/xorg/2008-October/039630.html
 
-/usr/bin/make -j1 HOSTCC="/usr/bin/gcc" HOSTCFLAGS="" ARCH=i386
-CFLAGS_KERNEL="-Os
--I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
--I/home/roberto/gles/buildroot/build_i586/staging_dir/include
---sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
-/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
--march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64"
-INSTALL_MOD_PATH=/home/roberto/gles/buildroot/project_build_i586/ugles/root
-CROSS_COMPILE=/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-
-LDFLAGS="-L/home/roberto/gles/buildroot/build_i586/staging_dir/lib
--L/home/roberto/gles/buildroot/build_i586/staging_dir/usr/lib
---sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/"
-LZMA="/home/roberto/gles/buildroot/toolchain_build_i586/bin/lzma" -C
-/home/roberto/gles/buildroot/project_build_i586/ugles/linux-2.6.21.7
-prepare
-make[1]: Entering directory
-`/home/roberto/gles/buildroot/project_build_i586/ugles/linux-2.6.21.7'
-  CHK     include/linux/version.h
-  CHK     include/linux/utsrelease.h
-make[1]: Leaving directory
-`/home/roberto/gles/buildroot/project_build_i586/ugles/linux-2.6.21.7'
-touch
-/home/roberto/gles/buildroot/project_build_i586/ugles/linux-2.6.21.7/.depend_done
-/usr/bin/make -j1 HOSTCC="/usr/bin/gcc" HOSTCFLAGS="" ARCH=i386
-CFLAGS_KERNEL="-Os
--I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
--I/home/roberto/gles/buildroot/build_i586/staging_dir/include
---sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
-/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
--march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64"
-INSTALL_MOD_PATH=/home/roberto/gles/buildroot/project_build_i586/ugles/root
-CROSS_COMPILE=/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-
-LDFLAGS="-L/home/roberto/gles/buildroot/build_i586/staging_dir/lib
--L/home/roberto/gles/buildroot/build_i586/staging_dir/usr/lib
---sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/"
-LZMA="/home/roberto/gles/buildroot/toolchain_build_i586/bin/lzma" \
-		-C /home/roberto/gles/buildroot/project_build_i586/ugles/linux-2.6.21.7
-bzImage
-make[1]: Entering directory
-`/home/roberto/gles/buildroot/project_build_i586/ugles/linux-2.6.21.7'
-  CHK     include/linux/version.h
-  CHK     include/linux/utsrelease.h
-  CHK     include/linux/compile.h
- 
-/home/roberto/gles/buildroot/project_build_i586/ugles/linux-2.6.21.7/scripts/gen_initramfs_list.sh:
-Cannot open
-'/home/roberto/gles/buildroot/binaries/ugles/rootfs.i586.initramfs_list'
-make[2]: *** [usr/initramfs_data.cpio.gz] Error 1
-make[1]: *** [usr] Error 2
-make[1]: Leaving directory
-`/home/roberto/gles/buildroot/project_build_i586/ugles/linux-2.6.21.7'
-make: ***
-[/home/roberto/gles/buildroot/project_build_i586/ugles/linux-2.6.21.7/arch/i386/boot/bzImage]
-Error 2
+Modified:
+   trunk/buildroot/package/x11r7/xlib_libFS/xlib_libFS-susv3-legacy.patch
 
 
-
-====================================================================== 
-
----------------------------------------------------------------------- 
- robang74 - 10-22-08 04:57  
----------------------------------------------------------------------- 
-Proposed solution: 
-
-  linux CONFIG_INITRAMFS_SOURCE should be reset to "" void value
-
-in order to trigger the reset event 
-
- 1) make should verify the previous .config values which has been changed
-and acts accordingly
-
- 2) make should save the current .config into a
-project_build_$ARCH/$project/previous.config
-
- Please take a look to checkconfig.patch
-
- 
-
----------------------------------------------------------------------- 
- robang74 - 10-22-08 07:01  
----------------------------------------------------------------------- 
-CLOSE THIS REPORT: bug is not any more reproducible in revision 23756 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-10-19-08 03:38  robang74       New Issue                                    
-10-19-08 03:38  robang74       Status                   new => assigned     
-10-19-08 03:38  robang74       Assigned To               => buildroot       
-10-19-08 03:39  robang74       Issue Monitored: robang74                    
-10-22-08 03:29  robang74       Note Added: 0013964                          
-10-22-08 04:56  robang74       File Added: checkconfig.patch                    
-10-22-08 04:57  robang74       Note Edited: 0013964                         
-10-22-08 07:01  robang74       Note Added: 0013994                          
-10-22-08 07:05  bernhardf      Status                   assigned => closed  
-======================================================================
+Changeset:
+Modified: trunk/buildroot/package/x11r7/xlib_libFS/xlib_libFS-susv3-legacy.patch
+===================================================================
+--- trunk/buildroot/package/x11r7/xlib_libFS/xlib_libFS-susv3-legacy.patch	2008-10-22 13:36:10 UTC (rev 23764)
++++ trunk/buildroot/package/x11r7/xlib_libFS/xlib_libFS-susv3-legacy.patch	2008-10-22 14:39:46 UTC (rev 23765)
+@@ -1,4 +1,10 @@
+-libFS: use memcpy instead of bcopy
++From: Peter Korsgaard <jacmet@sunsite.dk>
++Subject: [PATCH] libFS: use memmove instead of bcopy
++
++bcopy is marked as legacy in SuSv3 and not available in the default
++configuration of uClibc. Replace with memmove proposed by SuSv3.
++
++Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+ ---
+  src/FSOpenServ.c |    2 +-
+  src/FSlibInt.c   |    2 +-
+@@ -15,7 +21,7 @@
+  	    return (FSServer *) 0;
+  	}
+ -	bcopy(ad, alts[i].name, altlen);
+-+	memcpy(alts[i].name, ad, altlen);
+++	memmove(alts[i].name, ad, altlen);
+  	alts[i].name[altlen] = '\0';
+  	ad += altlen + ((4 - (altlen + 2)) & 3);
+      }
+@@ -28,7 +34,7 @@
+  {
+      if (svr->bufptr + (len) <= svr->bufmax) {
+ -	bcopy(data, svr->bufptr, (int) len);
+-+	memcpy(svr->bufptr, data, (int) len);
+++	memmove(svr->bufptr, data, (int) len);
+  	svr->bufptr += ((len) + 3) & ~3;
+      } else {
+  	_FSSend(svr, data, len);
+@@ -41,7 +47,7 @@
+  #define Data(svr, data, len) \
+  	if (svr->bufptr + (len) <= svr->bufmax) {\
+ -		bcopy(data, svr->bufptr, (int)len);\
+-+		memcpy(svr->bufptr, data, (int)len);	\
+++		memmove(svr->bufptr, data, (int)len);	\
+  		svr->bufptr += ((len) + 3) & ~3;\
+  	} else\
+  		_FSSend(svr, data, len)
+@@ -50,7 +56,7 @@
+    { register char *cpvar; \
+    for (cpvar = (char *) start; endcond; cpvar = NEXTPTR(cpvar,type), decr) { \
+ -    type dummy; bcopy (cpvar, (char *) &dummy, SIZEOF(type)); \
+-+    type dummy; memcpy ((char *) &dummy, cpvar, SIZEOF(type));			\
+++    type dummy; memmove ((char *) &dummy, cpvar, SIZEOF(type));			\
+      tpvar = (type *) cpvar;
+  #define ENDITERATE }}
+  
+@@ -63,7 +69,7 @@
+  
+  #if (MSKCNT>4)
+ -#define COPYBITS(src, dst) bcopy((caddr_t) src, (caddr_t) dst, sizeof(FdSet))
+-+#define COPYBITS(src, dst) memcpy((caddr_t) dst, (caddr_t) src, sizeof(FdSet))
+++#define COPYBITS(src, dst) memmove((caddr_t) dst, (caddr_t) src, sizeof(FdSet))
+  #define CLEARBITS(buf) bzero((caddr_t) buf, sizeof(FdSet))
+  #define MASKANDSETBITS(dst, b1, b2)  \
+  		      { int cri;			\
