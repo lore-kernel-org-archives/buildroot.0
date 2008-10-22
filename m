@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 22 Oct 2008 07:01:22 -0700
+Date: Wed, 22 Oct 2008 07:05:46 -0700
 Subject: [Buildroot] [buildroot 0005564]: Removing initramfs has not
 	complete support
-Message-ID: <27d3ad1808ddfb653be094b3e46e50c2@busybox.net>
+Message-ID: <68f2ad2301e3e0d09cd8da7253b2ad6e@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +10,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-A NOTE has been added to this issue. 
+The following issue has been CLOSED 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=5564 
 ====================================================================== 
@@ -23,10 +23,12 @@ Category:                   Other
 Reproducibility:            always
 Severity:                   minor
 Priority:                   normal
-Status:                     assigned
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
 ====================================================================== 
 Date Submitted:             10-19-2008 03:38 PDT
-Last Modified:              10-22-2008 07:01 PDT
+Last Modified:              10-22-2008 07:05 PDT
 ====================================================================== 
 Summary:                    Removing initramfs has not complete support
 Description: 
@@ -135,4 +137,5 @@ Date Modified   Username       Field                    Change
 10-22-08 04:56  robang74       File Added: checkconfig.patch                    
 10-22-08 04:57  robang74       Note Edited: 0013964                         
 10-22-08 07:01  robang74       Note Added: 0013994                          
+10-22-08 07:05  bernhardf      Status                   assigned => closed  
 ======================================================================
