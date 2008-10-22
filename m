@@ -1,61 +1,56 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Wed, 22 Oct 2008 14:38:21 +0200
-Subject: [Buildroot] docs/buildroot.html - package make file
-	make	command overrides configure script CC setting
-In-Reply-To: <002401c9343a$7b4fe1b0$6901a8c0@iguana3>
-References: <002401c9343a$7b4fe1b0$6901a8c0@iguana3>
-Message-ID: <20081022123821.GA25329@mx.loc>
+From: laird at uclibc.org <laird@uclibc.org>
+Date: Wed, 22 Oct 2008 05:47:54 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package
+Message-ID: <20081022124754.407DF3C375@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Oct 22, 2008 at 04:36:53AM -0700, John Schimandle wrote:
->I've been stumbling through adding a package to buildroot. Although I did
->make a successful package I did find a potential problem with the
->documenation, buildroot usage and documentation document at
->docs/buildroot.html specifically the section entitled "Extending Buildroot
->with more software". This section describes the package make file in
->package/name/name.mk. It shows an example of the file which I think is
->incorrect. Lines 33 and 34 specify a make statement that overrides the
->variable settings of CC that are set in configure. The overriding action
->causes all makes within the package to have the CC variable set to TARGET_CC
->and not the CC variable defined in the configure script. The CC variable in
->the configure script is set by TARGET_CONFIGURE_OPTS on line 22 of this
->example. TARGET_CONFIGURE_OPTS contains architecture specific information
->for the compiler which is important for some packages.
-> 
->Original statement in example
-> 
->33  $(FOO_DIR)/$(FOO_BINARY): $(FOO_DIR)/.configured
->34          $(MAKE) CC=$(TARGET_CC) -C $(FOO_DIR)
-> 
->I think the example should have the following statements (line 33 is
->unchanged)
-> 
->33  $(FOO_DIR)/$(FOO_BINARY): $(FOO_DIR)/.configured
->34          $(MAKE) -C $(FOO_DIR)
+Author: laird
+Date: 2008-10-22 05:47:53 -0700 (Wed, 22 Oct 2008)
+New Revision: 23763
 
-yes. I suggest you look at how often these documentation receives
-updates, compared to the "code" itself..
-> 
->Now the targets see the full CC arguments that were passed to the configure
->script and were written into each Makefile in the package.
-> 
->I don't know if this would be valid for all packages but it seems to me that
+Log:
+package/Makefile.in: Add -rpath-link 
 
-This example should only be used for packages which do not use autotools
-(autoconf / automake etc). These packages should use
-package/Makefile.autotools.in and _not_ this oldish example code.
+As per various email discussions add -rpath-link
+to the LDFLAGS.
+This definately fixes a few issues for Thomas and myself
+Any objections and it can be pulled again.
 
->you would want to preserve the CC variable setting that was done with the
->configure script.
-> 
->Again, I'm not sure how to submit this change to the buildroot tree.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@...> 
+Signed-off-by: Daniel Laird <daniel.j.laird@nxp.com>
 
-"
-Changes can be submitted for inclusion by posting them to the buildroot
-mailing list or to the Bug and Patch Tracking System.
-"
-(from the webpage)
+
+
+Modified:
+   trunk/buildroot/package/Makefile.in
+
+
+Changeset:
+Modified: trunk/buildroot/package/Makefile.in
+===================================================================
+--- trunk/buildroot/package/Makefile.in	2008-10-22 08:47:03 UTC (rev 23762)
++++ trunk/buildroot/package/Makefile.in	2008-10-22 12:47:53 UTC (rev 23763)
+@@ -39,7 +39,8 @@
+ ifeq ($(BR2_TOOLCHAIN_SOURCE),y)
+ TARGET_CFLAGS=$(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING) \
+ 	-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include
+-TARGET_LDFLAGS+=-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib
++TARGET_LDFLAGS+= -L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib
++TARGET_LDFLAGS+= -Wl,--rpath-link -Wl,$(STAGING_DIR)/lib -Wl,--rpath-link -Wl,$(STAGING_DIR)/usr/lib
+ ifeq ($(BR2_TOOLCHAIN_SYSROOT),y)
+ TARGET_CFLAGS+= $(BR2_SYSROOT) $(BR2_ISYSROOT)
+ TARGET_LDFLAGS+= $(BR2_SYSROOT)
+@@ -91,7 +92,8 @@
+ else
+ TARGET_CFLAGS=$(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING) -I$(STAGING_DIR)/include -I$(STAGING_DIR)/usr/include -I$(TOOLCHAIN_EXTERNAL_PATH)/$(TOOLCHAIN_EXTERNAL_PREFIX)/include
+ TARGET_CXXFLAGS=$(TARGET_CFLAGS)
+-TARGET_LDFLAGS=-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib
++TARGET_LDFLAGS+= -L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib
++TARGET_LDFLAGS+= -Wl,--rpath-link -Wl,$(STAGING_DIR)/lib -Wl,--rpath-link -Wl,$(STAGING_DIR)/usr/lib
+ endif
+ #########################################################################
+ #ifeq ($(BR2_ROOTFS_SUFFIX),)
