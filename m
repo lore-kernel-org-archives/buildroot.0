@@ -1,44 +1,38 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 23 Oct 2008 07:51:28 -0700
-Subject: [Buildroot] [buildroot 0005704]: xkeyboard-config depends on
-	xapp_xkbcomp at runtime
-Message-ID: <25fb520f031e98c44ec29c41ea4dcf89@busybox.net>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Thu, 23 Oct 2008 08:07:34 -0700 (PDT)
+Subject: [Buildroot] svn commit:
+	trunk/buildroot/package/x11r7/xkeyboard-config
+Message-ID: <20081023150734.AFC8B3C675@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: jacmet
+Date: 2008-10-23 08:07:34 -0700 (Thu, 23 Oct 2008)
+New Revision: 23772
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=5704 
-====================================================================== 
-Reported By:                robang74
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   5704
-Category:                   Standards Compliance
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             10-23-2008 07:51 PDT
-Last Modified:              10-23-2008 07:51 PDT
-====================================================================== 
-Summary:                    xkeyboard-config depends on xapp_xkbcomp at runtime
-Description: 
-X server keyboard rules could not be parsed without the xkcomp application
-====================================================================== 
+Log:
+x11r7/xkeyboard-config: select xkbcomp
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-10-23-08 07:51  robang74       New Issue                                    
-10-23-08 07:51  robang74       Status                   new => assigned     
-10-23-08 07:51  robang74       Assigned To               => buildroot       
-10-23-08 07:51  robang74       File Added: xkeyboard-config.patch               
-    
-======================================================================
+xkeyboard-config uses xkbcomp at runtime, so select it.
+
+closes #5704.
+
+Modified:
+   trunk/buildroot/package/x11r7/xkeyboard-config/Config.in
+
+
+Changeset:
+Modified: trunk/buildroot/package/x11r7/xkeyboard-config/Config.in
+===================================================================
+--- trunk/buildroot/package/x11r7/xkeyboard-config/Config.in	2008-10-23 13:49:21 UTC (rev 23771)
++++ trunk/buildroot/package/x11r7/xkeyboard-config/Config.in	2008-10-23 15:07:34 UTC (rev 23772)
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_XKEYBOARD_CONFIG
+ 	bool "xkeyboard-config"
++	select BR2_PACKAGE_XAPP_XKBCOMP
+ 	help
+ 	  keyboard configuration database for X
+ 
