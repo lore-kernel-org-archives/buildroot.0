@@ -1,89 +1,55 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 23 Oct 2008 04:59:29 -0700
-Subject: [Buildroot] [buildroot 0005684]: Xorg need font misc-misc and font
-	alias
-Message-ID: <67994f5fa84b5bad0d85802585d5d66e@busybox.net>
+From: Adam McLaurin <buildroot@irotas.net>
+Date: Thu, 23 Oct 2008 08:10:29 -0400
+Subject: [Buildroot] Error building buildroot r23768
+In-Reply-To: <87ej27bk67.fsf@macbook.be.48ers.dk>
+References: <1224714192.16050.1280744193@webmail.messagingengine.com>
+	<1224720661.6200.1280758491@webmail.messagingengine.com>
+	<87fxmneokb.fsf@macbook.be.48ers.dk>
+	<1224758099.514.1280826623@webmail.messagingengine.com>
+	<87ej27bk67.fsf@macbook.be.48ers.dk>
+Message-ID: <1224763829.22575.1280841191@webmail.messagingengine.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+It's strange, this morning I checked out r23770 from SVN and the problem
+seems to have disappeared. I am running on the exact same box with the
+exact same environment and commands that I used yesterday evening.
 
-The following issue has been CLOSED 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=5684 
-====================================================================== 
-Reported By:                robang74
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   5684
-Category:                   Shared Library Support
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     closed
-Resolution:                 reopened
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             10-23-2008 03:19 PDT
-Last Modified:              10-23-2008 04:59 PDT
-====================================================================== 
-Summary:                    Xorg need font misc-misc and font alias
-Description: 
-Xorg need font misc-misc and font alias in order to run otherwise it fails
-with this error: "could not load font ?fixed?"
-====================================================================== 
+Anyway, thanks for the help. I don't know what was wrong but at least it
+seems to be working now.
 
----------------------------------------------------------------------- 
- jacmet - 10-23-08 03:24  
----------------------------------------------------------------------- 
-Thanks, committed as r23769 
+-Adam
 
----------------------------------------------------------------------- 
- robang74 - 10-23-08 04:50  
----------------------------------------------------------------------- 
-Xorg need font cursor-misc, misc-misc and font alias in order to run
-otherwise it fails with this error: "could not load font ?cursor?". Add
-this too:
 
-+	select BR2_PACKAGE_XFONT_FONT_ALIAS
-+	select BR2_PACKAGE_XFONT_FONT_MISC_MISC
-+	select BR2_PACKAGE_XFONT_FONT_CURSOR_MISC
-
-Sorry but adding/removing packages from menuconfig is not always a
-reliable process (yet).
-
- 
-
----------------------------------------------------------------------- 
- jacmet - 10-23-08 04:59  
----------------------------------------------------------------------- 
-thanks, committed as r23770 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-10-23-08 03:19  robang74       New Issue                                    
-10-23-08 03:19  robang74       Status                   new => assigned     
-10-23-08 03:19  robang74       Assigned To               => buildroot       
-10-23-08 03:19  robang74       File Added: xserver_xorg-server.patch            
-       
-10-23-08 03:19  robang74       Issue Monitored: robang74                    
-10-23-08 03:24  jacmet         Status                   assigned => closed  
-10-23-08 03:24  jacmet         Note Added: 0014014                          
-10-23-08 03:24  jacmet         Resolution               open => fixed       
-10-23-08 04:22  robang74       Issue End Monitor: robang74                    
-10-23-08 04:46  robang74       Status                   closed => feedback  
-10-23-08 04:46  robang74       Resolution               fixed => reopened   
-10-23-08 04:46  robang74       Note Added: 0014024                          
-10-23-08 04:47  robang74       Issue Monitored: robang74                    
-10-23-08 04:47  robang74       File Added: xserver_xorg-server.patch2           
-        
-10-23-08 04:48  robang74       Note Edited: 0014024                         
-10-23-08 04:49  robang74       Note Edited: 0014024                         
-10-23-08 04:50  robang74       Note Edited: 0014024                         
-10-23-08 04:59  jacmet         Status                   feedback => closed  
-10-23-08 04:59  jacmet         Note Added: 0014034                          
-======================================================================
+On Thu, 23 Oct 2008 13:55:12 +0200, "Peter Korsgaard"
+<jacmet@uclibc.org> said:
+> >>>>> "Adam" == Adam McLaurin <buildroot@irotas.net> writes:
+> 
+>  Adam> Hi Peter,
+>  Adam> I only found daily snapshots that work - I haven't gone back
+>  Adam> through SVN revisions to find one that works.
+> 
+> But the daily snapshots are svn checkouts, so svn info should work.
+> 
+>  Adam> That said, I can say for sure that at least
+>  Adam> buildroot-20081022.tar.bz2 works for me. I tried several others
+>  Adam> from the past month and they all worked as well.
+> 
+>  Adam> As for the configuration, at first I tried a customized
+>  Adam> configuration, which failed, then I just used the default
+>  Adam> configuration generated from 'make menuconfig', which failed as
+>  Adam> well. I can provide the exact .config generated by that if you
+>  Adam> need.
+> 
+> Please do - I just tried a default build with trunk and it worked
+> here:
+> 
+> -rw-r--r-- 1 peko peko 3600384 2008-10-23 13:42
+> /home/peko/tmp/br-i386/binaries/uclibc/rootfs.i386.ext2
+> rm -f /home/peko/tmp/br-i386/project_build_i386/uclibc/.fakeroot*
+> 
+> -- 
+> Bye, Peter Korsgaard
