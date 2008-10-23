@@ -1,48 +1,23 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 22 Oct 2008 15:38:18 -0700
-Subject: [Buildroot] [buildroot 0005674]: Outdated syslinux links.
-Message-ID: <69c76a68f337e43c488979ddd352b26d@bugs.uclibc.org>
+From: Adam McLaurin <buildroot@irotas.net>
+Date: Wed, 22 Oct 2008 20:11:01 -0400
+Subject: [Buildroot] Error building buildroot r23768
+In-Reply-To: <1224714192.16050.1280744193@webmail.messagingengine.com>
+References: <1224714192.16050.1280744193@webmail.messagingengine.com>
+Message-ID: <1224720661.6200.1280758491@webmail.messagingengine.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+It seems that this problem only occurs if you check out buildroot from
+SVN (r23768). I tried the latest few snapshots and none exhibit this
+behavior. Odd!
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=5674 
-====================================================================== 
-Reported By:                ksnieck
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   5674
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             10-22-2008 15:38 PDT
-Last Modified:              10-22-2008 15:38 PDT
-====================================================================== 
-Summary:                    Outdated syslinux links.
-Description: 
-When configuring for pxelinux or syslinux images, build fails because
-syslinux has since been updated and the version number buildroot looks for
-is no longer at kernel.org.
-Changing the version number and commenting out the bit about the patch, in
-the buildroot/target/x86/syslinux/syslinux.mk file causes the build to
-complete succesfully, but I don't know what the patch was doing, so it
-might not do what it was intended to anymore.
+-Adam
 
-====================================================================== 
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-10-22-08 15:38  ksnieck        New Issue                                    
-10-22-08 15:38  ksnieck        Status                   new => assigned     
-10-22-08 15:38  ksnieck        Assigned To               => buildroot       
-======================================================================
+On Wed, 22 Oct 2008 18:23:12 -0400, "Adam McLaurin"
+<buildroot@irotas.net> said:
+> I am having problems building buildroot r23768 on both my home and work
+> Ubuntu boxes. I get the same error on both:
