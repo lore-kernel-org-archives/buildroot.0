@@ -1,11 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 23 Oct 2008 16:36:09 +0200
-Subject: [Buildroot] New to embedded Linux... questions ref. buildroot
-In-Reply-To: <20081023133805.GB956@mx.loc> (Bernhard Reutner-Fischer's message
-	of "Thu\, 23 Oct 2008 15\:38\:05 +0200")
-References: <6.2.5.6.2.20081023070550.02f4eb98@rkt-tech.com>
-	<20081023133805.GB956@mx.loc>
-Message-ID: <874p33idk6.fsf@macbook.be.48ers.dk>
+Date: Thu, 23 Oct 2008 16:38:18 +0200
+Subject: [Buildroot] Busybox build fails with external toolchain
+In-Reply-To: <20081023133045.GA956@mx.loc> (Bernhard Reutner-Fischer's message
+	of "Thu\, 23 Oct 2008 15\:30\:45 +0200")
+References: <c88e466f0810230239m298d6b09v92a11fdb4ce5f077@mail.gmail.com>
+	<87y70fd4ig.fsf@macbook.be.48ers.dk> <20081023133045.GA956@mx.loc>
+Message-ID: <87zlkvgyw5.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,19 +14,16 @@ To: buildroot@busybox.net
 
 >>>>> "Bernhard" == Bernhard Reutner-Fischer <rep.dot.nop@gmail.com> writes:
 
- Bernhard> On Thu, Oct 23, 2008 at 07:47:54AM -0400, Eric wrote:
- >> Next step was to download buildroot and see if I can create images 
- >> from that.  Downloaded buildroot-avr32-v2.2.0.tar.bz2 from the Atmel 
- >> site and after several missteps was able to get it to build to completion.
+Hi,
 
- Bernhard> Note that the above is not buildroot (as should be
- Bernhard> mentioned somewhere where you downloaded it).
- Bernhard> http://buildroot/uClibc.org/
+ >> The external toolchain stuff is known to be kinda flaky - But maybe
+ >> your problem is the ~ - Could you try with an absolute path to the
+ >> external toolchain?
 
-That's http://buildroot.uclibc.org ;)
+ Bernhard> '~' != $HOME unless
 
-What Bernhard means is that you should ask Atmel for support on their
-buildroot fork, we cannot help you.
+Indeed, that's what I thought. There might be other packages having
+issues with ~ as well though, so better use the full path instead.
 
 -- 
 Bye, Peter Korsgaard
