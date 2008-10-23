@@ -1,27 +1,27 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 23 Oct 2008 20:54:21 +0200
-Subject: [Buildroot] lsof updated to 4.81
-In-Reply-To: <1224782256.32653.1280897733@webmail.messagingengine.com> (Adam
-	McLaurin's message of "Thu\, 23 Oct 2008 13\:17\:36 -0400")
-References: <1224782256.32653.1280897733@webmail.messagingengine.com>
-Message-ID: <87vdvjcfc2.fsf@macbook.be.48ers.dk>
+From: Savin Gorup <savin.gorup@gmail.com>
+Date: Thu, 23 Oct 2008 22:55:57 +0200
+Subject: [Buildroot] [PATCH] SocketCAN Tools in buildroot
+Message-ID: <b8db1b750810231355v4cab04cfgd2844bfad2c161c8@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Adam" == Adam McLaurin <buildroot@irotas.net> writes:
-
 Hi,
 
- Adam> It looks like lsof just updated to 4.81, and they moved the old
- Adam> 4.80 tarball to a different directory on their FTP
- Adam> server. Unfortunately this breaks the buildroot download link.
+this patch adds support for SocketCAN userspace tools.
+Works for me, but it may be of use to somebody else.
+I decided to go for SVN trunk since last tagged revision is ancient.
+The patch is similar to i2ctools and tools are put in same section.
+Please comment and apply if OK.
 
- Adam> Just a heads up!
-
-Thanks, fixed in r23773.
-
--- 
-Bye, Peter Korsgaard
+Best regards,
+Savin Gorup
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: SocketCAN-buildroot-patch.diff
+Type: application/octet-stream
+Size: 3448 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20081023/f6cb67d0/attachment.obj 
