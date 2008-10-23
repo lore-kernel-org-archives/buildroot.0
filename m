@@ -1,38 +1,55 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Thu, 23 Oct 2008 03:24:43 -0700 (PDT)
-Subject: [Buildroot] svn commit:
-	trunk/buildroot/package/x11r7/xserver_xorg-server
-Message-ID: <20081023102443.4E3CC3C368@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Thu, 23 Oct 2008 03:24:59 -0700
+Subject: [Buildroot] [buildroot 0005684]: Xorg need font misc-misc and font
+	alias
+Message-ID: <40033a4ae95a6e31a14a9a86338d229d@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-10-23 03:24:42 -0700 (Thu, 23 Oct 2008)
-New Revision: 23769
 
-Log:
-x11r7/xserver: select misc font + font alias
+The following issue has been CLOSED 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=5684 
+====================================================================== 
+Reported By:                robang74
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   5684
+Category:                   Shared Library Support
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
+====================================================================== 
+Date Submitted:             10-23-2008 03:19 PDT
+Last Modified:              10-23-2008 03:24 PDT
+====================================================================== 
+Summary:                    Xorg need font misc-misc and font alias
+Description: 
+Xorg need font misc-misc and font alias in order to run otherwise it fails
+with this error: "could not load font ?fixed?"
+====================================================================== 
 
-Closes #5684.
+---------------------------------------------------------------------- 
+ jacmet - 10-23-08 03:24  
+---------------------------------------------------------------------- 
+Thanks, committed as r23769 
 
-Modified:
-   trunk/buildroot/package/x11r7/xserver_xorg-server/Config.in
-
-
-Changeset:
-Modified: trunk/buildroot/package/x11r7/xserver_xorg-server/Config.in
-===================================================================
---- trunk/buildroot/package/x11r7/xserver_xorg-server/Config.in	2008-10-22 20:12:28 UTC (rev 23768)
-+++ trunk/buildroot/package/x11r7/xserver_xorg-server/Config.in	2008-10-23 10:24:42 UTC (rev 23769)
-@@ -11,6 +11,8 @@
- 	select BR2_PACKAGE_XPROTO_RANDRPROTO
- 	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_FREETYPE
-+	select BR2_PACKAGE_XFONT_FONT_ALIAS
-+	select BR2_PACKAGE_XFONT_FONT_MISC_MISC
- 	select BR2_PACKAGE_XLIB_LIBX11
- 	select BR2_PACKAGE_XLIB_LIBXAU
- 	select BR2_PACKAGE_XLIB_LIBXAW
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+10-23-08 03:19  robang74       New Issue                                    
+10-23-08 03:19  robang74       Status                   new => assigned     
+10-23-08 03:19  robang74       Assigned To               => buildroot       
+10-23-08 03:19  robang74       File Added: xserver_xorg-server.patch            
+       
+10-23-08 03:19  robang74       Issue Monitored: robang74                    
+10-23-08 03:24  jacmet         Status                   assigned => closed  
+10-23-08 03:24  jacmet         Note Added: 0014014                          
+======================================================================
