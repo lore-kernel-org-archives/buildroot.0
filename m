@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 24 Oct 2008 05:46:26 -0700
+Date: Fri, 24 Oct 2008 06:55:37 -0700
 Subject: [Buildroot] [buildroot 0005714]: bug with jamvm + concierge +
 	classpath
-Message-ID: <8d3bb4c4faeb5378126eb51db8126aef@bugs.uclibc.org>
+Message-ID: <8f1de456dea15de9ba12386c9c9893d8@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +10,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=5714 
 ====================================================================== 
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             10-24-2008 05:46 PDT
-Last Modified:              10-24-2008 05:46 PDT
+Last Modified:              10-24-2008 06:55 PDT
 ====================================================================== 
 Summary:                    bug with jamvm + concierge + classpath
 Description: 
@@ -85,10 +85,20 @@ make[1]: quittant le r?pertoire ?
 
 ====================================================================== 
 
+---------------------------------------------------------------------- 
+ tpetazzoni - 10-24-08 06:55  
+---------------------------------------------------------------------- 
+The problem at the beginning is that it tries to link with the host libjpeg
+instead of the target libjpeg. Not sure why, though, and I don't really get
+why setting TARGET_DIR would solve the problem. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
 10-24-08 05:46  sylvain        New Issue                                    
 10-24-08 05:46  sylvain        Status                   new => assigned     
 10-24-08 05:46  sylvain        Assigned To               => buildroot       
+10-24-08 05:49  sylvain        Issue Monitored: sylvain                     
+10-24-08 05:50  sylvain        Issue End Monitor: sylvain                    
+10-24-08 06:55  tpetazzoni     Note Added: 0014104                          
 ======================================================================
