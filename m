@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 24 Oct 2008 06:55:37 -0700
+Date: Fri, 24 Oct 2008 10:35:23 -0700
 Subject: [Buildroot] [buildroot 0005714]: bug with jamvm + concierge +
 	classpath
-Message-ID: <8f1de456dea15de9ba12386c9c9893d8@busybox.net>
+Message-ID: <1ee36abd475bd8f14e211fe2803e6a27@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             10-24-2008 05:46 PDT
-Last Modified:              10-24-2008 06:55 PDT
+Last Modified:              10-24-2008 10:35 PDT
 ====================================================================== 
 Summary:                    bug with jamvm + concierge + classpath
 Description: 
@@ -92,6 +92,15 @@ The problem at the beginning is that it tries to link with the host libjpeg
 instead of the target libjpeg. Not sure why, though, and I don't really get
 why setting TARGET_DIR would solve the problem. 
 
+---------------------------------------------------------------------- 
+ Correa - 10-24-08 10:35  
+---------------------------------------------------------------------- 
+It did build ok for me using avr32 as target.
+
+I'm using latest svn (r23778 at the moment).
+Try updating. There were changes in the Makefile.autotools.in that might
+affect your build. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -101,4 +110,5 @@ Date Modified   Username       Field                    Change
 10-24-08 05:49  sylvain        Issue Monitored: sylvain                     
 10-24-08 05:50  sylvain        Issue End Monitor: sylvain                    
 10-24-08 06:55  tpetazzoni     Note Added: 0014104                          
+10-24-08 10:35  Correa         Note Added: 0014114                          
 ======================================================================
