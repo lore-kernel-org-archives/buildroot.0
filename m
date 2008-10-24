@@ -1,71 +1,48 @@
 From: Markus Heidelberg <markus.heidelberg@web.de>
-Date: Sat, 25 Oct 2008 01:08:06 +0200
-Subject: [Buildroot] [PATCH] package: remove/replace PKG_CONFIG_SYSROOT
-Message-ID: <200810250108.06823.markus.heidelberg@web.de>
+Date: Sat, 25 Oct 2008 01:09:44 +0200
+Subject: [Buildroot] [PATCH] docker: s/PKGCONFIG/PKG_CONFIG/ to be consistent
+Message-ID: <200810250109.44430.markus.heidelberg@web.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-PKG_CONFIG_SYSROOT is not recognized by pkg-config,
-PKG_CONFIG_SYSROOT_DIR is the valid environment variable name.
 ---
- package/audio/libogg/libogg.mk       |    1 -
- package/audio/libvorbis/libvorbis.mk |    1 -
- package/docker/docker.mk             |    2 +-
- package/editors/vim/vim.mk           |    2 +-
- 4 files changed, 2 insertions(+), 4 deletions(-)
+ package/docker/docker-1.5-pkgconfig.patch |    4 ++--
+ package/docker/docker.mk                  |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/audio/libogg/libogg.mk b/package/audio/libogg/libogg.mk
-index 91deabe..27ecfd1 100644
---- a/package/audio/libogg/libogg.mk
-+++ b/package/audio/libogg/libogg.mk
-@@ -26,7 +26,6 @@ $(LIBOGG_DIR)/.configured: $(LIBOGG_DIR)/.source
- 		CFLAGS="$(TARGET_CFLAGS)" \
- 		PKG_CONFIG_PATH="$(STAGING_DIR)/lib/pkconfig:$(STAGING_DIR)/usr/lib/pkgconfig" \
- 		PKG_CONFIG="$(STAGING_DIR)/usr/bin/pkg-config" \
--		PKG_CONFIG_SYSROOT=$(STAGING_DIR) \
- 		./configure \
- 		--target=$(GNU_TARGET_NAME) \
- 		--host=$(GNU_TARGET_NAME) \
-diff --git a/package/audio/libvorbis/libvorbis.mk b/package/audio/libvorbis/libvorbis.mk
-index 6e72ad5..19ac354 100644
---- a/package/audio/libvorbis/libvorbis.mk
-+++ b/package/audio/libvorbis/libvorbis.mk
-@@ -25,7 +25,6 @@ $(LIBVORBIS_DIR)/.configured: $(LIBVORBIS_DIR)/.source
- 		CFLAGS="$(TARGET_CFLAGS)" \
- 		PKG_CONFIG_PATH="$(STAGING_DIR)/lib/pkconfig:$(STAGING_DIR)/usr/lib/pkgconfig" \
- 		PKG_CONFIG="$(STAGING_DIR)/usr/bin/pkg-config" \
--		PKG_CONFIG_SYSROOT=$(STAGING_DIR) \
- 		./configure \
- 		--target=$(GNU_TARGET_NAME) \
- 		--host=$(GNU_TARGET_NAME) \
+diff --git a/package/docker/docker-1.5-pkgconfig.patch b/package/docker/docker-1.5-pkgconfig.patch
+index cba4d81..1b56b1b 100644
+--- a/package/docker/docker-1.5-pkgconfig.patch
++++ b/package/docker/docker-1.5-pkgconfig.patch
+@@ -13,11 +13,11 @@
+  $(target): $(sources:.c=.o)
+  	$(CC) $(CFLAGS) -L$(XLIBPATH) -lX11 \
+ -		`pkg-config --libs glib-2.0` $^ -o $@
+-+		`$(PKGCONFIG) --libs glib-2.0` $^ -o $@
+++		`$(PKG_CONFIG) --libs glib-2.0` $^ -o $@
+  
+  %.o: %.c
+ -	$(CC) -c $(CFLAGS) `pkg-config --cflags glib-2.0` $<
+-+	$(CC) -c $(CFLAGS) `$(PKGCONFIG) --cflags glib-2.0` $<
+++	$(CC) -c $(CFLAGS) `$(PKG_CONFIG) --cflags glib-2.0` $<
+  
+  version.h: version.h.in Makefile
+  	sed -e "s/@VERSION@/$(VERSION)/" version.h.in > $@
 diff --git a/package/docker/docker.mk b/package/docker/docker.mk
-index f8f6360..78137cc 100644
+index 78137cc..1e41ea9 100644
 --- a/package/docker/docker.mk
 +++ b/package/docker/docker.mk
-@@ -16,7 +16,7 @@ DOCKER_MAKE_OPT = CC=$(TARGET_CC) CXX=$(TARGET_CXX) LD=$(TARGET_LD) \
+@@ -15,7 +15,7 @@ DOCKER_MAKE_OPT = CC=$(TARGET_CC) CXX=$(TARGET_CXX) LD=$(TARGET_LD) \
+ 						-I$(STAGING_DIR)/usr/include/glib-2.0 \
  						-I$(STAGING_DIR)/usr/lib/glib-2.0/include" \
  					LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
- 					PKGCONFIG="$(STAGING_DIR)/usr/bin/pkg-config" \
--					PKG_CONFIG_SYSROOT="$(STAGING_DIR)" \
-+					PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)" \
+-					PKGCONFIG="$(STAGING_DIR)/usr/bin/pkg-config" \
++					PKG_CONFIG="$(STAGING_DIR)/usr/bin/pkg-config" \
+ 					PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)" \
  					PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig"
  
- DOCKER_INSTALL_TARGET_OPT = PREFIX=$(TARGET_DIR)/usr install
-diff --git a/package/editors/vim/vim.mk b/package/editors/vim/vim.mk
-index cc15bf6..2979a42 100644
---- a/package/editors/vim/vim.mk
-+++ b/package/editors/vim/vim.mk
-@@ -41,7 +41,7 @@ $(VIM_DIR)/.configured: $(VIM_DIR)/.patched
- 		CPP="$(TARGET_CPP)" \
- 		CFLAGS="$(TARGET_CFLAGS)" \
- 		STRIP="$(TARGET_STRIP)" \
--		PKG_CONFIG_SYSROOT="$(STAGING_DIR)" \
-+		PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)" \
- 		PKG_CONFIG="$(STAGING_DIR)/usr/bin/pkg-config" \
- 		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig:$(PKG_CONFIG_PATH)" \
- 		PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
 -- 
 1.5.6.4
