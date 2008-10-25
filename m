@@ -1,189 +1,55 @@
 From: Markus Heidelberg <markus.heidelberg@web.de>
-Date: Sat, 25 Oct 2008 03:19:08 +0200
-Subject: [Buildroot] [PATCH] qtopia4: reduce the use of BR2_PACKAGE_QTOPIA4
-Message-ID: <200810250319.09175.markus.heidelberg@web.de>
+Date: Sat, 25 Oct 2008 04:01:17 +0200
+Subject: [Buildroot] [PATCH] lsof,
+	m4: use variables from BR instead of uClibc
+Message-ID: <200810250401.18342.markus.heidelberg@web.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use one conditional if statement instead of several single "depends on".
+UCLIB_HAS_* is not defined in Buildroot space, so the conditions always
+evaluate to the same result. Use appropriate Buildroot variables.
 ---
- package/qtopia4/Config.in |   27 ++++++---------------------
- 1 files changed, 6 insertions(+), 21 deletions(-)
 
-diff --git a/package/qtopia4/Config.in b/package/qtopia4/Config.in
-index 37733b6..11c05f7 100644
---- a/package/qtopia4/Config.in
-+++ b/package/qtopia4/Config.in
-@@ -7,16 +7,16 @@ config BR2_PACKAGE_QTOPIA4
+Note: This change is untested and m4 still uses UCLIBC_HAS_REGEX, where I
+don't know how to handle it.
+
+ package/lsof/lsof.mk |    4 ++--
+ package/m4/m4.mk     |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/lsof/lsof.mk b/package/lsof/lsof.mk
+index 2e9f5fd..85acd87 100644
+--- a/package/lsof/lsof.mk
++++ b/package/lsof/lsof.mk
+@@ -38,11 +38,11 @@ $(LSOF_DIR)/.configured: $(LSOF_DIR)/.unpacked
+ 	touch $(LSOF_DIR)/.configured
  
- 	  http://www.trolltech.com/
- 
-+if BR2_PACKAGE_QTOPIA4
-+
- config BR2_PACKAGE_QTOPIA4_DEBUG
- 	bool "Compile with debug support"
--	depends on BR2_PACKAGE_QTOPIA4
- 	help
- 	  If unsure, say N.
- 
- choice
- 	prompt "Library type"
- 	default BR2_PACKAGE_QTOPIA4_SHARED
--	depends on BR2_PACKAGE_QTOPIA4
- 	help
- 	  Selects the library type: Shared or Static
- 
-@@ -40,7 +40,6 @@ endchoice
- choice
- 	prompt "Qtopia 4 Core license type"
- 	default BR2_PACKAGE_QTOPIA4_LICENSE_TYPE_GPL
--	depends on BR2_PACKAGE_QTOPIA4
- 	help
- 	  Selects the type of license you which to use for Qtopia 4 Core.
- 
-@@ -54,7 +53,7 @@ endchoice
- 
- config BR2_PACKAGE_QTOPIA4_GPL_LICENSE_APPROVED
- 	bool "Approve Qtopia Core 4 GPL licence"
--	depends on BR2_PACKAGE_QTOPIA4 && BR2_PACKAGE_QTOPIA4_LICENSE_TYPE_GPL
-+	depends on BR2_PACKAGE_QTOPIA4_LICENSE_TYPE_GPL
- 	help
- 	  Select this if you approve the GNU GENERAL PUBLIC LICENSE Version 2
- 	  on the Qtopia Core 4 library. By doing this you will not be asked
-@@ -67,7 +66,7 @@ config BR2_PACKAGE_QTOPIA4_GPL_LICENSE_APPROVED
- config BR2_PACKAGE_QTOPIA4_COMMERCIAL_USERNAME
- 	string "Qtopia Core 4 Commercial License Username"
- 	default ""
--	depends on BR2_PACKAGE_QTOPIA4 && BR2_PACKAGE_QTOPIA4_LICENSE_TYPE_COMMERCIAL
-+	depends on BR2_PACKAGE_QTOPIA4_LICENSE_TYPE_COMMERCIAL
- 	help
- 	  Commercial users can download their source directly by
- 	  providing a username.
-@@ -75,14 +74,13 @@ config BR2_PACKAGE_QTOPIA4_COMMERCIAL_USERNAME
- config BR2_PACKAGE_QTOPIA4_COMMERCIAL_PASSWORD
- 	string "Qtopia Core 4 Commercial License Password"
- 	default ""
--	depends on BR2_PACKAGE_QTOPIA4 && BR2_PACKAGE_QTOPIA4_LICENSE_TYPE_COMMERCIAL
-+	depends on BR2_PACKAGE_QTOPIA4_LICENSE_TYPE_COMMERCIAL
- 	help
- 	  Commercial users can download their source directly by
- 	  providing a password.
- 
- config BR2_PACKAGE_QTOPIA4_QT3SUPPORT
- 	bool "Compatibility with Qt3"
--	depends on BR2_PACKAGE_QTOPIA4
- 	help
- 	  Turns on support for older Qt3. This will create an additional
- 	  library with proxy code and increase the space required on target.
-@@ -91,26 +89,22 @@ config BR2_PACKAGE_QTOPIA4_QT3SUPPORT
- config BR2_PACKAGE_QTOPIA4_DEPTHS
- 	string "color depths to support"
- 	default "-depths 24,16,8"
--	depends on BR2_PACKAGE_QTOPIA4
- 	help
- 	  Which color depths to support for the library. Default is "-depths
- 	  24,16,8". Different depths are specified by a comma separated list.
- 
- config BR2_PACKAGE_QTOPIA4_GIF
- 	bool "Enable GIF support"
--	depends on BR2_PACKAGE_QTOPIA4
- 	help
- 	  This compiles and installs the plugin for GIF reading support.
- 
- config BR2_PACKAGE_QTOPIA4_LIBMNG
- 	bool "Enable libmng support"
--	depends on BR2_PACKAGE_QTOPIA4
- 	help
- 	  This compiles and installs the plugin for MNG support.
- 
- choice
- 	prompt "JPEG support"
--	depends on BR2_PACKAGE_QTOPIA4
- 	default BR2_PACKAGE_QTOPIA4_NOJPEG
- 	help
- 	  Select libjpeg support.
-@@ -134,7 +128,6 @@ endchoice
- 
- choice
- 	prompt "PNG support"
--	depends on BR2_PACKAGE_QTOPIA4
- 	default BR2_PACKAGE_QTOPIA4_NOPNG
- 	help
- 	  Select which library to use if PNG support should be enabled.
-@@ -152,7 +145,6 @@ endchoice
- 
- choice
- 	prompt "TIFF support"
--	depends on BR2_PACKAGE_QTOPIA4
- 	default BR2_PACKAGE_QTOPIA4_NOTIFF
- 	help
- 	  Select which library to use if TIFF support should be enabled.
-@@ -170,7 +162,6 @@ endchoice
- 
- choice
- 	prompt "zlib support"
--	depends on BR2_PACKAGE_QTOPIA4
- 	default BR2_PACKAGE_QTOPIA4_QTZLIB
- 	help
- 	  Select zlib support.
-@@ -189,7 +180,6 @@ endchoice
- 								
- choice
- 	prompt "freetype2 support"
--	depends on BR2_PACKAGE_QTOPIA4
- 	default BR2_PACKAGE_QTOPIA4_NOFREETYPE
- 	help
- 	  Select freetype2 support.
-@@ -231,13 +221,11 @@ config BR2_PACKAGE_QTOPIA4_EMB_PLATFORM
- 	default "generic"	if BR2_sh
- 	default "generic"	if BR2_sh64
- 	default "generic"	if BR2_sparc
--	depends on BR2_PACKAGE_QTOPIA4
- 	help
- 	  The target platform.
- 
- menuconfig BR2_PACKAGE_QTOPIA4_SQL_MODULE
- 	bool "SQL Module"
--	depends on BR2_PACKAGE_QTOPIA4
- 	help
- 	  Compile Qtopia SQL Module
- if BR2_PACKAGE_QTOPIA4_SQL_MODULE
-@@ -246,28 +234,24 @@ endif
- 
- config BR2_PACKAGE_QTOPIA4_XMLPATTERNS
- 	bool "XML Patterns Module"
--	depends on BR2_PACKAGE_QTOPIA4
- 	help
- 	  Build QtXmlPatterns module.
- 	  If unsure, say n
- 
- config BR2_PACKAGE_QTOPIA4_SVG
- 	bool "SVG Module"
--	depends on BR2_PACKAGE_QTOPIA4
- 	help
- 	  Build the SVG module.
- 	  If unsure, say n
- 
- config BR2_PACKAGE_QTOPIA4_WEBKIT
- 	bool "WebKit Module"
--	depends on BR2_PACKAGE_QTOPIA4
- 	help
- 	  Build the WebKit module.
- 	  If unsure, say n.
- 
- config BR2_PACKAGE_QTOPIA4_OPENSSL
- 	bool "Enable OpenSSL support"
--	depends on BR2_PACKAGE_QTOPIA4
- 	select BR2_PACKAGE_OPENSSL
- 	help
- 	  Enable support for the OpenSSL encryption library. If you use
-@@ -275,3 +259,4 @@ config BR2_PACKAGE_QTOPIA4_OPENSSL
- 	  target.
- 	  If unsure, say n.
- 
-+endif # BR2_PACKAGE_QTOPIA4
+ $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src/$(LSOF_BINARY): $(LSOF_DIR)/.configured
+-ifeq ($(UCLIBC_HAS_WCHAR),)
++ifeq ($(BR2_USE_WCHAR),)
+ 	$(SED) 's,^#define[[:space:]]*HASWIDECHAR.*,#undef HASWIDECHAR,' $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src/machine.h
+ 	$(SED) 's,^#define[[:space:]]*WIDECHARINCL.*,,' $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src/machine.h
+ endif
+-ifeq ($(UCLIBC_HAS_LOCALE),)
++ifeq ($(BR2_ENABLE_LOCALE),)
+ 	$(SED) 's,^#define[[:space:]]*HASSETLOCALE.*,#undef HASSETLOCALE,' $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src/machine.h
+ endif
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) DEBUG="$(TARGET_CFLAGS) $(BR2_LSOF_CFLAGS)" -C $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src
+diff --git a/package/m4/m4.mk b/package/m4/m4.mk
+index 570f9ac..8c57bef 100644
+--- a/package/m4/m4.mk
++++ b/package/m4/m4.mk
+@@ -15,7 +15,7 @@ M4_TARGET_BINARY:=usr/bin/m4
+ ifeq ($(UCLIBC_HAS_REGEX),y)
+ gl_cv_func_re_compile_pattern_working=gl_cv_func_re_compile_pattern_working=yes
+ endif
+-ifneq ($(UCLIBC_HAS_WCHAR),y)
++ifneq ($(BR2_USE_WCHAR),y)
+ gt_cv_c_wchar_t=gt_cv_c_wchar_t=no
+ gl_cv_absolute_wchar_h=gl_cv_absolute_wchar_h=__fpending.h
+ endif
 -- 
 1.5.6.4
