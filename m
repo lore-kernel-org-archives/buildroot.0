@@ -1,55 +1,106 @@
-From: Markus Heidelberg <markus.heidelberg@web.de>
-Date: Sat, 25 Oct 2008 04:01:17 +0200
-Subject: [Buildroot] [PATCH] lsof,
-	m4: use variables from BR instead of uClibc
-Message-ID: <200810250401.18342.markus.heidelberg@web.de>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Fri, 24 Oct 2008 21:51:15 -0700
+Subject: [Buildroot] [buildroot 0005724]: libglib2 compilation crash on
+	/usr/bin/glib-genmarshal
+Message-ID: <0f38ab9b630363a060299cc953399a70@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-UCLIB_HAS_* is not defined in Buildroot space, so the conditions always
-evaluate to the same result. Use appropriate Buildroot variables.
----
 
-Note: This change is untested and m4 still uses UCLIBC_HAS_REGEX, where I
-don't know how to handle it.
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=5724 
+====================================================================== 
+Reported By:                robang74
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   5724
+Category:                   Shared Library Support
+Reproducibility:            always
+Severity:                   crash
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             10-24-2008 21:51 PDT
+Last Modified:              10-24-2008 21:51 PDT
+====================================================================== 
+Summary:                    libglib2 compilation crash on
+/usr/bin/glib-genmarshal
+Description: 
+make[3]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/glib'
+Making all in gobject
+make[3]: Entering directory
+`/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/gobject'
+/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
+-Os  -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/include
+--sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
+/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
+-march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64 -DHAVE_CONFIG_H -I. -I.. 
+-DG_LOG_DOMAIN=\"GLib-GObject\" -I.. -I../glib -I.. -DG_ENABLE_DEBUG
+-DG_DISABLE_DEPRECATED -DGOBJECT_COMPILATION -DG_DISABLE_CONST_RETURNS
+-pthread  -g -O2 -Wall -MT glib-genmarshal.o -MD -MP -MF
+.deps/glib-genmarshal.Tpo -c -o glib-genmarshal.o glib-genmarshal.c
+mv -f .deps/glib-genmarshal.Tpo .deps/glib-genmarshal.Po
+/bin/bash ../libtool --tag=CC   --mode=link
+/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
+-Os  -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/include
+--sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
+/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
+-march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64  -g -O2 -Wall   -o glib-genmarshal
+glib-genmarshal.o ../glib/libglib-2.0.la -lintl  
+mkdir .libs
+/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
+-Os -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/include
+--sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
+/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
+-march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64 -g -O2 -Wall -o glib-genmarshal glib-genmarshal.o 
+../glib/.libs/libglib-2.0.so -lintl   -Wl,--rpath
+-Wl,/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/glib/.libs
+/usr/bin/make glib-genmarshal
+make[4]: Entering directory
+`/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/gobject'
+make[4]: `glib-genmarshal' is up to date.
+make[4]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/gobject'
+echo "#ifndef __G_MARSHAL_H__" > xgen-gmh \
+	&& echo "#define __G_MARSHAL_H__" >> xgen-gmh \
+	&& /usr/bin/glib-genmarshal --nostdinc --prefix=g_cclosure_marshal
+./gmarshal.list --header >> xgen-gmh \
+	&& echo "#endif /* __G_MARSHAL_H__ */" >> xgen-gmh \
+	&& (cmp -s xgen-gmh gmarshal.h 2>/dev/null || cp xgen-gmh gmarshal.h) \
+	&& rm -f xgen-gmh xgen-gmh~ \
+	&& echo timestamp > stamp-gmarshal.h
+/bin/bash: line 2: /usr/bin/glib-genmarshal: No such file or directory
+make[3]: *** [stamp-gmarshal.h] Error 127
+make[3]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/gobject'
+make[2]: *** [all-recursive] Error 1
+make[2]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4'
+make: ***
+[/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/.stamp_built]
+Error 2
 
- package/lsof/lsof.mk |    4 ++--
- package/m4/m4.mk     |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+====================================================================== 
 
-diff --git a/package/lsof/lsof.mk b/package/lsof/lsof.mk
-index 2e9f5fd..85acd87 100644
---- a/package/lsof/lsof.mk
-+++ b/package/lsof/lsof.mk
-@@ -38,11 +38,11 @@ $(LSOF_DIR)/.configured: $(LSOF_DIR)/.unpacked
- 	touch $(LSOF_DIR)/.configured
- 
- $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src/$(LSOF_BINARY): $(LSOF_DIR)/.configured
--ifeq ($(UCLIBC_HAS_WCHAR),)
-+ifeq ($(BR2_USE_WCHAR),)
- 	$(SED) 's,^#define[[:space:]]*HASWIDECHAR.*,#undef HASWIDECHAR,' $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src/machine.h
- 	$(SED) 's,^#define[[:space:]]*WIDECHARINCL.*,,' $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src/machine.h
- endif
--ifeq ($(UCLIBC_HAS_LOCALE),)
-+ifeq ($(BR2_ENABLE_LOCALE),)
- 	$(SED) 's,^#define[[:space:]]*HASSETLOCALE.*,#undef HASSETLOCALE,' $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src/machine.h
- endif
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) DEBUG="$(TARGET_CFLAGS) $(BR2_LSOF_CFLAGS)" -C $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src
-diff --git a/package/m4/m4.mk b/package/m4/m4.mk
-index 570f9ac..8c57bef 100644
---- a/package/m4/m4.mk
-+++ b/package/m4/m4.mk
-@@ -15,7 +15,7 @@ M4_TARGET_BINARY:=usr/bin/m4
- ifeq ($(UCLIBC_HAS_REGEX),y)
- gl_cv_func_re_compile_pattern_working=gl_cv_func_re_compile_pattern_working=yes
- endif
--ifneq ($(UCLIBC_HAS_WCHAR),y)
-+ifneq ($(BR2_USE_WCHAR),y)
- gt_cv_c_wchar_t=gt_cv_c_wchar_t=no
- gl_cv_absolute_wchar_h=gl_cv_absolute_wchar_h=__fpending.h
- endif
--- 
-1.5.6.4
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+10-24-08 21:51  robang74       New Issue                                    
+10-24-08 21:51  robang74       Status                   new => assigned     
+10-24-08 21:51  robang74       Assigned To               => buildroot       
+======================================================================
