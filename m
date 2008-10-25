@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 24 Oct 2008 21:51:15 -0700
+Date: Fri, 24 Oct 2008 22:10:25 -0700
 Subject: [Buildroot] [buildroot 0005724]: libglib2 compilation crash on
 	/usr/bin/glib-genmarshal
-Message-ID: <0f38ab9b630363a060299cc953399a70@busybox.net>
+Message-ID: <67c1251220b97dc4c728d67992abc860@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +10,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=5724 
 ====================================================================== 
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             10-24-2008 21:51 PDT
-Last Modified:              10-24-2008 21:51 PDT
+Last Modified:              10-24-2008 22:10 PDT
 ====================================================================== 
 Summary:                    libglib2 compilation crash on
 /usr/bin/glib-genmarshal
@@ -97,10 +97,18 @@ Error 2
 
 ====================================================================== 
 
+---------------------------------------------------------------------- 
+ robang74 - 10-24-08 22:10  
+---------------------------------------------------------------------- 
+Solution: glib-genmarshal should be compiled for $HOST not for $TARGET
+system 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
 10-24-08 21:51  robang74       New Issue                                    
 10-24-08 21:51  robang74       Status                   new => assigned     
 10-24-08 21:51  robang74       Assigned To               => buildroot       
+10-24-08 22:09  robang74       Issue Monitored: robang74                    
+10-24-08 22:10  robang74       Note Added: 0014134                          
 ======================================================================
