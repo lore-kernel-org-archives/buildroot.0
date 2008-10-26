@@ -1,42 +1,25 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Sun, 26 Oct 2008 05:13:28 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/editors/vim
-Message-ID: <20081026121328.DA75F3C7FE@busybox.net>
+From: Thomas Lundquist <lists@zelow.no>
+Date: Sun, 26 Oct 2008 12:43:58 +0100
+Subject: [Buildroot] if !defined
+Message-ID: <20081026114358.GA14465@zelow.no>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-10-26 05:13:28 -0700 (Sun, 26 Oct 2008)
-New Revision: 23800
 
-Log:
-vim: add TARGET_CONFIGURE_OPTS
+Hi.
 
-Patch by Markus Heidelberg.
+I am messing with grub right now and using gcc 4.2.4 I end up with a problem with this:
 
-Modified:
-   trunk/buildroot/package/editors/vim/vim.mk
+#if !defined __UCLIBC__ || (defined __UCLIBC__ && defined __UCLIBC_HAS_LFS__)
+
+__UCLIBC_HAS_LFS__ is not defined and __UCLIBC__ is  but it still kicks in.
+
+Anyone seen this lately?
+
+(vsftpd seems to just work with the same line)
 
 
-Changeset:
-Modified: trunk/buildroot/package/editors/vim/vim.mk
-===================================================================
---- trunk/buildroot/package/editors/vim/vim.mk	2008-10-26 11:08:14 UTC (rev 23799)
-+++ trunk/buildroot/package/editors/vim/vim.mk	2008-10-26 12:13:28 UTC (rev 23800)
-@@ -36,11 +36,12 @@
- 
- $(VIM_DIR)/.configured: $(VIM_DIR)/.patched
- 	(cd $(VIM_DIR)/src; \
-+		$(TARGET_CONFIGURE_OPTS) \
-+		$(TARGET_CONFIGURE_ARGS) \
- 		CFLAGS="$(TARGET_CFLAGS)" \
- 		STRIP="$(TARGET_STRIP)" \
- 		PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
- 		PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
--        $(TARGET_CONFIGURE_ARGS) \
- 		./configure --prefix=/usr \
- 		--target=$(GNU_TARGET_NAME) \
- 		--host=$(GNU_TARGET_NAME) \
+Thomas.
