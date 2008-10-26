@@ -1,40 +1,55 @@
-From: Markus Heidelberg <markus.heidelberg@web.de>
-Date: Sun, 26 Oct 2008 14:37:57 +0200
-Subject: [Buildroot] [PATCH] package: remove/replace PKG_CONFIG_SYSROOT
-In-Reply-To: <20081025205424.78d812d4@surf>
-References: <200810250108.06823.markus.heidelberg@web.de>
-	<20081025205424.78d812d4@surf>
-Message-ID: <200810261337.58158.markus.heidelberg@web.de>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Sun, 26 Oct 2008 04:44:14 -0700
+Subject: [Buildroot] [buildroot 0005744]: fb.modes example copied from
+	kernel docs
+Message-ID: <f6bbb89a5d0ef78075fbec660a58a9b3@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni, 25.10.2008:
-> Le Sat, 25 Oct 2008 01:08:06 +0200,
-> Markus Heidelberg <markus.heidelberg@web.de> a ?crit :
-> 
-> > PKG_CONFIG_SYSROOT is not recognized by pkg-config,
-> > PKG_CONFIG_SYSROOT_DIR is the valid environment variable name.
-> 
-> These variables are already defined in TARGET_CONFIGURE_OPTS in
-> package/Makefile.in. Just drop them in your packages.
 
-I know, so I just removed it in libogg and libvorbis. Docker uses
-Makefile.autotools.in, here I forgot to just remove it. In vim
-TARGET_CONFIGURE_OPTS are not used, so I had to change SYSROOT to SYSROOT_DIR.
-I don't use any of these packages but wanted to get rid of the wrong
-PKG_CONFIG_SYSROOT_DIR variables in Buildroot, confusing me while working on
-other packages using pkg-config. I don't wanted to risk side effects, so I did
-the minimal work.
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=5744 
+====================================================================== 
+Reported By:                robang74
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   5744
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   feature
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             10-26-2008 03:59 PDT
+Last Modified:              10-26-2008 04:44 PDT
+====================================================================== 
+Summary:                    fb.modes example copied from kernel docs
+Description: 
+When fbset is compiled and installed in the rootfs an example of
+/etc/fb.modes from kernel docs should be installed too (if it does not
+exist yet).
+====================================================================== 
 
-When cleaning up the PKG_CONFIG stuff, there are 12 packages defining these
-variables on their own instead of using them from Makefile.in:
+---------------------------------------------------------------------- 
+ jacmet - 10-26-08 04:44  
+---------------------------------------------------------------------- 
+Wouldn't it make more sense to install one of the fb.modes shipped with
+fbset instead? (etc/fb.modes.*)
 
-find package -name *.mk -exec echo {} \; -exec grep -w "PKG_CONFIG\(\|_PATH\|SYSROOT_DIR\)" {} \; | grep PKG_CONFIG -B 1
+Is the cyberblade stuff representable for other gfx chips? 
 
-Also, since libogg and libvorbis used /lib/pkgconfig in addition to the normal
-/usr/lib/pkgconfig I just kept it in there.
-
-Markus
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+10-26-08 03:59  robang74       New Issue                                    
+10-26-08 03:59  robang74       Status                   new => assigned     
+10-26-08 03:59  robang74       Assigned To               => buildroot       
+10-26-08 03:59  robang74       File Added: fbset.mk.patch                    
+10-26-08 04:04  robang74       Issue Monitored: robang74                    
+10-26-08 04:44  jacmet         Note Added: 0014254                          
+======================================================================
