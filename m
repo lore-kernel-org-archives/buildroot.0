@@ -1,40 +1,25 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Sun, 26 Oct 2008 13:02:37 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libglib2
-Message-ID: <20081026200237.27C313C6D4@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 26 Oct 2008 21:02:26 +0100
+Subject: [Buildroot] [PATCH] libglib2: remove $(DISABLE_NLS) from
+	configure options
+In-Reply-To: <200810250216.21072.markus.heidelberg@web.de> (Markus
+	Heidelberg's message of "Sat\, 25 Oct 2008 02\:16\:20 +0200")
+References: <200810250216.21072.markus.heidelberg@web.de>
+Message-ID: <87fxmjdt0t.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-10-26 13:02:36 -0700 (Sun, 26 Oct 2008)
-New Revision: 23807
+>>>>> "Markus" == Markus Heidelberg <markus.heidelberg@web.de> writes:
 
-Log:
-libglib2: remove $(DISABLE_NLS) from configure options
+ Markus> The configure option --disable-nls is not supported anymore in glib
+ Markus> since version 2.0, see file ChangeLog.pre-2-0 line 544.
 
-The configure option --disable-nls is not supported anymore in glib
-since version 2.0, see file ChangeLog.pre-2-0 line 544.
+Thanks, committed.
 
-Patch by Markus Heidelberg.
+Does this mean that libglib2 should depend on BR2_ENABLE_LOCALE?
 
-Modified:
-   trunk/buildroot/package/libglib2/libglib2.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/libglib2/libglib2.mk
-===================================================================
---- trunk/buildroot/package/libglib2/libglib2.mk	2008-10-26 20:02:34 UTC (rev 23806)
-+++ trunk/buildroot/package/libglib2/libglib2.mk	2008-10-26 20:02:36 UTC (rev 23807)
-@@ -45,7 +45,7 @@
- 		gt_cv_c_wchar_t=$(if $(BR2_USE_WCHAR),yes,no)
- 
- LIBGLIB2_CONF_OPT = --enable-shared \
--		--enable-static $(DISABLE_NLS)
-+		--enable-static
- 
- LIBGLIB2_DEPENDENCIES = uclibc gettext libintl pkgconfig
- 
+-- 
+Bye, Peter Korsgaard
