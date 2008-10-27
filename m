@@ -1,14 +1,13 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 27 Oct 2008 10:12:15 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package: audio/libogg
-	audio/libvorbis docker edit etc...
-In-Reply-To: <200810270759.28374.markus.heidelberg@web.de> (Markus
-	Heidelberg's message of "Mon\, 27 Oct 2008 07\:59\:27 +0100")
-References: <20081026061944.0F6DE3C2B3@busybox.net>
-	<200810261437.05446.markus.heidelberg@web.de>
-	<87r663f91t.fsf@macbook.be.48ers.dk>
-	<200810270759.28374.markus.heidelberg@web.de>
-Message-ID: <87iqrebdw0.fsf@macbook.be.48ers.dk>
+Date: Mon, 27 Oct 2008 10:13:20 +0100
+Subject: [Buildroot] [PATCH] libglib2: remove $(DISABLE_NLS) from
+	configure options
+In-Reply-To: <200810270807.15968.markus.heidelberg@web.de> (Markus
+	Heidelberg's message of "Mon\, 27 Oct 2008 08\:07\:15 +0100")
+References: <200810250216.21072.markus.heidelberg@web.de>
+	<87fxmjdt0t.fsf@macbook.be.48ers.dk>
+	<200810270807.15968.markus.heidelberg@web.de>
+Message-ID: <87ej22bdu7.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,17 +18,15 @@ To: buildroot@busybox.net
 
 Hi,
 
- Markus> After looking into it again, the package seems a bit
- Markus> broken. `$(PKG_CONFIG) --cflags glib-2.0` evaluates to
- Markus> "-I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include", not
- Markus> the ones in staging_dir, so it uses the system include
- Markus> files. PKG_CONFIG_PATH has to be defined and
- Markus> PKG_CONFIG_SYSROOT_DIR, too. But it also uses the staging
- Markus> files hardcoded in the Makefile. Then have a look at XLIBPATH
- Markus> in the Makefile, which points to the system files. And
- Markus> LDFLAGS is never used.
+ >> Does this mean that libglib2 should depend on BR2_ENABLE_LOCALE?
 
-Yeah, the docker build system seems pretty broken :/
+ Markus> I'm not sure. Looking at DISABLE_NLS in Makefile.in, then
+ Markus> yes. I've also read a thread, saying that packages using glib
+ Markus> don't have to ask for locale support but can just rely on
+ Markus> having it. But I have no clue about the relationship between
+ Markus> UCLIBC_HAS_LOCALE and --disable/enable-nls.
+
+Probably it's handled with the libintl stuff when !BR2_ENABLE_LOCALE.
 
 -- 
 Bye, Peter Korsgaard
