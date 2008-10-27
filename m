@@ -1,35 +1,29 @@
-From: Adam McLaurin <buildroot@irotas.net>
-Date: Mon, 27 Oct 2008 09:21:34 -0400
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 27 Oct 2008 14:22:41 +0100
 Subject: [Buildroot] Unable to create files inside mounted root
 	filesystem
-In-Reply-To: <e4c675870810270615n2bb4e9dbwf86044668db35ad2@mail.gmail.com>
+In-Reply-To: <1225112903.16248.1281448757@webmail.messagingengine.com> (Adam
+	McLaurin's message of "Mon\, 27 Oct 2008 09\:08\:23 -0400")
 References: <1225112903.16248.1281448757@webmail.messagingengine.com>
-	<e4c675870810270615n2bb4e9dbwf86044668db35ad2@mail.gmail.com>
-Message-ID: <1225113694.19430.1281451485@webmail.messagingengine.com>
+Message-ID: <873aiimau6.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 27 Oct 2008 14:15:12 +0100, "Roberto A. Foglietta"
-<roberto.foglietta@gmail.com> said:
-> 2008/10/27 Adam McLaurin <buildroot@irotas.net>:
->  Welcome, I am newbie in buildroot me too, try this:
-> 
->  mount -o remount,rw /
-> 
->  It was useful in my bootable iso9660 from buildroot
-> 
->  Cheers,
+>>>>> "Adam" == Adam McLaurin <buildroot@irotas.net> writes:
+
+Hi,
 
 
-Thanks for the advice. I tried what you suggested, but no luck:
-/ # mount -o remount,rw /
-mount: cannot read /proc/mounts: No such file or directory
+ Adam> I hope this is a typical newbie question. I was finally able to
+ Adam> create a root filesystem (ext2) with buildroot, and I can mount
+ Adam> (-o loop) and chroot into it with no problems.
 
-Indeed, /proc is entirely empty. However, it is also empty when I mount
-the pre-built filesystem (from uclibc's website), so I don't think
-that's a problem.
+ Adam> The trouble is that I cannot create any files in the mounted
+ Adam> filesystem: / # touch foo touch: foo: No space left on device
 
--Adam
+That's because genext2fs only creates the file system exactly big
+enough for the buildroot files. If you want to have room for more
+stuff take a look at the BR2_TARGET_ROOTFS_EXT2_BLOCKS/INODES options:
