@@ -1,62 +1,40 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 26 Oct 2008 14:49:13 -0700
-Subject: [Buildroot] [buildroot 0005744]: fb.modes example copied from
-	kernel docs
-Message-ID: <e440326ff077c24f32b24844d1d3d7d4@busybox.net>
+From: Markus Heidelberg <markus.heidelberg@web.de>
+Date: Mon, 27 Oct 2008 07:59:27 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package: audio/libogg
+	audio/libvorbis docker edit etc...
+In-Reply-To: <87r663f91t.fsf@macbook.be.48ers.dk>
+References: <20081026061944.0F6DE3C2B3@busybox.net>
+	<200810261437.05446.markus.heidelberg@web.de>
+	<87r663f91t.fsf@macbook.be.48ers.dk>
+Message-ID: <200810270759.28374.markus.heidelberg@web.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Peter Korsgaard, 26.10.2008:
+> >>>>> "Markus" == Markus Heidelberg <markus.heidelberg@web.de> writes:
+> 
+> Hi,
+> 
+>  >> -					PKGCONFIG="$(STAGING_DIR)/usr/bin/pkg-config" \
+>  >> -					PKG_CONFIG_SYSROOT="$(STAGING_DIR)" \
+>  >> -					PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig"
+>  >> +					LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib"
+> 
+>  Markus> I think this will break docker, because MAKE_OPT is affected,
+>  Markus> not CONF_OPT.  And I just noticed that docker doesn't use
+>  Markus> autotools at all.
+> 
+> Yes, I re-added PKG_CONFIG=.. in r23796 - With that, it works for me.
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=5744 
-====================================================================== 
-Reported By:                robang74
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   5744
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   feature
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             10-26-2008 03:59 PDT
-Last Modified:              10-26-2008 14:49 PDT
-====================================================================== 
-Summary:                    fb.modes example copied from kernel docs
-Description: 
-When fbset is compiled and installed in the rootfs an example of
-/etc/fb.modes from kernel docs should be installed too (if it does not
-exist yet).
-====================================================================== 
+After looking into it again, the package seems a bit broken. `$(PKG_CONFIG)
+--cflags glib-2.0` evaluates to "-I/usr/include/glib-2.0
+-I/usr/lib/glib-2.0/include", not the ones in staging_dir, so it uses the
+system include files. PKG_CONFIG_PATH has to be defined and
+PKG_CONFIG_SYSROOT_DIR, too. But it also uses the staging files hardcoded in
+the Makefile. Then have a look at XLIBPATH in the Makefile, which points to
+the system files. And LDFLAGS is never used.
 
----------------------------------------------------------------------- 
- jacmet - 10-26-08 04:44  
----------------------------------------------------------------------- 
-Wouldn't it make more sense to install one of the fb.modes shipped with
-fbset instead? (etc/fb.modes.*)
-
-Is the cyberblade stuff representable for other gfx chips? 
-
----------------------------------------------------------------------- 
- robang74 - 10-26-08 14:49  
----------------------------------------------------------------------- 
-I tought one example would be enought and I put in the first I found.
-Following patch will put in all I have found. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-10-26-08 03:59  robang74       New Issue                                    
-10-26-08 03:59  robang74       Status                   new => assigned     
-10-26-08 03:59  robang74       Assigned To               => buildroot       
-10-26-08 03:59  robang74       File Added: fbset.mk.patch                    
-10-26-08 04:04  robang74       Issue Monitored: robang74                    
-10-26-08 04:44  jacmet         Note Added: 0014254                          
-10-26-08 14:49  robang74       Note Added: 0014274                          
-======================================================================
+Markus
