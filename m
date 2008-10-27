@@ -1,26 +1,39 @@
-From: Adam McLaurin <buildroot@irotas.net>
-Date: Mon, 27 Oct 2008 11:55:16 -0400
-Subject: [Buildroot] Unable to create files inside mounted root
-	filesystem
-In-Reply-To: <878wsakt8l.fsf@macbook.be.48ers.dk>
-References: <1225112903.16248.1281448757@webmail.messagingengine.com>
-	<873aiimau6.fsf@macbook.be.48ers.dk>
-	<1225116460.30688.1281460263@webmail.messagingengine.com>
-	<878wsakt8l.fsf@macbook.be.48ers.dk>
-Message-ID: <1225122916.24422.1281482349@webmail.messagingengine.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 27 Oct 2008 17:56:45 +0100
+Subject: [Buildroot] Synchronisation of dependencies between Config.in and
+	.mk files ?
+Message-ID: <20081027175645.7e7cb096@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 27 Oct 2008 15:28:10 +0100, "Peter Korsgaard"
-<jacmet@uclibc.org> said:
-> True. Those options are forwarded directly to genext2fs (-b and -N
-> options), so have a look at the man page of genext2fs for details.
+Hi,
 
-Well the documentation doesn't even mention block size, but fortunately
-the source code is more revealing:
-#define BLOCKSIZE         1024
+Currently, there are two complementary ways of expressing dependencies
+between packages:
 
--Adam
+ * Through the select BR2_FOOBAR statements in the Config.in files ;
+
+ * Through the FOOBAR_DEPS variable in the package makefiles.
+
+The second one is absolutely necessary, as it makes sure that packages
+are built in the proper order. The first one allows packages Makefiles
+to adapt their configuration depending on the existing dependencies
+(i.e if tslib is available, then enable support for touchscreens, etc.).
+
+However, there are great chances for these two lists of dependencies
+for each package to become unsynchronized.
+
+What's the policy about this ? What are the current techniques to keep
+them synchronized ?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
