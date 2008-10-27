@@ -1,69 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Oct 2008 10:30:49 +0100
-Subject: [Buildroot] [PATCH] libglib2: remove $(DISABLE_NLS) from
- configure options
-In-Reply-To: <87ej22bdu7.fsf@macbook.be.48ers.dk>
-References: <200810250216.21072.markus.heidelberg@web.de>
-	<87fxmjdt0t.fsf@macbook.be.48ers.dk>
-	<200810270807.15968.markus.heidelberg@web.de>
-	<87ej22bdu7.fsf@macbook.be.48ers.dk>
-Message-ID: <20081027103049.47ef9fd4@surf>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Mon, 27 Oct 2008 02:45:35 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/pango
+Message-ID: <20081027094535.1193D3C6A2@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 27 Oct 2008 10:13:20 +0100,
-Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+Author: jacmet
+Date: 2008-10-27 02:45:34 -0700 (Mon, 27 Oct 2008)
+New Revision: 23809
 
-> Probably it's handled with the libintl stuff when !BR2_ENABLE_LOCALE.
+Log:
+Fix strange problems in pango configure target
 
-Concerning libglib2 and iconv, I have the following workaround/patch in
-my tree to disable pulling libiconv when !BR2_ENABLE_LOCALE. The
-problem is that I'm using an external toolchain (having too many
-troubles with buildroot-generated toolchains). Because the toolchain is
-external, BR2_ENABLE_LOCALE is not set. But the toolchain already
-contains libiconv, so I don't want to add it as a dependency. But the
-following patch is just a workaround, I haven't thought about a proper
-fix for now.
+The configure target of pango had strange characters in it, preventing
+compilation to work. Remove them, they just seem to be mistakes.
 
-Bogus check if the toolchain is external.
----
- package/libglib2/Config.in   |    1 -
- package/libglib2/libglib2.mk |    4 ----
- 2 files changed, 5 deletions(-)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Index: buildroot/package/libglib2/Config.in
+Modified:
+   trunk/buildroot/package/pango/pango.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/pango/pango.mk
 ===================================================================
---- buildroot.orig/package/libglib2/Config.in
-+++ buildroot/package/libglib2/Config.in
-@@ -2,7 +2,6 @@
- 	bool "libglib2"
- 	select BR2_PACKAGE_GETTEXT
- 	select BR2_PACKAGE_LIBINTL
--	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	select BR2_PACKAGE_PKGCONFIG
- 	help
- 	  Low-level core library that forms the basis of GTK+ and GNOME.
-Index: buildroot/package/libglib2/libglib2.mk
-===================================================================
---- buildroot.orig/package/libglib2/libglib2.mk
-+++ buildroot/package/libglib2/libglib2.mk
-@@ -49,8 +49,4 @@
- 
- LIBGLIB2_DEPENDENCIES = uclibc gettext libintl pkgconfig
- 
--ifneq ($(BR2_ENABLE_LOCALE),y)
--LIBGLIB2_DEPENDENCIES+=libiconv
--endif
--
- $(eval $(call AUTOTARGETS,package,libglib2))
-
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+--- trunk/buildroot/package/pango/pango.mk	2008-10-27 08:27:43 UTC (rev 23808)
++++ trunk/buildroot/package/pango/pango.mk	2008-10-27 09:45:34 UTC (rev 23809)
+@@ -39,9 +39,9 @@
+ 		am_getline_needs_run_time_check=no am_cv_func_working_getline=yes \
+ 		gl_cv_func_mkdir_trailing_slash_bug=no gl_cv_func_mkstemp_limitations=no \
+ 		ac_cv_func_working_mktime=yes jm_cv_func_working_re_compile_pattern=yes \
+-		ac_use_included_regex=no gl_cv_c_restrict=no)" \
++		ac_use_included_regex=no gl_cv_c_restrict=no \
+ 		ac_cv_path_GLIB_GENMARSHAL=$(HOST_GLIB)/bin/glib-genmarshal ac_cv_path_FREETYPE_CONFIG=$(STAGING_DIR)/usr/bin/freetype-config
+-		
++
+ ifneq ($(BR2_PACKAGE_XSERVER_none),y)
+         PANGO_CONF_OPT_X = --with-x \
+ 		--x-includes=$(STAGING_DIR)/usr/include/X11 \
