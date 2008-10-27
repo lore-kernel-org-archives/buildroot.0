@@ -1,38 +1,32 @@
-From: Roberto A. Foglietta <roberto.foglietta@gmail.com>
-Date: Mon, 27 Oct 2008 11:09:40 +0100
-Subject: [Buildroot] [PATCH] S00automnt + S90Xserver + profile.diff
-Message-ID: <e4c675870810270309n313186c2r7d8cc63a80aab285@mail.gmail.com>
+From: Adam McLaurin <buildroot@irotas.net>
+Date: Mon, 27 Oct 2008 09:08:23 -0400
+Subject: [Buildroot] Unable to create files inside mounted root filesystem
+Message-ID: <1225112903.16248.1281448757@webmail.messagingengine.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi to all,
+Hi all,
 
- please apply these changes if you think could be useful
+I hope this is a typical newbie question. I was finally able to create a
+root filesystem (ext2) with buildroot, and I can mount (-o loop) and
+chroot into it with no problems.
 
- S00automnt:
- - find cdrom and mount it, if it exists
- - run over /proc/partitions and mount in ro all of them
+The trouble is that I cannot create any files in the mounted filesystem:
+/ # touch foo
+touch: foo: No space left on device
 
- S90Xserver
- - prepare enviroment/initrc files
- - launch blackbox/twm/xterm over X
- - users compliant
+Strangely, when I mount/chroot into one of the pre-built root
+filesystems available from the uclibc website, I can create files
+without any problems.
 
- ^^^^ these two could be not executable in order to not run by default
+I'm trying to figure out what I did differently creating my root
+filesystem that would cause this problem, but at the moment I'm out of
+ideas.
 
- profile:
- - added /usr/X11R6/bin in PATH
+Any advice?
 
- Bye,
--- 
-/roberto
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: target_skeleton_generic.patch
-Type: text/x-diff
-Size: 10712 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20081027/0a884ec3/attachment-0001.patch 
+Thanks,
+Adam
