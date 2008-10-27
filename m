@@ -1,69 +1,34 @@
-From: Roberto A. Foglietta <roberto.foglietta@gmail.com>
-Date: Mon, 27 Oct 2008 18:32:09 +0100
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 27 Oct 2008 19:43:07 +0100
 Subject: [Buildroot] Synchronisation of dependencies between Config.in
 	and .mk files ?
-In-Reply-To: <20081027175645.7e7cb096@surf>
+In-Reply-To: <20081027175645.7e7cb096@surf> (Thomas Petazzoni's message of
+	"Mon\, 27 Oct 2008 17\:56\:45 +0100")
 References: <20081027175645.7e7cb096@surf>
-Message-ID: <e4c675870810271032u4a2aff9fvb6e686ffb3f0fd31@mail.gmail.com>
+Message-ID: <87zlkphoas.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2008/10/27 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> Hi,
->
-> Currently, there are two complementary ways of expressing dependencies
-> between packages:
->
->  * Through the select BR2_FOOBAR statements in the Config.in files ;
->
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Good: because we can see in the menuconfig what is selected immediately
- Bad: because once we remove the initial package we still stay with dependencies
+Hi,
 
->  * Through the FOOBAR_DEPS variable in the package makefiles.
->
+ Thomas> However, there are great chances for these two lists of
+ Thomas> dependencies for each package to become unsynchronized.
 
+True, but I don't think there's any easy way of going from Kconfig
+selects to Makefile deps.
 
- Bad: because these dependencies are not displayed into menuconfig
- Bad: because these dependencies would not be downloaded in 'make
-sources' <--- !!!
- Good: because these dependencies are necessary for building
+ Thomas> What's the policy about this ? What are the current
+ Thomas> techniques to keep them synchronized ?
 
+Well, the policy is that they should be in sync - And we currently
+have no way of ensuring that they are in sync besides manual review.
 
-> The second one is absolutely necessary, as it makes sure that packages
-> are built in the proper order. The first one allows packages Makefiles
-> to adapt their configuration depending on the existing dependencies
-> (i.e if tslib is available, then enable support for touchscreens, etc.).
->
-> However, there are great chances for these two lists of dependencies
-> for each package to become unsynchronized.
->
-> What's the policy about this ? What are the current techniques to keep
-> them synchronized ?
->
+Do you have any ideas about how to solve this in a nicer way?
 
-  tristate,  where x means depend on something:
-
-BR2_CIAO=y
-BR2_CIAO=x
-# BR2_CIAO is not set
-
- or
-
-BR2_CIAO=y
-# BR2_CIAO needed by BR2_PLUTO BR2_PAPERINO ...
-# BR2_CIAO is not set
-
- 'select' in Config.in should not exist and 'make' should generate at
-run-time all 'x-select' constrains accordingly with dependencies in
-package.mk
-
- Easy to say but...
- ;-)
-
- Cheers,
 -- 
-/roberto
+Bye, Peter Korsgaard
