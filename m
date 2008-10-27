@@ -1,226 +1,278 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon, 27 Oct 2008 08:15:53 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/matchbox
-Message-ID: <20081027151553.2738B3C6FA@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 27 Oct 2008 08:20:38 -0700
+Subject: [Buildroot] [buildroot 0005484]: Matchbox compilation crash into
+	libmatchbox-1.9
+Message-ID: <b192ae5f2d027d4a01ab106ab5824715@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-10-27 08:15:52 -0700 (Mon, 27 Oct 2008)
-New Revision: 23821
 
-Log:
-Fix matchbox build
+The following issue has been CLOSED 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=5484 
+====================================================================== 
+Reported By:                robang74
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   5484
+Category:                   Shared Library Support
+Reproducibility:            always
+Severity:                   crash
+Priority:                   normal
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
+====================================================================== 
+Date Submitted:             10-18-2008 03:24 PDT
+Last Modified:              10-27-2008 08:20 PDT
+====================================================================== 
+Summary:                    Matchbox compilation crash into libmatchbox-1.9
+Description: 
+roberto at rafbook:~/gles/buildroot$ make
 
-Fix matchbox build
+[...]
 
-This patch fixes various failures in the Matchbox build:
+Making all in menu
+make[4]: Entering directory
+`/home/roberto/gles/buildroot/build_i586/libmatchbox-1.9/tests/menu'
+make[4]: Nothing to be done for `all'.
+make[4]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/libmatchbox-1.9/tests/menu'
+make[4]: Entering directory
+`/home/roberto/gles/buildroot/build_i586/libmatchbox-1.9/tests'
+if
+/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
+-Os  -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/include
+--sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
+/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
+-march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64 -DHAVE_CONFIG_H -I. -I. -I..  -I../libmb -g -Wall
+-fno-strict-aliasing    
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include/libpng12
+    -Os  -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/include
+--sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
+/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
+-march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include -MT
+dump-image.o -MD -MP -MF ".deps/dump-image.Tpo" -c -o dump-image.o
+dump-image.c; \
+	then mv -f ".deps/dump-image.Tpo" ".deps/dump-image.Po"; else rm -f
+".deps/dump-image.Tpo"; exit 1; fi
+/bin/bash ../libtool --tag=CC --mode=link
+/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
+-Os  -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/include
+--sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
+/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
+-march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64  -Os 
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/include
+--sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
+/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
+-march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
+-L../libmb -lmb
+-L/home/roberto/gles/buildroot/build_i586/staging_dir/usr/lib -o
+dump-image  dump-image.o  
+/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
+-Os -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/include
+--sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
+/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
+-march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64 -Os
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/include
+--sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
+/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
+-march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include -o
+.libs/dump-image dump-image.o 
+-L/home/roberto/gles/buildroot/build_i586/libmatchbox-1.9/libmb
+/home/roberto/gles/buildroot/build_i586/libmatchbox-1.9/libmb/.libs/libmb.so
+-L/home/roberto/gles/buildroot/build_i586/staging_dir/usr/lib -Wl,--rpath
+-Wl,/home/roberto/gles/buildroot/build_i586/staging_dir/usr/lib
+/home/roberto/gles/buildroot/build_i586/libmatchbox-1.9/libmb/.libs/libmb.so:
+undefined reference to `index'
+collect2: ld returned 1 exit status
+make[4]: *** [dump-image] Error 1
+make[4]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/libmatchbox-1.9/tests'
+make[3]: *** [all-recursive] Error 1
+make[3]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/libmatchbox-1.9/tests'
+make[2]: *** [all-recursive] Error 1
+make[2]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/libmatchbox-1.9'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/libmatchbox-1.9'
+make: ***
+[/home/roberto/gles/buildroot/build_i586/libmatchbox-1.9/.compiled] Error
+2
 
- * libmatchbox and matchbox-panel were using a now legacy index()
-   function, which is not part of every uClibc build nowadays
-   (depending on the configuration). As this function doesn't exist
-   anymore in all builds, use strchr() instead, which is the
-   recommended replacement for index(). Two patches, one for
-   libmatchbox, one for matchbox-panel, are added to fix this problem.
+====================================================================== 
 
-   Closes bug http://bugs.uclibc.org/view.php?id=5484
+---------------------------------------------------------------------- 
+ robang74 - 10-18-08 03:30  
+---------------------------------------------------------------------- 
+workaround waiting for a solution, in libmatchbox-1.9/Makefile.in:
 
- * Do not override the CFLAGS and LDFLAGS values, they are already set
-   by TARGET_CONFIGURE_OPTS. It caused build failures.
+s,SUBDIRS = libmb doc tests, SUBDIRS = libmb doc, 
 
- * Mangle the library paths in the .la file of libmatchbox, after
-   installation in the staging dir.
+---------------------------------------------------------------------- 
+ robang74 - 10-18-08 03:52  
+---------------------------------------------------------------------- 
+applaying the workaround in note 0013764 conduce to another crash in
 
-It would probably be nice to switch Matchbox over to the new
-Makefile.autotools.in.
+Making all in src
+make[3]: Entering directory
+`/home/roberto/gles/buildroot/build_i586/matchbox-window-manager-1.2/src'
+if
+/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
+-Os  -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/include
+--sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
+/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
+-march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64 -DHAVE_CONFIG_H -I. -I. -I..
+-DDATADIR=\"/usr/share/matchbox\" -DCONFDIR=\"/etc/matchbox\"
+-DPKGDATADIR=\"/usr/share/matchbox/matchbox\"
+-DPREFIX=\"/home/roberto/gles/buildroot/build_i586/staging_dir/usr\" -g
+-Wall -fno-strict-aliasing 
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include/libpng12 
+  -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include/startup-notification-1.0
+        -Os 
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/include
+--sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
+/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
+-march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include -MT
+main.o -MD -MP -MF ".deps/main.Tpo" -c -o main.o main.c; \
+	then mv -f ".deps/main.Tpo" ".deps/main.Po"; else rm -f ".deps/main.Tpo";
+exit 1; fi
+In file included from main.c:21:
+structs.h:60:22: error: libsn/sn.h: No such file or directory
+In file included from main.c:21:
+structs.h:615: error: expected specifier-qualifier-list before
+?SnDisplay?
+make[3]: *** [main.o] Error 1
+make[3]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/matchbox-window-manager-1.2/src'
+make[2]: *** [all-recursive] Error 1
+make[2]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/matchbox-window-manager-1.2'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/matchbox-window-manager-1.2'
+make: ***
+[/home/roberto/gles/buildroot/build_i586/matchbox-window-manager-1.2/.compiled]
+Error 2
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+the missing file should be found here:
 
-Added:
-   trunk/buildroot/package/matchbox/libmatchbox-1.9-index-is-legacy.patch
-   trunk/buildroot/package/matchbox/matchbox-panel-0.9.3-index-is-legacy.patch
+roberto at rafbook:~/gles/buildroot$ find . -name sn.h
+./build_i586/staging_dir/usr/include/startup-notification-1.0/libsn/sn.h
+./build_i586/startup-notification-0.9/libsn/sn.h
 
-Modified:
-   trunk/buildroot/package/matchbox/matchbox.mk
+however to work around the problem it should link a whole directory in
+this way:
 
+roberto at rafbook:~/gles/buildroot$ ln -sf
+$BR2_STAGING_DIR/usr/include/startup-notification-1.0/libsn $(dirname
+$BR2_STAGING_DIR)/matchbox-window-manager-1.2/src/libsn 
 
-Changeset:
-Added: trunk/buildroot/package/matchbox/libmatchbox-1.9-index-is-legacy.patch
-===================================================================
---- trunk/buildroot/package/matchbox/libmatchbox-1.9-index-is-legacy.patch	                        (rev 0)
-+++ trunk/buildroot/package/matchbox/libmatchbox-1.9-index-is-legacy.patch	2008-10-27 15:15:52 UTC (rev 23821)
-@@ -0,0 +1,35 @@
-+index() is a legacy function, not implemented in some uClibc
-+configurations.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ libmb/mbexp.c  |    2 +-
-+ libmb/mbmenu.c |    2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+Index: libmatchbox-1.9/libmb/mbexp.c
-+===================================================================
-+--- libmatchbox-1.9.orig/libmb/mbexp.c
-++++ libmatchbox-1.9/libmb/mbexp.c
-+@@ -492,7 +492,7 @@
-+ 
-+   /* get the family */
-+ 
-+-  if (index(spec, ',') != NULL || index(spec, '-') != NULL) 
-++  if (strchr(spec, ',') != NULL || strchr(spec, '-') != NULL) 
-+     has_comma_delim = True;
-+ 
-+   while (!got_family) {
-+Index: libmatchbox-1.9/libmb/mbmenu.c
-+===================================================================
-+--- libmatchbox-1.9.orig/libmb/mbmenu.c
-++++ libmatchbox-1.9/libmb/mbmenu.c
-+@@ -433,7 +433,7 @@
-+    {
-+       s = p;
-+       found   = NULL;
-+-      while(index("/\0", *p) == NULL) p++;
-++      while(strchr("/\0", *p) == NULL) p++;
-+       if (*p != '\0') { *p = '\0'; p++; };
-+ 
-+       item = current->items;
+---------------------------------------------------------------------- 
+ robang74 - 10-18-08 04:01  
+---------------------------------------------------------------------- 
+finally it crashes for the same reason of making testes which means that to
+have success in tests is mandatory and a work around are not enough:
 
-Added: trunk/buildroot/package/matchbox/matchbox-panel-0.9.3-index-is-legacy.patch
-===================================================================
---- trunk/buildroot/package/matchbox/matchbox-panel-0.9.3-index-is-legacy.patch	                        (rev 0)
-+++ trunk/buildroot/package/matchbox/matchbox-panel-0.9.3-index-is-legacy.patch	2008-10-27 15:15:52 UTC (rev 23821)
-@@ -0,0 +1,20 @@
-+Replace the legacy index() with strchr()
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ applets/mb-applet-menu-launcher.c |    2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+Index: matchbox-panel-0.9.3/applets/mb-applet-menu-launcher.c
-+===================================================================
-+--- matchbox-panel-0.9.3.orig/applets/mb-applet-menu-launcher.c
-++++ matchbox-panel-0.9.3/applets/mb-applet-menu-launcher.c
-+@@ -280,7 +280,7 @@
-+ 	 DBG("\tkey %s ", key);
-+          if (*(++p) == '"') { p++; tc = sc; } /* skip "'s */
-+ 	 val = p;
-+-	 while(index(tc,*p) == NULL)
-++	 while(strchr(tc,*p) == NULL)
-+ 	 {
-+ 	    if (*p == '\\' && *(p+1) == '"') p++;  /* skip \" */
-+ 	    p++;
+[...]
 
-Modified: trunk/buildroot/package/matchbox/matchbox.mk
-===================================================================
---- trunk/buildroot/package/matchbox/matchbox.mk	2008-10-27 14:33:03 UTC (rev 23820)
-+++ trunk/buildroot/package/matchbox/matchbox.mk	2008-10-27 15:15:52 UTC (rev 23821)
-@@ -113,6 +113,7 @@
- 
- $(MATCHBOX_LIB_DIR)/.unpacked: $(DL_DIR)/$(MATCHBOX_LIB_SOURCE)
- 	$(MATCHBOX_CAT) $(DL_DIR)/$(MATCHBOX_LIB_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+	toolchain/patch-kernel.sh $(MATCHBOX_LIB_DIR) package/matchbox/ libmatchbox\*.patch
- 	touch $(MATCHBOX_LIB_DIR)/.unpacked
- 
- $(MATCHBOX_SNOTIFY_DIR)/.unpacked: $(DL_DIR)/$(MATCHBOX_SNOTIFY_SOURCE)
-@@ -133,6 +134,7 @@
- 
- $(MATCHBOX_PL_DIR)/.unpacked: $(DL_DIR)/$(MATCHBOX_PL_SOURCE)
- 	$(MATCHBOX_CAT) $(DL_DIR)/$(MATCHBOX_PL_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+	toolchain/patch-kernel.sh $(MATCHBOX_PL_DIR) package/matchbox/ matchbox-panel\*.patch
- 	touch $(MATCHBOX_PL_DIR)/.unpacked
- 
- $(MATCHBOX_DP_DIR)/.unpacked: $(DL_DIR)/$(MATCHBOX_DP_SOURCE)
-@@ -214,8 +216,6 @@
- $(MATCHBOX_LIB_DIR)/.configured: $(MATCHBOX_LIB_DIR)/.unpacked xlib_libXext-install-staging
- 	(cd $(MATCHBOX_LIB_DIR); rm -f config.cache; \
- 	$(TARGET_CONFIGURE_OPTS) \
--	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
--	LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
- 	./configure \
- 	--target=$(GNU_TARGET_NAME) \
- 	--host=$(GNU_TARGET_NAME) \
-@@ -241,8 +241,6 @@
- $(MATCHBOX_SNOTIFY_DIR)/.configured: $(MATCHBOX_SNOTIFY_DIR)/.unpacked
- 	(cd $(MATCHBOX_SNOTIFY_DIR); rm -f config.cache; \
- 	$(TARGET_CONFIGURE_OPTS) \
--	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
--	LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
- 	lf_cv_sane_realloc=no \
- 	./configure \
- 	--target=$(GNU_TARGET_NAME) \
-@@ -264,8 +262,6 @@
- $(MATCHBOX_WM_DIR)/.configured: $(MATCHBOX_WM_DIR)/.unpacked
- 	(cd $(MATCHBOX_WM_DIR); rm -f config.cache; \
- 	$(TARGET_CONFIGURE_OPTS) \
--	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
--	LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
- 	./configure \
- 	--target=$(GNU_TARGET_NAME) \
- 	--host=$(GNU_TARGET_NAME) \
-@@ -291,8 +287,6 @@
- $(MATCHBOX_SM_DIR)/.configured: $(MATCHBOX_SM_DIR)/.unpacked
- 	(cd $(MATCHBOX_SM_DIR); rm -f config.cache; \
- 	$(TARGET_CONFIGURE_OPTS) \
--	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
--	LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
- 	./configure \
- 	--target=$(GNU_TARGET_NAME) \
- 	--host=$(GNU_TARGET_NAME) \
-@@ -317,8 +311,6 @@
- $(MATCHBOX_CN_DIR)/.configured: $(MATCHBOX_CN_DIR)/.unpacked
- 	(cd $(MATCHBOX_CN_DIR); rm -f config.cache; \
- 	$(TARGET_CONFIGURE_OPTS) \
--	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
--	LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
- 	./configure \
- 	--target=$(GNU_TARGET_NAME) \
- 	--host=$(GNU_TARGET_NAME) \
-@@ -342,8 +334,6 @@
- $(MATCHBOX_PL_DIR)/.configured: $(MATCHBOX_PL_DIR)/.unpacked
- 	(cd $(MATCHBOX_PL_DIR); rm -f config.cache; \
- 	$(TARGET_CONFIGURE_OPTS) \
--	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
--	LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
- 	./configure \
- 	--target=$(GNU_TARGET_NAME) \
- 	--host=$(GNU_TARGET_NAME) \
-@@ -368,8 +358,6 @@
- $(MATCHBOX_DP_DIR)/.configured: $(MATCHBOX_DP_DIR)/.unpacked
- 	(cd $(MATCHBOX_DP_DIR); rm -f config.cache; \
- 	$(TARGET_CONFIGURE_OPTS) \
--	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
--	LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
- 	./configure \
- 	--target=$(GNU_TARGET_NAME) \
- 	--host=$(GNU_TARGET_NAME) \
-@@ -394,8 +382,6 @@
- $(MATCHBOX_FK_DIR)/.configured: $(MATCHBOX_FK_DIR)/.unpacked
- 	(cd $(MATCHBOX_FK_DIR); rm -f config.cache; \
- 	$(TARGET_CONFIGURE_OPTS) \
--	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
--	LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
- 	./configure \
- 	--target=$(GNU_TARGET_NAME) \
- 	--host=$(GNU_TARGET_NAME) \
-@@ -420,8 +406,6 @@
- $(MATCHBOX_KB_DIR)/.configured: $(MATCHBOX_KB_DIR)/.unpacked
- 	(cd $(MATCHBOX_KB_DIR); rm -f config.cache; \
- 	$(TARGET_CONFIGURE_OPTS) \
--	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
--	LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
- 	./configure \
- 	--target=$(GNU_TARGET_NAME) \
- 	--host=$(GNU_TARGET_NAME) \
-@@ -486,6 +470,7 @@
- 	libdir=/usr/lib \
- 	includedir=/usr/include \
- 	install
-+	$(SED) "s:\(['= ]\)/usr:\1$(STAGING_DIR)/usr:g" $(STAGING_DIR)/usr/lib/libmb.la
- 
- $(STAGING_DIR)/usr/lib/$(MATCHBOX_SNOTIFY_BIN): $(MATCHBOX_SNOTIFY_DIR)/.compiled
- 	$(MAKE) -C $(MATCHBOX_SNOTIFY_DIR) DESTDIR=$(STAGING_DIR) \
+Making all in src
+make[3]: Entering directory
+`/home/roberto/gles/buildroot/build_i586/matchbox-window-manager-1.2/src'
+
+[...]
+
+/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
+-Os  -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/include
+--sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
+/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
+-march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64  -Os 
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/include
+--sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
+/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
+-march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include 
+-L/home/roberto/gles/buildroot/build_i586/staging_dir/usr/lib -o
+matchbox-window-manager  main.o wm.o base_client.o main_client.o
+toolbar_client.o toolbar_client_alt.o dockbar_client.o dialog_client.o
+select_client.o desktop_client.o ewmh.o misc.o client_common.o keys.o
+list.o stack.o composite-engine.o session.o mbtheme.o xml.o
+-L/home/roberto/gles/buildroot/build_i586/staging_dir/home/roberto/gles/buildroot/build_i586/staging_dir/usr/lib
+-lmb -lX11 -lXext -lpng12   
+-L/home/roberto/gles/buildroot/build_i586/staging_dir/usr/lib -lexpat
+-L/home/roberto/gles/buildroot/build_i586/staging_dir/home/roberto/gles/buildroot/build_i586/staging_dir/usr/lib
+-lstartup-notification-1    -lXfixes   -lXcursor   
+/home/roberto/gles/buildroot/build_i586/staging_dir/usr/lib/libmb.so:
+undefined reference to `index'
+collect2: ld returned 1 exit status
+make[3]: *** [matchbox-window-manager] Error 1
+make[3]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/matchbox-window-manager-1.2/src'
+make[2]: *** [all-recursive] Error 1
+make[2]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/matchbox-window-manager-1.2'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/matchbox-window-manager-1.2'
+make: ***
+[/home/roberto/gles/buildroot/build_i586/matchbox-window-manager-1.2/.compiled]
+Error 2 
+
+---------------------------------------------------------------------- 
+ robang74 - 10-18-08 04:19  
+---------------------------------------------------------------------- 
+N.B.: In spite the .config says kernel headers version is 2.6.27 in real I
+had compiled the toolchain against 2.6.24-19 ubuntu 8.04 kernel source. 
+
+---------------------------------------------------------------------- 
+ jacmet - 10-27-08 08:20  
+---------------------------------------------------------------------- 
+Fixed in r23821 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+10-18-08 03:24  robang74       New Issue                                    
+10-18-08 03:24  robang74       Status                   new => assigned     
+10-18-08 03:24  robang74       Assigned To               => buildroot       
+10-18-08 03:24  robang74       File Added: .config                          
+10-18-08 03:24  robang74       Issue Monitored: robang74                    
+10-18-08 03:30  robang74       Note Added: 0013764                          
+10-18-08 03:52  robang74       Note Added: 0013774                          
+10-18-08 04:01  robang74       Note Added: 0013784                          
+10-18-08 04:19  robang74       Note Added: 0013794                          
+10-27-08 08:20  jacmet         Status                   assigned => closed  
+10-27-08 08:20  jacmet         Note Added: 0014374                          
+======================================================================
