@@ -1,12 +1,11 @@
 From: Markus Heidelberg <markus.heidelberg@web.de>
-Date: Mon, 27 Oct 2008 07:59:27 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package: audio/libogg
-	audio/libvorbis docker edit etc...
-In-Reply-To: <87r663f91t.fsf@macbook.be.48ers.dk>
-References: <20081026061944.0F6DE3C2B3@busybox.net>
-	<200810261437.05446.markus.heidelberg@web.de>
-	<87r663f91t.fsf@macbook.be.48ers.dk>
-Message-ID: <200810270759.28374.markus.heidelberg@web.de>
+Date: Mon, 27 Oct 2008 08:07:15 +0100
+Subject: [Buildroot] [PATCH] libglib2: remove $(DISABLE_NLS) from
+	configure options
+In-Reply-To: <87fxmjdt0t.fsf@macbook.be.48ers.dk>
+References: <200810250216.21072.markus.heidelberg@web.de>
+	<87fxmjdt0t.fsf@macbook.be.48ers.dk>
+Message-ID: <200810270807.15968.markus.heidelberg@web.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,25 +15,16 @@ To: buildroot@busybox.net
 Peter Korsgaard, 26.10.2008:
 > >>>>> "Markus" == Markus Heidelberg <markus.heidelberg@web.de> writes:
 > 
-> Hi,
+>  Markus> The configure option --disable-nls is not supported anymore in glib
+>  Markus> since version 2.0, see file ChangeLog.pre-2-0 line 544.
 > 
->  >> -					PKGCONFIG="$(STAGING_DIR)/usr/bin/pkg-config" \
->  >> -					PKG_CONFIG_SYSROOT="$(STAGING_DIR)" \
->  >> -					PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig"
->  >> +					LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib"
+> Thanks, committed.
 > 
->  Markus> I think this will break docker, because MAKE_OPT is affected,
->  Markus> not CONF_OPT.  And I just noticed that docker doesn't use
->  Markus> autotools at all.
-> 
-> Yes, I re-added PKG_CONFIG=.. in r23796 - With that, it works for me.
+> Does this mean that libglib2 should depend on BR2_ENABLE_LOCALE?
 
-After looking into it again, the package seems a bit broken. `$(PKG_CONFIG)
---cflags glib-2.0` evaluates to "-I/usr/include/glib-2.0
--I/usr/lib/glib-2.0/include", not the ones in staging_dir, so it uses the
-system include files. PKG_CONFIG_PATH has to be defined and
-PKG_CONFIG_SYSROOT_DIR, too. But it also uses the staging files hardcoded in
-the Makefile. Then have a look at XLIBPATH in the Makefile, which points to
-the system files. And LDFLAGS is never used.
+I'm not sure. Looking at DISABLE_NLS in Makefile.in, then yes. I've also read
+a thread, saying that packages using glib don't have to ask for locale support
+but can just rely on having it. But I have no clue about the relationship
+between UCLIBC_HAS_LOCALE and --disable/enable-nls.
 
 Markus
