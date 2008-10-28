@@ -1,32 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Oct 2008 08:14:10 +0100
-Subject: [Buildroot] [PATCH] qtopia4: fix use of pkg-config
-In-Reply-To: <200810280251.36628.markus.heidelberg@web.de>
-References: <200810280251.36628.markus.heidelberg@web.de>
-Message-ID: <20081028081410.5395e6f0@surf>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 28 Oct 2008 08:32:41 +0100
+Subject: [Buildroot] Synchronisation of dependencies between Config.in
+	and .mk files ?
+In-Reply-To: <e4c675870810271533q21914df7od498b0be858600e2@mail.gmail.com>
+	(Roberto A. Foglietta's message of "Mon\,
+	27 Oct 2008 23\:33\:35 +0100")
+References: <20081027175645.7e7cb096@surf>
+	<87zlkphoas.fsf@macbook.be.48ers.dk> <20081027211141.0935d9c0@surf>
+	<200810272247.34068.markus.heidelberg@web.de>
+	<e4c675870810271533q21914df7od498b0be858600e2@mail.gmail.com>
+Message-ID: <87ljw9dvja.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 28 Oct 2008 02:51:36 +0100,
-Markus Heidelberg <markus.heidelberg@web.de> a ?crit :
+>>>>> "Roberto" == Roberto A Foglietta <roberto.foglietta@gmail.com> writes:
 
-> +		$(TARGET_CONFIGURE_OPTS) \
-> +		PKG_CONFIG_SYSROOT="$(STAGING_DIR)" \
+Hi,
 
-I don't get why PKG_CONFIG_SYSROOT should be set here. The correct
-variable is PKG_CONFIG_SYSROOT_DIR and it is already set in
-TARGET_CONFIGURE_OPTS. I probably missed something specific to Qt, but
-I didn't understand the sentence: ?PKG_CONFIG_SYSROOT is only used to
-avoid a warning from Qt's configure system?.
+ Roberto>  I think the use of "depends on" in Config.in should be used
+ Roberto> ONLY when arch restrictions have been involved.
 
-Thanks,
+We normally only use depends on for sub packages (E.G. X applications
+that don't make any sense without X) and for toolchain dependencies
+(E.G. locale support) as changing toolchain option with select isn't a
+good thing.
 
-Thomas
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
