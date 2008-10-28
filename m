@@ -1,24 +1,32 @@
-From: Markus Heidelberg <markus.heidelberg@web.de>
-Date: Tue, 28 Oct 2008 22:45:06 +0100
-Subject: [Buildroot] [PATCH] qtopia4: fix adjustment of qmake.conf
-In-Reply-To: <877i7tcb27.fsf@macbook.be.48ers.dk>
-References: <200810280254.32049.markus.heidelberg@web.de>
-	<877i7tcb27.fsf@macbook.be.48ers.dk>
-Message-ID: <200810282245.06820.markus.heidelberg@web.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 28 Oct 2008 23:20:24 +0100
+Subject: [Buildroot] LDFLAGS setting in buildroot
+In-Reply-To: <C13DBBE85AD6974B85C118C35890CA5F13B20D9256@EU1RDCRDC1WX029.exi.nxp.com>
+References: <C13DBBE85AD6974B85C118C35890CA5F13B20D91B5@EU1RDCRDC1WX029.exi.nxp.com>
+	<20081028131817.GA3139@mx.loc>
+	<C13DBBE85AD6974B85C118C35890CA5F13B20D9256@EU1RDCRDC1WX029.exi.nxp.com>
+Message-ID: <20081028232024.4ca5d0c7@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard, 28.10.2008:
-> 
-> Thanks, committed.
-> 
-> Could I get you to sign off on the patches (-s option to git
-> format-patch)? Then I don't have to git commit --amend to mention that
-> you are the author of the commit.
+Le Tue, 28 Oct 2008 14:58:19 +0100,
+Daniel J Laird <daniel.j.laird@nxp.com> a ?crit :
 
-Of course, sorry. If I had known it before, I would have already done it.
+> The proposed patch would be something like this:
 
-Markus
+I confirm that this patch works for me, I was able to build Gtk +
+DirectFB with all their dependencies properly.
+
+Acked-By: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Sincerly,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
