@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 28 Oct 2008 02:21:28 -0700
-Subject: [Buildroot] [buildroot 0005724]: libglib2 compilation crash on
-	/usr/bin/glib-genmarshal
-Message-ID: <0c7e5806ecc41c89b40f8692760dc28e@busybox.net>
+Date: Tue, 28 Oct 2008 02:33:02 -0700
+Subject: [Buildroot] [buildroot 0005614]: make clean + make does not provide
+	a full project rootfs
+Message-ID: <6aeae9d3319411f8c40a94cdaacb0f9b@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,122 +12,61 @@ To: buildroot@busybox.net
 
 A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=5724 
+http://busybox.net/bugs/view.php?id=5614 
 ====================================================================== 
 Reported By:                robang74
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   5724
-Category:                   Shared Library Support
+Issue ID:                   5614
+Category:                   Other
 Reproducibility:            always
-Severity:                   crash
+Severity:                   major
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             10-24-2008 21:51 PDT
-Last Modified:              10-28-2008 02:21 PDT
+Date Submitted:             10-20-2008 13:20 PDT
+Last Modified:              10-28-2008 02:33 PDT
 ====================================================================== 
-Summary:                    libglib2 compilation crash on
-/usr/bin/glib-genmarshal
+Summary:                    make clean + make does not provide a full project
+rootfs
 Description: 
-make[3]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/glib'
-Making all in gobject
-make[3]: Entering directory
-`/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/gobject'
-/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
--Os  -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
--I/home/roberto/gles/buildroot/build_i586/staging_dir/include
---sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
-/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
--march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -DHAVE_CONFIG_H -I. -I.. 
--DG_LOG_DOMAIN=\"GLib-GObject\" -I.. -I../glib -I.. -DG_ENABLE_DEBUG
--DG_DISABLE_DEPRECATED -DGOBJECT_COMPILATION -DG_DISABLE_CONST_RETURNS
--pthread  -g -O2 -Wall -MT glib-genmarshal.o -MD -MP -MF
-.deps/glib-genmarshal.Tpo -c -o glib-genmarshal.o glib-genmarshal.c
-mv -f .deps/glib-genmarshal.Tpo .deps/glib-genmarshal.Po
-/bin/bash ../libtool --tag=CC   --mode=link
-/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
--Os  -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
--I/home/roberto/gles/buildroot/build_i586/staging_dir/include
---sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
-/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
--march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64  -g -O2 -Wall   -o glib-genmarshal
-glib-genmarshal.o ../glib/libglib-2.0.la -lintl  
-mkdir .libs
-/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
--Os -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
--I/home/roberto/gles/buildroot/build_i586/staging_dir/include
---sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
-/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
--march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -g -O2 -Wall -o glib-genmarshal glib-genmarshal.o 
-../glib/.libs/libglib-2.0.so -lintl   -Wl,--rpath
--Wl,/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/glib/.libs
-/usr/bin/make glib-genmarshal
-make[4]: Entering directory
-`/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/gobject'
-make[4]: `glib-genmarshal' is up to date.
-make[4]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/gobject'
-echo "#ifndef __G_MARSHAL_H__" > xgen-gmh \
-	&& echo "#define __G_MARSHAL_H__" >> xgen-gmh \
-	&& /usr/bin/glib-genmarshal --nostdinc --prefix=g_cclosure_marshal
-./gmarshal.list --header >> xgen-gmh \
-	&& echo "#endif /* __G_MARSHAL_H__ */" >> xgen-gmh \
-	&& (cmp -s xgen-gmh gmarshal.h 2>/dev/null || cp xgen-gmh gmarshal.h) \
-	&& rm -f xgen-gmh xgen-gmh~ \
-	&& echo timestamp > stamp-gmarshal.h
-/bin/bash: line 2: /usr/bin/glib-genmarshal: No such file or directory
-make[3]: *** [stamp-gmarshal.h] Error 127
-make[3]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/gobject'
-make[2]: *** [all-recursive] Error 1
-make[2]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4'
-make[1]: *** [all] Error 2
-make[1]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4'
-make: ***
-[/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/.stamp_built]
-Error 2
+roberto at rafbook:~/gles/buildroot$ make clean
+
+[...]
+
+roberto at rafbook:~/gles/buildroot$ make 
+
+Size of boot image is 4 sectors -> No emulation
+Total translation table size: 2048
+Total rockridge attributes bytes: 996
+Total directory bytes: 4096
+Path table size(bytes): 34
+Max brk space used 0
+2838 extents written (5 MB)
+echo /home/roberto/gles/buildroot/binaries/ugles/rootfs.i586.iso
+/home/roberto/gles/buildroot/binaries/ugles/rootfs.i586.iso
+-rw-r--r-- 1 roberto roberto 5812224 2008-10-20 22:13
+/home/roberto/gles/buildroot/binaries/ugles/rootfs.i586.iso
+rm -f /home/roberto/gles/buildroot/project_build_i586/ugles/.fakeroot*
 
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- robang74 - 10-24-08 22:53  
+ robang74 - 10-28-08 02:33  
 ---------------------------------------------------------------------- 
-Proposed solution: glib-genmarshal should be compiled for $HOST not for
-$TARGET system. Probably tests should be avoided too.
-
-roberto at rafbook:~/gles/buildroot$ svn info | grep Last
-Last Changed Author: jacmet
-Last Changed Rev: 23778
-Last Changed Date: 2008-10-24 13:02:32 +0200 (Fri, 24 Oct 2008)
-
- 
-
----------------------------------------------------------------------- 
- robang74 - 10-28-08 02:21  
----------------------------------------------------------------------- 
-roberto at rafbook:~/gles/buildroot$ svn info | grep Last
-Last Changed Author: jacmet
-Last Changed Rev: 23821
-Last Changed Date: 2008-10-27 16:15:52 +0100 (Mon, 27 Oct 2008) 
+Proposed solution discussed in m-list
+http://busybox.net/lists/buildroot/2008-October/011309.html 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-10-24-08 21:51  robang74       New Issue                                    
-10-24-08 21:51  robang74       Status                   new => assigned     
-10-24-08 21:51  robang74       Assigned To               => buildroot       
-10-24-08 22:09  robang74       Issue Monitored: robang74                    
-10-24-08 22:10  robang74       Note Added: 0014134                          
-10-24-08 22:30  robang74       Note Edited: 0014134                         
-10-24-08 22:53  robang74       Note Edited: 0014134                         
-10-26-08 15:31  robang74       File Added: 5724.config                      
-10-28-08 02:21  robang74       Note Added: 0014424                          
+10-20-08 13:20  robang74       New Issue                                    
+10-20-08 13:20  robang74       Status                   new => assigned     
+10-20-08 13:20  robang74       Assigned To               => buildroot       
+10-20-08 13:20  robang74       File Added: .config                          
+10-20-08 13:20  robang74       Issue Monitored: robang74                    
+10-28-08 02:29  robang74       File Added: Makefile-r23778.patch3               
+    
+10-28-08 02:33  robang74       Note Added: 0014434                          
 ======================================================================
