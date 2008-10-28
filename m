@@ -1,55 +1,75 @@
-From: Markus Heidelberg <markus.heidelberg@web.de>
-Date: Tue, 28 Oct 2008 02:54:31 +0100
-Subject: [Buildroot] [PATCH] qtopia4: fix adjustment of qmake.conf
-Message-ID: <200810280254.32049.markus.heidelberg@web.de>
+From: Roberto A. Foglietta <roberto.foglietta@gmail.com>
+Date: Tue, 28 Oct 2008 07:47:01 +0100
+Subject: [Buildroot] [PATCH] Avoid make distclean to remove packages
+	fromrootfs
+In-Reply-To: <20081028010442.GA27610@cloud.net.au>
+References: <e4c675870810220506q31952b43ta544bfbdcec64c4e@mail.gmail.com>
+	<COL0-DAV311F354B4DDD6CF6B394418D290@phx.gbl>
+	<e4c675870810271342l7cb8d57eo824d1238bcf18ab3@mail.gmail.com>
+	<20081027204927.GF14184@mx.loc>
+	<e4c675870810271411j60951480x90de0d4520abcb75@mail.gmail.com>
+	<20081028010442.GA27610@cloud.net.au>
+Message-ID: <e4c675870810272347i7a91fc6ds4cd56a26dad643fb@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Extend the regexp to match spaces and also tabs to replace the qmake
-variables with the proper buildroot values. Also use TARGET_AR and
-TARGET_STRIP instead of using TARGET_CROSS and set a variable for
-qmake.conf to shorten the command line.
----
- package/qtopia4/qtopia4.mk |   17 +++++++++--------
- 1 files changed, 9 insertions(+), 8 deletions(-)
+2008/10/28 Hamish Moffatt <hamish@cloud.net.au>:
+> On Mon, Oct 27, 2008 at 10:11:12PM +0100, Roberto A. Foglietta wrote:
+>> clean remove a lot of things not only the stamps
+>>
+>> clean: $(TARGETS_CLEAN)
+>>       rm -rf $(STAGING_DIR) $(TARGET_DIR) $(IMAGE)
+>> $(PROJECT_BUILD_DIR)/.root $(PROJECT_BUILD_DIR)/autotools-stamps
+>>
+>> a) you want reinstall things in root because they have been corrupted
+>> without loosing your customization on scripts/configurations:
+>
+> You shouldn't edit anything in $(TARGET_DIR) yourself - edit the
+> source, then rebuild.
 
-diff --git a/package/qtopia4/qtopia4.mk b/package/qtopia4/qtopia4.mk
-index 360b949..c0ced9b 100644
---- a/package/qtopia4/qtopia4.mk
-+++ b/package/qtopia4/qtopia4.mk
-@@ -218,6 +218,7 @@ QTOPIA4_CONFIGURE:=$(strip $(subst ",, $(QTOPIA4_CONFIGURE)))
- BR2_PACKAGE_QTOPIA4_EMB_PLATFORM:=$(strip $(subst ",, $(BR2_PACKAGE_QTOPIA4_EMB_PLATFORM)))
- #"))
- 
-+QTOPIA4_QMAKE_CONF:=$(QTOPIA4_TARGET_DIR)/mkspecs/qws/linux-$(BR2_PACKAGE_QTOPIA4_EMB_PLATFORM)-g++/qmake.conf
- 
- # Variable for other Qt applications to use
- QTOPIA4_QMAKE:=$(STAGING_DIR)/usr/bin/qmake -spec qws/linux-$(BR2_PACKAGE_QTOPIA4_EMB_PLATFORM)-g++
-@@ -243,14 +244,14 @@ endif
- 	$(SED) 's/^CFG_XINERAMA=auto/CFG_XINERAMA=no/' $(QTOPIA4_TARGET_DIR)/configure
- 	#$(SED) 's,-O2,$(TARGET_CFLAGS),' $(QTOPIA4_TARGET_DIR)/mkspecs/qws/linux-$(BR2_PACKAGE_QTOPIA4_EMB_PLATFORM)-g++/qmake.conf
-         # Fix compiler path
--	$(SED) '\,QMAKE_CC *=, c\QMAKE_CC = $(TARGET_CC)' $(QTOPIA4_TARGET_DIR)/mkspecs/qws/linux-$(BR2_PACKAGE_QTOPIA4_EMB_PLATFORM)-g++/qmake.conf
--	$(SED) '\,QMAKE_CXX *=, c\QMAKE_CXX = $(TARGET_CXX)' $(QTOPIA4_TARGET_DIR)/mkspecs/qws/linux-$(BR2_PACKAGE_QTOPIA4_EMB_PLATFORM)-g++/qmake.conf
--	$(SED) '\,QMAKE_LINK *=, c\QMAKE_LINK = $(TARGET_CXX)' $(QTOPIA4_TARGET_DIR)/mkspecs/qws/linux-$(BR2_PACKAGE_QTOPIA4_EMB_PLATFORM)-g++/qmake.conf
--	$(SED) '\,QMAKE_LINK_SHLIB *=, c\QMAKE_LINK_SHLIB = $(TARGET_CXX)' $(QTOPIA4_TARGET_DIR)/mkspecs/qws/linux-$(BR2_PACKAGE_QTOPIA4_EMB_PLATFORM)-g++/qmake.conf
--	$(SED) '\,QMAKE_AR *=, c\QMAKE_AR = $(TARGET_CROSS)ar cqs' $(QTOPIA4_TARGET_DIR)/mkspecs/qws/linux-$(BR2_PACKAGE_QTOPIA4_EMB_PLATFORM)-g++/qmake.conf
--	$(SED) '\,QMAKE_RANLIB *=, c\QMAKE_RANLIB = $(TARGET_RANLIB)' $(QTOPIA4_TARGET_DIR)/mkspecs/qws/linux-$(BR2_PACKAGE_QTOPIA4_EMB_PLATFORM)-g++/qmake.conf
--	$(SED) '\,QMAKE_STRIP *=, c\QMAKE_STRIP = $(TARGET_CROSS)strip' $(QTOPIA4_TARGET_DIR)/mkspecs/qws/linux-$(BR2_PACKAGE_QTOPIA4_EMB_PLATFORM)-g++/qmake.conf
--	
-+	$(SED) '\,QMAKE_CC[ 	]*=, c\QMAKE_CC = $(TARGET_CC)' $(QTOPIA4_QMAKE_CONF)
-+	$(SED) '\,QMAKE_CXX[ 	]*=, c\QMAKE_CXX = $(TARGET_CXX)' $(QTOPIA4_QMAKE_CONF)
-+	$(SED) '\,QMAKE_LINK[ 	]*=, c\QMAKE_LINK = $(TARGET_CXX)' $(QTOPIA4_QMAKE_CONF)
-+	$(SED) '\,QMAKE_LINK_SHLIB[ 	]*=, c\QMAKE_LINK_SHLIB = $(TARGET_CXX)' $(QTOPIA4_QMAKE_CONF)
-+	$(SED) '\,QMAKE_AR[ 	]*=, c\QMAKE_AR = $(TARGET_AR) cqs' $(QTOPIA4_QMAKE_CONF)
-+	$(SED) '\,QMAKE_RANLIB[ 	]*=, c\QMAKE_RANLIB = $(TARGET_RANLIB)' $(QTOPIA4_QMAKE_CONF)
-+	$(SED) '\,QMAKE_STRIP[ 	]*=, c\QMAKE_STRIP = $(TARGET_STRIP)' $(QTOPIA4_QMAKE_CONF)
-+
- 	-[ -f $(QTOPIA4_QCONFIG_FILE) ] && cp $(QTOPIA4_QCONFIG_FILE) \
- 		$(QTOPIA4_TARGET_DIR)/$(QTOPIA4_QCONFIG_FILE_LOCATION)
- # Qt doesn't use PKG_CONFIG, it searches for pkg-config with 'which'.
+Yes and no.
+Yes you are right once I know what I want to do on the source.
+No, you are not right if I have to play with rootfs until I decide.
+
+
+>
+> However, there does need to be a way to copy the target_skeleton over
+> the root directory again in case you've edited files (startup scripts,
+> passwd file, fstab etc). And you might not want to copy this over an
+> existing $(TARGET_DIR), because then you might lose changes made
+> by packages.
+>
+> I didn't understand your softclean and rootclean targets though. Here's
+> what I have added to my own tree:
+>
+
+my 'softclean' is an internal target in order to do 'install' target.
+
+> root-clean:
+>        rm -rf $(PROJECT_BUILD_DIR)/.root $(PROJECT_BUILD_DIR)/autotools-stamps $(TARGET_DIR)
+>
+>
+
+ok, so it seems to me that: install and rootclean could be two
+acceptable targets to add.
+
+here you are a newer version of the patch
+
++	@echo '  rootclean		- delete all rootfs content
+
++	@echo '  install		- (re)install rootfs but not skeleton if it exists'
+
+
+Cheers,
 -- 
-1.5.6.4
+/roberto
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: Makefile-r23778.patch3
+Type: application/octet-stream
+Size: 2568 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20081028/4492baf1/attachment.obj 
