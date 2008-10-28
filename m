@@ -1,46 +1,41 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Tue, 28 Oct 2008 12:04:42 +1100
-Subject: [Buildroot] [PATCH] Avoid make distclean to remove
-	packages	fromrootfs
-In-Reply-To: <e4c675870810271411j60951480x90de0d4520abcb75@mail.gmail.com>
-References: <e4c675870810220506q31952b43ta544bfbdcec64c4e@mail.gmail.com>
-	<COL0-DAV311F354B4DDD6CF6B394418D290@phx.gbl>
-	<e4c675870810271342l7cb8d57eo824d1238bcf18ab3@mail.gmail.com>
-	<20081027204927.GF14184@mx.loc>
-	<e4c675870810271411j60951480x90de0d4520abcb75@mail.gmail.com>
-Message-ID: <20081028010442.GA27610@cloud.net.au>
+From: Markus Heidelberg <markus.heidelberg@web.de>
+Date: Tue, 28 Oct 2008 02:51:36 +0100
+Subject: [Buildroot] [PATCH] qtopia4: fix use of pkg-config
+Message-ID: <200810280251.36628.markus.heidelberg@web.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Oct 27, 2008 at 10:11:12PM +0100, Roberto A. Foglietta wrote:
-> clean remove a lot of things not only the stamps
-> 
-> clean: $(TARGETS_CLEAN)
-> 	rm -rf $(STAGING_DIR) $(TARGET_DIR) $(IMAGE)
-> $(PROJECT_BUILD_DIR)/.root $(PROJECT_BUILD_DIR)/autotools-stamps
-> 
-> a) you want reinstall things in root because they have been corrupted
-> without loosing your customization on scripts/configurations:
+When cross compiling, Qt sets PKG_CONFIG in its own configure script to
+an empty string. That leads to not using pkg-config. To avoid that, use
+the configure option -force-pkg-config. Also set environment variables
+for pkg-config defined in TARGET_CONFIGURE_OPTS.
+---
+ package/qtopia4/qtopia4.mk |    7 ++++++-
+ 1 files changed, 6 insertions(+), 1 deletions(-)
 
-You shouldn't edit anything in $(TARGET_DIR) yourself - edit the
-source, then rebuild.
-
-However, there does need to be a way to copy the target_skeleton over
-the root directory again in case you've edited files (startup scripts,
-passwd file, fstab etc). And you might not want to copy this over an
-existing $(TARGET_DIR), because then you might lose changes made
-by packages.
-
-I didn't understand your softclean and rootclean targets though. Here's
-what I have added to my own tree:
-
-root-clean:
-	rm -rf $(PROJECT_BUILD_DIR)/.root $(PROJECT_BUILD_DIR)/autotools-stamps $(TARGET_DIR)
-
-
-Hamish
+diff --git a/package/qtopia4/qtopia4.mk b/package/qtopia4/qtopia4.mk
+index c959d40..360b949 100644
+--- a/package/qtopia4/qtopia4.mk
++++ b/package/qtopia4/qtopia4.mk
+@@ -253,10 +253,15 @@ endif
+ 	
+ 	-[ -f $(QTOPIA4_QCONFIG_FILE) ] && cp $(QTOPIA4_QCONFIG_FILE) \
+ 		$(QTOPIA4_TARGET_DIR)/$(QTOPIA4_QCONFIG_FILE_LOCATION)
++# Qt doesn't use PKG_CONFIG, it searches for pkg-config with 'which'.
++# PKG_CONFIG_SYSROOT is only used to avoid a warning from Qt's configure system
++# when cross compiling, Qt 4.4.3 is wrong here.
+ 	(cd $(QTOPIA4_TARGET_DIR); rm -rf config.cache; \
+-		PATH=$(TARGET_PATH) \
++		$(TARGET_CONFIGURE_OPTS) \
++		PKG_CONFIG_SYSROOT="$(STAGING_DIR)" \
+ 		./configure \
+ 		-verbose \
++		-force-pkg-config \
+ 		-embedded $(BR2_PACKAGE_QTOPIA4_EMB_PLATFORM) \
+ 		$(QTOPIA4_QCONFIG_COMMAND) \
+ 		$(QTOPIA4_CONFIGURE) \
 -- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+1.5.6.4
