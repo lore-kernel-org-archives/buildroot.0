@@ -1,33 +1,57 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 28 Oct 2008 08:32:41 +0100
-Subject: [Buildroot] Synchronisation of dependencies between Config.in
-	and .mk files ?
-In-Reply-To: <e4c675870810271533q21914df7od498b0be858600e2@mail.gmail.com>
-	(Roberto A. Foglietta's message of "Mon\,
-	27 Oct 2008 23\:33\:35 +0100")
-References: <20081027175645.7e7cb096@surf>
-	<87zlkphoas.fsf@macbook.be.48ers.dk> <20081027211141.0935d9c0@surf>
-	<200810272247.34068.markus.heidelberg@web.de>
-	<e4c675870810271533q21914df7od498b0be858600e2@mail.gmail.com>
-Message-ID: <87ljw9dvja.fsf@macbook.be.48ers.dk>
+From: Markus Heidelberg <markus.heidelberg@web.de>
+Date: Tue, 28 Oct 2008 09:22:53 +0100
+Subject: [Buildroot] [PATCH] qtopia4: fix use of pkg-config
+In-Reply-To: <20081028081410.5395e6f0@surf>
+References: <200810280251.36628.markus.heidelberg@web.de>
+	<20081028081410.5395e6f0@surf>
+Message-ID: <200810280922.53728.markus.heidelberg@web.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Roberto" == Roberto A Foglietta <roberto.foglietta@gmail.com> writes:
+Thomas Petazzoni, 28.10.2008:
+> Le Tue, 28 Oct 2008 02:51:36 +0100,
+> Markus Heidelberg <markus.heidelberg@web.de> a ?crit :
+> 
+> > +		$(TARGET_CONFIGURE_OPTS) \
+> > +		PKG_CONFIG_SYSROOT="$(STAGING_DIR)" \
+> 
+> I don't get why PKG_CONFIG_SYSROOT should be set here. The correct
+> variable is PKG_CONFIG_SYSROOT_DIR and it is already set in
+> TARGET_CONFIGURE_OPTS. I probably missed something specific to Qt, but
+> I didn't understand the sentence: ?PKG_CONFIG_SYSROOT is only used to
+> avoid a warning from Qt's configure system?.
 
-Hi,
+Damn, I wanted to keep the comment short without being unclear, which
+apparently failed. This extract from the file Qt/configure should make the use
+of -force-pkg-config and PKG_CONFIG_SYSROOT clear. Qt should query
+PKG_CONFIG_SYSROOT_DIR instead of PKG_CONFIG_SYSROOT. I've already sent a bug
+report.
 
- Roberto>  I think the use of "depends on" in Config.in should be used
- Roberto> ONLY when arch restrictions have been involved.
-
-We normally only use depends on for sub packages (E.G. X applications
-that don't make any sense without X) and for toolchain dependencies
-(E.G. locale support) as changing toolchain option with select isn't a
-good thing.
-
-
--- 
-Bye, Peter Korsgaard
+if [ "$QT_CROSS_COMPILE" = "yes" ]; then
+    if [ -n "$QT_FORCE_PKGCONFIG" ]; then
+        echo >&2 ""
+        echo >&2 "You have asked to use pkg-config and are cross-compiling."
+        echo >&2 "Please make sure you have a correctly set-up pkg-config"
+        echo >&2 "environment!"
+        echo >&2 ""
+        if [ -z "$PKG_CONFIG_PATH" ]; then
+            echo >&2 ""
+            echo >&2 "Warning: PKG_CONFIG_PATH has not been set.  This could mean"
+            echo >&2 "the host compiler's .pc files will be used. This is probably"
+            echo >&2 "not what you want."
+            echo >&2 ""
+        elif [ -z "$PKG_CONFIG_SYSROOT" ]; then
+            echo >&2 ""
+            echo >&2 "Warning: PKG_CONFIG_SYSROOT has not been set. This means"
+            echo >&2 "your toolchain's .pc files must contain the paths to the"
+            echo >&2 "toolchain's libraries & headers. If configure tests are"
+            echo >&2 "failing, please check these files."
+            echo >&2 ""
+        fi
+    else
+        PKG_CONFIG=""
+    fi
+fi
