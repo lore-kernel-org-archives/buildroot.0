@@ -1,24 +1,24 @@
-From: Daniel J Laird <daniel.j.laird@nxp.com>
-Date: Tue, 28 Oct 2008 18:32:28 +0100
-Subject: [Buildroot] LDFLAGS setting in buildroot
-In-Reply-To: <20081028171739.GC5827@mx.loc>
-References: <C13DBBE85AD6974B85C118C35890CA5F13B20D91B5@EU1RDCRDC1WX029.exi.nxp.com>
-	<20081028131817.GA3139@mx.loc> <20081028143538.5e9eda36@surf>
-	<20081028134555.GB3139@mx.loc> <20081028150833.015999ca@surf>
-	<20081028153100.GC3139@mx.loc> <20081028170050.6ded5cda@surf>
-	<20081028161325.GA5827@mx.loc>
-	<C13DBBE85AD6974B85C118C35890CA5F13B20D9424@EU1RDCRDC1WX029.exi.nxp.com>
-	<20081028171739.GC5827@mx.loc>
-Message-ID: <C13DBBE85AD6974B85C118C35890CA5F13B20D9441@EU1RDCRDC1WX029.exi.nxp.com>
+From: Markus Heidelberg <markus.heidelberg@web.de>
+Date: Tue, 28 Oct 2008 22:45:06 +0100
+Subject: [Buildroot] [PATCH] qtopia4: fix adjustment of qmake.conf
+In-Reply-To: <877i7tcb27.fsf@macbook.be.48ers.dk>
+References: <200810280254.32049.markus.heidelberg@web.de>
+	<877i7tcb27.fsf@macbook.be.48ers.dk>
+Message-ID: <200810282245.06820.markus.heidelberg@web.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Agreed, I would need to do for directfb.mk what you have done is lots of other packages.....
+Peter Korsgaard, 28.10.2008:
+> 
+> Thanks, committed.
+> 
+> Could I get you to sign off on the patches (-s option to git
+> format-patch)? Then I don't have to git commit --amend to mention that
+> you are the author of the commit.
 
-I think I will look into adding your stuff and see where that gets me.
+Of course, sorry. If I had known it before, I would have already done it.
 
-Cheers
-Dan
+Markus
