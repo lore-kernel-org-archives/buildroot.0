@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 28 Oct 2008 02:33:02 -0700
-Subject: [Buildroot] [buildroot 0005614]: make clean + make does not provide
-	a full project rootfs
-Message-ID: <6aeae9d3319411f8c40a94cdaacb0f9b@busybox.net>
+Date: Tue, 28 Oct 2008 02:35:08 -0700
+Subject: [Buildroot] [buildroot 0005714]: bug with jamvm + concierge +
+	classpath
+Message-ID: <e39db6834d37ebe70da6732efbef1322@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,61 +12,143 @@ To: buildroot@busybox.net
 
 A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=5614 
+http://busybox.net/bugs/view.php?id=5714 
 ====================================================================== 
-Reported By:                robang74
+Reported By:                sylvain
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   5614
-Category:                   Other
+Issue ID:                   5714
+Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   major
+Severity:                   block
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             10-20-2008 13:20 PDT
-Last Modified:              10-28-2008 02:33 PDT
+Date Submitted:             10-24-2008 05:46 PDT
+Last Modified:              10-28-2008 02:35 PDT
 ====================================================================== 
-Summary:                    make clean + make does not provide a full project
-rootfs
+Summary:                    bug with jamvm + concierge + classpath
 Description: 
-roberto at rafbook:~/gles/buildroot$ make clean
+I work on arm9.
 
-[...]
+I try with the tarball of 22/09/2008 
 
-roberto at rafbook:~/gles/buildroot$ make 
+When I compil busyboc + classpath + jamvm + concierge I get something like
+:
 
-Size of boot image is 4 sectors -> No emulation
-Total translation table size: 2048
-Total rockridge attributes bytes: 996
-Total directory bytes: 4096
-Path table size(bytes): 34
-Max brk space used 0
-2838 extents written (5 MB)
-echo /home/roberto/gles/buildroot/binaries/ugles/rootfs.i586.iso
-/home/roberto/gles/buildroot/binaries/ugles/rootfs.i586.iso
--rw-r--r-- 1 roberto roberto 5812224 2008-10-20 22:13
-/home/roberto/gles/buildroot/binaries/ugles/rootfs.i586.iso
-rm -f /home/roberto/gles/buildroot/project_build_i586/ugles/.fakeroot*
+libtool: link:
+/home/sylvain/FSEmbarque/maChaineDeCompil/usr/bin/arm-linux-uclibc-gcc -Os
+-I/home/sylvain/FSEmbarque/maChaineDeCompil/usr/include
+-I/home/sylvain/FSEmbarque/maChaineDeCompil/include
+--sysroot=/home/sylvain/FSEmbarque/maChaineDeCompil/ -isysroot
+/home/sylvain/FSEmbarque/maChaineDeCompil -msoft-float -g -O2 -Wall -W -o
+mkg3states mkg3states.o  -L/home/sylvain/FSEmbarque/maChaineDeCompil/lib
+../port/.libs/libport.a /usr/lib/libjpeg.so -lz -lm -lc
+/usr/lib/libjpeg.so: could not read symbols: File in wrong format
+collect2: ld returned 1 exit status
+make[3]: *** [mkg3states] Erreur 1
+make[3]: *** Attente des t?ches non termin?es....
+libtool: link:
+/home/sylvain/FSEmbarque/maChaineDeCompil/usr/bin/arm-linux-uclibc-gcc -Os
+ -I/home/sylvain/FSEmbarque/maChaineDeCompil/usr/include
+-I/home/sylvain/FSEmbarque/maChaineDeCompil/include
+--sysroot=/home/sylvain/FSEmbarque/maChaineDeCompil/ -isysroot
+/home/sylvain/FSEmbarque/maChaineDeCompil -msoft-float -shared 
+.libs/tif_aux.o .libs/tif_close.o .libs/tif_codec.o .libs/tif_color.o
+.libs/tif_compress.o .libs/tif_dir.o .libs/tif_dirinfo.o
+.libs/tif_dirread.o .libs/tif_dirwrite.o .libs/tif_dumpmode.o
+.libs/tif_error.o .libs/tif_extension.o .libs/tif_fax3.o
+.libs/tif_fax3sm.o .libs/tif_flush.o .libs/tif_getimage.o .libs/tif_jpeg.o
+.libs/tif_luv.o .libs/tif_lzw.o .libs/tif_next.o .libs/tif_ojpeg.o
+.libs/tif_open.o .libs/tif_packbits.o .libs/tif_pixarlog.o
+.libs/tif_predict.o .libs/tif_print.o .libs/tif_read.o .libs/tif_strip.o
+.libs/tif_swab.o .libs/tif_thunder.o .libs/tif_tile.o .libs/tif_unix.o
+.libs/tif_version.o .libs/tif_warning.o .libs/tif_write.o .libs/tif_zip.o 
+-Wl,--whole-archive ../port/.libs/libport.a -Wl,--no-whole-archive 
+-L/home/sylvain/FSEmbarque/maChaineDeCompil/lib /usr/lib/libjpeg.so -lz
+-lm -lc  -isysroot /home/sylvain/FSEmbarque/maChaineDeCompil -msoft-float 
+   -Wl,-soname -Wl,libtiff.so.3 -o .libs/libtiff.so.3.8.2
+/usr/lib/libjpeg.so: could not read symbols: File in wrong format
+collect2: ld returned 1 exit status
+make[3]: *** [libtiff.la] Erreur 1
+make[3]: quittant le r?pertoire ?
+/home/sylvain/FSEmbarque/buildroot-20081024/build_arm/tiff-3.8.2/libtiff
+?
+make[2]: *** [all] Erreur 2
+make[2]: quittant le r?pertoire ?
+/home/sylvain/FSEmbarque/buildroot-20081024/build_arm/tiff-3.8.2/libtiff
+?
+make[1]: *** [all-recursive] Erreur 1
+make[1]: quittant le r?pertoire ?
+/home/sylvain/FSEmbarque/buildroot-20081024/build_arm/tiff-3.8.2 ?
 
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- robang74 - 10-28-08 02:33  
+ tpetazzoni - 10-24-08 06:55  
 ---------------------------------------------------------------------- 
-Proposed solution discussed in m-list
-http://busybox.net/lists/buildroot/2008-October/011309.html 
+The problem at the beginning is that it tries to link with the host libjpeg
+instead of the target libjpeg. Not sure why, though, and I don't really get
+why setting TARGET_DIR would solve the problem. 
+
+---------------------------------------------------------------------- 
+ Correa - 10-24-08 10:35  
+---------------------------------------------------------------------- 
+It did build ok for me using avr32 as target.
+
+I'm using latest svn (r23778 at the moment).
+Try updating. There were changes in the Makefile.autotools.in that might
+affect your build. 
+
+---------------------------------------------------------------------- 
+ sylvain - 10-28-08 02:05  
+---------------------------------------------------------------------- 
+Thanks for the help.
+
+tpetazzoni you are right to modify the TARGET_DIR do not resolve the
+problem permanently, I was just lucky and I don t know why..
+
+(Correa) I tried to update my release, unfortunatly I have the same
+bug...
+I should have a a difference with your linux settings... That's stuff are
+not really easy to solve...
+
+
+
+
+
+
+I did other investigations to understand the problem.
+In fact, when I compile classpath, it compiles its dependences : libjpeg,
+libtiff, etc....
+
+And inside tiff's makefile LIBTOOL try to resolve the dynamics shared
+libraries and it resolve -ljpeg by /usr/lib/libjpeg.so instead of
+<mycrosscompilToolchain>/usr/bin/libjpeg.so ...
+
+I try to understand libtool and resolve the problem but the libtool script
+are more or less a nightmare to understand.
+
+
+If you have some idea you are really welcome :-)) 
+
+---------------------------------------------------------------------- 
+ tpetazzoni - 10-28-08 02:35  
+---------------------------------------------------------------------- 
+After the failure, what's the contents of
+build_<ARCH>/staging_dir/usr/lib/libjpeg.la ? 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-10-20-08 13:20  robang74       New Issue                                    
-10-20-08 13:20  robang74       Status                   new => assigned     
-10-20-08 13:20  robang74       Assigned To               => buildroot       
-10-20-08 13:20  robang74       File Added: .config                          
-10-20-08 13:20  robang74       Issue Monitored: robang74                    
-10-28-08 02:29  robang74       File Added: Makefile-r23778.patch3               
-    
-10-28-08 02:33  robang74       Note Added: 0014434                          
+10-24-08 05:46  sylvain        New Issue                                    
+10-24-08 05:46  sylvain        Status                   new => assigned     
+10-24-08 05:46  sylvain        Assigned To               => buildroot       
+10-24-08 05:49  sylvain        Issue Monitored: sylvain                     
+10-24-08 05:50  sylvain        Issue End Monitor: sylvain                    
+10-24-08 06:55  tpetazzoni     Note Added: 0014104                          
+10-24-08 10:35  Correa         Note Added: 0014114                          
+10-28-08 02:05  sylvain        Note Added: 0014414                          
+10-28-08 02:35  tpetazzoni     Note Added: 0014444                          
 ======================================================================
