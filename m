@@ -1,53 +1,31 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 28 Oct 2008 05:13:43 -0700
-Subject: [Buildroot] [buildroot 0005774]: Add SocketCAN Tools in buildroot
-Message-ID: <6c18808e98104ec55e25147d71ef6021@busybox.net>
+From: Daniel J Laird <daniel.j.laird@nxp.com>
+Date: Tue, 28 Oct 2008 13:36:08 +0100
+Subject: [Buildroot] LDFLAGS setting in buildroot
+Message-ID: <C13DBBE85AD6974B85C118C35890CA5F13B20D91B5@EU1RDCRDC1WX029.exi.nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Sometime ago Thomas Petazzoni posted some patches about setting rpath-link etc.
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=5774 
-====================================================================== 
-Reported By:                ibabarovic
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   5774
-Category:                   New Features
-Reproducibility:            always
-Severity:                   feature
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             10-28-2008 05:13 PDT
-Last Modified:              10-28-2008 05:13 PDT
-====================================================================== 
-Summary:                    Add SocketCAN Tools in buildroot
-Description: 
-Hi,
+I have been playing with this and have come to similar conclusion.  That is that
+doing LD="$(TARGET_LD) $(TARGET_LDFLAGS)" is not very helpful.
 
-this patch adds support for SocketCAN userspace tools.
-Works for me, but it may be of use to somebody else.
-I decided to go for SVN trunk since last tagged revision is ancient.
-The patch is similar to i2ctools and tools are put in same section.
-Please comment and apply if OK.
+In fact if I do this I need to pass LDFLAGS to lots of my packages
+directfb
+png,
+webkit,
+cairo,
+To name but a few.
 
-Best regards,
-Savin Gorup
-Ivica Babarovic
-====================================================================== 
+However if I split this into:
+LD="$(TARGET_LD)"
+LDFLAGS="$(TARGET_LDFLAGS)"
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-10-28-08 05:13  ibabarovic     New Issue                                    
-10-28-08 05:13  ibabarovic     Status                   new => assigned     
-10-28-08 05:13  ibabarovic     Assigned To               => buildroot       
-10-28-08 05:13  ibabarovic     File Added: SocketCAN-buildroot-patch.diff       
-            
-======================================================================
+They all build better (i.e I do not need to add LD_FLAGS to all the packages) and I can then add --rpath-link lines to TARGET_LDFLAGS and they all still build (no shared library issues)
+Does anyone have any problems with what I am suggesting before I go ahead and commit.....
+
+Many thanks
+Daniel Laird
