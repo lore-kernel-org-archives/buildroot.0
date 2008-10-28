@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 28 Oct 2008 02:43:13 -0700
-Subject: [Buildroot] [buildroot 0005724]: libglib2 compilation crash on
-	/usr/bin/glib-genmarshal
-Message-ID: <df8a48229a4fea3c53139c4dc759885d@busybox.net>
+Date: Tue, 28 Oct 2008 03:28:15 -0700
+Subject: [Buildroot] [buildroot 0005714]: bug with jamvm + concierge +
+	classpath
+Message-ID: <c4031c998fa7311ae65419ce1a9aeb55@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,152 +12,167 @@ To: buildroot@busybox.net
 
 A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=5724 
+http://busybox.net/bugs/view.php?id=5714 
 ====================================================================== 
-Reported By:                robang74
+Reported By:                sylvain
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   5724
-Category:                   Shared Library Support
+Issue ID:                   5714
+Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   crash
+Severity:                   block
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             10-24-2008 21:51 PDT
-Last Modified:              10-28-2008 02:43 PDT
+Date Submitted:             10-24-2008 05:46 PDT
+Last Modified:              10-28-2008 03:28 PDT
 ====================================================================== 
-Summary:                    libglib2 compilation crash on
-/usr/bin/glib-genmarshal
+Summary:                    bug with jamvm + concierge + classpath
 Description: 
-make[3]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/glib'
-Making all in gobject
-make[3]: Entering directory
-`/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/gobject'
-/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
--Os  -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
--I/home/roberto/gles/buildroot/build_i586/staging_dir/include
---sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
-/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
--march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -DHAVE_CONFIG_H -I. -I.. 
--DG_LOG_DOMAIN=\"GLib-GObject\" -I.. -I../glib -I.. -DG_ENABLE_DEBUG
--DG_DISABLE_DEPRECATED -DGOBJECT_COMPILATION -DG_DISABLE_CONST_RETURNS
--pthread  -g -O2 -Wall -MT glib-genmarshal.o -MD -MP -MF
-.deps/glib-genmarshal.Tpo -c -o glib-genmarshal.o glib-genmarshal.c
-mv -f .deps/glib-genmarshal.Tpo .deps/glib-genmarshal.Po
-/bin/bash ../libtool --tag=CC   --mode=link
-/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
--Os  -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
--I/home/roberto/gles/buildroot/build_i586/staging_dir/include
---sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
-/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
--march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64  -g -O2 -Wall   -o glib-genmarshal
-glib-genmarshal.o ../glib/libglib-2.0.la -lintl  
-mkdir .libs
-/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
--Os -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
--I/home/roberto/gles/buildroot/build_i586/staging_dir/include
---sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
-/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
--march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -g -O2 -Wall -o glib-genmarshal glib-genmarshal.o 
-../glib/.libs/libglib-2.0.so -lintl   -Wl,--rpath
--Wl,/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/glib/.libs
-/usr/bin/make glib-genmarshal
-make[4]: Entering directory
-`/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/gobject'
-make[4]: `glib-genmarshal' is up to date.
-make[4]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/gobject'
-echo "#ifndef __G_MARSHAL_H__" > xgen-gmh \
-	&& echo "#define __G_MARSHAL_H__" >> xgen-gmh \
-	&& /usr/bin/glib-genmarshal --nostdinc --prefix=g_cclosure_marshal
-./gmarshal.list --header >> xgen-gmh \
-	&& echo "#endif /* __G_MARSHAL_H__ */" >> xgen-gmh \
-	&& (cmp -s xgen-gmh gmarshal.h 2>/dev/null || cp xgen-gmh gmarshal.h) \
-	&& rm -f xgen-gmh xgen-gmh~ \
-	&& echo timestamp > stamp-gmarshal.h
-/bin/bash: line 2: /usr/bin/glib-genmarshal: No such file or directory
-make[3]: *** [stamp-gmarshal.h] Error 127
-make[3]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/gobject'
-make[2]: *** [all-recursive] Error 1
-make[2]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4'
-make[1]: *** [all] Error 2
-make[1]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4'
-make: ***
-[/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/.stamp_built]
-Error 2
+I work on arm9.
+
+I try with the tarball of 22/09/2008 
+
+When I compil busyboc + classpath + jamvm + concierge I get something like
+:
+
+libtool: link:
+/home/sylvain/FSEmbarque/maChaineDeCompil/usr/bin/arm-linux-uclibc-gcc -Os
+-I/home/sylvain/FSEmbarque/maChaineDeCompil/usr/include
+-I/home/sylvain/FSEmbarque/maChaineDeCompil/include
+--sysroot=/home/sylvain/FSEmbarque/maChaineDeCompil/ -isysroot
+/home/sylvain/FSEmbarque/maChaineDeCompil -msoft-float -g -O2 -Wall -W -o
+mkg3states mkg3states.o  -L/home/sylvain/FSEmbarque/maChaineDeCompil/lib
+../port/.libs/libport.a /usr/lib/libjpeg.so -lz -lm -lc
+/usr/lib/libjpeg.so: could not read symbols: File in wrong format
+collect2: ld returned 1 exit status
+make[3]: *** [mkg3states] Erreur 1
+make[3]: *** Attente des t?ches non termin?es....
+libtool: link:
+/home/sylvain/FSEmbarque/maChaineDeCompil/usr/bin/arm-linux-uclibc-gcc -Os
+ -I/home/sylvain/FSEmbarque/maChaineDeCompil/usr/include
+-I/home/sylvain/FSEmbarque/maChaineDeCompil/include
+--sysroot=/home/sylvain/FSEmbarque/maChaineDeCompil/ -isysroot
+/home/sylvain/FSEmbarque/maChaineDeCompil -msoft-float -shared 
+.libs/tif_aux.o .libs/tif_close.o .libs/tif_codec.o .libs/tif_color.o
+.libs/tif_compress.o .libs/tif_dir.o .libs/tif_dirinfo.o
+.libs/tif_dirread.o .libs/tif_dirwrite.o .libs/tif_dumpmode.o
+.libs/tif_error.o .libs/tif_extension.o .libs/tif_fax3.o
+.libs/tif_fax3sm.o .libs/tif_flush.o .libs/tif_getimage.o .libs/tif_jpeg.o
+.libs/tif_luv.o .libs/tif_lzw.o .libs/tif_next.o .libs/tif_ojpeg.o
+.libs/tif_open.o .libs/tif_packbits.o .libs/tif_pixarlog.o
+.libs/tif_predict.o .libs/tif_print.o .libs/tif_read.o .libs/tif_strip.o
+.libs/tif_swab.o .libs/tif_thunder.o .libs/tif_tile.o .libs/tif_unix.o
+.libs/tif_version.o .libs/tif_warning.o .libs/tif_write.o .libs/tif_zip.o 
+-Wl,--whole-archive ../port/.libs/libport.a -Wl,--no-whole-archive 
+-L/home/sylvain/FSEmbarque/maChaineDeCompil/lib /usr/lib/libjpeg.so -lz
+-lm -lc  -isysroot /home/sylvain/FSEmbarque/maChaineDeCompil -msoft-float 
+   -Wl,-soname -Wl,libtiff.so.3 -o .libs/libtiff.so.3.8.2
+/usr/lib/libjpeg.so: could not read symbols: File in wrong format
+collect2: ld returned 1 exit status
+make[3]: *** [libtiff.la] Erreur 1
+make[3]: quittant le r?pertoire ?
+/home/sylvain/FSEmbarque/buildroot-20081024/build_arm/tiff-3.8.2/libtiff
+?
+make[2]: *** [all] Erreur 2
+make[2]: quittant le r?pertoire ?
+/home/sylvain/FSEmbarque/buildroot-20081024/build_arm/tiff-3.8.2/libtiff
+?
+make[1]: *** [all-recursive] Erreur 1
+make[1]: quittant le r?pertoire ?
+/home/sylvain/FSEmbarque/buildroot-20081024/build_arm/tiff-3.8.2 ?
 
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- robang74 - 10-24-08 22:53  
+ tpetazzoni - 10-24-08 06:55  
 ---------------------------------------------------------------------- 
-Proposed solution: glib-genmarshal should be compiled for $HOST not for
-$TARGET system. Probably tests should be avoided too.
-
-roberto at rafbook:~/gles/buildroot$ svn info | grep Last
-Last Changed Author: jacmet
-Last Changed Rev: 23778
-Last Changed Date: 2008-10-24 13:02:32 +0200 (Fri, 24 Oct 2008)
-
- 
+The problem at the beginning is that it tries to link with the host libjpeg
+instead of the target libjpeg. Not sure why, though, and I don't really get
+why setting TARGET_DIR would solve the problem. 
 
 ---------------------------------------------------------------------- 
- robang74 - 10-28-08 02:21  
+ Correa - 10-24-08 10:35  
 ---------------------------------------------------------------------- 
-roberto at rafbook:~/gles/buildroot$ svn info | grep Last
-Last Changed Author: jacmet
-Last Changed Rev: 23821
-Last Changed Date: 2008-10-27 16:15:52 +0100 (Mon, 27 Oct 2008) 
+It did build ok for me using avr32 as target.
+
+I'm using latest svn (r23778 at the moment).
+Try updating. There were changes in the Makefile.autotools.in that might
+affect your build. 
 
 ---------------------------------------------------------------------- 
- tpetazzoni - 10-28-08 02:43  
+ sylvain - 10-28-08 02:05  
 ---------------------------------------------------------------------- 
-glib2 is designed to use the glib-genmarshal binary available in the PATH
-in the case of cross-compilation. The ./configure script checks that a
-glib-genmarshal binary is available in the PATH in the cross-compile case,
-and fails if glib-genmarshal is not found:
+Thanks for the help.
 
-if test $cross_compiling = yes; then
-  AC_PATH_PROG(GLIB_GENMARSHAL, glib-genmarshal, no)
-  if test x$GLIB_GENMARSHAL = xno; then
-    AC_MSG_ERROR(Could not find a glib-genmarshal in your PATH)
-  fi
-fi
+tpetazzoni you are right to modify the TARGET_DIR do not resolve the
+problem permanently, I was just lucky and I don t know why..
 
-Do you have the output of the configure script ? And the config.log file
-?
+(Correa) I tried to update my release, unfortunatly I have the same
+bug...
+I should have a a difference with your linux settings... That's stuff are
+not really easy to solve...
 
-It should either :
 
- * Think that you are cross-compiling, testing in the configure script
-that you have glib-genmarshal in your PATH and fail if not. Which is not
-your case, it seems.
 
- * Think that you are *not* cross-compiling, and use the internally
-compiled glib-genmarshal. Which is not your case either.
 
-So, I'm quite confused with what you're seeing. 
+
+
+I did other investigations to understand the problem.
+In fact, when I compile classpath, it compiles its dependences : libjpeg,
+libtiff, etc....
+
+And inside tiff's makefile LIBTOOL try to resolve the dynamics shared
+libraries and it resolve -ljpeg by /usr/lib/libjpeg.so instead of
+<mycrosscompilToolchain>/usr/bin/libjpeg.so ...
+
+I try to understand libtool and resolve the problem but the libtool script
+are more or less a nightmare to understand.
+
+
+If you have some idea you are really welcome :-)) 
+
+---------------------------------------------------------------------- 
+ tpetazzoni - 10-28-08 02:35  
+---------------------------------------------------------------------- 
+After the failure, what's the contents of
+build_<ARCH>/staging_dir/usr/lib/libjpeg.la ? 
+
+---------------------------------------------------------------------- 
+ sylvain - 10-28-08 03:28  
+---------------------------------------------------------------------- 
+I found a hack to correct my problem it's quite "dirty" but this time I can
+reproduce it.
+
+libtool when it tries to resolve the compile flag "-ljpeg" (it's use by
+tiff/port, tiff/tool, tiff/libtiff) looks inside the /usr/lib/libjpeg.la
+the install directory of the jpeg library which is "/usr/lib/".
+so it translate "-ljpeg" -> /usr/lib/libjpeg.so...
+
+
+If I change the last line of the file  :
+# Directory that this library needs to be installed in:
+# libdir='/usr/lib'
+libdir='<path to your cross-compile toolchain>/usr/lib' 
+
+the full compilation is alright and my embedded jvm and osgi works
+sucessfully !!!
+
+Now I need to understand which buildroot compilation variable I have to
+change for libtool in order to set the correct libraries path. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-10-24-08 21:51  robang74       New Issue                                    
-10-24-08 21:51  robang74       Status                   new => assigned     
-10-24-08 21:51  robang74       Assigned To               => buildroot       
-10-24-08 22:09  robang74       Issue Monitored: robang74                    
-10-24-08 22:10  robang74       Note Added: 0014134                          
-10-24-08 22:30  robang74       Note Edited: 0014134                         
-10-24-08 22:53  robang74       Note Edited: 0014134                         
-10-26-08 15:31  robang74       File Added: 5724.config                      
-10-28-08 02:21  robang74       Note Added: 0014424                          
-10-28-08 02:43  tpetazzoni     Note Added: 0014454                          
+10-24-08 05:46  sylvain        New Issue                                    
+10-24-08 05:46  sylvain        Status                   new => assigned     
+10-24-08 05:46  sylvain        Assigned To               => buildroot       
+10-24-08 05:49  sylvain        Issue Monitored: sylvain                     
+10-24-08 05:50  sylvain        Issue End Monitor: sylvain                    
+10-24-08 06:55  tpetazzoni     Note Added: 0014104                          
+10-24-08 10:35  Correa         Note Added: 0014114                          
+10-28-08 02:05  sylvain        Note Added: 0014414                          
+10-28-08 02:35  tpetazzoni     Note Added: 0014444                          
+10-28-08 03:28  sylvain        Note Added: 0014464                          
 ======================================================================
