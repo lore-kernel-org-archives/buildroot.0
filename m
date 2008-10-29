@@ -1,36 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 29 Oct 2008 16:58:43 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libpng
-In-Reply-To: <C13DBBE85AD6974B85C118C35890CA5F13B20D9A20@EU1RDCRDC1WX029.exi.nxp.com>
-	(Daniel J. Laird's message of "Wed\,
-	29 Oct 2008 16\:33\:18 +0100")
-References: <20081029124939.6BC543C368@busybox.net>
-	<87skqf7bja.fsf@macbook.be.48ers.dk>
-	<C13DBBE85AD6974B85C118C35890CA5F13B20D9A20@EU1RDCRDC1WX029.exi.nxp.com>
-Message-ID: <87ljw71jgs.fsf@macbook.be.48ers.dk>
+From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
+Date: Wed, 29 Oct 2008 14:01:33 -0200
+Subject: [Buildroot] svn commit: trunk/buildroot/package/qtopia4
+In-Reply-To: <873aif2zqq.fsf@macbook.be.48ers.dk>
+References: <20081028094026.563A73C671@busybox.net>
+	<061E11D86E3DFF459604DF5B36F0805F1BA6D0@salka01.valka.local>
+	<873aif2zqq.fsf@macbook.be.48ers.dk>
+Message-ID: <d6cda7730810290901m5b306270t5025ac987c846128@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Daniel" == Daniel J Laird <daniel.j.laird@nxp.com> writes:
+On Wed, Oct 29, 2008 at 1:21 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Arnar" == Arnar Mar Sigur?sson <antab@valka.is> writes:
+>
+> Hi,
+>
+>  Arnar> This breaks building Qt for AVR32. It will force qmake to be
+>  Arnar> build for the target so its unusable later on.
+>
+> Ok, I don't do Qt nor AVR32 - Markus, Thomas?
+>
 
- Daniel> The BR2_AC_CV_FUNC_MALLOC_0_NONNULL value seems to depend up a value called MALLOC_GLIBC_COMPAT.  This is only set in the uClibC config files.  This means GLIBC based external toolchains cant use this BR2_AC_CV_FUNC_MALLOC_0_NONNULL if they want it set to yes like libpng does.  
- Daniel> 1. We could add the calloc stuff
- Daniel> 2. We could have
- Daniel> ac_cv_have_decl_malloc=yes \
- Daniel> gl_cv_func_malloc_0_nonnull=yes \
- Daniel> ac_cv_func_malloc_0_nonnull=yes \
- Daniel> ac_cv_func_calloc_0_nonnull=yes \
- Daniel> ac_cv_func_realloc_0_nonnull=yes
+I didn't try it either myself yet as I'm kind busy working on some
+other stuff, but the patch seams ok to me.
+I do quite a bit of AVR32 and Qt. The sed just edits the qmake.conf
+that qmake uses to generate the makefiles for qt and applications that
+use it. qmake itself is usually built using a simpler Makefile to go
+around the chicken egg issue.
 
- Daniel> When using an external toolchain as well
+The PKG_CONFIG_SYSROOT part is that I'm not quite sure. Is that the
+part that breaks it Amar?
 
-Or provide an option to let the user set it to whatever their
-toolchain does. I'm not familiar with the external toolchain stuff,
-how's the other toolchain settins handled (largefile, locales, wchar,
-..)?
-
--- 
-Bye, Peter Korsgaard
+Kind Regards,
+    Thiago A. Correa
