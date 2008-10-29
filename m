@@ -1,47 +1,42 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 29 Oct 2008 13:06:26 -0700
-Subject: [Buildroot] [buildroot 0005844]: tslib package: Utilities programs
-	cannot handle 24bpp framebuffers
-Message-ID: <496364223a254ab9fc6985e661436414@busybox.net>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Wed, 29 Oct 2008 13:40:51 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/qtopia4
+Message-ID: <20081029204051.E3F373C2BB@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: jacmet
+Date: 2008-10-29 13:40:51 -0700 (Wed, 29 Oct 2008)
+New Revision: 23855
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=5844 
-====================================================================== 
-Reported By:                pma
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   5844
-Category:                   Other
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             10-29-2008 13:06 PDT
-Last Modified:              10-29-2008 13:06 PDT
-====================================================================== 
-Summary:                    tslib package:  Utilities programs cannot handle
-24bpp framebuffers
-Description: 
-The tslib utilities (ts_calibrate, ts_test, etc) do not handle
-24bits-per-pixel framebuffers, and thus do not display anything while
-running.
+Log:
+qtopia4: fix wrong compilation of qmake
 
-====================================================================== 
+Signed-off-by: Markus Heidelberg <markus.heidelberg@web.de>
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-10-29-08 13:06  pma            New Issue                                    
-10-29-08 13:06  pma            Status                   new => assigned     
-10-29-08 13:06  pma            Assigned To               => buildroot       
-10-29-08 13:06  pma            File Added: tslib_24bpp.patch                    
-======================================================================
+Modified:
+   trunk/buildroot/package/qtopia4/qtopia4.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/qtopia4/qtopia4.mk
+===================================================================
+--- trunk/buildroot/package/qtopia4/qtopia4.mk	2008-10-29 19:40:21 UTC (rev 23854)
++++ trunk/buildroot/package/qtopia4/qtopia4.mk	2008-10-29 20:40:51 UTC (rev 23855)
+@@ -257,8 +257,12 @@
+ # Qt doesn't use PKG_CONFIG, it searches for pkg-config with 'which'.
+ # PKG_CONFIG_SYSROOT is only used to avoid a warning from Qt's configure system
+ # when cross compiling, Qt 4.4.3 is wrong here.
++# Don't use TARGET_CONFIGURE_OPTS here, qmake would be compiled for the target
++# instead of the host then.
+ 	(cd $(QTOPIA4_TARGET_DIR); rm -rf config.cache; \
+-		$(TARGET_CONFIGURE_OPTS) \
++		PATH=$(TARGET_PATH) \
++		PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)" \
++		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig:$(PKG_CONFIG_PATH)" \
+ 		PKG_CONFIG_SYSROOT="$(STAGING_DIR)" \
+ 		./configure \
+ 		-verbose \
