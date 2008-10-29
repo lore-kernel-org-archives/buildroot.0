@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 29 Oct 2008 00:22:16 -0700
+Date: Wed, 29 Oct 2008 00:26:02 -0700
 Subject: [Buildroot] [buildroot 0005714]: bug with jamvm + concierge +
 	classpath
-Message-ID: <c94c4f8d93f13b9eb952e80d8669b82e@bugs.uclibc.org>
+Message-ID: <d787a8f3b3b12ed431b99a0aa36be420@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             10-24-2008 05:46 PDT
-Last Modified:              10-29-2008 00:22 PDT
+Last Modified:              10-29-2008 00:26 PDT
 ====================================================================== 
 Summary:                    bug with jamvm + concierge + classpath
 Description: 
@@ -230,18 +230,20 @@ configure: error: Zlib library not found at
 Could you try with the patch I'll attach to this bug ? 
 
 ---------------------------------------------------------------------- 
- sylvain - 10-29-08 00:22  
+ sylvain - 10-29-08 00:26  
 ---------------------------------------------------------------------- 
->Hm, strange. Will try to reproduce it here to see what goes wrong.
+>Ok, I tried to reproduce your issue without any of the patches I currently
+have >on Buildroot (with my patches, I'm not able to reproduce). However,
+without my >patches, I face the following problem during libtiff
+./configure:
 
->BTW, my name is Thomas Petazzoni, and I'm the colleague of Michael
->Opdenacker, at Free-Electrons. Didn't you meet him two weeks ago during
-a
->training ?
+>checking for inflateEnd in -lz... no
+>configure: error: Zlib library not found at
+>/home/thomas/local/buildroot/build_arm/staging_dir/lib
 
-Yes I meet Michael 2 weeks ago. It was a really interresting training !!!
-
-How did you guess that ??? 
+>Could you try with the patch I'll attach to this bug ?
+Yes I gonna try.
+I have to duplicate my buildroot folder before, I post when I finish. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
@@ -265,4 +267,6 @@ Date Modified   Username       Field                    Change
 10-28-08 16:03  tpetazzoni     File Added: ldflags-fix-from-daniel              
      
 10-29-08 00:22  sylvain        Note Added: 0014524                          
+10-29-08 00:22  sylvain        Note Deleted: 0014524                        
+10-29-08 00:26  sylvain        Note Added: 0014534                          
 ======================================================================
