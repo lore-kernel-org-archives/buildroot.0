@@ -1,58 +1,31 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 29 Oct 2008 04:28:53 -0700
-Subject: [Buildroot] [buildroot 0005674]: Outdated syslinux links.
-Message-ID: <8d66c30b6bbf3e187d4cef325847e17c@bugs.uclibc.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 29 Oct 2008 12:29:10 +0100
+Subject: [Buildroot] LDFLAGS setting in buildroot
+In-Reply-To: <20081028232024.4ca5d0c7@surf>
+References: <C13DBBE85AD6974B85C118C35890CA5F13B20D91B5@EU1RDCRDC1WX029.exi.nxp.com>
+	<20081028131817.GA3139@mx.loc>
+	<C13DBBE85AD6974B85C118C35890CA5F13B20D9256@EU1RDCRDC1WX029.exi.nxp.com>
+	<20081028232024.4ca5d0c7@surf>
+Message-ID: <20081029122910.587832c6@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Le Tue, 28 Oct 2008 23:20:24 +0100,
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=5674 
-====================================================================== 
-Reported By:                ksnieck
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   5674
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             10-22-2008 15:38 PDT
-Last Modified:              10-29-2008 04:28 PDT
-====================================================================== 
-Summary:                    Outdated syslinux links.
-Description: 
-When configuring for pxelinux or syslinux images, build fails because
-syslinux has since been updated and the version number buildroot looks for
-is no longer at kernel.org.
-Changing the version number and commenting out the bit about the patch, in
-the buildroot/target/x86/syslinux/syslinux.mk file causes the build to
-complete succesfully, but I don't know what the patch was doing, so it
-might not do what it was intended to anymore.
+> > The proposed patch would be something like this:
+> 
+> I confirm that this patch works for me, I was able to build Gtk +
+> DirectFB with all their dependencies properly.
 
-====================================================================== 
+The patch also seems to solve http://busybox.net/bugs/view.php?id=5714.
 
----------------------------------------------------------------------- 
- nickpeirson - 10-29-08 04:28  
----------------------------------------------------------------------- 
-Patch to bump the syslinux version to 3.72, update the makefile patch, and
-fix a couple of "printf"s that were throwing errors during the compile.
-
-Not sure if the printf issues are uClibc specific or the patch should be
-pushed upstream? 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-10-22-08 15:38  ksnieck        New Issue                                    
-10-22-08 15:38  ksnieck        Status                   new => assigned     
-10-22-08 15:38  ksnieck        Assigned To               => buildroot       
-10-29-08 04:28  nickpeirson    Note Added: 0014564                          
-======================================================================
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
