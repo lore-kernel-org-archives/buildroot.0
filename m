@@ -1,60 +1,26 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Wed, 29 Oct 2008 00:35:04 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/bind
-Message-ID: <20081029073504.2F0043C6C2@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 29 Oct 2008 08:35:24 +0100
+Subject: [Buildroot] Bind compile problems
+In-Reply-To: <ea6cc0c70810282014v2fdbe57ev542ad4cfe9c763b3@mail.gmail.com>
+	(David A. Bandel's message of "Tue\,
+	28 Oct 2008 22\:14\:15 -0500")
+References: <ea6cc0c70810282014v2fdbe57ev542ad4cfe9c763b3@mail.gmail.com>
+Message-ID: <877i7rc0qr.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-10-29 00:35:03 -0700 (Wed, 29 Oct 2008)
-New Revision: 23844
+>>>>> "David" == David A Bandel <david.bandel@gmail.com> writes:
 
-Log:
-bind: use strchr() instead of index()
+ David> Folks,
+ David> Having a slight problem building bind-9.3.2 from svn:
 
-Added:
-   trunk/buildroot/package/bind/bind-9.3.2-susv3-legacy.patch
+ David> /opt/buildroot/build_mips/bind-9.3.2/lib/isc/.libs/libisc.so:
+ David> undefined reference to `index'
 
+Fixed in r23844.
 
-Changeset:
-Added: trunk/buildroot/package/bind/bind-9.3.2-susv3-legacy.patch
-===================================================================
---- trunk/buildroot/package/bind/bind-9.3.2-susv3-legacy.patch	                        (rev 0)
-+++ trunk/buildroot/package/bind/bind-9.3.2-susv3-legacy.patch	2008-10-29 07:35:03 UTC (rev 23844)
-@@ -0,0 +1,33 @@
-+---
-+ lib/isc/unix/ifiter_ioctl.c |    7 ++++---
-+ 1 file changed, 4 insertions(+), 3 deletions(-)
-+
-+Index: bind-9.3.2/lib/isc/unix/ifiter_ioctl.c
-+===================================================================
-+--- bind-9.3.2.orig/lib/isc/unix/ifiter_ioctl.c
-++++ bind-9.3.2/lib/isc/unix/ifiter_ioctl.c
-+@@ -17,11 +17,12 @@
-+ 
-+ /* $Id: ifiter_ioctl.c,v 1.19.2.5.2.17 2005/10/14 02:13:07 marka Exp $ */
-+ 
-++#include <string.h>
-++
-+ /*
-+  * Obtain the list of network interfaces using the SIOCGLIFCONF ioctl.
-+  * See netintro(4).
-+  */
-+-
-+ #if defined(SIOCGLIFCONF) && defined(SIOCGLIFADDR)
-+ #ifdef ISC_PLATFORM_HAVEIF_LADDRCONF
-+ #define lifc_len iflc_len
-+@@ -478,8 +479,8 @@
-+ 	for (i = 0; i < 16; i++) {
-+ 		unsigned char byte;
-+ 		static const char hex[] = "0123456789abcdef";
-+-		byte = ((index(hex, address[i * 2]) - hex) << 4) |
-+-		       (index(hex, address[i * 2 + 1]) - hex);
-++		byte = ((strchr(hex, address[i * 2]) - hex) << 4) |
-++		       (strchr(hex, address[i * 2 + 1]) - hex);
-+ 		addr6.s6_addr[i] = byte;
-+ 	}
-+ 	iter->current.af = AF_INET6;
+-- 
+Bye, Peter Korsgaard
