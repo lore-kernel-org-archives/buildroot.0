@@ -1,61 +1,134 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Oct 2008 09:03:58 +0100
-Subject: [Buildroot] [PATCH] Fix Qtopia build
-Message-ID: <20081030090358.06a8a8cb@surf>
+Date: Thu, 30 Oct 2008 09:45:01 +0100
+Subject: [Buildroot] External toolchain support improvements
+Message-ID: <20081030094501.66983ff9@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix Qtopia build issues
+Improve external toolchain support
 
-This patch fixes two Qtopia build issues, encountered while trying to
-use system implementation of zlib, freetype, jpeg and libpng :
+ * Do not put kernel-headers in the dependencies of BASE_TARGETS in
+   the case where BR2_TOOLCHAIN_SOURCE is not y. The kernel headers
+   are already supposed to be part of the external toolchain, so
+   there's no need to download, extract and install them.
 
- * The build process doesn't look in $(STAGING_DIR)/usr/include for
-   includes and $(STAGING_DIR)/usr/lib. Same problem as the patch
-   currently floating around adding LDFLAGS to TARGET_CONFIGURE_OPTS,
-   but as Qtopia doesn't use TARGET_CONFIGURE_OPTS, we need a specific
-   fix here. So we use the -I and -L options of Qtopia's configure
-   script.
+ * In the configuration system, don't display the kernel headers
+   version selection list when an external toolchain is selected. This
+   is implemented by moving the source
+   "toolchain/kernel-headers/Config.in" inside the if
+   BR2_TOOLCHAIN_SOURCE in toolchain/Config.in.2.
 
- * The build process doesn't use pkg-config to get the header path for
-   Freetype headers (located in $(STAGING_DIR)/usr/include/freetype2
-   and not directly in $(STAGING_DIR)/usr/include/). There was already
-   a fix for this, consisting in adding $(FREETYPE_DIR)/include to the
-   -I path of Qtopia's configure. This patch modifies this fix to use
-   $(STAGING_DIR)/usr/include/freetype2 instead, which looks more
-   coherent with how all the packages are built (using $(STAGING_DIR)
-   as the reference to get headers and libraries).
+ * Change the description and help message of the BR2_LARGEFILE,
+   BR2_INET_IPV6, BR2_INET_RPC, and BR2_SOFT_FLOAT option in
+   toolchain/external-toolchain/Config.in. In the case of an external
+   toolchain, the semantic of these options is not to enable large
+   file support, IPV6 or RPC (since the toolchain is already compiled,
+   it has been decided previously). Their semantic is to let Buildroot
+   know about the characteristics of the external toolchain being
+   used.
+
+   As an improvement, we could guess these values automatically:
+
+    - for BR2_LARGEFILE, look at the value of __UCLIBC_HAS_LFS__ in
+      bits/uClibc_config.h in the libc headers directory.
+
+    - for BR2_INET_RPC, look at the value of __UCLIBC_HAS_RPC__ in the
+      same file
+
+    - for BR2_INET_IPV6, look at the value of __UCLIBC_HAS_IPV6__ in
+      the same file
+
+    - for BR2_SOFT_FLOAT, look at the output of $(CC) -v 2>&1 | grep
+      -- "--with-float=soft"
+
+   But I'm not sure how this would be possible, since these values are
+   used at configuration-time by other configuration options, not only
+   at build time.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qtopia4/qtopia4.mk |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ Makefile                               |    2 +-
+ toolchain/Config.in.2                  |    3 +--
+ toolchain/external-toolchain/Config.in |   23 ++++++++++-------------
+ 3 files changed, 12 insertions(+), 16 deletions(-)
 
-Index: buildroot/package/qtopia4/qtopia4.mk
+Index: buildroot/Makefile
 ===================================================================
---- buildroot.orig/package/qtopia4/qtopia4.mk
-+++ buildroot/package/qtopia4/qtopia4.mk
-@@ -151,7 +151,7 @@
+--- buildroot.orig/Makefile
++++ buildroot/Makefile
+@@ -202,7 +202,7 @@
+ ifeq ($(BR2_TOOLCHAIN_SOURCE),y)
+ BASE_TARGETS:=uclibc-configured binutils cross_compiler uclibc-target-utils kernel-headers
  else
- ifeq ($(BR2_PACKAGE_QTOPIA4_SYSTEMFREETYPE),y)
- QTOPIA4_CONFIGURE+= -system-freetype
--QTOPIA4_CONFIGURE+= -I $(FREETYPE_DIR)/include
-+QTOPIA4_CONFIGURE+= -I $(STAGING_DIR)/usr/include/freetype2/
- QTOPIA4_DEP_LIBS+=freetype
- else
- QTOPIA4_CONFIGURE+= -no-freetype
-@@ -277,6 +277,8 @@
- 		-no-rpath \
- 		-nomake examples \
- 		-nomake demos \
-+		-I $(STAGING_DIR)/usr/include \
-+		-L $(STAGING_DIR)/usr/lib \
- 	)
- 	touch $@
+-BASE_TARGETS:=uclibc kernel-headers
++BASE_TARGETS:=uclibc
+ endif
+ TARGETS:=
  
+Index: buildroot/toolchain/Config.in.2
+===================================================================
+--- buildroot.orig/toolchain/Config.in.2
++++ buildroot/toolchain/Config.in.2
+@@ -1,8 +1,7 @@
+ #
+ 
+-source "toolchain/kernel-headers/Config.in"
+-
+ if BR2_TOOLCHAIN_SOURCE
++source "toolchain/kernel-headers/Config.in"
+ source "toolchain/uClibc/Config.in"
+ source "toolchain/binutils/Config.in"
+ source "toolchain/gcc/Config.in"
+Index: buildroot/toolchain/external-toolchain/Config.in
+===================================================================
+--- buildroot.orig/toolchain/external-toolchain/Config.in
++++ buildroot/toolchain/external-toolchain/Config.in
+@@ -69,32 +69,29 @@
+ endchoice
+ 
+ config BR2_LARGEFILE
+-	bool "Enable large file (files > 2 GB) support?"
++	bool "Toolchain supports large files (> 2 GB) ?"
+ 	depends on !BR2_cris
+ 	default y
+ 	help
+-	  Enable large file (files > 2 GB) support
++	  Set this option if the external toolchain supports large
++	  files (> 2 GB)
++
+ 
+ config BR2_INET_IPV6
+-	bool "Enable IPv6"
++	bool "Toolchain supports IPv6 ?"
+ 	help
+-	    Enable IPv6.
++	  Set this option if the external toolchain supports IPv6.
+ 
+ config BR2_INET_RPC
+-	bool "Enable RPC"
++	bool "Toolchain supports RPC ?"
+ 	help
+-	    Enable RPC. RPC support is needed for nfs.
++	  Set this option if the external toolchain supports RPC.
+ 
+ config BR2_SOFT_FLOAT
+-	bool "Use software floating point by default"
++	bool "Toolchain supports soft float ?"
+ 	depends on BR2_arm || BR2_armeb || BR2_mips || BR2_mipsel || BR2_powerpc
+ 	help
+-	  If your target CPU does not have a Floating Point Unit (FPU) or a
+-	  kernel FPU emulator, but you still wish to support floating point
+-	  functions, then everything will need to be compiled with soft
+-	  floating point support (-msoft-float).
+-
+-	  Most people will answer N.
++	  Set this option if the external toolchain supports soft float.
+ 
+ config BR2_TARGET_OPTIMIZATION
+ 	string "Target Optimizations"
 
 
 -- 
