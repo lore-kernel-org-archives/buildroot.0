@@ -1,69 +1,37 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Thu, 30 Oct 2008 12:57:38 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 30 Oct 2008 14:20:18 +0100
 Subject: [Buildroot] [PATCH 6/9] Ask the kernel source where it will
- installmodules
-In-Reply-To: <20081030105250.3ca61a3c@hcegtvedt>
+ install modules
+In-Reply-To: <20081016203246.15826.56394.stgit@localhost.localdomain>
 References: <20081016203220.15826.26173.stgit@localhost.localdomain>
 	<20081016203246.15826.56394.stgit@localhost.localdomain>
-	<20081030105250.3ca61a3c@hcegtvedt>
-Message-ID: <20081030125738.0489d0dd@hcegtvedt>
+Message-ID: <20081030142018.1377e1b1@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 30 Oct 2008 10:52:50 +0100
-Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> wrote:
+Le Thu, 16 Oct 2008 14:32:46 -0600,
+Grant Likely <grant.likely@secretlab.ca> a ?crit :
 
-> On Thu, 16 Oct 2008 22:32:46 +0200
-> "Grant Likely" <grant.likely@secretlab.ca> wrote:
-> 
-> > From: Grant Likely <grant.likely@secretlab.ca>
-> > 
-> > Originally, $(LINUX26_VERSION) was used to figure out which
-> > directory modules would get installed in under /lib/modules.  This
-> > causes problems when $(LINUX26_VERSION) differs from what version
-> > the kernel source thinks it is using because it will try to use
-> > depmod in the wrong directory.
-> > 
-> 
-> I like this stuff, I'll give it a spin and see how it performs. If it
-> works well I'll add it to the repo (unless somebody beat me to it).
-> 
+> Originally, $(LINUX26_VERSION) was used to figure out which directory
+> modules would get installed in under /lib/modules.  This causes
+> problems when $(LINUX26_VERSION) differs from what version the kernel
+> source thinks it is using because it will try to use depmod in the
+> wrong directory.
 
-Not present, and the stuff you posted was a little buggy. I cleaned it
-up a bit, see the attached patch.
+Just for curiosity, in what cases $(LINUX26_VERSION) can differ from
+the ? version the kernel source thinks it is using ? ?
 
-What do people think? I'll add it today/tomorrow unless somebody
-objects.
+Otherwise, the version proposed by Hans-Christian Egtvedt looks good to
+me.
 
-> > This patch adds a new variable $(LINUX26_VERSION_MOD) which resolves
-> > to the exact version string that the kernel uses.  Module install
-> > then uses this value instead of $(LINUX26_VERSION) when running
-> > depmod
-> > 
-> > This patch also eliminates the modules.dep target and makes
-> > .modules_installed depend on $(LINUX26_DIR)/.configured directly.
-> > This is necessary because the value of $(LINUX26_VERSION_MOD) is
-> > unavailable before the kernel is unpacked.  Trying to use it in a
-> > target or dependency name confuses make.
-> 
-> And what about using the $(PROJECT_DIR)/autotools-stamp directory
-> instead for the depend file? Follow with the stream, etc... Easier to
-> know how to trigger a reinstall as well.
-> 
+Thanks,
 
-I also added this, since I like gathering all the stamp files at one
-place for the target installations.
-
+Thomas
 -- 
-Best regards,
-Hans-Christian Egtvedt
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: linux26.advanced-probe-kernel-version-before-installing-modules.patch
-Type: text/x-patch
-Size: 2119 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20081030/ff50e343/attachment.bin 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
