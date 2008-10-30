@@ -1,39 +1,40 @@
-From: egtvedt at uclibc.org <egtvedt@uclibc.org>
-Date: Thu, 30 Oct 2008 07:02:47 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
-Message-ID: <20081030140247.B0D3C3C6BA@busybox.net>
+From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
+Date: Thu, 30 Oct 2008 15:04:19 +0100
+Subject: [Buildroot] [PATCH 6/9] Ask the kernel source where it will
+ install modules
+In-Reply-To: <20081030142018.1377e1b1@surf>
+References: <20081016203220.15826.26173.stgit@localhost.localdomain>
+	<20081016203246.15826.56394.stgit@localhost.localdomain>
+	<20081030142018.1377e1b1@surf>
+Message-ID: <20081030150419.2b9bff9f@hcegtvedt>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: egtvedt
-Date: 2008-10-30 07:02:47 -0700 (Thu, 30 Oct 2008)
-New Revision: 23859
+On Thu, 30 Oct 2008 14:20:18 +0100
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-Log:
-linux: fix typo in status printout
+> Le Thu, 16 Oct 2008 14:32:46 -0600,
+> Grant Likely <grant.likely@secretlab.ca> a ?crit :
+> 
+> > Originally, $(LINUX26_VERSION) was used to figure out which
+> > directory modules would get installed in under /lib/modules.  This
+> > causes problems when $(LINUX26_VERSION) differs from what version
+> > the kernel source thinks it is using because it will try to use
+> > depmod in the wrong directory.
+> 
+> Just for curiosity, in what cases $(LINUX26_VERSION) can differ from
+> the ? version the kernel source thinks it is using ? ?
+> 
+> Otherwise, the version proposed by Hans-Christian Egtvedt looks good
+> to me.
+> 
 
-Signed-off-by: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
+Committed as r23858, and sorry I forgot to add Grant Likely as
+author :/
 
-
-
-Modified:
-   trunk/buildroot/target/linux/Makefile.in.advanced
-
-
-Changeset:
-Modified: trunk/buildroot/target/linux/Makefile.in.advanced
-===================================================================
---- trunk/buildroot/target/linux/Makefile.in.advanced	2008-10-30 14:02:05 UTC (rev 23858)
-+++ trunk/buildroot/target/linux/Makefile.in.advanced	2008-10-30 14:02:47 UTC (rev 23859)
-@@ -499,7 +499,7 @@
- 	@echo BR2_PACKAGE_LINUX_USE_XCONFIG=$(BR2_PACKAGE_LINUX_USE_XCONFIG)
- 	@echo BR2_PACKAGE_LINUX_KCONFIG=$(BR2_PACKAGE_LINUX_KCONFIG)
- 	@echo BR2_LINUX_COPYTO_ROOTFS=$(BR2_LINUX_COPYTO_ROOTFS)
--	@echo BR2_LINUX_COPYTO_TFTPBOOT=$(BR2_LINUX_COPYTO_TFTPBOOT=)
-+	@echo BR2_LINUX_COPYTO_TFTPBOOT=$(BR2_LINUX_COPYTO_TFTPBOOT)
- 	@echo BR2_LINUX_COPYTO=$(BR2_LINUX_COPYTO)
- 	@echo LINUX_COPYTO=$(LINUX_COPYTO)
- 	@echo BR2_KERNEL_MINORLEVEL=$(BR2_KERNEL_MINORLEVEL)
+-- 
+Best regards,
+Hans-Christian Egtvedt
