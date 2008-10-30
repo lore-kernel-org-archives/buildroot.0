@@ -1,45 +1,31 @@
-From: wberrier at uclibc.org <wberrier@uclibc.org>
-Date: Thu, 30 Oct 2008 10:21:18 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/python
-Message-ID: <20081030172118.E5C703C79D@busybox.net>
+From: suffecool at comcast.net <suffecool@comcast.net>
+Date: Thu, 30 Oct 2008 18:51:22 +0000
+Subject: [Buildroot] AT91SAM9G20 support?
+Message-ID: <103020081851.6417.490A022A000046150000191122070209530401010C0A00009A9C@comcast.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: wberrier
-Date: 2008-10-30 10:21:18 -0700 (Thu, 30 Oct 2008)
-New Revision: 23863
+Hello,
 
-Log:
-python: add $(STAGING_DIR)/usr/lib to PYTHON_MODULES_LIB so that
- modules build correctly (particularly readline)
+Line 69 of target/device/Atmel/AT91_Config.in states that "Atmel AT91SAM9G20 ARM based systems" are not yet implemented.
 
-Modified:
-   trunk/buildroot/package/python/python.mk
+How difficult is this to do?  I am willing to give it a shot if it simply involves creating/tweaking some configuration files.  We were using the 9260 dev board, but have recently switched to the newer 9G20 board.  However, when we push our 9260 kernel to the board and boot it with a 9G20-knowledgeable u-boot, it balks after uncompressing the kernel image with the following error:
 
+Uncompressing Linux......................done, booting the kernel.
+Error: unrecognized/unsupported machine ID (r1 = 0x00000658)
+Available machine support:
+ID (hex)     NAME
+0000044b  Atmel AT91SAM9260-EK
+Please check your kernel config and/or bootloader.
 
-Changeset:
-Modified: trunk/buildroot/package/python/python.mk
-===================================================================
---- trunk/buildroot/package/python/python.mk	2008-10-30 16:45:55 UTC (rev 23862)
-+++ trunk/buildroot/package/python/python.mk	2008-10-30 17:21:18 UTC (rev 23863)
-@@ -117,7 +117,7 @@
- endif
- 	$(MAKE) CC=$(TARGET_CC) -C $(PYTHON_DIR) DESTDIR=$(TARGET_DIR) \
- 		PYTHON_MODULES_INCLUDE=$(STAGING_DIR)/usr/include \
--		PYTHON_MODULES_LIB=$(STAGING_DIR)/lib \
-+		PYTHON_MODULES_LIB="$(STAGING_DIR)/lib $(STAGING_DIR)/usr/lib" \
- 		PYTHON_DISABLE_MODULES="$(BR2_PYTHON_DISABLED_MODULES)" \
- 		HOSTPYTHON=./hostpython HOSTPGEN=./Parser/hostpgen
- 
-@@ -130,7 +130,7 @@
- 	$(MAKE) CC=$(TARGET_CC) -C $(PYTHON_DIR) install \
- 		DESTDIR=$(TARGET_DIR) CROSS_COMPILE=yes \
- 		PYTHON_MODULES_INCLUDE=$(STAGING_DIR)/usr/include \
--		PYTHON_MODULES_LIB=$(STAGING_DIR)/lib \
-+		PYTHON_MODULES_LIB="$(STAGING_DIR)/lib $(STAGING_DIR)/usr/lib" \
- 		PYTHON_DISABLE_MODULES="$(BR2_PYTHON_DISABLED_MODULES)" \
- 		HOSTPYTHON=./hostpython HOSTPGEN=./Parser/hostpgen && \
- 	rm $(TARGET_DIR)/usr/bin/python && \
+I initially thought this was a u-boot issue, but now I think it's just that buildroot does not yet know about 9G20 dev boards.
+
+Any direction/assistance would be appreciated.
+
+--Kevin S.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20081030/777a2084/attachment.htm 
