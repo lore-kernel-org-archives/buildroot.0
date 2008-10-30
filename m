@@ -1,67 +1,69 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 30 Oct 2008 03:12:31 -0700
-Subject: [Buildroot] [buildroot 0005174]: Patch for directfb(add gfxdrive
-	select options)
-Message-ID: <b4f19e84d84d346f0a53ff948f8c351f@busybox.net>
+From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
+Date: Thu, 30 Oct 2008 12:57:38 +0100
+Subject: [Buildroot] [PATCH 6/9] Ask the kernel source where it will
+ installmodules
+In-Reply-To: <20081030105250.3ca61a3c@hcegtvedt>
+References: <20081016203220.15826.26173.stgit@localhost.localdomain>
+	<20081016203246.15826.56394.stgit@localhost.localdomain>
+	<20081030105250.3ca61a3c@hcegtvedt>
+Message-ID: <20081030125738.0489d0dd@hcegtvedt>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Thu, 30 Oct 2008 10:52:50 +0100
+Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> wrote:
 
-The following issue has been CLOSED 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=5174 
-====================================================================== 
-Reported By:                Devix
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   5174
-Category:                   New Features
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             09-27-2008 07:06 PDT
-Last Modified:              10-30-2008 03:12 PDT
-====================================================================== 
-Summary:                    Patch for directfb(add gfxdrive select options)
-Description: 
-Thsi patch add gfx drivere select options into directfb package.
-====================================================================== 
+> On Thu, 16 Oct 2008 22:32:46 +0200
+> "Grant Likely" <grant.likely@secretlab.ca> wrote:
+> 
+> > From: Grant Likely <grant.likely@secretlab.ca>
+> > 
+> > Originally, $(LINUX26_VERSION) was used to figure out which
+> > directory modules would get installed in under /lib/modules.  This
+> > causes problems when $(LINUX26_VERSION) differs from what version
+> > the kernel source thinks it is using because it will try to use
+> > depmod in the wrong directory.
+> > 
+> 
+> I like this stuff, I'll give it a spin and see how it performs. If it
+> works well I'll add it to the repo (unless somebody beat me to it).
+> 
 
----------------------------------------------------------------------- 
- tpetazzoni - 10-13-08 03:20  
----------------------------------------------------------------------- 
-The patch doesn't apply anymore, and a similar functionnality has been
-added in r23621. Not all gfx drivers have been added in r23621, but they
-can trivially be added.
+Not present, and the stuff you posted was a little buggy. I cleaned it
+up a bit, see the attached patch.
 
-I'd suggest to mark this bug as fixed by r23621. 
+What do people think? I'll add it today/tomorrow unless somebody
+objects.
 
----------------------------------------------------------------------- 
- Correa - 10-30-08 03:12  
----------------------------------------------------------------------- 
-fixed by r23621.
-Pointed out by tpetazzoni 
+> > This patch adds a new variable $(LINUX26_VERSION_MOD) which resolves
+> > to the exact version string that the kernel uses.  Module install
+> > then uses this value instead of $(LINUX26_VERSION) when running
+> > depmod
+> > 
+> > This patch also eliminates the modules.dep target and makes
+> > .modules_installed depend on $(LINUX26_DIR)/.configured directly.
+> > This is necessary because the value of $(LINUX26_VERSION_MOD) is
+> > unavailable before the kernel is unpacked.  Trying to use it in a
+> > target or dependency name confuses make.
+> 
+> And what about using the $(PROJECT_DIR)/autotools-stamp directory
+> instead for the depend file? Follow with the stream, etc... Easier to
+> know how to trigger a reinstall as well.
+> 
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-09-27-08 07:06  Devix          New Issue                                    
-09-27-08 07:06  Devix          Status                   new => assigned     
-09-27-08 07:06  Devix          Assigned To               => buildroot       
-09-27-08 07:06  Devix          File Added:
-directfb-1.0.1-add-gfxdriver-select-options.patch                    
-09-27-08 08:46  Devix          Issue Monitored: Devix                       
-09-27-08 08:46  Devix          Issue End Monitor: Devix                     
-09-27-08 08:46  Devix          Issue Monitored: Devix                       
-10-13-08 03:20  tpetazzoni     Note Added: 0013424                          
-10-30-08 03:12  Correa         Status                   assigned => closed  
-10-30-08 03:12  Correa         Note Added: 0014594                          
-======================================================================
+I also added this, since I like gathering all the stamp files at one
+place for the target installations.
+
+-- 
+Best regards,
+Hans-Christian Egtvedt
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: linux26.advanced-probe-kernel-version-before-installing-modules.patch
+Type: text/x-patch
+Size: 2119 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20081030/ff50e343/attachment.bin 
