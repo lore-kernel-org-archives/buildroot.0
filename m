@@ -1,17 +1,21 @@
-From: Daniel J Laird <daniel.j.laird@nxp.com>
-Date: Fri, 31 Oct 2008 15:26:22 +0100
-Subject: [Buildroot] Problem with program_transform_name and naming of
- installed binaries
-In-Reply-To: <20081031144326.24ce23c1@surf>
-References: <20081031113307.14125656@surf> <20081031144326.24ce23c1@surf>
-Message-ID: <C13DBBE85AD6974B85C118C35890CA5F13B21BF1E7@EU1RDCRDC1WX029.exi.nxp.com>
+From: Adam McLaurin <buildroot@irotas.net>
+Date: Fri, 31 Oct 2008 10:33:16 -0400
+Subject: [Buildroot] How to build a gcc-3.3 toolchain
+Message-ID: <1225463596.29685.1282290569@webmail.messagingengine.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-if passing the --program-prefix= and --program-transform-name= to the CONFIGURE_OPTS means that I do not need to rename executables (to remvoe mipsel-unknown-gnu-) then I am all for this being added to CONFIGURE OPTS.
+Hi folks,
 
-Cheers
-Daniel Laird
+Unfortunately the software project I'm working on requires some features
+of gcc that were removed after v3.3.x. However, when I do 'make
+menuconfig' for buildroot and go to select the version of gcc, the only
+versions available are 4.1.2, 4.2.1, 4.2.3, 4.2.4, and 4.3.1.
+
+Is it possible to install an older version instead, perhaps 3.3.6?
+
+Thanks,
+Adam
