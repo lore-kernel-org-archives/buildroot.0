@@ -1,46 +1,85 @@
-From: Mike Sander <msander@ripnet.com>
-Date: Thu, 30 Oct 2008 22:01:15 -0500
-Subject: [Buildroot] AT91SAM9G20 support?
-In-Reply-To: <103020081936.29280.490A0CB70005979E0000726022007504380401010C0A00009A9C@comcast.net>
-References: <103020081936.29280.490A0CB70005979E0000726022007504380401010C0A00009A9C@comcast.net>
-Message-ID: <490A74FB.7020705@ripnet.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Thu, 30 Oct 2008 20:25:35 -0700
+Subject: [Buildroot] [buildroot 0005884]: zlib and pciutils build in the
+	wrong order
+Message-ID: <361589f9afd607c29335bcfad594e293@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-suffecool at comcast.net wrote:
-> Yeah, that's what I am discovering.  I am now looking at various kernel releases to see if and when 9G20 support was added (if at all).
->
-> Google searching found this link:
-> http://lkml.org/lkml/2008/6/13/62
->
-> where it appears that somebody back in June 2008 did a lot of work patching the kernel to get the 9G20 to be supported.  I'm downloading the 2.6.27 kernel now to see if it was added  into that one.
->
-> --kev
->
->   
 
-Kevin,
- 
-You will need the 2.6.27 kernel.  I got a g20 on Friday and successfully 
-booted it.  I used an oct 22 buildroot snapshot, and selected the 2.6.27 
-kernel. I initially did the buildroot configuration for the 9260.    
-After everything was completed I went back and did a kernel "make 
-at91sam9g20ek_defconfig, and redid the top level "make".  From what I 
-can see, there is no g20 support outside of the kernel (as of a few 
-weeks ago).  
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=5884 
+====================================================================== 
+Reported By:                peejay
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   5884
+Category:                   Other
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             10-30-2008 20:25 PDT
+Last Modified:              10-30-2008 20:25 PDT
+====================================================================== 
+Summary:                    zlib and pciutils build in the wrong order
+Description: 
+pciutils requires zlib, but zlib seems to build after pciutils. The obvious
+workaround is to disable pciutils and let zlib build, then add pciutils
+back in and build again.
 
-For my initial testing I grabbed pre build bootstrap & u-boot for the 
-9g20 from linux4sam
-(ftp://www.linux4sam.org/pub/uboot/u-boot-1.1.5_atmel_1.7/u-boot-1.1.5_atmel_1.7-at91sam9g20ek-dataflash.bin).      
+/home/paul.jones/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibcgnueabi-gcc
+-Os  -I/home/paul.jones/buildroot/build_arm/staging_dir/usr/include
+-I/home/paul.jones/buildroot/build_arm/staging_dir/include -mtune=arm920t
+-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Wall -W
+-Wno-parentheses -Wstrict-prototypes -Wmissing-prototypes   -c -o names.o
+names.c
+names.c:18:18: error: zlib.h: No such file or directory
+names.c:19: error: expected '=', ',', ';', 'asm' or '__attribute__' before
+'pci_file'
+names.c:23: error: expected '=', ',', ';', 'asm' or '__attribute__' before
+'pci_open'
+names.c:187: error: expected declaration specifiers or '...' before
+'pci_file'
+names.c: In function 'id_parse_list':
+names.c:197: warning: implicit declaration of function 'gzgets'
+names.c:197: error: 'f' undeclared (first use in this function)
+names.c:197: error: (Each undeclared identifier is reported only once
+names.c:197: error: for each function it appears in.)
+names.c:203: warning: implicit declaration of function 'gzeof'
+names.c: In function 'pci_load_name_list':
+names.c:321: error: 'pci_file' undeclared (first use in this function)
+names.c:321: error: expected ';' before 'f'
+names.c:327: error: 'f' undeclared (first use in this function)
+names.c:327: warning: implicit declaration of function 'pci_open'
+names.c:331: error: too many arguments to function 'id_parse_list'
+names.c:332: warning: implicit declaration of function 'gzerror'
+names.c:332: error: 'Z_ERRNO' undeclared (first use in this function)
+names.c:332: warning: implicit declaration of function 'zError'
+names.c:332: warning: assignment makes pointer from integer without a
+cast
+names.c:333: warning: implicit declaration of function 'gzclose'
+make[2]: *** [names.o] Error 1
+make[2]: Leaving directory
+`/home/paul.jones/buildroot/build_arm/pciutils-2.2.10/lib'
+make[1]: *** [lib/libpci.a] Error 2
+make[1]: Leaving directory
+`/home/paul.jones/buildroot/build_arm/pciutils-2.2.10'
+make: *** [/home/paul.jones/buildroot/build_arm/pciutils-2.2.10/.compiled]
+Error 2
 
-(ftp://www.linux4sam.org/pub/at91bootstrap/AT91Bootstrap_9g20/dataflash_at91sam9g20ek.bin)
+====================================================================== 
 
-I suspect the buildroot bootstrap & u-boot will work fine, but I have 
-not tested them.
-
-HTH
-
-Mike
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+10-30-08 20:25  peejay         New Issue                                    
+10-30-08 20:25  peejay         Status                   new => assigned     
+10-30-08 20:25  peejay         Assigned To               => buildroot       
+======================================================================
