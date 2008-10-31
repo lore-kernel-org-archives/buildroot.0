@@ -1,36 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 31 Oct 2008 14:43:26 +0100
-Subject: [Buildroot] Problem with program_transform_name and naming of
- installed binaries
-In-Reply-To: <20081031113307.14125656@surf>
-References: <20081031113307.14125656@surf>
-Message-ID: <20081031144326.24ce23c1@surf>
+From: laird at uclibc.org <laird@uclibc.org>
+Date: Fri, 31 Oct 2008 07:04:31 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/lite
+Message-ID: <20081031140431.E55863C75F@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri, 31 Oct 2008 11:33:07 +0100,
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
+Author: laird
+Date: 2008-10-31 07:04:31 -0700 (Fri, 31 Oct 2008)
+New Revision: 23882
 
-> Of course, this is not the desired behaviour, since binaries on the
-> target also end up with the arm-blablabla prefix. However, after a
-> quick look at ./configure, I don't really understand what's the logic
-> to compute this program_transform_name variable.
-> 
-> Any clue ?
+Log:
+package/lite/lite.mk: Bounce version
 
-FYI, the related autoconf documentation is available at
-http://www.gnu.org/software/autoconf/manual/html_node/Transforming-Names.html#Transforming-Names.
+Bounce version.
 
-It seems that by default, the binary names are transformed to be
-prefixed with the target name, which is what I see. Should we add
---program-prefix= and --program-transform-name= to the CONFIGURE_OPTS ?
+Signed-off-by: Thomas Petazzoni<>
+Signed-off-by: Daniel Laird <daniel.j.laird@nxp.com>
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+
+
+Modified:
+   trunk/buildroot/package/lite/lite.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/lite/lite.mk
+===================================================================
+--- trunk/buildroot/package/lite/lite.mk	2008-10-31 12:41:02 UTC (rev 23881)
++++ trunk/buildroot/package/lite/lite.mk	2008-10-31 14:04:31 UTC (rev 23882)
+@@ -3,15 +3,13 @@
+ # LiTE
+ #
+ #############################################################
+-LITE_VERSION:=0.8.9
++LITE_VERSION:=0.8.10
+ LITE_SOURCE:=LiTE-$(LITE_VERSION).tar.gz
+ LITE_SITE:=http://www.directfb.org/downloads/Libs
+-LITE_AUTORECONF = NO
+ LITE_INSTALL_STAGING = YES
+ LITE_INSTALL_TARGET = YES
+ LITE_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
+ LITE_CONF_ENV = DFB_CFLAGS=-I$(STAGING_DIR)/usr/include/directfb
+-LITE_CONF_OPT =
+ LITE_DEPENDENCIES = directfb
+ 
+ $(eval $(call AUTOTARGETS,package,lite))
