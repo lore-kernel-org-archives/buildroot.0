@@ -1,25 +1,35 @@
-From: steve at c2root.be <steve@c2root.be>
-Date: Fri, 31 Oct 2008 14:13:54 +0100
-Subject: [Buildroot] Building perl in buildroot SVN or adding modules to
-	microperl
-Message-ID: <20081031141354.egvaryyskkko40o8@webmail.digibel.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 31 Oct 2008 14:26:13 +0100
+Subject: [Buildroot] Write access to SVN and bug tracker
+In-Reply-To: <d6cda7730810310604o2f46cf03k2ee940fc0e0c340d@mail.gmail.com>
+References: <20081031101430.2e100d7e@surf>
+	<C13DBBE85AD6974B85C118C35890CA5F13B21BEFA4@EU1RDCRDC1WX029.exi.nxp.com>
+	<d6cda7730810310604o2f46cf03k2ee940fc0e0c340d@mail.gmail.com>
+Message-ID: <20081031142613.048c50ca@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear all,
+Le Fri, 31 Oct 2008 11:04:00 -0200,
+"Thiago A. Corr?a" <thiago.correa@gmail.com> a ?crit :
 
-I am trying to build a root_fs on which I can install webmin. Webmin  
-is perl based and I only have microperl available.
-I can see that you can add modules, yet if I type e.g. Config.pm in  
-the modules, no modules are built (or atleast I don't find them)
-Is there a package for regular perl or can someone explain what I am  
-doing wrong on the menuconfig?
+> Mike <vapier@uclibc.org> doesn't track buildroot development, so he
+> will ask you to be vouched from current developers.
+> 
+> You have +1 from here.
 
-Best regards
-Steve
+Thanks!
 
-----------------------------------------------------------------
-This message was sent using IMP, the Internet Messaging Program.
+I already sent an e-mail this morning to Mike and Erik asking for SVN
+write access. I'll send a reply mentionning your agreement.
+
+Cheers,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
