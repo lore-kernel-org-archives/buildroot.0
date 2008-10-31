@@ -1,47 +1,36 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Fri, 31 Oct 2008 14:26:48 +0100
-Subject: [Buildroot] [PATCH] Create zlib installation directory in
-	the	staging dir
-In-Reply-To: <d6cda7730810310544s6a93c58v18206bd17e58a72f@mail.gmail.com>
-References: <20081030170039.6fe37578@surf> <20081031083736.GB26468@mx.loc>
-	<d6cda7730810310511g3e03f40x6385931c49054d2d@mail.gmail.com>
-	<20081031121558.GB27517@mx.loc>
-	<d6cda7730810310544s6a93c58v18206bd17e58a72f@mail.gmail.com>
-Message-ID: <20081031132648.GE27517@mx.loc>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 31 Oct 2008 14:43:26 +0100
+Subject: [Buildroot] Problem with program_transform_name and naming of
+ installed binaries
+In-Reply-To: <20081031113307.14125656@surf>
+References: <20081031113307.14125656@surf>
+Message-ID: <20081031144326.24ce23c1@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Oct 31, 2008 at 10:44:20AM -0200, Thiago A. Corr?a wrote:
->On Fri, Oct 31, 2008 at 10:15 AM, Bernhard Reutner-Fischer
-><rep.dot.nop@gmail.com> wrote:
->> On Fri, Oct 31, 2008 at 10:11:04AM -0200, Thiago A. Corr?a wrote:
->>>Applied in r23879.
->>
->> You applied something different, fwiw. But it doesn't matter much,
->> you're building zlib incorrectly anyway *shrug* i've fixed this now..
->>
->
->Diff between svn and git gives me:
->
->-$(TARGET_DIR)/usr/lib/libz.a: $(STAGING_DIR)/usr/lib/libz.so
->-       $(INSTALL) -D $(STAGING_DIR)/usr/include/zlib.h
->$(TARGET_DIR)/usr/include/
->-       $(INSTALL) $(STAGING_DIR)/usr/include/zconf.h $(TARGET_DIR)/usr/include/
->-       $(INSTALL) -D $(STAGING_DIR)/usr/lib/libz.a $(TARGET_DIR)/usr/lib/
->+$(TARGET_DIR)/usr/lib/libz.a: $(STAGING_DIR)/usr/lib/libz.so.$(ZLIB_VERSION)
->+       mkdir -p $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/lib
->+       cp -dpf $(STAGING_DIR)/usr/include/zlib.h $(TARGET_DIR)/usr/include/
->+       cp -dpf $(STAGING_DIR)/usr/include/zconf.h $(TARGET_DIR)/usr/include/
->+       cp -dpf $(STAGING_DIR)/usr/lib/libz.a $(TARGET_DIR)/usr/lib/
->+       rm -f $(TARGET_DIR)/lib/libz.so $(TARGET_DIR)/usr/lib/libz.so
->+       ln -sf libz.so.$(ZLIB_VERSION) $(TARGET_DIR)/usr/lib/libz.so
->        touch -c $@
->
->Why not use $(INSTALL) here? That's what I did in addition to that
->point where you and Thomas pointed out.
+Le Fri, 31 Oct 2008 11:33:07 +0100,
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
 
-I overlooked that you creaded the dirs before installing the files, so
-this is ok, sorry.
+> Of course, this is not the desired behaviour, since binaries on the
+> target also end up with the arm-blablabla prefix. However, after a
+> quick look at ./configure, I don't really understand what's the logic
+> to compute this program_transform_name variable.
+> 
+> Any clue ?
+
+FYI, the related autoconf documentation is available at
+http://www.gnu.org/software/autoconf/manual/html_node/Transforming-Names.html#Transforming-Names.
+
+It seems that by default, the binary names are transformed to be
+prefixed with the target name, which is what I see. Should we add
+--program-prefix= and --program-transform-name= to the CONFIGURE_OPTS ?
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
