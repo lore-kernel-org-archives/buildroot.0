@@ -1,19 +1,35 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Fri, 31 Oct 2008 13:15:58 +0100
-Subject: [Buildroot] [PATCH] Create zlib installation directory in
-	the	staging dir
-In-Reply-To: <d6cda7730810310511g3e03f40x6385931c49054d2d@mail.gmail.com>
-References: <20081030170039.6fe37578@surf> <20081031083736.GB26468@mx.loc>
-	<d6cda7730810310511g3e03f40x6385931c49054d2d@mail.gmail.com>
-Message-ID: <20081031121558.GB27517@mx.loc>
+From: correa at uclibc.org <correa@uclibc.org>
+Date: Fri, 31 Oct 2008 05:41:02 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/pciutils
+Message-ID: <20081031124103.030FF3C7ED@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Oct 31, 2008 at 10:11:04AM -0200, Thiago A. Corr?a wrote:
->Applied in r23879.
+Author: correa
+Date: 2008-10-31 05:41:02 -0700 (Fri, 31 Oct 2008)
+New Revision: 23881
 
-You applied something different, fwiw. But it doesn't matter much,
-you're building zlib incorrectly anyway *shrug* i've fixed this now..
+Log:
+pciutils may depend on zlib. Based on Bernhard's git repository.
+
+Modified:
+   trunk/buildroot/package/pciutils/pciutils.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/pciutils/pciutils.mk
+===================================================================
+--- trunk/buildroot/package/pciutils/pciutils.mk	2008-10-31 12:14:39 UTC (rev 23880)
++++ trunk/buildroot/package/pciutils/pciutils.mk	2008-10-31 12:41:02 UTC (rev 23881)
+@@ -57,7 +57,7 @@
+ $(TARGET_DIR)/usr/share/misc/$(PCIIDS_FILE): $(PCIUTILS_DIR)/.unpacked
+ 	$(INSTALL) -D $(PCIUTILS_DIR)/$(PCIIDS_FILE) $(@D)
+ 
+-pciutils: uclibc $(TARGET_DIR)/sbin/setpci $(TARGET_DIR)/sbin/lspci $(TARGET_DIR)/usr/share/misc/$(PCIIDS_FILE)
++pciutils: uclibc $(if $(BR2_PACKAGE_ZLIB),zlib) $(TARGET_DIR)/sbin/setpci $(TARGET_DIR)/sbin/lspci $(TARGET_DIR)/usr/share/misc/$(PCIIDS_FILE)
+ 
+ pciutils-source: $(DL_DIR)/$(PCIUTILS_SOURCE) $(DL_DIR)/$(PCIIDS_SOURCE)
+ 
