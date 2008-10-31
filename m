@@ -1,45 +1,39 @@
-From: Nick Peirson <nick@netcentral.co.uk>
-Date: Fri, 31 Oct 2008 15:26:43 +0000
-Subject: [Buildroot] Patch review
-In-Reply-To: <490AE48B.20306@netcentral.co.uk>
-References: <490AD4EF.1010106@netcentral.co.uk> <20081031104315.GJ26468@mx.loc>
-	<490AE48B.20306@netcentral.co.uk>
-Message-ID: <490B23B3.60801@netcentral.co.uk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 31 Oct 2008 16:31:50 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/zlib
+In-Reply-To: <20081031121011.6D91B3C7FE@busybox.net>
+References: <20081031121011.6D91B3C7FE@busybox.net>
+Message-ID: <20081031163150.304d9a3a@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Nick Peirson wrote:
-> Bernhard Reutner-Fischer wrote:
->> Did you send the non-makefile patch upstream? If you didn't already then
->> please do now..
-> 
-> I wasn't sure if the bug was related to buildroot/uclibc, which I
-> mentioned in the bug notes, but I'll send it upstream and see what's
-> made of it.
-> 
+Le Fri, 31 Oct 2008 05:10:11 -0700 (PDT),
+correa at uclibc.org a ?crit :
 
-Posted the patch on the syslinux list, but apparently there's already a 
-fix upstream of syslinux.
+>  $(STAGING_DIR)/usr/lib/libz.so: $(ZLIB_DIR)/libz.so
+> -	cp -dpf $(ZLIB_DIR)/libz.a $(STAGING_DIR)/usr/lib/
+> -	cp -dpf $(ZLIB_DIR)/zlib.h $(STAGING_DIR)/usr/include/
+> -	cp -dpf $(ZLIB_DIR)/zconf.h $(STAGING_DIR)/usr/include/
+> -	cp -dpf $(ZLIB_DIR)/libz.so* $(STAGING_DIR)/usr/lib/
+> +	$(INSTALL) -D $(ZLIB_DIR)/libz.a $(STAGING_DIR)/usr/lib/
 
-Can the patch I attached be applied to the buildroot svn? Currently the 
-syslinux.mk points to a version of syslinux that isn't available and 
-will break the build.
+This doesn't work: even with the -D option, it doesn't create the
+intermediate directories. It should be:
 
-I can create a patch to move to 3.63 if that's preferred, as there 
-aren't as many changes, although going to 3.72 seems preferable to me?
+$(INSTALL) -D $(ZLIB_DIR)/libz.a $(STAGING_DIR)/usr/lib/libz.a
 
+> +	$(INSTALL) -D $(ZLIB_DIR)/zlib.h $(STAGING_DIR)/usr/include/
+
+Same thing here.
+
+Cheers,
+
+Thomas
 -- 
-Regards
-
-Nick Peirson
-
---
-Internet Central Ltd is a limited company registered in England. 
-Registered number: 3079542. Registered office: Ivy House Foundry, 
-Hanley, Stoke-on-Trent ST1 3NR.
-
-This message is private and confidential. If you have received this 
-message in error, please notify us and remove it from your system.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
