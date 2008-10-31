@@ -1,23 +1,22 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 31 Oct 2008 10:14:30 +0100
+From: Daniel J Laird <daniel.j.laird@nxp.com>
+Date: Fri, 31 Oct 2008 10:24:57 +0100
 Subject: [Buildroot] Write access to SVN and bug tracker
-Message-ID: <20081031101430.2e100d7e@surf>
+In-Reply-To: <20081031101430.2e100d7e@surf>
+References: <20081031101430.2e100d7e@surf>
+Message-ID: <C13DBBE85AD6974B85C118C35890CA5F13B21BEFA4@EU1RDCRDC1WX029.exi.nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Good Idea, more the merrier.... (Expecially with the fact that you are using an external toolchain)
 
-May I get write access to the Subversion and the bug tracker, in order
-to contribute more efficiently to Buildroot ?
+I had to do the stuff mentioned on the website( create SSH key etc) - http://buildroot.uclibc.org/developer.html
 
-Thanks,
+and then I had to send it to someone but not Erik Anderson.  I sent it to vapier at uclibc.org.
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+He created a username etc and then I can SVN over SSH and make my updates.
+
+Cheers
+Daniel Laird
