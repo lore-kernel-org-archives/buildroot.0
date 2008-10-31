@@ -1,52 +1,79 @@
-From: antab at uclibc.org <antab@uclibc.org>
-Date: Fri, 31 Oct 2008 10:22:59 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device/valka:
-	target_skeleton target_skeleton/etc tar etc...
-Message-ID: <20081031172259.E2F79F8055@busybox.net>
+From: Jonathan Dumaresq <jdumaresq@cimeq.qc.ca>
+Date: Fri, 31 Oct 2008 13:36:01 -0400
+Subject: [Buildroot] my first patch !
+In-Reply-To: <20081031171037.GF27517@mx.loc>
+References: <!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAIMsuCDiF8RCojvQ+E2NNJQBAAAAAA==@cimeq.qc.ca>
+	<20081031171037.GF27517@mx.loc>
+Message-ID: <!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAJ/gkkvS7oNNlXjUFHIJdO4BAAAAAA==@cimeq.qc.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: antab
-Date: 2008-10-31 10:22:59 -0700 (Fri, 31 Oct 2008)
-New Revision: 23887
+Hi,
 
-Log:
-Update valka target
+I would like to thanks you for your input. 
 
+I would like to know what I suppose to do with thoses 3 files ?
 
-Added:
-   trunk/buildroot/target/device/valka/target_skeleton/etc/lighttpd.conf
-   trunk/buildroot/target/device/valka/target_skeleton/etc/rc.d/nbd_swap
-   trunk/buildroot/target/device/valka/target_skeleton/valka/
-   trunk/buildroot/target/device/valka/target_skeleton/valka/web/
-   trunk/buildroot/target/device/valka/v100sc2/busybox.config
+I should remove all my "old" files in the package/netsnmp directory and put
+this 3 files in there ?
 
-Removed:
-   trunk/buildroot/target/device/valka/target_skeleton/etc/rc.d/dbus
-   trunk/buildroot/target/device/valka/target_skeleton/etc/rc.d/gui
-   trunk/buildroot/target/device/valka/target_skeleton/web/
-   trunk/buildroot/target/device/valka/v100sc2/busybox-1.9.0.config
-   trunk/buildroot/target/device/valka/v100sc2/busybox-1.9.1.config
-   trunk/buildroot/target/device/valka/v100sc2/kernel-patches/
-   trunk/buildroot/target/device/valka/v100sc2/v100sc2-linux-2.6.24.config
+I'm little new with all that patch, configs.. ect. 
 
-Modified:
-   trunk/buildroot/target/device/valka/Config.in
-   trunk/buildroot/target/device/valka/Makefile.in
-   trunk/buildroot/target/device/valka/target_skeleton/etc/default/rc.conf
-   trunk/buildroot/target/device/valka/target_skeleton/etc/ntp.conf
-   trunk/buildroot/target/device/valka/target_skeleton/etc/shadow
-   trunk/buildroot/target/device/valka/target_skeleton/etc/shells
-   trunk/buildroot/target/device/valka/v100sc2/uClibc.config
-   trunk/buildroot/target/device/valka/v100sc2_defconfig
+Jonathan
 
 
-Changeset:
+-----Message d'origine-----
+De?: Bernhard Reutner-Fischer [mailto:rep.dot.nop at gmail.com] 
+Envoy??: 31 octobre 2008 13:11
+??: Jonathan Dumaresq
+Cc?: buildroot at uclibc.org
+Objet?: Re: [Buildroot] my first patch !
 
-Sorry, the patch is too large to include (5085 lines).
-Please use ViewCVS to see it!
+On Fri, Oct 31, 2008 at 11:05:58AM -0400, Jonathan Dumaresq wrote:
+>Hi all,
+>
+>I have a small patch for net-snmp to add the avr32 build to the machine
+>availability. 
+>
+>This is the first patch that I make. So if I need to modify the way of
+doing
+>it, please let me know. 
 
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=23887
+Hi and welcome.
+The gnuconfig stuff is handled a bit differently, see CONFIG_UPDATE
+
+To spare you sime time, svn carries a way outdated netsnmp package, let
+me point you to
+http://repo.or.cz/w/buildroot.git?a=tree;f=package/netsnmp;hb=HEAD
+respectively it's history.
+
+HTH,
+>
+>Index: net-snmp-5.1.2/config.sub
+>===================================================================
+>--- net-snmp-5.1.2.orig/config.sub      2008-10-31 10:26:47.000000000 -0400
+>+++ net-snmp-5.1.2/config.sub   2008-10-31 10:28:27.000000000 -0400
+>@@ -228,7 +228,7 @@
+>        | a29k \
+>        | alpha | alphaev[4-8] | alphaev56 | alphaev6[78] | alphapca5[67] \
+>        | alpha64 | alpha64ev[4-8] | alpha64ev56 | alpha64ev6[78] |
+>alpha64pca5[67] \
+>-       | arc | arm | arm[bl]e | arme[lb] | armv[2345] | armv[345][lb] |
+avr
+>\
+>+       | arc | arm | arm[bl]e | arme[lb] | armv[2345] | armv[345][lb] |
+avr
+>| avr32 \
+>        | clipper \
+>        | d10v | d30v | dlx | dsp16xx \
+>        | fr30 | frv \
+>
+>Jonathan
+
+-- 
+This message has been scanned for viruses and
+dangerous content by MailScanner, and is
+believed to be clean.
