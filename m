@@ -1,22 +1,39 @@
-From: Daniel J Laird <daniel.j.laird@nxp.com>
-Date: Fri, 31 Oct 2008 10:24:57 +0100
-Subject: [Buildroot] Write access to SVN and bug tracker
-In-Reply-To: <20081031101430.2e100d7e@surf>
-References: <20081031101430.2e100d7e@surf>
-Message-ID: <C13DBBE85AD6974B85C118C35890CA5F13B21BEFA4@EU1RDCRDC1WX029.exi.nxp.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 31 Oct 2008 10:25:59 +0100
+Subject: [Buildroot] [PATCH] Bump lite version
+Message-ID: <20081031102559.70648045@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Good Idea, more the merrier.... (Expecially with the fact that you are using an external toolchain)
+Bump Lite version
 
-I had to do the stuff mentioned on the website( create SSH key etc) - http://buildroot.uclibc.org/developer.html
+Bump Lite version to 0.8.10.
 
-and then I had to send it to someone but not Erik Anderson.  I sent it to vapier at uclibc.org.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lite/lite.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-He created a username etc and then I can SVN over SSH and make my updates.
+Index: buildroot2/package/lite/lite.mk
+===================================================================
+--- buildroot2.orig/package/lite/lite.mk
++++ buildroot2/package/lite/lite.mk
+@@ -3,7 +3,7 @@
+ # LiTE
+ #
+ #############################################################
+-LITE_VERSION:=0.8.9
++LITE_VERSION:=0.8.10
+ LITE_SOURCE:=LiTE-$(LITE_VERSION).tar.gz
+ LITE_SITE:=http://www.directfb.org/downloads/Libs
+ LITE_AUTORECONF = NO
 
-Cheers
-Daniel Laird
+
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
