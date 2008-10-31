@@ -1,35 +1,56 @@
-From: correa at uclibc.org <correa@uclibc.org>
-Date: Thu, 30 Oct 2008 19:17:30 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/qtopia4
-Message-ID: <20081031021730.62E773C671@busybox.net>
+From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
+Date: Fri, 31 Oct 2008 00:31:36 -0200
+Subject: [Buildroot] [PATCH] qtopia4: fix wrong variable name for SQL
+In-Reply-To: <200810310118.50847.markus.heidelberg@web.de>
+References: <200810310118.50847.markus.heidelberg@web.de>
+Message-ID: <d6cda7730810301931q61359abdva18447d940267043@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: correa
-Date: 2008-10-30 19:17:30 -0700 (Thu, 30 Oct 2008)
-New Revision: 23872
+Thanks.
+Applied in r23872.
 
-Log:
-fix wrong variable name for SQL. Signed-off-by: Markus Heidelberg <markus.heidelberg@web.de>
+Btw, could you send patches as attachments (instead or as well)? Not
+sure how others prefers them, but since I don't view my mail on linux
+boxes and only use linux through ssh I sort of have to apply them by
+typing it back on the ssh window. Also, I don't trust copy and paste
+to not mess with the whitespaces and tabs.... If I do mess them up
+others jump on my neck. Whitespace damage is sort of worst than having
+a non working package around here *smile*.
 
-Modified:
-   trunk/buildroot/package/qtopia4/qtopia4.mk
+Anyway, thanks for spoting that. Sorry for my laziness.
 
+Kind Regards,
+   Thiago A. Correa
 
-Changeset:
-Modified: trunk/buildroot/package/qtopia4/qtopia4.mk
-===================================================================
---- trunk/buildroot/package/qtopia4/qtopia4.mk	2008-10-31 02:04:28 UTC (rev 23871)
-+++ trunk/buildroot/package/qtopia4/qtopia4.mk	2008-10-31 02:17:30 UTC (rev 23872)
-@@ -307,7 +307,7 @@
- 		cp -dpfr $(STAGING_DIR)/usr/plugins/imageformats $(TARGET_DIR)/usr/plugins/; \
- 		$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/plugins/imageformats/*; \
- 	fi
--ifneq ($(BR2_PACKAGE_QTOPIA4_SQL),y)
-+ifneq ($(BR2_PACKAGE_QTOPIA4_SQL_MODULE),y)
- 	# Remove Sql libraries, not needed
- 	-rm $(TARGET_DIR)/usr/lib/libQtSql*
- endif
+On Thu, Oct 30, 2008 at 10:18 PM, Markus Heidelberg
+<markus.heidelberg@web.de> wrote:
+> Signed-off-by: Markus Heidelberg <markus.heidelberg@web.de>
+> ---
+>  package/qtopia4/qtopia4.mk |    2 +-
+>  1 files changed, 1 insertions(+), 1 deletions(-)
+>
+> diff --git a/package/qtopia4/qtopia4.mk b/package/qtopia4/qtopia4.mk
+> index 9c08be9..de3bf4d 100644
+> --- a/package/qtopia4/qtopia4.mk
+> +++ b/package/qtopia4/qtopia4.mk
+> @@ -307,7 +307,7 @@ endif
+>                cp -dpfr $(STAGING_DIR)/usr/plugins/imageformats $(TARGET_DIR)/usr/plugins/; \
+>                $(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/plugins/imageformats/*; \
+>        fi
+> -ifneq ($(BR2_PACKAGE_QTOPIA4_SQL),y)
+> +ifneq ($(BR2_PACKAGE_QTOPIA4_SQL_MODULE),y)
+>        # Remove Sql libraries, not needed
+>        -rm $(TARGET_DIR)/usr/lib/libQtSql*
+>  endif
+> --
+> 1.6.0.3.524.g3adb7d
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+>
