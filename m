@@ -1,25 +1,26 @@
 From: hartleys <hartleys@visionengravers.com>
-Date: Fri, 31 Oct 2008 14:38:51 -0400
-Subject: [Buildroot] [PATCH] More external toolchain fixes
-In-Reply-To: <20081030100247.423cf5c1@surf>
-References: <20081030100247.423cf5c1@surf>
-Message-ID: <BD79186B4FD85F4B8E60E381CAEE1909C2916C@mi8nycmail19.Mi8.com>
+Date: Fri, 31 Oct 2008 14:42:14 -0400
+Subject: [Buildroot] External toolchain support improvements
+In-Reply-To: <20081030094501.66983ff9@surf>
+References: <20081030094501.66983ff9@surf>
+Message-ID: <BD79186B4FD85F4B8E60E381CAEE1909C2916F@mi8nycmail19.Mi8.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thursday, October 30, 2008 2:03 AM, Thomas Petazzoni wrote:
-> Fix issues with binary external toolchains
+On Thursday, October 30, 2008 1:45 AM, Thomas Petazzoni wrote:
+> Improve external toolchain support
+>
+> * Do not put kernel-headers in the dependencies of BASE_TARGETS in
+>   the case where BR2_TOOLCHAIN_SOURCE is not y. The kernel headers
+>   are already supposed to be part of the external toolchain, so
+>   there's no need to download, extract and install them.
 
-Again yah! 
+What are the side effects if you use an external toolchain that was
+built with a given kernel version, say 2.6.20.4, but use a newer kernel,
+say 2.6.27.3?
 
-I found the same issue back on 6/17/2008 and sent a patch on 7/7/2008
-that never got a response.
-
-Look forward to seeing any of your future external toolchain patches.
-
-Again for what it's worth.
-
-Acked-by: H Hartley Sweeten <hsweeten@visionengravers.com>
+Thanks,
+Hartley
