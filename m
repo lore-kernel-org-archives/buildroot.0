@@ -1,35 +1,42 @@
-From: correa at uclibc.org <correa@uclibc.org>
-Date: Fri, 31 Oct 2008 05:41:02 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/pciutils
-Message-ID: <20081031124103.030FF3C7ED@busybox.net>
+From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
+Date: Fri, 31 Oct 2008 10:44:20 -0200
+Subject: [Buildroot] [PATCH] Create zlib installation directory in the
+	staging dir
+In-Reply-To: <20081031121558.GB27517@mx.loc>
+References: <20081030170039.6fe37578@surf> <20081031083736.GB26468@mx.loc>
+	<d6cda7730810310511g3e03f40x6385931c49054d2d@mail.gmail.com>
+	<20081031121558.GB27517@mx.loc>
+Message-ID: <d6cda7730810310544s6a93c58v18206bd17e58a72f@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: correa
-Date: 2008-10-31 05:41:02 -0700 (Fri, 31 Oct 2008)
-New Revision: 23881
+On Fri, Oct 31, 2008 at 10:15 AM, Bernhard Reutner-Fischer
+<rep.dot.nop@gmail.com> wrote:
+> On Fri, Oct 31, 2008 at 10:11:04AM -0200, Thiago A. Corr?a wrote:
+>>Applied in r23879.
+>
+> You applied something different, fwiw. But it doesn't matter much,
+> you're building zlib incorrectly anyway *shrug* i've fixed this now..
+>
 
-Log:
-pciutils may depend on zlib. Based on Bernhard's git repository.
+Diff between svn and git gives me:
 
-Modified:
-   trunk/buildroot/package/pciutils/pciutils.mk
+-$(TARGET_DIR)/usr/lib/libz.a: $(STAGING_DIR)/usr/lib/libz.so
+-       $(INSTALL) -D $(STAGING_DIR)/usr/include/zlib.h
+$(TARGET_DIR)/usr/include/
+-       $(INSTALL) $(STAGING_DIR)/usr/include/zconf.h $(TARGET_DIR)/usr/include/
+-       $(INSTALL) -D $(STAGING_DIR)/usr/lib/libz.a $(TARGET_DIR)/usr/lib/
++$(TARGET_DIR)/usr/lib/libz.a: $(STAGING_DIR)/usr/lib/libz.so.$(ZLIB_VERSION)
++       mkdir -p $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/lib
++       cp -dpf $(STAGING_DIR)/usr/include/zlib.h $(TARGET_DIR)/usr/include/
++       cp -dpf $(STAGING_DIR)/usr/include/zconf.h $(TARGET_DIR)/usr/include/
++       cp -dpf $(STAGING_DIR)/usr/lib/libz.a $(TARGET_DIR)/usr/lib/
++       rm -f $(TARGET_DIR)/lib/libz.so $(TARGET_DIR)/usr/lib/libz.so
++       ln -sf libz.so.$(ZLIB_VERSION) $(TARGET_DIR)/usr/lib/libz.so
+        touch -c $@
 
-
-Changeset:
-Modified: trunk/buildroot/package/pciutils/pciutils.mk
-===================================================================
---- trunk/buildroot/package/pciutils/pciutils.mk	2008-10-31 12:14:39 UTC (rev 23880)
-+++ trunk/buildroot/package/pciutils/pciutils.mk	2008-10-31 12:41:02 UTC (rev 23881)
-@@ -57,7 +57,7 @@
- $(TARGET_DIR)/usr/share/misc/$(PCIIDS_FILE): $(PCIUTILS_DIR)/.unpacked
- 	$(INSTALL) -D $(PCIUTILS_DIR)/$(PCIIDS_FILE) $(@D)
- 
--pciutils: uclibc $(TARGET_DIR)/sbin/setpci $(TARGET_DIR)/sbin/lspci $(TARGET_DIR)/usr/share/misc/$(PCIIDS_FILE)
-+pciutils: uclibc $(if $(BR2_PACKAGE_ZLIB),zlib) $(TARGET_DIR)/sbin/setpci $(TARGET_DIR)/sbin/lspci $(TARGET_DIR)/usr/share/misc/$(PCIIDS_FILE)
- 
- pciutils-source: $(DL_DIR)/$(PCIUTILS_SOURCE) $(DL_DIR)/$(PCIIDS_SOURCE)
- 
+Why not use $(INSTALL) here? That's what I did in addition to that
+point where you and Thomas pointed out.
