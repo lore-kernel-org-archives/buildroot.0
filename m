@@ -1,7 +1,7 @@
 From: correa at uclibc.org <correa@uclibc.org>
-Date: Thu, 30 Oct 2008 20:55:03 -0700 (PDT)
+Date: Thu, 30 Oct 2008 21:03:28 -0700 (PDT)
 Subject: [Buildroot] svn commit: trunk/buildroot/package/pciutils
-Message-ID: <20081031035503.D5C713C765@busybox.net>
+Message-ID: <20081031040328.19ABB3C784@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,34 +9,40 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: correa
-Date: 2008-10-30 20:55:03 -0700 (Thu, 30 Oct 2008)
-New Revision: 23875
+Date: 2008-10-30 21:03:27 -0700 (Thu, 30 Oct 2008)
+New Revision: 23876
 
 Log:
-Minor cleanups. Use touch  for stamp-files
+Fix bug #0005884 - pciutils depends on zlib
 
 Modified:
+   trunk/buildroot/package/pciutils/Config.in
    trunk/buildroot/package/pciutils/pciutils.mk
 
 
 Changeset:
+Modified: trunk/buildroot/package/pciutils/Config.in
+===================================================================
+--- trunk/buildroot/package/pciutils/Config.in	2008-10-31 03:55:03 UTC (rev 23875)
++++ trunk/buildroot/package/pciutils/Config.in	2008-10-31 04:03:27 UTC (rev 23876)
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PCIUTILS
+ 	bool "pciutils"
++	depends on BR2_PACKAGE_ZLIB
+ 	help
+ 	  Various utilities dealing with the PCI bus.
+ 	  Provides things like setpci and lspci.
+
 Modified: trunk/buildroot/package/pciutils/pciutils.mk
 ===================================================================
---- trunk/buildroot/package/pciutils/pciutils.mk	2008-10-31 03:04:55 UTC (rev 23874)
-+++ trunk/buildroot/package/pciutils/pciutils.mk	2008-10-31 03:55:03 UTC (rev 23875)
-@@ -26,13 +26,13 @@
- 	$(PCIUTILS_CAT) $(DL_DIR)/$(PCIUTILS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
- 	$(PCIIDS_CAT) $(DL_DIR)/$(PCIIDS_SOURCE) > $(PCIUTILS_DIR)/pci.ids
- 	toolchain/patch-kernel.sh $(PCIUTILS_DIR) package/pciutils pciutils\*.patch
--	touch $(PCIUTILS_DIR)/.unpacked
-+	touch $@
+--- trunk/buildroot/package/pciutils/pciutils.mk	2008-10-31 03:55:03 UTC (rev 23875)
++++ trunk/buildroot/package/pciutils/pciutils.mk	2008-10-31 04:03:27 UTC (rev 23876)
+@@ -43,7 +43,7 @@
+ $(TARGET_DIR)/usr/share/misc/pci.ids: $(PCIUTILS_DIR)/.unpacked
+ 	install -Dc $(PCIUTILS_DIR)/pci.ids $(TARGET_DIR)/usr/share/misc/pci.ids
  
- $(PCIUTILS_DIR)/.compiled: $(PCIUTILS_DIR)/.unpacked
- 	$(MAKE1) CC=$(TARGET_CC) OPT="$(TARGET_CFLAGS)" -C $(PCIUTILS_DIR) \
- 		SHAREDIR="/usr/share/misc" \
- 		PREFIX=/usr
--	touch $(PCIUTILS_DIR)/.compiled
-+	touch $@
+-pciutils: uclibc $(TARGET_DIR)/sbin/setpci $(TARGET_DIR)/sbin/lspci $(TARGET_DIR)/usr/share/misc/pci.ids
++pciutils: uclibc zlib $(TARGET_DIR)/sbin/setpci $(TARGET_DIR)/sbin/lspci $(TARGET_DIR)/usr/share/misc/pci.ids
  
- $(TARGET_DIR)/sbin/lspci: $(PCIUTILS_DIR)/.compiled
- 	install -c $(PCIUTILS_DIR)/lspci $(TARGET_DIR)/sbin/lspci
+ pciutils-clean:
+ 	rm $(TARGET_DIR)/sbin/lspci $(TARGET_DIR)/sbin/setpci $(TARGET_DIR)/usr/share/misc/pci.ids
