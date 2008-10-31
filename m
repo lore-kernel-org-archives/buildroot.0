@@ -1,35 +1,58 @@
-From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Fri, 31 Oct 2008 09:27:37 -0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package/pciutils
-In-Reply-To: <20081031110225.GA27517@mx.loc>
-References: <20081031040328.19ABB3C784@busybox.net>
-	<20081031103023.GH26468@mx.loc>
-	<d6cda7730810310354g280c9ffbyd720dba75f965138@mail.gmail.com>
-	<20081031110225.GA27517@mx.loc>
-Message-ID: <d6cda7730810310427k7f4a9a12oc018179a6745c840@mail.gmail.com>
+From: correa at uclibc.org <correa@uclibc.org>
+Date: Fri, 31 Oct 2008 05:10:11 -0700 (PDT)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/zlib
+Message-ID: <20081031121011.6D91B3C7FE@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Oct 31, 2008 at 9:02 AM, Bernhard Reutner-Fischer
-<rep.dot.nop@gmail.com> wrote:
-> On Fri, Oct 31, 2008 at 08:54:59AM -0200, Thiago A. Corr?a wrote:
->
->>>>Fix bug #0005884 - pciutils depends on zlib
->>>
->>> This is not correct.
->>
->>Patches welcome.
->
-> http://repo.or.cz/w/buildroot.git?a=tree;f=package/pciutils;hb=HEAD
->
->>Either way, building without zlib, althougth possible, cripples
->>pciutils in not being able to use compressed PCI ID databases.
->
-> yes, and that's perfectly fine.
->
+Author: correa
+Date: 2008-10-31 05:10:10 -0700 (Fri, 31 Oct 2008)
+New Revision: 23879
 
-I see. Thanks. Will apply as soon as I finish build/testing your other
-suggestion on zlib.
+Log:
+Make sure directories are created during install to STAGING_DIR and TARGET_DIR. Thanks to Thomas Petazzoni and Bernhard Reutner-Fischer.
+
+Modified:
+   trunk/buildroot/package/zlib/zlib.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/zlib/zlib.mk
+===================================================================
+--- trunk/buildroot/package/zlib/zlib.mk	2008-10-31 09:50:42 UTC (rev 23878)
++++ trunk/buildroot/package/zlib/zlib.mk	2008-10-31 12:10:10 UTC (rev 23879)
+@@ -37,23 +37,21 @@
+ 	touch -c $@
+ 
+ $(STAGING_DIR)/usr/lib/libz.so: $(ZLIB_DIR)/libz.so
+-	cp -dpf $(ZLIB_DIR)/libz.a $(STAGING_DIR)/usr/lib/
+-	cp -dpf $(ZLIB_DIR)/zlib.h $(STAGING_DIR)/usr/include/
+-	cp -dpf $(ZLIB_DIR)/zconf.h $(STAGING_DIR)/usr/include/
+-	cp -dpf $(ZLIB_DIR)/libz.so* $(STAGING_DIR)/usr/lib/
++	$(INSTALL) -D $(ZLIB_DIR)/libz.a $(STAGING_DIR)/usr/lib/
++	$(INSTALL) -D $(ZLIB_DIR)/zlib.h $(STAGING_DIR)/usr/include/
++	$(INSTALL) $(ZLIB_DIR)/zconf.h $(STAGING_DIR)/usr/include/
++	$(INSTALL) $(ZLIB_DIR)/libz.so* $(STAGING_DIR)/usr/lib/
+ 	touch -c $@
+ 
+ $(TARGET_DIR)/usr/lib/libz.so: $(STAGING_DIR)/usr/lib/libz.so
+-	mkdir -p $(TARGET_DIR)/usr/lib
+-	cp -dpf $(STAGING_DIR)/usr/lib/libz.so* $(TARGET_DIR)/usr/lib
++	$(INSTALL) -D $(STAGING_DIR)/usr/lib/libz.so* $(TARGET_DIR)/usr/lib
+ 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $@
+ 	touch -c $@
+ 
+ $(TARGET_DIR)/usr/lib/libz.a: $(STAGING_DIR)/usr/lib/libz.so
+-	mkdir -p $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/lib
+-	cp -dpf $(STAGING_DIR)/usr/include/zlib.h $(TARGET_DIR)/usr/include/
+-	cp -dpf $(STAGING_DIR)/usr/include/zconf.h $(TARGET_DIR)/usr/include/
+-	cp -dpf $(STAGING_DIR)/usr/lib/libz.a $(TARGET_DIR)/usr/lib/
++	$(INSTALL) -D $(STAGING_DIR)/usr/include/zlib.h $(TARGET_DIR)/usr/include/
++	$(INSTALL) $(STAGING_DIR)/usr/include/zconf.h $(TARGET_DIR)/usr/include/
++	$(INSTALL) -D $(STAGING_DIR)/usr/lib/libz.a $(TARGET_DIR)/usr/lib/
+ 	touch -c $@
+ 
+ zlib-headers: $(TARGET_DIR)/usr/lib/libz.a
