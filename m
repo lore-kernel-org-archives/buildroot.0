@@ -1,50 +1,49 @@
-From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Fri, 31 Oct 2008 14:37:21 -0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package/zlib
-In-Reply-To: <20081031163150.304d9a3a@surf>
-References: <20081031121011.6D91B3C7FE@busybox.net>
-	<20081031163150.304d9a3a@surf>
-Message-ID: <d6cda7730810310937m44a69060u7827d9180683dcf@mail.gmail.com>
+From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+Date: Fri, 31 Oct 2008 18:10:37 +0100
+Subject: [Buildroot] my first patch !
+In-Reply-To: <!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAIMsuCDiF8RCojvQ+E2NNJQBAAAAAA==@cimeq.qc.ca>
+References: <!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAIMsuCDiF8RCojvQ+E2NNJQBAAAAAA==@cimeq.qc.ca>
+Message-ID: <20081031171037.GF27517@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ops, my bad.
+On Fri, Oct 31, 2008 at 11:05:58AM -0400, Jonathan Dumaresq wrote:
+>Hi all,
+>
+>I have a small patch for net-snmp to add the avr32 build to the machine
+>availability. 
+>
+>This is the first patch that I make. So if I need to modify the way of doing
+>it, please let me know. 
 
-Should be ok in 23885.
+Hi and welcome.
+The gnuconfig stuff is handled a bit differently, see CONFIG_UPDATE
 
-On Fri, Oct 31, 2008 at 1:31 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Le Fri, 31 Oct 2008 05:10:11 -0700 (PDT),
-> correa at uclibc.org a ?crit :
+To spare you sime time, svn carries a way outdated netsnmp package, let
+me point you to
+http://repo.or.cz/w/buildroot.git?a=tree;f=package/netsnmp;hb=HEAD
+respectively it's history.
+
+HTH,
 >
->>  $(STAGING_DIR)/usr/lib/libz.so: $(ZLIB_DIR)/libz.so
->> -     cp -dpf $(ZLIB_DIR)/libz.a $(STAGING_DIR)/usr/lib/
->> -     cp -dpf $(ZLIB_DIR)/zlib.h $(STAGING_DIR)/usr/include/
->> -     cp -dpf $(ZLIB_DIR)/zconf.h $(STAGING_DIR)/usr/include/
->> -     cp -dpf $(ZLIB_DIR)/libz.so* $(STAGING_DIR)/usr/lib/
->> +     $(INSTALL) -D $(ZLIB_DIR)/libz.a $(STAGING_DIR)/usr/lib/
+>Index: net-snmp-5.1.2/config.sub
+>===================================================================
+>--- net-snmp-5.1.2.orig/config.sub      2008-10-31 10:26:47.000000000 -0400
+>+++ net-snmp-5.1.2/config.sub   2008-10-31 10:28:27.000000000 -0400
+>@@ -228,7 +228,7 @@
+>        | a29k \
+>        | alpha | alphaev[4-8] | alphaev56 | alphaev6[78] | alphapca5[67] \
+>        | alpha64 | alpha64ev[4-8] | alpha64ev56 | alpha64ev6[78] |
+>alpha64pca5[67] \
+>-       | arc | arm | arm[bl]e | arme[lb] | armv[2345] | armv[345][lb] | avr
+>\
+>+       | arc | arm | arm[bl]e | arme[lb] | armv[2345] | armv[345][lb] | avr
+>| avr32 \
+>        | clipper \
+>        | d10v | d30v | dlx | dsp16xx \
+>        | fr30 | frv \
 >
-> This doesn't work: even with the -D option, it doesn't create the
-> intermediate directories. It should be:
->
-> $(INSTALL) -D $(ZLIB_DIR)/libz.a $(STAGING_DIR)/usr/lib/libz.a
->
->> +     $(INSTALL) -D $(ZLIB_DIR)/zlib.h $(STAGING_DIR)/usr/include/
->
-> Same thing here.
->
-> Cheers,
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers and embedded Linux development,
-> consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
+>Jonathan
