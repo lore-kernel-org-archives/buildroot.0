@@ -1,19 +1,19 @@
-From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Fri, 31 Oct 2008 10:15:16 -0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package/pciutils
-In-Reply-To: <d6cda7730810310427k7f4a9a12oc018179a6745c840@mail.gmail.com>
-References: <20081031040328.19ABB3C784@busybox.net>
-	<20081031103023.GH26468@mx.loc>
-	<d6cda7730810310354g280c9ffbyd720dba75f965138@mail.gmail.com>
-	<20081031110225.GA27517@mx.loc>
-	<d6cda7730810310427k7f4a9a12oc018179a6745c840@mail.gmail.com>
-Message-ID: <d6cda7730810310515l5c7c1927n31a1397a8fa0ab82@mail.gmail.com>
+From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+Date: Fri, 31 Oct 2008 13:15:58 +0100
+Subject: [Buildroot] [PATCH] Create zlib installation directory in
+	the	staging dir
+In-Reply-To: <d6cda7730810310511g3e03f40x6385931c49054d2d@mail.gmail.com>
+References: <20081030170039.6fe37578@surf> <20081031083736.GB26468@mx.loc>
+	<d6cda7730810310511g3e03f40x6385931c49054d2d@mail.gmail.com>
+Message-ID: <20081031121558.GB27517@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It's in -r23880
+On Fri, Oct 31, 2008 at 10:11:04AM -0200, Thiago A. Corr?a wrote:
+>Applied in r23879.
 
-Thanks.
+You applied something different, fwiw. But it doesn't matter much,
+you're building zlib incorrectly anyway *shrug* i've fixed this now..
