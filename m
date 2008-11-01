@@ -1,34 +1,42 @@
-From: Paul Jones <Paul.Jones@iwtech.com.au>
-Date: Sat, 1 Nov 2008 19:29:39 +1100
-Subject: [Buildroot] Error copying kernel image
-Message-ID: <3B941116898CDA489B91563DEF88F4B6059548@iwt-server.iwt.local>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Sat, 1 Nov 2008 03:23:33 -0700
+Subject: [Buildroot] [buildroot 0005914]: add 915resolution and v86d
+Message-ID: <e49c744612f8cdada0639efc237cc40f@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For some reason it seems to be trying to copy the kernel image from the
-main linux-2.6.26 directory rather than from arch/arm/boot/ - I assume
-that this is not correct behaviour? Copying the file manually results in
-a successful build.
 
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=5914 
+====================================================================== 
+Reported By:                robang74
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   5914
+Category:                   New Features
+Reproducibility:            N/A
+Severity:                   feature
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             11-01-2008 03:23 PDT
+Last Modified:              11-01-2008 03:23 PDT
+====================================================================== 
+Summary:                    add 915resolution and v86d
+Description: 
+add 915resolution and v86d for supporting non standard video resolutions
+====================================================================== 
 
-  CHK     include/linux/compile.h
-  Kernel: arch/arm/boot/Image is ready
-  Kernel: arch/arm/boot/zImage is ready
-  Image arch/arm/boot/uImage is ready
-make[1]: Leaving directory
-`/home/paul.jones/buildroot/project_build_arm/kisssa/linux-2.6.26'
-cp -pf
-/home/paul.jones/buildroot/project_build_arm/kisssa/linux-2.6.26/uImage
-/home/paul.jones/buildroot/binaries/kisssa/arm-linux-2.6.26-20081101.gz
-cp: cannot stat
-`/home/paul.jones/buildroot/project_build_arm/kisssa/linux-2.6.26/uImage
-': No such file or directory
-make: ***
-[/home/paul.jones/buildroot/binaries/kisssa/arm-linux-2.6.26-20081101.gz
-] Error 1
-
-
-Paul.
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+11-01-08 03:23  robang74       New Issue                                    
+11-01-08 03:23  robang74       Status                   new => assigned     
+11-01-08 03:23  robang74       Assigned To               => buildroot       
+11-01-08 03:23  robang74       File Added: resolutions.patch                    
+======================================================================
