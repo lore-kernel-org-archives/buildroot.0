@@ -1,43 +1,37 @@
-From: Markus Heidelberg <markus.heidelberg@web.de>
-Date: Sat, 1 Nov 2008 12:09:01 +0100
-Subject: [Buildroot] [PATCH] qtopia4: fix wrong variable name for SQL
-In-Reply-To: <d6cda7730810301931q61359abdva18447d940267043@mail.gmail.com>
-References: <200810310118.50847.markus.heidelberg@web.de>
-	<d6cda7730810301931q61359abdva18447d940267043@mail.gmail.com>
-Message-ID: <200811011209.02562.markus.heidelberg@web.de>
+From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+Date: Sat, 1 Nov 2008 12:11:13 +0100
+Subject: [Buildroot] my first patch !
+In-Reply-To: <!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAPwkCc3TmKtGu5F8XdCF1qkBAAAAAA==@cimeq.qc.ca>
+References: <!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAIMsuCDiF8RCojvQ+E2NNJQBAAAAAA==@cimeq.qc.ca>
+	<20081031171037.GF27517@mx.loc>
+	<!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAPwkCc3TmKtGu5F8XdCF1qkBAAAAAA==@cimeq.qc.ca>
+Message-ID: <20081101111112.GN14184@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thiago A. Corr?a, 31.10.2008:
-> Thanks.
-> Applied in r23872.
-> 
-> Btw, could you send patches as attachments (instead or as well)? Not
-> sure how others prefers them,
+On Fri, Oct 31, 2008 at 02:03:55PM -0400, Jonathan Dumaresq wrote:
+>Mmm,
+>
+>I have replaced my old files by the one in you git. Now I get this:
 
-I prefer inline patches, for easier commenting for example. I also find
-attachments are quite annoying if I have to use the web archives and can't
-just read the patch but have to download it at first. I know Peter prefers
-inline for the ease of applying them with "git am" and he has already applied
-a few from me.
+you cannot use the version from git as a drop-in replacement, svn misses
+some required improvements for this to work. Just see the diff between
+the version in git and svn and back out the AUTO_CONFIGURE_TARGET hunk.
 
-> but since I don't view my mail on linux
-> boxes and only use linux through ssh I sort of have to apply them by
-> typing it back on the ssh window.
+>/bin/bash: line 1:
+>--with-cc=/buildroot/buildroot-avr32-v2.2.0-rc6/build_avr32/staging_dir/usr/
+>bin/avr32-linux-uclibc-gcc: No such file or directory
+>make: ***
+>[/buildroot/buildroot-avr32-v2.2.0-rc6/build_avr32/net-snmp-5.4.1/.configure
+>d] Error 127
+>
+>if I do
+>=/buildroot/buildroot-avr32-v2.2.0-rc6/build_avr32/staging_dir/usr/bin/avr32
+>-linux-uclibc-gcc
+>
+>I have the no input file message. So the avr32-linux-uclibc-gcc is there.
 
-What are the advantages of using attachments or the disadvantages of inline
-through your ssh connection? When you are able to save an attachment you can
-also just save the whole email and apply it, can't you?
-
-> Also, I don't trust copy and paste
-> to not mess with the whitespaces and tabs.... If I do mess them up
-> others jump on my neck. Whitespace damage is sort of worst than having
-> a non working package around here *smile*.
-
-If whitespace is damaged after copy and paste, you will notice it when
-applying the malformed patch.
-
-Markus
+Please look carefully. There is no executable named "--with-...."
