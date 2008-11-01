@@ -1,37 +1,59 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Sat, 1 Nov 2008 12:11:13 +0100
-Subject: [Buildroot] my first patch !
-In-Reply-To: <!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAPwkCc3TmKtGu5F8XdCF1qkBAAAAAA==@cimeq.qc.ca>
-References: <!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAIMsuCDiF8RCojvQ+E2NNJQBAAAAAA==@cimeq.qc.ca>
-	<20081031171037.GF27517@mx.loc>
-	<!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAPwkCc3TmKtGu5F8XdCF1qkBAAAAAA==@cimeq.qc.ca>
-Message-ID: <20081101111112.GN14184@mx.loc>
+From: Markus Heidelberg <markus.heidelberg@web.de>
+Date: Sat, 1 Nov 2008 12:47:25 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/qtopia4
+In-Reply-To: <20081031171723.6F149F8055@busybox.net>
+References: <20081031171723.6F149F8055@busybox.net>
+Message-ID: <200811011247.26080.markus.heidelberg@web.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Oct 31, 2008 at 02:03:55PM -0400, Jonathan Dumaresq wrote:
->Mmm,
->
->I have replaced my old files by the one in you git. Now I get this:
+antab at uclibc.org, 31.10.2008:
+> Author: antab
+> Date: 2008-10-31 10:17:23 -0700 (Fri, 31 Oct 2008)
+> New Revision: 23886
+> 
+> Log:
+> Add options to select what gfx and mouse drivers are compiled in.
+> Note to tslib users: You now have to select the tslib mouse driver to build it.
+> 
+> 
+> Added:
+>    trunk/buildroot/package/qtopia4/Config.gfx.in
+>    trunk/buildroot/package/qtopia4/Config.mouse.in
+> 
+> Modified:
+>    trunk/buildroot/package/qtopia4/Config.in
+>    trunk/buildroot/package/qtopia4/Config.sql.in
+>    trunk/buildroot/package/qtopia4/qtopia4.mk
 
-you cannot use the version from git as a drop-in replacement, svn misses
-some required improvements for this to work. Just see the diff between
-the version in git and svn and back out the AUTO_CONFIGURE_TARGET hunk.
+Just some comments:
 
->/bin/bash: line 1:
->--with-cc=/buildroot/buildroot-avr32-v2.2.0-rc6/build_avr32/staging_dir/usr/
->bin/avr32-linux-uclibc-gcc: No such file or directory
->make: ***
->[/buildroot/buildroot-avr32-v2.2.0-rc6/build_avr32/net-snmp-5.4.1/.configure
->d] Error 127
->
->if I do
->=/buildroot/buildroot-avr32-v2.2.0-rc6/build_avr32/staging_dir/usr/bin/avr32
->-linux-uclibc-gcc
->
->I have the no input file message. So the avr32-linux-uclibc-gcc is there.
+> +config BR2_PACKAGE_QTOPIA4_GFX_MULTISCREEN
+> +	bool "multiscreen"
+> +	default y
 
-Please look carefully. There is no executable named "--with-...."
+I don't know what the multiscreen driver is about, sounds like multiple
+physical screens. Is this a common setup that you default to y here?
+
+> +config BR2_PACKAGE_QTOPIA4_MOUSE_VR41XX
+> +	bool "vxr41xx"
+
+vr41xx
+
+> +	default n
+
+is not necessary in all the options
+
+> Modified: trunk/buildroot/package/qtopia4/qtopia4.mk
+> +### Mouse drivers
+
+MOUSE_QVFB is missing here.
+
+
+I could also make a patch, but I wanted to clarify the multiscreen thing
+first.
+
+Markus
