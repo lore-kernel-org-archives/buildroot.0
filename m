@@ -1,26 +1,53 @@
-From: Markus Heidelberg <markus.heidelberg@web.de>
-Date: Sat, 1 Nov 2008 20:15:19 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/qtopia4
-In-Reply-To: <061E11D86E3DFF459604DF5B36F0805F1BA6D3@salka01.valka.local>
-References: <20081031171723.6F149F8055@busybox.net>
-	<200811011247.26080.markus.heidelberg@web.de>
-	<061E11D86E3DFF459604DF5B36F0805F1BA6D3@salka01.valka.local>
-Message-ID: <200811012015.19425.markus.heidelberg@web.de>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Sat, 1 Nov 2008 13:24:41 -0700
+Subject: [Buildroot] [buildroot 0005914]: add 915resolution and v86d
+Message-ID: <4ba7a4f560073f9c955da5518c03cef1@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnar Mar Sigur?sson, 01.11.2008:
-> >> +	default n
-> > is not necessary in all the options
-> Is "default n" the default? Was not sure because i have seen other packages
-> use "default n".
 
-Yes, it is.
-find package -name Config.* -exec grep "default n" {} \;
-only shows 7 lines. Look at revision 22874 from 2008-07-17 where all the
-"default n" lines were removed.
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=5914 
+====================================================================== 
+Reported By:                robang74
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   5914
+Category:                   New Features
+Reproducibility:            N/A
+Severity:                   feature
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             11-01-2008 03:23 PDT
+Last Modified:              11-01-2008 13:24 PDT
+====================================================================== 
+Summary:                    add 915resolution and v86d
+Description: 
+add 915resolution and v86d for supporting non standard video resolutions
+====================================================================== 
 
-Markus
+---------------------------------------------------------------------- 
+ robang74 - 11-01-08 13:24  
+---------------------------------------------------------------------- 
+In the resolution patch:
+
+s,$(INSTALL),$(INSTALL) -D,
+
+for both the package. Thanks. 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+11-01-08 03:23  robang74       New Issue                                    
+11-01-08 03:23  robang74       Status                   new => assigned     
+11-01-08 03:23  robang74       Assigned To               => buildroot       
+11-01-08 03:23  robang74       File Added: resolutions.patch                    
+11-01-08 03:23  robang74       Issue Monitored: robang74                    
+11-01-08 13:24  robang74       Note Added: 0014784                          
+======================================================================
