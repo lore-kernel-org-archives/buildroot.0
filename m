@@ -1,33 +1,59 @@
-From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Sat, 1 Nov 2008 15:42:26 -0200
-Subject: [Buildroot] svn commit: trunk/buildroot/package/qtopia4
-In-Reply-To: <061E11D86E3DFF459604DF5B36F0805F1BA6D3@salka01.valka.local>
-References: <20081031171723.6F149F8055@busybox.net>
-	<200811011247.26080.markus.heidelberg@web.de>
-	<061E11D86E3DFF459604DF5B36F0805F1BA6D3@salka01.valka.local>
-Message-ID: <d6cda7730811011042r53b2aeecgd5f1ced3a24895b1@mail.gmail.com>
+From: Markus Heidelberg <markus.heidelberg@web.de>
+Date: Sat, 1 Nov 2008 19:54:34 +0100
+Subject: [Buildroot] [PATCH 1/4] qtopia4: fix wrong configure options
+Message-ID: <200811011954.34239.markus.heidelberg@web.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->> I don't know what the multiscreen driver is about, sounds like multiple
->> physical screens. Is this a common setup that you default to y here?
->
-> Multiscreen is for using more then one output driver yes, so you can use
-> linuxfb and VNC at the same time (what i'm doing). Probably should have it
-> default no.
+---
+ package/qtopia4/qtopia4.mk |   12 ++++++------
+ 1 files changed, 6 insertions(+), 6 deletions(-)
 
-Hi Arnar,
-
-    Just out of curiosity, did you try the new directfb driver? It's
-new to 4.4 series I think. Since directfb was supposed to have the
-AVR32 accelarated instructions, so you would effectively have an
-accelarated gfx driver.
-
-    I've been meaning to test it out myself but my hardware with LCD
-isn't ready yet :(
-
-Kind Regards,
-    Thiago A. Correa
+diff --git a/package/qtopia4/qtopia4.mk b/package/qtopia4/qtopia4.mk
+index cadaaa6..c8be7c7 100644
+--- a/package/qtopia4/qtopia4.mk
++++ b/package/qtopia4/qtopia4.mk
+@@ -95,32 +95,32 @@ endif
+ 
+ ### Mouse drivers
+ ifeq ($(BR2_PACKAGE_QTOPIA4_MOUSE_PC),y)
+-QTOPIA4_CONFIGURE += qt-mouse-pc
++QTOPIA4_CONFIGURE += -qt-mouse-pc
+ else
+ QTOPIA4_CONFIGURE += -no-mouse-pc
+ endif
+ ifeq ($(BR2_PACKAGE_QTOPIA4_MOUSE_BUS),y)
+-QTOPIA4_CONFIGURE += qt-mouse-bus
++QTOPIA4_CONFIGURE += -qt-mouse-bus
+ else
+ QTOPIA4_CONFIGURE += -no-mouse-bus
+ endif
+ ifeq ($(BR2_PACKAGE_QTOPIA4_MOUSE_LINUXTP),y)
+-QTOPIA4_CONFIGURE += qt-mouse-linuxtp
++QTOPIA4_CONFIGURE += -qt-mouse-linuxtp
+ else
+ QTOPIA4_CONFIGURE += -no-mouse-linuxtp
+ endif
+ ifeq ($(BR2_PACKAGE_QTOPIA4_MOUSE_YOPY),y)
+-QTOPIA4_CONFIGURE += qt-mouse-yopy
++QTOPIA4_CONFIGURE += -qt-mouse-yopy
+ else
+ QTOPIA4_CONFIGURE += -no-mouse-yopy
+ endif
+ ifeq ($(BR2_PACKAGE_QTOPIA4_MOUSE_VR41XX),y)
+-QTOPIA4_CONFIGURE += qt-mouse-vr41xx
++QTOPIA4_CONFIGURE += -qt-mouse-vr41xx
+ else
+ QTOPIA4_CONFIGURE += -no-mouse-vr41xx
+ endif
+ ifeq ($(BR2_PACKAGE_QTOPIA4_MOUSE_TSLIB),y)
+-QTOPIA4_CONFIGURE += qt-mouse-tslib
++QTOPIA4_CONFIGURE += -qt-mouse-tslib
+ QTOPIA4_DEP_LIBS+=tslib
+ QTOPIA4_TSLIB_DEB="-D TSLIBMOUSEHANDLER_DEBUG"
+ QTOPIA4_TSLIB_DEB:=$(strip $(subst ",, $(QTOPIA4_TSLIB_DEB)))
+-- 
+1.6.0.3.536.gb5136
