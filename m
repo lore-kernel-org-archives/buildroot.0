@@ -1,42 +1,43 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 1 Nov 2008 03:23:33 -0700
-Subject: [Buildroot] [buildroot 0005914]: add 915resolution and v86d
-Message-ID: <e49c744612f8cdada0639efc237cc40f@busybox.net>
+From: Markus Heidelberg <markus.heidelberg@web.de>
+Date: Sat, 1 Nov 2008 12:09:01 +0100
+Subject: [Buildroot] [PATCH] qtopia4: fix wrong variable name for SQL
+In-Reply-To: <d6cda7730810301931q61359abdva18447d940267043@mail.gmail.com>
+References: <200810310118.50847.markus.heidelberg@web.de>
+	<d6cda7730810301931q61359abdva18447d940267043@mail.gmail.com>
+Message-ID: <200811011209.02562.markus.heidelberg@web.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Thiago A. Corr?a, 31.10.2008:
+> Thanks.
+> Applied in r23872.
+> 
+> Btw, could you send patches as attachments (instead or as well)? Not
+> sure how others prefers them,
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=5914 
-====================================================================== 
-Reported By:                robang74
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   5914
-Category:                   New Features
-Reproducibility:            N/A
-Severity:                   feature
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             11-01-2008 03:23 PDT
-Last Modified:              11-01-2008 03:23 PDT
-====================================================================== 
-Summary:                    add 915resolution and v86d
-Description: 
-add 915resolution and v86d for supporting non standard video resolutions
-====================================================================== 
+I prefer inline patches, for easier commenting for example. I also find
+attachments are quite annoying if I have to use the web archives and can't
+just read the patch but have to download it at first. I know Peter prefers
+inline for the ease of applying them with "git am" and he has already applied
+a few from me.
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-11-01-08 03:23  robang74       New Issue                                    
-11-01-08 03:23  robang74       Status                   new => assigned     
-11-01-08 03:23  robang74       Assigned To               => buildroot       
-11-01-08 03:23  robang74       File Added: resolutions.patch                    
-======================================================================
+> but since I don't view my mail on linux
+> boxes and only use linux through ssh I sort of have to apply them by
+> typing it back on the ssh window.
+
+What are the advantages of using attachments or the disadvantages of inline
+through your ssh connection? When you are able to save an attachment you can
+also just save the whole email and apply it, can't you?
+
+> Also, I don't trust copy and paste
+> to not mess with the whitespaces and tabs.... If I do mess them up
+> others jump on my neck. Whitespace damage is sort of worst than having
+> a non working package around here *smile*.
+
+If whitespace is damaged after copy and paste, you will notice it when
+applying the malformed patch.
+
+Markus
