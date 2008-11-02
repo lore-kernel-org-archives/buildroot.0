@@ -1,173 +1,352 @@
-From: antab at uclibc.org <antab@uclibc.org>
-Date: Sat,  1 Nov 2008 19:16:53 -0700 (PDT)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/qtopia4
-Message-ID: <20081102021653.EF636F8036@busybox.net>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Sun,  2 Nov 2008 05:06:44 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
+Message-ID: <20081102130644.6D6013C8A5@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: antab
-Date: 2008-11-01 19:16:53 -0700 (Sat, 01 Nov 2008)
-New Revision: 23900
+Author: jacmet
+Date: 2008-11-02 05:06:44 -0800 (Sun, 02 Nov 2008)
+New Revision: 23902
 
 Log:
-Fixes for Qt from Markus Heidelberg
+busybox: additional 1.12.1 patches
 
+Added:
+   trunk/buildroot/package/busybox/busybox-1.12.1-lineedit.patch
+   trunk/buildroot/package/busybox/busybox-1.12.1-login.patch
+   trunk/buildroot/package/busybox/busybox-1.12.1-standalone.patch
+   trunk/buildroot/package/busybox/busybox-1.12.1-vi.patch
 
 Modified:
-   trunk/buildroot/package/qtopia4/Config.gfx.in
-   trunk/buildroot/package/qtopia4/Config.in
-   trunk/buildroot/package/qtopia4/Config.mouse.in
-   trunk/buildroot/package/qtopia4/Config.sql.in
-   trunk/buildroot/package/qtopia4/qtopia4.mk
+   trunk/buildroot/package/busybox/busybox-1.12.1-modprobe.patch
 
 
 Changeset:
-Modified: trunk/buildroot/package/qtopia4/Config.gfx.in
+Added: trunk/buildroot/package/busybox/busybox-1.12.1-lineedit.patch
 ===================================================================
---- trunk/buildroot/package/qtopia4/Config.gfx.in	2008-11-02 00:55:41 UTC (rev 23899)
-+++ trunk/buildroot/package/qtopia4/Config.gfx.in	2008-11-02 02:16:53 UTC (rev 23900)
-@@ -6,18 +6,14 @@
- 
- config BR2_PACKAGE_QTOPIA4_GFX_TRANSFORMED
- 	bool "Transformed"
--	default n
- 
- config BR2_PACKAGE_QTOPIA4_GFX_QVFB
- 	bool "Qt Virtual Framebuffer"
--	default n
- 
- config BR2_PACKAGE_QTOPIA4_GFX_VNC
- 	bool "VNC"
--	default n
- 
- config BR2_PACKAGE_QTOPIA4_GFX_MULTISCREEN
- 	bool "multiscreen"
--	default y
- 
- endmenu
+--- trunk/buildroot/package/busybox/busybox-1.12.1-lineedit.patch	                        (rev 0)
++++ trunk/buildroot/package/busybox/busybox-1.12.1-lineedit.patch	2008-11-02 13:06:44 UTC (rev 23902)
+@@ -0,0 +1,12 @@
++--- busybox-1.12.1/libbb/lineedit.c	Sun Sep 28 20:04:20 2008
+++++ busybox-1.12.1-lineedit/libbb/lineedit.c	Sun Nov  2 01:39:52 2008
++@@ -1415,7 +1415,8 @@
++ 	if ((state->flags & SAVE_HISTORY) && state->hist_file)
++ 		load_history(state->hist_file);
++ #endif
++-	state->cur_history = state->cnt_history;
+++	if (state->flags & DO_HISTORY)
+++		state->cur_history = state->cnt_history;
++ 
++ 	/* prepare before init handlers */
++ 	cmdedit_y = 0;  /* quasireal y, not true if line > xt*yt */
 
-Modified: trunk/buildroot/package/qtopia4/Config.in
+Added: trunk/buildroot/package/busybox/busybox-1.12.1-login.patch
 ===================================================================
---- trunk/buildroot/package/qtopia4/Config.in	2008-11-02 00:55:41 UTC (rev 23899)
-+++ trunk/buildroot/package/qtopia4/Config.in	2008-11-02 02:16:53 UTC (rev 23900)
-@@ -185,7 +185,7 @@
- 	  Select freetype2 support.
- 
- config BR2_PACKAGE_QTOPIA4_NOFREETYPE
--        bool "no freetype2 support"
-+	bool "no freetype2 support"
- 	help
- 	  Do not compile in Freetype2 support.
- 
+--- trunk/buildroot/package/busybox/busybox-1.12.1-login.patch	                        (rev 0)
++++ trunk/buildroot/package/busybox/busybox-1.12.1-login.patch	2008-11-02 13:06:44 UTC (rev 23902)
+@@ -0,0 +1,25 @@
++--- busybox-1.12.1/libbb/setup_environment.c	Sun Sep 28 20:04:20 2008
+++++ busybox-1.12.1-login/libbb/setup_environment.c	Fri Oct 31 00:56:51 2008
++@@ -32,15 +32,15 @@
++ 
++ void FAST_FUNC setup_environment(const char *shell, int clear_env, int change_env, const struct passwd *pw)
++ {
+++	/* Change the current working directory to be the home directory
+++	 * of the user */
+++	if (chdir(pw->pw_dir)) {
+++		xchdir("/");
+++		bb_error_msg("can't chdir to home directory '%s'", pw->pw_dir);
+++	}
+++
++ 	if (clear_env) {
++ 		const char *term;
++-
++-		/* Change the current working directory to be the home directory
++-		 * of the user */
++-		if (chdir(pw->pw_dir)) {
++-			xchdir("/");
++-			bb_error_msg("can't chdir to home directory '%s'", pw->pw_dir);
++-		}
++ 
++ 		/* Leave TERM unchanged. Set HOME, SHELL, USER, LOGNAME, PATH.
++ 		   Unset all other environment variables.  */
 
-Modified: trunk/buildroot/package/qtopia4/Config.mouse.in
+Modified: trunk/buildroot/package/busybox/busybox-1.12.1-modprobe.patch
 ===================================================================
---- trunk/buildroot/package/qtopia4/Config.mouse.in	2008-11-02 00:55:41 UTC (rev 23899)
-+++ trunk/buildroot/package/qtopia4/Config.mouse.in	2008-11-02 02:16:53 UTC (rev 23900)
-@@ -2,30 +2,23 @@
- 
- config BR2_PACKAGE_QTOPIA4_MOUSE_PC
- 	bool "pc"
--	default n
- 
- config BR2_PACKAGE_QTOPIA4_MOUSE_BUS
- 	bool "bus"
--	default n
- 
- config BR2_PACKAGE_QTOPIA4_MOUSE_LINUXTP
- 	bool "linuxtp"
--	default n
- 
- config BR2_PACKAGE_QTOPIA4_MOUSE_YOPY
- 	bool "yopy"
--	default n
- 
- config BR2_PACKAGE_QTOPIA4_MOUSE_VR41XX
--	bool "vxr41xx"
--	default n
-+	bool "vr41xx"
- 
- config BR2_PACKAGE_QTOPIA4_MOUSE_TSLIB
- 	bool "tslib"
--	default n
- 
- config BR2_PACKAGE_QTOPIA4_MOUSE_QVFB
- 	bool "qvfb"
--	default n
- 
- endmenu
-
-Modified: trunk/buildroot/package/qtopia4/Config.sql.in
-===================================================================
---- trunk/buildroot/package/qtopia4/Config.sql.in	2008-11-02 00:55:41 UTC (rev 23899)
-+++ trunk/buildroot/package/qtopia4/Config.sql.in	2008-11-02 02:16:53 UTC (rev 23900)
+--- trunk/buildroot/package/busybox/busybox-1.12.1-modprobe.patch	2008-11-02 12:13:00 UTC (rev 23901)
++++ trunk/buildroot/package/busybox/busybox-1.12.1-modprobe.patch	2008-11-02 13:06:44 UTC (rev 23902)
 @@ -1,7 +1,7 @@
- menuconfig BR2_PACKAGE_QTOPIA4_SQL_MODULE
--    bool "SQL Module"
--    help
--      Compile Qtopia SQL Module
-+	bool "SQL Module"
-+	help
-+	  Compile Qtopia SQL Module
- 
- if BR2_PACKAGE_QTOPIA4_SQL_MODULE
- config BR2_PACKAGE_QTOPIA4_MYSQL
+-diff -urN busybox-1.12.1/modutils/modprobe.c busybox-1.12.1-modprobe/modutils/modprobe.c
++diff -urpN busybox-1.12.1/modutils/modprobe.c busybox-1.12.1-modprobe/modutils/modprobe.c
+ --- busybox-1.12.1/modutils/modprobe.c	2008-09-28 20:04:15.000000000 +0200
+ +++ busybox-1.12.1-modprobe/modutils/modprobe.c	2008-10-10 14:36:58.000000000 +0200
+-@@ -263,9 +263,9 @@
++@@ -263,9 +263,9 @@ static int FAST_FUNC include_conf_dir_ac
+  	return TRUE;
+  }
+  
+@@ -13,7 +13,7 @@
+  				include_conf_file_act,
+  				include_conf_dir_act,
+  				conf, 1);
+-@@ -362,7 +362,7 @@
++@@ -362,7 +362,7 @@ static int FAST_FUNC include_conf_file_a
+  			char *includefile;
+  
+  			includefile = skip_whitespace(line_buffer + 8);
+@@ -22,7 +22,7 @@
+  		} else if (ENABLE_FEATURE_MODPROBE_BLACKLIST &&
+  				(is_conf_command(line_buffer, "blacklist"))) {
+  			char *mod;
+-@@ -559,7 +559,7 @@
++@@ -559,7 +559,7 @@ static struct dep_t *build_dep(void)
+  		if (ENABLE_FEATURE_2_6_MODULES) {
+  			if (include_conf_file(&conf, "/etc/modprobe.conf"))
+  				r = TRUE;
 
-Modified: trunk/buildroot/package/qtopia4/qtopia4.mk
+Added: trunk/buildroot/package/busybox/busybox-1.12.1-standalone.patch
 ===================================================================
---- trunk/buildroot/package/qtopia4/qtopia4.mk	2008-11-02 00:55:41 UTC (rev 23899)
-+++ trunk/buildroot/package/qtopia4/qtopia4.mk	2008-11-02 02:16:53 UTC (rev 23900)
-@@ -95,32 +95,32 @@
- 
- ### Mouse drivers
- ifeq ($(BR2_PACKAGE_QTOPIA4_MOUSE_PC),y)
--QTOPIA4_CONFIGURE += qt-mouse-pc
-+QTOPIA4_CONFIGURE += -qt-mouse-pc
- else
- QTOPIA4_CONFIGURE += -no-mouse-pc
- endif
- ifeq ($(BR2_PACKAGE_QTOPIA4_MOUSE_BUS),y)
--QTOPIA4_CONFIGURE += qt-mouse-bus
-+QTOPIA4_CONFIGURE += -qt-mouse-bus
- else
- QTOPIA4_CONFIGURE += -no-mouse-bus
- endif
- ifeq ($(BR2_PACKAGE_QTOPIA4_MOUSE_LINUXTP),y)
--QTOPIA4_CONFIGURE += qt-mouse-linuxtp
-+QTOPIA4_CONFIGURE += -qt-mouse-linuxtp
- else
- QTOPIA4_CONFIGURE += -no-mouse-linuxtp
- endif
- ifeq ($(BR2_PACKAGE_QTOPIA4_MOUSE_YOPY),y)
--QTOPIA4_CONFIGURE += qt-mouse-yopy
-+QTOPIA4_CONFIGURE += -qt-mouse-yopy
- else
- QTOPIA4_CONFIGURE += -no-mouse-yopy
- endif
- ifeq ($(BR2_PACKAGE_QTOPIA4_MOUSE_VR41XX),y)
--QTOPIA4_CONFIGURE += qt-mouse-vr41xx
-+QTOPIA4_CONFIGURE += -qt-mouse-vr41xx
- else
- QTOPIA4_CONFIGURE += -no-mouse-vr41xx
- endif
- ifeq ($(BR2_PACKAGE_QTOPIA4_MOUSE_TSLIB),y)
--QTOPIA4_CONFIGURE += qt-mouse-tslib
-+QTOPIA4_CONFIGURE += -qt-mouse-tslib
- QTOPIA4_DEP_LIBS+=tslib
- QTOPIA4_TSLIB_DEB="-D TSLIBMOUSEHANDLER_DEBUG"
- QTOPIA4_TSLIB_DEB:=$(strip $(subst ",, $(QTOPIA4_TSLIB_DEB)))
-@@ -128,6 +128,11 @@
- else
- QTOPIA4_CONFIGURE += -no-mouse-tslib
- endif
-+ifeq ($(BR2_PACKAGE_QTOPIA4_MOUSE_QVFB),y)
-+QTOPIA4_CONFIGURE += -qt-mouse-qvfb
-+else
-+QTOPIA4_CONFIGURE += -no-mouse-qvfb
-+endif
- 
- ifeq ($(BR2_PACKAGE_QTOPIA4_DEBUG),y)
- QTOPIA4_CONFIGURE+= "-debug $(QTOPIA4_TSLIB_DEB)"
+--- trunk/buildroot/package/busybox/busybox-1.12.1-standalone.patch	                        (rev 0)
++++ trunk/buildroot/package/busybox/busybox-1.12.1-standalone.patch	2008-11-02 13:06:44 UTC (rev 23902)
+@@ -0,0 +1,185 @@
++diff -urpN busybox-1.12.1/coreutils/env.c busybox-1.12.1-standalone/coreutils/env.c
++--- busybox-1.12.1/coreutils/env.c	2008-09-28 20:04:18.000000000 +0200
+++++ busybox-1.12.1-standalone/coreutils/env.c	2008-10-20 10:21:54.000000000 +0200
++@@ -29,6 +29,8 @@
++  * - use xfunc_error_retval
++  */
++ 
+++/* This is a NOEXEC applet. Be very careful! */
+++
++ #include "libbb.h"
++ 
++ #if ENABLE_FEATURE_ENV_LONG_OPTIONS
++@@ -119,5 +121,3 @@ int env_main(int argc UNUSED_PARAM, char
++  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++  * SUCH DAMAGE.
++  */
++-
++-
++diff -urpN busybox-1.12.1/include/applets.h busybox-1.12.1-standalone/include/applets.h
++--- busybox-1.12.1/include/applets.h	2008-09-28 20:04:26.000000000 +0200
+++++ busybox-1.12.1-standalone/include/applets.h	2008-10-20 10:21:54.000000000 +0200
++@@ -136,7 +136,7 @@ USE_ECHO(APPLET_NOFORK(echo, echo, _BB_D
++ USE_ED(APPLET(ed, _BB_DIR_BIN, _BB_SUID_NEVER))
++ USE_FEATURE_GREP_EGREP_ALIAS(APPLET_ODDNAME(egrep, grep, _BB_DIR_BIN, _BB_SUID_NEVER, egrep))
++ USE_EJECT(APPLET(eject, _BB_DIR_USR_BIN, _BB_SUID_NEVER))
++-USE_ENV(APPLET(env, _BB_DIR_USR_BIN, _BB_SUID_NEVER))
+++USE_ENV(APPLET_NOEXEC(env, env, _BB_DIR_USR_BIN, _BB_SUID_NEVER, env))
++ USE_ENVDIR(APPLET_ODDNAME(envdir, chpst, _BB_DIR_USR_BIN, _BB_SUID_NEVER, envdir))
++ USE_ENVUIDGID(APPLET_ODDNAME(envuidgid, chpst, _BB_DIR_USR_BIN, _BB_SUID_NEVER, envuidgid))
++ USE_ETHER_WAKE(APPLET_ODDNAME(ether-wake, ether_wake, _BB_DIR_USR_BIN, _BB_SUID_NEVER, ether_wake))
++@@ -171,7 +171,7 @@ USE_GREP(APPLET(grep, _BB_DIR_BIN, _BB_S
++ USE_GUNZIP(APPLET(gunzip, _BB_DIR_BIN, _BB_SUID_NEVER))
++ USE_GZIP(APPLET(gzip, _BB_DIR_BIN, _BB_SUID_NEVER))
++ USE_HALT(APPLET(halt, _BB_DIR_SBIN, _BB_SUID_NEVER))
++-USE_HD(APPLET_ODDNAME(hd, hexdump, _BB_DIR_USR_BIN, _BB_SUID_NEVER, hd))
+++USE_HD(APPLET_NOEXEC(hd, hexdump, _BB_DIR_USR_BIN, _BB_SUID_NEVER, hd))
++ USE_HDPARM(APPLET(hdparm, _BB_DIR_SBIN, _BB_SUID_NEVER))
++ USE_HEAD(APPLET(head, _BB_DIR_USR_BIN, _BB_SUID_NEVER))
++ USE_HEXDUMP(APPLET_NOEXEC(hexdump, hexdump, _BB_DIR_USR_BIN, _BB_SUID_NEVER, hexdump))
++diff -urpN busybox-1.12.1/libbb/getopt32.c busybox-1.12.1-standalone/libbb/getopt32.c
++--- busybox-1.12.1/libbb/getopt32.c	2008-09-28 20:04:20.000000000 +0200
+++++ busybox-1.12.1-standalone/libbb/getopt32.c	2008-10-20 10:21:34.000000000 +0200
++@@ -515,28 +515,6 @@ getopt32(char **argv, const char *applet
++ 		}
++ 	}
++ 
++-	/* In case getopt32 was already called:
++-	 * reset the libc getopt() function, which keeps internal state.
++-	 *
++-	 * BSD-derived getopt() functions require that optind be set to 1 in
++-	 * order to reset getopt() state.  This used to be generally accepted
++-	 * way of resetting getopt().  However, glibc's getopt()
++-	 * has additional getopt() state beyond optind, and requires that
++-	 * optind be set to zero to reset its state.  So the unfortunate state of
++-	 * affairs is that BSD-derived versions of getopt() misbehave if
++-	 * optind is set to 0 in order to reset getopt(), and glibc's getopt()
++-	 * will core dump if optind is set 1 in order to reset getopt().
++-	 *
++-	 * More modern versions of BSD require that optreset be set to 1 in
++-	 * order to reset getopt().   Sigh.  Standards, anyone?
++-	 */
++-#ifdef __GLIBC__
++-	optind = 0;
++-#else /* BSD style */
++-	optind = 1;
++-	/* optreset = 1; */
++-#endif
++-	/* optarg = NULL; opterr = 0; optopt = 0; - do we need this?? */
++ 	pargv = NULL;
++ 
++ 	/* Note: just "getopt() <= 0" will not work well for
++diff -urpN busybox-1.12.1/libbb/vfork_daemon_rexec.c busybox-1.12.1-standalone/libbb/vfork_daemon_rexec.c
++--- busybox-1.12.1/libbb/vfork_daemon_rexec.c	2008-09-28 20:04:20.000000000 +0200
+++++ busybox-1.12.1-standalone/libbb/vfork_daemon_rexec.c	2008-10-20 10:21:34.000000000 +0200
++@@ -125,6 +125,7 @@ int FAST_FUNC run_nofork_applet_prime(st
++ 	int rc, argc;
++ 
++ 	applet_name = APPLET_NAME(applet_no);
+++
++ 	xfunc_error_retval = EXIT_FAILURE;
++ 
++ 	/* Special flag for xfunc_die(). If xfunc will "die"
++@@ -132,7 +133,30 @@ int FAST_FUNC run_nofork_applet_prime(st
++ 	 * die_sleep and longjmp here instead. */
++ 	die_sleep = -1;
++ 
++-	/* option_mask32 = 0; - not needed */
+++	/* In case getopt() or getopt32() was already called:
+++	 * reset the libc getopt() function, which keeps internal state.
+++	 *
+++	 * BSD-derived getopt() functions require that optind be set to 1 in
+++	 * order to reset getopt() state.  This used to be generally accepted
+++	 * way of resetting getopt().  However, glibc's getopt()
+++	 * has additional getopt() state beyond optind, and requires that
+++	 * optind be set to zero to reset its state.  So the unfortunate state of
+++	 * affairs is that BSD-derived versions of getopt() misbehave if
+++	 * optind is set to 0 in order to reset getopt(), and glibc's getopt()
+++	 * will core dump if optind is set 1 in order to reset getopt().
+++	 *
+++	 * More modern versions of BSD require that optreset be set to 1 in
+++	 * order to reset getopt().  Sigh.  Standards, anyone?
+++	 */
+++#ifdef __GLIBC__
+++	optind = 0;
+++#else /* BSD style */
+++	optind = 1;
+++	/* optreset = 1; */
+++#endif
+++	/* optarg = NULL; opterr = 1; optopt = 63; - do we need this too? */
+++	/* (values above are what they initialized to in glibc and uclibc) */
+++	/* option_mask32 = 0; - not needed, no applet depends on it being 0 */
++ 
++ 	argc = 1;
++ 	while (argv[argc])
++@@ -161,8 +185,16 @@ int FAST_FUNC run_nofork_applet_prime(st
++ 			rc = 0;
++ 	}
++ 
++-	/* Restoring globals */
+++	/* Restoring some globals */
++ 	restore_nofork_data(old);
+++
+++	/* Other globals can be simply reset to defaults */
+++#ifdef __GLIBC__
+++	optind = 0;
+++#else /* BSD style */
+++	optind = 1;
+++#endif
+++
++ 	return rc & 0xff; /* don't confuse people with "exitcodes" >255 */
++ }
++ 
++diff -urpN busybox-1.12.1/shell/ash.c busybox-1.12.1-standalone/shell/ash.c
++--- busybox-1.12.1/shell/ash.c	2008-09-28 20:04:18.000000000 +0200
+++++ busybox-1.12.1-standalone/shell/ash.c	2008-10-20 10:21:54.000000000 +0200
++@@ -6964,8 +6964,11 @@ tryexec(USE_FEATURE_SH_STANDALONE(int ap
++ 
++ #if ENABLE_FEATURE_SH_STANDALONE
++ 	if (applet_no >= 0) {
++-		if (APPLET_IS_NOEXEC(applet_no))
+++		if (APPLET_IS_NOEXEC(applet_no)) {
+++			while (*envp)
+++				putenv(*envp++);
++ 			run_applet_no_and_exit(applet_no, argv);
+++		}
++ 		/* re-exec ourselves with the new arguments */
++ 		execve(bb_busybox_exec_path, argv, envp);
++ 		/* If they called chroot or otherwise made the binary no longer
++@@ -12014,7 +12017,7 @@ exportcmd(int argc UNUSED_PARAM, char **
++ 	char *name;
++ 	const char *p;
++ 	char **aptr;
++-	int flag = argv[0][0] == 'r'? VREADONLY : VEXPORT;
+++	int flag = argv[0][0] == 'r' ? VREADONLY : VEXPORT;
++ 
++ 	if (nextopt("p") != 'p') {
++ 		aptr = argptr;
++diff -urpN busybox-1.12.1/util-linux/getopt.c busybox-1.12.1-standalone/util-linux/getopt.c
++--- busybox-1.12.1/util-linux/getopt.c	2008-09-28 20:04:30.000000000 +0200
+++++ busybox-1.12.1-standalone/util-linux/getopt.c	2008-10-20 10:21:34.000000000 +0200
++@@ -142,7 +142,8 @@ static const char *normalize(const char 
++  * Other settings are found in global variables.
++  */
++ #if !ENABLE_GETOPT_LONG
++-#define generate_output(argv,argc,optstr,longopts) generate_output(argv,argc,optstr)
+++#define generate_output(argv,argc,optstr,longopts) \
+++	generate_output(argv,argc,optstr)
++ #endif
++ static int generate_output(char **argv, int argc, const char *optstr, const struct option *longopts)
++ {
++@@ -156,14 +157,6 @@ static int generate_output(char **argv, 
++ 	if (quiet_errors) /* No error reporting from getopt(3) */
++ 		opterr = 0;
++ 
++-	/* Reset getopt(3) (see libbb/getopt32.c for long rant) */
++-#ifdef __GLIBC__
++-	optind = 0;
++-#else /* BSD style */
++-	optind = 1;
++-	/* optreset = 1; */
++-#endif
++-
++ 	while (1) {
++ 		opt =
++ #if ENABLE_GETOPT_LONG
+
+Added: trunk/buildroot/package/busybox/busybox-1.12.1-vi.patch
+===================================================================
+--- trunk/buildroot/package/busybox/busybox-1.12.1-vi.patch	                        (rev 0)
++++ trunk/buildroot/package/busybox/busybox-1.12.1-vi.patch	2008-11-02 13:06:44 UTC (rev 23902)
+@@ -0,0 +1,46 @@
++--- busybox-1.12.1/editors/vi.c	Sun Sep 28 20:04:29 2008
+++++ busybox-1.12.1-vi/editors/vi.c	Thu Oct 30 23:54:30 2008
++@@ -291,6 +291,8 @@
++ #define INIT_G() do { \
++ 	SET_PTR_TO_GLOBALS(xzalloc(sizeof(G))); \
++ 	last_file_modified = -1; \
+++	/* "" but has space for 2 chars */ \
+++	USE_FEATURE_VI_SEARCH(last_search_pattern = xzalloc(2);) \
++ } while (0)
++ 
++ 
++@@ -2974,7 +2976,7 @@
++ 	const char *msg = msg; // for compiler
++ 	char c1, *p, *q, *save_dot;
++ 	char buf[12];
++-	int dir = dir; // for compiler
+++	int dir;
++ 	int cnt, i, j;
++ 
++ //	c1 = c; // quiet the compiler
++@@ -3316,7 +3318,7 @@
++ 		q = get_input_line(buf);	// get input line- use "status line"
++ 		if (q[0] && !q[1]) {
++ 			if (last_search_pattern[0])
++-			    last_search_pattern[0] = c;
+++				last_search_pattern[0] = c;
++ 			goto dc3; // if no pat re-use old pat
++ 		}
++ 		if (q[0]) {       // strlen(q) > 1: new pat- save it and find
++@@ -3346,14 +3348,8 @@
++ 			do_cmd(c);
++ 		}				// repeat cnt
++  dc3:
++-		if (last_search_pattern == 0) {
++-			msg = "No previous regular expression";
++-			goto dc2;
++-		}
++-		if (last_search_pattern[0] == '/') {
++-			dir = FORWARD;	// assume FORWARD search
++-			p = dot + 1;
++-		}
+++		dir = FORWARD;	// assume FORWARD search
+++		p = dot + 1;
++ 		if (last_search_pattern[0] == '?') {
++ 			dir = BACK;
++ 			p = dot - 1;
