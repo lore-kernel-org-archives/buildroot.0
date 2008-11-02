@@ -1,58 +1,66 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 2 Nov 2008 11:22:53 -0800
-Subject: [Buildroot] [buildroot 0005924]: Cairo compile fails: no rule to
-	make target png
-Message-ID: <bd64375217e97ed1cbdc41f2d9743295@busybox.net>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Sun,  2 Nov 2008 12:22:00 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package: directfb pciutils
+Message-ID: <20081102202200.4602DF8073@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: jacmet
+Date: 2008-11-02 12:21:59 -0800 (Sun, 02 Nov 2008)
+New Revision: 23906
 
-The following issue has been CLOSED 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=5924 
-====================================================================== 
-Reported By:                tpk5010
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   5924
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             11-01-2008 16:49 PDT
-Last Modified:              11-02-2008 11:22 PST
-====================================================================== 
-Summary:                    Cairo compile fails: no rule to make target png
-Description: 
-When using the latest snapshot of buildroot to compile gtk2, cairo is
-pulled in as a dependency. However, cairo_dependencies requires make to
-pull in the 'png' target, but such a target does not exist.
+Log:
+package/: remove more 'default n' (see r22874)
 
-Changing line 49 buildroot/package/cairo/cairo.mk to read
-CAIRO_DEPENDENCIES = uclibc gettext libintl pkgconfig libglib2 zlib libpng
-fontconfig $(CAIRO_DEPENDENCIES_EXTRA) pixman $(XSERVER)
-fixes the issue.
-====================================================================== 
+Modified:
+   trunk/buildroot/package/directfb/Config.in
+   trunk/buildroot/package/pciutils/Config.in
 
----------------------------------------------------------------------- 
- jacmet - 11-02-08 11:22  
----------------------------------------------------------------------- 
-Thanks, fixed in r23904 
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-11-01-08 16:49  tpk5010        New Issue                                    
-11-01-08 16:49  tpk5010        Status                   new => assigned     
-11-01-08 16:49  tpk5010        Assigned To               => buildroot       
-11-02-08 11:22  jacmet         Status                   assigned => closed  
-11-02-08 11:22  jacmet         Note Added: 0014894                          
-======================================================================
+Changeset:
+Modified: trunk/buildroot/package/directfb/Config.in
+===================================================================
+--- trunk/buildroot/package/directfb/Config.in	2008-11-02 19:21:21 UTC (rev 23905)
++++ trunk/buildroot/package/directfb/Config.in	2008-11-02 20:21:59 UTC (rev 23906)
+@@ -15,18 +15,15 @@
+ 
+ config BR2_PACKAGE_DIRECTFB_XSERVER
+ 	bool "build with X server backend"
+-	default n
+ 	depends on BR2_PACKAGE_DIRECTFB
+ 	depends on !BR2_PACKAGE_XSERVER_none
+ 
+ config BR2_PACKAGE_DIRECTFB_UNIQUE
+ 	bool "enable unique window manager"
+-	default n
+ 	depends on BR2_PACKAGE_DIRECTFB
+ 
+ config BR2_PACKAGE_DIRECTFB_ATI128
+ 	bool "compile ati128 graphics driver"
+-	default n
+ 	depends on BR2_PACKAGE_DIRECTFB
+ 
+ config BR2_PACKAGE_DIRECTFB_CLE266
+@@ -36,7 +33,6 @@
+ 
+ config BR2_PACKAGE_DIRECTFB_MATROX
+ 	bool "compile matrox graphics driver"
+-	default n
+ 	depends on BR2_PACKAGE_DIRECTFB
+ 
+ config BR2_PACKAGE_DIRECTFB_UNICHROME
+
+Modified: trunk/buildroot/package/pciutils/Config.in
+===================================================================
+--- trunk/buildroot/package/pciutils/Config.in	2008-11-02 19:21:21 UTC (rev 23905)
++++ trunk/buildroot/package/pciutils/Config.in	2008-11-02 20:21:59 UTC (rev 23906)
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_PCIUTILS
+ 	bool "pciutils"
+-	default n
+ 	help
+ 	  Various utilities dealing with the PCI bus.
+ 	  Provides things like setpci and lspci.
