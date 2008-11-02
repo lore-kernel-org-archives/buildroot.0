@@ -1,31 +1,34 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 02 Nov 2008 21:19:17 +0100
+Date: Sun, 02 Nov 2008 21:22:34 +0100
 Subject: [Buildroot] svn commit: trunk/buildroot/package/qtopia4
-In-Reply-To: <061E11D86E3DFF459604DF5B36F0805F1BA6D3@salka01.valka.local>
-	("Arnar Mar =?utf-8?Q?Sigur=C3=B0sson=22's?= message of "Sat\,
-	1 Nov 2008 13\:46\:11 -0000")
-References: <20081031171723.6F149F8055@busybox.net>
-	<200811011247.26080.markus.heidelberg@web.de>
-	<061E11D86E3DFF459604DF5B36F0805F1BA6D3@salka01.valka.local>
-Message-ID: <87skq9rid6.fsf@macbook.be.48ers.dk>
+In-Reply-To: <200811021514.15439.markus.heidelberg@web.de> (Markus
+	Heidelberg's message of "Sun\, 2 Nov 2008 15\:14\:15 +0100")
+References: <20081102021653.EF636F8036@busybox.net>
+	<200811021514.15439.markus.heidelberg@web.de>
+Message-ID: <87od0xri7p.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnar" == Arnar Mar Sigur?sson <antab@valka.is> writes:
+>>>>> "Markus" == Markus Heidelberg <markus.heidelberg@web.de> writes:
 
 Hi,
 
- >>> +    default n
- >> is not necessary in all the options
+ >> trunk/buildroot/package/qtopia4/Config.gfx.in
+ >> trunk/buildroot/package/qtopia4/Config.in
+ >> trunk/buildroot/package/qtopia4/Config.mouse.in
+ >> trunk/buildroot/package/qtopia4/Config.sql.in
+ >> trunk/buildroot/package/qtopia4/qtopia4.mk
 
- Arnar> Is "default n" the default? Was not sure because i have seen
- Arnar> other packages use "default n".
+ Markus> Thanks, but it would be nice to include the log messages from
+ Markus> my patches, this one is quite meaningless. And if the
+ Markus> separate patches are squashed into one, I don't have to do
+ Markus> the work with splitting the change up into a patch set. I
+ Markus> don't think these four patches were split too much, are they?
 
-There shouldn't be any after r22874 - If there are, then that's an
-error.
+I agree.
 
 -- 
 Bye, Peter Korsgaard
