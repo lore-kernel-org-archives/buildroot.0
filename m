@@ -1,37 +1,28 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 02 Nov 2008 14:44:43 +0100
-Subject: [Buildroot] Write access to SVN and bug tracker
-In-Reply-To: <20081031142613.048c50ca@surf> (Thomas Petazzoni's message of
-	"Fri\, 31 Oct 2008 14\:26\:13 +0100")
-References: <20081031101430.2e100d7e@surf>
-	<C13DBBE85AD6974B85C118C35890CA5F13B21BEFA4@EU1RDCRDC1WX029.exi.nxp.com>
-	<d6cda7730810310604o2f46cf03k2ee940fc0e0c340d@mail.gmail.com>
-	<20081031142613.048c50ca@surf>
-Message-ID: <87vdv6z1h0.fsf@macbook.be.48ers.dk>
+Date: Sun, 02 Nov 2008 14:55:55 +0100
+Subject: [Buildroot] How to build a gcc-3.3 toolchain
+In-Reply-To: <1225463596.29685.1282290569@webmail.messagingengine.com> (Adam
+	McLaurin's message of "Fri\, 31 Oct 2008 10\:33\:16 -0400")
+References: <1225463596.29685.1282290569@webmail.messagingengine.com>
+Message-ID: <87ej1uz0yc.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Adam" == Adam McLaurin <buildroot@irotas.net> writes:
 
-Hi,
+ Adam> Hi folks,
+ Adam> Unfortunately the software project I'm working on requires some features
+ Adam> of gcc that were removed after v3.3.x. However, when I do 'make
+ Adam> menuconfig' for buildroot and go to select the version of gcc, the only
+ Adam> versions available are 4.1.2, 4.2.1, 4.2.3, 4.2.4, and 4.3.1.
 
- >> Mike <vapier@uclibc.org> doesn't track buildroot development, so he
- >> will ask you to be vouched from current developers.
- >> 
- >> You have +1 from here.
+ Adam> Is it possible to install an older version instead, perhaps 3.3.6?
 
-And from here.
-
- Thomas> Thanks!
-
- Thomas> I already sent an e-mail this morning to Mike and Erik asking for SVN
- Thomas> write access. I'll send a reply mentionning your agreement.
-
-Rumors have it that Bernhard just got sudo on morris, so maybe he's a
-better bet as Mike and Erik are pretty much mia (aldot at uclibc.org).
+You could probably change the existing 3.4.6 support (remember to
+enable BR2_DEPRECATED) to compile a 3.3 gcc instead.
 
 -- 
 Bye, Peter Korsgaard
