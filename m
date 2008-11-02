@@ -1,34 +1,28 @@
-From: Markus Heidelberg <markus.heidelberg@web.de>
-Date: Sun, 2 Nov 2008 15:14:15 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/qtopia4
-In-Reply-To: <20081102021653.EF636F8036@busybox.net>
-References: <20081102021653.EF636F8036@busybox.net>
-Message-ID: <200811021514.15439.markus.heidelberg@web.de>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 02 Nov 2008 18:05:06 +0100
+Subject: [Buildroot] sendto: Invalid argument
+In-Reply-To: <4909C462.2080307@actatek.com> (yongyew@actatek.com's message of
+	"Thu\, 30 Oct 2008 22\:27\:46 +0800")
+References: <4909C462.2080307@actatek.com>
+Message-ID: <87fxmaxdml.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-antab at uclibc.org, 02.11.2008:
-> Author: antab
-> Date: 2008-11-01 19:16:53 -0700 (Sat, 01 Nov 2008)
-> New Revision: 23900
-> 
-> Log:
-> Fixes for Qt from Markus Heidelberg
-> 
-> 
-> Modified:
->    trunk/buildroot/package/qtopia4/Config.gfx.in
->    trunk/buildroot/package/qtopia4/Config.in
->    trunk/buildroot/package/qtopia4/Config.mouse.in
->    trunk/buildroot/package/qtopia4/Config.sql.in
->    trunk/buildroot/package/qtopia4/qtopia4.mk
+>>>>> "yongyew" == yongyew  <yongyew@actatek.com> writes:
 
-Thanks, but it would be nice to include the log messages from my patches, this
-one is quite meaningless. And if the separate patches are squashed into one, I
-don't have to do the work with splitting the change up into a patch set. I
-don't think these four patches were split too much, are they?
+ yongyew> Dear all,
+ yongyew> I face same problem when i do the following ping
 
-Markus
+ yongyew> PING 127.0.0.1 (127.0.0.1): 56 data bytes
+ yongyew> ping: sendto: Invalid argument
+
+ yongyew> My eth0 is already config with eth0 and lo using ifconfig.
+ yongyew> Do anyone have any idea what is the cause. 
+
+Not without more details about your setup.
+
+-- 
+Bye, Peter Korsgaard
