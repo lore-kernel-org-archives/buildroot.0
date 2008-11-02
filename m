@@ -1,66 +1,31 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Sun,  2 Nov 2008 12:22:00 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package: directfb pciutils
-Message-ID: <20081102202200.4602DF8073@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 02 Nov 2008 21:19:17 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/qtopia4
+In-Reply-To: <061E11D86E3DFF459604DF5B36F0805F1BA6D3@salka01.valka.local>
+	("Arnar Mar =?utf-8?Q?Sigur=C3=B0sson=22's?= message of "Sat\,
+	1 Nov 2008 13\:46\:11 -0000")
+References: <20081031171723.6F149F8055@busybox.net>
+	<200811011247.26080.markus.heidelberg@web.de>
+	<061E11D86E3DFF459604DF5B36F0805F1BA6D3@salka01.valka.local>
+Message-ID: <87skq9rid6.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-11-02 12:21:59 -0800 (Sun, 02 Nov 2008)
-New Revision: 23906
+>>>>> "Arnar" == Arnar Mar Sigur?sson <antab@valka.is> writes:
 
-Log:
-package/: remove more 'default n' (see r22874)
+Hi,
 
-Modified:
-   trunk/buildroot/package/directfb/Config.in
-   trunk/buildroot/package/pciutils/Config.in
+ >>> +    default n
+ >> is not necessary in all the options
 
+ Arnar> Is "default n" the default? Was not sure because i have seen
+ Arnar> other packages use "default n".
 
-Changeset:
-Modified: trunk/buildroot/package/directfb/Config.in
-===================================================================
---- trunk/buildroot/package/directfb/Config.in	2008-11-02 19:21:21 UTC (rev 23905)
-+++ trunk/buildroot/package/directfb/Config.in	2008-11-02 20:21:59 UTC (rev 23906)
-@@ -15,18 +15,15 @@
- 
- config BR2_PACKAGE_DIRECTFB_XSERVER
- 	bool "build with X server backend"
--	default n
- 	depends on BR2_PACKAGE_DIRECTFB
- 	depends on !BR2_PACKAGE_XSERVER_none
- 
- config BR2_PACKAGE_DIRECTFB_UNIQUE
- 	bool "enable unique window manager"
--	default n
- 	depends on BR2_PACKAGE_DIRECTFB
- 
- config BR2_PACKAGE_DIRECTFB_ATI128
- 	bool "compile ati128 graphics driver"
--	default n
- 	depends on BR2_PACKAGE_DIRECTFB
- 
- config BR2_PACKAGE_DIRECTFB_CLE266
-@@ -36,7 +33,6 @@
- 
- config BR2_PACKAGE_DIRECTFB_MATROX
- 	bool "compile matrox graphics driver"
--	default n
- 	depends on BR2_PACKAGE_DIRECTFB
- 
- config BR2_PACKAGE_DIRECTFB_UNICHROME
+There shouldn't be any after r22874 - If there are, then that's an
+error.
 
-Modified: trunk/buildroot/package/pciutils/Config.in
-===================================================================
---- trunk/buildroot/package/pciutils/Config.in	2008-11-02 19:21:21 UTC (rev 23905)
-+++ trunk/buildroot/package/pciutils/Config.in	2008-11-02 20:21:59 UTC (rev 23906)
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_PCIUTILS
- 	bool "pciutils"
--	default n
- 	help
- 	  Various utilities dealing with the PCI bus.
- 	  Provides things like setpci and lspci.
+-- 
+Bye, Peter Korsgaard
