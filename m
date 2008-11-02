@@ -1,44 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 02 Nov 2008 14:59:02 +0100
-Subject: [Buildroot] [PATCH] qtopia4: fix wrong variable name for SQL
-In-Reply-To: <200811011209.02562.markus.heidelberg@web.de> (Markus
-	Heidelberg's message of "Sat\, 1 Nov 2008 12\:09\:01 +0100")
-References: <200810310118.50847.markus.heidelberg@web.de>
-	<d6cda7730810301931q61359abdva18447d940267043@mail.gmail.com>
-	<200811011209.02562.markus.heidelberg@web.de>
-Message-ID: <87abciz0t5.fsf@macbook.be.48ers.dk>
+From: Markus Heidelberg <markus.heidelberg@web.de>
+Date: Sun, 2 Nov 2008 15:14:15 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/qtopia4
+In-Reply-To: <20081102021653.EF636F8036@busybox.net>
+References: <20081102021653.EF636F8036@busybox.net>
+Message-ID: <200811021514.15439.markus.heidelberg@web.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Markus" == Markus Heidelberg <markus.heidelberg@web.de> writes:
+antab at uclibc.org, 02.11.2008:
+> Author: antab
+> Date: 2008-11-01 19:16:53 -0700 (Sat, 01 Nov 2008)
+> New Revision: 23900
+> 
+> Log:
+> Fixes for Qt from Markus Heidelberg
+> 
+> 
+> Modified:
+>    trunk/buildroot/package/qtopia4/Config.gfx.in
+>    trunk/buildroot/package/qtopia4/Config.in
+>    trunk/buildroot/package/qtopia4/Config.mouse.in
+>    trunk/buildroot/package/qtopia4/Config.sql.in
+>    trunk/buildroot/package/qtopia4/qtopia4.mk
 
-Hi,
+Thanks, but it would be nice to include the log messages from my patches, this
+one is quite meaningless. And if the separate patches are squashed into one, I
+don't have to do the work with splitting the change up into a patch set. I
+don't think these four patches were split too much, are they?
 
- >> Btw, could you send patches as attachments (instead or as well)? Not
- >> sure how others prefers them,
-
- Markus> I prefer inline patches, for easier commenting for example. I
- Markus> also find attachments are quite annoying if I have to use the
- Markus> web archives and can't just read the patch but have to
- Markus> download it at first. I know Peter prefers inline for the
- Markus> ease of applying them with "git am" and he has already
- Markus> applied a few from me.
-
-Exactly!
- >> Also, I don't trust copy and paste
- >> to not mess with the whitespaces and tabs.... If I do mess them up
- >> others jump on my neck. Whitespace damage is sort of worst than having
- >> a non working package around here *smile*.
-
- Markus> If whitespace is damaged after copy and paste, you will
- Markus> notice it when applying the malformed patch.
-
-Yes.
-
-Thiago, what keeps you from using a proper email client?
-
--- 
-Bye, Peter Korsgaard
+Markus
