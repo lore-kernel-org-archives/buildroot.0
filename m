@@ -1,34 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 02 Nov 2008 21:22:34 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/qtopia4
-In-Reply-To: <200811021514.15439.markus.heidelberg@web.de> (Markus
-	Heidelberg's message of "Sun\, 2 Nov 2008 15\:14\:15 +0100")
-References: <20081102021653.EF636F8036@busybox.net>
-	<200811021514.15439.markus.heidelberg@web.de>
-Message-ID: <87od0xri7p.fsf@macbook.be.48ers.dk>
+From: steve caster <steve@c2root.be>
+Date: Sun, 2 Nov 2008 23:10:37 +0100
+Subject: [Buildroot] kernel size
+Message-ID: <000001c93d37$d5a696d0$80f3c470$@be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Markus" == Markus Heidelberg <markus.heidelberg@web.de> writes:
+Hi all,
 
-Hi,
+ 
 
- >> trunk/buildroot/package/qtopia4/Config.gfx.in
- >> trunk/buildroot/package/qtopia4/Config.in
- >> trunk/buildroot/package/qtopia4/Config.mouse.in
- >> trunk/buildroot/package/qtopia4/Config.sql.in
- >> trunk/buildroot/package/qtopia4/qtopia4.mk
+I am trying to build a kernel with buildroot and are using a separate
+.config file which I made myself. The kernel is working, yet is about 90MB
+is size. This is unbelievable as I nearly don't have any modules. What could
+make is so big?
 
- Markus> Thanks, but it would be nice to include the log messages from
- Markus> my patches, this one is quite meaningless. And if the
- Markus> separate patches are squashed into one, I don't have to do
- Markus> the work with splitting the change up into a patch set. I
- Markus> don't think these four patches were split too much, are they?
+I have module support enabled and most of my drivers are compiled as
+modules. I don't get the issues. When I look at what it is compiling it is
+as if it is compiling everything in it.
 
-I agree.
+Any ideas?
 
--- 
-Bye, Peter Korsgaard
+ 
+
+Best regards
+
+Steve
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20081102/66768e2e/attachment.htm 
