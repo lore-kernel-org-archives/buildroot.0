@@ -1,63 +1,35 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 2 Nov 2008 10:39:35 -0800
-Subject: [Buildroot] [buildroot 0005914]: add 915resolution and v86d
-Message-ID: <d2801c51182e0ed0fa0934423c3903e5@busybox.net>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Sun,  2 Nov 2008 11:21:13 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/x86/syslinux
+Message-ID: <20081102192113.61C573C91B@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: jacmet
+Date: 2008-11-02 11:21:12 -0800 (Sun, 02 Nov 2008)
+New Revision: 23903
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=5914 
-====================================================================== 
-Reported By:                robang74
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   5914
-Category:                   New Features
-Reproducibility:            N/A
-Severity:                   feature
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             11-01-2008 03:23 PDT
-Last Modified:              11-02-2008 10:39 PST
-====================================================================== 
-Summary:                    add 915resolution and v86d
-Description: 
-add 915resolution and v86d for supporting non standard video resolutions
-====================================================================== 
+Log:
+syslinux: fix download url
 
----------------------------------------------------------------------- 
- robang74 - 11-01-08 13:24  
----------------------------------------------------------------------- 
-In the resolutions.patch:
+Modified:
+   trunk/buildroot/target/x86/syslinux/syslinux.mk
 
-s,$(INSTALL),$(INSTALL) -D,
 
-for both the package. Thanks.
-
+Changeset:
+Modified: trunk/buildroot/target/x86/syslinux/syslinux.mk
+===================================================================
+--- trunk/buildroot/target/x86/syslinux/syslinux.mk	2008-11-02 13:06:44 UTC (rev 23902)
++++ trunk/buildroot/target/x86/syslinux/syslinux.mk	2008-11-02 19:21:12 UTC (rev 23903)
+@@ -27,7 +27,7 @@
+ SYSLINUX_DIR2=$(TOOL_BUILD_DIR)/syslinux-$(SYSLINUX_VERSION)
+ SYSLINUX_SOURCE=syslinux-$(SYSLINUX_VERSION).tar.bz2
+ SYSLINUX_CAT:=$(BZCAT)
+-SYSLINUX_SITE=$(BR2_KERNEL_MIRROR)/linux/utils/boot/syslinux
++SYSLINUX_SITE=$(BR2_KERNEL_MIRROR)/linux/utils/boot/syslinux/Old
+ SYSLINUX_BIN=$(SYSLINUX_DIR2)/mtools/syslinux
  
-
----------------------------------------------------------------------- 
- jacmet - 11-02-08 10:39  
----------------------------------------------------------------------- 
-Isn't 915resolution only for really old Intel drivers? Shouldn't we bump
-the intel driver version instead? 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-11-01-08 03:23  robang74       New Issue                                    
-11-01-08 03:23  robang74       Status                   new => assigned     
-11-01-08 03:23  robang74       Assigned To               => buildroot       
-11-01-08 03:23  robang74       File Added: resolutions.patch                    
-11-01-08 03:23  robang74       Issue Monitored: robang74                    
-11-01-08 13:24  robang74       Note Added: 0014784                          
-11-01-08 13:24  robang74       Note Edited: 0014784                         
-11-02-08 10:39  jacmet         Note Added: 0014884                          
-======================================================================
+ 
