@@ -1,68 +1,25 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 2 Nov 2008 09:05:22 -0800
-Subject: [Buildroot] [buildroot 0005504]: Mesa: compile process abortion
-	requires a make realclean after
-Message-ID: <89a1927689d044c04dab7f331ffa1f77@bugs.uclibc.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 02 Nov 2008 19:33:46 +0100
+Subject: [Buildroot] Patch review
+In-Reply-To: <490B23B3.60801@netcentral.co.uk> (Nick Peirson's message of
+	"Fri\, 31 Oct 2008 15\:26\:43 +0000")
+References: <490AD4EF.1010106@netcentral.co.uk>
+	<20081031104315.GJ26468@mx.loc> <490AE48B.20306@netcentral.co.uk>
+	<490B23B3.60801@netcentral.co.uk>
+Message-ID: <87iqr6vuyd.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Nick" == Nick Peirson <nick@netcentral.co.uk> writes:
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=5504 
-====================================================================== 
-Reported By:                robang74
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   5504
-Category:                   Shared Library Support
-Reproducibility:            always
-Severity:                   trivial
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             10-18-2008 06:23 PDT
-Last Modified:              11-02-2008 09:05 PST
-====================================================================== 
-Summary:                    Mesa: compile process abortion requires a make
-realclean after
-Description: 
-If the Mesa compilation process abort the next time show this errors
-because main 'make' reconfigure the package one first compilation aborts
-but reconfiguration of Mesa require a 'make realclean' before:
+Hi,
 
-_i586/staging_dir" /usr/bin/make -j1 \
-		MKDEP="makedepend -I$gccinc" \
-		CC=/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
-CXX=/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-g++
-CC_FOR_BUILD=/usr/bin/gcc \
-		-C /home/roberto/gles/buildroot/build_i586/Mesa-7.0.3 linux-dri-x86
-make[1]: Entering directory
-`/home/roberto/gles/buildroot/build_i586/Mesa-7.0.3'
-Please run 'make realclean' before changing configs
-make[1]: *** [linux-dri-x86] Error 1
-make[1]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/Mesa-7.0.3'
-make: *** [/home/roberto/gles/buildroot/build_i586/Mesa-7.0.3/.built]
-Error 2
-====================================================================== 
+ Nick> Can the patch I attached be applied to the buildroot svn? Currently the 
+ Nick> syslinux.mk points to a version of syslinux that isn't available and 
+ Nick> will break the build.
 
----------------------------------------------------------------------- 
- tpk5010 - 11-02-08 09:05  
----------------------------------------------------------------------- 
-Forcing a rebuild of Mesa from the beginning by doing a rm -R
-build-i586/Mesa-7.0.3 fixes the issue. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-10-18-08 06:23  robang74       New Issue                                    
-10-18-08 06:23  robang74       Status                   new => assigned     
-10-18-08 06:23  robang74       Assigned To               => buildroot       
-10-18-08 06:23  robang74       Issue Monitored: robang74                    
-11-02-08 09:05  tpk5010        Note Added: 0014864                          
-======================================================================
+ Nick> I can create a patch to move to 3.63 if that's preferred, as there 
+ Nick> aren't as many changes, although going to 3.72 seems preferable to me?
