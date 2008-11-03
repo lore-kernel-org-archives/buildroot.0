@@ -1,35 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Nov 2008 11:15:06 +0100
-Subject: [Buildroot] kernel size
-In-Reply-To: <000001c93d37$d5a696d0$80f3c470$@be>
-References: <000001c93d37$d5a696d0$80f3c470$@be>
-Message-ID: <20081103111506.1005c517@surf>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 03 Nov 2008 11:15:27 +0100
+Subject: [Buildroot] External toolchain support improvements
+In-Reply-To: <20081030094501.66983ff9@surf> (Thomas Petazzoni's message of
+	"Thu\, 30 Oct 2008 09\:45\:01 +0100")
+References: <20081030094501.66983ff9@surf>
+Message-ID: <874p2pm7y8.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sun, 2 Nov 2008 23:10:37 +0100,
-"steve caster" <steve@c2root.be> a ?crit :
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-> I am trying to build a kernel with buildroot and are using a separate
-> .config file which I made myself. The kernel is working, yet is about
-> 90MB is size. This is unbelievable as I nearly don't have any
-> modules. What could make is so big?
+ Thomas> Improve external toolchain support
+ Thomas>  * Do not put kernel-headers in the dependencies of BASE_TARGETS in
+ Thomas>    the case where BR2_TOOLCHAIN_SOURCE is not y. The kernel headers
+ Thomas>    are already supposed to be part of the external toolchain, so
+ Thomas>    there's no need to download, extract and install them.
 
-By chance, aren't you using an initramfs, included in the kernel, which
-contains your root filesystem ? That could easily explain the large
-size of your kernel image.
+Sounds good.
 
-This is something that is done automatically by Buildroot if you
-enabled BR2_TARGET_ROOTFS_INITRAMFS.
+ Thomas>  * In the configuration system, don't display the kernel headers
+ Thomas>    version selection list when an external toolchain is selected. This
+ Thomas>    is implemented by moving the source
+ Thomas>    "toolchain/kernel-headers/Config.in" inside the if
+ Thomas>    BR2_TOOLCHAIN_SOURCE in toolchain/Config.in.2.
 
-Sincerly,
+And this too.
 
-Thomas
+ Thomas>  * Change the description and help message of the BR2_LARGEFILE,
+ Thomas>    BR2_INET_IPV6, BR2_INET_RPC, and BR2_SOFT_FLOAT option in
+ Thomas>    toolchain/external-toolchain/Config.in. In the case of an external
+ Thomas>    toolchain, the semantic of these options is not to enable large
+ Thomas>    file support, IPV6 or RPC (since the toolchain is already compiled,
+ Thomas>    it has been decided previously). Their semantic is to let Buildroot
+ Thomas>    know about the characteristics of the external toolchain being
+ Thomas>    used.
+
+Exactly.
+
+ Thomas>    As an improvement, we could guess these values automatically:
+
+ Thomas>     - for BR2_LARGEFILE, look at the value of __UCLIBC_HAS_LFS__ in
+ Thomas>       bits/uClibc_config.h in the libc headers directory.
+
+This would only work for external toolchains using uclibc - I guess
+the main reason for using an external toolchain is to not use uclibc?
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
