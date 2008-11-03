@@ -1,28 +1,18 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 03 Nov 2008 09:41:23 +0100
-Subject: [Buildroot] kernel size
-In-Reply-To: <000001c93d37$d5a696d0$80f3c470$@be> (steve caster's message of
-	"Sun\, 2 Nov 2008 23\:10\:37 +0100")
-References: <000001c93d37$d5a696d0$80f3c470$@be>
-Message-ID: <87ej1tp5fw.fsf@macbook.be.48ers.dk>
+From: Daniel Laird <danieljlaird@hotmail.com>
+Date: Mon, 3 Nov 2008 09:31:59 +0000
+Subject: [Buildroot] svn commit: trunk/buildroot/package:
+	cairo	java/classpath libgtk2
+In-Reply-To: <20081102192118.209FE3C923@busybox.net>
+References: <20081102192118.209FE3C923@busybox.net>
+Message-ID: <COL102-DS47DF42F5144147484C7AEDC1D0@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "steve" == steve caster <steve@c2root.be> writes:
+Many thanks for this, 
+my update was due for submission this morning.
 
- steve> Hi all,
-
- steve> I am trying to build a kernel with buildroot and are using a
- steve> separate .config file which I made myself. The kernel is
- steve> working, yet is about 90MB is size.  This is unbelievable as I
- steve> nearly don?t have any modules. What could make is so big?
-
-Hard to know without any more details. How big is the kernel if you
-compile it by hand with the buildroot cross compiler? What platform,
-what is your buildroot and kernel .config's?
-
--- 
-Bye, Peter Korsgaard
+Cheers
+Daniel Laird
