@@ -1,79 +1,54 @@
-From: hartleys <hartleys@visionengravers.com>
-Date: Mon, 3 Nov 2008 16:09:10 -0500
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 4 Nov 2008 00:17:54 +0100
 Subject: [Buildroot] svn commit: trunk/buildroot:
-	toolchaintoolchain/external-toolchain
-In-Reply-To: <20081103101839.6021A3C915@busybox.net>
+ toolchaintoolchain/external-toolchain
+In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE1909C91694@mi8nycmail19.Mi8.com>
 References: <20081103101839.6021A3C915@busybox.net>
-Message-ID: <BD79186B4FD85F4B8E60E381CAEE1909C91694@mi8nycmail19.Mi8.com>
+	<BD79186B4FD85F4B8E60E381CAEE1909C91694@mi8nycmail19.Mi8.com>
+Message-ID: <20081104001754.5fb48c87@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday, November 03, 2008 3:19 AM, jacmet at uclibc.org wrote:
-> Date: 2008-11-03 02:18:39 -0800 (Mon, 03 Nov 2008) New Revision: 23908
-> 
-> Log:
-> External toolchain support improvements
->
-> Improve external toolchain support
->
-> * Do not put kernel-headers in the dependencies of BASE_TARGETS in
->   the case where BR2_TOOLCHAIN_SOURCE is not y. The kernel headers
->   are already supposed to be part of the external toolchain, so
->   there's no need to download, extract and install them.
->
-> * In the configuration system, don't display the kernel headers
->   version selection list when an external toolchain is selected. This
->   is implemented by moving the source
->   "toolchain/kernel-headers/Config.in" inside the if
->   BR2_TOOLCHAIN_SOURCE in toolchain/Config.in.2.
+Le Mon, 3 Nov 2008 16:09:10 -0500,
+"hartleys" <hartleys@visionengravers.com> a ?crit :
 
-With these two patches I can no longer build kernel 2.6.27.3 using an
-external 4.1.1-920t toolchain.
+> With these two patches I can no longer build kernel 2.6.27.3 using an
+> external 4.1.1-920t toolchain.
 
-I know I should just build a new toolchain with buildroot but I have
-never been able to successfully get one working. That step I just do not
-get.....
+Oops. Could you give me your Buildroot .config file ? And the error
+message you're having ?
 
-Removing the following two patches fixes the problem. Any other
-solution?
+To build the kernel, there are two solutions:
+ * linux (advanced configuration)
+ * linux (same version as linux headers)
 
-Thanks,
-Hartley
+The second solution is probably broken by my change, but the first one
+seems to work fine here.
 
-<snip>
+I don't use Buildroot to build my kernels, so I missed that problem,
+sorry.
 
-Changeset:
-Modified: trunk/buildroot/Makefile
-===================================================================
---- trunk/buildroot/Makefile	2008-11-03 06:16:36 UTC (rev 23907)
-+++ trunk/buildroot/Makefile	2008-11-03 10:18:39 UTC (rev 23908)
-@@ -202,7 +202,7 @@
- ifeq ($(BR2_TOOLCHAIN_SOURCE),y)
- BASE_TARGETS:=uclibc-configured binutils cross_compiler
-uclibc-target-utils kernel-headers
- else
--BASE_TARGETS:=uclibc kernel-headers
-+BASE_TARGETS:=uclibc
- endif
- TARGETS:=
- 
+> I know I should just build a new toolchain with buildroot but I have
+> never been able to successfully get one working. That step I just do
+> not get.....
 
-Modified: trunk/buildroot/toolchain/Config.in.2
-===================================================================
---- trunk/buildroot/toolchain/Config.in.2	2008-11-03 06:16:36 UTC
-(rev 23907)
-+++ trunk/buildroot/toolchain/Config.in.2	2008-11-03 10:18:39 UTC
-(rev 23908)
-@@ -1,8 +1,7 @@
- #
- 
--source "toolchain/kernel-headers/Config.in"
--
- if BR2_TOOLCHAIN_SOURCE
-+source "toolchain/kernel-headers/Config.in"
- source "toolchain/uClibc/Config.in"
- source "toolchain/binutils/Config.in"
- source "toolchain/gcc/Config.in"
+I also use external toolchain, since I have troubles getting a
+completely working toolchain with Buildroot.
+
+> Removing the following two patches fixes the problem. Any other
+> solution?
+
+I understand why removing the second chunk fixes something, but not
+really the first chunk.
+
+Thanks for the feedback !
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
