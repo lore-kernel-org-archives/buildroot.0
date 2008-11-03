@@ -1,68 +1,79 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 3 Nov 2008 12:11:18 -0800
-Subject: [Buildroot] [buildroot 0005934]: HOST_GLIB not set correctly for
-	libgtk2
-Message-ID: <2c5d7922557b365c66e37d8f3b56fa25@busybox.net>
+From: hartleys <hartleys@visionengravers.com>
+Date: Mon, 3 Nov 2008 16:09:10 -0500
+Subject: [Buildroot] svn commit: trunk/buildroot:
+	toolchaintoolchain/external-toolchain
+In-Reply-To: <20081103101839.6021A3C915@busybox.net>
+References: <20081103101839.6021A3C915@busybox.net>
+Message-ID: <BD79186B4FD85F4B8E60E381CAEE1909C91694@mi8nycmail19.Mi8.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Monday, November 03, 2008 3:19 AM, jacmet at uclibc.org wrote:
+> Date: 2008-11-03 02:18:39 -0800 (Mon, 03 Nov 2008) New Revision: 23908
+> 
+> Log:
+> External toolchain support improvements
+>
+> Improve external toolchain support
+>
+> * Do not put kernel-headers in the dependencies of BASE_TARGETS in
+>   the case where BR2_TOOLCHAIN_SOURCE is not y. The kernel headers
+>   are already supposed to be part of the external toolchain, so
+>   there's no need to download, extract and install them.
+>
+> * In the configuration system, don't display the kernel headers
+>   version selection list when an external toolchain is selected. This
+>   is implemented by moving the source
+>   "toolchain/kernel-headers/Config.in" inside the if
+>   BR2_TOOLCHAIN_SOURCE in toolchain/Config.in.2.
 
-The following issue has been CLOSED 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=5934 
-====================================================================== 
-Reported By:                john_schimandle
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   5934
-Category:                   Other
-Reproducibility:            always
-Severity:                   minor
-Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             11-03-2008 09:40 PST
-Last Modified:              11-03-2008 12:11 PST
-====================================================================== 
-Summary:                    HOST_GLIB not set correctly for libgtk2
-Description: 
-HOST_GLIB is set to the path that contains the host glib tool set and is
-used when building package libgtk2 to create certain files. The buildroot
-top level Makefile sets HOST_GLIB using which to find the path where
-glib-genmarshal is located.
+With these two patches I can no longer build kernel 2.6.27.3 using an
+external 4.1.1-920t toolchain.
 
-The problem is that a cross compiled version of glib-genmarshal is also
-put in the build_ARCH/staging_dir/usr/bin directory when the package
-libglib2 is built. This cross compiled version will typically not run on
-the host system.
+I know I should just build a new toolchain with buildroot but I have
+never been able to successfully get one working. That step I just do not
+get.....
 
-If you have build_ARCH/staging_dir/usr/bin in your PATH variable before
-the host location of glib-genmarshal then HOST_GLIB will be set
-incorrectly. build_ARCH/staging_dir/usr/bin can easily be in your path if
-you follow the buildroot documentation to use the gcc cross compiler
-located in build_ARCH/staging_dir/usr/bin and place this directory in your
-PATH.
-====================================================================== 
+Removing the following two patches fixes the problem. Any other
+solution?
 
----------------------------------------------------------------------- 
- jacmet - 11-03-08 12:11  
----------------------------------------------------------------------- 
-Thanks, fixed (slightly differently) in r23920 
+Thanks,
+Hartley
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-11-03-08 09:40  john_schimandleNew Issue                                    
-11-03-08 09:40  john_schimandleStatus                   new => assigned     
-11-03-08 09:40  john_schimandleAssigned To               => buildroot       
-11-03-08 09:40  john_schimandleFile Added: HOST_GLIBpath.patch                  
+<snip>
+
+Changeset:
+Modified: trunk/buildroot/Makefile
+===================================================================
+--- trunk/buildroot/Makefile	2008-11-03 06:16:36 UTC (rev 23907)
++++ trunk/buildroot/Makefile	2008-11-03 10:18:39 UTC (rev 23908)
+@@ -202,7 +202,7 @@
+ ifeq ($(BR2_TOOLCHAIN_SOURCE),y)
+ BASE_TARGETS:=uclibc-configured binutils cross_compiler
+uclibc-target-utils kernel-headers
+ else
+-BASE_TARGETS:=uclibc kernel-headers
++BASE_TARGETS:=uclibc
+ endif
+ TARGETS:=
  
-11-03-08 12:11  jacmet         Status                   assigned => closed  
-11-03-08 12:11  jacmet         Note Added: 0014994                          
-======================================================================
+
+Modified: trunk/buildroot/toolchain/Config.in.2
+===================================================================
+--- trunk/buildroot/toolchain/Config.in.2	2008-11-03 06:16:36 UTC
+(rev 23907)
++++ trunk/buildroot/toolchain/Config.in.2	2008-11-03 10:18:39 UTC
+(rev 23908)
+@@ -1,8 +1,7 @@
+ #
+ 
+-source "toolchain/kernel-headers/Config.in"
+-
+ if BR2_TOOLCHAIN_SOURCE
++source "toolchain/kernel-headers/Config.in"
+ source "toolchain/uClibc/Config.in"
+ source "toolchain/binutils/Config.in"
+ source "toolchain/gcc/Config.in"
