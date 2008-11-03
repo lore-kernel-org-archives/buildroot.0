@@ -1,58 +1,82 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 03 Nov 2008 13:25:17 +0100
-Subject: [Buildroot] [PATCH] qtopia4: fix wrong variable name for SQL
-In-Reply-To: <d6cda7730811030413j1761701by6efebb6897b59f9@mail.gmail.com>
-	("Thiago A. =?utf-8?Q?Corr=C3=AAa=22's?= message of "Mon\, 3 Nov 2008
-	10\:13\:46 -0200")
-References: <200810310118.50847.markus.heidelberg@web.de>
-	<d6cda7730810301931q61359abdva18447d940267043@mail.gmail.com>
-	<200811011209.02562.markus.heidelberg@web.de>
-	<87abciz0t5.fsf@macbook.be.48ers.dk>
-	<d6cda7730811030413j1761701by6efebb6897b59f9@mail.gmail.com>
-Message-ID: <87iqr5f13m.fsf@macbook.be.48ers.dk>
+From: Shinya Kuribayashi <skuribay@ruby.dti.ne.jp>
+Date: Mon, 03 Nov 2008 21:48:24 +0900
+Subject: [Buildroot] External toolchain support improvements
+In-Reply-To: <20081030094501.66983ff9@surf>
+References: <20081030094501.66983ff9@surf>
+Message-ID: <490EF318.5030004@ruby.dti.ne.jp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thiago" == Thiago A Corr?a <thiago.correa@gmail.com> writes:
+Thomas Petazzoni wrote:
+>  * Change the description and help message of the BR2_LARGEFILE,
+>    BR2_INET_IPV6, BR2_INET_RPC, and BR2_SOFT_FLOAT option in
+>    toolchain/external-toolchain/Config.in. In the case of an external
+>    toolchain, the semantic of these options is not to enable large
+>    file support, IPV6 or RPC (since the toolchain is already compiled,
+>    it has been decided previously). Their semantic is to let Buildroot
+>    know about the characteristics of the external toolchain being
+>    used.
 
-Hi,
+[snip]
 
- Markus> I prefer inline patches, for easier commenting for example. I
- Markus> also find attachments are quite annoying if I have to use the
- Markus> web archives and can't just read the patch but have to
- Markus> download it at first. I know Peter prefers inline for the
- Markus> ease of applying them with "git am" and he has already
- Markus> applied a few from me.
- >> 
- >> Exactly!
+> Index: buildroot/toolchain/external-toolchain/Config.in
+> ===================================================================
+> --- buildroot.orig/toolchain/external-toolchain/Config.in
+> +++ buildroot/toolchain/external-toolchain/Config.in
+> @@ -69,32 +69,29 @@
+>  endchoice
+>  
+>  config BR2_LARGEFILE
+> -	bool "Enable large file (files > 2 GB) support?"
+> +	bool "Toolchain supports large files (> 2 GB) ?"
+>  	depends on !BR2_cris
+>  	default y
+>  	help
+> -	  Enable large file (files > 2 GB) support
+> +	  Set this option if the external toolchain supports large
+> +	  files (> 2 GB)
+> +
+>  
+>  config BR2_INET_IPV6
+> -	bool "Enable IPv6"
+> +	bool "Toolchain supports IPv6 ?"
+>  	help
+> -	    Enable IPv6.
+> +	  Set this option if the external toolchain supports IPv6.
+>  
+>  config BR2_INET_RPC
+> -	bool "Enable RPC"
+> +	bool "Toolchain supports RPC ?"
+>  	help
+> -	    Enable RPC. RPC support is needed for nfs.
+> +	  Set this option if the external toolchain supports RPC.
+>  
+>  config BR2_SOFT_FLOAT
+> -	bool "Use software floating point by default"
+> +	bool "Toolchain supports soft float ?"
+>  	depends on BR2_arm || BR2_armeb || BR2_mips || BR2_mipsel || BR2_powerpc
+>  	help
+> -	  If your target CPU does not have a Floating Point Unit (FPU) or a
+> -	  kernel FPU emulator, but you still wish to support floating point
+> -	  functions, then everything will need to be compiled with soft
+> -	  floating point support (-msoft-float).
+> -
+> -	  Most people will answer N.
+> +	  Set this option if the external toolchain supports soft float.
+>  
+>  config BR2_TARGET_OPTIMIZATION
+>  	string "Target Optimizations"
 
- Thiago> I don't use git, and I guess I never will *smile*.
+Why did you change these help text?  The previous messages seemed to be
+better, at least for me.  These options should be enabled based on what
+we want to do, not based on the toolchain's capabilities.
 
-Pity, you're missing out on good stuff. It's quite easy to get started
-with git-svn.
+I know that we share the same recognition of course, but current
+"Toolchain supports XXX?" feels somewhat misleading.
 
- Thiago> I agree it's best for commenting, but if it were also as well
- Thiago> easier to apply, then it means the submitter doesn't have to
- Thiago> wait for Peter to have the time to check it. I or someone
- Thiago> else with the same problem as me could do it.
+Thanks,
 
-patch -p1 < mail afaik still works, but then you ofcourse have to do
-the manual svn add / copy commit message ritual.
-
- >> Thiago, what keeps you from using a proper email client?
- 
- Thiago> I get rejects whenever I try to apply those git generated patches. It
- Thiago> just occured to me that maybe if I use the "show original" in the
- Thiago> gmail and copy from that it should work better. Will see in the next
- Thiago> patches if this works ;)
-
-Do you apply them with patch -p1 ?
-
-About cut'n'paste - Careful that you don't get tabs converted to white
-space on the way.
-
--- 
-Bye, Peter Korsgaard
+  Shinya
