@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 3 Nov 2008 02:55:00 -0800
+Date: Mon, 3 Nov 2008 03:01:43 -0800
 Subject: [Buildroot] [buildroot 0005914]: add 915resolution and v86d
-Message-ID: <11d345cd304249b93360011d9def0bc8@busybox.net>
+Message-ID: <24220660e358d9c60bc44928fef81fc6@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -25,7 +25,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             11-01-2008 03:23 PDT
-Last Modified:              11-03-2008 02:55 PST
+Last Modified:              11-03-2008 03:01 PST
 ====================================================================== 
 Summary:                    add 915resolution and v86d
 Description: 
@@ -58,6 +58,12 @@ resolutions table in order to activate/use non standard resolutions like
 uvesafb (a kernel patch) which is useful for use frame buffer at non
 standard resolutions like 800x480 (i.e.: in eeepc). 
 
+---------------------------------------------------------------------- 
+ jacmet - 11-03-08 03:01  
+---------------------------------------------------------------------- 
+yeah, but doesn't the intel driver do it's own mode settings nowadays? I
+atleast don't need 915resolution to run 1280x800 on this laptop 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -72,4 +78,5 @@ Date Modified   Username       Field                    Change
 11-03-08 02:51  robang74       File Added: resolutions.patch2                   
 
 11-03-08 02:55  robang74       Note Added: 0014914                          
+11-03-08 03:01  jacmet         Note Added: 0014924                          
 ======================================================================
