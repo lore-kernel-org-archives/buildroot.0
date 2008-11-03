@@ -1,47 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Nov 2008 09:31:10 +0100
-Subject: [Buildroot] External toolchain support improvements
-In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE1909C2916F@mi8nycmail19.Mi8.com>
-References: <20081030094501.66983ff9@surf>
-	<BD79186B4FD85F4B8E60E381CAEE1909C2916F@mi8nycmail19.Mi8.com>
-Message-ID: <20081103093110.13e43438@surf>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 03 Nov 2008 09:41:23 +0100
+Subject: [Buildroot] kernel size
+In-Reply-To: <000001c93d37$d5a696d0$80f3c470$@be> (steve caster's message of
+	"Sun\, 2 Nov 2008 23\:10\:37 +0100")
+References: <000001c93d37$d5a696d0$80f3c470$@be>
+Message-ID: <87ej1tp5fw.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri, 31 Oct 2008 14:42:14 -0400,
-"hartleys" <hartleys@visionengravers.com> a ?crit :
+>>>>> "steve" == steve caster <steve@c2root.be> writes:
 
-> What are the side effects if you use an external toolchain that was
-> built with a given kernel version, say 2.6.20.4, but use a newer
-> kernel, say 2.6.27.3?
+ steve> Hi all,
 
-The kernel <-> userspace interface is backward compatible. So if you
-use a toolchain that was compiled against the headers of kernel
-2.6.20.4 and run the binaries under 2.6.27.3, them it will work
-perfectly fine. The only thing is that you won't be able to use the new
-system calls, data structures, headers, defines, that have been added
-in the kernel between 2.6.20.4 and 2.6.27.3.
+ steve> I am trying to build a kernel with buildroot and are using a
+ steve> separate .config file which I made myself. The kernel is
+ steve> working, yet is about 90MB is size.  This is unbelievable as I
+ steve> nearly don?t have any modules. What could make is so big?
 
-The reverse side: if you generate binaries with a toolchain that has
-been compiled against the headers of kernel 2.6.27.3 and run it on a
-2.6.20.4 kernel, then there are two cases :
+Hard to know without any more details. How big is the kernel if you
+compile it by hand with the buildroot cross compiler? What platform,
+what is your buildroot and kernel .config's?
 
- * You don't use any of the new features of the kernel <-> userspace
-   interface added between 2.6.20.4 and 2.6.27.3 : everything will work
-   correctly ;
-
- * You use one of these new features: your binary might fail to run
-   properly (for example if they use a new system call, that isn't
-   available in your kernel).
-
-Sincerly,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
