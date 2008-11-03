@@ -1,26 +1,27 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 03 Nov 2008 15:03:20 +0100
-Subject: [Buildroot] External toolchain support improvements
-In-Reply-To: <490EFBE3.5030205@ruby.dti.ne.jp> (Shinya Kuribayashi's message
-	of "Mon\, 03 Nov 2008 22\:25\:55 +0900")
-References: <20081030094501.66983ff9@surf> <490EF318.5030004@ruby.dti.ne.jp>
-	<87bpwxdkz8.fsf@macbook.be.48ers.dk> <490EFBE3.5030205@ruby.dti.ne.jp>
-Message-ID: <87d4hcdhzr.fsf@macbook.be.48ers.dk>
+From: Adam McLaurin <buildroot@irotas.net>
+Date: Mon, 03 Nov 2008 09:33:52 -0500
+Subject: [Buildroot] How to build a gcc-3.3 toolchain
+In-Reply-To: <87ej1uz0yc.fsf@macbook.be.48ers.dk>
+References: <1225463596.29685.1282290569@webmail.messagingengine.com>
+	<87ej1uz0yc.fsf@macbook.be.48ers.dk>
+Message-ID: <1225722832.28602.1282706045@webmail.messagingengine.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Shinya" == Shinya Kuribayashi <skuribay@ruby.dti.ne.jp> writes:
+On Sun, 02 Nov 2008 14:55:55 +0100, "Peter Korsgaard"
+<jacmet@uclibc.org> said:
+> You could probably change the existing 3.4.6 support (remember to
+> enable BR2_DEPRECATED) to compile a 3.3 gcc instead.
 
- Shinya> This patch (and probably your comments) seems to overlook
- Shinya> toolchains built with _multi libraries_.  Please do not
- Shinya> assume toolchain's default options or default configurations,
- Shinya> especially when we talk about external toolchain support.
+Thanks for the response.
 
-Ok, I don't personally use either ext toolchain or multilib, but
-patches are welcome.
+Should I start by copying everything in 'toolchain/gcc/3.4.6' to
+'toolchain/gcc/3.3.6', or create the 3.3.6 directory clean and add
+patches as necessary? I'm not sure how well those patches will backport
+to 3.3.6.
 
--- 
-Bye, Peter Korsgaard
+Thanks,
+Adam
