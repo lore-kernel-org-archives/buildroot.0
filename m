@@ -1,53 +1,35 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Sun, 2 Nov 2008 22:17:09 -0800
-Subject: [Buildroot] [buildroot 0005834]: remove redundancy from mkdos
-	makefile
-Message-ID: <6dc76898fb9957f459c1136364db9f1f@busybox.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 3 Nov 2008 09:25:52 +0100
+Subject: [Buildroot] [PATCH] External toolchain C++ cross-compiler fix
+In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE1909C29169@mi8nycmail19.Mi8.com>
+References: <20081031151328.1baafffd@surf>
+	<BD79186B4FD85F4B8E60E381CAEE1909C29169@mi8nycmail19.Mi8.com>
+Message-ID: <20081103092552.37ee6ccd@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Le Fri, 31 Oct 2008 14:32:08 -0400,
+"hartleys" <hartleys@visionengravers.com> a ?crit :
 
-The following issue has been CLOSED 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=5834 
-====================================================================== 
-Reported By:                Chris David
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   5834
-Category:                   Other
-Reproducibility:            always
-Severity:                   tweak
-Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             10-29-2008 13:02 PDT
-Last Modified:              11-02-2008 22:17 PST
-====================================================================== 
-Summary:                    remove redundancy from mkdos makefile
-Description: 
-When I changed the location of the mkdosfs binary at the top of the
-makefile, the makefile breaks without this patch.
-====================================================================== 
+> I posted a message about this back on 8/13/2008 with a similar fix
+> (but not a patch) and never got a reply. I was starting to think it
+> was just me.
 
----------------------------------------------------------------------- 
- jacmet - 11-02-08 22:17  
----------------------------------------------------------------------- 
-thanks, fixed in r23907 
+No, that's not just you. Not everybody is using Buildroot with the
+external toolchain set-up (considering the number of issues faced by
+people using it in this setup), and many patches remained unanswered
+unfortunately.
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-10-29-08 13:02  Chris David    New Issue                                    
-10-29-08 13:02  Chris David    Status                   new => assigned     
-10-29-08 13:02  Chris David    Assigned To               => buildroot       
-10-29-08 13:02  Chris David    File Added: mkdosfs.patch                    
-11-02-08 22:17  jacmet         Status                   assigned => closed  
-11-02-08 22:17  jacmet         Note Added: 0014904                          
-======================================================================
+> Acked-by: H Hartley Sweeten <hsweeten@visionengravers.com>
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
