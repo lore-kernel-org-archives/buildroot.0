@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 3 Nov 2008 03:01:43 -0800
+Date: Mon, 3 Nov 2008 03:22:31 -0800
 Subject: [Buildroot] [buildroot 0005914]: add 915resolution and v86d
-Message-ID: <24220660e358d9c60bc44928fef81fc6@busybox.net>
+Message-ID: <d7b27a1974646e06c3057dad380efeed@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -25,7 +25,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             11-01-2008 03:23 PDT
-Last Modified:              11-03-2008 03:01 PST
+Last Modified:              11-03-2008 03:22 PST
 ====================================================================== 
 Summary:                    add 915resolution and v86d
 Description: 
@@ -64,6 +64,16 @@ standard resolutions like 800x480 (i.e.: in eeepc).
 yeah, but doesn't the intel driver do it's own mode settings nowadays? I
 atleast don't need 915resolution to run 1280x800 on this laptop 
 
+---------------------------------------------------------------------- 
+ robang74 - 11-03-08 03:22  
+---------------------------------------------------------------------- 
+Ok, probably you are right but I am using Xvesa from tinyX/Kdrive which
+does not support these non standard resolutions by itself becuase it relay
+on the BIOS (AFAIK). So this helpers could be useful for those use not a
+specific driver in order to reduce the size and mantain compatibility with
+almost al cards (and kdrive does not have i915 driver but i810 only which
+does not work on eeepc). 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -79,4 +89,5 @@ Date Modified   Username       Field                    Change
 
 11-03-08 02:55  robang74       Note Added: 0014914                          
 11-03-08 03:01  jacmet         Note Added: 0014924                          
+11-03-08 03:22  robang74       Note Added: 0014934                          
 ======================================================================
