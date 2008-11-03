@@ -1,91 +1,59 @@
-From: hartleys <hartleys@visionengravers.com>
-Date: Mon, 3 Nov 2008 10:52:51 -0500
-Subject: [Buildroot] External toolchain support improvements
-In-Reply-To: <20081103093110.13e43438@surf>
-References: <20081030094501.66983ff9@surf><BD79186B4FD85F4B8E60E381CAEE1909C2916F@mi8nycmail19.Mi8.com>
-	<20081103093110.13e43438@surf>
-Message-ID: <BD79186B4FD85F4B8E60E381CAEE1909C91465@mi8nycmail19.Mi8.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 3 Nov 2008 09:40:53 -0800
+Subject: [Buildroot] [buildroot 0005934]: HOST_GLIB not set correctly for
+	libgtk2
+Message-ID: <3b73e85f998986f2c7761b6df238a6b7@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday, November 03, 2008 1:31 AM, Thomas Petazzoni wrote:
->> What are the side effects if you use an external toolchain that was 
->> built with a given kernel version, say 2.6.20.4, but use a newer 
->> kernel, say 2.6.27.3?
->
-> The kernel <-> userspace interface is backward compatible. So if you
-> use a toolchain that was compiled against the headers of kernel
-> 2.6.20.4 and run the binaries under 2.6.27.3, them it will work
-> perfectly fine. The only thing is that you won't be able to use the
-> new system calls, data structures, headers, defines, that have been
-> added in the kernel between 2.6.20.4 and 2.6.27.3.
->
-> The reverse side: if you generate binaries with a toolchain that has
-> been compiled against the headers of kernel 2.6.27.3 and run it on a
-> 2.6.20.4 kernel, then there are two cases :
->
->  * You don't use any of the new features of the kernel <-> userspace
->    interface added between 2.6.20.4 and 2.6.27.3 : everything will
-work
->    correctly ;
->
->  * You use one of these new features: your binary might fail to run
->    properly (for example if they use a new system call, that isn't
->    available in your kernel).
 
-Thanks for the clarification.
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=5934 
+====================================================================== 
+Reported By:                john_schimandle
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   5934
+Category:                   Other
+Reproducibility:            always
+Severity:                   minor
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             11-03-2008 09:40 PST
+Last Modified:              11-03-2008 09:40 PST
+====================================================================== 
+Summary:                    HOST_GLIB not set correctly for libgtk2
+Description: 
+HOST_GLIB is set to the path that contains the host glib tool set and is
+used when building package libgtk2 to create certain files. The buildroot
+top level Makefile sets HOST_GLIB using which to find the path where
+glib-genmarshal is located.
 
-BTW, something is now broken with svn revision 23911 using an external
-toolchain.
+The problem is that a cross compiled version of glib-genmarshal is also
+put in the build_ARCH/staging_dir/usr/bin directory when the package
+libglib2 is built. This cross compiled version will typically not run on
+the host system.
 
-I just did a "svn up; make menuconfig; make" and I get the following
-errors right when the build starts.
+If you have build_ARCH/staging_dir/usr/bin in your PATH variable before
+the host location of glib-genmarshal then HOST_GLIB will be set
+incorrectly. build_ARCH/staging_dir/usr/bin can easily be in your path if
+you follow the buildroot documentation to use the gcc cross compiler
+located in build_ARCH/staging_dir/usr/bin and place this directory in your
+PATH.
+====================================================================== 
 
-Checking build system dependencies:
-BUILDROOT_DL_DIR clean:                         Ok
-CC clean:                                       Ok
-CXX clean:                                      Ok
-CPP clean:                                      Ok
-CFLAGS clean:                                   Ok
-INCLUDES clean:                                 Ok
-CXXFLAGS clean:                                 Ok
-which installed:                                Ok
-sed works:                                      Ok (/bin/sed)
-GNU make version '3.81':                        Ok
-C compiler '/usr/bin/gcc'
-C compiler version '4.1.2':                     Ok
-C++ compiler '/usr/bin/g++'
-C++ compiler version '4.1.2':                   Ok
-awk installed:                                  Ok
-bison installed:                                Ok
-flex installed:                                 Ok
-gettext installed:                              Ok
-makeinfo installed:                             Ok
-Build system dependencies:                      Ok
-
-rm -rf
-/home/bigguiness/buildroot/project_build_arm/ep9307/buildroot-config
-mkdir -p /home/bigguiness/buildroot/project_build_arm/ep9307
-cp -dpRf package/config/buildroot-config
-/home/bigguiness/buildroot/project_build_arm/ep9307/buildroot-config
-wget --passive-ftp -nd   -P /home/bigguiness/buildroot/dl
-"http://www.kernel.org/pub/"/linux/kernel/v2.6//linux-...tar.bz2
---08:47:11--
-http://www.kernel.org/pub//linux/kernel/v2.6//linux-...tar.bz2
-           => `/home/bigguiness/buildroot/dl/linux-...tar.bz2'
-Resolving www.kernel.org... 204.152.191.5, 204.152.191.37
-Connecting to www.kernel.org|204.152.191.5|:80... connected.
-HTTP request sent, awaiting response... 404 Not Found
-08:47:11 ERROR 404: Not Found.
-
-make: *** [/home/bigguiness/buildroot/dl/linux-...tar.bz2] Error 1
-
-
-I can't figure out what .mk is trying to download "linux-...tar.bz2".
-Any ideas?
-
-Thanks,
-Hartley
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+11-03-08 09:40  john_schimandleNew Issue                                    
+11-03-08 09:40  john_schimandleStatus                   new => assigned     
+11-03-08 09:40  john_schimandleAssigned To               => buildroot       
+11-03-08 09:40  john_schimandleFile Added: HOST_GLIBpath.patch                  
+ 
+======================================================================
