@@ -1,34 +1,39 @@
-From: steve caster <steve@c2root.be>
-Date: Sun, 2 Nov 2008 23:10:37 +0100
-Subject: [Buildroot] kernel size
-Message-ID: <000001c93d37$d5a696d0$80f3c470$@be>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Sun,  2 Nov 2008 22:16:37 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/mkdosfs
+Message-ID: <20081103061637.877213C89B@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Author: jacmet
+Date: 2008-11-02 22:16:36 -0800 (Sun, 02 Nov 2008)
+New Revision: 23907
 
+Log:
+mkdosfs: cleanup target install handling
+
+closes #5834.
+
+Modified:
+   trunk/buildroot/package/mkdosfs/mkdosfs.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/mkdosfs/mkdosfs.mk
+===================================================================
+--- trunk/buildroot/package/mkdosfs/mkdosfs.mk	2008-11-02 20:21:59 UTC (rev 23906)
++++ trunk/buildroot/package/mkdosfs/mkdosfs.mk	2008-11-03 06:16:36 UTC (rev 23907)
+@@ -26,8 +26,8 @@
+ 	touch -c $(MKDOSFS_DIR)/mkdosfs/mkdosfs
  
-
-I am trying to build a kernel with buildroot and are using a separate
-.config file which I made myself. The kernel is working, yet is about 90MB
-is size. This is unbelievable as I nearly don't have any modules. What could
-make is so big?
-
-I have module support enabled and most of my drivers are compiled as
-modules. I don't get the issues. When I look at what it is compiling it is
-as if it is compiling everything in it.
-
-Any ideas?
-
+ $(TARGET_DIR)/$(MKDOSFS_TARGET_BINARY): $(MKDOSFS_DIR)/$(MKDOSFS_BINARY)
+-	cp -a $(MKDOSFS_DIR)/$(MKDOSFS_BINARY) $(TARGET_DIR)/$(MKDOSFS_TARGET_BINARY)
+-	touch -c $(TARGET_DIR)/sbin/mkdosfs
++	cp -a $(MKDOSFS_DIR)/$(MKDOSFS_BINARY) $@
++	touch -c $@
  
-
-Best regards
-
-Steve
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20081102/66768e2e/attachment.htm 
+ mkdosfs: uclibc $(TARGET_DIR)/$(MKDOSFS_TARGET_BINARY)
+ 
