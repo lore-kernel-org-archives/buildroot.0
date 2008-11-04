@@ -1,40 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Nov 2008 18:14:09 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot
-In-Reply-To: <87prlb96au.fsf@macbook.be.48ers.dk>
-References: <20081103201104.190E7F8015@busybox.net>
-	<20081104082320.667f3022@surf> <87prlb96au.fsf@macbook.be.48ers.dk>
-Message-ID: <20081104181409.63a40a42@surf>
+Date: Tue, 4 Nov 2008 18:23:14 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot:
+ toolchaintoolchain/external-toolchain
+In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE1909C9177C@mi8nycmail19.Mi8.com>
+References: <20081103101839.6021A3C915@busybox.net>
+	<BD79186B4FD85F4B8E60E381CAEE1909C91694@mi8nycmail19.Mi8.com>
+	<20081104001754.5fb48c87@surf>
+	<BD79186B4FD85F4B8E60E381CAEE1909C9177C@mi8nycmail19.Mi8.com>
+Message-ID: <20081104182314.580215e5@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 04 Nov 2008 10:41:45 +0100,
-Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+Hi hartleys,
 
-> That looks more like a problem about glib-genmarshal not being
-> installed on the host (E.G. something like a libglib2.0-dev package)
+Please keep the list in Cc, other Buildroot developers can give very
+valuable insights, very often better than mine.
 
-Yep, there are two solutions:
+Le Mon, 3 Nov 2008 19:09:02 -0500,
+"hartleys" <hartleys@visionengravers.com> a ?crit :
 
- * Require glib-genmarshal to be installed on the host, in which case
-   it should be checked prior to the compilation process ;
+> > Oops. Could you give me your Buildroot .config file ? And the error
+> message you're having ?
+> 
+> Attached is the .config
 
- * Since the source code of glib-genmarshal is already available in the
-   package we're compiling, compile it for the host and use this
-   version instead of looking in /usr/bin.
+Is this a .config generated with the bare trunk, or with the trunk
+modified to remove the two chunks that you mentionned previously ?
 
-The current glib source code seems to indicate that the first solution
-is preferred when doing cross-compilation:
+Since BR2_KERNEL_HEADERS_2_6_27 is set, I'm inclined to think that this
+is a .config after removal of the two chunks.
 
-if test $cross_compiling = yes; then
-  AC_PATH_PROG(GLIB_GENMARSHAL, glib-genmarshal, no)
-  if test x$GLIB_GENMARSHAL = xno; then
-    AC_MSG_ERROR(Could not find a glib-genmarshal in your PATH)
-  fi
-fi
+> > To build the kernel, there are two solutions:
+> >  * linux (advanced configuration)
+> >  * linux (same version as linux headers)
+> >
+> > The second solution is probably broken by my change, but the first
+> > one seems to work fine here.
+> 
+> The second is broken with your change.
+> 
+> I tried the first but it's a bit of a pain. Every time there is a new
+> kernel I have to go in an update the values. I guess it's more of a
+> nit...
+
+The second option ? same version as linux headers ? clearly cannot work
+with my patches: since we're using an external toolchain, there's no
+version of linux headers defined in Buildroot.
+
+So my proposal is:
+
+ 1) remove the option "linux (same version as linux headers)" when an
+    external toolchain is used ;
+
+ 2) improve the "advanced" support to suit your needs. What do you mean
+    by ? I have to go in and update the values ? ?
+
+What do you think about this ?
+
+> At this point I'm still in development and a lot of the stuff I am
+> working on is kernel related. I keep sending off patches that are
+> slowly showing up in the newer kernels so I always want the latest
+> stuff. I really wish I could figure out how to use git inside
+> buildroot...
+
+Grant Likely recently sent a patch adding the ability to get the kernel
+for a Git repository. See
+http://buildroot.uclibc.org/lists/buildroot/2008-October/011037.html.
+This patch hasn't been integrated to Buildroot, yet.
+
+> > I don't use Buildroot to build my kernels, so I missed that problem,
+> sorry.
+> 
+> Not a problem. How else can you cross compile the kernel?
+
+See slides 136 and following in
+http://free-electrons.com/doc/embedded_linux_kernel_and_drivers.pdf.
 
 Sincerly,
 
