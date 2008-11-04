@@ -1,89 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Nov 2008 18:23:14 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot:
- toolchaintoolchain/external-toolchain
-In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE1909C9177C@mi8nycmail19.Mi8.com>
-References: <20081103101839.6021A3C915@busybox.net>
-	<BD79186B4FD85F4B8E60E381CAEE1909C91694@mi8nycmail19.Mi8.com>
-	<20081104001754.5fb48c87@surf>
-	<BD79186B4FD85F4B8E60E381CAEE1909C9177C@mi8nycmail19.Mi8.com>
-Message-ID: <20081104182314.580215e5@surf>
+From: Julien Boibessot <julien.boibessot@free.fr>
+Date: Tue, 04 Nov 2008 19:19:32 +0100
+Subject: [Buildroot] kernel patch not applied
+In-Reply-To: <20070514071131.GA11391@aon.at>
+References: <46432A7D.6050808@rcn.com>
+	<46433B79.50101@rcn.com>	<1178893909.11554.75.camel@localhost.localdomain>	<20070511154059.GA4710@aon.at>	<1179120085.21753.1.camel@localhost.localdomain>
+	<20070514071131.GA11391@aon.at>
+Message-ID: <49109234.9080406@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi hartleys,
+Hi,
 
-Please keep the list in Cc, other Buildroot developers can give very
-valuable insights, very often better than mine.
+It's quite a long time now, since first email, but I was faced to the
+problem today, when updating my old buildroot to the latest svn one.
 
-Le Mon, 3 Nov 2008 19:09:02 -0500,
-"hartleys" <hartleys@visionengravers.com> a ?crit :
+Bernhard Fischer a ?crit :
+> On Mon, May 14, 2007 at 07:21:25AM +0200, Hans-Christian Egtvedt wrote:
+>   
+>> On Fri, 2007-05-11 at 17:40 +0200, Bernhard Fischer wrote:
+>>     
+>>> On Fri, May 11, 2007 at 04:31:49PM +0200, Hans-Christian Egtvedt wrote:
+>>>       
+>> <cut>
+>>
+>>     
+>>>> $(LINUX_HEADERS_UNPACK_DIR)/.patched:
+>>>> $(LINUX_HEADERS_UNPACK_DIR)/.unpacked
+>>>>        toolchain/patch-kernel.sh $(LINUX_HEADERS_UNPACK_DIR)
+>>>> toolchain/kernel-headers \
+>>>>                linux-$(LINUX_HEADERS_VERSION)-\*.patch.\*
+>>>> ifeq ($(BR2_PACKAGE_OPENSWAN),y)
+>>>>        toolchain/patch-kernel.sh $(LINUX_HEADERS_UNPACK_DIR) package/openswan \
+>>>>                linux-$(LINUX_HEADERS_VERSION)-\*.patch.\*
+>>>>         
+>>> which means that your shell just doesn't expand ba{r,z}
+>>>       
+>> Weird, I tried zsh, bash and sh. I am building on Ubuntu 7.04.
+>>     
+>
+> IIRC ubuntu defaults to dash as sh, so make sure that
+> a) SHELL points to /bin/bash (ash may work too)
+> or,
+> b) symlink sh to be bash
+>
+> a) is of course the preferred solution, didn't look if there are direct
+> references to /bin/sh instead of $SHELL in the makefiles, though.
+>   
+I'm working on KUbuntu 7.10. (yes, I know it's bad :-) ).
+a) doesn't work for me (even if my SHELL env is pointing to /bin/bash)
 
-> > Oops. Could you give me your Buildroot .config file ? And the error
-> message you're having ?
-> 
-> Attached is the .config
+only b) or "make SHELL=/bin/bash" are working.
 
-Is this a .config generated with the bare trunk, or with the trunk
-modified to remove the two chunks that you mentionned previously ?
 
-Since BR2_KERNEL_HEADERS_2_6_27 is set, I'm inclined to think that this
-is a .config after removal of the two chunks.
+It's just a 2 cents feedback, so I'm not waiting for an answer ;-)
 
-> > To build the kernel, there are two solutions:
-> >  * linux (advanced configuration)
-> >  * linux (same version as linux headers)
-> >
-> > The second solution is probably broken by my change, but the first
-> > one seems to work fine here.
-> 
-> The second is broken with your change.
-> 
-> I tried the first but it's a bit of a pain. Every time there is a new
-> kernel I have to go in an update the values. I guess it's more of a
-> nit...
-
-The second option ? same version as linux headers ? clearly cannot work
-with my patches: since we're using an external toolchain, there's no
-version of linux headers defined in Buildroot.
-
-So my proposal is:
-
- 1) remove the option "linux (same version as linux headers)" when an
-    external toolchain is used ;
-
- 2) improve the "advanced" support to suit your needs. What do you mean
-    by ? I have to go in and update the values ? ?
-
-What do you think about this ?
-
-> At this point I'm still in development and a lot of the stuff I am
-> working on is kernel related. I keep sending off patches that are
-> slowly showing up in the newer kernels so I always want the latest
-> stuff. I really wish I could figure out how to use git inside
-> buildroot...
-
-Grant Likely recently sent a patch adding the ability to get the kernel
-for a Git repository. See
-http://buildroot.uclibc.org/lists/buildroot/2008-October/011037.html.
-This patch hasn't been integrated to Buildroot, yet.
-
-> > I don't use Buildroot to build my kernels, so I missed that problem,
-> sorry.
-> 
-> Not a problem. How else can you cross compile the kernel?
-
-See slides 136 and following in
-http://free-electrons.com/doc/embedded_linux_kernel_and_drivers.pdf.
-
-Sincerly,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Regards,
+Julien
