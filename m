@@ -1,32 +1,30 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 04 Nov 2008 09:51:16 +0100
-Subject: [Buildroot] openssl extract problem
-In-Reply-To: <000001c93de7$a0188130$e0498390$@be> (steve caster's message of
-	"Mon\, 3 Nov 2008 20\:08\:58 +0100")
-References: <db2a8a5aa9a6e1044ee4fc0ce95602f8@bugs.uclibc.org>
-	<000001c93de7$a0188130$e0498390$@be>
-Message-ID: <87od0van7f.fsf@macbook.be.48ers.dk>
+Date: Tue, 04 Nov 2008 10:41:45 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot
+In-Reply-To: <20081104082320.667f3022@surf> (Thomas Petazzoni's message of
+	"Tue\, 4 Nov 2008 08\:23\:20 +0100")
+References: <20081103201104.190E7F8015@busybox.net>
+	<20081104082320.667f3022@surf>
+Message-ID: <87prlb96au.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "steve" == steve caster <steve@c2root.be> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- steve> Hi all,
+ Thomas> Le Mon,  3 Nov 2008 12:11:04 -0800 (PST),
+ Thomas> jacmet at uclibc.org a ?crit :
 
- steve> I am trying to compile openssl, but it gives me an bzip2 error
- steve> which seems quite normal when trying to bunzip a .gz file. The
- steve> main question is, where can I modify this as I don't see a .mk
- steve> with the bzip command?
+ >> Log:
+ >> Makefile: ignore glib-genmarshal in staging_dir
 
-I don't see that here:
->>> openssl 0.9.8g Downloading
---09:48:13--  http://www.openssl.org/source/openssl-0.9.8g.tar.gz
-           => `/var/lib/downloads/openssl-0.9.8g.tar.gz'
+ Thomas> I haven't looked at the details, but do this also solve #5724
+ Thomas> (http://busybox.net/bugs/view.php?id=5724) ?
 
-Please provide more details of your .config and exact error message.
+That looks more like a problem about glib-genmarshal not being
+installed on the host (E.G. something like a libglib2.0-dev package)
 
 -- 
 Bye, Peter Korsgaard
