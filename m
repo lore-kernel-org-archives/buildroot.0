@@ -1,36 +1,28 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue,  4 Nov 2008 03:31:58 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/netsnmp
-Message-ID: <20081104113158.992A43C971@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 04 Nov 2008 12:32:01 +0100
+Subject: [Buildroot] my first patch !
+In-Reply-To: <!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAJ/gkkvS7oNNlXjUFHIJdO4BAAAAAA==@cimeq.qc.ca>
+	(Jonathan Dumaresq's message of "Fri\,
+	31 Oct 2008 13\:36\:01 -0400")
+References: <!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAIMsuCDiF8RCojvQ+E2NNJQBAAAAAA==@cimeq.qc.ca>
+	<20081031171037.GF27517@mx.loc>
+	<!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAJ/gkkvS7oNNlXjUFHIJdO4BAAAAAA==@cimeq.qc.ca>
+Message-ID: <87r65r7mmm.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-11-04 03:31:58 -0800 (Tue, 04 Nov 2008)
-New Revision: 23922
+>>>>> "Jonathan" == Jonathan Dumaresq <jdumaresq@cimeq.qc.ca> writes:
 
-Log:
-netsnmp: run CONFIG_UPDATE
+Hi,
 
-Based on e068796d3 in Bernhards tree.
+ Jonathan> I would like to thanks you for your input. 
 
-Modified:
-   trunk/buildroot/package/netsnmp/netsnmp.mk
+ Jonathan> I would like to know what I suppose to do with thoses 3 files ?
 
+I've updated the netsnmp package in svn, could you give it a try?
 
-Changeset:
-Modified: trunk/buildroot/package/netsnmp/netsnmp.mk
-===================================================================
---- trunk/buildroot/package/netsnmp/netsnmp.mk	2008-11-04 11:26:52 UTC (rev 23921)
-+++ trunk/buildroot/package/netsnmp/netsnmp.mk	2008-11-04 11:31:58 UTC (rev 23922)
-@@ -22,6 +22,7 @@
- $(NETSNMP_DIR)/.unpacked: $(DL_DIR)/$(NETSNMP_SOURCE)
- 	$(ZCAT) $(DL_DIR)/$(NETSNMP_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
- 	toolchain/patch-kernel.sh $(NETSNMP_DIR) package/netsnmp/ \*$(NETSNMP_VERSION)\*.patch
-+	$(CONFIG_UPDATE) $(@D)
- 	touch $@
- 
- ifeq ($(BR2_ENDIAN),"BIG")
+-- 
+Bye, Peter Korsgaard
