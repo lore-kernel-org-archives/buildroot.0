@@ -1,68 +1,56 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Tue, 4 Nov 2008 20:54:37 +0100
-Subject: [Buildroot] kernel patch not applied
-In-Reply-To: <49109234.9080406@free.fr>
-References: <46432A7D.6050808@rcn.com> <46433B79.50101@rcn.com>
-	<1178893909.11554.75.camel@localhost.localdomain>
-	<20070511154059.GA4710@aon.at>
-	<1179120085.21753.1.camel@localhost.localdomain>
-	<20070514071131.GA11391@aon.at> <49109234.9080406@free.fr>
-Message-ID: <20081104195437.GA26520@mx.loc>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Tue,  4 Nov 2008 11:58:49 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/target
+Message-ID: <20081104195849.373663C822@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Nov 04, 2008 at 07:19:32PM +0100, Julien Boibessot wrote:
->Hi,
->
->It's quite a long time now, since first email, but I was faced to the
->problem today, when updating my old buildroot to the latest svn one.
->
->Bernhard Fischer a ?crit :
->> On Mon, May 14, 2007 at 07:21:25AM +0200, Hans-Christian Egtvedt wrote:
->>   
->>> On Fri, 2007-05-11 at 17:40 +0200, Bernhard Fischer wrote:
->>>     
->>>> On Fri, May 11, 2007 at 04:31:49PM +0200, Hans-Christian Egtvedt wrote:
->>>>       
->>> <cut>
->>>
->>>     
->>>>> $(LINUX_HEADERS_UNPACK_DIR)/.patched:
->>>>> $(LINUX_HEADERS_UNPACK_DIR)/.unpacked
->>>>>        toolchain/patch-kernel.sh $(LINUX_HEADERS_UNPACK_DIR)
->>>>> toolchain/kernel-headers \
->>>>>                linux-$(LINUX_HEADERS_VERSION)-\*.patch.\*
->>>>> ifeq ($(BR2_PACKAGE_OPENSWAN),y)
->>>>>        toolchain/patch-kernel.sh $(LINUX_HEADERS_UNPACK_DIR) package/openswan \
->>>>>                linux-$(LINUX_HEADERS_VERSION)-\*.patch.\*
->>>>>         
->>>> which means that your shell just doesn't expand ba{r,z}
->>>>       
->>> Weird, I tried zsh, bash and sh. I am building on Ubuntu 7.04.
->>>     
->>
->> IIRC ubuntu defaults to dash as sh, so make sure that
->> a) SHELL points to /bin/bash (ash may work too)
->> or,
->> b) symlink sh to be bash
->>
->> a) is of course the preferred solution, didn't look if there are direct
->> references to /bin/sh instead of $SHELL in the makefiles, though.
->>   
->I'm working on KUbuntu 7.10. (yes, I know it's bad :-) ).
->a) doesn't work for me (even if my SHELL env is pointing to /bin/bash)
->
->only b) or "make SHELL=/bin/bash" are working.
+Author: jacmet
+Date: 2008-11-04 11:58:48 -0800 (Tue, 04 Nov 2008)
+New Revision: 23924
 
-yes. Note that there is also CONFIG_SHELL (which should be used in a
-consistent manner everywhere) for $(shell ....) invocations.
->
->It's just a 2 cents feedback, so I'm not waiting for an answer ;-)
+Log:
+Kernel build fix related to external toolchain use
 
-Thanks for the feedback, I could imagine that it proves helpful
-for somebody.
+This patch prevents the user from select "linux (Same version as linux
+headers)" as a choice for building the kernel when an external binary
+toolchain is used, since "same version as linux headers" doesn't make
+sense when an external toolchain is used.
 
-cheers,
+It fixes the issue encountered by Hartley <hartleys@visionengravers.com>
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Modified:
+   trunk/buildroot/target/Config.in
+
+
+Changeset:
+Modified: trunk/buildroot/target/Config.in
+===================================================================
+--- trunk/buildroot/target/Config.in	2008-11-04 12:50:38 UTC (rev 23923)
++++ trunk/buildroot/target/Config.in	2008-11-04 19:58:48 UTC (rev 23924)
+@@ -45,6 +45,11 @@
+ 	        kernel headers are just that (headers) and not full
+ 	        kernels. This is a feature.
+ 
++# The kernel with the same version as linux headers cannot be compiled
++# when using an external toolchain, because the linux headers are not
++# handled by Buildroot in this case.
++if BR2_TOOLCHAIN_SOURCE
++
+ config BR2_KERNEL_LINUX
+ 	bool "linux (Same version as linux headers)"
+ 	select BR2_PACKAGE_LINUX
+@@ -56,6 +61,8 @@
+ 	        kernel headers are just that (headers) and not full
+ 	        kernels. This is a feature.
+ 
++endif
++
+ config BR2_KERNEL_HURD
+ 	bool "hurd"
+ 	help
