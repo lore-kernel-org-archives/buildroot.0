@@ -1,329 +1,40 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 4 Nov 2008 17:58:16 -0800
-Subject: [Buildroot] [buildroot 0005724]: libglib2 compilation crash on
-	/usr/bin/glib-genmarshal
-Message-ID: <99b24f3269e1f0382025ce7ecd5d2f32@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 05 Nov 2008 07:16:15 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot
+In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE1909C91B4A@mi8nycmail19.Mi8.com>
+	(hartleys@visionengravers.com's message of "Tue\,
+	4 Nov 2008 20\:01\:22 -0500")
+References: <20081104125039.199A23C8D7@busybox.net>
+	<BD79186B4FD85F4B8E60E381CAEE1909C91B2A@mi8nycmail19.Mi8.com>
+	<e4c675870811041536w7c035576ie7690ba0d3c83e8f@mail.gmail.com>
+	<BD79186B4FD85F4B8E60E381CAEE1909C91B34@mi8nycmail19.Mi8.com>
+	<e4c675870811041553o7b15d778m6fb4bb6052909314@mail.gmail.com>
+	<BD79186B4FD85F4B8E60E381CAEE1909C91B38@mi8nycmail19.Mi8.com>
+	<e4c675870811041653j7c8e3c50r9ab4f35958681a91@mail.gmail.com>
+	<BD79186B4FD85F4B8E60E381CAEE1909C91B4A@mi8nycmail19.Mi8.com>
+Message-ID: <87hc6mvgsw.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "hartleys" == hartleys  <hartleys@visionengravers.com> writes:
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=5724 
-====================================================================== 
-Reported By:                robang74
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   5724
-Category:                   Shared Library Support
-Reproducibility:            always
-Severity:                   crash
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             10-24-2008 21:51 PDT
-Last Modified:              11-04-2008 17:58 PST
-====================================================================== 
-Summary:                    libglib2 compilation crash on
-/usr/bin/glib-genmarshal
-Description: 
-make[3]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/glib'
-Making all in gobject
-make[3]: Entering directory
-`/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/gobject'
-/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
--Os  -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
--I/home/roberto/gles/buildroot/build_i586/staging_dir/include
---sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
-/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
--march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -DHAVE_CONFIG_H -I. -I.. 
--DG_LOG_DOMAIN=\"GLib-GObject\" -I.. -I../glib -I.. -DG_ENABLE_DEBUG
--DG_DISABLE_DEPRECATED -DGOBJECT_COMPILATION -DG_DISABLE_CONST_RETURNS
--pthread  -g -O2 -Wall -MT glib-genmarshal.o -MD -MP -MF
-.deps/glib-genmarshal.Tpo -c -o glib-genmarshal.o glib-genmarshal.c
-mv -f .deps/glib-genmarshal.Tpo .deps/glib-genmarshal.Po
-/bin/bash ../libtool --tag=CC   --mode=link
-/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
--Os  -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
--I/home/roberto/gles/buildroot/build_i586/staging_dir/include
---sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
-/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
--march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64  -g -O2 -Wall   -o glib-genmarshal
-glib-genmarshal.o ../glib/libglib-2.0.la -lintl  
-mkdir .libs
-/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
--Os -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
--I/home/roberto/gles/buildroot/build_i586/staging_dir/include
---sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
-/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
--march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -g -O2 -Wall -o glib-genmarshal glib-genmarshal.o 
-../glib/.libs/libglib-2.0.so -lintl   -Wl,--rpath
--Wl,/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/glib/.libs
-/usr/bin/make glib-genmarshal
-make[4]: Entering directory
-`/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/gobject'
-make[4]: `glib-genmarshal' is up to date.
-make[4]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/gobject'
-echo "#ifndef __G_MARSHAL_H__" > xgen-gmh \
-	&& echo "#define __G_MARSHAL_H__" >> xgen-gmh \
-	&& /usr/bin/glib-genmarshal --nostdinc --prefix=g_cclosure_marshal
-./gmarshal.list --header >> xgen-gmh \
-	&& echo "#endif /* __G_MARSHAL_H__ */" >> xgen-gmh \
-	&& (cmp -s xgen-gmh gmarshal.h 2>/dev/null || cp xgen-gmh gmarshal.h) \
-	&& rm -f xgen-gmh xgen-gmh~ \
-	&& echo timestamp > stamp-gmarshal.h
-/bin/bash: line 2: /usr/bin/glib-genmarshal: No such file or directory
-make[3]: *** [stamp-gmarshal.h] Error 127
-make[3]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/gobject'
-make[2]: *** [all-recursive] Error 1
-make[2]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4'
-make[1]: *** [all] Error 2
-make[1]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4'
-make: ***
-[/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/.stamp_built]
-Error 2
+Hi,
 
-====================================================================== 
+ hartleys> Yes, it appears HOST_GLIB_BIN is just used to figure out
+ hartleys> what HOST_GLIB is supposed to be.
 
----------------------------------------------------------------------- 
- robang74 - 10-24-08 22:53  
----------------------------------------------------------------------- 
-Proposed solution: glib-genmarshal should be compiled for $HOST not for
-$TARGET system. Probably tests should be avoided too.
+ hartleys> Question: Does this really belong in the top level Makefile?
 
-roberto at rafbook:~/gles/buildroot$ svn info | grep Last
-Last Changed Author: jacmet
-Last Changed Rev: 23778
-Last Changed Date: 2008-10-24 13:02:32 +0200 (Fri, 24 Oct 2008)
+No, it belongs in libglib2.mk, and we should compile our own glib
+tools instead of using whatever may or may not be on the host.
 
- 
+That hunk was added by Ulf (r22663).
 
----------------------------------------------------------------------- 
- robang74 - 10-28-08 02:21  
----------------------------------------------------------------------- 
-roberto at rafbook:~/gles/buildroot$ svn info | grep Last
-Last Changed Author: jacmet
-Last Changed Rev: 23821
-Last Changed Date: 2008-10-27 16:15:52 +0100 (Mon, 27 Oct 2008) 
+Notice that HOST_GLIB is used for more than just glib-genmarshal
+(E.G. in libgtk2.mk)
 
----------------------------------------------------------------------- 
- tpetazzoni - 10-28-08 02:43  
----------------------------------------------------------------------- 
-glib2 is designed to use the glib-genmarshal binary available in the PATH
-in the case of cross-compilation. The ./configure script checks that a
-glib-genmarshal binary is available in the PATH in the cross-compile case,
-and fails if glib-genmarshal is not found:
-
-if test $cross_compiling = yes; then
-  AC_PATH_PROG(GLIB_GENMARSHAL, glib-genmarshal, no)
-  if test x$GLIB_GENMARSHAL = xno; then
-    AC_MSG_ERROR(Could not find a glib-genmarshal in your PATH)
-  fi
-fi
-
-Do you have the output of the configure script ? And the config.log file
-?
-
-It should either :
-
- * Think that you are cross-compiling, testing in the configure script
-that you have glib-genmarshal in your PATH and fail if not. Which is not
-your case, it seems.
-
- * Think that you are *not* cross-compiling, and use the internally
-compiled glib-genmarshal. Which is not your case either.
-
-So, I'm quite confused with what you're seeing. 
-
----------------------------------------------------------------------- 
- jacmet - 11-04-08 01:42  
----------------------------------------------------------------------- 
-Do you have the glib development package installed on your system? (E.G.
-something like libglib2.0-dev) 
-
----------------------------------------------------------------------- 
- robang74 - 11-04-08 08:46  
----------------------------------------------------------------------- 
-To answer to tpetazzoni I need more time but I can answer to jacmet pretty
-immediately: no, I do not have any libglib*-dev installed. ASAP I will
-investigate the problem deeper. Thanks to both, for the answer. 
-
----------------------------------------------------------------------- 
- intravenoes - 11-04-08 11:06  
----------------------------------------------------------------------- 
-One thing to keep in mind here is that the options for glib-genmarshal or
-rather glib-mkenums change a bit for newer versions of glib (2.18+).
-glib-mkenum adds ENUMPREFIX. Newer versions of libgtk (2.14+) use this,
-e.g. in gdk/gdkenumtypes.h.template.
-So if the host system version of glib is below 2.18 but you try to cross
-compile here and use the host system libs it will fail since this feature
-is not supported. I know that these versions are not in buildroot right
-now, just wanted to make you aware of this issue since I just ran into it. 
-
----------------------------------------------------------------------- 
- robang74 - 11-04-08 11:39  
----------------------------------------------------------------------- 
-checking for EILSEQ... yes
-+ test yes = yes
-+ CROSS_COMPILING_TRUE=
-+ CROSS_COMPILING_FALSE='#'
-+ test yes = yes
-+ set dummy glib-genmarshal
-+ ac_word=glib-genmarshal
-+ echo 'configure:44515: checking for glib-genmarshal'
-+ echo -n 'checking for glib-genmarshal... '
-checking for glib-genmarshal... + test set = set
-+ echo -n '(cached) '
-(cached) + GLIB_GENMARSHAL=/usr/bin/glib-genmarshal
-+ test -n /usr/bin/glib-genmarshal
-+ echo 'configure:44546: result: /usr/bin/glib-genmarshal'
-+ echo /usr/bin/glib-genmarshal
-/usr/bin/glib-genmarshal
-+ test x/usr/bin/glib-genmarshal = xno
-+ set +x
-checking whether to build gtk-doc documentation... no
-
-I think configure uses some kind of cached value which obviously is not
-right at all because my host is a 586 and my target is a 586. Anyway these
-are the "bad" lines:
-
-config.status:1080:s, at GLIB_GENMARSHAL@,|#_!!_#|/usr/bin/glib-genmarshal,g
-
-configure:44517:if test "${ac_cv_path_GLIB_GENMARSHAL+set}" = set; then
-
-Makefile:163:GLIB_GENMARSHAL = /usr/bin/glib-genmarshal
-
-I have tried with this work around in order to bypass the problem:
-
-for i in $(grep -rn " = /usr/bin/glib-genmarshal" * | cut -d: -f1); do sed
--e "s,GLIB_GENMARSHAL = /usr/bin/glib-genmarshal,GLIB_GENMARSHAL =
-/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/gobject/glib-genmarshal,g"
-$i > $i.1; mv -f $i.1 $i; done
-
-but the real problem is that the glib-genmarshal is compiled for the
-$TARGET instead for the $HOST as I stated at the beginning:
-
-Making all in gobject
-make[3]: Entering directory
-`/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/gobject'
-/usr/bin/make glib-genmarshal
-make[4]: Entering directory
-`/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/gobject'
-make[4]: `glib-genmarshal' is up to date.
-make[4]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/gobject'
-echo "#ifndef __G_MARSHAL_H__" > xgen-gmh \
-	&& echo "#define __G_MARSHAL_H__" >> xgen-gmh \
-	&&
-/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/gobject/glib-genmarshal
---nostdinc --prefix=g_cclosure_marshal ./gmarshal.list --header >> xgen-gmh
-\
-	&& echo "#endif /* __G_MARSHAL_H__ */" >> xgen-gmh \
-	&& (cmp -s xgen-gmh gmarshal.h 2>/dev/null || cp xgen-gmh gmarshal.h) \
-	&& rm -f xgen-gmh xgen-gmh~ \
-	&& echo timestamp > stamp-gmarshal.h
-/bin/bash: line 2:
-/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/gobject/glib-genmarshal:
-No such file or directory
-make[3]: *** [stamp-gmarshal.h] Error 127
-make[3]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/gobject'
-make[2]: *** [all-recursive] Error 1
-make[2]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4'
-make[1]: *** [all] Error 2
-make[1]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4'
-make: ***
-[/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/.stamp_built]
-Error 2
-
-roberto at rafbook:~/gles/buildroot$ ls -al
-/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/gobject/glib-genmarshal
--rwxr-xr-x 1 roberto roberto 36532 2008-11-04 20:14
-/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/gobject/glib-genmarshal
-
-roberto at rafbook:~/gles/buildroot$ file
-/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/gobject/glib-genmarshal
-/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/gobject/glib-genmarshal:
-ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), dynamically
-linked (uses shared libs), not stripped
-
-roberto at rafbook:~/gles/buildroot$ ldd
-/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/gobject/glib-genmarshal
-/usr/bin/ldd: line 117:
-/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/gobject/glib-genmarshal:
-No such file or directory
-
-roberto at rafbook:~/gles/buildroot$
-/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-ldd
-/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/gobject/glib-genmarshal
-checking sub-depends for
-'/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/glib/.libs/libglib-2.0.so.0'
-checking sub-depends for 'not found'
-checking sub-depends for 'not found'
-	libglib-2.0.so.0 =>
-/home/roberto/gles/buildroot/build_i586/libglib2-2.15.4/glib/.libs/libglib-2.0.so.0
-(0x00000000)
-	libintl.so.8 => not found (0x00000000)
-	libc.so.0 => not found (0x00000000)
-	not a dynamic executable 
-
----------------------------------------------------------------------- 
- robang74 - 11-04-08 17:58  
----------------------------------------------------------------------- 
-I mean, in this file:
-
-package/libglib2/libglib2.mk
-
- something like that:
-
-TOPDIR=$(pwd)
-tar xvjf dl/glib-2.15.4.tar.bz2 -C toolchain_build_i586/
-mkdir toolchain_build_$(ARCH)/glib-2.15.4-host
-pushd toolchain_build_$(ARCH)/glib-2.15.4-host
-$(pwd)/../glib-2.15.4/configure
-make && make DESTDIR=$(pwd)/../glib install
-HOST_GLIB=toolchain_build_$(ARCH)/glib/usr
-popd
-
-mkdir build_$(ARCH)/glib-2.15.4
-pushd build_$(ARCH)/glib-2.15.4
-$(TARGET_CONFIG_ENV)
-$(TOPDIR)/toolchain_build_$(ARCH)/glib-2.15.4/configure
-make $(TARGET_MAKE_ENV)
-make $(TARGET_MAKE_ENV) DESTDIR=$(STAGE_DIR) install
-popd 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-10-24-08 21:51  robang74       New Issue                                    
-10-24-08 21:51  robang74       Status                   new => assigned     
-10-24-08 21:51  robang74       Assigned To               => buildroot       
-10-24-08 22:09  robang74       Issue Monitored: robang74                    
-10-24-08 22:10  robang74       Note Added: 0014134                          
-10-24-08 22:30  robang74       Note Edited: 0014134                         
-10-24-08 22:53  robang74       Note Edited: 0014134                         
-10-26-08 15:31  robang74       File Added: 5724.config                      
-10-28-08 02:21  robang74       Note Added: 0014424                          
-10-28-08 02:43  tpetazzoni     Note Added: 0014454                          
-11-04-08 01:42  jacmet         Note Added: 0015044                          
-11-04-08 08:46  robang74       Note Added: 0015064                          
-11-04-08 11:06  intravenoes    Note Added: 0015074                          
-11-04-08 11:39  robang74       Note Added: 0015084                          
-11-04-08 11:40  robang74       File Added: .config                          
-11-04-08 17:58  robang74       Note Added: 0015144                          
-======================================================================
+-- 
+Bye, Peter Korsgaard
