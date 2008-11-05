@@ -1,34 +1,46 @@
-From: errico at inwind.it <errico@inwind.it>
-Date: Wed,  5 Nov 2008 14:58:09 +0100
-Subject: [Buildroot] rfs in ram and /usr in nand
-Message-ID: <K9V5GX$486F9A1842AD629D855B941DB26F75D7@libero.it>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Wed,  5 Nov 2008 07:47:10 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/games/prboom
+Message-ID: <20081105154710.249223C8DC@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Author: jacmet
+Date: 2008-11-05 07:47:09 -0800 (Wed, 05 Nov 2008)
+New Revision: 23940
 
-       I am new to the list and I am a new buildroot user.
-I just started using buildroot and it's very usefull.
-I am porting linux on a proprietary board based on ARM AT91sam9260.
+Log:
+prboom: misc cleanups
 
-I need some help to configure buildroot so that I will have a root file sistem on a ramdisk and the /usr directory in nand.
-I need the jffs2 format so that I can program the nand with Atmel Sam-ba.
-At the moment I am able to get from buildroot the rfs in 2 formats: ramdisk and jffs2.
+As noted by Bernhard on irc.
 
-How can I program the nand partition table?
-I would like to get following 6 partitions:
-- AT91boot
-- uboot
-- uboot env variables
-- linux kernel
-- ramdisk
-- usr
+Modified:
+   trunk/buildroot/package/games/prboom/prboom.mk
 
-Any help or hint is wellcome.
 
-Thank you 
-
-Errico
+Changeset:
+Modified: trunk/buildroot/package/games/prboom/prboom.mk
+===================================================================
+--- trunk/buildroot/package/games/prboom/prboom.mk	2008-11-05 13:33:43 UTC (rev 23939)
++++ trunk/buildroot/package/games/prboom/prboom.mk	2008-11-05 15:47:09 UTC (rev 23940)
+@@ -40,12 +40,12 @@
+ 	$(INSTALL) -D $(PRBOOM_DIR)/src/prboom $(TARGET_DIR)/usr/games/prboom
+ 	$(INSTALL) -D $(PRBOOM_DIR)/src/prboom-game-server $(TARGET_DIR)/usr/games/prboom-game-server
+ 	$(INSTALL) -D $(PRBOOM_DIR)/data/prboom.wad $(TARGET_DIR)/usr/share/games/doom/prboom.wad
+-	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/games/prboom
+-	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/games/prboom-game-server
++	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/usr/games/prboom
++	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/usr/games/prboom-game-server
+ 	touch $@
+ 
+ $(PRBOOM_TARGET_CLEAN):
+-	rm -rf $(TARGET_DIR)/usr/share/games/doom/prboom.wad
+-	rm -rf $(TARGET_DIR)/usr/games/prboom-game-server
+-	rm -rf $(TARGET_DIR)/usr/games/prboom
++	rm -rf $(TARGET_DIR)/usr/share/games/doom/prboom.wad \
++		$(TARGET_DIR)/usr/games/prboom-game-server \
++		$(TARGET_DIR)/usr/games/prboom
+ 	-$(MAKE) -C $(PRBOOM_DIR) clean
