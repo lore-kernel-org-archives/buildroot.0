@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 5 Nov 2008 01:46:57 -0800
+Date: Wed, 5 Nov 2008 01:52:08 -0800
 Subject: [Buildroot] [buildroot 0005994]: gdk-pixbuf-csource is missing in
 	the $HOST toolchain
-Message-ID: <4824839adfc121ca86d4f1012f5163b3@busybox.net>
+Message-ID: <be2c746cadd1d1c5750eb1c106d69597@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             11-05-2008 01:35 PST
-Last Modified:              11-05-2008 01:46 PST
+Last Modified:              11-05-2008 01:52 PST
 ====================================================================== 
 Summary:                    gdk-pixbuf-csource is missing in the $HOST toolchain
 Description: 
@@ -117,6 +117,38 @@ Exactly, it's the same issue - That we rely on the user having the
 glib/gtk/whatever development packages installed instead of compiling them
 ourselves for the host 
 
+---------------------------------------------------------------------- 
+ robang74 - 11-05-08 01:52  
+---------------------------------------------------------------------- 
+In order to compile gdk-pixbuf-csource for the $HOST glib, atk, pango and
+cairo should compiled too... Do you think could be used another way for
+provide host version of gdk-pixbuf-csource? 
+
+cd toolchain_build_$(ARCH)
+tar xvjf ../dl/gtk+-2.12.12.tar.bz2 
+mkdir gtk+-2.12.12-host
+pushd gtk+-2.12.12-host
+../gtk+-2.12.12/configure
+
+checking whether make sets $(MAKE)... (cached) yes
+checking for pkg-config... /usr/bin/pkg-config
+checking pkg-config is at least version 0.9.0... yes
+checking for BASE_DEPENDENCIES... configure: error: Package requirements
+(glib-2.0 >= 2.13.5    atk >= 1.9.0    pango >= 1.17.3    cairo >= 1.2.0)
+were not met:
+
+No package 'atk' found
+No package 'pango' found
+No package 'cairo' found
+
+Consider adjusting the PKG_CONFIG_PATH environment variable if you
+installed software in a non-standard prefix.
+
+Alternatively, you may set the environment variables
+BASE_DEPENDENCIES_CFLAGS
+and BASE_DEPENDENCIES_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -125,4 +157,5 @@ Date Modified   Username       Field                    Change
 11-05-08 01:35  robang74       Assigned To               => buildroot       
 11-05-08 01:35  robang74       Issue Monitored: robang74                    
 11-05-08 01:46  jacmet         Note Added: 0015154                          
+11-05-08 01:52  robang74       Note Added: 0015164                          
 ======================================================================
