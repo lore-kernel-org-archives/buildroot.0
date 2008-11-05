@@ -1,76 +1,51 @@
-From: egtvedt at uclibc.org <egtvedt@uclibc.org>
-Date: Wed,  5 Nov 2008 03:39:46 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot
-Message-ID: <20081105113946.B11D0F8008@busybox.net>
+From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
+Date: Wed, 5 Nov 2008 13:50:09 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
+In-Reply-To: <20081105103943.7725b98b@hcegtvedt>
+References: <20081030140206.411543C2BE@busybox.net>
+	<20081104201732.54f83c0c@surf> <20081105103943.7725b98b@hcegtvedt>
+Message-ID: <20081105135009.71a6dccd@hcegtvedt>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: egtvedt
-Date: 2008-11-05 03:39:46 -0800 (Wed, 05 Nov 2008)
-New Revision: 23935
+On Wed, 5 Nov 2008 10:39:43 +0100
+Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> wrote:
 
-Log:
-Build $(PROJECT_BUILD_DIR)/autotools-stamps with normal Makefile rules
+> On Tue, 4 Nov 2008 20:17:32 +0100
+> Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+> > Le Thu, 30 Oct 2008 07:02:06 -0700 (PDT),
+> > egtvedt at uclibc.org a ?crit :
 
-This patch will add a rule to top level Makefile to depend on the
-$(PROJECT_BUILD_DIR)/autotools-stamps as a required directory. Hence it will be
-generated if missing in stead of made when the $(PROJECT_BUILD_DIR)/.root rule
-is triggered.
+<snipp>
 
-Signed-off-by: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
+> > > +	rm -rf
+> > > $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION_PROBED)
+> > 
+> > And this one (which evaluates LINUX26_VERSION_PROVED) breaks with:
+> > 
+> > Makefile:1561: *** kernelrelease not valid - run 'make prepare' to
+> > update it.  Stop.
+> > 
+> 
+> Hmmm, weird, the Makefile should not install the modules before after
+> the kernel is prepared.
+> 
 
+Indeed it does, linux26-modules is added to TARGETS before the
+makefiles in target are added. Which results in your error. Wonder why
+this hit you and not me, I did a test run from scratch.
 
+Anyway, solution is easy, the modules must depend on
+$(LINUX26_DIR)/.depend_done instead of $(LINUX26_DIR)/.configured.
+depend_done should really be a .prepare_done IMHO.
 
-Modified:
-   trunk/buildroot/Makefile
+Doing a test build now.
 
+<snipp>
 
-Changeset:
-Modified: trunk/buildroot/Makefile
-===================================================================
---- trunk/buildroot/Makefile	2008-11-05 11:36:22 UTC (rev 23934)
-+++ trunk/buildroot/Makefile	2008-11-05 11:39:46 UTC (rev 23935)
-@@ -276,8 +276,8 @@
- 	cp -dpRf $(CONFIG)/buildroot-config $@
- 
- dirs: $(DL_DIR) $(TOOL_BUILD_DIR) $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
--	$(BR2_DEPENDS_DIR) \
--	$(BINARIES_DIR) $(PROJECT_BUILD_DIR)
-+	$(BR2_DEPENDS_DIR) $(BINARIES_DIR) $(PROJECT_BUILD_DIR) \
-+	$(PROJECT_BUILD_DIR)/autotools-stamps
- 
- $(BASE_TARGETS): dirs
- 
-@@ -288,8 +288,8 @@
- 	$(BASE_TARGETS) $(TARGETS) $(TARGETS_ALL) \
- 	$(TARGETS_CLEAN) $(TARGETS_DIRCLEAN) $(TARGETS_SOURCE) \
- 	$(DL_DIR) $(TOOL_BUILD_DIR) $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
--	$(BR2_DEPENDS_DIR) \
--	$(BINARIES_DIR) $(PROJECT_BUILD_DIR)
-+	$(BR2_DEPENDS_DIR) $(BINARIES_DIR) $(PROJECT_BUILD_DIR) \
-+	$(PROJECT_BUILD_DIR)/autotools-stamps
- 
- #############################################################
- #
-@@ -297,8 +297,8 @@
- # dependencies anywhere else
- #
- #############################################################
--$(DL_DIR) $(TOOL_BUILD_DIR) $(BUILD_DIR) \
--	$(PROJECT_BUILD_DIR) $(BINARIES_DIR):
-+$(DL_DIR) $(TOOL_BUILD_DIR) $(BUILD_DIR) $(PROJECT_BUILD_DIR) \
-+	$(PROJECT_BUILD_DIR)/autotools-stamps $(BINARIES_DIR):
- 	@mkdir -p $@
- 
- $(STAGING_DIR):
-@@ -318,7 +318,6 @@
- 
- $(PROJECT_BUILD_DIR)/.root:
- 	mkdir -p $(TARGET_DIR)
--	mkdir -p $(PROJECT_BUILD_DIR)/autotools-stamps
- 	if ! [ -d "$(TARGET_DIR)/bin" ]; then \
- 		if [ -d "$(TARGET_SKELETON)" ]; then \
- 			cp -fa $(TARGET_SKELETON)/* $(TARGET_DIR)/; \
+-- 
+Best regards,
+Hans-Christian Egtvedt
