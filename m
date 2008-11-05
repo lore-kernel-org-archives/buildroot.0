@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 5 Nov 2008 01:52:08 -0800
+Date: Wed, 5 Nov 2008 02:13:45 -0800
 Subject: [Buildroot] [buildroot 0005994]: gdk-pixbuf-csource is missing in
 	the $HOST toolchain
-Message-ID: <be2c746cadd1d1c5750eb1c106d69597@busybox.net>
+Message-ID: <e4bab51e0a0c2ab0683bc132bffe7455@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             11-05-2008 01:35 PST
-Last Modified:              11-05-2008 01:52 PST
+Last Modified:              11-05-2008 02:13 PST
 ====================================================================== 
 Summary:                    gdk-pixbuf-csource is missing in the $HOST toolchain
 Description: 
@@ -118,11 +118,11 @@ glib/gtk/whatever development packages installed instead of compiling them
 ourselves for the host 
 
 ---------------------------------------------------------------------- 
- robang74 - 11-05-08 01:52  
+ robang74 - 11-05-08 02:10  
 ---------------------------------------------------------------------- 
 In order to compile gdk-pixbuf-csource for the $HOST glib, atk, pango and
 cairo should compiled too... Do you think could be used another way for
-provide host version of gdk-pixbuf-csource? 
+provide host version of gdk-pixbuf-csource?
 
 cd toolchain_build_$(ARCH)
 tar xvjf ../dl/gtk+-2.12.12.tar.bz2 
@@ -147,7 +147,24 @@ installed software in a non-standard prefix.
 Alternatively, you may set the environment variables
 BASE_DEPENDENCIES_CFLAGS
 and BASE_DEPENDENCIES_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details. 
+See the pkg-config man page for more details.
+
+ 
+
+---------------------------------------------------------------------- 
+ robang74 - 11-05-08 02:13  
+---------------------------------------------------------------------- 
+Thanks jacmet I read your answer now. 
+
+What about version mismatch between host/target version of gdk/gtk dev
+enviroment?
+
+In report n.5724 has been noted that version mismatch could be an issue.
+
+I think we have to relay onto $HOST system as less as possibile (this
+helps reproducibility and software quality processes too) but I know this
+could be expensive in terms of compilation time (x2), disk space (x1.5)
+and complexity. 
 
 Issue History 
 Date Modified   Username       Field                    Change               
@@ -158,4 +175,7 @@ Date Modified   Username       Field                    Change
 11-05-08 01:35  robang74       Issue Monitored: robang74                    
 11-05-08 01:46  jacmet         Note Added: 0015154                          
 11-05-08 01:52  robang74       Note Added: 0015164                          
+11-05-08 01:53  robang74       Note Edited: 0015164                         
+11-05-08 02:10  robang74       Note Edited: 0015164                         
+11-05-08 02:13  robang74       Note Added: 0015174                          
 ======================================================================
