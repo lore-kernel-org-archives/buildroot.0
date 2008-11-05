@@ -1,26 +1,34 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Wed, 5 Nov 2008 14:34:10 +0100
-Subject: [Buildroot] [PATCH] Install PrBoom only once
-In-Reply-To: <49119FAB.8060400@free.fr>
-References: <49119FAB.8060400@free.fr>
-Message-ID: <20081105143410.3c2857e2@hcegtvedt>
+From: errico at inwind.it <errico@inwind.it>
+Date: Wed,  5 Nov 2008 14:58:09 +0100
+Subject: [Buildroot] rfs in ram and /usr in nand
+Message-ID: <K9V5GX$486F9A1842AD629D855B941DB26F75D7@libero.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 05 Nov 2008 14:29:15 +0100
-Julien Boibessot <julien.boibessot@free.fr> wrote:
+Hello,
 
-> Hi,
-> 
-> this trivial patch makes that PrBoom is not installed everytime we do
-> a "make", but only once.
-> 
+       I am new to the list and I am a new buildroot user.
+I just started using buildroot and it's very usefull.
+I am porting linux on a proprietary board based on ARM AT91sam9260.
 
-Thanks, committed in rev 23939.
+I need some help to configure buildroot so that I will have a root file sistem on a ramdisk and the /usr directory in nand.
+I need the jffs2 format so that I can program the nand with Atmel Sam-ba.
+At the moment I am able to get from buildroot the rfs in 2 formats: ramdisk and jffs2.
 
--- 
-Best regards,
-Hans-Christian Egtvedt
+How can I program the nand partition table?
+I would like to get following 6 partitions:
+- AT91boot
+- uboot
+- uboot env variables
+- linux kernel
+- ramdisk
+- usr
+
+Any help or hint is wellcome.
+
+Thank you 
+
+Errico
