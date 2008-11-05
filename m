@@ -1,46 +1,39 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Wed,  5 Nov 2008 07:47:10 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/games/prboom
-Message-ID: <20081105154710.249223C8DC@busybox.net>
+From: hartleys <hartleys@visionengravers.com>
+Date: Wed, 5 Nov 2008 12:16:02 -0500
+Subject: [Buildroot] [PATCH] Make the MESSAGE Macro work
+Message-ID: <BD79186B4FD85F4B8E60E381CAEE1909C91CCD@mi8nycmail19.Mi8.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-11-05 07:47:09 -0800 (Wed, 05 Nov 2008)
-New Revision: 23940
+Hello all,
 
-Log:
-prboom: misc cleanups
+The following patch makes the MESSAGE Macro in Makefile.autotools.in
+work.
 
-As noted by Bernhard on irc.
+I think it was originally intended to print the messages in bold type
+but it doesn't appear to work correctly. This patch should work on all
+platforms.
 
-Modified:
-   trunk/buildroot/package/games/prboom/prboom.mk
+Signed-off-by: H Hartley Sweeten <hsweeten@visionengravers.com>
 
+---
 
-Changeset:
-Modified: trunk/buildroot/package/games/prboom/prboom.mk
-===================================================================
---- trunk/buildroot/package/games/prboom/prboom.mk	2008-11-05 13:33:43 UTC (rev 23939)
-+++ trunk/buildroot/package/games/prboom/prboom.mk	2008-11-05 15:47:09 UTC (rev 23940)
-@@ -40,12 +40,12 @@
- 	$(INSTALL) -D $(PRBOOM_DIR)/src/prboom $(TARGET_DIR)/usr/games/prboom
- 	$(INSTALL) -D $(PRBOOM_DIR)/src/prboom-game-server $(TARGET_DIR)/usr/games/prboom-game-server
- 	$(INSTALL) -D $(PRBOOM_DIR)/data/prboom.wad $(TARGET_DIR)/usr/share/games/doom/prboom.wad
--	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/games/prboom
--	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/games/prboom-game-server
-+	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/usr/games/prboom
-+	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/usr/games/prboom-game-server
- 	touch $@
+--- package/Makefile.autotools.in.orig	2008-11-05 10:01:49.000000000
+-0700
++++ package/Makefile.autotools.in	2008-11-05 10:08:25.000000000
+-0700
+@@ -114,8 +114,8 @@
  
- $(PRBOOM_TARGET_CLEAN):
--	rm -rf $(TARGET_DIR)/usr/share/games/doom/prboom.wad
--	rm -rf $(TARGET_DIR)/usr/games/prboom-game-server
--	rm -rf $(TARGET_DIR)/usr/games/prboom
-+	rm -rf $(TARGET_DIR)/usr/share/games/doom/prboom.wad \
-+		$(TARGET_DIR)/usr/games/prboom-game-server \
-+		$(TARGET_DIR)/usr/games/prboom
- 	-$(MAKE) -C $(PRBOOM_DIR) clean
+ # MESSAGE Macro -- display a message in bold type
+ MESSAGE = @echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION)
+$(1)$(TERM_RESET)"
+-TERM_BOLD = #$(shell tput bold)
+-TERM_RESET = #$(shell tput rmso)
++TERM_BOLD = $(shell tput smso)
++TERM_RESET = $(shell tput rmso)
+ 
+ # Utility programs used to build packages
+ TAR ?= tar 
