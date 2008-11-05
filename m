@@ -1,79 +1,128 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Wed, 5 Nov 2008 10:39:43 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
-In-Reply-To: <20081104201732.54f83c0c@surf>
-References: <20081030140206.411543C2BE@busybox.net>
-	<20081104201732.54f83c0c@surf>
-Message-ID: <20081105103943.7725b98b@hcegtvedt>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Wed, 5 Nov 2008 01:46:57 -0800
+Subject: [Buildroot] [buildroot 0005994]: gdk-pixbuf-csource is missing in
+	the $HOST toolchain
+Message-ID: <4824839adfc121ca86d4f1012f5163b3@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 4 Nov 2008 20:17:32 +0100
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-Hi Thomas,
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=5994 
+====================================================================== 
+Reported By:                robang74
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   5994
+Category:                   Shared Library Support
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             11-05-2008 01:35 PST
+Last Modified:              11-05-2008 01:46 PST
+====================================================================== 
+Summary:                    gdk-pixbuf-csource is missing in the $HOST toolchain
+Description: 
+Making all in demos
+make[3]: Entering directory
+`/home/roberto/gles/buildroot/build_i586/libgtk2-2.12.12/demos'
+/usr/bin/gdk-pixbuf-csource --raw --build-list		\
+	        apple_red  ./apple-red.png	\
+                gnome_foot ./gnome-foot.png	\
+        > test-inline-pixbufs.h				\
+	|| (rm -f test-inline-pixbufs.h && false)
+/bin/bash: /usr/bin/gdk-pixbuf-csource: No such file or directory
+make[3]: *** [test-inline-pixbufs.h] Error 1
+make[3]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/libgtk2-2.12.12/demos'
+make[2]: *** [all-recursive] Error 1
+make[2]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/libgtk2-2.12.12'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/libgtk2-2.12.12'
+make: ***
+[/home/roberto/gles/buildroot/build_i586/libgtk2-2.12.12/.stamp_built]
+Error 2
 
-> Le Thu, 30 Oct 2008 07:02:06 -0700 (PDT),
-> egtvedt at uclibc.org a ?crit :
-> 
-> > Author: egtvedt
-> > Date: 2008-10-30 07:02:05 -0700 (Thu, 30 Oct 2008)
-> > New Revision: 23858
-> 
-> This commit breaks the build for me. See inline comments below.
-> 
 
-Sorry about that.
+This problem could be avoided removing 'demos' from SUBDIRS into
+libgtk2-2.12.12/Makefile*, however this could not fix because:
 
-<snipp>
 
-> > -$(TARGET_DIR)/lib/modules/$(LINUX26_VERSION)/modules.dep:
-> > $(LINUX26_DIR)/.configured
-> > -	rm -rf $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION)
-> > +$(PROJECT_BUILD_DIR)/autotools-stamps/linux_modules_target_installed:
-> > $(LINUX26_DIR)/.configured
-> 
-> This change breaks with the following:
-> 
-> make[1]: Leaving directory
-> `/home/thomas/local/buildroot2/project_build_arm/uclibc/linux-2.6.27'
-> touch /home/thomas/local/buildroot2/project_build_arm/uclibc/autotools-stamps/linux_modules_target_installed
-> touch: cannot touch
-> `/home/thomas/local/buildroot2/project_build_arm/uclibc/autotools-stamps/linux_modules_target_installed':
-> No such file or directory make: ***
-> [/home/thomas/local/buildroot2/project_build_arm/uclibc/autotools-stamps/linux_modules_target_installed]
-> Error 1
-> 
+>>> gqview 2.1.5 Building
+/usr/bin/make -j1  -C
+/home/roberto/gles/buildroot/build_i586/gqview-2.1.5/
+make[1]: Entering directory
+`/home/roberto/gles/buildroot/build_i586/gqview-2.1.5'
+/usr/bin/make  all-recursive
+make[2]: Entering directory
+`/home/roberto/gles/buildroot/build_i586/gqview-2.1.5'
+Making all in src
+make[3]: Entering directory
+`/home/roberto/gles/buildroot/build_i586/gqview-2.1.5/src'
+Making all in icons
+make[4]: Entering directory
+`/home/roberto/gles/buildroot/build_i586/gqview-2.1.5/src/icons'
+Making all in svg
+make[5]: Entering directory
+`/home/roberto/gles/buildroot/build_i586/gqview-2.1.5/src/icons/svg'
+make[5]: Nothing to be done for `all'.
+make[5]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/gqview-2.1.5/src/icons/svg'
+make[5]: Entering directory
+`/home/roberto/gles/buildroot/build_i586/gqview-2.1.5/src/icons'
+gdk-pixbuf-csource --raw --extern --build-list
+folder_closed		./folder_closed.png folder_locked		./folder_locked.png
+folder_open		./folder_open.png folder_up		./folder_up.png
+gqview_icon		./gqview_icon.png gqview_logo		./gqview_logo.png
+icon_float		./icon_float.png icon_thumb		./icon_thumb.png
+icon_scroller		./scroller.png icon_broken		./sheet_broken.png
+icon_book		./icon_book.png icon_config		./icon_config.png
+icon_tools		./icon_tools.png icon_view		./icon_view.png > icons_inline.h
+/bin/bash: gdk-pixbuf-csource: command not found
+make[5]: *** [icons_inline.h] Error 127
+make[5]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/gqview-2.1.5/src/icons'
+make[4]: *** [all-recursive] Error 1
+make[4]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/gqview-2.1.5/src/icons'
+make[3]: *** [all-recursive] Error 1
+make[3]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/gqview-2.1.5/src'
+make[2]: *** [all-recursive] Error 1
+make[2]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/gqview-2.1.5'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/gqview-2.1.5'
+make: ***
+[/home/roberto/gles/buildroot/build_i586/gqview-2.1.5/.stamp_built] Error
+2
 
-I am thinking about adding
-"mkdir -p $(PROJECT_BUILD_DIR)/autotools-stamps" to the top level
-Makefile. That way we are sure the stamps directory exists, and each
-package/Makefile.autotools.in does not need to run an additional mkdir.
+The gdk-pixbuf-csource still be there for those packages they require it.
+====================================================================== 
 
-> > +	rm -rf $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION_PROBED)
-> 
-> And this one (which evaluates LINUX26_VERSION_PROVED) breaks with:
-> 
-> Makefile:1561: *** kernelrelease not valid - run 'make prepare' to
-> update it.  Stop.
-> 
+---------------------------------------------------------------------- 
+ jacmet - 11-05-08 01:46  
+---------------------------------------------------------------------- 
+Exactly, it's the same issue - That we rely on the user having the
+glib/gtk/whatever development packages installed instead of compiling them
+ourselves for the host 
 
-Hmmm, weird, the Makefile should not install the modules before after
-the kernel is prepared.
-
-I see you are using external toolchain, might that be the cause? The
-kernel is prepared/compiled before the modules are compiled?
-
-> (But this one is not fatal, the compilation process continues.)
-> 
-> My .config is below.
-> 
-
-<snipp BR .config>
-
--- 
-Best regards,
-Hans-Christian Egtvedt
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+11-05-08 01:35  robang74       New Issue                                    
+11-05-08 01:35  robang74       Status                   new => assigned     
+11-05-08 01:35  robang74       Assigned To               => buildroot       
+11-05-08 01:35  robang74       Issue Monitored: robang74                    
+11-05-08 01:46  jacmet         Note Added: 0015154                          
+======================================================================
