@@ -1,40 +1,55 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 05 Nov 2008 07:16:15 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot
-In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE1909C91B4A@mi8nycmail19.Mi8.com>
-	(hartleys@visionengravers.com's message of "Tue\,
-	4 Nov 2008 20\:01\:22 -0500")
-References: <20081104125039.199A23C8D7@busybox.net>
-	<BD79186B4FD85F4B8E60E381CAEE1909C91B2A@mi8nycmail19.Mi8.com>
-	<e4c675870811041536w7c035576ie7690ba0d3c83e8f@mail.gmail.com>
-	<BD79186B4FD85F4B8E60E381CAEE1909C91B34@mi8nycmail19.Mi8.com>
-	<e4c675870811041553o7b15d778m6fb4bb6052909314@mail.gmail.com>
-	<BD79186B4FD85F4B8E60E381CAEE1909C91B38@mi8nycmail19.Mi8.com>
-	<e4c675870811041653j7c8e3c50r9ab4f35958681a91@mail.gmail.com>
-	<BD79186B4FD85F4B8E60E381CAEE1909C91B4A@mi8nycmail19.Mi8.com>
-Message-ID: <87hc6mvgsw.fsf@macbook.be.48ers.dk>
+From: egtvedt at uclibc.org <egtvedt@uclibc.org>
+Date: Wed,  5 Nov 2008 00:09:30 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/make
+Message-ID: <20081105080930.8D6EE3C808@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "hartleys" == hartleys  <hartleys@visionengravers.com> writes:
+Author: egtvedt
+Date: 2008-11-05 00:09:30 -0800 (Wed, 05 Nov 2008)
+New Revision: 23928
 
-Hi,
+Log:
+make: select gettext and libintl if locale is enabled
 
- hartleys> Yes, it appears HOST_GLIB_BIN is just used to figure out
- hartleys> what HOST_GLIB is supposed to be.
+This patch makes sure gettext and libintl are selected if locale support is
+enabled. Gettext must also be compiled before make so appropriate headers are
+available to make.
 
- hartleys> Question: Does this really belong in the top level Makefile?
+Signed-off-by: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
 
-No, it belongs in libglib2.mk, and we should compile our own glib
-tools instead of using whatever may or may not be on the host.
 
-That hunk was added by Ulf (r22663).
 
-Notice that HOST_GLIB is used for more than just glib-genmarshal
-(E.G. in libgtk2.mk)
+Modified:
+   trunk/buildroot/package/make/Config.in
+   trunk/buildroot/package/make/make.mk
 
--- 
-Bye, Peter Korsgaard
+
+Changeset:
+Modified: trunk/buildroot/package/make/Config.in
+===================================================================
+--- trunk/buildroot/package/make/Config.in	2008-11-04 22:29:02 UTC (rev 23927)
++++ trunk/buildroot/package/make/Config.in	2008-11-05 08:09:30 UTC (rev 23928)
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_MAKE
+ 	bool "make"
++	select BR2_PACKAGE_GETTEXT if BR2_ENABLE_LOCALE
++	select BR2_PACKAGE_LIBINTL if BR2_ENABLE_LOCALE
+ 	help
+ 	  A tool which controls the generation of executables and other
+ 	  non-source files of a program from the program's source files.
+
+Modified: trunk/buildroot/package/make/make.mk
+===================================================================
+--- trunk/buildroot/package/make/make.mk	2008-11-04 22:29:02 UTC (rev 23927)
++++ trunk/buildroot/package/make/make.mk	2008-11-05 08:09:30 UTC (rev 23928)
+@@ -71,5 +71,5 @@
+ #
+ #############################################################
+ ifeq ($(strip $(BR2_PACKAGE_MAKE)),y)
+-TARGETS+=make
++TARGETS+=$(if $(BR2_PACKAGE_GETTEXT),gettext) make
+ endif
