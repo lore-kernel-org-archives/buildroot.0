@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 5 Nov 2008 02:13:45 -0800
-Subject: [Buildroot] [buildroot 0005994]: gdk-pixbuf-csource is missing in
-	the $HOST toolchain
-Message-ID: <e4bab51e0a0c2ab0683bc132bffe7455@busybox.net>
+Date: Wed, 5 Nov 2008 02:33:12 -0800
+Subject: [Buildroot] [buildroot 0004844]: Bridge-utils broken under kernel
+	2.4
+Message-ID: <045cc3724338d167026e8d4e9d70cc44@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,170 +12,353 @@ To: buildroot@busybox.net
 
 A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=5994 
+http://busybox.net/bugs/view.php?id=4844 
 ====================================================================== 
-Reported By:                robang74
+Reported By:                Feynman
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   5994
-Category:                   Shared Library Support
+Issue ID:                   4844
+Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   major
+Severity:                   block
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             11-05-2008 01:35 PST
-Last Modified:              11-05-2008 02:13 PST
+Date Submitted:             09-08-2008 11:05 PDT
+Last Modified:              11-05-2008 02:33 PST
 ====================================================================== 
-Summary:                    gdk-pixbuf-csource is missing in the $HOST toolchain
+Summary:                    Bridge-utils broken under kernel 2.4
 Description: 
-Making all in demos
-make[3]: Entering directory
-`/home/roberto/gles/buildroot/build_i586/libgtk2-2.12.12/demos'
-/usr/bin/gdk-pixbuf-csource --raw --build-list		\
-	        apple_red  ./apple-red.png	\
-                gnome_foot ./gnome-foot.png	\
-        > test-inline-pixbufs.h				\
-	|| (rm -f test-inline-pixbufs.h && false)
-/bin/bash: /usr/bin/gdk-pixbuf-csource: No such file or directory
-make[3]: *** [test-inline-pixbufs.h] Error 1
-make[3]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/libgtk2-2.12.12/demos'
-make[2]: *** [all-recursive] Error 1
-make[2]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/libgtk2-2.12.12'
-make[1]: *** [all] Error 2
-make[1]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/libgtk2-2.12.12'
-make: ***
-[/home/roberto/gles/buildroot/build_i586/libgtk2-2.12.12/.stamp_built]
-Error 2
+Snapshot buildroot-20080905
+
+The bridge-utils package compiles but the brctl command fails.
+The error message is:
+# brctl addbr br0
+add bridge failed: Invalid argument
+
+I think this is a problem with the bridge-utils 1.4. The former version
+1.06 works fine.
+
+My configuration is: 386, kernel 2.4, busybox 1.11.x
+The project is openMGB, a RDC based NAS with WAP.
 
 
-This problem could be avoided removing 'demos' from SUBDIRS into
-libgtk2-2.12.12/Makefile*, however this could not fix because:
-
-
->>> gqview 2.1.5 Building
-/usr/bin/make -j1  -C
-/home/roberto/gles/buildroot/build_i586/gqview-2.1.5/
-make[1]: Entering directory
-`/home/roberto/gles/buildroot/build_i586/gqview-2.1.5'
-/usr/bin/make  all-recursive
-make[2]: Entering directory
-`/home/roberto/gles/buildroot/build_i586/gqview-2.1.5'
-Making all in src
-make[3]: Entering directory
-`/home/roberto/gles/buildroot/build_i586/gqview-2.1.5/src'
-Making all in icons
-make[4]: Entering directory
-`/home/roberto/gles/buildroot/build_i586/gqview-2.1.5/src/icons'
-Making all in svg
-make[5]: Entering directory
-`/home/roberto/gles/buildroot/build_i586/gqview-2.1.5/src/icons/svg'
-make[5]: Nothing to be done for `all'.
-make[5]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/gqview-2.1.5/src/icons/svg'
-make[5]: Entering directory
-`/home/roberto/gles/buildroot/build_i586/gqview-2.1.5/src/icons'
-gdk-pixbuf-csource --raw --extern --build-list
-folder_closed		./folder_closed.png folder_locked		./folder_locked.png
-folder_open		./folder_open.png folder_up		./folder_up.png
-gqview_icon		./gqview_icon.png gqview_logo		./gqview_logo.png
-icon_float		./icon_float.png icon_thumb		./icon_thumb.png
-icon_scroller		./scroller.png icon_broken		./sheet_broken.png
-icon_book		./icon_book.png icon_config		./icon_config.png
-icon_tools		./icon_tools.png icon_view		./icon_view.png > icons_inline.h
-/bin/bash: gdk-pixbuf-csource: command not found
-make[5]: *** [icons_inline.h] Error 127
-make[5]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/gqview-2.1.5/src/icons'
-make[4]: *** [all-recursive] Error 1
-make[4]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/gqview-2.1.5/src/icons'
-make[3]: *** [all-recursive] Error 1
-make[3]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/gqview-2.1.5/src'
-make[2]: *** [all-recursive] Error 1
-make[2]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/gqview-2.1.5'
-make[1]: *** [all] Error 2
-make[1]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/gqview-2.1.5'
-make: ***
-[/home/roberto/gles/buildroot/build_i586/gqview-2.1.5/.stamp_built] Error
-2
-
-The gdk-pixbuf-csource still be there for those packages they require it.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- jacmet - 11-05-08 01:46  
+ jacmet - 09-08-08 11:26  
 ---------------------------------------------------------------------- 
-Exactly, it's the same issue - That we rely on the user having the
-glib/gtk/whatever development packages installed instead of compiling them
-ourselves for the host 
+I don't have access to any system with a 2.4 kernel anymore - Does it work
+if you change the version in bridge.mk back to v1.06? If so, please report
+the problem with bridge-utils upstream. 
 
 ---------------------------------------------------------------------- 
- robang74 - 11-05-08 02:10  
+ hmoffatt - 09-08-08 18:11  
 ---------------------------------------------------------------------- 
-In order to compile gdk-pixbuf-csource for the $HOST glib, atk, pango and
-cairo should compiled too... Do you think could be used another way for
-provide host version of gdk-pixbuf-csource?
+1.4 seems to use /sys/class/net which wouldn't exist on linux 2.4 
 
-cd toolchain_build_$(ARCH)
-tar xvjf ../dl/gtk+-2.12.12.tar.bz2 
-mkdir gtk+-2.12.12-host
-pushd gtk+-2.12.12-host
-../gtk+-2.12.12/configure
+---------------------------------------------------------------------- 
+ jacmet - 09-09-08 00:27  
+---------------------------------------------------------------------- 
+The README claims to only use sysfs stuff on 2.6 kernels, but I don't see
+any fallback code. Probably the README is just stale - The bridge-utils
+upsteam tarball seems pretty broken in general (no configure, configure.in
+using wrong version, stale README, ..)
 
-checking whether make sets $(MAKE)... (cached) yes
-checking for pkg-config... /usr/bin/pkg-config
-checking pkg-config is at least version 0.9.0... yes
-checking for BASE_DEPENDENCIES... configure: error: Package requirements
-(glib-2.0 >= 2.13.5    atk >= 1.9.0    pango >= 1.17.3    cairo >= 1.2.0)
-were not met:
+I don't have a problem with reverting to 1.06 if that fixes the bug
+reporter's issue. 
 
-No package 'atk' found
-No package 'pango' found
-No package 'cairo' found
+---------------------------------------------------------------------- 
+ hmoffatt - 09-09-08 06:15  
+---------------------------------------------------------------------- 
+Do we need to support 2.4? I don't think you can build it using buildroot?
+I would've expected a project that is using current buildroot and current
+busybox to also run a current kernel.. 
 
-Consider adjusting the PKG_CONFIG_PATH environment variable if you
-installed software in a non-standard prefix.
+---------------------------------------------------------------------- 
+ jacmet - 09-09-08 08:39  
+---------------------------------------------------------------------- 
+I don't personally have any interest in 2.4, but if we can keep it working
+with small effort, then that's fine with me. 
 
-Alternatively, you may set the environment variables
-BASE_DEPENDENCIES_CFLAGS
-and BASE_DEPENDENCIES_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details.
+---------------------------------------------------------------------- 
+ Feynman - 09-09-08 08:47  
+---------------------------------------------------------------------- 
+Ok. I've changed the version in the brdige.mk file to 1.0.6 but the
+autoreconf fails:
+[...]
+>>> bridge 1.0.6 Running autoreconf
+autoreconf: Entering directory `.'
+autoreconf: configure.in: not using Gettext
+autoreconf: running: aclocal -I
+/home/welzel/naswork/openMGB/build/buildroot/build_i386/staging_dir/usr/share/aclocal
+--force
+autoreconf: configure.in: tracing
+autoreconf: configure.in: not using Libtool
+autoreconf: running:
+/home/welzel/naswork/openMGB/build/buildroot/build_i386/staging_dir/usr/bin/autoconf
+--include=/home/welzel/naswork/openMGB/build/buildroot/build_i386/staging_dir/usr/share/aclocal
+--force
+autoreconf: running:
+/home/welzel/naswork/openMGB/build/buildroot/build_i386/staging_dir/usr/bin/autoheader
+--include=/home/welzel/naswork/openMGB/build/buildroot/build_i386/staging_dir/usr/share/aclocal
+--force
+autoheader: warning: missing template: HAVE_LIBSYSFS
+autoheader: Use AC_DEFINE([HAVE_LIBSYSFS], [], [Description])
+autoreconf:
+/home/welzel/naswork/openMGB/build/buildroot/build_i386/staging_dir/usr/bin/autoheader
+failed with exit status: 1
+make[1]: ***
+[/home/welzel/naswork/openMGB/build/buildroot/build_i386/bridge-1.0.6/.stamp_autoconfigured]
+Fehler 1
+make[1]: Leaving directory `/home/welzel/naswork/openMGB/build/buildroot'
+make: *** [toolchain] Fehler 2
+
+It would be fine if buildroot supports kernel 2.4. It's right, you can't
+built the kernel 2.4 with buildroot but we can build it seperately.
+
+The project openMGB must use the kernel 2.4 because the WLAN driver for
+the Ralink chipset (RT2560) is not working properly for the kernel 2.6.
+Only the WLAN client is working. Not the access point driver (WLAN AP). So
+we must use the "old" kernel 2.4.
+
+I hope it is possible to support both version: the "old" 1.0.6 within the
+kernel 2.4 and the "new" version 2.4 within the kernel 2.6.
+
+Thanks in advance. 
+
+---------------------------------------------------------------------- 
+ jacmet - 09-09-08 08:49  
+---------------------------------------------------------------------- 
+Please set BRIDGE_AUTORECONF to NO and try again 
+
+---------------------------------------------------------------------- 
+ hmoffatt - 09-09-08 16:57  
+---------------------------------------------------------------------- 
+Recent busybox has brctl built in - maybe that will work on 2.4? Better
+than reverting bridge-utils to an old version.
+
+Although according to the changelog not a lot changed between 1.06 and 1.4
+anyway (I'm not sure why the version number jumped so much) 
+
+---------------------------------------------------------------------- 
+ hmoffatt - 09-09-08 17:01  
+---------------------------------------------------------------------- 
+According to the comments in busybox's brctl it doesn't use sysfs so it
+should work on 2.4
+
+It only has the basic bridge control functionality though - no STP. I'm
+not sure if you'd be using STP in a wifi environment anyway 
+
+---------------------------------------------------------------------- 
+ Feynman - 09-11-08 09:49  
+---------------------------------------------------------------------- 
+I've tried to use the build in brctl from busybox 1.12. See error message
+below:
+
+
+/usr/bin/make -j1
+CC=/home/welzel/naswork/openMGB/build/buildroot/build_i386/staging_dir/usr/bin/i386-linux-uclibc-gcc
+CROSS_COMPILE="/home/welzel/naswork/openMGB/build/buildroot/build_i386/staging_dir/usr/bin/i386-linux-uclibc-"
+\
+               
+CROSS="/home/welzel/naswork/openMGB/build/buildroot/build_i386/staging_dir/usr/bin/i386-linux-uclibc-"
+PREFIX="/home/welzel/naswork/openMGB/build/buildroot/project_build_i386/openMGB/root"
+\
+                ARCH=i386 \
+                EXTRA_CFLAGS="-Os 
+-I/home/welzel/naswork/openMGB/build/buildroot/build_i386/staging_dir/usr/include
+-I/home/welzel/naswork/openMGB/build/buildroot/build_i386/staging_dir/include
+-mtune=i386 -march=i386 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64" -C
+/home/welzel/naswork/openMGB/build/buildroot/project_build_i386/openMGB/busybox-1.12.0
+make[2]: Entering directory
+`/home/welzel/naswork/openMGB/build/buildroot/project_build_i386/openMGB/busybox-1.12.0'
+  CC      networking/brctl.o
+networking/brctl.c: In function `brctl_main':
+networking/brctl.c:186: error: `SIOCBRADDBR' undeclared (first use in this
+function)
+networking/brctl.c:186: error: (Each undeclared identifier is reported
+only once
+networking/brctl.c:186: error: for each function it appears in.)
+networking/brctl.c:186: error: `SIOCBRDELBR' undeclared (first use in this
+function)
+networking/brctl.c:202: error: `SIOCBRADDIF' undeclared (first use in this
+function)
+networking/brctl.c:202: error: `SIOCBRDELIF' undeclared (first use in this
+function)
+make[3]: *** [networking/brctl.o] Fehler 1
+make[2]: *** [networking] Fehler 2
+make[2]: Leaving directory
+`/home/welzel/naswork/openMGB/build/buildroot/project_build_i386/openMGB/busybox-1.12.0'
+make[1]: ***
+[/home/welzel/naswork/openMGB/build/buildroot/project_build_i386/openMGB/busybox-1.12.0/busybox]
+Fehler 2
+make[1]: Leaving directory `/home/welzel/naswork/openMGB/build/buildroot'
+make: *** [toolchain] Fehler 2
+
+Second try was to change the version to 1.0.6 and BRIDGE_AUTORECONF to NO.
+This works very well.
+
+If it is possible, please modify the config.in to decide which
+bridge-utils or made the decision on the used kernel.
+
+Thanks 
+
+---------------------------------------------------------------------- 
+ Feynman - 09-13-08 05:19  
+---------------------------------------------------------------------- 
+@jacmet
+
+If possible add these two changes to the bridge-utils package:
+
+bridge.mk:
+
+#############################################################
+#
+# bridge-utils - User Space Program For Controlling Bridging
+#
+#############################################################
+#
+BR2_PACKAGE_BRIDGE_VERSION:=$(strip $(subst ",,
+$(BR2_PACKAGE_BRIDGE_VERSION)))
+BR2_PACKAGE_BRIDGE_AUTORECONF:=$(strip $(subst ",,
+$(BR2_PACKAGE_BRIDGE_AUTORECONF)))
+
+BRIDGE_VERSION:=$(BR2_PACKAGE_BRIDGE_VERSION)
+BRIDGE_SOURCE:=bridge-utils-$(BRIDGE_VERSION).tar.gz
+BRIDGE_SITE=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/bridge/
+BRIDGE_AUTORECONF:=$(BR2_PACKAGE_BRIDGE_AUTORECONF)
+BRIDGE_INSTALL_STAGING:=NO
+BRIDGE_INSTALL_TARGET:=YES
+BRIDGE_INSTALL_TARGET_OPT:=DESTDIR=$(TARGET_DIR) install
+BRIDGE_CONF_OPT:=--with-linux-headers=$(LINUX_HEADERS_DIR) $(DISABLE_NLS)
+BRIDGE_DEPENDENCIES:=uclibc
+
+$(eval $(call AUTOTARGETS,package,bridge))
+
+# bridge has no install-strip target
+$(BRIDGE_HOOK_POST_INSTALL): $(BRIDGE_TARGET_INSTALL_TARGET)
+	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/usr/sbin/brctl
+	touch $@
+
+# bridge has no uninstall target
+$(BUILD_DIR)/bridge-$(BRIDGE_VERSION)/.stamp_uninstalled:
+	$(call MESSAGE,"Uninstalling")
+	rm -f $(addprefix $(TARGET_DIR)/usr/,lib/libbridge.a \
+		include/libbridge.h man/man8/brctl.8 sbin/brctl)
+	rm -f $(@D)/.stamp_target_installed
+
+
+Config.in:
+
+config BR2_PACKAGE_BRIDGE
+	bool "bridge-utils"
+	help
+	  Manage ethernet bridging; a way to connect networks together to
+	  form a larger network.
+
+	  http://bridge.sourceforge.net/
+
+choice
+	prompt "bridge-utils version"
+	default BR2_PACKAGE_BRIDGE_KERNEL26
+	depends on BR2_PACKAGE_BRIDGE
+	help
+	  Selects the bridge-util version.
+	  1.0.6 is required for kernel 2.4.
+
+config BR2_PACKAGE_BRIDGE_KERNEL24
+	bool "1.0.6"
+
+config BR2_PACKAGE_BRIDGE_KERNEL26
+	bool "1.4"
+endchoice
+
+config BR2_PACKAGE_BRIDGE_VERSION
+	string
+	default "1.4"		if BR2_PACKAGE_BRIDGE_KERNEL26
+	default "1.0.6"	    if BR2_PACKAGE_BRIDGE_KERNEL24
+	
+config BR2_PACKAGE_BRIDGE_AUTORECONF
+	string
+	default "YES"		if BR2_PACKAGE_BRIDGE_KERNEL26
+	default "NO"		if BR2_PACKAGE_BRIDGE_KERNEL24 
+
+---------------------------------------------------------------------- 
+ Feynman - 10-07-08 00:20  
+---------------------------------------------------------------------- 
+Hi,
+
+this problem still remains. Can anyone fix this? Maybe with the above
+bridge.mk and .Config files. Ohter solutions are also welcome.
+
+Please help.
+
+Regards,
+     Christian 
+
+---------------------------------------------------------------------- 
+ hmoffatt - 10-07-08 01:43  
+---------------------------------------------------------------------- 
+Can you please send diffs rather than replacement files? 
+
+---------------------------------------------------------------------- 
+ Feynman - 10-08-08 23:14  
+---------------------------------------------------------------------- 
+Hi,
+
+here is the patch-file (see above).
+
+Christian
 
  
 
 ---------------------------------------------------------------------- 
- robang74 - 11-05-08 02:13  
+ Feynman - 10-13-08 11:32  
 ---------------------------------------------------------------------- 
-Thanks jacmet I read your answer now. 
+Hi,
 
-What about version mismatch between host/target version of gdk/gtk dev
-enviroment?
+here is a new corrected patch for the bridge-utils for kernel 2.4 series.
 
-In report n.5724 has been noted that version mismatch could be an issue.
+Christian 
 
-I think we have to relay onto $HOST system as less as possibile (this
-helps reproducibility and software quality processes too) but I know this
-could be expensive in terms of compilation time (x2), disk space (x1.5)
-and complexity. 
+---------------------------------------------------------------------- 
+ Feynman - 11-05-08 02:33  
+---------------------------------------------------------------------- 
+Hi all,
+
+is there a problem to apply my patch? Please let me know, if you need
+additional informations.
+
+Regards 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-11-05-08 01:35  robang74       New Issue                                    
-11-05-08 01:35  robang74       Status                   new => assigned     
-11-05-08 01:35  robang74       Assigned To               => buildroot       
-11-05-08 01:35  robang74       Issue Monitored: robang74                    
-11-05-08 01:46  jacmet         Note Added: 0015154                          
-11-05-08 01:52  robang74       Note Added: 0015164                          
-11-05-08 01:53  robang74       Note Edited: 0015164                         
-11-05-08 02:10  robang74       Note Edited: 0015164                         
-11-05-08 02:13  robang74       Note Added: 0015174                          
+09-08-08 11:05  Feynman        New Issue                                    
+09-08-08 11:05  Feynman        Status                   new => assigned     
+09-08-08 11:05  Feynman        Assigned To               => buildroot       
+09-08-08 11:26  jacmet         Note Added: 0011194                          
+09-08-08 18:11  hmoffatt       Note Added: 0011214                          
+09-09-08 00:27  jacmet         Note Added: 0011224                          
+09-09-08 06:15  hmoffatt       Note Added: 0011234                          
+09-09-08 08:39  jacmet         Note Added: 0011244                          
+09-09-08 08:47  Feynman        Note Added: 0011254                          
+09-09-08 08:49  jacmet         Note Added: 0011264                          
+09-09-08 16:57  hmoffatt       Note Added: 0011274                          
+09-09-08 17:01  hmoffatt       Note Added: 0011284                          
+09-11-08 09:49  Feynman        Note Added: 0011424                          
+09-13-08 05:19  Feynman        Note Added: 0011464                          
+10-07-08 00:20  Feynman        Note Added: 0012934                          
+10-07-08 01:43  hmoffatt       Note Added: 0012974                          
+10-08-08 23:13  Feynman        Note Added: 0013154                          
+10-08-08 23:13  Feynman        File Added: bridge-utils.patch                   
+
+10-08-08 23:14  Feynman        Note Edited: 0013154                         
+10-13-08 11:32  Feynman        File Added: bridge-utils-new.patch               
+    
+10-13-08 11:32  Feynman        Note Added: 0013494                          
+11-05-08 02:33  Feynman        Note Added: 0015184                          
 ======================================================================
