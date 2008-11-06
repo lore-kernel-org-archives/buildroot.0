@@ -1,91 +1,42 @@
-From: wberrier at uclibc.org <wberrier@uclibc.org>
-Date: Thu,  6 Nov 2008 13:11:55 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/ntp
-Message-ID: <20081106211155.89BD53C859@busybox.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 6 Nov 2008 23:20:35 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package
+In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE1909C92102@mi8nycmail19.Mi8.com>
+References: <20081106125430.01B343C758@busybox.net>
+	<BD79186B4FD85F4B8E60E381CAEE1909C92005@mi8nycmail19.Mi8.com>
+	<COL102-DS184854396C0DF2D8C3CCEFDC1E0@phx.gbl>
+	<BD79186B4FD85F4B8E60E381CAEE1909C92102@mi8nycmail19.Mi8.com>
+Message-ID: <20081106232035.79e50f94@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: wberrier
-Date: 2008-11-06 13:11:54 -0800 (Thu, 06 Nov 2008)
-New Revision: 23945
+Le Thu, 6 Nov 2008 13:11:01 -0500,
+"hartleys" <hartleys@visionengravers.com> a ?crit :
 
-Log:
-ntp: add /etc/default/ntpd to control whether to start
- ntpd and/or ntpdate.  Also specify options and servers.
+>   LD [M]  drivers/scsi/scsi_wait_scan.ko
+> /usr/local/arm/4.1.1-920t/bin/arm-linux-ld: unrecognized option
+> '-Wl,--rpath-link'
+> /usr/local/arm/4.1.1-920t/bin/arm-linux-ld: use the --help option for
+> usage information
 
-Added:
-   trunk/buildroot/package/ntp/ntpd.etc.default
+Hum. -Wl,--rpath-link is supposed to be passed to the C compiler, the
+-Wl prefix telling the compiler to pass the option to the linker. But
+here -Wl,--rpath-link is passed to the linker directly, which obviously
+doesn't work. (See
+http://lists.openmoko.org/pipermail/openmoko-kernel/2008-May/002772.html
+for people having the same kind of issue).
 
-Modified:
-   trunk/buildroot/package/ntp/ntp.mk
-   trunk/buildroot/package/ntp/ntp.sysvinit
+*However*, I'm not sure having -Wl,--rpath-link when building the
+kernel is necessary. But because the kernel Makefile does
+LDFLAGS="$(TARGET_LDFLAGS)", and the TARGET_LDFLAGS variable is
+modified by Daniel's patch, that's why you hit this problem now.
 
-
-Changeset:
-Modified: trunk/buildroot/package/ntp/ntp.mk
-===================================================================
---- trunk/buildroot/package/ntp/ntp.mk	2008-11-06 15:13:33 UTC (rev 23944)
-+++ trunk/buildroot/package/ntp/ntp.mk	2008-11-06 21:11:54 UTC (rev 23945)
-@@ -67,6 +67,10 @@
- 	install -m 755 $(NTP_DIR)/sntp/sntp $(TARGET_DIR)/usr/bin/sntp
- endif
- 	install -m 755 package/ntp/ntp.sysvinit $(TARGET_DIR)/etc/init.d/S49ntp
-+	@if [ ! -f $(TARGET_DIR)/etc/default/ntpd ]; then \
-+		install -m 755 -d $(TARGET_DIR)/etc/default ; \
-+		install -m 644 package/ntp/ntpd.etc.default $(TARGET_DIR)/etc/default/ntpd ; \
-+	fi
- 
- ntp: uclibc $(TARGET_DIR)/$(NTP_TARGET_BINARY)
- 
-
-Modified: trunk/buildroot/package/ntp/ntp.sysvinit
-===================================================================
---- trunk/buildroot/package/ntp/ntp.sysvinit	2008-11-06 15:13:33 UTC (rev 23944)
-+++ trunk/buildroot/package/ntp/ntp.sysvinit	2008-11-06 21:11:54 UTC (rev 23945)
-@@ -9,6 +9,7 @@
- DESC="network time protocol daemon"
- NAME=ntpd
- DAEMON=/usr/sbin/$NAME
-+NTPDATE_BIN=/usr/bin/ntpdate
- 
- # Gracefully exit if the package has been removed.
- test -x $DAEMON || exit 0
-@@ -20,9 +21,17 @@
- fi
- 
- case "$1" in
--  start) echo -n "Starting $DESC: $NAME"
--	start-stop-daemon -S -q -x $DAEMON
--	echo "."
-+  start)
-+	if test x$NTPDATE = xyes ; then
-+		echo -n "Getting initial time via ntp"
-+		$NTPDATE_BIN $NTPDATE_OPTS $NTPSERVERS > /dev/null 2>&1
-+		echo "."
-+	fi
-+	if test x$NTPD = xyes ; then
-+		echo -n "Starting $DESC: $NAME"
-+		start-stop-daemon -S -q -x $DAEMON
-+		echo "."
-+	fi
- 	;;
-   stop) echo -n "Stopping $DESC: $NAME"
- 	start-stop-daemon -K -q -n $NAME
-
-Added: trunk/buildroot/package/ntp/ntpd.etc.default
-===================================================================
---- trunk/buildroot/package/ntp/ntpd.etc.default	                        (rev 0)
-+++ trunk/buildroot/package/ntp/ntpd.etc.default	2008-11-06 21:11:54 UTC (rev 23945)
-@@ -0,0 +1,9 @@
-+# NTP Servers to use for ntpdate
-+NTPSERVERS="pool.ntp.org"
-+
-+# Get initial time via ntpdate?
-+NTPDATE=no
-+NTPDATE_OPTS="-t 5"
-+
-+# Start the ntp daemon?
-+NTPD=yes
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
