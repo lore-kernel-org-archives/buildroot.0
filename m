@@ -1,60 +1,51 @@
-From: miroslav.misek at netgarden.cz <miroslav.misek@netgarden.cz>
-Date: Thu, 06 Nov 2008 11:26:01 +0100
-Subject: [Buildroot] binutils in target system
-Message-ID: <20081106112601.18663leya9yna1q8@mail.netgarden.cz>
+From: Roberto A. Foglietta <roberto.foglietta@gmail.com>
+Date: Thu, 6 Nov 2008 12:39:56 +0100
+Subject: [Buildroot] Stripping kernel modules (was: ext2+isofs initrd too
+	big)
+Message-ID: <e4c675870811060339j4446066bid6115de77a438342@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+2008/10/19 Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>:
+> On Sun, Oct 19, 2008 at 12:00:13PM +0200, Roberto A. Foglietta wrote:
 
-is there any chance to compile and install binutils into target  
-system? Because I found, that is just impossible to compile any larger  
-program (as rpm) - it fails on using "ar" with unknown parameters.  
-Compiling binutils inside final root fails with same fault.
+[cut]
 
+>>>
+>>>  a) stripping modules (previous patch was wrong, see below)
+>>>
+>>>  Using strip on .ko does not work at all without --strip-unneeded.
+>>>
+>>>  http://mailman.uclinux.org/pipermail/uclinux-dev/2007-January/041616.html
+>>>
+>>>  strip -R  .comment -R .note -g --strip-unneeded
+>>>
+>>
+>> Stripping modules belong to the kernel Makefile.in and Makefile.in.advanced
+>>
+>> Declaring INSTALL_MOD_STRIP=1 in modules_install should be enough,
+>>however find,xargs,strip has been added also.
+>>
+>> Ciao,
+>>--
+>>/roberto
+>
+>
+>> linux26-modules: cross-depmod26 $(LINUX26_DIR)/.modules_installed
+>>+      find $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION) -name \*.ko | xargs strip -R .comment -R .note -g --strip-unneeded
+>
+> This is wrong. Proper thing to do is $(STIPCMD) $(STRIP_STRIP_UNNEEDED)
+>
 
-Fault:
+ Using $(STRIPCMD) is wrong too because when
+STRIPCMD=/some/where/sstrip then stripping fails.
 
-make[2]: Entering directory `/root/binutils-2.19.50.0.1/libiberty'
-rm -f ./libiberty.a pic/./libiberty.a
-ar rc ./libiberty.a \
-           ./regex.o ./cplus-dem.o ./cp-demangle.o ./md5.o ./sha1.o  
-./alloca.o ./argv.o ./choose-temp.o ./concat.o ./cp-demint.o  
-./dyn-string.o ./fdmatch.o ./fibheap.o ./filename_cmp.o  
-./floatformat.o ./fnmatch.o ./fopen_unlocked.o ./getopt.o ./getopt1.o  
-./getpwd.o ./getruntime.o ./hashtab.o ./hex.o ./lbasename.o  
-./lrealpath.o ./make-relative-prefix.o ./make-temp-file.o ./objalloc.o  
-./obstack.o ./partition.o ./pexecute.o ./physmem.o ./pex-common.o  
-./pex-one.o ./pex-unix.o ./safe-ctype.o ./sort.o ./spaces.o  
-./splay-tree.o ./strerror.o ./strsignal.o ./unlink-if-ordinary.o  
-./xatexit.o ./xexit.o ./xmalloc.o ./xmemdup.o ./xstrdup.o  
-./xstrerror.o ./xstrndup.o  ./bcmp.o ./bcopy.o ./bzero.o ./index.o  
-./mkstemps.o ./rindex.o ./strverscmp.o
-BusyBox v1.12.1 (2008-11-04 17:51:50 CET) multi-call binary
+ I think the only viable way is INSTALL_MOD_STRIP=1, what about adding
+a proper .config variable?
 
-Usage: ar [-o] [-v] [-p] [-t] [-x] ARCHIVE FILES
-
-Extract or list FILES from an ar archive
-
-Options:
-         -o      Preserve original dates
-         -p      Extract to stdout
-         -t      List
-         -x      Extract
-         -v      Verbose
-
-make[2]: *** [libiberty.a] Error 1
-make[2]: Leaving directory `/root/binutils-2.19.50.0.1/libiberty'
-make[1]: *** [all-libiberty] Error 2
-make[1]: Leaving directory `/root/binutils-2.19.50.0.1'
-make: *** [all] Error 2
-
-
-
-Thanks.
-
-----------------------------------------------------------------
-This message was sent using IMP, the Internet Messaging Program.
+ Cheers,
+-- 
+/roberto
