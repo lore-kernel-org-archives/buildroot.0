@@ -1,43 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Nov 2008 17:39:47 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package
-In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE1909C92005@mi8nycmail19.Mi8.com>
-References: <20081106125430.01B343C758@busybox.net>
-	<BD79186B4FD85F4B8E60E381CAEE1909C92005@mi8nycmail19.Mi8.com>
-Message-ID: <20081106173947.7e8aeea4@surf>
+Date: Thu, 6 Nov 2008 17:43:40 +0100
+Subject: [Buildroot] bluez
+In-Reply-To: <c88e466f0811060612r70f1d4f7nec4376aca9414dbe@mail.gmail.com>
+References: <c88e466f0811060612r70f1d4f7nec4376aca9414dbe@mail.gmail.com>
+Message-ID: <20081106174340.208dc156@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 6 Nov 2008 10:54:56 -0500,
-"hartleys" <hartleys@visionengravers.com> a ?crit :
+Le Thu, 6 Nov 2008 15:12:02 +0100,
+"Michel Benoit" <michel.benoit@sepab.se> a ?crit :
 
-> Just updated to revision 23943. The patch looked liked it would fix
-> the issues I have with compiling mtd. But, no good I still get errors.
+> Has anyone cross compiled bluez-libs and bluez-utils with buildroot?
 
-> In order to get mtd to build correctly I have to patch mtd.mk as
-> follows:
-> 
-> $(MTD_BUILD_TARGETS): $(MTD_DIR)/.unpacked
-> 	mkdir -p $(TARGET_DIR)/usr/sbin
-> 	$(MAKE) CFLAGS="-I. -I./include -I$(LINUX_HEADERS_DIR)/include
-> -I$(STAGING_DIR)/usr/include $(TARGET_CFLAGS)" \
-> +		LDFLAGS="$(TARGET_LDFLAGS)" \
-> 		BUILDDIR=$(MTD_DIR) \
-> 		CROSS=$(TARGET_CROSS) CC=$(TARGET_CC)
-> LINUXDIR=$(LINUX26_DIR) WITHOUT_XATTR=1 -C $(MTD_DIR)
+As far as I can see, we don't have these packages in Buildroot yet, and
+there doesn't seem to be anything related to bluez in the bug tracker
+(but the search engine looks a bit weird, no sure it works properly).
 
-The modification made by Daniel Laird concerns TARGET_CONFIGURE_OPTS, a
-variable used in *.mk files of packages relying on the
-classical ./configure machinery.
+Back in 2005, some people tried to compile bluez with Buildroot, see
+http://osdir.com/ml/bluez.devel/2005-03/msg00089.html.
 
-For mtd, there's no such ./configure machinery, so adaptations to make
-the package buildable with an external toolchain must be made directly
-to the .mk file, with a patch like the one you proposed.
+Anyway, adding support for bluez-libs and bluez-utils to buildroot
+should be relatively simple, since they use the classical autotools. A
+few lines of .mk and Config.in should do the basic things.
 
-Sincerly,
+Do you want to provide a patch for these ?
+
+Thanks,
 
 Thomas
 -- 
