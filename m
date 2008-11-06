@@ -1,37 +1,60 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 05 Nov 2008 20:15:36 +0100
-Subject: [Buildroot] [PATCH] Make the MESSAGE Macro work
-In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE1909C91CCD@mi8nycmail19.Mi8.com>
-	(hartleys@visionengravers.com's message of "Wed\,
-	5 Nov 2008 12\:16\:02 -0500")
-References: <BD79186B4FD85F4B8E60E381CAEE1909C91CCD@mi8nycmail19.Mi8.com>
-Message-ID: <878wryoug7.fsf@macbook.be.48ers.dk>
+From: miroslav.misek at netgarden.cz <miroslav.misek@netgarden.cz>
+Date: Thu, 06 Nov 2008 11:26:01 +0100
+Subject: [Buildroot] binutils in target system
+Message-ID: <20081106112601.18663leya9yna1q8@mail.netgarden.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "hartleys" == hartleys  <hartleys@visionengravers.com> writes:
+Hello,
 
- hartleys> Hello all,
- hartleys> The following patch makes the MESSAGE Macro in Makefile.autotools.in
- hartleys> work.
+is there any chance to compile and install binutils into target  
+system? Because I found, that is just impossible to compile any larger  
+program (as rpm) - it fails on using "ar" with unknown parameters.  
+Compiling binutils inside final root fails with same fault.
 
- hartleys> I think it was originally intended to print the messages in bold type
- hartleys> but it doesn't appear to work correctly. This patch should work on all
- hartleys> platforms.
- 
- hartleys>  # MESSAGE Macro -- display a message in bold type
- hartleys>  MESSAGE = @echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION)
- hartleys> $(1)$(TERM_RESET)"
- hartleys> -TERM_BOLD = #$(shell tput bold)
- hartleys> -TERM_RESET = #$(shell tput rmso)
- hartleys> +TERM_BOLD = $(shell tput smso)
- hartleys> +TERM_RESET = $(shell tput rmso)
 
-These should probably be := so we don't end up with tons of tput
-calls.
+Fault:
 
--- 
-Bye, Peter Korsgaard
+make[2]: Entering directory `/root/binutils-2.19.50.0.1/libiberty'
+rm -f ./libiberty.a pic/./libiberty.a
+ar rc ./libiberty.a \
+           ./regex.o ./cplus-dem.o ./cp-demangle.o ./md5.o ./sha1.o  
+./alloca.o ./argv.o ./choose-temp.o ./concat.o ./cp-demint.o  
+./dyn-string.o ./fdmatch.o ./fibheap.o ./filename_cmp.o  
+./floatformat.o ./fnmatch.o ./fopen_unlocked.o ./getopt.o ./getopt1.o  
+./getpwd.o ./getruntime.o ./hashtab.o ./hex.o ./lbasename.o  
+./lrealpath.o ./make-relative-prefix.o ./make-temp-file.o ./objalloc.o  
+./obstack.o ./partition.o ./pexecute.o ./physmem.o ./pex-common.o  
+./pex-one.o ./pex-unix.o ./safe-ctype.o ./sort.o ./spaces.o  
+./splay-tree.o ./strerror.o ./strsignal.o ./unlink-if-ordinary.o  
+./xatexit.o ./xexit.o ./xmalloc.o ./xmemdup.o ./xstrdup.o  
+./xstrerror.o ./xstrndup.o  ./bcmp.o ./bcopy.o ./bzero.o ./index.o  
+./mkstemps.o ./rindex.o ./strverscmp.o
+BusyBox v1.12.1 (2008-11-04 17:51:50 CET) multi-call binary
+
+Usage: ar [-o] [-v] [-p] [-t] [-x] ARCHIVE FILES
+
+Extract or list FILES from an ar archive
+
+Options:
+         -o      Preserve original dates
+         -p      Extract to stdout
+         -t      List
+         -x      Extract
+         -v      Verbose
+
+make[2]: *** [libiberty.a] Error 1
+make[2]: Leaving directory `/root/binutils-2.19.50.0.1/libiberty'
+make[1]: *** [all-libiberty] Error 2
+make[1]: Leaving directory `/root/binutils-2.19.50.0.1'
+make: *** [all] Error 2
+
+
+
+Thanks.
+
+----------------------------------------------------------------
+This message was sent using IMP, the Internet Messaging Program.
