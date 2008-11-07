@@ -1,24 +1,42 @@
-From: Julien Boibessot <julien.boibessot@free.fr>
-Date: Fri, 07 Nov 2008 12:06:10 +0100
+From: Nick.Thompson at infineon.com <Nick.Thompson@infineon.com>
+Date: Fri, 7 Nov 2008 12:16:12 +0100
 Subject: [Buildroot] bluez
-In-Reply-To: <20081106174340.208dc156@surf>
+In-Reply-To: <49142122.7020405@free.fr>
 References: <c88e466f0811060612r70f1d4f7nec4376aca9414dbe@mail.gmail.com>
-	<20081106174340.208dc156@surf>
-Message-ID: <49142122.7020405@free.fr>
+	<20081106174340.208dc156@surf> <49142122.7020405@free.fr>
+Message-ID: <8CF9D79FB605004381900048F6005988032DDE4169@mucse405.eu.infineon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni a ?crit :
-> Anyway, adding support for bluez-libs and bluez-utils to buildroot
-> should be relatively simple, since they use the classical autotools. A
-> few lines of .mk and Config.in should do the basic things.
->
-> Do you want to provide a patch for these ?
->   
-If it can help, Gumstix guys seem to already have done the job:
-http://www.daimi.au.dk/~spider/gumstix/gumstix-buildroot/package/bluez/
 
-Julien
+
+> -----Original Message-----
+> From: buildroot-bounces at uclibc.org [mailto:buildroot-bounces at uclibc.org]
+> On Behalf Of Julien Boibessot
+> Sent: Friday, November 07, 2008 11:06 AM
+> To: Thomas Petazzoni
+> Cc: buildroot at uclibc.org
+> Subject: Re: [Buildroot] bluez
+>
+> Thomas Petazzoni a ?crit :
+> > Anyway, adding support for bluez-libs and bluez-utils to buildroot
+> > should be relatively simple, since they use the classical autotools. A
+> > few lines of .mk and Config.in should do the basic things.
+> >
+> > Do you want to provide a patch for these ?
+> >
+> If it can help, Gumstix guys seem to already have done the job:
+> http://www.daimi.au.dk/~spider/gumstix/gumstix-buildroot/package/bluez/
+
+Well I'll be damned - I just subscribed to the list 5 mins ago, to offer up my work getting the 3.36 version of bluez added to buildroot. It seems the gumstix guys have 2.24.
+
+3.36 *requires* dbus (and therefore either expat or libxml), 2.24 does not. The 2.x releases are no longer supported. 3.x is in maintenance mode. 4.x is active (and also requires dbus), though they say 3.x is still the most common.
+
+If you want me to submit my stuff, just let me know what format you would like it in and where to send it - I am new here remember :)
+
+I've tested my builds on an ARM926-EJS with a CSR BlueCore4 BT device using BCSP transport.
+
+Nick.
