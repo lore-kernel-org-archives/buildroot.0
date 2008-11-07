@@ -1,42 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Nov 2008 23:20:35 +0100
+From: laird at uclibc.org <laird@uclibc.org>
+Date: Fri,  7 Nov 2008 00:15:54 -0800 (PST)
 Subject: [Buildroot] svn commit: trunk/buildroot/package
-In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE1909C92102@mi8nycmail19.Mi8.com>
-References: <20081106125430.01B343C758@busybox.net>
-	<BD79186B4FD85F4B8E60E381CAEE1909C92005@mi8nycmail19.Mi8.com>
-	<COL102-DS184854396C0DF2D8C3CCEFDC1E0@phx.gbl>
-	<BD79186B4FD85F4B8E60E381CAEE1909C92102@mi8nycmail19.Mi8.com>
-Message-ID: <20081106232035.79e50f94@surf>
+Message-ID: <20081107081554.B32593C98B@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 6 Nov 2008 13:11:01 -0500,
-"hartleys" <hartleys@visionengravers.com> a ?crit :
+Author: laird
+Date: 2008-11-07 00:15:53 -0800 (Fri, 07 Nov 2008)
+New Revision: 23954
 
->   LD [M]  drivers/scsi/scsi_wait_scan.ko
-> /usr/local/arm/4.1.1-920t/bin/arm-linux-ld: unrecognized option
-> '-Wl,--rpath-link'
-> /usr/local/arm/4.1.1-920t/bin/arm-linux-ld: use the --help option for
-> usage information
+Log:
+package/Makefile.in: revert rpath setup for toolchains.
 
-Hum. -Wl,--rpath-link is supposed to be passed to the C compiler, the
--Wl prefix telling the compiler to pass the option to the linker. But
-here -Wl,--rpath-link is passed to the linker directly, which obviously
-doesn't work. (See
-http://lists.openmoko.org/pipermail/openmoko-kernel/2008-May/002772.html
-for people having the same kind of issue).
+Revert the rpath patch, it looked good up until someone tried 
+to build a kernel as well.  This seems to break as a result.
 
-*However*, I'm not sure having -Wl,--rpath-link when building the
-kernel is necessary. But because the kernel Makefile does
-LDFLAGS="$(TARGET_LDFLAGS)", and the TARGET_LDFLAGS variable is
-modified by Daniel's patch, that's why you hit this problem now.
+Will post a new patch soon and see how that goes.. 
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Signed-off-by: Daniel Laird <daniel.j.laird@nxp.com>
+
+
+
+Modified:
+   trunk/buildroot/package/Makefile.in
+
+
+Changeset:
+Modified: trunk/buildroot/package/Makefile.in
+===================================================================
+--- trunk/buildroot/package/Makefile.in	2008-11-07 01:58:21 UTC (rev 23953)
++++ trunk/buildroot/package/Makefile.in	2008-11-07 08:15:53 UTC (rev 23954)
+@@ -39,7 +39,7 @@
+ ifeq ($(BR2_TOOLCHAIN_SOURCE),y)
+ TARGET_CFLAGS=$(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING) \
+ 	-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include
+-TARGET_LDFLAGS+=-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib -Wl,--rpath-link -Wl,$(STAGING_DIR)/lib -Wl,--rpath-link -Wl,$(STAGING_DIR)/usr/lib
++TARGET_LDFLAGS+=-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib
+ ifeq ($(BR2_TOOLCHAIN_SYSROOT),y)
+ TARGET_CFLAGS+= $(BR2_SYSROOT) $(BR2_ISYSROOT)
+ TARGET_LDFLAGS+= $(BR2_SYSROOT)
+@@ -91,7 +91,7 @@
+ else
+ TARGET_CFLAGS=$(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING) -I$(STAGING_DIR)/include -I$(STAGING_DIR)/usr/include -I$(TOOLCHAIN_EXTERNAL_PATH)/$(TOOLCHAIN_EXTERNAL_PREFIX)/include
+ TARGET_CXXFLAGS=$(TARGET_CFLAGS)
+-TARGET_LDFLAGS+=-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib -Wl,--rpath-link -Wl,$(STAGING_DIR)/lib -Wl,--rpath-link -Wl,$(STAGING_DIR)/usr/lib
++TARGET_LDFLAGS=-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib
+ endif
+ #########################################################################
+ #ifeq ($(BR2_ROOTFS_SUFFIX),)
+@@ -196,8 +196,7 @@
+ TARGET_CONFIGURE_OPTS=PATH=$(TARGET_PATH) \
+ 		AR="$(TARGET_AR)" \
+ 		AS="$(TARGET_AS)" \
+-		LD="$(TARGET_LD)" \
+-		LDFLAGS="$(TARGET_LDFLAGS)" \
++		LD="$(TARGET_LD) $(TARGET_LDFLAGS)" \
+ 		NM="$(TARGET_NM)" \
+ 		CC="$(TARGET_CC) $(TARGET_CFLAGS)" \
+ 		GCC="$(TARGET_CC) $(TARGET_CFLAGS)" \
