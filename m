@@ -1,33 +1,44 @@
-From: Julien Boibessot <julien.boibessot@free.fr>
-Date: Fri, 07 Nov 2008 17:38:25 +0100
-Subject: [Buildroot] [PATCH] BR2_LINUX26_VERSION not set if
- BR2_KERNEL_ADD_LATEST_MINORPATCH selected
-Message-ID: <49146F01.901@free.fr>
+From: Roberto A. Foglietta <roberto.foglietta@gmail.com>
+Date: Fri, 7 Nov 2008 18:16:40 +0100
+Subject: [Buildroot] how to get the rootfs rebuilded ?
+In-Reply-To: <!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAANxvIbP3pP1EiLoe96b5TKYBAAAAAA==@cimeq.qc.ca>
+References: <!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAANxvIbP3pP1EiLoe96b5TKYBAAAAAA==@cimeq.qc.ca>
+Message-ID: <e4c675870811070916r2e00872gdd1612e0a0d8bf1f@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+2008/11/7 Jonathan Dumaresq <jdumaresq@cimeq.qc.ca>:
+> Hi all,
+>
+> I have compiled all my buildroot, and I would like to modify the root file
+> system directory customized. I would like to know what is the precess to
+> have the root file system rebuilded.
+>
+> Do I need to remove some .file to force makefile to reinstall the root
+> directory (under /project_build_ARCH_project/root) ?
 
-BR2_LINUX26_VERSION is not defined when BR2_KERNEL_ADD_LATEST_MINORPATCH
-option is selected. This empty BR2_LINUX26_VERSION results in
-LINUX26_VERSION:=$(LINUX_HEADERS_VERSION).
-(target/linux/Makefile.in.advanced).
+Please try the last patch attached in this reports
 
-So in that configuration the kernel used by Buildroot is not the latest
-available, but the one defined by headers.
-Is this an intended behaviour ?
+ http://busybox.net/bugs/view.php?id=5614
 
-If not please find the attached patch.
+Do make help so see it adds these target:
 
-Regards,
-Julien
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: kernel-minor.patch
-Type: text/x-patch
-Size: 910 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20081107/1b9bc3b6/attachment.bin 
+  rootclean              - delete all rootfs content
+
+  install                - (re)install rootfs but not skeleton if it exists
+
+which probably solve your problem.
+
+Please notice this patch apply in r23927 and probably it works for
+other releases too.
+
+If you find it useful please send on this m-list a feed back because
+the patch has not been received enough consensus to be committed in
+the svn
+
+ Enjoy,
+-- 
+/roberto
