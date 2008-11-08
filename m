@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Sat, 8 Nov 2008 11:42:07 -0800
+Date: Sat, 8 Nov 2008 13:41:45 -0800
 Subject: [Buildroot] [buildroot 0006034]: xserver_xorg-server-1.4.1 does not
 	compile in r23297
-Message-ID: <bd385c810207663fb2a8a06f929cfe7f@busybox.net>
+Message-ID: <ff90f2a8cc0f5707a5df01264e06caa6@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             11-08-2008 11:23 PST
-Last Modified:              11-08-2008 11:42 PST
+Last Modified:              11-08-2008 13:41 PST
 ====================================================================== 
 Summary:                    xserver_xorg-server-1.4.1 does not compile in r23297
 Description: 
@@ -321,6 +321,45 @@ make: ***
 [/home/salvador/ugles/buildroot/build_i586/xserver_xorg-server-1.4.2/.stamp_built]
 Error 2 
 
+---------------------------------------------------------------------- 
+ robang74 - 11-08-08 13:41  
+---------------------------------------------------------------------- 
+Kernel 2.6.27 does not have IOPL_MASK and IF_MASK definition but 2.6.24
+has.
+So not newer kernel could not be used to compile kdrive/tinyx.
+
+I am using 2.6.21.7 but this does not resolve the problem. 
+This work around allow the compilation to continue:
+
+salvador at mascalzone:~/ugles/buildroot$ cd
+/home/salvador/ugles/buildroot/build_i586/xserver_xorg-server-1.4.2/hw/kdrive/vesa
+salvador at mascalzone:~/ugles/buildroot/build_i586/xserver_xorg-server-1.4.2/hw/kdrive/vesa$
+/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
+-Os  -I/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/include
+-I/home/salvador/ugles/buildroot/build_i586/staging_dir/include
+--sysroot=/home/salvador/ugles/buildroot/build_i586/staging_dir/ -isysroot
+/home/salvador/ugles/buildroot/build_i586/staging_dir -mtune=i586
+-march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64 -DHAVE_CONFIG_H -I. -I../../../include
+-I../../../hw/kdrive/src -I../../../miext/damage -I../../../miext/shadow
+-I../../../Xext -I../../../fb -I../../../mi -I../../../hw/kdrive/linux
+-Wall -Wpointer-arith -Wstrict-prototypes -Wmissing-prototypes
+-Wmissing-declarations -Wnested-externs -fno-strict-aliasing -D_BSD_SOURCE
+-DHAS_FCHOWN -DHAS_STICKY_DIR_BIT
+-I/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/include/freetype2
+-I/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/include/pixman-1
+  -I../../../include -I../../../include -I../../../Xext
+-I../../../composite -I../../../damageext -I../../../xfixes -I../../../Xi
+-I../../../mi -I../../../miext/shadow  -I../../../miext/damage
+-I../../../render -I../../../randr -I../../../fb -DHAVE_KDRIVE_CONFIG_H   
+ -I/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/include/pixman-1
+-MT vm86.o -MD -MP -MF .deps/vm86.Tpo
+-I/home/salvador/ugles/buildroot/project_build_i586/ugles/linux-2.6.21.7/include
+-c -o vm86.o vm86.c
+
+Solution would include the target kernel headers path into Xserver
+compilation 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -329,4 +368,5 @@ Date Modified   Username       Field                    Change
 11-08-08 11:23  robang74       Assigned To               => buildroot       
 11-08-08 11:23  robang74       Issue Monitored: robang74                    
 11-08-08 11:42  robang74       Note Added: 0015274                          
+11-08-08 13:41  robang74       Note Added: 0015284                          
 ======================================================================
