@@ -1,40 +1,23 @@
-From: tpetazzoni at uclibc.org <tpetazzoni@uclibc.org>
-Date: Sat,  8 Nov 2008 14:24:39 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/x86/grub
-Message-ID: <20081108222440.040E33C911@busybox.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 8 Nov 2008 23:25:04 +0100
+Subject: [Buildroot] [PATCH] grub patch
+In-Reply-To: <e4c675870811080931k4c2542b8u92344ccac35399f8@mail.gmail.com>
+References: <e4c675870811080931k4c2542b8u92344ccac35399f8@mail.gmail.com>
+Message-ID: <20081108232504.10ccb820@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: tpetazzoni
-Date: 2008-11-08 14:24:39 -0800 (Sat, 08 Nov 2008)
-New Revision: 23968
+Le Sat, 8 Nov 2008 18:31:00 +0100,
+"Roberto A. Foglietta" <roberto.foglietta@gmail.com> a ?crit :
 
-Log:
-Fix Grub tarball version as the current version has disappeared from
-Debian mirrors.
+> Please apply because -35.patch is not available anymore
 
-Patch provided by Roberto A. Foglietta <roberto.foglietta@gmail.com>
-
-
-
-Modified:
-   trunk/buildroot/target/x86/grub/grub.mk
-
-
-Changeset:
-Modified: trunk/buildroot/target/x86/grub/grub.mk
-===================================================================
---- trunk/buildroot/target/x86/grub/grub.mk	2008-11-08 21:42:14 UTC (rev 23967)
-+++ trunk/buildroot/target/x86/grub/grub.mk	2008-11-08 22:24:39 UTC (rev 23968)
-@@ -21,7 +21,7 @@
- #
- #############################################################
- GRUB_SOURCE:=grub_0.97.orig.tar.gz
--GRUB_PATCH:=grub_0.97-35.diff.gz
-+GRUB_PATCH:=grub_0.97-51.diff.gz
- GRUB_SITE=$(BR2_DEBIAN_MIRROR)/debian/pool/main/g/grub
- GRUB_PATCH_SITE:=$(GRUB_SITE)
- GRUB_CAT:=$(ZCAT)
+Thanks, applied as r23968.
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
