@@ -1,44 +1,37 @@
-From: Roberto A. Foglietta <roberto.foglietta@gmail.com>
-Date: Fri, 7 Nov 2008 18:16:40 +0100
-Subject: [Buildroot] how to get the rootfs rebuilded ?
-In-Reply-To: <!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAANxvIbP3pP1EiLoe96b5TKYBAAAAAA==@cimeq.qc.ca>
-References: <!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAANxvIbP3pP1EiLoe96b5TKYBAAAAAA==@cimeq.qc.ca>
-Message-ID: <e4c675870811070916r2e00872gdd1612e0a0d8bf1f@mail.gmail.com>
+From: steve caster <steve@c2root.be>
+Date: Sat, 8 Nov 2008 13:55:41 +0100
+Subject: [Buildroot] openssl extract problem
+In-Reply-To: <000001c93de7$a0188130$e0498390$@be>
+References: <db2a8a5aa9a6e1044ee4fc0ce95602f8@bugs.uclibc.org>
+	<000001c93de7$a0188130$e0498390$@be>
+Message-ID: <000001c941a1$4eab5080$ec01f180$@be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2008/11/7 Jonathan Dumaresq <jdumaresq@cimeq.qc.ca>:
-> Hi all,
->
-> I have compiled all my buildroot, and I would like to modify the root file
-> system directory customized. I would like to know what is the precess to
-> have the root file system rebuilded.
->
-> Do I need to remove some .file to force makefile to reinstall the root
-> directory (under /project_build_ARCH_project/root) ?
+Problem is solved with the latest svn update
+Don't know what it was, but works now
 
-Please try the last patch attached in this reports
 
- http://busybox.net/bugs/view.php?id=5614
+-----Original Message-----
+From: buildroot-bounces@uclibc.org [mailto:buildroot-bounces at uclibc.org] On
+Behalf Of steve caster
+Sent: maandag 3 november 2008 20:09
+To: buildroot at uclibc.org
+Subject: [Buildroot] openssl extract problem
 
-Do make help so see it adds these target:
+Hi all,
 
-  rootclean              - delete all rootfs content
+I am trying to compile openssl, but it gives me an bzip2 error which seems
+quite normal when trying to bunzip a .gz file. The main question is, where
+can I modify this as I don't see a .mk with the bzip command?
 
-  install                - (re)install rootfs but not skeleton if it exists
+Regards
+S.
 
-which probably solve your problem.
-
-Please notice this patch apply in r23927 and probably it works for
-other releases too.
-
-If you find it useful please send on this m-list a feed back because
-the patch has not been received enough consensus to be committed in
-the svn
-
- Enjoy,
--- 
-/roberto
+_______________________________________________
+buildroot mailing list
+buildroot at uclibc.org
+http://busybox.net/mailman/listinfo/buildroot
