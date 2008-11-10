@@ -1,13 +1,31 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 10 Nov 2008 09:48:28 -0800
-Subject: [Buildroot] [buildroot 0006104]: midori libtool patch fails to apply
-Message-ID: <b004640077fb58ca7ca36d5b085a6576@busybox.net>
+From: =?iso-8859-1?Q?Arnar_Mar_Sigur=F0sson?= <antab@valka.is>
+Date: Mon, 10 Nov 2008 18:37:01 -0000
+Subject: [Buildroot] [buildroot 0006104]: midori libtool patch fails to
+	apply
+References: <b004640077fb58ca7ca36d5b085a6576@busybox.net>
+Message-ID: <061E11D86E3DFF459604DF5B36F0805F1BA6E6@salka01.valka.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Is anyone using this package?
+
+0.0.18 is missing alot of features and was only semi usable on AVR32.
+After version 0.0.18 they moved to a new python based build system that i have been unable to get working within buildroot so i gave up on it.
+
+IMO if nobody wants to spend time getting the new version working, then we should just remove it.
+
+Greets
+   Arnar Mar Sig
+
+-----Original Message-----
+From: buildroot-bounces@uclibc.org on behalf of bugs at busybox.net
+Sent: Mon 11/10/2008 5:48 PM
+To: buildroot at uclibc.org
+Subject: [Buildroot] [buildroot 0006104]: midori libtool patch fails to apply
+ 
 
 The following issue has been SUBMITTED. 
 ====================================================================== 
@@ -57,3 +75,13 @@ Date Modified   Username       Field                    Change
 11-10-08 09:48  robang74       Status                   new => assigned     
 11-10-08 09:48  robang74       Assigned To               => buildroot       
 ======================================================================
+
+_______________________________________________
+buildroot mailing list
+buildroot at uclibc.org
+http://busybox.net/mailman/listinfo/buildroot
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20081110/eb3a4ac2/attachment.htm 
