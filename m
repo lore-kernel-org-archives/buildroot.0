@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 10 Nov 2008 07:16:55 -0800
-Subject: [Buildroot] [buildroot 0006064]: Making install in curl fails
-Message-ID: <6b4306fddc1c8665867fb3dd5525f75e@busybox.net>
+Date: Mon, 10 Nov 2008 07:49:28 -0800
+Subject: [Buildroot] [buildroot 0001553]: New package : midnight commander
+Message-ID: <620bab640f462c3d123224f78eacbaa4@bugs.busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,87 +11,76 @@ To: buildroot@busybox.net
 
 A NOTE has been added to this issue. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=6064 
+http://busybox.net/bugs/view.php?id=1553 
 ====================================================================== 
-Reported By:                robang74
+Reported By:                Leon Bailly
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   6064
-Category:                   Shared Library Support
+Issue ID:                   1553
+Category:                   New Features
 Reproducibility:            always
-Severity:                   major
+Severity:                   minor
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             11-10-2008 07:11 PST
-Last Modified:              11-10-2008 07:16 PST
+Date Submitted:             10-23-2007 17:32 PDT
+Last Modified:              11-10-2008 07:49 PST
 ====================================================================== 
-Summary:                    Making install in curl fails
+Summary:                    New package : midnight commander
 Description: 
-Making install in curl
-make[6]: Entering directory
-`/home/roberto/gles/buildroot/build_i586/curl-7.17.1/include/curl'
-make[7]: Entering directory
-`/home/roberto/gles/buildroot/build_i586/curl-7.17.1/include/curl'
-make[7]: Nothing to be done for `install-exec-am'.
-test -z "/usr/include/curl" || @MKDIR_P@
-"/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include/curl"
-/bin/bash: @MKDIR_P@: command not found
-make[7]: *** [install-pkgincludeHEADERS] Error 127
-make[7]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/curl-7.17.1/include/curl'
-make[6]: *** [install-am] Error 2
-make[6]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/curl-7.17.1/include/curl'
-make[5]: *** [install-recursive] Error 1
-make[5]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/curl-7.17.1/include'
-make[4]: *** [install-data-hook] Error 2
-make[4]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/curl-7.17.1'
-make[3]: *** [install-data-am] Error 2
-make[3]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/curl-7.17.1'
-make[2]: *** [install-am] Error 2
-make[2]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/curl-7.17.1'
-make[1]: *** [install-recursive] Error 1
-make[1]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/curl-7.17.1'
-make: ***
-[/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/curl] Error
-2
+Midnight Commander 4.6.1 with debian patches.
+Requires glib2.0 on buildmachine.
+
+Requires glib2.0 + ncurses on hostmachine.
+
 
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- robang74 - 11-10-08 07:16  
+ Leon Bailly - 10-30-07 05:54  
 ---------------------------------------------------------------------- 
-roberto at rafbook:~/gles/buildroot/build_i586/curl-7.17.1/include/curl$ diff
--pru Makefile.old Makefile
---- Makefile.old	2008-11-10 16:12:52.000000000 +0100
-+++ Makefile	2008-11-10 16:13:27.000000000 +0100
-This seems work but I think @MKDIR_P@ should set properly elsewhere
+An improved version mc2.tar.gz removes the dependency on ncurses.
+You can use the recommended mc-slang library instead.
 
-@@ -108,7 +108,7 @@ LTLIBOBJS = 
- MAINT = #
- MAKEINFO = ${SHELL}
-"/home/roberto/gles/buildroot/build_i586/curl-7.17.1/missing" --run
-makeinfo
- MANOPT = -man
--MKDIR_P = @MKDIR_P@
-+MKDIR_P = mkdir -p
- NROFF = /usr/bin/nroff
- OBJEXT = o
- PACKAGE = curl 
+Further improvements:
+
+- honors LARGEFILE_support setting
+- honors HAVE_MANPAGES
+- selectable NLS
+- selectable VFS
+- a space saving feature removes some hi-lite template files 
+
+---------------------------------------------------------------------- 
+ broeggle - 11-10-08 07:49  
+---------------------------------------------------------------------- 
+Hi,
+I just tried out your mc2.tar.gz package, but unfortunately it doesn't
+work for me.
+The Config.in is missing some dependencies (e.g BR2_USE_WCHAR or
+BR2_ENABLE_LOCALE)
+However my main problem is that make always tries to recompile man2hlp
+which of course fails as glibcompat.o is already built for x86 (which is
+right behaviour) 
+-> why it is trying to rebuild man2hlp? 
+
+it would be nice if you could provide some help on this issue
+
+I'm using buildroot to compile for an avr32 system 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-11-10-08 07:11  robang74       New Issue                                    
-11-10-08 07:11  robang74       Status                   new => assigned     
-11-10-08 07:11  robang74       Assigned To               => buildroot       
-11-10-08 07:11  robang74       Issue Monitored: robang74                    
-11-10-08 07:16  robang74       Note Added: 0015334                          
+10-23-07 17:32  Leon Bailly    New Issue                                    
+10-23-07 17:32  Leon Bailly    Status                   new => assigned     
+10-23-07 17:32  Leon Bailly    Assigned To               => buildroot       
+10-23-07 17:32  Leon Bailly    File Added: mc.tar.gz                        
+10-23-07 17:32  Leon Bailly    Issue Monitored: Leon Bailly                    
+10-30-07 05:42  Leon Bailly    File Added: mc2.tar.gz                       
+10-30-07 05:54  Leon Bailly    Note Added: 0002870                          
+11-02-07 20:34  Leon Bailly    Issue End Monitor: Leon Bailly                   
+
+09-26-08 04:12  dpusz          Issue Monitored: dpusz                       
+09-26-08 04:12  dpusz          Issue End Monitor: dpusz                     
+11-10-08 07:49  broeggle       Note Added: 0015344                          
 ======================================================================
