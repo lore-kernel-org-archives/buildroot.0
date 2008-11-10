@@ -1,8 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 10 Nov 2008 09:14:14 -0800
-Subject: [Buildroot] [buildroot 0006084]: $HOST system need 'gperf' to
-	compile WebKit
-Message-ID: <dc676ac71155997d47df73740fd01223@busybox.net>
+Date: Mon, 10 Nov 2008 09:34:09 -0800
+Subject: [Buildroot] [buildroot 0006094]: Add support for clex filemanager
+Message-ID: <cdc4d45304d2a2a7f6bf36d556e987b3@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,49 +11,35 @@ To: buildroot@busybox.net
 
 The following issue has been SUBMITTED. 
 ====================================================================== 
-http://busybox.net/bugs/view.php?id=6084 
+http://busybox.net/bugs/view.php?id=6094 
 ====================================================================== 
-Reported By:                robang74
+Reported By:                broeggle
 Assigned To:                buildroot
 ====================================================================== 
 Project:                    buildroot
-Issue ID:                   6084
-Category:                   Shared Library Support
+Issue ID:                   6094
+Category:                   Architecture Specific
 Reproducibility:            always
-Severity:                   minor
+Severity:                   feature
 Priority:                   normal
 Status:                     assigned
 ====================================================================== 
-Date Submitted:             11-10-2008 09:14 PST
-Last Modified:              11-10-2008 09:14 PST
+Date Submitted:             11-10-2008 09:34 PST
+Last Modified:              11-10-2008 09:34 PST
 ====================================================================== 
-Summary:                    $HOST system need 'gperf' to compile WebKit
+Summary:                    Add support for clex filemanager
 Description: 
-checking if
-/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-g++
--Os  -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
--I/home/roberto/gles/buildroot/build_i586/staging_dir/include
---sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
-/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
--march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 supports -fvisibility=hidden
--fvisibility-inlines-hidden... yes
-checking for perl... /usr/bin/perl
-checking for bison... /usr/bin/bison
-checking for flex... /usr/bin/flex
-checking for gperf... no
-configure: error: You need the 'gperf' hash function generator to compile
-WebKit
-make: ***
-[/home/roberto/gles/buildroot/build_i586/webkit-r31321/.stamp_configured]
-Error 1
+Clex is a small and lightweight filemanager which fits in quite nicely into
+buildroot and is a lot less painful to install than mc.
 
+See http://www.clex.sk/ for more information
 ====================================================================== 
 
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
-11-10-08 09:14  robang74       New Issue                                    
-11-10-08 09:14  robang74       Status                   new => assigned     
-11-10-08 09:14  robang74       Assigned To               => buildroot       
+11-10-08 09:34  broeggle       New Issue                                    
+11-10-08 09:34  broeggle       Status                   new => assigned     
+11-10-08 09:34  broeggle       Assigned To               => buildroot       
+11-10-08 09:34  broeggle       File Added: clex-3.18.tar.gz                    
 ======================================================================
