@@ -1,7 +1,7 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 10 Nov 2008 09:34:09 -0800
+Date: Mon, 10 Nov 2008 09:37:19 -0800
 Subject: [Buildroot] [buildroot 0006094]: Add support for clex filemanager
-Message-ID: <cdc4d45304d2a2a7f6bf36d556e987b3@busybox.net>
+Message-ID: <e959bf040d41d8b64b2853f07e542936@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,7 +9,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=6094 
 ====================================================================== 
@@ -25,7 +25,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             11-10-2008 09:34 PST
-Last Modified:              11-10-2008 09:34 PST
+Last Modified:              11-10-2008 09:37 PST
 ====================================================================== 
 Summary:                    Add support for clex filemanager
 Description: 
@@ -35,6 +35,11 @@ buildroot and is a lot less painful to install than mc.
 See http://www.clex.sk/ for more information
 ====================================================================== 
 
+---------------------------------------------------------------------- 
+ broeggle - 11-10-08 09:37  
+---------------------------------------------------------------------- 
+Sorry wrong category - please change to 'New Feature' 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
@@ -42,4 +47,5 @@ Date Modified   Username       Field                    Change
 11-10-08 09:34  broeggle       Status                   new => assigned     
 11-10-08 09:34  broeggle       Assigned To               => buildroot       
 11-10-08 09:34  broeggle       File Added: clex-3.18.tar.gz                    
+11-10-08 09:37  broeggle       Note Added: 0015394                          
 ======================================================================
