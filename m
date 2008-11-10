@@ -1,74 +1,75 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 10 Nov 2008 07:11:50 -0800
-Subject: [Buildroot] [buildroot 0006064]: Making install in curl fails
-Message-ID: <e997943a6efcf4ce87fededa5d3a1f27@busybox.net>
+From: Matuschka, Sebastian <Sebastian.Matuschka@gcd-solutions.de>
+Date: Mon, 10 Nov 2008 15:56:15 +0100
+Subject: [Buildroot] bluez
+In-Reply-To: <8CF9D79FB605004381900048F6005988032DDE4169@mucse405.eu.infineon.com>
+References: <c88e466f0811060612r70f1d4f7nec4376aca9414dbe@mail.gmail.com><20081106174340.208dc156@surf>
+	<49142122.7020405@free.fr>
+	<8CF9D79FB605004381900048F6005988032DDE4169@mucse405.eu.infineon.com>
+Message-ID: <49ED01FC03EE524BB7BB258E8F93BFF32B2E75@bfl-exchange-1.BFL.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+I need bluez for a CSR BlueCore 4 too. It is connected to an Atmel AVR32.
+For me it would be nice to see bluez in Buildroot.
+I'm getting an error when trying to compile the gumstix version:
+   root/usr/lib/libbluetooth.so: cannot execute binary file
+Don't know what this means.
+I've added these update commands to bluez.mk so it accepts avr32:
+$(CONFIG_UPDATE) $(BLUEZ_LIBS_BUILD_DIR)
+$(CONFIG_UPDATE) $(BLUEZ_UTILS_BUILD_DIR)
+$(CONFIG_UPDATE) $(BLUEZ_HCIDUMP_BUILD_DIR)
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=6064 
-====================================================================== 
-Reported By:                robang74
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   6064
-Category:                   Shared Library Support
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             11-10-2008 07:11 PST
-Last Modified:              11-10-2008 07:11 PST
-====================================================================== 
-Summary:                    Making install in curl fails
-Description: 
-Making install in curl
-make[6]: Entering directory
-`/home/roberto/gles/buildroot/build_i586/curl-7.17.1/include/curl'
-make[7]: Entering directory
-`/home/roberto/gles/buildroot/build_i586/curl-7.17.1/include/curl'
-make[7]: Nothing to be done for `install-exec-am'.
-test -z "/usr/include/curl" || @MKDIR_P@
-"/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include/curl"
-/bin/bash: @MKDIR_P@: command not found
-make[7]: *** [install-pkgincludeHEADERS] Error 127
-make[7]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/curl-7.17.1/include/curl'
-make[6]: *** [install-am] Error 2
-make[6]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/curl-7.17.1/include/curl'
-make[5]: *** [install-recursive] Error 1
-make[5]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/curl-7.17.1/include'
-make[4]: *** [install-data-hook] Error 2
-make[4]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/curl-7.17.1'
-make[3]: *** [install-data-am] Error 2
-make[3]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/curl-7.17.1'
-make[2]: *** [install-am] Error 2
-make[2]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/curl-7.17.1'
-make[1]: *** [install-recursive] Error 1
-make[1]: Leaving directory
-`/home/roberto/gles/buildroot/build_i586/curl-7.17.1'
-make: ***
-[/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/curl] Error
-2
+Regards
+Sebastian
 
-====================================================================== 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-11-10-08 07:11  robang74       New Issue                                    
-11-10-08 07:11  robang74       Status                   new => assigned     
-11-10-08 07:11  robang74       Assigned To               => buildroot       
-======================================================================
+> -----Original Message-----
+> From: buildroot-bounces at uclibc.org [mailto:buildroot-bounces at uclibc.org]
+> On Behalf Of Nick.Thompson at infineon.com
+> Sent: Friday, November 07, 2008 12:16 PM
+> To: julien.boibessot at free.fr; thomas.petazzoni at free-electrons.com
+> Cc: buildroot at uclibc.org
+> Subject: Re: [Buildroot] bluez
+> 
+> 
+> 
+> > -----Original Message-----
+> > From: buildroot-bounces at uclibc.org [mailto:buildroot-bounces at uclibc.org]
+> > On Behalf Of Julien Boibessot
+> > Sent: Friday, November 07, 2008 11:06 AM
+> > To: Thomas Petazzoni
+> > Cc: buildroot at uclibc.org
+> > Subject: Re: [Buildroot] bluez
+> >
+> > Thomas Petazzoni a ?crit :
+> > > Anyway, adding support for bluez-libs and bluez-utils to buildroot
+> > > should be relatively simple, since they use the classical autotools. A
+> > > few lines of .mk and Config.in should do the basic things.
+> > >
+> > > Do you want to provide a patch for these ?
+> > >
+> > If it can help, Gumstix guys seem to already have done the job:
+> > http://www.daimi.au.dk/~spider/gumstix/gumstix-buildroot/package/bluez/
+> 
+> Well I'll be damned - I just subscribed to the list 5 mins ago, to offer
+> up my work getting the 3.36 version of bluez added to buildroot. It seems
+> the gumstix guys have 2.24.
+> 
+> 3.36 *requires* dbus (and therefore either expat or libxml), 2.24 does
+> not. The 2.x releases are no longer supported. 3.x is in maintenance mode.
+> 4.x is active (and also requires dbus), though they say 3.x is still the
+> most common.
+> 
+> If you want me to submit my stuff, just let me know what format you would
+> like it in and where to send it - I am new here remember :)
+> 
+> I've tested my builds on an ARM926-EJS with a CSR BlueCore4 BT device
+> using BCSP transport.
+> 
+> Nick.
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
