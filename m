@@ -1,29 +1,18 @@
 From: Roberto A. Foglietta <roberto.foglietta@gmail.com>
-Date: Mon, 10 Nov 2008 20:15:30 +0100
+Date: Mon, 10 Nov 2008 20:25:26 +0100
 Subject: [Buildroot] [buildroot 0006104]: midori libtool patch fails to
 	apply
 In-Reply-To: <061E11D86E3DFF459604DF5B36F0805F1BA6E6@salka01.valka.local>
 References: <b004640077fb58ca7ca36d5b085a6576@busybox.net>
 	<061E11D86E3DFF459604DF5B36F0805F1BA6E6@salka01.valka.local>
-Message-ID: <e4c675870811101115r4f6418c1scf73ab837978cda8@mail.gmail.com>
+Message-ID: <e4c675870811101125x420368b2n115cf682c5c49132@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This seems interesting as midori substitute:
-
-http://trac.webkit.org/wiki/S60Webkit
-
-Probably the fastest way to compile midori is to build a complete
-development environment and use it.
-
-Compile a cross toolchain in order to build a building environment in
-which compile everything natively, umh... :-p
-
-I think it would resolve a lot of problem but it would be seriously
-limited to those $ARCH which runs onto qemu properly.
+Anybody has tried to compile Firefox into buildroot?
 
 2008/11/10 Arnar Mar Sigur?sson <antab@valka.is>:
 > Is anyone using this package?
