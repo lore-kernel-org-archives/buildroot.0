@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 10 Nov 2008 08:47:22 -0800
+Date: Mon, 10 Nov 2008 09:04:18 -0800
 Subject: [Buildroot] [buildroot 0006074]: libsexy requires libxml or cannot
 	found them
-Message-ID: <cdfcad56d67c00a694df72391c5383be@busybox.net>
+Message-ID: <e80bc695a2775db2b611bf277734626a@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +10,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=6074 
 ====================================================================== 
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             11-10-2008 08:47 PST
-Last Modified:              11-10-2008 08:47 PST
+Last Modified:              11-10-2008 09:04 PST
 ====================================================================== 
 Summary:                    libsexy requires libxml or cannot found them
 Description: 
@@ -471,10 +471,18 @@ roberto at rafbook:~/gles/buildroot$ find . -name \*libxml\*
 
 ====================================================================== 
 
+---------------------------------------------------------------------- 
+ robang74 - 11-10-08 09:04  
+---------------------------------------------------------------------- 
+Adding this patch is suggested but it does not work, again. 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
 11-10-08 08:47  robang74       New Issue                                    
 11-10-08 08:47  robang74       Status                   new => assigned     
 11-10-08 08:47  robang74       Assigned To               => buildroot       
+11-10-08 08:47  robang74       Issue Monitored: robang74                    
+11-10-08 09:02  robang74       File Added: libsexy.patch                    
+11-10-08 09:04  robang74       Note Added: 0015364                          
 ======================================================================
