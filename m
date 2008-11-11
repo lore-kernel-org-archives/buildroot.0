@@ -1,67 +1,136 @@
-From: tpetazzoni at uclibc.org <tpetazzoni@uclibc.org>
-Date: Tue, 11 Nov 2008 10:35:43 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/qtopia4
-Message-ID: <20081111183543.534143C9A4@busybox.net>
+From: danieljlaird at hotmail.com <danieljlaird@hotmail.com>
+Date: Tue, 11 Nov 2008 18:37:57 -0000
+Subject: [Buildroot] [buildroot 0006104]: midori libtool patch fails
+	toapply
+In-Reply-To: <b004640077fb58ca7ca36d5b085a6576@busybox.net><061E11D86E3DFF459604DF5B36F0805F1BA6E6@salka01.valka.local>
+	<e4c675870811101115r4f6418c1scf73ab837978cda8@mail.gmail.com>
+References: <b004640077fb58ca7ca36d5b085a6576@busybox.net><061E11D86E3DFF459604DF5B36F0805F1BA6E6@salka01.valka.local>
+	<e4c675870811101115r4f6418c1scf73ab837978cda8@mail.gmail.com>
+Message-ID: <COL102-DS24104BDA25BB26F5D7B5C6DC150@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: tpetazzoni
-Date: 2008-11-11 10:35:43 -0800 (Tue, 11 Nov 2008)
-New Revision: 24001
+I just use webkit on Directfb with a patch to remove the need for ICU - see
+https://bugs.webkit.org/show_bug.cgi?id=15914
 
-Log:
-Fix Qtopia build issues
+cheers
+Dan laird
 
-This patch fixes two Qtopia build issues, encountered while trying to
-use system implementation of zlib, freetype, jpeg and libpng :
+--------------------------------------------------
+From: "Roberto A. Foglietta" <roberto.foglietta@gmail.com>
+Sent: Monday, November 10, 2008 7:15 PM
+To: "Arnar Mar Sigur?sson" <antab@valka.is>
+Cc: <buildroot@uclibc.org>
+Subject: Re: [Buildroot] [buildroot 0006104]: midori libtool patch fails 
+toapply
 
- * The build process doesn't look in $(STAGING_DIR)/usr/include for
-   includes and $(STAGING_DIR)/usr/lib. Same problem as the patch
-   currently floating around adding LDFLAGS to TARGET_CONFIGURE_OPTS,
-   but as Qtopia doesn't use TARGET_CONFIGURE_OPTS, we need a specific
-   fix here. So we use the -I and -L options of Qtopia's configure
-   script.
-
- * The build process doesn't use pkg-config to get the header path for
-   Freetype headers (located in $(STAGING_DIR)/usr/include/freetype2
-   and not directly in $(STAGING_DIR)/usr/include/). There was already
-   a fix for this, consisting in adding $(FREETYPE_DIR)/include to the
-   -I path of Qtopia's configure. This patch modifies this fix to use
-   $(STAGING_DIR)/usr/include/freetype2 instead, which looks more
-   coherent with how all the packages are built (using $(STAGING_DIR)
-   as the reference to get headers and libraries).
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-
-
-Modified:
-   trunk/buildroot/package/qtopia4/qtopia4.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/qtopia4/qtopia4.mk
-===================================================================
---- trunk/buildroot/package/qtopia4/qtopia4.mk	2008-11-11 18:32:31 UTC (rev 24000)
-+++ trunk/buildroot/package/qtopia4/qtopia4.mk	2008-11-11 18:35:43 UTC (rev 24001)
-@@ -212,7 +212,7 @@
- else
- ifeq ($(BR2_PACKAGE_QTOPIA4_SYSTEMFREETYPE),y)
- QTOPIA4_CONFIGURE+= -system-freetype
--QTOPIA4_CONFIGURE+= -I $(FREETYPE_DIR)/include
-+QTOPIA4_CONFIGURE+= -I $(STAGING_DIR)/usr/include/freetype2/
- QTOPIA4_DEP_LIBS+=freetype
- else
- QTOPIA4_CONFIGURE+= -no-freetype
-@@ -342,6 +342,8 @@
- 		-no-rpath \
- 		-nomake examples \
- 		-nomake demos \
-+		-I $(STAGING_DIR)/usr/include \
-+		-L $(STAGING_DIR)/usr/lib \
- 	)
- 	touch $@
- 
+> This seems interesting as midori substitute:
+>
+> http://trac.webkit.org/wiki/S60Webkit
+>
+> Probably the fastest way to compile midori is to build a complete
+> development environment and use it.
+>
+> Compile a cross toolchain in order to build a building environment in
+> which compile everything natively, umh... :-p
+>
+> I think it would resolve a lot of problem but it would be seriously
+> limited to those $ARCH which runs onto qemu properly.
+>
+> 2008/11/10 Arnar Mar Sigur?sson <antab@valka.is>:
+>> Is anyone using this package?
+>>
+>> 0.0.18 is missing alot of features and was only semi usable on AVR32.
+>> After version 0.0.18 they moved to a new python based build system that i
+>> have been unable to get working within buildroot so i gave up on it.
+>>
+>> IMO if nobody wants to spend time getting the new version working, then 
+>> we
+>> should just remove it.
+>>
+>> Greets
+>>    Arnar Mar Sig
+>>
+>> -----Original Message-----
+>> From: buildroot-bounces at uclibc.org on behalf of bugs at busybox.net
+>> Sent: Mon 11/10/2008 5:48 PM
+>> To: buildroot at uclibc.org
+>> Subject: [Buildroot] [buildroot 0006104]: midori libtool patch fails to
+>> apply
+>>
+>>
+>> The following issue has been SUBMITTED.
+>> ======================================================================
+>> http://busybox.net/bugs/view.php?id=6104
+>> ======================================================================
+>> Reported By:                robang74
+>> Assigned To:                buildroot
+>> ======================================================================
+>> Project:                    buildroot
+>> Issue ID:                   6104
+>> Category:                   Shared Library Support
+>> Reproducibility:            always
+>> Severity:                   major
+>> Priority:                   normal
+>> Status:                     assigned
+>> ======================================================================
+>> Date Submitted:             11-10-2008 09:48 PST
+>> Last Modified:              11-10-2008 09:48 PST
+>> ======================================================================
+>> Summary:                    midori libtool patch fails to apply
+>> Description:
+>>>>> midori 0.0.18 Extracting
+>>>>> midori 0.0.18 Patching libtool
+>>
+>> Applying buildroot-libtool.patch using plaintext:
+>> patching file ltmain.sh
+>> Hunk http://busybox.net/bugs/view.php?id=1 FAILED at 273.
+>> Hunk http://busybox.net/bugs/view.php?id=2 succeeded at 4811 (offset 2403
+>> lines).
+>> Hunk http://busybox.net/bugs/view.php?id=3 FAILED at 4955.
+>> Hunk http://busybox.net/bugs/view.php?id=4 FAILED at 5299.
+>> Hunk http://busybox.net/bugs/view.php?id=5 succeeded at 7415 with fuzz 1
+>> (offset
+>> 1792 lines).
+>> Hunk http://busybox.net/bugs/view.php?id=6 FAILED at 7740.
+>> 4 out of 6 hunks FAILED -- saving rejects to file ltmain.sh.rej
+>> Patch failed!  Please fix buildroot-libtool.patch!
+>> make: ***
+>> [/home/roberto/gles/buildroot/build_i586/midori-0.0.18/.stamp_libtool_patch]
+>> Error 1
+>>
+>> ======================================================================
+>>
+>> Issue History
+>> Date Modified   Username       Field                    Change
+>> ======================================================================
+>> 11-10-08 09:48  robang74       New Issue
+>> 11-10-08 09:48  robang74       Status                   new => assigned
+>> 11-10-08 09:48  robang74       Assigned To               => buildroot
+>> ======================================================================
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at uclibc.org
+>> http://busybox.net/mailman/listinfo/buildroot
+>>
+>>
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at uclibc.org
+>> http://busybox.net/mailman/listinfo/buildroot
+>>
+>
+>
+>
+> -- 
+> /roberto
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+> 
