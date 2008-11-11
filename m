@@ -1,67 +1,67 @@
-From: tpetazzoni at uclibc.org <tpetazzoni@uclibc.org>
-Date: Tue, 11 Nov 2008 11:00:33 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/mtd: 20061007
-	mtd-utils mtd-utils.git
-Message-ID: <20081111190033.0E0C73C9BE@busybox.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 11 Nov 2008 20:10:51 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package
+In-Reply-To: <COL102-DS116EF30796550B219F6BD6DC150@phx.gbl>
+References: <20081111183231.E74AC3C989@busybox.net>
+	<COL102-DS116EF30796550B219F6BD6DC150@phx.gbl>
+Message-ID: <20081111201051.3d03ac86@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: tpetazzoni
-Date: 2008-11-11 11:00:32 -0800 (Tue, 11 Nov 2008)
-New Revision: 24002
+Le Tue, 11 Nov 2008 18:46:36 -0000,
+<danieljlaird@hotmail.com> a ?crit :
 
-Log:
-Fix the mtd package with regard to external toolchain use.
+> I have just completed local testing of AUTO_CONFIGURE_TARGET that the
+> GIT based buildroot is using.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Great !
 
+> After I get this back (tomorrow) I suspect that some
+> Makefile.autotools.in packages might not build
+> I will post some common things to try to fix these I just cant build
+> all packages before feeding this back.
 
+Can you post the patch for review before committing. It is quite an
+important change, some review will probably lead to interesting
+comments.
 
-Modified:
-   trunk/buildroot/package/mtd/20061007/mtd.mk
-   trunk/buildroot/package/mtd/mtd-utils.git/mtd.mk
-   trunk/buildroot/package/mtd/mtd-utils/mtd.mk
+Moreover, as it will not possible to test all packages before
+committing, I'd suggest to commit the patch with the cache disabled by
+default. People who are willing to test in their configuration can
+enable the new feature with just a simple configuration change. By
+doing so, we won't break the build of people not willing to test, while
+still increasing the testing of this nice new feature.
 
+> It has highlighted an issue with the sheer number of config options
+> that are being hardcoded for packages like GTK etc!
+> Do we really need this huge number of configure options? surely
+> configure is not that bad at sniffing values?
+> The problem is that setting these values by hand means they override 
+> settings in the cache file which means for example GTK disables CXX 
+> compiler, yet I have a perfectly working compiler.
+> WebKit then tries to build after GTK and says I have no CXX compiler.
+> Deleting this hardcoded config flag means the cache file works.
 
-Changeset:
-Modified: trunk/buildroot/package/mtd/20061007/mtd.mk
-===================================================================
---- trunk/buildroot/package/mtd/20061007/mtd.mk	2008-11-11 18:35:43 UTC (rev 24001)
-+++ trunk/buildroot/package/mtd/20061007/mtd.mk	2008-11-11 19:00:32 UTC (rev 24002)
-@@ -90,6 +90,7 @@
- $(MTD_BUILD_TARGETS): $(MTD_DIR)/.unpacked
- 	mkdir -p $(TARGET_DIR)/usr/sbin
- 	$(MAKE) CFLAGS="-I. -I./include -I$(LINUX_HEADERS_DIR)/include -I$(STAGING_DIR)/usr/include $(TARGET_CFLAGS)" \
-+		LDFLAGS="$(TARGET_LDFLAGS)" \
- 		CROSS= CC=$(TARGET_CC) LINUXDIR=$(LINUX26_DIR) WITHOUT_XATTR=1 -C $(MTD_DIR)
- 
- MTD_TARGETS := $(addprefix $(TARGET_DIR)/usr/sbin/, $(MTD_TARGETS_y))
+I'm not quite sure what to do with all these changes. But some of them
+are probably necessary: the purpose of ./configure is to compile and
+run some small test programs to see if some features are available or
+not. However, in cross-compiling mode, running these test programs is
+not possible, so overriding configuration options might be necessary.
 
-Modified: trunk/buildroot/package/mtd/mtd-utils/mtd.mk
-===================================================================
---- trunk/buildroot/package/mtd/mtd-utils/mtd.mk	2008-11-11 18:35:43 UTC (rev 24001)
-+++ trunk/buildroot/package/mtd/mtd-utils/mtd.mk	2008-11-11 19:00:32 UTC (rev 24002)
-@@ -97,6 +97,7 @@
- $(MTD_BUILD_TARGETS): $(MTD_DIR)/.unpacked
- 	mkdir -p $(TARGET_DIR)/usr/sbin
- 	$(MAKE) CFLAGS="-I. -I./include -I$(LINUX_HEADERS_DIR)/include -I$(STAGING_DIR)/usr/include $(TARGET_CFLAGS)" \
-+		LDFLAGS="$(TARGET_LDFLAGS)" \
- 		BUILDDIR=$(MTD_DIR) \
- 		CROSS=$(TARGET_CROSS) CC=$(TARGET_CC) LINUXDIR=$(LINUX26_DIR) WITHOUT_XATTR=1 -C $(MTD_DIR)
- 
+However, clearly, the case of ac_cv_prog_CXX is wrong. The value of
+this option should be computed in package/Makefile.in depending on the
+configuration, and should be added to TARGET_CONFIGURE_ARGS, which is
+passed to the ./configure script thanks to the Makefile.autools.in
+machinery.
 
-Modified: trunk/buildroot/package/mtd/mtd-utils.git/mtd.mk
-===================================================================
---- trunk/buildroot/package/mtd/mtd-utils.git/mtd.mk	2008-11-11 18:35:43 UTC (rev 24001)
-+++ trunk/buildroot/package/mtd/mtd-utils.git/mtd.mk	2008-11-11 19:00:32 UTC (rev 24002)
-@@ -109,6 +109,7 @@
- $(MTD_BUILD_TARGETS): $(MTD_DIR)/.unpacked
- 	mkdir -p $(TARGET_DIR)/usr/sbin
- 	$(MAKE1) OPTFLAGS="-DNEED_BCOPY -Dbcmp=memcmp -I$(STAGING_DIR)/usr/include $(TARGET_CFLAGS)" \
-+		LDFLAGS="$(TARGET_LDFLAGS)" \
- 	       BUILDDIR=$(MTD_DIR) \
- 	       CROSS=$(TARGET_CROSS) CC=$(TARGET_CC) WITHOUT_XATTR=1 -C $(MTD_DIR)
- 
+Cheers,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
