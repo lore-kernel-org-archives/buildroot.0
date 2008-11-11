@@ -1,45 +1,78 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Tue, 11 Nov 2008 06:29:26 -0800
-Subject: [Buildroot] [buildroot 0006134]: New Package: bluez-libs and
-	bluez-utils 3.36
-Message-ID: <1cf5b942da5f8e472958347657e1aa8f@bugs.uclibc.org>
+From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+Date: Tue, 11 Nov 2008 15:43:35 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
+In-Reply-To: <4919943B.6080309@free.fr>
+References: <20081110104547.16BEB3C7BC@busybox.net>
+	<20081110110131.GA16174@mx.loc> <4919943B.6080309@free.fr>
+Message-ID: <20081111144335.GB24761@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Tue, Nov 11, 2008 at 03:18:35PM +0100, Julien Boibessot wrote:
+>Hi,
+>
+>Bernhard Reutner-Fischer a ?crit :
+>> On Mon, Nov 10, 2008 at 02:45:47AM -0800, vanokuten at uclibc.org wrote:
+>>> Author: vanokuten
+>>> Date: 2008-11-10 02:45:46 -0800 (Mon, 10 Nov 2008)
+>>> New Revision: 23987
+>>>
+>>> Log:
+>>> Download Kernel.org minor patches at the same time as full sources.
+>>
+>> The comment is correct but the impl is wrong since you do not
+>> _download_ all required stuff
+>> at the proper time.
+>> So: Iff there are patches, those patches are prerequesites of the
+>> _SOURCE which will
+>> automagically make 'make source' do the right thing.
+>If patches are set as prerequesites of LINUX26_SOURCE then, each time a
+>new set of patches are loaded, full sources will be reloaded again.
+>(User can "dynamically" choose the patch revision he wants to use).
+>
+>I can update the patch to have something like that:
+>
+>Index: target/linux/Makefile.in.advanced
+>===================================================================
+>--- target/linux/Makefile.in.advanced   (r?vision 23996)
+>+++ target/linux/Makefile.in.advanced   (copie de travail)
+>@@ -205,7 +205,7 @@
+>         $(WGET) -P $(DL_DIR) $(LINUX26_PATCH_SITE)/$(LINUX26_PATCH_SOURCE)
+> endif
+>
+>-$(LINUX26_DIR)/.unpacked: $(DL_DIR)/$(LINUX26_SOURCE)
+>+$(LINUX26_DIR)/.unpacked: $(DL_DIR)/$(LINUX26_SOURCE)
+>$(DL_DIR)/$(LINUX26_PATCH_SOURCE)
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=6134 
-====================================================================== 
-Reported By:                ratbert
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   6134
-Category:                   New Features
-Reproducibility:            N/A
-Severity:                   feature
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             11-11-2008 06:29 PST
-Last Modified:              11-11-2008 06:29 PST
-====================================================================== 
-Summary:                    New Package: bluez-libs and bluez-utils 3.36
-Description: 
-Add packages for BlueZ bluetooth user space code building. You will also
-need bluetooth kernel space drivers (kernel config) to make use of these
-tools.
-====================================================================== 
+yes, except that you'll have to use some
+ifneq ($(LINUX26_PATCH_SOURCE),)
+LINUX26_PATCH_SOURCE_FILE:=$(DL_DIR)/$(LINUX26_PATCH_SOURCE)
+endif
+and use LINUX26_PATCH_SOURCE_FILE, otherwise you'd end up with the dl dir as a
+prereq and this wouldn't do any good if you downloaded anything.
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-11-11-08 06:29  ratbert        New Issue                                    
-11-11-08 06:29  ratbert        Status                   new => assigned     
-11-11-08 06:29  ratbert        Assigned To               => buildroot       
-11-11-08 06:29  ratbert        File Added: bluez.diff                       
-======================================================================
+>        rm -rf $(LINUX26_DIR)
+>        @echo "*** Unpacking kernel source"
+>        $(LINUX26_BZCAT) $(DL_DIR)/$(LINUX26_SOURCE) | tar -C
+>$(PROJECT_BUILD_DIR) $(TAR_OPTIONS) -
+>@@ -451,7 +451,7 @@
+>
+> linux26-modules: cross-depmod26
+>$(PROJECT_BUILD_DIR)/autotools-stamps/linux_modules_target_installed
+>
+>-linux26-source: $(DL_DIR)/$(LINUX26_SOURCE)
+>+linux26-source: $(DL_DIR)/$(LINUX26_SOURCE)
+>$(DL_DIR)/$(LINUX26_PATCH_SOURCE)
+
+close, yes.
+>
+> linux26-unpacked: $(LINUX26_DIR)/.patched
+>
+>
+>
+>But I'm not sure I can do more :-(
+
+That would be the proper thing to do, modulo corrections mentioned above.
