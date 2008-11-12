@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 12 Nov 2008 06:53:31 -0800
+Date: Wed, 12 Nov 2008 08:00:38 -0800
 Subject: [Buildroot] [buildroot 0006134]: New Package: bluez-libs and
 	bluez-utils 3.36
-Message-ID: <c78e9438388dae9a9dc8507a9f00cdc8@busybox.net>
+Message-ID: <72831562820685a6710120f81cac54a5@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             11-11-2008 06:29 PST
-Last Modified:              11-12-2008 06:53 PST
+Last Modified:              11-12-2008 08:00 PST
 ====================================================================== 
 Summary:                    New Package: bluez-libs and bluez-utils 3.36
 Description: 
@@ -36,7 +36,7 @@ tools.
 ====================================================================== 
 
 ---------------------------------------------------------------------- 
- smatuschka - 11-12-08 06:53  
+ smatuschka - 11-12-08 07:07  
 ---------------------------------------------------------------------- 
 I tried the patch in atmel buildroot avr32-v2.2.0.
 1.Question: Is only dbus needed or dbus-glib?
@@ -75,7 +75,24 @@ hciattach.c:121: error: 'B1000000' undeclared (first use in this
 function)
 hciattach.c:123: error: 'B1152000' undeclared (first use in this
 function)
-make[3]: *** [hciattach.o] Error 1 
+make[3]: *** [hciattach.o] Error 1
+
+Versions:
+uClibc: 0.9.29
+gcc: 4.2.2
+linux: 2.6.25
+
+ 
+
+---------------------------------------------------------------------- 
+ ratbert - 11-12-08 08:00  
+---------------------------------------------------------------------- 
+1. You should only need dbus, not dbus-glib.
+
+2. D'oh. the buildroot/package/bluez-utils/hciattach-baud.patch is wrong.
+I need to adjust that patch file...
+
+Will attach new patch file in a moment... 
 
 Issue History 
 Date Modified   Username       Field                    Change               
@@ -85,4 +102,6 @@ Date Modified   Username       Field                    Change
 11-11-08 06:29  ratbert        Assigned To               => buildroot       
 11-11-08 06:29  ratbert        File Added: bluez.diff                       
 11-12-08 06:53  smatuschka     Note Added: 0015554                          
+11-12-08 07:07  smatuschka     Note Edited: 0015554                         
+11-12-08 08:00  ratbert        Note Added: 0015564                          
 ======================================================================
