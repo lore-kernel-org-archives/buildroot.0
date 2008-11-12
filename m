@@ -1,232 +1,208 @@
-From: danieljlaird at hotmail.com <danieljlaird@hotmail.com>
-Date: Wed, 12 Nov 2008 18:06:42 -0000
-Subject: [Buildroot] Adding AUTO_CONFIGURE_TARGET options from the GIT
-	version of buildroot.
-In-Reply-To: <C13DBBE85AD6974B85C118C35890CA5F13B24B8CBE@EU1RDCRDC1WX029.exi.nxp.com>
-References: <C13DBBE85AD6974B85C118C35890CA5F13B24B8CBE@EU1RDCRDC1WX029.exi.nxp.com>
-Message-ID: <COL102-DS27ABA89DE666BAFC2B74ADC140@phx.gbl>
+From: Arnar Mar Sig <antab@valka.is>
+Date: Wed, 12 Nov 2008 19:22:56 +0100
+Subject: [Buildroot] [buildroot 0006104]: midori libtool patch fails
+	toapply
+In-Reply-To: <e4c675870811120959r3bf07f27we258398d5ccaf587@mail.gmail.com>
+References: <b004640077fb58ca7ca36d5b085a6576@busybox.net>
+	<061E11D86E3DFF459604DF5B36F0805F1BA6E6@salka01.valka.local>
+	<e4c675870811101115r4f6418c1scf73ab837978cda8@mail.gmail.com>
+	<COL102-DS24104BDA25BB26F5D7B5C6DC150@phx.gbl>
+	<e4c675870811120959r3bf07f27we258398d5ccaf587@mail.gmail.com>
+Message-ID: <6F7B563F-4795-4A43-A18B-FAC7293E155B@valka.is>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Has anyone tried this yet?
+The package for 0.0.18 in google buildroot (http://code.google.com/p/buildroot/ 
+) did build and run for avr32 last time i checked, its a bit different  
+and i never synced it because i gave up on it.  Now i'm using a custom  
+browser build using Qt Embedded (the browser demo works nicely also)
 
-Because I want to start work on the next bit!
-(--enable-static if BR2_PREFER_STATIC) for Makefile.autotools.in packages.
+I got a tarball for 0.0.18 if needed.
 
-Cheers
-Daniel Laird
+Arnar Mar Sig
 
---------------------------------------------------
-From: "Daniel J Laird" <daniel.j.laird@nxp.com>
-Sent: Wednesday, November 12, 2008 9:33 AM
-To: <buildroot@uclibc.org>
-Subject: [Buildroot] Adding AUTO_CONFIGURE_TARGET options from the GIT 
-version of buildroot.
+On Nov 12, 2008, at 6:59 PM, Roberto A. Foglietta wrote:
 
-> The following patch adds the AUTO_CONFIGURE_TARGET idea from the GIT 
-> buildroot tree.
-> This allows packages to use a central cache which speeds up configure.
-> You can disable the cache at top level (BR2_CONFIG_CACHE) default n
-> You can also on a per package basis (Makefile.autotools.in only) 
-> $(PKG)_USE_CONFIG_CACHE = NO
-> Old style packages do not use the cache by default so only if you add the 
-> AUTO_CONFIGURE_TARGET like I have done for directfb.mk will it
-> use it.
+> Thanks for suggestions I will try in the next week.
 >
-> I had an issue with Fontconfig so I disabled the cache usage.
+> Some body has midori-0.0.17 tarball? I did not manage to download from
+> its home site, old version are not any more available in the wild.
 >
-> Hope some of you can try this and provide feedback.
+> I would give a try to midori and I think version 0.0.17 will compile
+> in buildroot.
 >
-> Cheers
-> Daniel Laird
->
-> Index: Config.in
-> ===================================================================
-> --- Config.in (revision 24010)
-> +++ Config.in (working copy)
-> @@ -189,6 +189,14 @@
->  help
->    This option show recent versions of packages.
->
-> +config BR2_CONFIG_CACHE
-> + bool "Use a central configure cache file"
-> + default n
-> + help
-> +   This determines if a central config cache is used by
-> +   packages, reducing the configure time for packages as each
-> +   one caches its findings.
-> +
-> config BR2_ENABLE_DEBUG
->  bool "build packages with debugging symbols"
->  select BR2_PACKAGE_GDB_SERVER
-> Index: package/atk/atk.mk
-> ===================================================================
-> --- package/atk/atk.mk (revision 24010)
-> +++ package/atk/atk.mk (working copy)
-> @@ -39,7 +39,7 @@
->  gl_cv_func_mkstemp_limitations=no ac_cv_func_working_mktime=yes \
->  jm_cv_func_working_re_compile_pattern=yes ac_use_included_regex=no \
->  gl_cv_c_restrict=no 
-> ac_cv_path_GLIB_GENMARSHAL=$(HOST_GLIB)/bin/glib-genmarshal \
-> - ac_cv_prog_F77=no ac_cv_prog_CXX=no
-> + ac_cv_prog_F77=no
->
-> ifneq ($(BR2_PACKAGE_XSERVER_none),y)
-> ATK_CONF_OPT_X = --with-x \
-> Index: package/libglib2/libglib2.mk
-> ===================================================================
-> --- package/libglib2/libglib2.mk (revision 24010)
-> +++ package/libglib2/libglib2.mk (working copy)
-> @@ -41,7 +41,7 @@
->  ac_cv_func_working_mktime=yes jm_cv_func_working_re_compile_pattern=yes \
->  ac_use_included_regex=no gl_cv_c_restrict=no \
->  ac_cv_path_GLIB_GENMARSHAL=$(HOST_GLIB)/bin/glib-genmarshal 
-> ac_cv_prog_F77=no \
-> - ac_cv_prog_CXX=no ac_cv_func_posix_getgrgid_r=no \
-> + ac_cv_func_posix_getgrgid_r=no \
->  gt_cv_c_wchar_t=$(if $(BR2_USE_WCHAR),yes,no)
->
-> LIBGLIB2_CONF_OPT = --enable-shared \
-> Index: package/directfb/directfb.mk
-> ===================================================================
-> --- package/directfb/directfb.mk (revision 24010)
-> +++ package/directfb/directfb.mk (working copy)
-> @@ -115,15 +115,10 @@
->
-> $(DIRECTFB_DIR)/.configured: $(DIRECTFB_DIR)/.unpacked
->  (cd $(DIRECTFB_DIR); rm -f config.cache; \
-> - $(TARGET_CONFIGURE_OPTS) \
-> - $(TARGET_CONFIGURE_ARGS) \
->  ac_cv_header_linux_wm97xx_h=no \
->  ac_cv_header_linux_sisfb_h=no \
->  ac_cv_header_asm_page_h=no \
-> - ./configure \
-> - --target=$(GNU_TARGET_NAME) \
-> - --host=$(GNU_TARGET_NAME) \
-> - --build=$(GNU_HOST_NAME) \
-> + $(AUTO_CONFIGURE_TARGET) \
->  --prefix=/usr \
->  --sysconfdir=/etc \
->  --localstatedir=/var \
-> Index: package/fontconfig/fontconfig.mk
-> ===================================================================
-> --- package/fontconfig/fontconfig.mk (revision 24010)
-> +++ package/fontconfig/fontconfig.mk (working copy)
-> @@ -7,8 +7,11 @@
-> FONTCONFIG_SOURCE = fontconfig-$(FONTCONFIG_VERSION).tar.gz
-> FONTCONFIG_SITE = http://fontconfig.org/release
-> FONTCONFIG_AUTORECONF = YES
-> +FONTCONFIG_USE_CONFIG_CACHE = NO
-> FONTCONFIG_INSTALL_STAGING = YES
-> FONTCONFIG_INSTALL_TARGET = YES
-> +# This package does not like using the target cflags for some reason.
-> +FONTCONFIG_CONF_ENV = CFLAGS=
->
-> FONTCONFIG_CONF_OPT = --with-arch=$(GNU_TARGET_NAME) \
->  --with-freetype-config="$(STAGING_DIR)/usr/bin/freetype-config" \
-> Index: package/Makefile.autotools.in
-> ===================================================================
-> --- package/Makefile.autotools.in (revision 24010)
-> +++ package/Makefile.autotools.in (working copy)
-> @@ -217,8 +217,10 @@
->  cd $(@D)/$($(PKG)_SUBDIR) && rm -f config.cache && \
->  $(TARGET_CONFIGURE_OPTS) \
->  $(TARGET_CONFIGURE_ARGS) \
-> + $(TARGET_CONFIGURE_ENV) \
->  $($(PKG)_CONF_ENV) \
-> - ./configure \
-> + $(if $(THIS_SRCDIR),$(THIS_SRCDIR)/,./)configure \
-> + $(if $(filter 
-> YES,$($(PKG)_USE_CONFIG_CACHE)),--cache-file="$(PROJECT_BUILD_DIR)/tgt-config.cache",) 
-> \
->  --target=$(GNU_TARGET_NAME) \
->  --host=$(GNU_TARGET_NAME) \
->  --build=$(GNU_HOST_NAME) \
-> @@ -302,6 +304,7 @@
-> $(2)_DEPENDENCIES ?=
-> $(2)_AUTORECONF ?= NO
-> $(2)_LIBTOOL_PATCH ?= YES
-> +$(2)_USE_CONFIG_CACHE   ?= $(if $(BR2_CONFIG_CACHE),YES,NO)
-> $(2)_CONF_ENV ?=
-> $(2)_CONF_OPT ?=
-> $(2)_MAKE_ENV ?=
-> Index: package/libgtk2/libgtk2.mk
-> ===================================================================
-> --- package/libgtk2/libgtk2.mk (revision 24010)
-> +++ package/libgtk2/libgtk2.mk (working copy)
-> @@ -68,7 +68,6 @@
->  ac_cv_path_GTK_UPDATE_ICON_CACHE=$(HOST_GLIB)/bin/gtk-update-icon-cache \
->  ac_cv_path_GDK_PIXBUF_CSOURCE=$(HOST_GLIB)/bin/gdk-pixbuf-csource \
->  ac_cv_prog_F77=no \
-> - ac_cv_prog_CXX=no \
->  ac_cv_path_CUPS_CONFIG=no
->
-> LIBGTK2_CONF_OPT = --target=$(GNU_TARGET_NAME) --host=$(GNU_TARGET_NAME) \
-> Index: package/Makefile.in
-> ===================================================================
-> --- package/Makefile.in (revision 24010)
-> +++ package/Makefile.in (working copy)
-> @@ -182,6 +182,8 @@
-> STRIPCMD=$(TARGET_STRIP)
-> endif
-> INSTALL=/usr/bin/install
-> +FLEX:=$(shell $(CONFIG_SHELL) -c 'which flex || type -p flex')
-> +BISON:=$(shell $(CONFIG_SHELL) -c 'which bison || type -p bison')
->
-> HOST_ARCH:=$(shell $(HOSTCC) -dumpmachine | sed -e s'/-.*//' \
->  -e 's/sparc.*/sparc/' \
-> @@ -197,6 +199,17 @@
->  )
-> GNU_HOST_NAME:=$(HOST_ARCH)-$(subst ",,$(BR2_GNU_BUILD_SUFFIX))
-> #")
-> +
-> +AUTO_CONFIGURE_TARGET=\
-> + $(TARGET_CONFIGURE_OPTS) \
-> + $(TARGET_CONFIGURE_ARGS) \
-> + $(TARGET_CONFIGURE_ENV) \
-> + $(if $(THIS_SRCDIR),$(THIS_SRCDIR)/,./)configure \
-> + $(if 
-> $(BR2_CONFIG_CACHE),--cache-file="$(PROJECT_BUILD_DIR)/tgt-config.cache",) 
-> \
-> + --target=$(GNU_TARGET_NAME) \
-> + --host=$(GNU_TARGET_NAME) \
-> + --build=$(GNU_HOST_NAME)
-> +
-> TARGET_CONFIGURE_OPTS=PATH=$(TARGET_PATH) \
->  AR="$(TARGET_AR)" \
->  AS="$(TARGET_AS)" \
-> @@ -235,6 +248,12 @@
->  PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig:$(PKG_CONFIG_PATH)" \
->  STAGING_DIR="$(STAGING_DIR)"
->
-> +TARGET_CONFIGURE_ENV=\
-> + CFLAGS="$(TARGET_CFLAGS)" \
-> + CXXFLAGS="$(TARGET_CXXFLAGS)" \
-> + LDFLAGS="$(TARGET_LDFLAGS)" \
-> + FCFLAGS="$(TARGET_FCFLAGS)" \
-> +
-> HOST_CONFIGURE_OPTS=PATH=$(TARGET_PATH) \
->  AR="$(HOSTAR)" \
->  AS="$(HOSTAS)" \
-> @@ -316,6 +335,11 @@
->  $(BR2_AC_CV_TRAP_CHECK) \
->  ac_cv_func_mmap_fixed_mapped=yes \
->  ac_cv_func_memcmp_working=yes \
-> + ac_cv_have_decl_malloc=yes \
-> + gl_cv_func_malloc_0_nonnull=yes \
-> + ac_cv_func_malloc_0_nonnull=yes \
-> + ac_cv_func_calloc_0_nonnull=yes \
-> + ac_cv_func_realloc_0_nonnull=yes \
->  $(BR2_AC_CV_C_BIGENDIAN)
->
-> #######################################################################
+> 2008/11/11  <danieljlaird@hotmail.com>:
+>> I just use webkit on Directfb with a patch to remove the need for  
+>> ICU - see
+>> https://bugs.webkit.org/show_bug.cgi?id=15914
+>>
+>> cheers
+>> Dan laird
+>>
+>> --------------------------------------------------
+>> From: "Roberto A. Foglietta" <roberto.foglietta@gmail.com>
+>> Sent: Monday, November 10, 2008 7:15 PM
+>> To: "Arnar Mar Sigur?sson" <antab@valka.is>
+>> Cc: <buildroot@uclibc.org>
+>> Subject: Re: [Buildroot] [buildroot 0006104]: midori libtool patch  
+>> fails
+>> toapply
+>>
+>>> This seems interesting as midori substitute:
+>>>
+>>> http://trac.webkit.org/wiki/S60Webkit
+>>>
+>>> Probably the fastest way to compile midori is to build a complete
+>>> development environment and use it.
+>>>
+>>> Compile a cross toolchain in order to build a building environment  
+>>> in
+>>> which compile everything natively, umh... :-p
+>>>
+>>> I think it would resolve a lot of problem but it would be seriously
+>>> limited to those $ARCH which runs onto qemu properly.
+>>>
+>>> 2008/11/10 Arnar Mar Sigur?sson <antab@valka.is>:
+>>>>
+>>>> Is anyone using this package?
+>>>>
+>>>> 0.0.18 is missing alot of features and was only semi usable on  
+>>>> AVR32.
+>>>> After version 0.0.18 they moved to a new python based build  
+>>>> system that i
+>>>> have been unable to get working within buildroot so i gave up on  
+>>>> it.
+>>>>
+>>>> IMO if nobody wants to spend time getting the new version  
+>>>> working, then
+>>>> we
+>>>> should just remove it.
+>>>>
+>>>> Greets
+>>>>  Arnar Mar Sig
+>>>>
+>>>> -----Original Message-----
+>>>> From: buildroot-bounces at uclibc.org on behalf of bugs at busybox.net
+>>>> Sent: Mon 11/10/2008 5:48 PM
+>>>> To: buildroot at uclibc.org
+>>>> Subject: [Buildroot] [buildroot 0006104]: midori libtool patch  
+>>>> fails to
+>>>> apply
+>>>>
+>>>>
+>>>> The following issue has been SUBMITTED.
+>>>> = 
+>>>> = 
+>>>> = 
+>>>> ===================================================================
+>>>> http://busybox.net/bugs/view.php?id=6104
+>>>> = 
+>>>> = 
+>>>> = 
+>>>> ===================================================================
+>>>> Reported By:                robang74
+>>>> Assigned To:                buildroot
+>>>> = 
+>>>> = 
+>>>> = 
+>>>> ===================================================================
+>>>> Project:                    buildroot
+>>>> Issue ID:                   6104
+>>>> Category:                   Shared Library Support
+>>>> Reproducibility:            always
+>>>> Severity:                   major
+>>>> Priority:                   normal
+>>>> Status:                     assigned
+>>>> = 
+>>>> = 
+>>>> = 
+>>>> ===================================================================
+>>>> Date Submitted:             11-10-2008 09:48 PST
+>>>> Last Modified:              11-10-2008 09:48 PST
+>>>> = 
+>>>> = 
+>>>> = 
+>>>> ===================================================================
+>>>> Summary:                    midori libtool patch fails to apply
+>>>> Description:
+>>>>>>>
+>>>>>>> midori 0.0.18 Extracting
+>>>>>>> midori 0.0.18 Patching libtool
+>>>>
+>>>> Applying buildroot-libtool.patch using plaintext:
+>>>> patching file ltmain.sh
+>>>> Hunk http://busybox.net/bugs/view.php?id=1 FAILED at 273.
+>>>> Hunk http://busybox.net/bugs/view.php?id=2 succeeded at 4811  
+>>>> (offset 2403
+>>>> lines).
+>>>> Hunk http://busybox.net/bugs/view.php?id=3 FAILED at 4955.
+>>>> Hunk http://busybox.net/bugs/view.php?id=4 FAILED at 5299.
+>>>> Hunk http://busybox.net/bugs/view.php?id=5 succeeded at 7415 with  
+>>>> fuzz 1
+>>>> (offset
+>>>> 1792 lines).
+>>>> Hunk http://busybox.net/bugs/view.php?id=6 FAILED at 7740.
+>>>> 4 out of 6 hunks FAILED -- saving rejects to file ltmain.sh.rej
+>>>> Patch failed!  Please fix buildroot-libtool.patch!
+>>>> make: ***
+>>>>
+>>>> [/home/roberto/gles/buildroot/build_i586/ 
+>>>> midori-0.0.18/.stamp_libtool_patch]
+>>>> Error 1
+>>>>
+>>>> = 
+>>>> = 
+>>>> = 
+>>>> ===================================================================
+>>>>
+>>>> Issue History
+>>>> Date Modified   Username       Field                    Change
+>>>> = 
+>>>> = 
+>>>> = 
+>>>> ===================================================================
+>>>> 11-10-08 09:48  robang74       New Issue
+>>>> 11-10-08 09:48  robang74       Status                   new =>  
+>>>> assigned
+>>>> 11-10-08 09:48  robang74       Assigned To               =>  
+>>>> buildroot
+>>>> = 
+>>>> = 
+>>>> = 
+>>>> ===================================================================
+>>>>
+>>>> _______________________________________________
+>>>> buildroot mailing list
+>>>> buildroot at uclibc.org
+>>>> http://busybox.net/mailman/listinfo/buildroot
+>>>>
+>>>>
+>>>>
+>>>> _______________________________________________
+>>>> buildroot mailing list
+>>>> buildroot at uclibc.org
+>>>> http://busybox.net/mailman/listinfo/buildroot
+>>>>
+>>>
+>>>
+>>>
+>>> --
+>>> /roberto
+>>> _______________________________________________
+>>> buildroot mailing list
+>>> buildroot at uclibc.org
+>>> http://busybox.net/mailman/listinfo/buildroot
+>>>
+>>
 >
 >
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot
-> 
+>
+> -- 
+> /roberto
+
+Greets
+	Arnar Mar Sig
+	Valka ehf
