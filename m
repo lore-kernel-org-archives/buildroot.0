@@ -1,208 +1,178 @@
-From: Arnar Mar Sig <antab@valka.is>
-Date: Wed, 12 Nov 2008 19:22:56 +0100
-Subject: [Buildroot] [buildroot 0006104]: midori libtool patch fails
-	toapply
-In-Reply-To: <e4c675870811120959r3bf07f27we258398d5ccaf587@mail.gmail.com>
-References: <b004640077fb58ca7ca36d5b085a6576@busybox.net>
-	<061E11D86E3DFF459604DF5B36F0805F1BA6E6@salka01.valka.local>
-	<e4c675870811101115r4f6418c1scf73ab837978cda8@mail.gmail.com>
-	<COL102-DS24104BDA25BB26F5D7B5C6DC150@phx.gbl>
-	<e4c675870811120959r3bf07f27we258398d5ccaf587@mail.gmail.com>
-Message-ID: <6F7B563F-4795-4A43-A18B-FAC7293E155B@valka.is>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Wed, 12 Nov 2008 16:27:46 -0800
+Subject: [Buildroot] [buildroot 0006064]: Making install in curl fails
+Message-ID: <7576f0f4c89c277e16d4fa1891eb8eb9@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The package for 0.0.18 in google buildroot (http://code.google.com/p/buildroot/ 
-) did build and run for avr32 last time i checked, its a bit different  
-and i never synced it because i gave up on it.  Now i'm using a custom  
-browser build using Qt Embedded (the browser demo works nicely also)
 
-I got a tarball for 0.0.18 if needed.
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=6064 
+====================================================================== 
+Reported By:                robang74
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   6064
+Category:                   Shared Library Support
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             11-10-2008 07:11 PST
+Last Modified:              11-12-2008 16:27 PST
+====================================================================== 
+Summary:                    Making install in curl fails
+Description: 
+Making install in curl
+make[6]: Entering directory
+`/home/roberto/gles/buildroot/build_i586/curl-7.17.1/include/curl'
+make[7]: Entering directory
+`/home/roberto/gles/buildroot/build_i586/curl-7.17.1/include/curl'
+make[7]: Nothing to be done for `install-exec-am'.
+test -z "/usr/include/curl" || @MKDIR_P@
+"/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include/curl"
+/bin/bash: @MKDIR_P@: command not found
+make[7]: *** [install-pkgincludeHEADERS] Error 127
+make[7]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/curl-7.17.1/include/curl'
+make[6]: *** [install-am] Error 2
+make[6]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/curl-7.17.1/include/curl'
+make[5]: *** [install-recursive] Error 1
+make[5]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/curl-7.17.1/include'
+make[4]: *** [install-data-hook] Error 2
+make[4]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/curl-7.17.1'
+make[3]: *** [install-data-am] Error 2
+make[3]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/curl-7.17.1'
+make[2]: *** [install-am] Error 2
+make[2]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/curl-7.17.1'
+make[1]: *** [install-recursive] Error 1
+make[1]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/curl-7.17.1'
+make: ***
+[/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/curl] Error
+2
 
-Arnar Mar Sig
+====================================================================== 
 
-On Nov 12, 2008, at 6:59 PM, Roberto A. Foglietta wrote:
+---------------------------------------------------------------------- 
+ robang74 - 11-10-08 08:45  
+---------------------------------------------------------------------- 
+Applying curl-7.17.1-mkdirp.patch using plaintext:
+patching file Makefile
+touch /home/roberto/gles/buildroot/build_i586/curl-7.17.1/.unpacked
+(cd /home/roberto/gles/buildroot/build_i586/curl-7.17.1; rm -rf
+config.cache; \
+                aclocal; \
+                libtoolize --force; \
+                ./reconf; )
+/bin/sh: libtoolize: not found
+lib/Makefile.am:42: Libtool library used but `LIBTOOL' is undefined
+lib/Makefile.am:42:   The usual way to define `LIBTOOL' is to add
+`AC_PROG_LIBTOOL'
+lib/Makefile.am:42:   to `configure.ac' and run `aclocal' and `autoconf'
+again.
+lib/Makefile.am:42:   If `AC_PROG_LIBTOOL' is in `configure.ac', make
+sure
+lib/Makefile.am:42:   its definition is in aclocal's search path.
+The command 'automake' failed
+cp -f package/gnuconfig/config.sub package/gnuconfig/config.guess
+/home/roberto/gles/buildroot/build_i586/curl-7.17.1
 
-> Thanks for suggestions I will try in the next week.
->
-> Some body has midori-0.0.17 tarball? I did not manage to download from
-> its home site, old version are not any more available in the wild.
->
-> I would give a try to midori and I think version 0.0.17 will compile
-> in buildroot.
->
-> 2008/11/11  <danieljlaird@hotmail.com>:
->> I just use webkit on Directfb with a patch to remove the need for  
->> ICU - see
->> https://bugs.webkit.org/show_bug.cgi?id=15914
->>
->> cheers
->> Dan laird
->>
->> --------------------------------------------------
->> From: "Roberto A. Foglietta" <roberto.foglietta@gmail.com>
->> Sent: Monday, November 10, 2008 7:15 PM
->> To: "Arnar Mar Sigur?sson" <antab@valka.is>
->> Cc: <buildroot@uclibc.org>
->> Subject: Re: [Buildroot] [buildroot 0006104]: midori libtool patch  
->> fails
->> toapply
->>
->>> This seems interesting as midori substitute:
->>>
->>> http://trac.webkit.org/wiki/S60Webkit
->>>
->>> Probably the fastest way to compile midori is to build a complete
->>> development environment and use it.
->>>
->>> Compile a cross toolchain in order to build a building environment  
->>> in
->>> which compile everything natively, umh... :-p
->>>
->>> I think it would resolve a lot of problem but it would be seriously
->>> limited to those $ARCH which runs onto qemu properly.
->>>
->>> 2008/11/10 Arnar Mar Sigur?sson <antab@valka.is>:
->>>>
->>>> Is anyone using this package?
->>>>
->>>> 0.0.18 is missing alot of features and was only semi usable on  
->>>> AVR32.
->>>> After version 0.0.18 they moved to a new python based build  
->>>> system that i
->>>> have been unable to get working within buildroot so i gave up on  
->>>> it.
->>>>
->>>> IMO if nobody wants to spend time getting the new version  
->>>> working, then
->>>> we
->>>> should just remove it.
->>>>
->>>> Greets
->>>>  Arnar Mar Sig
->>>>
->>>> -----Original Message-----
->>>> From: buildroot-bounces at uclibc.org on behalf of bugs at busybox.net
->>>> Sent: Mon 11/10/2008 5:48 PM
->>>> To: buildroot at uclibc.org
->>>> Subject: [Buildroot] [buildroot 0006104]: midori libtool patch  
->>>> fails to
->>>> apply
->>>>
->>>>
->>>> The following issue has been SUBMITTED.
->>>> = 
->>>> = 
->>>> = 
->>>> ===================================================================
->>>> http://busybox.net/bugs/view.php?id=6104
->>>> = 
->>>> = 
->>>> = 
->>>> ===================================================================
->>>> Reported By:                robang74
->>>> Assigned To:                buildroot
->>>> = 
->>>> = 
->>>> = 
->>>> ===================================================================
->>>> Project:                    buildroot
->>>> Issue ID:                   6104
->>>> Category:                   Shared Library Support
->>>> Reproducibility:            always
->>>> Severity:                   major
->>>> Priority:                   normal
->>>> Status:                     assigned
->>>> = 
->>>> = 
->>>> = 
->>>> ===================================================================
->>>> Date Submitted:             11-10-2008 09:48 PST
->>>> Last Modified:              11-10-2008 09:48 PST
->>>> = 
->>>> = 
->>>> = 
->>>> ===================================================================
->>>> Summary:                    midori libtool patch fails to apply
->>>> Description:
->>>>>>>
->>>>>>> midori 0.0.18 Extracting
->>>>>>> midori 0.0.18 Patching libtool
->>>>
->>>> Applying buildroot-libtool.patch using plaintext:
->>>> patching file ltmain.sh
->>>> Hunk http://busybox.net/bugs/view.php?id=1 FAILED at 273.
->>>> Hunk http://busybox.net/bugs/view.php?id=2 succeeded at 4811  
->>>> (offset 2403
->>>> lines).
->>>> Hunk http://busybox.net/bugs/view.php?id=3 FAILED at 4955.
->>>> Hunk http://busybox.net/bugs/view.php?id=4 FAILED at 5299.
->>>> Hunk http://busybox.net/bugs/view.php?id=5 succeeded at 7415 with  
->>>> fuzz 1
->>>> (offset
->>>> 1792 lines).
->>>> Hunk http://busybox.net/bugs/view.php?id=6 FAILED at 7740.
->>>> 4 out of 6 hunks FAILED -- saving rejects to file ltmain.sh.rej
->>>> Patch failed!  Please fix buildroot-libtool.patch!
->>>> make: ***
->>>>
->>>> [/home/roberto/gles/buildroot/build_i586/ 
->>>> midori-0.0.18/.stamp_libtool_patch]
->>>> Error 1
->>>>
->>>> = 
->>>> = 
->>>> = 
->>>> ===================================================================
->>>>
->>>> Issue History
->>>> Date Modified   Username       Field                    Change
->>>> = 
->>>> = 
->>>> = 
->>>> ===================================================================
->>>> 11-10-08 09:48  robang74       New Issue
->>>> 11-10-08 09:48  robang74       Status                   new =>  
->>>> assigned
->>>> 11-10-08 09:48  robang74       Assigned To               =>  
->>>> buildroot
->>>> = 
->>>> = 
->>>> = 
->>>> ===================================================================
->>>>
->>>> _______________________________________________
->>>> buildroot mailing list
->>>> buildroot at uclibc.org
->>>> http://busybox.net/mailman/listinfo/buildroot
->>>>
->>>>
->>>>
->>>> _______________________________________________
->>>> buildroot mailing list
->>>> buildroot at uclibc.org
->>>> http://busybox.net/mailman/listinfo/buildroot
->>>>
->>>
->>>
->>>
->>> --
->>> /roberto
->>> _______________________________________________
->>> buildroot mailing list
->>> buildroot at uclibc.org
->>> http://busybox.net/mailman/listinfo/buildroot
->>>
->>
->
->
->
-> -- 
-> /roberto
+[...]
 
-Greets
-	Arnar Mar Sig
-	Valka ehf
+[ ----- What is in description follows ---- ]
+
+roberto at rafbook:~/gles/buildroot$ automake --version
+automake (GNU automake) 1.10.1
+Copyright (C) 2008 Free Software Foundation, Inc.
+License GPLv2+: GNU GPL version 2 or later
+<http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+Written by Tom Tromey <tromey@redhat.com>
+       and Alexandre Duret-Lutz <adl@gnu.org>.
+
+roberto at rafbook:~/gles/buildroot$ make MKDIR_P="mkdir -p"
+
+[...]
+
+Making install in examples
+make[6]: Entering directory
+`/home/roberto/gles/buildroot/build_i586/curl-7.17.1/docs/examples'
+/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
+-Os  -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/include
+--sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
+/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
+-march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64 -DHAVE_CONFIG_H  -I../../include  -DCURL_NO_OLDIES 
+-g -O2 -MT 10-at-a-time.o -MD -MP -MF .deps/10-at-a-time.Tpo -c -o
+10-at-a-time.o 10-at-a-time.c
+mv -f .deps/10-at-a-time.Tpo .deps/10-at-a-time.Po
+/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
+-Os  -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/include
+--sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
+/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
+-march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64  -g -O2   -o 10-at-a-time 10-at-a-time.o
+../../lib/libcurl.la 
+../../lib/libcurl.la: file not recognized: File format not recognized
+collect2: ld returned 1 exit status
+make[6]: *** [10-at-a-time] Error 1
+make[6]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/curl-7.17.1/docs/examples'
+make[5]: *** [install-recursive] Error 1
+make[5]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/curl-7.17.1/docs'
+make[4]: *** [install-data-hook] Error 2
+make[4]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/curl-7.17.1'
+make[3]: *** [install-data-am] Error 2
+make[3]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/curl-7.17.1'
+make[2]: *** [install-am] Error 2
+make[2]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/curl-7.17.1'
+make[1]: *** [install-recursive] Error 1
+make[1]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/curl-7.17.1'
+make: ***
+[/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/curl] Error 2
+
+ 
+
+---------------------------------------------------------------------- 
+ robang74 - 11-12-08 16:27  
+---------------------------------------------------------------------- 
+Please close this report because the problem was: libtool not installed in
+the host system. If you like remove the host libtool need try to take a
+look to the attached patch. 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+11-10-08 07:11  robang74       New Issue                                    
+11-10-08 07:11  robang74       Status                   new => assigned     
+11-10-08 07:11  robang74       Assigned To               => buildroot       
+11-10-08 07:11  robang74       Issue Monitored: robang74                    
+11-10-08 07:16  robang74       Note Added: 0015334                          
+11-10-08 08:29  robang74       Note Added: 0015354                          
+11-10-08 08:29  robang74       Note Edited: 0015334                         
+11-10-08 08:30  robang74       Note Edited: 0015354                         
+11-10-08 08:45  robang74       Note Edited: 0015354                         
+11-10-08 08:45  robang74       Note Deleted: 0015334                        
+11-12-08 16:27  robang74       Note Added: 0015724                          
+======================================================================
