@@ -1,24 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Nov 2008 14:06:18 +0100
-Subject: [Buildroot] Adding AUTO_CONFIGURE_TARGET options from the GIT
- version of buildroot.
-In-Reply-To: <COL102-DS27ABA89DE666BAFC2B74ADC140@phx.gbl>
-References: <C13DBBE85AD6974B85C118C35890CA5F13B24B8CBE@EU1RDCRDC1WX029.exi.nxp.com>
-	<COL102-DS27ABA89DE666BAFC2B74ADC140@phx.gbl>
-Message-ID: <20081113140618.58dca1a7@surf>
+Date: Thu, 13 Nov 2008 14:07:00 +0100
+Subject: [Buildroot] TARGET_CONFIGURE_OPTS
+In-Reply-To: <ce76e3890811122014sbad333ai2101488d14ddb7f5@mail.gmail.com>
+References: <ce76e3890811122014sbad333ai2101488d14ddb7f5@mail.gmail.com>
+Message-ID: <20081113140700.67b6db3b@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 12 Nov 2008 18:06:42 -0000,
-<danieljlaird@hotmail.com> a ?crit :
+Le Thu, 13 Nov 2008 14:44:10 +1030,
+"malcolm blaney" <mblaney@gmail.com> a ?crit :
 
-> Has anyone tried this yet?
+> I'm trying to build dropbear, and have found that having
+> $(TARGET_CONFIGURE_OPTS) in the command to build:
+> $(DROPBEAR_DIR)/$(DROPBEAR_BINARY) in the file:
+> package/dropbear/dropbear.mk breaks my build. With it present the
+> value of CFLAGS in dropbear's makefile is not used and so some include
+> paths go missing. It seems to build fine when removed, or when placed
+> before $(MAKE) on the line.
 
-I will, but haven't yet had the time. I'll give you some feedback as
-soon as possible.
+What are the error messages ? What version of Buildroot are you using ?
 
 Thanks,
 
