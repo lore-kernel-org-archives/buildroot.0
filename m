@@ -1,131 +1,60 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Thu, 13 Nov 2008 05:11:01 -0800
-Subject: [Buildroot] [buildroot 0006134]: New Package: bluez-libs and
-	bluez-utils 3.36
-Message-ID: <489a5782ebcf197d0e59c6420f66a695@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 13 Nov 2008 15:23:34 +0100
+Subject: [Buildroot] Server administration,
+	and does buildroot have a maintainer?
+In-Reply-To: <200811091949.03358.rob@landley.net> (Rob Landley's message of
+	"Sun\, 9 Nov 2008 19\:49\:02 -0600")
+References: <200811091949.03358.rob@landley.net>
+Message-ID: <87r65fso0p.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Rob" == Rob Landley <rob@landley.net> writes:
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=6134 
-====================================================================== 
-Reported By:                ratbert
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   6134
-Category:                   New Features
-Reproducibility:            N/A
-Severity:                   feature
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             11-11-2008 06:29 PST
-Last Modified:              11-13-2008 05:11 PST
-====================================================================== 
-Summary:                    New Package: bluez-libs and bluez-utils 3.36
-Description: 
-Add packages for BlueZ bluetooth user space code building. You will also
-need bluetooth kernel space drivers (kernel config) to make use of these
-tools.
-====================================================================== 
+Hi,
 
----------------------------------------------------------------------- 
- smatuschka - 11-12-08 07:07  
----------------------------------------------------------------------- 
-I tried the patch in atmel buildroot avr32-v2.2.0.
-1.Question: Is only dbus needed or dbus-glib?
-2.Question: Where should these Bnumbers be defined? See this error:
-/buildroot-avr32-v2.2.0/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-gcc
--O2 -I/buildroot-avr32-v2.2.0/build_avr32/staging_dir/usr/include
--I/buildroot-avr32-v2.2.0/build_avr32/staging_dir/include
---sysroot=/buildroot-avr32-v2.2.0/build_avr32/staging_dir/ -isysroot
-/buildroot-avr32-v2.2.0/build_avr32/staging_dir -msoft-float
--D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
--D_FORTIFY_SOURCE=2 -fPIE
---sysroot=/buildroot-avr32-v2.2.0/build_avr32/staging_dir/ -o avinfo
-avinfo.o  -L/buildroot-avr32-v2.2.0/build_avr32/staging_dir/lib
--L/buildroot-avr32-v2.2.0/build_avr32/staging_dir/usr/lib
-/buildroot-avr32-v2.2.0/build_avr32/staging_dir/usr/lib/libbluetooth.so  
--Wl,--rpath -Wl,/buildroot-avr32-v2.2.0/build_avr32/staging_dir/usr/lib
--Wl,--rpath -Wl,/buildroot-avr32-v2.2.0/build_avr32/staging_dir/usr/lib
-/buildroot-avr32-v2.2.0/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-gcc
--DHAVE_CONFIG_H -I. -I.. -I../common    -O2 
--I/buildroot-avr32-v2.2.0/build_avr32/staging_dir/usr/include
--I/buildroot-avr32-v2.2.0/build_avr32/staging_dir/include
---sysroot=/buildroot-avr32-v2.2.0/build_avr32/staging_dir/ -isysroot
-/buildroot-avr32-v2.2.0/build_avr32/staging_dir -msoft-float
--D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
--D_FORTIFY_SOURCE=2 -fPIE -MT hciattach.o -MD -MP -MF .deps/hciattach.Tpo
--c -o hciattach.o hciattach.c
-hciattach.c: In function 'uart_speed':
-hciattach.c:111: error: 'B230400' undeclared (first use in this function)
-hciattach.c:111: error: (Each undeclared identifier is reported only once
-hciattach.c:111: error: for each function it appears in.)
-hciattach.c:113: error: 'B460800' undeclared (first use in this function)
-hciattach.c:115: error: 'B500000' undeclared (first use in this function)
-hciattach.c:117: error: 'B576000' undeclared (first use in this function)
-hciattach.c:119: error: 'B921600' undeclared (first use in this function)
-hciattach.c:121: error: 'B1000000' undeclared (first use in this
-function)
-hciattach.c:123: error: 'B1152000' undeclared (first use in this
-function)
-make[3]: *** [hciattach.o] Error 1
+ Rob> The web page still says Buildroot's maintainer is Erik Andersen,
+ Rob> who seems kind of busy with other things these days, has handed
+ Rob> off all the other projects on this server, and last posted to
+ Rob> this list 8 months ago.
 
-Versions:
-uClibc: 0.9.29
-gcc: 4.2.2
-linux: 2.6.25
+Yeah, Erik basically doesn't do any uclibc.org work anymore, buildroot
+or otherwise.
 
- 
+BR doesn't have a single maintainer, but I'm one of the old timers (so
+is Bernhard, but he forked).
 
----------------------------------------------------------------------- 
- ratbert - 11-12-08 08:00  
----------------------------------------------------------------------- 
-1. You should only need dbus, not dbus-glib.
+ Rob> I ask because Morris got cracked earlier today, and over on
+ Rob> freenode we're discussing reinstalling it with Gentoo Embedded.
+ Rob> The crack itself was just an automated script kiddie
+ Rob> compromising apache, and didn't even seem to notice _what_
+ Rob> server their bots had hit.  Denys spotted it within 24 hours,
+ Rob> and OSUOSL has good backups so they could confirm the data seems
+ Rob> to be fine, but it's generally a good idea to reinstall after
+ Rob> getting rootkitted _anyway_.
 
-2. D'oh. the buildroot/package/bluez-utils/hciattach-baud.patch is wrong.
-I need to adjust that patch file...
+Yeah :/
 
-Will attach new patch file in a moment... 
+ Rob> We're looking at gentoo embedded because then we'd be dogfooding
+ Rob> uClibc and busybox, which is cool.  (No, buildroot is not an
+ Rob> option; you have no package management, and the project has
+ Rob> still never had an actual _release_.
 
----------------------------------------------------------------------- 
- smatuschka - 11-13-08 04:24  
----------------------------------------------------------------------- 
-bluez-2.diff has an error:
-in the file hciattach.c are tabs but in the file hciattach-baud.patch
-generated by bluez-2.diff are spaces instead, so when buildroot tries to
-patch hciattach.c it fails. bluez.diff was correct in that way.
-I guess your editor replaced the tabs with spaces, not a good idea at this
-point :)
-With Tabs intead of the spaces in the hciattach-baud.patch, bluez compiles
-and works here. 
+/me mumbles something about getting a release out "soon" - But yeah.
 
----------------------------------------------------------------------- 
- ratbert - 11-13-08 05:11  
----------------------------------------------------------------------- 
-Thanks for testing. I've uploaded a third version with the tabs back in.
+I personally prefer Debian, but whatever floats your boat - As long as
+stuff works you won't hear me complain. Lets just keep things simple.
 
-It wasn't my editor BTW, but a cut and paste issue. My bad :( 
+ Rob> Bernhard and Denys have been pinged, and if buildroot has a
+ Rob> maintainer I'd like to keep him/her in the loop.  (If said
+ Rob> maintainer is still Erik, then he's aware of the crack already,
+ Rob> he just said he didn't have time to properly deal with it just
+ Rob> now and delegated it back to the rest of us.)
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-11-11-08 06:29  ratbert        New Issue                                    
-11-11-08 06:29  ratbert        Status                   new => assigned     
-11-11-08 06:29  ratbert        Assigned To               => buildroot       
-11-11-08 06:29  ratbert        File Added: bluez.diff                       
-11-12-08 06:53  smatuschka     Note Added: 0015554                          
-11-12-08 07:07  smatuschka     Note Edited: 0015554                         
-11-12-08 08:00  ratbert        Note Added: 0015564                          
-11-12-08 08:03  ratbert        File Added: bluez-2.diff                     
-11-13-08 01:54  ratbert        Issue Monitored: ratbert                     
-11-13-08 04:24  smatuschka     Note Added: 0015734                          
-11-13-08 05:09  ratbert        File Added: bluez-3.diff                     
-11-13-08 05:11  ratbert        Note Added: 0015744                          
-======================================================================
+I would like to be kept in the loop.
+
+-- 
+Bye, Peter Korsgaard
