@@ -1,33 +1,131 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Nov 2008 14:07:00 +0100
-Subject: [Buildroot] TARGET_CONFIGURE_OPTS
-In-Reply-To: <ce76e3890811122014sbad333ai2101488d14ddb7f5@mail.gmail.com>
-References: <ce76e3890811122014sbad333ai2101488d14ddb7f5@mail.gmail.com>
-Message-ID: <20081113140700.67b6db3b@surf>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Thu, 13 Nov 2008 05:11:01 -0800
+Subject: [Buildroot] [buildroot 0006134]: New Package: bluez-libs and
+	bluez-utils 3.36
+Message-ID: <489a5782ebcf197d0e59c6420f66a695@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 13 Nov 2008 14:44:10 +1030,
-"malcolm blaney" <mblaney@gmail.com> a ?crit :
 
-> I'm trying to build dropbear, and have found that having
-> $(TARGET_CONFIGURE_OPTS) in the command to build:
-> $(DROPBEAR_DIR)/$(DROPBEAR_BINARY) in the file:
-> package/dropbear/dropbear.mk breaks my build. With it present the
-> value of CFLAGS in dropbear's makefile is not used and so some include
-> paths go missing. It seems to build fine when removed, or when placed
-> before $(MAKE) on the line.
+A NOTE has been added to this issue. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=6134 
+====================================================================== 
+Reported By:                ratbert
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   6134
+Category:                   New Features
+Reproducibility:            N/A
+Severity:                   feature
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             11-11-2008 06:29 PST
+Last Modified:              11-13-2008 05:11 PST
+====================================================================== 
+Summary:                    New Package: bluez-libs and bluez-utils 3.36
+Description: 
+Add packages for BlueZ bluetooth user space code building. You will also
+need bluetooth kernel space drivers (kernel config) to make use of these
+tools.
+====================================================================== 
 
-What are the error messages ? What version of Buildroot are you using ?
+---------------------------------------------------------------------- 
+ smatuschka - 11-12-08 07:07  
+---------------------------------------------------------------------- 
+I tried the patch in atmel buildroot avr32-v2.2.0.
+1.Question: Is only dbus needed or dbus-glib?
+2.Question: Where should these Bnumbers be defined? See this error:
+/buildroot-avr32-v2.2.0/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-gcc
+-O2 -I/buildroot-avr32-v2.2.0/build_avr32/staging_dir/usr/include
+-I/buildroot-avr32-v2.2.0/build_avr32/staging_dir/include
+--sysroot=/buildroot-avr32-v2.2.0/build_avr32/staging_dir/ -isysroot
+/buildroot-avr32-v2.2.0/build_avr32/staging_dir -msoft-float
+-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+-D_FORTIFY_SOURCE=2 -fPIE
+--sysroot=/buildroot-avr32-v2.2.0/build_avr32/staging_dir/ -o avinfo
+avinfo.o  -L/buildroot-avr32-v2.2.0/build_avr32/staging_dir/lib
+-L/buildroot-avr32-v2.2.0/build_avr32/staging_dir/usr/lib
+/buildroot-avr32-v2.2.0/build_avr32/staging_dir/usr/lib/libbluetooth.so  
+-Wl,--rpath -Wl,/buildroot-avr32-v2.2.0/build_avr32/staging_dir/usr/lib
+-Wl,--rpath -Wl,/buildroot-avr32-v2.2.0/build_avr32/staging_dir/usr/lib
+/buildroot-avr32-v2.2.0/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-gcc
+-DHAVE_CONFIG_H -I. -I.. -I../common    -O2 
+-I/buildroot-avr32-v2.2.0/build_avr32/staging_dir/usr/include
+-I/buildroot-avr32-v2.2.0/build_avr32/staging_dir/include
+--sysroot=/buildroot-avr32-v2.2.0/build_avr32/staging_dir/ -isysroot
+/buildroot-avr32-v2.2.0/build_avr32/staging_dir -msoft-float
+-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+-D_FORTIFY_SOURCE=2 -fPIE -MT hciattach.o -MD -MP -MF .deps/hciattach.Tpo
+-c -o hciattach.o hciattach.c
+hciattach.c: In function 'uart_speed':
+hciattach.c:111: error: 'B230400' undeclared (first use in this function)
+hciattach.c:111: error: (Each undeclared identifier is reported only once
+hciattach.c:111: error: for each function it appears in.)
+hciattach.c:113: error: 'B460800' undeclared (first use in this function)
+hciattach.c:115: error: 'B500000' undeclared (first use in this function)
+hciattach.c:117: error: 'B576000' undeclared (first use in this function)
+hciattach.c:119: error: 'B921600' undeclared (first use in this function)
+hciattach.c:121: error: 'B1000000' undeclared (first use in this
+function)
+hciattach.c:123: error: 'B1152000' undeclared (first use in this
+function)
+make[3]: *** [hciattach.o] Error 1
 
-Thanks,
+Versions:
+uClibc: 0.9.29
+gcc: 4.2.2
+linux: 2.6.25
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+ 
+
+---------------------------------------------------------------------- 
+ ratbert - 11-12-08 08:00  
+---------------------------------------------------------------------- 
+1. You should only need dbus, not dbus-glib.
+
+2. D'oh. the buildroot/package/bluez-utils/hciattach-baud.patch is wrong.
+I need to adjust that patch file...
+
+Will attach new patch file in a moment... 
+
+---------------------------------------------------------------------- 
+ smatuschka - 11-13-08 04:24  
+---------------------------------------------------------------------- 
+bluez-2.diff has an error:
+in the file hciattach.c are tabs but in the file hciattach-baud.patch
+generated by bluez-2.diff are spaces instead, so when buildroot tries to
+patch hciattach.c it fails. bluez.diff was correct in that way.
+I guess your editor replaced the tabs with spaces, not a good idea at this
+point :)
+With Tabs intead of the spaces in the hciattach-baud.patch, bluez compiles
+and works here. 
+
+---------------------------------------------------------------------- 
+ ratbert - 11-13-08 05:11  
+---------------------------------------------------------------------- 
+Thanks for testing. I've uploaded a third version with the tabs back in.
+
+It wasn't my editor BTW, but a cut and paste issue. My bad :( 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+11-11-08 06:29  ratbert        New Issue                                    
+11-11-08 06:29  ratbert        Status                   new => assigned     
+11-11-08 06:29  ratbert        Assigned To               => buildroot       
+11-11-08 06:29  ratbert        File Added: bluez.diff                       
+11-12-08 06:53  smatuschka     Note Added: 0015554                          
+11-12-08 07:07  smatuschka     Note Edited: 0015554                         
+11-12-08 08:00  ratbert        Note Added: 0015564                          
+11-12-08 08:03  ratbert        File Added: bluez-2.diff                     
+11-13-08 01:54  ratbert        Issue Monitored: ratbert                     
+11-13-08 04:24  smatuschka     Note Added: 0015734                          
+11-13-08 05:09  ratbert        File Added: bluez-3.diff                     
+11-13-08 05:11  ratbert        Note Added: 0015744                          
+======================================================================
