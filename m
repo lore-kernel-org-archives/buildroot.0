@@ -1,32 +1,35 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Fri, 14 Nov 2008 09:27:06 +0100
-Subject: [Buildroot] [RFC] moving audio and video packages into a new
- category 'multimedia'
-In-Reply-To: <200811140813.57041.markus.heidelberg@web.de>
-References: <200811140813.57041.markus.heidelberg@web.de>
-Message-ID: <20081114092706.4e11413d@hcegtvedt>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Fri, 14 Nov 2008 00:47:04 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/dropbear
+Message-ID: <20081114084704.76A083C8CB@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 14 Nov 2008 08:13:56 +0100
-Markus Heidelberg <markus.heidelberg@web.de> wrote:
+Author: jacmet
+Date: 2008-11-14 00:47:04 -0800 (Fri, 14 Nov 2008)
+New Revision: 24036
 
-> Hi,
-> 
-> I'm currently working on some video stuff and would like to put new
-> packages together with the 'audio' category into a new category
-> 'multimedia'. As far as I can see currently affected are
-> package/audio, mplayer and vlc. Mplayer and vlc are in the 'graphics'
-> category, that seems to be a bit odd.
-> 
+Log:
+dropbear: bump version
 
-I would love to see the entire package selection cleaned up and grouped
-into sane sub groups. Mostly the kconfig part of it, but the package
-directory structure should reflect kconfig IMHO.
+Modified:
+   trunk/buildroot/package/dropbear/dropbear.mk
 
--- 
-Best regards,
-Hans-Christian Egtvedt
+
+Changeset:
+Modified: trunk/buildroot/package/dropbear/dropbear.mk
+===================================================================
+--- trunk/buildroot/package/dropbear/dropbear.mk	2008-11-14 00:37:48 UTC (rev 24035)
++++ trunk/buildroot/package/dropbear/dropbear.mk	2008-11-14 08:47:04 UTC (rev 24036)
+@@ -3,7 +3,7 @@
+ # dropbear
+ #
+ #############################################################
+-DROPBEAR_VERSION:=0.51
++DROPBEAR_VERSION:=0.52
+ DROPBEAR_SOURCE:=dropbear-$(DROPBEAR_VERSION).tar.gz
+ DROPBEAR_SITE:=http://matt.ucc.asn.au/dropbear/releases/
+ DROPBEAR_DIR:=$(BUILD_DIR)/dropbear-$(DROPBEAR_VERSION)
