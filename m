@@ -1,50 +1,149 @@
-From: hartleys <hartleys@visionengravers.com>
-Date: Fri, 14 Nov 2008 11:42:45 -0500
-Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
-In-Reply-To: <20081113163256.D28F83C8A1@busybox.net>
-References: <20081113163256.D28F83C8A1@busybox.net>
-Message-ID: <BD79186B4FD85F4B8E60E381CAEE1909D3E78E@mi8nycmail19.Mi8.com>
+From: Arnar Mar Sig <antab@valka.is>
+Date: Fri, 14 Nov 2008 18:16:21 +0100
+Subject: [Buildroot] [PATCH] Create "Shells" package category
+Message-ID: <B675007D-8CE2-48C7-9F49-241B967F30C7@valka.is>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thursday, November 13, 2008 9:33 AM, jacmet at uclibc.org wrote:
-> Author: jacmet
-> Date: 2008-11-13 08:32:56 -0800 (Thu, 13 Nov 2008) New Revision: 24031
-> 
-> Log:
-> busybox: add 1.13.x, mark older as deprecated
-> 
-> Added:
->    trunk/buildroot/package/busybox/busybox-1.13.0-getopt.patch
->    trunk/buildroot/package/busybox/busybox-1.13.0-lineedit.patch
->    trunk/buildroot/package/busybox/busybox-1.13.0-modprobe.patch
-> 
-> Modified:
->    trunk/buildroot/package/busybox/Config.in
+First of the package menu cleanup.
 
-With revision 24042 of buildroot I get an error building busybox. During
-the build I get:
+Create a new package sub menu named "Shells" and move bash into it.
+It also removes the  if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS condition  
+around the package sub menus, is it not it better to set this in the  
+package's Config.in?
 
-...
-  CC      coreutils/id.o
-coreutils/id.c: In function 'get_groups':
-coreutils/id.c:81: warning: implicit declaration of function
-'getgrouplist'
-...
+If there are no objection then I'll just go ahead and commit it
 
-Then at the final link:
+(svn diff does not show files moved around:/)
 
-...
-coreutils/lib.a(id.o): In function `get_groups':
-id.c:(.text.get_groups+0x10): undefined reference to `getgrouplist'
-collect2: ld returned 1 exit status
-make[1]: *** [busybox_unstripped] Error 1
-...
+Greets
+	Arnar Mar Sig
 
-Any ideas?
+Index: shells/editors.mk
+===================================================================
+--- shells/editors.mk	(revision 0)
++++ shells/editors.mk	(revision 0)
+@@ -0,0 +1 @@
++include package/shells/*/*.mk
+Index: shells/Config.in
+===================================================================
+--- shells/Config.in	(revision 0)
++++ shells/Config.in	(revision 0)
+@@ -0,0 +1,3 @@
++menu "Shells"
++source "package/shells/bash/Config.in"
++endmenu
 
-Thanks,
-Hartley
+Property changes on: shells/bash
+___________________________________________________________________
+Added: svn:mergeinfo
+
+
+Property changes on: shells/bash
+___________________________________________________________________
+Added: svn:mergeinfo
+
+Index: bash/bash32-010 (deleted)
+===================================================================
+Index: bash/bash32-011 (deleted)
+===================================================================
+Index: bash/bash32-030 (deleted)
+===================================================================
+Index: bash/bash32-012 (deleted)
+===================================================================
+Index: bash/bash32-013 (deleted)
+===================================================================
+Index: bash/bash32-031 (deleted)
+===================================================================
+Index: bash/bash32-014 (deleted)
+===================================================================
+Index: bash/bash32-032 (deleted)
+===================================================================
+Index: bash/bash32-015 (deleted)
+===================================================================
+Index: bash/bash32-033 (deleted)
+===================================================================
+Index: bash/bash32-016 (deleted)
+===================================================================
+Index: bash/bash32-017 (deleted)
+===================================================================
+Index: bash/bash32-018 (deleted)
+===================================================================
+Index: bash/bash32-019 (deleted)
+===================================================================
+Index: bash/bash32-remove-bzero-dependancy.patch (deleted)
+===================================================================
+Index: bash/bash32-001 (deleted)
+===================================================================
+Index: bash/bash32-020 (deleted)
+===================================================================
+Index: bash/bash32-002 (deleted)
+===================================================================
+Index: bash/bash32-021 (deleted)
+===================================================================
+Index: bash/bash32-003 (deleted)
+===================================================================
+Index: bash/bash32-022 (deleted)
+===================================================================
+Index: bash/bash.mk (deleted)
+===================================================================
+Index: bash/bash32-004 (deleted)
+===================================================================
+Index: bash/bash32-023 (deleted)
+===================================================================
+Index: bash/bash32-005 (deleted)
+===================================================================
+Index: bash/bash32-024 (deleted)
+===================================================================
+Index: bash/bash32-006 (deleted)
+===================================================================
+Index: bash/bash32-025 (deleted)
+===================================================================
+Index: bash/bash32-007 (deleted)
+===================================================================
+Index: bash/bash32-026 (deleted)
+===================================================================
+Index: bash/bash32-008 (deleted)
+===================================================================
+Index: bash/bash32-027 (deleted)
+===================================================================
+Index: bash/bash32-009 (deleted)
+===================================================================
+Index: bash/bash32-028 (deleted)
+===================================================================
+Index: bash/bash32-029 (deleted)
+===================================================================
+Index: bash/Config.in (deleted)
+===================================================================
+Index: Config.in
+===================================================================
+--- Config.in	(revision 24042)
++++ Config.in	(working copy)
+@@ -5,7 +5,6 @@
+comment "The minimum needed to build a uClibc development system"
+
+if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
+-source "package/bash/Config.in"
+source "package/bzip2/Config.in"
+source "package/coreutils/Config.in"
+source "package/diffutils/Config.in"
+@@ -112,15 +111,9 @@
+endif
+
+source "package/database/Config.in"
+-
+-if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
+-# busybox has an editor
+-
+-# text editors
+source "package/editors/Config.in"
++source "package/shells/Config.in"
+
+-endif
+-
+menu "Networking"
+
+comment "Networking applications"
