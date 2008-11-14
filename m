@@ -1,23 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 14 Nov 2008 14:37:04 +0100
-Subject: [Buildroot] [PATCH] u-boot: add config option to disable
-	patching
-In-Reply-To: <200811140854.58814.markus.heidelberg@web.de> (Markus
-	Heidelberg's message of "Fri\, 14 Nov 2008 08\:54\:58 +0100")
-References: <200811140854.58814.markus.heidelberg@web.de>
-Message-ID: <87od0ijunz.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Fri, 14 Nov 2008 05:39:46 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/lzo
+Message-ID: <20081114133946.360FD3C941@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Markus" == Markus Heidelberg <markus.heidelberg@web.de> writes:
+Author: jacmet
+Date: 2008-11-14 05:39:46 -0800 (Fri, 14 Nov 2008)
+New Revision: 24041
 
- Markus> The patches in target/u-boot/ can conflict with custom board specific
- Markus> patches, so this option is necessary.
+Log:
+lzo: add $(DISABLE_LARGEFILE) to configure options
 
-But there aren't any patches under target/u-boot?
+Signed-off-by: Markus Heidelberg <markus.heidelberg@web.de>
 
--- 
-Bye, Peter Korsgaard
+Modified:
+   trunk/buildroot/package/lzo/lzo.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/lzo/lzo.mk
+===================================================================
+--- trunk/buildroot/package/lzo/lzo.mk	2008-11-14 13:03:01 UTC (rev 24040)
++++ trunk/buildroot/package/lzo/lzo.mk	2008-11-14 13:39:46 UTC (rev 24041)
+@@ -11,7 +11,7 @@
+ LZO_INSTALL_TARGET = YES
+ LZO_INSTALL_STAGING_OPT = CC="$(TARGET_CC)" DESTDIR=$(STAGING_DIR) install
+ LZO_CONF_ENV =
+-LZO_CONF_OPT =
++LZO_CONF_OPT = $(DISABLE_LARGEFILE)
+ LZO_DEPENDENCIES = uclibc
+ 
+ $(eval $(call AUTOTARGETS,package,lzo))
