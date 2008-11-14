@@ -1,40 +1,75 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Fri, 14 Nov 2008 10:52:26 +0100
-Subject: [Buildroot] [PATCH] package: don't default to y for categories
-In-Reply-To: <200811141021.18792.markus.heidelberg@web.de>
-References: <200811132007.39723.markus.heidelberg@web.de>
-	<200811140957.05585.markus.heidelberg@web.de>
-	<20081114101003.5f1cb983@hcegtvedt>
-	<200811141021.18792.markus.heidelberg@web.de>
-Message-ID: <20081114105226.505aa98b@hcegtvedt>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Fri, 14 Nov 2008 02:06:45 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device
+Message-ID: <20081114100645.192BD3C8EE@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 14 Nov 2008 10:21:18 +0100
-Markus Heidelberg <markus.heidelberg@web.de> wrote:
+Author: jacmet
+Date: 2008-11-14 02:06:44 -0800 (Fri, 14 Nov 2008)
+New Revision: 24037
 
-> Hans-Christian Egtvedt, 14.11.2008:
-> > On Fri, 14 Nov 2008 09:57:05 +0100
-> > Markus Heidelberg <markus.heidelberg@web.de> wrote:
+Log:
+target/Config.in.toolchain: cleanup
 
-<snipp>
+Modified:
+   trunk/buildroot/target/device/Config.in.toolchain
 
-> > A bit OT; the sub package selection directory should be selected
-> > when you have a package selected beneath. That way you can not
-> > disable compression stuff, when you have ZLIB selected by other
-> > packages.
-> 
-> Damn, I see. So please forget the patch for now.
-> 
 
-It was more a remark about a general "bug" in the menu system generated
-by kconfig now. Just look at the kernel, if you select a driver beneath
-SPI, then you are not able to deselect the SPI category. I think we
-should do the same with the kconfig in Buildroot.
-
--- 
-Best regards,
-Hans-Christian Egtvedt
+Changeset:
+Modified: trunk/buildroot/target/device/Config.in.toolchain
+===================================================================
+--- trunk/buildroot/target/device/Config.in.toolchain	2008-11-14 08:47:04 UTC (rev 24036)
++++ trunk/buildroot/target/device/Config.in.toolchain	2008-11-14 10:06:44 UTC (rev 24037)
+@@ -156,35 +156,33 @@
+ 
+ config	BR2_EXT_GCC_VERSION_4_1_2
+ 	bool
+-	default y if !BR2_TOOLCHAIN_EXTERNAL_SOURCE
+-	default n if  BR2_TOOLCHAIN_EXTERNAL_SOURCE
++	default !BR2_TOOLCHAIN_EXTERNAL_SOURCE
+ 
+ config	BR2_EXT_GCC_VERSION_4_2_1
+ 	bool
+-	default y if !BR2_TOOLCHAIN_EXTERNAL_SOURCE
+-	default n if  BR2_TOOLCHAIN_EXTERNAL_SOURCE
++	default !BR2_TOOLCHAIN_EXTERNAL_SOURCE
+ 
+ config	BR2_EXT_GCC_VERSION_4_2_2
+ 	bool
+-	default y if !BR2_TOOLCHAIN_EXTERNAL_SOURCE
+-	default n if  BR2_TOOLCHAIN_EXTERNAL_SOURCE
++	default !BR2_TOOLCHAIN_EXTERNAL_SOURCE
+ 
+ config	BR2_EXT_GCC_VERSION_4_2_3
+ 	bool
+-	default y if !BR2_TOOLCHAIN_EXTERNAL_SOURCE
+-	default n if  BR2_TOOLCHAIN_EXTERNAL_SOURCE
++	default !BR2_TOOLCHAIN_EXTERNAL_SOURCE
+ 
+ config	BR2_EXT_BINUTILS_VERSION_2_17
+ 	bool
+-	default y if !BR2_TOOLCHAIN_EXTERNAL_SOURCE
+-	default n if  BR2_TOOLCHAIN_EXTERNAL_SOURCE
++	default !BR2_TOOLCHAIN_EXTERNAL_SOURCE
+ 
++config	BR2_EXT_UCLIBC_VERSION_0_9_28_3
++	bool
++	default !BR2_TOOLCHAIN_EXTERNAL_SOURCE
++
+ config	BR2_EXT_UCLIBC_VERSION_0_9_29
+ 	bool
+-	default y if !BR2_TOOLCHAIN_EXTERNAL_SOURCE
+-	default n if  BR2_TOOLCHAIN_EXTERNAL_SOURCE
++	default !BR2_TOOLCHAIN_EXTERNAL_SOURCE
+ 
+-config	BR2_EXT_UCLIBC_VERSION_0_9_28_3
++config	BR2_EXT_UCLIBC_VERSION_0_9_30
+ 	bool
+-	default y if !BR2_TOOLCHAIN_EXTERNAL_SOURCE
+-	default n if  BR2_TOOLCHAIN_EXTERNAL_SOURCE
++	default !BR2_TOOLCHAIN_EXTERNAL_SOURCE
++
