@@ -1,52 +1,95 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 14 Nov 2008 12:43:01 +0100
-Subject: [Buildroot] [PATCH] package: don't default to y for categories
-In-Reply-To: <20081114111923.4d1f2ab8@hcegtvedt> (Hans-Christian Egtvedt's
-	message of "Fri\, 14 Nov 2008 11\:19\:23 +0100")
-References: <200811132007.39723.markus.heidelberg@web.de>
-	<200811140957.05585.markus.heidelberg@web.de>
-	<20081114101003.5f1cb983@hcegtvedt>
-	<200811141021.18792.markus.heidelberg@web.de>
-	<20081114105226.505aa98b@hcegtvedt> <20081114111545.3d3d5ca3@surf>
-	<20081114111923.4d1f2ab8@hcegtvedt>
-Message-ID: <87vduqo7ne.fsf@macbook.be.48ers.dk>
+From: Arnar Mar Sig <antab@valka.is>
+Date: Fri, 14 Nov 2008 12:47:58 +0100
+Subject: [Buildroot] [RFC] moving audio and video packages into a
+	new	category 'multimedia'
+In-Reply-To: <COL102-DS1586696D3AE21579640C10DC160@phx.gbl>
+References: <200811140813.57041.markus.heidelberg@web.de>	<20081114092706.4e11413d@hcegtvedt>
+	<200811141003.19394.markus.heidelberg@web.de>
+	<COL102-DS1586696D3AE21579640C10DC160@phx.gbl>
+Message-ID: <9DA31EAF-25F4-4EB3-BD8D-4229AD7DE022@valka.is>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Hans-Christian" == Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> writes:
+I also think that the package dir structure should reflect the menus  
+and no packages should be directly under packages/
 
-Hi,
+IMO the organization of package that FreeBSD ports has is really good  
+and can be used as template for our package dir structure.
+Also FreeBSD ports does NOT rename packages like most linux package  
+systems do (and annoys the hell out of me). Like libgtk, the softwares  
+name is GTK not libgtk so the package should be named gtk to make  
+looking for it easier.
 
- >> In our case, the categories ? Graphical libraries ?, ? Audio stuff ?
- >> and others do not lead to anything being compiled, except if I'm
- >> wrong. So I would say that we shouldn't be able to select/unselect the
- >> categories. They should just be submenus, to organize the options, not
- >> more.
- >> 
+On Nov 14, 2008, at 11:29 AM, Daniel Laird wrote:
 
- Hans-Christian> Ah, even more sane. I think I for long time ago
- Hans-Christian> (probably fixed now) that LZO was not compiled if the
- Hans-Christian> compression menu was not selected. LZO was selected
- Hans-Christian> by some other packages in a different sub menu.
+> I made some suggestions some time ago and started the move with  
+> audio and
+> games.
+>
+> I also proposed a large clean up of the huge BR2_GRAPHICS menu which  
+> is a
+> bit large.
+>
+> I also believe that no packages should be under package directly.
+>
+> I think we should create a directory skeleton on here.  Get  
+> agreement and
+> make the big move
+> Cheers
+> Daniel Laird
+>
+>
+> -----Original Message-----
+> From: buildroot-bounces at uclibc.org [mailto:buildroot-bounces at uclibc.org 
+> ] On
+> Behalf Of Markus Heidelberg
+> Sent: 2008 Nov 14 09:03
+> To: Hans-Christian Egtvedt
+> Cc: buildroot at uclibc.org
+> Subject: Re: [Buildroot] [RFC] moving audio and video packages into  
+> a new
+> category 'multimedia'
+>
+> Hans-Christian Egtvedt, 14.11.2008:
+>> On Fri, 14 Nov 2008 08:13:56 +0100
+>> Markus Heidelberg <markus.heidelberg@web.de> wrote:
+>>
+>>> Hi,
+>>>
+>>> I'm currently working on some video stuff and would like to put new
+>>> packages together with the 'audio' category into a new category
+>>> 'multimedia'. As far as I can see currently affected are
+>>> package/audio, mplayer and vlc. Mplayer and vlc are in the  
+>>> 'graphics'
+>>> category, that seems to be a bit odd.
+>>>
+>>
+>> I would love to see the entire package selection cleaned up and  
+>> grouped
+>> into sane sub groups. Mostly the kconfig part of it, but the package
+>> directory structure should reflect kconfig IMHO.
+>
+> Should we even go so far that not a single package should live under
+> package/
+> directly any more, but all packages under package/<category>/ ?
+>
+> I think so. And BusyBox works the same way.
+>
+> Markus
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
 
-I actually think that's still the case as we don't source the
-Config.in files of the stuff in the sub menus if the menu isn't
-enabled.
-
- >> Look at the top of the kernel configuration system. Networking support
- >> can be enabled/disabled as a whole, while Device Drivers is just a
- >> submenu. Our categories should be like Device Drivers, IMO.
- >> 
-
- Hans-Christian> Yes, that is smoother IMHO.
-
-I agree. I'll change the sub menus to use menu / endmenu instead of
-menuconfig. This does mean that you no longer can deselect all
-packages in a submenu simply by deselecting the menu, but as all
-packages default to n that shouldn't be a big deal.
-
--- 
-Bye, Peter Korsgaard
+Greets
+	Arnar Mar Sig
+	Valka ehf
