@@ -1,45 +1,52 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 14 Nov 2008 12:15:13 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device
-In-Reply-To: <20081114111259.5e2d902c@surf> (Thomas Petazzoni's message of
-	"Fri\, 14 Nov 2008 11\:12\:59 +0100")
-References: <20081114100645.192BD3C8EE@busybox.net>
-	<20081114111259.5e2d902c@surf>
-Message-ID: <87zlk2o8xq.fsf@macbook.be.48ers.dk>
+Date: Fri, 14 Nov 2008 12:43:01 +0100
+Subject: [Buildroot] [PATCH] package: don't default to y for categories
+In-Reply-To: <20081114111923.4d1f2ab8@hcegtvedt> (Hans-Christian Egtvedt's
+	message of "Fri\, 14 Nov 2008 11\:19\:23 +0100")
+References: <200811132007.39723.markus.heidelberg@web.de>
+	<200811140957.05585.markus.heidelberg@web.de>
+	<20081114101003.5f1cb983@hcegtvedt>
+	<200811141021.18792.markus.heidelberg@web.de>
+	<20081114105226.505aa98b@hcegtvedt> <20081114111545.3d3d5ca3@surf>
+	<20081114111923.4d1f2ab8@hcegtvedt>
+Message-ID: <87vduqo7ne.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Hans-Christian" == Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> writes:
 
 Hi,
 
- Thomas> I don't really get what's all this toolchain-related stuff in
- Thomas> target/device/. Even when using a binary external toolchain, all the
- Thomas> BR2_EXT_GCC_VERSION_* variables are set:
+ >> In our case, the categories ? Graphical libraries ?, ? Audio stuff ?
+ >> and others do not lead to anything being compiled, except if I'm
+ >> wrong. So I would say that we shouldn't be able to select/unselect the
+ >> categories. They should just be submenus, to organize the options, not
+ >> more.
+ >> 
 
- Thomas> BR2_EXT_GCC_VERSION_4_1_2=y
- Thomas> BR2_EXT_GCC_VERSION_4_2_1=y
- Thomas> BR2_EXT_GCC_VERSION_4_2_2=y
- Thomas> BR2_EXT_GCC_VERSION_4_2_3=y
- Thomas> BR2_EXT_BINUTILS_VERSION_2_17=y
- Thomas> BR2_EXT_UCLIBC_VERSION_0_9_29=y
- Thomas> BR2_EXT_UCLIBC_VERSION_0_9_28_3=y
+ Hans-Christian> Ah, even more sane. I think I for long time ago
+ Hans-Christian> (probably fixed now) that LZO was not compiled if the
+ Hans-Christian> compression menu was not selected. LZO was selected
+ Hans-Christian> by some other packages in a different sub menu.
 
- Thomas> which looks a bit odd to me, since Buildroot has absolutely no power
- Thomas> over the version of the components used in an already compiled binary
- Thomas> toolchain.
+I actually think that's still the case as we don't source the
+Config.in files of the stuff in the sub menus if the menu isn't
+enabled.
 
- Thomas> And why is all that stuff implemented in target/device/ and not in
- Thomas> toolchain/ ?
+ >> Look at the top of the kernel configuration system. Networking support
+ >> can be enabled/disabled as a whole, while Device Drivers is just a
+ >> submenu. Our categories should be like Device Drivers, IMO.
+ >> 
 
-I actually have no idea - I don't use the external toolchain stuff,
-but it looks like something related to the avr32 stuff.
+ Hans-Christian> Yes, that is smoother IMHO.
 
-I've just cleaned it up slightly in preparation for adding uclibc
-0.9.30.
+I agree. I'll change the sub menus to use menu / endmenu instead of
+menuconfig. This does mean that you no longer can deselect all
+packages in a submenu simply by deselecting the menu, but as all
+packages default to n that shouldn't be a big deal.
 
 -- 
 Bye, Peter Korsgaard
