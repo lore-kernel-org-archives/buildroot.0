@@ -1,35 +1,45 @@
-From: correa at uclibc.org <correa@uclibc.org>
-Date: Fri, 14 Nov 2008 03:06:02 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/dropbear
-Message-ID: <20081114110602.0E1AB3C8C6@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 14 Nov 2008 12:15:13 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device
+In-Reply-To: <20081114111259.5e2d902c@surf> (Thomas Petazzoni's message of
+	"Fri\, 14 Nov 2008 11\:12\:59 +0100")
+References: <20081114100645.192BD3C8EE@busybox.net>
+	<20081114111259.5e2d902c@surf>
+Message-ID: <87zlk2o8xq.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: correa
-Date: 2008-11-14 03:06:01 -0800 (Fri, 14 Nov 2008)
-New Revision: 24038
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Log:
-Fix build. Use TARGET_CONFIGURE_OPTS as environment rather than as argument of make to avoid overwriting dropbear's CFLAGS
+Hi,
 
-Modified:
-   trunk/buildroot/package/dropbear/dropbear.mk
+ Thomas> I don't really get what's all this toolchain-related stuff in
+ Thomas> target/device/. Even when using a binary external toolchain, all the
+ Thomas> BR2_EXT_GCC_VERSION_* variables are set:
 
+ Thomas> BR2_EXT_GCC_VERSION_4_1_2=y
+ Thomas> BR2_EXT_GCC_VERSION_4_2_1=y
+ Thomas> BR2_EXT_GCC_VERSION_4_2_2=y
+ Thomas> BR2_EXT_GCC_VERSION_4_2_3=y
+ Thomas> BR2_EXT_BINUTILS_VERSION_2_17=y
+ Thomas> BR2_EXT_UCLIBC_VERSION_0_9_29=y
+ Thomas> BR2_EXT_UCLIBC_VERSION_0_9_28_3=y
 
-Changeset:
-Modified: trunk/buildroot/package/dropbear/dropbear.mk
-===================================================================
---- trunk/buildroot/package/dropbear/dropbear.mk	2008-11-14 10:06:44 UTC (rev 24037)
-+++ trunk/buildroot/package/dropbear/dropbear.mk	2008-11-14 11:06:01 UTC (rev 24038)
-@@ -42,7 +42,7 @@
- 	touch $@
- 
- $(DROPBEAR_DIR)/$(DROPBEAR_BINARY): $(DROPBEAR_DIR)/.configured
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) LD=$(TARGET_CC) \
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) LD=$(TARGET_CC) \
- 		PROGRAMS="dropbear dbclient dropbearkey dropbearconvert scp" \
- 		MULTI=1 SCPPROGRESS=1 -C $(DROPBEAR_DIR)
- 
+ Thomas> which looks a bit odd to me, since Buildroot has absolutely no power
+ Thomas> over the version of the components used in an already compiled binary
+ Thomas> toolchain.
+
+ Thomas> And why is all that stuff implemented in target/device/ and not in
+ Thomas> toolchain/ ?
+
+I actually have no idea - I don't use the external toolchain stuff,
+but it looks like something related to the avr32 stuff.
+
+I've just cleaned it up slightly in preparation for adding uclibc
+0.9.30.
+
+-- 
+Bye, Peter Korsgaard
