@@ -1,115 +1,27 @@
-From: Roberto A. Foglietta <roberto.foglietta@gmail.com>
-Date: Sat, 15 Nov 2008 10:40:09 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package
-In-Reply-To: <COL102-DS21DE57562B03C89036385DC110@phx.gbl>
-References: <20081111183231.E74AC3C989@busybox.net>
-	<BD79186B4FD85F4B8E60E381CAEE1909CEAAE5@mi8nycmail19.Mi8.com>
-	<20081112085548.105af9b2@surf>
-	<1363312C-9914-45B9-9A58-86C6CB8AD38B@valka.is>
-	<e4c675870811142206p1100c2a6ha571f1fbe5a5ba1e@mail.gmail.com>
-	<COL102-DS21DE57562B03C89036385DC110@phx.gbl>
-Message-ID: <e4c675870811150140y5cb47c91p55be7dfa442e6da0@mail.gmail.com>
+From: Markus Heidelberg <markus.heidelberg@web.de>
+Date: Sat, 15 Nov 2008 11:56:01 +0100
+Subject: [Buildroot] [PATCH] u-boot: add config option to disable
+	patching
+In-Reply-To: <87od0ijunz.fsf@macbook.be.48ers.dk>
+References: <200811140854.58814.markus.heidelberg@web.de>
+	<87od0ijunz.fsf@macbook.be.48ers.dk>
+Message-ID: <200811151156.02393.markus.heidelberg@web.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Peter Korsgaard, 14.11.2008:
+> >>>>> "Markus" == Markus Heidelberg <markus.heidelberg@web.de> writes:
+> 
+>  Markus> The patches in target/u-boot/ can conflict with custom board specific
+>  Markus> patches, so this option is necessary.
+> 
+> But there aren't any patches under target/u-boot?
 
- Unfortunately at this time I cannot help you in external toolchain support.
+I use Atmel's buildroot for AVR32, they added a patch there. Then do you think
+we should just delete the 3 patch-kernel.sh lines I've surrounded with the new
+option because it is never used?
 
- The problem is not only that gcc complains but X server does not
-compile at all.
-
-2008/11/15  <danieljlaird@hotmail.com>:
-> We have some issues regarding this patch.
-> The problem is that buildroot when it builds its own compiler gets rpath etc
-> setup properly.
-> If you try to build buildroot with an external toolchain then this fails and
-> various issues are seen.
->
-> Currently Thomas and myself have posted various forms of a patch that tries
-> to get buildroot working
-> with an external toolchain as both of us (I believe) require this
-> functionality.
->
-> The problem appears to be that if *-gcc is compiling to a object file then
-> the --rpath-link options are not necessary and it complains.
-> currently however when gcc is doing the linking then it requires the --rpath
-> options.
->
-> I am not a gcc expert or a particular toolchain expert so I would love
-> someone who might know to try and
-> help us on how to use an external toolchain with buildroot and the correct
-> --rpath flags at the right time.
->
-> I have found some stuff on LD_RUN_PATH, maybe this could be used? any help
-> is really appreciated,
-> it currently seems a shame that buildroot and external toolchain support is
-> not quite as good as it could be!
->
-> cheers
-> daniel Laird
-> --------------------------------------------------
-> From: "Roberto A. Foglietta" <roberto.foglietta@gmail.com>
-> Sent: Saturday, November 15, 2008 6:06 AM
-> To: "Arnar Mar Sig" <antab@valka.is>
-> Cc: <buildroot@uclibc.org>
-> Subject: Re: [Buildroot] svn commit: trunk/buildroot/package
->
->> 2008/11/12 Arnar Mar Sig <antab@valka.is>:
->>>
->>> On Nov 12, 2008, at 8:55 AM, Thomas Petazzoni wrote:
->>>
->>>> Le Tue, 11 Nov 2008 20:09:06 -0500,
->>>> "hartleys" <hartleys@visionengravers.com> a ?crit :
->>>>
->>>>> Each source file hit with CC produces a warning message. Everything
->>>>> hit with LD is fine. Here's a snip of the output:
->>>>>
->>>>> ...
->>>>> LD      lib/zlib_inflate/zlib_inflate.o
->>>>> LD      lib/zlib_inflate/built-in.o
->>>>> CC      lib/audit.o
->>>>> arm-linux-gcc: --rpath-link: linker input file unused because linking
->>>>> not done
->>>>> arm-linux-gcc: /home/bigguiness/buildroot/build_arm/staging_dir/lib:
->>>>> linker input file unused because linking not done
->>>>> arm-linux-gcc: --rpath-link: linker input file unused because linking
->>>>> not done
->>>>> arm-linux-gcc: /home/bigguiness/buildroot/build_arm/staging_dir/usr/
->>>>> lib:
->>>>> linker input file unused because linking not done
->>>>
->>>> Odd. I did try to build the kernel and didn't see this messages. I
->>>> will
->>>> try something else.
->>>>
->>>> Sincerly,
->>>>
->>>> Thomas
->>>
->>>
->>> This also happen when building for AVR32.
->>
->> It happens in i586 too, please take a look to this report
->>
->> http://busybox.net/bugs/view.php?id=6324
->>
->> may be it is related with your changes.
->>
->> Ciao,
->> --
->> /roberto
->> _______________________________________________
->> buildroot mailing list
->> buildroot at uclibc.org
->> http://busybox.net/mailman/listinfo/buildroot
->>
->
-
-
-
--- 
-/roberto
+Markus
