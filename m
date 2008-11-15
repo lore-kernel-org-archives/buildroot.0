@@ -1,385 +1,97 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Fri, 14 Nov 2008 23:33:16 -0800
-Subject: [Buildroot] [buildroot 0006034]: xserver_xorg-server-1.4.1 does not
-	compile in r23297
-Message-ID: <4702e6c3c915c9d8b6ad9a8b9f1a66af@busybox.net>
+From: danieljlaird at hotmail.com <danieljlaird@hotmail.com>
+Date: Sat, 15 Nov 2008 09:22:47 -0000
+Subject: [Buildroot] svn commit: trunk/buildroot/package
+In-Reply-To: <e4c675870811142206p1100c2a6ha571f1fbe5a5ba1e@mail.gmail.com>
+References: <20081111183231.E74AC3C989@busybox.net><BD79186B4FD85F4B8E60E381CAEE1909CEAAE5@mi8nycmail19.Mi8.com><20081112085548.105af9b2@surf><1363312C-9914-45B9-9A58-86C6CB8AD38B@valka.is>
+	<e4c675870811142206p1100c2a6ha571f1fbe5a5ba1e@mail.gmail.com>
+Message-ID: <COL102-DS21DE57562B03C89036385DC110@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+We have some issues regarding this patch.
+The problem is that buildroot when it builds its own compiler gets rpath etc 
+setup properly.
+If you try to build buildroot with an external toolchain then this fails and 
+various issues are seen.
 
-A NOTE has been added to this issue. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=6034 
-====================================================================== 
-Reported By:                robang74
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   6034
-Category:                   Shared Library Support
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             11-08-2008 11:23 PST
-Last Modified:              11-14-2008 23:33 PST
-====================================================================== 
-Summary:                    xserver_xorg-server-1.4.1 does not compile in r23297
-Description: 
-Making all in vesa
-make[4]: Entering directory
-`/home/salvador/ugles/buildroot/build_i586/xserver_xorg-server-1.4.1/hw/kdrive/vesa'
-/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
--Os  -I/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/include
--I/home/salvador/ugles/buildroot/build_i586/staging_dir/include
---sysroot=/home/salvador/ugles/buildroot/build_i586/staging_dir/ -isysroot
-/home/salvador/ugles/buildroot/build_i586/staging_dir -mtune=i586
--march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -DHAVE_CONFIG_H -I. -I../../../include
--I../../../hw/kdrive/src -I../../../miext/damage -I../../../miext/shadow
--I../../../Xext -I../../../fb -I../../../mi -I../../../hw/kdrive/linux
--Wall -Wpointer-arith -Wstrict-prototypes -Wmissing-prototypes
--Wmissing-declarations -Wnested-externs -fno-strict-aliasing -D_BSD_SOURCE
--DHAS_FCHOWN -DHAS_STICKY_DIR_BIT
--I/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/include/freetype2
--I/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/include/pixman-1
-  -I../../../include -I../../../include -I../../../Xext
--I../../../composite -I../../../damageext -I../../../xfixes -I../../../Xi
--I../../../mi -I../../../miext/shadow  -I../../../miext/damage
--I../../../render -I../../../randr -I../../../fb -DHAVE_KDRIVE_CONFIG_H   
- -I/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/include/pixman-1
--MT vesa.o -MD -MP -MF .deps/vesa.Tpo -c -o vesa.o vesa.c
-vesa.c: In function ?vesaReportMode?:
-vesa.c:111: warning: too many arguments for format
-vesa.c: In function ?vesaComputeFramebufferMapping?:
-vesa.c:916: warning: format ?%x? expects type ?unsigned int?, but argument
-4 has type ?Pixel?
-vesa.c:916: warning: format ?%x? expects type ?unsigned int?, but argument
-5 has type ?Pixel?
-vesa.c:916: warning: format ?%x? expects type ?unsigned int?, but argument
-6 has type ?Pixel?
-mv -f .deps/vesa.Tpo .deps/vesa.Po
-/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
--Os  -I/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/include
--I/home/salvador/ugles/buildroot/build_i586/staging_dir/include
---sysroot=/home/salvador/ugles/buildroot/build_i586/staging_dir/ -isysroot
-/home/salvador/ugles/buildroot/build_i586/staging_dir -mtune=i586
--march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -DHAVE_CONFIG_H -I. -I../../../include
--I../../../hw/kdrive/src -I../../../miext/damage -I../../../miext/shadow
--I../../../Xext -I../../../fb -I../../../mi -I../../../hw/kdrive/linux
--Wall -Wpointer-arith -Wstrict-prototypes -Wmissing-prototypes
--Wmissing-declarations -Wnested-externs -fno-strict-aliasing -D_BSD_SOURCE
--DHAS_FCHOWN -DHAS_STICKY_DIR_BIT
--I/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/include/freetype2
--I/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/include/pixman-1
-  -I../../../include -I../../../include -I../../../Xext
--I../../../composite -I../../../damageext -I../../../xfixes -I../../../Xi
--I../../../mi -I../../../miext/shadow  -I../../../miext/damage
--I../../../render -I../../../randr -I../../../fb -DHAVE_KDRIVE_CONFIG_H   
- -I/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/include/pixman-1
--MT vbe.o -MD -MP -MF .deps/vbe.Tpo -c -o vbe.o vbe.c
-vbe.c: In function ?VbeSetPalette?:
-vbe.c:439: warning: pointer targets in assignment differ in signedness
-vbe.c: In function ?VbeGetPalette?:
-vbe.c:484: warning: pointer targets in assignment differ in signedness
-vbe.c: In function ?VbeDoInterrupt10?:
-vbe.c:668: warning: format ?%04X? expects type ?unsigned int?, but
-argument 3 has type ?long int?
-vbe.c: In function ?VbeDoInterruptE6?:
-vbe.c:704: warning: format ?%04X? expects type ?unsigned int?, but
-argument 3 has type ?long int?
-mv -f .deps/vbe.Tpo .deps/vbe.Po
-/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
--Os  -I/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/include
--I/home/salvador/ugles/buildroot/build_i586/staging_dir/include
---sysroot=/home/salvador/ugles/buildroot/build_i586/staging_dir/ -isysroot
-/home/salvador/ugles/buildroot/build_i586/staging_dir -mtune=i586
--march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -DHAVE_CONFIG_H -I. -I../../../include
--I../../../hw/kdrive/src -I../../../miext/damage -I../../../miext/shadow
--I../../../Xext -I../../../fb -I../../../mi -I../../../hw/kdrive/linux
--Wall -Wpointer-arith -Wstrict-prototypes -Wmissing-prototypes
--Wmissing-declarations -Wnested-externs -fno-strict-aliasing -D_BSD_SOURCE
--DHAS_FCHOWN -DHAS_STICKY_DIR_BIT
--I/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/include/freetype2
--I/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/include/pixman-1
-  -I../../../include -I../../../include -I../../../Xext
--I../../../composite -I../../../damageext -I../../../xfixes -I../../../Xi
--I../../../mi -I../../../miext/shadow  -I../../../miext/damage
--I../../../render -I../../../randr -I../../../fb -DHAVE_KDRIVE_CONFIG_H   
- -I/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/include/pixman-1
--MT vga.o -MD -MP -MF .deps/vga.Tpo -c -o vga.o vga.c
-vga.c: In function ?VgaSetPalette?:
-vga.c:149: warning: pointer targets in assignment differ in signedness
-vga.c: In function ?VgaGetPalette?:
-vga.c:192: warning: pointer targets in assignment differ in signedness
-mv -f .deps/vga.Tpo .deps/vga.Po
-/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
--Os  -I/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/include
--I/home/salvador/ugles/buildroot/build_i586/staging_dir/include
---sysroot=/home/salvador/ugles/buildroot/build_i586/staging_dir/ -isysroot
-/home/salvador/ugles/buildroot/build_i586/staging_dir -mtune=i586
--march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -DHAVE_CONFIG_H -I. -I../../../include
--I../../../hw/kdrive/src -I../../../miext/damage -I../../../miext/shadow
--I../../../Xext -I../../../fb -I../../../mi -I../../../hw/kdrive/linux
--Wall -Wpointer-arith -Wstrict-prototypes -Wmissing-prototypes
--Wmissing-declarations -Wnested-externs -fno-strict-aliasing -D_BSD_SOURCE
--DHAS_FCHOWN -DHAS_STICKY_DIR_BIT
--I/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/include/freetype2
--I/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/include/pixman-1
-  -I../../../include -I../../../include -I../../../Xext
--I../../../composite -I../../../damageext -I../../../xfixes -I../../../Xi
--I../../../mi -I../../../miext/shadow  -I../../../miext/damage
--I../../../render -I../../../randr -I../../../fb -DHAVE_KDRIVE_CONFIG_H   
- -I/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/include/pixman-1
--MT vm86.o -MD -MP -MF .deps/vm86.Tpo -c -o vm86.o vm86.c
-vm86.c: In function ?Vm86DoInterrupt?:
-vm86.c:213: warning: too few arguments for format
-vm86.c:225: error: ?IF_MASK? undeclared (first use in this function)
-vm86.c:225: error: (Each undeclared identifier is reported only once
-vm86.c:225: error: for each function it appears in.)
-vm86.c:225: error: ?IOPL_MASK? undeclared (first use in this function)
-vm86.c: In function ?Vm86Debug?:
-vm86.c:746: warning: format ?%04lX? expects type ?long unsigned int?, but
-argument 2 has type ?int?
-vm86.c:746: warning: format ?%04lX? expects type ?long unsigned int?, but
-argument 3 has type ?int?
-vm86.c:746: warning: format ?%04lX? expects type ?long unsigned int?, but
-argument 4 has type ?int?
-vm86.c:746: warning: format ?%04lX? expects type ?long unsigned int?, but
-argument 5 has type ?int?
-vm86.c:746: warning: format ?%04lX? expects type ?long unsigned int?, but
-argument 6 has type ?int?
-make[4]: *** [vm86.o] Error 1
-make[4]: Leaving directory
-`/home/salvador/ugles/buildroot/build_i586/xserver_xorg-server-1.4.1/hw/kdrive/vesa'
-make[3]: *** [all-recursive] Error 1
-make[3]: Leaving directory
-`/home/salvador/ugles/buildroot/build_i586/xserver_xorg-server-1.4.1/hw/kdrive'
-make[2]: *** [all-recursive] Error 1
-make[2]: Leaving directory
-`/home/salvador/ugles/buildroot/build_i586/xserver_xorg-server-1.4.1/hw'
-make[1]: *** [all-recursive] Error 1
-make[1]: Leaving directory
-`/home/salvador/ugles/buildroot/build_i586/xserver_xorg-server-1.4.1'
-make: ***
-[/home/salvador/ugles/buildroot/build_i586/xserver_xorg-server-1.4.1/.stamp_built]
-Error 2
+Currently Thomas and myself have posted various forms of a patch that tries 
+to get buildroot working
+with an external toolchain as both of us (I believe) require this 
+functionality.
 
-====================================================================== 
+The problem appears to be that if *-gcc is compiling to a object file then 
+the --rpath-link options are not necessary and it complains.
+currently however when gcc is doing the linking then it requires the --rpath 
+options.
 
----------------------------------------------------------------------- 
- robang74 - 11-08-08 11:42  
----------------------------------------------------------------------- 
-The same happen with version 1.4.2 (default in 23927)
+I am not a gcc expert or a particular toolchain expert so I would love 
+someone who might know to try and
+help us on how to use an external toolchain with buildroot and the 
+correct --rpath flags at the right time.
 
-Making all in vesa
-make[4]: Entering directory
-`/home/salvador/ugles/buildroot/build_i586/xserver_xorg-server-1.4.2/hw/kdrive/vesa'
-/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
--Os  -I/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/include
--I/home/salvador/ugles/buildroot/build_i586/staging_dir/include
---sysroot=/home/salvador/ugles/buildroot/build_i586/staging_dir/ -isysroot
-/home/salvador/ugles/buildroot/build_i586/staging_dir -mtune=i586
--march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -DHAVE_CONFIG_H -I. -I../../../include
--I../../../hw/kdrive/src -I../../../miext/damage -I../../../miext/shadow
--I../../../Xext -I../../../fb -I../../../mi -I../../../hw/kdrive/linux
--Wall -Wpointer-arith -Wstrict-prototypes -Wmissing-prototypes
--Wmissing-declarations -Wnested-externs -fno-strict-aliasing -D_BSD_SOURCE
--DHAS_FCHOWN -DHAS_STICKY_DIR_BIT
--I/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/include/freetype2
--I/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/include/pixman-1
-  -I../../../include -I../../../include -I../../../Xext
--I../../../composite -I../../../damageext -I../../../xfixes -I../../../Xi
--I../../../mi -I../../../miext/shadow  -I../../../miext/damage
--I../../../render -I../../../randr -I../../../fb -DHAVE_KDRIVE_CONFIG_H   
- -I/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/include/pixman-1
--MT vesa.o -MD -MP -MF .deps/vesa.Tpo -c -o vesa.o vesa.c
-vesa.c: In function ?vesaReportMode?:
-vesa.c:111: warning: too many arguments for format
-vesa.c: In function ?vesaComputeFramebufferMapping?:
-vesa.c:916: warning: format ?%x? expects type ?unsigned int?, but argument
-4 has type ?Pixel?
-vesa.c:916: warning: format ?%x? expects type ?unsigned int?, but argument
-5 has type ?Pixel?
-vesa.c:916: warning: format ?%x? expects type ?unsigned int?, but argument
-6 has type ?Pixel?
-mv -f .deps/vesa.Tpo .deps/vesa.Po
-/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
--Os  -I/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/include
--I/home/salvador/ugles/buildroot/build_i586/staging_dir/include
---sysroot=/home/salvador/ugles/buildroot/build_i586/staging_dir/ -isysroot
-/home/salvador/ugles/buildroot/build_i586/staging_dir -mtune=i586
--march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -DHAVE_CONFIG_H -I. -I../../../include
--I../../../hw/kdrive/src -I../../../miext/damage -I../../../miext/shadow
--I../../../Xext -I../../../fb -I../../../mi -I../../../hw/kdrive/linux
--Wall -Wpointer-arith -Wstrict-prototypes -Wmissing-prototypes
--Wmissing-declarations -Wnested-externs -fno-strict-aliasing -D_BSD_SOURCE
--DHAS_FCHOWN -DHAS_STICKY_DIR_BIT
--I/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/include/freetype2
--I/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/include/pixman-1
-  -I../../../include -I../../../include -I../../../Xext
--I../../../composite -I../../../damageext -I../../../xfixes -I../../../Xi
--I../../../mi -I../../../miext/shadow  -I../../../miext/damage
--I../../../render -I../../../randr -I../../../fb -DHAVE_KDRIVE_CONFIG_H   
- -I/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/include/pixman-1
--MT vbe.o -MD -MP -MF .deps/vbe.Tpo -c -o vbe.o vbe.c
-vbe.c: In function ?VbeSetPalette?:
-vbe.c:439: warning: pointer targets in assignment differ in signedness
-vbe.c: In function ?VbeGetPalette?:
-vbe.c:484: warning: pointer targets in assignment differ in signedness
-vbe.c: In function ?VbeDoInterrupt10?:
-vbe.c:668: warning: format ?%04X? expects type ?unsigned int?, but
-argument 3 has type ?long int?
-vbe.c: In function ?VbeDoInterruptE6?:
-vbe.c:704: warning: format ?%04X? expects type ?unsigned int?, but
-argument 3 has type ?long int?
-mv -f .deps/vbe.Tpo .deps/vbe.Po
-/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
--Os  -I/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/include
--I/home/salvador/ugles/buildroot/build_i586/staging_dir/include
---sysroot=/home/salvador/ugles/buildroot/build_i586/staging_dir/ -isysroot
-/home/salvador/ugles/buildroot/build_i586/staging_dir -mtune=i586
--march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -DHAVE_CONFIG_H -I. -I../../../include
--I../../../hw/kdrive/src -I../../../miext/damage -I../../../miext/shadow
--I../../../Xext -I../../../fb -I../../../mi -I../../../hw/kdrive/linux
--Wall -Wpointer-arith -Wstrict-prototypes -Wmissing-prototypes
--Wmissing-declarations -Wnested-externs -fno-strict-aliasing -D_BSD_SOURCE
--DHAS_FCHOWN -DHAS_STICKY_DIR_BIT
--I/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/include/freetype2
--I/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/include/pixman-1
-  -I../../../include -I../../../include -I../../../Xext
--I../../../composite -I../../../damageext -I../../../xfixes -I../../../Xi
--I../../../mi -I../../../miext/shadow  -I../../../miext/damage
--I../../../render -I../../../randr -I../../../fb -DHAVE_KDRIVE_CONFIG_H   
- -I/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/include/pixman-1
--MT vga.o -MD -MP -MF .deps/vga.Tpo -c -o vga.o vga.c
-vga.c: In function ?VgaSetPalette?:
-vga.c:149: warning: pointer targets in assignment differ in signedness
-vga.c: In function ?VgaGetPalette?:
-vga.c:192: warning: pointer targets in assignment differ in signedness
-mv -f .deps/vga.Tpo .deps/vga.Po
-/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
--Os  -I/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/include
--I/home/salvador/ugles/buildroot/build_i586/staging_dir/include
---sysroot=/home/salvador/ugles/buildroot/build_i586/staging_dir/ -isysroot
-/home/salvador/ugles/buildroot/build_i586/staging_dir -mtune=i586
--march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -DHAVE_CONFIG_H -I. -I../../../include
--I../../../hw/kdrive/src -I../../../miext/damage -I../../../miext/shadow
--I../../../Xext -I../../../fb -I../../../mi -I../../../hw/kdrive/linux
--Wall -Wpointer-arith -Wstrict-prototypes -Wmissing-prototypes
--Wmissing-declarations -Wnested-externs -fno-strict-aliasing -D_BSD_SOURCE
--DHAS_FCHOWN -DHAS_STICKY_DIR_BIT
--I/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/include/freetype2
--I/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/include/pixman-1
-  -I../../../include -I../../../include -I../../../Xext
--I../../../composite -I../../../damageext -I../../../xfixes -I../../../Xi
--I../../../mi -I../../../miext/shadow  -I../../../miext/damage
--I../../../render -I../../../randr -I../../../fb -DHAVE_KDRIVE_CONFIG_H   
- -I/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/include/pixman-1
--MT vm86.o -MD -MP -MF .deps/vm86.Tpo -c -o vm86.o vm86.c
-vm86.c: In function ?Vm86DoInterrupt?:
-vm86.c:213: warning: too few arguments for format
-vm86.c:225: error: ?IF_MASK? undeclared (first use in this function)
-vm86.c:225: error: (Each undeclared identifier is reported only once
-vm86.c:225: error: for each function it appears in.)
-vm86.c:225: error: ?IOPL_MASK? undeclared (first use in this function)
-vm86.c: In function ?Vm86Debug?:
-vm86.c:746: warning: format ?%04lX? expects type ?long unsigned int?, but
-argument 2 has type ?int?
-vm86.c:746: warning: format ?%04lX? expects type ?long unsigned int?, but
-argument 3 has type ?int?
-vm86.c:746: warning: format ?%04lX? expects type ?long unsigned int?, but
-argument 4 has type ?int?
-vm86.c:746: warning: format ?%04lX? expects type ?long unsigned int?, but
-argument 5 has type ?int?
-vm86.c:746: warning: format ?%04lX? expects type ?long unsigned int?, but
-argument 6 has type ?int?
-make[4]: *** [vm86.o] Error 1
-make[4]: Leaving directory
-`/home/salvador/ugles/buildroot/build_i586/xserver_xorg-server-1.4.2/hw/kdrive/vesa'
-make[3]: *** [all-recursive] Error 1
-make[3]: Leaving directory
-`/home/salvador/ugles/buildroot/build_i586/xserver_xorg-server-1.4.2/hw/kdrive'
-make[2]: *** [all-recursive] Error 1
-make[2]: Leaving directory
-`/home/salvador/ugles/buildroot/build_i586/xserver_xorg-server-1.4.2/hw'
-make[1]: *** [all-recursive] Error 1
-make[1]: Leaving directory
-`/home/salvador/ugles/buildroot/build_i586/xserver_xorg-server-1.4.2'
-make: ***
-[/home/salvador/ugles/buildroot/build_i586/xserver_xorg-server-1.4.2/.stamp_built]
-Error 2 
+I have found some stuff on LD_RUN_PATH, maybe this could be used? any help 
+is really appreciated,
+it currently seems a shame that buildroot and external toolchain support is 
+not quite as good as it could be!
 
----------------------------------------------------------------------- 
- robang74 - 11-14-08 22:44  
----------------------------------------------------------------------- 
-Kernel 2.6.27 does not have IOPL_MASK and IF_MASK definition but 2.6.24
-has.
-So not newer kernel could not be used to compile kdrive/tinyx.
+cheers
+daniel Laird
+--------------------------------------------------
+From: "Roberto A. Foglietta" <roberto.foglietta@gmail.com>
+Sent: Saturday, November 15, 2008 6:06 AM
+To: "Arnar Mar Sig" <antab@valka.is>
+Cc: <buildroot@uclibc.org>
+Subject: Re: [Buildroot] svn commit: trunk/buildroot/package
 
-I am using 2.6.21.7 but this does not resolve the problem. 
-This work around allow the compilation to continue:
-
-salvador at mascalzone:~/ugles/buildroot$ cd
-/home/salvador/ugles/buildroot/build_i586/xserver_xorg-server-1.4.2/hw/kdrive/vesa
-salvador at mascalzone:~/ugles/buildroot/build_i586/xserver_xorg-server-1.4.2/hw/kdrive/vesa$
-/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
--Os  -I/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/include
--I/home/salvador/ugles/buildroot/build_i586/staging_dir/include
---sysroot=/home/salvador/ugles/buildroot/build_i586/staging_dir/ -isysroot
-/home/salvador/ugles/buildroot/build_i586/staging_dir -mtune=i586
--march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -DHAVE_CONFIG_H -I. -I../../../include
--I../../../hw/kdrive/src -I../../../miext/damage -I../../../miext/shadow
--I../../../Xext -I../../../fb -I../../../mi -I../../../hw/kdrive/linux
--Wall -Wpointer-arith -Wstrict-prototypes -Wmissing-prototypes
--Wmissing-declarations -Wnested-externs -fno-strict-aliasing -D_BSD_SOURCE
--DHAS_FCHOWN -DHAS_STICKY_DIR_BIT
--I/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/include/freetype2
--I/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/include/pixman-1
-  -I../../../include -I../../../include -I../../../Xext
--I../../../composite -I../../../damageext -I../../../xfixes -I../../../Xi
--I../../../mi -I../../../miext/shadow  -I../../../miext/damage
--I../../../render -I../../../randr -I../../../fb -DHAVE_KDRIVE_CONFIG_H   
- -I/home/salvador/ugles/buildroot/build_i586/staging_dir/usr/include/pixman-1
--MT vm86.o -MD -MP -MF .deps/vm86.Tpo
--I/home/salvador/ugles/buildroot/project_build_i586/ugles/linux-2.6.21.7/include/asm-x86
--c -o vm86.o vm86.c
-
-Solution should include the target kernel headers path into Xserver
-compilation
-
--I/home/salvador/ugles/buildroot/project_build_i586/ugles/linux-2.6.21.7/include/asm-x86
-
- 
-
----------------------------------------------------------------------- 
- robang74 - 11-14-08 23:33  
----------------------------------------------------------------------- 
-not always but sometimes 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-11-08-08 11:23  robang74       New Issue                                    
-11-08-08 11:23  robang74       Status                   new => assigned     
-11-08-08 11:23  robang74       Assigned To               => buildroot       
-11-08-08 11:23  robang74       Issue Monitored: robang74                    
-11-08-08 11:42  robang74       Note Added: 0015274                          
-11-08-08 13:41  robang74       Note Added: 0015284                          
-11-08-08 13:41  robang74       Note Edited: 0015284                         
-11-08-08 13:52  robang74       Note Edited: 0015284                         
-11-14-08 22:44  robang74       Note Edited: 0015284                         
-11-14-08 23:33  robang74       Note Added: 0015894                          
-======================================================================
+> 2008/11/12 Arnar Mar Sig <antab@valka.is>:
+>>
+>> On Nov 12, 2008, at 8:55 AM, Thomas Petazzoni wrote:
+>>
+>>> Le Tue, 11 Nov 2008 20:09:06 -0500,
+>>> "hartleys" <hartleys@visionengravers.com> a ?crit :
+>>>
+>>>> Each source file hit with CC produces a warning message. Everything
+>>>> hit with LD is fine. Here's a snip of the output:
+>>>>
+>>>> ...
+>>>> LD      lib/zlib_inflate/zlib_inflate.o
+>>>> LD      lib/zlib_inflate/built-in.o
+>>>> CC      lib/audit.o
+>>>> arm-linux-gcc: --rpath-link: linker input file unused because linking
+>>>> not done
+>>>> arm-linux-gcc: /home/bigguiness/buildroot/build_arm/staging_dir/lib:
+>>>> linker input file unused because linking not done
+>>>> arm-linux-gcc: --rpath-link: linker input file unused because linking
+>>>> not done
+>>>> arm-linux-gcc: /home/bigguiness/buildroot/build_arm/staging_dir/usr/
+>>>> lib:
+>>>> linker input file unused because linking not done
+>>>
+>>> Odd. I did try to build the kernel and didn't see this messages. I
+>>> will
+>>> try something else.
+>>>
+>>> Sincerly,
+>>>
+>>> Thomas
+>>
+>>
+>> This also happen when building for AVR32.
+>
+> It happens in i586 too, please take a look to this report
+>
+> http://busybox.net/bugs/view.php?id=6324
+>
+> may be it is related with your changes.
+>
+> Ciao,
+> -- 
+> /roberto
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot
+> 
