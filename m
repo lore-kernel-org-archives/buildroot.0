@@ -1,33 +1,29 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 15 Nov 2008 22:27:01 +0100
-Subject: [Buildroot] [PATCH] move audio category to multimedia and add
-	mplayer and vlc
-In-Reply-To: <200811152209.02889.markus.heidelberg@web.de> (Markus
-	Heidelberg's message of "Sat\, 15 Nov 2008 22\:09\:02 +0100")
-References: <200811151704.42586.markus.heidelberg@web.de>
-	<87wsf4g447.fsf@macbook.be.48ers.dk>
-	<200811152209.02889.markus.heidelberg@web.de>
-Message-ID: <87ljvkel3u.fsf@macbook.be.48ers.dk>
+Date: Sat, 15 Nov 2008 22:29:57 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
+In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE1909D3E78E@mi8nycmail19.Mi8.com>
+	(hartleys@visionengravers.com's message of "Fri\,
+	14 Nov 2008 11\:42\:45 -0500")
+References: <20081113163256.D28F83C8A1@busybox.net>
+	<BD79186B4FD85F4B8E60E381CAEE1909D3E78E@mi8nycmail19.Mi8.com>
+Message-ID: <874p28ekyy.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Markus" == Markus Heidelberg <markus.heidelberg@web.de> writes:
+>>>>> "hartleys" == hartleys  <hartleys@visionengravers.com> writes:
 
 Hi,
 
- >> Could you redo them with rename detection please
- >> (git format-patch -M)? It makes it a lot easier to see what changed.
+ hartleys> With revision 24042 of buildroot I get an error building busybox. During
+ hartleys> the build I get:
 
- Markus> OK, done. I've already thought about it, it also had avoided
- Markus> the 40k limit.  But I wasn't sure because of the git-only
- Markus> patch.
+Yes, busybox 1.13.0 id applet requires functionality not available in
+uclibc 0.9.29 / 0.9.28.
 
-Thanks, I prefer it for something like this as it's a lot easier to
-review.
-
+I've disabled the id applet in the default config for now.
 
 -- 
 Bye, Peter Korsgaard
