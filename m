@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 17 Nov 2008 02:26:49 -0800
+Date: Mon, 17 Nov 2008 02:29:33 -0800
 Subject: [Buildroot] [buildroot 0006364]: lockfile-progs do not find rindex
 	in string.h
-Message-ID: <f6e74403fc993a32a18a0f5e194cc16f@busybox.net>
+Message-ID: <dea4bc49c1ec5faa18dd016ef718bdbe@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +10,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The following issue has been SUBMITTED. 
+A NOTE has been added to this issue. 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=6364 
 ====================================================================== 
@@ -26,7 +26,7 @@ Priority:                   normal
 Status:                     assigned
 ====================================================================== 
 Date Submitted:             11-17-2008 02:26 PST
-Last Modified:              11-17-2008 02:26 PST
+Last Modified:              11-17-2008 02:29 PST
 ====================================================================== 
 Summary:                    lockfile-progs do not find rindex in string.h
 Description: 
@@ -58,10 +58,22 @@ Error 2
 
 ====================================================================== 
 
+---------------------------------------------------------------------- 
+ robang74 - 11-17-08 02:29  
+---------------------------------------------------------------------- 
+Probably the best solution is adding this lines to lockfile-progs.c after
+includes
+
+#if !defined(rindex)
+#define rindex(s,c) strrchr((s), (c))
+#endif 
+
 Issue History 
 Date Modified   Username       Field                    Change               
 ====================================================================== 
 11-17-08 02:26  robang74       New Issue                                    
 11-17-08 02:26  robang74       Status                   new => assigned     
 11-17-08 02:26  robang74       Assigned To               => buildroot       
+11-17-08 02:27  robang74       Issue Monitored: robang74                    
+11-17-08 02:29  robang74       Note Added: 0015914                          
 ======================================================================
