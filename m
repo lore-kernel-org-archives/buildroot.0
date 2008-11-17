@@ -1,91 +1,47 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 17 Nov 2008 03:35:47 -0800
-Subject: [Buildroot] [buildroot 0005744]: fb.modes example copied from
-	kernel docs
-Message-ID: <61b6526a81a2a02bad6d19795b084526@busybox.net>
+From: Roberto A. Foglietta <roberto.foglietta@gmail.com>
+Date: Mon, 17 Nov 2008 12:39:44 +0100
+Subject: [Buildroot] [PATCH] some patch are pending
+In-Reply-To: <e4c675870811170256g4233308bw10ff105d8e512379@mail.gmail.com>
+References: <e4c675870811170256g4233308bw10ff105d8e512379@mail.gmail.com>
+Message-ID: <e4c675870811170339l620d6b8bt318d77b23df209e9@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+2008/11/17 Roberto A. Foglietta <roberto.foglietta@gmail.com>:
+> Hi to all maintainers,
+>
+>  these bug reports could be closed with a very little effort (take a
+> look to last attached patch in the bug reports):
+>
+> http://busybox.net/bugs/view.php?id=5514
+> http://busybox.net/bugs/view.php?id=6074
+> http://busybox.net/bugs/view.php?id=6364
+>
 
-The following issue has been CLOSED 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=5744 
-====================================================================== 
-Reported By:                robang74
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   5744
-Category:                   Architecture Specific
-Reproducibility:            always
-Severity:                   feature
-Priority:                   normal
-Status:                     closed
-Resolution:                 open
-Fixed in Version:           
-====================================================================== 
-Date Submitted:             10-26-2008 03:59 PDT
-Last Modified:              11-17-2008 03:35 PST
-====================================================================== 
-Summary:                    fb.modes example copied from kernel docs
-Description: 
-When fbset is compiled and installed in the rootfs an example of
-/etc/fb.modes from kernel docs should be installed too (if it does not
-exist yet).
-====================================================================== 
+http://busybox.net/bugs/view.php?id=5494
+http://busybox.net/bugs/view.php?id=5734
 
----------------------------------------------------------------------- 
- jacmet - 10-26-08 04:44  
----------------------------------------------------------------------- 
-Wouldn't it make more sense to install one of the fb.modes shipped with
-fbset instead? (etc/fb.modes.*)
+and close these because are irrelevant:
 
-Is the cyberblade stuff representable for other gfx chips? 
+http://busybox.net/bugs/view.php?id=5744
+http://busybox.net/bugs/view.php?id=5984
 
----------------------------------------------------------------------- 
- robang74 - 10-26-08 14:56  
----------------------------------------------------------------------- 
-I thought one example would be enough and I put in the first I found.
-Following patch will put in all I have found.
+>  these bug reports could be closed with a small effort (verify if the
+> last attached patch is a viable solution):
+>
+> http://busybox.net/bugs/view.php?id=6044
+> http://busybox.net/bugs/view.php?id=6064
+> http://busybox.net/bugs/view.php?id=6104
+>
+>  I hope this helps,
+> --
+> /roberto
+>
 
---- package/fbset/fbset.mk	(revision 23784)
-+++ package/fbset/fbset.mk	(working copy)
-@@ -31,6 +31,8 @@
- 	touch -c $@
- 
- fbset: uclibc $(TARGET_DIR)/$(FBSET_TARGET_BINARY)
-+	$(INSTALL) -m 0644 $(LINUX26_DIR)/Documentation/fb/cyblafb/fb.modes
-$(TARGET_DIR)/etc/fb.modes.cybla
-+	$(INSTALL) -m 0644 $(FBSET_DIR)/etc/fb.modes* $(TARGET_DIR)/etc
- 
- fbset-source: $(DL_DIR)/$(FBSET_SOURCE)
- 
-Sorry but I cannot upload file any more, my FF remain blocked in "waiting
-for busybox.net..."
 
- 
-
----------------------------------------------------------------------- 
- robang74 - 11-17-08 03:15  
----------------------------------------------------------------------- 
-Plese close this bug report, copying that files are useless. 
-
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-10-26-08 03:59  robang74       New Issue                                    
-10-26-08 03:59  robang74       Status                   new => assigned     
-10-26-08 03:59  robang74       Assigned To               => buildroot       
-10-26-08 03:59  robang74       File Added: fbset.mk.patch                    
-10-26-08 04:04  robang74       Issue Monitored: robang74                    
-10-26-08 04:44  jacmet         Note Added: 0014254                          
-10-26-08 14:49  robang74       Note Added: 0014274                          
-10-26-08 14:51  robang74       Note Edited: 0014274                         
-10-26-08 14:55  robang74       Note Edited: 0014274                         
-10-26-08 14:56  robang74       Note Edited: 0014274                         
-11-17-08 03:15  robang74       Note Added: 0015924                          
-11-17-08 03:35  jacmet         Status                   assigned => closed  
-======================================================================
+ Thanks,
+-- 
+/roberto
