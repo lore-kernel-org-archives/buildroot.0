@@ -1,8 +1,8 @@
 From: bugs at busybox.net <bugs@busybox.net>
-Date: Mon, 17 Nov 2008 03:15:33 -0800
+Date: Mon, 17 Nov 2008 03:35:47 -0800
 Subject: [Buildroot] [buildroot 0005744]: fb.modes example copied from
 	kernel docs
-Message-ID: <fed5ac32fb102e4b39a22a33ece914d8@busybox.net>
+Message-ID: <61b6526a81a2a02bad6d19795b084526@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +10,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-A NOTE has been added to this issue. 
+The following issue has been CLOSED 
 ====================================================================== 
 http://busybox.net/bugs/view.php?id=5744 
 ====================================================================== 
@@ -23,10 +23,12 @@ Category:                   Architecture Specific
 Reproducibility:            always
 Severity:                   feature
 Priority:                   normal
-Status:                     assigned
+Status:                     closed
+Resolution:                 open
+Fixed in Version:           
 ====================================================================== 
 Date Submitted:             10-26-2008 03:59 PDT
-Last Modified:              11-17-2008 03:15 PST
+Last Modified:              11-17-2008 03:35 PST
 ====================================================================== 
 Summary:                    fb.modes example copied from kernel docs
 Description: 
@@ -85,4 +87,5 @@ Date Modified   Username       Field                    Change
 10-26-08 14:55  robang74       Note Edited: 0014274                         
 10-26-08 14:56  robang74       Note Edited: 0014274                         
 11-17-08 03:15  robang74       Note Added: 0015924                          
+11-17-08 03:35  jacmet         Status                   assigned => closed  
 ======================================================================
