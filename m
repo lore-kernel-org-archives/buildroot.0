@@ -1,45 +1,67 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Sun, 16 Nov 2008 23:40:15 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
-Message-ID: <20081117074015.2FD553C870@busybox.net>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Mon, 17 Nov 2008 02:26:49 -0800
+Subject: [Buildroot] [buildroot 0006364]: lockfile-progs do not find rindex
+	in string.h
+Message-ID: <f6e74403fc993a32a18a0f5e194cc16f@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-11-16 23:40:14 -0800 (Sun, 16 Nov 2008)
-New Revision: 24070
 
-Log:
-busybox: updated 1.13.0 id patch (only error out if needed)
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=6364 
+====================================================================== 
+Reported By:                robang74
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   6364
+Category:                   Architecture Specific
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             11-17-2008 02:26 PST
+Last Modified:              11-17-2008 02:26 PST
+====================================================================== 
+Summary:                    lockfile-progs do not find rindex in string.h
+Description: 
+make[1]: Entering directory
+`/home/roberto/gles/buildroot/build_i586/lockfile-progs-0.1.11'
+/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
+-Os  -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/include
+--sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
+/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
+-march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64 -g -Wall -Werror -O2   -c -o lockfile-progs.o
+lockfile-progs.c
+cc1: warnings being treated as errors
+lockfile-progs.c: In function ?parse_arguments?:
+lockfile-progs.c:96: warning: implicit declaration of function ?rindex?
+lockfile-progs.c:96: warning: incompatible implicit declaration of
+built-in function ?rindex?
+make[1]: *** [lockfile-progs.o] Error 1
+make[1]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/lockfile-progs-0.1.11'
+make: ***
+[/home/roberto/gles/buildroot/project_build_i586/ugles/root/usr/bin/lockfile-create]
+Error 2
 
-Modified:
-   trunk/buildroot/package/busybox/busybox-1.13.0-id.patch
 
 
-Changeset:
-Modified: trunk/buildroot/package/busybox/busybox-1.13.0-id.patch
-===================================================================
---- trunk/buildroot/package/busybox/busybox-1.13.0-id.patch	2008-11-17 03:31:47 UTC (rev 24069)
-+++ trunk/buildroot/package/busybox/busybox-1.13.0-id.patch	2008-11-17 07:40:14 UTC (rev 24070)
-@@ -1,14 +1,16 @@
- --- busybox-1.13.0/coreutils/id.c	Wed Nov  5 22:39:54 2008
--+++ busybox-1.13.0-id/coreutils/id.c	Sun Nov 16 15:59:46 2008
--@@ -17,6 +17,12 @@
-++++ busybox-1.13.0-id/coreutils/id.c	Mon Nov 17 01:10:04 2008
-+@@ -17,6 +17,14 @@
-  
-  #include "libbb.h"
-  
-++#if !ENABLE_USE_BB_PWD_GRP
- +#if defined(__UCLIBC_MAJOR__) && (__UCLIBC_MAJOR__ == 0)
- +#if (__UCLIBC_MINOR__ < 9) || (__UCLIBC_MINOR__ == 9 &&  __UCLIBC_SUBLEVEL__ < 30)
- +#error "Sorry, you need@least uClibc version 0.9.30 for id applet to build"
- +#endif
- +#endif
-++#endif
- +
-  enum {
-  	PRINT_REAL      = (1 << 0),
+
+
+====================================================================== 
+
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+11-17-08 02:26  robang74       New Issue                                    
+11-17-08 02:26  robang74       Status                   new => assigned     
+11-17-08 02:26  robang74       Assigned To               => buildroot       
+======================================================================
