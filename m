@@ -1,29 +1,61 @@
-From: Julien Boibessot <julien.boibessot@free.fr>
-Date: Tue, 18 Nov 2008 17:56:00 +0100
-Subject: [Buildroot] tslib 1.0 patches status
-Message-ID: <4922F3A0.2030902@free.fr>
+From: Roberto A. Foglietta <roberto.foglietta@gmail.com>
+Date: Tue, 18 Nov 2008 19:01:52 +0100
+Subject: [Buildroot] [PATCH] skeletons patch
+Message-ID: <e4c675870811181001u6d5a4643h7dc77efe3dfeae76@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi
 
-I think there are some "no more useful" / inappropriate patches in
-buildroot/package/tslib/.
+ a) using busybox_skeleton loopback interface is configured two times
+in inittab and in interfaces
 
-What are the status of the following requests ? :
-* http://www.uclibc.org/lists/buildroot/2008-March/007246.html
-* http://www.uclibc.org/lists/buildroot/2008-July/009594.html
+ b) in both skeletons append /usr/X11R6/bin in PATH does not hurt.
 
-Moreover with recent Linux kernels (tested on 2.6.27 on ARM9), the
-following patch is needed for tslib to work:
-http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=499446
-(Don't pay attention on patch title, it is mandatory on ARM9 too)
 
-Wouldn't it be the time to integrate that things all together ?? (I'm
-ready to help)
+roberto at rafbook:~/gles/buildroot$ cat skeletons.patch
+--- target/generic/target_busybox_skeleton/etc/network/interfaces	(revision
+24038)
++++ target/generic/target_busybox_skeleton/etc/network/interfaces	(working copy)
+@@ -1,4 +1,5 @@
+ # Configure Loopback
+-auto lo
+-iface lo inet loopback
++# In this skeleton happens in inittab
++#auto lo
++#iface lo inet loopback
 
-Regards,
-Julien
+--- target/generic/target_skeleton/etc/profile	(revision 24038)
++++ target/generic/target_skeleton/etc/profile	(working copy)
+@@ -6,6 +6,7 @@
+ /usr/bin:\
+ /usr/sbin:\
+ /usr/bin/X11:\
++/usr/X11R6/bin:\
+ /usr/local/bin
+
+ # If running interactively, then:
+--- target/generic/target_busybox_skeleton/etc/profile	(revision 24038)
++++ target/generic/target_busybox_skeleton/etc/profile	(working copy)
+@@ -6,6 +6,7 @@
+ /usr/bin:\
+ /usr/sbin:\
+ /usr/bin/X11:\
++/usr/X11R6/bin:\
+ /usr/local/bin
+
+ # If running interactively, then:
+
+
+-- 
+/roberto
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: skeletons.patch
+Type: text/x-diff
+Size: 834 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20081118/682ae6c7/attachment.patch 
