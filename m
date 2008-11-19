@@ -1,62 +1,65 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Wed, 19 Nov 2008 13:27:40 +0100
-Subject: [Buildroot] [PATCH] small patches (was: skeleton patch)
-In-Reply-To: <e4c675870811190421r6612519ek47ef41d9f7434890@mail.gmail.com>
-References: <e4c675870811181121r169f9fcej6f8c2470bb46d34d@mail.gmail.com>
-	<e4c675870811190421r6612519ek47ef41d9f7434890@mail.gmail.com>
-Message-ID: <20081119122740.GB4797@mx.loc>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Wed, 19 Nov 2008 06:07:29 -0800
+Subject: [Buildroot] [buildroot 0006384]: libjpeg does not compile anymore
+Message-ID: <c2692375ec71cad81f4e1a10d989e7b3@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Nov 19, 2008 at 01:21:48PM +0100, Roberto A. Foglietta wrote:
->2008/11/18 Roberto A. Foglietta <roberto.foglietta@gmail.com>:
->> Hi
->>
->>  a) mkdir -p does not hurt but probably it is optional
->>  b) s,cp -a,cp -af, because overwriting is necessary
->>
->> --- package/freetype/freetype.mk        (revision 24038)
->> +++ package/freetype/freetype.mk        (working copy)
->> @@ -15,7 +15,8 @@
->>  $(eval $(call AUTOTARGETS,package,freetype))
->>
->>  $(FREETYPE_HOOK_POST_BUILD):
->> -       -cp -a $(FREETYPE_DIR)/objs/.libs/libfreetype.so* $(TARGET_DIR)/usr/lib/
->> +       mkdir -p $(TARGET_DIR)/usr/lib
->> +       cp -af $(FREETYPE_DIR)/objs/.libs/libfreetype.so* $(TARGET_DIR)/usr/lib
->>        $(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libfreetype.so
->>        $(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g"
->> $(FREETYPE_DIR)/builds/unix/freetype-config
->>        $(SED) "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g"
->> $(FREETYPE_DIR)/builds/unix/freetype-config
->>
->
-> Patch attached
->
->-- 
->/roberto
 
->Index: package/freetype/freetype.mk
->===================================================================
->--- package/freetype/freetype.mk	(revision 24099)
->+++ package/freetype/freetype.mk	(working copy)
->@@ -15,7 +15,8 @@
-> $(eval $(call AUTOTARGETS,package,freetype))
-> 
-> $(FREETYPE_HOOK_POST_BUILD):
->-	-cp -a $(FREETYPE_DIR)/objs/.libs/libfreetype.so* $(TARGET_DIR)/usr/lib/
->+	mkdir -p $(TARGET_DIR)/usr/lib
->+	cp -af $(FREETYPE_DIR)/objs/.libs/libfreetype.so* $(TARGET_DIR)/usr/lib
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=6384 
+====================================================================== 
+Reported By:                robang74
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   6384
+Category:                   Shared Library Support
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             11-19-2008 06:07 PST
+Last Modified:              11-19-2008 06:07 PST
+====================================================================== 
+Summary:                    libjpeg does not compile anymore
+Description: 
+/home/roberto/gles/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc
+-Os -I/home/roberto/gles/buildroot/build_i586/staging_dir/usr/include
+-I/home/roberto/gles/buildroot/build_i586/staging_dir/include
+-Wl,--rpath-link
+-Wl,/home/roberto/gles/buildroot/build_i586/staging_dir/lib
+-Wl,--rpath-link
+-Wl,/home/roberto/gles/buildroot/build_i586/staging_dir/usr/lib
+--sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -isysroot
+/home/roberto/gles/buildroot/build_i586/staging_dir -mtune=i586
+-march=i586 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64
+-L/home/roberto/gles/buildroot/build_i586/staging_dir/lib
+-L/home/roberto/gles/buildroot/build_i586/staging_dir/usr/lib
+--sysroot=/home/roberto/gles/buildroot/build_i586/staging_dir/ -o
+.libs/cjpeg cjpeg.o rdppm.o rdgif.o rdtarga.o rdrle.o rdbmp.o rdswitch.o
+cdjpeg.o -Wl,--rpath -Wl,/usr/lib .libs/libjpeg.so
+rdswitch.o: In function `read_scan_script':
+rdswitch.c:(.text+0x4b0): undefined reference to `bcopy'
+collect2: ld returned 1 exit status
+make[1]: *** [cjpeg] Error 1
+make[1]: Leaving directory
+`/home/roberto/gles/buildroot/build_i586/jpeg-6b'
+make: ***
+[/home/roberto/gles/buildroot/build_i586/jpeg-6b/.libs/libjpeg.a] Error 2
 
-This will not work properly for a number of host systems (see ML archives)
-Either use "cp -dpRf" or the preferred $(INSTALL), like:
+====================================================================== 
 
-	$(INSTALL) -d $(TARGET_DIR)/usr/lib
-	$(INSTALL) -m0644 $(FREETYPE_DIR)/objs/.libs/libfreetype.so* $(TARGET_DIR)/usr/lib/
-
-> 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libfreetype.so
-> 	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" $(FREETYPE_DIR)/builds/unix/freetype-config
-> 	$(SED) "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" $(FREETYPE_DIR)/builds/unix/freetype-config
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+11-19-08 06:07  robang74       New Issue                                    
+11-19-08 06:07  robang74       Status                   new => assigned     
+11-19-08 06:07  robang74       Assigned To               => buildroot       
+======================================================================
