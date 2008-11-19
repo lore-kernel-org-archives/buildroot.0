@@ -1,42 +1,62 @@
-From: Roberto A. Foglietta <roberto.foglietta@gmail.com>
-Date: Wed, 19 Nov 2008 13:23:46 +0100
+From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+Date: Wed, 19 Nov 2008 13:27:40 +0100
 Subject: [Buildroot] [PATCH] small patches (was: skeleton patch)
-In-Reply-To: <e4c675870811181146g39352c46tcaaa832bde6cf4c@mail.gmail.com>
+In-Reply-To: <e4c675870811190421r6612519ek47ef41d9f7434890@mail.gmail.com>
 References: <e4c675870811181121r169f9fcej6f8c2470bb46d34d@mail.gmail.com>
-	<e4c675870811181146g39352c46tcaaa832bde6cf4c@mail.gmail.com>
-Message-ID: <e4c675870811190423l69e348f3p187d6b9d13d3034@mail.gmail.com>
+	<e4c675870811190421r6612519ek47ef41d9f7434890@mail.gmail.com>
+Message-ID: <20081119122740.GB4797@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2008/11/18 Roberto A. Foglietta <roberto.foglietta@gmail.com>:
-> Hi,
+On Wed, Nov 19, 2008 at 01:21:48PM +0100, Roberto A. Foglietta wrote:
+>2008/11/18 Roberto A. Foglietta <roberto.foglietta@gmail.com>:
+>> Hi
+>>
+>>  a) mkdir -p does not hurt but probably it is optional
+>>  b) s,cp -a,cp -af, because overwriting is necessary
+>>
+>> --- package/freetype/freetype.mk        (revision 24038)
+>> +++ package/freetype/freetype.mk        (working copy)
+>> @@ -15,7 +15,8 @@
+>>  $(eval $(call AUTOTARGETS,package,freetype))
+>>
+>>  $(FREETYPE_HOOK_POST_BUILD):
+>> -       -cp -a $(FREETYPE_DIR)/objs/.libs/libfreetype.so* $(TARGET_DIR)/usr/lib/
+>> +       mkdir -p $(TARGET_DIR)/usr/lib
+>> +       cp -af $(FREETYPE_DIR)/objs/.libs/libfreetype.so* $(TARGET_DIR)/usr/lib
+>>        $(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libfreetype.so
+>>        $(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g"
+>> $(FREETYPE_DIR)/builds/unix/freetype-config
+>>        $(SED) "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g"
+>> $(FREETYPE_DIR)/builds/unix/freetype-config
+>>
 >
->  I do not think libpng12-config could be useful in the target system
-> if it does not a developing system itself
+> Patch attached
 >
-> --- package/libpng/libpng.mk    (revision 24038)
-> +++ package/libpng/libpng.mk    (working copy)
-> @@ -28,5 +28,8 @@
->                -e "s,^includedir=.*,includedir=\'$(STAGING_DIR)/usr/include/libpng12\',g" \
->                -e "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" \
->                $(STAGING_DIR)/usr/bin/libpng12-config
-> +ifneq ($(strip $(CONFIG_BR2_HAVE_DEVFILES)),y)
-> +       rm -f $(TARGET_DIR)/usr/bin/libpng12-config
-> +endif
->        touch $@
->
+>-- 
+>/roberto
 
- patch attached
+>Index: package/freetype/freetype.mk
+>===================================================================
+>--- package/freetype/freetype.mk	(revision 24099)
+>+++ package/freetype/freetype.mk	(working copy)
+>@@ -15,7 +15,8 @@
+> $(eval $(call AUTOTARGETS,package,freetype))
+> 
+> $(FREETYPE_HOOK_POST_BUILD):
+>-	-cp -a $(FREETYPE_DIR)/objs/.libs/libfreetype.so* $(TARGET_DIR)/usr/lib/
+>+	mkdir -p $(TARGET_DIR)/usr/lib
+>+	cp -af $(FREETYPE_DIR)/objs/.libs/libfreetype.so* $(TARGET_DIR)/usr/lib
 
--- 
-/roberto
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: libpng.patch
-Type: text/x-diff
-Size: 495 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20081119/a345c98c/attachment.patch 
+This will not work properly for a number of host systems (see ML archives)
+Either use "cp -dpRf" or the preferred $(INSTALL), like:
+
+	$(INSTALL) -d $(TARGET_DIR)/usr/lib
+	$(INSTALL) -m0644 $(FREETYPE_DIR)/objs/.libs/libfreetype.so* $(TARGET_DIR)/usr/lib/
+
+> 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libfreetype.so
+> 	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" $(FREETYPE_DIR)/builds/unix/freetype-config
+> 	$(SED) "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" $(FREETYPE_DIR)/builds/unix/freetype-config
