@@ -1,86 +1,54 @@
-From: Roberto A. Foglietta <roberto.foglietta@gmail.com>
-Date: Wed, 19 Nov 2008 15:46:43 +0100
-Subject: [Buildroot] [PATCH] small patches (was: skeleton patch)
-In-Reply-To: <20081119122740.GB4797@mx.loc>
-References: <e4c675870811181121r169f9fcej6f8c2470bb46d34d@mail.gmail.com>
-	<e4c675870811190421r6612519ek47ef41d9f7434890@mail.gmail.com>
-	<20081119122740.GB4797@mx.loc>
-Message-ID: <e4c675870811190646h1fa99a88k478fef83dc05693c@mail.gmail.com>
+From: bugs at busybox.net <bugs@busybox.net>
+Date: Wed, 19 Nov 2008 08:06:30 -0800
+Subject: [Buildroot] [buildroot 0006404]: master buildroot .config doesn't
+	honor BR2_PACKAGE_LINUX_KCONFIG
+Message-ID: <333a99266a7b0b9aeb3ef3e4db5596e7@bugs.uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2008/11/19 Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>:
 
-[cut]
+The following issue has been SUBMITTED. 
+====================================================================== 
+http://busybox.net/bugs/view.php?id=6404 
+====================================================================== 
+Reported By:                suffecool
+Assigned To:                buildroot
+====================================================================== 
+Project:                    buildroot
+Issue ID:                   6404
+Category:                   Other
+Reproducibility:            always
+Severity:                   major
+Priority:                   normal
+Status:                     assigned
+====================================================================== 
+Date Submitted:             11-19-2008 08:06 PST
+Last Modified:              11-19-2008 08:06 PST
+====================================================================== 
+Summary:                    master buildroot .config doesn't honor
+BR2_PACKAGE_LINUX_KCONFIG
+Description: 
+I have my four config files saved in ./local/samdev.
+I type "make BOARD=samdev getconfig", which copies
+./local/samdev/samdev.config to .config.
+Within this .config file are these pertinent defined variables:
 
->> $(FREETYPE_HOOK_POST_BUILD):
->>-      -cp -a $(FREETYPE_DIR)/objs/.libs/libfreetype.so* $(TARGET_DIR)/usr/lib/
->>+      mkdir -p $(TARGET_DIR)/usr/lib
->>+      cp -af $(FREETYPE_DIR)/objs/.libs/libfreetype.so* $(TARGET_DIR)/usr/lib
->
-> This will not work properly for a number of host systems (see ML archives)
-> Either use "cp -dpRf" or the preferred $(INSTALL), like:
->
->        $(INSTALL) -d $(TARGET_DIR)/usr/lib
->        $(INSTALL) -m0644 $(FREETYPE_DIR)/objs/.libs/libfreetype.so* $(TARGET_DIR)/usr/lib/
->
->>       $(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libfreetype.so
->>       $(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" $(FREETYPE_DIR)/builds/unix/freetype-config
->>       $(SED) "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" $(FREETYPE_DIR)/builds/unix/freetype-config
->
+BR2_UCLIBC_CONFIG="./local/samdev/uclibc-0.9.29.config
+BR2_PACKAGE_BUSYBOX_CONFIG="./local/samdev/busybox-1.12.1.config
+BR2_PACKAGE_LINUX_KCONFIG="./local/samdev/linux-2.6.27.config"
+BR2_PACKAGE_LINUX_USE_KCONFIG=y
 
- Ok, acknowledged and reported http://bugs.uclibc.org/view.php?id=6394
+Although buildroot is indeed honoring the UCLIBC and BUSYBOX config
+directives, it is ignoring the one for the linux kernel.
+====================================================================== 
 
- There is another problem related to libfreetype which happens in grub
-and probably Mesa package too.
-
- At least these three packages relay on .installed flag and sometimes
-it does not do its job properly and the package would not be installed
-expecially if root and .root has been removed in order to regenerate
-them
-
-roberto at rafbook:~/gles/buildroot.002$ find build_i586 -name .installed
-build_i586/Mesa-7.0.3/.installed
-build_i586/font-util-1.0.1/.installed
-build_i586/grub-0.97/.installed
-
- My personal solution is adding some makefile targets called rootclean
-and softclean an expressing all clean targets in that way:
-
--clean: $(TARGETS_CLEAN)
--       rm -rf $(STAGING_DIR) $(TARGET_DIR) $(IMAGE)
-$(PROJECT_BUILD_DIR)/.root $(PROJECT_BUILD_DIR)/autotools-stamps
-
--dirclean: $(TARGETS_DIRCLEAN)
--       rm -rf $(STAGING_DIR) $(TARGET_DIR) $(IMAGE)
-$(PROJECT_BUILD_DIR)/.root $(PROJECT_BUILD_DIR)/autotools-stamps
-+install: softclean all
-
-+softclean:
-+       rm -rf $(IMAGE) $(PROJECT_BUILD_DIR)/autotools-stamps
-+       rm -f $(find $(BUILD_DIR) -name .installed | grep -v _staging_)
-+
-+rootclean: softclean
-+       rm -rf $(TARGET_DIR) $(PROJECT_BUILD_DIR)/.root
-+
-+clean: $(TARGETS_CLEAN) rootclean
-+       rm -rf $(STAGING_DIR)
-+
-+dirclean: $(TARGETS_DIRCLEAN) clean
-+
-
- I know this patch has been criticized but I hope its evolution could
-be better rated than previous.
-
- http://bugs.uclibc.org/view.php?id=5614
-
- Please remember that this report is still open and users are expect
-that "make clean; make" works properly
-
-
- Ciao,
--- 
-/roberto
+Issue History 
+Date Modified   Username       Field                    Change               
+====================================================================== 
+11-19-08 08:06  suffecool      New Issue                                    
+11-19-08 08:06  suffecool      Status                   new => assigned     
+11-19-08 08:06  suffecool      Assigned To               => buildroot       
+======================================================================
