@@ -1,49 +1,39 @@
-From: bugs at busybox.net <bugs@busybox.net>
-Date: Wed, 19 Nov 2008 02:12:20 -0800
-Subject: [Buildroot] [buildroot 0006374]: SDL_ttf 2.0.9 not compatible with
-	Freetype 2.X
-Message-ID: <f29b30431a9289d80f47b04d6fa29146@busybox.net>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Wed, 19 Nov 2008 02:16:40 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/lockfile-progs
+Message-ID: <20081119101640.F36C73C818@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: jacmet
+Date: 2008-11-19 02:16:40 -0800 (Wed, 19 Nov 2008)
+New Revision: 24098
 
-The following issue has been SUBMITTED. 
-====================================================================== 
-http://busybox.net/bugs/view.php?id=6374 
-====================================================================== 
-Reported By:                slade
-Assigned To:                buildroot
-====================================================================== 
-Project:                    buildroot
-Issue ID:                   6374
-Category:                   Other
-Reproducibility:            always
-Severity:                   major
-Priority:                   normal
-Status:                     assigned
-====================================================================== 
-Date Submitted:             11-19-2008 02:12 PST
-Last Modified:              11-19-2008 02:12 PST
-====================================================================== 
-Summary:                    SDL_ttf 2.0.9 not compatible with Freetype 2.X
-Description: 
-When selecting SDL_ttf and Freetype on my buildroot config, the compilation
-fail due to : 
-In file included from SDL_ttf.c:42:
-/home/myname/dev/system/buildroot/build_arm/staging_dir/usr/include/ft2build.h:56:38:
-error: freetype/config/ftheader.h: No such file or directory
+Log:
+lockfile-progs: fix patch-kernel invocation
 
-I join the patch for correcting this.
-====================================================================== 
+Patch by Roberto A. Foglietta.
 
-Issue History 
-Date Modified   Username       Field                    Change               
-====================================================================== 
-11-19-08 02:12  slade          New Issue                                    
-11-19-08 02:12  slade          Status                   new => assigned     
-11-19-08 02:12  slade          Assigned To               => buildroot       
-11-19-08 02:12  slade          File Added: sdl_ttf_mk.patch                    
-======================================================================
+Closes #6364
+
+Modified:
+   trunk/buildroot/package/lockfile-progs/lockfile-progs.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/lockfile-progs/lockfile-progs.mk
+===================================================================
+--- trunk/buildroot/package/lockfile-progs/lockfile-progs.mk	2008-11-19 09:35:00 UTC (rev 24097)
++++ trunk/buildroot/package/lockfile-progs/lockfile-progs.mk	2008-11-19 10:16:40 UTC (rev 24098)
+@@ -17,7 +17,7 @@
+ 
+ $(LOCKFILE_PROGS_DIR)/.unpacked: $(DL_DIR)/$(LOCKFILE_PROGS_SOURCE)
+ 	$(LOCKFILE_PROGS_CAT) $(DL_DIR)/$(LOCKFILE_PROGS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(LOCKFILE_PROGS_DIR) package/lockfile-progs/ *.patch
++	toolchain/patch-kernel.sh $(LOCKFILE_PROGS_DIR) package/lockfile-progs/ \*.patch
+ 	touch $(LOCKFILE_PROGS_DIR)/.unpacked
+ 
+ $(TARGET_DIR)/$(LOCKFILE_PROGS_BINARY): $(LOCKFILE_PROGS_DIR)/.unpacked
