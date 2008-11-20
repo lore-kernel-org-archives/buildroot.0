@@ -1,158 +1,86 @@
-From: Weber, Bernd <BWEBE@dolby.com>
-Date: Thu, 20 Nov 2008 09:02:14 -0800
-Subject: [Buildroot] binutils in target system: 'LONG_MIN' undeclared
-In-Reply-To: <05BB196AB3DA6C4BBE11AB6C957581FE124F9707@sfo-exch-01.dolby.net>
-References: <6c8937b20811200104w374564efu9b8eb7e5d19783c2@mail.gmail.com>
-	<05BB196AB3DA6C4BBE11AB6C957581FE124F9707@sfo-exch-01.dolby.net>
-Message-ID: <05BB196AB3DA6C4BBE11AB6C957581FE124F9721@sfo-exch-01.dolby.net>
+From: danieljlaird at hotmail.com <danieljlaird@hotmail.com>
+Date: Thu, 20 Nov 2008 19:13:31 -0000
+Subject: [Buildroot] svn commit: trunk/buildroot/package
+In-Reply-To: <e4c675870811200656l75ad07b8l253459fa0a3e47a6@mail.gmail.com>
+References: <20081111183231.E74AC3C989@busybox.net>
+	<e4c675870811200656l75ad07b8l253459fa0a3e47a6@mail.gmail.com>
+Message-ID: <COL102-DS1115F46E4B6337F6BB1B92DC0C0@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Oops. Actually scratch that and just upgrade to the latest
-package/Makefile.in. I just saw that Roberto fixed it... Sorry!
+Agreed, if someone else does not get there first I will try to apply 
+tomorrow and save you guys.
+I will then be posting my patch to allow support for using central cache 
+file (saves configure time)
+I then may post a patch for people to try that uses sysroot and isysroot
 
- 
+Cheers
+Dan
+--------------------------------------------------
+From: "Roberto A. Foglietta" <roberto.foglietta@gmail.com>
+Sent: Thursday, November 20, 2008 2:56 PM
+To: <buildroot@uclibc.org>
+Subject: Re: [Buildroot] svn commit: trunk/buildroot/package
 
-________________________________
-
-From: buildroot-bounces@uclibc.org [mailto:buildroot-bounces at uclibc.org]
-On Behalf Of Weber, Bernd
-Sent: Thursday, November 20, 2008 9:00 AM
-To: l m; buildroot at uclibc.org
-Subject: Re: [Buildroot] binutils in target system: 'LONG_MIN'
-undeclared
-
- 
-
-I think you hit the problem with the last rpath and LDFLAGS patch in
-package/Makefile.in -> r24000. Try my patch (remove the rpath-line):
-
- 
-
---- ../temp/buildroot/package/Makefile.in 2008-11-17 11:04:59.538371000
--0800
-
-+++ package/Makefile.in 2008-11-17 16:02:07.495849000 -0800
-
-@@ -38,8 +38,7 @@
-
- 
-########################################################################
-#
-
- ifeq ($(BR2_TOOLCHAIN_SOURCE),y)
-
- TARGET_CFLAGS=$(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING) \
-
--     -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include \
-
--     -Wl,--rpath-link -Wl,$(STAGING_DIR)/lib -Wl,--rpath-link
--Wl,$(STAGING_DIR)/usr/lib
-
-+     -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include
-
- TARGET_LDFLAGS+=-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib  ifeq
-($(BR2_TOOLCHAIN_SYSROOT),y)  TARGET_CFLAGS+= $(BR2_SYSROOT)
-$(BR2_ISYSROOT)
-
- 
-
- 
-
-________________________________
-
-From: buildroot-bounces@uclibc.org [mailto:buildroot-bounces at uclibc.org]
-On Behalf Of l m
-Sent: Thursday, November 20, 2008 1:04 AM
-To: buildroot at uclibc.org
-Subject: [Buildroot] binutils in target system: 'LONG_MIN' undeclared
-
- 
-
-Dear All,
-
- 
-
-I found in recent buildroot system, the compiling was not successful,
-but the previous version Revision: 23573 is fine. The error is 
-
- 
-
-build_i686/staging_dir/usr/bin/i686-linux-uclibc-gcc -Os
--Ibuild_i686/staging_dir/usr/include -Ibuild_i686/staging_dir/include
--Wl,--rpath-link -Wl,build_i686/staging_dir/lib -Wl,--rpath-link
--Wl,build_i686/staging_dir/usr/lib --sysroot=build_i686/staging_dir/
--isysroot build_i686/staging_dir -mtune=i686 -march=i686 -c
--DHAVE_CONFIG_H -Os  -Ibuild_i686/staging_dir/usr/include
--Ibuild_i686/staging_dir/include -Wl,--rpath-link
--Wl,build_i686/staging_dir/lib -Wl,--rpath-link
--Wl,build_i686/staging_dir/usr/lib --sysroot=build_i686/staging_dir/
--isysroot build_i686/staging_dir -mtune=i686 -march=i686 -I.
--Itoolchain_build_i686/binutils-2.18/libiberty/../include  -W -Wall
--Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic
-toolchain_build_i686/binutils-2.18/libiberty/fibheap.c -o fibheap.o
-toolchain_build_i686/binutils-2.18/libiberty/fibheap.c: In function
-'fibheap_union':
-toolchain_build_i686/binutils-2.18/libiberty/fibheap.c:151: warning:
-implicit declaration of function 'free'
-toolchain_build_i686/binutils-2.18/libiberty/fibheap.c: In function
-'fibheap_delete_node':
-toolchain_build_i686/binutils-2.18/libiberty/fibheap.c:258: error:
-'LONG_MIN' undeclared (first use in this function)
-toolchain_build_i686/binutils-2.18/libiberty/fibheap.c:258: error: (Each
-undeclared identifier is reported only once
-toolchain_build_i686/binutils-2.18/libiberty/fibheap.c:258: error: for
-each function it appears in.)
-toolchain_build_i686/binutils-2.18/libiberty/fibheap.c: In function
-'fibheap_consolidate':
-toolchain_build_i686/binutils-2.18/libiberty/fibheap.c:360: warning:
-implicit declaration of function 'memset'
-toolchain_build_i686/binutils-2.18/libiberty/fibheap.c:360: warning:
-incompatible implicit declaration of built-in function 'memset'
-make[3]: *** [fibheap.o] Error 1
-make[3]: Leaving directory `build_i686/binutils-2.18-target/libiberty'
-make[2]: *** [all-libiberty] Error 2
-make[2]: Leaving directory `build_i686/binutils-2.18-target'
-make[1]: *** [all] Error 2
-make[1]: Leaving directory `build_i686/binutils-2.18-target'
-make: *** [build_i686/binutils-2.18-target/binutils/objdump] Error 2
-
-Some flags appear twice. There is one "checking for limits.h... no" in
-binutils, it seems limits.h from gcc isn't included here, other a few
-times checking is "yes". 
-
- 
-
- I'm using a X86 board, Could you help me to figure this out? Thank you
-
- 
-
-LM
-
- 
-
- 
-
-________________________________
-
-This message (including any attachments) may contain confidential
-information intended for a specific individual and purpose. If you are
-not the intended recipient, delete this message. If you are not the
-intended recipient, disclosing, copying, distributing, or taking any
-action based on this message is strictly prohibited. 
+> 2008/11/11  <tpetazzoni@uclibc.org>:
+>> Author: tpetazzoni
+>> Date: 2008-11-11 10:32:31 -0800 (Tue, 11 Nov 2008)
+>> New Revision: 24000
+>>
+>> Log:
+>> Fix external toolchain build
+>
+> While you are looking for a better solution I think this patch will
+> save internal toolchain users from a lot of problems
+>
+> roberto at rafbook:~/gles/buildroot$ svn diff -r24103 package/Makefile.in
+> Index: package/Makefile.in
+> ===================================================================
+> --- package/Makefile.in (revision 24103)
+> +++ package/Makefile.in (working copy)
+> @@ -38,8 +38,10 @@
+> #########################################################################
+> ifeq ($(BR2_TOOLCHAIN_SOURCE),y)
+> TARGET_CFLAGS=$(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING) \
+> - -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include \
+> - -Wl,--rpath-link -Wl,$(STAGING_DIR)/lib -Wl,--rpath-link
+> -Wl,$(STAGING_DIR)/usr/lib
+> + -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include
+> +ifneq ($(strip $(BR2_TOOLCHAIN_EXTERNAL)),)
+> +TARGET_CFLAGS+=-Wl,--rpath-link -Wl,$(STAGING_DIR)/lib
+> -Wl,--rpath-link -Wl,$(STAGING_DIR)/usr/lib
+> +endif
+> TARGET_LDFLAGS+=-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib
+> ifeq ($(BR2_TOOLCHAIN_SYSROOT),y)
+> TARGET_CFLAGS+= $(BR2_SYSROOT) $(BR2_ISYSROOT)
+> @@ -91,8 +93,10 @@
+> #########################################################################
+> else
+> TARGET_CFLAGS=$(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING) \
+> - -I$(STAGING_DIR)/include -I$(STAGING_DIR)/usr/include
+> -I$(TOOLCHAIN_EXTERNAL_PATH)/$(TOOLCHAIN_EXTERNAL_PREFIX)/include \
+> - -Wl,--rpath-link -Wl,$(STAGING_DIR)/lib -Wl,--rpath-link
+> -Wl,$(STAGING_DIR)/usr/lib
+> + -I$(STAGING_DIR)/include -I$(STAGING_DIR)/usr/include
+> -I$(TOOLCHAIN_EXTERNAL_PATH)/$(TOOLCHAIN_EXTERNAL_PREFIX)/include
+> +ifneq ($(strip $(BR2_TOOLCHAIN_EXTERNAL)),)
+> +TARGET_CFLAGS+=-Wl,--rpath-link -Wl,$(STAGING_DIR)/lib
+> -Wl,--rpath-link -Wl,$(STAGING_DIR)/usr/lib
+> +endif
+> TARGET_CXXFLAGS=$(TARGET_CFLAGS)
+> TARGET_LDFLAGS=-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib
+> endif
+>
+> --
+> /roberto
+>
 
 
 
-
------------------------------------------
-This message (including any attachments) may contain confidential
-information intended for a specific individual and purpose.  If you
-are not the intended recipient, delete this message.  If you are
-not the intended recipient, disclosing, copying, distributing, or
-taking any action based on this message is strictly prohibited.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20081120/da374c97/attachment.htm 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at uclibc.org
+> http://busybox.net/mailman/listinfo/buildroot 
