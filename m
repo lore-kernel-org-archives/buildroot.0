@@ -1,14 +1,31 @@
 From: Weber, Bernd <BWEBE@dolby.com>
-Date: Thu, 20 Nov 2008 09:00:03 -0800
+Date: Thu, 20 Nov 2008 09:02:14 -0800
 Subject: [Buildroot] binutils in target system: 'LONG_MIN' undeclared
-In-Reply-To: <6c8937b20811200104w374564efu9b8eb7e5d19783c2@mail.gmail.com>
+In-Reply-To: <05BB196AB3DA6C4BBE11AB6C957581FE124F9707@sfo-exch-01.dolby.net>
 References: <6c8937b20811200104w374564efu9b8eb7e5d19783c2@mail.gmail.com>
-Message-ID: <05BB196AB3DA6C4BBE11AB6C957581FE124F9707@sfo-exch-01.dolby.net>
+	<05BB196AB3DA6C4BBE11AB6C957581FE124F9707@sfo-exch-01.dolby.net>
+Message-ID: <05BB196AB3DA6C4BBE11AB6C957581FE124F9721@sfo-exch-01.dolby.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+Oops. Actually scratch that and just upgrade to the latest
+package/Makefile.in. I just saw that Roberto fixed it... Sorry!
+
+ 
+
+________________________________
+
+From: buildroot-bounces@uclibc.org [mailto:buildroot-bounces at uclibc.org]
+On Behalf Of Weber, Bernd
+Sent: Thursday, November 20, 2008 9:00 AM
+To: l m; buildroot at uclibc.org
+Subject: Re: [Buildroot] binutils in target system: 'LONG_MIN'
+undeclared
+
+ 
 
 I think you hit the problem with the last rpath and LDFLAGS patch in
 package/Makefile.in -> r24000. Try my patch (remove the rpath-line):
@@ -119,6 +136,14 @@ LM
 
  
 
+________________________________
+
+This message (including any attachments) may contain confidential
+information intended for a specific individual and purpose. If you are
+not the intended recipient, delete this message. If you are not the
+intended recipient, disclosing, copying, distributing, or taking any
+action based on this message is strictly prohibited. 
+
 
 
 
@@ -130,4 +155,4 @@ not the intended recipient, disclosing, copying, distributing, or
 taking any action based on this message is strictly prohibited.
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20081120/9a63b22e/attachment-0001.htm 
+URL: http://busybox.net/lists/buildroot/attachments/20081120/da374c97/attachment.htm 
