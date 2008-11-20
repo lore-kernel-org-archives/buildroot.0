@@ -1,56 +1,63 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Wed, 19 Nov 2008 22:49:21 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
-Message-ID: <20081120064921.4DA103C80A@busybox.net>
+From: l m <lmmmcc@gmail.com>
+Date: Thu, 20 Nov 2008 17:04:01 +0800
+Subject: [Buildroot] =?gb2312?b?YmludXRpbHMgaW4gdGFyZ2V0IHN5c3RlbTogoa5M?=
+	=?gb2312?b?T05HX01JTqGvIHVuZGVjbGFyZWQ=?=
+Message-ID: <6c8937b20811200104w374564efu9b8eb7e5d19783c2@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-11-19 22:49:20 -0800 (Wed, 19 Nov 2008)
-New Revision: 24103
+Dear All,
 
-Log:
-busybox: 1.13.0 klogd fix
+I found in recent buildroot system, the compiling was not successful, but
+the previous version Revision: 23573 is fine. The error is
 
-Added:
-   trunk/buildroot/package/busybox/busybox-1.13.0-klogd.patch
+build_i686/staging_dir/usr/bin/i686-linux-uclibc-gcc -Os
+-Ibuild_i686/staging_dir/usr/include -Ibuild_i686/staging_dir/include
+-Wl,--rpath-link -Wl,build_i686/staging_dir/lib -Wl,--rpath-link
+-Wl,build_i686/staging_dir/usr/lib --sysroot=build_i686/staging_dir/
+-isysroot build_i686/staging_dir -mtune=i686 -march=i686 -c -DHAVE_CONFIG_H
+-Os  -Ibuild_i686/staging_dir/usr/include -Ibuild_i686/staging_dir/include
+-Wl,--rpath-link -Wl,build_i686/staging_dir/lib -Wl,--rpath-link
+-Wl,build_i686/staging_dir/usr/lib --sysroot=build_i686/staging_dir/
+-isysroot build_i686/staging_dir -mtune=i686 -march=i686 -I.
+-Itoolchain_build_i686/binutils-2.18/libiberty/../include  -W -Wall
+-Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic
+toolchain_build_i686/binutils-2.18/libiberty/fibheap.c -o fibheap.o
+toolchain_build_i686/binutils-2.18/libiberty/fibheap.c: In function
+'fibheap_union':
+toolchain_build_i686/binutils-2.18/libiberty/fibheap.c:151: warning:
+implicit declaration of function 'free'
+toolchain_build_i686/binutils-2.18/libiberty/fibheap.c: In function
+'fibheap_delete_node':
+toolchain_build_i686/binutils-2.18/libiberty/fibheap.c:258: error:
+'LONG_MIN' undeclared (first use in this function)
+toolchain_build_i686/binutils-2.18/libiberty/fibheap.c:258: error: (Each
+undeclared identifier is reported only once
+toolchain_build_i686/binutils-2.18/libiberty/fibheap.c:258: error: for each
+function it appears in.)
+toolchain_build_i686/binutils-2.18/libiberty/fibheap.c: In function
+'fibheap_consolidate':
+toolchain_build_i686/binutils-2.18/libiberty/fibheap.c:360: warning:
+implicit declaration of function 'memset'
+toolchain_build_i686/binutils-2.18/libiberty/fibheap.c:360: warning:
+incompatible implicit declaration of built-in function 'memset'
+make[3]: *** [fibheap.o] Error 1
+make[3]: Leaving directory `build_i686/binutils-2.18-target/libiberty'
+make[2]: *** [all-libiberty] Error 2
+make[2]: Leaving directory `build_i686/binutils-2.18-target'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory `build_i686/binutils-2.18-target'
+make: *** [build_i686/binutils-2.18-target/binutils/objdump] Error 2
+Some flags appear twice. There is one "checking for limits.h... no" in
+binutils, it seems limits.h from gcc isn't included here, other a few times
+checking is "yes".
 
+  I'm using a X86 board, Could you help me to figure this out? Thank you
 
-Changeset:
-Added: trunk/buildroot/package/busybox/busybox-1.13.0-klogd.patch
-===================================================================
---- trunk/buildroot/package/busybox/busybox-1.13.0-klogd.patch	                        (rev 0)
-+++ trunk/buildroot/package/busybox/busybox-1.13.0-klogd.patch	2008-11-20 06:49:20 UTC (rev 24103)
-@@ -0,0 +1,29 @@
-+--- busybox-1.13.0/sysklogd/klogd.c	Thu Oct 30 08:41:28 2008
-++++ busybox-1.13.0-klogd/sysklogd/klogd.c	Thu Nov 20 00:46:00 2008
-+@@ -73,9 +73,6 @@
-+ 
-+ 	syslog(LOG_NOTICE, "klogd started: %s", bb_banner);
-+ 
-+-	/* Initially null terminate the buffer in case of a very long line */
-+-	log_buffer[KLOGD_LOGBUF_SIZE - 1] = '\0';
-+-
-+ 	while (1) {
-+ 		int n;
-+ 		int priority;
-+@@ -89,6 +86,7 @@
-+ 					errno);
-+ 			break;
-+ 		}
-++		log_buffer[used + n] = '\0';
-+ 
-+ 		/* klogctl buffer parsing modelled after code in dmesg.c */
-+ 		start = &log_buffer[0];
-+@@ -101,7 +99,7 @@
-+ 				/* This line is incomplete... */
-+ 				if (start != log_buffer) {
-+ 					/* move it to the front of the buffer */
-+-					strcpy(log_buffer, start);
-++					overlapping_strcpy(log_buffer, start);
-+ 					/* don't log it yet */
-+ 					used = strlen(log_buffer);
-+ 					break;
+LM
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20081120/6d596e9b/attachment.htm 
