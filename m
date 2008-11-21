@@ -1,86 +1,125 @@
-From: danieljlaird at hotmail.com <danieljlaird@hotmail.com>
-Date: Thu, 20 Nov 2008 19:13:31 -0000
-Subject: [Buildroot] svn commit: trunk/buildroot/package
-In-Reply-To: <e4c675870811200656l75ad07b8l253459fa0a3e47a6@mail.gmail.com>
-References: <20081111183231.E74AC3C989@busybox.net>
-	<e4c675870811200656l75ad07b8l253459fa0a3e47a6@mail.gmail.com>
-Message-ID: <COL102-DS1115F46E4B6337F6BB1B92DC0C0@phx.gbl>
+From: Jared Holzman <j.holzman@genesysdesign.com.au>
+Date: Fri, 21 Nov 2008 12:22:15 +1100
+Subject: [Buildroot]  [PATCH 1/1] package: add bitstream-vera package
+Message-ID: <49260D47.30902@genesysdesign.com.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Agreed, if someone else does not get there first I will try to apply 
-tomorrow and save you guys.
-I will then be posting my patch to allow support for using central cache 
-file (saves configure time)
-I then may post a patch for people to try that uses sysroot and isysroot
+This adds the bitstream-vera package which installs the bitstream vera series of truetype fonts to the /usr/share/fonts dir on the target.
 
-Cheers
-Dan
---------------------------------------------------
-From: "Roberto A. Foglietta" <roberto.foglietta@gmail.com>
-Sent: Thursday, November 20, 2008 2:56 PM
-To: <buildroot@uclibc.org>
-Subject: Re: [Buildroot] svn commit: trunk/buildroot/package
+Signed-off-by: Jared Holzman <j.holzman@genesysdesign.com.au>
 
-> 2008/11/11  <tpetazzoni@uclibc.org>:
->> Author: tpetazzoni
->> Date: 2008-11-11 10:32:31 -0800 (Tue, 11 Nov 2008)
->> New Revision: 24000
->>
->> Log:
->> Fix external toolchain build
->
-> While you are looking for a better solution I think this patch will
-> save internal toolchain users from a lot of problems
->
-> roberto at rafbook:~/gles/buildroot$ svn diff -r24103 package/Makefile.in
-> Index: package/Makefile.in
-> ===================================================================
-> --- package/Makefile.in (revision 24103)
-> +++ package/Makefile.in (working copy)
-> @@ -38,8 +38,10 @@
-> #########################################################################
-> ifeq ($(BR2_TOOLCHAIN_SOURCE),y)
-> TARGET_CFLAGS=$(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING) \
-> - -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include \
-> - -Wl,--rpath-link -Wl,$(STAGING_DIR)/lib -Wl,--rpath-link
-> -Wl,$(STAGING_DIR)/usr/lib
-> + -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include
-> +ifneq ($(strip $(BR2_TOOLCHAIN_EXTERNAL)),)
-> +TARGET_CFLAGS+=-Wl,--rpath-link -Wl,$(STAGING_DIR)/lib
-> -Wl,--rpath-link -Wl,$(STAGING_DIR)/usr/lib
-> +endif
-> TARGET_LDFLAGS+=-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib
-> ifeq ($(BR2_TOOLCHAIN_SYSROOT),y)
-> TARGET_CFLAGS+= $(BR2_SYSROOT) $(BR2_ISYSROOT)
-> @@ -91,8 +93,10 @@
-> #########################################################################
-> else
-> TARGET_CFLAGS=$(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING) \
-> - -I$(STAGING_DIR)/include -I$(STAGING_DIR)/usr/include
-> -I$(TOOLCHAIN_EXTERNAL_PATH)/$(TOOLCHAIN_EXTERNAL_PREFIX)/include \
-> - -Wl,--rpath-link -Wl,$(STAGING_DIR)/lib -Wl,--rpath-link
-> -Wl,$(STAGING_DIR)/usr/lib
-> + -I$(STAGING_DIR)/include -I$(STAGING_DIR)/usr/include
-> -I$(TOOLCHAIN_EXTERNAL_PATH)/$(TOOLCHAIN_EXTERNAL_PREFIX)/include
-> +ifneq ($(strip $(BR2_TOOLCHAIN_EXTERNAL)),)
-> +TARGET_CFLAGS+=-Wl,--rpath-link -Wl,$(STAGING_DIR)/lib
-> -Wl,--rpath-link -Wl,$(STAGING_DIR)/usr/lib
-> +endif
-> TARGET_CXXFLAGS=$(TARGET_CFLAGS)
-> TARGET_LDFLAGS=-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib
-> endif
->
-> --
-> /roberto
->
+---
+
+Index: package/Config.in
+===================================================================
+--- package/Config.in	(revision 24069)
++++ package/Config.in	(working copy)
+@@ -340,6 +339,7 @@
+ comment "X libraries and helper libraries"
+ #XXX: maybe some of these should depend on !BR2_PACKAGE_XSERVER_none
+ source "package/atk/Config.in"
++source "package/bitstream-vera/Config.in"
+ source "package/cairo/Config.in"
+ source "package/pango/Config.in"
+ source "package/libdrm/Config.in"
+Index: package/bitstream-vera/Config.in
+===================================================================
+--- package/bitstream-vera/Config.in	(revision 0)
++++ package/bitstream-vera/Config.in	(revision 0)
+@@ -0,0 +1,4 @@
++config BR2_PACKAGE_BITSTREAM_VERA
++	bool "bitstream-vera"
++	help
++	  Install the Bitstream Vera Truetype fonts
+Index: package/bitstream-vera/bitstream-vera.mk
+===================================================================
+--- package/bitstream-vera/bitstream-vera.mk	(revision 0)
++++ package/bitstream-vera/bitstream-vera.mk	(revision 0)
+@@ -0,0 +1,54 @@
++#############################################################
++#
++# bitstream-vera
++#
++#############################################################
++BITSTREAM_VERA_VERSION = 1.10
++BITSTREAM_VERA_SOURCE = ttf-bitstream-vera-$(BITSTREAM_VERA_VERSION).tar.bz2
++BITSTREAM_VERA_SITE = http://ftp.gnome.org/pub/GNOME/sources/ttf-bitstream-vera/1.10
++BITSTREAM_VERA_AUTORECONF = NO
++BITSTREAM_VERA_INSTALL_STAGING = NO
++BITSTREAM_VERA_INSTALL_TARGET = YES
++
++BITSTREAM_VERA_TARGET_DIR = $(TARGET_DIR)/usr/share/fonts/bitstream-vera
++BITSTREAM_VERA_FONTS = 
++BITSTREAM_VERA_FONTS += VeraBd.ttf
++BITSTREAM_VERA_FONTS += VeraBI.ttf
++BITSTREAM_VERA_FONTS += VeraIt.ttf
++BITSTREAM_VERA_FONTS += VeraMoBd.ttf
++BITSTREAM_VERA_FONTS += VeraMoBI.ttf
++BITSTREAM_VERA_FONTS += VeraMoIt.ttf
++BITSTREAM_VERA_FONTS += VeraMono.ttf
++BITSTREAM_VERA_FONTS += VeraSeBd.ttf
++BITSTREAM_VERA_FONTS += VeraSe.ttf
++BITSTREAM_VERA_FONTS += Vera.ttf
++
++$(eval $(call AUTOTARGETS,package,bitstream-vera))
++
++#############################################################
++#
++# Override standard configure, build and install
++#
++#############################################################
++
++$(BITSTREAM_VERA_TARGET_CONFIGURE):
++	touch $@
++
++$(BITSTREAM_VERA_TARGET_BUILD):
++	touch $@
++
++$(BITSTREAM_VERA_TARGET_INSTALL_TARGET):
++	$(Q)mkdir -p $(BITSTREAM_VERA_TARGET_DIR)
++	for file in $(BITSTREAM_VERA_FONTS); do \
++                cp -dpf $(BITSTREAM_VERA_DIR)/$$file $(BITSTREAM_VERA_TARGET_DIR)/$$file; \
++        done
++
++$(BITSTREAM_VERA_TARGET_UNINSTALL):
++	for file in $(BITSTREAM_VERA_FONTS); do \
++		rm $(BITSTREAM_VERA_TARGET_DIR)/$$file; \
++	done
++	$(Q)rmdir $(BITSTREAM_VERA_TARGET_DIR)
++
++$(BITSTREAM_VERA_TARGET_CLEAN):
++	touch $@
++
+
+--- 
+
+Regards,
+
+Jared Holzman
+
+------------------------------------------------------------------------
+
+*Electronics Design Engineer*
+
+*Genesys Electronics Design Pty Ltd*
+
+Unit 5, 33 Ryde Rd Pymble
+
+NSW, Australia 2073
+
+Direct: +612 9496 8924
+
+Phone: +612 9496 8900
+
+Fax: +612 9496 8999
 
 
+j.holzman at genesysdesign.com.au <mailto:j.holzman@genesysdesign.com.au>
 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at uclibc.org
-> http://busybox.net/mailman/listinfo/buildroot 
+www.genesysdesign.com.au <http://www.genesysdesign.com.au>
+
+------------------------------------------------------------------------
