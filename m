@@ -1,65 +1,28 @@
-From: Jared Holzman <j.holzman@genesysdesign.com.au>
-Date: Fri, 21 Nov 2008 13:24:53 +1100
-Subject: [Buildroot]  [PATCH 1/1] package: x11r7/xserver_xorg-server
-Message-ID: <49261BF5.8060406@genesysdesign.com.au>
+From: =?windows-1251?B?1+jt6u7iIMDt5PDl6Q==?= <blackmesa@rambler.ru>
+Date: Fri, 21 Nov 2008 12:51:26 +0300
+Subject: [Buildroot] Had anybody ever basically create JFFS2 image using
+	BUILDROOT ???
+Message-ID: <777157424.1227261086.161258872.38642@mcgi26.rambler.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds evdev driver support to Xfbdev
+My question is simple and easy:
 
+Had anybody ever basically create JFFS2 image using BUILDROOT ???
 
-Signed-off-by: Jared Holzman <j.holzman@genesysdesign.com.au>
----
-Index: package/x11r7/xserver_xorg-server/xserver_xorg-server-1.4-Xfbdev-evdev.patch
-===================================================================
---- package/x11r7/xserver_xorg-server/xserver_xorg-server-1.4-Xfbdev-evdev.patch	(revision 0)
-+++ package/x11r7/xserver_xorg-server/xserver_xorg-server-1.4-Xfbdev-evdev.patch	(revision 0)
-@@ -0,0 +1,16 @@
-+diff -Nur xserver_xorg-server-1.4.2.old/hw/kdrive/fbdev/fbinit.c xserver_xorg-server-1.4.2/hw/kdrive/fbdev/fbinit.c
-+--- xserver_xorg-server-1.4.2.old/hw/kdrive/fbdev/fbinit.c	2008-11-13 16:59:28.000000000 +1100
-++++ xserver_xorg-server-1.4.2/hw/kdrive/fbdev/fbinit.c	2008-11-13 17:00:29.000000000 +1100
-+@@ -44,11 +44,7 @@
-+ {
-+     KdKeyboardInfo *ki;
-+ 
-+-    KdAddKeyboardDriver (&LinuxKeyboardDriver);
-+-    KdAddPointerDriver (&LinuxMouseDriver);
-+-#ifdef TSLIB
-+-    KdAddPointerDriver (&TsDriver);
-+-#endif
-++	KdOsAddInputDrivers();
-+ 
-+     ki = KdParseKeyboard ("keybd");
-+     KdAddKeyboard(ki);
+The reason of this question is that I can not create target JFFS2 image 
+using buildroot-dailysnapshot.tar.bz2
 
---- 
+May be there are other tools to create JFFS2 filesystem image for MIPSEL 
+on Ubuntu/x86 ???
 
-Regards,
+PS:
 
-Jared Holzman
+My host machine is Ubuntu8.04, x86
+My target machine is MIPSEL
 
-------------------------------------------------------------------------
-
-*Electronics Design Engineer*
-
-*Genesys Electronics Design Pty Ltd*
-
-Unit 5, 33 Ryde Rd Pymble
-
-NSW, Australia 2073
-
-Direct: +612 9496 8924
-
-Phone: +612 9496 8900
-
-Fax: +612 9496 8999
-
-
-j.holzman at genesysdesign.com.au <mailto:j.holzman@genesysdesign.com.au>
-
-www.genesysdesign.com.au <http://www.genesysdesign.com.au>
-
-------------------------------------------------------------------------
+Thx.
+Chinkov Andrew.
