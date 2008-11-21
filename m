@@ -1,106 +1,70 @@
-From: =?windows-1251?B?1+jt6u7iIMDt5PDl6Q==?= <blackmesa@rambler.ru>
-Date: Fri, 21 Nov 2008 13:45:34 +0300
-Subject: [Buildroot] No rule to make target uImage
-Message-ID: <1133111752.1227264334.189979624.2801@mcgi56.rambler.ru>
+From: Roberto A. Foglietta <roberto.foglietta@gmail.com>
+Date: Fri, 21 Nov 2008 11:48:25 +0100
+Subject: [Buildroot] [PATCH] target/iso9660/iso9660.mk
+In-Reply-To: <20081121103242.GB19111@mx.loc>
+References: <e4c675870811210211s3080d990ue4b59efe2c4a3d68@mail.gmail.com>
+	<20081121103242.GB19111@mx.loc>
+Message-ID: <e4c675870811210248j12a6082au9a17b1723d3d8cd9@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi.
+2008/11/21 Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>:
+> On Fri, Nov 21, 2008 at 11:11:59AM +0100, Roberto A. Foglietta wrote:
+>>Hi,
+>>
+>> when the user choose to use INITRAMFS iso9660 double its size because
+>>initrd is also copied in iso9660 but kernel has its own.
+>>
+>>
+>>Index: target/iso9660/iso9660.mk
+>>===================================================================
+>>--- target/iso9660/iso9660.mk  (revision 24103)
+>>+++ target/iso9660/iso9660.mk  (working copy)
+>>@@ -55,12 +55,17 @@
+>> endif
+>>
+>> $(ISO9660_TARGET): host-fakeroot $(LINUX_KERNEL) $(EXT2_TARGET) grub mkisofs
+>>+      rm -rf $(ISO9660_TARGET_DIR)
+>>       mkdir -p $(ISO9660_TARGET_DIR)
+>>       mkdir -p $(ISO9660_TARGET_DIR)/boot/grub
+>>       cp $(GRUB_DIR)/stage2/stage2_eltorito $(ISO9660_TARGET_DIR)/boot/grub/
+>>       cp $(ISO9660_BOOT_MENU) $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
+>>       cp $(LINUX_KERNEL) $(ISO9660_TARGET_DIR)/kernel
+>>+ifneq ($(strip $(BR2_TARGET_ROOTFS_INITRAMFS)),y)
+>
+> the strip is superfluous (other patches of yours also do this. Don't.)
+>
 
-After invoke in terminal such commands:
+Ok, I just imitate the others code.
 
-0. Download and unpack bouildroot-dailysnapshot.tar.bz2
-1. make menuconfig
-1.1 select MIPSEL
-1.2 select mips32
-1.3 select Linux-Advanced-Configuration - set 2.6.22 version there and
-also set 'make menuconfig' command to be invoked before Linux build
-1.4 select jffs2 as target filesystem
-2. make all >1 2>2
+>>       cp $(EXT2_TARGET) $(ISO9660_TARGET_DIR)/initrd
+>>+else
+>>+      touch $(ISO9660_TARGET_DIR)/initrd
+>
+> Sounds like this is not needed?
+>
 
-I got an error after 'make all > 1 2>2' :(
+I strongly suggest to add the touch initrd because:
 
-So I invoked "make all >1 2>2" and put 1 and 2 outputs here:
+ a)  initramf takes a lot of time at each compilation so beta-testing
+stage usually goes with initrd
 
-1:
+ b) when you deliver the product you should turn on initramfs but then
+menu.lst still reports grub should load initrd but if it does not
+exist grub fails
 
-Checking build system dependencies:
-BUILDROOT_DL_DIR clean: Ok
-CC clean: Ok
-CXX clean: Ok
-CPP clean: Ok
-CFLAGS clean: Ok
-INCLUDES clean: Ok
-CXXFLAGS clean: Ok
-which installed: Ok
-sed works: Ok (/bin/sed)
-GNU make version '3.81': Ok
-C compiler '/usr/bin/gcc'
-C compiler version '4.2.4': Ok
-C++ compiler '/usr/bin/g++'
-C++ compiler version '4.2.4': Ok
-awk installed: Ok
-bison installed: Ok
-flex installed: Ok
-gettext installed: Ok
-makeinfo installed: Ok
-Build system dependencies: Ok
+ touching the initrd means: if you forget to modify menu.lst you will
+not pay the fee to see your system unable to boot.
 
-rm -rf
-/mnt/local_storage/buildroot/project_build_mipsel/uclibc/buildroot-config
-mkdir -p /mnt/local_storage/buildroot/project_build_mipsel/uclibc
-cp -dpRf package/config/buildroot-config
-/mnt/local_storage/buildroot/project_build_mipsel/uclibc/buildroot-config
-rm -rf
-/mnt/local_storage/buildroot/project_build_mipsel/uclibc/root/usr/include
-/mnt/local_storage/buildroot/project_build_mipsel/uclibc/root/usr/lib/pkgconfig
-find
-/mnt/local_storage/buildroot/project_build_mipsel/uclibc/root/usr/lib
--name '*.a' -delete
-find /mnt/local_storage/buildroot/project_build_mipsel/uclibc/root/lib
--name '*.a' -delete
-find
-/mnt/local_storage/buildroot/project_build_mipsel/uclibc/root/usr/lib
--name '*.la' -delete
-find /mnt/local_storage/buildroot/project_build_mipsel/uclibc/root/lib
--name '*.la' -delete
-/usr/bin/make -j1 HOSTCC="/usr/bin/gcc" HOSTCFLAGS="" ARCH=mips
-CFLAGS_KERNEL="-Os
--I/mnt/local_storage/buildroot/build_mipsel/staging_dir/usr/include
--I/mnt/local_storage/buildroot/build_mipsel/staging_dir/include
--Wl,--rpath-link
--Wl,/mnt/local_storage/buildroot/build_mipsel/staging_dir/lib
--Wl,--rpath-link
--Wl,/mnt/local_storage/buildroot/build_mipsel/staging_dir/usr/lib
---sysroot=/mnt/local_storage/buildroot/build_mipsel/staging_dir/
--isysroot /mnt/local_storage/buildroot/build_mipsel/staging_dir
--mtune=mips32 -mabi=32"
-INSTALL_MOD_PATH=/mnt/local_storage/buildroot/project_build_mipsel/uclibc/root
-CROSS_COMPILE=/mnt/local_storage/buildroot/build_mipsel/staging_dir/usr/bin/mipsel-linux-uclibc-
-LDFLAGS="-L/mnt/local_storage/buildroot/build_mipsel/staging_dir/lib
--L/mnt/local_storage/buildroot/build_mipsel/staging_dir/usr/lib
---sysroot=/mnt/local_storage/buildroot/build_mipsel/staging_dir/"
-LZMA="/mnt/local_storage/buildroot/toolchain_build_mipsel/bin/lzma" \
-                -C
-/mnt/local_storage/buildroot/project_build_mipsel/uclibc/linux-2.6.22
-uImage
-make[1]: Entering directory
-`/mnt/local_storage/buildroot/project_build_mipsel/uclibc/linux-2.6.22'
-make[1]: Leaving directory
-`/mnt/local_storage/buildroot/project_build_mipsel/uclibc/linux-2.6.22'
+ The question: is there any condition in which touching initrd really
+hurts somebody? I think the answer is no.
 
-==================================================================================
+ Under this point of view touching initrd save time to skilled users
+and make things work for those are not such skilled users
 
-2:
-
-make[1]: *** No rule to make target `uImage'. Stop.
-make: ***
-[/mnt/local_storage/buildroot/project_build_mipsel/uclibc/linux-2.6.22/uImage]
-Error 2
-
-==================================================================================
-
-Why NO_RULE_TO_MAKE _TARGET_UIMAGE ?
+ Cheers,
+-- 
+/roberto
