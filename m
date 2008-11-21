@@ -1,70 +1,30 @@
-From: Roberto A. Foglietta <roberto.foglietta@gmail.com>
-Date: Fri, 21 Nov 2008 11:48:25 +0100
-Subject: [Buildroot] [PATCH] target/iso9660/iso9660.mk
-In-Reply-To: <20081121103242.GB19111@mx.loc>
-References: <e4c675870811210211s3080d990ue4b59efe2c4a3d68@mail.gmail.com>
-	<20081121103242.GB19111@mx.loc>
-Message-ID: <e4c675870811210248j12a6082au9a17b1723d3d8cd9@mail.gmail.com>
+From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+Date: Fri, 21 Nov 2008 11:54:08 +0100
+Subject: [Buildroot] No rule to make target uImage
+In-Reply-To: <1133111752.1227264334.189979624.2801@mcgi56.rambler.ru>
+References: <1133111752.1227264334.189979624.2801@mcgi56.rambler.ru>
+Message-ID: <20081121105408.GC19111@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2008/11/21 Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>:
-> On Fri, Nov 21, 2008 at 11:11:59AM +0100, Roberto A. Foglietta wrote:
->>Hi,
->>
->> when the user choose to use INITRAMFS iso9660 double its size because
->>initrd is also copied in iso9660 but kernel has its own.
->>
->>
->>Index: target/iso9660/iso9660.mk
->>===================================================================
->>--- target/iso9660/iso9660.mk  (revision 24103)
->>+++ target/iso9660/iso9660.mk  (working copy)
->>@@ -55,12 +55,17 @@
->> endif
->>
->> $(ISO9660_TARGET): host-fakeroot $(LINUX_KERNEL) $(EXT2_TARGET) grub mkisofs
->>+      rm -rf $(ISO9660_TARGET_DIR)
->>       mkdir -p $(ISO9660_TARGET_DIR)
->>       mkdir -p $(ISO9660_TARGET_DIR)/boot/grub
->>       cp $(GRUB_DIR)/stage2/stage2_eltorito $(ISO9660_TARGET_DIR)/boot/grub/
->>       cp $(ISO9660_BOOT_MENU) $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
->>       cp $(LINUX_KERNEL) $(ISO9660_TARGET_DIR)/kernel
->>+ifneq ($(strip $(BR2_TARGET_ROOTFS_INITRAMFS)),y)
+On Fri, Nov 21, 2008 at 01:45:34PM +0300, ?????? ?????? wrote:
+>Hi.
+
+Hi.. Please do not send duplicate messages to the list. TIA.
+
+>make[1]: *** No rule to make target `uImage'. Stop.
+>make: ***
+>[/mnt/local_storage/buildroot/project_build_mipsel/uclibc/linux-2.6.22/uImage]
+>Error 2
 >
-> the strip is superfluous (other patches of yours also do this. Don't.)
+>==================================================================================
 >
+>Why NO_RULE_TO_MAKE _TARGET_UIMAGE ?
 
-Ok, I just imitate the others code.
-
->>       cp $(EXT2_TARGET) $(ISO9660_TARGET_DIR)/initrd
->>+else
->>+      touch $(ISO9660_TARGET_DIR)/initrd
->
-> Sounds like this is not needed?
->
-
-I strongly suggest to add the touch initrd because:
-
- a)  initramf takes a lot of time at each compilation so beta-testing
-stage usually goes with initrd
-
- b) when you deliver the product you should turn on initramfs but then
-menu.lst still reports grub should load initrd but if it does not
-exist grub fails
-
- touching the initrd means: if you forget to modify menu.lst you will
-not pay the fee to see your system unable to boot.
-
- The question: is there any condition in which touching initrd really
-hurts somebody? I think the answer is no.
-
- Under this point of view touching initrd save time to skilled users
-and make things work for those are not such skilled users
-
- Cheers,
--- 
-/roberto
+I suppose you mean
+Why "No rule to make target XYZ"
+Well, please read the helptext of BR2_PACKAGE_LINUX_FORMAT
+HTH,
