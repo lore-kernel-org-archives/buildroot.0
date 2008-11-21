@@ -1,30 +1,116 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Fri, 21 Nov 2008 11:54:08 +0100
-Subject: [Buildroot] No rule to make target uImage
-In-Reply-To: <1133111752.1227264334.189979624.2801@mcgi56.rambler.ru>
-References: <1133111752.1227264334.189979624.2801@mcgi56.rambler.ru>
-Message-ID: <20081121105408.GC19111@mx.loc>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Fri, 21 Nov 2008 02:59:01 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
+Message-ID: <20081121105902.057043C8E4@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Nov 21, 2008 at 01:45:34PM +0300, ?????? ?????? wrote:
->Hi.
+Author: jacmet
+Date: 2008-11-21 02:59:01 -0800 (Fri, 21 Nov 2008)
+New Revision: 24111
 
-Hi.. Please do not send duplicate messages to the list. TIA.
+Log:
+busybox: 1.13.0 ash fix
 
->make[1]: *** No rule to make target `uImage'. Stop.
->make: ***
->[/mnt/local_storage/buildroot/project_build_mipsel/uclibc/linux-2.6.22/uImage]
->Error 2
->
->==================================================================================
->
->Why NO_RULE_TO_MAKE _TARGET_UIMAGE ?
+Added:
+   trunk/buildroot/package/busybox/busybox-1.13.0-ash.patch
 
-I suppose you mean
-Why "No rule to make target XYZ"
-Well, please read the helptext of BR2_PACKAGE_LINUX_FORMAT
-HTH,
+
+Changeset:
+Added: trunk/buildroot/package/busybox/busybox-1.13.0-ash.patch
+===================================================================
+--- trunk/buildroot/package/busybox/busybox-1.13.0-ash.patch	                        (rev 0)
++++ trunk/buildroot/package/busybox/busybox-1.13.0-ash.patch	2008-11-21 10:59:01 UTC (rev 24111)
+@@ -0,0 +1,89 @@
++diff -urpN busybox-1.13.0/shell/ash.c busybox-1.13.0-ash/shell/ash.c
++--- busybox-1.13.0/shell/ash.c	2008-10-30 08:41:32.000000000 +0100
+++++ busybox-1.13.0-ash/shell/ash.c	2008-11-21 11:38:04.000000000 +0100
++@@ -536,6 +536,7 @@ static const char dolatstr[] ALIGN1 = {
++ #define NHERE    24
++ #define NXHERE   25
++ #define NNOT     26
+++#define N_NUMBER 27
++ 
++ union node;
++ 
++@@ -7546,43 +7547,44 @@ commandcmd(int argc UNUSED_PARAM, char *
++ 
++ /* ============ eval.c */
++ 
++-static int funcblocksize;          /* size of structures in function */
++-static int funcstringsize;         /* size of strings in node */
++-static void *funcblock;            /* block to allocate function from */
++-static char *funcstring;           /* block to allocate strings from */
+++static int funcblocksize;       /* size of structures in function */
+++static int funcstringsize;      /* size of strings in node */
+++static void *funcblock;         /* block to allocate function from */
+++static char *funcstring;        /* block to allocate strings from */
++ 
++ /* flags in argument to evaltree */
++-#define EV_EXIT 01              /* exit after evaluating tree */
++-#define EV_TESTED 02            /* exit status is checked; ignore -e flag */
+++#define EV_EXIT    01           /* exit after evaluating tree */
+++#define EV_TESTED  02           /* exit status is checked; ignore -e flag */
++ #define EV_BACKCMD 04           /* command executing within back quotes */
++ 
++-static const short nodesize[26] = {
++-	SHELL_ALIGN(sizeof(struct ncmd)),
++-	SHELL_ALIGN(sizeof(struct npipe)),
++-	SHELL_ALIGN(sizeof(struct nredir)),
++-	SHELL_ALIGN(sizeof(struct nredir)),
++-	SHELL_ALIGN(sizeof(struct nredir)),
++-	SHELL_ALIGN(sizeof(struct nbinary)),
++-	SHELL_ALIGN(sizeof(struct nbinary)),
++-	SHELL_ALIGN(sizeof(struct nbinary)),
++-	SHELL_ALIGN(sizeof(struct nif)),
++-	SHELL_ALIGN(sizeof(struct nbinary)),
++-	SHELL_ALIGN(sizeof(struct nbinary)),
++-	SHELL_ALIGN(sizeof(struct nfor)),
++-	SHELL_ALIGN(sizeof(struct ncase)),
++-	SHELL_ALIGN(sizeof(struct nclist)),
++-	SHELL_ALIGN(sizeof(struct narg)),
++-	SHELL_ALIGN(sizeof(struct narg)),
++-	SHELL_ALIGN(sizeof(struct nfile)),
++-	SHELL_ALIGN(sizeof(struct nfile)),
++-	SHELL_ALIGN(sizeof(struct nfile)),
++-	SHELL_ALIGN(sizeof(struct nfile)),
++-	SHELL_ALIGN(sizeof(struct nfile)),
++-	SHELL_ALIGN(sizeof(struct ndup)),
++-	SHELL_ALIGN(sizeof(struct ndup)),
++-	SHELL_ALIGN(sizeof(struct nhere)),
++-	SHELL_ALIGN(sizeof(struct nhere)),
++-	SHELL_ALIGN(sizeof(struct nnot)),
+++static const short nodesize[N_NUMBER] = {
+++	[NCMD     ] = SHELL_ALIGN(sizeof(struct ncmd)),
+++	[NPIPE    ] = SHELL_ALIGN(sizeof(struct npipe)),
+++	[NREDIR   ] = SHELL_ALIGN(sizeof(struct nredir)),
+++	[NBACKGND ] = SHELL_ALIGN(sizeof(struct nredir)),
+++	[NSUBSHELL] = SHELL_ALIGN(sizeof(struct nredir)),
+++	[NAND     ] = SHELL_ALIGN(sizeof(struct nbinary)),
+++	[NOR      ] = SHELL_ALIGN(sizeof(struct nbinary)),
+++	[NSEMI    ] = SHELL_ALIGN(sizeof(struct nbinary)),
+++	[NIF      ] = SHELL_ALIGN(sizeof(struct nif)),
+++	[NWHILE   ] = SHELL_ALIGN(sizeof(struct nbinary)),
+++	[NUNTIL   ] = SHELL_ALIGN(sizeof(struct nbinary)),
+++	[NFOR     ] = SHELL_ALIGN(sizeof(struct nfor)),
+++	[NCASE    ] = SHELL_ALIGN(sizeof(struct ncase)),
+++	[NCLIST   ] = SHELL_ALIGN(sizeof(struct nclist)),
+++	[NDEFUN   ] = SHELL_ALIGN(sizeof(struct narg)),
+++	[NARG     ] = SHELL_ALIGN(sizeof(struct narg)),
+++	[NTO      ] = SHELL_ALIGN(sizeof(struct nfile)),
+++	[NTO2     ] = SHELL_ALIGN(sizeof(struct nfile)),
+++	[NCLOBBER ] = SHELL_ALIGN(sizeof(struct nfile)),
+++	[NFROM    ] = SHELL_ALIGN(sizeof(struct nfile)),
+++	[NFROMTO  ] = SHELL_ALIGN(sizeof(struct nfile)),
+++	[NAPPEND  ] = SHELL_ALIGN(sizeof(struct nfile)),
+++	[NTOFD    ] = SHELL_ALIGN(sizeof(struct ndup)),
+++	[NFROMFD  ] = SHELL_ALIGN(sizeof(struct ndup)),
+++	[NHERE    ] = SHELL_ALIGN(sizeof(struct nhere)),
+++	[NXHERE   ] = SHELL_ALIGN(sizeof(struct nhere)),
+++	[NNOT     ] = SHELL_ALIGN(sizeof(struct nnot)),
++ };
++ 
++ static void calcsize(union node *n);
