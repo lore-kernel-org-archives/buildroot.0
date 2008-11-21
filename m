@@ -1,56 +1,44 @@
-From: l m <lmmmcc@gmail.com>
-Date: Fri, 21 Nov 2008 18:23:38 +0800
-Subject: [Buildroot] Fonconfig
-Message-ID: <6c8937b20811210223l527b6f07ya15f0248a96352f8@mail.gmail.com>
+From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+Date: Fri, 21 Nov 2008 11:32:42 +0100
+Subject: [Buildroot] [PATCH] target/iso9660/iso9660.mk
+In-Reply-To: <e4c675870811210211s3080d990ue4b59efe2c4a3d68@mail.gmail.com>
+References: <e4c675870811210211s3080d990ue4b59efe2c4a3d68@mail.gmail.com>
+Message-ID: <20081121103242.GB19111@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, guys
-I just found this compiling problem.
+On Fri, Nov 21, 2008 at 11:11:59AM +0100, Roberto A. Foglietta wrote:
+>Hi,
+>
+> when the user choose to use INITRAMFS iso9660 double its size because
+>initrd is also copied in iso9660 but kernel has its own.
+>
+>
+>Index: target/iso9660/iso9660.mk
+>===================================================================
+>--- target/iso9660/iso9660.mk	(revision 24103)
+>+++ target/iso9660/iso9660.mk	(working copy)
+>@@ -55,12 +55,17 @@
+> endif
+>
+> $(ISO9660_TARGET): host-fakeroot $(LINUX_KERNEL) $(EXT2_TARGET) grub mkisofs
+>+	rm -rf $(ISO9660_TARGET_DIR)
+> 	mkdir -p $(ISO9660_TARGET_DIR)
+> 	mkdir -p $(ISO9660_TARGET_DIR)/boot/grub
+> 	cp $(GRUB_DIR)/stage2/stage2_eltorito $(ISO9660_TARGET_DIR)/boot/grub/
+> 	cp $(ISO9660_BOOT_MENU) $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
+> 	cp $(LINUX_KERNEL) $(ISO9660_TARGET_DIR)/kernel
+>+ifneq ($(strip $(BR2_TARGET_ROOTFS_INITRAMFS)),y)
 
->>> fontconfig 2.6.0 Building
-/usr/bin/make -j1  -C build_i686/fontconfig-2.6.0/
-make[1]: Entering directory `build_i686/fontconfig-2.6.0'
-/usr/bin/make  all-recursive
-make[2]: Entering directory `build_i686/fontconfig-2.6.0'
-Making all in fontconfig
-make[3]: Entering directory `build_i686/fontconfig-2.6.0/fontconfig'
-make[3]: Nothing to be done for `all'.
-make[3]: Leaving directory `build_i686/fontconfig-2.6.0/fontconfig'
-Making all in fc-case
-make[3]: Entering directory `build_i686/fontconfig-2.6.0/fc-case'
-touch fcalias.h fcaliastail.h
-/usr/bin/make  all-am
-make[4]: Entering directory `build_i686/fontconfig-2.6.0/fc-case'
-/usr/lib/ccache/gcc -DHAVE_CONFIG_H -I. -I.. -I../src -I.. -Wall
--Wpointer-arith -Wstrict-prototypes    -Wmissing-prototypes
--Wmissing-declarations     -Wnested-externs -fno-strict-aliasing    -Os
--Ibuild_i686/staging_dir/usr/include -Ibuild_i686/staging_dir/include
---sysroot=build_i686/staging_dir/ -isysroot build_i686/staging_dir
--mtune=i686 -march=i686 -MT fc-case.o -MD -MP -MF .deps/fc-case.Tpo -c -o
-fc-case.o fc-case.c
-mv -f .deps/fc-case.Tpo .deps/fc-case.Po
-/usr/lib/ccache/gcc  -Os  -Ibuild_i686/staging_dir/usr/include
--Ibuild_i686/staging_dir/include --sysroot=build_i686/staging_dir/ -isysroot
-build_i686/staging_dir -mtune=i686 -march=i686  -Lbuild_i686/staging_dir/lib
--Lbuild_i686/staging_dir/usr/lib --sysroot=build_i686/staging_dir/ -o
-fc-case fc-case.o
-/usr/bin/ld: this linker was not configured to use sysroots
-collect2: ld returned 1 exit status
-make[4]: *** [fc-case] Error 1
-make[4]: Leaving directory `build_i686/fontconfig-2.6.0/fc-case'
-make[3]: *** [all] Error 2
-make[3]: Leaving directory `build_i686/fontconfig-2.6.0/fc-case'
-make[2]: *** [all-recursive] Error 1
-make[2]: Leaving directory `build_i686/fontconfig-2.6.0'
-make[1]: *** [all] Error 2
-make[1]: Leaving directory `build_i686/fontconfig-2.6.0'
-make: *** [build_i686/fontconfig-2.6.0/.stamp_built] Error 2
+the strip is superfluous (other patches of yours also do this. Don't.)
 
-LM
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20081121/062db6ef/attachment.htm 
+> 	cp $(EXT2_TARGET) $(ISO9660_TARGET_DIR)/initrd
+>+else
+>+	touch $(ISO9660_TARGET_DIR)/initrd
+
+Sounds like this is not needed?
+
+I have applied something equivalent to my tree. Thanks.
