@@ -1,49 +1,26 @@
-From: jrise <jrise@hispeed.ch>
-Date: Sun, 23 Nov 2008 15:12:45 +0100
+From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
+Date: Sun, 23 Nov 2008 16:29:23 -0200
 Subject: [Buildroot] Building Toolchain using Cygwin
-Message-ID: <C9699A75729D480CB8D298B179410509@jrise1>
+In-Reply-To: <C9699A75729D480CB8D298B179410509@jrise1>
+References: <C9699A75729D480CB8D298B179410509@jrise1>
+Message-ID: <d6cda7730811231029o51e046d5ue85bb4bbfdea1039@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi everybody
+> The goal is to have a toolchain running under Windows (host) that generates
+> code for a PowerPC (target) based system that runs a busybox / uClibc Linux
+> system.
+>
 
- 
+If all you want is the toolchain, than perhaps Crosstool-ng [1] is
+more suited to what you need. Althought I have never used it myself,
+others on the list have spoken highly of it. I haven't heard of
+success stories with buildroot and cygwin.
 
-I want to build a cross-compilation toolchain using buildroot and cygwin. 
+Kind Regards,
+    Thiago A. Correa
 
- 
-
-The goal is to have a toolchain running under Windows (host) that generates
-code for a PowerPC (target) based system that runs a busybox / uClibc Linux
-system.
-
- 
-
-That toolchain shall afterwards be integrated into CDT/Eclipse system.
-
- 
-
-Especially important is to be able to use the cross-debugging support of
-CDT.
-
- 
-
-Has anybody done this already or has experience in using buildroot and
-cygwin together?
-
- 
-
-Any help is welcome 
-
- 
-
-Greetings from Switzerland - Ren?
-
- 
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20081123/b24165f9/attachment.htm 
+[1] http://freshmeat.net/projects/crosstool-ng/
