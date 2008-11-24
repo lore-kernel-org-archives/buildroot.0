@@ -1,26 +1,39 @@
-From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Sun, 23 Nov 2008 16:29:23 -0200
-Subject: [Buildroot] Building Toolchain using Cygwin
-In-Reply-To: <C9699A75729D480CB8D298B179410509@jrise1>
-References: <C9699A75729D480CB8D298B179410509@jrise1>
-Message-ID: <d6cda7730811231029o51e046d5ue85bb4bbfdea1039@mail.gmail.com>
+From: =?windows-1251?B?1+jt6u7iIMDt5PDl6Q==?= <blackmesa@rambler.ru>
+Date: Mon, 24 Nov 2008 11:21:29 +0300
+Subject: [Buildroot] Buildroot does not generates target image.
+Message-ID: <402224706.1227514889.172836360.21697@mcgi41.rambler.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> The goal is to have a toolchain running under Windows (host) that generates
-> code for a PowerPC (target) based system that runs a busybox / uClibc Linux
-> system.
->
+Hi.
 
-If all you want is the toolchain, than perhaps Crosstool-ng [1] is
-more suited to what you need. Althought I have never used it myself,
-others on the list have spoken highly of it. I haven't heard of
-success stories with buildroot and cygwin.
+I did these steps:
 
-Kind Regards,
-    Thiago A. Correa
+1) download buildroot-20081110.tar.bz2
+2) unpack
+3) cd ./buildroot
+4) make menuconfig
+4.1) Reset produce target JFFS2 image
+4.2) Set Linux advanced configuration (set Alchemy Based Processor, 
+Little Endian, vmlinux)
+5) make all
 
-[1] http://freshmeat.net/projects/crosstool-ng/
+So I have the following question:
+
+1) .../buildroot/project_build_mipsel/uclibc/root - is it the root 
+folder for target JFFS2 image ?
+
+2) Could I invoke this command "mkfs.jffs2 -d 
+.../buildroot/project_build_mipsel/uclibc/root -o MY_IMAGE_NAME 
+--little-endian" to produce target JFFS2 image by hand?
+
+3) If I goto 4.1 item and set produce target JFFS2 image flag then I get 
+an error after Linux compiles: "No rule to make 'mtd-host'".
+What does this error means? How to force BUILDROOT to produce target 
+image (like JFFS2) ??
+
+--
+Andrew.
