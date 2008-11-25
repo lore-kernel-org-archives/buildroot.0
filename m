@@ -1,30 +1,35 @@
-From: Markus Heidelberg <markus.heidelberg@web.de>
-Date: Tue, 25 Nov 2008 08:33:46 +0100
-Subject: [Buildroot] [PATCH 0/7] add Phonon support to qtopia4
-In-Reply-To: <492BA8EF.5070409@atmel.com>
-References: <200811190244.44817.markus.heidelberg@web.de>
-	<200811250825.06755.markus.heidelberg@web.de>
-	<492BA8EF.5070409@atmel.com>
-Message-ID: <200811250833.46629.markus.heidelberg@web.de>
+From: =?windows-1251?B?1+jt6u7iIMDt5PDl6Q==?= <blackmesa@rambler.ru>
+Date: Tue, 25 Nov 2008 13:25:29 +0300
+Subject: [Buildroot] How to configure Linux with "Device Drivers->GPIO
+	support"
+Message-ID: <281629735.1227608729.191157228.68438@mcgi25.rambler.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hans-Christian Egtvedt, 25.11.2008:
-> Markus Heidelberg wrote:
-> > Markus Heidelberg, 19.11.2008:
-> >> This patch series adds Phonon configuration to qtopia4 and its required
-> >> packages.
-> > 
-> > Is nobody interested, not even the Qt users? I'd really like this being
-> > integrated. I could do it on my own with commit access, but I'm not sure
-> > whether my activity will be lasting.
-> > 
-> 
-> Sorry for the late feedback, I am very interested, but I lack a bit on 
-> time at the moment to complete this. Hopefully I get the time to look 
-> into this during the coming weeks.
+Good Day.
+I selected advanced Linux kernel configuration option from "make 
+menuconfig" invoked in .../buildroot directory.
 
-OK, I can understand only too well. Thanks for the response.
+So all is OK with Linux building but the question1 is:
+why in Linux configuration session "Device Drivers -> GPIO Support" is 
+absent?
+
+I have target "AMD Alchemy Processor", MIPSel architecture.
+
+If I invoke "make menuconfig" in linux-2.6.27 directory by hand then 
+there will be "Device Drivers -> GPIO Support" option.
+
+So the question2 is:
+is the option "Device Drivers -> GPIO Support" absent due to some 
+special patches applied?
+
+And question3:
+is it able to build Linux from some existing linux_configuration_file ?
+
+Thanks.
+
+--
+Andrew
