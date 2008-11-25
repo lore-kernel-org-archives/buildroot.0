@@ -1,35 +1,34 @@
 From: =?windows-1251?B?1+jt6u7iIMDt5PDl6Q==?= <blackmesa@rambler.ru>
-Date: Tue, 25 Nov 2008 13:25:29 +0300
-Subject: [Buildroot] How to configure Linux with "Device Drivers->GPIO
-	support"
-Message-ID: <281629735.1227608729.191157228.68438@mcgi25.rambler.ru>
+Date: Tue, 25 Nov 2008 15:15:17 +0300
+Subject: [Buildroot] =?windows-1251?q?=D1orrect_buildroot/target/jffs2/jff?=
+	=?windows-1251?q?s2root=2Emk=2E?=
+Message-ID: <260427672.1227615317.177933076.67883@mcgi54.rambler.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Good Day.
-I selected advanced Linux kernel configuration option from "make 
-menuconfig" invoked in .../buildroot directory.
+Hi all.
 
-So all is OK with Linux building but the question1 is:
-why in Linux configuration session "Device Drivers -> GPIO Support" is 
-absent?
+I will speak about .../buildroot/target/jffs2/jffs2root.mk file.
 
-I have target "AMD Alchemy Processor", MIPSel architecture.
+I had built JFFS2 image for MIPSel and found that there is an indefinite 
+conduct of the 'rmdir' (linux remove directory utility).
 
-If I invoke "make menuconfig" in linux-2.6.27 directory by hand then 
-there will be "Device Drivers -> GPIO Support" option.
+An error consists of that command:
 
-So the question2 is:
-is the option "Device Drivers -> GPIO Support" absent due to some 
-special patches applied?
+@rmdir -p --ignore-fail-on-non-empty $(TARGET_DIR)/usr/share
 
-And question3:
-is it able to build Linux from some existing linux_configuration_file ?
+does not delete directory recursive and reports error of that (I have 
+Ubuntu-8.04 host machine).
 
-Thanks.
+So I decided this problem by means of substituting of this line:
+@rmdir -p --ignore-fail-on-non-empty $(TARGET_DIR)/usr/share
+by it:
+@rm -r $(TARGET_DIR)/usr/share
+
+And it works!
 
 --
 Andrew
