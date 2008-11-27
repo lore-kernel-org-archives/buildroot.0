@@ -1,7 +1,7 @@
-From: Quick X <quickx@hotmail.com>
-Date: Wed, 26 Nov 2008 16:40:38 -0800
-Subject: [Buildroot] Bare Toolchain
-Message-ID: <BAY124-W34DB57BF59730B9E960F48D2050@phx.gbl>
+From: SalvoFa <salvatore.fassi@gmail.com>
+Date: Thu, 27 Nov 2008 05:54:40 -0800 (PST)
+Subject: [Buildroot]  Initramfs question
+Message-ID: <20719678.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,26 +9,25 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-I'm a little new to this *my apologies if it is a basic question*, however, can buildroot create a "bare" toolchain for a target device?  How would I configure buildroot to build something like this?
- 
- 
-Basically there is a startup project "softpack-1.4-at91sam9261-ek-web" which makes some lights on my board blink.  It asks for a "arm-elf-" compiler.
- 
-The projects compiles fine and works if I use 
-1. GNUARM or YATARGO (windows) "arm-elf-" compiler.
-2. CodeSourcery EABI (linux) " arm-none-eabi-" compiler.
- 
-When I do a default build for my AT91SAM9261-EK board with buildroot (linux) it produces a "arm-linux-" (or "arm-linux-uclibc-") compiler.  CodeSourcery also has a Linux/GNU "arm-none-linux-gnueabi-" toolchain which gives the same errors as buildroots "arm-linux-" toolchain for this project.  The error it gives is the following:
- 
------ERROR-----
-arm-linux-gcc -Wall -mlong-calls -ffunction-sections -g -Os -I../../at91lib/boards/at91sam9260-ek -I../../at91lib/peripherals -I../../at91lib/memories -I../../at91lib/components -I../../at91lib -Dat91sam9260 -DDYNAMIC_TRACE_LEVEL -c -o obj/stdio.o ../../at91lib/utility/stdio.c ../../at91lib/utility/stdio.c:53: error: variable 'r' has initializer but incomplete type ../../at91lib/utility/stdio.c:53: warning: excess elements in struct initializer ../../at91lib/utility/stdio.c:53: warning: (near initialization for 'r') ../../at91lib/utility/stdio.c:53: warning: excess elements in struct initializer ../../at91lib/utility/stdio.c:53: warning: (near initialization for 'r') ../../at91lib/utility/stdio.c:53: warning: excess elements in struct initializer ../../at91lib/utility/stdio.c:53: warning: (near initialization for 'r') ../../at91lib/utility/stdio.c:53: warning: excess elements in struct initializer ../../at91lib/utility/stdio.c:53: warning: (near initialization for 'r') make: *** [obj/stdio.o] Error 1 
------END-----
- 
-Reason I'm asking here is because since buildroot builds the kernel and bootstraps, it already has to use an "arm-elf-" (bare) toolchain for those correct?  Where would I find this, or, am I missing something?
- 
-The toolchain buildroot creates works fine for the projects I make after linux is flashed to the board so this question is more so for the test/temp/maybe future things I may need; and thus not have to install a 2nd toolchain (CodeSourcers's "arm-none-eabi-") since I already have buildroot.  Thanks for any help.
-_________________________________________________________________
+Hi all,
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20081126/9121d423/attachment.htm 
+I'm currently using buildroot to generate a cramfs filesystem.
+Now I've the need to create also an initramfs that will mount the real
+cramfs filesystem.
+This initramfs will be more or less the same as the ones used by Ubuntu...so
+it will check the kernel command line and will mount the right filesystem
+from the desired device.
+I know that in buildroot there is the possibility to create the initramfs.
+"make initramfs" will create a file list and then the kernel will create the
+gzipped cpio archive. But this means that it takes the file list from the
+project compiled root filesystem...but I want the initramfs to be a
+different filesystem..as it should be...
+Must I create another "project" in my buildroot directory for my custom
+initramfs?
+
+Thank you for your help.
+
+Salvo
+-- 
+View this message in context: http://www.nabble.com/Initramfs-question-tp20719678p20719678.html
+Sent from the BuildRoot mailing list archive at Nabble.com.
