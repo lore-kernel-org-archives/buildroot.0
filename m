@@ -1,33 +1,222 @@
-From: SalvoFa <salvatore.fassi@gmail.com>
-Date: Thu, 27 Nov 2008 05:54:40 -0800 (PST)
-Subject: [Buildroot]  Initramfs question
-Message-ID: <20719678.post@talk.nabble.com>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Fri, 28 Nov 2008 00:19:24 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
+Message-ID: <20081128081924.52B0A3C2C1@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: jacmet
+Date: 2008-11-28 00:19:23 -0800 (Fri, 28 Nov 2008)
+New Revision: 24172
 
-Hi all,
+Log:
+busybox: updated 1.13.0 ash fix
 
-I'm currently using buildroot to generate a cramfs filesystem.
-Now I've the need to create also an initramfs that will mount the real
-cramfs filesystem.
-This initramfs will be more or less the same as the ones used by Ubuntu...so
-it will check the kernel command line and will mount the right filesystem
-from the desired device.
-I know that in buildroot there is the possibility to create the initramfs.
-"make initramfs" will create a file list and then the kernel will create the
-gzipped cpio archive. But this means that it takes the file list from the
-project compiled root filesystem...but I want the initramfs to be a
-different filesystem..as it should be...
-Must I create another "project" in my buildroot directory for my custom
-initramfs?
+Modified:
+   trunk/buildroot/package/busybox/busybox-1.13.0-ash.patch
 
-Thank you for your help.
 
-Salvo
--- 
-View this message in context: http://www.nabble.com/Initramfs-question-tp20719678p20719678.html
-Sent from the BuildRoot mailing list archive at Nabble.com.
+Changeset:
+Modified: trunk/buildroot/package/busybox/busybox-1.13.0-ash.patch
+===================================================================
+--- trunk/buildroot/package/busybox/busybox-1.13.0-ash.patch	2008-11-28 04:01:03 UTC (rev 24171)
++++ trunk/buildroot/package/busybox/busybox-1.13.0-ash.patch	2008-11-28 08:19:23 UTC (rev 24172)
+@@ -1,5 +1,5 @@
+ --- busybox-1.13.0/shell/ash.c	Thu Oct 30 08:41:32 2008
+-+++ busybox-1.13.0-ash/shell/ash.c	Sat Nov 22 02:31:06 2008
+++++ busybox-1.13.0-ash/shell/ash.c	Fri Nov 28 04:39:17 2008
+ @@ -536,6 +536,7 @@
+  #define NHERE    24
+  #define NXHERE   25
+@@ -88,3 +88,188 @@
+  };
+  
+  static void calcsize(union node *n);
++@@ -9065,8 +9069,6 @@
++  * This implements the input routines used by the parser.
++  */
++ 
++-#define EOF_NLEFT -99           /* value of parsenleft when EOF pushed back */
++-
++ enum {
++ 	INPUT_PUSH_FILE = 1,
++ 	INPUT_NOFILE_OK = 2,
++@@ -9107,7 +9109,6 @@
++ #endif
++ 	parsenextc = sp->prevstring;
++ 	parsenleft = sp->prevnleft;
++-/*dprintf("*** calling popstring: restoring to '%s'\n", parsenextc);*/
++ 	g_parsefile->strpush = sp->prev;
++ 	if (sp != &(g_parsefile->basestrpush))
++ 		free(sp);
++@@ -9123,7 +9124,7 @@
++ 
++ #if ENABLE_FEATURE_EDITING
++  retry:
++-	if (!iflag || g_parsefile->fd)
+++	if (!iflag || g_parsefile->fd != STDIN_FILENO)
++ 		nr = nonblock_safe_read(g_parsefile->fd, buf, BUFSIZ - 1);
++ 	else {
++ #if ENABLE_FEATURE_TAB_COMPLETION
++@@ -9171,55 +9172,76 @@
++  * Refill the input buffer and return the next input character:
++  *
++  * 1) If a string was pushed back on the input, pop it;
++- * 2) If an EOF was pushed back (parsenleft == EOF_NLEFT) or we are reading
+++ * 2) If an EOF was pushed back (parsenleft < -BIGNUM) or we are reading
++  *    from a string so we can't refill the buffer, return EOF.
++  * 3) If the is more stuff in this buffer, use it else call read to fill it.
++  * 4) Process input up to the next newline, deleting nul characters.
++  */
+++//#define pgetc_debug(...) bb_error_msg(__VA_ARGS__)
+++#define pgetc_debug(...) ((void)0)
++ static int
++ preadbuffer(void)
++ {
++ 	char *q;
++ 	int more;
++-	char savec;
++ 
++ 	while (g_parsefile->strpush) {
++ #if ENABLE_ASH_ALIAS
++-		if (parsenleft == -1 && g_parsefile->strpush->ap &&
++-			parsenextc[-1] != ' ' && parsenextc[-1] != '\t') {
+++		if (parsenleft == -1 && g_parsefile->strpush->ap
+++		 && parsenextc[-1] != ' ' && parsenextc[-1] != '\t'
+++		) {
+++			pgetc_debug("preadbuffer PEOA");
++ 			return PEOA;
++ 		}
++ #endif
++ 		popstring();
+++		/* try "pgetc" now: */
+++		pgetc_debug("internal pgetc at %d:%p'%s'", parsenleft, parsenextc, parsenextc);
++ 		if (--parsenleft >= 0)
++ 			return signed_char2int(*parsenextc++);
++ 	}
++-	if (parsenleft == EOF_NLEFT || g_parsefile->buf == NULL)
+++	/* on both branches above parsenleft < 0.
+++	 * "pgetc" needs refilling.
+++	 */
+++
+++	/* -90 is -BIGNUM. Below we use -99 to mark "EOF on read",
+++	 * pungetc() may decrement it a few times. -90 is enough.
+++	 */
+++	if (parsenleft < -90 || g_parsefile->buf == NULL) {
+++		pgetc_debug("preadbuffer PEOF1");
+++		/* even in failure keep them in lock step,
+++		 * for correct pungetc. */
+++		parsenextc++;
++ 		return PEOF;
++-	flush_stdout_stderr();
+++	}
++ 
++ 	more = parselleft;
++ 	if (more <= 0) {
+++		flush_stdout_stderr();
++  again:
++ 		more = preadfd();
++ 		if (more <= 0) {
++-			parselleft = parsenleft = EOF_NLEFT;
+++			parselleft = parsenleft = -99;
+++			pgetc_debug("preadbuffer PEOF2");
+++			parsenextc++;
++ 			return PEOF;
++ 		}
++ 	}
++ 
+++	/* Find out where's the end of line.
+++	 * Set parsenleft/parselleft acordingly.
+++	 * NUL chars are deleted.
+++	 */
++ 	q = parsenextc;
++-
++-	/* delete nul characters */
++ 	for (;;) {
++-		int c;
+++		char c;
++ 
++ 		more--;
++-		c = *q;
++ 
++-		if (!c)
+++		c = *q;
+++		if (c == '\0') {
++ 			memmove(q, q + 1, more);
++-		else {
+++		} else {
++ 			q++;
++ 			if (c == '\n') {
++ 				parsenleft = q - parsenextc - 1;
++@@ -9236,22 +9258,23 @@
++ 	}
++ 	parselleft = more;
++ 
++-	savec = *q;
++-	*q = '\0';
++-
++ 	if (vflag) {
+++		char save = *q;
+++		*q = '\0';
++ 		out2str(parsenextc);
+++		*q = save;
++ 	}
++ 
++-	*q = savec;
++-
+++	pgetc_debug("preadbuffer@%d:%p'%s'", parsenleft, parsenextc, parsenextc);
++ 	return signed_char2int(*parsenextc++);
++ }
++ 
++ #define pgetc_as_macro() (--parsenleft >= 0 ? signed_char2int(*parsenextc++) : preadbuffer())
+++
++ static int
++ pgetc(void)
++ {
+++	pgetc_debug("pgetc at %d:%p'%s'", parsenleft, parsenextc, parsenextc);
++ 	return pgetc_as_macro();
++ }
++ 
++@@ -9312,6 +9335,7 @@
++ {
++ 	parsenleft++;
++ 	parsenextc--;
+++	pgetc_debug("pushed back to %d:%p'%s'", parsenleft, parsenextc, parsenextc);
++ }
++ 
++ /*
++@@ -9325,16 +9349,17 @@
++ pushstring(char *s, struct alias *ap)
++ {
++ 	struct strpush *sp;
++-	size_t len;
+++	int len;
++ 
++ 	len = strlen(s);
++ 	INT_OFF;
++ 	if (g_parsefile->strpush) {
++-		sp = ckzalloc(sizeof(struct strpush));
+++		sp = ckzalloc(sizeof(*sp));
++ 		sp->prev = g_parsefile->strpush;
++-		g_parsefile->strpush = sp;
++-	} else
++-		sp = g_parsefile->strpush = &(g_parsefile->basestrpush);
+++	} else {
+++		sp = &(g_parsefile->basestrpush);
+++	}
+++	g_parsefile->strpush = sp;
++ 	sp->prevstring = parsenextc;
++ 	sp->prevnleft = parsenleft;
++ #if ENABLE_ASH_ALIAS
++@@ -9424,7 +9449,7 @@
++ 	close_on_exec_on(fd);
++ 	if (push) {
++ 		pushfile();
++-		g_parsefile->buf = 0;
+++		g_parsefile->buf = NULL;
++ 	}
++ 	g_parsefile->fd = fd;
++ 	if (g_parsefile->buf == NULL)
