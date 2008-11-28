@@ -1,222 +1,263 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Fri, 28 Nov 2008 00:19:24 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
-Message-ID: <20081128081924.52B0A3C2C1@busybox.net>
+From: laird at uclibc.org <laird@uclibc.org>
+Date: Fri, 28 Nov 2008 06:20:47 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot: package package/atk
+	package/directfb pa etc...
+Message-ID: <20081128142047.DBFD83C2BB@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-11-28 00:19:23 -0800 (Fri, 28 Nov 2008)
-New Revision: 24172
+Author: laird
+Date: 2008-11-28 06:20:47 -0800 (Fri, 28 Nov 2008)
+New Revision: 24173
 
 Log:
-busybox: updated 1.13.0 ash fix
+Adding Central config.cache options
+
+The following changes allow for use of a central configure cache
+file.  This speeds up configuration of packages.
+Its use is configurable at the top level (BR2_CONFIG_CACHE - default n).
+Old style makefiles can use it if they use the following MACRO in makefiles:
+$(AUTO_CONFIGURE_TARGET) see my change to directfb.mk.
+New style Autotools.in will use it if you set the global option.
+However you can enable the global option and on a per package overrule it by doing
+the following: $(PKGNAME)_USE_CONFIG_CACHE = NO see fontconfig.mk for an example 
+of this.
+Finally I have removed a few config variable settings which indicated no CXX compiler
+as this is wrong and breaks the build when using this central cache.
+
+ Config.in                        |    8 ++++++++
+ package/Makefile.autotools.in    |    5 ++++-
+ package/Makefile.in              |   28 +++++++++++++++++++++++++++-
+ package/atk/atk.mk               |    2 +-
+ package/directfb/directfb.mk     |    7 +------
+ package/fontconfig/fontconfig.mk |    3 +++
+ package/libglib2/libglib2.mk     |    2 +-
+ package/libgtk2/libgtk2.mk       |    1 -
+ 8 files changed, 45 insertions(+), 11 deletions(-)
+
+I would appreciate feedback on this change (I have been testing for 2-3 weeks)
+But I can never test all cases!  If you enable the BR2_CONFIG_CACHE option some
+Makefile.autotools.in based packages may now break - I cannot build them all.
+In this case you may need to remove config options that are being hardcoded all
+over the place (like gtk saying we have 2 CXX compiler) or disable the use
+of CONFIG CACHE file like I have done in fontconfig.
+I can build all packages required to get WebKit on DirectFB up and running
+and it runs fine.
+I will try to resolve any issues this creates as fast as I can.
+
+Signed-off-by: Daniel Laird <daniel.j.laird@nxp.com>
+
+
 
 Modified:
-   trunk/buildroot/package/busybox/busybox-1.13.0-ash.patch
+   trunk/buildroot/Config.in
+   trunk/buildroot/package/Makefile.autotools.in
+   trunk/buildroot/package/Makefile.in
+   trunk/buildroot/package/atk/atk.mk
+   trunk/buildroot/package/directfb/directfb.mk
+   trunk/buildroot/package/fontconfig/fontconfig.mk
+   trunk/buildroot/package/libglib2/libglib2.mk
+   trunk/buildroot/package/libgtk2/libgtk2.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/busybox/busybox-1.13.0-ash.patch
+Modified: trunk/buildroot/Config.in
 ===================================================================
---- trunk/buildroot/package/busybox/busybox-1.13.0-ash.patch	2008-11-28 04:01:03 UTC (rev 24171)
-+++ trunk/buildroot/package/busybox/busybox-1.13.0-ash.patch	2008-11-28 08:19:23 UTC (rev 24172)
-@@ -1,5 +1,5 @@
- --- busybox-1.13.0/shell/ash.c	Thu Oct 30 08:41:32 2008
--+++ busybox-1.13.0-ash/shell/ash.c	Sat Nov 22 02:31:06 2008
-++++ busybox-1.13.0-ash/shell/ash.c	Fri Nov 28 04:39:17 2008
- @@ -536,6 +536,7 @@
-  #define NHERE    24
-  #define NXHERE   25
-@@ -88,3 +88,188 @@
-  };
-  
-  static void calcsize(union node *n);
-+@@ -9065,8 +9069,6 @@
-+  * This implements the input routines used by the parser.
-+  */
-+ 
-+-#define EOF_NLEFT -99           /* value of parsenleft when EOF pushed back */
-+-
-+ enum {
-+ 	INPUT_PUSH_FILE = 1,
-+ 	INPUT_NOFILE_OK = 2,
-+@@ -9107,7 +9109,6 @@
-+ #endif
-+ 	parsenextc = sp->prevstring;
-+ 	parsenleft = sp->prevnleft;
-+-/*dprintf("*** calling popstring: restoring to '%s'\n", parsenextc);*/
-+ 	g_parsefile->strpush = sp->prev;
-+ 	if (sp != &(g_parsefile->basestrpush))
-+ 		free(sp);
-+@@ -9123,7 +9124,7 @@
-+ 
-+ #if ENABLE_FEATURE_EDITING
-+  retry:
-+-	if (!iflag || g_parsefile->fd)
-++	if (!iflag || g_parsefile->fd != STDIN_FILENO)
-+ 		nr = nonblock_safe_read(g_parsefile->fd, buf, BUFSIZ - 1);
-+ 	else {
-+ #if ENABLE_FEATURE_TAB_COMPLETION
-+@@ -9171,55 +9172,76 @@
-+  * Refill the input buffer and return the next input character:
-+  *
-+  * 1) If a string was pushed back on the input, pop it;
-+- * 2) If an EOF was pushed back (parsenleft == EOF_NLEFT) or we are reading
-++ * 2) If an EOF was pushed back (parsenleft < -BIGNUM) or we are reading
-+  *    from a string so we can't refill the buffer, return EOF.
-+  * 3) If the is more stuff in this buffer, use it else call read to fill it.
-+  * 4) Process input up to the next newline, deleting nul characters.
-+  */
-++//#define pgetc_debug(...) bb_error_msg(__VA_ARGS__)
-++#define pgetc_debug(...) ((void)0)
-+ static int
-+ preadbuffer(void)
-+ {
-+ 	char *q;
-+ 	int more;
-+-	char savec;
-+ 
-+ 	while (g_parsefile->strpush) {
-+ #if ENABLE_ASH_ALIAS
-+-		if (parsenleft == -1 && g_parsefile->strpush->ap &&
-+-			parsenextc[-1] != ' ' && parsenextc[-1] != '\t') {
-++		if (parsenleft == -1 && g_parsefile->strpush->ap
-++		 && parsenextc[-1] != ' ' && parsenextc[-1] != '\t'
-++		) {
-++			pgetc_debug("preadbuffer PEOA");
-+ 			return PEOA;
-+ 		}
-+ #endif
-+ 		popstring();
-++		/* try "pgetc" now: */
-++		pgetc_debug("internal pgetc at %d:%p'%s'", parsenleft, parsenextc, parsenextc);
-+ 		if (--parsenleft >= 0)
-+ 			return signed_char2int(*parsenextc++);
-+ 	}
-+-	if (parsenleft == EOF_NLEFT || g_parsefile->buf == NULL)
-++	/* on both branches above parsenleft < 0.
-++	 * "pgetc" needs refilling.
-++	 */
-++
-++	/* -90 is -BIGNUM. Below we use -99 to mark "EOF on read",
-++	 * pungetc() may decrement it a few times. -90 is enough.
-++	 */
-++	if (parsenleft < -90 || g_parsefile->buf == NULL) {
-++		pgetc_debug("preadbuffer PEOF1");
-++		/* even in failure keep them in lock step,
-++		 * for correct pungetc. */
-++		parsenextc++;
-+ 		return PEOF;
-+-	flush_stdout_stderr();
-++	}
-+ 
-+ 	more = parselleft;
-+ 	if (more <= 0) {
-++		flush_stdout_stderr();
-+  again:
-+ 		more = preadfd();
-+ 		if (more <= 0) {
-+-			parselleft = parsenleft = EOF_NLEFT;
-++			parselleft = parsenleft = -99;
-++			pgetc_debug("preadbuffer PEOF2");
-++			parsenextc++;
-+ 			return PEOF;
-+ 		}
-+ 	}
-+ 
-++	/* Find out where's the end of line.
-++	 * Set parsenleft/parselleft acordingly.
-++	 * NUL chars are deleted.
-++	 */
-+ 	q = parsenextc;
-+-
-+-	/* delete nul characters */
-+ 	for (;;) {
-+-		int c;
-++		char c;
-+ 
-+ 		more--;
-+-		c = *q;
-+ 
-+-		if (!c)
-++		c = *q;
-++		if (c == '\0') {
-+ 			memmove(q, q + 1, more);
-+-		else {
-++		} else {
-+ 			q++;
-+ 			if (c == '\n') {
-+ 				parsenleft = q - parsenextc - 1;
-+@@ -9236,22 +9258,23 @@
-+ 	}
-+ 	parselleft = more;
-+ 
-+-	savec = *q;
-+-	*q = '\0';
-+-
-+ 	if (vflag) {
-++		char save = *q;
-++		*q = '\0';
-+ 		out2str(parsenextc);
-++		*q = save;
-+ 	}
-+ 
-+-	*q = savec;
-+-
-++	pgetc_debug("preadbuffer@%d:%p'%s'", parsenleft, parsenextc, parsenextc);
-+ 	return signed_char2int(*parsenextc++);
-+ }
-+ 
-+ #define pgetc_as_macro() (--parsenleft >= 0 ? signed_char2int(*parsenextc++) : preadbuffer())
-++
-+ static int
-+ pgetc(void)
-+ {
-++	pgetc_debug("pgetc at %d:%p'%s'", parsenleft, parsenextc, parsenextc);
-+ 	return pgetc_as_macro();
-+ }
-+ 
-+@@ -9312,6 +9335,7 @@
-+ {
-+ 	parsenleft++;
-+ 	parsenextc--;
-++	pgetc_debug("pushed back to %d:%p'%s'", parsenleft, parsenextc, parsenextc);
-+ }
-+ 
-+ /*
-+@@ -9325,16 +9349,17 @@
-+ pushstring(char *s, struct alias *ap)
-+ {
-+ 	struct strpush *sp;
-+-	size_t len;
-++	int len;
-+ 
-+ 	len = strlen(s);
-+ 	INT_OFF;
-+ 	if (g_parsefile->strpush) {
-+-		sp = ckzalloc(sizeof(struct strpush));
-++		sp = ckzalloc(sizeof(*sp));
-+ 		sp->prev = g_parsefile->strpush;
-+-		g_parsefile->strpush = sp;
-+-	} else
-+-		sp = g_parsefile->strpush = &(g_parsefile->basestrpush);
-++	} else {
-++		sp = &(g_parsefile->basestrpush);
-++	}
-++	g_parsefile->strpush = sp;
-+ 	sp->prevstring = parsenextc;
-+ 	sp->prevnleft = parsenleft;
-+ #if ENABLE_ASH_ALIAS
-+@@ -9424,7 +9449,7 @@
-+ 	close_on_exec_on(fd);
-+ 	if (push) {
-+ 		pushfile();
-+-		g_parsefile->buf = 0;
-++		g_parsefile->buf = NULL;
-+ 	}
-+ 	g_parsefile->fd = fd;
-+ 	if (g_parsefile->buf == NULL)
+--- trunk/buildroot/Config.in	2008-11-28 08:19:23 UTC (rev 24172)
++++ trunk/buildroot/Config.in	2008-11-28 14:20:47 UTC (rev 24173)
+@@ -189,6 +189,14 @@
+ 	help
+ 	  This option show recent versions of packages.
+ 
++config BR2_CONFIG_CACHE
++	bool "Use a central configure cache file"
++	default n
++	help
++	  This determines if a central config cache is used by
++	  packages, reducing the configure time for packages as each
++	  one caches its findings.
++
+ config BR2_ENABLE_DEBUG
+ 	bool "build packages with debugging symbols"
+ 	select BR2_PACKAGE_GDB_SERVER
+
+Modified: trunk/buildroot/package/Makefile.autotools.in
+===================================================================
+--- trunk/buildroot/package/Makefile.autotools.in	2008-11-28 08:19:23 UTC (rev 24172)
++++ trunk/buildroot/package/Makefile.autotools.in	2008-11-28 14:20:47 UTC (rev 24173)
+@@ -32,6 +32,8 @@
+ #	run <autoreconf> before <configure>
+ # FOO_LIBTOOL_PATCH [YES/NO, default YES]
+ #	Do you want the standard buildroot patch applied to ltmain.sh? (libtool)
++# FOO_USE_CONFIG_CACHE [YES/NO default $(BR2_CONFIG_CACHE)]
++#   Do you wany to use the central configure cache file? See BR2_CONFIG_CACHE.
+ # FOO_CONF_ENV [default empty]
+ #	environment passed to the <configure> script
+ # FOO_CONF_OPT [default empty]
+@@ -217,8 +219,10 @@
+ 	cd $(@D)/$($(PKG)_SUBDIR) && rm -f config.cache && \
+ 	$(TARGET_CONFIGURE_OPTS) \
+ 	$(TARGET_CONFIGURE_ARGS) \
++	$(TARGET_CONFIGURE_ENV) \
+ 	$($(PKG)_CONF_ENV) \
+-		./configure \
++	$(if $(THIS_SRCDIR),$(THIS_SRCDIR)/,./)configure \
++		$(if $(filter YES,$($(PKG)_USE_CONFIG_CACHE)),--cache-file="$(PROJECT_BUILD_DIR)/tgt-config.cache",) \
+ 		--target=$(GNU_TARGET_NAME) \
+ 		--host=$(GNU_TARGET_NAME) \
+ 		--build=$(GNU_HOST_NAME) \
+@@ -302,6 +306,7 @@
+ $(2)_DEPENDENCIES		?=
+ $(2)_AUTORECONF			?= NO
+ $(2)_LIBTOOL_PATCH		?= YES
++$(2)_USE_CONFIG_CACHE   ?= $(if $(BR2_CONFIG_CACHE),YES,NO)
+ $(2)_CONF_ENV			?=
+ $(2)_CONF_OPT			?=
+ $(2)_MAKE_ENV			?=
+
+Modified: trunk/buildroot/package/Makefile.in
+===================================================================
+--- trunk/buildroot/package/Makefile.in	2008-11-28 08:19:23 UTC (rev 24172)
++++ trunk/buildroot/package/Makefile.in	2008-11-28 14:20:47 UTC (rev 24173)
+@@ -178,6 +178,8 @@
+ STRIPCMD=$(TARGET_STRIP)
+ endif
+ INSTALL=/usr/bin/install
++FLEX:=$(shell $(CONFIG_SHELL) -c 'which flex || type -p flex')
++BISON:=$(shell $(CONFIG_SHELL) -c 'which bison || type -p bison')
+ 
+ HOST_ARCH:=$(shell $(HOSTCC) -dumpmachine | sed -e s'/-.*//' \
+ 	-e 's/sparc.*/sparc/' \
+@@ -193,10 +195,23 @@
+ 	)
+ GNU_HOST_NAME:=$(HOST_ARCH)-$(subst ",,$(BR2_GNU_BUILD_SUFFIX))
+ #")
++
++AUTO_CONFIGURE_TARGET=\
++	$(TARGET_CONFIGURE_OPTS) \
++	$(TARGET_CONFIGURE_ARGS) \
++	$(TARGET_CONFIGURE_ENV) \
++	$(if $(THIS_SRCDIR),$(THIS_SRCDIR)/,./)configure \
++		$(if $(BR2_CONFIG_CACHE),--cache-file="$(PROJECT_BUILD_DIR)/tgt-config.cache",) \
++		--target=$(GNU_TARGET_NAME) \
++		--host=$(GNU_TARGET_NAME) \
++		--build=$(GNU_HOST_NAME)
++
+ TARGET_CONFIGURE_OPTS=PATH=$(TARGET_PATH) \
+ 		AR="$(TARGET_AR)" \
+ 		AS="$(TARGET_AS)" \
+-		LD="$(TARGET_LD) $(TARGET_LDFLAGS)" \
++		LD="$(TARGET_LD)" \
++		CFLAGS="$(TARGET_CFLAGS)" \
++		LDFLAGS="$(TARGET_LDFLAGS)" \
+ 		NM="$(TARGET_NM)" \
+ 		CC="$(TARGET_CC) $(TARGET_CFLAGS)" \
+ 		GCC="$(TARGET_CC) $(TARGET_CFLAGS)" \
+@@ -229,6 +244,12 @@
+ 		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig:$(PKG_CONFIG_PATH)" \
+ 		STAGING_DIR="$(STAGING_DIR)"
+ 
++TARGET_CONFIGURE_ENV=\
++	CFLAGS="$(TARGET_CFLAGS)" \
++	CXXFLAGS="$(TARGET_CXXFLAGS)" \
++	LDFLAGS="$(TARGET_LDFLAGS)" \
++	FCFLAGS="$(TARGET_FCFLAGS)" \
++
+ HOST_CONFIGURE_OPTS=PATH=$(TARGET_PATH) \
+ 		AR="$(HOSTAR)" \
+ 		AS="$(HOSTAS)" \
+@@ -310,6 +331,11 @@
+ 	$(BR2_AC_CV_TRAP_CHECK) \
+ 	ac_cv_func_mmap_fixed_mapped=yes \
+ 	ac_cv_func_memcmp_working=yes \
++	ac_cv_have_decl_malloc=yes \
++	gl_cv_func_malloc_0_nonnull=yes \
++	ac_cv_func_malloc_0_nonnull=yes \
++	ac_cv_func_calloc_0_nonnull=yes \
++	ac_cv_func_realloc_0_nonnull=yes \
+ 	$(BR2_AC_CV_C_BIGENDIAN)
+ 
+ #######################################################################
+
+Modified: trunk/buildroot/package/atk/atk.mk
+===================================================================
+--- trunk/buildroot/package/atk/atk.mk	2008-11-28 08:19:23 UTC (rev 24172)
++++ trunk/buildroot/package/atk/atk.mk	2008-11-28 14:20:47 UTC (rev 24173)
+@@ -39,7 +39,7 @@
+ 		gl_cv_func_mkstemp_limitations=no ac_cv_func_working_mktime=yes \
+ 		jm_cv_func_working_re_compile_pattern=yes ac_use_included_regex=no \
+ 		gl_cv_c_restrict=no ac_cv_path_GLIB_GENMARSHAL=$(HOST_GLIB)/bin/glib-genmarshal \
+-		ac_cv_prog_F77=no ac_cv_prog_CXX=no
++		ac_cv_prog_F77=no
+ 
+ ifneq ($(BR2_PACKAGE_XSERVER_none),y)
+ ATK_CONF_OPT_X = --with-x \
+
+Modified: trunk/buildroot/package/directfb/directfb.mk
+===================================================================
+--- trunk/buildroot/package/directfb/directfb.mk	2008-11-28 08:19:23 UTC (rev 24172)
++++ trunk/buildroot/package/directfb/directfb.mk	2008-11-28 14:20:47 UTC (rev 24173)
+@@ -115,15 +115,10 @@
+ 
+ $(DIRECTFB_DIR)/.configured: $(DIRECTFB_DIR)/.unpacked
+ 	(cd $(DIRECTFB_DIR); rm -f config.cache; \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		$(TARGET_CONFIGURE_ARGS) \
+ 	ac_cv_header_linux_wm97xx_h=no \
+ 	ac_cv_header_linux_sisfb_h=no \
+ 	ac_cv_header_asm_page_h=no \
+-	./configure \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
+-		--build=$(GNU_HOST_NAME) \
++	$(AUTO_CONFIGURE_TARGET) \
+ 		--prefix=/usr \
+ 		--sysconfdir=/etc \
+ 		--localstatedir=/var \
+
+Modified: trunk/buildroot/package/fontconfig/fontconfig.mk
+===================================================================
+--- trunk/buildroot/package/fontconfig/fontconfig.mk	2008-11-28 08:19:23 UTC (rev 24172)
++++ trunk/buildroot/package/fontconfig/fontconfig.mk	2008-11-28 14:20:47 UTC (rev 24173)
+@@ -7,8 +7,11 @@
+ FONTCONFIG_SOURCE = fontconfig-$(FONTCONFIG_VERSION).tar.gz
+ FONTCONFIG_SITE = http://fontconfig.org/release
+ FONTCONFIG_AUTORECONF = YES
++FONTCONFIG_USE_CONFIG_CACHE = NO
+ FONTCONFIG_INSTALL_STAGING = YES
+ FONTCONFIG_INSTALL_TARGET = YES
++# This package does not like using the target cflags for some reason.
++FONTCONFIG_CONF_ENV = CFLAGS=
+ 
+ FONTCONFIG_CONF_OPT = --with-arch=$(GNU_TARGET_NAME) \
+ 		--with-freetype-config="$(STAGING_DIR)/usr/bin/freetype-config" \
+
+Modified: trunk/buildroot/package/libglib2/libglib2.mk
+===================================================================
+--- trunk/buildroot/package/libglib2/libglib2.mk	2008-11-28 08:19:23 UTC (rev 24172)
++++ trunk/buildroot/package/libglib2/libglib2.mk	2008-11-28 14:20:47 UTC (rev 24173)
+@@ -41,7 +41,7 @@
+ 		ac_cv_func_working_mktime=yes jm_cv_func_working_re_compile_pattern=yes \
+ 		ac_use_included_regex=no gl_cv_c_restrict=no \
+ 		ac_cv_path_GLIB_GENMARSHAL=$(HOST_GLIB)/bin/glib-genmarshal ac_cv_prog_F77=no \
+-		ac_cv_prog_CXX=no ac_cv_func_posix_getgrgid_r=no \
++		ac_cv_func_posix_getgrgid_r=no \
+ 		gt_cv_c_wchar_t=$(if $(BR2_USE_WCHAR),yes,no)
+ 
+ LIBGLIB2_CONF_OPT = --enable-shared \
+
+Modified: trunk/buildroot/package/libgtk2/libgtk2.mk
+===================================================================
+--- trunk/buildroot/package/libgtk2/libgtk2.mk	2008-11-28 08:19:23 UTC (rev 24172)
++++ trunk/buildroot/package/libgtk2/libgtk2.mk	2008-11-28 14:20:47 UTC (rev 24173)
+@@ -68,7 +68,6 @@
+ 		ac_cv_path_GTK_UPDATE_ICON_CACHE=$(HOST_GLIB)/bin/gtk-update-icon-cache \
+ 		ac_cv_path_GDK_PIXBUF_CSOURCE=$(HOST_GLIB)/bin/gdk-pixbuf-csource \
+ 		ac_cv_prog_F77=no \
+-		ac_cv_prog_CXX=no \
+ 		ac_cv_path_CUPS_CONFIG=no
+ 
+ LIBGTK2_CONF_OPT = --target=$(GNU_TARGET_NAME) --host=$(GNU_TARGET_NAME) \
