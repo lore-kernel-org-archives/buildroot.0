@@ -1,32 +1,42 @@
-From: Daniel Laird <danieljlaird@hotmail.com>
-Date: Fri, 28 Nov 2008 14:35:34 +0000
-Subject: [Buildroot] Audio Dir empty?
-Message-ID: <COL102-DS63F84B368BD657375B8F3DC040@phx.gbl>
+From: Alexander Voropay <alec@sensi.org>
+Date: Sat, 29 Nov 2008 22:52:54 +0300
+Subject: [Buildroot] BUGREPORT: fakeroot version 1.9.6
+Message-ID: <347d9b1b0811291152j89fbf69l55053f78054da2d5@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All the audio/* packages got moved into multimedia/ but the audio directory
-and subdirs remain.  
+Hi!
 
-Is this on purpose? 
+Trying to build current snapshot I've got following error:
 
-Or should these be cleaned up?
+====
+wget --passive-ftp -nd   -P /home/alec/buildroot-20081129/dl
+"http://ftp.debian.org"/debian/pool/main/f/fakeroot/fakeroot_1.9.6.tar.gz
+--21:14:04--  http://ftp.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.9.6.tar.gz
+          => `/home/alec/buildroot-20081129/dl/fakeroot_1.9.6.tar.gz'
+Resolving ftp.debian.org... 128.101.240.212
+Connecting to ftp.debian.org|128.101.240.212|:80... connected.
+HTTP request sent, awaiting response... 404 Not Found
+21:14:06 ERROR 404: Not Found.
 
- 
+make: *** [/home/alec/buildroot-20081129/dl/fakeroot_1.9.6.tar.gz] Error 1
+====
 
-Cheers
+There is no such version on the fakeroot page:
 
-Dan Laird
+http://ftp.debian.org/debian/pool/main/f/fakeroot/
 
- 
 
- 
+Can anyone correct this ?
 
- 
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20081128/8be33c84/attachment.htm 
+
+P.S. There is fakeroot-ng and most distributives use it.
+
+http://sourceforge.net/projects/fakerootng
+
+--
+-=AV=-
