@@ -1,35 +1,30 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Sun, 30 Nov 2008 01:51:58 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/kernel-headers
-Message-ID: <20081130095158.3B7A23C632@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 30 Nov 2008 10:51:52 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
+In-Reply-To: <20081129215625.D168F3C674@busybox.net> (ulf@uclibc.org's message
+	of "Sat\, 29 Nov 2008 13\:56\:25 -0800 \(PST\)")
+References: <20081129215625.D168F3C674@busybox.net>
+Message-ID: <87r64th77r.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-11-30 01:51:57 -0800 (Sun, 30 Nov 2008)
-New Revision: 24193
+>>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
 
-Log:
-kernel-headers: also show 2.6.26 if deprecated is enabled, but recent isn't
+ ulf> Author: ulf
+ ulf> Date: 2008-11-29 13:56:25 -0800 (Sat, 29 Nov 2008)
+ ulf> New Revision: 24189
 
-Modified:
-   trunk/buildroot/toolchain/kernel-headers/Config.in
+ ulf> Log:
+ ulf> Update Linux versions
 
+ ulf> Modified:
+ ulf>    trunk/buildroot/target/linux/Config.in.advanced
+ ulf>    trunk/buildroot/target/linux/Makefile.in.advanced
 
-Changeset:
-Modified: trunk/buildroot/toolchain/kernel-headers/Config.in
-===================================================================
---- trunk/buildroot/toolchain/kernel-headers/Config.in	2008-11-29 23:14:37 UTC (rev 24192)
-+++ trunk/buildroot/toolchain/kernel-headers/Config.in	2008-11-30 09:51:57 UTC (rev 24193)
-@@ -61,7 +61,7 @@
- 		bool "Linux 2.6.25.x kernel headers"
- 
- 	config BR2_KERNEL_HEADERS_2_6_26
--		depends on BR2_RECENT
-+		depends on BR2_DEPRECATED || BR2_RECENT
- 		bool "Linux 2.6.26.x kernel headers"
- 
- 	config BR2_KERNEL_HEADERS_2_6_27
+Don't forget to update the version in target/kernel-headers as well.
+
+-- 
+Bye, Peter Korsgaard
