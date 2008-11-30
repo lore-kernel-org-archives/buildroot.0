@@ -1,40 +1,35 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sat, 29 Nov 2008 14:00:29 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Atmel:
-	at91sam9g20dfc u-boot
-Message-ID: <20081129220029.86E0C3C682@busybox.net>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Sun, 30 Nov 2008 01:51:58 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/kernel-headers
+Message-ID: <20081130095158.3B7A23C632@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2008-11-29 14:00:29 -0800 (Sat, 29 Nov 2008)
-New Revision: 24191
+Author: jacmet
+Date: 2008-11-30 01:51:57 -0800 (Sun, 30 Nov 2008)
+New Revision: 24193
 
 Log:
-Add support for AT91SAM9G20 & -EK
-
-Added:
-   trunk/buildroot/target/device/Atmel/at91sam9g20dfc/
-   trunk/buildroot/target/device/Atmel/at91sam9g20dfc/Makefile.in
-   trunk/buildroot/target/device/Atmel/at91sam9g20dfc/at91sam9260dfc-linux-2.6.28-rc6.config
-   trunk/buildroot/target/device/Atmel/at91sam9g20dfc/at91sam9g20dfc-linux-2.6.28-rc6.config
-   trunk/buildroot/target/device/Atmel/at91sam9g20dfc/at91sam9g20dfc_defconfig
-   trunk/buildroot/target/device/Atmel/at91sam9g20dfc/busybox-1.9.1.config
-   trunk/buildroot/target/device/Atmel/at91sam9g20dfc/kernel-patches/
-   trunk/buildroot/target/device/Atmel/at91sam9g20dfc/u-boot/
+kernel-headers: also show 2.6.26 if deprecated is enabled, but recent isn't
 
 Modified:
-   trunk/buildroot/target/device/Atmel/AT91_Config.in
-   trunk/buildroot/target/device/Atmel/Config.in
-   trunk/buildroot/target/device/Atmel/u-boot/Config.in
+   trunk/buildroot/toolchain/kernel-headers/Config.in
 
 
 Changeset:
-
-Sorry, the patch is too large to include (4829 lines).
-Please use ViewCVS to see it!
-
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=24191
+Modified: trunk/buildroot/toolchain/kernel-headers/Config.in
+===================================================================
+--- trunk/buildroot/toolchain/kernel-headers/Config.in	2008-11-29 23:14:37 UTC (rev 24192)
++++ trunk/buildroot/toolchain/kernel-headers/Config.in	2008-11-30 09:51:57 UTC (rev 24193)
+@@ -61,7 +61,7 @@
+ 		bool "Linux 2.6.25.x kernel headers"
+ 
+ 	config BR2_KERNEL_HEADERS_2_6_26
+-		depends on BR2_RECENT
++		depends on BR2_DEPRECATED || BR2_RECENT
+ 		bool "Linux 2.6.26.x kernel headers"
+ 
+ 	config BR2_KERNEL_HEADERS_2_6_27
