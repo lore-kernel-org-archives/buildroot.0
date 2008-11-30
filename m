@@ -1,30 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 30 Nov 2008 10:51:52 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
-In-Reply-To: <20081129215625.D168F3C674@busybox.net> (ulf@uclibc.org's message
-	of "Sat\, 29 Nov 2008 13\:56\:25 -0800 \(PST\)")
-References: <20081129215625.D168F3C674@busybox.net>
-Message-ID: <87r64th77r.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Sun, 30 Nov 2008 01:52:06 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/kernel-headers
+Message-ID: <20081130095206.635543C64D@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+Author: jacmet
+Date: 2008-11-30 01:52:06 -0800 (Sun, 30 Nov 2008)
+New Revision: 24194
 
- ulf> Author: ulf
- ulf> Date: 2008-11-29 13:56:25 -0800 (Sat, 29 Nov 2008)
- ulf> New Revision: 24189
+Log:
+kernel-headers: bump 2.6.26.x / 2.6.27.x version
 
- ulf> Log:
- ulf> Update Linux versions
+Modified:
+   trunk/buildroot/toolchain/kernel-headers/Config.in
 
- ulf> Modified:
- ulf>    trunk/buildroot/target/linux/Config.in.advanced
- ulf>    trunk/buildroot/target/linux/Makefile.in.advanced
 
-Don't forget to update the version in target/kernel-headers as well.
-
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/toolchain/kernel-headers/Config.in
+===================================================================
+--- trunk/buildroot/toolchain/kernel-headers/Config.in	2008-11-30 09:51:57 UTC (rev 24193)
++++ trunk/buildroot/toolchain/kernel-headers/Config.in	2008-11-30 09:52:06 UTC (rev 24194)
+@@ -113,7 +113,7 @@
+ 	default "2.6.23"	if BR2_KERNEL_HEADERS_2_6_23
+ 	default "2.6.24.7"	if BR2_KERNEL_HEADERS_2_6_24
+ 	default "2.6.25.19"	if BR2_KERNEL_HEADERS_2_6_25
+-	default "2.6.26.7"	if BR2_KERNEL_HEADERS_2_6_26
+-	default "2.6.27.4"	if BR2_KERNEL_HEADERS_2_6_27
++	default "2.6.26.8"	if BR2_KERNEL_HEADERS_2_6_26
++	default "2.6.27.7"	if BR2_KERNEL_HEADERS_2_6_27
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 
