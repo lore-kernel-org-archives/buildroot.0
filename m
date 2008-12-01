@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon,  1 Dec 2008 06:53:22 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
-Message-ID: <20081201145322.E8FF63C758@busybox.net>
+Date: Mon,  1 Dec 2008 07:10:47 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/haserl
+Message-ID: <20081201151047.4DCDA3C7BD@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,26 +9,35 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-12-01 06:53:22 -0800 (Mon, 01 Dec 2008)
-New Revision: 24218
+Date: 2008-12-01 07:10:47 -0800 (Mon, 01 Dec 2008)
+New Revision: 24219
 
 Log:
-uclibc 0.9.30: defconfig: enable UCLIBC_HAS_LONG_DOUBLE_MATH
+haserl: fix shared cache interaction issue
+
+The ac_cv_path_install override is needed to strip the target binary for
+haserl 0.8.0, but it doesn't interact nicely with the shared cache, so
+disable the cache for now.
+
+Longer term we should probably forget about install-strip and do the
+strip/cleanup/mklibs stuff as a post processing step before the target
+filesystem rules are run.
 
 Modified:
-   trunk/buildroot/toolchain/uClibc/uClibc-0.9.30.config
+   trunk/buildroot/package/haserl/haserl.mk
 
 
 Changeset:
-Modified: trunk/buildroot/toolchain/uClibc/uClibc-0.9.30.config
+Modified: trunk/buildroot/package/haserl/haserl.mk
 ===================================================================
---- trunk/buildroot/toolchain/uClibc/uClibc-0.9.30.config	2008-12-01 14:23:57 UTC (rev 24217)
-+++ trunk/buildroot/toolchain/uClibc/uClibc-0.9.30.config	2008-12-01 14:53:22 UTC (rev 24218)
-@@ -46,6 +46,7 @@
- UCLIBC_HAS_FPU=y
- DO_C99_MATH=y
- # UCLIBC_HAS_FENV is not set
-+UCLIBC_HAS_LONG_DOUBLE_MATH=y
- KERNEL_HEADERS="/usr/src/linux/include"
- HAVE_DOT_CONFIG=y
+--- trunk/buildroot/package/haserl/haserl.mk	2008-12-01 14:53:22 UTC (rev 24218)
++++ trunk/buildroot/package/haserl/haserl.mk	2008-12-01 15:10:47 UTC (rev 24219)
+@@ -17,6 +17,8 @@
+ 
+ # force haserl 0.8.0 to use install-sh so stripping works
+ HASERL_CONF_ENV = ac_cv_path_install=./install-sh
++# the above doesn't interact nicely with a shared cache, so disable for now
++HASERL_USE_CONFIG_CACHE = NO
+ 
+ HASERL_DEPENDENCIES:=uclibc
  
