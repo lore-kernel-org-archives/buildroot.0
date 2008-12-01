@@ -1,29 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 01 Dec 2008 10:23:09 +0100
-Subject: [Buildroot] Audio Dir empty?
-In-Reply-To: <COL102-DS63F84B368BD657375B8F3DC040@phx.gbl> (Daniel Laird's
-	message of "Fri\, 28 Nov 2008 14\:35\:34 +0000")
-References: <COL102-DS63F84B368BD657375B8F3DC040@phx.gbl>
-Message-ID: <87tz9odzb6.fsf@macbook.be.48ers.dk>
+From: egtvedt at uclibc.org <egtvedt@uclibc.org>
+Date: Mon,  1 Dec 2008 04:32:51 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/multimedia/mplayer
+Message-ID: <20081201123251.46DFF3C374@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Daniel" == Daniel Laird <danieljlaird@hotmail.com> writes:
+Author: egtvedt
+Date: 2008-12-01 04:32:50 -0800 (Mon, 01 Dec 2008)
+New Revision: 24206
 
- Daniel> All the audio/* packages got moved into multimedia/ but the
- Daniel> audio directory and subdirs remain.
+Log:
+mplayer: disable ivtv video output
 
-Ahh, I'm to blame on this (or rather git-svn). Git doesn't track empty
-directories, so when I git-am'ed r24057 it applied the move nicely to
-my git tree, but git-svn failed to remove the empty audio directory.
+This patch disabled ivtv video output, since it does not compile with Linux
+kernel 2.6.27 headers.
 
- Daniel> Is this on purpose?
- Daniel> Or should these be cleaned up?
+Signed-off-by: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
 
-Please do.
 
--- 
-Bye, Peter Korsgaard
+
+Modified:
+   trunk/buildroot/package/multimedia/mplayer/mplayer.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/multimedia/mplayer/mplayer.mk
+===================================================================
+--- trunk/buildroot/package/multimedia/mplayer/mplayer.mk	2008-12-01 11:03:35 UTC (rev 24205)
++++ trunk/buildroot/package/multimedia/mplayer/mplayer.mk	2008-12-01 12:32:50 UTC (rev 24206)
+@@ -45,6 +45,7 @@
+ 		--enable-fbdev \
+ 		$(MPLAYER_ENDIAN) \
+ 		--disable-mpdvdkit \
++		--disable-ivtv \
+ 		--disable-tv \
+ 		--enable-dynamic-plugins \
+ 	)
