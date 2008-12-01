@@ -1,47 +1,55 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Mon, 1 Dec 2008 14:25:58 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/qtopia4
-In-Reply-To: <20081201141958.5eb0cfe9@surf>
-References: <20081201130602.AB0FD3C78E@busybox.net>
-	<20081201140854.287670ff@surf> <20081201141201.507161b7@hcegtvedt>
-	<20081201141958.5eb0cfe9@surf>
-Message-ID: <20081201142558.7b214b59@hcegtvedt>
+From: egtvedt at uclibc.org <egtvedt@uclibc.org>
+Date: Mon,  1 Dec 2008 05:33:33 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/multimedia/mplayer
+Message-ID: <20081201133333.84D033C6F3@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 1 Dec 2008 14:19:58 +0100
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+Author: egtvedt
+Date: 2008-12-01 05:33:33 -0800 (Mon, 01 Dec 2008)
+New Revision: 24214
 
-> Le Mon, 1 Dec 2008 14:12:01 +0100,
-> Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> a ?crit :
-> 
-> > Okay, then we'll enable them only if we have an external toolchain.
-> 
-> Yes, probably. But then, if you encountered some breakage with them
-> and an internal toolchain, maybe the same breakage occurs with an
-> external toolchain ?
-> 
+Log:
+mplayer: use $(if ...) to add dependencies to mplayer
 
-They probably will if the external toolchain is for cross compiling.
-What architecture was your external toolchain for? Was it configured
-very similar to the host toolchain?
+This patch will add needed libraries with $(if ...) syntax. This should ease
+readability and make it easy for others to spot where the depencies are added.
 
-> (I tested my patch by building Qtopia with an external toolchain, and
-> it worked. But maybe I didn't build exactly the same thing as you
-> did).
-> 
+Signed-off-by: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
 
-The problem I triggered was that stdio.h in uClibc is not equal to
-stdio.h in glibc on my build machine, so the host compiler got utterly
-confused.
 
-I think I'll leave it until we have some proper data on who uses what
-kinds of toolchains. Could it be that your external toolchain just
-needs a massage?
 
--- 
-Best regards,
-Hans-Christian Egtvedt
+Modified:
+   trunk/buildroot/package/multimedia/mplayer/mplayer.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/multimedia/mplayer/mplayer.mk
+===================================================================
+--- trunk/buildroot/package/multimedia/mplayer/mplayer.mk	2008-12-01 13:08:43 UTC (rev 24213)
++++ trunk/buildroot/package/multimedia/mplayer/mplayer.mk	2008-12-01 13:33:33 UTC (rev 24214)
+@@ -17,12 +17,6 @@
+ MPLAYER_ENDIAN:=--disable-big-endian
+ endif
+ 
+-MPLAYER_DEP_LIBS:=libmad
+-
+-ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
+-MPLAYER_DEP_LIBS+=alsa-lib
+-endif
+-
+ $(DL_DIR)/$(MPLAYER_SOURCE):
+ 	$(WGET) -P $(DL_DIR) $(MPLAYER_SITE)/$(MPLAYER_SOURCE)
+ 
+@@ -66,7 +60,7 @@
+ 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/$(MPLAYER_TARGET_BINARY)
+ 	touch -c $@
+ 
+-mplayer: uclibc $(MPLAYER_DEP_LIBS) $(TARGET_DIR)/$(MPLAYER_TARGET_BINARY)
++mplayer: uclibc $(if $(BR2_PACKAGE_LIBMAD),libmad) $(if $(BR2_PACKAGE_ALSA_LIB),alsa-lib) $(TARGET_DIR)/$(MPLAYER_TARGET_BINARY)
+ 
+ mplayer-source: $(DL_DIR)/$(MPLAYER_SOURCE)
+ 
