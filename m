@@ -1,43 +1,39 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon,  1 Dec 2008 07:10:47 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/haserl
-Message-ID: <20081201151047.4DCDA3C7BD@busybox.net>
+From: Mirko ROCCO <mirko.rocco@gmail.com>
+Date: Mon, 1 Dec 2008 16:40:38 +0100
+Subject: [Buildroot] Buildroot for target PowerPC 405 (on Xilinx XUPV2p
+	Board)
+Message-ID: <10d6046f0812010740u5082e10bk9fded198d8d3bddb@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-12-01 07:10:47 -0800 (Mon, 01 Dec 2008)
-New Revision: 24219
+Hi,
+i'm trying to compile buildroot... this is my scenario:
 
-Log:
-haserl: fix shared cache interaction issue
+HOST=i386-pc-linux
+TARGET=powerpc 405 (i don't know if with FPU or not...)
 
-The ac_cv_path_install override is needed to strip the target binary for
-haserl 0.8.0, but it doesn't interact nicely with the shared cache, so
-disable the cache for now.
+I have the XUPV2P Board of Xilinx, and I would want to install on it an
+linuz kernel (linux-2.6.xlnx.git kernel from xilinx!)
 
-Longer term we should probably forget about install-strip and do the
-strip/cleanup/mklibs stuff as a post processing step before the target
-filesystem rules are run.
+Which combination of uclibc, GCC, busybox, binutils, etc. etc. is better to
+choose in "menuconfig"in my case?
 
-Modified:
-   trunk/buildroot/package/haserl/haserl.mk
+Now I'm working with
+Busybox: 1.12.x
+uCLibc: 0.9.29
+GCC: (really i try every combination with same result :-( ...)
+binutils: 2.18
 
+I never had success in compilation!!!
 
-Changeset:
-Modified: trunk/buildroot/package/haserl/haserl.mk
-===================================================================
---- trunk/buildroot/package/haserl/haserl.mk	2008-12-01 14:53:22 UTC (rev 24218)
-+++ trunk/buildroot/package/haserl/haserl.mk	2008-12-01 15:10:47 UTC (rev 24219)
-@@ -17,6 +17,8 @@
- 
- # force haserl 0.8.0 to use install-sh so stripping works
- HASERL_CONF_ENV = ac_cv_path_install=./install-sh
-+# the above doesn't interact nicely with a shared cache, so disable for now
-+HASERL_USE_CONFIG_CACHE = NO
- 
- HASERL_DEPENDENCIES:=uclibc
- 
+Can someone help me please?
+
+Thanks, regards,
+
+Mirko ROCCO
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20081201/31cbe455/attachment.htm 
