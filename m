@@ -1,38 +1,35 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon,  1 Dec 2008 01:08:04 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/fakeroot
-Message-ID: <20081201090804.87FE03C65A@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 01 Dec 2008 10:09:05 +0100
+Subject: [Buildroot] BUGREPORT: fakeroot version 1.9.6
+In-Reply-To: <347d9b1b0811291152j89fbf69l55053f78054da2d5@mail.gmail.com>
+	(Alexander Voropay's message of "Sat\,
+	29 Nov 2008 22\:52\:54 +0300")
+References: <347d9b1b0811291152j89fbf69l55053f78054da2d5@mail.gmail.com>
+Message-ID: <87k5akfej2.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-12-01 01:08:04 -0800 (Mon, 01 Dec 2008)
-New Revision: 24200
+>>>>> "Alexander" == Alexander Voropay <alec@sensi.org> writes:
 
-Log:
-fakeroot: use 1.9.5 from snapshot.debian.net
+Hi,
 
-Modified:
-   trunk/buildroot/package/fakeroot/fakeroot.mk
+ Alexander> There is no such version on the fakeroot page:
 
+ Alexander> http://ftp.debian.org/debian/pool/main/f/fakeroot/
 
-Changeset:
-Modified: trunk/buildroot/package/fakeroot/fakeroot.mk
-===================================================================
---- trunk/buildroot/package/fakeroot/fakeroot.mk	2008-12-01 09:08:01 UTC (rev 24199)
-+++ trunk/buildroot/package/fakeroot/fakeroot.mk	2008-12-01 09:08:04 UTC (rev 24200)
-@@ -3,9 +3,9 @@
- # fakeroot
- #
- #############################################################
--FAKEROOT_VERSION:=1.9.6
-+FAKEROOT_VERSION:=1.9.5
- FAKEROOT_SOURCE:=fakeroot_$(FAKEROOT_VERSION).tar.gz
--FAKEROOT_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/f/fakeroot
-+FAKEROOT_SITE:=http://snapshot.debian.net/archive/2008/04/27/debian/pool/main/f/fakeroot/
- FAKEROOT_CAT:=$(ZCAT)
- FAKEROOT_SOURCE_DIR:=$(BUILD_DIR)/fakeroot-$(FAKEROOT_VERSION)
- FAKEROOT_DIR1:=$(TOOL_BUILD_DIR)/fakeroot-$(FAKEROOT_VERSION)-host
+ Alexander> Can anyone correct this ?
+
+Yes, I've fixed it in r24200 to use the stable links to
+snapshot.debian.net instead.
+
+ Alexander> P.S. There is fakeroot-ng and most distributives use it.
+
+ Alexander> http://sourceforge.net/projects/fakerootng
+
+Ahh, that looks interesting - I'll take a look.
+
+-- 
+Bye, Peter Korsgaard
