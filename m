@@ -1,22 +1,22 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 2 Dec 2008 23:26:24 +0100
-Subject: [Buildroot] [PATCH] target/makedev: fix compile breakage from
- unused result warning
-In-Reply-To: <1227570086.584828.33608303487.qpush@pingu>
-References: <1227570086.584828.33608303487.qpush@pingu>
-Message-ID: <20081202232624.64254046@surf>
+Date: Tue, 2 Dec 2008 23:27:41 +0100
+Subject: [Buildroot] Compile error: makedevs.c - warnings treated as
+ errors
+In-Reply-To: <7631e7570812021117h254f7bd2r3145bdcca1611ccf@mail.gmail.com>
+References: <7631e7570812021117h254f7bd2r3145bdcca1611ccf@mail.gmail.com>
+Message-ID: <20081202232741.31cf6c49@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 25 Nov 2008 10:41:26 +1100,
-Jeremy Kerr <jk@ozlabs.org> a ?crit :
+Le Tue, 2 Dec 2008 12:17:05 -0700,
+"Joe George" <ccjoegml@gmail.com> a ?crit :
 
-> This change adds a simple warning if system() fails.
+> Any ideas?
 
-Thanks, applied as r24236.
+Fixed in r24236, thanks to a patch provided by Jeremy Kerr.
 
 Thomas
 -- 
