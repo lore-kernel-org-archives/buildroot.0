@@ -1,22 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 2 Dec 2008 23:27:41 +0100
-Subject: [Buildroot] Compile error: makedevs.c - warnings treated as
- errors
-In-Reply-To: <7631e7570812021117h254f7bd2r3145bdcca1611ccf@mail.gmail.com>
-References: <7631e7570812021117h254f7bd2r3145bdcca1611ccf@mail.gmail.com>
-Message-ID: <20081202232741.31cf6c49@surf>
+Date: Tue, 2 Dec 2008 23:51:49 +0100
+Subject: [Buildroot] [PATCH 1/7 v2] package: add liboil package
+In-Reply-To: <200811250827.15650.markus.heidelberg@web.de>
+References: <200811190244.44817.markus.heidelberg@web.de>
+	<200811190249.29428.markus.heidelberg@web.de>
+	<200811250827.15650.markus.heidelberg@web.de>
+Message-ID: <20081202235149.553ef881@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 2 Dec 2008 12:17:05 -0700,
-"Joe George" <ccjoegml@gmail.com> a ?crit :
+Le Tue, 25 Nov 2008 08:27:15 +0100,
+Markus Heidelberg <markus.heidelberg@web.de> a ?crit :
 
-> Any ideas?
+> "select BR2_PACKAGE_LIBGLIB2" was missing in the previous patch.
 
-Fixed in r24236, thanks to a patch provided by Jeremy Kerr.
+It seems that Glib2 is only needed to compile the example programs of
+liboil. Maybe we could disable building of the examples and get rid of
+the Glib2 dependency ?
+
+Sincerly,
 
 Thomas
 -- 
