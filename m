@@ -1,62 +1,52 @@
-From: Mirko ROCCO <mirko.rocco@gmail.com>
-Date: Tue, 2 Dec 2008 13:04:17 +0100
-Subject: [Buildroot] Buildroot for target PowerPC 405 (on Xilinx XUPV2p
-	Board)
-In-Reply-To: <20081201161034.GA20082@mx.loc>
-References: <10d6046f0812010740u5082e10bk9fded198d8d3bddb@mail.gmail.com>
-	<20081201161034.GA20082@mx.loc>
-Message-ID: <10d6046f0812020404t6b9fb241i48bf8ee334fcdbbb@mail.gmail.com>
+From: Cyril HAENEL <chaenel@free.fr>
+Date: Tue, 02 Dec 2008 13:55:40 +0100
+Subject: [Buildroot] Problem with jffs2 image creation.
+Message-ID: <4935304C.2050206@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thank you Bernard for all information!
-Now I try with your tree...
+Hi all,
 
-Soon!
+I am new to the list. I built a custom electronic board based on an 
+atmel AT91SAM9260 processor.
+I successfully finished a complete buildroot build, but I have a problem.
+The generated jffs2 image of the root filesystem is incorrect, in fact 
+the dev directory is not populated, thus I have this message after the 
+linux kernel has mounted the filesystem : "Unable to open an initial 
+console"
 
-Mirko ROCCO
+I tried the ext2 image in my board, it works correctly. But I absolutely 
+need to use jffs2 because my filesystem is in a Nand flash.
 
+To detect the problem I have mounted the jffs2 image on my laptop :
 
-2008/12/1 Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+#modprobe mtdram total_size=24576 erase_size=128
+#modprobe mtdblock
+#dd 
+if=/home/nlc/linuxEmbedded/buildroot/binaries/at91sam9260dfc/rootfs.arm-20081202.jffs2 
+of=/dev/mtdblock
+#mount -t jffs2 /dev/mtdblock0 /mnt/removable/
 
-> On Mon, Dec 01, 2008 at 04:40:38PM +0100, Mirko ROCCO wrote:
-> >Hi,
-> >i'm trying to compile buildroot... this is my scenario:
-> >
-> >HOST=i386-pc-linux
-> >TARGET=powerpc 405 (i don't know if with FPU or not...)
->
-> 405 would be without fpu as opposed to 405fp
-> >
-> >I have the XUPV2P Board of Xilinx, and I would want to install on it an
-> >linuz kernel (linux-2.6.xlnx.git kernel from xilinx!)
-> >
-> >Which combination of uclibc, GCC, busybox, binutils, etc. etc. is better
-> to
-> >choose in "menuconfig"in my case?
->
-> Works fine for me with my tree ?) for gcc-4.3.2, gcc-trunk, current
-> binutils and
-> latest kernel and current uClibc (or trunk), current busybox (or trunk).
-> All of
-> the stuff you mention below is old by that measure (and didn't work for
-> me).
-> >
-> >Now I'm working with
-> >Busybox: 1.12.x
-> >uCLibc: 0.9.29
-> >GCC: (really i try every combination with same result :-( ...)
-> >binutils: 2.18
-> >
-> >I never had success in compilation!!!
-> >
-> >Can someone help me please?
->
-> ?) http://repo.or.cz/w/buildroot.git/
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20081202/298afbcf/attachment.htm 
+#ls /mnt/removable/
+#bin/  boot/  config/  dev/  etc/  home/  lib/  linuxrc@  mnt/  opt/  
+proc/  root/  sbin/  sys/  tmp/  usr/  var/
+
+And dev is empty :
+
+#ls -l /mnt/removable/dev/
+total 0
+
+Is someone have the same problem ? Where can be the problem, from 
+mkfs.jffs2 ?
+
+Sorry for my poor english !
+Regards,
+Cyril HAENEL
+
+-- 
+
+Cyril Haenel
+Registered Linux User #332632
