@@ -1,39 +1,33 @@
-From: egtvedt at uclibc.org <egtvedt@uclibc.org>
-Date: Tue,  2 Dec 2008 06:46:38 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/samba
-Message-ID: <20081202144638.DB8863C7B0@busybox.net>
+From: Joe George <ccjoegml@gmail.com>
+Date: Tue, 2 Dec 2008 12:17:05 -0700
+Subject: [Buildroot] Compile error: makedevs.c - warnings treated as errors
+Message-ID: <7631e7570812021117h254f7bd2r3145bdcca1611ccf@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: egtvedt
-Date: 2008-12-02 06:46:38 -0800 (Tue, 02 Dec 2008)
-New Revision: 24229
+I am getting a compile error due to warnings.  I probably have
+something setup wrong but I haven't been able to figure out what.  The
+makedevs.c file has not changed from an earlier buildroot snapshot
+that compiled.
 
-Log:
-samba: bump version to 3.0.33
+cc1: warnings being treated as errors
+/media/swdev/buildroot/build_powerpc/makedevs/makedevs.c: In function 'main':
+/media/swdev/buildroot/build_powerpc/makedevs/makedevs.c:531: error:
+ignoring return value of 'system', declared with attribute
+warn_unused_result
+make: *** [/media/swdev/buildroot/build_powerpc/makedevs/makedevs] Error 1
 
-Signed-off-by: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
+Any ideas?
 
-
-
-Modified:
-   trunk/buildroot/package/samba/samba.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/samba/samba.mk
-===================================================================
---- trunk/buildroot/package/samba/samba.mk	2008-12-02 09:15:08 UTC (rev 24228)
-+++ trunk/buildroot/package/samba/samba.mk	2008-12-02 14:46:38 UTC (rev 24229)
-@@ -3,7 +3,7 @@
- # samba
- #
- #############################################################
--SAMBA_VERSION:=3.0.28a
-+SAMBA_VERSION:=3.0.33
- SAMBA_SOURCE:=samba-$(SAMBA_VERSION).tar.gz
- SAMBA_SITE:=http://samba.org/samba/ftp/stable/
- SAMBA_DIR:=$(BUILD_DIR)/samba-$(SAMBA_VERSION)/source
+Thanks,
+Joe
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: .config
+Type: application/octet-stream
+Size: 18152 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20081202/27734c3a/attachment-0001.obj 
