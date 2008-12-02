@@ -1,22 +1,33 @@
-From: Jared Holzman <j.holzman@genesysdesign.com.au>
-Date: Tue, 02 Dec 2008 15:15:22 +1100
-Subject: [Buildroot] [PATCH] target/cramfs/cramfs.mk: Fix device table not
- being passed to mkcramfs
-Message-ID: <4934B65A.90804@genesysdesign.com.au>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Tue,  2 Dec 2008 01:15:08 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/cramfs
+Message-ID: <20081202091508.7E32B3C6D4@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: jacmet
+Date: 2008-12-02 01:15:08 -0800 (Tue, 02 Dec 2008)
+New Revision: 24228
+
+Log:
+target/cramfs/cramfs.mk: Fix device table not being passed to mkcramfs
+
 While mkcramfs was being patched to support a device table, the target device table was not being passed to the mkcramfs options. This patch fixes that
 
 Signed-off-by: Jared Holzman <j.holzman@genesysdesign.com.au>
 
-Index: target/cramfs/cramfs.mk
+Modified:
+   trunk/buildroot/target/cramfs/cramfs.mk
+
+
+Changeset:
+Modified: trunk/buildroot/target/cramfs/cramfs.mk
 ===================================================================
---- target/cramfs/cramfs.mk	(revision 24069)
-+++ target/cramfs/cramfs.mk	(working copy)
+--- trunk/buildroot/target/cramfs/cramfs.mk	2008-12-02 06:38:26 UTC (rev 24227)
++++ trunk/buildroot/target/cramfs/cramfs.mk	2008-12-02 09:15:08 UTC (rev 24228)
 @@ -40,11 +40,15 @@
  #
  #############################################################
@@ -44,32 +55,3 @@ Index: target/cramfs/cramfs.mk
  		"$(TARGET_DIR) $(CRAMFS_TARGET)" >> $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(CRAMFS_TARGET))
  	chmod a+x $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(CRAMFS_TARGET))
  	$(STAGING_DIR)/usr/bin/fakeroot -- $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(CRAMFS_TARGET))
-
----
-
-Regards,
-
-Jared Holzman
-
-------------------------------------------------------------------------
-
-*Electronics Design Engineer*
-
-*Genesys Electronics Design Pty Ltd*
-
-Unit 5, 33 Ryde Rd Pymble
-
-NSW, Australia 2073
-
-Direct: +612 9496 8924
-
-Phone: +612 9496 8900
-
-Fax: +612 9496 8999
-
-
-j.holzman at genesysdesign.com.au <mailto:j.holzman@genesysdesign.com.au>
-
-www.genesysdesign.com.au <http://www.genesysdesign.com.au>
-
-------------------------------------------------------------------------
