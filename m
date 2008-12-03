@@ -1,8 +1,8 @@
 From: Nicolas Pitre <nico@cam.org>
-Date: Wed, 03 Dec 2008 14:24:06 -0500 (EST)
-Subject: [Buildroot] [PATCH] Include a default udhcpc script with
- BR2_PACKAGE_BUSYBOX_SKELETON
-Message-ID: <alpine.LFD.2.00.0812031423150.14328@xanadu.home>
+Date: Wed, 03 Dec 2008 14:24:46 -0500 (EST)
+Subject: [Buildroot] [PATCH] make the default etc/init.d/S40network
+	compatible with msh
+Message-ID: <alpine.LFD.2.00.0812031424090.14328@xanadu.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,58 +10,87 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-When this option is turned on, the selected skeleton does not include
-the udhcpc script which is good for a nice moment of confusion.
-Here's the remedy.
+msh is currently the only good choice for uClinux but it doesn't
+understands shell functions.  In this case there is nothing to gain
+by using shell functions anyway.
 
 Signed-off-by: Nicolas Pitre <nico@cam.org>
 
-Index: target/generic/target_busybox_skeleton/usr/share/udhcpc/default.script
+Index: target/generic/target_busybox_skeleton/etc/init.d/S40network
 ===================================================================
---- target/generic/target_busybox_skeleton/usr/share/udhcpc/default.script	(revision 0)
-+++ target/generic/target_busybox_skeleton/usr/share/udhcpc/default.script	(revision 0)
-@@ -0,0 +1,39 @@
-+#!/bin/sh
-+
-+# udhcpc script edited by Tim Riker <Tim@Rikers.org>
-+
-+[ -z "$1" ] && echo "Error: should be called from udhcpc" && exit 1
-+
-+RESOLV_CONF="/etc/resolv.conf"
-+[ -n "$broadcast" ] && BROADCAST="broadcast $broadcast"
-+[ -n "$subnet" ] && NETMASK="netmask $subnet"
-+
+--- target/generic/target_busybox_skeleton/etc/init.d/S40network	(revision 24219)
++++ target/generic/target_busybox_skeleton/etc/init.d/S40network	(working copy)
+@@ -3,28 +3,18 @@
+ # Start the network....
+ #
+ 
+-start() {
 +case "$1" in
-+	deconfig)
-+		/sbin/ifconfig $interface 0.0.0.0
-+		;;
-+
-+	renew|bound)
-+		/sbin/ifconfig $interface $ip $BROADCAST $NETMASK
-+
-+		if [ -n "$router" ] ; then
-+			echo "deleting routers"
-+			while route del default gw 0.0.0.0 dev $interface ; do
-+				:
-+			done
-+
-+			for i in $router ; do
-+				route add default gw $i dev $interface
-+			done
-+		fi
-+
-+		echo -n > $RESOLV_CONF
-+		[ -n "$domain" ] && echo search $domain >> $RESOLV_CONF
-+		for i in $dns ; do
-+			echo adding dns $i
-+			echo nameserver $i >> $RESOLV_CONF
-+		done
-+		;;
-+esac
-+
-+exit 0
-
-Property changes on: target/generic/target_busybox_skeleton/usr/share/udhcpc/default.script
-___________________________________________________________________
-Name: svn:executable
-   + *
++  start)
+  	echo "Starting network..."
+ 	/sbin/ifup -a
+-}	
+-stop() {
++	;;
++  stop)
+ 	echo -n "Stopping network..."
+ 	/sbin/ifdown -a
+-}
+-restart() {
+-	stop
+-	start
+-}	
+-
+-case "$1" in
+-  start)
+-  	start
+ 	;;
+-  stop)
+-  	stop
+-	;;
+   restart|reload)
+-  	restart
++	"$0" stop
++	"$0" start
+ 	;;
+   *)
+ 	echo $"Usage: $0 {start|stop|restart}"
+Index: target/generic/target_skeleton/etc/init.d/S40network
+===================================================================
+--- target/generic/target_skeleton/etc/init.d/S40network	(revision 24219)
++++ target/generic/target_skeleton/etc/init.d/S40network	(working copy)
+@@ -3,28 +3,18 @@
+ # Start the network....
+ #
+ 
+-start() {
++case "$1" in
++  start)
+  	echo "Starting network..."
+ 	/sbin/ifup -a
+-}	
+-stop() {
++	;;
++  stop)
+ 	echo -n "Stopping network..."
+ 	/sbin/ifdown -a
+-}
+-restart() {
+-	stop
+-	start
+-}	
+-
+-case "$1" in
+-  start)
+-  	start
+ 	;;
+-  stop)
+-  	stop
+-	;;
+   restart|reload)
+-  	restart
++	"$0" stop
++	"$0" start
+ 	;;
+   *)
+ 	echo $"Usage: $0 {start|stop|restart}"
