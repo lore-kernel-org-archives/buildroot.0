@@ -1,8 +1,7 @@
 From: Nicolas Pitre <nico@cam.org>
-Date: Wed, 03 Dec 2008 14:24:46 -0500 (EST)
-Subject: [Buildroot] [PATCH] make the default etc/init.d/S40network
-	compatible with msh
-Message-ID: <alpine.LFD.2.00.0812031424090.14328@xanadu.home>
+Date: Wed, 03 Dec 2008 14:25:22 -0500 (EST)
+Subject: [Buildroot] [PATCH] avoid mount time warnings with default skeletons
+Message-ID: <alpine.LFD.2.00.0812031424510.14328@xanadu.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,87 +9,54 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-msh is currently the only good choice for uClinux but it doesn't
-understands shell functions.  In this case there is nothing to gain
-by using shell functions anyway.
+The busybox mount doesn't like extra flags along side with "defaults",
+which in that case is redundant anyway.
+
+Also mount /proc before remounting / read-write so /etc/mtab returns
+something.
 
 Signed-off-by: Nicolas Pitre <nico@cam.org>
 
-Index: target/generic/target_busybox_skeleton/etc/init.d/S40network
+Index: target/generic/target_busybox_skeleton/etc/fstab
 ===================================================================
---- target/generic/target_busybox_skeleton/etc/init.d/S40network	(revision 24219)
-+++ target/generic/target_busybox_skeleton/etc/init.d/S40network	(working copy)
-@@ -3,28 +3,18 @@
- # Start the network....
+--- target/generic/target_busybox_skeleton/etc/fstab	(revision 24219)
++++ target/generic/target_busybox_skeleton/etc/fstab	(working copy)
+@@ -1,9 +1,9 @@
+ # /etc/fstab: static file system information.
  #
- 
--start() {
-+case "$1" in
-+  start)
-  	echo "Starting network..."
- 	/sbin/ifup -a
--}	
--stop() {
-+	;;
-+  stop)
- 	echo -n "Stopping network..."
- 	/sbin/ifdown -a
--}
--restart() {
--	stop
--	start
--}	
--
--case "$1" in
--  start)
--  	start
- 	;;
--  stop)
--  	stop
--	;;
-   restart|reload)
--  	restart
-+	"$0" stop
-+	"$0" start
- 	;;
-   *)
- 	echo $"Usage: $0 {start|stop|restart}"
-Index: target/generic/target_skeleton/etc/init.d/S40network
+ # <file system> <mount pt>     <type>	<options>         <dump> <pass>
+ /dev/root       /              ext2	rw,noauto         0      1
+ proc		/proc	       proc     defaults	  0	 0
+-devpts		/dev/pts       devpts   defaults,gid=5,mode=620	  0	 0
++devpts		/dev/pts       devpts   gid=5,mode=620	  0	 0
+ tmpfs           /tmp           tmpfs    defaults          0      0
+ configfs	/config	       configfs defaults	  0	 0
+ sysfs		/sys	       sysfs    defaults	  0	 0
+Index: target/generic/target_skeleton/etc/inittab
 ===================================================================
---- target/generic/target_skeleton/etc/init.d/S40network	(revision 24219)
-+++ target/generic/target_skeleton/etc/init.d/S40network	(working copy)
-@@ -3,28 +3,18 @@
- # Start the network....
- #
+--- target/generic/target_skeleton/etc/inittab	(revision 24219)
++++ target/generic/target_skeleton/etc/inittab	(working copy)
+@@ -14,8 +14,8 @@
+ # process   == program to run
  
--start() {
-+case "$1" in
-+  start)
-  	echo "Starting network..."
- 	/sbin/ifup -a
--}	
--stop() {
-+	;;
-+  stop)
- 	echo -n "Stopping network..."
- 	/sbin/ifdown -a
--}
--restart() {
--	stop
--	start
--}	
--
--case "$1" in
--  start)
--  	start
- 	;;
--  stop)
--  	stop
--	;;
-   restart|reload)
--  	restart
-+	"$0" stop
-+	"$0" start
- 	;;
-   *)
- 	echo $"Usage: $0 {start|stop|restart}"
+ # Startup the system
++null::sysinit:/bin/mount -t proc proc /proc
+ null::sysinit:/bin/mount -o remount,rw /
+-null::sysinit:/bin/mount -t proc proc /proc
+ null::sysinit:/bin/mount -a
+ null::sysinit:/bin/hostname -F /etc/hostname
+ null::sysinit:/sbin/ifconfig lo 127.0.0.1 up
+Index: target/generic/target_skeleton/etc/fstab
+===================================================================
+--- target/generic/target_skeleton/etc/fstab	(revision 24219)
++++ target/generic/target_skeleton/etc/fstab	(working copy)
+@@ -1,8 +1,8 @@
+ # /etc/fstab: static file system information.
+ #
+ # <file system> <mount pt>     <type>	<options>         <dump> <pass>
+ /dev/root       /              ext2	rw,noauto         0      1
+ proc		/proc	       proc     defaults	  0	 0
+-devpts		/dev/pts       devpts   defaults,gid=5,mode=620	  0	 0
++devpts		/dev/pts       devpts   gid=5,mode=620	  0	 0
+ tmpfs           /tmp           tmpfs    defaults          0      0
+ sysfs		/sys	       sysfs    defaults	  0	 0
