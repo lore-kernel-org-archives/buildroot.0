@@ -1,22 +1,38 @@
-From: Quick X <quickx@hotmail.com>
-Date: Tue, 2 Dec 2008 16:45:13 -0800
-Subject: [Buildroot] Builroot Make Error (
-Message-ID: <BAY124-W558A56205B09EF85A2940ED2030@phx.gbl>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Wed, 3 Dec 2008 14:14:39 +1100
+Subject: [Buildroot] [PATCH] target/cramfs/cramfs.mk: Fix device
+	table	not being passed to mkcramfs
+In-Reply-To: <87tz9nuedv.fsf@macbook.be.48ers.dk>
+References: <4934B65A.90804@genesysdesign.com.au>
+	<87tz9nuedv.fsf@macbook.be.48ers.dk>
+Message-ID: <20081203031439.GA15621@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Tue, Dec 02, 2008 at 10:15:24AM +0100, Peter Korsgaard wrote:
+> >>>>> "Jared" == Jared Holzman <j.holzman@genesysdesign.com.au> writes:
+> 
+> Hi,
+> 
+>  Jared> While mkcramfs was being patched to support a device table,
+>  Jared> the target device table was not being passed to the mkcramfs
+>  Jared> options. This patch fixes that
+> 
+> Thanks, committed as r24228.
 
-make menuconfig > Target Options > Atmel Device Support > Secondary locations (*** Package support ***) > also copy the image to...
- 
-If this value is set to nothing "()" then you get a "mkdir -p" "mkdir: missing operand" "Error 1" problem, most the other "Copy To" Locations allow you to not copy if you wish it.
- 
-[...]
-/home/administrator/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-objcopy --gap-fill=0xff -O srec /home/administrator/buildroot/project_build_arm/at91sam9261ek/u-boot-1.2.0-atmel/u-boot /home/administrator/buildroot/project_build_arm/at91sam9261ek/u-boot-1.2.0-atmel/u-boot.srec/home/administrator/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-objcopy --gap-fill=0xff -O binary /home/administrator/buildroot/project_build_arm/at91sam9261ek/u-boot-1.2.0-atmel/u-boot /home/administrator/buildroot/project_build_arm/at91sam9261ek/u-boot-1.2.0-atmel/u-boot.bingzip -c /home/administrator/buildroot/project_build_arm/at91sam9261ek/u-boot-1.2.0-atmel/u-boot.bin > /home/administrator/buildroot/project_build_arm/at91sam9261ek/u-boot-1.2.0-atmel/u-boot.gzmake[1]: Leaving directory `/home/administrator/buildroot/build_arm/u-boot-1.2.0-atmel'mkdir -p /home/administrator/buildroot/binaries/at91sam9261ekcp /home/administrator/buildroot/project_build_arm/at91sam9261ek/u-boot-1.2.0-atmel/u-boot.bin /home/administrator/buildroot/binaries/at91sam9261ek/at91sam9261ek-u-boot-1.2.0-atmel-20081202.binmkdir -pmkdir: missing operandTry `mkdir --help' for more information.make: *** [/at91sam9261ek-u-boot-1.2.0-atmel-20081202.bin] Error 1
-_________________________________________________________________
+Whoa! Has this been tested?
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20081202/a68561af/attachment.htm 
+The device table is processed by running makedevs within the fakeroot
+session, rather than relying on mkcramfs's device table support. (Same
+as in many other buildroot targets, even though most of them have device
+table support too.) Now the device table is being used twice, which may
+or may not work?
+
+
+
+Hamish
+-- 
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
