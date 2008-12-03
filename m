@@ -1,7 +1,8 @@
 From: Nicolas Pitre <nico@cam.org>
-Date: Wed, 03 Dec 2008 14:28:24 -0500 (EST)
-Subject: [Buildroot] [PATCH] have zlib respect BR2_PREFER_STATIC_LIB
-Message-ID: <alpine.LFD.2.00.0812031427390.14328@xanadu.home>
+Date: Wed, 03 Dec 2008 15:37:03 -0500 (EST)
+Subject: [Buildroot] [PATCH 1/3] create a libuuid subtarget in the e2fsprogs
+	package
+Message-ID: <alpine.LFD.2.00.0812031536150.14328@xanadu.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,77 +10,28 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The ARM uClinux BFLT format apparently doesn't support shared libs nor
--fPIC.  So let's distinguish between shared and non shared builds by
-having split rules for libz.a and libz.so based on BR2_PREFER_STATIC_LIB.
+This is needed to build the latest mkfs.ubifs provided by the next patch.
 
 Signed-off-by: Nicolas Pitre <nico@cam.org>
 
-Index: package/zlib/zlib.mk
+Index: package/e2fsprogs/e2fsprogs.mk
 ===================================================================
---- package/zlib/zlib.mk	(revision 24219)
-+++ package/zlib/zlib.mk	(working copy)
-@@ -18,13 +18,23 @@
- 	$(CONFIG_UPDATE) $(@D)
- 	touch $@
- 
-+ifneq ($(BR2_PREFER_STATIC_LIB),y)
-+ZLIB_PIC := -fPIC
-+ZLIB_SHARED := --shared
-+ZLIB_TARGET := $(TARGET_DIR)/usr/lib/libz.so
-+else
-+ZLIB_PIC :=
-+ZLIB_SHARED :=
-+ZLIB_TARGET := $(STAGING_DIR)/usr/lib/libz.a
-+endif
-+
- $(ZLIB_DIR)/.configured: $(ZLIB_DIR)/.patched
- 	(cd $(ZLIB_DIR); rm -rf config.cache; \
- 		$(TARGET_CONFIGURE_ARGS) \
- 		$(TARGET_CONFIGURE_OPTS) \
--		CFLAGS="$(TARGET_CFLAGS) -fPIC" \
-+		CFLAGS="$(TARGET_CFLAGS) $(ZLIB_PIC)" \
- 		./configure \
--		--shared \
-+		$(ZLIB_SHARED) \
- 		--prefix=/usr \
- 		--exec-prefix=$(STAGING_DIR)/usr/bin \
- 		--libdir=$(STAGING_DIR)/usr/lib \
-@@ -32,14 +42,17 @@
- 	)
- 	touch $@
- 
--$(ZLIB_DIR)/libz.so: $(ZLIB_DIR)/.configured
-+$(ZLIB_DIR)/libz.a: $(ZLIB_DIR)/.configured
- 	$(MAKE) -C $(ZLIB_DIR) all libz.a
+--- package/e2fsprogs/e2fsprogs.mk	(revision 24219)
++++ package/e2fsprogs/e2fsprogs.mk	(working copy)
+@@ -68,6 +74,16 @@
+ 	#$(STRIPCMD) $(E2FSPROGS_DIR)/lib/lib*.so.*.*
  	touch -c $@
  
--$(STAGING_DIR)/usr/lib/libz.so: $(ZLIB_DIR)/libz.so
-+$(STAGING_DIR)/usr/lib/libz.a: $(ZLIB_DIR)/libz.a
- 	$(INSTALL) -D $(ZLIB_DIR)/libz.a $(STAGING_DIR)/usr/lib/libz.a
- 	$(INSTALL) -D $(ZLIB_DIR)/zlib.h $(STAGING_DIR)/usr/include/zlib.h
- 	$(INSTALL) $(ZLIB_DIR)/zconf.h $(STAGING_DIR)/usr/include/
++$(E2FSPROGS_DIR)/lib/uuid/libuuid.a: $(E2FSPROGS_DIR)/.configured
++	$(MAKE1) -C $(E2FSPROGS_DIR)/lib/uuid
++
++$(STAGING_DIR)/usr/lib/libuuid.a: $(E2FSPROGS_DIR)/lib/uuid/libuuid.a
++	$(INSTALL) -D $(E2FSPROGS_DIR)/lib/uuid/libuuid.a $(STAGING_DIR)/usr/lib/libuuid.a
++	$(INSTALL) -D $(E2FSPROGS_DIR)/lib/uuid/uuid.h $(STAGING_DIR)/usr/include/uuid/uuid.h
 +	touch -c $@
 +
-+$(STAGING_DIR)/usr/lib/libz.so: $(STAGING_DIR)/usr/lib/libz.a
- 	$(INSTALL) $(ZLIB_DIR)/libz.so* $(STAGING_DIR)/usr/lib/
- 	touch -c $@
- 
-@@ -49,7 +62,7 @@
- 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $@
- 	touch -c $@
- 
--$(TARGET_DIR)/usr/lib/libz.a: $(STAGING_DIR)/usr/lib/libz.so
-+$(TARGET_DIR)/usr/lib/libz.a: $(STAGING_DIR)/usr/lib/libz.a
- 	$(INSTALL) -D $(STAGING_DIR)/usr/include/zlib.h $(TARGET_DIR)/usr/include/zlib.h
- 	$(INSTALL) $(STAGING_DIR)/usr/include/zconf.h $(TARGET_DIR)/usr/include/
- 	$(INSTALL) -D $(STAGING_DIR)/usr/lib/libz.a $(TARGET_DIR)/usr/lib/libz.a
-@@ -57,7 +70,7 @@
- 
- zlib-headers: $(TARGET_DIR)/usr/lib/libz.a
- 
--zlib: uclibc $(TARGET_DIR)/usr/lib/libz.so
-+zlib: uclibc $(ZLIB_TARGET)
- 
- zlib-source: $(DL_DIR)/$(ZLIB_SOURCE)
- 
++libuuid: $(STAGING_DIR)/usr/lib/libuuid.a
++
+ E2FSPROGS_RM$(strip $(BR2_PACKAGE_E2FSPROGS_BADBLOCKS)) += ${TARGET_DIR}/sbin/badblocks
+ E2FSPROGS_RM$(strip $(BR2_PACKAGE_E2FSPROGS_BLKID)) += ${TARGET_DIR}/sbin/blkid
+ E2FSPROGS_RM$(strip $(BR2_PACKAGE_E2FSPROGS_CHATTR)) += ${TARGET_DIR}/bin/chattr
