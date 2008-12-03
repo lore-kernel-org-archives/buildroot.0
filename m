@@ -1,55 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 3 Dec 2008 09:17:21 +0100
-Subject: [Buildroot] Builroot Make Error (
-In-Reply-To: <BAY124-W558A56205B09EF85A2940ED2030@phx.gbl>
-References: <BAY124-W558A56205B09EF85A2940ED2030@phx.gbl>
-Message-ID: <20081203091721.70003613@surf>
+Date: Wed, 3 Dec 2008 09:31:03 +0100
+Subject: [Buildroot] [RFC] First hack for external toolchain support
+ based on sysroot
+In-Reply-To: <COL102-DS16312FCA60C7EA2DB82A0CDC030@phx.gbl>
+References: <20081202232132.7c67e402@surf>
+	<COL102-DS16312FCA60C7EA2DB82A0CDC030@phx.gbl>
+Message-ID: <20081203093103.3aab088d@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 2 Dec 2008 16:45:13 -0800,
-Quick X <quickx@hotmail.com> a ?crit :
+Le Wed, 3 Dec 2008 08:14:00 +0000,
+"Daniel Laird" <danieljlaird@hotmail.com> a ?crit :
 
-> make menuconfig > Target Options > Atmel Device Support > Secondary
-> locations (*** Package support ***) > also copy the image to... 
-> If this value is set to nothing "()" then you get a "mkdir -p"
-> "mkdir: missing operand" "Error 1" problem, most the other "Copy To"
-> Locations allow you to not copy if you wish it. [...]
+> I had done the first bit and not the second.  I will start to look at
+> this. Perhaps the CFLAGS and LDFLAGS can go back to how they were
+> when new started all this.
+> eg LD="$(TARGET_LD) $(TARGET_LDFLAGS)"
+> 
+> Does that work for DirectFB?
 
-There's a missing test in
-target/device/Atmel/at91bootstrap/at91bootstrap.mk, fixed by the
-attached patch. But I think your problem is occuring in
-target/device/Atmel/u-boot/u-boot.mk, which uses TARGET_ATMEL_COPYTO
-without testing if it's set or not. A more slightly more complicated
-fix is needed here.
+Maybe, I haven't tried.
+
+> Cheers foe this good work, maybe we will have external toolchain
+> working properly soon?
+
+I hope so :-)
+
+The nice advantage of the --sysroot solution is that it should work in
+all cases, while the -rpath-link solution didn't work for Qtopia, for
+example.
+
+> My next question is - with sysroot set do we really need to set the
+> SYSROOT option to pkgconfig? and do we need to sed all the .la files?
+
+I'd say we still need them. Otherwise in a .la file you'll
+have /usr/lib/libfoobar.a, and I don't think gcc will interpret that
+relative to its --sysroot. But it remains to be checked.
 
 Sincerly,
 
 Thomas
-
----
- target/device/Atmel/at91bootstrap/at91bootstrap.mk |    2 ++
- 1 file changed, 2 insertions(+)
-
-Index: buildroot2/target/device/Atmel/at91bootstrap/at91bootstrap.mk
-===================================================================
---- buildroot2.orig/target/device/Atmel/at91bootstrap/at91bootstrap.mk
-+++ buildroot2/target/device/Atmel/at91bootstrap/at91bootstrap.mk
-@@ -63,7 +63,9 @@
- $(BINARIES_DIR)/$(AT91BOOTSTRAP_BINARY): $(AT91BOOTSTRAP_TARGET)
- 	mkdir -p $(BINARIES_DIR)
- 	cp $(AT91BOOTSTRAP_TARGET) $(BINARIES_DIR)/$(AT91BOOTSTRAP_BINARY)
-+ifneq	($(TARGET_ATMEL_COPYTO),)
- 	cp $(AT91BOOTSTRAP_TARGET) $(BR2_TARGET_ATMEL_COPYTO)/$(AT91BOOTSTRAP_BINARY)
-+endif
- 
- .PHONY: at91bootstrap at91bootstrap-source
- 
-
-
 -- 
 Thomas Petazzoni, Free Electrons
 Kernel, drivers and embedded Linux development,
