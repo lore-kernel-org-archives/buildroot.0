@@ -1,7 +1,8 @@
 From: Nicolas Pitre <nico@cam.org>
-Date: Wed, 03 Dec 2008 14:23:11 -0500 (EST)
-Subject: [Buildroot] [PATCH] replace the unused BR2_TARGET_OPTIMIZATION
-Message-ID: <alpine.LFD.2.00.0812031422212.14328@xanadu.home>
+Date: Wed, 03 Dec 2008 14:24:06 -0500 (EST)
+Subject: [Buildroot] [PATCH] Include a default udhcpc script with
+ BR2_PACKAGE_BUSYBOX_SKELETON
+Message-ID: <alpine.LFD.2.00.0812031423150.14328@xanadu.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,88 +10,58 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-The BR2_TARGET_OPTIMIZATION setting is not used anywhere.  Instead, a set
-of discrete optimization levels are provided through the BR2_OPTIMIZE_*
-symbols.
-
-This replaces BR2_TARGET_OPTIMIZATION with BR2_TARGET_EXTRA_FLAGS which
-can be used for specific customizations of the build, such as specific
-optimizations, etc.
+When this option is turned on, the selected skeleton does not include
+the udhcpc script which is good for a nice moment of confusion.
+Here's the remedy.
 
 Signed-off-by: Nicolas Pitre <nico@cam.org>
 
-Index: toolchain/gcc/Makefile.in
+Index: target/generic/target_busybox_skeleton/usr/share/udhcpc/default.script
 ===================================================================
---- toolchain/gcc/Makefile.in	(revision 24219)
-+++ toolchain/gcc/Makefile.in	(working copy)
-@@ -6,7 +6,7 @@
- 
- GCC_VERSION:=$(strip $(subst ",, $(BR2_GCC_VERSION)))
- #"))
--TARGET_OPTIMIZATION:=$(strip $(subst ",, $(BR2_TARGET_OPTIMIZATION)))
-+TARGET_EXTRA_FLAGS:=$(strip $(subst ",, $(BR2_TARGET_EXTRA_FLAGS)))
- #"))
- EXTRA_GCC_CONFIG_OPTIONS:=$(strip $(subst ",, $(BR2_EXTRA_GCC_CONFIG_OPTIONS)))
- #"))
-Index: toolchain/external-toolchain/Config.in
-===================================================================
---- toolchain/external-toolchain/Config.in	(revision 24219)
-+++ toolchain/external-toolchain/Config.in	(working copy)
-@@ -99,10 +99,10 @@
- 	  Set this option if the external toolchain has a C++
- 	  cross-compiler.
- 
--config BR2_TARGET_OPTIMIZATION
--	string "Target Optimizations"
--	default "-Os -pipe"
-+config BR2_TARGET_EXTRA_FLAGS
-+	string "Target extra gcc flags"
-+	default ""
- 	help
--	  Optimizations to use when building for the target host.
-+	  Extra gcc flags to use when building for the target host.
- 
- endif
-Index: toolchain/Config.in.2
-===================================================================
---- toolchain/Config.in.2	(revision 24219)
-+++ toolchain/Config.in.2	(working copy)
-@@ -54,11 +54,11 @@
- #config BR2_SOFT_FLOAT_FP
- #	bool "Use softfp"
- 
--config BR2_TARGET_OPTIMIZATION
--	string "Target Optimizations"
--	default "-Os -pipe"
-+config BR2_TARGET_EXTRA_FLAGS
-+	string "Target extra gcc flags"
-+	default ""
- 	help
--	  Optimizations to use when building for the target host.
-+	  Extra gcc flags to use when building for the target host.
- 
- config BR2_CROSS_TOOLCHAIN_TARGET_UTILS
- 	bool "Include target utils in cross toolchain"
-Index: package/Makefile.in
-===================================================================
---- package/Makefile.in	(revision 24219)
-+++ package/Makefile.in	(working copy)
-@@ -37,7 +37,7 @@
- 
- #########################################################################
- ifeq ($(BR2_TOOLCHAIN_SOURCE),y)
--TARGET_CFLAGS=$(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING) \
-+TARGET_CFLAGS=$(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING) $(TARGET_EXTRA_FLAGS) \
- 	-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include
- TARGET_LDFLAGS+=-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib
- ifeq ($(BR2_TOOLCHAIN_SYSROOT),y)
-@@ -89,7 +89,8 @@
- # else it's an external toolchain
- #########################################################################
- else
--TARGET_CFLAGS=$(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING) -I$(STAGING_DIR)/include -I$(STAGING_DIR)/usr/include -I$(TOOLCHAIN_EXTERNAL_PATH)/$(TOOLCHAIN_EXTERNAL_PREFIX)/include
-+TARGET_CFLAGS=$(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING) $(TARGET_EXTRA_FLAGS) \
-+	-I$(STAGING_DIR)/include -I$(STAGING_DIR)/usr/include -I$(TOOLCHAIN_EXTERNAL_PATH)/$(TOOLCHAIN_EXTERNAL_PREFIX)/include
- TARGET_CXXFLAGS=$(TARGET_CFLAGS)
- TARGET_LDFLAGS=-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib
- endif
+--- target/generic/target_busybox_skeleton/usr/share/udhcpc/default.script	(revision 0)
++++ target/generic/target_busybox_skeleton/usr/share/udhcpc/default.script	(revision 0)
+@@ -0,0 +1,39 @@
++#!/bin/sh
++
++# udhcpc script edited by Tim Riker <Tim@Rikers.org>
++
++[ -z "$1" ] && echo "Error: should be called from udhcpc" && exit 1
++
++RESOLV_CONF="/etc/resolv.conf"
++[ -n "$broadcast" ] && BROADCAST="broadcast $broadcast"
++[ -n "$subnet" ] && NETMASK="netmask $subnet"
++
++case "$1" in
++	deconfig)
++		/sbin/ifconfig $interface 0.0.0.0
++		;;
++
++	renew|bound)
++		/sbin/ifconfig $interface $ip $BROADCAST $NETMASK
++
++		if [ -n "$router" ] ; then
++			echo "deleting routers"
++			while route del default gw 0.0.0.0 dev $interface ; do
++				:
++			done
++
++			for i in $router ; do
++				route add default gw $i dev $interface
++			done
++		fi
++
++		echo -n > $RESOLV_CONF
++		[ -n "$domain" ] && echo search $domain >> $RESOLV_CONF
++		for i in $dns ; do
++			echo adding dns $i
++			echo nameserver $i >> $RESOLV_CONF
++		done
++		;;
++esac
++
++exit 0
+
+Property changes on: target/generic/target_busybox_skeleton/usr/share/udhcpc/default.script
+___________________________________________________________________
+Name: svn:executable
+   + *
