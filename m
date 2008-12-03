@@ -1,31 +1,22 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 2 Dec 2008 23:51:49 +0100
-Subject: [Buildroot] [PATCH 1/7 v2] package: add liboil package
-In-Reply-To: <200811250827.15650.markus.heidelberg@web.de>
-References: <200811190244.44817.markus.heidelberg@web.de>
-	<200811190249.29428.markus.heidelberg@web.de>
-	<200811250827.15650.markus.heidelberg@web.de>
-Message-ID: <20081202235149.553ef881@surf>
+From: Quick X <quickx@hotmail.com>
+Date: Tue, 2 Dec 2008 16:45:13 -0800
+Subject: [Buildroot] Builroot Make Error (
+Message-ID: <BAY124-W558A56205B09EF85A2940ED2030@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 25 Nov 2008 08:27:15 +0100,
-Markus Heidelberg <markus.heidelberg@web.de> a ?crit :
 
-> "select BR2_PACKAGE_LIBGLIB2" was missing in the previous patch.
+make menuconfig > Target Options > Atmel Device Support > Secondary locations (*** Package support ***) > also copy the image to...
+ 
+If this value is set to nothing "()" then you get a "mkdir -p" "mkdir: missing operand" "Error 1" problem, most the other "Copy To" Locations allow you to not copy if you wish it.
+ 
+[...]
+/home/administrator/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-objcopy --gap-fill=0xff -O srec /home/administrator/buildroot/project_build_arm/at91sam9261ek/u-boot-1.2.0-atmel/u-boot /home/administrator/buildroot/project_build_arm/at91sam9261ek/u-boot-1.2.0-atmel/u-boot.srec/home/administrator/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-objcopy --gap-fill=0xff -O binary /home/administrator/buildroot/project_build_arm/at91sam9261ek/u-boot-1.2.0-atmel/u-boot /home/administrator/buildroot/project_build_arm/at91sam9261ek/u-boot-1.2.0-atmel/u-boot.bingzip -c /home/administrator/buildroot/project_build_arm/at91sam9261ek/u-boot-1.2.0-atmel/u-boot.bin > /home/administrator/buildroot/project_build_arm/at91sam9261ek/u-boot-1.2.0-atmel/u-boot.gzmake[1]: Leaving directory `/home/administrator/buildroot/build_arm/u-boot-1.2.0-atmel'mkdir -p /home/administrator/buildroot/binaries/at91sam9261ekcp /home/administrator/buildroot/project_build_arm/at91sam9261ek/u-boot-1.2.0-atmel/u-boot.bin /home/administrator/buildroot/binaries/at91sam9261ek/at91sam9261ek-u-boot-1.2.0-atmel-20081202.binmkdir -pmkdir: missing operandTry `mkdir --help' for more information.make: *** [/at91sam9261ek-u-boot-1.2.0-atmel-20081202.bin] Error 1
+_________________________________________________________________
 
-It seems that Glib2 is only needed to compile the example programs of
-liboil. Maybe we could disable building of the examples and get rid of
-the Glib2 dependency ?
-
-Sincerly,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20081202/a68561af/attachment.htm 
