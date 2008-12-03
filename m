@@ -1,7 +1,7 @@
 From: Nicolas Pitre <nico@cam.org>
-Date: Wed, 03 Dec 2008 15:37:50 -0500 (EST)
-Subject: [Buildroot] [PATCH 2/3] update mtd-utils to the latest and greatest
-Message-ID: <alpine.LFD.2.00.0812031537080.14328@xanadu.home>
+Date: Wed, 03 Dec 2008 15:38:52 -0500 (EST)
+Subject: [Buildroot] [PATCH 3/3] fix the ubifsroot target
+Message-ID: <alpine.LFD.2.00.0812031537530.14328@xanadu.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,239 +9,216 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-This include latest UBI tools which are now packaged with MTD utils
-in the upstream Git repository.  A dependency on libuuid (see previous
-patch) is needed by mkfs.ubifs.
+Currently this target is broken since the mkfs.ubifs source repository
+no longer exists.  It is now included with mtd-utils and built per the
+previous patch.
 
-Also new host targets are added as needed by the UBI rootfs target in
-the next patch.
+Also it is now possible to wrap the UBIFS image into an UBI flash image.
+An UBIFS image cannot be written to flash directly without special
+bootloader support.
 
 Signed-off-by: Nicolas Pitre <nico@cam.org>
 
-Index: package/mtd/mtd-utils.git/mtd.mk
+Index: target/ubifs/ubifsroot.mk
 ===================================================================
---- package/mtd/mtd-utils.git/mtd.mk	(revision 24219)
-+++ package/mtd/mtd-utils.git/mtd.mk	(working copy)
-@@ -3,7 +3,8 @@
- # mtd provides jffs2 utilities
+--- target/ubifs/ubifsroot.mk	(revision 24219)
++++ target/ubifs/ubifsroot.mk	(working copy)
+@@ -3,39 +3,7 @@
+ # mkfs.ubifs to build to target ubifs filesystems
  #
  #############################################################
--MTD_VERSION:=fcb52ccc99679460640386c297023f852b108f68
-+MTD_VERSION:=c3d328ca27b31dad62ab7ca3edf55087352d27a8
-+#MTD_VERSION:=HEAD
- MTD_SOURCE:=mtd-utils-$(MTD_VERSION).tar.gz
- MTD_URL:=http://git.infradead.org/mtd-utils.git?a=snapshot;h=$(MTD_VERSION);sf=tgz
- MTD_HOST_DIR:= $(TOOL_BUILD_DIR)/mtd-utils-$(MTD_VERSION)
-@@ -19,6 +20,8 @@
- #############################################################
- MKFS_JFFS2 := $(MTD_HOST_DIR)/mkfs.jffs2
- SUMTOOL := $(MTD_HOST_DIR)/sumtool
-+MKFS_UBIFS := $(MTD_HOST_DIR)/mkfs.ubifs/mkfs.ubifs
-+UBINIZE := $(MTD_HOST_DIR)/ubi-utils/ubinize
+-#MKFS_UBIFS_VERSION=2582f128dad78591bc3adcc87c343c690bb82e61
+-#MKFS_UBIFS_URL=http://git.infradead.org/users/dedekind/mkfs.ubifs.git?a=snapshot;h=$(MKFS_UBIFS_VERSION);sf=tgz
+-MKFS_UBIFS_VERSION=v0.4
+-MKFS_UBIFS_URL=http://git.infradead.org/users/dedekind/mkfs.ubifs.git?a=snapshot;h=refs/tags/mkfs.ubifs-$(MKFS_UBIFS_VERSION);sf=tgz
+-MKFS_UBIFS_SOURCE:=mkfs.ubifs-$(MKFS_UBIFS_VERSION).tar.gz
+-MKFS_UBIFS_DIR:= $(BUILD_DIR)/mkfs-ubifs-$(MKFS_UBIFS_VERSION)
+-MKFS_UBIFS_CAT:=$(ZCAT)
+-MKFS_UBIFS_NAME:=mkfs.ubifs
  
- $(DL_DIR)/$(MTD_SOURCE):
- 	$(WGET) -O $(DL_DIR)/$(MTD_SOURCE) "$(MTD_URL)"
-@@ -35,25 +38,39 @@
- 
- 
- $(MKFS_JFFS2): $(MTD_HOST_DIR)/.unpacked
--	CC="$(HOSTCC)" CROSS= CFLAGS=-I$(LINUX_HEADERS_DIR)/include \
-+	CC="$(HOSTCC)" CROSS= CPPFLAGS=-I$(LINUX_HEADERS_DIR)/include \
- 		$(MAKE) \
- 		BUILDDIR=$(MTD_HOST_DIR) WITHOUT_XATTR=1 \
- 		-C $(MTD_HOST_DIR) mkfs.jffs2
- 
- $(SUMTOOL): $(MTD_HOST_DIR)/.unpacked
--	CC="$(HOSTCC)" CROSS= CFLAGS=-I$(LINUX_HEADERS_DIR)/include \
-+	CC="$(HOSTCC)" CROSS= CPPFLAGS=-I$(LINUX_HEADERS_DIR)/include \
- 		$(MAKE) \
- 		BUILDDIR=$(MTD_HOST_DIR) WITHOUT_XATTR=1 \
- 		-C $(MTD_HOST_DIR) sumtool
- 
-+$(MKFS_UBIFS): $(MTD_HOST_DIR)/.unpacked
-+	CC="$(HOSTCC)" CROSS= CPPFLAGS=-I$(LINUX_HEADERS_DIR)/include \
-+		$(MAKE) \
-+		BUILDDIR=$(MTD_HOST_DIR) WITHOUT_XATTR=1 \
-+		-C $(MTD_HOST_DIR)/mkfs.ubifs
-+
-+$(UBINIZE): $(MTD_HOST_DIR)/.unpacked
-+	CC="$(HOSTCC)" CROSS= CPPFLAGS=-I$(LINUX_HEADERS_DIR)/include \
-+		$(MAKE) \
-+		BUILDDIR=$(MTD_HOST_DIR) WITHOUT_XATTR=1 \
-+		-C $(MTD_HOST_DIR)/ubi-utils ubinize
-+
- mtd-host: $(MKFS_JFFS2) $(SUMTOOL)
- 
--mtd-host-source: $(DL_DIR)/$(MTD_SOURCE)
-+ubi-host: $(MKFS_UBIFS) $(UBINIZE)
- 
--mtd-host-clean:
-+mtd-host-source ubi-host-source: $(DL_DIR)/$(MTD_SOURCE)
-+
-+mtd-host-clean ubi-host-clean:
- 	-$(MAKE) -C $(MTD_HOST_DIR) clean
- 
--mtd-host-dirclean:
-+mtd-host-dirclean ubi-host-dirclean:
- 	rm -rf $(MTD_HOST_DIR)
- 
- #############################################################
-@@ -98,23 +115,56 @@
- MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIATTACH) += ubiattach
- MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBICRC32) += ubicrc32
- MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIDETACH) += ubidetach
--MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIMIRROR) += ubimirror
- MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIMKVOL) += ubimkvol
- MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBINFO) += ubinfo
-+MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBINIZE) += ubinize
- MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIRMVOL) += ubirmvol
- MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIUPDATEVOL) += ubiupdatevol
-+MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIFORMAT) += ubiformat
-+MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_PFIFLASH) += pfiflash
-+MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_PDDCUSTOMIZE) += pddcustomize
-+MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIMIRROR) += ubimirror
-+MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_BIN2NAND) += bin2nand
-+MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_NAND2BIN) += nand2bin
-+MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIGEN) += ubigen
-+MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_MKBOOTENV) += mkbootenv
-+MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UNUBI) += unubi
-+MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_PFI2BIN) += pfi2bin
- 
--MTD_BUILD_TARGETS := $(addprefix $(MTD_DIR)/, $(MTD_TARGETS_y)) $(addprefix $(MTD_DIR)/ubi-utils/, $(MTD_TARGETS_UBI_y))
-+MTD_TARGETS_UBIFS_n :=
-+MTD_TARGETS_UBIFS_y :=
- 
-+MTD_TARGETS_UBIFS_$(BR2_PACKAGE_MTD_MKFSUBIFS) += mkfs.ubifs
-+
-+MTD_BUILD_TARGETS := $(addprefix $(MTD_DIR)/, $(MTD_TARGETS_y))
-+MTD_UBI_BUILD_TARGETS := $(addprefix $(MTD_DIR)/ubi-utils/, $(MTD_TARGETS_UBI_y))
-+MTD_UBIFS_BUILD_TARGETS := $(addprefix $(MTD_DIR)/mkfs.ubifs/, $(MTD_TARGETS_UBIfs_y))
-+
- $(MTD_BUILD_TARGETS): $(MTD_DIR)/.unpacked
- 	mkdir -p $(TARGET_DIR)/usr/sbin
--	$(MAKE1) OPTFLAGS="-DNEED_BCOPY -Dbcmp=memcmp -I$(STAGING_DIR)/usr/include $(TARGET_CFLAGS)" \
-+	$(MAKE1) CFLAGS="-DNEED_BCOPY -Dbcmp=memcmp -I$(STAGING_DIR)/usr/include $(TARGET_CFLAGS)" \
- 		LDFLAGS="$(TARGET_LDFLAGS)" \
- 	       BUILDDIR=$(MTD_DIR) \
--	       CROSS=$(TARGET_CROSS) CC=$(TARGET_CC) WITHOUT_XATTR=1 -C $(MTD_DIR)
-+	       CROSS=$(TARGET_CROSS) CC=$(TARGET_CC) WITHOUT_XATTR=1 \
-+	       -C $(MTD_DIR) $(MTD_BUILD_TARGETS)
- 
-+$(MTD_UBI_BUILD_TARGETS): $(MTD_DIR)/.unpacked
-+	mkdir -p $(TARGET_DIR)/usr/sbin
-+	$(MAKE1) CFLAGS="-DNEED_BCOPY -Dbcmp=memcmp -I$(STAGING_DIR)/usr/include $(TARGET_CFLAGS)" \
-+		LDFLAGS="$(TARGET_LDFLAGS)" \
-+		CROSS=$(TARGET_CROSS) CC=$(TARGET_CC) WITHOUT_XATTR=1 \
-+		-C $(MTD_DIR)/ubi-utils $(MTD_TARGETS_UBIfs_y)
-+
-+$(MTD_UBIFS_BUILD_TARGETS): $(MTD_DIR)/.unpacked libuuid
-+	mkdir -p $(TARGET_DIR)/usr/sbin
-+	$(MAKE1) CFLAGS="-DNEED_BCOPY -Dbcmp=memcmp -I$(STAGING_DIR)/usr/include $(TARGET_CFLAGS)" \
-+		LDFLAGS="$(TARGET_LDFLAGS)" \
-+		CROSS=$(TARGET_CROSS) CC=$(TARGET_CC) WITHOUT_XATTR=1 \
-+		-C $(MTD_DIR)/mkfs.ubifs $(MTD_UBIFS_BUILD_TARGETS)
-+
- MTD_TARGETS := $(addprefix $(TARGET_DIR)/usr/sbin/, $(MTD_TARGETS_y))
- MTD_UBI_TARGETS := $(addprefix $(TARGET_DIR)/usr/sbin/, $(MTD_TARGETS_UBI_y))
-+MTD_UBIFS_TARGETS := $(addprefix $(TARGET_DIR)/usr/sbin/, $(MTD_TARGETS_UBIFS_y))
- 
- $(MTD_TARGETS): $(TARGET_DIR)/usr/sbin/% : $(MTD_DIR)/%
- 	cp -f $< $@
-@@ -124,8 +174,12 @@
- 	cp -f $< $@
- 	$(STRIPCMD) $@
- 
--mtd: zlib lzo $(MTD_TARGETS) $(MTD_UBI_TARGETS)
-+$(MTD_UBIFS_TARGETS): $(TARGET_DIR)/usr/sbin/% : $(MTD_DIR)/mkfs.ubifs/%
-+	cp -f $< $@
-+	$(STRIPCMD) $@
- 
-+mtd: zlib lzo $(MTD_TARGETS) $(MTD_UBI_TARGETS) $(MTD_UBIFS_TARGETS)
-+
- mtd-source: $(DL_DIR)/$(MTD_SOURCE)
- 
- mtd-clean:
-Index: package/mtd/Config.in
-===================================================================
---- package/mtd/Config.in	(revision 24219)
-+++ package/mtd/Config.in	(working copy)
-@@ -164,11 +164,6 @@
- 	default y
- 	depends on BR2_PACKAGE_MTD_UTILS_GIT
- 
--config BR2_PACKAGE_MTD_UBIMIRROR
--	bool "ubimirror"
--	default y
--	depends on BR2_PACKAGE_MTD_UTILS_GIT
+-$(DL_DIR)/$(MKFS_UBIFS_SOURCE):
+-	$(WGET) -O $(DL_DIR)/$(MKFS_UBIFS_SOURCE) "$(MKFS_UBIFS_URL)"
 -
- config BR2_PACKAGE_MTD_UBIMKVOL
- 	bool "ubimkvol"
- 	default y
-@@ -179,6 +174,11 @@
- 	default y
- 	depends on BR2_PACKAGE_MTD_UTILS_GIT
+-$(MKFS_UBIFS_DIR)/.unpacked: $(DL_DIR)/$(MKFS_UBIFS_SOURCE)
+-	$(ZCAT) $(DL_DIR)/$(MKFS_UBIFS_SOURCE) | tar -C $(BUILD_DIR) -xvf -
+-	mv $(BUILD_DIR)/$(MKFS_UBIFS_NAME) $(MKFS_UBIFS_DIR)
+-	toolchain/patch-kernel.sh $(MKFS_UBIFS_DIR) target/ubifs/ mkfs-ubifs-\*.patch
+-	touch $@
+-
+-$(MKFS_UBIFS_DIR)/mkfs.ubifs: $(MKFS_UBIFS_DIR)/.unpacked
+-	$(MAKE) -C $(MKFS_UBIFS_DIR)
+-	touch -c $@
+-
+-mkfs.ubifs-dirclean:
+-	rm -rf $(MKFS_UBIFS_DIR)
+-
+-mkfs.ubifs: $(MKFS_UBIFS_DIR)/mkfs.ubifs
+-
+-#############################################################
+-#
+-# Build the ubifs root filesystem image
+-#
+-#############################################################
+-
+ UBIFS_OPTS := -e $(BR2_TARGET_ROOTFS_UBIFS_LEBSIZE) -c $(BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT) -m $(BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE)
  
-+config BR2_PACKAGE_MTD_UBINIZE
-+	bool "ubinize"
-+	default y
-+	depends on BR2_PACKAGE_MTD_UTILS_GIT
-+
- config BR2_PACKAGE_MTD_UBIRMVOL
- 	bool "ubirmvol"
- 	default y
-@@ -189,5 +189,55 @@
- 	default y
- 	depends on BR2_PACKAGE_MTD_UTILS_GIT
- 
-+config BR2_PACKAGE_MTD_UBIFORMAT
-+	bool "ubiformat"
-+	default y
-+	depends on BR2_PACKAGE_MTD_UTILS_GIT
-+
-+config BR2_PACKAGE_MTD_PFIFLASH
-+	bool "pfiflash"
-+	default y
-+	depends on BR2_PACKAGE_MTD_UTILS_GIT
-+
-+config BR2_PACKAGE_MTD_PDDCUSTOMIZE
-+	bool "pddcustomize"
-+	default y
-+	depends on BR2_PACKAGE_MTD_UTILS_GIT
-+
-+config BR2_PACKAGE_MTD_UBIMIRROR
-+	bool "ubimirror"
-+	default y
-+	depends on BR2_PACKAGE_MTD_UTILS_GIT
-+
-+config BR2_PACKAGE_MTD_BIN2NAND
-+	bool "bin2nand"
-+	default y
-+	depends on BR2_PACKAGE_MTD_UTILS_GIT
-+
-+config BR2_PACKAGE_MTD_NAND2BIN
-+	bool "nand2bin"
-+	default y
-+	depends on BR2_PACKAGE_MTD_UTILS_GIT
-+
-+config BR2_PACKAGE_MTD_UBIGEN
-+	bool "ubigen"
-+	default y
-+	depends on BR2_PACKAGE_MTD_UTILS_GIT
-+
-+config BR2_PACKAGE_MTD_MKBOOTENV
-+	bool "mkbootenv"
-+	default y
-+	depends on BR2_PACKAGE_MTD_UTILS_GIT
-+
-+config BR2_PACKAGE_MTD_UNUBI
-+	bool "unubi"
-+	default y
-+	depends on BR2_PACKAGE_MTD_UTILS_GIT
-+
-+config BR2_PACKAGE_MTD_MKFSUBIFS
-+	bool "mkfs.ubifs"
-+	default y
-+	depends on BR2_PACKAGE_MTD_UTILS_GIT && BR2_LARGEFILE
-+	
+ UBIFS_BASE := $(subst ",,$(BR2_TARGET_ROOTFS_UBIFS_OUTPUT))
+@@ -51,6 +19,10 @@
+ UBIFS_OPTS += -x none
  endif
  
++ifneq ($(BR2_TARGET_ROOTFS_UBIFS_SQUASH),)
++UBIFS_OPTS += -U
++endif
++
+ UBIFS_ROOTFS_COMPRESSOR:=
+ UBIFS_ROOTFS_COMPRESSOR_EXT:=
+ UBIFS_ROOTFS_COMPRESSOR_PREREQ:=
+@@ -76,7 +48,12 @@
+ UBIFS_TARGET := $(UBIFS_BASE)
+ endif
+ 
+-$(UBIFS_BASE): host-fakeroot makedevs mkfs.ubifs
++#
++# ubi-host is a dependency which builds a local copy of mkfs.ubifs 
++# if it is needed. The actual build is done from
++# package/mtd/mtd-utils.git/mtd.mk.
++#
++$(UBIFS_BASE): host-fakeroot makedevs ubi-host
+ 	- at find $(TARGET_DIR) -type f -perm +111 | xargs $(STRIPCMD) 2>/dev/null || true
+ ifneq ($(BR2_HAVE_MANPAGES),y)
+ 	@rm -rf $(TARGET_DIR)/usr/man
+@@ -88,22 +65,20 @@
+ 	@test -d $(TARGET_DIR)/usr/share && \
+ 		rmdir -p --ignore-fail-on-non-empty $(TARGET_DIR)/usr/share || \
+ 		true
++ifneq ($(BR2_PREFER_STATIC_LIB),y)
+ 	$(if $(TARGET_LDCONFIG),test -x $(TARGET_LDCONFIG) && $(TARGET_LDCONFIG) -r $(TARGET_DIR) 2>/dev/null)
+-	# Use fakeroot to pretend all target binaries are owned by root
++endif
+ 	rm -f $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
+ 	touch $(PROJECT_BUILD_DIR)/.fakeroot.00000
+ 	cat $(PROJECT_BUILD_DIR)/.fakeroot* > $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
+-ifneq ($(BR2_TARGET_ROOTFS_UBIFS_SQUASH),)
+-	echo "chown -R 0:0 $(TARGET_DIR)" >> $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
+-endif
+ ifneq ($(TARGET_DEVICE_TABLE),)
+ 	# Use fakeroot to pretend to create all needed device nodes
+ 	echo "$(STAGING_DIR)/bin/makedevs -d $(TARGET_DEVICE_TABLE) $(TARGET_DIR)" \
+ 		>> $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
+ endif
+ 	# Use fakeroot so mkfs.ubifs believes the previous fakery
+-	echo "$(MKFS_UBIFS_DIR)/mkfs.ubifs -d $(TARGET_DIR) " \
+-		"$(UBIFS_OPTS) -o $(UBIFS_BASE)" >> $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
++	echo "$(MKFS_UBIFS) -d $(TARGET_DIR) $(UBIFS_OPTS) -o $(UBIFS_BASE)" \
++		>> $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
+ 	chmod a+x $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
+ 	$(STAGING_DIR)/usr/bin/fakeroot -- $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
+ 	- at rm -f $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
+@@ -113,6 +88,23 @@
+ 	$(UBIFS_ROOTFS_COMPRESSOR) $(UBIFS_BASE) > $(UBIFS_TARGET)
+ endif
+ 
++UBI_IMAGE := $(UBIFS_BASE:.ubifs=).ubi_image
++
++$(UBI_IMAGE): $(UBINIZE) $(UBIFS_BASE)
++	( echo "[rootfs]"; \
++	  echo "mode=ubi"; \
++	  echo "image=$(UBIFS_BASE)"; \
++	  echo "vol_id=0"; \
++	  echo "vol_name=rootfs"; \
++	  echo "vol_type=dynamic"; \
++	  echo "vol_flags=autoresize"; \
++	) > $(PROJECT_BUILD_DIR)/_ubidata.$(notdir $(UBI_IMAGE))
++	$(UBINIZE) -o $@ -m $(BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE) \
++	  -p $(BR2_TARGET_ROOTFS_UBI_PEBSIZE) \
++	  -s $(BR2_TARGET_ROOTFS_UBI_SUBSIZE) \
++	  $(PROJECT_BUILD_DIR)/_ubidata.$(notdir $(UBI_IMAGE))
++	- at rm -f $(PROJECT_BUILD_DIR)/_ubidata.$(notdir $(UBI_IMAGE))
++
+ UBIFS_COPYTO := $(strip $(subst ",,$(BR2_TARGET_ROOTFS_UBIFS_COPYTO)))
+ # "))
+ 
+@@ -122,14 +114,9 @@
+ 	@cp -f $(UBIFS_TARGET) $(UBIFS_COPYTO)
+ endif
+ 
+-ubifsroot-source: $(DL_DIR)/$(GENUBIFS_SOURCE)
++ubi-image: $(UBI_IMAGE)
++	@ls -l $(UBI_IMAGE)
+ 
+-ubifsroot-clean:
+-	-$(MAKE) -C $(MKFS_UBIFS_DIR) clean
+-
+-ubifsroot-dirclean:
+-	rm -rf $(MKFS_UBIFS_DIR)
+-
+ #############################################################
+ #
+ # Toplevel Makefile options
+@@ -138,4 +125,7 @@
+ ifeq ($(strip $(BR2_TARGET_ROOTFS_UBIFS)),y)
+ TARGETS+=ubifsroot
+ endif
++ifeq ($(strip $(BR2_TARGET_ROOTFS_UBI_IMAGE)),y)
++TARGETS+=ubi-image
++endif
+ 
+Index: target/ubifs/Config.in
+===================================================================
+--- target/ubifs/Config.in	(revision 24219)
++++ target/ubifs/Config.in	(working copy)
+@@ -1,25 +1,26 @@
+ config BR2_TARGET_ROOTFS_UBIFS
+ 	bool "ubifs root filesystem"
+ 	select BR2_HOST_FAKEROOT
++	select BR2_PACKAGE_MTD_UTILS_GIT
+ 	help
+ 	  Build a ubifs root filesystem
+ 
+ config BR2_TARGET_ROOTFS_UBIFS_LEBSIZE
+-	hex "UBI logical erase block size"
++	int "UBI logical erase block size"
+ 	depends on BR2_TARGET_ROOTFS_UBIFS
+-	default 0x1f800
++	default 129024
+ 
+ config BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE
+-	hex "UBI minimum I/O size"
++	int "UBI minimum I/O size"
+ 	depends on BR2_TARGET_ROOTFS_UBIFS
+-	default 0x800
++	default 2048
+ 	help
+ 	  Some comment required here
+ 
+ config BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT
+ 	int "Maximum LEB count"
+ 	depends on BR2_TARGET_ROOTFS_UBIFS
+-	default 2048
++	default 1023
+ 	help
+ 	  Some comment required here
+ 
+@@ -105,3 +106,21 @@
+ 	  Copies the resulting image to a secondary location
+ 	  like a tftp server's root directory.
+ 
++config BR2_TARGET_ROOTFS_UBI_IMAGE
++	bool "create a raw UBI image"
++	depends on BR2_TARGET_ROOTFS_UBIFS
++	help
++	  This creates a raw UBI image that can be used for initial flash
++	  initialization.
++
++config BR2_TARGET_ROOTFS_UBI_PEBSIZE
++	int "UBI physical erase block size"
++	depends on BR2_TARGET_ROOTFS_UBI_IMAGE
++	default 131072
++
++config BR2_TARGET_ROOTFS_UBI_SUBSIZE
++	int "UBI sub-page size"
++	depends on BR2_TARGET_ROOTFS_UBI_IMAGE
++	default 512
++
++
