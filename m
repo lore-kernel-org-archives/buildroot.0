@@ -1,22 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 04 Dec 2008 15:17:13 +0100
-Subject: [Buildroot] [PATCH] new mdadm and dmraid
-In-Reply-To: <gh6fd7$d95$1@ger.gmane.org> (Charles Duffy's message of "Wed\,
-	03 Dec 2008 11\:24\:54 -0600")
-References: <gh6fd7$d95$1@ger.gmane.org>
-Message-ID: <873ah4vxcm.fsf@macbook.be.48ers.dk>
+From: egtvedt at uclibc.org <egtvedt@uclibc.org>
+Date: Thu,  4 Dec 2008 08:10:07 -0800 (PST)
+Subject: [Buildroot] svn commit:
+	trunk/buildroot/package/multimedia/alsa-utils
+Message-ID: <20081204161007.3C4033C6BC@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Charles" == Charles Duffy <Charles_Duffy@messageone.com> writes:
+Author: egtvedt
+Date: 2008-12-04 08:10:06 -0800 (Thu, 04 Dec 2008)
+New Revision: 24270
 
- Charles> Both mdadm and dmraid packages refer to upstream versions
- Charles> which are no longer available.
+Log:
+alsa-utils: add dependency to libintl if libintl is enabled
 
-Thanks, committed as r24263.
+Signed-off-by: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
 
--- 
-Bye, Peter Korsgaard
+
+
+Modified:
+   trunk/buildroot/package/multimedia/alsa-utils/alsa-utils.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/multimedia/alsa-utils/alsa-utils.mk
+===================================================================
+--- trunk/buildroot/package/multimedia/alsa-utils/alsa-utils.mk	2008-12-04 15:49:26 UTC (rev 24269)
++++ trunk/buildroot/package/multimedia/alsa-utils/alsa-utils.mk	2008-12-04 16:10:06 UTC (rev 24270)
+@@ -71,7 +71,7 @@
+ 	fi
+ 	touch -c $@
+ 
+-alsa-utils: uclibc alsa-lib ncurses $(TARGET_DIR)/$(ALSA_UTILS_TARGET_BINARY)
++alsa-utils: uclibc alsa-lib ncurses $(if $(BR2_PACKAGE_LIBINTL),libintl) $(TARGET_DIR)/$(ALSA_UTILS_TARGET_BINARY)
+ 
+ alsa-utils-source: $(DL_DIR)/$(ALSA_UTILS_SOURCE)
+ 
