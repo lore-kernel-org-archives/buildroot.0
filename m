@@ -1,8 +1,8 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Fri,  5 Dec 2008 07:27:28 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot: package/gmp package/mpfr
-	toolchain/binut etc...
-Message-ID: <20081205152728.D86353C8A9@busybox.net>
+Date: Fri,  5 Dec 2008 07:27:33 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/binutils:
+	2.18.50.0.3
+Message-ID: <20081205152733.7460F3C8BD@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,117 +10,152 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-12-05 07:27:26 -0800 (Fri, 05 Dec 2008)
-New Revision: 24284
+Date: 2008-12-05 07:27:33 -0800 (Fri, 05 Dec 2008)
+New Revision: 24285
 
 Log:
-toolchain/*: use CONFIG_UPDATE
+toolchain/binutils: add 2.18.50.0.3
 
-Based on e0e0945e in Bernhard's tree.
+Based on b2b5d9f2 in Bernhard's tree.
+
+Added:
+   trunk/buildroot/toolchain/binutils/2.18.50.0.3/
+   trunk/buildroot/toolchain/binutils/2.18.50.0.3/110-arm-eabi-conf.patch
+   trunk/buildroot/toolchain/binutils/2.18.50.0.3/300-001_ld_makefile_patch.patch
+   trunk/buildroot/toolchain/binutils/2.18.50.0.3/300-012_check_ldrunpath_length.patch
 
 Modified:
-   trunk/buildroot/package/gmp/gmp.mk
-   trunk/buildroot/package/mpfr/mpfr.mk
-   trunk/buildroot/toolchain/binutils/binutils.mk
-   trunk/buildroot/toolchain/ccache/ccache.mk
-   trunk/buildroot/toolchain/elf2flt/elf2flt.mk
-   trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
-   trunk/buildroot/toolchain/gdb/gdb.mk
+   trunk/buildroot/toolchain/binutils/Config.in
 
 
 Changeset:
-Modified: trunk/buildroot/package/gmp/gmp.mk
+Added: trunk/buildroot/toolchain/binutils/2.18.50.0.3/110-arm-eabi-conf.patch
 ===================================================================
---- trunk/buildroot/package/gmp/gmp.mk	2008-12-05 14:46:56 UTC (rev 24283)
-+++ trunk/buildroot/package/gmp/gmp.mk	2008-12-05 15:27:26 UTC (rev 24284)
-@@ -27,7 +27,7 @@
- $(GMP_DIR)/.unpacked: $(DL_DIR)/$(GMP_SOURCE)
- 	$(GMP_CAT) $(DL_DIR)/$(GMP_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS) -
- 	toolchain/patch-kernel.sh $(GMP_DIR) package/gmp/ \*.patch
--	$(CONFIG_UPDATE) $(GMP_DIR)
-+	$(CONFIG_UPDATE) $(@D)
- 	touch $@
- 
- $(GMP_TARGET_DIR)/.configured: $(GMP_DIR)/.unpacked
+--- trunk/buildroot/toolchain/binutils/2.18.50.0.3/110-arm-eabi-conf.patch	                        (rev 0)
++++ trunk/buildroot/toolchain/binutils/2.18.50.0.3/110-arm-eabi-conf.patch	2008-12-05 15:27:33 UTC (rev 24285)
+@@ -0,0 +1,24 @@
++diff -rdup binutils-2.18.50.0.3.orig/configure binutils-2.18.50.0.3/configure
++--- binutils-2.18.50.0.3.orig/configure	2007-11-22 12:41:26.000000000 +0100
+++++ binutils-2.18.50.0.3/configure	2007-11-22 12:45:01.000000000 +0100
++@@ -2245,7 +2245,7 @@ case "${target}" in
++     noconfigdirs="$noconfigdirs target-libffi target-qthreads"
++     libgloss_dir=arm
++     ;;
++-  arm*-*-linux-gnueabi)
+++  arm*-*-linux-*gnueabi)
++     noconfigdirs="$noconfigdirs target-qthreads"
++     noconfigdirs="$noconfigdirs target-libobjc"
++     case ${with_newlib} in
++diff -rdup binutils-2.18.50.0.3.orig/configure.ac binutils-2.18.50.0.3/configure.ac
++--- binutils-2.18.50.0.3.orig/configure.ac	2007-11-22 12:41:26.000000000 +0100
+++++ binutils-2.18.50.0.3/configure.ac	2007-11-22 12:44:54.000000000 +0100
++@@ -522,7 +522,7 @@ case "${target}" in
++     noconfigdirs="$noconfigdirs target-libffi target-qthreads"
++     libgloss_dir=arm
++     ;;
++-  arm*-*-linux-gnueabi)
+++  arm*-*-linux-*gnueabi)
++     noconfigdirs="$noconfigdirs target-qthreads"
++     noconfigdirs="$noconfigdirs target-libobjc"
++     case ${with_newlib} in
 
-Modified: trunk/buildroot/package/mpfr/mpfr.mk
+Added: trunk/buildroot/toolchain/binutils/2.18.50.0.3/300-001_ld_makefile_patch.patch
 ===================================================================
---- trunk/buildroot/package/mpfr/mpfr.mk	2008-12-05 14:46:56 UTC (rev 24283)
-+++ trunk/buildroot/package/mpfr/mpfr.mk	2008-12-05 15:27:26 UTC (rev 24284)
-@@ -30,7 +30,7 @@
- $(MPFR_DIR)/.unpacked: $(DL_DIR)/$(MPFR_SOURCE) $(MPFR_PATCH_SOURCE)
- 	$(MPFR_CAT) $(DL_DIR)/$(MPFR_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS) -
- 	toolchain/patch-kernel.sh $(MPFR_DIR) package/mpfr/ \*.patch
--	$(CONFIG_UPDATE) $(MPFR_DIR)
-+	$(CONFIG_UPDATE) $(@D)
- ifneq ($(MPFR_PATCH),)
- 	( cd $(MPFR_DIR); patch -p1 -N -Z < $(MPFR_PATCH_SOURCE); )
- endif
+--- trunk/buildroot/toolchain/binutils/2.18.50.0.3/300-001_ld_makefile_patch.patch	                        (rev 0)
++++ trunk/buildroot/toolchain/binutils/2.18.50.0.3/300-001_ld_makefile_patch.patch	2008-12-05 15:27:33 UTC (rev 24285)
+@@ -0,0 +1,24 @@
++diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.am binutils-2.17.50.0.17/ld/Makefile.am
++--- binutils-2.17.50.0.17.oorig/ld/Makefile.am	2007-06-18 19:29:29.000000000 +0200
+++++ binutils-2.17.50.0.17/ld/Makefile.am	2007-06-25 10:00:36.000000000 +0200
++@@ -18,7 +18,7 @@
++ # We put the scripts in the directory $(scriptdir)/ldscripts.
++ # We can't put the scripts in $(datadir) because the SEARCH_DIR
++ # directives need to be different for native and cross linkers.
++-scriptdir = $(tooldir)/lib
+++scriptdir = $(libdir)
++ 
++ EMUL = @EMUL@
++ EMULATION_OFILES = @EMULATION_OFILES@
++diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.in binutils-2.17.50.0.17/ld/Makefile.in
++--- binutils-2.17.50.0.17.oorig/ld/Makefile.in	2007-06-18 19:29:29.000000000 +0200
+++++ binutils-2.17.50.0.17/ld/Makefile.in	2007-06-25 10:00:36.000000000 +0200
++@@ -287,7 +287,7 @@
++ # We put the scripts in the directory $(scriptdir)/ldscripts.
++ # We can't put the scripts in $(datadir) because the SEARCH_DIR
++ # directives need to be different for native and cross linkers.
++-scriptdir = $(tooldir)/lib
+++scriptdir = $(libdir)
++ BASEDIR = $(srcdir)/..
++ BFDDIR = $(BASEDIR)/bfd
++ INCDIR = $(BASEDIR)/include
 
-Modified: trunk/buildroot/toolchain/binutils/binutils.mk
+Added: trunk/buildroot/toolchain/binutils/2.18.50.0.3/300-012_check_ldrunpath_length.patch
 ===================================================================
---- trunk/buildroot/toolchain/binutils/binutils.mk	2008-12-05 14:46:56 UTC (rev 24283)
-+++ trunk/buildroot/toolchain/binutils/binutils.mk	2008-12-05 15:27:26 UTC (rev 24284)
-@@ -88,7 +88,7 @@
- 	mkdir -p $(TOOL_BUILD_DIR)
- 	rm -rf $(BINUTILS_DIR)
- 	$(BINUTILS_CAT) $(DL_DIR)/$(BINUTILS_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS) -
--	$(CONFIG_UPDATE) $(BINUTILS_DIR)
-+	$(CONFIG_UPDATE) $(@D)
- 	touch $@
- 
- binutils-patched: $(BINUTILS_DIR)/.patched
+--- trunk/buildroot/toolchain/binutils/2.18.50.0.3/300-012_check_ldrunpath_length.patch	                        (rev 0)
++++ trunk/buildroot/toolchain/binutils/2.18.50.0.3/300-012_check_ldrunpath_length.patch	2008-12-05 15:27:33 UTC (rev 24285)
+@@ -0,0 +1,21 @@
++diff -u binutils-2.17.50.0.17.oorig/ld/emultempl/elf32.em binutils-2.17.50.0.17/ld/emultempl/elf32.em
++--- binutils-2.17.50.0.17.oorig/ld/emultempl/elf32.em	2007-06-18 19:31:40.000000000 +0200
+++++ binutils-2.17.50.0.17/ld/emultempl/elf32.em	2007-06-25 10:01:25.000000000 +0200
++@@ -1007,6 +1007,8 @@
++ 	      && command_line.rpath == NULL)
++ 	    {
++ 	      lib_path = (const char *) getenv ("LD_RUN_PATH");
+++	      if ((lib_path) && (strlen (lib_path) == 0))
+++		  lib_path = NULL;
++ 	      if (gld${EMULATION_NAME}_search_needed (lib_path, &n,
++ 						      force))
++ 		break;
++@@ -1191,6 +1193,8 @@
++   rpath = command_line.rpath;
++   if (rpath == NULL)
++     rpath = (const char *) getenv ("LD_RUN_PATH");
+++  if ((rpath) && (strlen (rpath) == 0))
+++      rpath = NULL;
++   if (! (bfd_elf_size_dynamic_sections
++ 	 (output_bfd, command_line.soname, rpath,
++ 	  command_line.filter_shlib,
 
-Modified: trunk/buildroot/toolchain/ccache/ccache.mk
+Modified: trunk/buildroot/toolchain/binutils/Config.in
 ===================================================================
---- trunk/buildroot/toolchain/ccache/ccache.mk	2008-12-05 14:46:56 UTC (rev 24283)
-+++ trunk/buildroot/toolchain/ccache/ccache.mk	2008-12-05 15:27:26 UTC (rev 24284)
-@@ -29,6 +29,7 @@
- 	$(SED) "s,getenv(\"CCACHE_DIR\"),\"$(BR2_CCACHE_DIR)\",g" \
- 		$(CCACHE_DIR1)/ccache.c
- 	mkdir -p $(CCACHE_DIR1)/cache
-+	$(CONFIG_UPDATE) $(@D)
- 	touch $@
+--- trunk/buildroot/toolchain/binutils/Config.in	2008-12-05 15:27:26 UTC (rev 24284)
++++ trunk/buildroot/toolchain/binutils/Config.in	2008-12-05 15:27:33 UTC (rev 24285)
+@@ -9,12 +9,14 @@
+ 	  Select the version of binutils you wish to use.
  
- $(CCACHE_DIR1)/.configured: $(CCACHE_DIR1)/.patched
-
-Modified: trunk/buildroot/toolchain/elf2flt/elf2flt.mk
-===================================================================
---- trunk/buildroot/toolchain/elf2flt/elf2flt.mk	2008-12-05 14:46:56 UTC (rev 24283)
-+++ trunk/buildroot/toolchain/elf2flt/elf2flt.mk	2008-12-05 15:27:26 UTC (rev 24284)
-@@ -19,6 +19,7 @@
- 	$(SED) "s,CROSS_COMPILE_PREFIX,$(REAL_GNU_TARGET_NAME),g;" toolchain/elf2flt/elf2flt.nios2.conditional
- 	toolchain/patch-kernel.sh $(ELF2FLT_DIR) toolchain/elf2flt elf2flt.nios2.conditional
- endif
-+	$(CONFIG_UPDATE) $(@D)
- 	touch $@
+ 	config BR2_BINUTILS_VERSION_2_17
+-		depends on BR2_avr32 || !BR2_nios2 && BR2_DEPRECATED
++		depends on BR2_avr32 || !BR2_nios2
++		depends on BR2_DEPRECATED
+ 		depends on BR2_EXT_BINUTILS_VERSION_2_17
+ 		bool "binutils 2.17"
  
- $(ELF2FLT_DIR)/.configured: $(ELF2FLT_DIR)/.patched
-
-Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
-===================================================================
---- trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2008-12-05 14:46:56 UTC (rev 24283)
-+++ trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2008-12-05 15:27:26 UTC (rev 24284)
-@@ -144,7 +144,7 @@
- $(GCC_DIR)/.unpacked: $(DL_DIR)/$(GCC_SOURCE)
- 	mkdir -p $(TOOL_BUILD_DIR)
- 	$(GCC_CAT) $(DL_DIR)/$(GCC_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS) -
--	$(CONFIG_UPDATE) $(GCC_DIR)
-+	$(CONFIG_UPDATE) $(@D)
- 	touch $@
+ 	config BR2_BINUTILS_VERSION_2_17_50_0_17
+-		depends on !BR2_avr32 && !BR2_nios2 && BR2_DEPRECATED
++		depends on !BR2_avr32 && !BR2_nios2
++		depends on BR2_DEPRECATED
+ 		bool "binutils 2.17.50.0.17"
  
- gcc-patched: $(GCC_DIR)/.patched
-
-Modified: trunk/buildroot/toolchain/gdb/gdb.mk
-===================================================================
---- trunk/buildroot/toolchain/gdb/gdb.mk	2008-12-05 14:46:56 UTC (rev 24283)
-+++ trunk/buildroot/toolchain/gdb/gdb.mk	2008-12-05 15:27:26 UTC (rev 24284)
-@@ -58,7 +58,7 @@
- 	ln -sf $(TOOL_BUILD_DIR)/$(shell tar jtf $(DL_DIR)/$(GDB_SOURCE) | head -1 | cut -d"/" -f1) $(GDB_DIR)
- endif
- 	toolchain/patch-kernel.sh $(GDB_DIR) $(GDB_PATCH_DIR) \*.patch
--	$(CONFIG_UPDATE) $(GDB_DIR)
-+	$(CONFIG_UPDATE) $(@D)
- 	touch $@
+ 	config BR2_BINUTILS_VERSION_2_18
+@@ -23,7 +25,13 @@
  
- gdb-patched: $(GDB_DIR)/.unpacked
+ 	config BR2_BINUTILS_VERSION_2_18_50_0_1
+ 		depends on !BR2_avr32 && !BR2_nios2
++		depends on BR2_DEPRECATED
+ 		bool "binutils 2.18.50.0.1"
++
++	config BR2_BINUTILS_VERSION_2_18_50_0_3
++		depends on !BR2_avr32 && !BR2_nios2
++		depends on BR2_DEPRECATED
++		bool "binutils 2.18.50.0.3"
+ endchoice
+ 
+ config BR2_BINUTILS_VERSION
+@@ -33,6 +41,7 @@
+ 	default "2.17.50.0.17"	if BR2_BINUTILS_VERSION_2_17_50_0_17
+ 	default "2.18"		if BR2_BINUTILS_VERSION_2_18
+ 	default "2.18.50.0.1"	if BR2_BINUTILS_VERSION_2_18_50_0_1
++	default "2.18.50.0.3"	if BR2_BINUTILS_VERSION_2_18_50_0_3
+ 
+ config BR2_EXTRA_BINUTILS_CONFIG_OPTIONS
+ 	string "Additional binutils options"
