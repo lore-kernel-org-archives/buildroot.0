@@ -1,8 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Fri,  5 Dec 2008 07:27:33 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/binutils:
-	2.18.50.0.3
-Message-ID: <20081205152733.7460F3C8BD@busybox.net>
+Date: Fri,  5 Dec 2008 07:27:36 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libiconv
+Message-ID: <20081205152736.4C63E3C8DC@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,152 +9,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-12-05 07:27:33 -0800 (Fri, 05 Dec 2008)
-New Revision: 24285
+Date: 2008-12-05 07:27:35 -0800 (Fri, 05 Dec 2008)
+New Revision: 24286
 
 Log:
-toolchain/binutils: add 2.18.50.0.3
-
-Based on b2b5d9f2 in Bernhard's tree.
-
-Added:
-   trunk/buildroot/toolchain/binutils/2.18.50.0.3/
-   trunk/buildroot/toolchain/binutils/2.18.50.0.3/110-arm-eabi-conf.patch
-   trunk/buildroot/toolchain/binutils/2.18.50.0.3/300-001_ld_makefile_patch.patch
-   trunk/buildroot/toolchain/binutils/2.18.50.0.3/300-012_check_ldrunpath_length.patch
+libiconv: use BR2_GNU_MIRROR
 
 Modified:
-   trunk/buildroot/toolchain/binutils/Config.in
+   trunk/buildroot/package/libiconv/libiconv.mk
 
 
 Changeset:
-Added: trunk/buildroot/toolchain/binutils/2.18.50.0.3/110-arm-eabi-conf.patch
+Modified: trunk/buildroot/package/libiconv/libiconv.mk
 ===================================================================
---- trunk/buildroot/toolchain/binutils/2.18.50.0.3/110-arm-eabi-conf.patch	                        (rev 0)
-+++ trunk/buildroot/toolchain/binutils/2.18.50.0.3/110-arm-eabi-conf.patch	2008-12-05 15:27:33 UTC (rev 24285)
-@@ -0,0 +1,24 @@
-+diff -rdup binutils-2.18.50.0.3.orig/configure binutils-2.18.50.0.3/configure
-+--- binutils-2.18.50.0.3.orig/configure	2007-11-22 12:41:26.000000000 +0100
-++++ binutils-2.18.50.0.3/configure	2007-11-22 12:45:01.000000000 +0100
-+@@ -2245,7 +2245,7 @@ case "${target}" in
-+     noconfigdirs="$noconfigdirs target-libffi target-qthreads"
-+     libgloss_dir=arm
-+     ;;
-+-  arm*-*-linux-gnueabi)
-++  arm*-*-linux-*gnueabi)
-+     noconfigdirs="$noconfigdirs target-qthreads"
-+     noconfigdirs="$noconfigdirs target-libobjc"
-+     case ${with_newlib} in
-+diff -rdup binutils-2.18.50.0.3.orig/configure.ac binutils-2.18.50.0.3/configure.ac
-+--- binutils-2.18.50.0.3.orig/configure.ac	2007-11-22 12:41:26.000000000 +0100
-++++ binutils-2.18.50.0.3/configure.ac	2007-11-22 12:44:54.000000000 +0100
-+@@ -522,7 +522,7 @@ case "${target}" in
-+     noconfigdirs="$noconfigdirs target-libffi target-qthreads"
-+     libgloss_dir=arm
-+     ;;
-+-  arm*-*-linux-gnueabi)
-++  arm*-*-linux-*gnueabi)
-+     noconfigdirs="$noconfigdirs target-qthreads"
-+     noconfigdirs="$noconfigdirs target-libobjc"
-+     case ${with_newlib} in
-
-Added: trunk/buildroot/toolchain/binutils/2.18.50.0.3/300-001_ld_makefile_patch.patch
-===================================================================
---- trunk/buildroot/toolchain/binutils/2.18.50.0.3/300-001_ld_makefile_patch.patch	                        (rev 0)
-+++ trunk/buildroot/toolchain/binutils/2.18.50.0.3/300-001_ld_makefile_patch.patch	2008-12-05 15:27:33 UTC (rev 24285)
-@@ -0,0 +1,24 @@
-+diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.am binutils-2.17.50.0.17/ld/Makefile.am
-+--- binutils-2.17.50.0.17.oorig/ld/Makefile.am	2007-06-18 19:29:29.000000000 +0200
-++++ binutils-2.17.50.0.17/ld/Makefile.am	2007-06-25 10:00:36.000000000 +0200
-+@@ -18,7 +18,7 @@
-+ # We put the scripts in the directory $(scriptdir)/ldscripts.
-+ # We can't put the scripts in $(datadir) because the SEARCH_DIR
-+ # directives need to be different for native and cross linkers.
-+-scriptdir = $(tooldir)/lib
-++scriptdir = $(libdir)
-+ 
-+ EMUL = @EMUL@
-+ EMULATION_OFILES = @EMULATION_OFILES@
-+diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.in binutils-2.17.50.0.17/ld/Makefile.in
-+--- binutils-2.17.50.0.17.oorig/ld/Makefile.in	2007-06-18 19:29:29.000000000 +0200
-++++ binutils-2.17.50.0.17/ld/Makefile.in	2007-06-25 10:00:36.000000000 +0200
-+@@ -287,7 +287,7 @@
-+ # We put the scripts in the directory $(scriptdir)/ldscripts.
-+ # We can't put the scripts in $(datadir) because the SEARCH_DIR
-+ # directives need to be different for native and cross linkers.
-+-scriptdir = $(tooldir)/lib
-++scriptdir = $(libdir)
-+ BASEDIR = $(srcdir)/..
-+ BFDDIR = $(BASEDIR)/bfd
-+ INCDIR = $(BASEDIR)/include
-
-Added: trunk/buildroot/toolchain/binutils/2.18.50.0.3/300-012_check_ldrunpath_length.patch
-===================================================================
---- trunk/buildroot/toolchain/binutils/2.18.50.0.3/300-012_check_ldrunpath_length.patch	                        (rev 0)
-+++ trunk/buildroot/toolchain/binutils/2.18.50.0.3/300-012_check_ldrunpath_length.patch	2008-12-05 15:27:33 UTC (rev 24285)
-@@ -0,0 +1,21 @@
-+diff -u binutils-2.17.50.0.17.oorig/ld/emultempl/elf32.em binutils-2.17.50.0.17/ld/emultempl/elf32.em
-+--- binutils-2.17.50.0.17.oorig/ld/emultempl/elf32.em	2007-06-18 19:31:40.000000000 +0200
-++++ binutils-2.17.50.0.17/ld/emultempl/elf32.em	2007-06-25 10:01:25.000000000 +0200
-+@@ -1007,6 +1007,8 @@
-+ 	      && command_line.rpath == NULL)
-+ 	    {
-+ 	      lib_path = (const char *) getenv ("LD_RUN_PATH");
-++	      if ((lib_path) && (strlen (lib_path) == 0))
-++		  lib_path = NULL;
-+ 	      if (gld${EMULATION_NAME}_search_needed (lib_path, &n,
-+ 						      force))
-+ 		break;
-+@@ -1191,6 +1193,8 @@
-+   rpath = command_line.rpath;
-+   if (rpath == NULL)
-+     rpath = (const char *) getenv ("LD_RUN_PATH");
-++  if ((rpath) && (strlen (rpath) == 0))
-++      rpath = NULL;
-+   if (! (bfd_elf_size_dynamic_sections
-+ 	 (output_bfd, command_line.soname, rpath,
-+ 	  command_line.filter_shlib,
-
-Modified: trunk/buildroot/toolchain/binutils/Config.in
-===================================================================
---- trunk/buildroot/toolchain/binutils/Config.in	2008-12-05 15:27:26 UTC (rev 24284)
-+++ trunk/buildroot/toolchain/binutils/Config.in	2008-12-05 15:27:33 UTC (rev 24285)
-@@ -9,12 +9,14 @@
- 	  Select the version of binutils you wish to use.
- 
- 	config BR2_BINUTILS_VERSION_2_17
--		depends on BR2_avr32 || !BR2_nios2 && BR2_DEPRECATED
-+		depends on BR2_avr32 || !BR2_nios2
-+		depends on BR2_DEPRECATED
- 		depends on BR2_EXT_BINUTILS_VERSION_2_17
- 		bool "binutils 2.17"
- 
- 	config BR2_BINUTILS_VERSION_2_17_50_0_17
--		depends on !BR2_avr32 && !BR2_nios2 && BR2_DEPRECATED
-+		depends on !BR2_avr32 && !BR2_nios2
-+		depends on BR2_DEPRECATED
- 		bool "binutils 2.17.50.0.17"
- 
- 	config BR2_BINUTILS_VERSION_2_18
-@@ -23,7 +25,13 @@
- 
- 	config BR2_BINUTILS_VERSION_2_18_50_0_1
- 		depends on !BR2_avr32 && !BR2_nios2
-+		depends on BR2_DEPRECATED
- 		bool "binutils 2.18.50.0.1"
-+
-+	config BR2_BINUTILS_VERSION_2_18_50_0_3
-+		depends on !BR2_avr32 && !BR2_nios2
-+		depends on BR2_DEPRECATED
-+		bool "binutils 2.18.50.0.3"
- endchoice
- 
- config BR2_BINUTILS_VERSION
-@@ -33,6 +41,7 @@
- 	default "2.17.50.0.17"	if BR2_BINUTILS_VERSION_2_17_50_0_17
- 	default "2.18"		if BR2_BINUTILS_VERSION_2_18
- 	default "2.18.50.0.1"	if BR2_BINUTILS_VERSION_2_18_50_0_1
-+	default "2.18.50.0.3"	if BR2_BINUTILS_VERSION_2_18_50_0_3
- 
- config BR2_EXTRA_BINUTILS_CONFIG_OPTIONS
- 	string "Additional binutils options"
+--- trunk/buildroot/package/libiconv/libiconv.mk	2008-12-05 15:27:33 UTC (rev 24285)
++++ trunk/buildroot/package/libiconv/libiconv.mk	2008-12-05 15:27:35 UTC (rev 24286)
+@@ -5,7 +5,7 @@
+ #############################################################
+ LIBICONV_VERSION = 1.12
+ LIBICONV_SOURCE = libiconv-$(LIBICONV_VERSION).tar.gz
+-LIBICONV_SITE = http://ftp.gnu.org/pub/gnu/libiconv
++LIBICONV_SITE = $(BR2_GNU_MIRROR)/libiconv
+ LIBICONV_AUTORECONF = NO
+ LIBICONV_INSTALL_STAGING = YES
+ LIBICONV_INSTALL_TARGET = YES
