@@ -1,8 +1,8 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Fri,  5 Dec 2008 07:27:45 -0800 (PST)
+Date: Fri,  5 Dec 2008 07:27:49 -0800 (PST)
 Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/binutils:
-	2.18.50.0.6
-Message-ID: <20081205152745.B455F3C8FE@busybox.net>
+	2.18.50.0.8
+Message-ID: <20081205152750.098B73C8F5@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,29 +10,29 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-12-05 07:27:45 -0800 (Fri, 05 Dec 2008)
-New Revision: 24289
+Date: 2008-12-05 07:27:48 -0800 (Fri, 05 Dec 2008)
+New Revision: 24290
 
 Log:
-toolchain/binutils: add 2.18.50.0.6
+toolchain/binutils: add 2.18.50.0.8
 
-Based on 45b89c54 / beede0ba in Bernhard's tree.
+Based on 1c493ff1 in Bernhard's tree.
 
 Added:
-   trunk/buildroot/toolchain/binutils/2.18.50.0.6/
-   trunk/buildroot/toolchain/binutils/2.18.50.0.6/110-arm-eabi-conf.patch
-   trunk/buildroot/toolchain/binutils/2.18.50.0.6/300-001_ld_makefile_patch.patch
-   trunk/buildroot/toolchain/binutils/2.18.50.0.6/300-012_check_ldrunpath_length.patch
+   trunk/buildroot/toolchain/binutils/2.18.50.0.8/
+   trunk/buildroot/toolchain/binutils/2.18.50.0.8/110-arm-eabi-conf.patch
+   trunk/buildroot/toolchain/binutils/2.18.50.0.8/300-001_ld_makefile_patch.patch
+   trunk/buildroot/toolchain/binutils/2.18.50.0.8/300-012_check_ldrunpath_length.patch
 
 Modified:
    trunk/buildroot/toolchain/binutils/Config.in
 
 
 Changeset:
-Added: trunk/buildroot/toolchain/binutils/2.18.50.0.6/110-arm-eabi-conf.patch
+Added: trunk/buildroot/toolchain/binutils/2.18.50.0.8/110-arm-eabi-conf.patch
 ===================================================================
---- trunk/buildroot/toolchain/binutils/2.18.50.0.6/110-arm-eabi-conf.patch	                        (rev 0)
-+++ trunk/buildroot/toolchain/binutils/2.18.50.0.6/110-arm-eabi-conf.patch	2008-12-05 15:27:45 UTC (rev 24289)
+--- trunk/buildroot/toolchain/binutils/2.18.50.0.8/110-arm-eabi-conf.patch	                        (rev 0)
++++ trunk/buildroot/toolchain/binutils/2.18.50.0.8/110-arm-eabi-conf.patch	2008-12-05 15:27:48 UTC (rev 24290)
 @@ -0,0 +1,24 @@
 +diff -rdup binutils-2.18.50.0.3.orig/configure binutils-2.18.50.0.3/configure
 +--- binutils-2.18.50.0.3.orig/configure	2007-11-22 12:41:26.000000000 +0100
@@ -59,10 +59,10 @@ Added: trunk/buildroot/toolchain/binutils/2.18.50.0.6/110-arm-eabi-conf.patch
 +     noconfigdirs="$noconfigdirs target-libobjc"
 +     case ${with_newlib} in
 
-Added: trunk/buildroot/toolchain/binutils/2.18.50.0.6/300-001_ld_makefile_patch.patch
+Added: trunk/buildroot/toolchain/binutils/2.18.50.0.8/300-001_ld_makefile_patch.patch
 ===================================================================
---- trunk/buildroot/toolchain/binutils/2.18.50.0.6/300-001_ld_makefile_patch.patch	                        (rev 0)
-+++ trunk/buildroot/toolchain/binutils/2.18.50.0.6/300-001_ld_makefile_patch.patch	2008-12-05 15:27:45 UTC (rev 24289)
+--- trunk/buildroot/toolchain/binutils/2.18.50.0.8/300-001_ld_makefile_patch.patch	                        (rev 0)
++++ trunk/buildroot/toolchain/binutils/2.18.50.0.8/300-001_ld_makefile_patch.patch	2008-12-05 15:27:48 UTC (rev 24290)
 @@ -0,0 +1,24 @@
 +diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.am binutils-2.17.50.0.17/ld/Makefile.am
 +--- binutils-2.17.50.0.17.oorig/ld/Makefile.am	2007-06-18 19:29:29.000000000 +0200
@@ -89,10 +89,10 @@ Added: trunk/buildroot/toolchain/binutils/2.18.50.0.6/300-001_ld_makefile_patch.
 + BFDDIR = $(BASEDIR)/bfd
 + INCDIR = $(BASEDIR)/include
 
-Added: trunk/buildroot/toolchain/binutils/2.18.50.0.6/300-012_check_ldrunpath_length.patch
+Added: trunk/buildroot/toolchain/binutils/2.18.50.0.8/300-012_check_ldrunpath_length.patch
 ===================================================================
---- trunk/buildroot/toolchain/binutils/2.18.50.0.6/300-012_check_ldrunpath_length.patch	                        (rev 0)
-+++ trunk/buildroot/toolchain/binutils/2.18.50.0.6/300-012_check_ldrunpath_length.patch	2008-12-05 15:27:45 UTC (rev 24289)
+--- trunk/buildroot/toolchain/binutils/2.18.50.0.8/300-012_check_ldrunpath_length.patch	                        (rev 0)
++++ trunk/buildroot/toolchain/binutils/2.18.50.0.8/300-012_check_ldrunpath_length.patch	2008-12-05 15:27:48 UTC (rev 24290)
 @@ -0,0 +1,21 @@
 +diff -u binutils-2.17.50.0.17.oorig/ld/emultempl/elf32.em binutils-2.17.50.0.17/ld/emultempl/elf32.em
 +--- binutils-2.17.50.0.17.oorig/ld/emultempl/elf32.em	2007-06-18 19:31:40.000000000 +0200
@@ -118,24 +118,26 @@ Added: trunk/buildroot/toolchain/binutils/2.18.50.0.6/300-012_check_ldrunpath_le
 
 Modified: trunk/buildroot/toolchain/binutils/Config.in
 ===================================================================
---- trunk/buildroot/toolchain/binutils/Config.in	2008-12-05 15:27:42 UTC (rev 24288)
-+++ trunk/buildroot/toolchain/binutils/Config.in	2008-12-05 15:27:45 UTC (rev 24289)
-@@ -32,6 +32,10 @@
+--- trunk/buildroot/toolchain/binutils/Config.in	2008-12-05 15:27:45 UTC (rev 24289)
++++ trunk/buildroot/toolchain/binutils/Config.in	2008-12-05 15:27:48 UTC (rev 24290)
+@@ -35,7 +35,12 @@
+ 
+ 	config BR2_BINUTILS_VERSION_2_18_50_0_6
  		depends on !BR2_avr32 && !BR2_nios2
- 		depends on BR2_DEPRECATED
- 		bool "binutils 2.18.50.0.3"
++		depends on BR2_DEPRECATED
+ 		bool "binutils 2.18.50.0.6"
 +
-+	config BR2_BINUTILS_VERSION_2_18_50_0_6
++	config BR2_BINUTILS_VERSION_2_18_50_0_8
 +		depends on !BR2_avr32 && !BR2_nios2
-+		bool "binutils 2.18.50.0.6"
++		bool "binutils 2.18.50.0.8"
  endchoice
  
  config BR2_BINUTILS_VERSION
-@@ -42,6 +46,7 @@
- 	default "2.18"		if BR2_BINUTILS_VERSION_2_18
+@@ -47,6 +52,7 @@
  	default "2.18.50.0.1"	if BR2_BINUTILS_VERSION_2_18_50_0_1
  	default "2.18.50.0.3"	if BR2_BINUTILS_VERSION_2_18_50_0_3
-+	default "2.18.50.0.6"	if BR2_BINUTILS_VERSION_2_18_50_0_6
+ 	default "2.18.50.0.6"	if BR2_BINUTILS_VERSION_2_18_50_0_6
++	default "2.18.50.0.8"	if BR2_BINUTILS_VERSION_2_18_50_0_8
  
  config BR2_EXTRA_BINUTILS_CONFIG_OPTIONS
  	string "Additional binutils options"
