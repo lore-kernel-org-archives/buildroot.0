@@ -1,8 +1,8 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Fri,  5 Dec 2008 07:27:56 -0800 (PST)
+Date: Fri,  5 Dec 2008 07:27:58 -0800 (PST)
 Subject: [Buildroot] svn commit:
 	trunk/buildroot/toolchain/binutils/2.18.50.0.9
-Message-ID: <20081205152756.582FD3C2BA@busybox.net>
+Message-ID: <20081205152758.D1AB43C2C0@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,89 +10,63 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-12-05 07:27:55 -0800 (Fri, 05 Dec 2008)
-New Revision: 24292
+Date: 2008-12-05 07:27:58 -0800 (Fri, 05 Dec 2008)
+New Revision: 24293
 
 Log:
-toolchain/binutils/2.18.50.0.9: add patch for PR6878
+toolchain/binutils/2.18.50.0.9: accept sh?-*-*
 
-Based on b5451979 in Bernhard's tree.
+Based on 3ed6c5b5 in Bernhard's tree.
 
 Added:
-   trunk/buildroot/toolchain/binutils/2.18.50.0.9/PR6878.01.patch
+   trunk/buildroot/toolchain/binutils/2.18.50.0.9/120-sh-conf.patch
 
 
 Changeset:
-Added: trunk/buildroot/toolchain/binutils/2.18.50.0.9/PR6878.01.patch
+Added: trunk/buildroot/toolchain/binutils/2.18.50.0.9/120-sh-conf.patch
 ===================================================================
---- trunk/buildroot/toolchain/binutils/2.18.50.0.9/PR6878.01.patch	                        (rev 0)
-+++ trunk/buildroot/toolchain/binutils/2.18.50.0.9/PR6878.01.patch	2008-12-05 15:27:55 UTC (rev 24292)
-@@ -0,0 +1,68 @@
-+Index: a/gas/app.c
-+===================================================================
-+RCS file: /cvs/src/src/gas/app.c,v
-+retrieving revision 1.47
-+diff -c -3 -p -r1.47 app.c
-+*** a/gas/app.c	18 Jul 2008 22:25:07 -0000	1.47
-+--- b/gas/app.c	18 Sep 2008 07:50:44 -0000
-+*************** do_scrub_chars (int (*get) (char *, int)
-+*** 1024,1030 ****
-+  
-+  #ifndef IEEE_STYLE
-+  	case LEX_IS_ONECHAR_QUOTE:
-+! 	  if (state == 9)
-+  	    {
-+  	      char c;
-+  
-+--- 1024,1031 ----
-+  
-+  #ifndef IEEE_STYLE
-+  	case LEX_IS_ONECHAR_QUOTE:
-+! #ifdef H_TICK_HEX
-+! 	  if (state == 9 && enable_h_tick_hex)
-+  	    {
-+  	      char c;
-+  
-+*************** do_scrub_chars (int (*get) (char *, int)
-+*** 1032,1037 ****
-+--- 1033,1039 ----
-+  	      as_warn ("'%c found after symbol", c);
-+  	      UNGET (c);
-+  	    }
-++ #endif
-+  	  if (state == 10)
-+  	    {
-+  	      /* Preserve the whitespace in foo 'b'.  */
-+Index: gas/messages.c
-+===================================================================
-+RCS file: /cvs/src/src/gas/messages.c,v
-+retrieving revision 1.21
-+diff -c -3 -p -r1.21 messages.c
-+*** a/gas/messages.c	30 Jul 2008 04:34:57 -0000	1.21
-+--- b/gas/messages.c	18 Sep 2008 07:50:44 -0000
-+*************** as_warn_internal (char *file, unsigned i
-+*** 162,171 ****
-+  
-+    identify (file);
-+    if (file)
-+!     fprintf (stderr, "%s:%u: ", file, line);
-+!   fprintf (stderr, _("Warning: "));
-+!   fputs (buffer, stderr);
-+!   (void) putc ('\n', stderr);
-+  #ifndef NO_LISTING
-+    listing_warning (buffer);
-+  #endif
-+--- 162,174 ----
-+  
-+    identify (file);
-+    if (file)
-+!     {
-+!       fprintf (stderr, "%s:", file);
-+!       if (line)
-+! 	fprintf (stderr, "%u:", line);
-+!       fputc (' ', stderr);
-+!     }
-+!   fprintf (stderr, _("Warning: %s\n"), buffer);
-+  #ifndef NO_LISTING
-+    listing_warning (buffer);
-+  #endif
+--- trunk/buildroot/toolchain/binutils/2.18.50.0.9/120-sh-conf.patch	                        (rev 0)
++++ trunk/buildroot/toolchain/binutils/2.18.50.0.9/120-sh-conf.patch	2008-12-05 15:27:58 UTC (rev 24293)
+@@ -0,0 +1,42 @@
++diff -rdup binutils-2.18.50.0.9.old/configure binutils-2.18.50.0.9/configure
++--- binutils-2.18.50.0.9.old/configure	2008-08-23 17:36:13.000000000 +0200
+++++ binutils-2.18.50.0.9/configure	2008-10-14 14:25:22.000000000 +0200
++@@ -2281,7 +2281,7 @@ case "${target}" in
++   am33_2.0-*-linux*)
++     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
++     ;;
++-  sh-*-linux*)
+++  sh*-*-linux*)
++     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
++     ;;
++   sh*-*-pe|mips*-*-pe|*arm-wince-pe)
++@@ -2606,7 +2606,7 @@ case "${target}" in
++   romp-*-*)
++     noconfigdirs="$noconfigdirs bfd binutils ld gas opcodes target-libgloss ${libgcj}"
++     ;;
++-  sh-*-* | sh64-*-*)
+++  sh*-*-* | sh64-*-*)
++     case "${host}" in
++       i[3456789]86-*-vsta) ;; # don't add gprof back in
++       i[3456789]86-*-go32*) ;; # don't add gprof back in
++diff -rdup binutils-2.18.50.0.9.old/configure.ac binutils-2.18.50.0.9/configure.ac
++--- binutils-2.18.50.0.9.old/configure.ac	2008-08-23 17:36:13.000000000 +0200
+++++ binutils-2.18.50.0.9/configure.ac	2008-10-14 14:25:11.000000000 +0200
++@@ -530,7 +530,7 @@ case "${target}" in
++   am33_2.0-*-linux*)
++     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
++     ;;
++-  sh-*-linux*)
+++  sh*-*-linux*)
++     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
++     ;;    
++   sh*-*-pe|mips*-*-pe|*arm-wince-pe)
++@@ -855,7 +855,7 @@ case "${target}" in
++   romp-*-*)
++     noconfigdirs="$noconfigdirs bfd binutils ld gas opcodes target-libgloss ${libgcj}"
++     ;;
++-  sh-*-* | sh64-*-*)
+++  sh*-*-* | sh64-*-*)
++     case "${host}" in
++       i[[3456789]]86-*-vsta) ;; # don't add gprof back in
++       i[[3456789]]86-*-go32*) ;; # don't add gprof back in
