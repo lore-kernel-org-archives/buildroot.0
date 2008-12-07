@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Sun,  7 Dec 2008 13:22:45 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gdb
-Message-ID: <20081207212245.F331C3C670@busybox.net>
+Date: Sun,  7 Dec 2008 13:22:49 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
+Message-ID: <20081207212249.4038D3C6ED@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,26 +9,39 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-12-07 13:22:45 -0800 (Sun, 07 Dec 2008)
-New Revision: 24301
+Date: 2008-12-07 13:22:48 -0800 (Sun, 07 Dec 2008)
+New Revision: 24302
 
 Log:
-toolchain/gdb: add -source target
+busybox: 1.13.1 crond fix
 
-Modified:
-   trunk/buildroot/toolchain/gdb/gdb.mk
+Added:
+   trunk/buildroot/package/busybox/busybox-1.13.1-crond.patch
 
 
 Changeset:
-Modified: trunk/buildroot/toolchain/gdb/gdb.mk
+Added: trunk/buildroot/package/busybox/busybox-1.13.1-crond.patch
 ===================================================================
---- trunk/buildroot/toolchain/gdb/gdb.mk	2008-12-07 06:55:36 UTC (rev 24300)
-+++ trunk/buildroot/toolchain/gdb/gdb.mk	2008-12-07 21:22:45 UTC (rev 24301)
-@@ -63,6 +63,7 @@
- 
- gdb-patched: $(GDB_DIR)/.unpacked
- 
-+gdb-source: $(DL_DIR)/$(GDB_SOURCE)
- gdb-dirclean:
- 	rm -rf $(GDB_DIR)
- 
+--- trunk/buildroot/package/busybox/busybox-1.13.1-crond.patch	                        (rev 0)
++++ trunk/buildroot/package/busybox/busybox-1.13.1-crond.patch	2008-12-07 21:22:48 UTC (rev 24302)
+@@ -0,0 +1,20 @@
++--- busybox-1.13.1/miscutils/crond.c	Sun Nov  9 18:28:17 2008
+++++ busybox-1.13.1-crond/miscutils/crond.c	Thu Dec  4 14:56:10 2008
++@@ -779,6 +779,8 @@
++ 			xmove_fd(mailFd, mail_filename ? 1 : 0);
++ 			dup2(1, 2);
++ 		}
+++		/* crond 3.0pl1-100 puts tasks in separate process groups */
+++		bb_setpgrp();
++ 		execlp(prog, prog, cmd, arg, NULL);
++ 		crondlog(ERR20 "can't exec, user %s cmd %s %s %s", user, prog, cmd, arg);
++ 		if (mail_filename) {
++@@ -914,6 +916,8 @@
++ 		if (DebugOpt) {
++ 			crondlog(LVL5 "child running %s", DEFAULT_SHELL);
++ 		}
+++		/* crond 3.0pl1-100 puts tasks in separate process groups */
+++		bb_setpgrp();
++ 		execl(DEFAULT_SHELL, DEFAULT_SHELL, "-c", line->cl_Shell, NULL);
++ 		crondlog(ERR20 "can't exec, user %s cmd %s %s %s", user,
++ 				 DEFAULT_SHELL, "-c", line->cl_Shell);
