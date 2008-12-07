@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Sun,  7 Dec 2008 13:22:49 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
-Message-ID: <20081207212249.4038D3C6ED@busybox.net>
+Date: Sun,  7 Dec 2008 13:22:51 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
+Message-ID: <20081207212251.ECE643C6F8@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,39 +9,30 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-12-07 13:22:48 -0800 (Sun, 07 Dec 2008)
-New Revision: 24302
+Date: 2008-12-07 13:22:51 -0800 (Sun, 07 Dec 2008)
+New Revision: 24303
 
 Log:
-busybox: 1.13.1 crond fix
+uclibc: add RPC config variables to 0.9.30
 
-Added:
-   trunk/buildroot/package/busybox/busybox-1.13.1-crond.patch
+Add UCLIBC_HAS_{FULL,REENTRANT}_RPC config variables to the defconfig, so
+the sed invocation in uclibc.mk can set them to the proper values.
+
+Modified:
+   trunk/buildroot/toolchain/uClibc/uClibc-0.9.30.config
 
 
 Changeset:
-Added: trunk/buildroot/package/busybox/busybox-1.13.1-crond.patch
+Modified: trunk/buildroot/toolchain/uClibc/uClibc-0.9.30.config
 ===================================================================
---- trunk/buildroot/package/busybox/busybox-1.13.1-crond.patch	                        (rev 0)
-+++ trunk/buildroot/package/busybox/busybox-1.13.1-crond.patch	2008-12-07 21:22:48 UTC (rev 24302)
-@@ -0,0 +1,20 @@
-+--- busybox-1.13.1/miscutils/crond.c	Sun Nov  9 18:28:17 2008
-++++ busybox-1.13.1-crond/miscutils/crond.c	Thu Dec  4 14:56:10 2008
-+@@ -779,6 +779,8 @@
-+ 			xmove_fd(mailFd, mail_filename ? 1 : 0);
-+ 			dup2(1, 2);
-+ 		}
-++		/* crond 3.0pl1-100 puts tasks in separate process groups */
-++		bb_setpgrp();
-+ 		execlp(prog, prog, cmd, arg, NULL);
-+ 		crondlog(ERR20 "can't exec, user %s cmd %s %s %s", user, prog, cmd, arg);
-+ 		if (mail_filename) {
-+@@ -914,6 +916,8 @@
-+ 		if (DebugOpt) {
-+ 			crondlog(LVL5 "child running %s", DEFAULT_SHELL);
-+ 		}
-++		/* crond 3.0pl1-100 puts tasks in separate process groups */
-++		bb_setpgrp();
-+ 		execl(DEFAULT_SHELL, DEFAULT_SHELL, "-c", line->cl_Shell, NULL);
-+ 		crondlog(ERR20 "can't exec, user %s cmd %s %s %s", user,
-+ 				 DEFAULT_SHELL, "-c", line->cl_Shell);
+--- trunk/buildroot/toolchain/uClibc/uClibc-0.9.30.config	2008-12-07 21:22:48 UTC (rev 24302)
++++ trunk/buildroot/toolchain/uClibc/uClibc-0.9.30.config	2008-12-07 21:22:51 UTC (rev 24303)
+@@ -125,6 +125,8 @@
+ UCLIBC_HAS_IPV4=y
+ # UCLIBC_HAS_IPV6 is not set
+ # UCLIBC_HAS_RPC is not set
++# UCLIBC_HAS_FULL_RPC is not set
++# UCLIBC_HAS_REENTRANT_RPC is not set
+ UCLIBC_USE_NETLINK=y
+ UCLIBC_SUPPORT_AI_ADDRCONFIG=y
+ # UCLIBC_HAS_BSD_RES_CLOSE is not set
