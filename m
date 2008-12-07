@@ -1,23 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 07 Dec 2008 07:56:12 +0100
-Subject: [Buildroot] disabling loadable module support
-In-Reply-To: <120520081557.4462.49394F5F000C7AFD0000116E22134843730401010C0A00009A9C@comcast.net>
-	(suffecool@comcast.net's message of "Fri\,
-	05 Dec 2008 15\:57\:19 +0000")
-References: <120520081557.4462.49394F5F000C7AFD0000116E22134843730401010C0A00009A9C@comcast.net>
-Message-ID: <87ej0k5v8z.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Sun,  7 Dec 2008 13:22:45 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gdb
+Message-ID: <20081207212245.F331C3C670@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "suffecool" == suffecool  <suffecool@comcast.net> writes:
+Author: jacmet
+Date: 2008-12-07 13:22:45 -0800 (Sun, 07 Dec 2008)
+New Revision: 24301
 
- suffecool> Hello all, Today I tried to see the impact on kernel size
- suffecool> by turning OFF loadable module support.  I typed:
+Log:
+toolchain/gdb: add -source target
 
-Fixed in r24300.
+Modified:
+   trunk/buildroot/toolchain/gdb/gdb.mk
 
--- 
-Bye, Peter Korsgaard
+
+Changeset:
+Modified: trunk/buildroot/toolchain/gdb/gdb.mk
+===================================================================
+--- trunk/buildroot/toolchain/gdb/gdb.mk	2008-12-07 06:55:36 UTC (rev 24300)
++++ trunk/buildroot/toolchain/gdb/gdb.mk	2008-12-07 21:22:45 UTC (rev 24301)
+@@ -63,6 +63,7 @@
+ 
+ gdb-patched: $(GDB_DIR)/.unpacked
+ 
++gdb-source: $(DL_DIR)/$(GDB_SOURCE)
+ gdb-dirclean:
+ 	rm -rf $(GDB_DIR)
+ 
