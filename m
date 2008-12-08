@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon,  8 Dec 2008 00:54:14 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gdb
-Message-ID: <20081208085414.3FAC73C6C6@busybox.net>
+Date: Mon,  8 Dec 2008 01:06:59 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/target: tar ubifs
+Message-ID: <20081208090659.5760E3C6C6@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,27 +9,44 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-12-08 00:54:14 -0800 (Mon, 08 Dec 2008)
-New Revision: 24313
+Date: 2008-12-08 01:06:59 -0800 (Mon, 08 Dec 2008)
+New Revision: 24314
 
 Log:
-toolchain/gdb: 6.4 shouldn't be selectable for avr32
+target: paths may need stripping
+
+r24310 removed a few too many strips.
 
 Modified:
-   trunk/buildroot/toolchain/gdb/Config.in
+   trunk/buildroot/target/tar/tarroot.mk
+   trunk/buildroot/target/ubifs/ubifsroot.mk
 
 
 Changeset:
-Modified: trunk/buildroot/toolchain/gdb/Config.in
+Modified: trunk/buildroot/target/tar/tarroot.mk
 ===================================================================
---- trunk/buildroot/toolchain/gdb/Config.in	2008-12-08 08:46:52 UTC (rev 24312)
-+++ trunk/buildroot/toolchain/gdb/Config.in	2008-12-08 08:54:14 UTC (rev 24313)
-@@ -37,7 +37,7 @@
+--- trunk/buildroot/target/tar/tarroot.mk	2008-12-08 08:54:14 UTC (rev 24313)
++++ trunk/buildroot/target/tar/tarroot.mk	2008-12-08 09:06:59 UTC (rev 24314)
+@@ -21,7 +21,7 @@
+ TAR_COMPRESSOR:=lzma -9 -c
+ TAR_COMPRESSOR_EXT:=lzma
+ endif
+-ROOTFS_TAR_COPYTO:=$(subst ",,$(BR2_TARGET_ROOTFS_TAR_COPYTO))
++ROOTFS_TAR_COPYTO:=$(strip $(subst ",,$(BR2_TARGET_ROOTFS_TAR_COPYTO)))
+ # "))
  
- 	config BR2_GDB_VERSION_6_4
- 		bool "gdb 6.4"
--		depends on !BR2_nios2
-+		depends on !BR2_avr32 && !BR2_nios2
- 		depends on BR2_DEPRECATED
+ tarroot: host-fakeroot makedevs
+
+Modified: trunk/buildroot/target/ubifs/ubifsroot.mk
+===================================================================
+--- trunk/buildroot/target/ubifs/ubifsroot.mk	2008-12-08 08:54:14 UTC (rev 24313)
++++ trunk/buildroot/target/ubifs/ubifsroot.mk	2008-12-08 09:06:59 UTC (rev 24314)
+@@ -113,7 +113,7 @@
+ 	$(UBIFS_ROOTFS_COMPRESSOR) $(UBIFS_BASE) > $(UBIFS_TARGET)
+ endif
  
- 	config BR2_GDB_VERSION_6_5
+-UBIFS_COPYTO := $(subst ",,$(BR2_TARGET_ROOTFS_UBIFS_COPYTO))
++UBIFS_COPYTO := $(strip $(subst ",,$(BR2_TARGET_ROOTFS_UBIFS_COPYTO)))
+ # "))
+ 
+ ubifsroot: $(UBIFS_TARGET)
