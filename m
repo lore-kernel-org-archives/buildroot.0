@@ -1,27 +1,38 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Mon, 8 Dec 2008 10:53:59 +1100
-Subject: [Buildroot] Zipit buildroot?
-In-Reply-To: <493C4057.70702@popdial.com>
-References: <493C4057.70702@popdial.com>
-Message-ID: <20081207235359.GA22967@cloud.net.au>
+From: Jeremy Kerr <jk@ozlabs.org>
+Date: Mon, 08 Dec 2008 14:58:17 +1100
+Subject: [Buildroot] [PATCH 3/4] target/initramfs: actually build initramfs
+	target
+In-Reply-To: <1228708697.392615.378550596058.1.gpush@pingu>
+Message-ID: <1228708697.394335.203742513427.3.gpush@pingu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Dec 07, 2008 at 01:29:59PM -0800, William Estrada wrote:
-> Hi group,
-> 
->  Where can I find a current "How to" for buildroot for a Zipit Z2?
+Currently, BR2_TARGET_ROOTFS_INITRAMFS doesn't actually do anything,
+as it doesn't alter $(TARGETS)
 
-Not from us, perhaps from the vendor?
+This change hooks up the TARGETS variable to INITRAMFS_TARGET (which
+is only set if BR2_TARGET_ROOTFS_INITRAMFS=y), so that the initramfs
+list is built.
 
->   I got  "buildroot-zipit-1.2.tar.bz2" but it fails with:
+Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
 
-Where did you get it?
+---
+ target/initramfs/initramfs.mk |    2 ++
+ 1 file changed, 2 insertions(+)
 
-
-Hamish
--- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+diff --git a/target/initramfs/initramfs.mk b/target/initramfs/initramfs.mk
+index 07f5ec3..015d879 100644
+--- a/target/initramfs/initramfs.mk
++++ b/target/initramfs/initramfs.mk
+@@ -12,6 +12,8 @@ else
+ INITRAMFS_TARGET:= #nothing
+ endif
+ 
++TARGETS+=$(INITRAMFS_TARGET)
++
+ $(INITRAMFS_TARGET) initramfs: host-fakeroot makedevs
+ 	rm -f $(TARGET_DIR)/init
+ 	ln -s sbin/init $(TARGET_DIR)/init
