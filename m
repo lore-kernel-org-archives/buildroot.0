@@ -1,109 +1,34 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon,  8 Dec 2008 06:52:16 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/generic:
-	target_busybox_skeleton/etc/init.d targe etc...
-Message-ID: <20081208145216.966853C7DF@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 08 Dec 2008 15:53:46 +0100
+Subject: [Buildroot] [PATCH] make the default etc/init.d/S40network
+	compatible with msh
+In-Reply-To: <alpine.LFD.2.00.0812031424090.14328@xanadu.home> (Nicolas
+	Pitre's message of "Wed\, 03 Dec 2008 14\:24\:46 -0500 \(EST\)")
+References: <alpine.LFD.2.00.0812031424090.14328@xanadu.home>
+Message-ID: <874p1ewwed.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-12-08 06:52:16 -0800 (Mon, 08 Dec 2008)
-New Revision: 24325
+>>>>> "Nicolas" == Nicolas Pitre <nico@cam.org> writes:
 
-Log:
-make the default etc/init.d/S40network compatible with msh
+ Nicolas> msh is currently the only good choice for uClinux but it doesn't
+ Nicolas> understands shell functions.  In this case there is nothing to gain
+ Nicolas> by using shell functions anyway.
 
-msh is currently the only good choice for uClinux but it doesn't
-understands shell functions.  In this case there is nothing to gain
-by using shell functions anyway.
+ Nicolas> Signed-off-by: Nicolas Pitre <nico@cam.org>
 
-Signed-off-by: Nicolas Pitre <nico@cam.org>
+A lot of the other startup scripts (dbus, dropbear, hal,
+mdnsresponder, ..) also use functions, but I take it those aren't
+relevant for uclinux?
 
-Modified:
-   trunk/buildroot/target/generic/target_busybox_skeleton/etc/init.d/S40network
-   trunk/buildroot/target/generic/target_skeleton/etc/init.d/S40network
+Anyway, committed as r24325.
 
+It would btw be handy if you could create your patches with one more
+level, so I can apply them with git-am without having to remember to
+add -p 0.
 
-Changeset:
-Modified: trunk/buildroot/target/generic/target_busybox_skeleton/etc/init.d/S40network
-===================================================================
---- trunk/buildroot/target/generic/target_busybox_skeleton/etc/init.d/S40network	2008-12-08 14:41:47 UTC (rev 24324)
-+++ trunk/buildroot/target/generic/target_busybox_skeleton/etc/init.d/S40network	2008-12-08 14:52:16 UTC (rev 24325)
-@@ -3,28 +3,18 @@
- # Start the network....
- #
- 
--start() {
-+case "$1" in
-+  start)
-  	echo "Starting network..."
- 	/sbin/ifup -a
--}	
--stop() {
-+	;;
-+  stop)
- 	echo -n "Stopping network..."
- 	/sbin/ifdown -a
--}
--restart() {
--	stop
--	start
--}	
--
--case "$1" in
--  start)
--  	start
- 	;;
--  stop)
--  	stop
--	;;
-   restart|reload)
--  	restart
-+	"$0" stop
-+	"$0" start
- 	;;
-   *)
- 	echo $"Usage: $0 {start|stop|restart}"
-
-Modified: trunk/buildroot/target/generic/target_skeleton/etc/init.d/S40network
-===================================================================
---- trunk/buildroot/target/generic/target_skeleton/etc/init.d/S40network	2008-12-08 14:41:47 UTC (rev 24324)
-+++ trunk/buildroot/target/generic/target_skeleton/etc/init.d/S40network	2008-12-08 14:52:16 UTC (rev 24325)
-@@ -3,28 +3,18 @@
- # Start the network....
- #
- 
--start() {
-+case "$1" in
-+  start)
-  	echo "Starting network..."
- 	/sbin/ifup -a
--}	
--stop() {
-+	;;
-+  stop)
- 	echo -n "Stopping network..."
- 	/sbin/ifdown -a
--}
--restart() {
--	stop
--	start
--}	
--
--case "$1" in
--  start)
--  	start
- 	;;
--  stop)
--  	stop
--	;;
-   restart|reload)
--  	restart
-+	"$0" stop
-+	"$0" start
- 	;;
-   *)
- 	echo $"Usage: $0 {start|stop|restart}"
+-- 
+Bye, Peter Korsgaard
