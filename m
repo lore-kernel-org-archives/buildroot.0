@@ -1,38 +1,65 @@
 From: Jeremy Kerr <jk@ozlabs.org>
 Date: Mon, 08 Dec 2008 14:58:17 +1100
-Subject: [Buildroot] [PATCH 3/4] target/initramfs: actually build initramfs
-	target
+Subject: [Buildroot] [PATCH 2/4] package/udev: fix CFLAGS for udev extras
 In-Reply-To: <1228708697.392615.378550596058.1.gpush@pingu>
-Message-ID: <1228708697.394335.203742513427.3.gpush@pingu>
+Message-ID: <1228708697.393459.9557548453.2.gpush@pingu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, BR2_TARGET_ROOTFS_INITRAMFS doesn't actually do anything,
-as it doesn't alter $(TARGETS)
+If the udev extras are built without large file support in uClibc,
+I get the following error:
 
-This change hooks up the TARGETS variable to INITRAMFS_TARGET (which
-is only set if BR2_TARGET_ROOTFS_INITRAMFS=y), so that the initramfs
-list is built.
+ build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-gcc -c -g -Wall
+ -pipe -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -Wstrict-prototypes
+ -Wsign-compare -Wshadow -Wchar-subscripts -Wmissing-declarations
+ -Wnested-externs -Wpointer-arith -Wcast-align -Wsign-compare
+ -Wmissing-prototypes -Os ext.c -o ext.o
+ In file included from build_powerpc/staging_dir/usr/include/stdio.h:28,
+ from ext.c:19:
+ build_powerpc/staging_dir/usr/include/features.h:382:4: error:
+ #error It appears you have defined _FILE_OFFSET_BITS=64. Unfortunately,
+ uClibc was built without large file support enabled.
+
+Although the base udev package builds correctly, the extras pacakges
+don't adjust their CFLAGS depending on BR2_LARGEFILE.
+
+This change adds the required CFLAGS modifications to make the
+extras build.
 
 Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
 
 ---
- target/initramfs/initramfs.mk |    2 ++
- 1 file changed, 2 insertions(+)
+ package/udev/udev.mk |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/target/initramfs/initramfs.mk b/target/initramfs/initramfs.mk
-index 07f5ec3..015d879 100644
---- a/target/initramfs/initramfs.mk
-+++ b/target/initramfs/initramfs.mk
-@@ -12,6 +12,8 @@ else
- INITRAMFS_TARGET:= #nothing
- endif
+diff --git a/package/udev/udev.mk b/package/udev/udev.mk
+index 9186853..6005bd1 100644
+--- a/package/udev/udev.mk
++++ b/package/udev/udev.mk
+@@ -81,6 +81,7 @@ ifeq ($(strip $(BR2_PACKAGE_UDEV_VOLUME_ID)),y)
  
-+TARGETS+=$(INITRAMFS_TARGET)
-+
- $(INITRAMFS_TARGET) initramfs: host-fakeroot makedevs
- 	rm -f $(TARGET_DIR)/init
- 	ln -s sbin/init $(TARGET_DIR)/init
+ $(STAGING_DIR)/usr/lib/libvolume_id.so.$(UDEV_VOLUME_ID_VERSION):
+ 	$(MAKE) CROSS_COMPILE=$(TARGET_CROSS) \
++		CFLAGS="$(BR2_UDEV_CFLAGS)" \
+ 		USE_LOG=false USE_SELINUX=false \
+ 		udevdir=$(UDEV_ROOT) EXTRAS="extras/volume_id" -C $(UDEV_DIR)
+ 	$(INSTALL) -m 0644 -D $(UDEV_DIR)/extras/volume_id/lib/libvolume_id.h $(STAGING_DIR)/usr/include/libvolume_id.h
+@@ -125,6 +126,7 @@ ifeq ($(strip $(BR2_PACKAGE_UDEV_SCSI_ID)),y)
+ 
+ $(TARGET_DIR)/lib/udev/scsi_id: $(STAGING_DIR)/usr/lib/libvolume_id.so.$(UDEV_VOLUME_ID_VERSION)
+ 	$(MAKE) CROSS_COMPILE=$(TARGET_CROSS) \
++		CFLAGS="$(BR2_UDEV_CFLAGS)" \
+ 		USE_LOG=false USE_SELINUX=false \
+ 		udevdir=$(UDEV_ROOT) EXTRAS="extras/scsi_id" -C $(UDEV_DIR)
+ 	$(INSTALL) -m 0755 -D $(UDEV_DIR)/extras/scsi_id/scsi_id $(TARGET_DIR)/lib/udev/scsi_id
+@@ -132,6 +134,7 @@ $(TARGET_DIR)/lib/udev/scsi_id: $(STAGING_DIR)/usr/lib/libvolume_id.so.$(UDEV_VO
+ 
+ $(TARGET_DIR)/lib/udev/usb_id: $(STAGING_DIR)/usr/lib/libvolume_id.so.$(UDEV_VOLUME_ID_VERSION)
+ 	$(MAKE) CROSS_COMPILE=$(TARGET_CROSS) \
++		CFLAGS="$(BR2_UDEV_CFLAGS)" \
+ 		USE_LOG=false USE_SELINUX=false \
+ 		udevdir=$(UDEV_ROOT) EXTRAS="extras/usb_id" -C $(UDEV_DIR)
+ 	$(INSTALL) -m 0755 -D $(UDEV_DIR)/extras/usb_id/usb_id $(TARGET_DIR)/lib/udev/usb_id
