@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon,  8 Dec 2008 05:48:37 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/udev
-Message-ID: <20081208134837.984743C7A0@busybox.net>
+Date: Mon,  8 Dec 2008 06:41:48 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/zlib
+Message-ID: <20081208144148.2D52E3C776@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,70 +9,88 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-12-08 05:48:37 -0800 (Mon, 08 Dec 2008)
-New Revision: 24323
+Date: 2008-12-08 06:41:47 -0800 (Mon, 08 Dec 2008)
+New Revision: 24324
 
 Log:
-udev: use $@ instead of hardcoding target name
+have zlib respect BR2_PREFER_STATIC_LIB
+
+The ARM uClinux BFLT format apparently doesn't support shared libs nor
+-fPIC.  So let's distinguish between shared and non shared builds by
+having split rules for libz.a and libz.so based on BR2_PREFER_STATIC_LIB.
+
+Signed-off-by: Nicolas Pitre <nico@cam.org>
 
 Modified:
-   trunk/buildroot/package/udev/udev.mk
+   trunk/buildroot/package/zlib/zlib.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/udev/udev.mk
+Modified: trunk/buildroot/package/zlib/zlib.mk
 ===================================================================
---- trunk/buildroot/package/udev/udev.mk	2008-12-08 13:42:04 UTC (rev 24322)
-+++ trunk/buildroot/package/udev/udev.mk	2008-12-08 13:48:37 UTC (rev 24323)
-@@ -85,23 +85,23 @@
- 		USE_LOG=false USE_SELINUX=false \
- 		udevdir=$(UDEV_ROOT) EXTRAS="extras/volume_id" -C $(UDEV_DIR)
- 	$(INSTALL) -m 0644 -D $(UDEV_DIR)/extras/volume_id/lib/libvolume_id.h $(STAGING_DIR)/usr/include/libvolume_id.h
--	$(INSTALL) -m 0755 -D $(UDEV_DIR)/extras/volume_id/lib/libvolume_id.so.$(UDEV_VOLUME_ID_VERSION) $(STAGING_DIR)/usr/lib/libvolume_id.so.$(UDEV_VOLUME_ID_VERSION)
-+	$(INSTALL) -m 0755 -D $(UDEV_DIR)/extras/volume_id/lib/libvolume_id.so.$(UDEV_VOLUME_ID_VERSION) $@
- 	-ln -sf libvolume_id.so.$(UDEV_VOLUME_ID_VERSION) $(STAGING_DIR)/usr/lib/libvolume_id.so.0
- 	-ln -sf libvolume_id.so.$(UDEV_VOLUME_ID_VERSION) $(STAGING_DIR)/usr/lib/libvolume_id.so
+--- trunk/buildroot/package/zlib/zlib.mk	2008-12-08 13:48:37 UTC (rev 24323)
++++ trunk/buildroot/package/zlib/zlib.mk	2008-12-08 14:41:47 UTC (rev 24324)
+@@ -18,13 +18,23 @@
+ 	$(CONFIG_UPDATE) $(@D)
+ 	touch $@
  
- $(STAGING_DIR)/usr/lib/libvolume_id.la: $(STAGING_DIR)/usr/lib/libvolume_id.so.$(UDEV_VOLUME_ID_VERSION)
--	$(INSTALL) -m 0755 -D package/udev/libvolume_id.la.tmpl $(STAGING_DIR)/usr/lib/libvolume_id.la
--	$(SED) 's/REPLACE_CURRENT/$(UDEV_VOLUME_ID_CURRENT)/g' $(STAGING_DIR)/usr/lib/libvolume_id.la
--	$(SED) 's/REPLACE_AGE/$(UDEV_VOLUME_ID_AGE)/g' $(STAGING_DIR)/usr/lib/libvolume_id.la
--	$(SED) 's/REPLACE_REVISION/$(UDEV_VOLUME_ID_REVISION)/g' $(STAGING_DIR)/usr/lib/libvolume_id.la
--	$(SED) 's,REPLACE_LIB_DIR,$(STAGING_DIR)/usr/lib,g' $(STAGING_DIR)/usr/lib/libvolume_id.la
-+	$(INSTALL) -m 0755 -D package/udev/libvolume_id.la.tmpl $@
-+	$(SED) 's/REPLACE_CURRENT/$(UDEV_VOLUME_ID_CURRENT)/g' $@
-+	$(SED) 's/REPLACE_AGE/$(UDEV_VOLUME_ID_AGE)/g' $@
-+	$(SED) 's/REPLACE_REVISION/$(UDEV_VOLUME_ID_REVISION)/g' $@
-+	$(SED) 's,REPLACE_LIB_DIR,$(STAGING_DIR)/usr/lib,g' $@
++ifneq ($(BR2_PREFER_STATIC_LIB),y)
++ZLIB_PIC := -fPIC
++ZLIB_SHARED := --shared
++ZLIB_TARGET := $(TARGET_DIR)/usr/lib/libz.so
++else
++ZLIB_PIC :=
++ZLIB_SHARED :=
++ZLIB_TARGET := $(STAGING_DIR)/usr/lib/libz.a
++endif
++
+ $(ZLIB_DIR)/.configured: $(ZLIB_DIR)/.patched
+ 	(cd $(ZLIB_DIR); rm -rf config.cache; \
+ 		$(TARGET_CONFIGURE_ARGS) \
+ 		$(TARGET_CONFIGURE_OPTS) \
+-		CFLAGS="$(TARGET_CFLAGS) -fPIC" \
++		CFLAGS="$(TARGET_CFLAGS) $(ZLIB_PIC)" \
+ 		./configure \
+-		--shared \
++		$(ZLIB_SHARED) \
+ 		--prefix=/usr \
+ 		--exec-prefix=$(STAGING_DIR)/usr/bin \
+ 		--libdir=$(STAGING_DIR)/usr/lib \
+@@ -32,14 +42,17 @@
+ 	)
+ 	touch $@
  
- $(TARGET_DIR)/lib/udev/vol_id: $(STAGING_DIR)/usr/lib/libvolume_id.la
- 	$(INSTALL) -m 0755 -D $(UDEV_DIR)/extras/volume_id/lib/libvolume_id.so.$(UDEV_VOLUME_ID_VERSION) $(TARGET_DIR)/usr/lib/libvolume_id.so.$(UDEV_VOLUME_ID_VERSION)
- 	-ln -sf libvolume_id.so.$(UDEV_VOLUME_ID_VERSION) $(TARGET_DIR)/usr/lib/libvolume_id.so.0
- 	-ln -sf libvolume_id.so.$(UDEV_VOLUME_ID_VERSION) $(TARGET_DIR)/usr/lib/libvolume_id.so
- 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libvolume_id.so.$(UDEV_VOLUME_ID_VERSION)
--	$(INSTALL) -m 0755 -D $(UDEV_DIR)/extras/volume_id/vol_id $(TARGET_DIR)/lib/udev/vol_id
-+	$(INSTALL) -m 0755 -D $(UDEV_DIR)/extras/volume_id/vol_id $@
+-$(ZLIB_DIR)/libz.so: $(ZLIB_DIR)/.configured
++$(ZLIB_DIR)/libz.a: $(ZLIB_DIR)/.configured
+ 	$(MAKE) -C $(ZLIB_DIR) all libz.a
+ 	touch -c $@
  
- udev-volume_id: udev $(TARGET_DIR)/lib/udev/vol_id
+-$(STAGING_DIR)/usr/lib/libz.so: $(ZLIB_DIR)/libz.so
++$(STAGING_DIR)/usr/lib/libz.a: $(ZLIB_DIR)/libz.a
+ 	$(INSTALL) -D $(ZLIB_DIR)/libz.a $(STAGING_DIR)/usr/lib/libz.a
+ 	$(INSTALL) -D $(ZLIB_DIR)/zlib.h $(STAGING_DIR)/usr/include/zlib.h
+ 	$(INSTALL) $(ZLIB_DIR)/zconf.h $(STAGING_DIR)/usr/include/
++	touch -c $@
++
++$(STAGING_DIR)/usr/lib/libz.so: $(STAGING_DIR)/usr/lib/libz.a
+ 	$(INSTALL) $(ZLIB_DIR)/libz.so* $(STAGING_DIR)/usr/lib/
+ 	touch -c $@
  
-@@ -129,16 +129,16 @@
- 		CFLAGS="$(BR2_UDEV_CFLAGS)" \
- 		USE_LOG=false USE_SELINUX=false \
- 		udevdir=$(UDEV_ROOT) EXTRAS="extras/scsi_id" -C $(UDEV_DIR)
--	$(INSTALL) -m 0755 -D $(UDEV_DIR)/extras/scsi_id/scsi_id $(TARGET_DIR)/lib/udev/scsi_id
--	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/lib/udev/scsi_id
-+	$(INSTALL) -m 0755 -D $(UDEV_DIR)/extras/scsi_id/scsi_id $@
-+	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $@
+@@ -49,7 +62,7 @@
+ 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $@
+ 	touch -c $@
  
- $(TARGET_DIR)/lib/udev/usb_id: $(STAGING_DIR)/usr/lib/libvolume_id.so.$(UDEV_VOLUME_ID_VERSION)
- 	$(MAKE) CROSS_COMPILE=$(TARGET_CROSS) \
- 		CFLAGS="$(BR2_UDEV_CFLAGS)" \
- 		USE_LOG=false USE_SELINUX=false \
- 		udevdir=$(UDEV_ROOT) EXTRAS="extras/usb_id" -C $(UDEV_DIR)
--	$(INSTALL) -m 0755 -D $(UDEV_DIR)/extras/usb_id/usb_id $(TARGET_DIR)/lib/udev/usb_id
--	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/lib/udev/usb_id
-+	$(INSTALL) -m 0755 -D $(UDEV_DIR)/extras/usb_id/usb_id $@
-+	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $@
+-$(TARGET_DIR)/usr/lib/libz.a: $(STAGING_DIR)/usr/lib/libz.so
++$(TARGET_DIR)/usr/lib/libz.a: $(STAGING_DIR)/usr/lib/libz.a
+ 	$(INSTALL) -D $(STAGING_DIR)/usr/include/zlib.h $(TARGET_DIR)/usr/include/zlib.h
+ 	$(INSTALL) $(STAGING_DIR)/usr/include/zconf.h $(TARGET_DIR)/usr/include/
+ 	$(INSTALL) -D $(STAGING_DIR)/usr/lib/libz.a $(TARGET_DIR)/usr/lib/libz.a
+@@ -57,7 +70,7 @@
  
- udev-scsi_id: udev $(TARGET_DIR)/lib/udev/scsi_id $(TARGET_DIR)/lib/udev/usb_id
+ zlib-headers: $(TARGET_DIR)/usr/lib/libz.a
+ 
+-zlib: uclibc $(TARGET_DIR)/usr/lib/libz.so
++zlib: uclibc $(ZLIB_TARGET)
+ 
+ zlib-source: $(DL_DIR)/$(ZLIB_SOURCE)
  
