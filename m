@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon,  8 Dec 2008 05:42:01 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/freetype
-Message-ID: <20081208134201.C6C093C78E@busybox.net>
+Date: Mon,  8 Dec 2008 05:42:04 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/initramfs
+Message-ID: <20081208134204.5531A3C7A0@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,27 +9,36 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-12-08 05:42:01 -0800 (Mon, 08 Dec 2008)
-New Revision: 24321
+Date: 2008-12-08 05:42:04 -0800 (Mon, 08 Dec 2008)
+New Revision: 24322
 
 Log:
-package/freetype: default to 2.3.7
+target/initramfs: actually build initramfs target
+
+Currently, BR2_TARGET_ROOTFS_INITRAMFS doesn't actually do anything,
+as it doesn't alter $(TARGETS)
+
+This change hooks up the TARGETS variable to INITRAMFS_TARGET (which
+is only set if BR2_TARGET_ROOTFS_INITRAMFS=y), so that the initramfs
+list is built.
+
+Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
 
 Modified:
-   trunk/buildroot/package/freetype/Config.in
+   trunk/buildroot/target/initramfs/initramfs.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/freetype/Config.in
+Modified: trunk/buildroot/target/initramfs/initramfs.mk
 ===================================================================
---- trunk/buildroot/package/freetype/Config.in	2008-12-08 13:41:59 UTC (rev 24320)
-+++ trunk/buildroot/package/freetype/Config.in	2008-12-08 13:42:01 UTC (rev 24321)
-@@ -9,7 +9,7 @@
- choice
- 	prompt "Freetype Version"
- 	depends on BR2_PACKAGE_FREETYPE
--	default BR2_FREETYPE_VERSION_2_2_1
-+	default BR2_FREETYPE_VERSION_2_3_7
- 	help
- 	  Select the version of Freetype you wish to use.
+--- trunk/buildroot/target/initramfs/initramfs.mk	2008-12-08 13:42:01 UTC (rev 24321)
++++ trunk/buildroot/target/initramfs/initramfs.mk	2008-12-08 13:42:04 UTC (rev 24322)
+@@ -12,6 +12,8 @@
+ INITRAMFS_TARGET:= #nothing
+ endif
  
++TARGETS+=$(INITRAMFS_TARGET)
++
+ $(INITRAMFS_TARGET) initramfs: host-fakeroot makedevs
+ 	rm -f $(TARGET_DIR)/init
+ 	ln -s sbin/init $(TARGET_DIR)/init
