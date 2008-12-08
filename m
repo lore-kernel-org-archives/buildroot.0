@@ -1,26 +1,33 @@
-From: Charles Duffy <Charles_Duffy@messageone.com>
-Date: Mon, 08 Dec 2008 13:01:22 -0600
-Subject: [Buildroot] [PATCH] kpartx package
-Message-ID: <ghjqu3$7qk$1@ger.gmane.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 08 Dec 2008 22:08:05 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libusb
+In-Reply-To: <49390579.7040600@walsimou.com> (Gaye Abdoulaye Walsimou's
+	message of "Fri\, 05 Dec 2008 11\:42\:01 +0100")
+References: <20081205102252.8B86A3C799@busybox.net>
+	<49390579.7040600@walsimou.com>
+Message-ID: <87hc5eqssq.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-kpartx (from the multipath-tools package) scans for partition tables in 
-userland and uses the device-mapper subsystem to register them with the 
-kernel. It is necessary for some device types, such as NBD, for which 
-the kernel won't recognize partition tables on its own. (This also means 
-that partition-table recognition can be removed from the kernel and done 
-entirely in userland, if one so chooses).
+>>>>> "Gaye" == Gaye Abdoulaye Walsimou <walsimou@walsimou.com> writes:
 
-The rest of multipath-tools is less useful in embedded systems, and so 
-is not included here.
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: buildroot-kpartx.patch
-Type: text/x-patch
-Size: 2141 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20081208/1aa98dde/attachment.bin 
+ Gaye> jacmet at uclibc.org wrote:
+ >> Author: jacmet
+ >> Date: 2008-12-05 02:22:52 -0800 (Fri, 05 Dec 2008)
+ >> New Revision: 24282
+ >> 
+ >> Log:
+ >> libusb: use 0.1.12-10 from snapshot.debian.net
+ >> 
+ Gaye> Hello,
+ Gaye> As I said in a moderated message (due to build log) libusb_0.1.12-13 
+ Gaye> build here (see moderated message)
+
+The question was not if -13 built, but how long the URL would stay
+valid.
+
+-- 
+Bye, Peter Korsgaard
