@@ -1,65 +1,32 @@
 From: Jeremy Kerr <jk@ozlabs.org>
 Date: Mon, 08 Dec 2008 14:58:17 +1100
-Subject: [Buildroot] [PATCH 2/4] package/udev: fix CFLAGS for udev extras
-In-Reply-To: <1228708697.392615.378550596058.1.gpush@pingu>
-Message-ID: <1228708697.393459.9557548453.2.gpush@pingu>
+Subject: [Buildroot] [PATCH 1/4] package/udev: fix dependency for scsi_id
+Message-ID: <1228708697.392615.378550596058.1.gpush@pingu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If the udev extras are built without large file support in uClibc,
-I get the following error:
-
- build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-gcc -c -g -Wall
- -pipe -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -Wstrict-prototypes
- -Wsign-compare -Wshadow -Wchar-subscripts -Wmissing-declarations
- -Wnested-externs -Wpointer-arith -Wcast-align -Wsign-compare
- -Wmissing-prototypes -Os ext.c -o ext.o
- In file included from build_powerpc/staging_dir/usr/include/stdio.h:28,
- from ext.c:19:
- build_powerpc/staging_dir/usr/include/features.h:382:4: error:
- #error It appears you have defined _FILE_OFFSET_BITS=64. Unfortunately,
- uClibc was built without large file support enabled.
-
-Although the base udev package builds correctly, the extras pacakges
-don't adjust their CFLAGS depending on BR2_LARGEFILE.
-
-This change adds the required CFLAGS modifications to make the
-extras build.
+According to udev.mk, the scsi_id package depends on the libvolume_id
+library, so add this dependency to Config.mk
 
 Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
 
 ---
- package/udev/udev.mk |    3 +++
- 1 file changed, 3 insertions(+)
+ package/udev/Config.in |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/udev/udev.mk b/package/udev/udev.mk
-index 9186853..6005bd1 100644
---- a/package/udev/udev.mk
-+++ b/package/udev/udev.mk
-@@ -81,6 +81,7 @@ ifeq ($(strip $(BR2_PACKAGE_UDEV_VOLUME_ID)),y)
+diff --git a/package/udev/Config.in b/package/udev/Config.in
+index 7ecce0b..b97ff57 100644
+--- a/package/udev/Config.in
++++ b/package/udev/Config.in
+@@ -23,7 +23,7 @@ config BR2_PACKAGE_UDEV_VOLUME_ID
  
- $(STAGING_DIR)/usr/lib/libvolume_id.so.$(UDEV_VOLUME_ID_VERSION):
- 	$(MAKE) CROSS_COMPILE=$(TARGET_CROSS) \
-+		CFLAGS="$(BR2_UDEV_CFLAGS)" \
- 		USE_LOG=false USE_SELINUX=false \
- 		udevdir=$(UDEV_ROOT) EXTRAS="extras/volume_id" -C $(UDEV_DIR)
- 	$(INSTALL) -m 0644 -D $(UDEV_DIR)/extras/volume_id/lib/libvolume_id.h $(STAGING_DIR)/usr/include/libvolume_id.h
-@@ -125,6 +126,7 @@ ifeq ($(strip $(BR2_PACKAGE_UDEV_SCSI_ID)),y)
+ config BR2_PACKAGE_UDEV_SCSI_ID
+ 	bool "udev-scsi_id"
+-	depends on BR2_PACKAGE_UDEV
++	depends on BR2_PACKAGE_UDEV_VOLUME_ID
+ 	help
+ 	  Build and install SCSI disk identification library.
  
- $(TARGET_DIR)/lib/udev/scsi_id: $(STAGING_DIR)/usr/lib/libvolume_id.so.$(UDEV_VOLUME_ID_VERSION)
- 	$(MAKE) CROSS_COMPILE=$(TARGET_CROSS) \
-+		CFLAGS="$(BR2_UDEV_CFLAGS)" \
- 		USE_LOG=false USE_SELINUX=false \
- 		udevdir=$(UDEV_ROOT) EXTRAS="extras/scsi_id" -C $(UDEV_DIR)
- 	$(INSTALL) -m 0755 -D $(UDEV_DIR)/extras/scsi_id/scsi_id $(TARGET_DIR)/lib/udev/scsi_id
-@@ -132,6 +134,7 @@ $(TARGET_DIR)/lib/udev/scsi_id: $(STAGING_DIR)/usr/lib/libvolume_id.so.$(UDEV_VO
- 
- $(TARGET_DIR)/lib/udev/usb_id: $(STAGING_DIR)/usr/lib/libvolume_id.so.$(UDEV_VOLUME_ID_VERSION)
- 	$(MAKE) CROSS_COMPILE=$(TARGET_CROSS) \
-+		CFLAGS="$(BR2_UDEV_CFLAGS)" \
- 		USE_LOG=false USE_SELINUX=false \
- 		udevdir=$(UDEV_ROOT) EXTRAS="extras/usb_id" -C $(UDEV_DIR)
- 	$(INSTALL) -m 0755 -D $(UDEV_DIR)/extras/usb_id/usb_id $(TARGET_DIR)/lib/udev/usb_id
