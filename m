@@ -1,35 +1,49 @@
-From: Markus Heidelberg <markus.heidelberg@web.de>
-Date: Mon, 8 Dec 2008 23:00:09 +0100
-Subject: [Buildroot] [PATCH 0/7] add Phonon support to qtopia4
-In-Reply-To: <20081208190302.724298c4@hcegtvedt>
-References: <200811190244.44817.markus.heidelberg@web.de>
-	<200811250833.46629.markus.heidelberg@web.de>
-	<20081208190302.724298c4@hcegtvedt>
-Message-ID: <200812082300.09891.markus.heidelberg@web.de>
+From: Nicolas Pitre <nico@cam.org>
+Date: Mon, 08 Dec 2008 16:59:26 -0500 (EST)
+Subject: [Buildroot] [PATCH] make the default etc/init.d/S40network
+ compatible with msh
+In-Reply-To: <874p1ewwed.fsf@macbook.be.48ers.dk>
+References: <alpine.LFD.2.00.0812031424090.14328@xanadu.home>
+	<874p1ewwed.fsf@macbook.be.48ers.dk>
+Message-ID: <alpine.LFD.2.00.0812081651380.14328@xanadu.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hans-Christian Egtvedt, 08.12.2008:
-> Finally got some time to spin this around. Audio worked fine with the
-> Qt examples, tested both Ogg and MP3.
+On Mon, 8 Dec 2008, Peter Korsgaard wrote:
+
+> >>>>> "Nicolas" == Nicolas Pitre <nico@cam.org> writes:
 > 
-> Thanks for the patches, sorry I forgot to credit you except the last
-> commit.
+>  Nicolas> msh is currently the only good choice for uClinux but it doesn't
+>  Nicolas> understands shell functions.  In this case there is nothing to gain
+>  Nicolas> by using shell functions anyway.
+> 
+>  Nicolas> Signed-off-by: Nicolas Pitre <nico@cam.org>
+> 
+> A lot of the other startup scripts (dbus, dropbear, hal,
+> mdnsresponder, ..) also use functions, but I take it those aren't
+> relevant for uclinux?
 
-Can happen, thanks for committing.
+I didn't use those, except for dropbear which startup script I modified 
+as well (to only create the initial host keys since the dropbear server 
+is otherwise started through inetd).
 
-> Now only to add gst-ffmpeg as well ;)
+> Anyway, committed as r24325.
 
-This would probably have been my next step, but I have rejected Phonon
-for now. The video playback was just so slow. It took something about
-15s to load the Qt example I sent and even longer to get the video
-started. And the playback performance then wasn't better. Did I do
-something wrong? I haven't yet tested it on ATSTK1002 nor 1005 and I'm
-not sure I get round to it before the vacation.
+Thanks.
 
-So currently I'm using mplayer -geometry
+> It would btw be handy if you could create your patches with one more
+> level, so I can apply them with git-am without having to remember to
+> add -p 0.
 
-Markus
+True indeed.  I generated those patches with svn diff, and being so used 
+to git I forgot that other systems have different defaults.
+
+Now what about the 10 or so other patches I posted?  Will they get 
+merged?  I have more patches to post but I wanted to see what was going 
+to happen with this lot first.
+
+
+Nicolas
