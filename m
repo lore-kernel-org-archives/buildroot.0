@@ -1,33 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 08 Dec 2008 22:08:05 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libusb
-In-Reply-To: <49390579.7040600@walsimou.com> (Gaye Abdoulaye Walsimou's
-	message of "Fri\, 05 Dec 2008 11\:42\:01 +0100")
-References: <20081205102252.8B86A3C799@busybox.net>
-	<49390579.7040600@walsimou.com>
-Message-ID: <87hc5eqssq.fsf@macbook.be.48ers.dk>
+From: Markus Heidelberg <markus.heidelberg@web.de>
+Date: Mon, 8 Dec 2008 23:00:09 +0100
+Subject: [Buildroot] [PATCH 0/7] add Phonon support to qtopia4
+In-Reply-To: <20081208190302.724298c4@hcegtvedt>
+References: <200811190244.44817.markus.heidelberg@web.de>
+	<200811250833.46629.markus.heidelberg@web.de>
+	<20081208190302.724298c4@hcegtvedt>
+Message-ID: <200812082300.09891.markus.heidelberg@web.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gaye" == Gaye Abdoulaye Walsimou <walsimou@walsimou.com> writes:
+Hans-Christian Egtvedt, 08.12.2008:
+> Finally got some time to spin this around. Audio worked fine with the
+> Qt examples, tested both Ogg and MP3.
+> 
+> Thanks for the patches, sorry I forgot to credit you except the last
+> commit.
 
- Gaye> jacmet at uclibc.org wrote:
- >> Author: jacmet
- >> Date: 2008-12-05 02:22:52 -0800 (Fri, 05 Dec 2008)
- >> New Revision: 24282
- >> 
- >> Log:
- >> libusb: use 0.1.12-10 from snapshot.debian.net
- >> 
- Gaye> Hello,
- Gaye> As I said in a moderated message (due to build log) libusb_0.1.12-13 
- Gaye> build here (see moderated message)
+Can happen, thanks for committing.
 
-The question was not if -13 built, but how long the URL would stay
-valid.
+> Now only to add gst-ffmpeg as well ;)
 
--- 
-Bye, Peter Korsgaard
+This would probably have been my next step, but I have rejected Phonon
+for now. The video playback was just so slow. It took something about
+15s to load the Qt example I sent and even longer to get the video
+started. And the playback performance then wasn't better. Did I do
+something wrong? I haven't yet tested it on ATSTK1002 nor 1005 and I'm
+not sure I get round to it before the vacation.
+
+So currently I'm using mplayer -geometry
+
+Markus
