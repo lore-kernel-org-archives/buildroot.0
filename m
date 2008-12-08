@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon,  8 Dec 2008 01:07:02 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/tar
-Message-ID: <20081208090702.9E9283C6FB@busybox.net>
+Date: Mon,  8 Dec 2008 05:05:48 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/kernel-headers
+Message-ID: <20081208130548.3F87E3C6BF@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,29 +9,26 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2008-12-08 01:07:01 -0800 (Mon, 08 Dec 2008)
-New Revision: 24315
+Date: 2008-12-08 05:05:47 -0800 (Mon, 08 Dec 2008)
+New Revision: 24316
 
 Log:
-target/tar: remove unused cut'n'paste leftover
+toolchain/kernel-headers: bump 2.6.27.x version
 
 Modified:
-   trunk/buildroot/target/tar/tarroot.mk
+   trunk/buildroot/toolchain/kernel-headers/Config.in
 
 
 Changeset:
-Modified: trunk/buildroot/target/tar/tarroot.mk
+Modified: trunk/buildroot/toolchain/kernel-headers/Config.in
 ===================================================================
---- trunk/buildroot/target/tar/tarroot.mk	2008-12-08 09:06:59 UTC (rev 24314)
-+++ trunk/buildroot/target/tar/tarroot.mk	2008-12-08 09:07:01 UTC (rev 24315)
-@@ -57,10 +57,6 @@
- endif
- 	- at rm -f $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(TAR_TARGET))
+--- trunk/buildroot/toolchain/kernel-headers/Config.in	2008-12-08 09:07:01 UTC (rev 24315)
++++ trunk/buildroot/toolchain/kernel-headers/Config.in	2008-12-08 13:05:47 UTC (rev 24316)
+@@ -114,6 +114,6 @@
+ 	default "2.6.24.7"	if BR2_KERNEL_HEADERS_2_6_24
+ 	default "2.6.25.19"	if BR2_KERNEL_HEADERS_2_6_25
+ 	default "2.6.26.8"	if BR2_KERNEL_HEADERS_2_6_26
+-	default "2.6.27.7"	if BR2_KERNEL_HEADERS_2_6_27
++	default "2.6.27.8"	if BR2_KERNEL_HEADERS_2_6_27
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
  
--EXT2_COPYTO := $(subst ",,$(BR2_TARGET_ROOTFS_EXT2_COPYTO))
--# "))
--
--
- tarroot-source:
- 
- tarroot-clean:
