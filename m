@@ -1,38 +1,47 @@
-From: Jeremy Kerr <jk@ozlabs.org>
-Date: Mon, 08 Dec 2008 14:58:17 +1100
-Subject: [Buildroot] [PATCH 4/4] package/udev: create base device nodes
-	after mounting a	new /dev
-In-Reply-To: <1228708697.392615.378550596058.1.gpush@pingu>
-Message-ID: <1228708697.395009.129460318835.4.gpush@pingu>
+From: hamish at uclibc.org <hamish@uclibc.org>
+Date: Sun,  7 Dec 2008 20:41:19 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/tiff
+Message-ID: <20081208044119.81B323C6DF@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, udev won't start for me, as we've just mounted a new /dev,
-which is completely empty, and udevd requires a /dev/null.
+Author: hamish
+Date: 2008-12-07 20:41:19 -0800 (Sun, 07 Dec 2008)
+New Revision: 24304
 
-This change manually creates the three base device nodes (zero, null
-and console) so that udev can start.
+Log:
+Over-ride the target-install target rather than installing as a post-build
+hook. Otherwise the wrong stamps are used and the library won't be reinstalled
+if you clean out $(TARGET_DIR).
 
-Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
 
----
- package/udev/S10udev |    3 +++
- 1 file changed, 3 insertions(+)
+Modified:
+   trunk/buildroot/package/tiff/tiff.mk
 
-diff --git a/package/udev/S10udev b/package/udev/S10udev
-index 5b663a0..6418f63 100755
---- a/package/udev/S10udev
-+++ b/package/udev/S10udev
-@@ -58,6 +58,9 @@ case "$1" in
- 	exit 1
+
+Changeset:
+Modified: trunk/buildroot/package/tiff/tiff.mk
+===================================================================
+--- trunk/buildroot/package/tiff/tiff.mk	2008-12-07 21:22:51 UTC (rev 24303)
++++ trunk/buildroot/package/tiff/tiff.mk	2008-12-08 04:41:19 UTC (rev 24304)
+@@ -8,7 +8,7 @@
+ TIFF_SOURCE:=tiff-$(TIFF_VERSION).tar.gz
+ TIFF_LIBTOOL_PATCH = NO
+ TIFF_INSTALL_STAGING = YES
+-TIFF_INSTALL_TARGET = NO
++TIFF_INSTALL_TARGET = YES
+ TIFF_CONF_OPT = \
+ 	--enable-shared \
+ 	--enable-static \
+@@ -19,7 +19,7 @@
  
-         mkdir $udev_root/pts $udev_root/shm
-+        mknod -m 0666 /dev/null c 1 3
-+        mknod -m 0666 /dev/zero c 1 5
-+        mknod -m 0600 /dev/console c 5 1
+ $(eval $(call AUTOTARGETS,package,tiff))
  
-         # populate /dev (normally)
-         echo -n "Populating $udev_root using udev: "
+-$(TIFF_HOOK_POST_BUILD):
++$(TIFF_TARGET_INSTALL_TARGET):
+ 	-cp -a $(TIFF_DIR)/libtiff/.libs/libtiff.so* $(TARGET_DIR)/usr/lib/
+ 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libtiff.so
+ 	touch $@
