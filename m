@@ -1,29 +1,36 @@
-From: P Jagadeesh Maiya <pjmaiya@signal-networks.com>
-Date: Tue, 9 Dec 2008 18:46:20 +0530
-Subject: [Buildroot] buildroot using glibc
-Message-ID: <008a01c95a00$53f2a300$4d01a8c0@signet>
+From: andersen at uclibc.org <andersen@uclibc.org>
+Date: Tue,  9 Dec 2008 12:00:32 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/dm
+Message-ID: <20081209200032.0ECDB3C683@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-hi,
-  I want to use buildroot built using glibc instead of ulibc. I have gone through entire mailing list archeive, but nowhere I am not getting any information or link to get patch for glibc. Can anyone provide any refernce for the patch so that buildroot can be used with glibc.
+Author: andersen
+Date: 2008-12-09 12:00:31 -0800 (Tue, 09 Dec 2008)
+New Revision: 24347
 
-thanx in advace,
-pjmaiya
+Log:
+bump
 
-Signal Networks Pvt. Ltd.,
 
-No.12, Kalpataru Apartments,
+Modified:
+   trunk/buildroot/package/dm/dm.mk
 
-Race Course Cross Road,
-Madhavnagar, Bengaluru-560001.
+
+Changeset:
+Modified: trunk/buildroot/package/dm/dm.mk
+===================================================================
+--- trunk/buildroot/package/dm/dm.mk	2008-12-09 13:23:59 UTC (rev 24346)
++++ trunk/buildroot/package/dm/dm.mk	2008-12-09 20:00:31 UTC (rev 24347)
+@@ -24,7 +24,7 @@
+ # USA
  
-
-Tel: 91-80-22260099 / 22260077
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20081209/02affcac/attachment.htm 
+ DM_BASEVER=1.02
+-DM_PATCH=22
++DM_PATCH=28
+ DM_VERSION=$(DM_BASEVER).$(DM_PATCH)
+ DM_SOURCE:=device-mapper.$(DM_VERSION).tgz
+ DM_SITE:=ftp://sources.redhat.com/pub/dm
