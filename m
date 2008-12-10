@@ -1,78 +1,81 @@
-From: Mirko ROCCO <mirko.rocco@gmail.com>
-Date: Wed, 10 Dec 2008 14:07:56 +0100
-Subject: [Buildroot] Buildroot for target PowerPC 405 (on Xilinx XUPV2p
-	Board)
-In-Reply-To: <20081201161034.GA20082@mx.loc>
-References: <10d6046f0812010740u5082e10bk9fded198d8d3bddb@mail.gmail.com>
-	<20081201161034.GA20082@mx.loc>
-Message-ID: <10d6046f0812100507k5e51bddbg88dd80732142a73@mail.gmail.com>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Wed, 10 Dec 2008 05:46:20 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
+Message-ID: <20081210134620.4F72D3C7E8@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernhard!
-I try to use your tree as you suggest me!
+Author: jacmet
+Date: 2008-12-10 05:46:19 -0800 (Wed, 10 Dec 2008)
+New Revision: 24359
 
-Unfortunately I recive this error and i don't know how to solve it:
+Log:
+busybox: additional 1.13.1 fixes
 
-/usr/bin/install: manca l'operando per il file di destinazione dopo
-`/home/mirko/Documenti/TESI/BUILDROOT/buildroot-Bernhard/powerpc_nofpu_toolchain/linux/.config'
-Usare `/usr/bin/install --help' per ulteriori informazioni.
-make: ***
-[/home/mirko/Documenti/TESI/BUILDROOT/buildroot-Bernhard/powerpc_nofpu_toolchain/linux/.configured]
-Error 1
-
-Any idea?
-
-The folder "linux" doesn't exist in
-"../buildroot-Bernhard/powerpc_nofpu_toolchain/", but instead exist
-"linux-2.6.26.5". This is the folder that buildroot create every time i
-launch "make", so is useless to rename the folder!
-
-Hope you can help me, thanks!
-
-Mirko ROCCO
+Added:
+   trunk/buildroot/package/busybox/busybox-1.13.1-init.patch
+   trunk/buildroot/package/busybox/busybox-1.13.1-printf.patch
 
 
-2008/12/1 Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+Changeset:
+Added: trunk/buildroot/package/busybox/busybox-1.13.1-init.patch
+===================================================================
+--- trunk/buildroot/package/busybox/busybox-1.13.1-init.patch	                        (rev 0)
++++ trunk/buildroot/package/busybox/busybox-1.13.1-init.patch	2008-12-10 13:46:19 UTC (rev 24359)
+@@ -0,0 +1,28 @@
++--- busybox-1.13.1/init/init.c	Sat Nov 29 07:48:56 2008
+++++ busybox-1.13.1-init/init/init.c	Tue Dec  9 22:17:43 2008
++@@ -118,18 +118,18 @@
++ 
++ 	msg[0] = '\r';
++ 	va_start(arguments, fmt);
++-	l = vsnprintf(msg + 1, sizeof(msg) - 2, fmt, arguments);
++-	if (l > sizeof(msg) - 2)
++-		l = sizeof(msg) - 2;
+++	l = 1 + vsnprintf(msg + 1, sizeof(msg) - 2, fmt, arguments);
+++	if (l > sizeof(msg) - 1)
+++		l = sizeof(msg) - 1;
++ 	msg[l] = '\0';
++ 	va_end(arguments);
++ 
++ 	if (ENABLE_FEATURE_INIT_SYSLOG) {
++-		/* Log the message to syslogd */
++ 		if (where & L_LOG) {
++-			/* don't print out "\r" */
++-			openlog(applet_name, 0, LOG_DAEMON);
++-			syslog(LOG_INFO, "init: %s", msg + 1);
+++			/* Log the message to syslogd */
+++			openlog("init", 0, LOG_DAEMON);
+++			/* don't print "\r" */
+++			syslog(LOG_INFO, "%s", msg + 1);
++ 			closelog();
++ 		}
++ 		msg[l++] = '\n';
 
-> On Mon, Dec 01, 2008 at 04:40:38PM +0100, Mirko ROCCO wrote:
-> >Hi,
-> >i'm trying to compile buildroot... this is my scenario:
-> >
-> >HOST=i386-pc-linux
-> >TARGET=powerpc 405 (i don't know if with FPU or not...)
->
-> 405 would be without fpu as opposed to 405fp
-> >
-> >I have the XUPV2P Board of Xilinx, and I would want to install on it an
-> >linuz kernel (linux-2.6.xlnx.git kernel from xilinx!)
-> >
-> >Which combination of uclibc, GCC, busybox, binutils, etc. etc. is better
-> to
-> >choose in "menuconfig"in my case?
->
-> Works fine for me with my tree ?) for gcc-4.3.2, gcc-trunk, current
-> binutils and
-> latest kernel and current uClibc (or trunk), current busybox (or trunk).
-> All of
-> the stuff you mention below is old by that measure (and didn't work for
-> me).
-> >
-> >Now I'm working with
-> >Busybox: 1.12.x
-> >uCLibc: 0.9.29
-> >GCC: (really i try every combination with same result :-( ...)
-> >binutils: 2.18
-> >
-> >I never had success in compilation!!!
-> >
-> >Can someone help me please?
->
-> ?) http://repo.or.cz/w/buildroot.git/
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20081210/4e5d0546/attachment.htm 
+Added: trunk/buildroot/package/busybox/busybox-1.13.1-printf.patch
+===================================================================
+--- trunk/buildroot/package/busybox/busybox-1.13.1-printf.patch	                        (rev 0)
++++ trunk/buildroot/package/busybox/busybox-1.13.1-printf.patch	2008-12-10 13:46:19 UTC (rev 24359)
+@@ -0,0 +1,19 @@
++--- busybox-1.13.1/coreutils/printf.c	Sun Nov  9 18:28:07 2008
+++++ busybox-1.13.1-printf/coreutils/printf.c	Wed Dec 10 12:50:55 2008
++@@ -359,8 +359,15 @@
++ 	 * We will mimic coreutils. */
++ 	if (argv[1] && argv[1][0] == '-' && argv[1][1] == '-' && !argv[1][2])
++ 		argv++;
++-	if (!argv[1])
+++	if (!argv[1]) {
+++		if (ENABLE_ASH_BUILTIN_PRINTF
+++		 && applet_name[0] != 'p'
+++		) {
+++			bb_error_msg("usage: printf FORMAT [ARGUMENT...]");
+++			return 2; /* bash compat */
+++		}
++ 		bb_show_usage();
+++	}
++ 
++ 	format = argv[1];
++ 	argv2 = argv + 2;
