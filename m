@@ -1,10 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 Dec 2008 09:24:57 +0100
-Subject: [Buildroot] [RFC] First hack for external toolchain support
- based on sysroot
-In-Reply-To: <20081202232132.7c67e402@surf>
-References: <20081202232132.7c67e402@surf>
-Message-ID: <20081210092457.64d6ef9f@surf>
+Date: Wed, 10 Dec 2008 09:30:48 +0100
+Subject: [Buildroot] Autoreconf is using host tools
+Message-ID: <20081210093048.175f7964@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,99 +10,46 @@ To: buildroot@busybox.net
 
 Hi,
 
-Any reaction to this patch ?
+Compiling the fontconfig package breaks here, with the following
+messages:
+
+>>> fontconfig 2.6.0 Running autoreconf
+Can't exec "libtoolize": No such file or directory at /usr/bin/autoreconf line 186.
+Use of uninitialized value $libtoolize in pattern match (m//) at /usr/bin/autoreconf line 186.
+autoreconf: Entering directory `.'
+autoreconf: configure.in: not using Gettext
+autoreconf: running: aclocal -I /home/thomas/local/buildroot2/build_arm/staging_dir/usr/share/aclocal --force 
+autoreconf: configure.in: tracing
+autoreconf: running: libtoolize --copy --force
+Can't exec "libtoolize": No such file or directory at /usr/share/autoconf/Autom4te/FileUtils.pm line 290, <GEN3> line 4.
+autoreconf: failed to run libtoolize: No such file or directory
+make: ***
+[/home/thomas/local/buildroot2/build_arm/fontconfig-2.6.0/.stamp_autoconfigured]
+Error 1
+
+The problem is that it tries to use "libtoolize" of my host (Ubuntu
+system) and not the host-libtool that was compiled by Buildroot and
+installed in $(STAGING_DIR). I don't really get how all this AUTORECONF
+stuff works, so I don't know how it selects the tools.
+
+FWIW, I have no libtool on my Ubuntu system because the latest Ubuntu
+version ships a 2.2.4 version of libtool, which doesn't work with many
+packages. It fails with messages like:
+
+./libtool: line 466: CDPATH: command not found
+./libtool: line 1144: func_opt_split: command not found
+libtool: Version mismatch error.  This is libtool 2.2.4
+Debian-2.2.4-0ubuntu4, but the
+libtool: definition of this LT_INIT comes from an older release.
+libtool: You should recreate aclocal.m4 with macros from libtool 2.2.4
+Debian-2.2.4-0ubuntu4
+
+But that's not the issue, since Buildroot is not supposed to use
+libtool from the host, but libtool from the $(STAGING_DIR).
 
 Thanks,
 
 Thomas
-
-Le Tue, 2 Dec 2008 23:21:32 +0100,
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
-
-> Hi,
-> 
-> This evening, I had a quick look at implementing support for external
-> toolchain based on --sysroot. It seems to work, see the included
-> patch. It's very hacky at the moment, I'm waiting for your
-> suggestions to improve the patch.
-> 
-> Sincerly,
-> 
-> Thomas
-> 
-> ---
-> 
-> Another external toolchain support solution
-> 
->  * In toolchain/external-toolchain/ext-tool.mk, copy the contents of
->    the sysroot directory to the staging dir.
-> 
->  * In package/Makefile.in, add a --sysroot CFLAGS pointing to the
->    staging dir
-> 
->  * Remove the CFLAGS and LDFLAGS definition from
->    TARGET_CONFIGURE_OPTS. I haven't investigated exactly why, but with
->    these options, DirectFB fails to build because it cannot find
->    PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP, even if DirectFB's Makefile
->    properly sets -D_GNU_SOURCE.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/Makefile.in                      |    4 +---
->  toolchain/external-toolchain/ext-tool.mk |    6 ++++++
->  2 files changed, 7 insertions(+), 3 deletions(-)
-> 
-> Index: buildroot2/package/Makefile.in
-> ===================================================================
-> --- buildroot2.orig/package/Makefile.in
-> +++ buildroot2/package/Makefile.in
-> @@ -89,7 +89,7 @@
->  # else it's an external toolchain
->  #########################################################################
->  else
-> -TARGET_CFLAGS=$(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
-> -I$(STAGING_DIR)/include -I$(STAGING_DIR)/usr/include
-> -I$(TOOLCHAIN_EXTERNAL_PATH)/$(TOOLCHAIN_EXTERNAL_PREFIX)/include
-> +TARGET_CFLAGS=$(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
-> -I$(STAGING_DIR)/include -I$(STAGING_DIR)/usr/include
-> -I$(TOOLCHAIN_EXTERNAL_PATH)/$(TOOLCHAIN_EXTERNAL_PREFIX)/include
-> --sysroot $(STAGING_DIR)/ TARGET_CXXFLAGS=$(TARGET_CFLAGS)
-> TARGET_LDFLAGS=-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib endif @@
-> -210,8 +210,6 @@ AR="$(TARGET_AR)" \ AS="$(TARGET_AS)" \
-> LD="$(TARGET_LD)" \
-> -		CFLAGS="$(TARGET_CFLAGS)" \
-> -		LDFLAGS="$(TARGET_LDFLAGS)" \
->  		NM="$(TARGET_NM)" \
->  		CC="$(TARGET_CC) $(TARGET_CFLAGS)" \
->  		GCC="$(TARGET_CC) $(TARGET_CFLAGS)" \
-> Index: buildroot2/toolchain/external-toolchain/ext-tool.mk
-> ===================================================================
-> --- buildroot2.orig/toolchain/external-toolchain/ext-tool.mk
-> +++ buildroot2/toolchain/external-toolchain/ext-tool.mk
-> @@ -44,6 +44,11 @@
->   \
->  	echo -n
->  
-> +copy_toolchain_sysroot = \
-> +	SYSROOT_DIR=`$(TARGET_CC) -v 2>&1 | grep ^Configured | tr "
-> " "\n" | grep -- "--with-sysroot" | cut -f2 -d=`; \
-> +	cp -a $${SYSROOT_DIR}/* $(STAGING_DIR)/ ; \
-> +	find $(STAGING_DIR) -type d | xargs chmod 755
-> +
->  uclibc: dependencies $(TARGET_DIR)/lib/$(strip $(subst ",,
-> $(BR2_TOOLCHAIN_EXTERNAL_LIB_C))) 
->  $(TARGET_DIR)/lib/$(strip $(subst ",,
-> $(BR2_TOOLCHAIN_EXTERNAL_LIB_C))): @@ -54,3 +59,4 @@
->  	for libs in $(strip $(subst ",,
-> $(BR2_TOOLCHAIN_EXTERNAL_LIBS))); do \ $(call
-> copy_toolchain_lib_root, $$libs, /lib,
-> $(BR2_TOOLCHAIN_EXTERNAL_STRIP)); \ done
-> +	$(call copy_toolchain_sysroot)
-> \ No newline at end of file
-> 
-> 
-
-
 -- 
 Thomas Petazzoni, Free Electrons
 Kernel, drivers and embedded Linux development,
