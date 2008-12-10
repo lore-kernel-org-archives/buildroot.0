@@ -1,28 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 10 Dec 2008 23:36:40 +0100
-Subject: [Buildroot] Adding a new architecture
-In-Reply-To: <BMEBLILHDELOCLHMCPHNMEONHJAA.marc@tensilica.com> (Marc
-	Gauthier's message of "Wed\, 10 Dec 2008 11\:52\:01 -0800")
-References: <BMEBLILHDELOCLHMCPHNMEONHJAA.marc@tensilica.com>
-Message-ID: <87d4fzodxj.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Wed, 10 Dec 2008 15:54:18 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/kernel-headers
+Message-ID: <20081210235418.B2B3A3C767@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Marc" == Marc Gauthier <marc@tensilica.com> writes:
+Author: jacmet
+Date: 2008-12-10 15:54:18 -0800 (Wed, 10 Dec 2008)
+New Revision: 24364
 
-Hi,
+Log:
+toolchain/kernel-headers: don't hide 2.6.27 if RECENT isn't enabled
 
- Marc> Well, cross out that "near", a few things came up, but we are
- Marc> back to work on it.  I just won't promise any timeframe this time :-)
+Modified:
+   trunk/buildroot/toolchain/kernel-headers/Config.in
 
-Heh, those things happen ;)
 
- Marc> I'm sure we'll have more questions once we get closer to submission.
-
-Ok.
-
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/toolchain/kernel-headers/Config.in
+===================================================================
+--- trunk/buildroot/toolchain/kernel-headers/Config.in	2008-12-10 22:41:30 UTC (rev 24363)
++++ trunk/buildroot/toolchain/kernel-headers/Config.in	2008-12-10 23:54:18 UTC (rev 24364)
+@@ -65,7 +65,6 @@
+ 		bool "Linux 2.6.26.x kernel headers"
+ 
+ 	config BR2_KERNEL_HEADERS_2_6_27
+-		depends on BR2_RECENT
+ 		bool "Linux 2.6.27.x kernel headers"
+ 
+ 	config BR2_KERNEL_HEADERS_SNAP
