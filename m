@@ -1,23 +1,22 @@
 From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Thu, 11 Dec 2008 16:01:54 +0100
-Subject: [Buildroot] [RFC] strip installed libiconv and remove preloadable
-	library
-Message-ID: <20081211160154.2fa2d2d0@hcegtvedt>
+Date: Thu, 11 Dec 2008 16:03:35 +0100
+Subject: [Buildroot] [RFC] bump Samba to v3.2.5
+Message-ID: <20081211160335.05e74987@hcegtvedt>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See attached patch.
+Se attached patch.
 
 -- 
 Best regards,
 Hans-Christian Egtvedt
 -------------- next part --------------
 A non-text attachment was scrubbed...
-Name: buildroot-strip-installed-library-and-remove-preloadable.patch
+Name: buildroot-bump-samba-to-3.2.5.patch
 Type: text/x-patch
-Size: 642 bytes
+Size: 9700 bytes
 Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20081211/a194e1c1/attachment.bin 
+Url : http://busybox.net/lists/buildroot/attachments/20081211/4dc43990/attachment.bin 
