@@ -1,27 +1,15 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 Dec 2008 16:49:38 +0100
-Subject: [Buildroot] [RFC] strip installed libiconv and remove
- preloadable library
-In-Reply-To: <20081211160154.2fa2d2d0@hcegtvedt>
-References: <20081211160154.2fa2d2d0@hcegtvedt>
-Message-ID: <20081211164938.0fec88bd@surf>
+From: Matt Wood <mattwood2000@gmx.net>
+Date: Thu, 11 Dec 2008 21:31:55 +0100
+Subject: [Buildroot] at91sam9g20dfc_defconfig - no u-boot (mkimage)???
+Message-ID: <20081211203155.142270@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 11 Dec 2008 16:01:54 +0100,
-Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> a ?crit :
+Hi guys...just downloaded the latest trunk to test the AT91SAM9G20 build.  I notice that there is no u-boot monitor option under Ateml Device Support.  When I try to build it anyway, I get an error saying mkimage is not found...obviously because u-boot has not been built yet.
 
-> See attached patch.
+Anyone else find this?
 
-Not sure what the preloadable library is, but the strip of libiconv was
-on my TODO list, so +1 on that part.
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Thanks, Matt.
