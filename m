@@ -1,22 +1,113 @@
-From: Andreas Kuehn <Andreas.Kuehn@gin.de>
-Date: Thu, 11 Dec 2008 09:03:45 +0100
-Subject: [Buildroot] dropbear & openssh transfers are limited to about 800k
-	!?
-Message-ID: <4940C961.7080602@gin.de>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Thu, 11 Dec 2008 01:35:08 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
+Message-ID: <20081211093508.268B53C6C6@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+Author: jacmet
+Date: 2008-12-11 01:35:07 -0800 (Thu, 11 Dec 2008)
+New Revision: 24367
 
-I'm using buildroot revision 23203. After all seems to work on my 
-at91sam9263 based board, I figured out that scp transferes not more than 
-800kByte in one file. This is not acceptable and I tried openssh instead 
-of dropbear. Still, the maximum transferable file size is less than 800k.
+Log:
+busybox: 1.13.1 bindtodevice fix
 
-Any idea where the limit is bound to?
+Added:
+   trunk/buildroot/package/busybox/busybox-1.13.1-bindtodevice.patch
 
-Regards
-	akuehn
+
+Changeset:
+Added: trunk/buildroot/package/busybox/busybox-1.13.1-bindtodevice.patch
+===================================================================
+--- trunk/buildroot/package/busybox/busybox-1.13.1-bindtodevice.patch	                        (rev 0)
++++ trunk/buildroot/package/busybox/busybox-1.13.1-bindtodevice.patch	2008-12-11 09:35:07 UTC (rev 24367)
+@@ -0,0 +1,86 @@
++--- busybox-1.13.1/include/libbb.h	Sun Nov  9 18:28:17 2008
+++++ busybox-1.13.1-bindtodevice/include/libbb.h	Wed Dec 10 12:10:30 2008
++@@ -437,6 +437,7 @@
++  * Turn it on before you call bind(). */
++ void setsockopt_reuseaddr(int fd) FAST_FUNC; /* On Linux this never fails. */
++ int setsockopt_broadcast(int fd) FAST_FUNC;
+++int setsockopt_bindtodevice(int fd, const char *iface) FAST_FUNC;
++ /* NB: returns port in host byte order */
++ unsigned bb_lookup_port(const char *port, const char *protocol, unsigned default_port) FAST_FUNC;
++ typedef struct len_and_sockaddr {
++--- busybox-1.13.1/libbb/xconnect.c	Sun Nov  9 18:28:09 2008
+++++ busybox-1.13.1-bindtodevice/libbb/xconnect.c	Wed Dec 10 23:20:29 2008
++@@ -7,6 +7,7 @@
++  */
++ 
++ #include <netinet/in.h>
+++#include <net/if.h>
++ #include "libbb.h"
++ 
++ void FAST_FUNC setsockopt_reuseaddr(int fd)
++@@ -17,6 +18,20 @@
++ {
++ 	return setsockopt(fd, SOL_SOCKET, SO_BROADCAST, &const_int_1, sizeof(const_int_1));
++ }
+++int FAST_FUNC setsockopt_bindtodevice(int fd, const char *iface)
+++{
+++	int r;
+++	struct ifreq ifr;
+++	strncpy(ifr.ifr_name, iface, IFNAMSIZ);
+++	/* Actually, ifr_name is at offset 0, and in practice
+++	 * just giving char[IFNAMSIZ] instead of struct ifreq works too.
+++	 * But just in case it's not true on some obscure arch... */
+++	r = setsockopt(fd, SOL_SOCKET, SO_BINDTODEVICE, &ifr, sizeof(ifr));
+++	if (r)
+++		bb_perror_msg("can't bind to interface %s", iface);
+++	return r;
+++}
+++
++ 
++ void FAST_FUNC xconnect(int s, const struct sockaddr *s_addr, socklen_t addrlen)
++ {
++--- busybox-1.13.1/networking/arping.c	Sun Nov  9 18:27:59 2008
+++++ busybox-1.13.1-bindtodevice/networking/arping.c	Wed Dec 10 12:10:30 2008
++@@ -322,8 +322,7 @@
++ 		struct sockaddr_in saddr;
++ 		int probe_fd = xsocket(AF_INET, SOCK_DGRAM, 0);
++ 
++-		if (setsockopt(probe_fd, SOL_SOCKET, SO_BINDTODEVICE, device, strlen(device) + 1) == -1)
++-			bb_perror_msg("cannot bind to device %s", device);
+++		setsockopt_bindtodevice(probe_fd, device);
++ 		memset(&saddr, 0, sizeof(saddr));
++ 		saddr.sin_family = AF_INET;
++ 		if (src.s_addr) {
++--- busybox-1.13.1/networking/ping.c	Sun Nov  9 18:27:59 2008
+++++ busybox-1.13.1-bindtodevice/networking/ping.c	Wed Dec 10 12:10:30 2008
++@@ -572,7 +572,7 @@
++ 		xbind(pingsock, &source_lsa->u.sa, source_lsa->len);
++ 	}
++ 	if (str_I)
++-		setsockopt(pingsock, SOL_SOCKET, SO_BINDTODEVICE, str_I, strlen(str_I) + 1);
+++		setsockopt_bindtodevice(pingsock, str_I);
++ 
++ 	/* enable broadcast pings */
++ 	setsockopt_broadcast(pingsock);
++@@ -622,7 +622,7 @@
++ 	if (source_lsa)
++ 		xbind(pingsock, &source_lsa->u.sa, source_lsa->len);
++ 	if (str_I)
++-		setsockopt(pingsock, SOL_SOCKET, SO_BINDTODEVICE, str_I, strlen(str_I) + 1);
+++		setsockopt_bindtodevice(pingsock, str_I);
++ 
++ #ifdef ICMP6_FILTER
++ 	{
++--- busybox-1.13.1/networking/udhcp/socket.c	Sun Nov  9 18:27:58 2008
+++++ busybox-1.13.1-bindtodevice/networking/udhcp/socket.c	Wed Dec 10 12:10:30 2008
++@@ -98,8 +98,8 @@
++ 		bb_perror_msg_and_die("SO_BROADCAST");
++ 
++ 	/* NB: bug 1032 says this doesn't work on ethernet aliases (ethN:M) */
++-	if (setsockopt(fd, SOL_SOCKET, SO_BINDTODEVICE, &inf, strlen(inf) + 1) == -1)
++-		bb_perror_msg_and_die("SO_BINDTODEVICE");
+++	if (setsockopt_bindtodevice(fd, inf))
+++		xfunc_die(); /* warning is already printed */
++ 
++ 	memset(&addr, 0, sizeof(addr));
++ 	addr.sin_family = AF_INET;
