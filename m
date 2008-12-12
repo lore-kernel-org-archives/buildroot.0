@@ -1,32 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 12 Dec 2008 00:57:58 +0100
-Subject: [Buildroot] dropbear & openssh transfers are limited to about
-	800k !?
-In-Reply-To: <4940EDF4.7040400@gin.de> (Andreas Kuehn's message of "Thu\,
-	11 Dec 2008 11\:39\:48 +0100")
-References: <4940C961.7080602@gin.de> <87ljunkojx.fsf@macbook.be.48ers.dk>
-	<4940EDF4.7040400@gin.de>
-Message-ID: <87bpvil0xl.fsf@macbook.be.48ers.dk>
+From: theHog <lists@t3i.nl>
+Date: Fri, 12 Dec 2008 02:07:15 +0100
+Subject: [Buildroot] error: sysdep-cancel.h: No such file or directory
+Message-ID: <20081212020715.bljz08hhc0oswo04@webmail.dds.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Andreas" == Andreas Kuehn <Andreas.Kuehn@gin.de> writes:
-
 Hi,
 
- Andreas> Fine hearing that it should work as expected.
+I just tried to build a rootfs for and arm architecture using buildroot
+(latest svn). I left most options alone, except for the architecture
+(=arm926t), target ABI (=EABI) and thread library implementation (=nptl).
 
- Andreas> About the memory capacity:
- Andreas> Mem: 8612K used, 118892K free, 0K shrd, 320K buff, 5168K cached
- Andreas> rootfs: 119.5M used, 56.0M free
+I get the following error:
 
- Andreas> I still expect something like that ext2-fs has some
- Andreas> limitation or uClibc
+CC libpthread/linuxthreads/sysdeps/pthread/errno-loc.oS  
+libpthread/linuxthreads/sysdeps/pthread/errno-loc.c:23:27: error:
+sysdep-cancel.h: No such file or directory
+make[1]: *** [libpthread/linuxthreads/sysdeps/pthread/errno-loc.oS] Error 1
+make[1]: Leaving directory  
+`/home/eddy/work/buildroot/toolchain_build_arm/uClibc-0.9.30'
+make: ***
+[/home/eddy/work/buildroot/toolchain_build_arm/uClibc-0.9.30/lib/libc.a] Error  
+2
 
-Ext2? Are you using an initrd? How much space do you have free?
+What is wrong here? I tried a previous version of uClibc (0.9.29) and
+linuxthreads instead of nptl but that does not make a difference.
 
--- 
-Bye, Peter Korsgaard
+Thanks,
+theHog
