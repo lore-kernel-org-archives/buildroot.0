@@ -1,41 +1,45 @@
-From: Andreas Kuehn <Andreas.Kuehn@gin.de>
-Date: Fri, 12 Dec 2008 09:52:15 +0100
-Subject: [Buildroot] dropbear & openssh transfers are limited to about
- 800k !?
-In-Reply-To: <87bpvil0xl.fsf@macbook.be.48ers.dk>
-References: <4940C961.7080602@gin.de>
-	<87ljunkojx.fsf@macbook.be.48ers.dk>	<4940EDF4.7040400@gin.de>
-	<87bpvil0xl.fsf@macbook.be.48ers.dk>
-Message-ID: <4942263F.4070805@gin.de>
+From: egtvedt at uclibc.org <egtvedt@uclibc.org>
+Date: Fri, 12 Dec 2008 01:03:47 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libiconv
+Message-ID: <20081212090347.DF9393C2BB@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: egtvedt
+Date: 2008-12-12 01:03:47 -0800 (Fri, 12 Dec 2008)
+New Revision: 24388
+
+Log:
+libiconv: strip installed library and remove the preloadable library
+
+This patch is mainly for size reduction, removing more than half the
+needed footprint.
+
+Signed-off-by: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
 
 
-Peter Korsgaard wrote:
->>>>>> "Andreas" == Andreas Kuehn <Andreas.Kuehn@gin.de> writes:
-> 
-> Hi,
-> 
->  Andreas> Fine hearing that it should work as expected.
-> 
->  Andreas> About the memory capacity:
->  Andreas> Mem: 8612K used, 118892K free, 0K shrd, 320K buff, 5168K cached
->  Andreas> rootfs: 119.5M used, 56.0M free
-> 
->  Andreas> I still expect something like that ext2-fs has some
->  Andreas> limitation or uClibc
-> 
-> Ext2? Are you using an initrd? How much space do you have free?
-> 
-Good Morning Peter!
 
-No, I do *not* use initrd.
+Modified:
+   trunk/buildroot/package/libiconv/libiconv.mk
 
-The rootfs is an ext2 on a CompactFlash card (Industial Type).
-I tried cards from different brands but without result. Moreover, Linux 
-uses these cards through its IDE interface. I can copy 5MB files around 
-the disk without trouble. To me, the storage system works fine.
+
+Changeset:
+Modified: trunk/buildroot/package/libiconv/libiconv.mk
+===================================================================
+--- trunk/buildroot/package/libiconv/libiconv.mk	2008-12-12 02:14:35 UTC (rev 24387)
++++ trunk/buildroot/package/libiconv/libiconv.mk	2008-12-12 09:03:47 UTC (rev 24388)
+@@ -16,3 +16,11 @@
+ 
+ $(eval $(call AUTOTARGETS,package,libiconv))
+ 
++$(LIBICONV_HOOK_POST_INSTALL):
++	# Remove not used preloadable libiconv.so
++	rm -f $(STAGING_DIR)/usr/lib/preloadable_libiconv.so
++	rm -f $(TARGET_DIR)/usr/lib/preloadable_libiconv.so
++ifneq ($(BR2_ENABLE_DEBUG),y)
++	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libiconv.so.*
++endif
++	touch $@
