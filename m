@@ -1,37 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 12 Dec 2008 11:06:26 +0100
+From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
+Date: Fri, 12 Dec 2008 11:14:50 +0100
 Subject: [Buildroot] svn commit: trunk/buildroot/package/samba
-In-Reply-To: <20081212092938.291973C2E4@busybox.net> (egtvedt@uclibc.org's
-	message of "Fri\, 12 Dec 2008 01\:29\:38 -0800 \(PST\)")
+In-Reply-To: <87iqppr9lp.fsf@macbook.be.48ers.dk>
 References: <20081212092938.291973C2E4@busybox.net>
-Message-ID: <87iqppr9lp.fsf@macbook.be.48ers.dk>
+	<87iqppr9lp.fsf@macbook.be.48ers.dk>
+Message-ID: <20081212111450.7af4120c@hcegtvedt>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "egtvedt" == egtvedt  <egtvedt@uclibc.org> writes:
+On Fri, 12 Dec 2008 11:06:26 +0100
+Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-Hi,
+> >>>>> "egtvedt" == egtvedt  <egtvedt@uclibc.org> writes:
 
- egtvedt> Author: egtvedt
- egtvedt> Date: 2008-12-12 01:29:37 -0800 (Fri, 12 Dec 2008)
- egtvedt> New Revision: 24390
+<snipp>
 
- egtvedt> Log:
- egtvedt> samba: make proto first to allow parallel build afterwards
+>  egtvedt>  $(SAMBA_DIR)/$(SAMBA_BINARY): $(SAMBA_DIR)/.configured
+>  egtvedt> -	$(MAKE1) -C $(SAMBA_DIR)
+>  egtvedt> +	$(MAKE) -C $(SAMBA_DIR) proto
+> 
+> Shouldn't this then be $(MAKE1) ?
+> 
 
- egtvedt> This patch fixes parallel build of Samba. The trick is to make proto before
- egtvedt> executing a full make.
- 
- egtvedt>  $(SAMBA_DIR)/$(SAMBA_BINARY): $(SAMBA_DIR)/.configured
- egtvedt> -	$(MAKE1) -C $(SAMBA_DIR)
- egtvedt> +	$(MAKE) -C $(SAMBA_DIR) proto
-
-Shouldn't this then be $(MAKE1) ?
-
- egtvedt> +	$(MAKE) -C $(SAMBA_DIR)
+Not needed, it is safe to parallel build the proto stuff. The problem
+is that the all: rule does not depend properly on proto.
 
 -- 
-Bye, Peter Korsgaard
+Best regards,
+Hans-Christian Egtvedt
