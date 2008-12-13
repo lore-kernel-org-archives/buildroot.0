@@ -1,59 +1,88 @@
-From: jczhang at ict.ac.cn <jczhang@ict.ac.cn>
-Date: Sat, 13 Dec 2008 21:50:29 +0800 (CST)
-Subject: [Buildroot] n32 ABI problem when building a mipsel n32 buildroot
-Message-ID: <508d8060d49b2e4fe6b4280e3d495875.squirrel@webmail.ict.ac.cn>
+From: tpetazzoni at uclibc.org <tpetazzoni@uclibc.org>
+Date: Sat, 13 Dec 2008 08:15:50 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot: package
+	toolchain/external-toolchain
+Message-ID: <20081213161550.A9B5A3C2A6@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-  I have a problem when build a mipsel n32 cross compiler uclibc toolchain
-on a CentOS4/X86_64 host. The buildroot I used is the snapshot
-buildroot-20081210.tar.bz2.
-  Firstly I issue "make menuconfig" under buildroot directory. Among the
-target options, I choose "mipsel, mips4, n32".
-  Secondly, I issue "make uclibc-menuconfig" under buildroot. In the
-"Target Architecture Features and Options", I adjust the miss-guessed
-"Target ABI" from O32 to N32. Other options are left unchanged.
-  Then I type "make" to build. I find binutils-2.19, gcc-4.2.4-initial are
-all successfully built. But when building  uClibc-0.9.30, the following
-error happens:
+Author: tpetazzoni
+Date: 2008-12-13 08:15:50 -0800 (Sat, 13 Dec 2008)
+New Revision: 24408
 
-  ....
-  AS ldso/ldso/mips/resolve.oS
-  AR cr ldso/ldso/ld-uClibc_so.a
-  STRIP -x -R .note -R .comment ldso/ldso/ld-uClibc_so.a
-  LD ld-uClibc-0.9.30.so
-collect2: ld terminated with signal 11 [Segmentation fault]
-/home/jczhang/research/buildroot/build_mipsel/staging_dir/usr/lib/gcc/mipsel-linux-uclibc/4.2.4/../../../../mipsel-linux-uclibc/bin/ld:
-ldso/ldso/ld-uClibc_so.a(ldso.oS): ABI is incompatible with that of the
-selected emulation
-/home/jczhang/research/buildroot/build_mipsel/staging_dir/usr/lib/gcc/mipsel-linux-uclibc/4.2.4/../../../../mipsel-linux-uclibc/bin/ld:
-failed to merge target specific data of file
-ldso/ldso/ld-uClibc_so.a(ldso.oS)
-/home/jczhang/research/buildroot/build_mipsel/staging_dir/usr/lib/gcc/mipsel-linux-uclibc/4.2.4/../../../../mipsel-linux-uclibc/bin/ld:
-ldso/ldso/ld-uClibc_so.a(resolve.oS): ABI is incompatible with that of the
-selected emulation
-/home/jczhang/research/buildroot/build_mipsel/staging_dir/usr/lib/gcc/mipsel-linux-uclibc/4.2.4/../../../../mipsel-linux-uclibc/bin/ld:
-failed to merge target specific data of file
-ldso/ldso/ld-uClibc_so.a(resolve.oS)
-ldso/ldso/ld-uClibc_so.a(ldso.oS): In function `_start':
-ldso.c:(.text+0x20): undefined reference to `_DYNAMIC'
-make[1]: *** [lib/ld-uClibc.so] Error 1
-make[1]: Leaving directory
-`/home/jczhang/research/buildroot/toolchain_build_mipsel/uClibc-0.9.30'
-make: ***
-[/home/jczhang/research/buildroot/toolchain_build_mipsel/uClibc-0.9.30/lib/libc.a]
-Error 2
+Log:
+Another external toolchain support solution
 
- I made some investigation on the problem. I found ldso.oS is a
-n32 ELF file. But the linker(i.e.,buildroot/build_mipsel/staging_dir
-/usr/mipsel-linux-uclibc/bin/ld)'s default link script uses an o32 format.
-So the linker complains conflict ABIs between the input file(ld-uClibc_so.a)
-and the output file(ld-uClibc-0.9.30.so)
-  But why buildroot builds a binutils like this? I don't have any idea.
+ * In toolchain/external-toolchain/ext-tool.mk, copy the contents of
+   the sysroot directory to the staging dir.
 
-  Any help is appreciated.
-  Thanks!
+ * In package/Makefile.in, add a --sysroot CFLAGS pointing to the
+   staging dir
+
+ * Remove the CFLAGS and LDFLAGS definition from
+   TARGET_CONFIGURE_OPTS. I haven't investigated exactly why, but with
+   these options, DirectFB fails to build because it cannot find
+   PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP, even if DirectFB's Makefile
+   properly sets -D_GNU_SOURCE.
+
+I have already sent this patch on December, 2nd to the mailing-list,
+but got no feedback. So let's commit and see what happens :-)
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+
+
+Modified:
+   trunk/buildroot/package/Makefile.in
+   trunk/buildroot/toolchain/external-toolchain/ext-tool.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/Makefile.in
+===================================================================
+--- trunk/buildroot/package/Makefile.in	2008-12-13 15:21:07 UTC (rev 24407)
++++ trunk/buildroot/package/Makefile.in	2008-12-13 16:15:50 UTC (rev 24408)
+@@ -89,7 +89,7 @@
+ # else it's an external toolchain
+ #########################################################################
+ else
+-TARGET_CFLAGS=$(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING) -I$(STAGING_DIR)/include -I$(STAGING_DIR)/usr/include -I$(TOOLCHAIN_EXTERNAL_PATH)/$(TOOLCHAIN_EXTERNAL_PREFIX)/include
++TARGET_CFLAGS=$(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING) -I$(STAGING_DIR)/include -I$(STAGING_DIR)/usr/include -I$(TOOLCHAIN_EXTERNAL_PATH)/$(TOOLCHAIN_EXTERNAL_PREFIX)/include --sysroot $(STAGING_DIR)/
+ TARGET_CXXFLAGS=$(TARGET_CFLAGS)
+ TARGET_LDFLAGS=-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib
+ endif
+@@ -210,8 +210,6 @@
+ 		AR="$(TARGET_AR)" \
+ 		AS="$(TARGET_AS)" \
+ 		LD="$(TARGET_LD)" \
+-		CFLAGS="$(TARGET_CFLAGS)" \
+-		LDFLAGS="$(TARGET_LDFLAGS)" \
+ 		NM="$(TARGET_NM)" \
+ 		CC="$(TARGET_CC) $(TARGET_CFLAGS)" \
+ 		GCC="$(TARGET_CC) $(TARGET_CFLAGS)" \
+
+Modified: trunk/buildroot/toolchain/external-toolchain/ext-tool.mk
+===================================================================
+--- trunk/buildroot/toolchain/external-toolchain/ext-tool.mk	2008-12-13 15:21:07 UTC (rev 24407)
++++ trunk/buildroot/toolchain/external-toolchain/ext-tool.mk	2008-12-13 16:15:50 UTC (rev 24408)
+@@ -44,6 +44,11 @@
+  \
+ 	echo -n
+ 
++copy_toolchain_sysroot = \
++	SYSROOT_DIR=`$(TARGET_CC) -v 2>&1 | grep ^Configured | tr " " "\n" | grep -- "--with-sysroot" | cut -f2 -d=`; \
++	cp -a $${SYSROOT_DIR}/* $(STAGING_DIR)/ ; \
++	find $(STAGING_DIR) -type d | xargs chmod 755
++
+ uclibc: dependencies $(TARGET_DIR)/lib/$(strip $(subst ",, $(BR2_TOOLCHAIN_EXTERNAL_LIB_C)))
+ 
+ $(TARGET_DIR)/lib/$(strip $(subst ",, $(BR2_TOOLCHAIN_EXTERNAL_LIB_C))):
+@@ -54,3 +59,4 @@
+ 	for libs in $(strip $(subst ",, $(BR2_TOOLCHAIN_EXTERNAL_LIBS))); do \
+ 		$(call copy_toolchain_lib_root, $$libs, /lib, $(BR2_TOOLCHAIN_EXTERNAL_STRIP)); \
+ 	done
++	$(call copy_toolchain_sysroot)
+\ No newline at end of file
