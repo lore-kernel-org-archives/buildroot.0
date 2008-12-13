@@ -1,26 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 13 Dec 2008 12:04:14 +0100
-Subject: [Buildroot] [PATCH] Bump php to 5.2.7
-In-Reply-To: <49427039.1040702@zacarias.com.ar>
-References: <49427039.1040702@zacarias.com.ar>
-Message-ID: <20081213120414.7791f8eb@surf>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Sat, 13 Dec 2008 03:52:54 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/config
+Message-ID: <20081213115254.A14C63C66C@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri, 12 Dec 2008 12:07:53 -0200,
-Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
+Author: jacmet
+Date: 2008-12-13 03:52:54 -0800 (Sat, 13 Dec 2008)
+New Revision: 24403
 
-> Same deal as lighttpd, fixes a couple security issues.
-> Tested on a custom ARMv4 board.
+Log:
+menuconfig: don't prepend CONFIG_ to symbols in help text
 
-Applied as r24402. Thanks!
+Modified:
+   trunk/buildroot/package/config/mconf.c
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+
+Changeset:
+Modified: trunk/buildroot/package/config/mconf.c
+===================================================================
+--- trunk/buildroot/package/config/mconf.c	2008-12-13 11:01:21 UTC (rev 24402)
++++ trunk/buildroot/package/config/mconf.c	2008-12-13 11:52:54 UTC (rev 24403)
+@@ -743,7 +743,7 @@
+ 	if (menu_has_help(menu))
+ 	{
+ 		if (sym->name) {
+-			str_printf(&help, "CONFIG_%s:\n\n", sym->name);
++			str_printf(&help, "%s:\n\n", sym->name);
+ 			str_append(&help, _(menu_get_help(menu)));
+ 			str_append(&help, "\n");
+ 		}
