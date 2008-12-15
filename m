@@ -1,29 +1,24 @@
-From: hartleys <hartleys@visionengravers.com>
-Date: Mon, 15 Dec 2008 17:51:20 -0500
-Subject: [Buildroot] List not receiving bug reports anymore ?
-In-Reply-To: <20081215234555.296bd140@surf>
-References: <20081215234555.296bd140@surf>
-Message-ID: <BD79186B4FD85F4B8E60E381CAEE1909ED57CE@mi8nycmail19.Mi8.com>
+From: Dan Lykowski <dan.lykowski@dynonavionics.com>
+Date: Mon, 15 Dec 2008 15:24:40 -0800
+Subject: [Buildroot] Bug building fontconfig
+Message-ID: <4946E738.6020803@dynonavionics.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday, December 15, 2008 3:46 PM, Thomas Petazzoni wrote:
-> Since November, 21st, I haven't seen a mail coming from
-> Buildroot's bug tracking system. Is it because :
->
-> * of a technical issue ?
-> * people got fed up of filling bug reports that remained
->   unanswered ?
-> * Buildroot is bug-free ?
+Building fontconfig crashes with the following problem on Ubuntu 8.04/8.10.
 
-Probably not because of the last reason ;-)
+/usr/bin/gcc -L/buildroot/build_i686/staging_dir/lib 
+-L/buildroot/build_i686/staging_dir/usr/lib 
+--sysroot=/buildroot/build_i686/staging_dir/ -o fc-case fc-case.o
+/usr/bin/ld: this linker was not configured to use sysroots
+collect2: ld returned 1 exit status
 
-Possibly people are just posting to this list and not filing a bug
-report. I personally did not realize there was a bug tracking system.
+Removing the --sysroot and building by hand allows the file to link. I 
+cant seem to find where this is being added to the cflags/ldflags. Any 
+help would be appreciated. It continues to happen whenever linking using 
+the host linker.
 
-Just me two cents...
-
-Hartley
+Dan Lykowski
