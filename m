@@ -1,23 +1,47 @@
-From: Quick X <quickx@hotmail.com>
-Date: Tue, 16 Dec 2008 15:13:25 -0800
-Subject: [Buildroot] REQ: U-Boot Update on the Atmel Devices (at91sam9261)
-Message-ID: <BAY124-W4592D0A695B7609A243BCDD2F50@phx.gbl>
+From: theHog <lists@t3i.nl>
+Date: Wed, 17 Dec 2008 00:43:04 +0100
+Subject: [Buildroot] Issue with login
+Message-ID: <20081217004304.7b1ozl8hickg4gsg@webmail.dds.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
 
-I see "ninevolz" tried to update the Atmel U-Boot to the 1.3.x version almost a year ago but it was reverted by ulf (bad patch).  U-Boot 1.2.0 is pretty old (~2 years) and the newest U-Boot works for Atmel devices.
- 
-Sam4Linux updated to 1.3.4 (http://www.linux4sam.org/twiki/bin/view/Linux4SAM/U-Boot) and it works perfectly on my board.
-Denx.de (http://www.denx.de/wiki/U-Boot/Custodians) has the u-boot-at91 git tree that I use and it works perfectly on my board.
-Buildroot seems to be stuck at 1.2.0 eventhough 1.3.x (at91 version) has been around for about a year now.
- 
-Just a low-priority request since anyone can pretty easily include the 1.3.x version manually with their buildroot, not sure exactly what would have to be changed but it'd be nice if buildroot included it.  Thanks
-_________________________________________________________________
+I built a rootfs using buildroot and mounted it over nfs on a Atmel  
+ARM9 board. The
+boards boots OK, but when it gets to the login prompt, logging in doesn't
+seem to work. The login prompt appears again after I type the name and
+password.
+
+I checked various thing:
+- permissions on files seems OK,
+- /etc/securetty contains ttyS0 (only way for now to get in),
+- the password itself in /etc/passwd,
+- login, sh and getty binaries are in place.
+
+I have access to the /var/log/messages file since the root fs is mounted from
+nfs. It just repeats the following for every login attempt:
+Dec 31 17:27:53 eddy auth.info login[716]: root login on 'ttyS0'
+Dec 31 17:27:53 eddy daemon.info init: process '/sbin/getty -L ttyS0 115200
+vt100' (pid 716) exited. Scheduling for restart.
+Dec 31 17:27:53 eddy daemon.info init: starting pid 717, tty '/dev/ttyS0':
+'/sbin/getty -L ttyS0 115200 vt100'
+
+I used a pretty out-of-the-box config for buildroot (it's attached). What
+could be wrong here?
+
+Thanks,
+
+Richard.
+
 
 -------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://busybox.net/lists/buildroot/attachments/20081216/7586cadc/attachment.htm 
+A non-text attachment was scrubbed...
+Name: buildroot-config
+Type: application/octet-stream
+Size: 17299 bytes
+Desc: not available
+Url : http://busybox.net/lists/buildroot/attachments/20081217/cf3c483c/attachment-0001.obj 
