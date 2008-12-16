@@ -1,43 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Dec 2008 20:48:25 +0100
-Subject: [Buildroot] Bug building fontconfig
-In-Reply-To: <4946E738.6020803@dynonavionics.com>
-References: <4946E738.6020803@dynonavionics.com>
-Message-ID: <20081216204825.00249c96@surf>
+From: Tim Barr <tbarr@multitech.com>
+Date: Tue, 16 Dec 2008 16:01:31 -0600
+Subject: [Buildroot] Questions on buildroot device_table.txt file and how to
+	use it
+Message-ID: <1CD05B980C94AC408B37C82BBABAA3E60F3544B0@mtsexchange.dc.multitech.prv>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 15 Dec 2008 15:24:40 -0800,
-Dan Lykowski <dan.lykowski@dynonavionics.com> a ?crit :
+I have been having a problem with missing devices in buildroot for my
+at91sam9g20 design, specifically rtc0 and ppp. The kernel has ppp
+enabled and sets the rtt to rtc0. But the RFS does not have drivers for
+either in the /dev directory. Doing some research I found a file in
+buildroot called device_table.txt that looks like what I need to modify
+in order to make these drivers available in my build. One thing I am not
+sure of is which version of this file I should modify. There is one in
+"target/generic" and also in "target/device/Atmel/root". Which one
+should I change? Also, it is not clear to me if it is possible to have
+board specific device_table.txt files. Is that possible? And if so, how
+would I do it? 
+ 
 
-> Building fontconfig crashes with the following problem on Ubuntu
-> 8.04/8.10.
-> 
-> /usr/bin/gcc -L/buildroot/build_i686/staging_dir/lib 
-> -L/buildroot/build_i686/staging_dir/usr/lib 
-> --sysroot=/buildroot/build_i686/staging_dir/ -o fc-case fc-case.o
-> /usr/bin/ld: this linker was not configured to use sysroots
-> collect2: ld returned 1 exit status
-> 
-> Removing the --sysroot and building by hand allows the file to link.
-> I cant seem to find where this is being added to the cflags/ldflags.
-> Any help would be appreciated. It continues to happen whenever
-> linking using the host linker.
 
-My patch committed at r24408 added a --sysroot option in the case of
-external toolchains, to get things working properly. Are you by any
-chance using a configuration with an external toolchain ?
+Timothy Barr
+Hardware Development Engineer
+for Multi-Tech Systems, Inc.
+ <mailto:tbarr@multitech.com> tbarr at multitech.com 
 
-Could you send your .config ?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+ 
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20081216/4703234c/attachment.htm 
