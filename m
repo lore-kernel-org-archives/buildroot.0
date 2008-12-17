@@ -1,68 +1,66 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 17 Dec 2008 14:32:43 +0100
-Subject: [Buildroot] hotplug lsof index libssp
-In-Reply-To: <6c8937b20812162350r1d6aea89jc784100c7151b274@mail.gmail.com> (l.
-	m.'s message of "Wed\, 17 Dec 2008 15\:50\:52 +0800")
-References: <6c8937b20812162140u6138e517n87fe31e24e82b7ba@mail.gmail.com>
-	<20081217064519.GA23637@cloud.net.au>
-	<6c8937b20812162350r1d6aea89jc784100c7151b274@mail.gmail.com>
-Message-ID: <878wqf2ah0.fsf@macbook.be.48ers.dk>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Wed, 17 Dec 2008 16:06:17 +0100
+Subject: [Buildroot] Architecture specific patches for kernel-headers?
+Message-ID: <00ee01c96059$0ab8aa40$ae3118ac@Glamdring>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "l" == l m <lmmmcc@gmail.com> writes:
+In order to avoid cluttering the toolchain/kernel-headers directory
+the target/device/Atmel/ directory contains two subdirs
+for at91 and avr32 specific patches. "arch-at91" and "arch-avr32".
 
-Hi,
+These patches are not applied when the kernel headers are built
+and I discussed this with  Hans Christian Egtvedt
+which has put the AVR32 specific patches in toolchain/kernel-headers.
 
- >> Bytes. Is it this diethotplug-0.5.tar in r24435 corrupted?
+I am worried that this directory will get cluttered with this approach.
 
- l>     Yes it is. Thanks, I fixed it in r24436.
+I can see a couple of ways to handle this.
 
-Yeah, my fault.
+1) Create toolchain/kernel-headers/arch/arch-at91
+    and toolchain/kernel-headers/arch/arch-avr32 etc.
+    and patch from there.
 
- >> 2. lsof
- >> The default lsof site ftp://lsof.itap.purdue.edu is not valid now. I use
+2) Do the same as target/linux/Makefile.advanced
+    and add a conditional patch to the kernel-headers Makefile based on 
+    $(KERNEL_ARCH_PATCH_DIR)
 
- l>     ? It looks ok to me.
+3) Just put it in the toolchain/kernel directory risking
+    that there will be several conflicting patches
+    in the future.
+    If someone updates the kernel-header version
+    to a newer kernel, the patches will be ignored
+    until someone updates them.
 
- l> ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/lsof_4.81.tar.bz2 Can you
- l> download this link? This is the wget result.
- 
- l> " wget ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/lsof_4.81.tar.bz2
- l> --2008-12-17 15:48:46--  ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/
- l> lsof_4.81.tar.bz2
- l>            => `lsof_4.81.tar.bz2'
- l> Resolving lsof.itap.purdue.edu... 128.210.7.20
- l> Connecting to lsof.itap.purdue.edu|128.210.7.20|:21... connected.
- l> Logging in as anonymous ...
- l> Error in server greeting.
- l> Retrying."
- 
-It seems like your reverse dns is broken. From http://people.freebsd.org/~abe/:
+4) Set KERNEL_HEADERS_PATCH_DIR to
+    KERNEL_ARCH_PATCH_DIR,
 
-!!!NOTICE!!! The ftpd server of the host, lsof.itap.purdue.edu, where
-   the lsof tar files reside MUST be able to convert (do a DNS
-   reverse-lookup of) the Internet address of the host from which an
-   attempt is being made to "get" the lsof tar file, and then it must
-   be able to convert (do a DNS forward lookup of) that host name and
-   find the host's starting Internet address.
+    We have to be careful, because the user might want
+    to build a new kernel where the patches cannot be 
+    applied to both the kernel header source and the
+    kernel actually built
 
-There's not much we can do about it. If you can get it from somewhere
-else you can stick it in your download directory and buildroot won't
-try to download it any more.
+5) ?
 
- >> 3. index() function
- >> Some packages still use index(), but default setting doesn't support it.
+In the arch-at91 and arch-avr32 you have to explicitly enable the patches.
+The reasoning behind this is that a patch that applies
+to 2.6.27.3 may not apply to 2.6.27.6 so you cannot 
+just apply the patch and hope for the best, based on
+the major number.
+If you base yourself on the major/minor number 
+combination, you are very restrictive.
+A patch might work from 2.6.27.4 to 2.6.27.9 without problems
+and there is no reason to restrict this more than neccessary.
 
- l>     Which packages?
- 
- l> I only tried tinylogin and syslogd.
+The way it is done now, there are a number of patches
+and if you have a supported major/minor version, then
+you get this patchset as a default, but you can select
+to use this patchset if you have another kernel version.
 
-Ahh, any reason you cannot use the busybox versions? tinyloging is
-deprecated.
+Would appreciate people's thinking here.
 
--- 
-Bye, Peter Korsgaard
+Best Regards
+Ulf Samuelsson
