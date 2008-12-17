@@ -1,27 +1,88 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 17 Dec 2008 11:31:17 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/hotplug
-In-Reply-To: <200812171051.12956.markus.heidelberg@web.de>
-References: <20081217063220.1F58D3C682@busybox.net>
-	<9305ca410812170140r1bf63f0ereb8ad96246740e7b@mail.gmail.com>
-	<200812171051.12956.markus.heidelberg@web.de>
-Message-ID: <9305ca410812170231i3f864392v7a0ff87e900aeeb4@mail.gmail.com>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Wed, 17 Dec 2008 02:32:08 -0800 (PST)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/openswan
+Message-ID: <20081217103208.AAEE53C6F8@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Dec 17, 2008 at 10:51 AM, Markus Heidelberg
-<markus.heidelberg@web.de> wrote:
-> These files are also affected:
->
->   trunk/buildroot/package/openswan/linux-2.6.20-openswan-2.4.7.kernel-2.6-klips.patch
->   trunk/buildroot/package/openswan/linux-2.6.20.4-openswan-2.4.7.kernel-2.6-klips.patch
->   trunk/buildroot/package/openswan/linux-2.6.21.5-openswan-2.4.8.kernel-2.6-klips.patch
->   trunk/buildroot/package/openswan/linux-2.6.22.6-openswan-2.4.9.kernel-2.6-klips.patch
+Author: jacmet
+Date: 2008-12-17 02:32:06 -0800 (Wed, 17 Dec 2008)
+New Revision: 24438
 
-Ahh yes, thanks - Will revert.
+Log:
+openswan: revert $(strip ...) change (r24307) on patches
 
--- 
-Bye, Peter Korsgaard
+Thanks to Markus for noticing.
+
+Modified:
+   trunk/buildroot/package/openswan/linux-2.6.20-openswan-2.4.7.kernel-2.6-klips.patch
+   trunk/buildroot/package/openswan/linux-2.6.20.4-openswan-2.4.7.kernel-2.6-klips.patch
+   trunk/buildroot/package/openswan/linux-2.6.21.5-openswan-2.4.8.kernel-2.6-klips.patch
+   trunk/buildroot/package/openswan/linux-2.6.22.6-openswan-2.4.9.kernel-2.6-klips.patch
+
+
+Changeset:
+/svn/hooks/commit-email.pl: `/usr/bin/svnlook diff /svn -r 24438' failed with this output:
+Modified: trunk/buildroot/package/openswan/linux-2.6.20-openswan-2.4.7.kernel-2.6-klips.patch
+===================================================================
+--- trunk/buildroot/package/openswan/linux-2.6.20-openswan-2.4.7.kernel-2.6-klips.patch	2008-12-17 09:28:33 UTC (rev 24437)
++++ trunk/buildroot/package/openswan/linux-2.6.20-openswan-2.4.7.kernel-2.6-klips.patch	2008-12-17 10:32:06 UTC (rev 24438)
+@@ -9774,7 +9774,7 @@
+ +asm-obj-$(CONFIG_MWINCHIP3D)	+= match686.o
+ +
+ +obj-y += $(asm-obj-y)
+-+ifneq ($(asm-obj-y),)
+++ifneq ($(strip $(asm-obj-y)),)
+ +  EXTRA_CFLAGS += -DASMV
+ +endif
+ +
+@@ -13864,12 +13864,12 @@
+ +++ linux/net/ipsec/alg/Makefile     Mon Feb  9 13:51:03 2004
+ @@ -0,0 +1,112 @@
+ +# Makefile,v 1.1.2.1 2003/11/21 18:12:23 jjo Exp
+-+ifeq ($(KLIPSMODULE),)
+++ifeq ($(strip $(KLIPSMODULE)),)
+ +FREESWANSRCDIR=.
+ +else
+ +FREESWANSRCDIR=../../../..
+ +endif
+-+ifeq ($(KLIPS_TOP),)
+++ifeq ($(strip $(KLIPS_TOP)),)
+ +KLIPS_TOP=../../..
+ +override EXTRA_CFLAGS += -I$(KLIPS_TOP)/include
+ +endif
+
+Modified: trunk/buildroot/package/openswan/linux-2.6.20.4-openswan-2.4.7.kernel-2.6-klips.patch
+===================================================================
+--- trunk/buildroot/package/openswan/linux-2.6.20.4-openswan-2.4.7.kernel-2.6-klips.patch	2008-12-17 09:28:33 UTC (rev 24437)
++++ trunk/buildroot/package/openswan/linux-2.6.20.4-openswan-2.4.7.kernel-2.6-klips.patch	2008-12-17 10:32:06 UTC (rev 24438)
+@@ -9774,7 +9774,7 @@
+ +asm-obj-$(CONFIG_MWINCHIP3D)	+= match686.o
+ +
+ +obj-y += $(asm-obj-y)
+-+ifneq ($(asm-obj-y),)
+++ifneq ($(strip $(asm-obj-y)),)
+ +  EXTRA_CFLAGS += -DASMV
+ +endif
+ +
+@@ -13864,12 +13864,12 @@
+ +++ linux/net/ipsec/alg/Makefile     Mon Feb  9 13:51:03 2004
+ @@ -0,0 +1,112 @@
+ +# Makefile,v 1.1.2.1 2003/11/21 18:12:23 jjo Exp
+-+ifeq ($(KLIPSMODULE),)
+++ifeq ($(strip $(KLIPSMODULE)),)
+ +FREESWANSRCDIR=.
+ +else
+ +FREESWANSRCDIR=../../../..
+ +endif
+-+ifeq ($(KLIPS_TOP),)
+++ifeq ($(strip $(KLIPS_TOP)),)
+ +KLIPS_TOP=../../..
+ +override EXTRA_CFLAGS += -I$(KLIPS_TOP)/include
+ +endif
+
+Modified: trunk/buildroot/package/openswan/linux-2.6.21.5-openswan-2.4.8.kernel-2.6-klips.patch
+===================================================================
