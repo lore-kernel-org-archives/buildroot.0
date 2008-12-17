@@ -1,47 +1,48 @@
-From: theHog <lists@t3i.nl>
-Date: Wed, 17 Dec 2008 00:43:04 +0100
-Subject: [Buildroot] Issue with login
-Message-ID: <20081217004304.7b1ozl8hickg4gsg@webmail.dds.nl>
+From: l m <lmmmcc@gmail.com>
+Date: Wed, 17 Dec 2008 13:40:41 +0800
+Subject: [Buildroot] hotplug lsof index libssp
+Message-ID: <6c8937b20812162140u6138e517n87fe31e24e82b7ba@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Dear All,
 
-I built a rootfs using buildroot and mounted it over nfs on a Atmel  
-ARM9 board. The
-boards boots OK, but when it gets to the login prompt, logging in doesn't
-seem to work. The login prompt appears again after I type the name and
-password.
+I've met some problems with recent buildroot versions.
 
-I checked various thing:
-- permissions on files seems OK,
-- /etc/securetty contains ttyS0 (only way for now to get in),
-- the password itself in /etc/passwd,
-- login, sh and getty binaries are in place.
+1. hotplug: r24435
+"cat package/hotplug/diethotplug-0.5.tar | tar -C
+/opt/buildroot/build_i686   -xf -
+tar: Skipping to next header
+tar: Error exit delayed from previous errors
+make: *** [/opt/buildroot/build_i686/diethotplug-0.5] Error 2"
 
-I have access to the /var/log/messages file since the root fs is mounted from
-nfs. It just repeats the following for every login attempt:
-Dec 31 17:27:53 eddy auth.info login[716]: root login on 'ttyS0'
-Dec 31 17:27:53 eddy daemon.info init: process '/sbin/getty -L ttyS0 115200
-vt100' (pid 716) exited. Scheduling for restart.
-Dec 31 17:27:53 eddy daemon.info init: starting pid 717, tty '/dev/ttyS0':
-'/sbin/getty -L ttyS0 115200 vt100'
+I've compared diethotplug-0.5.tar in different buildroot svn versions. In
+r24435 the file size is 40951 Bytes, in another working version, it's 40960
+Bytes. Is it this diethotplug-0.5.tar in r24435 corrupted?
 
-I used a pretty out-of-the-box config for buildroot (it's attached). What
-could be wrong here?
+2. lsof
+The default lsof site ftp://lsof.itap.purdue.edu is not valid now. I use
+http://www.mirrors.wiretapped.net/security/host-security/lsof/ to replace
+it.
 
-Thanks,
+3. index() function
+Some packages still use index(), but default setting doesn't support it. Is
+it the "Enable SuSv3 LEGACY" in uclibc? I use strchr() to replace this
+function.
 
-Richard.
+4. libssp.so
+For my X86 target system and FC10 X86 host system with gcc 4.3.2, openssh
+compiling is ok, but its running (sshd, ssh-keygen,...) needs libssp.so in
+the target system. Some people said in X86 with gcc 4 libssp is needed.
+Should you add it to openssh.mk for X86 and gcc 4?
 
 
+Regards
+
+LM
 -------------- next part --------------
-A non-text attachment was scrubbed...
-Name: buildroot-config
-Type: application/octet-stream
-Size: 17299 bytes
-Desc: not available
-Url : http://busybox.net/lists/buildroot/attachments/20081217/cf3c483c/attachment-0001.obj 
+An HTML attachment was scrubbed...
+URL: http://busybox.net/lists/buildroot/attachments/20081217/9c4afe32/attachment.htm 
