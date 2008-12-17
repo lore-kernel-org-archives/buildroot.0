@@ -1,7 +1,7 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Wed, 17 Dec 2008 16:06:17 +0100
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Wed, 17 Dec 2008 15:55:40 +0100
 Subject: [Buildroot] Architecture specific patches for kernel-headers?
-Message-ID: <00ee01c96059$0ab8aa40$ae3118ac@Glamdring>
+Message-ID: <00e301c96058$4c655e30$ae3118ac@Glamdring>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -31,19 +31,6 @@ I can see a couple of ways to handle this.
 3) Just put it in the toolchain/kernel directory risking
     that there will be several conflicting patches
     in the future.
-    If someone updates the kernel-header version
-    to a newer kernel, the patches will be ignored
-    until someone updates them.
-
-4) Set KERNEL_HEADERS_PATCH_DIR to
-    KERNEL_ARCH_PATCH_DIR,
-
-    We have to be careful, because the user might want
-    to build a new kernel where the patches cannot be 
-    applied to both the kernel header source and the
-    kernel actually built
-
-5) ?
 
 In the arch-at91 and arch-avr32 you have to explicitly enable the patches.
 The reasoning behind this is that a patch that applies
