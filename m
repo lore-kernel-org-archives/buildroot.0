@@ -1,45 +1,24 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Wed, 17 Dec 2008 01:28:34 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/target
-Message-ID: <20081217092834.1782A3C6C2@busybox.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 17 Dec 2008 10:40:02 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/hotplug
+In-Reply-To: <20081217063220.1F58D3C682@busybox.net>
+References: <20081217063220.1F58D3C682@busybox.net>
+Message-ID: <9305ca410812170140r1bf63f0ereb8ad96246740e7b@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2008-12-17 01:28:33 -0800 (Wed, 17 Dec 2008)
-New Revision: 24437
+On Wed, Dec 17, 2008 at 7:32 AM,  <hamish@uclibc.org> wrote:
+> Author: hamish
+> Date: 2008-12-16 22:32:19 -0800 (Tue, 16 Dec 2008)
+> New Revision: 24436
+>
+> Log:
+> Revert $(strip ...) change which corrupted this file
 
-Log:
-Remove AVR32 target variants, the current entries refers to CHIPS which have the same CPU core, CHIP variant is defined elsewhere
+Argh, sorry about that - Seems like sed went a bit over board :/
 
-Modified:
-   trunk/buildroot/target/Config.in.arch
-
-
-Changeset:
-Modified: trunk/buildroot/target/Config.in.arch
-===================================================================
---- trunk/buildroot/target/Config.in.arch	2008-12-17 06:32:19 UTC (rev 24436)
-+++ trunk/buildroot/target/Config.in.arch	2008-12-17 09:28:33 UTC (rev 24437)
-@@ -186,18 +186,6 @@
- 
- choice
- 	prompt "Target Architecture Variant"
--	depends on BR2_avr32
--config BR2_at32ap7000
--	bool "AT32AP7000"
--config BR2_at32ap7001
--	bool "AT32AP7001"
--config BR2_at32ap7002
--	bool "AT32AP7002"
--endchoice
--
--
--choice
--	prompt "Target Architecture Variant"
- 	depends on BR2_sh
- 	default BR2_sh4
- 	help
+-- 
+Bye, Peter Korsgaard
