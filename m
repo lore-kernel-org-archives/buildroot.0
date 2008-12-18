@@ -1,70 +1,66 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Wed, 17 Dec 2008 10:03:30 -0800 (PST)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
-Message-ID: <20081217180330.3BC463C2BF@busybox.net>
+From: root at uclibc.org <root@uclibc.org>
+Date: Thu, 18 Dec 2008 00:48:49 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/docs
+Message-ID: <20081218004849.C8D7276720@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2008-12-17 10:03:29 -0800 (Wed, 17 Dec 2008)
-New Revision: 24441
+Author: root
+Date: 2008-12-18 00:48:49 +0000 (Thu, 18 Dec 2008)
+New Revision: 24447
 
 Log:
-Update to latest linux versions
+Update links to new site locations (via Lance Albertson of OSL)
+
 
 Modified:
-   trunk/buildroot/target/linux/Config.in.advanced
+   trunk/buildroot/docs/download.html
+   trunk/buildroot/docs/header.html
+   trunk/buildroot/docs/lists.html
 
 
 Changeset:
-Modified: trunk/buildroot/target/linux/Config.in.advanced
+Modified: trunk/buildroot/docs/download.html
 ===================================================================
---- trunk/buildroot/target/linux/Config.in.advanced	2008-12-17 16:01:39 UTC (rev 24440)
-+++ trunk/buildroot/target/linux/Config.in.advanced	2008-12-17 18:03:29 UTC (rev 24441)
-@@ -32,7 +32,7 @@
- # --- These 'constants' requires regular maintenance, so put them first
- config BR2_KERNEL_PATCH_LEVEL
- 	string
--	default "7" if BR2_LINUX_2_6_27 && BR2_KERNEL_ADD_LATEST_MINORPATCH
-+	default "9" if BR2_LINUX_2_6_27 && BR2_KERNEL_ADD_LATEST_MINORPATCH
- 	default "8" if BR2_LINUX_2_6_26 && BR2_KERNEL_ADD_LATEST_MINORPATCH
- 	default "9" if BR2_LINUX_2_6_25 && BR2_KERNEL_ADD_LATEST_MINORPATCH
- 	default "7" if BR2_LINUX_2_6_24 && BR2_KERNEL_ADD_LATEST_MINORPATCH
-@@ -44,7 +44,7 @@
+--- trunk/buildroot/docs/download.html	2008-12-18 00:48:17 UTC (rev 24446)
++++ trunk/buildroot/docs/download.html	2008-12-18 00:48:49 UTC (rev 24447)
+@@ -15,7 +15,7 @@
+ 	<li> Click here to <a href="downloads/snapshots/">Daily Snapshots</a>.
+ 	</li>
  
- config BR2_KERNEL_CURRENT_VERSION
- 	string
--	default "2.6.27.7"
-+	default "2.6.27.9"
+-	<li> Click here to <a href="/cgi-bin/viewcvs.cgi/trunk/buildroot/">browse the source tree</a>.
++	<li> Click here to <a href="http://sources.busybox.net/index.py/trunk/buildroot/">browse the source tree</a>.
+ 	</li>
  
- config BR2_KERNEL_NEXT_VERSION
- 	string
-@@ -73,11 +73,11 @@
+ 	<li>Anonymous <a href="subversion.html">Subversion access</a> is available.
+
+Modified: trunk/buildroot/docs/header.html
+===================================================================
+--- trunk/buildroot/docs/header.html	2008-12-18 00:48:17 UTC (rev 24446)
++++ trunk/buildroot/docs/header.html	2008-12-18 00:48:49 UTC (rev 24447)
+@@ -46,7 +46,7 @@
+     <br><a href="/about.html">About</a>
+     <br><a href="/news.html">Latest News</a>
+     <br><a href="/download.html">Download</a>
+-    <br><a href="/cgi-bin/viewcvs.cgi/trunk/buildroot/">Browse Source</a>
++    <br><a href="http://sources.busybox.net/index.py/trunk/buildroot/">Browse Source</a>
+     <br><a href="/subversion.html">Accessing Source</a>
+     <br><a href="http://bugs.uclibc.org/">Bug Tracking</a>
+     <br><a href="/docs.html">Documentation</a>
+
+Modified: trunk/buildroot/docs/lists.html
+===================================================================
+--- trunk/buildroot/docs/lists.html	2008-12-18 00:48:17 UTC (rev 24446)
++++ trunk/buildroot/docs/lists.html	2008-12-18 00:48:49 UTC (rev 24447)
+@@ -5,7 +5,7 @@
+ <h3>Mailing List Information</h3>
+ Buildroot has a <a href="/lists/buildroot/">mailing list</a> for discussion and
+ development.  You can subscribe by visiting
+-<a href="/mailman/listinfo/buildroot">this page</a>.
++<a href="http://lists.busybox.net/mailman/listinfo/buildroot">this page</a>.
+ Only subscribers to the Buildroot mailing list are allowed to post
+ to this list.
  
- config LINUX26_LATEST_RC_VERSION
- 	string
--	default "2.6.28-rc6" if BR2_KERNEL_ADD_LATEST_RC_PATCH
-+	default "2.6.28-rc8" if BR2_KERNEL_ADD_LATEST_RC_PATCH
- 
- config LINUX26_LATEST_GIT_VERSION
- 	string
--	default "2.6.28-rc6-git1" if BR2_KERNEL_ADD_LATEST_SNAPSHOT
-+	default "2.6.28-rc6-git4" if BR2_KERNEL_ADD_LATEST_SNAPSHOT
- 
- config LINUX26_LATEST_MM_VERSION
- 	string
-@@ -139,9 +139,9 @@
- 	  Select the specific Linux version you want to use
- 
- config BR2_LINUX_2_6_STABLE
--	bool "The latest stable Linux kernel (2.6.27.7)"
-+	bool "The latest stable Linux kernel (2.6.27.9)"
- 	help
--	  Linux 2.6.27.7
-+	  Linux 2.6.27.9
- 
- config BR2_LINUX_2_6_27
- 	bool "Linux 2.6.27"
