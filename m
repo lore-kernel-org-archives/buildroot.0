@@ -1,18 +1,84 @@
-From: Matt Wood <mattwood2000@gmx.net>
-Date: Fri, 19 Dec 2008 17:59:59 +0100
-Subject: [Buildroot] u-boot and at91bootstrap NAND flash options
-Message-ID: <20081219165959.207450@gmx.net>
+From: Tim Barr <tbarr@multitech.com>
+Date: Fri, 19 Dec 2008 11:04:59 -0600
+Subject: [Buildroot] Issues with patching the kernel in buildroot
+Message-ID: <1CD05B980C94AC408B37C82BBABAA3E60F3F70C3@mtsexchange.dc.multitech.prv>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi guys, is there any specific reason why buildroot does not have options in the menuconfig to compile u-boot with NAND flash support for the AT91SAM9xxx devices?  I know that NAND support does not function for the RevA SAM9260, SAM9263, and the SAM9261, but Rev B has been out for a while for the first two and I think it would be nice to see the options in buildroot instead of having to build manually or download the pre-built binaries from www.linux4sam.org.  
+I am trying to create a BSP in buildroot for my design so that I have a
+working point for the software team. I have created a directory in the
+target/device/Atmel directory for my 9g20 design and put in the proper
+files and subdirectories, including a kernel-patches. I have populated
+this design directory and sub directories with files that have the
+proper names based on the kernel and board name I am using. Everything
+seems to work properly, except for the board patch of the kernel. I have
+a patch file in the kernel-patches directory, but when I run "make
+configured" the patch file does not run. The kernel I am using is the
+baseline 2.6.25 version, and the name of my patchfile is
+linux-2.6.25-100-mt-at91sam9g20-20081217.patch. Here is what I see when
+I run "make configured" with the patch file in the kernel-patches
+directory. I have added some "echos" to the patch-kernel.sh script to
+see what is happening.
+ 
+if [ -d target/device/Atmel/mtcba2sam9g20/kernel-patches/ ] ; then \
+toolchain/patch-kernel.sh
+/home/falingtrea/buildroot/project_build_arm/MTCBA_G1_SS/linux-2.6.25
+target/device/Atmel/mtcba2sam9g20/kernel-patches/ \
+linux-2.6.25\*.patch{,.gz,.bz2} ; \
+fi
+target/device/Atmel/mtcba2sam9g20/kernel-patches/
+linux-2.6.25*.patch{,.gz,.bz2}
+still running
+got here
+ 
+I "echo" out the patchdir and patchpattern variables to see what was
+created. The "still running" echo was just after the section of the
+script that tests the patchdir and kerneldir parameters to make sure
+they are directories. The "got here" echo was right after the "for ...
+do" section of the script that does the actual patching.
+ 
+I then executed the following command line from a prompt:
+ 
+toolchain/patch-kernel.sh
+/home/falingtrea/buildroot/project_build_arm/MTCBA_G1_SS/linux-2.6.25
+target/device/Atmel/mtcba2sam9g20/kernel-patches/
+linux-2.6.25-100-mt-at91sam9g20-20081217.patch
+ 
+Which is basically the same command buildroot sends, but with a specific
+patch filename. And the patch ran successfully.
+ 
+Then I executed the following command line from a prompt:
+ 
+toolchain/patch-kernel.sh
+/home/falingtrea/buildroot/project_build_arm/MTCBA_G1_SS/linux-2.6.25
+target/device/Atmel/mtcba2sam9g20/kernel-patches/
+linux-2.6.25\*.patch{,.gz,.bz2}
+ 
+And got the following result:
+ 
+target/device/Atmel/mtcba2sam9g20/kernel-patches/
+linux-2.6.25*.patch linux-2.6.25*.patch.gz linux-2.6.25*.patch.bz2
+still running
+Applying linux-2.6.25-100-mt-at91sam9g20-20081217.patch using plaintext:
 
-Also, the NAND flash option for at91bootstrap does not work.  The NAND code is missing.  I know that at91bootstrap-1.9 (found here:  ftp://www.linux4sam.org/pub/at91bootstrap/) has fully functional NAND support - any reason why this has not been integrated into the buildroot at91bootstrap?
+.
+.
+.
+got here
+ 
+Which again was a sucessful patch. So it seems for some reason the
+search pattern buildroot sends is not getting expanded correctly. Does
+anyone have any ideas on what is wrong?
+ 
+Timothy Barr
+Hardware Development Engineer
+for Multi-Tech Systems, Inc.
+ <mailto:tbarr@multitech.com> tbarr at multitech.com 
 
-Thanks, Matt.
--- 
-Sensationsangebot verl?ngert: GMX FreeDSL - Telefonanschluss + DSL 
-f?r nur 16,37 Euro/mtl.!* http://dsl.gmx.de/?ac=OM.AD.PD003K1308T4569a
+ 
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://lists.busybox.net/pipermail/buildroot/attachments/20081219/2b99c5c5/attachment.htm 
