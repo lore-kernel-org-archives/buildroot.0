@@ -1,8 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sat, 20 Dec 2008 22:24:12 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Atmel:
-	atstk1005 atstk1005/target_skeleton ats etc...
-Message-ID: <20081220222412.7B21D76CEB@busybox.osuosl.org>
+Date: Sat, 20 Dec 2008 22:26:24 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Atmel
+Message-ID: <20081220222624.AD44976CEB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,93 +9,30 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2008-12-20 22:24:11 +0000 (Sat, 20 Dec 2008)
-New Revision: 24471
+Date: 2008-12-20 22:26:24 +0000 (Sat, 20 Dec 2008)
+New Revision: 24472
 
 Log:
-Add BSP for AP7200
+Add AP7200 eval kit configuration
 
-Added:
-   trunk/buildroot/target/device/Atmel/atstk1005/
-   trunk/buildroot/target/device/Atmel/atstk1005/Makefile.in
-   trunk/buildroot/target/device/Atmel/atstk1005/atstk1005-linux-2.6.27.6.config
-   trunk/buildroot/target/device/Atmel/atstk1005/atstk1005_defconfig
-   trunk/buildroot/target/device/Atmel/atstk1005/busybox-1.9.1.config
-   trunk/buildroot/target/device/Atmel/atstk1005/device_table.txt
-   trunk/buildroot/target/device/Atmel/atstk1005/kernel-patches/
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/TZ
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/asound.state
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/default/
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/default/ntpdate
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/dnsmasq.conf
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/fb.modes
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/fstab
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/group
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/hostname
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/hosts
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/hosts.dnsmasq
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/httpd.conf
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/inetd.conf
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/K20alsa-utils
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/K70sendsig
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/K80netfs
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/K85network
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/K90localfs
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S00mountvirtfs
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S01hotplug
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S02hostname
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S03bootsplash
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S08syslog
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S09klog
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S10modules-init
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S15localfs
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S20network
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S40telnetd
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S41inetd
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S42httpd
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S43ntp
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S49netfs
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S50alsa-utils
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S99gpio
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S99splash
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/rcK
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/rcS
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/inittab
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/mdev.conf
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/modules
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/mplayer.conf
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/mtab
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/network/
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/network/interfaces
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/ntp.conf
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/passwd
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/proftpd.conf
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/protocols
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/resolv.conf
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/samba/
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/samba/smb.conf
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/samba/smbpasswd
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/services
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/shadow
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/etc/shells
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/root/
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/root/.bash_logout
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/root/.bash_profile
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/root/.bashrc
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/sys/
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/sys/.empty
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/usr/
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/usr/share/
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/usr/share/udhcpc/
-   trunk/buildroot/target/device/Atmel/atstk1005/target_skeleton/usr/share/udhcpc/default.script
+Modified:
+   trunk/buildroot/target/device/Atmel/Config.in
 
 
 Changeset:
-
-Sorry, the patch is too large to include (8054 lines).
-Please use ViewCVS to see it!
-
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=24471
+Modified: trunk/buildroot/target/device/Atmel/Config.in
+===================================================================
+--- trunk/buildroot/target/device/Atmel/Config.in	2008-12-20 22:24:11 UTC (rev 24471)
++++ trunk/buildroot/target/device/Atmel/Config.in	2008-12-20 22:26:24 UTC (rev 24472)
+@@ -24,9 +24,10 @@
+ 	default	"at91sam9m10ek"		if	BR2_TARGET_AT91SAM9M10EK
+ 	default	"at91sam9m10dfc"	if	BR2_TARGET_AT91SAM9M10DFC
+ 	default	"atstk100x"		if	BR2_TARGET_AVR32_ATSTK1002
++	default	"atstk1005"		if	BR2_TARGET_AVR32_ATSTK1005
+ 	default	"atngw100"		if	BR2_TARGET_AVR32_ATNGW100
+ 	default "atngw100-base"		if	BR2_TARGET_AVR32_ATNGW100_BASE
+-	default "atngw100-expanded"	if  BR2_TARGET_AVR32_ATNGW100_EXPANDED
++	default "atngw100-expanded"	if	BR2_TARGET_AVR32_ATNGW100_EXPANDED
+ 
+ config BR2_TARGET_AT91_ADVANCED_INFO
+ 	bool "Remove work in progress"
