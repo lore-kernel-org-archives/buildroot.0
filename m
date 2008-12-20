@@ -1,9 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sat, 20 Dec 2008 22:19:39 +0000 (UTC)
-Subject: [Buildroot] svn commit:
-	trunk/buildroot/target/device/Atmel/arch-avr32:
-	kernel-patches-2.6.27.6
-Message-ID: <20081220221939.4935476CEB@busybox.osuosl.org>
+Date: Sat, 20 Dec 2008 22:23:15 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Atmel
+Message-ID: <20081220222315.9048676CEB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,28 +9,46 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2008-12-20 22:19:38 +0000 (Sat, 20 Dec 2008)
-New Revision: 24469
+Date: 2008-12-20 22:23:15 +0000 (Sat, 20 Dec 2008)
+New Revision: 24470
 
 Log:
-Add 2.6.27.7 patches for AVR32
-
-Added:
-   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.27.6/
-   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.27.6/linux-2.6.27.6-100-avr32-atmel.1.patch
-   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.27.6/linux-2.6.27.6-200-avr32-remove.note.gnu.build-id-section.patch
-   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.27.6/linux-2.6.27.6-201-avr32-atmel_mpopfb-disable-debug.patch
-   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.27.6/linux-2.6.27.6-202-avr32-atmel_mpopfb-add-signal-to-disable-line-caching.patch
-   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.27.6/linux-2.6.27.6-203-avr32-fix-arch-header-byteorder.patch
-   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.27.6/linux-2.6.27.6-204-avr32-ap700x-fix-det_pin-for-nand-flash.patch
+Add support for AT32AP7200
 
 Modified:
-   trunk/buildroot/target/device/Atmel/arch-avr32/Config.in.linux.patches
+   trunk/buildroot/target/device/Atmel/AVR32_Config.in
 
 
 Changeset:
-
-Sorry, the patch is too large to include (27029 lines).
-Please use ViewCVS to see it!
-
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=24469
+Modified: trunk/buildroot/target/device/Atmel/AVR32_Config.in
+===================================================================
+--- trunk/buildroot/target/device/Atmel/AVR32_Config.in	2008-12-20 22:19:38 UTC (rev 24469)
++++ trunk/buildroot/target/device/Atmel/AVR32_Config.in	2008-12-20 22:23:15 UTC (rev 24470)
+@@ -32,6 +32,12 @@
+ 	help
+ 	  Atmel AT32AP7002 AVR32 based systems
+ 
++config BR2_TARGET_AT32AP7200
++	bool "Board support for the Atmel AT32AP7200 Microprocessor"
++	depends on BR2_TARGET_AVR32
++	help
++	  Atmel AT32AP7200 AVR32 based systems
++
+ endchoice
+ 
+ comment "Development board support"
+@@ -51,6 +57,14 @@
+ 	help
+ 	  The Atmel ATSTK1000 AVR32 Development Board.
+ 
++config BR2_TARGET_AVR32_ATSTK1005
++	bool "Atmel ATSTK1000/5 AVR32 development board support"
++	depends on BR2_TARGET_AT32AP7200
++	select BR2_PACKAGE_LINUX
++	help
++	  The Atmel ATSTK1000 AVR32 Development Board,
++	  with the AT32AP7200 based top board
++
+ config BR2_TARGET_AVR32_ATNGW100
+ 	bool "Atmel AVR32 network gateway board support"
+ 	depends on BR2_TARGET_AT32AP7000
