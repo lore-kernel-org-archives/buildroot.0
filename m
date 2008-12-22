@@ -1,24 +1,23 @@
-From: Simon Pasch <fpasch@googlemail.com>
-Date: Mon, 22 Dec 2008 12:23:39 +0100
-Subject: [Buildroot] Remove SUSv3 legacy stuff from alsa-utils
-Message-ID: <f90898420812220323r1fb28fcdx7083c925f2689389@mail.gmail.com>
+From: hartleys <hartleys@visionengravers.com>
+Date: Mon, 22 Dec 2008 11:30:41 -0500
+Subject: [Buildroot] Unable to 'make' with svn revision 24492
+Message-ID: <BD79186B4FD85F4B8E60E381CAEE1909F3E892@mi8nycmail19.Mi8.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alsactl doesn't compile, if UCLIBC_SUSV3_LEGACY_MACROS isn't set in
-uclibc-config.
+Hello all,
 
-I think the cleanest way is to remove SUSv3-stuff from alsa-utils (see
-attached patch)
+I just did an svn up to the latest revision and can no longer do a
+'make'. When I try the build I get the following error:
 
-Simon Pasch
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: alsa-utils-1.0.18-susv3-legacy.patch
-Type: text/x-diff
-Size: 691 bytes
-Desc: not available
-Url : http://lists.busybox.net/pipermail/buildroot/attachments/20081222/196268d9/attachment.bin 
+make: *** No rule to make target `cross_compiler', needed by
+`/home/bigguiness/arm-uclibc-gcc-.sh'.  Stop.
+
+I am using an external binary toolchain and everything has worked fine
+up until the latest revision.
+
+Any idea? Thanks,
+Hartley
