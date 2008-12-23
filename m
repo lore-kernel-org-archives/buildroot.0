@@ -1,49 +1,36 @@
-From: =?ISO-8859-1?Q?Bernhard_G=F6del?= <bernhard.goedel@gmx.at>
-Date: Tue, 23 Dec 2008 11:38:42 +0100
-Subject: [Buildroot] avr32: lbipthread problem
-Message-ID: <4950BFB2.7010302@gmx.at>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 23 Dec 2008 11:40:08 +0100
+Subject: [Buildroot] avr32: no selection for Binutils version
+In-Reply-To: <4950BD88.2060503@gmx.at> ("Bernhard =?utf-8?Q?G=C3=B6del=22'?=
+	=?utf-8?Q?s?= message of "Tue\, 23 Dec 2008 11\:29\:28 +0100")
+References: <4950BD88.2060503@gmx.at>
+Message-ID: <87vdtb5g53.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Bernhard" == Bernhard G?del <bernhard.goedel@gmx.at> writes:
+
 Hi,
 
-I'm trying to build a toolchain based on uClibc for the AVR32. I'm using 
-  buildroot-20081120 (as I had problems with binutils in newer 
-snapshots). I've configured threading support to NPTL, don't know 
-whether the compile error below happens also with other configurations.
+ Bernhard> Hi, I'm new to embedded Linux, so I want to apologize for
+ Bernhard> stupid questions in advance. :-)
 
-I'm experiencing the following issues:
+Don't worry ;)
 
-1. The file tls.h is missing.
-In order to overcome a problem with the missing tls.h I created an empty 
-file named tls.h in 
-/buildroot/toolchain_build_avr32/uClibc-0.9.29-avr32-2.1.5/include
+ Bernhard> I used 'make menuconfig' to enter the configuration for my
+ Bernhard> target but I've encountered a problem here. After selecting
+ Bernhard> 'AVR32' as target architecture, I cannot select any
+ Bernhard> Binutils Version from the 'Toolchain' submenu.
 
+Sorry, the avr32 stuff is quite special case, and I don't know
+anything about it. Ulf recently did some changes to it, so maybe you
+could try either the newest snapshot or a version before his changes
+(20/12)?
 
-2. __THROW undefined in pt-machine.h
-/libpthread/linuxthreads/sysdeps/avr32/pt-machine.h:16: error: expected 
-',' or ';' before '{' token
+Ulf, comments?
 
-Reason for that was obviously that the __THROW definition was missing in 
-this file. I simply defined it as blank in the same file because I 
-didn't figure out where the original definition of this preprocessor 
-macro is.
-
-
-3. The file sysdep-cancel.h is missing
-I created an empty file in
-/buildroot/toolchain_build_avr32/uClibc-0.9.29-avr32-2.1.5/libpthread/linuxthreads
-to overcome this problem.
-
-
-4. finally I'm stuck with this one:
-configure: error: Pthreads are required to build libgomp
-make[2]: *** [configure-target-libgomp] Error 1
-
-
-Any suggestions are welcome :-)
-
-Bernhard
+-- 
+Bye, Peter Korsgaard
