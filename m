@@ -1,67 +1,49 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 23 Dec 2008 11:25:42 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain:
-	export-toolchain uClibc
-In-Reply-To: <20081221171134.7BAB176ABE@busybox.osuosl.org> (ulf@uclibc.org's
-	message of "Sun\, 21 Dec 2008 17\:11\:34 +0000 \(UTC\)")
-References: <20081221171134.7BAB176ABE@busybox.osuosl.org>
-Message-ID: <87fxkf6vdl.fsf@macbook.be.48ers.dk>
+From: =?ISO-8859-1?Q?Bernhard_G=F6del?= <bernhard.goedel@gmx.at>
+Date: Tue, 23 Dec 2008 11:38:42 +0100
+Subject: [Buildroot] avr32: lbipthread problem
+Message-ID: <4950BFB2.7010302@gmx.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+Hi,
 
- ulf> Author: ulf
- ulf> Date: 2008-12-21 17:11:33 +0000 (Sun, 21 Dec 2008)
- ulf> New Revision: 24480
+I'm trying to build a toolchain based on uClibc for the AVR32. I'm using 
+  buildroot-20081120 (as I had problems with binutils in newer 
+snapshots). I've configured threading support to NPTL, don't know 
+whether the compile error below happens also with other configurations.
 
- ulf> Log:
- ulf> Allow creating a script for external use of Buildroot toolchain
+I'm experiencing the following issues:
 
- ulf> Added:
- ulf>    trunk/buildroot/toolchain/export-toolchain/
- ulf>    trunk/buildroot/toolchain/export-toolchain/Config.in
- ulf>    trunk/buildroot/toolchain/export-toolchain/Makefile.in
+1. The file tls.h is missing.
+In order to overcome a problem with the missing tls.h I created an empty 
+file named tls.h in 
+/buildroot/toolchain_build_avr32/uClibc-0.9.29-avr32-2.1.5/include
 
-That seems very specific - What's wrong with the currently documented
-way of adding build_$ARCH/staging_dir/usr/bin to the path? Where's the
-documentation of this thing?
 
- ulf> Modified:
- ulf>    trunk/buildroot/toolchain/Config.in
- ulf>    trunk/buildroot/toolchain/Makefile.in
- ulf>    trunk/buildroot/toolchain/uClibc/Config.in
+2. __THROW undefined in pt-machine.h
+/libpthread/linuxthreads/sysdeps/avr32/pt-machine.h:16: error: expected 
+',' or ';' before '{' token
 
- ulf> +++ trunk/buildroot/toolchain/Makefile.in	2008-12-21 17:11:33 UTC (rev 24480)
- ulf> @@ -47,3 +47,5 @@
- ulf>  # gcc has a bunch of needed stuff....
- ulf>  include toolchain/gcc/Makefile.in
- 
- ulf> +include toolchain/export-toolchain/Makefile.in
- ulf> +
+Reason for that was obviously that the __THROW definition was missing in 
+this file. I simply defined it as blank in the same file because I 
+didn't figure out where the original definition of this preprocessor 
+macro is.
 
-This seems to break the build as the dependencies target isn't
-executed before the other toolchain stuff - I've disabled it in
-r24519.
 
- ulf> +config BR2_EXPORT_TOOLCHAIN
- ulf> +	bool "Create script exporting toolchain to home directory"
- ulf> +	default n
- ulf> +	help
- ulf> +	  This will generate a batchfile which, if run
- ulf> +	  will add the Buildroot toolchain to the user PATH
- ulf> +	  The file is called "$(ARCH)-uclibc-gcc-$(GCC_VERSION).sh"
- ulf> +
+3. The file sysdep-cancel.h is missing
+I created an empty file in
+/buildroot/toolchain_build_avr32/uClibc-0.9.29-avr32-2.1.5/libpthread/linuxthreads
+to overcome this problem.
 
-Batchfile? shell script? I take it that you need to source the file
-for the changes to take effect?
 
- ulf> +~/$(GCC_SCRIPT): cross_compiler
+4. finally I'm stuck with this one:
+configure: error: Pthreads are required to build libgomp
+make[2]: *** [configure-target-libgomp] Error 1
 
-I'm not sure ~ in make targets are a good idea.
 
--- 
-Bye, Peter Korsgaard
+Any suggestions are welcome :-)
+
+Bernhard
