@@ -1,36 +1,31 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 23 Dec 2008 11:40:08 +0100
-Subject: [Buildroot] avr32: no selection for Binutils version
-In-Reply-To: <4950BD88.2060503@gmx.at> ("Bernhard =?utf-8?Q?G=C3=B6del=22'?=
-	=?utf-8?Q?s?= message of "Tue\, 23 Dec 2008 11\:29\:28 +0100")
-References: <4950BD88.2060503@gmx.at>
-Message-ID: <87vdtb5g53.fsf@macbook.be.48ers.dk>
+Date: Tue, 23 Dec 2008 12:07:58 +0100
+Subject: [Buildroot] Unable to 'make' with svn revision 24492
+In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE1909F3E892@mi8nycmail19.Mi8.com>
+	(hartleys@visionengravers.com's message of "Mon\,
+	22 Dec 2008 11\:30\:41 -0500")
+References: <BD79186B4FD85F4B8E60E381CAEE1909F3E892@mi8nycmail19.Mi8.com>
+Message-ID: <87ocz35eup.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernhard" == Bernhard G?del <bernhard.goedel@gmx.at> writes:
+>>>>> "hartleys" == hartleys  <hartleys@visionengravers.com> writes:
 
 Hi,
 
- Bernhard> Hi, I'm new to embedded Linux, so I want to apologize for
- Bernhard> stupid questions in advance. :-)
+ hartleys> make: *** No rule to make target `cross_compiler', needed by
+ hartleys> `/home/bigguiness/arm-uclibc-gcc-.sh'.  Stop.
 
-Don't worry ;)
+ hartleys> I am using an external binary toolchain and everything has worked fine
+ hartleys> up until the latest revision.
 
- Bernhard> I used 'make menuconfig' to enter the configuration for my
- Bernhard> target but I've encountered a problem here. After selecting
- Bernhard> 'AVR32' as target architecture, I cannot select any
- Bernhard> Binutils Version from the 'Toolchain' submenu.
+ hartleys> Any idea? Thanks,
+ hartleys> Hartley
 
-Sorry, the avr32 stuff is quite special case, and I don't know
-anything about it. Ulf recently did some changes to it, so maybe you
-could try either the newest snapshot or a version before his changes
-(20/12)?
-
-Ulf, comments?
+I fixed a build issue in r24519 - Maybe that solves it for you?
 
 -- 
 Bye, Peter Korsgaard
