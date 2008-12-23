@@ -1,67 +1,91 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 23 Dec 2008 10:05:33 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
-In-Reply-To: <20081220205708.1766876CEB@busybox.osuosl.org> (ulf@uclibc.org's
-	message of "Sat\, 20 Dec 2008 20\:57\:07 +0000 \(UTC\)")
-References: <20081220205708.1766876CEB@busybox.osuosl.org>
-Message-ID: <87fxkf8dnm.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Tue, 23 Dec 2008 09:39:05 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
+Message-ID: <20081223093905.CF72276A3D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+Author: jacmet
+Date: 2008-12-23 09:39:05 +0000 (Tue, 23 Dec 2008)
+New Revision: 24516
 
- ulf> Author: ulf
- ulf> Date: 2008-12-20 20:57:07 +0000 (Sat, 20 Dec 2008)
- ulf> New Revision: 24465
+Log:
+toolchain/uclibc: Add BR2_ENABLE_LOCALE_PREGENERATED option
 
- ulf> Log:
- ulf> Put latest version info in separate file for easier maintenance
+Add an option to either generate locales yourself or download the
+pregenerated set.
 
- ulf> Added:
- ulf>    trunk/buildroot/target/linux/Config.in.versions
+Based on 4bdca9cc in Bernhard's tree.
 
- ulf> Modified:
- ulf>    trunk/buildroot/target/linux/Config.in.advanced
+Modified:
+   trunk/buildroot/toolchain/uClibc/Config.in
+   trunk/buildroot/toolchain/uClibc/uclibc.mk
 
-Is this an improvement? Don't you now need to maintain 2 files?
 
- ulf> Changeset:
- ulf> Modified: trunk/buildroot/target/linux/Config.in.advanced
- ulf> ===================================================================
- ulf> --- trunk/buildroot/target/linux/Config.in.advanced	2008-12-20 18:26:38 UTC (rev 24464)
- ulf> +++ trunk/buildroot/target/linux/Config.in.advanced	2008-12-20 20:57:07 UTC (rev 24465)
- ulf> @@ -30,21 +30,24 @@
- ulf>  #
- ulf>  # ---------------------------------------------------------------------------
- ulf>  # --- These 'constants' requires regular maintenance, so put them first
- ulf> +
- ulf> +source "target/linux/Config.in.versions"
- ulf> +
- ulf>  config BR2_KERNEL_PATCH_LEVEL
- ulf>  	string
- ulf> -	default "9" if BR2_LINUX_2_6_27 && BR2_KERNEL_ADD_LATEST_MINORPATCH
- ulf> -	default "8" if BR2_LINUX_2_6_26 && BR2_KERNEL_ADD_LATEST_MINORPATCH
- ulf> -	default "9" if BR2_LINUX_2_6_25 && BR2_KERNEL_ADD_LATEST_MINORPATCH
- ulf> -	default "7" if BR2_LINUX_2_6_24 && BR2_KERNEL_ADD_LATEST_MINORPATCH
- ulf> -	default "17" if BR2_LINUX_2_6_23 && BR2_KERNEL_ADD_LATEST_MINORPATCH
- ulf> -	default "19" if BR2_LINUX_2_6_22 && BR2_KERNEL_ADD_LATEST_MINORPATCH
- ulf> -	default "7" if BR2_LINUX_2_6_21 && BR2_KERNEL_ADD_LATEST_MINORPATCH
- ulf> -	default "21" if BR2_LINUX_2_6_20 && BR2_KERNEL_ADD_LATEST_MINORPATCH
- ulf> +	default $(BR2_KERNEL_LATEST_2_6_27) if BR2_LINUX_2_6_27 && BR2_KERNEL_ADD_LATEST_MINORPATCH
- ulf> +	default $(BR2_KERNEL_LATEST_2_6_26) if BR2_LINUX_2_6_26 && BR2_KERNEL_ADD_LATEST_MINORPATCH
- ulf> +	default $(BR2_KERNEL_LATEST_2_6_25) if BR2_LINUX_2_6_25 && BR2_KERNEL_ADD_LATEST_MINORPATCH
- ulf> +	default $(BR2_KERNEL_LATEST_2_6_24) if BR2_LINUX_2_6_24 && BR2_KERNEL_ADD_LATEST_MINORPATCH
- ulf> +	default $(BR2_KERNEL_LATEST_2_6_23) if BR2_LINUX_2_6_23 && BR2_KERNEL_ADD_LATEST_MINORPATCH
- ulf> +	default $(BR2_KERNEL_LATEST_2_6_22) if BR2_LINUX_2_6_22 && BR2_KERNEL_ADD_LATEST_MINORPATCH
- ulf> +	default $(BR2_KERNEL_LATEST_2_6_21) if BR2_LINUX_2_6_21 && BR2_KERNEL_ADD_LATEST_MINORPATCH
- ulf> +	default $(BR2_KERNEL_LATEST_2_6_20) if BR2_LINUX_2_6_20 && BR2_KERNEL_ADD_LATEST_MINORPATCH
- ulf>  	default "$(BR2_KERNEL_MINORLEVEL)" if BR2_KERNEL_ADD_MINORPATCH
+Changeset:
+Modified: trunk/buildroot/toolchain/uClibc/Config.in
+===================================================================
+--- trunk/buildroot/toolchain/uClibc/Config.in	2008-12-23 09:04:50 UTC (rev 24515)
++++ trunk/buildroot/toolchain/uClibc/Config.in	2008-12-23 09:39:05 UTC (rev 24516)
+@@ -56,8 +56,18 @@
+ config BR2_ENABLE_LOCALE
+ 	bool "Enable locale/gettext/i18n support?"
+ 	help
+-	    Enable locale/gettext/i18n support?
++	  Enable locale/gettext/i18n support?
+ 
++config BR2_ENABLE_LOCALE_PREGENERATED
++	bool "Use pregenerated locale data?"
++	depends on BR2_ENABLE_LOCALE
++	help
++	  Instead of generating the locale data locally you can optionally
++	  download a pregenerated set of locales.
++
++	  Say N here unless your buildhost lacks locale support and you
++	  desparately want to use internationalization on your target.
++
+ choice
+ 	prompt "Thread library implementation"
+ 	default BR2_PTHREADS_OLD
 
-Do we really need to support that many kernel versions? Shouldn't some
-of them atlest be marked as deprecated?
-
--- 
-Bye, Peter Korsgaard
+Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
+===================================================================
+--- trunk/buildroot/toolchain/uClibc/uclibc.mk	2008-12-23 09:04:50 UTC (rev 24515)
++++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2008-12-23 09:39:05 UTC (rev 24516)
+@@ -96,7 +96,7 @@
+ $(DL_DIR)/$(UCLIBC_SOURCE):
+ 	$(WGET) -P $(DL_DIR) $(UCLIBC_SITE)/$(UCLIBC_SOURCE)
+ 
+-ifneq ($(BR2_ENABLE_LOCALE),)
++ifneq ($(BR2_ENABLE_LOCALE_PREGENERATED),)
+ UCLIBC_SITE_LOCALE:=http://www.uclibc.org/downloads
+ UCLIBC_SOURCE_LOCALE:=uClibc-locale-030818.tgz
+ 
+@@ -125,7 +125,7 @@
+ 	toolchain/patch-kernel.sh $(UCLIBC_DIR) $(UCLIBC_PATCH_DIR) \
+ 		uClibc.\*.patch uClibc.\*.patch.$(ARCH)
+ endif
+-ifneq ($(BR2_ENABLE_LOCALE),)
++ifneq ($(BR2_ENABLE_LOCALE_PREGENERATED)),)
+ 	cp -dpf $(DL_DIR)/$(UCLIBC_SOURCE_LOCALE) $(UCLIBC_DIR)/extra/locale/
+ endif
+ 	touch $@
+@@ -346,11 +346,13 @@
+ 	echo "# PTHREADS_DEBUG_SUPPORT is not set" >> $(UCLIBC_DIR)/.oldconfig
+ endif
+ ifeq ($(BR2_ENABLE_LOCALE),y)
++ifeq ($(BR2_ENABLE_LOCALE_PREGENERATED),y)
+ 	$(SED) 's,^.*UCLIBC_HAS_LOCALE.*,UCLIBC_HAS_LOCALE=y\nUCLIBC_PREGENERATED_LOCALE_DATA=y\nUCLIBC_DOWNLOAD_PREGENERATED_LOCALE_DATA=y\nUCLIBC_HAS_XLOCALE=y\nUCLIBC_HAS_GLIBC_DIGIT_GROUPING=n\n,g' $(UCLIBC_DIR)/.oldconfig
+-	$(SED) 's,.*UCLIBC_HAS_WCHAR.*,UCLIBC_HAS_WCHAR=y,g' $(UCLIBC_DIR)/.oldconfig
+ else
++	$(SED) 's,^.*UCLIBC_HAS_LOCALE.*,UCLIBC_HAS_LOCALE=y\nUCLIBC_PREGENERATED_LOCALE_DATA=n\nUCLIBC_DOWNLOAD_PREGENERATED_LOCALE_DATA=n\nUCLIBC_HAS_XLOCALE=y\nUCLIBC_HAS_GLIBC_DIGIT_GROUPING=n\n,g' $(UCLIBC_DIR)/.oldconfig
++endif
++else
+ 	$(SED) 's,^.*UCLIBC_HAS_LOCALE.*,UCLIBC_HAS_LOCALE=n,g' $(UCLIBC_DIR)/.oldconfig
+-	$(SED) 's,.*UCLIBC_HAS_WCHAR.*,UCLIBC_HAS_WCHAR=n,g' $(UCLIBC_DIR)/.oldconfig
+ endif
+ ifeq ($(BR2_USE_WCHAR),y)
+ 	$(SED) 's,^.*UCLIBC_HAS_WCHAR.*,UCLIBC_HAS_WCHAR=y,g' $(UCLIBC_DIR)/.oldconfig
