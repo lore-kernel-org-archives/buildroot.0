@@ -1,40 +1,41 @@
-From: =?ISO-8859-1?Q?Bernhard_G=F6del?= <bernhard.goedel@gmx.at>
-Date: Tue, 23 Dec 2008 11:29:28 +0100
-Subject: [Buildroot] avr32: no selection for Binutils version
-Message-ID: <4950BD88.2060503@gmx.at>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 23 Dec 2008 10:55:52 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/binutils:
+	ext_source/Atmel/avr32
+In-Reply-To: <20081220223102.7E1D376CEB@busybox.osuosl.org> (ulf@uclibc.org's
+	message of "Sat\, 20 Dec 2008 22\:31\:02 +0000 \(UTC\)")
+References: <20081220223102.7E1D376CEB@busybox.osuosl.org>
+Message-ID: <87y6y76wrb.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+
 Hi,
 
-I'm new to embedded Linux, so I want to apologize for stupid questions 
-in advance. :-)
+ ulf> Author: ulf
+ ulf> Date: 2008-12-20 22:31:02 +0000 (Sat, 20 Dec 2008)
+ ulf> New Revision: 24474
 
-I've bought the Atmel NGW100 featuring an AVR32 AP7000. Now I'm 
-following the instructions given in the book 'Building embedded Linux 
-Systems' (O'Reilly) to build a Linux system for this platform from scratch.
+ ulf> Log:
+ ulf> Add updated binutils-2.18 prepatched toolchain for AVR32
 
-Therefore I've downloaded the package 
-http://buildroot.uclibc.org/downloads/snapshots/buildroot-snapshot.tar.bz2 
-(which points to 
-http://buildroot.uclibc.org/downloads/snapshots/buildroot-20081221.tar.bz2 
-currently) in order to build the tool chain.
+ ulf> Changeset:
+ ulf> Modified: trunk/buildroot/toolchain/binutils/Config.in
+ ulf> ===================================================================
+ ulf> --- trunk/buildroot/toolchain/binutils/Config.in	2008-12-20 22:27:56 UTC (rev 24473)
+ ulf> +++ trunk/buildroot/toolchain/binutils/Config.in	2008-12-20 22:31:02 UTC (rev 24474)
+ ulf> @@ -10,7 +10,7 @@
+ 
+ ulf>  	config BR2_BINUTILS_VERSION_2_17
+ ulf>  		depends on BR2_avr32 || !BR2_nios2
+ ulf> -		depends on BR2_DEPRECATED
+ ulf> +		depends on BR2_DEPRECATED && !BR2_avr32
 
-I used 'make menuconfig' to enter the configuration for my target but 
-I've encountered a problem here. After selecting 'AVR32' as target 
-architecture, I cannot select any Binutils Version from the 'Toolchain' 
-submenu.
+depends on BR2_avr32  + depends on !BR2_avr32?
 
-I've downloaded an older version 
-(http://buildroot.uclibc.org/downloads/snapshots/buildroot-20081120.tar.bz2), 
-which offers Binutils 2.17 for AVR32.
-
-Is this a bug in the newest buildroot package?
-I didn't find the location where the available versions are stored, so I 
-couldn't patch it myself...
-
-Yours,
-Bernhard
+-- 
+Bye, Peter Korsgaard
