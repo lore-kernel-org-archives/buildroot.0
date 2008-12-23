@@ -1,91 +1,41 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue, 23 Dec 2008 09:39:05 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
-Message-ID: <20081223093905.CF72276A3D@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 23 Dec 2008 10:40:47 +0100
+Subject: [Buildroot] [PATCH] Buildroot uClibc-0.9.29 patches not present
+	in	uClibc-0.9.30
+In-Reply-To: <1229806548.30378.10.camel@linux-yrgm.site> (Ulf Samuelsson's
+	message of "Sat\, 20 Dec 2008 21\:55\:48 +0100")
+References: <1229806548.30378.10.camel@linux-yrgm.site>
+Message-ID: <87bpv38c0w.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-12-23 09:39:05 +0000 (Tue, 23 Dec 2008)
-New Revision: 24516
+>>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 
-Log:
-toolchain/uclibc: Add BR2_ENABLE_LOCALE_PREGENERATED option
+Hi,
 
-Add an option to either generate locales yourself or download the
-pregenerated set.
+ Ulf> uClibc-0.9.30 does not build due to uClibc-locale-20081111-*.tgz not
+ Ulf> beeing available.
 
-Based on 4bdca9cc in Bernhard's tree.
+ Ulf> I guess this is the culprit:
+ Ulf> ------------------------------------------------------------------------
+ Ulf> r23997 | aldot | 2008-11-11 12:05:57 +0100 (Tue, 11 Nov 2008) | 3 lines
 
-Modified:
-   trunk/buildroot/toolchain/uClibc/Config.in
-   trunk/buildroot/toolchain/uClibc/uclibc.mk
+ Ulf> - update recommendation for pregenerated locales.
+ Ulf> - update name of locale-tarball. We will retroactively fill them in, eventually
 
 
-Changeset:
-Modified: trunk/buildroot/toolchain/uClibc/Config.in
-===================================================================
---- trunk/buildroot/toolchain/uClibc/Config.in	2008-12-23 09:04:50 UTC (rev 24515)
-+++ trunk/buildroot/toolchain/uClibc/Config.in	2008-12-23 09:39:05 UTC (rev 24516)
-@@ -56,8 +56,18 @@
- config BR2_ENABLE_LOCALE
- 	bool "Enable locale/gettext/i18n support?"
- 	help
--	    Enable locale/gettext/i18n support?
-+	  Enable locale/gettext/i18n support?
- 
-+config BR2_ENABLE_LOCALE_PREGENERATED
-+	bool "Use pregenerated locale data?"
-+	depends on BR2_ENABLE_LOCALE
-+	help
-+	  Instead of generating the locale data locally you can optionally
-+	  download a pregenerated set of locales.
-+
-+	  Say N here unless your buildhost lacks locale support and you
-+	  desparately want to use internationalization on your target.
-+
- choice
- 	prompt "Thread library implementation"
- 	default BR2_PTHREADS_OLD
+ Ulf> It is supposed to be on http://www.uclibc.org/downloads" but
+ Ulf> is not there.
 
-Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
-===================================================================
---- trunk/buildroot/toolchain/uClibc/uclibc.mk	2008-12-23 09:04:50 UTC (rev 24515)
-+++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2008-12-23 09:39:05 UTC (rev 24516)
-@@ -96,7 +96,7 @@
- $(DL_DIR)/$(UCLIBC_SOURCE):
- 	$(WGET) -P $(DL_DIR) $(UCLIBC_SITE)/$(UCLIBC_SOURCE)
- 
--ifneq ($(BR2_ENABLE_LOCALE),)
-+ifneq ($(BR2_ENABLE_LOCALE_PREGENERATED),)
- UCLIBC_SITE_LOCALE:=http://www.uclibc.org/downloads
- UCLIBC_SOURCE_LOCALE:=uClibc-locale-030818.tgz
- 
-@@ -125,7 +125,7 @@
- 	toolchain/patch-kernel.sh $(UCLIBC_DIR) $(UCLIBC_PATCH_DIR) \
- 		uClibc.\*.patch uClibc.\*.patch.$(ARCH)
- endif
--ifneq ($(BR2_ENABLE_LOCALE),)
-+ifneq ($(BR2_ENABLE_LOCALE_PREGENERATED)),)
- 	cp -dpf $(DL_DIR)/$(UCLIBC_SOURCE_LOCALE) $(UCLIBC_DIR)/extra/locale/
- endif
- 	touch $@
-@@ -346,11 +346,13 @@
- 	echo "# PTHREADS_DEBUG_SUPPORT is not set" >> $(UCLIBC_DIR)/.oldconfig
- endif
- ifeq ($(BR2_ENABLE_LOCALE),y)
-+ifeq ($(BR2_ENABLE_LOCALE_PREGENERATED),y)
- 	$(SED) 's,^.*UCLIBC_HAS_LOCALE.*,UCLIBC_HAS_LOCALE=y\nUCLIBC_PREGENERATED_LOCALE_DATA=y\nUCLIBC_DOWNLOAD_PREGENERATED_LOCALE_DATA=y\nUCLIBC_HAS_XLOCALE=y\nUCLIBC_HAS_GLIBC_DIGIT_GROUPING=n\n,g' $(UCLIBC_DIR)/.oldconfig
--	$(SED) 's,.*UCLIBC_HAS_WCHAR.*,UCLIBC_HAS_WCHAR=y,g' $(UCLIBC_DIR)/.oldconfig
- else
-+	$(SED) 's,^.*UCLIBC_HAS_LOCALE.*,UCLIBC_HAS_LOCALE=y\nUCLIBC_PREGENERATED_LOCALE_DATA=n\nUCLIBC_DOWNLOAD_PREGENERATED_LOCALE_DATA=n\nUCLIBC_HAS_XLOCALE=y\nUCLIBC_HAS_GLIBC_DIGIT_GROUPING=n\n,g' $(UCLIBC_DIR)/.oldconfig
-+endif
-+else
- 	$(SED) 's,^.*UCLIBC_HAS_LOCALE.*,UCLIBC_HAS_LOCALE=n,g' $(UCLIBC_DIR)/.oldconfig
--	$(SED) 's,.*UCLIBC_HAS_WCHAR.*,UCLIBC_HAS_WCHAR=n,g' $(UCLIBC_DIR)/.oldconfig
- endif
- ifeq ($(BR2_USE_WCHAR),y)
- 	$(SED) 's,^.*UCLIBC_HAS_WCHAR.*,UCLIBC_HAS_WCHAR=y,g' $(UCLIBC_DIR)/.oldconfig
+There was a thread about this on the uclibc list recently:
+
+http://lists.uclibc.org/pipermail/uclibc/2008-December/041624.html
+
+It would be better to not use the pregenerated locales at all. I have
+added an option for this in r24516 (from Bernhard's tree).
+
+-- 
+Bye, Peter Korsgaard
