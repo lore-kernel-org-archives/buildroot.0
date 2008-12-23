@@ -1,11 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 23 Dec 2008 10:55:52 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/binutils:
-	ext_source/Atmel/avr32
-In-Reply-To: <20081220223102.7E1D376CEB@busybox.osuosl.org> (ulf@uclibc.org's
-	message of "Sat\, 20 Dec 2008 22\:31\:02 +0000 \(UTC\)")
-References: <20081220223102.7E1D376CEB@busybox.osuosl.org>
-Message-ID: <87y6y76wrb.fsf@macbook.be.48ers.dk>
+Date: Tue, 23 Dec 2008 11:25:42 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain:
+	export-toolchain uClibc
+In-Reply-To: <20081221171134.7BAB176ABE@busybox.osuosl.org> (ulf@uclibc.org's
+	message of "Sun\, 21 Dec 2008 17\:11\:34 +0000 \(UTC\)")
+References: <20081221171134.7BAB176ABE@busybox.osuosl.org>
+Message-ID: <87fxkf6vdl.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,28 +14,54 @@ To: buildroot@busybox.net
 
 >>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
 
-Hi,
-
  ulf> Author: ulf
- ulf> Date: 2008-12-20 22:31:02 +0000 (Sat, 20 Dec 2008)
- ulf> New Revision: 24474
+ ulf> Date: 2008-12-21 17:11:33 +0000 (Sun, 21 Dec 2008)
+ ulf> New Revision: 24480
 
  ulf> Log:
- ulf> Add updated binutils-2.18 prepatched toolchain for AVR32
+ ulf> Allow creating a script for external use of Buildroot toolchain
 
- ulf> Changeset:
- ulf> Modified: trunk/buildroot/toolchain/binutils/Config.in
- ulf> ===================================================================
- ulf> --- trunk/buildroot/toolchain/binutils/Config.in	2008-12-20 22:27:56 UTC (rev 24473)
- ulf> +++ trunk/buildroot/toolchain/binutils/Config.in	2008-12-20 22:31:02 UTC (rev 24474)
- ulf> @@ -10,7 +10,7 @@
+ ulf> Added:
+ ulf>    trunk/buildroot/toolchain/export-toolchain/
+ ulf>    trunk/buildroot/toolchain/export-toolchain/Config.in
+ ulf>    trunk/buildroot/toolchain/export-toolchain/Makefile.in
+
+That seems very specific - What's wrong with the currently documented
+way of adding build_$ARCH/staging_dir/usr/bin to the path? Where's the
+documentation of this thing?
+
+ ulf> Modified:
+ ulf>    trunk/buildroot/toolchain/Config.in
+ ulf>    trunk/buildroot/toolchain/Makefile.in
+ ulf>    trunk/buildroot/toolchain/uClibc/Config.in
+
+ ulf> +++ trunk/buildroot/toolchain/Makefile.in	2008-12-21 17:11:33 UTC (rev 24480)
+ ulf> @@ -47,3 +47,5 @@
+ ulf>  # gcc has a bunch of needed stuff....
+ ulf>  include toolchain/gcc/Makefile.in
  
- ulf>  	config BR2_BINUTILS_VERSION_2_17
- ulf>  		depends on BR2_avr32 || !BR2_nios2
- ulf> -		depends on BR2_DEPRECATED
- ulf> +		depends on BR2_DEPRECATED && !BR2_avr32
+ ulf> +include toolchain/export-toolchain/Makefile.in
+ ulf> +
 
-depends on BR2_avr32  + depends on !BR2_avr32?
+This seems to break the build as the dependencies target isn't
+executed before the other toolchain stuff - I've disabled it in
+r24519.
+
+ ulf> +config BR2_EXPORT_TOOLCHAIN
+ ulf> +	bool "Create script exporting toolchain to home directory"
+ ulf> +	default n
+ ulf> +	help
+ ulf> +	  This will generate a batchfile which, if run
+ ulf> +	  will add the Buildroot toolchain to the user PATH
+ ulf> +	  The file is called "$(ARCH)-uclibc-gcc-$(GCC_VERSION).sh"
+ ulf> +
+
+Batchfile? shell script? I take it that you need to source the file
+for the changes to take effect?
+
+ ulf> +~/$(GCC_SCRIPT): cross_compiler
+
+I'm not sure ~ in make targets are a good idea.
 
 -- 
 Bye, Peter Korsgaard
