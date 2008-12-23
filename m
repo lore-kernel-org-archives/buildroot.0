@@ -1,74 +1,51 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue, 23 Dec 2008 14:54:49 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/generic:
-	target_busybox_skeleton/etc target_skel etc...
-Message-ID: <20081223145450.0BAD276A3D@busybox.osuosl.org>
+From: =?UTF-8?B?QmVybmhhcmQgR8O2ZGVs?= <bernhard.goedel@gmx.at>
+Date: Tue, 23 Dec 2008 16:08:20 +0100
+Subject: [Buildroot] avr32: no selection for Binutils version
+In-Reply-To: <87vdtb5g53.fsf@macbook.be.48ers.dk>
+References: <4950BD88.2060503@gmx.at> <87vdtb5g53.fsf@macbook.be.48ers.dk>
+Message-ID: <4950FEE4.8090900@gmx.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-12-23 14:54:49 +0000 (Tue, 23 Dec 2008)
-New Revision: 24528
+Peter Korsgaard wrote:
+>>>>>> "Bernhard" == Bernhard G?del <bernhard.goedel@gmx.at> writes:
+>  Bernhard> I used 'make menuconfig' to enter the configuration for my
+>  Bernhard> target but I've encountered a problem here. After selecting
+>  Bernhard> 'AVR32' as target architecture, I cannot select any
+>  Bernhard> Binutils Version from the 'Toolchain' submenu.
 
-Log:
-target/generic: add ttyAMAx device nodes (E.G. for qemu-system-arm)
+I found the file where it is specified which binutils versions are 
+available for a certain architecture.
 
-Modified:
-   trunk/buildroot/target/generic/device_table.txt
-   trunk/buildroot/target/generic/target_busybox_skeleton/etc/securetty
-   trunk/buildroot/target/generic/target_skeleton/etc/securetty
+It is in /buildroot/toolchain/binutils/config.in
 
+In the older version (allowing to select 2.17) there is:
 
-Changeset:
-Modified: trunk/buildroot/target/generic/device_table.txt
-===================================================================
---- trunk/buildroot/target/generic/device_table.txt	2008-12-23 13:02:13 UTC (rev 24527)
-+++ trunk/buildroot/target/generic/device_table.txt	2008-12-23 14:54:49 UTC (rev 24528)
-@@ -72,6 +72,7 @@
- #/dev/ttySA	c	666	0	0	204	5	0	1	3
- /dev/psaux	c	666	0	0	10	1	0	0	-
- #/dev/ppp	c	666	0	0	108	0	-	-	-
-+/dev/ttyAMA	c	666	0	0	204	64	0	1	4
- /dev/ttyPSC	c	666	0	0	204	148	0	1	4
- /dev/ttyUL	c	666	0	0	204	187	0	1	4
- 
+	config BR2_BINUTILS_VERSION_2_17
+		depends on BR2_avr32 || !BR2_nios2 && BR2_DEPRECATED
+		depends on BR2_EXT_BINUTILS_VERSION_2_17
+		bool "binutils 2.17"
 
-Modified: trunk/buildroot/target/generic/target_busybox_skeleton/etc/securetty
-===================================================================
---- trunk/buildroot/target/generic/target_busybox_skeleton/etc/securetty	2008-12-23 13:02:13 UTC (rev 24527)
-+++ trunk/buildroot/target/generic/target_busybox_skeleton/etc/securetty	2008-12-23 14:54:49 UTC (rev 24528)
-@@ -10,7 +10,15 @@
- ttyS1
- ttyS2
- ttyS3
-+ttyAMA0
-+ttyAMA1
-+ttyAMA2
-+ttyAMA3
- ttyUL0
- ttyUL1
- ttyUL2
- ttyUL3
-+ttyPSC0
-+ttyPSC1
-+ttyPSC2
-+ttyPSC3
+where as in the most recent snapshot it is:
 
-Modified: trunk/buildroot/target/generic/target_skeleton/etc/securetty
-===================================================================
---- trunk/buildroot/target/generic/target_skeleton/etc/securetty	2008-12-23 13:02:13 UTC (rev 24527)
-+++ trunk/buildroot/target/generic/target_skeleton/etc/securetty	2008-12-23 14:54:49 UTC (rev 24528)
-@@ -10,6 +10,10 @@
- ttyS1
- ttyS2
- ttyS3
-+ttyAMA0
-+ttyAMA1
-+ttyAMA2
-+ttyAMA3
- ttyUL0
- ttyUL1
- ttyUL2
+	config BR2_BINUTILS_VERSION_2_17
+		depends on BR2_avr32 || !BR2_nios2
+		depends on BR2_DEPRECATED && !BR2_avr32
+		depends on BR2_EXT_BINUTILS_VERSION_2_17
+		bool "binutils 2.17"
+
+The later configuration makes it impossible to select 2.17 as a binutils 
+version for avr32. As there is no other binutils version that is allowed 
+to be selected for avr32, it is simply impossible to select a binutils 
+version at all.
+I've replaced this section of the file by the older one and now I can 
+select 2.17 also on the most recent snapshot.
+
+Unfortunately, the problems described in "[Buildroot] avr32: lbipthread 
+problem" remain the same also for the most recent snapshot. I'm stuck in 
+the make process at the generation of libgomp.
+
+Bernhard
