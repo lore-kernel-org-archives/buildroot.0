@@ -1,34 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 23 Dec 2008 10:48:45 +0100
-Subject: [Buildroot] svn commit:
-	trunk/buildroot/target/device/Atmel/arch-avr32:
-	kernel-patches-2.6.27.6
-In-Reply-To: <20081220221939.4935476CEB@busybox.osuosl.org> (ulf@uclibc.org's
-	message of "Sat\, 20 Dec 2008 22\:19\:39 +0000 \(UTC\)")
-References: <20081220221939.4935476CEB@busybox.osuosl.org>
-Message-ID: <873agf8bnm.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Tue, 23 Dec 2008 10:21:08 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
+Message-ID: <20081223102108.59EE676A3D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+Author: jacmet
+Date: 2008-12-23 10:21:07 +0000 (Tue, 23 Dec 2008)
+New Revision: 24518
 
- ulf> Author: ulf
- ulf> Date: 2008-12-20 22:19:38 +0000 (Sat, 20 Dec 2008)
- ulf> New Revision: 24469
+Log:
+toolchain/uclibc: fix typo
 
- ulf> Log:
- ulf> Add 2.6.27.7 patches for AVR32
+Modified:
+   trunk/buildroot/toolchain/uClibc/uclibc.mk
 
- ulf> Added:
- ulf>    trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.27.6/
 
-2.6.27.6 or 2.6.27.7? Don't they apply to 2.6.27.10?
-
-Do we really need another ~800kb of avr specific patches? What about
-the older patches, can they go away?
-
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
+===================================================================
+--- trunk/buildroot/toolchain/uClibc/uclibc.mk	2008-12-23 10:16:51 UTC (rev 24517)
++++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2008-12-23 10:21:07 UTC (rev 24518)
+@@ -125,7 +125,7 @@
+ 	toolchain/patch-kernel.sh $(UCLIBC_DIR) $(UCLIBC_PATCH_DIR) \
+ 		uClibc.\*.patch uClibc.\*.patch.$(ARCH)
+ endif
+-ifneq ($(BR2_ENABLE_LOCALE_PREGENERATED)),)
++ifneq ($(BR2_ENABLE_LOCALE_PREGENERATED),)
+ 	cp -dpf $(DL_DIR)/$(UCLIBC_SOURCE_LOCALE) $(UCLIBC_DIR)/extra/locale/
+ endif
+ 	touch $@
