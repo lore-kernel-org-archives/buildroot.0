@@ -1,38 +1,40 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue, 23 Dec 2008 10:21:10 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain
-Message-ID: <20081223102110.F225976A3D@busybox.osuosl.org>
+From: =?ISO-8859-1?Q?Bernhard_G=F6del?= <bernhard.goedel@gmx.at>
+Date: Tue, 23 Dec 2008 11:29:28 +0100
+Subject: [Buildroot] avr32: no selection for Binutils version
+Message-ID: <4950BD88.2060503@gmx.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2008-12-23 10:21:10 +0000 (Tue, 23 Dec 2008)
-New Revision: 24519
+Hi,
 
-Log:
-toolchain: disable export-toolchain stuff as it breaks make dependencies
+I'm new to embedded Linux, so I want to apologize for stupid questions 
+in advance. :-)
 
-For some reason Ulf's export-toolchain stuff breaks the build as the
-dependencies target isn't executed and SED isn't set.
+I've bought the Atmel NGW100 featuring an AVR32 AP7000. Now I'm 
+following the instructions given in the book 'Building embedded Linux 
+Systems' (O'Reilly) to build a Linux system for this platform from scratch.
 
-Modified:
-   trunk/buildroot/toolchain/Makefile.in
+Therefore I've downloaded the package 
+http://buildroot.uclibc.org/downloads/snapshots/buildroot-snapshot.tar.bz2 
+(which points to 
+http://buildroot.uclibc.org/downloads/snapshots/buildroot-20081221.tar.bz2 
+currently) in order to build the tool chain.
 
+I used 'make menuconfig' to enter the configuration for my target but 
+I've encountered a problem here. After selecting 'AVR32' as target 
+architecture, I cannot select any Binutils Version from the 'Toolchain' 
+submenu.
 
-Changeset:
-Modified: trunk/buildroot/toolchain/Makefile.in
-===================================================================
---- trunk/buildroot/toolchain/Makefile.in	2008-12-23 10:21:07 UTC (rev 24518)
-+++ trunk/buildroot/toolchain/Makefile.in	2008-12-23 10:21:10 UTC (rev 24519)
-@@ -46,6 +46,5 @@
- 
- # gcc has a bunch of needed stuff....
- include toolchain/gcc/Makefile.in
--
--include toolchain/export-toolchain/Makefile.in
--
-+# breaks the build
-+#include toolchain/export-toolchain/Makefile.in
+I've downloaded an older version 
+(http://buildroot.uclibc.org/downloads/snapshots/buildroot-20081120.tar.bz2), 
+which offers Binutils 2.17 for AVR32.
+
+Is this a bug in the newest buildroot package?
+I didn't find the location where the available versions are stored, so I 
+couldn't patch it myself...
+
+Yours,
+Bernhard
