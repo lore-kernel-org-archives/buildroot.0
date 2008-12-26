@@ -1,40 +1,26 @@
-From: Mauro Condarelli <mcondarelli@soft-in.com>
-Date: Fri, 26 Dec 2008 20:32:31 +0100
-Subject: [Buildroot] test
-In-Reply-To: <87bpuy7nyp.fsf@macbook.be.48ers.dk>
-References: <4955294A.9090002@soft-in.com> <87bpuy7nyp.fsf@macbook.be.48ers.dk>
-Message-ID: <4955314F.6060805@soft-in.com>
+From: =?ISO-8859-1?Q?Bernhard_G=F6del?= <bernhard.goedel@gmx.at>
+Date: Fri, 26 Dec 2008 20:35:13 +0100
+Subject: [Buildroot] AT91SAM9G20 build .config for linux-2.6.26
+In-Reply-To: <49552B28.5040203@soft-in.com>
+References: <49552B28.5040203@soft-in.com>
+Message-ID: <495531F1.3000900@gmx.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard ha scritto:
->>>>>> "Mauro" == Mauro Condarelli <mcondarelli@soft-in.com> writes:
->>>>>>             
->
->  Mauro> test (I seem unable to post!)
->  Mauro> Sorry for the inconvenience
->
-> Seems to come through just fine.
->   
-Hi,
-Thanks.
+Hi Mauro,
 
-Problem is I tried to follow instructions:
+I'm sorry I can't help you with your Eval board but this
 
-Welcome to the buildroot at busybox.net mailing list!
+> P.S.: The welcome message for the mailing list says to send mail to "buildroot at busybox.net" but it doesn't seem to work. I have to send messages to "buildroot at uclibc.org" instead.  What am I doing wrong?
 
-To post to this list, send your email to:
+I can confirm. My first two mails to this mailing list were in fact not 
+delivered to the list because of the wrong E-Mail address. I resent them 
+after I've read the address others write to to post the mail to the list.
 
-  buildroot at busybox.net
+Maybe there others also trying to post to the list but do not succeed: 
+the correct address to write to is buildroot at uclibc.org
 
-But it is wrong: I need to post to buildroot at uclibc.org instead.
-Posts to buildroot at busybox.net are just going down the drain.
-
-Could someone check and correct the welcome message?
-
-
-TiA
-Mauro
+Bernhard
