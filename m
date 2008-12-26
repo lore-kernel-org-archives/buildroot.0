@@ -1,50 +1,40 @@
-From: Michael Trimarchi <trimarchimichael@yahoo.it>
-Date: Fri, 26 Dec 2008 19:24:12 +0000 (GMT)
-Subject: [Buildroot] R:  AT91SAM9G20 build .config for linux-2.6.26
-In-Reply-To: <49552B28.5040203@soft-in.com>
-Message-ID: <787962.90753.qm@web23507.mail.ird.yahoo.com>
+From: Mauro Condarelli <mcondarelli@soft-in.com>
+Date: Fri, 26 Dec 2008 20:32:31 +0100
+Subject: [Buildroot] test
+In-Reply-To: <87bpuy7nyp.fsf@macbook.be.48ers.dk>
+References: <4955294A.9090002@soft-in.com> <87bpuy7nyp.fsf@macbook.be.48ers.dk>
+Message-ID: <4955314F.6060805@soft-in.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Peter Korsgaard ha scritto:
+>>>>>> "Mauro" == Mauro Condarelli <mcondarelli@soft-in.com> writes:
+>>>>>>             
+>
+>  Mauro> test (I seem unable to post!)
+>  Mauro> Sorry for the inconvenience
+>
+> Seems to come through just fine.
+>   
 Hi,
+Thanks.
 
---- Ven 26/12/08, Mauro Condarelli <mcondarelli@soft-in.com> ha scritto:
+Problem is I tried to follow instructions:
 
-> Da: Mauro Condarelli <mcondarelli@soft-in.com>
-> Oggetto: [Buildroot] AT91SAM9G20 build .config for linux-2.6.26
-> A: buildroot at uclibc.org
-> Data: Venerd? 26 dicembre 2008, 20:06
-> Hi,
-> I've been trying to build the whole kernel+rootfs
-> system for my
-> AT91SAM9G20-EK Rev.B EVA board several times now and always
-> failing, for
-> one reason or the other.
-> 
-> I tried both the straight instructions from
-> buildroot.uclibc.org and
-> those from www.linux4sam.org.
-> 
-> I have a working set bootstrap+uboot+linux-2.6.25+rootfs
-> BINARY ONLY!
-> 
-> I am (for the time being) happy with the first two steps
-> and I'm trying
-> to setup a net boot with tftp+nfs.
-> I have been able to set-up a server with working tftpd+nfsd
-> that will
-> boot the original stuff.
-> 
+Welcome to the buildroot at busybox.net mailing list!
 
-The rootfs is one thing. The kernel is another one. You can compile
-the kernel outside the buildroot project using the same toolchain, start
-from the config file of 2.6.25 distribuition.
+To post to this list, send your email to:
 
-Michael
+  buildroot at busybox.net
+
+But it is wrong: I need to post to buildroot at uclibc.org instead.
+Posts to buildroot at busybox.net are just going down the drain.
+
+Could someone check and correct the welcome message?
 
 
-
-      
+TiA
+Mauro
