@@ -1,27 +1,107 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 29 Dec 2008 11:09:21 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/gmpc
-In-Reply-To: <20081229100345.1d614bad@surf> (Thomas Petazzoni's message of
-	"Mon\, 29 Dec 2008 10\:03\:45 +0100")
-References: <20081229084626.38A7B76C21@busybox.osuosl.org>
-	<20081229100345.1d614bad@surf>
-Message-ID: <87iqp347ji.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Mon, 29 Dec 2008 10:09:51 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
+Message-ID: <20081229100951.BEB927697D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Author: jacmet
+Date: 2008-12-29 10:09:50 +0000 (Mon, 29 Dec 2008)
+New Revision: 24590
 
- Thomas> Le Mon, 29 Dec 2008 08:46:25 +0000 (UTC),
- Thomas> jacmet at uclibc.org a ?crit :
+Log:
+busybox; fix iptunnel compile with 2.6.28 headers (from r24253)
 
- >> -	select BR2_PACKAGE_LIBCURL
- >> +	select BR2_PACKAGE_LIBCUR
- Thomas>                                  ^^ Typo ?
+Added:
+   trunk/buildroot/package/busybox/busybox-1.13.1-iptunnel-fix-problems-with-linux-include.patch
 
-Argh, yes ofcourse - fixed.
 
--- 
-Bye, Peter Korsgaard
+Changeset:
+Added: trunk/buildroot/package/busybox/busybox-1.13.1-iptunnel-fix-problems-with-linux-include.patch
+===================================================================
+--- trunk/buildroot/package/busybox/busybox-1.13.1-iptunnel-fix-problems-with-linux-include.patch	                        (rev 0)
++++ trunk/buildroot/package/busybox/busybox-1.13.1-iptunnel-fix-problems-with-linux-include.patch	2008-12-29 10:09:50 UTC (rev 24590)
+@@ -0,0 +1,80 @@
++From 2534c277b4b1c519ec05689eb3525e95d4f6c602 Mon Sep 17 00:00:00 2001
++From: vda <vda@69ca8d6d-28ef-0310-b511-8ec308f3f277>
++Date: Wed, 3 Dec 2008 20:16:11 +0000
++Subject: [PATCH] iptunnel: fix problems with including linux/ip_tunnel.h
++  on some systems
++
++git-svn-id: svn://busybox.net/trunk/busybox at 24253 69ca8d6d-28ef-0310-b511-8ec308f3f277
++---
++ networking/libiproute/iptunnel.c |   45 ++++++++++++++++++++++++++++++++++++-
++ 1 files changed, 43 insertions(+), 2 deletions(-)
++
++diff --git a/networking/libiproute/iptunnel.c b/networking/libiproute/iptunnel.c
++index ab4d65b..5349587 100644
++--- a/networking/libiproute/iptunnel.c
+++++ b/networking/libiproute/iptunnel.c
++@@ -6,7 +6,6 @@
++  *
++  * Authors:	Alexey Kuznetsov, <kuznet@ms2.inr.ac.ru>
++  *
++- *
++  * Changes:
++  *
++  * Rani Assaf <rani@magic.metawire.com> 980929:	resolve addresses
++@@ -18,10 +17,52 @@
++ #include <net/if.h>
++ #include <net/if_arp.h>
++ #include <asm/types.h>
+++
++ #ifndef __constant_htons
++ #define __constant_htons htons
++ #endif
++-#include <linux/if_tunnel.h>
+++
+++// FYI: #define SIOCDEVPRIVATE 0x89F0
+++
+++/* From linux/if_tunnel.h. #including it proved troublesome
+++ * (redefiniton errors due to name collisions in linux/ and net[inet]/) */
+++#define SIOCGETTUNNEL   (SIOCDEVPRIVATE + 0)
+++#define SIOCADDTUNNEL   (SIOCDEVPRIVATE + 1)
+++#define SIOCDELTUNNEL   (SIOCDEVPRIVATE + 2)
+++#define SIOCCHGTUNNEL   (SIOCDEVPRIVATE + 3)
+++//#define SIOCGETPRL      (SIOCDEVPRIVATE + 4)
+++//#define SIOCADDPRL      (SIOCDEVPRIVATE + 5)
+++//#define SIOCDELPRL      (SIOCDEVPRIVATE + 6)
+++//#define SIOCCHGPRL      (SIOCDEVPRIVATE + 7)
+++#define GRE_CSUM        __constant_htons(0x8000)
+++//#define GRE_ROUTING     __constant_htons(0x4000)
+++#define GRE_KEY         __constant_htons(0x2000)
+++#define GRE_SEQ         __constant_htons(0x1000)
+++//#define GRE_STRICT      __constant_htons(0x0800)
+++//#define GRE_REC         __constant_htons(0x0700)
+++//#define GRE_FLAGS       __constant_htons(0x00F8)
+++//#define GRE_VERSION     __constant_htons(0x0007)
+++struct ip_tunnel_parm {
+++	char            name[IFNAMSIZ];
+++	int             link;
+++	uint16_t        i_flags;
+++	uint16_t        o_flags;
+++	uint32_t        i_key;
+++	uint32_t        o_key;
+++	struct iphdr    iph;
+++};
+++/* SIT-mode i_flags */
+++//#define SIT_ISATAP 0x0001
+++//struct ip_tunnel_prl {
+++//	uint32_t          addr;
+++//	uint16_t          flags;
+++//	uint16_t          __reserved;
+++//	uint32_t          datalen;
+++//	uint32_t          __reserved2;
+++//	/* data follows */
+++//};
+++///* PRL flags */
+++//#define PRL_DEFAULT 0x0001
++ 
++ #include "ip_common.h"  /* #include "libbb.h" is inside */
++ #include "rt_names.h"
++-- 
++1.5.6.5
++
