@@ -1,40 +1,27 @@
-From: Michael Trimarchi <trimarchimichael@yahoo.it>
-Date: Mon, 29 Dec 2008 10:01:40 +0000 (GMT)
-Subject: [Buildroot] R:  AT91SAM9G20 build .config for linux-2.6.26
-In-Reply-To: <49589DCC.30909@soft-in.com>
-Message-ID: <999637.34647.qm@web23506.mail.ird.yahoo.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 29 Dec 2008 11:09:21 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/gmpc
+In-Reply-To: <20081229100345.1d614bad@surf> (Thomas Petazzoni's message of
+	"Mon\, 29 Dec 2008 10\:03\:45 +0100")
+References: <20081229084626.38A7B76C21@busybox.osuosl.org>
+	<20081229100345.1d614bad@surf>
+Message-ID: <87iqp347ji.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Hi
+ Thomas> Le Mon, 29 Dec 2008 08:46:25 +0000 (UTC),
+ Thomas> jacmet at uclibc.org a ?crit :
 
-> Hi,
-> Thanks.
-> 
-> I know that, unfortunately, for reasons independent of my
-> will, I need
-> to stick to version 2.6.26.
-> 
-> Is there any *easy* way to backport the changes?
-> 
-> Can someone help me?
-> 
-> TiA
-> Mauro
+ >> -	select BR2_PACKAGE_LIBCURL
+ >> +	select BR2_PACKAGE_LIBCUR
+ Thomas>                                  ^^ Typo ?
 
-Apply the two patches of at91sam9g20 to the 2.6.26. You can find in the 
-mailing list:
+Argh, yes ofcourse - fixed.
 
-http://lkml.org/lkml/2008/6/13/62
-
-This is the thread I think
-
-Michael
-
-
-
-      
+-- 
+Bye, Peter Korsgaard
