@@ -1,69 +1,45 @@
 From: Omar BELKHODJA <omar.belkhodja@gmail.com>
-Date: Mon, 29 Dec 2008 12:20:16 +0100
+Date: Mon, 29 Dec 2008 16:07:33 +0100
 Subject: [Buildroot] [PATCH] Buildroot uClibc-0.9.29 patches not	present
  in uClibc-0.9.30
-In-Reply-To: <20081229110937.GB8275@mx.loc>
-References: <1229806548.30378.10.camel@linux-yrgm.site>
-	<495801C7.7090807@gmail.com> <87vdt34e1y.fsf@macbook.be.48ers.dk>
-	<4958AB8B.2070005@gmail.com> <20081229110937.GB8275@mx.loc>
-Message-ID: <4958B270.80709@gmail.com>
+In-Reply-To: <878wpz3w15.fsf@macbook.be.48ers.dk>
+References: <1229806548.30378.10.camel@linux-yrgm.site>	<495801C7.7090807@gmail.com>
+	<87vdt34e1y.fsf@macbook.be.48ers.dk>	<4958AB8B.2070005@gmail.com>
+	<20081229110937.GB8275@mx.loc>	<4958B270.80709@gmail.com>
+	<878wpz3w15.fsf@macbook.be.48ers.dk>
+Message-ID: <4958E7B5.5090100@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sorry for the inconvenience. I guess this happened because I did a 
-copy/paste... What I wanted to say was :
+Thanks for your intereset to my issue guys. I appreciate it.
 
-It is already disabled... So this option seems not to be working. Below 
-is an extract of my .config file (I needs locales that's why they are 
-enabled).
-Also, if I try with
+I've just update to the revision 24597, done a make distclean(by the way 
+this didn't remove the .config file, so I removed it manually). Then I 
+changed the configuration options using make menuconfig.
 
-BR2_ENABLE_LOCALE_PREGENERATED=n
+Please find attached, the command line + my .config file
 
-It still doesn't work
-
-
-Regards,
 Omar
 
-#
-# uClibc Options
-#
-# BR2_UCLIBC_VERSION_0_9_28_3 is not set
-# BR2_UCLIBC_VERSION_0_9_29 is not set
-BR2_UCLIBC_VERSION_0_9_30=y
-# BR2_UCLIBC_VERSION_SNAPSHOT is not set
-UCLIBC_VERSION="0.9.30"
-BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.30.config"
-BR2_ENABLE_LOCALE=y
-# BR2_ENABLE_LOCALE_PREGENERATED is not set
-# BR2_PTHREADS_NONE is not set
-# BR2_PTHREADS is not set
-BR2_PTHREADS_OLD=y
-# BR2_PTHREADS_NATIVE is not set
-BR2_PTHREAD_DEBUG=y
-BR2_UCLIBC_PROGRAM_INVOCATION=y
-# BR2_UCLIBC_INSTALL_TEST_SUITE is not set
-
-Bernhard Reutner-Fischer a ?crit :
-> On Mon, Dec 29, 2008 at 11:50:51AM +0100, Omar BELKHODJA wrote:
->   
->> <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
->> <html>
->> <head>
->>  <meta content="text/html;charset=ISO-8859-1" http-equiv="Content-Type">
->>  <title></title>
->> </head>
->> <body bgcolor="#ffffff" text="#000000">
->> <tt>It is already disabled... So this option seems not to be working.
->> Below is an extract of my .config file (I needs locales that's why they
->> are enabled).<br>
->>     
+Peter Korsgaard a ?crit :
+>>>>>> "Omar" == Omar BELKHODJA <omar.belkhodja@gmail.com> writes:
+>>>>>>             
 >
-> brrrrr. Please send plaintext messages, TIA
+> Hi,
+>
+>  Omar> It is already disabled... So this option seems not to be
+>  Omar> working. Below is an extract of my .config file (I needs locales
+>  Omar> that's why they are enabled).
+>  Omar> Also, if I try with
+>
+>  Omar> BR2_ENABLE_LOCALE_PREGENERATED=n
+>
+>  Omar> It still doesn't work
+>
+> Strange, it works here, could you send the full .config please?
 >
 >   
 
@@ -84,3 +60,14 @@ _______________________________________________________________________
         /                     _/
   http://www.sos-company.com
 _______________________________________________________________________
+
+
+
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: log.txt
+Url: http://lists.busybox.net/pipermail/buildroot/attachments/20081229/05652312/attachment.txt 
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: .config
+Url: http://lists.busybox.net/pipermail/buildroot/attachments/20081229/05652312/attachment.diff 
