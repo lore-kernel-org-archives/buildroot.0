@@ -1,49 +1,34 @@
-From: Wade Berrier <wberrier@gmail.com>
-Date: Wed, 31 Dec 2008 16:04:37 -0700
-Subject: [Buildroot] shell issues when /bin/sh is 'dash' instead of 'bash'
-Message-ID: <bbbeeccd0812311504p2e7f96a6l923c938acac8acf0@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 29 Dec 2008 14:18:05 -0000
+Subject: [Buildroot] [PATCH] Buildroot uClibc-0.9.29 patches not	present
+	in uClibc-0.9.30
+In-Reply-To: <4958B270.80709@gmail.com> (Omar BELKHODJA's message of "Mon\,
+	29 Dec 2008 12\:20\:16 +0100")
+References: <1229806548.30378.10.camel@linux-yrgm.site>
+	<495801C7.7090807@gmail.com> <87vdt34e1y.fsf@macbook.be.48ers.dk>
+	<4958AB8B.2070005@gmail.com> <20081229110937.GB8275@mx.loc>
+	<4958B270.80709@gmail.com>
+Message-ID: <878wpz3w15.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Omar" == Omar BELKHODJA <omar.belkhodja@gmail.com> writes:
+
 Hi,
 
-There are a few Makefiles that rely on some bash specific code:
+ Omar> It is already disabled... So this option seems not to be
+ Omar> working. Below is an extract of my .config file (I needs locales
+ Omar> that's why they are enabled).
+ Omar> Also, if I try with
 
-findutils
-sed
-tar
-tftpd
+ Omar> BR2_ENABLE_LOCALE_PREGENERATED=n
 
-(grep used to, but was fixed by Jacmet circa 6 months ago)
+ Omar> It still doesn't work
 
-The culprit is the "-ot" operator.  From the advanced bash scripting guide:
+Strange, it works here, could you send the full .config please?
 
-[ FILE1 -ot FILE2 ]	True if FILE1 is older than FILE2, or is FILE2
-exists and FILE1 does not.
-
-'dash' doesn't follow the "or is FILE2 exists and FILE1 does not." portion.
-
-The result is that some files don't get installed into the target
-system when /bin/sh points to dash (like on recent ubuntu and debian?
-distros)
-
-Attached is a patch to use CONFIG_SHELL.
-
-Question: is this the best way to fix this?  Or maybe these packages
-should be fixed more in the style of how Jacmet fixed grep? (see
-http://sources.uclibc.org/index.py/trunk/buildroot/package/grep/grep.mk?r1=22930&r2=22931
-)
-
-Feedback?
-
-Wade
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: buildroot-CONFIG_SHELL.patch
-Type: text/x-diff
-Size: 4161 bytes
-Desc: not available
-Url : http://lists.busybox.net/pipermail/buildroot/attachments/20081231/8cefe290/attachment.bin 
+-- 
+Bye, Peter Korsgaard
