@@ -1,73 +1,41 @@
-From: Omar BELKHODJA <omar.belkhodja@gmail.com>
-Date: Mon, 29 Dec 2008 16:07:33 +0100
-Subject: [Buildroot] [PATCH] Buildroot uClibc-0.9.29 patches not	present
- in uClibc-0.9.30
-In-Reply-To: <878wpz3w15.fsf@macbook.be.48ers.dk>
-References: <1229806548.30378.10.camel@linux-yrgm.site>	<495801C7.7090807@gmail.com>
-	<87vdt34e1y.fsf@macbook.be.48ers.dk>	<4958AB8B.2070005@gmail.com>
-	<20081229110937.GB8275@mx.loc>	<4958B270.80709@gmail.com>
-	<878wpz3w15.fsf@macbook.be.48ers.dk>
-Message-ID: <4958E7B5.5090100@gmail.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Mon, 29 Dec 2008 15:12:10 +0000 (UTC)
+Subject: [Buildroot] svn commit:
+	trunk/buildroot/target/device/Atmel/arch-arm/kernel-patches-2.6.27.7
+Message-ID: <20081229151210.B63C176C21@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks for your intereset to my issue guys. I appreciate it.
+Author: ulf
+Date: 2008-12-29 15:12:10 +0000 (Mon, 29 Dec 2008)
+New Revision: 24602
 
-I've just update to the revision 24597, done a make distclean(by the way 
-this didn't remove the .config file, so I removed it manually). Then I 
-changed the configuration options using make menuconfig.
+Log:
+Use correct filename for patch
 
-Please find attached, the command line + my .config file
+Added:
+   trunk/buildroot/target/device/Atmel/arch-arm/kernel-patches-2.6.27.7/linux-2.6.27-at91.patch.gz
 
-Omar
-
-Peter Korsgaard a ?crit :
->>>>>> "Omar" == Omar BELKHODJA <omar.belkhodja@gmail.com> writes:
->>>>>>             
->
-> Hi,
->
->  Omar> It is already disabled... So this option seems not to be
->  Omar> working. Below is an extract of my .config file (I needs locales
->  Omar> that's why they are enabled).
->  Omar> Also, if I try with
->
->  Omar> BR2_ENABLE_LOCALE_PREGENERATED=n
->
->  Omar> It still doesn't work
->
-> Strange, it works here, could you send the full .config please?
->
->   
-
--- 
-Omar BELKHODJA
-_______________________________________________________________________
-   _____  ____   _____    _____
-  / ____|/ __ \ / ____|  / ____|
- | (___ | |  | | (___   | |     ___  _ __ ___  _ __   __ _ _ __  _   _
-  \___ \| |  | |\___ \  | |    / _ \| '_ ` _ \| '_ \ / _` | '_ \| | | |
-  ____) | |__| |____) | | |___| (_) | | | | | | |_) | (_| | | | | |_| |
- |_____/ \____/|_____/   \_____\___/|_| |_| |_| .__/ \__,_|_| |_|\__, |
-                                              | |                 __/ |
-                                              |_|                |___/
-    __                    __               __
-   (  '_    /_   _   _/  /  )_ '_ '  _ /  (    / _/'     _
-  __)///)/)((-  (//)(/  (__// /(///)(/(  __)()((///()/)_)
-        /                     _/
-  http://www.sos-company.com
-_______________________________________________________________________
+Removed:
+   trunk/buildroot/target/device/Atmel/arch-arm/kernel-patches-2.6.27.7/2.6.27-at91.patch.gz
 
 
+Changeset:
+Deleted: trunk/buildroot/target/device/Atmel/arch-arm/kernel-patches-2.6.27.7/2.6.27-at91.patch.gz
+===================================================================
+(Binary files differ)
 
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: log.txt
-Url: http://lists.busybox.net/pipermail/buildroot/attachments/20081229/05652312/attachment.txt 
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: .config
-Url: http://lists.busybox.net/pipermail/buildroot/attachments/20081229/05652312/attachment.diff 
+Copied: trunk/buildroot/target/device/Atmel/arch-arm/kernel-patches-2.6.27.7/linux-2.6.27-at91.patch.gz (from rev 24599, trunk/buildroot/target/device/Atmel/arch-arm/kernel-patches-2.6.27.7/2.6.27-at91.patch.gz)
+===================================================================
+(Binary files differ)
+
+
+Property changes on: trunk/buildroot/target/device/Atmel/arch-arm/kernel-patches-2.6.27.7/linux-2.6.27-at91.patch.gz
+___________________________________________________________________
+Added: svn:mime-type
+   + application/octet-stream
+Added: svn:mergeinfo
+   + 
