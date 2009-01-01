@@ -1,42 +1,55 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Thu, 1 Jan 2009 13:36:21 +1100
-Subject: [Buildroot] shell issues when /bin/sh is 'dash' instead
-	of	'bash'
-In-Reply-To: <bbbeeccd0812311504p2e7f96a6l923c938acac8acf0@mail.gmail.com>
-References: <bbbeeccd0812311504p2e7f96a6l923c938acac8acf0@mail.gmail.com>
-Message-ID: <20090101023620.GA13399@cloud.net.au>
+From: nkukard at uclibc.org <nkukard@uclibc.org>
+Date: Thu,  1 Jan 2009 14:00:36 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/lvm2
+Message-ID: <20090101140036.CAC1176C21@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Dec 31, 2008 at 04:04:37PM -0700, Wade Berrier wrote:
-> The result is that some files don't get installed into the target
-> system when /bin/sh points to dash (like on recent ubuntu and debian?
-> distros)
-> 
-> Attached is a patch to use CONFIG_SHELL.
+Author: nkukard
+Date: 2009-01-01 14:00:35 +0000 (Thu, 01 Jan 2009)
+New Revision: 24633
 
-Why aren't we setting SHELL=$(CONFIG_SHELL) somewhere, rather than using
-$(CONFIG_SHELL) explicitly in each place? (And why do I have the feeling
-we've had this discussion before?)
-
-> Question: is this the best way to fix this?  Or maybe these packages
-> should be fixed more in the style of how Jacmet fixed grep? (see
-> http://sources.uclibc.org/index.py/trunk/buildroot/package/grep/grep.mk?r1=22930&r2=22931
-> )
-
-dash(1) on my system says -ot is supported anyway. If not perhaps it can
-be expressed in a better way; I think that would be better than this
-fix.
-
-Besides is CONFIG_SHELL guaranteed to be bash anyway?
+Log:
+* Bumped lvm2 to 2.02.43
+- By default the build uses host ar/ranlib to generate the static lvm library used, force the target tools to be used instead
 
 
+Modified:
+   trunk/buildroot/package/lvm2/lvm2.mk
 
-Happy new year.
 
-Hamish
--- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+Changeset:
+Modified: trunk/buildroot/package/lvm2/lvm2.mk
+===================================================================
+--- trunk/buildroot/package/lvm2/lvm2.mk	2008-12-31 18:28:59 UTC (rev 24632)
++++ trunk/buildroot/package/lvm2/lvm2.mk	2009-01-01 14:00:35 UTC (rev 24633)
+@@ -24,7 +24,7 @@
+ # USA
+ 
+ LVM2_BASEVER=2.02
+-LVM2_PATCH=28
++LVM2_PATCH=43
+ LVM2_VERSION=$(LVM2_BASEVER).$(LVM2_PATCH)
+ LVM2_SOURCE:=LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE:=ftp://sources.redhat.com/pub/lvm2
+@@ -62,14 +62,14 @@
+ 	touch $(LVM2_DIR)/.configured
+ 
+ $(LVM2_TARGET_SBINS): $(LVM2_DIR)/.configured
+-	$(MAKE) CC=$(TARGET_CC) -C $(LVM2_DIR) DESTDIR=$(STAGING_DIR)
+-	$(MAKE) CC=$(TARGET_CC) -C $(LVM2_DIR) DESTDIR=$(STAGING_DIR) install
++	$(MAKE) CC=$(TARGET_CC) RANLIB=$(TARGET_RANLIB) AR=$(TARGET_AR) -C $(LVM2_DIR) DESTDIR=$(STAGING_DIR)
++	$(MAKE) CC=$(TARGET_CC) RANLIB=$(TARGET_RANLIB) AR=$(TARGET_AR) -C $(LVM2_DIR) DESTDIR=$(STAGING_DIR) install
+ 	for binary in $(LVM2_SBIN); do echo $$binary; cp -a $(STAGING_DIR)/sbin/$$binary $(TARGET_DIR)/sbin; done
+ 
+ lvm2: uclibc dm $(LVM2_TARGET_SBINS)
+ 
+ lvm2-clean:
+-	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(LVM2_DIR) uninstall
++	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) RANLIB=$(TARGET_RANLIB) AR=$(TARGET_AR) -C $(LVM2_DIR) uninstall
+ 	-$(MAKE) -C $(LVM2_DIR) clean
+ 
+ lvm2-dirclean:
