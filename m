@@ -1,55 +1,45 @@
-From: Wade Berrier <wberrier@gmail.com>
-Date: Thu, 1 Jan 2009 07:40:47 -0700
-Subject: [Buildroot] shell issues when /bin/sh is 'dash' instead of
-	'bash'
-In-Reply-To: <20090101023620.GA13399@cloud.net.au>
-References: <bbbeeccd0812311504p2e7f96a6l923c938acac8acf0@mail.gmail.com>
-	<20090101023620.GA13399@cloud.net.au>
-Message-ID: <bbbeeccd0901010640h6bb648fbi42ede94784462131@mail.gmail.com>
+From: nkukard at uclibc.org <nkukard@uclibc.org>
+Date: Thu,  1 Jan 2009 17:28:52 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/pciutils
+Message-ID: <20090101172852.A361A76C21@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Dec 31, 2008 at 7:36 PM, Hamish Moffatt <hamish@cloud.net.au> wrote:
-> On Wed, Dec 31, 2008 at 04:04:37PM -0700, Wade Berrier wrote:
->> The result is that some files don't get installed into the target
->> system when /bin/sh points to dash (like on recent ubuntu and debian?
->> distros)
->>
->> Attached is a patch to use CONFIG_SHELL.
->
-> Why aren't we setting SHELL=$(CONFIG_SHELL) somewhere, rather than using
-> $(CONFIG_SHELL) explicitly in each place? (And why do I have the feeling
-> we've had this discussion before?)
+Author: nkukard
+Date: 2009-01-01 17:28:51 +0000 (Thu, 01 Jan 2009)
+New Revision: 24635
 
-Yes, I think this has been discussed before...
+Log:
+* Removed duplicate PCIUTILS_VERSION
+* When installing pci.ids[.gz] the -D means create all components leading up, using $(@D) does not include the filename, the last directory component is then /usr/share. pci.ids[.gz] is therefore created as /usr/share/misc (misc being the filename). Using $@ fixes this, the directory path is created and the file is installed as /usr/share/misc/pci.ids[.gz] .
 
->
->> Question: is this the best way to fix this?  Or maybe these packages
->> should be fixed more in the style of how Jacmet fixed grep? (see
->> http://sources.uclibc.org/index.py/trunk/buildroot/package/grep/grep.mk?r1=22930&r2=22931
->> )
->
-> dash(1) on my system says -ot is supported anyway. If not perhaps it can
-> be expressed in a better way; I think that would be better than this
-> fix.
 
-dash supports '-ot', but it doesn't have the same behavior as bash
-when one of the files is missing.  I tend to agree... it could
-probably be expressed in a better way.
+Modified:
+   trunk/buildroot/package/pciutils/pciutils.mk
 
->
-> Besides is CONFIG_SHELL guaranteed to be bash anyway?
 
-It will prefer bash, but will fall back on /bin/sh, which could be dash.
-
->
->
->
-> Happy new year.
-
-You too!
-
-Wade
+Changeset:
+Modified: trunk/buildroot/package/pciutils/pciutils.mk
+===================================================================
+--- trunk/buildroot/package/pciutils/pciutils.mk	2009-01-01 14:05:54 UTC (rev 24634)
++++ trunk/buildroot/package/pciutils/pciutils.mk	2009-01-01 17:28:51 UTC (rev 24635)
+@@ -3,7 +3,6 @@
+ # pciutils
+ #
+ #############################################################
+-PCIUTILS_VERSION:=2.2.10
+ PCIUTILS_VERSION:=3.0.1
+ PCIUTILS_SOURCE:=pciutils-$(PCIUTILS_VERSION).tar.gz
+ PCIUTILS_CAT:=$(ZCAT)
+@@ -55,7 +54,7 @@
+ 	$(STRIPCMD) $(STRIP_STRIP_ALL) $@
+ 
+ $(TARGET_DIR)/usr/share/misc/$(PCIIDS_FILE): $(PCIUTILS_DIR)/.unpacked
+-	$(INSTALL) -D $(PCIUTILS_DIR)/$(PCIIDS_FILE) $(@D)
++	$(INSTALL) -D $(PCIUTILS_DIR)/$(PCIIDS_FILE) $@
+ 
+ pciutils: uclibc $(if $(BR2_PACKAGE_ZLIB),zlib) $(TARGET_DIR)/sbin/setpci $(TARGET_DIR)/sbin/lspci $(TARGET_DIR)/usr/share/misc/$(PCIIDS_FILE)
+ 
