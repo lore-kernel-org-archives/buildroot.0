@@ -1,62 +1,96 @@
 From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Fri, 02 Jan 2009 22:55:14 +0100
+Date: Fri, 02 Jan 2009 23:23:25 +0100
 Subject: [Buildroot] svn commit:
-	trunk/buildroot/toolchain/binutils:	ext_source/Atmel/avr32
-In-Reply-To: <20081220223102.7E1D376CEB@busybox.osuosl.org>
-References: <20081220223102.7E1D376CEB@busybox.osuosl.org>
-Message-ID: <1230933314.8886.1.camel@linux-yrgm.site>
+	trunk/buildroot/toolchain:	export-toolchain uClibc
+In-Reply-To: <87fxkf6vdl.fsf@macbook.be.48ers.dk>
+References: <20081221171134.7BAB176ABE@busybox.osuosl.org>
+	<87fxkf6vdl.fsf@macbook.be.48ers.dk>
+Message-ID: <1230935005.8886.13.camel@linux-yrgm.site>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-l?r 2008-12-20 klockan 22:31 +0000 skrev ulf at uclibc.org:
-> Author: ulf
-> Date: 2008-12-20 22:31:02 +0000 (Sat, 20 Dec 2008)
-> New Revision: 24474
+tis 2008-12-23 klockan 11:25 +0100 skrev Peter Korsgaard:
+> >>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+> 
+>  ulf> Author: ulf
+>  ulf> Date: 2008-12-21 17:11:33 +0000 (Sun, 21 Dec 2008)
+>  ulf> New Revision: 24480
+> 
+>  ulf> Log:
+>  ulf> Allow creating a script for external use of Buildroot toolchain
+> 
+>  ulf> Added:
+>  ulf>    trunk/buildroot/toolchain/export-toolchain/
+>  ulf>    trunk/buildroot/toolchain/export-toolchain/Config.in
+>  ulf>    trunk/buildroot/toolchain/export-toolchain/Makefile.in
+> 
+> That seems very specific - What's wrong with the currently documented
+> way of adding build_$ARCH/staging_dir/usr/bin to the path? Where's the
+> documentation of this thing?
 
-That is not fixing the problem, it is breaking the AVR32 build
-Pls do a real fix.
+Sorry about the late answer.
+Have had a disk crash and did not install the account
+for reading buildroot mail until after the holidays.
+
+Adding a path is manual and error prone.
+This is more productive since you can with a single 
+click create something that works.
+
+You can of course also have several toolchains, 
+and select which you want at a specific time.
+
+> 
+>  ulf> Modified:
+>  ulf>    trunk/buildroot/toolchain/Config.in
+>  ulf>    trunk/buildroot/toolchain/Makefile.in
+>  ulf>    trunk/buildroot/toolchain/uClibc/Config.in
+> 
+>  ulf> +++ trunk/buildroot/toolchain/Makefile.in	2008-12-21 17:11:33 UTC (rev 24480)
+>  ulf> @@ -47,3 +47,5 @@
+>  ulf>  # gcc has a bunch of needed stuff....
+>  ulf>  include toolchain/gcc/Makefile.in
+>  
+>  ulf> +include toolchain/export-toolchain/Makefile.in
+>  ulf> +
+> 
+> This seems to break the build as the dependencies target isn't
+> executed before the other toolchain stuff - I've disabled it in
+> r24519.
+
+
+What exactly is broken?
+"Seems do" != "does".
+Have you tested and found that you cannot build a toolchain or what??
+
+
+> 
+>  ulf> +config BR2_EXPORT_TOOLCHAIN
+>  ulf> +	bool "Create script exporting toolchain to home directory"
+>  ulf> +	default n
+>  ulf> +	help
+>  ulf> +	  This will generate a batchfile which, if run
+>  ulf> +	  will add the Buildroot toolchain to the user PATH
+>  ulf> +	  The file is called "$(ARCH)-uclibc-gcc-$(GCC_VERSION).sh"
+>  ulf> +
+> 
+> Batchfile? shell script? I take it that you need to source the file
+> for the changes to take effect?
+
+Exactly.
+
+
+> 
+>  ulf> +~/$(GCC_SCRIPT): cross_compiler
+> 
+> I'm not sure ~ in make targets are a good idea.
+> 
+
+If you want to have a script file in your top directory, why not?
+It is a possibility to fix so that it gets built in a subdirectory
+to ~ as well or by defining a BUILDROOT_<XXX> shell variable 
+and install it in $(BUILDROOT_XXX)/?$(GCC_SCRIPT).
 
 /Ulf
-
-> Log:
-> Add updated binutils-2.18 prepatched toolchain for AVR32
-> 
-> Added:
->    trunk/buildroot/toolchain/binutils/ext_source/Atmel/avr32/2.18-avr32-1.0.1/
-> 
-> Modified:
->    trunk/buildroot/toolchain/binutils/Config.in
-> 
-> 
-> Changeset:
-> Modified: trunk/buildroot/toolchain/binutils/Config.in
-> ===================================================================
-> --- trunk/buildroot/toolchain/binutils/Config.in	2008-12-20 22:27:56 UTC (rev 24473)
-> +++ trunk/buildroot/toolchain/binutils/Config.in	2008-12-20 22:31:02 UTC (rev 24474)
-> @@ -10,7 +10,7 @@
->  
->  	config BR2_BINUTILS_VERSION_2_17
->  		depends on BR2_avr32 || !BR2_nios2
-> -		depends on BR2_DEPRECATED
-> +		depends on BR2_DEPRECATED && !BR2_avr32
->  		depends on BR2_EXT_BINUTILS_VERSION_2_17
->  		bool "binutils 2.17"
->  
-> @@ -20,7 +20,8 @@
->  		bool "binutils 2.17.50.0.17"
->  
->  	config BR2_BINUTILS_VERSION_2_18
-> -		depends on !BR2_avr32 && !BR2_nios2
-> +		depends on !BR2_nios2
-> +		depends on BR2_EXT_BINUTILS_VERSION_2_18
->  		bool "binutils 2.18"
->  
->  	config BR2_BINUTILS_VERSION_2_18_50_0_1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
