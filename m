@@ -1,62 +1,83 @@
 From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Fri, 02 Jan 2009 23:33:43 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/socat
-In-Reply-To: <877i5e2i9e.fsf@macbook.be.48ers.dk>
-References: <20090102082932.46BD0769FA@busybox.osuosl.org>
-	<877i5e2i9e.fsf@macbook.be.48ers.dk>
-Message-ID: <1230935623.8886.19.camel@linux-yrgm.site>
+Date: Fri, 02 Jan 2009 23:45:20 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
+In-Reply-To: <87fxkf8dnm.fsf@macbook.be.48ers.dk>
+References: <20081220205708.1766876CEB@busybox.osuosl.org>
+	<87fxkf8dnm.fsf@macbook.be.48ers.dk>
+Message-ID: <1230936320.8886.28.camel@linux-yrgm.site>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-fre 2009-01-02 klockan 10:02 +0100 skrev Peter Korsgaard:
+tis 2008-12-23 klockan 10:05 +0100 skrev Peter Korsgaard:
 > >>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
 > 
-> Hi,
+>  ulf> Author: ulf
+>  ulf> Date: 2008-12-20 20:57:07 +0000 (Sat, 20 Dec 2008)
+>  ulf> New Revision: 24465
 > 
->  ulf>  	  http://www.dest-unreach.org/socat/
->  ulf> +if BR2_PACKAGE_SOCAT
->  ulf> +config BR2_PACKAGE_SOCAT_PREDEF_CRDLY_SHIFT
->  ulf> +	string "CRDLY_SHIFT"
->  ulf> +	default "9"
->  ulf> +	help
->  ulf> +	  Add configure variable
+>  ulf> Log:
+>  ulf> Put latest version info in separate file for easier maintenance
+> 
+>  ulf> Added:
+>  ulf>    trunk/buildroot/target/linux/Config.in.versions
+> 
+>  ulf> Modified:
+>  ulf>    trunk/buildroot/target/linux/Config.in.advanced
+> 
+> Is this an improvement? Don't you now need to maintain 2 files?
+> 
+>  ulf> Changeset:
+>  ulf> Modified: trunk/buildroot/target/linux/Config.in.advanced
+>  ulf> ===================================================================
+>  ulf> --- trunk/buildroot/target/linux/Config.in.advanced	2008-12-20 18:26:38 UTC (rev 24464)
+>  ulf> +++ trunk/buildroot/target/linux/Config.in.advanced	2008-12-20 20:57:07 UTC (rev 24465)
+>  ulf> @@ -30,21 +30,24 @@
+>  ulf>  #
+>  ulf>  # ---------------------------------------------------------------------------
+>  ulf>  # --- These 'constants' requires regular maintenance, so put them first
 >  ulf> +
->  ulf> +config BR2_PACKAGE_SOCAT_PREDEF_TABDLY_SHIFT
->  ulf> +	string "TABDLY_SHIFT"
->  ulf> +	default "11"
->  ulf> +	help
->  ulf> +	  Add configure variable
+>  ulf> +source "target/linux/Config.in.versions"
+>  ulf> +
+>  ulf>  config BR2_KERNEL_PATCH_LEVEL
+>  ulf>  	string
+>  ulf> -	default "9" if BR2_LINUX_2_6_27 && BR2_KERNEL_ADD_LATEST_MINORPATCH
+>  ulf> -	default "8" if BR2_LINUX_2_6_26 && BR2_KERNEL_ADD_LATEST_MINORPATCH
+>  ulf> -	default "9" if BR2_LINUX_2_6_25 && BR2_KERNEL_ADD_LATEST_MINORPATCH
+>  ulf> -	default "7" if BR2_LINUX_2_6_24 && BR2_KERNEL_ADD_LATEST_MINORPATCH
+>  ulf> -	default "17" if BR2_LINUX_2_6_23 && BR2_KERNEL_ADD_LATEST_MINORPATCH
+>  ulf> -	default "19" if BR2_LINUX_2_6_22 && BR2_KERNEL_ADD_LATEST_MINORPATCH
+>  ulf> -	default "7" if BR2_LINUX_2_6_21 && BR2_KERNEL_ADD_LATEST_MINORPATCH
+>  ulf> -	default "21" if BR2_LINUX_2_6_20 && BR2_KERNEL_ADD_LATEST_MINORPATCH
+>  ulf> +	default $(BR2_KERNEL_LATEST_2_6_27) if BR2_LINUX_2_6_27 && BR2_KERNEL_ADD_LATEST_MINORPATCH
+>  ulf> +	default $(BR2_KERNEL_LATEST_2_6_26) if BR2_LINUX_2_6_26 && BR2_KERNEL_ADD_LATEST_MINORPATCH
+>  ulf> +	default $(BR2_KERNEL_LATEST_2_6_25) if BR2_LINUX_2_6_25 && BR2_KERNEL_ADD_LATEST_MINORPATCH
+>  ulf> +	default $(BR2_KERNEL_LATEST_2_6_24) if BR2_LINUX_2_6_24 && BR2_KERNEL_ADD_LATEST_MINORPATCH
+>  ulf> +	default $(BR2_KERNEL_LATEST_2_6_23) if BR2_LINUX_2_6_23 && BR2_KERNEL_ADD_LATEST_MINORPATCH
+>  ulf> +	default $(BR2_KERNEL_LATEST_2_6_22) if BR2_LINUX_2_6_22 && BR2_KERNEL_ADD_LATEST_MINORPATCH
+>  ulf> +	default $(BR2_KERNEL_LATEST_2_6_21) if BR2_LINUX_2_6_21 && BR2_KERNEL_ADD_LATEST_MINORPATCH
+>  ulf> +	default $(BR2_KERNEL_LATEST_2_6_20) if BR2_LINUX_2_6_20 && BR2_KERNEL_ADD_LATEST_MINORPATCH
+>  ulf>  	default "$(BR2_KERNEL_MINORLEVEL)" if BR2_KERNEL_ADD_MINORPATCH
 > 
-> That's not very descriptive.
+> Do we really need to support that many kernel versions? Shouldn't some
+> of them atlest be marked as deprecated?
 
-I have little clue of what it is used for
-except some kind of delay when a TAB character is received
-Old socat version breaks for some reason and it is really ancient.
-socat configure is not able to build without it
-The socat source contains defaults for Linux-2.6.24,
-and the documentation recommends using this
-if configure cannot deduct a resonable value.
+It all depends on why Buildroot exists.
+If it is to be more than a toy, then you need some stability.
 
+I regularily talk to customers which plans to use the
+same platform for > 10 years.
+At some stage products are put into maintenace mode.
+I can see people wanting to keep an old kernel while
+updating the file system,
 
+The system currently allows people to EASILY 
+build any kernel from 2.6.20 and upwards, instead of 
+the old makefile which had a fairly small flexibility.
+YOu can apply any type of patch, including your own.
 
->  
->  ulf>  $(SOCAT_WORKDIR)/Makefile: $(SOCAT_DIR)/.unpacked
->  ulf> @@ -30,6 +53,7 @@
->  ulf>  	(cd $(SOCAT_WORKDIR); rm -rf config.cache; \
->  ulf>  		$(TARGET_CONFIGURE_OPTS) \
->  ulf>  		$(TARGET_CONFIGURE_ARGS) \
->  ulf> +		$(SOCAT_CONFIGURE_OPTS) \
->  ulf>  		$(SOCAT_DIR)/configure \
->  ulf>  		--target=$(GNU_TARGET_NAME) \
->  ulf>  		--host=$(GNU_TARGET_NAME) \
+What is the real drawback of that?
+
 > 
-> How about converting it to Makefile.autotools.in format while you're
-> at it?
-
-Lots of things to do, and this has less priority
-than fixing U-boot for AT91/at91bootstrap etc.
-
-/Ulf
