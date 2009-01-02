@@ -1,48 +1,39 @@
 From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Fri, 2 Jan 2009 22:50:40 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/binutils:
-	ext_source/Atmel/avr32
-References: <20081220223102.7E1D376CEB@busybox.osuosl.org><87y6y76wrb.fsf@macbook.be.48ers.dk>
-	<87mye91m58.fsf@macbook.be.48ers.dk>
-Message-ID: <FE8B93BAD143478690C33B2E9D818EB0@aeglos>
+Date: Fri, 2 Jan 2009 22:52:15 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain:
+	export-toolchain uClibc
+References: <20081221171134.7BAB176ABE@busybox.osuosl.org><87fxkf6vdl.fsf@macbook.be.48ers.dk>
+	<87iqox1m2d.fsf@macbook.be.48ers.dk>
+Message-ID: <184FF361662E479582AF4706B539C4E5@aeglos>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-
->>>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
-> 
->>>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
-> Peter> Hi,
-> 
 > ulf> Author: ulf
-> ulf> Date: 2008-12-20 22:31:02 +0000 (Sat, 20 Dec 2008)
-> ulf> New Revision: 24474
-> 
+> ulf> Date: 2008-12-21 17:11:33 +0000 (Sun, 21 Dec 2008)
+> ulf> New Revision: 24480
+>
 > ulf> Log:
-> ulf> Add updated binutils-2.18 prepatched toolchain for AVR32
-> 
-> ulf> config BR2_BINUTILS_VERSION_2_17
-> ulf> depends on BR2_avr32 || !BR2_nios2
-> ulf> - depends on BR2_DEPRECATED
-> ulf> + depends on BR2_DEPRECATED && !BR2_avr32
-> 
-> Peter> depends on BR2_avr32  + depends on !BR2_avr32?
-> 
+> ulf> Allow creating a script for external use of Buildroot toolchain
+>
+> It's been 10 days now, and it has been disabled in Kconfig since then,
+> so I'll revert the commit.
 
-Previously it was deprecated for everything.
-The intention was to de-deprecate it for the AVR32 but not for other archs.
+Why disable it?
+I find this pretty useful.
 
-
-> It's been 10 days now, so I'm fixing it up.
-> 
+>
 > -- 
 > Bye, Peter Korsgaard
 >
 
 
 Best Regards
-Ulf Samuelsson
+Ulf Samuelsson                ulf at atmel.com
+Atmel Nordic AB
+Mail:  Box 2033, 174 02 Sundbyberg, Sweden
+Visit:  Kavalleriv?gen 24, 174 58 Sundbyberg, Sweden
+Phone +46 (8) 441 54 22     Fax +46 (8) 441 54 29
+GSM    +46 (706) 22 44 57
