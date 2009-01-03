@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sat,  3 Jan 2009 00:02:08 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/u-boot
-Message-ID: <20090103000208.59551769FA@busybox.osuosl.org>
+Date: Sat,  3 Jan 2009 00:03:32 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/u-boot/2009.01-rc1
+Message-ID: <20090103000332.27DB5769FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,330 +9,595 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2009-01-03 00:02:07 +0000 (Sat, 03 Jan 2009)
-New Revision: 24653
+Date: 2009-01-03 00:03:31 +0000 (Sat, 03 Jan 2009)
+New Revision: 24654
 
 Log:
-Add Memory configration to u-boot (Config.in) and remove comments from 'choice's', Rearrange options for clarity
+Add X-Modem tools for minicom to u-boot allowing easy downloading of U-Boot
 
-Modified:
-   trunk/buildroot/target/u-boot/Config.in
+Added:
+   trunk/buildroot/target/u-boot/2009.01-rc1/u-boot-2009.01-rc1-007-tools.patch
 
 
 Changeset:
-Modified: trunk/buildroot/target/u-boot/Config.in
+Added: trunk/buildroot/target/u-boot/2009.01-rc1/u-boot-2009.01-rc1-007-tools.patch
 ===================================================================
---- trunk/buildroot/target/u-boot/Config.in	2009-01-03 00:00:46 UTC (rev 24652)
-+++ trunk/buildroot/target/u-boot/Config.in	2009-01-03 00:02:07 UTC (rev 24653)
-@@ -11,6 +11,14 @@
- 	  Build "Das U-Boot" Boot Monitor
- 
- if BR2_TARGET_UBOOT
-+config BR2_TARGET_UBOOT_BOARDNAME
-+	string "board name"
-+	depends on BR2_TARGET_UBOOT
-+	default "$(BOARD_NAME)"
-+	help
-+	  One of U-Boot supported boards to be built.
-+	  This will be suffixed with _config to meet U-Boot standard naming.
-+
- choice
- 	prompt "U-Boot Version"
- 	default BR2_TARGET_UBOOT_2009_01_RC1
-@@ -20,27 +28,18 @@
- config BR2_TARGET_UBOOT_2009_01_RC1
- 	bool "u-boot-2009.01-rc1"
- 	depends on BR2_TARGET_UBOOT
--	help
--	  Use u-boot from December 2008 (RC1)
- 
- config BR2_TARGET_UBOOT_2008_10
- 	bool "u-boot-2008.10"
- 	depends on BR2_TARGET_UBOOT
--	help
--	  Use u-boot from October 2008
- 	
- config BR2_TARGET_UBOOT_1_3_4
- 	bool "u-boot-1.3.4"
- 	depends on BR2_TARGET_UBOOT
--	help
--	  Use u-boot from mid 2008
- 	
- config BR2_TARGET_UBOOT_2009_01
- 	bool "u-boot-2009.01"
- 	depends on BR2_TARGET_UBOOT
--	help
--	  Use u-boot from January 2009
--	  Release date 2009-01-17
- 
- endchoice
- 
-@@ -51,14 +50,6 @@
- 	default "1.3.4"		if BR2_TARGET_UBOOT_1_3_4
- 	default "2009.01"	if BR2_TARGET_UBOOT_2009_01
- 
--config BR2_TARGET_UBOOT_BOARDNAME
--	string "board name"
--	depends on BR2_TARGET_UBOOT
--	default "$(BOARD_NAME)"
--	help
--	  One of U-Boot supported boards to be built.
--	  This will be suffixed with _config to meet U-Boot standard naming.
--
- config BR2_TARGET_UBOOT_CUSTOM_PATCH
- 	string "custom patch"
- 	depends on BR2_TARGET_UBOOT
-@@ -74,42 +65,27 @@
- 	config BR2_TARGET_UBOOT_BOOTSOURCE_DATAFLASHCARD
- 	bool "Boot from dataflashcard"
- 	depends on BR2_BOOTSOURCE_DATAFLASHCARD
--	help
--	  
- 
- 	config BR2_TARGET_UBOOT_BOOTSOURCE_DATAFLASH
- 	bool "Boot from dataflash
- 	depends on BR2_BOOTSOURCE_DATAFLASH
--	help
--	  
- 
- 	config BR2_TARGET_UBOOT_BOOTSOURCE_NANDFLASH
- 	bool "Boot from a NAND flash"
- 	depends on BR2_BOOTSOURCE_NANDFLASH
--	help
--	  Build u-boot with environment in the NAND flash
- 
- 	config BR2_TARGET_UBOOT_BOOTSOURCE_FLASH
- 	bool "Boot from a parallell flash"
- 	depends on BR2_BOOTSOURCE_FLASH
--	help
--	  Build u-boot with environment in a flash RAM
- 
- 	config BR2_TARGET_UBOOT_BOOTSOURCE_SDCARD
--	bool "Boot from a NAND flash"
-+	bool "Boot from an SD-Card"
- 	depends on BR2_BOOTSOURCE_SDCARD
--	help
--	  Build u-boot with environment on an SD-Card
--	  Not yet supported
- 
- 	config BR2_TARGET_UBOOT_BOOTSOURCE_EEPROM
--	bool "Boot from a serial EEPROM"
-+	bool "Boot from a serial EEPROM (Not yet supported)"
- 	depends on BR2_BOOTSOURCE_EEPROM
--	help
--	  Build u-boot with environment in a serial EEPROM
--	  Not yet supported
- 
--
- endchoice
- 
- config BR2_TARGET_UBOOT_BOOTSOURCE
-@@ -122,6 +98,181 @@
- 	default "sdcard"	if BR2_TARGET_UBOOT_BOOTSOURCE_SDCARD
- 	default "eeprom"	if BR2_TARGET_UBOOT_BOOTSOURCE_EEPROM
- 
-+config BR2_TARGET_UBOOT_SILENT
-+	bool "silent console"
-+	depends on BR2_TARGET_UBOOT
-+	help
-+	  If the option has been enabled, the output can be
-+	  silenced by setting the environment variable "silent".
-+
-+config BR2_TARGET_UBOOT_TOOL_MKIMAGE
-+	bool "mkimage tool in target"
-+	depends on BR2_TARGET_UBOOT
-+	help
-+	  Install mkimage tool in target.
-+
-+config BR2_TARGET_UBOOT_TOOL_ENV
-+	bool "fw_printenv tool in target"
-+	depends on BR2_TARGET_UBOOT
-+	help
-+	  Install fw_printenv / fw_setenv tools in target.
-+
-+
-+choice
-+	prompt "SDRAM Memory size"
-+	default BR2_TARGET_UBOOT_SDRAM_SIZE_64M
-+	help
-+	  Size of the onboard SDRAM
-+
-+config BR2_TARGET_UBOOT_SDRAM_SIZE_256MB
-+	bool "256 MB"
-+
-+config BR2_TARGET_UBOOT_SDRAM_SIZE_128MB
-+	bool "128 MB"
-+
-+config BR2_TARGET_UBOOT_SDRAM_SIZE_64MB
-+	bool "64 MB"
-+
-+config BR2_TARGET_UBOOT_SDRAM_SIZE_32MB
-+	bool "32 MB"
-+
-+config BR2_TARGET_UBOOT_SDRAM_SIZE_16MB
-+	bool "16 MB"
-+
-+config BR2_TARGET_UBOOT_SDRAM_SIZE_8MB
-+	bool "8 MB"
-+
-+endchoice
-+
-+config BR2_TARGET_UBOOT_MEMORY_SIZE
-+	string
-+	default "256M"	if BR2_TARGET_UBOOT_SDRAM_SIZE_256MB
-+	default "128M"	if BR2_TARGET_UBOOT_SDRAM_SIZE_128MB
-+	default "64M"	if BR2_TARGET_UBOOT_SDRAM_SIZE_64MB
-+	default "32M"	if BR2_TARGET_UBOOT_SDRAM_SIZE_32MB
-+	default "16M"	if BR2_TARGET_UBOOT_SDRAM_SIZE_16MB
-+	default "8M"	if BR2_TARGET_UBOOT_SDRAM_SIZE_8MB
-+
-+choice
-+	prompt "Kernel Size"
-+	default BR2_TARGET_UBOOT_KERNEL_SIZE_2_00MB
-+
-+config BR2_TARGET_UBOOT_KERNEL_SIZE_1_25MB
-+	bool "Kernel size is less than 1.25 MB"
-+
-+config BR2_TARGET_UBOOT_KERNEL_SIZE_1_50MB
-+	bool "Kernel size is less than 1.50 MB"
-+
-+config BR2_TARGET_UBOOT_KERNEL_SIZE_1_75MB
-+	bool "Kernel size is less than 1.75 MB"
-+
-+config BR2_TARGET_UBOOT_KERNEL_SIZE_2_00MB
-+	bool "Kernel size is less than 2.00 MB"
-+
-+config BR2_TARGET_UBOOT_KERNEL_SIZE_2_25MB
-+	bool "Kernel size is less than 2.25 MB"
-+
-+config BR2_TARGET_UBOOT_KERNEL_SIZE_2_50MB
-+	bool "Kernel size is less than 2.50 MB"
-+
-+endchoice
-+
-+choice
-+	prompt "Dataflash Size"
-+	default BR2_TARGET_UBOOT_DATAFLASH_SIZE_2_00MB
-+
-+config BR2_TARGET_UBOOT_DATAFLASH_SIZE_8MB
-+	bool "Dataflash size is 8 MB"
-+
-+config BR2_TARGET_UBOOT_DATAFLASH_SIZE_4MB
-+	bool "Dataflash size is 4 MB"
-+
-+config BR2_TARGET_UBOOT_DATAFLASH_SIZE_2MB
-+	bool "Dataflash size is 2 MB"
-+
-+config BR2_TARGET_UBOOT_DATAFLASH_SIZE_1MB
-+	bool "Dataflash size is 1 MB"
-+
-+config BR2_TARGET_UBOOT_DATAFLASH_SIZE_0_50MB
-+	bool "Dataflash size is 0.5 MB"
-+
-+config BR2_TARGET_UBOOT_DATAFLASH_SIZE_0_25MB
-+	bool "Dataflash size is 0.25 MB"
-+
-+endchoice
-+
-+config BR2_TARGET_UBOOT_DATAFLASH_SIZE
-+	string
-+	default "8M"	if BR2_TARGET_DATAFLASH_SIZE_8MB
-+	default "4M"	if BR2_TARGET_DATAFLASH_SIZE_4MB
-+	default "2M"	if BR2_TARGET_DATAFLASH_SIZE_2MB
-+	default "1M"	if BR2_TARGET_DATAFLASH_SIZE_1MB
-+	default "0.5M"	if BR2_TARGET_DATAFLASH_SIZE_0_50MB
-+	default "0.25M"	if BR2_TARGET_DATAFLASH_SIZE_0_25MB
-+
-+config BR2_TARGET_UBOOT_END_OF_FLASH
-+	string
-+	default "C083FFFF" if  BR2_TARGET_UBOOT_DATAFLASH_SIZE_8MB
-+	default "C041FFFF" if  BR2_TARGET_UBOOT_DATAFLASH_SIZE_4MB
-+	default "C020FFFF" if  BR2_TARGET_UBOOT_DATAFLASH_SIZE_2MB
-+	default "C0107FFF" if  BR2_TARGET_UBOOT_DATAFLASH_SIZE_1MB
-+	default "C0083FFF" if  BR2_TARGET_UBOOT_DATAFLASH_SIZE_0_50MB
-+	default "C0041FFF" if  BR2_TARGET_UBOOT_DATAFLASH_SIZE_0_25MB
-+	help
-+	  
-+
-+config BR2_TARGET_UBOOT_KERNEL_START
-+	string "Kernel SDRAM address"
-+	default "21000000"
-+	help
-+	  Kernel is loaded to this address in SDRAM 
-+
-+config BR2_TARGET_UBOOT_KERNEL_LOCATION
-+	string "Kernel flash address"
-+	default "C0042000"
-+	help
-+	  Kernel location in dataflash
-+
-+config BR2_TARGET_UBOOT_FILESYSTEM_START
-+	string
-+	default "2114A000" if BR2_TARGET_UBOOT_KERNEL_SIZE_1_25MB
-+	default "2118C000" if BR2_TARGET_UBOOT_KERNEL_SIZE_1_50MB
-+  	default "211CE000" if BR2_TARGET_UBOOT_KERNEL_SIZE_1_75MB
-+  	default "21210000" if BR2_TARGET_UBOOT_KERNEL_SIZE_2_00MB
-+  	default "21252000" if BR2_TARGET_UBOOT_KERNEL_SIZE_2_25MB
-+  	default "21294000" if BR2_TARGET_UBOOT_KERNEL_SIZE_2_50MB
-+	help
-+	  Kernel is loaded to this SDRAM address
-+	  Assumes SDRAM starts at 20000000
-+	  Will need to be updated if the SDRAM is located elsewhere
-+
-+config BR2_TARGET_UBOOT_FILESYSTEM_LOCATION
-+	string
-+	default "C018C000" if BR2_TARGET_UBOOT_KERNEL_SIZE_1_25MB
-+  	default "C01CE000" if BR2_TARGET_UBOOT_KERNEL_SIZE_1_50MB
-+  	default "C0210000" if BR2_TARGET_UBOOT_KERNEL_SIZE_1_75MB
-+  	default "C0252000" if BR2_TARGET_UBOOT_KERNEL_SIZE_2_00MB
-+  	default "C0294000" if BR2_TARGET_UBOOT_KERNEL_SIZE_2_25MB
-+  	default "C02D6000" if BR2_TARGET_UBOOT_KERNEL_SIZE_2_50MB
-+	help
-+	  Determine location for File System in Dataflash
-+	  This needs to be updated for other memory technologies
-+
-+config BR2_TARGET_UBOOT_FILESYSTEM_SIZE
-+	string "File System Size"
-+	default "6000000"
-+	help
-+	  
-+
-+menuconfig BR2_TARGET_UBOOT_NETWORK
-+	bool "Network Settings"
-+	default y
-+	depends on BR2_TARGET_UBOOT
-+	help
-+	  Network settings for U-boot
-+
-+if BR2_TARGET_UBOOT_NETWORK
-+
- config BR2_TARGET_UBOOT_SERVERIP
- 	string "server ip"
- 	depends on BR2_TARGET_UBOOT
-@@ -164,25 +315,8 @@
- 	depends on BR2_TARGET_AVR32
- 	help
- 	  Target MAC address for the second ethernet interface.
-+endif
- 
--config BR2_TARGET_UBOOT_SILENT
--	bool "silent console"
--	depends on BR2_TARGET_UBOOT
--	help
--	  If the option has been enabled, the output can be
--	  silenced by setting the environment variable "silent".
--
--config BR2_TARGET_UBOOT_TOOL_MKIMAGE
--	bool "mkimage tool in target"
--	depends on BR2_TARGET_UBOOT
--	help
--	  Install mkimage tool in target.
--
--config BR2_TARGET_UBOOT_TOOL_ENV
--	bool "fw_printenv tool in target"
--	depends on BR2_TARGET_UBOOT
--	help
--	  Install fw_printenv / fw_setenv tools in target.
- endif
- 
- config BR2_BOOTSOURCE_DATAFLASHCARD
+--- trunk/buildroot/target/u-boot/2009.01-rc1/u-boot-2009.01-rc1-007-tools.patch	                        (rev 0)
++++ trunk/buildroot/target/u-boot/2009.01-rc1/u-boot-2009.01-rc1-007-tools.patch	2009-01-03 00:03:31 UTC (rev 24654)
+@@ -0,0 +1,576 @@
++diff -urN u-boot-2008.10-0rig//tools/Makefile u-boot-2008.10/tools/Makefile
++--- u-boot-2008.10-0rig//tools/Makefile	2008-12-31 17:51:29.000000000 +0100
+++++ u-boot-2008.10/tools/Makefile	2008-12-31 19:38:15.000000000 +0100
++@@ -37,6 +37,11 @@
++ #OBJ_FILES	+= mpc86x_clk.o
++ #endif
++ 
+++ifeq ($(VENDOR),atmel)
+++BINS+= raw-at91$(SFX) sx-at91$(SFX)
+++OBJS+= raw-at91.o sx-at91.o
+++endif
+++
++ LIBFDT_OBJ_FILES	= $(obj)fdt.o $(obj)fdt_ro.o $(obj)fdt_rw.o $(obj)fdt_strerror.o $(obj)fdt_wip.o
++ 
++ LOGO_H	= $(OBJTREE)/include/bmp_logo.h
++@@ -175,6 +180,14 @@
++ 		$(CC) $(CFLAGS) $(HOST_LDFLAGS) -o $@ $^
++ 		$(STRIP) $@
++ 
+++$(obj)raw-at91$(SFX):	$(obj)raw-at91.o
+++		$(CC) $(CFLAGS) $(HOST_LDFLAGS) -o $@ $^
+++		$(STRIP) $@
+++
+++$(obj)sx-at91$(SFX):	$(obj)sx-at91.o
+++		$(CC) $(CFLAGS) $(HOST_LDFLAGS) -o $@ $^
+++		$(STRIP) $@
+++
++ $(obj)envcrc.o:	$(src)envcrc.c
++ 		$(CC) -g $(CFLAGS) -c -o $@ $<
++ 
++@@ -223,6 +236,12 @@
++ $(obj)fdt_wip.o:	$(obj)fdt_wip.c
++ 		$(CC) -g $(FIT_CFLAGS) -c -o $@ $<
++ 
+++$(obj)sx-at91.o:		$(src)sx-at91.c
+++		$(CC) -g $(CFLAGS) -c -o $@ $<
+++
+++$(obj)raw-at91.o:	$(src)raw-at91.c
+++		$(CC) -g $(CFLAGS) -c -o $@ $<
+++
++ subdirs:
++ ifeq ($(TOOLSUBDIRS),)
++ 		@:
++diff -urN u-boot-2008.10-0rig//tools/raw-at91.c u-boot-2008.10/tools/raw-at91.c
++--- u-boot-2008.10-0rig//tools/raw-at91.c	1970-01-01 01:00:00.000000000 +0100
+++++ u-boot-2008.10/tools/raw-at91.c	2008-12-31 19:26:23.000000000 +0100
++@@ -0,0 +1,225 @@
+++/*
+++ * xmodem-at91.c
+++ *
+++ * A simple program using xmodem/1kxmode upload file to at91rm9200 based board.
+++ * Created by (C) Copyright 2004
+++ * Linhang.Zhang, Jilin University of PR.China, linxing at jlu.edu.cn.
+++ *
+++ *************************************************************************************
+++ *
+++ * Modified 01-Feb-2005 (C)Copyright 2005
+++ * Marco Cavallini, www.KoanSoftware.com - ITALY, m.cavallini@koansoftware.com
+++ * - edited indentations and changed break usage in switch statement.
+++ * - added "\r" to printf
+++ *
+++ * - build with 
+++ *   gcc sx-at91.c -o sx-at91
+++ *
+++ * - Howto use this program with minicom/xminicom and AT91 
+++ *   start minicom or xminicom
+++ *   edit Options / File transfer protocol, 
+++ *   add a name (for example J) like the following example
+++ *
+++ *   |     Name             Program                 Name U/D FullScr IO-Red. Multi  |
+++ *   | A  zmodem     /usr/bin/sz -vv -b              Y    U    N       Y       Y    |
+++ *   | B  ymodem     /usr/bin/sb -vv                 Y    U    N       Y       Y    |
+++ *   | C  xmodem     /usr/bin/sx -vv                 Y    U    N       Y       N    |
+++ *   | D  zmodem     /usr/bin/rz -vv -b -E           N    D    N       Y       Y    |
+++ *   | E  ymodem     /usr/bin/rb -vv                 N    D    N       Y       Y    |
+++ *   | F  xmodem     /usr/bin/rx -vv                 Y    D    N       Y       N    |
+++ *   | G  kermit     /usr/bin/kermit -i -l %l -s     Y    U    Y       N       N    |
+++ *   | H  kermit     /usr/bin/kermit -i -l %l -r     N    D    Y       N       N    |
+++ *   | I  ascii      /usr/bin/ascii-xfr -dsv         Y    U    N       Y       N    |
+++ *   | J  at91       /home/koan/xmodem/xs-at91       Y    U    Y       N       N    |
+++ *   | K    -                                                                       |
+++ *   | L    -                                                                       |
+++ *
+++ *   save and use it selecting at91 protocol when you start an Xmodem upload to AT91
+++ *
+++ *************************************************************************************
+++ *
+++ * This program is free software; you can redistribute it and/or
+++ * modify it under the terms of the GNU General Public License as
+++ * published by the Free Software Foundation; either version 2 of
+++ * the License, or (at your option) any later version.
+++ *
+++ * This program is distributed in the hope that it will be useful,
+++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+++ * GNU General Public License for more details.
+++ *
+++ * You should have received a copy of the GNU General Public License
+++ * along with this program; if not, write to the Free Software
+++ * Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+++ * MA 02111-1307 USA
+++ */
+++
+++#include     <stdio.h>
+++#include     <stdlib.h>
+++#include     <string.h>
+++#include     <unistd.h>
+++#include     <sys/types.h>
+++#include     <sys/stat.h>
+++#include     <fcntl.h>
+++#include     <termios.h>
+++#include     <errno.h>
+++#include     <time.h>
+++
+++#define	TRUE		1
+++#define	FALSE		0
+++#define LINESIZE	1024
+++
+++/*********/
+++
+++#define SERIAL_DEVICE "/dev/ttyS0"
+++#define MYBAUDRATE B115200
+++
+++/***************SUB PROGRAM*******/
+++
+++int Initial_SerialPort(void)
+++{
+++	int fd;
+++	struct termios options;
+++
+++	fd = open( SERIAL_DEVICE , O_RDWR | O_NOCTTY | O_NDELAY );
+++	if ( fd == -1 )
+++	{ 
+++		/*open error!*/
+++		perror("Can't open serial port!");
+++		return -1;
+++	}
+++
+++	/*Get the current options for the port...*/
+++	tcgetattr(fd, &options);
+++
+++	/*Set the baud rates to BAUDRATE...*/
+++	cfsetispeed(&options,MYBAUDRATE);
+++	cfsetospeed(&options,MYBAUDRATE);
+++	tcsetattr(fd, TCSANOW, &options);
+++	if (0 != tcgetattr(fd, &options)) 
+++	{
+++		perror("SetupSerial 1");
+++		return -1;
+++	} 
+++	
+++	/*
+++	 * 8bit Data,no partity,1 stop bit...
+++	 */
+++	options.c_cflag &= ~PARENB;
+++	options.c_cflag &= ~CSTOPB;
+++	options.c_cflag &= ~CSIZE;
+++	options.c_cflag |= CS8;
+++	tcflush(fd,TCIFLUSH);
+++
+++	/***Choosing Raw Input*/
+++	options.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
+++	options.c_oflag &= ~OPOST; 
+++
+++	/*
+++	 * Set the new options for the port...
+++	 */
+++	if (0 != tcsetattr(fd, TCSANOW, &options))
+++	{
+++ 		perror("SetupSerial error");
+++ 		return -1 ;
+++	}
+++
+++	return fd ;
+++}
+++
+++/******************************/
+++void ClearReceiveBuffer(int fd)
+++{
+++	unsigned char tmp;
+++	while ((read(fd,&tmp,1))>0);
+++	
+++	return;
+++}
+++unsigned char filebuf[ LINESIZE+2 ];
+++unsigned char outbuf[ LINESIZE+2 ];
+++FILE *datafile;
+++int fd;
+++
+++static	unsigned int	ChCnt=0;
+++static	unsigned int	ChIx;
+++unsigned char	GetChar(unsigned char *ch)
+++/* 
+++ * SUCCESS:	Return TRUE
+++ * FAILURE:	Return FALSE
+++ */
+++{
+++  
+++  if(ChCnt == 0) {
+++    ChCnt = fread( filebuf, sizeof(char), LINESIZE, datafile);
+++    ChIx = 0;
+++  }
+++  if(ChCnt > 0) {
+++    *ch = filebuf[ChIx++];
+++    ChCnt--;
+++    return TRUE;
+++  } else {
+++    return FALSE;	/* Reached End of File */
+++  }
+++}
+++
+++/********************************/
+++void	delay()
+++{
+++}
+++
+++int main(int argc,char *argv[])
+++{
+++	char *data_file_name;
+++	int	len;
+++	unsigned char c;
+++	int complete,i,sts;
+++
+++	printf("raw-at91 started...\r\n");
+++	
+++	/* open serial port1 */
+++	if ( (fd = Initial_SerialPort()) == -1)  
+++		return -1 ;
+++
+++	data_file_name = argv[1];
+++
+++	if((datafile=fopen(data_file_name,"rb"))==NULL)
+++	{
+++		perror ("Can't open file!");
+++		return -1 ;
+++	}
+++
+++	/*******************************/
+++	
+++	complete = 0;
+++	/*	ClearReceiveBuffer(fd); */
+++
+++	/* while((read(fd,&ack_id,1))<=0);*/
+++	
+++	/* printf("%c\r\n",ack_id); */
+++	while(!complete)
+++	{
+++	  for(i=0;i < LINESIZE; i++) {		/* A line more than 1024 characters will have problems...*/
+++	    if((sts = GetChar(&outbuf[i]))) {
+++	      /* Sts = Success */
+++	      if((c = outbuf[i]) == '\n') {	/* Found end of Line - Start Processing*/
+++		outbuf[i+1] = '\0';		/* Terminate String*/
+++		break;
+++	      }
+++	    } else {
+++	      /* Sts = Failure - End of File */
+++	      outbuf[i] = '\n';
+++	      outbuf[i+1] = '\0';
+++	      complete = 1;
+++	    }
+++	  }
+++	  printf("%s",outbuf);		/* Inform user */
+++	  len = strlen((char *)outbuf);
+++	  write(fd,outbuf,strlen((char *)outbuf));
+++	  for(i = 0; i < 500000000; i++ ) delay();
+++	  while((read(fd,&c,1))<=0) putchar(c);
+++	  printf("  ");
+++	}
+++	fclose(datafile);
+++	close(fd);
+++	return 0;
+++}
++diff -urN u-boot-2008.10-0rig//tools/sx-at91.c u-boot-2008.10/tools/sx-at91.c
++--- u-boot-2008.10-0rig//tools/sx-at91.c	1970-01-01 01:00:00.000000000 +0100
+++++ u-boot-2008.10/tools/sx-at91.c	2008-12-31 19:26:23.000000000 +0100
++@@ -0,0 +1,300 @@
+++/*
+++ * xmodem-at91.c
+++ *
+++ * A simple program using xmodem/1kxmode upload file to at91rm9200 based board.
+++ * Created by (C) Copyright 2004
+++ * Linhang.Zhang, Jilin University of PR.China, linxing at jlu.edu.cn.
+++ *
+++ *************************************************************************************
+++ *
+++ * Modified 01-Feb-2005 (C)Copyright 2005
+++ * Marco Cavallini, www.KoanSoftware.com - ITALY, m.cavallini@koansoftware.com
+++ * - edited indentations and changed break usage in switch statement.
+++ * - added "\r" to printf
+++ *
+++ * - build with 
+++ *   gcc sx-at91.c -o sx-at91
+++ *
+++ * - Howto use this program with minicom/xminicom and AT91 
+++ *   start minicom or xminicom
+++ *   edit Options / File transfer protocol, 
+++ *   add a name (for example J) like the following example
+++ *
+++ *   |     Name             Program                 Name U/D FullScr IO-Red. Multi  |
+++ *   | A  zmodem     /usr/bin/sz -vv -b              Y    U    N       Y       Y    |
+++ *   | B  ymodem     /usr/bin/sb -vv                 Y    U    N       Y       Y    |
+++ *   | C  xmodem     /usr/bin/sx -vv                 Y    U    N       Y       N    |
+++ *   | D  zmodem     /usr/bin/rz -vv -b -E           N    D    N       Y       Y    |
+++ *   | E  ymodem     /usr/bin/rb -vv                 N    D    N       Y       Y    |
+++ *   | F  xmodem     /usr/bin/rx -vv                 Y    D    N       Y       N    |
+++ *   | G  kermit     /usr/bin/kermit -i -l %l -s     Y    U    Y       N       N    |
+++ *   | H  kermit     /usr/bin/kermit -i -l %l -r     N    D    Y       N       N    |
+++ *   | I  ascii      /usr/bin/ascii-xfr -dsv         Y    U    N       Y       N    |
+++ *   | J  at91       /home/koan/xmodem/xs-at91       Y    U    Y       N       N    |
+++ *   | K    -                                                                       |
+++ *   | L    -                                                                       |
+++ *
+++ *   save and use it selecting at91 protocol when you start an Xmodem upload to AT91
+++ *
+++ *************************************************************************************
+++ *
+++ * This program is free software; you can redistribute it and/or
+++ * modify it under the terms of the GNU General Public License as
+++ * published by the Free Software Foundation; either version 2 of
+++ * the License, or (at your option) any later version.
+++ *
+++ * This program is distributed in the hope that it will be useful,
+++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+++ * GNU General Public License for more details.
+++ *
+++ * You should have received a copy of the GNU General Public License
+++ * along with this program; if not, write to the Free Software
+++ * Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+++ * MA 02111-1307 USA
+++ */
+++
+++#include     <stdio.h>
+++#include     <stdlib.h>
+++#include     <unistd.h>
+++#include     <sys/types.h>
+++#include     <sys/stat.h>
+++#include     <fcntl.h>
+++#include     <termios.h>
+++#include     <errno.h>
+++#include     <time.h>
+++
+++/*
+++Xmodem Frame form: <SOH><blk #><255-blk #><--128 data bytes--><CRC hi><CRC lo>
+++*/
+++
+++#define XMODEM_SOH 0x01
+++#define XMODEM_STX 0x02
+++#define XMODEM_EOT 0x04
+++#define XMODEM_ACK 0x06
+++#define XMODEM_NAK 0x15
+++#define XMODEM_CRC_CHR	'C'
+++#define XMODEM_CRC_SIZE 2			/* Crc_High Byte + Crc_Low Byte */
+++#define XMODEM_FRAME_ID_SIZE 2 /* Frame_Id + 255-Frame_Id */
+++#define XMODEM_DATA_SIZE_SOH 128  /* for Xmodem protocol */
+++#define XMODEM_DATA_SIZE_STX 1024 /* for 1K xmodem protocol */
+++#define USE_1K_XMODEM 0  /* 1 for use 1k_xmodem 0 for xmodem */
+++
+++#if (USE_1K_XMODEM)
+++	#define XMODEM_DATA_SIZE 	XMODEM_DATA_SIZE_STX
+++	#define XMODEM_HEAD		XMODEM_STX
+++#else
+++	#define XMODEM_DATA_SIZE 	XMODEM_DATA_SIZE_SOH
+++	#define XMODEM_HEAD 		XMODEM_SOH
+++#endif
+++/*********/
+++
+++#define SERIAL_DEVICE "/dev/ttyS0"
+++#define MYBAUDRATE B115200
+++
+++/***************SUB PROGRAM*******/
+++unsigned short GetCrc16 ( char *ptr, unsigned short count )
+++{
+++	unsigned short crc, i;
+++
+++	crc = 0;
+++	while(count--)
+++	{
+++		crc = crc ^ (int) *ptr++ << 8;
+++	
+++		for(i = 0; i < 8; i++)
+++		{
+++			if(crc & 0x8000)
+++				crc = crc << 1 ^ 0x1021;
+++			else			
+++				crc = crc << 1;
+++		}
+++	}
+++
+++	return (crc & 0xFFFF);
+++}
+++
+++/*******************************/
+++int Initial_SerialPort(void)
+++{
+++	int fd;
+++	struct termios options;
+++
+++	fd = open( SERIAL_DEVICE , O_RDWR | O_NOCTTY | O_NDELAY );
+++	if ( fd == -1 )
+++	{ 
+++		/*open error!*/
+++		perror("Can't open serial port!");
+++		return -1;
+++	}
+++
+++	/*Get the current options for the port...*/
+++	tcgetattr(fd, &options);
+++
+++	/*Set the baud rates to BAUDRATE...*/
+++	cfsetispeed(&options,MYBAUDRATE);
+++	cfsetospeed(&options,MYBAUDRATE);
+++	tcsetattr(fd, TCSANOW, &options);
+++	if (0 != tcgetattr(fd, &options)) 
+++	{
+++		perror("SetupSerial 1");
+++		return -1;
+++	} 
+++	
+++	/*
+++	 * 8bit Data,no partity,1 stop bit...
+++	 */
+++	options.c_cflag &= ~PARENB;
+++	options.c_cflag &= ~CSTOPB;
+++	options.c_cflag &= ~CSIZE;
+++	options.c_cflag |= CS8;
+++	tcflush(fd,TCIFLUSH);
+++
+++	/***Choosing Raw Input*/
+++	options.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
+++	options.c_oflag &= ~OPOST; 
+++
+++	/*
+++	 * Set the new options for the port...
+++	 */
+++	if (0 != tcsetattr(fd, TCSANOW, &options))
+++	{
+++ 		perror("SetupSerial error");
+++ 		return -1 ;
+++	}
+++
+++	return fd ;
+++}
+++
+++/******************************/
+++void ClearReceiveBuffer(int fd)
+++{
+++	unsigned char tmp;
+++	while ((read(fd,&tmp,1))>0);
+++	
+++	return;
+++}
+++
+++/********************************/
+++int main(int argc,char *argv[])
+++{
+++	int fd;
+++	char *data_file_name;
+++	char packet_data[ XMODEM_DATA_SIZE ];
+++	char frame_data[ XMODEM_DATA_SIZE + XMODEM_CRC_SIZE + XMODEM_FRAME_ID_SIZE + 1 ];
+++	FILE *datafile;
+++	int complete,retry_num,pack_counter,read_number,write_number,i;
+++	unsigned short crc_value;
+++	unsigned char ack_id;
+++
+++	printf("sx-at91 started...\r\n");
+++	
+++	/* open serial port1 */
+++	if ( (fd = Initial_SerialPort()) == -1)  
+++		return -1 ;
+++
+++	data_file_name = argv[1];
+++
+++	if((datafile=fopen(data_file_name,"rb"))==NULL)
+++	{
+++		perror ("Can't open file!");
+++		return -1 ;
+++	}
+++
+++	/*******************************/
+++	
+++	pack_counter = 0;
+++	complete = 0;
+++	retry_num = 0;
+++	ClearReceiveBuffer(fd);
+++
+++	while((read(fd,&ack_id,1))<=0);
+++	
+++	printf("%c\r\n",ack_id);
+++	ack_id=XMODEM_ACK;
+++	while(!complete)
+++	{
+++		switch(ack_id)
+++		{
+++		case XMODEM_ACK:
+++			retry_num = 0;
+++			pack_counter++;
+++			read_number = fread( packet_data, sizeof(char), XMODEM_DATA_SIZE, datafile);
+++			if(read_number>0)
+++			{
+++				if(read_number<XMODEM_DATA_SIZE_SOH)
+++				{
+++			
+++					printf("Start filling the last frame!\r\n");
+++					for(;read_number<XMODEM_DATA_SIZE;read_number++)
+++						packet_data[read_number] = 0x00;
+++				}
+++				frame_data[0] = XMODEM_HEAD;
+++				frame_data[1] = (char)pack_counter;
+++				frame_data[2] = (char)(255-frame_data[1]);
+++	
+++				for(i=0;i<XMODEM_DATA_SIZE;i++)
+++					frame_data[i+3]=packet_data[i];
+++	
+++				crc_value = GetCrc16(packet_data,XMODEM_DATA_SIZE);
+++				frame_data[XMODEM_DATA_SIZE_SOH+3]=(unsigned char)(crc_value >> 8);
+++				frame_data[XMODEM_DATA_SIZE_SOH+4]=(unsigned char)(crc_value);
+++				write_number = write( fd, frame_data, XMODEM_DATA_SIZE_SOH + 5);
+++				printf("waiting for ACK,%d,%d,...",pack_counter,write_number);
+++				while((read(fd,&ack_id,1))<=0);
+++			
+++				if(ack_id == XMODEM_ACK)
+++					printf("Ok!\r\n");
+++				else
+++					printf("Error!\r\n");
+++			}
+++			else
+++			{
+++				ack_id = XMODEM_EOT;
+++				complete = 1;
+++				printf("Waiting for complete ACK ...");
+++			
+++				while(ack_id != XMODEM_ACK)
+++				{
+++					ack_id = XMODEM_EOT;	
+++					write_number=write(fd,&ack_id,1);
+++					while((read(fd,&ack_id,1))<=0);
+++				}
+++				printf("OK\r\n");
+++		
+++				printf("Sending file complete\r\n");
+++			}
+++		break;
+++
+++		case XMODEM_NAK:
+++			if( retry_num++ > 10) 
+++			{
+++				printf("Retry too many times,Quit!\r\n");
+++				complete = 1;
+++			}
+++			else
+++			{
+++				write_number = write(fd,frame_data,XMODEM_DATA_SIZE + 5);
+++				printf("Retry for ACK,%d,%d...",pack_counter,write_number);
+++				while((read(fd,&ack_id,1))<=0);
+++				
+++				if( ack_id == XMODEM_ACK )
+++					printf("OK\r\n");
+++				else
+++					printf("Error!\r\n");
+++			}
+++		break;
+++
+++		default:
+++			printf("Fatal Error!\r\n");
+++			complete = 1;
+++		break;
+++		}
+++
+++	}
+++
+++	fclose(datafile);
+++	close(fd);
+++
+++	return 0;
+++}
