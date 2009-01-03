@@ -1,60 +1,43 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Sat, 03 Jan 2009 16:15:44 +0100
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Sat,  3 Jan 2009 16:24:15 +0000 (UTC)
 Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/binutils
-In-Reply-To: <495F7ECE.5090903@lbsd.net>
-References: <20090103005958.74BCC769FD@busybox.osuosl.org>
-	<495F7ECE.5090903@lbsd.net>
-Message-ID: <1230995744.8886.91.camel@linux-yrgm.site>
+Message-ID: <20090103162415.4D1CF76BC9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-l?r 2009-01-03 klockan 15:05 +0000 skrev Nigel Kukard:
-> ulf at uclibc.org wrote:
-> > Author: ulf
-> > Date: 2009-01-03 00:59:57 +0000 (Sat, 03 Jan 2009)
-> > New Revision: 24661
-> >
-> > Log:
-> > Unbreak AVR32 toolchain, by making binutils-2.17 available
-> >
-> > Modified:
-> >    trunk/buildroot/toolchain/binutils/Config.in
-> >
-> >
-> > Changeset:
-> > Modified: trunk/buildroot/toolchain/binutils/Config.in
-> > ===================================================================
-> > --- trunk/buildroot/toolchain/binutils/Config.in	2009-01-03 00:40:02 UTC (rev 24660)
-> > +++ trunk/buildroot/toolchain/binutils/Config.in	2009-01-03 00:59:57 UTC (rev 24661)
-> > @@ -14,6 +14,10 @@
-> >  		depends on BR2_EXT_BINUTILS_VERSION_2_17
-> >  		bool "binutils 2.17"
-> >  
-> > +	config BR2_BINUTILS_VERSION_2_17
-> > +		depends on BR2_avr32
-> > +		bool "binutils 2.17"
-> > +
-> >  	config BR2_BINUTILS_VERSION_2_17_50_0_17
-> >  		depends on !BR2_avr32 && !BR2_nios2
-> >  		depends on BR2_DEPRECATED
-> >   
-> This causes a warning...
-> toolchain/binutils/Config.in:19:warning: choice values currently only
-> support a single prompt
-> toolchain/binutils/Config.in:14:warning: choice values currently only
-> support a single prompt
+Author: ulf
+Date: 2009-01-03 16:24:14 +0000 (Sat, 03 Jan 2009)
+New Revision: 24676
 
-Sorry, my mistake, I needed to update.
-I'll look into it right now.
+Log:
+Fix binutils Config for AVR32 (hopefully final version)
+
+Modified:
+   trunk/buildroot/toolchain/binutils/Config.in
 
 
-> 
-> 
-> Please fix.
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Changeset:
+Modified: trunk/buildroot/toolchain/binutils/Config.in
+===================================================================
+--- trunk/buildroot/toolchain/binutils/Config.in	2009-01-03 16:10:50 UTC (rev 24675)
++++ trunk/buildroot/toolchain/binutils/Config.in	2009-01-03 16:24:14 UTC (rev 24676)
+@@ -9,14 +9,10 @@
+ 	  Select the version of binutils you wish to use.
+ 
+ 	config BR2_BINUTILS_VERSION_2_17
+-		depends on !BR2_avr32 && !BR2_nios2
+-		depends on BR2_DEPRECATED
++		depends on !BR2_nios2
++		depends on BR2_DEPRECATED || (BR2_avr32 && BR2_EXT_BINUTILS_VERSION_2_17)
+ 		bool "binutils 2.17"
+ 
+-	config BR2_BINUTILS_VERSION_2_17
+-		depends on BR2_avr32
+-		depends on BR2_EXT_BINUTILS_VERSION_2_17
+-		bool "binutils 2.17"
+ 
+ 	config BR2_BINUTILS_VERSION_2_17_50_0_17
+ 		depends on !BR2_avr32 && !BR2_nios2
