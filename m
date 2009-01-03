@@ -1,71 +1,181 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 03 Jan 2009 22:27:48 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
-In-Reply-To: <1231012341.8886.115.camel@linux-yrgm.site> (Ulf Samuelsson's
-	message of "Sat\, 03 Jan 2009 20\:52\:21 +0100")
-References: <20090103010637.58207769FD@busybox.osuosl.org>
-	<871vvk17mo.fsf@macbook.be.48ers.dk>
-	<1231012341.8886.115.camel@linux-yrgm.site>
-Message-ID: <87k59cyt9n.fsf@macbook.be.48ers.dk>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Sat, 03 Jan 2009 21:37:20 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/target/u-boot
+In-Reply-To: <87wsdcyw0d.fsf@macbook.be.48ers.dk>
+References: <20090103000048.221A2769FA@busybox.osuosl.org>
+	<87wsdcyw0d.fsf@macbook.be.48ers.dk>
+Message-ID: <1231015040.8886.152.camel@linux-yrgm.site>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
+l?r 2009-01-03 klockan 21:28 +0100 skrev Peter Korsgaard:
+> >>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+> 
+>  ulf> Author: ulf
+>  ulf> Date: 2009-01-03 00:00:46 +0000 (Sat, 03 Jan 2009)
+>  ulf> New Revision: 24652
+> 
+>  ulf> Log:
+>  ulf> Add Memory configuration to U-Boot build, remove some debugging info
+> 
+>  ulf> Modified:
+>  ulf>    trunk/buildroot/target/u-boot/Makefile.in
+> 
+> 
+>  ulf> Changeset:
+>  ulf> Modified: trunk/buildroot/target/u-boot/Makefile.in
+>  ulf> ===================================================================
+>  ulf> --- trunk/buildroot/target/u-boot/Makefile.in	2009-01-02 20:31:44 UTC (rev 24651)
+>  ulf> +++ trunk/buildroot/target/u-boot/Makefile.in	2009-01-03 00:00:46 UTC (rev 24652)
+>  ulf> @@ -42,8 +42,9 @@
+>  ulf>  @echo "#ifdef $(strip $(1))" >> $(U_BOOT_INC_CONF_FILE)
+>  ulf>  @echo "#undef $(strip $(1))" >> $(U_BOOT_INC_CONF_FILE)
+>  ulf>  @echo "#endif" >> $(U_BOOT_INC_CONF_FILE)
+>  ulf> - at echo '#define $(strip $(1)) $(2)' >> $(U_BOOT_INC_CONF_FILE)
+>  ulf> + at echo '#define $(strip $(1)) $(strip $(subst ",,$(2)))' >> $(U_BOOT_INC_CONF_FILE)
+> 
+> What is this for and why isn't it mentioned in the commit message?
 
-Hi,
+It just removes the '"' characters around the config variable.
 
- Ulf> Don't see any whitespace damage in my file, there is a TAB character
- Ulf> at the beginning of each line instead of 8 space characters.
+>  
+>  ulf>  $(U_BOOT_DIR)/.header_modified: $(U_BOOT_DIR)/.configured
+>  ulf>  	# Modify configuration header in $(U_BOOT_INC_CONF_FILE)
+>  ulf> -	
+>  ulf>  	@echo >> $(U_BOOT_INC_CONF_FILE)
+>  ulf>  	@echo "/* Add a wrapper around the values Buildroot sets. */" >> $(U_BOOT_INC_CONF_FILE)
+>  ulf>  	@echo "#ifndef __BR2_ADDED_CONFIG_H" >> $(U_BOOT_INC_CONF_FILE)
+>  ulf>  	@echo "#define __BR2_ADDED_CONFIG_H" >> $(U_BOOT_INC_CONF_FILE)
+>  ulf> +	$(call insert_define, DATE, $(DATE))	
+>  ulf> +	$(call insert_define, CONFIG_LOAD_SCRIPTS, 1)
+> 
+> What is this? I don't find the string CONFIG_LOAD_SCRIPTS in U-boot.
 
-Sorry, my fault - Didn't notice the spaces.
+It is used by the "factory" command which is available in one of the
+patches.
+By typing "factory" you setup your environment to the factory
+default created by the configuration.
 
- Ulf> As for comments on ?24465:
- Ulf> Yes, I consider it an improvement that all (except one)
- Ulf> thing that regularily changes is located in a separate file.
+> 
+>  ulf>  ifneq ($(strip $(BR2_PROJECT)),"")
+>  ulf>  	$(call insert_define, CONFIG_HOSTNAME, $(BR2_PROJECT))
+>  ulf>  endif
+>  ulf> -ifneq ($(strip $(BR2_TARGET_UBOOT_SERVERIP)),"")
+>  ulf> -	$(call insert_define, CONFIG_SERVERIP, $(BR2_TARGET_UBOOT_SERVERIP))
+>  ulf> -endif
+>  ulf> -
+> 
+> Why is this gone?
 
-You still need to change BR2_KERNEL_PATCH_LEVEL and
-BR2_KERNEL_CURRENT_VERSION and BR2_LINUX_2_6_STABLE, right? I don't
-see it as an advantage, and could very well imagine someone only
-updating one of the files and not the other.
+Just moved it.
 
- Ulf> I do not think it is a good idea to remove support for kernel versions
- Ulf> and I do not think it is a good idea to deprecate them.
- Ulf> I fail to see any significant benefit in doing this, 
- Ulf> and I can foresee substantial drawbacks for individual users.
+> 
+>  ulf>  ifneq ($(strip $(BR2_TARGET_UBOOT_IPADDR)),"")
+>  ulf>  	$(call insert_define, CONFIG_IPADDR, $(BR2_TARGET_UBOOT_IPADDR))
+>  ulf>  ifneq ($(strip $(BR2_TARGET_UBOOT_GATEWAY)),"")
+>  ulf> @@ -101,22 +99,51 @@
+>  ulf>  	$(call insert_define, CONFIG_NETMASK, $(BR2_TARGET_UBOOT_NETMASK))
+>  ulf>  endif
+>  ulf>  endif # end BR2_TARGET_U_BOOT_IPADDR
+>  ulf> -
+>  ulf> +ifneq ($(strip $(BR2_TARGET_UBOOT_SERVERIP)),"")
+>  ulf> +	$(call insert_define, CONFIG_SERVERIP, $(BR2_TARGET_UBOOT_SERVERIP))
+>  ulf> +endif
+> 
+> Why the move?
 
-I do. It simply doesn't scale to add more config options to
-buildroot. We already now have a bunch of stuff that doesn't build,
-and adding more versions of each package makes the number of
-combinations grow exponentally.
+I think the ip address should be before the server ip address
+in the list.
 
-One of the goals of getting stable releases out of the door is to be
-able to deprecate AND REMOVE old versions - More about that shortly.
+> 
+>  ulf>  ifneq ($(strip $(BR2_TARGET_UBOOT_ETHADDR)),"")
+>  ulf>  	$(call insert_define, CONFIG_ETHADDR, $(BR2_TARGET_UBOOT_ETHADDR))
+>  ulf>  endif
+>  ulf> +ifneq ($(strip $(BR2_TARGET_UBOOT_ETH1ADDR)),)
+>  ulf>  ifneq ($(strip $(BR2_TARGET_UBOOT_ETH1ADDR)),"")
+>  ulf> -	$(call insert_define, CONFIG_ETH2ADDR, $(BR2_TARGET_UBOOT_ETH1ADDR))
+>  ulf> +	$(call insert_define, CONFIG_ETH1ADDR, $(BR2_TARGET_UBOOT_ETH1ADDR))
+> 
+> Huh? Why does the ETH1ADDR thingy depend on AVR32 in the first place?
+> 
 
-I don't think it's realistic with the available manpower to target
-much else than the latest stable version of each package - And
-spending time on older packages instead is doing a disservice to those
-projects.
+It is for the second Ethernet controller.
+It should not be there for parts with a single ethernet controller.
+Anyone can add support for other parts in Buildroot in the future, 
+but it should be off by default.
 
- Ulf> The deprecation of binutils-2.17 has, as you know caused
- Ulf> extra work, which we all could benefit from avoiding.
+>  ulf>  endif
+>  ulf> +endif
+>  ulf> +ifneq ($(strip $(BR2_TARGET_UBOOT_BOOTARGS)),)
+>  ulf>  ifneq ($(strip $(BR2_TARGET_UBOOT_BOOTARGS)),"")
+>  ulf>  	$(call insert_define, CONFIG_BOOTARGS, $(BR2_TARGET_UBOOT_BOOTARGS))
+>  ulf>  endif
+>  ulf> +endif
+> 
+> What is this BOOTARGS thing? It's not in Config.in
+> 
 
-Why were you using such an ancient version to begin with? 2.17 is
-more than 3 years old.
+I did not add them, I just make sure that if they are empty
+they are not forwarded to U-Boot.
+Anyone can of course add them in a board support package.
 
- Ulf> The only significant drawback of keeping multiple choice,
- Ulf> is that the list of choices grow.
- Ulf> By sorting the list of choices in reverse order,
- Ulf> this is more or less nullified,.
+>  ulf> +ifneq ($(strip $(BR2_TARGET_UBOOT_BOOTCMD)),)
+>  ulf>  ifneq ($(strip $(BR2_TARGET_UBOOT_BOOTCMD)),"")
+>  ulf>  	$(call insert_define, CONFIG_BOOTCOMMAND, $(BR2_TARGET_UBOOT_BOOTCMD))
+>  ulf>  endif
+>  ulf> +endif
+> 
+> Neither is this.
+> 
+>  ulf>  ifeq ($(BR2_TARGET_UBOOT_SILENT),y)
+>  ulf>  	$(call insert_define, CONFIG_SILENT_CONSOLE,)
+>  ulf>  endif
+>  ulf> +ifneq ($(strip $(BR2_TARGET_UBOOT_KERNEL_START)),"")
+>  ulf> +	$(call insert_define, KERNEL_START, $(BR2_TARGET_UBOOT_KERNEL_START))
+>  ulf> +endif
+>  ulf> +ifneq ($(strip $(BR2_TARGET_UBOOT_KERNEL_LOCATION)),"")
+>  ulf> +	$(call insert_define, KERNEL_LOCATION, $(BR2_TARGET_UBOOT_KERNEL_LOCATION))
+>  ulf> +endif
+>  ulf> +ifneq ($(strip $(BR2_TARGET_UBOOT_FILESYSTEM_START)),"")
+>  ulf> +	$(call insert_define, FILESYSTEM_START, $(BR2_TARGET_UBOOT_FILESYSTEM_START))
+>  ulf> +endif
+>  ulf> +ifneq ($(strip $(BR2_TARGET_UBOOT_FILESYSTEM_LOCATION)),"")
+>  ulf> +	$(call insert_define, FILESYSTEM_LOCATION, $(BR2_TARGET_UBOOT_FILESYSTEM_LOCATION))
+>  ulf> +endif
+>  ulf> +ifneq ($(strip $(BR2_TARGET_UBOOT_FILESYSTEM_SIZE)),"")
+>  ulf> +	$(call insert_define, FILESYSTEM_SIZE, $(BR2_TARGET_UBOOT_FILESYSTEM_SIZE))
+>  ulf> +endif
+>  ulf> +ifneq ($(strip $(BR2_TARGET_UBOOT_END_OF_FLASH)),"")
+>  ulf> +	$(call insert_define, END_OF_FLASH, $(BR2_TARGET_UBOOT_END_OF_FLASH))
+>  ulf> +endif
+>  ulf> +ifneq ($(strip $(BR2_TARGET_UBOOT_MEMORY_SIZE)),"")
+>  ulf> +	$(call insert_define, MEMORY_SIZE, $(BR2_TARGET_UBOOT_MEMORY_SIZE))
+>  ulf> +endif
+> 
+> Huh, that sounds like a very target specific things - And you seem to
+> have forgotten to add those config settings to Config.in
 
-NOT True. Every time you make a change to those makefiles you need to
-verify that it still works with all those versions, which noone
-ofcourse does as it is too much work - and stuff breaks.
+I do not think that they are target specific,
+Anyone which will boot linux will have a location in SDRAM
+where linux is loaded, and there will be a
+location in flash where the kernel is stored.
+Same for root fs.
+They are automatically calculated based on the kernel size
+so you do not configure them directly.
+Currently this is only supported for dataflash in Config.in
+but feel free to add for other memory technologies
 
-Letting users use outdated (and likely with known bugs/security
-issues) is doing a disservice to our users and the upstream projects.
-
--- 
-Bye, Peter Korsgaard
+> 
+>  ulf> -	@echo BR2_TARGET_UBOOT_BOOTSOURCE_SDCARD=$(BR2_TARGET_UBOOT_BOOTSOURCE_SDCARD)
+>  ulf> -	@echo BR2_TARGET_UBOOT_BOOTSOURCE_EEPROM=$(BR2_TARGET_UBOOT_BOOTSOURCE_EEPROM)
+>  ulf>  	@echo UBOOT_BOARD_NAME=$(UBOOT_BOARD_NAME)
+>  ulf>  	@echo TEST=$(TEST)
+>  ulf>  	@exit 0
+> 
+> You still didn't get rid of that TEST thing.
+> 
+> Please clean up.
+> 
