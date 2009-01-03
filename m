@@ -1,54 +1,59 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sat,  3 Jan 2009 16:25:48 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot: target/device
-	toolchain/uClibc/ext_sourc etc...
-Message-ID: <20090103162548.32E1076BC9@busybox.osuosl.org>
+From: nkukard at uclibc.org <nkukard@uclibc.org>
+Date: Sat,  3 Jan 2009 16:30:09 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/screen
+Message-ID: <20090103163009.A051C76BC9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2009-01-03 16:25:47 +0000 (Sat, 03 Jan 2009)
-New Revision: 24677
+Author: nkukard
+Date: 2009-01-03 16:30:09 +0000 (Sat, 03 Jan 2009)
+New Revision: 24678
 
 Log:
-Allow use of uClibc-0.9.30 for AVR32 toolchain
+* Simplify the screen install, no versioned binaries, no symlink to versioned binary
 
-Added:
-   trunk/buildroot/toolchain/uClibc/ext_source/Atmel/avr32/0.9.30-avr32-2.1.5/
 
 Modified:
-   trunk/buildroot/target/device/Config.in.toolchain
+   trunk/buildroot/package/screen/screen-4.0.2_install-fix.patch
 
 
 Changeset:
-Modified: trunk/buildroot/target/device/Config.in.toolchain
+Modified: trunk/buildroot/package/screen/screen-4.0.2_install-fix.patch
 ===================================================================
---- trunk/buildroot/target/device/Config.in.toolchain	2009-01-03 16:24:14 UTC (rev 24676)
-+++ trunk/buildroot/target/device/Config.in.toolchain	2009-01-03 16:25:47 UTC (rev 24677)
-@@ -57,13 +57,14 @@
- 	select BR2_EXT_GCC_VERSION_4_2_2
- 	select BR2_EXT_BINUTILS_VERSION_2_18
- 	select BR2_EXT_UCLIBC_VERSION_0_9_29
-+	select BR2_EXT_UCLIBC_VERSION_0_9_30
- 	select BR2_TOOLCHAIN_ATMEL_AVR32
- 	select BR2_GCC_SUPPORTS_SYSROOT
- 	help
- 	  The gcc-4.2.2 toolchain for the AVR32
- 	  * gcc-4.2.2
- 	  * binutils-2.18
--	  * uClibc-0.9.29
-+	  * uClibc-0.9.29/30
- 	  * gdb-6.7.1
- 	  It is generated from buildroot-avr32-v2.3.0-rc1
- 	  in http://www.atmel.no/buildroot
-@@ -75,6 +76,7 @@
- 	select BR2_EXT_GCC_VERSION_4_2_3
- 	select BR2_EXT_BINUTILS_VERSION_2_17
- 	select BR2_EXT_UCLIBC_VERSION_0_9_29
-+	select BR2_EXT_UCLIBC_VERSION_0_9_30
- 	select BR2_TOOLCHAIN_ATMEL_AVR32
- 	help
- 	  The gcc-4.2.3 toolchain for the AVR32
+--- trunk/buildroot/package/screen/screen-4.0.2_install-fix.patch	2009-01-03 16:25:47 UTC (rev 24677)
++++ trunk/buildroot/package/screen/screen-4.0.2_install-fix.patch	2009-01-03 16:30:09 UTC (rev 24678)
+@@ -1,16 +1,20 @@
+-diff -ru screen-4.0.2_vanilla/Makefile.in screen-4.0.2_install-fix/Makefile.in
++diff -ru screen-4.0.2_vanilla/Makefile.in screen-4.0.2_install-fixup/Makefile.in
+ --- screen-4.0.2_vanilla/Makefile.in	2003-12-05 13:59:39.000000000 +0000
+-+++ screen-4.0.2_install-fix/Makefile.in	2008-05-01 10:47:49.000000000 +0000
+-@@ -74,11 +74,12 @@
+- 	-if [ -f $(DESTDIR)$(bindir)/$(SCREEN) ] && [ ! -f $(DESTDIR)$(bindir)/$(SCREEN).old ]; \
+- 		then mv $(DESTDIR)$(bindir)/$(SCREEN) $(DESTDIR)$(bindir)/$(SCREEN).old; fi
+- 	$(INSTALL_PROGRAM) screen $(DESTDIR)$(bindir)/$(SCREEN)
+++++ screen-4.0.2_install-fixup/Makefile.in	2009-01-03 15:20:22.000000000 +0000
++@@ -71,14 +71,9 @@
++ 	$(CC) -c -I. -I$(srcdir) $(M_CFLAGS) $(DEFS) $(OPTIONS) $(CFLAGS) $<
++ 
++ install_bin: .version screen
++-	-if [ -f $(DESTDIR)$(bindir)/$(SCREEN) ] && [ ! -f $(DESTDIR)$(bindir)/$(SCREEN).old ]; \
++-		then mv $(DESTDIR)$(bindir)/$(SCREEN) $(DESTDIR)$(bindir)/$(SCREEN).old; fi
++-	$(INSTALL_PROGRAM) screen $(DESTDIR)$(bindir)/$(SCREEN)
+ -	-chown root $(DESTDIR)$(bindir)/$(SCREEN) && chmod 4755 $(DESTDIR)$(bindir)/$(SCREEN)
+-+	-chmod 4755 $(DESTDIR)$(bindir)/$(SCREEN)
+- # This doesn't work if $(bindir)/screen is a symlink
+- 	-if [ -f $(DESTDIR)$(bindir)/screen ] && [ ! -f $(DESTDIR)$(bindir)/screen.old ]; then mv $(DESTDIR)$(bindir)/screen $(DESTDIR)$(bindir)/screen.old; fi
+- 	rm -f $(DESTDIR)$(bindir)/screen
+- 	(cd $(DESTDIR)$(bindir) && ln -sf $(SCREEN) screen)
++-# This doesn't work if $(bindir)/screen is a symlink
++-	-if [ -f $(DESTDIR)$(bindir)/screen ] && [ ! -f $(DESTDIR)$(bindir)/screen.old ]; then mv $(DESTDIR)$(bindir)/screen $(DESTDIR)$(bindir)/screen.old; fi
++-	rm -f $(DESTDIR)$(bindir)/screen
++-	(cd $(DESTDIR)$(bindir) && ln -sf $(SCREEN) screen)
+++	$(INSTALL_PROGRAM) screen $(DESTDIR)$(bindir)/screen
+++	-chmod 4755 $(DESTDIR)$(bindir)/screen
+ +	mkdir -p $(DESTDIR)$(SCREENENCODINGS)
+  	cp $(srcdir)/utf8encodings/?? $(DESTDIR)$(SCREENENCODINGS)
+  
