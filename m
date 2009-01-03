@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sat,  3 Jan 2009 00:04:56 +0000 (UTC)
+Date: Sat,  3 Jan 2009 00:05:42 +0000 (UTC)
 Subject: [Buildroot] svn commit: trunk/buildroot/target/u-boot/2009.01-rc1
-Message-ID: <20090103000456.97D1E769FA@busybox.osuosl.org>
+Message-ID: <20090103000543.03D36769FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,342 +9,83 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2009-01-03 00:04:55 +0000 (Sat, 03 Jan 2009)
-New Revision: 24656
+Date: 2009-01-03 00:05:42 +0000 (Sat, 03 Jan 2009)
+New Revision: 24657
 
 Log:
-Provide factory default command to u-boot, using Buildroot variables
+Add facilities for installing u-boot in different locations
 
 Added:
-   trunk/buildroot/target/u-boot/2009.01-rc1/u-boot-2009.01-rc1-009-factory.patch
+   trunk/buildroot/target/u-boot/2009.01-rc1/u-boot-2009.01-rc1-008-Makefile.patch
 
 
 Changeset:
-Added: trunk/buildroot/target/u-boot/2009.01-rc1/u-boot-2009.01-rc1-009-factory.patch
+Added: trunk/buildroot/target/u-boot/2009.01-rc1/u-boot-2009.01-rc1-008-Makefile.patch
 ===================================================================
---- trunk/buildroot/target/u-boot/2009.01-rc1/u-boot-2009.01-rc1-009-factory.patch	                        (rev 0)
-+++ trunk/buildroot/target/u-boot/2009.01-rc1/u-boot-2009.01-rc1-009-factory.patch	2009-01-03 00:04:55 UTC (rev 24656)
-@@ -0,0 +1,323 @@
-+diff -urN u-boot-2009.01-0rig//common/cmd_factory.c u-boot-2009.01/common/cmd_factory.c
-+--- u-boot-2009.01-0rig//common/cmd_factory.c	1970-01-01 01:00:00.000000000 +0100
-++++ u-boot-2009.01/common/cmd_factory.c	2009-01-02 19:32:07.000000000 +0100
-+@@ -0,0 +1,308 @@
-++/*
-++ * (C) Copyright 2000
-++ * Ulf Samuelsson	<ulf.samuelsson@atmelcom>.
-++ *
-++ * See file CREDITS for list of people who contributed to this
-++ * project.
-++ *
-++ * This program is free software; you can redistribute it and/or
-++ * modify it under the terms of the GNU General Public License as
-++ * published by the Free Software Foundation; either version 2 of
-++ * the License, or (at your option) any later version.
-++ *
-++ * This program is distributed in the hope that it will be useful,
-++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
-++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-++ * GNU General Public License for more details.
-++ *
-++ * You should have received a copy of the GNU General Public License
-++ * along with this program; if not, write to the Free Software
-++ * Foundation, Inc., 59 Temple Place, Suite 330, Boston,
-++ * MA 02111-1307 USA
-++ */
+--- trunk/buildroot/target/u-boot/2009.01-rc1/u-boot-2009.01-rc1-008-Makefile.patch	                        (rev 0)
++++ trunk/buildroot/target/u-boot/2009.01-rc1/u-boot-2009.01-rc1-008-Makefile.patch	2009-01-03 00:05:42 UTC (rev 24657)
+@@ -0,0 +1,64 @@
++diff -urN u-boot-2008.10-0rig//Makefile u-boot-2008.10/Makefile
++--- u-boot-2008.10-0rig//Makefile	2008-12-31 18:11:18.000000000 +0100
+++++ u-boot-2008.10/Makefile	2008-12-31 18:39:58.000000000 +0100
++@@ -20,6 +20,7 @@
++ # Foundation, Inc., 59 Temple Place, Suite 330, Boston,
++ # MA 02111-1307 USA
++ #
+++BUILD_DATE= $(shell date +%F)
++ 
++ VERSION = 2008
++ PATCHLEVEL = 10
++@@ -294,6 +295,22 @@
++ ALL += $(obj)u-boot.ldr
++ endif
++ 
+++ifneq ($(BOARDNAME),)
+++BINARY := $(BOARDNAME)-u-boot-$(U_BOOT_VERSION)-$(BUILD_DATE)
+++BINARY_BIN := $(obj)$(BINARY).bin
+++BINARY_GZ  := $(obj)$(BINARY).gz
+++ALL += $(BINARY_BIN)
+++ALL += $(BINARY_GZ)
+++else
+++BINARY := u-boot
+++BINARY_BIN := $(obj)$(BINARY).bin
+++BINARY_GZ  := $(obj)$(BINARY).gz
+++endif
 ++
-++/*
-++ * Boot support
-++ */
-++#include <config.h>
-++#include <common.h>
-++#include <command.h>
-++#include <dataflash.h>
+++ifeq ($(DESTDIR),)
+++DESTDIR=binaries
+++endif
 ++
-++/* 
-++ * 
-++ * The typical use of this file, is to update config.h
-++ * from an external build system
-++ * 
-++ */
++ all:		$(ALL)
++ 
++ $(obj)u-boot.hex:	$(obj)u-boot
++@@ -302,9 +319,20 @@
++ $(obj)u-boot.srec:	$(obj)u-boot
++ 		$(OBJCOPY) -O srec $< $@
++ 
++-$(obj)u-boot.bin:	$(obj)u-boot
+++$(BINARY_BIN):	$(obj)u-boot
++ 		$(OBJCOPY) ${OBJCFLAGS} -O binary $< $@
++ 
+++$(BINARY_GZ):	$(BINARY_BIN)
+++		gzip -c $(BINARY_BIN) > $(BINARY_GZ)
 ++
+++install:	all
+++		-install -d	$(DESTDIR)
+++		install		$(BINARY_BIN)	$(DESTDIR)
 ++
-++/*
-++ * Macros to transform values
-++ * into environment strings.
-++ */
-++#define XMK_STR(x)		#x
-++#define MK_STR(x)		XMK_STR(x)
+++tftp:		install
+++		cp $(BINARY_GZ)				$(TFTPBOOT)/$(BINARY).gz
+++		cp $(BINARY_BIN) 			$(TFTPBOOT)/$(BINARY).bin
 ++
-++void		setargs(void);
-++
-++int do_factory_defaults (cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
-++{
-++#if	defined(CONFIG_ETHADDR)
-++	setenv("ethaddr",	MK_STR(CONFIG_ETHADDR));
-++#endif
-++#if	defined(CONFIG_ETH1ADDR)
-++	setenv("eth1addr",	MK_STR(CONFIG_ETH1ADDR));
-++#endif
-++#if	defined(CONFIG_HOSTNAME)
-++	setenv("hostname",	MK_STR(CONFIG_HOSTNAME));
-++#endif
-++#if	defined(CONFIG_IPADDR)
-++	setenv("ipaddr",	MK_STR(CONFIG_IPADDR));
-++#endif
-++#if	defined(CONFIG_SERVERIP)
-++	setenv("serverip",	MK_STR(CONFIG_SERVERIP));
-++#endif
-++#if	defined(CONFIG_GATEWAY)
-++	setenv("gatewayip",	MK_STR(CONFIG_GATEWAY));
-++#endif
-++#if	defined(CONFIG_NETMASK)
-++	setenv("netmask",	MK_STR(CONFIG_NETMASK));
-++#endif
-++#if	defined(KERNEL_START)
-++	setenv("kernel",	MK_STR(KERNEL_START));
-++#endif
-++#if	defined(KERNEL_LOCATION)
-++	setenv("OS",		MK_STR(KERNEL_LOCATION));
-++#endif
-++#if	defined(FILESYSTEM_START)
-++	setenv("ramdisk",	MK_STR(FILESYSTEM_START));
-++	setenv("initrd",	MK_STR(FILESYSTEM_START)","MK_STR(FILESYSTEM_SIZE));
-++#endif
-++#if	defined(FILESYSTEM_LOCATION)
-++	setenv("FS",		MK_STR(FS_LOCATION));
-++#endif
-++#if	defined(END_OF_FLASH)
-++	setenv("endflash",	MK_STR(END_OF_FLASH));
-++#endif
-++#if	defined(CONFIG_LOAD_SCRIPTS)
-++	/* By updating the "fs-date" environment variable and running "fs"
-++	   You set "rd-1" and "rd-2"
-++	*/ 
-++	setenv("rd-1",		"rootfs.arm-"MK_STR(DATE)".ext2");
-++	setenv("rd-2",		"rootfs.arm-"MK_STR(DATE)".jffs2");
-++	setenv("rd-3",		"rootfs.arm-linux.ext2");
-++	setenv("rd-4",		"rootfs.arm-linux.jffs2");
-++	setenv("ver",		"1");
-++
-++	setenv("config",	"tftp  ${ramdisk} autoscript.${hostname} ; autoscr ${ramdisk} ");
-++
-++#if	defined(KERNEL_VERSION)
-++	setenv("kernel-version",MK_STR(KERNEL_VERSION));
-++#endif
-++#if	defined(DATE)
-++	setenv("kernel-date",	MK_STR(DATE));
-++	setenv("fs-date",	MK_STR(DATE));
-++	setenv("rd",		"rootfs.arm-"MK_STR(DATE)".ext2");
-++#endif
-++#if	defined(KERNEL_VERSION)
-++	setenv("linux",		MK_STR(BOARD_NAME)"-linux-"MK_STR(KERNEL_VERSION)"-"MK_STR(DATE)".gz");
-++#endif
-++	setenv("get-ramdisk",	"tftp	${ramdisk}	${rd};		setenv rd-size	${filesize}");
-++	setenv("store-ramdisk",	"cp.b	${ramdisk}	${FS}		${rd-size}");
-++	setenv("load-ramdisk",	"cp.b	${FS}		${ramdisk}	${rd-size}");
-++	setenv("flash-ramdisk",	"run	get-ramdisk;	run		store-ramdisk");
-++
-++	setenv("get-kernel",	"tftp	${kernel}	${linux};	setenv	kernel-size	${filesize}");
-++	setenv("store-kernel",	"cp.b	${kernel}	${OS}		${kernel-size};		saveenv");
-++	setenv("load-kernel",	"cp.b	${OS}		${kernel}	${kernel-size};		saveenv");
-++	setenv("flash-kernel",	"run	get-kernel;	run		store-kernel");
-++
-++	setenv("get",		"run get-kernel		; run get-ramdisk");
-++	setenv("flash",		"run flash-kernel	; run flash-ramdisk ; saveenv");
-++	setenv("load",		"run load-kernel	; run load-ramdisk");
-++
-++	setenv("bootcmd",	"run load ; bootm "MK_STR(KERNEL_START));
-++
-++	setenv("fstype",	"ram");
-++	setenv("flashfs",	"/dev/mtdblock2");
-++	setenv("ramfs",		"/dev/ram");
-++
-++	setenv("rootfstype",	"jffs2");
-++	setenv("access",	"rw");
-++	setenv("ramdisk_size",	"15360");
-++	setenv("console",	"ttyS0,115200");
-++
-++
-++#if	defined(MEMORY_SIZE)
-++	setenv("mem",		MK_STR(MEMORY_SIZE));
-++#else
-++	setenv("mem",		"32M");	/* Cautious default */
-++#endif
-++
-++	setenv("update",	"os; fs; setargs");
-++	setenv("cmpk",		"run flash-kernel; cp.b ${OS} ${ramdisk} ${kernel-size}; cmp ${kernel} ${ramdisk} ${kernel-size}"); 
-++#endif	/* CONFIG_LOAD_SCRIPTS */
-++#if	defined(CONFIG_AT91RM9200)
-++	setenv("machid24",	"0x0fb");
-++	setenv("machid26",	"0x2c1");
-++	setenv("machid",	"0x2c1");
-++	setenv("k24",		"setenv machid ${machid24}; os");
-++	setenv("k26",		"setenv machid ${machid26}; os");
-++#endif
-++	AT91F_DataflashSetEnv ();
-++#if	defined(CONFIG_LOAD_SCRIPTS)
-++	setargs();
-++#endif
-++	return (saveenv() ? 1 : 0);
-++}
-++
-++
-++
-++U_BOOT_CMD(
-++	factory,	1,	1,	do_factory_defaults,
-++	"factory\t- Create a default environment\n",
-++	"\n"
-++);
-++
-++#if	defined(CONFIG_LOAD_SCRIPTS)
-++void		setargs(void)
-++{
-++	char cmd[512];
-++	char fstype[512];
-++
-++	sprintf(fstype,getenv("fstype"));
-++	if((fstype[0] != 'f') && (fstype[0] != 'r')) {
-++		fstype[0] = 'r';
-++	}
-++
-++	if(fstype[0] == 'f') {
-++		sprintf(cmd,"root=%s rootfstype=%s ip=%s:%s:%s:%s console=%s,mem=%s",
-++			getenv("flashfs"),
-++			getenv("rootfstype"),
-++			getenv("ipaddr"),
-++			getenv("serverip"),
-++			getenv("gatewayip"),
-++			getenv("netmask"),
-++			getenv("console"),
-++			getenv("mem")
-++		);
-++		cmd[511] = '\0';
-++		printf("len=%d: %s\n",strlen(cmd),cmd);
-++		if(strlen(cmd) > 500) {
-++			printf("Error: Environment too large during 'setargs'\n");
-++		} else {
-++			setenv("bootargs",cmd);
-++			setenv("bootcmd",	"run load-kernel ; bootm 21000000");
-++		}
-++	} else if(fstype[0] == 'r') {
-++		sprintf(cmd,"root=%s %s initrd=%s ramdisk_size=%s ip=%s:%s:%s:%s console=%s,mem=%s",
-++			getenv("ramfs"),
-++			getenv("access"),
-++			getenv("initrd"),
-++			getenv("ramdisk_size"),
-++			getenv("ipaddr"),
-++			getenv("serverip"),
-++			getenv("gatewayip"),
-++			getenv("netmask"),
-++			getenv("console"),
-++			getenv("mem")
-++		);
-++		printf("len=%d: %s\n",strlen(cmd),cmd);
-++		cmd[511] = '\0';
-++		if(strlen(cmd) > 500) {
-++			printf("Error: Environment too large during 'setargs'\n");
-++		} else {
-++			setenv("bootargs",cmd);
-++			setenv("bootcmd",	"run load ; bootm 21000000");
-++		}
-++	} else {
-++		setenv("bootargs","no args");
-++	}
-++}
-++
-++int do_setargs (cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
-++{
-++	setargs();
-++	return 0;
-++}
-++
-++U_BOOT_CMD(
-++	setargs,	1,	1,	do_setargs,
-++	"setargs\t- Create a bootargs from:"
-++	"fstype=flash:	(${flash} ${access} ${initrd} ${ramdisk_size}) "
-++	"fstype=ram:	(${ram}   ${access} ${initrd} ${ramdisk_size}) "
-++	"${ipaddr} ${serverip} ${gatewayip} ${netmask} "
-++	"${console} ${mem}\n"
-++	,	"\n"
-++);
-++
-++int do_os (cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
-++{
-++	char *kchip;
-++	char *kdate;
-++	char *kver;
-++	char cmd[512];
-++	kchip = getenv("hostname");
-++	kdate = getenv("kernel-date");
-++	kver = getenv("kernel-version");
-++	if((strlen(kdate) + strlen(kver) + 32) >  500) {
-++		printf("Error: Environment too large during 'os': ");
-++		printf("len=%d\n", strlen(kdate) + strlen(kver) + 32);
-++	} else if(kver != NULL) {
-++		if(kdate != NULL) {
-++			sprintf(cmd,"%s-linux-%s-%s.gz",kchip,kver,kdate);
-++		} else {
-++			sprintf(cmd,"%s-linux-%s.gz",kchip,kver);
-++		}
-++		printf("Setting kernel to %s\n",cmd);
-++		setenv("linux",cmd);
-++		return 0;
-++	}
-++	return 1;
-++}
-++
-++U_BOOT_CMD(
-++	os,	1,	1,	do_os,
-++	"os\t- Select linux version  ${hostname}-linux-${kernel-name}-${kernel-date}\n"
-++	,	"\n"
-++);
-++
-++
-++int do_fs (cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
-++{
-++	char *ver;
-++	char *fsdate;
-++	char *hostname;
-++	char cmd[512];
-++	fsdate		= getenv("fs-date");
-++	hostname	= getenv("hostname");
-++
-++	if(fsdate != NULL) {
-++		sprintf(cmd,"rootfs.arm-%s.ext2",fsdate);
-++		setenv("rd-1",cmd);
-++		sprintf(cmd,"rootfs.arm-%s.jffs2",fsdate);
-++		setenv("rd-2",cmd);
-++	}
-++	ver = getenv("ver");		/* Find out which version we are using*/
-++	if(cmd==NULL) {
-++		setenv("ver","1");
-++	}
-++	ver = getenv("ver");		/* Find out which version we are using*/
-++	sprintf(cmd,"rd-%s",ver);	/* create rd${ver}*/
-++	ver=getenv(cmd);
-++	sprintf(cmd,"%s",ver);
-++	printf("Setting ramdisk to %s\n",cmd);
-++	setenv("rd",cmd);
-++	return 0;
-++}
-++
-++
-++U_BOOT_CMD(
-++	fs,	1,	1,	do_fs,
-++	"fs\t- Select ramdisk version == rd-${ver}\n"
-++	,	"\n"
-++);
-++#endif /* #if	defined(CONFIG_LOAD_SCRIPTS) */
-++
-++#endif	/* CONFIG_DEFENV */
-+diff -urN u-boot-2009.01-0rig//common/Makefile u-boot-2009.01/common/Makefile
-+--- u-boot-2009.01-0rig//common/Makefile	2008-12-16 23:48:27.000000000 +0100
-++++ u-boot-2009.01/common/Makefile	2009-01-02 19:17:16.000000000 +0100
-+@@ -84,6 +84,7 @@
-+ COBJS-$(CONFIG_CMD_EEPROM) += cmd_eeprom.o
-+ COBJS-$(CONFIG_CMD_ELF) += cmd_elf.o
-+ COBJS-$(CONFIG_CMD_EXT2) += cmd_ext2.o
-++COBJS-$(CONFIG_CMD_FACTORY) += cmd_factory.o
-+ COBJS-$(CONFIG_CMD_FAT) += cmd_fat.o
-+ COBJS-$(CONFIG_CMD_FDC)$(CONFIG_CMD_FDOS) += cmd_fdc.o
-+ COBJS-$(CONFIG_OF_LIBFDT) += cmd_fdt.o fdt_support.o
++ $(obj)u-boot.ldr:	$(obj)u-boot
++ 		$(LDR) -T $(CONFIG_BFIN_CPU) -f -c $@ $< $(LDR_FLAGS)
++ 
++@@ -3295,6 +3324,7 @@
++ 		-o -name '*.srec' -o -name '*.bin' -o -name u-boot.img \) \
++ 		-print0 \
++ 		| xargs -0 rm -f
+++	@rm -f $(obj)u-boot-*.gz
++ 	@rm -f $(OBJS) $(obj)*.bak $(obj)ctags $(obj)etags $(obj)TAGS \
++ 		$(obj)cscope.* $(obj)*.*~
++ 	@rm -f $(obj)u-boot $(obj)u-boot.map $(obj)u-boot.hex $(ALL)
