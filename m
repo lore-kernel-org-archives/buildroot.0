@@ -1,39 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 03 Jan 2009 08:58:31 +0100
-Subject: [Buildroot] svn
-	commit:trunk/buildroot/target/device/Atmel/arch-avr32:kernel-patches-2.6.27.6
-In-Reply-To: <FC51A1FF4A8643D8A0C0B2C0DA0C5E2D@aeglos> (Ulf Samuelsson's
-	message of "Fri\, 2 Jan 2009 23\:44\:37 +0100")
-References: <20081220221939.4935476CEB@busybox.osuosl.org>
-	<873agf8bnm.fsf@macbook.be.48ers.dk>
-	<FC51A1FF4A8643D8A0C0B2C0DA0C5E2D@aeglos>
-Message-ID: <87aba8253s.fsf@macbook.be.48ers.dk>
+From: nkukard at uclibc.org <nkukard@uclibc.org>
+Date: Sat,  3 Jan 2009 08:04:22 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/rsync
+Message-ID: <20090103080422.489B676BC9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
+Author: nkukard
+Date: 2009-01-03 08:04:21 +0000 (Sat, 03 Jan 2009)
+New Revision: 24664
 
-Hi,
+Log:
+rsync doesn't support install-exec, override RSYNC_INSTALL_TARGET_OPT to install non-stripped
 
- Ulf> The way it works now the patches are for a specific major/minor
- Ulf> combination but you select which kernel you want to use, and
- Ulf> then you select which patchset.  You can apply 2.6.27.6 on top
- Ulf> of 2.6.27.10 if you want to, but the name indicates which kernel
- Ulf> it was intended for, and the further away you go in terms of
- Ulf> major/minor revisions the higher the risk that the patch will
- Ulf> not apply.
 
-But why are you checking in something that is already obsolete? Why
-not base on 2.6.27.10 right away?
+Modified:
+   trunk/buildroot/package/rsync/rsync.mk
 
- Ulf> When I get time, I will implement downloading the patchset
- Ulf> instead of storing it in the svn.
- Ulf> Then the size will go down.
 
-And what about the older patches, can they go away?
-
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/package/rsync/rsync.mk
+===================================================================
+--- trunk/buildroot/package/rsync/rsync.mk	2009-01-03 01:06:36 UTC (rev 24663)
++++ trunk/buildroot/package/rsync/rsync.mk	2009-01-03 08:04:21 UTC (rev 24664)
+@@ -10,8 +10,11 @@
+ RSYNC_AUTORECONF:=no
+ RSYNC_INSTALL_STAGING:=NO
+ RSYNC_INSTALL_TARGET:=YES
+-ifeq ($(BR2_ENABLE_DEBUG),)
++ifeq ($(BR2_ENABLE_DEBUG),y)
+ RSYNC_INSTALL_TARGET_OPT:=DESTDIR=$(TARGET_DIR) INSTALLCMD='./install-sh -c' \
++			  install
++else
++RSYNC_INSTALL_TARGET_OPT:=DESTDIR=$(TARGET_DIR) INSTALLCMD='./install-sh -c' \
+ 			  STRIPPROG="$(TARGET_STRIP)" install-strip
+ endif
+ RSYNC_CONF_OPT:=--with-included-popt
