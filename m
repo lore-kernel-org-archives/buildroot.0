@@ -1,83 +1,137 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Fri, 02 Jan 2009 23:45:20 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
-In-Reply-To: <87fxkf8dnm.fsf@macbook.be.48ers.dk>
-References: <20081220205708.1766876CEB@busybox.osuosl.org>
-	<87fxkf8dnm.fsf@macbook.be.48ers.dk>
-Message-ID: <1230936320.8886.28.camel@linux-yrgm.site>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Sat,  3 Jan 2009 00:00:47 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/u-boot
+Message-ID: <20090103000048.221A2769FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-tis 2008-12-23 klockan 10:05 +0100 skrev Peter Korsgaard:
-> >>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
-> 
->  ulf> Author: ulf
->  ulf> Date: 2008-12-20 20:57:07 +0000 (Sat, 20 Dec 2008)
->  ulf> New Revision: 24465
-> 
->  ulf> Log:
->  ulf> Put latest version info in separate file for easier maintenance
-> 
->  ulf> Added:
->  ulf>    trunk/buildroot/target/linux/Config.in.versions
-> 
->  ulf> Modified:
->  ulf>    trunk/buildroot/target/linux/Config.in.advanced
-> 
-> Is this an improvement? Don't you now need to maintain 2 files?
-> 
->  ulf> Changeset:
->  ulf> Modified: trunk/buildroot/target/linux/Config.in.advanced
->  ulf> ===================================================================
->  ulf> --- trunk/buildroot/target/linux/Config.in.advanced	2008-12-20 18:26:38 UTC (rev 24464)
->  ulf> +++ trunk/buildroot/target/linux/Config.in.advanced	2008-12-20 20:57:07 UTC (rev 24465)
->  ulf> @@ -30,21 +30,24 @@
->  ulf>  #
->  ulf>  # ---------------------------------------------------------------------------
->  ulf>  # --- These 'constants' requires regular maintenance, so put them first
->  ulf> +
->  ulf> +source "target/linux/Config.in.versions"
->  ulf> +
->  ulf>  config BR2_KERNEL_PATCH_LEVEL
->  ulf>  	string
->  ulf> -	default "9" if BR2_LINUX_2_6_27 && BR2_KERNEL_ADD_LATEST_MINORPATCH
->  ulf> -	default "8" if BR2_LINUX_2_6_26 && BR2_KERNEL_ADD_LATEST_MINORPATCH
->  ulf> -	default "9" if BR2_LINUX_2_6_25 && BR2_KERNEL_ADD_LATEST_MINORPATCH
->  ulf> -	default "7" if BR2_LINUX_2_6_24 && BR2_KERNEL_ADD_LATEST_MINORPATCH
->  ulf> -	default "17" if BR2_LINUX_2_6_23 && BR2_KERNEL_ADD_LATEST_MINORPATCH
->  ulf> -	default "19" if BR2_LINUX_2_6_22 && BR2_KERNEL_ADD_LATEST_MINORPATCH
->  ulf> -	default "7" if BR2_LINUX_2_6_21 && BR2_KERNEL_ADD_LATEST_MINORPATCH
->  ulf> -	default "21" if BR2_LINUX_2_6_20 && BR2_KERNEL_ADD_LATEST_MINORPATCH
->  ulf> +	default $(BR2_KERNEL_LATEST_2_6_27) if BR2_LINUX_2_6_27 && BR2_KERNEL_ADD_LATEST_MINORPATCH
->  ulf> +	default $(BR2_KERNEL_LATEST_2_6_26) if BR2_LINUX_2_6_26 && BR2_KERNEL_ADD_LATEST_MINORPATCH
->  ulf> +	default $(BR2_KERNEL_LATEST_2_6_25) if BR2_LINUX_2_6_25 && BR2_KERNEL_ADD_LATEST_MINORPATCH
->  ulf> +	default $(BR2_KERNEL_LATEST_2_6_24) if BR2_LINUX_2_6_24 && BR2_KERNEL_ADD_LATEST_MINORPATCH
->  ulf> +	default $(BR2_KERNEL_LATEST_2_6_23) if BR2_LINUX_2_6_23 && BR2_KERNEL_ADD_LATEST_MINORPATCH
->  ulf> +	default $(BR2_KERNEL_LATEST_2_6_22) if BR2_LINUX_2_6_22 && BR2_KERNEL_ADD_LATEST_MINORPATCH
->  ulf> +	default $(BR2_KERNEL_LATEST_2_6_21) if BR2_LINUX_2_6_21 && BR2_KERNEL_ADD_LATEST_MINORPATCH
->  ulf> +	default $(BR2_KERNEL_LATEST_2_6_20) if BR2_LINUX_2_6_20 && BR2_KERNEL_ADD_LATEST_MINORPATCH
->  ulf>  	default "$(BR2_KERNEL_MINORLEVEL)" if BR2_KERNEL_ADD_MINORPATCH
-> 
-> Do we really need to support that many kernel versions? Shouldn't some
-> of them atlest be marked as deprecated?
+Author: ulf
+Date: 2009-01-03 00:00:46 +0000 (Sat, 03 Jan 2009)
+New Revision: 24652
 
-It all depends on why Buildroot exists.
-If it is to be more than a toy, then you need some stability.
+Log:
+Add Memory configuration to U-Boot build, remove some debugging info
 
-I regularily talk to customers which plans to use the
-same platform for > 10 years.
-At some stage products are put into maintenace mode.
-I can see people wanting to keep an old kernel while
-updating the file system,
+Modified:
+   trunk/buildroot/target/u-boot/Makefile.in
 
-The system currently allows people to EASILY 
-build any kernel from 2.6.20 and upwards, instead of 
-the old makefile which had a fairly small flexibility.
-YOu can apply any type of patch, including your own.
 
-What is the real drawback of that?
-
-> 
+Changeset:
+Modified: trunk/buildroot/target/u-boot/Makefile.in
+===================================================================
+--- trunk/buildroot/target/u-boot/Makefile.in	2009-01-02 20:31:44 UTC (rev 24651)
++++ trunk/buildroot/target/u-boot/Makefile.in	2009-01-03 00:00:46 UTC (rev 24652)
+@@ -42,8 +42,9 @@
+ @echo "#ifdef $(strip $(1))" >> $(U_BOOT_INC_CONF_FILE)
+ @echo "#undef $(strip $(1))" >> $(U_BOOT_INC_CONF_FILE)
+ @echo "#endif" >> $(U_BOOT_INC_CONF_FILE)
+- at echo '#define $(strip $(1)) $(2)' >> $(U_BOOT_INC_CONF_FILE)
++ at echo '#define $(strip $(1)) $(strip $(subst ",,$(2)))' >> $(U_BOOT_INC_CONF_FILE)
+ endef
++#"))
+ 
+ $(DL_DIR)/$(U_BOOT_SOURCE):
+ 	 $(WGET) -P $(DL_DIR) $(U_BOOT_SITE)/$(U_BOOT_SOURCE)
+@@ -80,18 +81,15 @@
+ 
+ $(U_BOOT_DIR)/.header_modified: $(U_BOOT_DIR)/.configured
+ 	# Modify configuration header in $(U_BOOT_INC_CONF_FILE)
+-	
+ 	@echo >> $(U_BOOT_INC_CONF_FILE)
+ 	@echo "/* Add a wrapper around the values Buildroot sets. */" >> $(U_BOOT_INC_CONF_FILE)
+ 	@echo "#ifndef __BR2_ADDED_CONFIG_H" >> $(U_BOOT_INC_CONF_FILE)
+ 	@echo "#define __BR2_ADDED_CONFIG_H" >> $(U_BOOT_INC_CONF_FILE)
++	$(call insert_define, DATE, $(DATE))	
++	$(call insert_define, CONFIG_LOAD_SCRIPTS, 1)
+ ifneq ($(strip $(BR2_PROJECT)),"")
+ 	$(call insert_define, CONFIG_HOSTNAME, $(BR2_PROJECT))
+ endif
+-ifneq ($(strip $(BR2_TARGET_UBOOT_SERVERIP)),"")
+-	$(call insert_define, CONFIG_SERVERIP, $(BR2_TARGET_UBOOT_SERVERIP))
+-endif
+-
+ ifneq ($(strip $(BR2_TARGET_UBOOT_IPADDR)),"")
+ 	$(call insert_define, CONFIG_IPADDR, $(BR2_TARGET_UBOOT_IPADDR))
+ ifneq ($(strip $(BR2_TARGET_UBOOT_GATEWAY)),"")
+@@ -101,22 +99,51 @@
+ 	$(call insert_define, CONFIG_NETMASK, $(BR2_TARGET_UBOOT_NETMASK))
+ endif
+ endif # end BR2_TARGET_U_BOOT_IPADDR
+-
++ifneq ($(strip $(BR2_TARGET_UBOOT_SERVERIP)),"")
++	$(call insert_define, CONFIG_SERVERIP, $(BR2_TARGET_UBOOT_SERVERIP))
++endif
+ ifneq ($(strip $(BR2_TARGET_UBOOT_ETHADDR)),"")
+ 	$(call insert_define, CONFIG_ETHADDR, $(BR2_TARGET_UBOOT_ETHADDR))
+ endif
++ifneq ($(strip $(BR2_TARGET_UBOOT_ETH1ADDR)),)
+ ifneq ($(strip $(BR2_TARGET_UBOOT_ETH1ADDR)),"")
+-	$(call insert_define, CONFIG_ETH2ADDR, $(BR2_TARGET_UBOOT_ETH1ADDR))
++	$(call insert_define, CONFIG_ETH1ADDR, $(BR2_TARGET_UBOOT_ETH1ADDR))
+ endif
++endif
++ifneq ($(strip $(BR2_TARGET_UBOOT_BOOTARGS)),)
+ ifneq ($(strip $(BR2_TARGET_UBOOT_BOOTARGS)),"")
+ 	$(call insert_define, CONFIG_BOOTARGS, $(BR2_TARGET_UBOOT_BOOTARGS))
+ endif
++endif
++ifneq ($(strip $(BR2_TARGET_UBOOT_BOOTCMD)),)
+ ifneq ($(strip $(BR2_TARGET_UBOOT_BOOTCMD)),"")
+ 	$(call insert_define, CONFIG_BOOTCOMMAND, $(BR2_TARGET_UBOOT_BOOTCMD))
+ endif
++endif
+ ifeq ($(BR2_TARGET_UBOOT_SILENT),y)
+ 	$(call insert_define, CONFIG_SILENT_CONSOLE,)
+ endif
++ifneq ($(strip $(BR2_TARGET_UBOOT_KERNEL_START)),"")
++	$(call insert_define, KERNEL_START, $(BR2_TARGET_UBOOT_KERNEL_START))
++endif
++ifneq ($(strip $(BR2_TARGET_UBOOT_KERNEL_LOCATION)),"")
++	$(call insert_define, KERNEL_LOCATION, $(BR2_TARGET_UBOOT_KERNEL_LOCATION))
++endif
++ifneq ($(strip $(BR2_TARGET_UBOOT_FILESYSTEM_START)),"")
++	$(call insert_define, FILESYSTEM_START, $(BR2_TARGET_UBOOT_FILESYSTEM_START))
++endif
++ifneq ($(strip $(BR2_TARGET_UBOOT_FILESYSTEM_LOCATION)),"")
++	$(call insert_define, FILESYSTEM_LOCATION, $(BR2_TARGET_UBOOT_FILESYSTEM_LOCATION))
++endif
++ifneq ($(strip $(BR2_TARGET_UBOOT_FILESYSTEM_SIZE)),"")
++	$(call insert_define, FILESYSTEM_SIZE, $(BR2_TARGET_UBOOT_FILESYSTEM_SIZE))
++endif
++ifneq ($(strip $(BR2_TARGET_UBOOT_END_OF_FLASH)),"")
++	$(call insert_define, END_OF_FLASH, $(BR2_TARGET_UBOOT_END_OF_FLASH))
++endif
++ifneq ($(strip $(BR2_TARGET_UBOOT_MEMORY_SIZE)),"")
++	$(call insert_define, MEMORY_SIZE, $(BR2_TARGET_UBOOT_MEMORY_SIZE))
++endif
+ 	@echo "#endif /* __BR2_ADDED_CONFIG_H */" >> $(U_BOOT_INC_CONF_FILE)
+ 	touch $@
+ 
+@@ -162,6 +189,10 @@
+ 
+ u-boot-source: $(DL_DIR)/$(U_BOOT_SOURCE)
+ 
++u-boot-unpacked: $(U_BOOT_DIR)/.patched
++
++u-boot-configured: $(U_BOOT_DIR)/.header_modified
++
+ #############################################################
+ #
+ # Toplevel Makefile options
+@@ -186,13 +217,6 @@
+ 	@echo BR2_TARGET_UBOOT_BOOTARGS = $(BR2_TARGET_UBOOT_BOOTARGS)
+ 	@echo BR2_TARGET_UBOOT_BOOTCMD = $(BR2_TARGET_UBOOT_BOOTCMD)
+ 	@echo BR2_TARGET_UBOOT_SILENT = $(BR2_TARGET_UBOOT_SILENT)
+-	@echo BR2_BOOTSOURCE=$(BR2_BOOTSOURCE)
+-	@echo BR2_TARGET_UBOOT_BOOTSOURCE_DATAFLASHCARD=$(BR2_TARGET_UBOOT_BOOTSOURCE_DATAFLASHCARD)
+-	@echo BR2_TARGET_UBOOT_BOOTSOURCE_DATAFLASH=$(BR2_TARGET_UBOOT_BOOTSOURCE_DATAFLASH)
+-	@echo BR2_TARGET_UBOOT_BOOTSOURCE_NANDFLASH=$(BR2_TARGET_UBOOT_BOOTSOURCE_NANDFLASH)
+-	@echo BR2_TARGET_UBOOT_BOOTSOURCE_FLASH=$(BR2_TARGET_UBOOT_BOOTSOURCE_FLASH)
+-	@echo BR2_TARGET_UBOOT_BOOTSOURCE_SDCARD=$(BR2_TARGET_UBOOT_BOOTSOURCE_SDCARD)
+-	@echo BR2_TARGET_UBOOT_BOOTSOURCE_EEPROM=$(BR2_TARGET_UBOOT_BOOTSOURCE_EEPROM)
+ 	@echo UBOOT_BOARD_NAME=$(UBOOT_BOARD_NAME)
+ 	@echo TEST=$(TEST)
+ 	@exit 0
