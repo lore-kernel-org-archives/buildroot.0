@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 03 Jan 2009 21:01:35 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
-In-Reply-To: <20090103010637.58207769FD@busybox.osuosl.org> (ulf@uclibc.org's
-	message of "Sat\, 3 Jan 2009 01\:06\:37 +0000 \(UTC\)")
-References: <20090103010637.58207769FD@busybox.osuosl.org>
-Message-ID: <871vvk17mo.fsf@macbook.be.48ers.dk>
+Date: Sat, 03 Jan 2009 21:28:34 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/target/u-boot
+In-Reply-To: <20090103000048.221A2769FA@busybox.osuosl.org> (ulf@uclibc.org's
+	message of "Sat\, 3 Jan 2009 00\:00\:47 +0000 \(UTC\)")
+References: <20090103000048.221A2769FA@busybox.osuosl.org>
+Message-ID: <87wsdcyw0d.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,144 +14,131 @@ To: buildroot@busybox.net
 >>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
 
  ulf> Author: ulf
- ulf> Date: 2009-01-03 01:06:36 +0000 (Sat, 03 Jan 2009)
- ulf> New Revision: 24663
+ ulf> Date: 2009-01-03 00:00:46 +0000 (Sat, 03 Jan 2009)
+ ulf> New Revision: 24652
 
  ulf> Log:
- ulf> Update linux versions
+ ulf> Add Memory configuration to U-Boot build, remove some debugging info
 
  ulf> Modified:
- ulf>    trunk/buildroot/target/linux/Config.in.advanced
- ulf>    trunk/buildroot/target/linux/Config.in.versions
+ ulf>    trunk/buildroot/target/u-boot/Makefile.in
 
-What about my comments to r24465?
 
  ulf> Changeset:
- ulf> Modified: trunk/buildroot/target/linux/Config.in.advanced
+ ulf> Modified: trunk/buildroot/target/u-boot/Makefile.in
  ulf> ===================================================================
- ulf> --- trunk/buildroot/target/linux/Config.in.advanced	2009-01-03 01:06:16 UTC (rev 24662)
- ulf> +++ trunk/buildroot/target/linux/Config.in.advanced	2009-01-03 01:06:36 UTC (rev 24663)
- ulf> @@ -123,17 +123,21 @@
+ ulf> --- trunk/buildroot/target/u-boot/Makefile.in	2009-01-02 20:31:44 UTC (rev 24651)
+ ulf> +++ trunk/buildroot/target/u-boot/Makefile.in	2009-01-03 00:00:46 UTC (rev 24652)
+ ulf> @@ -42,8 +42,9 @@
+ ulf>  @echo "#ifdef $(strip $(1))" >> $(U_BOOT_INC_CONF_FILE)
+ ulf>  @echo "#undef $(strip $(1))" >> $(U_BOOT_INC_CONF_FILE)
+ ulf>  @echo "#endif" >> $(U_BOOT_INC_CONF_FILE)
+ ulf> - at echo '#define $(strip $(1)) $(2)' >> $(U_BOOT_INC_CONF_FILE)
+ ulf> + at echo '#define $(strip $(1)) $(strip $(subst ",,$(2)))' >> $(U_BOOT_INC_CONF_FILE)
+
+What is this for and why isn't it mentioned in the commit message?
  
- ulf>  choice
- ulf>  	prompt "Linux Kernel Version"
- ulf> -	default BR2_LINUX_2_6_22_10 if BR2_avr32
- ulf> -	default BR2_LINUX_2_6_22_1 if !BR2_avr32 && BR2_TARGET_ATMEL
- ulf> -	default BR2_LINUX_2_6_22 if !BR2_TARGET_ATMEL
- ulf> +	default BR2_LINUX_2_6_28
+ ulf>  $(U_BOOT_DIR)/.header_modified: $(U_BOOT_DIR)/.configured
+ ulf>  	# Modify configuration header in $(U_BOOT_INC_CONF_FILE)
+ ulf> -	
+ ulf>  	@echo >> $(U_BOOT_INC_CONF_FILE)
+ ulf>  	@echo "/* Add a wrapper around the values Buildroot sets. */" >> $(U_BOOT_INC_CONF_FILE)
+ ulf>  	@echo "#ifndef __BR2_ADDED_CONFIG_H" >> $(U_BOOT_INC_CONF_FILE)
+ ulf>  	@echo "#define __BR2_ADDED_CONFIG_H" >> $(U_BOOT_INC_CONF_FILE)
+ ulf> +	$(call insert_define, DATE, $(DATE))	
+ ulf> +	$(call insert_define, CONFIG_LOAD_SCRIPTS, 1)
 
-Wee.
+What is this? I don't find the string CONFIG_LOAD_SCRIPTS in U-boot.
 
-Shouldn't it be default BR2_LINUX_2_6_STABLE instead so you don't need
-to go and change this all the time?
-
- ulf>  	help
- ulf>  	  Select the specific Linux version you want to use
- 
- ulf>  config BR2_LINUX_2_6_STABLE
- ulf> -	bool "The latest stable Linux kernel (2.6.27.10)"
- ulf> +	bool "The latest stable Linux kernel (2.6.28)"
- ulf>  	help
- ulf> -	  Linux 2.26.27.10
- ulf> +	  Linux 2.26.28
-
-Get rid of the help text. You cannot see it in make menuconfig and
-it's just more text that might get out of sync with the symbols.
- 
- ulf> +config BR2_LINUX_2_6_28
- ulf> +	bool "Linux 2.6.28"
- ulf> +	select BR2_KERNEL_BASE
- ulf> +	help
- ulf> +	  Linux 2.6.28
- ulf> +
-
-Here as well.
-
- ulf>  config BR2_LINUX_2_6_27
- ulf>  	bool "Linux 2.6.27"
- ulf>  	select BR2_KERNEL_BASE
- ulf> @@ -207,12 +211,6 @@
- ulf>  	help
- ulf>  	  Linux 2.6.20
- 
- ulf> -config BR2_LINUX_2_6_28
- ulf> -	bool "Linux 2.6.28"
- ulf> -	select BR2_KERNEL_BASE
- ulf> -	help
- ulf> -	  Linux 2.6.28
+ ulf>  ifneq ($(strip $(BR2_PROJECT)),"")
+ ulf>  	$(call insert_define, CONFIG_HOSTNAME, $(BR2_PROJECT))
+ ulf>  endif
+ ulf> -ifneq ($(strip $(BR2_TARGET_UBOOT_SERVERIP)),"")
+ ulf> -	$(call insert_define, CONFIG_SERVERIP, $(BR2_TARGET_UBOOT_SERVERIP))
+ ulf> -endif
  ulf> -
+
+Why is this gone?
+
+ ulf>  ifneq ($(strip $(BR2_TARGET_UBOOT_IPADDR)),"")
+ ulf>  	$(call insert_define, CONFIG_IPADDR, $(BR2_TARGET_UBOOT_IPADDR))
+ ulf>  ifneq ($(strip $(BR2_TARGET_UBOOT_GATEWAY)),"")
+ ulf> @@ -101,22 +99,51 @@
+ ulf>  	$(call insert_define, CONFIG_NETMASK, $(BR2_TARGET_UBOOT_NETMASK))
+ ulf>  endif
+ ulf>  endif # end BR2_TARGET_U_BOOT_IPADDR
+ ulf> -
+ ulf> +ifneq ($(strip $(BR2_TARGET_UBOOT_SERVERIP)),"")
+ ulf> +	$(call insert_define, CONFIG_SERVERIP, $(BR2_TARGET_UBOOT_SERVERIP))
+ ulf> +endif
 
 Why the move?
 
- ulf>  config BR2_LINUX_2_6_29
- ulf>  	bool "Linux 2.6.29"
- ulf>  	select BR2_KERNEL_BASE
+ ulf>  ifneq ($(strip $(BR2_TARGET_UBOOT_ETHADDR)),"")
+ ulf>  	$(call insert_define, CONFIG_ETHADDR, $(BR2_TARGET_UBOOT_ETHADDR))
+ ulf>  endif
+ ulf> +ifneq ($(strip $(BR2_TARGET_UBOOT_ETH1ADDR)),)
+ ulf>  ifneq ($(strip $(BR2_TARGET_UBOOT_ETH1ADDR)),"")
+ ulf> -	$(call insert_define, CONFIG_ETH2ADDR, $(BR2_TARGET_UBOOT_ETH1ADDR))
+ ulf> +	$(call insert_define, CONFIG_ETH1ADDR, $(BR2_TARGET_UBOOT_ETH1ADDR))
 
-Time machine? ;)
+Huh? Why does the ETH1ADDR thingy depend on AVR32 in the first place?
 
- ulf> Modified: trunk/buildroot/target/linux/Config.in.versions
- ulf> ===================================================================
- ulf> --- trunk/buildroot/target/linux/Config.in.versions	2009-01-03 01:06:16 UTC (rev 24662)
- ulf> +++ trunk/buildroot/target/linux/Config.in.versions	2009-01-03 01:06:36 UTC (rev 24663)
- ulf> @@ -5,11 +5,13 @@
- 
- ulf>  config LINUX26_LATEST_RC_VERSION
- ulf>  	string
- ulf> -	default "2.6.28-rc9" if BR2_KERNEL_ADD_LATEST_RC_PATCH
- ulf> +	default "2.6.29-rc1" if BR2_KERNEL_ADD_LATEST_RC_PATCH
- ulf> +	help
- ulf> +	  Not really available as of 20090103
+ ulf>  endif
+ ulf> +endif
+ ulf> +ifneq ($(strip $(BR2_TARGET_UBOOT_BOOTARGS)),)
+ ulf>  ifneq ($(strip $(BR2_TARGET_UBOOT_BOOTARGS)),"")
+ ulf>  	$(call insert_define, CONFIG_BOOTARGS, $(BR2_TARGET_UBOOT_BOOTARGS))
+ ulf>  endif
+ ulf> +endif
 
-Why add it then? What happens if you select it?
- 
- ulf>  config LINUX26_LATEST_GIT_VERSION
- ulf>  	string
- ulf> -	default "2.6.28-rc9-git1" if BR2_KERNEL_ADD_LATEST_SNAPSHOT
- ulf> +	default "2.6.28-git5" if BR2_KERNEL_ADD_LATEST_SNAPSHOT
+What is this BOOTARGS thing? It's not in Config.in
 
-Does it make sense to have an option for this? That one changes almost
-every day.
- 
- ulf>  config BR2_KERNEL_CURRENT_VERSION
- ulf>  	string
- ulf> -	default "2.6.27.10"
- ulf> +	default "2.6.28"
- 
- ulf> +config BR2_KERNEL_LATEST_2_6_28
- ulf> +	string
- ulf> +	default "1"
- ulf> +	help
- ulf> +	  Not really available as of 20090103
- ulf> +
+ ulf> +ifneq ($(strip $(BR2_TARGET_UBOOT_BOOTCMD)),)
+ ulf>  ifneq ($(strip $(BR2_TARGET_UBOOT_BOOTCMD)),"")
+ ulf>  	$(call insert_define, CONFIG_BOOTCOMMAND, $(BR2_TARGET_UBOOT_BOOTCMD))
+ ulf>  endif
+ ulf> +endif
 
-Huh?
+Neither is this.
 
- ulf>  config BR2_KERNEL_LATEST_2_6_27
- ulf> -       string
- ulf> -       default "10"
- ulf> +	string
- ulf> +	default "10"
+ ulf>  ifeq ($(BR2_TARGET_UBOOT_SILENT),y)
+ ulf>  	$(call insert_define, CONFIG_SILENT_CONSOLE,)
+ ulf>  endif
+ ulf> +ifneq ($(strip $(BR2_TARGET_UBOOT_KERNEL_START)),"")
+ ulf> +	$(call insert_define, KERNEL_START, $(BR2_TARGET_UBOOT_KERNEL_START))
+ ulf> +endif
+ ulf> +ifneq ($(strip $(BR2_TARGET_UBOOT_KERNEL_LOCATION)),"")
+ ulf> +	$(call insert_define, KERNEL_LOCATION, $(BR2_TARGET_UBOOT_KERNEL_LOCATION))
+ ulf> +endif
+ ulf> +ifneq ($(strip $(BR2_TARGET_UBOOT_FILESYSTEM_START)),"")
+ ulf> +	$(call insert_define, FILESYSTEM_START, $(BR2_TARGET_UBOOT_FILESYSTEM_START))
+ ulf> +endif
+ ulf> +ifneq ($(strip $(BR2_TARGET_UBOOT_FILESYSTEM_LOCATION)),"")
+ ulf> +	$(call insert_define, FILESYSTEM_LOCATION, $(BR2_TARGET_UBOOT_FILESYSTEM_LOCATION))
+ ulf> +endif
+ ulf> +ifneq ($(strip $(BR2_TARGET_UBOOT_FILESYSTEM_SIZE)),"")
+ ulf> +	$(call insert_define, FILESYSTEM_SIZE, $(BR2_TARGET_UBOOT_FILESYSTEM_SIZE))
+ ulf> +endif
+ ulf> +ifneq ($(strip $(BR2_TARGET_UBOOT_END_OF_FLASH)),"")
+ ulf> +	$(call insert_define, END_OF_FLASH, $(BR2_TARGET_UBOOT_END_OF_FLASH))
+ ulf> +endif
+ ulf> +ifneq ($(strip $(BR2_TARGET_UBOOT_MEMORY_SIZE)),"")
+ ulf> +	$(call insert_define, MEMORY_SIZE, $(BR2_TARGET_UBOOT_MEMORY_SIZE))
+ ulf> +endif
 
-Whitespace damage?
+Huh, that sounds like a very target specific things - And you seem to
+have forgotten to add those config settings to Config.in
 
+ ulf> -	@echo BR2_TARGET_UBOOT_BOOTSOURCE_SDCARD=$(BR2_TARGET_UBOOT_BOOTSOURCE_SDCARD)
+ ulf> -	@echo BR2_TARGET_UBOOT_BOOTSOURCE_EEPROM=$(BR2_TARGET_UBOOT_BOOTSOURCE_EEPROM)
+ ulf>  	@echo UBOOT_BOARD_NAME=$(UBOOT_BOARD_NAME)
+ ulf>  	@echo TEST=$(TEST)
+ ulf>  	@exit 0
 
- ulf>  config BR2_KERNEL_LATEST_2_6_26
- ulf> -       string
- ulf> -       default "8"
- ulf> +	string
- ulf> +	default "8"
+You still didn't get rid of that TEST thing.
 
-And here.
-
- ulf>  config BR2_KERNEL_LATEST_2_6_25
- ulf> -       string
- ulf> -       default "9"
- ulf> +	string
- ulf> +	default "9"
-
-And so on ..
-
-Please fix.
+Please clean up.
 
 -- 
 Bye, Peter Korsgaard
