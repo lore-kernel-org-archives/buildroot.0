@@ -1,59 +1,90 @@
-From: nkukard at uclibc.org <nkukard@uclibc.org>
-Date: Sat,  3 Jan 2009 16:30:09 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/screen
-Message-ID: <20090103163009.A051C76BC9@busybox.osuosl.org>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Sat,  3 Jan 2009 16:59:04 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/scripts
+Message-ID: <20090103165904.DD4DC76BC9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: nkukard
-Date: 2009-01-03 16:30:09 +0000 (Sat, 03 Jan 2009)
-New Revision: 24678
+Author: ulf
+Date: 2009-01-03 16:59:04 +0000 (Sat, 03 Jan 2009)
+New Revision: 24679
 
 Log:
-* Simplify the screen install, no versioned binaries, no symlink to versioned binary
-
+Do not copy linux config with higher minor version than current kernel
 
 Modified:
-   trunk/buildroot/package/screen/screen-4.0.2_install-fix.patch
+   trunk/buildroot/scripts/get_linux_config.sh
 
 
 Changeset:
-Modified: trunk/buildroot/package/screen/screen-4.0.2_install-fix.patch
+Modified: trunk/buildroot/scripts/get_linux_config.sh
 ===================================================================
---- trunk/buildroot/package/screen/screen-4.0.2_install-fix.patch	2009-01-03 16:25:47 UTC (rev 24677)
-+++ trunk/buildroot/package/screen/screen-4.0.2_install-fix.patch	2009-01-03 16:30:09 UTC (rev 24678)
-@@ -1,16 +1,20 @@
--diff -ru screen-4.0.2_vanilla/Makefile.in screen-4.0.2_install-fix/Makefile.in
-+diff -ru screen-4.0.2_vanilla/Makefile.in screen-4.0.2_install-fixup/Makefile.in
- --- screen-4.0.2_vanilla/Makefile.in	2003-12-05 13:59:39.000000000 +0000
--+++ screen-4.0.2_install-fix/Makefile.in	2008-05-01 10:47:49.000000000 +0000
--@@ -74,11 +74,12 @@
-- 	-if [ -f $(DESTDIR)$(bindir)/$(SCREEN) ] && [ ! -f $(DESTDIR)$(bindir)/$(SCREEN).old ]; \
-- 		then mv $(DESTDIR)$(bindir)/$(SCREEN) $(DESTDIR)$(bindir)/$(SCREEN).old; fi
-- 	$(INSTALL_PROGRAM) screen $(DESTDIR)$(bindir)/$(SCREEN)
-++++ screen-4.0.2_install-fixup/Makefile.in	2009-01-03 15:20:22.000000000 +0000
-+@@ -71,14 +71,9 @@
-+ 	$(CC) -c -I. -I$(srcdir) $(M_CFLAGS) $(DEFS) $(OPTIONS) $(CFLAGS) $<
-+ 
-+ install_bin: .version screen
-+-	-if [ -f $(DESTDIR)$(bindir)/$(SCREEN) ] && [ ! -f $(DESTDIR)$(bindir)/$(SCREEN).old ]; \
-+-		then mv $(DESTDIR)$(bindir)/$(SCREEN) $(DESTDIR)$(bindir)/$(SCREEN).old; fi
-+-	$(INSTALL_PROGRAM) screen $(DESTDIR)$(bindir)/$(SCREEN)
- -	-chown root $(DESTDIR)$(bindir)/$(SCREEN) && chmod 4755 $(DESTDIR)$(bindir)/$(SCREEN)
--+	-chmod 4755 $(DESTDIR)$(bindir)/$(SCREEN)
-- # This doesn't work if $(bindir)/screen is a symlink
-- 	-if [ -f $(DESTDIR)$(bindir)/screen ] && [ ! -f $(DESTDIR)$(bindir)/screen.old ]; then mv $(DESTDIR)$(bindir)/screen $(DESTDIR)$(bindir)/screen.old; fi
-- 	rm -f $(DESTDIR)$(bindir)/screen
-- 	(cd $(DESTDIR)$(bindir) && ln -sf $(SCREEN) screen)
-+-# This doesn't work if $(bindir)/screen is a symlink
-+-	-if [ -f $(DESTDIR)$(bindir)/screen ] && [ ! -f $(DESTDIR)$(bindir)/screen.old ]; then mv $(DESTDIR)$(bindir)/screen $(DESTDIR)$(bindir)/screen.old; fi
-+-	rm -f $(DESTDIR)$(bindir)/screen
-+-	(cd $(DESTDIR)$(bindir) && ln -sf $(SCREEN) screen)
-++	$(INSTALL_PROGRAM) screen $(DESTDIR)$(bindir)/screen
-++	-chmod 4755 $(DESTDIR)$(bindir)/screen
- +	mkdir -p $(DESTDIR)$(SCREENENCODINGS)
-  	cp $(srcdir)/utf8encodings/?? $(DESTDIR)$(SCREENENCODINGS)
-  
+--- trunk/buildroot/scripts/get_linux_config.sh	2009-01-03 16:30:09 UTC (rev 24678)
++++ trunk/buildroot/scripts/get_linux_config.sh	2009-01-03 16:59:04 UTC (rev 24679)
+@@ -11,38 +11,57 @@
+ #######################################################################
+ 
+ TOPDIR=`pwd`
+-
++DEBUG=0
+ # parameter #1	BOARD_PATH
+ # parameter #2  LINUX26_DIR
+ 
+-CONFIGS=`ls -X $1/*linux*.*.config | sed s/[.]config// - | sort`
++CONFIGS=`ls -X $1/*linux-2.6.*.config | sed s/[.]config// - | sort`
+ LINUX26_DIR=`basename $2`
+ LINUX26_CONFIG=${2}/.config
+ LINUX_MAJOR_VERSION=${LINUX26_DIR:10:2}
+ LINUX_MINOR_VERSION=${LINUX26_DIR:13}
+ 
++function DBG_PRINT
++{
++	if [ ${DEBUG} == 1 ] ; then
++		echo $1
++	fi
++}
++
+ function linux_version()
+ {
+ 	local KCONFIG
+ 	KCONFIG=`basename $1`
+-	KERNEL=`echo ${KCONFIG} | sed s/.*-linux-/linux-/g -`
++	KERNEL=`echo ${KCONFIG} | sed s/.*linux-2.6./linux-2.6./g -`
+ 	THIS_MAJOR=${KERNEL:10:2}
+ 	THIS_MINOR=${KERNEL:13}
+-
+ }
+ 
+ # Try to be careful...
++DBG_PRINT MAJOR=\"${LINUX_MAJOR_VERSION}\"
++DBG_PRINT MINOR=\"${LINUX_MINOR_VERSION}\"
+ 
+ for i in ${CONFIGS} ; do
++    DBG_PRINT FILE=$i
+     linux_version $i
+-    if [ ${THIS_MAJOR} -le ${LINUX_MAJOR_VERSION} ] ; then
++    DBG_PRINT KERNEL=${KERNEL}
++    if [ ${THIS_MAJOR} -lt ${LINUX_MAJOR_VERSION} ] ; then
+ 	    echo Copying `basename $i`.config ...
+ 	    cp $i.config ${LINUX26_CONFIG}
+     elif [ ${THIS_MAJOR} -eq ${LINUX_MAJOR_VERSION} ] ; then
+-	if [ ${THIS_MINOR} -le ${LINUX_MINOR_VERSION} ] ; then
++	if [ "${LINUX_MINOR_VERSION}X" == "X" ] ; then
++		if [ "${THIS_MINOR}X" == "X" ] ; then
++		    echo Copying `basename $i`.config ...
++		    cp $i.config ${LINUX26_CONFIG}
++		else		
++			return
++		fi
++	elif [ ${THIS_MINOR} -le ${LINUX_MINOR_VERSION} ] ; then
+ 	    echo Copying `basename $i`.config ...
+ 	    cp $i.config ${LINUX26_CONFIG}
+ 	fi
++    else		
++	return
+     fi
+ done
+ 
