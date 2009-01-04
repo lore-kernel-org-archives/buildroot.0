@@ -1,7 +1,7 @@
 From: nkukard at uclibc.org <nkukard@uclibc.org>
-Date: Sun,  4 Jan 2009 06:02:31 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/lvm2
-Message-ID: <20090104060231.340EA769EF@busybox.osuosl.org>
+Date: Sun,  4 Jan 2009 06:04:50 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libtool
+Message-ID: <20090104060450.ABF7D769EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,35 +9,37 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: nkukard
-Date: 2009-01-04 06:02:30 +0000 (Sun, 04 Jan 2009)
-New Revision: 24682
+Date: 2009-01-04 06:04:50 +0000 (Sun, 04 Jan 2009)
+New Revision: 24683
 
 Log:
-We don't need to set CC, AR, RANLIB when installing and uninstalling
+Use target ar & ranlib when generating static archives, the host tools were being used when libltdl.a was being generated
 
 
 Modified:
-   trunk/buildroot/package/lvm2/lvm2.mk
+   trunk/buildroot/package/libtool/libtool.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/lvm2/lvm2.mk
+Modified: trunk/buildroot/package/libtool/libtool.mk
 ===================================================================
---- trunk/buildroot/package/lvm2/lvm2.mk	2009-01-04 05:59:54 UTC (rev 24681)
-+++ trunk/buildroot/package/lvm2/lvm2.mk	2009-01-04 06:02:30 UTC (rev 24682)
-@@ -63,13 +63,13 @@
+--- trunk/buildroot/package/libtool/libtool.mk	2009-01-04 06:02:30 UTC (rev 24682)
++++ trunk/buildroot/package/libtool/libtool.mk	2009-01-04 06:04:50 UTC (rev 24683)
+@@ -56,7 +56,7 @@
+ 	touch $@
  
- $(LVM2_TARGET_SBINS): $(LVM2_DIR)/.configured
- 	$(MAKE1) CC=$(TARGET_CC) RANLIB=$(TARGET_RANLIB) AR=$(TARGET_AR) -C $(LVM2_DIR) DESTDIR=$(STAGING_DIR)
--	$(MAKE1) CC=$(TARGET_CC) RANLIB=$(TARGET_RANLIB) AR=$(TARGET_AR) -C $(LVM2_DIR) DESTDIR=$(STAGING_DIR) install
-+	$(MAKE1) -C $(LVM2_DIR) DESTDIR=$(STAGING_DIR) install
- 	for binary in $(LVM2_SBIN); do echo $$binary; cp -a $(STAGING_DIR)/sbin/$$binary $(TARGET_DIR)/sbin; done
+ $(LIBTOOL_DIR)/$(LIBTOOL_BINARY): $(LIBTOOL_DIR)/.configured
+-	$(MAKE) CC=$(TARGET_CC) -C $(LIBTOOL_DIR)
++	$(MAKE) CC=$(TARGET_CC) RANLIB=$(TARGET_RANLIB) AR=$(TARGET_AR) -C $(LIBTOOL_DIR)
+ 	touch -c $@
  
- lvm2: uclibc dm $(LVM2_TARGET_SBINS)
+ $(TARGET_DIR)/$(LIBTOOL_TARGET_BINARY): $(LIBTOOL_DIR)/$(LIBTOOL_BINARY)
+@@ -90,7 +90,7 @@
+ libtool: uclibc $(TARGET_DIR)/$(LIBTOOL_TARGET_BINARY)
  
- lvm2-clean:
--	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) RANLIB=$(TARGET_RANLIB) AR=$(TARGET_AR) -C $(LVM2_DIR) uninstall
-+	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(LVM2_DIR) uninstall
- 	-$(MAKE) -C $(LVM2_DIR) clean
+ libtool-clean:
+-	-$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(LIBTOOL_DIR) uninstall
++	-$(MAKE) DESTDIR=$(TARGET_DIR) -C $(LIBTOOL_DIR) uninstall
+ 	-$(MAKE) -C $(LIBTOOL_DIR) clean
  
- lvm2-dirclean:
+ libtool-cross: uclibc $(LIBTOOL_DIR)/$(LIBTOOL_BINARY)
