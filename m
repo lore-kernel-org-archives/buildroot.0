@@ -1,7 +1,7 @@
 From: nkukard at uclibc.org <nkukard@uclibc.org>
-Date: Sun,  4 Jan 2009 05:59:55 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/m4
-Message-ID: <20090104055956.319E4769EF@busybox.osuosl.org>
+Date: Sun,  4 Jan 2009 06:02:31 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/lvm2
+Message-ID: <20090104060231.340EA769EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,28 +9,35 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: nkukard
-Date: 2009-01-04 05:59:54 +0000 (Sun, 04 Jan 2009)
-New Revision: 24681
+Date: 2009-01-04 06:02:30 +0000 (Sun, 04 Jan 2009)
+New Revision: 24682
 
 Log:
-Use target ar & ranlib when generating static archives, libm4.a was being built with the host ar and ranlib
+We don't need to set CC, AR, RANLIB when installing and uninstalling
 
 
 Modified:
-   trunk/buildroot/package/m4/m4.mk
+   trunk/buildroot/package/lvm2/lvm2.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/m4/m4.mk
+Modified: trunk/buildroot/package/lvm2/lvm2.mk
 ===================================================================
---- trunk/buildroot/package/m4/m4.mk	2009-01-04 02:58:58 UTC (rev 24680)
-+++ trunk/buildroot/package/m4/m4.mk	2009-01-04 05:59:54 UTC (rev 24681)
-@@ -50,7 +50,7 @@
- 	touch $@
+--- trunk/buildroot/package/lvm2/lvm2.mk	2009-01-04 05:59:54 UTC (rev 24681)
++++ trunk/buildroot/package/lvm2/lvm2.mk	2009-01-04 06:02:30 UTC (rev 24682)
+@@ -63,13 +63,13 @@
  
- $(M4_DIR)/src/$(M4_BINARY): $(M4_DIR)/.configured
--	$(MAKE) CC=$(TARGET_CC) -C $(M4_DIR)
-+	$(MAKE) CC=$(TARGET_CC) RANLIB=$(TARGET_RANLIB) AR=$(TARGET_AR) -C $(M4_DIR)
+ $(LVM2_TARGET_SBINS): $(LVM2_DIR)/.configured
+ 	$(MAKE1) CC=$(TARGET_CC) RANLIB=$(TARGET_RANLIB) AR=$(TARGET_AR) -C $(LVM2_DIR) DESTDIR=$(STAGING_DIR)
+-	$(MAKE1) CC=$(TARGET_CC) RANLIB=$(TARGET_RANLIB) AR=$(TARGET_AR) -C $(LVM2_DIR) DESTDIR=$(STAGING_DIR) install
++	$(MAKE1) -C $(LVM2_DIR) DESTDIR=$(STAGING_DIR) install
+ 	for binary in $(LVM2_SBIN); do echo $$binary; cp -a $(STAGING_DIR)/sbin/$$binary $(TARGET_DIR)/sbin; done
  
- $(TARGET_DIR)/$(M4_TARGET_BINARY): $(M4_DIR)/src/$(M4_BINARY)
- 	$(MAKE) \
+ lvm2: uclibc dm $(LVM2_TARGET_SBINS)
+ 
+ lvm2-clean:
+-	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) RANLIB=$(TARGET_RANLIB) AR=$(TARGET_AR) -C $(LVM2_DIR) uninstall
++	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(LVM2_DIR) uninstall
+ 	-$(MAKE) -C $(LVM2_DIR) clean
+ 
+ lvm2-dirclean:
