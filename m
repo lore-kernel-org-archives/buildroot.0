@@ -1,58 +1,42 @@
-From: Nigel Kukard <nkukard@lbsd.net>
-Date: Sun, 04 Jan 2009 06:04:47 +0000
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libtool
-In-Reply-To: <20090104060450.ABF7D769EF@busybox.osuosl.org>
-References: <20090104060450.ABF7D769EF@busybox.osuosl.org>
-Message-ID: <4960517F.2010605@lbsd.net>
+From: Nicolas Pitre <nico@cam.org>
+Date: Sun, 04 Jan 2009 16:53:41 -0500 (EST)
+Subject: [Buildroot] shell issues when /bin/sh is 'dash' instead of
+	'bash'
+In-Reply-To: <20090101023620.GA13399@cloud.net.au>
+References: <bbbeeccd0812311504p2e7f96a6l923c938acac8acf0@mail.gmail.com>
+	<20090101023620.GA13399@cloud.net.au>
+Message-ID: <alpine.LFD.2.00.0901041650200.26118@xanadu.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-nkukard at uclibc.org wrote:
-> Author: nkukard
-> Date: 2009-01-04 06:04:50 +0000 (Sun, 04 Jan 2009)
-> New Revision: 24683
->
-> Log:
-> Use target ar & ranlib when generating static archives, the host tools were being used when libltdl.a was being generated
->   
-And remove setting CC them from the uninstall
+On Thu, 1 Jan 2009, Hamish Moffatt wrote:
 
--N
+> On Wed, Dec 31, 2008 at 04:04:37PM -0700, Wade Berrier wrote:
+> > The result is that some files don't get installed into the target
+> > system when /bin/sh points to dash (like on recent ubuntu and debian?
+> > distros)
+> > 
+> > Attached is a patch to use CONFIG_SHELL.
+> 
+> Why aren't we setting SHELL=$(CONFIG_SHELL) somewhere, rather than using
+> $(CONFIG_SHELL) explicitly in each place? (And why do I have the feeling
+> we've had this discussion before?)
+> 
+> > Question: is this the best way to fix this?  Or maybe these packages
+> > should be fixed more in the style of how Jacmet fixed grep? (see
+> > http://sources.uclibc.org/index.py/trunk/buildroot/package/grep/grep.mk?r1=22930&r2=22931
+> > )
+> 
+> dash(1) on my system says -ot is supported anyway. If not perhaps it can
+> be expressed in a better way; I think that would be better than this
+> fix.
 
->
-> Modified:
->    trunk/buildroot/package/libtool/libtool.mk
->
->
-> Changeset:
-> Modified: trunk/buildroot/package/libtool/libtool.mk
-> ===================================================================
-> --- trunk/buildroot/package/libtool/libtool.mk	2009-01-04 06:02:30 UTC (rev 24682)
-> +++ trunk/buildroot/package/libtool/libtool.mk	2009-01-04 06:04:50 UTC (rev 24683)
-> @@ -56,7 +56,7 @@
->  	touch $@
->  
->  $(LIBTOOL_DIR)/$(LIBTOOL_BINARY): $(LIBTOOL_DIR)/.configured
-> -	$(MAKE) CC=$(TARGET_CC) -C $(LIBTOOL_DIR)
-> +	$(MAKE) CC=$(TARGET_CC) RANLIB=$(TARGET_RANLIB) AR=$(TARGET_AR) -C $(LIBTOOL_DIR)
->  	touch -c $@
->  
->  $(TARGET_DIR)/$(LIBTOOL_TARGET_BINARY): $(LIBTOOL_DIR)/$(LIBTOOL_BINARY)
-> @@ -90,7 +90,7 @@
->  libtool: uclibc $(TARGET_DIR)/$(LIBTOOL_TARGET_BINARY)
->  
->  libtool-clean:
-> -	-$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(LIBTOOL_DIR) uninstall
-> +	-$(MAKE) DESTDIR=$(TARGET_DIR) -C $(LIBTOOL_DIR) uninstall
->  	-$(MAKE) -C $(LIBTOOL_DIR) clean
->  
->  libtool-cross: uclibc $(LIBTOOL_DIR)/$(LIBTOOL_BINARY)
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->   
+There are other places where brace expansion is used for arguments to 
+patch-kernel.sh, and dash doesn't supports that.  You end up with a 
+kernel missing appropriate patches, etc.
+
+
+Nicolas
