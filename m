@@ -1,39 +1,78 @@
-From: David Brown <david@westcontrol.com>
-Date: Mon, 05 Jan 2009 17:27:55 +0100
-Subject: [Buildroot] avr32 - directfb compile failure in release buildroot
-	2.3.0
-Message-ID: <gjtcei$egs$1@ger.gmane.org>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Mon, 05 Jan 2009 19:12:01 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/target/u-boot
+In-Reply-To: <20090105161237.034D977404@busybox.osuosl.org>
+References: <20090105161237.034D977404@busybox.osuosl.org>
+Message-ID: <1231179121.8886.225.camel@linux-yrgm.site>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm not sure if this is something that should be considered a buildroot 
-issue, a DirectFB issue, or an AVR32-specific issue.  Hopefully someone 
-will point me in the right direction if this is not a suitable mailing 
-list for this issue.
+m?n 2009-01-05 klockan 16:12 +0000 skrev jacmet at uclibc.org:
+> Author: jacmet
+> Date: 2009-01-05 16:12:34 +0000 (Mon, 05 Jan 2009)
+> New Revision: 24693
+> 
+> Log:
+> u-boot: revert U_BOOT_TARGET part of r24646
+> 
+> More u-boot build unbreaking. r24646 added U_BOOT_TARGET which uses the
+> nonexisting BOARDNAME variable, which means that the filename expands
+> to -u-boot-*, confusing ln.
+> 
+> There's limited point in having that symlink in the first please, so simply
+> revert that hunk.
+>
 
-My build environment is buildroot 2.3.0 from Atmel, configured for the 
-AVR32 (with "make atstk1002_defconfig" and a few small changes).
+If you have a script that needs the filename u-boot.bin
+then it make sense.
 
-Builds of DirectFB (version 1.2.6) are failing with an error message 
-that "PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP" is not defined (in 
-lib/direct/interface.c, amongst other files).  I've traced this to a 
-difference in the ./configure script and the actual compilation - the 
-./configure script defines the "_GNU_SOURCE" symbol before checking for 
-the "PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP" macro, and thus finds it 
-defined.  The actual library code does not define the "_GNU_SOURCE" 
-symbol (according to the changelog, this definition was in older 
-DirectFB versions, but has since been removed), and thus (via 
-<features.h> and <pthread.h>) "PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP" 
-is not defined during compilation.
+> Modified:
+>    trunk/buildroot/target/u-boot/Makefile.in
+> 
+> 
 
-I've got DirectFB to compile by adding a "#define _GNU_SOURCE 1" to the 
-start of "config.h", and now the DirectFB demo programs are compiled and 
-seem to be working.
+The "complex" file name is needed, unless you only
+work with a single board.
 
-mvh.,
+We obviously need to find  a way that does not break the build of
+course.
 
-David Brown
-Norway.
+Many targets define BR2_BOARD_NAME in their Config.in's
+and it may make sense to have a common BR2_BOARD_NAME
+Then it will be always be defined.
+Default to "uclibc" is probably OK.
+
+
+> Changeset:
+> Modified: trunk/buildroot/target/u-boot/Makefile.in
+> ===================================================================
+> --- trunk/buildroot/target/u-boot/Makefile.in	2009-01-05 15:52:44 UTC (rev 24692)
+> +++ trunk/buildroot/target/u-boot/Makefile.in	2009-01-05 16:12:34 UTC (rev 24693)
+> @@ -14,7 +14,6 @@
+>  U_BOOT_PATCH_DIR:=$(PROJECT_BUILD_DIR)/u-boot-$(U_BOOT_VERSION)-patches
+>  U_BOOT_CAT:=$(BZCAT)
+>  U_BOOT_BIN:=u-boot.bin
+> -U_BOOT_TARGET:=$(BOARD_NAME)-u-boot-$(U_BOOT_VERSION)-$(DATE).bin
+>  U_BOOT_TOOLS_BIN:=mkimage
+>  U_BOOT_TOOLS:=$(STAGING_DIR)/usr/bin/$(U_BOOT_TOOLS_BIN)
+>  MKIMAGE:=$(U_BOOT_TOOLS)
+> @@ -179,10 +178,8 @@
+>  		 -C $(U_BOOT_DIR)
+>  
+>  $(BINARIES_DIR)/$(U_BOOT_BIN): $(U_BOOT_DIR)/$(U_BOOT_BIN)
+> -	rm -f $(BINARIES_DIR)/$(U_BOOT_TARGET)
+>  	rm -f $(BINARIES_DIR)/$(U_BOOT_BIN)
+> -	cp -dpf $(U_BOOT_DIR)/$(U_BOOT_BIN) $(BINARIES_DIR)/$(U_BOOT_TARGET)
+> -	(cd $(BINARIES_DIR); ln -s $(U_BOOT_TARGET) $(U_BOOT_BIN)) 
+> +	cp -dpf $(U_BOOT_DIR)/$(U_BOOT_BIN) $(BINARIES_DIR)
+>  
+>  $(U_BOOT_TOOLS):	$(U_BOOT_DIR)/tools/$(U_BOOT_TOOLS_BIN)
+>  	cp -dpf $(U_BOOT_DIR)/tools/$(U_BOOT_TOOLS_BIN) $(STAGING_DIR)/usr/bin/
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
