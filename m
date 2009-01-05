@@ -1,117 +1,55 @@
-From: hartleys <hartleys@visionengravers.com>
-Date: Mon, 5 Jan 2009 15:49:06 -0500
-Subject: [Buildroot] Problem with svn revision 24694
-Message-ID: <BD79186B4FD85F4B8E60E381CAEE1909FA4C34@mi8nycmail19.Mi8.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 05 Jan 2009 22:18:01 +0100
+Subject: [Buildroot] Buildroot maintainer and stable releases
+Message-ID: <87prj1v4dy.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+Hi, and happy new year everyone,
 
-I updated my svn checkout today and noticed that busybox and the linux
-kernel were updated.  When either of these have been updated in the past
-I usually have problems with my root filesystem not getting fully
-created.
+The end of the year is a moment to take a step back and take a bigger
+look at the situation. I have done that for buildroot, and as I see it
+the two biggest problems we have are:
 
-To get around this issue I normally just do a 'make menuconfig' so that
-my buildroot .config gets updated then do a 'make'.  The new files then
-get downloaded and compiled.  I'll then do a 'make busybox-menuconfig'
-and 'make linux26-menuconfig' to make sure busybox and the kernel are
-configured correctly for what I need.  After that I manually delete
-$(PROJECT_BUILD_DIR)/root, $(PROJECT_BUILD_DIR)/.root,
-$(PROJECT_BUILD_DIR)/autotools-stamps.  Then do a 'make' and everything
-gets built correctly.
+ - Lack of an active maintainer. No hard feelings, but lets face it -
+   Erik hasn't really been active in buildroot development for quite
+   some time. This isn't a big deal for day to day development, but it
+   means that there's no one doing stuff like keeping the website
+   up to date, a central contact point for infrastruture issues (like
+   the recent break in), make decissions when there is disagreements
+   among developers (we already lost Bernhard because of that), and:
+ - Lack of releases. It has often been discussed, but nothing has come
+   of it.
 
-In the past this has worked fine.  When I tried it today I get the
-following right after my external toolchain libraries are copied to
-$(PROJECT_BUILD_DIR)/root/lib:
+I offer to do something about both: Take over maintainership and get
+atual stable releases out the door (if Erik and the other developers
+agree).
 
-...
-copy_toolchain_lib_root lib=libstdc++.so.6.0.8 dst=/lib
-SYSROOT_DIR=`/usr/local/arm/4.1.1-920t/bin/arm-linux-gcc -v 2>&1 | grep
-^Configured | tr " " "\n" | grep -- "--with-sysroot" | cut -f2 -d=`; cp
--a ${SYSROOT_DIR}/* /home/bigguiness/buildroot/build_arm/staging_dir/ ;
-find /home/bigguiness/buildroot/build_arm/staging_dir -type d | xargs
-chmod 755
-cp: cannot create special file
-`/home/bigguiness/buildroot/build_arm/staging_dir/dev/vcsa6': Operation
-not permitted
-cp: cannot create special file
-`/home/bigguiness/buildroot/build_arm/staging_dir/dev/vcs6': Operation
-not permitted
-cp: cannot create special file
-`/home/bigguiness/buildroot/build_arm/staging_dir/dev/vcsa5': Operation
-not permitted
-...
-More cp: cannot create special file errors
-...
-cp: cannot create special file
-`/home/bigguiness/buildroot/build_arm/staging_dir/dev/console':
-Operation not permitted
-cp: cannot open `/etc/X11/Xwrapper.config' for reading: Permission
-denied
-cp: cannot create regular file
-`/home/bigguiness/buildroot/build_arm/staging_dir/etc/vmware-tools/xsess
-ion-gdm.sh': Permission denied
-...
-More cp: cannot create regular file errors
-...
-cp: cannot create regular file
-`/home/bigguiness/buildroot/build_arm/staging_dir/etc/vmware-tools/xsess
-ion-xdm.pl': Permission denied
-cp: cannot access `/etc/cups/ssl': Permission denied
-cp: cannot open `/etc/cups/cupsd.conf' for reading: Permission denied
-cp: cannot open `/etc/cups/printers.conf' for reading: Permission denied
-cp: cannot access `/etc/chatscripts': Permission denied
-cp: cannot open `/etc/group-' for reading: Permission denied
-cp: cannot access `/etc/selinux/refpolicy-targeted/modules/active':
-Permission denied
-cp: cannot open
-`/etc/selinux/refpolicy-targeted/modules/semanage.read.LOCK' for
-reading: Permission denied
-cp: cannot open
-`/etc/selinux/refpolicy-targeted/modules/semanage.trans.LOCK' for
-reading: Permission denied
-cp: cannot access `/etc/selinux/refpolicy-targeted/modules/previous':
-Permission denied
-cp: cannot open `/etc/shadow-' for reading: Permission denied
-cp: cannot open `/etc/identd.key' for reading: Permission denied
-cp: cannot open `/etc/apt/secring.gpg' for reading: Permission denied
-cp: cannot open `/etc/apt/trusted.gpg' for reading: Permission denied
-cp: cannot open `/etc/apt/trustdb.gpg' for reading: Permission denied
-cp: cannot open `/etc/apt/trusted.gpg~' for reading: Permission denied
-cp: cannot open `/etc/.pwd.lock' for reading: Permission denied
-cp: cannot access `/etc/ssl/private': Permission denied
-cp: cannot open `/etc/passwd-' for reading: Permission denied
-cp: cannot open `/etc/qt3/.qt_plugins_3.3rc.lock' for reading:
-Permission denied
-cp: cannot open `/etc/gshadow-' for reading: Permission denied
-cp: cannot open `/etc/at.deny' for reading: Permission denied
-cp: cannot open `/etc/sudoers' for reading: Permission denied
-cp: cannot open `/etc/ppp/pap-secrets' for reading: Permission denied
-cp: cannot open `/etc/ppp/chap-secrets' for reading: Permission denied
-cp: cannot access `/etc/ppp/peers': Permission denied
-cp: cannot open `/etc/exim4/passwd.client' for reading: Permission
-denied
-cp: cannot open `/etc/gshadow' for reading: Permission denied
-cp: cannot open `/etc/shadow' for reading: Permission denied
-cp: cannot create regular file
-`/home/bigguiness/buildroot/build_arm/staging_dir/etc/init.d/vmware-tool
-s': Permission denied
-cp: cannot access `/home/bigguiness/.gnupg': Permission denied
+What is the plan? Getting the first release out is always the hardest,
+so I would on purpose aim low for the first release and get it out
+soon (February). The target is to get all architectures to build (and
+run where hw is available for test) using the default toolchain config
+and busybox, anything else is just a bonus. I will put out the first
+release candidate early next week, so from then on please don't add
+anything else than bugfixes until the release it out. I believe in
+time based releases, so any architectures that we cannot fix in time
+will simply be disabled in kconfig (E.G. depend on BROKEN).
 
-At this point the build just hangs.  I've let it sit there for various
-times to see if it will continue but a Ctrl-C always gives me:
+After that I would like us to move to a regular release schedule every
+3 months with 2 months of development and 1 month of stabilization.
 
-make: *** Deleting file
-`/home/bigguiness/buildroot/project_build_arm/ep9307/root/lib/libc.so.0'
-make: ***
-[/home/bigguiness/buildroot/project_build_arm/ep9307/root/lib/libc.so.0]
-Interrupt
+The big issue with buildroot quality control is the mindblowing number
+of configuration combinations and specialized hardware needed to
+test. I am therefore convinced we need to leverage qemu and
+agressively deprecate legacy versions / packages + actively work with
+upstream to keep the number of patches low. I think our users would
+also be happier with a less ambitious project that wouldn't break left
+and right, instead of the current situation.
 
-Any ideas what might be the problem? I'm at a loss...
+Let me know what you think.
 
-Thanks,
-Hartley
+-- 
+Bye, Peter Korsgaard
