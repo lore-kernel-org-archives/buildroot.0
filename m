@@ -1,55 +1,60 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 05 Jan 2009 22:18:01 +0100
-Subject: [Buildroot] Buildroot maintainer and stable releases
-Message-ID: <87prj1v4dy.fsf@macbook.be.48ers.dk>
+From: hartleys <hartleys@visionengravers.com>
+Date: Mon, 5 Jan 2009 16:47:53 -0500
+Subject: [Buildroot] External toolchain problem with svn revision 24694
+In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE1909FA4C34@mi8nycmail19.Mi8.com>
+References: <BD79186B4FD85F4B8E60E381CAEE1909FA4C34@mi8nycmail19.Mi8.com>
+Message-ID: <BD79186B4FD85F4B8E60E381CAEE1909FA4C84@mi8nycmail19.Mi8.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, and happy new year everyone,
+Thomas,
 
-The end of the year is a moment to take a step back and take a bigger
-look at the situation. I have done that for buildroot, and as I see it
-the two biggest problems we have are:
+I updated my svn checkout today and ran into a problem running the
+toplevel make.
 
- - Lack of an active maintainer. No hard feelings, but lets face it -
-   Erik hasn't really been active in buildroot development for quite
-   some time. This isn't a big deal for day to day development, but it
-   means that there's no one doing stuff like keeping the website
-   up to date, a central contact point for infrastruture issues (like
-   the recent break in), make decissions when there is disagreements
-   among developers (we already lost Bernhard because of that), and:
- - Lack of releases. It has often been discussed, but nothing has come
-   of it.
+I haven't completely figured out where the problem is but I think one of
+the changes you made in revision 24408 is causing part of it.
 
-I offer to do something about both: Take over maintainership and get
-atual stable releases out the door (if Erik and the other developers
-agree).
+> * In toolchain/external-toolchain/ext-tool.mk, copy the contents of
+>   the sysroot directory to the staging dir.
 
-What is the plan? Getting the first release out is always the hardest,
-so I would on purpose aim low for the first release and get it out
-soon (February). The target is to get all architectures to build (and
-run where hw is available for test) using the default toolchain config
-and busybox, anything else is just a bonus. I will put out the first
-release candidate early next week, so from then on please don't add
-anything else than bugfixes until the release it out. I believe in
-time based releases, so any architectures that we cannot fix in time
-will simply be disabled in kconfig (E.G. depend on BROKEN).
+My bash scripting is not quite up to par but I think the
+$(copy_toolchain_sysroot) macro is doing the following:
 
-After that I would like us to move to a regular release schedule every
-3 months with 2 months of development and 1 month of stabilization.
+1) calls '$(TARGET_CC) -v'
+2) greps the output for the "Configured ...." information
+3) greps that information for the "--with-sysroot ..." string
+4) cuts the string following --with-sysroot and assigns it to
+SYSROOT_DIR
+5) copies the entire $${SYSROOT_DIR} to ${STAGING_DIR}
+6) chmod's all the directories to 755
 
-The big issue with buildroot quality control is the mindblowing number
-of configuration combinations and specialized hardware needed to
-test. I am therefore convinced we need to leverage qemu and
-agressively deprecate legacy versions / packages + actively work with
-upstream to keep the number of patches low. I think our users would
-also be happier with a less ambitious project that wouldn't break left
-and right, instead of the current situation.
+The problem I have is my external toolchain does not have a
+--with-sysroot configuration option.  For some reason this seems to
+cause the cp to try copying my entire root directory to the staging dir.
+Here's the output of my $(TARGET_CC) -v:
 
-Let me know what you think.
+bigguiness at etch:~/buildroot$ /usr/local/arm/4.1.1-920t/bin/arm-linux-gcc
+-v
+Using built-in specs.
+Target: arm-linux-uclibc
+Configured with:
+/opt/buildroot.920t-cc/toolchain_build_arm_nofpu/gcc-4.1.1/configure
+--prefix=/usr/local/arm/4.1.1-920t --build=i386-pc-linux-gnu
+--host=i386-pc-linux-gnu --target=arm-linux-uclibc
+--enable-languages=c,c++ --disable-__cxa_atexit --enable-target-optspace
+--with-gnu-ld
+--with-gmp=/opt/buildroot.920t-cc/toolchain_build_arm_nofpu/gmp
+--with-mpfr=/opt/buildroot.920t-cc/toolchain_build_arm_nofpu/mpfr
+--enable-shared --disable-nls --enable-threads --disable-multilib
+--with-float=soft
+Thread model: posix
+gcc version 4.1.1
 
--- 
-Bye, Peter Korsgaard
+Any ideas?
+
+Thanks,
+Hartley
