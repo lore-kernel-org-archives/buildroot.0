@@ -1,58 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Jan 2009 22:54:35 +0100
-Subject: [Buildroot] External toolchain problem with svn revision 24694
-In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE1909FA4C84@mi8nycmail19.Mi8.com>
-References: <BD79186B4FD85F4B8E60E381CAEE1909FA4C34@mi8nycmail19.Mi8.com>
-	<BD79186B4FD85F4B8E60E381CAEE1909FA4C84@mi8nycmail19.Mi8.com>
-Message-ID: <20090105225435.0aa68b1a@surf>
+From: Quick X <quickx@hotmail.com>
+Date: Mon, 5 Jan 2009 15:11:31 -0800
+Subject: [Buildroot] Buildroot Not Using Saved Config for Linux
+Message-ID: <BAY124-W25B0802FB150D5566BD194D2E10@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi hartleys,
 
-Le Mon, 5 Jan 2009 16:47:53 -0500,
-"hartleys" <hartleys@visionengravers.com> a ?crit :
-
-> My bash scripting is not quite up to par but I think the
-> $(copy_toolchain_sysroot) macro is doing the following:
-> 
-> 1) calls '$(TARGET_CC) -v'
-> 2) greps the output for the "Configured ...." information
-> 3) greps that information for the "--with-sysroot ..." string
-> 4) cuts the string following --with-sysroot and assigns it to
-> SYSROOT_DIR
-> 5) copies the entire $${SYSROOT_DIR} to ${STAGING_DIR}
-> 6) chmod's all the directories to 755
-
-Exactly.
-
-> The problem I have is my external toolchain does not have a
-> --with-sysroot configuration option.
-
-Which probably means that your toolchain hasn't been compiled with
-sysroot support.
-
-> Any ideas?
-
-Yes and no.
-
-Yes: I can make sure that we test if sysroot is supported by the
-toolchain and if not fail out instead of doing stupid things. I will
-commit a patch that implements this soon.
-
-No: I don't see a proper way of supporting external toolchains if they
-don't support sysroot. Our previous attempts of using --rpath-link have
-all failed, and --sysroot seems to be the best option we've seen until
-now.
-
-Thanks for the report!
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+I can't get buildroot to use the "local\MYPROJECT\linux-2.6.24.3.config" file no matter what.  It always uses the "project_build_arm/at91sam9261ek/linux-2.6.24.3/.config" file, or creates a new one if it doesn't exsist.
+ 
+Steps I do to test:
+make linux26-menuconfig
+make saveconfig
+make linux26-menuconfig (EDIT SOMETHING ELSE)
+make BOARD=MYPROJECT
+ 
+The (EDIT SOMETHING ELSE) changes are used, not the config that was saved.  Even if I delete the "project_build_arm/at91sam9261ek/linux-2.6.24.3/.config" it just creates a new one, asking questions during the build process, instead of using the one located in the local directory.  Same result if I delete everything and grab a new buildroot with svn, and then copy the "local" directory to it and issue the following:
+make menuconfig
+make BOARD=MYPROJECT
+ 
+ 
+I'm using a Kubuntu 8.10 machine.  The "MYPROJECT.config" defines the ".//local/at91sam9261ek/linux-2.6.24.3.config" as the linux config after a "make saveconfig".  AKA: BR2_PACKAGE_LINUX_KCONFIG=".//local/at91sam9261ek/linux-2.6.24.3.config"
+ 
+I'm unsure if this matters but the "BR2_PACKAGE_LINUX_KCONFIG" is usally defined in the middle of the .config file and after a "make saveconfig" it's defined at the very botton of the .config file.  I've tired using: BR2_PACKAGE_LINUX_KCONFIG="./local/at91sam9261ek/linux-2.6.24.3.config" (AKA changing the ".//" to "./") and it doesn't fix the problem.
+ 
+Small thing since it's easy to issue a "cp local\MYPROJECT\linux-2.6.24.3.config project_build_arm\MYPROJECT\linux-2.6.24.3\.config" command before building if I think it's needed, which builds fine.  Am I using the "make saveconfig" & "make BOARD=MYPROJECT" incorrectly?
+_________________________________________________________________
+Keep in touch and up to date with friends and family. Make the connection now.
+http://www.microsoft.com/windows/windowslive/
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://lists.busybox.net/pipermail/buildroot/attachments/20090105/6c75c81d/attachment.htm 
