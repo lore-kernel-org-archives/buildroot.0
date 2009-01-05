@@ -1,37 +1,37 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon,  5 Jan 2009 15:52:45 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/u-boot
-Message-ID: <20090105155245.159C577404@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 05 Jan 2009 17:12:17 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/target: device/Atmel
+	u-boot
+In-Reply-To: <20090103155041.42D3976BC9@busybox.osuosl.org> (ulf@uclibc.org's
+	message of "Sat\, 3 Jan 2009 15\:50\:40 +0000 \(UTC\)")
+References: <20090103155041.42D3976BC9@busybox.osuosl.org>
+Message-ID: <873afxwx3y.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-01-05 15:52:44 +0000 (Mon, 05 Jan 2009)
-New Revision: 24692
+>>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
 
-Log:
-u-boot: unbreak build after r24646
+ ulf> +$(U_BOOT_AUTOSCRIPT).$(PROJECT): $(U_BOOT_AUTOSCRIPT) $(MKIMAGE)
+ ulf> +	$(MKIMAGE) -A arm \
 
-Unset variables aren't the same as "".
+ARM?
+ ulf> +				-O linux \
+ ulf> +				-T script \
+ ulf> +				-C none \
+ ulf> +				-a 0 \
+ ulf> +				-e 0 \
+ ulf> +				-n "autoscr config" \
+ ulf> +				-d $(U_BOOT_AUTOSCRIPT) \
+ ulf> +				$(U_BOOT_AUTOSCRIPT).$(PROJECT)
+ ulf> +	cp $(U_BOOT_AUTOSCRIPT).$(PROJECT) $(TARGET_ATMEL_COPYTO)
 
-Modified:
-   trunk/buildroot/target/u-boot/Makefile.in
+TARGET_ATMEL_COPYTO?
 
+Sorry, this breaks the build and I want to atleast get the u-boot
+build to complete today, so I'm reverting this for now.
 
-Changeset:
-Modified: trunk/buildroot/target/u-boot/Makefile.in
-===================================================================
---- trunk/buildroot/target/u-boot/Makefile.in	2009-01-05 15:47:00 UTC (rev 24691)
-+++ trunk/buildroot/target/u-boot/Makefile.in	2009-01-05 15:52:44 UTC (rev 24692)
-@@ -33,7 +33,7 @@
- 
- # u-boot still uses arch=ppc for powerpc
- U_BOOT_ARCH=$(KERNEL_ARCH:powerpc=ppc)
--ifeq ($(UBOOT_BOARD_NAME),"")
-+ifeq ($(UBOOT_BOARD_NAME),)
- UBOOT_BOARD_NAME:=$(strip $(subst ",,$(BR2_TARGET_UBOOT_BOARDNAME)))
- #"))
- endif
+-- 
+Bye, Peter Korsgaard
