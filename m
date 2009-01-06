@@ -1,70 +1,39 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Tue, 06 Jan 2009 20:09:30 +0100
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 06 Jan 2009 20:16:49 +0100
 Subject: [Buildroot] Buildroot maintainer and stable releases
-In-Reply-To: <873afwnu6n.fsf@macbook.be.48ers.dk>
+In-Reply-To: <1231268529.32308.222.camel@elrond.atmel.com> (Ulf Samuelsson's
+	message of "Tue\, 06 Jan 2009 20\:02\:09 +0100")
 References: <87prj1v4dy.fsf@macbook.be.48ers.dk>
-	<20090106140140.GA22854@zelow.no> <87aba4pj4w.fsf@macbook.be.48ers.dk>
-	<20090106183243.GA28479@zelow.no> <873afwnu6n.fsf@macbook.be.48ers.dk>
-Message-ID: <1231268970.32308.230.camel@elrond.atmel.com>
+	<d6cda7730901061022v3866b298y547235a57535d009@mail.gmail.com>
+	<1231268529.32308.222.camel@elrond.atmel.com>
+Message-ID: <87y6xomehq.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-tis 2009-01-06 klockan 19:52 +0100 skrev Peter Korsgaard:
-> >>>>> "Thomas" == Thomas Lundquist <lists@zelow.no> writes:
-> 
-> Hi,
-> 
->  >> Maybe. I would just start with the rm .config; make menuconf, select
->  >> arch, save; make
-> 
->  Thomas> It's a start of course but is the resulting .config a good
->  Thomas> config or just more or less random?
-> 
-> Hopefully good - It's the default config of everything, just like any
-> new user would see it. If anything is not sensible then we should
-> change the defaults.
-> 
->  Thomas> (BTW; WCHAR and LOCALE OFF is NOT a special case, it should
->  Thomas> be default.  In my view, also LARGEFILE.)
->  >> 
->  >> You mean default on? They currently default to off, simply because of
->  >> their size impact.
-> 
->  Thomas> Default OFF. I haven't messed with g++ lately but it had a tendency 
->  Thomas> to not work without WCHAR ON. It may be back in 3.X days though.
-> 
-> It work for me here on PPC (gcc 4.2.x / 4.3.x).
-> 
->  Thomas> LARGEFILE set to off is another option I'd like to have as a test 
->  Thomas> case but I have a slight feeling that will hinder a release 
->  Thomas> for quite some time..
-> 
-> WCHAR, LOCALE and LARGEFILE all defaults to off, so that's imho a
-> pretty well tested.
+>>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 
-I have been running with them on for a long time, since
-when I last tried them OFF, there were a lot of packages
-which did seemed to require at least WCHAR to build properly for ARM.
+Hi,
 
-There are nice advantages if these packages could be made
-to run without WHCAR of course.
+ Ulf> You have not said anything so far, on how you would like
+ Ulf> to support distributions.
 
-A typical issue that pops up from time to time is that
-people build the toolchain with a certain configuration
-and then finds that they need a different configurtion
-to build a package, and do not realize that they 
-need to rebuild the toolchain for the changes to take effect.
+Distributions? What kind of distributions?
 
-It would be good to resolve this, and this is why I have
-proposed to separate toolchain build.
-With SYSROOT in gcc-4 there is really no reason 
-to induce people to rebuild the toolchain,
-and we might want to support downloading a binary toolchain as well.
+ Ulf> If you plan to take the current structure and just 
+ Ulf> start to remove/deprecate and label with BROKEN
+ Ulf> then I am afraid that this will cause a lot of problems.
 
+Why? More that the current situation?
 
-Peter Korsgaard <jacmet@uclibc.org>,
-BR
-Ulf
+ Ulf> We should also replacing svn with git.
+
+One thing at the time. git infrastructure on uclibc.org has been
+discussed in connection with the break in / reinstall. It probably
+makes most sense to move buildroot to git when the other uclibc
+projects do.
+
+-- 
+Bye, Peter Korsgaard
