@@ -1,49 +1,45 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 06 Jan 2009 19:52:32 +0100
+From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
+Date: Tue, 6 Jan 2009 16:53:53 -0200
 Subject: [Buildroot] Buildroot maintainer and stable releases
-In-Reply-To: <20090106183243.GA28479@zelow.no> (Thomas Lundquist's message of
-	"Tue\, 6 Jan 2009 19\:32\:43 +0100")
+In-Reply-To: <877i58nv1k.fsf@macbook.be.48ers.dk>
 References: <87prj1v4dy.fsf@macbook.be.48ers.dk>
-	<20090106140140.GA22854@zelow.no> <87aba4pj4w.fsf@macbook.be.48ers.dk>
-	<20090106183243.GA28479@zelow.no>
-Message-ID: <873afwnu6n.fsf@macbook.be.48ers.dk>
+	<d6cda7730901061022v3866b298y547235a57535d009@mail.gmail.com>
+	<877i58nv1k.fsf@macbook.be.48ers.dk>
+Message-ID: <d6cda7730901061053q68b12ed6n51fb88f6201d20bf@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Lundquist <lists@zelow.no> writes:
+Peter,
 
-Hi,
+On Tue, Jan 6, 2009 at 4:33 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>  Thiago> AVR32 has been recently broken (again). I would much prefer
+>  Thiago> that changes were reverted (termporarily or not) and have
+>  Thiago> AVR32 in this "release" rather than deem it BROKEN.
+>
+> What changes are those exactly?
 
- >> Maybe. I would just start with the rm .config; make menuconf, select
- >> arch, save; make
+I didn't had the time to track it down to a commit yet. But it breaks
+pretty early during toolchain compilation, so I guess some svn log in
+toolchain should reveal the most likely candidates.
+Will see if I can go back a few releases to pin point that.
 
- Thomas> It's a start of course but is the resulting .config a good
- Thomas> config or just more or less random?
+>  Thiago> Maybe we could get a buildbot going. Then we can let many of the
+>  Thiago> developers/uses here contribute cpu cycle to build tests.
+>
+> Yes, I have been pondering that as well. I have a buildbot running at
+> work for the platforms we're using with good results, but it's a
+> question about coming up with varying enough configs to get good test
+> coverage.
+>
 
-Hopefully good - It's the default config of everything, just like any
-new user would see it. If anything is not sensible then we should
-change the defaults.
+Having just toolchain + libc + busybox and kernel build would already
+go a long way compared to our current. At least for AVR32 which I
+usually build for, most common breaks are in those packages. They are
+also the trickiest ones. IMHO fixing a particular package is usually
+easy compared to fixing the toolchain build.
 
- Thomas> (BTW; WCHAR and LOCALE OFF is NOT a special case, it should
- Thomas> be default.  In my view, also LARGEFILE.)
- >> 
- >> You mean default on? They currently default to off, simply because of
- >> their size impact.
-
- Thomas> Default OFF. I haven't messed with g++ lately but it had a tendency 
- Thomas> to not work without WCHAR ON. It may be back in 3.X days though.
-
-It work for me here on PPC (gcc 4.2.x / 4.3.x).
-
- Thomas> LARGEFILE set to off is another option I'd like to have as a test 
- Thomas> case but I have a slight feeling that will hinder a release 
- Thomas> for quite some time..
-
-WCHAR, LOCALE and LARGEFILE all defaults to off, so that's imho a
-pretty well tested.
-
--- 
-Bye, Peter Korsgaard
+Kind Regards,
+   Thiago A. Correa
