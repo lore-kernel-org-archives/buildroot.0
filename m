@@ -1,85 +1,77 @@
-From: Thomas Lundquist <lists@zelow.no>
-Date: Tue, 6 Jan 2009 15:01:41 +0100
+From: Nigel Kukard <nkukard@lbsd.net>
+Date: Tue, 06 Jan 2009 14:52:56 +0000
 Subject: [Buildroot] Buildroot maintainer and stable releases
 In-Reply-To: <87prj1v4dy.fsf@macbook.be.48ers.dk>
 References: <87prj1v4dy.fsf@macbook.be.48ers.dk>
-Message-ID: <20090106140140.GA22854@zelow.no>
+Message-ID: <49637048.9090506@lbsd.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jan 05, 2009 at 10:18:01PM +0100, Peter Korsgaard wrote:
-> 
+Hi,
+
+> Hi, and happy new year everyone,
+>   
+Likewise.
+
+> The end of the year is a moment to take a step back and take a bigger
+> look at the situation. I have done that for buildroot, and as I see it
+> the two biggest problems we have are:
+>
+>  - Lack of an active maintainer. No hard feelings, but lets face it -
+>    Erik hasn't really been active in buildroot development for quite
+>    some time. This isn't a big deal for day to day development, but it
+>    means that there's no one doing stuff like keeping the website
+>    up to date, a central contact point for infrastruture issues (like
+>    the recent break in), make decissions when there is disagreements
+>    among developers (we already lost Bernhard because of that), and:
+>   
+wrt central contacts and points of contacts ... we need that MAINTAINERS
+file :)
+
+>  - Lack of releases. It has often been discussed, but nothing has come
+>    of it.
+>
 > I offer to do something about both: Take over maintainership and get
 > atual stable releases out the door (if Erik and the other developers
 > agree).
+>   
+Personally I like how you handle the project and try steer it with the
+resources available, I would like to see you being the project maintainer.
 
-The first question then is what kind of maintainer you mean. 
-
-The One that makes releases or The One that maintains coherency and 
-vetoes big changes?
 
 > What is the plan? Getting the first release out is always the hardest,
 > so I would on purpose aim low for the first release and get it out
-> soon (February).
-
-That *is* quick.
-
-> The target is to get all architectures to build (and
+> soon (February). The target is to get all architectures to build (and
 > run where hw is available for test) using the default toolchain config
-> and busybox, anything else is just a bonus.
-
-Should we have some arch_testconfig as we have defconfigs? First start
-with a simple config then add more.
-
-> I will put out the first
+> and busybox, anything else is just a bonus. I will put out the first
 > release candidate early next week, so from then on please don't add
 > anything else than bugfixes until the release it out. I believe in
 > time based releases, so any architectures that we cannot fix in time
 > will simply be disabled in kconfig (E.G. depend on BROKEN).
-
-BROKEN or ROTTEN or something that will alert future maintainer-wannabees.
+>
+> After that I would like us to move to a regular release schedule every
+> 3 months with 2 months of development and 1 month of stabilization.
+>   
+And those components without maintainers scheduled to be dropped or
+deprecated (using BROKEN, DEPRECATED, NEEDS_MAINTAINER or however the
+finer detail may advise) after X number of releases if no maintainer
+steps up, this would help with some of the more severe bitrot in
+portions of buildroot.
 
 > The big issue with buildroot quality control is the mindblowing number
 > of configuration combinations and specialized hardware needed to
-> test. 
-
-This has to be handles by a defined set of test cases based on more 
-or less generic HW, like evaluation kits. 
-
-And also devices actively maintained by someone wanting it to be a 
-part of the test collection.
-
-The odd cases have to be taken care of by ordinary bug tickets.
-
-(BTW; WCHAR and LOCALE OFF is NOT a special case, it should be default.
- In my view, also LARGEFILE.)
-
-> I am therefore convinced we need to leverage qemu and
+> test. I am therefore convinced we need to leverage qemu and
 > agressively deprecate legacy versions / packages + actively work with
-> upstream to keep the number of patches low. 
-
-I am afraid we need more than one version of the kernel (Ulf wants is also) 
-and I guess also of most of the toolchain but the packages/ is another story.
-
-If we do releases we should be able to cut down on the amount of versions in
-the toolchain aswell, since comppanies should freeze on a version if they plan
-to use it for years as Ulf mentioned.
-
-> I think our users would
+> upstream to keep the number of patches low. I think our users would
 > also be happier with a less ambitious project that wouldn't break left
 > and right, instead of the current situation.
+>
+>   
+The other thing is possibly a mirror for buildroot releases so people at
+least know those packages at those versions will always be available, or
+at least available 6 months or so down the line?
 
-Agreed.
-
-First thing I guess is to agree that we want this and 
-then to make test criterias.
-
-After that, lay down which big changes we want and distribute 
-maintainer responsibilities.
-
-
-
-Thomas.
+-N
