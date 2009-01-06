@@ -1,48 +1,47 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Tue, 06 Jan 2009 19:31:48 +0100
-Subject: [Buildroot] Buildroot Not Using Saved Config for Linux
-In-Reply-To: <BAY124-W25B0802FB150D5566BD194D2E10@phx.gbl>
-References: <BAY124-W25B0802FB150D5566BD194D2E10@phx.gbl>
-Message-ID: <1231266708.32308.211.camel@elrond.atmel.com>
+From: Thomas Lundquist <lists@zelow.no>
+Date: Tue, 6 Jan 2009 19:32:43 +0100
+Subject: [Buildroot] Buildroot maintainer and stable releases
+In-Reply-To: <87aba4pj4w.fsf@macbook.be.48ers.dk>
+References: <87prj1v4dy.fsf@macbook.be.48ers.dk>
+	<20090106140140.GA22854@zelow.no>
+	<87aba4pj4w.fsf@macbook.be.48ers.dk>
+Message-ID: <20090106183243.GA28479@zelow.no>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-m?n 2009-01-05 klockan 15:11 -0800 skrev Quick X:
-> I can't get buildroot to use the "local\MYPROJECT
-> \linux-2.6.24.3.config" file no matter what.  It always uses the
-> "project_build_arm/at91sam9261ek/linux-2.6.24.3/.config" file, or
-> creates a new one if it doesn't exsist.
->  
-> Steps I do to test:
-> make linux26-menuconfig
-> make saveconfig
-> make linux26-menuconfig (EDIT SOMETHING ELSE)
-> make BOARD=MYPROJECT
->  
+On Tue, Jan 06, 2009 at 04:08:15PM +0100, Peter Korsgaard wrote:
+> 
+>  Thomas> Should we have some arch_testconfig as we have defconfigs?
+>  Thomas> First start with a simple config then add more.
+> 
+> Maybe. I would just start with the rm .config; make menuconf, select
+> arch, save; make
 
-IIRC, The way saveconfig works is that it copies the current
-$(TOPDIR)/.config to the loacl/$(PROJECT) directory
-and then edits the paths for certain variables.
+It's a start of course but is the resulting .config a good config or just 
+more or less random?
 
-It does not modify the ?$(TOPDIR)/.config file,so you
-will still be using the same paths.
+>  Thomas> This has to be handles by a defined set of test cases based
+>  Thomas> on more or less generic HW, like evaluation kits.
+> 
+> Or qemu.
 
-If you want to use the new board stuff, you have to to
+True.
 
-$ make BOARD=MYPROJECT getconfig 
+>  Thomas> (BTW; WCHAR and LOCALE OFF is NOT a special case, it should
+>  Thomas> be default.  In my view, also LARGEFILE.)
+> 
+> You mean default on? They currently default to off, simply because of
+> their size impact.
 
-which do:
+Default OFF. I haven't messed with g++ lately but it had a tendency 
+to not work without WCHAR ON. It may be back in 3.X days though.
 
-cp $(LOCAL)/$(PROJECT)/$(PROJECT).config .config
+LARGEFILE set to off is another option I'd like to have as a test 
+case but I have a slight feeling that will hinder a release 
+for quite some time..
 
-and after that, you should be using the BOARD files.
 
-Note that you can set BUILDROOT_LOCAL to whatever in 
-your shell environment so you can store your project
-files outside the buildroot source tree.
-
-Best Regards
-Ulf Samuelsson.
+Thomas.
