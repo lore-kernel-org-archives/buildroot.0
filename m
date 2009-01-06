@@ -1,36 +1,28 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 06 Jan 2009 08:56:17 +0100
-Subject: [Buildroot] Which u-boot/buildroot version for ppc8272?
-In-Reply-To: <loom.20090106T043218-43@post.gmane.org> (Daniel Ng's message of
-	"Tue\, 6 Jan 2009 04\:33\:45 +0000 \(UTC\)")
-References: <loom.20090106T043218-43@post.gmane.org>
-Message-ID: <87ljtovpem.fsf@macbook.be.48ers.dk>
+From: Faye <faye2040@gmail.com>
+Date: Tue, 6 Jan 2009 17:22:43 +0800
+Subject: [Buildroot] I do need make rootclean install
+Message-ID: <fe1063720901060122t1b18525fx2400279632734456@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Daniel" == Daniel Ng <daniel_ng11@lycos.com> writes:
+Dear all
 
- Daniel> Hi,
- Daniel> Which daily snapshot version of buildroot would people recommend for a PPC 
- Daniel> 8272-based (603e core) board?
+I noticed that there is a strange thing happened.
+When I recompile kernel more than once or twice,
+sometimes the final root fs ramdisk will grow larger and larger
+even I do not change anything specially in linux26-menuconifg.
 
-The latest.
+Thus, I usually try to rebuild everything from beginning to
+ensure that this never occurs.
 
- Daniel> I just tried yesterday's (buildroot-20090105.tar.tar) buildroot snapshot and 
- Daniel> it failed to build-
+Hence, why not giving an make option of "rootclean" and/or "rootbuild" !?
 
- Daniel> make[1]: *** No rule to make target `_config'.  Stop.
- Daniel> make[1]: Leaving directory 
- Daniel> `/home/dng/buildroot2009/buildroot/project_build_powerpc/uclibc/u-boot-2009.01-
- Daniel> rc1'
- Daniel> make: *** [/home/dng/buildroot2009/buildroot/project_build_powerpc/uclibc/u-
- Daniel> boot-2009.01-rc1/.configured] Error 2
+I searched the archive of mailing list and do find somebody once
+propose such idea.
 
-Yes, u-boot recently broke. I fixed it up yesterday and it builds for
-me for a 603e (83xx).
+So nobody encounters the similar issue as I met? :-( Strangely.
 
--- 
-Bye, Peter Korsgaard
+Anthony
