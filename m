@@ -1,47 +1,51 @@
-From: Thomas Lundquist <lists@zelow.no>
-Date: Tue, 6 Jan 2009 19:32:43 +0100
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 06 Jan 2009 19:33:59 +0100
 Subject: [Buildroot] Buildroot maintainer and stable releases
-In-Reply-To: <87aba4pj4w.fsf@macbook.be.48ers.dk>
+In-Reply-To: <d6cda7730901061022v3866b298y547235a57535d009@mail.gmail.com>
+	("Thiago A. =?utf-8?Q?Corr=C3=AAa=22's?= message of "Tue\, 6 Jan 2009
+	16\:22\:17 -0200")
 References: <87prj1v4dy.fsf@macbook.be.48ers.dk>
-	<20090106140140.GA22854@zelow.no>
-	<87aba4pj4w.fsf@macbook.be.48ers.dk>
-Message-ID: <20090106183243.GA28479@zelow.no>
+	<d6cda7730901061022v3866b298y547235a57535d009@mail.gmail.com>
+Message-ID: <877i58nv1k.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jan 06, 2009 at 04:08:15PM +0100, Peter Korsgaard wrote:
-> 
->  Thomas> Should we have some arch_testconfig as we have defconfigs?
->  Thomas> First start with a simple config then add more.
-> 
-> Maybe. I would just start with the rm .config; make menuconf, select
-> arch, save; make
+>>>>> "Thiago" == Thiago A Corr?a <thiago.correa@gmail.com> writes:
 
-It's a start of course but is the resulting .config a good config or just 
-more or less random?
+Hi,
 
->  Thomas> This has to be handles by a defined set of test cases based
->  Thomas> on more or less generic HW, like evaluation kits.
-> 
-> Or qemu.
+ >> I offer to do something about both: Take over maintainership and get
+ >> atual stable releases out the door (if Erik and the other developers
+ >> agree).
 
-True.
+ Thiago> I for one welcome our new maintainer overlord.
+ Thiago> Seriously, for what it's worth, you have my support.
 
->  Thomas> (BTW; WCHAR and LOCALE OFF is NOT a special case, it should
->  Thomas> be default.  In my view, also LARGEFILE.)
-> 
-> You mean default on? They currently default to off, simply because of
-> their size impact.
+Great, thanks.
 
-Default OFF. I haven't messed with g++ lately but it had a tendency 
-to not work without WCHAR ON. It may be back in 3.X days though.
+ Thiago> AVR32 has been recently broken (again). I would much prefer
+ Thiago> that changes were reverted (termporarily or not) and have
+ Thiago> AVR32 in this "release" rather than deem it BROKEN.
 
-LARGEFILE set to off is another option I'd like to have as a test 
-case but I have a slight feeling that will hinder a release 
-for quite some time..
+What changes are those exactly?
 
+ Thiago> Maybe we could get a buildbot going. Then we can let many of the
+ Thiago> developers/uses here contribute cpu cycle to build tests.
 
-Thomas.
+Yes, I have been pondering that as well. I have a buildbot running at
+work for the platforms we're using with good results, but it's a
+question about coming up with varying enough configs to get good test
+coverage.
+
+ Thiago> The problem with qemu is that it will only cover some
+ Thiago> platforms that it supports, and unfortunally for me, it
+ Thiago> doesn't support AVR32 :(
+
+Sure, if you have access to suitable hw, then that's better than qemu,
+but if not, then qemu is nice for the platforms it support.
+
+-- 
+Bye, Peter Korsgaard
