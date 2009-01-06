@@ -1,120 +1,77 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 06 Jan 2009 13:44:55 +0100
-Subject: [Buildroot] Buildroot maintainer and stable releases
-In-Reply-To: <1231243376.32308.52.camel@elrond.atmel.com> (Ulf Samuelsson's
-	message of "Tue\, 06 Jan 2009 13\:02\:56 +0100")
-References: <87prj1v4dy.fsf@macbook.be.48ers.dk>
-	<1231243376.32308.52.camel@elrond.atmel.com>
-Message-ID: <87vdsssiwo.fsf@macbook.be.48ers.dk>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Tue, 06 Jan 2009 13:50:36 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/target/u-boot
+In-Reply-To: <87y6xpv7fl.fsf@macbook.be.48ers.dk>
+References: <20090105161237.034D977404@busybox.osuosl.org>
+	<1231179121.8886.225.camel@linux-yrgm.site>
+	<87y6xpv7fl.fsf@macbook.be.48ers.dk>
+Message-ID: <1231246236.32308.68.camel@elrond.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
+m?n 2009-01-05 klockan 21:12 +0100 skrev Peter Korsgaard:
+> >>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
+> 
+> Hi,
+> 
+>  Ulf> The "complex" file name is needed, unless you only
+>  Ulf> work with a single board.
+> 
+> I don't get it - Isn't that why we have binaries/<project>? 
 
-Hi,
+YOu copy things to binaries/PROJECT to have a single directory
+which you can compress, but if you copy the stuff to
+the tftp directory then you have a mess.
+You have to manually rename this.
 
- >> What is the plan? Getting the first release out is always the hardest,
- >> so I would on purpose aim low for the first release and get it out
- >> soon (February). The target is to get all architectures to build (and
- >> run where hw is available for test) using the default toolchain config
- >> and busybox, anything else is just a bonus. I will put out the first
- >> release candidate early next week, so from then on please don't add
- >> anything else than bugfixes until the release it out. I believe in
- >> time based releases, so any architectures that we cannot fix in time
- >> will simply be disabled in kconfig (E.G. depend on BROKEN).
+> 
+> Even so,
+> isn't that the same problem with the other files? (file system images,
+> kernels)?
 
- Ulf> This is a little bit too loose.
- Ulf> What is the "default toolchain config?".
+The kernel is already doing this in the "advanced" makefile.
 
-The default one - E.G.:
+The rootfs should be doing it. and in this case PROJECT Is definitely
+the right one to use.
 
-rm .config; make menuconfig, select arch, save config, make
+>  Ulf> We obviously need to find  a way that does not break the build of
+>  Ulf> course.
+> 
+>  Ulf> Many targets define BR2_BOARD_NAME in their Config.in's
+>  Ulf> and it may make sense to have a common BR2_BOARD_NAME
+>  Ulf> Then it will be always be defined.
+>  Ulf> Default to "uclibc" is probably OK.
+> 
+> Isn't that what we have BR2_PROJECT for?
+> 
 
- Ulf> I can see that this would affect the AVR32 where
- Ulf> the patches are still to be introduced into gcc and binutils.
- Ulf> (They are there in uClibc right now).
 
-Sorry, I don't know anything about avr32. It's my opinion that we have
-too much special case handling for avr32/at91 in buildroot, and that
-it's causing problems for the users + friction between developers
-(E.G. see the recent openssl breakage)
+Yes and no,
 
-But ok, that's the situation as it is today. My understanding is that
-most of those patches are (slowly) progressing upstream.
+You can use BR2_PROJECT, but if you:
 
-Are you saying that the default config for avr32 doesn't build?
+make XXXX_config 
+when building u-boot-<VERSION>, it also makes sense to name the binary
 
-From talking with HcE on IRC, it seems like the Atmel fork of
-buildroot is the recommended solution for avr32 users anyway.
+<XXXX>-u-boot-<VERSION>-<DATE>.bin
 
- Ulf> You have complained about size of patches, and 
- Ulf> that is why there is a prepatched toolchain for AVR32.
- Ulf> If that is not considered to be OK, then the several
- Ulf> MBytes of patches has to be introduced into the trunk.
+because regardless of which project you are building,
+the binary should end up the same.
 
-It's not the size in bytes as such, it's the special casing and
-(effectively) black box patches. Even when you test your changes on
-multiple archs there's a fairly big change that you break stuff for
-avr32/at91, or that you guys break it for the other archs. The same
-with moving packages to new versions or removing old versions, you
-cannot expect other people to forward port those arch specific
-patches.
+<DATE> is there to give you some kind of revision information
+so you do not overwrite older working results.
+It is not perfect, but I think it is good enough.
 
- Ulf> If you by default toolchain config, means that each architecture
- Ulf> has its own toolchain versions, but the parameters like 
- Ulf> enabling WCHAR etc are standardized, then this is fine with me.
+If you are building several projects where the U-Boot differs
+I.E: if a header file is first copied to "include/configs" 
+then it would make sense to call it:
 
-Whatever kconfig selects as default (which is Linux 2.6.28 / uclibc
-0.9.30 / binutils 2.19 / gcc 4.2.4) for everything else than avr32 and
-nios.
+?<PROJECT>-u-boot-<VERSION>-<DATE>.bin
 
-We should probably make gcc 4.3.2 default before the release.
+The difference is minor, so I guess we go with PROJECT for now.
 
- Ulf> As I pointed out before, it is a source of problems
- Ulf> that the toolchain and the rootfs is build in a single make.
- Ulf> I think they should be separated.
-
-Ok, there's already some support for that - But that should NOT be a
-showstopper for a release. We tried it before, if we go down that hole
-then there won't be a release in the forseeable future.
-
- Ulf> I believe a distribution needs use a single version
- Ulf> of each package and we should focusing to get that to work for
- Ulf> as many architectures as possible.
-
-Agree.
-
- Ulf> The implementation needs to be discussed.
- Ulf> Instead of having a common "BROKEN" dependency, I think 
- Ulf> it would be good if each package depend on an <package>_ENABLE. 
-
-But why? That still leads to way too many combinations. Why not just
-use the same package version for all archs?
-
- Ulf> For Linux, there are two different ways of building it.
- Ulf> The simple and the advanced configuration.
- Ulf> I am fine with restricting kernel choices for the
- Ulf> simple configuration and to use that as a default.
-
-I'll leave all this discussion about distributions for after the
-release, then we can bring it up again - OK?
-
- Ulf> The distribution concept will not work, unless we mirror
- Ulf> packages on a server to avoid the build beeing broken
- Ulf> by disappearing packages.
-
-Yes, that's also on my todo list.
-
- >> Let me know what you think.
- >> 
-
- Ulf> I think we need to discuss the architecture on how things are to
- Ulf> be done
-
-Sure, but after the release please.
-
--- 
-Bye, Peter Korsgaard
+BR
+Ulf Samuelsson
