@@ -1,31 +1,18 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Tue,  6 Jan 2009 16:42:15 +0000 (UTC)
-Subject: [Buildroot] svn commit:
-	trunk/buildroot/target/device/Atmel/at91sam9260dfc
-Message-ID: <20090106164215.E6AA876BFE@busybox.osuosl.org>
+From: sjhill at realitydiluted.com <sjhill@realitydiluted.com>
+Date: Tue, 6 Jan 2009 10:37:58 -0600
+Subject: [Buildroot] Recent u-boot patches to buildroot...
+Message-ID: <20090106163758.GA15009@real.realitydiluted.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2009-01-06 16:42:15 +0000 (Tue, 06 Jan 2009)
-New Revision: 24710
+Ulf,
 
-Log:
-Update at91sam9260 Board Support Package to linux-2.6.28
+I am trying to understand where these patches for u-boot are coming
+from. Are they from the u-boot mailing list or are they specific to
+Atmel platforms? If they are specific to Atmel platforms, they should
+not be applied by default to anyone building u-boot. Is that the case?
 
-Added:
-   trunk/buildroot/target/device/Atmel/at91sam9260dfc/at91sam9260dfc-linux-2.6.28.config
-
-Modified:
-   trunk/buildroot/target/device/Atmel/at91sam9260dfc/at91sam9260dfc_defconfig
-
-
-Changeset:
-
-Sorry, the patch is too large to include (1809 lines).
-Please use ViewCVS to see it!
-
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=24710
+-Steve
