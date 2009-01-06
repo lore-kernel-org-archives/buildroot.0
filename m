@@ -1,115 +1,56 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 06 Jan 2009 16:08:15 +0100
-Subject: [Buildroot] Buildroot maintainer and stable releases
-In-Reply-To: <20090106140140.GA22854@zelow.no> (Thomas Lundquist's message of
-	"Tue\, 6 Jan 2009 15\:01\:41 +0100")
-References: <87prj1v4dy.fsf@macbook.be.48ers.dk>
-	<20090106140140.GA22854@zelow.no>
-Message-ID: <87aba4pj4w.fsf@macbook.be.48ers.dk>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Tue, 06 Jan 2009 16:16:47 +0100
+Subject: [Buildroot] svn
+	commit:	trunk/buildroot/target/u-boot/2009.01-rc1
+In-Reply-To: <87mye4qz4d.fsf@macbook.be.48ers.dk>
+References: <20090103000614.1DC5F769FA@busybox.osuosl.org>
+	<87mye4qz4d.fsf@macbook.be.48ers.dk>
+Message-ID: <1231255007.32308.107.camel@elrond.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Lundquist <lists@zelow.no> writes:
+tis 2009-01-06 klockan 15:37 +0100 skrev Peter Korsgaard:
+> >>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+> 
+>  ulf> Author: ulf
+>  ulf> Date: 2009-01-03 00:06:13 +0000 (Sat, 03 Jan 2009)
+>  ulf> New Revision: 24658
+> 
 
-Hi,
+I discovered I made a mistake and checked in the
+1.3.4 patch so it will be updated later today
 
- Thomas> On Mon, Jan 05, 2009 at 10:18:01PM +0100, Peter Korsgaard wrote:
- >> 
- >> I offer to do something about both: Take over maintainership and get
- >> atual stable releases out the door (if Erik and the other developers
- >> agree).
+The original is part of the atmel 1.3.4 patch freom www.linux4sam.org
 
- Thomas> The first question then is what kind of maintainer you mean. 
+?There will be some other fixes due to the CFG->CONFIG(_SYS)
+I have tested the new patches to build for all possible AT91 targets
+in buildroot as well as for a PowerPC target.
 
- Thomas> The One that makes releases or The One that maintains
- Thomas> coherency and vetoes big changes?
+Generally on patches to u-boot:
+The AT91 team got zero response from the U-Boot during 2003-2005
+so they dropped all attempts to submit new stuff.
+After it was decided to split the responsibilities up
+to several people, the submission process has improved a lot, 
+so the AT91 team started to be interested again last year.
+The board support for AT91 processors has improved.
+The AT91RM9200 has less priority on support from the product line
+and has therefore not been submitted, even if patches
+has been available for a long time.
 
-Primarily the first, but also the 2nd where needed. I think we have
-done relatively good so far without a maintainer, so I expect the 2nd
-part to be fairly infrequent.
+Currently the merge window is closed, but I expect
+to submit the board support patches and some of the
+new commands end of January.
 
- >> What is the plan? Getting the first release out is always the
- >> hardest, so I would on purpose aim low for the first release and
- >> get it out soon (February).
-
- Thomas> That *is* quick.
-
-It is, but why delay it any longer? People are using current svn
-anyway, so we might as well make a release of it.
-
- >> The target is to get all architectures to build (and
- >> run where hw is available for test) using the default toolchain config
- >> and busybox, anything else is just a bonus.
-
- Thomas> Should we have some arch_testconfig as we have defconfigs?
- Thomas> First start with a simple config then add more.
-
-Maybe. I would just start with the rm .config; make menuconf, select
-arch, save; make
-
- >> I will put out the first
- >> release candidate early next week, so from then on please don't add
- >> anything else than bugfixes until the release it out. I believe in
- >> time based releases, so any architectures that we cannot fix in time
- >> will simply be disabled in kconfig (E.G. depend on BROKEN).
-
- Thomas> BROKEN or ROTTEN or something that will alert future
- Thomas> maintainer-wannabees.
-
-Exactly.
-
- >> The big issue with buildroot quality control is the mindblowing
- >> number of configuration combinations and specialized hardware
- >> needed to test.
-
- Thomas> This has to be handles by a defined set of test cases based
- Thomas> on more or less generic HW, like evaluation kits.
-
-Or qemu.
-
- Thomas> And also devices actively maintained by someone wanting it to
- Thomas> be a part of the test collection.
-
- Thomas> The odd cases have to be taken care of by ordinary bug tickets.
-
- Thomas> (BTW; WCHAR and LOCALE OFF is NOT a special case, it should
- Thomas> be default.  In my view, also LARGEFILE.)
-
-You mean default on? They currently default to off, simply because of
-their size impact.
-
- >> I am therefore convinced we need to leverage qemu and
- >> agressively deprecate legacy versions / packages + actively work with
- >> upstream to keep the number of patches low. 
-
- Thomas> I am afraid we need more than one version of the kernel (Ulf
- Thomas> wants is also) and I guess also of most of the toolchain but
- Thomas> the packages/ is another story.
-
-Maybe, but we can surely do better than todays' forest.
+The factory default command relies heavily on
+the buildroot configuration, so it may make less
+sense to include that in the main u-boot trunk.
 
 
- Thomas> If we do releases we should be able to cut down on the amount
- Thomas> of versions in the toolchain aswell, since comppanies should
- Thomas> freeze on a version if they plan to use it for years as Ulf
- Thomas> mentioned.
-
-Exactly.
-
- >> I think our users would
- >> also be happier with a less ambitious project that wouldn't break left
- >> and right, instead of the current situation.
-
- Thomas> Agreed.
-
- Thomas> First thing I guess is to agree that we want this and 
- Thomas> then to make test criterias.
-
- Thomas> After that, lay down which big changes we want and distribute 
- Thomas> maintainer responsibilities.
-
--- 
-Bye, Peter Korsgaard
+>  ulf> Log:
+>  ulf> Add support for at91sam9g20 to U-Boot
+> 
+> What's the upstream status of this patch?
+> 
