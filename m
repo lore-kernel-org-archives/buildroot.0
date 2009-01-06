@@ -1,47 +1,70 @@
 From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Tue, 06 Jan 2009 20:02:09 +0100
+Date: Tue, 06 Jan 2009 20:09:30 +0100
 Subject: [Buildroot] Buildroot maintainer and stable releases
-In-Reply-To: <d6cda7730901061022v3866b298y547235a57535d009@mail.gmail.com>
+In-Reply-To: <873afwnu6n.fsf@macbook.be.48ers.dk>
 References: <87prj1v4dy.fsf@macbook.be.48ers.dk>
-	<d6cda7730901061022v3866b298y547235a57535d009@mail.gmail.com>
-Message-ID: <1231268529.32308.222.camel@elrond.atmel.com>
+	<20090106140140.GA22854@zelow.no> <87aba4pj4w.fsf@macbook.be.48ers.dk>
+	<20090106183243.GA28479@zelow.no> <873afwnu6n.fsf@macbook.be.48ers.dk>
+Message-ID: <1231268970.32308.230.camel@elrond.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-tis 2009-01-06 klockan 16:22 -0200 skrev Thiago A. Corr?a:
+tis 2009-01-06 klockan 19:52 +0100 skrev Peter Korsgaard:
+> >>>>> "Thomas" == Thomas Lundquist <lists@zelow.no> writes:
+> 
 > Hi,
 > 
-> On Mon, Jan 5, 2009 at 7:18 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
-> >
-> > I offer to do something about both: Take over maintainership and get
-> > atual stable releases out the door (if Erik and the other developers
-> > agree).
+>  >> Maybe. I would just start with the rm .config; make menuconf, select
+>  >> arch, save; make
 > 
-> I for one welcome our new maintainer overlord.
-> Seriously, for what it's worth, you have my support.
+>  Thomas> It's a start of course but is the resulting .config a good
+>  Thomas> config or just more or less random?
 > 
-> > What is the plan? Getting the first release out is always the hardest,
-> > so I would on purpose aim low for the first release and get it out
-> > soon (February). The target is to get all architectures to build (and
-> > run where hw is available for test) using the default toolchain config
-> > and busybox, anything else is just a bonus.
+> Hopefully good - It's the default config of everything, just like any
+> new user would see it. If anything is not sensible then we should
+> change the defaults.
 > 
+>  Thomas> (BTW; WCHAR and LOCALE OFF is NOT a special case, it should
+>  Thomas> be default.  In my view, also LARGEFILE.)
+>  >> 
+>  >> You mean default on? They currently default to off, simply because of
+>  >> their size impact.
+> 
+>  Thomas> Default OFF. I haven't messed with g++ lately but it had a tendency 
+>  Thomas> to not work without WCHAR ON. It may be back in 3.X days though.
+> 
+> It work for me here on PPC (gcc 4.2.x / 4.3.x).
+> 
+>  Thomas> LARGEFILE set to off is another option I'd like to have as a test 
+>  Thomas> case but I have a slight feeling that will hinder a release 
+>  Thomas> for quite some time..
+> 
+> WCHAR, LOCALE and LARGEFILE all defaults to off, so that's imho a
+> pretty well tested.
 
-You have not said anything so far, on how you would like
-to support distributions.
+I have been running with them on for a long time, since
+when I last tried them OFF, there were a lot of packages
+which did seemed to require at least WCHAR to build properly for ARM.
 
-If you plan to take the current structure and just 
-start to remove/deprecate and label with BROKEN
-then I am afraid that this will cause a lot of problems.
+There are nice advantages if these packages could be made
+to run without WHCAR of course.
+
+A typical issue that pops up from time to time is that
+people build the toolchain with a certain configuration
+and then finds that they need a different configurtion
+to build a package, and do not realize that they 
+need to rebuild the toolchain for the changes to take effect.
+
+It would be good to resolve this, and this is why I have
+proposed to separate toolchain build.
+With SYSROOT in gcc-4 there is really no reason 
+to induce people to rebuild the toolchain,
+and we might want to support downloading a binary toolchain as well.
 
 
-We should also replacing svn with git.
-
-
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Peter Korsgaard <jacmet@uclibc.org>,
+BR
+Ulf
