@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Tue,  6 Jan 2009 23:00:24 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
-Message-ID: <20090106230025.0B75476CB5@busybox.osuosl.org>
+Date: Tue,  6 Jan 2009 23:02:52 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Atmel/atngw100
+Message-ID: <20090106230252.BC55376CB5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,27 +9,22 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2009-01-06 23:00:24 +0000 (Tue, 06 Jan 2009)
-New Revision: 24713
+Date: 2009-01-06 23:02:50 +0000 (Tue, 06 Jan 2009)
+New Revision: 24714
 
 Log:
-Remove incorrrect dependency on latest minor kernel patch
+Update atngw100 configs, needs patch from Atmel fork for strace to build correctly, otherwise disable strace
+
+Added:
+   trunk/buildroot/target/device/Atmel/atngw100/atngw100-linux-2.6.27.10.config
 
 Modified:
-   trunk/buildroot/target/linux/Config.in.advanced
+   trunk/buildroot/target/device/Atmel/atngw100/atngw100_defconfig
 
 
 Changeset:
-Modified: trunk/buildroot/target/linux/Config.in.advanced
-===================================================================
---- trunk/buildroot/target/linux/Config.in.advanced	2009-01-06 21:42:43 UTC (rev 24712)
-+++ trunk/buildroot/target/linux/Config.in.advanced	2009-01-06 23:00:24 UTC (rev 24713)
-@@ -373,7 +373,7 @@
- 	default "2.6.21.7" if BR2_LINUX_2_6_21_7
- 	default "2.6.22.1" if BR2_LINUX_2_6_22_1
- 	default "2.6.22.10" if BR2_LINUX_2_6_22_10
--	default "$(BR2_KERNEL_CURRENT_VERSION)"if BR2_LINUX_2_6_STABLE || BR2_KERNEL_ADD_LATEST_MINORPATCH
-+	default "$(BR2_KERNEL_CURRENT_VERSION)"if BR2_LINUX_2_6_STABLE
- 	default $(BR2_CUSTOM_LINUX26_VERSION) if BR2_LINUX26_CUSTOM
- 
- menu "Linux Kernel Configuration"
+
+Sorry, the patch is too large to include (2005 lines).
+Please use ViewCVS to see it!
+
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=24714
