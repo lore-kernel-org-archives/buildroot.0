@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Tue,  6 Jan 2009 16:24:43 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/u-boot/2009.01-rc1
-Message-ID: <20090106162443.AFDE376BFE@busybox.osuosl.org>
+Date: Tue,  6 Jan 2009 16:30:32 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/docs
+Message-ID: <20090106163032.9B7B176BFE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,149 +9,274 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2009-01-06 16:24:42 +0000 (Tue, 06 Jan 2009)
-New Revision: 24706
+Date: 2009-01-06 16:30:32 +0000 (Tue, 06 Jan 2009)
+New Revision: 24707
 
 Log:
-Add CONFIGs for new commands to at91 parts
+Add documentation for u-boot patches to 2009.01-rc1
 
 Added:
-   trunk/buildroot/target/u-boot/2009.01-rc1/u-boot-2009.01-rc1-013-configs.patch
+   trunk/buildroot/docs/U-boot.html
 
 
 Changeset:
-Added: trunk/buildroot/target/u-boot/2009.01-rc1/u-boot-2009.01-rc1-013-configs.patch
+Added: trunk/buildroot/docs/U-boot.html
 ===================================================================
---- trunk/buildroot/target/u-boot/2009.01-rc1/u-boot-2009.01-rc1-013-configs.patch	                        (rev 0)
-+++ trunk/buildroot/target/u-boot/2009.01-rc1/u-boot-2009.01-rc1-013-configs.patch	2009-01-06 16:24:42 UTC (rev 24706)
-@@ -0,0 +1,130 @@
-+diff -urN u-boot-2009.01-0rig//include/configs/at91cap9adk.h u-boot-2009.01/include/configs/at91cap9adk.h
-+--- u-boot-2009.01-0rig//include/configs/at91cap9adk.h	2008-12-16 23:48:27.000000000 +0100
-++++ u-boot-2009.01/include/configs/at91cap9adk.h	2009-01-04 00:43:58.000000000 +0100
-+@@ -69,7 +69,9 @@
-+ #define CONFIG_ATMEL_LCD		1
-+ #define CONFIG_ATMEL_LCD_BGR555		1
-+ #define CONFIG_SYS_CONSOLE_IS_IN_ENV		1
-+-
-++#define CONFIG_CMD_FACTORY
-++#define CONFIG_CMD_LED
-++#define CONFIG_COLOURED_LED
-+ #define CONFIG_BOOTDELAY	3
-+ 
-+ /*
-+diff -urN u-boot-2009.01-0rig//include/configs/at91rm9200df.h u-boot-2009.01/include/configs/at91rm9200df.h
-+--- u-boot-2009.01-0rig//include/configs/at91rm9200df.h	2009-01-02 17:37:43.000000000 +0100
-++++ u-boot-2009.01/include/configs/at91rm9200df.h	2009-01-04 00:43:33.000000000 +0100
-+@@ -123,6 +123,9 @@
-+ #define CONFIG_CMD_DHCP
-+ #define CONFIG_CMD_MII
-+ #define CONFIG_CMD_NAND
-++#define CONFIG_CMD_FACTORY
-++#define CONFIG_CMD_LED
-++#define CONFIG_COLOURED_LED
-+ #define CONFIG_CMD_AT91_SPIMUX
-+ #define CONFIG_CMD_ETHINIT
-+ 
-+diff -urN u-boot-2009.01-0rig//include/configs/at91rm9200dk_df.h u-boot-2009.01/include/configs/at91rm9200dk_df.h
-+--- u-boot-2009.01-0rig//include/configs/at91rm9200dk_df.h	2009-01-02 10:03:11.000000000 +0100
-++++ u-boot-2009.01/include/configs/at91rm9200dk_df.h	2009-01-04 00:42:52.000000000 +0100
-+@@ -122,7 +122,11 @@
-+ #define CONFIG_CMD_DHCP
-+ #define CONFIG_CMD_MII
-+ #define CONFIG_CMD_NAND
-++#define CONFIG_CMD_FACTORY
-++#define CONFIG_CMD_LED
-++#define CONFIG_COLOURED_LED
-+ #define CONFIG_CMD_AT91_SPIMUX
-++#define CONFIG_CMD_ETHINIT
-+ 
-+ #define CONFIG_NAND_LEGACY
-+ 
-+diff -urN u-boot-2009.01-0rig//include/configs/at91rm9200dk.h u-boot-2009.01/include/configs/at91rm9200dk.h
-+--- u-boot-2009.01-0rig//include/configs/at91rm9200dk.h	2009-01-02 10:03:11.000000000 +0100
-++++ u-boot-2009.01/include/configs/at91rm9200dk.h	2009-01-04 00:43:15.000000000 +0100
-+@@ -120,7 +120,11 @@
-+ #define CONFIG_CMD_DHCP
-+ #define CONFIG_CMD_MII
-+ #define CONFIG_CMD_NAND
-++#define CONFIG_CMD_FACTORY
-++#define CONFIG_CMD_LED
-++#define CONFIG_COLOURED_LED
-+ #define CONFIG_CMD_AT91_SPIMUX
-++#define CONFIG_CMD_ETHINIT
-+ 
-+ #define CONFIG_NAND_LEGACY
-+ 
-+diff -urN u-boot-2009.01-0rig//include/configs/at91rm9200ek.h u-boot-2009.01/include/configs/at91rm9200ek.h
-+--- u-boot-2009.01-0rig//include/configs/at91rm9200ek.h	2009-01-02 17:37:43.000000000 +0100
-++++ u-boot-2009.01/include/configs/at91rm9200ek.h	2009-01-04 00:42:35.000000000 +0100
-+@@ -121,9 +121,11 @@
-+ #define CONFIG_CMD_DHCP
-+ #define CONFIG_CMD_MII
-+ #define CONFIG_CMD_NAND
-++#define CONFIG_CMD_FACTORY
-++#define CONFIG_CMD_LED
-++#define CONFIG_COLOURED_LED
-+ #define CONFIG_CMD_AT91_SPIMUX
-+ #define CONFIG_CMD_ETHINIT
-+-
-+ #define CONFIG_NAND_LEGACY
-+ 
-+ #define CONFIG_SYS_MAX_NAND_DEVICE	1	/* Max number of NAND devices		*/
-+diff -urN u-boot-2009.01-0rig//include/configs/at91sam9260ek.h u-boot-2009.01/include/configs/at91sam9260ek.h
-+--- u-boot-2009.01-0rig//include/configs/at91sam9260ek.h	2008-12-16 23:48:27.000000000 +0100
-++++ u-boot-2009.01/include/configs/at91sam9260ek.h	2009-01-04 00:41:56.000000000 +0100
-+@@ -74,10 +74,13 @@
-+ #include <config_cmd_default.h>
-+ #undef CONFIG_CMD_BDI
-+ #undef CONFIG_CMD_IMI
-+-#undef CONFIG_CMD_AUTOSCRIPT
-++#define CONFIG_CMD_AUTOSCRIPT
-+ #undef CONFIG_CMD_FPGA
-+ #undef CONFIG_CMD_LOADS
-+ #undef CONFIG_CMD_IMLS
-++#define CONFIG_CMD_FACTORY
-++#define CONFIG_CMD_LED
-++#define CONFIG_COLOURED_LED
-+ 
-+ #define CONFIG_CMD_PING		1
-+ #define CONFIG_CMD_DHCP		1
-+diff -urN u-boot-2009.01-0rig//include/configs/at91sam9261ek.h u-boot-2009.01/include/configs/at91sam9261ek.h
-+--- u-boot-2009.01-0rig//include/configs/at91sam9261ek.h	2008-12-16 23:48:27.000000000 +0100
-++++ u-boot-2009.01/include/configs/at91sam9261ek.h	2009-01-04 00:44:11.000000000 +0100
-+@@ -68,6 +68,9 @@
-+ #define CONFIG_ATMEL_LCD		1
-+ #define CONFIG_ATMEL_LCD_BGR555		1
-+ #define CONFIG_SYS_CONSOLE_IS_IN_ENV		1
-++#define CONFIG_CMD_FACTORY
-++#define CONFIG_CMD_LED
-++#define CONFIG_COLOURED_LED
-+ 
-+ #define CONFIG_BOOTDELAY	3
-+ 
-+diff -urN u-boot-2009.01-0rig//include/configs/at91sam9263ek.h u-boot-2009.01/include/configs/at91sam9263ek.h
-+--- u-boot-2009.01-0rig//include/configs/at91sam9263ek.h	2008-12-16 23:48:27.000000000 +0100
-++++ u-boot-2009.01/include/configs/at91sam9263ek.h	2009-01-04 00:44:34.000000000 +0100
-+@@ -69,6 +69,9 @@
-+ #define CONFIG_ATMEL_LCD		1
-+ #define CONFIG_ATMEL_LCD_BGR555		1
-+ #define CONFIG_SYS_CONSOLE_IS_IN_ENV		1
-++#define CONFIG_CMD_FACTORY
-++#define CONFIG_CMD_LED
-++#define CONFIG_COLOURED_LED
-+ 
-+ #define CONFIG_BOOTDELAY	3
-+ 
-+diff -urN u-boot-2009.01-0rig//include/configs/at91sam9rlek.h u-boot-2009.01/include/configs/at91sam9rlek.h
-+--- u-boot-2009.01-0rig//include/configs/at91sam9rlek.h	2008-12-16 23:48:27.000000000 +0100
-++++ u-boot-2009.01/include/configs/at91sam9rlek.h	2009-01-04 00:44:54.000000000 +0100
-+@@ -68,6 +68,9 @@
-+ #define CONFIG_ATMEL_LCD		1
-+ #define CONFIG_ATMEL_LCD_RGB565		1
-+ #define CONFIG_SYS_CONSOLE_IS_IN_ENV		1
-++#define CONFIG_CMD_FACTORY
-++#define CONFIG_CMD_LED
-++#define CONFIG_COLOURED_LED
-+ 
-+ #define CONFIG_BOOTDELAY	3
-+ 
+--- trunk/buildroot/docs/U-boot.html	                        (rev 0)
++++ trunk/buildroot/docs/U-boot.html	2009-01-06 16:30:32 UTC (rev 24707)
+@@ -0,0 +1,255 @@
++<?xml version="1.0" encoding="iso-8859-1"?>
++<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
++	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
++
++<html xmlns="http://www.w3.org/1999/xhtml">
++<head>
++	<title>Buildroot - U-boot extensions in 2009.01-rc1</title>
++	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
++	<link rel="stylesheet" type="text/css" href="stylesheet.css" />
++</head>
++
++<body>
++	<div class="main">
++	<div class="titre">
++	<a name="top" id="top"></a>
++	<h1>U-boot extensions in 2009.01-rc1</h1>
++	</div>
++
++	<p><a href="http://buildroot.uclibc.org/">U-Boot</a>
++	usage and documentation by Ulf Samuelsson.
++	</p>
++
++	<p><small>$LastChangedDate: 2008-12-16 10:00:11 +0100 (tis, 16 dec 2008) $</small></p>
++	<ul>
++		<li><a href="#about">About U-Boot</a></li>
++		<li><a href="#at91rm9200dk">Board Support for AT91RM9200DK</a></li>
++		<li><a href="#at91rm9200ek">Board Support for AT91RM9200EK</a></li>
++		<li><a href="#at91sam9g20ek">Board Support for AT91SAM9G20EK</a></li>
++		<li><a href="#Minicom extensions">X-Modem/Raw extensions to minicom</a></li>
++		<li><a href="#cmd_factory">New Command: factory</a></li>
++		<li><a href="#cmd_os">New Command: os</a></li>
++		<li><a href="#cmd_fs">New Command: fs</a></li>
++		<li><a href="#cmd_setargs">New Command: setargs</a></li>
++		<li><a href="#cmd_led">New Command: led</a></li>
++		<li><a href="#cmd_mux">New Command: mux</a></li>
++		<li><a href="#cmd_ethinit">New Command: ethinit</a></li>
++		<li><a href="#environment">Special environment variables</a></li>
++	</ul>
++	<h2><a name="about" id="about"></a>About U-boot</h2>
++	<a href="#top"><small>[TOP]</small></a>
++
++	<p>
++	U-Boot is an open source bootloader ported to a multitude of processors.
++	See (<a href="http://www.denx.de/wiki/U-Boot/WebHome">U-Boot Home</a>)
++	for documentation for vanilla U-Boot. This document only describes
++	changes compared to the vanilla u-boot.
++	</p>
++
++	<h2><a name="at91rm9200dk" id="at91rm9200dk"></a>Board support for at91rm9200dk</h2>
++	<a href="#top"><small>[TOP]</small></a>
++
++	<p>
++	"at91rm9200dk" is updated to use a linux like API for gpio.
++	A new target "at91rm9200dk_df" is defined to support boot from dataflash.
++	</p>
++
++	<h2><a name="at91rm9200ek" id="at91rm9200ek"></a>Board support for at91rm9200ek</h2>
++	<a href="#top"><small>[TOP]</small></a>
++
++	<p>
++	The "at91rm9200ek" BSP supports booting from a parallel flash.
++	The "at91rm9200df" BSP supports a generic target booting from dataflash.
++	</p>
++
++	<h2><a name="#at91sam9g20ek" id="#at91sam9g20ek"></a>Board support for at91sam9g20ek</h2>
++	<a href="#top"><small>[TOP]</small></a>
++
++	<p>
++	The "at91sam9g20ek" target with dataflash(card) and NAND boot support.
++	</p>
++
++	<h2><a name="minicom_extensions" id="minicom_extensions"></a>Minicom extensions </h2>
++	<a href="#top"><small>[TOP]</small></a>
++
++	<p>
++	"sx-at91" is a reliable X-Modem application allowing download to the at91rm9200
++	based board
++	</p>
++	<p>
++	"raw-at91" is a download application which will download binary data using minicom.
++	Typically used to download an environment script.
++	</p>
++
++	<h2><a name="cmd_factory" id="cmd_factory"></a>New command: factory</h2>
++	<a href="#top"><small>[TOP]</small></a>
++
++	<p>
++	<h3><code>factory</code></h3>
++	</p>
++
++	<p>
++	"factory" will set a selected set of environment variables 
++	back to the compile time default. The following will give some
++	hints on capabilities, but is not yet complete.
++	</p>
++
++	<p>
++	It will generate a set of scripts which will facilitate downloading
++	the kernel and root file system using tftp and will also
++	add commands to store into and retrieve from flash
++	</p>
++
++	<h2><a name="cmd_os" id="cmd_os"></a>New command: os</h2>
++	<a href="#top"><small>[TOP]</small></a>
++
++	<p>
++	<h3><code>os<code></h3>
++	</p>
++	<p>
++	"os" computes a new name for the linux kernel
++	</p>
++
++	<h2><a name="cmd_fs" id="cmd_fs"></a>New command: fs</h2>
++	<a href="#top"><small>[TOP]</small></a>
++
++	<p>
++	<h3><code>fs<code></h3>
++	</p>
++	<p>
++	"fs" computes a new name for the file system
++	</p>
++
++	<h2><a name="cmd_setargs" id="cmd_setargs"></a>New command: setargs</h2>
++	<a href="#top"><small>[TOP]</small></a>
++	<p>
++	<h3><code>setargs<code></h3>
++	</p>
++	<p>
++	"setargs" will create new bootcmd/bootargs combination from
++	kernel name, filesystem name, and rootfs type.
++	</p>
++
++	<h2><a name="cmd_led" id="cmd_led"></a>New command: led</h2>
++	<a href="#top"><small>[TOP]</small></a>
++
++	<p>
++	<h3><code>led [green | yellow | red | all ]  [ on | off ]<code></h3>
++	</p>
++
++	<p>
++	"led" will turn on or off the specified (coloured) led
++	</p>
++
++	<h2><a name="cmd_mux" id="cmd_mux"></a>New command: mux</h2>
++	<a href="#top"><small>[TOP]</small></a>
++
++	<p>
++	<h3><code>mux [spi | mmc ]<code></h3>
++	</p>
++
++	<p>
++	"mux" will select how to use the flash card connector on the 
++	at91rm9200dk or at91rm9200ek
++	</p>
++
++	<h2><a name="cmd_ethinit" id="cmd_ethinit"></a>New command: ethinit</h2>
++	<a href="#top"><small>[TOP]</small></a>
++
++	<p>
++	<h3><code>ethinit<code></h3>
++	</p>
++
++	<p>
++	"ethinit" can be used to delay the boot of linux, until a valid network
++	connection has been established. This is useful if the machine is NFS mounting
++	the root file system and both this machine and the NFS server are powering up
++	simultaneously. The NFS server could take a lot longer to boot, and waiting
++	for this to boot may be neccessary for proper operation.
++	</p>
++
++	<h2><a name="environment" id="environment"></a>Special environment variables</h2>
++	<a href="#top"><small>[TOP]</small></a>
++
++	<p>
++	<h3><code>rd<code></h3>
++	</p>
++	<p>
++	rd contains the name of the current root file system
++	It is autmatically generated from <bold>ver</bold> and <bold>rd-1</bold>, <bold>rd-2</bold> etc.
++	The "fs-date" is added at the end.
++	</p>
++
++	<p>
++	<h3><code>ver<code></h3>
++	</p>
++	<p>
++	You can handle a number of different root fs by defining <code>ver</code>.
++	When running <code>fs</code> rd will be assigned from one of:
++	<ul><code>rd-1, rd2, rd-3 ...<code></ul>
++	</p>
++	<p>
++	By defining <code>ver</code> to a number you will
++	select the appropriate disk name 
++	</p>
++
++	<p>
++	<h3><code>fs-date<code></h3>
++	</p>
++	<p>
++	"date" part of the root file system name
++	</p>
++
++	<p>
++	<h3><code>linux<code></h3>
++	</p>
++	<p>
++	linux contains the name of the current kernel.
++	</p>
++	<p>
++	It is generated from several environment variables when <code>os</code> is run
++	</p>
++	<p>
++	A typical name would be "at91sam9263ek-linux-2.6.28-20090105.gz"
++	</p>
++
++	<p>
++	<h3><code>hostname<code></h3>
++	</p>
++	<p>
++	"name" part of the kernel file name
++	</p>
++
++	<p>
++	<h3><code>kernel-version<code></h3>
++	</p>
++	<p>
++	"version" part of the kernel file name
++	</p>
++
++	<p>
++	<h3><code>kernel-date<code></h3>
++	</p>
++	<p>
++	"date" part of the kernel file name
++	</p>
++
++	<p>
++	<h3><code>fstype [ ram | flash ]<code></h3>
++	<p>
++	You can have several file system types.
++	bootargs is created depending on fstype..
++	</p>
++
++	<a href="#top"><small>[TOP]</small></a>
++
++	</div>
++<!--
++	<a href="http://validator.w3.org/check?uri=referer"><img
++	border="0" height="31" width="88"
++	src="images/valid-html401.png"
++	alt="Valid HTML"></img></a>
++-->
++
++</body>
++</html>
