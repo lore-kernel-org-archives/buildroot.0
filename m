@@ -1,52 +1,33 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Tue, 06 Jan 2009 18:32:53 +0100
-Subject: [Buildroot] Recent u-boot patches to buildroot...
-In-Reply-To: <20090106163758.GA15009@real.realitydiluted.com>
-References: <20090106163758.GA15009@real.realitydiluted.com>
-Message-ID: <1231263173.32308.201.camel@elrond.atmel.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 06 Jan 2009 19:13:21 +0100
+Subject: [Buildroot] svn commit:
+	trunk/buildroot/target/u-boot/2009.01-rc1
+In-Reply-To: <1231262543.32308.189.camel@elrond.atmel.com> (Ulf Samuelsson's
+	message of "Tue\, 06 Jan 2009 18\:22\:23 +0100")
+References: <20090103000614.1DC5F769FA@busybox.osuosl.org>
+	<87mye4qz4d.fsf@macbook.be.48ers.dk>
+	<1231255007.32308.107.camel@elrond.atmel.com>
+	<874p0cpiau.fsf@macbook.be.48ers.dk>
+	<1231257412.32308.148.camel@elrond.atmel.com>
+	<87vdsso1bx.fsf@macbook.be.48ers.dk>
+	<1231262543.32308.189.camel@elrond.atmel.com>
+Message-ID: <87bpuknvzy.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-tis 2009-01-06 klockan 10:37 -0600 skrev sjhill at realitydiluted.com:
-> Ulf,
-> 
-> I am trying to understand where these patches for u-boot are coming
-> from. Are they from the u-boot mailing list or are they specific to
-> Atmel platforms? If they are specific to Atmel platforms, they should
-> not be applied by default to anyone building u-boot. Is that the case?
+>>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 
-Some of them are coming from the atmel AT91 specific u-boot.
-That is mainly board/atmel/* files
-and cpu/arm920t or arm/926ej-s files.
-as well as the include files.
+ Ulf> If you want to avoid cluttering the u-boot directory
+ Ulf> with patches, then it is of course a possibility
+ Ulf> to apply all patches and store the tarball on $(ATMEL_MIRROR)
+ Ulf> That will make the patches harder to maintain and 
+ Ulf> it will take longer to get them into mainline.
 
-For the commands, only the "mux" command is really specific to AT91
-boards.
-The LED command is obviously of potential use for anyone
-supporting the coloured_LED API.
-Ethinit is useful for anyone mounting a root fs over NFS.
+Why? Having them in buildroot or not seems pretty unrelated to their
+upstream acceptance or not.
 
-
-All commands introduced by the patches are governed by CONFIG
-variables so if they are not set, then the command source files
-will not be compiled and no extra code will be generated.
-
-Only drawback will be 2-3 seconds max extra buildtime.
-
-If people would like to be able to apply these patches
-conditionally, then I do not mind doing that.
-
-It is difficult to add patches on a fine grained level,
-because you may be updating the same file in
-several patches, and depend on a patch order.
-
-
-> 
-> -Steve
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+-- 
+Bye, Peter Korsgaard
