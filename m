@@ -1,176 +1,27 @@
-From: =?utf-8?B?RGFuaWVs?= <lida_mail@163.com>
-Date: Tue, 6 Jan 2009 12:24:59 +0800
-Subject: [Buildroot] =?utf-8?q?=5FCups=5Fcompile=5Fproblem?=
-References: <BAY124-W25B0802FB150D5566BD194D2E10@phx.gbl>,
-	<200901060934369135686@163.com>
-Message-ID: <200901061224560942523@163.com>
+From: Daniel Ng <daniel_ng11@lycos.com>
+Date: Tue, 6 Jan 2009 04:33:45 +0000 (UTC)
+Subject: [Buildroot] Which u-boot/buildroot version for ppc8272?
+Message-ID: <loom.20090106T043218-43@post.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear All:
+Hi,
 
-	Fixed! It's OK within the latest SVN snapshot. Just something wrong with my environment.
- 
-Sorry for the trouble! 
+Which daily snapshot version of buildroot would people recommend for a PPC 
+8272-based (603e core) board?
 
-Hi Allan, 
-   Thanks again.
+I just tried yesterday's (buildroot-20090105.tar.tar) buildroot snapshot and 
+it failed to build-
 
-======= 2009-01-06 09:50:23 written in your letter?=======
+make[1]: *** No rule to make target `_config'.  Stop.
+make[1]: Leaving directory 
+`/home/dng/buildroot2009/buildroot/project_build_powerpc/uclibc/u-boot-2009.01-
+rc1'
+make: *** [/home/dng/buildroot2009/buildroot/project_build_powerpc/uclibc/u-
+boot-2009.01-rc1/.configured] Error 2
 
->Dear All:
->
->	I have check out a latest cups scripts. When I build the root, it shows as below. Can anyone help? Thanks.
->make[2]: Leaving directory `/home/daniel/pilot/buildroot/build_arm/cups-1.3.5/notifier'
->Installing in pdftops...
->make[2]: Entering directory `/home/daniel/pilot/buildroot/build_arm/cups-1.3.5/pdftops'
->Compiling Annot.cxx...
->Compiling Array.cxx...
->Compiling BuiltinFont.cxx...
->Compiling BuiltinFontTables.cxx...
->Compiling Catalog.cxx...
->Compiling CharCodeToUnicode.cxx...
->Compiling CMap.cxx...
->Compiling Decrypt.cxx...
->Compiling Dict.cxx...
->Compiling Error.cxx...
->Compiling FoFiBase.cxx...
->Compiling FoFiEncodings.cxx...
->Compiling FoFiTrueType.cxx...
->Compiling FoFiType1C.cxx...
->FoFiType1C.cxx: In member function ???void FoFiType1C::readFD(int, int, Type1CPrivateDict*)???:
->FoFiType1C.cxx:1924: warning: ???fontMatrix$0??? may be used uninitialized in this function
->FoFiType1C.cxx:1924: warning: ???fontMatrix$1??? may be used uninitialized in this function
->FoFiType1C.cxx:1924: warning: ???fontMatrix$2??? may be used uninitialized in this function
->FoFiType1C.cxx:1924: warning: ???fontMatrix$3??? may be used uninitialized in this function
->FoFiType1C.cxx:1924: warning: ???fontMatrix$4??? may be used uninitialized in this function
->FoFiType1C.cxx:1924: warning: ???fontMatrix$5??? may be used uninitialized in this function
->Compiling FoFiType1.cxx...
->Compiling FontEncodingTables.cxx...
->Compiling Function.cxx...
->Compiling gfile.cxx...
->Compiling Gfx.cxx...
->Compiling GfxFont.cxx...
->Compiling GfxState.cxx...
->Compiling GHash.cxx...
->Compiling GList.cxx...
->Compiling GlobalParams.cxx...
->GlobalParams.cxx: In destructor ???GlobalParams::~GlobalParams()???:
->GlobalParams.cxx:1059: warning: dereferencing type-punned pointer will break strict-aliasing rules
->GlobalParams.cxx: In member function ???CharCodeToUnicode* GlobalParams::getUnicodeToUnicode(GString*)???:
->GlobalParams.cxx:1647: warning: dereferencing type-punned pointer will break strict-aliasing rules
->Compiling gmem.c...
->Compiling gmempp.cxx...
->Compiling GString.cxx...
->Compiling JArithmeticDecoder.cxx...
->Compiling JBIG2Stream.cxx...
->Compiling JPXStream.cxx...
->Compiling Lexer.cxx...
->Compiling Link.cxx...
->Compiling NameToCharCode.cxx...
->Compiling Object.cxx...
->Compiling Outline.cxx...
->Compiling OutputDev.cxx...
->Compiling Page.cxx...
->Compiling parseargs.c...
->Compiling Parser.cxx...
->Compiling PDFDoc.cxx...
->Compiling PDFDocEncoding.cxx...
->Compiling PSOutputDev.cxx...
->Compiling PSTokenizer.cxx...
->Compiling SecurityHandler.cxx...
->Compiling Stream.cxx...
->Compiling UnicodeMap.cxx...
->Compiling UnicodeTypeTable.cxx...
->Compiling XpdfPluginAPI.cxx...
->Compiling XRef.cxx...
->Archiving libxpdf.a...
->a - Annot.o
->a - Array.o
->a - BuiltinFont.o
->a - BuiltinFontTables.o
->a - Catalog.o
->a - CharCodeToUnicode.o
->a - CMap.o
->a - Decrypt.o
->a - Dict.o
->a - Error.o
->a - FoFiBase.o
->a - FoFiEncodings.o
->a - FoFiTrueType.o
->a - FoFiType1C.o
->a - FoFiType1.o
->a - FontEncodingTables.o
->a - Function.o
->a - gfile.o
->a - Gfx.o
->a - GfxFont.o
->a - GfxState.o
->a - GHash.o
->a - GList.o
->a - GlobalParams.o
->a - gmem.o
->a - gmempp.o
->a - GString.o
->a - JArithmeticDecoder.o
->a - JBIG2Stream.o
->a - JPXStream.o
->a - Lexer.o
->a - Link.o
->a - NameToCharCode.o
->a - Object.o
->a - Outline.o
->a - OutputDev.o
->a - Page.o
->a - parseargs.o
->a - Parser.o
->a - PDFDoc.o
->a - PDFDocEncoding.o
->a - PSOutputDev.o
->a - PSTokenizer.o
->a - SecurityHandler.o
->a - Stream.o
->a - UnicodeMap.o
->a - UnicodeTypeTable.o
->a - XpdfPluginAPI.o
->a - XRef.o
->Compiling pdftops.cxx...
->Linking pdftops...
->/usr/bin/ld: libxpdf.a(gmem.o): Relocations in generic ELF (EM: 40)
->/usr/bin/ld: libxpdf.a(gmem.o): Relocations in generic ELF (EM: 40)
->/usr/bin/ld: libxpdf.a(gmem.o): Relocations in generic ELF (EM: 40)
->/usr/bin/ld: libxpdf.a(gmem.o): Relocations in generic ELF (EM: 40)
->/usr/bin/ld: libxpdf.a(gmem.o): Relocations in generic ELF (EM: 40)
->/usr/bin/ld: libxpdf.a(gmem.o): Relocations in generic ELF (EM: 40)
->libxpdf.a: could not read symbols: File in wrong format
->collect2: ld returned 1 exit status
->make[2]: *** [pdftops] Error 1
->make[2]: Leaving directory `/home/daniel/pilot/buildroot/build_arm/cups-1.3.5/pdftops'
->make[1]: *** [install] Error 1
->make[1]: Leaving directory `/home/daniel/pilot/buildroot/build_arm/cups-1.3.5'
->make: *** [/home/daniel/pilot/buildroot/build_arm/cups-1.3.5/.installed] Error 2
->
->			
->
->????????Sincerely yours,
-> 
->				 
->????????Daniel Li
->????????2009-01-06
->
->_______________________________________________
->buildroot mailing list
->buildroot at busybox.net
->http://lists.busybox.net/mailman/listinfo/buildroot
-
-= = = = = = = = = = = = = = = = = = = =
-			
-
-????????Sincerely yours,
- 
-				 
-????????Daniel Li
-????????2009-01-06
+Cheers,
+Daniel
