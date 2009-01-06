@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Tue,  6 Jan 2009 16:17:16 +0000 (UTC)
+Date: Tue,  6 Jan 2009 16:17:44 +0000 (UTC)
 Subject: [Buildroot] svn commit: trunk/buildroot/target/u-boot/2009.01-rc1
-Message-ID: <20090106161716.E17BB76BFE@busybox.osuosl.org>
+Message-ID: <20090106161744.8449576BFE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,215 +9,23 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2009-01-06 16:17:15 +0000 (Tue, 06 Jan 2009)
-New Revision: 24702
+Date: 2009-01-06 16:17:43 +0000 (Tue, 06 Jan 2009)
+New Revision: 24703
 
 Log:
-Add 'led' command to control coloured LEDs
+Add 'mux' command to control ext mux on at91rm9200dk/ek
 
 Added:
-   trunk/buildroot/target/u-boot/2009.01-rc1/u-boot-2009.01-rc1-010-coloured_led.patch
+   trunk/buildroot/target/u-boot/2009.01-rc1/u-boot-2009.01-rc1-011-spimux.patch
+   trunk/buildroot/target/u-boot/2009.01-rc1/u-boot-2009.01-rc1-012-ethinit.patch
+   trunk/buildroot/target/u-boot/2009.01-rc1/u-boot-2009.01-rc1-013-configs.patch
+   trunk/buildroot/target/u-boot/2009.01-rc1/u-boot-2009.01-rc1-014-at572d940hfeb.patch
+   trunk/buildroot/target/u-boot/2009.01-rc1/u-boot-2009.01-rc1-016-cmd_mem.patch
 
 
 Changeset:
-Added: trunk/buildroot/target/u-boot/2009.01-rc1/u-boot-2009.01-rc1-010-coloured_led.patch
-===================================================================
---- trunk/buildroot/target/u-boot/2009.01-rc1/u-boot-2009.01-rc1-010-coloured_led.patch	                        (rev 0)
-+++ trunk/buildroot/target/u-boot/2009.01-rc1/u-boot-2009.01-rc1-010-coloured_led.patch	2009-01-06 16:17:15 UTC (rev 24702)
-@@ -0,0 +1,196 @@
-+diff -urN u-boot-2009.01-0rig//common/cmd_led.c u-boot-2009.01/common/cmd_led.c
-+--- u-boot-2009.01-0rig//common/cmd_led.c	1970-01-01 01:00:00.000000000 +0100
-++++ u-boot-2009.01/common/cmd_led.c	2009-01-03 23:39:57.000000000 +0100
-+@@ -0,0 +1,84 @@
-++/*
-++ * (C) Copyright 2008
-++ * Ulf Samuelsson <ulf.samuelsson@atmel.com>
-++ *
-++ * See file CREDITS for list of people who contributed to this
-++ * project.
-++ *
-++ * This program is free software; you can redistribute it and/or
-++ * modify it under the terms of the GNU General Public License as
-++ * published by the Free Software Foundation; either version 2 of
-++ * the License, or (at your option) any later version.
-++ *
-++ * This program is distributed in the hope that it will be useful,
-++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
-++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the
-++ * GNU General Public License for more details.
-++ *
-++ * You should have received a copy of the GNU General Public License
-++ * along with this program; if not, write to the Free Software
-++ * Foundation, Inc., 59 Temple Place, Suite 330, Boston,
-++ * MA 02111-1307 USA
-++ */
-++
-++/*
-++ * This file provides a shell like 'test' function to return
-++ * true/false from an integer or string compare of two memory
-++ * locations or a location and a scalar/literal.
-++ * A few parts were lifted from bash 'test' command
-++ */
-++
-++#include <common.h>
-++#include <config.h>
-++#include <command.h>
-++#include <coloured_led.h>
-++
-++int do_led ( cmd_tbl_t *cmdtp, int flag, int argc, char *argv[] )
-++{
-++	int	led;
-++	/* Validate arguments */
-++	if ((argc != 3)){
-++		printf("Usage:\n%s\n", cmdtp->usage);
-++		return 1;
-++	}
-++	if (strcmp(argv[1], "1") == 0) {
-++		led = (1 << 0);
-++	} else if (strcmp(argv[1], "2") == 0) {
-++		led = (1 << 1);
-++	} else if (strcmp(argv[1], "3") == 0) {
-++		led = (1 << 2);
-++	} else if (strcmp(argv[1], "green") == 0) {
-++		led = (1 << 0);
-++	} else if (strcmp(argv[1], "yellow") == 0) {
-++		led = (1 << 1);
-++	} else if (strcmp(argv[1], "red") == 0) {
-++		led = (1 << 2);
-++	} else if (strcmp(argv[1], "all") == 0) {
-++		led = 7;
-++	} else {
-++		printf ("Usage:\n%s\n", cmdtp->usage);
-++		return 1;
-++	}
-++
-++	if (strcmp(argv[2], "off") == 0) {
-++		if(led & 1) green_LED_off();
-++		if(led & 2) yellow_LED_off();
-++		if(led & 4) red_LED_off();		
-++	} else if (strcmp(argv[2], "on") == 0) {
-++		if(led & 1) green_LED_on();
-++		if(led & 2) yellow_LED_on();
-++		if(led & 4) red_LED_on();		
-++	} else {
-++		printf ("Usage:\n%s\n", cmdtp->usage);
-++		return 1;
-++	}
-++
-++	return 0;
-++}
-++
-++U_BOOT_CMD(
-++	led, 3, 1, do_led,
-++	"led\t- [1|2|3|green|yellow|red|all] [on|off]\n",
-++	"led [1|2|3|green|yellow|red|all] [on|off] sets /clears led 1,2,3\n"
-++);
-++
-+diff -urN u-boot-2009.01-0rig//common/Makefile u-boot-2009.01/common/Makefile
-+--- u-boot-2009.01-0rig//common/Makefile	2009-01-02 21:18:24.000000000 +0100
-++++ u-boot-2009.01/common/Makefile	2009-01-03 23:41:53.000000000 +0100
-+@@ -99,6 +99,7 @@
-+ COBJS-$(CONFIG_CMD_IRQ) += cmd_irq.o
-+ COBJS-$(CONFIG_CMD_ITEST) += cmd_itest.o
-+ COBJS-$(CONFIG_CMD_JFFS2) += cmd_jffs2.o
-++COBJS-$(CONFIG_CMD_LED) += cmd_led.o
-+ COBJS-$(CONFIG_CMD_LICENSE) += cmd_license.o
-+ COBJS-y += cmd_load.o
-+ COBJS-$(CONFIG_LOGBUFFER) += cmd_log.o
-+diff -urN u-boot-2009.01-0rig//include/coloured_led.h u-boot-2009.01/include/coloured_led.h
-+--- u-boot-2009.01-0rig//include/coloured_led.h	1970-01-01 01:00:00.000000000 +0100
-++++ u-boot-2009.01/include/coloured_led.h	2009-01-03 23:39:19.000000000 +0100
-+@@ -0,0 +1,62 @@
-++/*
-++ * (C) Copyright 2008
-++ * Wolfgang Denk, DENX Software Engineering, wd at denx.de.
-++ * 
-++ * See file CREDITS for list of people who contributed to this
-++ * project.
-++ *
-++ * This program is free software; you can redistribute it and/or
-++ * modify it under the terms of the GNU General Public License as
-++ * published by the Free Software Foundation; either version 2 of
-++ * the License, or (at your option) any later version.
-++ *
-++ * This program is distributed in the hope that it will be useful,
-++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
-++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-++ * GNU General Public License for more details.
-++ *
-++ * You should have received a copy of the GNU General Public License
-++ * along with this program; if not, write to the Free Software
-++ * Foundation, Inc., 59 Temple Place, Suite 330, Boston,
-++ * MA 02111-1307 USA
-++ */
-++
-++/*
-++ * The purpose of this code is to signal the operational status of a
-++ * target which usually boots over the network; while running in
-++ * PCBoot, a status LED is blinking. As soon as a valid BOOTP reply
-++ * message has been received, the LED is turned off. The Linux
-++ * kernel, once it is running, will start blinking the LED again,
-++ * with another frequency.
-++ */
-++
-++#ifndef _COLOURED_LED_H_
-++#define	_COLOURED_LED_H_
-++
-++#ifdef CONFIG_COLOURED_LED
-++
-++/*
-++ * Coloured LEDs API
-++ */
-++#ifndef	__ASSEMBLY__
-++extern void	coloured_LED_init (void);
-++extern void	red_LED_on(void);
-++extern void	red_LED_off(void);
-++extern void	green_LED_on(void);
-++extern void	green_LED_off(void);
-++extern void	yellow_LED_on(void);
-++extern void	yellow_LED_off(void);
-++#else
-++	.extern LED_init
-++	.extern red_LED_on
-++	.extern red_LED_off
-++	.extern yellow_LED_on
-++	.extern yellow_LED_off
-++	.extern green_LED_on
-++	.extern green_LED_off
-++#endif
-++
-++#endif	/* CONFIG_COLOURED_LED	*/
-++
-++#endif	/* _STATUS_COLOURED_H_	*/
-++
-+diff -urN u-boot-2009.01-0rig//include/status_led.h u-boot-2009.01/include/status_led.h
-+--- u-boot-2009.01-0rig//include/status_led.h	2008-12-16 23:48:27.000000000 +0100
-++++ u-boot-2009.01/include/status_led.h	2009-01-03 23:44:40.000000000 +0100
-+@@ -383,27 +383,6 @@
-+ # include <asm/status_led.h>
-+ #endif
-+ 
-+-/*
-+- * Coloured LEDs API
-+- */
-+-#ifndef	__ASSEMBLY__
-+-extern void	coloured_LED_init (void);
-+-extern void	red_LED_on(void);
-+-extern void	red_LED_off(void);
-+-extern void	green_LED_on(void);
-+-extern void	green_LED_off(void);
-+-extern void	yellow_LED_on(void);
-+-extern void	yellow_LED_off(void);
-+-#else
-+-	.extern LED_init
-+-	.extern red_LED_on
-+-	.extern red_LED_off
-+-	.extern yellow_LED_on
-+-	.extern yellow_LED_off
-+-	.extern green_LED_on
-+-	.extern green_LED_off
-+-#endif
-+-
-+ #endif	/* CONFIG_STATUS_LED	*/
-+ 
-+ #endif	/* _STATUS_LED_H_	*/
+
+Sorry, the patch is too large to include (4607 lines).
+Please use ViewCVS to see it!
+
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=24703
