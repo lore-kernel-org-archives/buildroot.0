@@ -1,48 +1,48 @@
-From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Tue, 6 Jan 2009 16:22:17 -0200
-Subject: [Buildroot] Buildroot maintainer and stable releases
-In-Reply-To: <87prj1v4dy.fsf@macbook.be.48ers.dk>
-References: <87prj1v4dy.fsf@macbook.be.48ers.dk>
-Message-ID: <d6cda7730901061022v3866b298y547235a57535d009@mail.gmail.com>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Tue, 06 Jan 2009 19:31:48 +0100
+Subject: [Buildroot] Buildroot Not Using Saved Config for Linux
+In-Reply-To: <BAY124-W25B0802FB150D5566BD194D2E10@phx.gbl>
+References: <BAY124-W25B0802FB150D5566BD194D2E10@phx.gbl>
+Message-ID: <1231266708.32308.211.camel@elrond.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+m?n 2009-01-05 klockan 15:11 -0800 skrev Quick X:
+> I can't get buildroot to use the "local\MYPROJECT
+> \linux-2.6.24.3.config" file no matter what.  It always uses the
+> "project_build_arm/at91sam9261ek/linux-2.6.24.3/.config" file, or
+> creates a new one if it doesn't exsist.
+>  
+> Steps I do to test:
+> make linux26-menuconfig
+> make saveconfig
+> make linux26-menuconfig (EDIT SOMETHING ELSE)
+> make BOARD=MYPROJECT
+>  
 
-On Mon, Jan 5, 2009 at 7:18 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->
-> I offer to do something about both: Take over maintainership and get
-> atual stable releases out the door (if Erik and the other developers
-> agree).
+IIRC, The way saveconfig works is that it copies the current
+$(TOPDIR)/.config to the loacl/$(PROJECT) directory
+and then edits the paths for certain variables.
 
-I for one welcome our new maintainer overlord.
-Seriously, for what it's worth, you have my support.
+It does not modify the ?$(TOPDIR)/.config file,so you
+will still be using the same paths.
 
-> What is the plan? Getting the first release out is always the hardest,
-> so I would on purpose aim low for the first release and get it out
-> soon (February). The target is to get all architectures to build (and
-> run where hw is available for test) using the default toolchain config
-> and busybox, anything else is just a bonus.
+If you want to use the new board stuff, you have to to
 
-AVR32 has been recently broken (again). I would much prefer that
-changes were reverted (termporarily or not) and have AVR32 in this
-"release" rather than deem it BROKEN.
+$ make BOARD=MYPROJECT getconfig 
 
-> The big issue with buildroot quality control is the mindblowing number
-> of configuration combinations and specialized hardware needed to
-> test. I am therefore convinced we need to leverage qemu and
-> agressively deprecate legacy versions / packages + actively work with
-> upstream to keep the number of patches low. I think our users would
-> also be happier with a less ambitious project that wouldn't break left
-> and right, instead of the current situation.
+which do:
 
-Maybe we could get a buildbot going. Then we can let many of the
-developers/uses here contribute cpu cycle to build tests.
-The problem with qemu is that it will only cover some platforms that
-it supports, and unfortunally for me, it doesn't support AVR32 :(
+cp $(LOCAL)/$(PROJECT)/$(PROJECT).config .config
 
-Kind Regards,
-    Thiago A. Correa
+and after that, you should be using the BOARD files.
+
+Note that you can set BUILDROOT_LOCAL to whatever in 
+your shell environment so you can store your project
+files outside the buildroot source tree.
+
+Best Regards
+Ulf Samuelsson.
