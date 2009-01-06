@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Tue,  6 Jan 2009 16:21:36 +0000 (UTC)
+Date: Tue,  6 Jan 2009 16:24:06 +0000 (UTC)
 Subject: [Buildroot] svn commit: trunk/buildroot/target/u-boot/2009.01-rc1
-Message-ID: <20090106162136.BEA6576BFE@busybox.osuosl.org>
+Message-ID: <20090106162407.013AE76BFE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,22 +9,96 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2009-01-06 16:21:36 +0000 (Tue, 06 Jan 2009)
-New Revision: 24704
+Date: 2009-01-06 16:24:06 +0000 (Tue, 06 Jan 2009)
+New Revision: 24705
 
 Log:
-Remove patches that should not have been inlcuded in the spimux commit
+Add support for waiting for NFS root server before booting
 
-Removed:
+Added:
    trunk/buildroot/target/u-boot/2009.01-rc1/u-boot-2009.01-rc1-012-ethinit.patch
-   trunk/buildroot/target/u-boot/2009.01-rc1/u-boot-2009.01-rc1-013-configs.patch
-   trunk/buildroot/target/u-boot/2009.01-rc1/u-boot-2009.01-rc1-014-at572d940hfeb.patch
-   trunk/buildroot/target/u-boot/2009.01-rc1/u-boot-2009.01-rc1-016-cmd_mem.patch
 
 
 Changeset:
-
-Sorry, the patch is too large to include (4508 lines).
-Please use ViewCVS to see it!
-
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=24704
+Added: trunk/buildroot/target/u-boot/2009.01-rc1/u-boot-2009.01-rc1-012-ethinit.patch
+===================================================================
+--- trunk/buildroot/target/u-boot/2009.01-rc1/u-boot-2009.01-rc1-012-ethinit.patch	                        (rev 0)
++++ trunk/buildroot/target/u-boot/2009.01-rc1/u-boot-2009.01-rc1-012-ethinit.patch	2009-01-06 16:24:06 UTC (rev 24705)
+@@ -0,0 +1,77 @@
++diff -urN u-boot-2009.01-0rig//common/cmd_ethinit.c u-boot-2009.01/common/cmd_ethinit.c
++--- u-boot-2009.01-0rig//common/cmd_ethinit.c	1970-01-01 01:00:00.000000000 +0100
+++++ u-boot-2009.01/common/cmd_ethinit.c	2009-01-04 00:28:39.000000000 +0100
++@@ -0,0 +1,62 @@
+++/*
+++ * (C) Copyright 2000
+++ * Wolfgang Denk, DENX Software Engineering, wd at denx.de.
+++ *
+++ * See file CREDITS for list of people who contributed to this
+++ * project.
+++ *
+++ * This program is free software; you can redistribute it and/or
+++ * modify it under the terms of the GNU General Public License as
+++ * published by the Free Software Foundation; either version 2 of
+++ * the License, or (at your option) any later version.
+++ *
+++ * This program is distributed in the hope that it will be useful,
+++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+++ * GNU General Public License for more details.
+++ *
+++ * You should have received a copy of the GNU General Public License
+++ * along with this program; if not, write to the Free Software
+++ * Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+++ * MA 02111-1307 USA
+++ */
+++
+++/*
+++ * Boot support
+++ */
+++#include <common.h>
+++#include <command.h>
+++#include <net.h>
+++#ifdef CONFIG_CMD_ETHINIT
+++extern int eth_init (bd_t * bd);
+++
+++static void	delay(void)
+++{
+++}
+++/* 
+++ * This command allows you to delay booting until you have a 
+++ * valid Ethernet connection.
+++ * Neccessary if you want to NFS mount a rootfs etc.
+++ * When both this target and the NFS server 
+++ * are powered on at the same time, then the NFS
+++ * server can take a long time to boot.
+++ */
+++int do_ethinit (cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
+++{
+++	int	i;
+++	DECLARE_GLOBAL_DATA_PTR;
+++	while(eth_init (gd->bd) == 0) {
+++		for(i = 0; i < 10000000; i ++) {
+++			delay();
+++		}
+++	}
+++	return 0;
+++}
+++
+++U_BOOT_CMD(
+++	ethinit,	1,	1,	do_ethinit,
+++	"ethinit\t- Initialize Ethernet controller\n",
+++	"\n"
+++);
+++
+++#endif	/* CONFIG_CMD_ETHINIT */
++diff -urN u-boot-2009.01-0rig//common/Makefile u-boot-2009.01/common/Makefile
++--- u-boot-2009.01-0rig//common/Makefile	2009-01-04 00:22:06.000000000 +0100
+++++ u-boot-2009.01/common/Makefile	2009-01-04 00:29:46.000000000 +0100
++@@ -83,6 +83,7 @@
++ COBJS-$(CONFIG_ENV_IS_IN_EEPROM) += cmd_eeprom.o
++ COBJS-$(CONFIG_CMD_EEPROM) += cmd_eeprom.o
++ COBJS-$(CONFIG_CMD_ELF) += cmd_elf.o
+++COBJS-$(CONFIG_CMD_ETHINIT) += cmd_ethinit.o
++ COBJS-$(CONFIG_CMD_EXT2) += cmd_ext2.o
++ COBJS-$(CONFIG_CMD_FACTORY) += cmd_factory.o
++ COBJS-$(CONFIG_CMD_FAT) += cmd_fat.o
