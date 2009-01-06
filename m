@@ -1,51 +1,49 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 06 Jan 2009 19:33:59 +0100
+Date: Tue, 06 Jan 2009 19:52:32 +0100
 Subject: [Buildroot] Buildroot maintainer and stable releases
-In-Reply-To: <d6cda7730901061022v3866b298y547235a57535d009@mail.gmail.com>
-	("Thiago A. =?utf-8?Q?Corr=C3=AAa=22's?= message of "Tue\, 6 Jan 2009
-	16\:22\:17 -0200")
+In-Reply-To: <20090106183243.GA28479@zelow.no> (Thomas Lundquist's message of
+	"Tue\, 6 Jan 2009 19\:32\:43 +0100")
 References: <87prj1v4dy.fsf@macbook.be.48ers.dk>
-	<d6cda7730901061022v3866b298y547235a57535d009@mail.gmail.com>
-Message-ID: <877i58nv1k.fsf@macbook.be.48ers.dk>
+	<20090106140140.GA22854@zelow.no> <87aba4pj4w.fsf@macbook.be.48ers.dk>
+	<20090106183243.GA28479@zelow.no>
+Message-ID: <873afwnu6n.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thiago" == Thiago A Corr?a <thiago.correa@gmail.com> writes:
+>>>>> "Thomas" == Thomas Lundquist <lists@zelow.no> writes:
 
 Hi,
 
- >> I offer to do something about both: Take over maintainership and get
- >> atual stable releases out the door (if Erik and the other developers
- >> agree).
+ >> Maybe. I would just start with the rm .config; make menuconf, select
+ >> arch, save; make
 
- Thiago> I for one welcome our new maintainer overlord.
- Thiago> Seriously, for what it's worth, you have my support.
+ Thomas> It's a start of course but is the resulting .config a good
+ Thomas> config or just more or less random?
 
-Great, thanks.
+Hopefully good - It's the default config of everything, just like any
+new user would see it. If anything is not sensible then we should
+change the defaults.
 
- Thiago> AVR32 has been recently broken (again). I would much prefer
- Thiago> that changes were reverted (termporarily or not) and have
- Thiago> AVR32 in this "release" rather than deem it BROKEN.
+ Thomas> (BTW; WCHAR and LOCALE OFF is NOT a special case, it should
+ Thomas> be default.  In my view, also LARGEFILE.)
+ >> 
+ >> You mean default on? They currently default to off, simply because of
+ >> their size impact.
 
-What changes are those exactly?
+ Thomas> Default OFF. I haven't messed with g++ lately but it had a tendency 
+ Thomas> to not work without WCHAR ON. It may be back in 3.X days though.
 
- Thiago> Maybe we could get a buildbot going. Then we can let many of the
- Thiago> developers/uses here contribute cpu cycle to build tests.
+It work for me here on PPC (gcc 4.2.x / 4.3.x).
 
-Yes, I have been pondering that as well. I have a buildbot running at
-work for the platforms we're using with good results, but it's a
-question about coming up with varying enough configs to get good test
-coverage.
+ Thomas> LARGEFILE set to off is another option I'd like to have as a test 
+ Thomas> case but I have a slight feeling that will hinder a release 
+ Thomas> for quite some time..
 
- Thiago> The problem with qemu is that it will only cover some
- Thiago> platforms that it supports, and unfortunally for me, it
- Thiago> doesn't support AVR32 :(
-
-Sure, if you have access to suitable hw, then that's better than qemu,
-but if not, then qemu is nice for the platforms it support.
+WCHAR, LOCALE and LARGEFILE all defaults to off, so that's imho a
+pretty well tested.
 
 -- 
 Bye, Peter Korsgaard
