@@ -1,34 +1,70 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 06 Jan 2009 15:39:40 +0100
-Subject: [Buildroot] svn commit:
-	trunk/buildroot/target/u-boot/2009.01-rc1
-In-Reply-To: <20090103000456.97D1E769FA@busybox.osuosl.org> (ulf@uclibc.org's
-	message of "Sat\, 3 Jan 2009 00\:04\:56 +0000 \(UTC\)")
-References: <20090103000456.97D1E769FA@busybox.osuosl.org>
-Message-ID: <87iqosqz0z.fsf@macbook.be.48ers.dk>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Tue,  6 Jan 2009 14:40:25 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
+Message-ID: <20090106144025.CCD7E76BFE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+Author: ulf
+Date: 2009-01-06 14:40:24 +0000 (Tue, 06 Jan 2009)
+New Revision: 24698
 
- ulf> Author: ulf
- ulf> Date: 2009-01-03 00:04:55 +0000 (Sat, 03 Jan 2009)
- ulf> New Revision: 24656
+Log:
+When you set BR2_PACKAGE_LINUX_USE_DEFCONFIG
+to configure linux using the
 
- ulf> Log:
- ulf> Provide factory default command to u-boot, using Buildroot variables
+make <board>_defconfig
 
- ulf> Added:
- ulf>    trunk/buildroot/target/u-boot/2009.01-rc1/u-boot-2009.01-rc1-009-factory.patch
+You have to supply the $(BOARD_NAME) variable.
+Add this info in the help text for
+target/linux/Makefile.in.advanced
 
-Do we really need this? What's the upstream status of it?
+----------------
 
-I would very much like to limit the number of patches to the minimum
-(E.G. bugfixes, needed hardware support), and this doesn't look like
-either to those.
+When you do not set BR2_PACKAGE_LINUX_USE_XCONFIG
+to configure linux using "$make <XXXX>config
+The choices "$make menuconfig" or "$make xconfig"
+should not be visible.
+Add dependency
 
--- 
-Bye, Peter Korsgaard
+
+
+
+Modified:
+   trunk/buildroot/target/linux/Config.in.advanced
+
+
+Changeset:
+Modified: trunk/buildroot/target/linux/Config.in.advanced
+===================================================================
+--- trunk/buildroot/target/linux/Config.in.advanced	2009-01-06 14:16:27 UTC (rev 24697)
++++ trunk/buildroot/target/linux/Config.in.advanced	2009-01-06 14:40:24 UTC (rev 24698)
+@@ -437,6 +437,8 @@
+ 	depends on BR2_PACKAGE_LINUX
+ 	help
+ 	  Configure Linux by make <board>_defconfig
++	  You have to supply a BOARD_NAME, either by
++	  defining it in a BSP or by make BOARD_NAME=<board>
+ 
+ config BR2_PACKAGE_LINUX_USE_XCONFIG
+ 	bool "Run make ARCH=$(ARCH) [xconfig|menuconfig] before build"
+@@ -445,8 +447,6 @@
+ 	  Configure Linux by make xconfig
+ endchoice
+ 
+-
+-
+ config BR2_PACKAGE_LINUX_KCONFIG
+ 	string ".config file"
+ 	depends on BR2_PACKAGE_LINUX_USE_KCONFIG
+@@ -462,6 +462,7 @@
+ 	prompt "Preferred config tool"
+ 	default BR2_MAKE_XCONFIG if BR2_TARGET_ATMEL
+ 	default BR2_MAKE_MENUCONFIG
++	depends on BR2_PACKAGE_LINUX_USE_XCONFIG
+ 	help
+ 	  Define the preferred tool to invoke if a configuration is invalid
+ 
