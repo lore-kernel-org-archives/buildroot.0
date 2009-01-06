@@ -1,36 +1,18 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Tue,  6 Jan 2009 21:42:43 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
-Message-ID: <20090106214244.0870976CB5@busybox.osuosl.org>
+From: David Brown <david.brown@hesbynett.no>
+Date: Tue, 06 Jan 2009 23:19:45 +0100
+Subject: [Buildroot] Support for ColdFire v2 core (no MMU)?
+Message-ID: <gk0len$2hp$1@ger.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2009-01-06 21:42:43 +0000 (Tue, 06 Jan 2009)
-New Revision: 24712
+Has anyone successfully used buildroot for a ColdFire v2 MCF5234?  This 
+is a device without an MMU or an FPU, but it is certainly possible to 
+run ucLinux on it.  If anyone has tried this, or can give me any 
+pointers to get started, I'd love to hear about it.
 
-Log:
-Add PATH to linux build options to allow 'mkimage' to be found. Neccessary for arm,blackfin,sh and avr32 in linux-2.6.28
+mvh.,
 
-Modified:
-   trunk/buildroot/target/linux/Makefile.in.advanced
-
-
-Changeset:
-Modified: trunk/buildroot/target/linux/Makefile.in.advanced
-===================================================================
---- trunk/buildroot/target/linux/Makefile.in.advanced	2009-01-06 21:24:42 UTC (rev 24711)
-+++ trunk/buildroot/target/linux/Makefile.in.advanced	2009-01-06 21:42:43 UTC (rev 24712)
-@@ -190,7 +190,8 @@
- 	INSTALL_MOD_PATH=$(TARGET_DIR) \
- 	CROSS_COMPILE=$(KERNEL_CROSS) \
- 	LDFLAGS="$(TARGET_LDFLAGS)" \
--	LZMA="$(LZMA)"
-+	LZMA="$(LZMA)" \
-+	PATH=$(STAGING_DIR)/usr/bin:$(PATH)
- 
- # =============================================================================
- # ifneq ($(strip $(LINUX26_VERSION)),$(strip $(LINUX_HEADERS_VERSION)))
+David
