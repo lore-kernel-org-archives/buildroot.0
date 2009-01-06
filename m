@@ -1,43 +1,35 @@
-From: Daniel Ng <daniel_ng11@lycos.com>
-Date: Tue, 6 Jan 2009 22:53:33 +0000 (UTC)
-Subject: [Buildroot] Which u-boot/buildroot version for ppc8272?
-References: <loom.20090106T043218-43@post.gmane.org>
-	<87ljtovpem.fsf@macbook.be.48ers.dk>
-Message-ID: <loom.20090106T224840-114@post.gmane.org>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Tue,  6 Jan 2009 23:00:24 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
+Message-ID: <20090106230025.0B75476CB5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard <jacmet@...> writes:
-> Yes, u-boot recently broke. I fixed it up yesterday and it builds for
-> me for a 603e (83xx).
-> 
+Author: ulf
+Date: 2009-01-06 23:00:24 +0000 (Tue, 06 Jan 2009)
+New Revision: 24713
 
-Hi Peter,
+Log:
+Remove incorrrect dependency on latest minor kernel patch
 
-I've just tried the latest (buildroot-20090106.tar.bz2) but get the same error-
+Modified:
+   trunk/buildroot/target/linux/Config.in.advanced
 
-make[1]: Entering directory 
-`/home/dng/buildroot/project_build_powerpc/uclibc/u-boot-2009.01-rc1'
-make[1]: *** No rule to make target `_config'.  Stop.
-make[1]: Leaving directory `/home/dng/buildroot/project_build_powerpc/uclibc/u-
-boot-2009.01-rc1'
-make: *** [/home/dng/buildroot/project_build_powerpc/uclibc/u-boot-2009.01-
-rc1/.configured] Error 2
 
-In 'make menuconfig', all I did was:
-
-1) Specify PowerPC 603e
-2) Select u-boot
-
--everything else was left as their defaults.
-
-Perhaps I need to change another menuconfig setting?
-
-Also, did you try it by downloading buildroot-20090106.tar.bz2? Or did you try 
-it using some other bz2 file?
-
-Cheers,
-Daniel
+Changeset:
+Modified: trunk/buildroot/target/linux/Config.in.advanced
+===================================================================
+--- trunk/buildroot/target/linux/Config.in.advanced	2009-01-06 21:42:43 UTC (rev 24712)
++++ trunk/buildroot/target/linux/Config.in.advanced	2009-01-06 23:00:24 UTC (rev 24713)
+@@ -373,7 +373,7 @@
+ 	default "2.6.21.7" if BR2_LINUX_2_6_21_7
+ 	default "2.6.22.1" if BR2_LINUX_2_6_22_1
+ 	default "2.6.22.10" if BR2_LINUX_2_6_22_10
+-	default "$(BR2_KERNEL_CURRENT_VERSION)"if BR2_LINUX_2_6_STABLE || BR2_KERNEL_ADD_LATEST_MINORPATCH
++	default "$(BR2_KERNEL_CURRENT_VERSION)"if BR2_LINUX_2_6_STABLE
+ 	default $(BR2_CUSTOM_LINUX26_VERSION) if BR2_LINUX26_CUSTOM
+ 
+ menu "Linux Kernel Configuration"
