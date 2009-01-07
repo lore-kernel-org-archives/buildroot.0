@@ -1,88 +1,62 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 07 Jan 2009 13:57:41 +0100
+Date: Wed, 07 Jan 2009 14:02:53 +0100
 Subject: [Buildroot] Buildroot maintainer and stable releases
-In-Reply-To: <1231330238.32308.334.camel@elrond.atmel.com> (Ulf Samuelsson's
-	message of "Wed\, 07 Jan 2009 13\:10\:38 +0100")
+In-Reply-To: <200901071319.00644.markus.heidelberg@web.de> (Markus
+	Heidelberg's message of "Wed\, 7 Jan 2009 13\:19\:00 +0100")
 References: <87prj1v4dy.fsf@macbook.be.48ers.dk>
-	<1231243376.32308.52.camel@elrond.atmel.com>
-	<87vdsssiwo.fsf@macbook.be.48ers.dk>
 	<200901070409.42558.markus.heidelberg@web.de>
-	<1231326832.32308.320.camel@elrond.atmel.com>
-	<87prizl5im.fsf@macbook.be.48ers.dk>
-	<1231330238.32308.334.camel@elrond.atmel.com>
-Message-ID: <87d4ezl1dm.fsf@macbook.be.48ers.dk>
+	<87y6xnldvt.fsf@macbook.be.48ers.dk>
+	<200901071319.00644.markus.heidelberg@web.de>
+Message-ID: <878wpnl14y.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
+>>>>> "Markus" == Markus Heidelberg <markus.heidelberg@web.de> writes:
 
 Hi,
 
- Ulf> but I had to disable SAMBA and STRACE and change to uCLibc-0.9.30
- Ulf> since 0.9.29 does not compile for anything I tried.
- >> 
- >> Ok, why would you use 0.9.29 now 0.9.30 is out? Anyway, I'll do a
- >> 0.9.29 test compile in a moment.
+ >> (resend with trimmed Cc line to please mailman)
 
-Builds ok here on armv4l with gcc 4.24 / 2.6.28 headers (breaks with
-4.3.x with the limits.h error). I'm not interested in fixing up 0.9.29
-to work with current compilers, but feel free to do so.
+ Markus> What was the problem with the former mail?  In my sent mail
+ Markus> you, Ulf and HCE were on Cc, but when receiving my mail from
+ Markus> the list, only Ulf was on Cc, you and HCE were gone. Is this
+ Markus> a related problem? How to fix it?
 
- Ulf> I giess a new version of STRACE has probably been introduced
- Ulf> and this broke the socat.XXX.patch.avr32 patches.
- >> 
- >> socat or strace?
+Mailman bounced the mail to the list because it didn't like the long
+Cc list.
 
- Ulf> sorry - strace.
+We might ask the osuosl.org people to tweak the config, but I'm still
+waiting on them to fix the buildroot at busybox.net bounces.
 
-Ok, HcE will afaik check in the updated avr32 patch once he gets the
-connection sorted out.
+ Markus> I don't remember where to find the git URL, but I did it somehow once:
+ Markus> git://www.atmel.no/~hcegtvedt/buildroot/avr32.git
 
- Ulf> It is not fixed by a system which has stable distributions
- Ulf> which are removed and replaced with another stable
- Ulf> distribution which breaks support for a number of systems.
- Ulf> Then distributions might be stable, but the system as a whole
- Ulf> is totally unstable, and unacceptable for professional use.
+Thanks.
 
-Breaks support? That shouldn't happen if the release candidates gets
-enough testing. 100% safety is not realistic, if you want that, just
-don't upgrade to the new version.
+ >> Exactly. Who will redo this patch if I bump the mplayer version?
 
- >> With main svn you mean this tree? Maybe it would make more sense to
- >> keep the Atmel stuff in your own fork?
+ Markus> I tried it some weeks ago. I think it should have worked, but I got
+ Markus> a compile error that wasn't related to the patch as far as I remember
+ Markus> and judge. I had some time consuming toolchain rebuilds and then I
+ Markus> noticed that the new version wasn't really necessary, so I stopped
+ Markus> investigating further and stayed with the current version.
 
- Ulf> That is not my own fork, it is Atmel Norways fork.
+Ok.
 
-Yes, but Ulf == Atmel.no, right?
+ Markus> And even if it worked, this is not a solution. Someone should make it
+ Markus> ready and submit it upstream and it's definetly not me, I haven't
+ Markus> written the patch and cannot say anything about it's maturity.
 
- >> I disagree. This is exactly what we SHOULDN'T do. We need to keep
- >> close to upstream and only provide the latest stable version (except
- >> for special situations) and work with upstream to fix problems if any.
+Probably HcE in the long run, but he seems quite busy at the moment.
 
- Ulf> Which will break architectures continously, so it will not allow
- Ulf> the use of Buildroot as more than a toy to introduce Linux
- Ulf> until people find something that really works.
+ Markus> If nobody involved in this patch has the time to do it, it
+ Markus> should best be thrown out of uclibc-buildroot and just be
+ Markus> kept in HCE's repo.
 
-Why? Seems to work pretty well elsewhere.
-
- >> Anything else is just too much work with too little improvements
- >> going upstream.
-
- Ulf> I do not disagree that we need to ensure that patches are fed
- Ulf> upstream, but the current way does not support working as a team
- Ulf> project.  It is a single user system.
-
-This I don't get - What do you mean?
-
- Ulf> Since we have opposing views, then I think the rest of the 
- Ulf> people interested in maintaining buildroot, needs to 
- Ulf> also show their desires before any drastic actions in either
- Ulf> direction is taken.
-
-Sure, feel free to speak up.
+Agreed.
 
 -- 
 Bye, Peter Korsgaard
