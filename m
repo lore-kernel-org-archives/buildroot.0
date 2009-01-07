@@ -1,62 +1,68 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 07 Jan 2009 14:15:15 +0100
+From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
+Date: Wed, 7 Jan 2009 12:01:33 -0200
 Subject: [Buildroot] Buildroot maintainer and stable releases
-In-Reply-To: <1231331663.32308.358.camel@elrond.atmel.com> (Ulf Samuelsson's
-	message of "Wed\, 07 Jan 2009 13\:34\:23 +0100")
+In-Reply-To: <200901071319.00644.markus.heidelberg@web.de>
 References: <87prj1v4dy.fsf@macbook.be.48ers.dk>
-	<d6cda7730901061022v3866b298y547235a57535d009@mail.gmail.com>
-	<1231268529.32308.222.camel@elrond.atmel.com>
-	<87y6xomehq.fsf@macbook.be.48ers.dk>
-	<1231274947.32308.260.camel@elrond.atmel.com>
-	<87ljtnl5g9.fsf@macbook.be.48ers.dk>
-	<1231331663.32308.358.camel@elrond.atmel.com>
-Message-ID: <874p0bl0kc.fsf@macbook.be.48ers.dk>
+	<200901070409.42558.markus.heidelberg@web.de>
+	<87y6xnldvt.fsf@macbook.be.48ers.dk>
+	<200901071319.00644.markus.heidelberg@web.de>
+Message-ID: <d6cda7730901070601o1c98127cv2df22e32808718b0@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
+This thread is getting too high traffic for me to follow, so I will
+just pick some topics:
 
- Ulf> You need several for distributions (or releases) to work
- >> 
- >> Why? If big distributions like Debian can use the same sources for all
- >> it's archs, why can't we?
+On Wed, Jan 7, 2009 at 10:19 AM, Markus Heidelberg
+<markus.heidelberg@web.de> wrote:
+> Peter Korsgaard, 07.01.2009:
+>> Markus Heidelberg writes:
+>
+>> Right now things are kind of a mess as avr32 is lacking from most
+>> upstream projects, so there's lots of big patches involved. As things
+>> are now, I don't see missing avr32 as a showstopper for a first
+>> release.
+>
+> Absolutely agreed. Especially given that there is this well-supported
+> AVR32 fork (which isn't really a fork I think, it rather sits on top of
+> uclibc-buildroot).
+>
 
- Ulf> We need to differentiate between testing and releases.
- Ulf> I have already made the comment, that I believe 
- Ulf> a distribution should use a single version of the source
- Ulf> (with patches).
+This is not really true. The Atmel fork have numerous issues, and I
+can't do much about them, that's exactly why I looked up to this
+project. I didn't even knew what buildroot was before being introduced
+to Atmel's fork.
+John and Amaur, certainly had their issues with Atmel's fork as well,
+since they decided to contribute AVR32 specific changes here at some
+point. That probably could be said about most AVR32 user around.
 
- Ulf> I am talking about the process of getting a package
- Ulf> into the stable distribution, and currently there
- Ulf> is no process of doing this.
- Ulf> Either you commit a patch or not.
- Ulf> As you pointed out, we do not have the resources
- Ulf> to do every test for every architecture.
+I guess HCE and others from Atmel will only point users to Atmel's
+fork because of the quality issues we have here, and lack of release.
+It really doesn't look good for the company to point it's customers
+here and it sudenly doesn't even build today.
+Having our quality issues and releases sorted out, it's likely that
+their branch might just go away.
 
-That's what the releases are for. We do development for some time,
-then move into a stabilization phase (release candidates) and finally
-we do a release. Then the cyclus starts again.
+On Wed, Jan 7, 2009 at 9:28 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>  Ulf> That is why other systems like OpenEmbedded allow having more
+>  Ulf> than one version of a package.
+>  Ulf> A system that only allows a single version is really not useful.
+>
+> Sorry, I disagree. Most packages only have a single version and that
+> works fine. Almost everything under packages builds just fine on any
+[cut]
 
- Ulf> Unless we can commit patches to a development section
- Ulf> without breaking the distribution we cannot work 
- Ulf> as a team.
+I agree with Peter. We should strive to keep single versions only.
+There are cases like DirectFB and perhaps other libs that it's not
+possible, because the lib changes it's API. But in general, having
+several versions of the same package will add clutter and will be a
+maintenance nightmare.
+Ulf, I see your point. But suggesting to have versions for every
+package is too much. Perhaps we could have multiple versions for one
+very important package or another but every one doesn't make sense.
 
-Why not? It seems to work elsewhere, and obviously seems to have
-worked here pretty ok as well.
-
- Ulf> Your goal of a single source package that will not break
- Ulf> for any supported architecture will thus be met by the 
- Ulf> packages IN the distribution. Packages outside
- Ulf> the distribution are not supported.
-
-packages outside the distribution? What are those?
-
- Ulf> It will also allow people to build old distributions.
-
-They always can do that, just use an old release.
-
--- 
-Bye, Peter Korsgaard
+Kind Regards,
+    Thiago A. Correa
