@@ -1,80 +1,42 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Wed, 07 Jan 2009 20:26:17 +0100
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 07 Jan 2009 20:36:36 +0100
 Subject: [Buildroot] Buildroot maintainer and stable releases
-In-Reply-To: <20090107184338.GA12169@zelow.no>
+In-Reply-To: <1231355624.32308.410.camel@elrond.atmel.com> (Ulf Samuelsson's
+	message of "Wed\, 07 Jan 2009 20\:13\:44 +0100")
 References: <87prj1v4dy.fsf@macbook.be.48ers.dk>
-	<20090106140140.GA22854@zelow.no> <87aba4pj4w.fsf@macbook.be.48ers.dk>
-	<20090106183243.GA28479@zelow.no> <873afwnu6n.fsf@macbook.be.48ers.dk>
-	<1231268970.32308.230.camel@elrond.atmel.com>
-	<20090107184338.GA12169@zelow.no>
-Message-ID: <1231356377.32308.424.camel@elrond.atmel.com>
+	<d6cda7730901061022v3866b298y547235a57535d009@mail.gmail.com>
+	<1231268529.32308.222.camel@elrond.atmel.com>
+	<87y6xomehq.fsf@macbook.be.48ers.dk>
+	<1231274947.32308.260.camel@elrond.atmel.com>
+	<87ljtnl5g9.fsf@macbook.be.48ers.dk>
+	<1231331663.32308.358.camel@elrond.atmel.com>
+	<20090107180208.GA14648@zelow.no>
+	<1231355624.32308.410.camel@elrond.atmel.com>
+Message-ID: <87zli2kiwr.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ons 2009-01-07 klockan 19:43 +0100 skrev Thomas Lundquist:
-> On Tue, Jan 06, 2009 at 08:09:30PM +0100, Ulf Samuelsson wrote:
-> > 
-> > A typical issue that pops up from time to time is that
-> > people build the toolchain with a certain configuration
-> > and then finds that they need a different configurtion
-> > to build a package, and do not realize that they 
-> > need to rebuild the toolchain for the changes to take effect.
-> 
-> Which is why...
-> 
-> > It would be good to resolve this, and this is why I have
-> > proposed to separate toolchain build.
-> 
-> ..This is a bad idea.
-> 
-> (Since the rebuild should be automagic if there are 
->  changes in configurations that requires one.)
+>>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 
-It doesn't rebuild automatically right now.
+Hi,
 
-I think that this is the main reason why I think 
-the toolchain should be separate.
+ >> That's what tags, branches and releases are for. 
+ >> Having separate makefiles sounds messy.
 
-When the toolchain has been build it should generate
-Config.in files automatically, which is included
-by the Buildroot Config.in.
+ Ulf> I am not an expert in Source Code Management,
+ Ulf> but do you have this capability in Subversion?
+ Ulf> I know you have it in git, but using git
+ Ulf> is apparently not an option.
 
-You will then have access to the toolchain
-parameters, but you will not have the ability
-to add packages depending on non avaialble options.
+Yes, ofcourse you can do it in svn, and as I said, git is coming.
 
-You will have to go back and reconfigure the toolchain
-when then will then be forced to be rebuilt.
+ Ulf> I do not see it as too messy to use directories.
 
-gcctools:	toolchain/.config
-		make -C toolchain 
-		touch $@
+I do - But more importantly, it would just keep on growing, making it
+harder and harder to test everything.
 
-and then the toolchain is automatically rebuilt
-everytime the toolchain configuration is changed.
-
-If you can change an option easily which forces the rebuild
-of a toolchian, then you can also change an option by
-mistake making you lose a couple of hours...
-
-> 
-> > With SYSROOT in gcc-4 there is really no reason 
-> > to induce people to rebuild the toolchain,
-> > and we might want to support downloading a binary toolchain as well.
-> 
-> The only way to support this should be through the "external toolchain" 
-> thingie. (And that should have it's own maintainer, one that uses this)
-> 
-
-If you separate the build then (almost) everyone will build
-then native toolchain and then use it as an external toolchain.
-
-> 
-> Thomas
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+-- 
+Bye, Peter Korsgaard
