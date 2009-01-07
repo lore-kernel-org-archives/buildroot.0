@@ -1,18 +1,18 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 07 Jan 2009 20:36:36 +0100
+Date: Wed, 07 Jan 2009 20:39:10 +0100
 Subject: [Buildroot] Buildroot maintainer and stable releases
-In-Reply-To: <1231355624.32308.410.camel@elrond.atmel.com> (Ulf Samuelsson's
-	message of "Wed\, 07 Jan 2009 20\:13\:44 +0100")
+In-Reply-To: <1231355808.32308.414.camel@elrond.atmel.com> (Ulf Samuelsson's
+	message of "Wed\, 07 Jan 2009 20\:16\:48 +0100")
 References: <87prj1v4dy.fsf@macbook.be.48ers.dk>
-	<d6cda7730901061022v3866b298y547235a57535d009@mail.gmail.com>
-	<1231268529.32308.222.camel@elrond.atmel.com>
-	<87y6xomehq.fsf@macbook.be.48ers.dk>
-	<1231274947.32308.260.camel@elrond.atmel.com>
-	<87ljtnl5g9.fsf@macbook.be.48ers.dk>
-	<1231331663.32308.358.camel@elrond.atmel.com>
-	<20090107180208.GA14648@zelow.no>
-	<1231355624.32308.410.camel@elrond.atmel.com>
-Message-ID: <87zli2kiwr.fsf@macbook.be.48ers.dk>
+	<1231243376.32308.52.camel@elrond.atmel.com>
+	<87vdsssiwo.fsf@macbook.be.48ers.dk>
+	<200901070409.42558.markus.heidelberg@web.de>
+	<1231326832.32308.320.camel@elrond.atmel.com>
+	<87prizl5im.fsf@macbook.be.48ers.dk>
+	<1231330238.32308.334.camel@elrond.atmel.com>
+	<20090107181337.GB14648@zelow.no>
+	<1231355808.32308.414.camel@elrond.atmel.com>
+Message-ID: <87vdsqkish.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -23,20 +23,21 @@ To: buildroot@busybox.net
 
 Hi,
 
- >> That's what tags, branches and releases are for. 
- >> Having separate makefiles sounds messy.
+ Ulf> When we release a distribution, then all needed packages
+ Ulf> in that distribution needs to be mirrored somewhere.
 
- Ulf> I am not an expert in Source Code Management,
- Ulf> but do you have this capability in Subversion?
- Ulf> I know you have it in git, but using git
- Ulf> is apparently not an option.
+Agreed (long term atleast).
 
-Yes, ofcourse you can do it in svn, and as I said, git is coming.
+ Ulf> This was a key requirement when I pestered Atmel Norway 
+ Ulf> to replace their build scripts with buildroot,
+ Ulf> and I think HCE has implemented it.
+ Ulf> There is a scripts/wget.sh which I will have a look at.
 
- Ulf> I do not see it as too messy to use directories.
+From a quick look that script just seems to handle the backup mirror
+thing like we have in Makefile.autotools.in.
 
-I do - But more importantly, it would just keep on growing, making it
-harder and harder to test everything.
+For populating a mirror you can use make source instead (for all
+possible configurations)
 
 -- 
 Bye, Peter Korsgaard
