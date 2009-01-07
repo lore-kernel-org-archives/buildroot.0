@@ -1,62 +1,62 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 07 Jan 2009 14:02:53 +0100
+Date: Wed, 07 Jan 2009 14:15:15 +0100
 Subject: [Buildroot] Buildroot maintainer and stable releases
-In-Reply-To: <200901071319.00644.markus.heidelberg@web.de> (Markus
-	Heidelberg's message of "Wed\, 7 Jan 2009 13\:19\:00 +0100")
+In-Reply-To: <1231331663.32308.358.camel@elrond.atmel.com> (Ulf Samuelsson's
+	message of "Wed\, 07 Jan 2009 13\:34\:23 +0100")
 References: <87prj1v4dy.fsf@macbook.be.48ers.dk>
-	<200901070409.42558.markus.heidelberg@web.de>
-	<87y6xnldvt.fsf@macbook.be.48ers.dk>
-	<200901071319.00644.markus.heidelberg@web.de>
-Message-ID: <878wpnl14y.fsf@macbook.be.48ers.dk>
+	<d6cda7730901061022v3866b298y547235a57535d009@mail.gmail.com>
+	<1231268529.32308.222.camel@elrond.atmel.com>
+	<87y6xomehq.fsf@macbook.be.48ers.dk>
+	<1231274947.32308.260.camel@elrond.atmel.com>
+	<87ljtnl5g9.fsf@macbook.be.48ers.dk>
+	<1231331663.32308.358.camel@elrond.atmel.com>
+Message-ID: <874p0bl0kc.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Markus" == Markus Heidelberg <markus.heidelberg@web.de> writes:
+>>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 
-Hi,
+ Ulf> You need several for distributions (or releases) to work
+ >> 
+ >> Why? If big distributions like Debian can use the same sources for all
+ >> it's archs, why can't we?
 
- >> (resend with trimmed Cc line to please mailman)
+ Ulf> We need to differentiate between testing and releases.
+ Ulf> I have already made the comment, that I believe 
+ Ulf> a distribution should use a single version of the source
+ Ulf> (with patches).
 
- Markus> What was the problem with the former mail?  In my sent mail
- Markus> you, Ulf and HCE were on Cc, but when receiving my mail from
- Markus> the list, only Ulf was on Cc, you and HCE were gone. Is this
- Markus> a related problem? How to fix it?
+ Ulf> I am talking about the process of getting a package
+ Ulf> into the stable distribution, and currently there
+ Ulf> is no process of doing this.
+ Ulf> Either you commit a patch or not.
+ Ulf> As you pointed out, we do not have the resources
+ Ulf> to do every test for every architecture.
 
-Mailman bounced the mail to the list because it didn't like the long
-Cc list.
+That's what the releases are for. We do development for some time,
+then move into a stabilization phase (release candidates) and finally
+we do a release. Then the cyclus starts again.
 
-We might ask the osuosl.org people to tweak the config, but I'm still
-waiting on them to fix the buildroot at busybox.net bounces.
+ Ulf> Unless we can commit patches to a development section
+ Ulf> without breaking the distribution we cannot work 
+ Ulf> as a team.
 
- Markus> I don't remember where to find the git URL, but I did it somehow once:
- Markus> git://www.atmel.no/~hcegtvedt/buildroot/avr32.git
+Why not? It seems to work elsewhere, and obviously seems to have
+worked here pretty ok as well.
 
-Thanks.
+ Ulf> Your goal of a single source package that will not break
+ Ulf> for any supported architecture will thus be met by the 
+ Ulf> packages IN the distribution. Packages outside
+ Ulf> the distribution are not supported.
 
- >> Exactly. Who will redo this patch if I bump the mplayer version?
+packages outside the distribution? What are those?
 
- Markus> I tried it some weeks ago. I think it should have worked, but I got
- Markus> a compile error that wasn't related to the patch as far as I remember
- Markus> and judge. I had some time consuming toolchain rebuilds and then I
- Markus> noticed that the new version wasn't really necessary, so I stopped
- Markus> investigating further and stayed with the current version.
+ Ulf> It will also allow people to build old distributions.
 
-Ok.
-
- Markus> And even if it worked, this is not a solution. Someone should make it
- Markus> ready and submit it upstream and it's definetly not me, I haven't
- Markus> written the patch and cannot say anything about it's maturity.
-
-Probably HcE in the long run, but he seems quite busy at the moment.
-
- Markus> If nobody involved in this patch has the time to do it, it
- Markus> should best be thrown out of uclibc-buildroot and just be
- Markus> kept in HCE's repo.
-
-Agreed.
+They always can do that, just use an old release.
 
 -- 
 Bye, Peter Korsgaard
