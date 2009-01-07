@@ -1,68 +1,76 @@
-From: =?ISO-8859-1?Q?Thiago_A._Corr=EAa?= <thiago.correa@gmail.com>
-Date: Wed, 7 Jan 2009 12:01:33 -0200
+From: Thomas Lundquist <lists@zelow.no>
+Date: Wed, 7 Jan 2009 19:02:08 +0100
 Subject: [Buildroot] Buildroot maintainer and stable releases
-In-Reply-To: <200901071319.00644.markus.heidelberg@web.de>
+In-Reply-To: <1231331663.32308.358.camel@elrond.atmel.com>
 References: <87prj1v4dy.fsf@macbook.be.48ers.dk>
-	<200901070409.42558.markus.heidelberg@web.de>
-	<87y6xnldvt.fsf@macbook.be.48ers.dk>
-	<200901071319.00644.markus.heidelberg@web.de>
-Message-ID: <d6cda7730901070601o1c98127cv2df22e32808718b0@mail.gmail.com>
+	<d6cda7730901061022v3866b298y547235a57535d009@mail.gmail.com>
+	<1231268529.32308.222.camel@elrond.atmel.com>
+	<87y6xomehq.fsf@macbook.be.48ers.dk>
+	<1231274947.32308.260.camel@elrond.atmel.com>
+	<87ljtnl5g9.fsf@macbook.be.48ers.dk>
+	<1231331663.32308.358.camel@elrond.atmel.com>
+Message-ID: <20090107180208.GA14648@zelow.no>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This thread is getting too high traffic for me to follow, so I will
-just pick some topics:
+On Wed, Jan 07, 2009 at 01:34:23PM +0100, Ulf Samuelsson wrote:
+> 
+> We need to differentiate between testing and releases.
+> I have already made the comment, that I believe 
+> a distribution should use a single version of the source
+> (with patches).
 
-On Wed, Jan 7, 2009 at 10:19 AM, Markus Heidelberg
-<markus.heidelberg@web.de> wrote:
-> Peter Korsgaard, 07.01.2009:
->> Markus Heidelberg writes:
->
->> Right now things are kind of a mess as avr32 is lacking from most
->> upstream projects, so there's lots of big patches involved. As things
->> are now, I don't see missing avr32 as a showstopper for a first
->> release.
->
-> Absolutely agreed. Especially given that there is this well-supported
-> AVR32 fork (which isn't really a fork I think, it rather sits on top of
-> uclibc-buildroot).
->
+That's what tags, branches and releases are for. 
+Having separate makefiles sounds messy.
 
-This is not really true. The Atmel fork have numerous issues, and I
-can't do much about them, that's exactly why I looked up to this
-project. I didn't even knew what buildroot was before being introduced
-to Atmel's fork.
-John and Amaur, certainly had their issues with Atmel's fork as well,
-since they decided to contribute AVR32 specific changes here at some
-point. That probably could be said about most AVR32 user around.
+> I am talking about the process of getting a package
+> into the stable distribution, and currently there
+> is no process of doing this.
 
-I guess HCE and others from Atmel will only point users to Atmel's
-fork because of the quality issues we have here, and lack of release.
-It really doesn't look good for the company to point it's customers
-here and it sudenly doesn't even build today.
-Having our quality issues and releases sorted out, it's likely that
-their branch might just go away.
+You could tag each package in Config.in or something 
+with "UNTESTED" "TESTING" or whatever aswell, then change or remove when
+we know it works.
 
-On Wed, Jan 7, 2009 at 9:28 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->  Ulf> That is why other systems like OpenEmbedded allow having more
->  Ulf> than one version of a package.
->  Ulf> A system that only allows a single version is really not useful.
->
-> Sorry, I disagree. Most packages only have a single version and that
-> works fine. Almost everything under packages builds just fine on any
-[cut]
+(Or just use EXPERIMENTAL as other projects does)
 
-I agree with Peter. We should strive to keep single versions only.
-There are cases like DirectFB and perhaps other libs that it's not
-possible, because the lib changes it's API. But in general, having
-several versions of the same package will add clutter and will be a
-maintenance nightmare.
-Ulf, I see your point. But suggesting to have versions for every
-package is too much. Perhaps we could have multiple versions for one
-very important package or another but every one doesn't make sense.
+> Your goal of a single source package that will not break
+> for any supported architecture will thus be met by the 
+> packages IN the distribution. Packages outside
+> the distribution are not supported.
 
-Kind Regards,
-    Thiago A. Correa
+This is another story, maybe we should support contrib/*.* like you 
+once had with local/ for out-of-tree packages and boards.
+
+> It will also allow people to build old distributions.
+
+That's why we have version control. Just check out an earlier
+revision.
+
+> When it is time to look at a new release, then
+> it is easy to check what has been introduced
+> since the last distribution, and create 
+> the version file for the new testing phase.
+
+NEW (and oldconfig)
+
+> If it does not build, then it is set to broken
+> for that architecture.
+
+What you are suggesting here is a package-tagging about the status 
+of the package per ARCH.
+
+This would suggest a new file per package with metainfo (Which could be used
+to make Config.in since we'd rather not duplicate information.)
+
+> If the problem can be fixed with a patch, then
+> a new directory is created with the patch.
+
+As long as we keep having only one version of each package we won't need
+to do this.
+
+
+
+Thomas.
