@@ -1,43 +1,58 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 07 Jan 2009 20:39:10 +0100
+From: Thomas Lundquist <lists@zelow.no>
+Date: Wed, 7 Jan 2009 21:22:43 +0100
 Subject: [Buildroot] Buildroot maintainer and stable releases
-In-Reply-To: <1231355808.32308.414.camel@elrond.atmel.com> (Ulf Samuelsson's
-	message of "Wed\, 07 Jan 2009 20\:16\:48 +0100")
+In-Reply-To: <1231356377.32308.424.camel@elrond.atmel.com>
 References: <87prj1v4dy.fsf@macbook.be.48ers.dk>
-	<1231243376.32308.52.camel@elrond.atmel.com>
-	<87vdsssiwo.fsf@macbook.be.48ers.dk>
-	<200901070409.42558.markus.heidelberg@web.de>
-	<1231326832.32308.320.camel@elrond.atmel.com>
-	<87prizl5im.fsf@macbook.be.48ers.dk>
-	<1231330238.32308.334.camel@elrond.atmel.com>
-	<20090107181337.GB14648@zelow.no>
-	<1231355808.32308.414.camel@elrond.atmel.com>
-Message-ID: <87vdsqkish.fsf@macbook.be.48ers.dk>
+	<20090106140140.GA22854@zelow.no>
+	<87aba4pj4w.fsf@macbook.be.48ers.dk>
+	<20090106183243.GA28479@zelow.no>
+	<873afwnu6n.fsf@macbook.be.48ers.dk>
+	<1231268970.32308.230.camel@elrond.atmel.com>
+	<20090107184338.GA12169@zelow.no>
+	<1231356377.32308.424.camel@elrond.atmel.com>
+Message-ID: <20090107202243.GA17480@zelow.no>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
+On Wed, Jan 07, 2009 at 08:26:17PM +0100, Ulf Samuelsson wrote:
+> 
+> It doesn't rebuild automatically right now.
+> 
+> I think that this is the main reason why I think 
+> the toolchain should be separate.
 
-Hi,
+> When the toolchain has been build it should generate
+> Config.in files automatically, which is included
+> by the Buildroot Config.in.
 
- Ulf> When we release a distribution, then all needed packages
- Ulf> in that distribution needs to be mirrored somewhere.
+With only the options working with that specific toochain? 
 
-Agreed (long term atleast).
+That will hide the users real options.
 
- Ulf> This was a key requirement when I pestered Atmel Norway 
- Ulf> to replace their build scripts with buildroot,
- Ulf> and I think HCE has implemented it.
- Ulf> There is a scripts/wget.sh which I will have a look at.
+> You will then have access to the toolchain
+> parameters, but you will not have the ability
+> to add packages depending on non avaialble options.
 
-From a quick look that script just seems to handle the backup mirror
-thing like we have in Makefile.autotools.in.
+If it is possible to know this, the opposite is possible too, and that is 
+to keep the available options instead of hiding it but show / tell the 
+user that this will result in a recompiled toolchain.
 
-For populating a mirror you can use make source instead (for all
-possible configurations)
+(One reason I am a bit recultant to do this automagically, that it turning on the 
+ nessesary toolchain options is that options like WCHAR adds alot.)
 
--- 
-Bye, Peter Korsgaard
+> If you can change an option easily which forces the rebuild
+> of a toolchian, then you can also change an option by
+> mistake making you lose a couple of hours...
+
+Figuring out that the one little thing you wanted would be available if 
+you just turned on something in the toolchain takes alot longer and 
+frustrates alot more. That is the *users* time wasted, not CPU time.
+
+I'd rather have a warning of some sort.
+
+
+
+Thomas.
