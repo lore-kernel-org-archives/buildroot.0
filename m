@@ -1,53 +1,36 @@
 From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Wed, 7 Jan 2009 07:29:21 +0100
-Subject: [Buildroot] Which u-boot/buildroot version for ppc8272?
-In-Reply-To: <loom.20090106T224840-114@post.gmane.org>
-References: <loom.20090106T043218-43@post.gmane.org>
-	<87ljtovpem.fsf@macbook.be.48ers.dk>
-	<loom.20090106T224840-114@post.gmane.org>
-Message-ID: <20090107072921.3740d709@hcegtvedt>
+Date: Wed, 7 Jan 2009 07:09:24 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
+In-Reply-To: <20090106214244.0870976CB5@busybox.osuosl.org>
+References: <20090106214244.0870976CB5@busybox.osuosl.org>
+Message-ID: <20090107070924.57955742@hcegtvedt>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 6 Jan 2009 22:53:33 +0000 (UTC)
-Daniel Ng <daniel_ng11@lycos.com> wrote:
+On Tue,  6 Jan 2009 21:42:43 +0000 (UTC)
+ulf at uclibc.org wrote:
 
-> Peter Korsgaard <jacmet@...> writes:
-> > Yes, u-boot recently broke. I fixed it up yesterday and it builds
-> > for me for a 603e (83xx).
-> > 
-> 
-> Hi Peter,
-> 
-> I've just tried the latest (buildroot-20090106.tar.bz2) but get the
-> same error-
-> 
-> make[1]: Entering directory 
-> `/home/dng/buildroot/project_build_powerpc/uclibc/u-boot-2009.01-rc1'
-> make[1]: *** No rule to make target `_config'.  Stop.
+<snipp>
 
-Here is your error
+> Modified: trunk/buildroot/target/linux/Makefile.in.advanced
+> ===================================================================
+> --- trunk/buildroot/target/linux/Makefile.in.advanced
+> 2009-01-06 21:24:42 UTC (rev 24711) +++
+> trunk/buildroot/target/linux/Makefile.in.advanced	2009-01-06
+> 21:42:43 UTC (rev 24712) @@ -190,7 +190,8 @@
+> INSTALL_MOD_PATH=$(TARGET_DIR) \ CROSS_COMPILE=$(KERNEL_CROSS) \
+>  	LDFLAGS="$(TARGET_LDFLAGS)" \
+> -	LZMA="$(LZMA)"
+> +	LZMA="$(LZMA)" \
+> +	PATH=$(STAGING_DIR)/usr/bin:$(PATH)
+>  
 
-> make[1]: Leaving directory
-> `/home/dng/buildroot/project_build_powerpc/uclibc/u- boot-2009.01-rc1'
-> make: ***
-> [/home/dng/buildroot/project_build_powerpc/uclibc/u-boot-2009.01-
-> rc1/.configured] Error 2
-> 
-> In 'make menuconfig', all I did was:
-> 
-> 1) Specify PowerPC 603e
-> 2) Select u-boot
-> 
-> -everything else was left as their defaults.
-> 
-> Perhaps I need to change another menuconfig setting?
-> 
+PATH=$(TARGET_PATH) ?
 
-You need to set BR2_TARGET_UBOOT_BOARDNAME in Kconfig.
+<snipp>
 
 -- 
 Best regards,
