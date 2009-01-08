@@ -1,25 +1,34 @@
-From: Anton Copylov <a_copl@mail.ru>
-Date: Thu, 08 Jan 2009 17:43:07 +0300
-Subject: [Buildroot] uCLibc build error
-In-Reply-To: <874p09sw8l.fsf@macbook.be.48ers.dk>
-References: <874p09sw8l.fsf@macbook.be.48ers.dk>
-Message-ID: <E1LKw6F-0003k5-00.a_copl-mail-ru@f32.mail.ru>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Thu,  8 Jan 2009 14:58:47 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/mtd
+Message-ID: <20090108145847.D2C1D77106@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: jacmet
+Date: 2009-01-08 14:58:45 +0000 (Thu, 08 Jan 2009)
+New Revision: 24722
 
-Subject: Re: [Buildroot] uCLibc build error
+Log:
+mtd: mark 20050122 snapshot as deprecated
 
->Please show us your .config.
+Modified:
+   trunk/buildroot/package/mtd/Config.in
 
-Here is .config
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: .config
-Type: application/octet-stream
-Size: 22197 bytes
-Desc: not available
-Url : http://lists.busybox.net/pipermail/buildroot/attachments/20090108/9129cda9/attachment-0001.obj 
+
+Changeset:
+Modified: trunk/buildroot/package/mtd/Config.in
+===================================================================
+--- trunk/buildroot/package/mtd/Config.in	2009-01-08 13:16:24 UTC (rev 24721)
++++ trunk/buildroot/package/mtd/Config.in	2009-01-08 14:58:45 UTC (rev 24722)
+@@ -25,6 +25,7 @@
+ 
+ config BR2_PACKAGE_MTD_20050122
+ 	bool "Use MTD snapshot from 20050122"
++	depends on BR2_DEPRECATED
+ 	help
+ 	  Use the stable release.
+ 
