@@ -1,78 +1,37 @@
-From: Markus Heidelberg <markus.heidelberg@web.de>
-Date: Thu, 8 Jan 2009 15:10:39 +0100
-Subject: [Buildroot] [PATCH] u-boot: add config option to disable
-	general patches
-In-Reply-To: <200811151156.02393.markus.heidelberg@web.de>
-References: <200811140854.58814.markus.heidelberg@web.de>
-	<87od0ijunz.fsf@macbook.be.48ers.dk>
-	<200811151156.02393.markus.heidelberg@web.de>
-Message-ID: <200901081510.39837.markus.heidelberg@web.de>
+From: Anton Copylov <a_copl@mail.ru>
+Date: Thu, 08 Jan 2009 17:10:29 +0300
+Subject: [Buildroot] uCLibc build error
+Message-ID: <E1LKvaf-000HA9-00.a_copl-mail-ru@f142.mail.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The patches in target/u-boot/$(U_BOOT_VERSION)/ can conflict with custom
-board specific patches, so this option is necessary.
+Hi, all.
+I've building buildroot for PowerPC.
+Here is some output, occured, when uCLibc builds:
+gcc -c libc/sysdeps/linux/alpha/crt1.S -o 
+lib/crt1.o -include ./include/libc-symbols.h -Wall -Wstrict-prototypes -fno-strict-aliasing -fno-stack-protector -fno-builtin -nostdinc -I./include -I. -I./libc/sysdeps/linux/alpha -fno-asm -DUCLIBC_INTERNAL -DSTATIC -Os -funit-at-a-time -fno-tree-loop-optimize -fno-tree-dominator-opts -fno-strength-reduce -I./libpthread/linuxthreads.old/sysdeps/unix/sysv/linux/alpha -I./libpthread/linuxthreads.old/sysdeps/alpha -I./libpthread/linuxthreads.old/sysdeps/unix/sysv/linux -I./libpthread/linuxthreads.old/sysdeps/pthread -I./libpthread/linuxthreads.old -I./libpthread -I/usr/src/linux/include/ -I/usr/lib/gcc/i486-linux-gnu/4.3.2//include-fixed -I/usr/lib/gcc/i486-linux-gnu/4.3.2/include -DNDEBUG -MT 
+lib/crt1.o -MD -MP -MF lib/.crt1.o.dep -D__ASSEMBLER__ -DL_crt1
+libc/sysdeps/linux/alpha/crt1.S: Assembler messages:
+libc/sysdeps/linux/alpha/crt1.S:43: Error: alignment not a power of 2
+libc/sysdeps/linux/alpha/crt1.S:45: Error: unknown pseudo-op: `.ent'
+libc/sysdeps/linux/alpha/crt1.S:57: Error: unknown pseudo-op: `.frame'
+libc/sysdeps/linux/alpha/crt1.S:58: Error: no such instruction: `br $29,1f'
+libc/sysdeps/linux/alpha/crt1.S:59: Error: no such instruction: `ldgp $29,0($29)'
+libc/sysdeps/linux/alpha/crt1.S:60: Error: suffix or operands invalid for `sub'
+libc/sysdeps/linux/alpha/crt1.S:61: Error: suffix or operands invalid for `mov'
+libc/sysdeps/linux/alpha/crt1.S:62: Error: unknown pseudo-op: `.prologue'
+libc/sysdeps/linux/alpha/crt1.S:65: Error: no such instruction: `lda $16,main'
+libc/sysdeps/linux/alpha/crt1.S:67: Error: no such instruction: `ldl $17,16($30)'
+libc/sysdeps/linux/alpha/crt1.S:68: Error: no such instruction: `lda $18,24($30)'
+libc/sysdeps/linux/alpha/crt1.S:71: Error: no such instruction: `lda $19,_init'
+libc/sysdeps/linux/alpha/crt1.S:72: Error: no such instruction: `lda $20,_fini'
+libc/sysdeps/linux/alpha/crt1.S:75: Error: suffix or operands invalid for `mov'
+libc/sysdeps/linux/alpha/crt1.S:78: Error: no such instruction: `stq $30,0($30)'
+libc/sysdeps/linux/alpha/crt1.S:82: Error: no such instruction: `jsr $26,__uClibc_main'
+libc/sysdeps/linux/alpha/crt1.S:86: Error: invalid character '_' in mnemonic
 
-Signed-off-by: Markus Heidelberg <markus.heidelberg@web.de>
----
-
-Markus Heidelberg, 15.11.2008:
-> Peter Korsgaard, 14.11.2008:
-> > >>>>> "Markus" == Markus Heidelberg <markus.heidelberg@web.de> writes:
-> > 
-> >  Markus> The patches in target/u-boot/ can conflict with custom board specific
-> >  Markus> patches, so this option is necessary.
-> > 
-> > But there aren't any patches under target/u-boot?
-
-Now there are.
-
-> I use Atmel's buildroot for AVR32, they added a patch there. Then do you think
-> we should just delete the 3 patch-kernel.sh lines I've surrounded with the new
-> option because it is never used?
-
-
- target/u-boot/Config.in   |    8 ++++++++
- target/u-boot/Makefile.in |    2 ++
- 2 files changed, 10 insertions(+), 0 deletions(-)
-
-diff --git a/target/u-boot/Config.in b/target/u-boot/Config.in
-index 9ab6224..f916852 100644
---- a/target/u-boot/Config.in
-+++ b/target/u-boot/Config.in
-@@ -54,6 +54,14 @@ config BR2_U_BOOT_SITE
- 	default "$(BR2_ATMEL_MIRROR)"		if BR2_TARGET_UBOOT_1_2_0_ATMEL
- 	default "ftp://ftp.denx.de/pub/u-boot"
- 
-+config BR2_TARGET_UBOOT_DISABLE_GENERAL_PATCHES
-+	bool "disable general patches"
-+	depends on BR2_TARGET_UBOOT
-+	help
-+	  Select this option to disable applying the patches from
-+	  target/u-boot/$(U_BOOT_VERSION)/. This can be necessary if they
-+	  conflict with your custom patch.
-+
- config BR2_TARGET_UBOOT_CUSTOM_PATCH
- 	string "custom patch"
- 	depends on BR2_TARGET_UBOOT
-diff --git a/target/u-boot/Makefile.in b/target/u-boot/Makefile.in
-index b5bb8e1..6319cea 100644
---- a/target/u-boot/Makefile.in
-+++ b/target/u-boot/Makefile.in
-@@ -85,9 +85,11 @@ $(U_BOOT_DIR)/.unpacked: $(DL_DIR)/$(U_BOOT_SOURCE)
- 	touch $@
- 
- $(U_BOOT_DIR)/.patched: $(U_BOOT_DIR)/.unpacked
-+ifneq ($(BR2_TARGET_UBOOT_DISABLE_GENERAL_PATCHES),y)
- 	toolchain/patch-kernel.sh $(U_BOOT_DIR) target/u-boot/$(U_BOOT_VERSION) \
- 		u-boot-$(U_BOOT_VERSION)-\*.patch \
- 		u-boot-$(U_BOOT_VERSION)-\*.patch.$(ARCH)
-+endif
- ifneq ($(strip $(BR2_TARGET_UBOOT_CUSTOM_PATCH)),"")
- 	@mkdir -p $(U_BOOT_PATCH_DIR)
- 	cp -dpr $(BR2_TARGET_UBOOT_CUSTOM_PATCH) $(U_BOOT_PATCH_DIR)
--- 
-1.6.1.35.g0c23
+Path something/alpha/something looks strange, it seems like build for alpha processor, but i have PPC generic target 
+choosed.
