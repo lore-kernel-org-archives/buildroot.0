@@ -1,33 +1,43 @@
-From: RainerB <berns@BEKA-Elektronik.de>
-Date: Thu, 8 Jan 2009 04:58:32 -0800 (PST)
-Subject: [Buildroot]  GTK-DEMO crash with Segmentation fault
-Message-ID: <21351308.post@talk.nabble.com>
+From: egtvedt at uclibc.org <egtvedt@uclibc.org>
+Date: Thu,  8 Jan 2009 13:16:25 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot
+Message-ID: <20090108131625.74DAD77106@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: egtvedt
+Date: 2009-01-08 13:16:24 +0000 (Thu, 08 Jan 2009)
+New Revision: 24721
 
-Hi,
+Log:
+Mention the saveconfig and getconfig targets in make help
 
-i have generated buildroot (rev. 24695 and uClibc 0.9.29) for a AT91SAM9261
-with Directfb and GTK+.
-It works so far. There is one linking problem with tslib. 
-After fixing this i'am able to start the directfb samples and generate and
-run samples by myself with the toolchain.  
-Starting gtk-demo causes  a segmentation fault (Signal 11).
+I often find myself forgetting what those targets were called, and I imagine
+others may not even be aware of their existence.
 
-gdb gtk-demo core
-...
-#0  0x406fcaf0 in ?? () from /lib/libc.so.0
+Signed-off-by: Haavard Skinnemoen <haavard.skinnemoen@atmel.com>
+Signed-off-by: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
 
-Has anybody tried gtk+ with directfb during the last time ?
-Thanks for help.
 
-Regards
 
-Rainer
--- 
-View this message in context: http://www.nabble.com/GTK-DEMO-crash-with-Segmentation-fault-tp21351308p21351308.html
-Sent from the BuildRoot mailing list archive at Nabble.com.
+Modified:
+   trunk/buildroot/Makefile
+
+
+Changeset:
+Modified: trunk/buildroot/Makefile
+===================================================================
+--- trunk/buildroot/Makefile	2009-01-08 11:11:26 UTC (rev 24720)
++++ trunk/buildroot/Makefile	2009-01-08 13:16:24 UTC (rev 24721)
+@@ -505,6 +505,8 @@
+ 	@echo 'Configuration:'
+ 	@echo '  menuconfig             - interactive curses-based configurator'
+ 	@echo '  oldconfig              - resolve any unresolved symbols in .config'
++	@echo '  saveconfig             - save current configuration under local/<project>'
++	@echo '  getconfig              - restore saved configuration from local/<project>'
+ 	@echo
+ 	@echo 'Miscellaneous:'
+ 	@echo '  source                 - download all sources needed for offline-build'
