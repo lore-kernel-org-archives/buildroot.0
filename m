@@ -1,42 +1,44 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 08 Jan 2009 10:12:17 +0100
-Subject: [Buildroot] Buildroot maintainer and stable releases
-In-Reply-To: <20090108082750.GD17480@zelow.no> (Thomas Lundquist's message of
-	"Thu\, 8 Jan 2009 09\:27\:50 +0100")
-References: <87prj1v4dy.fsf@macbook.be.48ers.dk>
-	<20090106140140.GA22854@zelow.no> <87aba4pj4w.fsf@macbook.be.48ers.dk>
-	<20090106183243.GA28479@zelow.no> <873afwnu6n.fsf@macbook.be.48ers.dk>
-	<1231268970.32308.230.camel@elrond.atmel.com>
-	<20090107184338.GA12169@zelow.no>
-	<1231356377.32308.424.camel@elrond.atmel.com>
-	<20090107202243.GA17480@zelow.no> <87mye2kgdt.fsf@macbook.be.48ers.dk>
-	<20090108082750.GD17480@zelow.no>
-Message-ID: <87d4eyrwjy.fsf@macbook.be.48ers.dk>
+From: egtvedt at uclibc.org <egtvedt@uclibc.org>
+Date: Thu,  8 Jan 2009 09:24:33 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/strace
+Message-ID: <20090108092434.243E077106@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Lundquist <lists@zelow.no> writes:
+Author: egtvedt
+Date: 2009-01-08 09:24:32 +0000 (Thu, 08 Jan 2009)
+New Revision: 24719
 
- Thomas> On Wed, Jan 07, 2009 at 09:31:10PM +0100, Peter Korsgaard wrote:
- >> 
- >> comment "xorg requires a toolchain with LOCALE and WCHAR support"
- >> comment "iperf requires a toolchain with C++ support enabled"
- >> 
- >> And so on.
+Log:
+strace: fix AVR32 arch patches and refresh all patches to apply clean
 
- Thomas> That's a comment, maybe make it a bit more in-the-face?
+This patch updates the AVR32 arch patches for strace 4.5.18 and refreshes all
+the other patches so they apply clean.
 
-The comment is displayed in menuconfig - E.G.
+Signed-off-by: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
 
- [ ] ifplugd
- [ ] irda_utils  --->
-     *** iperf requires a toolchain with C++ support enabled ***
- [ ] iproute2
 
-I find that pretty clear.
 
--- 
-Bye, Peter Korsgaard
+Removed:
+   trunk/buildroot/package/strace/strace-undef-syscall.patch.avr32
+
+Modified:
+   trunk/buildroot/package/strace/strace-arch.patch.avr32
+   trunk/buildroot/package/strace/strace-arm-no-cachectl.patch
+   trunk/buildroot/package/strace/strace-autoreconf.patch.avr32
+   trunk/buildroot/package/strace/strace-dont-use-REG_SYSCALL-for-sh.patch
+   trunk/buildroot/package/strace/strace-fix-arm-bad-syscall.patch
+   trunk/buildroot/package/strace/strace-fix-disabled-largefile-syscalls.patch
+   trunk/buildroot/package/strace/strace-statfs64-check.patch
+   trunk/buildroot/package/strace/strace-undef-CTL_PROC.patch
+
+
+Changeset:
+
+Sorry, the patch is too large to include (11597 lines).
+Please use ViewCVS to see it!
+
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=24719
