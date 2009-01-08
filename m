@@ -1,108 +1,133 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Thu, 08 Jan 2009 00:42:57 +0100
+From: Thomas Lundquist <lists@zelow.no>
+Date: Thu, 8 Jan 2009 09:07:33 +0100
 Subject: [Buildroot] Buildroot maintainer and stable releases
-In-Reply-To: <20090107202243.GA17480@zelow.no>
+In-Reply-To: <1231355624.32308.410.camel@elrond.atmel.com>
 References: <87prj1v4dy.fsf@macbook.be.48ers.dk>
-	<20090106140140.GA22854@zelow.no> <87aba4pj4w.fsf@macbook.be.48ers.dk>
-	<20090106183243.GA28479@zelow.no> <873afwnu6n.fsf@macbook.be.48ers.dk>
-	<1231268970.32308.230.camel@elrond.atmel.com>
-	<20090107184338.GA12169@zelow.no>
-	<1231356377.32308.424.camel@elrond.atmel.com>
-	<20090107202243.GA17480@zelow.no>
-Message-ID: <1231371777.32308.608.camel@elrond.atmel.com>
+	<d6cda7730901061022v3866b298y547235a57535d009@mail.gmail.com>
+	<1231268529.32308.222.camel@elrond.atmel.com>
+	<87y6xomehq.fsf@macbook.be.48ers.dk>
+	<1231274947.32308.260.camel@elrond.atmel.com>
+	<87ljtnl5g9.fsf@macbook.be.48ers.dk>
+	<1231331663.32308.358.camel@elrond.atmel.com>
+	<20090107180208.GA14648@zelow.no>
+	<1231355624.32308.410.camel@elrond.atmel.com>
+Message-ID: <20090108080733.GB17480@zelow.no>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ons 2009-01-07 klockan 21:22 +0100 skrev Thomas Lundquist:
-> On Wed, Jan 07, 2009 at 08:26:17PM +0100, Ulf Samuelsson wrote:
-> > 
-> > It doesn't rebuild automatically right now.
-> > 
-> > I think that this is the main reason why I think 
-> > the toolchain should be separate.
+On Wed, Jan 07, 2009 at 08:13:44PM +0100, Ulf Samuelsson wrote:
+
+> > That's what tags, branches and releases are for. 
+> > Having separate makefiles sounds messy.
 > 
-> > When the toolchain has been build it should generate
-> > Config.in files automatically, which is included
-> > by the Buildroot Config.in.
+> I am not an expert in Source Code Management,
+> but do you have this capability in Subversion?
+
+Of course.
+
+> I know you have it in git, but using git
+> is apparently not an option.
+
+Maybe not as cool as git but still tags and branches.
+
+> I do not see it as too messy to use directories.
 > 
-> With only the options working with that specific toochain? 
+> Go to the package/<package> directory and create a new
+> directory, copy the files but not the svn info 
+> from the old distribution directory X.Y.Z. 
+> Call the new directory X1.X2.X3.
 > 
-> That will hide the users real options.
-
-If the user wants to know which options he has to build the
-toolchain, then he will have to configre the toolchain.
-
-It is the same with busybox, uClibc and linux. 
-You can only configure  a few things from buildroot.
-
+> Add 
 > 
-> > You will then have access to the toolchain
-> > parameters, but you will not have the ability
-> > to add packages depending on non avaialble options.
+> "<package>_VERSION=Z1.Y1.Z1"
 > 
-> If it is possible to know this, the opposite is possible too, and that is 
-> to keep the available options instead of hiding it but show / tell the 
-> user that this will result in a recompiled toolchain.
-
-I think it could be harder to implement.
-I do agree that you do not want a package to be totally
-invisible, just because of an toolchain option.
-I think that if a package IS disabled, then it could still be visible,
-but the reason for it to be impossible to select is shown.
-
-
-> (One reason I am a bit recultant to do this automagically, that it turning on the 
->  nessesary toolchain options is that options like WCHAR adds alot.)
+> to a file, and and
 > 
-> > If you can change an option easily which forces the rebuild
-> > of a toolchian, then you can also change an option by
-> > mistake making you lose a couple of hours...
+> ???select BR2_PACKAGE_<package>
 > 
-> Figuring out that the one little thing you wanted would be available if 
-> you just turned on something in the toolchain takes alot longer and 
-> frustrates alot more. That is the *users* time wasted, not CPU time.
-
-You need the information, but if you instead of:
-
-[ ] socat
-
-would get
-
---- socat -- needs toolchain with WCHAR
-
-Would that be uncacceptable?
-
-Maybe you could get an even better
-description if each package had 
-a menuconfig if the package cannot be
-selected with the package name in CAPITALS.
-
-[ ] NO SOCAT 
-
-If cyou check the box you get
-?
-[*] NO SOCAT 
---- toolchain must be built with WCHAR enabled
---- socat requires pacakge <x>
-
-You may have to set a global variable to enable 
-the reason for hiding a package.
-
-Will complicate the Config.in files a lot, but 
-would sure be nice.
-It is hard searching through the Config tree help
-
-
-
-> I'd rather have a warning of some sort.
+> to another, and your are ready to go.
 > 
+> ONce you ahve added a patch, then it will be easy
+> for other people to test this by adding 
+> ???
+> "<package>_VERSION=Z1.Y1.Z1"
+> ???select BR2_PACKAGE_<package>
 > 
-> 
-> Thomas.
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> to their private override files.
+
+This will be hell to maintain. Who / when to deprecate older versions 
+that does not compile with anything new? Shall it be kept for 
+ten years like you seem to suggest?
+
+Bit rot tends to start showing up in less than a year.
+
+> Once the "enable" file for all architectures contain this select
+> then the package can be considered to be validated,
+> and can be released.
+
+for *that* particular version and patch set. 
+
+> Then again, my requirement is not that it needs
+> to be implemented in a certain way, just
+> that the functionality of beeing able to 
+> start with a distribution, 
+
+That is tags and releases. No need to have more than one version 
+of the packages for that.
+
+> You can review changes by code reading,
+> and you can build to check that it compiles
+> but if you want to check that it actually
+> runs then someone with the right H/W needs
+> to build and run the code.
+
+Yes.
+
+> That is important as well, but I am rather thinking
+> distribution X supports package 1,2,3 but not 4.
+
+distribution or arch?
+
+> You wamt tp develop package 4 support for your arch,
+> and want to submit patches for others to test.
+
+Then you add that package (or do you mean version? then you bump it and make 
+sure it goes through the test runs) and then add your specific patches 
+if it's nessesary.
+
+> This is how openembedded works, you have a base distribution
+> which defines what versions to use, but anyone
+> can override the package version in their local.conf file.
+
+it can be overridden in the .mk file and then tagged with ignore in 
+the SCM so it won't be overwritten by the next update.
+
+> Anyone (with write access) can introduce and test a new package version
+> without breaking anyone elses build.
+
+And then we end up with so many versions it'll hurt, alot.
+
+> Yes. But in addition, I would like each architecture
+> to have access to packages from earlier distributions as well.
+
+As mentioned; Debian manages without and doing this will complicate
+way too much.
+
+> In order to avoid support nightmares, updates of
+> packages belonging to previous packages should not be
+> permitted, when work is starting on a new revision.
+
+This didn't make sense. Previous versions of a package 
+or "distribution"?
+
+> Use of old packages together with the current
+> distribution is not neccessarily a supported
+> activity.
+
+Whitch is exactly why we don't need this.
+
+
+Thomas.
