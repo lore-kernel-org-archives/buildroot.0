@@ -1,53 +1,66 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Thu, 08 Jan 2009 22:56:39 +0100
-Subject: [Buildroot] [PATCH] u-boot: add config option to
-	disable	general patches
-In-Reply-To: <878wplsw9q.fsf@macbook.be.48ers.dk>
-References: <200811140854.58814.markus.heidelberg@web.de>
-	<87od0ijunz.fsf@macbook.be.48ers.dk>
-	<200811151156.02393.markus.heidelberg@web.de>
-	<200901081510.39837.markus.heidelberg@web.de>
-	<878wplsw9q.fsf@macbook.be.48ers.dk>
-Message-ID: <1231451799.9711.13.camel@elrond.atmel.com>
+From: Markus Heidelberg <markus.heidelberg@web.de>
+Date: Thu, 8 Jan 2009 23:06:29 +0100
+Subject: [Buildroot] Buildroot maintainer and stable releases
+In-Reply-To: <00b501c971d5$4db0e0a0$dfc4af0a@Glamdring>
+References: <87prj1v4dy.fsf@macbook.be.48ers.dk>
+	<200901082128.59939.markus.heidelberg@web.de>
+	<00b501c971d5$4db0e0a0$dfc4af0a@Glamdring>
+Message-ID: <200901082306.29783.markus.heidelberg@web.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-tor 2009-01-08 klockan 15:33 +0100 skrev Peter Korsgaard:
-> >>>>> "Markus" == Markus Heidelberg <markus.heidelberg@web.de> writes:
+Ulf Samuelsson, 08.01.2009:
+> > But when you already put so much stuff into uclibc-buildroot to fully
+> > support AVR32, what's then remaining in HCE's tree and for what reason
+> > this is not put into upstream? With your arguments, HCE doesn't need to
+> > commit to his own repository at all, he could just commit everything
+> > to upstream. The only purpose of his tree then would be having stable
+> > and tested AVR32 releases for the customers.
 > 
->  Markus> The patches in target/u-boot/$(U_BOOT_VERSION)/ can conflict with custom
->  Markus> board specific patches, so this option is necessary.
+> That is a very important reason for it to exist.
+
+Yes, it is. But I have the feeling, that in your opinion it is the only
+reason.
+
+> >> One of the key issues for an AVR32 developer is that they cannot
+> >> commit additions to the Atmel version, so every time
 > 
-> I would rather get rid of any patches that are not strictly needed. We
-> should only have patches for criticial bugfixes or build issues.
+> > What's wrong with that? What would they want to commit?
 > 
-> The number of configuration options we have in target/u-boot nowadays
-> is getty silly.
+> X-Windows for a start...
+> That was committed to Buildroot by John Voltz so he
+> could run X on his AVR32 board.
+> There are plenty of examples.
+
+In package/x11r7/ there is only one little avr32 patch to support
+xorg-server for this architecture. I think this is fine to be included
+in uclibc-buildroot, as long as it is pushed upstream. I looked at
+Xorg's git web interface and at least in the latest version it is
+included.
+
+So this is not a good example for a lack-of-commit-access issue with
+HCE's repository.
+
+I rather thought of examples like the big mplayer patch. This doesn't
+belong into uclibc-buildroot, but into the AVR32 repo. And as I said
+earlier: without commit access just send a patch to HCE. I'm sure he
+would be glad to apply it to get more packages working with/optimized
+for AVR32.
+
+> Since AVR32 is a fairly new architecture, support for it does not exist
+> in many packages, and maybe some developers want to put their
+> own effort into bringing more packages online with AVR32 support.
 > 
-> Ulf, let me know what you think.
+> > I think if you have AVR32 changes, that shouln't go into
+> > uclibc-buildroot, then you could always send a patch to the
+> > avr32-buildroot mailing list or HCE.
+> 
+> I do not know of any AVR32 changes which I do not think
+> should go into uclibc-buildroot.
 
-I can see a few alternatives.
-1) Get rid of the patches, and introduce the possibility 
-   to select a prepatched version with these patches
+Then why is it a problem not to have commit access to HCE's repo?
 
-2) Keep the patches and prune them once 
-   they are in mainstream.
-   I am only interested in maintaing one set of patches
-   for one version, so as I mentioned before,
-   I submitted about half a dozen patches the last two days
-   and it looks like they can enter the main tree,
-   with maybe a little rework.
-
-3) Do it the same way I did the Advanced Linux support
-   Keep target/u-boot, but allow patches
-   to be taken from the target/device/<whatever>
-   In this case, the patches would go into 
-   target/device/Atmel/arch-at91/u-boot-2009.01-rc1 
- 
-The last option is appealing.
-
-BR
-Ulf Samuelsson
+Markus
