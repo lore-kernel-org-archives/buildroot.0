@@ -1,38 +1,36 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 09 Jan 2009 10:15:13 +0100
-Subject: [Buildroot] Buildroot maintainer and stable releases
-In-Reply-To: <200901090013.01339.markus.heidelberg@web.de> (Markus
-	Heidelberg's message of "Fri\, 9 Jan 2009 00\:13\:01 +0100")
-References: <87prj1v4dy.fsf@macbook.be.48ers.dk>
-	<200901082306.29783.markus.heidelberg@web.de>
-	<1231453993.9711.27.camel@elrond.atmel.com>
-	<200901090013.01339.markus.heidelberg@web.de>
-Message-ID: <87priwrgbi.fsf@macbook.be.48ers.dk>
+Date: Fri, 09 Jan 2009 10:17:16 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
+In-Reply-To: <20090108225832.382AD77108@busybox.osuosl.org> (ulf@uclibc.org's
+	message of "Thu\, 8 Jan 2009 22\:58\:31 +0000 \(UTC\)")
+References: <20090108225832.382AD77108@busybox.osuosl.org>
+Message-ID: <87ljtkrg83.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Markus" == Markus Heidelberg <markus.heidelberg@web.de> writes:
+>>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
 
- Markus> I have never objected. But it depends on the type of the
- Markus> patch. A simple patch that adds some architecture specific
- Markus> configurations (endian or something) to get it working
- Markus> belongs to uclibc-buildroot. And even there it can require
- Markus> some investigation to update the patch, if the source code
- Markus> base has changed. And this investigation should be avoided
- Markus> with pushing it upstream.
+ ulf> Author: ulf
+ ulf> Date: 2009-01-08 22:58:30 +0000 (Thu, 08 Jan 2009)
+ ulf> New Revision: 24727
 
- Markus> But a huge patch that adds lots of optimization code
- Markus> (mplayer) definetly belongs to avr32-buildroot.
+ ulf> Log:
+ ulf> Linux26 requires "mkimage" from u-boot to be in the PATH
+ ulf> if an uImage is to be built for arm, avr32, blackfin and sh.
 
-I agree - Or atleast not in the buildroot I care about. Same with
-feature patches, like the ones recently added to U-Boot. We really
-need to keep patches to a minimum (and push them upstream) to stay
-sane.
+ ulf> PATH has therefore been set to have $(STAGING_DIR)/usr/bin
+ ulf> as the first item allowing linux to find mkimage.
 
-I repeat, Buildroot is not a dumping ground for random patches.
+ ulf> This patch will, if an uImage is built, create a "u-boot-to?\195?\179ls"
+ ulf> directory in the PROJECT_BUILD_DIR directory.
+ ulf> $(STAGING_DIR)/usr/bin/mkimage is copied to this directory
+ ulf> and the PATH variable will now include "u-boot-tools"
+
+Why the extra dir? Why isn't mkimage just installed into
+STAGING_DIR/usr/bin and used from there?
 
 -- 
 Bye, Peter Korsgaard
