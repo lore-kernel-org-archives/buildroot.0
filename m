@@ -1,86 +1,44 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Fri,  9 Jan 2009 13:35:17 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/editors/ed
-Message-ID: <20090109133517.71A5E768C5@busybox.osuosl.org>
+From: Markus Heidelberg <markus.heidelberg@web.de>
+Date: Fri, 9 Jan 2009 16:08:17 +0100
+Subject: [Buildroot] [PATCH] u-boot: add config option to disable
+	general patches
+In-Reply-To: <87y6xkpx5m.fsf@macbook.be.48ers.dk>
+References: <200811140854.58814.markus.heidelberg@web.de>
+	<200901081917.16406.markus.heidelberg@web.de>
+	<87y6xkpx5m.fsf@macbook.be.48ers.dk>
+Message-ID: <200901091608.17923.markus.heidelberg@web.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-01-09 13:35:16 +0000 (Fri, 09 Jan 2009)
-New Revision: 24733
+Peter Korsgaard, 09.01.2009:
+> >>>>> "Markus" == Markus Heidelberg <markus.heidelberg@web.de> writes:
+> 
+> Hi,
+> 
+>  Markus> It's the same as with the Linux kernel: you wouldn't like
+>  Markus> patches lying around in Buildroot, which you can't disable
+>  Markus> and always get applied.
+> 
+> I've been pondering about adding a bit of flexibility to the packages
+> that often need platform specific handling
+> (E.G. Linux/U-Boot). Building upstream versions of those rarely make
+> sense for custom boards, so having the option to apply custom patches
 
-Log:
-ed: bump version, convert to Makefile.autotools.in format
+Which is available, but only in addition to the general patches lying
+around.
 
-Modified:
-   trunk/buildroot/package/editors/ed/ed.mk
+> or grabbing the entire tree from other version control system seems
+> sensible.
 
+Yes, that would be a possible alternative.
 
-Changeset:
-Modified: trunk/buildroot/package/editors/ed/ed.mk
-===================================================================
---- trunk/buildroot/package/editors/ed/ed.mk	2009-01-09 13:35:09 UTC (rev 24732)
-+++ trunk/buildroot/package/editors/ed/ed.mk	2009-01-09 13:35:16 UTC (rev 24733)
-@@ -3,57 +3,8 @@
- # ed
- #
- #############################################################
--ED_VERSION:=0.8
-+ED_VERSION:=1.1
- ED_SOURCE:=ed-$(ED_VERSION).tar.bz2
- ED_SITE:=$(BR2_GNU_MIRROR)/ed/
--ED_CAT:=$(BZCAT)
--ED_DIR:=$(BUILD_DIR)/ed-$(ED_VERSION)
--ED_BINARY:=ed
--ED_TARGET_BINARY:=bin/ed
- 
--$(DL_DIR)/$(ED_SOURCE):
--	 $(WGET) -P $(DL_DIR) $(ED_SITE)/$(ED_SOURCE)
--
--$(ED_DIR)/.unpacked: $(DL_DIR)/$(ED_SOURCE)
--	$(ED_CAT) $(DL_DIR)/$(ED_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(ED_DIR) package/editors/ed/ ed-\*.patch
--	touch $@
--
--$(ED_DIR)/.configured: $(ED_DIR)/.unpacked
--	(cd $(ED_DIR); rm -rf config.cache; \
--		$(TARGET_CONFIGURE_OPTS) \
--		$(TARGET_CONFIGURE_ARGS) \
--		./configure \
--		--target=$(GNU_TARGET_NAME) \
--		--host=$(GNU_TARGET_NAME) \
--		--build=$(GNU_HOST_NAME) \
--		--prefix=/usr \
--		--exec-prefix=/usr \
--	)
--	touch $@
--
--$(ED_DIR)/$(ED_BINARY): $(ED_DIR)/.configured
--	$(MAKE) CC=$(TARGET_CC) -C $(ED_DIR)
--
--$(TARGET_DIR)/$(ED_TARGET_BINARY): $(ED_DIR)/$(ED_BINARY)
--	$(INSTALL) -D $(ED_DIR)/$(ED_BINARY) $(TARGET_DIR)/$(ED_TARGET_BINARY)
--
--ed: uclibc $(TARGET_DIR)/$(ED_TARGET_BINARY)
--
--ed-source: $(DL_DIR)/$(ED_SOURCE)
--
--ed-clean:
--	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(ED_DIR) uninstall
--	-$(MAKE) -C $(ED_DIR) clean
--
--ed-dirclean:
--	rm -rf $(ED_DIR)
--
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(BR2_PACKAGE_ED),y)
--TARGETS+=ed
--endif
-+$(eval $(call AUTOTARGETS,package/editors,ed))
+> Grant Likely once sent a patch series adding support for using other
+> git trees to the kernel build, that I still need to look into.
+
+I just had a look at it. Some sort of checking for newer commits and
+then updating the cloned tree would be nice.
+
+Markus
