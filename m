@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Fri,  9 Jan 2009 13:35:10 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/grep
-Message-ID: <20090109133510.718B0768C5@busybox.osuosl.org>
+Date: Fri,  9 Jan 2009 13:35:17 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/editors/ed
+Message-ID: <20090109133517.71A5E768C5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,91 +9,78 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2009-01-09 13:35:09 +0000 (Fri, 09 Jan 2009)
-New Revision: 24732
+Date: 2009-01-09 13:35:16 +0000 (Fri, 09 Jan 2009)
+New Revision: 24733
 
 Log:
-grep: convert to Makefile.autotools.in format
+ed: bump version, convert to Makefile.autotools.in format
 
 Modified:
-   trunk/buildroot/package/grep/grep.mk
+   trunk/buildroot/package/editors/ed/ed.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/grep/grep.mk
+Modified: trunk/buildroot/package/editors/ed/ed.mk
 ===================================================================
---- trunk/buildroot/package/grep/grep.mk	2009-01-09 13:34:53 UTC (rev 24731)
-+++ trunk/buildroot/package/grep/grep.mk	2009-01-09 13:35:09 UTC (rev 24732)
-@@ -3,65 +3,12 @@
- # grep
+--- trunk/buildroot/package/editors/ed/ed.mk	2009-01-09 13:35:09 UTC (rev 24732)
++++ trunk/buildroot/package/editors/ed/ed.mk	2009-01-09 13:35:16 UTC (rev 24733)
+@@ -3,57 +3,8 @@
+ # ed
  #
  #############################################################
--GNUGREP_VERSION:=2.5.3
--GNUGREP_SOURCE:=grep-$(GNUGREP_VERSION).tar.gz
--GNUGREP_SITE:=$(BR2_GNU_MIRROR)/grep
--GNUGREP_DIR:=$(BUILD_DIR)/grep-$(GNUGREP_VERSION)
--GNUGREP_CAT:=$(ZCAT)
--GNUGREP_BINARY:=src/grep
--GNUGREP_TARGET_BINARY:=bin/grep
-+GREP_VERSION:=2.5.3
-+GREP_SOURCE:=grep-$(GREP_VERSION).tar.bz2
-+GREP_SITE:=$(BR2_GNU_MIRROR)/grep
-+GREP_CONF_OPT = --disable-perl-regexp --without-included-regex \
-+	$(DISABLE_NLS) $(DISABLE_LARGEFILE)
+-ED_VERSION:=0.8
++ED_VERSION:=1.1
+ ED_SOURCE:=ed-$(ED_VERSION).tar.bz2
+ ED_SITE:=$(BR2_GNU_MIRROR)/ed/
+-ED_CAT:=$(BZCAT)
+-ED_DIR:=$(BUILD_DIR)/ed-$(ED_VERSION)
+-ED_BINARY:=ed
+-ED_TARGET_BINARY:=bin/ed
  
--$(DL_DIR)/$(GNUGREP_SOURCE):
--	 $(WGET) -P $(DL_DIR) $(GNUGREP_SITE)/$(GNUGREP_SOURCE)
-+GREP_DEPENDENCIES = $(if $(BR2_ENABLE_LOCALE),gettext libintl)
- 
--grep-source: $(DL_DIR)/$(GNUGREP_SOURCE)
+-$(DL_DIR)/$(ED_SOURCE):
+-	 $(WGET) -P $(DL_DIR) $(ED_SITE)/$(ED_SOURCE)
 -
--$(GNUGREP_DIR)/.unpacked: $(DL_DIR)/$(GNUGREP_SOURCE)
--	rm -rf $(GNUGREP_DIR).xxx
--	$(GNUGREP_CAT) $(DL_DIR)/$(GNUGREP_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	$(CONFIG_UPDATE) $(GNUGREP_DIR)
+-$(ED_DIR)/.unpacked: $(DL_DIR)/$(ED_SOURCE)
+-	$(ED_CAT) $(DL_DIR)/$(ED_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(ED_DIR) package/editors/ed/ ed-\*.patch
 -	touch $@
 -
--$(GNUGREP_DIR)/.configured: $(GNUGREP_DIR)/.unpacked
--	(cd $(GNUGREP_DIR); rm -rf config.cache; \
+-$(ED_DIR)/.configured: $(ED_DIR)/.unpacked
+-	(cd $(ED_DIR); rm -rf config.cache; \
 -		$(TARGET_CONFIGURE_OPTS) \
 -		$(TARGET_CONFIGURE_ARGS) \
 -		./configure \
 -		--target=$(GNU_TARGET_NAME) \
 -		--host=$(GNU_TARGET_NAME) \
 -		--build=$(GNU_HOST_NAME) \
--		--prefix=/ \
--		$(DISABLE_NLS) \
--		$(DISABLE_LARGEFILE) \
--		--disable-perl-regexp \
--		--without-included-regex \
+-		--prefix=/usr \
+-		--exec-prefix=/usr \
 -	)
 -	touch $@
 -
--$(GNUGREP_DIR)/$(GNUGREP_BINARY): $(GNUGREP_DIR)/.configured
--	$(MAKE) -C $(GNUGREP_DIR)
+-$(ED_DIR)/$(ED_BINARY): $(ED_DIR)/.configured
+-	$(MAKE) CC=$(TARGET_CC) -C $(ED_DIR)
 -
--$(TARGET_DIR)/$(GNUGREP_TARGET_BINARY): $(GNUGREP_DIR)/$(GNUGREP_BINARY)
--	for i in egrep fgrep grep; do \
--		$(INSTALL) $(GNUGREP_DIR)/src/$$i $(@D); \
--	done
--	$(STRIPCMD) $(STRIP_STRIP_ALL) $@
+-$(TARGET_DIR)/$(ED_TARGET_BINARY): $(ED_DIR)/$(ED_BINARY)
+-	$(INSTALL) -D $(ED_DIR)/$(ED_BINARY) $(TARGET_DIR)/$(ED_TARGET_BINARY)
 -
--grep: uclibc $(if $(BR2_ENABLE_LOCALE),gettext libintl) \
--	 $(TARGET_DIR)/$(GNUGREP_TARGET_BINARY)
--	echo deps: $^
--grep-clean:
--	rm -f $(addprefix $(TARGET_DIR)/bin/,egrep fgrep grep)
--	-$(MAKE) -C $(GNUGREP_DIR) clean
+-ed: uclibc $(TARGET_DIR)/$(ED_TARGET_BINARY)
 -
--grep-dirclean:
--	rm -rf $(GNUGREP_DIR)
+-ed-source: $(DL_DIR)/$(ED_SOURCE)
+-
+-ed-clean:
+-	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(ED_DIR) uninstall
+-	-$(MAKE) -C $(ED_DIR) clean
+-
+-ed-dirclean:
+-	rm -rf $(ED_DIR)
 -
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_GREP),y)
--TARGETS+=grep
+-ifeq ($(BR2_PACKAGE_ED),y)
+-TARGETS+=ed
 -endif
-+$(eval $(call AUTOTARGETS,package,grep))
++$(eval $(call AUTOTARGETS,package/editors,ed))
