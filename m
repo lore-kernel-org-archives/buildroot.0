@@ -1,38 +1,38 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 09 Jan 2009 10:12:06 +0100
+Date: Fri, 09 Jan 2009 10:15:13 +0100
 Subject: [Buildroot] Buildroot maintainer and stable releases
-In-Reply-To: <1231453993.9711.27.camel@elrond.atmel.com> (Ulf Samuelsson's
-	message of "Thu\, 08 Jan 2009 23\:33\:12 +0100")
+In-Reply-To: <200901090013.01339.markus.heidelberg@web.de> (Markus
+	Heidelberg's message of "Fri\, 9 Jan 2009 00\:13\:01 +0100")
 References: <87prj1v4dy.fsf@macbook.be.48ers.dk>
-	<200901082128.59939.markus.heidelberg@web.de>
-	<00b501c971d5$4db0e0a0$dfc4af0a@Glamdring>
 	<200901082306.29783.markus.heidelberg@web.de>
 	<1231453993.9711.27.camel@elrond.atmel.com>
-Message-ID: <87tz88rggp.fsf@macbook.be.48ers.dk>
+	<200901090013.01339.markus.heidelberg@web.de>
+Message-ID: <87priwrgbi.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
+>>>>> "Markus" == Markus Heidelberg <markus.heidelberg@web.de> writes:
 
-Hi,
+ Markus> I have never objected. But it depends on the type of the
+ Markus> patch. A simple patch that adds some architecture specific
+ Markus> configurations (endian or something) to get it working
+ Markus> belongs to uclibc-buildroot. And even there it can require
+ Markus> some investigation to update the patch, if the source code
+ Markus> base has changed. And this investigation should be avoided
+ Markus> with pushing it upstream.
 
- >> I rather thought of examples like the big mplayer patch. This doesn't
- >> belong into uclibc-buildroot, but into the AVR32 repo. 
+ Markus> But a huge patch that adds lots of optimization code
+ Markus> (mplayer) definetly belongs to avr32-buildroot.
 
- Ulf> ?I am sure you would think otherwise if you were an AVR32 user.
+I agree - Or atleast not in the buildroot I care about. Same with
+feature patches, like the ones recently added to U-Boot. We really
+need to keep patches to a minimum (and push them upstream) to stay
+sane.
 
-Why? Wouldn't avr32 users use the atmel fork?
-
- >> Then why is it a problem not to have commit access to HCE's repo?
-
- Ulf> If I or someone else have a AVR32 patch available that will enable 
- Ulf> a package to build for the AVR32, then I think it belongs in
- Ulf> uclibc-buildroot.
-
-This I cannot parse.
+I repeat, Buildroot is not a dumping ground for random patches.
 
 -- 
 Bye, Peter Korsgaard
