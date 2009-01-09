@@ -1,50 +1,55 @@
-From: Markus Heidelberg <markus.heidelberg@web.de>
-Date: Fri, 9 Jan 2009 17:07:29 +0100
-Subject: [Buildroot] [PATCH] u-boot: add config option to disable
-	general patches
-In-Reply-To: <87hc48o6hp.fsf@macbook.be.48ers.dk>
-References: <200811140854.58814.markus.heidelberg@web.de>
-	<200901091608.17923.markus.heidelberg@web.de>
-	<87hc48o6hp.fsf@macbook.be.48ers.dk>
-Message-ID: <200901091707.29369.markus.heidelberg@web.de>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Fri, 09 Jan 2009 18:40:22 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
+In-Reply-To: <87hc48rg53.fsf@macbook.be.48ers.dk>
+References: <20090109063009.8E640768C5@busybox.osuosl.org>
+	<87hc48rg53.fsf@macbook.be.48ers.dk>
+Message-ID: <1231522822.9711.32.camel@elrond.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard, 09.01.2009:
-> >>>>> "Markus" == Markus Heidelberg <markus.heidelberg@web.de> writes:
+fre 2009-01-09 klockan 10:19 +0100 skrev Peter Korsgaard:
+> >>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
 > 
->  >> (E.G. Linux/U-Boot). Building upstream versions of those rarely make
->  >> sense for custom boards, so having the option to apply custom patches
+>  ulf> Author: ulf
+>  ulf> Date: 2009-01-09 06:30:08 +0000 (Fri, 09 Jan 2009)
+>  ulf> New Revision: 24729
 > 
->  Markus> Which is available, but only in addition to the general patches lying
->  Markus> around.
+>  ulf> Log:
+>  ulf> Make sure U-boot is built, if we do make uImage
 > 
-> Exactly, it should ofcourse be INSTEAD.
+>  ulf> Modified:
+>  ulf>    trunk/buildroot/target/linux/Config.in.advanced
+> 
+> 
+>  ulf> Changeset:
+>  ulf> Modified: trunk/buildroot/target/linux/Config.in.advanced
+>  ulf> ===================================================================
+>  ulf> --- trunk/buildroot/target/linux/Config.in.advanced	2009-01-08 23:01:50 UTC (rev 24728)
+>  ulf> +++ trunk/buildroot/target/linux/Config.in.advanced	2009-01-09 06:30:08 UTC (rev 24729)
+>  ulf> @@ -464,6 +464,7 @@
+>  ulf>  config BR2_LINUX_BIN_UIMAGE
+>  ulf>  	bool "uImage"
+>  ulf>  	depends on BR2_PACKAGE_LINUX
+>  ulf> +	select BR2_TARGET_UBOOT
+> 
+> Silently selecting something as big and with so many configuration
+> options as U-Boot isn't that nice - I think it would be nicer to
+> depend on UBOOT instead.
 
-Which was the reason for the config option in my patch.
+No, that means that it will silently ignore this alternative.
+?if u-boot is not selected.
 
-Or do you think of the following, without an additional option? Maybe
-this would make sense!?
+	bool "uImage"
 
---- a/target/u-boot/Makefile.in
-+++ b/target/u-boot/Makefile.in
-@@ -85,13 +85,14 @@ $(U_BOOT_DIR)/.unpacked: $(DL_DIR)/$(U_BOOT_SOURCE)
-        touch $@
+can be replaced by
 
- $(U_BOOT_DIR)/.patched: $(U_BOOT_DIR)/.unpacked
--       toolchain/patch-kernel.sh $(U_BOOT_DIR) target/u-boot/$(U_BOOT_VERSION) \
--               u-boot-$(U_BOOT_VERSION)-\*.patch \
--               u-boot-$(U_BOOT_VERSION)-\*.patch.$(ARCH)
- ifneq ($(strip $(BR2_TARGET_UBOOT_CUSTOM_PATCH)),"")
-        @mkdir -p $(U_BOOT_PATCH_DIR)
-        cp -dpr $(BR2_TARGET_UBOOT_CUSTOM_PATCH) $(U_BOOT_PATCH_DIR)
-        toolchain/patch-kernel.sh $(U_BOOT_DIR) $(U_BOOT_PATCH_DIR) \*.patch
-+else
-+       toolchain/patch-kernel.sh $(U_BOOT_DIR) target/u-boot/$(U_BOOT_VERSION) \
-+               u-boot-$(U_BOOT_VERSION)-\*.patch \
-+               u-boot-$(U_BOOT_VERSION)-\*.patch.$(ARCH)
- endif
-        touch $@
+	bool "uImage - Will force build of u-boot"
+
+or something
+
+BR
+Ulf Samuelsson
