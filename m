@@ -1,30 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 10 Jan 2009 13:03:44 +0100
+From: thomasez at uclibc.org <thomasez@uclibc.org>
+Date: Sat, 10 Jan 2009 12:45:28 +0000 (UTC)
 Subject: [Buildroot] svn commit: trunk/buildroot/package/libglib2
-In-Reply-To: <20090110114447.7FED976A00@busybox.osuosl.org>
-	(thomasez@uclibc.org's message of "Sat\,
-	10 Jan 2009 11\:44\:47 +0000 \(UTC\)")
-References: <20090110114447.7FED976A00@busybox.osuosl.org>
-Message-ID: <87ljtjl65b.fsf@macbook.be.48ers.dk>
+Message-ID: <20090110124531.5989276A00@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "thomasez" == thomasez  <thomasez@uclibc.org> writes:
+Author: thomasez
+Date: 2009-01-10 12:45:27 +0000 (Sat, 10 Jan 2009)
+New Revision: 24743
 
- thomasez> Author: thomasez
- thomasez> Date: 2009-01-10 11:44:44 +0000 (Sat, 10 Jan 2009)
- thomasez> New Revision: 24742
+Log:
+Wrtie? nto mee!
 
- thomasez> Log:
- thomasez> Nice to point out dependencies on host.
 
- thomasez>  	  Low-level core library that forms the basis of GTK+ and GNOME.
- thomasez> +	  Requires libglig2 (-dev) on the host. 
+Modified:
+   trunk/buildroot/package/libglib2/Config.in
 
-What's libglig2? ;)
 
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/package/libglib2/Config.in
+===================================================================
+--- trunk/buildroot/package/libglib2/Config.in	2009-01-10 11:44:44 UTC (rev 24742)
++++ trunk/buildroot/package/libglib2/Config.in	2009-01-10 12:45:27 UTC (rev 24743)
+@@ -6,6 +6,6 @@
+ 	select BR2_PACKAGE_PKGCONFIG
+ 	help
+ 	  Low-level core library that forms the basis of GTK+ and GNOME.
+-	  Requires libglig2 (-dev) on the host. 
++	  Requires libglib2 (-dev) on the host. 
+ 
+ 	  http://www.gtk.org/
