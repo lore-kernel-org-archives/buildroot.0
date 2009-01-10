@@ -1,7 +1,7 @@
 From: thomasez at uclibc.org <thomasez@uclibc.org>
-Date: Sat, 10 Jan 2009 13:47:19 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/fontconfig
-Message-ID: <20090110134719.B1C2B76A00@busybox.osuosl.org>
+Date: Sat, 10 Jan 2009 14:55:52 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libglib2
+Message-ID: <20090110145553.16CB476A00@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,28 +9,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: thomasez
-Date: 2009-01-10 13:47:18 +0000 (Sat, 10 Jan 2009)
-New Revision: 24744
+Date: 2009-01-10 14:55:52 +0000 (Sat, 10 Jan 2009)
+New Revision: 24745
 
 Log:
-Get rid of a host-dependency.
+We do not need gtk-doc on the target (and hopefully not in staging.. )
 
 
 Modified:
-   trunk/buildroot/package/fontconfig/fontconfig.mk
+   trunk/buildroot/package/libglib2/libglib2.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/fontconfig/fontconfig.mk
+Modified: trunk/buildroot/package/libglib2/libglib2.mk
 ===================================================================
---- trunk/buildroot/package/fontconfig/fontconfig.mk	2009-01-10 12:45:27 UTC (rev 24743)
-+++ trunk/buildroot/package/fontconfig/fontconfig.mk	2009-01-10 13:47:18 UTC (rev 24744)
-@@ -11,7 +11,7 @@
- FONTCONFIG_INSTALL_STAGING = YES
- FONTCONFIG_INSTALL_TARGET = YES
- # This package does not like using the target cflags for some reason.
--FONTCONFIG_CONF_ENV = CFLAGS=
-+FONTCONFIG_CONF_ENV = CFLAGS="-I$(STAGING_DIR)/usr/include/freetype2"
+--- trunk/buildroot/package/libglib2/libglib2.mk	2009-01-10 13:47:18 UTC (rev 24744)
++++ trunk/buildroot/package/libglib2/libglib2.mk	2009-01-10 14:55:52 UTC (rev 24745)
+@@ -45,6 +45,7 @@
+ 		gt_cv_c_wchar_t=$(if $(BR2_USE_WCHAR),yes,no)
  
- FONTCONFIG_CONF_OPT = --with-arch=$(GNU_TARGET_NAME) \
- 		--with-freetype-config="$(STAGING_DIR)/usr/bin/freetype-config" \
+ LIBGLIB2_CONF_OPT = --enable-shared \
++		--disable-gtk-doc \
+ 		--enable-static
+ 
+ LIBGLIB2_DEPENDENCIES = uclibc gettext libintl pkgconfig
