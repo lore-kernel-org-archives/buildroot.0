@@ -1,56 +1,67 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sun, 11 Jan 2009 21:50:07 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/xfsprogs
-Message-ID: <20090111215008.2754F76736@busybox.osuosl.org>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Sun, 11 Jan 2009 23:24:40 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/sudo
+In-Reply-To: <20090111203618.2084F76736@busybox.osuosl.org>
+References: <20090111203618.2084F76736@busybox.osuosl.org>
+Message-ID: <1231712680.9711.52.camel@elrond.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2009-01-11 21:50:07 +0000 (Sun, 11 Jan 2009)
-New Revision: 24773
+s?n 2009-01-11 klockan 20:36 +0000 skrev jacmet at uclibc.org:
+> Author: jacmet
+> Date: 2009-01-11 20:36:17 +0000 (Sun, 11 Jan 2009)
+> New Revision: 24763
+> 
+> Log:
+> sudo: use Debian as upstream
+> 
+> As we are using a Debian/Ubuntu patch, it makes more sense to get the
+> tarball from there as well.
+> 
 
-Log:
-Make xfsprogs downloadable, Why have it, when we do not support XFS file system?
+?I am pretty sure you id NOT test that...
+Please remove any such tarball from your download directory
+and try building sudo, and you will see.
+Not since they obsoleted that version.
+Either you update to a newer version AND
+create a patchset that compiled or you
+revert that patch.
 
-Modified:
-   trunk/buildroot/package/xfsprogs/Config.in
-   trunk/buildroot/package/xfsprogs/xfsprogs.mk
+?
 
 
-Changeset:
-Modified: trunk/buildroot/package/xfsprogs/Config.in
-===================================================================
---- trunk/buildroot/package/xfsprogs/Config.in	2009-01-11 21:44:14 UTC (rev 24772)
-+++ trunk/buildroot/package/xfsprogs/Config.in	2009-01-11 21:50:07 UTC (rev 24773)
-@@ -1,3 +1,7 @@
-+
-+comment "Note that xfsprogs needs a toolchain with UCLIBC_SV4_DEPRECATED enabled"
-+	depends on BR2_PACKAGE_XFSPROGS
-+
- config BR2_PACKAGE_XFSPROGS
- 	bool "xfsprogs"
- 	help
-@@ -4,3 +8,4 @@
- 	  The XFS file system utilities and libraries
- 
- 	  http://oss.sgi.com/projects/xfs/
-+
-
-Modified: trunk/buildroot/package/xfsprogs/xfsprogs.mk
-===================================================================
---- trunk/buildroot/package/xfsprogs/xfsprogs.mk	2009-01-11 21:44:14 UTC (rev 24772)
-+++ trunk/buildroot/package/xfsprogs/xfsprogs.mk	2009-01-11 21:50:07 UTC (rev 24773)
-@@ -5,8 +5,8 @@
- #############################################################
- XFSPROGS_VERSION:=2.10.2
- XFSPROGS_SOURCE=xfsprogs_$(XFSPROGS_VERSION)-1.tar.gz
--#XFSPROGS_SITE=ftp://oss.sgi.com/projects/xfs/cmd_tars
--XFSPROGS_SITE=ftp://oss.sgi.com/projects/xfs/previous/cmd_tars/
-+XFSPROGS_SITE=ftp://oss.sgi.com/projects/xfs/cmd_tars
-+#XFSPROGS_SITE=ftp://oss.sgi.com/projects/xfs/previous/cmd_tars/
- XFSPROGS_DIR=$(BUILD_DIR)/xfsprogs-$(XFSPROGS_VERSION)
- XFSPROGS_CAT:=$(ZCAT)
- XFSPROGS_BINARY:=mkfs/mkfs.xfs
+> Modified:
+>    trunk/buildroot/package/sudo/sudo.mk
+> 
+> 
+> Changeset:
+> Modified: trunk/buildroot/package/sudo/sudo.mk
+> ===================================================================
+> --- trunk/buildroot/package/sudo/sudo.mk	2009-01-11 20:35:34 UTC (rev 24762)
+> +++ trunk/buildroot/package/sudo/sudo.mk	2009-01-11 20:36:17 UTC (rev 24763)
+> @@ -5,15 +5,13 @@
+>  #############################################################
+>  
+>  SUDO_VERSION:=1.6.8p12
+> -#SUDO_SITE:=ftp://ftp.sudo.ws/pub/sudo/
+> -SUDO_SITE:=$(BR2_ATMEL_MIRROR)
+> +SUDO_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/s/sudo
+>  
+>  #SUDO_VERSION:=1.7.0
+>  #SUDO_SITE:=http://www.courtesan.com/sudo/dist
+>  # 1.7.0 Needs update Cross-Compiler patches
+>  
+> -
+> -SUDO_SOURCE:=sudo-$(SUDO_VERSION).tar.gz
+> +SUDO_SOURCE:=sudo_$(SUDO_VERSION).orig.tar.gz
+>  SUDO_DIR:=$(BUILD_DIR)/sudo-$(SUDO_VERSION)
+>  SUDO_UNZIP:=$(ZCAT)
+>  
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
