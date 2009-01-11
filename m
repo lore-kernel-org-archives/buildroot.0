@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sun, 11 Jan 2009 20:10:57 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/multimedia/alsa-lib
-Message-ID: <20090111201057.88BDD76736@busybox.osuosl.org>
+Date: Sun, 11 Jan 2009 20:12:11 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libraw1394
+Message-ID: <20090111201211.C48F376736@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,37 +9,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2009-01-11 20:10:57 +0000 (Sun, 11 Jan 2009)
-New Revision: 24754
+Date: 2009-01-11 20:12:11 +0000 (Sun, 11 Jan 2009)
+New Revision: 24755
 
 Log:
-Make sure alsa-lib build with correct python version
+Use correct goal for libraw1394.so
 
 Modified:
-   trunk/buildroot/package/multimedia/alsa-lib/alsa-lib.mk
+   trunk/buildroot/package/libraw1394/libraw1394.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/multimedia/alsa-lib/alsa-lib.mk
+Modified: trunk/buildroot/package/libraw1394/libraw1394.mk
 ===================================================================
---- trunk/buildroot/package/multimedia/alsa-lib/alsa-lib.mk	2009-01-11 20:08:47 UTC (rev 24753)
-+++ trunk/buildroot/package/multimedia/alsa-lib/alsa-lib.mk	2009-01-11 20:10:57 UTC (rev 24754)
-@@ -17,6 +17,10 @@
- ALSA_LIB_ABI:=
- endif
+--- trunk/buildroot/package/libraw1394/libraw1394.mk	2009-01-11 20:10:57 UTC (rev 24754)
++++ trunk/buildroot/package/libraw1394/libraw1394.mk	2009-01-11 20:12:11 UTC (rev 24755)
+@@ -46,7 +46,7 @@
+ $(STAGING_DIR)/usr/lib/libraw1394.so: $(LIBRAW1394_DIR)/.compiled
+ 	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(LIBRAW1394_DIR)/src install
  
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
-+ALSA_LIB_CONFIGURE_OPTS += --with-pythonlibs=-lpython$(PYTHON_VERSION_MAJOR)
-+endif
-+
- ifeq ($(BR2_SOFT_FLOAT),y)
- 	SOFT_FLOAT=--with-softfloat
- endif
-@@ -45,6 +49,7 @@
- 		--enable-shared \
- 		--enable-static \
- 		--disable-docs \
-+		$(ALSA_LIB_CONFIGURE_OPTS) \
- 		$(SOFT_FLOAT) \
- 		$(DISABLE_NLS) \
- 	)
+-$(TARGET_DIR)/usr/lib/libraw1394.so: $(STAGING_DIR)/lib/libraw1394.so
++$(TARGET_DIR)/usr/lib/libraw1394.so: $(STAGING_DIR)/usr/lib/libraw1394.so
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libraw1394.so* $(TARGET_DIR)/usr/lib/
+ 
+ libraw1394: uclibc $(TARGET_DIR)/usr/lib/libraw1394.so
