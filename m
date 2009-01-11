@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sun, 11 Jan 2009 20:15:35 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package: libdnet python
-Message-ID: <20090111201536.0E3DD76736@busybox.osuosl.org>
+Date: Sun, 11 Jan 2009 20:19:24 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package:  raidtools2
+Message-ID: <20090111201924.F249A76736@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,106 +9,206 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2009-01-11 20:15:35 +0000 (Sun, 11 Jan 2009)
-New Revision: 24758
+Date: 2009-01-11 20:19:24 +0000 (Sun, 11 Jan 2009)
+New Revision: 24759
 
 Log:
-Change name from PYTHON_VERSION_SHORT to PYTHON_VERSION_MAJOR
+Change name from raidtools to raidtools2
+
+Added:
+   trunk/buildroot/package/raidtools2/
+   trunk/buildroot/package/raidtools2/raidtools2.mk
+
+Removed:
+   trunk/buildroot/package/raidtools/
+   trunk/buildroot/package/raidtools2/raidtools.mk
 
 Modified:
-   trunk/buildroot/package/libdnet/libdnet.mk
-   trunk/buildroot/package/python/python.mk
+   trunk/buildroot/package/Config.in
+   trunk/buildroot/package/raidtools2/Config.in
 
 
 Changeset:
-Modified: trunk/buildroot/package/libdnet/libdnet.mk
+Modified: trunk/buildroot/package/Config.in
 ===================================================================
---- trunk/buildroot/package/libdnet/libdnet.mk	2009-01-11 20:13:49 UTC (rev 24757)
-+++ trunk/buildroot/package/libdnet/libdnet.mk	2009-01-11 20:15:35 UTC (rev 24758)
-@@ -16,7 +16,7 @@
- ifneq ($(BR2_PACKAGE_LIBDNET_PYTHON),)
- LIBDNET_DEPENDENCIES += python
- LIBDNET_CONF_OPT += --with-python
--LIBDNET_MAKE_OPT = PYTHON=python$(PYTHON_VERSION_SHORT) PYINCDIR=$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_SHORT)
-+LIBDNET_MAKE_OPT = PYTHON=python$(PYTHON_VERSION_MAJOR) PYINCDIR=$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)
- LIBDNET_INSTALL_TARGET_OPT = $(LIBDNET_MAKE_OPT) DESTDIR=$(TARGET_DIR) INSTALL_STRIP_FLAG=-s install-exec
- LIBDNET_INSTALL_STAGING_OPT = $(LIBDNET_MAKE_OPT) DESTDIR=$(STAGING_DIR) install
- endif
+--- trunk/buildroot/package/Config.in	2009-01-11 20:15:35 UTC (rev 24758)
++++ trunk/buildroot/package/Config.in	2009-01-11 20:19:24 UTC (rev 24759)
+@@ -254,7 +254,7 @@
+ source "package/ntfs-3g/Config.in"
+ source "package/pciutils/Config.in"
+ source "package/pcmcia/Config.in"
+-source "package/raidtools/Config.in"
++source "package/raidtools2/Config.in"
+ source "package/setserial/Config.in"
+ if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
+ # busybox has fdisk
 
-Modified: trunk/buildroot/package/python/python.mk
+
+Property changes on: trunk/buildroot/package/raidtools2
+___________________________________________________________________
+Added: svn:mergeinfo
+   + 
+
+Modified: trunk/buildroot/package/raidtools2/Config.in
 ===================================================================
---- trunk/buildroot/package/python/python.mk	2009-01-11 20:13:49 UTC (rev 24757)
-+++ trunk/buildroot/package/python/python.mk	2009-01-11 20:15:35 UTC (rev 24758)
-@@ -4,7 +4,7 @@
- #
- #############################################################
- PYTHON_VERSION=2.4.5
--PYTHON_VERSION_SHORT=2.4
-+PYTHON_VERSION_MAJOR=2.4
- PYTHON_SOURCE:=Python-$(PYTHON_VERSION).tar.bz2
- PYTHON_SITE:=http://python.org/ftp/python/$(PYTHON_VERSION)
- PYTHON_DIR:=$(BUILD_DIR)/Python-$(PYTHON_VERSION)
-@@ -12,7 +12,7 @@
- PYTHON_BINARY:=python
- PYTHON_TARGET_BINARY:=usr/bin/python
- PYTHON_DEPS:=
--PYTHON_SITE_PACKAGE_DIR=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_SHORT)/site-packages
-+PYTHON_SITE_PACKAGE_DIR=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
+--- trunk/buildroot/package/raidtools/Config.in	2009-01-10 00:27:34 UTC (rev 24740)
++++ trunk/buildroot/package/raidtools2/Config.in	2009-01-11 20:19:24 UTC (rev 24759)
+@@ -1,5 +1,5 @@
+ config BR2_PACKAGE_RAIDTOOLS
+-	bool "raidtools"
++	bool "raidtools2"
+ 	help
+ 	  Utilities to support 'old-style' RAID disks.
  
- BR2_PYTHON_DISABLED_MODULES=dbm zipfile
- 
-@@ -78,7 +78,7 @@
- 	touch $@
- 
- $(PYTHON_DIR)/.patched: $(PYTHON_DIR)/.unpacked
--	toolchain/patch-kernel.sh $(PYTHON_DIR) package/python/ python-$(PYTHON_VERSION_SHORT)-\*.patch
-+	toolchain/patch-kernel.sh $(PYTHON_DIR) package/python/ python-$(PYTHON_VERSION_MAJOR)-\*.patch
- 	touch $@
- 
- $(PYTHON_DIR)/.hostpython: $(PYTHON_DIR)/.patched
-@@ -134,16 +134,16 @@
- 		PYTHON_DISABLE_MODULES="$(BR2_PYTHON_DISABLED_MODULES)" \
- 		HOSTPYTHON=./hostpython HOSTPGEN=./Parser/hostpgen && \
- 	rm $(TARGET_DIR)/usr/bin/python && \
--	ln -s python$(PYTHON_VERSION_SHORT) $(TARGET_DIR)/usr/bin/python && \
-+	ln -s python$(PYTHON_VERSION_MAJOR) $(TARGET_DIR)/usr/bin/python && \
- 	rm $(TARGET_DIR)/usr/bin/idle && \
- 	rm $(TARGET_DIR)/usr/bin/pydoc && \
- 	find $(TARGET_DIR)/usr/lib/ -name '*.pyo' -exec rm {} \; && \
- 	rm -rf $(TARGET_DIR)/share/locale $(TARGET_DIR)/usr/info \
- 		$(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc \
--		$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_SHORT)/test
--	cp -dpr $(TARGET_DIR)/usr/include/python$(PYTHON_VERSION_SHORT) $(STAGING_DIR)/usr/include/
--	mkdir -p $(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_SHORT)
--	cp -dpr $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_SHORT)/config $(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_SHORT)/
-+		$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/test
-+	cp -dpr $(TARGET_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR) $(STAGING_DIR)/usr/include/
-+	mkdir -p $(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)
-+	cp -dpr $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/config $(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/
- 
- ifeq ($(BR2_PACKAGE_PYTHON_PY_ONLY),y)
- 	find $(TARGET_DIR)/usr/lib/ -name '*.pyc' -exec rm {} \;
-@@ -152,18 +152,18 @@
- 	find $(TARGET_DIR)/usr/lib/ -name '*.py' -exec rm {} \;
- endif
- ifneq ($(BR2_PACKAGE_PYTHON_DEV),y)
--	rm -rf $(TARGET_DIR)/usr/include/python$(PYTHON_VERSION_SHORT)
--	rm -rf $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_SHORT)/config
-+	rm -rf $(TARGET_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)
-+	rm -rf $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/config
- 	find $(TARGET_DIR)/usr/lib/ -name '*.py' -exec rm {} \;
- endif
- ifneq ($(BR2_PACKAGE_PYTHON_BSDDB),y)
--	rm -rf $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_SHORT)/bsddb
-+	rm -rf $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/bsddb
- endif
- ifneq ($(BR2_PACKAGE_PYTHON_CURSES),y)
--	rm -rf $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_SHORT)/curses
-+	rm -rf $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/curses
- endif
- ifneq ($(BR2_PACKAGE_PYTHON_TKINTER),y)
--	rm -rf $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_SHORT)/lib-tk
-+	rm -rf $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/lib-tk
- endif
- 
- python: uclibc $(PYTHON_DEPS) $(TARGET_DIR)/$(PYTHON_TARGET_BINARY)
+
+Deleted: trunk/buildroot/package/raidtools2/raidtools.mk
+===================================================================
+--- trunk/buildroot/package/raidtools/raidtools.mk	2009-01-10 00:27:34 UTC (rev 24740)
++++ trunk/buildroot/package/raidtools2/raidtools.mk	2009-01-11 20:19:24 UTC (rev 24759)
+@@ -1,70 +0,0 @@
+-#############################################################
+-#
+-# raidtools2
+-#
+-#############################################################
+-RAIDTOOLS2_VERSION:=1.00.3
+-RAIDTOOLS2_SOURCE:=raidtools2-$(RAIDTOOLS2_VERSION).tar.gz
+-RAIDTOOLS2_SITE:=
+-RAIDTOOLS2_DIR:=$(BUILD_DIR)/raidtools2-$(RAIDTOOLS2_VERSION)
+-RAIDTOOLS2_CAT:=$(ZCAT)
+-RAIDTOOLS2_BINARY:=mkraid
+-RAIDTOOLS2_TARGET_BINARY:=sbin/mkraid
+-
+-$(DL_DIR)/$(RAIDTOOLS2_SOURCE):
+-	$(WGET) -P $(DL_DIR) $(RAIDTOOLS2_SITE)/$(RAIDTOOLS2_SOURCE)
+-
+-raidtools2-source: $(DL_DIR)/$(RAIDTOOLS2_SOURCE)
+-
+-$(RAIDTOOLS2_DIR)/.unpacked: $(DL_DIR)/$(RAIDTOOLS2_SOURCE)
+-	$(RAIDTOOLS2_CAT) $(DL_DIR)/$(RAIDTOOLS2_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	touch $(RAIDTOOLS2_DIR)/.unpacked
+-
+-$(RAIDTOOLS2_DIR)/.configured: $(RAIDTOOLS2_DIR)/.unpacked
+-	(cd $(RAIDTOOLS2_DIR); rm -rf config.cache; \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		$(TARGET_CONFIGURE_ARGS) \
+-	        ./configure \
+-	        --target=$(GNU_TARGET_NAME) \
+-	        --host=$(GNU_TARGET_NAME) \
+-	        --build=$(GNU_HOST_NAME) \
+-	        --prefix=/usr \
+-	        --exec-prefix=/usr \
+-	        --bindir=/usr/bin \
+-	        --sbindir=/usr/sbin \
+-		--libdir=/lib \
+-	        --libexecdir=/usr/lib \
+-	        --sysconfdir=/etc \
+-	        --datadir=/usr/share/misc \
+-	        --localstatedir=/var \
+-	        --mandir=/usr/man \
+-	        --infodir=/usr/info \
+-		$(DISABLE_NLS) \
+-	        --enable-fsect-man5 \
+-	)
+-	touch $(RAIDTOOLS2_DIR)/.configured
+-
+-$(RAIDTOOLS2_DIR)/$(RAIDTOOLS2_BINARY): $(RAIDTOOLS2_DIR)/.configured
+-	$(MAKE) CC=$(TARGET_CC) -C $(RAIDTOOLS2_DIR)
+-
+-$(TARGET_DIR)/$(RAIDTOOLS2_TARGET_BINARY): $(RAIDTOOLS2_DIR)/$(RAIDTOOLS2_BINARY)
+-	$(MAKE) ROOTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(RAIDTOOLS2_DIR) install
+-	rm -rf $(TARGET_DIR)/share/locale $(TARGET_DIR)/usr/info \
+-		$(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc
+-
+-raidtools2: zlib uclibc $(TARGET_DIR)/$(RAIDTOOLS2_TARGET_BINARY)
+-
+-raidtools2-clean:
+-	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(RAIDTOOLS2_DIR) uninstall
+-	-$(MAKE) -C $(RAIDTOOLS2_DIR) clean
+-
+-raidtools2-dirclean:
+-	rm -rf $(RAIDTOOLS2_DIR)
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_RAIDTOOLS),y)
+-TARGETS+=raidtools
+-endif
+
+Added: trunk/buildroot/package/raidtools2/raidtools2.mk
+===================================================================
+--- trunk/buildroot/package/raidtools2/raidtools2.mk	                        (rev 0)
++++ trunk/buildroot/package/raidtools2/raidtools2.mk	2009-01-11 20:19:24 UTC (rev 24759)
+@@ -0,0 +1,70 @@
++#############################################################
++#
++# raidtools2
++#
++#############################################################
++RAIDTOOLS2_VERSION:=1.00.3
++RAIDTOOLS2_SOURCE:=raidtools2-$(RAIDTOOLS2_VERSION).tar.gz
++RAIDTOOLS2_SITE:=
++RAIDTOOLS2_DIR:=$(BUILD_DIR)/raidtools2-$(RAIDTOOLS2_VERSION)
++RAIDTOOLS2_CAT:=$(ZCAT)
++RAIDTOOLS2_BINARY:=mkraid
++RAIDTOOLS2_TARGET_BINARY:=sbin/mkraid
++
++$(DL_DIR)/$(RAIDTOOLS2_SOURCE):
++	$(WGET) -P $(DL_DIR) $(RAIDTOOLS2_SITE)/$(RAIDTOOLS2_SOURCE)
++
++raidtools2-source: $(DL_DIR)/$(RAIDTOOLS2_SOURCE)
++
++$(RAIDTOOLS2_DIR)/.unpacked: $(DL_DIR)/$(RAIDTOOLS2_SOURCE)
++	$(RAIDTOOLS2_CAT) $(DL_DIR)/$(RAIDTOOLS2_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
++	touch $(RAIDTOOLS2_DIR)/.unpacked
++
++$(RAIDTOOLS2_DIR)/.configured: $(RAIDTOOLS2_DIR)/.unpacked
++	(cd $(RAIDTOOLS2_DIR); rm -rf config.cache; \
++		$(TARGET_CONFIGURE_OPTS) \
++		$(TARGET_CONFIGURE_ARGS) \
++	        ./configure \
++	        --target=$(GNU_TARGET_NAME) \
++	        --host=$(GNU_TARGET_NAME) \
++	        --build=$(GNU_HOST_NAME) \
++	        --prefix=/usr \
++	        --exec-prefix=/usr \
++	        --bindir=/usr/bin \
++	        --sbindir=/usr/sbin \
++		--libdir=/lib \
++	        --libexecdir=/usr/lib \
++	        --sysconfdir=/etc \
++	        --datadir=/usr/share/misc \
++	        --localstatedir=/var \
++	        --mandir=/usr/man \
++	        --infodir=/usr/info \
++		$(DISABLE_NLS) \
++	        --enable-fsect-man5 \
++	)
++	touch $(RAIDTOOLS2_DIR)/.configured
++
++$(RAIDTOOLS2_DIR)/$(RAIDTOOLS2_BINARY): $(RAIDTOOLS2_DIR)/.configured
++	$(MAKE) CC=$(TARGET_CC) -C $(RAIDTOOLS2_DIR)
++
++$(TARGET_DIR)/$(RAIDTOOLS2_TARGET_BINARY): $(RAIDTOOLS2_DIR)/$(RAIDTOOLS2_BINARY)
++	$(MAKE) ROOTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(RAIDTOOLS2_DIR) install
++	rm -rf $(TARGET_DIR)/share/locale $(TARGET_DIR)/usr/info \
++		$(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc
++
++raidtools2: zlib uclibc $(TARGET_DIR)/$(RAIDTOOLS2_TARGET_BINARY)
++
++raidtools2-clean:
++	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(RAIDTOOLS2_DIR) uninstall
++	-$(MAKE) -C $(RAIDTOOLS2_DIR) clean
++
++raidtools2-dirclean:
++	rm -rf $(RAIDTOOLS2_DIR)
++#############################################################
++#
++# Toplevel Makefile options
++#
++#############################################################
++ifeq ($(BR2_PACKAGE_RAIDTOOLS),y)
++TARGETS+=raidtools2
++endif
