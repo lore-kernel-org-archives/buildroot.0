@@ -1,35 +1,26 @@
-From: thomasez at uclibc.org <thomasez@uclibc.org>
-Date: Sat, 10 Jan 2009 14:55:52 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libglib2
-Message-ID: <20090110145553.16CB476A00@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 11 Jan 2009 14:23:52 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/scripts
+In-Reply-To: <20090110002630.A8D457688F@busybox.osuosl.org> (ulf@uclibc.org's
+	message of "Sat\, 10 Jan 2009 00\:26\:30 +0000 \(UTC\)")
+References: <20090110002630.A8D457688F@busybox.osuosl.org>
+Message-ID: <87zlhyj7rr.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: thomasez
-Date: 2009-01-10 14:55:52 +0000 (Sat, 10 Jan 2009)
-New Revision: 24745
+>>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
 
-Log:
-We do not need gtk-doc on the target (and hopefully not in staging.. )
+ ulf> Author: ulf
+ ulf> Date: 2009-01-10 00:26:30 +0000 (Sat, 10 Jan 2009)
+ ulf> New Revision: 24739
 
+ ulf> Log:
+ ulf> Add script allowing better overview of build status of single packages
 
-Modified:
-   trunk/buildroot/package/libglib2/libglib2.mk
+Documentation?
 
-
-Changeset:
-Modified: trunk/buildroot/package/libglib2/libglib2.mk
-===================================================================
---- trunk/buildroot/package/libglib2/libglib2.mk	2009-01-10 13:47:18 UTC (rev 24744)
-+++ trunk/buildroot/package/libglib2/libglib2.mk	2009-01-10 14:55:52 UTC (rev 24745)
-@@ -45,6 +45,7 @@
- 		gt_cv_c_wchar_t=$(if $(BR2_USE_WCHAR),yes,no)
- 
- LIBGLIB2_CONF_OPT = --enable-shared \
-+		--disable-gtk-doc \
- 		--enable-static
- 
- LIBGLIB2_DEPENDENCIES = uclibc gettext libintl pkgconfig
+-- 
+Bye, Peter Korsgaard
