@@ -1,92 +1,66 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 12 Jan 2009 10:22:57 +0100
-Subject: [Buildroot] arch support
-In-Reply-To: <20090112090745.GB25148@mx.loc> (Bernhard Reutner-Fischer's
-	message of "Mon\, 12 Jan 2009 10\:07\:45 +0100")
-References: <87ljtgj44z.fsf@macbook.be.48ers.dk>
-	<20090112090745.GB25148@mx.loc>
-Message-ID: <878wpgj2tq.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Mon, 12 Jan 2009 09:36:58 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
+Message-ID: <20090112093658.5928F766E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernhard" == Bernhard Reutner-Fischer <rep.dot.nop@gmail.com> writes:
+Author: jacmet
+Date: 2009-01-12 09:36:57 +0000 (Mon, 12 Jan 2009)
+New Revision: 24789
 
-Hi,
+Log:
+busybox: 1.13.2 mdev fix
 
- >> Status:
- >> 
- >> alpha: broken in libpthread
+Added:
+   trunk/buildroot/package/busybox/busybox-1.13.2-mdev.patch
 
- Bernhard> alpha currently only supports static builds and no threads, IIRC.
 
-Ok, I'll fixup Kconfig deps then.
-
- >> arm: ok
- >> armeb: ok
- >> avr32: ok (uclibc-0.9.29-avr32, binutils-2.17-avr32, gcc-4.2.2-avr32)
- >> cris: broken in kernel headers
-
- Bernhard> This was already fixed, build tested fine for me some time ago.
-
-I'll try your tree and port over fixes if needed.
-
- >> m68k: gcc ICE
-
- Bernhard> This is fixed with gcc trunk (i.e. 4.4.0).
-
-Ok, we won't get that in BR before the release, so I'll mark it as
-BROKEN for now.
-
- >> mips: ok
- >> mipsel: ok
- >> nios2: broken in kernel headers
-
- Bernhard> Would need love as it's a bit outdated.
-
-Exactly, and apparently no one cares, so I'll mark it as BROKEN for
-now. Is nios2 support evan available in upstream gcc?
-
- >> powerpc: ok
- >> s390: broken in uclibc
-
- Bernhard> s/broken/not yet supported/
-
-True, but the outcome is the same ;)
-
- >> sh4: ok
- >> sh64: broken in kernel headers (merged with sh?)
-
- Bernhard> both sh64 and sh* build fine for me.
-
-Ok, will check.
-
- >> x86_64: broken in uclibc
-
- Bernhard> works for me. What's failing?
-
-uclibc build - See bottom of http://uclibc.org/~jacmet/br/x86_64.log
-
- >> - alpha: I'll retry with the "new" pthreads and see if that works
- >> - ia64 and sparc issue seems similar, will ask on the uclibc list
- >> - sh64: Anyone knows if that got merged with sh4 like powerpc did?
-
- Bernhard> there are SH and SH64. SH[234] are just SH variants -- think
- Bernhard> i?86 or mips?e{l,b}
-
-Yes, but the kernel only has arch/sh - Should that also be used for
-sh64?
-
- >> - s390: Shouldn't really have been added in the first place as there's
- >> no uclibc support. Will remove (Bernhard agrees)
-
- Bernhard> Strictly speaking this should depend on
- Bernhard> !BR2_TOOLCHAIN_BUILDROOT until it is supported in uClibc. I
- Bernhard> agree that it could just me removed from BR for now.
-
-Ok, will do.
-
--- 
-Bye, Peter Korsgaard
+Changeset:
+Added: trunk/buildroot/package/busybox/busybox-1.13.2-mdev.patch
+===================================================================
+--- trunk/buildroot/package/busybox/busybox-1.13.2-mdev.patch	                        (rev 0)
++++ trunk/buildroot/package/busybox/busybox-1.13.2-mdev.patch	2009-01-12 09:36:57 UTC (rev 24789)
+@@ -0,0 +1,39 @@
++--- busybox-1.13.2/testsuite/mdev.tests	Sun Nov  9 18:28:19 2008
+++++ busybox-1.13.2-mdev/testsuite/mdev.tests	Mon Jan 12 08:59:15 2009
++@@ -111,6 +111,22 @@
++ 
++ # continuing to use directory structure from prev test
++ rm -rf mdev.testdir/dev/*
+++echo "sda 0:0 644 =block/ @echo @echo TEST" >mdev.testdir/etc/mdev.conf
+++testing "mdev move and command" \
+++	"env - PATH=$PATH ACTION=add DEVPATH=/block/sda chroot mdev.testdir /mdev 2>&1;
+++	ls -lnR mdev.testdir/dev | $FILTER_LS2" \
+++"\
+++ at echo TEST
+++mdev.testdir/dev:
+++drwxr-xr-x 2 0 0 block
+++
+++mdev.testdir/dev/block:
+++brw-r--r-- 1 0 0 sda
+++" \
+++	"" ""
+++
+++# continuing to use directory structure from prev test
+++rm -rf mdev.testdir/dev/*
++ echo "@8,0 :1 644" >mdev.testdir/etc/mdev.conf
++ testing "mdev #maj,min and no explicit uid" \
++ 	"env - PATH=$PATH ACTION=add DEVPATH=/block/sda chroot mdev.testdir /mdev 2>&1;
++--- busybox-1.13.2/util-linux/mdev.c	Sun Nov  9 18:28:22 2008
+++++ busybox-1.13.2-mdev/util-linux/mdev.c	Mon Jan 12 08:59:15 2009
++@@ -179,8 +179,9 @@
++ 			unsigned i, n;
++ #endif
++ 			char *a = val;
++-			s = strchr(val, ' ');
++-			val = (s && s[1]) ? s+1 : NULL;
+++			s = strchrnul(val, ' ');
+++			val = (s[0] && s[1]) ? s+1 : NULL;
+++			s[0] = '\0';
++ #if ENABLE_FEATURE_MDEV_RENAME_REGEXP
++ 			/* substitute %1..9 with off[1..9], if any */
++ 			n = 0;
