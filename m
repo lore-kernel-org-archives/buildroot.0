@@ -1,70 +1,56 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon, 12 Jan 2009 15:57:29 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
-Message-ID: <20090112155730.69F0E766E4@busybox.osuosl.org>
+From: Daniel James Laird <daniel.j.laird@nxp.com>
+Date: Mon, 12 Jan 2009 17:30:36 +0100
+Subject: [Buildroot] Some issues I have found in buildroot today.
+In-Reply-To: <87eiz8h6tz.fsf@macbook.be.48ers.dk>
+References: <20090112152242.565A7766E4@busybox.osuosl.org>
+	<C13DBBE85AD6974B85C118C35890CA5F1A85066FB6@EU1RDCRDC1WX029.exi.nxp.com>
+	<87eiz8h6tz.fsf@macbook.be.48ers.dk>
+Message-ID: <C13DBBE85AD6974B85C118C35890CA5F1A85067046@EU1RDCRDC1WX029.exi.nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-01-12 15:57:28 +0000 (Mon, 12 Jan 2009)
-New Revision: 24802
+My thoughts on the BR2_ENABLE_LOCALE were this:
 
-Log:
-uclibc: 0.9.30-x86-2.6.28+headers-fix: add r24799 as well
+Should the BR2_ENABLE_LOCALE options be moved from the uclibc/Config.in file so that they are globally available.  I could then set that I have a LOCALE enabled toolchain.  If I set that I did not have a LOCALE enabled toolchain then it would build libiconv like it does now.
 
-Handle x86_84 as well. From uclibc r24799.
+Or do I just add the same options to the external-toolchain/Config.in?
 
-Modified:
-   trunk/buildroot/toolchain/uClibc/uClibc-0.9.30-x86-2.6.28+-headers-fix.patch
+Cheers,
+Daniel Laird
 
+-----Original Message-----
+From: Peter Korsgaard [mailto:jacmet at gmail.com] On Behalf Of Peter Korsgaard
+Sent: 2009 Jan 12 15:39
+To: Daniel James Laird
+Cc: buildroot at uclibc.org
+Subject: Re: [Buildroot] Some issues I have found in buildroot today.
 
-Changeset:
-Modified: trunk/buildroot/toolchain/uClibc/uClibc-0.9.30-x86-2.6.28+-headers-fix.patch
-===================================================================
---- trunk/buildroot/toolchain/uClibc/uClibc-0.9.30-x86-2.6.28+-headers-fix.patch	2009-01-12 15:22:41 UTC (rev 24801)
-+++ trunk/buildroot/toolchain/uClibc/uClibc-0.9.30-x86-2.6.28+-headers-fix.patch	2009-01-12 15:57:28 UTC (rev 24802)
-@@ -4,8 +4,10 @@
- Subject: [PATCH] These defines needs to be considered after recent linux kernel combined i386 and x86_64 into x86
- 
- git-svn-id: svn+ssh://uclibc.org/svn/trunk/uClibc at 24515 69ca8d6d-28ef-0310-b511-8ec308f3f277
-+git-svn-id: svn+ssh://uclibc.org/svn/trunk/uClibc at 24799 69ca8d6d-28ef-0310-b511-8ec308f3f277
- ---
-- libc/sysdeps/linux/i386/bits/kernel_types.h |    8 ++++++--
-+ libc/sysdeps/linux/i386/bits/kernel_types.h   |    8 ++++++--
-+ libc/sysdeps/linux/x86_64/bits/kernel_types.h |   11 ++++++++++-
-  1 files changed, 6 insertions(+), 2 deletions(-)
- 
- diff --git a/libc/sysdeps/linux/i386/bits/kernel_types.h b/libc/sysdeps/linux/i386/bits/kernel_types.h
-@@ -29,6 +31,29 @@
-  typedef unsigned short	__kernel_dev_t;
-  typedef unsigned long	__kernel_ino_t;
-  typedef unsigned short	__kernel_mode_t;
-+diff --git a/libc/sysdeps/linux/x86_64/bits/kernel_types.h b/libc/sysdeps/linux/x86_64/bits/kernel_types.h
-+index 73f6ffb..b2f7341 100644
-+--- a/libc/sysdeps/linux/x86_64/bits/kernel_types.h
-++++ b/libc/sysdeps/linux/x86_64/bits/kernel_types.h
-+@@ -4,8 +4,17 @@
-+  * our private content, and not the kernel header, will win.
-+  *  -Erik
-+  */
-+-#ifndef _ASM_X86_64_POSIX_TYPES_H
-++
-++/* a hack for compiling a 32 bit user space with 64 bit
-++ * kernel on x86_64  */
-++#if !defined(__ARCH_I386_POSIX_TYPES_H) && \
-++    !defined(_ASM_X86_64_POSIX_TYPES_H) && \
-++    !defined(_ASM_X86_POSIX_TYPES_32_H) && \
-++    !defined(_ASM_X86_POSIX_TYPES_64_H)
-+ #define _ASM_X86_64_POSIX_TYPES_H
-++#define __ARCH_I386_POSIX_TYPES_H
-++#define _ASM_X86_POSIX_TYPES_32_H
-++#define _ASM_X86_POSIX_TYPES_64_H
-+ 
-+ typedef unsigned long	__kernel_dev_t;
-+ typedef unsigned long	__kernel_ino_t;
- -- 
- 1.5.6.5
- 
+>>>>> "Daniel" == Daniel James Laird <daniel.j.laird@nxp.com> writes:
+
+Hi,
+
+ Daniel> I have found that libcurl is not properly dependent on
+ Daniel> host-sed so if I build this package alone it does not work.
+
+And it needs it internally for the build?
+
+ Daniel> I have also found that autoconf can not be built with multi
+ Daniel> jobs (i.e -j X).
+
+Ok, that should be fixable with a simple s/MAKE/MAKE1/
+
+ Daniel> I have also found that for external toolchains you cannot set
+ Daniel> that you have LOCALE/WCHAR support this limits options
+ Daniel> somewhat and means libiconv is always built and I would
+ Daniel> rather not do this.  Can anyone explain the LOCALE support
+ Daniel> options and what it means for an external toolchain instead
+ Daniel> of a uclibc built toolchain.
+
+I guess the LOCALE stuff for external toolchain should just match what
+the toolchain has, but I don't use the external stuff.
+
+-- 
+Bye, Peter Korsgaard
