@@ -1,39 +1,27 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 12 Jan 2009 07:26:40 +0100
+Date: Mon, 12 Jan 2009 07:27:50 +0100
 Subject: [Buildroot] svn commit: trunk/buildroot/package/sudo
-In-Reply-To: <1231712680.9711.52.camel@elrond.atmel.com> (Ulf Samuelsson's
-	message of "Sun\, 11 Jan 2009 23\:24\:40 +0100")
-References: <20090111203618.2084F76736@busybox.osuosl.org>
-	<1231712680.9711.52.camel@elrond.atmel.com>
-Message-ID: <87fxjpjazj.fsf@macbook.be.48ers.dk>
+In-Reply-To: <20090112000650.6225C76736@busybox.osuosl.org> (ulf@uclibc.org's
+	message of "Mon\, 12 Jan 2009 00\:06\:50 +0000 \(UTC\)")
+References: <20090112000650.6225C76736@busybox.osuosl.org>
+Message-ID: <87bpudjaxl.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
+>>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
 
-Hi,
+ ulf> Author: ulf
+ ulf> Date: 2009-01-12 00:06:49 +0000 (Mon, 12 Jan 2009)
+ ulf> New Revision: 24777
 
- >> As we are using a Debian/Ubuntu patch, it makes more sense to get the
- >> tarball from there as well.
- >> 
+ ulf> Log:
+ ulf> Sudo source package IS at DEBIAN, but with a different name
 
- Ulf> ?I am pretty sure you id NOT test that...
-
-Ofcourse I did - Try it.
-
- Ulf> Please remove any such tarball from your download directory
- Ulf> and try building sudo, and you will see.
- Ulf> Not since they obsoleted that version.
- Ulf> Either you update to a newer version AND
- Ulf> create a patchset that compiled or you
- Ulf> revert that patch.
-
-But
-http://ftp.debian.org/debian/pool/main/s/sudo/sudo_1.6.8p12.orig.tar.gz
-exists, so maybe just give it a try, before you complain - will you? ;)
+Ok, so this reverts your revert and we're now back to my 24763
+version?
 
 -- 
 Bye, Peter Korsgaard
