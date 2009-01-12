@@ -1,50 +1,65 @@
-From: laird at uclibc.org <laird@uclibc.org>
-Date: Mon, 12 Jan 2009 12:54:30 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/external-toolchain
-Message-ID: <20090112125430.C33E4766E4@busybox.osuosl.org>
+From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+Date: Mon, 12 Jan 2009 14:05:44 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/liberation
+In-Reply-To: <20090112124048.BBE95766E4@busybox.osuosl.org>
+References: <20090112124048.BBE95766E4@busybox.osuosl.org>
+Message-ID: <20090112130544.GA32253@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: laird
-Date: 2009-01-12 12:54:30 +0000 (Mon, 12 Jan 2009)
-New Revision: 24794
+On Mon, Jan 12, 2009 at 12:40:48PM +0000, laird at uclibc.org wrote:
+>Author: laird
+>Date: 2009-01-12 12:40:48 +0000 (Mon, 12 Jan 2009)
+>New Revision: 24792
+>
+>Log:
+>package/liberation/liberation.mk: Correct the makefile to what it should have been
+>
+>Correct the makefile so that it works and is what I originally planned to add.
+>
+>Signed-off-by: Daniel Laird <daniel.j.laird@nxp.com>
+>
+>
+>
+>Modified:
+>   trunk/buildroot/package/liberation/liberation.mk
+>
+>
+>Changeset:
+>Modified: trunk/buildroot/package/liberation/liberation.mk
+>===================================================================
+>--- trunk/buildroot/package/liberation/liberation.mk	2009-01-12 10:29:46 UTC (rev 24791)
+>+++ trunk/buildroot/package/liberation/liberation.mk	2009-01-12 12:40:48 UTC (rev 24792)
+>@@ -18,12 +18,12 @@
+> 	$(LIBERATION_CAT) $(DL_DIR)/$(LIBERATION_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+> 	touch $(LIBERATION_DIR)/.unpacked
 
-Log:
-toolchain/external-toolchain/ext-tool.mk: Support non sysroot-able toolchains
+touch $@
+> 
+>-$(STAGING_DIR)/usr/share/fonts/.ttf: $(LIBERATION_DIR)/.unpacked
+>+$(STAGING_DIR)/usr/share/fonts/LiberationMono-Bold.ttf: $(LIBERATION_DIR)/.unpacked
+> 	-mkdir -p $(STAGING_DIR)/usr/share/fonts/liberation
 
-Only copy the sysroot files if the toolchain was built with sysroot support.
+The preferred thing to do is to use $(INSTALL) -d $(@D)
 
-Signed-off-by: Daniel Laird <daniel.j.laird@nxp.com>
+> 	$(INSTALL) -m0644 $(LIBERATION_DIR)/*.ttf $(STAGING_DIR)/usr/share/fonts/liberation/
 
+okay.. the target is fonts/LiberationMono-Bold.ttf and you put the fonts into
+fonts/liberation/
 
+> 	touch -c $(STAGING_DIR)/usr/share/fonts/.ttf
 
-Modified:
-   trunk/buildroot/toolchain/external-toolchain/ext-tool.mk
+See how it would be *so* much better to use 'touch -c $@' ?
 
+> 
+>-$(TARGET_DIR)/usr/share/fonts/LiberationMono-Bold.ttf: $(STAGING_DIR)/usr/share/fonts/.ttf
+>+$(TARGET_DIR)/usr/share/fonts/LiberationMono-Bold.ttf: $(STAGING_DIR)/usr/share/fonts/LiberationMono-Bold.ttf
+> 	-mkdir -p $(TARGET_DIR)/usr/share/fonts/liberation
+> 	$(INSTALL) -m0644 $(LIBERATION_DIR)/*.ttf $(TARGET_DIR)/usr/share/fonts/liberation/
+> 	touch -c $(TARGET_DIR)/usr/share/fonts/.ttf
 
-Changeset:
-Modified: trunk/buildroot/toolchain/external-toolchain/ext-tool.mk
-===================================================================
---- trunk/buildroot/toolchain/external-toolchain/ext-tool.mk	2009-01-12 12:45:48 UTC (rev 24793)
-+++ trunk/buildroot/toolchain/external-toolchain/ext-tool.mk	2009-01-12 12:54:30 UTC (rev 24794)
-@@ -46,8 +46,8 @@
- 
- copy_toolchain_sysroot = \
- 	SYSROOT_DIR=`$(TARGET_CC) -v 2>&1 | grep ^Configured | tr " " "\n" | grep -- "--with-sysroot" | cut -f2 -d=`; \
--	cp -a $${SYSROOT_DIR}/* $(STAGING_DIR)/ ; \
--	find $(STAGING_DIR) -type d | xargs chmod 755
-+	if [ -n "$${SYSROOT_DIR}" ]; then cp -a $${SYSROOT_DIR}/* $(STAGING_DIR)/ ; \
-+	find $(STAGING_DIR) -type d | xargs chmod 755; fi
- 
- uclibc: dependencies $(TARGET_DIR)/lib/$(strip $(subst ",, $(BR2_TOOLCHAIN_EXTERNAL_LIB_C)))
- 
-@@ -59,4 +59,4 @@
- 	for libs in $(strip $(subst ",, $(BR2_TOOLCHAIN_EXTERNAL_LIBS))); do \
- 		$(call copy_toolchain_lib_root, $$libs, /lib, $(BR2_TOOLCHAIN_EXTERNAL_STRIP)); \
- 	done
--	$(call copy_toolchain_sysroot)
-\ No newline at end of file
-+	$(call copy_toolchain_sysroot)
+about the same 3 bugs as above.
+Please, be more careful..
