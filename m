@@ -1,51 +1,92 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 12 Jan 2009 10:08:57 +0100
+Date: Mon, 12 Jan 2009 10:22:57 +0100
 Subject: [Buildroot] arch support
-In-Reply-To: <20090112100054.25c79c4f@hcegtvedt> (Hans-Christian Egtvedt's
-	message of "Mon\, 12 Jan 2009 10\:00\:54 +0100")
+In-Reply-To: <20090112090745.GB25148@mx.loc> (Bernhard Reutner-Fischer's
+	message of "Mon\, 12 Jan 2009 10\:07\:45 +0100")
 References: <87ljtgj44z.fsf@macbook.be.48ers.dk>
-	<20090112100054.25c79c4f@hcegtvedt>
-Message-ID: <87d4esj3h2.fsf@macbook.be.48ers.dk>
+	<20090112090745.GB25148@mx.loc>
+Message-ID: <878wpgj2tq.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Hans-Christian" == Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> writes:
+>>>>> "Bernhard" == Bernhard Reutner-Fischer <rep.dot.nop@gmail.com> writes:
 
 Hi,
 
- >> I just finished building the defconfigs for all the archs (uclibc
- >> 0.9.30 / kernel headers 2.6.28 / binutils 2.19 / gcc 4.3.2 except for
- >> avr32 which does it's own thing)
+ >> Status:
  >> 
+ >> alpha: broken in libpthread
 
- Hans-Christian> Nice, that is a good number of CPU cycles used ;)
+ Bernhard> alpha currently only supports static builds and no threads, IIRC.
 
-yeah ;)
+Ok, I'll fixup Kconfig deps then.
 
+ >> arm: ok
+ >> armeb: ok
  >> avr32: ok (uclibc-0.9.29-avr32, binutils-2.17-avr32, gcc-4.2.2-avr32)
+ >> cris: broken in kernel headers
 
- Hans-Christian> Hmm, why is not 0.9.30 default for AVR32? It compiles
- Hans-Christian> fine with the upstream release, no extra patches
- Hans-Christian> needed.
+ Bernhard> This was already fixed, build tested fine for me some time ago.
 
-I guess it's because of:
+I'll try your tree and port over fixes if needed.
 
-toolchain/Config.in:
-config BR2_TOOLCHAIN_BUILDROOT
-        bool "Buildroot toolchain"
-        depends on !BR2_avr32
+ >> m68k: gcc ICE
 
-Which is from r21549 (Ulf)
+ Bernhard> This is fixed with gcc trunk (i.e. 4.4.0).
 
-and target/device/Config.in.toolchain:
-choice
-        prompt "Source location:"
-        default BR2_TOOLCHAIN_ATMEL_AVR32_4_2_2 if BR2_avr32
+Ok, we won't get that in BR before the release, so I'll mark it as
+BROKEN for now.
 
-Which is from r22624 (Ulf)
+ >> mips: ok
+ >> mipsel: ok
+ >> nios2: broken in kernel headers
+
+ Bernhard> Would need love as it's a bit outdated.
+
+Exactly, and apparently no one cares, so I'll mark it as BROKEN for
+now. Is nios2 support evan available in upstream gcc?
+
+ >> powerpc: ok
+ >> s390: broken in uclibc
+
+ Bernhard> s/broken/not yet supported/
+
+True, but the outcome is the same ;)
+
+ >> sh4: ok
+ >> sh64: broken in kernel headers (merged with sh?)
+
+ Bernhard> both sh64 and sh* build fine for me.
+
+Ok, will check.
+
+ >> x86_64: broken in uclibc
+
+ Bernhard> works for me. What's failing?
+
+uclibc build - See bottom of http://uclibc.org/~jacmet/br/x86_64.log
+
+ >> - alpha: I'll retry with the "new" pthreads and see if that works
+ >> - ia64 and sparc issue seems similar, will ask on the uclibc list
+ >> - sh64: Anyone knows if that got merged with sh4 like powerpc did?
+
+ Bernhard> there are SH and SH64. SH[234] are just SH variants -- think
+ Bernhard> i?86 or mips?e{l,b}
+
+Yes, but the kernel only has arch/sh - Should that also be used for
+sh64?
+
+ >> - s390: Shouldn't really have been added in the first place as there's
+ >> no uclibc support. Will remove (Bernhard agrees)
+
+ Bernhard> Strictly speaking this should depend on
+ Bernhard> !BR2_TOOLCHAIN_BUILDROOT until it is supported in uClibc. I
+ Bernhard> agree that it could just me removed from BR for now.
+
+Ok, will do.
 
 -- 
 Bye, Peter Korsgaard
