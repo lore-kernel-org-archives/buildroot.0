@@ -1,64 +1,39 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Mon, 12 Jan 2009 00:43:24 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/jffs2
-Message-ID: <20090112004324.7BD1676736@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 12 Jan 2009 07:26:40 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/sudo
+In-Reply-To: <1231712680.9711.52.camel@elrond.atmel.com> (Ulf Samuelsson's
+	message of "Sun\, 11 Jan 2009 23\:24\:40 +0100")
+References: <20090111203618.2084F76736@busybox.osuosl.org>
+	<1231712680.9711.52.camel@elrond.atmel.com>
+Message-ID: <87fxjpjazj.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2009-01-12 00:43:22 +0000 (Mon, 12 Jan 2009)
-New Revision: 24778
+>>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 
-Log:
-Support large sector NAND flash for JFFS2
+Hi,
 
-Modified:
-   trunk/buildroot/target/jffs2/Config.in
+ >> As we are using a Debian/Ubuntu patch, it makes more sense to get the
+ >> tarball from there as well.
+ >> 
 
+ Ulf> ?I am pretty sure you id NOT test that...
 
-Changeset:
-Modified: trunk/buildroot/target/jffs2/Config.in
-===================================================================
---- trunk/buildroot/target/jffs2/Config.in	2009-01-12 00:06:49 UTC (rev 24777)
-+++ trunk/buildroot/target/jffs2/Config.in	2009-01-12 00:43:22 UTC (rev 24778)
-@@ -20,6 +20,11 @@
- 	depends on BR2_TARGET_ROOTFS_JFFS2
- 	select BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER
- 
-+config BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_2K_128K
-+	bool "NAND flash with 2kB Page and 128 kB erasesize"
-+	depends on BR2_TARGET_ROOTFS_JFFS2
-+	select BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER
-+
- config BR2_TARGET_ROOTFS_JFFS2_FLASH_128
- 	bool "Parallel flash with 4 kB pagesize and 128 kB erase size"
- 	depends on BR2_TARGET_ROOTFS_JFFS2
-@@ -53,6 +58,7 @@
- 	depends on BR2_TARGET_ROOTFS_JFFS2
- 	default 0x420 if BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_1056
- 	default 0x210 if BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_528
-+	default 0x800 if BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_2K_128K
- 	default 0x1000 if BR2_TARGET_ROOTFS_JFFS2_FLASH_128
- 	default 0x1000 if BR2_TARGET_ROOTFS_JFFS2_FLASH_64
- 	default $(BR2_TARGET_ROOTFS_JFFS2_CUSTOM_PAGESIZE) if BR2_TARGET_ROOTFS_JFFS2_CUSTOM
-@@ -62,6 +68,7 @@
- 	depends on BR2_TARGET_ROOTFS_JFFS2
- 	default 0x2100 if BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_1056
- 	default 0x1080 if BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_528
-+	default 0x20000 if BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_2K_128K
- 	default 0x20000 if BR2_TARGET_ROOTFS_JFFS2_FLASH_128
- 	default 0x10000 if BR2_TARGET_ROOTFS_JFFS2_FLASH_64
- 	default $(BR2_TARGET_ROOTFS_JFFS2_CUSTOM_EBSIZE) if BR2_TARGET_ROOTFS_JFFS2_CUSTOM
-@@ -69,6 +76,9 @@
- config BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER
- 	bool "Do not use Cleanmarker"
- 	depends on BR2_TARGET_ROOTFS_JFFS2
-+	default y if BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_1056
-+	default y if BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_528
-+	default y if BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_2K_128K
- 	help
- 	  Do not use cleanmarkers if using NAND flash or Dataflash where
- 	  the pagesize is not a power of 2
+Ofcourse I did - Try it.
+
+ Ulf> Please remove any such tarball from your download directory
+ Ulf> and try building sudo, and you will see.
+ Ulf> Not since they obsoleted that version.
+ Ulf> Either you update to a newer version AND
+ Ulf> create a patchset that compiled or you
+ Ulf> revert that patch.
+
+But
+http://ftp.debian.org/debian/pool/main/s/sudo/sudo_1.6.8p12.orig.tar.gz
+exists, so maybe just give it a try, before you complain - will you? ;)
+
+-- 
+Bye, Peter Korsgaard
