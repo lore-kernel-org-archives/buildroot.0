@@ -1,36 +1,27 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 13 Jan 2009 23:16:56 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libidn
-In-Reply-To: <20090113165723.1761476850@busybox.osuosl.org>
-	(laird@uclibc.org's message of "Tue\,
-	13 Jan 2009 16\:57\:22 +0000 \(UTC\)")
-References: <20090113165723.1761476850@busybox.osuosl.org>
-Message-ID: <87fxjmdf6v.fsf@macbook.be.48ers.dk>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Wed, 14 Jan 2009 10:11:30 +1100
+Subject: [Buildroot] external toolchain --sysroot
+In-Reply-To: <eaeb93bb0901122052o16f639f8nbc8c25d989fdb876@mail.gmail.com>
+References: <20090113043014.GA5238@cloud.net.au>
+	<eaeb93bb0901122045p6e653f67of6172a11f28010d8@mail.gmail.com>
+	<eaeb93bb0901122046g2ed61992n672221d163c74971@mail.gmail.com>
+	<eaeb93bb0901122052o16f639f8nbc8c25d989fdb876@mail.gmail.com>
+Message-ID: <20090113231130.GA24352@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "laird" == laird  <laird@uclibc.org> writes:
+On Mon, Jan 12, 2009 at 10:52:49PM -0600, Eric wrote:
+> Also I did build my tool chain with sysroot support ... so you would have to
+> do the same to get that to work.
 
- laird> Author: laird
- laird> Date: 2009-01-13 16:57:21 +0000 (Tue, 13 Jan 2009)
- laird> New Revision: 24818
+Right. I notice that --sysroot is being used even if gcc is compiled
+without it. And it appears that sysroot is buggy in gcc 4.1.2, which is
+what I'm using currently.
 
- laird> Log:
- laird> package/libidn/Config.in: Fix line length of text
 
- laird> +++ trunk/buildroot/package/libidn/Config.in	2009-01-13 16:57:21 UTC (rev 24818)
- laird> @@ -2,5 +2,6 @@
- laird>  	bool "libidn"
- laird>  	help
- laird>  	  http://www.gnu.org/software/libidn/
- laird> -	  Libidn's purpose is to encode and decode internationalized domain names. 
- laird> +	  Libidn's purpose is to encode and decode internationalized 
- laird> +	  domain names. 
-
-Please don't add trailing spaces.
-
+Hamish
 -- 
-Bye, Peter Korsgaard
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
