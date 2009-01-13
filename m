@@ -1,28 +1,47 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Tue, 13 Jan 2009 17:47:04 +1100
-Subject: [Buildroot] samba doesn't build
-In-Reply-To: <20090113071800.5c58bd6c@hcegtvedt>
-References: <20090113044740.GA6321@cloud.net.au>
-	<20090113071217.138459f9@hcegtvedt>
-	<20090113061530.GA8121@cloud.net.au>
-	<20090113071800.5c58bd6c@hcegtvedt>
-Message-ID: <20090113064704.GA8503@cloud.net.au>
+From: egtvedt at uclibc.org <egtvedt@uclibc.org>
+Date: Tue, 13 Jan 2009 07:26:56 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/samba
+Message-ID: <20090113072656.64F4A76850@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jan 13, 2009 at 07:18:00AM +0100, Hans-Christian Egtvedt wrote:
-> PS! Excellent use of the non existing MAINTAINER file ;)
+Author: egtvedt
+Date: 2009-01-13 07:26:55 +0000 (Tue, 13 Jan 2009)
+New Revision: 24809
 
-I use "svn blame" :)
+Log:
+samba: properly disable largefile if not selected in Buildroot
 
-Now if only there was "svn flame" which automatically started a new
-message in my mail client .. ;) 
 
-Thanks for looking into the samba issue.
+Modified:
+   trunk/buildroot/package/samba/samba.mk
 
-Hamish
--- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+
+Changeset:
+Modified: trunk/buildroot/package/samba/samba.mk
+===================================================================
+--- trunk/buildroot/package/samba/samba.mk	2009-01-13 00:46:39 UTC (rev 24808)
++++ trunk/buildroot/package/samba/samba.mk	2009-01-13 07:26:55 UTC (rev 24809)
+@@ -11,6 +11,10 @@
+ SAMBA_BINARY:=bin/smbd
+ SAMBA_TARGET_BINARY:=usr/sbin/smbd
+ 
++ifneq ($(BR2_LARGEFILE),y)
++SAMBA_DISABLE_LARGEFILE:=--disable-largefile
++endif
++
+ $(DL_DIR)/$(SAMBA_SOURCE):
+ 	$(WGET) -P $(DL_DIR) $(SAMBA_SITE)/$(SAMBA_SOURCE)
+ 
+@@ -55,7 +59,7 @@
+ 		--disable-shared-libs \
+ 		--disable-static \
+ 		--disable-cups \
+-		$(BR2_LARGEFILE) \
++		$(SAMBA_DISABLE_LARGEFILE) \
+ 	)
+ 	touch $@
+ 
