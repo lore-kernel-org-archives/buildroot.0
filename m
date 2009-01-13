@@ -1,35 +1,60 @@
-From: hamish at uclibc.org <hamish@uclibc.org>
-Date: Tue, 13 Jan 2009 00:46:40 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package
-Message-ID: <20090113004640.C043E769B5@busybox.osuosl.org>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Tue, 13 Jan 2009 15:30:14 +1100
+Subject: [Buildroot] external toolchain --sysroot
+Message-ID: <20090113043014.GA5238@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: hamish
-Date: 2009-01-13 00:46:39 +0000 (Tue, 13 Jan 2009)
-New Revision: 24808
+Hi Thomas,
 
-Log:
-Added missing libdnet package
+Firstly:
+
+The external toolchain --sysroot change in CFLAGS has broken my builds.
+(I only just merged into into my tree and tried it, so sorry for the
+delayed feedback).
+
+configure scripts are failing to compile any test program, with the
+error:
+
+configure:2909: checking for C compiler default output file name
+configure:2936: /home/hamish/work/xyz/buildroot/build_armeb/staging_dir/usr/bin/armeb-linux-uclibcgnu-gcc -Os  -I/home/hamish/work/xyz/buildroot/build_armeb/staging_dir/include -I/home/hamish/work/xyz/buildroot/build_armeb/staging_dir/usr/include -I/home/hamish/work/xyz/buildroot/build_armeb/staging_dir/usr/armeb-linux-uclibcgnu/include --sysroot /home/hamish/work/xyz/buildroot/build_armeb/staging_dir/ -Os  -I/home/hamish/work/xyz/buildroot/build_armeb/staging_dir/include -I/home/hamish/work/xyz/buildroot/build_armeb/staging_dir/usr/include -I/home/hamish/work/xyz/buildroot/build_armeb/staging_dir/usr/armeb-linux-uclibcgnu/include --sysroot /home/hamish/work/xyz/buildroot/build_armeb/staging_dir/  -L/home/hamish/work/xyz/buildroot/build_armeb/staging_dir/lib -L/home/hamish/work/xyz/buildroot/build_armeb/staging_dir/usr/lib conftest.c  >&5
+/home/hamish/work/xyz/buildroot/build_armeb/staging_dir/usr/bin/armeb-linux-uclibcgnu-ld: cannot find /home/hamish/work/xyz/buildroot/build_armeb/staging_dir/lib/libc.so.0 inside /home/hamish/work/xyz/buildroot/build_armeb/staging_dir/
+collect2: ld returned 1 exit status
+configure:2939: $? = 1
+
+The library does exist at that location, I guess it doesn't like the
+combination of the sysroot and the full path in -L.../lib.
+
+[ 2:49PM] hamish at bach:work/xyz/buildroot $ ls -l /home/hamish/work/xyz/buildroot/build_armeb/staging_dir/lib/libc.so.0 
+lrwxrwxrwx 1 hamish hamish 19 2008-11-10 17:15 /home/hamish/work/xyz/buildroot/build_armeb/staging_dir/lib/libc.so.0 -> libuClibc-0.9.29.so
+
+[ 2:54PM] hamish at bach:work/xyz/buildroot $ ls -l /home/hamish/work/xyz/buildroot/build_armeb/staging_dir/lib/libuClibc-0.9.29.so 
+-rw-r--r-- 1 hamish hamish 293315 2008-11-10 17:15 /home/hamish/work/xyz/buildroot/build_armeb/staging_dir/lib/libuClibc-0.9.29.so
+
+My gcc is 4.1.2. This might work with newer versions.
+
+I removed the --sysroot in package/Makefile.in and it works again.
+
+What is the purpose of using the --sysroot flag? It's used even if gcc
+is configured without it.
 
 
-Modified:
-   trunk/buildroot/package/Config.in
+Secondly:
 
+The change to toolchain/external-toolchain/ext-tool.mk seems to copy the
+sysroot into $(STAGING_DIR) as a side-effect of copying the libs to the
+$(TARGET_DIR), not as an explicit dependency.
 
-Changeset:
-Modified: trunk/buildroot/package/Config.in
-===================================================================
---- trunk/buildroot/package/Config.in	2009-01-12 22:12:22 UTC (rev 24807)
-+++ trunk/buildroot/package/Config.in	2009-01-13 00:46:39 UTC (rev 24808)
-@@ -152,6 +152,7 @@
- source "package/libcgi/Config.in"
- source "package/libcgicc/Config.in"
- source "package/libcurl/Config.in"
-+source "package/libdnet/Config.in"
- source "package/libeXosip2/Config.in"
- source "package/libosip2/Config.in"
- source "package/libpcap/Config.in"
+And in my case, the sysroot IS the $(STAGING_DIR)... but my gcc is not
+configured with sysroot so it doesn't do any copying anyway.
+
+I did a fresh checkout of my tree and built the toolchain and then my
+board, and it failed as above. gcc has a hardcoded path to libc in it,
+so it doesn't expect to get --sysroot as well.
+
+Hamish
+-- 
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
