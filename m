@@ -1,26 +1,30 @@
 From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Wed, 14 Jan 2009 10:11:30 +1100
-Subject: [Buildroot] external toolchain --sysroot
-In-Reply-To: <eaeb93bb0901122052o16f639f8nbc8c25d989fdb876@mail.gmail.com>
-References: <20090113043014.GA5238@cloud.net.au>
-	<eaeb93bb0901122045p6e653f67of6172a11f28010d8@mail.gmail.com>
-	<eaeb93bb0901122046g2ed61992n672221d163c74971@mail.gmail.com>
-	<eaeb93bb0901122052o16f639f8nbc8c25d989fdb876@mail.gmail.com>
-Message-ID: <20090113231130.GA24352@cloud.net.au>
+Date: Wed, 14 Jan 2009 10:35:22 +1100
+Subject: [Buildroot] samba doesn't build
+In-Reply-To: <20090113083057.38518dfd@hcegtvedt>
+References: <20090113044740.GA6321@cloud.net.au>
+	<20090113071217.138459f9@hcegtvedt>
+	<20090113061530.GA8121@cloud.net.au>
+	<20090113071800.5c58bd6c@hcegtvedt>
+	<20090113083057.38518dfd@hcegtvedt>
+Message-ID: <20090113233522.GA24997@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jan 12, 2009 at 10:52:49PM -0600, Eric wrote:
-> Also I did build my tool chain with sysroot support ... so you would have to
-> do the same to get that to work.
+On Tue, Jan 13, 2009 at 08:30:57AM +0100, Hans-Christian Egtvedt wrote:
+> On Tue, 13 Jan 2009 07:18:00 +0100
+> Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> wrote:
+> 
+> > On Tue, 13 Jan 2009 17:15:30 +1100
+> > Hamish Moffatt <hamish@cloud.net.au> wrote:
+> > > I note that 3.2.7 is out now with more security fixes.
+> > Okay, I will bump the version while I'm at it :)
+> Done, could you give revision 24810 (or later) a spin?
 
-Right. I notice that --sysroot is being used even if gcc is compiled
-without it. And it appears that sysroot is buggy in gcc 4.1.2, which is
-what I'm using currently.
-
+Builds fine. Thanks.
 
 Hamish
 -- 
