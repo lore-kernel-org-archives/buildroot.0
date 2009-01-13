@@ -1,49 +1,34 @@
 From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Tue, 13 Jan 2009 11:05:41 +1100
-Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
-In-Reply-To: <87hc48rg53.fsf@macbook.be.48ers.dk>
-References: <20090109063009.8E640768C5@busybox.osuosl.org>
-	<87hc48rg53.fsf@macbook.be.48ers.dk>
-Message-ID: <20090113000541.GA32708@cloud.net.au>
+Date: Tue, 13 Jan 2009 11:28:21 +1100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/liberation
+In-Reply-To: <20090112124048.BBE95766E4@busybox.osuosl.org>
+References: <20090112124048.BBE95766E4@busybox.osuosl.org>
+Message-ID: <20090113002821.GB32708@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jan 09, 2009 at 10:19:04AM +0100, Peter Korsgaard wrote:
-> >>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
-> 
->  ulf> Author: ulf
->  ulf> Date: 2009-01-09 06:30:08 +0000 (Fri, 09 Jan 2009)
->  ulf> New Revision: 24729
-> 
->  ulf> Log:
->  ulf> Make sure U-boot is built, if we do make uImage
-> 
->  ulf> Modified:
->  ulf>    trunk/buildroot/target/linux/Config.in.advanced
-> 
-> 
->  ulf> Changeset:
->  ulf> Modified: trunk/buildroot/target/linux/Config.in.advanced
->  ulf> ===================================================================
->  ulf> --- trunk/buildroot/target/linux/Config.in.advanced	2009-01-08 23:01:50 UTC (rev 24728)
->  ulf> +++ trunk/buildroot/target/linux/Config.in.advanced	2009-01-09 06:30:08 UTC (rev 24729)
->  ulf> @@ -464,6 +464,7 @@
->  ulf>  config BR2_LINUX_BIN_UIMAGE
->  ulf>  	bool "uImage"
->  ulf>  	depends on BR2_PACKAGE_LINUX
->  ulf> +	select BR2_TARGET_UBOOT
-> 
-> Silently selecting something as big and with so many configuration
-> options as U-Boot isn't that nice - I think it would be nicer to
-> depend on UBOOT instead.
+On Mon, Jan 12, 2009 at 12:40:48PM +0000, laird at uclibc.org wrote:
+> -$(STAGING_DIR)/usr/share/fonts/.ttf: $(LIBERATION_DIR)/.unpacked
+> +$(STAGING_DIR)/usr/share/fonts/LiberationMono-Bold.ttf: $(LIBERATION_DIR)/.unpacked
+>  	-mkdir -p $(STAGING_DIR)/usr/share/fonts/liberation
+>  	$(INSTALL) -m0644 $(LIBERATION_DIR)/*.ttf $(STAGING_DIR)/usr/share/fonts/liberation/
+>  	touch -c $(STAGING_DIR)/usr/share/fonts/.ttf
+>  
+> -$(TARGET_DIR)/usr/share/fonts/LiberationMono-Bold.ttf: $(STAGING_DIR)/usr/share/fonts/.ttf
+> +$(TARGET_DIR)/usr/share/fonts/LiberationMono-Bold.ttf: $(STAGING_DIR)/usr/share/fonts/LiberationMono-Bold.ttf
+>  	-mkdir -p $(TARGET_DIR)/usr/share/fonts/liberation
+>  	$(INSTALL) -m0644 $(LIBERATION_DIR)/*.ttf $(TARGET_DIR)/usr/share/fonts/liberation/
+>  	touch -c $(TARGET_DIR)/usr/share/fonts/.ttf
 
-Isn't it possible(likely?) that users would have their own U-Boot or
-have a pre-built one and don't need to compile it with buildroot, yet
-still want to generate uImages?
+What's the purpose of the .ttf file touched in the staging and target
+dirs?
 
+Why is the font installed into the staging dir at all?
+
+thanks
 Hamish
 -- 
 Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
