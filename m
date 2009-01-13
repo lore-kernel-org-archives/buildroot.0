@@ -1,51 +1,52 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Tue, 13 Jan 2009 08:30:57 +0100
-Subject: [Buildroot] samba doesn't build
-In-Reply-To: <20090113071800.5c58bd6c@hcegtvedt>
-References: <20090113044740.GA6321@cloud.net.au>
-	<20090113071217.138459f9@hcegtvedt>
-	<20090113061530.GA8121@cloud.net.au>
-	<20090113071800.5c58bd6c@hcegtvedt>
-Message-ID: <20090113083057.38518dfd@hcegtvedt>
+From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+Date: Tue, 13 Jan 2009 09:00:54 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/samba
+In-Reply-To: <20090113072656.64F4A76850@busybox.osuosl.org>
+References: <20090113072656.64F4A76850@busybox.osuosl.org>
+Message-ID: <20090113080053.GD18623@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 13 Jan 2009 07:18:00 +0100
-Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> wrote:
+On Tue, Jan 13, 2009 at 07:26:56AM +0000, egtvedt at uclibc.org wrote:
+>Author: egtvedt
+>Date: 2009-01-13 07:26:55 +0000 (Tue, 13 Jan 2009)
+>New Revision: 24809
+>
+>Log:
+>samba: properly disable largefile if not selected in Buildroot
 
-> On Tue, 13 Jan 2009 17:15:30 +1100
-> Hamish Moffatt <hamish@cloud.net.au> wrote:
+properly would mean using $(DISABLE_LARGEFILE). Please fix.
+>
+>
+>Modified:
+>   trunk/buildroot/package/samba/samba.mk
+>
+>
+>Changeset:
+>Modified: trunk/buildroot/package/samba/samba.mk
+>===================================================================
+>--- trunk/buildroot/package/samba/samba.mk	2009-01-13 00:46:39 UTC (rev 24808)
+>+++ trunk/buildroot/package/samba/samba.mk	2009-01-13 07:26:55 UTC (rev 24809)
+>@@ -11,6 +11,10 @@
+> SAMBA_BINARY:=bin/smbd
+> SAMBA_TARGET_BINARY:=usr/sbin/smbd
 > 
-> > On Tue, Jan 13, 2009 at 07:12:17AM +0100, Hans-Christian Egtvedt
-> > wrote:
-
-<snipp>
-
-> > > Huh? Then they have changed the 3.2.5 source code... I'll do a
-> > > refresh of the Samba patches to see what's going on.
-> > 
-> > Here's the md5sum I have for the tarball;
-> > 
-> > 0f7539e09803ae60a2912e70adf1c747  ../../../sources/samba-3.2.5.tar.gz
-> > 
+>+ifneq ($(BR2_LARGEFILE),y)
+>+SAMBA_DISABLE_LARGEFILE:=--disable-largefile
+>+endif
+>+
+> $(DL_DIR)/$(SAMBA_SOURCE):
+> 	$(WGET) -P $(DL_DIR) $(SAMBA_SITE)/$(SAMBA_SOURCE)
 > 
-> I have the exactly same md5sum, weird.
+>@@ -55,7 +59,7 @@
+> 		--disable-shared-libs \
+> 		--disable-static \
+> 		--disable-cups \
+>-		$(BR2_LARGEFILE) \
+>+		$(SAMBA_DISABLE_LARGEFILE) \
+> 	)
+> 	touch $@
 > 
-
-Aha, there was a patch in upstream Buildroot which I probably have
-forgotten to remove some time ago.
-
-> > I note that 3.2.7 is out now with more security fixes.
-> > 
-> 
-> Okay, I will bump the version while I'm at it :)
-> 
-
-Done, could you give revision 24810 (or later) a spin?
-
--- 
-Best regards,
-Hans-Christian Egtvedt
