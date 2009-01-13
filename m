@@ -1,38 +1,49 @@
-From: Andrew Wiley <debio264@gmail.com>
-Date: Mon, 12 Jan 2009 16:22:52 -0600
-Subject: [Buildroot] Can't Login to New System
-In-Reply-To: <ecbbfeda0901121422t5aad880amf988d2d55d237dcc@mail.gmail.com>
-References: <1231316636.6374.5.camel@hactar.vie.riedel.net>
-	<ecbbfeda0901121422t5aad880amf988d2d55d237dcc@mail.gmail.com>
-Message-ID: <ecbbfeda0901121422v44252c68r61ad8a937557569@mail.gmail.com>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Tue, 13 Jan 2009 11:05:41 +1100
+Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
+In-Reply-To: <87hc48rg53.fsf@macbook.be.48ers.dk>
+References: <20090109063009.8E640768C5@busybox.osuosl.org>
+	<87hc48rg53.fsf@macbook.be.48ers.dk>
+Message-ID: <20090113000541.GA32708@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jan 7, 2009 at 2:23 AM, Bernhard Weirich
-<bernhard.weirich@riedel.net> wrote:
-> Hi Andrew,
->
-> just a wild guess, but I had the same problem and the issue was that neither
-> uclib nor kernel was built with floating point support.
-> so maybe check if you have floats...
->
-> Regards Bernhard
->
+On Fri, Jan 09, 2009 at 10:19:04AM +0100, Peter Korsgaard wrote:
+> >>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+> 
+>  ulf> Author: ulf
+>  ulf> Date: 2009-01-09 06:30:08 +0000 (Fri, 09 Jan 2009)
+>  ulf> New Revision: 24729
+> 
+>  ulf> Log:
+>  ulf> Make sure U-boot is built, if we do make uImage
+> 
+>  ulf> Modified:
+>  ulf>    trunk/buildroot/target/linux/Config.in.advanced
+> 
+> 
+>  ulf> Changeset:
+>  ulf> Modified: trunk/buildroot/target/linux/Config.in.advanced
+>  ulf> ===================================================================
+>  ulf> --- trunk/buildroot/target/linux/Config.in.advanced	2009-01-08 23:01:50 UTC (rev 24728)
+>  ulf> +++ trunk/buildroot/target/linux/Config.in.advanced	2009-01-09 06:30:08 UTC (rev 24729)
+>  ulf> @@ -464,6 +464,7 @@
+>  ulf>  config BR2_LINUX_BIN_UIMAGE
+>  ulf>  	bool "uImage"
+>  ulf>  	depends on BR2_PACKAGE_LINUX
+>  ulf> +	select BR2_TARGET_UBOOT
+> 
+> Silently selecting something as big and with so many configuration
+> options as U-Boot isn't that nice - I think it would be nicer to
+> depend on UBOOT instead.
 
-This may be a stupid question, but is that setting somewhere in the
-buildroot toolchain config, in the kernel config, or somewhere else
-entirely? I've looked for it, but I can't seem to find it.
-I'm pretty sure the Cirrus Labs cross toolchain uses software floating
-point, because in the guide for setting it up, you have to run this
-command:
-$ sudo mkdir -p /opt/buildroot/toolchain_build_arm_nofpu/ccache-2.4/cache
-I thought that was pretty funny when I noticed it. I may be
-misinterpretting that, because I'm pretty sure the EDB9302 does have a
-FPU, but it may be something wierd about the Qwerk, or I may just be
-an idiot. That instruction is found at
-http://terk.svn.sourceforge.net/viewvc/terk/embed/trunk/share/docs/QwerkDevelopmentGuide.html#SettingUpTheARMCompiler
+Isn't it possible(likely?) that users would have their own U-Boot or
+have a pre-built one and don't need to compile it with buildroot, yet
+still want to generate uImages?
 
-Andrew Wiley
+Hamish
+-- 
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
