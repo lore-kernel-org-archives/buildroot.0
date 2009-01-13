@@ -1,73 +1,60 @@
-From: Hamish Guthrie <hamish.guthrie@sonycom.com>
-Date: Tue, 13 Jan 2009 10:04:06 +0100
-Subject: [Buildroot] arch support
-In-Reply-To: <87iqokh9mt.fsf@macbook.be.48ers.dk>
-References: <87ljtgj44z.fsf@macbook.be.48ers.dk>	<496B5427.6040103@sonycom.com>
-	<87iqokh9mt.fsf@macbook.be.48ers.dk>
-Message-ID: <496C5906.6080309@sonycom.com>
+From: laird at uclibc.org <laird@uclibc.org>
+Date: Tue, 13 Jan 2009 10:26:29 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package: gettext
+	multimedia/alsa-utils
+Message-ID: <20090113102629.9FDF776850@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-> 
-> Strange - Are you building in a clean tree? What host are you using?
-> 
+Author: laird
+Date: 2009-01-13 10:26:28 +0000 (Tue, 13 Jan 2009)
+New Revision: 24812
 
-Yes, building against a clean tree. I have tried this on 4 different 
-build hosts:
+Log:
+package/alsa-lib/alsa-lib.mk
+package/gettext/gettext.mk: Both of these components look for iconv when configuring so need to be dependent.
 
-1) Centos 5.0 i386: gcc4.1.2 - FAIL
-2) Debian Etch i386: gcc4.1.2 - FAIL
-3) Ubuntu 7.04 i386: gcc4.1.2 - FAIL
-4) Ubuntu 8.10 i386: gcc4.3.2 - PASS
+Both of these packages can be built with libiconv support.  If libiconv is enabled and these are built first 
+then some configure variables get stored in the system cache and then libiconv is not used properly.
+If libiconv is selected by user make sure it is built before either of these packages are built.
 
-For all of the failures, the appropriate part of the config.log file is 
-as follows:
+Signed-off-by: Daniel Laird <daniel.j.laird@nxp.com>
 
-configure:2567: checking for suffix of object files
-configure:2588: 
-/tmp/br/powerpc/toolchain_build_powerpc/gcc-4.3.2-initial/./gcc/xgcc 
--B/tmp/br/powerpc/toolchain_build_powerpc/gcc-4.3.2-initial/./gcc/ 
--B/tmp/br/powerpc/build_powerpc/staging_dir/usr/powerpc-linux-uclibc/bin/ 
--B/tmp/br/powerpc/build_powerpc/staging_dir/usr/powerpc-linux-uclibc/lib/ 
--isystem 
-/tmp/br/powerpc/build_powerpc/staging_dir/usr/powerpc-linux-uclibc/include 
--isystem 
-/tmp/br/powerpc/build_powerpc/staging_dir/usr/powerpc-linux-uclibc/sys-include 
--c -g -Os  conftest.c >&5
-/tmp/br/powerpc/toolchain_build_powerpc/gcc-4.3.2-initial/./gcc/cc1: 
-error while loading shared libraries: libmpfr.so.1: cannot open shared 
-object file: No such file or directory
-configure:2591: $? = 1
-configure: failed program was:
-| /* confdefs.h.  */
-|
-| #define PACKAGE_NAME "GNU C Runtime Library"
-| #define PACKAGE_TARNAME "libgcc"
-| #define PACKAGE_VERSION "1.0"
-| #define PACKAGE_STRING "GNU C Runtime Library 1.0"
-| #define PACKAGE_BUGREPORT ""
-| /* end confdefs.h.  */
-|
-| int
-| main ()
-| {
-|
-|   ;
-|   return 0;
-| }
-configure:2605: error: cannot compute suffix of object files: cannot compile
-See `config.log' for more details.
 
-Unfortunately, the Ubuntu 8.10 machine I used last night to test on is 
-not available to me at the moment, however, I am currently getting a new 
-VM set up with Ubuntu 8.10 on it, on which I will install gcc4.1.2 to 
-see if that is in fact the culprit, but I am not really convinced.
 
-Any thoughts would be appreciated
+Modified:
+   trunk/buildroot/package/gettext/gettext.mk
+   trunk/buildroot/package/multimedia/alsa-utils/alsa-utils.mk
 
---
-Hamish
+
+Changeset:
+Modified: trunk/buildroot/package/gettext/gettext.mk
+===================================================================
+--- trunk/buildroot/package/gettext/gettext.mk	2009-01-13 08:02:52 UTC (rev 24811)
++++ trunk/buildroot/package/gettext/gettext.mk	2009-01-13 10:26:28 UTC (rev 24812)
+@@ -120,7 +120,7 @@
+ 		autopoint envsubst gettext.sh gettextize msg* ?gettext)
+ 	touch -c $@
+ 
+-gettext: uclibc pkgconfig $(STAGING_DIR)/$(GETTEXT_TARGET_BINARY)
++gettext: uclibc pkgconfig $(if $(BR2_PACKAGE_LIBICONV),libiconv) $(STAGING_DIR)/$(GETTEXT_TARGET_BINARY)
+ 
+ gettext-unpacked: $(GETTEXT_DIR)/.unpacked
+ 
+
+Modified: trunk/buildroot/package/multimedia/alsa-utils/alsa-utils.mk
+===================================================================
+--- trunk/buildroot/package/multimedia/alsa-utils/alsa-utils.mk	2009-01-13 08:02:52 UTC (rev 24811)
++++ trunk/buildroot/package/multimedia/alsa-utils/alsa-utils.mk	2009-01-13 10:26:28 UTC (rev 24812)
+@@ -71,7 +71,7 @@
+ 	fi
+ 	touch -c $@
+ 
+-alsa-utils: uclibc alsa-lib ncurses $(if $(BR2_PACKAGE_LIBINTL),libintl) $(TARGET_DIR)/$(ALSA_UTILS_TARGET_BINARY)
++alsa-utils: uclibc alsa-lib ncurses $(if $(BR2_PACKAGE_LIBINTL),libintl) $(if $(BR2_PACKAGE_LIBICONV),libiconv) $(TARGET_DIR)/$(ALSA_UTILS_TARGET_BINARY)
+ 
+ alsa-utils-source: $(DL_DIR)/$(ALSA_UTILS_SOURCE)
+ 
