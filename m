@@ -1,48 +1,48 @@
-From: Robin Gilham <robin.gilham@gmail.com>
-Date: Tue, 13 Jan 2009 13:25:04 +0200
-Subject: [Buildroot] PATCH - fping, gSoap
-Message-ID: <1231845905.7710.16.camel@Pandora>
+From: David Brown <david@westcontrol.com>
+Date: Tue, 13 Jan 2009 14:29:37 +0100
+Subject: [Buildroot] Buildroot fails to build shared library for libglib12
+	on avr32
+Message-ID: <gki4sh$tpl$1@ger.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All, my first attempt at submitting a patch....
-
-
-Fping - fping is a ping(1) like program which uses the Internet Control
-Message Protocol (ICMP) echo request to determine if a host is up. fping
-is different from ping in that you can specify any number of hosts on
-the command line, or specify a file containing the lists of hosts to
-ping. (http://fping.sourceforge.net/)
-
-gSoap, - web services library, this patch only installs the libraries
-onto the target and not the wsdl compiler and other tools.
-
-A cross-platform open source C and C++ software development toolkit.
-Generates C/C++ RPC code, XML data bindings, and efficient
-schema-specific parsers for SOAP Web services and other applications
-that benefit from an XML interface.
-(http://www.cs.fsu.edu/~engelen/soap.html)
+Should I be posting this sort of thing here in the mailing list, or 
+using the bug tracker?
 
 
 
-Hope you find this useful.
+When building for the avr32, libglib12 does not build a shared library 
+for the target, and therefore fails to build properly.  The fix, as far 
+as I can see, is to patch "ltconfig" so that avr32 builds are treated 
+like uclibc builds.  I based this on an old mailing list post:
 
-Regards
-Robin
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: buildroot-avr32-v2.3.0-fping.patch
-Type: text/x-patch
-Size: 3029 bytes
-Desc: not available
-Url : http://lists.busybox.net/pipermail/buildroot/attachments/20090113/b16fdd15/attachment-0002.bin 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: buildroot-avr32-v2.3.0-gsoap.patch
-Type: text/x-patch
-Size: 13270 bytes
-Desc: not available
-Url : http://lists.busybox.net/pipermail/buildroot/attachments/20090113/b16fdd15/attachment-0003.bin 
+http://lists.busybox.net/pipermail/buildroot/2008-February/007030.html
+
+The post refers to issue number 1478 in the bug tracker for busybox, but 
+I can't find a bug with this number.
+
+
+Adding the following patch to package/libglib12 fixes the problem:
+
+package/libglib12/libglib-sharedlib-avr32.patch
+
+--- glib/ltconfig
++++ glib/ltconfig
+@@ -1982,7 +1982,7 @@
+    fi
+    ;;
+
+-linux-uclibc*)
++linux-uclibc* | avr32-linux*)
+    version_type=linux
+    need_lib_prefix=no
+    need_version=no
+
+
+
+mvh.,
+
+David Brown
