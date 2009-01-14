@@ -1,95 +1,29 @@
-From: laird at uclibc.org <laird@uclibc.org>
-Date: Wed, 14 Jan 2009 14:38:18 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/multimedia:
-	gst-plugins-base gst-plugins-good gst-pl etc...
-Message-ID: <20090114143818.F1B2F769A1@busybox.osuosl.org>
+From: Sven Neumann <s.neumann@phase-zero.de>
+Date: Wed, 14 Jan 2009 15:50:17 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/cairo
+In-Reply-To: <COL102-DS153B476E9992200EBB96B2DCD60@phx.gbl>
+References: <20090114133637.93DCB769A1@busybox.osuosl.org>
+	<COL102-DS153B476E9992200EBB96B2DCD60@phx.gbl>
+Message-ID: <1231944617.6465.10.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: laird
-Date: 2009-01-14 14:38:18 +0000 (Wed, 14 Jan 2009)
-New Revision: 24832
+On Wed, 2009-01-14 at 14:24 +0000, Daniel Laird wrote:
+> I think the same can be done for libglib2 and libgtk2 to stop them
+> installing as well which would be nice.
 
-Log:
-package/multimedia/gstreamer
-package/multimedia/gst-plugins-*: I do not want docs installed in rootfs.
+Same for
 
-Stop it installing the docs in the ROOTFS by using the same fix
-as has been applied to cairo.
+ gst-plugins-base-libs
+ gstreamer-0.10
+ gstreamer-plugins-0.10
+ liboil
 
-Signed-off-by: Daniel Laird <daniel.j.laird@nxp.com>
-
-
-
-Modified:
-   trunk/buildroot/package/multimedia/gst-plugins-base/gst-plugins-base.mk
-   trunk/buildroot/package/multimedia/gst-plugins-good/gst-plugins-good.mk
-   trunk/buildroot/package/multimedia/gst-plugins-ugly/gst-plugins-ugly.mk
-   trunk/buildroot/package/multimedia/gstreamer/gstreamer.mk
+and probably some more. I'll apply the same fix to the gupnp packages
+that I proposed in bug 35. Will attach an updated patch later...
 
 
-Changeset:
-Modified: trunk/buildroot/package/multimedia/gst-plugins-base/gst-plugins-base.mk
-===================================================================
---- trunk/buildroot/package/multimedia/gst-plugins-base/gst-plugins-base.mk	2009-01-14 14:28:48 UTC (rev 24831)
-+++ trunk/buildroot/package/multimedia/gst-plugins-base/gst-plugins-base.mk	2009-01-14 14:38:18 UTC (rev 24832)
-@@ -17,7 +17,9 @@
- 		--disable-xshm \
- 		--disable-oggtest \
- 		--disable-vorbistest \
--		--disable-freetypetest
-+		--disable-freetypetest \
-+		--disable-gtk-doc \
-+		--without-html-dir
- 
- GST_PLUGINS_BASE_DEPENDENCIES = gstreamer liboil
- 
-
-Modified: trunk/buildroot/package/multimedia/gst-plugins-good/gst-plugins-good.mk
-===================================================================
---- trunk/buildroot/package/multimedia/gst-plugins-good/gst-plugins-good.mk	2009-01-14 14:28:48 UTC (rev 24831)
-+++ trunk/buildroot/package/multimedia/gst-plugins-good/gst-plugins-good.mk	2009-01-14 14:38:18 UTC (rev 24832)
-@@ -22,7 +22,9 @@
- 		--disable-aalibtest \
- 		--disable-esdtest \
- 		--disable-shout2 \
--		--disable-shout2test
-+		--disable-shout2test \
-+		--disable-gtk-doc \
-+		--without-html-dir
- 
- GST_PLUGINS_GOOD_DEPENDENCIES = gstreamer gst-plugins-base
- 
-
-Modified: trunk/buildroot/package/multimedia/gst-plugins-ugly/gst-plugins-ugly.mk
-===================================================================
---- trunk/buildroot/package/multimedia/gst-plugins-ugly/gst-plugins-ugly.mk	2009-01-14 14:28:48 UTC (rev 24831)
-+++ trunk/buildroot/package/multimedia/gst-plugins-ugly/gst-plugins-ugly.mk	2009-01-14 14:38:18 UTC (rev 24832)
-@@ -9,7 +9,9 @@
- 
- GST_PLUGINS_UGLY_CONF_OPT = \
- 		$(DISABLE_NLS) \
--		--disable-examples
-+		--disable-examples \
-+		--disable-gtk-doc \
-+		--without-html-dir
- 
- GST_PLUGINS_UGLY_DEPENDENCIES = gstreamer gst-plugins-base
- 
-
-Modified: trunk/buildroot/package/multimedia/gstreamer/gstreamer.mk
-===================================================================
---- trunk/buildroot/package/multimedia/gstreamer/gstreamer.mk	2009-01-14 14:28:48 UTC (rev 24831)
-+++ trunk/buildroot/package/multimedia/gstreamer/gstreamer.mk	2009-01-14 14:38:18 UTC (rev 24832)
-@@ -24,6 +24,8 @@
- 		--disable-examples \
- 		--disable-tests \
- 		--disable-failing-tests
-+		--disable-gtk-doc \
-+		--without-html-dir
- 
- GSTREAMER_DEPENDENCIES = libglib2 libxml2 pkgconfig
- 
+Sven
