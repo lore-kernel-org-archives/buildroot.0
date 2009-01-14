@@ -1,27 +1,41 @@
-From: Dan Lyke <danlyke@flutterby.com>
-Date: Wed, 14 Jan 2009 08:42:46 -0800
-Subject: [Buildroot] Searching for the right "make clean"
-Message-ID: <20090114084246.42473a62@danhplaptop>
+From: laird at uclibc.org <laird@uclibc.org>
+Date: Wed, 14 Jan 2009 16:52:11 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/multimedia/gstreamer
+Message-ID: <20090114165211.F26A3769A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Silly question:
+Author: laird
+Date: 2009-01-14 16:52:10 +0000 (Wed, 14 Jan 2009)
+New Revision: 24841
 
-I'm using buildroot for an AT91SAM9261, and was getting some floating
-point behavior I didn't understand, so rather than be all smart about
-it I decided to force software floating point and rebuild my toolchain.
+Log:
+package/multimedia/gstreamer/gstreamer.mk: Fix missing \
 
-Simply checking that box under "Toolchain" in the "make menuconfig",
-followed by "make clean; make" failed with errors that things were
-compiled with hardware floating point, so I grepped the Makefile for
-"clean", tried "make dirclean", that failed, and then did a "make
-distclean" which blew away more than I wanted to.
+Fix stupid typo.
 
-What's the right "clean" for me to have typed?
+Signed-off-by: Daniel Laird <daniel.j.laird@nxp.com>
 
-Thanks.
 
-Dan
+
+Modified:
+   trunk/buildroot/package/multimedia/gstreamer/gstreamer.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/multimedia/gstreamer/gstreamer.mk
+===================================================================
+--- trunk/buildroot/package/multimedia/gstreamer/gstreamer.mk	2009-01-14 16:04:05 UTC (rev 24840)
++++ trunk/buildroot/package/multimedia/gstreamer/gstreamer.mk	2009-01-14 16:52:10 UTC (rev 24841)
+@@ -23,7 +23,7 @@
+ 		$(DISABLE_LARGEFILE) \
+ 		--disable-examples \
+ 		--disable-tests \
+-		--disable-failing-tests
++		--disable-failing-tests \
+ 		--disable-gtk-doc \
+ 		--without-html-dir
+ 
