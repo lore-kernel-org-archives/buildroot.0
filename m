@@ -1,31 +1,26 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Wed, 14 Jan 2009 10:35:22 +1100
-Subject: [Buildroot] samba doesn't build
-In-Reply-To: <20090113083057.38518dfd@hcegtvedt>
-References: <20090113044740.GA6321@cloud.net.au>
-	<20090113071217.138459f9@hcegtvedt>
-	<20090113061530.GA8121@cloud.net.au>
-	<20090113071800.5c58bd6c@hcegtvedt>
-	<20090113083057.38518dfd@hcegtvedt>
-Message-ID: <20090113233522.GA24997@cloud.net.au>
+From: Thomas Lundquist <lists@zelow.no>
+Date: Wed, 14 Jan 2009 09:11:04 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package: atk iptables
+	java/classpath java/jamvm
+In-Reply-To: <20090113210244.C2A7E76C8E@busybox.osuosl.org>
+References: <20090113210244.C2A7E76C8E@busybox.osuosl.org>
+Message-ID: <20090114081104.GA11127@zelow.no>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jan 13, 2009 at 08:30:57AM +0100, Hans-Christian Egtvedt wrote:
-> On Tue, 13 Jan 2009 07:18:00 +0100
-> Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> wrote:
+On Tue, Jan 13, 2009 at 09:02:44PM +0000, ulf at uclibc.org wrote:
 > 
-> > On Tue, 13 Jan 2009 17:15:30 +1100
-> > Hamish Moffatt <hamish@cloud.net.au> wrote:
-> > > I note that 3.2.7 is out now with more security fixes.
-> > Okay, I will bump the version while I'm at it :)
-> Done, could you give revision 24810 (or later) a spin?
+> Log:
+> Use HOST_GLIB for glib installation instead of /usr/bin
+>  
+> +ATK_MAKE_OPT = GLIB_GENMARSHAL=$(HOST_GLIB)/bin/glib-genmarshal GLIB_MKENUMS=$(HOST_GLIB)/bin/glib-mkenums
 
-Builds fine. Thanks.
+Any reason we do this instead of using good old PATH? 
+Using PATH and having STAGING_DIR/BIN first in it will give the user an option 
+to choose wether he wants to use the host provided or his own.
 
-Hamish
--- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+
+Thomas.
