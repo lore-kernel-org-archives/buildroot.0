@@ -1,39 +1,46 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 14 Jan 2009 22:14:51 +0100
-Subject: [Buildroot] error building alsa-utils
-In-Reply-To: <496E4A36.4050902@carallon.com> (Will Wagner's message of "Wed\,
-	14 Jan 2009 20\:25\:26 +0000")
-References: <496E4A36.4050902@carallon.com>
-Message-ID: <8763khbnec.fsf@macbook.be.48ers.dk>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Wed, 14 Jan 2009 22:05:20 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/mrouted
+Message-ID: <20090114220521.1DD0176C8E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Will" == Will Wagner <will_wagner@carallon.com> writes:
+Author: ulf
+Date: 2009-01-14 22:05:19 +0000 (Wed, 14 Jan 2009)
+New Revision: 24842
 
- Will> Hi All,
+Log:
+Add mrouted-unpacked target
 
- Will> I have just checked out the trunk and am doing an ARM build
- Will> with alsa-utils.
+Modified:
+   trunk/buildroot/package/mrouted/mrouted.mk
 
- Will> Have run into a couple of problems. The first is that it does
- Will> not compile with SUSV3_LEGACY disabled due to the use of index
- Will> & rindex. Have a patch that fixes that.
 
-Ah yes, thats fairly common. Please send the patch to the list and
-I'll apply it - Also don't forget to send it to the alsa people!
-
- Will> The second problem I have is it appears to be trying to install
- Will> the manual pages and is failing when trying to use xmlto
- Will> command. I want to configure it to not build/install the man
- Will> pages but I can't spot a configure option to do so. Am I
- Will> missing something obvious? If not how do you suggest fixing
- Will> this?
-
-Well, if everything else fails, you can always patch the
-Makefile.in's.
-
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/package/mrouted/mrouted.mk
+===================================================================
+--- trunk/buildroot/package/mrouted/mrouted.mk	2009-01-14 16:52:10 UTC (rev 24841)
++++ trunk/buildroot/package/mrouted/mrouted.mk	2009-01-14 22:05:19 UTC (rev 24842)
+@@ -19,8 +19,6 @@
+ $(DL_DIR)/$(MROUTED_PATCH):
+ 	 $(WGET) -P $(DL_DIR) $(MROUTED_SITE)/$(MROUTED_PATCH)
+ 
+-mrouted-source: $(DL_DIR)/$(MROUTED_SOURCE) $(DL_DIR)/$(MROUTED_PATCH)
+-
+ $(MROUTED_DIR)/.unpacked: $(DL_DIR)/$(MROUTED_SOURCE) $(DL_DIR)/$(MROUTED_PATCH)
+ 	$(MROUTED_CAT) $(DL_DIR)/$(MROUTED_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+ 	$(MROUTED_CAT) $(DL_DIR)/$(MROUTED_PATCH) | patch -p1 -d $(MROUTED_DIR)
+@@ -36,6 +34,10 @@
+ 
+ mrouted: uclibc $(TARGET_DIR)/$(MROUTED_TARGET_BINARY)
+ 
++mrouted-source: $(DL_DIR)/$(MROUTED_SOURCE) $(DL_DIR)/$(MROUTED_PATCH)
++
++mrouted-unpacked: $(MROUTED_DIR)/.unpacked
++
+ mrouted-clean:
+ 	rm -f $(TARGET_DIR)/$(MROUTED_TARGET_BINARY)
+ 	-$(MAKE) -C $(MROUTED_DIR) clean
