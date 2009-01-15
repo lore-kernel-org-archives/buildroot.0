@@ -1,29 +1,54 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Thu, 15 Jan 2009 11:36:01 +1100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/mrouted
-In-Reply-To: <20090114220521.1DD0176C8E@busybox.osuosl.org>
-References: <20090114220521.1DD0176C8E@busybox.osuosl.org>
-Message-ID: <20090115003601.GA21518@cloud.net.au>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Thu, 15 Jan 2009 06:28:06 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/python
+Message-ID: <20090115062806.91B6E76850@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jan 14, 2009 at 10:05:20PM +0000, ulf at uclibc.org wrote:
-> Author: ulf
-> Date: 2009-01-14 22:05:19 +0000 (Wed, 14 Jan 2009)
-> New Revision: 24842
-> 
-> Log:
-> Add mrouted-unpacked target
+Author: ulf
+Date: 2009-01-15 06:28:05 +0000 (Thu, 15 Jan 2009)
+New Revision: 24852
 
-Any reason?
+Log:
+Always create shared python library, if python is created, needed by multiple packages
 
-<pkg>-unpacked targets seem to be provided inconsistently. I guess this
-is not harmful. If it's useful we should standardise it.
+Modified:
+   trunk/buildroot/package/python/python.mk
 
 
-Hamish
--- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+Changeset:
+Modified: trunk/buildroot/package/python/python.mk
+===================================================================
+--- trunk/buildroot/package/python/python.mk	2009-01-14 23:54:02 UTC (rev 24851)
++++ trunk/buildroot/package/python/python.mk	2009-01-15 06:28:05 UTC (rev 24852)
+@@ -106,6 +106,7 @@
+ 		--prefix=/usr \
+ 		--sysconfdir=/etc \
+ 		--with-cxx=no \
++		--enable-shared \
+ 		$(DISABLE_IPV6) \
+ 		$(DISABLE_NLS) \
+ 	)
+@@ -166,8 +167,18 @@
+ 	rm -rf $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/lib-tk
+ endif
+ 
+-python: uclibc $(PYTHON_DEPS) $(TARGET_DIR)/$(PYTHON_TARGET_BINARY)
++$(STAGING_DIR)/usr/lib/libpython$(PYTHON_VERSION_MAJOR).so: $(TARGET_DIR)/$(PYTHON_TARGET_BINARY)
++		cp -dpr $(PYTHON_DIR)/libpython*.so.* $(STAGING_DIR)/usr/lib
++		(\
++		cd $(STAGING_DIR)/usr/lib ; \
++		rm -f libpython$(PYTHON_VERSION_MAJOR).so ; \
++		ln -s `basename  \`ls libpython*.so.*\`` libpython$(PYTHON_VERSION_MAJOR).so \
++		)
+ 
++libpython:	$(STAGING_DIR)/usr/lib/libpython$(PYTHON_VERSION_MAJOR).so
++
++python: uclibc $(PYTHON_DEPS) $(TARGET_DIR)/$(PYTHON_TARGET_BINARY) libpython
++
+ python-clean:
+ 	-$(MAKE) -C $(PYTHON_DIR) distclean
+ 	rm -f $(PYTHON_DIR)/.configured $(TARGET_DIR)/$(PYTHON_TARGET_BINARY)
