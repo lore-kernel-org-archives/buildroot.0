@@ -1,56 +1,37 @@
 From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Thu, 15 Jan 2009 22:08:50 +0100
-Subject: [Buildroot] preferred procedure to get new packages included
-In-Reply-To: <1232028479.6759.2.camel@sven>
-References: <1231932008.6465.7.camel@sven>
-	<87zlhuazqj.fsf@macbook.be.48ers.dk>  <1232028479.6759.2.camel@sven>
-Message-ID: <1232053730.4757.39.camel@aeglos.sweden.atmel.com>
+Date: Thu, 15 Jan 2009 21:05:11 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/mrouted
+In-Reply-To: <20090115003601.GA21518@cloud.net.au>
+References: <20090114220521.1DD0176C8E@busybox.osuosl.org>
+	<20090115003601.GA21518@cloud.net.au>
+Message-ID: <1232049911.4757.10.camel@aeglos.sweden.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-tor 2009-01-15 klockan 15:07 +0100 skrev Sven Neumann:
-> Hi,
+tor 2009-01-15 klockan 11:36 +1100 skrev Hamish Moffatt:
+> On Wed, Jan 14, 2009 at 10:05:20PM +0000, ulf at uclibc.org wrote:
+> > Author: ulf
+> > Date: 2009-01-14 22:05:19 +0000 (Wed, 14 Jan 2009)
+> > New Revision: 24842
+> > 
+> > Log:
+> > Add mrouted-unpacked target
 > 
-> On Wed, 2009-01-14 at 12:33 +0100, Peter Korsgaard wrote:
+> Any reason?
 > 
-> > I've seen your patch, but haven't had time for a closer review yet.
-> > We're trying to stabilize the tree and get a release out by February,
-> > so it won't get committed until then.
+> <pkg>-unpacked targets seem to be provided inconsistently. I guess this
+> is not harmful. If it's useful we should standardise it.
 > 
-> That's of course sad as it would like to see these packages included in
-> that release if possible. I have now attached an updated patch with some
-> cleanups and fixes to the bug report. Perhaps it is useful for anyone.
-> 
-> https://bugs.busybox.net/show_bug.cgi?id=35
 
-I looked at the patch, and there are still some issues.
-"libsoup" has version 2.4.1 but is downloaded
-from a version "2.2" subdirectory.
-
-Anything uPnP related should IMO be in the Networking 
-part of Config.
-
-I can fix issues like that.
-
-At the moment, glib does not build for me, since 
-I built libiconv which will stop glib from building
-but I will start from scratch and test again
-and try to get glib to build.
-
-
+The main reason for this, is if you want to create a patch for a package
+which includes the current patches.
+THen you just make xxx-dirclean and the xxx-unpacked,
+copy the source tree and then you can create the patch.
 BR
-Ulf Samuelsson
+Ulf
 
-
 > 
-> 
-> Sven
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Hamish
