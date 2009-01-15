@@ -1,30 +1,42 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Thu, 15 Jan 2009 23:47:33 +0100
-Subject: [Buildroot]
-	svn	commit:	trunk/buildroot/target/device/Atmel/at91bootstrap
-In-Reply-To: <20090113170046.4820@gmx.net>
-References: <20090111214416.5A26C76736@busybox.osuosl.org>
-	<20090113170046.4820@gmx.net>
-Message-ID: <1232059653.4757.78.camel@aeglos.sweden.atmel.com>
+From: Ulf Samuelsson <ulf@atmel.com>
+Date: Thu, 15 Jan 2009 22:55:08 +0100
+Subject: [Buildroot] error building alsa-utils
+In-Reply-To: <87r6346xw8.fsf@macbook.be.48ers.dk>
+References: <496E4A36.4050902@carallon.com>
+	<8763khbnec.fsf@macbook.be.48ers.dk> <496F1A63.3010403@carallon.com>
+	<1232051621.4757.26.camel@aeglos.sweden.atmel.com>
+	<1232051945.4757.32.camel@aeglos.sweden.atmel.com>
+	<87r6346xw8.fsf@macbook.be.48ers.dk>
+Message-ID: <1232056509.4757.55.camel@aeglos.sweden.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-tis 2009-01-13 klockan 18:00 +0100 skrev Matt Wood:
-> Hi Ulf, I tried to compile at91bootstrap for NAND flash boot and I get the following error below...
-
-> looks like it is not swithcing the default configuration to NAND flash.  
-
-> If I try to build manually using "MEMORY=nandflash make at91sam9263ek_defconfig" it just copies the default config file and builds for dataflash.  Any ideas?
+tor 2009-01-15 klockan 22:51 +0100 skrev Peter Korsgaard:
+> >>>>> "Ulf" == Ulf Samuelsson <ulf@atmel.com> writes:
 > 
-> Thanks, Matt.
+> Hi,
+> 
+>  >> Alsa-utils fails for me when I run buildall.sh so 
+>  >> I will put the stuff in the alsa-utils directory and rerun.
+>  >> 
+> 
+>  Ulf> OK so alsa-utils now compiles OK for ARM, 
+>  Ulf> It did not do so before the patch.
 
-make at91sam9263nf_defconfig
-make
 
-works!
 
-BR
+> 
+> Please commit the patch then.
+> 
+
+Plan to rebuild from scratch again, and will commit this
+and other things like the requested libpython change,
+but I do not expect problems.
+
+
+-- 
+Best Regards,
 Ulf Samuelsson
