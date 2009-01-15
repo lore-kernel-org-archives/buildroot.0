@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Thu, 15 Jan 2009 08:33:32 +0000 (UTC)
+Date: Thu, 15 Jan 2009 08:33:36 +0000 (UTC)
 Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/kernel-headers
-Message-ID: <20090115083332.707F576850@busybox.osuosl.org>
+Message-ID: <20090115083336.7C6FA76850@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,11 +9,11 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2009-01-15 08:33:31 +0000 (Thu, 15 Jan 2009)
-New Revision: 24853
+Date: 2009-01-15 08:33:35 +0000 (Thu, 15 Jan 2009)
+New Revision: 24854
 
 Log:
-kernel-headers: bump 2.6.27 version
+kernel-headers: default to 2.6.28
 
 Modified:
    trunk/buildroot/toolchain/kernel-headers/Config.in
@@ -22,14 +22,14 @@ Modified:
 Changeset:
 Modified: trunk/buildroot/toolchain/kernel-headers/Config.in
 ===================================================================
---- trunk/buildroot/toolchain/kernel-headers/Config.in	2009-01-15 06:28:05 UTC (rev 24852)
-+++ trunk/buildroot/toolchain/kernel-headers/Config.in	2009-01-15 08:33:31 UTC (rev 24853)
-@@ -116,7 +116,7 @@
- 	default "2.6.24.7"	if BR2_KERNEL_HEADERS_2_6_24
- 	default "2.6.25.19"	if BR2_KERNEL_HEADERS_2_6_25
- 	default "2.6.26.8"	if BR2_KERNEL_HEADERS_2_6_26
--	default "2.6.27.10"	if BR2_KERNEL_HEADERS_2_6_27
-+	default "2.6.27.11"	if BR2_KERNEL_HEADERS_2_6_27
- 	default "2.6.28"	if BR2_KERNEL_HEADERS_2_6_28
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+--- trunk/buildroot/toolchain/kernel-headers/Config.in	2009-01-15 08:33:31 UTC (rev 24853)
++++ trunk/buildroot/toolchain/kernel-headers/Config.in	2009-01-15 08:33:35 UTC (rev 24854)
+@@ -6,7 +6,7 @@
  
+ choice
+ 	prompt "Kernel Headers"
+-	default BR2_KERNEL_HEADERS_2_6_27
++	default BR2_KERNEL_HEADERS_2_6_28
+ 
+ 	help
+ 	  Select the version of kernel header files you wish to use.
