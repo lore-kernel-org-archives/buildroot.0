@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Thu, 15 Jan 2009 14:50:18 +0000 (UTC)
+Date: Thu, 15 Jan 2009 14:50:21 +0000 (UTC)
 Subject: [Buildroot] svn commit: trunk/buildroot/docs
-Message-ID: <20090115145018.629B476850@busybox.osuosl.org>
+Message-ID: <20090115145021.29DE976850@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,27 +9,42 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2009-01-15 14:50:17 +0000 (Thu, 15 Jan 2009)
-New Revision: 24860
+Date: 2009-01-15 14:50:20 +0000 (Thu, 15 Jan 2009)
+New Revision: 24861
 
 Log:
-docs/copyright.txt: update year, add buildroot developers
+docs/developer.html: People should ask on the list for commit access
 
 Modified:
-   trunk/buildroot/docs/copyright.txt
+   trunk/buildroot/docs/developer.html
 
 
 Changeset:
-Modified: trunk/buildroot/docs/copyright.txt
+Modified: trunk/buildroot/docs/developer.html
 ===================================================================
---- trunk/buildroot/docs/copyright.txt	2009-01-15 14:50:14 UTC (rev 24859)
-+++ trunk/buildroot/docs/copyright.txt	2009-01-15 14:50:17 UTC (rev 24860)
-@@ -1,6 +1,7 @@
+--- trunk/buildroot/docs/developer.html	2009-01-15 14:50:17 UTC (rev 24860)
++++ trunk/buildroot/docs/developer.html	2009-01-15 14:50:20 UTC (rev 24861)
+@@ -5,8 +5,8 @@
  
- The code and graphics on this website (and it's mirror sites, if any) are
--Copyright (c) 1999-2005 by Erik Andersen.  All rights reserved.
-+Copyright (c) 1999-2005 by Erik Andersen, 2006-2009 The Buildroot
-+developers. All rights reserved.
+ If you want to be able to commit things to Subversion, first contribute some
+ stuff to show you are serious.  Then, very nicely ask <a
+-href="mailto:andersen@codepoet.org">Erik Andersen</a> if he will set you up
+-with an commit access to the Subversion repository.  To access Subversion, you
++href="mailto:buildroot at uclibc.org">The Buildroot Developers</a> to set you up
++with commit access to the Subversion repository.  To access Subversion, you
+ will want to add the following to set up your environment:
  
- Documents on this Web site including their graphical elements, design, and
- layout are protected by trade dress and other laws and MAY BE COPIED OR
+ <p>
+@@ -32,12 +32,6 @@
+ 
+ <p>
+ 
+-Note that if you would prefer to keep your communications with me
+-private, you can encrypt your email using my
+-<a href="http://www.codepoet.org/andersen/erik/gpg.asc">public key</a>.
+-
+-<p>
+-
+ Once you are setup with an account, you will need to use your account to
+ checkout a copy of buildroot from Subversion:
+ 
