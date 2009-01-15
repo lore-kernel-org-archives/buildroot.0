@@ -1,39 +1,33 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Thu, 15 Jan 2009 19:36:08 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot
-Message-ID: <20090115193608.37CB776850@busybox.osuosl.org>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Thu, 15 Jan 2009 21:07:58 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/ttcp
+In-Reply-To: <87wscx9cj4.fsf@macbook.be.48ers.dk>
+References: <20090114225232.851F976C8E@busybox.osuosl.org>
+	<87wscx9cj4.fsf@macbook.be.48ers.dk>
+Message-ID: <1232050078.4757.13.camel@aeglos.sweden.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-01-15 19:36:06 +0000 (Thu, 15 Jan 2009)
-New Revision: 24862
+tor 2009-01-15 klockan 09:52 +0100 skrev Peter Korsgaard:
+> >>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+> 
+>  ulf> Author: ulf
+>  ulf> Date: 2009-01-14 22:52:31 +0000 (Wed, 14 Jan 2009)
+>  ulf> New Revision: 24846
+> 
+>  ulf> Log:
+>  ulf> Update deprecated bmove to memmove in ttcp
+> 
+>  ulf> Added:
+>  ulf>    trunk/buildroot/package/ttcp/ttcp-bcopy.patch
+> 
+> Have you pushed this upstream?
 
-Log:
-Makefile: implement make release
+No, my current focus is to get as many packages as possible
+through the "buildall.sh" script.
 
-Modified:
-   trunk/buildroot/Makefile
-
-
-Changeset:
-Modified: trunk/buildroot/Makefile
-===================================================================
---- trunk/buildroot/Makefile	2009-01-15 14:50:20 UTC (rev 24861)
-+++ trunk/buildroot/Makefile	2009-01-15 19:36:06 UTC (rev 24862)
-@@ -516,6 +516,12 @@
- 	@echo 'See docs/README and docs/buildroot.html for further details'
- 	@echo
- 
-+release: distclean
-+	OUT=buildroot-$$(grep -A2 BR2_VERSION $(CONFIG_CONFIG_IN)|grep default|cut -f2 -d\"); \
-+	rm -rf ../$$OUT*; cp -al . ../$$OUT; cd ..; \
-+	tar cfz $$OUT.tar.gz --exclude .svn --exclude .git --exclude \*~ $$OUT; \
-+	rm -rf $$OUT
-+
- .PHONY: dummy subdirs release distclean clean config oldconfig \
- 	menuconfig tags check test depend defconfig help
- 
+BR
+Ulf Samuelsson
