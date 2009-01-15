@@ -1,50 +1,45 @@
-From: Will Wagner <will_wagner@carallon.com>
-Date: Thu, 15 Jan 2009 11:13:39 +0000
-Subject: [Buildroot] error building alsa-utils
-In-Reply-To: <8763khbnec.fsf@macbook.be.48ers.dk>
-References: <496E4A36.4050902@carallon.com>
-	<8763khbnec.fsf@macbook.be.48ers.dk>
-Message-ID: <496F1A63.3010403@carallon.com>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Fri, 16 Jan 2009 01:01:07 +1100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/python
+In-Reply-To: <877i4x9cai.fsf@macbook.be.48ers.dk>
+References: <20090115062806.91B6E76850@busybox.osuosl.org>
+	<877i4x9cai.fsf@macbook.be.48ers.dk>
+Message-ID: <20090115140106.GA8086@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Thu, Jan 15, 2009 at 09:57:41AM +0100, Peter Korsgaard wrote:
+> >>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
 > 
-> Ah yes, thats fairly common. Please send the patch to the list and
-> I'll apply it - Also don't forget to send it to the alsa people!
-
-Attached is patch, have also mailed alsa-devel
-
+>  ulf> Author: ulf
+>  ulf> Date: 2009-01-15 06:28:05 +0000 (Thu, 15 Jan 2009)
+>  ulf> New Revision: 24852
 > 
->  Will> The second problem I have is it appears to be trying to install
->  Will> the manual pages and is failing when trying to use xmlto
->  Will> command. I want to configure it to not build/install the man
->  Will> pages but I can't spot a configure option to do so. Am I
->  Will> missing something obvious? If not how do you suggest fixing
->  Will> this?
+>  ulf> Log:
+>  ulf> Always create shared python library, if python is created, needed by multiple packages
 > 
-> Well, if everything else fails, you can always patch the
-> Makefile.in's.
+>  ulf> +$(STAGING_DIR)/usr/lib/libpython$(PYTHON_VERSION_MAJOR).so: $(TARGET_DIR)/$(PYTHON_TARGET_BINARY)
+>  ulf> +		cp -dpr $(PYTHON_DIR)/libpython*.so.* $(STAGING_DIR)/usr/lib
+>  ulf> +		(\
+>  ulf> +		cd $(STAGING_DIR)/usr/lib ; \
+>  ulf> +		rm -f libpython$(PYTHON_VERSION_MAJOR).so ; \
+>  ulf> +		ln -s `basename  \`ls libpython*.so.*\`` libpython$(PYTHON_VERSION_MAJOR).so \
+>  ulf> +		)
+> 
+> What are you trying to do here?
 
-Have fixed by patching Makefile.in. I also realise that if I had xmlto on my build machine 
-it would not be a problem.
+I'd like to know why libpython is needed, or at least why it's not a
+separate configuration option. 
 
-Will.
+It's not needed to run python, only to embed it in other applications -
+the main python binary (/usr/bin/python2.x) doesn't even link to it.
 
+I use Python extensively in my buildroot-based embedded system, and I
+don't need libpython bloating my image.
 
+Hamish
 -- 
-------------------------------------------------------------------------
-Will Wagner                                     will_wagner at carallon.com
-Development Manager                      Office Tel: +44 (0)20 7371 2032
-Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
-------------------------------------------------------------------------
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: alsa-utils-1.0.18-fix_sysv_legacy.patch
-Url: http://lists.busybox.net/pipermail/buildroot/attachments/20090115/4bd77251/attachment.diff 
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: alsa-utils-1.0.18-remove_man.patch
-Url: http://lists.busybox.net/pipermail/buildroot/attachments/20090115/4bd77251/attachment-0001.diff 
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
