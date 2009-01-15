@@ -1,54 +1,33 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Thu, 15 Jan 2009 06:28:06 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/python
-Message-ID: <20090115062806.91B6E76850@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 15 Jan 2009 09:20:33 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/kismet
+In-Reply-To: <20090114235133.4391B7697C@busybox.osuosl.org> (ulf@uclibc.org's
+	message of "Wed\, 14 Jan 2009 23\:51\:33 +0000 \(UTC\)")
+References: <20090114235133.4391B7697C@busybox.osuosl.org>
+Message-ID: <871vv5asku.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2009-01-15 06:28:05 +0000 (Thu, 15 Jan 2009)
-New Revision: 24852
+>>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
 
-Log:
-Always create shared python library, if python is created, needed by multiple packages
+ ulf> Author: ulf
+ ulf> Date: 2009-01-14 23:51:32 +0000 (Wed, 14 Jan 2009)
+ ulf> New Revision: 24849
 
-Modified:
-   trunk/buildroot/package/python/python.mk
+ ulf> Log:
+ ulf> Kismet needs dbus to build
 
+What about dbus_glib?
 
-Changeset:
-Modified: trunk/buildroot/package/python/python.mk
-===================================================================
---- trunk/buildroot/package/python/python.mk	2009-01-14 23:54:02 UTC (rev 24851)
-+++ trunk/buildroot/package/python/python.mk	2009-01-15 06:28:05 UTC (rev 24852)
-@@ -106,6 +106,7 @@
- 		--prefix=/usr \
- 		--sysconfdir=/etc \
- 		--with-cxx=no \
-+		--enable-shared \
- 		$(DISABLE_IPV6) \
- 		$(DISABLE_NLS) \
- 	)
-@@ -166,8 +167,18 @@
- 	rm -rf $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/lib-tk
- endif
- 
--python: uclibc $(PYTHON_DEPS) $(TARGET_DIR)/$(PYTHON_TARGET_BINARY)
-+$(STAGING_DIR)/usr/lib/libpython$(PYTHON_VERSION_MAJOR).so: $(TARGET_DIR)/$(PYTHON_TARGET_BINARY)
-+		cp -dpr $(PYTHON_DIR)/libpython*.so.* $(STAGING_DIR)/usr/lib
-+		(\
-+		cd $(STAGING_DIR)/usr/lib ; \
-+		rm -f libpython$(PYTHON_VERSION_MAJOR).so ; \
-+		ln -s `basename  \`ls libpython*.so.*\`` libpython$(PYTHON_VERSION_MAJOR).so \
-+		)
- 
-+libpython:	$(STAGING_DIR)/usr/lib/libpython$(PYTHON_VERSION_MAJOR).so
-+
-+python: uclibc $(PYTHON_DEPS) $(TARGET_DIR)/$(PYTHON_TARGET_BINARY) libpython
-+
- python-clean:
- 	-$(MAKE) -C $(PYTHON_DIR) distclean
- 	rm -f $(PYTHON_DIR)/.configured $(TARGET_DIR)/$(PYTHON_TARGET_BINARY)
+Config.in has:
+
+        select BR2_PACKAGE_NCURSES
+        select BR2_PACKAGE_LIBPCAP
+        select BR2_PACKAGE_DBUS
+        select BR2_PACKAGE_DBUS_GLIB
+
+-- 
+Bye, Peter Korsgaard
