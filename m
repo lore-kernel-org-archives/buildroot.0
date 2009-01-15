@@ -1,27 +1,86 @@
-From: Markus Heidelberg <markus.heidelberg@web.de>
-Date: Fri, 16 Jan 2009 00:16:48 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/python
-In-Reply-To: <20090115231004.GE12961@cloud.net.au>
-References: <20090115062806.91B6E76850@busybox.osuosl.org>
-	<1232050311.4757.17.camel@aeglos.sweden.atmel.com>
-	<20090115231004.GE12961@cloud.net.au>
-Message-ID: <200901160016.48846.markus.heidelberg@web.de>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Thu, 15 Jan 2009 23:17:39 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/scripts
+Message-ID: <20090115231739.782E476736@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hamish Moffatt, 16.01.2009:
-> On Thu, Jan 15, 2009 at 09:11:51PM +0100, Ulf Samuelsson wrote:
-> > The alsa-lib has to depend on libpython  and libpython
-> > has to depend on python.
-> 
-> Really? The Debian package of alsa-lib (libasound2) doesn't depend on
-> libpython.
+Author: ulf
+Date: 2009-01-15 23:17:38 +0000 (Thu, 15 Jan 2009)
+New Revision: 24863
 
-Gentoo's ebuild has it as optional dependency, description: "Adds
-support/bindings for the Python language".
-I guess it's not a must-have dependency.
+Log:
+Update package buildscript
 
-Markus
+Modified:
+   trunk/buildroot/scripts/mkpkg
+
+
+Changeset:
+Modified: trunk/buildroot/scripts/mkpkg
+===================================================================
+--- trunk/buildroot/scripts/mkpkg	2009-01-15 19:36:06 UTC (rev 24862)
++++ trunk/buildroot/scripts/mkpkg	2009-01-15 23:17:38 UTC (rev 24863)
+@@ -19,16 +19,21 @@
+ 
+ test=${OK}
+ 
+-function build_package ()
++function	clean_files()
+ {
+-	printf "%-31s" "$1"
+ 	rm -f ${LOG}
+ 	rm -f ${LOG_OK_FILE}
+ 	rm -f ${LOG_FAIL_FILE}
+ 	rm -f ${DEPENDENCY}
++}
+ 
++function	dirclean ()
++{
+ 	make $1-dirclean > /dev/null 2>&1
++}
+ 
++function	process ()
++{
+ 	make $1 >> ${LOG} 2>&1 || test=${FAIL}
+ 	grep "\.tar\." ${LOG} > ${DEPENDENCY}
+ 	if [ ${test} == ${OK} ] ; then
+@@ -36,10 +41,33 @@
+ 		echo "OK	"
+ 	else
+ 		mv ${LOG} ${LOG_FAIL_FILE}
+-		echo "FAIL	"
++		printf "FAIL	"
++		echo	\"$2\"
+ 	fi
+ }
+ 
+-build_package $1
++function build_package ()
++{
++	printf "mk	%-31s" "$1"
++	if [ "$2X" == "X" ] ; then		# no parameters
++		clean_files	$1
++		dirclean	$1
++		process		$1
++	elif [ "$2X" == "OKX" ] ; then	# Previous build was OK
++		clean_files	$1
++		dirclean	$1
++		process		$1
++	elif [ "$2X" == "FAILX" ] ; then
++		clean_files	$1
++		dirclean	$1
++		process		$1 $3
++	elif [ "$2X" == "BROKENX" ] ; then
++		printf  "BROKEN	"
++		echo	\"$3\"
++	fi
++}
+ 
++build_package $1 $2 $3
+ 
++
++
