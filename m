@@ -1,45 +1,28 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Fri, 16 Jan 2009 01:01:07 +1100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/python
-In-Reply-To: <877i4x9cai.fsf@macbook.be.48ers.dk>
-References: <20090115062806.91B6E76850@busybox.osuosl.org>
-	<877i4x9cai.fsf@macbook.be.48ers.dk>
-Message-ID: <20090115140106.GA8086@cloud.net.au>
+From: Sven Neumann <s.neumann@phase-zero.de>
+Date: Thu, 15 Jan 2009 15:07:59 +0100
+Subject: [Buildroot] preferred procedure to get new packages included
+In-Reply-To: <87zlhuazqj.fsf@macbook.be.48ers.dk>
+References: <1231932008.6465.7.camel@sven> <87zlhuazqj.fsf@macbook.be.48ers.dk>
+Message-ID: <1232028479.6759.2.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jan 15, 2009 at 09:57:41AM +0100, Peter Korsgaard wrote:
-> >>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
-> 
->  ulf> Author: ulf
->  ulf> Date: 2009-01-15 06:28:05 +0000 (Thu, 15 Jan 2009)
->  ulf> New Revision: 24852
-> 
->  ulf> Log:
->  ulf> Always create shared python library, if python is created, needed by multiple packages
-> 
->  ulf> +$(STAGING_DIR)/usr/lib/libpython$(PYTHON_VERSION_MAJOR).so: $(TARGET_DIR)/$(PYTHON_TARGET_BINARY)
->  ulf> +		cp -dpr $(PYTHON_DIR)/libpython*.so.* $(STAGING_DIR)/usr/lib
->  ulf> +		(\
->  ulf> +		cd $(STAGING_DIR)/usr/lib ; \
->  ulf> +		rm -f libpython$(PYTHON_VERSION_MAJOR).so ; \
->  ulf> +		ln -s `basename  \`ls libpython*.so.*\`` libpython$(PYTHON_VERSION_MAJOR).so \
->  ulf> +		)
-> 
-> What are you trying to do here?
+Hi,
 
-I'd like to know why libpython is needed, or at least why it's not a
-separate configuration option. 
+On Wed, 2009-01-14 at 12:33 +0100, Peter Korsgaard wrote:
 
-It's not needed to run python, only to embed it in other applications -
-the main python binary (/usr/bin/python2.x) doesn't even link to it.
+> I've seen your patch, but haven't had time for a closer review yet.
+> We're trying to stabilize the tree and get a release out by February,
+> so it won't get committed until then.
 
-I use Python extensively in my buildroot-based embedded system, and I
-don't need libpython bloating my image.
+That's of course sad as it would like to see these packages included in
+that release if possible. I have now attached an updated patch with some
+cleanups and fixes to the bug report. Perhaps it is useful for anyone.
 
-Hamish
--- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+https://bugs.busybox.net/show_bug.cgi?id=35
+
+
+Sven
