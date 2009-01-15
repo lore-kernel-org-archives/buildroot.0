@@ -1,35 +1,29 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Wed, 14 Jan 2009 23:54:03 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/acpid
-Message-ID: <20090114235403.1FAC07697C@busybox.osuosl.org>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Thu, 15 Jan 2009 11:36:01 +1100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/mrouted
+In-Reply-To: <20090114220521.1DD0176C8E@busybox.osuosl.org>
+References: <20090114220521.1DD0176C8E@busybox.osuosl.org>
+Message-ID: <20090115003601.GA21518@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2009-01-14 23:54:02 +0000 (Wed, 14 Jan 2009)
-New Revision: 24851
+On Wed, Jan 14, 2009 at 10:05:20PM +0000, ulf at uclibc.org wrote:
+> Author: ulf
+> Date: 2009-01-14 22:05:19 +0000 (Wed, 14 Jan 2009)
+> New Revision: 24842
+> 
+> Log:
+> Add mrouted-unpacked target
 
-Log:
-Make acpid patch depend on VERSION
+Any reason?
 
-Modified:
-   trunk/buildroot/package/acpid/acpid.mk
+<pkg>-unpacked targets seem to be provided inconsistently. I guess this
+is not harmful. If it's useful we should standardise it.
 
 
-Changeset:
-Modified: trunk/buildroot/package/acpid/acpid.mk
-===================================================================
---- trunk/buildroot/package/acpid/acpid.mk	2009-01-14 23:53:20 UTC (rev 24850)
-+++ trunk/buildroot/package/acpid/acpid.mk	2009-01-14 23:54:02 UTC (rev 24851)
-@@ -13,7 +13,7 @@
- 
- $(ACPID_DIR)/.unpacked: $(DL_DIR)/$(ACPID_SOURCE)
- 	$(ZCAT) $(DL_DIR)/$(ACPID_SOURCE) | tar -C $(BUILD_DIR) -xvf -
--	toolchain/patch-kernel.sh $(ACPID_DIR) package/acpid/ acpid\*.patch
-+	toolchain/patch-kernel.sh $(ACPID_DIR) package/acpid/ acpid-$(ACPID_VERSION)\*.patch
- 	touch $(ACPID_DIR)/.unpacked
- 
- $(ACPID_DIR)/acpid: $(ACPID_DIR)/.unpacked
+Hamish
+-- 
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
