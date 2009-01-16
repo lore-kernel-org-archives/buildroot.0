@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Fri, 16 Jan 2009 12:30:08 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package
-Message-ID: <20090116123009.05052774FA@busybox.osuosl.org>
+Date: Fri, 16 Jan 2009 12:34:41 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/dm
+Message-ID: <20090116123441.402C0774FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,32 +9,36 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2009-01-16 12:30:07 +0000 (Fri, 16 Jan 2009)
-New Revision: 24873
+Date: 2009-01-16 12:34:40 +0000 (Fri, 16 Jan 2009)
+New Revision: 24874
 
 Log:
-DOWNLOAD: don't use := assignment for function implementation
-
-:= causes the function parameters to get evaluated at definition time
-instead of implementation time, which is kind of silly for a function.
-
-Fixes make source-check / external-deps
+package/dm: fix DOWNLOAD fallout
 
 Modified:
-   trunk/buildroot/package/Makefile.autotools.in
+   trunk/buildroot/package/dm/dm.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/Makefile.autotools.in
+Modified: trunk/buildroot/package/dm/dm.mk
 ===================================================================
---- trunk/buildroot/package/Makefile.autotools.in	2009-01-16 12:07:53 UTC (rev 24872)
-+++ trunk/buildroot/package/Makefile.autotools.in	2009-01-16 12:30:07 UTC (rev 24873)
-@@ -134,7 +134,7 @@
+--- trunk/buildroot/package/dm/dm.mk	2009-01-16 12:30:07 UTC (rev 24873)
++++ trunk/buildroot/package/dm/dm.mk	2009-01-16 12:34:40 UTC (rev 24874)
+@@ -28,7 +28,6 @@
+ DM_VERSION=$(DM_BASEVER).$(DM_PATCH)
+ DM_SOURCE:=device-mapper.$(DM_VERSION).tgz
+ DM_SITE:=ftp://sources.redhat.com/pub/dm
+-DM_SITE_OLD:=ftp://sources.redhat.com/pub/dm/old
+ DM_CAT:=$(ZCAT)
+ DM_DIR:=$(BUILD_DIR)/device-mapper.$(DM_VERSION)
+ DM_STAGING_BINARY:=$(STAGING_DIR)/usr/sbin/dmsetup
+@@ -38,8 +37,7 @@
+ DM_TARGET_HEADER:=$(TARGET_DIR)/usr/include/libdevmapper.h
  
- # support make source-check/external-deps
- ifneq ($(SPIDER),)
--DOWNLOAD:=$(WGET) -P $(DL_DIR) $(1)/$(2)
-+DOWNLOAD=$(WGET) -P $(DL_DIR) $(1)/$(2)
- else
- define DOWNLOAD
- 	$(Q)test -e $(DL_DIR)/$(2) || \
+ $(DL_DIR)/$(DM_SOURCE):
+-	$(call DOWNLOAD,$(DM_SITE),$(DM_SOURCE) || \)
+-		$(call DOWNLOAD,$(DM_SITE_OLD),$(DM_SOURCE))
++	$(call DOWNLOAD,$(DM_SITE),$(DM_SOURCE))
+ 
+ dm-source: $(DL_DIR)/$(DM_SOURCE)
+ 
