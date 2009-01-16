@@ -1,11 +1,10 @@
 From: Sven Neumann <s.neumann@phase-zero.de>
-Date: Fri, 16 Jan 2009 10:37:36 +0100
-Subject: [Buildroot] preferred procedure to get new packages included
-In-Reply-To: <1232053730.4757.39.camel@aeglos.sweden.atmel.com>
-References: <1231932008.6465.7.camel@sven>
-	<87zlhuazqj.fsf@macbook.be.48ers.dk>  <1232028479.6759.2.camel@sven>
-	<1232053730.4757.39.camel@aeglos.sweden.atmel.com>
-Message-ID: <1232098656.6639.6.camel@sven>
+Date: Fri, 16 Jan 2009 10:42:07 +0100
+Subject: [Buildroot] Searching for the right "make clean"
+In-Reply-To: <1232058471.4757.70.camel@aeglos.sweden.atmel.com>
+References: <20090114084246.42473a62@danhplaptop>
+	<1232058471.4757.70.camel@aeglos.sweden.atmel.com>
+Message-ID: <1232098927.6639.10.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,22 +13,29 @@ To: buildroot@busybox.net
 
 Hi,
 
-On Thu, 2009-01-15 at 22:08 +0100, Ulf Samuelsson wrote:
+On Thu, 2009-01-15 at 23:27 +0100, Ulf Samuelsson wrote:
 
-> > https://bugs.busybox.net/show_bug.cgi?id=35
+> Once you change a toolchain option, you should probably 
+> remove everything and start afresh.
 > 
-> I looked at the patch, and there are still some issues.
-> "libsoup" has version 2.4.1 but is downloaded
-> from a version "2.2" subdirectory.
+> THere is nothing you need to save except the configs
+> which you can do with make saveconfig.
+> 
+> 
+> I.E: rm:
+> 	binaries
+> 	build_ARCH
+> 	toolchain_build_ARCH
+> 	project_build_ARCH
 
-You are right, that should be changed to
-http://ftp.gnome.org/pub/gnome/sources/libsoup/2.4/
+It would help a lot if there was a dedicated make target for this.
 
-> Anything uPnP related should IMO be in the Networking 
-> part of Config.
-
-OK, I wasn't certain where I should put it. I will attach a patch later
-that addresses this.
+We have has this problem several times now. Whenever we change a
+configuration in the toolchain or in uclibc, everything needs to be
+rebuilt. Unfortunately the Makefile does not automatically care about
+this dependency. So one has make sure that the tree is clean before
+running the build again. If there was a target that would take care of
+this, that would help a lot.
 
 
 Sven
