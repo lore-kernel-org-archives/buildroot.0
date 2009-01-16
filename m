@@ -1,35 +1,21 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Fri, 16 Jan 2009 13:27:08 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/xerces
-Message-ID: <20090116132709.0DCF0774FA@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 16 Jan 2009 14:32:55 +0100
+Subject: [Buildroot] sources mirror and raidtools2-1.00.3.tar.gz
+Message-ID: <87bpu75qbc.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-01-16 13:27:08 +0000 (Fri, 16 Jan 2009)
-New Revision: 24878
+Hi,
 
-Log:
-xerces: tarball moved to archive.apache.org
+http://buildroot.uclibc.org/downloads/sources now have everything
+referenced from 'make allyesconfig'. The only thing I haven't been
+able to find is raidtools2-1.00.3.tar.gz - Does anyone have it?
 
-Modified:
-   trunk/buildroot/package/xerces/xerces.mk
+Otherwise I'll just remove the package, it seems very outdated and is
+deprecated in favour of mdadm.
 
-
-Changeset:
-Modified: trunk/buildroot/package/xerces/xerces.mk
-===================================================================
---- trunk/buildroot/package/xerces/xerces.mk	2009-01-16 13:23:56 UTC (rev 24877)
-+++ trunk/buildroot/package/xerces/xerces.mk	2009-01-16 13:27:08 UTC (rev 24878)
-@@ -5,7 +5,7 @@
- #############################################################
- XERCES_VERSION:=2.7.0
- XERCES_SOURCE:=xerces-c-src_2_7_0.tar.gz
--XERCES_SITE:=http://www.apache.org/dist/xml/xerces-c/source/
-+XERCES_SITE:=http://archive.apache.org/dist/xml/xerces-c/source/
- XERCES_CAT:=$(ZCAT)
- XERCES_DIR:=$(BUILD_DIR)/xerces-c-src_2_7_0
- XERCES_BINARY:=lib/libxerces-c.so.27.0
+-- 
+Bye, Peter Korsgaard
