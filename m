@@ -1,36 +1,28 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 16 Jan 2009 20:52:19 +0100
-Subject: [Buildroot] buildroot 2009.02-rc1 releases
-Message-ID: <87ab9r3u6k.fsf@macbook.be.48ers.dk>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Fri, 16 Jan 2009 21:40:18 +0100
+Subject: [Buildroot] sources mirror and raidtools2-1.00.3.tar.gz
+In-Reply-To: <87bpu75qbc.fsf@macbook.be.48ers.dk>
+References: <87bpu75qbc.fsf@macbook.be.48ers.dk>
+Message-ID: <1232138418.6977.1.camel@aeglos.sweden.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+fre 2009-01-16 klockan 14:32 +0100 skrev Peter Korsgaard:
+> Hi,
 
-With the source mirror stuff in place, we have all the features
-required for the release, so I have released buildroot-2009.02-rc1 as
-promised.
+> http://buildroot.uclibc.org/downloads/sources now have everything
+> referenced from 'make allyesconfig'. The only thing I haven't been
+> able to find is raidtools2-1.00.3.tar.gz - Does anyone have it?
 
-You can get it from:
+> Otherwise I'll just remove the package, it seems very outdated and is
+> deprecated in favour of mdadm.
 
-http://buildroot.uclibc.org/downloads/buildroot-2009.02-rc1.tar.gz
 
-or
+I have raidtools2-1.00.4.tar.gz, but I think we are better off 
+removing the package.
 
-http://buildroot.uclibc.org/downloads/buildroot-2009.02-rc1.tar.bz2
-
-Please give it a spin and report back issues to the mailing list or
-the bug tracker.
-
-The plan is still to release the final 2009.02 release by FOSDEM
-(February 7th).
-
-Notice: I have NOT created a release branch as I want the release to
-get as much testing as possible, so PLEASE only commit fixes to the
-tree until we have the release out the door.
-
--- 
-Bye, Peter Korsgaard
+BR
+Ulf Samuelsson
