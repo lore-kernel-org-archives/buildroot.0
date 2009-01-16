@@ -1,32 +1,51 @@
-From: Markus Heidelberg <markus.heidelberg@web.de>
-Date: Fri, 16 Jan 2009 22:10:03 +0100
-Subject: [Buildroot] buildroot 2009.02-rc1 releases
-In-Reply-To: <1232139576.6977.9.camel@aeglos.sweden.atmel.com>
-References: <87ab9r3u6k.fsf@macbook.be.48ers.dk>
-	<COL102-DS22F34FACAAB46FA15B3945DCD40@phx.gbl>
-	<1232139576.6977.9.camel@aeglos.sweden.atmel.com>
-Message-ID: <200901162210.04267.markus.heidelberg@web.de>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Fri, 16 Jan 2009 21:18:11 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libglib2
+Message-ID: <20090116211811.BB15C7757D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ulf Samuelsson, 16.01.2009:
-> fre 2009-01-16 klockan 20:52 +0000 skrev danieljlaird at hotmail.com:
-> > - For me I would like us to have a serious look again at package structure 
-> > as I am sure we could create less top level packages and extend on the idea 
-> > of games/java/network/multimedia etc.
-> 
-> I think it would be a good idea to have all things supported
-> by busybox in a single menu, instead of spread out
-> all over the place.
-> This menu should be enabled by the 
-> BR2_PACKAGE_BUSYBOX_HIDE_OTHERS config
+Author: ulf
+Date: 2009-01-16 21:18:08 +0000 (Fri, 16 Jan 2009)
+New Revision: 24888
 
-I think, if putting all busybox alternatives into a single menu, then
-the BR2_PACKAGE_BUSYBOX_HIDE_OTHERS option would lose it's purpose and
-could be removed, because the menu would already have a descriptive
-title.
+Log:
+Fix libglib2 build when LIBICONV is selected, clean up versioning
 
-Markus
+Modified:
+   trunk/buildroot/package/libglib2/libglib2.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/libglib2/libglib2.mk
+===================================================================
+--- trunk/buildroot/package/libglib2/libglib2.mk	2009-01-16 19:45:21 UTC (rev 24887)
++++ trunk/buildroot/package/libglib2/libglib2.mk	2009-01-16 21:18:08 UTC (rev 24888)
+@@ -3,9 +3,12 @@
+ # libglib2
+ #
+ #############################################################
+-LIBGLIB2_VERSION = 2.16.6
++LIBGLIB2_VERSION_MAJOR = 2.16
++LIBGLIB2_VERSION_MINOR = 6
++LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).$(LIBGLIB2_VERSION_MINOR)
+ LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.bz2
+-LIBGLIB2_SITE = http://ftp.gtk.org/pub/glib/2.16
++LIBGLIB2_SITE = http://ftp.gtk.org/pub/glib/$(LIBGLIB2_VERSION_MAJOR)
++
+ LIBGLIB2_AUTORECONF = NO
+ LIBGLIB2_INSTALL_STAGING = YES
+ LIBGLIB2_INSTALL_TARGET = YES
+@@ -55,4 +58,9 @@
+ LIBGLIB2_DEPENDENCIES+=libiconv
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBICONV),y)
++LIBGLIB2_CONF_OPT += --with-libiconv=gnu
++LIBGLIB2_DEPENDENCIES+=libiconv
++endif
++
+ $(eval $(call AUTOTARGETS,package,libglib2))
