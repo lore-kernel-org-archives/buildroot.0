@@ -1,40 +1,34 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Fri, 16 Jan 2009 10:42:30 +0100
-Subject: [Buildroot] libglibg2 fails
-In-Reply-To: <87iqof7hzd.fsf@macbook.be.48ers.dk>
-References: <1232091382.8094.40.camel@aeglos.sweden.atmel.com>
-	<87iqof7hzd.fsf@macbook.be.48ers.dk>
-Message-ID: <1232098950.7129.1.camel@aeglos.sweden.atmel.com>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Fri, 16 Jan 2009 10:27:28 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot
+Message-ID: <20090116102728.AD393768D2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-fre 2009-01-16 klockan 09:49 +0100 skrev Peter Korsgaard:
-> >>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
-> 
->  Ulf> When building libglib2 for both AVR32 and ARM I get the following:
->  Ulf> ...
->  Ulf> gconvert.c:55:2: error: 
->  Ulf>    #error GNU libiconv not in use but included iconv.h is from libiconv
->  Ulf> make[5]: *** [gconvert.lo] Fel 1
->  Ulf> ...
->  Ulf> make[1]: Leaving directory `<buildroot>/build_avr32/libglib2-2.19.4'
->  Ulf> ...
-> 
->  Ulf> Is there anyone capable of building libglib2?
-> 
-> I've built it several times around christmas for arm (v4l)
-> 
-> Haven't tried since, so it sounds like recent breakage.
-> 
+Author: jacmet
+Date: 2009-01-16 10:27:27 +0000 (Fri, 16 Jan 2009)
+New Revision: 24866
 
-I think it is a dependency that is missing.
-Would appreciate it, if anyone with a working libglib2 for arm,
-could post the .config to the list
+Log:
+Makefile: update copyright
+
+Modified:
+   trunk/buildroot/Makefile
 
 
--- 
-Ulf Samuelsson
-Atmel Nordic AB
+Changeset:
+Modified: trunk/buildroot/Makefile
+===================================================================
+--- trunk/buildroot/Makefile	2009-01-16 09:02:51 UTC (rev 24865)
++++ trunk/buildroot/Makefile	2009-01-16 10:27:27 UTC (rev 24866)
+@@ -1,6 +1,7 @@
+ # Makefile for buildroot2
+ #
+ # Copyright (C) 1999-2005 by Erik Andersen <andersen@codepoet.org>
++# Copyright (C) 2006-2009 by the Buildroot developers <buildroot@uclibc.org>
+ #
+ # This program is free software; you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
