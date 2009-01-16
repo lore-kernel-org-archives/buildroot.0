@@ -1,46 +1,36 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Fri, 16 Jan 2009 19:45:22 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/docs
-Message-ID: <20090116194522.2EDB17757A@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 16 Jan 2009 20:52:19 +0100
+Subject: [Buildroot] buildroot 2009.02-rc1 releases
+Message-ID: <87ab9r3u6k.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-01-16 19:45:21 +0000 (Fri, 16 Jan 2009)
-New Revision: 24887
+Hi,
 
-Log:
-docs/download.html: cleanup and mention releases
+With the source mirror stuff in place, we have all the features
+required for the release, so I have released buildroot-2009.02-rc1 as
+promised.
 
-Modified:
-   trunk/buildroot/docs/download.html
+You can get it from:
 
+http://buildroot.uclibc.org/downloads/buildroot-2009.02-rc1.tar.gz
 
-Changeset:
-Modified: trunk/buildroot/docs/download.html
-===================================================================
---- trunk/buildroot/docs/download.html	2009-01-16 19:45:16 UTC (rev 24886)
-+++ trunk/buildroot/docs/download.html	2009-01-16 19:45:21 UTC (rev 24887)
-@@ -6,11 +6,15 @@
- 
- <p>
- 
--The best way to obtain and update your own copy of buildroot is to fetch the
--latest version using <a href="subversion.html">Subversion</a>.  You can also
--obtain <a href= "downloads/snapshots/">Daily Snapshots</a> of the latest
--buildroot source tree but cannot or do not wish to use Subversion (svn).
-+The latest release can always be dowloaded from
-+<a href="/downloads/">http://buildroot.uclibc.org/downloads/</a>.
- 
-+<p>
-+
-+You can also obtain <a href="/downloads/snapshots/">Daily
-+Snapshots</a> of the latest Buildroot source tree if you want to to
-+follow development, but cannot or do not wish to use Subversion (svn).
-+
- <ul>
- 	<li> Click here to <a href="downloads/snapshots/">Daily Snapshots</a>.
- 	</li>
+or
+
+http://buildroot.uclibc.org/downloads/buildroot-2009.02-rc1.tar.bz2
+
+Please give it a spin and report back issues to the mailing list or
+the bug tracker.
+
+The plan is still to release the final 2009.02 release by FOSDEM
+(February 7th).
+
+Notice: I have NOT created a release branch as I want the release to
+get as much testing as possible, so PLEASE only commit fixes to the
+tree until we have the release out the door.
+
+-- 
+Bye, Peter Korsgaard
