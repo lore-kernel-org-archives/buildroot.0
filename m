@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Fri, 16 Jan 2009 19:30:21 +0000 (UTC)
-Subject: [Buildroot] svn commit: tags/buildroot_2009.02_rc1
-Message-ID: <20090116193022.1E05277571@busybox.osuosl.org>
+Date: Fri, 16 Jan 2009 19:45:17 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/docs
+Message-ID: <20090116194517.C3B1677579@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,27 +9,37 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2009-01-16 19:30:21 +0000 (Fri, 16 Jan 2009)
-New Revision: 24885
+Date: 2009-01-16 19:45:16 +0000 (Fri, 16 Jan 2009)
+New Revision: 24886
 
 Log:
-buildroot: fix version for 2009.02-rc2
+docs/news.html: announce 2009.02-rc1
 
 Modified:
-   tags/buildroot_2009.02_rc1/Config.in
+   trunk/buildroot/docs/news.html
 
 
 Changeset:
-Modified: tags/buildroot_2009.02_rc1/Config.in
+Modified: trunk/buildroot/docs/news.html
 ===================================================================
---- tags/buildroot_2009.02_rc1/Config.in	2009-01-16 19:28:06 UTC (rev 24884)
-+++ tags/buildroot_2009.02_rc1/Config.in	2009-01-16 19:30:21 UTC (rev 24885)
-@@ -8,7 +8,7 @@
+--- trunk/buildroot/docs/news.html	2009-01-16 19:30:21 UTC (rev 24885)
++++ trunk/buildroot/docs/news.html	2009-01-16 19:45:16 UTC (rev 24886)
+@@ -3,6 +3,18 @@
  
- config BR2_VERSION
- 	string
--	default "2009.02-svn"
-+	default "2009.02-rc1"
+ <ul>
  
- source "target/Config.in.arch"
- source "target/device/Config.in"
++  <li><b>16 January 2009 -- Release candidate and new maintainer</b>
++    <p>It has been a long time coming, but we finally have a new
++    release candidate! - And a new maintainer to match (Peter Korsgaard).</p>
++
++    <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
++    <a href="/downloads/buildroot-2009.02-rc1.tar.bz2">2009.02-rc1
++    release candidate</a>, and report any problems found to the <a
++    href="lists.html">mailing list</a> or <a
++    href="http://bugs.uclibc.org">bug tracker</a>. The plan is to
++    release 2009.02 in time for <a
++    href="http://www.fosdem.org/2009/">FOSDEM</a>.</p>
++
+   <li><b>16 July 2006 -- Buildroot mailing list</b>
+     <p>Buildroot now has its own <a href=lists.html>mailing list</a>.</p>
+ 
