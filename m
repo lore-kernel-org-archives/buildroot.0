@@ -1,9 +1,11 @@
 From: Sven Neumann <s.neumann@phase-zero.de>
-Date: Fri, 16 Jan 2009 10:28:25 +0100
-Subject: [Buildroot] libglibg2 fails
-In-Reply-To: <1232091382.8094.40.camel@aeglos.sweden.atmel.com>
-References: <1232091382.8094.40.camel@aeglos.sweden.atmel.com>
-Message-ID: <1232098105.6639.2.camel@sven>
+Date: Fri, 16 Jan 2009 10:32:37 +0100
+Subject: [Buildroot] error building alsa-utils
+In-Reply-To: <1232051621.4757.26.camel@aeglos.sweden.atmel.com>
+References: <496E4A36.4050902@carallon.com>
+	<8763khbnec.fsf@macbook.be.48ers.dk>  <496F1A63.3010403@carallon.com>
+	<1232051621.4757.26.camel@aeglos.sweden.atmel.com>
+Message-ID: <1232098357.6639.4.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +14,20 @@ To: buildroot@busybox.net
 
 Hi,
 
-On Fri, 2009-01-16 at 08:36 +0100, Ulf Samuelsson wrote:
+On Thu, 2009-01-15 at 21:33 +0100, Ulf Samuelsson wrote:
+> tor 2009-01-15 klockan 11:13 +0000 skrev Will Wagner:
+> > > 
+> > > Ah yes, thats fairly common. Please send the patch to the list and
+> > > I'll apply it - Also don't forget to send it to the alsa people!
+> > 
+> > Attached is patch, have also mailed alsa-devel
+> > 
+> Alsa-utils fails for me when I run buildall.sh so 
+> I will put the stuff in the alsa-utils directory and rerun.
 
-> Is there anyone capable of building libglib2?
-
-Builds fine for me with the buildroot snapshot from 20090113 and the
-patch from https://bugs.busybox.net/show_bug.cgi?id=37
-applied. But I guess it would also compile without that patch. Do you
-have gettext and libiconv enabled in your build? My .config has
- 
- BR2_PACKAGE_LIBICONV=y
- BR2_PACKAGE_GETTEXT=y
- # BR2_PACKAGE_GETTEXT_STATIC is not set
+We have tested the patch that Will sent to the list. It seems to work
+fine and we are now able to build without the legacy functions and
+macros in uclibc. I suggest that the patch is included in buildroot.
 
 
 Sven
