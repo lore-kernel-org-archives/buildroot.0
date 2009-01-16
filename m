@@ -1,89 +1,66 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Fri, 16 Jan 2009 22:49:35 +0100
-Subject: [Buildroot] buildroot 2009.02-rc1 releases [atngw100]
-In-Reply-To: <4970F52E.8070002@gmail.com>
-References: <87ab9r3u6k.fsf@macbook.be.48ers.dk> <4970F52E.8070002@gmail.com>
-Message-ID: <1232142575.6977.12.camel@aeglos.sweden.atmel.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Fri, 16 Jan 2009 22:06:50 +0000 (UTC)
+Subject: [Buildroot] svn commit:
+	trunk/buildroot/package/multimedia/alsa-utils
+Message-ID: <20090116220650.ED9C377580@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-fre 2009-01-16 klockan 14:59 -0600 skrev Robert Nelson:
-> On 1/16/2009 1:52 PM, Peter Korsgaard wrote:
-> > Hi,
-> >
-> > With the source mirror stuff in place, we have all the features
-> > required for the release, so I have released buildroot-2009.02-rc1 as
-> > promised.
-> >
-> > You can get it from:
-> >
-> > http://buildroot.uclibc.org/downloads/buildroot-2009.02-rc1.tar.gz
-> >
-> > or
-> >
-> > http://buildroot.uclibc.org/downloads/buildroot-2009.02-rc1.tar.bz2
-> >
-> > Please give it a spin and report back issues to the mailing list or
-> > the bug tracker.
-> >
-> > The plan is still to release the final 2009.02 release by FOSDEM
-> > (February 7th).
-> >
-> > Notice: I have NOT created a release branch as I want the release to
-> > get as much testing as possible, so PLEASE only commit fixes to the
-> > tree until we have the release out the door.
-> >
-> >    
+Author: ulf
+Date: 2009-01-16 22:06:49 +0000 (Fri, 16 Jan 2009)
+New Revision: 24890
 
-That is because 4.2.2 was deprecated which probably makes sense
-at this time.
-I think that if you do a make menuconfig, then
-the default compiler becomes 4.2.3 automagically.
-I will update the defconfig.
-BR
-Ulf Samuelsson
+Log:
+Fix legacy strings for alsa-utils & remove man pages
+
+Added:
+   trunk/buildroot/package/multimedia/alsa-utils/alsa-utils-1.0.18-fix_sysv_legacy.patch
+   trunk/buildroot/package/multimedia/alsa-utils/alsa-utils-1.0.18-remove_man.patch
 
 
-> 
-> Hello guys,
-> 
-> atngw100_defconfig's failing, for some reason "4.2.2" isn't being 
-> correctly past with "BR2_GCC_VERSION" from the defconfig to the build.
-> 
-> Started with a fresh download, 'make atngw100_defconfig', 'make'...
-> 
-> Build system: debian lenny amd64
-> 
-> *******
-> #rm -f 
-> /media/mirror/testing/buildroot-2009.02-rc1/build_avr32/staging_dir/usr/bin/{ar,as,ld,nm,objdump,ranlib,strip}
-> mkdir -p /media/mirror/testing/buildroot-2009.02-rc1/dl
-> --2009-01-16 14:37:42--  
-> ftp://www.at91.com/pub/buildroot//gcc--avr32-1.1.3.tar.bz2
->             => 
-> `/media/mirror/testing/buildroot-2009.02-rc1/dl/gcc--avr32-1.1.3.tar.bz2'
-> Resolving www.at91.com... 194.2.24.29
-> Connecting to www.at91.com|194.2.24.29|:21... connected.
-> Logging in as anonymous ... Logged in!
-> ==> SYST ... done.    ==> PWD ... done.
-> ==> TYPE I ... done.  ==> CWD /pub/buildroot/ ... done.
-> ==> SIZE gcc--avr32-1.1.3.tar.bz2 ... done.
-> ==> PASV ... done.    ==> RETR gcc--avr32-1.1.3.tar.bz2 ...
-> No such file `gcc--avr32-1.1.3.tar.bz2'.
-> 
-> --
-> Robert Nelson
-> http://www.rcn-ee.com/
-> 
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
--- 
-Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Atmel Nordic AB
+Changeset:
+Added: trunk/buildroot/package/multimedia/alsa-utils/alsa-utils-1.0.18-fix_sysv_legacy.patch
+===================================================================
+--- trunk/buildroot/package/multimedia/alsa-utils/alsa-utils-1.0.18-fix_sysv_legacy.patch	                        (rev 0)
++++ trunk/buildroot/package/multimedia/alsa-utils/alsa-utils-1.0.18-fix_sysv_legacy.patch	2009-01-16 22:06:49 UTC (rev 24890)
+@@ -0,0 +1,20 @@
++--- a/alsactl/init_parse.c	2009-01-15 10:44:48.000000000 +0000
+++++ b/alsactl/init_parse.c	2009-01-15 10:46:41.000000000 +0000
++@@ -381,7 +381,7 @@ static int set_ctl_value(struct space *s
++ 				snd_ctl_elem_value_set_integer(space->ctl_value, idx, val);
++ 			} else if (items > 2 && value[items-2] == 'd' && value[items-1] == 'B') {
++ 				val = strtol(value, NULL, 0) * 100;
++-				if ((pos2 = index(value, '.')) != NULL) {
+++				if ((pos2 = strchr(value, '.')) != NULL) {
++ 					if (isdigit(*(pos2-1)) && isdigit(*(pos2-2))) {
++ 						if (val < 0)
++ 							val -= strtol(pos2 + 1, NULL, 0);
++@@ -1253,7 +1253,7 @@ static char *new_root_dir(const char *fi
++ 
++ 	res = strdup(filename);
++ 	if (res) {
++-		tmp = rindex(res, '/');
+++		tmp = strrchr(res, '/');
++ 		if (tmp)
++ 			*tmp = '\0';
++ 	}
+
+Added: trunk/buildroot/package/multimedia/alsa-utils/alsa-utils-1.0.18-remove_man.patch
+===================================================================
+--- trunk/buildroot/package/multimedia/alsa-utils/alsa-utils-1.0.18-remove_man.patch	                        (rev 0)
++++ trunk/buildroot/package/multimedia/alsa-utils/alsa-utils-1.0.18-remove_man.patch	2009-01-16 22:06:49 UTC (rev 24890)
+@@ -0,0 +1,11 @@
++--- a/alsactl/Makefile.in	2009-01-15 10:59:38.000000000 +0000
+++++ b/alsactl/Makefile.in	2009-01-15 10:59:34.000000000 +0000
++@@ -204,7 +204,7 @@ sharedstatedir = @sharedstatedir@
++ sysconfdir = @sysconfdir@
++ target_alias = @target_alias@
++ SUBDIRS = init
++-man_MANS = alsactl.1 alsactl_init.7
+++man_MANS = alsactl.1
++ EXTRA_DIST = alsactl.1 alsactl_init.xml
++ alsactl_SOURCES = alsactl.c state.c utils.c init_parse.c
++ noinst_HEADERS = alsactl.h list.h init_sysdeps.c init_utils_string.c init_utils_run.c init_sysfs.c
