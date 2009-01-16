@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Fri, 16 Jan 2009 12:34:45 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/mpfr
-Message-ID: <20090116123445.A3465774FA@busybox.osuosl.org>
+Date: Fri, 16 Jan 2009 13:21:35 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/openswan
+Message-ID: <20090116132135.9C9D7774FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,29 +9,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2009-01-16 12:34:44 +0000 (Fri, 16 Jan 2009)
-New Revision: 24875
+Date: 2009-01-16 13:21:33 +0000 (Fri, 16 Jan 2009)
+New Revision: 24876
 
 Log:
-package/mpfr: fix make source-check/external-deps issue
+openswan: tarball moved to old/ subdir
 
 Modified:
-   trunk/buildroot/package/mpfr/mpfr.mk
+   trunk/buildroot/package/openswan/openswan.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/mpfr/mpfr.mk
+Modified: trunk/buildroot/package/openswan/openswan.mk
 ===================================================================
---- trunk/buildroot/package/mpfr/mpfr.mk	2009-01-16 12:34:40 UTC (rev 24874)
-+++ trunk/buildroot/package/mpfr/mpfr.mk	2009-01-16 12:34:44 UTC (rev 24875)
-@@ -22,8 +22,10 @@
- 
- $(MPFR_PATCH_SOURCE):
- 	$(call DOWNLOAD,$(MPFR_SITE),$(MPFR_PATCH))
-+ifeq ($(SPIDER),) # this breaks source-check/external-deps
- 	mv $(DL_DIR)/$(MPFR_PATCH) $@
- endif
-+endif
- 
- $(DL_DIR)/$(MPFR_SOURCE):
- 	 $(call DOWNLOAD,$(MPFR_SITE),$(MPFR_SOURCE))
+--- trunk/buildroot/package/openswan/openswan.mk	2009-01-16 12:34:44 UTC (rev 24875)
++++ trunk/buildroot/package/openswan/openswan.mk	2009-01-16 13:21:33 UTC (rev 24876)
+@@ -8,7 +8,7 @@
+ #############################################################
+ OPENSWAN_VERSION:=2.4.9
+ OPENSWAN_SOURCE:=openswan-$(OPENSWAN_VERSION).tar.gz
+-OPENSWAN_SITE:=http://www.openswan.org/download/
++OPENSWAN_SITE:=http://www.openswan.org/download/old/
+ OPENSWAN_DIR:=$(BUILD_DIR)/openswan-$(OPENSWAN_VERSION)
+ OPENSWAN_CAT:=$(ZCAT)
+ OPENSWAN_BINARY:=programs/pluto/pluto
