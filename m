@@ -1,122 +1,26 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sat, 17 Jan 2009 02:13:18 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libglib12
-Message-ID: <20090117021319.1CFF577589@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 17 Jan 2009 07:46:38 +0100
+Subject: [Buildroot] Upgrading libgtk2 and libglibg2 to latest version
+	before the	release?
+In-Reply-To: <1232144162.6977.17.camel@aeglos.sweden.atmel.com> (Ulf
+	Samuelsson's message of "Fri\, 16 Jan 2009 23\:16\:02 +0100")
+References: <1232144162.6977.17.camel@aeglos.sweden.atmel.com>
+Message-ID: <8763ke4egh.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2009-01-17 02:13:15 +0000 (Sat, 17 Jan 2009)
-New Revision: 24894
+>>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 
-Log:
-Ensure glib-1.2 builds a static library
+Hi,
 
-Added:
-   trunk/buildroot/package/libglib12/libglib-libtool.patch
+ Ulf> libgtk2 = 2.15.0
+ Ulf> libglib2 = 2.19.4
 
-Removed:
-   trunk/buildroot/package/libglib12/libglib-libtool.patch.bz2
+No, it's imho too risky. Let's do it right after the release and
+stabilize it for the the next (2009.05).
 
-
-Changeset:
-Added: trunk/buildroot/package/libglib12/libglib-libtool.patch
-===================================================================
---- trunk/buildroot/package/libglib12/libglib-libtool.patch	                        (rev 0)
-+++ trunk/buildroot/package/libglib12/libglib-libtool.patch	2009-01-17 02:13:15 UTC (rev 24894)
-@@ -0,0 +1,88 @@
-+--- glib/ltconfig
-++++ glib/ltconfig
-+@@ -450,6 +450,7 @@
-+ # Transform linux* to *-*-linux-gnu*, to support old configure scripts.
-+ case "$host_os" in
-+ linux-gnu*) ;;
-++linux-uclibc*) ;;
-+ linux*) host=`echo $host | sed 's/^\(.*-.*-linux\)\(.*\)$/\1-gnu\2/'`
-+ esac
-+ 
-+@@ -1981,6 +1982,28 @@
-+   fi
-+   ;;
-+ 
-++linux-uclibc*)
-++  version_type=linux
-++  need_lib_prefix=no
-++  need_version=no
-++  library_names_spec='${libname}${release}.so$versuffix ${libname}${release}.so$major $libname.so'
-++  soname_spec='${libname}${release}.so$major'
-++  finish_cmds='PATH="\$PATH:/sbin" ldconfig -n $libdir'
-++  shlibpath_var=LD_LIBRARY_PATH
-++  shlibpath_overrides_runpath=no
-++  # deplibs_check_method=pass_all
-++  deplibs_check_method='file_magic ELF [0-9][0-9]*-bit [LM]SB (shared object|dynamic lib )'
-++  file_magic_cmd=/usr/bin/file
-++  file_magic_test_file=`echo /lib/libuClibc-*.so`
-++  # This implies no fast_install, which is unacceptable.
-++  # Some rework will be needed to allow for fast_install
-++  # before this can be enabled.
-++  # Note: copied from linux-gnu, and may not be appropriate.
-++  hardcode_into_libs=yes
-++  # Assume using the uClibc dynamic linker.
-++  dynamic_linker="uClibc ld.so"
-++  ;;
-++
-+ netbsd*)
-+   version_type=sunos
-+   if echo __ELF__ | $CC -E - | grep __ELF__ >/dev/null; then
-+--- g/configure
-++++ g/configure
-+@@ -966,6 +966,7 @@
-+ host_vendor=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\2/'`
-+ host_os=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
-+ echo "$ac_t""$host" 1>&6
-++host_alias=$host
-+ 
-+ echo $ac_n "checking build system type""... $ac_c" 1>&6
-+ echo "configure:972: checking build system type" >&5
-+diff -urN glib-1.2.10-0rig/ltconfig glib-1.2.10/ltconfig
-+--- glib-1.2.10-0rig/ltconfig	2009-01-17 02:56:10.000000000 +0100
-++++ glib-1.2.10/ltconfig	2009-01-17 02:55:40.000000000 +0100
-+@@ -448,6 +448,9 @@
-+ fi
-+ 
-+ # Transform linux* to *-*-linux-gnu*, to support old configure scripts.
-++echo $ac_n "host_os... $host_os" 1>&5
-++echo $ac_n "host_os... $host_os" 1>&6
-++
-+ case "$host_os" in
-+ linux-gnu*) ;;
-+ linux-uclibc*) ;;
-+@@ -761,6 +764,7 @@
-+     ;;
-+   *)
-+     can_build_shared=no
-++    echo "$progname:764: No OS found: host_os = $host_os" >&5
-+     ;;
-+   esac
-+ fi
-+@@ -1791,6 +1795,8 @@
-+ # If you have `file' or equivalent on your system and you're not sure
-+ # whether `pass_all' will *always* work, you probably want this one.
-+ echo $ac_n "checking dynamic linker characteristics... $ac_c" 1>&6
-++echo $ac_n "host_os... $host_os" 1>&5
-++echo $ac_n "host_os... $host_os" 1>&6
-+ case "$host_os" in
-+ aix3*)
-+   version_type=linux
-+@@ -1982,7 +1988,7 @@
-+   fi
-+   ;;
-+ 
-+-linux-uclibc*)
-++*-linux | linux-uclibc*)
-+   version_type=linux
-+   need_lib_prefix=no
-+   need_version=no
-
-Deleted: trunk/buildroot/package/libglib12/libglib-libtool.patch.bz2
-===================================================================
-(Binary files differ)
+-- 
+Bye, Peter Korsgaard
