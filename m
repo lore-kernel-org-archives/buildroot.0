@@ -1,40 +1,38 @@
-From: danieljlaird at hotmail.com <danieljlaird@hotmail.com>
-Date: Sat, 17 Jan 2009 08:06:22 -0000
-Subject: [Buildroot] Upgrading libgtk2 and libglibg2 to latest
-	versionbefore the	release?
-In-Reply-To: <1232144162.6977.17.camel@aeglos.sweden.atmel.com>
-References: <1232144162.6977.17.camel@aeglos.sweden.atmel.com>
-Message-ID: <COL102-DS9509D5521155803397FFEDCD50@phx.gbl>
+From: Thomas Lundquist <lists@zelow.no>
+Date: Sat, 17 Jan 2009 10:55:24 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/cairo
+In-Reply-To: <1231944617.6465.10.camel@sven>
+References: <20090114133637.93DCB769A1@busybox.osuosl.org>
+	<COL102-DS153B476E9992200EBB96B2DCD60@phx.gbl>
+	<1231944617.6465.10.camel@sven>
+Message-ID: <20090117095524.GA11505@zelow.no>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I would rather not bounce gtk+ as 2.14.x and 2.15.x series have not yet 
-fixed directfb support, maybe we could have a choice of versions until this 
-is fixed.
-
-Cheers
-Dan
-
---------------------------------------------------
-From: "Ulf Samuelsson" <ulf.samuelsson@atmel.com>
-Sent: Friday, January 16, 2009 10:16 PM
-To: <buildroot@uclibc.org>
-Subject: [Buildroot] Upgrading libgtk2 and libglibg2 to latest versionbefore 
-the	release?
-
-> libgtk2 = 2.15.0
-> libglib2 = 2.19.4
->
-> BR
-> Ulf Samuelsson
->
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+On Wed, Jan 14, 2009 at 03:50:17PM +0100, Sven Neumann wrote:
+> On Wed, 2009-01-14 at 14:24 +0000, Daniel Laird wrote:
+> > I think the same can be done for libglib2 and libgtk2 to stop them
+> > installing as well which would be nice.
 > 
+> Same for
+> 
+>  gst-plugins-base-libs
+>  gstreamer-0.10
+>  gstreamer-plugins-0.10
+>  liboil
+
+I'll just add it to the configure part in Makefile.autotools.in, configure seems to
+ignore it if it's not needed instead of complaining.
+
+And I'm pretty sure noone cares about html documentation anyway.
+
+Both --without-html-dir and --disable-gtk-doc
+
+And I'll connect it to BR2_HAVE_DOCUMENTATION
+
+
+
+Thomas.
