@@ -1,33 +1,30 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 17 Jan 2009 17:24:52 +0100
-Subject: [Buildroot] Upgrading libgtk2 and libglibg2 to latest
-	versionbefore the	release?
-In-Reply-To: <COL102-DS9509D5521155803397FFEDCD50@phx.gbl>
-	(danieljlaird@hotmail.com's message of "Sat\,
-	17 Jan 2009 08\:06\:22 -0000")
-References: <1232144162.6977.17.camel@aeglos.sweden.atmel.com>
-	<COL102-DS9509D5521155803397FFEDCD50@phx.gbl>
-Message-ID: <87ocy53nor.fsf@macbook.be.48ers.dk>
+Date: Sat, 17 Jan 2009 17:27:32 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/cairo
+In-Reply-To: <20090117095524.GA11505@zelow.no> (Thomas Lundquist's message of
+	"Sat\, 17 Jan 2009 10\:55\:24 +0100")
+References: <20090114133637.93DCB769A1@busybox.osuosl.org>
+	<COL102-DS153B476E9992200EBB96B2DCD60@phx.gbl>
+	<1231944617.6465.10.camel@sven> <20090117095524.GA11505@zelow.no>
+Message-ID: <87k58t3nkb.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>>   <danieljlaird@hotmail.com> writes:
+>>>>> "Thomas" == Thomas Lundquist <lists@zelow.no> writes:
 
- > I would rather not bounce gtk+ as 2.14.x and 2.15.x series have not yet 
- > fixed directfb support, maybe we could have a choice of versions until this 
- > is fixed.
+Hi,
 
-Or simply leave it as it is for now. Do we have any concrete reason
-for upgrading the gtk version? I'm using gtk 2.12 on my Debian machine
-as well. The bug tracker issue was for glib, and there's afaik no
-issues with using a newer glib version with gtk 2.12 (I'm having 2.16
-here).
+ Thomas> I'll just add it to the configure part in Makefile.autotools.in, configure seems to
+ Thomas> ignore it if it's not needed instead of complaining.
+ Thomas> And I'm pretty sure noone cares about html documentation anyway.
+ Thomas> Both --without-html-dir and --disable-gtk-doc
+ Thomas> And I'll connect it to BR2_HAVE_DOCUMENTATION
 
-Adding a configuration option would mean we would mean a lot more
-configurations to test, so I would prefer to not to that.
+Sounds like a good idea - Thanks.
+
 
 -- 
 Bye, Peter Korsgaard
