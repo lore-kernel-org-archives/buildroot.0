@@ -1,51 +1,30 @@
-From: danieljlaird at hotmail.com <danieljlaird@hotmail.com>
-Date: Sat, 17 Jan 2009 21:41:48 -0000
-Subject: [Buildroot] svn commit: trunk/buildroot/package/cairo
-In-Reply-To: <20090117200304.GB22848@zelow.no>
-References: <20090114133637.93DCB769A1@busybox.osuosl.org><COL102-DS153B476E9992200EBB96B2DCD60@phx.gbl><1231944617.6465.10.camel@sven>
-	<20090117095524.GA11505@zelow.no><87k58t3nkb.fsf@macbook.be.48ers.dk>
-	<20090117200304.GB22848@zelow.no>
-Message-ID: <COL102-DS212985CAEF7E65DA88999BDCD50@phx.gbl>
+From: Dan Lyke <danlyke@flutterby.com>
+Date: Sat, 17 Jan 2009 14:08:15 -0800
+Subject: [Buildroot] Installing Buildroot built u-boot on an AT91SAM9261EK?
+Message-ID: <20090117140815.49509869@danhplaptop>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I agree with you,
-We could also do the same with --enable-static based upon BR2_ENABLE_STATIC.
+I've been using Buildroot successfully for the Linux kernel and
+filesystem, but I've been using the u-boot that comes with the Angstrom
+demo build, with the TCL script that came with it to install it via
+SAM-BA.
 
-This would be a really good thing and remove yet more common options, non 
-auto-tooled ones stay as they are and get updated eventually
+Now I need to put my own u-boot on the device, but I can't figure out
+where  but all of the other u-boots I find, including the ones I build
+myself, seem to be looking for the u-boot environment somewhere other
+than where the Angstrom TCL script puts it.
+
+When I try to boot I'm getting:
+
+  *** Warning - bad CRC, using default environment
+
+Anyone got a SAM-BA TCL script that puts the Buildroot built u-boot and
+associated environment in the right place?
+
+Thanks!
 
 Dan
-
---------------------------------------------------
-From: "Thomas Lundquist" <lists@zelow.no>
-Sent: Saturday, January 17, 2009 8:03 PM
-To: <buildroot@uclibc.org>
-Subject: Re: [Buildroot] svn commit: trunk/buildroot/package/cairo
-
-> On Sat, Jan 17, 2009 at 05:27:32PM +0100, Peter Korsgaard wrote:
->>
->>  Thomas> I'll just add it to the configure part in Makefile.autotools.in, 
->> configure seems to
->>  Thomas> ignore it if it's not needed instead of complaining.
->>  Thomas> And I'm pretty sure noone cares about html documentation anyway.
->>  Thomas> Both --without-html-dir and --disable-gtk-doc
->>  Thomas> And I'll connect it to BR2_HAVE_DOCUMENTATION
->>
->> Sounds like a good idea - Thanks.
->
-> It seems to work aswell. I guess we should/could do the same thing
-> with DISABLE_LARGEFILE and DISABLE_NLS.
->
-> The non-autotools .mk's can stay as they are for now.
->
->
-> Thomas.
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
