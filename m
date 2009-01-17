@@ -1,29 +1,23 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 17 Jan 2009 18:49:26 +0100
-Subject: [Buildroot] Upgrading libgtk2 and libglibg2 to latest version
-	before the	release?
-In-Reply-To: <1232213110.20691.8.camel@bender> (Sven Neumann's message of
-	"Sat\, 17 Jan 2009 18\:25\:10 +0100")
-References: <1232144162.6977.17.camel@aeglos.sweden.atmel.com>
-	<8763ke4egh.fsf@macbook.be.48ers.dk> <1232213110.20691.8.camel@bender>
-Message-ID: <87bpu53jrt.fsf@macbook.be.48ers.dk>
+From: Matt Wood <mattwood2000@gmx.net>
+Date: Sat, 17 Jan 2009 14:21:55 -0500
+Subject: [Buildroot] dialog-1.1 failing on curses library
+Message-ID: <200901171421.55143.mattwood2000@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Neumann <s.neumann@phase-zero.de> writes:
+Hi guys, I just did an update to the latest trunk version of buildroot, and did 
+a defconfig for the AT91SAM9263EK board.  Changed a couple of things like the 
+compiler to 4.3.2, binutils to 2.19, and kernel headers to 2.6.28.  Dialog 
+fails its configure with the below config.log.  Looks like its picking up the 
+host curses library.  Anyone see this before?  Possibly a fix?
 
- >> No, it's imho too risky. Let's do it right after the release and
- >> stabilize it for the the next (2009.05).
+Thanks, Matt
 
- Sven> I have updated libglib2 to 2.18.4 (the latest stable release)
- Sven> and it works nicely. There's a patch for this attached to bug
- Sven> 37. In my opinion you should do this upgrade now as more and
- Sven> more libraries start to depend on glib 2.18.
-
-Ok, I'll apply the patch once 2009.02 is released (3 weeks).
-
--- 
-Bye, Peter Korsgaard
+configure:9115: checking for tgoto in -lncurses
+configure:9142: /usr/arm/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-gcc -Os  -I/usr/arm/buildroot/build_arm/staging_dir/usr/include -I/usr/arm/buildroot/build_arm/staging_dir/include --sysroot=/usr/arm/buildroot/build_arm/staging_dir/ -isysroot /usr/arm/buildroot/build_arm/staging_dir -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -o 
+conftest -g -O2  -D_GNU_SOURCE  conftest.c -lncurses   -lm -L/lib >&5
+/lib/libncurses.so: file not recognized: File format not recognized
+collect2: ld returned 1 exit status
