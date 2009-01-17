@@ -1,56 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 17 Jan 2009 08:54:14 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package:
-	multimedia/alsa-lib python
-In-Reply-To: <20090117001907.6679477587@busybox.osuosl.org> (ulf@uclibc.org's
-	message of "Sat\, 17 Jan 2009 00\:19\:07 +0000 \(UTC\)")
-References: <20090117001907.6679477587@busybox.osuosl.org>
-Message-ID: <87skni2wrd.fsf@macbook.be.48ers.dk>
+From: danieljlaird at hotmail.com <danieljlaird@hotmail.com>
+Date: Sat, 17 Jan 2009 08:06:22 -0000
+Subject: [Buildroot] Upgrading libgtk2 and libglibg2 to latest
+	versionbefore the	release?
+In-Reply-To: <1232144162.6977.17.camel@aeglos.sweden.atmel.com>
+References: <1232144162.6977.17.camel@aeglos.sweden.atmel.com>
+Message-ID: <COL102-DS9509D5521155803397FFEDCD50@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+I would rather not bounce gtk+ as 2.14.x and 2.15.x series have not yet 
+fixed directfb support, maybe we could have a choice of versions until this 
+is fixed.
 
- ulf> Author: ulf
- ulf> Date: 2009-01-17 00:19:06 +0000 (Sat, 17 Jan 2009)
- ulf> New Revision: 24893
+Cheers
+Dan
 
- ulf> Log:
- ulf> Make alsa-lib depend on libpython, if new BR2_PACKAGE_ALSA_LIB_PYTHON is selected
+--------------------------------------------------
+From: "Ulf Samuelsson" <ulf.samuelsson@atmel.com>
+Sent: Friday, January 16, 2009 10:16 PM
+To: <buildroot@uclibc.org>
+Subject: [Buildroot] Upgrading libgtk2 and libglibg2 to latest versionbefore 
+the	release?
 
- ulf> Modified:
- ulf>    trunk/buildroot/package/multimedia/alsa-lib/Config.in
- ulf>    trunk/buildroot/package/multimedia/alsa-lib/alsa-lib.mk
- ulf>    trunk/buildroot/package/python/python.mk
-
-
- ulf> Changeset:
- ulf> Modified: trunk/buildroot/package/multimedia/alsa-lib/Config.in
- ulf> ===================================================================
- ulf> --- trunk/buildroot/package/multimedia/alsa-lib/Config.in	2009-01-16 22:45:31 UTC (rev 24892)
- ulf> +++ trunk/buildroot/package/multimedia/alsa-lib/Config.in	2009-01-17 00:19:06 UTC (rev 24893)
- ulf> @@ -5,3 +5,14 @@
- ulf>  	  functionality to the Linux operating system.
- 
- ulf>  	  http://www.alsa-project.org/
- ulf> +
- ulf> +config BR2_PACKAGE_ALSA_LIB_PYTHON
- ulf> +	bool "Python support for alsa-lib"
- ulf> +	depends on BR2_PACKAGE_ALSA_LIB
- ulf> +	select BR2_PACKAGE_PYTHON
-
-It would probably be goodt to add a 'default BR2_PACKAGE_PYTHON' line,
-so it defaults to enabled if you have python support, and false
-otherwise.
-
-Alternatively it should depend on BR2_PACKAGE_PYTHON and just be
-default y, as it's probably pretty unlikely someone wants python
-support in alsa without having python enabled in the first place.
-
-The 2nd option seems cleanest to me, what do you think?
-
--- 
-Bye, Peter Korsgaard
+> libgtk2 = 2.15.0
+> libglib2 = 2.19.4
+>
+> BR
+> Ulf Samuelsson
+>
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
