@@ -1,23 +1,32 @@
-From: Matt Wood <mattwood2000@gmx.net>
-Date: Sat, 17 Jan 2009 14:21:55 -0500
-Subject: [Buildroot] dialog-1.1 failing on curses library
-Message-ID: <200901171421.55143.mattwood2000@gmx.net>
+From: Thomas Lundquist <lists@zelow.no>
+Date: Sat, 17 Jan 2009 21:03:04 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/cairo
+In-Reply-To: <87k58t3nkb.fsf@macbook.be.48ers.dk>
+References: <20090114133637.93DCB769A1@busybox.osuosl.org>
+	<COL102-DS153B476E9992200EBB96B2DCD60@phx.gbl>
+	<1231944617.6465.10.camel@sven> <20090117095524.GA11505@zelow.no>
+	<87k58t3nkb.fsf@macbook.be.48ers.dk>
+Message-ID: <20090117200304.GB22848@zelow.no>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi guys, I just did an update to the latest trunk version of buildroot, and did 
-a defconfig for the AT91SAM9263EK board.  Changed a couple of things like the 
-compiler to 4.3.2, binutils to 2.19, and kernel headers to 2.6.28.  Dialog 
-fails its configure with the below config.log.  Looks like its picking up the 
-host curses library.  Anyone see this before?  Possibly a fix?
+On Sat, Jan 17, 2009 at 05:27:32PM +0100, Peter Korsgaard wrote:
+> 
+>  Thomas> I'll just add it to the configure part in Makefile.autotools.in, configure seems to
+>  Thomas> ignore it if it's not needed instead of complaining.
+>  Thomas> And I'm pretty sure noone cares about html documentation anyway.
+>  Thomas> Both --without-html-dir and --disable-gtk-doc
+>  Thomas> And I'll connect it to BR2_HAVE_DOCUMENTATION
+> 
+> Sounds like a good idea - Thanks.
 
-Thanks, Matt
+It seems to work aswell. I guess we should/could do the same thing 
+with DISABLE_LARGEFILE and DISABLE_NLS.
 
-configure:9115: checking for tgoto in -lncurses
-configure:9142: /usr/arm/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-gcc -Os  -I/usr/arm/buildroot/build_arm/staging_dir/usr/include -I/usr/arm/buildroot/build_arm/staging_dir/include --sysroot=/usr/arm/buildroot/build_arm/staging_dir/ -isysroot /usr/arm/buildroot/build_arm/staging_dir -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -o 
-conftest -g -O2  -D_GNU_SOURCE  conftest.c -lncurses   -lm -L/lib >&5
-/lib/libncurses.so: file not recognized: File format not recognized
-collect2: ld returned 1 exit status
+The non-autotools .mk's can stay as they are for now.
+
+
+Thomas.
