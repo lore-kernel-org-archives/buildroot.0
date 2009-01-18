@@ -1,77 +1,119 @@
-From: Shinya Kuribayashi <skuribay@ruby.dti.ne.jp>
-Date: Sun, 18 Jan 2009 08:53:18 +0900
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
-In-Reply-To: <451083.90600.qm@web56906.mail.re3.yahoo.com>
-References: <451083.90600.qm@web56906.mail.re3.yahoo.com>
-Message-ID: <49726F6E.1070505@ruby.dti.ne.jp>
+From: thomasez at uclibc.org <thomasez@uclibc.org>
+Date: Sun, 18 Jan 2009 00:05:58 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package: libgtk2
+	multimedia/gst-plugins-base mul etc...
+Message-ID: <20090118000558.DC88077108@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Frank Hoeflich wrote:
->     I believe you will find messages similar to the following in your
->     config.log:
-> 
-> /tmp/br/powerpc/toolchain_build_powerpc/gcc-4.3.2-initial/./gcc/cc1:
-> error while loading shared libraries: libmpfr.so.1: cannot open shared
-> object file: No such file or directory
+Author: thomasez
+Date: 2009-01-18 00:05:57 +0000 (Sun, 18 Jan 2009)
+New Revision: 24896
 
-It seems.  Here you are:
+Log:
+Finish the gtk-doc stuff and start on the smae thing with LARGEFILE and NLS.
 
-[toolchain_build_mips/gcc-4.3.2-initial/mips-linux-uclibc/libgcc/config.log]
 
---- 8< --- 8< --- 8< ---
-Reading specs from /home/skuribay/git/buildroot.git/toolchain_build_mips/gcc-4.3.2-initial/./gcc/specs
-Target: mips-linux-uclibc
-Configured with: /home/skuribay/git/buildroot.git/toolchain_build_mips/gcc-4.3.2/configure --prefix=/home/skuribay/git/buildroot.git/build_mips/staging_dir/usr --build=i386-pc-linux-gnu --host=i386-pc-linux-gnu --target=mips-linux-uclibc --enable-languages=c --with-sysroot=/home/skuribay/git/buildroot.git/toolchain_build_mips/uClibc_dev/ --disable-__cxa_atexit --enable-target-optspace --with-gnu-ld --disable-shared --with-gmp=/home/skuribay/git/buildroot.git/toolchain_build_mips/gmp --with-mpfr=/home/skuribay/git/buildroot.git/toolchain_build_mips/mpfr --disable-nls --enable-threads --disable-multilib --disable-decimal-float --with-abi=32 --with-tune=mips4 -q --silent
-Thread model: posix
-gcc version 4.3.2 (GCC)
-configure:2374: $? = 0
-configure:2376:  /home/skuribay/git/buildroot.git/toolchain_build_mips/gcc-4.3.2-initial/./gcc/xgcc -B/home/skuribay/git/buildroot.git/toolchain_build_mips/gcc-4.3.2-initial/./gcc/ -B/home/skuribay/git/buildroot.git/build_mips/staging_dir/usr/mips-linux-uclibc/bin/ -B/home/skuribay/git/buildroot.git/build_mips/staging_dir/usr/mips-linux-uclibc/lib/ -isystem /home/skuribay/git/buildroot.git/build_mips/staging_dir/usr/mips-linux-uclibc/include -isystem /home/skuribay/git/buildroot.git/build_mips/staging_dir/usr/mips-linux-uclibc/sys-include -V </dev/null >&5
-xgcc: '-V' must come at the start of the command line
-configure:2379: $? = 1
-configure:2398:  /home/skuribay/git/buildroot.git/toolchain_build_mips/gcc-4.3.2-initial/./gcc/xgcc -B/home/skuribay/git/buildroot.git/toolchain_build_mips/gcc-4.3.2-initial/./gcc/ -B/home/skuribay/git/buildroot.git/build_mips/staging_dir/usr/mips-linux-uclibc/bin/ -B/home/skuribay/git/buildroot.git/build_mips/staging_dir/usr/mips-linux-uclibc/lib/ -isystem /home/skuribay/git/buildroot.git/build_mips/staging_dir/usr/mips-linux-uclibc/include -isystem /home/skuribay/git/buildroot.git/build_mips/staging_dir/usr/mips-linux-uclibc/sys-include -o conftest -g -Os   conftest.c  >&5
-/home/skuribay/git/buildroot.git/toolchain_build_mips/gcc-4.3.2-initial/./gcc/cc1: error while loading shared libraries: libmpfr.so.1: cannot open shared object file: No such file or directory
-configure:2401: $? = 1
-configure:2567: checking for suffix of object files
-configure:2588:  /home/skuribay/git/buildroot.git/toolchain_build_mips/gcc-4.3.2-initial/./gcc/xgcc -B/home/skuribay/git/buildroot.git/toolchain_build_mips/gcc-4.3.2-initial/./gcc/ -B/home/skuribay/git/buildroot.git/build_mips/staging_dir/usr/mips-linux-uclibc/bin/ -B/home/skuribay/git/buildroot.git/build_mips/staging_dir/usr/mips-linux-uclibc/lib/ -isystem /home/skuribay/git/buildroot.git/build_mips/staging_dir/usr/mips-linux-uclibc/include -isystem /home/skuribay/git/buildroot.git/build_mips/staging_dir/usr/mips-linux-uclibc/sys-include -c -g -Os  conftest.c >&5
-/home/skuribay/git/buildroot.git/toolchain_build_mips/gcc-4.3.2-initial/./gcc/cc1: error while loading shared libraries: libmpfr.so.1: cannot open shared object file: No such file or directory
-configure:2591: $? = 1
-configure: failed program was:
-| /* confdefs.h.  */
-| 
-| #define PACKAGE_NAME "GNU C Runtime Library"
-| #define PACKAGE_TARNAME "libgcc"
-| #define PACKAGE_VERSION "1.0"
-| #define PACKAGE_STRING "GNU C Runtime Library 1.0"
-| #define PACKAGE_BUGREPORT ""
-| /* end confdefs.h.  */
-| 
-| int
-| main ()
-| {
-| 
-|   ;
-|   return 0;
-| }
-configure:2605: error: cannot compute suffix of object files: cannot compile
-See `config.log' for more details.
---- 8< --- 8< --- 8< ---
+Modified:
+   trunk/buildroot/package/Makefile.autotools.in
+   trunk/buildroot/package/libgtk2/libgtk2.mk
+   trunk/buildroot/package/multimedia/gst-plugins-base/gst-plugins-base.mk
+   trunk/buildroot/package/multimedia/gst-plugins-good/gst-plugins-good.mk
+   trunk/buildroot/package/multimedia/gst-plugins-ugly/gst-plugins-ugly.mk
+   trunk/buildroot/package/multimedia/gstreamer/gstreamer.mk
 
-> away.  If you have a downrev host gcc, try upgrading it - the rc1
-> candidate should build.
 
-I'm sticking to ubuntu 8.04.01 for now, so couldn't give it a try,
-sorry.
+Changeset:
+Modified: trunk/buildroot/package/Makefile.autotools.in
+===================================================================
+--- trunk/buildroot/package/Makefile.autotools.in	2009-01-17 10:11:12 UTC (rev 24895)
++++ trunk/buildroot/package/Makefile.autotools.in	2009-01-18 00:05:57 UTC (rev 24896)
+@@ -249,6 +249,8 @@
+ 		--exec-prefix=/usr \
+ 		--sysconfdir=/etc \
+ 		$(DISABLE_DOCUMENTATION) \
++		$(DISABLE_NLS) \
++		$(DISABLE_LARGEFILE) \
+ 		$(QUIET) $($(PKG)_CONF_OPT)
+ 	$(Q)touch $@
+ 
 
->     If the BR tools aren't going to flag this sort of downrev host
->     tool issue explicitly, there should at least be a note in the docs
->     about it somewhere (e.g. host gcc version 4.1.1-2 is known to be
->     too old to build this BR release, use at least 4.3.0-2).
+Modified: trunk/buildroot/package/libgtk2/libgtk2.mk
+===================================================================
+--- trunk/buildroot/package/libgtk2/libgtk2.mk	2009-01-17 10:11:12 UTC (rev 24895)
++++ trunk/buildroot/package/libgtk2/libgtk2.mk	2009-01-18 00:05:57 UTC (rev 24896)
+@@ -75,7 +75,6 @@
+ 		--disable-glibtest \
+ 		--enable-explicit-deps=no \
+ 		--disable-debug \
+-		--without-html-dir \
+ 		$(DISABLE_LARGEFILE) \
+ 		$(LIBGTK2_CONF_OPT_X)  \
+ 		$(LIBGTK2_CONF_OPT_DFB)
 
-Fully agreed, this is what I wanted to point out.  Thanks for your
-clarification, Frank-san.
+Modified: trunk/buildroot/package/multimedia/gst-plugins-base/gst-plugins-base.mk
+===================================================================
+--- trunk/buildroot/package/multimedia/gst-plugins-base/gst-plugins-base.mk	2009-01-17 10:11:12 UTC (rev 24895)
++++ trunk/buildroot/package/multimedia/gst-plugins-base/gst-plugins-base.mk	2009-01-18 00:05:57 UTC (rev 24896)
+@@ -17,9 +17,7 @@
+ 		--disable-xshm \
+ 		--disable-oggtest \
+ 		--disable-vorbistest \
+-		--disable-freetypetest \
+-		--disable-gtk-doc \
+-		--without-html-dir
++		--disable-freetypetest
+ 
+ GST_PLUGINS_BASE_DEPENDENCIES = gstreamer liboil
+ 
 
-  Shinya
+Modified: trunk/buildroot/package/multimedia/gst-plugins-good/gst-plugins-good.mk
+===================================================================
+--- trunk/buildroot/package/multimedia/gst-plugins-good/gst-plugins-good.mk	2009-01-17 10:11:12 UTC (rev 24895)
++++ trunk/buildroot/package/multimedia/gst-plugins-good/gst-plugins-good.mk	2009-01-18 00:05:57 UTC (rev 24896)
+@@ -22,9 +22,7 @@
+ 		--disable-aalibtest \
+ 		--disable-esdtest \
+ 		--disable-shout2 \
+-		--disable-shout2test \
+-		--disable-gtk-doc \
+-		--without-html-dir
++		--disable-shout2test
+ 
+ GST_PLUGINS_GOOD_DEPENDENCIES = gstreamer gst-plugins-base
+ 
+
+Modified: trunk/buildroot/package/multimedia/gst-plugins-ugly/gst-plugins-ugly.mk
+===================================================================
+--- trunk/buildroot/package/multimedia/gst-plugins-ugly/gst-plugins-ugly.mk	2009-01-17 10:11:12 UTC (rev 24895)
++++ trunk/buildroot/package/multimedia/gst-plugins-ugly/gst-plugins-ugly.mk	2009-01-18 00:05:57 UTC (rev 24896)
+@@ -9,9 +9,7 @@
+ 
+ GST_PLUGINS_UGLY_CONF_OPT = \
+ 		$(DISABLE_NLS) \
+-		--disable-examples \
+-		--disable-gtk-doc \
+-		--without-html-dir
++		--disable-examples
+ 
+ GST_PLUGINS_UGLY_DEPENDENCIES = gstreamer gst-plugins-base
+ 
+
+Modified: trunk/buildroot/package/multimedia/gstreamer/gstreamer.mk
+===================================================================
+--- trunk/buildroot/package/multimedia/gstreamer/gstreamer.mk	2009-01-17 10:11:12 UTC (rev 24895)
++++ trunk/buildroot/package/multimedia/gstreamer/gstreamer.mk	2009-01-18 00:05:57 UTC (rev 24896)
+@@ -23,9 +23,7 @@
+ 		$(DISABLE_LARGEFILE) \
+ 		--disable-examples \
+ 		--disable-tests \
+-		--disable-failing-tests \
+-		--disable-gtk-doc \
+-		--without-html-dir
++		--disable-failing-tests
+ 
+ GSTREAMER_DEPENDENCIES = libglib2 libxml2 pkgconfig
+ 
