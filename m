@@ -1,53 +1,40 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sun, 18 Jan 2009 10:57:25 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libgtk2
-Message-ID: <20090118105725.52A2177108@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 18 Jan 2009 12:02:38 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
+In-Reply-To: <4972ECC6.7010608@ruby.dti.ne.jp> (Shinya Kuribayashi's message
+	of "Sun\, 18 Jan 2009 17\:48\:06 +0900")
+References: <20090116141347.DD52277567@busybox.osuosl.org>
+	<4971FB3A.4050904@ruby.dti.ne.jp> <87fxjh3nhq.fsf@macbook.be.48ers.dk>
+	<4972649E.2010609@ruby.dti.ne.jp> <873afh2enj.fsf@macbook.be.48ers.dk>
+	<4972ECC6.7010608@ruby.dti.ne.jp>
+Message-ID: <87prik27xt.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2009-01-18 10:57:23 +0000 (Sun, 18 Jan 2009)
-New Revision: 24900
-
-Log:
-Cleanup libgtk2, and prepare for 2.15
-
-Modified:
-   trunk/buildroot/package/libgtk2/libgtk2.mk
+>>>>> "Shinya" == Shinya Kuribayashi <skuribay@ruby.dti.ne.jp> writes:
 
 
-Changeset:
-Modified: trunk/buildroot/package/libgtk2/libgtk2.mk
-===================================================================
---- trunk/buildroot/package/libgtk2/libgtk2.mk	2009-01-18 10:53:06 UTC (rev 24899)
-+++ trunk/buildroot/package/libgtk2/libgtk2.mk	2009-01-18 10:57:23 UTC (rev 24900)
-@@ -3,9 +3,13 @@
- # libgtk2.0
- #
- #############################################################
--LIBGTK2_VERSION = 2.12.12
-+#LIBGTK2_VERSION = 2.15.0
-+LIBGTK2_VERSION_MAJOR:=2.12
-+LIBGTK2_VERSION_MINOR:=12
-+LIBGTK2_VERSION = $(LIBGTK2_VERSION_MAJOR).$(LIBGTK2_VERSION_MINOR)
-+
- LIBGTK2_SOURCE = gtk+-$(LIBGTK2_VERSION).tar.bz2
--LIBGTK2_SITE = ftp://ftp.gtk.org/pub/gtk/2.12
-+LIBGTK2_SITE = ftp://ftp.gtk.org/pub/gtk/$(LIBGTK2_VERSION_MAJOR)
- LIBGTK2_AUTORECONF = NO
- LIBGTK2_INSTALL_STAGING = YES
- LIBGTK2_INSTALL_TARGET = YES
-@@ -96,6 +100,10 @@
- 	LIBGTK2_CONF_OPT += --without-x
- endif
- 
-+# Buildroot does not support JPEG2000 library
-+ifeq ($(LIBGTK2_VERSION_MAJOR),2.15)
-+LIBGTK2_CONF_OPT += --without-libjasper
-+endif
- 
- ifeq ($(BR2_PACKAGE_LIBPNG),y)
- LIBGTK2_DEPENDENCIES += libpng
+ >> Which for a bit of testing seems to be caused by the combination of
+ >> -pedantic and -Wno-overlength-strings (any of the two are ok, but the
+ >> combination isn't).
+
+ Shinya> Hmm.  Could you give it a try with gcc 4.2.x?
+
+Sure - It builds for me with 4.2.4:
+
+gcc-4.2 --version                                                   ~
+gcc-4.2 (GCC) 4.2.4 (Debian 4.2.4-5)
+Copyright (C) 2007 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+See http://uclibc.org/~jacmet/br/mips-4.1.log
+See http://uclibc.org/~jacmet/br/mips-4.2.log
+
+The gcc 4.1 issue also seems fixable (acx_cv_prog_cc_pedantic__Wno_long_long)
+
+-- 
+Bye, Peter Korsgaard
