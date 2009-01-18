@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sun, 18 Jan 2009 10:53:06 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/input-tools
-Message-ID: <20090118105306.C73EB77108@busybox.osuosl.org>
+Date: Sun, 18 Jan 2009 10:57:25 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libgtk2
+Message-ID: <20090118105725.52A2177108@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,37 +9,45 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2009-01-18 10:53:06 +0000 (Sun, 18 Jan 2009)
-New Revision: 24899
+Date: 2009-01-18 10:57:23 +0000 (Sun, 18 Jan 2009)
+New Revision: 24900
 
 Log:
-Change use of rint, which is only supported for X86 in uClibc to generic rounding
+Cleanup libgtk2, and prepare for 2.15
 
-Added:
-   trunk/buildroot/package/input-tools/joystick-20051019-rint.patch
+Modified:
+   trunk/buildroot/package/libgtk2/libgtk2.mk
 
 
 Changeset:
-Added: trunk/buildroot/package/input-tools/joystick-20051019-rint.patch
+Modified: trunk/buildroot/package/libgtk2/libgtk2.mk
 ===================================================================
---- trunk/buildroot/package/input-tools/joystick-20051019-rint.patch	                        (rev 0)
-+++ trunk/buildroot/package/input-tools/joystick-20051019-rint.patch	2009-01-18 10:53:06 UTC (rev 24899)
-@@ -0,0 +1,18 @@
-+diff -urN joystick-20051019.orig/utils/jscal.c joystick-20051019/utils/jscal.c
-+--- joystick-20051019.orig/utils/jscal.c	2004-10-19 09:51:52.000000000 +0200
-++++ joystick-20051019/utils/jscal.c	2009-01-18 10:48:50.000000000 +0100
-+@@ -141,10 +141,10 @@
-+ 	c = 32767.0 / (inputs.cmin[1] - inputs.cmax[0]);
-+ 	d = 32767.0 / (inputs.cmin[2] - inputs.cmax[1]);
-+ 
-+-	results[0] = rint(a);
-+-	results[1] = rint(b);
-+-	results[2] = rint(c*16384.0);
-+-	results[3] = rint(d*16384.0);
-++	results[0] = (int) (a + 0.5);
-++	results[1] = (int) (b + 0.5);
-++	results[2] = (int) (c*16384.0 + 0.5);
-++	results[3] = (int) (d*16384.0 + 0.5);
-+ 
-+ 	return 1;
-+ }
+--- trunk/buildroot/package/libgtk2/libgtk2.mk	2009-01-18 10:53:06 UTC (rev 24899)
++++ trunk/buildroot/package/libgtk2/libgtk2.mk	2009-01-18 10:57:23 UTC (rev 24900)
+@@ -3,9 +3,13 @@
+ # libgtk2.0
+ #
+ #############################################################
+-LIBGTK2_VERSION = 2.12.12
++#LIBGTK2_VERSION = 2.15.0
++LIBGTK2_VERSION_MAJOR:=2.12
++LIBGTK2_VERSION_MINOR:=12
++LIBGTK2_VERSION = $(LIBGTK2_VERSION_MAJOR).$(LIBGTK2_VERSION_MINOR)
++
+ LIBGTK2_SOURCE = gtk+-$(LIBGTK2_VERSION).tar.bz2
+-LIBGTK2_SITE = ftp://ftp.gtk.org/pub/gtk/2.12
++LIBGTK2_SITE = ftp://ftp.gtk.org/pub/gtk/$(LIBGTK2_VERSION_MAJOR)
+ LIBGTK2_AUTORECONF = NO
+ LIBGTK2_INSTALL_STAGING = YES
+ LIBGTK2_INSTALL_TARGET = YES
+@@ -96,6 +100,10 @@
+ 	LIBGTK2_CONF_OPT += --without-x
+ endif
+ 
++# Buildroot does not support JPEG2000 library
++ifeq ($(LIBGTK2_VERSION_MAJOR),2.15)
++LIBGTK2_CONF_OPT += --without-libjasper
++endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBPNG),y)
+ LIBGTK2_DEPENDENCIES += libpng
