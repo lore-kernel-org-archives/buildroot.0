@@ -1,26 +1,34 @@
-From: Sven Neumann <s.neumann@phase-zero.de>
-Date: Sun, 18 Jan 2009 14:47:43 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
-In-Reply-To: <87r6333vms.fsf@macbook.be.48ers.dk>
-References: <20090116141347.DD52277567@busybox.osuosl.org>
-	<1232123796.6639.16.camel@sven>  <87r6333vms.fsf@macbook.be.48ers.dk>
-Message-ID: <1232286463.1493.10.camel@bender>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 18 Jan 2009 14:48:41 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libgtk2
+In-Reply-To: <1232284312.1493.5.camel@bender> (Sven Neumann's message of "Sun\,
+	18 Jan 2009 14\:11\:52 +0100")
+References: <20090118105725.52A2177108@busybox.osuosl.org>
+	<87ljt827tb.fsf@macbook.be.48ers.dk> <1232284312.1493.5.camel@bender>
+Message-ID: <87hc3w2092.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Sven" == Sven Neumann <s.neumann@phase-zero.de> writes:
 
-On Fri, 2009-01-16 at 20:20 +0100, Peter Korsgaard wrote:
+ Sven> Hi,
+ Sven> On Sun, 2009-01-18 at 12:05 +0100, Peter Korsgaard wrote:
 
-> So what you are saying is that libmap builds with some other gcc
-> version (4.2.4?), and not with 4.3.2? What arch are you on?
+ >> I would prefer to leave that hunk out for now - It makes the history
+ >> easier to read if all 2.15 stuff is in the same commit.
 
-Yes, libmad cross-compiles for ARM  with gcc 4.2.4 but that build breaks
-when I change gcc to 4.3.2. That was the only thing I changed in this
-build.
+ Sven> Please do not include an unstable development build of GTK+ in
+ Sven> buildroot. No one would benefit from that. The latest stable release is
+ Sven> 2.14.7. The 2.15.x releases are development snapshots. They may contain
+ Sven> API that is not yet final and they certainly have bugs.
 
+ Sven> Same holds true for GLib. Please use glib 2.18.4 and not a 2.19.x
+ Sven> development release.
 
-Sven
+Agreed - Like I said in an earlier mail as well.
+
+-- 
+Bye, Peter Korsgaard
