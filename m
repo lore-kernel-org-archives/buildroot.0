@@ -1,33 +1,84 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 18 Jan 2009 15:18:09 +0100
-Subject: [Buildroot] buildroot 2009.02-rc1 releases
-In-Reply-To: <20090118131735.GA13908@cloud.net.au> (Hamish Moffatt's message
-	of "Mon\, 19 Jan 2009 00\:17\:35 +1100")
-References: <87ab9r3u6k.fsf@macbook.be.48ers.dk>
-	<20090118131735.GA13908@cloud.net.au>
-Message-ID: <87d4ek1yvy.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Sun, 18 Jan 2009 14:20:19 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot: package/openssl
+	target/u-boot toolchain etc...
+Message-ID: <20090118142020.2738A77108@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Hamish" == Hamish Moffatt <hamish@cloud.net.au> writes:
+Author: jacmet
+Date: 2009-01-18 14:20:18 +0000 (Sun, 18 Jan 2009)
+New Revision: 24901
 
- Hamish> On Fri, Jan 16, 2009 at 08:52:19PM +0100, Peter Korsgaard wrote:
- >> With the source mirror stuff in place, we have all the features
- >> required for the release, so I have released buildroot-2009.02-rc1 as
- >> promised.
+Log:
+Kconfig: remove 'default n' and 'default no' (see r22874)
 
- Hamish> Awesome work Peter. Thanks.
+Signed-off-by: Markus Heidelberg <markus.heidelberg@web.de>
 
-You're welcome.
+Modified:
+   trunk/buildroot/Config.in
+   trunk/buildroot/package/openssl/Config.in
+   trunk/buildroot/target/u-boot/Config.in
+   trunk/buildroot/toolchain/uClibc/Config.in
 
- Hamish> If there's any other buildroot users/hackers at the
- Hamish> linux.conf.au conference this week (in Hobart, Australia)
- Hamish> speak up, as maybe we could meet for a chat.
 
-Sorry, it's too far for me this year - I'll be at FOSDEM though.
+Changeset:
+Modified: trunk/buildroot/Config.in
+===================================================================
+--- trunk/buildroot/Config.in	2009-01-18 10:57:23 UTC (rev 24900)
++++ trunk/buildroot/Config.in	2009-01-18 14:20:18 UTC (rev 24901)
+@@ -182,7 +182,6 @@
+ 
+ config BR2_CONFIG_CACHE
+ 	bool "Use a central configure cache file"
+-	default n
+ 	help
+ 	  This determines if a central config cache is used by
+ 	  packages, reducing the configure time for packages as each
 
--- 
-Bye, Peter Korsgaard
+Modified: trunk/buildroot/package/openssl/Config.in
+===================================================================
+--- trunk/buildroot/package/openssl/Config.in	2009-01-18 10:57:23 UTC (rev 24900)
++++ trunk/buildroot/package/openssl/Config.in	2009-01-18 14:20:18 UTC (rev 24901)
+@@ -12,7 +12,6 @@
+ config BR2_PACKAGE_OPENSSL_BIN
+ 	bool "openssl binary"
+ 	depends on BR2_PACKAGE_OPENSSL
+-	default no
+ 	help
+ 	  Install the openssl binary to the target file system. This is a
+ 	  command line tool for doing various crypthographic stuff.
+@@ -20,6 +19,5 @@
+ config BR2_PACKAGE_OPENSSL_ENGINES
+ 	bool "openssl additional engines"
+ 	depends on BR2_PACKAGE_OPENSSL
+-	default no
+ 	help
+ 	  Install additional encryption engine libraries.
+
+Modified: trunk/buildroot/target/u-boot/Config.in
+===================================================================
+--- trunk/buildroot/target/u-boot/Config.in	2009-01-18 10:57:23 UTC (rev 24900)
++++ trunk/buildroot/target/u-boot/Config.in	2009-01-18 14:20:18 UTC (rev 24901)
+@@ -360,5 +360,3 @@
+ 	default y if BR2_BOOTSOURCE_FLASH
+ 	default y if BR2_BOOTSOURCE_SDCARD
+ 	default y if BR2_BOOTSOURCE_EEPROM
+-	default n
+-
+
+Modified: trunk/buildroot/toolchain/uClibc/Config.in
+===================================================================
+--- trunk/buildroot/toolchain/uClibc/Config.in	2009-01-18 10:57:23 UTC (rev 24900)
++++ trunk/buildroot/toolchain/uClibc/Config.in	2009-01-18 14:20:18 UTC (rev 24901)
+@@ -101,7 +101,6 @@
+ 
+ config BR2_UCLIBC_INSTALL_TEST_SUITE
+ 	bool "Compile and install uClibc tests"
+-	default n
+ 	select BR2_PACKAGE_MAKE
+ 	help
+ 	  Enabling this option will compile and install the uClibc test suite.
