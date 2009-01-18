@@ -1,33 +1,27 @@
 From: Thomas Lundquist <lists@zelow.no>
-Date: Sun, 18 Jan 2009 09:59:14 +0100
+Date: Sun, 18 Jan 2009 10:17:39 +0100
 Subject: [Buildroot] svn commit: trunk/buildroot/package: libgtk2
 	multimedia/gst-plugins-base mul etc...
-In-Reply-To: <877i4t2i74.fsf@macbook.be.48ers.dk>
+In-Reply-To: <20090118085914.GA9100@zelow.no>
 References: <20090118000558.DC88077108@busybox.osuosl.org>
 	<877i4t2i74.fsf@macbook.be.48ers.dk>
-Message-ID: <20090118085914.GA9100@zelow.no>
+	<20090118085914.GA9100@zelow.no>
+Message-ID: <20090118091739.GB9100@zelow.no>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Jan 18, 2009 at 08:21:03AM +0100, Peter Korsgaard wrote:
->  thomasez> -		--without-html-dir \
->  thomasez>  		$(DISABLE_LARGEFILE) \
+On Sun, Jan 18, 2009 at 09:59:14AM +0100, Thomas Lundquist wrote:
 > 
-> You could have gotten rid of that line as well.
->  
->  thomasez>  GST_PLUGINS_UGLY_CONF_OPT = \
->  thomasez>  		$(DISABLE_NLS) \
-> 
-> And this one.
+> Yup, that's the next step. 
 
-Yup, that's the next step. 
+And I think I have gotten them now.
 
-I was pondering about how to find all autotools--mk files and remove just from them. 
-
-I guess "manually" ends up being the simplest way.
+I found 6 of 342 autotools .mk's with enable-static and two with DISABLE_IPV6.
+So we want to "convert" these aswell? can we end up with some side effect 
+we might not like?
 
 
 Thomas.
