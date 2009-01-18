@@ -1,70 +1,57 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 18 Jan 2009 08:21:03 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package: libgtk2
-	multimedia/gst-plugins-base mul etc...
-In-Reply-To: <20090118000558.DC88077108@busybox.osuosl.org>
-	(thomasez@uclibc.org's message of "Sun\,
-	18 Jan 2009 00\:05\:58 +0000 \(UTC\)")
-References: <20090118000558.DC88077108@busybox.osuosl.org>
-Message-ID: <877i4t2i74.fsf@macbook.be.48ers.dk>
+Date: Sun, 18 Jan 2009 09:37:36 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
+In-Reply-To: <4972649E.2010609@ruby.dti.ne.jp> (Shinya Kuribayashi's message
+	of "Sun\, 18 Jan 2009 08\:07\:10 +0900")
+References: <20090116141347.DD52277567@busybox.osuosl.org>
+	<4971FB3A.4050904@ruby.dti.ne.jp> <87fxjh3nhq.fsf@macbook.be.48ers.dk>
+	<4972649E.2010609@ruby.dti.ne.jp>
+Message-ID: <873afh2enj.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "thomasez" == thomasez  <thomasez@uclibc.org> writes:
+>>>>> "Shinya" == Shinya Kuribayashi <skuribay@ruby.dti.ne.jp> writes:
 
- thomasez> Author: thomasez
- thomasez> Date: 2009-01-18 00:05:57 +0000 (Sun, 18 Jan 2009)
- thomasez> New Revision: 24896
+Hi,
 
- thomasez> Log:
- thomasez> Finish the gtk-doc stuff and start on the smae thing with LARGEFILE and NLS.
+ >> And 4.2.4 works for you?
 
-Thanks.
+ Shinya> Yes (forgot to mention, sorry).
 
- thomasez> +++ trunk/buildroot/package/Makefile.autotools.in	2009-01-18 00:05:57 UTC (rev 24896)
- thomasez> @@ -249,6 +249,8 @@
- thomasez>  		--exec-prefix=/usr \
- thomasez>  		--sysconfdir=/etc \
- thomasez>  		$(DISABLE_DOCUMENTATION) \
- thomasez> +		$(DISABLE_NLS) \
- thomasez> +		$(DISABLE_LARGEFILE) \
- thomasez>  		$(QUIET) $($(PKG)_CONF_OPT)
- thomasez>  	$(Q)touch $@
- 
+ Shinya> As Frank pointed out, this problem seems to be related to the host gcc
+ Shinya> version.  I'll check the config.log and let you know what internally
+ Shinya> happens.
 
- thomasez> Modified: trunk/buildroot/package/libgtk2/libgtk2.mk
- thomasez> ===================================================================
- thomasez> --- trunk/buildroot/package/libgtk2/libgtk2.mk	2009-01-17 10:11:12 UTC (rev 24895)
- thomasez> +++ trunk/buildroot/package/libgtk2/libgtk2.mk	2009-01-18 00:05:57 UTC (rev 24896)
- thomasez> @@ -75,7 +75,6 @@
- thomasez>  		--disable-glibtest \
- thomasez>  		--enable-explicit-deps=no \
- thomasez>  		--disable-debug \
- thomasez> -		--without-html-dir \
- thomasez>  		$(DISABLE_LARGEFILE) \
+And what host GCC version are you using?
+I just tried a build with HOSTCC=gcc-4.1 and it indeed fails for me
+(but with another error):
 
-You could have gotten rid of that line as well.
- 
- thomasez>  GST_PLUGINS_UGLY_CONF_OPT = \
- thomasez>  		$(DISABLE_NLS) \
+gcc-4.1  -c  -W -Wall -Wwrite-strings -Wstrict-prototypes
+-Wmissing-prototypes -Wold-style-definition -Wmissing-format-attribute
+-Wno-overlength-strings -pedantic -Wno-long-long   -DHAVE_CONFIG_H
+-I. -I/tmp/br/mips-4.1/toolchain_build_mips/gcc-4.3.2/fixincludes
+-I../include
+-I/tmp/br/mips-4.1/toolchain_build_mips/gcc-4.3.2/fixincludes/../include
+/tmp/br/mips-4.1/toolchain_build_mips/gcc-4.3.2/fixincludes/fixincl.c
+/tmp/br/mips-4.1/toolchain_build_mips/gcc-4.3.2/fixincludes/fixincl.x:7947: warning: string length `575' is greater than the length `509' ISO C89 compilers are required to support
+cc1: error: unrecognized command line option "-Wno-overlength-strings"
+make[2]: *** [fixincl.o] Error 1
+make[2]: Leaving directory
+`/home/peko/tmp/br/mips-4.1/toolchain_build_mips/gcc-4.3.2-initial/build-x86_64-pc-linux-gnu/fixincludes'
 
-And this one.
+Which for a bit of testing seems to be caused by the combination of
+-pedantic and -Wno-overlength-strings (any of the two are ok, but the
+combination isn't).
 
- thomasez> +++ trunk/buildroot/package/multimedia/gstreamer/gstreamer.mk	2009-01-18 00:05:57 UTC (rev 24896)
- thomasez> @@ -23,9 +23,7 @@
- thomasez>  		$(DISABLE_LARGEFILE) \
+That's with:
 
-And this.
-
- thomasez>  		--disable-examples \
- thomasez>  		--disable-tests \
- thomasez> -		--disable-failing-tests \
- thomasez> -		--disable-gtk-doc \
- thomasez> -		--without-html-dir
- thomasez> +		--disable-failing-tests
+gcc-4.1 (GCC) 4.1.3 20080704 (prerelease) (Debian 4.1.2-24)
+Copyright (C) 2006 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 -- 
 Bye, Peter Korsgaard
