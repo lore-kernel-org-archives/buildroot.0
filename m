@@ -1,30 +1,26 @@
-From: Sven Neumann <s.neumann@phase-zero.de>
-Date: Sun, 18 Jan 2009 14:11:52 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libgtk2
-In-Reply-To: <87ljt827tb.fsf@macbook.be.48ers.dk>
-References: <20090118105725.52A2177108@busybox.osuosl.org>
-	<87ljt827tb.fsf@macbook.be.48ers.dk>
-Message-ID: <1232284312.1493.5.camel@bender>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Mon, 19 Jan 2009 00:17:35 +1100
+Subject: [Buildroot] buildroot 2009.02-rc1 releases
+In-Reply-To: <87ab9r3u6k.fsf@macbook.be.48ers.dk>
+References: <87ab9r3u6k.fsf@macbook.be.48ers.dk>
+Message-ID: <20090118131735.GA13908@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Fri, Jan 16, 2009 at 08:52:19PM +0100, Peter Korsgaard wrote:
+> With the source mirror stuff in place, we have all the features
+> required for the release, so I have released buildroot-2009.02-rc1 as
+> promised.
 
-On Sun, 2009-01-18 at 12:05 +0100, Peter Korsgaard wrote:
+Awesome work Peter. Thanks.
 
-> I would prefer to leave that hunk out for now - It makes the history
-> easier to read if all 2.15 stuff is in the same commit.
+If there's any other buildroot users/hackers at the linux.conf.au
+conference this week (in Hobart, Australia) speak up, as maybe we could
+meet for a chat.
 
-Please do not include an unstable development build of GTK+ in
-buildroot. No one would benefit from that. The latest stable release is
-2.14.7. The 2.15.x releases are development snapshots. They may contain
-API that is not yet final and they certainly have bugs.
-
-Same holds true for GLib. Please use glib 2.18.4 and not a 2.19.x
-development release.
-
-
-Sven
+Hamish
+-- 
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
