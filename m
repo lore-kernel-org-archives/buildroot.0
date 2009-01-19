@@ -1,30 +1,29 @@
-From: Sven Neumann <s.neumann@phase-zero.de>
-Date: Mon, 19 Jan 2009 17:30:48 +0100
-Subject: [Buildroot] tslib puts staging_dir into pkgconfig file
-Message-ID: <1232382648.8906.11.camel@sven>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 19 Jan 2009 18:14:16 +0100
+Subject: [Buildroot] buildroot 2009.02-rc1 releases
+In-Reply-To: <87d4ek1yvy.fsf@macbook.be.48ers.dk>
+References: <87ab9r3u6k.fsf@macbook.be.48ers.dk>
+	<20090118131735.GA13908@cloud.net.au>
+	<87d4ek1yvy.fsf@macbook.be.48ers.dk>
+Message-ID: <20090119181416.01f7cfa4@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Le Sun, 18 Jan 2009 15:18:09 +0100,
+Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
-the tslib package passes options to configure that cause the generated
-tslib.pc file to contain pointers into the staging_dir. This causes
-applications and drivers that link with libts to search for that library
-in the staging_dir. Attached is a patch that fixes this.
+> Sorry, it's too far for me this year - I'll be at FOSDEM though.
 
-It looks like libusb has a similar problem, btw.
+Do you plan to present Buildroot in the embedded devroom ?
 
+I'll be at FOSDEM, too.
 
-Sven
-
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: tslib.diff
-Type: text/x-patch
-Size: 679 bytes
-Desc: not available
-Url : http://lists.busybox.net/pipermail/buildroot/attachments/20090119/3d39177f/attachment.bin 
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
