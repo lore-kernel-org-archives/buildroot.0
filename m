@@ -1,77 +1,30 @@
-From: Andreas Kuehn <kuehn@gin.de>
-Date: Mon, 19 Jan 2009 16:03:26 +0100
-Subject: [Buildroot] strace buggy or not?
-Message-ID: <gl24nv$38r$1@ger.gmane.org>
+From: Sven Neumann <s.neumann@phase-zero.de>
+Date: Mon, 19 Jan 2009 17:30:48 +0100
+Subject: [Buildroot] tslib puts staging_dir into pkgconfig file
+Message-ID: <1232382648.8906.11.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi out there!
+Hi,
 
-I had some trouble using strace as debugging tool. On my system it
-creates quite odd information. Running the following testprogram creates
-this summary report.
+the tslib package passes options to configure that cause the generated
+tslib.pc file to contain pointers into the staging_dir. This causes
+applications and drivers that link with libts to search for that library
+in the staging_dir. Attached is a patch that fixes this.
 
-# strace -c fcopy
-What file do you want to copy? dcc.c
-What file name do you want for the copy? x
-% time     seconds  usecs/call     calls    errors syscall
------- ----------- ----------- --------- --------- ----------------
-   nan    0.000000           0         4           read
-   nan    0.000000           0         3           write
-   nan    0.000000           0         2           open
-   nan    0.000000           0         2           close
-   nan    0.000000           0         1           execve
-   nan    0.000000           0         4           brk
-   nan    0.000000           0         4         2 ioctl
------- ----------- ----------- --------- --------- ----------------
-100.00    0.000000                    20         2 total
-#
+It looks like libusb has a similar problem, btw.
 
 
-And here is the "mysterious" code:
-
-/* Copy a file */
-#include <stdio.h>
-
-void main()
-{
-   int ch; /* input character */
-   char inputfile[80], outputfile[80];
-   FILE *fpin, *fpout; /* input & output struct pointers */
-
-   /* get the filenames from the user */
-   printf("What file do you want to copy? ");
-   scanf("%s", inputfile);
-   printf("What file name do you want for the copy? ");
-   scanf("%s", outputfile);
-
-   /* open the files */
-   fpin = fopen(inputfile, "r");
-   fpout = fopen(outputfile, "w");
-
-   /* copy the file char by char */
-   while( (ch = fgetc(fpin)) != EOF)
-   {
-      fputc(ch, fpout);
-   }
-
-   /* close the files */
-   fclose(fpin);
-   fclose(fpout);
-}
-
-I did this because I thought there is some problem with the fopen or
-ioctl call but all testet applications are running fine. Actually, I
-felt like hunting an artefact. Other applications result with many more
-error entries in the summary report.
-
-My system is buildroot (svn:24878) on an at91sam9263 custom board.
+Sven
 
 
--- 
- aKuehn
-
---------------> Never trust a computer you can't lift. -- Stan Masor
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: tslib.diff
+Type: text/x-patch
+Size: 679 bytes
+Desc: not available
+Url : http://lists.busybox.net/pipermail/buildroot/attachments/20090119/3d39177f/attachment.bin 
