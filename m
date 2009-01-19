@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon, 19 Jan 2009 12:34:35 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/kernel-headers
-Message-ID: <20090119123435.50DCF7744F@busybox.osuosl.org>
+Date: Mon, 19 Jan 2009 12:34:39 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
+Message-ID: <20090119123439.B9CFF7744F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,28 +9,140 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2009-01-19 12:34:33 +0000 (Mon, 19 Jan 2009)
-New Revision: 24908
+Date: 2009-01-19 12:34:38 +0000 (Mon, 19 Jan 2009)
+New Revision: 24909
 
 Log:
-toolchain/kernel-headers: bump 2.6.27 / 2.6.28 versions
+busybox: 1.13.2 depmod fix
 
-Modified:
-   trunk/buildroot/toolchain/kernel-headers/Config.in
+Added:
+   trunk/buildroot/package/busybox/busybox-1.13.2-depmod.patch
 
 
 Changeset:
-Modified: trunk/buildroot/toolchain/kernel-headers/Config.in
+Added: trunk/buildroot/package/busybox/busybox-1.13.2-depmod.patch
 ===================================================================
---- trunk/buildroot/toolchain/kernel-headers/Config.in	2009-01-19 09:18:46 UTC (rev 24907)
-+++ trunk/buildroot/toolchain/kernel-headers/Config.in	2009-01-19 12:34:33 UTC (rev 24908)
-@@ -117,7 +117,7 @@
- 	default "2.6.24.7"	if BR2_KERNEL_HEADERS_2_6_24
- 	default "2.6.25.19"	if BR2_KERNEL_HEADERS_2_6_25
- 	default "2.6.26.8"	if BR2_KERNEL_HEADERS_2_6_26
--	default "2.6.27.11"	if BR2_KERNEL_HEADERS_2_6_27
--	default "2.6.28"	if BR2_KERNEL_HEADERS_2_6_28
-+	default "2.6.27.12"	if BR2_KERNEL_HEADERS_2_6_27
-+	default "2.6.28.1"	if BR2_KERNEL_HEADERS_2_6_28
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 
+--- trunk/buildroot/package/busybox/busybox-1.13.2-depmod.patch	                        (rev 0)
++++ trunk/buildroot/package/busybox/busybox-1.13.2-depmod.patch	2009-01-19 12:34:38 UTC (rev 24909)
+@@ -0,0 +1,121 @@
++--- busybox-1.13.2/modutils/depmod.c	Sun Nov  9 18:28:03 2008
+++++ busybox-1.13.2-depmod/modutils/depmod.c	Mon Jan 12 23:12:59 2009
++@@ -33,7 +33,7 @@
++ enum {
++ 	ARG_a = (1<<0), /* All modules, ignore mods in argv */
++ 	ARG_A = (1<<1), /* Only emit .ko that are newer than modules.dep file */
++-	ARG_b = (1<<2), /* not /lib/modules/$(uname -r)/ but this base-dir */
+++	ARG_b = (1<<2), /* base directory when modules are in staging area */
++ 	ARG_e = (1<<3), /* with -F, print unresolved symbols */
++ 	ARG_F = (1<<4), /* System.map that contains the symbols */
++ 	ARG_n = (1<<5)  /* dry-run, print to stdout only */
++@@ -57,7 +57,7 @@
++ 	*first = info;
++ 
++ 	info->dnext = info->dprev = info;
++-	info->name = xstrdup(fname);
+++	info->name = xasprintf("/%s", fname);
++ 	info->modname = filename2modname(fname, NULL);
++ 	for (ptr = image; ptr < image + len - 10; ptr++) {
++ 		if (strncmp(ptr, "depends=", 8) == 0) {
++@@ -123,44 +123,61 @@
++ 	}
++ }
++ 
+++static void xfreopen_write(const char *file, FILE *f)
+++{
+++	if (freopen(file, "w", f) == NULL)
+++		bb_perror_msg_and_die("can't open '%s'", file);
+++}
+++
++ int depmod_main(int argc, char **argv) MAIN_EXTERNALLY_VISIBLE;
++ int depmod_main(int argc UNUSED_PARAM, char **argv)
++ {
++ 	module_info *modules = NULL, *m, *dep;
++-	char *moddir_base = (char *)CONFIG_DEFAULT_MODULES_DIR;
+++	const char *moddir_base = "/";
+++	char *moddir, *version;
+++	struct utsname uts;
++ 	int tmp;
++ 
++ 	getopt32(argv, "aAb:eF:n", &moddir_base, NULL);
++ 	argv += optind;
++ 
++ 	/* goto modules location */
+++	xchdir(moddir_base);
++ 
++ 	/* If a version is provided, then that kernel version's module directory
++ 	 * is used, rather than the current kernel version (as returned by
++ 	 * "uname -r").  */
++-	xchdir(moddir_base);
++-	if (*argv && (sscanf(*argv, "%d.%d.%d", &tmp, &tmp, &tmp) == 3)) {
++-		xchdir(*argv++);
+++	if (*argv && sscanf(*argv, "%d.%d.%d", &tmp, &tmp, &tmp) == 3) {
+++		version = *argv++;
++ 	} else {
++-		struct utsname uts;
++ 		uname(&uts);
++-		xchdir(uts.release);
+++		version = uts.release;
++ 	}
++-	/* If no modules are given on the command-line, -a is on per default.  */
++-	option_mask32 |= *argv == NULL;
+++	moddir = concat_path_file(&CONFIG_DEFAULT_MODULES_DIR[1], version);
++ 
++ 	/* Scan modules */
++-	moddir_base = xrealloc_getcwd_or_warn(NULL);
++-	do {
++-		recursive_action((option_mask32 & ARG_a) ? moddir_base : *argv,
++-				ACTION_RECURSE, parse_module, NULL,  &modules, 0);
++-	} while (!(option_mask32 & ARG_a) && *(++argv));
+++	if (*argv) {
+++		char *modfile;
+++		struct stat sb;
+++		do {
+++			modfile = concat_path_file(moddir, *argv);
+++			xstat(modfile, &sb);
+++			parse_module(modfile, &sb, &modules, 0);
+++			free(modfile);
+++		} while (*(++argv));
+++	} else {
+++		recursive_action(moddir, ACTION_RECURSE,
+++				 parse_module, NULL, &modules, 0);
+++	}
+++
+++	/* Prepare for writing out the dep files */
+++	xchdir(moddir);
++ 	if (ENABLE_FEATURE_CLEAN_UP)
++-		free(moddir_base);
+++		free(moddir);
++ 
++ 	/* Generate dependency and alias files */
++ 	if (!(option_mask32 & ARG_n))
++-		freopen(CONFIG_DEFAULT_DEPMOD_FILE, "w", stdout);
+++		xfreopen_write(CONFIG_DEFAULT_DEPMOD_FILE, stdout);
++ 	for (m = modules; m != NULL; m = m->next) {
++ 		printf("%s:", m->name);
++ 
++@@ -174,12 +191,12 @@
++ 			dep->dprev->dnext = dep->dnext;
++ 			dep->dnext = dep->dprev = dep;
++ 		}
++-		puts("");
+++		bb_putchar('\n');
++ 	}
++ 
++ #if ENABLE_FEATURE_MODUTILS_ALIAS
++ 	if (!(option_mask32 & ARG_n))
++-		freopen("modules.alias", "w", stdout);
+++		xfreopen_write("modules.alias", stdout);
++ 	for (m = modules; m != NULL; m = m->next) {
++ 		while (m->aliases) {
++ 			printf("alias %s %s\n",
++@@ -190,7 +207,7 @@
++ #endif
++ #if ENABLE_FEATURE_MODUTILS_SYMBOLS
++ 	if (!(option_mask32 & ARG_n))
++-		freopen("modules.symbols", "w", stdout);
+++		xfreopen_write("modules.symbols", stdout);
++ 	for (m = modules; m != NULL; m = m->next) {
++ 		while (m->symbols) {
++ 			printf("alias symbol:%s %s\n",
