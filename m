@@ -1,55 +1,26 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Mon, 19 Jan 2009 20:59:47 +0100
-Subject: [Buildroot] Status of "mplayer" in buildroot
-Message-ID: <1232395188.4539.20.camel@elrond.atmel.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 19 Jan 2009 22:13:51 +0100
+Subject: [Buildroot] buildroot 2009.02-rc1 releases
+In-Reply-To: <F7DDF81A-C689-4338-8AEF-204CDA5115BC@valka.is> (Arnar Mar Sig's
+	message of "Mon\, 19 Jan 2009 20\:35\:06 +0100")
+References: <87ab9r3u6k.fsf@macbook.be.48ers.dk>
+	<20090118131735.GA13908@cloud.net.au>
+	<87d4ek1yvy.fsf@macbook.be.48ers.dk> <20090119181416.01f7cfa4@surf>
+	<87d4ejyucb.fsf@macbook.be.48ers.dk>
+	<F7DDF81A-C689-4338-8AEF-204CDA5115BC@valka.is>
+Message-ID: <8763kbyp68.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Anyone beeing able to build "mplayer" at all?
+>>>>> "Arnar" == Arnar Mar Sig <antab@valka.is> writes:
 
-I have been trying to get that to build for some time now.
+ >> Great, maybe we can meet for a beer or so.
+ Arnar> I will also be there, so.. Buildroot beer party;) ?
 
-There are several problems:
+Yeah, release beer.
 
-1: Current mplayer relies on an older version of alsa-lib
-   The current version of alsa-lib make some routines "local"
-   by statements like:
-
-   #define snd_XXXX snd1_XXXX
-
-   mplayer uses some of these routines and the build will not complete.
-
-2) mplayer do not have any recent "versions".
-   Instead you are encouraged to checkout the latest svn.
-
-   The build of this will fail using the current Buildroot mplayer.mk,
-   since you have to prepare the mplayer source tree by:
-
-   ./configure
-   make codec.conf.h	# This is created using native gcc.
-
-   And once this is complete, then the buildroot mplayer.mk
-   can be applied on top.
-
-   The AVR32 patches do not apply clean on the current svn, but
-   since I believe mplayer do not build anyway, for any architecture
-   that means that there should be no problem upgrading mplayer 
-   to the latest version.
-
-   I *have* created a new version of the AVR patches that applies
-   clean on top of the current svn. Not fully tested yet.
-   HCE you want to test?
-
-----------------
-
-I am not particlary fond of downloading the latest svn,
-since that is a recipy for breakage.
-I think we should have a recommended version of mplayer
-(which we have tested on many architectures) 
-as well as the capability to checkout the latest.
-
-BR
-Ulf Samuelsson
+-- 
+Bye, Peter Korsgaard
