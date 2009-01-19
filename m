@@ -1,35 +1,55 @@
-From: Arnar Mar Sig <antab@valka.is>
-Date: Mon, 19 Jan 2009 20:35:06 +0100
-Subject: [Buildroot] buildroot 2009.02-rc1 releases
-In-Reply-To: <87d4ejyucb.fsf@macbook.be.48ers.dk>
-References: <87ab9r3u6k.fsf@macbook.be.48ers.dk>
-	<20090118131735.GA13908@cloud.net.au>
-	<87d4ek1yvy.fsf@macbook.be.48ers.dk> <20090119181416.01f7cfa4@surf>
-	<87d4ejyucb.fsf@macbook.be.48ers.dk>
-Message-ID: <F7DDF81A-C689-4338-8AEF-204CDA5115BC@valka.is>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Mon, 19 Jan 2009 20:59:47 +0100
+Subject: [Buildroot] Status of "mplayer" in buildroot
+Message-ID: <1232395188.4539.20.camel@elrond.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Jan 19, 2009, at 8:22 PM, Peter Korsgaard wrote:
->>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free- 
->>>>>> electrons.com> writes:
->
->>> Sorry, it's too far for me this year - I'll be at FOSDEM though.
->
-> Thomas> Do you plan to present Buildroot in the embedded devroom ?
->
-> No, sorry - I thought about it, but ran out of time - Maybe next year?
->
-> But I'll be there to comment on the ptxdist presentation ;)
->
-> Thomas> I'll be at FOSDEM, too.
->
-> Great, maybe we can meet for a beer or so.
-I will also be there, so.. Buildroot beer party;) ?
+Anyone beeing able to build "mplayer" at all?
 
-Greets
-	Arnar Mar Sig
-	Valka ehf
+I have been trying to get that to build for some time now.
+
+There are several problems:
+
+1: Current mplayer relies on an older version of alsa-lib
+   The current version of alsa-lib make some routines "local"
+   by statements like:
+
+   #define snd_XXXX snd1_XXXX
+
+   mplayer uses some of these routines and the build will not complete.
+
+2) mplayer do not have any recent "versions".
+   Instead you are encouraged to checkout the latest svn.
+
+   The build of this will fail using the current Buildroot mplayer.mk,
+   since you have to prepare the mplayer source tree by:
+
+   ./configure
+   make codec.conf.h	# This is created using native gcc.
+
+   And once this is complete, then the buildroot mplayer.mk
+   can be applied on top.
+
+   The AVR32 patches do not apply clean on the current svn, but
+   since I believe mplayer do not build anyway, for any architecture
+   that means that there should be no problem upgrading mplayer 
+   to the latest version.
+
+   I *have* created a new version of the AVR patches that applies
+   clean on top of the current svn. Not fully tested yet.
+   HCE you want to test?
+
+----------------
+
+I am not particlary fond of downloading the latest svn,
+since that is a recipy for breakage.
+I think we should have a recommended version of mplayer
+(which we have tested on many architectures) 
+as well as the capability to checkout the latest.
+
+BR
+Ulf Samuelsson
