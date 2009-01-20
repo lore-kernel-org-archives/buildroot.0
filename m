@@ -1,36 +1,49 @@
-From: Sven Neumann <s.neumann@phase-zero.de>
-Date: Tue, 20 Jan 2009 12:49:19 +0100
-Subject: [Buildroot] tslib puts staging_dir into pkgconfig file
-In-Reply-To: <8763kaxqrg.fsf@macbook.be.48ers.dk>
-References: <1232382648.8906.11.camel@sven> <20090120070239.53b5e464@hcegtvedt>
-	<8763kaxqrg.fsf@macbook.be.48ers.dk>
-Message-ID: <1232452159.6666.18.camel@sven>
+From: Cyril HAENEL <chaenel@free.fr>
+Date: Tue, 20 Jan 2009 14:35:42 +0100
+Subject: [Buildroot] Buildroot compilation blocks on LZO package
+Message-ID: <4975D32E.7020602@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi all,
 
-On Tue, 2009-01-20 at 10:37 +0100, Peter Korsgaard wrote:
-> >>>>> "Hans-Christian" == Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> writes:
-> 
->  Hans-Christian> Why not just convert it to Makefile.autotools.in?
-> 
-> My thoughts exactly.
+I try to build a rootfs based on 
+http://buildroot.uclibc.org/downloads/buildroot-2009.02-rc1.tar.gz
 
-Yeah, why not :)  Attached is a patch that does this. Seems to work
-nicely for me.
+After unpacking, I done make menuconfig and done very small things :
+
+- Put Target Architecture to Arm
+- Put Target Architecture variant tp generic_arm
+- Put Filesystem for target device to jffs2, and not ext2
+
+After that, a make the build works well until it reach the LZO package.
+The configure script blocks on this line :
+
+checking whether we are using the GNU C++ compiler...
+
+I must stop the build with ctrl-c because it never stops.
+
+I looked in the configure script 
+(buildroot-2009.02-rc1/build_arm/lzo-2.03/configure), and after some 
+echo, I found that the script block on lines 5535/5536 :
+
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+ 
+Any idea ?
+
+Regards,
+Cyril HAENEL
 
 
-Sven
 
 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: tslib-autotools.diff
-Type: text/x-patch
-Size: 4323 bytes
-Desc: not available
-Url : http://lists.busybox.net/pipermail/buildroot/attachments/20090120/060521bb/attachment.bin 
+
+
+-- 
+
+Cyril Haenel
+Registered Linux User #332632
