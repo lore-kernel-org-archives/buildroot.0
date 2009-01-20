@@ -1,27 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 20 Jan 2009 20:23:05 +0100
-Subject: [Buildroot] What now?
-In-Reply-To: <929036.64286.qm@web51306.mail.re2.yahoo.com> (Dave Tucker's
-	message of "Tue\, 20 Jan 2009 10\:44\:04 -0800 \(PST\)")
-References: <929036.64286.qm@web51306.mail.re2.yahoo.com>
-Message-ID: <877i4pwzmu.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Tue, 20 Jan 2009 19:26:55 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
+Message-ID: <20090120192656.5959476850@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Dave" == Dave Tucker <endianx@yahoo.com> writes:
+Author: jacmet
+Date: 2009-01-20 19:26:54 +0000 (Tue, 20 Jan 2009)
+New Revision: 24924
 
- Dave> I want to compile applications for an arm processor.  I have
- Dave> compiled Buildroot for my target platform.  How do I complile
- Dave> an application using the results of Buildroot?  It did not seem
- Dave> to produce a compiler, or if it did, I can not find it.
+Log:
+busybox: 1.13.2 tar fix
 
-It should, otherwise nothing else could get build.
+Added:
+   trunk/buildroot/package/busybox/busybox-1.13.2-tar.patch
 
-Have a look in build_<arch>/staging_dir/usr/bin, and use that compiler
-to compile your applications.
 
--- 
-Bye, Peter Korsgaard
+Changeset:
+Added: trunk/buildroot/package/busybox/busybox-1.13.2-tar.patch
+===================================================================
+--- trunk/buildroot/package/busybox/busybox-1.13.2-tar.patch	                        (rev 0)
++++ trunk/buildroot/package/busybox/busybox-1.13.2-tar.patch	2009-01-20 19:26:54 UTC (rev 24924)
+@@ -0,0 +1,11 @@
++--- busybox-1.13.2/archival/tar.c	Sun Nov  9 18:28:02 2008
+++++ busybox-1.13.2-tar/archival/tar.c	Tue Jan 20 03:52:04 2009
++@@ -591,8 +591,6 @@
++ 	struct TarBallInfo tbInfo;
++ 
++ 	tbInfo.hlInfoHead = NULL;
++-
++-	fchmod(tar_fd, 0644);
++ 	tbInfo.tarFd = tar_fd;
++ 	tbInfo.verboseFlag = verboseFlag;
++ 
