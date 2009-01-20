@@ -1,76 +1,46 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue, 20 Jan 2009 09:29:51 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/multimedia/mplayer
-Message-ID: <20090120092951.911B1770F3@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 20 Jan 2009 10:33:08 +0100
+Subject: [Buildroot] Status of "mplayer" in buildroot
+In-Reply-To: <1232395188.4539.20.camel@elrond.atmel.com> (Ulf Samuelsson's
+	message of "Mon\, 19 Jan 2009 20\:59\:47 +0100")
+References: <1232395188.4539.20.camel@elrond.atmel.com>
+Message-ID: <87ljt6xqy3.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-01-20 09:29:50 +0000 (Tue, 20 Jan 2009)
-New Revision: 24922
+>>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 
-Log:
-mplayer: fix non-largefile build
+ Ulf> Anyone beeing able to build "mplayer" at all?
 
-Added:
-   trunk/buildroot/package/multimedia/mplayer/mplayer-1.0rc1-largefile.patch
+It builds for me on powerpc with the patches I've just comitted (to
+libmad and mplayer).
 
-Modified:
-   trunk/buildroot/package/multimedia/mplayer/mplayer.mk
+I've never built it before, and I haven't actually tried running it
+yet (no hw with audio/gfx output available right now).
 
+ Ulf> 1: Current mplayer relies on an older version of alsa-lib
+ Ulf>    The current version of alsa-lib make some routines "local"
+ Ulf>    by statements like:
 
-Changeset:
-Added: trunk/buildroot/package/multimedia/mplayer/mplayer-1.0rc1-largefile.patch
-===================================================================
---- trunk/buildroot/package/multimedia/mplayer/mplayer-1.0rc1-largefile.patch	                        (rev 0)
-+++ trunk/buildroot/package/multimedia/mplayer/mplayer-1.0rc1-largefile.patch	2009-01-20 09:29:50 UTC (rev 24922)
-@@ -0,0 +1,18 @@
-+mplayer: don't unconditionally force largefile support for libraries
-+---
-+ common.mak |    2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+Index: MPlayer-1.0rc1/common.mak
-+===================================================================
-+--- MPlayer-1.0rc1.orig/common.mak
-++++ MPlayer-1.0rc1/common.mak
-+@@ -5,7 +5,7 @@
-+ SRC_DIR = $(SRC_PATH)/lib$(NAME)
-+ VPATH = $(SRC_DIR)
-+ 
-+-CFLAGS += -DHAVE_AV_CONFIG_H -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE \
-++CFLAGS += -DHAVE_AV_CONFIG_H \
-+           -D_ISOC9X_SOURCE -I$(BUILD_ROOT) -I$(SRC_PATH) \
-+           -I$(SRC_PATH)/libavutil $(OPTFLAGS)
-+ SRCS := $(OBJS:.o=.c) $(ASM_OBJS:.o=.S) $(CPPOBJS:.o=.cpp)
+HcE afaik just fixed that.
 
-Modified: trunk/buildroot/package/multimedia/mplayer/mplayer.mk
-===================================================================
---- trunk/buildroot/package/multimedia/mplayer/mplayer.mk	2009-01-20 09:12:06 UTC (rev 24921)
-+++ trunk/buildroot/package/multimedia/mplayer/mplayer.mk	2009-01-20 09:29:50 UTC (rev 24922)
-@@ -17,6 +17,14 @@
- MPLAYER_ENDIAN:=--disable-big-endian
- endif
- 
-+# mplayer unfortunately uses --disable-largefileS, so we cannot use
-+# DISABLE_LARGEFILE
-+ifeq ($(BR2_LARGEFILE),y)
-+MPLAYER_LARGEFILE:=--enable-largefiles
-+else
-+MPLAYER_LARGEFILE:=--disable-largefiles
-+endif
-+
- $(DL_DIR)/$(MPLAYER_SOURCE):
- 	$(call DOWNLOAD,$(MPLAYER_SITE),$(MPLAYER_SOURCE))
- 
-@@ -45,6 +53,7 @@
- 		--enable-mad \
- 		--enable-fbdev \
- 		$(MPLAYER_ENDIAN) \
-+		$(MPLAYER_LARGEFILE) \
- 		--enable-cross-compile \
- 		--disable-mpdvdkit \
- 		--disable-ivtv \
+ Ulf> 2) mplayer do not have any recent "versions".
+ Ulf>    Instead you are encouraged to checkout the latest svn.
+
+We could atleast move to 1.0rc2, but after the release please.
+
+I would very much prefer to NOT move to a random svn version.
+
+ Ulf> I am not particlary fond of downloading the latest svn,
+ Ulf> since that is a recipy for breakage.
+ Ulf> I think we should have a recommended version of mplayer
+ Ulf> (which we have tested on many architectures) 
+ Ulf> as well as the capability to checkout the latest.
+
+Wouldn't -rc2 be such a version?
+
+-- 
+Bye, Peter Korsgaard
