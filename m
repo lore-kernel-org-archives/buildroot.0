@@ -1,28 +1,63 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 20 Jan 2009 10:38:18 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
-In-Reply-To: <1232286463.1493.10.camel@bender> (Sven Neumann's message of
-	"Sun\, 18 Jan 2009 14\:47\:43 +0100")
-References: <20090116141347.DD52277567@busybox.osuosl.org>
-	<1232123796.6639.16.camel@sven> <87r6333vms.fsf@macbook.be.48ers.dk>
-	<1232286463.1493.10.camel@bender>
-Message-ID: <871vuyxqph.fsf@macbook.be.48ers.dk>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Tue, 20 Jan 2009 12:00:40 +0100
+Subject: [Buildroot] Status of "mplayer" in buildroot
+References: <1232395188.4539.20.camel@elrond.atmel.com>
+	<87ljt6xqy3.fsf@macbook.be.48ers.dk>
+Message-ID: <AD5651DC396F4490BF04E1FEA1DFE9CA@aeglos>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Neumann <s.neumann@phase-zero.de> writes:
 
- >> So what you are saying is that libmap builds with some other gcc
- >> version (4.2.4?), and not with 4.3.2? What arch are you on?
 
- Sven> Yes, libmad cross-compiles for ARM with gcc 4.2.4 but that
- Sven> build breaks when I change gcc to 4.3.2. That was the only
- Sven> thing I changed in this build.
+>>>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
+>
+> Ulf> Anyone beeing able to build "mplayer" at all?
+>
+> It builds for me on powerpc with the patches I've just comitted (to
+> libmad and mplayer).
+>
+> I've never built it before, and I haven't actually tried running it
+> yet (no hw with audio/gfx output available right now).
+>
+> Ulf> 1: Current mplayer relies on an older version of alsa-lib
+> Ulf>    The current version of alsa-lib make some routines "local"
+> Ulf>    by statements like:
+>
+> HcE afaik just fixed that.
+>
+> Ulf> 2) mplayer do not have any recent "versions".
+> Ulf>    Instead you are encouraged to checkout the latest svn.
+>
+> We could atleast move to 1.0rc2, but after the release please.
+>
+> I would very much prefer to NOT move to a random svn version.
+>
+> Ulf> I am not particlary fond of downloading the latest svn,
+> Ulf> since that is a recipy for breakage.
+> Ulf> I think we should have a recommended version of mplayer
+> Ulf> (which we have tested on many architectures)
+> Ulf> as well as the capability to checkout the latest.
+>
+> Wouldn't -rc2 be such a version?
+>
 
-Fixed in r24919.
+"-rc2" is almost as old as "-rc1" and this will not be an update to a 
+"release".
+The project only supports svn/git and expects people to download
+the latest svn which may or may not break, so I think
+our only alternative is to select the latest version, test that
+and stay with that until we are forced to switch or decide
+we want extra functionality.
 
--- 
-Bye, Peter Korsgaard
+If the mplayer builds with HCE's patch, then there is no problem
+keeping this for the release.
+
+Best Regards
+Ulf Samuelsson
+
+> -- 
+> Bye, Peter Korsgaard
+> 
