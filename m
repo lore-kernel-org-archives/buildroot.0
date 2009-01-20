@@ -1,35 +1,63 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Tue, 20 Jan 2009 08:11:27 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/u-boot
-Message-ID: <20090120081127.7E2DA77108@busybox.osuosl.org>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Tue, 20 Jan 2009 08:51:16 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/multimedia/libmad
+Message-ID: <20090120085117.2BBFD77108@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2009-01-20 08:11:26 +0000 (Tue, 20 Jan 2009)
-New Revision: 24918
+Author: jacmet
+Date: 2009-01-20 08:51:15 +0000 (Tue, 20 Jan 2009)
+New Revision: 24919
 
 Log:
-U_BOOT_ARCH_PATCH_DIR should contain a value or should not be defined, empty string is not allowed
+libmad: unbreak build with gcc-4.3.x
 
-Modified:
-   trunk/buildroot/target/u-boot/Makefile.in
+libmad used the long deprecated -fforce-mem gcc flag, which no longer is
+recognized in gcc-4.3.x. It has long been a noop, so simply remove it.
+
+Added:
+   trunk/buildroot/package/multimedia/libmad/libmad-0.15.1b-remove-deprecated-cflags.patch
 
 
 Changeset:
-Modified: trunk/buildroot/target/u-boot/Makefile.in
+Added: trunk/buildroot/package/multimedia/libmad/libmad-0.15.1b-remove-deprecated-cflags.patch
 ===================================================================
---- trunk/buildroot/target/u-boot/Makefile.in	2009-01-20 06:17:12 UTC (rev 24917)
-+++ trunk/buildroot/target/u-boot/Makefile.in	2009-01-20 08:11:26 UTC (rev 24918)
-@@ -88,7 +88,7 @@
- 	toolchain/patch-kernel.sh $(U_BOOT_DIR) target/u-boot/$(U_BOOT_VERSION) \
- 		u-boot-$(U_BOOT_VERSION)-\*.patch \
- 		u-boot-$(U_BOOT_VERSION)-\*.patch.$(ARCH)
--ifneq ($(strip $(U_BOOT_ARCH_PATCH_DIR)),"")
-+ifneq ($(strip $(U_BOOT_ARCH_PATCH_DIR)),)
- 	toolchain/patch-kernel.sh $(U_BOOT_DIR) $(U_BOOT_ARCH_PATCH_DIR) \*.patch
- endif
- ifneq ($(strip $(BR2_TARGET_UBOOT_CUSTOM_PATCH)),"")
+--- trunk/buildroot/package/multimedia/libmad/libmad-0.15.1b-remove-deprecated-cflags.patch	                        (rev 0)
++++ trunk/buildroot/package/multimedia/libmad/libmad-0.15.1b-remove-deprecated-cflags.patch	2009-01-20 08:51:15 UTC (rev 24919)
+@@ -0,0 +1,33 @@
++libmad: remove deprecated cflags (-fforce-mem)
++
++fforce-mem has long been deprecated, and is completely removed from
++gcc 4.3.x on.
++---
++ configure    |    1 -
++ configure.ac |    1 -
++ 2 files changed, 2 deletions(-)
++
++Index: libmad-0.15.1b/configure.ac
++===================================================================
++--- libmad-0.15.1b.orig/configure.ac
+++++ libmad-0.15.1b/configure.ac
++@@ -140,7 +140,6 @@
++     case "$optimize" in
++ 	-O|"-O "*)
++ 	    optimize="-O"
++-	    optimize="$optimize -fforce-mem"
++ 	    optimize="$optimize -fforce-addr"
++ 	    : #x optimize="$optimize -finline-functions"
++ 	    : #- optimize="$optimize -fstrength-reduce"
++Index: libmad-0.15.1b/configure
++===================================================================
++--- libmad-0.15.1b.orig/configure
+++++ libmad-0.15.1b/configure
++@@ -19099,7 +19099,6 @@
++     case "$optimize" in
++ 	-O|"-O "*)
++ 	    optimize="-O"
++-	    optimize="$optimize -fforce-mem"
++ 	    optimize="$optimize -fforce-addr"
++ 	    : #x optimize="$optimize -finline-functions"
++ 	    : #- optimize="$optimize -fstrength-reduce"
