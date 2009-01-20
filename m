@@ -1,50 +1,35 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Tue, 20 Jan 2009 09:07:49 +0100
-Subject: [Buildroot] Status of "mplayer" in buildroot
-In-Reply-To: <200901200857.39283.markus.heidelberg@web.de>
-References: <1232395188.4539.20.camel@elrond.atmel.com>
-	<20090120072738.77f10839@hcegtvedt>
-	<200901200857.39283.markus.heidelberg@web.de>
-Message-ID: <20090120090749.341d3958@hcegtvedt>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Tue, 20 Jan 2009 08:11:27 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/u-boot
+Message-ID: <20090120081127.7E2DA77108@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 20 Jan 2009 08:57:38 +0100
-Markus Heidelberg <markus.heidelberg@web.de> wrote:
+Author: ulf
+Date: 2009-01-20 08:11:26 +0000 (Tue, 20 Jan 2009)
+New Revision: 24918
 
-> Hans-Christian Egtvedt, 20.01.2009:
-> > On Mon, 19 Jan 2009 20:59:47 +0100
-> > Ulf Samuelsson <ulf.samuelsson@atmel.com> wrote:
-> > 
-> > > 2) mplayer do not have any recent "versions".
-> > >    Instead you are encouraged to checkout the latest svn.
-> > > 
-> > 
-> > It is just plain bad to depend on a random checkout. Perhaps we can
-> > use debians/ubuntus "release"?
-> > 
-> > MPlayer v1.0rc2 + mplayer_1.0~rc2-0ubuntu17.diff.gz ?
-> > 
-> > When I look more into it, the Ubuntu diff is just adding pulse audio
-> > support and various version and other doc changes.
-> 
-> Or a Gentoo package:
-> http://distfiles.gentoo.org/distfiles/mplayer-1.0_rc2_p28288.tar.bz2
-> 
-> There we don't have to fear distribution specific stuff and exactly
-> know the version we use due to the svn revision in the filename.
-> 
+Log:
+U_BOOT_ARCH_PATCH_DIR should contain a value or should not be defined, empty string is not allowed
 
-Great, that sounds a lot better.
+Modified:
+   trunk/buildroot/target/u-boot/Makefile.in
 
-My suggestion for my own work flow is to push the AVR32 stuff into
-upstream and then grab back a subversion cut from gentoo (or other
-"release") which then will incorporate the AVR32 stuff in a more sane
-way.
 
--- 
-Best regards,
-Hans-Christian Egtvedt
+Changeset:
+Modified: trunk/buildroot/target/u-boot/Makefile.in
+===================================================================
+--- trunk/buildroot/target/u-boot/Makefile.in	2009-01-20 06:17:12 UTC (rev 24917)
++++ trunk/buildroot/target/u-boot/Makefile.in	2009-01-20 08:11:26 UTC (rev 24918)
+@@ -88,7 +88,7 @@
+ 	toolchain/patch-kernel.sh $(U_BOOT_DIR) target/u-boot/$(U_BOOT_VERSION) \
+ 		u-boot-$(U_BOOT_VERSION)-\*.patch \
+ 		u-boot-$(U_BOOT_VERSION)-\*.patch.$(ARCH)
+-ifneq ($(strip $(U_BOOT_ARCH_PATCH_DIR)),"")
++ifneq ($(strip $(U_BOOT_ARCH_PATCH_DIR)),)
+ 	toolchain/patch-kernel.sh $(U_BOOT_DIR) $(U_BOOT_ARCH_PATCH_DIR) \*.patch
+ endif
+ ifneq ($(strip $(BR2_TARGET_UBOOT_CUSTOM_PATCH)),"")
