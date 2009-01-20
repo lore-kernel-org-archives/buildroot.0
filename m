@@ -1,39 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 20 Jan 2009 23:34:39 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/xerces
-In-Reply-To: <20090120213447.41570770AD@busybox.osuosl.org> (ulf@uclibc.org's
-	message of "Tue\, 20 Jan 2009 21\:34\:47 +0000 \(UTC\)")
-References: <20090120213447.41570770AD@busybox.osuosl.org>
-Message-ID: <87y6x5vc74.fsf@macbook.be.48ers.dk>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Tue, 20 Jan 2009 22:38:40 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/dbus-glib
+Message-ID: <20090120223840.3A76B770AD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+Author: ulf
+Date: 2009-01-20 22:38:39 +0000 (Tue, 20 Jan 2009)
+New Revision: 24930
 
- ulf> Author: ulf
- ulf> Date: 2009-01-20 21:34:46 +0000 (Tue, 20 Jan 2009)
- ulf> New Revision: 24928
+Log:
+Fix circular dependency
 
- ulf> Log:
- ulf> Bump xerces-c to latest stable, ARM build now completes
+Modified:
+   trunk/buildroot/package/dbus-glib/Config.in
 
- ulf> Modified:
- ulf>    trunk/buildroot/package/xerces/Config.in
- ulf>    trunk/buildroot/package/xerces/xerces.mk
 
-How about converting to Makefile.autotools.in format while you're at
-it?
-
- ulf> +xerces-unpacked: $(XERCES_DIR)/.unpacked
- ulf> +
- ulf>  xerces-clean:
- ulf>  	rm -rf $(STAGING_DIR)/usr/include/xercesc
- ulf>  	rm -f $(STAGING_DIR)/lib/libxerces*
-
-TARGET_DIR cleanup stuff seems to be missing.
-
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/package/dbus-glib/Config.in
+===================================================================
+--- trunk/buildroot/package/dbus-glib/Config.in	2009-01-20 22:25:55 UTC (rev 24929)
++++ trunk/buildroot/package/dbus-glib/Config.in	2009-01-20 22:38:39 UTC (rev 24930)
+@@ -3,7 +3,6 @@
+ 	depends on BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_PKGCONFIG
+-	select BR2_PACKAGE_EXPAT
+ 	help
+ 	  GLib bindings for D-Bus.
+ 
