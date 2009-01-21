@@ -1,33 +1,53 @@
-From: Stridh, Robin ActeSE <robin.stridh@acteembedded.se>
-Date: Wed, 21 Jan 2009 12:10:19 +0100
-Subject: [Buildroot]  busybox login problem on AT91SAM9263
-References: <5B920D714A1C354D8949DBF58C2A35D604139AA8@freja.acte.local>
-	<87d4egudlg.fsf@macbook.be.48ers.dk>
-Message-ID: <5B920D714A1C354D8949DBF58C2A35D604139AAE@freja.acte.local>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Wed, 21 Jan 2009 08:31:14 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/xerces
+In-Reply-To: <87y6x5vc74.fsf@macbook.be.48ers.dk>
+References: <20090120213447.41570770AD@busybox.osuosl.org>
+	<87y6x5vc74.fsf@macbook.be.48ers.dk>
+Message-ID: <1232523074.11888.2.camel@elrond.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter and thanks for your quick reply!
+tis 2009-01-20 klockan 23:34 +0100 skrev Peter Korsgaard:
+> >>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+> 
+>  ulf> Author: ulf
+>  ulf> Date: 2009-01-20 21:34:46 +0000 (Tue, 20 Jan 2009)
+>  ulf> New Revision: 24928
+> 
+>  ulf> Log:
+>  ulf> Bump xerces-c to latest stable, ARM build now completes
+> 
+>  ulf> Modified:
+>  ulf>    trunk/buildroot/package/xerces/Config.in
+>  ulf>    trunk/buildroot/package/xerces/xerces.mk
+> 
+> How about converting to Makefile.autotools.in format while you're at
+> it?
 
-Peter> Then it's time to debug. Do you have an /etc/securetty on the target
-Peter> and does it list ttyS0?
+I think my priority is to get things to build at all.
 
-Yes, ttyS0 is listed in /etc/securetty. The only change i made from the non 
-working to the working version is changing the busybox version and rebuild buildroot. 
+Once all packages build, then it will not be hard
+to get most of them into Makefile.autotools.in 
 
-Peter> If that's ok, then I would suggest you enable strace, boot with
-Peter> init=/bin/sh and send the strace output of running login here to the
-Peter> list.
+BTW: Makefile.autotools.in does not support compressed
+patches *.patch.gz, *.patch.bz2, is that intentional?
 
-I tried passing init=/bin/sh to the kernel, but then I end up without a shell. 
-The console is still responsive and echoes everything I type and produces 
-newlines when I hit return but nothing more.
+BR
+Ulf Samuelsson
 
-Regards,
-Robin
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://lists.busybox.net/pipermail/buildroot/attachments/20090121/9ba5ddae/attachment.htm 
+>  ulf> +xerces-unpacked: $(XERCES_DIR)/.unpacked
+>  ulf> +
+>  ulf>  xerces-clean:
+>  ulf>  	rm -rf $(STAGING_DIR)/usr/include/xercesc
+>  ulf>  	rm -f $(STAGING_DIR)/lib/libxerces*
+> 
+> TARGET_DIR cleanup stuff seems to be missing.
+> 
+
+OK, Have a look at it later.
+BR
+Ulf Samuelsson
