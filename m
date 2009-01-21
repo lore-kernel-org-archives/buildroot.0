@@ -1,9 +1,9 @@
 From: Stridh, Robin ActeSE <robin.stridh@acteembedded.se>
-Date: Wed, 21 Jan 2009 13:50:50 +0100
+Date: Wed, 21 Jan 2009 13:50:58 +0100
 Subject: [Buildroot]   busybox login problem on AT91SAM9263
 References: <5B920D714A1C354D8949DBF58C2A35D604139AA8@freja.acte.local><87d4egudlg.fsf@macbook.be.48ers.dk><5B920D714A1C354D8949DBF58C2A35D604139AAE@freja.acte.local>
 	<8763k8uacw.fsf@macbook.be.48ers.dk>
-Message-ID: <5B920D714A1C354D8949DBF58C2A35D604139AAF@freja.acte.local>
+Message-ID: <5B920D714A1C354D8949DBF58C2A35D604139AB0@freja.acte.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -44,4 +44,4 @@ Regards,
 Robin
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: http://lists.busybox.net/pipermail/buildroot/attachments/20090121/faeefc2d/attachment.htm 
+URL: http://lists.busybox.net/pipermail/buildroot/attachments/20090121/0ed6d836/attachment.htm 
