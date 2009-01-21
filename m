@@ -1,54 +1,34 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 21 Jan 2009 07:22:27 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libcgicc
-In-Reply-To: <20090121002712.88E7B77099@busybox.osuosl.org> (ulf@uclibc.org's
-	message of "Wed\, 21 Jan 2009 00\:27\:12 +0000 \(UTC\)")
-References: <20090121002712.88E7B77099@busybox.osuosl.org>
-Message-ID: <874oztuqjg.fsf@macbook.be.48ers.dk>
+Date: Wed, 21 Jan 2009 07:24:40 +0100
+Subject: [Buildroot] Need some help with uClibc build
+In-Reply-To: <49768405.20909@hq.tensilica.com> (Maxim Grigoriev's message of
+	"Tue\, 20 Jan 2009 18\:10\:13 -0800")
+References: <49768405.20909@hq.tensilica.com>
+Message-ID: <87zlhltbvb.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+>>>>> "Maxim" == Maxim Grigoriev <maxim@tensilica.com> writes:
 
- ulf> Author: ulf
- ulf> Date: 2009-01-21 00:27:11 +0000 (Wed, 21 Jan 2009)
- ulf> New Revision: 24933
+ Maxim> Can somebody, please, help me.
+ Maxim> I seem to be missing something trivial like the fact that
+ Maxim> gcc-4.3.1+ would not work with uClibc-0.9.29, or something
+ Maxim> like this.
 
- ulf> Log:
- ulf> add patch form cgicc'upstream, build now completes\!
+That could very well be - uClibc 0.9.29 is old, and gcc 4.3.x is
+pretty new.
 
- ulf> Added:
- ulf>    trunk/buildroot/package/libcgicc/cgicc-3.2.7-sort-undeclared.patch
+ Maxim> I'm trying to build buildroot with
 
+ Maxim>     binutils-2.19
+ Maxim>     uClibc-0.9.29
+ Maxim>     gcc-4.3.1
 
- ulf> Changeset:
- ulf> Added: trunk/buildroot/package/libcgicc/cgicc-3.2.7-sort-undeclared.patch
- ulf> ===================================================================
- ulf> --- trunk/buildroot/package/libcgicc/cgicc-3.2.7-sort-undeclared.patch	                        (rev 0)
- ulf> +++ trunk/buildroot/package/libcgicc/cgicc-3.2.7-sort-undeclared.patch	2009-01-21 00:27:11 UTC (rev 24933)
- ulf> @@ -0,0 +1,38 @@
- ulf> +From: Robert Schwebel <r.schwebel@pengutronix.de>
- ulf> +Subject: [patch] sort is now in <algorithm>
- ulf> +
- ulf> +When built with gcc-4.3.2, cgicc-3.2.7 cannot be compiled any more; sort
- ulf> +is now being part of <algorithm> and must be written as ::sort:
- ulf> +
- ulf> +cardgame.cpp:1232: error: 'sort' was not declared in this scope
- ulf> +make[2]: *** [cardgame.o] Error 1
- ulf> +
- ulf> +Fix it.
- ulf> +
- ulf> +Signed-off-by: Robert Schwebel <r.schwebel@pengutronix.de>
- ulf> +
- ulf> +---
- ulf> + demo/cardgame.cpp |    3 ++-
- ulf> + 1 file changed, 2 insertions(+), 1 deletion(-)
-
-Why are we building demos in the first place?
-
+Why would you want to use those versions instead of the stable and
+recommended ones? (uclibc 0.9.30, gcc 4.3.2)?
 
 -- 
 Bye, Peter Korsgaard
