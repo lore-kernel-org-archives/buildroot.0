@@ -1,47 +1,47 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 21 Jan 2009 13:34:06 +0100
-Subject: [Buildroot] List of working packages for ARM
-In-Reply-To: <1232523725.11888.11.camel@elrond.atmel.com> (Ulf Samuelsson's
-	message of "Wed\, 21 Jan 2009 08\:42\:05 +0100")
-References: <1232523725.11888.11.camel@elrond.atmel.com>
-Message-ID: <87skncsurl.fsf@macbook.be.48ers.dk>
+From: Stridh, Robin ActeSE <robin.stridh@acteembedded.se>
+Date: Wed, 21 Jan 2009 13:50:50 +0100
+Subject: [Buildroot]   busybox login problem on AT91SAM9263
+References: <5B920D714A1C354D8949DBF58C2A35D604139AA8@freja.acte.local><87d4egudlg.fsf@macbook.be.48ers.dk><5B920D714A1C354D8949DBF58C2A35D604139AAE@freja.acte.local>
+	<8763k8uacw.fsf@macbook.be.48ers.dk>
+Message-ID: <5B920D714A1C354D8949DBF58C2A35D604139AAF@freja.acte.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
+ Peter> Then it's time to debug. Do you have an /etc/securetty on the target
+ Peter> and does it list ttyS0?
 
- Ulf> Using gcc-4.2.4, bu-2.18, uclibc-0.9.30
- Ulf> wchar, largefile,ipv6, NWFPE
+ Robin> Yes, ttyS0 is listed in /etc/securetty. The only change i made
+ Robin> from the non working to the working version is changing the
+ Robin> busybox version and rebuild buildroot.
 
-Again, it would be neat to have such a list with the toolchain config
-that really matters.
+Peter> Ok, are you using the default busybox config
+Peter> (package/busybox/busybox-1.13.x.config) or a custom one?
 
- Ulf> nmk	valgrind                       DISABLED	x86 specific  
+I'm using everything as default as set up by at91sam9263ek_defconfig. When checking
+closer I realize the config file used is package/busybox/busybox-1.6.0. A diff
+between this one and package/busybox/busybox-1.13.x.config gives a lot of differeces,
+so I suspect this might be the cause of the problem. I'll try to recompile with a 
+newer config file.
 
-i386/x86-64/powerpc
+ Peter> If that's ok, then I would suggest you enable strace, boot with
+ Peter> init=/bin/sh and send the strace output of running login here to the
+ Peter> list.
 
+ Robin> I tried passing init=/bin/sh to the kernel, but then I end up
+ Robin> without a shell.  The console is still responsive and echoes
+ Robin> everything I type and produces newlines when I hit return but
+ Robin> nothing more.
 
- Ulf> mk	libconfuse                     FAIL	"error: 'input' defined but not used"
+Peter> Strange, that doesn't sound right. What is you console= on the kernel
+Peter> cmdline set to?
 
-How is that an error?
+console=ttyS0,115200
 
- Ulf> nmk	database                       DISABLED	Need to enter subdirectory 
-
-? So you didn't test sqlite/mysql?
-
-
- Ulf> mk	libcurl                        FAIL	"checking for socklen_t
- Ulf> equivalent... unknown"
-
-I have recently built that on armv4l without problems.
-
- Ulf> mk	madplay                        OK	"Depends on python"
- Ulf> mk	mpg123                         FAIL	"Depends on python"
-
-That sounds unlikely - Do you have a build log?
-
--- 
-Bye, Peter Korsgaard
+Regards,
+Robin
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://lists.busybox.net/pipermail/buildroot/attachments/20090121/faeefc2d/attachment.htm 
