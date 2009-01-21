@@ -1,24 +1,31 @@
-From: sjhill at realitydiluted.com <sjhill@realitydiluted.com>
-Date: Wed, 21 Jan 2009 08:54:18 -0600
-Subject: [Buildroot] buildroot with glibc instead of uclibc because
-	i	need some libraries not provided for uclibc
-In-Reply-To: <87k58osp9t.fsf@macbook.be.48ers.dk>
-References: <OF5368AD77.8DC10895-ONC1257545.004F0B48-C1257545.004F71EE@gidi.it>
-	<87k58osp9t.fsf@macbook.be.48ers.dk>
-Message-ID: <20090121145418.GA10568@real.realitydiluted.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 21 Jan 2009 15:55:42 +0100
+Subject: [Buildroot] What now?
+In-Reply-To: <877i4pwzmu.fsf@macbook.be.48ers.dk>
+References: <929036.64286.qm@web51306.mail.re2.yahoo.com>
+	<877i4pwzmu.fsf@macbook.be.48ers.dk>
+Message-ID: <20090121155542.7b6cd0ec@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> No such thing exists. You should in theory be able to do it with the
-> external toolchain support, but I've never heard from anyone trying
-> it.
-> 
-I was the one who originally put external toolchain support into buildroot
-specifically to use glibc instead of uClibc via an external toolchain.
-That said, buildroot does not support building glibc or a glibc toolchain
-within the buildroot framework.
+Le Tue, 20 Jan 2009 20:23:05 +0100,
+Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
--Steve
+> It should, otherwise nothing else could get build.
+> 
+> Have a look in build_<arch>/staging_dir/usr/bin, and use that compiler
+> to compile your applications.
+
+See also
+http://buildroot.uclibc.org/buildroot.html#toolchain_standalone for
+more details.
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
