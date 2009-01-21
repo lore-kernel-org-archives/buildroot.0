@@ -1,36 +1,28 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Wed, 21 Jan 2009 12:40:49 +0100
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 21 Jan 2009 09:33:21 -0200
 Subject: [Buildroot] List of working packages for ARM
-In-Reply-To: <87vds9t51h.fsf@macbook.be.48ers.dk>
+In-Reply-To: <1232523725.11888.11.camel@elrond.atmel.com>
 References: <1232523725.11888.11.camel@elrond.atmel.com>
-	<87vds9t51h.fsf@macbook.be.48ers.dk>
-Message-ID: <1232538049.11888.16.camel@elrond.atmel.com>
+Message-ID: <49770801.70809@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ons 2009-01-21 klockan 09:52 +0100 skrev Peter Korsgaard:
-> >>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
-> 
->  Ulf> Using gcc-4.2.4, bu-2.18, uclibc-0.9.30
->  Ulf> wchar, largefile,ipv6, NWFPE
-> 
-> Thanks, but why? Please use the default versions as that's what we're
-> releasing with and what new users will use.
-> 
-> E.G. binutils 2.29, uclibc 0.9.30, gcc 4.3.2
+Ulf Samuelsson wrote:
 
-I have seen compiler errors with this combination,
-so I want to build with several toolchain versions,
-but it is in the plan.
-
-I have seen some compiler problems with my combination
-as well...
-
-BR
-Ulf Samuelsson
-
-> Could you rerun it with proper toolchain settings? Thanks.
+> Using gcc-4.2.4, bu-2.18, uclibc-0.9.30
+> wchar, largefile,ipv6, NWFPE
 > 
+> Not all packages has been tested.
+> Some key packages that I do not get to build are
+>
+> php                 
+
+This works for me with gcc-4.3.2, binutils-2.19, uclibc-0.9.30 with
+wchar, largefile, ipv6 and softfloat with a buildroot snapshot from
+20090105.
+I can try svn or some other snap, though i don't think things changed
+that much so as to break them.
+Regards.
