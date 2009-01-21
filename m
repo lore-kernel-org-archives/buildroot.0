@@ -1,40 +1,80 @@
-From: Sven Neumann <s.neumann@phase-zero.de>
-Date: Wed, 21 Jan 2009 16:55:21 +0100
-Subject: [Buildroot] DirectFB fetch problem (no tarball on the primary
- mirror)
-In-Reply-To: <8763k8sncv.fsf@macbook.be.48ers.dk>
-References: <fce2a370901210657q3f62fe85r642d9171b328876@mail.gmail.com>
-	<1232550294.6326.12.camel@sven>  <8763k8sncv.fsf@macbook.be.48ers.dk>
-Message-ID: <1232553321.6326.18.camel@sven>
+From: Daniel Laird <danieljlaird@hotmail.com>
+Date: Wed, 21 Jan 2009 15:56:30 +0000
+Subject: [Buildroot] svn
+	commit:	trunk/buildroot/package/multimedia/gst-plugins-good
+In-Reply-To: <87ocy0srp9.fsf@macbook.be.48ers.dk>
+References: <20090121133322.0FFA4770FC@busybox.osuosl.org>
+	<87ocy0srp9.fsf@macbook.be.48ers.dk>
+Message-ID: <COL102-DS21A734A7B3DE9D3E1B2541DCD10@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Ok I will change to use select.
 
-On Wed, 2009-01-21 at 16:14 +0100, Peter Korsgaard wrote:
+regarding:
+laird> +comment "plugins with external dependencies (more to come)"
+ laird> +
 
->  Sven> But I agree that buildroot should update to version 1.2.7.
-> 
-> We can if someone is willing to test it - I don't have any readily
-> available test setup for it. Otherwise I'll stick to the safe solution
-> and use 1.2.6.
+The package has a number of plugins with external dependencies the 5 I have
+added are ones that seems to end up being built by default but then fail due
+to missing dependencies (ESD being first culprit).  The others plugins I
+have not added as I have not tested them yet and the out of box 'untar;
+configure; make' did not try making them.  I was trying to limit the scope
+of the change with RC being done. 
 
-I have run some tests here with DirectFB 1.2.7 cross-compiled for ARM.
-Everything I tested (mostly stuff from DirectFB-examples) works fine.
-Attached is a patch to the directfb.mk file that updates it to 1.2.7 and
-converts it to Makefile.autotools.in.
+-----Original Message-----
+From: buildroot-bounces@busybox.net [mailto:buildroot-bounces at busybox.net]
+On Behalf Of Peter Korsgaard
+Sent: 2009 Jan 21 13:40
+To: buildroot at uclibc.org
+Subject: Re: [Buildroot] svn commit:
+trunk/buildroot/package/multimedia/gst-plugins-good
+
+>>>>> "laird" == laird  <laird@uclibc.org> writes:
+
+ laird> Author: laird
+ laird> Date: 2009-01-21 13:33:21 +0000 (Wed, 21 Jan 2009)
+ laird> New Revision: 24937
+
+ laird> Log:
+ laird> package/multimedia/gst-plugins-good/gst-plugins-good.mk
+ laird> package/multimedia/gst-plugins-good/Config.in
+
+ laird> gst-plugins-good does not build unless some package dependencies are
+forced.
+ laird> This patch allows you to turn off some of the plugins with these
+dependencies and hides
+ laird> others that require some packages (like PNG/JPEG)
+
+ laird> Signed-off-by: Daniel Laird <daniel.j.laird@nxp.com>
 
 
-Sven
+ laird>  config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_MATROSKA
+ laird>  	bool "matroska"
+ laird> +	depends on BR2_PACKAGE_BZIP2 && BR2_PACKAGE_ZLIB
 
+I prefer to use select for library dependencies. How is the user
+supposed to know that bzip2 and zlib needs to be enabled to even see
+the matroska option.
 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: directfb.diff
-Type: text/x-patch
-Size: 5068 bytes
-Desc: not available
-Url : http://lists.busybox.net/pipermail/buildroot/attachments/20090121/3d3417a6/attachment.bin 
+ laird>  config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_MONOSCOPE
+ laird>  	bool "monoscope"
+ laird> @@ -119,4 +120,25 @@
+ laird>  	bool "wavparse (*.wav audio)"
+ laird>  	default y
+ 
+ laird> +comment "plugins with external dependencies (more to come)"
+ laird> +
+
+What is this comment supposed to mean? That these things don't build
+right now?
+
+-- 
+Bye, Peter Korsgaard
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
