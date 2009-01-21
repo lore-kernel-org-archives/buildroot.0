@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Wed, 21 Jan 2009 00:17:05 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/kismet
-Message-ID: <20090121001706.78888775D3@busybox.osuosl.org>
+Date: Wed, 21 Jan 2009 00:21:46 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libcgicc
+Message-ID: <20090121002146.562C8775DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,80 +9,72 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2009-01-21 00:17:03 +0000 (Wed, 21 Jan 2009)
-New Revision: 24931
+Date: 2009-01-21 00:21:43 +0000 (Wed, 21 Jan 2009)
+New Revision: 24932
 
 Log:
-add kismet-unpacked target, fix lack of include for memset etc.
+include string.h when building cgicc, add libcgicc-unpacked, and clean up libcgicc.mk - still does not build OK
 
 Added:
-   trunk/buildroot/package/kismet/kismet-2007-10-R1-memset.patch
+   trunk/buildroot/package/libcgicc/cgicc-3.2.7-memset.patch
 
 Modified:
-   trunk/buildroot/package/kismet/kismet.mk
+   trunk/buildroot/package/libcgicc/libcgicc.mk
 
 
 Changeset:
-Added: trunk/buildroot/package/kismet/kismet-2007-10-R1-memset.patch
+Added: trunk/buildroot/package/libcgicc/cgicc-3.2.7-memset.patch
 ===================================================================
---- trunk/buildroot/package/kismet/kismet-2007-10-R1-memset.patch	                        (rev 0)
-+++ trunk/buildroot/package/kismet/kismet-2007-10-R1-memset.patch	2009-01-21 00:17:03 UTC (rev 24931)
-@@ -0,0 +1,45 @@
-+diff -urN kismet-2007-10-R1-0rig//kismet_wrapper.cc kismet-2007-10-R1/kismet_wrapper.cc
-+--- kismet-2007-10-R1-0rig//kismet_wrapper.cc	2007-10-06 23:50:03.000000000 +0200
-++++ kismet-2007-10-R1/kismet_wrapper.cc	2009-01-21 01:12:42.000000000 +0100
-+@@ -27,6 +27,7 @@
-+ #include <unistd.h>
-+ 
-+ #include "config.h"
+--- trunk/buildroot/package/libcgicc/cgicc-3.2.7-memset.patch	                        (rev 0)
++++ trunk/buildroot/package/libcgicc/cgicc-3.2.7-memset.patch	2009-01-21 00:21:43 UTC (rev 24932)
+@@ -0,0 +1,12 @@
++diff -urN cgicc-3.2.7-0rig//demo/dns.cpp cgicc-3.2.7/demo/dns.cpp
++--- cgicc-3.2.7-0rig//demo/dns.cpp	2009-01-21 00:24:13.000000000 +0100
+++++ cgicc-3.2.7/demo/dns.cpp	2009-01-21 00:24:30.000000000 +0100
++@@ -34,6 +34,7 @@
++ #include <vector>
++ #include <stdexcept>
++ #include <iostream>
 ++#include <string.h>
 + 
-+ /* Blob of globals since sighandler needs them */
-+ vector<string> postcli_err;
-+diff -urN kismet-2007-10-R1-0rig//ringbuf.cc kismet-2007-10-R1/ringbuf.cc
-+--- kismet-2007-10-R1-0rig//ringbuf.cc	2005-12-11 20:14:39.000000000 +0100
-++++ kismet-2007-10-R1/ringbuf.cc	2009-01-21 01:12:26.000000000 +0100
-+@@ -17,6 +17,7 @@
-+ */
-+ 
-+ #include "ringbuf.h"
-++#include <string.h>
-+ 
-+ RingBuffer::RingBuffer(int in_size) {
-+     ring_len = in_size;
-+diff -urN kismet-2007-10-R1-0rig//util.cc kismet-2007-10-R1/util.cc
-+--- kismet-2007-10-R1-0rig//util.cc	2006-08-28 22:37:29.000000000 +0200
-++++ kismet-2007-10-R1/util.cc	2009-01-21 01:12:26.000000000 +0100
-+@@ -22,6 +22,7 @@
-+ #include <sys/types.h>
-+ #include <sys/stat.h>
-+ #include <fcntl.h>
-++#include <string.h>
-+ 
-+ // We need this to make uclibc happy since they don't even have rintf...
-+ #ifndef rintf
-+diff -urN kismet-2007-10-R1-0rig//util.h kismet-2007-10-R1/util.h
-+--- kismet-2007-10-R1-0rig//util.h	2006-08-28 22:37:29.000000000 +0200
-++++ kismet-2007-10-R1/util.h	2009-01-21 01:12:26.000000000 +0100
-+@@ -65,7 +65,7 @@
-+         end = op.end;
-+         return *this;
-+     }
-+-};
-++} swt;
-+ vector<smart_word_token> SmartStrTokenize(string in_str, string in_split, int return_partial = 1);
-+ 
-+ vector<string> LineWrap(string in_txt, unsigned int in_hdr_len, unsigned int in_maxlen);
++ #include "cgicc/CgiDefs.h"
++ #include "cgicc/Cgicc.h"
++
 
-Modified: trunk/buildroot/package/kismet/kismet.mk
+Modified: trunk/buildroot/package/libcgicc/libcgicc.mk
 ===================================================================
---- trunk/buildroot/package/kismet/kismet.mk	2009-01-20 22:38:39 UTC (rev 24930)
-+++ trunk/buildroot/package/kismet/kismet.mk	2009-01-21 00:17:03 UTC (rev 24931)
-@@ -62,6 +62,7 @@
+--- trunk/buildroot/package/libcgicc/libcgicc.mk	2009-01-21 00:17:03 UTC (rev 24931)
++++ trunk/buildroot/package/libcgicc/libcgicc.mk	2009-01-21 00:21:43 UTC (rev 24932)
+@@ -17,7 +17,8 @@
  
- kismet: uclibc ncurses libpcap dbus $(TARGET_DIR)/$(KISMET_TARGET_DIRECTORY)/$(KISMET_BINARY)
+ $(LIBCGICC_DIR)/.unpacked: $(DL_DIR)/$(LIBCGICC_SOURCE)
+ 	$(LIBCGICC_CAT) $(DL_DIR)/$(LIBCGICC_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	touch $(LIBCGICC_DIR)/.unpacked
++	toolchain/patch-kernel.sh $(LIBCGICC_DIR) package/libcgicc cgicc\*.patch
++	touch $@
  
-+kismet-unpacked: $(KISMET_DIR)/.patched
+ $(LIBCGICC_DIR)/.configured: $(LIBCGICC_DIR)/.unpacked
+ 	(cd $(LIBCGICC_DIR); rm -f config.cache; \
+@@ -40,11 +41,11 @@
+ 		--mandir=/usr/man \
+ 		--infodir=/usr/info \
+ 	)
+-	touch $(LIBCGICC_DIR)/.configured
++	touch $@
  
- kismet-clean:
- 	rm -f $(TARGET_DIR)/$(KISMET_TARGET_DIRECTORY)/kismet
+ $(LIBCGICC_DIR)/.compiled: $(LIBCGICC_DIR)/.configured
+ 	$(MAKE) -C $(LIBCGICC_DIR)
+-	touch $(LIBCGICC_DIR)/.compiled
++	touch $@
+ 
+ $(STAGING_DIR)/lib/libcgicc.so: $(LIBCGICC_DIR)/.compiled
+ 	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(LIBCGICC_DIR) install
+@@ -55,6 +56,8 @@
+ 
+ libcgicc: uclibc $(TARGET_DIR)/usr/lib/libcgicc.so
+ 
++libcgicc-unpacked: $(LIBCGICC_DIR)/.unpacked
++
+ libcgicc-clean:
+ 		-$(MAKE) -C $(LIBCGICC_DIR) clean
+ 
