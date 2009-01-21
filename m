@@ -1,32 +1,44 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 21 Jan 2009 20:20:06 +0100
-Subject: [Buildroot] DirectFB fetch problem (no tarball on the primary
-	mirror)
-In-Reply-To: <1232553321.6326.18.camel@sven> (Sven Neumann's message of "Wed\,
-	21 Jan 2009 16\:55\:21 +0100")
-References: <fce2a370901210657q3f62fe85r642d9171b328876@mail.gmail.com>
-	<1232550294.6326.12.camel@sven> <8763k8sncv.fsf@macbook.be.48ers.dk>
-	<1232553321.6326.18.camel@sven>
-Message-ID: <87fxjcqxeh.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Wed, 21 Jan 2009 19:20:14 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/directfb
+Message-ID: <20090121192014.4FEE0768C5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Neumann <s.neumann@phase-zero.de> writes:
+Author: jacmet
+Date: 2009-01-21 19:20:13 +0000 (Wed, 21 Jan 2009)
+New Revision: 24942
 
-Hi,
+Log:
+directfb: fix compilation error on ppc (linux/config.h is long gone)
 
- Sven> I have run some tests here with DirectFB 1.2.7 cross-compiled
- Sven> for ARM.  Everything I tested (mostly stuff from
- Sven> DirectFB-examples) works fine.  Attached is a patch to the
- Sven> directfb.mk file that updates it to 1.2.7 and converts it to
- Sven> Makefile.autotools.in.
+Added:
+   trunk/buildroot/package/directfb/directfb-1.2.7-ppc-compile-fix.patch
 
-Thanks. It didn't apply as it wasn't against latest svn (apparently
-something pre-rc1). I fixed it up and cleaned up a few small things,
-but please create patches against latest svn in the future.
 
--- 
-Bye, Peter Korsgaard
+Changeset:
+Added: trunk/buildroot/package/directfb/directfb-1.2.7-ppc-compile-fix.patch
+===================================================================
+--- trunk/buildroot/package/directfb/directfb-1.2.7-ppc-compile-fix.patch	                        (rev 0)
++++ trunk/buildroot/package/directfb/directfb-1.2.7-ppc-compile-fix.patch	2009-01-21 19:20:13 UTC (rev 24942)
+@@ -0,0 +1,17 @@
++---
++ lib/direct/ppcasm_memcpy_cachable.S |    2 --
++ 1 file changed, 2 deletions(-)
++
++Index: DirectFB-1.2.7/lib/direct/ppcasm_memcpy_cachable.S
++===================================================================
++--- DirectFB-1.2.7.orig/lib/direct/ppcasm_memcpy_cachable.S
+++++ DirectFB-1.2.7/lib/direct/ppcasm_memcpy_cachable.S
++@@ -34,8 +34,6 @@
++ 
++ #define __ASSEMBLY__
++ 
++-#include <linux/config.h>
++-
++ #if defined(CONFIG_8xx) || defined(CONFIG_403GCX)
++ #define L1_CACHE_LINE_SIZE       16
++ #define LG_L1_CACHE_LINE_SIZE     4 
