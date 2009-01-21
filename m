@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Wed, 21 Jan 2009 00:21:46 +0000 (UTC)
+Date: Wed, 21 Jan 2009 00:27:12 +0000 (UTC)
 Subject: [Buildroot] svn commit: trunk/buildroot/package/libcgicc
-Message-ID: <20090121002146.562C8775DB@busybox.osuosl.org>
+Message-ID: <20090121002712.88E7B77099@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,72 +9,57 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2009-01-21 00:21:43 +0000 (Wed, 21 Jan 2009)
-New Revision: 24932
+Date: 2009-01-21 00:27:11 +0000 (Wed, 21 Jan 2009)
+New Revision: 24933
 
 Log:
-include string.h when building cgicc, add libcgicc-unpacked, and clean up libcgicc.mk - still does not build OK
+add patch form cgicc'upstream, build now completes\!
 
 Added:
-   trunk/buildroot/package/libcgicc/cgicc-3.2.7-memset.patch
-
-Modified:
-   trunk/buildroot/package/libcgicc/libcgicc.mk
+   trunk/buildroot/package/libcgicc/cgicc-3.2.7-sort-undeclared.patch
 
 
 Changeset:
-Added: trunk/buildroot/package/libcgicc/cgicc-3.2.7-memset.patch
+Added: trunk/buildroot/package/libcgicc/cgicc-3.2.7-sort-undeclared.patch
 ===================================================================
---- trunk/buildroot/package/libcgicc/cgicc-3.2.7-memset.patch	                        (rev 0)
-+++ trunk/buildroot/package/libcgicc/cgicc-3.2.7-memset.patch	2009-01-21 00:21:43 UTC (rev 24932)
-@@ -0,0 +1,12 @@
-+diff -urN cgicc-3.2.7-0rig//demo/dns.cpp cgicc-3.2.7/demo/dns.cpp
-+--- cgicc-3.2.7-0rig//demo/dns.cpp	2009-01-21 00:24:13.000000000 +0100
-++++ cgicc-3.2.7/demo/dns.cpp	2009-01-21 00:24:30.000000000 +0100
-+@@ -34,6 +34,7 @@
-+ #include <vector>
-+ #include <stdexcept>
-+ #include <iostream>
-++#include <string.h>
+--- trunk/buildroot/package/libcgicc/cgicc-3.2.7-sort-undeclared.patch	                        (rev 0)
++++ trunk/buildroot/package/libcgicc/cgicc-3.2.7-sort-undeclared.patch	2009-01-21 00:27:11 UTC (rev 24933)
+@@ -0,0 +1,38 @@
++From: Robert Schwebel <r.schwebel@pengutronix.de>
++Subject: [patch] sort is now in <algorithm>
++
++When built with gcc-4.3.2, cgicc-3.2.7 cannot be compiled any more; sort
++is now being part of <algorithm> and must be written as ::sort:
++
++cardgame.cpp:1232: error: 'sort' was not declared in this scope
++make[2]: *** [cardgame.o] Error 1
++
++Fix it.
++
++Signed-off-by: Robert Schwebel <r.schwebel@pengutronix.de>
++
++---
++ demo/cardgame.cpp |    3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++Index: cgicc-3.2.7/demo/cardgame.cpp
++===================================================================
++--- cgicc-3.2.7.orig/demo/cardgame.cpp
+++++ cgicc-3.2.7/demo/cardgame.cpp
++@@ -36,6 +36,7 @@
++ #include <sstream>
++ #include <fstream>
++ #include <queue>
+++#include <algorithm>
 + 
 + #include "cgicc/CgiDefs.h"
 + #include "cgicc/Cgicc.h"
-+
-
-Modified: trunk/buildroot/package/libcgicc/libcgicc.mk
-===================================================================
---- trunk/buildroot/package/libcgicc/libcgicc.mk	2009-01-21 00:17:03 UTC (rev 24931)
-+++ trunk/buildroot/package/libcgicc/libcgicc.mk	2009-01-21 00:21:43 UTC (rev 24932)
-@@ -17,7 +17,8 @@
- 
- $(LIBCGICC_DIR)/.unpacked: $(DL_DIR)/$(LIBCGICC_SOURCE)
- 	$(LIBCGICC_CAT) $(DL_DIR)/$(LIBCGICC_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	touch $(LIBCGICC_DIR)/.unpacked
-+	toolchain/patch-kernel.sh $(LIBCGICC_DIR) package/libcgicc cgicc\*.patch
-+	touch $@
- 
- $(LIBCGICC_DIR)/.configured: $(LIBCGICC_DIR)/.unpacked
- 	(cd $(LIBCGICC_DIR); rm -f config.cache; \
-@@ -40,11 +41,11 @@
- 		--mandir=/usr/man \
- 		--infodir=/usr/info \
- 	)
--	touch $(LIBCGICC_DIR)/.configured
-+	touch $@
- 
- $(LIBCGICC_DIR)/.compiled: $(LIBCGICC_DIR)/.configured
- 	$(MAKE) -C $(LIBCGICC_DIR)
--	touch $(LIBCGICC_DIR)/.compiled
-+	touch $@
- 
- $(STAGING_DIR)/lib/libcgicc.so: $(LIBCGICC_DIR)/.compiled
- 	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(LIBCGICC_DIR) install
-@@ -55,6 +56,8 @@
- 
- libcgicc: uclibc $(TARGET_DIR)/usr/lib/libcgicc.so
- 
-+libcgicc-unpacked: $(LIBCGICC_DIR)/.unpacked
-+
- libcgicc-clean:
- 		-$(MAKE) -C $(LIBCGICC_DIR) clean
- 
++@@ -1043,7 +1044,7 @@ namespace CardGameTools
++ 
++ 	void drawPlayerCards(datasplayer *vPlayer)
++ 	{
++-		sort (vPlayer->cardsList->begin(),vPlayer->cardsList->end());
+++		std::sort (vPlayer->cardsList->begin(),vPlayer->cardsList->end());
++ 		cout <<"<form name=\"cards\">"; 
++ 		cout <<"<input type=\"hidden\" name=\"actionner\" value=\"\">"; 
++ 		cout <<"<input type=\"hidden\" name=\"card\" value=\"\">"; 
