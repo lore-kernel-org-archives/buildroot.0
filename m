@@ -1,27 +1,27 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 21 Jan 2009 09:52:10 +0100
+Date: Wed, 21 Jan 2009 09:53:12 +0100
 Subject: [Buildroot] List of working packages for ARM
-In-Reply-To: <1232523725.11888.11.camel@elrond.atmel.com> (Ulf Samuelsson's
-	message of "Wed\, 21 Jan 2009 08\:42\:05 +0100")
+In-Reply-To: <1232526975.6326.6.camel@sven> (Sven Neumann's message of "Wed\,
+	21 Jan 2009 09\:36\:15 +0100")
 References: <1232523725.11888.11.camel@elrond.atmel.com>
-Message-ID: <87vds9t51h.fsf@macbook.be.48ers.dk>
+	<1232526975.6326.6.camel@sven>
+Message-ID: <87r62xt4zr.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
+>>>>> "Sven" == Sven Neumann <s.neumann@phase-zero.de> writes:
 
- Ulf> Using gcc-4.2.4, bu-2.18, uclibc-0.9.30
- Ulf> wchar, largefile,ipv6, NWFPE
+ >> alsa-utils          "Depends on alsa-lib"
 
-Thanks, but why? Please use the default versions as that's what we're
-releasing with and what new users will use.
+ Sven> alsa-lib builds for me. Yesterday we updated to version 1.0.19, the
+ Sven> latest stable release, and that version also compiles nicely. Perhaps
+ Sven> you might want to try that update in buildroot?
 
-E.G. binutils 2.29, uclibc 0.9.30, gcc 4.3.2
-
-Could you rerun it with proper toolchain settings? Thanks.
+Only if we cannot get 1.0.18 building without too much effort. After
+the release we should certainly move to 1.0.19 ofcourse.
 
 -- 
 Bye, Peter Korsgaard
