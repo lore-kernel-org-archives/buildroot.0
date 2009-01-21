@@ -1,28 +1,48 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 21 Jan 2009 09:33:21 -0200
-Subject: [Buildroot] List of working packages for ARM
-In-Reply-To: <1232523725.11888.11.camel@elrond.atmel.com>
-References: <1232523725.11888.11.camel@elrond.atmel.com>
-Message-ID: <49770801.70809@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 21 Jan 2009 13:11:59 +0100
+Subject: [Buildroot] busybox login problem on AT91SAM9263
+In-Reply-To: <5B920D714A1C354D8949DBF58C2A35D604139AAE@freja.acte.local>
+	(Robin ActeSE Stridh's message of "Wed\,
+	21 Jan 2009 12\:10\:19 +0100")
+References: <5B920D714A1C354D8949DBF58C2A35D604139AA8@freja.acte.local>
+	<87d4egudlg.fsf@macbook.be.48ers.dk>
+	<5B920D714A1C354D8949DBF58C2A35D604139AAE@freja.acte.local>
+Message-ID: <8763k8uacw.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ulf Samuelsson wrote:
+>>>>> "Robin" == Stridh, Robin ActeSE <robin.stridh@acteembedded.se> writes:
 
-> Using gcc-4.2.4, bu-2.18, uclibc-0.9.30
-> wchar, largefile,ipv6, NWFPE
-> 
-> Not all packages has been tested.
-> Some key packages that I do not get to build are
->
-> php                 
+Hi,
 
-This works for me with gcc-4.3.2, binutils-2.19, uclibc-0.9.30 with
-wchar, largefile, ipv6 and softfloat with a buildroot snapshot from
-20090105.
-I can try svn or some other snap, though i don't think things changed
-that much so as to break them.
-Regards.
+ Robin> Hi Peter and thanks for your quick reply!
+
+You're welcome.
+
+ Peter> Then it's time to debug. Do you have an /etc/securetty on the target
+ Peter> and does it list ttyS0?
+
+ Robin> Yes, ttyS0 is listed in /etc/securetty. The only change i made
+ Robin> from the non working to the working version is changing the
+ Robin> busybox version and rebuild buildroot.
+
+Ok, are you using the default busybox config
+(package/busybox/busybox-1.13.x.config) or a custom one?
+
+ Peter> If that's ok, then I would suggest you enable strace, boot with
+ Peter> init=/bin/sh and send the strace output of running login here to the
+ Peter> list.
+
+ Robin> I tried passing init=/bin/sh to the kernel, but then I end up
+ Robin> without a shell.  The console is still responsive and echoes
+ Robin> everything I type and produces newlines when I hit return but
+ Robin> nothing more.
+
+Strange, that doesn't sound right. What is you console= on the kernel
+cmdline set to?
+
+-- 
+Bye, Peter Korsgaard
