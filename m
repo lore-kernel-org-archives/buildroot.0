@@ -1,65 +1,66 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Wed, 21 Jan 2009 00:27:12 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libcgicc
-Message-ID: <20090121002712.88E7B77099@busybox.osuosl.org>
+From: Maxim Grigoriev <maxim@tensilica.com>
+Date: Tue, 20 Jan 2009 18:10:13 -0800
+Subject: [Buildroot] Need some help with uClibc build
+Message-ID: <49768405.20909@hq.tensilica.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2009-01-21 00:27:11 +0000 (Wed, 21 Jan 2009)
-New Revision: 24933
+Can somebody, please, help me.
 
-Log:
-add patch form cgicc'upstream, build now completes\!
+I seem to be missing something trivial like the fact that
+gcc-4.3.1+ would not work with uClibc-0.9.29, or something like this.
 
-Added:
-   trunk/buildroot/package/libcgicc/cgicc-3.2.7-sort-undeclared.patch
+I'm trying to build buildroot with
 
+    binutils-2.19
+    uClibc-0.9.29
+    gcc-4.3.1
 
-Changeset:
-Added: trunk/buildroot/package/libcgicc/cgicc-3.2.7-sort-undeclared.patch
-===================================================================
---- trunk/buildroot/package/libcgicc/cgicc-3.2.7-sort-undeclared.patch	                        (rev 0)
-+++ trunk/buildroot/package/libcgicc/cgicc-3.2.7-sort-undeclared.patch	2009-01-21 00:27:11 UTC (rev 24933)
-@@ -0,0 +1,38 @@
-+From: Robert Schwebel <r.schwebel@pengutronix.de>
-+Subject: [patch] sort is now in <algorithm>
-+
-+When built with gcc-4.3.2, cgicc-3.2.7 cannot be compiled any more; sort
-+is now being part of <algorithm> and must be written as ::sort:
-+
-+cardgame.cpp:1232: error: 'sort' was not declared in this scope
-+make[2]: *** [cardgame.o] Error 1
-+
-+Fix it.
-+
-+Signed-off-by: Robert Schwebel <r.schwebel@pengutronix.de>
-+
-+---
-+ demo/cardgame.cpp |    3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+Index: cgicc-3.2.7/demo/cardgame.cpp
-+===================================================================
-+--- cgicc-3.2.7.orig/demo/cardgame.cpp
-++++ cgicc-3.2.7/demo/cardgame.cpp
-+@@ -36,6 +36,7 @@
-+ #include <sstream>
-+ #include <fstream>
-+ #include <queue>
-++#include <algorithm>
-+ 
-+ #include "cgicc/CgiDefs.h"
-+ #include "cgicc/Cgicc.h"
-+@@ -1043,7 +1044,7 @@ namespace CardGameTools
-+ 
-+ 	void drawPlayerCards(datasplayer *vPlayer)
-+ 	{
-+-		sort (vPlayer->cardsList->begin(),vPlayer->cardsList->end());
-++		std::sort (vPlayer->cardsList->begin(),vPlayer->cardsList->end());
-+ 		cout <<"<form name=\"cards\">"; 
-+ 		cout <<"<input type=\"hidden\" name=\"actionner\" value=\"\">"; 
-+ 		cout <<"<input type=\"hidden\" name=\"card\" value=\"\">"; 
+I managed to configure and build everything including the compiler.
+But then, uClibc build did not go through :
+
+  CC libc/sysdeps/linux/common/chdir.os
+In file included from ./include/sys/param.h:22,
+                 from libc/sysdeps/linux/common/chdir.c:13:
+./include/limits.h:124:26: error: limits.h: No such file or directory
+make[2]: *** [libc/sysdeps/linux/common/chdir.os] Error 1
+make[1]: *** [lib/libc.so.0] Error 2
+
+I figured that using extra GCC flag "-D_GCC_LIMITS_H_" would help.
+It did. But then, another problem raised up :
+
+  CC libc/sysdeps/linux/common/nice.os
+libc/sysdeps/linux/common/nice.c: In function 'int_add_no_wrap':
+libc/sysdeps/linux/common/nice.c:33: error: 'INT_MIN' undeclared (first 
+use in this function)
+libc/sysdeps/linux/common/nice.c:33: error: (Each undeclared identifier 
+is reported only once
+libc/sysdeps/linux/common/nice.c:33: error: for each function it appears 
+in.)
+libc/sysdeps/linux/common/nice.c:35: error: 'INT_MAX' undeclared (first 
+use in this function)
+make[2]: *** [libc/sysdeps/linux/common/nice.os] Error 1
+
+I guess I might be missing some trivial knowledge about how things work 
+with each other.
+If you can share with me this knowledge I would really appreciate it.
+
+Thanks in advance for any of your help,
+
+-- Maxim Grigoriev
+   Tensilica Inc.
+   408-566-1770
+
+P.S. Some background on my project. Xtensa GNU/Linux is successfully 
+building with
+     
+      binutils-2.18
+      uClibc-0.9.29
+      gcc-4.2.1
+
+     with relatively recent buildroot update.
+
+I'm trying to upgrade the compiler, which is important for our projects.
