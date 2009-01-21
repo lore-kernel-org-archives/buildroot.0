@@ -1,12 +1,14 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 21 Jan 2009 21:12:25 +0100
+Date: Wed, 21 Jan 2009 21:14:10 +0100
 Subject: [Buildroot] List of working packages for ARM
-In-Reply-To: <1232568463.11888.74.camel@elrond.atmel.com> (Ulf Samuelsson's
-	message of "Wed\, 21 Jan 2009 21\:07\:43 +0100")
+In-Reply-To: <1232560373.11888.36.camel@elrond.atmel.com> (Ulf Samuelsson's
+	message of "Wed\, 21 Jan 2009 18\:52\:53 +0100")
 References: <1232523725.11888.11.camel@elrond.atmel.com>
-	<87skncsurl.fsf@macbook.be.48ers.dk>
-	<1232568463.11888.74.camel@elrond.atmel.com>
-Message-ID: <87prigpgeu.fsf@macbook.be.48ers.dk>
+	<87vds9t51h.fsf@macbook.be.48ers.dk>
+	<1232538049.11888.16.camel@elrond.atmel.com>
+	<87wscosv1f.fsf@macbook.be.48ers.dk>
+	<1232560373.11888.36.camel@elrond.atmel.com>
+Message-ID: <87ljt4pgbx.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,29 +19,22 @@ To: buildroot@busybox.net
 
 Hi,
 
- Ulf> mk	libconfuse                     FAIL	"error: 'input' defined but not used"
- >> 
- >> How is that an error?
- >> 
+ Ulf> Here is the same with the 4.3.2/bu-2.19/uclib-0.9.30
 
- Ulf> Ask the compiler writer, I was also confused, but that is
- Ulf> maybe appropriate for a package named "libconfuse" ;-)
- Ulf> There is a comment just before the "error".
- Ulf> "cc1: warnings being treated as errors" so the maintainer
- Ulf> wants to make dead sure that the lexer.c is real clean.
+ Ulf> mk	mplayer                        OK	
 
-Ok, so that should be easy to fix.
+Just tried with arm926t, and it dies with an ICE in h263.c:
 
- Ulf> mk	madplay                        OK	"Depends on python"
- Ulf> mk	mpg123                         FAIL	"Depends on python"
- >> 
- >> That sounds unlikely - Do you have a build log?
+h263.c: In function 'h263_pred_motion':
+h263.c:1710: error: unrecognizable insn:
+(insn 81 80 82 11 h263.c:1678 (set (reg:SI 209)
+        (const_int 2305843009213693948 [0x1ffffffffffffffc])) -1 (nil))
+h263.c:1710: internal compiler error: in extract_insn, at recog.c:1990
+Please submit a full bug report,
+with preprocessed source if appropriate.
+See <http://gcc.gnu.org/bugs.html> for instructions.
 
- Ulf> Have build logs for everything.
- Ulf> For the release toochain, the mpg123 build 
- Ulf> aborts with a segmentation fault.
-
-So a compiler ICE?
+What arm variant are you testing with?
 
 -- 
 Bye, Peter Korsgaard
