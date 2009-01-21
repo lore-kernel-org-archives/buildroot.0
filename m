@@ -1,61 +1,73 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Wed, 21 Jan 2009 20:45:12 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libconfuse
-Message-ID: <20090121204512.4928A768C5@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 21 Jan 2009 21:58:52 +0100
+Subject: [Buildroot] List of working packages for ARM
+In-Reply-To: <1232560373.11888.36.camel@elrond.atmel.com> (Ulf Samuelsson's
+	message of "Wed\, 21 Jan 2009 18\:52\:53 +0100")
+References: <1232523725.11888.11.camel@elrond.atmel.com>
+	<87vds9t51h.fsf@macbook.be.48ers.dk>
+	<1232538049.11888.16.camel@elrond.atmel.com>
+	<87wscosv1f.fsf@macbook.be.48ers.dk>
+	<1232560373.11888.36.camel@elrond.atmel.com>
+Message-ID: <87d4egpe9f.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-01-21 20:45:10 +0000 (Wed, 21 Jan 2009)
-New Revision: 24944
+>>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 
-Log:
-libconfuse: fix build by removing -Werror flag
+Hi,
 
-Added:
-   trunk/buildroot/package/libconfuse/libconfuse-2.6-dont-use-werror.patch
+ Ulf> Here is the same with the 4.3.2/bu-2.19/uclib-0.9.30
 
+ Ulf> mk	libconfuse                     FAIL	""
 
-Changeset:
-Added: trunk/buildroot/package/libconfuse/libconfuse-2.6-dont-use-werror.patch
-===================================================================
---- trunk/buildroot/package/libconfuse/libconfuse-2.6-dont-use-werror.patch	                        (rev 0)
-+++ trunk/buildroot/package/libconfuse/libconfuse-2.6-dont-use-werror.patch	2009-01-21 20:45:10 UTC (rev 24944)
-@@ -0,0 +1,34 @@
-+confuse: don't compile with -Werror
-+
-+Werror isn't really a robust setting for !development.
-+---
-+ src/Makefile.am |    2 +-
-+ src/Makefile.in |    2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+Index: confuse-2.6/src/Makefile.am
-+===================================================================
-+--- confuse-2.6.orig/src/Makefile.am
-++++ confuse-2.6/src/Makefile.am
-+@@ -10,7 +10,7 @@
-+ DEFS = -DLOCALEDIR=\"$(localedir)\" @DEFS@
-+ 
-+ if cc_is_gcc
-+-AM_CFLAGS=-Wall -Werror
-++AM_CFLAGS=-Wall
-+ endif
-+ 
-+ LIBS = @LIBS@
-+Index: confuse-2.6/src/Makefile.in
-+===================================================================
-+--- confuse-2.6.orig/src/Makefile.in
-++++ confuse-2.6/src/Makefile.in
-+@@ -196,7 +196,7 @@
-+ libconfuse_la_SOURCES = confuse.c lexer.l
-+ libconfuse_la_LIBADD = $(LTLIBINTL)
-+ include_HEADERS = confuse.h
-+- at cc_is_gcc_TRUE@AM_CFLAGS = -Wall -Werror
-++ at cc_is_gcc_TRUE@AM_CFLAGS = -Wall
-+ CLEANFILES = *~ \#*\#
-+ AM_LFLAGS = -Pcfg_yy -olex.yy.c
-+ all: all-am
+Builds here after r24944.
+
+ Ulf> mk	ntp                            FAIL	""
+
+Builds here.
+
+ Ulf> mk	openssh                        FAIL	""
+
+Builds here.
+
+ Ulf> mk	openssl                        OK	
+
+Failed before, but builds after r24943.
+
+ Ulf> mk	libcurl                        FAIL	""
+
+Builds here.
+
+ Ulf> mk	libtheora                      FAIL	""
+
+Dies with an ICE:
+
+dec/fragment.c: In function 'oc_frag_recon_inter2_c':
+dec/fragment.c:83: internal compiler error: Segmentation fault
+Please submit a full bug report,
+with preprocessed source if appropriate.
+See <http://gcc.gnu.org/bugs.html> for instructions.
+
+ Ulf> mk	mpg123                         FAIL	""
+
+Dies with an ICE:
+
+layer2.c: In function 'II_step_two':
+layer2.c:251: internal compiler error: Segmentation fault
+Please submit a full bug report,
+with preprocessed source if appropriate.
+See <http://gcc.gnu.org/bugs.html> for instructions.
+
+ Ulf> mk	directfb                       FAIL	""
+
+Builds here.
+
+ Ulf> mk	u-boot                         FAIL	""
+
+Builds here.
+
+-- 
+Bye, Peter Korsgaard
