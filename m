@@ -1,48 +1,54 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 21 Jan 2009 13:11:59 +0100
-Subject: [Buildroot] busybox login problem on AT91SAM9263
-In-Reply-To: <5B920D714A1C354D8949DBF58C2A35D604139AAE@freja.acte.local>
-	(Robin ActeSE Stridh's message of "Wed\,
-	21 Jan 2009 12\:10\:19 +0100")
-References: <5B920D714A1C354D8949DBF58C2A35D604139AA8@freja.acte.local>
-	<87d4egudlg.fsf@macbook.be.48ers.dk>
-	<5B920D714A1C354D8949DBF58C2A35D604139AAE@freja.acte.local>
-Message-ID: <8763k8uacw.fsf@macbook.be.48ers.dk>
+Date: Wed, 21 Jan 2009 13:25:24 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/xerces
+In-Reply-To: <1232523074.11888.2.camel@elrond.atmel.com> (Ulf Samuelsson's
+	message of "Wed\, 21 Jan 2009 08\:31\:14 +0100")
+References: <20090120213447.41570770AD@busybox.osuosl.org>
+	<87y6x5vc74.fsf@macbook.be.48ers.dk>
+	<1232523074.11888.2.camel@elrond.atmel.com>
+Message-ID: <871vuwu9qj.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Robin" == Stridh, Robin ActeSE <robin.stridh@acteembedded.se> writes:
+>>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 
 Hi,
 
- Robin> Hi Peter and thanks for your quick reply!
+ >> How about converting to Makefile.autotools.in format while you're at
+ >> it?
 
-You're welcome.
+ Ulf> I think my priority is to get things to build at all.
 
- Peter> Then it's time to debug. Do you have an /etc/securetty on the target
- Peter> and does it list ttyS0?
+Then why were you doing cleanups as well in that commit?
+Purely cosmetic cleanups to packages that should be converted to
+Makefile.autotools.in seems kind of silly to me - But anyway.
 
- Robin> Yes, ttyS0 is listed in /etc/securetty. The only change i made
- Robin> from the non working to the working version is changing the
- Robin> busybox version and rebuild buildroot.
+ Ulf> Once all packages build, then it will not be hard
+ Ulf> to get most of them into Makefile.autotools.in 
 
-Ok, are you using the default busybox config
-(package/busybox/busybox-1.13.x.config) or a custom one?
+ Ulf> BTW: Makefile.autotools.in does not support compressed
+ Ulf> patches *.patch.gz, *.patch.bz2, is that intentional?
 
- Peter> If that's ok, then I would suggest you enable strace, boot with
- Peter> init=/bin/sh and send the strace output of running login here to the
- Peter> list.
+Why should it?
 
- Robin> I tried passing init=/bin/sh to the kernel, but then I end up
- Robin> without a shell.  The console is still responsive and echoes
- Robin> everything I type and produces newlines when I hit return but
- Robin> nothing more.
+find package/ -name '*patch.?z*'
 
-Strange, that doesn't sound right. What is you console= on the kernel
-cmdline set to?
+We don't have such files, and for most patches in BR (with the
+possible exception of those unfortunate avr32 patches) I don't think
+compression will buy us much.
+
+ ulf> xerces-clean:
+ ulf> rm -rf $(STAGING_DIR)/usr/include/xercesc
+ ulf> rm -f $(STAGING_DIR)/lib/libxerces*
+ >> 
+ >> TARGET_DIR cleanup stuff seems to be missing.
+
+ Ulf> OK, Have a look at it later.
+
+Thanks.
 
 -- 
 Bye, Peter Korsgaard
