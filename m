@@ -1,53 +1,48 @@
 From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Wed, 21 Jan 2009 08:31:14 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/xerces
-In-Reply-To: <87y6x5vc74.fsf@macbook.be.48ers.dk>
-References: <20090120213447.41570770AD@busybox.osuosl.org>
-	<87y6x5vc74.fsf@macbook.be.48ers.dk>
-Message-ID: <1232523074.11888.2.camel@elrond.atmel.com>
+Date: Wed, 21 Jan 2009 12:38:41 +0100
+Subject: [Buildroot] List of working packages for ARM
+In-Reply-To: <1232526975.6326.6.camel@sven>
+References: <1232523725.11888.11.camel@elrond.atmel.com>
+	<1232526975.6326.6.camel@sven>
+Message-ID: <1232537921.11888.13.camel@elrond.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-tis 2009-01-20 klockan 23:34 +0100 skrev Peter Korsgaard:
-> >>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+ons 2009-01-21 klockan 09:36 +0100 skrev Sven Neumann:
+> Hi,
 > 
->  ulf> Author: ulf
->  ulf> Date: 2009-01-20 21:34:46 +0000 (Tue, 20 Jan 2009)
->  ulf> New Revision: 24928
+> On Wed, 2009-01-21 at 08:42 +0100, Ulf Samuelsson wrote:
+> > Using gcc-4.2.4, bu-2.18, uclibc-0.9.30
+> > wchar, largefile,ipv6, NWFPE
 > 
->  ulf> Log:
->  ulf> Bump xerces-c to latest stable, ARM build now completes
-> 
->  ulf> Modified:
->  ulf>    trunk/buildroot/package/xerces/Config.in
->  ulf>    trunk/buildroot/package/xerces/xerces.mk
-> 
-> How about converting to Makefile.autotools.in format while you're at
-> it?
+> We are building for ARM as well, using gcc 4.3.2, uclibc-0.9.30, wchar,
+> largefile, !ipv6. 
 
-I think my priority is to get things to build at all.
+Can you send your ".config" to my email address?
 
-Once all packages build, then it will not be hard
-to get most of them into Makefile.autotools.in 
-
-BTW: Makefile.autotools.in does not support compressed
-patches *.patch.gz, *.patch.bz2, is that intentional?
+Since I am not running a straight "make" (using scripts/buildall.sh),
+this can cause some extra problems.
 
 BR
 Ulf Samuelsson
 
->  ulf> +xerces-unpacked: $(XERCES_DIR)/.unpacked
->  ulf> +
->  ulf>  xerces-clean:
->  ulf>  	rm -rf $(STAGING_DIR)/usr/include/xercesc
->  ulf>  	rm -f $(STAGING_DIR)/lib/libxerces*
 > 
-> TARGET_DIR cleanup stuff seems to be missing.
+> > Some key packages that I do not get to build are
 > 
-
-OK, Have a look at it later.
-BR
-Ulf Samuelsson
+> > alsa-utils          "Depends on alsa-lib"
+> 
+> alsa-lib builds for me. Yesterday we updated to version 1.0.19, the
+> latest stable release, and that version also compiles nicely. Perhaps
+> you might want to try that update in buildroot?
+> 
+> 
+> Sven
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
