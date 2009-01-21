@@ -1,12 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 21 Jan 2009 13:28:12 +0100
+Date: Wed, 21 Jan 2009 13:34:06 +0100
 Subject: [Buildroot] List of working packages for ARM
-In-Reply-To: <1232538049.11888.16.camel@elrond.atmel.com> (Ulf Samuelsson's
-	message of "Wed\, 21 Jan 2009 12\:40\:49 +0100")
+In-Reply-To: <1232523725.11888.11.camel@elrond.atmel.com> (Ulf Samuelsson's
+	message of "Wed\, 21 Jan 2009 08\:42\:05 +0100")
 References: <1232523725.11888.11.camel@elrond.atmel.com>
-	<87vds9t51h.fsf@macbook.be.48ers.dk>
-	<1232538049.11888.16.camel@elrond.atmel.com>
-Message-ID: <87wscosv1f.fsf@macbook.be.48ers.dk>
+Message-ID: <87skncsurl.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,23 +13,35 @@ To: buildroot@busybox.net
 
 >>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 
-Hi,
+ Ulf> Using gcc-4.2.4, bu-2.18, uclibc-0.9.30
+ Ulf> wchar, largefile,ipv6, NWFPE
 
- >> Thanks, but why? Please use the default versions as that's what we're
- >> releasing with and what new users will use.
- >> 
- >> E.G. binutils 2.29, uclibc 0.9.30, gcc 4.3.2
+Again, it would be neat to have such a list with the toolchain config
+that really matters.
 
- Ulf> I have seen compiler errors with this combination,
- Ulf> so I want to build with several toolchain versions,
- Ulf> but it is in the plan.
+ Ulf> nmk	valgrind                       DISABLED	x86 specific  
 
- Ulf> I have seen some compiler problems with my combination
- Ulf> as well...
+i386/x86-64/powerpc
 
-Ok, but if we're releasing with that combination (and we should), then
-that's the one we should be spending our time on getting stable, not
-some other combination with other problems.
+
+ Ulf> mk	libconfuse                     FAIL	"error: 'input' defined but not used"
+
+How is that an error?
+
+ Ulf> nmk	database                       DISABLED	Need to enter subdirectory 
+
+? So you didn't test sqlite/mysql?
+
+
+ Ulf> mk	libcurl                        FAIL	"checking for socklen_t
+ Ulf> equivalent... unknown"
+
+I have recently built that on armv4l without problems.
+
+ Ulf> mk	madplay                        OK	"Depends on python"
+ Ulf> mk	mpg123                         FAIL	"Depends on python"
+
+That sounds unlikely - Do you have a build log?
 
 -- 
 Bye, Peter Korsgaard
