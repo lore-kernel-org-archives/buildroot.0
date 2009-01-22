@@ -1,31 +1,30 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 22 Jan 2009 10:05:50 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libconfuse
-In-Reply-To: <20090122071406.155456d9@hcegtvedt> (Hans-Christian Egtvedt's
-	message of "Thu\, 22 Jan 2009 07\:14\:06 +0100")
-References: <20090121204512.4928A768C5@busybox.osuosl.org>
-	<20090122071406.155456d9@hcegtvedt>
-Message-ID: <878wp3pv69.fsf@macbook.be.48ers.dk>
+Date: Thu, 22 Jan 2009 10:08:39 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/target/generic
+In-Reply-To: <20090122075324.D71DA765E9@busybox.osuosl.org> (ulf@uclibc.org's
+	message of "Thu\, 22 Jan 2009 07\:53\:24 +0000 \(UTC\)")
+References: <20090122075324.D71DA765E9@busybox.osuosl.org>
+Message-ID: <874ozrpv1k.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Hans-Christian" == Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> writes:
+>>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
 
- >> libconfuse: fix build by removing -Werror flag
- >> 
+ ulf> Author: ulf
+ ulf> Date: 2009-01-22 07:53:24 +0000 (Thu, 22 Jan 2009)
+ ulf> New Revision: 24952
 
- Hans-Christian> You know that is not fixing it ;) Source code should
- Hans-Christian> not generate warnings, they are usually a sign of
- Hans-Christian> something bad is happening.
+ ulf> Log:
+ ulf> Add simple way to enable most (but not all) targets for testing purposes
 
- Hans-Christian> But I guess this is fine for now.
+Please don't do that. That's not a common use case. If you want to
+test everything, just use make allyesconfig instead.
 
-True, but in this case it's a simple warning about an unused variable.
-
-Imho, shipping with -Werror isn't really a robust thing to do.
+Having such an explicit list hidden away under target/generic is bound
+to get out of sync with packages/ in no time.
 
 -- 
 Bye, Peter Korsgaard
