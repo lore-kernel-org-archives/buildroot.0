@@ -1,65 +1,47 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Thu, 22 Jan 2009 22:02:49 +0100
-Subject: [Buildroot] Problem building ALSA_UTILS
-Message-ID: <1232658169.5311.29.camel@elrond.atmel.com>
+From: Markus Heidelberg <markus.heidelberg@web.de>
+Date: Thu, 22 Jan 2009 22:17:57 +0100
+Subject: [Buildroot] svn commit:
+	trunk/buildroot/package/multimedia/gst-plugins-good
+In-Reply-To: <20090122110159.E9877765E9@busybox.osuosl.org>
+References: <20090122110159.E9877765E9@busybox.osuosl.org>
+Message-ID: <200901222217.57888.markus.heidelberg@web.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I finally discovered the reason I have had problems with alsa-utils
+laird at uclibc.org, 22.01.2009:
+> Author: laird
+> Date: 2009-01-22 11:01:56 +0000 (Thu, 22 Jan 2009)
+> New Revision: 24960
+> 
+> Log:
+> package/multimedia/gst-plugins-good/Config.in
+> package/multimedia/gst-plugins-good/gst-plugins-good.mk
 
-I get the following problem:
+It probably doesn't make sense to include the filenames in the commit
+message, let alone full paths. The VCS knows them anyway.
 
-alsamixer.o: In function `mixer_init_dc':
-alsamixer.c:(.text+0x476): undefined reference to `acs_map'
-alsamixer.o: In function `mixer_show_text':
-alsamixer.c:(.text+0x8b6): undefined reference to `acs_map'
-alsamixer.c:(.text+0x8d0): undefined reference to `acs_map'
-alsamixer.c:(.text+0x8ea): undefined reference to `acs_map'
-alsamixer.c:(.text+0x904): undefined reference to `acs_map'
-alsamixer.o:alsamixer.c:(.text+0x92c): more undefined references to ...
+> +ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PNG),y)
+> +GST_PLUGINS_GOOD_CONF_OPT += --enable-png
+> +GST_PLUGINS_GOOD_DEPENDENCIES += libpng
+> +else
+> +GST_PLUGINS_GOOD_CONF_OPT += --disable-png
+> +endif
 
-acs_map is coming from the ncurses directory, but
-in ncurses.h, acs_map is defined to something else.
-I have not found any library using acs_map,
-they are all using nc_acs_map.
+I just saw this in configure:
+  --disable-libpng             disable Portable Network Graphics library: png
 
-in $(ALSA_UTILS_DIR)/alamizer/,deps/alsamixer.Po I found
-
-
-/home/ulf/projects/Buildroot/20090122/buildroot/build_avr32/staging_dir/usr/include/sys/user.h:
-/home/ulf/projects/Buildroot/20090122/buildroot/build_avr32/staging_dir/usr/include/locale.h:
-/home/ulf/projects/Buildroot/20090122/buildroot/build_avr32/staging_dir/usr/include/bits/uClibc_locale.h:
-/usr/include/ncurses/ncurses.h:
-/home/ulf/projects/Buildroot/20090122/buildroot/build_avr32/staging_dir/usr/include/ncurses_dll.h:
-
-so ncurses.h comes from the host machine, and not from the target
-machine.
-
-In OpenSuSE 11.0 this contains:
-
-#if 0
-extern NCURSES_EXPORT_VAR(chtype*) _nc_acs_map(void);
-#define acs_map (_nc_acs_map())
-#else
-extern NCURSES_EXPORT_VAR(chtype) acs_map[];
-#endif
-
-which means that acs_map becomes a valid identifier
-which is exported but not found, since Buildroot ncurses uses:
-
-?#if 1
-extern NCURSES_EXPORT_VAR(chtype*) _nc_acs_map(void);
-#define acs_map (_nc_acs_map())
-#else
-extern NCURSES_EXPORT_VAR(chtype) acs_map[];
-#endif
+libpng instead of png
 
 
-I do not yet know why the host alsa-utils
-uses ?/usr/include/ncurses/ncurses.h.
+Also, please keep the order of the config options identically between
+the files for Kconfig and Make.
+In Config.in you have : jpeg, png, bz2, zlib
+In gst-plugins-good.mk: bz2, zlib, jpeg, png
 
-BR
-Ulf Samuelsson
+With this big amount of options, it could get distracting, when
+extending the package or searching for bugs.
+
+Markus
