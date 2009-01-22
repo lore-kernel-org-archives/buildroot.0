@@ -1,188 +1,82 @@
-From: laird at uclibc.org <laird@uclibc.org>
-Date: Thu, 22 Jan 2009 11:01:59 +0000 (UTC)
-Subject: [Buildroot] svn commit:
-	trunk/buildroot/package/multimedia/gst-plugins-good
-Message-ID: <20090122110159.E9877765E9@busybox.osuosl.org>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Thu, 22 Jan 2009 11:18:44 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
+Message-ID: <20090122111844.D8E3F765E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: laird
-Date: 2009-01-22 11:01:56 +0000 (Thu, 22 Jan 2009)
-New Revision: 24960
+Author: jacmet
+Date: 2009-01-22 11:18:44 +0000 (Thu, 22 Jan 2009)
+New Revision: 24961
 
 Log:
-package/multimedia/gst-plugins-good/Config.in
-package/multimedia/gst-plugins-good/gst-plugins-good.mk
+toolchain/gcc: make version detection more robust
 
-Always disable ESD
-Move JPEG/PNG
-Add BZIP2/ZLIB options as posted by Markus
-Add LIBXML2 dependency for annodex
-
-Signed-off-by: Daniel Laird <daniel.j.laird@nxp.com>
-
-
+Thanks to Bernhard for noticing (and less so for causing the problem in
+the first place :P)
 
 Modified:
-   trunk/buildroot/package/multimedia/gst-plugins-good/Config.in
-   trunk/buildroot/package/multimedia/gst-plugins-good/gst-plugins-good.mk
+   trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/multimedia/gst-plugins-good/Config.in
+Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
 ===================================================================
---- trunk/buildroot/package/multimedia/gst-plugins-good/Config.in	2009-01-22 10:15:46 UTC (rev 24959)
-+++ trunk/buildroot/package/multimedia/gst-plugins-good/Config.in	2009-01-22 11:01:56 UTC (rev 24960)
-@@ -10,6 +10,30 @@
- 
- if BR2_PACKAGE_GST_PLUGINS_GOOD
- 
-+config BR2_PACKAGE_GST_PLUGINS_GOOD_JPEG
-+	bool "jpeg (JPEG support)"
-+	select BR2_PACKAGE_JPEG
-+
-+config BR2_PACKAGE_GST_PLUGINS_GOOD_PNG
-+	bool "png (PNG support)"
-+	select BR2_PACKAGE_LIBPNG
-+
-+config BR2_PACKAGE_GST_PLUGINS_GOOD_BZ2
-+	bool "bz2 support"
-+	depends on BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_MATROSKA
-+	select BR2_PACKAGE_BZIP2
-+	help
-+	  Enable bz2 support for the following plugins:
-+	  matroska
-+
-+config BR2_PACKAGE_GST_PLUGINS_GOOD_ZLIB
-+	bool "zlib support"
-+	depends on BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_QTDEMUX || BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_ID3DEMUX || BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_MATROSKA
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  Enable zlib support for the following plugins:
-+	  id3demux, qtdemux, matroska
-+
- comment "dependency-less plugins"
- 
- config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_VIDEOFILTER
-@@ -72,8 +96,6 @@
- 
- config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_MATROSKA
- 	bool "matroska"
--	select BR2_PACKAGE_BZIP2
--	select BR2_PACKAGE_ZLIB
- 
- config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_MONOSCOPE
- 	bool "monoscope"
-@@ -121,25 +143,13 @@
- 	bool "wavparse (*.wav audio)"
- 	default y
- 
--comment "plugins with external dependencies (more to come)"
-+comment "plugins with external dependencies"
- 
- config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_ANNODEX
- 	bool "annodex (XML Library)"
--	default y
-+	select BR2_PACKAGE_LIBXML2
- 
--config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_ESD
--	bool "esdsink (ESounD sound daemon)"
--
--config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_JPEG
--	bool "jpeg (JPEG support)"
--	select BR2_PACKAGE_JPEG
--	default y
--
- config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_OSS
- 	bool "ossaudio (OSS audio)"
- 
--config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_PNG
--	bool "png (PNG support)"
--	select BR2_PACKAGE_LIBPNG
--	default y
- endif
-
-Modified: trunk/buildroot/package/multimedia/gst-plugins-good/gst-plugins-good.mk
-===================================================================
---- trunk/buildroot/package/multimedia/gst-plugins-good/gst-plugins-good.mk	2009-01-22 10:15:46 UTC (rev 24959)
-+++ trunk/buildroot/package/multimedia/gst-plugins-good/gst-plugins-good.mk	2009-01-22 11:01:56 UTC (rev 24960)
-@@ -22,10 +22,39 @@
- 		--disable-aalibtest \
- 		--disable-esdtest \
- 		--disable-shout2 \
--		--disable-shout2test
-+		--disable-shout2test \
-+		--disable-esd 
- 
- GST_PLUGINS_GOOD_DEPENDENCIES = gstreamer gst-plugins-base
- 
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_BZ2),y)
-+GST_PLUGINS_GOOD_CONF_OPT += --enable-bz2
-+GST_PLUGINS_GOOD_DEPENDENCIES += bzip2
-+else
-+GST_PLUGINS_GOOD_CONF_OPT += --disable-bz2
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_ZLIB),y)
-+GST_PLUGINS_GOOD_CONF_OPT += --enable-zlib
-+GST_PLUGINS_GOOD_DEPENDENCIES += zlib
-+else
-+GST_PLUGINS_GOOD_CONF_OPT += --disable-zlib
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_JPEG),y)
-+GST_PLUGINS_GOOD_CONF_OPT += --enable-jpeg
-+GST_PLUGINS_GOOD_DEPENDENCIES += jpeg
-+else
-+GST_PLUGINS_GOOD_CONF_OPT += --disable-jpeg
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PNG),y)
-+GST_PLUGINS_GOOD_CONF_OPT += --enable-png
-+GST_PLUGINS_GOOD_DEPENDENCIES += libpng
-+else
-+GST_PLUGINS_GOOD_CONF_OPT += --disable-png
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_VIDEOFILTER),y)
- GST_PLUGINS_GOOD_CONF_OPT += --enable-videofilter
+--- trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2009-01-22 11:01:56 UTC (rev 24960)
++++ trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2009-01-22 11:18:44 UTC (rev 24961)
+@@ -347,7 +347,7 @@
+ 	# Now for the ugly 3.3.x soft float hack...
+ 	#
+ ifeq ($(BR2_SOFT_FLOAT),y)
+-ifeq ($(findstring 3.3.,$(GCC_VERSION)),3.3.)
++ifeq ($(findstring x3.3.,x$(GCC_VERSION)),x3.3.)
+ 	# Make sure we have a soft float specs file for this arch
+ 	if [ ! -f toolchain/gcc/$(GCC_VERSION)/specs-$(ARCH)-soft-float ]; then \
+ 		echo soft float configured but no specs file for this arch; \
+@@ -464,20 +464,20 @@
+ #
+ # gcc-lib dir changes names to gcc with 3.4.mumble
+ #
+-ifeq ($(findstring 3.4.,$(GCC_VERSION)),3.4.)
++ifeq ($(findstring x3.4.,x$(GCC_VERSION)),x3.4.)
+ GCC_LIB_SUBDIR=lib/gcc/$(REAL_GNU_TARGET_NAME)/$(GCC_VERSION)
  else
-@@ -239,34 +268,15 @@
- 
- ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_ANNODEX),y)
- GST_PLUGINS_GOOD_CONF_OPT += --enable-annodex
-+GST_PLUGINS_GOOD_DEPENDENCIES += libxml2
- else
- GST_PLUGINS_GOOD_CONF_OPT += --disable-annodex
+ GCC_LIB_SUBDIR=lib/gcc-lib/$(REAL_GNU_TARGET_NAME)/$(GCC_VERSION)
  endif
- 
--ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_ESD),y)
--GST_PLUGINS_GOOD_CONF_OPT += --enable-esd
--else
--GST_PLUGINS_GOOD_CONF_OPT += --disable-esd
--endif
--
--ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_JPEG),y)
--GST_PLUGINS_GOOD_CONF_OPT += --enable-jpeg
--GST_PLUGINS_GOOD_DEPENDENCIES += jpeg
--else
--GST_PLUGINS_GOOD_CONF_OPT += --disable-jpeg
--endif
--
- ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_OSS),y)
- GST_PLUGINS_GOOD_CONF_OPT += --enable-oss
- else
- GST_PLUGINS_GOOD_CONF_OPT += --disable-oss
+ # sigh... we need to find a better way
+-ifeq ($(findstring 4.0.,$(GCC_VERSION)),4.0.)
++ifeq ($(findstring x4.0.,x$(GCC_VERSION)),x4.0.)
+ GCC_LIB_SUBDIR=lib/gcc/$(REAL_GNU_TARGET_NAME)/$(GCC_VERSION)
  endif
- 
--ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_PNG),y)
--GST_PLUGINS_GOOD_CONF_OPT += --enable-png
--GST_PLUGINS_GOOD_DEPENDENCIES += libpng
--else
--GST_PLUGINS_GOOD_CONF_OPT += --disable-png
--endif
--
- $(eval $(call AUTOTARGETS,package/multimedia,gst-plugins-good))
+-ifeq ($(findstring 4.1.,$(GCC_VERSION)),4.1.)
++ifeq ($(findstring x4.1.,x$(GCC_VERSION)),x4.1.)
+ GCC_LIB_SUBDIR=lib/gcc/$(REAL_GNU_TARGET_NAME)/$(GCC_VERSION)
+ endif
+-ifeq ($(findstring 4.2,$(GCC_VERSION)),4.2)
+-ifneq ($(findstring 4.2.,$(GCC_VERSION)),4.2.)
++ifeq ($(findstring x4.2,x$(GCC_VERSION)),x4.2)
++ifneq ($(findstring x4.2.,x$(GCC_VERSION)),x4.2.)
+ REAL_GCC_VERSION=$(shell cat $(GCC_SRC_DIR)/gcc/BASE-VER)
+ GCC_LIB_SUBDIR=lib/gcc/$(REAL_GNU_TARGET_NAME)/$(REAL_GCC_VERSION)
+ else
+@@ -485,7 +485,7 @@
+ endif
+ endif
+ GCC_INCLUDE_DIR:=include
+-ifeq ($(findstring 4.3,$(GCC_VERSION)),4.3)
++ifeq ($(findstring x4.3,x$(GCC_VERSION)),x4.3)
+ GCC_LIB_SUBDIR=lib/gcc/$(REAL_GNU_TARGET_NAME)/$(GCC_VERSION)
+ GCC_INCLUDE_DIR:=include-fixed
+ endif
+@@ -499,7 +499,7 @@
+ 	# Now for the ugly 3.3.x soft float hack...
+ 	#
+ ifeq ($(BR2_SOFT_FLOAT),y)
+-ifeq ($(findstring 3.3.,$(GCC_VERSION)),3.3.)
++ifeq ($(findstring x3.3.,x$(GCC_VERSION)),x3.3.)
+ 	# Add a specs file that defaults to soft float mode.
+ 	cp toolchain/gcc/$(GCC_VERSION)/specs-$(ARCH)-soft-float $(TARGET_DIR)/usr/lib/gcc-lib/$(REAL_GNU_TARGET_NAME)/$(GCC_VERSION)/specs
+ 	# Make sure gcc does not think we are cross compiling
