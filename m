@@ -1,33 +1,22 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Thu, 22 Jan 2009 07:14:06 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libconfuse
-In-Reply-To: <20090121204512.4928A768C5@busybox.osuosl.org>
-References: <20090121204512.4928A768C5@busybox.osuosl.org>
-Message-ID: <20090122071406.155456d9@hcegtvedt>
+From: =?utf-8?B?RGFuaWVs?= <lida_mail@163.com>
+Date: Thu, 22 Jan 2009 15:03:50 +0800
+Subject: [Buildroot] =?utf-8?q?Does_anyone_have_done_truecrypt_on_buildroo?=
+	=?utf-8?q?t=3F?=
+References: <1232523725.11888.11.camel@elrond.atmel.com>,
+	<200901221429040909225@163.com>
+Message-ID: <200901221503500269098@163.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 21 Jan 2009 20:45:12 +0000 (UTC)
-jacmet at uclibc.org wrote:
+Dear All,
 
-> Author: jacmet
-> Date: 2009-01-21 20:45:10 +0000 (Wed, 21 Jan 2009)
-> New Revision: 24944
-> 
-> Log:
-> libconfuse: fix build by removing -Werror flag
-> 
+Does anyone have done truecrypt on buildroot?
 
-You know that is not fixing it ;) Source code should not generate
-warnings, they are usually a sign of something bad is happening.
-
-But I guess this is fine for now.
-
-<snipp>
-
--- 
-Best regards,
-Hans-Christian Egtvedt
+------------------				 
+Sincerely yours,
+		 
+Daniel Li
+2009-01-22
