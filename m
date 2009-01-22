@@ -1,51 +1,34 @@
-From: Gaye Abdoulaye Walsimou <walsimou@walsimou.com>
-Date: Thu, 22 Jan 2009 20:10:50 +0100
-Subject: [Buildroot] Kernel panic - not syncing: Attempted to kill
- init!: at	boot time
-In-Reply-To: <C171323BB93CB94897E300CBB6D4537F17D80301@CLMSG-01.ad.cirrus.com>
-References: <C171323BB93CB94897E300CBB6D4537F17D80301@CLMSG-01.ad.cirrus.com>
-Message-ID: <4978C4BA.3030805@walsimou.com>
+From: Stridh, Robin ActeSE <robin.stridh@acteembedded.se>
+Date: Thu, 22 Jan 2009 20:12:17 +0100
+Subject: [Buildroot]     busybox login problem on AT91SAM9263
+References: <5B920D714A1C354D8949DBF58C2A35D604139AA8@freja.acte.local><87d4egudlg.fsf@macbook.be.48ers.dk><5B920D714A1C354D8949DBF58C2A35D604139AAE@freja.acte.local><8763k8uacw.fsf@macbook.be.48ers.dk><1232559369.11888.20.camel@elrond.atmel.com><5B920D714A1C354D8949DBF58C2A35D604139ABA@freja.acte.local><877i4no5n7.fsf@macbook.be.48ers.dk><5B920D714A1C354D8949DBF58C2A35D604139ABB@freja.acte.local><87zlhjml3m.fsf@macbook.be.48ers.dk><5B920D714A1C354D8949DBF58C2A35D604139ABC@freja.acte.local>
+	<87sknbmjj4.fsf@macbook.be.48ers.dk>
+Message-ID: <5B920D714A1C354D8949DBF58C2A35D604139ABE@freja.acte.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Austin, Brian wrote:
-> It's not quite that we aren't inspired.  It seems to be a common problem.
-> Usually it's from either EABI/OABI conflicts with the kernel and your ramdisk, or something broken in the build with busybox itself.
->   
-> Have you run 'file' on your init or busybox binary?
->
->   
+ Robin> I configured buildroot to use an external toolchain and tried
+ Robin> using the toolchain built with the working configuration
+ Robin> (r24822) to build the current version of the root file system
+ Robin> (r24966). Here the login actually works!
 
-Austin,
+Seems I've been searching a dead end. I compared the configurations and 
+found that I had Target ABI set to EABI, but Ulf has used OABI in 
+at91sam9263ek_defconfig. When selecting OABI the login works for all 
+versions I have tried, including r24966 from today.
 
-Toolchain #1:
-kernel header linux-2.6.28.1, gcc-4.3.2, binutils-2.9, uclibc-0.9.30
+I know I have selected EABI in buildroot sucessfully in the past and my kernel 
+is built to support both. Now I have no idea when this thing broke - probably 
+months ago.
 
-Toolchain #1:
-kernel header linux-2.6.27.10, gcc-4.2.4, binutils-2.9, uclibc-0.9.30
+What ABI is recommended for Buildroot? I though that if selectable you should 
+always choose EABI since it's newer?
 
-
-busybox which generates a kernel panic:
-file /nfsroot/bin/busybox
-/nfsroot/bin/busybox: setuid ELF 32-bit LSB executable, MIPS, MIPS32 
-rel2 version 1 (SYSV), dynamically linked (uses shared libs), stripped
-build with toolchain #1
-
-file /var/lib/tftpboot/vmlinux
-/var/lib/tftpboot/vmlinux: ELF 32-bit LSB executable, MIPS, MIPS32 
-version 1 (SYSV), statically linked, not stripped
-build with toolchain #1
-
-Working busybox:
-bin/busybox: setuid ELF 32-bit LSB executable, MIPS, MIPS32 version 1 
-(SYSV), dynamically linked (uses shared libs), stripped
-build with toolchain #2
-
-I'm a bit confused, I've set mips32r2 in buildroot for toolchain #1 and 
-for toolchain #2.
-
-Thanks for your answer.
-Regards
+Best regards,
+Robin
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://lists.busybox.net/pipermail/buildroot/attachments/20090122/c7ea09db/attachment.htm 
