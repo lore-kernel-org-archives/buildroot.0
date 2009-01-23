@@ -1,60 +1,148 @@
 From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Fri, 23 Jan 2009 15:50:05 +0100
-Subject: [Buildroot] busybox login problem on AT91SAM9263
-In-Reply-To: <1232721038.6350.9.camel@sven>
-References: <5B920D714A1C354D8949DBF58C2A35D604139AA8@freja.acte.local>
-	<87d4egudlg.fsf@macbook.be.48ers.dk>
-	<5B920D714A1C354D8949DBF58C2A35D604139AAE@freja.acte.local>
-	<8763k8uacw.fsf@macbook.be.48ers.dk>
-	<1232559369.11888.20.camel@elrond.atmel.com>
-	<5B920D714A1C354D8949DBF58C2A35D604139ABA@freja.acte.local>
-	<877i4no5n7.fsf@macbook.be.48ers.dk>
-	<5B920D714A1C354D8949DBF58C2A35D604139ABB@freja.acte.local>
-	<87zlhjml3m.fsf@macbook.be.48ers.dk>
-	<5B920D714A1C354D8949DBF58C2A35D604139ABC@freja.acte.local>
-	<87sknbmjj4.fsf@macbook.be.48ers.dk>
-	<5B920D714A1C354D8949DBF58C2A35D604139ABE@freja.acte.local>
-	<87wscml1t2.fsf@macbook.be.48ers.dk>
-	<1232715723.5311.57.camel@elrond.atmel.com>
-	<1232721038.6350.9.camel@sven>
-Message-ID: <1232722205.5311.66.camel@elrond.atmel.com>
+Date: Fri, 23 Jan 2009 15:53:43 +0100
+Subject: [Buildroot] Some AT91SAM9261-EK Notes
+In-Reply-To: <BAY124-W491126D3265E8BD9DCF5DCD2CE0@phx.gbl>
+References: <BAY124-W491126D3265E8BD9DCF5DCD2CE0@phx.gbl>
+Message-ID: <1232722423.5311.70.camel@elrond.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-fre 2009-01-23 klockan 15:30 +0100 skrev Sven Neumann:
-> Hi,
-> 
-> On Fri, 2009-01-23 at 14:02 +0100, Ulf Samuelsson wrote:
-> 
-> > I OABI works and EABI doesn't then I am not going to drive EABI.
-> > Still way too many packages that does not build...
-> 
-> Oh, please. EABI works nicely as long as the toolchain is correctly
-> configured. And there are very good reasons to prefer EABI over OABI.
-> The performance difference is definitely worth it.
-> 
+tor 2009-01-22 klockan 13:19 -0800 skrev Quick X:
+> I was updating/testing some versions of things and noticed three small issues.
+>  
+> First: Using the "uClibc-0.9.30.config" file segfaults some packages, for example dropbear and samba.
+>  
+> ---at91sam9261ek_defconfig---  Works Fine
+> uClibc 0.9.30 (uClibc-0.9.29.config)
+> binutils 2.18
+> gcc 4.2.4
+> BusyBox 1.13.x (busybox-1.6.0.config)
+> at91bootstrap 2.10
+> u-boot-2009.01
+>  
+> ---Attempted 1---  Compiles but some Packages Don't work
+> uClibc 0.9.30 (uClibc-0.9.30.config)
+> binutils 2.19
+> gcc 4.3.2
+> BusyBox 1.13.x (busybox-1.13.x.config)
+> at91bootstrap 2.10
+> u-boot-2009.01
+>  
+> ---Attempted 2---  Works Fine
+> uClibc 0.9.30 (uClibc-0.9.29.config)
+> binutils 2.19
+> gcc 4.3.2
+> BusyBox 1.13.x (busybox-1.13.x.config)
+> at91bootstrap 2.10
+> u-boot-2009.01
 
-If it is so easy that you just need to change OABI to EABI,
-then do I need to get involved?
-I do not say that it is a bad idea to have EABI,
-but you have to choose your battleground,
-and my primary focus is ironing
-out inherent issues with current packages.
 
-Everything else has less importance to me, RIGHT NOW.
+Can you  build uclibc-0.9.30 with ?uclibc-0.9.29.config without
+updating configuration item.
 
-Since it is a collaborative effort, anyone
-can take up the EABI ball.
+Maybe you can provide a diff between the resulting .config
+and the ?uclibc-0.9.30.config
 
 BR
 Ulf Samuelsson
 
-> Sven
+
+> 
+> As you can see only the uClibc-0.9.30.config was changed to get it working.  When I say doesn't work I mean error messages during Boot (Seg Fault and Core Dump).  IE
+>  
+> ---Working Hyperterminal Log (From Attempt 2)---
+> [[[SNIP]]]
+> Advanced Linux Sound Architecture Driver Version 1.0.18rc3.
+> at73c213 spi0.3: at73c213: supported bitrate is 48500 (64 divider)
+> ASoC version 0.13.2
+> Error: Driver 'at73c213' is already registered, aborting...
+> ALSA device list:
+>   #0: AT91SAM9261-EK external DAC on irq 15
+> TCP cubic registered
+> NET: Registered protocol family 10
+> IPv6 over IPv4 tunneling driver
+> NET: Registered protocol family 17
+> RPC: Registered udp transport module.
+> RPC: Registered tcp transport module.
+> drivers/rtc/hctosys.c: unable to open rtc device (rtc0)
+> VFS: Mounted root (jffs2 filesystem).
+> Freeing init memory: 136K
+> Initializing random number generator... done.
+> Starting network...
+> ip: RTNETLINK answers: File exists
+> Starting dropbear sshd: generating rsa key... generating dsa key... OK
+> Starting SMB services: done
+> Starting NMB services: done
+>  
+> Welcome to the Erik's uClibc development environment running on an AT91SAM9261EK
+> AT91SAM9261EK login:
+> ---END---
+>  
+> 
+> ---Broken Hyperterminal Log (From Attemp 1)---
+> Advanced Linux Sound Architecture Driver Version 1.0.18rc3.
+> at73c213 spi0.3: at73c213: supported bitrate is 48500 (64 divider)
+> ASoC version 0.13.2
+> Error: Driver 'at73c213' is already registered, aborting...
+> ALSA device list:
+>   #0: AT91SAM9261-EK external DAC on irq 15
+> TCP cubic registered
+> NET: Registered protocol family 10
+> IPv6 over IPv4 tunneling driver
+> NET: Registered protocol family 17
+> RPC: Registered udp transport module.
+> RPC: Registered tcp transport module.
+> drivers/rtc/hctosys.c: unable to open rtc device (rtc0)
+> VFS: Mounted root (jffs2 filesystem).
+> Freeing init memory: 136K
+> Initializing random number generator... done.
+> Starting network...
+> Starting dropbear sshd: generating rsa key... generating dsa key... Aiee, segfau
+> lt! You should probably report this as a bug to the developer
+> OK
+> Starting SMB services: Aborted (core dumped)
+> done
+> Starting NMB services: done
+>  
+> Welcome to the Erik's uClibc development environment running on an AT91SAM9261EK
+> AT91SAM9261EK login:
+> ---END---
+>  
 > 
 > 
+> 
+> Second: I was able to test the "save config" using a custom linux config.  This works now as long as you use "save config" (because it sets the "BOARD_PATH" as well as the "BR2_LINUX_KCONFIG").  If you manually set the Linux Config file with a "make menuconfig", then you also have to manually set the "make menuconfig> XXX> Atmel board repository".  Maybe intended but took me a little bit to figure out.
+>  
+> 
+> 
+> 
+> Third: Since U-Boot moved I thought I'd try testing "make menuconfig> Target Options> Atmel Device Support> Secondary Locations> () also copy image to..." again.  Setting it to nothing still results in a make error.
+>  
+> ---Also Copy Image To Make Error---
+> [[[SNIP]]]
+> rm -f /home/dustin/buildroot/binaries/at91sam9261ek/at91bootstrap.bin
+> (cd /home/dustin/buildroot/binaries/at91sam9261ek ; \
+>          ln -sf at91sam9261ek-dataflashboot-2.10.bin at91bootstrap.bin \
+>         )
+> make[1]: Leaving directory `/home/dustin/buildroot/project_build_arm/at91sam9261ek/at91bootstrap-2.10'
+> make DESTDIR="" -C /home/dustin/buildroot/project_build_arm/at91sam9261ek/at91bootstrap-2.10 install
+> make[1]: Entering directory `/home/dustin/buildroot/project_build_arm/at91sam9261ek/at91bootstrap-2.10'
+> install -d
+> install: missing file operand
+> Try `install --help' for more information.
+> make[1]: [install] Error 1 (ignored)
+> install binaries/at91sam9261ek-dataflashboot-2.10.bin.fixboot /at91sam9261ek-dataflashboot-2.10.bin
+> install: cannot create regular file `/at91sam9261ek-dataflashboot-2.10.bin': Permission denied
+> make[1]: *** [install] Error 1
+> make[1]: Leaving directory `/home/dustin/buildroot/project_build_arm/at91sam9261ek/at91bootstrap-2.10'
+> make: *** [/home/dustin/buildroot/project_build_arm/at91sam9261ek/at91bootstrap-2.10/.installed] Error 2
+> dustin at dds186:~/buildroot$
+> _________________________________________________________________
+> Drag n? drop?Get easy photo sharing with Windows Live? Photos.
+> http://www.microsoft.com/windows/windowslive/photos.aspx
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
