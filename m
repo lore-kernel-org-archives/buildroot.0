@@ -1,69 +1,87 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 23 Jan 2009 19:48:42 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libsexy
-In-Reply-To: <20090123174850.A9B52769CC@busybox.osuosl.org> (ulf@uclibc.org's
-	message of "Fri\, 23 Jan 2009 17\:48\:50 +0000 \(UTC\)")
-References: <20090123174850.A9B52769CC@busybox.osuosl.org>
-Message-ID: <87mydhkgdx.fsf@macbook.be.48ers.dk>
+From: QuickX <quickx@hotmail.com>
+Date: Fri, 23 Jan 2009 11:38:55 -0800
+Subject: [Buildroot] Some AT91SAM9261-EK Notes
+In-Reply-To: <1232722423.5311.70.camel@elrond.atmel.com>
+References: <BAY124-W491126D3265E8BD9DCF5DCD2CE0@phx.gbl>
+	<1232722423.5311.70.camel@elrond.atmel.com>
+Message-ID: <BAY124-DS41A02756B01D8CBA35C29D2CF0@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+> Can you  build uclibc-0.9.30 with ?uclibc-0.9.29.config without
+> updating configuration item.
+>
+> Maybe you can provide a diff between the resulting .config
+> and the ?uclibc-0.9.30.config
 
- ulf> Author: ulf
- ulf> Date: 2009-01-23 17:48:49 +0000 (Fri, 23 Jan 2009)
- ulf> New Revision: 24982
+I built the project with uClibc-0.9.30 (0.9.29.config), and then build 
+project with uClibc-0.9.30 (0.9.30.config).  Here are the differences in the 
+generated "toolchain_build_arm/uClibc-0.9.30/.config"'s.  I TABed the Items 
+that didn't show up in the counterpart config.
 
- ulf> Log:
- ulf> Disable libsexy (with comment) if X is not available
+---uClibc 0.9.30 (with 0.9.29.config); Working; Took Default for Questions 
+Asked During Build---
+# FORCE_SHAREABLE_TEXT_SEGMENTS is not set
+LDSO_CACHE_SUPPORT=y
+	LDSO_BASE_FILENAME="ld.so"
+# UNIX98PTY_ONLY is not set
+UCLIBC_HAS_GETPT=y
+# UCLIBC_USE_NETLINK is not set
+UCLIBC_HAS_STRING_GENERIC_OPT=y
+UCLIBC_HAS_STRING_ARCH_OPT=y
+UCLIBC_HAS_CTYPE_CHECKED=y
+# UCLIBC_HAS_CTYPE_ENFORCED is not set
+UCLIBC_HAS_STDIO_GETC_MACRO=y
+UCLIBC_HAS_STDIO_PUTC_MACRO=y
+UCLIBC_HAS_GNU_GETSUBOPT=y
+UCLIBC_HAS_REGEX_OLD=y
+UCLIBC_HAS_FNMATCH_OLD=y
+# UCLIBC_HAS_ARC4RANDOM is not set
 
- ulf> Modified:
- ulf>    trunk/buildroot/package/libsexy/Config.in
 
- ulf> Changeset:
- ulf> Modified: trunk/buildroot/package/libsexy/Config.in
- ulf> ===================================================================
- ulf> --- trunk/buildroot/package/libsexy/Config.in	2009-01-23 13:12:57 UTC (rev 24981)
- ulf> +++ trunk/buildroot/package/libsexy/Config.in	2009-01-23 17:48:49 UTC (rev 24982)
- ulf> @@ -1,6 +1,7 @@
- ulf>  config BR2_PACKAGE_LIBSEXY
- ulf>  	bool "libsexy"
- ulf>  	depends on BR2_PACKAGE_LIBGTK2
- ulf> +	depends on !BR2_PACKAGE_XSERVER_none
+---uClibc 0.9.30 (with 0.9.30.config); Not Working; Didn't Ask Any Questions 
+During Build---
+FORCE_SHAREABLE_TEXT_SEGMENTS=y
+# LDSO_CACHE_SUPPORT is not set
+UNIX98PTY_ONLY=y
+# UCLIBC_HAS_GETPT is not set
+UCLIBC_USE_NETLINK=y
+	UCLIBC_SUPPORT_AI_ADDRCONFIG=y
+# UCLIBC_HAS_STRING_GENERIC_OPT is not set
+# UCLIBC_HAS_STRING_ARCH_OPT is not set
+# UCLIBC_HAS_CTYPE_CHECKED is not set
+UCLIBC_HAS_CTYPE_ENFORCED=y
+# UCLIBC_HAS_STDIO_GETC_MACRO is not set
+# UCLIBC_HAS_STDIO_PUTC_MACRO is not set
+# UCLIBC_HAS_GNU_GETSUBOPT is not set
+# UCLIBC_HAS_REGEX_OLD is not set
+# UCLIBC_HAS_FNMATCH_OLD is not set
+UCLIBC_HAS_ARC4RANDOM=y
 
-According to the makefile it seems like there's a:
 
-select BR2_PACKAGE_XLIB_LIBX11
+My guess is that it's the "UCLIBC_USE_NETLINK" option since it looks like 
+only networky applications are affected (dropbear, samba, etc).  I'm 
+actually catching a plane in 8 hours and will be gone for a week, however, I 
+can try to test the options one by one if you can't tell what it is from 
+just the diff.
 
-missing.
-
-But from doing a quick grep in the libsexy sources I don't see
-any X includes, so are you sure it doesn't work with
-gtk-over-directfb?
-
-From a quick look at configure.ac, it seems to check for:
-
-pango >= 1.4.0, glib-2.0 >= 2.4.0, gtk+-2.0 >= 2.4.0, libxml-2.0
-
-The first 3 are covered by the gtk2 dependency, but libxml2 isn't.
-
- ulf>  	help
- ulf>  	  libsexy is a collection of GTK+ widgets that extend the
- ulf>  	  functionality of such standard widgets as GtkEntry and
- ulf> @@ -8,3 +9,7 @@
- ulf>  	  limitations of the widgets.
- 
- ulf>  	  http://www.chipx86.com/wiki/Libsexy
- ulf> +
- ulf> +comment "libsexy       - disabled (requires X-Windows)"
- ulf> +	depends on BR2_PACKAGE_XSERVER_none
- ulf> +
-
-We don't normally do that for X-only stuff. Long term, we should
-probably move X apps to a seperate menu.
-
--- 
-Bye, Peter Korsgaard
+I also attached both the generated config files if they are helpful.  I 
+wasn't too sure what "without updating configuration items" meant, is it an 
+option somewhere? 
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: Working Generated uClibc.config
+Type: application/xml
+Size: 5982 bytes
+Desc: not available
+Url : http://lists.busybox.net/pipermail/buildroot/attachments/20090123/5de0861b/attachment-0002.xml 
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: NotWorking Generated uClibc.config
+Type: application/xml
+Size: 6061 bytes
+Desc: not available
+Url : http://lists.busybox.net/pipermail/buildroot/attachments/20090123/5de0861b/attachment-0003.xml 
