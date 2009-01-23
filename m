@@ -1,43 +1,84 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Fri, 23 Jan 2009 21:06:06 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/docs
-Message-ID: <20090123210606.7E75C76D75@busybox.osuosl.org>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Fri, 23 Jan 2009 22:06:16 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libsexy
+In-Reply-To: <87mydhkgdx.fsf@macbook.be.48ers.dk>
+References: <20090123174850.A9B52769CC@busybox.osuosl.org>
+	<87mydhkgdx.fsf@macbook.be.48ers.dk>
+Message-ID: <1232744776.5311.93.camel@elrond.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-01-23 21:06:05 +0000 (Fri, 23 Jan 2009)
-New Revision: 24991
+fre 2009-01-23 klockan 19:48 +0100 skrev Peter Korsgaard:
+> >>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+> 
+>  ulf> Author: ulf
+>  ulf> Date: 2009-01-23 17:48:49 +0000 (Fri, 23 Jan 2009)
+>  ulf> New Revision: 24982
+> 
+>  ulf> Log:
+>  ulf> Disable libsexy (with comment) if X is not available
+> 
+>  ulf> Modified:
+>  ulf>    trunk/buildroot/package/libsexy/Config.in
+> 
+>  ulf> Changeset:
+>  ulf> Modified: trunk/buildroot/package/libsexy/Config.in
+>  ulf> ===================================================================
+>  ulf> --- trunk/buildroot/package/libsexy/Config.in	2009-01-23 13:12:57 UTC (rev 24981)
+>  ulf> +++ trunk/buildroot/package/libsexy/Config.in	2009-01-23 17:48:49 UTC (rev 24982)
+>  ulf> @@ -1,6 +1,7 @@
+>  ulf>  config BR2_PACKAGE_LIBSEXY
+>  ulf>  	bool "libsexy"
+>  ulf>  	depends on BR2_PACKAGE_LIBGTK2
+>  ulf> +	depends on !BR2_PACKAGE_XSERVER_none
+> 
+> According to the makefile it seems like there's a:
+> 
+> select BR2_PACKAGE_XLIB_LIBX11
+> 
+> missing.
+> 
+> But from doing a quick grep in the libsexy sources I don't see
+> any X includes, so are you sure it doesn't work with
+> gtk-over-directfb?
+> 
 
-Log:
-docs/news.html: announce -rc2
 
-Modified:
-   trunk/buildroot/docs/news.html
+Not 100% sure, but it does not work as it is today due to:
+LIBSEXY_DEPENDENCIES = xlib_libX11 libgtk2
 
 
-Changeset:
-Modified: trunk/buildroot/docs/news.html
-===================================================================
---- trunk/buildroot/docs/news.html	2009-01-23 20:56:07 UTC (rev 24990)
-+++ trunk/buildroot/docs/news.html	2009-01-23 21:06:05 UTC (rev 24991)
-@@ -3,6 +3,16 @@
- 
- <ul>
- 
-+  <li><b>23 January 2009 -- 2009.02-rc2 released</b>
-+    <p>Another week, another release candidate with a bunch of
-+    cleanups and build fixes.</p>
-+
-+    <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
-+    <a href="/downloads/buildroot-2009.02-rc2.tar.bz2">2009.02-rc2
-+    release candidate</a>, and report any problems found to the <a
-+    href="lists.html">mailing list</a> or <a
-+    href="http://bugs.uclibc.org">bug tracker</a>.</p>
-+
-   <li><b>16 January 2009 -- Release candidate and new maintainer</b>
-     <p>It has been a long time coming, but we finally have a new
-     release candidate! - And a new maintainer to match (Peter Korsgaard).</p>
+
+> >From a quick look at configure.ac, it seems to check for:
+> 
+> pango >= 1.4.0, glib-2.0 >= 2.4.0, gtk+-2.0 >= 2.4.0, libxml-2.0
+> 
+> The first 3 are covered by the gtk2 dependency, but libxml2 isn't.
+> 
+
+Feel free to update.
+
+
+>  ulf>  	help
+>  ulf>  	  libsexy is a collection of GTK+ widgets that extend the
+>  ulf>  	  functionality of such standard widgets as GtkEntry and
+>  ulf> @@ -8,3 +9,7 @@
+>  ulf>  	  limitations of the widgets.
+>  
+>  ulf>  	  http://www.chipx86.com/wiki/Libsexy
+>  ulf> +
+>  ulf> +comment "libsexy       - disabled (requires X-Windows)"
+>  ulf> +	depends on BR2_PACKAGE_XSERVER_none
+>  ulf> +
+> 
+> We don't normally do that for X-only stuff. Long term, we should
+> probably move X apps to a seperate menu.
+> 
+
+Sounds OK to me.
+
+BR
+Ulf Samuelsson
