@@ -1,57 +1,33 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Fri, 23 Jan 2009 19:41:44 +0000 (UTC)
-Subject: [Buildroot] svn commit:
-	trunk/buildroot/target/device/Atmel/arch-arm/u-boot: 2009.01
-Message-ID: <20090123194144.6A32A769CC@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 23 Jan 2009 21:37:46 +0100
+Subject: [Buildroot] ARM release compiler broken for mpg123.
+In-Reply-To: <1232723429.5311.73.camel@elrond.atmel.com> (Ulf Samuelsson's
+	message of "Fri\, 23 Jan 2009 16\:10\:29 +0100")
+References: <1232723429.5311.73.camel@elrond.atmel.com>
+Message-ID: <87eiytkbc5.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2009-01-23 19:41:42 +0000 (Fri, 23 Jan 2009)
-New Revision: 24986
+>>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 
-Log:
-Bump AT91 u-boot patches to 2009.01
+ Ulf> ?Have been struggling with mpg123 last night.
+ Ulf> There seems to be a bug in the release version
+ Ulf> (gcc-4.3.2/bu-2-19/uclibc-0.9.30)
+ Ulf> of the toolchain which creates a Segment violation.
 
-Added:
-   trunk/buildroot/target/device/Atmel/arch-arm/u-boot/2009.01/
-   trunk/buildroot/target/device/Atmel/arch-arm/u-boot/2009.01/u-boot-2009.01-001-at91rm9200.patch
-   trunk/buildroot/target/device/Atmel/arch-arm/u-boot/2009.01/u-boot-2009.01-002-at91rm9200dk.h.patch
-   trunk/buildroot/target/device/Atmel/arch-arm/u-boot/2009.01/u-boot-2009.01-003-at91rm9200dk.patch
-   trunk/buildroot/target/device/Atmel/arch-arm/u-boot/2009.01/u-boot-2009.01-004-at91rm9200ek.patch
-   trunk/buildroot/target/device/Atmel/arch-arm/u-boot/2009.01/u-boot-2009.01-005-at91sam9g20ek.patch
-   trunk/buildroot/target/device/Atmel/arch-arm/u-boot/2009.01/u-boot-2009.01-006-drivers-net-macb.c.patch
-   trunk/buildroot/target/device/Atmel/arch-arm/u-boot/2009.01/u-boot-2009.01-007-tools.patch
-   trunk/buildroot/target/device/Atmel/arch-arm/u-boot/2009.01/u-boot-2009.01-008-Makefile.patch
-   trunk/buildroot/target/device/Atmel/arch-arm/u-boot/2009.01/u-boot-2009.01-009-factory.patch
-   trunk/buildroot/target/device/Atmel/arch-arm/u-boot/2009.01/u-boot-2009.01-010-coloured_led.patch
-   trunk/buildroot/target/device/Atmel/arch-arm/u-boot/2009.01/u-boot-2009.01-011-spimux.patch
-   trunk/buildroot/target/device/Atmel/arch-arm/u-boot/2009.01/u-boot-2009.01-012-ethinit.patch
-   trunk/buildroot/target/device/Atmel/arch-arm/u-boot/2009.01/u-boot-2009.01-013-configs.patch
+ Ulf> Anyone else can build mpg123, maybe for another architecture?
 
-Removed:
-   trunk/buildroot/target/device/Atmel/arch-arm/u-boot/2009.01-rc3/
-   trunk/buildroot/target/device/Atmel/arch-arm/u-boot/2009.01/u-boot-2009.01-rc1-001-at91rm9200.patch
-   trunk/buildroot/target/device/Atmel/arch-arm/u-boot/2009.01/u-boot-2009.01-rc1-002-at91rm9200dk.h.patch
-   trunk/buildroot/target/device/Atmel/arch-arm/u-boot/2009.01/u-boot-2009.01-rc1-003-at91rm9200dk.patch
-   trunk/buildroot/target/device/Atmel/arch-arm/u-boot/2009.01/u-boot-2009.01-rc1-004-at91rm9200ek.patch
-   trunk/buildroot/target/device/Atmel/arch-arm/u-boot/2009.01/u-boot-2009.01-rc1-005-at91sam9g20ek.patch
-   trunk/buildroot/target/device/Atmel/arch-arm/u-boot/2009.01/u-boot-2009.01-rc1-006-drivers-net-macb.c.patch
-   trunk/buildroot/target/device/Atmel/arch-arm/u-boot/2009.01/u-boot-2009.01-rc1-007-tools.patch
-   trunk/buildroot/target/device/Atmel/arch-arm/u-boot/2009.01/u-boot-2009.01-rc1-008-Makefile.patch
-   trunk/buildroot/target/device/Atmel/arch-arm/u-boot/2009.01/u-boot-2009.01-rc1-009-factory.patch
-   trunk/buildroot/target/device/Atmel/arch-arm/u-boot/2009.01/u-boot-2009.01-rc1-010-coloured_led.patch
-   trunk/buildroot/target/device/Atmel/arch-arm/u-boot/2009.01/u-boot-2009.01-rc1-011-spimux.patch
-   trunk/buildroot/target/device/Atmel/arch-arm/u-boot/2009.01/u-boot-2009.01-rc1-012-ethinit.patch
-   trunk/buildroot/target/device/Atmel/arch-arm/u-boot/2009.01/u-boot-2009.01-rc1-013-configs.patch
+Yes, it builds on atleast powerpc without problems (afaik also i386,
+but that has been a while).
 
+ Ulf> I have found an upstream patch, which I will test
+ Ulf> and apply if it seems to solve the problem.
 
-Changeset:
+I guess you'll need to patch the compiler instead as it's the compiler
+ICE'ing. Any change you do to mpg123 won't make that bug go away.
 
-Sorry, the patch is too large to include (8515 lines).
-Please use ViewCVS to see it!
-
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=24986
+-- 
+Bye, Peter Korsgaard
