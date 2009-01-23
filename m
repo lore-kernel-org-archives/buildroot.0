@@ -1,43 +1,40 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 23 Jan 2009 10:16:02 +0100
+Date: Fri, 23 Jan 2009 10:18:12 +0100
 Subject: [Buildroot] svn commit:
-	trunk/buildroot/target/u-boot/2009.01-rc3
-In-Reply-To: <1232649458.5311.6.camel@elrond.atmel.com> (Ulf Samuelsson's
-	message of "Thu\, 22 Jan 2009 19\:37\:38 +0100")
-References: <20090122073913.5C9CE765E9@busybox.osuosl.org>
-	<87zlhjogcu.fsf@macbook.be.48ers.dk>
-	<1232649458.5311.6.camel@elrond.atmel.com>
-Message-ID: <87k58mmlgt.fsf@macbook.be.48ers.dk>
+	trunk/buildroot/package/multimedia/gst-plugins-good
+In-Reply-To: <200901222217.57888.markus.heidelberg@web.de> (Markus
+	Heidelberg's message of "Thu\, 22 Jan 2009 22\:17\:57 +0100")
+References: <20090122110159.E9877765E9@busybox.osuosl.org>
+	<200901222217.57888.markus.heidelberg@web.de>
+Message-ID: <87fxjamld7.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
+>>>>> "Markus" == Markus Heidelberg <markus.heidelberg@web.de> writes:
 
- >> I don't see this either in U-Boot git or as a patch to the mailing
- >> list.
+ >> Log:
+ >> package/multimedia/gst-plugins-good/Config.in
+ >> package/multimedia/gst-plugins-good/gst-plugins-good.mk
 
- Ulf> It is in the u-boot-avr32 git.
- Ulf> I pointed it out to Haavard, so he has asked Wolfgang
- Ulf> to pull this patch, but it is too late for 2009.01
+ Markus> It probably doesn't make sense to include the filenames in the commit
+ Markus> message, let alone full paths. The VCS knows them anyway.
 
-So 2009.01 is broken on all avr32? Seems like someone forgot to do
-tests.
+I agree - It's good to prefix the commit message with what's it about
+(E.G. gst-plugins-good:) to make it easy to find back (E.G. in gitk),
+but not the individual file names.
 
-I see that your patch is not the same as Haavard sent to wdenx,
-perhaps update?
+ Markus> Also, please keep the order of the config options identically between
+ Markus> the files for Kconfig and Make.
+ Markus> In Config.in you have : jpeg, png, bz2, zlib
+ Markus> In gst-plugins-good.mk: bz2, zlib, jpeg, png
 
- >> 2009.01 is furthermore released, so -rcX should imho go.
- >> 
+ Markus> With this big amount of options, it could get distracting, when
+ Markus> extending the package or searching for bugs.
 
- Ulf> I am testing this very thing right now, so
- Ulf> 2009.01-rc3 will go, and 2009.01
- Ulf> will be enabled, and the patch will be moved 
- Ulf> to the correct directory.
-
-I already did that yesterday.
+Agree.
 
 -- 
 Bye, Peter Korsgaard
