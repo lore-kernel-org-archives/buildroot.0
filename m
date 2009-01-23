@@ -1,35 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 23 Jan 2009 14:05:33 +0100
-Subject: [Buildroot] DirectFB + linux-headers-2.6.28.1 compilation
-	problem
-In-Reply-To: <fce2a370901230456m52a0b2d4xd74c5121ec3cdd6d@mail.gmail.com>
-	(Ihar Hrachyshka's message of "Fri\,
-	23 Jan 2009 14\:56\:40 +0200")
-References: <fce2a370901230310y63c0ebe3x10e523e10154a96a@mail.gmail.com>
-	<87sknakx0f.fsf@macbook.be.48ers.dk> <1232715256.6350.7.camel@sven>
-	<fce2a370901230456m52a0b2d4xd74c5121ec3cdd6d@mail.gmail.com>
-Message-ID: <87k58mkw9u.fsf@macbook.be.48ers.dk>
+From: Stridh, Robin ActeSE <robin.stridh@acteembedded.se>
+Date: Fri, 23 Jan 2009 14:01:38 +0100
+Subject: [Buildroot]  busybox login problem on AT91SAM9263
+References: <5B920D714A1C354D8949DBF58C2A35D604139AA8@freja.acte.local><87d4egudlg.fsf@macbook.be.48ers.dk><5B920D714A1C354D8949DBF58C2A35D604139AAE@freja.acte.local><8763k8uacw.fsf@macbook.be.48ers.dk><1232559369.11888.20.camel@elrond.atmel.com><5B920D714A1C354D8949DBF58C2A35D604139ABA@freja.acte.local><877i4no5n7.fsf@macbook.be.48ers.dk><5B920D714A1C354D8949DBF58C2A35D604139ABB@freja.acte.local><87zlhjml3m.fsf@macbook.be.48ers.dk><5B920D714A1C354D8949DBF58C2A35D604139ABC@freja.acte.local><87sknbmjj4.fsf@macbook.be.48ers.dk><5B920D714A1C354D8949DBF58C2A35D604139ABE@freja.acte.local><87wscml1t2.fsf@macbook.be.48ers.dk>
+	<1232715723.5311.57.camel@elrond.atmel.com>
+Message-ID: <5B920D714A1C354D8949DBF58C2A35D604139AC4@freja.acte.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ihar" == Ihar Hrachyshka <ihar.hrachyshka@gmail.com> writes:
+  Robin> What ABI is recommended for Buildroot? I though that if
+  Robin> selectable you should always choose EABI since it's newer?
+ 
+ Peter> Well, it's newer, but potentinally less stable (as you see).
+ Peter> Sorry, I don't work much with ARM, so I cannot say much more than that
+ Peter> - Ulf?
+ 
+Ulf> I OABI works and EABI doesn't then I am not going to drive EABI.
+Ulf> Still way too many packages that does not build...
 
- >> Yes. Seems to be a problem in the kernel headers.
+Ok, I guess I'll stick with OABI then as well for now. 
+Could someone describe the differences? What is the reason for EABI
+if it's not commonly used?
 
- Ihar> Yes, it's a kernel headers bug. Should be fixed for next versions I think.
+Best regards,
+Robin
 
-Ahh yes, I see it now:
 
-commit 60c20fb8c00a2b23308ae4517f145383bc66d291
-Author: Andy Whitcroft <apw@canonical.com>
-Date:   Fri Jan 2 13:49:04 2009 +0000
 
-    serial: RS485 ioctl structure uses __u32 include linux/types.h
-
-I don't see it in 2.6.28.2-rc1 though, but I'll backport to 2.6.28.1.
-
--- 
-Bye, Peter Korsgaard
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://lists.busybox.net/pipermail/buildroot/attachments/20090123/bcbf975a/attachment.htm 
