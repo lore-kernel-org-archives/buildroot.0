@@ -1,76 +1,59 @@
 From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Fri, 23 Jan 2009 16:10:29 +0100
-Subject: [Buildroot] ARM release compiler broken for mpg123.
-Message-ID: <1232723429.5311.73.camel@elrond.atmel.com>
+Date: Fri, 23 Jan 2009 17:45:43 +0100
+Subject: [Buildroot] How handle broken or partly broken packages in
+	the	distribution
+In-Reply-To: <20090123095712.6878553d@hcegtvedt>
+References: <1232651253.5311.19.camel@elrond.atmel.com>
+	<20090123095712.6878553d@hcegtvedt>
+Message-ID: <1232729143.5311.77.camel@elrond.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-?Have been struggling with mpg123 last night.
-There seems to be a bug in the release version
-(gcc-4.3.2/bu-2-19/uclibc-0.9.30)
-of the toolchain which creates a Segment violation.
+fre 2009-01-23 klockan 09:57 +0100 skrev Hans-Christian Egtvedt:
+> On Thu, 22 Jan 2009 20:07:33 +0100
+> Ulf Samuelsson <ulf.samuelsson@atmel.com> wrote:
+> 
+> <snipp list of packages>
+>  
+> > I suggest we disable them using
+> > 	depends on "BR2_avr32
+> > 
+> 
+> I assume " was supposed to be !.
+> 
+> > so they are not selectable for AVR32 users
+> > 
+> 
+> To make it harder to fix the problem with the packages?
+> 
+> It might also be a result from the development environment on your
+> build machine, like the recent alsa-utils errors somebody else found on
+> opensuse, which I have not triggered in my Ubuntu system.
+> 
 
-Anyone else can build mpg123, maybe for another architecture?
-I have found an upstream patch, which I will test
-and apply if it seems to solve the problem.
+True in some cases, but if the "machine is not recognized" 
+pops up, then there is a slim chance for it to build.
 
+An alternative approach would be to depend on 
 
-Reproduce using:
+	!BR_PACKAGE_<XXXX>_HIDE
 
-$ arm-linux-uclibc-gcc -Os -funroll-all-loops layer2.c
-
-
-layer2.c:
------------------------------------------------
-
-#define FAIL
-//#define WORKAROUND
-
-struct al_table 
-{
-#if defined(FAIL)
-  short bits;
-#endif
-  short d;
-};
-
-int getd_val;
-int xd1;
-
-
-
-struct al_table *alloc2;
-
-
-void getd(void)
-{
-getd_val = alloc2->d;
-}
-
-int main(void)
-{
-int d1;
-
-#if defined(WORKAROUND)
-getd();
-d1 = getd_val;
-#else
-d1 = alloc2->d;
-#endif
-
-#if defined(FAIL)
-if( (d1) < 0)         {
-xd1 = d1;
-}
-#else
-xd1 = d1;
-#endif
-}
-
----------------------------------------
+and have
+config BR2_HIDE_BROKEN_ON_AVR32
+	depends on BR2_avr32
+?	 select ?BR_PACKAGE_<XXX1>_HIDE?
+	select ?BR_PACKAGE_<XXX1>_HIDE
+	select ?BR_PACKAGE_<XXX1>_HIDE
+	select ?BR_PACKAGE_<XXX1>_HIDE
+	etc.
+ 
+Which packages should be disabled this way should be open for
+discussion, but if noone can build it, there
+is no reason for wasting everyones time by making
+it visible IN THE DISTRIBUTION.
 
 BR
 Ulf Samuelsson
