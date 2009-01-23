@@ -1,431 +1,69 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Fri, 23 Jan 2009 18:05:26 +0000 (UTC)
-Subject: [Buildroot] svn commit:
-	trunk/buildroot/target/device/Atmel/at91sam9263ek
-Message-ID: <20090123180526.5AE72769CC@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 23 Jan 2009 19:48:42 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libsexy
+In-Reply-To: <20090123174850.A9B52769CC@busybox.osuosl.org> (ulf@uclibc.org's
+	message of "Fri\, 23 Jan 2009 17\:48\:50 +0000 \(UTC\)")
+References: <20090123174850.A9B52769CC@busybox.osuosl.org>
+Message-ID: <87mydhkgdx.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2009-01-23 18:05:25 +0000 (Fri, 23 Jan 2009)
-New Revision: 24985
+>>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
 
-Log:
-Update at91sam9263ek BSP
+ ulf> Author: ulf
+ ulf> Date: 2009-01-23 17:48:49 +0000 (Fri, 23 Jan 2009)
+ ulf> New Revision: 24982
 
-Modified:
-   trunk/buildroot/target/device/Atmel/at91sam9263ek/at91sam9263ek_defconfig
+ ulf> Log:
+ ulf> Disable libsexy (with comment) if X is not available
 
+ ulf> Modified:
+ ulf>    trunk/buildroot/package/libsexy/Config.in
 
-Changeset:
-Modified: trunk/buildroot/target/device/Atmel/at91sam9263ek/at91sam9263ek_defconfig
-===================================================================
---- trunk/buildroot/target/device/Atmel/at91sam9263ek/at91sam9263ek_defconfig	2009-01-23 17:50:34 UTC (rev 24984)
-+++ trunk/buildroot/target/device/Atmel/at91sam9263ek/at91sam9263ek_defconfig	2009-01-23 18:05:25 UTC (rev 24985)
-@@ -1,9 +1,9 @@
- #
- # Automatically generated make config: don't edit
--# Tue Jan 13 19:37:43 2009
-+# Fri Jan 23 18:35:10 2009
- #
- BR2_HAVE_DOT_CONFIG=y
--BR2_VERSION="0.10.0-svn"
-+BR2_VERSION="2009.02-svn"
- # BR2_alpha is not set
- BR2_arm=y
- # BR2_armeb is not set
-@@ -151,11 +151,11 @@
- # BR2_TARGET_GENERIC_ACCESS_POINT is not set
- # BR2_TARGET_GENERIC_FIREWALL is not set
- # BR2_TARGET_GENERIC_DEV_SYSTEM is not set
-+# BR2_TARGET_TEST_PACKAGES is not set
+ ulf> Changeset:
+ ulf> Modified: trunk/buildroot/package/libsexy/Config.in
+ ulf> ===================================================================
+ ulf> --- trunk/buildroot/package/libsexy/Config.in	2009-01-23 13:12:57 UTC (rev 24981)
+ ulf> +++ trunk/buildroot/package/libsexy/Config.in	2009-01-23 17:48:49 UTC (rev 24982)
+ ulf> @@ -1,6 +1,7 @@
+ ulf>  config BR2_PACKAGE_LIBSEXY
+ ulf>  	bool "libsexy"
+ ulf>  	depends on BR2_PACKAGE_LIBGTK2
+ ulf> +	depends on !BR2_PACKAGE_XSERVER_none
+
+According to the makefile it seems like there's a:
+
+select BR2_PACKAGE_XLIB_LIBX11
+
+missing.
+
+But from doing a quick grep in the libsexy sources I don't see
+any X includes, so are you sure it doesn't work with
+gtk-over-directfb?
+
+From a quick look at configure.ac, it seems to check for:
+
+pango >= 1.4.0, glib-2.0 >= 2.4.0, gtk+-2.0 >= 2.4.0, libxml-2.0
+
+The first 3 are covered by the gtk2 dependency, but libxml2 isn't.
+
+ ulf>  	help
+ ulf>  	  libsexy is a collection of GTK+ widgets that extend the
+ ulf>  	  functionality of such standard widgets as GtkEntry and
+ ulf> @@ -8,3 +9,7 @@
+ ulf>  	  limitations of the widgets.
  
- #
- # Build options
- #
--BR2_PRIMARY_SITE=""
- BR2_WGET="wget --passive-ftp"
- BR2_SVN_CO="svn co"
- BR2_SVN_UP="svn up"
-@@ -168,6 +168,8 @@
- #
- # Mirrors and Download locations
- #
-+BR2_PRIMARY_SITE=""
-+BR2_BACKUP_SITE="http://buildroot.uclibc.org/downloads/sources/"
- BR2_SOURCEFORGE_MIRROR="easynews"
- BR2_KERNEL_MIRROR="http://www.kernel.org/pub/"
- BR2_GNU_MIRROR="http://ftp.gnu.org/pub/gnu"
-@@ -242,7 +244,7 @@
- BR2_KERNEL_HEADERS_2_6_27=y
- # BR2_KERNEL_HEADERS_2_6_28 is not set
- # BR2_KERNEL_HEADERS_SNAP is not set
--BR2_DEFAULT_KERNEL_HEADERS="2.6.27.10"
-+BR2_DEFAULT_KERNEL_HEADERS="2.6.27.12"
- 
- #
- # uClibc Options
-@@ -267,14 +269,14 @@
- #
- # BR2_BINUTILS_VERSION_2_17 is not set
- # BR2_BINUTILS_VERSION_2_17_50_0_17 is not set
--BR2_BINUTILS_VERSION_2_18=y
-+# BR2_BINUTILS_VERSION_2_18 is not set
- # BR2_BINUTILS_VERSION_2_18_50_0_1 is not set
- # BR2_BINUTILS_VERSION_2_18_50_0_3 is not set
- # BR2_BINUTILS_VERSION_2_18_50_0_6 is not set
- # BR2_BINUTILS_VERSION_2_18_50_0_8 is not set
- # BR2_BINUTILS_VERSION_2_18_50_0_9 is not set
--# BR2_BINUTILS_VERSION_2_19 is not set
--BR2_BINUTILS_VERSION="2.18"
-+BR2_BINUTILS_VERSION_2_19=y
-+BR2_BINUTILS_VERSION="2.19"
- BR2_EXTRA_BINUTILS_CONFIG_OPTIONS=""
- 
- #
-@@ -286,12 +288,12 @@
- # BR2_GCC_VERSION_4_2_1 is not set
- # BR2_GCC_VERSION_4_2_2 is not set
- # BR2_GCC_VERSION_4_2_3 is not set
--BR2_GCC_VERSION_4_2_4=y
-+# BR2_GCC_VERSION_4_2_4 is not set
- # BR2_GCC_VERSION_4_3_1 is not set
--# BR2_GCC_VERSION_4_3_2 is not set
-+BR2_GCC_VERSION_4_3_2=y
- BR2_GCC_SUPPORTS_SYSROOT=y
--# BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE is not set
--BR2_GCC_VERSION="4.2.4"
-+BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE=y
-+BR2_GCC_VERSION="4.3.2"
- BR2_TOOLCHAIN_SYSROOT=y
- # BR2_GCC_USE_SJLJ_EXCEPTIONS is not set
- BR2_EXTRA_GCC_CONFIG_OPTIONS=""
-@@ -329,6 +331,7 @@
- BR2_INET_RPC=y
- BR2_USE_WCHAR=y
- # BR2_SOFT_FLOAT is not set
-+# BR2_VFP_FLOAT is not set
- BR2_TARGET_OPTIMIZATION="-Os -pipe"
- BR2_CROSS_TOOLCHAIN_TARGET_UTILS=y
- 
-@@ -397,21 +400,22 @@
- # BR2_PACKAGE_CUSTOMIZE is not set
- # BR2_PACKAGE_FILE is not set
- # BR2_PACKAGE_GAMIN is not set
--# BR2_PACKAGE_ICU is not set
-+BR2_PACKAGE_ICU=y
- # BR2_PACKAGE_KEXEC is not set
- # BR2_PACKAGE_LIBCONFIG is not set
- # BR2_PACKAGE_LIBCONFUSE is not set
--BR2_PACKAGE_LIBDAEMON=y
-+# BR2_PACKAGE_LIBDAEMON is not set
- # BR2_PACKAGE_LIBELF is not set
- # BR2_PACKAGE_LIBEVENT is not set
- # BR2_PACKAGE_LIBFLOAT is not set
- # BR2_PACKAGE_LIBGCRYPT is not set
- # BR2_PACKAGE_LIBGPG_ERROR is not set
- # BR2_PACKAGE_LIBICONV is not set
--# BR2_PACKAGE_LIBLOCKFILE is not set
-+# BR2_PACKAGE_LIBIDN is not set
-+BR2_PACKAGE_LIBLOCKFILE=y
- BR2_PACKAGE_LIBOIL=y
- # BR2_PACKAGE_LIBSYSFS is not set
--# BR2_PACKAGE_LOCKFILE_PROGS is not set
-+BR2_PACKAGE_LOCKFILE_PROGS=y
- # BR2_PACKAGE_LOGROTATE is not set
- # BR2_PACKAGE_LSOF is not set
- # BR2_PACKAGE_LTP-TESTSUITE is not set
-@@ -442,10 +446,9 @@
- # BR2_PACKAGE_AVAHI is not set
- # BR2_PACKAGE_AXEL is not set
- # BR2_PACKAGE_BIND is not set
--BR2_PACKAGE_BRIDGE=y
--BR2_PACKAGE_DNSMASQ=y
--BR2_PACKAGE_DNSMASQ_TFTP=y
--BR2_PACKAGE_DROPBEAR=y
-+# BR2_PACKAGE_BRIDGE is not set
-+# BR2_PACKAGE_DNSMASQ is not set
-+# BR2_PACKAGE_DROPBEAR is not set
- # BR2_PACKAGE_ETHTOOL is not set
- # BR2_PACKAGE_HASERL is not set
- # BR2_PACKAGE_IFPLUGD is not set
-@@ -538,12 +541,30 @@
- #
- # Hardware handling / blockdevices and filesystem maintenance
- #
--# BR2_PACKAGE_DBUS is not set
-+BR2_PACKAGE_DBUS=y
-+# BR2_DBUS_EXPAT is not set
-+BR2_DBUS_LIBXML2=y
-+# BR2_PACKAGE_DBUS_GLIB is not set
- # BR2_PACKAGE_DEVMEM2 is not set
- # BR2_PACKAGE_DM is not set
- # BR2_PACKAGE_DMRAID is not set
--# BR2_PACKAGE_E2FSPROGS is not set
--# BR2_PACKAGE_EEPROG is not set
-+BR2_PACKAGE_E2FSPROGS=y
-+BR2_PACKAGE_E2FSPROGS_BADBLOCKS=y
-+BR2_PACKAGE_E2FSPROGS_BLKID=y
-+BR2_PACKAGE_E2FSPROGS_CHATTR=y
-+BR2_PACKAGE_E2FSPROGS_DUMPE2FS=y
-+BR2_PACKAGE_E2FSPROGS_E2FSCK=y
-+BR2_PACKAGE_E2FSPROGS_E2LABEL=y
-+BR2_PACKAGE_E2FSPROGS_FILEFRAG=y
-+BR2_PACKAGE_E2FSPROGS_FINDFS=y
-+BR2_PACKAGE_E2FSPROGS_FSCK=y
-+BR2_PACKAGE_E2FSPROGS_LOGSAVE=y
-+BR2_PACKAGE_E2FSPROGS_LSATTR=y
-+BR2_PACKAGE_E2FSPROGS_MKE2FS=y
-+BR2_PACKAGE_E2FSPROGS_MKLOSTFOUND=y
-+BR2_PACKAGE_E2FSPROGS_TUNE2FS=y
-+BR2_PACKAGE_E2FSPROGS_UUIDGEN=y
-+BR2_PACKAGE_EEPROG=y
- # BR2_PACKAGE_FCONFIG is not set
- # BR2_PACKAGE_FIS is not set
- # BR2_PACKAGE_LIBFUSE is not set
-@@ -595,8 +616,10 @@
- # BR2_PACKAGE_RAIDTOOLS is not set
- BR2_PACKAGE_SETSERIAL=y
- # BR2_PACKAGE_SMARTMONTOOLS is not set
--# BR2_PACKAGE_USBMOUNT is not set
--# BR2_PACKAGE_USBUTILS is not set
-+BR2_PACKAGE_UDEV_VOLUME_ID=y
-+BR2_PACKAGE_UDEV_SCSI_ID=y
-+BR2_PACKAGE_USBMOUNT=y
-+BR2_PACKAGE_USBUTILS=y
- # BR2_PACKAGE_WIPE is not set
- # BR2_PACKAGE_XFSPROGS is not set
- 
-@@ -604,6 +627,7 @@
- # Audio and video libraries and applications
- #
- BR2_PACKAGE_ALSA_LIB=y
-+BR2_PACKAGE_ALSA_LIB_PYTHON=y
- BR2_PACKAGE_ALSA_UTILS=y
- 
- #
-@@ -628,75 +652,7 @@
- # asterisk	- disabled (required openssl and mpg123)
- #
- BR2_PACKAGE_AUMIX=y
--BR2_PACKAGE_GSTREAMER=y
--BR2_PACKAGE_GST_PLUGINS_BASE=y
--
--#
--# dependency-less plugins
--#
--# BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_ADDER is not set
--BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_AUDIOCONVERT=y
--# BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_AUDIORATE is not set
--BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_AUDIORESAMPLE=y
--# BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_AUDIOTESTSRC is not set
--BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_FFMPEGCOLORSPACE=y
--# BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_GDP is not set
--BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_PLAYBACK=y
--# BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_SUBPARSE is not set
--# BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_TCP is not set
--BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_TYPEFIND=y
--# BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_VIDEOTESTSRC is not set
--# BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_VIDEORATE is not set
--BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_VIDEOSCALE=y
--BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_VOLUME=y
--
--#
--# plugins with external dependencies (there may be more available)
--#
--# BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_OGG is not set
--# BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_THEORA is not set
--# BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_VORBIS is not set
--BR2_PACKAGE_GST_PLUGINS_GOOD=y
--
--#
--# dependency-less plugins
--#
--# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_VIDEOFILTER is not set
--# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_ALPHA is not set
--# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_APETAG is not set
--# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_AUDIOFX is not set
--# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_AUPARSE is not set
--# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_AUTODETECT is not set
--BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_AVI=y
--# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_CUTTER is not set
--# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_DEBUG is not set
--# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_EFFECTV is not set
--# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_EQUALIZER is not set
--# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_ID3DEMUX is not set
--# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_ICYDEMUX is not set
--# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_INTERLEAVE is not set
--# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_FLX is not set
--# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_GOOM is not set
--# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_GOOM2K1 is not set
--# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_LAW is not set
--# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_LEVEL is not set
--# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_MATROSKA is not set
--# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_MONOSCOPE is not set
--# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_MULTIFILE is not set
--# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_MULTIPART is not set
--# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_QTDEMUX is not set
--# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_REPLAYGAIN is not set
--# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_RTP is not set
--# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_RTSP is not set
--# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_SMPTE is not set
--# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_SPECTRUM is not set
--# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_UDP is not set
--# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_VIDEOBOX is not set
--# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_VIDEOCROP is not set
--# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_VIDEOMIXER is not set
--# BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_WAVENC is not set
--BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_WAVPARSE=y
--# BR2_PACKAGE_GST_PLUGINS_UGLY is not set
-+# BR2_PACKAGE_GSTREAMER is not set
- BR2_PACKAGE_LIBID3TAG=y
- BR2_PACKAGE_LIBMAD=y
- # BR2_PACKAGE_LIBMAD_TARGET_HEADERS is not set
-@@ -708,7 +664,7 @@
- BR2_PACKAGE_LIBVORBIS_TREMOR=y
- BR2_PACKAGE_MADPLAY=y
- BR2_PACKAGE_MADPLAY_ALSA=y
--BR2_PACKAGE_MPG123=y
-+# BR2_PACKAGE_MPG123 is not set
- BR2_PACKAGE_MPG123_ALSA=y
- BR2_PACKAGE_MPLAYER=y
- # BR2_PACKAGE_SPEEX is not set
-@@ -723,10 +679,10 @@
- # text rendering libraries
- #
- BR2_PACKAGE_NCURSES=y
--# BR2_PACKAGE_NCURSES_TARGET_PANEL is not set
--# BR2_PACKAGE_NCURSES_TARGET_FORM is not set
--# BR2_PACKAGE_NCURSES_TARGET_MENU is not set
--# BR2_PACKAGE_NCURSES_TARGET_HEADERS is not set
-+BR2_PACKAGE_NCURSES_TARGET_PANEL=y
-+BR2_PACKAGE_NCURSES_TARGET_FORM=y
-+BR2_PACKAGE_NCURSES_TARGET_MENU=y
-+BR2_PACKAGE_NCURSES_TARGET_HEADERS=y
- # BR2_PACKAGE_NEWT is not set
- # BR2_PACKAGE_SLANG is not set
- 
-@@ -756,7 +712,7 @@
- BR2_PACKAGE_LINUX_FUSION=y
- BR2_PACKAGE_LITE=y
- BR2_PACKAGE_PIXMAN=y
--# BR2_PACKAGE_SAWMAN is not set
-+BR2_PACKAGE_SAWMAN=y
- BR2_PACKAGE_SDL=y
- 
- #
-@@ -784,7 +740,7 @@
- # BR2_PACKAGE_SDL_IMAGE_XPM is not set
- # BR2_PACKAGE_SDL_IMAGE_XV is not set
- BR2_PACKAGE_SDL_MIXER=y
--# BR2_PACKAGE_SDL_NET is not set
-+BR2_PACKAGE_SDL_NET=y
- BR2_PACKAGE_SDL_TTF=y
- # BR2_PACKAGE_TIFF is not set
- 
-@@ -824,7 +780,10 @@
- # GTK Themes
- #
- BR2_PACKAGE_GTK2_THEME_HICOLOR=y
--BR2_PACKAGE_LIBSEXY=y
-+
-+#
-+# libsexy       - disabled (requires X-Windows)
-+#
- # BR2_PACKAGE_OPENMOTIF is not set
- BR2_PACKAGE_FONTCONFIG=y
- BR2_PACKAGE_FREETYPE=y
-@@ -832,9 +791,12 @@
- BR2_FREETYPE_VERSION_2_3_7=y
- BR2_FREETYPE_VERSION="2.3.7"
- BR2_PACKAGE_TSLIB=y
--# BR2_PACKAGE_WEBKIT is not set
- 
- #
-+# webkit       - disabled (requires X-Windows)
-+#
-+
-+#
- # X Window managers
- #
- # BR2_PACKAGE_MATCHBOX is not set
-@@ -877,13 +839,14 @@
- # Package managers
- #
- # BR2_PACKAGE_IPKG is not set
--BR2_PACKAGE_PORTAGE=y
-+# BR2_PACKAGE_PORTAGE is not set
- 
- #
- # Interpreter languages / Scripting
- #
- # BR2_PACKAGE_LUA is not set
--# BR2_PACKAGE_MICROPERL is not set
-+BR2_PACKAGE_MICROPERL=y
-+BR2_PACKAGE_MICROPERL_MODULES=""
- BR2_PACKAGE_PYTHON=y
- # BR2_PACKAGE_PYTHON_DEV is not set
- BR2_PACKAGE_PYTHON_PY_ONLY=y
-@@ -947,7 +910,7 @@
- BR2_PACKAGE_EXPAT=y
- # BR2_PACKAGE_EZXML is not set
- BR2_PACKAGE_LIBXML2=y
--# BR2_PACKAGE_LIBXSLT is not set
-+BR2_PACKAGE_LIBXSLT=y
- # BR2_PACKAGE_XERCES is not set
- 
- #
-@@ -1016,12 +979,15 @@
- #
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="$(BOARD_NAME)"
--BR2_TARGET_UBOOT_2009_01_RC1=y
-+BR2_TARGET_UBOOT_2009_01=y
- # BR2_TARGET_UBOOT_2008_10 is not set
- # BR2_TARGET_UBOOT_1_3_4 is not set
- # BR2_TARGET_UBOOT_1_2_0_ATMEL is not set
--BR2_UBOOT_VERSION="2009.01-rc1"
-+BR2_UBOOT_VERSION="2009.01"
- BR2_U_BOOT_SITE="ftp://ftp.denx.de/pub/u-boot"
-+BR2_TARGET_U_BOOT_ARCH_PATCH=y
-+BR2_TARGET_U_BOOT_2009_01_ARCH_AT91=y
-+BR2_TARGET_U_BOOT_ARCH_AT91_PATCH_DIR="target/device/Atmel/arch-arm/u-boot/2009.01"
- BR2_TARGET_UBOOT_CUSTOM_PATCH=""
- BR2_TARGET_UBOOT_BOOTSOURCE_DATAFLASHCARD=y
- # BR2_TARGET_UBOOT_BOOTSOURCE_DATAFLASH is not set
-@@ -1078,9 +1044,9 @@
- # BR2_KERNEL_HURD is not set
- BR2_PACKAGE_LINUX=y
- BR2_PACKAGE_LINUX_FORMAT="uImage"
--BR2_KERNEL_CURRENT_VERSION="2.6.28"
-+BR2_KERNEL_CURRENT_VERSION="2.6.28.1"
- BR2_KERNEL_LATEST_2_6_28="1"
--BR2_KERNEL_LATEST_2_6_27="10"
-+BR2_KERNEL_LATEST_2_6_27="12"
- BR2_KERNEL_LATEST_2_6_26="8"
- BR2_KERNEL_LATEST_2_6_25="9"
- BR2_KERNEL_LATEST_2_6_24="7"
-@@ -1090,7 +1056,7 @@
- BR2_KERNEL_LATEST_2_6_20="21"
- BR2_KERNEL_NEXT_VERSION="2.6.29"
- BR2_KERNEL_THIS_VERSION="2.6.28"
--BR2_KERNEL_SITE="http://ftp.kernel.org/pub/linux/kernel/v2.6/"
-+BR2_KERNEL_SITE="http://ftp.kernel.org/pub/linux/kernel/v2.6"
- BR2_MM_PATCH_SITE="http://ftp.kernel.org/pub/linux/kernel/people/akpm/patches/2.6"
- BR2_RC_MM_PATCH_DIR="$(BR2_KERNEL_NEXT_VERSION)-rc$(BR2_KERNEL_RC_LEVEL)/2.6.$(BR2_KERNEL_NEXT_VERSION)-rc$(BR2_KERNEL_RC_LEVEL)-mm$(BR2_KERNEL_MM_LEVEL)"
- # BR2_LINUX_2_6_STABLE is not set
-@@ -1100,11 +1066,7 @@
- # BR2_LINUX_2_6_25 is not set
- # BR2_LINUX_2_6_24 is not set
- # BR2_LINUX_2_6_23 is not set
--# BR2_LINUX_2_6_22_10 is not set
--# BR2_LINUX_2_6_22_1 is not set
- # BR2_LINUX_2_6_22 is not set
--# BR2_LINUX_2_6_21_7 is not set
--# BR2_LINUX_2_6_21_5 is not set
- # BR2_LINUX_2_6_21 is not set
- # BR2_LINUX_2_6_20 is not set
- # BR2_LINUX_2_6_29 is not set
+ ulf>  	  http://www.chipx86.com/wiki/Libsexy
+ ulf> +
+ ulf> +comment "libsexy       - disabled (requires X-Windows)"
+ ulf> +	depends on BR2_PACKAGE_XSERVER_none
+ ulf> +
+
+We don't normally do that for X-only stuff. Long term, we should
+probably move X apps to a seperate menu.
+
+-- 
+Bye, Peter Korsgaard
