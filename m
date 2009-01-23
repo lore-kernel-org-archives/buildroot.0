@@ -1,36 +1,42 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Fri, 23 Jan 2009 09:57:12 +0100
-Subject: [Buildroot] How handle broken or partly broken packages in the
- distribution
-In-Reply-To: <1232651253.5311.19.camel@elrond.atmel.com>
-References: <1232651253.5311.19.camel@elrond.atmel.com>
-Message-ID: <20090123095712.6878553d@hcegtvedt>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 23 Jan 2009 10:11:28 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/target/generic
+In-Reply-To: <1232650901.5311.15.camel@elrond.atmel.com> (Ulf Samuelsson's
+	message of "Thu\, 22 Jan 2009 20\:01\:41 +0100")
+References: <20090122075324.D71DA765E9@busybox.osuosl.org>
+	<874ozrpv1k.fsf@macbook.be.48ers.dk>
+	<1232650901.5311.15.camel@elrond.atmel.com>
+Message-ID: <87ocxymlof.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 22 Jan 2009 20:07:33 +0100
-Ulf Samuelsson <ulf.samuelsson@atmel.com> wrote:
+>>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 
-<snipp list of packages>
- 
-> I suggest we disable them using
-> 	depends on "BR2_avr32
-> 
+ >> Please don't do that. That's not a common use case. If you want to
+ >> test everything, just use make allyesconfig instead.
 
-I assume " was supposed to be !.
+ Ulf> I agree that it is not a common test case, but I don't want to
+ Ulf> test everything as well at this point.
 
-> so they are not selectable for AVR32 users
-> 
+ Ulf> ?It is a help to test, but I agree it should be removed 
+ Ulf> before the final distribution, or significantly improved.
 
-To make it harder to fix the problem with the packages?
+Then please keep it in your local tree instead.
 
-It might also be a result from the development environment on your
-build machine, like the recent alsa-utils errors somebody else found on
-opensuse, which I have not triggered in my Ubuntu system.
+ Ulf> Right now, It saves a lot of time in the testing process.
+
+ Ulf> Easiest is just to replace it with an empty file when
+ Ulf> the distribution is made.
+
+No, that sounds dirty.
+
+Why don't you just do a make allyesconfig and either use the
+KCONFIG_ALLCONFIG stuff to disable specific packages, or simply run
+sed on your .config instead? You could probably add it to your
+buildall script.
 
 -- 
-Best regards,
-Hans-Christian Egtvedt
+Bye, Peter Korsgaard
