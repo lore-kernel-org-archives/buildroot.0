@@ -1,38 +1,46 @@
-From: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>
-Date: Fri, 23 Jan 2009 15:00:56 +0200
-Subject: [Buildroot] DirectFB + linux-headers-2.6.28.1 compilation
-	problem
-In-Reply-To: <87ocxykwle.fsf@macbook.be.48ers.dk>
-References: <fce2a370901230310y63c0ebe3x10e523e10154a96a@mail.gmail.com>
-	<87sknakx0f.fsf@macbook.be.48ers.dk> <1232715256.6350.7.camel@sven>
-	<87ocxykwle.fsf@macbook.be.48ers.dk>
-Message-ID: <fce2a370901230500n9286d24n9a5acb135076032b@mail.gmail.com>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Fri, 23 Jan 2009 14:02:03 +0100
+Subject: [Buildroot] busybox login problem on AT91SAM9263
+In-Reply-To: <87wscml1t2.fsf@macbook.be.48ers.dk>
+References: <5B920D714A1C354D8949DBF58C2A35D604139AA8@freja.acte.local>
+	<87d4egudlg.fsf@macbook.be.48ers.dk>
+	<5B920D714A1C354D8949DBF58C2A35D604139AAE@freja.acte.local>
+	<8763k8uacw.fsf@macbook.be.48ers.dk>
+	<1232559369.11888.20.camel@elrond.atmel.com>
+	<5B920D714A1C354D8949DBF58C2A35D604139ABA@freja.acte.local>
+	<877i4no5n7.fsf@macbook.be.48ers.dk>
+	<5B920D714A1C354D8949DBF58C2A35D604139ABB@freja.acte.local>
+	<87zlhjml3m.fsf@macbook.be.48ers.dk>
+	<5B920D714A1C354D8949DBF58C2A35D604139ABC@freja.acte.local>
+	<87sknbmjj4.fsf@macbook.be.48ers.dk>
+	<5B920D714A1C354D8949DBF58C2A35D604139ABE@freja.acte.local>
+	<87wscml1t2.fsf@macbook.be.48ers.dk>
+Message-ID: <1232715723.5311.57.camel@elrond.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jan 23, 2009 at 2:58 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Sven" == Sven Neumann <s.neumann@phase-zero.de> writes:
->
->  Sven> Hi,
->  Sven> On Fri, 2009-01-23 at 13:49 +0100, Peter Korsgaard wrote:
->
->  >> Does this also happen with latest trunk (E.G. where we have DirectFB
->  >> 1.2.7)?
->
->  Sven> Yes. Seems to be a problem in the kernel headers.
->
-> From a quick look at it, it more looks like directfb shouldn't be
-> including kernel headers in the first place.
->
-> I'll take a closer look at it now.
+fre 2009-01-23 klockan 12:06 +0100 skrev Peter Korsgaard:
+> >>>>> "Robin" == Stridh, Robin ActeSE <robin.stridh@acteembedded.se> writes:
+> 
+> Hi,
+> 
+>  Robin> I know I have selected EABI in buildroot sucessfully in the
+>  Robin> past and my kernel is built to support both. Now I have no
+>  Robin> idea when this thing broke - probably months ago.
+> 
+>  Robin> What ABI is recommended for Buildroot? I though that if
+>  Robin> selectable you should always choose EABI since it's newer?
+> 
+> Well, it's newer, but potentinally less stable (as you see).
+> Sorry, I don't work much with ARM, so I cannot say much more than that
+> - Ulf?
+> 
 
-DirectFB includes linux headers _for userspace_. It _should_ do it.
-That's what these userspace includes for.
+I OABI works and EABI doesn't then I am not going to drive EABI.
+Still way too many packages that does not build...
 
->
-> --
-> Bye, Peter Korsgaard
->
+BR
+Ulf Samuelsson
