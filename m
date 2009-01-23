@@ -1,60 +1,35 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Fri, 23 Jan 2009 13:44:32 +0100
-Subject: [Buildroot] How handle broken or partly broken packages in
-	the	distribution
-In-Reply-To: <20090123095712.6878553d@hcegtvedt>
-References: <1232651253.5311.19.camel@elrond.atmel.com>
-	<20090123095712.6878553d@hcegtvedt>
-Message-ID: <1232714672.5311.43.camel@elrond.atmel.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 23 Jan 2009 13:49:36 +0100
+Subject: [Buildroot] DirectFB + linux-headers-2.6.28.1 compilation
+	problem
+In-Reply-To: <fce2a370901230310y63c0ebe3x10e523e10154a96a@mail.gmail.com>
+	(Ihar Hrachyshka's message of "Fri\,
+	23 Jan 2009 13\:10\:54 +0200")
+References: <fce2a370901230310y63c0ebe3x10e523e10154a96a@mail.gmail.com>
+Message-ID: <87sknakx0f.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-fre 2009-01-23 klockan 09:57 +0100 skrev Hans-Christian Egtvedt:
-> On Thu, 22 Jan 2009 20:07:33 +0100
-> Ulf Samuelsson <ulf.samuelsson@atmel.com> wrote:
-> 
-> <snipp list of packages>
->  
-> > I suggest we disable them using
-> > 	depends on "BR2_avr32
-> > 
-> 
-> I assume " was supposed to be !.
-> 
+>>>>> "Ihar" == Ihar Hrachyshka <ihar.hrachyshka@gmail.com> writes:
 
-Of course.
+ Ihar> Hello guys!
+ Ihar> I have the following problem compiling DirectFB with linux-header-2.6.28.1:
 
-> > so they are not selectable for AVR32 users
-> > 
-> 
-> To make it harder to fix the problem with the packages?
-> 
+ Ihar> /home/booxter/winbox/buildroot/build_mipsel/staging_dir/usr/bin/mipsel-linux-uclibc-ld
+ Ihar> -o libdirectfb_keyboard.o -r .libs/libdirectfb_keyboard.a.tmp/*.o
+ Ihar> rm -f .libs/libdirectfb_keyboard.a.tmp/*.o && rmdir
+ Ihar> .libs/libdirectfb_keyboard.a.tmp
+ Ihar> make[4]: Leaving directory
+ Ihar> `/home/booxter/winbox/buildroot/build_mipsel/DirectFB-1.2.6/inputdrivers/keyboard'
+ Ihar> Making all in serialmouse
+ Ihar> make[4]: Entering directory
+ Ihar> `/home/booxter/winbox/buildroot/build_mipsel/DirectFB-1.2.6/inputdrivers/serialmouse'
 
-No, I think the distribution should as a default only enable things
-which actually has a slim change to build.
+Does this also happen with latest trunk (E.G. where we have DirectFB
+1.2.7)?
 
-The svn should allow developers more freedom.
-
-> It might also be a result from the development environment on your
-> build machine, like the recent alsa-utils errors somebody else found on
-> opensuse, which I have not triggered in my Ubuntu system.
-> 
-
-True, but that was why I sent is as a suggestion.
-These packages looks terminally broken to me for the AVR32.
-If we know that they are broken then we should not expose
-inexperienced firstcomers to Buildroot to them.
-
-A package which depends on the build host should not be
-disabled or at least not in this manner.
-
-If we want more users/contributors, then the behaviour
-should be perceived as stable, and we currently have 
-no mechanism to ensure stability.
-
-
-BR
-Ulf Samuelsson
+-- 
+Bye, Peter Korsgaard
