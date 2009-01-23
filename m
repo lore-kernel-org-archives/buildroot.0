@@ -1,40 +1,75 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 23 Jan 2009 10:18:12 +0100
+From: laird at uclibc.org <laird@uclibc.org>
+Date: Fri, 23 Jan 2009 10:39:36 +0000 (UTC)
 Subject: [Buildroot] svn commit:
 	trunk/buildroot/package/multimedia/gst-plugins-good
-In-Reply-To: <200901222217.57888.markus.heidelberg@web.de> (Markus
-	Heidelberg's message of "Thu\, 22 Jan 2009 22\:17\:57 +0100")
-References: <20090122110159.E9877765E9@busybox.osuosl.org>
-	<200901222217.57888.markus.heidelberg@web.de>
-Message-ID: <87fxjamld7.fsf@macbook.be.48ers.dk>
+Message-ID: <20090123103936.BC485769CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Markus" == Markus Heidelberg <markus.heidelberg@web.de> writes:
+Author: laird
+Date: 2009-01-23 10:39:35 +0000 (Fri, 23 Jan 2009)
+New Revision: 24979
 
- >> Log:
- >> package/multimedia/gst-plugins-good/Config.in
- >> package/multimedia/gst-plugins-good/gst-plugins-good.mk
+Log:
+gst-plugins-good: Fix style issues and use of --disable-png.
 
- Markus> It probably doesn't make sense to include the filenames in the commit
- Markus> message, let alone full paths. The VCS knows them anyway.
+Update ordering and configure options.
 
-I agree - It's good to prefix the commit message with what's it about
-(E.G. gst-plugins-good:) to make it easy to find back (E.G. in gitk),
-but not the individual file names.
+Signed-off-by: Daniel Laird <daniel.j.laird@nxp.com>
 
- Markus> Also, please keep the order of the config options identically between
- Markus> the files for Kconfig and Make.
- Markus> In Config.in you have : jpeg, png, bz2, zlib
- Markus> In gst-plugins-good.mk: bz2, zlib, jpeg, png
 
- Markus> With this big amount of options, it could get distracting, when
- Markus> extending the package or searching for bugs.
 
-Agree.
+Modified:
+   trunk/buildroot/package/multimedia/gst-plugins-good/gst-plugins-good.mk
 
--- 
-Bye, Peter Korsgaard
+
+Changeset:
+Modified: trunk/buildroot/package/multimedia/gst-plugins-good/gst-plugins-good.mk
+===================================================================
+--- trunk/buildroot/package/multimedia/gst-plugins-good/gst-plugins-good.mk	2009-01-23 02:07:14 UTC (rev 24978)
++++ trunk/buildroot/package/multimedia/gst-plugins-good/gst-plugins-good.mk	2009-01-23 10:39:35 UTC (rev 24979)
+@@ -27,6 +27,20 @@
+ 
+ GST_PLUGINS_GOOD_DEPENDENCIES = gstreamer gst-plugins-base
+ 
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_JPEG),y)
++GST_PLUGINS_GOOD_CONF_OPT += --enable-jpeg
++GST_PLUGINS_GOOD_DEPENDENCIES += jpeg
++else
++GST_PLUGINS_GOOD_CONF_OPT += --disable-jpeg
++endif
++
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PNG),y)
++GST_PLUGINS_GOOD_CONF_OPT += --enable-libpng
++GST_PLUGINS_GOOD_DEPENDENCIES += libpng
++else
++GST_PLUGINS_GOOD_CONF_OPT += --disable-libpng
++endif
++
+ ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_BZ2),y)
+ GST_PLUGINS_GOOD_CONF_OPT += --enable-bz2
+ GST_PLUGINS_GOOD_DEPENDENCIES += bzip2
+@@ -41,20 +55,6 @@
+ GST_PLUGINS_GOOD_CONF_OPT += --disable-zlib
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_JPEG),y)
+-GST_PLUGINS_GOOD_CONF_OPT += --enable-jpeg
+-GST_PLUGINS_GOOD_DEPENDENCIES += jpeg
+-else
+-GST_PLUGINS_GOOD_CONF_OPT += --disable-jpeg
+-endif
+-
+-ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PNG),y)
+-GST_PLUGINS_GOOD_CONF_OPT += --enable-png
+-GST_PLUGINS_GOOD_DEPENDENCIES += libpng
+-else
+-GST_PLUGINS_GOOD_CONF_OPT += --disable-png
+-endif
+-
+ ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_VIDEOFILTER),y)
+ GST_PLUGINS_GOOD_CONF_OPT += --enable-videofilter
+ else
