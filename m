@@ -1,141 +1,37 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Fri, 23 Jan 2009 20:38:06 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot: package package/raidtools2
-	scripts
-Message-ID: <20090123203806.47FF5769CC@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 23 Jan 2009 21:40:36 +0100
+Subject: [Buildroot] Some AT91SAM9261-EK Notes
+In-Reply-To: <BAY124-DS41A02756B01D8CBA35C29D2CF0@phx.gbl>
+	(quickx@hotmail.com's message of "Fri\,
+	23 Jan 2009 11\:38\:55 -0800")
+References: <BAY124-W491126D3265E8BD9DCF5DCD2CE0@phx.gbl>
+	<1232722423.5311.70.camel@elrond.atmel.com>
+	<BAY124-DS41A02756B01D8CBA35C29D2CF0@phx.gbl>
+Message-ID: <87ab9hkb7f.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-01-23 20:38:05 +0000 (Fri, 23 Jan 2009)
-New Revision: 24987
+>>>>> "QuickX" == QuickX  <quickx@hotmail.com> writes:
 
-Log:
-package/: remove deprecated and broken raidtool2 package
+Hi,
 
-Removed:
-   trunk/buildroot/package/raidtools2/Config.in
-   trunk/buildroot/package/raidtools2/raidtools2.mk
+ QuickX> My guess is that it's the "UCLIBC_USE_NETLINK" option since
+ QuickX> it looks like only networky applications are affected
+ QuickX> (dropbear, samba, etc).  I'm actually catching a plane in 8
+ QuickX> hours and will be gone for a week, however, I can try to test
+ QuickX> the options one by one if you can't tell what it is from just
+ QuickX> the diff.
 
-Modified:
-   trunk/buildroot/package/Config.in
-   trunk/buildroot/scripts/buildall.sh
+You're not the only one having problems with uclibc 0.9.30 and
+netlink:
 
+http://lists.uclibc.org/pipermail/uclibc/2009-January/041701.html
 
-Changeset:
-Modified: trunk/buildroot/package/Config.in
-===================================================================
---- trunk/buildroot/package/Config.in	2009-01-23 19:41:42 UTC (rev 24986)
-+++ trunk/buildroot/package/Config.in	2009-01-23 20:38:05 UTC (rev 24987)
-@@ -255,7 +255,6 @@
- source "package/ntfs-3g/Config.in"
- source "package/pciutils/Config.in"
- source "package/pcmcia/Config.in"
--source "package/raidtools2/Config.in"
- source "package/setserial/Config.in"
- if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
- # busybox has fdisk
+Maybe we should just disable it in the 0.9.30 defconfig? What is the
+impact of doing that?
 
-Deleted: trunk/buildroot/package/raidtools2/Config.in
-===================================================================
---- trunk/buildroot/package/raidtools2/Config.in	2009-01-23 19:41:42 UTC (rev 24986)
-+++ trunk/buildroot/package/raidtools2/Config.in	2009-01-23 20:38:05 UTC (rev 24987)
-@@ -1,6 +0,0 @@
--config BR2_PACKAGE_RAIDTOOLS
--	bool "raidtools2"
--	help
--	  Utilities to support 'old-style' RAID disks.
--
--	  http://people.redhat.com/mingo/raidtools/
-
-Deleted: trunk/buildroot/package/raidtools2/raidtools2.mk
-===================================================================
---- trunk/buildroot/package/raidtools2/raidtools2.mk	2009-01-23 19:41:42 UTC (rev 24986)
-+++ trunk/buildroot/package/raidtools2/raidtools2.mk	2009-01-23 20:38:05 UTC (rev 24987)
-@@ -1,70 +0,0 @@
--#############################################################
--#
--# raidtools2
--#
--#############################################################
--RAIDTOOLS2_VERSION:=1.00.3
--RAIDTOOLS2_SOURCE:=raidtools2-$(RAIDTOOLS2_VERSION).tar.gz
--RAIDTOOLS2_SITE:=
--RAIDTOOLS2_DIR:=$(BUILD_DIR)/raidtools2-$(RAIDTOOLS2_VERSION)
--RAIDTOOLS2_CAT:=$(ZCAT)
--RAIDTOOLS2_BINARY:=mkraid
--RAIDTOOLS2_TARGET_BINARY:=sbin/mkraid
--
--$(DL_DIR)/$(RAIDTOOLS2_SOURCE):
--	$(call DOWNLOAD,$(RAIDTOOLS2_SITE),$(RAIDTOOLS2_SOURCE))
--
--raidtools2-source: $(DL_DIR)/$(RAIDTOOLS2_SOURCE)
--
--$(RAIDTOOLS2_DIR)/.unpacked: $(DL_DIR)/$(RAIDTOOLS2_SOURCE)
--	$(RAIDTOOLS2_CAT) $(DL_DIR)/$(RAIDTOOLS2_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	touch $(RAIDTOOLS2_DIR)/.unpacked
--
--$(RAIDTOOLS2_DIR)/.configured: $(RAIDTOOLS2_DIR)/.unpacked
--	(cd $(RAIDTOOLS2_DIR); rm -rf config.cache; \
--		$(TARGET_CONFIGURE_OPTS) \
--		$(TARGET_CONFIGURE_ARGS) \
--	        ./configure \
--	        --target=$(GNU_TARGET_NAME) \
--	        --host=$(GNU_TARGET_NAME) \
--	        --build=$(GNU_HOST_NAME) \
--	        --prefix=/usr \
--	        --exec-prefix=/usr \
--	        --bindir=/usr/bin \
--	        --sbindir=/usr/sbin \
--		--libdir=/lib \
--	        --libexecdir=/usr/lib \
--	        --sysconfdir=/etc \
--	        --datadir=/usr/share/misc \
--	        --localstatedir=/var \
--	        --mandir=/usr/man \
--	        --infodir=/usr/info \
--		$(DISABLE_NLS) \
--	        --enable-fsect-man5 \
--	)
--	touch $(RAIDTOOLS2_DIR)/.configured
--
--$(RAIDTOOLS2_DIR)/$(RAIDTOOLS2_BINARY): $(RAIDTOOLS2_DIR)/.configured
--	$(MAKE) CC=$(TARGET_CC) -C $(RAIDTOOLS2_DIR)
--
--$(TARGET_DIR)/$(RAIDTOOLS2_TARGET_BINARY): $(RAIDTOOLS2_DIR)/$(RAIDTOOLS2_BINARY)
--	$(MAKE) ROOTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(RAIDTOOLS2_DIR) install
--	rm -rf $(TARGET_DIR)/share/locale $(TARGET_DIR)/usr/info \
--		$(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc
--
--raidtools2: zlib uclibc $(TARGET_DIR)/$(RAIDTOOLS2_TARGET_BINARY)
--
--raidtools2-clean:
--	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(RAIDTOOLS2_DIR) uninstall
--	-$(MAKE) -C $(RAIDTOOLS2_DIR) clean
--
--raidtools2-dirclean:
--	rm -rf $(RAIDTOOLS2_DIR)
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(BR2_PACKAGE_RAIDTOOLS),y)
--TARGETS+=raidtools2
--endif
-
-Modified: trunk/buildroot/scripts/buildall.sh
-===================================================================
---- trunk/buildroot/scripts/buildall.sh	2009-01-23 19:41:42 UTC (rev 24986)
-+++ trunk/buildroot/scripts/buildall.sh	2009-01-23 20:38:05 UTC (rev 24987)
-@@ -189,7 +189,6 @@
- AVR	mk	ntfs-3g                        FAIL	"Machine avr32 not recognized"
- EXE	mk	pciutils                       FAIL	"Compile Error"
- skip	mk	pcmcia                         DISABLED	""
--skip	mk	raidtools2                     DISABLED	""
- EXE	mk	setserial                      OK	
- bb	mk	sfdisk
- AVR	mk	smartmontools                  FAIL	"Machine avr32 not recognized"
+-- 
+Bye, Peter Korsgaard
