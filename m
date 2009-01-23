@@ -1,84 +1,43 @@
 From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Fri, 23 Jan 2009 22:06:16 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libsexy
-In-Reply-To: <87mydhkgdx.fsf@macbook.be.48ers.dk>
-References: <20090123174850.A9B52769CC@busybox.osuosl.org>
-	<87mydhkgdx.fsf@macbook.be.48ers.dk>
-Message-ID: <1232744776.5311.93.camel@elrond.atmel.com>
+Date: Fri, 23 Jan 2009 22:08:47 +0100
+Subject: [Buildroot] ARM release compiler broken for mpg123.
+In-Reply-To: <87eiytkbc5.fsf@macbook.be.48ers.dk>
+References: <1232723429.5311.73.camel@elrond.atmel.com>
+	<87eiytkbc5.fsf@macbook.be.48ers.dk>
+Message-ID: <1232744927.5311.95.camel@elrond.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-fre 2009-01-23 klockan 19:48 +0100 skrev Peter Korsgaard:
-> >>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+fre 2009-01-23 klockan 21:37 +0100 skrev Peter Korsgaard:
+> >>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 > 
->  ulf> Author: ulf
->  ulf> Date: 2009-01-23 17:48:49 +0000 (Fri, 23 Jan 2009)
->  ulf> New Revision: 24982
+>  Ulf> ?Have been struggling with mpg123 last night.
+>  Ulf> There seems to be a bug in the release version
+>  Ulf> (gcc-4.3.2/bu-2-19/uclibc-0.9.30)
+>  Ulf> of the toolchain which creates a Segment violation.
 > 
->  ulf> Log:
->  ulf> Disable libsexy (with comment) if X is not available
+>  Ulf> Anyone else can build mpg123, maybe for another architecture?
 > 
->  ulf> Modified:
->  ulf>    trunk/buildroot/package/libsexy/Config.in
+> Yes, it builds on atleast powerpc without problems (afaik also i386,
+> but that has been a while).
 > 
->  ulf> Changeset:
->  ulf> Modified: trunk/buildroot/package/libsexy/Config.in
->  ulf> ===================================================================
->  ulf> --- trunk/buildroot/package/libsexy/Config.in	2009-01-23 13:12:57 UTC (rev 24981)
->  ulf> +++ trunk/buildroot/package/libsexy/Config.in	2009-01-23 17:48:49 UTC (rev 24982)
->  ulf> @@ -1,6 +1,7 @@
->  ulf>  config BR2_PACKAGE_LIBSEXY
->  ulf>  	bool "libsexy"
->  ulf>  	depends on BR2_PACKAGE_LIBGTK2
->  ulf> +	depends on !BR2_PACKAGE_XSERVER_none
+>  Ulf> I have found an upstream patch, which I will test
+>  Ulf> and apply if it seems to solve the problem.
 > 
-> According to the makefile it seems like there's a:
-> 
-> select BR2_PACKAGE_XLIB_LIBX11
-> 
-> missing.
-> 
-> But from doing a quick grep in the libsexy sources I don't see
-> any X includes, so are you sure it doesn't work with
-> gtk-over-directfb?
+> I guess you'll need to patch the compiler instead as it's the compiler
+> ICE'ing. Any change you do to mpg123 won't make that bug go away.
 > 
 
-
-Not 100% sure, but it does not work as it is today due to:
-LIBSEXY_DEPENDENCIES = xlib_libX11 libgtk2
-
-
-
-> >From a quick look at configure.ac, it seems to check for:
-> 
-> pango >= 1.4.0, glib-2.0 >= 2.4.0, gtk+-2.0 >= 2.4.0, libxml-2.0
-> 
-> The first 3 are covered by the gtk2 dependency, but libxml2 isn't.
-> 
-
-Feel free to update.
-
-
->  ulf>  	help
->  ulf>  	  libsexy is a collection of GTK+ widgets that extend the
->  ulf>  	  functionality of such standard widgets as GtkEntry and
->  ulf> @@ -8,3 +9,7 @@
->  ulf>  	  limitations of the widgets.
->  
->  ulf>  	  http://www.chipx86.com/wiki/Libsexy
->  ulf> +
->  ulf> +comment "libsexy       - disabled (requires X-Windows)"
->  ulf> +	depends on BR2_PACKAGE_XSERVER_none
->  ulf> +
-> 
-> We don't normally do that for X-only stuff. Long term, we should
-> probably move X apps to a seperate menu.
-> 
-
-Sounds OK to me.
+Yes, it is a gcc patch for ARM.
 
 BR
 Ulf Samuelsson
+> -- 
+> Bye, Peter Korsgaard
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
