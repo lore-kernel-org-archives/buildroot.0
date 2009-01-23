@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Fri, 23 Jan 2009 20:56:08 +0000 (UTC)
-Subject: [Buildroot] svn commit: tags/buildroot_2009.02_rc2
-Message-ID: <20090123205608.6D81E769CC@busybox.osuosl.org>
+Date: Fri, 23 Jan 2009 21:06:06 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/docs
+Message-ID: <20090123210606.7E75C76D75@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,27 +9,35 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2009-01-23 20:56:07 +0000 (Fri, 23 Jan 2009)
-New Revision: 24990
+Date: 2009-01-23 21:06:05 +0000 (Fri, 23 Jan 2009)
+New Revision: 24991
 
 Log:
-buildroot: fix version for 2009.02-rc2
+docs/news.html: announce -rc2
 
 Modified:
-   tags/buildroot_2009.02_rc2/Config.in
+   trunk/buildroot/docs/news.html
 
 
 Changeset:
-Modified: tags/buildroot_2009.02_rc2/Config.in
+Modified: trunk/buildroot/docs/news.html
 ===================================================================
---- tags/buildroot_2009.02_rc2/Config.in	2009-01-23 20:52:59 UTC (rev 24989)
-+++ tags/buildroot_2009.02_rc2/Config.in	2009-01-23 20:56:07 UTC (rev 24990)
-@@ -8,7 +8,7 @@
+--- trunk/buildroot/docs/news.html	2009-01-23 20:56:07 UTC (rev 24990)
++++ trunk/buildroot/docs/news.html	2009-01-23 21:06:05 UTC (rev 24991)
+@@ -3,6 +3,16 @@
  
- config BR2_VERSION
- 	string
--	default "2009.02-svn"
-+	default "2009.02-rc2"
+ <ul>
  
- source "target/Config.in.arch"
- source "target/device/Config.in"
++  <li><b>23 January 2009 -- 2009.02-rc2 released</b>
++    <p>Another week, another release candidate with a bunch of
++    cleanups and build fixes.</p>
++
++    <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
++    <a href="/downloads/buildroot-2009.02-rc2.tar.bz2">2009.02-rc2
++    release candidate</a>, and report any problems found to the <a
++    href="lists.html">mailing list</a> or <a
++    href="http://bugs.uclibc.org">bug tracker</a>.</p>
++
+   <li><b>16 January 2009 -- Release candidate and new maintainer</b>
+     <p>It has been a long time coming, but we finally have a new
+     release candidate! - And a new maintainer to match (Peter Korsgaard).</p>
