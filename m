@@ -1,28 +1,49 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 23 Jan 2009 22:12:27 +0100
-Subject: [Buildroot] 2009.02-rc2 released
-Message-ID: <87skn9iv5w.fsf@macbook.be.48ers.dk>
+From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
+Date: Fri, 23 Jan 2009 19:17:32 -0200
+Subject: [Buildroot] How handle broken or partly broken packages in the
+	distribution
+In-Reply-To: <1232732815.5311.88.camel@elrond.atmel.com>
+References: <1232651253.5311.19.camel@elrond.atmel.com>
+	<20090123095712.6878553d@hcegtvedt>
+	<d6cda7730901230912g6851880fua908aad10de0192@mail.gmail.com>
+	<1232732815.5311.88.camel@elrond.atmel.com>
+Message-ID: <d6cda7730901231317q57e351dev9ef8b5f1dc24086f@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Fri, Jan 23, 2009 at 3:46 PM, Ulf Samuelsson
+<ulf.samuelsson@atmel.com> wrote:
+>
+> Why on earth do you want to enable a thing which NEVER will work?
+>
+> If you want to update the package so it works,
+> then you can do that in the trunk which should not
+> have these limitations turned on by default
 
-Another week, another release candidate. I have released
-buildroot-2009.02-rc2:
+As I said, just remove the package from defconfig.
+If we start disabling stuff just because of some minor build problem,
+the chances that it will be fixed and enabled again are slim. How do
+you differentiate things that are just minor corrections from things
+that doesn't make sense at all to be enabled in that platform?
 
-http://buildroot.uclibc.org/downloads/buildroot-2009.02-rc2.tar.gz
+We would of course want to disable PCI Utils in AVR32 since there is
+no PCI bus there. But not linux-fusion stuff that doesn't build right
+now but it did a while back.
 
-or
+Usually a release is a trunk revision at some point. Going thru
+several packages disabling them just for releases isn't much
+practical.
 
-http://buildroot.uclibc.org/downloads/buildroot-2009.02-rc2.tar.bz2
+> The distibution, on the other hand, should be easy to use
+> and should IMO protect users against wasting their time.
 
-Please give it a spin and report back issues to the mailing list or
-the bug tracker.
+They can read the help message for that. A common pattern for users is
+to build the default config first, and that we should make sure to
+have working.
 
-I think we're pretty well on track to do a final release in 2 weeks.
 
--- 
-Bye, Peter Korsgaard
+Kind Regards,
+    Thiago A. Correa
