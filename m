@@ -1,12 +1,13 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 23 Jan 2009 10:11:28 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/target/generic
-In-Reply-To: <1232650901.5311.15.camel@elrond.atmel.com> (Ulf Samuelsson's
-	message of "Thu\, 22 Jan 2009 20\:01\:41 +0100")
-References: <20090122075324.D71DA765E9@busybox.osuosl.org>
-	<874ozrpv1k.fsf@macbook.be.48ers.dk>
-	<1232650901.5311.15.camel@elrond.atmel.com>
-Message-ID: <87ocxymlof.fsf@macbook.be.48ers.dk>
+Date: Fri, 23 Jan 2009 10:16:02 +0100
+Subject: [Buildroot] svn commit:
+	trunk/buildroot/target/u-boot/2009.01-rc3
+In-Reply-To: <1232649458.5311.6.camel@elrond.atmel.com> (Ulf Samuelsson's
+	message of "Thu\, 22 Jan 2009 19\:37\:38 +0100")
+References: <20090122073913.5C9CE765E9@busybox.osuosl.org>
+	<87zlhjogcu.fsf@macbook.be.48ers.dk>
+	<1232649458.5311.6.camel@elrond.atmel.com>
+Message-ID: <87k58mmlgt.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,28 +16,28 @@ To: buildroot@busybox.net
 
 >>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 
- >> Please don't do that. That's not a common use case. If you want to
- >> test everything, just use make allyesconfig instead.
+ >> I don't see this either in U-Boot git or as a patch to the mailing
+ >> list.
 
- Ulf> I agree that it is not a common test case, but I don't want to
- Ulf> test everything as well at this point.
+ Ulf> It is in the u-boot-avr32 git.
+ Ulf> I pointed it out to Haavard, so he has asked Wolfgang
+ Ulf> to pull this patch, but it is too late for 2009.01
 
- Ulf> ?It is a help to test, but I agree it should be removed 
- Ulf> before the final distribution, or significantly improved.
+So 2009.01 is broken on all avr32? Seems like someone forgot to do
+tests.
 
-Then please keep it in your local tree instead.
+I see that your patch is not the same as Haavard sent to wdenx,
+perhaps update?
 
- Ulf> Right now, It saves a lot of time in the testing process.
+ >> 2009.01 is furthermore released, so -rcX should imho go.
+ >> 
 
- Ulf> Easiest is just to replace it with an empty file when
- Ulf> the distribution is made.
+ Ulf> I am testing this very thing right now, so
+ Ulf> 2009.01-rc3 will go, and 2009.01
+ Ulf> will be enabled, and the patch will be moved 
+ Ulf> to the correct directory.
 
-No, that sounds dirty.
-
-Why don't you just do a make allyesconfig and either use the
-KCONFIG_ALLCONFIG stuff to disable specific packages, or simply run
-sed on your .config instead? You could probably add it to your
-buildall script.
+I already did that yesterday.
 
 -- 
 Bye, Peter Korsgaard
