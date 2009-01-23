@@ -1,82 +1,29 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Fri, 23 Jan 2009 13:12:57 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/kernel-headers
-Message-ID: <20090123131257.C2274769CC@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 23 Jan 2009 14:14:51 +0100
+Subject: [Buildroot] DirectFB + linux-headers-2.6.28.1 compilation
+	problem
+In-Reply-To: <fce2a370901230456m52a0b2d4xd74c5121ec3cdd6d@mail.gmail.com>
+	(Ihar Hrachyshka's message of "Fri\,
+	23 Jan 2009 14\:56\:40 +0200")
+References: <fce2a370901230310y63c0ebe3x10e523e10154a96a@mail.gmail.com>
+	<87sknakx0f.fsf@macbook.be.48ers.dk> <1232715256.6350.7.camel@sven>
+	<fce2a370901230456m52a0b2d4xd74c5121ec3cdd6d@mail.gmail.com>
+Message-ID: <87d4eekvuc.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-01-23 13:12:57 +0000 (Fri, 23 Jan 2009)
-New Revision: 24981
+>>>>> "Ihar" == Ihar Hrachyshka <ihar.hrachyshka@gmail.com> writes:
 
-Log:
-kernel-headers: fix 2.6.28.1 serial.h (unbreaks directfb serialmouse.c)
+Hi,
 
-Added:
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.1-fix-serial.h-include.patch
+ >> Yes. Seems to be a problem in the kernel headers.
 
+ Ihar> Yes, it's a kernel headers bug. Should be fixed for next versions I think.
 
-Changeset:
-Added: trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.1-fix-serial.h-include.patch
-===================================================================
---- trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.1-fix-serial.h-include.patch	                        (rev 0)
-+++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.1-fix-serial.h-include.patch	2009-01-23 13:12:57 UTC (rev 24981)
-@@ -0,0 +1,55 @@
-+From 60c20fb8c00a2b23308ae4517f145383bc66d291 Mon Sep 17 00:00:00 2001
-+From: Andy Whitcroft <apw@canonical.com>
-+Date: Fri, 2 Jan 2009 13:49:04 +0000
-+Subject: [PATCH] serial: RS485 ioctl structure uses __u32 include linux/types.h
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=utf-8
-+Content-Transfer-Encoding: 8bit
-+
-+In the commit below a new struct serial_rs485 was introduced for a new
-+ioctl:
-+
-+    commit c26c56c0f40e200e61d1390629c806f6adaffbcc
-+    Author: Alan Cox <alan@redhat.com>
-+    Date:   Mon Oct 13 10:37:48 2008 +0100
-+
-+	tty: Cris has a nice RS485 ioctl so we should steal it
-+
-+This structure uses the __u32 types for some of its members, which leads
-+to the following compile error:
-+
-+    $ cc -I.../include -c X.c
-+    In file included from X.c:2: .../include/linux/serial.h:185:
-+		error: expected specifier-qualifier-list before ?__u32?
-+    $
-+
-+It seems that these types are appropriate for this structure as it is
-+to be exposed to userspace.  These types are available via linux/types.h
-+so move the include of that outside the __KERNEL__ section.
-+
-+Signed-off-by: Andy Whitcroft <apw@canonical.com>
-+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-+Signed-off-by: Alan Cox <alan@redhat.com>
-+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-+---
-+ include/linux/serial.h |    3 ++-
-+ 1 files changed, 2 insertions(+), 1 deletions(-)
-+
-+diff --git a/include/linux/serial.h b/include/linux/serial.h
-+index 1ea8d92..9136cc5 100644
-+--- a/include/linux/serial.h
-++++ b/include/linux/serial.h
-+@@ -10,8 +10,9 @@
-+ #ifndef _LINUX_SERIAL_H
-+ #define _LINUX_SERIAL_H
-+ 
-+-#ifdef __KERNEL__
-+ #include <linux/types.h>
-++
-++#ifdef __KERNEL__
-+ #include <asm/page.h>
-+ 
-+ /*
-+-- 
-+1.5.6.5
-+
+Could you retry with r24981?
+
+-- 
+Bye, Peter Korsgaard
