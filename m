@@ -1,22 +1,37 @@
-From: Dan Lykowski <lykowdk@gmail.com>
-Date: Fri, 23 Jan 2009 14:37:59 -0800
-Subject: [Buildroot] glibc support
-Message-ID: <f8955f9e0901231437t23a39883n95e6920792674ee1@mail.gmail.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Fri, 23 Jan 2009 23:02:17 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/ncurses
+Message-ID: <20090123230218.44A1376564@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I was the person who submitted the glibc patch in December.
-No one ever commented so I have never pursued the matter.
+Author: ulf
+Date: 2009-01-23 23:02:15 +0000 (Fri, 23 Jan 2009)
+New Revision: 24992
 
-I made the changes because I need to run fglrx ( closed source ATI driver )
-for 3D performance reasons.
+Log:
+Fix static lib dep for ncurses
 
-If there is interest, I can create the patch again.
+Modified:
+   trunk/buildroot/package/ncurses/ncurses.mk
 
-Dan Lykowski
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://lists.busybox.net/pipermail/buildroot/attachments/20090123/f70c3dfe/attachment.htm 
+
+Changeset:
+Modified: trunk/buildroot/package/ncurses/ncurses.mk
+===================================================================
+--- trunk/buildroot/package/ncurses/ncurses.mk	2009-01-23 21:06:05 UTC (rev 24991)
++++ trunk/buildroot/package/ncurses/ncurses.mk	2009-01-23 23:02:15 UTC (rev 24992)
+@@ -130,7 +130,9 @@
+ 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $@
+ 	touch -c $@
+ 
+-$(TARGET_DIR)/usr/lib/libncurses.a: $(STAGING_DIR)/lib/libncurses.a
++$(NCURSES_DIR)/lib/libncurses.a: $(NCURSES_DIR)/lib/libncurses.so.$(NCURSES_VERSION)
++
++$(TARGET_DIR)/usr/lib/libncurses.a: $(NCURSES_DIR)/lib/libncurses.a
+ 	mkdir -p $(TARGET_DIR)/usr/include
+ 	cp -dpf $(NCURSES_DIR)/include/curses.h $(TARGET_DIR)/usr/include/curses.h
+ 	cp -dpf $(NCURSES_DIR)/include/ncurses_dll.h $(TARGET_DIR)/usr/include/ncurses_dll.h
