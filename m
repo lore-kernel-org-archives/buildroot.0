@@ -1,49 +1,79 @@
-From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
-Date: Fri, 23 Jan 2009 19:17:32 -0200
-Subject: [Buildroot] How handle broken or partly broken packages in the
-	distribution
-In-Reply-To: <1232732815.5311.88.camel@elrond.atmel.com>
-References: <1232651253.5311.19.camel@elrond.atmel.com>
-	<20090123095712.6878553d@hcegtvedt>
-	<d6cda7730901230912g6851880fua908aad10de0192@mail.gmail.com>
-	<1232732815.5311.88.camel@elrond.atmel.com>
-Message-ID: <d6cda7730901231317q57e351dev9ef8b5f1dc24086f@mail.gmail.com>
+From: Cyril HAENEL <chaenel@free.fr>
+Date: Fri, 23 Jan 2009 22:27:37 +0100
+Subject: [Buildroot] 2009.02-rc2 released
+In-Reply-To: <87skn9iv5w.fsf@macbook.be.48ers.dk>
+References: <87skn9iv5w.fsf@macbook.be.48ers.dk>
+Message-ID: <497A3649.7050005@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jan 23, 2009 at 3:46 PM, Ulf Samuelsson
-<ulf.samuelsson@atmel.com> wrote:
+
+
+Peter Korsgaard a ?crit :
+> Hi,
 >
-> Why on earth do you want to enable a thing which NEVER will work?
+> Another week, another release candidate. I have released
+> buildroot-2009.02-rc2:
 >
-> If you want to update the package so it works,
-> then you can do that in the trunk which should not
-> have these limitations turned on by default
+> http://buildroot.uclibc.org/downloads/buildroot-2009.02-rc2.tar.gz
+>
+> or
+>
+> http://buildroot.uclibc.org/downloads/buildroot-2009.02-rc2.tar.bz2
+>
+> Please give it a spin and report back issues to the mailing list or
+> the bug tracker.
+>
+> I think we're pretty well on track to do a final release in 2 weeks.
+>
+>   
+Hi,
 
-As I said, just remove the package from defconfig.
-If we start disabling stuff just because of some minor build problem,
-the chances that it will be fixed and enabled again are slim. How do
-you differentiate things that are just minor corrections from things
-that doesn't make sense at all to be enabled in that platform?
+Compilation problem for me :
 
-We would of course want to disable PCI Utils in AVR32 since there is
-no PCI bus there. But not linux-fusion stuff that doesn't build right
-now but it did a while back.
+tar jxvf buildroot-2009.02-rc2.tar.bz2
+cd buildroot-2009.02-rc2
+make menuconfig + Exit + Save
+make at91sam9260dfc_defconfig
+make
 
-Usually a release is a trunk revision at some point. Going thru
-several packages disabling them just for releases isn't much
-practical.
+-> I answer N at all questions
+-> I answer 3 for the memory type question (Nand flash 2KB page and 
+128KB block)
 
-> The distibution, on the other hand, should be easy to use
-> and should IMO protect users against wasting their time.
+After 2 or 3 minutes :
 
-They can read the help message for that. A common pattern for users is
-to build the default config first, and that we should make sure to
-have working.
+  LN include/sys/procfs.h
+  LN include/sys/ucontext.h
+  LN include/sys/user.h
+  HOSTCC extra/locale/gen_wc8bit
+extra/locale/gen_wc8bit.c: In function 'main':
+extra/locale/gen_wc8bit.c:356: warning: array subscript is above array 
+bounds
+extra/locale/gen_wc8bit.c:415: warning: array subscript is above array 
+bounds
+extra/locale/gen_wc8bit.c:481: warning: array subscript is above array 
+bounds
+  GEN extra/locale/codesets.txt
+  GEN extra/locale/c8tables.h
+setlocale(LC_CTYPE,"en_US.UTF-8") failed!
+make[1]: *** [extra/locale/c8tables.h] Erreur 1
+make[1]: quittant le r?pertoire ? 
+/home/nlc/developpement/linuxEmbedded/buildroot-2009.02-rc2/toolchain_build_arm/uClibc-0.9.30 
+?
+make: *** 
+[/home/nlc/developpement/linuxEmbedded/buildroot-2009.02-rc2/toolchain_build_arm/uClibc-0.9.30/.configured] 
+Erreur 2
 
+Its a problem on my laptop ?
 
-Kind Regards,
-    Thiago A. Correa
+Regards,
+Cyril HAENEL
+
+-- 
+
+Cyril Haenel
+Registered Linux User #332632
