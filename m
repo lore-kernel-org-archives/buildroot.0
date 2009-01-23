@@ -1,40 +1,36 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Fri, 23 Jan 2009 00:54:31 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
-Message-ID: <20090123005432.D97D576850@busybox.osuosl.org>
+From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
+Date: Fri, 23 Jan 2009 09:57:12 +0100
+Subject: [Buildroot] How handle broken or partly broken packages in the
+ distribution
+In-Reply-To: <1232651253.5311.19.camel@elrond.atmel.com>
+References: <1232651253.5311.19.camel@elrond.atmel.com>
+Message-ID: <20090123095712.6878553d@hcegtvedt>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2009-01-23 00:54:23 +0000 (Fri, 23 Jan 2009)
-New Revision: 24977
+On Thu, 22 Jan 2009 20:07:33 +0100
+Ulf Samuelsson <ulf.samuelsson@atmel.com> wrote:
 
-Log:
-Do not reapply linux patches if LINUX26_PATCH_SOURCE is empty, and we are continuing building after a failure
-
-Modified:
-   trunk/buildroot/target/linux/Makefile.in.advanced
-
-
-Changeset:
-Modified: trunk/buildroot/target/linux/Makefile.in.advanced
-===================================================================
---- trunk/buildroot/target/linux/Makefile.in.advanced	2009-01-22 23:10:12 UTC (rev 24976)
-+++ trunk/buildroot/target/linux/Makefile.in.advanced	2009-01-23 00:54:23 UTC (rev 24977)
-@@ -71,8 +71,12 @@
- LINUX26_BSP_PATCH:=$(strip $(subst ",,$(BR2_LINUX_BSP_PATCH)))
- #"))
+<snipp list of packages>
  
--LINUX_HEADERS_DEPENDS:= $(DL_DIR)/$(LINUX26_PATCH_SOURCE) $(LINUX26_BSP_PATCH)
-+LINUX_HEADERS_DEPENDS:=  $(LINUX26_BSP_PATCH)
- 
-+ifneq ($(LINUX26_PATCH_SOURCE),)
-+LINUX_HEADERS_DEPENDS+=$(DL_DIR)/$(LINUX26_PATCH_SOURCE)
-+endif
-+
- # ------------------------------------
- # kernel patches provided by buildroot
- ifeq ($(strip $(LINUX26_PATCH_DIR)),)
+> I suggest we disable them using
+> 	depends on "BR2_avr32
+> 
+
+I assume " was supposed to be !.
+
+> so they are not selectable for AVR32 users
+> 
+
+To make it harder to fix the problem with the packages?
+
+It might also be a result from the development environment on your
+build machine, like the recent alsa-utils errors somebody else found on
+opensuse, which I have not triggered in my Ubuntu system.
+
+-- 
+Best regards,
+Hans-Christian Egtvedt
