@@ -1,29 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 23 Jan 2009 14:14:51 +0100
-Subject: [Buildroot] DirectFB + linux-headers-2.6.28.1 compilation
-	problem
-In-Reply-To: <fce2a370901230456m52a0b2d4xd74c5121ec3cdd6d@mail.gmail.com>
-	(Ihar Hrachyshka's message of "Fri\,
-	23 Jan 2009 14\:56\:40 +0200")
-References: <fce2a370901230310y63c0ebe3x10e523e10154a96a@mail.gmail.com>
-	<87sknakx0f.fsf@macbook.be.48ers.dk> <1232715256.6350.7.camel@sven>
-	<fce2a370901230456m52a0b2d4xd74c5121ec3cdd6d@mail.gmail.com>
-Message-ID: <87d4eekvuc.fsf@macbook.be.48ers.dk>
+From: Sven Neumann <s.neumann@phase-zero.de>
+Date: Fri, 23 Jan 2009 15:30:38 +0100
+Subject: [Buildroot] busybox login problem on AT91SAM9263
+In-Reply-To: <1232715723.5311.57.camel@elrond.atmel.com>
+References: <5B920D714A1C354D8949DBF58C2A35D604139AA8@freja.acte.local>
+	<87d4egudlg.fsf@macbook.be.48ers.dk>
+	<5B920D714A1C354D8949DBF58C2A35D604139AAE@freja.acte.local>
+	<8763k8uacw.fsf@macbook.be.48ers.dk>
+	<1232559369.11888.20.camel@elrond.atmel.com>
+	<5B920D714A1C354D8949DBF58C2A35D604139ABA@freja.acte.local>
+	<877i4no5n7.fsf@macbook.be.48ers.dk>
+	<5B920D714A1C354D8949DBF58C2A35D604139ABB@freja.acte.local>
+	<87zlhjml3m.fsf@macbook.be.48ers.dk>
+	<5B920D714A1C354D8949DBF58C2A35D604139ABC@freja.acte.local>
+	<87sknbmjj4.fsf@macbook.be.48ers.dk>
+	<5B920D714A1C354D8949DBF58C2A35D604139ABE@freja.acte.local>
+	<87wscml1t2.fsf@macbook.be.48ers.dk>
+	<1232715723.5311.57.camel@elrond.atmel.com>
+Message-ID: <1232721038.6350.9.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ihar" == Ihar Hrachyshka <ihar.hrachyshka@gmail.com> writes:
-
 Hi,
 
- >> Yes. Seems to be a problem in the kernel headers.
+On Fri, 2009-01-23 at 14:02 +0100, Ulf Samuelsson wrote:
 
- Ihar> Yes, it's a kernel headers bug. Should be fixed for next versions I think.
+> I OABI works and EABI doesn't then I am not going to drive EABI.
+> Still way too many packages that does not build...
 
-Could you retry with r24981?
+Oh, please. EABI works nicely as long as the toolchain is correctly
+configured. And there are very good reasons to prefer EABI over OABI.
+The performance difference is definitely worth it.
 
--- 
-Bye, Peter Korsgaard
+
+Sven
