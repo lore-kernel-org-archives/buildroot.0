@@ -1,106 +1,466 @@
-From: Cyril HAENEL <chaenel@free.fr>
-Date: Sat, 24 Jan 2009 14:03:40 +0100
-Subject: [Buildroot] 2009.02-rc2 released
-In-Reply-To: <87vds5gjpl.fsf@macbook.be.48ers.dk>
-References: <87skn9iv5w.fsf@macbook.be.48ers.dk> <497A3649.7050005@free.fr>
-	<87vds5gjpl.fsf@macbook.be.48ers.dk>
-Message-ID: <497B11AC.3090103@free.fr>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Sat, 24 Jan 2009 13:34:22 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/scripts:  test
+Message-ID: <20090124133423.00EBC769CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: ulf
+Date: 2009-01-24 13:34:21 +0000 (Sat, 24 Jan 2009)
+New Revision: 25006
+
+Log:
+Fix buildall script to use testbed in scripts/test
+
+Modified:
+   trunk/buildroot/scripts/buildall.sh
+   trunk/buildroot/scripts/test/Config.in.test.buildall
 
 
-Peter Korsgaard a ?crit :
->>>>>> "Cyril" == Cyril HAENEL <chaenel@free.fr> writes:
->>>>>>             
->
->  Cyril> Compilation problem for me :
->
->  Cyril> tar jxvf buildroot-2009.02-rc2.tar.bz2
->  Cyril> cd buildroot-2009.02-rc2
->  Cyril> make menuconfig + Exit + Save
->  Cyril> make at91sam9260dfc_defconfig
->
-> That one seems to have BR2_ENABLE_LOCALE enabled.
->
->  Cyril> make
->
->  -> I answer N at all questions
->  -> I answer 3 for the memory type question (Nand flash 2KB page and
->  Cyril> 128KB block)
->
->  Cyril> After 2 or 3 minutes :
->
->  Cyril>  LN include/sys/procfs.h
->  Cyril>  LN include/sys/ucontext.h
->  Cyril>  LN include/sys/user.h
->  Cyril>  HOSTCC extra/locale/gen_wc8bit
->  Cyril> extra/locale/gen_wc8bit.c: In function 'main':
->  Cyril> extra/locale/gen_wc8bit.c:356: warning: array subscript is above array
->  Cyril> bounds
->  Cyril> extra/locale/gen_wc8bit.c:415: warning: array subscript is above array
->  Cyril> bounds
->  Cyril> extra/locale/gen_wc8bit.c:481: warning: array subscript is above array
->  Cyril> bounds
->  Cyril>  GEN extra/locale/codesets.txt
->  Cyril>  GEN extra/locale/c8tables.h
->  Cyril> setlocale(LC_CTYPE,"en_US.UTF-8") failed!
->
-> And your host doesn't seem to have the en_US.UTF-8 locale which seems
-> to be a requirement for this.
->
-> I don't know the finer details about the locale generation in uclibc,
-> and if en_US.UTF-8 really should be required, for that you better ask
-> the uclibc list.
->
->   
-Hi Peter,
+Changeset:
+Modified: trunk/buildroot/scripts/buildall.sh
+===================================================================
+--- trunk/buildroot/scripts/buildall.sh	2009-01-24 11:29:10 UTC (rev 25005)
++++ trunk/buildroot/scripts/buildall.sh	2009-01-24 13:34:21 UTC (rev 25006)
+@@ -1,6 +1,15 @@
+ #!/bin/sh
++sed	-i s/^.*Config.in.test.*//	Config.in
++echo	"source \"scripts/test/Config.in.test.$1\"" >> Config.in
++sed	-i s/^.*BR2_TARGET_TEST_PACKAGES*//	.config
++echo	"BR2_TARGET_TEST_PACKAGES=y" >> .config
++cat	scripts/test/noconfiguration.$1 >> .config
++make 	oldconfig
++
++
+ source	"scripts/testheader.inc"
+ 
++
+ skip	mk	busybox
+ bb	mk	bash
+ bb	mk	bzip2
 
-I disabled BR2_ENABLE_LOCALE :
-
-tar jxvf buildroot-2009.02-rc2.tar.bz2
-cd buildroot-2009.02-rc2
-make menuconfig + Exit + Save
-make at91sam9260dfc_defconfig
-
-Edit .config and disable BR2_ENABLE_LOCALE
-
-make
-
---> I answer the default proposition at all questions, except for memory 
-type question, I answer 3
-
-This time there is no setlocale() error, but after a while, I have an 
-error on the module-init-tools-3.2.2 compilation :
-
-    /usr/bin/gcc -DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" 
--DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" 
--DPACKAGE=\"module-init-tools\" -DVERSION=\"3.2.2\"  -I. -I.     -g -O2 
--Wunused -Wall -c `test -f 'modinfo.c' || echo './'`modinfo.c
-modinfo.c: In function 'main':
-modinfo.c:338: attention : 'infosize' may be used uninitialized in this 
-function
-/usr/bin/gcc  -g -O2 -Wunused -Wall   -o modinfo  modinfo.o zlibsupport.o 
-/usr/bin/gcc  -g -O2 -Wunused -Wall   -o insmod.static -static insmod.o 
-/usr/bin/ld: cannot find -lc
-collect2: ld a retourn? 1 code d'?tat d'ex?cution
-make[1]: *** [insmod.static] Erreur 1
-make[1]: quittant le r?pertoire ? 
-/home/nlc/developpement/linuxEmbedded/buildroot-2009.02-rc2/toolchain_build_arm/module-init-tools-3.2.2 
-?
-make: *** 
-[/home/nlc/developpement/linuxEmbedded/buildroot-2009.02-rc2/toolchain_build_arm/module-init-tools-3.2.2/depmod] 
-Erreur 2
-
-What can be the problem this time ?
-
-Regards,
-Cyril
-
--- 
-
-Cyril Haenel
-Registered Linux User #332632
+Modified: trunk/buildroot/scripts/test/Config.in.test.buildall
+===================================================================
+--- trunk/buildroot/scripts/test/Config.in.test.buildall	2009-01-24 11:29:10 UTC (rev 25005)
++++ trunk/buildroot/scripts/test/Config.in.test.buildall	2009-01-24 13:34:21 UTC (rev 25006)
+@@ -17,7 +17,7 @@
+ 	select BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
+ 	select BR2_PACKAGE_BZIP2
+ 	select BR2_PACKAGE_FLEX
+-	select BR2_PACKAGE_FLEX_LIBFL
++		select BR2_PACKAGE_FLEX_LIBFL
+ 	select BR2_PACKAGE_GCC_TARGET
+ 	select BR2_PACKAGE_MAKE
+ 	select BR2_PACKAGE_AUTOCONF
+@@ -34,18 +34,21 @@
+ 	select BR2_PACKAGE_GETTEXT_STATIC
+ 	select BR2_PACKAGE_LIBINTL
+ 	select BR2_PACKAGE_LIBGMP
+-	select BR2_PACKAGE_LIBGMP_HEADERS
++		select BR2_PACKAGE_LIBGMP_HEADERS
++
+ 	select BR2_PACKAGE_GPERF
+ 	select BR2_PACKAGE_LIBMPFR
+-	select BR2_PACKAGE_LIBMPFR_HEADERS
++		select BR2_PACKAGE_LIBMPFR_HEADERS
++
+ 	select BR2_PACKAGE_LIBTOOL
+ 	select BR2_PACKAGE_M4
+ 	select BR2_PACKAGE_MPATROL
+ 	select BR2_PACKAGE_OPROFILE
+ 	select BR2_PACKAGE_PKGCONFIG
+ 	select BR2_READLINE
+-	select BR2_PACKAGE_READLINE_TARGET
+-	select BR2_PACKAGE_READLINE_HEADERS
++		select BR2_PACKAGE_READLINE_TARGET
++		select BR2_PACKAGE_READLINE_HEADERS
++
+ 	select BR2_PACKAGE_PCRE
+ 	select BR2_PACKAGE_AT
+ 	select BR2_PACKAGE_BEECRYPT
+@@ -57,12 +60,14 @@
+ 	select BR2_PACKAGE_GAMIN
+ 	select BR2_PACKAGE_ICU
+ 	select BR2_PACKAGE_KEXEC
+-	select BR2_PACKAGE_KEXEC_ZLIB
++		select BR2_PACKAGE_KEXEC_ZLIB
++
+ 	select BR2_PACKAGE_LIBCONFIG
+ 	select BR2_PACKAGE_LIBCONFUSE
+ 	select BR2_PACKAGE_LIBDAEMON
+ 	select BR2_PACKAGE_LIBELF
+-	select BR2_PACKAGE_LIBELF_HEADERS
++		select BR2_PACKAGE_LIBELF_HEADERS
++
+ 	select BR2_PACKAGE_LIBEVENT
+ 	select BR2_PACKAGE_LIBGCRYPT
+ 	select BR2_PACKAGE_LIBGPG_ERROR
+@@ -76,7 +81,7 @@
+ 	select BR2_PACKAGE_LSOF
+ 	select BR2_PACKAGE_LTP-TESTSUITE
+ 	select BR2_PACKAGE_LTRACE
+-	select BR2_PACKAGE_LTT
++# BR2_PACKAGE_LTT is not set
+ 	select BR2_PACKAGE_MEMSTAT
+ 	select BR2_PACKAGE_NG_SPICE_REWORK
+ 	select BR2_PACKAGE_POPT
+@@ -88,29 +93,44 @@
+ 	select BR2_PACKAGE_SQLITE
+ 	select BR2_PACKAGE_ARGUS
+ 	select BR2_PACKAGE_AVAHI
+-	select BR2_PACKAGE_AVAHI_AUTOIPD
+-	select BR2_PACKAGE_AVAHI_DAEMON
++		select BR2_PACKAGE_AVAHI_AUTOIPD
++		select BR2_PACKAGE_AVAHI_DAEMON
++
+ 	select BR2_PACKAGE_AXEL
+ 	select BR2_PACKAGE_BIND
+ 	select BR2_PACKAGE_BRIDGE
+ 	select BR2_PACKAGE_DNSMASQ
++		select BR2_PACKAGE_DNSMASQ_TFTP
++
+ 	select BR2_PACKAGE_DROPBEAR
+ 	select BR2_PACKAGE_ETHTOOL
+ 	select BR2_PACKAGE_HASERL
+-# BR2_PACKAGE_HASERL_VERSION_0_8_X is not set
+-	select BR2_PACKAGE_HASERL_VERSION_0_9_X
++# 		BR2_PACKAGE_HASERL_VERSION_0_8_X is not set
++		select BR2_PACKAGE_HASERL_VERSION_0_9_X
++
+ 	select BR2_PACKAGE_IFPLUGD
+ 	select BR2_PACKAGE_IPERF
+ 	select BR2_PACKAGE_IPROUTE2
+ 	select BR2_PACKAGE_IPSEC_TOOLS
++		select BR2_PACKAGE_IPSEC_TOOLS_STATS
++		select BR2_PACKAGE_IPSEC_TOOLS_ADMINPORT
++		select BR2_PACKAGE_IPSEC_TOOLS_NATT
++		select BR2_PACKAGE_IPSEC_TOOLS_FRAG
++		select BR2_PACKAGE_IPSEC_TOOLS_READLINE
++# BR2_PACKAGE_IPSEC_TOOLS_IPV6 is not set
++# BR2_PACKAGE_IPSEC_TOOLS_LIBS is not set
++
+ 	select BR2_PACKAGE_IPTABLES
+ 	select BR2_PACKAGE_KISMET
+ 	select BR2_PACKAGE_L2TP
+ 	select BR2_PACKAGE_LIBCGI
+ 	select BR2_PACKAGE_LIBCGICC
+ 	select BR2_PACKAGE_LIBCURL
+-	select BR2_PACKAGE_CURL
++		select BR2_PACKAGE_CURL
++
+ 	select BR2_PACKAGE_LIBDNET
++		select BR2_PACKAGE_LIBDNET_PYTHON
++
+ 	select BR2_PACKAGE_LIBOSIP2
+ 	select BR2_PACKAGE_LIBEXOSIP2
+ 	select BR2_PACKAGE_LIBPCAP
+@@ -118,36 +138,50 @@
+ 	select BR2_PACKAGE_LINKS
+ 	select BR2_PACKAGE_LRZSZ
+ 	select BR2_PACKAGE_MDNSRESPONDER
++		select BR2_PACKAGE_MDNSRESPONDER_UTILS
++
+ 	select BR2_PACKAGE_MICROCOM
+ 	select BR2_PACKAGE_MIIDIAG
+ 	select BR2_PACKAGE_MROUTED
+ 	select BR2_PACKAGE_MUTT
+ 	select BR2_PACKAGE_NBD
+ 	select BR2_PACKAGE_NCFTP
+-	select BR2_PACKAGE_NCFTP_GET
+-	select BR2_PACKAGE_NCFTP_PUT
+-	select BR2_PACKAGE_NCFTP_LS
+-	select BR2_PACKAGE_NCFTP_BATCH
+-	select BR2_PACKAGE_NCFTP_SPOOLER
+-	select BR2_PACKAGE_NCFTP_BOOKMARKS
++		select BR2_PACKAGE_NCFTP_GET
++		select BR2_PACKAGE_NCFTP_PUT
++		select BR2_PACKAGE_NCFTP_LS
++		select BR2_PACKAGE_NCFTP_BATCH
++		select BR2_PACKAGE_NCFTP_SPOOLER
++		select BR2_PACKAGE_NCFTP_BOOKMARKS
++
+ 	select BR2_PACKAGE_NEON
++		select BR2_PACKAGE_NEON_ZLIB
++# BR2_PACKAGE_NEON_EXPAT is not set
++		select BR2_PACKAGE_NEON_LIBXML2
++# BR2_PACKAGE_NEON_NOXML is not set
++
+ 	select BR2_PACKAGE_NETKITBASE
+ 	select BR2_PACKAGE_NETKITTELNET
+ 	select BR2_PACKAGE_NETPLUG
+ 	select BR2_PACKAGE_NETSNMP
+ 	select BR2_PACKAGE_NFS_UTILS
+-	select BR2_PACKAGE_NFS_UTILS_RPCDEBUG
+-	select BR2_PACKAGE_NFS_UTILS_RPC_LOCKD
+-	select BR2_PACKAGE_NFS_UTILS_RPC_RQUOTAD
++		select BR2_PACKAGE_NFS_UTILS_RPCDEBUG
++		select BR2_PACKAGE_NFS_UTILS_RPC_LOCKD
++		select BR2_PACKAGE_NFS_UTILS_RPC_RQUOTAD
++
+ 	select BR2_PACKAGE_NTP
++		select BR2_PACKAGE_NTP_SNTP
++
+ 	select BR2_PACKAGE_OLSR
+ 	select BR2_PACKAGE_OPENNTPD
+ 	select BR2_PACKAGE_OPENSSH
+ 	select BR2_PACKAGE_OPENSSL
+-	select BR2_PACKAGE_OPENSSL_BIN
+-	select BR2_PACKAGE_OPENSSL_ENGINES
++		select BR2_PACKAGE_OPENSSL_BIN
++		select BR2_PACKAGE_OPENSSL_ENGINES
++
+ 	select BR2_PACKAGE_OPENVPN
+ 	select BR2_PACKAGE_OPENSWAN
++# 		BR2_PACKAGE_OPENSWAN_DEBUGGING is not set
++
+ 	select BR2_PACKAGE_PORTMAP
+ 	select BR2_PACKAGE_PPPD
+ 	select BR2_PACKAGE_RP_PPPOE
+@@ -157,27 +191,72 @@
+ #
+ # quagga suite
+ #
+-# BR2_PACKAGE_QUAGGA_ZEBRA is not set
+-# BR2_PACKAGE_QUAGGA_BGPD is not set
+-# BR2_PACKAGE_QUAGGA_RIPD is not set
+-# BR2_PACKAGE_QUAGGA_RIPNGD is not set
+-# BR2_PACKAGE_QUAGGA_OSPFD is not set
+-# BR2_PACKAGE_QUAGGA_OSPF6D is not set
+-# BR2_PACKAGE_QUAGGA_WATCHQUAGGA is not set
+-# BR2_PACKAGE_QUAGGA_ISISD is not set
++	select BR2_PACKAGE_QUAGGA_ZEBRA
++	select BR2_PACKAGE_QUAGGA_BGPD
++	select BR2_PACKAGE_QUAGGA_RIPD
++	select BR2_PACKAGE_QUAGGA_RIPNGD
++	select BR2_PACKAGE_QUAGGA_OSPFD
++	select BR2_PACKAGE_QUAGGA_OSPF6D
++	select BR2_PACKAGE_QUAGGA_WATCHQUAGGA
++	select BR2_PACKAGE_QUAGGA_ISISD
++	select BR2_PACKAGE_QUAGGA_BGP_ANNOUNCE
++	select BR2_PACKAGE_QUAGGA_NETLINK
++	select BR2_PACKAGE_QUAGGA_SNMP
++	select BR2_PACKAGE_QUAGGA_TCP_ZEBRA
++	select BR2_PACKAGE_QUAGGA_OPAGUE_LSA
++	select BR2_PACKAGE_QUAGGA_CONFIGURE
++
+ 	select BR2_PACKAGE_RSYNC
++
+ 	select BR2_PACKAGE_SAMBA
++		select BR2_PACKAGE_SAMBA_CIFS
++		select BR2_PACKAGE_SAMBA_EVENTLOGADM
++		select BR2_PACKAGE_SAMBA_FINDSMB
++		select BR2_PACKAGE_SAMBA_NET
++		select BR2_PACKAGE_SAMBA_NMBD
++		select BR2_PACKAGE_SAMBA_NMBLOOKUP
++		select BR2_PACKAGE_SAMBA_NTLM_AUTH
++		select BR2_PACKAGE_SAMBA_PDBEDIT
++		select BR2_PACKAGE_SAMBA_PROFILES
++		select BR2_PACKAGE_SAMBA_RPCCLIENT
++		select BR2_PACKAGE_SAMBA_SMBCACLS
++		select BR2_PACKAGE_SAMBA_SMBCLIENT
++		select BR2_PACKAGE_SAMBA_SMBCONTROL
++		select BR2_PACKAGE_SAMBA_SMBCQUOTAS
++		select BR2_PACKAGE_SAMBA_SMBGET
++		select BR2_PACKAGE_SAMBA_SMBPASSWD
++		select BR2_PACKAGE_SAMBA_SMBSPOOL
++		select BR2_PACKAGE_SAMBA_SMBSTATUS
++		select BR2_PACKAGE_SAMBA_SMBTREE
++		select BR2_PACKAGE_SAMBA_SWAT
++		select BR2_PACKAGE_SAMBA_SMBTAR
++		select BR2_PACKAGE_SAMBA_TDB
++		select BR2_PACKAGE_SAMBA_TESTPARM
++		select BR2_PACKAGE_SAMBA_WINBINDD
++		select BR2_PACKAGE_SAMBA_WBINFO
++
++
++
+ 	select BR2_PACKAGE_SOCAT
+ 	select BR2_PACKAGE_STUNNEL
+ 	select BR2_PACKAGE_TCPDUMP
++		select BR2_PACKAGE_TCPDUMP_SMB
++
+ 	select BR2_PACKAGE_DHCPDUMP
+ 	select BR2_PACKAGE_TFTPD
++# BR2_PACKAGE_TN5250 is not set
+ 	select BR2_PACKAGE_TTCP
+ 	select BR2_PACKAGE_UDPCAST
++		select BR2_PACKAGE_UDPCAST_SENDER
++		select BR2_PACKAGE_UDPCAST_RECEIVER
++
+ 	select BR2_PACKAGE_VPNC
+ 	select BR2_PACKAGE_VSFTPD
+ 	select BR2_PACKAGE_VTUN
+ 	select BR2_PACKAGE_WEBIF
++		select BR2_PACKAGE_WEBIF_INSTALL_INDEX_HTML
++		select BR2_PACKAGE_WEBIF_LANGUAGES
++
+ 	select BR2_PACKAGE_WIRELESS_TOOLS
+ 
+ #
+@@ -185,41 +264,45 @@
+ #
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_DBUS_EXPAT
+-	select BR2_DBUS_LIBXML2
+-	select BR2_PACKAGE_DBUS_GLIB
++		select BR2_DBUS_LIBXML2
++		select BR2_PACKAGE_DBUS_GLIB
++
+ 	select BR2_PACKAGE_DEVMEM2
+ 	select BR2_PACKAGE_DM
+ 	select BR2_PACKAGE_DMRAID
+ 	select BR2_PACKAGE_E2FSPROGS
+-	select BR2_PACKAGE_E2FSPROGS_BADBLOCKS
+-	select BR2_PACKAGE_E2FSPROGS_BLKID
+-	select BR2_PACKAGE_E2FSPROGS_CHATTR
+-	select BR2_PACKAGE_E2FSPROGS_DUMPE2FS
+-	select BR2_PACKAGE_E2FSPROGS_E2FSCK
+-	select BR2_PACKAGE_E2FSPROGS_E2LABEL
+-	select BR2_PACKAGE_E2FSPROGS_FILEFRAG
+-	select BR2_PACKAGE_E2FSPROGS_FINDFS
+-	select BR2_PACKAGE_E2FSPROGS_FSCK
+-	select BR2_PACKAGE_E2FSPROGS_LOGSAVE
+-	select BR2_PACKAGE_E2FSPROGS_LSATTR
+-	select BR2_PACKAGE_E2FSPROGS_MKE2FS
+-	select BR2_PACKAGE_E2FSPROGS_MKLOSTFOUND
+-	select BR2_PACKAGE_E2FSPROGS_TUNE2FS
+-	select BR2_PACKAGE_E2FSPROGS_UUIDGEN
+-	select BR2_PACKAGE_EEPROG
++		select BR2_PACKAGE_E2FSPROGS_BADBLOCKS
++		select BR2_PACKAGE_E2FSPROGS_BLKID
++		select BR2_PACKAGE_E2FSPROGS_CHATTR
++		select BR2_PACKAGE_E2FSPROGS_DUMPE2FS
++		select BR2_PACKAGE_E2FSPROGS_E2FSCK
++		select BR2_PACKAGE_E2FSPROGS_E2LABEL
++		select BR2_PACKAGE_E2FSPROGS_FILEFRAG
++		select BR2_PACKAGE_E2FSPROGS_FINDFS
++		select BR2_PACKAGE_E2FSPROGS_FSCK
++		select BR2_PACKAGE_E2FSPROGS_LOGSAVE
++		select BR2_PACKAGE_E2FSPROGS_LSATTR
++		select BR2_PACKAGE_E2FSPROGS_MKE2FS
++		select BR2_PACKAGE_E2FSPROGS_MKLOSTFOUND
++		select BR2_PACKAGE_E2FSPROGS_TUNE2FS
++		select BR2_PACKAGE_E2FSPROGS_UUIDGEN
++		select BR2_PACKAGE_EEPROG
++
+ 	select BR2_PACKAGE_FCONFIG
+ 	select BR2_PACKAGE_FIS
+ 	select BR2_PACKAGE_LIBFUSE
+ 	select BR2_PACKAGE_GADGETFS_TEST
+-	select BR2_PACKAGE_GADGETFS_TEST_USE_AIO
++#		BR2_PACKAGE_GADGETFS_TEST_USE_AIO is not set
++
+ 	select BR2_PACKAGE_HAL
+ 	select BR2_PACKAGE_HWDATA
+ 	select BR2_PACKAGE_I2C_TOOLS
+ 	select BR2_PACKAGE_INPUT_TOOLS
+-	select BR2_PACKAGE_INPUT_TOOLS_EVTEST
+-	select BR2_PACKAGE_INPUT_TOOLS_INPUTATTACH
+-	select BR2_PACKAGE_INPUT_TOOLS_JSCAL
+-	select BR2_PACKAGE_INPUT_TOOLS_JSTEST
++		select BR2_PACKAGE_INPUT_TOOLS_EVTEST
++		select BR2_PACKAGE_INPUT_TOOLS_INPUTATTACH
++		select BR2_PACKAGE_INPUT_TOOLS_JSCAL
++		select BR2_PACKAGE_INPUT_TOOLS_JSTEST
++
+ 	select BR2_PACKAGE_IOSTAT
+ 	select BR2_PACKAGE_LIBAIO
+ # BR2_PACKAGE_LIBRAW1394 is not set
+@@ -231,34 +314,34 @@
+ 	select BR2_PACKAGE_MKDOSFS
+ 	select BR2_PACKAGE_MTD
+ # BR2_PACKAGE_MTD_UTILS is not set
+-	select BR2_PACKAGE_MTD_20061007
+-# BR2_PACKAGE_MTD_20050122 is not set
+-# BR2_PACKAGE_MTD_UTILS_GIT is not set
++		select BR2_PACKAGE_MTD_20061007
++# 		BR2_PACKAGE_MTD_20050122 is not set
++# 		BR2_PACKAGE_MTD_UTILS_GIT is not set
+ 
+ #
+ # MTD tools selection
+ #
+-	select BR2_PACKAGE_MTD_DOCFDISK
+-	select BR2_PACKAGE_MTD_DOC_LOADBIOS
+-	select BR2_PACKAGE_MTD_FLASHCP
+-	select BR2_PACKAGE_MTD_FLASH_ERASE
+-	select BR2_PACKAGE_MTD_FLASH_ERASEALL
+-	select BR2_PACKAGE_MTD_FLASH_INFO
+-	select BR2_PACKAGE_MTD_FLASH_LOCK
+-	select BR2_PACKAGE_MTD_FLASH_UNLOCK
+-	select BR2_PACKAGE_MTD_FTL_CHECK
+-	select BR2_PACKAGE_MTD_FTL_FORMAT
+-	select BR2_PACKAGE_MTD_JFFS2DUMP
+-	select BR2_PACKAGE_MTD_MKFSJFFS2
+-	select BR2_PACKAGE_MTD_MKFSJFFS
+-	select BR2_PACKAGE_MTD_MTD_DEBUG
+-	select BR2_PACKAGE_MTD_NANDDUMP
+-	select BR2_PACKAGE_MTD_NANDWRITE
+-	select BR2_PACKAGE_MTD_NFTL_FORMAT
+-	select BR2_PACKAGE_MTD_NFTLDUMP
+-	select BR2_PACKAGE_MTD_SUMTOOL
+-	select BR2_PACKAGE_NTFS-3G
+-	select BR2_PACKAGE_PCIUTILS
++		select BR2_PACKAGE_MTD_DOCFDISK
++		select BR2_PACKAGE_MTD_DOC_LOADBIOS
++		select BR2_PACKAGE_MTD_FLASHCP
++		select BR2_PACKAGE_MTD_FLASH_ERASE
++		select BR2_PACKAGE_MTD_FLASH_ERASEALL
++		select BR2_PACKAGE_MTD_FLASH_INFO
++		select BR2_PACKAGE_MTD_FLASH_LOCK
++		select BR2_PACKAGE_MTD_FLASH_UNLOCK
++		select BR2_PACKAGE_MTD_FTL_CHECK
++		select BR2_PACKAGE_MTD_FTL_FORMAT
++		select BR2_PACKAGE_MTD_JFFS2DUMP
++		select BR2_PACKAGE_MTD_MKFSJFFS2
++		select BR2_PACKAGE_MTD_MKFSJFFS
++		select BR2_PACKAGE_MTD_MTD_DEBUG
++		select BR2_PACKAGE_MTD_NANDDUMP
++		select BR2_PACKAGE_MTD_NANDWRITE
++		select BR2_PACKAGE_MTD_NFTL_FORMAT
++		select BR2_PACKAGE_MTD_NFTLDUMP
++		select BR2_PACKAGE_MTD_SUMTOOL
++		select BR2_PACKAGE_NTFS-3G
++# BR2_PACKAGE_PCIUTILS is not set
+ # BR2_PACKAGE_PCMCIA is not set
+ # BR2_PACKAGE_RAIDTOOLS is not set
+ 	select BR2_PACKAGE_SETSERIAL
+@@ -378,12 +461,12 @@
+ 	select BR2_PACKAGE_MPG123_ALSA
+ 	select BR2_PACKAGE_MPLAYER
+ 	select BR2_PACKAGE_SPEEX
+-	select BR2_PACKAGE_SPEEX_ARM_GENERIC
++		select BR2_PACKAGE_SPEEX_ARM_GENERIC
+ 	select BR2_PACKAGE_FESTIVAL
+ 	select BR2_PACKAGE_SPEECH_TOOLS
+-	select BR2_PACKAGE_FESTLEX_CMU
+-	select BR2_PACKAGE_FESTLEX_OALD
+-	select BR2_PACKAGE_FESTLEX_POS
++		select BR2_PACKAGE_FESTLEX_CMU
++		select BR2_PACKAGE_FESTLEX_OALD
++		select BR2_PACKAGE_FESTLEX_POS
+ 	select BR2_PACKAGE_FESTVOX_AWB
+ 	select BR2_PACKAGE_FESTVOX_BDL
+ 	select BR2_PACKAGE_FESTVOX_JMK
+@@ -478,7 +561,7 @@
+ 	select BR2_PACKAGE_PANGO
+ 	select BR2_PACKAGE_LIBDRM
+ 	select BR2_PACKAGE_LIBERATION
+-# BR2_PACKAGE_LIBGLADE is not set
++	select BR2_PACKAGE_LIBGLADE
+ 	select BR2_PACKAGE_LIBGLIB12
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBGTK2
+@@ -585,7 +668,8 @@
+ # BR2_PACKAGE_PHP_EXT_SYSVSHM is not set
+ # BR2_PACKAGE_PHP_EXT_ZIP is not set
+ # BR2_PACKAGE_PHP_EXT_FILTER is not set
+-
++# BR2_PACKAGE_PHP_EXT_OPENSSL is not set
++# BR2_PACKAGE_PHP_EXT_GMP is not set
+ #
+ # Database extensions
+ #
