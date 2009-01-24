@@ -1,44 +1,53 @@
-From: QuickX <quickx@hotmail.com>
-Date: Fri, 23 Jan 2009 15:06:42 -0800
-Subject: [Buildroot] Some AT91SAM9261-EK Notes
-In-Reply-To: <87ab9hkb7f.fsf@macbook.be.48ers.dk>
-References: <BAY124-W491126D3265E8BD9DCF5DCD2CE0@phx.gbl><1232722423.5311.70.camel@elrond.atmel.com><BAY124-DS41A02756B01D8CBA35C29D2CF0@phx.gbl>
-	<87ab9hkb7f.fsf@macbook.be.48ers.dk>
-Message-ID: <BAY124-DS71A6FE16D4AA2E6DE33BAD2CF0@phx.gbl>
+From: Andrew Wiley <debio264@gmail.com>
+Date: Fri, 23 Jan 2009 20:40:43 -0600
+Subject: [Buildroot] Some Questions - root placement, Initramfs, dev nodes
+Message-ID: <ecbbfeda0901231840q30263e2ax3ab8ba4708776c5@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I was able to narrow down the problem a bit more.  It seems that the 
-"UCLIBC_SUPPORT_AI_ADDRCONFIG" is what causes the Segfaults/Core Dumps, 
-however, this option is only available if UCLIBC_USE_NETLINK is set.
+Let my start by saying that I'm not new to linux, but I am new to
+embedded linux. I've been spoiled really, if only because I've never
+had to live with uDev, and so much of what I'm having to worry about
+now is done automagically in my desktop linux distro.
+Anyway, I have linux running on a Cirrus Labs EDB9302. So far, I've
+just been using buildroot to make a ramdisk, putting in a few kernel
+modules and a few apps, and putting it on the board in flash memory. I
+also put in a cross compiled kernel. The bootloader (RedBoot) loads
+the ramdisk and boots the kernel; the kernel finds the ramdisk, and
+away it goes.
 
-Results: 0.9.30 (with 0.9.30 config, minus UCLIBC_SUPPORT_AI_ADDRCONFIG) 
-works fine for dropbear and samba.
+The trick is that this isn't really a permanent solution. I have 16 MB
+of RAM on the board, so I could potentially have about 10 MB for a
+root filesystem, and I have 32 MB of RAM. I would like to avoid the
+use of a ramdisk (I only used it because that's what Cirrus Labs uses)
+because it takes away RAM and loses all changes on reboot. I see two
+ways to avoid one. Firstly, I could write directly to the flash
+memory, but that seems like a bad idea because I still have a pretty
+small space limit and the flash memory probably has a very finite
+life. Secondly, I could use the flash memory to host an initramfs,
+which, as I understand it, would allow me to boot, load drivers, mount
+an external flash drive as root, and reclaim the space the initramfs
+took up. Once again, the flash drive has a finite life, but it can be
+replaced easily.
+What's the normal approach to this? The board I'm working with is
+being used for robotics projects by beginner programmers, so I would
+like to have as complete a system as possible to make programming
+simpler. Ideally, the board would be it's own development system, with
+a native compiler toolchain.
+Is this a realistic goal? Have I understood the initramfs correctly?
+How would I set up something like this?
 
+Also, my board has two serial ports, ttyAM0 and ttyAM1. I copied the
+/dev nodes from the official Cirrus Labs firmware (I sent another
+email about this a while back), and while ttyAM0 works perfectly,
+ttyAM1 doesn't seem to respond to anything I do. Programs can open the
+port, set speeds, and write to it without errors, but these actions
+have no effect. As I said, I've never had to work without uDev, so how
+do I find the major and minor information for this serial port?
 
-> What is the impact of doing that?
-I'm not really sure of the impact.  From the uClibc-menuconfig help it 
-states following if they are helpful.
-
-UCLIBC_USE_NETLINK:
-  ?
-  ? In newer versions of Linux (2.4.17+), support was added for querying
-  ? network device information via netlink rather than the old style
-  ? ioctl's.  Most of the time, the older ioctl style is sufficient (and
-  ? it is smaller than netlink), but if you find that not all of your
-  ? devices are being returned by the if_nameindex() function, you will
-  ? have to use the netlink implementation.
-  ?
-  ? Most people can safely answer N.
-
-UCLIBC_SUPPORT_AI_ADDRCONFIG:
-  ?
-  ? The implementation of AI_ADDRCONFIG is aligned with the glibc
-  ? implementation using netlink to query interfaces to find both
-  ? ipv4 and ipv6 support. This is only needed if an application uses
-  ? the AI_ADDRCONFIG flag.
-  ?
-  ? Most people can safely answer N. 
+Thanks for any help you can offer, and feel free to tell me I'm a
+clueless idiot,
+Andrew Wiley
