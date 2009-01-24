@@ -1,35 +1,47 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 24 Jan 2009 12:46:05 +0100
-Subject: [Buildroot] svn commit:
-	trunk/buildroot/package/multimedia/mpg123
-In-Reply-To: <1232794656.5311.130.camel@elrond.atmel.com> (Ulf Samuelsson's
-	message of "Sat\, 24 Jan 2009 11\:57\:36 +0100")
-References: <20090124101510.62459769CC@busybox.osuosl.org>
-	<87r62tgfme.fsf@macbook.be.48ers.dk>
-	<1232794656.5311.130.camel@elrond.atmel.com>
-Message-ID: <87eiytgc5e.fsf@macbook.be.48ers.dk>
+Date: Sat, 24 Jan 2009 12:48:28 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package:
+	multimedia/mpg123
+In-Reply-To: <20090124112748.D8336769CC@busybox.osuosl.org> (ulf@uclibc.org's
+	message of "Sat\, 24 Jan 2009 11\:27\:48 +0000 \(UTC\)")
+References: <20090124112748.D8336769CC@busybox.osuosl.org>
+Message-ID: <87ab9ghqlv.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
+>>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
 
-Hi,
+ ulf> Author: ulf
+ ulf> Date: 2009-01-24 11:27:47 +0000 (Sat, 24 Jan 2009)
+ ulf> New Revision: 25004
 
- Ulf> It fixes a similar problem, but apparently not my problem.
- Ulf> Why revert? 
- Ulf> do we want really want to run into the problem which it fixes?
+ ulf> Log:
+ ulf> Make toolchain configration to fix mpg123 global and move to Makefile
 
-Well, it depends. Where is it from? What problem exactly does it fix?
-What is the risk that it breaks something else?
+ ulf> Modified:
+ ulf>    trunk/buildroot/package/Makefile.in
+ ulf>    trunk/buildroot/package/multimedia/mpg123/Config.in
+ ulf>    trunk/buildroot/package/multimedia/mpg123/mpg123-0.66-arm-unroll.patch
+ 
+ ulf> +# Handle bug fixes in toolchain
+ ulf> +ifeq ($(BR2_arm),y)
+ ulf> +ifeq ($(BR2_GCC_VERSION_4_3_2),y)
+ ulf> +# Removes segment violation in mpg123.
 
-E.G. if it's in the tree for 4.3.3, then that's fine, otherwise we
-might want to consider what to do ..
+Confusing comments as It's a GCC ICE, not mpg123 crashing.
 
-Please mention where patches are from if you didn't create them
-yourself in the commit message, thanks.
+What about the other gcc 4.3.x versions? Does it E.G. also occur with
+4.3.1?
+
+Why isn't this in mpg123.mk ?
+
+ ulf> -+#if	defined(MPG123_ARM_UNROLL_FIX)
+ ulf> ++#if	defined(ARM_UNROLL_FIX)
+
+Why the rename?
 
 -- 
 Bye, Peter Korsgaard
