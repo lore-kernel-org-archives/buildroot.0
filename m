@@ -1,24 +1,44 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 24 Jan 2009 07:43:22 +0100
-Subject: [Buildroot] glibc support
-In-Reply-To: <f8955f9e0901231437t23a39883n95e6920792674ee1@mail.gmail.com>
-	(Dan Lykowski's message of "Fri\, 23 Jan 2009 14\:37\:59 -0800")
-References: <f8955f9e0901231437t23a39883n95e6920792674ee1@mail.gmail.com>
-Message-ID: <87fxj9i4qd.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Sat, 24 Jan 2009 06:44:05 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libsexy
+Message-ID: <20090124064405.AC038769CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Dan" == Dan Lykowski <lykowdk@gmail.com> writes:
+Author: jacmet
+Date: 2009-01-24 06:44:04 +0000 (Sat, 24 Jan 2009)
+New Revision: 24995
 
- Dan> I was the person who submitted the glibc patch in December.
- Dan> No one ever commented so I have never pursued the matter.
+Log:
+Revert r24982 (Disable libsexy (with comment) if X is not available)
 
-Bernhard afaik commented and added a cleaned up version to his tree:
+It's wrong, libsexy doesn't depend on an X server.
 
-http://repo.or.cz/w/buildroot.git
+Modified:
+   trunk/buildroot/package/libsexy/Config.in
 
--- 
-Bye, Peter Korsgaard
+
+Changeset:
+Modified: trunk/buildroot/package/libsexy/Config.in
+===================================================================
+--- trunk/buildroot/package/libsexy/Config.in	2009-01-24 06:25:40 UTC (rev 24994)
++++ trunk/buildroot/package/libsexy/Config.in	2009-01-24 06:44:04 UTC (rev 24995)
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_LIBSEXY
+ 	bool "libsexy"
+ 	depends on BR2_PACKAGE_LIBGTK2
+-	depends on !BR2_PACKAGE_XSERVER_none
+ 	help
+ 	  libsexy is a collection of GTK+ widgets that extend the
+ 	  functionality of such standard widgets as GtkEntry and
+@@ -9,7 +8,3 @@
+ 	  limitations of the widgets.
+ 
+ 	  http://www.chipx86.com/wiki/Libsexy
+-
+-comment "libsexy       - disabled (requires X-Windows)"
+-	depends on BR2_PACKAGE_XSERVER_none
+-
