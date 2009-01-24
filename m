@@ -1,40 +1,56 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Sat, 24 Jan 2009 06:44:18 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
-Message-ID: <20090124064418.25A12769CC@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 24 Jan 2009 09:05:51 +0100
+Subject: [Buildroot] Some Questions - root placement, Initramfs,
+	dev nodes
+In-Reply-To: <ecbbfeda0901231840q30263e2ax3ab8ba4708776c5@mail.gmail.com>
+	(Andrew Wiley's message of "Fri\, 23 Jan 2009 20\:40\:43 -0600")
+References: <ecbbfeda0901231840q30263e2ax3ab8ba4708776c5@mail.gmail.com>
+Message-ID: <878wp1i0ww.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-01-24 06:44:17 +0000 (Sat, 24 Jan 2009)
-New Revision: 24997
+>>>>> "Andrew" == Andrew Wiley <debio264@gmail.com> writes:
 
-Log:
-toolchain/uClibc: disable UCLIBC_SUPPORT_AI_ADDRCONFIG in 0.9.30 defconfig
+Hi,
 
-UCLIBC_SUPPORT_AI_ADDRCONFIG seems to have issues in 0.9.30 and cause
-segfaults on some architectures, so disable it.
+ Andrew> What's the normal approach to this? The board I'm working
+ Andrew> with is being used for robotics projects by beginner
+ Andrew> programmers, so I would like to have as complete a system as
+ Andrew> possible to make programming simpler. Ideally, the board
+ Andrew> would be it's own development system, with a native compiler
+ Andrew> toolchain.  Is this a realistic goal? Have I understood the
+ Andrew> initramfs correctly?  How would I set up something like this?
 
-Reported and tracked down by "QuickX" <quickx@hotmail.com>.
+With initramfs you still waste RAM to store your files. The most
+common approach is to put a file system in flash - E.G. jffs2 if you
+need read/write access, and squashfs for read only (notice you need a
+kernel patch for squashfs).
 
-Modified:
-   trunk/buildroot/toolchain/uClibc/uClibc-0.9.30.config
+For development it's probably easier to boot over nfs (see the tarball
+image option in buildroot).
 
+Getting native compilation running with 16MB is pretty unrealistic though.
 
-Changeset:
-Modified: trunk/buildroot/toolchain/uClibc/uClibc-0.9.30.config
-===================================================================
---- trunk/buildroot/toolchain/uClibc/uClibc-0.9.30.config	2009-01-24 06:44:13 UTC (rev 24996)
-+++ trunk/buildroot/toolchain/uClibc/uClibc-0.9.30.config	2009-01-24 06:44:17 UTC (rev 24997)
-@@ -128,7 +128,7 @@
- # UCLIBC_HAS_FULL_RPC is not set
- # UCLIBC_HAS_REENTRANT_RPC is not set
- UCLIBC_USE_NETLINK=y
--UCLIBC_SUPPORT_AI_ADDRCONFIG=y
-+# UCLIBC_SUPPORT_AI_ADDRCONFIG is not set
- # UCLIBC_HAS_BSD_RES_CLOSE is not set
- 
- #
+ Andrew> Also, my board has two serial ports, ttyAM0 and ttyAM1. I
+ Andrew> copied the /dev nodes from the official Cirrus Labs firmware
+ Andrew> (I sent another email about this a while back), and while
+ Andrew> ttyAM0 works perfectly, ttyAM1 doesn't seem to respond to
+ Andrew> anything I do. Programs can open the port, set speeds, and
+ Andrew> write to it without errors, but these actions have no
+ Andrew> effect. As I said, I've never had to work without uDev, so
+ Andrew> how do I find the major and minor information for this serial
+ Andrew> port?
+
+Have a look at contents of /sys/class/tty/ttyAMx/dev or check the
+kernel driver.
+
+ Andrew> Thanks for any help you can offer, and feel free to tell me I'm a
+ Andrew> clueless idiot,
+
+No worries ;)
+
+-- 
+Bye, Peter Korsgaard
