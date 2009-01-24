@@ -1,35 +1,28 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Sat, 24 Jan 2009 10:20:36 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/freetype
-Message-ID: <20090124102036.ABC18769CC@busybox.osuosl.org>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Sat, 24 Jan 2009 10:23:00 +0000 (UTC)
+Subject: [Buildroot] svn commit:
+	trunk/buildroot/target/device/Atmel/at91sam9261ek
+Message-ID: <20090124102300.CCF6F769CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-01-24 10:20:36 +0000 (Sat, 24 Jan 2009)
-New Revision: 25001
+Author: ulf
+Date: 2009-01-24 10:23:00 +0000 (Sat, 24 Jan 2009)
+New Revision: 25002
 
 Log:
-freetype: fix typo
+Add linux config for at91sam9261ek
 
-Modified:
-   trunk/buildroot/package/freetype/freetype.mk
+Added:
+   trunk/buildroot/target/device/Atmel/at91sam9261ek/at91sam9261ek-linux-2.6.28.1.config
 
 
 Changeset:
-Modified: trunk/buildroot/package/freetype/freetype.mk
-===================================================================
---- trunk/buildroot/package/freetype/freetype.mk	2009-01-24 10:16:53 UTC (rev 25000)
-+++ trunk/buildroot/package/freetype/freetype.mk	2009-01-24 10:20:36 UTC (rev 25001)
-@@ -11,7 +11,7 @@
- FREETYPE_INSTALL_STAGING = YES
- FREETYPE_INSTALL_TARGET = YES
- FREETYPE_MAKE_OPT = CCexe="$(HOSTCC)"
--FREETYPE_DEPENDENCIES = uclibc pkgconfig $(if $(BR2_PACKAGE_ZLIB,zlib)
-+FREETYPE_DEPENDENCIES = uclibc pkgconfig $(if $(BR2_PACKAGE_ZLIB),zlib)
- 
- $(eval $(call AUTOTARGETS,package,freetype))
- 
+
+Sorry, the patch is too large to include (1437 lines).
+Please use ViewCVS to see it!
+
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=25002
