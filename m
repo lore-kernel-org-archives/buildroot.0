@@ -1,24 +1,66 @@
-From: Dan Lyke <danlyke@flutterby.com>
-Date: Sat, 24 Jan 2009 07:27:45 -0800
-Subject: [Buildroot] svn commit: trunk/buildroot/target/u-boot
-In-Reply-To: <874ozpi078.fsf@macbook.be.48ers.dk>
-References: <20090111213956.5713C76736@busybox.osuosl.org>
-	<874ozpi078.fsf@macbook.be.48ers.dk>
-Message-ID: <20090124072745.37588d9f@danhplaptop>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Sat, 24 Jan 2009 17:45:26 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/scripts:  test
+In-Reply-To: <8763k4hqi6.fsf@macbook.be.48ers.dk>
+References: <20090124112911.51B4E769CC@busybox.osuosl.org>
+	<8763k4hqi6.fsf@macbook.be.48ers.dk>
+Message-ID: <1232815526.5311.156.camel@elrond.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 24 Jan 2009 09:21:15 +0100
-Peter Korsgaard <jacmet@uclibc.org> wrote:
-> Why? Isn't 2009.01 working for you?
+l?r 2009-01-24 klockan 12:50 +0100 skrev Peter Korsgaard:
+> >>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+> 
+>  ulf> Author: ulf
+>  ulf> Date: 2009-01-24 11:29:10 +0000 (Sat, 24 Jan 2009)
+>  ulf> New Revision: 25005
+> 
+>  ulf> Log:
+>  ulf> Add test configuration but do not include it by default
+> 
+>  ulf> Added:
+>  ulf>    trunk/buildroot/scripts/test/
+>  ulf>    trunk/buildroot/scripts/test/Config.in.test.buildall
+> 
+> Come on, just keep it locally instead if it isn't used by BR.
+> 
 
-I can't speak for everyone, but I just (ie: this week) got patches from
-Atmel, and they are still working off of 1.20. I'm hoping to ship this
-product without revisiting that, and a quick attempt to look at forward
-porting those patches to 2009.01 made it obvious that I'd have to
-actually get in there and understanding the code.
+You can say the same for all the defconfigs.
+Buildroot does not use them unless you do a make *_defconfig
 
-Dan
+In the same way, a BR user will be able to do a test
+of a specific board/architecture by running dedicated commands.
+
+> What does this buy you compared to just having a .config with those
+> things enabled?
+
+It saves editing configs.
+I can apply this to ANY board, without manual editing,
+and there are a lot of boards/architectures.
+
+By using several Config.in.test files, it is easy to 
+test a limited set of things for many architectures.
+
+> Please discuss these things on the list first when you know they are
+> controversive.
+
+I already suggested this on the list and got no response.
+
+What is the benefit of NOT having selftest included?
+
+?I have pointed out that so far we have no documentation 
+on what works and what does not work.
+If the results of running these scripts are checked in
+then we *have* documentation which is generated automatically.
+
+Do you have ANY way of measuring the quality of Buildroot
+before you do a release, or do you just plan to 
+tell everyone that we are creating a release 
+and then take the trunk and publish it a certain date
+regardless of quality?
+
+BR
+Ulf Samuelsson
