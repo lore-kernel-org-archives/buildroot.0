@@ -1,56 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 24 Jan 2009 10:02:46 +0100
-Subject: [Buildroot] 2009.02-rc2 released
-In-Reply-To: <497A3649.7050005@free.fr> (Cyril HAENEL's message of "Fri\,
-	23 Jan 2009 22\:27\:37 +0100")
-References: <87skn9iv5w.fsf@macbook.be.48ers.dk> <497A3649.7050005@free.fr>
-Message-ID: <87vds5gjpl.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Sat, 24 Jan 2009 10:20:36 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/freetype
+Message-ID: <20090124102036.ABC18769CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Cyril" == Cyril HAENEL <chaenel@free.fr> writes:
+Author: jacmet
+Date: 2009-01-24 10:20:36 +0000 (Sat, 24 Jan 2009)
+New Revision: 25001
 
- Cyril> Compilation problem for me :
+Log:
+freetype: fix typo
 
- Cyril> tar jxvf buildroot-2009.02-rc2.tar.bz2
- Cyril> cd buildroot-2009.02-rc2
- Cyril> make menuconfig + Exit + Save
- Cyril> make at91sam9260dfc_defconfig
+Modified:
+   trunk/buildroot/package/freetype/freetype.mk
 
-That one seems to have BR2_ENABLE_LOCALE enabled.
 
- Cyril> make
-
- -> I answer N at all questions
- -> I answer 3 for the memory type question (Nand flash 2KB page and
- Cyril> 128KB block)
-
- Cyril> After 2 or 3 minutes :
-
- Cyril>  LN include/sys/procfs.h
- Cyril>  LN include/sys/ucontext.h
- Cyril>  LN include/sys/user.h
- Cyril>  HOSTCC extra/locale/gen_wc8bit
- Cyril> extra/locale/gen_wc8bit.c: In function 'main':
- Cyril> extra/locale/gen_wc8bit.c:356: warning: array subscript is above array
- Cyril> bounds
- Cyril> extra/locale/gen_wc8bit.c:415: warning: array subscript is above array
- Cyril> bounds
- Cyril> extra/locale/gen_wc8bit.c:481: warning: array subscript is above array
- Cyril> bounds
- Cyril>  GEN extra/locale/codesets.txt
- Cyril>  GEN extra/locale/c8tables.h
- Cyril> setlocale(LC_CTYPE,"en_US.UTF-8") failed!
-
-And your host doesn't seem to have the en_US.UTF-8 locale which seems
-to be a requirement for this.
-
-I don't know the finer details about the locale generation in uclibc,
-and if en_US.UTF-8 really should be required, for that you better ask
-the uclibc list.
-
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/package/freetype/freetype.mk
+===================================================================
+--- trunk/buildroot/package/freetype/freetype.mk	2009-01-24 10:16:53 UTC (rev 25000)
++++ trunk/buildroot/package/freetype/freetype.mk	2009-01-24 10:20:36 UTC (rev 25001)
+@@ -11,7 +11,7 @@
+ FREETYPE_INSTALL_STAGING = YES
+ FREETYPE_INSTALL_TARGET = YES
+ FREETYPE_MAKE_OPT = CCexe="$(HOSTCC)"
+-FREETYPE_DEPENDENCIES = uclibc pkgconfig $(if $(BR2_PACKAGE_ZLIB,zlib)
++FREETYPE_DEPENDENCIES = uclibc pkgconfig $(if $(BR2_PACKAGE_ZLIB),zlib)
+ 
+ $(eval $(call AUTOTARGETS,package,freetype))
+ 
