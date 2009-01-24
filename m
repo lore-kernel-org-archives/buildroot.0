@@ -1,45 +1,31 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Sat, 24 Jan 2009 08:31:23 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/freetype
-Message-ID: <20090124083123.F057F769CC@busybox.osuosl.org>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Sat, 24 Jan 2009 10:15:09 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/multimedia/mpg123
+Message-ID: <20090124101510.62459769CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-01-24 08:31:22 +0000 (Sat, 24 Jan 2009)
-New Revision: 24998
+Author: ulf
+Date: 2009-01-24 10:15:05 +0000 (Sat, 24 Jan 2009)
+New Revision: 24999
 
 Log:
-freetype: only depend on zlib if it is available
+Add fix to mpg123 for bug in ARM release toolchain causing segment violation, bug reported to gcc bugzilla
 
-The dependency is only there so zlib gets built before freetype if it's
-available (for shared configure cache)
+Added:
+   trunk/buildroot/package/multimedia/mpg123/mpg123-0.66-arm-unroll.patch
 
 Modified:
-   trunk/buildroot/package/freetype/freetype.mk
+   trunk/buildroot/package/multimedia/mpg123/Config.in
+   trunk/buildroot/package/multimedia/mpg123/mpg123.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/freetype/freetype.mk
-===================================================================
---- trunk/buildroot/package/freetype/freetype.mk	2009-01-24 06:44:17 UTC (rev 24997)
-+++ trunk/buildroot/package/freetype/freetype.mk	2009-01-24 08:31:22 UTC (rev 24998)
-@@ -4,13 +4,14 @@
- #
- #############################################################
- FREETYPE_VERSION = $(strip $(subst ",, $(BR2_FREETYPE_VERSION)))
-+#"))
- FREETYPE_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/freetype
- FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
- FREETYPE_LIBTOOL_PATCH = NO
- FREETYPE_INSTALL_STAGING = YES
- FREETYPE_INSTALL_TARGET = YES
- FREETYPE_MAKE_OPT = CCexe="$(HOSTCC)"
--FREETYPE_DEPENDENCIES = uclibc pkgconfig zlib
-+FREETYPE_DEPENDENCIES = uclibc pkgconfig $(if $(BR2_PACKAGE_ZLIB,zlib)
- 
- $(eval $(call AUTOTARGETS,package,freetype))
- 
+
+Sorry, the patch is too large to include (2181 lines).
+Please use ViewCVS to see it!
+
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=24999
