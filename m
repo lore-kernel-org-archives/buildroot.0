@@ -1,29 +1,35 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 24 Jan 2009 09:21:15 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/target/u-boot
-In-Reply-To: <20090111213956.5713C76736@busybox.osuosl.org> (ulf@uclibc.org's
-	message of "Sun\, 11 Jan 2009 21\:39\:56 +0000 \(UTC\)")
-References: <20090111213956.5713C76736@busybox.osuosl.org>
-Message-ID: <874ozpi078.fsf@macbook.be.48ers.dk>
+Date: Sat, 24 Jan 2009 09:28:45 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/freetype
+In-Reply-To: <20081111113345.68C223C95C@busybox.net> (laird@uclibc.org's
+	message of "Tue\, 11 Nov 2008 03\:33\:45 -0800 \(PST\)")
+References: <20081111113345.68C223C95C@busybox.net>
+Message-ID: <87zlhhglaa.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+>>>>> "laird" == laird  <laird@uclibc.org> writes:
 
- ulf> Author: ulf
- ulf> Date: 2009-01-11 21:39:54 +0000 (Sun, 11 Jan 2009)
- ulf> New Revision: 24770
+ laird> Author: laird
+ laird> Date: 2008-11-11 03:33:45 -0800 (Tue, 11 Nov 2008)
+ laird> New Revision: 23998
 
- ulf> Log:
- ulf> Remove premature deprecation of u-boot-1.2.0-atmel
+ laird> Log:
+ laird> package/freetype/freetype.mk: Add zib to dependencies
 
- ulf> Modified:
- ulf>    trunk/buildroot/target/u-boot/Config.in
+ laird> Looking into adding a configure cache to the build (like the GIT buildroot version)
+ laird> This means that freetype needs to know about zlib so make
+ laird> sure it had it as a dependency.
+ laird> Also remove install rule for staging as it matches default.
 
-Why? Isn't 2009.01 working for you?
+That seems wrong. It should probably be $(if $(BR2_PACKAGE_ZLIB),zlib)
+or you should select zlib if freetype really needs it.
+
+ laird> -FREETYPE_DEPENDENCIES = uclibc pkgconfig
+ laird> +FREETYPE_DEPENDENCIES = uclibc pkgconfig zlib
 
 -- 
 Bye, Peter Korsgaard
