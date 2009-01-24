@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Sat, 24 Jan 2009 06:44:14 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libsexy
-Message-ID: <20090124064414.E9EDE769CC@busybox.osuosl.org>
+Date: Sat, 24 Jan 2009 06:44:18 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
+Message-ID: <20090124064418.25A12769CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,48 +9,32 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2009-01-24 06:44:13 +0000 (Sat, 24 Jan 2009)
-New Revision: 24996
+Date: 2009-01-24 06:44:17 +0000 (Sat, 24 Jan 2009)
+New Revision: 24997
 
 Log:
-libsexy: unbreak build
+toolchain/uClibc: disable UCLIBC_SUPPORT_AI_ADDRCONFIG in 0.9.30 defconfig
 
-libsexy doesn't depend on libX11, but it does need libxml2.
+UCLIBC_SUPPORT_AI_ADDRCONFIG seems to have issues in 0.9.30 and cause
+segfaults on some architectures, so disable it.
+
+Reported and tracked down by "QuickX" <quickx@hotmail.com>.
 
 Modified:
-   trunk/buildroot/package/libsexy/Config.in
-   trunk/buildroot/package/libsexy/libsexy.mk
+   trunk/buildroot/toolchain/uClibc/uClibc-0.9.30.config
 
 
 Changeset:
-Modified: trunk/buildroot/package/libsexy/Config.in
+Modified: trunk/buildroot/toolchain/uClibc/uClibc-0.9.30.config
 ===================================================================
---- trunk/buildroot/package/libsexy/Config.in	2009-01-24 06:44:04 UTC (rev 24995)
-+++ trunk/buildroot/package/libsexy/Config.in	2009-01-24 06:44:13 UTC (rev 24996)
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LIBSEXY
- 	bool "libsexy"
- 	depends on BR2_PACKAGE_LIBGTK2
-+	select BR2_PACKAGE_LIBXML2
- 	help
- 	  libsexy is a collection of GTK+ widgets that extend the
- 	  functionality of such standard widgets as GtkEntry and
-@@ -8,3 +9,4 @@
- 	  limitations of the widgets.
+--- trunk/buildroot/toolchain/uClibc/uClibc-0.9.30.config	2009-01-24 06:44:13 UTC (rev 24996)
++++ trunk/buildroot/toolchain/uClibc/uClibc-0.9.30.config	2009-01-24 06:44:17 UTC (rev 24997)
+@@ -128,7 +128,7 @@
+ # UCLIBC_HAS_FULL_RPC is not set
+ # UCLIBC_HAS_REENTRANT_RPC is not set
+ UCLIBC_USE_NETLINK=y
+-UCLIBC_SUPPORT_AI_ADDRCONFIG=y
++# UCLIBC_SUPPORT_AI_ADDRCONFIG is not set
+ # UCLIBC_HAS_BSD_RES_CLOSE is not set
  
- 	  http://www.chipx86.com/wiki/Libsexy
-+
-
-Modified: trunk/buildroot/package/libsexy/libsexy.mk
-===================================================================
---- trunk/buildroot/package/libsexy/libsexy.mk	2009-01-24 06:44:04 UTC (rev 24995)
-+++ trunk/buildroot/package/libsexy/libsexy.mk	2009-01-24 06:44:13 UTC (rev 24996)
-@@ -8,7 +8,7 @@
- LIBSEXY_SOURCE = libsexy-$(LIBSEXY_VERSION).tar.gz
- LIBSEXY_SITE = http://releases.chipx86.com/libsexy/libsexy/
- LIBSEXY_AUTORECONF = NO
--LIBSEXY_DEPENDENCIES = xlib_libX11 libgtk2
-+LIBSEXY_DEPENDENCIES = libgtk2 libxml2
- LIBSEXY_INSTALL_TARGET = YES
- LIBSEXY_INSTALL_STAGING = YES
- 
+ #
