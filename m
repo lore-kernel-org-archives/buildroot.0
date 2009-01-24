@@ -1,12 +1,13 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 24 Jan 2009 12:43:12 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/target/u-boot
-In-Reply-To: <1232794501.5311.126.camel@elrond.atmel.com> (Ulf Samuelsson's
-	message of "Sat\, 24 Jan 2009 11\:55\:01 +0100")
-References: <20090111213956.5713C76736@busybox.osuosl.org>
-	<874ozpi078.fsf@macbook.be.48ers.dk>
-	<1232794501.5311.126.camel@elrond.atmel.com>
-Message-ID: <87iqo5gca7.fsf@macbook.be.48ers.dk>
+Date: Sat, 24 Jan 2009 12:46:05 +0100
+Subject: [Buildroot] svn commit:
+	trunk/buildroot/package/multimedia/mpg123
+In-Reply-To: <1232794656.5311.130.camel@elrond.atmel.com> (Ulf Samuelsson's
+	message of "Sat\, 24 Jan 2009 11\:57\:36 +0100")
+References: <20090124101510.62459769CC@busybox.osuosl.org>
+	<87r62tgfme.fsf@macbook.be.48ers.dk>
+	<1232794656.5311.130.camel@elrond.atmel.com>
+Message-ID: <87eiytgc5e.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,15 +16,20 @@ To: buildroot@busybox.net
 
 >>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 
- Ulf> I do not know if it ths build script or
- Ulf> the toolchain, but until this has been 
- Ulf> investigated, it is premature
- Ulf> to deprecate u-boot-1.2.0-atmel.
+Hi,
 
-Ok, let's do it after the release then.
+ Ulf> It fixes a similar problem, but apparently not my problem.
+ Ulf> Why revert? 
+ Ulf> do we want really want to run into the problem which it fixes?
 
-It would be good if you could write this kind of stuff in your commit
-messages in the first place.
+Well, it depends. Where is it from? What problem exactly does it fix?
+What is the risk that it breaks something else?
+
+E.G. if it's in the tree for 4.3.3, then that's fine, otherwise we
+might want to consider what to do ..
+
+Please mention where patches are from if you didn't create them
+yourself in the commit message, thanks.
 
 -- 
 Bye, Peter Korsgaard
