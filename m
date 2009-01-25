@@ -1,36 +1,33 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 25 Jan 2009 14:07:52 +0100
-Subject: [Buildroot] 2009.02-rc2 released
-In-Reply-To: <1232868757.5311.170.camel@elrond.atmel.com> (Ulf Samuelsson's
-	message of "Sun\, 25 Jan 2009 08\:32\:37 +0100")
-References: <3B941116898CDA489B91563DEF88F4B607F8DB@iwt-server.iwt.local>
-	<1232868757.5311.170.camel@elrond.atmel.com>
-Message-ID: <87zlhffs9j.fsf@macbook.be.48ers.dk>
+Date: Sun, 25 Jan 2009 15:21:22 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/microperl
+In-Reply-To: <20090125081438.BE00D76D28@busybox.osuosl.org> (ulf@uclibc.org's
+	message of "Sun\, 25 Jan 2009 08\:14\:38 +0000 \(UTC\)")
+References: <20090125081438.BE00D76D28@busybox.osuosl.org>
+Message-ID: <87vds3fov1.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
+>>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
 
- Ulf> s?n 2009-01-25 klockan 11:28 +1100 skrev Paul Jones:
- >> I had a go at compiling this for an ARM and I get this error:
- >> 
- >> 
- >> 
- Ulf> Noone has put a lot of effort into supporting the
- Ulf> "generic" ARM so there is no linux configuration file available.
+ ulf> Author: ulf
+ ulf> Date: 2009-01-25 08:14:37 +0000 (Sun, 25 Jan 2009)
+ ulf> New Revision: 25011
 
-I don't quite see how such a config would make sense in the first
-place. ARM is far from as homogeneous as i386.
+ ulf> Log:
+ ulf> Fix make problems with perl
 
- Ulf> You have obviously selected Advanced Kernel configuration, and for
- Ulf> that you need Qt installed, or you have to select
- Ulf> to use "menuconfig" in the setup instead of "xconfig"
+ ulf> +++ trunk/buildroot/package/microperl/microperl.mk	2009-01-25 08:14:37 UTC (rev 25011)
+ ulf> @@ -23,18 +23,38 @@
+ 
+ ulf>  $(MICROPERL_DIR)/.source: $(DL_DIR)/$(MICROPERL_SOURCE)
+ ulf>  	$(MICROPERL_CAT) $(DL_DIR)/$(MICROPERL_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+ ulf> +	(cd $(MICROPERL_DIR); chmod -R u+w *)
 
-Ulf, several people (myself included) told you to default to menuconfig
-for the kernel stuff, I'm surprised that's still not the case.
+Why the subshell? what's wrong with chmod -R u+w $(MICROPERL_DIR)/ ?
 
 -- 
 Bye, Peter Korsgaard
