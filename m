@@ -1,66 +1,142 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Sat, 24 Jan 2009 17:45:26 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/scripts:  test
-In-Reply-To: <8763k4hqi6.fsf@macbook.be.48ers.dk>
-References: <20090124112911.51B4E769CC@busybox.osuosl.org>
-	<8763k4hqi6.fsf@macbook.be.48ers.dk>
-Message-ID: <1232815526.5311.156.camel@elrond.atmel.com>
+From: Paul Jones <Paul.Jones@iwtech.com.au>
+Date: Sun, 25 Jan 2009 11:28:05 +1100
+Subject: [Buildroot] 2009.02-rc2 released
+Message-ID: <3B941116898CDA489B91563DEF88F4B607F8DB@iwt-server.iwt.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-l?r 2009-01-24 klockan 12:50 +0100 skrev Peter Korsgaard:
-> >>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
-> 
->  ulf> Author: ulf
->  ulf> Date: 2009-01-24 11:29:10 +0000 (Sat, 24 Jan 2009)
->  ulf> New Revision: 25005
-> 
->  ulf> Log:
->  ulf> Add test configuration but do not include it by default
-> 
->  ulf> Added:
->  ulf>    trunk/buildroot/scripts/test/
->  ulf>    trunk/buildroot/scripts/test/Config.in.test.buildall
-> 
-> Come on, just keep it locally instead if it isn't used by BR.
-> 
+I had a go at compiling this for an ARM and I get this error:
 
-You can say the same for all the defconfigs.
-Buildroot does not use them unless you do a make *_defconfig
 
-In the same way, a BR user will be able to do a test
-of a specific board/architecture by running dedicated commands.
 
-> What does this buy you compared to just having a .config with those
-> things enabled?
-
-It saves editing configs.
-I can apply this to ANY board, without manual editing,
-and there are a lot of boards/architectures.
-
-By using several Config.in.test files, it is easy to 
-test a limited set of things for many architectures.
-
-> Please discuss these things on the list first when you know they are
-> controversive.
-
-I already suggested this on the list and got no response.
-
-What is the benefit of NOT having selftest included?
-
-?I have pointed out that so far we have no documentation 
-on what works and what does not work.
-If the results of running these scripts are checked in
-then we *have* documentation which is generated automatically.
-
-Do you have ANY way of measuring the quality of Buildroot
-before you do a release, or do you just plan to 
-tell everyone that we are creating a release 
-and then take the trunk and publish it a certain date
-regardless of quality?
-
-BR
-Ulf Samuelsson
+# Try to get a config for this linux version in the board directory
+echo "LINUX26_VERSION = 2.6.28.1"
+LINUX26_VERSION = 2.6.28.1
+if [ ! -f
+"/home/paul.jones/dev/buildroot-2009.02-rc2/project_build_arm/uclibc/lin
+ux-2.6.28.1/.config" ] ; then \
+            if [ -f "/arm-linux-2.6.28.1.config" ] ; then \
+                cp -dpf /arm-linux-2.6.28.1.config
+/home/paul.jones/dev/buildroot-2009.02-rc2/project_build_arm/uclibc/linu
+x-2.6.28.1/.config ; \
+            fi ; \
+        fi
+# Try to get a config for latest linux version in the board directory
+if [ ! -f
+"/home/paul.jones/dev/buildroot-2009.02-rc2/project_build_arm/uclibc/lin
+ux-2.6.28.1/.config" ] ; then \
+                scripts/get_linux_config.sh
+/home/paul.jones/dev/buildroot-2009.02-rc2/project_build_arm/uclibc/linu
+x-2.6.28.1 ; \
+        fi
+ls: cannot access
+/home/paul.jones/dev/buildroot-2009.02-rc2/project_build_arm/uclibc/linu
+x-2.6.28.1/*linux-2.6.*.config: No such file or directory
+basename: missing operand
+Try `basename --help' for more information.
+ls: cannot access
+/home/paul.jones/dev/buildroot-2009.02-rc2/project_build_arm/uclibc/linu
+x-2.6.28.1/*linux*.config: No such file or directory
+# Use a board config defined in the linux source.
+if [ ! -f
+"/home/paul.jones/dev/buildroot-2009.02-rc2/project_build_arm/uclibc/lin
+ux-2.6.28.1/.config" ] ; then \
+                /usr/bin/make -j1 HOSTCC="/usr/bin/gcc" HOSTCFLAGS=""
+ARCH=arm CFLAGS_KERNEL="-Os
+-I/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/staging_dir/usr/i
+nclude
+-I/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/staging_dir/inclu
+de
+--sysroot=/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/staging_d
+ir/ -isysroot
+/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/staging_dir
+-mtune=arm920t"
+INSTALL_MOD_PATH=/home/paul.jones/dev/buildroot-2009.02-rc2/project_buil
+d_arm/uclibc/root
+CROSS_COMPILE=/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/stagi
+ng_dir/usr/bin/arm-linux-uclibcgnueabi-
+LDFLAGS="-L/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/staging_
+dir/lib
+-L/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/staging_dir/usr/l
+ib
+--sysroot=/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/staging_d
+ir/"
+LZMA="/home/paul.jones/dev/buildroot-2009.02-rc2/toolchain_build_arm/bin
+/lzma"
+PATH=/home/paul.jones/dev/buildroot-2009.02-rc2/project_build_arm/uclibc
+/u-boot-tools:/usr/local/bin:/usr/bin:/bin:/opt/bin:/usr/x86_64-pc-linux
+-gnu/arm-unknown-linux-gnu/gcc-bin/4.2.4:/usr/x86_64-pc-linux-gnu/arm-un
+known-linux-uclibc/gcc-bin/4.2.4:/usr/x86_64-pc-linux-gnu/gcc-bin/4.1.2:
+~/buildroot/build_arm/staging_dir/usr/bin/ -C
+/home/paul.jones/dev/buildroot-2009.02-rc2/project_build_arm/uclibc/linu
+x-2.6.28.1 arm_defconfig || \
+                        echo "arm_defconfig failed..." ; \
+        fi
+make[1]: Entering directory
+`/home/paul.jones/dev/buildroot-2009.02-rc2/project_build_arm/uclibc/lin
+ux-2.6.28.1'
+***
+*** Can't find default configuration "arch/arm/configs/arm_defconfig"!
+***
+make[2]: *** [arm_defconfig] Error 1
+make[1]: *** [arm_defconfig] Error 2
+make[1]: Leaving directory
+`/home/paul.jones/dev/buildroot-2009.02-rc2/project_build_arm/uclibc/lin
+ux-2.6.28.1'
+arm_defconfig failed...
+# let the user create his/her own config
+if [ ! -f
+"/home/paul.jones/dev/buildroot-2009.02-rc2/project_build_arm/uclibc/lin
+ux-2.6.28.1/.config" ] ; then \
+                /usr/bin/make -j1 HOSTCC="/usr/bin/gcc" HOSTCFLAGS=""
+ARCH=arm CFLAGS_KERNEL="-Os
+-I/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/staging_dir/usr/i
+nclude
+-I/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/staging_dir/inclu
+de
+--sysroot=/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/staging_d
+ir/ -isysroot
+/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/staging_dir
+-mtune=arm920t"
+INSTALL_MOD_PATH=/home/paul.jones/dev/buildroot-2009.02-rc2/project_buil
+d_arm/uclibc/root
+CROSS_COMPILE=/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/stagi
+ng_dir/usr/bin/arm-linux-uclibcgnueabi-
+LDFLAGS="-L/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/staging_
+dir/lib
+-L/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/staging_dir/usr/l
+ib
+--sysroot=/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/staging_d
+ir/"
+LZMA="/home/paul.jones/dev/buildroot-2009.02-rc2/toolchain_build_arm/bin
+/lzma"
+PATH=/home/paul.jones/dev/buildroot-2009.02-rc2/project_build_arm/uclibc
+/u-boot-tools:/usr/local/bin:/usr/bin:/bin:/opt/bin:/usr/x86_64-pc-linux
+-gnu/arm-unknown-linux-gnu/gcc-bin/4.2.4:/usr/x86_64-pc-linux-gnu/arm-un
+known-linux-uclibc/gcc-bin/4.2.4:/usr/x86_64-pc-linux-gnu/gcc-bin/4.1.2:
+~/buildroot/build_arm/staging_dir/usr/bin/ -C
+/home/paul.jones/dev/buildroot-2009.02-rc2/project_build_arm/uclibc/linu
+x-2.6.28.1 xconfig ; \
+        fi
+make[1]: Entering directory
+`/home/paul.jones/dev/buildroot-2009.02-rc2/project_build_arm/uclibc/lin
+ux-2.6.28.1'
+  CHECK   qt
+*
+* Unable to find the QT3 installation. Please make sure that
+* the QT3 development package is correctly installed and
+* either install pkg-config or set the QTDIR environment
+* variable to the correct location.
+*
+make[2]: *** No rule to make target `scripts/kconfig/.tmp_qtcheck',
+needed by `scripts/kconfig/qconf.o'.  Stop.
+make[1]: *** [xconfig] Error 2
+make[1]: Leaving directory
+`/home/paul.jones/dev/buildroot-2009.02-rc2/project_build_arm/uclibc/lin
+ux-2.6.28.1'
+make: ***
+[/home/paul.jones/dev/buildroot-2009.02-rc2/project_build_arm/uclibc/lin
+ux-2.6.28.1/.config] Error 2
