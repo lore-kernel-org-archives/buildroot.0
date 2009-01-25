@@ -1,142 +1,97 @@
-From: Paul Jones <Paul.Jones@iwtech.com.au>
-Date: Sun, 25 Jan 2009 11:28:05 +1100
-Subject: [Buildroot] 2009.02-rc2 released
-Message-ID: <3B941116898CDA489B91563DEF88F4B607F8DB@iwt-server.iwt.local>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 25 Jan 2009 05:58:41 +0000 (UTC)
+Subject: [Buildroot] [Bug 71] New: ./wchar.h:41:12: error: empty filename in
+	#include
+Message-ID: <bug-71-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I had a go at compiling this for an ARM and I get this error:
+https://bugs.busybox.net/show_bug.cgi?id=71
+
+              Host: Gentoo AMD64
+            Target: ARM
+           Summary: ./wchar.h:41:12: error: empty filename in #include
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: critical
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: paul.jones at iwtech.com.au
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
 
-
-# Try to get a config for this linux version in the board directory
-echo "LINUX26_VERSION = 2.6.28.1"
-LINUX26_VERSION = 2.6.28.1
+# Work around problem of missing syslimits.h
 if [ ! -f
-"/home/paul.jones/dev/buildroot-2009.02-rc2/project_build_arm/uclibc/lin
-ux-2.6.28.1/.config" ] ; then \
-            if [ -f "/arm-linux-2.6.28.1.config" ] ; then \
-                cp -dpf /arm-linux-2.6.28.1.config
-/home/paul.jones/dev/buildroot-2009.02-rc2/project_build_arm/uclibc/linu
-x-2.6.28.1/.config ; \
-            fi ; \
+/home/paul.jones/dev/buildroot-2009.02-rc2/project_build_arm/uclibc/root/usr/lib/gcc/arm-linux-uclibc/4.3.2/include-fixed/syslimits.h
+]; then \
+                echo "warning: working around missing syslimits.h"; \
+                cp -f
+/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/staging_dir/lib/gcc/arm-linux-uclibc/4.3.2/include-fixed/syslimits.h
+\
+                       
+/home/paul.jones/dev/buildroot-2009.02-rc2/project_build_arm/uclibc/root/usr/lib/gcc/arm-linux-uclibc/4.3.2/include-fixed/;
+\
         fi
-# Try to get a config for latest linux version in the board directory
-if [ ! -f
-"/home/paul.jones/dev/buildroot-2009.02-rc2/project_build_arm/uclibc/lin
-ux-2.6.28.1/.config" ] ; then \
-                scripts/get_linux_config.sh
-/home/paul.jones/dev/buildroot-2009.02-rc2/project_build_arm/uclibc/linu
-x-2.6.28.1 ; \
+# Make sure we have 'cc'.
+if [ ! -e
+/home/paul.jones/dev/buildroot-2009.02-rc2/project_build_arm/uclibc/root/usr/bin/cc
+]; then \
+                ln -snf gcc
+/home/paul.jones/dev/buildroot-2009.02-rc2/project_build_arm/uclibc/root/usr/bin/cc;
+\
         fi
-ls: cannot access
-/home/paul.jones/dev/buildroot-2009.02-rc2/project_build_arm/uclibc/linu
-x-2.6.28.1/*linux-2.6.*.config: No such file or directory
-basename: missing operand
-Try `basename --help' for more information.
-ls: cannot access
-/home/paul.jones/dev/buildroot-2009.02-rc2/project_build_arm/uclibc/linu
-x-2.6.28.1/*linux*.config: No such file or directory
-# Use a board config defined in the linux source.
-if [ ! -f
-"/home/paul.jones/dev/buildroot-2009.02-rc2/project_build_arm/uclibc/lin
-ux-2.6.28.1/.config" ] ; then \
-                /usr/bin/make -j1 HOSTCC="/usr/bin/gcc" HOSTCFLAGS=""
-ARCH=arm CFLAGS_KERNEL="-Os
--I/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/staging_dir/usr/i
-nclude
--I/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/staging_dir/inclu
-de
---sysroot=/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/staging_d
-ir/ -isysroot
-/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/staging_dir
--mtune=arm920t"
-INSTALL_MOD_PATH=/home/paul.jones/dev/buildroot-2009.02-rc2/project_buil
-d_arm/uclibc/root
-CROSS_COMPILE=/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/stagi
-ng_dir/usr/bin/arm-linux-uclibcgnueabi-
-LDFLAGS="-L/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/staging_
-dir/lib
--L/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/staging_dir/usr/l
-ib
---sysroot=/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/staging_d
-ir/"
-LZMA="/home/paul.jones/dev/buildroot-2009.02-rc2/toolchain_build_arm/bin
-/lzma"
-PATH=/home/paul.jones/dev/buildroot-2009.02-rc2/project_build_arm/uclibc
-/u-boot-tools:/usr/local/bin:/usr/bin:/bin:/opt/bin:/usr/x86_64-pc-linux
--gnu/arm-unknown-linux-gnu/gcc-bin/4.2.4:/usr/x86_64-pc-linux-gnu/arm-un
-known-linux-uclibc/gcc-bin/4.2.4:/usr/x86_64-pc-linux-gnu/gcc-bin/4.1.2:
-~/buildroot/build_arm/staging_dir/usr/bin/ -C
-/home/paul.jones/dev/buildroot-2009.02-rc2/project_build_arm/uclibc/linu
-x-2.6.28.1 arm_defconfig || \
-                        echo "arm_defconfig failed..." ; \
-        fi
+# These are in /lib, so...
+#rm -rf
+/home/paul.jones/dev/buildroot-2009.02-rc2/project_build_arm/uclibc/root/usr/lib/libgcc_s*.so*
+touch -c
+/home/paul.jones/dev/buildroot-2009.02-rc2/project_build_arm/uclibc/root/usr/bin/gcc
+/usr/bin/make -j1 -C
+/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/coreutils-6.9
 make[1]: Entering directory
-`/home/paul.jones/dev/buildroot-2009.02-rc2/project_build_arm/uclibc/lin
-ux-2.6.28.1'
-***
-*** Can't find default configuration "arch/arm/configs/arm_defconfig"!
-***
-make[2]: *** [arm_defconfig] Error 1
-make[1]: *** [arm_defconfig] Error 2
+`/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/coreutils-6.9'
+Making all in lib
+make[2]: Entering directory
+`/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/coreutils-6.9/lib'
+/usr/bin/make  all-am
+make[3]: Entering directory
+`/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/coreutils-6.9/lib'
+/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/staging_dir/usr/bin/arm-linux-uclibc-gcc
+-Os 
+-I/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/staging_dir/usr/include
+-I/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/staging_dir/include
+--sysroot=/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/staging_dir/
+-isysroot /home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/staging_dir
+-mtune=arm920t  -I.      -g -O2 -c allocsa.c
+In file included from ./stdint.h:87,
+                 from
+///home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/staging_dir/usr/include/stdlib.h:860,
+                 from ./stdlib.h:44,
+                 from allocsa.h:24,
+                 from allocsa.c:22:
+./wchar.h:41:12: error: empty filename in #include
+make[3]: *** [allocsa.o] Error 1
+make[3]: Leaving directory
+`/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/coreutils-6.9/lib'
+make[2]: *** [all] Error 2
+make[2]: Leaving directory
+`/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/coreutils-6.9/lib'
+make[1]: *** [all-recursive] Error 1
 make[1]: Leaving directory
-`/home/paul.jones/dev/buildroot-2009.02-rc2/project_build_arm/uclibc/lin
-ux-2.6.28.1'
-arm_defconfig failed...
-# let the user create his/her own config
-if [ ! -f
-"/home/paul.jones/dev/buildroot-2009.02-rc2/project_build_arm/uclibc/lin
-ux-2.6.28.1/.config" ] ; then \
-                /usr/bin/make -j1 HOSTCC="/usr/bin/gcc" HOSTCFLAGS=""
-ARCH=arm CFLAGS_KERNEL="-Os
--I/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/staging_dir/usr/i
-nclude
--I/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/staging_dir/inclu
-de
---sysroot=/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/staging_d
-ir/ -isysroot
-/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/staging_dir
--mtune=arm920t"
-INSTALL_MOD_PATH=/home/paul.jones/dev/buildroot-2009.02-rc2/project_buil
-d_arm/uclibc/root
-CROSS_COMPILE=/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/stagi
-ng_dir/usr/bin/arm-linux-uclibcgnueabi-
-LDFLAGS="-L/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/staging_
-dir/lib
--L/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/staging_dir/usr/l
-ib
---sysroot=/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/staging_d
-ir/"
-LZMA="/home/paul.jones/dev/buildroot-2009.02-rc2/toolchain_build_arm/bin
-/lzma"
-PATH=/home/paul.jones/dev/buildroot-2009.02-rc2/project_build_arm/uclibc
-/u-boot-tools:/usr/local/bin:/usr/bin:/bin:/opt/bin:/usr/x86_64-pc-linux
--gnu/arm-unknown-linux-gnu/gcc-bin/4.2.4:/usr/x86_64-pc-linux-gnu/arm-un
-known-linux-uclibc/gcc-bin/4.2.4:/usr/x86_64-pc-linux-gnu/gcc-bin/4.1.2:
-~/buildroot/build_arm/staging_dir/usr/bin/ -C
-/home/paul.jones/dev/buildroot-2009.02-rc2/project_build_arm/uclibc/linu
-x-2.6.28.1 xconfig ; \
-        fi
-make[1]: Entering directory
-`/home/paul.jones/dev/buildroot-2009.02-rc2/project_build_arm/uclibc/lin
-ux-2.6.28.1'
-  CHECK   qt
-*
-* Unable to find the QT3 installation. Please make sure that
-* the QT3 development package is correctly installed and
-* either install pkg-config or set the QTDIR environment
-* variable to the correct location.
-*
-make[2]: *** No rule to make target `scripts/kconfig/.tmp_qtcheck',
-needed by `scripts/kconfig/qconf.o'.  Stop.
-make[1]: *** [xconfig] Error 2
-make[1]: Leaving directory
-`/home/paul.jones/dev/buildroot-2009.02-rc2/project_build_arm/uclibc/lin
-ux-2.6.28.1'
+`/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/coreutils-6.9'
 make: ***
-[/home/paul.jones/dev/buildroot-2009.02-rc2/project_build_arm/uclibc/lin
-ux-2.6.28.1/.config] Error 2
+[/home/paul.jones/dev/buildroot-2009.02-rc2/build_arm/coreutils-6.9/src/vdir]
+Error 2
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
