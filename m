@@ -1,53 +1,56 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sun, 25 Jan 2009 20:59:31 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/php
-Message-ID: <20090125205931.4FB7876D28@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 25 Jan 2009 22:00:39 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/dbus
+In-Reply-To: <20090125205531.E8C1C76D28@busybox.osuosl.org> (ulf@uclibc.org's
+	message of "Sun\, 25 Jan 2009 20\:55\:31 +0000 \(UTC\)")
+References: <20090125205531.E8C1C76D28@busybox.osuosl.org>
+Message-ID: <87pribdrt4.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2009-01-25 20:59:30 +0000 (Sun, 25 Jan 2009)
-New Revision: 25022
+>>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
 
-Log:
-Fix spelling error, causing php to use host includes, add patching and unpacked targets
+ ulf> Author: ulf
+ ulf> Date: 2009-01-25 20:55:31 +0000 (Sun, 25 Jan 2009)
+ ulf> New Revision: 25021
 
-Modified:
-   trunk/buildroot/package/php/php.mk
+ ulf> Log:
+ ulf> Stop dbus continuos rebuild, fix deps
+
+ ulf> Modified:
+ ulf>    trunk/buildroot/package/dbus/dbus.mk
 
 
-Changeset:
-Modified: trunk/buildroot/package/php/php.mk
-===================================================================
---- trunk/buildroot/package/php/php.mk	2009-01-25 20:55:31 UTC (rev 25021)
-+++ trunk/buildroot/package/php/php.mk	2009-01-25 20:59:30 UTC (rev 25022)
-@@ -87,7 +87,7 @@
- 	PHP_DEPS+=readline
- endif
- ifeq ($(BR2_PACKAGE_PHP_EXT_NCURSES),y)
--	PHP_CONFIGURE+=--with-ncurses=$(STATING_DIR)/usr
-+	PHP_CONFIGURE+=--with-ncurses=$(STAGING_DIR)/usr
- 	PHP_DEPS+=ncurses
- endif
- ifeq ($(BR2_PACKAGE_PHP_EXT_SYSVMSG),y)
-@@ -132,6 +132,8 @@
+ ulf> Changeset:
+ ulf> Modified: trunk/buildroot/package/dbus/dbus.mk
+ ulf> ===================================================================
+ ulf> --- trunk/buildroot/package/dbus/dbus.mk	2009-01-25 20:53:43 UTC (rev 25020)
+ ulf> +++ trunk/buildroot/package/dbus/dbus.mk	2009-01-25 20:55:31 UTC (rev 25021)
+ ulf> @@ -15,14 +15,17 @@
+ ulf>  DBUS_XML:=expat
+ ulf>  # depend on the exact library file instead of expat so dbus isn't always
+ ulf>  # considered out-of-date
+ ulf> -DBUS_XML_DEP:=$(STAGING_DIR)/usr/lib/libexpat.so.1
+ ulf> +DBUS_XML_DEP_LIB:=$(STAGING_DIR)/usr/lib/libexpat.so.1
+ ulf>  else
+ ulf>  DBUS_XML:=libxml
+ ulf>  # Makefile.autotools.in unfortunately has broken dependency handling,
+ ulf>  # so we cannot do the same for libxml2
+ ulf> -DBUS_XML_DEP:=libxml2-install-staging
+ ulf> +DBUS_XML_DEP_LIB:=$(LIBXML2_HOOK_POST_INSTALL)
+ ulf> +#libxml2-install-staging
+ ulf>  endif
  
- $(PHP_DIR)/.unpacked: $(DL_DIR)/$(PHP_SOURCE)
- 	$(PHP_CAT) $(DL_DIR)/$(PHP_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+	toolchain/patch-kernel.sh $(PHP_DIR) package/php/ php\*.patch
-+	toolchain/patch-kernel.sh $(PHP_DIR) package/php/ php\*.patch.$(ARCH)
- 	touch $@
- 
- $(PHP_DIR)/.configured: $(PHP_DIR)/.unpacked
-@@ -184,6 +186,8 @@
- 
- php: uclibc $(PHP_DEPS) $(PHP_TARGET_DEPS) $(TARGET_DIR)/etc/php.ini
- 
-+php-unpacked: $(PHP_DIR)/.unpacked
-+
- php-clean:
- 	rm -f $(PHP_DIR)/.configured $(PHP_DIR)/.built $(PHP_DIR)/.staged
- 	rm -f $(PHP_TARGET_DEPS)
+ ulf> +DBUS_XML_DEP:=$(DBUS_XML_DEP_LIB)
+
+Why the dance with DBUS_XML_DEP_LIB ?
+
+Is all of this actually needed? As the toplevel Makefile run
+sequentially it seems to me that it would be enough to just add expat
+/ libxml2 to the dbus: line.
+
+-- 
+Bye, Peter Korsgaard
