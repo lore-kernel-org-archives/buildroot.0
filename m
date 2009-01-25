@@ -1,8 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Sun, 25 Jan 2009 20:11:34 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/target:
-	device/Atmel/at91rm9200df device/Atmel/a etc...
-Message-ID: <20090125201134.560DF768D3@busybox.osuosl.org>
+Date: Sun, 25 Jan 2009 20:11:46 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/kernel-headers
+Message-ID: <20090125201146.A989E768D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,156 +9,330 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2009-01-25 20:11:31 +0000 (Sun, 25 Jan 2009)
-New Revision: 25014
+Date: 2009-01-25 20:11:45 +0000 (Sun, 25 Jan 2009)
+New Revision: 25015
 
 Log:
-target/linux-advanced: default to menuconfig for all archs
+kernel-headers: bump 2.6.27 / 2.6.28 to latest stable
 
-Default to menuconfig for atmel targets as well, mention QT3 dependency
-for make xconfig and update affected defconfigs.
+Added:
+   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.2-cris-headers.patch
+   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.2-cris-objcopy-flags.patch
+   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.2-fix-serial.h-include.patch
+
+Removed:
+   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.1-cris-headers.patch
+   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.1-cris-objcopy-flags.patch
+   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.1-fix-serial.h-include.patch
 
 Modified:
-   trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df_defconfig
-   trunk/buildroot/target/device/Atmel/at91sam9g20dfc/at91sam9g20dfc_defconfig
-   trunk/buildroot/target/device/Atmel/atngw100-base/atngw100-base_defconfig
-   trunk/buildroot/target/device/Atmel/atngw100-expanded/atngw100-expanded_defconfig
-   trunk/buildroot/target/device/Atmel/atstk1005/atstk1005_defconfig
-   trunk/buildroot/target/linux/Config.in.advanced
-   trunk/buildroot/target/linux/Makefile.in.advanced
+   trunk/buildroot/toolchain/kernel-headers/Config.in
 
 
 Changeset:
-Modified: trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df_defconfig
+Modified: trunk/buildroot/toolchain/kernel-headers/Config.in
 ===================================================================
---- trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df_defconfig	2009-01-25 08:18:35 UTC (rev 25013)
-+++ trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df_defconfig	2009-01-25 20:11:31 UTC (rev 25014)
-@@ -996,9 +996,9 @@
- BR2_PACKAGE_LINUX_USE_KCONFIG=y
- # BR2_PACKAGE_LINUX_USE_DEFCONFIG is not set
- # BR2_PACKAGE_LINUX_USE_XCONFIG is not set
--BR2_MAKE_XCONFIG=y
--# BR2_MAKE_MENUCONFIG is not set
--BR2_KERNEL_CONFIG_METHOD="xconfig"
-+# BR2_MAKE_XCONFIG is not set
-+BR2_MAKE_MENUCONFIG=y
-+BR2_KERNEL_CONFIG_METHOD="menuconfig"
- # BR2_LINUX_BIN_BZIMAGE is not set
- BR2_LINUX_BIN_UIMAGE=y
- # BR2_LINUX_BIN_VMLINUX is not set
-
-Modified: trunk/buildroot/target/device/Atmel/at91sam9g20dfc/at91sam9g20dfc_defconfig
-===================================================================
---- trunk/buildroot/target/device/Atmel/at91sam9g20dfc/at91sam9g20dfc_defconfig	2009-01-25 08:18:35 UTC (rev 25013)
-+++ trunk/buildroot/target/device/Atmel/at91sam9g20dfc/at91sam9g20dfc_defconfig	2009-01-25 20:11:31 UTC (rev 25014)
-@@ -882,9 +882,9 @@
- BR2_PACKAGE_LINUX_USE_KCONFIG=y
- # BR2_PACKAGE_LINUX_USE_DEFCONFIG is not set
- # BR2_PACKAGE_LINUX_USE_XCONFIG is not set
--BR2_MAKE_XCONFIG=y
--# BR2_MAKE_MENUCONFIG is not set
--BR2_KERNEL_CONFIG_METHOD="xconfig"
-+# BR2_MAKE_XCONFIG is not set
-+BR2_MAKE_MENUCONFIG=y
-+BR2_KERNEL_CONFIG_METHOD="menuconfig"
- # BR2_LINUX_BIN_BZIMAGE is not set
- BR2_LINUX_BIN_UIMAGE=y
- # BR2_LINUX_BIN_VMLINUX is not set
-
-Modified: trunk/buildroot/target/device/Atmel/atngw100-base/atngw100-base_defconfig
-===================================================================
---- trunk/buildroot/target/device/Atmel/atngw100-base/atngw100-base_defconfig	2009-01-25 08:18:35 UTC (rev 25013)
-+++ trunk/buildroot/target/device/Atmel/atngw100-base/atngw100-base_defconfig	2009-01-25 20:11:31 UTC (rev 25014)
-@@ -587,9 +587,9 @@
- BR2_PACKAGE_LINUX_USE_KCONFIG=y
- # BR2_PACKAGE_LINUX_USE_DEFCONFIG is not set
- # BR2_PACKAGE_LINUX_USE_XCONFIG is not set
--BR2_MAKE_XCONFIG=y
--# BR2_MAKE_MENUCONFIG is not set
--BR2_KERNEL_CONFIG_METHOD="xconfig"
-+# BR2_MAKE_XCONFIG is not set
-+BR2_MAKE_MENUCONFIG=y
-+BR2_KERNEL_CONFIG_METHOD="menuconfig"
- # BR2_LINUX_BIN_BZIMAGE is not set
- BR2_LINUX_BIN_UIMAGE=y
- # BR2_LINUX_BIN_VMLINUX is not set
-
-Modified: trunk/buildroot/target/device/Atmel/atngw100-expanded/atngw100-expanded_defconfig
-===================================================================
---- trunk/buildroot/target/device/Atmel/atngw100-expanded/atngw100-expanded_defconfig	2009-01-25 08:18:35 UTC (rev 25013)
-+++ trunk/buildroot/target/device/Atmel/atngw100-expanded/atngw100-expanded_defconfig	2009-01-25 20:11:31 UTC (rev 25014)
-@@ -1091,9 +1091,9 @@
- BR2_PACKAGE_LINUX_USE_KCONFIG=y
- # BR2_PACKAGE_LINUX_USE_DEFCONFIG is not set
- # BR2_PACKAGE_LINUX_USE_XCONFIG is not set
--BR2_MAKE_XCONFIG=y
--# BR2_MAKE_MENUCONFIG is not set
--BR2_KERNEL_CONFIG_METHOD="xconfig"
-+# BR2_MAKE_XCONFIG is not set
-+BR2_MAKE_MENUCONFIG=y
-+BR2_KERNEL_CONFIG_METHOD="menuconfig"
- # BR2_LINUX_BIN_BZIMAGE is not set
- BR2_LINUX_BIN_UIMAGE=y
- # BR2_LINUX_BIN_VMLINUX is not set
-
-Modified: trunk/buildroot/target/device/Atmel/atstk1005/atstk1005_defconfig
-===================================================================
---- trunk/buildroot/target/device/Atmel/atstk1005/atstk1005_defconfig	2009-01-25 08:18:35 UTC (rev 25013)
-+++ trunk/buildroot/target/device/Atmel/atstk1005/atstk1005_defconfig	2009-01-25 20:11:31 UTC (rev 25014)
-@@ -857,9 +857,9 @@
- BR2_PACKAGE_LINUX_USE_KCONFIG=y
- # BR2_PACKAGE_LINUX_USE_DEFCONFIG is not set
- # BR2_PACKAGE_LINUX_USE_XCONFIG is not set
--BR2_MAKE_XCONFIG=y
--# BR2_MAKE_MENUCONFIG is not set
--BR2_KERNEL_CONFIG_METHOD="xconfig"
-+# BR2_MAKE_XCONFIG is not set
-+BR2_MAKE_MENUCONFIG=y
-+BR2_KERNEL_CONFIG_METHOD="menuconfig"
- # BR2_LINUX_BIN_BZIMAGE is not set
- BR2_LINUX_BIN_UIMAGE=y
- # BR2_LINUX_BIN_VMLINUX is not set
-
-Modified: trunk/buildroot/target/linux/Config.in.advanced
-===================================================================
---- trunk/buildroot/target/linux/Config.in.advanced	2009-01-25 08:18:35 UTC (rev 25013)
-+++ trunk/buildroot/target/linux/Config.in.advanced	2009-01-25 20:11:31 UTC (rev 25014)
-@@ -390,7 +390,7 @@
- 	bool "Run make ARCH=$(ARCH) [xconfig|menuconfig] before build"
- 	depends on BR2_PACKAGE_LINUX
- 	help
--	  Configure Linux by make xconfig
-+	  Configure Linux by make xconfig|menuconfig
- endchoice
- 
- config BR2_PACKAGE_LINUX_KCONFIG
-@@ -406,14 +406,13 @@
- 
- choice
- 	prompt "Preferred config tool"
--	default BR2_MAKE_XCONFIG if BR2_TARGET_ATMEL
- 	default BR2_MAKE_MENUCONFIG
- 	depends on BR2_PACKAGE_LINUX_USE_XCONFIG
- 	help
- 	  Define the preferred tool to invoke if a configuration is invalid
- 
- config	BR2_MAKE_XCONFIG
--	bool "make xconfig"
-+	bool "make xconfig (needs QT3 headers on host)"
- 	help
- 	  Run "make xconfig" if kernel ".config" is invalid
+--- trunk/buildroot/toolchain/kernel-headers/Config.in	2009-01-25 20:11:31 UTC (rev 25014)
++++ trunk/buildroot/toolchain/kernel-headers/Config.in	2009-01-25 20:11:45 UTC (rev 25015)
+@@ -117,7 +117,7 @@
+ 	default "2.6.24.7"	if BR2_KERNEL_HEADERS_2_6_24
+ 	default "2.6.25.19"	if BR2_KERNEL_HEADERS_2_6_25
+ 	default "2.6.26.8"	if BR2_KERNEL_HEADERS_2_6_26
+-	default "2.6.27.12"	if BR2_KERNEL_HEADERS_2_6_27
+-	default "2.6.28.1"	if BR2_KERNEL_HEADERS_2_6_28
++	default "2.6.27.13"	if BR2_KERNEL_HEADERS_2_6_27
++	default "2.6.28.2"	if BR2_KERNEL_HEADERS_2_6_28
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
  
 
-Modified: trunk/buildroot/target/linux/Makefile.in.advanced
+Deleted: trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.1-cris-headers.patch
 ===================================================================
---- trunk/buildroot/target/linux/Makefile.in.advanced	2009-01-25 08:18:35 UTC (rev 25013)
-+++ trunk/buildroot/target/linux/Makefile.in.advanced	2009-01-25 20:11:31 UTC (rev 25014)
-@@ -112,7 +112,7 @@
- KERNEL_CONFIG_METHOD:=$(strip $(subst ",,$(BR2_KERNEL_CONFIG_METHOD)))
- #"))
- ifeq ($(KERNEL_CONFIG_METHOD),)
--KERNEL_CONFIG_METHOD:=xconfig
-+KERNEL_CONFIG_METHOD:=menuconfig
- endif
- 
- # -----------------------------------------------------------------------------
+--- trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.1-cris-headers.patch	2009-01-25 20:11:31 UTC (rev 25014)
++++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.1-cris-headers.patch	2009-01-25 20:11:45 UTC (rev 25015)
+@@ -1,28 +0,0 @@
+-diff -urN linux-2.6.28/arch/cris/include/arch-v10/arch/Kbuild linux-2.6.28.my/arch/cris/include/arch-v10/arch/Kbuild
+---- linux-2.6.28/arch/cris/include/arch-v10/arch/Kbuild	2008-12-25 00:26:37.000000000 +0100
+-+++ linux-2.6.28.my/arch/cris/include/arch-v10/arch/Kbuild	2009-01-12 12:59:06.000000000 +0100
+-@@ -1,3 +1,5 @@
+-+header-y += elf.h
+-+header-y += ptrace.h
+- header-y += user.h
+- header-y += svinto.h
+- header-y += sv_addr_ag.h
+-diff -urN linux-2.6.28/arch/cris/include/asm/Kbuild linux-2.6.28.my/arch/cris/include/asm/Kbuild
+---- linux-2.6.28/arch/cris/include/asm/Kbuild	2008-12-25 00:26:37.000000000 +0100
+-+++ linux-2.6.28.my/arch/cris/include/asm/Kbuild	2009-01-12 13:14:40.000000000 +0100
+-@@ -1,11 +1,13 @@
+- include include/asm-generic/Kbuild.asm
+- 
+--header-y += arch-v10/
+--header-y += arch-v32/
+-+header-y += ../arch-v10/arch/
+-+header-y += ../arch-v32/arch/
+- 
+-+header-y += elf.h
+- header-y += ethernet.h
+- header-y += rtc.h
+- header-y += sync_serial.h
+-+header-y += user.h
+- 
+- unifdef-y += etraxgpio.h
+- unifdef-y += rs485.h
+
+Deleted: trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.1-cris-objcopy-flags.patch
+===================================================================
+--- trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.1-cris-objcopy-flags.patch	2009-01-25 20:11:31 UTC (rev 25014)
++++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.1-cris-objcopy-flags.patch	2009-01-25 20:11:45 UTC (rev 25015)
+@@ -1,45 +0,0 @@
+---- linux-2.6.28/arch/cris/Makefile	2008-12-25 00:26:37.000000000 +0100
+-+++ linux-2.6.28.my/arch/cris/Makefile	2009-01-12 13:21:44.000000000 +0100
+-@@ -40,7 +40,7 @@
+- 
+- LD = $(CROSS_COMPILE)ld -mcrislinux
+- 
+--OBJCOPYFLAGS := -O binary -R .note -R .comment -S
+-+OBJCOPYFLAGS := -O binary -R .note -R .note.gnu.build-id -R .comment
+- 
+- CPPFLAGS_vmlinux.lds = -DDRAM_VIRTUAL_BASE=0x$(CONFIG_ETRAX_DRAM_VIRTUAL_BASE)
+- 
+-diff -urN linux-2.6.28/arch/cris/arch-v10/boot/Makefile linux-2.6.28.my/arch/cris/arch-v10/boot/Makefile
+---- linux-2.6.28/arch/cris/arch-v10/boot/Makefile	2008-12-25 00:26:37.000000000 +0100
+-+++ linux-2.6.28.my/arch/cris/arch-v10/boot/Makefile	2009-01-12 13:28:25.000000000 +0100
+-@@ -2,8 +2,6 @@
+- # arch/cris/arch-v10/boot/Makefile
+- #
+- 
+--OBJCOPYFLAGS = -O binary --remove-section=.bss
+--
+- subdir- := compressed rescue
+- targets := Image
+- 
+-diff -urN linux-2.6.28/arch/cris/arch-v10/boot/compressed/Makefile linux-2.6.28.my/arch/cris/arch-v10/boot/compressed/Makefile
+---- linux-2.6.28/arch/cris/arch-v10/boot/compressed/Makefile	2008-12-25 00:26:37.000000000 +0100
+-+++ linux-2.6.28.my/arch/cris/arch-v10/boot/compressed/Makefile	2009-01-12 13:28:33.000000000 +0100
+-@@ -6,7 +6,6 @@
+- ccflags-y += -O2 $(LINUXINCLUDE)
+- ldflags-y += -T $(srctree)/$(src)/decompress.lds
+- OBJECTS = $(obj)/head.o $(obj)/misc.o
+--OBJCOPYFLAGS = -O binary --remove-section=.bss
+- 
+- quiet_cmd_image = BUILD   $@
+- cmd_image = cat $(obj)/decompress.bin $(obj)/piggy.gz > $@
+-diff -urN linux-2.6.28/arch/cris/arch-v10/boot/rescue/Makefile linux-2.6.28.my/arch/cris/arch-v10/boot/rescue/Makefile
+---- linux-2.6.28/arch/cris/arch-v10/boot/rescue/Makefile	2008-12-25 00:26:37.000000000 +0100
+-+++ linux-2.6.28.my/arch/cris/arch-v10/boot/rescue/Makefile	2009-01-12 13:28:40.000000000 +0100
+-@@ -5,7 +5,6 @@
+- ccflags-y += -O2 $(LINUXINCLUDE)
+- asflags-y += $(LINUXINCLUDE)
+- ldflags-y += -T $(srctree)/$(src)/rescue.lds
+--OBJCOPYFLAGS = -O binary --remove-section=.bss
+- obj-$(CONFIG_ETRAX_AXISFLASHMAP) = head.o
+- OBJECT := $(obj)/head.o
+- 
+
+Deleted: trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.1-fix-serial.h-include.patch
+===================================================================
+--- trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.1-fix-serial.h-include.patch	2009-01-25 20:11:31 UTC (rev 25014)
++++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.1-fix-serial.h-include.patch	2009-01-25 20:11:45 UTC (rev 25015)
+@@ -1,55 +0,0 @@
+-From 60c20fb8c00a2b23308ae4517f145383bc66d291 Mon Sep 17 00:00:00 2001
+-From: Andy Whitcroft <apw@canonical.com>
+-Date: Fri, 2 Jan 2009 13:49:04 +0000
+-Subject: [PATCH] serial: RS485 ioctl structure uses __u32 include linux/types.h
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=utf-8
+-Content-Transfer-Encoding: 8bit
+-
+-In the commit below a new struct serial_rs485 was introduced for a new
+-ioctl:
+-
+-    commit c26c56c0f40e200e61d1390629c806f6adaffbcc
+-    Author: Alan Cox <alan@redhat.com>
+-    Date:   Mon Oct 13 10:37:48 2008 +0100
+-
+-	tty: Cris has a nice RS485 ioctl so we should steal it
+-
+-This structure uses the __u32 types for some of its members, which leads
+-to the following compile error:
+-
+-    $ cc -I.../include -c X.c
+-    In file included from X.c:2: .../include/linux/serial.h:185:
+-		error: expected specifier-qualifier-list before ?__u32?
+-    $
+-
+-It seems that these types are appropriate for this structure as it is
+-to be exposed to userspace.  These types are available via linux/types.h
+-so move the include of that outside the __KERNEL__ section.
+-
+-Signed-off-by: Andy Whitcroft <apw@canonical.com>
+-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+-Signed-off-by: Alan Cox <alan@redhat.com>
+-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+----
+- include/linux/serial.h |    3 ++-
+- 1 files changed, 2 insertions(+), 1 deletions(-)
+-
+-diff --git a/include/linux/serial.h b/include/linux/serial.h
+-index 1ea8d92..9136cc5 100644
+---- a/include/linux/serial.h
+-+++ b/include/linux/serial.h
+-@@ -10,8 +10,9 @@
+- #ifndef _LINUX_SERIAL_H
+- #define _LINUX_SERIAL_H
+- 
+--#ifdef __KERNEL__
+- #include <linux/types.h>
+-+
+-+#ifdef __KERNEL__
+- #include <asm/page.h>
+- 
+- /*
+--- 
+-1.5.6.5
+-
+
+Copied: trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.2-cris-headers.patch (from rev 25014, trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.1-cris-headers.patch)
+===================================================================
+--- trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.2-cris-headers.patch	                        (rev 0)
++++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.2-cris-headers.patch	2009-01-25 20:11:45 UTC (rev 25015)
+@@ -0,0 +1,28 @@
++diff -urN linux-2.6.28/arch/cris/include/arch-v10/arch/Kbuild linux-2.6.28.my/arch/cris/include/arch-v10/arch/Kbuild
++--- linux-2.6.28/arch/cris/include/arch-v10/arch/Kbuild	2008-12-25 00:26:37.000000000 +0100
+++++ linux-2.6.28.my/arch/cris/include/arch-v10/arch/Kbuild	2009-01-12 12:59:06.000000000 +0100
++@@ -1,3 +1,5 @@
+++header-y += elf.h
+++header-y += ptrace.h
++ header-y += user.h
++ header-y += svinto.h
++ header-y += sv_addr_ag.h
++diff -urN linux-2.6.28/arch/cris/include/asm/Kbuild linux-2.6.28.my/arch/cris/include/asm/Kbuild
++--- linux-2.6.28/arch/cris/include/asm/Kbuild	2008-12-25 00:26:37.000000000 +0100
+++++ linux-2.6.28.my/arch/cris/include/asm/Kbuild	2009-01-12 13:14:40.000000000 +0100
++@@ -1,11 +1,13 @@
++ include include/asm-generic/Kbuild.asm
++ 
++-header-y += arch-v10/
++-header-y += arch-v32/
+++header-y += ../arch-v10/arch/
+++header-y += ../arch-v32/arch/
++ 
+++header-y += elf.h
++ header-y += ethernet.h
++ header-y += rtc.h
++ header-y += sync_serial.h
+++header-y += user.h
++ 
++ unifdef-y += etraxgpio.h
++ unifdef-y += rs485.h
+
+Copied: trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.2-cris-objcopy-flags.patch (from rev 25014, trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.1-cris-objcopy-flags.patch)
+===================================================================
+--- trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.2-cris-objcopy-flags.patch	                        (rev 0)
++++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.2-cris-objcopy-flags.patch	2009-01-25 20:11:45 UTC (rev 25015)
+@@ -0,0 +1,45 @@
++--- linux-2.6.28/arch/cris/Makefile	2008-12-25 00:26:37.000000000 +0100
+++++ linux-2.6.28.my/arch/cris/Makefile	2009-01-12 13:21:44.000000000 +0100
++@@ -40,7 +40,7 @@
++ 
++ LD = $(CROSS_COMPILE)ld -mcrislinux
++ 
++-OBJCOPYFLAGS := -O binary -R .note -R .comment -S
+++OBJCOPYFLAGS := -O binary -R .note -R .note.gnu.build-id -R .comment
++ 
++ CPPFLAGS_vmlinux.lds = -DDRAM_VIRTUAL_BASE=0x$(CONFIG_ETRAX_DRAM_VIRTUAL_BASE)
++ 
++diff -urN linux-2.6.28/arch/cris/arch-v10/boot/Makefile linux-2.6.28.my/arch/cris/arch-v10/boot/Makefile
++--- linux-2.6.28/arch/cris/arch-v10/boot/Makefile	2008-12-25 00:26:37.000000000 +0100
+++++ linux-2.6.28.my/arch/cris/arch-v10/boot/Makefile	2009-01-12 13:28:25.000000000 +0100
++@@ -2,8 +2,6 @@
++ # arch/cris/arch-v10/boot/Makefile
++ #
++ 
++-OBJCOPYFLAGS = -O binary --remove-section=.bss
++-
++ subdir- := compressed rescue
++ targets := Image
++ 
++diff -urN linux-2.6.28/arch/cris/arch-v10/boot/compressed/Makefile linux-2.6.28.my/arch/cris/arch-v10/boot/compressed/Makefile
++--- linux-2.6.28/arch/cris/arch-v10/boot/compressed/Makefile	2008-12-25 00:26:37.000000000 +0100
+++++ linux-2.6.28.my/arch/cris/arch-v10/boot/compressed/Makefile	2009-01-12 13:28:33.000000000 +0100
++@@ -6,7 +6,6 @@
++ ccflags-y += -O2 $(LINUXINCLUDE)
++ ldflags-y += -T $(srctree)/$(src)/decompress.lds
++ OBJECTS = $(obj)/head.o $(obj)/misc.o
++-OBJCOPYFLAGS = -O binary --remove-section=.bss
++ 
++ quiet_cmd_image = BUILD   $@
++ cmd_image = cat $(obj)/decompress.bin $(obj)/piggy.gz > $@
++diff -urN linux-2.6.28/arch/cris/arch-v10/boot/rescue/Makefile linux-2.6.28.my/arch/cris/arch-v10/boot/rescue/Makefile
++--- linux-2.6.28/arch/cris/arch-v10/boot/rescue/Makefile	2008-12-25 00:26:37.000000000 +0100
+++++ linux-2.6.28.my/arch/cris/arch-v10/boot/rescue/Makefile	2009-01-12 13:28:40.000000000 +0100
++@@ -5,7 +5,6 @@
++ ccflags-y += -O2 $(LINUXINCLUDE)
++ asflags-y += $(LINUXINCLUDE)
++ ldflags-y += -T $(srctree)/$(src)/rescue.lds
++-OBJCOPYFLAGS = -O binary --remove-section=.bss
++ obj-$(CONFIG_ETRAX_AXISFLASHMAP) = head.o
++ OBJECT := $(obj)/head.o
++ 
+
+Copied: trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.2-fix-serial.h-include.patch (from rev 25014, trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.1-fix-serial.h-include.patch)
+===================================================================
+--- trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.2-fix-serial.h-include.patch	                        (rev 0)
++++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.2-fix-serial.h-include.patch	2009-01-25 20:11:45 UTC (rev 25015)
+@@ -0,0 +1,55 @@
++From 60c20fb8c00a2b23308ae4517f145383bc66d291 Mon Sep 17 00:00:00 2001
++From: Andy Whitcroft <apw@canonical.com>
++Date: Fri, 2 Jan 2009 13:49:04 +0000
++Subject: [PATCH] serial: RS485 ioctl structure uses __u32 include linux/types.h
++MIME-Version: 1.0
++Content-Type: text/plain; charset=utf-8
++Content-Transfer-Encoding: 8bit
++
++In the commit below a new struct serial_rs485 was introduced for a new
++ioctl:
++
++    commit c26c56c0f40e200e61d1390629c806f6adaffbcc
++    Author: Alan Cox <alan@redhat.com>
++    Date:   Mon Oct 13 10:37:48 2008 +0100
++
++	tty: Cris has a nice RS485 ioctl so we should steal it
++
++This structure uses the __u32 types for some of its members, which leads
++to the following compile error:
++
++    $ cc -I.../include -c X.c
++    In file included from X.c:2: .../include/linux/serial.h:185:
++		error: expected specifier-qualifier-list before ?__u32?
++    $
++
++It seems that these types are appropriate for this structure as it is
++to be exposed to userspace.  These types are available via linux/types.h
++so move the include of that outside the __KERNEL__ section.
++
++Signed-off-by: Andy Whitcroft <apw@canonical.com>
++Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
++Signed-off-by: Alan Cox <alan@redhat.com>
++Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
++---
++ include/linux/serial.h |    3 ++-
++ 1 files changed, 2 insertions(+), 1 deletions(-)
++
++diff --git a/include/linux/serial.h b/include/linux/serial.h
++index 1ea8d92..9136cc5 100644
++--- a/include/linux/serial.h
+++++ b/include/linux/serial.h
++@@ -10,8 +10,9 @@
++ #ifndef _LINUX_SERIAL_H
++ #define _LINUX_SERIAL_H
++ 
++-#ifdef __KERNEL__
++ #include <linux/types.h>
+++
+++#ifdef __KERNEL__
++ #include <asm/page.h>
++ 
++ /*
++-- 
++1.5.6.5
++
