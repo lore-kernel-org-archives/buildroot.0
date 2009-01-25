@@ -1,34 +1,53 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 25 Jan 2009 21:56:56 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/ncurses
-In-Reply-To: <20090125100722.GA14740@zelow.no> (Thomas Lundquist's message of
-	"Sun\, 25 Jan 2009 11\:07\:22 +0100")
-References: <20090123230218.44A1376564@busybox.osuosl.org>
-	<87ocxxi57i.fsf@macbook.be.48ers.dk> <20090125100722.GA14740@zelow.no>
-Message-ID: <87tz7ndrzb.fsf@macbook.be.48ers.dk>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Sun, 25 Jan 2009 20:59:31 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/php
+Message-ID: <20090125205931.4FB7876D28@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Lundquist <lists@zelow.no> writes:
+Author: ulf
+Date: 2009-01-25 20:59:30 +0000 (Sun, 25 Jan 2009)
+New Revision: 25022
 
- Thomas> On Sat, Jan 24, 2009 at 07:33:05AM +0100, Peter Korsgaard wrote:
- >> 
- >> That looks odd. Why not simply always install the development stuff to
- >> target, and simply rely on the BR2_HAVE_DEVFILES setting to clean it
- >> up if it isn't desired?
+Log:
+Fix spelling error, causing php to use host includes, add patching and unpacked targets
 
- Thomas> I have to admit I'm a bit sceptic to this. It presumes that
- Thomas> the install scripts behave and we're able to get rid of all
- Thomas> overhead when we want to.
+Modified:
+   trunk/buildroot/package/php/php.mk
 
-True, but we do that already to a certain extent (E.G. the
-Makefile.autotools.in stuff using make install-exec / install-strip),
-and we've had (have?) quite some bugs with packages not installing the
-same with install-strip versus install-exec or not picking up the
-correct strip program and/or arguments.
 
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/package/php/php.mk
+===================================================================
+--- trunk/buildroot/package/php/php.mk	2009-01-25 20:55:31 UTC (rev 25021)
++++ trunk/buildroot/package/php/php.mk	2009-01-25 20:59:30 UTC (rev 25022)
+@@ -87,7 +87,7 @@
+ 	PHP_DEPS+=readline
+ endif
+ ifeq ($(BR2_PACKAGE_PHP_EXT_NCURSES),y)
+-	PHP_CONFIGURE+=--with-ncurses=$(STATING_DIR)/usr
++	PHP_CONFIGURE+=--with-ncurses=$(STAGING_DIR)/usr
+ 	PHP_DEPS+=ncurses
+ endif
+ ifeq ($(BR2_PACKAGE_PHP_EXT_SYSVMSG),y)
+@@ -132,6 +132,8 @@
+ 
+ $(PHP_DIR)/.unpacked: $(DL_DIR)/$(PHP_SOURCE)
+ 	$(PHP_CAT) $(DL_DIR)/$(PHP_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
++	toolchain/patch-kernel.sh $(PHP_DIR) package/php/ php\*.patch
++	toolchain/patch-kernel.sh $(PHP_DIR) package/php/ php\*.patch.$(ARCH)
+ 	touch $@
+ 
+ $(PHP_DIR)/.configured: $(PHP_DIR)/.unpacked
+@@ -184,6 +186,8 @@
+ 
+ php: uclibc $(PHP_DEPS) $(PHP_TARGET_DEPS) $(TARGET_DIR)/etc/php.ini
+ 
++php-unpacked: $(PHP_DIR)/.unpacked
++
+ php-clean:
+ 	rm -f $(PHP_DIR)/.configured $(PHP_DIR)/.built $(PHP_DIR)/.staged
+ 	rm -f $(PHP_TARGET_DEPS)
