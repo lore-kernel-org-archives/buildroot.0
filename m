@@ -1,65 +1,36 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 25 Jan 2009 22:06:55 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/cups
-In-Reply-To: <20090125205344.6649776D28@busybox.osuosl.org> (ulf@uclibc.org's
-	message of "Sun\, 25 Jan 2009 20\:53\:44 +0000 \(UTC\)")
-References: <20090125205344.6649776D28@busybox.osuosl.org>
-Message-ID: <87hc3ndrio.fsf@macbook.be.48ers.dk>
+Date: Sun, 25 Jan 2009 22:12:28 +0100
+Subject: [Buildroot] svn commit:
+	trunk/buildroot/target:	device/Atmel/at91rm9200df
+	device/Atmel/a etc...
+In-Reply-To: <1232917612.2298.2.camel@elrond.atmel.com> (Ulf Samuelsson's
+	message of "Sun\, 25 Jan 2009 22\:06\:52 +0100")
+References: <20090125201134.560DF768D3@busybox.osuosl.org>
+	<1232917612.2298.2.camel@elrond.atmel.com>
+Message-ID: <87d4ebdr9f.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+>>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 
- ulf> Author: ulf
- ulf> Date: 2009-01-25 20:53:43 +0000 (Sun, 25 Jan 2009)
- ulf> New Revision: 25020
+ Ulf> Don't do this!
 
- ulf> Log:
- ulf> Make cups build, support perl/php option
+Why not? xconfig doesn't buy you any more functionality, but it DOES
+break if you don't have QT3 headers installed on the host (which we
+don't check for)
 
- ulf> Modified:
- ulf>    trunk/buildroot/package/cups/cups.mk
+I don't see why we need to provide the xconfig option in the first
+place.
 
+ Ulf> Either you revert, or I will do it.
 
- ulf>  	(cd $(CUPS_DIR) && \
- ulf>  		$(TARGET_CONFIGURE_OPTS) \
- ulf>  		$(TARGET_CONFIGURE_ARGS) \
- ulf> +		$(CUPS_CONF_ENV) \
- ulf> +		CFLAGS="$(CUPS_CFLAGS)" \
- ulf>  		./configure \
- ulf> -		--prefix=/usr $(CUPS_CONF_OPT_DBUS) --includedir=/usr/include  \
- ulf> -		--libdir=/usr/lib --disable-gnutls --disable-gssapi --host=$(ARCH) \ )
- ulf> +		--target=$(GNU_TARGET_NAME) \
- ulf> +		--host=$(GNU_TARGET_NAME) \
- ulf> +		--build=$(GNU_HOST_NAME) \
- ulf> +		--prefix=/usr \
- ulf> +		--includedir=/usr/include  \
- ulf> +		--libdir=/usr/lib \
- ulf> +		--exec-prefix=/ \
+ Ulf> You are NOT the maintainer of these boards.
 
-Shouldn't that be /usr?
-
- ulf> +		--bindir=/usr/bin \
- ulf> +		--sbindir=/usr/sbin \
- ulf> +		--libexecdir=/usr/lib \
- ulf> +		--sysconfdir=/etc \
-
-And all of those should get set automatically by prefix.
-
- ulf> +		--with-config-file-path=/etc \
- ulf> +		--datadir=/usr/share/misc \
- ulf> +		--localstatedir=/var \
- ulf> +		--mandir=/usr/man \
- ulf> +		--infodir=/usr/info \
- ulf> +		--disable-gnutls \
- ulf> +		--disable-gssapi \
- ulf> +		$(CUPS_CONF_OPT) \
- ulf> +		)
- ulf>  	touch $@
- 
+I am of BR, and we're getting mails from people where the xconfig
+stuff breaks.
 
 -- 
 Bye, Peter Korsgaard
