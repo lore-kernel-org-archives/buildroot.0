@@ -1,97 +1,56 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sun, 25 Jan 2009 21:53:15 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Atmel:
-	at91rm9200df at91sam9g20dfc atngw100-bas etc...
-Message-ID: <20090125215315.8FF4B76D28@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 25 Jan 2009 22:54:01 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
+In-Reply-To: <20090125214834.783FA76D28@busybox.osuosl.org> (ulf@uclibc.org's
+	message of "Sun\, 25 Jan 2009 21\:48\:34 +0000 \(UTC\)")
+References: <20090125214834.783FA76D28@busybox.osuosl.org>
+Message-ID: <871vurdpc6.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2009-01-25 21:53:14 +0000 (Sun, 25 Jan 2009)
-New Revision: 25025
+>>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
 
-Log:
-Revert Atmel boards back to desired operation
+ ulf> Author: ulf
+ ulf> Date: 2009-01-25 21:48:33 +0000 (Sun, 25 Jan 2009)
+ ulf> New Revision: 25024
 
-Modified:
-   trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df_defconfig
-   trunk/buildroot/target/device/Atmel/at91sam9g20dfc/at91sam9g20dfc_defconfig
-   trunk/buildroot/target/device/Atmel/atngw100-base/atngw100-base_defconfig
-   trunk/buildroot/target/device/Atmel/atstk1005/atstk1005_defconfig
+ ulf> Log:
 
+ ulf> Use new SHELL variable BUILDROOT_KERNEL_CONFIG_METHOD
+ ulf> which will override selection between xconfig and menuconfig
 
-Changeset:
-Modified: trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df_defconfig
-===================================================================
---- trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df_defconfig	2009-01-25 21:48:33 UTC (rev 25024)
-+++ trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df_defconfig	2009-01-25 21:53:14 UTC (rev 25025)
-@@ -996,9 +996,9 @@
- BR2_PACKAGE_LINUX_USE_KCONFIG=y
- # BR2_PACKAGE_LINUX_USE_DEFCONFIG is not set
- # BR2_PACKAGE_LINUX_USE_XCONFIG is not set
--# BR2_MAKE_XCONFIG is not set
--BR2_MAKE_MENUCONFIG=y
--BR2_KERNEL_CONFIG_METHOD="menuconfig"
-+BR2_MAKE_XCONFIG=y
-+# BR2_MAKE_MENUCONFIG is not set
-+BR2_KERNEL_CONFIG_METHOD="xconfig"
- # BR2_LINUX_BIN_BZIMAGE is not set
- BR2_LINUX_BIN_UIMAGE=y
- # BR2_LINUX_BIN_VMLINUX is not set
+ ulf> make xconfig will, if it fails, or user does not save configuration
+ ulf> result in make menuconfig beeing tried
 
-Modified: trunk/buildroot/target/device/Atmel/at91sam9g20dfc/at91sam9g20dfc_defconfig
-===================================================================
---- trunk/buildroot/target/device/Atmel/at91sam9g20dfc/at91sam9g20dfc_defconfig	2009-01-25 21:48:33 UTC (rev 25024)
-+++ trunk/buildroot/target/device/Atmel/at91sam9g20dfc/at91sam9g20dfc_defconfig	2009-01-25 21:53:14 UTC (rev 25025)
-@@ -882,9 +882,9 @@
- BR2_PACKAGE_LINUX_USE_KCONFIG=y
- # BR2_PACKAGE_LINUX_USE_DEFCONFIG is not set
- # BR2_PACKAGE_LINUX_USE_XCONFIG is not set
--# BR2_MAKE_XCONFIG is not set
--BR2_MAKE_MENUCONFIG=y
--BR2_KERNEL_CONFIG_METHOD="menuconfig"
-+BR2_MAKE_XCONFIG=y
-+# BR2_MAKE_MENUCONFIG is not set
-+BR2_KERNEL_CONFIG_METHOD="xconfig"
- # BR2_LINUX_BIN_BZIMAGE is not set
- BR2_LINUX_BIN_UIMAGE=y
- # BR2_LINUX_BIN_VMLINUX is not set
+Sigh, please don't make these changes to the tree before we come to an
+agreement on the list.
 
-Modified: trunk/buildroot/target/device/Atmel/atngw100-base/atngw100-base_defconfig
-===================================================================
---- trunk/buildroot/target/device/Atmel/atngw100-base/atngw100-base_defconfig	2009-01-25 21:48:33 UTC (rev 25024)
-+++ trunk/buildroot/target/device/Atmel/atngw100-base/atngw100-base_defconfig	2009-01-25 21:53:14 UTC (rev 25025)
-@@ -587,9 +587,9 @@
- BR2_PACKAGE_LINUX_USE_KCONFIG=y
- # BR2_PACKAGE_LINUX_USE_DEFCONFIG is not set
- # BR2_PACKAGE_LINUX_USE_XCONFIG is not set
--# BR2_MAKE_XCONFIG is not set
--BR2_MAKE_MENUCONFIG=y
--BR2_KERNEL_CONFIG_METHOD="menuconfig"
-+BR2_MAKE_XCONFIG=y
-+# BR2_MAKE_MENUCONFIG is not set
-+BR2_KERNEL_CONFIG_METHOD="xconfig"
- # BR2_LINUX_BIN_BZIMAGE is not set
- BR2_LINUX_BIN_UIMAGE=y
- # BR2_LINUX_BIN_VMLINUX is not set
+ ulf> Fix several issues causing final part of linux to be regenerated
+ ulf> on each make.
+ 
+ ulf>  choice
+ ulf>  	prompt "Preferred config tool"
+ ulf> -	default BR2_MAKE_MENUCONFIG
+ ulf> +	default BR2_MAKE_XCONFIG
 
-Modified: trunk/buildroot/target/device/Atmel/atstk1005/atstk1005_defconfig
-===================================================================
---- trunk/buildroot/target/device/Atmel/atstk1005/atstk1005_defconfig	2009-01-25 21:48:33 UTC (rev 25024)
-+++ trunk/buildroot/target/device/Atmel/atstk1005/atstk1005_defconfig	2009-01-25 21:53:14 UTC (rev 25025)
-@@ -857,9 +857,9 @@
- BR2_PACKAGE_LINUX_USE_KCONFIG=y
- # BR2_PACKAGE_LINUX_USE_DEFCONFIG is not set
- # BR2_PACKAGE_LINUX_USE_XCONFIG is not set
--# BR2_MAKE_XCONFIG is not set
--BR2_MAKE_MENUCONFIG=y
--BR2_KERNEL_CONFIG_METHOD="menuconfig"
-+BR2_MAKE_XCONFIG=y
-+# BR2_MAKE_MENUCONFIG is not set
-+BR2_KERNEL_CONFIG_METHOD="xconfig"
- # BR2_LINUX_BIN_BZIMAGE is not set
- BR2_LINUX_BIN_UIMAGE=y
- # BR2_LINUX_BIN_VMLINUX is not set
+Don't do that.
+
+ ulf> +# Override config method with shell variable
+ ulf> +ifneq ($(BUILDROOT_KERNEL_CONFIG_METHOD),)
+ ulf> +KERNEL_CONFIG_METHOD:=$(strip $(subst ",,$(BUILDROOT_KERNEL_CONFIG_METHOD)))
+ ulf> +#"))
+ ulf> +else
+ ulf>  KERNEL_CONFIG_METHOD:=$(strip $(subst ",,$(BR2_KERNEL_CONFIG_METHOD)))
+ ulf>  #"))
+ ulf>  ifeq ($(KERNEL_CONFIG_METHOD),)
+ ulf> -KERNEL_CONFIG_METHOD:=menuconfig
+ ulf> +KERNEL_CONFIG_METHOD:=xconfig
+ ulf>  endif
+
+But why?
+
+-- 
+Bye, Peter Korsgaard
