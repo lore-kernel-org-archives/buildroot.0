@@ -1,137 +1,165 @@
-From: Markus Heidelberg <markus.heidelberg@web.de>
-Date: Sun, 25 Jan 2009 18:36:50 +0100
-Subject: [Buildroot] [PATCH 2/2] qtopia4: fix and improve color/pixel depths
-	config
-Message-ID: <200901251836.50681.markus.heidelberg@web.de>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Sun, 25 Jan 2009 20:11:34 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/target:
+	device/Atmel/at91rm9200df device/Atmel/a etc...
+Message-ID: <20090125201134.560DF768D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also fix whitespace and use an existing variable for qmake.conf, which
-was forgotten in r23828, though it's only commented out.
+Author: jacmet
+Date: 2009-01-25 20:11:31 +0000 (Sun, 25 Jan 2009)
+New Revision: 25014
 
-Signed-off-by: Markus Heidelberg <markus.heidelberg@web.de>
----
- package/qtopia4/Config.in  |   46 ++++++++++++++++++++++++++++++++++++++-----
- package/qtopia4/qtopia4.mk |   40 ++++++++++++++++++++++++++++++++++++-
- 2 files changed, 78 insertions(+), 8 deletions(-)
+Log:
+target/linux-advanced: default to menuconfig for all archs
 
-diff --git a/package/qtopia4/Config.in b/package/qtopia4/Config.in
-index 2cd6e17..4809cb1 100644
---- a/package/qtopia4/Config.in
-+++ b/package/qtopia4/Config.in
-@@ -86,12 +86,46 @@ config BR2_PACKAGE_QTOPIA4_QT3SUPPORT
- 	  library with proxy code and increase the space required on target.
- 	  If unsure say n.
+Default to menuconfig for atmel targets as well, mention QT3 dependency
+for make xconfig and update affected defconfigs.
+
+Modified:
+   trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df_defconfig
+   trunk/buildroot/target/device/Atmel/at91sam9g20dfc/at91sam9g20dfc_defconfig
+   trunk/buildroot/target/device/Atmel/atngw100-base/atngw100-base_defconfig
+   trunk/buildroot/target/device/Atmel/atngw100-expanded/atngw100-expanded_defconfig
+   trunk/buildroot/target/device/Atmel/atstk1005/atstk1005_defconfig
+   trunk/buildroot/target/linux/Config.in.advanced
+   trunk/buildroot/target/linux/Makefile.in.advanced
+
+
+Changeset:
+Modified: trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df_defconfig
+===================================================================
+--- trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df_defconfig	2009-01-25 08:18:35 UTC (rev 25013)
++++ trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df_defconfig	2009-01-25 20:11:31 UTC (rev 25014)
+@@ -996,9 +996,9 @@
+ BR2_PACKAGE_LINUX_USE_KCONFIG=y
+ # BR2_PACKAGE_LINUX_USE_DEFCONFIG is not set
+ # BR2_PACKAGE_LINUX_USE_XCONFIG is not set
+-BR2_MAKE_XCONFIG=y
+-# BR2_MAKE_MENUCONFIG is not set
+-BR2_KERNEL_CONFIG_METHOD="xconfig"
++# BR2_MAKE_XCONFIG is not set
++BR2_MAKE_MENUCONFIG=y
++BR2_KERNEL_CONFIG_METHOD="menuconfig"
+ # BR2_LINUX_BIN_BZIMAGE is not set
+ BR2_LINUX_BIN_UIMAGE=y
+ # BR2_LINUX_BIN_VMLINUX is not set
+
+Modified: trunk/buildroot/target/device/Atmel/at91sam9g20dfc/at91sam9g20dfc_defconfig
+===================================================================
+--- trunk/buildroot/target/device/Atmel/at91sam9g20dfc/at91sam9g20dfc_defconfig	2009-01-25 08:18:35 UTC (rev 25013)
++++ trunk/buildroot/target/device/Atmel/at91sam9g20dfc/at91sam9g20dfc_defconfig	2009-01-25 20:11:31 UTC (rev 25014)
+@@ -882,9 +882,9 @@
+ BR2_PACKAGE_LINUX_USE_KCONFIG=y
+ # BR2_PACKAGE_LINUX_USE_DEFCONFIG is not set
+ # BR2_PACKAGE_LINUX_USE_XCONFIG is not set
+-BR2_MAKE_XCONFIG=y
+-# BR2_MAKE_MENUCONFIG is not set
+-BR2_KERNEL_CONFIG_METHOD="xconfig"
++# BR2_MAKE_XCONFIG is not set
++BR2_MAKE_MENUCONFIG=y
++BR2_KERNEL_CONFIG_METHOD="menuconfig"
+ # BR2_LINUX_BIN_BZIMAGE is not set
+ BR2_LINUX_BIN_UIMAGE=y
+ # BR2_LINUX_BIN_VMLINUX is not set
+
+Modified: trunk/buildroot/target/device/Atmel/atngw100-base/atngw100-base_defconfig
+===================================================================
+--- trunk/buildroot/target/device/Atmel/atngw100-base/atngw100-base_defconfig	2009-01-25 08:18:35 UTC (rev 25013)
++++ trunk/buildroot/target/device/Atmel/atngw100-base/atngw100-base_defconfig	2009-01-25 20:11:31 UTC (rev 25014)
+@@ -587,9 +587,9 @@
+ BR2_PACKAGE_LINUX_USE_KCONFIG=y
+ # BR2_PACKAGE_LINUX_USE_DEFCONFIG is not set
+ # BR2_PACKAGE_LINUX_USE_XCONFIG is not set
+-BR2_MAKE_XCONFIG=y
+-# BR2_MAKE_MENUCONFIG is not set
+-BR2_KERNEL_CONFIG_METHOD="xconfig"
++# BR2_MAKE_XCONFIG is not set
++BR2_MAKE_MENUCONFIG=y
++BR2_KERNEL_CONFIG_METHOD="menuconfig"
+ # BR2_LINUX_BIN_BZIMAGE is not set
+ BR2_LINUX_BIN_UIMAGE=y
+ # BR2_LINUX_BIN_VMLINUX is not set
+
+Modified: trunk/buildroot/target/device/Atmel/atngw100-expanded/atngw100-expanded_defconfig
+===================================================================
+--- trunk/buildroot/target/device/Atmel/atngw100-expanded/atngw100-expanded_defconfig	2009-01-25 08:18:35 UTC (rev 25013)
++++ trunk/buildroot/target/device/Atmel/atngw100-expanded/atngw100-expanded_defconfig	2009-01-25 20:11:31 UTC (rev 25014)
+@@ -1091,9 +1091,9 @@
+ BR2_PACKAGE_LINUX_USE_KCONFIG=y
+ # BR2_PACKAGE_LINUX_USE_DEFCONFIG is not set
+ # BR2_PACKAGE_LINUX_USE_XCONFIG is not set
+-BR2_MAKE_XCONFIG=y
+-# BR2_MAKE_MENUCONFIG is not set
+-BR2_KERNEL_CONFIG_METHOD="xconfig"
++# BR2_MAKE_XCONFIG is not set
++BR2_MAKE_MENUCONFIG=y
++BR2_KERNEL_CONFIG_METHOD="menuconfig"
+ # BR2_LINUX_BIN_BZIMAGE is not set
+ BR2_LINUX_BIN_UIMAGE=y
+ # BR2_LINUX_BIN_VMLINUX is not set
+
+Modified: trunk/buildroot/target/device/Atmel/atstk1005/atstk1005_defconfig
+===================================================================
+--- trunk/buildroot/target/device/Atmel/atstk1005/atstk1005_defconfig	2009-01-25 08:18:35 UTC (rev 25013)
++++ trunk/buildroot/target/device/Atmel/atstk1005/atstk1005_defconfig	2009-01-25 20:11:31 UTC (rev 25014)
+@@ -857,9 +857,9 @@
+ BR2_PACKAGE_LINUX_USE_KCONFIG=y
+ # BR2_PACKAGE_LINUX_USE_DEFCONFIG is not set
+ # BR2_PACKAGE_LINUX_USE_XCONFIG is not set
+-BR2_MAKE_XCONFIG=y
+-# BR2_MAKE_MENUCONFIG is not set
+-BR2_KERNEL_CONFIG_METHOD="xconfig"
++# BR2_MAKE_XCONFIG is not set
++BR2_MAKE_MENUCONFIG=y
++BR2_KERNEL_CONFIG_METHOD="menuconfig"
+ # BR2_LINUX_BIN_BZIMAGE is not set
+ BR2_LINUX_BIN_UIMAGE=y
+ # BR2_LINUX_BIN_VMLINUX is not set
+
+Modified: trunk/buildroot/target/linux/Config.in.advanced
+===================================================================
+--- trunk/buildroot/target/linux/Config.in.advanced	2009-01-25 08:18:35 UTC (rev 25013)
++++ trunk/buildroot/target/linux/Config.in.advanced	2009-01-25 20:11:31 UTC (rev 25014)
+@@ -390,7 +390,7 @@
+ 	bool "Run make ARCH=$(ARCH) [xconfig|menuconfig] before build"
+ 	depends on BR2_PACKAGE_LINUX
+ 	help
+-	  Configure Linux by make xconfig
++	  Configure Linux by make xconfig|menuconfig
+ endchoice
  
--config BR2_PACKAGE_QTOPIA4_DEPTHS
--	string "color depths to support"
--	default "-depths 24,16,8"
--	help
--	  Which color depths to support for the library. Default is "-depths
--	  24,16,8". Different depths are specified by a comma separated list.
-+menu "Pixel depths"
-+comment "Deselecting each option leads to Qt's default (8,16,32)"
-+
-+config BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_ALL
-+	bool "All supported depths"
-+
-+if !BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_ALL
-+
-+config BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_1
-+	bool "1 bpp, black/white"
-+
-+config BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_4
-+	bool "4 bpp, grayscale"
-+
-+config BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_8
-+	bool "8 bpp, paletted"
-+	default y
-+
-+config BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_12
-+	bool "12 bpp, rgb 4-4-4"
-+
-+config BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_15
-+	bool "15 bpp, rgb 5-5-5"
-+
-+config BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_16
-+	bool "16 bpp, rgb 5-6-5"
-+	default y
-+
-+config BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_18
-+	bool "18 bpp, rgb 6-6-6"
-+
-+config BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_24
-+	bool "24 bpp, rgb 8-8-8"
-+
-+config BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_32
-+	bool "32 bpp, argb 8-8-8-8 and rgb 8-8-8"
-+	default y
-+
-+endif
-+endmenu
+ config BR2_PACKAGE_LINUX_KCONFIG
+@@ -406,14 +406,13 @@
  
- config BR2_PACKAGE_QTOPIA4_GIF
- 	bool "Enable GIF support"
-diff --git a/package/qtopia4/qtopia4.mk b/package/qtopia4/qtopia4.mk
-index fd7cb8b..569966e 100644
---- a/package/qtopia4/qtopia4.mk
-+++ b/package/qtopia4/qtopia4.mk
-@@ -66,6 +66,42 @@ QTOPIA4_CONFIGURE+= -no-qt3support
+ choice
+ 	prompt "Preferred config tool"
+-	default BR2_MAKE_XCONFIG if BR2_TARGET_ATMEL
+ 	default BR2_MAKE_MENUCONFIG
+ 	depends on BR2_PACKAGE_LINUX_USE_XCONFIG
+ 	help
+ 	  Define the preferred tool to invoke if a configuration is invalid
+ 
+ config	BR2_MAKE_XCONFIG
+-	bool "make xconfig"
++	bool "make xconfig (needs QT3 headers on host)"
+ 	help
+ 	  Run "make xconfig" if kernel ".config" is invalid
+ 
+
+Modified: trunk/buildroot/target/linux/Makefile.in.advanced
+===================================================================
+--- trunk/buildroot/target/linux/Makefile.in.advanced	2009-01-25 08:18:35 UTC (rev 25013)
++++ trunk/buildroot/target/linux/Makefile.in.advanced	2009-01-25 20:11:31 UTC (rev 25014)
+@@ -112,7 +112,7 @@
+ KERNEL_CONFIG_METHOD:=$(strip $(subst ",,$(BR2_KERNEL_CONFIG_METHOD)))
+ #"))
+ ifeq ($(KERNEL_CONFIG_METHOD),)
+-KERNEL_CONFIG_METHOD:=xconfig
++KERNEL_CONFIG_METHOD:=menuconfig
  endif
  
- 
-+### Pixel depths
-+ifeq ($(BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_ALL),y)
-+QTOPIA4_PIXEL_DEPTHS = all
-+else
-+ifeq ($(BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_1),y)
-+QTOPIA4_PIXEL_DEPTHS += 1
-+endif
-+ifeq ($(BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_4),y)
-+QTOPIA4_PIXEL_DEPTHS += 4
-+endif
-+ifeq ($(BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_8),y)
-+QTOPIA4_PIXEL_DEPTHS += 8
-+endif
-+ifeq ($(BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_12),y)
-+QTOPIA4_PIXEL_DEPTHS += 12
-+endif
-+ifeq ($(BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_15),y)
-+QTOPIA4_PIXEL_DEPTHS += 15
-+endif
-+ifeq ($(BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_16),y)
-+QTOPIA4_PIXEL_DEPTHS += 16
-+endif
-+ifeq ($(BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_18),y)
-+QTOPIA4_PIXEL_DEPTHS += 18
-+endif
-+ifeq ($(BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_24),y)
-+QTOPIA4_PIXEL_DEPTHS += 24
-+endif
-+ifeq ($(BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_32),y)
-+QTOPIA4_PIXEL_DEPTHS += 32
-+endif
-+endif
-+ifneq ($(QTOPIA4_PIXEL_DEPTHS),)
-+QTOPIA4_CONFIGURE += -depths $(subst $(space),$(comma),$(strip $(QTOPIA4_PIXEL_DEPTHS)))
-+endif
-+
- ### Display drivers
- ifeq ($(BR2_PACKAGE_QTOPIA4_GFX_LINUXFB),y)
- QTOPIA4_CONFIGURE += -qt-gfx-linuxfb
-@@ -310,8 +346,8 @@ ifneq ($(BR2_INET_IPV6),y)
- 	$(SED) 's/^CFG_IPV6IFNAME=auto/CFG_IPV6IFNAME=no/' $(QTOPIA4_TARGET_DIR)/configure
- endif
- 	$(SED) 's/^CFG_XINERAMA=auto/CFG_XINERAMA=no/' $(QTOPIA4_TARGET_DIR)/configure
--	#$(SED) 's,-O2,$(TARGET_CFLAGS),' $(QTOPIA4_TARGET_DIR)/mkspecs/qws/linux-$(BR2_PACKAGE_QTOPIA4_EMB_PLATFORM)-g++/qmake.conf
--        # Fix compiler path
-+	#$(SED) 's,-O2,$(TARGET_CFLAGS),' $(QTOPIA4_QMAKE_CONF)
-+	# Fix compiler path
- 	$(SED) '\,QMAKE_CC[ 	]*=, c\QMAKE_CC = $(TARGET_CC)' $(QTOPIA4_QMAKE_CONF)
- 	$(SED) '\,QMAKE_CXX[ 	]*=, c\QMAKE_CXX = $(TARGET_CXX)' $(QTOPIA4_QMAKE_CONF)
- 	$(SED) '\,QMAKE_LINK[ 	]*=, c\QMAKE_LINK = $(TARGET_CXX)' $(QTOPIA4_QMAKE_CONF)
--- 
-1.6.1.288.ga6efd
+ # -----------------------------------------------------------------------------
