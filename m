@@ -1,145 +1,53 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Sun, 25 Jan 2009 20:19:06 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/qtopia4
-Message-ID: <20090125201907.17DC4768D3@busybox.osuosl.org>
+From: Mitesh Gupta <guptamitesh@gmail.com>
+Date: Mon, 26 Jan 2009 01:49:02 +0530
+Subject: [Buildroot] Mysql compilation error with Buildroot
+Message-ID: <8ebba8c20901251219x4419089mf9afb5970882ebb1@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-01-25 20:19:06 +0000 (Sun, 25 Jan 2009)
-New Revision: 25017
+Hi all,
+I am getting the following error when adding mysql client to the buildroot
+configuration
 
-Log:
-qtopia4: fix and improve color/pixel depths config
+g++ -Os
+-I/home/mitesh/buildroot-2009.02-rc2/build_i686/staging_dir/usr/include
+-I/home/mitesh/buildroot-2009.02-rc2/build_i686/staging_dir/include
+--sysroot=/home/mitesh/buildroot-2009.02-rc2/build_i686/staging_dir/
+-isysroot /home/mitesh/buildroot-2009.02-rc2/build_i686/staging_dir
+-mtune=i686 -march=i686 -fno-implicit-templates -fno-exceptions -fno-rtti
+--sysroot=/home/mitesh/buildroot-2009.02-rc2/build_i686/staging_dir/
+-rdynamic -o mysql mysql.o readline.o sql_string.o completion_hash.o
+-L/home/mitesh/buildroot-2009.02-rc2/build_i686/staging_dir/lib
+-L/home/mitesh/buildroot-2009.02-rc2/build_i686/staging_dir/usr/lib
+-lreadline -lncurses -lpthread ../libmysql/.libs/libmysqlclient.so
+../zlib/.libs/libzlt.a -lcrypt -lnsl -lm -Wl,--rpath
+-Wl,/home/mitesh/buildroot-2009.02-rc2/build_i686/mysql_client-5.1.23-rc/libmysql/.libs
+-Wl,--rpath -Wl,/usr/lib/mysql
+/usr/bin/ld: this linker was not configured to use sysroots
+collect2: ld returned 1 exit status
+make[3]: *** [mysql] Error 1
+make[3]: Leaving directory
+`/home/mitesh/buildroot-2009.02-rc2/build_i686/mysql_client-5.1.23-rc/client'
+make[2]: *** [all] Error 2
+make[2]: Leaving directory
+`/home/mitesh/buildroot-2009.02-rc2/build_i686/mysql_client-5.1.23-rc/client'
+make[1]: *** [all-recursive] Error 1
+make[1]: Leaving directory
+`/home/mitesh/buildroot-2009.02-rc2/build_i686/mysql_client-5.1.23-rc'
+make: ***
+[/home/mitesh/buildroot-2009.02-rc2/build_i686/mysql_client-5.1.23-rc/.stamp_built]
+Error 2
 
-Also fix whitespace and use an existing variable for qmake.conf, which
-was forgotten in r23828, though it's only commented out.
+The main error seems to be /usr/bin/ld: this linker was not configured to
+use sysroots. I have googled but cant find any solutions to it. Kindly help
+me with it.
 
-Signed-off-by: Markus Heidelberg <markus.heidelberg@web.de>
+Thanks
 
-Modified:
-   trunk/buildroot/package/qtopia4/Config.in
-   trunk/buildroot/package/qtopia4/qtopia4.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/qtopia4/Config.in
-===================================================================
---- trunk/buildroot/package/qtopia4/Config.in	2009-01-25 20:19:01 UTC (rev 25016)
-+++ trunk/buildroot/package/qtopia4/Config.in	2009-01-25 20:19:06 UTC (rev 25017)
-@@ -86,13 +86,47 @@
- 	  library with proxy code and increase the space required on target.
- 	  If unsure say n.
- 
--config BR2_PACKAGE_QTOPIA4_DEPTHS
--	string "color depths to support"
--	default "-depths 24,16,8"
--	help
--	  Which color depths to support for the library. Default is "-depths
--	  24,16,8". Different depths are specified by a comma separated list.
-+menu "Pixel depths"
-+comment "Deselecting each option leads to Qt's default (8,16,32)"
- 
-+config BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_ALL
-+	bool "All supported depths"
-+
-+if !BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_ALL
-+
-+config BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_1
-+	bool "1 bpp, black/white"
-+
-+config BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_4
-+	bool "4 bpp, grayscale"
-+
-+config BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_8
-+	bool "8 bpp, paletted"
-+	default y
-+
-+config BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_12
-+	bool "12 bpp, rgb 4-4-4"
-+
-+config BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_15
-+	bool "15 bpp, rgb 5-5-5"
-+
-+config BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_16
-+	bool "16 bpp, rgb 5-6-5"
-+	default y
-+
-+config BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_18
-+	bool "18 bpp, rgb 6-6-6"
-+
-+config BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_24
-+	bool "24 bpp, rgb 8-8-8"
-+
-+config BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_32
-+	bool "32 bpp, argb 8-8-8-8 and rgb 8-8-8"
-+	default y
-+
-+endif
-+endmenu
-+
- config BR2_PACKAGE_QTOPIA4_GIF
- 	bool "Enable GIF support"
- 	help
-
-Modified: trunk/buildroot/package/qtopia4/qtopia4.mk
-===================================================================
---- trunk/buildroot/package/qtopia4/qtopia4.mk	2009-01-25 20:19:01 UTC (rev 25016)
-+++ trunk/buildroot/package/qtopia4/qtopia4.mk	2009-01-25 20:19:06 UTC (rev 25017)
-@@ -66,6 +66,42 @@
- endif
- 
- 
-+### Pixel depths
-+ifeq ($(BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_ALL),y)
-+QTOPIA4_PIXEL_DEPTHS = all
-+else
-+ifeq ($(BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_1),y)
-+QTOPIA4_PIXEL_DEPTHS += 1
-+endif
-+ifeq ($(BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_4),y)
-+QTOPIA4_PIXEL_DEPTHS += 4
-+endif
-+ifeq ($(BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_8),y)
-+QTOPIA4_PIXEL_DEPTHS += 8
-+endif
-+ifeq ($(BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_12),y)
-+QTOPIA4_PIXEL_DEPTHS += 12
-+endif
-+ifeq ($(BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_15),y)
-+QTOPIA4_PIXEL_DEPTHS += 15
-+endif
-+ifeq ($(BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_16),y)
-+QTOPIA4_PIXEL_DEPTHS += 16
-+endif
-+ifeq ($(BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_18),y)
-+QTOPIA4_PIXEL_DEPTHS += 18
-+endif
-+ifeq ($(BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_24),y)
-+QTOPIA4_PIXEL_DEPTHS += 24
-+endif
-+ifeq ($(BR2_PACKAGE_QTOPIA4_PIXEL_DEPTH_32),y)
-+QTOPIA4_PIXEL_DEPTHS += 32
-+endif
-+endif
-+ifneq ($(QTOPIA4_PIXEL_DEPTHS),)
-+QTOPIA4_CONFIGURE += -depths $(subst $(space),$(comma),$(strip $(QTOPIA4_PIXEL_DEPTHS)))
-+endif
-+
- ### Display drivers
- ifeq ($(BR2_PACKAGE_QTOPIA4_GFX_LINUXFB),y)
- QTOPIA4_CONFIGURE += -qt-gfx-linuxfb
-@@ -310,8 +346,8 @@
- 	$(SED) 's/^CFG_IPV6IFNAME=auto/CFG_IPV6IFNAME=no/' $(QTOPIA4_TARGET_DIR)/configure
- endif
- 	$(SED) 's/^CFG_XINERAMA=auto/CFG_XINERAMA=no/' $(QTOPIA4_TARGET_DIR)/configure
--	#$(SED) 's,-O2,$(TARGET_CFLAGS),' $(QTOPIA4_TARGET_DIR)/mkspecs/qws/linux-$(BR2_PACKAGE_QTOPIA4_EMB_PLATFORM)-g++/qmake.conf
--        # Fix compiler path
-+	#$(SED) 's,-O2,$(TARGET_CFLAGS),' $(QTOPIA4_QMAKE_CONF)
-+	# Fix compiler path
- 	$(SED) '\,QMAKE_CC[ 	]*=, c\QMAKE_CC = $(TARGET_CC)' $(QTOPIA4_QMAKE_CONF)
- 	$(SED) '\,QMAKE_CXX[ 	]*=, c\QMAKE_CXX = $(TARGET_CXX)' $(QTOPIA4_QMAKE_CONF)
- 	$(SED) '\,QMAKE_LINK[ 	]*=, c\QMAKE_LINK = $(TARGET_CXX)' $(QTOPIA4_QMAKE_CONF)
+Mitesh
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://lists.busybox.net/pipermail/buildroot/attachments/20090126/df6ac24d/attachment.htm 
