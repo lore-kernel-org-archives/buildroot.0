@@ -1,78 +1,87 @@
 From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Sun, 25 Jan 2009 23:09:01 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
-In-Reply-To: <871vurdpc6.fsf@macbook.be.48ers.dk>
-References: <20090125214834.783FA76D28@busybox.osuosl.org>
-	<871vurdpc6.fsf@macbook.be.48ers.dk>
-Message-ID: <1232921341.2298.18.camel@elrond.atmel.com>
+Date: Sun, 25 Jan 2009 23:24:12 +0100
+Subject: [Buildroot] 2009.02-rc2 released
+In-Reply-To: <8763k3dqi3.fsf@macbook.be.48ers.dk>
+References: <3B941116898CDA489B91563DEF88F4B607F8DB@iwt-server.iwt.local>
+	<1232868757.5311.170.camel@elrond.atmel.com>
+	<87zlhffs9j.fsf@macbook.be.48ers.dk>
+	<1232918236.2298.9.camel@elrond.atmel.com>
+	<8763k3dqi3.fsf@macbook.be.48ers.dk>
+Message-ID: <1232922252.2298.34.camel@elrond.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-s?n 2009-01-25 klockan 22:54 +0100 skrev Peter Korsgaard:
-> >>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+s?n 2009-01-25 klockan 22:28 +0100 skrev Peter Korsgaard:
+> >>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 > 
->  ulf> Author: ulf
->  ulf> Date: 2009-01-25 21:48:33 +0000 (Sun, 25 Jan 2009)
->  ulf> New Revision: 25024
+> Hi,
 > 
->  ulf> Log:
+>  >> Ulf, several people (myself included) told you to default to menuconfig
+>  >> for the kernel stuff, I'm surprised that's still not the case.
 > 
->  ulf> Use new SHELL variable BUILDROOT_KERNEL_CONFIG_METHOD
->  ulf> which will override selection between xconfig and menuconfig
+>  Ulf> If you want a simple configuration, then you don't use
+>  Ulf> the "Advanced configuration for Linux"
 > 
->  ulf> make xconfig will, if it fails, or user does not save configuration
->  ulf> result in make menuconfig beeing tried
+>  Ulf> The advanced configuration is a selectable option.
+>  Ulf> so is the make menuconfig.
+>  Ulf> I prefer default
 > 
-> Sigh, please don't make these changes to the tree before we come to an
-> agreement on the list.
+> But we're not talking about what YOU prefer. We're talking about what
+> is a sensible default. I think we can all agree that if we have a
+> choice between 2 functionally equivalent options where option 1 always
+> works and the other requires X and QT3 headers, then the decission is
+> easily made.
 > 
->  ulf> Fix several issues causing final part of linux to be regenerated
->  ulf> on each make.
->  
->  ulf>  choice
->  ulf>  	prompt "Preferred config tool"
->  ulf> -	default BR2_MAKE_MENUCONFIG
->  ulf> +	default BR2_MAKE_XCONFIG
-> 
-> Don't do that.
-> 
->  ulf> +# Override config method with shell variable
->  ulf> +ifneq ($(BUILDROOT_KERNEL_CONFIG_METHOD),)
->  ulf> +KERNEL_CONFIG_METHOD:=$(strip $(subst ",,$(BUILDROOT_KERNEL_CONFIG_METHOD)))
->  ulf> +#"))
->  ulf> +else
->  ulf>  KERNEL_CONFIG_METHOD:=$(strip $(subst ",,$(BR2_KERNEL_CONFIG_METHOD)))
->  ulf>  #"))
->  ulf>  ifeq ($(KERNEL_CONFIG_METHOD),)
->  ulf> -KERNEL_CONFIG_METHOD:=menuconfig
->  ulf> +KERNEL_CONFIG_METHOD:=xconfig
->  ulf>  endif
-> 
-> But why?
 
-You started by doing changes which are unacceptable.
+Now it works, regardless if you have X or not.
+so we and the user do not have to choose.
 
-People that want to use xconfig should not suffer because
-of people that does not have QT3.
-
-With the new features, you can
-1) Override whatever is in the configuration.
-	and select xconfig, or menuconfig as you like
-2) If you do not know, then you will default to xconfig
-   and if QT3 is installed you will get this.
-   If you do not have QT3 installed, then the make xconfig
-   will fail and you will get menuconfig immediately afterwards
-3) If you do know, and care, you can set
-   the board config to use menuconfig,
-   but then you are probably much better off to 
-   use the shell default.
+If X is available you have a better experience.
 
 
-In fact, with this error handling it might make sense
-to remove the configuration possibility altogether.
+>  Ulf> I wrote the Advanced configuration so that I can 
+>  Ulf> work with Linux in a manner that is flexible.
+> 
+>  Ulf> What should possible be done is to fallback to menuconfig if this fails
+> 
+> But why? Just use menuconfig and be done with it. What does xconfig
+> bring you that menuconfig doesn't?
+> 
+
+Ease of use - ?menuconfig is archaic
+I would prefer to use Xconfig for Buildroot as well.
+
+
+>  Ulf> You want to minimize the options for the user, so I suggest
+>  Ulf> that you write a new way of configuring Linux
+>  Ulf> so you can do it the way You want.
+> 
+> Sigh. Ulf, you really need to learn to work with the rest of the BR
+> developers.
+
+If people have valid issues, then I listen,
+My main problem is that not only does people want to 
+to it in a certain way, they also want to ensure
+that it is not possible to do it in another way.
+
+If you want to ensure that Buildroot does not crash
+when people select to use make *-config, then that is 
+a valid concern.
+
+If you want to ensure that Buildroot users 
+are coreced into using menuconfig, then I think it is not.
+
+If you want to ensure that people has to spend tons of time, 
+updating the config file to fit their desires
+every time they download the trunk, again, I am against that.
+
+IMO, the submitted solution should meet all valid concerns.
+
+>  Ulf> You have NO business changing the board defaults.
+> 
 
 BR
 Ulf Samuelsson
