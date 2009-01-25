@@ -1,54 +1,46 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 25 Jan 2009 21:48:25 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libeXosip2
-In-Reply-To: <20090125204425.CEE37768D3@busybox.osuosl.org> (ulf@uclibc.org's
-	message of "Sun\, 25 Jan 2009 20\:44\:25 +0000 \(UTC\)")
-References: <20090125204425.CEE37768D3@busybox.osuosl.org>
-Message-ID: <87y6wzdsdi.fsf@macbook.be.48ers.dk>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Sun, 25 Jan 2009 20:50:59 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/popt
+Message-ID: <20090125205100.1BBE176D28@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+Author: ulf
+Date: 2009-01-25 20:50:59 +0000 (Sun, 25 Jan 2009)
+New Revision: 25019
 
- ulf> Author: ulf
- ulf> Date: 2009-01-25 20:44:23 +0000 (Sun, 25 Jan 2009)
- ulf> New Revision: 25018
+Log:
+Support libiconv option for popt
 
- ulf> Log:
- ulf> Use prefix=/usr for libeXosip2
+Modified:
+   trunk/buildroot/package/popt/popt.mk
 
- ulf> Changeset:
- ulf> Modified: trunk/buildroot/package/libeXosip2/libeXosip2.mk
- ulf> ===================================================================
- ulf> --- trunk/buildroot/package/libeXosip2/libeXosip2.mk	2009-01-25 20:19:06 UTC (rev 25017)
- ulf> +++ trunk/buildroot/package/libeXosip2/libeXosip2.mk	2009-01-25 20:44:23 UTC (rev 25018)
- ulf> @@ -26,16 +26,16 @@
- ulf>  		--target=$(GNU_TARGET_NAME) \
- ulf>  		--host=$(GNU_TARGET_NAME) \
- ulf>  		--build=$(GNU_HOST_NAME) \
- ulf> -		--prefix=$(STAGING_DIR) \
- ulf> -		--exec-prefix=/usr \
- ulf> +		--prefix=/usr \
- ulf> +		--exec-prefix=/ \
 
-Really? --exec-prefix should normally be the same as prefix.
-
- ulf>  		--bindir=/usr/bin \
- ulf>  		--sbindir=/usr/sbin \
- ulf> +		--libexecdir=/usr/lib \
- ulf>  		--sysconfdir=/etc \
- ulf>  		--datadir=/usr/share \
- ulf> -		--localstatedir=/var \
- ulf>  		--mandir=/usr/man \
- ulf>  		--infodir=/usr/info \
- ulf> -		--libexecdir=/usr/lib \
- ulf> +		--localstatedir=/var \
- ulf>  		--libdir=/usr/lib \
-
-I gather prefix is enough, and you can remove all of those.
-
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/package/popt/popt.mk
+===================================================================
+--- trunk/buildroot/package/popt/popt.mk	2009-01-25 20:44:23 UTC (rev 25018)
++++ trunk/buildroot/package/popt/popt.mk	2009-01-25 20:50:59 UTC (rev 25019)
+@@ -5,10 +5,16 @@
+ #############################################################
+ POPT_VERSION:=1.14
+ POPT_SITE:=http://rpm5.org/files/popt
+-POPT_INSTALL_STAGING:=YES
+-POPT_INSTALL_TARGET:=YES
+-POPT_CONF_ENV:=ac_cv_va_copy=yes
++POPT_INSTALL_STAGING = YES
++POPT_INSTALL_TARGET = YES
+ 
++POPT_CONF_ENV = ac_cv_va_copy=yes
++
++ifeq ($(BR2_PACKAGE_LIBICONV),y)
++POPT_CONF_ENV += am_cv_lib_iconv=yes
++POPT_CONF_OPT += --with-libiconv-prefix=$(STAGING_DIR)/usr
++endif
++
+ POPT_DEPENDENCIES:=uclibc
+ 
+ $(eval $(call AUTOTARGETS,package,popt))
