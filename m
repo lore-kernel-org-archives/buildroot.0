@@ -1,183 +1,65 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Sun, 25 Jan 2009 22:06:52 +0100
-Subject: [Buildroot] svn commit:
-	trunk/buildroot/target:	device/Atmel/at91rm9200df
-	device/Atmel/a etc...
-In-Reply-To: <20090125201134.560DF768D3@busybox.osuosl.org>
-References: <20090125201134.560DF768D3@busybox.osuosl.org>
-Message-ID: <1232917612.2298.2.camel@elrond.atmel.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 25 Jan 2009 22:06:55 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/cups
+In-Reply-To: <20090125205344.6649776D28@busybox.osuosl.org> (ulf@uclibc.org's
+	message of "Sun\, 25 Jan 2009 20\:53\:44 +0000 \(UTC\)")
+References: <20090125205344.6649776D28@busybox.osuosl.org>
+Message-ID: <87hc3ndrio.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-s?n 2009-01-25 klockan 20:11 +0000 skrev jacmet at uclibc.org:
-> Author: jacmet
-> Date: 2009-01-25 20:11:31 +0000 (Sun, 25 Jan 2009)
-> New Revision: 25014
-> 
-> Log:
-> target/linux-advanced: default to menuconfig for all archs
-> 
-> Default to menuconfig for atmel targets as well, mention QT3 dependency
-> for make xconfig and update affected defconfigs.
-> 
-> Modified:
->    trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df_defconfig
->    trunk/buildroot/target/device/Atmel/at91sam9g20dfc/at91sam9g20dfc_defconfig
->    trunk/buildroot/target/device/Atmel/atngw100-base/atngw100-base_defconfig
->    trunk/buildroot/target/device/Atmel/atngw100-expanded/atngw100-expanded_defconfig
->    trunk/buildroot/target/device/Atmel/atstk1005/atstk1005_defconfig
->    trunk/buildroot/target/linux/Config.in.advanced
->    trunk/buildroot/target/linux/Makefile.in.advanced
-> 
+>>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
 
-Don't do this!
-Either you revert, or I will do it.
+ ulf> Author: ulf
+ ulf> Date: 2009-01-25 20:53:43 +0000 (Sun, 25 Jan 2009)
+ ulf> New Revision: 25020
 
-You are NOT the maintainer of these boards.
+ ulf> Log:
+ ulf> Make cups build, support perl/php option
 
-BR
-Ulf Samuelsson
+ ulf> Modified:
+ ulf>    trunk/buildroot/package/cups/cups.mk
 
-> 
-> Changeset:
-> Modified: trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df_defconfig
-> ===================================================================
-> --- trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df_defconfig	2009-01-25 08:18:35 UTC (rev 25013)
-> +++ trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df_defconfig	2009-01-25 20:11:31 UTC (rev 25014)
-> @@ -996,9 +996,9 @@
->  BR2_PACKAGE_LINUX_USE_KCONFIG=y
->  # BR2_PACKAGE_LINUX_USE_DEFCONFIG is not set
->  # BR2_PACKAGE_LINUX_USE_XCONFIG is not set
-> -BR2_MAKE_XCONFIG=y
-> -# BR2_MAKE_MENUCONFIG is not set
-> -BR2_KERNEL_CONFIG_METHOD="xconfig"
-> +# BR2_MAKE_XCONFIG is not set
-> +BR2_MAKE_MENUCONFIG=y
-> +BR2_KERNEL_CONFIG_METHOD="menuconfig"
->  # BR2_LINUX_BIN_BZIMAGE is not set
->  BR2_LINUX_BIN_UIMAGE=y
->  # BR2_LINUX_BIN_VMLINUX is not set
-> 
-> Modified: trunk/buildroot/target/device/Atmel/at91sam9g20dfc/at91sam9g20dfc_defconfig
-> ===================================================================
-> --- trunk/buildroot/target/device/Atmel/at91sam9g20dfc/at91sam9g20dfc_defconfig	2009-01-25 08:18:35 UTC (rev 25013)
-> +++ trunk/buildroot/target/device/Atmel/at91sam9g20dfc/at91sam9g20dfc_defconfig	2009-01-25 20:11:31 UTC (rev 25014)
-> @@ -882,9 +882,9 @@
->  BR2_PACKAGE_LINUX_USE_KCONFIG=y
->  # BR2_PACKAGE_LINUX_USE_DEFCONFIG is not set
->  # BR2_PACKAGE_LINUX_USE_XCONFIG is not set
-> -BR2_MAKE_XCONFIG=y
-> -# BR2_MAKE_MENUCONFIG is not set
-> -BR2_KERNEL_CONFIG_METHOD="xconfig"
-> +# BR2_MAKE_XCONFIG is not set
-> +BR2_MAKE_MENUCONFIG=y
-> +BR2_KERNEL_CONFIG_METHOD="menuconfig"
->  # BR2_LINUX_BIN_BZIMAGE is not set
->  BR2_LINUX_BIN_UIMAGE=y
->  # BR2_LINUX_BIN_VMLINUX is not set
-> 
-> Modified: trunk/buildroot/target/device/Atmel/atngw100-base/atngw100-base_defconfig
-> ===================================================================
-> --- trunk/buildroot/target/device/Atmel/atngw100-base/atngw100-base_defconfig	2009-01-25 08:18:35 UTC (rev 25013)
-> +++ trunk/buildroot/target/device/Atmel/atngw100-base/atngw100-base_defconfig	2009-01-25 20:11:31 UTC (rev 25014)
-> @@ -587,9 +587,9 @@
->  BR2_PACKAGE_LINUX_USE_KCONFIG=y
->  # BR2_PACKAGE_LINUX_USE_DEFCONFIG is not set
->  # BR2_PACKAGE_LINUX_USE_XCONFIG is not set
-> -BR2_MAKE_XCONFIG=y
-> -# BR2_MAKE_MENUCONFIG is not set
-> -BR2_KERNEL_CONFIG_METHOD="xconfig"
-> +# BR2_MAKE_XCONFIG is not set
-> +BR2_MAKE_MENUCONFIG=y
-> +BR2_KERNEL_CONFIG_METHOD="menuconfig"
->  # BR2_LINUX_BIN_BZIMAGE is not set
->  BR2_LINUX_BIN_UIMAGE=y
->  # BR2_LINUX_BIN_VMLINUX is not set
-> 
-> Modified: trunk/buildroot/target/device/Atmel/atngw100-expanded/atngw100-expanded_defconfig
-> ===================================================================
-> --- trunk/buildroot/target/device/Atmel/atngw100-expanded/atngw100-expanded_defconfig	2009-01-25 08:18:35 UTC (rev 25013)
-> +++ trunk/buildroot/target/device/Atmel/atngw100-expanded/atngw100-expanded_defconfig	2009-01-25 20:11:31 UTC (rev 25014)
-> @@ -1091,9 +1091,9 @@
->  BR2_PACKAGE_LINUX_USE_KCONFIG=y
->  # BR2_PACKAGE_LINUX_USE_DEFCONFIG is not set
->  # BR2_PACKAGE_LINUX_USE_XCONFIG is not set
-> -BR2_MAKE_XCONFIG=y
-> -# BR2_MAKE_MENUCONFIG is not set
-> -BR2_KERNEL_CONFIG_METHOD="xconfig"
-> +# BR2_MAKE_XCONFIG is not set
-> +BR2_MAKE_MENUCONFIG=y
-> +BR2_KERNEL_CONFIG_METHOD="menuconfig"
->  # BR2_LINUX_BIN_BZIMAGE is not set
->  BR2_LINUX_BIN_UIMAGE=y
->  # BR2_LINUX_BIN_VMLINUX is not set
-> 
-> Modified: trunk/buildroot/target/device/Atmel/atstk1005/atstk1005_defconfig
-> ===================================================================
-> --- trunk/buildroot/target/device/Atmel/atstk1005/atstk1005_defconfig	2009-01-25 08:18:35 UTC (rev 25013)
-> +++ trunk/buildroot/target/device/Atmel/atstk1005/atstk1005_defconfig	2009-01-25 20:11:31 UTC (rev 25014)
-> @@ -857,9 +857,9 @@
->  BR2_PACKAGE_LINUX_USE_KCONFIG=y
->  # BR2_PACKAGE_LINUX_USE_DEFCONFIG is not set
->  # BR2_PACKAGE_LINUX_USE_XCONFIG is not set
-> -BR2_MAKE_XCONFIG=y
-> -# BR2_MAKE_MENUCONFIG is not set
-> -BR2_KERNEL_CONFIG_METHOD="xconfig"
-> +# BR2_MAKE_XCONFIG is not set
-> +BR2_MAKE_MENUCONFIG=y
-> +BR2_KERNEL_CONFIG_METHOD="menuconfig"
->  # BR2_LINUX_BIN_BZIMAGE is not set
->  BR2_LINUX_BIN_UIMAGE=y
->  # BR2_LINUX_BIN_VMLINUX is not set
-> 
-> Modified: trunk/buildroot/target/linux/Config.in.advanced
-> ===================================================================
-> --- trunk/buildroot/target/linux/Config.in.advanced	2009-01-25 08:18:35 UTC (rev 25013)
-> +++ trunk/buildroot/target/linux/Config.in.advanced	2009-01-25 20:11:31 UTC (rev 25014)
-> @@ -390,7 +390,7 @@
->  	bool "Run make ARCH=$(ARCH) [xconfig|menuconfig] before build"
->  	depends on BR2_PACKAGE_LINUX
->  	help
-> -	  Configure Linux by make xconfig
-> +	  Configure Linux by make xconfig|menuconfig
->  endchoice
->  
->  config BR2_PACKAGE_LINUX_KCONFIG
-> @@ -406,14 +406,13 @@
->  
->  choice
->  	prompt "Preferred config tool"
-> -	default BR2_MAKE_XCONFIG if BR2_TARGET_ATMEL
->  	default BR2_MAKE_MENUCONFIG
->  	depends on BR2_PACKAGE_LINUX_USE_XCONFIG
->  	help
->  	  Define the preferred tool to invoke if a configuration is invalid
->  
->  config	BR2_MAKE_XCONFIG
-> -	bool "make xconfig"
-> +	bool "make xconfig (needs QT3 headers on host)"
->  	help
->  	  Run "make xconfig" if kernel ".config" is invalid
->  
-> 
-> Modified: trunk/buildroot/target/linux/Makefile.in.advanced
-> ===================================================================
-> --- trunk/buildroot/target/linux/Makefile.in.advanced	2009-01-25 08:18:35 UTC (rev 25013)
-> +++ trunk/buildroot/target/linux/Makefile.in.advanced	2009-01-25 20:11:31 UTC (rev 25014)
-> @@ -112,7 +112,7 @@
->  KERNEL_CONFIG_METHOD:=$(strip $(subst ",,$(BR2_KERNEL_CONFIG_METHOD)))
->  #"))
->  ifeq ($(KERNEL_CONFIG_METHOD),)
-> -KERNEL_CONFIG_METHOD:=xconfig
-> +KERNEL_CONFIG_METHOD:=menuconfig
->  endif
->  
->  # -----------------------------------------------------------------------------
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+
+ ulf>  	(cd $(CUPS_DIR) && \
+ ulf>  		$(TARGET_CONFIGURE_OPTS) \
+ ulf>  		$(TARGET_CONFIGURE_ARGS) \
+ ulf> +		$(CUPS_CONF_ENV) \
+ ulf> +		CFLAGS="$(CUPS_CFLAGS)" \
+ ulf>  		./configure \
+ ulf> -		--prefix=/usr $(CUPS_CONF_OPT_DBUS) --includedir=/usr/include  \
+ ulf> -		--libdir=/usr/lib --disable-gnutls --disable-gssapi --host=$(ARCH) \ )
+ ulf> +		--target=$(GNU_TARGET_NAME) \
+ ulf> +		--host=$(GNU_TARGET_NAME) \
+ ulf> +		--build=$(GNU_HOST_NAME) \
+ ulf> +		--prefix=/usr \
+ ulf> +		--includedir=/usr/include  \
+ ulf> +		--libdir=/usr/lib \
+ ulf> +		--exec-prefix=/ \
+
+Shouldn't that be /usr?
+
+ ulf> +		--bindir=/usr/bin \
+ ulf> +		--sbindir=/usr/sbin \
+ ulf> +		--libexecdir=/usr/lib \
+ ulf> +		--sysconfdir=/etc \
+
+And all of those should get set automatically by prefix.
+
+ ulf> +		--with-config-file-path=/etc \
+ ulf> +		--datadir=/usr/share/misc \
+ ulf> +		--localstatedir=/var \
+ ulf> +		--mandir=/usr/man \
+ ulf> +		--infodir=/usr/info \
+ ulf> +		--disable-gnutls \
+ ulf> +		--disable-gssapi \
+ ulf> +		$(CUPS_CONF_OPT) \
+ ulf> +		)
+ ulf>  	touch $@
+ 
+
+-- 
+Bye, Peter Korsgaard
