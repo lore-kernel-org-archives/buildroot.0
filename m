@@ -1,7 +1,7 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sun, 25 Jan 2009 23:44:56 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/microperl
-Message-ID: <20090125234456.42F3E76D28@busybox.osuosl.org>
+Date: Sun, 25 Jan 2009 23:47:49 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/liboil
+Message-ID: <20090125234749.B772976D28@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,27 +9,29 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2009-01-25 23:44:53 +0000 (Sun, 25 Jan 2009)
-New Revision: 25032
+Date: 2009-01-25 23:47:47 +0000 (Sun, 25 Jan 2009)
+New Revision: 25033
 
 Log:
-Avoid the use of subshell in microperl
+Add explanation why examples are disabled for liboil
 
 Modified:
-   trunk/buildroot/package/microperl/microperl.mk
+   trunk/buildroot/package/liboil/liboil.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/microperl/microperl.mk
+Modified: trunk/buildroot/package/liboil/liboil.mk
 ===================================================================
---- trunk/buildroot/package/microperl/microperl.mk	2009-01-25 23:42:09 UTC (rev 25031)
-+++ trunk/buildroot/package/microperl/microperl.mk	2009-01-25 23:44:53 UTC (rev 25032)
-@@ -23,7 +23,7 @@
- 
- $(MICROPERL_DIR)/.source: $(DL_DIR)/$(MICROPERL_SOURCE)
- 	$(MICROPERL_CAT) $(DL_DIR)/$(MICROPERL_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	(cd $(MICROPERL_DIR); chmod -R u+w *)
-+	chmod -R u+w $(MICROPERL_DIR)
+--- trunk/buildroot/package/liboil/liboil.mk	2009-01-25 23:44:53 UTC (rev 25032)
++++ trunk/buildroot/package/liboil/liboil.mk	2009-01-25 23:47:47 UTC (rev 25033)
+@@ -45,6 +45,10 @@
+ 	rm -f $(TARGET_DIR)/usr/bin/oil-bugreport
  	touch $@
  
- $(MICROPERL_DIR)/.host_configured: $(MICROPERL_DIR)/.source
++
++# Disable some examples that will break the build.
++# There are sveral more that can be removed
++# by someone with time over.
+ $(LIBOIL_HOOK_POST_CONFIGURE):
+ 	$(SED) 's/uberopt//g' $(LIBOIL_DIR)/examples/Makefile
+ 	$(SED) 's/work//g' $(LIBOIL_DIR)/examples/Makefile
