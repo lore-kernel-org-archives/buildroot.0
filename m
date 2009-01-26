@@ -1,14 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 26 Jan 2009 06:58:11 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
-In-Reply-To: <1232925876.2298.48.camel@elrond.atmel.com> (Ulf Samuelsson's
-	message of "Mon\, 26 Jan 2009 00\:24\:36 +0100")
-References: <20090125214834.783FA76D28@busybox.osuosl.org>
-	<871vurdpc6.fsf@macbook.be.48ers.dk>
-	<1232921341.2298.18.camel@elrond.atmel.com>
-	<200901260012.25169.markus.heidelberg@web.de>
-	<1232925876.2298.48.camel@elrond.atmel.com>
-Message-ID: <87ocxud2x8.fsf@macbook.be.48ers.dk>
+Date: Mon, 26 Jan 2009 07:01:56 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/popt
+In-Reply-To: <1232926121.2298.52.camel@elrond.atmel.com> (Ulf Samuelsson's
+	message of "Mon\, 26 Jan 2009 00\:28\:41 +0100")
+References: <20090125205100.1BBE176D28@busybox.osuosl.org>
+	<87ljszdrqv.fsf@macbook.be.48ers.dk>
+	<1232926121.2298.52.camel@elrond.atmel.com>
+Message-ID: <87k58id2qz.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,16 +15,19 @@ To: buildroot@busybox.net
 
 >>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 
- Ulf> m?n 2009-01-26 klockan 00:12 +0100 skrev Markus Heidelberg:
- >> Ulf Samuelsson, 25.01.2009:
- >> > In fact, with this error handling it might make sense
- >> > to remove the configuration possibility altogether.
- >> 
- >> By no means! I have Qt installed, but never use xconfig.
+ >> What's wrong with := ?
 
- Ulf> OK, The SHELL variable will ensure that everyone has a choice.
+ Ulf> 90%+ of the Autotools packages use "=" and the rest use ":="
+ Ulf> when I did a quick grep
 
-And the default should be menuconfig, not xconfig.
+ Ulf> Feel free to argue pro/con.
+
+They are basic variables. We normally use := where possible for
+performance reasons and to not have surprises later, but I know the
+Makefile.autotoos.in "style" is = instead.
+
+Just leave it for now, but please stick "cleanups" in seperate commits
+from funcional changes.
 
 -- 
 Bye, Peter Korsgaard
