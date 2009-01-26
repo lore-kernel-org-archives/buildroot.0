@@ -1,28 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 26 Jan 2009 21:10:32 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libcgicc
-In-Reply-To: <1232996634.2298.98.camel@elrond.atmel.com> (Ulf Samuelsson's
-	message of "Mon\, 26 Jan 2009 20\:03\:54 +0100")
-References: <20090121002712.88E7B77099@busybox.osuosl.org>
-	<874oztuqjg.fsf@macbook.be.48ers.dk>
-	<87myde6pj8.fsf@macbook.be.48ers.dk>
-	<1232996634.2298.98.camel@elrond.atmel.com>
-Message-ID: <878wox6d6v.fsf@macbook.be.48ers.dk>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Mon, 26 Jan 2009 20:17:08 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
+Message-ID: <20090126201708.B4FD677458@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
+Author: ulf
+Date: 2009-01-26 20:17:06 +0000 (Mon, 26 Jan 2009)
+New Revision: 25065
 
- Peter> Why are we building demos in the first place?
- >> 
- >> Ping?
+Log:
+Replace BUILDROOT_KERNEL_CONFIG_METHOD environment variable with BUILDROOT_USE_XWINDOWS
 
- Ulf> Feel free to remove them.
+Modified:
+   trunk/buildroot/target/linux/Makefile.in.advanced
 
-Done.
 
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/target/linux/Makefile.in.advanced
+===================================================================
+--- trunk/buildroot/target/linux/Makefile.in.advanced	2009-01-26 19:42:47 UTC (rev 25064)
++++ trunk/buildroot/target/linux/Makefile.in.advanced	2009-01-26 20:17:06 UTC (rev 25065)
+@@ -110,8 +110,8 @@
+ endif
+ 
+ # Override config method with shell variable
+-ifneq ($(BUILDROOT_KERNEL_CONFIG_METHOD),)
+-KERNEL_CONFIG_METHOD:=$(strip $(subst ",,$(BUILDROOT_KERNEL_CONFIG_METHOD)))
++ifneq ($(BUILDROOT_USE_XWINDOWS),)
++KERNEL_CONFIG_METHOD:=xconfig
+ #"))
+ else
+ KERNEL_CONFIG_METHOD:=$(strip $(subst ",,$(BR2_KERNEL_CONFIG_METHOD)))
