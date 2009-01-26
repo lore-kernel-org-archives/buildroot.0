@@ -1,34 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 26 Jan 2009 15:02:11 +0100
-Subject: [Buildroot] Error encountered while doing make after adding
-	u-boot
-In-Reply-To: <20090126144012.4e62179b@hcegtvedt> (Hans-Christian Egtvedt's
-	message of "Mon\, 26 Jan 2009 14\:40\:12 +0100")
-References: <8ebba8c20901260506t271f675avd114aefdf82be711@mail.gmail.com>
-	<20090126144012.4e62179b@hcegtvedt>
-Message-ID: <87wsci88t8.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Mon, 26 Jan 2009 14:04:11 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/u-boot
+Message-ID: <20090126140412.5620C768D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Hans-Christian" == Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> writes:
+Author: jacmet
+Date: 2009-01-26 14:04:10 +0000 (Mon, 26 Jan 2009)
+New Revision: 25050
 
- Hans-Christian> On Mon, 26 Jan 2009 18:36:16 +0530
- Hans-Christian> Mitesh Gupta <guptamitesh@gmail.com> wrote:
+Log:
+u-boot: mark 2008.10 version as recent
 
- Hans-Christian> <snipp>
+Modified:
+   trunk/buildroot/target/u-boot/Config.in
 
- >> make[1]: Entering directory
- >> `/mnt/rootfs/buildroot/project_build_i686/uclibc/u-boot-2008.10'
- >> make[1]: *** No rule to make target `_config'.  Stop.
 
- Hans-Christian> You need to set the variable BR2_TARGET_UBOOT_BOARDNAME.
-
-Why is it again we don't default to $(PROJECT) for this?
-
-This BOARD_NAME variable seems to be an ARM/Atmel specific thing.
-
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/target/u-boot/Config.in
+===================================================================
+--- trunk/buildroot/target/u-boot/Config.in	2009-01-26 11:46:44 UTC (rev 25049)
++++ trunk/buildroot/target/u-boot/Config.in	2009-01-26 14:04:10 UTC (rev 25050)
+@@ -22,6 +22,7 @@
+ 
+ config BR2_TARGET_UBOOT_2008_10
+ 	bool "u-boot-2008.10"
++	depends on BR2_DEPRECATED || BR2_RECENT
+ 
+ config BR2_TARGET_UBOOT_1_3_4
+ 	bool "u-boot-1.3.4"
