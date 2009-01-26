@@ -1,37 +1,42 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 26 Jan 2009 19:49:22 +0100
-Subject: [Buildroot] 2009.02-rc2 released
-In-Reply-To: <497E0152.9040403@gmail.com> (Robert Nelson's message of "Mon\,
-	26 Jan 2009 12\:30\:42 -0600")
-References: <87skn9iv5w.fsf@macbook.be.48ers.dk> <497DF1CC.2010404@gmail.com>
-	<873af66k0f.fsf@macbook.be.48ers.dk> <497E0152.9040403@gmail.com>
-Message-ID: <87y6wx6gy5.fsf@macbook.be.48ers.dk>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Mon, 26 Jan 2009 20:01:02 +0100
+Subject: [Buildroot] svn commit:
+	trunk/buildroot/package:	multimedia/alsa-lib python
+In-Reply-To: <87vds26pot.fsf@macbook.be.48ers.dk>
+References: <20090117001907.6679477587@busybox.osuosl.org>
+	<87skni2wrd.fsf@macbook.be.48ers.dk>
+	<87vds26pot.fsf@macbook.be.48ers.dk>
+Message-ID: <1232996462.2298.93.camel@elrond.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Robert" == Robert Nelson <robert.nelson.work@gmail.com> writes:
+m?n 2009-01-26 klockan 16:40 +0100 skrev Peter Korsgaard:
+> >>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
+> 
+>  ulf> http://www.alsa-project.org/
+>  ulf> +
+>  ulf> +config BR2_PACKAGE_ALSA_LIB_PYTHON
+>  ulf> +	bool "Python support for alsa-lib"
+>  ulf> +	depends on BR2_PACKAGE_ALSA_LIB
+>  ulf> +	select BR2_PACKAGE_PYTHON
+> 
+>  Peter> It would probably be goodt to add a 'default BR2_PACKAGE_PYTHON' line,
+>  Peter> so it defaults to enabled if you have python support, and false
+>  Peter> otherwise.
+> 
+>  Peter> Alternatively it should depend on BR2_PACKAGE_PYTHON and just be
+>  Peter> default y, as it's probably pretty unlikely someone wants python
+>  Peter> support in alsa without having python enabled in the first place.
+> 
+>  Peter> The 2nd option seems cleanest to me, what do you think?
+> 
 
- >> That's a known issue. We don't (yet) build a host version of glib, so
- >> you need to have the the glib development package (something like
- >> libglib2.0-dev) installed.
- >> 
- >> I'll fix the tree to atleast give you a clearer error message if you
- >> don't have a host glib-genmarshal.
+I think feedback was that people would like the option to build alsa-lib
+WITHOUT python support even if python was on the target.
+Adding python to alsa-lib means a fat library is added to the fs.
 
-
- Robert> Sorry for the noise guys... (ssh'd into the wrong test box.. didn't
- Robert> have libglib2.0-dev installed..)
-
-No problem, we should fix the host-glib issue sooner or later. I
-checked in a test for it in r25057.
-
- Robert> Currently rebuilding the avr32 targets... (I have ngw100's and
- Robert> stk1000's I can test here..)
-
-Great.
-
--- 
-Bye, Peter Korsgaard
+BR
+Ulf Samuelsson
