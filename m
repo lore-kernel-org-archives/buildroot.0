@@ -1,34 +1,58 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 26 Jan 2009 10:41:11 +0100
-Subject: [Buildroot] [PATCH 2/2] mplayer: add -fomit-frame-pointer for
-	i386
-In-Reply-To: <200901261029.00769.markus.heidelberg@web.de> (Markus
-	Heidelberg's message of "Mon\, 26 Jan 2009 10\:29\:00 +0100")
-References: <200901261016.20373.markus.heidelberg@web.de>
-	<87zlhea0ai.fsf@macbook.be.48ers.dk>
-	<200901261029.00769.markus.heidelberg@web.de>
-Message-ID: <87vds29zgo.fsf@macbook.be.48ers.dk>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Mon, 26 Jan 2009 10:38:03 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/target: linux u-boot
+Message-ID: <20090126103804.AB33277458@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Markus" == Markus Heidelberg <markus.heidelberg@web.de> writes:
+Author: ulf
+Date: 2009-01-26 10:38:00 +0000 (Mon, 26 Jan 2009)
+New Revision: 25048
 
- >> That's unfortunately a link to the old (removed because of security
- >> breach) mantis tracker.
+Log:
+Revert bad patch to fix linux rebuild problem
 
- Markus> I thought so yes, is the new bugtracker already working?
+Modified:
+   trunk/buildroot/target/linux/Makefile.in.advanced
+   trunk/buildroot/target/u-boot/Makefile.in
 
-It is, but the old issues have not been migrated (and I'm afraid they
-never will).
 
- Markus> When entering bug id 4604 on bugs.busybox.net, I got the
- Markus> error "Bug #4604 does not exist.", so I kept this dead URL in
- Markus> the commit message for the sake of completeness.
+Changeset:
+Modified: trunk/buildroot/target/linux/Makefile.in.advanced
+===================================================================
+--- trunk/buildroot/target/linux/Makefile.in.advanced	2009-01-26 09:22:52 UTC (rev 25047)
++++ trunk/buildroot/target/linux/Makefile.in.advanced	2009-01-26 10:38:00 UTC (rev 25048)
+@@ -481,7 +481,7 @@
+ 	echo $(LINUX26_VERSION_PROBED) > $(PROJECT_BUILD_DIR)/.linux-version
+ 	echo LINUX_MODULES=`$(LINUX26_VERSION_PROBED)`
+ 
+-$(LINUX26_MKIMAGE_DIR)/mkimage:	$(MKIMAGE)
++$(LINUX26_MKIMAGE_DIR)/mkimage:	u-boot
+ 	mkdir -p $(LINUX26_MKIMAGE_DIR)
+ 	cp $(MKIMAGE) $(LINUX26_MKIMAGE_DIR)
+ 
 
-Ok - Thanks.
-
--- 
-Bye, Peter Korsgaard
+Modified: trunk/buildroot/target/u-boot/Makefile.in
+===================================================================
+--- trunk/buildroot/target/u-boot/Makefile.in	2009-01-26 09:22:52 UTC (rev 25047)
++++ trunk/buildroot/target/u-boot/Makefile.in	2009-01-26 10:38:00 UTC (rev 25048)
+@@ -22,6 +22,7 @@
+ U_BOOT_AUTOSCRIPT=$(BINARIES_DIR)/autoscript
+ 
+ U_BOOT_TARGETS:=$(BINARIES_DIR)/$(U_BOOT_BIN) $(U_BOOT_TOOLS)
++#U_BOOT_TARGETS:=$(BINARIES_DIR)/$(U_BOOT_BIN)
+ 
+ ifeq ($(strip $(subst ",,$(BR2_TARGET_UBOOT_DEFAULT_ENV))),y)
+ #"))
+@@ -289,7 +290,7 @@
+ #
+ #############################################################
+ ifeq ($(BR2_TARGET_UBOOT),y)
+-TARGETS+=u-boot
++TARGETS+=u-boot mkimage
+ endif
+ 
+ u-boot-status:
