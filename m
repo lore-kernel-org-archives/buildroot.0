@@ -1,57 +1,47 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon, 26 Jan 2009 19:10:42 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot:  package/libglib2
-Message-ID: <20090126191042.A65DE768D3@busybox.osuosl.org>
+From: Will Wagner <will_wagner@carallon.com>
+Date: Mon, 26 Jan 2009 19:12:20 +0000
+Subject: [Buildroot] alsa lib problem
+Message-ID: <497E0B14.8040801@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-01-26 19:10:41 +0000 (Mon, 26 Jan 2009)
-New Revision: 25058
+Hi All,
 
-Log:
-libglib2: move HOST_GLIB detection to glib package
+I have alsa-lib compiling for my arm target however aplay fails to work with the kernel 
+reporting:
 
-Makes more sense to have it here, and easier to change once we start
-building host-glib.
+ALSA sound/core/pcm_native.c:2587: unknown ioctl = 0x80184132
 
-Modified:
-   trunk/buildroot/Makefile
-   trunk/buildroot/package/libglib2/libglib2.mk
+Decoding this ioctl it is SNDRV_PCM_IOCTL_CHANNEL_INFO defined in asound.h.
 
+The reason it is not working is that the kernel and alsa-lib think that the 
+sndrv_pcm_channel_info struct is different sizes.
 
-Changeset:
-Modified: trunk/buildroot/Makefile
-===================================================================
---- trunk/buildroot/Makefile	2009-01-26 18:17:57 UTC (rev 25057)
-+++ trunk/buildroot/Makefile	2009-01-26 19:10:41 UTC (rev 25058)
-@@ -132,10 +132,7 @@
- HOSTLD:=$(shell which $(HOSTLD) || type -p $(HOSTLD) || echo ld)
- HOSTLN:=$(shell which $(HOSTLN) || type -p $(HOSTLN) || echo ln)
- HOSTNM:=$(shell which $(HOSTNM) || type -p $(HOSTNM) || echo nm)
--HOST_GLIB_BIN:=`dirname $(shell which glib-genmarshal || echo /usr/bin/glib-genmarshal)`
--HOST_GLIB:=$(shell dirname $(HOST_GLIB_BIN) || echo /usr)
- 
--
- ifndef CFLAGS_FOR_BUILD
- CFLAGS_FOR_BUILD:=-g -O2
- endif
+The definition in asound.h is:
 
-Modified: trunk/buildroot/package/libglib2/libglib2.mk
-===================================================================
---- trunk/buildroot/package/libglib2/libglib2.mk	2009-01-26 18:17:57 UTC (rev 25057)
-+++ trunk/buildroot/package/libglib2/libglib2.mk	2009-01-26 19:10:41 UTC (rev 25058)
-@@ -14,6 +14,10 @@
- LIBGLIB2_INSTALL_TARGET = YES
- LIBGLIB2_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
- 
-+# detect install prefix of host glib development stuff
-+HOST_GLIB_BIN:=`dirname $(shell which glib-genmarshal || echo /usr/bin/glib-genmarshal)`
-+HOST_GLIB:=$(shell dirname $(HOST_GLIB_BIN) || echo /usr)
-+
- LIBGLIB2_CONF_ENV =	\
- 		ac_cv_func_posix_getpwuid_r=yes glib_cv_stack_grows=no \
- 		glib_cv_uscore=no ac_cv_func_strtod=yes \
+struct sndrv_pcm_channel_info {
+	unsigned int channel;
+	off_t offset;			/* mmap offset */
+	unsigned int first;		/* offset to first sample in bits */
+	unsigned int step;		/* samples distance in bits */
+};
+
+The problem is that when compiling linux it thinks off_t is 4 bytes but it appears that 
+when compiling alsa-lib it thought it was 8 bytes. I assume this is because something in 
+the toolchain on the host PC or the alsa-lib build is wrong and it is picking up a define 
+from outside buildroot.
+
+Does this sound possible? How do I establish which definition it is using?
+
+Thanks,
+
+Will.
+-- 
+------------------------------------------------------------------------
+Will Wagner                                     will_wagner at carallon.com
+Development Manager                      Office Tel: +44 (0)20 7371 2032
+Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
+------------------------------------------------------------------------
