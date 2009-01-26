@@ -1,58 +1,38 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon, 26 Jan 2009 15:28:06 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/acpid
-Message-ID: <20090126152806.D6A9277458@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 26 Jan 2009 16:40:34 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package:
+	multimedia/alsa-lib python
+In-Reply-To: <87skni2wrd.fsf@macbook.be.48ers.dk> (Peter Korsgaard's message
+	of "Sat\, 17 Jan 2009 08\:54\:14 +0100")
+References: <20090117001907.6679477587@busybox.osuosl.org>
+	<87skni2wrd.fsf@macbook.be.48ers.dk>
+Message-ID: <87vds26pot.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-01-26 15:28:05 +0000 (Mon, 26 Jan 2009)
-New Revision: 25054
+>>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
 
-Log:
-acpid: remove unused legacy patches
+ ulf> http://www.alsa-project.org/
+ ulf> +
+ ulf> +config BR2_PACKAGE_ALSA_LIB_PYTHON
+ ulf> +	bool "Python support for alsa-lib"
+ ulf> +	depends on BR2_PACKAGE_ALSA_LIB
+ ulf> +	select BR2_PACKAGE_PYTHON
 
-As discussed on the list.
+ Peter> It would probably be goodt to add a 'default BR2_PACKAGE_PYTHON' line,
+ Peter> so it defaults to enabled if you have python support, and false
+ Peter> otherwise.
 
-Removed:
-   trunk/buildroot/package/acpid/acpid-sign-warning.patch
-   trunk/buildroot/package/acpid/acpid-socket-path.patch
+ Peter> Alternatively it should depend on BR2_PACKAGE_PYTHON and just be
+ Peter> default y, as it's probably pretty unlikely someone wants python
+ Peter> support in alsa without having python enabled in the first place.
 
+ Peter> The 2nd option seems cleanest to me, what do you think?
 
-Changeset:
-Deleted: trunk/buildroot/package/acpid/acpid-sign-warning.patch
-===================================================================
---- trunk/buildroot/package/acpid/acpid-sign-warning.patch	2009-01-26 14:49:37 UTC (rev 25053)
-+++ trunk/buildroot/package/acpid/acpid-sign-warning.patch	2009-01-26 15:28:05 UTC (rev 25054)
-@@ -1,11 +0,0 @@
----- acpid-1.0.4/ud_socket.c
--+++ acpid-1.0.4/ud_socket.c
--@@ -58,7 +58,7 @@ ud_accept(int listenfd, struct ucred *cr
-- 	while (1) {
-- 		int newsock = 0;
-- 		struct sockaddr_un cliaddr;
---		int len = sizeof(struct sockaddr_un);
--+		socklen_t len = sizeof(struct sockaddr_un);
-- 
-- 		newsock = accept(listenfd, (struct sockaddr *)&cliaddr, &len);
-- 		if (newsock < 0) {
+Ping?
 
-Deleted: trunk/buildroot/package/acpid/acpid-socket-path.patch
-===================================================================
---- trunk/buildroot/package/acpid/acpid-socket-path.patch	2009-01-26 14:49:37 UTC (rev 25053)
-+++ trunk/buildroot/package/acpid/acpid-socket-path.patch	2009-01-26 15:28:05 UTC (rev 25054)
-@@ -1,11 +0,0 @@
----- acpid-1.0.4/acpid.h
--+++ acpid-1.0.4/acpid.h
--@@ -32,7 +32,7 @@
-- #define ACPI_EVENTFILE		ACPI_PROCDIR "/event"
-- #define ACPI_CONFDIR		"/etc/acpi/events"
-- #define ACPI_LOGFILE		"/var/log/acpid"
---#define ACPI_SOCKETFILE		"/var/run/acpid.socket"
--+#define ACPI_SOCKETFILE		"/tmp/acpid.socket"
-- #define ACPI_SOCKETMODE		0666
-- #define ACPI_MAX_ERRS		5
-- 
+-- 
+Bye, Peter Korsgaard
