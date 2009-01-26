@@ -1,30 +1,29 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 26 Jan 2009 14:27:09 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package: argus bind
-	dmraid kismet libeXosip2 ltra etc...
-In-Reply-To: <20090126132754.64c458b2@hcegtvedt> (Hans-Christian Egtvedt's
-	message of "Mon\, 26 Jan 2009 13\:27\:54 +0100")
-References: <20090126003405.2EE7776D28@busybox.osuosl.org>
-	<873af6d219.fsf@macbook.be.48ers.dk>
-	<1232968874.2298.60.camel@elrond.atmel.com>
-	<87eiyq9s7r.fsf@macbook.be.48ers.dk>
-	<20090126132754.64c458b2@hcegtvedt>
-Message-ID: <8763k29p02.fsf@macbook.be.48ers.dk>
+From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
+Date: Mon, 26 Jan 2009 14:40:12 +0100
+Subject: [Buildroot] Error encountered while doing make after adding
+ u-boot
+In-Reply-To: <8ebba8c20901260506t271f675avd114aefdf82be711@mail.gmail.com>
+References: <8ebba8c20901260506t271f675avd114aefdf82be711@mail.gmail.com>
+Message-ID: <20090126144012.4e62179b@hcegtvedt>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Hans-Christian" == Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> writes:
+On Mon, 26 Jan 2009 18:36:16 +0530
+Mitesh Gupta <guptamitesh@gmail.com> wrote:
 
- >> HcE: Is the package list correct?
- >> 
+<snipp>
 
- Hans-Christian> I've not had any chance of running through what
- Hans-Christian> compiles and not, hence not able to work on it.
+> make[1]: Entering directory
+> `/mnt/rootfs/buildroot/project_build_i686/uclibc/u-boot-2008.10'
+> make[1]: *** No rule to make target `_config'.  Stop.
 
-Ok. Would it be possible to test that list before the release (Feb 6-ish)?
+You need to set the variable BR2_TARGET_UBOOT_BOARDNAME.
+
+<snipp>
 
 -- 
-Bye, Peter Korsgaard
+Best regards,
+Hans-Christian Egtvedt
