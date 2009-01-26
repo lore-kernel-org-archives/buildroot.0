@@ -1,85 +1,39 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 26 Jan 2009 22:05:20 +0000 (UTC)
-Subject: [Buildroot] [Bug 75] New: arm buildroot "unrecognized option" error
-Message-ID: <bug-75-163@https.bugs.busybox.net/>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Mon, 26 Jan 2009 23:19:49 +0100
+Subject: [Buildroot] target/device/Atmel kernel patches
+In-Reply-To: <871vup4ul9.fsf@macbook.be.48ers.dk>
+References: <87ab9d4w6j.fsf@macbook.be.48ers.dk>
+	<1233005366.2298.118.camel@elrond.atmel.com>
+	<871vup4ul9.fsf@macbook.be.48ers.dk>
+Message-ID: <1233008389.2298.129.camel@elrond.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=75
+m?n 2009-01-26 klockan 22:37 +0100 skrev Peter Korsgaard:
+> >>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
+> 
+>  >> Can I just delete anything older than 2.6.27?
+>  >> 
+>  Ulf> No, Just because you like to run with the latest kernel,
+>  Ulf> that view is not shared by everyone else.
+> 
+> Ok, so what patches can be removed? I take it that atleast *SOME* of
+> those 10 versions can go?
+> 
 
-              Host: pc
-            Target: arm
-             Build: Jan 26, 2009 daily buildroot
-           Summary: arm buildroot "unrecognized option" error
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: critical
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: craigdry at yahoo.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+I have customers still working on 2.6.22 ...
 
+I think you need to understand that some people
+are planning for 10-15 year lifetime of products.
+They do not neccessarily update the kernel very often.
+If they do, they are likely to juyst add tweaks to
+their kernel instead of upgrading to a new version.
 
-I am having the following problem:
+If you implement the patch downloading, there is
+very little reason to remove functionality.
 
-    1. I downloaded the latest buildroot to my Fedora Core 10 PC as follows:
-        svn co svn://uclibc.org/trunk/buildroot
-     2. Configure it by:
-        make menuconfig (I changed the target Architecture to "arm".  Then I
-exited and save the configuration file.  No other changes.)
-    3. do a build by entering:
-        make > make.log
-
-Unfortunately I get an "unrecognized option" error:
-
-TARGET_CPU_DEFAULT="" \
- HEADERS="auto-host.h ansidecl.h" DEFINES="" \
- /bin/sh /home/cdry/buildroot/toolchain_build_arm/gcc-4.3.2/gcc/mkconfig.sh
-bconfig.h
-/usr/lib/ccache/gcc  -c   -g -O2 -DIN_GCC -DCROSS_DIRECTORY_STRUCTURE  -W -Wall
--Wwrite-strings -Wstrict-prototypes -Wmissing-prototypes -Wold-style-definition
--Wmissing-format-attribute    -DHAVE_CONFIG_H -DGENERATOR_FILE -I. -Ibuild
--I/home/cdry/buildroot/toolchain_build_arm/gcc-4.3.2/gcc
--I/home/cdry/buildroot/toolchain_build_arm/gcc-4.3.2/gcc/build
--I/home/cdry/buildroot/toolchain_build_arm/gcc-4.3.2/gcc/../include
--I/home/cdry/buildroot/toolchain_build_arm/gcc-4.3.2/gcc/../libcpp/include
--I/home/cdry/buildroot/toolchain_build_arm/gmp/include
--I/home/cdry/buildroot/toolchain_build_arm/mpfr/include
--I/home/cdry/buildroot/toolchain_build_arm/gcc-4.3.2/gcc/../libdecnumber
--I/home/cdry/buildroot/toolchain_build_arm/gcc-4.3.2/gcc/../libdecnumber/dpd
--I../libdecnumber    -o build/genmodes.o
-/home/cdry/buildroot/toolchain_build_arm/gcc-4.3.2/gcc/genmodes.c
-/home/cdry/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-as:
-unrecognized option `-Qy'
-make[2]: *** [build/genmodes.o] Error 1
-make[2]: Leaving directory
-`/home/cdry/buildroot/toolchain_build_arm/gcc-4.3.2-initial/gcc'
-make[1]: *** [all-gcc] Error 2
-make[1]: Leaving directory
-`/home/cdry/buildroot/toolchain_build_arm/gcc-4.3.2-initial'
-make: ***
-[/home/cdry/buildroot/toolchain_build_arm/gcc-4.3.2-initial/.compiled] Error 2
-
-For the purpose of comparison, I tried the following:
-    1. got a fresh new buildroot from svn
-    2. make menuconfig (this time, I leave the architecture selection at i386. 
-I exit and save the config file.)
-    3. make > make.log
-    4. Runs to completion without error.
-
-So I see the problem for the "arm" architecture, but not for the "i386"
-architecture.
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+BR
+Ulf Samuelsson
