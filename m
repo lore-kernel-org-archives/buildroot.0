@@ -1,89 +1,47 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon, 26 Jan 2009 14:49:37 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/liboil
-Message-ID: <20090126144938.07E82768D3@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 26 Jan 2009 15:50:27 +0100
+Subject: [Buildroot] Error encountered while doing make after adding
+	u-boot
+In-Reply-To: <20090126153034.21798ced@hcegtvedt> (Hans-Christian Egtvedt's
+	message of "Mon\, 26 Jan 2009 15\:30\:34 +0100")
+References: <8ebba8c20901260506t271f675avd114aefdf82be711@mail.gmail.com>
+	<20090126144012.4e62179b@hcegtvedt>
+	<87wsci88t8.fsf@macbook.be.48ers.dk>
+	<20090126151732.7c6aa021@hcegtvedt>
+	<87skn687sf.fsf@macbook.be.48ers.dk>
+	<20090126153034.21798ced@hcegtvedt>
+Message-ID: <87ocxu86ks.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-01-26 14:49:37 +0000 (Mon, 26 Jan 2009)
-New Revision: 25053
+>>>>> "Hans-Christian" == Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> writes:
 
-Log:
-liboil: don't build examples
+ >> Naah, to much work as that's arch dependent. Then I would rather add a
+ >> big fat $(error) in the U-Boot Makefile.in if the thing evaluates to
+ >> nothing.
+ >> 
 
-Added:
-   trunk/buildroot/package/liboil/liboil-0.3.15-arm-vfp.patch
+ Hans-Christian> ... I think checking for an empty config name is
+ Hans-Christian> better, and print an appropriate message before
+ Hans-Christian> quiting. If the PROJECT happens to work, that still
+ Hans-Christian> might not be the u-boot config the user wants, and
+ Hans-Christian> he/she does not understand why u-boot does not work
+ Hans-Christian> afterwards.
 
-Removed:
-   trunk/buildroot/package/liboil/liboil-vfp.patch
+Ok, done - It gives something like:
 
-Modified:
-   trunk/buildroot/package/liboil/liboil.mk
+target/u-boot/Makefile.in:287: *** NO U-Boot board name set. Check your BR2_TARGET_UBOOT_BOARDNAME setting.  Stop.
 
+That seems pretty clear to me.
 
-Changeset:
-Copied: trunk/buildroot/package/liboil/liboil-0.3.15-arm-vfp.patch (from rev 25052, trunk/buildroot/package/liboil/liboil-vfp.patch)
-===================================================================
---- trunk/buildroot/package/liboil/liboil-0.3.15-arm-vfp.patch	                        (rev 0)
-+++ trunk/buildroot/package/liboil/liboil-0.3.15-arm-vfp.patch	2009-01-26 14:49:37 UTC (rev 25053)
-@@ -0,0 +1,16 @@
-+diff --git a/configure.ac b/configure.ac
-+index 06a0ac9..b8d1640 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -158,7 +158,10 @@ if test x$HAVE_GCC_ASM = xyes -a x$HAVE_POWERPC = xyes ; then
-+     true)
-+ fi
-+ 
-+-if test x$HAVE_GCC_ASM = xyes -a x$HAVE_ARM = xyes ; then
-++AC_ARG_ENABLE(vfp,
-++  AC_HELP_STRING([--enable-vfp],[compile with Vector Floating-point unit support]),
-++  enable_vfp=$enableval,enable_vfp=yes)
-++if test "x$enable-vfp" = xyes -a x$HAVE_GCC_ASM = xyes -a x$HAVE_ARM = xyes; then
-+   AS_COMPILER_FLAG(["-Wa,-mfpu=vfp"],
-+     [LIBOIL_CFLAGS="$LIBOIL_CFLAGS -mfpu=vfp"],
-+     true)
+ Hans-Christian> And in most instances the PROJECT name will not match
+ Hans-Christian> a U-Boot config.
 
-Deleted: trunk/buildroot/package/liboil/liboil-vfp.patch
-===================================================================
---- trunk/buildroot/package/liboil/liboil-vfp.patch	2009-01-26 14:49:19 UTC (rev 25052)
-+++ trunk/buildroot/package/liboil/liboil-vfp.patch	2009-01-26 14:49:37 UTC (rev 25053)
-@@ -1,16 +0,0 @@
--diff --git a/configure.ac b/configure.ac
--index 06a0ac9..b8d1640 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -158,7 +158,10 @@ if test x$HAVE_GCC_ASM = xyes -a x$HAVE_POWERPC = xyes ; then
--     true)
-- fi
-- 
---if test x$HAVE_GCC_ASM = xyes -a x$HAVE_ARM = xyes ; then
--+AC_ARG_ENABLE(vfp,
--+  AC_HELP_STRING([--enable-vfp],[compile with Vector Floating-point unit support]),
--+  enable_vfp=$enableval,enable_vfp=yes)
--+if test "x$enable-vfp" = xyes -a x$HAVE_GCC_ASM = xyes -a x$HAVE_ARM = xyes; then
--   AS_COMPILER_FLAG(["-Wa,-mfpu=vfp"],
--     [LIBOIL_CFLAGS="$LIBOIL_CFLAGS -mfpu=vfp"],
--     true)
+Maybe, in the kind of setup I'm normally doing it does, but maybe not
+for others.
 
-Modified: trunk/buildroot/package/liboil/liboil.mk
-===================================================================
---- trunk/buildroot/package/liboil/liboil.mk	2009-01-26 14:49:19 UTC (rev 25052)
-+++ trunk/buildroot/package/liboil/liboil.mk	2009-01-26 14:49:37 UTC (rev 25053)
-@@ -44,12 +44,3 @@
- 	# Remove useless bugreport program from the target
- 	rm -f $(TARGET_DIR)/usr/bin/oil-bugreport
- 	touch $@
--
--
--# Disable some examples that will break the build.
--# There are sveral more that can be removed
--# by someone with time over.
--$(LIBOIL_HOOK_POST_CONFIGURE):
--	$(SED) 's/uberopt//g' $(LIBOIL_DIR)/examples/Makefile
--	$(SED) 's/work//g' $(LIBOIL_DIR)/examples/Makefile
--
+-- 
+Bye, Peter Korsgaard
