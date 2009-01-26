@@ -1,50 +1,29 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon, 26 Jan 2009 16:25:18 +0000 (UTC)
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 26 Jan 2009 17:27:44 +0100
 Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
-Message-ID: <20090126162519.2B9DA768D3@busybox.osuosl.org>
+In-Reply-To: <20090125214834.783FA76D28@busybox.osuosl.org> (ulf@uclibc.org's
+	message of "Sun\, 25 Jan 2009 21\:48\:34 +0000 \(UTC\)")
+References: <20090125214834.783FA76D28@busybox.osuosl.org>
+Message-ID: <877i4i6ni7.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-01-26 16:25:17 +0000 (Mon, 26 Jan 2009)
-New Revision: 25056
+>>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
 
-Log:
-linux/advanced: default to make menuconfig
+ ulf> Author: ulf
+ ulf> Date: 2009-01-25 21:48:33 +0000 (Sun, 25 Jan 2009)
+ ulf> New Revision: 25024
 
-Modified:
-   trunk/buildroot/target/linux/Config.in.advanced
-   trunk/buildroot/target/linux/Makefile.in.advanced
+ ulf> Log:
 
+ ulf> Use new SHELL variable BUILDROOT_KERNEL_CONFIG_METHOD
+ ulf> which will override selection between xconfig and menuconfig
 
-Changeset:
-Modified: trunk/buildroot/target/linux/Config.in.advanced
-===================================================================
---- trunk/buildroot/target/linux/Config.in.advanced	2009-01-26 15:45:32 UTC (rev 25055)
-+++ trunk/buildroot/target/linux/Config.in.advanced	2009-01-26 16:25:17 UTC (rev 25056)
-@@ -406,7 +406,7 @@
- 
- choice
- 	prompt "Preferred config tool"
--	default BR2_MAKE_XCONFIG
-+	default BR2_MAKE_MENUCONFIG
- 	depends on BR2_PACKAGE_LINUX_USE_XCONFIG
- 	help
- 	  Define the preferred tool to invoke if a configuration is invalid
+Let's not add any more undocumented command line options for such
+special cases like this.
 
-Modified: trunk/buildroot/target/linux/Makefile.in.advanced
-===================================================================
---- trunk/buildroot/target/linux/Makefile.in.advanced	2009-01-26 15:45:32 UTC (rev 25055)
-+++ trunk/buildroot/target/linux/Makefile.in.advanced	2009-01-26 16:25:17 UTC (rev 25056)
-@@ -117,7 +117,7 @@
- KERNEL_CONFIG_METHOD:=$(strip $(subst ",,$(BR2_KERNEL_CONFIG_METHOD)))
- #"))
- ifeq ($(KERNEL_CONFIG_METHOD),)
--KERNEL_CONFIG_METHOD:=xconfig
-+KERNEL_CONFIG_METHOD:=menuconfig
- endif
- endif
- # -----------------------------------------------------------------------------
+-- 
+Bye, Peter Korsgaard
