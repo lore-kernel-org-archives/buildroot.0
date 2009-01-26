@@ -1,52 +1,39 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 26 Jan 2009 06:54:13 +0100
-Subject: [Buildroot] 2009.02-rc2 released
-In-Reply-To: <497CFB4F.2010402@iwtech.com.au> (Paul Jones's message of "Mon\,
-	26 Jan 2009 10\:52\:47 +1100")
-References: <3B941116898CDA489B91563DEF88F4B607F8DB@iwt-server.iwt.local>
-	<1232868757.5311.170.camel@elrond.atmel.com>
-	<87zlhffs9j.fsf@macbook.be.48ers.dk>
-	<1232918236.2298.9.camel@elrond.atmel.com>
-	<8763k3dqi3.fsf@macbook.be.48ers.dk>
-	<1232922252.2298.34.camel@elrond.atmel.com>
-	<497CFB4F.2010402@iwtech.com.au>
-Message-ID: <87wscid33u.fsf@macbook.be.48ers.dk>
+Date: Mon, 26 Jan 2009 06:56:39 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/xfsprogs
+In-Reply-To: <20090126001204.39959775D3@busybox.osuosl.org> (ulf@uclibc.org's
+	message of "Mon\, 26 Jan 2009 00\:12\:03 +0000 \(UTC\)")
+References: <20090126001204.39959775D3@busybox.osuosl.org>
+Message-ID: <87skn6d2zs.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Paul" == Paul Jones <paul.jones@iwtech.com.au> writes:
+>>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
 
- Paul> Ulf Samuelsson wrote:
- >> 
- >> Now it works, regardless if you have X or not.
- >> so we and the user do not have to choose.
- >> 
- >> If X is available you have a better experience.
+ ulf> Author: ulf
+ ulf> Date: 2009-01-26 00:12:02 +0000 (Mon, 26 Jan 2009)
+ ulf> New Revision: 25035
 
- Paul> I should just point out that my build system is a Gentoo64
- Paul> server via SSH, my desktop is usually Windows. I'd much prefer
- Paul> to use X myself but don't relay have a choice.
+ ulf> Log:
+ ulf> Deprecate xfsprogs, no support for XFS in Buildroot
 
-Exactly. We've heard from other people using a similar setup.
+But that doesn't mean people aren't using it for initramfs'es needing
+xfs support. It it builds and works and there isn't an alternative
+implementation in busybox, then I don't see any reason to deprecate
+it.
+ ulf> +++ trunk/buildroot/package/xfsprogs/xfsprogs.mk	2009-01-26 00:12:02 UTC (rev 25035)
+ ulf> @@ -46,7 +46,7 @@
+ ulf>  		--host=$(GNU_TARGET_NAME) \
+ ulf>  		--build=$(GNU_HOST_NAME) \
+ ulf>  		--prefix=/usr \
+ ulf> -		--exec-prefix=/ \
+ ulf> +		--exec-prefix=/usr \
 
-Menuconfig obviously works as we use it in buildroot, so that's the
-safe choice for kernel config as well.
-
- Paul> As a newbie here I tend to need as much help as I can get! When
- Paul> the build crashed and complained about QT missing I thought I'd
- Paul> accidentally added some X package into buildroot, it was only
- Paul> after a few hours of doing step by step builds that I figured
- Paul> out it must have been running xconfig rather than
- Paul> menuconfig. Once I disabled the kernel it compiled first go,
- Paul> which is still a lot further than I got when I first tried
- Paul> buildroot a few months ago!
-
- Paul> Keep up the good work guys!
-
-Thanks.
+Please don't check in unrelated stuff in the same commit (atleast
+without describing them in the commit msg)
 
 -- 
 Bye, Peter Korsgaard
