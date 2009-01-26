@@ -1,29 +1,70 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 26 Jan 2009 17:27:44 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
-In-Reply-To: <20090125214834.783FA76D28@busybox.osuosl.org> (ulf@uclibc.org's
-	message of "Sun\, 25 Jan 2009 21\:48\:34 +0000 \(UTC\)")
-References: <20090125214834.783FA76D28@busybox.osuosl.org>
-Message-ID: <877i4i6ni7.fsf@macbook.be.48ers.dk>
+From: Robert Nelson <robert.nelson.work@gmail.com>
+Date: Mon, 26 Jan 2009 11:24:28 -0600
+Subject: [Buildroot] 2009.02-rc2 released
+In-Reply-To: <87skn9iv5w.fsf@macbook.be.48ers.dk>
+References: <87skn9iv5w.fsf@macbook.be.48ers.dk>
+Message-ID: <497DF1CC.2010404@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+On 1/23/2009 3:12 PM, Peter Korsgaard wrote:
+> Hi,
+>
+> Another week, another release candidate. I have released
+> buildroot-2009.02-rc2:
+>
+> http://buildroot.uclibc.org/downloads/buildroot-2009.02-rc2.tar.gz
+>
+> or
+>
+> http://buildroot.uclibc.org/downloads/buildroot-2009.02-rc2.tar.bz2
+>
+> Please give it a spin and report back issues to the mailing list or
+> the bug tracker.
+>
+> I think we're pretty well on track to do a final release in 2 weeks.
+>
+>    
 
- ulf> Author: ulf
- ulf> Date: 2009-01-25 21:48:33 +0000 (Sun, 25 Jan 2009)
- ulf> New Revision: 25024
+Hi Peter & Ulf,
 
- ulf> Log:
+Was just able to test rc-2 for avr32 (atngw100_defconfig and friends)
 
- ulf> Use new SHELL variable BUILDROOT_KERNEL_CONFIG_METHOD
- ulf> which will override selection between xconfig and menuconfig
+default atngw100_defconfig is failling at this point in rc2...
 
-Let's not add any more undocumented command line options for such
-special cases like this.
+log***************
+make[4]: Entering directory 
+`/media/mirror/testing/buildroot-2009.02-rc2/build_avr32/libglib2-2.16.6/gobject'
+make[4]: `glib-genmarshal' is up to date.
+make[4]: Leaving directory 
+`/media/mirror/testing/buildroot-2009.02-rc2/build_avr32/libglib2-2.16.6/gobject'
+echo "#ifndef __G_MARSHAL_H__" > xgen-gmh \
+&& echo "#define __G_MARSHAL_H__" >> xgen-gmh \
+&& /usr/bin/glib-genmarshal --nostdinc --prefix=g_cclosure_marshal 
+./gmarshal.list --header >> xgen-gmh \
+&& echo "#endif /* __G_MARSHAL_H__ */" >> xgen-gmh \
+&& (cmp -s xgen-gmh gmarshal.h 2>/dev/null || cp xgen-gmh gmarshal.h) \
+&& rm -f xgen-gmh xgen-gmh~ \
+&& echo timestamp > stamp-gmarshal.h
+/bin/sh: line 2: /usr/bin/glib-genmarshal: No such file or directory
+make[3]: *** [stamp-gmarshal.h] Error 127
+make[3]: Leaving directory 
+`/media/mirror/testing/buildroot-2009.02-rc2/build_avr32/libglib2-2.16.6/gobject'
+make[2]: *** [all-recursive] Error 1
+make[2]: Leaving directory 
+`/media/mirror/testing/buildroot-2009.02-rc2/build_avr32/libglib2-2.16.6'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory 
+`/media/mirror/testing/buildroot-2009.02-rc2/build_avr32/libglib2-2.16.6'
+make: *** 
+[/media/mirror/testing/buildroot-2009.02-rc2/build_avr32/libglib2-2.16.6/.stamp_built] 
+Error 2
+
+Regards,
 
 -- 
-Bye, Peter Korsgaard
+Robert Nelson
+http://www.rcn-ee.com/
