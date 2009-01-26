@@ -1,31 +1,126 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 26 Jan 2009 21:30:27 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
-In-Reply-To: <20090126201708.B4FD677458@busybox.osuosl.org> (ulf@uclibc.org's
-	message of "Mon\, 26 Jan 2009 20\:17\:08 +0000 \(UTC\)")
-References: <20090126201708.B4FD677458@busybox.osuosl.org>
-Message-ID: <871vup6c9o.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Mon, 26 Jan 2009 21:02:16 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/binutils:
+	2.14.90.0.8 2.15.94.0.2.2 2.16.1 2.16.90 etc...
+Message-ID: <20090126210216.70A9E7672B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+Author: jacmet
+Date: 2009-01-26 21:02:15 +0000 (Mon, 26 Jan 2009)
+New Revision: 25067
 
- ulf> Author: ulf
- ulf> Date: 2009-01-26 20:17:06 +0000 (Mon, 26 Jan 2009)
- ulf> New Revision: 25065
+Log:
+toolchain/binutils: remove ancient (and unused) 2.14/15/16/17 patches
 
- ulf> Log:
- ulf> Replace BUILDROOT_KERNEL_CONFIG_METHOD environment variable with BUILDROOT_USE_XWINDOWS
+Removed:
+   trunk/buildroot/toolchain/binutils/2.14.90.0.8/001-debian.patch
+   trunk/buildroot/toolchain/binutils/2.14.90.0.8/100-uclibc-conf.patch
+   trunk/buildroot/toolchain/binutils/2.14.90.0.8/210-cflags.patch
+   trunk/buildroot/toolchain/binutils/2.14.90.0.8/400-mips-ELF_MAXPAGESIZE-4K.patch
+   trunk/buildroot/toolchain/binutils/2.14.90.0.8/600-arm-textrel.patch
+   trunk/buildroot/toolchain/binutils/2.15.94.0.2.2/100-uclibc-conf.patch
+   trunk/buildroot/toolchain/binutils/2.15.94.0.2.2/210-cflags.patch
+   trunk/buildroot/toolchain/binutils/2.15.94.0.2.2/300-001_ld_makefile_patch.patch
+   trunk/buildroot/toolchain/binutils/2.15.94.0.2.2/300-006_better_file_error.patch
+   trunk/buildroot/toolchain/binutils/2.15.94.0.2.2/300-012_check_ldrunpath_length.patch
+   trunk/buildroot/toolchain/binutils/2.15.94.0.2.2/300-120_mips_xgot_multigot_workaround.patch
+   trunk/buildroot/toolchain/binutils/2.15.94.0.2.2/400-mips-ELF_MAXPAGESIZE-4K.patch
+   trunk/buildroot/toolchain/binutils/2.15.94.0.2.2/sh-flags-off-by-one.patch
+   trunk/buildroot/toolchain/binutils/2.16.1/100-uclibc-conf.patch
+   trunk/buildroot/toolchain/binutils/2.16.1/110-uclibc-libtool-conf.patch
+   trunk/buildroot/toolchain/binutils/2.16.1/300-001_ld_makefile_patch.patch
+   trunk/buildroot/toolchain/binutils/2.16.1/300-006_better_file_error.patch
+   trunk/buildroot/toolchain/binutils/2.16.1/300-012_check_ldrunpath_length.patch
+   trunk/buildroot/toolchain/binutils/2.16.1/400-mips-ELF_MAXPAGESIZE-4K.patch
+   trunk/buildroot/toolchain/binutils/2.16.1/sh-flags-off-by-one.patch
+   trunk/buildroot/toolchain/binutils/2.16.90.0.3/100-uclibc-conf.patch
+   trunk/buildroot/toolchain/binutils/2.16.90.0.3/300-001_ld_makefile_patch.patch
+   trunk/buildroot/toolchain/binutils/2.16.90.0.3/300-006_better_file_error.patch
+   trunk/buildroot/toolchain/binutils/2.16.90.0.3/300-012_check_ldrunpath_length.patch
+   trunk/buildroot/toolchain/binutils/2.16.90.0.3/400-mips-ELF_MAXPAGESIZE-4K.patch
+   trunk/buildroot/toolchain/binutils/2.16.90.0.3/sh-flags-off-by-one.patch
+   trunk/buildroot/toolchain/binutils/2.16.91.0.5/100-uclibc-conf.patch
+   trunk/buildroot/toolchain/binutils/2.16.91.0.5/300-001_ld_makefile_patch.patch
+   trunk/buildroot/toolchain/binutils/2.16.91.0.5/300-006_better_file_error.patch
+   trunk/buildroot/toolchain/binutils/2.16.91.0.5/300-012_check_ldrunpath_length.patch
+   trunk/buildroot/toolchain/binutils/2.16.91.0.5/400-mips-ELF_MAXPAGESIZE-4K.patch
+   trunk/buildroot/toolchain/binutils/2.16.91.0.6/100-uclibc-conf.patch
+   trunk/buildroot/toolchain/binutils/2.16.91.0.6/300-001_ld_makefile_patch.patch
+   trunk/buildroot/toolchain/binutils/2.16.91.0.6/300-006_better_file_error.patch
+   trunk/buildroot/toolchain/binutils/2.16.91.0.6/300-012_check_ldrunpath_length.patch
+   trunk/buildroot/toolchain/binutils/2.16.91.0.6/400-mips-ELF_MAXPAGESIZE-4K.patch
+   trunk/buildroot/toolchain/binutils/2.16.91.0.7/100-uclibc-conf.patch
+   trunk/buildroot/toolchain/binutils/2.16.91.0.7/110-arm-eabi-conf.patch
+   trunk/buildroot/toolchain/binutils/2.16.91.0.7/300-001_ld_makefile_patch.patch
+   trunk/buildroot/toolchain/binutils/2.16.91.0.7/300-006_better_file_error.patch
+   trunk/buildroot/toolchain/binutils/2.16.91.0.7/300-012_check_ldrunpath_length.patch
+   trunk/buildroot/toolchain/binutils/2.16.91.0.7/400-mips-ELF_MAXPAGESIZE-4K.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.10/100-uclibc-conf.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.10/110-arm-eabi-conf.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.10/300-001_ld_makefile_patch.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.10/300-012_check_ldrunpath_length.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.12/100-makeinfo-version.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.12/100-uclibc-conf.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.12/110-arm-eabi-conf.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.12/300-001_ld_makefile_patch.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.12/300-012_check_ldrunpath_length.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.12/320-mips-elf-reloc-regression.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.14/100-uclibc-conf.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.14/110-arm-eabi-conf.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.14/300-001_ld_makefile_patch.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.14/300-012_check_ldrunpath_length.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.16/100-makeinfo-version.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.16/100-uclibc-conf.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.16/110-arm-eabi-conf.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.16/300-001_ld_makefile_patch.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.16/300-012_check_ldrunpath_length.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.2/100-uclibc-conf.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.2/110-arm-eabi-conf.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.2/300-001_ld_makefile_patch.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.2/300-006_better_file_error.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.2/300-012_check_ldrunpath_length.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.2/400-mips-ELF_MAXPAGESIZE-4K.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.3/100-uclibc-conf.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.3/110-arm-eabi-conf.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.3/300-001_ld_makefile_patch.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.3/300-006_better_file_error.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.3/300-012_check_ldrunpath_length.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.4/100-uclibc-conf.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.4/110-arm-eabi-conf.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.4/300-001_ld_makefile_patch.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.4/300-006_better_file_error.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.4/300-012_check_ldrunpath_length.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.5/100-uclibc-conf.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.5/110-arm-eabi-conf.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.5/300-001_ld_makefile_patch.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.5/300-006_better_file_error.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.5/300-012_check_ldrunpath_length.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.6/100-uclibc-conf.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.6/110-arm-eabi-conf.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.6/300-001_ld_makefile_patch.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.6/300-006_better_file_error.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.6/300-012_check_ldrunpath_length.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.7/100-uclibc-conf.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.7/110-arm-eabi-conf.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.7/300-001_ld_makefile_patch.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.7/300-012_check_ldrunpath_length.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.8/100-uclibc-conf.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.8/110-arm-eabi-conf.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.8/300-001_ld_makefile_patch.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.8/300-012_check_ldrunpath_length.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.9/100-uclibc-conf.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.9/110-arm-eabi-conf.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.9/300-001_ld_makefile_patch.patch
+   trunk/buildroot/toolchain/binutils/2.17.50.0.9/300-012_check_ldrunpath_length.patch
 
-Why are you doing this after I explicitly said:
 
-Let's not add any more undocumented command line options for such
-special cases like this.
+Changeset:
 
-Renaming doesn't make it any better.
+Sorry, the patch is too large to include (8393 lines).
+Please use ViewCVS to see it!
 
--- 
-Bye, Peter Korsgaard
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=25067
