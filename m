@@ -1,31 +1,60 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 26 Jan 2009 07:26:45 +0100
-Subject: [Buildroot] svn commit:
-	trunk/buildroot/package/multimedia/asterisk
-In-Reply-To: <20090126001613.9F458775F4@busybox.osuosl.org> (ulf@uclibc.org's
-	message of "Mon\, 26 Jan 2009 00\:16\:12 +0000 \(UTC\)")
-References: <20090126001613.9F458775F4@busybox.osuosl.org>
-Message-ID: <87tz7mbn16.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Mon, 26 Jan 2009 06:28:04 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/multimedia/asterisk
+Message-ID: <20090126062805.30F7377458@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+Author: jacmet
+Date: 2009-01-26 06:28:03 +0000 (Mon, 26 Jan 2009)
+New Revision: 25044
 
- ulf> Author: ulf
- ulf> Date: 2009-01-26 00:16:11 +0000 (Mon, 26 Jan 2009)
- ulf> New Revision: 25040
+Log:
+asterisk: mark as BROKEN and remove obsolete patch
 
- ulf> Log:
- ulf> Add comment on brokenness of Asterisk
+Asterisk seems to have moved to a auto* build system, so the .mk has to be
+more or less completely rewritten.
 
-The patch is easy to fix, just remove it. The bigger problem is that
-the build process has changed significantly since 1.2.0, so I'll mark
-it as broken instead.
+Removed:
+   trunk/buildroot/package/multimedia/asterisk/asterisk_no_res_ninit.patch
 
-If someone wants to fix it up, please do (and remove BROKEN).
+Modified:
+   trunk/buildroot/package/multimedia/asterisk/Config.in
 
--- 
-Bye, Peter Korsgaard
+
+Changeset:
+Modified: trunk/buildroot/package/multimedia/asterisk/Config.in
+===================================================================
+--- trunk/buildroot/package/multimedia/asterisk/Config.in	2009-01-26 06:13:06 UTC (rev 25043)
++++ trunk/buildroot/package/multimedia/asterisk/Config.in	2009-01-26 06:28:03 UTC (rev 25044)
+@@ -1,8 +1,6 @@
+-comment "asterisk	- is currently broken due to a bad patch"
+-	depends on BR2_PACKAGE_ASTERISK
+-
+ config BR2_PACKAGE_ASTERISK
+ 	bool "asterisk"
++	depends on BROKEN
+ 	select BR2_PACKAGE_NCURSES
+ 	select BR2_PACKAGE_ZLIB
+ 	depends on BR2_PACKAGE_OPENSSL
+
+Deleted: trunk/buildroot/package/multimedia/asterisk/asterisk_no_res_ninit.patch
+===================================================================
+--- trunk/buildroot/package/multimedia/asterisk/asterisk_no_res_ninit.patch	2009-01-26 06:13:06 UTC (rev 25043)
++++ trunk/buildroot/package/multimedia/asterisk/asterisk_no_res_ninit.patch	2009-01-26 06:28:03 UTC (rev 25044)
+@@ -1,12 +0,0 @@
+-diff -ur /tmp/asterisk-1.2.0-beta1/dns.c asterisk-1.2.0-beta1/dns.c
+---- /tmp/asterisk-1.2.0-beta1/dns.c	2005-08-14 04:23:33.000000000 +0200
+-+++ asterisk-1.2.0-beta1/dns.c	2005-08-31 09:42:36.000000000 +0200
+-@@ -157,7 +157,7 @@
+- 	return 0;
+- }
+- 
+--#if defined(res_ninit)
+-+#if (defined(res_ninit) && !defined(__UCLIBC__))
+- #define HAS_RES_NINIT
+- #else
+- AST_MUTEX_DEFINE_STATIC(res_lock);
