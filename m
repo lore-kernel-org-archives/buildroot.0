@@ -1,29 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 26 Jan 2009 07:17:22 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package: argus bind
-	dmraid kismet libeXosip2 ltra etc...
-In-Reply-To: <20090126003405.2EE7776D28@busybox.osuosl.org> (ulf@uclibc.org's
-	message of "Mon\, 26 Jan 2009 00\:34\:04 +0000 \(UTC\)")
-References: <20090126003405.2EE7776D28@busybox.osuosl.org>
-Message-ID: <873af6d219.fsf@macbook.be.48ers.dk>
+From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
+Date: Mon, 26 Jan 2009 07:18:22 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libsexy
+In-Reply-To: <20090124064414.E9EDE769CC@busybox.osuosl.org>
+References: <20090124064414.E9EDE769CC@busybox.osuosl.org>
+Message-ID: <20090126071822.32c42258@hcegtvedt>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+On Sat, 24 Jan 2009 06:44:14 +0000 (UTC)
+jacmet at uclibc.org wrote:
 
- ulf> Author: ulf
- ulf> Date: 2009-01-26 00:34:02 +0000 (Mon, 26 Jan 2009)
- ulf> New Revision: 25041
+<snipp>
 
- ulf> Log:
- ulf> Add help for packages without AVR32 support
+> --- trunk/buildroot/package/libsexy/Config.in	2009-01-24
+> 06:44:04 UTC (rev 24995) +++
+> trunk/buildroot/package/libsexy/Config.in	2009-01-24 06:44:13
+> UTC (rev 24996) @@ -1,6 +1,7 @@ config BR2_PACKAGE_LIBSEXY
+>  	bool "libsexy"
+>  	depends on BR2_PACKAGE_LIBGTK2
+> +	select BR2_PACKAGE_LIBXML2
+>  	help
+>  	  libsexy is a collection of GTK+ widgets that extend the
+>  	  functionality of such standard widgets as GtkEntry and
+> @@ -8,3 +9,4 @@
+>  	  limitations of the widgets.
+>  
+>  	  http://www.chipx86.com/wiki/Libsexy
+> +
+> 
 
-Do they all really NEED avr32 patches to build? Some of them atleast
-doesn't seem to be very hardware specific. Do they all fail doing
-build for avr32? Can you post snippets of the build logs?
+Why this extra whitespace?
+
+<snipp>
 
 -- 
-Bye, Peter Korsgaard
+Best regards,
+Hans-Christian Egtvedt
