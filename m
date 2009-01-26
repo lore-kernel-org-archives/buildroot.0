@@ -1,94 +1,39 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon, 26 Jan 2009 19:19:12 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package: oprofile qte
-	qtopia4
-Message-ID: <20090126191912.6A750768D3@busybox.osuosl.org>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Mon, 26 Jan 2009 20:28:59 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
+In-Reply-To: <877i4i6ni7.fsf@macbook.be.48ers.dk>
+References: <20090125214834.783FA76D28@busybox.osuosl.org>
+	<877i4i6ni7.fsf@macbook.be.48ers.dk>
+Message-ID: <1232998139.2298.102.camel@elrond.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-01-26 19:19:10 +0000 (Mon, 26 Jan 2009)
-New Revision: 25060
+m?n 2009-01-26 klockan 17:27 +0100 skrev Peter Korsgaard:
+> >>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+> 
+>  ulf> Author: ulf
+>  ulf> Date: 2009-01-25 21:48:33 +0000 (Sun, 25 Jan 2009)
+>  ulf> New Revision: 25024
+> 
+>  ulf> Log:
+> 
+>  ulf> Use new SHELL variable BUILDROOT_KERNEL_CONFIG_METHOD
+>  ulf> which will override selection between xconfig and menuconfig
+> 
 
-Log:
-package/: depend on toolchain C++ config, don't use select
+It needs to be documented, that is for sure.
 
-select should only be used for package (library) dependencies.
+> Let's not add any more undocumented command line options for such
+> special cases like this.
 
-Modified:
-   trunk/buildroot/package/oprofile/Config.in
-   trunk/buildroot/package/qte/Config.in
-   trunk/buildroot/package/qtopia4/Config.in
+I agree that is it too specific.
 
+A more generic thing would be to use "BUILDROOT_USE_XWIN"
+This might only be used for the config method,
+but it is easier to understand.
 
-Changeset:
-Modified: trunk/buildroot/package/oprofile/Config.in
-===================================================================
---- trunk/buildroot/package/oprofile/Config.in	2009-01-26 19:14:18 UTC (rev 25059)
-+++ trunk/buildroot/package/oprofile/Config.in	2009-01-26 19:19:10 UTC (rev 25060)
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_OPROFILE
- 	bool "oprofile"
- 	select BR2_PACKAGE_POPT
--	select BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	help
- 	  OProfile is a system-wide profiler for Linux systems,
- 	  capable of profiling all running code at low overhead.
-@@ -17,3 +17,6 @@
- 	  profiling. All code is profiled: hardware and software
- 	  interrupt handlers, kernel modules, the kernel, shared
- 	  libraries, and applications.
-+
-+comment "oprofile requires a toolchain with C++ support enabled"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-
-Modified: trunk/buildroot/package/qte/Config.in
-===================================================================
---- trunk/buildroot/package/qte/Config.in	2009-01-26 19:14:18 UTC (rev 25059)
-+++ trunk/buildroot/package/qte/Config.in	2009-01-26 19:19:10 UTC (rev 25060)
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_QTE
- 	bool "Qt/E"
- 	depends on BR2_DEPRECATED
--	select BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PTHREADS_NATIVE
- 	select BR2_PACKAGE_JPEG
- 	select BR2_PACKAGE_LIBPNG
-@@ -14,6 +14,10 @@
- 	  Only tested with threading on, PACKAGE_JPEG, PACKAGE_LIBPNG,
- 	  but remove those if you like.
- 
-+comment "Qt/E requires a toolchain with C++ support enabled"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_DEPRECATED
-+
- config BR2_PACKAGE_QTE_COMMERCIAL_USERNAME
- 	string "Qt/E Commercial License Username"
- 	default ""
-
-Modified: trunk/buildroot/package/qtopia4/Config.in
-===================================================================
---- trunk/buildroot/package/qtopia4/Config.in	2009-01-26 19:14:18 UTC (rev 25059)
-+++ trunk/buildroot/package/qtopia4/Config.in	2009-01-26 19:19:10 UTC (rev 25060)
-@@ -1,12 +1,15 @@
- config BR2_PACKAGE_QTOPIA4
- 	bool "qtopia4"
--	select BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PTHREADS_NATIVE
- 	help
- 	  Qtopia core 4.
- 
- 	  http://www.trolltech.com/
- 
-+comment "qtopia4 requires a toolchain with C++ support enabled"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+
- if BR2_PACKAGE_QTOPIA4
- 
- config BR2_PACKAGE_QTOPIA4_DEBUG
+BR
+Ulf Samuelsson
