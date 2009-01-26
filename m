@@ -1,28 +1,43 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 26 Jan 2009 07:13:01 +0100
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Mon, 26 Jan 2009 06:13:07 +0000 (UTC)
 Subject: [Buildroot] svn commit: trunk/buildroot/package/irda-utils
-In-Reply-To: <20090126001248.7B942775D3@busybox.osuosl.org> (ulf@uclibc.org's
-	message of "Mon\, 26 Jan 2009 00\:12\:48 +0000 \(UTC\)")
-References: <20090126001248.7B942775D3@busybox.osuosl.org>
-Message-ID: <877i4id28i.fsf@macbook.be.48ers.dk>
+Message-ID: <20090126061307.E1D1D77458@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+Author: jacmet
+Date: 2009-01-26 06:13:06 +0000 (Mon, 26 Jan 2009)
+New Revision: 25043
 
- ulf> Author: ulf
- ulf> Date: 2009-01-26 00:12:47 +0000 (Mon, 26 Jan 2009)
- ulf> New Revision: 25036
+Log:
+irda-utils: totally broken packages should depend on BROKEN, not DEPRECATED
 
- ulf> Log:
- ulf> Deprecate irda-utils, makefile totally broken
+Or we should simply delete the dir.
 
-If it's totally broken, then deprecated isn't the correct
-dependency. Instead we should let it depend on BROKEN like I did in
-Config.in.arch
+Modified:
+   trunk/buildroot/package/irda-utils/Config.in
 
--- 
-Bye, Peter Korsgaard
+
+Changeset:
+Modified: trunk/buildroot/package/irda-utils/Config.in
+===================================================================
+--- trunk/buildroot/package/irda-utils/Config.in	2009-01-26 05:51:31 UTC (rev 25042)
++++ trunk/buildroot/package/irda-utils/Config.in	2009-01-26 06:13:06 UTC (rev 25043)
+@@ -1,6 +1,6 @@
+ menuconfig BR2_PACKAGE_IRDA_UTILS
+ 	bool "irda_utils"
+-	depends on BR2_DEPRECATED
++	depends on BROKEN
+ 	help
+ 	  Tools for accessing the irda-Subsystem of the Linux-Kernel
+ 	  The makefile is totally broken.
+@@ -41,5 +41,5 @@
+ 	help
+ 		Some Toshiba Laptops have buggy BIOSes which didn't initialize
+ 		Irda. This may help those.
+-	
++
+ endif
