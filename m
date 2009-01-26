@@ -1,40 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 26 Jan 2009 14:21:51 +0000 (UTC)
-Subject: [Buildroot] [Bug 69] tar refuses to build
-In-Reply-To: <bug-69-163@https.bugs.busybox.net/>
-References: <bug-69-163@https.bugs.busybox.net/>
-Message-ID: <20090126142151.B415C76D28@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 26 Jan 2009 15:24:16 +0100
+Subject: [Buildroot] Error encountered while doing make after adding
+	u-boot
+In-Reply-To: <20090126151732.7c6aa021@hcegtvedt> (Hans-Christian Egtvedt's
+	message of "Mon\, 26 Jan 2009 15\:17\:32 +0100")
+References: <8ebba8c20901260506t271f675avd114aefdf82be711@mail.gmail.com>
+	<20090126144012.4e62179b@hcegtvedt>
+	<87wsci88t8.fsf@macbook.be.48ers.dk>
+	<20090126151732.7c6aa021@hcegtvedt>
+Message-ID: <87skn687sf.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=69
+>>>>> "Hans-Christian" == Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> writes:
 
+ >> This BOARD_NAME variable seems to be an ARM/Atmel specific thing.
+ >> 
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+ Hans-Christian> You can not default to $(PROJECT), since this
+ Hans-Christian> variable is used to load a configuration for u-boot
+ Hans-Christian> build system and must exist.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |jacmet at uclibc.org
-             Status|NEW                         |ASSIGNED
+But you can default to $(BOARD_NAME) which isn't set for most people?
 
+PROJECT atleast has a chance of being something close to what the user
+wants.
 
+ Hans-Christian> Perhaps default to a known to work config? Take a
+ Hans-Christian> peak in u-boot source ./Makefile.
 
-
---- Comment #2 from Peter Korsgaard <jacmet@uclibc.org>  2009-01-26 14:21:49 UTC ---
-I agree that the current situation isn't optimal - Is there any particular
-reason why you want to use the GNU tar version, instead of the one in busybox?
-As you probably noticed, most people use the busybox version so the GNU one
-doesn't get much testing in BR.
-
-I would prefer to mark the gnu version as DEPRECATED.
-
-Let me know what you think.
-
+Naah, to much work as that's arch dependent. Then I would rather add a
+big fat $(error) in the U-Boot Makefile.in if the thing evaluates to
+nothing.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
