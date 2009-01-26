@@ -1,49 +1,95 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon, 26 Jan 2009 21:10:13 +0000 (UTC)
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Mon, 26 Jan 2009 21:19:06 +0000 (UTC)
 Subject: [Buildroot] svn commit:
-	trunk/buildroot/target/device/Atmel/arch-avr32:
-	kernel-patches-2.6.20.4 kernel-patches-2 etc...
-Message-ID: <20090126211013.2FAB27672B@busybox.osuosl.org>
+	trunk/buildroot/target/device/Atmel/at91sam9260dfc
+Message-ID: <20090126211906.8B9B57672B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-01-26 21:10:11 +0000 (Mon, 26 Jan 2009)
-New Revision: 25069
+Author: ulf
+Date: 2009-01-26 21:19:05 +0000 (Mon, 26 Jan 2009)
+New Revision: 25070
 
 Log:
-target/device/Atmel/arch-avr32: remove old unused kernel patches
+Update at91sam9260dfc BSP
 
-As discussed on the list:
-
-22:08 < HcE> Jacmet: so yes, AVR32 wise you can delete anything older than
-             2.6.27
-
-Removed:
-   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.20.4/.empty
-   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.21.5/.empty
-   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.22.1/.empty
-   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.22.10/linux-2.6.22.10-100-avr32-atmel.4.patch
-   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.22.10/linux-2.6.22.10-500-gpio_mouse-setup-for-atstk1000-board.patch
-   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.22.10/linux-2.6.22.10-501-atmel_mci-minor-fixes-and-cleanups.patch
-   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.22.10/linux-2.6.22.10-502-atmel_mci-fix-two-subtle-but-deadly-races.patch
-   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.23/linux-2.6.23-100-avr32-atmel.2.patch
-   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.23/linux-2.6.23-200-fix-include-typo-for-atngw100-board.patch
-   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.24/linux-2.6.24-100-avr32-git.1.patch
-   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.24/linux-2.6.24-500-v4l-avr32-isi.patch.cond
-   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.24/linux-2.6.24-600-avr32-mmc.patch
-   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.24/linux-2.6.24-avr32-ac97-reset.patch.cond
-   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.24/linux-2.6.24-avr32-psif-2.patch.cond
-   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.25.10/linux-2.6.25.10-no-localversion.patch
-   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.25.10/linux-2.6.25.10.atmel.2.patch.bz2
+Modified:
+   trunk/buildroot/target/device/Atmel/at91sam9260dfc/at91sam9260dfc_defconfig
 
 
 Changeset:
-
-Sorry, the patch is too large to include (58852 lines).
-Please use ViewCVS to see it!
-
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=25069
+Modified: trunk/buildroot/target/device/Atmel/at91sam9260dfc/at91sam9260dfc_defconfig
+===================================================================
+--- trunk/buildroot/target/device/Atmel/at91sam9260dfc/at91sam9260dfc_defconfig	2009-01-26 21:10:11 UTC (rev 25069)
++++ trunk/buildroot/target/device/Atmel/at91sam9260dfc/at91sam9260dfc_defconfig	2009-01-26 21:19:05 UTC (rev 25070)
+@@ -1,6 +1,6 @@
+ #
+ # Automatically generated make config: don't edit
+-# Sat Jan 24 08:07:54 2009
++# Mon Jan 26 13:16:32 2009
+ #
+ BR2_HAVE_DOT_CONFIG=y
+ BR2_VERSION="2009.02-svn"
+@@ -243,7 +243,7 @@
+ BR2_KERNEL_HEADERS_2_6_27=y
+ # BR2_KERNEL_HEADERS_2_6_28 is not set
+ # BR2_KERNEL_HEADERS_SNAP is not set
+-BR2_DEFAULT_KERNEL_HEADERS="2.6.27.12"
++BR2_DEFAULT_KERNEL_HEADERS="2.6.27.13"
+ 
+ #
+ # uClibc Options
+@@ -415,7 +415,6 @@
+ BR2_PACKAGE_LIBDAEMON=y
+ # BR2_PACKAGE_LIBELF is not set
+ BR2_PACKAGE_LIBEVENT=y
+-# BR2_PACKAGE_LIBFLOAT is not set
+ BR2_PACKAGE_LIBGCRYPT=y
+ BR2_PACKAGE_LIBGPG_ERROR=y
+ BR2_PACKAGE_LIBICONV=y
+@@ -428,7 +427,6 @@
+ # BR2_PACKAGE_LSOF is not set
+ # BR2_PACKAGE_LTP-TESTSUITE is not set
+ # BR2_PACKAGE_LTRACE is not set
+-# BR2_PACKAGE_LTT is not set
+ # BR2_PACKAGE_MEMSTAT is not set
+ # BR2_PACKAGE_NG_SPICE_REWORK is not set
+ # BR2_PACKAGE_POPT is not set
+@@ -679,7 +677,6 @@
+ BR2_PACKAGE_USBMOUNT=y
+ BR2_PACKAGE_USBUTILS=y
+ # BR2_PACKAGE_WIPE is not set
+-# BR2_PACKAGE_XFSPROGS is not set
+ 
+ #
+ # Audio and video libraries and applications
+@@ -772,10 +769,6 @@
+ # BR2_PACKAGE_LIBERATION is not set
+ # BR2_PACKAGE_LIBGLIB12 is not set
+ BR2_PACKAGE_LIBGLIB2=y
+-
+-#
+-# libsexy       - disabled (requires X-Windows)
+-#
+ # BR2_PACKAGE_OPENMOTIF is not set
+ # BR2_PACKAGE_FONTCONFIG is not set
+ # BR2_PACKAGE_FREETYPE is not set
+@@ -995,11 +988,11 @@
+ BR2_PACKAGE_LINUX=y
+ BR2_PACKAGE_LINUX_KCONFIG="$(BR2_BOARD_PATH)/$(BR2_BOARD_NAME)-linux-$(BR2_LINUX26_VERSION).config"
+ BR2_PACKAGE_LINUX_FORMAT="uImage"
+-BR2_KERNEL_CURRENT_VERSION="2.6.28.1"
+-BR2_KERNEL_LATEST_2_6_28="1"
+-BR2_KERNEL_LATEST_2_6_27="12"
++BR2_KERNEL_CURRENT_VERSION="2.6.28.2"
++BR2_KERNEL_LATEST_2_6_28="2"
++BR2_KERNEL_LATEST_2_6_27="13"
+ BR2_KERNEL_LATEST_2_6_26="8"
+-BR2_KERNEL_LATEST_2_6_25="9"
++BR2_KERNEL_LATEST_2_6_25="19"
+ BR2_KERNEL_LATEST_2_6_24="7"
+ BR2_KERNEL_LATEST_2_6_23="17"
+ BR2_KERNEL_LATEST_2_6_22="19"
