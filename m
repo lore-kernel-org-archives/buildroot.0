@@ -1,13 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 26 Jan 2009 13:17:44 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package: argus bind
-	dmraid kismet libeXosip2 ltra etc...
-In-Reply-To: <1232968874.2298.60.camel@elrond.atmel.com> (Ulf Samuelsson's
-	message of "Mon\, 26 Jan 2009 12\:21\:14 +0100")
-References: <20090126003405.2EE7776D28@busybox.osuosl.org>
-	<873af6d219.fsf@macbook.be.48ers.dk>
-	<1232968874.2298.60.camel@elrond.atmel.com>
-Message-ID: <87eiyq9s7r.fsf@macbook.be.48ers.dk>
+Date: Mon, 26 Jan 2009 13:21:42 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot
+In-Reply-To: <1232968993.2298.63.camel@elrond.atmel.com> (Ulf Samuelsson's
+	message of "Mon\, 26 Jan 2009 12\:23\:13 +0100")
+References: <20090125230123.541D376D28@busybox.osuosl.org>
+	<87y6wybnd9.fsf@macbook.be.48ers.dk>
+	<1232968993.2298.63.camel@elrond.atmel.com>
+Message-ID: <87ab9e9s15.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,32 +15,30 @@ To: buildroot@busybox.net
 
 >>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 
+Hi,
 
- Ulf> Most of these indicate "Machine not recognized"
+ ulf> Flush configuration cache, needed if config has changed
+ >> 
+ >> It would be good if we could get the system to automatically detect
+ >> this instead of using a manual make target.
+ >> 
+ >> What is the use case for this? If someone changes the toolchain
+ >> config, or is it simply adding/removing packages?
 
-From configure? Isn't that solved by the $(CONFIG_UPDATE) stuff?
+ Ulf> If you build crashes, and you add /delete targets, then
+ Ulf> several packages will fail to build because the current
+ Ulf> configuration is different from the contents of the cache.
 
- Ulf> I think one of them indicated something similar
- Ulf> to "header"-<ARCH>.h not found.
+So shouldn't we have something like:
 
- Ulf> I consider them as totally broken for AVR32 until proven otherwise.
- Ulf> I would prefer them to depend on !BR2_avr32 in the distribution
- Ulf> (not the svn), but that is apparently not popular.
+$(PROJECT_BUILD_DIR)/tgt-config.cache: .config
+        mkdir -p $(@D)
+        rm -f $@
+        touch $@
 
- Ulf> Totally meaninless to even attempt to build a package
- Ulf> if there is 0% of success.
+Probably in an ifdef BR2_CONFIG_CACHE.
 
-Agree.
-
- Ulf> HCE wants it to be there in the hope of that someone will
- Ulf> need the support on AVR32 so much that they will fix it,
- Ulf> but the casual user should not include them and fail the build.
-
-I agree, I just questioned the need for avr32 specific fixups (besides
-an updated config.{guess,sub} in those packages that mostly don't seem
-to be very hw specific.
-
-HcE: Is the package list correct?
+Totally untested, but wouldn't that work?
 
 -- 
 Bye, Peter Korsgaard
