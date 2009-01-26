@@ -1,31 +1,29 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 26 Jan 2009 07:02:48 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/dbus
-In-Reply-To: <1232926285.2298.54.camel@elrond.atmel.com> (Ulf Samuelsson's
-	message of "Mon\, 26 Jan 2009 00\:31\:25 +0100")
-References: <20090125205531.E8C1C76D28@busybox.osuosl.org>
-	<87pribdrt4.fsf@macbook.be.48ers.dk>
-	<1232926285.2298.54.camel@elrond.atmel.com>
-Message-ID: <87fxj6d2pj.fsf@macbook.be.48ers.dk>
+Date: Mon, 26 Jan 2009 07:04:19 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/liboil
+In-Reply-To: <20090125234749.B772976D28@busybox.osuosl.org> (ulf@uclibc.org's
+	message of "Sun\, 25 Jan 2009 23\:47\:49 +0000 \(UTC\)")
+References: <20090125234749.B772976D28@busybox.osuosl.org>
+Message-ID: <87bptud2n0.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
+>>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
 
- ulf> +DBUS_XML_DEP:=$(DBUS_XML_DEP_LIB)
- >> 
- >> Why the dance with DBUS_XML_DEP_LIB ?
- >> 
- >> Is all of this actually needed? As the toplevel Makefile run
- >> sequentially it seems to me that it would be enough to just add expat
- >> / libxml2 to the dbus: line.
+ ulf> Author: ulf
+ ulf> Date: 2009-01-25 23:47:47 +0000 (Sun, 25 Jan 2009)
+ ulf> New Revision: 25033
 
- Ulf> Feel free to optimize and test.
+ ulf> Log:
+ ulf> Add explanation why examples are disabled for liboil
 
-For the 2nd part ok, but WHY did you now just add DBUS_XML_DEP_LIB?
+ ulf> +
+ ulf> +# Disable some examples that will break the build.
+ ulf> +# There are sveral more that can be removed
 
+sveral/several
 -- 
 Bye, Peter Korsgaard
