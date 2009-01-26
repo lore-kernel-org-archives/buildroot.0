@@ -1,10 +1,10 @@
 From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Mon, 26 Jan 2009 20:28:59 +0100
+Date: Mon, 26 Jan 2009 20:30:27 +0100
 Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
 In-Reply-To: <877i4i6ni7.fsf@macbook.be.48ers.dk>
 References: <20090125214834.783FA76D28@busybox.osuosl.org>
 	<877i4i6ni7.fsf@macbook.be.48ers.dk>
-Message-ID: <1232998139.2298.102.camel@elrond.atmel.com>
+Message-ID: <1232998227.2298.106.camel@elrond.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -23,17 +23,16 @@ m?n 2009-01-26 klockan 17:27 +0100 skrev Peter Korsgaard:
 >  ulf> Use new SHELL variable BUILDROOT_KERNEL_CONFIG_METHOD
 >  ulf> which will override selection between xconfig and menuconfig
 > 
-
-It needs to be documented, that is for sure.
-
 > Let's not add any more undocumented command line options for such
 > special cases like this.
+> 
 
-I agree that is it too specific.
+Something that needs to be cleaned up is the way
+things are copied to a directory outside Buildroot.
 
-A more generic thing would be to use "BUILDROOT_USE_XWIN"
-This might only be used for the config method,
-but it is easier to understand.
+I think to have a global COPYTO which can
+be overridden by a shell variable is the
+best approach.
 
 BR
 Ulf Samuelsson
