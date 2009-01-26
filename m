@@ -1,31 +1,26 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon, 26 Jan 2009 06:30:59 +0000 (UTC)
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 26 Jan 2009 07:31:17 +0100
 Subject: [Buildroot] svn commit: trunk/buildroot/package/libsexy
-Message-ID: <20090126063059.C54C877458@busybox.osuosl.org>
+In-Reply-To: <20090126071822.32c42258@hcegtvedt> (Hans-Christian Egtvedt's
+	message of "Mon\, 26 Jan 2009 07\:18\:22 +0100")
+References: <20090124064414.E9EDE769CC@busybox.osuosl.org>
+	<20090126071822.32c42258@hcegtvedt>
+Message-ID: <87priabmtm.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-01-26 06:30:59 +0000 (Mon, 26 Jan 2009)
-New Revision: 25045
+>>>>> "Hans-Christian" == Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> writes:
 
-Log:
-libsexy: remove trailing newline from r24996
+ >> http://www.chipx86.com/wiki/Libsexy
+ >> +
+ >> 
 
-Modified:
-   trunk/buildroot/package/libsexy/Config.in
+ Hans-Christian> Why this extra whitespace?
 
+Sorry, my mistake - Fixed in r25045.
 
-Changeset:
-Modified: trunk/buildroot/package/libsexy/Config.in
-===================================================================
---- trunk/buildroot/package/libsexy/Config.in	2009-01-26 06:28:03 UTC (rev 25044)
-+++ trunk/buildroot/package/libsexy/Config.in	2009-01-26 06:30:59 UTC (rev 25045)
-@@ -9,4 +9,3 @@
- 	  limitations of the widgets.
- 
- 	  http://www.chipx86.com/wiki/Libsexy
--
+-- 
+Bye, Peter Korsgaard
