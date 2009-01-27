@@ -1,38 +1,39 @@
-From: Will Wagner <will_wagner@carallon.com>
-Date: Tue, 27 Jan 2009 12:32:28 +0000
+From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
+Date: Tue, 27 Jan 2009 13:44:08 +0100
 Subject: [Buildroot] alsa lib problem
-In-Reply-To: <87ocxt2t8g.fsf@macbook.be.48ers.dk>
+In-Reply-To: <497EFEDC.3040606@carallon.com>
 References: <497E0B14.8040801@carallon.com>
 	<87ocxt2t8g.fsf@macbook.be.48ers.dk>
-Message-ID: <497EFEDC.3040606@carallon.com>
+	<497EFEDC.3040606@carallon.com>
+Message-ID: <20090127134408.2c74b516@hcegtvedt>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard wrote:
+On Tue, 27 Jan 2009 12:32:28 +0000
+Will Wagner <will_wagner@carallon.com> wrote:
+
+> Peter Korsgaard wrote:
+> > 
+> > We unconditinally add the largefile stuff to TARGET_CFLAGS, which
+> > apparently isn't a good idea for alsa.
+> > 
+> > If the kernel interface is always with an 32bit offset, then
+> > asound.h should probably be changed to use a 32bit data type
+> > instead. Could you try changing it to an unsigned int and recompile?
 > 
-> We unconditinally add the largefile stuff to TARGET_CFLAGS, which
-> apparently isn't a good idea for alsa.
+> Yes is I change the asound.h header it does work.
 > 
-> If the kernel interface is always with an 32bit offset, then asound.h
-> should probably be changed to use a 32bit data type instead. Could you
-> try changing it to an unsigned int and recompile?
-
-Yes is I change the asound.h header it does work.
-
-What is the best way to proceed from here? Just patch alsa?
-
-Thanks for your help,
-
-Will.
-
+> What is the best way to proceed from here? Just patch alsa?
 > 
+
+Make a patch for alsa, and send it upstream to the alsa maintainers.
+They need to fix broken code like this anyway.
+
+<snipp>
 
 -- 
-------------------------------------------------------------------------
-Will Wagner                                     will_wagner at carallon.com
-Development Manager                      Office Tel: +44 (0)20 7371 2032
-Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
-------------------------------------------------------------------------
+Best regards,
+Hans-Christian Egtvedt
