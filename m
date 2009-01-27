@@ -1,32 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 27 Jan 2009 13:57:30 +0100
-Subject: [Buildroot] C++ and uclibc++ ??
-In-Reply-To: <OFCA721249.B9DBD6C6-ONC125754B.004638F2-C125754B.00464B2A@gidi.it>
-	(Alessio Stella's message of "Tue\, 27 Jan 2009 13\:47\:23 +0100")
-References: <OFCA721249.B9DBD6C6-ONC125754B.004638F2-C125754B.00464B2A@gidi.it>
-Message-ID: <87iqo029fp.fsf@macbook.be.48ers.dk>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Tue, 27 Jan 2009 23:58:35 +1100
+Subject: [Buildroot] svn
+	commit:	trunk/buildroot/package/multimedia/mplayer
+In-Reply-To: <87fxj52t0c.fsf@macbook.be.48ers.dk>
+References: <20090126092249.54682768D3@busybox.osuosl.org>
+	<20090127005212.GC1083@cloud.net.au>
+	<87fxj52t0c.fsf@macbook.be.48ers.dk>
+Message-ID: <20090127125835.GA18681@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alessio" == Alessio Stella <Alessio.Stella@gidi.it> writes:
+On Tue, Jan 27, 2009 at 06:54:43AM +0100, Peter Korsgaard wrote:
+> >>>>> "Hamish" == Hamish Moffatt <hamish@cloud.net.au> writes:
+> 
+>  >> Log:
+>  >> mplayer: add patch due to missing sys/timeb.h
+> 
+>  Hamish> I had a similar problem building OpenSSL with uclibc
+>  Hamish> 0.9.30. I will fix it later today if I get a chance.
+> 
+> With svn trunk? I checked in a 0.9.30 fix back in December (r24578).
 
- Alessio> Dear Mr.,
+Weird, I should have that patch. I'll check tomorrow. Thanks.
 
- Alessio>       I don't understand if the fact that uclibc++ is an
- Alessio> alpha release should prevent me from writing in C++ and
- Alessio> force me to write me in C code instead.
 
- Alessio> The question is: does uclibc++ affect only some C++
- Alessio> libraries and operands like for instance the console IO <<
- Alessio> and >> ? or does it affect C++ code as a whole in its
- Alessio> compiling and linking??
-
-You seem to have sent this to the wrong list. This list is about
-buildroot, not uclibc++ - And we don't have an uclibc++ package in
-buildroot.
-
+Hamish
 -- 
-Bye, Peter Korsgaard
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
