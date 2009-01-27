@@ -1,73 +1,53 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 27 Jan 2009 18:03:14 +0100
-Subject: [Buildroot] [PATCH] Add radvd to the list of packages
-In-Reply-To: <200901271757.28001.amand.tihon@alrj.org> (Amand Tihon's message
-	of "Tue\, 27 Jan 2009 17\:57\:19 +0100")
-References: <200901271757.28001.amand.tihon@alrj.org>
-Message-ID: <87eiyoznot.fsf@macbook.be.48ers.dk>
+From: loody <miloody@gmail.com>
+Date: Wed, 28 Jan 2009 01:07:08 +0800
+Subject: [Buildroot] bfd lib include Error while build elf2flt
+In-Reply-To: <87iqo0zocz.fsf@macbook.be.48ers.dk>
+References: <3a665c760901270846y7ccc4adak9c49fbc82618bfa0@mail.gmail.com>
+	<87iqo0zocz.fsf@macbook.be.48ers.dk>
+Message-ID: <3a665c760901270907o4aa2d8a5m86645cb9a844308f@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Amand" == Amand Tihon <amand.tihon@alrj.org> writes:
+>>>>>> "loody" == loody  <miloody@gmail.com> writes:
+>
+>  loody> Dear all:
+>  loody> While compiling elf2flt, the buildroot shows the error message as
+>  loody> attach at the end of this mail.
+>  loody> I try to rebuild the binuitilies, but it still fail.
+>  loody> If anyone has the same problem or knows where I get wrong, please let me know.
+>  loody> appreciate your help,
+>  loody> miloody
+>
+>  loody> undefined reference to `inflateInit_'
+>  loody> /media/sda6/uclinux/buildroot-2009.02-rc2/toolchain_build_arm/binutils-2.19/bfd/compress.c:103:
+>  loody> undefined reference to `inflate'
+>  loody> /media/sda6/uclinux/buildroot-2009.02-rc2/toolchain_build_arm/binutils-2.19/bfd/compress.c:106:
+>  loody> undefined reference to `inflateReset'
+>  loody> /media/sda6/uclinux/buildroot-2009.02-rc2/toolchain_build_arm/binutils-2.19/bfd/compress.c:108:
+>
+> Don't know anything about elf2flt, but it seems like it needs to link
+> to zlib.
+>
+> --
+> Bye, Peter Korsgaard
+>
 
- Amand> Add radvd, the IPv6 router advertisement daemon.
- Amand> Signed-off-by: Amand Tihon <amand.tihon@alrj.org>
- Amand> ---
+Hi:
+do you mean zlib1g-dev?
+I use ubuntu and I have followed the instructions on the
+website,http://docwiki.gumstix.org/Buildroot_on_Ubuntu, to update this
+package as below.
 
- Amand> Note that it has only been tested on avr32 (ngw100) using
- Amand> Atmel's latest stable buildroot (v2.3.0). A basic init script
- Amand> is included.
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+zlib1g-dev is already the newest version.
+0 upgraded, 0 newly installed, 0 to remove and 176 not upgraded.
+TT at TT-T43:~$
 
-I'll take a closer look at this after the release, but here's a few
-comments:
-
- Amand> +++ b/package/radvd/Config.in
- Amand> @@ -0,0 +1,9 @@
- Amand> +config BR2_PACKAGE_RADVD
- Amand> +	bool "radvd"
- Amand> +	default n
- Amand> +	select BR2_PACKAGE_FLEX
- Amand> +	depends on BR2_PACKAGE_KMOD_IPV6
-
-KMOD_IPV6 - What's that?
-
-I would have expected a depends on BR2_INET_IPV6
-
- Amand> +++ b/package/radvd/radvd-1.2-avr32.patch
- Amand> @@ -0,0 +1,21 @@
- Amand> +diff -ru radvd-1.2_vanilla/config.sub radvd-1.2/config.sub
- Amand> +--- radvd-1.2_vanilla/config.sub	2003-11-21 15:53:23.000000000 +0100
-
-Isn't that handled by the CONFIG_UPDATE stuff?
-
- Amand> diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
- Amand> new file mode 100644
- Amand> index 0000000..29f4d8d
- Amand> --- /dev/null
- Amand> +++ b/package/radvd/radvd.mk
- Amand> @@ -0,0 +1,64 @@
- Amand> +#############################################################
- Amand> +#
- Amand> +# radvd
- Amand> +#
- Amand> +#############################################################
- Amand> +
- Amand> +RADVD_VERSION=1.2
- Amand> +RADVD_SOURCE=radvd-$(RADVD_VERSION).tar.gz
- Amand> +RADVD_SITE=http://www.litech.org/radvd/dist/
- Amand> +RADVD_DIR=$(BUILD_DIR)/radvd-$(RADVD_VERSION)
- Amand> +RADVD_CAT:=$(ZCAT)
- Amand> +
- Amand> +$(DL_DIR)/$(RADVD_SOURCE):
- Amand> +	$(WGET) -P $(DL_DIR) $(RADVD_SITE)/$(RADVD_SOURCE)
- Amand> +
- Amand> +$(RADVD_DIR)/.unpacked: $(DL_DIR)/$(RADVD_SOURCE)
-
-Please use Makefile.autotools.in instead of adding a new old-style
-package.
-
--- 
-Bye, Peter Korsgaard
+If not, would you please tell me which package I need?
+appreciate your help,
+miloody
