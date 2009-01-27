@@ -1,45 +1,58 @@
-From: loody <miloody@gmail.com>
-Date: Wed, 28 Jan 2009 00:46:09 +0800
-Subject: [Buildroot] bfd lib include Error while build elf2flt
-Message-ID: <3a665c760901270846y7ccc4adak9c49fbc82618bfa0@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 27 Jan 2009 17:47:19 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/icu
+In-Reply-To: <C13DBBE85AD6974B85C118C35890CA5F1AF38F7920@EU1RDCRDC1WX029.exi.nxp.com>
+	(Daniel James Laird's message of "Tue\,
+	27 Jan 2009 17\:30\:25 +0100")
+References: <20090127150231.1A65F7709E@busybox.osuosl.org>
+	<COL102-DS10B32A6F03C4C2B946F2DBDCCB0@phx.gbl>
+	<87r62ozqv4.fsf@macbook.be.48ers.dk>
+	<C13DBBE85AD6974B85C118C35890CA5F1AF38F7920@EU1RDCRDC1WX029.exi.nxp.com>
+Message-ID: <87mydczofc.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear all:
-While compiling elf2flt, the buildroot shows the error message as
-attach at the end of this mail.
-I try to rebuild the binuitilies, but it still fail.
-If anyone has the same problem or knows where I get wrong, please let me know.
-appreciate your help,
-miloody
+>>>>> "Daniel" == Daniel James Laird <daniel.j.laird@nxp.com> writes:
 
-/media/sda6/uclinux/buildroot-2009.02-rc2/toolchain_build_arm/elf2flt/elf2flt.c:2120:
-warning: format ???%x??? expects type ???unsigned int???, but argument
-2 has type ???long unsigned int???
-/media/sda6/uclinux/buildroot-2009.02-rc2/toolchain_build_arm/elf2flt/elf2flt.c:2088:
-warning: ignoring return value of ???write???, declared with attribute
-warn_unused_result
-/media/sda6/uclinux/buildroot-2009.02-rc2/toolchain_build_arm/elf2flt/elf2flt.c:2124:
-warning: ignoring return value of ???fwrite???, declared with
-attribute warn_unused_result
-/media/sda6/uclinux/buildroot-2009.02-rc2/toolchain_build_arm/elf2flt/elf2flt.c:2130:
-warning: ignoring return value of ???fwrite???, declared with
-attribute warn_unused_result
-/media/sda6/uclinux/buildroot-2009.02-rc2/toolchain_build_arm/elf2flt/elf2flt.c:2133:
-warning: ignoring return value of ???fwrite???, declared with
-attribute warn_unused_result
-/media/sda6/uclinux/buildroot-2009.02-rc2/toolchain_build_arm/binutils-2.19-build/bfd/libbfd.a(compress.o):
-In function `bfd_uncompress_section_contents':
-/media/sda6/uclinux/buildroot-2009.02-rc2/toolchain_build_arm/binutils-2.19/bfd/compress.c:96:
-undefined reference to `inflateInit_'
-/media/sda6/uclinux/buildroot-2009.02-rc2/toolchain_build_arm/binutils-2.19/bfd/compress.c:103:
-undefined reference to `inflate'
-/media/sda6/uclinux/buildroot-2009.02-rc2/toolchain_build_arm/binutils-2.19/bfd/compress.c:106:
-undefined reference to `inflateReset'
-/media/sda6/uclinux/buildroot-2009.02-rc2/toolchain_build_arm/binutils-2.19/bfd/compress.c:108:
-undefined reference to `inflateEnd'
-collect2: ld returned 1 exit status
-make: *** [elf2flt] Error 1
+Hi,
+
+ >> I'm not familiar with the external toolchain stuff, but don't you
+ >> already now need to configure buildroot to match the toolchain
+ >> settings (ipv6, largefile, locales, c++ support and so on?). If not,
+ >> how is that handled?
+
+ Daniel> It is currently setting stuff under
+ Daniel> toolchain/external-toolchain/Config.in.2
+
+Ahh ok.
+
+ >> I guess it's already broken then ;) There's several packages
+ >> depending on locales/c++/wchar stuff.
+
+ Daniel> Yep, seems like what I shall do is add the options
+ Daniel> BR2_LOCALE, BR2_USE_WCHAR and BR2_INSTALL_LIBSTDCPP.
+
+Seems so.
+
+ Daniel> Quick question, currently
+ Daniel> toolchain/external-toolchain/Config.in.2 is setting
+ Daniel> BR2_GCC_CROSS_CXX which means build a working C++ compiler
+ Daniel> (in buildroot toolchain case) or I have a working C++
+ Daniel> compiler (in external toolchain usecase).  So should this be
+ Daniel> changed to BR2_INSTALL_LIBSTDCPP as we seem to be using this
+ Daniel> second option to dictate whether some packages can be built
+ Daniel> (qt/icu etc) or should we instead be checking against
+ Daniel> BR2_GCC_CROSS_CXX in the packages that require C++ compiler
+ Daniel> support
+
+Well, these things date back to before my time - I'm not quite sure
+why we have 2 config settings for C++, and if C++ support without
+libstdc++ makes any sense, but the best approach indeed seems to be to
+add a LIBSTDCPP option as well (You can make it a hidden option that
+get's selected by the CROSS_CXX if you want to).
+
+-- 
+Bye, Peter Korsgaard
