@@ -1,53 +1,72 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Tue, 27 Jan 2009 08:30:29 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot:
-	docs	target	target/device/Atmel target/ etc...
-In-Reply-To: <20090127002621.GQ25952@mx.loc>
-References: <20090126235232.92CF677458@busybox.osuosl.org>
-	<20090127002621.GQ25952@mx.loc>
-Message-ID: <1233041429.2298.144.camel@elrond.atmel.com>
+From: Daniel Laird <danieljlaird@hotmail.com>
+Date: Tue, 27 Jan 2009 08:25:16 +0000
+Subject: [Buildroot] svn commit: trunk/buildroot/package/webkit
+In-Reply-To: <20090127002732.GB1083@cloud.net.au>
+References: <20090123174908.81999769CC@busybox.osuosl.org>
+	<20090127002732.GB1083@cloud.net.au>
+Message-ID: <COL102-W811D43396757A885D85C94DCCB0@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-tis 2009-01-27 klockan 01:26 +0100 skrev Bernhard Reutner-Fischer:
-> On Mon, Jan 26, 2009 at 11:52:32PM +0000, ulf at uclibc.org wrote:
-> >Author: ulf
-> >Date: 2009-01-26 23:52:31 +0000 (Mon, 26 Jan 2009)
-> >New Revision: 25071
+
+Webkit does not rely on X either, I have building just on top of GTK and DirectFB.
+
+Although I do have a slightly newer version of webkit running.
+
+Daniel Laird
+
+
+> Date: Tue, 27 Jan 2009 11:27:32 +1100
+> From: hamish at cloud.net.au
+> To: buildroot at busybox.net; buildroot at uclibc.org
+> Subject: Re: [Buildroot] svn commit: trunk/buildroot/package/webkit
 > 
-> >This is overridden by BUILDROOT_COPYTO,
-> >if set into the environment.
+> On Fri, Jan 23, 2009 at 05:49:08PM +0000, ulf at uclibc.org wrote:
+> > Author: ulf
+> > Date: 2009-01-23 17:49:07 +0000 (Fri, 23 Jan 2009)
+> > New Revision: 24983
+> > 
+> > Log:
+> > Disable webkit (with comment) if X is not available
+> > 
+> > Modified:
+> >    trunk/buildroot/package/webkit/Config.in
+> > 
+> > 
+> > Changeset:
+> > Modified: trunk/buildroot/package/webkit/Config.in
+> > ===================================================================
+> > --- trunk/buildroot/package/webkit/Config.in	2009-01-23 17:48:49 UTC (rev 24982)
+> > +++ trunk/buildroot/package/webkit/Config.in	2009-01-23 17:49:07 UTC (rev 24983)
+> > @@ -1,13 +1,18 @@
+> >  config BR2_PACKAGE_WEBKIT
+> >  	bool "webkit"
+> > -	select BR2_PACKAGE_LIBGTK2
+> >  	select BR2_PACKAGE_ICU
+> >  	select BR2_PACKAGE_CURL
+> >  	select BR2_PACKAGE_LIBXML2
+> >  	select BR2_PACKAGE_LIBXSLT
+> > +	select BR2_PACKAGE_LIBGTK2
+> >  	select BR2_PACKAGE_SQLITE
+> > +	depends on !BR2_PACKAGE_XSERVER_none
 > 
-> >+COPYTO=$(strip $(subst ",,$(BUILDROOT_COPYTO)))
+> That's not a good test of X availability. You should check for X
+> libraries only, as the X server may be remote.
 > 
-> What i like about stuff like that is that it is so obvious that it
-> _will_ bite sombody sooner or later. Surely you will call that
-> case constructed, but there is no need to add brittle stuff if
-> it would be so easy to do it "right".
-> 
-> $ grep _COPYTO ~/.bashrc
-> BUILDROOT_COPYTO="$HOME/This is my   Desktop directory/keep/"
-
-Thre typical case for this is "/tftpboot"
-or "/var/share/tftpbot"
-I do not see any other use for it at the momemnt.
-
-If you want more stability,
-then providing a directory for tftpboot
-would be the real option.
-
-I.E: You always end with tftpboot.
-YOu can then select "/"  or "/var/share"
-
-for "/tftpboot" or "/var/share/tftpboot"
-
-BR
-Ulf Samuelsson
-
+> Hamish
+> -- 
+> Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
+
+_________________________________________________________________
+Check out the new and improved services from Windows Live. Learn more! 
+http://clk.atdmt.com/UKM/go/132630768/direct/01/
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://lists.busybox.net/pipermail/buildroot/attachments/20090127/7d978ab8/attachment.htm 
