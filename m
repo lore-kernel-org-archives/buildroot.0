@@ -1,12 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 27 Jan 2009 06:52:41 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libsexy
-In-Reply-To: <20090127002646.GA1083@cloud.net.au> (Hamish Moffatt's message of
-	"Tue\, 27 Jan 2009 11\:26\:46 +1100")
-References: <20090123174850.A9B52769CC@busybox.osuosl.org>
-	<87mydhkgdx.fsf@macbook.be.48ers.dk>
-	<20090127002646.GA1083@cloud.net.au>
-Message-ID: <87k58h2t3q.fsf@macbook.be.48ers.dk>
+Date: Tue, 27 Jan 2009 06:54:43 +0100
+Subject: [Buildroot] svn
+	commit:	trunk/buildroot/package/multimedia/mplayer
+In-Reply-To: <20090127005212.GC1083@cloud.net.au> (Hamish Moffatt's message of
+	"Tue\, 27 Jan 2009 11\:52\:12 +1100")
+References: <20090126092249.54682768D3@busybox.osuosl.org>
+	<20090127005212.GC1083@cloud.net.au>
+Message-ID: <87fxj52t0c.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,15 +15,13 @@ To: buildroot@busybox.net
 
 >>>>> "Hamish" == Hamish Moffatt <hamish@cloud.net.au> writes:
 
- >> But from doing a quick grep in the libsexy sources I don't see
- >> any X includes, so are you sure it doesn't work with
- >> gtk-over-directfb?
+ >> Log:
+ >> mplayer: add patch due to missing sys/timeb.h
 
- Hamish> Also, remember that X is client/server and lack of an X
- Hamish> server doesn't mean you can't run any X clients.
+ Hamish> I had a similar problem building OpenSSL with uclibc
+ Hamish> 0.9.30. I will fix it later today if I get a chance.
 
-True, but there wasn't actually any X dependency at all. With current
-trunk it builds under gtk/directfb as well.
+With svn trunk? I checked in a 0.9.30 fix back in December (r24578).
 
 -- 
 Bye, Peter Korsgaard
