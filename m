@@ -1,53 +1,39 @@
-From: loody <miloody@gmail.com>
-Date: Wed, 28 Jan 2009 01:07:08 +0800
-Subject: [Buildroot] bfd lib include Error while build elf2flt
-In-Reply-To: <87iqo0zocz.fsf@macbook.be.48ers.dk>
-References: <3a665c760901270846y7ccc4adak9c49fbc82618bfa0@mail.gmail.com>
-	<87iqo0zocz.fsf@macbook.be.48ers.dk>
-Message-ID: <3a665c760901270907o4aa2d8a5m86645cb9a844308f@mail.gmail.com>
+From: Amand Tihon <amand.tihon@alrj.org>
+Date: Tue, 27 Jan 2009 22:14:42 +0100
+Subject: [Buildroot] [PATCH] Add radvd to the list of packages
+In-Reply-To: <200901271757.28001.amand.tihon@alrj.org>
+References: <200901271757.28001.amand.tihon@alrj.org>
+Message-ID: <200901272214.48303.amand.tihon@alrj.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>>> "loody" == loody  <miloody@gmail.com> writes:
->
->  loody> Dear all:
->  loody> While compiling elf2flt, the buildroot shows the error message as
->  loody> attach at the end of this mail.
->  loody> I try to rebuild the binuitilies, but it still fail.
->  loody> If anyone has the same problem or knows where I get wrong, please let me know.
->  loody> appreciate your help,
->  loody> miloody
->
->  loody> undefined reference to `inflateInit_'
->  loody> /media/sda6/uclinux/buildroot-2009.02-rc2/toolchain_build_arm/binutils-2.19/bfd/compress.c:103:
->  loody> undefined reference to `inflate'
->  loody> /media/sda6/uclinux/buildroot-2009.02-rc2/toolchain_build_arm/binutils-2.19/bfd/compress.c:106:
->  loody> undefined reference to `inflateReset'
->  loody> /media/sda6/uclinux/buildroot-2009.02-rc2/toolchain_build_arm/binutils-2.19/bfd/compress.c:108:
->
-> Don't know anything about elf2flt, but it seems like it needs to link
-> to zlib.
->
-> --
-> Bye, Peter Korsgaard
->
+Le mardi 27 janvier 2009, Amand Tihon a ?crit?:
+> Add radvd, the IPv6 router advertisement daemon.
 
-Hi:
-do you mean zlib1g-dev?
-I use ubuntu and I have followed the instructions on the
-website,http://docwiki.gumstix.org/Buildroot_on_Ubuntu, to update this
-package as below.
+Thanks to Peter Korsgaard help, I'm working on a much cleaner patch.
 
-Reading package lists... Done
-Building dependency tree
-Reading state information... Done
-zlib1g-dev is already the newest version.
-0 upgraded, 0 newly installed, 0 to remove and 176 not upgraded.
-TT at TT-T43:~$
+One small thing still bugs me: the executables are installed in $(TARGET_DIR) 
+as (in my case) "avr32-linux-radvd" and "avr32-linux-radvdump" instead of 
+plain "radvd" and "radvdump".
 
-If not, would you please tell me which package I need?
-appreciate your help,
-miloody
+My current solution is to rename both files in $(RADVD_HOOK_POST_INSTALL). At 
+least, it's working.
+
+Does anyone know what could cause this, and how to correct it ?
+
+Thanks in advance.
+
+-- 
+Amand Tihon
+Rue du Ruchaux, 1 - 1490 Court-St-Etienne, Belgique
++32 479 207 743
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 189 bytes
+Desc: This is a digitally signed message part.
+Url : http://lists.busybox.net/pipermail/buildroot/attachments/20090127/2049ec22/attachment.pgp 
