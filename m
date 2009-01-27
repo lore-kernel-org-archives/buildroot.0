@@ -1,50 +1,53 @@
-From: Will Wagner <will_wagner@carallon.com>
-Date: Tue, 27 Jan 2009 12:47:31 +0000
-Subject: [Buildroot] alsa lib problem
-In-Reply-To: <20090127134408.2c74b516@hcegtvedt>
-References: <497E0B14.8040801@carallon.com>	<87ocxt2t8g.fsf@macbook.be.48ers.dk>	<497EFEDC.3040606@carallon.com>
-	<20090127134408.2c74b516@hcegtvedt>
-Message-ID: <497F0263.80302@carallon.com>
+From: Alessio.Stella at gidi.it <Alessio.Stella@gidi.it>
+Date: Tue, 27 Jan 2009 13:47:23 +0100
+Subject: [Buildroot] C++ and uclibc++ ??
+Message-ID: <OFCA721249.B9DBD6C6-ONC125754B.004638F2-C125754B.00464B2A@gidi.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hans-Christian Egtvedt wrote:
-> On Tue, 27 Jan 2009 12:32:28 +0000
-> Will Wagner <will_wagner@carallon.com> wrote:
-> 
->> Peter Korsgaard wrote:
->>> We unconditinally add the largefile stuff to TARGET_CFLAGS, which
->>> apparently isn't a good idea for alsa.
->>>
->>> If the kernel interface is always with an 32bit offset, then
->>> asound.h should probably be changed to use a 32bit data type
->>> instead. Could you try changing it to an unsigned int and recompile?
->> Yes is I change the asound.h header it does work.
->>
->> What is the best way to proceed from here? Just patch alsa?
->>
-> 
-> Make a patch for alsa, and send it upstream to the alsa maintainers.
-> They need to fix broken code like this anyway.
 
-Happy to prepare a patch for upstream. However can someone explain to me what is broken in 
-alsa? Looking at the code the declaration of the struct is identical in the kernel code 
-and the copy of the header in alsa. How is it that the size of off_t is different?
+Dear Mr.,
+      I don't understand if the fact that uclibc++ is an alpha release
+should prevent me from writing in C++ and force me to write me in C code
+instead.
 
-Thanks,
+The question is: does uclibc++ affect only some C++ libraries and operands
+like for instance the console IO << and >> ? or does it affect C++ code as
+a whole in its compiling and linking??
 
-Will.
+Thank you
 
-> 
-> <snipp>
-> 
+Kind regards,
 
--- 
-------------------------------------------------------------------------
-Will Wagner                                     will_wagner at carallon.com
-Development Manager                      Office Tel: +44 (0)20 7371 2032
-Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
-------------------------------------------------------------------------
+
+Alessio Stella
+(+39)051 642 3319
+R&D / Machine SW
+G.D
+Via Emilia Ponente 49 - 40011 Anzola Emilia - Bologna - Italy
+Headquarters: Via Battindarno 91 - 40133 Bologna Italy
+www.gidi.it
+
+
+
+
+---------------------------------------------------------------------------------------------------------
+Le informazioni contenute in questo messaggio di posta elettronica,
+allegati inclusi, sono riservate e confidenziali e ne ? vietata la
+diffusione in qualunque modo eseguita. Qualora Lei non fosse la persona a
+cui il presente messaggio ? destinato La invito ad eliminarlo ed a non
+leggerlo, dandomene gentilmente comunicazione.
+La prego inoltre di considerare la natura non personale di questo messaggio
+di posta aziendale, ovvero l'eventualita' che la sua risposta possa essere
+conosciuta anche da altri ruoli nell'ambito dell'organizzazione -
+
+The information contained in this email message, including the attachments,
+is confidential and its diffusion in any form is prohibited.
+If you are not the intended recipient, you are kindly requested to cancel
+this message without reading it and to notify the sender.
+Please also consider the impersonal nature of this company e-mail message,
+i.e. the possibility that also other members within the organization may be
+aware of the contents of any reply of yours.
