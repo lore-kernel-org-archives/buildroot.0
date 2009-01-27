@@ -1,58 +1,35 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 27 Jan 2009 17:47:19 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/icu
-In-Reply-To: <C13DBBE85AD6974B85C118C35890CA5F1AF38F7920@EU1RDCRDC1WX029.exi.nxp.com>
-	(Daniel James Laird's message of "Tue\,
-	27 Jan 2009 17\:30\:25 +0100")
-References: <20090127150231.1A65F7709E@busybox.osuosl.org>
-	<COL102-DS10B32A6F03C4C2B946F2DBDCCB0@phx.gbl>
-	<87r62ozqv4.fsf@macbook.be.48ers.dk>
-	<C13DBBE85AD6974B85C118C35890CA5F1AF38F7920@EU1RDCRDC1WX029.exi.nxp.com>
-Message-ID: <87mydczofc.fsf@macbook.be.48ers.dk>
+Date: Tue, 27 Jan 2009 17:48:44 +0100
+Subject: [Buildroot] bfd lib include Error while build elf2flt
+In-Reply-To: <3a665c760901270846y7ccc4adak9c49fbc82618bfa0@mail.gmail.com>
+	(loody's message of "Wed\, 28 Jan 2009 00\:46\:09 +0800")
+References: <3a665c760901270846y7ccc4adak9c49fbc82618bfa0@mail.gmail.com>
+Message-ID: <87iqo0zocz.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Daniel" == Daniel James Laird <daniel.j.laird@nxp.com> writes:
+>>>>> "loody" == loody  <miloody@gmail.com> writes:
 
-Hi,
+ loody> Dear all:
+ loody> While compiling elf2flt, the buildroot shows the error message as
+ loody> attach at the end of this mail.
+ loody> I try to rebuild the binuitilies, but it still fail.
+ loody> If anyone has the same problem or knows where I get wrong, please let me know.
+ loody> appreciate your help,
+ loody> miloody
 
- >> I'm not familiar with the external toolchain stuff, but don't you
- >> already now need to configure buildroot to match the toolchain
- >> settings (ipv6, largefile, locales, c++ support and so on?). If not,
- >> how is that handled?
+ loody> undefined reference to `inflateInit_'
+ loody> /media/sda6/uclinux/buildroot-2009.02-rc2/toolchain_build_arm/binutils-2.19/bfd/compress.c:103:
+ loody> undefined reference to `inflate'
+ loody> /media/sda6/uclinux/buildroot-2009.02-rc2/toolchain_build_arm/binutils-2.19/bfd/compress.c:106:
+ loody> undefined reference to `inflateReset'
+ loody> /media/sda6/uclinux/buildroot-2009.02-rc2/toolchain_build_arm/binutils-2.19/bfd/compress.c:108:
 
- Daniel> It is currently setting stuff under
- Daniel> toolchain/external-toolchain/Config.in.2
-
-Ahh ok.
-
- >> I guess it's already broken then ;) There's several packages
- >> depending on locales/c++/wchar stuff.
-
- Daniel> Yep, seems like what I shall do is add the options
- Daniel> BR2_LOCALE, BR2_USE_WCHAR and BR2_INSTALL_LIBSTDCPP.
-
-Seems so.
-
- Daniel> Quick question, currently
- Daniel> toolchain/external-toolchain/Config.in.2 is setting
- Daniel> BR2_GCC_CROSS_CXX which means build a working C++ compiler
- Daniel> (in buildroot toolchain case) or I have a working C++
- Daniel> compiler (in external toolchain usecase).  So should this be
- Daniel> changed to BR2_INSTALL_LIBSTDCPP as we seem to be using this
- Daniel> second option to dictate whether some packages can be built
- Daniel> (qt/icu etc) or should we instead be checking against
- Daniel> BR2_GCC_CROSS_CXX in the packages that require C++ compiler
- Daniel> support
-
-Well, these things date back to before my time - I'm not quite sure
-why we have 2 config settings for C++, and if C++ support without
-libstdc++ makes any sense, but the best approach indeed seems to be to
-add a LIBSTDCPP option as well (You can make it a hidden option that
-get's selected by the CROSS_CXX if you want to).
+Don't know anything about elf2flt, but it seems like it needs to link
+to zlib.
 
 -- 
 Bye, Peter Korsgaard
