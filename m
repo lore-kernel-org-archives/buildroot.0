@@ -1,70 +1,35 @@
-From: Daniel Laird <danieljlaird@hotmail.com>
-Date: Tue, 27 Jan 2009 15:29:20 +0000
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 27 Jan 2009 16:54:39 +0100
 Subject: [Buildroot] svn commit: trunk/buildroot/package/icu
-In-Reply-To: <20090127150231.1A65F7709E@busybox.osuosl.org>
+In-Reply-To: <COL102-DS10B32A6F03C4C2B946F2DBDCCB0@phx.gbl> (Daniel Laird's
+	message of "Tue\, 27 Jan 2009 15\:29\:20 +0000")
 References: <20090127150231.1A65F7709E@busybox.osuosl.org>
-Message-ID: <COL102-DS10B32A6F03C4C2B946F2DBDCCB0@phx.gbl>
+	<COL102-DS10B32A6F03C4C2B946F2DBDCCB0@phx.gbl>
+Message-ID: <87r62ozqv4.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-My only concern with all these changes is currently external toolchain has
-no support for setting
-BR2_ENABLE_LOCALE or BR2_USE_WCHAR.  However I can build these packages.
+>>>>> "Daniel" == Daniel Laird <danieljlaird@hotmail.com> writes:
 
-SO,
-do we make these options top level external-toolchain options? (best option)
-automagically set these if using an external toolchain? (hack option)
+ Daniel> My only concern with all these changes is currently external toolchain has
+ Daniel> no support for setting
 
-It would seem a shame to break external toolchain support at this late
-hour....
+ Daniel> BR2_ENABLE_LOCALE or BR2_USE_WCHAR.  However I can build
+ Daniel> these packages.
 
-Am willing to try out suggested fixes!
-Cheers
-Dan
------Original Message-----
-From: buildroot-bounces@busybox.net [mailto:buildroot-bounces at busybox.net]
-On Behalf Of jacmet at uclibc.org
-Sent: 2009 Jan 27 15:03
-To: buildroot at uclibc.org
-Subject: [Buildroot] svn commit: trunk/buildroot/package/icu
+I'm not familiar with the external toolchain stuff, but don't you
+already now need to configure buildroot to match the toolchain
+settings (ipv6, largefile, locales, c++ support and so on?). If not,
+how is that handled?
 
-Author: jacmet
-Date: 2009-01-27 15:02:29 +0000 (Tue, 27 Jan 2009)
-New Revision: 25078
+ Daniel> It would seem a shame to break external toolchain support at
+ Daniel> this late hour....
 
-Log:
-icu: needs wchar support in toolchain as well
+I guess it's already broken then ;) There's several packages depending
+on locales/c++/wchar stuff.
 
-Modified:
-   trunk/buildroot/package/icu/Config.in
-
-
-Changeset:
-Modified: trunk/buildroot/package/icu/Config.in
-===================================================================
---- trunk/buildroot/package/icu/Config.in	2009-01-27 15:02:25 UTC (rev
-25077)
-+++ trunk/buildroot/package/icu/Config.in	2009-01-27 15:02:29 UTC (rev
-25078)
-@@ -1,10 +1,11 @@
- config BR2_PACKAGE_ICU
- 	bool "icu"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_USE_WCHAR
- 	help
- 	  International Components for Unicode.
- 
- 	  http://icu-project.org/
- 
--comment "icu requires a toolchain with C++ support enabled"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "icu requires a toolchain with C++ support and WCHAR enabled"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
-
-_______________________________________________
-buildroot mailing list
-buildroot at busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
+-- 
+Bye, Peter Korsgaard
