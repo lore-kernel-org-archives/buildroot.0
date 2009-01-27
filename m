@@ -1,28 +1,32 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Tue, 27 Jan 2009 11:52:12 +1100
-Subject: [Buildroot] svn
-	commit:	trunk/buildroot/package/multimedia/mplayer
-In-Reply-To: <20090126092249.54682768D3@busybox.osuosl.org>
-References: <20090126092249.54682768D3@busybox.osuosl.org>
-Message-ID: <20090127005212.GC1083@cloud.net.au>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 27 Jan 2009 01:12:27 +0000 (UTC)
+Subject: [Buildroot] [Bug 73] Bump openssl package to the latest version
+In-Reply-To: <bug-73-163@https.bugs.busybox.net/>
+References: <bug-73-163@https.bugs.busybox.net/>
+Message-ID: <20090127011227.5E27E76484@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jan 26, 2009 at 09:22:48AM +0000, jacmet at uclibc.org wrote:
-> Author: jacmet
-> Date: 2009-01-26 09:22:47 +0000 (Mon, 26 Jan 2009)
-> New Revision: 25046
-> 
-> Log:
-> mplayer: add patch due to missing sys/timeb.h
-
-I had a similar problem building OpenSSL with uclibc 0.9.30. I will fix
-it later today if I get a chance.
+https://bugs.busybox.net/show_bug.cgi?id=73
 
 
-Hamish
+Hamish Moffatt <hamish@cloud.net.au> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |hamish at cloud.net.au
+
+
+
+
+--- Comment #4 from Hamish Moffatt <hamish@cloud.net.au>  2009-01-27 01:12:26 UTC ---
+I've been using 0.9.8i locally with no issues
+
+
 -- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
