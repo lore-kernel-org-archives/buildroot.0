@@ -1,9 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 27 Jan 2009 01:12:27 +0000 (UTC)
+Date: Tue, 27 Jan 2009 01:22:47 +0000 (UTC)
 Subject: [Buildroot] [Bug 73] Bump openssl package to the latest version
 In-Reply-To: <bug-73-163@https.bugs.busybox.net/>
 References: <bug-73-163@https.bugs.busybox.net/>
-Message-ID: <20090127011227.5E27E76484@busybox.osuosl.org>
+Message-ID: <20090127012247.C34EC76484@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +13,12 @@ To: buildroot@busybox.net
 https://bugs.busybox.net/show_bug.cgi?id=73
 
 
-Hamish Moffatt <hamish@cloud.net.au> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |hamish at cloud.net.au
 
 
 
-
---- Comment #4 from Hamish Moffatt <hamish@cloud.net.au>  2009-01-27 01:12:26 UTC ---
-I've been using 0.9.8i locally with no issues
+--- Comment #5 from Hamish Moffatt <hamish@cloud.net.au>  2009-01-27 01:22:46 UTC ---
+I think upgrading to 0.9.8j would be good, as this is a security-sensitive
+package and we should do our best to keep it up to date.
 
 
 -- 
