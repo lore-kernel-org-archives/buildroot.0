@@ -1,31 +1,53 @@
 From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Tue, 27 Jan 2009 08:26:07 +0100
-Subject: [Buildroot] Newbie question
-In-Reply-To: <877i4h2pkq.fsf@macbook.be.48ers.dk>
-References: <497EA507.6060505@iwtech.com.au>
-	<20090127073152.0571b3ae@hcegtvedt>
-	<877i4h2pkq.fsf@macbook.be.48ers.dk>
-Message-ID: <1233041167.2298.138.camel@elrond.atmel.com>
+Date: Tue, 27 Jan 2009 08:30:29 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot:
+	docs	target	target/device/Atmel target/ etc...
+In-Reply-To: <20090127002621.GQ25952@mx.loc>
+References: <20090126235232.92CF677458@busybox.osuosl.org>
+	<20090127002621.GQ25952@mx.loc>
+Message-ID: <1233041429.2298.144.camel@elrond.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-tis 2009-01-27 klockan 08:08 +0100 skrev Peter Korsgaard:
-> >>>>> "Hans-Christian" == Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> writes:
+tis 2009-01-27 klockan 01:26 +0100 skrev Bernhard Reutner-Fischer:
+> On Mon, Jan 26, 2009 at 11:52:32PM +0000, ulf at uclibc.org wrote:
+> >Author: ulf
+> >Date: 2009-01-26 23:52:31 +0000 (Mon, 26 Jan 2009)
+> >New Revision: 25071
 > 
->  Hans-Christian> It is set for some targets in a Makefile in a sub
->  Hans-Christian> directory beneath target/devices/...
+> >This is overridden by BUILDROOT_COPYTO,
+> >if set into the environment.
 > 
->  Hans-Christian> Perhaps doing make BOARD_NAME=foobar works
+> >+COPYTO=$(strip $(subst ",,$(BUILDROOT_COPYTO)))
 > 
-> It seems like we have a BR2_BOARD_NAME several places under
-> target/device. That should probably be generalized and moved together
-> with BR2_PROJECT.
+> What i like about stuff like that is that it is so obvious that it
+> _will_ bite sombody sooner or later. Surely you will call that
+> case constructed, but there is no need to add brittle stuff if
+> it would be so easy to do it "right".
 > 
+> $ grep _COPYTO ~/.bashrc
+> BUILDROOT_COPYTO="$HOME/This is my   Desktop directory/keep/"
 
-I agree with that.
+Thre typical case for this is "/tftpboot"
+or "/var/share/tftpbot"
+I do not see any other use for it at the momemnt.
+
+If you want more stability,
+then providing a directory for tftpboot
+would be the real option.
+
+I.E: You always end with tftpboot.
+YOu can then select "/"  or "/var/share"
+
+for "/tftpboot" or "/var/share/tftpboot"
 
 BR
 Ulf Samuelsson
+
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
