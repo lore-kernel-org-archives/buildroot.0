@@ -1,30 +1,54 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Tue, 27 Jan 2009 01:26:21 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot: docs
-	target	target/device/Atmel target/ etc...
-In-Reply-To: <20090126235232.92CF677458@busybox.osuosl.org>
-References: <20090126235232.92CF677458@busybox.osuosl.org>
-Message-ID: <20090127002621.GQ25952@mx.loc>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Tue, 27 Jan 2009 11:26:46 +1100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libsexy
+In-Reply-To: <87mydhkgdx.fsf@macbook.be.48ers.dk>
+References: <20090123174850.A9B52769CC@busybox.osuosl.org>
+	<87mydhkgdx.fsf@macbook.be.48ers.dk>
+Message-ID: <20090127002646.GA1083@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jan 26, 2009 at 11:52:32PM +0000, ulf at uclibc.org wrote:
->Author: ulf
->Date: 2009-01-26 23:52:31 +0000 (Mon, 26 Jan 2009)
->New Revision: 25071
+On Fri, Jan 23, 2009 at 07:48:42PM +0100, Peter Korsgaard wrote:
+> >>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+> 
+>  ulf> Author: ulf
+>  ulf> Date: 2009-01-23 17:48:49 +0000 (Fri, 23 Jan 2009)
+>  ulf> New Revision: 24982
+> 
+>  ulf> Log:
+>  ulf> Disable libsexy (with comment) if X is not available
+> 
+>  ulf> Modified:
+>  ulf>    trunk/buildroot/package/libsexy/Config.in
+> 
+>  ulf> Changeset:
+>  ulf> Modified: trunk/buildroot/package/libsexy/Config.in
+>  ulf> ===================================================================
+>  ulf> --- trunk/buildroot/package/libsexy/Config.in	2009-01-23 13:12:57 UTC (rev 24981)
+>  ulf> +++ trunk/buildroot/package/libsexy/Config.in	2009-01-23 17:48:49 UTC (rev 24982)
+>  ulf> @@ -1,6 +1,7 @@
+>  ulf>  config BR2_PACKAGE_LIBSEXY
+>  ulf>  	bool "libsexy"
+>  ulf>  	depends on BR2_PACKAGE_LIBGTK2
+>  ulf> +	depends on !BR2_PACKAGE_XSERVER_none
+> 
+> According to the makefile it seems like there's a:
+> 
+> select BR2_PACKAGE_XLIB_LIBX11
+> 
+> missing.
+> 
+> But from doing a quick grep in the libsexy sources I don't see
+> any X includes, so are you sure it doesn't work with
+> gtk-over-directfb?
 
->This is overridden by BUILDROOT_COPYTO,
->if set into the environment.
+Also, remember that X is client/server and lack of an X server doesn't
+mean you can't run any X clients.
 
->+COPYTO=$(strip $(subst ",,$(BUILDROOT_COPYTO)))
 
-What i like about stuff like that is that it is so obvious that it
-_will_ bite sombody sooner or later. Surely you will call that
-case constructed, but there is no need to add brittle stuff if
-it would be so easy to do it "right".
-
-$ grep _COPYTO ~/.bashrc
-BUILDROOT_COPYTO="$HOME/This is my   Desktop directory/keep/"
+Hamish
+-- 
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
