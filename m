@@ -1,33 +1,40 @@
-From: Amand Tihon <amand.tihon@alrj.org>
-Date: Wed, 28 Jan 2009 22:35:37 +0100
-Subject: [Buildroot]  [PATCH] Add radvd to the list of packages
-In-Reply-To: <200901282131.37172.amand.tihon@alrj.org>
-References: <200901282131.37172.amand.tihon@alrj.org>
-Message-ID: <200901282235.37230.amand.tihon@alrj.org>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Wed, 28 Jan 2009 21:38:50 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package:  radvd
+Message-ID: <20090128213850.79B5B768D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: jacmet
+Date: 2009-01-28 21:38:49 +0000 (Wed, 28 Jan 2009)
+New Revision: 25107
+
+Log:
+Add radvd to the list of packages
+
 Add radvd, the IPv6 router advertisement daemon.
 
 Signed-off-by: Amand Tihon <amand.tihon@alrj.org>
----
 
-Never two without three... This one should make it :)
+Added:
+   trunk/buildroot/package/radvd/
+   trunk/buildroot/package/radvd/Config.in
+   trunk/buildroot/package/radvd/S50radvd
+   trunk/buildroot/package/radvd/radvd.mk
 
- package/Config.in       |    1 +
- package/radvd/Config.in |    8 ++++++++
- package/radvd/S50radvd  |   18 ++++++++++++++++++
- package/radvd/radvd.mk  |   20 ++++++++++++++++++++
- 4 files changed, 47 insertions(+), 0 deletions(-)
+Modified:
+   trunk/buildroot/package/Config.in
 
-diff --git a/package/Config.in b/package/Config.in
-index 29190b2..bb16015 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -189,6 +189,7 @@ source "package/openvpn/Config.in"
+
+Changeset:
+Modified: trunk/buildroot/package/Config.in
+===================================================================
+--- trunk/buildroot/package/Config.in	2009-01-28 20:09:03 UTC (rev 25106)
++++ trunk/buildroot/package/Config.in	2009-01-28 21:38:49 UTC (rev 25107)
+@@ -189,6 +189,7 @@
  source "package/openswan/Config.in"
  source "package/portmap/Config.in"
  source "package/pppd/Config.in"
@@ -35,11 +42,11 @@ index 29190b2..bb16015 100644
  source "package/rp-pppoe/Config.in"
  source "package/pptp-linux/Config.in"
  source "package/proftpd/Config.in"
-diff --git a/package/radvd/Config.in b/package/radvd/Config.in
-new file mode 100644
-index 0000000..072aed4
---- /dev/null
-+++ b/package/radvd/Config.in
+
+Added: trunk/buildroot/package/radvd/Config.in
+===================================================================
+--- trunk/buildroot/package/radvd/Config.in	                        (rev 0)
++++ trunk/buildroot/package/radvd/Config.in	2009-01-28 21:38:49 UTC (rev 25107)
 @@ -0,0 +1,8 @@
 +config BR2_PACKAGE_RADVD
 +	bool "radvd"
@@ -49,11 +56,11 @@ index 0000000..072aed4
 +	  IPv6 Router Advertisement Daemon.
 +
 +	  http://www.litech.org/radvd/
-diff --git a/package/radvd/S50radvd b/package/radvd/S50radvd
-new file mode 100755
-index 0000000..d3e2cd1
---- /dev/null
-+++ b/package/radvd/S50radvd
+
+Added: trunk/buildroot/package/radvd/S50radvd
+===================================================================
+--- trunk/buildroot/package/radvd/S50radvd	                        (rev 0)
++++ trunk/buildroot/package/radvd/S50radvd	2009-01-28 21:38:49 UTC (rev 25107)
 @@ -0,0 +1,18 @@
 +#!/bin/sh
 +
@@ -73,11 +80,17 @@ index 0000000..d3e2cd1
 +	echo "failed"
 +	exit 1
 +fi
-diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
-new file mode 100644
-index 0000000..268c26d
---- /dev/null
-+++ b/package/radvd/radvd.mk
+
+
+Property changes on: trunk/buildroot/package/radvd/S50radvd
+___________________________________________________________________
+Added: svn:executable
+   + *
+
+Added: trunk/buildroot/package/radvd/radvd.mk
+===================================================================
+--- trunk/buildroot/package/radvd/radvd.mk	                        (rev 0)
++++ trunk/buildroot/package/radvd/radvd.mk	2009-01-28 21:38:49 UTC (rev 25107)
 @@ -0,0 +1,20 @@
 +#############################################################
 +#
@@ -99,16 +112,3 @@ index 0000000..268c26d
 +$(RADVD_HOOK_POST_INSTALL): $(RADVD_TARGET_INSTALL_TARGET)
 +	$(INSTALL) -m 0755 package/radvd/S50radvd $(TARGET_DIR)/etc/init.d
 +	touch $@
-
-
--- 
-Amand Tihon
-Rue du Ruchaux, 1 - 1490 Court-St-Etienne, Belgique
-+32 479 207 743
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 189 bytes
-Desc: This is a digitally signed message part.
-Url : http://lists.busybox.net/pipermail/buildroot/attachments/20090128/7f1b4a01/attachment.pgp 
