@@ -1,31 +1,42 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 28 Jan 2009 16:34:16 +0100
-Subject: [Buildroot] alsa lib problem
-In-Reply-To: <497EFEDC.3040606@carallon.com> (Will Wagner's message of "Tue\,
-	27 Jan 2009 12\:32\:28 +0000")
-References: <497E0B14.8040801@carallon.com>
-	<87ocxt2t8g.fsf@macbook.be.48ers.dk> <497EFEDC.3040606@carallon.com>
-Message-ID: <877i4fv407.fsf@macbook.be.48ers.dk>
+From: laird at uclibc.org <laird@uclibc.org>
+Date: Wed, 28 Jan 2009 15:35:41 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/autoconf
+Message-ID: <20090128153542.0132D769CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Will" == Will Wagner <will_wagner@carallon.com> writes:
+Author: laird
+Date: 2009-01-28 15:35:39 +0000 (Wed, 28 Jan 2009)
+New Revision: 25102
 
- >> If the kernel interface is always with an 32bit offset, then asound.h
- >> should probably be changed to use a 32bit data type instead. Could you
- >> try changing it to an unsigned int and recompile?
+Log:
+autoconf.mk: Bounce version to 2.63
 
- Will> Yes is I change the asound.h header it does work.
+Have been having various issues with multiple jobs (-jX) and building
+autoconf.  Turns out that v2.63 has fixed this.  So bounce version
+to a working version.
+ 
+Signed-off-by: Daniel Laird <daniel.j.laird@nxp.com>
 
- Will> What is the best way to proceed from here? Just patch alsa?
 
-Yes, I checked in the patch Takashi Iwai committed to alsa-lib.git as
-r25101.
+Modified:
+   trunk/buildroot/package/autoconf/autoconf.mk
 
-Thanks.
 
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/package/autoconf/autoconf.mk
+===================================================================
+--- trunk/buildroot/package/autoconf/autoconf.mk	2009-01-28 15:33:08 UTC (rev 25101)
++++ trunk/buildroot/package/autoconf/autoconf.mk	2009-01-28 15:35:39 UTC (rev 25102)
+@@ -3,7 +3,7 @@
+ # autoconf
+ #
+ #############################################################
+-AUTOCONF_VERSION:=2.61
++AUTOCONF_VERSION:=2.63
+ AUTOCONF_SOURCE:=autoconf-$(AUTOCONF_VERSION).tar.bz2
+ AUTOCONF_SITE:=$(BR2_GNU_MIRROR)/autoconf
+ AUTOCONF_CAT:=$(BZCAT)
