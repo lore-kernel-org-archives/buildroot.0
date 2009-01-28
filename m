@@ -1,39 +1,36 @@
-From: Amand Tihon <amand.tihon@alrj.org>
-Date: Tue, 27 Jan 2009 22:14:42 +0100
-Subject: [Buildroot] [PATCH] Add radvd to the list of packages
-In-Reply-To: <200901271757.28001.amand.tihon@alrj.org>
-References: <200901271757.28001.amand.tihon@alrj.org>
-Message-ID: <200901272214.48303.amand.tihon@alrj.org>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Wed, 28 Jan 2009 11:13:22 +1100
+Subject: [Buildroot] svn
+	commit:	trunk/buildroot/package/multimedia/mplayer
+In-Reply-To: <87eiyo2979.fsf@macbook.be.48ers.dk>
+References: <20090126092249.54682768D3@busybox.osuosl.org>
+	<20090127005212.GC1083@cloud.net.au>
+	<87fxj52t0c.fsf@macbook.be.48ers.dk>
+	<20090127125835.GA18681@cloud.net.au>
+	<87eiyo2979.fsf@macbook.be.48ers.dk>
+Message-ID: <20090128001322.GA3027@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le mardi 27 janvier 2009, Amand Tihon a ?crit?:
-> Add radvd, the IPv6 router advertisement daemon.
+On Tue, Jan 27, 2009 at 02:02:34PM +0100, Peter Korsgaard wrote:
+> >>>>> "Hamish" == Hamish Moffatt <hamish@cloud.net.au> writes:
+> 
+>  Hamish> I had a similar problem building OpenSSL with uclibc
+>  Hamish> 0.9.30. I will fix it later today if I get a chance.
+>  >> 
+>  >> With svn trunk? I checked in a 0.9.30 fix back in December (r24578).
+> 
+>  Hamish> Weird, I should have that patch. I'll check tomorrow. Thanks.
+> 
+> Notice that Makefile.autotools.in normally only applies patches if the
+> filename matches <package>-<version>-*.patch, so if you locally
+> updated openssl and didn't rename the patches then that might be why.
 
-Thanks to Peter Korsgaard help, I'm working on a much cleaner patch.
+That was it. Builds perfectly now. Thanks.
 
-One small thing still bugs me: the executables are installed in $(TARGET_DIR) 
-as (in my case) "avr32-linux-radvd" and "avr32-linux-radvdump" instead of 
-plain "radvd" and "radvdump".
-
-My current solution is to rename both files in $(RADVD_HOOK_POST_INSTALL). At 
-least, it's working.
-
-Does anyone know what could cause this, and how to correct it ?
-
-Thanks in advance.
-
+Hamish
 -- 
-Amand Tihon
-Rue du Ruchaux, 1 - 1490 Court-St-Etienne, Belgique
-+32 479 207 743
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 189 bytes
-Desc: This is a digitally signed message part.
-Url : http://lists.busybox.net/pipermail/buildroot/attachments/20090127/2049ec22/attachment.pgp 
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
