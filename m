@@ -1,31 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 28 Jan 2009 07:34:37 +0100
-Subject: [Buildroot] [PATCH] fix configuration wrt elf2flt
-In-Reply-To: <alpine.LFD.2.00.0812031426200.14328@xanadu.home> (Nicolas
-	Pitre's message of "Wed\, 03 Dec 2008 14\:26\:54 -0500 \(EST\)")
-References: <alpine.LFD.2.00.0812031426200.14328@xanadu.home>
-Message-ID: <87tz7kvszm.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 28 Jan 2009 06:45:25 +0000 (UTC)
+Subject: [Buildroot] [Bug 73] Bump openssl package to the latest version
+In-Reply-To: <bug-73-163@https.bugs.busybox.net/>
+References: <bug-73-163@https.bugs.busybox.net/>
+Message-ID: <20090128064525.79E3F769CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Nicolas" == Nicolas Pitre <nico@cam.org> writes:
+https://bugs.busybox.net/show_bug.cgi?id=73
 
-Hi,
 
- Nicolas> The buildroot toolchain is installed in
- Nicolas> $(STAGING_DIR)/usr/bin and not in $(STAGING_DIR)/bin so
- Nicolas> let,s adjust the --prefix accordingly.
+Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> changed:
 
- Nicolas> Also the BFLT binary format is always stripped by
- Nicolas> definition, so it is incompatible with any kind of stripping
- Nicolas> option.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |hans-
+                   |                            |christian.egtvedt at atmel.com
 
-Sorry for the delay, is now committed.
 
-Thanks.
+
+
+--- Comment #7 from Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>  2009-01-28 06:45:24 UTC ---
+Just leave out AVR32 for now, I think the security stuff is more important.
+
+The openssl.mk needs a little love before AVR32 will work, you have to disable
+it selecting an optimization for AVR32 arch.
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
