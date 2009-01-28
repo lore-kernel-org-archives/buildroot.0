@@ -1,100 +1,38 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Wed, 28 Jan 2009 16:37:09 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain: gcc/4.3.1
-	gcc/4.3.2 kernel-headers
-Message-ID: <20090128163710.1D38C769CC@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 28 Jan 2009 17:37:53 +0100
+Subject: [Buildroot] 2009.02-rc2 released
+In-Reply-To: <49801BBE.8060603@cetrtapot.si> (Hinko Kocevar's message of "Wed\,
+	28 Jan 2009 09\:47\:58 +0100")
+References: <87skn9iv5w.fsf@macbook.be.48ers.dk>
+	<49801BBE.8060603@cetrtapot.si>
+Message-ID: <87tz7jtmhq.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-01-28 16:37:09 +0000 (Wed, 28 Jan 2009)
-New Revision: 25105
+>>>>> "Hinko" == Hinko Kocevar <hinko.kocevar@cetrtapot.si> writes:
 
-Log:
-toolchain: cris fixes for gcc 4.3.x / linux 2.6.28.x
+Hi,
 
-Patches by Hinko Kocevar <hinko.kocevar@cetrtapot.si>
+ Hinko> I've tested my custom Axis etrax LX100 based board (cris
+ Hinko> arch-v10 CPU) and buildroot 2009.02-rc2 builds toolchain and
+ Hinko> kernel wo problem.  I have minor fixes for 2.6.28.1 kernel and
+ Hinko> 4.3.2 gcc regarding cris architecture (please apply):
 
-Added:
-   trunk/buildroot/toolchain/gcc/4.3.1/999-gcc-4.3.0-cris-pragma-pack-warning-remove.patch
-   trunk/buildroot/toolchain/gcc/4.3.2/999-gcc-4.3.0-cris-pragma-pack-warning-remove.patch
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.2-cris-eth-driver-netpoll.patch
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.2-cris-klist-warnings.patch
+ Hinko>  - 999-gcc-4.3.0-cris-pragma-pack-warning-remove.patch
+ Hinko>    remove warnings when compiling gcc-4.3.2
+ Hinko>  - linux-2.6.28.1-cris-eth-driver-netpoll.patch
+ Hinko>    make cris eth driver compile on 2.6.28.1 kernel
+ Hinko>  - linux-2.6.28.1-cris-klist-warnings.patch
+ Hinko>    avoid klist warnings at bootup related to alignment of the klist struct (from be 2.6.28 stable)
 
+Thanks, committed as r25105.
 
-Changeset:
-Added: trunk/buildroot/toolchain/gcc/4.3.1/999-gcc-4.3.0-cris-pragma-pack-warning-remove.patch
-===================================================================
---- trunk/buildroot/toolchain/gcc/4.3.1/999-gcc-4.3.0-cris-pragma-pack-warning-remove.patch	                        (rev 0)
-+++ trunk/buildroot/toolchain/gcc/4.3.1/999-gcc-4.3.0-cris-pragma-pack-warning-remove.patch	2009-01-28 16:37:09 UTC (rev 25105)
-@@ -0,0 +1,13 @@
-+diff -urN gcc-4.3.1.orig/gcc/config/cris/cris.h gcc-4.3.1/gcc/config/cris/cris.h
-+--- gcc-4.3.1.orig/gcc/config/cris/cris.h	2008-02-22 12:11:01.000000000 +0100
-++++ gcc-4.3.1/gcc/config/cris/cris.h	2008-07-02 10:42:42.000000000 +0200
-+@@ -1529,9 +1529,6 @@
-+ 
-+ #define NO_IMPLICIT_EXTERN_C
-+ 
-+-/* No specific purpose other than warningless compatibility.  */
-+-#define HANDLE_PRAGMA_PACK_PUSH_POP 1
-+-
-+ /*
-+  * Local variables:
-+  * eval: (c-set-style "gnu")
+ Hinko> Keep up the great work!
 
-Added: trunk/buildroot/toolchain/gcc/4.3.2/999-gcc-4.3.0-cris-pragma-pack-warning-remove.patch
-===================================================================
---- trunk/buildroot/toolchain/gcc/4.3.2/999-gcc-4.3.0-cris-pragma-pack-warning-remove.patch	                        (rev 0)
-+++ trunk/buildroot/toolchain/gcc/4.3.2/999-gcc-4.3.0-cris-pragma-pack-warning-remove.patch	2009-01-28 16:37:09 UTC (rev 25105)
-@@ -0,0 +1,13 @@
-+diff -urN gcc-4.3.1.orig/gcc/config/cris/cris.h gcc-4.3.1/gcc/config/cris/cris.h
-+--- gcc-4.3.1.orig/gcc/config/cris/cris.h	2008-02-22 12:11:01.000000000 +0100
-++++ gcc-4.3.1/gcc/config/cris/cris.h	2008-07-02 10:42:42.000000000 +0200
-+@@ -1529,9 +1529,6 @@
-+ 
-+ #define NO_IMPLICIT_EXTERN_C
-+ 
-+-/* No specific purpose other than warningless compatibility.  */
-+-#define HANDLE_PRAGMA_PACK_PUSH_POP 1
-+-
-+ /*
-+  * Local variables:
-+  * eval: (c-set-style "gnu")
+Thanks!
 
-Added: trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.2-cris-eth-driver-netpoll.patch
-===================================================================
---- trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.2-cris-eth-driver-netpoll.patch	                        (rev 0)
-+++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.2-cris-eth-driver-netpoll.patch	2009-01-28 16:37:09 UTC (rev 25105)
-@@ -0,0 +1,11 @@
-+--- a/drivers/net/cris/eth_v10.c.org	2009-01-28 09:19:09.000000000 +0100
-++++ b/drivers/net/cris/eth_v10.c	2009-01-28 09:19:16.000000000 +0100
-+@@ -1707,7 +1707,7 @@
-+ static void
-+ e100_netpoll(struct net_device* netdev)
-+ {
-+-	e100rxtx_interrupt(NETWORK_DMA_TX_IRQ_NBR, netdev, NULL);
-++	e100rxtx_interrupt(NETWORK_DMA_TX_IRQ_NBR, netdev);
-+ }
-+ #endif
-+ 
-
-Added: trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.2-cris-klist-warnings.patch
-===================================================================
---- trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.2-cris-klist-warnings.patch	                        (rev 0)
-+++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.2-cris-klist-warnings.patch	2009-01-28 16:37:09 UTC (rev 25105)
-@@ -0,0 +1,12 @@
-+--- a/include/linux/klist.h
-++++ b/include/linux/klist.h
-+@@ -23,7 +23,7 @@ struct klist {
-+ 	struct list_head	k_list;
-+ 	void			(*get)(struct klist_node *);
-+ 	void			(*put)(struct klist_node *);
-+-};
-++} __attribute__ ((aligned (4)));
-+ 
-+ #define KLIST_INIT(_name, _get, _put)					\
-+ 	{ .k_lock	= __SPIN_LOCK_UNLOCKED(_name.k_lock),		\
-+
+-- 
+Bye, Peter Korsgaard
