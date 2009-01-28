@@ -1,42 +1,31 @@
-From: laird at uclibc.org <laird@uclibc.org>
-Date: Wed, 28 Jan 2009 15:35:41 +0000 (UTC)
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 28 Jan 2009 16:39:17 +0100
 Subject: [Buildroot] svn commit: trunk/buildroot/package/autoconf
-Message-ID: <20090128153542.0132D769CC@busybox.osuosl.org>
+In-Reply-To: <20090128153542.0132D769CC@busybox.osuosl.org>
+	(laird@uclibc.org's message of "Wed\,
+	28 Jan 2009 15\:35\:41 +0000 \(UTC\)")
+References: <20090128153542.0132D769CC@busybox.osuosl.org>
+Message-ID: <873af3v3ru.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: laird
-Date: 2009-01-28 15:35:39 +0000 (Wed, 28 Jan 2009)
-New Revision: 25102
+>>>>> "laird" == laird  <laird@uclibc.org> writes:
 
-Log:
-autoconf.mk: Bounce version to 2.63
+ laird> Author: laird
+ laird> Date: 2009-01-28 15:35:39 +0000 (Wed, 28 Jan 2009)
+ laird> New Revision: 25102
 
-Have been having various issues with multiple jobs (-jX) and building
-autoconf.  Turns out that v2.63 has fixed this.  So bounce version
-to a working version.
- 
-Signed-off-by: Daniel Laird <daniel.j.laird@nxp.com>
+ laird> Log:
+ laird> autoconf.mk: Bounce version to 2.63
 
+ laird> Have been having various issues with multiple jobs (-jX) and building
+ laird> autoconf.  Turns out that v2.63 has fixed this.  So bounce version
+ laird> to a working version.
 
-Modified:
-   trunk/buildroot/package/autoconf/autoconf.mk
+Ok, let's give it a good shake to see if anything breaks with this.
 
-
-Changeset:
-Modified: trunk/buildroot/package/autoconf/autoconf.mk
-===================================================================
---- trunk/buildroot/package/autoconf/autoconf.mk	2009-01-28 15:33:08 UTC (rev 25101)
-+++ trunk/buildroot/package/autoconf/autoconf.mk	2009-01-28 15:35:39 UTC (rev 25102)
-@@ -3,7 +3,7 @@
- # autoconf
- #
- #############################################################
--AUTOCONF_VERSION:=2.61
-+AUTOCONF_VERSION:=2.63
- AUTOCONF_SOURCE:=autoconf-$(AUTOCONF_VERSION).tar.bz2
- AUTOCONF_SITE:=$(BR2_GNU_MIRROR)/autoconf
- AUTOCONF_CAT:=$(BZCAT)
+-- 
+Bye, Peter Korsgaard
