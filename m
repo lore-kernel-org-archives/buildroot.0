@@ -1,38 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 28 Jan 2009 17:37:53 +0100
-Subject: [Buildroot] 2009.02-rc2 released
-In-Reply-To: <49801BBE.8060603@cetrtapot.si> (Hinko Kocevar's message of "Wed\,
-	28 Jan 2009 09\:47\:58 +0100")
-References: <87skn9iv5w.fsf@macbook.be.48ers.dk>
-	<49801BBE.8060603@cetrtapot.si>
-Message-ID: <87tz7jtmhq.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 28 Jan 2009 18:53:32 +0000 (UTC)
+Subject: [Buildroot] [Bug 79] New: No version-number for the Freetype-package
+Message-ID: <bug-79-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Hinko" == Hinko Kocevar <hinko.kocevar@cetrtapot.si> writes:
+https://bugs.busybox.net/show_bug.cgi?id=79
 
-Hi,
+            Target: i386
+           Summary: No version-number for the Freetype-package
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: major
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: kretschi at online.de
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
- Hinko> I've tested my custom Axis etrax LX100 based board (cris
- Hinko> arch-v10 CPU) and buildroot 2009.02-rc2 builds toolchain and
- Hinko> kernel wo problem.  I have minor fixes for 2.6.28.1 kernel and
- Hinko> 4.3.2 gcc regarding cris architecture (please apply):
 
- Hinko>  - 999-gcc-4.3.0-cris-pragma-pack-warning-remove.patch
- Hinko>    remove warnings when compiling gcc-4.3.2
- Hinko>  - linux-2.6.28.1-cris-eth-driver-netpoll.patch
- Hinko>    make cris eth driver compile on 2.6.28.1 kernel
- Hinko>  - linux-2.6.28.1-cris-klist-warnings.patch
- Hinko>    avoid klist warnings at bootup related to alignment of the klist struct (from be 2.6.28 stable)
+When downloading the Freetype-tar.bz2 it trys the URL
+http://easynews.dl.sourceforge.net/sourceforge/freetype/freetype-.tar.bz2.
+So I think, it doesn't get the information about which version he should build.
 
-Thanks, committed as r25105.
-
- Hinko> Keep up the great work!
-
-Thanks!
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
