@@ -1,30 +1,114 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 28 Jan 2009 21:01:32 +0000 (UTC)
-Subject: [Buildroot] [Bug 79] No version-number for the Freetype-package
-In-Reply-To: <bug-79-163@https.bugs.busybox.net/>
-References: <bug-79-163@https.bugs.busybox.net/>
-Message-ID: <20090128210132.D9FEE764B1@busybox.osuosl.org>
+From: Amand Tihon <amand.tihon@alrj.org>
+Date: Wed, 28 Jan 2009 22:35:37 +0100
+Subject: [Buildroot]  [PATCH] Add radvd to the list of packages
+In-Reply-To: <200901282131.37172.amand.tihon@alrj.org>
+References: <200901282131.37172.amand.tihon@alrj.org>
+Message-ID: <200901282235.37230.amand.tihon@alrj.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=79
+Add radvd, the IPv6 router advertisement daemon.
 
+Signed-off-by: Amand Tihon <amand.tihon@alrj.org>
+---
 
+Never two without three... This one should make it :)
 
+ package/Config.in       |    1 +
+ package/radvd/Config.in |    8 ++++++++
+ package/radvd/S50radvd  |   18 ++++++++++++++++++
+ package/radvd/radvd.mk  |   20 ++++++++++++++++++++
+ 4 files changed, 47 insertions(+), 0 deletions(-)
 
-
---- Comment #5 from Peter Korsgaard <jacmet@uclibc.org>  2009-01-28 21:01:31 UTC ---
-Ah yes, that's it. Looking at gamin.mk it seems pretty broken. It's not a
-graphical program so it shouldn't depend on libgtk2 (it does look like it needs
-glib2 though).
-
-I'll take a look at it and commit a fix to svn soon.
+diff --git a/package/Config.in b/package/Config.in
+index 29190b2..bb16015 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -189,6 +189,7 @@ source "package/openvpn/Config.in"
+ source "package/openswan/Config.in"
+ source "package/portmap/Config.in"
+ source "package/pppd/Config.in"
++source "package/radvd/Config.in"
+ source "package/rp-pppoe/Config.in"
+ source "package/pptp-linux/Config.in"
+ source "package/proftpd/Config.in"
+diff --git a/package/radvd/Config.in b/package/radvd/Config.in
+new file mode 100644
+index 0000000..072aed4
+--- /dev/null
++++ b/package/radvd/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_RADVD
++	bool "radvd"
++	select BR2_PACKAGE_FLEX
++	depends on BR2_INET_IPV6
++	help
++	  IPv6 Router Advertisement Daemon.
++
++	  http://www.litech.org/radvd/
+diff --git a/package/radvd/S50radvd b/package/radvd/S50radvd
+new file mode 100755
+index 0000000..d3e2cd1
+--- /dev/null
++++ b/package/radvd/S50radvd
+@@ -0,0 +1,18 @@
++#!/bin/sh
++
++RADVD=/usr/sbin/radvd
++
++echo "1" > /proc/sys/net/ipv6/conf/all/forwarding
++
++echo -n "Starting radvd: "
++if [ ! -x "${RADVD}" ]; then
++	echo "missing"
++	exit 1
++fi
++
++if ${RADVD} ; then
++	echo "done"
++else
++	echo "failed"
++	exit 1
++fi
+diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
+new file mode 100644
+index 0000000..268c26d
+--- /dev/null
++++ b/package/radvd/radvd.mk
+@@ -0,0 +1,20 @@
++#############################################################
++#
++# radvd
++#
++#############################################################
++RADVD_VERSION:=1.2
++RADVD_SOURCE:=radvd-$(RADVD_VERSION).tar.gz
++RADVD_SITE:=http://www.litech.org/radvd/dist/
++RADVD_AUTORECONF:=no
++RADVD_INSTALL_STAGING:=no
++RADVD_INSTALL_TARGET:=YES
++RADVD_DEPENDENCIES:=uclibc flex
++RADVD_MAKE:=$(MAKE1)
++RADVD_CONF_OPT:= --program-prefix=''
++
++$(eval $(call AUTOTARGETS,package,radvd))
++
++$(RADVD_HOOK_POST_INSTALL): $(RADVD_TARGET_INSTALL_TARGET)
++	$(INSTALL) -m 0755 package/radvd/S50radvd $(TARGET_DIR)/etc/init.d
++	touch $@
 
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Amand Tihon
+Rue du Ruchaux, 1 - 1490 Court-St-Etienne, Belgique
++32 479 207 743
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 189 bytes
+Desc: This is a digitally signed message part.
+Url : http://lists.busybox.net/pipermail/buildroot/attachments/20090128/7f1b4a01/attachment.pgp 
