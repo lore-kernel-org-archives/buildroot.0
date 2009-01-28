@@ -1,35 +1,34 @@
-From: nkukard at uclibc.org <nkukard@uclibc.org>
-Date: Wed, 28 Jan 2009 13:16:27 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/xfsprogs
-Message-ID: <20090128131627.E15DB769CC@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 28 Jan 2009 13:40:48 +0000 (UTC)
+Subject: [Buildroot] [Bug 51] GCC 4.3.2 complains about an incorrect Version
+	of mpfr.h
+In-Reply-To: <bug-51-163@https.bugs.busybox.net/>
+References: <bug-51-163@https.bugs.busybox.net/>
+Message-ID: <20090128134048.BBC37769CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: nkukard
-Date: 2009-01-28 13:16:27 +0000 (Wed, 28 Jan 2009)
-New Revision: 25091
-
-Log:
-xfs is a mainline filesystem with no alternative regarding tools in busybox, remove depend on deprecated
+https://bugs.busybox.net/show_bug.cgi?id=51
 
 
-Modified:
-   trunk/buildroot/package/xfsprogs/Config.in
+Peter Korsgaard <jacmet@uclibc.org> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|ASSIGNED                    |RESOLVED
+         Resolution|                            |WORKSFORME
 
 
-Changeset:
-Modified: trunk/buildroot/package/xfsprogs/Config.in
-===================================================================
---- trunk/buildroot/package/xfsprogs/Config.in	2009-01-28 13:14:51 UTC (rev 25090)
-+++ trunk/buildroot/package/xfsprogs/Config.in	2009-01-28 13:16:27 UTC (rev 25091)
-@@ -4,7 +4,6 @@
- 
- config BR2_PACKAGE_XFSPROGS
- 	bool "xfsprogs"
--	depends on BR2_DEPRECATED
- 	help
- 	  The XFS file system utilities and libraries
- 
+
+
+--- Comment #7 from Peter Korsgaard <jacmet@uclibc.org>  2009-01-28 13:40:48 UTC ---
+Ok, closing then
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
