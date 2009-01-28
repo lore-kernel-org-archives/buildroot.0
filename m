@@ -1,36 +1,31 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 28 Jan 2009 06:45:25 +0000 (UTC)
-Subject: [Buildroot] [Bug 73] Bump openssl package to the latest version
-In-Reply-To: <bug-73-163@https.bugs.busybox.net/>
-References: <bug-73-163@https.bugs.busybox.net/>
-Message-ID: <20090128064525.79E3F769CC@busybox.osuosl.org>
+From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
+Date: Wed, 28 Jan 2009 07:48:25 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot:  toolchain/elf2flt
+In-Reply-To: <20090128063240.3211E769CC@busybox.osuosl.org>
+References: <20090128063240.3211E769CC@busybox.osuosl.org>
+Message-ID: <20090128074825.3ae94d3b@hcegtvedt>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=73
+On Wed, 28 Jan 2009 06:32:40 +0000 (UTC)
+jacmet at uclibc.org wrote:
 
+<snipp>
 
-Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> changed:
+> --- trunk/buildroot/Config.in	2009-01-28 06:32:33 UTC (rev
+> 25085) +++ trunk/buildroot/Config.in	2009-01-28 06:32:39 UTC
+> (rev 25086) @@ -243,14 +243,14 @@
+>  
+>  config BR2_STRIP_strip
+>  	bool "strip"
+> -	depends on !BR2_ENABLE_DEBUG
+> +	depends on !BR2_ENABLE_DEBUG &&  !BR2_ELF2FLT
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |hans-
-                   |                            |christian.egtvedt at atmel.com
-
-
-
-
---- Comment #7 from Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>  2009-01-28 06:45:24 UTC ---
-Just leave out AVR32 for now, I think the security stuff is more important.
-
-The openssl.mk needs a little love before AVR32 will work, you have to disable
-it selecting an optimization for AVR32 arch.
-
+                      extra whitespace ^^
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Best regards,
+Hans-Christian Egtvedt
