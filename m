@@ -1,13 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 28 Jan 2009 09:14:28 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/webkit
-In-Reply-To: <20090128090655.49da87fd@hcegtvedt> (Hans-Christian Egtvedt's
-	message of "Wed\, 28 Jan 2009 09\:06\:55 +0100")
-References: <20090127151010.080DA7709E@busybox.osuosl.org>
-	<20090128081026.55f4a8f8@hcegtvedt>
-	<87fxj3x3ou.fsf@macbook.be.48ers.dk>
-	<20090128090655.49da87fd@hcegtvedt>
-Message-ID: <87bptrx2xn.fsf@macbook.be.48ers.dk>
+Date: Wed, 28 Jan 2009 08:51:18 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot:  toolchain/elf2flt
+In-Reply-To: <20090128074825.3ae94d3b@hcegtvedt> (Hans-Christian Egtvedt's
+	message of "Wed\, 28 Jan 2009 07\:48\:25 +0100")
+References: <20090128063240.3211E769CC@busybox.osuosl.org>
+	<20090128074825.3ae94d3b@hcegtvedt>
+Message-ID: <87k58fx409.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,28 +14,20 @@ To: buildroot@busybox.net
 
 >>>>> "Hans-Christian" == Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> writes:
 
-Hi,
+ Hans-Christian> <snipp>
 
- Hans-Christian> Ah, then the depends on makes sense. There should be
- Hans-Christian> some comment about why WCHAR is a dependency since
- Hans-Christian> webkit seems to not need it.
+ >> --- trunk/buildroot/Config.in	2009-01-28 06:32:33 UTC (rev
+ >> 25085) +++ trunk/buildroot/Config.in	2009-01-28 06:32:39 UTC
+ >> (rev 25086) @@ -243,14 +243,14 @@
+ >> 
+ >> config BR2_STRIP_strip
+ >> bool "strip"
+ >> -	depends on !BR2_ENABLE_DEBUG
+ >> +	depends on !BR2_ENABLE_DEBUG &&  !BR2_ELF2FLT
 
-Sure? Ever tried compiling it without WCHAR? ;)
+ Hans-Christian>                       extra whitespace ^^
 
-But yes, we could note that the wchar dependency is because it does
-unicode stuff using the icu library.
-
-Notice that I can't actually get webkit to build, atleast not with gcc
-4.3.2 (We my mail to Daniel yesterday), so maybe we should bump the
-version before the release.
-
- >> Applications should select their library dependencies and depend (with
- >> a comment) on toolchain features.
-
- Hans-Christian> Then I agree that it has to be done like this.
-
-Ok, good.
-
+True, I just git-am'ed the patch and didn't notice - Will fix.
 
 -- 
 Bye, Peter Korsgaard
