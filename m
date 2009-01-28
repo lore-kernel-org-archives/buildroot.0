@@ -1,61 +1,71 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Wed, 28 Jan 2009 09:39:48 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/webkit
-In-Reply-To: <877i4fx26y.fsf@macbook.be.48ers.dk>
-References: <20090127151010.080DA7709E@busybox.osuosl.org>
-	<20090128081026.55f4a8f8@hcegtvedt>
-	<87fxj3x3ou.fsf@macbook.be.48ers.dk>
-	<20090128090655.49da87fd@hcegtvedt>
-	<87bptrx2xn.fsf@macbook.be.48ers.dk>
-	<20090128091937.6db2ef12@hcegtvedt>
-	<877i4fx26y.fsf@macbook.be.48ers.dk>
-Message-ID: <20090128093948.68a5b7cd@hcegtvedt>
+From: Hinko Kocevar <hinko.kocevar@cetrtapot.si>
+Date: Wed, 28 Jan 2009 09:47:58 +0100
+Subject: [Buildroot] 2009.02-rc2 released
+In-Reply-To: <87skn9iv5w.fsf@macbook.be.48ers.dk>
+References: <87skn9iv5w.fsf@macbook.be.48ers.dk>
+Message-ID: <49801BBE.8060603@cetrtapot.si>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 28 Jan 2009 09:30:29 +0100
-Peter Korsgaard <jacmet@uclibc.org> wrote:
-
-> >>>>> "Hans-Christian" == Hans-Christian Egtvedt
-> >>>>> <hans-christian.egtvedt@atmel.com> writes:
+Peter Korsgaard wrote:
+> Hi,
 > 
->  >> Sure? Ever tried compiling it without WCHAR? ;)
->  >> 
+> Another week, another release candidate. I have released
+> buildroot-2009.02-rc2:
 > 
->  Hans-Christian> Qt uses webkit, and AFAIK compiles without WCHAR
-> enabled.
+> http://buildroot.uclibc.org/downloads/buildroot-2009.02-rc2.tar.gz
 > 
-> How? Without using libicu? I know close to nothing about webkit.
+> or
+> 
+> http://buildroot.uclibc.org/downloads/buildroot-2009.02-rc2.tar.bz2
 > 
 
-I dunno, black Qt fuu I guess.
+Great!
 
-cat qt-embedded-linux-opensource-src-4.4.3/src/3rdparty/webkit/VERSION
-This is a snapshot of the Qt port of WebKit from
+> Please give it a spin and report back issues to the mailing list or
+> the bug tracker.
 
-        git://code.staikos.net/webkit
+I've tested my custom Axis etrax LX100 based board (cris arch-v10 CPU) and
+buildroot 2009.02-rc2 builds toolchain and kernel wo problem.
+I have minor fixes for 2.6.28.1 kernel and 4.3.2 gcc regarding cris
+architecture (please apply):
 
-The commit imported was from the
+ - 999-gcc-4.3.0-cris-pragma-pack-warning-remove.patch
+   remove warnings when compiling gcc-4.3.2
+ - linux-2.6.28.1-cris-eth-driver-netpoll.patch
+   make cris eth driver compile on 2.6.28.1 kernel
+ - linux-2.6.28.1-cris-klist-warnings.patch
+   avoid klist warnings at bootup related to alignment of the klist struct (from be 2.6.28 stable)
 
-        origin/qtwebkit-merged-into-qt-4-4 branch/tag
-
-and has the sha1 checksum
-
-        bf04f19228d9968ede068745fd4ec4902c9f9786
-
->  Hans-Christian> FWIW webkit in Qt 4.5 builds with the AVR32 toolchain
->  Hans-Christian> (gcc 4.2.2 + vendor patch).
 > 
-> The webkit version we have in BR (some svn nightly) most likely also
-> built at some time, but I know from other C++ projects that gcc 4.3.x
-> cleaned up quite some stuff and got more strict.
+> I think we're pretty well on track to do a final release in 2 weeks.
 > 
 
-Ah, okay, explains why 4.2.x does not have a problem.
+Keep up the great work!
+
+Thanks,
+Hinko
 
 -- 
-Best regards,
-Hans-Christian Egtvedt
+Hinko Ko?evar, OSS developer
+?ETRTA POT, d.o.o.
+Planina 3, 4000 Kranj, SI EU
+tel     ++386 (0) 4 280 66 03
+e-mail  hinko.kocevar at cetrtapot.si
+http    www.cetrtapot.si
+
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: 999-gcc-4.3.0-cris-pragma-pack-warning-remove.patch
+Url: http://lists.busybox.net/pipermail/buildroot/attachments/20090128/3c53abf1/attachment.diff 
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: linux-2.6.28.1-cris-klist-warnings.patch
+Url: http://lists.busybox.net/pipermail/buildroot/attachments/20090128/3c53abf1/attachment-0001.diff 
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: linux-2.6.28.1-cris-eth-driver-netpoll.patch
+Url: http://lists.busybox.net/pipermail/buildroot/attachments/20090128/3c53abf1/attachment-0002.diff 
