@@ -1,53 +1,28 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Thu, 29 Jan 2009 23:02:43 +0000 (UTC)
-Subject: [Buildroot] svn commit:
-	trunk/buildroot/target/device/Atmel/at91rm9200df
-Message-ID: <20090129230243.C21177741D@busybox.osuosl.org>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Fri, 30 Jan 2009 10:09:04 +1100
+Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
+In-Reply-To: <D4FF4B0197F54EE4BC14E179A2F17F15@aeglos>
+References: <20090127125650.GA18250@cloud.net.au>
+	<D4FF4B0197F54EE4BC14E179A2F17F15@aeglos>
+Message-ID: <20090129230904.GA13929@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2009-01-29 23:02:41 +0000 (Thu, 29 Jan 2009)
-New Revision: 25152
+On Thu, Jan 29, 2009 at 03:33:08PM +0100, Ulf Samuelsson wrote:
+>> The current logic of trying xconfig then menuconfig is very ugly - does
+>> it allow you to abort xconfig without falling back?
+>
+> If you could abort the xconfig without running menuconfig,
+> then you would not have a config file and the build would abort.
+> What is the sense of that?
 
-Log:
-at91rm9200df defconfig comment update
-
-Modified:
-   trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df_defconfig
+You could have an exising config, start editing then change your mind.
+You don't want menuconfig to launch in that case.
 
 
-Changeset:
-Modified: trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df_defconfig
-===================================================================
---- trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df_defconfig	2009-01-29 22:45:55 UTC (rev 25151)
-+++ trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df_defconfig	2009-01-29 23:02:41 UTC (rev 25152)
-@@ -1,6 +1,6 @@
- #
- # Automatically generated make config: don't edit
--# Thu Jan 29 22:22:52 2009
-+# Thu Jan 29 23:59:46 2009
- #
- BR2_HAVE_DOT_CONFIG=y
- BR2_VERSION="2009.02-svn"
-@@ -1014,15 +1014,11 @@
- BR2_KERNEL_MINORLEVEL="2"
- BR2_KERNEL_ARCH_PATCH_ENABLED=y
- BR2_ARCH_AT91_2_6_28=y
--# BR2_ARCH_AT91_2_6_27_7 is not set
-+# BR2_ARCH_AT91_2_6_27 is not set
- # BR2_ARCH_AT91_2_6_26 is not set
--# BR2_ARCH_AT91_2_6_26_RC3 is not set
- # BR2_ARCH_AT91_2_6_25 is not set
- # BR2_ARCH_AT91_2_6_24 is not set
--# BR2_ARCH_AT91_2_6_22_1 is not set
--# BR2_ARCH_AT91_2_6_21_5 is not set
--# BR2_ARCH_AT91_2_6_21_1 is not set
--# BR2_ARCH_AT91_2_6_20_4 is not set
-+# BR2_ARCH_AT91_2_6_22 is not set
- BR2_LINUX_BSP_PATCH=""
- BR2_KERNEL_PATCH="patch-$(BR2_DOWNLOAD_LINUX26_VERSION).$(BR2_KERNEL_PATCH_LEVEL).bz2"
- BR2_EXTRA_VERSION=".$(BR2_KERNEL_PATCH_LEVEL)"
+Hamish
+-- 
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
