@@ -1,36 +1,46 @@
-From: Fabien Marteau <lepingouin.tux@gmail.com>
-Date: Thu, 29 Jan 2009 09:36:34 +0100
-Subject: [Buildroot] Mysql error with Buildroot
-In-Reply-To: <8ebba8c20901290015u199c2ad8r66ef36339ae1d099@mail.gmail.com>
-References: <8ebba8c20901290015u199c2ad8r66ef36339ae1d099@mail.gmail.com>
-Message-ID: <ce62e9d00901290036r3b7649e3s748b7821c7ab1f4b@mail.gmail.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Thu, 29 Jan 2009 09:32:46 +0000 (UTC)
+Subject: [Buildroot] svn commit:
+	trunk/buildroot/target/device/Atmel/arch-avr32:
+	kernel-patches-2.6.28.2
+Message-ID: <20090129093246.EBDF27741D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I has the same problem, to solve it I just made link on library :
+Author: ulf
+Date: 2009-01-29 09:32:45 +0000 (Thu, 29 Jan 2009)
+New Revision: 25113
 
-cd /usr/lib
-ln -s mysql/libmysqlclient.so.16
+Log:
+Add AVR32 support for linux-2.6.28.2
 
-And it's work, but it's not very clean patch ;-)
+Added:
+   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.28.2/
+   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.28.2/linux-2.6.28.2-100-avr32-atmel.1.patch
+   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.28.2/linux-2.6.28.2-201-avr32-atmel_mpopfb-disable-debug.patch
+   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.28.2/linux-2.6.28.2-202-avr32-atmel_mpopfb-add-signal-to-disable-line-caching.patch
+   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.28.2/linux-2.6.28.2-203-avr32-fix-arch-header-byteorder.patch
+   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.28.2/linux-2.6.28.2-204-avr32-ap700x-fix-det_pin-for-nand-flash.patch
 
-FabM
+Removed:
+   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.20.4/
+   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.21.5/
+   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.22.1/
+   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.22.10/
+   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.23/
+   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.24/
+   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.25.10/
 
-On Thu, Jan 29, 2009 at 9:15 AM, Mitesh Gupta <guptamitesh@gmail.com> wrote:
-> Hi,
-> I was able to add mysql client successfully with buildroot. However after
-> booting into the system and  trying to start mysql I am getting the
-> following errors " can't load library 'libmysqlclient.so.16' ".
-> Any help? I think issue is with how mysql is configured.
-> Thanks
-> Mitesh
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+Modified:
+   trunk/buildroot/target/device/Atmel/arch-avr32/Config.in.linux.patches
+
+
+Changeset:
+
+Sorry, the patch is too large to include (17059 lines).
+Please use ViewCVS to see it!
+
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=25113
