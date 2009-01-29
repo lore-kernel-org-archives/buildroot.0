@@ -1,7 +1,8 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Thu, 29 Jan 2009 21:17:38 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device/x86
-Message-ID: <20090129211739.359B276D75@busybox.osuosl.org>
+Date: Thu, 29 Jan 2009 21:27:53 +0000 (UTC)
+Subject: [Buildroot] svn commit:
+	trunk/buildroot/target/device/Atmel/at91rm9200df
+Message-ID: <20090129212754.3BBA076D75@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,26 +10,31 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2009-01-29 21:17:36 +0000 (Thu, 29 Jan 2009)
-New Revision: 25139
+Date: 2009-01-29 21:27:51 +0000 (Thu, 29 Jan 2009)
+New Revision: 25140
 
 Log:
-Remove default value from choice in x86 config
+Update at91rm9200df BSP
+
+Added:
+   trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df-linux-2.6.28.2.config
+
+Removed:
+   trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df-linux-2.6.21.1.config
+   trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df-linux-2.6.22.1.config
+   trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df-linux-2.6.28.config
+   trunk/buildroot/target/device/Atmel/at91rm9200df/busybox-1.5.0-atmel.config
+   trunk/buildroot/target/device/Atmel/at91rm9200df/busybox-1.6.0.config
+   trunk/buildroot/target/device/Atmel/at91rm9200df/busybox-1.7.1.config
+   trunk/buildroot/target/device/Atmel/at91rm9200df/u-boot/
 
 Modified:
-   trunk/buildroot/target/device/x86/Config.in
+   trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df_defconfig
 
 
 Changeset:
-Modified: trunk/buildroot/target/device/x86/Config.in
-===================================================================
---- trunk/buildroot/target/device/x86/Config.in	2009-01-29 20:52:52 UTC (rev 25138)
-+++ trunk/buildroot/target/device/x86/Config.in	2009-01-29 21:17:36 UTC (rev 25139)
-@@ -11,7 +11,6 @@
- config BR2_TARGET_I686
- 	bool "i686"
- 	depends on BR2_i386
--	default y
- 
- endchoice
- 
+
+Sorry, the patch is too large to include (6825 lines).
+Please use ViewCVS to see it!
+
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=25140
