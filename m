@@ -1,40 +1,42 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Thu, 29 Jan 2009 20:10:24 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device/ARMLTD:
-	integrator926 integrator926_huge
-Message-ID: <20090129201024.71ECB7741D@busybox.osuosl.org>
+From: hartleys <hartleys@visionengravers.com>
+Date: Thu, 29 Jan 2009 15:30:59 -0500
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device/x86: i686
+In-Reply-To: <20090129192525.2264976D75@busybox.osuosl.org>
+References: <20090129192525.2264976D75@busybox.osuosl.org>
+Message-ID: <BD79186B4FD85F4B8E60E381CAEE19090114B4E9@mi8nycmail19.Mi8.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2009-01-29 20:10:23 +0000 (Thu, 29 Jan 2009)
-New Revision: 25136
+On Thursday, January 29, 2009 12:25 PM, ulf at uclibc.org wrote:
+> Log:
+> Update x86 BSP to latest uclibc/linux/tools versions
+> 
+> Added:
+>    trunk/buildroot/target/device/x86/i686/
+>    trunk/buildroot/target/device/x86/i686/i686-linux-2.6.28.2.config
+>    trunk/buildroot/target/device/x86/i686/i686_defconfig
+> 
+> Removed:
+>    trunk/buildroot/target/device/x86/i386/
+> 
+> Modified:
+>    trunk/buildroot/target/device/x86/Config.in
+>    trunk/buildroot/target/device/x86/Makefile.in
+>    trunk/buildroot/target/device/x86/i686/Makefile.in
+>    trunk/buildroot/target/device/x86/i686/i386_defconfig
+> 
 
-Log:
-Clean up ARM Ltd. BSP
+Ulf,
 
-Added:
-   trunk/buildroot/target/device/ARMLTD/integrator926/integrator926-linux-2.6.28.2.config
-   trunk/buildroot/target/device/ARMLTD/integrator926_huge/integrator926_huge-linux-2.6.28.2.config
+trunk/buildroot/target/device/x86/Config.in has the same issue as ARMLTD
+did.
 
-Removed:
-   trunk/buildroot/target/device/ARMLTD/integrator926/linux-2.6.22.9.config
-   trunk/buildroot/target/device/ARMLTD/integrator926_huge/linux-2.6.26.8.config
+$ make menuconfig
+target/device/x86/Config.in:14:warning: defaults for choice values not
+supported
 
-Modified:
-   trunk/buildroot/target/device/ARMLTD/Config.in
-   trunk/buildroot/target/device/ARMLTD/Makefile.in
-   trunk/buildroot/target/device/ARMLTD/integrator926/integrator926_defconfig
-   trunk/buildroot/target/device/ARMLTD/integrator926_huge/integrator926_huge_defconfig
-   trunk/buildroot/target/device/ARMLTD/uClibc.integrator926.config
-
-
-Changeset:
-
-Sorry, the patch is too large to include (6258 lines).
-Please use ViewCVS to see it!
-
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=25136
+Regards,
+Hartley
