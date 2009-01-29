@@ -1,41 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 29 Jan 2009 21:04:22 +0100
-Subject: [Buildroot] [buildroot 0001090]: stdlibc++ fails putting a
-	double in a stream.
-In-Reply-To: <glt1hu$rk9$1@ger.gmane.org> (Javier Viguera's message of "Thu\,
-	29 Jan 2009 20\:54\:37 +0100")
-References: <9390a75d187845256e22e9a1e085fdbb@busybox.net>
-	<glt1hu$rk9$1@ger.gmane.org>
-Message-ID: <87tz7hq3p5.fsf@macbook.be.48ers.dk>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Thu, 29 Jan 2009 20:10:24 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device/ARMLTD:
+	integrator926 integrator926_huge
+Message-ID: <20090129201024.71ECB7741D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Javier" == Javier Viguera <javier.viguera@digi.com> writes:
+Author: ulf
+Date: 2009-01-29 20:10:23 +0000 (Thu, 29 Jan 2009)
+New Revision: 25136
 
-Hi,
+Log:
+Clean up ARM Ltd. BSP
 
- Javier> I have hit this old bug with a toolchain for ARM based on
- Javier> gcc-4.0.3 and uclibc-0.9.28. The issue is described below and
- Javier> in the thread of the bug there seems to be a couple of
- Javier> patches that fixes the problem:
+Added:
+   trunk/buildroot/target/device/ARMLTD/integrator926/integrator926-linux-2.6.28.2.config
+   trunk/buildroot/target/device/ARMLTD/integrator926_huge/integrator926_huge-linux-2.6.28.2.config
 
- >> gcc_snprintf_double_cssize.patch
- >> c_locale.h
+Removed:
+   trunk/buildroot/target/device/ARMLTD/integrator926/linux-2.6.22.9.config
+   trunk/buildroot/target/device/ARMLTD/integrator926_huge/linux-2.6.26.8.config
 
- Javier> I am trying to get those patches, but the bug-tracking system
- Javier> seems not to have bug #1090. I seem to remember some changes
- Javier> in the buildroot servers lately, so that might be the reason
- Javier> why i cannot reach older bugs.
+Modified:
+   trunk/buildroot/target/device/ARMLTD/Config.in
+   trunk/buildroot/target/device/ARMLTD/Makefile.in
+   trunk/buildroot/target/device/ARMLTD/integrator926/integrator926_defconfig
+   trunk/buildroot/target/device/ARMLTD/integrator926_huge/integrator926_huge_defconfig
+   trunk/buildroot/target/device/ARMLTD/uClibc.integrator926.config
 
-Yes, the old bugtracker is gone and we have a bugzilla installation
-instead.
 
- Javier> Does anyone here still have those patches?
+Changeset:
 
-Sorry, not me.
+Sorry, the patch is too large to include (6258 lines).
+Please use ViewCVS to see it!
 
--- 
-Bye, Peter Korsgaard
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=25136
