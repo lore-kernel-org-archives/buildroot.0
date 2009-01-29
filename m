@@ -1,124 +1,38 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Thu, 29 Jan 2009 19:24:32 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
-Message-ID: <20090129192432.8F4C176D75@busybox.osuosl.org>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Thu, 29 Jan 2009 19:25:25 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device/x86:  i686
+Message-ID: <20090129192525.2264976D75@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-01-29 19:24:31 +0000 (Thu, 29 Jan 2009)
-New Revision: 25133
+Author: ulf
+Date: 2009-01-29 19:25:24 +0000 (Thu, 29 Jan 2009)
+New Revision: 25134
 
 Log:
-toolchain/gcc: remove ancient (and unused) i386 softfloat patch
+Update x86 BSP to latest uclibc/linux/tools versions
+
+Added:
+   trunk/buildroot/target/device/x86/i686/
+   trunk/buildroot/target/device/x86/i686/i686-linux-2.6.28.2.config
+   trunk/buildroot/target/device/x86/i686/i686_defconfig
 
 Removed:
-   trunk/buildroot/toolchain/gcc/i386-gcc-soft-float.patch
+   trunk/buildroot/target/device/x86/i386/
 
 Modified:
-   trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
-   trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
+   trunk/buildroot/target/device/x86/Config.in
+   trunk/buildroot/target/device/x86/Makefile.in
+   trunk/buildroot/target/device/x86/i686/Makefile.in
+   trunk/buildroot/target/device/x86/i686/i386_defconfig
 
 
 Changeset:
-Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
-===================================================================
---- trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2009-01-29 19:13:53 UTC (rev 25132)
-+++ trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2009-01-29 19:24:31 UTC (rev 25133)
-@@ -159,10 +159,6 @@
- ifeq ("$(strip $(ARCH))","armeb")
- 	toolchain/patch-kernel.sh $(GCC_DIR) toolchain/gcc/$(GCC_VERSION) arm-softfloat.patch.conditional
- endif
--	# Not yet updated to 3.4.1.
--	#ifeq ("$(strip $(ARCH))","i386")
--	#toolchain/patch-kernel.sh $(GCC_DIR) toolchain/gcc i386-gcc-soft-float.patch
--	#endif
- endif
- 	touch $@
- 
 
-Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
-===================================================================
---- trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2009-01-29 19:13:53 UTC (rev 25132)
-+++ trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2009-01-29 19:24:31 UTC (rev 25133)
-@@ -179,10 +179,6 @@
- ifeq ("$(strip $(ARCH))","armeb")
- 	toolchain/patch-kernel.sh $(GCC_DIR) toolchain/gcc/$(GCC_VERSION) arm-softfloat.patch.conditional
- endif
--	# Not yet updated to 3.4.1.
--	#ifeq ("$(strip $(ARCH))","i386")
--	#toolchain/patch-kernel.sh $(GCC_DIR) toolchain/gcc i386-gcc-soft-float.patch
--	#endif
- endif
- 	touch $@
- 
+Sorry, the patch is too large to include (3698 lines).
+Please use ViewCVS to see it!
 
-Deleted: trunk/buildroot/toolchain/gcc/i386-gcc-soft-float.patch
-===================================================================
---- trunk/buildroot/toolchain/gcc/i386-gcc-soft-float.patch	2009-01-29 19:13:53 UTC (rev 25132)
-+++ trunk/buildroot/toolchain/gcc/i386-gcc-soft-float.patch	2009-01-29 19:24:31 UTC (rev 25133)
-@@ -1,61 +0,0 @@
--diff -urN gcc-3.3.2-orig/gcc/config/i386/i386.h gcc-3.3.2/gcc/config/i386/i386.h
----- gcc-3.3.2-orig/gcc/config/i386/i386.h	2003-06-25 16:18:31.000000000 -0500
--+++ gcc-3.3.2/gcc/config/i386/i386.h	2003-10-22 01:46:57.000000000 -0500
--@@ -653,6 +653,7 @@
-- /* Define for XFmode or TFmode extended real floating point support.
--    The XFmode is specified by i386 ABI, while TFmode may be faster
--    due to alignment and simplifications in the address calculations.  */
--+#if 0
-- #define LONG_DOUBLE_TYPE_SIZE (TARGET_128BIT_LONG_DOUBLE ? 128 : 96)
-- #define MAX_LONG_DOUBLE_TYPE_SIZE 128
-- #ifdef __x86_64__
--@@ -660,6 +661,17 @@
-- #else
-- #define LIBGCC2_LONG_DOUBLE_TYPE_SIZE 96
-- #endif
--+#else
--+	  /* Set up for x86 soft float with 64-bit long doubles, since that's
--+	   * all the soft float emulation supports. */
--+#define LONG_DOUBLE_TYPE_SIZE (TARGET_128BIT_LONG_DOUBLE ? 128 : (TARGET_80387 ? 96 : 64))
--+#define MAX_LONG_DOUBLE_TYPE_SIZE 128
--+#ifdef __x86_64__
--+#define LIBGCC2_LONG_DOUBLE_TYPE_SIZE 128
--+#else
--+#define LIBGCC2_LONG_DOUBLE_TYPE_SIZE (TARGET_80387 ? 96 : 64)
--+#endif
--+#endif
-- 
-- /* Set the value of FLT_EVAL_METHOD in float.h.  When using only the
--    FPU, assume that the fpcw is set to extended precision; when using
--diff -urN gcc-3.3.2-orig/gcc/config/t-linux gcc-3.3.2/gcc/config/t-linux
----- gcc-3.3.2-orig/gcc/config/t-linux-uclibc	2003-06-04 11:56:11.000000000 -0500
--+++ gcc-3.3.2/gcc/config/t-linux-uclibc	2003-10-22 01:46:39.000000000 -0500
--@@ -21,3 +21,28 @@
-- LIB2ADDEH = $(srcdir)/unwind-dw2.c $(srcdir)/unwind-dw2-fde.c \
--   $(srcdir)/unwind-sjlj.c $(srcdir)/unwind-c.c
-- LIB2ADDEHDEP = unwind.inc unwind-dw2-fde.h
--+
--+##############################################
--+# We want fine grained libraries, so use the new code to build the
--+# floating point emulation libraries.
--+FPBIT = fp-bit.c
--+DPBIT = dp-bit.c
--+
--+#LIB2FUNCS_EXTRA = xp-bit.c
--+
--+dp-bit.c: $(srcdir)/config/fp-bit.c
--+	echo '#ifdef __LITTLE_ENDIAN__' > dp-bit.c
--+	echo '#define FLOAT_BIT_ORDER_MISMATCH' >>dp-bit.c
--+	echo '#endif'           >> dp-bit.c
--+	cat $(srcdir)/config/fp-bit.c >> dp-bit.c
--+
--+fp-bit.c: $(srcdir)/config/fp-bit.c
--+	echo '#define FLOAT' > fp-bit.c
--+	echo '#ifdef __LITTLE_ENDIAN__' >> fp-bit.c
--+	echo '#define FLOAT_BIT_ORDER_MISMATCH' >>fp-bit.c
--+	echo '#endif'           >> fp-bit.c
--+	cat $(srcdir)/config/fp-bit.c >> fp-bit.c
--+
--+#MULTILIB_OPTIONS = msoft-float
--+#MULTILIB_DIRNAMES = soft-float
--+
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=25134
