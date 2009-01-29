@@ -1,38 +1,37 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Thu, 29 Jan 2009 19:25:25 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device/x86:  i686
-Message-ID: <20090129192525.2264976D75@busybox.osuosl.org>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Thu, 29 Jan 2009 19:49:23 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/database/sqlite
+Message-ID: <20090129194923.5917476D75@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2009-01-29 19:25:24 +0000 (Thu, 29 Jan 2009)
-New Revision: 25134
+Author: jacmet
+Date: 2009-01-29 19:49:22 +0000 (Thu, 29 Jan 2009)
+New Revision: 25135
 
 Log:
-Update x86 BSP to latest uclibc/linux/tools versions
+sqlite: bump version
 
-Added:
-   trunk/buildroot/target/device/x86/i686/
-   trunk/buildroot/target/device/x86/i686/i686-linux-2.6.28.2.config
-   trunk/buildroot/target/device/x86/i686/i686_defconfig
-
-Removed:
-   trunk/buildroot/target/device/x86/i386/
+Fixes several database corruption bugs
 
 Modified:
-   trunk/buildroot/target/device/x86/Config.in
-   trunk/buildroot/target/device/x86/Makefile.in
-   trunk/buildroot/target/device/x86/i686/Makefile.in
-   trunk/buildroot/target/device/x86/i686/i386_defconfig
+   trunk/buildroot/package/database/sqlite/sqlite.mk
 
 
 Changeset:
-
-Sorry, the patch is too large to include (3698 lines).
-Please use ViewCVS to see it!
-
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=25134
+Modified: trunk/buildroot/package/database/sqlite/sqlite.mk
+===================================================================
+--- trunk/buildroot/package/database/sqlite/sqlite.mk	2009-01-29 19:25:24 UTC (rev 25134)
++++ trunk/buildroot/package/database/sqlite/sqlite.mk	2009-01-29 19:49:22 UTC (rev 25135)
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-SQLITE_VERSION:=3.6.4
++SQLITE_VERSION:=3.6.10
+ SQLITE_SOURCE:=sqlite-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE:=http://www.sqlite.org
+ SQLITE_DIR:=$(BUILD_DIR)/sqlite-$(SQLITE_VERSION)
