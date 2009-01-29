@@ -1,7 +1,8 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Thu, 29 Jan 2009 22:45:56 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Atmel/arch-arm
-Message-ID: <20090129224556.438027741D@busybox.osuosl.org>
+Date: Thu, 29 Jan 2009 23:02:43 +0000 (UTC)
+Subject: [Buildroot] svn commit:
+	trunk/buildroot/target/device/Atmel/at91rm9200df
+Message-ID: <20090129230243.C21177741D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,70 +10,44 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2009-01-29 22:45:55 +0000 (Thu, 29 Jan 2009)
-New Revision: 25151
+Date: 2009-01-29 23:02:41 +0000 (Thu, 29 Jan 2009)
+New Revision: 25152
 
 Log:
-2.6.23 is not patchable for at91, cleanup some comments
+at91rm9200df defconfig comment update
 
 Modified:
-   trunk/buildroot/target/device/Atmel/arch-arm/Config.in.linux.patches
+   trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df_defconfig
 
 
 Changeset:
-Modified: trunk/buildroot/target/device/Atmel/arch-arm/Config.in.linux.patches
+Modified: trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df_defconfig
 ===================================================================
---- trunk/buildroot/target/device/Atmel/arch-arm/Config.in.linux.patches	2009-01-29 22:40:27 UTC (rev 25150)
-+++ trunk/buildroot/target/device/Atmel/arch-arm/Config.in.linux.patches	2009-01-29 22:45:55 UTC (rev 25151)
-@@ -7,7 +7,6 @@
- 	default BR2_ARCH_AT91_2_6_26		if BR2_LINUX_2_6_26
- 	default BR2_ARCH_AT91_2_6_25		if BR2_LINUX_2_6_25
- 	default BR2_ARCH_AT91_2_6_24		if BR2_LINUX_2_6_24
--	default BR2_ARCH_AT91_2_6_23		if BR2_LINUX_2_6_23
- 	default BR2_ARCH_AT91_2_6_22		if BR2_LINUX_2_6_22
- 	default BR2_ARCH_AT91_2_6_28
- 	help
-@@ -27,31 +26,24 @@
- 	bool "2.6.26"
- 	help
- 	  Apply the at91 linux-2.6.26 patches
--	  Will apply on latest 2.6.2
-+	  Will apply on latest 2.6.26
- 
- config	BR2_ARCH_AT91_2_6_25
- 	bool "2.6.25"
- 	help
- 	  Apply the at91 linux-2.6.25 patches
--	  Will apply on latest 2.6.2
-+	  Will apply on latest 2.6.25
- 
- config	BR2_ARCH_AT91_2_6_24
- 	bool "2.6.24"
- 	help
- 	  Apply the at91 linux-2.6.24 patches
--	  Will apply on latest 2.6.2
--
--config	BR2_ARCH_AT91_2_6_23
--	bool "2.6.23"
--	help
--	  Apply the at91 linux-2.6.23 patches
--	  Will apply on latest 2.6.2
--
-+	  Will apply on latest 2.6.24
- config	BR2_ARCH_AT91_2_6_22
- 	bool "2.6.22"
- 	help
- 	  Apply the at91 linux-2.6.22 patches
--	  Will apply on latest 2.6.2
-+	  Will apply on latest 2.6.22
- 
- endchoice
- 
-@@ -64,7 +56,6 @@
- 	default "2.6.26" if BR2_ARCH_AT91_2_6_26
- 	default "2.6.25" if BR2_ARCH_AT91_2_6_25
- 	default "2.6.24" if BR2_ARCH_AT91_2_6_24
--	default "2.6.24" if BR2_ARCH_AT91_2_6_23
- 	default "2.6.22" if BR2_ARCH_AT91_2_6_22
- 
- config	BR2_KERNEL_ARCH_PATCH_DIR
+--- trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df_defconfig	2009-01-29 22:45:55 UTC (rev 25151)
++++ trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df_defconfig	2009-01-29 23:02:41 UTC (rev 25152)
+@@ -1,6 +1,6 @@
+ #
+ # Automatically generated make config: don't edit
+-# Thu Jan 29 22:22:52 2009
++# Thu Jan 29 23:59:46 2009
+ #
+ BR2_HAVE_DOT_CONFIG=y
+ BR2_VERSION="2009.02-svn"
+@@ -1014,15 +1014,11 @@
+ BR2_KERNEL_MINORLEVEL="2"
+ BR2_KERNEL_ARCH_PATCH_ENABLED=y
+ BR2_ARCH_AT91_2_6_28=y
+-# BR2_ARCH_AT91_2_6_27_7 is not set
++# BR2_ARCH_AT91_2_6_27 is not set
+ # BR2_ARCH_AT91_2_6_26 is not set
+-# BR2_ARCH_AT91_2_6_26_RC3 is not set
+ # BR2_ARCH_AT91_2_6_25 is not set
+ # BR2_ARCH_AT91_2_6_24 is not set
+-# BR2_ARCH_AT91_2_6_22_1 is not set
+-# BR2_ARCH_AT91_2_6_21_5 is not set
+-# BR2_ARCH_AT91_2_6_21_1 is not set
+-# BR2_ARCH_AT91_2_6_20_4 is not set
++# BR2_ARCH_AT91_2_6_22 is not set
+ BR2_LINUX_BSP_PATCH=""
+ BR2_KERNEL_PATCH="patch-$(BR2_DOWNLOAD_LINUX26_VERSION).$(BR2_KERNEL_PATCH_LEVEL).bz2"
+ BR2_EXTRA_VERSION=".$(BR2_KERNEL_PATCH_LEVEL)"
