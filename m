@@ -1,58 +1,42 @@
-From: David Anders <dave123_aml@yahoo.com>
-Date: Wed, 28 Jan 2009 15:14:48 -0800 (PST)
-Subject: [Buildroot] So what do we do about all the unmaintained boards?
-In-Reply-To: <1233182567.4147.16.camel@elrond.atmel.com>
-Message-ID: <242910.1644.qm@web54409.mail.yahoo.com>
+From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
+Date: Thu, 29 Jan 2009 07:15:37 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/autoconf
+In-Reply-To: <873af3v3ru.fsf@macbook.be.48ers.dk>
+References: <20090128153542.0132D769CC@busybox.osuosl.org>
+	<873af3v3ru.fsf@macbook.be.48ers.dk>
+Message-ID: <20090129071537.5f22f517@hcegtvedt>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ulf,
+On Wed, 28 Jan 2009 16:39:17 +0100
+Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-LNODE80 can be removed
+> >>>>> "laird" == laird  <laird@uclibc.org> writes:
+> 
+>  laird> Author: laird
+>  laird> Date: 2009-01-28 15:35:39 +0000 (Wed, 28 Jan 2009)
+>  laird> New Revision: 25102
+> 
+>  laird> Log:
+>  laird> autoconf.mk: Bounce version to 2.63
+> 
+>  laird> Have been having various issues with multiple jobs (-jX) and
+>  laird> building autoconf.  Turns out that v2.63 has fixed this.  So
+>  laird> bounce version to a working version.
+> 
+> Ok, let's give it a good shake to see if anything breaks with this.
+> 
 
-thanks
-Dave Anders
-AML
+Please note that autoconf 2.63 is not compatible with autoconf 2.61, at
+least from my experience. So I say all packages should be configured
+and built to test if this is working as expected.
 
+And since we're already touching autoconf, install it to
+toolchain_build_ARCH/bin as well? (-:
 
-
-> VENDOR	BOARD		KERNEL
-> AMD	Dbu1500		2.6.19.1
-> ARM	AT91SAM9260	2.6.24					REMOVE?
-> ARMLTD	Integrator926	2.6.22.9
-> Atmel	Plenty		All are or will soon be 2.6.28
-> Hitachi	MS7206SE01	No kernel config
-> jp	q5		2.4.26/29/32				REMOVE?
-> KWIKBYTE kb9202		2.6.24
-> mips	malta		2.6.21.5
-> Sharp	LNode80		2.4.26					REMOVE?
-> Soekris	net4521/4801	2.4.29					REMOVE?
-> Valka	v100sc2		No kernel config
-> Via	epia-mii	2.6.11.5				REMOVE?
-> x86	i386		2.6.21.5
-> 
-> The reason for removing the ARM directory, is that it does
-> not make
-> any sense to do a "generic ARM".
-> 
-> You might as well build an ARMLTD or an Atmel board,
-> without
-> the fancy stuff.
-> There is no defconfig and the linux config builds an AT91.
-> 
-> 
-> 
-> 
-> BR
-> Ulf Samuelsson
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-
-      
+-- 
+Best regards,
+Hans-Christian Egtvedt
