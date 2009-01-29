@@ -1,75 +1,54 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Thu, 29 Jan 2009 22:11:48 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Atmel/arch-arm
-Message-ID: <20090129221149.4BB417741D@busybox.osuosl.org>
+From: hartleys <hartleys@visionengravers.com>
+Date: Thu, 29 Jan 2009 17:31:14 -0500
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device/x86: i686
+In-Reply-To: <1233266903.4147.60.camel@elrond.atmel.com>
+References: <20090129192525.2264976D75@busybox.osuosl.org>
+	<BD79186B4FD85F4B8E60E381CAEE19090114B4E9@mi8nycmail19.Mi8.com>
+	<1233266903.4147.60.camel@elrond.atmel.com>
+Message-ID: <BD79186B4FD85F4B8E60E381CAEE19090114B587@mi8nycmail19.Mi8.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2009-01-29 22:11:46 +0000 (Thu, 29 Jan 2009)
-New Revision: 25148
+On Thursday, January 29, 2009 3:08 PM, Ulf Samuelsson wrote:
+> tor 2009-01-29 klockan 15:30 -0500 skrev hartleys:
+> > On Thursday, January 29, 2009 12:25 PM, ulf at uclibc.org wrote:
+> > > Log:
+> > > Update x86 BSP to latest uclibc/linux/tools versions
+> > > 
+> > > Added:
+> > >    trunk/buildroot/target/device/x86/i686/
+> > >
+trunk/buildroot/target/device/x86/i686/i686-linux-2.6.28.2.config
+> > >    trunk/buildroot/target/device/x86/i686/i686_defconfig
+> > > 
+> > > Removed:
+> > >    trunk/buildroot/target/device/x86/i386/
+> > > 
+> > > Modified:
+> > >    trunk/buildroot/target/device/x86/Config.in
+> > >    trunk/buildroot/target/device/x86/Makefile.in
+> > >    trunk/buildroot/target/device/x86/i686/Makefile.in
+> > >    trunk/buildroot/target/device/x86/i686/i386_defconfig
+> > > 
+> > 
+> > Ulf,
+> > 
+> > trunk/buildroot/target/device/x86/Config.in has the same issue as 
+> > ARMLTD did.
+> > 
+> > $ make menuconfig
+> > target/device/x86/Config.in:14:warning: defaults for choice values
+> > not supported
+> > 
+> 
+> I have gone through the ARM and x86 and updated to latest toolset
+> and versions, and I think both ARM and x86 shouldbe OK by now.
+> If someone disagrees, pls provide feedback.
 
-Log:
-Remove some unneeded AT91 patches
+It all looks good to me now...
 
-Removed:
-   trunk/buildroot/target/device/Atmel/arch-arm/kernel-patches-2.6.21.1/
-   trunk/buildroot/target/device/Atmel/arch-arm/kernel-patches-2.6.26-rc3/
-
-Modified:
-   trunk/buildroot/target/device/Atmel/arch-arm/Config.in.linux.patches
-
-
-Changeset:
-Modified: trunk/buildroot/target/device/Atmel/arch-arm/Config.in.linux.patches
-===================================================================
---- trunk/buildroot/target/device/Atmel/arch-arm/Config.in.linux.patches	2009-01-29 22:00:58 UTC (rev 25147)
-+++ trunk/buildroot/target/device/Atmel/arch-arm/Config.in.linux.patches	2009-01-29 22:11:46 UTC (rev 25148)
-@@ -10,7 +10,6 @@
- 	default BR2_ARCH_AT91_2_6_24		if BR2_LINUX_2_6_23
- 	default BR2_ARCH_AT91_2_6_22_1		if BR2_LINUX_2_6_22_1
- 	default BR2_ARCH_AT91_2_6_21_5		if BR2_LINUX_2_6_21 || BR2_LINUX_2_6_21_5
--	default BR2_ARCH_AT91_2_6_21_1		if BR2_LINUX_2_6_21_1
- 	default BR2_ARCH_AT91_2_6_20_4		if BR2_LINUX_2_6_20 || BR2_LINUX_2_6_20_4
- 	default BR2_ARCH_AT91_2_6_24
- 	help
-@@ -31,11 +30,6 @@
- 	help
- 	  Apply the at91 linux-2.6.26 patches
- 
--config	BR2_ARCH_AT91_2_6_26_RC3
--	bool "2.6.26-rc3"
--	help
--	  Apply the at91 linux-2.6.26-rc3 patches
--
- config	BR2_ARCH_AT91_2_6_25
- 	bool "2.6.25"
- 	help
-@@ -56,11 +50,6 @@
- 	help
- 	  Apply the at91 linux-2.6.21.5 patches
- 
--config	BR2_ARCH_AT91_2_6_21_1
--	bool "2.6.21.1"
--	help
--	  Apply the at91 linux-2.6.21.1 patches
--
- config	BR2_ARCH_AT91_2_6_20_4
- 	bool "2.6.20.4"
- 	help
-@@ -75,12 +64,10 @@
- 	default "2.6.28" if BR2_ARCH_AT91_2_6_28
- 	default "2.6.27.7" if BR2_ARCH_AT91_2_6_27_7
- 	default "2.6.26" if BR2_ARCH_AT91_2_6_26
--	default "2.6.26-rc3" if BR2_ARCH_AT91_2_6_26_RC3
- 	default "2.6.25" if BR2_ARCH_AT91_2_6_25
- 	default "2.6.24" if BR2_ARCH_AT91_2_6_24
- 	default "2.6.22.1" if BR2_ARCH_AT91_2_6_22_1
- 	default "2.6.21.5" if BR2_ARCH_AT91_2_6_21_5
--	default "2.6.21.1" if BR2_ARCH_AT91_2_6_21_1
- 	default "2.6.20.4" if BR2_ARCH_AT91_2_6_20_4
- 
- config	BR2_KERNEL_ARCH_PATCH_DIR
+Regards,
+Hartley
