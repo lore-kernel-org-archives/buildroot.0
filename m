@@ -1,11 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 29 Jan 2009 20:14:10 +0100
-Subject: [Buildroot] [PATCH] toolchain/gcc: remove unused
-	GCC_ENABLE_CLOCALE
-In-Reply-To: <200901291949.12311.markus.heidelberg@web.de> (Markus
-	Heidelberg's message of "Thu\, 29 Jan 2009 19\:49\:12 +0100")
-References: <200901291949.12311.markus.heidelberg@web.de>
-Message-ID: <877i4drkl9.fsf@macbook.be.48ers.dk>
+Date: Thu, 29 Jan 2009 20:15:08 +0100
+Subject: [Buildroot] FOSDEM
+In-Reply-To: <200901292013.05684.markus.heidelberg@web.de> (Markus
+	Heidelberg's message of "Thu\, 29 Jan 2009 20\:13\:05 +0100")
+References: <1232566648.11888.56.camel@elrond.atmel.com>
+	<87bpu0qv4t.fsf@macbook.be.48ers.dk> <20090122081257.GA3672@zelow.no>
+	<200901292013.05684.markus.heidelberg@web.de>
+Message-ID: <873af1rkjn.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,10 +15,13 @@ To: buildroot@busybox.net
 
 >>>>> "Markus" == Markus Heidelberg <markus.heidelberg@web.de> writes:
 
- Markus> This variable was introduced in r17046 (add gfortran support,
- Markus> 2006-12-22) and wasn't used even there.
+Hi,
 
-Thanks, committed as r25132.
+ Markus> Today I've booked the accomodation and rail ticket, will be
+ Markus> there, too.  Will anyone already be there on Friday for the
+ Markus> "Friday Beer Event"?  I will.
+
+Great, I think I will as well, but it depends a bit on logistics.
 
 -- 
 Bye, Peter Korsgaard
