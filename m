@@ -1,32 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 29 Jan 2009 10:38:14 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Atmel:
-	atstk100x
-In-Reply-To: <20090129093327.BD8B17741D@busybox.osuosl.org> (ulf@uclibc.org's
-	message of "Thu\, 29 Jan 2009 09\:33\:27 +0000 \(UTC\)")
-References: <20090129093327.BD8B17741D@busybox.osuosl.org>
-Message-ID: <87skn2tptl.fsf@macbook.be.48ers.dk>
+From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
+Date: Thu, 29 Jan 2009 10:42:08 +0100
+Subject: [Buildroot] svn commit:
+ trunk/buildroot/target/device/Atmel/arch-avr32: kernel-patches-2.6.28.2
+In-Reply-To: <20090129093246.EBDF27741D@busybox.osuosl.org>
+References: <20090129093246.EBDF27741D@busybox.osuosl.org>
+Message-ID: <20090129104208.2a2c38c8@hcegtvedt>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+On Thu, 29 Jan 2009 09:32:46 +0000 (UTC)
+ulf at uclibc.org wrote:
 
- ulf> Author: ulf
- ulf> Date: 2009-01-29 09:33:25 +0000 (Thu, 29 Jan 2009)
- ulf> New Revision: 25114
+> Author: ulf
+> Date: 2009-01-29 09:32:45 +0000 (Thu, 29 Jan 2009)
+> New Revision: 25113
+> 
+> Log:
+> Add AVR32 support for linux-2.6.28.2
+> 
 
- ulf> Log:
- ulf> Update atstk100x BSP
+I appreciate the effort for these patches.
 
- ulf> Added:
- ulf>    trunk/buildroot/target/device/Atmel/atstk100x/atstk100x-linux-2.6.27.12.config
- ulf>    trunk/buildroot/target/device/Atmel/atstk100x/atstk100x-linux-2.6.27.3.config
+> Added:
+>    trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.28.2/
+>    trunk/buildroot/target/device/Atmel/arch-avr32/kernel-patches-2.6.28.2/linux-2.6.28.2-100-avr32-atmel.1.patch
 
-Too configs for practically the same kernel version? That doesn't
-sound right.
+But do not make something that looks like a vendor release, this is
+AFAIK not tested. Is this just a rebase?
+
+<snipp>
 
 -- 
-Bye, Peter Korsgaard
+Best regards,
+Hans-Christian Egtvedt
