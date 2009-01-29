@@ -1,57 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 29 Jan 2009 17:03:20 +0100
-Subject: [Buildroot] target/device/Atmel kernel patches
-In-Reply-To: <A223C54B106543948AC36303E7C74F76@aeglos> (Ulf Samuelsson's
-	message of "Thu\, 29 Jan 2009 16\:27\:10 +0100")
-References: <87ab9d4w6j.fsf@macbook.be.48ers.dk>
-	<1233005366.2298.118.camel@elrond.atmel.com>
-	<871vup4ul9.fsf@macbook.be.48ers.dk>
-	<1233008389.2298.129.camel@elrond.atmel.com>
-	<87vds114op.fsf@macbook.be.48ers.dk>
-	<FE6DCE243B7A4724B6B33E85771AD61F@aeglos>
-	<871vumtb1w.fsf@macbook.be.48ers.dk>
-	<A223C54B106543948AC36303E7C74F76@aeglos>
-Message-ID: <8763jyrtfb.fsf@macbook.be.48ers.dk>
+From: Sven Neumann <s.neumann@phase-zero.de>
+Date: Thu, 29 Jan 2009 17:11:03 +0100
+Subject: [Buildroot] meaning of BR2_arm_dunno
+In-Reply-To: <87eiymru7j.fsf@macbook.be.48ers.dk>
+References: <1233243053.15375.33.camel@sven>
+	<87eiymru7j.fsf@macbook.be.48ers.dk>
+Message-ID: <1233245463.15375.41.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
+Hi,
 
- >> We already have a situation where more than half the size of buildroot
- >> is patches, continuing to grow this is not a workable situation.
- >> 
- Ulf> I agree with this, but the solution I want to see is that you
- Ulf> only keep the latest patches in the tree,
- Ulf> and as we introduce new kernel versions we
- Ulf> let older patches slip into the mirror server.
+On Thu, 2009-01-29 at 16:46 +0100, Peter Korsgaard wrote:
 
-I don't see why we the buildroot project should mirror random obsolete
-board patches?
+>         default apcs-gnu        if BR2_ARM_OABI
+>         default atpcs           if BR2_arm_dunno
+>         default aapcs           if BR2_arm_dunno
+>         default aapcs-linux     if BR2_ARM_EABI
 
-And again, things should get pushed upstream so we only carry patches
-for (not-yet-applied-upstream) bugfixes.
+That looks more reasonable to me and it is in line with what was
+suggested on the linux-arm-kernel mailing-list, see
+http://lists.arm.linux.org.uk/lurker/message/20090124.152540.2d9a4947.en.html
 
- Ulf> I just want them to build as long as possible.
+As you can see from the linked thread, the compiler we ended up with
+works nicely for userspace, but it cannot be used to build a kernel. It
+may be a good idea to set BR2_GCC_TARGET_ABI to aapcs-linux even if
+BR2_iwmmxt is selected.
 
-Why can't people just continue to use an old buildroot release or
-store their (project specific) board patches outside buildroot?
+> Could you give it a try with those 2 lines changed?
 
- >> If people want to use an old kernel they can maintain it outside of
- >> buildroot or in their local buildroot tree.
+What exactly do you want me to try? I guess I would have to remove
+my .config and go thru menuconfig, select ARM iwmmxt and then check what
+gets sets for BR2_GCC_TARGET_TUNE, BR2_GCC_TARGET_ARCH and
+BR2_GCC_TARGET_ABI? Is that correct?
 
- Ulf> I want to give people the capability to build old kernel
- Ulf> with a new root fs.
 
-No problem if we make it possible to get the kernel from somewhere
-else (for most commercial projects probably a local
-cvs/svn/git/whatever repository).
-
- >> I do agree we should make it easier to build u-boot / linux from a
- >> non-mainline svn/git/whatever tree, that's something I will work on
- >> after the release.
-
--- 
-Bye, Peter Korsgaard
+Sven
