@@ -1,48 +1,32 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Thu, 29 Jan 2009 09:36:36 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/scripts:  test
-Message-ID: <20090129093636.297FA7741D@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 29 Jan 2009 10:38:14 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Atmel:
+	atstk100x
+In-Reply-To: <20090129093327.BD8B17741D@busybox.osuosl.org> (ulf@uclibc.org's
+	message of "Thu\, 29 Jan 2009 09\:33\:27 +0000 \(UTC\)")
+References: <20090129093327.BD8B17741D@busybox.osuosl.org>
+Message-ID: <87skn2tptl.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2009-01-29 09:36:35 +0000 (Thu, 29 Jan 2009)
-New Revision: 25116
+>>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
 
-Log:
-run test with some knowledge of ARCH
+ ulf> Author: ulf
+ ulf> Date: 2009-01-29 09:33:25 +0000 (Thu, 29 Jan 2009)
+ ulf> New Revision: 25114
 
-Added:
-   trunk/buildroot/scripts/test/Makefile
+ ulf> Log:
+ ulf> Update atstk100x BSP
 
-Modified:
-   trunk/buildroot/scripts/testheader.inc
+ ulf> Added:
+ ulf>    trunk/buildroot/target/device/Atmel/atstk100x/atstk100x-linux-2.6.27.12.config
+ ulf>    trunk/buildroot/target/device/Atmel/atstk100x/atstk100x-linux-2.6.27.3.config
 
+Too configs for practically the same kernel version? That doesn't
+sound right.
 
-Changeset:
-Added: trunk/buildroot/scripts/test/Makefile
-===================================================================
---- trunk/buildroot/scripts/test/Makefile	                        (rev 0)
-+++ trunk/buildroot/scripts/test/Makefile	2009-01-29 09:36:35 UTC (rev 25116)
-@@ -0,0 +1,7 @@
-+include .config
-+
-+
-+ARCH:	
-+	@echo	$(strip $(subst ",,$(BR2_ARCH)))
-+#")))
-+
-
-Modified: trunk/buildroot/scripts/testheader.inc
-===================================================================
---- trunk/buildroot/scripts/testheader.inc	2009-01-29 09:34:11 UTC (rev 25115)
-+++ trunk/buildroot/scripts/testheader.inc	2009-01-29 09:36:35 UTC (rev 25116)
-@@ -1,3 +1,5 @@
-+ARCH=`make -f scripts/test/Makefile ARCH`
-+
- function mk()
- {
- 	scripts/mkpkg $1 $2 "$3"
+-- 
+Bye, Peter Korsgaard
