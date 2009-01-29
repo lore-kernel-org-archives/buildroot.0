@@ -1,28 +1,78 @@
-From: Daniel Laird <danieljlaird@hotmail.com>
-Date: Thu, 29 Jan 2009 18:48:28 +0000
-Subject: [Buildroot] Updating toolchain config options to help
-	external	toolchain support.
-In-Reply-To: <1233252750.4147.34.camel@elrond.atmel.com>
-References: <C13DBBE85AD6974B85C118C35890CA5F1AF39BD968@EU1RDCRDC1WX029.exi.nxp.com>
-	<COL102-DS4F672F3105EE1F6476A4CDCC90@phx.gbl> 
-	<1233252750.4147.34.camel@elrond.atmel.com>
-Message-ID: <COL102-W584B4DF0925281F2B5E144DCC90@phx.gbl>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Thu, 29 Jan 2009 19:50:25 +0100
+Subject: [Buildroot] svn commit:
+	trunk/buildroot/target/device:	ARMLTDARMLTD/integrator926
+	ARMLTD/inte etc...
+In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE19090114B446@mi8nycmail19.Mi8.com>
+References: <20090129174137.BB3DC76D75@busybox.osuosl.org>
+	<BD79186B4FD85F4B8E60E381CAEE19090114B446@mi8nycmail19.Mi8.com>
+Message-ID: <1233255025.4147.53.camel@elrond.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+tor 2009-01-29 klockan 13:35 -0500 skrev hartleys:
+> On Thursday, January 29, 2009 10:42 AM, ulf at uclibc.org wrote:
+> > Log:
+> > Clean  up ARM Ltd BSP
+> > 
+> > Added:
+> >    trunk/buildroot/target/device/ARMLTD/integrator926/
+> >
+> trunk/buildroot/target/device/ARMLTD/integrator926/integrator926_defconf
+> ig
+> >
+> trunk/buildroot/target/device/ARMLTD/integrator926/linux-2.6.22.9.config
+> >    trunk/buildroot/target/device/ARMLTD/integrator926_huge/
+> >
+> trunk/buildroot/target/device/ARMLTD/integrator926_huge/integrator926_hu
+> ge_defconfig
+> >
+> trunk/buildroot/target/device/ARMLTD/integrator926_huge/linux-2.6.26.8.c
+> onfig
+> > 
+> > Removed:
+> >    trunk/buildroot/target/device/ARMLTD/integrator926_defconfig
+> >    trunk/buildroot/target/device/ARMLTD/integrator926_huge_defconfig
+> >    trunk/buildroot/target/device/ARMLTD/linux26.integrator926.config
+> >
+> trunk/buildroot/target/device/ARMLTD/linux26.integrator926_huge.config
+> > 
+> > Modified:
+> >    trunk/buildroot/target/device/ARMLTD/Config.in
+> >    trunk/buildroot/target/device/ARMLTD/Makefile.in
+> >    trunk/buildroot/target/device/Config.in
+> > 
+> 
+> I think trunk/buildroot/target/device/ARMLTD/Config.in needs a bit more
+> work.
+> 
+> $ make menuconfig
+> target/device/ARMLTD/Config.in:19:warning: defaults for choice values
+> not supported
+> target/device/ARMLTD/Config.in:26:warning: defaults for choice values
+> not supported
+> 
+> Also, are the various:
+> 
+> 	depends on BR2_arm && BR2_TARGET_ARMLTD
+> 
+> really needed?  I don't think you can even get into the choices until
+> those depends are already satisfied.
 
-I like this option, however I think this is too big a change to make before releasing.
-I think we should move to this after the release.
- 
-In the mean time I will make the commits (with comments/feedback that has been provided)
- 
-And then we should look into this for the next release (a really good idea).Daniel Laird> Subject: Re: [Buildroot] Updating toolchain config options to help external toolchain support.> From: ulf.samuelsson at atmel.com> To: danieljlaird at hotmail.com> CC: buildroot at uclibc.org> Date: Thu, 29 Jan 2009 19:12:30 +0100> > > > After a lot a playing around I have made some changes to the toolchain> > configuration options.> > This now allows users of external binary toolchains to enable/disable the> > same set of features as those> > who are building a toolchain using buildroot or external source.> > However the number of changes mean that I would like to post the patch below> > for comments before commiting it.> > I have tested the external toolchain support side of things and checked the> > options are all ok but I have not built a new> > buildroot toolchain (never done this)> > perhaps someone can comment on patch below: If not I would like to commit by> > friday to enable a few days testing before final release.> > > > Many thanks> > Daniel Laird> > > > ?> > If you have an external toolchain which is built in a certain way, > then I think it makes more sense to have a file which > contains the settings of that toolchain:> > config BR2_EXTERNAL_TOOLCHAIN> defeds on ...> select BR2_WCHAR> select ?BR2_EXT_PTHREADS> select ?BR2_GCC_CROSS_CXX> select ...> > Why give the user an option to configure buildroot to> use the wrong parameters.> > As I mentioned before, I think the toolchain should be> built as as seaprate item, and then provide> its configuration in a file like above.> > Package disabled by the toolchain needs to > be replaced by a Comment during menuconfig.> > > BR> Ulf Samuelsson> 
-_________________________________________________________________
-Windows Live Messenger just got better .Video display pics, contact updates & more.
-http://www.download.live.com/messenger
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: http://lists.busybox.net/pipermail/buildroot/attachments/20090129/62390ef0/attachment.htm 
+OK, It started, did not check thw warnings
+Will clean it up.
+BR
+Ulf Samuelsson
+
+
+
+> 
+> Just my two cents...  Keep up the great work!
+> Hartley
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
