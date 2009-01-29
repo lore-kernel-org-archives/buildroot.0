@@ -1,42 +1,60 @@
-From: hartleys <hartleys@visionengravers.com>
-Date: Thu, 29 Jan 2009 15:30:59 -0500
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device/x86: i686
-In-Reply-To: <20090129192525.2264976D75@busybox.osuosl.org>
-References: <20090129192525.2264976D75@busybox.osuosl.org>
-Message-ID: <BD79186B4FD85F4B8E60E381CAEE19090114B4E9@mi8nycmail19.Mi8.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Thu, 29 Jan 2009 20:51:07 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Atmel:
+	arch-avr32 atngw100 atstk1005 atstk100x
+Message-ID: <20090129205107.9ED3A7741D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thursday, January 29, 2009 12:25 PM, ulf at uclibc.org wrote:
-> Log:
-> Update x86 BSP to latest uclibc/linux/tools versions
-> 
-> Added:
->    trunk/buildroot/target/device/x86/i686/
->    trunk/buildroot/target/device/x86/i686/i686-linux-2.6.28.2.config
->    trunk/buildroot/target/device/x86/i686/i686_defconfig
-> 
-> Removed:
->    trunk/buildroot/target/device/x86/i386/
-> 
-> Modified:
->    trunk/buildroot/target/device/x86/Config.in
->    trunk/buildroot/target/device/x86/Makefile.in
->    trunk/buildroot/target/device/x86/i686/Makefile.in
->    trunk/buildroot/target/device/x86/i686/i386_defconfig
-> 
+Author: ulf
+Date: 2009-01-29 20:51:05 +0000 (Thu, 29 Jan 2009)
+New Revision: 25137
 
-Ulf,
+Log:
+Clean up AVR32 Linux support for atngw100, atstk100x and atstk1005
+The boards now support 2.6.27.13 as default
+There are configs for 2.6.28.2, but this patch is marked (experimental)
+Configuration options for no longer existing patches are removed
+(AC-97,ISI and PS2-I/F)
 
-trunk/buildroot/target/device/x86/Config.in has the same issue as ARMLTD
-did.
 
-$ make menuconfig
-target/device/x86/Config.in:14:warning: defaults for choice values not
-supported
 
-Regards,
-Hartley
+Added:
+   trunk/buildroot/target/device/Atmel/atngw100/atngw100-linux-2.6.27.13.config
+   trunk/buildroot/target/device/Atmel/atngw100/atngw100-linux-2.6.28.2.config
+   trunk/buildroot/target/device/Atmel/atstk1005/atstk1005-linux-2.6.27.13.config
+   trunk/buildroot/target/device/Atmel/atstk1005/atstk1005-linux-2.6.28.2.config
+   trunk/buildroot/target/device/Atmel/atstk100x/atstk100x-linux-2.6.27.13.config
+   trunk/buildroot/target/device/Atmel/atstk100x/atstk100x-linux-2.6.28.2.config
+
+Removed:
+   trunk/buildroot/target/device/Atmel/atngw100/atngw100-linux-2.6.22.1.config
+   trunk/buildroot/target/device/Atmel/atngw100/atngw100-linux-2.6.23.config
+   trunk/buildroot/target/device/Atmel/atngw100/atngw100-linux-2.6.27.10.config
+   trunk/buildroot/target/device/Atmel/atstk1005/atstk1005-linux-2.6.27.6.config
+   trunk/buildroot/target/device/Atmel/atstk100x/atstk1002-linux-2.6.22.1.config
+   trunk/buildroot/target/device/Atmel/atstk100x/atstk1002-linux-2.6.22.10.config
+   trunk/buildroot/target/device/Atmel/atstk100x/atstk1002-linux-2.6.23.config
+   trunk/buildroot/target/device/Atmel/atstk100x/atstk1002-linux-2.6.24.config
+   trunk/buildroot/target/device/Atmel/atstk100x/atstk1002-no-mplayer_defconfig
+   trunk/buildroot/target/device/Atmel/atstk100x/atstk100x-linux-2.6.27.10.config
+   trunk/buildroot/target/device/Atmel/atstk100x/atstk100x-linux-2.6.27.12.config
+   trunk/buildroot/target/device/Atmel/atstk100x/atstk100x-linux-2.6.27.3.config
+
+Modified:
+   trunk/buildroot/target/device/Atmel/arch-avr32/Config.in.linux.patches
+   trunk/buildroot/target/device/Atmel/atngw100/atngw100_defconfig
+   trunk/buildroot/target/device/Atmel/atstk1005/atstk1005_defconfig
+   trunk/buildroot/target/device/Atmel/atstk100x/atstk100x_defconfig
+   trunk/buildroot/target/device/Atmel/uClibc.config.avr32
+
+
+Changeset:
+
+Sorry, the patch is too large to include (23364 lines).
+Please use ViewCVS to see it!
+
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=25137
