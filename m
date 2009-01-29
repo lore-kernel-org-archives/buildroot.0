@@ -1,56 +1,52 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Thu, 29 Jan 2009 16:30:36 +0100
-Subject: [Buildroot] So what do we do about all the unmaintained boards?
-References: <1233182567.4147.16.camel@elrond.atmel.com>
-	<87vdryrw65.fsf@macbook.be.48ers.dk>
-Message-ID: <F9E9391EAD414FA2BA0378C38D349B86@aeglos>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 29 Jan 2009 16:46:24 +0100
+Subject: [Buildroot] meaning of BR2_arm_dunno
+In-Reply-To: <1233243053.15375.33.camel@sven> (Sven Neumann's message of "Thu\,
+	29 Jan 2009 16\:30\:53 +0100")
+References: <1233243053.15375.33.camel@sven>
+Message-ID: <87eiymru7j.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Sven" == Sven Neumann <s.neumann@phase-zero.de> writes:
 
+ Sven> Hi,
 
->>>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
-> 
-> Ulf> VENDOR BOARD KERNEL
-> Ulf> AMD Dbu1500 2.6.19.1
-> Ulf> ARM AT91SAM9260 2.6.24 REMOVE?
-> Ulf> ARMLTD Integrator926 2.6.22.9
-> Ulf> Atmel Plenty All are or will soon be 2.6.28
-> Ulf> Hitachi MS7206SE01 No kernel config
-> Ulf> jp q5 2.4.26/29/32 REMOVE?
-> Ulf> KWIKBYTE kb9202 2.6.24
-> Ulf> mips malta 2.6.21.5
-> Ulf> Sharp LNode80 2.4.26 REMOVE?
-> Ulf> Soekris net4521/4801 2.4.29 REMOVE?
-> Ulf> Valka v100sc2 No kernel config
-> Ulf> Via epia-mii 2.6.11.5 REMOVE?
-> Ulf> x86 i386 2.6.21.5
-> 
-> Ulf> The reason for removing the ARM directory, is that it does not make
-> Ulf> any sense to do a "generic ARM".
-> 
-> I have been wanting to get rid of (atleast all the really ancient)
-> boards for some time, I don't remember ever seeing any updates to
-> them.
-> 
-> Either we mark them as DEPRECATED and remove them after the release,
-> or we do it now.
-> 
-> -- 
-> Bye, Peter Korsgaard
->
+ Sven> I wonder if anyone could explain to me the purpose of
+ Sven> BR2_arm_dunno as used in target/Config.in.arch. The reason I am
+ Sven> asking is that we've run into the problem of ending up with a
+ Sven> misconfigured gcc (as reported earlier on this list). I would
+ Sven> like to find out how this can be avoided in the future, but I
+ Sven> seem to be unable to understand the mechanism that selects the
+ Sven> default values for BR2_GCC_TARGET_TUNE, BR2_GCC_TARGET_ARCH and
+ Sven> BR2_GCC_TARGET_ABI.
 
-I suggest we remove the boards with 2.4 kernel only today
-but we should have one board per architecture we want to support.
+It takes a bit of searching as the lines have moved around the tree a
+few times, but they were originally added by Bernhard in r19040 with
+the nice commit message:
 
-There is no PowerPC board support at the moment. 
-Can you fix since you seem to be working on this?
+- populate some BR2_GCC_TARGET_ARCH, BR2_GCC_TARGET_ABI, BR2_GCC_TARGET_TUNE defaults (hand-waving mode, of course untested.. ;)
 
-The BOARD_NAME, BOARD_PATH really belong
-in a target/device/<subdir> directory and not in the <buildroot>/project.
+In other words it seems pretty half baked. Taking a look at Bernhard's
+git tree I see he has:
 
-Best Regards
-Ulf Samuelsson
+        default apcs-gnu        if BR2_ARM_OABI
+        default atpcs           if BR2_arm_dunno
+        default aapcs           if BR2_arm_dunno
+        default aapcs-linux     if BR2_ARM_EABI
+
+Which confusingly comes from the following commit:
+
+commit 7f7aac5d32ba677e8be386afa6ca121af00fbf1a
+Author: Bernhard Fischer <rep.dot.nop@gmail.com>
+Date:   Thu Sep 18 23:47:23 2008 +0200
+
+    remove dependency on iwmmxt
+
+Could you give it a try with those 2 lines changed?
+
+-- 
+Bye, Peter Korsgaard
