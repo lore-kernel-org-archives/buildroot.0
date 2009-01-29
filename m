@@ -1,27 +1,124 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 29 Jan 2009 20:15:08 +0100
-Subject: [Buildroot] FOSDEM
-In-Reply-To: <200901292013.05684.markus.heidelberg@web.de> (Markus
-	Heidelberg's message of "Thu\, 29 Jan 2009 20\:13\:05 +0100")
-References: <1232566648.11888.56.camel@elrond.atmel.com>
-	<87bpu0qv4t.fsf@macbook.be.48ers.dk> <20090122081257.GA3672@zelow.no>
-	<200901292013.05684.markus.heidelberg@web.de>
-Message-ID: <873af1rkjn.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Thu, 29 Jan 2009 19:24:32 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc
+Message-ID: <20090129192432.8F4C176D75@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Markus" == Markus Heidelberg <markus.heidelberg@web.de> writes:
+Author: jacmet
+Date: 2009-01-29 19:24:31 +0000 (Thu, 29 Jan 2009)
+New Revision: 25133
 
-Hi,
+Log:
+toolchain/gcc: remove ancient (and unused) i386 softfloat patch
 
- Markus> Today I've booked the accomodation and rail ticket, will be
- Markus> there, too.  Will anyone already be there on Friday for the
- Markus> "Friday Beer Event"?  I will.
+Removed:
+   trunk/buildroot/toolchain/gcc/i386-gcc-soft-float.patch
 
-Great, I think I will as well, but it depends a bit on logistics.
+Modified:
+   trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
+   trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
 
--- 
-Bye, Peter Korsgaard
+
+Changeset:
+Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk
+===================================================================
+--- trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2009-01-29 19:13:53 UTC (rev 25132)
++++ trunk/buildroot/toolchain/gcc/gcc-uclibc-3.x.mk	2009-01-29 19:24:31 UTC (rev 25133)
+@@ -159,10 +159,6 @@
+ ifeq ("$(strip $(ARCH))","armeb")
+ 	toolchain/patch-kernel.sh $(GCC_DIR) toolchain/gcc/$(GCC_VERSION) arm-softfloat.patch.conditional
+ endif
+-	# Not yet updated to 3.4.1.
+-	#ifeq ("$(strip $(ARCH))","i386")
+-	#toolchain/patch-kernel.sh $(GCC_DIR) toolchain/gcc i386-gcc-soft-float.patch
+-	#endif
+ endif
+ 	touch $@
+ 
+
+Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
+===================================================================
+--- trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2009-01-29 19:13:53 UTC (rev 25132)
++++ trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2009-01-29 19:24:31 UTC (rev 25133)
+@@ -179,10 +179,6 @@
+ ifeq ("$(strip $(ARCH))","armeb")
+ 	toolchain/patch-kernel.sh $(GCC_DIR) toolchain/gcc/$(GCC_VERSION) arm-softfloat.patch.conditional
+ endif
+-	# Not yet updated to 3.4.1.
+-	#ifeq ("$(strip $(ARCH))","i386")
+-	#toolchain/patch-kernel.sh $(GCC_DIR) toolchain/gcc i386-gcc-soft-float.patch
+-	#endif
+ endif
+ 	touch $@
+ 
+
+Deleted: trunk/buildroot/toolchain/gcc/i386-gcc-soft-float.patch
+===================================================================
+--- trunk/buildroot/toolchain/gcc/i386-gcc-soft-float.patch	2009-01-29 19:13:53 UTC (rev 25132)
++++ trunk/buildroot/toolchain/gcc/i386-gcc-soft-float.patch	2009-01-29 19:24:31 UTC (rev 25133)
+@@ -1,61 +0,0 @@
+-diff -urN gcc-3.3.2-orig/gcc/config/i386/i386.h gcc-3.3.2/gcc/config/i386/i386.h
+---- gcc-3.3.2-orig/gcc/config/i386/i386.h	2003-06-25 16:18:31.000000000 -0500
+-+++ gcc-3.3.2/gcc/config/i386/i386.h	2003-10-22 01:46:57.000000000 -0500
+-@@ -653,6 +653,7 @@
+- /* Define for XFmode or TFmode extended real floating point support.
+-    The XFmode is specified by i386 ABI, while TFmode may be faster
+-    due to alignment and simplifications in the address calculations.  */
+-+#if 0
+- #define LONG_DOUBLE_TYPE_SIZE (TARGET_128BIT_LONG_DOUBLE ? 128 : 96)
+- #define MAX_LONG_DOUBLE_TYPE_SIZE 128
+- #ifdef __x86_64__
+-@@ -660,6 +661,17 @@
+- #else
+- #define LIBGCC2_LONG_DOUBLE_TYPE_SIZE 96
+- #endif
+-+#else
+-+	  /* Set up for x86 soft float with 64-bit long doubles, since that's
+-+	   * all the soft float emulation supports. */
+-+#define LONG_DOUBLE_TYPE_SIZE (TARGET_128BIT_LONG_DOUBLE ? 128 : (TARGET_80387 ? 96 : 64))
+-+#define MAX_LONG_DOUBLE_TYPE_SIZE 128
+-+#ifdef __x86_64__
+-+#define LIBGCC2_LONG_DOUBLE_TYPE_SIZE 128
+-+#else
+-+#define LIBGCC2_LONG_DOUBLE_TYPE_SIZE (TARGET_80387 ? 96 : 64)
+-+#endif
+-+#endif
+- 
+- /* Set the value of FLT_EVAL_METHOD in float.h.  When using only the
+-    FPU, assume that the fpcw is set to extended precision; when using
+-diff -urN gcc-3.3.2-orig/gcc/config/t-linux gcc-3.3.2/gcc/config/t-linux
+---- gcc-3.3.2-orig/gcc/config/t-linux-uclibc	2003-06-04 11:56:11.000000000 -0500
+-+++ gcc-3.3.2/gcc/config/t-linux-uclibc	2003-10-22 01:46:39.000000000 -0500
+-@@ -21,3 +21,28 @@
+- LIB2ADDEH = $(srcdir)/unwind-dw2.c $(srcdir)/unwind-dw2-fde.c \
+-   $(srcdir)/unwind-sjlj.c $(srcdir)/unwind-c.c
+- LIB2ADDEHDEP = unwind.inc unwind-dw2-fde.h
+-+
+-+##############################################
+-+# We want fine grained libraries, so use the new code to build the
+-+# floating point emulation libraries.
+-+FPBIT = fp-bit.c
+-+DPBIT = dp-bit.c
+-+
+-+#LIB2FUNCS_EXTRA = xp-bit.c
+-+
+-+dp-bit.c: $(srcdir)/config/fp-bit.c
+-+	echo '#ifdef __LITTLE_ENDIAN__' > dp-bit.c
+-+	echo '#define FLOAT_BIT_ORDER_MISMATCH' >>dp-bit.c
+-+	echo '#endif'           >> dp-bit.c
+-+	cat $(srcdir)/config/fp-bit.c >> dp-bit.c
+-+
+-+fp-bit.c: $(srcdir)/config/fp-bit.c
+-+	echo '#define FLOAT' > fp-bit.c
+-+	echo '#ifdef __LITTLE_ENDIAN__' >> fp-bit.c
+-+	echo '#define FLOAT_BIT_ORDER_MISMATCH' >>fp-bit.c
+-+	echo '#endif'           >> fp-bit.c
+-+	cat $(srcdir)/config/fp-bit.c >> fp-bit.c
+-+
+-+#MULTILIB_OPTIONS = msoft-float
+-+#MULTILIB_DIRNAMES = soft-float
+-+
