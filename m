@@ -1,45 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 29 Jan 2009 20:04:53 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device
-In-Reply-To: <20090129172116.F10B076D75@busybox.osuosl.org> (ulf@uclibc.org's
-	message of "Thu\, 29 Jan 2009 17\:21\:16 +0000 \(UTC\)")
-References: <20090129172116.F10B076D75@busybox.osuosl.org>
-Message-ID: <87bptqq6ga.fsf@macbook.be.48ers.dk>
+From: Markus Heidelberg <markus.heidelberg@web.de>
+Date: Thu, 29 Jan 2009 20:13:05 +0100
+Subject: [Buildroot] FOSDEM
+In-Reply-To: <20090122081257.GA3672@zelow.no>
+References: <1232566648.11888.56.camel@elrond.atmel.com>
+	<87bpu0qv4t.fsf@macbook.be.48ers.dk>
+	<20090122081257.GA3672@zelow.no>
+Message-ID: <200901292013.05684.markus.heidelberg@web.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+Thomas Lundquist, 22.01.2009:
+> On Wed, Jan 21, 2009 at 09:09:06PM +0100, Peter Korsgaard wrote:
+> > 
+> > >>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
+> > 
+> >  Ulf> Decided to plunder my air milage cache and attend FOSDEM.
+> >  Ulf> Will bring the AT91SAM9263EK kit I promised Peter in a weak moment.
+> > 
+> > Yes, I'll probably be around the embedded room most of the time.
+> 
+> I'll be there aswell, not sure where I can be found but I guess
+> that room will be the most probable place.
 
- ulf> Author: ulf
- ulf> Date: 2009-01-29 17:21:16 +0000 (Thu, 29 Jan 2009)
- ulf> New Revision: 25124
+Today I've booked the accomodation and rail ticket, will be there, too.
+Will anyone already be there on Friday for the "Friday Beer Event"?
+I will.
 
- ulf> Log:
- ulf> Remove unneeded ARM architecure patch, just a clone of SAM9260 support
-
- ulf> Removed:
- ulf>    trunk/buildroot/target/device/ARM/
-
- ulf> Modified:
- ulf>    trunk/buildroot/target/device/Config.in
-
-
- ulf> Changeset:
- ulf> Modified: trunk/buildroot/target/device/Config.in
- ulf> ===================================================================
- ulf> --- trunk/buildroot/target/device/Config.in	2009-01-29 17:05:12 UTC (rev 25123)
- ulf> +++ trunk/buildroot/target/device/Config.in	2009-01-29 17:21:16 UTC (rev 25124)
- ulf> @@ -7,8 +7,6 @@
- ulf>  source "target/device/AMD/Config.in"
- ulf>  source "target/device/ARMLTD/Config.in"
- ulf>  source "target/device/Atmel/Config.in"
- ulf> -source "target/device/Hitachi/Config.in"
- ulf> -source "target/device/jp/Config.in"
-
-Huh? What does those have to do with $SUBJECT?
-
--- 
-Bye, Peter Korsgaard
+Markus
