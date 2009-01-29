@@ -1,65 +1,63 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Thu, 29 Jan 2009 19:31:31 +0100
-Subject: [Buildroot] target/device/Atmel kernel patches
-In-Reply-To: <87skn2qch5.fsf@macbook.be.48ers.dk>
-References: <87ab9d4w6j.fsf@macbook.be.48ers.dk>
-	<1233005366.2298.118.camel@elrond.atmel.com>
-	<871vup4ul9.fsf@macbook.be.48ers.dk>
-	<1233008389.2298.129.camel@elrond.atmel.com>
-	<87vds114op.fsf@macbook.be.48ers.dk>
-	<FE6DCE243B7A4724B6B33E85771AD61F@aeglos>
-	<871vumtb1w.fsf@macbook.be.48ers.dk>
-	<A223C54B106543948AC36303E7C74F76@aeglos>
-	<8763jyrtfb.fsf@macbook.be.48ers.dk>
-	<69C4B5A4F9B74F77AE1E58B4F020A786@aeglos>
-	<87skn2qch5.fsf@macbook.be.48ers.dk>
-Message-ID: <1233253891.4147.51.camel@elrond.atmel.com>
+From: hartleys <hartleys@visionengravers.com>
+Date: Thu, 29 Jan 2009 13:35:46 -0500
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device:
+	ARMLTDARMLTD/integrator926 ARMLTD/inte etc...
+In-Reply-To: <20090129174137.BB3DC76D75@busybox.osuosl.org>
+References: <20090129174137.BB3DC76D75@busybox.osuosl.org>
+Message-ID: <BD79186B4FD85F4B8E60E381CAEE19090114B446@mi8nycmail19.Mi8.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-tor 2009-01-29 klockan 17:54 +0100 skrev Peter Korsgaard:
-> >>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
+On Thursday, January 29, 2009 10:42 AM, ulf at uclibc.org wrote:
+> Log:
+> Clean  up ARM Ltd BSP
 > 
->  Ulf> As I see it, you get the base kernel from www.kernel.org
+> Added:
+>    trunk/buildroot/target/device/ARMLTD/integrator926/
+>
+trunk/buildroot/target/device/ARMLTD/integrator926/integrator926_defconf
+ig
+>
+trunk/buildroot/target/device/ARMLTD/integrator926/linux-2.6.22.9.config
+>    trunk/buildroot/target/device/ARMLTD/integrator926_huge/
+>
+trunk/buildroot/target/device/ARMLTD/integrator926_huge/integrator926_hu
+ge_defconfig
+>
+trunk/buildroot/target/device/ARMLTD/integrator926_huge/linux-2.6.26.8.c
+onfig
 > 
-> Yes, more or less directly, and that's fine for evaluation boards -
-> But for real development on specialized hardware that's rarely enough,
-> hence the need for either:
+> Removed:
+>    trunk/buildroot/target/device/ARMLTD/integrator926_defconfig
+>    trunk/buildroot/target/device/ARMLTD/integrator926_huge_defconfig
+>    trunk/buildroot/target/device/ARMLTD/linux26.integrator926.config
+>
+trunk/buildroot/target/device/ARMLTD/linux26.integrator926_huge.config
 > 
->  - Provide a way to add project specific patches on top
-> 
-> OR
-> 
->  - Take the kernel from somewhere else (some other
->    cvs/svn/git/whatever repo).
-> 
-> I suspect we need to support both.
-> 
->  Ulf> and if you dont want to host kernel patches for AT91,  then
->  Ulf> it will be no problem to download them from $(ATMEL_MIRROR).
->  Ulf> I just think there are other things in higher need of attention
->  Ulf> than removing these patches RIGHT NOW.
->  Ulf> I see that moving these patches from svn to a mirror should
->  Ulf> be done before the next release of buildroot.
-> 
-> No, but we're doing a bunch of cleanups now - And as I mentioned before,
-> the arch-arm directory seems a bit extreme as it is.
-
-I much prefer that we avoid doing this under time pressure
-and come to an agreememt on how to do a good implementation
-after the first release.
-
-> I don't think adding a bunch of special case handling to buildroot to
-> download AT91 patches from somewhere is a better solution. We should
-> rather generalize the setup so you can handle it outside BR and just
-> point BR to a repo or a directory full of patches.
+> Modified:
+>    trunk/buildroot/target/device/ARMLTD/Config.in
+>    trunk/buildroot/target/device/ARMLTD/Makefile.in
+>    trunk/buildroot/target/device/Config.in
 > 
 
-I am for generic solutions, but not at the expense of ease of use.
-That is why it needs some pondering, before a solution is selected.
+I think trunk/buildroot/target/device/ARMLTD/Config.in needs a bit more
+work.
 
-BR
-Ulf Samuelsson
+$ make menuconfig
+target/device/ARMLTD/Config.in:19:warning: defaults for choice values
+not supported
+target/device/ARMLTD/Config.in:26:warning: defaults for choice values
+not supported
+
+Also, are the various:
+
+	depends on BR2_arm && BR2_TARGET_ARMLTD
+
+really needed?  I don't think you can even get into the choices until
+those depends are already satisfied.
+
+Just my two cents...  Keep up the great work!
+Hartley
