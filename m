@@ -1,58 +1,65 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 29 Jan 2009 18:03:00 +0100
-Subject: [Buildroot] Updating toolchain config options to help external
-	toolchain support.
-In-Reply-To: <C13DBBE85AD6974B85C118C35890CA5F1AF39BD968@EU1RDCRDC1WX029.exi.nxp.com>
-	(Daniel James Laird's message of "Wed\,
-	28 Jan 2009 12\:52\:56 +0100")
-References: <C13DBBE85AD6974B85C118C35890CA5F1AF39BD968@EU1RDCRDC1WX029.exi.nxp.com>
-Message-ID: <87ocxqqc3f.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Thu, 29 Jan 2009 17:05:15 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device: Sharp
+	Sharp/LNode80 Sharp/LNode80/kerne etc...
+Message-ID: <20090129170516.39BFB76D75@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Daniel" == Daniel James Laird <daniel.j.laird@nxp.com> writes:
+Author: jacmet
+Date: 2009-01-29 17:05:12 +0000 (Thu, 29 Jan 2009)
+New Revision: 25123
 
-Hi,
+Log:
+target/device: remove obsolete Sharp/LNode80 platform
 
- Daniel> After a lot a playing around I have made some changes to the
- Daniel> toolchain configuration options.  This now allows users of
- Daniel> external binary toolchains to enable/disable the same set of
- Daniel> features as those who are building a toolchain using
- Daniel> buildroot or external source.  However the number of changes
- Daniel> mean that I would like to post the patch below for comments
- Daniel> before commiting it.  I have tested the external toolchain
- Daniel> support side of things and checked the options are all ok but
- Daniel> I have not built a new buildroot toolchain (never done this)
- Daniel> perhaps someone can comment on patch below: If not I would
- Daniel> like to commit by friday to enable a few days testing before
- Daniel> final release.
+As discussed on the list and requested on irc:
 
-It seems to work here - A few comments:
+< prpplague> Jacmet: hey, just wanted to drop a note to confirm that the
+             LNode80 can be removed, we never went into full scale
+             production of it, only 20 were ever made
 
-The reshuffle of configuration settings makes it fairly hard to find
-stuff for existing users - I wonder if this is all worth it as these
-things don't change very often.
+Removed:
+   trunk/buildroot/target/device/Sharp/Config.in
+   trunk/buildroot/target/device/Sharp/LNode80/Makefile.in
+   trunk/buildroot/target/device/Sharp/LNode80/device_table.txt
+   trunk/buildroot/target/device/Sharp/LNode80/kernel-patches/001-patch-2.4.26-vrs1
+   trunk/buildroot/target/device/Sharp/LNode80/kernel-patches/002-patch-2.4.26-vrs1-lnode80
+   trunk/buildroot/target/device/Sharp/LNode80/linux.config
+   trunk/buildroot/target/device/Sharp/LNode80/linux.mk
+   trunk/buildroot/target/device/Sharp/LNode80/target_skeleton/etc/TZ
+   trunk/buildroot/target/device/Sharp/LNode80/target_skeleton/etc/fstab
+   trunk/buildroot/target/device/Sharp/LNode80/target_skeleton/etc/group
+   trunk/buildroot/target/device/Sharp/LNode80/target_skeleton/etc/hostname
+   trunk/buildroot/target/device/Sharp/LNode80/target_skeleton/etc/hosts
+   trunk/buildroot/target/device/Sharp/LNode80/target_skeleton/etc/init.d/rcS
+   trunk/buildroot/target/device/Sharp/LNode80/target_skeleton/etc/inittab
+   trunk/buildroot/target/device/Sharp/LNode80/target_skeleton/etc/inputrc
+   trunk/buildroot/target/device/Sharp/LNode80/target_skeleton/etc/issue
+   trunk/buildroot/target/device/Sharp/LNode80/target_skeleton/etc/network/interfaces
+   trunk/buildroot/target/device/Sharp/LNode80/target_skeleton/etc/passwd
+   trunk/buildroot/target/device/Sharp/LNode80/target_skeleton/etc/profile
+   trunk/buildroot/target/device/Sharp/LNode80/target_skeleton/etc/protocols
+   trunk/buildroot/target/device/Sharp/LNode80/target_skeleton/etc/securetty
+   trunk/buildroot/target/device/Sharp/LNode80/target_skeleton/etc/services
+   trunk/buildroot/target/device/Sharp/LNode80/target_skeleton/etc/shadow
+   trunk/buildroot/target/device/Sharp/LNode80/target_skeleton/root/.bash_logout
+   trunk/buildroot/target/device/Sharp/LNode80/target_skeleton/root/.bash_profile
+   trunk/buildroot/target/device/Sharp/LNode80/target_skeleton/root/.bashrc
+   trunk/buildroot/target/device/Sharp/LNode80/target_skeleton/root/.empty
+   trunk/buildroot/target/device/Sharp/LNode80/target_skeleton/usr/share/udhcpc/default.script
+   trunk/buildroot/target/device/Sharp/Makefile.in
 
- Daniel> +config BR2_ENABLE_LOCALE
- Daniel> +	bool "Toolchain built with locale/gettext/i18n support?"
+Modified:
+   trunk/buildroot/target/device/Config.in
 
-The text used to be 'Enable locale/gettext/i18n support?', why the change?
 
- Daniel> ===================================================================
- Daniel> --- package/qte/Config.in	(revision 25087)
- Daniel> +++ package/qte/Config.in	(working copy)
- Daniel> @@ -2,7 +2,7 @@
- Daniel>  	bool "Qt/E"
- Daniel>  	depends on BR2_DEPRECATED
- Daniel>  	depends on BR2_INSTALL_LIBSTDCPP
- Daniel> -	select BR2_PTHREADS_NATIVE
- Daniel> +	depends on BR2_PTHREADS_NATIVE
+Changeset:
 
-This should go in a seperate commit, and have a comment entry like for
-the other packages depending on toolchain config.
+Sorry, the patch is too large to include (105659 lines).
+Please use ViewCVS to see it!
 
--- 
-Bye, Peter Korsgaard
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=25123
