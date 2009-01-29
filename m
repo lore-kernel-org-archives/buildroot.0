@@ -1,53 +1,45 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Thu, 29 Jan 2009 23:32:07 +0000 (UTC)
-Subject: [Buildroot] svn commit:
-	trunk/buildroot/target/device/Atmel/at91sam9263ek
-Message-ID: <20090129233207.9F5D57741D@busybox.osuosl.org>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Fri, 30 Jan 2009 00:37:27 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
+In-Reply-To: <20090129230904.GA13929@cloud.net.au>
+References: <20090127125650.GA18250@cloud.net.au>
+	<D4FF4B0197F54EE4BC14E179A2F17F15@aeglos>
+	<20090129230904.GA13929@cloud.net.au>
+Message-ID: <1233272247.4147.65.camel@elrond.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2009-01-29 23:32:06 +0000 (Thu, 29 Jan 2009)
-New Revision: 25155
+fre 2009-01-30 klockan 10:09 +1100 skrev Hamish Moffatt:
+> On Thu, Jan 29, 2009 at 03:33:08PM +0100, Ulf Samuelsson wrote:
+> >> The current logic of trying xconfig then menuconfig is very ugly - does
+> >> it allow you to abort xconfig without falling back?
+> >
+> > If you could abort the xconfig without running menuconfig,
+> > then you would not have a config file and the build would abort.
+> > What is the sense of that?
+> 
+> You could have an exising config, start editing then change your mind.
+> You don't want menuconfig to launch in that case.
+> 
 
-Log:
-Update some comments, which will cause defconfig to wait for input
 
-Modified:
-   trunk/buildroot/target/device/Atmel/at91sam9263ek/at91sam9263ek_defconfig
+If you have an existing config, then buildroot will copy that
+to the linux directory, and neither menuconfig or xconfig
+will be launched.
+
+It is launched if buildroot does not find a suitable config.
+
+If you select to do make menuconfig, it will not launch  xconfig.
+
+If you already have a .config, then you should do make linux-config
+or similar.
+
+BR
+Ulf Samuelsson
 
 
-Changeset:
-Modified: trunk/buildroot/target/device/Atmel/at91sam9263ek/at91sam9263ek_defconfig
-===================================================================
---- trunk/buildroot/target/device/Atmel/at91sam9263ek/at91sam9263ek_defconfig	2009-01-29 23:23:51 UTC (rev 25154)
-+++ trunk/buildroot/target/device/Atmel/at91sam9263ek/at91sam9263ek_defconfig	2009-01-29 23:32:06 UTC (rev 25155)
-@@ -1,6 +1,6 @@
- #
- # Automatically generated make config: don't edit
--# Thu Jan 29 22:57:38 2009
-+# Fri Jan 30 00:24:22 2009
- #
- BR2_HAVE_DOT_CONFIG=y
- BR2_VERSION="2009.02-svn"
-@@ -1077,15 +1077,11 @@
- BR2_KERNEL_MINORLEVEL="2"
- BR2_KERNEL_ARCH_PATCH_ENABLED=y
- BR2_ARCH_AT91_2_6_28=y
--# BR2_ARCH_AT91_2_6_27_7 is not set
-+# BR2_ARCH_AT91_2_6_27 is not set
- # BR2_ARCH_AT91_2_6_26 is not set
--# BR2_ARCH_AT91_2_6_26_RC3 is not set
- # BR2_ARCH_AT91_2_6_25 is not set
- # BR2_ARCH_AT91_2_6_24 is not set
--# BR2_ARCH_AT91_2_6_22_1 is not set
--# BR2_ARCH_AT91_2_6_21_5 is not set
--# BR2_ARCH_AT91_2_6_21_1 is not set
--# BR2_ARCH_AT91_2_6_20_4 is not set
-+# BR2_ARCH_AT91_2_6_22 is not set
- BR2_LINUX_BSP_PATCH=""
- BR2_KERNEL_PATCH="patch-$(BR2_DOWNLOAD_LINUX26_VERSION).$(BR2_KERNEL_PATCH_LEVEL).bz2"
- BR2_EXTRA_VERSION=".$(BR2_KERNEL_PATCH_LEVEL)"
+> 
+> Hamish
