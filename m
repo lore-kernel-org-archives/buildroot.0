@@ -1,57 +1,66 @@
 From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Thu, 29 Jan 2009 19:12:30 +0100
-Subject: [Buildroot] Updating toolchain config options to help
-	external	toolchain support.
-In-Reply-To: <COL102-DS4F672F3105EE1F6476A4CDCC90@phx.gbl>
-References: <C13DBBE85AD6974B85C118C35890CA5F1AF39BD968@EU1RDCRDC1WX029.exi.nxp.com>
-	<COL102-DS4F672F3105EE1F6476A4CDCC90@phx.gbl>
-Message-ID: <1233252750.4147.34.camel@elrond.atmel.com>
+Date: Thu, 29 Jan 2009 19:23:33 +0100
+Subject: [Buildroot] So what do we do about all the unmaintained boards?
+In-Reply-To: <87wsceqcsv.fsf@macbook.be.48ers.dk>
+References: <1233182567.4147.16.camel@elrond.atmel.com>
+	<87vdryrw65.fsf@macbook.be.48ers.dk>
+	<F9E9391EAD414FA2BA0378C38D349B86@aeglos>
+	<87ab9aru23.fsf@macbook.be.48ers.dk>
+	<D91510715FFE497385EA85C1BE1F6FE2@aeglos>
+	<87wsceqcsv.fsf@macbook.be.48ers.dk>
+Message-ID: <1233253413.4147.44.camel@elrond.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-> After a lot a playing around I have made some changes to the toolchain
-> configuration options.
-> This now allows users of external binary toolchains to enable/disable the
-> same set of features as those
-> who are building a toolchain using buildroot or external source.
-> However the number of changes mean that I would like to post the patch below
-> for comments before commiting it.
-> I have tested the external toolchain support side of things and checked the
-> options are all ok but I have not built a new
-> buildroot toolchain (never done this)
-> perhaps someone can comment on patch below: If not I would like to commit by
-> friday to enable a few days testing before final release.
+tor 2009-01-29 klockan 17:47 +0100 skrev Peter Korsgaard:
+> >>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 > 
-> Many thanks
-> Daniel Laird
+>  >> Huh? I don't see any references to such variables under project.
+>  >> 
+>  Ulf> No, but I think you suggested that if this is to be general thing,
+>  Ulf> it could be a configuration item under /project.
+> 
+>  Ulf> The way BOARD_NAME is implemented today
+>  Ulf> is that you select a board and maybe set some options,
+>  Ulf> and then Kconfig deduces the board name from that
+>  Ulf> so it is really not something the user inputs.
+> 
+> So what's the BR2_BOARD_NAME thing for? Having it like you just
+> described is no good for people building stuff without having one of
+> those boards selected as they then cannot set BOARD_NAME.
 > 
 
-?
+?It is also used to define which directory
+contains other configuration items.
 
-If you have an external toolchain which is built in a certain way, 
-then I think it makes more sense to have a file which 
-contains the settings of that toolchain:
+BR2_BOARD_PATH="target/device/Atmel/$(BOARD_NAME)
 
-config BR2_EXTERNAL_TOOLCHAIN
-	defeds on ...
-	select BR2_WCHAR
-	select ?BR2_EXT_PTHREADS
-	select ?BR2_GCC_CROSS_CXX
-	select ...
+As you see, there is only a small number of acceptable values.
 
-Why give the user an option to configure buildroot to
-use the wrong parameters.
+It is also used for U-Boot.
+make $(BOARD_NAME)_config
 
-As I mentioned before, I think the toolchain should be
-built as as seaprate item, and then provide
-its configuration in a file like above.
+so you do not have to specify manually the boardname.
 
-Package disabled by the toolchain needs to 
-be replaced by a Comment during menuconfig.
+For the SAM9263 you can build several u-boot targets like
+
+?at91sam9263ek_dataflash_cs0
+?at91sam9263ek_dataflash_cs1
+?at91sam9263ek_nandflash
+
+and this list will grow as support for different bootoptions
+becomes more advanced.
+
+It is too much to expect that people should remember
+the exact name of such configurations.
+
+
+> Individual boards may want to override the setting, but it should
+> still be available.
+> 
 
 
 BR
