@@ -1,56 +1,58 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 29 Jan 2009 17:54:46 +0100
-Subject: [Buildroot] target/device/Atmel kernel patches
-In-Reply-To: <69C4B5A4F9B74F77AE1E58B4F020A786@aeglos> (Ulf Samuelsson's
-	message of "Thu\, 29 Jan 2009 17\:28\:12 +0100")
-References: <87ab9d4w6j.fsf@macbook.be.48ers.dk>
-	<1233005366.2298.118.camel@elrond.atmel.com>
-	<871vup4ul9.fsf@macbook.be.48ers.dk>
-	<1233008389.2298.129.camel@elrond.atmel.com>
-	<87vds114op.fsf@macbook.be.48ers.dk>
-	<FE6DCE243B7A4724B6B33E85771AD61F@aeglos>
-	<871vumtb1w.fsf@macbook.be.48ers.dk>
-	<A223C54B106543948AC36303E7C74F76@aeglos>
-	<8763jyrtfb.fsf@macbook.be.48ers.dk>
-	<69C4B5A4F9B74F77AE1E58B4F020A786@aeglos>
-Message-ID: <87skn2qch5.fsf@macbook.be.48ers.dk>
+Date: Thu, 29 Jan 2009 18:03:00 +0100
+Subject: [Buildroot] Updating toolchain config options to help external
+	toolchain support.
+In-Reply-To: <C13DBBE85AD6974B85C118C35890CA5F1AF39BD968@EU1RDCRDC1WX029.exi.nxp.com>
+	(Daniel James Laird's message of "Wed\,
+	28 Jan 2009 12\:52\:56 +0100")
+References: <C13DBBE85AD6974B85C118C35890CA5F1AF39BD968@EU1RDCRDC1WX029.exi.nxp.com>
+Message-ID: <87ocxqqc3f.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
+>>>>> "Daniel" == Daniel James Laird <daniel.j.laird@nxp.com> writes:
 
- Ulf> As I see it, you get the base kernel from www.kernel.org
+Hi,
 
-Yes, more or less directly, and that's fine for evaluation boards -
-But for real development on specialized hardware that's rarely enough,
-hence the need for either:
+ Daniel> After a lot a playing around I have made some changes to the
+ Daniel> toolchain configuration options.  This now allows users of
+ Daniel> external binary toolchains to enable/disable the same set of
+ Daniel> features as those who are building a toolchain using
+ Daniel> buildroot or external source.  However the number of changes
+ Daniel> mean that I would like to post the patch below for comments
+ Daniel> before commiting it.  I have tested the external toolchain
+ Daniel> support side of things and checked the options are all ok but
+ Daniel> I have not built a new buildroot toolchain (never done this)
+ Daniel> perhaps someone can comment on patch below: If not I would
+ Daniel> like to commit by friday to enable a few days testing before
+ Daniel> final release.
 
- - Provide a way to add project specific patches on top
+It seems to work here - A few comments:
 
-OR
+The reshuffle of configuration settings makes it fairly hard to find
+stuff for existing users - I wonder if this is all worth it as these
+things don't change very often.
 
- - Take the kernel from somewhere else (some other
-   cvs/svn/git/whatever repo).
+ Daniel> +config BR2_ENABLE_LOCALE
+ Daniel> +	bool "Toolchain built with locale/gettext/i18n support?"
 
-I suspect we need to support both.
+The text used to be 'Enable locale/gettext/i18n support?', why the change?
 
- Ulf> and if you dont want to host kernel patches for AT91,  then
- Ulf> it will be no problem to download them from $(ATMEL_MIRROR).
- Ulf> I just think there are other things in higher need of attention
- Ulf> than removing these patches RIGHT NOW.
- Ulf> I see that moving these patches from svn to a mirror should
- Ulf> be done before the next release of buildroot.
+ Daniel> ===================================================================
+ Daniel> --- package/qte/Config.in	(revision 25087)
+ Daniel> +++ package/qte/Config.in	(working copy)
+ Daniel> @@ -2,7 +2,7 @@
+ Daniel>  	bool "Qt/E"
+ Daniel>  	depends on BR2_DEPRECATED
+ Daniel>  	depends on BR2_INSTALL_LIBSTDCPP
+ Daniel> -	select BR2_PTHREADS_NATIVE
+ Daniel> +	depends on BR2_PTHREADS_NATIVE
 
-No, but we're doing a bunch of cleanups now - And as I mentioned before,
-the arch-arm directory seems a bit extreme as it is.
-
-I don't think adding a bunch of special case handling to buildroot to
-download AT91 patches from somewhere is a better solution. We should
-rather generalize the setup so you can handle it outside BR and just
-point BR to a repo or a directory full of patches.
+This should go in a seperate commit, and have a comment entry like for
+the other packages depending on toolchain config.
 
 -- 
 Bye, Peter Korsgaard
