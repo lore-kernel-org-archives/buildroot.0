@@ -1,14 +1,19 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 29 Jan 2009 17:47:44 +0100
-Subject: [Buildroot] So what do we do about all the unmaintained boards?
-In-Reply-To: <D91510715FFE497385EA85C1BE1F6FE2@aeglos> (Ulf Samuelsson's
-	message of "Thu\, 29 Jan 2009 17\:32\:01 +0100")
-References: <1233182567.4147.16.camel@elrond.atmel.com>
-	<87vdryrw65.fsf@macbook.be.48ers.dk>
-	<F9E9391EAD414FA2BA0378C38D349B86@aeglos>
-	<87ab9aru23.fsf@macbook.be.48ers.dk>
-	<D91510715FFE497385EA85C1BE1F6FE2@aeglos>
-Message-ID: <87wsceqcsv.fsf@macbook.be.48ers.dk>
+Date: Thu, 29 Jan 2009 17:54:46 +0100
+Subject: [Buildroot] target/device/Atmel kernel patches
+In-Reply-To: <69C4B5A4F9B74F77AE1E58B4F020A786@aeglos> (Ulf Samuelsson's
+	message of "Thu\, 29 Jan 2009 17\:28\:12 +0100")
+References: <87ab9d4w6j.fsf@macbook.be.48ers.dk>
+	<1233005366.2298.118.camel@elrond.atmel.com>
+	<871vup4ul9.fsf@macbook.be.48ers.dk>
+	<1233008389.2298.129.camel@elrond.atmel.com>
+	<87vds114op.fsf@macbook.be.48ers.dk>
+	<FE6DCE243B7A4724B6B33E85771AD61F@aeglos>
+	<871vumtb1w.fsf@macbook.be.48ers.dk>
+	<A223C54B106543948AC36303E7C74F76@aeglos>
+	<8763jyrtfb.fsf@macbook.be.48ers.dk>
+	<69C4B5A4F9B74F77AE1E58B4F020A786@aeglos>
+Message-ID: <87skn2qch5.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,22 +22,35 @@ To: buildroot@busybox.net
 
 >>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 
- >> Huh? I don't see any references to such variables under project.
- >> 
- Ulf> No, but I think you suggested that if this is to be general thing,
- Ulf> it could be a configuration item under /project.
+ Ulf> As I see it, you get the base kernel from www.kernel.org
 
- Ulf> The way BOARD_NAME is implemented today
- Ulf> is that you select a board and maybe set some options,
- Ulf> and then Kconfig deduces the board name from that
- Ulf> so it is really not something the user inputs.
+Yes, more or less directly, and that's fine for evaluation boards -
+But for real development on specialized hardware that's rarely enough,
+hence the need for either:
 
-So what's the BR2_BOARD_NAME thing for? Having it like you just
-described is no good for people building stuff without having one of
-those boards selected as they then cannot set BOARD_NAME.
+ - Provide a way to add project specific patches on top
 
-Individual boards may want to override the setting, but it should
-still be available.
+OR
+
+ - Take the kernel from somewhere else (some other
+   cvs/svn/git/whatever repo).
+
+I suspect we need to support both.
+
+ Ulf> and if you dont want to host kernel patches for AT91,  then
+ Ulf> it will be no problem to download them from $(ATMEL_MIRROR).
+ Ulf> I just think there are other things in higher need of attention
+ Ulf> than removing these patches RIGHT NOW.
+ Ulf> I see that moving these patches from svn to a mirror should
+ Ulf> be done before the next release of buildroot.
+
+No, but we're doing a bunch of cleanups now - And as I mentioned before,
+the arch-arm directory seems a bit extreme as it is.
+
+I don't think adding a bunch of special case handling to buildroot to
+download AT91 patches from somewhere is a better solution. We should
+rather generalize the setup so you can handle it outside BR and just
+point BR to a repo or a directory full of patches.
 
 -- 
 Bye, Peter Korsgaard
