@@ -1,52 +1,107 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 30 Jan 2009 08:05:45 +0100
-Subject: [Buildroot] buildroot questions
-In-Reply-To: <20090129151144.7e82de38@INDYZONE.dhcp.2wire.com> (Jackson
-	Jones's message of "Thu\, 29 Jan 2009 15\:11\:44 -0800")
-References: <20090129151144.7e82de38@INDYZONE.dhcp.2wire.com>
-Message-ID: <87d4e5p92u.fsf@macbook.be.48ers.dk>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Fri, 30 Jan 2009 07:40:15 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package:  0 dbus libxml2
+Message-ID: <20090130074016.0A323765E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Jackson" == Jackson Jones <jjones@2wire.com> writes:
+Author: ulf
+Date: 2009-01-30 07:40:14 +0000 (Fri, 30 Jan 2009)
+New Revision: 25156
 
-Hi,
+Log:
+Fix dbus dependency on libxml2, without rebuild, works but may need refinement
 
-Please mail the buildroot mailing list in the future so other people
-can help as well.
+Added:
+   trunk/buildroot/package/0/
+   trunk/buildroot/package/0/0-run-first.mk
 
- Jackson> Peter,
+Modified:
+   trunk/buildroot/package/dbus/dbus.mk
+   trunk/buildroot/package/libxml2/libxml2.mk
 
- Jackson> I had a couple of quick questions about build root. I am
- Jackson> using the rc2 that is on the site. Is it a known bug that
- Jackson> the libgcj does not build and causes a build error?
 
-I'm afraid the java stuff may have bitrotted or is incomplete - I have
-never tried it in all the time I have been working on buildroot, and I
-don't ever remember any questions and/or patches about it on the list.
+Changeset:
+Added: trunk/buildroot/package/0/0-run-first.mk
+===================================================================
+--- trunk/buildroot/package/0/0-run-first.mk	                        (rev 0)
++++ trunk/buildroot/package/0/0-run-first.mk	2009-01-30 07:40:14 UTC (rev 25156)
+@@ -0,0 +1,4 @@
++ifeq ($(BR2_TARGET_LIBXML2),y)
++TARGETS+=libxml2
++endif
++
 
-Anyone else?
+Modified: trunk/buildroot/package/dbus/dbus.mk
+===================================================================
+--- trunk/buildroot/package/dbus/dbus.mk	2009-01-29 23:32:06 UTC (rev 25155)
++++ trunk/buildroot/package/dbus/dbus.mk	2009-01-30 07:40:14 UTC (rev 25156)
+@@ -15,17 +15,17 @@
+ DBUS_XML:=expat
+ # depend on the exact library file instead of expat so dbus isn't always
+ # considered out-of-date
+-DBUS_XML_DEP_LIB:=$(STAGING_DIR)/usr/lib/libexpat.so.1
++DBUS_XML_DEP:=$(STAGING_DIR)/usr/lib/libexpat.so.1
+ else
+ DBUS_XML:=libxml
+ # Makefile.autotools.in unfortunately has broken dependency handling,
+ # so we cannot do the same for libxml2
+-DBUS_XML_DEP_LIB:=$(LIBXML2_HOOK_POST_INSTALL)
++DBUS_XML_DEP:=$(LIBXML2_HOOK_POST_INSTALL)
+ #libxml2-install-staging
+ endif
+ 
+-DBUS_XML_DEP:=$(DBUS_XML_DEP_LIB)
+ 
++
+ $(DL_DIR)/$(DBUS_SOURCE):
+ 	$(call DOWNLOAD,$(DBUS_SITE),$(DBUS_SOURCE))
+ 
+@@ -37,6 +37,7 @@
+ 
+ $(DBUS_DIR)/.configured: $(DBUS_DIR)/.unpacked $(DBUS_XML_DEP)
+ 	(cd $(DBUS_DIR); rm -rf config.cache; \
++		echo "dbus is depending on  $(DBUS_XML_DEP)"; \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		$(TARGET_CONFIGURE_ARGS) \
+ 		ac_cv_have_abstract_sockets=yes \
 
- Jackson> The other question I have is that I noticed that the ntpl
- Jackson> library is not merged with uClibc, so selecting ntpl results
- Jackson> in an error when the sysdep.h cannot be found. Is there a
- Jackson> patch to add this in. I am trying to build a cross compiler
- Jackson> to mipsel (for a broadcom chipset). We are currently using a
- Jackson> glibc based toolchain (home grown), but want to switch to
- Jackson> uClibc for the size advantage. Our platform is written in
- Jackson> C/C++, but the application side is written in Java (compiled
- Jackson> gcj).
-
-The ntpl branch of uclibc is supposed to be merged real-soon-now, but
-I don't actually know much more about it. I would suggest to stick to
-the default linuxthreads for now.
-
- Jackson> Thanks for you time,
-
-You're welcome.
-
--- 
-Bye, Peter Korsgaard
+Modified: trunk/buildroot/package/libxml2/libxml2.mk
+===================================================================
+--- trunk/buildroot/package/libxml2/libxml2.mk	2009-01-29 23:32:06 UTC (rev 25155)
++++ trunk/buildroot/package/libxml2/libxml2.mk	2009-01-30 07:40:14 UTC (rev 25156)
+@@ -8,7 +8,7 @@
+ LIBXML2_SITE = ftp://xmlsoft.org/libxml2
+ LIBXML2_INSTALL_STAGING = YES
+ LIBXML2_INSTALL_TARGET = YES
+-
++LIBXML2_LIBTOOL_PATCH = NO
+ ifneq ($(BR2_LARGEFILE),y)
+ LIBXML2_CONF_ENV = CC="$(TARGET_CC) $(TARGET_CFLAGS) -DNO_LARGEFILE_SOURCE"
+ endif
+@@ -27,10 +27,21 @@
+ 	rm -f $(LIBXML2_DIR)/macos/src/XMLTestPrefix.h.rej
+ 	touch $@
+ 
+-$(LIBXML2_HOOK_POST_INSTALL):
++$(LIBXML2_HOOK_POST_INSTALL):\
++	$(LIBXML2_TARGET_SOURCE)		\
++	$(LIBXML2_TARGET_EXTRACT)		\
++	$(LIBXML2_HOOK_POST_EXTRACT)		\
++	$(LIBXML2_TARGET_PATCH)			\
++	$(LIBXML2_TARGET_AUTORECONF)		\
++	$(LIBXML2_TARGET_CONFIGURE)		\
++	$(LIBXML2_TARGET_LIBTOOL_PATCH)		\
++	$(LIBXML2_TARGET_BUILD)			\
++	$(LIBXML2_HOOK_POST_BUILD)		\
++	$(LIBXML2_TARGET_INSTALL_STAGING)
+ 	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/xml2-config
+ 	$(SED) "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/xml2-config
+ 	rm -rf $(TARGET_DIR)/usr/share/aclocal \
+ 	       $(TARGET_DIR)/usr/share/doc/libxml2-$(LIBXML2_VERSION) \
+ 	       $(TARGET_DIR)/usr/share/gtk-doc
+ 	touch $@
++
