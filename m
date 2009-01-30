@@ -1,54 +1,48 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Fri, 30 Jan 2009 18:39:08 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot: target/device/Atmel
-	target/device/Atmel/ etc...
-Message-ID: <20090130183909.05D727620E@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 30 Jan 2009 20:28:22 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot:
+	target/device/Atmel/arch-avr32/kernel-pa etc...
+In-Reply-To: <1233337768.4147.93.camel@elrond.atmel.com> (Ulf Samuelsson's
+	message of "Fri\, 30 Jan 2009 18\:49\:28 +0100")
+References: <20090130085310.9730F765E9@busybox.osuosl.org>
+	<87zlh9np10.fsf@macbook.be.48ers.dk>
+	<20090130100919.5b8c93ba@hcegtvedt>
+	<1233337768.4147.93.camel@elrond.atmel.com>
+Message-ID: <877i4cmw4p.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2009-01-30 18:39:03 +0000 (Fri, 30 Jan 2009)
-New Revision: 25171
+>>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 
-Log:
-Remove AVR32 patches from kernel-headers directory and put them in 
+Hi,
 
-"target/device/Atmel/arch-avre/kernel-headers-2.6.28.2"
+ Ulf> HC has all these patches in the kernel-headers directory in his
+ Ulf> tree.  I thought initially that was a little risky.
 
-Make sure BR2_KERNEL_HEADERS_PATCH_DIR is enabled for 2.6.28
-Set
-KERNEL_HEADERS_PATCH_DIR="target/device/Atmel/arch-avre/kernel-headers-2.6.28.2"
-for Atmel AVR32 targets and "valka"
+ Ulf> I therefore tried putting them in the avr32 specific parts, 
+ Ulf> but I have seen strange effects on some packages.
+ Ulf> That is why I tried this approach.
 
+Just split up the patches and put the kernel header _FIXES_ in
+toolchain/kernel-headers, just like all other architectures do.
 
+The leftovers you can but under target/device/Atmel.
 
-Added:
-   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-headers-2.6.28.2/
-   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-headers-2.6.28.2/linux-2.6.28.2-100-avr32.patch
-   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-headers-2.6.28.2/linux-2.6.28.2-201-avr32-atmel_mpopfb-disable-debug.patch
-   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-headers-2.6.28.2/linux-2.6.28.2-202-avr32-atmel_mpopfb-add-signal-to-disable-line-caching.patch
-   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-headers-2.6.28.2/linux-2.6.28.2-203-avr32-fix-arch-header-byteorder.patch
-   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-headers-2.6.28.2/linux-2.6.28.2-204-avr32-ap700x-fix-det_pin-for-nand-flash.patch
+ Ulf> Have read a little bit more on the kernel-headers, 
+ Ulf> and it appears that I can keep the stuff in the
+ Ulf> AVR32 parts and then define 
 
-Removed:
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.2-100-avr32.patch
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.2-201-avr32-atmel_mpopfb-disable-debug.patch
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.2-202-avr32-atmel_mpopfb-add-signal-to-disable-line-caching.patch
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.2-203-avr32-fix-arch-header-byteorder.patch
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.2-204-avr32-ap700x-fix-det_pin-for-nand-flash.patch
+ Ulf> KERNEL_HEADERS_PATCH_DIR=target/device/Atmel/arch-avr32/2.6.[27.6|28.2]
 
-Modified:
-   trunk/buildroot/target/device/Atmel/Makefile.in
-   trunk/buildroot/target/device/valka/Makefile.in
-   trunk/buildroot/toolchain/kernel-headers/Config.in
+ Ulf> for AVR32 targets.
 
+ Ulf> Does that make sense?
 
-Changeset:
+I would prefer to have the kernel headers stuff together for all
+archs, the amount (and size of) patches is normally very limited.
 
-Sorry, the patch is too large to include (34026 lines).
-Please use ViewCVS to see it!
-
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=25171
+-- 
+Bye, Peter Korsgaard
