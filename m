@@ -1,45 +1,42 @@
-From: laird at uclibc.org <laird@uclibc.org>
-Date: Fri, 30 Jan 2009 11:30:22 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/qte
-Message-ID: <20090130113022.691E7765E9@busybox.osuosl.org>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Fri, 30 Jan 2009 11:35:04 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/target
+Message-ID: <20090130113504.70551765E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: laird
-Date: 2009-01-30 11:30:21 +0000 (Fri, 30 Jan 2009)
-New Revision: 25163
+Author: jacmet
+Date: 2009-01-30 11:35:04 +0000 (Fri, 30 Jan 2009)
+New Revision: 25164
 
 Log:
-qte.mk: Add a 'comment' to indicate the need for NPTL threads
+target/Config.in.arch: fix ARM abi setting
 
-Make sure the developer is informed why a package is not
-visable and that they need to have a NPTL enabled
-toolchain.
- 
-Signed-off-by: Daniel Laird <daniel.j.laird@nxp.com>
-
+Reported by Sven Neumann and based on 7f7aac5d3 in Bernhard's tree.
 
 Modified:
-   trunk/buildroot/package/qte/Config.in
+   trunk/buildroot/target/Config.in.arch
 
 
 Changeset:
-Modified: trunk/buildroot/package/qte/Config.in
+Modified: trunk/buildroot/target/Config.in.arch
 ===================================================================
---- trunk/buildroot/package/qte/Config.in	2009-01-30 10:49:59 UTC (rev 25162)
-+++ trunk/buildroot/package/qte/Config.in	2009-01-30 11:30:21 UTC (rev 25163)
-@@ -14,9 +14,10 @@
- 	  Only tested with threading on, PACKAGE_JPEG, PACKAGE_LIBPNG,
- 	  but remove those if you like.
+--- trunk/buildroot/target/Config.in.arch	2009-01-30 11:30:21 UTC (rev 25163)
++++ trunk/buildroot/target/Config.in.arch	2009-01-30 11:35:04 UTC (rev 25164)
+@@ -670,11 +670,10 @@
  
--comment "Qt/E requires a toolchain with C++ support enabled"
-+comment "Qt/E requires a toolchain with C++ support enabled and native threading enabled (NPTL)"
- 	depends on !BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_DEPRECATED
-+	depends on !BR2_PTHREADS_NATIVE
- 
- config BR2_PACKAGE_QTE_COMMERCIAL_USERNAME
- 	string "Qt/E Commercial License Username"
+ config BR2_GCC_TARGET_ABI
+ 	string
+-	default apcs-gnu	if BR2_arm_dunno
++	default apcs-gnu	if BR2_ARM_OABI
+ 	default atpcs		if BR2_arm_dunno
+ 	default aapcs		if BR2_arm_dunno
+-	default aapcs-linux	if BR2_arm_dunno
+-	default iwmmxt		if BR2_iwmmxt
++	default aapcs-linux	if BR2_ARM_EABI
+ 	default 32		if BR2_MIPS_OABI32
+ 	default n32		if BR2_MIPS_ABI32
+ 	default eabi		if BR2_MIPS_EABI
