@@ -1,10 +1,10 @@
 From: Sven Neumann <s.neumann@phase-zero.de>
-Date: Fri, 30 Jan 2009 11:01:25 +0100
+Date: Fri, 30 Jan 2009 11:14:35 +0100
 Subject: [Buildroot] meaning of BR2_arm_dunno
-In-Reply-To: <87eiymru7j.fsf@macbook.be.48ers.dk>
+In-Reply-To: <1233309685.6293.17.camel@sven>
 References: <1233243053.15375.33.camel@sven>
-	<87eiymru7j.fsf@macbook.be.48ers.dk>
-Message-ID: <1233309685.6293.17.camel@sven>
+	<87eiymru7j.fsf@macbook.be.48ers.dk>  <1233309685.6293.17.camel@sven>
+Message-ID: <1233310475.6293.20.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,34 +13,18 @@ To: buildroot@busybox.net
 
 Hi,
 
-On Thu, 2009-01-29 at 16:46 +0100, Peter Korsgaard wrote:
+On Fri, 2009-01-30 at 11:01 +0100, Sven Neumann wrote:
 
->         default apcs-gnu        if BR2_ARM_OABI
->         default atpcs           if BR2_arm_dunno
->         default aapcs           if BR2_arm_dunno
->         default aapcs-linux     if BR2_ARM_EABI
+> Does not work for my configuration. The error when compiling gcc is:
 > 
-> [...]
-> Could you give it a try with those 2 lines changed?
+>   Unknown ABI used in --with-abi=aapcs-linux
 
-Does not work for my configuration. The error when compiling gcc is:
+Might be related to
+http://gcc.gnu.org/ml/gcc-patches/2008-09/msg01500.html
 
-  Unknown ABI used in --with-abi=aapcs-linux
-
-The relevant bits from my .config are:
-
-BR2_iwmmxt=y
-BR2_ARM_TYPE="ARM_IWMMXT"
-# BR2_ARM_OABI is not set
-BR2_ARM_EABI=y
-BR2_ARCH="arm"
-BR2_ENDIAN="LITTLE"
-BR2_GCC_TARGET_TUNE="iwmmxt"
-BR2_GCC_TARGET_ARCH="iwmmxt"
-BR2_GCC_TARGET_ABI="aapcs-linux"
-BR2_GCC_VERSION="4.3.2"
-
-Anything else you want me to try ?
+BR2_GCC_TARGET_ABI="aapcs" seems to be accepted. I will try to compile
+my tree with this option now and also check if I can build a recent
+kernel using the compiler that results from this build...
 
 
 Sven
