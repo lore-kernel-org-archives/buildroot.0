@@ -1,48 +1,52 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Fri, 30 Jan 2009 10:47:11 +1100
-Subject: [Buildroot] svn commit: trunk/buildroot/target/linux
-In-Reply-To: <1233272247.4147.65.camel@elrond.atmel.com>
-References: <20090127125650.GA18250@cloud.net.au>
-	<D4FF4B0197F54EE4BC14E179A2F17F15@aeglos>
-	<20090129230904.GA13929@cloud.net.au>
-	<1233272247.4147.65.camel@elrond.atmel.com>
-Message-ID: <20090129234711.GA15229@cloud.net.au>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 30 Jan 2009 08:05:45 +0100
+Subject: [Buildroot] buildroot questions
+In-Reply-To: <20090129151144.7e82de38@INDYZONE.dhcp.2wire.com> (Jackson
+	Jones's message of "Thu\, 29 Jan 2009 15\:11\:44 -0800")
+References: <20090129151144.7e82de38@INDYZONE.dhcp.2wire.com>
+Message-ID: <87d4e5p92u.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jan 30, 2009 at 12:37:27AM +0100, Ulf Samuelsson wrote:
-> fre 2009-01-30 klockan 10:09 +1100 skrev Hamish Moffatt:
-> > On Thu, Jan 29, 2009 at 03:33:08PM +0100, Ulf Samuelsson wrote:
-> > >> The current logic of trying xconfig then menuconfig is very ugly - does
-> > >> it allow you to abort xconfig without falling back?
-> > >
-> > > If you could abort the xconfig without running menuconfig,
-> > > then you would not have a config file and the build would abort.
-> > > What is the sense of that?
-> > 
-> > You could have an exising config, start editing then change your mind.
-> > You don't want menuconfig to launch in that case.
-> 
-> If you have an existing config, then buildroot will copy that
-> to the linux directory, and neither menuconfig or xconfig
-> will be launched.
-> 
-> It is launched if buildroot does not find a suitable config.
-> 
-> If you select to do make menuconfig, it will not launch  xconfig.
-> 
-> If you already have a .config, then you should do make linux-config
-> or similar.
+>>>>> "Jackson" == Jackson Jones <jjones@2wire.com> writes:
 
-OK, I misunderstood that this only affects the case where you don't have
-a .config.
+Hi,
 
-I still think you might want to abort xconfig and not expect it to
-launch menuconfig though.
+Please mail the buildroot mailing list in the future so other people
+can help as well.
 
-Hamish
+ Jackson> Peter,
+
+ Jackson> I had a couple of quick questions about build root. I am
+ Jackson> using the rc2 that is on the site. Is it a known bug that
+ Jackson> the libgcj does not build and causes a build error?
+
+I'm afraid the java stuff may have bitrotted or is incomplete - I have
+never tried it in all the time I have been working on buildroot, and I
+don't ever remember any questions and/or patches about it on the list.
+
+Anyone else?
+
+ Jackson> The other question I have is that I noticed that the ntpl
+ Jackson> library is not merged with uClibc, so selecting ntpl results
+ Jackson> in an error when the sysdep.h cannot be found. Is there a
+ Jackson> patch to add this in. I am trying to build a cross compiler
+ Jackson> to mipsel (for a broadcom chipset). We are currently using a
+ Jackson> glibc based toolchain (home grown), but want to switch to
+ Jackson> uClibc for the size advantage. Our platform is written in
+ Jackson> C/C++, but the application side is written in Java (compiled
+ Jackson> gcj).
+
+The ntpl branch of uclibc is supposed to be merged real-soon-now, but
+I don't actually know much more about it. I would suggest to stick to
+the default linuxthreads for now.
+
+ Jackson> Thanks for you time,
+
+You're welcome.
+
 -- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+Bye, Peter Korsgaard
