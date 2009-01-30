@@ -1,49 +1,70 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 30 Jan 2009 10:04:11 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot:
-	target/device/Atmel/arch-avr32/kernel-pa etc...
-In-Reply-To: <20090130085310.9730F765E9@busybox.osuosl.org> (ulf@uclibc.org's
-	message of "Fri\, 30 Jan 2009 08\:53\:10 +0000 \(UTC\)")
-References: <20090130085310.9730F765E9@busybox.osuosl.org>
-Message-ID: <87zlh9np10.fsf@macbook.be.48ers.dk>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Fri, 30 Jan 2009 10:05:22 +0100
+Subject: [Buildroot] svn commit:
+	trunk/buildroot/target/device/Atmel:	atstk100x
+In-Reply-To: <20090130090922.0b77a183@hcegtvedt>
+References: <20090129093327.BD8B17741D@busybox.osuosl.org>
+	<87skn2tptl.fsf@macbook.be.48ers.dk>
+	<20090129104341.2d34aa8e@hcegtvedt>
+	<87iqnytp51.fsf@macbook.be.48ers.dk>
+	<1233252070.4147.23.camel@elrond.atmel.com>
+	<20090130090922.0b77a183@hcegtvedt>
+Message-ID: <1233306322.4147.81.camel@elrond.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+fre 2009-01-30 klockan 09:09 +0100 skrev Hans-Christian Egtvedt:
+> On Thu, 29 Jan 2009 19:01:10 +0100
+> Ulf Samuelsson <ulf.samuelsson@atmel.com> wrote:
+> 
+> > tor 2009-01-29 klockan 10:52 +0100 skrev Peter Korsgaard:
+> > > >>>>> "Hans-Christian" == Hans-Christian Egtvedt
+> > > >>>>> <hans-christian.egtvedt@atmel.com> writes:
+> > > 
+> > >  >> Too configs for practically the same kernel version? That
+> > >  >> doesn't sound right.
+> > >  >> 
+> > > 
+> > >  Hans-Christian> You can do "make atstk1005_defconfig" and similar
+> > > for Hans-Christian> most of the AVR32 boards. The defconfig in the
+> > > kernel Hans-Christian> is quite sane.
+> > > 
+> > > So in other words these files should go away?
+> > > 
+> > 
+> > These are example projects and the user is likely
+> > to want to do things which are specific for his/her kernel.
+> > 
+> > That is easier to do if you set buildroot to use a configuration file.
+> > 
+> 
+> Why?
+> 
+> make linux26-menuconfig works fine.
+> 
+> > If you set buildroot to use make defconfig, then the user
+> > has to change some other configurations in buildroot
+> > to allow change of configuration.
+> > 
+> 
+> Nope, see above.
+> 
 
- ulf> Author: ulf
- ulf> Date: 2009-01-30 08:53:08 +0000 (Fri, 30 Jan 2009)
- ulf> New Revision: 25157
+Try "make linux26-update" with that configuration...
 
- ulf> Log:
- ulf> Move AVR32 patch to kernel header to unbreak several applications
-
-What does these do and what applications are unbroken by them? Could
-you please write more detailed commit messages?
-
- ulf> Added:
- ulf>    trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.2-100-avr32.patch
-
-What does this do to the headers?
-
- ulf>    trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.2-201-avr32-atmel_mpopfb-disable-debug.patch
-
-That seems completely unrelated to kernel headers.
-
- ulf>    trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.2-202-avr32-atmel_mpopfb-add-signal-to-disable-line-caching.patch
-
-This one as well.
-
- ulf>    trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.2-203-avr32-fix-arch-header-byteorder.patch
-
-OK.
-
- ulf>    trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.2-204-avr32-ap700x-fix-det_pin-for-nand-flash.patch
-
-That also seems unrelated.
-
--- 
-Bye, Peter Korsgaard
+BR
+Ulf Samuelsson
+ 
+> > The way buildroot now works is that it will seek
+> > for a config version which is smaller or equal 
+> > to that of the current kernel.
+> > 
+> > It is probably safe to remove the 2.6.7.3
+> > 
+> 
+> Hmm, sure, did that have anything to do with the AVR32 boards?
+> Linux v2.6.7.3 was never official supported by AVR32.
+> 
