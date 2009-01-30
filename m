@@ -1,48 +1,41 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Fri, 30 Jan 2009 10:35:55 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc/4.3.2
-Message-ID: <20090130103556.08B22765E9@busybox.osuosl.org>
+From: laird at uclibc.org <laird@uclibc.org>
+Date: Fri, 30 Jan 2009 10:50:01 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/qte
+Message-ID: <20090130105001.98CDB765E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-01-30 10:35:55 +0000 (Fri, 30 Jan 2009)
-New Revision: 25161
+Author: laird
+Date: 2009-01-30 10:49:59 +0000 (Fri, 30 Jan 2009)
+New Revision: 25162
 
 Log:
-toolchain/gcc/4.3.2: accept abi=aapcs-linux for EABI
+qte.mk: Use depends on for toolchain features 
 
-From Bernhards' tree, thanks to Sven Neuman for noticing. See also
-http://gcc.gnu.org/ml/gcc-patches/2008-09/msg01500.html
+Buildroot is adopting depends on for toolchain features and
+select for packages. Make this change in this file.
+ 
+Signed-off-by: Daniel Laird <daniel.j.laird@nxp.com>
 
-Added:
-   trunk/buildroot/toolchain/gcc/4.3.2/999-4.3.2-armeabi-aapcs-linux.patch
+
+Modified:
+   trunk/buildroot/package/qte/Config.in
 
 
 Changeset:
-Added: trunk/buildroot/toolchain/gcc/4.3.2/999-4.3.2-armeabi-aapcs-linux.patch
+Modified: trunk/buildroot/package/qte/Config.in
 ===================================================================
---- trunk/buildroot/toolchain/gcc/4.3.2/999-4.3.2-armeabi-aapcs-linux.patch	                        (rev 0)
-+++ trunk/buildroot/toolchain/gcc/4.3.2/999-4.3.2-armeabi-aapcs-linux.patch	2009-01-30 10:35:55 UTC (rev 25161)
-@@ -0,0 +1,18 @@
-+\\\\ followup of PR34205; trying to use aapcs-linux
-+\\ gcc/ChangeLog
-+\\
-+\\ 2008-09-18  Bernhard Reutner-Fischer  <aldot@>
-+\\
-+\\ * config.gcc (arm*-*-*): Add aapcs-linux to supported ABIs.
-+\\
-+--- gcc-4.3.2.orig/gcc/config.gcc	2008-09-18 20:33:55.000000000 +0200
-++++ gcc-4.3.2/gcc/config.gcc	2008-09-18 21:38:52.000000000 +0200
-+@@ -2921,7 +2921,7 @@
-+ 
-+ 		case "$with_abi" in
-+ 		"" \
-+-		| apcs-gnu | atpcs | aapcs | iwmmxt )
-++		| apcs-gnu | atpcs | aapcs | iwmmxt | aapcs-linux )
-+ 			#OK
-+ 			;;
-+ 		*)
+--- trunk/buildroot/package/qte/Config.in	2009-01-30 10:35:55 UTC (rev 25161)
++++ trunk/buildroot/package/qte/Config.in	2009-01-30 10:49:59 UTC (rev 25162)
+@@ -2,7 +2,7 @@
+ 	bool "Qt/E"
+ 	depends on BR2_DEPRECATED
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	select BR2_PTHREADS_NATIVE
++	depends on BR2_PTHREADS_NATIVE
+ 	select BR2_PACKAGE_JPEG
+ 	select BR2_PACKAGE_LIBPNG
+ 	help
