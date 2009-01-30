@@ -1,53 +1,29 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Fri, 30 Jan 2009 10:14:40 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Atmel:
- atstk100x
-In-Reply-To: <1233306322.4147.81.camel@elrond.atmel.com>
-References: <20090129093327.BD8B17741D@busybox.osuosl.org>
-	<87skn2tptl.fsf@macbook.be.48ers.dk>
-	<20090129104341.2d34aa8e@hcegtvedt>
-	<87iqnytp51.fsf@macbook.be.48ers.dk>
-	<1233252070.4147.23.camel@elrond.atmel.com>
-	<20090130090922.0b77a183@hcegtvedt>
-	<1233306322.4147.81.camel@elrond.atmel.com>
-Message-ID: <20090130101440.3ebc34e1@hcegtvedt>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 30 Jan 2009 10:17:41 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package: 0 dbus libxml2
+In-Reply-To: <1233306201.4147.79.camel@elrond.atmel.com> (Ulf Samuelsson's
+	message of "Fri\, 30 Jan 2009 10\:03\:21 +0100")
+References: <20090130074016.0A323765E9@busybox.osuosl.org>
+	<C13DBBE85AD6974B85C118C35890CA5F1AF39BE4AC@EU1RDCRDC1WX029.exi.nxp.com>
+	<1233306201.4147.79.camel@elrond.atmel.com>
+Message-ID: <87vdrxnoei.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 30 Jan 2009 10:05:22 +0100
-Ulf Samuelsson <ulf.samuelsson@atmel.com> wrote:
+>>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 
-> fre 2009-01-30 klockan 09:09 +0100 skrev Hans-Christian Egtvedt:
-> > On Thu, 29 Jan 2009 19:01:10 +0100
-> > Ulf Samuelsson <ulf.samuelsson@atmel.com> wrote:
-> > 
+Hi,
 
-<snipp>
+ Ulf> Wihtout the fix, libxml2 is not built before dbus,
+ Ulf> and a solution which continuously rebuilds libxml2
+ Ulf> is also undesirable.
 
-> > > That is easier to do if you set buildroot to use a configuration
-> > > file.
-> > > 
-> > 
-> > Why?
-> > 
-> > make linux26-menuconfig works fine.
-> > 
-> > > If you set buildroot to use make defconfig, then the user
-> > > has to change some other configurations in buildroot
-> > > to allow change of configuration.
-> > > 
-> > 
-> > Nope, see above.
-> > 
-> 
-> Try "make linux26-update" with that configuration...
-> 
+ Ulf> ?With this fix dbus builds, but feel free to work on it.
 
-Then linux26-update is broken IMHO.
+That's not how things work. You address the comments or revert the commit.
 
 -- 
-Best regards,
-Hans-Christian Egtvedt
+Bye, Peter Korsgaard
