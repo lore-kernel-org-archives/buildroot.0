@@ -1,41 +1,54 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Fri, 30 Jan 2009 18:57:16 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package: 0 dbus libxml2
-In-Reply-To: <87vdrxnoei.fsf@macbook.be.48ers.dk>
-References: <20090130074016.0A323765E9@busybox.osuosl.org>
-	<C13DBBE85AD6974B85C118C35890CA5F1AF39BE4AC@EU1RDCRDC1WX029.exi.nxp.com>
-	<1233306201.4147.79.camel@elrond.atmel.com>
-	<87vdrxnoei.fsf@macbook.be.48ers.dk>
-Message-ID: <1233338236.4147.96.camel@elrond.atmel.com>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Fri, 30 Jan 2009 18:39:08 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot: target/device/Atmel
+	target/device/Atmel/ etc...
+Message-ID: <20090130183909.05D727620E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-fre 2009-01-30 klockan 10:17 +0100 skrev Peter Korsgaard:
-> >>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
-> 
-> Hi,
-> 
->  Ulf> Wihtout the fix, libxml2 is not built before dbus,
->  Ulf> and a solution which continuously rebuilds libxml2
->  Ulf> is also undesirable.
-> 
->  Ulf> ?With this fix dbus builds, but feel free to work on it.
-> 
-> That's not how things work. You address the comments or revert the commit.
-> 
+Author: ulf
+Date: 2009-01-30 18:39:03 +0000 (Fri, 30 Jan 2009)
+New Revision: 25171
 
-Just a time issue.
-I had to leave for some other things at that point.
-It has been updated by now, I see.
+Log:
+Remove AVR32 patches from kernel-headers directory and put them in 
 
-BR
-Ulf Samuelsson
-> -- 
-> Bye, Peter Korsgaard
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+"target/device/Atmel/arch-avre/kernel-headers-2.6.28.2"
+
+Make sure BR2_KERNEL_HEADERS_PATCH_DIR is enabled for 2.6.28
+Set
+KERNEL_HEADERS_PATCH_DIR="target/device/Atmel/arch-avre/kernel-headers-2.6.28.2"
+for Atmel AVR32 targets and "valka"
+
+
+
+Added:
+   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-headers-2.6.28.2/
+   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-headers-2.6.28.2/linux-2.6.28.2-100-avr32.patch
+   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-headers-2.6.28.2/linux-2.6.28.2-201-avr32-atmel_mpopfb-disable-debug.patch
+   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-headers-2.6.28.2/linux-2.6.28.2-202-avr32-atmel_mpopfb-add-signal-to-disable-line-caching.patch
+   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-headers-2.6.28.2/linux-2.6.28.2-203-avr32-fix-arch-header-byteorder.patch
+   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-headers-2.6.28.2/linux-2.6.28.2-204-avr32-ap700x-fix-det_pin-for-nand-flash.patch
+
+Removed:
+   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.2-100-avr32.patch
+   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.2-201-avr32-atmel_mpopfb-disable-debug.patch
+   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.2-202-avr32-atmel_mpopfb-add-signal-to-disable-line-caching.patch
+   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.2-203-avr32-fix-arch-header-byteorder.patch
+   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.2-204-avr32-ap700x-fix-det_pin-for-nand-flash.patch
+
+Modified:
+   trunk/buildroot/target/device/Atmel/Makefile.in
+   trunk/buildroot/target/device/valka/Makefile.in
+   trunk/buildroot/toolchain/kernel-headers/Config.in
+
+
+Changeset:
+
+Sorry, the patch is too large to include (34026 lines).
+Please use ViewCVS to see it!
+
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=25171
