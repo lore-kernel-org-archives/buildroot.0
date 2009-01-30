@@ -1,39 +1,55 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 30 Jan 2009 10:31:37 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package: 0 dbus libxml2
-In-Reply-To: <C13DBBE85AD6974B85C118C35890CA5F1AF39BE529@EU1RDCRDC1WX029.exi.nxp.com>
-	(Daniel James Laird's message of "Fri\,
-	30 Jan 2009 10\:22\:37 +0100")
-References: <20090130074016.0A323765E9@busybox.osuosl.org>
-	<C13DBBE85AD6974B85C118C35890CA5F1AF39BE4AC@EU1RDCRDC1WX029.exi.nxp.com>
-	<1233306201.4147.79.camel@elrond.atmel.com>
-	<C13DBBE85AD6974B85C118C35890CA5F1AF39BE529@EU1RDCRDC1WX029.exi.nxp.com>
-Message-ID: <87myd9nnra.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Fri, 30 Jan 2009 09:50:03 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/readline
+Message-ID: <20090130095003.69EC8765E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Daniel" == Daniel James Laird <daniel.j.laird@nxp.com> writes:
+Author: jacmet
+Date: 2009-01-30 09:50:02 +0000 (Fri, 30 Jan 2009)
+New Revision: 25158
 
- Daniel> I have looked at the dbus makefile and under the section
- Daniel> dbus: uclibc ...... 
- Daniel> should you not add libxml2 or expat with a check on if it is enabled or not.
+Log:
+readline: remove redundant BR2_PACKAGE_READLINE_HEADERS configuration
 
- Daniel> I can see the comment in dbus.mk but it stil seems this is
- Daniel> the only package that has done this fix.  Usually you just
- Daniel> add all the pkg dependencies to the packagename: ..... list
- Daniel> and buildroot seems to get it right in all the packages I
- Daniel> have built anyway, why is dbus different?
+Header files on target is globally controlled by BR2_HAVE_DEVFILES.
 
-I added that comment long time ago as part of trying to get the
-dependencies right to run the top level makefile with stuff in
-parallel (-jX). We are not doing that (and it would take quite some
-work to get there), so it can be ignored.
+Modified:
+   trunk/buildroot/package/readline/Config.in
+   trunk/buildroot/package/readline/readline.mk
 
-I would also think that simply adding expat/libxml to the dbus:
-dependency would be enough,
 
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/package/readline/Config.in
+===================================================================
+--- trunk/buildroot/package/readline/Config.in	2009-01-30 08:53:08 UTC (rev 25157)
++++ trunk/buildroot/package/readline/Config.in	2009-01-30 09:50:02 UTC (rev 25158)
+@@ -9,10 +9,3 @@
+ 	depends on BR2_READLINE
+ 	help
+ 	  Say yes here to install the readline libraries on the target.
+-
+-config BR2_PACKAGE_READLINE_HEADERS
+-	bool "readline headers for the target"
+-	depends on BR2_PACKAGE_READLINE_TARGET
+-	help
+-	  Say yes here to install the readline headers and documentation
+-	  on the target.
+
+Modified: trunk/buildroot/package/readline/readline.mk
+===================================================================
+--- trunk/buildroot/package/readline/readline.mk	2009-01-30 08:53:08 UTC (rev 25157)
++++ trunk/buildroot/package/readline/readline.mk	2009-01-30 09:50:02 UTC (rev 25158)
+@@ -75,9 +75,6 @@
+ 		-C $(READLINE_DIR) install-shared uninstall-doc
+ 	chmod 775 $(TARGET_DIR)/usr/lib/libreadline.so.$(READLINE_VERSION) $(TARGET_DIR)/usr/lib/libhistory.so.$(READLINE_VERSION)
+ 	$(STRIPCMD) $(TARGET_DIR)/usr/lib/libreadline.so.$(READLINE_VERSION) $(TARGET_DIR)/usr/lib/libhistory.so.$(READLINE_VERSION)
+-ifneq ($(BR2_PACKAGE_READLINE_HEADERS),y)
+-	rm -rf $(TARGET_DIR)/usr/include/readline
+-endif
+ 
+ readline: ncurses $(STAGING_DIR)/usr/include/readline/readline.h
+ 
