@@ -1,295 +1,39 @@
-From: Daniel Jabbour <daniel@laptouchinc.com>
-Date: Fri, 30 Jan 2009 16:28:39 -0500
-Subject: [Buildroot] Error when compiling grub
-Message-ID: <8394274C-0F54-4970-ABC4-20DF8C4D01DB@laptouchinc.com>
+From: Maxim Grigoriev <maxim@tensilica.com>
+Date: Fri, 30 Jan 2009 15:02:36 -0800
+Subject: [Buildroot] {buildroot 0004384]: GCC 4.3.1 fails with cannot
+ compute suffix of object files
+Message-ID: <4983870C.6010607@hq.tensilica.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+There is a buildroot issue 0004384:
 
-When I try to use buildroot (latest SVN copy) to compile grub, make  
-fails. It seems to be getting stuck on some patch. "make" output  
-below, anyone have any ideas what's going on or how I can fix this?  
+    http://lists.uclibc.org/pipermail/buildroot/2008-September/010792.html
+
+I understand it's a generic architecture-independent GCC 4.3.1+ compiler 
+problem
+mentioned several times in different places ( e.g. bugzilla PRs 35577, 
+35693 ).
+
+On the buildroot mailing, list I found a reference to the patch
+
+  gcc-4.3.1-compile.patch 
+
+introduced by "antezedens" somewhere around 09-10-08.
+But, I was not able to find this patch. Looks like it was withdrawn.
+
+                          * * * * *
+
+My question is: is this build failure supposed to be fixed on
+the BUILDROOT makefiles/scripts level ? Or, setting 
+
+LD_LIBRARY_PATH=$PWD/toolchain_build_arm/mpfr/lib:$LD_LIBRARY_PATH
+
+from the top of buildroot tree is assumed to be a standard
+setup for the buildroot build ? Is it documented anywhere ?
+
 Thanks,
-
-Daniel
-
---
-Daniel Jabbour
-Software Engineer
-Laptouch, Inc.
-
-
-gzip -d -c /home/djabbour/source/buildroot/dl/grub_0.97.orig.tar.gz |  
-tar -C /home/djabbour/source/buildroot/build_i486 -xvf -
-grub-0.97/
-grub-0.97/util/
-grub-0.97/util/Makefile.am
-grub-0.97/util/Makefile.in
-grub-0.97/util/grub-image.in
-grub-0.97/util/grub-install.in
-grub-0.97/util/grub-md5-crypt.in
-grub-0.97/util/grub-set-default.in
-grub-0.97/util/grub-terminfo.in
-grub-0.97/util/mbchk.c
-grub-0.97/util/mkbimage
-grub-0.97/README
-grub-0.97/acinclude.m4
-grub-0.97/configure.ac
-grub-0.97/aclocal.m4
-grub-0.97/Makefile.am
-grub-0.97/Makefile.in
-grub-0.97/config.h.in
-grub-0.97/configure
-grub-0.97/AUTHORS
-grub-0.97/COPYING
-grub-0.97/ChangeLog
-grub-0.97/INSTALL
-grub-0.97/NEWS
-grub-0.97/THANKS
-grub-0.97/TODO
-grub-0.97/compile
-grub-0.97/config.guess
-grub-0.97/config.sub
-grub-0.97/depcomp
-grub-0.97/install-sh
-grub-0.97/missing
-grub-0.97/mkinstalldirs
-grub-0.97/BUGS
-grub-0.97/MAINTENANCE
-grub-0.97/netboot/
-grub-0.97/netboot/Makefile.am
-grub-0.97/netboot/Makefile.in
-grub-0.97/netboot/cards.h
-grub-0.97/netboot/config.c
-grub-0.97/netboot/etherboot.h
-grub-0.97/netboot/fsys_tftp.c
-grub-0.97/netboot/linux-asm-io.h
-grub-0.97/netboot/linux-asm-string.h
-grub-0.97/netboot/main.c
-grub-0.97/netboot/misc.c
-grub-0.97/netboot/nic.h
-grub-0.97/netboot/osdep.h
-grub-0.97/netboot/pci.c
-grub-0.97/netboot/pci.h
-grub-0.97/netboot/timer.c
-grub-0.97/netboot/timer.h
-grub-0.97/netboot/3c509.c
-grub-0.97/netboot/3c509.h
-grub-0.97/netboot/3c595.c
-grub-0.97/netboot/3c595.h
-grub-0.97/netboot/3c90x.c
-grub-0.97/netboot/cs89x0.c
-grub-0.97/netboot/cs89x0.h
-grub-0.97/netboot/davicom.c
-grub-0.97/netboot/depca.c
-grub-0.97/netboot/eepro.c
-grub-0.97/netboot/eepro100.c
-grub-0.97/netboot/epic100.c
-grub-0.97/netboot/epic100.h
-grub-0.97/netboot/fa311.c
-grub-0.97/netboot/i82586.c
-grub-0.97/netboot/lance.c
-grub-0.97/netboot/natsemi.c
-grub-0.97/netboot/ni5010.c
-grub-0.97/netboot/ns8390.c
-grub-0.97/netboot/ns8390.h
-grub-0.97/netboot/otulip.c
-grub-0.97/netboot/otulip.h
-grub-0.97/netboot/rtl8139.c
-grub-0.97/netboot/sis900.c
-grub-0.97/netboot/sis900.h
-grub-0.97/netboot/sk_g16.c
-grub-0.97/netboot/sk_g16.h
-grub-0.97/netboot/smc9000.c
-grub-0.97/netboot/smc9000.h
-grub-0.97/netboot/tiara.c
-grub-0.97/netboot/tlan.c
-grub-0.97/netboot/tulip.c
-grub-0.97/netboot/via-rhine.c
-grub-0.97/netboot/w89c840.c
-grub-0.97/netboot/README.netboot
-grub-0.97/netboot/3c90x.txt
-grub-0.97/netboot/cs89x0.txt
-grub-0.97/netboot/sis900.txt
-grub-0.97/netboot/tulip.txt
-grub-0.97/stage2/
-grub-0.97/stage2/apic.h
-grub-0.97/stage2/defs.h
-grub-0.97/stage2/dir.h
-grub-0.97/stage2/disk_inode.h
-grub-0.97/stage2/disk_inode_ffs.h
-grub-0.97/stage2/fat.h
-grub-0.97/stage2/filesys.h
-grub-0.97/stage2/freebsd.h
-grub-0.97/stage2/fs.h
-grub-0.97/stage2/hercules.h
-grub-0.97/stage2/i386-elf.h
-grub-0.97/stage2/imgact_aout.h
-grub-0.97/stage2/iso9660.h
-grub-0.97/stage2/jfs.h
-grub-0.97/stage2/mb_header.h
-grub-0.97/stage2/mb_info.h
-grub-0.97/stage2/md5.h
-grub-0.97/stage2/nbi.h
-grub-0.97/stage2/pc_slice.h
-grub-0.97/stage2/serial.h
-grub-0.97/stage2/shared.h
-grub-0.97/stage2/smp-imps.h
-grub-0.97/stage2/term.h
-grub-0.97/stage2/terminfo.h
-grub-0.97/stage2/tparm.h
-grub-0.97/stage2/ufs2.h
-grub-0.97/stage2/vstafs.h
-grub-0.97/stage2/xfs.h
-grub-0.97/stage2/Makefile.am
-grub-0.97/stage2/Makefile.in
-grub-0.97/stage2/boot.c
-grub-0.97/stage2/builtins.c
-grub-0.97/stage2/char_io.c
-grub-0.97/stage2/cmdline.c
-grub-0.97/stage2/common.c
-grub-0.97/stage2/disk_io.c
-grub-0.97/stage2/fsys_ext2fs.c
-grub-0.97/stage2/fsys_fat.c
-grub-0.97/stage2/fsys_ffs.c
-grub-0.97/stage2/fsys_iso9660.c
-grub-0.97/stage2/fsys_jfs.c
-grub-0.97/stage2/fsys_minix.c
-grub-0.97/stage2/fsys_reiserfs.c
-grub-0.97/stage2/fsys_ufs2.c
-grub-0.97/stage2/fsys_vstafs.c
-grub-0.97/stage2/fsys_xfs.c
-grub-0.97/stage2/gunzip.c
-grub-0.97/stage2/md5.c
-grub-0.97/stage2/serial.c
-grub-0.97/stage2/stage2.c
-grub-0.97/stage2/terminfo.c
-grub-0.97/stage2/tparm.c
-grub-0.97/stage2/asm.S
-grub-0.97/stage2/bios.c
-grub-0.97/stage2/console.c
-grub-0.97/stage2/hercules.c
-grub-0.97/stage2/smp-imps.c
-grub-0.97/stage2/start.S
-grub-0.97/stage2/stage1_5.c
-grub-0.97/stage2/start_eltorito.S
-grub-0.97/stage2/nbloader.S
-grub-0.97/stage2/pxeloader.S
-grub-0.97/stage2/setjmp.S
-grub-0.97/stage2/apm.S
-grub-0.97/stage2/size_test
-grub-0.97/stage1/
-grub-0.97/stage1/Makefile.am
-grub-0.97/stage1/Makefile.in
-grub-0.97/stage1/stage1.S
-grub-0.97/stage1/stage1.h
-grub-0.97/lib/
-grub-0.97/lib/Makefile.am
-grub-0.97/lib/Makefile.in
-grub-0.97/lib/getopt.c
-grub-0.97/lib/getopt1.c
-grub-0.97/lib/getopt.h
-grub-0.97/lib/device.c
-grub-0.97/lib/device.h
-grub-0.97/grub/
-grub-0.97/grub/Makefile.am
-grub-0.97/grub/Makefile.in
-grub-0.97/grub/main.c
-grub-0.97/grub/asmstub.c
-grub-0.97/docs/
-grub-0.97/docs/internals.texi
-grub-0.97/docs/boot.S.texi
-grub-0.97/docs/kernel.c.texi
-grub-0.97/docs/multiboot.h.texi
-grub-0.97/docs/Makefile.am
-grub-0.97/docs/Makefile.in
-grub-0.97/docs/stamp-vti
-grub-0.97/docs/version.texi
-grub-0.97/docs/mdate-sh
-grub-0.97/docs/texinfo.tex
-grub-0.97/docs/boot.S
-grub-0.97/docs/kernel.c
-grub-0.97/docs/multiboot.h
-grub-0.97/docs/grub.texi
-grub-0.97/docs/multiboot.texi
-grub-0.97/docs/menu.lst
-grub-0.97/docs/grub.8
-grub-0.97/docs/mbchk.1
-grub-0.97/docs/grub-install.8
-grub-0.97/docs/grub-md5-crypt.8
-grub-0.97/docs/grub-terminfo.8
-grub-0.97/docs/help2man
-grub-0.97/docs/src2texi
-grub-0.97/docs/grub.info
-grub-0.97/docs/multiboot.info
-toolchain/patch-kernel.sh /home/djabbour/source/buildroot/build_i486/ 
-grub-0.97 /home/djabbour/source/buildroot/dl grub_0.97-51.diff.gz
-
-Applying grub_0.97-51.diff.gz using gzip:
-patching file debian/update-grub
-patching file debian/update-grub.wrapper
-patching file debian/grub-legacy-doc.dirs
-patching file debian/presubj
-patching file debian/grub.docs
-patching file debian/grub-floppy
-patching file debian/changelog
-patching file debian/grub-legacy-doc.install
-patching file debian/grub-legacy-doc.info
-patching file debian/NEWS
-patching file debian/README.Debian
-patching file debian/multiboot-doc.install
-patching file debian/control
-patching file debian/multiboot-doc.dirs
-patching file debian/script
-patching file debian/multiboot-doc.info
-patching file debian/grub-install.wrapper
-patching file debian/mkbimage
-patching file debian/watch
-patching file debian/multiboot-doc.doc-base.multiboot
-patching file debian/compat
-patching file debian/grub-set-default.1
-patching file debian/rules
-patching file debian/update-grub.8
-patching file debian/grub-reboot.8
-patching file debian/grub-legacy-doc.doc-base.grub
-patching file debian/grub.install
-patching file debian/grub-reboot
-patching file debian/multiboot-doc.examples
-patching file debian/grub.dirs
-patching file debian/grub.manpages
-patching file debian/grub.examples
-patching file debian/copyright
-patching file debian/patches/kfreebsd.diff
-patching file debian/patches/print_func.diff
-patching file debian/patches/ext3_256byte_inode.diff
-patching file debian/patches/splashimage_help.diff
-patching file debian/patches/cvs-sync.patch
-patching file debian/patches/initrd_max_address.diff
-patching file debian/patches/savedefault.diff
-patching file debian/patches/mprotect.diff
-patching file debian/patches/raid.diff
-patching file debian/patches/grub-xvd_drives.diff
-patching file debian/patches/graphics.diff
-patching file debian/patches/grub-special_device_names.diff
-patching file debian/patches/use_grub-probe_in_grub-install.diff
-patching file debian/patches/2gb_limit.diff
-patching file debian/patches/grub-install_xvd.diff
-patching file debian/patches/grub-install_aoe_support.diff
-patching file debian/patches/find-grub-dir.diff
-patching file debian/patches/intelmac.diff
-patching file debian/patches/raid_cciss.diff
-patching file debian/patches/grub-install_addsyncs.diff
-patching file debian/patches/menu.lst_gnu-hurd.diff
-patching file debian/patches/xfs_freeze.diff
-patching file debian/patches/geometry-26kernel.diff
-patching file debian/patches/grub-install_regexp.diff
-patching file debian/patches/fix_amd64_compile.diff
-patching file debian/patches/00list
-patching file debian/patches/crossreference_manpages.diff
-Aborting.  Reject files found.
-make: *** [/home/djabbour/source/buildroot/build_i486/ 
-grub-0.97/.unpacked] Error 1
+-- Maxim
