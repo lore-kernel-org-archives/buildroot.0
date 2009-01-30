@@ -1,32 +1,48 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 30 Jan 2009 11:23:01 +0100
-Subject: [Buildroot] meaning of BR2_arm_dunno
-In-Reply-To: <1233310475.6293.20.camel@sven> (Sven Neumann's message of "Fri\,
-	30 Jan 2009 11\:14\:35 +0100")
-References: <1233243053.15375.33.camel@sven>
-	<87eiymru7j.fsf@macbook.be.48ers.dk> <1233309685.6293.17.camel@sven>
-	<1233310475.6293.20.camel@sven>
-Message-ID: <8763jxnldm.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Fri, 30 Jan 2009 10:35:55 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/gcc/4.3.2
+Message-ID: <20090130103556.08B22765E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Neumann <s.neumann@phase-zero.de> writes:
+Author: jacmet
+Date: 2009-01-30 10:35:55 +0000 (Fri, 30 Jan 2009)
+New Revision: 25161
 
-Hi,
+Log:
+toolchain/gcc/4.3.2: accept abi=aapcs-linux for EABI
 
- Sven> Might be related to
- Sven> http://gcc.gnu.org/ml/gcc-patches/2008-09/msg01500.html
+From Bernhards' tree, thanks to Sven Neuman for noticing. See also
+http://gcc.gnu.org/ml/gcc-patches/2008-09/msg01500.html
 
-Ahh, our good friend Bernhard ;)
+Added:
+   trunk/buildroot/toolchain/gcc/4.3.2/999-4.3.2-armeabi-aapcs-linux.patch
 
- Sven> BR2_GCC_TARGET_ABI="aapcs" seems to be accepted. I will try to compile
- Sven> my tree with this option now and also check if I can build a recent
- Sven> kernel using the compiler that results from this build...
 
-Ok, thanks, otherwise I'll take the gcc patch so aapcs-linux works.
-
--- 
-Bye, Peter Korsgaard
+Changeset:
+Added: trunk/buildroot/toolchain/gcc/4.3.2/999-4.3.2-armeabi-aapcs-linux.patch
+===================================================================
+--- trunk/buildroot/toolchain/gcc/4.3.2/999-4.3.2-armeabi-aapcs-linux.patch	                        (rev 0)
++++ trunk/buildroot/toolchain/gcc/4.3.2/999-4.3.2-armeabi-aapcs-linux.patch	2009-01-30 10:35:55 UTC (rev 25161)
+@@ -0,0 +1,18 @@
++\\\\ followup of PR34205; trying to use aapcs-linux
++\\ gcc/ChangeLog
++\\
++\\ 2008-09-18  Bernhard Reutner-Fischer  <aldot@>
++\\
++\\ * config.gcc (arm*-*-*): Add aapcs-linux to supported ABIs.
++\\
++--- gcc-4.3.2.orig/gcc/config.gcc	2008-09-18 20:33:55.000000000 +0200
+++++ gcc-4.3.2/gcc/config.gcc	2008-09-18 21:38:52.000000000 +0200
++@@ -2921,7 +2921,7 @@
++ 
++ 		case "$with_abi" in
++ 		"" \
++-		| apcs-gnu | atpcs | aapcs | iwmmxt )
+++		| apcs-gnu | atpcs | aapcs | iwmmxt | aapcs-linux )
++ 			#OK
++ 			;;
++ 		*)
