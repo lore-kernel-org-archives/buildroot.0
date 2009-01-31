@@ -1,49 +1,43 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 31 Jan 2009 13:29:03 +0100
-Subject: [Buildroot] svn commit:
-	trunk/buildroot/package/multimedia/alsa-lib
-In-Reply-To: <20090131101825.7DC5376219@busybox.osuosl.org> (ulf@uclibc.org's
-	message of "Sat\, 31 Jan 2009 10\:18\:25 +0000 \(UTC\)")
-References: <20090131101825.7DC5376219@busybox.osuosl.org>
-Message-ID: <87y6wrlkvk.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Sat, 31 Jan 2009 12:29:56 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/x86/grub
+Message-ID: <20090131122956.BF6E476219@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
+Author: jacmet
+Date: 2009-01-31 12:29:55 +0000 (Sat, 31 Jan 2009)
+New Revision: 25177
 
- ulf> Author: ulf
- ulf> Date: 2009-01-31 10:18:23 +0000 (Sat, 31 Jan 2009)
- ulf> New Revision: 25175
+Log:
+grub: fix build
 
- ulf> Log:
- ulf> Workaround for AVR32 compiler issue affecting inlining, causing alsa-lib to break, feedback to AVR32 compiler team will be sent
+Revert to the -35 debian patch (from stable.debian.net) so the other
+patches apply, E.G. effectively revert r23968.
 
- ulf> +++ trunk/buildroot/package/multimedia/alsa-lib/alsa-lib.mk	2009-01-31 10:18:23 UTC (rev 25175)
- ulf> @@ -12,11 +12,17 @@
- ulf>  ALSA_LIB_TARGET_BINARY:=usr/lib/$(ALSA_LIB_BINARY)
- 
- ulf>  ifeq ($(BR2_arm),y)
- ulf> -ALSA_LIB_ABI:=-mabi=aapcs-linux
- ulf> +ALSA_LIB_ABI+=-mabi=aapcs-linux
- ulf>  else
- ulf> -ALSA_LIB_ABI:=
- ulf> +ALSA_LIB_ABI+=
- ulf>  endif
- 
- ulf> +ifeq ($(BR2_avr32),y)
- ulf> +ALSA_LIB_ABI+=-DAVR32_INLINE_BUG
- ulf> +else
- ulf> +ALSA_LIB_ABI+=
- ulf> +endif
+Someone who actually uses grub should probably look into updating our
+version.
 
-Please rename that variable to something sensible when you start to
-use it for other things, something like ALSA_CFLAGS.
+Modified:
+   trunk/buildroot/target/x86/grub/grub.mk
 
-And now we're at it, is the arm abi handling needed after the fix in
-r25164? Could you give it a try (with an internal toolchain ofcourse)?
 
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/target/x86/grub/grub.mk
+===================================================================
+--- trunk/buildroot/target/x86/grub/grub.mk	2009-01-31 12:02:40 UTC (rev 25176)
++++ trunk/buildroot/target/x86/grub/grub.mk	2009-01-31 12:29:55 UTC (rev 25177)
+@@ -21,8 +21,8 @@
+ #
+ #############################################################
+ GRUB_SOURCE:=grub_0.97.orig.tar.gz
+-GRUB_PATCH:=grub_0.97-51.diff.gz
+-GRUB_SITE=$(BR2_DEBIAN_MIRROR)/debian/pool/main/g/grub
++GRUB_PATCH:=grub_0.97-35.diff.gz
++GRUB_SITE:=http://snapshot.debian.net/archive/2008/03/29/debian/pool/main/g/grub/
+ GRUB_PATCH_SITE:=$(GRUB_SITE)
+ GRUB_CAT:=$(ZCAT)
+ GRUB_DIR:=$(BUILD_DIR)/grub-0.97
