@@ -1,45 +1,49 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sat, 31 Jan 2009 12:02:41 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/dbus
-Message-ID: <20090131120242.19B9276219@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 31 Jan 2009 13:29:03 +0100
+Subject: [Buildroot] svn commit:
+	trunk/buildroot/package/multimedia/alsa-lib
+In-Reply-To: <20090131101825.7DC5376219@busybox.osuosl.org> (ulf@uclibc.org's
+	message of "Sat\, 31 Jan 2009 10\:18\:25 +0000 \(UTC\)")
+References: <20090131101825.7DC5376219@busybox.osuosl.org>
+Message-ID: <87y6wrlkvk.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2009-01-31 12:02:40 +0000 (Sat, 31 Jan 2009)
-New Revision: 25176
+>>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
 
-Log:
-dbus dependencies needs to be ready before ./configure
+ ulf> Author: ulf
+ ulf> Date: 2009-01-31 10:18:23 +0000 (Sat, 31 Jan 2009)
+ ulf> New Revision: 25175
 
-Modified:
-   trunk/buildroot/package/dbus/dbus.mk
+ ulf> Log:
+ ulf> Workaround for AVR32 compiler issue affecting inlining, causing alsa-lib to break, feedback to AVR32 compiler team will be sent
 
-
-Changeset:
-Modified: trunk/buildroot/package/dbus/dbus.mk
-===================================================================
---- trunk/buildroot/package/dbus/dbus.mk	2009-01-31 10:18:23 UTC (rev 25175)
-+++ trunk/buildroot/package/dbus/dbus.mk	2009-01-31 12:02:40 UTC (rev 25176)
-@@ -28,7 +28,7 @@
- 	$(DBUS_CAT) $(DL_DIR)/$(DBUS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
- 	touch $@
+ ulf> +++ trunk/buildroot/package/multimedia/alsa-lib/alsa-lib.mk	2009-01-31 10:18:23 UTC (rev 25175)
+ ulf> @@ -12,11 +12,17 @@
+ ulf>  ALSA_LIB_TARGET_BINARY:=usr/lib/$(ALSA_LIB_BINARY)
  
--$(DBUS_DIR)/.configured: $(DBUS_DIR)/.unpacked
-+$(DBUS_DIR)/.configured: $(DBUS_DIR)/.unpacked $(DBUS_XML_DEP)
- 	(cd $(DBUS_DIR); rm -rf config.cache; \
- 		$(TARGET_CONFIGURE_OPTS) \
- 		$(TARGET_CONFIGURE_ARGS) \
-@@ -113,3 +113,9 @@
- ifeq ($(BR2_PACKAGE_DBUS),y)
- TARGETS+=dbus
- endif
-+
-+dbus-status:
-+	@echo	BR2_DBUS_EXPAT=$(BR2_DBUS_EXPAT)
-+	@echo	DBUS_XML=$(DBUS_XML)
-+	@echo	DBUS_XML_DEP=$(DBUS_XML_DEP)
-+
+ ulf>  ifeq ($(BR2_arm),y)
+ ulf> -ALSA_LIB_ABI:=-mabi=aapcs-linux
+ ulf> +ALSA_LIB_ABI+=-mabi=aapcs-linux
+ ulf>  else
+ ulf> -ALSA_LIB_ABI:=
+ ulf> +ALSA_LIB_ABI+=
+ ulf>  endif
+ 
+ ulf> +ifeq ($(BR2_avr32),y)
+ ulf> +ALSA_LIB_ABI+=-DAVR32_INLINE_BUG
+ ulf> +else
+ ulf> +ALSA_LIB_ABI+=
+ ulf> +endif
+
+Please rename that variable to something sensible when you start to
+use it for other things, something like ALSA_CFLAGS.
+
+And now we're at it, is the arm abi handling needed after the fix in
+r25164? Could you give it a try (with an internal toolchain ofcourse)?
+
+-- 
+Bye, Peter Korsgaard
