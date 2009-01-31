@@ -1,51 +1,64 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Sat, 31 Jan 2009 23:29:38 +0100
-Subject: [Buildroot] svn commit:
-	trunk/buildroot/target/device/Atmel:	at91rm9200df
-	at91sam9260dfc at91sam9261e etc...
-In-Reply-To: <87k58bjfq9.fsf@macbook.be.48ers.dk>
-References: <20090131214405.4A8147621A@busybox.osuosl.org>
-	<87k58bjfq9.fsf@macbook.be.48ers.dk>
-Message-ID: <1233440979.4147.132.camel@elrond.atmel.com>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Sat, 31 Jan 2009 22:53:36 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/dbus
+Message-ID: <20090131225336.4E3377621A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-l?r 2009-01-31 klockan 23:03 +0100 skrev Peter Korsgaard:
-> >>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
-> 
->  ulf> Author: ulf
->  ulf> Date: 2009-01-31 21:44:04 +0000 (Sat, 31 Jan 2009)
->  ulf> New Revision: 25199
-> 
->  ulf> Log:
->  ulf> Add AT91 defconfigs for binary toolchains
-> 
->  ulf> Added:
-> 
->  ulf>    trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df_ext_bare_defconfig
->  ulf>    trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df_ext_defconfig
->  ulf>    trunk/buildroot/target/device/Atmel/at91sam9261ek/at91sam9261ek_ext_bare_defconfig
->  ulf>    trunk/buildroot/target/device/Atmel/at91sam9261ek/at91sam9261ek_ext_defconfig
->  ulf>    trunk/buildroot/target/device/Atmel/at91sam9263ek/at91sam9263ek_ext_bare_defconfig
->  ulf>    trunk/buildroot/target/device/Atmel/at91sam9263ek/at91sam9263ek_ext_defconfig
->  ulf>    trunk/buildroot/target/device/Atmel/at91sam9g20dfc/at91sam9g20dfc_ext_bare_defconfig
->  ulf>    trunk/buildroot/target/device/Atmel/at91sam9g20dfc/at91sam9g20dfc_ext_defconfig
-> 
-> I'm really not convinced we need (to keep updated) all those
-> defconfigs.
+Author: jacmet
+Date: 2009-01-31 22:53:35 +0000 (Sat, 31 Jan 2009)
+New Revision: 25201
 
-I prefer that the defconfigs do not halt the build 
-to get user input, so I want them updated.
+Log:
+dbus: revert r25194 (Unbreak Peters 'fixes' to dbus for a second time)
 
-If/when the build of the toolchain is separated
-from the build of the rest,
-?then all projects can/will use a binary toolchain.
-Then the number of defconfig's can be reduced
+It was a bogus revert.
 
-BR
-Ulf Samuelsson
+Modified:
+   trunk/buildroot/package/dbus/dbus.mk
 
-> 
+
+Changeset:
+Modified: trunk/buildroot/package/dbus/dbus.mk
+===================================================================
+--- trunk/buildroot/package/dbus/dbus.mk	2009-01-31 21:45:57 UTC (rev 25200)
++++ trunk/buildroot/package/dbus/dbus.mk	2009-01-31 22:53:35 UTC (rev 25201)
+@@ -13,10 +13,18 @@
+ 
+ ifeq ($(BR2_DBUS_EXPAT),y)
+ DBUS_XML:=expat
+-DBUS_XML_DEP:=expat
++# depend on the exact library file instead of expat so dbus isn't always
++# considered out-of-date
++DBUS_XML_DEP:=$(STAGING_DIR)/usr/lib/libexpat.so.1
+ else
+ DBUS_XML:=libxml
+-DBUS_XML_DEP:=libxml2
++# Makefile.autotools.in unfortunately has broken dependency handling,
++# so we cannot do the same for libxml2 as the targets (like
++# libxml2-install-staging) are phony and hence, dbus will always be
++# considered out-of-date. Using the corresponding .stamp_* files (E.G.
++# LIBXML2_TARGET_INSTALL_STAGING doesn't work as there's no dependency
++# information between them.
++DBUS_XML_DEP:=libxml2-install-staging
+ endif
+ 
+ $(DL_DIR)/$(DBUS_SOURCE):
+@@ -86,7 +94,7 @@
+ 	rm -rf $(TARGET_DIR)/usr/share/man
+ endif
+ 
+-dbus: uclibc pkgconfig $(DBUS_XML_DEP) $(TARGET_DIR)/$(DBUS_TARGET_BINARY)
++dbus: uclibc pkgconfig $(TARGET_DIR)/$(DBUS_TARGET_BINARY)
+ 
+ dbus-clean:
+ 	rm -f $(TARGET_DIR)/etc/dbus-1/session.conf
+@@ -113,5 +121,3 @@
+ ifeq ($(BR2_PACKAGE_DBUS),y)
+ TARGETS+=dbus
+ endif
+-
+-
