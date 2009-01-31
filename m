@@ -1,36 +1,38 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Sat, 31 Jan 2009 21:38:51 +0000 (UTC)
-Subject: [Buildroot] svn commit: tags/buildroot_2009.02_rc3
-Message-ID: <20090131213851.2C5A57621A@busybox.osuosl.org>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Sat, 31 Jan 2009 21:44:05 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Atmel:
+	at91rm9200df at91sam9260dfc at91sam9261e etc...
+Message-ID: <20090131214405.4A8147621A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-01-31 21:38:50 +0000 (Sat, 31 Jan 2009)
-New Revision: 25198
+Author: ulf
+Date: 2009-01-31 21:44:04 +0000 (Sat, 31 Jan 2009)
+New Revision: 25199
 
 Log:
-buildroot: fix version for 2009.02-rc3
+Add AT91 defconfigs for binary toolchains
 
+Added:
+   trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df_ext_bare_defconfig
+   trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df_ext_defconfig
+   trunk/buildroot/target/device/Atmel/at91sam9261ek/at91sam9261ek_ext_bare_defconfig
+   trunk/buildroot/target/device/Atmel/at91sam9261ek/at91sam9261ek_ext_defconfig
+   trunk/buildroot/target/device/Atmel/at91sam9263ek/at91sam9263ek_ext_bare_defconfig
+   trunk/buildroot/target/device/Atmel/at91sam9263ek/at91sam9263ek_ext_defconfig
+   trunk/buildroot/target/device/Atmel/at91sam9g20dfc/at91sam9g20dfc_ext_bare_defconfig
+   trunk/buildroot/target/device/Atmel/at91sam9g20dfc/at91sam9g20dfc_ext_defconfig
 
 Modified:
-   tags/buildroot_2009.02_rc3/Config.in
+   trunk/buildroot/target/device/Atmel/at91sam9260dfc/at91sam9260dfc_ext_bare_defconfig
 
 
 Changeset:
-Modified: tags/buildroot_2009.02_rc3/Config.in
-===================================================================
---- tags/buildroot_2009.02_rc3/Config.in	2009-01-31 21:27:33 UTC (rev 25197)
-+++ tags/buildroot_2009.02_rc3/Config.in	2009-01-31 21:38:50 UTC (rev 25198)
-@@ -8,7 +8,7 @@
- 
- config BR2_VERSION
- 	string
--	default "2009.02-svn"
-+	default "2009.02-rc3"
- 
- source "target/Config.in.arch"
- source "target/device/Config.in"
+
+Sorry, the patch is too large to include (6840 lines).
+Please use ViewCVS to see it!
+
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=25199
