@@ -1,7 +1,8 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sat, 31 Jan 2009 20:43:01 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Atmel/atngw100
-Message-ID: <20090131204302.082727621A@busybox.osuosl.org>
+Date: Sat, 31 Jan 2009 20:43:33 +0000 (UTC)
+Subject: [Buildroot] svn commit:
+	trunk/buildroot/target/device/Atmel/atstk1005
+Message-ID: <20090131204333.8204B7621A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,26 +10,26 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2009-01-31 20:43:01 +0000 (Sat, 31 Jan 2009)
-New Revision: 25190
+Date: 2009-01-31 20:43:32 +0000 (Sat, 31 Jan 2009)
+New Revision: 25191
 
 Log:
-Update atngw100 BSP
+Update atstk1005 BSP
 
 Modified:
-   trunk/buildroot/target/device/Atmel/atngw100/atngw100_defconfig
+   trunk/buildroot/target/device/Atmel/atstk1005/atstk1005_defconfig
 
 
 Changeset:
-Modified: trunk/buildroot/target/device/Atmel/atngw100/atngw100_defconfig
+Modified: trunk/buildroot/target/device/Atmel/atstk1005/atstk1005_defconfig
 ===================================================================
---- trunk/buildroot/target/device/Atmel/atngw100/atngw100_defconfig	2009-01-31 20:42:28 UTC (rev 25189)
-+++ trunk/buildroot/target/device/Atmel/atngw100/atngw100_defconfig	2009-01-31 20:43:01 UTC (rev 25190)
+--- trunk/buildroot/target/device/Atmel/atstk1005/atstk1005_defconfig	2009-01-31 20:43:01 UTC (rev 25190)
++++ trunk/buildroot/target/device/Atmel/atstk1005/atstk1005_defconfig	2009-01-31 20:43:32 UTC (rev 25191)
 @@ -1,6 +1,6 @@
  #
  # Automatically generated make config: don't edit
--# Thu Jan 29 21:25:38 2009
-+# Sat Jan 31 00:10:01 2009
+-# Thu Jan 29 21:43:05 2009
++# Sat Jan 31 00:17:40 2009
  #
  BR2_HAVE_DOT_CONFIG=y
  BR2_VERSION="2009.02-svn"
@@ -91,7 +92,7 @@ Modified: trunk/buildroot/target/device/Atmel/atngw100/atngw100_defconfig
  BR2_CROSS_TOOLCHAIN_TARGET_UTILS=y
  
  #
-@@ -851,9 +852,6 @@
+@@ -868,9 +869,6 @@
  BR2_KERNEL_ARCH_PATCH_ENABLED=y
  # BR2_ARCH_AVR32_2_6_28_2 is not set
  BR2_ARCH_AVR32_2_6_27_6=y
