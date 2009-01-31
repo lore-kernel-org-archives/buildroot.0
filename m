@@ -1,50 +1,41 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Sat, 31 Jan 2009 12:30:02 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/x86/grub
-Message-ID: <20090131123003.248B376219@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 31 Jan 2009 13:31:31 +0100
+Subject: [Buildroot] dbus no longer builds
+In-Reply-To: <1233395038.4147.110.camel@elrond.atmel.com> (Ulf Samuelsson's
+	message of "Sat\, 31 Jan 2009 10\:43\:58 +0100")
+References: <1233395038.4147.110.camel@elrond.atmel.com>
+Message-ID: <87tz7flkrg.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-01-31 12:30:02 +0000 (Sat, 31 Jan 2009)
-New Revision: 25178
+>>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 
-Log:
-grub: revert r21974 (features.h should never be included explicitly)
+Hi,
 
-features.h (or something including it) is needed for __UCLIBC* to get
-defined - E.G. without that the build breaks without largefile support.
+ Ulf> With your fix, dbus no longer builds for
+ Ulf> * at91rm9200df
+ Ulf> * at91sam9260dfc
+ Ulf> * at91sam9g20dfc
 
-Nigel, what was the reason for your commit and what file not found error
-did you see?
+ Ulf> Please fix your patch so that it works.
 
-Modified:
-   trunk/buildroot/target/x86/grub/grub.300-honor_UCLIBC_HAS_LFS.patch
+ Ulf> checking for ISO C99 varargs macros in C... yes
+ Ulf> checking for GNUC varargs macros... yes
+ Ulf> checking for struct cmsgcred... no
+ Ulf> checking for getpeerucred... no
+ Ulf> checking for getpeereid... no
+ Ulf> checking abstract socket namespace... (cached) yes
+ Ulf> checking for XML_ParserCreate_MM in -lexpat... no
+ Ulf> checking for libxml-2.0 >= 2.6.0... configure: error: Explicitly
+ Ulf> requested expat but expat not found
+ Ulf> make: ***
+ Ulf> [/home/ulf/projects/Buildroot/20090129/at91rm9200df/build_arm/dbus-1.1.1/.configured] Fel 1
 
+Strange, it builds just fine here (i686). Are you saying that expat
+doesn't build before dbus?
 
-Changeset:
-Modified: trunk/buildroot/target/x86/grub/grub.300-honor_UCLIBC_HAS_LFS.patch
-===================================================================
---- trunk/buildroot/target/x86/grub/grub.300-honor_UCLIBC_HAS_LFS.patch	2009-01-31 12:29:55 UTC (rev 25177)
-+++ trunk/buildroot/target/x86/grub/grub.300-honor_UCLIBC_HAS_LFS.patch	2009-01-31 12:30:02 UTC (rev 25178)
-@@ -5,7 +5,7 @@
-   *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-   */
-  
--+/* #include <features.h> - NK */
-++#include <features.h>
- +#if !defined __UCLIBC__ || (defined __UCLIBC__ && defined __UCLIBC_HAS_LFS__)
-  /* Try to use glibc's transparant LFS support. */
-  #define _LARGEFILE_SOURCE	1
-@@ -22,7 +22,7 @@
-   *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-   */
-  
--+/* #include <features.h> - NK */
-++#include <features.h>
- +#if !defined __UCLIBC__ || (defined __UCLIBC__ && defined __UCLIBC_HAS_LFS__)
-  /* Try to use glibc's transparant LFS support. */
-  #define _LARGEFILE_SOURCE       1
+-- 
+Bye, Peter Korsgaard
