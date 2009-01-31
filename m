@@ -1,81 +1,39 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Sat, 31 Jan 2009 22:55:00 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/dbus
-In-Reply-To: <871vujkw9s.fsf@macbook.be.48ers.dk>
-References: <20090131183956.11B4D7621A@busybox.osuosl.org>
-	<1233435146.4147.118.camel@elrond.atmel.com>
-	<871vujkw9s.fsf@macbook.be.48ers.dk>
-Message-ID: <1233438900.4147.128.camel@elrond.atmel.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 31 Jan 2009 23:03:10 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Atmel:
+	at91rm9200df at91sam9260dfc at91sam9261e etc...
+In-Reply-To: <20090131214405.4A8147621A@busybox.osuosl.org> (ulf@uclibc.org's
+	message of "Sat\, 31 Jan 2009 21\:44\:05 +0000 \(UTC\)")
+References: <20090131214405.4A8147621A@busybox.osuosl.org>
+Message-ID: <87k58bjfq9.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-l?r 2009-01-31 klockan 22:20 +0100 skrev Peter Korsgaard:
-> >>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
-> 
->  Ulf> l?r 2009-01-31 klockan 18:39 +0000 skrev jacmet at uclibc.org:
->  >> Author: jacmet
->  >> Date: 2009-01-31 18:39:55 +0000 (Sat, 31 Jan 2009)
->  >> New Revision: 25181
->  >> 
->  >> Log:
->  >> dbus: revert to pre-r25021 situation
->  >> 
->  >> Revert to pre-r25021 situation, but add extra comments explaining the
->  >> situation.
->  >> 
->  >> Modified:
->  >> trunk/buildroot/package/dbus/dbus.mk
-> 
->  Ulf> Why are you doing this?
-> 
->  Ulf> You are AGAIN breaking boards...
-> 
-> What? What is broken? A wee bit more detail would be handy.
-> 
+>>>>> "ulf" == ulf  <ulf@uclibc.org> writes:
 
-The problem is that you make dbus depend on expat/libxml2.
+ ulf> Author: ulf
+ ulf> Date: 2009-01-31 21:44:04 +0000 (Sat, 31 Jan 2009)
+ ulf> New Revision: 25199
 
-To build dbus, you need to do a number of things
+ ulf> Log:
+ ulf> Add AT91 defconfigs for binary toolchains
 
-extract
-patch
-configure
-make
-install staging dir
-install target
-dbus = "ready"
+ ulf> Added:
 
-If you make "dbus" depend on "libxml2", then 
-libxml2 can be built at ANY time between start of make
-until the "dbus" install target rule is executed
-which will complete the dbus build.
+ ulf>    trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df_ext_bare_defconfig
+ ulf>    trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df_ext_defconfig
+ ulf>    trunk/buildroot/target/device/Atmel/at91sam9261ek/at91sam9261ek_ext_bare_defconfig
+ ulf>    trunk/buildroot/target/device/Atmel/at91sam9261ek/at91sam9261ek_ext_defconfig
+ ulf>    trunk/buildroot/target/device/Atmel/at91sam9263ek/at91sam9263ek_ext_bare_defconfig
+ ulf>    trunk/buildroot/target/device/Atmel/at91sam9263ek/at91sam9263ek_ext_defconfig
+ ulf>    trunk/buildroot/target/device/Atmel/at91sam9g20dfc/at91sam9g20dfc_ext_bare_defconfig
+ ulf>    trunk/buildroot/target/device/Atmel/at91sam9g20dfc/at91sam9g20dfc_ext_defconfig
 
-"dbus" needs to have access to the libraries already
-at "configure" time, or the build will abort.
-It so happens that "dbus" configure starts before
-libxml2 is built for some unclear reason.
+I'm really not convinced we need (to keep updated) all those
+defconfigs.
 
-Therefore *?"dbus-configured"* meeds to be dependent on 
-"expat" | "libxml2".
-
-Then they are built before the configure starts
-and the build will complete without errors.
-
-You were right that it is OK to depend on libxml2|expat
-instead of strange libraries/goals.
-but the solution was not complete which broke the build.
-
-BR
-Ulf Samuelsson
-
-
-> 
-> -- 
-> Bye, Peter Korsgaard
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+-- 
+Bye, Peter Korsgaard
