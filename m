@@ -1,7 +1,8 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sat, 31 Jan 2009 21:01:25 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/dbus
-Message-ID: <20090131210126.336A27621A@busybox.osuosl.org>
+Date: Sat, 31 Jan 2009 21:04:45 +0000 (UTC)
+Subject: [Buildroot] svn commit:
+	trunk/buildroot/target/device/Atmel/at91rm9200df
+Message-ID: <20090131210446.0ECC97621A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,54 +10,107 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2009-01-31 21:01:24 +0000 (Sat, 31 Jan 2009)
-New Revision: 25194
+Date: 2009-01-31 21:04:45 +0000 (Sat, 31 Jan 2009)
+New Revision: 25195
 
 Log:
-Unbreak Peters 'fixes' to dbus for a second time
+Update at91rm9200df BSP
 
 Modified:
-   trunk/buildroot/package/dbus/dbus.mk
+   trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df_defconfig
 
 
 Changeset:
-Modified: trunk/buildroot/package/dbus/dbus.mk
+Modified: trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df_defconfig
 ===================================================================
---- trunk/buildroot/package/dbus/dbus.mk	2009-01-31 20:49:59 UTC (rev 25193)
-+++ trunk/buildroot/package/dbus/dbus.mk	2009-01-31 21:01:24 UTC (rev 25194)
-@@ -13,18 +13,10 @@
+--- trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df_defconfig	2009-01-31 21:01:24 UTC (rev 25194)
++++ trunk/buildroot/target/device/Atmel/at91rm9200df/at91rm9200df_defconfig	2009-01-31 21:04:45 UTC (rev 25195)
+@@ -1,6 +1,6 @@
+ #
+ # Automatically generated make config: don't edit
+-# Thu Jan 29 23:59:46 2009
++# Sat Jan 31 00:32:00 2009
+ #
+ BR2_HAVE_DOT_CONFIG=y
+ BR2_VERSION="2009.02-svn"
+@@ -42,6 +42,7 @@
+ # BR2_ARM_EABI is not set
+ BR2_ARCH="arm"
+ BR2_ENDIAN="LITTLE"
++BR2_GCC_TARGET_ABI="apcs-gnu"
  
- ifeq ($(BR2_DBUS_EXPAT),y)
- DBUS_XML:=expat
--# depend on the exact library file instead of expat so dbus isn't always
--# considered out-of-date
--DBUS_XML_DEP:=$(STAGING_DIR)/usr/lib/libexpat.so.1
-+DBUS_XML_DEP:=expat
- else
- DBUS_XML:=libxml
--# Makefile.autotools.in unfortunately has broken dependency handling,
--# so we cannot do the same for libxml2 as the targets (like
--# libxml2-install-staging) are phony and hence, dbus will always be
--# considered out-of-date. Using the corresponding .stamp_* files (E.G.
--# LIBXML2_TARGET_INSTALL_STAGING doesn't work as there's no dependency
--# information between them.
--DBUS_XML_DEP:=libxml2-install-staging
-+DBUS_XML_DEP:=libxml2
- endif
+ #
+ # Target options
+@@ -224,6 +225,7 @@
+ # BR2_KERNEL_HEADERS_2_6_27 is not set
+ BR2_KERNEL_HEADERS_2_6_28=y
+ # BR2_KERNEL_HEADERS_SNAP is not set
++# BR2_KERNEL_HEADERS_PATCH_DIR is not set
+ BR2_DEFAULT_KERNEL_HEADERS="2.6.28.2"
  
- $(DL_DIR)/$(DBUS_SOURCE):
-@@ -94,7 +86,7 @@
- 	rm -rf $(TARGET_DIR)/usr/share/man
- endif
+ #
+@@ -234,12 +236,6 @@
+ BR2_UCLIBC_VERSION_0_9_30=y
+ # BR2_UCLIBC_VERSION_SNAPSHOT is not set
+ BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.30.config"
+-BR2_ENABLE_LOCALE=y
+-# BR2_ENABLE_LOCALE_PREGENERATED is not set
+-# BR2_PTHREADS_NONE is not set
+-# BR2_PTHREADS is not set
+-BR2_PTHREADS_OLD=y
+-# BR2_PTHREADS_NATIVE is not set
+ # BR2_PTHREAD_DEBUG is not set
+ BR2_UCLIBC_PROGRAM_INVOCATION=y
+ # BR2_UCLIBC_INSTALL_TEST_SUITE is not set
+@@ -277,9 +273,7 @@
+ BR2_TOOLCHAIN_SYSROOT=y
+ # BR2_GCC_USE_SJLJ_EXCEPTIONS is not set
+ BR2_EXTRA_GCC_CONFIG_OPTIONS=""
+-BR2_GCC_CROSS_CXX=y
+ # BR2_GCC_CROSS_FORTRAN is not set
+-BR2_INSTALL_LIBSTDCPP=y
+ # BR2_INSTALL_LIBGCJ is not set
+ # BR2_INSTALL_OBJC is not set
+ # BR2_INSTALL_FORTRAN is not set
+@@ -310,18 +304,26 @@
+ #
+ # Common Toolchain Options
+ #
++BR2_LARGEFILE=y
++BR2_INET_IPV6=y
++BR2_INET_RPC=y
++BR2_ENABLE_LOCALE=y
++# BR2_ENABLE_LOCALE_PREGENERATED is not set
++BR2_USE_WCHAR=y
++# BR2_SOFT_FLOAT is not set
++# BR2_PTHREADS_NONE is not set
++# BR2_PTHREADS is not set
++BR2_PTHREADS_OLD=y
++# BR2_PTHREADS_NATIVE is not set
++BR2_GCC_CROSS_CXX=y
++BR2_INSTALL_LIBSTDCPP=y
++BR2_TARGET_OPTIMIZATION="-Os -pipe"
+ # BR2_ELF2FLT is not set
+ # BR2_MKLIBS is not set
+ BR2_PACKAGE_SSTRIP_TARGET=y
+ BR2_PACKAGE_SSTRIP_HOST=y
+ # BR2_ENABLE_MULTILIB is not set
+-BR2_LARGEFILE=y
+-BR2_INET_IPV6=y
+-BR2_INET_RPC=y
+-BR2_USE_WCHAR=y
+-# BR2_SOFT_FLOAT is not set
+ # BR2_VFP_FLOAT is not set
+-BR2_TARGET_OPTIMIZATION="-Os -pipe"
+ BR2_CROSS_TOOLCHAIN_TARGET_UTILS=y
  
--dbus: uclibc pkgconfig $(TARGET_DIR)/$(DBUS_TARGET_BINARY)
-+dbus: uclibc pkgconfig $(DBUS_XML_DEP) $(TARGET_DIR)/$(DBUS_TARGET_BINARY)
+ #
+@@ -374,8 +376,6 @@
+ # BR2_PACKAGE_OPROFILE is not set
+ BR2_PACKAGE_PKGCONFIG=y
+ BR2_PACKAGE_READLINE=y
+-BR2_PACKAGE_READLINE_TARGET=y
+-# BR2_PACKAGE_READLINE_HEADERS is not set
+ # BR2_PACKAGE_PCRE is not set
  
- dbus-clean:
- 	rm -f $(TARGET_DIR)/etc/dbus-1/session.conf
-@@ -121,3 +113,5 @@
- ifeq ($(BR2_PACKAGE_DBUS),y)
- TARGETS+=dbus
- endif
-+
-+
+ #
