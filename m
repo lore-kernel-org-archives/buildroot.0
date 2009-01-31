@@ -1,22 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 31 Jan 2009 20:08:58 +0100
-Subject: [Buildroot] [PATCH] x11r7: make xman and xcb-util visible in
-	Kconfig
-In-Reply-To: <200901311506.56000.markus.heidelberg@web.de> (Markus
-	Heidelberg's message of "Sat\, 31 Jan 2009 15\:06\:55 +0100")
-References: <200901311506.56000.markus.heidelberg@web.de>
-Message-ID: <8763jvl2d1.fsf@macbook.be.48ers.dk>
+From: ulf at uclibc.org <ulf@uclibc.org>
+Date: Sat, 31 Jan 2009 20:38:56 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot
+Message-ID: <20090131203857.2C7837621A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Markus" == Markus Heidelberg <markus.heidelberg@web.de> writes:
+Author: ulf
+Date: 2009-01-31 20:38:55 +0000 (Sat, 31 Jan 2009)
+New Revision: 25186
 
- Markus> Signed-off-by: Markus Heidelberg <markus.heidelberg@web.de>
+Log:
+make update shoudl save to PROJECT_defconfig
 
-Thanks, committed. Funny that noone ever noticed.
+Modified:
+   trunk/buildroot/Makefile
 
--- 
-Bye, Peter Korsgaard
+
+Changeset:
+Modified: trunk/buildroot/Makefile
+===================================================================
+--- trunk/buildroot/Makefile	2009-01-31 20:08:21 UTC (rev 25185)
++++ trunk/buildroot/Makefile	2009-01-31 20:38:55 UTC (rev 25186)
+@@ -484,7 +484,7 @@
+ 	-@$(MAKE) oldconfig
+ 
+ update:
+-	cp .config $(BOARD_PATH)/$(BOARD_NAME)_defconfig
++	cp .config $(BOARD_PATH)/$(PROJECT)_defconfig
+ 
+ configured: dirs host-sed kernel-headers uclibc-config busybox-config linux26-config
+ 
