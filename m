@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Sat, 31 Jan 2009 12:29:56 +0000 (UTC)
+Date: Sat, 31 Jan 2009 12:30:02 +0000 (UTC)
 Subject: [Buildroot] svn commit: trunk/buildroot/target/x86/grub
-Message-ID: <20090131122956.BF6E476219@busybox.osuosl.org>
+Message-ID: <20090131123003.248B376219@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,35 +9,42 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2009-01-31 12:29:55 +0000 (Sat, 31 Jan 2009)
-New Revision: 25177
+Date: 2009-01-31 12:30:02 +0000 (Sat, 31 Jan 2009)
+New Revision: 25178
 
 Log:
-grub: fix build
+grub: revert r21974 (features.h should never be included explicitly)
 
-Revert to the -35 debian patch (from stable.debian.net) so the other
-patches apply, E.G. effectively revert r23968.
+features.h (or something including it) is needed for __UCLIBC* to get
+defined - E.G. without that the build breaks without largefile support.
 
-Someone who actually uses grub should probably look into updating our
-version.
+Nigel, what was the reason for your commit and what file not found error
+did you see?
 
 Modified:
-   trunk/buildroot/target/x86/grub/grub.mk
+   trunk/buildroot/target/x86/grub/grub.300-honor_UCLIBC_HAS_LFS.patch
 
 
 Changeset:
-Modified: trunk/buildroot/target/x86/grub/grub.mk
+Modified: trunk/buildroot/target/x86/grub/grub.300-honor_UCLIBC_HAS_LFS.patch
 ===================================================================
---- trunk/buildroot/target/x86/grub/grub.mk	2009-01-31 12:02:40 UTC (rev 25176)
-+++ trunk/buildroot/target/x86/grub/grub.mk	2009-01-31 12:29:55 UTC (rev 25177)
-@@ -21,8 +21,8 @@
- #
- #############################################################
- GRUB_SOURCE:=grub_0.97.orig.tar.gz
--GRUB_PATCH:=grub_0.97-51.diff.gz
--GRUB_SITE=$(BR2_DEBIAN_MIRROR)/debian/pool/main/g/grub
-+GRUB_PATCH:=grub_0.97-35.diff.gz
-+GRUB_SITE:=http://snapshot.debian.net/archive/2008/03/29/debian/pool/main/g/grub/
- GRUB_PATCH_SITE:=$(GRUB_SITE)
- GRUB_CAT:=$(ZCAT)
- GRUB_DIR:=$(BUILD_DIR)/grub-0.97
+--- trunk/buildroot/target/x86/grub/grub.300-honor_UCLIBC_HAS_LFS.patch	2009-01-31 12:29:55 UTC (rev 25177)
++++ trunk/buildroot/target/x86/grub/grub.300-honor_UCLIBC_HAS_LFS.patch	2009-01-31 12:30:02 UTC (rev 25178)
+@@ -5,7 +5,7 @@
+   *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+   */
+  
+-+/* #include <features.h> - NK */
+++#include <features.h>
+ +#if !defined __UCLIBC__ || (defined __UCLIBC__ && defined __UCLIBC_HAS_LFS__)
+  /* Try to use glibc's transparant LFS support. */
+  #define _LARGEFILE_SOURCE	1
+@@ -22,7 +22,7 @@
+   *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+   */
+  
+-+/* #include <features.h> - NK */
+++#include <features.h>
+ +#if !defined __UCLIBC__ || (defined __UCLIBC__ && defined __UCLIBC_HAS_LFS__)
+  /* Try to use glibc's transparant LFS support. */
+  #define _LARGEFILE_SOURCE       1
