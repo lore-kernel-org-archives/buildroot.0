@@ -1,8 +1,8 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sat, 31 Jan 2009 20:43:33 +0000 (UTC)
+Date: Sat, 31 Jan 2009 20:44:05 +0000 (UTC)
 Subject: [Buildroot] svn commit:
-	trunk/buildroot/target/device/Atmel/atstk1005
-Message-ID: <20090131204333.8204B7621A@busybox.osuosl.org>
+	trunk/buildroot/target/device/Atmel/atstk100x
+Message-ID: <20090131204405.768A07621A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,26 +10,26 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2009-01-31 20:43:32 +0000 (Sat, 31 Jan 2009)
-New Revision: 25191
+Date: 2009-01-31 20:44:04 +0000 (Sat, 31 Jan 2009)
+New Revision: 25192
 
 Log:
-Update atstk1005 BSP
+Update atstk200x BSP
 
 Modified:
-   trunk/buildroot/target/device/Atmel/atstk1005/atstk1005_defconfig
+   trunk/buildroot/target/device/Atmel/atstk100x/atstk100x_defconfig
 
 
 Changeset:
-Modified: trunk/buildroot/target/device/Atmel/atstk1005/atstk1005_defconfig
+Modified: trunk/buildroot/target/device/Atmel/atstk100x/atstk100x_defconfig
 ===================================================================
---- trunk/buildroot/target/device/Atmel/atstk1005/atstk1005_defconfig	2009-01-31 20:43:01 UTC (rev 25190)
-+++ trunk/buildroot/target/device/Atmel/atstk1005/atstk1005_defconfig	2009-01-31 20:43:32 UTC (rev 25191)
+--- trunk/buildroot/target/device/Atmel/atstk100x/atstk100x_defconfig	2009-01-31 20:43:32 UTC (rev 25191)
++++ trunk/buildroot/target/device/Atmel/atstk100x/atstk100x_defconfig	2009-01-31 20:44:04 UTC (rev 25192)
 @@ -1,6 +1,6 @@
  #
  # Automatically generated make config: don't edit
--# Thu Jan 29 21:43:05 2009
-+# Sat Jan 31 00:17:40 2009
+-# Thu Jan 29 21:33:28 2009
++# Sat Jan 31 00:13:26 2009
  #
  BR2_HAVE_DOT_CONFIG=y
  BR2_VERSION="2009.02-svn"
@@ -52,7 +52,7 @@ Modified: trunk/buildroot/target/device/Atmel/atstk1005/atstk1005_defconfig
 -BR2_PTHREADS_OLD=y
 -# BR2_PTHREADS_NATIVE is not set
  # BR2_PTHREAD_DEBUG is not set
- # BR2_UCLIBC_PROGRAM_INVOCATION is not set
+ BR2_UCLIBC_PROGRAM_INVOCATION=y
  # BR2_UCLIBC_INSTALL_TEST_SUITE is not set
 @@ -238,8 +233,6 @@
  BR2_TOOLCHAIN_SYSROOT=y
@@ -92,7 +92,7 @@ Modified: trunk/buildroot/target/device/Atmel/atstk1005/atstk1005_defconfig
  BR2_CROSS_TOOLCHAIN_TARGET_UTILS=y
  
  #
-@@ -868,9 +869,6 @@
+@@ -967,9 +968,6 @@
  BR2_KERNEL_ARCH_PATCH_ENABLED=y
  # BR2_ARCH_AVR32_2_6_28_2 is not set
  BR2_ARCH_AVR32_2_6_27_6=y
