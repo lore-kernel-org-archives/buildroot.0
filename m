@@ -1,41 +1,26 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 31 Jan 2009 13:31:31 +0100
-Subject: [Buildroot] dbus no longer builds
-In-Reply-To: <1233395038.4147.110.camel@elrond.atmel.com> (Ulf Samuelsson's
-	message of "Sat\, 31 Jan 2009 10\:43\:58 +0100")
-References: <1233395038.4147.110.camel@elrond.atmel.com>
-Message-ID: <87tz7flkrg.fsf@macbook.be.48ers.dk>
+Date: Sat, 31 Jan 2009 13:42:22 +0100
+Subject: [Buildroot] Error when compiling grub
+In-Reply-To: <8394274C-0F54-4970-ABC4-20DF8C4D01DB@laptouchinc.com> (Daniel
+	Jabbour's message of "Fri\, 30 Jan 2009 16\:28\:39 -0500")
+References: <8394274C-0F54-4970-ABC4-20DF8C4D01DB@laptouchinc.com>
+Message-ID: <87myd7lk9d.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
+>>>>> "Daniel" == Daniel Jabbour <daniel@laptouchinc.com> writes:
 
-Hi,
+ Daniel> Hi,
 
- Ulf> With your fix, dbus no longer builds for
- Ulf> * at91rm9200df
- Ulf> * at91sam9260dfc
- Ulf> * at91sam9g20dfc
+ Daniel> When I try to use buildroot (latest SVN copy) to compile
+ Daniel> grub, make fails. It seems to be getting stuck on some
+ Daniel> patch. "make" output below, anyone have any ideas what's
+ Daniel> going on or how I can fix this?  Thanks,
 
- Ulf> Please fix your patch so that it works.
-
- Ulf> checking for ISO C99 varargs macros in C... yes
- Ulf> checking for GNUC varargs macros... yes
- Ulf> checking for struct cmsgcred... no
- Ulf> checking for getpeerucred... no
- Ulf> checking for getpeereid... no
- Ulf> checking abstract socket namespace... (cached) yes
- Ulf> checking for XML_ParserCreate_MM in -lexpat... no
- Ulf> checking for libxml-2.0 >= 2.6.0... configure: error: Explicitly
- Ulf> requested expat but expat not found
- Ulf> make: ***
- Ulf> [/home/ulf/projects/Buildroot/20090129/at91rm9200df/build_arm/dbus-1.1.1/.configured] Fel 1
-
-Strange, it builds just fine here (i686). Are you saying that expat
-doesn't build before dbus?
+Fixed in r25178 in svn.
 
 -- 
 Bye, Peter Korsgaard
