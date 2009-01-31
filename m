@@ -1,8 +1,8 @@
 From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Sat, 31 Jan 2009 20:41:00 +0000 (UTC)
+Date: Sat, 31 Jan 2009 20:41:37 +0000 (UTC)
 Subject: [Buildroot] svn commit:
 	trunk/buildroot/target/device/Atmel/at91sam9260dfc
-Message-ID: <20090131204100.621147621A@busybox.osuosl.org>
+Message-ID: <20090131204137.7A2A57621A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,25 +10,25 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: ulf
-Date: 2009-01-31 20:41:00 +0000 (Sat, 31 Jan 2009)
-New Revision: 25187
+Date: 2009-01-31 20:41:36 +0000 (Sat, 31 Jan 2009)
+New Revision: 25188
 
 Log:
-defconfig for arm toolchain
+defconfig using binary toolchain
 
 Added:
-   trunk/buildroot/target/device/Atmel/at91sam9260dfc/arm_toolchain_defconfig
+   trunk/buildroot/target/device/Atmel/at91sam9260dfc/at91sam9260dfc_ext_defconfig
 
 
 Changeset:
-Added: trunk/buildroot/target/device/Atmel/at91sam9260dfc/arm_toolchain_defconfig
+Added: trunk/buildroot/target/device/Atmel/at91sam9260dfc/at91sam9260dfc_ext_defconfig
 ===================================================================
---- trunk/buildroot/target/device/Atmel/at91sam9260dfc/arm_toolchain_defconfig	                        (rev 0)
-+++ trunk/buildroot/target/device/Atmel/at91sam9260dfc/arm_toolchain_defconfig	2009-01-31 20:41:00 UTC (rev 25187)
-@@ -0,0 +1,761 @@
+--- trunk/buildroot/target/device/Atmel/at91sam9260dfc/at91sam9260dfc_ext_defconfig	                        (rev 0)
++++ trunk/buildroot/target/device/Atmel/at91sam9260dfc/at91sam9260dfc_ext_defconfig	2009-01-31 20:41:36 UTC (rev 25188)
+@@ -0,0 +1,981 @@
 +#
 +# Automatically generated make config: don't edit
-+# Sat Jan 31 15:37:54 2009
++# Sat Jan 31 16:04:52 2009
 +#
 +BR2_HAVE_DOT_CONFIG=y
 +BR2_VERSION="2009.02-svn"
@@ -79,8 +79,8 @@ Added: trunk/buildroot/target/device/Atmel/at91sam9260dfc/arm_toolchain_defconfi
 +#
 +# Project Options
 +#
-+BR2_PROJECT="arm_toolchain"
-+BR2_HOSTNAME="arm-toolchain"
++BR2_PROJECT="at91sam9260dfc_ext"
++BR2_HOSTNAME="at91sam9260dfc"
 +BR2_BANNER="Welcome to the Erik's uClibc development environment running on the AT91SAM9260EK"
 +
 +#
@@ -146,8 +146,27 @@ Added: trunk/buildroot/target/device/Atmel/at91sam9260dfc/arm_toolchain_defconfi
 +#
 +BR2_AT91_LINUXPATCH_SITE="http://maxim.org.za/AT91RM9200/2.6"
 +BR2_TARGET_ATMEL_COPYTO="/tftpboot"
-+# BR2_TARGET_AT91BOOTSTRAP is not set
++BR2_TARGET_AT91BOOTSTRAP=y
++BR2_TARGET_AT91BOOTSTRAP_BOARD="at91sam9260ek"
++# BR2_TARGET_AT91BOOT_DATAFLASH is not set
++BR2_TARGET_AT91BOOT_DATAFLASHCARD=y
++# BR2_TARGET_AT91BOOT_NANDFLASH is not set
++# BR2_TARGET_AT91BOOT_FLASH is not set
++# BR2_TARGET_AT91BOOT_SDCARD is not set
++# BR2_TARGET_AT91BOOT_EEPROM is not set
++BR2_TARGET_AT91BOOTSTRAP_MEMORY="dataflashcard"
++BR2_AT91BOOTSTRAP_IMG_SIZE="0x32000"
++BR2_AT91BOOTSTRAP_JUMP_TO_DEFAULT=y
++# BR2_AT91BOOTSTRAP_JUMP_TO_HIGH_SDRAM is not set
++# BR2_AT91BOOTSTRAP_JUMP_TO_START_OF_SDRAM is not set
++BR2_AT91BOOTSTRAP_JUMP_ADDR="0x23F00000"
++
++#
++# It will be copied to $(BR2_AT91BOOTSTRAP_JUMP_ADDR)
++#
 +# BR2_TARGET_KWIKBYTE is not set
++BR2_KERNEL_ARCH_PATCH_VERSION="2.6.28"
++BR2_KERNEL_ARCH_PATCH_DIR="target/device/Atmel/arch-arm/kernel-patches-$(BR2_KERNEL_ARCH_PATCH_VERSION)"
 +
 +#
 +# Generic System Support
@@ -184,11 +203,11 @@ Added: trunk/buildroot/target/device/Atmel/at91sam9260dfc/arm_toolchain_defconfi
 +#
 +BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot"
 +BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
-+BR2_STAGING_DIR="/usr/local/$(ARCH)/gcc-$(BR2_GCC_VERSION)-uclibc"
++BR2_STAGING_DIR="$(BUILD_DIR)/staging_dir"
 +# BR2_FPU_SUFFIX is not set
 +BR2_TOPDIR_PREFIX=""
 +BR2_TOPDIR_SUFFIX=""
-+BR2_ROOTFS_PREFIX="rootfs"
++BR2_ROOTFS_PREFIX="at91sam9260dfc-rootfs"
 +BR2_ROOTFS_SUFFIX="$(DATE)"
 +BR2_GNU_BUILD_SUFFIX="pc-linux-gnu"
 +BR2_GNU_TARGET_SUFFIX="linux-uclibc"
@@ -196,7 +215,7 @@ Added: trunk/buildroot/target/device/Atmel/at91sam9260dfc/arm_toolchain_defconfi
 +# BR2_PREFER_IMA is not set
 +# BR2_DEPRECATED is not set
 +BR2_RECENT=y
-+BR2_CONFIG_CACHE=y
++# BR2_CONFIG_CACHE is not set
 +# BR2_ENABLE_DEBUG is not set
 +BR2_STRIP_strip=y
 +# BR2_STRIP_sstrip is not set
@@ -216,10 +235,12 @@ Added: trunk/buildroot/target/device/Atmel/at91sam9260dfc/arm_toolchain_defconfi
 +#
 +# Toolchain
 +#
-+BR2_TOOLCHAIN_BUILDROOT=y
-+# BR2_TOOLCHAIN_EXTERNAL is not set
++# BR2_TOOLCHAIN_BUILDROOT is not set
++BR2_TOOLCHAIN_EXTERNAL=y
 +# BR2_TOOLCHAIN_EXTERNAL_SOURCE is not set
-+BR2_TOOLCHAIN_SOURCE=y
++# BR2_TOOLCHAIN_SOURCE is not set
++BR2_TOOLCHAIN_EXTERNAL_PATH="$(GCCROOT)"
++BR2_TOOLCHAIN_EXTERNAL_PREFIX="$(ARCH)-linux"
 +BR2_EXT_GCC_VERSION_4_1_2=y
 +BR2_EXT_GCC_VERSION_4_2_1=y
 +BR2_EXT_GCC_VERSION_4_2_2=y
@@ -229,90 +250,25 @@ Added: trunk/buildroot/target/device/Atmel/at91sam9260dfc/arm_toolchain_defconfi
 +BR2_EXT_UCLIBC_VERSION_0_9_28_3=y
 +BR2_EXT_UCLIBC_VERSION_0_9_29=y
 +BR2_EXT_UCLIBC_VERSION_0_9_30=y
-+
-+#
-+# Kernel Header Options
-+#
-+# BR2_KERNEL_HEADERS_2_4_31 is not set
-+# BR2_KERNEL_HEADERS_2_6_20_4 is not set
-+# BR2_KERNEL_HEADERS_2_6_20 is not set
-+# BR2_KERNEL_HEADERS_2_6_21_5 is not set
-+# BR2_KERNEL_HEADERS_2_6_21 is not set
-+# BR2_KERNEL_HEADERS_2_6_22_1 is not set
-+# BR2_KERNEL_HEADERS_2_6_22_10 is not set
-+# BR2_KERNEL_HEADERS_2_6_22 is not set
-+# BR2_KERNEL_HEADERS_2_6_23 is not set
-+# BR2_KERNEL_HEADERS_2_6_24 is not set
-+# BR2_KERNEL_HEADERS_2_6_25 is not set
-+# BR2_KERNEL_HEADERS_2_6_26 is not set
-+# BR2_KERNEL_HEADERS_2_6_27 is not set
-+BR2_KERNEL_HEADERS_2_6_28=y
-+# BR2_KERNEL_HEADERS_SNAP is not set
-+# BR2_KERNEL_HEADERS_PATCH_DIR is not set
-+BR2_DEFAULT_KERNEL_HEADERS="2.6.28.2"
-+
-+#
-+# uClibc Options
-+#
-+# BR2_UCLIBC_VERSION_0_9_28_3 is not set
-+# BR2_UCLIBC_VERSION_0_9_29 is not set
-+BR2_UCLIBC_VERSION_0_9_30=y
-+# BR2_UCLIBC_VERSION_SNAPSHOT is not set
-+BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.30.config"
-+# BR2_PTHREAD_DEBUG is not set
-+# BR2_UCLIBC_PROGRAM_INVOCATION is not set
-+# BR2_UCLIBC_INSTALL_TEST_SUITE is not set
-+
-+#
-+# Binutils Options
-+#
-+# BR2_BINUTILS_VERSION_2_17 is not set
-+# BR2_BINUTILS_VERSION_2_17_50_0_17 is not set
-+# BR2_BINUTILS_VERSION_2_18 is not set
-+# BR2_BINUTILS_VERSION_2_18_50_0_1 is not set
-+# BR2_BINUTILS_VERSION_2_18_50_0_3 is not set
-+# BR2_BINUTILS_VERSION_2_18_50_0_6 is not set
-+# BR2_BINUTILS_VERSION_2_18_50_0_8 is not set
-+# BR2_BINUTILS_VERSION_2_18_50_0_9 is not set
-+BR2_BINUTILS_VERSION_2_19=y
-+BR2_BINUTILS_VERSION="2.19"
-+BR2_EXTRA_BINUTILS_CONFIG_OPTIONS=""
-+
-+#
-+# GCC Options
-+#
-+# BR2_GCC_VERSION_3_4_6 is not set
-+# BR2_GCC_VERSION_4_0_4 is not set
-+# BR2_GCC_VERSION_4_1_2 is not set
-+# BR2_GCC_VERSION_4_2_1 is not set
-+# BR2_GCC_VERSION_4_2_2 is not set
-+# BR2_GCC_VERSION_4_2_3 is not set
-+# BR2_GCC_VERSION_4_2_4 is not set
-+# BR2_GCC_VERSION_4_3_1 is not set
-+BR2_GCC_VERSION_4_3_2=y
-+BR2_GCC_SUPPORTS_SYSROOT=y
-+BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE=y
-+BR2_GCC_VERSION="4.3.2"
-+BR2_TOOLCHAIN_SYSROOT=y
-+# BR2_GCC_USE_SJLJ_EXCEPTIONS is not set
-+BR2_EXTRA_GCC_CONFIG_OPTIONS=""
-+# BR2_GCC_CROSS_FORTRAN is not set
-+# BR2_INSTALL_LIBGCJ is not set
-+# BR2_INSTALL_OBJC is not set
-+# BR2_INSTALL_FORTRAN is not set
-+BR2_GCC_SHARED_LIBGCC=y
-+
-+#
-+# Ccache Options
-+#
-+# BR2_CCACHE is not set
++BR2_TOOLCHAIN_EXTERNAL_LIB_C="libc.so.0"
++BR2_TOOLCHAIN_EXTERNAL_LIBS="ld-uClibc.so.0 libcrypt.so.0 libdl.so.0 libgcc_s.so libm.so.0 libnsl.so.0 libpthread.so.0 libresolv.so.0 librt.so.0 libutil.so.0"
++BR2_TOOLCHAIN_EXTERNAL_STRIP=y
 +
 +#
 +# Gdb Options
 +#
 +# BR2_PACKAGE_GDB is not set
-+# BR2_PACKAGE_GDB_SERVER is not set
++BR2_PACKAGE_GDB_SERVER=y
 +# BR2_PACKAGE_GDB_HOST is not set
++# BR2_GDB_VERSION_6_2_1 is not set
++# BR2_GDB_VERSION_6_3 is not set
++# BR2_GDB_VERSION_6_4 is not set
++# BR2_GDB_VERSION_6_5 is not set
++# BR2_GDB_VERSION_6_6 is not set
++# BR2_GDB_VERSION_6_7_1 is not set
++BR2_GDB_VERSION_6_8=y
++# BR2_GDB_VERSION_SNAPSHOT is not set
++BR2_GDB_VERSION="6.8"
 +
 +#
 +# Common Toolchain Options
@@ -321,7 +277,6 @@ Added: trunk/buildroot/target/device/Atmel/at91sam9260dfc/arm_toolchain_defconfi
 +BR2_INET_IPV6=y
 +BR2_INET_RPC=y
 +BR2_ENABLE_LOCALE=y
-+# BR2_ENABLE_LOCALE_PREGENERATED is not set
 +BR2_USE_WCHAR=y
 +# BR2_SOFT_FLOAT is not set
 +# BR2_PTHREADS_NONE is not set
@@ -331,35 +286,33 @@ Added: trunk/buildroot/target/device/Atmel/at91sam9260dfc/arm_toolchain_defconfi
 +BR2_GCC_CROSS_CXX=y
 +BR2_INSTALL_LIBSTDCPP=y
 +BR2_TARGET_OPTIMIZATION="-Os -pipe"
-+# BR2_ELF2FLT is not set
-+# BR2_MKLIBS is not set
-+# BR2_PACKAGE_SSTRIP_TARGET is not set
-+# BR2_PACKAGE_SSTRIP_HOST is not set
-+# BR2_ENABLE_MULTILIB is not set
-+# BR2_VFP_FLOAT is not set
-+BR2_CROSS_TOOLCHAIN_TARGET_UTILS=y
 +
 +#
 +# Package Selection for the target
 +#
-+# BR2_PACKAGE_BUSYBOX is not set
++BR2_PACKAGE_BUSYBOX=y
++# BR2_BUSYBOX_VERSION_1_2_2_1 is not set
++# BR2_BUSYBOX_VERSION_1_6_1 is not set
++# BR2_BUSYBOX_VERSION_1_7_X is not set
++# BR2_BUSYBOX_VERSION_1_8_X is not set
++# BR2_BUSYBOX_VERSION_1_9_X is not set
++# BR2_BUSYBOX_VERSION_1_10_X is not set
++# BR2_BUSYBOX_VERSION_1_11_X is not set
++# BR2_BUSYBOX_VERSION_1_12_X is not set
++BR2_BUSYBOX_VERSION_1_13_X=y
++# BR2_PACKAGE_BUSYBOX_SNAPSHOT is not set
++BR2_BUSYBOX_VERSION="1.13.2"
++BR2_PACKAGE_BUSYBOX_FULLINSTALL=y
++BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.13.x.config"
++BR2_PACKAGE_BUSYBOX_HIDE_OTHERS=y
++# BR2_PACKAGE_BUSYBOX_SKELETON is not set
 +
 +#
 +# The minimum needed to build a uClibc development system
 +#
-+# BR2_PACKAGE_BASH is not set
-+# BR2_PACKAGE_BZIP2 is not set
-+# BR2_PACKAGE_COREUTILS is not set
-+# BR2_PACKAGE_DIFFUTILS is not set
-+# BR2_PACKAGE_FINDUTILS is not set
 +# BR2_PACKAGE_FLEX is not set
-+# BR2_PACKAGE_GAWK is not set
 +# BR2_PACKAGE_GCC_TARGET is not set
-+# BR2_PACKAGE_GREP is not set
 +# BR2_PACKAGE_MAKE is not set
-+# BR2_PACKAGE_PATCH is not set
-+# BR2_PACKAGE_SED is not set
-+# BR2_PACKAGE_TAR is not set
 +
 +#
 +# Other development stuff
@@ -372,79 +325,63 @@ Added: trunk/buildroot/target/device/Atmel/at91sam9260dfc/arm_toolchain_defconfi
 +# BR2_PACKAGE_DISTCC is not set
 +# BR2_PACKAGE_DMALLOC is not set
 +# BR2_PACKAGE_FAKEROOT is not set
-+# BR2_PACKAGE_GETTEXT is not set
-+# BR2_PACKAGE_LIBINTL is not set
++BR2_HOST_FAKEROOT=y
++BR2_PACKAGE_GETTEXT=y
++# BR2_PACKAGE_GETTEXT_STATIC is not set
++BR2_PACKAGE_LIBINTL=y
 +# BR2_PACKAGE_LIBGMP is not set
 +# BR2_PACKAGE_GPERF is not set
 +# BR2_PACKAGE_LIBMPFR is not set
 +# BR2_PACKAGE_LIBTOOL is not set
 +# BR2_PACKAGE_M4 is not set
 +# BR2_PACKAGE_OPROFILE is not set
-+# BR2_PACKAGE_PKGCONFIG is not set
-+# BR2_PACKAGE_READLINE is not set
++BR2_PACKAGE_PKGCONFIG=y
++BR2_PACKAGE_READLINE=y
 +# BR2_PACKAGE_PCRE is not set
 +
 +#
 +# Other stuff
 +#
-+# BR2_PACKAGE_AT is not set
++BR2_PACKAGE_AT=y
 +# BR2_PACKAGE_BEECRYPT is not set
 +# BR2_PACKAGE_BERKELEYDB is not set
 +# BR2_PACKAGE_BSDIFF is not set
-+# BR2_PACKAGE_BOOTUTILS is not set
 +# BR2_PACKAGE_CUPS is not set
 +# BR2_PACKAGE_CUSTOMIZE is not set
-+# BR2_PACKAGE_DASH is not set
 +# BR2_PACKAGE_FILE is not set
 +# BR2_PACKAGE_GAMIN is not set
 +# BR2_PACKAGE_ICU is not set
 +# BR2_PACKAGE_KEXEC is not set
-+# BR2_PACKAGE_LESS is not set
 +# BR2_PACKAGE_LIBCONFIG is not set
 +# BR2_PACKAGE_LIBCONFUSE is not set
-+# BR2_PACKAGE_LIBDAEMON is not set
++BR2_PACKAGE_LIBDAEMON=y
 +# BR2_PACKAGE_LIBELF is not set
-+# BR2_PACKAGE_LIBEVENT is not set
-+# BR2_PACKAGE_LIBGCRYPT is not set
-+# BR2_PACKAGE_LIBGPG_ERROR is not set
-+# BR2_PACKAGE_LIBICONV is not set
++BR2_PACKAGE_LIBEVENT=y
++BR2_PACKAGE_LIBGCRYPT=y
++BR2_PACKAGE_LIBGPG_ERROR=y
++BR2_PACKAGE_LIBICONV=y
 +# BR2_PACKAGE_LIBIDN is not set
-+# BR2_PACKAGE_LIBLOCKFILE is not set
++BR2_PACKAGE_LIBLOCKFILE=y
 +# BR2_PACKAGE_LIBOIL is not set
 +# BR2_PACKAGE_LIBSYSFS is not set
-+# BR2_PACKAGE_LOCKFILE_PROGS is not set
++BR2_PACKAGE_LOCKFILE_PROGS=y
 +# BR2_PACKAGE_LOGROTATE is not set
 +# BR2_PACKAGE_LSOF is not set
 +# BR2_PACKAGE_LTP-TESTSUITE is not set
 +# BR2_PACKAGE_LTRACE is not set
 +# BR2_PACKAGE_MEMSTAT is not set
-+# BR2_PACKAGE_MODULE_INIT_TOOLS is not set
 +# BR2_PACKAGE_NG_SPICE_REWORK is not set
 +# BR2_PACKAGE_POPT is not set
-+# BR2_PACKAGE_PROCPS is not set
-+# BR2_PACKAGE_PSMISC is not set
 +# BR2_PACKAGE_SCREEN is not set
 +# BR2_PACKAGE_STARTUP_NOTIFICATION is not set
 +# BR2_PACKAGE_STRACE is not set
 +# BR2_PACKAGE_SUDO is not set
-+# BR2_PACKAGE_SYSKLOGD is not set
-+# BR2_PACKAGE_SYSVINIT is not set
-+# BR2_PACKAGE_UTIL-LINUX is not set
-+# BR2_PACKAGE_WHICH is not set
 +
 +#
 +# Database
 +#
 +# BR2_PACKAGE_MYSQL_CLIENT is not set
 +# BR2_PACKAGE_SQLITE is not set
-+
-+#
-+# Text editors
-+#
-+# BR2_PACKAGE_ED is not set
-+# BR2_PACKAGE_NANO is not set
-+# BR2_PACKAGE_UEMACS is not set
-+# BR2_PACKAGE_VIM is not set
 +
 +#
 +# Networking
@@ -454,62 +391,84 @@ Added: trunk/buildroot/target/device/Atmel/at91sam9260dfc/arm_toolchain_defconfi
 +# Networking applications
 +#
 +# BR2_PACKAGE_ARGUS is not set
-+# BR2_PACKAGE_AVAHI is not set
-+# BR2_PACKAGE_AXEL is not set
-+# BR2_PACKAGE_BOA is not set
++BR2_PACKAGE_AVAHI=y
++BR2_PACKAGE_AVAHI_AUTOIPD=y
++# BR2_PACKAGE_AVAHI_DAEMON is not set
++BR2_PACKAGE_AXEL=y
 +# BR2_PACKAGE_BIND is not set
 +# BR2_PACKAGE_BRIDGE is not set
-+# BR2_PACKAGE_ISC_DHCP is not set
 +# BR2_PACKAGE_DNSMASQ is not set
-+# BR2_PACKAGE_DROPBEAR is not set
-+# BR2_PACKAGE_ETHTOOL is not set
-+# BR2_PACKAGE_HASERL is not set
-+# BR2_PACKAGE_IFPLUGD is not set
++BR2_PACKAGE_DROPBEAR=y
++BR2_PACKAGE_ETHTOOL=y
++BR2_PACKAGE_HASERL=y
++# BR2_PACKAGE_HASERL_VERSION_0_8_X is not set
++BR2_PACKAGE_HASERL_VERSION_0_9_X=y
++BR2_PACKAGE_HASERL_VERSION="0.9.25"
++BR2_PACKAGE_IFPLUGD=y
 +# BR2_PACKAGE_IPERF is not set
 +# BR2_PACKAGE_IPROUTE2 is not set
 +
 +#
 +# ipsec-tools	- disabled (requires openssl, flex and the flex library (libfl.a) )
 +#
-+# BR2_PACKAGE_IPTABLES is not set
++BR2_PACKAGE_IPTABLES=y
 +# BR2_PACKAGE_KISMET is not set
-+# BR2_PACKAGE_L2TP is not set
-+# BR2_PACKAGE_LIBCGI is not set
++BR2_PACKAGE_L2TP=y
++BR2_PACKAGE_LIBCGI=y
 +# BR2_PACKAGE_LIBCGICC is not set
 +# BR2_PACKAGE_LIBCURL is not set
-+# BR2_PACKAGE_LIBDNET is not set
++BR2_PACKAGE_LIBDNET=y
++# BR2_PACKAGE_LIBDNET_PYTHON is not set
 +# BR2_PACKAGE_LIBEXOSIP2 is not set
 +# BR2_PACKAGE_LIBOSIP2 is not set
-+# BR2_PACKAGE_LIBPCAP is not set
-+# BR2_PACKAGE_LIBUPNP is not set
-+# BR2_PACKAGE_LIGHTTPD is not set
++BR2_PACKAGE_LIBPCAP=y
++BR2_PACKAGE_LIBUPNP=y
 +# BR2_PACKAGE_LINKS is not set
-+# BR2_PACKAGE_LRZSZ is not set
++BR2_PACKAGE_LRZSZ=y
 +# BR2_PACKAGE_MDNSRESPONDER is not set
-+# BR2_PACKAGE_MICROCOM is not set
++BR2_PACKAGE_MICROCOM=y
 +# BR2_PACKAGE_MIIDIAG is not set
 +# BR2_PACKAGE_MROUTED is not set
 +# BR2_PACKAGE_MUTT is not set
 +# BR2_PACKAGE_NBD is not set
-+# BR2_PACKAGE_NCFTP is not set
++BR2_PACKAGE_NCFTP=y
++
++#
++# ncFTP tools selection
++#
++BR2_PACKAGE_NCFTP_GET=y
++BR2_PACKAGE_NCFTP_PUT=y
++BR2_PACKAGE_NCFTP_LS=y
++BR2_PACKAGE_NCFTP_BATCH=y
++# BR2_PACKAGE_NCFTP_SPOOLER is not set
++# BR2_PACKAGE_NCFTP_BOOKMARKS is not set
 +# BR2_PACKAGE_NEON is not set
-+# BR2_PACKAGE_NETCAT is not set
 +# BR2_PACKAGE_NETKITBASE is not set
 +# BR2_PACKAGE_NETKITTELNET is not set
-+# BR2_PACKAGE_NETPLUG is not set
-+# BR2_PACKAGE_NETSNMP is not set
-+# BR2_PACKAGE_NFS_UTILS is not set
-+# BR2_PACKAGE_NTP is not set
++BR2_PACKAGE_NETPLUG=y
++BR2_PACKAGE_NETSNMP=y
++BR2_PACKAGE_NFS_UTILS=y
++
++#
++# NFS utilities selection
++#
++BR2_PACKAGE_NFS_UTILS_RPCDEBUG=y
++BR2_PACKAGE_NFS_UTILS_RPC_LOCKD=y
++BR2_PACKAGE_NFS_UTILS_RPC_RQUOTAD=y
++BR2_PACKAGE_NTP=y
++# BR2_PACKAGE_NTP_SNTP is not set
 +# BR2_PACKAGE_OLSR is not set
 +# BR2_PACKAGE_OPENNTPD is not set
-+# BR2_PACKAGE_OPENSSH is not set
-+# BR2_PACKAGE_OPENSSL is not set
-+# BR2_PACKAGE_OPENVPN is not set
++BR2_PACKAGE_OPENSSH=y
++BR2_PACKAGE_OPENSSL=y
++BR2_PACKAGE_OPENSSL_BIN=y
++# BR2_PACKAGE_OPENSSL_ENGINES is not set
++BR2_PACKAGE_OPENVPN=y
 +# BR2_PACKAGE_OPENSWAN is not set
-+# BR2_PACKAGE_PORTMAP is not set
-+# BR2_PACKAGE_PPPD is not set
++BR2_PACKAGE_PORTMAP=y
++BR2_PACKAGE_PPPD=y
 +# BR2_PACKAGE_RADVD is not set
-+# BR2_PACKAGE_RP_PPPOE is not set
++BR2_PACKAGE_RP_PPPOE=y
 +# BR2_PACKAGE_PPTP_LINUX is not set
 +# BR2_PACKAGE_PROFTPD is not set
 +
@@ -524,65 +483,142 @@ Added: trunk/buildroot/target/device/Atmel/at91sam9260dfc/arm_toolchain_defconfi
 +# BR2_PACKAGE_QUAGGA_OSPF6D is not set
 +# BR2_PACKAGE_QUAGGA_WATCHQUAGGA is not set
 +# BR2_PACKAGE_QUAGGA_ISISD is not set
-+# BR2_PACKAGE_RSYNC is not set
-+# BR2_PACKAGE_SAMBA is not set
-+# BR2_PACKAGE_SOCAT is not set
-+# BR2_PACKAGE_STUNNEL is not set
++BR2_PACKAGE_RSYNC=y
++BR2_PACKAGE_SAMBA=y
++
++#
++# Samba tools selection
++#
++BR2_PACKAGE_SAMBA_CIFS=y
++BR2_PACKAGE_SAMBA_EVENTLOGADM=y
++
++#
++# findsmb       - disabled (requires nmblookup, smbclient and perl)
++#
++BR2_PACKAGE_SAMBA_NET=y
++BR2_PACKAGE_SAMBA_NMBD=y
++BR2_PACKAGE_SAMBA_NMBLOOKUP=y
++BR2_PACKAGE_SAMBA_NTLM_AUTH=y
++BR2_PACKAGE_SAMBA_PDBEDIT=y
++BR2_PACKAGE_SAMBA_PROFILES=y
++BR2_PACKAGE_SAMBA_RPCCLIENT=y
++BR2_PACKAGE_SAMBA_SMBCACLS=y
++BR2_PACKAGE_SAMBA_SMBCLIENT=y
++BR2_PACKAGE_SAMBA_SMBCONTROL=y
++BR2_PACKAGE_SAMBA_SMBCQUOTAS=y
++BR2_PACKAGE_SAMBA_SMBGET=y
++BR2_PACKAGE_SAMBA_SMBPASSWD=y
++BR2_PACKAGE_SAMBA_SMBSPOOL=y
++BR2_PACKAGE_SAMBA_SMBSTATUS=y
++BR2_PACKAGE_SAMBA_SMBTREE=y
++BR2_PACKAGE_SAMBA_SWAT=y
++BR2_PACKAGE_SAMBA_SMBTAR=y
++BR2_PACKAGE_SAMBA_TDB=y
++BR2_PACKAGE_SAMBA_TESTPARM=y
++BR2_PACKAGE_SAMBA_WINBINDD=y
++BR2_PACKAGE_SAMBA_WBINFO=y
++BR2_PACKAGE_SOCAT=y
++BR2_PACKAGE_SOCAT_PREDEF_CRDLY_SHIFT="9"
++BR2_PACKAGE_SOCAT_PREDEF_TABDLY_SHIFT="11"
++BR2_PACKAGE_SOCAT_PREDEF_CSIZE_SHIFT="4"
++BR2_PACKAGE_STUNNEL=y
 +# BR2_PACKAGE_TCPDUMP is not set
 +# BR2_PACKAGE_DHCPDUMP is not set
-+# BR2_PACKAGE_TFTPD is not set
-+# BR2_PACKAGE_THTTPD is not set
-+# BR2_PACKAGE_TINYHTTPD is not set
++BR2_PACKAGE_TFTPD=y
 +# BR2_PACKAGE_TN5250 is not set
 +# BR2_PACKAGE_TTCP is not set
 +# BR2_PACKAGE_UDPCAST is not set
-+# BR2_PACKAGE_VPNC is not set
++BR2_PACKAGE_VPNC=y
 +# BR2_PACKAGE_VSFTPD is not set
-+# BR2_PACKAGE_VTUN is not set
++BR2_PACKAGE_VTUN=y
 +# BR2_PACKAGE_WEBIF is not set
-+# BR2_PACKAGE_WGET is not set
 +# BR2_PACKAGE_WIRELESS_TOOLS is not set
 +
 +#
 +# Hardware handling / blockdevices and filesystem maintenance
 +#
-+
-+#
-+# dbus not available (need expat or libxml2)
-+#
-+# BR2_PACKAGE_DEVMEM2 is not set
-+# BR2_PACKAGE_DM is not set
++BR2_PACKAGE_DBUS=y
++BR2_DBUS_EXPAT=y
++# BR2_DBUS_LIBXML2 is not set
++# BR2_PACKAGE_DBUS_GLIB is not set
++BR2_PACKAGE_DEVMEM2=y
++BR2_PACKAGE_DM=y
 +# BR2_PACKAGE_DMRAID is not set
-+# BR2_PACKAGE_E2FSPROGS is not set
++BR2_PACKAGE_E2FSPROGS=y
++BR2_PACKAGE_E2FSPROGS_BADBLOCKS=y
++BR2_PACKAGE_E2FSPROGS_BLKID=y
++BR2_PACKAGE_E2FSPROGS_CHATTR=y
++BR2_PACKAGE_E2FSPROGS_DUMPE2FS=y
++BR2_PACKAGE_E2FSPROGS_E2FSCK=y
++BR2_PACKAGE_E2FSPROGS_E2LABEL=y
++BR2_PACKAGE_E2FSPROGS_FILEFRAG=y
++BR2_PACKAGE_E2FSPROGS_FINDFS=y
++BR2_PACKAGE_E2FSPROGS_FSCK=y
++BR2_PACKAGE_E2FSPROGS_LOGSAVE=y
++BR2_PACKAGE_E2FSPROGS_LSATTR=y
++BR2_PACKAGE_E2FSPROGS_MKE2FS=y
++BR2_PACKAGE_E2FSPROGS_MKLOSTFOUND=y
++BR2_PACKAGE_E2FSPROGS_TUNE2FS=y
++BR2_PACKAGE_E2FSPROGS_UUIDGEN=y
 +# BR2_PACKAGE_EEPROG is not set
 +# BR2_PACKAGE_FCONFIG is not set
 +# BR2_PACKAGE_FIS is not set
 +# BR2_PACKAGE_LIBFUSE is not set
 +# BR2_PACKAGE_GADGETFS_TEST is not set
 +# BR2_PACKAGE_HAL is not set
-+# BR2_PACKAGE_HDPARM is not set
-+# BR2_PACKAGE_HOTPLUG is not set
 +# BR2_PACKAGE_HWDATA is not set
 +# BR2_PACKAGE_I2C_TOOLS is not set
-+# BR2_PACKAGE_INPUT_TOOLS is not set
++BR2_PACKAGE_INPUT_TOOLS=y
++BR2_PACKAGE_INPUT_TOOLS_EVTEST=y
++BR2_PACKAGE_INPUT_TOOLS_INPUTATTACH=y
++BR2_PACKAGE_INPUT_TOOLS_JSCAL=y
++BR2_PACKAGE_INPUT_TOOLS_JSTEST=y
 +# BR2_PACKAGE_IOSTAT is not set
 +# BR2_PACKAGE_LIBAIO is not set
 +# BR2_PACKAGE_LIBRAW1394 is not set
-+# BR2_PACKAGE_LIBUSB is not set
++BR2_PACKAGE_LIBUSB=y
 +# BR2_PACKAGE_LM_SENSORS is not set
 +# BR2_PACKAGE_LVM2 is not set
 +# BR2_PACKAGE_MDADM is not set
 +# BR2_PACKAGE_MEMTESTER is not set
-+# BR2_PACKAGE_MKDOSFS is not set
-+# BR2_PACKAGE_MTD is not set
++BR2_PACKAGE_MKDOSFS=y
++BR2_PACKAGE_MTD=y
++# BR2_PACKAGE_MTD_UTILS is not set
++BR2_PACKAGE_MTD_20061007=y
++# BR2_PACKAGE_MTD_20050122 is not set
++# BR2_PACKAGE_MTD_UTILS_GIT is not set
++
++#
++# MTD tools selection
++#
++BR2_PACKAGE_MTD_DOCFDISK=y
++BR2_PACKAGE_MTD_DOC_LOADBIOS=y
++BR2_PACKAGE_MTD_FLASHCP=y
++BR2_PACKAGE_MTD_FLASH_ERASE=y
++BR2_PACKAGE_MTD_FLASH_ERASEALL=y
++BR2_PACKAGE_MTD_FLASH_INFO=y
++BR2_PACKAGE_MTD_FLASH_LOCK=y
++BR2_PACKAGE_MTD_FLASH_UNLOCK=y
++BR2_PACKAGE_MTD_FTL_CHECK=y
++BR2_PACKAGE_MTD_FTL_FORMAT=y
++BR2_PACKAGE_MTD_JFFS2DUMP=y
++BR2_PACKAGE_MTD_MKFSJFFS2=y
++BR2_PACKAGE_MTD_MKFSJFFS=y
++BR2_PACKAGE_MTD_MTD_DEBUG=y
++BR2_PACKAGE_MTD_NANDDUMP=y
++BR2_PACKAGE_MTD_NANDWRITE=y
++BR2_PACKAGE_MTD_NFTL_FORMAT=y
++BR2_PACKAGE_MTD_NFTLDUMP=y
++BR2_PACKAGE_MTD_SUMTOOL=y
 +# BR2_PACKAGE_NTFS-3G is not set
 +# BR2_PACKAGE_PCIUTILS is not set
-+# BR2_PACKAGE_SETSERIAL is not set
-+# BR2_PACKAGE_SFDISK is not set
++# BR2_PACKAGE_PCMCIA is not set
++BR2_PACKAGE_SETSERIAL=y
 +# BR2_PACKAGE_SMARTMONTOOLS is not set
-+# BR2_PACKAGE_UDEV is not set
-+# BR2_PACKAGE_USBMOUNT is not set
-+# BR2_PACKAGE_USBUTILS is not set
++BR2_PACKAGE_UDEV_VOLUME_ID=y
++BR2_PACKAGE_UDEV_SCSI_ID=y
++BR2_PACKAGE_USBMOUNT=y
++BR2_PACKAGE_USBUTILS=y
 +# BR2_PACKAGE_WIPE is not set
 +# BR2_PACKAGE_XFSPROGS is not set
 +
@@ -594,22 +630,24 @@ Added: trunk/buildroot/target/device/Atmel/at91sam9260dfc/arm_toolchain_defconfi
 +#
 +# asterisk	- disabled (required openssl and mpg123)
 +#
-+# BR2_PACKAGE_AUMIX is not set
-+# BR2_PACKAGE_GSTREAMER is not set
-+# BR2_PACKAGE_LIBID3TAG is not set
-+# BR2_PACKAGE_LIBMAD is not set
-+# BR2_PACKAGE_LIBMPD is not set
-+# BR2_PACKAGE_LIBOGG is not set
++BR2_PACKAGE_AUMIX=y
++BR2_PACKAGE_GSTREAMER=y
++# BR2_PACKAGE_GST_PLUGINS_BASE is not set
++# BR2_PACKAGE_GST_PLUGINS_GOOD is not set
++# BR2_PACKAGE_GST_PLUGINS_UGLY is not set
++BR2_PACKAGE_LIBID3TAG=y
++BR2_PACKAGE_LIBMAD=y
++# BR2_PACKAGE_LIBMAD_TARGET_HEADERS is not set
++BR2_PACKAGE_LIBMPD=y
++BR2_PACKAGE_LIBOGG=y
 +# BR2_PACKAGE_LIBSNDFILE is not set
 +# BR2_PACKAGE_LIBTHEORA is not set
-+
-+#
-+# libvorbis requires the package libogg to build
-+#
-+# BR2_PACKAGE_MADPLAY is not set
++# BR2_PACKAGE_LIBVORBIS is not set
++BR2_PACKAGE_MADPLAY=y
 +# BR2_PACKAGE_MPG123 is not set
-+# BR2_PACKAGE_MPLAYER is not set
-+# BR2_PACKAGE_SPEEX is not set
++BR2_PACKAGE_MPLAYER=y
++BR2_PACKAGE_SPEEX=y
++BR2_PACKAGE_SPEEX_ARM_GENERIC=y
 +# BR2_PACKAGE_FESTIVAL is not set
 +# BR2_PACKAGE_VLC is not set
 +
@@ -620,7 +658,11 @@ Added: trunk/buildroot/target/device/Atmel/at91sam9260dfc/arm_toolchain_defconfi
 +#
 +# text rendering libraries
 +#
-+# BR2_PACKAGE_NCURSES is not set
++BR2_PACKAGE_NCURSES=y
++# BR2_PACKAGE_NCURSES_TARGET_PANEL is not set
++# BR2_PACKAGE_NCURSES_TARGET_FORM is not set
++# BR2_PACKAGE_NCURSES_TARGET_MENU is not set
++# BR2_PACKAGE_NCURSES_TARGET_HEADERS is not set
 +# BR2_PACKAGE_NEWT is not set
 +# BR2_PACKAGE_SLANG is not set
 +
@@ -670,7 +712,7 @@ Added: trunk/buildroot/target/device/Atmel/at91sam9260dfc/arm_toolchain_defconfi
 +# BR2_PACKAGE_LIBDRM is not set
 +# BR2_PACKAGE_LIBERATION is not set
 +# BR2_PACKAGE_LIBGLIB12 is not set
-+# BR2_PACKAGE_LIBGLIB2 is not set
++BR2_PACKAGE_LIBGLIB2=y
 +# BR2_PACKAGE_OPENMOTIF is not set
 +# BR2_PACKAGE_FONTCONFIG is not set
 +# BR2_PACKAGE_FREETYPE is not set
@@ -707,25 +749,42 @@ Added: trunk/buildroot/target/device/Atmel/at91sam9260dfc/arm_toolchain_defconfi
 +#
 +# Compressors / decompressors
 +#
-+# BR2_PACKAGE_GZIP is not set
-+# BR2_PACKAGE_LZO is not set
++BR2_PACKAGE_LZO=y
 +# BR2_PACKAGE_LZMA_TARGET is not set
 +# BR2_PACKAGE_LZMA_HOST is not set
-+# BR2_PACKAGE_ZLIB is not set
++BR2_PACKAGE_ZLIB=y
++# BR2_PACKAGE_ZLIB_TARGET_HEADERS is not set
 +
 +#
 +# Package managers
 +#
 +# BR2_PACKAGE_IPKG is not set
 +# BR2_PACKAGE_PORTAGE is not set
-+# BR2_PACKAGE_RPM is not set
 +
 +#
 +# Interpreter languages / Scripting
 +#
 +# BR2_PACKAGE_LUA is not set
 +# BR2_PACKAGE_MICROPERL is not set
-+# BR2_PACKAGE_PYTHON is not set
++BR2_PACKAGE_PYTHON=y
++# BR2_PACKAGE_PYTHON_DEV is not set
++BR2_PACKAGE_PYTHON_PY_ONLY=y
++# BR2_PACKAGE_PYTHON_PYC_ONLY is not set
++# BR2_PACKAGE_PYTHON_PY_PYC is not set
++
++#
++# The following modules are unusual or require extra libraries
++#
++# BR2_PACKAGE_PYTHON_BSDDB is not set
++BR2_PACKAGE_PYTHON_CODECSCJK=y
++# BR2_PACKAGE_PYTHON_CURSES is not set
++# BR2_PACKAGE_PYTHON_GDBM is not set
++# BR2_PACKAGE_PYTHON_NIS is not set
++# BR2_PACKAGE_PYTHON_PYEXPAT is not set
++# BR2_PACKAGE_PYTHON_READLINE is not set
++# BR2_PACKAGE_PYTHON_SSL is not set
++# BR2_PACKAGE_PYTHON_TKINTER is not set
++BR2_PACKAGE_PYTHON_UNICODEDATA=y
 +# BR2_PACKAGE_RUBY is not set
 +# BR2_PACKAGE_TCL is not set
 +# BR2_PACKAGE_PHP is not set
@@ -733,9 +792,9 @@ Added: trunk/buildroot/target/device/Atmel/at91sam9260dfc/arm_toolchain_defconfi
 +#
 +# XML handling
 +#
-+# BR2_PACKAGE_EXPAT is not set
++BR2_PACKAGE_EXPAT=y
 +# BR2_PACKAGE_EZXML is not set
-+# BR2_PACKAGE_LIBXML2 is not set
++BR2_PACKAGE_LIBXML2=y
 +# BR2_PACKAGE_LIBXSLT is not set
 +# BR2_PACKAGE_XERCES is not set
 +
@@ -763,8 +822,35 @@ Added: trunk/buildroot/target/device/Atmel/at91sam9260dfc/arm_toolchain_defconfi
 +#
 +# BR2_TARGET_ROOTFS_CRAMFS is not set
 +# BR2_TARGET_ROOTFS_CLOOP is not set
-+# BR2_TARGET_ROOTFS_EXT2 is not set
-+# BR2_TARGET_ROOTFS_JFFS2 is not set
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_BLOCKS=0
++BR2_TARGET_ROOTFS_EXT2_INODES=0
++BR2_TARGET_ROOTFS_EXT2_RESBLKS=0
++BR2_TARGET_ROOTFS_EXT2_SQUASH=y
++BR2_TARGET_ROOTFS_EXT2_OUTPUT="$(IMAGE).ext2"
++BR2_TARGET_ROOTFS_EXT2_NONE=y
++# BR2_TARGET_ROOTFS_EXT2_GZIP is not set
++# BR2_TARGET_ROOTFS_EXT2_BZIP2 is not set
++# BR2_TARGET_ROOTFS_EXT2_LZMA is not set
++BR2_TARGET_ROOTFS_EXT2_COPYTO="/tftpboot"
++BR2_TARGET_ROOTFS_JFFS2=y
++BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_1056=y
++# BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_528 is not set
++# BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_2K_128K is not set
++# BR2_TARGET_ROOTFS_JFFS2_FLASH_128 is not set
++# BR2_TARGET_ROOTFS_JFFS2_FLASH_64 is not set
++# BR2_TARGET_ROOTFS_JFFS2_CUSTOM is not set
++BR2_TARGET_ROOTFS_JFFS2_PAGESIZE=0x420
++BR2_TARGET_ROOTFS_JFFS2_EBSIZE=0x2100
++BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER=y
++# BR2_JFFS2_TARGET_SREC is not set
++# BR2_TARGET_ROOTFS_JFFS2_PAD is not set
++BR2_TARGET_ROOTFS_JFFS2_LE=y
++# BR2_TARGET_ROOTFS_JFFS2_BE is not set
++# BR2_TARGET_ROOTFS_JFFS2_SQUASH is not set
++# BR2_TARGET_ROOTFS_JFFS2_SUMMARY is not set
++BR2_TARGET_ROOTFS_JFFS2_OUTPUT="$(IMAGE).jffs2"
++BR2_TARGET_ROOTFS_JFFS2_COPYTO="/tftpboot"
 +# BR2_TARGET_ROOTFS_UBIFS is not set
 +# BR2_TARGET_ROOTFS_SQUASHFS is not set
 +# BR2_TARGET_ROOTFS_TAR is not set
@@ -775,7 +861,60 @@ Added: trunk/buildroot/target/device/Atmel/at91sam9260dfc/arm_toolchain_defconfi
 +#
 +# bootloader for target device
 +#
-+# BR2_TARGET_UBOOT is not set
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="$(BOARD_NAME)"
++BR2_TARGET_UBOOT_2009_01=y
++# BR2_TARGET_UBOOT_2008_10 is not set
++# BR2_TARGET_UBOOT_1_3_4 is not set
++# BR2_TARGET_UBOOT_1_2_0_ATMEL is not set
++BR2_UBOOT_VERSION="2009.01"
++BR2_U_BOOT_SITE="ftp://ftp.denx.de/pub/u-boot"
++BR2_TARGET_U_BOOT_ARCH_PATCH=y
++BR2_TARGET_U_BOOT_2009_01_ARCH_AT91=y
++BR2_TARGET_U_BOOT_ARCH_AT91_PATCH_DIR="target/device/Atmel/arch-arm/u-boot/2009.01"
++BR2_TARGET_UBOOT_CUSTOM_PATCH=""
++BR2_TARGET_UBOOT_BOOTSOURCE_DATAFLASHCARD=y
++# BR2_TARGET_UBOOT_BOOTSOURCE_DATAFLASH is not set
++# BR2_TARGET_UBOOT_BOOTSOURCE_NANDFLASH is not set
++# BR2_TARGET_UBOOT_BOOTSOURCE_FLASH is not set
++# BR2_TARGET_UBOOT_BOOTSOURCE_SDCARD is not set
++# BR2_TARGET_UBOOT_BOOTSOURCE_EEPROM is not set
++BR2_TARGET_UBOOT_BOOTSOURCE="dataflash"
++# BR2_TARGET_UBOOT_SILENT is not set
++# BR2_TARGET_UBOOT_TOOL_MKIMAGE is not set
++# BR2_TARGET_UBOOT_TOOL_ENV is not set
++BR2_TARGET_UBOOT_DEFAULT_ENV=y
++# BR2_TARGET_UBOOT_SDRAM_SIZE_256MB is not set
++# BR2_TARGET_UBOOT_SDRAM_SIZE_128MB is not set
++BR2_TARGET_UBOOT_SDRAM_SIZE_64MB=y
++# BR2_TARGET_UBOOT_SDRAM_SIZE_32MB is not set
++# BR2_TARGET_UBOOT_SDRAM_SIZE_16MB is not set
++# BR2_TARGET_UBOOT_SDRAM_SIZE_8MB is not set
++BR2_TARGET_UBOOT_MEMORY_SIZE="64M"
++# BR2_TARGET_UBOOT_KERNEL_SIZE_1_25MB is not set
++# BR2_TARGET_UBOOT_KERNEL_SIZE_1_50MB is not set
++# BR2_TARGET_UBOOT_KERNEL_SIZE_1_75MB is not set
++BR2_TARGET_UBOOT_KERNEL_SIZE_2_00MB=y
++# BR2_TARGET_UBOOT_KERNEL_SIZE_2_25MB is not set
++# BR2_TARGET_UBOOT_KERNEL_SIZE_2_50MB is not set
++BR2_TARGET_UBOOT_DATAFLASH_SIZE_8MB=y
++# BR2_TARGET_UBOOT_DATAFLASH_SIZE_4MB is not set
++# BR2_TARGET_UBOOT_DATAFLASH_SIZE_2MB is not set
++# BR2_TARGET_UBOOT_DATAFLASH_SIZE_1MB is not set
++# BR2_TARGET_UBOOT_DATAFLASH_SIZE_0_50MB is not set
++# BR2_TARGET_UBOOT_DATAFLASH_SIZE_0_25MB is not set
++BR2_TARGET_UBOOT_END_OF_FLASH="C083FFFF"
++BR2_TARGET_UBOOT_KERNEL_START="21000000"
++BR2_TARGET_UBOOT_KERNEL_LOCATION="C0042000"
++BR2_TARGET_UBOOT_FILESYSTEM_START="21210000"
++BR2_TARGET_UBOOT_FILESYSTEM_LOCATION="C0252000"
++BR2_TARGET_UBOOT_FILESYSTEM_SIZE="6000000"
++BR2_TARGET_UBOOT_NETWORK=y
++BR2_TARGET_UBOOT_SERVERIP="10.175.196.221"
++BR2_TARGET_UBOOT_IPADDR="10.175.196.18"
++BR2_TARGET_UBOOT_GATEWAY="10.175.196.1"
++BR2_TARGET_UBOOT_NETMASK="255.255.255.0"
++BR2_TARGET_UBOOT_ETHADDR="04:25:fe:ed:00:18"
 +BR2_BOOTSOURCE_DATAFLASHCARD=y
 +BR2_BOOTSOURCE_DATAFLASH=y
 +BR2_BOOTSOURCE=y
@@ -783,7 +922,88 @@ Added: trunk/buildroot/target/device/Atmel/at91sam9260dfc/arm_toolchain_defconfi
 +#
 +# Kernel
 +#
-+BR2_KERNEL_none=y
-+# BR2_KERNEL_LINUX_ADVANCED is not set
++# BR2_KERNEL_none is not set
++BR2_KERNEL_LINUX_ADVANCED=y
 +# BR2_KERNEL_LINUX is not set
 +# BR2_KERNEL_HURD is not set
++BR2_PACKAGE_LINUX=y
++BR2_PACKAGE_LINUX_KCONFIG="$(BR2_BOARD_PATH)/$(BR2_BOARD_NAME)-linux-$(BR2_LINUX26_VERSION).config"
++BR2_PACKAGE_LINUX_FORMAT="uImage"
++BR2_KERNEL_CURRENT_VERSION="2.6.28.2"
++BR2_KERNEL_LATEST_2_6_28="2"
++BR2_KERNEL_LATEST_2_6_27="13"
++BR2_KERNEL_LATEST_2_6_26="8"
++BR2_KERNEL_LATEST_2_6_25="19"
++BR2_KERNEL_LATEST_2_6_24="7"
++BR2_KERNEL_LATEST_2_6_23="17"
++BR2_KERNEL_LATEST_2_6_22="19"
++BR2_KERNEL_LATEST_2_6_21="7"
++BR2_KERNEL_LATEST_2_6_20="21"
++BR2_KERNEL_PATCH_LEVEL="$(BR2_KERNEL_MINORLEVEL)"
++BR2_KERNEL_NEXT_VERSION="2.6.29"
++BR2_KERNEL_THIS_VERSION="2.6.28"
++BR2_KERNEL_SITE="http://ftp.kernel.org/pub/linux/kernel/v2.6"
++BR2_MM_PATCH_SITE="http://ftp.kernel.org/pub/linux/kernel/people/akpm/patches/2.6"
++BR2_RC_MM_PATCH_DIR="$(BR2_KERNEL_NEXT_VERSION)-rc$(BR2_KERNEL_RC_LEVEL)/2.6.$(BR2_KERNEL_NEXT_VERSION)-rc$(BR2_KERNEL_RC_LEVEL)-mm$(BR2_KERNEL_MM_LEVEL)"
++BR2_KERNEL_PATCH_SITE="$(BR2_KERNEL_SITE)"
++# BR2_LINUX_2_6_STABLE is not set
++BR2_LINUX_2_6_28=y
++# BR2_LINUX_2_6_27 is not set
++# BR2_LINUX_2_6_26 is not set
++# BR2_LINUX_2_6_25 is not set
++# BR2_LINUX_2_6_24 is not set
++# BR2_LINUX_2_6_23 is not set
++# BR2_LINUX_2_6_22 is not set
++# BR2_LINUX_2_6_21 is not set
++# BR2_LINUX_2_6_20 is not set
++# BR2_LINUX_2_6_29 is not set
++# BR2_LINUX26_CUSTOM is not set
++
++#
++# Patches
++#
++BR2_KERNEL_ADD_KERNEL_ORG_PATCH=y
++# BR2_KERNEL_ADD_LATEST is not set
++# BR2_KERNEL_ADD_LATEST_MINORPATCH is not set
++BR2_KERNEL_ADD_MINORPATCH=y
++# BR2_KERNEL_ADD_LATEST_RC_PATCH is not set
++# BR2_KERNEL_ADD_RC_PATCH is not set
++# BR2_KERNEL_ADD_LATEST_SNAPSHOT is not set
++# BR2_KERNEL_ADD_SNAPSHOT is not set
++# BR2_KERNEL_ADD_LATEST_MM_PATCH is not set
++# BR2_KERNEL_ADD_MM_PATCH is not set
++BR2_KERNEL_ADD_PATCH=y
++BR2_KERNEL_MINORLEVEL="2"
++BR2_KERNEL_ARCH_PATCH_ENABLED=y
++BR2_ARCH_AT91_2_6_28=y
++# BR2_ARCH_AT91_2_6_27 is not set
++# BR2_ARCH_AT91_2_6_26 is not set
++# BR2_ARCH_AT91_2_6_25 is not set
++# BR2_ARCH_AT91_2_6_24 is not set
++# BR2_ARCH_AT91_2_6_22 is not set
++BR2_LINUX_BSP_PATCH=""
++BR2_KERNEL_PATCH="patch-$(BR2_DOWNLOAD_LINUX26_VERSION).$(BR2_KERNEL_PATCH_LEVEL).bz2"
++BR2_EXTRA_VERSION=".$(BR2_KERNEL_PATCH_LEVEL)"
++BR2_KERNEL_BASE=y
++BR2_DOWNLOAD_LINUX26_VERSION="$(BR2_KERNEL_THIS_VERSION)"
++BR2_LINUX26_VERSION="$(BR2_KERNEL_THIS_VERSION).$(BR2_KERNEL_PATCH_LEVEL)"
++
++#
++# Linux Kernel Configuration
++#
++BR2_PACKAGE_LINUX_USE_KCONFIG=y
++# BR2_PACKAGE_LINUX_USE_DEFCONFIG is not set
++# BR2_PACKAGE_LINUX_USE_XCONFIG is not set
++# BR2_LINUX_BIN_BZIMAGE is not set
++BR2_LINUX_BIN_UIMAGE=y
++# BR2_LINUX_BIN_VMLINUX is not set
++# BR2_LINUX_BIN_ZIMAGE is not set
++# BR2_LINUX_BIN_CUSTOM is not set
++
++#
++# Destinations for linux kernel binaries
++#
++# BR2_LINUX_COPYTO_ROOTFS is not set
++BR2_LINUX_COPYTO_TFTPBOOT=y
++BR2_LINUX_COPYTO=""
++BR2_LINUX_COPY_CONFIGURATION=y
