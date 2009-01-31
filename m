@@ -1,48 +1,28 @@
-From: Daniel Jabbour <daniel@laptouchinc.com>
-Date: Fri, 30 Jan 2009 18:43:11 -0500
+From: Dan Lyke <danlyke@flutterby.com>
+Date: Fri, 30 Jan 2009 16:44:18 -0800
 Subject: [Buildroot] Won't build kernel
-Message-ID: <ED397211-8106-4E05-9702-625310A5CF37@laptouchinc.com>
+In-Reply-To: <ED397211-8106-4E05-9702-625310A5CF37@laptouchinc.com>
+References: <ED397211-8106-4E05-9702-625310A5CF37@laptouchinc.com>
+Message-ID: <20090130164418.7ea4aca7@danhplaptop>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Fri, 30 Jan 2009 18:43:11 -0500
+Daniel Jabbour <daniel@laptouchinc.com> wrote:
+> I'm pretty new to buildroot. However, I have been successfully able
+> to compile a toolchain and root fs. Now I am trying to also compile
+> a kernel using buildroot.
 
-I'm pretty new to buildroot. However, I have been successfully able to  
-compile a toolchain and root fs. Now I am trying to also compile a  
-kernel using buildroot.
+If you haven't used one of the "_defconfig" files (ie: I'm working on
+at at91sam9261-ek board for prototyping, so I do a "make
+at91sam9261_defconfig" to set up default configuration), then you may
+need to do a "make linux26-menuconfig" as a separate step to set up a
+Linux kernel configuration. This will probably also need a whole bunch
+of setup for your board.
 
-I enabled the kernel build by going to make menuconfig and enabling  
-the following:
-Kernel--->
-	Kernel type (linux (Advanced configuration)) --->
-	Linux Kernel Version (The latest stable Linux kernel (2.6.28.2)) --->
-	Linux Kernel Configuration --->
-		Run make ARCH=$(ARCH) [xconfig|menuconfig] before build
-		Preferred config tool (make menuconfig) --->
-	kernel binary format (vmlinux) --->
-	Destinations for linux kernel binaries  --->
-		Copy kernel to <dir>... (binaries/)
+Am I making any sense here?
 
-make produces the following error:
-
-rm -rf /home/djabbour/source/buildroot/project_build_i486/LtOS-1/ 
-buildroot-config
-mkdir -p /home/djabbour/source/buildroot/project_build_i486/LtOS-1
-cp -dpRf package/config/buildroot-config /home/djabbour/source/ 
-buildroot/project_build_i486/LtOS-1/buildroot-config
-/home/djabbour/source/buildroot/toolchain_build_i486/bin/sed -i -e '/ 
-CONFIG_AEABI=y/d' /home/djabbour/source/buildroot/project_build_i486/ 
-LtOS-1/linux-2.6.28.2/.config
-/home/djabbour/source/buildroot/toolchain_build_i486/bin/sed: can't  
-read /home/djabbour/source/buildroot/project_build_i486/LtOS-1/ 
-linux-2.6.28.2/.config: No such file or directory
-make: *** [/home/djabbour/source/buildroot/project_build_i486/LtOS-1/ 
-linux-2.6.28.2/.configured] Error 2
-
---
-Daniel Jabbour
-Software Engineer
-Laptouch, Inc.
+Dan
