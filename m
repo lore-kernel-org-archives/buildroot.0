@@ -1,35 +1,34 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 01 Feb 2009 07:31:05 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/dbus
-In-Reply-To: <20090201055814.GA8215@cloud.net.au> (Hamish Moffatt's message of
-	"Sun\, 1 Feb 2009 16\:58\:14 +1100")
-References: <20090131225336.4E3377621A@busybox.osuosl.org>
-	<20090201055814.GA8215@cloud.net.au>
-Message-ID: <87zlh6is7q.fsf@macbook.be.48ers.dk>
+Date: Sun, 01 Feb 2009 07:37:05 +0100
+Subject: [Buildroot] 2009.02-rc3 released
+Message-ID: <87skmyirxq.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Hamish" == Hamish Moffatt <hamish@cloud.net.au> writes:
+Hi,
 
- >> dbus: revert r25194 (Unbreak Peters 'fixes' to dbus for a second time)
- >> 
- >> It was a bogus revert.
+-rc3 is out:
 
- Hamish> Are we having fun yet?
+http://buildroot.uclibc.org/downloads/buildroot-2009.02-rc3.tar.gz
 
-Yeah, I know it's silly.
+or
 
-I know it's mainly a social problem, but to me it again shows the need
-from moving from the svn code ghetto approach to git's approach with
-patches to the list and finally pull requests to the maintainer.
+http://buildroot.uclibc.org/downloads/buildroot-2009.02-rc3.tar.bz2
 
-E.G. get the code reviewed BEFORE it gets into the tree, and not
-afterwards.
+Please give it a spin and report back issues to the mailing list or
+the bug tracker.
 
-But let's discuss this after the release.
+A nice side effect of the recent cleanups / removal of ancient stuff
+is that the tarballs are 25% smaller. Unless big issues are found,
+expect this to be the last release candidate before the release - So
+give it a good test, so we can shake out the remaining issues by
+Friday where I hope to release the final 2009.02.
+
+I would also like to remind all devs that we're deeply frozen, and I
+DON'T want to see anything else than bugfixes checked into svn.
 
 -- 
 Bye, Peter Korsgaard
