@@ -1,59 +1,62 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 01 Feb 2009 19:57:27 +0100
-Subject: [Buildroot] Atmel specific handling in buildroot
-In-Reply-To: <1233509597.5742.35.camel@elrond.atmel.com> (Ulf Samuelsson's
-	message of "Sun\, 01 Feb 2009 18\:33\:17 +0100")
-References: <873af0mvws.fsf@macbook.be.48ers.dk>
-	<874ozei4hg.fsf@macbook.be.48ers.dk>
-	<1233502594.5742.24.camel@elrond.atmel.com>
-	<87zlh6gmod.fsf@macbook.be.48ers.dk>
-	<1233509597.5742.35.camel@elrond.atmel.com>
-Message-ID: <87vdrugf3c.fsf@macbook.be.48ers.dk>
+From: Maxim Grigoriev <maxim@tensilica.com>
+Date: Sun, 01 Feb 2009 11:05:53 -0800
+Subject: [Buildroot] {buildroot 0004384]: GCC 4.3.1 fails with cannot
+ compute suffix of object files
+In-Reply-To: <4983870C.6010607@hq.tensilica.com>
+References: <4983870C.6010607@hq.tensilica.com>
+Message-ID: <4985F291.5010002@hq.tensilica.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
+Is this the right mailing list to ask questions about BUILDROOT ?
 
-Hi,
+Should I ask some official maintainers directly instead ?
 
- Ulf> I dont think you will build correctly unless you use the
- Ulf> advanced kernel setting for the AVR32 and AT91.
+If there is a communication policy described somewhere, please, refer me 
+to it.
 
-Huh, why wouldn't BR2_KERNEL_none work for those targets?
+Thanks,
+-- Maxim
 
- Ulf> Copying the build configuration to the root file system
- Ulf> is in line with the open source model, since
- Ulf> it helps people to reproduce whatever is on the board
- Ulf> if they buy the product.
 
-Not only that, That info is required by the license.
-
- Ulf> If you want to debug something, then it is good to
- Ulf> know how it was configured.
-
- Ulf> If someone calls in with a board without this, then it is
- Ulf> too late to do anything about it.
-
- Ulf> Obviously, since I put it there, I want to have it ON
- Ulf> for all my customers.
-
-Fine, that's why we have the configuration in the first place I
-guess - But the question isn't about what you or your customers want,
-it's about what the default should be in BR.
-
-It makes sense to default these to off like for everything else, so
-I'll remove the atmel special case.
-
- Ulf> As for the copyto, this is a convenience, and people
- Ulf> can configure whatever they want.
- Ulf> I find that it saves time to have this on.
-
-Again, feel free to use it, but it shouldn't be default (E.G. it
-breaks the build when you don't have a /tftpboot and/or it isn't
-writable.
-
--- 
-Bye, Peter Korsgaard
+Maxim Grigoriev wrote:
+> There is a buildroot issue 0004384:
+>
+>     http://lists.uclibc.org/pipermail/buildroot/2008-September/010792.html
+>
+> I understand it's a generic architecture-independent GCC 4.3.1+ compiler 
+> problem
+> mentioned several times in different places ( e.g. bugzilla PRs 35577, 
+> 35693 ).
+>
+> On the buildroot mailing, list I found a reference to the patch
+>
+>   gcc-4.3.1-compile.patch 
+>
+> introduced by "antezedens" somewhere around 09-10-08.
+> But, I was not able to find this patch. Looks like it was withdrawn.
+>
+>                           * * * * *
+>
+> My question is: is this build failure supposed to be fixed on
+> the BUILDROOT makefiles/scripts level ? Or, setting 
+>
+> LD_LIBRARY_PATH=$PWD/toolchain_build_arm/mpfr/lib:$LD_LIBRARY_PATH
+>
+> from the top of buildroot tree is assumed to be a standard
+> setup for the buildroot build ? Is it documented anywhere ?
+>
+> Thanks,
+> -- Maxim
+>
+>
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>   
