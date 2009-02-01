@@ -1,49 +1,54 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Sun, 01 Feb 2009 11:58:06 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/dbus
-In-Reply-To: <87zlh6is7q.fsf@macbook.be.48ers.dk>
-References: <20090131225336.4E3377621A@busybox.osuosl.org>
-	<20090201055814.GA8215@cloud.net.au>
-	<87zlh6is7q.fsf@macbook.be.48ers.dk>
-Message-ID: <1233485886.5742.4.camel@elrond.atmel.com>
+From: S0L0 at gmx-topmail.de <S0L0@gmx-topmail.de>
+Date: Sun, 01 Feb 2009 12:44:51 +0100
+Subject: [Buildroot] cannot build: conflicting types for '__kernel_dev_t'
+Message-ID: <20090201114451.154610@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-s?n 2009-02-01 klockan 07:31 +0100 skrev Peter Korsgaard:
-> >>>>> "Hamish" == Hamish Moffatt <hamish@cloud.net.au> writes:
-> 
->  >> dbus: revert r25194 (Unbreak Peters 'fixes' to dbus for a second time)
->  >> 
->  >> It was a bogus revert.
-> 
->  Hamish> Are we having fun yet?
-> 
-> Yeah, I know it's silly.
-> 
-> I know it's mainly a social problem, but to me it again shows the need
-> from moving from the svn code ghetto approach to git's approach with
-> patches to the list and finally pull requests to the maintainer.
-> 
-> E.G. get the code reviewed BEFORE it gets into the tree, and not
-> afterwards.
+Hello,
 
-?As long as you allow a commit to the main tree without
-testing by others you will have a problem.
+i just wanted to try again getting buildroot to wrk, but I seem to have one more porblem:
 
-I have proposed to go to git, but that was not of interest
-until the uclibc project did so.
+I set up a new debian environment before ~ 2 hours. Installed gcc, libncurses5-dev and subversion (and all dependencies, of course).
 
-I also proposed a method allowing commits which 
-does not interfere with the main build, but that was also shot down,
-I seem to remember that you claimed that this functionality
-can be handled by svn and tags.
+After that I downloaded the sources and tried to compile:
 
-BR
-Ulf Samuelsson
+svn co svn://uclibc.org/trunk/uClibc
+cd uClibc
+make menuconfig
+->changed "Target Architecture" to "i386" and "Target x86 Processor Family" to "Pentium/586/K5/5x86/6x86/6x86MX".
+make
 
-> 
-> But let's discuss this after the release.
-> 
+################
+
+I got the folowwing error after a couple of seconds:
+
+  CC libc/inet/ether_addr.os
+In file included from /usr/include/linux/if_ether.h:24,
+                 from ./include/netinet/if_ether.h:26,
+                 from ./include/netinet/ether.h:26,
+                 from libc/inet/ether_addr.c:31:
+/usr/include/linux/types.h:11: error: conflicting types for '__kernel_dev_t'
+./include/bits/kernel_types.h:19: error: previous declaration of '__kernel_dev_t' was here
+make: *** [libc/inet/ether_addr.os] Fehler 1
+
+################
+
+ok, I think, I understand what the error is, but I do not have a clue of how to fix this. I just played a bit around commenting-out the suspicious lines, but I ended up with more errors.
+
+
+I hope anybody out there can help me :)
+
+Best regards,
+
+S0l0
+-- 
+_____________________________________________________________
+Stephan Blanke
+Stephan.Blanke at gmx.de
+#166931535
+
+Psssst! Schon vom neuen GMX MultiMessenger geh?rt? Der kann`s mit allen: http://www.gmx.net/de/go/multimessenger01
