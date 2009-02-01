@@ -1,11 +1,13 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 01 Feb 2009 14:08:42 +0100
-Subject: [Buildroot] Binary toolchain fails
-In-Reply-To: <1233489031.5742.11.camel@elrond.atmel.com> (Ulf Samuelsson's
-	message of "Sun\, 01 Feb 2009 12\:50\:31 +0100")
-References: <1233484479.4147.149.camel@elrond.atmel.com>
-	<1233489031.5742.11.camel@elrond.atmel.com>
-Message-ID: <87d4e2i9t1.fsf@macbook.be.48ers.dk>
+Date: Sun, 01 Feb 2009 14:17:03 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/dbus
+In-Reply-To: <1233485886.5742.4.camel@elrond.atmel.com> (Ulf Samuelsson's
+	message of "Sun\, 01 Feb 2009 11\:58\:06 +0100")
+References: <20090131225336.4E3377621A@busybox.osuosl.org>
+	<20090201055814.GA8215@cloud.net.au>
+	<87zlh6is7q.fsf@macbook.be.48ers.dk>
+	<1233485886.5742.4.camel@elrond.atmel.com>
+Message-ID: <878woqi9f4.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,24 +16,30 @@ To: buildroot@busybox.net
 
 >>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 
- Ulf> Once that is fixed, sysroot is still not enabled 
- Ulf> since the configuration variables for sysroot are disabled
- Ulf> when you use a binary toolchain.
+ Ulf> ?As long as you allow a commit to the main tree without
+ Ulf> testing by others you will have a problem.
 
- Ulf> BR2_TARGET_OPTIMIZATION="-Os -pipe --sysroot=$(STAGING_DIR)/ -isysroot
- Ulf> $(STAGING_DIR)"
+ Ulf> I have proposed to go to git, but that was not of interest
+ Ulf> until the uclibc project did so.
 
-Don't forget the !SYSROOT case.
+Who says it's not of interest? I'm pretty sure the general agreement
+is that we'll move to git sooner or later, and the same was discussed
+during the uclibc.org reinstall. Back then we had more urgent issues
+to handle, and not all is taken care of yet (E.G. issues from the old
+bugtracker, the commit mails are still using the wrong URLs and so
+on).
 
- Ulf> Would let me build packages with problems.
+Just getting git up and running is easy (hey, it's installed on
+uclibc.org so we could have it NOW), it's all the extra things like
+gitweb/cgit, commit messages to the mailing list, a maintainers system
+with submaintainers and an agreed upon procedure for finally getting
+changes in the official (E.G. mine) tree.
 
- Ulf> Since there are so many changes needed to get binary toolchains
- Ulf> to work, I propose we simply disable them in the distribution
- Ulf> and fix the problem afterwards.
+A lot of these infrastructure issues would be shared with
+busybox/uclibc as well, so it makes sense to sync.
 
-I wouldn't do that as we pretty frequently hear from people apparently
-using it (Like Daniel's latest changes), so it obviously works for
-some.
+But we can certainly discuss how to handle the BR specific procedures
+so we're ready (either here on the list or IRL at FOSDEM).
 
 -- 
 Bye, Peter Korsgaard
