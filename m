@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Sun,  1 Feb 2009 19:37:06 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/target:  linux
-Message-ID: <20090201193706.70A447653E@busybox.osuosl.org>
+Date: Sun,  1 Feb 2009 19:37:10 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/mpfr
+Message-ID: <20090201193710.3EEC97653E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,52 +9,48 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2009-02-01 19:37:06 +0000 (Sun, 01 Feb 2009)
-New Revision: 25207
+Date: 2009-02-01 19:37:09 +0000 (Sun, 01 Feb 2009)
+New Revision: 25208
 
 Log:
-buildroot: use same defaults for atmel target as everything else
+mpfr: bump version
+
+I know that changing something as fundamental as mpfr this close to the
+release isn't really ideal, but it's listed as the minimum version
+for gcc 4.3.x:
+
+http://gcc.gnu.org/install/prerequisites.html
+
+Bernhard's tree has been using 2.3.2 since October, so the risk is probably
+not that big though.
 
 Modified:
-   trunk/buildroot/target/Config.in
-   trunk/buildroot/target/linux/Config.in.advanced
+   trunk/buildroot/package/mpfr/mpfr.mk
 
 
 Changeset:
-Modified: trunk/buildroot/target/Config.in
+Modified: trunk/buildroot/package/mpfr/mpfr.mk
 ===================================================================
---- trunk/buildroot/target/Config.in	2009-02-01 19:36:56 UTC (rev 25206)
-+++ trunk/buildroot/target/Config.in	2009-02-01 19:37:06 UTC (rev 25207)
-@@ -26,8 +26,7 @@
- menu "Kernel"
- choice
- 	prompt "Kernel type"
--	default BR2_KERNEL_LINUX_ADVANCED if BR2_TARGET_ATMEL
--	default BR2_KERNEL_none if !BR2_TARGET_ATMEL
-+	default BR2_KERNEL_none
+--- trunk/buildroot/package/mpfr/mpfr.mk	2009-02-01 19:37:06 UTC (rev 25207)
++++ trunk/buildroot/package/mpfr/mpfr.mk	2009-02-01 19:37:09 UTC (rev 25208)
+@@ -3,8 +3,8 @@
+ # mpfr
+ #
+ #############################################################
+-MPFR_VERSION:=2.3.0
+-MPFR_PATCH:=patches
++MPFR_VERSION:=2.3.2
++#MPFR_PATCH:=patches
+ MPFR_PATCH_FILE:=mpfr-$(MPFR_VERSION).patch
+ MPFR_SOURCE:=mpfr-$(MPFR_VERSION).tar.bz2
+ MPFR_CAT:=$(BZCAT)
+@@ -13,8 +13,7 @@
+ MPFR_TARGET_DIR:=$(BUILD_DIR)/mpfr-$(MPFR_VERSION)
+ MPFR_BINARY:=libmpfr$(LIBTGTEXT)
+ MPFR_HOST_BINARY:=libmpfr$(HOST_SHREXT)
+-MPFR_LIBVERSION:=1.0.1
+-#MPFR_SVN_CMD:=svn co svn://scm.gforge.inria.fr/svn/mpfr/branches/2.3 mpfr-2.3
++MPFR_LIBVERSION:=1.1.2
  
- config BR2_KERNEL_none
- 	bool "none"
-
-Modified: trunk/buildroot/target/linux/Config.in.advanced
-===================================================================
---- trunk/buildroot/target/linux/Config.in.advanced	2009-02-01 19:36:56 UTC (rev 25206)
-+++ trunk/buildroot/target/linux/Config.in.advanced	2009-02-01 19:37:06 UTC (rev 25207)
-@@ -505,8 +505,6 @@
- 
- config BR2_LINUX_COPYTO_TFTPBOOT
- 	bool "Copy kernel to /tftpboot"
--	default y if BR2_TARGET_ATMEL
--	default n if !BR2_TARGET_ATMEL
- 	help
- 	  Copy kernel to /tftpboot directory
- 
-@@ -518,8 +516,6 @@
- 
- config BR2_LINUX_COPY_CONFIGURATION
- 	bool "Copy buildroot configuration to Linux file system"
--	default y if BR2_TARGET_ATMEL
--	default n if !BR2_TARGET_ATMEL
- 	help
- 	  The configuration files for buildroot, uclibc, busybox and linux
- 	  are copied to the "<root>/boot" directory.
+ # need patch
+ ifneq ($(MPFR_PATCH),)
