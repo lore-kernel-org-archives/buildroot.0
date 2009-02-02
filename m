@@ -1,61 +1,58 @@
-From: ulf at uclibc.org <ulf@uclibc.org>
-Date: Mon,  2 Feb 2009 07:24:49 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libeXosip2
-Message-ID: <20090202072449.30556764CB@busybox.osuosl.org>
+From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
+Date: Mon, 2 Feb 2009 08:59:52 +0100
+Subject: [Buildroot] svn commit:
+ trunk/buildroot/package/multimedia/alsa-lib
+In-Reply-To: <1233556443.5742.42.camel@elrond.atmel.com>
+References: <20090131101825.7DC5376219@busybox.osuosl.org>
+	<20090202070901.1b015522@hcegtvedt>
+	<1233556443.5742.42.camel@elrond.atmel.com>
+Message-ID: <20090202085952.4693eb51@hcegtvedt>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: ulf
-Date: 2009-02-02 07:24:48 +0000 (Mon, 02 Feb 2009)
-New Revision: 25218
+On Mon, 02 Feb 2009 07:34:03 +0100
+Ulf Samuelsson <ulf.samuelsson@atmel.com> wrote:
 
-Log:
-Define OSIP_CFLAGS and OSIP_LIBS for libeXosip2
+> m?n 2009-02-02 klockan 07:09 +0100 skrev Hans-Christian Egtvedt:
+> > On Sat, 31 Jan 2009 10:18:25 +0000 (UTC)
+> > ulf at uclibc.org wrote:
+> > 
+> > > Author: ulf
+> > > Date: 2009-01-31 10:18:23 +0000 (Sat, 31 Jan 2009)
+> > > New Revision: 25175
+> > > 
+> > > Log:
+> > > Workaround for AVR32 compiler issue affecting inlining, causing
+> > > alsa-lib to break, feedback to AVR32 compiler team will be sent
+> > > 
+> > 
+> > Huh? Inline bug?
+> 
+> If I download the latest trunk and build atstk100x/alsa-lib 
+> (without the patch) then I get an error which to me indicates
+> that the compiler issues a jump instruction with a limited 
+> jump range, and then it turns out that the jump is
+> longer than allowed.
+> 
+> Same happens on www.atmel.no/buildroot-avr32-2.3.0
+> 
+> I am running OpenSuSE 11.0
+> 
 
-Modified:
-   trunk/buildroot/package/libeXosip2/libeXosip2.mk
+I've heard other complain about OpenSUSE triggering "bugs" here and
+there as well.
 
+Weird that I am unable to trigger this when compiling on Ubuntu 8.10.
+Which .config are you running? atstk100something in uclibc.org
+repository?
 
-Changeset:
-Modified: trunk/buildroot/package/libeXosip2/libeXosip2.mk
-===================================================================
---- trunk/buildroot/package/libeXosip2/libeXosip2.mk	2009-02-02 07:22:19 UTC (rev 25217)
-+++ trunk/buildroot/package/libeXosip2/libeXosip2.mk	2009-02-02 07:24:48 UTC (rev 25218)
-@@ -22,32 +22,19 @@
- 	(cd $(LIBEXOSIP2_DIR); rm -rf config.cache; \
- 		$(TARGET_CONFIGURE_OPTS) \
- 		$(TARGET_CONFIGURE_ARGS) \
-+		OSIP_CFLAGS="$(TARGET_CFLAGS)" \
-+		OSIP_LIBS="-L$(STAGING_DIR)/usr/lib -losip2 -losipparser2" \
- 		./configure \
- 		--target=$(GNU_TARGET_NAME) \
- 		--host=$(GNU_TARGET_NAME) \
- 		--build=$(GNU_HOST_NAME) \
- 		--prefix=/usr \
--		--exec-prefix=/usr \
--		--libexecdir=/usr/lib \
--		--sysconfdir=/etc \
--		--datadir=/usr/share \
--		--localstatedir=/var \
--		--libdir=/usr/lib \
--		--includedir=$(STAGING_DIR)/usr/include \
--		--oldincludedir=/usr/include \
- 		--enable-shared \
- 		--enable-static \
- 		$(DISABLE_NLS) \
- 	)
- 	touch $@
- 
--#		--with-gnu-ld \
--#		--libexecdir=$(STAGING_DIR)/usr/lib \
--#		--libdir=$(STAGING_DIR)/usr/lib \
--#		--libdir=/usr/lib \
--#		--libexecdir=/usr/lib \
--
--
- $(LIBEXOSIP2_DIR)/.compiled: $(LIBEXOSIP2_DIR)/.configured
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(LIBEXOSIP2_DIR)
- 	touch $@
+> There are other applications which show the same problem,
+> but I don't have a list of those.
+> 
+
+-- 
+Best regards,
+Hans-Christian Egtvedt
