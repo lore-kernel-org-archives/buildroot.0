@@ -1,30 +1,26 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon,  2 Feb 2009 21:39:39 +0000 (UTC)
-Subject: [Buildroot] [Bug 81] New package wpa_supplicant
-In-Reply-To: <bug-81-163@https.bugs.busybox.net/>
-References: <bug-81-163@https.bugs.busybox.net/>
-Message-ID: <20090202213939.205B3764CB@busybox.osuosl.org>
+Date: Mon,  2 Feb 2009 22:21:48 +0000 (UTC)
+Subject: [Buildroot] [Bug 83] liblockfile fails to compile due to eaccess
+	redefinition
+In-Reply-To: <bug-83-163@https.bugs.busybox.net/>
+References: <bug-83-163@https.bugs.busybox.net/>
+Message-ID: <20090202222148.790EA76A3D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=81
-
-
-Peter Korsgaard <jacmet@uclibc.org> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |jacmet at uclibc.org
-             Status|NEW                         |ASSIGNED
+https://bugs.busybox.net/show_bug.cgi?id=83
 
 
 
 
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-02-02 21:39:38 UTC ---
-Thanks, will look closer into it after the 2009.02 release.
+
+--- Comment #2 from Hunter Cobbs <hunter.cobbs@gmail.com>  2009-02-02 22:21:46 UTC ---
+I use the current toolchain when compiling my kernel.  I was simply trying to
+maintain the same toolchain across all builds, but it looks like that may not
+be the best track to take.
 
 
 -- 
