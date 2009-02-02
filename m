@@ -1,58 +1,25 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Mon, 2 Feb 2009 08:59:52 +0100
-Subject: [Buildroot] svn commit:
- trunk/buildroot/package/multimedia/alsa-lib
-In-Reply-To: <1233556443.5742.42.camel@elrond.atmel.com>
-References: <20090131101825.7DC5376219@busybox.osuosl.org>
-	<20090202070901.1b015522@hcegtvedt>
-	<1233556443.5742.42.camel@elrond.atmel.com>
-Message-ID: <20090202085952.4693eb51@hcegtvedt>
+From: henri guyenne <henri.guyenne@free.fr>
+Date: Mon, 02 Feb 2009 10:35:22 +0100
+Subject: [Buildroot] TinyX and keyboard
+Message-ID: <1233567322.4986be5a5e29f@imp.free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 02 Feb 2009 07:34:03 +0100
-Ulf Samuelsson <ulf.samuelsson@atmel.com> wrote:
+Hi everyone,
 
-> m?n 2009-02-02 klockan 07:09 +0100 skrev Hans-Christian Egtvedt:
-> > On Sat, 31 Jan 2009 10:18:25 +0000 (UTC)
-> > ulf at uclibc.org wrote:
-> > 
-> > > Author: ulf
-> > > Date: 2009-01-31 10:18:23 +0000 (Sat, 31 Jan 2009)
-> > > New Revision: 25175
-> > > 
-> > > Log:
-> > > Workaround for AVR32 compiler issue affecting inlining, causing
-> > > alsa-lib to break, feedback to AVR32 compiler team will be sent
-> > > 
-> > 
-> > Huh? Inline bug?
-> 
-> If I download the latest trunk and build atstk100x/alsa-lib 
-> (without the patch) then I get an error which to me indicates
-> that the compiler issues a jump instruction with a limited 
-> jump range, and then it turns out that the jump is
-> longer than allowed.
-> 
-> Same happens on www.atmel.no/buildroot-avr32-2.3.0
-> 
-> I am running OpenSuSE 11.0
-> 
+I'm new with buildroot and embedded linux. So excuse-me if my questions seems to
+be a little clumsy. I'm intend to build embedded linux with a x-server using
+buildroot (2009.02-rc2), but the x.org doesn't compile. So I try TinyX and it
+build corretly and I can launch it (without any options). But when I'm in the X
+display (gray screen with a cross in the middle), I can't close it with the keys
+CTRL+Alt+Backspace nor go to tty1 by pressing Ctrl+Alt+F1 keys. I didn't find
+any helps posted in the mailing list archive.
 
-I've heard other complain about OpenSUSE triggering "bugs" here and
-there as well.
+Could someone helps me to make the keyboard works under TinyX ?
 
-Weird that I am unable to trigger this when compiling on Ubuntu 8.10.
-Which .config are you running? atstk100something in uclibc.org
-repository?
+Thanks
 
-> There are other applications which show the same problem,
-> but I don't have a list of those.
-> 
-
--- 
-Best regards,
-Hans-Christian Egtvedt
+Henri
