@@ -1,37 +1,35 @@
-From: jeff angielski <jeff@theptrgroup.com>
-Date: Mon, 02 Feb 2009 17:29:05 -0500
-Subject: [Buildroot] can't open /dev/tty No such device or address
-Message-ID: <1233613745.7613.23.camel@penguin>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Tue, 3 Feb 2009 10:22:00 +1100
+Subject: [Buildroot] svn commit: trunk/buildroot/package
+In-Reply-To: <87ocxlgxt6.fsf@macbook.be.48ers.dk>
+References: <20090202003915.BE2397653E@busybox.osuosl.org>
+	<87ocxlgxt6.fsf@macbook.be.48ers.dk>
+Message-ID: <20090202232200.GA30540@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Mon, Feb 02, 2009 at 07:25:25AM +0100, Peter Korsgaard wrote:
+> >>>>> "hamish" == hamish  <hamish@uclibc.org> writes:
+> 
+>  hamish> Author: hamish
+>  hamish> Date: 2009-02-02 00:39:14 +0000 (Mon, 02 Feb 2009)
+>  hamish> New Revision: 25212
+> 
+>  hamish> Log:
+>  hamish> Remove empty directory left after dbus/libxml2 cleanup
+> 
+> Ah yes, thanks - git-svn messes those up and don't show them in my
+> local tree.
+> 
+> I wonder why Ulf added it in the first place.
 
-I am getting the following errors when trying to boot a CRAMFS image on
-my PowerPC target.
+It previously contained a 0-run-first.mk or something like that that
+just defined some variable with libxml2 deps. That stuff would probably
+have better been added to whatever included package/*/*.mk.
 
-can't open /dev/tty1: No such device or address
-can't open /dev/tty2: No such device or address
-can't open /dev/tty3: No such device or address
-<repeats over and over>
-
-
-If I log into the system through my serial port (/dev/ttyCPM0) you can
-see that the char devs exist in the fileystem.
-
-crw-rw-rw-  1 root     root       4,   1 Dec 31 17:00 tty1             
-crw-rw-rw-  1 root     root       4,   2 Dec 31 17:00 tty2             
-crw-rw-rw-  1 root     root       4,   3 Dec 31 17:00 tty3  
-
-
-The node info matches the device_table.txt.
-
-Any idea what is going on here?  Anybody else seeing this?
-
-
+Hamish
 -- 
-Jeff Angielski
-The PTR Group
-www.theptrgroup.com
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
