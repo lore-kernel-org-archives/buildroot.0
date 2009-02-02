@@ -1,31 +1,47 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 02 Feb 2009 21:06:18 +0100
-Subject: [Buildroot] gcc 4.3.3 anyone?
-In-Reply-To: <1233594146.6464.6.camel@sven> (Sven Neumann's message of "Mon\,
-	02 Feb 2009 18\:02\:26 +0100")
-References: <1233594146.6464.6.camel@sven>
-Message-ID: <873aewhadh.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon,  2 Feb 2009 20:07:43 +0000 (UTC)
+Subject: [Buildroot] [Bug 85] New: liblockfile fails to install due to
+ missing directories
+Message-ID: <bug-85-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Neumann <s.neumann@phase-zero.de> writes:
+https://bugs.busybox.net/show_bug.cgi?id=85
 
- Sven> Hi,
- Sven> I've ran into what appears to be a bug in gcc 4.3.2 and reported it
- Sven> here: http://gcc.gnu.org/bugzilla/show_bug.cgi?id=39076
+              Host: pc-linux
+            Target: arm-linux-gnueabi (gcc 4.2.2)
+             Build: 2009.02-rc3
+           Summary: liblockfile fails to install due to missing directories
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: hunter.cobbs at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
- Sven> Now I consider to try to update buildroot to use gcc 4.3.3. But as there
- Sven> are a number of patches for each gcc version this could become quite
- Sven> some work. That's why I'm asking if anyone has already done that and
- Sven> wants to share his/her experience/patches?
 
-I was going to bump the gcc version right after the release, but if
-someone else want to do it, that's fine as well.
+install -m 644 lockfile.h maillock.h
+/home/hcobbs/dev/src/buildroot-2009.02-rc3/ucm_build_arm/staging_dir/usr/local/include
+install: target
+`/home/hcobbs/dev/src/buildroot-2009.02-rc3/ucm_build_arm/staging_dir/usr/local/include'
+is not a directory
+make[1]: *** [install_common] Error 1
 
-I wouldn't do it for the release though.
+---------------------------------
+
+also occurs for man1/man3
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
