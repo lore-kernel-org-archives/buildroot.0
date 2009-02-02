@@ -1,25 +1,30 @@
-From: henri guyenne <henri.guyenne@free.fr>
-Date: Mon, 02 Feb 2009 10:35:22 +0100
-Subject: [Buildroot] TinyX and keyboard
-Message-ID: <1233567322.4986be5a5e29f@imp.free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 02 Feb 2009 07:25:25 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package
+In-Reply-To: <20090202003915.BE2397653E@busybox.osuosl.org>
+	(hamish@uclibc.org's message of "Mon\,
+	2 Feb 2009 00\:39\:15 +0000 \(UTC\)")
+References: <20090202003915.BE2397653E@busybox.osuosl.org>
+Message-ID: <87ocxlgxt6.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi everyone,
+>>>>> "hamish" == hamish  <hamish@uclibc.org> writes:
 
-I'm new with buildroot and embedded linux. So excuse-me if my questions seems to
-be a little clumsy. I'm intend to build embedded linux with a x-server using
-buildroot (2009.02-rc2), but the x.org doesn't compile. So I try TinyX and it
-build corretly and I can launch it (without any options). But when I'm in the X
-display (gray screen with a cross in the middle), I can't close it with the keys
-CTRL+Alt+Backspace nor go to tty1 by pressing Ctrl+Alt+F1 keys. I didn't find
-any helps posted in the mailing list archive.
+ hamish> Author: hamish
+ hamish> Date: 2009-02-02 00:39:14 +0000 (Mon, 02 Feb 2009)
+ hamish> New Revision: 25212
 
-Could someone helps me to make the keyboard works under TinyX ?
+ hamish> Log:
+ hamish> Remove empty directory left after dbus/libxml2 cleanup
 
-Thanks
+Ah yes, thanks - git-svn messes those up and don't show them in my
+local tree.
 
-Henri
+I wonder why Ulf added it in the first place.
+
+-- 
+Bye, Peter Korsgaard
