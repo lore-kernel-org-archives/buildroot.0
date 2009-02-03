@@ -1,43 +1,64 @@
-From: jeff angielski <jeff@theptrgroup.com>
-Date: Tue, 03 Feb 2009 08:25:08 -0500
-Subject: [Buildroot] can't open /dev/tty No such device or address
-In-Reply-To: <87pri0f1gr.fsf@macbook.be.48ers.dk>
-References: <1233613745.7613.23.camel@penguin>
-	<20090202232422.GB30540@cloud.net.au>
-	<1233633829.13156.3.camel@penguin>
-	<87pri0f1gr.fsf@macbook.be.48ers.dk>
-Message-ID: <1233667508.7844.5.camel@penguin>
+From: Mitesh Gupta <guptamitesh@gmail.com>
+Date: Tue, 3 Feb 2009 19:01:25 +0530
+Subject: [Buildroot] MySql make error
+Message-ID: <8ebba8c20902030531i350c2c46vf2981f88947863ea@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 2009-02-03 at 08:01 +0100, Peter Korsgaard wrote:
-> >>>>> "jeff" == jeff angielski <jeff@theptrgroup.com> writes:
-> 
-> Hi,
-> 
->  jeff> You are correct.  At some point while I was trying to get my
->  jeff> serial port, /dev/ttyCPM0, up and running as the serial console
->  jeff> in buildroot I must have inadvertently disabled Virtual
->  jeff> Terminals in the kernel config file.  Once I enabled them again
->  jeff> all was well.
-> 
-> We don't seem to have ttyCPMx devices listed in the default
-> /etc/securetty, what major/minor device numbers does it use and how
-> many are typically present?
+Hi,
+I used build root and did a make menuconfig in that I jus added mysql
+client. Then edited  vim package/database/mysql_client/mysql_client.mk and
+removed the line --without-server for mysql to build with the server and did
+a make after making the change. I encounted the following error while make
+(just including the short output)
 
-These are serial ports from the 2.6.x kernel based on the CPM core in
-the PowerPC processors.  They can be found in the linux kernel under
-linux/drivers/serial/cpm_uart.
+/mnt/rootfs/buildroot/buildroot/build_i686/staging_dir/usr/bin/i686-linux-uclibc-g++
+-Os -pipe -Os
+-I/mnt/rootfs/buildroot/buildroot/build_i686/staging_dir/usr/include
+-I/mnt/rootfs/buildroot/buildroot/build_i686/staging_dir/include
+--sysroot=/mnt/rootfs/buildroot/buildroot/build_i686/staging_dir/ -isysroot
+/mnt/rootfs/buildroot/buildroot/build_i686/staging_dir -mtune=i686
+-march=i686 -Os -pipe -Os
+-I/mnt/rootfs/buildroot/buildroot/build_i686/staging_dir/usr/include
+-I/mnt/rootfs/buildroot/buildroot/build_i686/staging_dir/include
+--sysroot=/mnt/rootfs/buildroot/buildroot/build_i686/staging_dir/ -isysroot
+/mnt/rootfs/buildroot/buildroot/build_i686/staging_dir -mtune=i686
+-march=i686 -fno-implicit-templates -fno-exceptions -fno-rtti
+--sysroot=/mnt/rootfs/buildroot/buildroot/build_i686/staging_dir/ -rdynamic
+-o gen_lex_hash gen_lex_hash.o
+-L/mnt/rootfs/buildroot/buildroot/build_i686/staging_dir/lib
+-L/mnt/rootfs/buildroot/buildroot/build_i686/staging_dir/usr/lib
+../vio/libvio.a ../mysys/libmysys.a ../dbug/libdbug.a ../regex/libregex.a
+../strings/libmystrings.a ../zlib/.libs/libzlt.a -lpthread -lcrypt -lnsl -lm
+-lpthread
+make[3]: Leaving directory
+`/mnt/rootfs/buildroot/buildroot/build_i686/mysql_client-5.1.23-rc/sql'
+./gen_lex_hash > lex_hash.h-t
+/bin/bash: ./gen_lex_hash: No such file or directory
+make[2]: *** [lex_hash.h] Error 127
+make[2]: Leaving directory
+`/mnt/rootfs/buildroot/buildroot/build_i686/mysql_client-5.1.23-rc/sql'
+make[1]: *** [all-recursive] Error 1
+make[1]: Leaving directory
+`/mnt/rootfs/buildroot/buildroot/build_i686/mysql_client-5.1.23-rc'
+make: ***
+[/mnt/rootfs/buildroot/buildroot/build_i686/mysql_client-5.1.23-rc/.stamp_built]
+Error 2
 
-Here is what I added to the device_table.txt to make it work.
 
-/dev/ttyCPM c	666	0	0	204	46	0	1	6
+I think the problem is it try to execute gen_lex_hash file which was
+compiled and generated using the cross toolchain for the target machine and
+cant be run on the machine on which I am building the system and hence the
+error " /bin/bash: ./gen_lex_hash: No such file or directory ".
 
+Is there a way this problem can be solved?
 
--- 
-Jeff Angielski
-The PTR Group
-www.theptrgroup.com
+Thanks
+
+Mitesh
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: http://lists.busybox.net/pipermail/buildroot/attachments/20090203/626e9abe/attachment.htm 
