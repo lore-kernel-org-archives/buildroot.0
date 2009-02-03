@@ -1,65 +1,27 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue,  3 Feb 2009 14:30:45 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/generic:
-	target_busybox_skeleton/etc target_skel etc...
-Message-ID: <20090203143045.4E1B976272@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 03 Feb 2009 15:39:04 +0100
+Subject: [Buildroot] Mysql error with Buildroot
+In-Reply-To: <ce62e9d00901290036r3b7649e3s748b7821c7ab1f4b@mail.gmail.com>
+	(Fabien Marteau's message of "Thu\, 29 Jan 2009 09\:36\:34 +0100")
+References: <8ebba8c20901290015u199c2ad8r66ef36339ae1d099@mail.gmail.com>
+	<ce62e9d00901290036r3b7649e3s748b7821c7ab1f4b@mail.gmail.com>
+Message-ID: <87ocxjegaf.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-02-03 14:30:44 +0000 (Tue, 03 Feb 2009)
-New Revision: 25227
+>>>>> "Fabien" == Fabien Marteau <lepingouin.tux@gmail.com> writes:
 
-Log:
-target/generic: add ttyCPMx device nodes to device_table / securetty
+ Fabien> I has the same problem, to solve it I just made link on library :
+ Fabien> cd /usr/lib
+ Fabien> ln -s mysql/libmysqlclient.so.16
 
-Serial devices for CPM cores on ppc.
+ Fabien> And it's work, but it's not very clean patch ;-)
 
-Modified:
-   trunk/buildroot/target/generic/device_table.txt
-   trunk/buildroot/target/generic/target_busybox_skeleton/etc/securetty
-   trunk/buildroot/target/generic/target_skeleton/etc/securetty
+The uclibc defconfig was set up to not respect RPATH settings, and
+mysql used a RPATH to /usr/lib/mysql. Fixed in svn r25225.
 
-
-Changeset:
-Modified: trunk/buildroot/target/generic/device_table.txt
-===================================================================
---- trunk/buildroot/target/generic/device_table.txt	2009-02-03 14:29:36 UTC (rev 25226)
-+++ trunk/buildroot/target/generic/device_table.txt	2009-02-03 14:30:44 UTC (rev 25227)
-@@ -72,6 +72,7 @@
- #/dev/ttySA	c	666	0	0	204	5	0	1	3
- /dev/psaux	c	666	0	0	10	1	0	0	-
- #/dev/ppp	c	666	0	0	108	0	-	-	-
-+/dev/ttyCPM	c	666	0	0	204	46	0	1	4
- /dev/ttyAMA	c	666	0	0	204	64	0	1	4
- /dev/ttyPSC	c	666	0	0	204	148	0	1	4
- /dev/ttyUL	c	666	0	0	204	187	0	1	4
-
-Modified: trunk/buildroot/target/generic/target_busybox_skeleton/etc/securetty
-===================================================================
---- trunk/buildroot/target/generic/target_busybox_skeleton/etc/securetty	2009-02-03 14:29:36 UTC (rev 25226)
-+++ trunk/buildroot/target/generic/target_busybox_skeleton/etc/securetty	2009-02-03 14:30:44 UTC (rev 25227)
-@@ -22,3 +22,7 @@
- ttyPSC1
- ttyPSC2
- ttyPSC3
-+ttyCPM0
-+ttyCPM1
-+ttyCPM2
-+ttyCPM3
-
-Modified: trunk/buildroot/target/generic/target_skeleton/etc/securetty
-===================================================================
---- trunk/buildroot/target/generic/target_skeleton/etc/securetty	2009-02-03 14:29:36 UTC (rev 25226)
-+++ trunk/buildroot/target/generic/target_skeleton/etc/securetty	2009-02-03 14:30:44 UTC (rev 25227)
-@@ -22,3 +22,7 @@
- ttyPSC1
- ttyPSC2
- ttyPSC3
-+ttyCPM0
-+ttyCPM1
-+ttyCPM2
-+ttyCPM3
+-- 
+Bye, Peter Korsgaard
