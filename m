@@ -1,37 +1,32 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 03 Feb 2009 09:30:39 +0100
-Subject: [Buildroot]
-	svn	commit:	trunk/buildroot/target/device/Atmel/at91bootstrap
-In-Reply-To: <21805444.post@talk.nabble.com> (tigmac's message of "Tue\,
-	3 Feb 2009 00\:23\:37 -0800 \(PST\)")
-References: <21805444.post@talk.nabble.com>
-Message-ID: <87ljsngbww.fsf@macbook.be.48ers.dk>
+Date: Tue, 03 Feb 2009 09:55:18 +0100
+Subject: [Buildroot] XBurst CPU by Ingenic
+In-Reply-To: <84687A6B-E461-4916-A313-3E441B940217@laptouchinc.com> (Daniel
+	Jabbour's message of "Mon\, 2 Feb 2009 15\:31\:03 -0500")
+References: <84687A6B-E461-4916-A313-3E441B940217@laptouchinc.com>
+Message-ID: <87hc3bgart.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "tigmac" == tigmac  <chromy@asix.cz> writes:
+>>>>> "Daniel" == Daniel Jabbour <daniel@laptouchinc.com> writes:
 
-Hi,
+ Daniel> Hi,
+ Daniel> Has anyone used buildroot with the XBurst CPU by Ingenic? It's a MIPS  
+ Daniel> 32 compatible CPU which Ingenic has released a toolkit for on their  
+ Daniel> site (http://www.ingenic.cn/eng/productServ/kfyd/Linux/ 
+ Daniel> pfCustomPage.aspx). It seems pretty straight forward, but I'm  
+ Daniel> wondering if I need to use their toolchain or if I can simply use  
+ Daniel> buildroot and select MIPS as the architecture.
 
- tigmac> Unfortunately this is not the only problem, even if Makefile
- tigmac> is corrected, there is an #include missing in
- tigmac> driver/nandflash.c causing the compilation to fail. In other
- tigmac> words version 2.10 is buggy like hell, at least concerning
- tigmac> NADN flash.  Unless you are willing to fix it yourself, I
- tigmac> recommend using version 2.4.
+ Daniel> My question is basically: Would you recommend using the Ingenic  
+ Daniel> toolchain or simply a generic MIPS-32 one?
 
-Ok. I don't have any at91 hw, so I don't know anything about it.
-
-Ulf, you bumped the at91bootstrap version recently - What's up?
-
- tigmac> BTW if I would like to submit a patch for AT91Bootstrap,
- tigmac> where should I send it so that it makes its way info the
- tigmac> official release?
-
-Don't know, somewhere at Atmel I guess - Ulf?
+No idea, but the simplest approach would probably to just do a quick
+BR compilation with the generic mips32 compiler and check that it all
+works.
 
 -- 
 Bye, Peter Korsgaard
