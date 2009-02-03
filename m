@@ -1,27 +1,67 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 03 Feb 2009 15:39:04 +0100
-Subject: [Buildroot] Mysql error with Buildroot
-In-Reply-To: <ce62e9d00901290036r3b7649e3s748b7821c7ab1f4b@mail.gmail.com>
-	(Fabien Marteau's message of "Thu\, 29 Jan 2009 09\:36\:34 +0100")
-References: <8ebba8c20901290015u199c2ad8r66ef36339ae1d099@mail.gmail.com>
-	<ce62e9d00901290036r3b7649e3s748b7821c7ab1f4b@mail.gmail.com>
-Message-ID: <87ocxjegaf.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Tue,  3 Feb 2009 16:24:13 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/scripts
+Message-ID: <20090203162414.08B4976272@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabien" == Fabien Marteau <lepingouin.tux@gmail.com> writes:
+Author: jacmet
+Date: 2009-02-03 16:24:13 +0000 (Tue, 03 Feb 2009)
+New Revision: 25228
 
- Fabien> I has the same problem, to solve it I just made link on library :
- Fabien> cd /usr/lib
- Fabien> ln -s mysql/libmysqlclient.so.16
+Log:
+setlocalversion: sync with HEAD of kernel git
 
- Fabien> And it's work, but it's not very clean patch ;-)
+Outputs correct svn revision (latest change, not repo version).
 
-The uclibc defconfig was set up to not respect RPATH settings, and
-mysql used a RPATH to /usr/lib/mysql. Fixed in svn r25225.
+Modified:
+   trunk/buildroot/scripts/setlocalversion
 
--- 
-Bye, Peter Korsgaard
+
+Changeset:
+Modified: trunk/buildroot/scripts/setlocalversion
+===================================================================
+--- trunk/buildroot/scripts/setlocalversion	2009-02-03 14:30:44 UTC (rev 25227)
++++ trunk/buildroot/scripts/setlocalversion	2009-02-03 16:24:13 UTC (rev 25228)
+@@ -9,15 +9,19 @@
+ cd "${1:-.}" || usage
+ 
+ # Check for git and a git repo.
+-if head=`git rev-parse --verify HEAD 2>/dev/null`; then
++if head=`git rev-parse --verify --short HEAD 2>/dev/null`; then
+ 	# Do we have an untagged version?
+ 	if git name-rev --tags HEAD | grep -E '^HEAD[[:space:]]+(.*~[0-9]*|undefined)$' > /dev/null; then
+-	        git describe 2>/dev/null | awk -F- '{printf("-%05d-%s", $(NF-1),$(NF))}'
++		if tag=`git describe 2>/dev/null`; then
++			echo $tag | awk -F- '{printf("-%05d-%s", $(NF-1),$(NF))}'
++		else
++			printf '%s%s' -g $head
++		fi
+ 	fi
+ 
+ 	# Is this git on svn?
+ 	if git config --get svn-remote.svn.url >/dev/null; then
+-	        printf -- '-svn%s' "`git svn find-rev $head`"
++	        printf -- '-svn%s' "`git-svn find-rev $head`"
+ 	fi
+ 
+ 	# Are there uncommitted changes?
+@@ -52,13 +56,13 @@
+ fi
+ 
+ # Check for svn and a svn repo.
+-if rev=`svn info 2>/dev/null | grep '^Revision'`; then
++if rev=`svn info 2>/dev/null | grep '^Last Changed Rev'`; then
+ 	rev=`echo $rev | awk '{print $NF}'`
+ 	changes=`svn status 2>/dev/null | grep '^[AMD]' | wc -l`
+ 
+ 	# Are there uncommitted changes?
+ 	if [ $changes != 0 ]; then
+-		printf -- '-svn%s%s%s' "$rev" -dirty "$changes"
++		printf -- '-svn%s%s' "$rev" -dirty
+ 	else
+ 		printf -- '-svn%s' "$rev"
+ 	fi
