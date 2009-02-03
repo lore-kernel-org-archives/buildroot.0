@@ -1,30 +1,98 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 03 Feb 2009 15:28:27 +0100
-Subject: [Buildroot] can't open /dev/tty No such device or address
-In-Reply-To: <1233667508.7844.5.camel@penguin> (jeff angielski's message of
-	"Tue\, 03 Feb 2009 08\:25\:08 -0500")
-References: <1233613745.7613.23.camel@penguin>
-	<20090202232422.GB30540@cloud.net.au>
-	<1233633829.13156.3.camel@penguin>
-	<87pri0f1gr.fsf@macbook.be.48ers.dk> <1233667508.7844.5.camel@penguin>
-Message-ID: <87wsc7egs4.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Tue,  3 Feb 2009 14:28:44 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
+Message-ID: <20090203142844.7A87176272@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "jeff" == jeff angielski <jeff@theptrgroup.com> writes:
+Author: jacmet
+Date: 2009-02-03 14:28:43 +0000 (Tue, 03 Feb 2009)
+New Revision: 25225
 
- jeff> Here is what I added to the device_table.txt to make it work.
+Log:
+uClibc: enable LDSO_RUNPATH in defconfigs (use ELF RPATH info)
 
- jeff> /dev/ttyCPM c	666	0	0	204	46	0	1	6
+Fixes mysql-client package (installs shared libraries into /usr/lib/mysql
+and sets RPATH).
 
-6 nodes? devices.txt seems a bit broken in this regard, but it seems
-like only the region 46..49 has been reserved for cpm.
+Modified:
+   trunk/buildroot/toolchain/uClibc/uClibc-0.9.28.config
+   trunk/buildroot/toolchain/uClibc/uClibc-0.9.29-wchar.config
+   trunk/buildroot/toolchain/uClibc/uClibc-0.9.29.config
+   trunk/buildroot/toolchain/uClibc/uClibc-0.9.30.config
+   trunk/buildroot/toolchain/uClibc/uClibc-snapshot.config
 
-I've updated the generic device_table.txt / securetty with
-ttyCPM[0-3].
 
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/toolchain/uClibc/uClibc-0.9.28.config
+===================================================================
+--- trunk/buildroot/toolchain/uClibc/uClibc-0.9.28.config	2009-02-02 23:43:57 UTC (rev 25224)
++++ trunk/buildroot/toolchain/uClibc/uClibc-0.9.28.config	2009-02-03 14:28:43 UTC (rev 25225)
+@@ -75,7 +75,7 @@
+ LDSO_CACHE_SUPPORT=y
+ # LDSO_PRELOAD_FILE_SUPPORT is not set
+ LDSO_BASE_FILENAME="ld.so"
+-# LDSO_RUNPATH is not set
++LDSO_RUNPATH=y
+ # DL_FINI_CRT_COMPAT is not set
+ UCLIBC_CTOR_DTOR=y
+ # HAS_NO_THREADS is not set
+
+Modified: trunk/buildroot/toolchain/uClibc/uClibc-0.9.29-wchar.config
+===================================================================
+--- trunk/buildroot/toolchain/uClibc/uClibc-0.9.29-wchar.config	2009-02-02 23:43:57 UTC (rev 25224)
++++ trunk/buildroot/toolchain/uClibc/uClibc-0.9.29-wchar.config	2009-02-03 14:28:43 UTC (rev 25225)
+@@ -80,7 +80,7 @@
+ # LDSO_PRELOAD_FILE_SUPPORT is not set
+ LDSO_BASE_FILENAME="ld.so"
+ # UCLIBC_STATIC_LDCONFIG is not set
+-# LDSO_RUNPATH is not set
++LDSO_RUNPATH=y
+ UCLIBC_CTOR_DTOR=y
+ # HAS_NO_THREADS is not set
+ UCLIBC_HAS_THREADS=y
+
+Modified: trunk/buildroot/toolchain/uClibc/uClibc-0.9.29.config
+===================================================================
+--- trunk/buildroot/toolchain/uClibc/uClibc-0.9.29.config	2009-02-02 23:43:57 UTC (rev 25224)
++++ trunk/buildroot/toolchain/uClibc/uClibc-0.9.29.config	2009-02-03 14:28:43 UTC (rev 25225)
+@@ -64,7 +64,7 @@
+ # LDSO_PRELOAD_FILE_SUPPORT is not set
+ LDSO_BASE_FILENAME="ld.so"
+ # UCLIBC_STATIC_LDCONFIG is not set
+-# LDSO_RUNPATH is not set
++LDSO_RUNPATH=y
+ # DL_FINI_CRT_COMPAT is not set
+ UCLIBC_CTOR_DTOR=y
+ # HAS_NO_THREADS is not set
+
+Modified: trunk/buildroot/toolchain/uClibc/uClibc-0.9.30.config
+===================================================================
+--- trunk/buildroot/toolchain/uClibc/uClibc-0.9.30.config	2009-02-02 23:43:57 UTC (rev 25224)
++++ trunk/buildroot/toolchain/uClibc/uClibc-0.9.30.config	2009-02-03 14:28:43 UTC (rev 25225)
+@@ -63,7 +63,7 @@
+ # LDSO_CACHE_SUPPORT is not set
+ # LDSO_PRELOAD_FILE_SUPPORT is not set
+ # UCLIBC_STATIC_LDCONFIG is not set
+-# LDSO_RUNPATH is not set
++LDSO_RUNPATH=y
+ UCLIBC_CTOR_DTOR=y
+ # LDSO_GNU_HASH_SUPPORT is not set
+ # HAS_NO_THREADS is not set
+
+Modified: trunk/buildroot/toolchain/uClibc/uClibc-snapshot.config
+===================================================================
+--- trunk/buildroot/toolchain/uClibc/uClibc-snapshot.config	2009-02-02 23:43:57 UTC (rev 25224)
++++ trunk/buildroot/toolchain/uClibc/uClibc-snapshot.config	2009-02-03 14:28:43 UTC (rev 25225)
+@@ -68,7 +68,7 @@
+ # LDSO_PRELOAD_FILE_SUPPORT is not set
+ LDSO_BASE_FILENAME="ld.so"
+ # UCLIBC_STATIC_LDCONFIG is not set
+-# LDSO_RUNPATH is not set
++LDSO_RUNPATH=y
+ UCLIBC_CTOR_DTOR=y
+ # LDSO_GNU_HASH_SUPPORT is not set
+ # HAS_NO_THREADS is not set
