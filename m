@@ -1,31 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 03 Feb 2009 08:01:40 +0100
-Subject: [Buildroot] can't open /dev/tty No such device or address
-In-Reply-To: <1233633829.13156.3.camel@penguin> (jeff angielski's message of
-	"Mon\, 02 Feb 2009 23\:03\:49 -0500")
-References: <1233613745.7613.23.camel@penguin>
-	<20090202232422.GB30540@cloud.net.au>
-	<1233633829.13156.3.camel@penguin>
-Message-ID: <87pri0f1gr.fsf@macbook.be.48ers.dk>
+From: tigmac <chromy@asix.cz>
+Date: Tue, 3 Feb 2009 00:23:37 -0800 (PST)
+Subject: [Buildroot]
+	svn	commit:	trunk/buildroot/target/device/Atmel/at91bootstrap
+Message-ID: <21805444.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "jeff" == jeff angielski <jeff@theptrgroup.com> writes:
 
-Hi,
+I am afraid that AT91Bootstrap version 2.10 is broken regarding NAND flash.
+The main problem being in Makefile:
 
- jeff> You are correct.  At some point while I was trying to get my
- jeff> serial port, /dev/ttyCPM0, up and running as the serial console
- jeff> in buildroot I must have inadvertently disabled Virtual
- jeff> Terminals in the kernel config file.  Once I enabled them again
- jeff> all was well.
+ifeq ($(CONFIG_NANDFLASH),y)
+CPPFLAGS += -DCONFIG_NAND_FLASH
+endif
 
-We don't seem to have ttyCPMx devices listed in the default
-/etc/securetty, what major/minor device numbers does it use and how
-many are typically present?
+See the extra underscore which should not be there?
+Unfortunately this is not the only problem, even if Makefile is corrected,
+there is an #include missing
+in  driver/nandflash.c causing the compilation to fail. In other words
+version 2.10 is buggy like hell,
+at least concerning NADN flash.
+Unless you are willing to fix it yourself, I recommend using version 2.4.
 
+BTW if I would like to submit a patch for AT91Bootstrap, where should I send
+it so that it makes its way
+info the official release?
 -- 
-Bye, Peter Korsgaard
+View this message in context: http://www.nabble.com/svn-commit%3A-trunk-buildroot-target-device-Atmel-at91bootstrap-tp21404604p21805444.html
+Sent from the BuildRoot mailing list archive at Nabble.com.
