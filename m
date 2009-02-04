@@ -1,107 +1,51 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Wed,  4 Feb 2009 13:42:40 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain:
-	external-toolchain gcc
-Message-ID: <20090204134241.21E0F76274@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 04 Feb 2009 16:11:07 +0100
+Subject: [Buildroot] BR-2009.02-rc3 Make Error (./makedepend: 1: Syntax
+	error: Unterminated quoted string)
+In-Reply-To: <BAY124-DS4F2AA8AFF4C9516A055FDD2C20@phx.gbl>
+	(quickx@hotmail.com's message of "Tue\,
+	3 Feb 2009 13\:15\:44 -0800")
+References: <BAY124-DS4F2AA8AFF4C9516A055FDD2C20@phx.gbl>
+Message-ID: <87d4dyck50.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-02-04 13:42:40 +0000 (Wed, 04 Feb 2009)
-New Revision: 25237
+>>>>> "QuickX" == QuickX  <quickx@hotmail.com> writes:
 
-Log:
-toolchain: revert r25193 (Change binary toolchain configuration)
+Hi,
 
-As discussed on the list.
+ QuickX> I'm trying to build the at91sam9261ek_defconfig build on a
+ QuickX> Kubuntu 8.10 machine.  I issue the following commands and get
+ QuickX> the following error:
 
-Modified:
-   trunk/buildroot/toolchain/Config.in
-   trunk/buildroot/toolchain/external-toolchain/Config.in.2
-   trunk/buildroot/toolchain/external-toolchain/ext-tool.mk
-   trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
+ QuickX> Note: I notice it seems to be at a perl type section.  I do have perl 
+ QuickX> v5.10.0 on the host machine, is there a package I'm missing?
 
+ QuickX> $ tar xf buildroot-2009.02-rc3.tar.gz
+ QuickX> $ cd buildroot-2009.02-rc3
+ QuickX> $ make menuconfig ((SAVE EXIT))
+ QuickX> $ make at91sam9261ek_defconfig
+ QuickX> $ make
 
-Changeset:
-Modified: trunk/buildroot/toolchain/Config.in
-===================================================================
---- trunk/buildroot/toolchain/Config.in	2009-02-04 12:57:21 UTC (rev 25236)
-+++ trunk/buildroot/toolchain/Config.in	2009-02-04 13:42:40 UTC (rev 25237)
-@@ -26,8 +26,6 @@
- 	default y if BR2_TOOLCHAIN_BUILDROOT || BR2_TOOLCHAIN_EXTERNAL_SOURCE
- 	default n if BR2_TOOLCHAIN_EXTERNAL
- 
--source "toolchain/external-toolchain/Config.in.2"
--
- source "target/device/Config.in.toolchain"
- 
- source "toolchain/Config.in.1"
-@@ -40,6 +38,6 @@
- comment "Common Toolchain Options"
- 
- source "toolchain/Config.in.2"
-+source "toolchain/external-toolchain/Config.in.2"
- 
- endmenu
--
+..
 
-Modified: trunk/buildroot/toolchain/external-toolchain/Config.in.2
-===================================================================
---- trunk/buildroot/toolchain/external-toolchain/Config.in.2	2009-02-04 12:57:21 UTC (rev 25236)
-+++ trunk/buildroot/toolchain/external-toolchain/Config.in.2	2009-02-04 13:42:40 UTC (rev 25237)
-@@ -3,12 +3,9 @@
- if BR2_TOOLCHAIN_EXTERNAL
- config BR2_TOOLCHAIN_EXTERNAL_PATH
- 	string "External toolchain path"
--	default "$(GCCROOT)"
-+	default "/path/to/staging_dir/usr"
- 	help
- 	  Path to where the external toolchain is installed.
--	  Either define GCCROOT in your environment
--	  or an absolute path like:
--	  "/path/to/staging_dir/usr"
- 
- config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	string "External toolchain prefix"
+ QuickX> Extracting x2p/Makefile (with variable substitutions)
+ QuickX> /home/dustin//buildroot-2009.02-rc3/toolchain_build_arm/bin/sed -i -e 
+ QuickX> 's/^.*<command-line>.*//g' 
+ QuickX> /home/dustin//buildroot-2009.02-rc3/build_arm/perl-5.8.8/x2p/makefile
+ QuickX> /home/dustin//buildroot-2009.02-rc3/toolchain_build_arm/bin/sed: can't read 
+ QuickX> /home/dustin//buildroot-2009.02-rc3/build_arm/perl-5.8.8/x2p/makefile: No 
 
-Modified: trunk/buildroot/toolchain/external-toolchain/ext-tool.mk
-===================================================================
---- trunk/buildroot/toolchain/external-toolchain/ext-tool.mk	2009-02-04 12:57:21 UTC (rev 25236)
-+++ trunk/buildroot/toolchain/external-toolchain/ext-tool.mk	2009-02-04 13:42:40 UTC (rev 25237)
-@@ -60,4 +60,3 @@
- 		$(call copy_toolchain_lib_root, $$libs, /lib, $(BR2_TOOLCHAIN_EXTERNAL_STRIP)); \
- 	done
- 	$(call copy_toolchain_sysroot)
--
+I just tried building it for i686 without problems - I'll try the
+atmel config as well.
 
-Modified: trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk
-===================================================================
---- trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2009-02-04 12:57:21 UTC (rev 25236)
-+++ trunk/buildroot/toolchain/gcc/gcc-uclibc-4.x.mk	2009-02-04 13:42:40 UTC (rev 25237)
-@@ -498,23 +498,5 @@
- 	@echo GCC_PATCH_DIR=$(GCC_PATCH_DIR)
- 	@echo GCC_SITE=$(GCC_SITE)
- 
--GCCSCRIPT=$(ARCH)-uclibc-gcc-$(BR2_GCC_VERSION).sh
--
--gccscript:
--	@rm -f $(GCCSCRIPT)
--	@rm -f gcc.sh
--	@echo	"#!/bin/sh"						> $(GCCSCRIPT)
--	@echo	"# $(ARCH) cross compiler toolchain created $(DATE)"	>> $(GCCSCRIPT)
--	@echo	"# gcc-$(BR2_GCC_VERSION)"				>> $(GCCSCRIPT)
--	@echo	"# binutils-$(BR2_BINUTILS_VERSION)"			>> $(GCCSCRIPT)
--	@echo	"# uClibc-$(UCLIBC_VER)"				>> $(GCCSCRIPT)
--	@echo	"export	GCCROOT=$(BR2_STAGING_DIR)/usr"			>> $(GCCSCRIPT)
--	@echo	"export	PATH=\$$GCCROOT/bin:\$$PATH"			>> $(GCCSCRIPT)
--	@echo	"export	GCCPREFIX=$(ARCH)-linux"			>> $(GCCSCRIPT)
--	@echo	"export	CROSS_COMPILE=\$$GCCPREFIX-"			>> $(GCCSCRIPT)
--	@chmod	a+x $(GCCSCRIPT)
--	@ln	-s $(GCCSCRIPT) gcc.sh
--	@echo	"$(GCCSCRIPT) created"
--	@more	$(GCCSCRIPT)
- endif
- # gcc-4.x only
+I don't use perl, but it seems from the above like Ulf's r25032 might
+have gotten the file case wrong - It talks about x2p/Makefile but is
+then trying to sed x2p/makefile. Could you try changing the $(SED)
+line in package/microperl/microperl.mk to use x2p/Makefile?
+
+-- 
+Bye, Peter Korsgaard
