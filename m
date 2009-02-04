@@ -1,45 +1,42 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  4 Feb 2009 07:47:35 +0000 (UTC)
-Subject: [Buildroot] [Bug 89] New: changing the default string for GNU
- target suffix does not work
-Message-ID: <bug-89-163@https.bugs.busybox.net/>
+Date: Wed,  4 Feb 2009 12:29:12 +0000 (UTC)
+Subject: [Buildroot] [Bug 81] New package wpa_supplicant
+In-Reply-To: <bug-81-163@https.bugs.busybox.net/>
+References: <bug-81-163@https.bugs.busybox.net/>
+Message-ID: <20090204122912.E888D76210@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=89
-
-              Host: Linux PC
-            Target: PowerPC and ARM
-           Summary: changing the default string for GNU target suffix does
-                    not work
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: major
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: vania.joloboff at tsinghua.edu.cn
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+https://bugs.busybox.net/show_bug.cgi?id=81
 
 
-I am using latest buildroot version 2009-02-rc3.
-I am trying to generate the toolchain for ARM, PPC and MIPS
-In the configuration menu, in the Build Options submenu there is an option for
-GNU target suffix. The default value is "linux-uclibc"
+Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
 
-If this string is changed to another value for example "elf-uclibc" the build
-process fails with an error, for both ARM (generic) and PowerPC (generic) at
-least.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+  Attachment #47 is|0                           |1
+           obsolete|                            |
 
-I have only set this variable and the install directory to be
-/usr/local/cross/{target-arch}/ and I am using make O=path/to/build
+
+
+
+--- Comment #2 from Gustavo Zacarias <gustavo@zacarias.com.ar>  2009-02-04 12:29:10 UTC ---
+Created an attachment (id=51)
+ --> (https://bugs.busybox.net/attachment.cgi?id=51)
+New wpa_supplicant package take 2
+
+
+Added the EAP enable/disable option to make things lighter when it's not
+wanted.
+Also made some menu descriptions nicer.
+Size for each variant:
+
+314444 bytes for wpa_supplicant with EAP-internal
+258396 bytes for wpa_supplicant with EAP-openssl
+205040 bytes for wpa_supplicant without EAP
 
 
 -- 
