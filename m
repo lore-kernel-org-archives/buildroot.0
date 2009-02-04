@@ -1,65 +1,25 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Wed, 4 Feb 2009 22:49:21 +0100
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libeXosip2
-References: <20090202072449.30556764CB@busybox.osuosl.org><87bptlgh4d.fsf@macbook.be.48ers.dk>
-	<87tz7acqjg.fsf@macbook.be.48ers.dk>
-Message-ID: <218F941249F34F48B7D7566B00C35169@aeglos>
+From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
+Date: Wed, 4 Feb 2009 20:25:03 -0200
+Subject: [Buildroot] uClibc-0.9.30-avr32-2.1.5.tar.bz2 is missing
+In-Reply-To: <F5677F2913BF4E44A9D6D3B4D74FB21C@aeglos>
+References: <d6cda7730902041111h26b28bc7l4ab8f2fff3ef9e1c@mail.gmail.com>
+	<F5677F2913BF4E44A9D6D3B4D74FB21C@aeglos>
+Message-ID: <d6cda7730902041425g5aab0fc3q44c25f2af088ae35@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> ulf> Log:
-> ulf> Define OSIP_CFLAGS and OSIP_LIBS for libeXosip2
->
->
-No email for a few days.
-
-> ulf> Changeset:
-> ulf> Modified: trunk/buildroot/package/libeXosip2/libeXosip2.mk
-> ulf> ===================================================================
-> ulf> --- trunk/buildroot/package/libeXosip2/libeXosip2.mk 2009-02-02 
-> 07:22:19 UTC (rev 25217)
-> ulf> +++ trunk/buildroot/package/libeXosip2/libeXosip2.mk 2009-02-02 
-> 07:24:48 UTC (rev 25218)
-> ulf> @@ -22,32 +22,19 @@
-> ulf> (cd $(LIBEXOSIP2_DIR); rm -rf config.cache; \
-> ulf> $(TARGET_CONFIGURE_OPTS) \
-> ulf> $(TARGET_CONFIGURE_ARGS) \
-> ulf> + OSIP_CFLAGS="$(TARGET_CFLAGS)" \
-> ulf> + OSIP_LIBS="-L$(STAGING_DIR)/usr/lib -losip2 -losipparser2" \
->
-> Peter> Aren't those things already provided in TARGET_CONFIGURE_* ?
-
-It seems that libeXosip2 ignores CFLAGS and LIBS and uses the OSIP_ stuff.
-
-libeXosip2 fails when building on OpenSuSE 11.0 for ARM.
-Reason is that configure is trying to use host libraries.
-
-While this problem at first sight would point at OpenSuSE I think that it is 
-more complex.
-I have previously seen in other packages that during configure something is 
-tested,
-inside the host files.
-If the host has the same default as Buildroot, then the build can complete,
-using buildroot directories, but if the host have other values then
-the build goes wrong and the packaes fails to build.
-
-The problem is not that OpenSuSE uses a different default.
-It is that configure uses the host stuff in the first place.
->
-> ulf> - --includedir=$(STAGING_DIR)/usr/include \
-> ulf> - --oldincludedir=/usr/include \
->
-> Peter> Why were these removed?
-
-The build can complete without them (for ARM on OpenSuSE at least),
-According to the principle of Occam's razor they then should not be present.
-
+On Wed, Feb 4, 2009 at 7:23 PM, Ulf Samuelsson <ulf.samuelsson@atmel.com> wrote:
+> If the AVR toolchain is mirrored on the Buldroot mirror, then it is possible
+> to set ATMEL_MIRROR to point at the mirror would work.
 >
 
-It certainly did not work without this
+It's not necessary, after a number of failed attempts, it does try the
+buildroot mirror, but it's not there as well.
+Could you upload to buildroot mirror or sourceforge so someone could
+move it to buildroot mirror?
 
-Best Regards
-Ulf Samuelsson
+Thanks,
+    Thiago A. Correa
