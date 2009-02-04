@@ -1,41 +1,60 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 04 Feb 2009 08:39:48 +0100
-Subject: [Buildroot] What's up with the kernel names? (Again)
-In-Reply-To: <d6cda7730902031749o51818770l1077d71877f9ad33@mail.gmail.com>
-	("Thiago A. =?utf-8?Q?Corr=C3=AAa=22's?= message of "Tue\, 3 Feb 2009
-	23\:49\:10 -0200")
-References: <d6cda7730902031749o51818770l1077d71877f9ad33@mail.gmail.com>
-Message-ID: <87bptiejln.fsf@macbook.be.48ers.dk>
+Date: Wed, 04 Feb 2009 08:46:43 +0100
+Subject: [Buildroot] mksquashfs for big endian
+In-Reply-To: <1233715795.17973.14.camel@penguin> (jeff angielski's message of
+	"Tue\, 03 Feb 2009 21\:49\:55 -0500")
+References: <1233715795.17973.14.camel@penguin>
+Message-ID: <877i46eja4.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thiago" == Thiago A Corr?a <thiago.correa@gmail.com> writes:
+>>>>> "jeff" == jeff angielski <jeff@theptrgroup.com> writes:
 
- Thiago> Hi,
- Thiago>     I thought it was seattled sometime last year that kernel names
- Thiago> would not include timestamps or any think that breaks u-boot from
- Thiago> loading the kernel.
+Hi,
 
-I thought so as well.
+ jeff> Has anybody been able to get a big endian squashfs filesystem built on a
+ jeff> x86 host (little endian) to run on a powerpc target (big endian)?
 
- Thiago>     I just had atngw100-linux-2.6.27.13-20090203.gz for a kernel name.
- Thiago> It's already bad enough that rootfs has stupid timestamps, we don't
- Thiago> really need kernel binaries too. If I wanted to preserve binaries, I
- Thiago> would copy them over before building again. Whenever I type make, I
- Thiago> expect things to be overwritten.
- Thiago>     As I develop a system, I don't want to find out that I'm out of
- Thiago> disk space because it has every single failed attempt in binaries
- Thiago> folder. I also don't want to touch u-boot in anyway, don't care if
- Thiago> there are autoscripts or not. Ideally it would be named uImage like
- Thiago> the kernel folks intended.
+Yes, several times a week ;)
 
- Thiago>     Peter, could we hear your opinion on this? At least let's make
- Thiago> this optional and never bother with it again.
+ jeff> When I build the rootfs as big endian, the kernel always fails when it
+ jeff> tries to find the magic number because the bytes are swapped incorrectly
+ jeff> in flash.
 
-I agree. I'll look closer into it.
+ jeff> If you look in super.c for the squashfs driver in the kernel, it would
+ jeff> seem that Linux always assumes the rootfs is little endian.
+	
+ sb-> s_magic = le32_to_cpu(sblk->s_magic);
+ jeff> 	if (sb->s_magic != SQUASHFS_MAGIC) {\
+ jeff> 		<fail>
+ jeff> 	}
+
+ jeff> How can this ever work?  
+
+ jeff> I recall seeing patches proposed for supporting big endian but alas,
+ jeff> they do not appear to have been accepted.
+
+To buildroot?
+
+ jeff> I was just looking for a sanity check to see if somebody else has it
+ jeff> working.
+
+ jeff> BTW, I am using the DENX 2.6 kernel.
+
+I think you are getting confused about the different squashfs versions
+in existence. The squashfs version supported in BR is 3.4 (the latest
+released version), which supports big AND little endian file
+systems. The thing that got merged into the mainline kernel after
+2.6.28 is squashfs 4, which is a different filesystem format and
+purely little endian. You'll need an updated mksquashfs to create a
+version 4 filesystem, but that's sadly not released yet (available in
+cvs though).
+
+I'll add v4 support to BR when there's a new mksquashfs release
+supporting it, until then I suggest you stay with 2.6.28.
 
 -- 
 Bye, Peter Korsgaard
