@@ -1,47 +1,65 @@
 From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Wed, 4 Feb 2009 22:23:32 +0100
-Subject: [Buildroot] uClibc-0.9.30-avr32-2.1.5.tar.bz2 is missing
-References: <d6cda7730902041111h26b28bc7l4ab8f2fff3ef9e1c@mail.gmail.com>
-Message-ID: <F5677F2913BF4E44A9D6D3B4D74FB21C@aeglos>
+Date: Wed, 4 Feb 2009 22:49:21 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package/libeXosip2
+References: <20090202072449.30556764CB@busybox.osuosl.org><87bptlgh4d.fsf@macbook.be.48ers.dk>
+	<87tz7acqjg.fsf@macbook.be.48ers.dk>
+Message-ID: <218F941249F34F48B7D7566B00C35169@aeglos>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Hi,
+> ulf> Log:
+> ulf> Define OSIP_CFLAGS and OSIP_LIBS for libeXosip2
 >
->    The avr32 configurations can't download
-> uClibc-0.9.30-avr32-2.1.5.tar.bz2. The primary site
-> (ftp://www.at91.com) gives Connection refused, and the buildroot
-> mirror doesn't have it.
->    Same goes for binutils-2.18-avr32-1.0.1.tar.bz2
 >
->    According to [1], avr32 support was in uClibc svn after 0.9.29
-> release, so upstream 0.9.30 should have support to it. Unfortunally I
-> don't see any easy way to work around this, disabling only the vendor
-> specific uclibc while keeping it for the rest of the toolchain. If we
-> remove the external source toolchain handling from uclibc.mk, it will
-> affect versions prior to .30.
+No email for a few days.
+
+> ulf> Changeset:
+> ulf> Modified: trunk/buildroot/package/libeXosip2/libeXosip2.mk
+> ulf> ===================================================================
+> ulf> --- trunk/buildroot/package/libeXosip2/libeXosip2.mk 2009-02-02 
+> 07:22:19 UTC (rev 25217)
+> ulf> +++ trunk/buildroot/package/libeXosip2/libeXosip2.mk 2009-02-02 
+> 07:24:48 UTC (rev 25218)
+> ulf> @@ -22,32 +22,19 @@
+> ulf> (cd $(LIBEXOSIP2_DIR); rm -rf config.cache; \
+> ulf> $(TARGET_CONFIGURE_OPTS) \
+> ulf> $(TARGET_CONFIGURE_ARGS) \
+> ulf> + OSIP_CFLAGS="$(TARGET_CFLAGS)" \
+> ulf> + OSIP_LIBS="-L$(STAGING_DIR)/usr/lib -losip2 -losipparser2" \
 >
-> [1] http://avr32linux.org/twiki/bin/view/Main/MicroClibcPatches
+> Peter> Aren't those things already provided in TARGET_CONFIGURE_* ?
+
+It seems that libeXosip2 ignores CFLAGS and LIBS and uses the OSIP_ stuff.
+
+libeXosip2 fails when building on OpenSuSE 11.0 for ARM.
+Reason is that configure is trying to use host libraries.
+
+While this problem at first sight would point at OpenSuSE I think that it is 
+more complex.
+I have previously seen in other packages that during configure something is 
+tested,
+inside the host files.
+If the host has the same default as Buildroot, then the build can complete,
+using buildroot directories, but if the host have other values then
+the build goes wrong and the packaes fails to build.
+
+The problem is not that OpenSuSE uses a different default.
+It is that configure uses the host stuff in the first place.
 >
-> Thanks,
->   Thiago A. Correa
+> ulf> - --includedir=$(STAGING_DIR)/usr/include \
+> ulf> - --oldincludedir=/usr/include \
+>
+> Peter> Why were these removed?
+
+The build can complete without them (for ARM on OpenSuSE at least),
+According to the principle of Occam's razor they then should not be present.
+
 >
 
-I would say that this  is a temporary problem.
-The whole www.at91.com site seems to be locked up.
-ftp wont connect to the server to my usual account.
-Will report this to the responsible persons.
-
-If the AVR toolchain is mirrored on the Buldroot mirror, then it is possible
-to set ATMEL_MIRROR to point at the mirror would work.
-
-If you do not have the source tarballs, I can provide it to you,
-if you can point to an ftp server where I can upload.
-
-Could also move the stuff to sourceforge of course...
+It certainly did not work without this
 
 Best Regards
 Ulf Samuelsson
