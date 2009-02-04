@@ -1,60 +1,48 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 04 Feb 2009 08:46:43 +0100
-Subject: [Buildroot] mksquashfs for big endian
-In-Reply-To: <1233715795.17973.14.camel@penguin> (jeff angielski's message of
-	"Tue\, 03 Feb 2009 21\:49\:55 -0500")
-References: <1233715795.17973.14.camel@penguin>
-Message-ID: <877i46eja4.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed,  4 Feb 2009 07:47:35 +0000 (UTC)
+Subject: [Buildroot] [Bug 89] New: changing the default string for GNU
+ target suffix does not work
+Message-ID: <bug-89-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "jeff" == jeff angielski <jeff@theptrgroup.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=89
 
-Hi,
+              Host: Linux PC
+            Target: PowerPC and ARM
+           Summary: changing the default string for GNU target suffix does
+                    not work
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: major
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: vania.joloboff at tsinghua.edu.cn
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
- jeff> Has anybody been able to get a big endian squashfs filesystem built on a
- jeff> x86 host (little endian) to run on a powerpc target (big endian)?
 
-Yes, several times a week ;)
+I am using latest buildroot version 2009-02-rc3.
+I am trying to generate the toolchain for ARM, PPC and MIPS
+In the configuration menu, in the Build Options submenu there is an option for
+GNU target suffix. The default value is "linux-uclibc"
 
- jeff> When I build the rootfs as big endian, the kernel always fails when it
- jeff> tries to find the magic number because the bytes are swapped incorrectly
- jeff> in flash.
+If this string is changed to another value for example "elf-uclibc" the build
+process fails with an error, for both ARM (generic) and PowerPC (generic) at
+least.
 
- jeff> If you look in super.c for the squashfs driver in the kernel, it would
- jeff> seem that Linux always assumes the rootfs is little endian.
-	
- sb-> s_magic = le32_to_cpu(sblk->s_magic);
- jeff> 	if (sb->s_magic != SQUASHFS_MAGIC) {\
- jeff> 		<fail>
- jeff> 	}
+I have only set this variable and the install directory to be
+/usr/local/cross/{target-arch}/ and I am using make O=path/to/build
 
- jeff> How can this ever work?  
-
- jeff> I recall seeing patches proposed for supporting big endian but alas,
- jeff> they do not appear to have been accepted.
-
-To buildroot?
-
- jeff> I was just looking for a sanity check to see if somebody else has it
- jeff> working.
-
- jeff> BTW, I am using the DENX 2.6 kernel.
-
-I think you are getting confused about the different squashfs versions
-in existence. The squashfs version supported in BR is 3.4 (the latest
-released version), which supports big AND little endian file
-systems. The thing that got merged into the mainline kernel after
-2.6.28 is squashfs 4, which is a different filesystem format and
-purely little endian. You'll need an updated mksquashfs to create a
-version 4 filesystem, but that's sadly not released yet (available in
-cvs though).
-
-I'll add v4 support to BR when there's a new mksquashfs release
-supporting it, until then I suggest you stay with 2.6.28.
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
