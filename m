@@ -1,55 +1,53 @@
 From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Thu, 05 Feb 2009 21:27:16 +0100
-Subject: [Buildroot] BR-2009.02-rc3 Make Error (./makedepend: 1:
-	Syntax	error: Unterminated quoted string)
-In-Reply-To: <87d4dyck50.fsf@macbook.be.48ers.dk>
-References: <BAY124-DS4F2AA8AFF4C9516A055FDD2C20@phx.gbl>
-	<87d4dyck50.fsf@macbook.be.48ers.dk>
-Message-ID: <1233865636.4148.8.camel@elrond.atmel.com>
+Date: Thu, 05 Feb 2009 21:37:32 +0100
+Subject: [Buildroot] What's up with the kernel names? (Again)
+In-Reply-To: <87vdrpaug2.fsf@macbook.be.48ers.dk>
+References: <d6cda7730902031749o51818770l1077d71877f9ad33@mail.gmail.com>
+	<873aeue676.fsf@macbook.be.48ers.dk>
+	<d6cda7730902041833r5e5af2ax26c0eebb48df19a4@mail.gmail.com>
+	<87vdrpaug2.fsf@macbook.be.48ers.dk>
+Message-ID: <1233866252.4148.12.camel@elrond.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ons 2009-02-04 klockan 16:11 +0100 skrev Peter Korsgaard:
-> >>>>> "QuickX" == QuickX  <quickx@hotmail.com> writes:
+tor 2009-02-05 klockan 14:23 +0100 skrev Peter Korsgaard:
+> >>>>> "Thiago" == Thiago A Corr?a <thiago.correa@gmail.com> writes:
 > 
-> Hi,
+>  Thiago> Hi,
+>  >> To me the sane thing would just be for the files to be named whatever
+>  >> the kernel names them (uImage/zImage/bzImage/..), but even if we don't
+>  >> do that we should atleast make the 2 Linux types use the same style.
+>  >> 
 > 
->  QuickX> I'm trying to build the at91sam9261ek_defconfig build on a
->  QuickX> Kubuntu 8.10 machine.  I issue the following commands and get
->  QuickX> the following error:
+>  Thiago> Unless someone oposes, I will commit the patch below tomorrow night.
 > 
->  QuickX> Note: I notice it seems to be at a perl type section.  I do have perl 
->  QuickX> v5.10.0 on the host machine, is there a package I'm missing?
+> Please do it today, I'm planning on cutting the release tomorrow
+> (Friday) at noon.
 > 
->  QuickX> $ tar xf buildroot-2009.02-rc3.tar.gz
->  QuickX> $ cd buildroot-2009.02-rc3
->  QuickX> $ make menuconfig ((SAVE EXIT))
->  QuickX> $ make at91sam9261ek_defconfig
->  QuickX> $ make
-> 
-> ..
-> 
->  QuickX> Extracting x2p/Makefile (with variable substitutions)
->  QuickX> /home/dustin//buildroot-2009.02-rc3/toolchain_build_arm/bin/sed -i -e 
->  QuickX> 's/^.*<command-line>.*//g' 
->  QuickX> /home/dustin//buildroot-2009.02-rc3/build_arm/perl-5.8.8/x2p/makefile
->  QuickX> /home/dustin//buildroot-2009.02-rc3/toolchain_build_arm/bin/sed: can't read 
->  QuickX> /home/dustin//buildroot-2009.02-rc3/build_arm/perl-5.8.8/x2p/makefile: No 
-> 
-> I just tried building it for i686 without problems - I'll try the
-> atmel config as well.
-> 
-> I don't use perl, but it seems from the above like Ulf's r25032 might
-> have gotten the file case wrong - It talks about x2p/Makefile but is
-> then trying to sed x2p/makefile. Could you try changing the $(SED)
-> line in package/microperl/microperl.mk to use x2p/Makefile?
+>  Thiago> It will use the rootfs suffix if one is specified for the kernel, but
+>  Thiago> if none is supplied, we get default kernel names. Then you can get
+>  Thiago> both rootfs and kernel with your board names, dates, etc. And both
+>  Thiago> rootfs and kernel names will always match.
 > 
 
-IIRC, there is both a makefile and a Makefile, and it should be applied
-to makefile.
 
+And you have no clue about the kernel version.
+And you have to modify the suffix for every project.
+Much better to just create the link to uImage etc.
+
+Then you have both.
 BR
-Ulf Samuelsson
+
+
+> Seems good, but don't forget the non-advanced version as well. We
+> should imho use the same naming convention for both kernel builds.
+> 
+> -- 
+> Bye, Peter Korsgaard
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
