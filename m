@@ -1,36 +1,26 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Thu,  5 Feb 2009 13:24:22 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/multimedia/mpg123
-Message-ID: <20090205132422.BA38576454@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 05 Feb 2009 14:25:53 +0100
+Subject: [Buildroot] at91rm9200 toolchain
+In-Reply-To: <1233814769.5851.73.camel@linux-l8en.site> (Sandeep Kumar's
+	message of "Thu\, 05 Feb 2009 11\:49\:29 +0530")
+References: <498A1FA9.1070306@ethertek.ca> <878woldc0r.fsf@macbook.be.48ers.dk>
+	<1233814769.5851.73.camel@linux-l8en.site>
+Message-ID: <87r62dauce.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-02-05 13:24:22 +0000 (Thu, 05 Feb 2009)
-New Revision: 25251
+>>>>> "Sandeep" == Sandeep Kumar <sandeepk@verismonetworks.com> writes:
 
-Log:
-mpg123: remove unused mpg123x target (debug?)
+ Sandeep> Hi everybody
 
-Modified:
-   trunk/buildroot/package/multimedia/mpg123/mpg123.mk
+ Sandeep> I am new to at91rm9200 and i want to know that from where
+ Sandeep> can i get the toolchain, rootfile system, busybox and kernel
+ Sandeep> + patches for the same.
 
+Here I guess? We have an AT91RM9200 target (at91rm9200df_defconfig).
 
-Changeset:
-Modified: trunk/buildroot/package/multimedia/mpg123/mpg123.mk
-===================================================================
---- trunk/buildroot/package/multimedia/mpg123/mpg123.mk	2009-02-05 13:24:18 UTC (rev 25250)
-+++ trunk/buildroot/package/multimedia/mpg123/mpg123.mk	2009-02-05 13:24:22 UTC (rev 25251)
-@@ -55,9 +55,6 @@
- 
- mpg123: uclibc $(MPG123_ALSA_DEP) $(TARGET_DIR)/$(MPG123_TARGET_BIN)
- 
--mpg123x: 
--	touch $(MPG123_DIR)/.configured
--
- mpg123-unpacked: $(MPG123_DIR)/.unpacked
- 
- mpg123-clean:
+-- 
+Bye, Peter Korsgaard
