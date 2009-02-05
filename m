@@ -1,73 +1,55 @@
 From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Thu, 05 Feb 2009 21:23:52 +0100
-Subject: [Buildroot] What's up with the kernel names? (Again)
-In-Reply-To: <873aeue676.fsf@macbook.be.48ers.dk>
-References: <d6cda7730902031749o51818770l1077d71877f9ad33@mail.gmail.com>
-	<873aeue676.fsf@macbook.be.48ers.dk>
-Message-ID: <1233865432.4148.6.camel@elrond.atmel.com>
+Date: Thu, 05 Feb 2009 21:27:16 +0100
+Subject: [Buildroot] BR-2009.02-rc3 Make Error (./makedepend: 1:
+	Syntax	error: Unterminated quoted string)
+In-Reply-To: <87d4dyck50.fsf@macbook.be.48ers.dk>
+References: <BAY124-DS4F2AA8AFF4C9516A055FDD2C20@phx.gbl>
+	<87d4dyck50.fsf@macbook.be.48ers.dk>
+Message-ID: <1233865636.4148.8.camel@elrond.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ons 2009-02-04 klockan 13:29 +0100 skrev Peter Korsgaard:
-> >>>>> "Thiago" == Thiago A Corr?a <thiago.correa@gmail.com> writes:
+ons 2009-02-04 klockan 16:11 +0100 skrev Peter Korsgaard:
+> >>>>> "QuickX" == QuickX  <quickx@hotmail.com> writes:
 > 
->  Thiago> Hi,
->  Thiago>     I thought it was seattled sometime last year that kernel names
->  Thiago> would not include timestamps or any think that breaks u-boot from
->  Thiago> loading the kernel.
+> Hi,
 > 
->  Thiago>     I just had atngw100-linux-2.6.27.13-20090203.gz for a kernel name.
->  Thiago> It's already bad enough that rootfs has stupid timestamps, we don't
->  Thiago> really need kernel binaries too. If I wanted to preserve binaries, I
->  Thiago> would copy them over before building again. Whenever I type make, I
->  Thiago> expect things to be overwritten.
+>  QuickX> I'm trying to build the at91sam9261ek_defconfig build on a
+>  QuickX> Kubuntu 8.10 machine.  I issue the following commands and get
+>  QuickX> the following error:
 > 
-> The rootfs timestamp is because your defconfig sets the
-> BR2_ROOTFS_SUFFIX to a nonstandard value.
+>  QuickX> Note: I notice it seems to be at a perl type section.  I do have perl 
+>  QuickX> v5.10.0 on the host machine, is there a package I'm missing?
 > 
-> I had a look at target/linux/Makefile.in.advanced and see that it
-> uses:
+>  QuickX> $ tar xf buildroot-2009.02-rc3.tar.gz
+>  QuickX> $ cd buildroot-2009.02-rc3
+>  QuickX> $ make menuconfig ((SAVE EXIT))
+>  QuickX> $ make at91sam9261ek_defconfig
+>  QuickX> $ make
 > 
-> LINUX26_KERNEL:=$(BINARIES_DIR)/$(BOARD_NAME)-linux-$(LINUX26_VERSION)-$(DATE)$(KERNEL_EXT)
+> ..
 > 
-> whereas the normal (!advanced) Linux config uses:
+>  QuickX> Extracting x2p/Makefile (with variable substitutions)
+>  QuickX> /home/dustin//buildroot-2009.02-rc3/toolchain_build_arm/bin/sed -i -e 
+>  QuickX> 's/^.*<command-line>.*//g' 
+>  QuickX> /home/dustin//buildroot-2009.02-rc3/build_arm/perl-5.8.8/x2p/makefile
+>  QuickX> /home/dustin//buildroot-2009.02-rc3/toolchain_build_arm/bin/sed: can't read 
+>  QuickX> /home/dustin//buildroot-2009.02-rc3/build_arm/perl-5.8.8/x2p/makefile: No 
 > 
-> LINUX26_KERNEL:=$(BINARIES_DIR)/linux-kernel-$(LINUX26_VERSION)-$(KERNEL_ARCH)
+> I just tried building it for i686 without problems - I'll try the
+> atmel config as well.
 > 
-> To me the sane thing would just be for the files to be named whatever
-> the kernel names them (uImage/zImage/bzImage/..), but even if we don't
-> do that we should atleast make the 2 Linux types use the same style.
+> I don't use perl, but it seems from the above like Ulf's r25032 might
+> have gotten the file case wrong - It talks about x2p/Makefile but is
+> then trying to sed x2p/makefile. Could you try changing the $(SED)
+> line in package/microperl/microperl.mk to use x2p/Makefile?
+> 
 
-> 
-> We can add BR2_KERNEL_PREFIX/SUFFIX (defaulting to "") if people
-> really to do something special.
-> 
-> Ulf, what do you say?
-> 
+IIRC, there is both a makefile and a Makefile, and it should be applied
+to makefile.
 
-I think that we should have a symbolic link to xImage as we do for
-u-boot.bin for those that do not like the more complex filenames.
-Then there is no need for a 
-
-The purpose of having a more complex file name is to
-be able to see which kernel you have and it configuration.
-Also to be able to copy multiple kernels for multiple chips to a single
-directory - Typically /tftpboot.
-
-uImage really does not give you *any* information on the contents.
-
-When testing several configurations for the same kernel,
-adding some kind of revision information is important.
-THat is why the date is there, a little simplistic, but
-it works for me.
-
-
-> -- 
-> Bye, Peter Korsgaard
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+BR
+Ulf Samuelsson
