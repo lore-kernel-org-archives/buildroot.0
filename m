@@ -1,9 +1,7 @@
-From: Sven Neumann <s.neumann@phase-zero.de>
-Date: Thu, 05 Feb 2009 10:59:14 +0100
-Subject: [Buildroot] gcc 4.3.3 anyone?
-In-Reply-To: <873aewhadh.fsf@macbook.be.48ers.dk>
-References: <1233594146.6464.6.camel@sven> <873aewhadh.fsf@macbook.be.48ers.dk>
-Message-ID: <1233827954.6323.3.camel@sven>
+From: Jean-Christian de Rivaz <jc@eclis.ch>
+Date: Thu, 05 Feb 2009 11:39:33 +0100
+Subject: [Buildroot] cannot compute suffix of object files
+Message-ID: <498AC1E5.6080707@eclis.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,26 +10,26 @@ To: buildroot@busybox.net
 
 Hi,
 
-On Mon, 2009-02-02 at 21:06 +0100, Peter Korsgaard wrote:
+I try to install buildroot by testing the default configuration. I do a 
+"make menuconfig" and I exit it without touching any setting. After I do 
+a "make". I that correct ?
 
->  Sven> I've ran into what appears to be a bug in gcc 4.3.2 and reported it
->  Sven> here: http://gcc.gnu.org/bugzilla/show_bug.cgi?id=39076
+The problem is that the build failed on the 2009.02-RC3 and on the 
+Subversion revision 25244. The error is alway the same:
 
-The gcc people have fixed this problem in the gcc-4.3 branch. I verified
-that the patch fixes the compiler segfault when compiling flac. Attached
-is a patch for buildroot that incorporates this fix for gcc 4.3.2.
+checking for suffix of object files... configure: error: cannot compute 
+suffix of object files: cannot compile
 
-I also noticed that two of the patches in toolchain/gcc/4.3.2 don't end
-in .patch and thus are not applied. Is this intentional?
+More details on the attached files. The host is a Debian Etch x86_64.
 
-
-Sven
-
-
+Please help
+-- 
+Jean-Christian de Rivaz
 -------------- next part --------------
-A non-text attachment was scrubbed...
-Name: gcc-bugfix.diff
-Type: text/x-patch
-Size: 908 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090205/bbc89c33/attachment.bin>
+An embedded and charset-unspecified text was scrubbed...
+Name: buildroot-2009.02-rc3.txt
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090205/4d611da5/attachment.txt>
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: buildroot-svn-25244.txt
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090205/4d611da5/attachment-0001.txt>
