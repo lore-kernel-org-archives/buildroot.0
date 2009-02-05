@@ -1,41 +1,112 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Fri, 6 Feb 2009 09:06:11 +1100
-Subject: [Buildroot] Webserver
-In-Reply-To: <4989C13E.5040603@ethertek.ca>
-References: <4989C13E.5040603@ethertek.ca>
-Message-ID: <20090205220610.GA9769@cloud.net.au>
+From: Dan Pattison <dan.pattison@ethertek.ca>
+Date: Thu, 05 Feb 2009 10:18:49 -0800
+Subject: [Buildroot] Web Server
+In-Reply-To: <878woldc0r.fsf@macbook.be.48ers.dk>
+References: <498A1FA9.1070306@ethertek.ca> <878woldc0r.fsf@macbook.be.48ers.dk>
+Message-ID: <498B2D89.2080700@ethertek.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Feb 04, 2009 at 08:24:30AM -0800, Dan Pattison wrote:
-> spawn-fcgi.c:(.text+0x340): undefined reference to `rpl_malloc'  
-> collect2: ld returned 1 exit status                                       
+Hello List:
 
-[...]
-> We can see the error: undefined reference to `rpl_malloc', but being new  
-> to cross compiling, we do not know how to fix it.
+I have got a little further with making Cherokee work with Buildroot. 
+Using Peter's suggestion of   export ac_cv_func_malloc_0_nonnull=yes   
+solved the error  undefined reference to `rpl_malloc' .
 
-I've got a similar problem with a local package here. I put the
-following in xxx_CONF_OPT (xxx being the package prefix in the .mk):
+The cherokee.mk file now looks like this
+#############################################################
+# cherokee
+#############################################################
+CHEROKEE_VERSION = 0.98.1
+CHEROKEE_SOURCE = cherokee-$(CHEROKEE_VERSION).tar.gz
+CHEROKEE_SITE = http://www.cherokee-project.com/download/0.98/0.98.1
+CHEROKEE_AUTORECONF = NO
+CHEROKEE_INSTALL_STAGING = YES
+CHEROKEE_INSTALL_TARGET = YES
 
-xxx_CONF_OPT = ac_cv_func_malloc_0_nonnull=yes ac_cv_func_realloc_0_nonnull=yes
+CHEROKEE_CONF_OPT = export ac_cv_func_malloc_0_nonnull=yes
 
-> Also, when using the add_new_package.wizard, how do you know when to  
-> select "Does autoreconf need to be run first?". It did not seem to  
-> matter in the case of cross compiling Cherokee-0.98.1
+CHEROKEE_DEPENDENCIES = uclibc
 
-It may still be needed on other architectures, but leave it off for now.
-
-> Lastly, does anyone know of a different web server for Buildroot that  
-> will make the most common web browsers (IE6, IE7, Firefox etc) pop up  
-> the username/password box?
-
-Almost any web server should support basic authentication?
+$(eval $(call AUTOTARGETS,package,cherokee))
 
 
-Hamish
--- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+I am now getting a different error;   unrecognized command line option 
+"-m32"
+Can anyone suggest a work around for this error?
+
+Best Regards,
+Dan Pattison
+
+
+
+
+
+Hello Peter:
+
+Thanks for your reply. I think the stock BOA does not support Basic HTTP 
+auth, see:  http://en.wikipedia.org/wiki/Boa_(web_server)
+Please correct me if I am wrong. I cannot find where to set the password 
+file in boa.conf. The docs for the boa conf file do not mention how to 
+set the password.
+
+I've googled around and there are some patches against boa 0.94 
+mentioned that add basic auth functionality. Axis Communications (ARCH 
+cris - Etrax) have added this to boa in their linux SDK.
+
+I will check out the busybox httpd to see if it supports it, and will 
+have a look at lighttpd.
+
+I would still like to get Cherokee running if possible. Any chance 
+someone more knowledgeable than me can download it and figure out to 
+make it compile for buildroot? http://www.cherokee-project.com/
+
+Thanks,
+Dan Pattison
+
+Peter Korsgaard wrote:
+>>>>>> "Dan" == Dan Pattison <dan.pattison@ethertek.ca> writes:
+>>>>>>             
+>
+>  Dan> Hello List:
+>  Dan> We are using buildroot v2009.02 on a Fedora 10 linux distro. Our
+>  Dan> architecture is for Atmel AT91SAM9G20-EK development board. We want a
+>  Dan> more robust web server than the BOA or Busybox HTTPD. Our main
+>  Dan> requirement is to have the web server make a web browser (IE6, IE7,
+>  Dan> Firefox etc.) display a login/password box. It seems the two mentioned
+>  Dan> web servers do not support this.
+>
+> Standard http auth? Both busybox httpd and boa supports that.
+>
+>  Dan> Apache seems overkill for our needs, so we wanted to try
+>  Dan> Cherokee-0.98.1:  http://www.cherokee-project.com/
+>
+> We also have lighttpd in busybox, maybe take a look at that.
+>
+>  Dan> Using /buildroot/scripts/add_new_package.wizard we are able to make
+>  Dan> our package show up in the make menuconfig configurator utility. When
+>  Dan> we do a make from the top level directory we can see Cherokee gets
+>  Dan> downloaded and starts to compile, but it errors out with these errors
+>  Dan> below:
+>
+>  Dan> spawn-fcgi.o: In function `fcgi_spawn_connection':                                                                           
+>
+>  Dan> spawn-fcgi.c:(.text+0x340): undefined reference to `rpl_malloc'
+>  Dan> collect2: ld returned 1 exit status                                                                                          
+>
+> Check config.log, you normally have to set a *_cv_func_malloc_* (don't
+> remember the exact name offhand) variable to not get it to use this
+> malloc wrapper.
+>
+>   
+> ------------------------------------------------------------------------
+>
+>
+> No virus found in this incoming message.
+> Checked by AVG - www.avg.com 
+> Version: 8.0.233 / Virus Database: 270.10.17/1934 - Release Date: 01/29/09 17:57:00
+>
+>   
