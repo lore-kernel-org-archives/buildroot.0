@@ -1,39 +1,51 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 05 Feb 2009 14:23:41 +0100
-Subject: [Buildroot] What's up with the kernel names? (Again)
-In-Reply-To: <d6cda7730902041833r5e5af2ax26c0eebb48df19a4@mail.gmail.com>
-	("Thiago A. =?utf-8?Q?Corr=C3=AAa=22's?= message of "Thu\, 5 Feb 2009
-	00\:33\:10 -0200")
-References: <d6cda7730902031749o51818770l1077d71877f9ad33@mail.gmail.com>
-	<873aeue676.fsf@macbook.be.48ers.dk>
-	<d6cda7730902041833r5e5af2ax26c0eebb48df19a4@mail.gmail.com>
-Message-ID: <87vdrpaug2.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Thu,  5 Feb 2009 13:24:02 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/multimedia/mpg123
+Message-ID: <20090205132402.C38A976454@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thiago" == Thiago A Corr?a <thiago.correa@gmail.com> writes:
+Author: jacmet
+Date: 2009-02-05 13:24:01 +0000 (Thu, 05 Feb 2009)
+New Revision: 25246
 
- Thiago> Hi,
- >> To me the sane thing would just be for the files to be named whatever
- >> the kernel names them (uImage/zImage/bzImage/..), but even if we don't
- >> do that we should atleast make the 2 Linux types use the same style.
- >> 
+Log:
+mpg123: cleanup after r19300 (don't introduce unneeded hidden configs)
 
- Thiago> Unless someone oposes, I will commit the patch below tomorrow night.
+Modified:
+   trunk/buildroot/package/multimedia/mpg123/Config.in
+   trunk/buildroot/package/multimedia/mpg123/mpg123.mk
 
-Please do it today, I'm planning on cutting the release tomorrow
-(Friday) at noon.
 
- Thiago> It will use the rootfs suffix if one is specified for the kernel, but
- Thiago> if none is supplied, we get default kernel names. Then you can get
- Thiago> both rootfs and kernel with your board names, dates, etc. And both
- Thiago> rootfs and kernel names will always match.
+Changeset:
+Modified: trunk/buildroot/package/multimedia/mpg123/Config.in
+===================================================================
+--- trunk/buildroot/package/multimedia/mpg123/Config.in	2009-02-05 12:38:21 UTC (rev 25245)
++++ trunk/buildroot/package/multimedia/mpg123/Config.in	2009-02-05 13:24:01 UTC (rev 25246)
+@@ -5,9 +5,3 @@
+ 	  MPEG 1.0/2.0 layers 1, 2 and 3.
+ 
+ 	  http://www.mpg123.de/
+-
+-config BR2_PACKAGE_MPG123_ALSA
+-	bool
+-	default y
+-	depends on BR2_PACKAGE_ALSA_LIB
+-
 
-Seems good, but don't forget the non-advanced version as well. We
-should imho use the same naming convention for both kernel builds.
-
--- 
-Bye, Peter Korsgaard
+Modified: trunk/buildroot/package/multimedia/mpg123/mpg123.mk
+===================================================================
+--- trunk/buildroot/package/multimedia/mpg123/mpg123.mk	2009-02-05 12:38:21 UTC (rev 25245)
++++ trunk/buildroot/package/multimedia/mpg123/mpg123.mk	2009-02-05 13:24:01 UTC (rev 25246)
+@@ -13,7 +13,7 @@
+ 
+ # Check if ALSA is built, then we should configure after alsa-lib so
+ # ./configure can find alsa-lib.
+-ifeq ($(BR2_PACKAGE_MPG123_ALSA),y)
++ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
+ MPG123_USE_ALSA:=--with-audio=alsa
+ MPG123_ALSA_DEP:=alsa-lib
+ endif
