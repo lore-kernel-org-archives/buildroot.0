@@ -1,46 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 05 Feb 2009 12:06:53 +0100
-Subject: [Buildroot] gcc 4.3.3 anyone?
-In-Reply-To: <1233827954.6323.3.camel@sven> (Sven Neumann's message of "Thu\,
-	05 Feb 2009 10\:59\:14 +0100")
-References: <1233594146.6464.6.camel@sven>
-	<873aewhadh.fsf@macbook.be.48ers.dk> <1233827954.6323.3.camel@sven>
-Message-ID: <871vudcfci.fsf@macbook.be.48ers.dk>
+From: John Voltz <john.voltz@gmail.com>
+Date: Thu, 5 Feb 2009 06:39:11 -0500
+Subject: [Buildroot] buildroot Digest, Vol 32, Issue 12
+In-Reply-To: <889327.65678.qm@web58205.mail.re3.yahoo.com>
+References: <46a136670902040433h6bb7e883mc295b6a3fce75fb9@mail.gmail.com>
+	<889327.65678.qm@web58205.mail.re3.yahoo.com>
+Message-ID: <46a136670902050339v7a55231ei1bcbe6b37e58c891@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Neumann <s.neumann@phase-zero.de> writes:
+>
+>
+> I did hit another snag. At the end of the script is:
+> # Install GRUB
+>     /sbin/grub --no-floppy --batch <<EOT
+>     device (hd0) ${IMAGE}
+>     geometry (hd0) ${CYLINDERS} 16 63
+>     root (hd0,0)
+>     setup (hd0)
+>     quit
+>     EOT
+>
+> What does this do? what is (hd0)? What is the context I need to run this?
+> It looks like it runs the host's grub? I don't want to install grub in my
+> host's boot directory, but in the new "image" is that what this does?
+>
 
- Sven> Hi,
- Sven> On Mon, 2009-02-02 at 21:06 +0100, Peter Korsgaard wrote:
+Yes, it uses the host's grub, but it  needs you to build grub so that the
+/boot/grub directory and it's contents get installed in the rootfs. It's
+hackish I know, but I don't know if there is any other way to install the
+buildroot generated grub. Maybe someone else does? hd0 is hard disk zero, in
+image file ${IMAGE}.
 
- Sven> I've ran into what appears to be a bug in gcc 4.3.2 and reported it
- Sven> here: http://gcc.gnu.org/bugzilla/show_bug.cgi?id=39076
-
- Sven> The gcc people have fixed this problem in the gcc-4.3 branch. I verified
- Sven> that the patch fixes the compiler segfault when compiling flac. Attached
- Sven> is a patch for buildroot that incorporates this fix for gcc 4.3.2.
-
-Thanks, will apply.
-
- Sven> I also noticed that two of the patches in toolchain/gcc/4.3.2 don't end
- Sven> in .patch and thus are not applied. Is this intentional?
-
-No, not afaik. The 995-short-enums.diff comes from Bernhard and is a
-fix for PR34205 which got tagged WONTFIX upstream
-(http://gcc.gnu.org/bugzilla/show_bug.cgi?id=34205), and afaik
-shouldn't be needed now we don't use abi=iwmmxt anymore - Bernhard,
-correct me if I'm wrong - Otherwise I'll remove it.
-
-The 306-arm-funroll-loops.patch.arm is from Ulf (r24993), and not just
-the name is wrong, it doesn't apply (wrong patch level). I've fixed
-that up and am now doing a test build to check if it fixes the mplayer
-ICE. If so, then I'll commit, otherwise I'll remove it.
-
-Thanks for noticing!
-
--- 
-Bye, Peter Korsgaard
+John
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090205/3608e79c/attachment.htm>
