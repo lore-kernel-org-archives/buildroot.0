@@ -1,7 +1,10 @@
-From: Vania Joloboff <vania.joloboff@tsinghua.edu.cn>
-Date: Thu, 05 Feb 2009 10:17:23 +0800
-Subject: [Buildroot] Bug with gmp and mpfr
-Message-ID: <498A4C33.8000302@tsinghua.edu.cn>
+From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
+Date: Thu, 5 Feb 2009 00:33:10 -0200
+Subject: [Buildroot] What's up with the kernel names? (Again)
+In-Reply-To: <873aeue676.fsf@macbook.be.48ers.dk>
+References: <d6cda7730902031749o51818770l1077d71877f9ad33@mail.gmail.com>
+	<873aeue676.fsf@macbook.be.48ers.dk>
+Message-ID: <d6cda7730902041833r5e5af2ax26c0eebb48df19a4@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,55 +13,70 @@ To: buildroot@busybox.net
 
 Hi,
 
-We have some experience in cross compiling but we are new users of 
-buildroot.
-Please pardon our ignorance.
+> To me the sane thing would just be for the files to be named whatever
+> the kernel names them (uImage/zImage/bzImage/..), but even if we don't
+> do that we should atleast make the 2 Linux types use the same style.
+>
 
-We have built the GCC toolchain with the latest version of buildroot 
-2009-02-rc3
-for three targets arm, ppc and mips, all three on two different hosts 
-Ubuntu 7.10 and 8.10
-We have installed the three toolchains in respectively 
-/usr/local/cross/{arm|ppc|mips}
+Unless someone oposes, I will commit the patch below tomorrow night.
+It will use the rootfs suffix if one is specified for the kernel, but
+if none is supplied, we get default kernel names. Then you can get
+both rootfs and kernel with your board names, dates, etc. And both
+rootfs and kernel names will always match.
 
-The gcc cross-compilers works (almost) fine except that the gmp and mpfr
-library are dynamically loaded by gcc (by cc1 more exactly) from the 
-wrong place...
-They are loaded from the system directory (/usr/lib) instead of the 
-directory
-that should correspond to the gcc build.
+It would be even better if /boot in the rootfs had a soft link to the
+long kernel name if it's suffixed with something.
 
-Because Ubuntu version 8 is using libgmp and libmpfr in a more
-recent version it creates a mismatch that you can notice if you compile 
-with gcc -v,
-but it seems to work fine however. We did not have time to thoroughly 
-test generated code
+Index: target/linux/Makefile.in.advanced
+===================================================================
+--- target/linux/Makefile.in.advanced   (revision 25243)
++++ target/linux/Makefile.in.advanced   (working copy)
+@@ -138,7 +138,6 @@
+ ifeq ($(LINUX26_BINLOC),)
+ LINUX26_BINLOC:=$(LINUX26_FORMAT)
+ endif
+-KERNEL_EXT:=
+ endif
 
-Ubuntu version 7 is older and does not use libmpfr.
-If you don't have libmpfr installed in the dynamic loading system 
-directories
-you get an error like :
+ # --------------
+@@ -149,7 +148,6 @@
+ ifeq ($(LINUX26_BINLOC),)
+ LINUX26_BINLOC:=arch/$(KERNEL_ARCH)/boot/$(LINUX26_FORMAT)
+ endif
+-KERNEL_EXT:=.gz
+ endif
 
-/usr/local/cross/ppc/usr/bin/../libexec/gcc/powerpc-linux-uclibc/4.3.2/cc1plus: 
-error while loading shared libraries: libmpfr.so.1: cannot open shared 
-object file: No such file or directory
+ # --------------
+@@ -158,7 +156,6 @@
+ ifeq ($(LINUX26_BINLOC),)
+ LINUX26_BINLOC:=arch/$(KERNEL_ARCH)/boot/$(LINUX26_FORMAT)
+ endif
+-KERNEL_EXT:=.z
+ endif
 
-It seems there is a bug in buildroot: the generated gcc does not take 
-the libgmp
-and libmpfr from the right place.
-libgmp and libmpfr are not target dependent, they are host dependent.
-However the cross compiler gcc should not take these libraries
-from the same place as the host gcc.
-It should be from the staging directory.
-Moreover in our case we built the three targets (arm, ppc, mips)
-with the same release of buildroot.
-But it could be possible we would have the three targets built with 
-different
-releases of buildroot, hence different releases of mpfr. These libraries
-should be loaded from the staging directory.
+ # --------------
+@@ -167,14 +164,13 @@
+ ifeq ($(LINUX26_BINLOC),)
+ LINUX26_BINLOC:=arch/$(KERNEL_ARCH)/boot/bzImage
+ endif
+-KERNEL_EXT:=.bz
+ endif
 
-Perhaps it is because we missed an option somewhere in the configuration...
+ ROOTFS_STRIPPED_SUFFIX=$(strip $(subst ",,$(ROOTFS_SUFFIX)))
+ #"))
+ # -----------------------------------------------------------------------------
+ # File name for the Linux kernel binary
+-LINUX26_KERNEL_NAME:=$(BOARD_NAME)-linux-$(LINUX26_VERSION)$(ROOTFS_STRIPPED_SUFFIX)$(KERNEL_EXT)
++LINUX26_KERNEL_NAME:=$(LINUX26_FORMAT)$(ROOTFS_STRIPPED_SUFFIX)
 
-Anyone has an opinion on this ?
 
-VJ
+ ifeq ($(BOARD_NAME),)
+@@ -182,7 +178,7 @@
+ endif
+
+ ifndef LINUX26_KERNEL
+-LINUX26_KERNEL:=$(BINARIES_DIR)/$(BOARD_NAME)-linux-$(LINUX26_VERSION)-$(DATE)$(KERNEL_EXT)
++LINUX26_KERNEL:=$(BINARIES_DIR)/$(LINUX26_KERNEL_NAME)
+ endif
+
+ # for packages that need it
