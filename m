@@ -1,87 +1,73 @@
-From: Hodgson, Simon <Simon.Hodgson@nortechonline.co.uk>
-Date: Thu, 5 Feb 2009 17:12:33 +0000
-Subject: [Buildroot] Webserver
-In-Reply-To: <4989C13E.5040603@ethertek.ca>
-References: <4989C13E.5040603@ethertek.ca>
-Message-ID: <B44D4D5BF344094DABB900C4E0F6E35301CB2F98AA@srv02.nortechonline.net>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Thu, 05 Feb 2009 21:23:52 +0100
+Subject: [Buildroot] What's up with the kernel names? (Again)
+In-Reply-To: <873aeue676.fsf@macbook.be.48ers.dk>
+References: <d6cda7730902031749o51818770l1077d71877f9ad33@mail.gmail.com>
+	<873aeue676.fsf@macbook.be.48ers.dk>
+Message-ID: <1233865432.4148.6.camel@elrond.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm using thttpd for a project to do this. Doesn't have a lot of features but basic HTTP auth is one of them. It's included in the list of supported packages in Buildroot.
+ons 2009-02-04 klockan 13:29 +0100 skrev Peter Korsgaard:
+> >>>>> "Thiago" == Thiago A Corr?a <thiago.correa@gmail.com> writes:
+> 
+>  Thiago> Hi,
+>  Thiago>     I thought it was seattled sometime last year that kernel names
+>  Thiago> would not include timestamps or any think that breaks u-boot from
+>  Thiago> loading the kernel.
+> 
+>  Thiago>     I just had atngw100-linux-2.6.27.13-20090203.gz for a kernel name.
+>  Thiago> It's already bad enough that rootfs has stupid timestamps, we don't
+>  Thiago> really need kernel binaries too. If I wanted to preserve binaries, I
+>  Thiago> would copy them over before building again. Whenever I type make, I
+>  Thiago> expect things to be overwritten.
+> 
+> The rootfs timestamp is because your defconfig sets the
+> BR2_ROOTFS_SUFFIX to a nonstandard value.
+> 
+> I had a look at target/linux/Makefile.in.advanced and see that it
+> uses:
+> 
+> LINUX26_KERNEL:=$(BINARIES_DIR)/$(BOARD_NAME)-linux-$(LINUX26_VERSION)-$(DATE)$(KERNEL_EXT)
+> 
+> whereas the normal (!advanced) Linux config uses:
+> 
+> LINUX26_KERNEL:=$(BINARIES_DIR)/linux-kernel-$(LINUX26_VERSION)-$(KERNEL_ARCH)
+> 
+> To me the sane thing would just be for the files to be named whatever
+> the kernel names them (uImage/zImage/bzImage/..), but even if we don't
+> do that we should atleast make the 2 Linux types use the same style.
 
-Simon
+> 
+> We can add BR2_KERNEL_PREFIX/SUFFIX (defaulting to "") if people
+> really to do something special.
+> 
+> Ulf, what do you say?
+> 
 
------Original Message-----
-From: buildroot-bounces@busybox.net [mailto:buildroot-bounces at busybox.net] On Behalf Of Dan Pattison
-Sent: 04 February 2009 16:25
-To: buildroot at busybox.net
-Subject: [Buildroot] Webserver
+I think that we should have a symbolic link to xImage as we do for
+u-boot.bin for those that do not like the more complex filenames.
+Then there is no need for a 
 
-Hello List:
+The purpose of having a more complex file name is to
+be able to see which kernel you have and it configuration.
+Also to be able to copy multiple kernels for multiple chips to a single
+directory - Typically /tftpboot.
 
-We are using buildroot v2009.02 on a Fedora 10 linux distro. Our 
-architecture is for Atmel AT91SAM9G20-EK development board. We want a 
-more robust web server than the BOA or Busybox HTTPD. Our main 
-requirement is to have the web server make a web browser (IE6, IE7, 
-Firefox etc.) display a login/password box. It seems the two mentioned 
-web servers do not support this.
+uImage really does not give you *any* information on the contents.
 
-Apache seems overkill for our needs, so we wanted to try 
-Cherokee-0.98.1:  http://www.cherokee-project.com/
+When testing several configurations for the same kernel,
+adding some kind of revision information is important.
+THat is why the date is there, a little simplistic, but
+it works for me.
 
-Using /buildroot/scripts/add_new_package.wizard we are able to make our 
-package show up in the make menuconfig configurator utility. When we do 
-a make from the top level directory we can see Cherokee gets downloaded 
-and starts to compile, but it errors out with these errors below:
 
-spawn-fcgi.o: In function 
-`fcgi_spawn_connection':                                                                          
-
-spawn-fcgi.c:(.text+0x340): undefined reference to `rpl_malloc' 
-collect2: ld returned 1 exit 
-status                                                                                         
-
-make[3]: *** [spawn-fcgi] Error 
-1                                                                                           
-
-make[3]: Leaving directory 
-`/home/ethertek/rms200/buildroot/build_arm/cherokee-0.98.1/contrib'                              
-
-make[2]: *** [all-recursive] Error 
-1                                                                                        
-
-make[2]: Leaving directory 
-`/home/ethertek/rms200/buildroot/build_arm/cherokee-0.98.1'                                      
-
-make[1]: *** [all] Error 
-2                                                                                                  
-
-make[1]: Leaving directory 
-`/home/ethertek/rms200/buildroot/build_arm/cherokee-0.98.1'                                      
-
-make: *** 
-[/home/ethertek/rms200/buildroot/build_arm/cherokee-0.98.1/.stamp_built] 
-Error 2
-
-We can see the error: undefined reference to `rpl_malloc', but being new 
-to cross compiling, we do not know how to fix it.
-
-Can someone please help us get cherokee to compile for our architecture?
-
-Also, when using the add_new_package.wizard, how do you know when to 
-select "Does autoreconf need to be run first?". It did not seem to 
-matter in the case of cross compiling Cherokee-0.98.1
-
-Lastly, does anyone know of a different web server for Buildroot that 
-will make the most common web browsers (IE6, IE7, Firefox etc) pop up 
-the username/password box?
-
-Thank you, and Best Regards,
-Dan Pattison
-_______________________________________________
-buildroot mailing list
-buildroot at busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
+> -- 
+> Bye, Peter Korsgaard
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
