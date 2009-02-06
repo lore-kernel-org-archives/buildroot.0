@@ -1,49 +1,29 @@
 From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
-Date: Fri, 6 Feb 2009 00:28:01 -0200
-Subject: [Buildroot] What's up with the kernel names? (Again)
-In-Reply-To: <1233866252.4148.12.camel@elrond.atmel.com>
-References: <d6cda7730902031749o51818770l1077d71877f9ad33@mail.gmail.com>
-	<873aeue676.fsf@macbook.be.48ers.dk>
-	<d6cda7730902041833r5e5af2ax26c0eebb48df19a4@mail.gmail.com>
-	<87vdrpaug2.fsf@macbook.be.48ers.dk>
-	<1233866252.4148.12.camel@elrond.atmel.com>
-Message-ID: <d6cda7730902051828if9915d3u31cf79bf5a68fcac@mail.gmail.com>
+Date: Fri, 6 Feb 2009 00:33:56 -0200
+Subject: [Buildroot] uClibc-0.9.30-avr32-2.1.5.tar.bz2 is missing
+In-Reply-To: <2CBF71990FD040DA91787A2E5CDEE141@aeglos>
+References: <d6cda7730902041111h26b28bc7l4ab8f2fff3ef9e1c@mail.gmail.com>
+	<F5677F2913BF4E44A9D6D3B4D74FB21C@aeglos>
+	<d6cda7730902041425g5aab0fc3q44c25f2af088ae35@mail.gmail.com>
+	<2CBF71990FD040DA91787A2E5CDEE141@aeglos>
+Message-ID: <d6cda7730902051833m4a9cd374saa37c6a66c2376c9@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Feb 5, 2009 at 6:37 PM, Ulf Samuelsson <ulf.samuelsson@atmel.com> wrote:
->>  Thiago> It will use the rootfs suffix if one is specified for the kernel, but
->>  Thiago> if none is supplied, we get default kernel names. Then you can get
->>  Thiago> both rootfs and kernel with your board names, dates, etc. And both
->>  Thiago> rootfs and kernel names will always match.
->>
->
->
-> And you have no clue about the kernel version.
-> And you have to modify the suffix for every project.
-> Much better to just create the link to uImage etc.
->
-> Then you have both.
+Hi,
 
-But if you use the rootfs suffix, not only you have both, but you also
-can disable it.
-Following your argument, I might just as well want to have rootfs in
-/tftpboot, and if the names match (same suffix) then I know which
-kernel is inside each rootfs image.
+On Wed, Feb 4, 2009 at 9:35 PM, Ulf Samuelsson <ulf.samuelsson@atmel.com> wrote:
+> Hopefully, www.at91.com should be up and running sometime tomorrow.
+> Think they will put some priorit on this as soon as the problem is noticed.
 
-The $(DATE) seams to be default to rootfs suffix already, all you have
-to do is change it per project to include the project or board name.
-You have to touch your projects at some point to change things anyway,
-otherwise they would always build the same thing, so that's not a very
-good argument against.
 
-You can have the same functionality as before, but with added flexibility.
+Still down :(
 
-I'm just trying to test it out before commiting. Since I can't build
-my usual platform, avr32, I'm giving arm a try.
+And it's not just AVR32 that is affected, I can't build At91 as well:
+at91bootstrap-2.10.tar.bz2 is missing in buildroot mirror too.
 
-Kind Regards,
+Best Regards,
    Thiago A. Correa
