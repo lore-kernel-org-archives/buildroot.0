@@ -1,16 +1,13 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 06 Feb 2009 09:49:23 +0100
-Subject: [Buildroot] What's up with the kernel names? (Again)
-In-Reply-To: <1233900994.26426.10.camel@elrond.atmel.com> (Ulf Samuelsson's
-	message of "Fri\, 06 Feb 2009 07\:16\:34 +0100")
-References: <d6cda7730902031749o51818770l1077d71877f9ad33@mail.gmail.com>
-	<873aeue676.fsf@macbook.be.48ers.dk>
-	<d6cda7730902041833r5e5af2ax26c0eebb48df19a4@mail.gmail.com>
-	<87vdrpaug2.fsf@macbook.be.48ers.dk>
-	<1233866252.4148.12.camel@elrond.atmel.com>
-	<d6cda7730902051828if9915d3u31cf79bf5a68fcac@mail.gmail.com>
-	<1233900994.26426.10.camel@elrond.atmel.com>
-Message-ID: <871vucar1o.fsf@macbook.be.48ers.dk>
+Date: Fri, 06 Feb 2009 09:50:02 +0100
+Subject: [Buildroot] BR-2009.02-rc3 Make Error (./makedepend: 1: Syntax
+	error: Unterminated quoted string)
+In-Reply-To: <1233865636.4148.8.camel@elrond.atmel.com> (Ulf Samuelsson's
+	message of "Thu\, 05 Feb 2009 21\:27\:16 +0100")
+References: <BAY124-DS4F2AA8AFF4C9516A055FDD2C20@phx.gbl>
+	<87d4dyck50.fsf@macbook.be.48ers.dk>
+	<1233865636.4148.8.camel@elrond.atmel.com>
+Message-ID: <87wsc49cg5.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,38 +16,18 @@ To: buildroot@busybox.net
 
 >>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 
- Ulf> ?The AT91 uboot patches and autoscripts rely on this very exact naming,
- Ulf> so if you commit your patch, you break the at91 support.
+Hi,
 
-So they are broken for people using the simple linux build already?
+ >> I don't use perl, but it seems from the above like Ulf's r25032 might
+ >> have gotten the file case wrong - It talks about x2p/Makefile but is
+ >> then trying to sed x2p/makefile. Could you try changing the $(SED)
+ >> line in package/microperl/microperl.mk to use x2p/Makefile?
+ >> 
 
- Ulf> If you add KERNEL_VERSION to the root fs name you do things
- Ulf> automatically, if you dont then everything is manually, and you
- Ulf> have a risk of mismatch between name and actual version.  I
- Ulf> would not mind that the rootfs contains kernel version, but it
- Ulf> will break the at91 u-boot autoscripts which means that it
- Ulf> should avoided at this point, and introduced in a future
- Ulf> buildroot.
+ Ulf> IIRC, there is both a makefile and a Makefile, and it should be applied
+ Ulf> to makefile.
 
- Ulf> To avoid bugs due to people forgetting to update onfig the kernel name
- Ulf> needs to depend BOTH on PROJECT and LINUX_VERSION.
-
-Then set prefix/suffix.
-
- >> The $(DATE) seams to be default to rootfs suffix already, all you have
- >> to do is change it per project to include the project or board name.
-
- Ulf> I think your major problem is that the DATE changes.
- Ulf> I think it is fair to allow DATE to be in the rootfs suffix.
-
-Sure, setting prefix/suffix to $(DATE) should work - But it shouldn't
-be default.
-
- Ulf> but I still think your needs are best accomodated by 
-
- Ulf> ln -s $(LINUX_KERNEL_NAME) uImage
-
-No, lets not add any more clutter to binaries/
+Ok, it seems to build for me - E.G. I cannot reproduce the problem.
 
 -- 
 Bye, Peter Korsgaard
