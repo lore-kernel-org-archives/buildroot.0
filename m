@@ -1,188 +1,44 @@
-From: Dan Pattison <dan.pattison@ethertek.ca>
-Date: Fri, 06 Feb 2009 09:09:09 -0800
-Subject: [Buildroot] Urgent : at91rm9200 root file system
-In-Reply-To: <1233937542.4559.46.camel@linux-l8en.site>
-References: <498A1FA9.1070306@ethertek.ca>	
-	<878woldc0r.fsf@macbook.be.48ers.dk>	
-	<1233814769.5851.73.camel@linux-l8en.site>	
-	<87r62dauce.fsf@macbook.be.48ers.dk>	
-	<1233920929.4559.12.camel@linux-l8en.site>	
-	<87d4dvaij4.fsf@macbook.be.48ers.dk>	
-	<1233924549.4559.17.camel@linux-l8en.site>	
-	<87zlgz91gc.fsf@macbook.be.48ers.dk>	
-	<1233928454.4559.27.camel@linux-l8en.site>
-	<498C5579.10007@ethertek.ca>	
-	<1233935456.4559.36.camel@linux-l8en.site>
-	<498C5F12.4060904@ethertek.ca>
-	<1233937542.4559.46.camel@linux-l8en.site>
-Message-ID: <498C6EB5.2070908@ethertek.ca>
+From: QuickX <quickx@hotmail.com>
+Date: Fri, 6 Feb 2009 12:01:20 -0800
+Subject: [Buildroot] BR-2009.02-rc3 Make Error (./makedepend: 1: Syntax
+	error: Unterminated quoted string)
+In-Reply-To: <87wsc49cg5.fsf@macbook.be.48ers.dk>
+References: <BAY124-DS4F2AA8AFF4C9516A055FDD2C20@phx.gbl><87d4dyck50.fsf@macbook.be.48ers.dk><1233865636.4148.8.camel@elrond.atmel.com>
+	<87wsc49cg5.fsf@macbook.be.48ers.dk>
+Message-ID: <BAY124-DS65E8E0F5826810A82D719D2C10@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Sandeep:
+> Ok, it seems to build for me - E.G. I cannot reproduce the problem.
+Hmm.  I uploaded online the uncompressed log (15MB), and the compressed log 
+in 7z (480KB).
 
-To skip the file downloading, copy the linux-2.6.28.3.tar.bz2 file into 
-the buildroot/dl folder.
+UnCompressed : http://www.mediafire.com/file/mhzjfyylqiw/at91sam9261ek.log
+Compressed: http://www.mediafire.com/file/vlmztnnulyy/at91sam9261ek.7z
 
-Regards,
-Dan Pattison
+My Computer is a Vanilla Kubuntu 8.10 Machine fully updated and added only
+the following packages (mainly for buildroot).  ssh subversion wget patch
+build-essential libncurses-dev bison flex texinfo zlib1g-dev gettext
+libssl-dev autoconf libacl1-dev liblzo2-dev libpng12-dev libtool
+libglib2.0-dev libgtk2.0-bin libgtk2.0-dev apt-file.  I also installed
+emacs, eclipse, java.
 
-Sandeep Kumar wrote:
-> Hi Pattison,
->
-> I am able to download the source from the link sent by you i.e.
-> http://buildroot.uclibc.org/downloads/snapshots/buildroot-snapshot.tar.bz2
->
-> After giving the "make at91rm9200df_defconfig" command configuration for
-> my device was successful but after giving the "make" command it is
-> downloading "linux-2.6.28.3.tar.bz2" which i have already downloaded.
->
-> Is there any method to bypass this step and give the path of the
-> downloaded "linux-2.6.28.3.tar.bz2".
->
-> Thanks and Regards
-> Sandeep
->
->
-> On Fri, 2009-02-06 at 08:02 -0800, Dan Pattison wrote:
->   
->> Hello Sandeep:
->>
->> The command works on my internet connection/linux computer. Make sure 
->> you did not make any spelling mistakes. Copy paste the command from the 
->> docs. Yes you can download the Buildroot package from here: 
->> http://buildroot.uclibc.org/downloads/snapshots/buildroot-snapshot.tar.bz2
->>
->> This is all explained in the docs found here:  
->> http://buildroot.uclibc.org/buildroot.html
->>
->> Best Regards,
->> Dan Pattison
->>
->>
->> Sandeep Kumar wrote:
->>     
->>> Hi Pattison
->>>
->>> Thanks for reply
->>> I have tried with the commands sent by you but i am getting the
->>> following error:
->>>
->>> svn: Can't connect to host 'uclibc.org': Connection refused
->>>
->>> Can there be some authorization issue or so.
->>> I am able to access the website uclibc.org from internet. Is there
->>> anyway to download the package from there.
->>>
->>> Thanks and regards
->>> Sandeep
->>>
->>>
->>>
->>> On Fri, 2009-02-06 at 07:21 -0800, Dan Pattison wrote:
->>>   
->>>       
->>>> Sandeep:
->>>>
->>>> On the command line; navigate to the folder where you want your build 
->>>> environment installed.
->>>> Type out this command:   
->>>>
->>>> svn co svn://uclibc.org/trunk/buildroot
->>>>
->>>> It will download the current Buildroot files. Then type out:
->>>>
->>>> make at91rm9200df_defconfig
->>>>
->>>> Then type out:
->>>>
->>>> make
->>>>
->>>> Try that. Also the docs are here
->>>>
->>>> http://buildroot.uclibc.org/buildroot.html
->>>>
->>>> Best Regards,
->>>> Dan Pattison
->>>>
->>>>
->>>> Sandeep Kumar wrote:
->>>>     
->>>>         
->>>>> Hi Peter,
->>>>>
->>>>> Thanks once again for your response.
->>>>>
->>>>> Sorry!!!, I have not understood your reply. I am some what new to this
->>>>> platform. I am working on a linux machine and i do not have the source
->>>>> code for the root file system to make it. From where can i get the
->>>>> source code to build it for at91rm9200. Where should i execute the
->>>>> command sent by you (make at91rm9200df_defconfig; make) without having
->>>>> the source code. And if i am making some mistake can you please explain
->>>>> me in a little bit detail. I will be very thankful to you.
->>>>>
->>>>> Regards
->>>>> Sandeep
->>>>>
->>>>>
->>>>> On Fri, 2009-02-06 at 13:47 +0100, Peter Korsgaard wrote:
->>>>>   
->>>>>       
->>>>>           
->>>>>>>>>>> "Sandeep" == Sandeep Kumar <sandeepk@verismonetworks.com> writes:
->>>>>>>>>>>               
->>>>>>>>>>>                   
->>>>>>>>>>>                       
->>>>>>  Sandeep> Hi peter
->>>>>>  Sandeep> Thanks for reply.
->>>>>>
->>>>>>  Sandeep> For this I want the root file system source code which i
->>>>>>  Sandeep> dont have. from where can i get it.
->>>>>>
->>>>>> Buildroot will download the sources and build the rootfs for you when
->>>>>> you run make.
->>>>>>
->>>>>>     
->>>>>>         
->>>>>>             
->>>>> _______________________________________________
->>>>> buildroot mailing list
->>>>> buildroot at busybox.net
->>>>> http://lists.busybox.net/mailman/listinfo/buildroot
->>>>>   
->>>>> ------------------------------------------------------------------------
->>>>>
->>>>>
->>>>> No virus found in this incoming message.
->>>>> Checked by AVG - www.avg.com 
->>>>> Version: 8.0.233 / Virus Database: 270.10.18/1936 - Release Date: 01/29/09 17:57:00
->>>>>
->>>>>   
->>>>>       
->>>>>           
->>>>     
->>>>         
->>>   
->>> ------------------------------------------------------------------------
->>>
->>>
->>> No virus found in this incoming message.
->>> Checked by AVG - www.avg.com 
->>> Version: 8.0.233 / Virus Database: 270.10.18/1937 - Release Date: 01/29/09 17:57:00
->>>
->>>   
->>>       
->>     
->
->   
-> ------------------------------------------------------------------------
->
->
-> No virus found in this incoming message.
-> Checked by AVG - www.avg.com 
-> Version: 8.0.233 / Virus Database: 270.10.18/1937 - Release Date: 01/29/09 17:57:00
->
->   
+The exact commands I used to create the attached log are as follows:
+$ svn co svn://uclibc.org/trunk/buildroot
+$ cd buildroot
+$ ln -s /home/dustin/buildroot_dl dl
+$ make menuconfig ((SAVE EXIT))
+$ make at91sam9261ek_defconfig
+$ make menuconfig ((Turned off / change "copy to /tftpboot" in
+kernel/bootstrap sections))
+$ make make > at91sam9261ek.log 2>&1
+
+
+Maybe it's Kubuntu 8.10, or maybe it's a package I need that isn't installed
+on the machine.  I'm sure the problem is easy to fix by disabling a few of
+the packages since the previous at91sam9261ek_defconfig used to compile for
+me.  The buildroot-2009.02-rc3.tar.gz does the same as the latest revision
+(Revision 25258). 
