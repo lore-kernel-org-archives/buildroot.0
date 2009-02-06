@@ -1,36 +1,108 @@
-From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
-Date: Fri, 6 Feb 2009 13:18:48 -0200
-Subject: [Buildroot] What's up with the kernel names? (Again)
-In-Reply-To: <d6cda7730902060631o54f2944rddc0f7cd8278a11a@mail.gmail.com>
-References: <d6cda7730902031749o51818770l1077d71877f9ad33@mail.gmail.com>
-	<873aeue676.fsf@macbook.be.48ers.dk>
-	<1233865432.4148.6.camel@elrond.atmel.com>
-	<87eiycarei.fsf@macbook.be.48ers.dk>
-	<D071C392448744ECA7A451C54A46ABE6@aeglos>
-	<d6cda7730902060631o54f2944rddc0f7cd8278a11a@mail.gmail.com>
-Message-ID: <d6cda7730902060718x3fc1ef01q401f0dc5a9bb12e6@mail.gmail.com>
+From: Sandeep Kumar <sandeepk@verismonetworks.com>
+Date: Fri, 06 Feb 2009 21:20:56 +0530
+Subject: [Buildroot] Urgent : at91rm9200 root file system
+In-Reply-To: <498C5579.10007@ethertek.ca>
+References: <498A1FA9.1070306@ethertek.ca> <878woldc0r.fsf@macbook.be.48ers.dk>
+	<1233814769.5851.73.camel@linux-l8en.site>
+	<87r62dauce.fsf@macbook.be.48ers.dk>
+	<1233920929.4559.12.camel@linux-l8en.site>
+	<87d4dvaij4.fsf@macbook.be.48ers.dk>
+	<1233924549.4559.17.camel@linux-l8en.site>
+	<87zlgz91gc.fsf@macbook.be.48ers.dk>
+	<1233928454.4559.27.camel@linux-l8en.site> <498C5579.10007@ethertek.ca>
+Message-ID: <1233935456.4559.36.camel@linux-l8en.site>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Feb 6, 2009 at 12:31 PM, Thiago A. Corr?a
-<thiago.correa@gmail.com> wrote:
-> Ulf> If you add KERNEL_VERSION to the root fs name you do things
-> Ulf> automatically, if you dont then everything is manually, and you
-> Ulf> have a risk of mismatch between name and actual version.  I
-> Ulf> would not mind that the rootfs contains kernel version, but it
-> Ulf> will break the at91 u-boot autoscripts which means that it
-> Ulf> should avoided at this point, and introduced in a future
-> Ulf> buildroot.
->
-> I suspect that the autoscript generation uses the same variable as the
-> kernel build. Otherwise it's impossible to predict your current naming
-> scheme. If so, it wouldn't break anything, as the variable is
-> preserved, just it's contents changed slightly.
+Hi Pattison
 
-From target/u-boot/Makefile.in:
-        echo setenv linux $(LINUX26_KERNEL_NAME).gz >> $(U_BOOT_AUTOSCRIPT)
+Thanks for reply
+I have tried with the commands sent by you but i am getting the
+following error:
 
-So, it should be ok.
+svn: Can't connect to host 'uclibc.org': Connection refused
+
+Can there be some authorization issue or so.
+I am able to access the website uclibc.org from internet. Is there
+anyway to download the package from there.
+
+Thanks and regards
+Sandeep
+
+
+
+On Fri, 2009-02-06 at 07:21 -0800, Dan Pattison wrote:
+> Sandeep:
+> 
+> On the command line; navigate to the folder where you want your build 
+> environment installed.
+> Type out this command:   
+> 
+> svn co svn://uclibc.org/trunk/buildroot
+> 
+> It will download the current Buildroot files. Then type out:
+> 
+> make at91rm9200df_defconfig
+> 
+> Then type out:
+> 
+> make
+> 
+> Try that. Also the docs are here
+> 
+> http://buildroot.uclibc.org/buildroot.html
+> 
+> Best Regards,
+> Dan Pattison
+> 
+> 
+> Sandeep Kumar wrote:
+> > Hi Peter,
+> >
+> > Thanks once again for your response.
+> >
+> > Sorry!!!, I have not understood your reply. I am some what new to this
+> > platform. I am working on a linux machine and i do not have the source
+> > code for the root file system to make it. From where can i get the
+> > source code to build it for at91rm9200. Where should i execute the
+> > command sent by you (make at91rm9200df_defconfig; make) without having
+> > the source code. And if i am making some mistake can you please explain
+> > me in a little bit detail. I will be very thankful to you.
+> >
+> > Regards
+> > Sandeep
+> >
+> >
+> > On Fri, 2009-02-06 at 13:47 +0100, Peter Korsgaard wrote:
+> >   
+> >>>>>>> "Sandeep" == Sandeep Kumar <sandeepk@verismonetworks.com> writes:
+> >>>>>>>               
+> >>  Sandeep> Hi peter
+> >>  Sandeep> Thanks for reply.
+> >>
+> >>  Sandeep> For this I want the root file system source code which i
+> >>  Sandeep> dont have. from where can i get it.
+> >>
+> >> Buildroot will download the sources and build the rootfs for you when
+> >> you run make.
+> >>
+> >>     
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> >   
+> > ------------------------------------------------------------------------
+> >
+> >
+> > No virus found in this incoming message.
+> > Checked by AVG - www.avg.com 
+> > Version: 8.0.233 / Virus Database: 270.10.18/1936 - Release Date: 01/29/09 17:57:00
+> >
+> >   
+> 
+> 
