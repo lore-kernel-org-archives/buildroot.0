@@ -1,39 +1,67 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 07 Feb 2009 20:19:49 +0100
-Subject: [Buildroot] Build ok, but the toolschain don't work
-In-Reply-To: <2961e5a80902070016v1f102dcfq9e27915671ab7f1a@mail.gmail.com> (w.
-	wg's message of "Sat\, 7 Feb 2009 16\:16\:02 +0800")
-References: <2961e5a80902070016v1f102dcfq9e27915671ab7f1a@mail.gmail.com>
-Message-ID: <87skmq836y.fsf@macbook.be.48ers.dk>
+From: Claus Klein <claus.klein@arcormail.de>
+Date: Sat, 7 Feb 2009 23:10:44 +0100
+Subject: [Buildroot] 2009.02-rc3 released
+In-Reply-To: <87skmyirxq.fsf@macbook.be.48ers.dk>
+References: <87skmyirxq.fsf@macbook.be.48ers.dk>
+Message-ID: <3465FC6D-040F-475F-8AFA-BB3F1F0C7E5E@arcormail.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "w" == w wg <duzuike@gmail.com> writes:
+Hi,
 
- w> Hi,
- w> I have built my project succesfully. But I the toolchains seems not
- w> being work succesfully.
+I  tried to build the default busybox on mac-OX, but it failed.
+
+A year ago, I tried to build a buildsystem based on a minmal system  
+like DSL using busybox tools.
+but it failed too.
+
+I want to build a cross-development tool-chain and the embedded  
+destination system at a small virtual vmware image.
+
+So I want to ask if it is possible to use only posix conform options  
+when building a system with buildroot?
+At leased, the options available at the busybox should be enough, or  
+not?
+
+And to start, there is a small patch to fix my first problem I had:
+
+claus-kleins-macbook-pro:buildroot-2009.02-rc3 clausklein$ diff -u  
+package/editors/vim/vim.mk package/editors/vim/vim.mk.ck
+--- package/editors/vim/vim.mk	2009-01-31 22:30:46.000000000 +0100
++++ package/editors/vim/vim.mk.ck	2009-02-07 22:39:28.000000000 +0100
+@@ -9,7 +9,7 @@
+  VIM_SOURCE_SITE:=$(VIM_SITE)/unix
+  VIM_PATCH_SITE:=$(VIM_SITE)/patches/7.1
+  VIM_DIR:=$(BUILD_DIR)/vim71
+-VIM_PATCHES:=$(shell cat package/editors/vim/patches | sed -s 's:\(.\+ 
+\):$(DL_DIR)/vim/$(VIM_VERSION).\1:')
++VIM_PATCHES:=$(shell cat package/editors/vim/patches | sed -e 's:\(.\+ 
+\):$(DL_DIR)/vim/$(VIM_VERSION).\1:')
+  VIM_CONFIG_H:=$(VIM_DIR)/src/auto/config.h
+  VIM_CONFIG_MK:=$(VIM_DIR)/src/auto/config.mk
+
+claus-kleins-macbook-pro:buildroot-2009.02-rc3 clausklein$
 
 
- w> lfs at diy:~$ cat test.c
- w> #include <stdio.h>
+//BR
 
- w> int main() {
- w>         printf("Hello !\n");
- w> }
+Claus
 
- w> i686-linux-gcc -o test test.c
- w> echo $?
- w> 0
 
- w> ./test
- w> -bash: ./test: No such file or directory
+Am 01.02.2009 um 07:37 schrieb Peter Korsgaard:
 
-It doesn't find your uclibc C library. Either execute it in your
-rootfs chroot, or compile statically.
-
--- 
-Bye, Peter Korsgaard
+> Hi,
+>
+> -rc3 is out:
+>
+> http://buildroot.uclibc.org/downloads/buildroot-2009.02-rc3.tar.gz
+>
+> or
+>
+> http://buildroot.uclibc.org/downloads/buildroot-2009.02-rc3.tar.bz2
+>
+> Please give it a spin and report back issues to the mailing list or
+> the bug tracker.
