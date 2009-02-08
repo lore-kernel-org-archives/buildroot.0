@@ -1,28 +1,35 @@
-From: Thomas Lundquist <lists@zelow.no>
-Date: Sun, 8 Feb 2009 03:17:55 +0100
-Subject: [Buildroot] FOSDEM
-In-Reply-To: <20090130084320.GC14142@zelow.no>
-References: <1232566648.11888.56.camel@elrond.atmel.com>
-	<87bpu0qv4t.fsf@macbook.be.48ers.dk>
-	<20090122081257.GA3672@zelow.no>
-	<200901292013.05684.markus.heidelberg@web.de>
-	<20090130084320.GC14142@zelow.no>
-Message-ID: <20090208021755.GA18831@zelow.no>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Sun,  8 Feb 2009 11:00:47 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/editors/vim
+Message-ID: <20090208110047.B229A764A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jan 30, 2009 at 09:43:20AM +0100, Thomas Lundquist wrote:
-> 
-> It's Belgium, it's beer, guess.
+Author: jacmet
+Date: 2009-02-08 11:00:44 +0000 (Sun, 08 Feb 2009)
+New Revision: 25264
 
-One thing I forgot to say is how to find me.
+Log:
+vim: cleanup sed invocation
 
-Well, I'm going to be at the Emdedded room on sunday aswell. 
+Modified:
+   trunk/buildroot/package/editors/vim/vim.mk
 
-Just look for the long haired (obviously faked) blonde.
 
-
-Thomas
+Changeset:
+Modified: trunk/buildroot/package/editors/vim/vim.mk
+===================================================================
+--- trunk/buildroot/package/editors/vim/vim.mk	2009-02-08 02:04:26 UTC (rev 25263)
++++ trunk/buildroot/package/editors/vim/vim.mk	2009-02-08 11:00:44 UTC (rev 25264)
+@@ -9,7 +9,7 @@
+ VIM_SOURCE_SITE:=$(VIM_SITE)/unix
+ VIM_PATCH_SITE:=$(VIM_SITE)/patches/7.1
+ VIM_DIR:=$(BUILD_DIR)/vim71
+-VIM_PATCHES:=$(shell cat package/editors/vim/patches | sed -s 's:\(.\+\):$(DL_DIR)/vim/$(VIM_VERSION).\1:')
++VIM_PATCHES:=$(shell sed -e 's:^:$(DL_DIR)/vim/$(VIM_VERSION).:' package/editors/vim/patches)
+ VIM_CONFIG_H:=$(VIM_DIR)/src/auto/config.h
+ VIM_CONFIG_MK:=$(VIM_DIR)/src/auto/config.mk
+ 
