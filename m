@@ -1,63 +1,44 @@
-From: correa at uclibc.org <correa@uclibc.org>
-Date: Mon,  9 Feb 2009 17:35:02 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/target/device/Atmel:
-	atngw100 atstk1005 atstk100x
-Message-ID: <20090209173503.4E10C765E9@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 09 Feb 2009 20:34:39 +0100
+Subject: [Buildroot] What's up with the kernel names? (Again)
+In-Reply-To: <1234200240.4143.8.camel@elrond.atmel.com> (Ulf Samuelsson's
+	message of "Mon\, 09 Feb 2009 18\:24\:00 +0100")
+References: <d6cda7730902031749o51818770l1077d71877f9ad33@mail.gmail.com>
+	<873aeue676.fsf@macbook.be.48ers.dk>
+	<1233865432.4148.6.camel@elrond.atmel.com>
+	<87eiycarei.fsf@macbook.be.48ers.dk>
+	<D071C392448744ECA7A451C54A46ABE6@aeglos>
+	<d6cda7730902060631o54f2944rddc0f7cd8278a11a@mail.gmail.com>
+	<1234200240.4143.8.camel@elrond.atmel.com>
+Message-ID: <87hc3376b4.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: correa
-Date: 2009-02-09 17:35:00 +0000 (Mon, 09 Feb 2009)
-New Revision: 25279
+>>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 
-Log:
-Remove BR2_LINUX_COPYTO_TFTPBOOT from avr32 defconfigs. This will cause build to fail if user is not root and don't have a /tftpboot folder
+Hi,
 
-Modified:
-   trunk/buildroot/target/device/Atmel/atngw100/atngw100_defconfig
-   trunk/buildroot/target/device/Atmel/atstk1005/atstk1005_defconfig
-   trunk/buildroot/target/device/Atmel/atstk100x/atstk100x_defconfig
+ >> You will get everything you had before, albeit in a different order
+ >> (uImage-myprojec-2.6.28-20080106)
+ >> 
 
+ Ulf> Which breaks the U-Boot autoscripts.
 
-Changeset:
-Modified: trunk/buildroot/target/device/Atmel/atngw100/atngw100_defconfig
-===================================================================
---- trunk/buildroot/target/device/Atmel/atngw100/atngw100_defconfig	2009-02-09 16:44:09 UTC (rev 25278)
-+++ trunk/buildroot/target/device/Atmel/atngw100/atngw100_defconfig	2009-02-09 17:35:00 UTC (rev 25279)
-@@ -875,6 +875,6 @@
- # Destinations for linux kernel binaries
- #
- BR2_LINUX_COPYTO_ROOTFS=y
--BR2_LINUX_COPYTO_TFTPBOOT=y
-+# BR2_LINUX_COPYTO_TFTPBOOT is not set
- BR2_LINUX_COPYTO=""
- # BR2_LINUX_COPY_CONFIGURATION is not set
+Why? It looks like it uses LINUX26_KERNEL_NAME.
 
-Modified: trunk/buildroot/target/device/Atmel/atstk1005/atstk1005_defconfig
-===================================================================
---- trunk/buildroot/target/device/Atmel/atstk1005/atstk1005_defconfig	2009-02-09 16:44:09 UTC (rev 25278)
-+++ trunk/buildroot/target/device/Atmel/atstk1005/atstk1005_defconfig	2009-02-09 17:35:00 UTC (rev 25279)
-@@ -892,6 +892,6 @@
- # Destinations for linux kernel binaries
- #
- BR2_LINUX_COPYTO_ROOTFS=y
--BR2_LINUX_COPYTO_TFTPBOOT=y
-+# BR2_LINUX_COPYTO_TFTPBOOT is not set
- BR2_LINUX_COPYTO=""
- # BR2_LINUX_COPY_CONFIGURATION is not set
+ Ulf> I need it in this specific order.
+ Ulf> I also would like to avoid unneccesary problems
+ Ulf> due to someone forgetting to update strings.
 
-Modified: trunk/buildroot/target/device/Atmel/atstk100x/atstk100x_defconfig
-===================================================================
---- trunk/buildroot/target/device/Atmel/atstk100x/atstk100x_defconfig	2009-02-09 16:44:09 UTC (rev 25278)
-+++ trunk/buildroot/target/device/Atmel/atstk100x/atstk100x_defconfig	2009-02-09 17:35:00 UTC (rev 25279)
-@@ -991,6 +991,6 @@
- # Destinations for linux kernel binaries
- #
- BR2_LINUX_COPYTO_ROOTFS=y
--BR2_LINUX_COPYTO_TFTPBOOT=y
-+# BR2_LINUX_COPYTO_TFTPBOOT is not set
- BR2_LINUX_COPYTO=""
- BR2_LINUX_COPY_CONFIGURATION=y
+Then set the appropriate _SUFFIX / _PREFIX variables.
+
+ Ulf> And I repeat, I want all files related to a specific project
+ Ulf> to be sorted together.
+
+Then put them in /tftpboot/<project>/.
+
+-- 
+Bye, Peter Korsgaard
