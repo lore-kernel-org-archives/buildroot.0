@@ -1,41 +1,22 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon,  9 Feb 2009 21:29:24 +0000 (UTC)
-Subject: [Buildroot] [Bug 95] New: XGI version mismatch
-Message-ID: <bug-95-163@https.bugs.busybox.net/>
+From: Dan Pattison <dan.pattison@ethertek.ca>
+Date: Mon, 09 Feb 2009 10:53:34 -0800
+Subject: [Buildroot] Easy Upgrade Path?
+Message-ID: <49907BAE.3020509@ethertek.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=95
+Hello List:
 
-           Summary: XGI version mismatch
-           Product: buildroot
-           Version: unspecified
-          Platform: All
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P3
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: xgiguy at mailinator.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+I've been getting used to the buildroot development environment using 
+2009.02-RC2 for ARM AT91SAM9g20-EK. I have made lots of changes and 
+additions that suit our project (config files, packages, etc.) We have 
+successfully compiled and included some of our own programs.
 
+What is the recommended method to upgrade to the newest build 
+environment so we don't have to re-do everything? Is this possible?
 
-Created an attachment (id=53)
- --> (https://bugs.busybox.net/attachment.cgi?id=53)
-This fixes x11r7 to download the correct version of the XGI video driver
-
-the latest rc for buildroot tries to download an invalid version of
-xdriver_xf86-video-xgi (xf86-video-xgi-1.3.0.tar.bz2).  It looks like it is
-supposed to be using xf86-video-xgi-1.5.0.tar.bz2, but has probably not been
-tested.  See the attached patch.
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Best Regards,
+Dan Pattison
