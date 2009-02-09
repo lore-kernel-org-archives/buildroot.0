@@ -1,374 +1,192 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon,  9 Feb 2009 09:07:11 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/kernel-headers
-Message-ID: <20090209090711.B765B7644E@busybox.osuosl.org>
+From: Sandeep Kumar <sandeepk@verismonetworks.com>
+Date: Mon, 09 Feb 2009 14:48:57 +0530
+Subject: [Buildroot] Urgent : at91rm9200 root file system
+In-Reply-To: <498C5F12.4060904@ethertek.ca>
+References: <498A1FA9.1070306@ethertek.ca> <878woldc0r.fsf@macbook.be.48ers.dk>
+	<1233814769.5851.73.camel@linux-l8en.site>
+	<87r62dauce.fsf@macbook.be.48ers.dk>
+	<1233920929.4559.12.camel@linux-l8en.site>
+	<87d4dvaij4.fsf@macbook.be.48ers.dk>
+	<1233924549.4559.17.camel@linux-l8en.site>
+	<87zlgz91gc.fsf@macbook.be.48ers.dk>
+	<1233928454.4559.27.camel@linux-l8en.site> <498C5579.10007@ethertek.ca>
+	<1233935456.4559.36.camel@linux-l8en.site>
+	<498C5F12.4060904@ethertek.ca>
+Message-ID: <1234171137.4559.67.camel@linux-l8en.site>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-02-09 09:07:10 +0000 (Mon, 09 Feb 2009)
-New Revision: 25268
+Hi Pattison
 
-Log:
-kernel-headers: bump 2.6.27/2.6.28 stable versions
+I have downloaded buildroot package configured it for at91rm9200 and in
+the make i am getting an error which i was unable to fix. Can you please
+help me in fixing this bug. One more thing i want to know is that if i
+want to build a separate bootloader where i have to make the board
+specific changes like ram size, Flash size, boot configuration etc. The
+log is as follows:
 
-Added:
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.4-cris-eth-driver-netpoll.patch
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.4-cris-headers.patch
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.4-cris-objcopy-flags.patch
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.4-fix-serial.h-include.patch
+rm -f include-fixed/README
+cp /home/sandeepk/Desktop/buildroot/toolchain_build_arm/gcc-4.3.2/gcc/../fixincludes/README-fixinc include-fixed/README
+chmod a+r include-fixed/README
+echo timestamp > stmp-int-hdrs
+make[2]: Leaving directory
+`/home/sandeepk/Desktop/buildroot/toolchain_build_arm/gcc-4.3.2-initial/gcc'
+Checking multilib configuration for libgcc...
+mkdir -p -- arm-linux-uclibc/libgcc
+Configuring in arm-linux-uclibc/libgcc
+configure: creating cache ./config.cache
+checking for --enable-version-specific-runtime-libs... no
+checking for a BSD-compatible install... /usr/bin/install -c
+checking for gawk... gawk
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... arm-unknown-linux-uclibc
+checking for
+arm-linux-uclibc-ar... /home/sandeepk/Desktop/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-ar
+checking for arm-linux-uclibc-lipo... arm-linux-uclibc-lipo
+checking for
+arm-linux-uclibc-nm... /home/sandeepk/Desktop/buildroot/toolchain_build_arm/gcc-4.3.2-initial/./gcc/nm
+checking for
+arm-linux-uclibc-ranlib... /home/sandeepk/Desktop/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-ranlib
+checking for
+arm-linux-uclibc-strip... /home/sandeepk/Desktop/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-strip
+checking whether ln -s works... yes
+checking for
+arm-linux-uclibc-gcc...  /home/sandeepk/Desktop/buildroot/toolchain_build_arm/gcc-4.3.2-initial/./gcc/xgcc -B/home/sandeepk/Desktop/buildroot/toolchain_build_arm/gcc-4.3.2-initial/./gcc/ -B/home/sandeepk/Desktop/buildroot/build_arm/staging_dir/usr/arm-linux-uclibc/bin/ -B/home/sandeepk/Desktop/buildroot/build_arm/staging_dir/usr/arm-linux-uclibc/lib/ -isystem /home/sandeepk/Desktop/buildroot/build_arm/staging_dir/usr/arm-linux-uclibc/include -isystem /home/sandeepk/Desktop/buildroot/build_arm/staging_dir/usr/arm-linux-uclibc/sys-include
+checking for suffix of object files... configure: error: cannot compute
+suffix of object files: cannot compile
+See `config.log' for more details.
+make[1]: *** [configure-target-libgcc] Error 1
+make[1]: Leaving directory
+`/home/sandeepk/Desktop/buildroot/toolchain_build_arm/gcc-4.3.2-initial'
+make: ***
+[/home/sandeepk/Desktop/buildroot/toolchain_build_arm/gcc-4.3.2-initial/.compiled] Error 2
 
-Removed:
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.3-cris-eth-driver-netpoll.patch
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.3-cris-headers.patch
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.3-cris-objcopy-flags.patch
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.3-fix-serial.h-include.patch
 
-Modified:
-   trunk/buildroot/toolchain/kernel-headers/Config.in
+Thanks and Regards
+Sandeep
 
 
-Changeset:
-Modified: trunk/buildroot/toolchain/kernel-headers/Config.in
-===================================================================
---- trunk/buildroot/toolchain/kernel-headers/Config.in	2009-02-08 22:45:48 UTC (rev 25267)
-+++ trunk/buildroot/toolchain/kernel-headers/Config.in	2009-02-09 09:07:10 UTC (rev 25268)
-@@ -117,7 +117,7 @@
- 	default "2.6.24.7"	if BR2_KERNEL_HEADERS_2_6_24
- 	default "2.6.25.19"	if BR2_KERNEL_HEADERS_2_6_25
- 	default "2.6.26.8"	if BR2_KERNEL_HEADERS_2_6_26
--	default "2.6.27.14"	if BR2_KERNEL_HEADERS_2_6_27
--	default "2.6.28.3"	if BR2_KERNEL_HEADERS_2_6_28
-+	default "2.6.27.15"	if BR2_KERNEL_HEADERS_2_6_27
-+	default "2.6.28.4"	if BR2_KERNEL_HEADERS_2_6_28
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 
-
-Deleted: trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.3-cris-eth-driver-netpoll.patch
-===================================================================
---- trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.3-cris-eth-driver-netpoll.patch	2009-02-08 22:45:48 UTC (rev 25267)
-+++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.3-cris-eth-driver-netpoll.patch	2009-02-09 09:07:10 UTC (rev 25268)
-@@ -1,11 +0,0 @@
----- a/drivers/net/cris/eth_v10.c.org	2009-01-28 09:19:09.000000000 +0100
--+++ b/drivers/net/cris/eth_v10.c	2009-01-28 09:19:16.000000000 +0100
--@@ -1707,7 +1707,7 @@
-- static void
-- e100_netpoll(struct net_device* netdev)
-- {
---	e100rxtx_interrupt(NETWORK_DMA_TX_IRQ_NBR, netdev, NULL);
--+	e100rxtx_interrupt(NETWORK_DMA_TX_IRQ_NBR, netdev);
-- }
-- #endif
-- 
-
-Deleted: trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.3-cris-headers.patch
-===================================================================
---- trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.3-cris-headers.patch	2009-02-08 22:45:48 UTC (rev 25267)
-+++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.3-cris-headers.patch	2009-02-09 09:07:10 UTC (rev 25268)
-@@ -1,28 +0,0 @@
--diff -urN linux-2.6.28/arch/cris/include/arch-v10/arch/Kbuild linux-2.6.28.my/arch/cris/include/arch-v10/arch/Kbuild
----- linux-2.6.28/arch/cris/include/arch-v10/arch/Kbuild	2008-12-25 00:26:37.000000000 +0100
--+++ linux-2.6.28.my/arch/cris/include/arch-v10/arch/Kbuild	2009-01-12 12:59:06.000000000 +0100
--@@ -1,3 +1,5 @@
--+header-y += elf.h
--+header-y += ptrace.h
-- header-y += user.h
-- header-y += svinto.h
-- header-y += sv_addr_ag.h
--diff -urN linux-2.6.28/arch/cris/include/asm/Kbuild linux-2.6.28.my/arch/cris/include/asm/Kbuild
----- linux-2.6.28/arch/cris/include/asm/Kbuild	2008-12-25 00:26:37.000000000 +0100
--+++ linux-2.6.28.my/arch/cris/include/asm/Kbuild	2009-01-12 13:14:40.000000000 +0100
--@@ -1,11 +1,13 @@
-- include include/asm-generic/Kbuild.asm
-- 
---header-y += arch-v10/
---header-y += arch-v32/
--+header-y += ../arch-v10/arch/
--+header-y += ../arch-v32/arch/
-- 
--+header-y += elf.h
-- header-y += ethernet.h
-- header-y += rtc.h
-- header-y += sync_serial.h
--+header-y += user.h
-- 
-- unifdef-y += etraxgpio.h
-- unifdef-y += rs485.h
-
-Deleted: trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.3-cris-objcopy-flags.patch
-===================================================================
---- trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.3-cris-objcopy-flags.patch	2009-02-08 22:45:48 UTC (rev 25267)
-+++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.3-cris-objcopy-flags.patch	2009-02-09 09:07:10 UTC (rev 25268)
-@@ -1,45 +0,0 @@
----- linux-2.6.28/arch/cris/Makefile	2008-12-25 00:26:37.000000000 +0100
--+++ linux-2.6.28.my/arch/cris/Makefile	2009-01-12 13:21:44.000000000 +0100
--@@ -40,7 +40,7 @@
-- 
-- LD = $(CROSS_COMPILE)ld -mcrislinux
-- 
---OBJCOPYFLAGS := -O binary -R .note -R .comment -S
--+OBJCOPYFLAGS := -O binary -R .note -R .note.gnu.build-id -R .comment
-- 
-- CPPFLAGS_vmlinux.lds = -DDRAM_VIRTUAL_BASE=0x$(CONFIG_ETRAX_DRAM_VIRTUAL_BASE)
-- 
--diff -urN linux-2.6.28/arch/cris/arch-v10/boot/Makefile linux-2.6.28.my/arch/cris/arch-v10/boot/Makefile
----- linux-2.6.28/arch/cris/arch-v10/boot/Makefile	2008-12-25 00:26:37.000000000 +0100
--+++ linux-2.6.28.my/arch/cris/arch-v10/boot/Makefile	2009-01-12 13:28:25.000000000 +0100
--@@ -2,8 +2,6 @@
-- # arch/cris/arch-v10/boot/Makefile
-- #
-- 
---OBJCOPYFLAGS = -O binary --remove-section=.bss
---
-- subdir- := compressed rescue
-- targets := Image
-- 
--diff -urN linux-2.6.28/arch/cris/arch-v10/boot/compressed/Makefile linux-2.6.28.my/arch/cris/arch-v10/boot/compressed/Makefile
----- linux-2.6.28/arch/cris/arch-v10/boot/compressed/Makefile	2008-12-25 00:26:37.000000000 +0100
--+++ linux-2.6.28.my/arch/cris/arch-v10/boot/compressed/Makefile	2009-01-12 13:28:33.000000000 +0100
--@@ -6,7 +6,6 @@
-- ccflags-y += -O2 $(LINUXINCLUDE)
-- ldflags-y += -T $(srctree)/$(src)/decompress.lds
-- OBJECTS = $(obj)/head.o $(obj)/misc.o
---OBJCOPYFLAGS = -O binary --remove-section=.bss
-- 
-- quiet_cmd_image = BUILD   $@
-- cmd_image = cat $(obj)/decompress.bin $(obj)/piggy.gz > $@
--diff -urN linux-2.6.28/arch/cris/arch-v10/boot/rescue/Makefile linux-2.6.28.my/arch/cris/arch-v10/boot/rescue/Makefile
----- linux-2.6.28/arch/cris/arch-v10/boot/rescue/Makefile	2008-12-25 00:26:37.000000000 +0100
--+++ linux-2.6.28.my/arch/cris/arch-v10/boot/rescue/Makefile	2009-01-12 13:28:40.000000000 +0100
--@@ -5,7 +5,6 @@
-- ccflags-y += -O2 $(LINUXINCLUDE)
-- asflags-y += $(LINUXINCLUDE)
-- ldflags-y += -T $(srctree)/$(src)/rescue.lds
---OBJCOPYFLAGS = -O binary --remove-section=.bss
-- obj-$(CONFIG_ETRAX_AXISFLASHMAP) = head.o
-- OBJECT := $(obj)/head.o
-- 
-
-Deleted: trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.3-fix-serial.h-include.patch
-===================================================================
---- trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.3-fix-serial.h-include.patch	2009-02-08 22:45:48 UTC (rev 25267)
-+++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.3-fix-serial.h-include.patch	2009-02-09 09:07:10 UTC (rev 25268)
-@@ -1,55 +0,0 @@
--From 60c20fb8c00a2b23308ae4517f145383bc66d291 Mon Sep 17 00:00:00 2001
--From: Andy Whitcroft <apw@canonical.com>
--Date: Fri, 2 Jan 2009 13:49:04 +0000
--Subject: [PATCH] serial: RS485 ioctl structure uses __u32 include linux/types.h
--MIME-Version: 1.0
--Content-Type: text/plain; charset=utf-8
--Content-Transfer-Encoding: 8bit
--
--In the commit below a new struct serial_rs485 was introduced for a new
--ioctl:
--
--    commit c26c56c0f40e200e61d1390629c806f6adaffbcc
--    Author: Alan Cox <alan@redhat.com>
--    Date:   Mon Oct 13 10:37:48 2008 +0100
--
--	tty: Cris has a nice RS485 ioctl so we should steal it
--
--This structure uses the __u32 types for some of its members, which leads
--to the following compile error:
--
--    $ cc -I.../include -c X.c
--    In file included from X.c:2: .../include/linux/serial.h:185:
--		error: expected specifier-qualifier-list before ?__u32?
--    $
--
--It seems that these types are appropriate for this structure as it is
--to be exposed to userspace.  These types are available via linux/types.h
--so move the include of that outside the __KERNEL__ section.
--
--Signed-off-by: Andy Whitcroft <apw@canonical.com>
--Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
--Signed-off-by: Alan Cox <alan@redhat.com>
--Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-----
-- include/linux/serial.h |    3 ++-
-- 1 files changed, 2 insertions(+), 1 deletions(-)
--
--diff --git a/include/linux/serial.h b/include/linux/serial.h
--index 1ea8d92..9136cc5 100644
----- a/include/linux/serial.h
--+++ b/include/linux/serial.h
--@@ -10,8 +10,9 @@
-- #ifndef _LINUX_SERIAL_H
-- #define _LINUX_SERIAL_H
-- 
---#ifdef __KERNEL__
-- #include <linux/types.h>
--+
--+#ifdef __KERNEL__
-- #include <asm/page.h>
-- 
-- /*
---- 
--1.5.6.5
--
-
-Copied: trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.4-cris-eth-driver-netpoll.patch (from rev 25264, trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.3-cris-eth-driver-netpoll.patch)
-===================================================================
---- trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.4-cris-eth-driver-netpoll.patch	                        (rev 0)
-+++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.4-cris-eth-driver-netpoll.patch	2009-02-09 09:07:10 UTC (rev 25268)
-@@ -0,0 +1,11 @@
-+--- a/drivers/net/cris/eth_v10.c.org	2009-01-28 09:19:09.000000000 +0100
-++++ b/drivers/net/cris/eth_v10.c	2009-01-28 09:19:16.000000000 +0100
-+@@ -1707,7 +1707,7 @@
-+ static void
-+ e100_netpoll(struct net_device* netdev)
-+ {
-+-	e100rxtx_interrupt(NETWORK_DMA_TX_IRQ_NBR, netdev, NULL);
-++	e100rxtx_interrupt(NETWORK_DMA_TX_IRQ_NBR, netdev);
-+ }
-+ #endif
-+ 
-
-Copied: trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.4-cris-headers.patch (from rev 25264, trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.3-cris-headers.patch)
-===================================================================
---- trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.4-cris-headers.patch	                        (rev 0)
-+++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.4-cris-headers.patch	2009-02-09 09:07:10 UTC (rev 25268)
-@@ -0,0 +1,28 @@
-+diff -urN linux-2.6.28/arch/cris/include/arch-v10/arch/Kbuild linux-2.6.28.my/arch/cris/include/arch-v10/arch/Kbuild
-+--- linux-2.6.28/arch/cris/include/arch-v10/arch/Kbuild	2008-12-25 00:26:37.000000000 +0100
-++++ linux-2.6.28.my/arch/cris/include/arch-v10/arch/Kbuild	2009-01-12 12:59:06.000000000 +0100
-+@@ -1,3 +1,5 @@
-++header-y += elf.h
-++header-y += ptrace.h
-+ header-y += user.h
-+ header-y += svinto.h
-+ header-y += sv_addr_ag.h
-+diff -urN linux-2.6.28/arch/cris/include/asm/Kbuild linux-2.6.28.my/arch/cris/include/asm/Kbuild
-+--- linux-2.6.28/arch/cris/include/asm/Kbuild	2008-12-25 00:26:37.000000000 +0100
-++++ linux-2.6.28.my/arch/cris/include/asm/Kbuild	2009-01-12 13:14:40.000000000 +0100
-+@@ -1,11 +1,13 @@
-+ include include/asm-generic/Kbuild.asm
-+ 
-+-header-y += arch-v10/
-+-header-y += arch-v32/
-++header-y += ../arch-v10/arch/
-++header-y += ../arch-v32/arch/
-+ 
-++header-y += elf.h
-+ header-y += ethernet.h
-+ header-y += rtc.h
-+ header-y += sync_serial.h
-++header-y += user.h
-+ 
-+ unifdef-y += etraxgpio.h
-+ unifdef-y += rs485.h
-
-Copied: trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.4-cris-objcopy-flags.patch (from rev 25264, trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.3-cris-objcopy-flags.patch)
-===================================================================
---- trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.4-cris-objcopy-flags.patch	                        (rev 0)
-+++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.4-cris-objcopy-flags.patch	2009-02-09 09:07:10 UTC (rev 25268)
-@@ -0,0 +1,45 @@
-+--- linux-2.6.28/arch/cris/Makefile	2008-12-25 00:26:37.000000000 +0100
-++++ linux-2.6.28.my/arch/cris/Makefile	2009-01-12 13:21:44.000000000 +0100
-+@@ -40,7 +40,7 @@
-+ 
-+ LD = $(CROSS_COMPILE)ld -mcrislinux
-+ 
-+-OBJCOPYFLAGS := -O binary -R .note -R .comment -S
-++OBJCOPYFLAGS := -O binary -R .note -R .note.gnu.build-id -R .comment
-+ 
-+ CPPFLAGS_vmlinux.lds = -DDRAM_VIRTUAL_BASE=0x$(CONFIG_ETRAX_DRAM_VIRTUAL_BASE)
-+ 
-+diff -urN linux-2.6.28/arch/cris/arch-v10/boot/Makefile linux-2.6.28.my/arch/cris/arch-v10/boot/Makefile
-+--- linux-2.6.28/arch/cris/arch-v10/boot/Makefile	2008-12-25 00:26:37.000000000 +0100
-++++ linux-2.6.28.my/arch/cris/arch-v10/boot/Makefile	2009-01-12 13:28:25.000000000 +0100
-+@@ -2,8 +2,6 @@
-+ # arch/cris/arch-v10/boot/Makefile
-+ #
-+ 
-+-OBJCOPYFLAGS = -O binary --remove-section=.bss
-+-
-+ subdir- := compressed rescue
-+ targets := Image
-+ 
-+diff -urN linux-2.6.28/arch/cris/arch-v10/boot/compressed/Makefile linux-2.6.28.my/arch/cris/arch-v10/boot/compressed/Makefile
-+--- linux-2.6.28/arch/cris/arch-v10/boot/compressed/Makefile	2008-12-25 00:26:37.000000000 +0100
-++++ linux-2.6.28.my/arch/cris/arch-v10/boot/compressed/Makefile	2009-01-12 13:28:33.000000000 +0100
-+@@ -6,7 +6,6 @@
-+ ccflags-y += -O2 $(LINUXINCLUDE)
-+ ldflags-y += -T $(srctree)/$(src)/decompress.lds
-+ OBJECTS = $(obj)/head.o $(obj)/misc.o
-+-OBJCOPYFLAGS = -O binary --remove-section=.bss
-+ 
-+ quiet_cmd_image = BUILD   $@
-+ cmd_image = cat $(obj)/decompress.bin $(obj)/piggy.gz > $@
-+diff -urN linux-2.6.28/arch/cris/arch-v10/boot/rescue/Makefile linux-2.6.28.my/arch/cris/arch-v10/boot/rescue/Makefile
-+--- linux-2.6.28/arch/cris/arch-v10/boot/rescue/Makefile	2008-12-25 00:26:37.000000000 +0100
-++++ linux-2.6.28.my/arch/cris/arch-v10/boot/rescue/Makefile	2009-01-12 13:28:40.000000000 +0100
-+@@ -5,7 +5,6 @@
-+ ccflags-y += -O2 $(LINUXINCLUDE)
-+ asflags-y += $(LINUXINCLUDE)
-+ ldflags-y += -T $(srctree)/$(src)/rescue.lds
-+-OBJCOPYFLAGS = -O binary --remove-section=.bss
-+ obj-$(CONFIG_ETRAX_AXISFLASHMAP) = head.o
-+ OBJECT := $(obj)/head.o
-+ 
-
-Copied: trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.4-fix-serial.h-include.patch (from rev 25264, trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.3-fix-serial.h-include.patch)
-===================================================================
---- trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.4-fix-serial.h-include.patch	                        (rev 0)
-+++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.4-fix-serial.h-include.patch	2009-02-09 09:07:10 UTC (rev 25268)
-@@ -0,0 +1,55 @@
-+From 60c20fb8c00a2b23308ae4517f145383bc66d291 Mon Sep 17 00:00:00 2001
-+From: Andy Whitcroft <apw@canonical.com>
-+Date: Fri, 2 Jan 2009 13:49:04 +0000
-+Subject: [PATCH] serial: RS485 ioctl structure uses __u32 include linux/types.h
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=utf-8
-+Content-Transfer-Encoding: 8bit
-+
-+In the commit below a new struct serial_rs485 was introduced for a new
-+ioctl:
-+
-+    commit c26c56c0f40e200e61d1390629c806f6adaffbcc
-+    Author: Alan Cox <alan@redhat.com>
-+    Date:   Mon Oct 13 10:37:48 2008 +0100
-+
-+	tty: Cris has a nice RS485 ioctl so we should steal it
-+
-+This structure uses the __u32 types for some of its members, which leads
-+to the following compile error:
-+
-+    $ cc -I.../include -c X.c
-+    In file included from X.c:2: .../include/linux/serial.h:185:
-+		error: expected specifier-qualifier-list before ?__u32?
-+    $
-+
-+It seems that these types are appropriate for this structure as it is
-+to be exposed to userspace.  These types are available via linux/types.h
-+so move the include of that outside the __KERNEL__ section.
-+
-+Signed-off-by: Andy Whitcroft <apw@canonical.com>
-+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-+Signed-off-by: Alan Cox <alan@redhat.com>
-+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-+---
-+ include/linux/serial.h |    3 ++-
-+ 1 files changed, 2 insertions(+), 1 deletions(-)
-+
-+diff --git a/include/linux/serial.h b/include/linux/serial.h
-+index 1ea8d92..9136cc5 100644
-+--- a/include/linux/serial.h
-++++ b/include/linux/serial.h
-+@@ -10,8 +10,9 @@
-+ #ifndef _LINUX_SERIAL_H
-+ #define _LINUX_SERIAL_H
-+ 
-+-#ifdef __KERNEL__
-+ #include <linux/types.h>
-++
-++#ifdef __KERNEL__
-+ #include <asm/page.h>
-+ 
-+ /*
-+-- 
-+1.5.6.5
-+
+On Fri, 2009-02-06 at 08:02 -0800, Dan Pattison wrote:
+> Hello Sandeep:
+> 
+> The command works on my internet connection/linux computer. Make sure 
+> you did not make any spelling mistakes. Copy paste the command from the 
+> docs. Yes you can download the Buildroot package from here: 
+> http://buildroot.uclibc.org/downloads/snapshots/buildroot-snapshot.tar.bz2
+> 
+> This is all explained in the docs found here:  
+> http://buildroot.uclibc.org/buildroot.html
+> 
+> Best Regards,
+> Dan Pattison
+> 
+> 
+> Sandeep Kumar wrote:
+> > Hi Pattison
+> >
+> > Thanks for reply
+> > I have tried with the commands sent by you but i am getting the
+> > following error:
+> >
+> > svn: Can't connect to host 'uclibc.org': Connection refused
+> >
+> > Can there be some authorization issue or so.
+> > I am able to access the website uclibc.org from internet. Is there
+> > anyway to download the package from there.
+> >
+> > Thanks and regards
+> > Sandeep
+> >
+> >
+> >
+> > On Fri, 2009-02-06 at 07:21 -0800, Dan Pattison wrote:
+> >   
+> >> Sandeep:
+> >>
+> >> On the command line; navigate to the folder where you want your build 
+> >> environment installed.
+> >> Type out this command:   
+> >>
+> >> svn co svn://uclibc.org/trunk/buildroot
+> >>
+> >> It will download the current Buildroot files. Then type out:
+> >>
+> >> make at91rm9200df_defconfig
+> >>
+> >> Then type out:
+> >>
+> >> make
+> >>
+> >> Try that. Also the docs are here
+> >>
+> >> http://buildroot.uclibc.org/buildroot.html
+> >>
+> >> Best Regards,
+> >> Dan Pattison
+> >>
+> >>
+> >> Sandeep Kumar wrote:
+> >>     
+> >>> Hi Peter,
+> >>>
+> >>> Thanks once again for your response.
+> >>>
+> >>> Sorry!!!, I have not understood your reply. I am some what new to this
+> >>> platform. I am working on a linux machine and i do not have the source
+> >>> code for the root file system to make it. From where can i get the
+> >>> source code to build it for at91rm9200. Where should i execute the
+> >>> command sent by you (make at91rm9200df_defconfig; make) without having
+> >>> the source code. And if i am making some mistake can you please explain
+> >>> me in a little bit detail. I will be very thankful to you.
+> >>>
+> >>> Regards
+> >>> Sandeep
+> >>>
+> >>>
+> >>> On Fri, 2009-02-06 at 13:47 +0100, Peter Korsgaard wrote:
+> >>>   
+> >>>       
+> >>>>>>>>> "Sandeep" == Sandeep Kumar <sandeepk@verismonetworks.com> writes:
+> >>>>>>>>>               
+> >>>>>>>>>                   
+> >>>>  Sandeep> Hi peter
+> >>>>  Sandeep> Thanks for reply.
+> >>>>
+> >>>>  Sandeep> For this I want the root file system source code which i
+> >>>>  Sandeep> dont have. from where can i get it.
+> >>>>
+> >>>> Buildroot will download the sources and build the rootfs for you when
+> >>>> you run make.
+> >>>>
+> >>>>     
+> >>>>         
+> >>> _______________________________________________
+> >>> buildroot mailing list
+> >>> buildroot at busybox.net
+> >>> http://lists.busybox.net/mailman/listinfo/buildroot
+> >>>   
+> >>> ------------------------------------------------------------------------
+> >>>
+> >>>
+> >>> No virus found in this incoming message.
+> >>> Checked by AVG - www.avg.com 
+> >>> Version: 8.0.233 / Virus Database: 270.10.18/1936 - Release Date: 01/29/09 17:57:00
+> >>>
+> >>>   
+> >>>       
+> >>     
+> >
+> >   
+> > ------------------------------------------------------------------------
+> >
+> >
+> > No virus found in this incoming message.
+> > Checked by AVG - www.avg.com 
+> > Version: 8.0.233 / Virus Database: 270.10.18/1937 - Release Date: 01/29/09 17:57:00
+> >
+> >   
+> 
+> 
