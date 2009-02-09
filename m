@@ -1,51 +1,31 @@
-From: Sandeep Kumar <sandeepk@verismonetworks.com>
-Date: Mon, 09 Feb 2009 17:30:12 +0530
-Subject: [Buildroot] Urgent : at91rm9200 root file system
-In-Reply-To: <87bptc7yhe.fsf@macbook.be.48ers.dk>
-References: <498A1FA9.1070306@ethertek.ca> <878woldc0r.fsf@macbook.be.48ers.dk>
-	<1233814769.5851.73.camel@linux-l8en.site>
-	<87r62dauce.fsf@macbook.be.48ers.dk>
-	<1233920929.4559.12.camel@linux-l8en.site>
-	<87d4dvaij4.fsf@macbook.be.48ers.dk>
-	<1233924549.4559.17.camel@linux-l8en.site>
-	<87zlgz91gc.fsf@macbook.be.48ers.dk>
-	<1233928454.4559.27.camel@linux-l8en.site> <498C5579.10007@ethertek.ca>
-	<1233935456.4559.36.camel@linux-l8en.site>
-	<498C5F12.4060904@ethertek.ca>
-	<1234171137.4559.67.camel@linux-l8en.site>
-	<87bptc7yhe.fsf@macbook.be.48ers.dk>
-Message-ID: <1234180812.4559.73.camel@linux-l8en.site>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon,  9 Feb 2009 12:10:40 +0000 (UTC)
+Subject: [Buildroot] [Bug 91] vsftpd fails to build with ssl support
+In-Reply-To: <bug-91-163@https.bugs.busybox.net/>
+References: <bug-91-163@https.bugs.busybox.net/>
+Message-ID: <20090209121041.63B287644E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi pattison,
-
-I am using opensuse 10.2
-
-Thanks and Regards
-Sandeep
+https://bugs.busybox.net/show_bug.cgi?id=91
 
 
 
 
 
+--- Comment #1 from Markus Brunner <super.firetwister@googlemail.com>  2009-02-09 12:10:39 UTC ---
+Sorry, I forgot to mention that I had to set the LDFLAGS. I'm using an externel
+toolchain.
+
+$(VSFTPD_DIR)/$(VSFTPD_BINARY): $(VSFTPD_DIR)/.configured
+        $(MAKE) CC=$(TARGET_CC) CFLAGS="$(TARGET_CFLAGS)"
+LDFLAGS="$(TARGET_LDFLAGS)" LIBS="$(VSFTPD_LIBS)" -C $(VSFTPD_DIR)
 
 
-On Mon, 2009-02-09 at 10:26 +0100, Peter Korsgaard wrote:
-> >>>>> "Sandeep" == Sandeep Kumar <sandeepk@verismonetworks.com> writes:
-> 
->  Sandeep> Hi Pattison I have downloaded buildroot package configured
->  Sandeep> it for at91rm9200 and in the make i am getting an error
->  Sandeep> which i was unable to fix. Can you please
-> 
->  Sandeep> checking for suffix of object files... configure: error: cannot compute
->  Sandeep> suffix of object files: cannot compile
->  Sandeep> See `config.log' for more details.
->  Sandeep> make[1]: *** [configure-target-libgcc] Error 1
-> 
-> You're using Ubuntu and don't have mpfr/gmpc installed on the host,
-> right? I'm looking into the problem right now.
-> 
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
