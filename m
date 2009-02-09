@@ -1,44 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 09 Feb 2009 20:34:39 +0100
-Subject: [Buildroot] What's up with the kernel names? (Again)
-In-Reply-To: <1234200240.4143.8.camel@elrond.atmel.com> (Ulf Samuelsson's
-	message of "Mon\, 09 Feb 2009 18\:24\:00 +0100")
-References: <d6cda7730902031749o51818770l1077d71877f9ad33@mail.gmail.com>
-	<873aeue676.fsf@macbook.be.48ers.dk>
-	<1233865432.4148.6.camel@elrond.atmel.com>
-	<87eiycarei.fsf@macbook.be.48ers.dk>
-	<D071C392448744ECA7A451C54A46ABE6@aeglos>
-	<d6cda7730902060631o54f2944rddc0f7cd8278a11a@mail.gmail.com>
-	<1234200240.4143.8.camel@elrond.atmel.com>
-Message-ID: <87hc3376b4.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon,  9 Feb 2009 21:29:24 +0000 (UTC)
+Subject: [Buildroot] [Bug 95] New: XGI version mismatch
+Message-ID: <bug-95-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=95
 
-Hi,
+           Summary: XGI version mismatch
+           Product: buildroot
+           Version: unspecified
+          Platform: All
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P3
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: xgiguy at mailinator.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
- >> You will get everything you had before, albeit in a different order
- >> (uImage-myprojec-2.6.28-20080106)
- >> 
 
- Ulf> Which breaks the U-Boot autoscripts.
+Created an attachment (id=53)
+ --> (https://bugs.busybox.net/attachment.cgi?id=53)
+This fixes x11r7 to download the correct version of the XGI video driver
 
-Why? It looks like it uses LINUX26_KERNEL_NAME.
+the latest rc for buildroot tries to download an invalid version of
+xdriver_xf86-video-xgi (xf86-video-xgi-1.3.0.tar.bz2).  It looks like it is
+supposed to be using xf86-video-xgi-1.5.0.tar.bz2, but has probably not been
+tested.  See the attached patch.
 
- Ulf> I need it in this specific order.
- Ulf> I also would like to avoid unneccesary problems
- Ulf> due to someone forgetting to update strings.
-
-Then set the appropriate _SUFFIX / _PREFIX variables.
-
- Ulf> And I repeat, I want all files related to a specific project
- Ulf> to be sorted together.
-
-Then put them in /tftpboot/<project>/.
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
