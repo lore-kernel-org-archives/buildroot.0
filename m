@@ -1,36 +1,45 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 09 Feb 2009 14:05:05 +0100
-Subject: [Buildroot] Urgent : at91rm9200 root file system
-In-Reply-To: <1234180812.4559.73.camel@linux-l8en.site> (Sandeep Kumar's
-	message of "Mon\, 09 Feb 2009 17\:30\:12 +0530")
-References: <498A1FA9.1070306@ethertek.ca> <878woldc0r.fsf@macbook.be.48ers.dk>
-	<1233814769.5851.73.camel@linux-l8en.site>
-	<87r62dauce.fsf@macbook.be.48ers.dk>
-	<1233920929.4559.12.camel@linux-l8en.site>
-	<87d4dvaij4.fsf@macbook.be.48ers.dk>
-	<1233924549.4559.17.camel@linux-l8en.site>
-	<87zlgz91gc.fsf@macbook.be.48ers.dk>
-	<1233928454.4559.27.camel@linux-l8en.site>
-	<498C5579.10007@ethertek.ca>
-	<1233935456.4559.36.camel@linux-l8en.site>
-	<498C5F12.4060904@ethertek.ca>
-	<1234171137.4559.67.camel@linux-l8en.site>
-	<87bptc7yhe.fsf@macbook.be.48ers.dk>
-	<1234180812.4559.73.camel@linux-l8en.site>
-Message-ID: <87y6wf7oce.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon,  9 Feb 2009 15:02:39 +0000 (UTC)
+Subject: [Buildroot] [Bug 91] vsftpd fails to build with ssl support
+In-Reply-To: <bug-91-163@https.bugs.busybox.net/>
+References: <bug-91-163@https.bugs.busybox.net/>
+Message-ID: <20090209150240.67585764FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sandeep" == Sandeep Kumar <sandeepk@verismonetworks.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=91
 
- Sandeep> Hi pattison,
- Sandeep> I am using opensuse 10.2
 
-It should be fixed now - Could you update to latest subversion version
-(atleast r25269) and try again? (type rm -rf *build_*; make)
+Peter Korsgaard <jacmet@uclibc.org> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |jacmet at uclibc.org
+             Status|NEW                         |RESOLVED
+         Resolution|                            |WORKSFORME
+
+
+
+
+--- Comment #2 from Peter Korsgaard <jacmet@uclibc.org>  2009-02-09 15:02:37 UTC ---
+I cannot reproduce this here, vsftpd.mk has:
+
+ifeq ($(BR2_PACKAGE_OPENSSL),y)
+VSFTPD_LIBS:=-lcrypt -lssl
+else
+VSFTPD_LIBS:=-lcrypt
+endif
+
+And:
+
+$(MAKE) CC=$(TARGET_CC) CFLAGS="$(TARGET_CFLAGS)" LIBS="$(VSFTPD_LIBS)" -C
+$(VSFTPD_DIR)
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
