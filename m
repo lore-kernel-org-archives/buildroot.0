@@ -1,33 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 09 Feb 2009 11:10:17 +0100
-Subject: [Buildroot] Bug with gmp and mpfr
-In-Reply-To: <498A642A.3060003@hq.tensilica.com> (Maxim Grigoriev's message of
-	"Wed\, 04 Feb 2009 19\:59\:38 -0800")
-References: <498A4C33.8000302@tsinghua.edu.cn>
-	<498A642A.3060003@hq.tensilica.com>
-Message-ID: <877i3z9b06.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon,  9 Feb 2009 11:50:31 +0000 (UTC)
+Subject: [Buildroot] [Bug 91] New: vsftpd fails to build with ssl support
+Message-ID: <bug-91-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Maxim" == Maxim Grigoriev <maxim@tensilica.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=91
 
-Hi,
+              Host: i386
+             Build: i386
+           Summary: vsftpd fails to build with ssl support
+           Product: buildroot
+           Version: unspecified
+          Platform: Other
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: super.firetwister at googlemail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
- Maxim> Hello Vania,
- Maxim> The best solution for this problem I was able to find is
- Maxim> switching to static linkage of GMP/MPFR for GCC 4.3.x compilers.
 
- Maxim> If you don't like the idea of static linkage, please, simply ignore
- Maxim> this email.
+vsftpd fails to build (link) with ssl support because -lcrypto is missing in 
+$(VSFTPD_LIBS) in the vsftpd.mk
 
-It indeed seems to be best solution this close to the release. I'll do
-a test build with one of the older gcc's, and commit if that still
-works.
-
-Thanks.
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
