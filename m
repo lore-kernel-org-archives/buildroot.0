@@ -1,5 +1,5 @@
 From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Tue, 10 Feb 2009 19:50:11 +0100
+Date: Tue, 10 Feb 2009 19:59:39 +0100
 Subject: [Buildroot] What's up with the kernel names? (Again)
 References: <d6cda7730902031749o51818770l1077d71877f9ad33@mail.gmail.com>
 	<D071C392448744ECA7A451C54A46ABE6@aeglos>
@@ -12,7 +12,7 @@ References: <d6cda7730902031749o51818770l1077d71877f9ad33@mail.gmail.com>
 	<87ab8u5ub5.fsf@macbook.be.48ers.dk>
 	<083a01c98b86$99d10260$f53018ac@Glamdring>
 	<d6cda7730902100834j409c7df8te83d42356957608c@mail.gmail.com>
-Message-ID: <264FEF6125FE485C9E19C343987ADD0F@aeglos>
+Message-ID: <D6A7EE92B1CB495290E03D37EB58AA6F@aeglos>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -62,8 +62,17 @@ That is an assumption you make.
 I regularily discuss pro's and con's with buildroot with end customers.
 There are a number of things brought up, but, so far, never the linux file 
 name.
+I can understand that you would like to have a filename which does not 
+change.
+"odd" is something relative, as I pointed out, *professional* companies
+do NOT use simple names as "uImage" for embedded control.
+The default for embedded linux distributions is a complex name
+which includes architecture and linux version.
+You are simply forced to do that, if you want to maintain
+a large number of kernels.
+The "simple" name is in this context insane.
 
-The key requirement for newbies is to load a kernel/rootfs to the target
+The *key* requirement for newbies is to load a kernel/rootfs to the target
 with minimum effort. The current "cleanups" to "sane" defaults is clearly
 making life harder for newbies.
 
