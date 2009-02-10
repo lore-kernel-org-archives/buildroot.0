@@ -1,51 +1,31 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue, 10 Feb 2009 13:01:28 +0000 (UTC)
-Subject: [Buildroot] svn commit:
-	trunk/buildroot/package/x11r7/xdriver_xf86-video-xgi
-Message-ID: <20090210130128.DA8AD76275@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 10 Feb 2009 13:55:40 +0100
+Subject: [Buildroot] svn error : Connection refused
+In-Reply-To: <1234269855.4559.97.camel@linux-l8en.site> (Sandeep Kumar's
+	message of "Tue\, 10 Feb 2009 18\:14\:15 +0530")
+References: <20090131204302.082727621A@busybox.osuosl.org>
+	<1234269855.4559.97.camel@linux-l8en.site>
+Message-ID: <8763ji5u43.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-02-10 13:01:28 +0000 (Tue, 10 Feb 2009)
-New Revision: 25289
+>>>>> "Sandeep" == Sandeep Kumar <sandeepk@verismonetworks.com> writes:
 
-Log:
-x11/video-xgi: fix vesa/xgi typo
+ Sandeep> Hi all
+ Sandeep> I am trying to checkout a fresh copy of buildroot by following command
 
-Closes #95
+ Sandeep> 	"svn co svn://uclibc.org/trunk/buildroot"
 
-Modified:
-   trunk/buildroot/package/x11r7/xdriver_xf86-video-xgi/Config.in
-   trunk/buildroot/package/x11r7/xdriver_xf86-video-xgi/xdriver_xf86-video-xgi.mk
+ Sandeep> and getting the following error
+ Sandeep> svn: Can't connect to host 'uclibc.org': Connection refused
+ Sandeep> My internet connection is working fine and i am able to access
+ Sandeep> "uclibc.org". Can antbody help me out to sort out this problem.
 
+You probably have a firewall blocking the svn connections. Use the
+-rc4 release of the latest svn snapshot.
 
-Changeset:
-Modified: trunk/buildroot/package/x11r7/xdriver_xf86-video-xgi/Config.in
-===================================================================
---- trunk/buildroot/package/x11r7/xdriver_xf86-video-xgi/Config.in	2009-02-10 04:10:34 UTC (rev 25288)
-+++ trunk/buildroot/package/x11r7/xdriver_xf86-video-xgi/Config.in	2009-02-10 13:01:28 UTC (rev 25289)
-@@ -7,5 +7,5 @@
- 	select BR2_PACKAGE_XPROTO_XEXTPROTO
- 	select BR2_PACKAGE_XPROTO_XPROTO
- 	help
--	  xf86-video-xgi 1.3.0
-+	  xf86-video-xgi 1.5.0
- 	  XGI based chips video driver
-
-Modified: trunk/buildroot/package/x11r7/xdriver_xf86-video-xgi/xdriver_xf86-video-xgi.mk
-===================================================================
---- trunk/buildroot/package/x11r7/xdriver_xf86-video-xgi/xdriver_xf86-video-xgi.mk	2009-02-10 04:10:34 UTC (rev 25288)
-+++ trunk/buildroot/package/x11r7/xdriver_xf86-video-xgi/xdriver_xf86-video-xgi.mk	2009-02-10 13:01:28 UTC (rev 25289)
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- XDRIVER_XF86_VIDEO_XGI_VERSION = 1.5.0
--XDRIVER_XF86_VIDEO_XGI_SOURCE = xf86-video-xgi-$(XDRIVER_XF86_VIDEO_VESA_VERSION).tar.bz2
-+XDRIVER_XF86_VIDEO_XGI_SOURCE = xf86-video-xgi-$(XDRIVER_XF86_VIDEO_XGI_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_XGI_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_XGI_AUTORECONF = NO
- XDRIVER_XF86_VIDEO_XGI_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xextproto xproto_xproto
+-- 
+Bye, Peter Korsgaard
