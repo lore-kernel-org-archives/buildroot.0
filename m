@@ -1,30 +1,37 @@
-From: steve at c2root.be <steve@c2root.be>
-Date: Tue, 10 Feb 2009 11:29:01 +0100
-Subject: [Buildroot] rebuilding with new option
-Message-ID: <20090210112901.kwbh1totokgkwcc8@webmail.digibel.be>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 10 Feb 2009 11:10:47 +0000 (UTC)
+Subject: [Buildroot] [Bug 97] New: Bump dnsmasq package to 2.47
+Message-ID: <bug-97-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+https://bugs.busybox.net/show_bug.cgi?id=97
 
-I have noticed that when I change options after a build in the  
-toolchain, it does not recompile. I have added large file support  
-afterwards and still further down the build it is complaining I don't  
-have large file support. When I double check the config, it states  
-that it should have large file support.
+              Host: i686-linux
+            Target: arm-softfloat-linux-uclibcgnueabi
+           Summary: Bump dnsmasq package to 2.47
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: gustavo at zacarias.com.ar
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
 
-The only thing I can do is remove buildroot_i686 folder
+Introduces minor improvements in dbus, ipv6 and other stuff.
+Not security related, so it's really low priority.
 
 
-How can I bypass this?
-
-kind regards
-
-Steve
-
-----------------------------------------------------------------
-This message was sent using IMP, the Internet Messaging Program.
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
