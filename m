@@ -1,25 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 10 Feb 2009 14:51:16 +0100
-Subject: [Buildroot] Samba build problem
-In-Reply-To: <20090210144234.gd6524zllw0wo4oo@webmail.digibel.be>
-	(steve@c2root.be's message of "Tue\,
-	10 Feb 2009 14\:42\:34 +0100")
-References: <20090210144234.gd6524zllw0wo4oo@webmail.digibel.be>
-Message-ID: <871vu65rjf.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 10 Feb 2009 15:15:50 +0000 (UTC)
+Subject: [Buildroot] [Bug 99] New: new package: flac
+Message-ID: <bug-99-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "steve" == steve  <steve@c2root.be> writes:
+https://bugs.busybox.net/show_bug.cgi?id=99
 
- steve> Hi all,
- steve> when I try to compile samba within buildroot, it give me an error 1
- steve> and claims it can not find iconv.h. I have seen this file within the
- steve> source of samba.
+           Summary: new package: flac
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P3
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: s.neumann at phase-zero.de
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Sounds like a libiconv issue. Please post your .config.
+
+I've added flac in my copy of buildroot and would appreciate if this new
+package could be included upstream.
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
