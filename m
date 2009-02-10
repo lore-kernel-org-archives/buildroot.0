@@ -1,11 +1,8 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 10 Feb 2009 21:06:15 +0100
+From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
+Date: Tue, 10 Feb 2009 18:06:37 -0200
 Subject: [Buildroot] What's up with the kernel names? (Again)
-In-Reply-To: <A5E32A5430FA4B31BA2D4BE8B5E985AF@aeglos> (Ulf Samuelsson's
-	message of "Tue\, 10 Feb 2009 20\:49\:15 +0100")
+In-Reply-To: <264FEF6125FE485C9E19C343987ADD0F@aeglos>
 References: <d6cda7730902031749o51818770l1077d71877f9ad33@mail.gmail.com>
-	<D071C392448744ECA7A451C54A46ABE6@aeglos>
-	<d6cda7730902060631o54f2944rddc0f7cd8278a11a@mail.gmail.com>
 	<1234200240.4143.8.camel@elrond.atmel.com>
 	<87hc3376b4.fsf@macbook.be.48ers.dk>
 	<1234219930.4143.16.camel@elrond.atmel.com>
@@ -14,117 +11,149 @@ References: <d6cda7730902031749o51818770l1077d71877f9ad33@mail.gmail.com>
 	<87ab8u5ub5.fsf@macbook.be.48ers.dk>
 	<083a01c98b86$99d10260$f53018ac@Glamdring>
 	<d6cda7730902100834j409c7df8te83d42356957608c@mail.gmail.com>
-	<A5E32A5430FA4B31BA2D4BE8B5E985AF@aeglos>
-Message-ID: <87skmm3vm0.fsf@macbook.be.48ers.dk>
+	<264FEF6125FE485C9E19C343987ADD0F@aeglos>
+Message-ID: <d6cda7730902101206k8dfe134ief7acc668a1ea9cd@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
-
 Hi,
 
- >> Second of all, I expect to have more choices in advanced, not less.
- >> Third of all, your At91 customers will have the exact same problem had
- >> they choosen the standard build because they also don't want the
- >> forced odd name.
+   I think I finally understand your use case. But I still think you
+are getting the requirement backward.
 
- Ulf> That is an assumption you make.
+On Tue, Feb 10, 2009 at 4:50 PM, Ulf Samuelsson
+<ulf.samuelsson@atmel.com> wrote:
+>> Second of all, I expect to have more choices in advanced, not less.
+>> Third of all, your At91 customers will have the exact same problem had
+>> they choosen the standard build because they also don't want the
+>> forced odd name.
+>
+> That is an assumption you make.
+> I regularily discuss pro's and con's with buildroot with end customers.
+> There are a number of things brought up, but, so far, never the linux file
+> name.
 
-Which is probably fairly easy to make given the 'advanced' in the
-name. Are you saying it shoule be Makefile.ulf instead? ;)
+Well, we buy quite a lot from Atmel, so you can count me as a first. :)
 
- Ulf> I regularily discuss pro's and con's with buildroot with end customers.
+> The key requirement for newbies is to load a kernel/rootfs to the target
+> with minimum effort. The current "cleanups" to "sane" defaults is clearly
+> making life harder for newbies.
 
-Atmel customers are not necessarily a representative group for
-buildroot users.
+Agreed, and if the kernel is named uImage, there is no need for
+setenv's or special undocumented commands.
 
- Ulf> There are a number of things brought up, but, so far, never the linux
- Ulf> file name.
- Ulf> I can understand that you would like to have a filename which does not
- Ulf> change.
- Ulf> "odd" is something relative, as I pointed out, *professional* companies
- Ulf> do NOT use simple names as "uImage" for embedded control.
+> This category does NOT want to change a lot of options from (in)sane
+> defaults.
+> They want (at the most) to do
+>
+> $ make userconfig                ; setup user specific defaults.
+> $ make <board>_config       ; setup board
+> $ make                                 ; build board
+> $ make install                        ; program target with resulting files.
 
-So mainline Linux / U-Boot / whatever isn't *professional*?
+If it was avr32, make install could simply invoke avr32program and
+upload the rootfs to the target. Being uImage a static name, uboot
+would never need to be touched, they could simply wait for the board
+to load. Sure it's slow, but it's also easy.
+AT91 might have something similar, I don't know. I evaluated Atmel's
+ARMs once, but that J-Link programmer simply never worked. Might have
+been a bad board, since it was in another customer before, I don't
+know.
 
- Ulf> The "simple" name is in this context insane.
- Ulf> And again, it would be easy to add an option for a choice.
+> and then connect to the target with a terminal and see linux boot.
+> *I* want it to be easy, or they will phone me and ask for help,
+> which means I can handle less projects.
 
-Which is what Thiago's commit added.
+Same here, but with a different reason. I'm on the other end of the
+problem, I'm a software developer.
+Whenever I need to test my code on the board, I want names not to
+change. I know the previous build was flawed, or in the case of the
+kernel, most likely is just the same binary. I need to rerun buildroot
+when I change my code, so it links with all the system libs, but the
+side effect is that I get a new kernel every day, except that they are
+exactly the same binary that was just relinked because it's name
+changed from yesterday.
 
- Ulf> You happen to give no choice for people which do not
- Ulf> want to have uImage as part of the name.
- Ulf> uImage is a name for the initiated, not for the newbie
- Ulf> who expect to have a "linux".
+> We are far from this point, but with the u-boot patches I can easily
+> support people over the phone without worrying about
+> having the odd environment variable misspelled or so.
 
-Then add linux to _PREFIX for those configs. The previous linux-*.gz
-doesn't tell me anything about the format, and in fact it was extra
-confusing with that .gz even though it isn't a gzip file.
+Just don't create odd environment variables, then it can never be mispelled.
 
- Ulf> The *key* requirement for newbies is to load a kernel/rootfs to
- Ulf> the target with minimum effort. The current "cleanups" to "sane"
- Ulf> defaults is clearly making life harder for newbies.
+> ---------------
+> Once they have passed a certain point and are confident with buildroot
+> then the requirements change.
+>
+> The main complaint of buildroot is lack of stability.
+> People do not want to upgrade and retest just because someone feels
+> that this is a good idea, they want 100% control over when upgrades happen.
+> At the same time they would like to work in a project which is maintained.
+>
+> With buildroot you are forced to continuosly upgrade or you lose support
+> and it is getting worse.
 
-That I don't follow. A constant name by default should if nothing else
-make it simpler.
+That's what Peter is trying to fix. And I hope this goes well, because
+I would like to see buildroot being stable. I remember that when I
+started using buildroot, the toolchain was broken every 100 or so
+revisions, and it was almost impossible to work. Try explaining that
+to your management.
 
- Ulf> They want (at the most) to do
+> There is complaints that there is no support for proprietary functions.
+> If you want to add your company logo at boot, this is certainly
+> not something that should  be in the trunk, but still people
+> want this to be easy to include in the build.
+>
 
- Ulf> $ make userconfig                ; setup user specific defaults.
- Ulf> $ make <board>_config       ; setup board
- Ulf> $ make                                 ; build board
- Ulf> $ make install                        ; program target with resulting files.
+That's the case of the silent u-boot build support, that I have added
+a while back. We didn't want the console spilling out information as
+we needed to use that U(S)ART for other purposes. It's not nice when
+your custommer turns on your device and it sends to a printer several
+pages of boot messages.
 
-And where is that broken with Thiago's commit?
+> No, because the whole idea of the patches is that you can modify the
+> different parts of the filename afterwards.
+>
+> If the kernel name is:
+>
+> at91sam9260ek-linux-2.6.28-20081001.gz
+>
+> then
+> "setenv kernel_version 2.6.28.1 ; os"
+>
+> will change the kernel name to
+>
+> at91sam9260ek-linux-2.6.28.1-20081001.gz
+>
+> Your patch will FIX the kernel name to whatever was the name at u-boot
+> build.
 
- Ulf> The main complaint of buildroot is lack of stability.  People do
- Ulf> not want to upgrade and retest just because someone feels that
- Ulf> this is a good idea, they want 100% control over when upgrades
- Ulf> happen.  At the same time they would like to work in a project
- Ulf> which is maintained.
+Yeah, that's what I thought when I saw a file named factory defaults.
+You could either have ppl build with a suffix that is predetermined such as:
+at91sam9260ek-2.6.28-20081001 and get uImage-at91sam9260ek-2.6.28-20081001
 
-Maintained, uptodate and stability is hard to combine, but you are
-welcome to maintain a stable tree based of the buildroot releases if
-you want to.
+And hardcode that do u-boot (as software developer, I find it horrible)
 
- Ulf> With buildroot you are forced to continuosly upgrade or you lose
- Ulf> support and it is getting worse.
+Or, you could drop all that complication and use uImage, or if you
+really want that approach, make it better and introduce a command to
+ask for kernel version, then generates it using strstr to find the
+older entry, and therefore, it's able to cope with different naming
+schemes, whatever the customer throws at it.
 
-Worse? Just because people haven't been idling the last few weeks like
-they used to do? If that's what you want, just stick to a release.
+>>
+>> While still on the subject, why haven't the patches been submitted
+>> upstream? Last time you said that the At91 had given up because u-boot
+>> devs were unavailable. Then, after that, avr32 team were able to get
+>> their patches upstream. Why haven't At91 tried again?
+>
+> You can send a mail to the at91 team and ask.
 
- Ulf> There is complaints that there is no support for proprietary
- Ulf> functions.
+Does support.atmel.no makes any difference? I had a ticket there
+asking for the avr32 patches to be submited to FSF over a year ago,
+and we all know how that turned out so far.
 
-functions?
 
- Ulf> If you want to add your company logo at boot, this is certainly
- Ulf> not something that should  be in the trunk, but still people
- Ulf> want this to be easy to include in the build.
-
-I don't see any problems with having some kind of bootsplash package
-in BR. U-Boot afaik also has some bmp support, so I don't see the
-problem.
-
- >> That was broken to begin with. >
-
- Ulf> Considering that ?ou only AFAIK want to  build uImage's for U-Boot,
- Ulf> this is a minor restriction.
-
-Doesn't make it any less broken, especially now that we have the
-prefix/suffix stuff.
-
- >> While still on the subject, why haven't the patches been submitted
- >> upstream? Last time you said that the At91 had given up because u-boot
- >> devs were unavailable. Then, after that, avr32 team were able to get
- >> their patches upstream. Why haven't At91 tried again?
-
- Ulf> You can send a mail to the at91 team and ask.
-
-Ulf, that's not constructive - Please behave.
-
--- 
-Bye, Peter Korsgaard
+Kind Regards,
+    Thiago A. Correa
