@@ -1,7 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 10 Feb 2009 15:15:50 +0000 (UTC)
-Subject: [Buildroot] [Bug 99] New: new package: flac
-Message-ID: <bug-99-163@https.bugs.busybox.net/>
+Date: Tue, 10 Feb 2009 15:17:11 +0000 (UTC)
+Subject: [Buildroot] [Bug 99] new package: flac
+In-Reply-To: <bug-99-163@https.bugs.busybox.net/>
+References: <bug-99-163@https.bugs.busybox.net/>
+Message-ID: <20090210151711.66A7F763F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,23 +12,14 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=99
 
-           Summary: new package: flac
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: enhancement
-          Priority: P3
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: s.neumann at phase-zero.de
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
 
 
-I've added flac in my copy of buildroot and would appreciate if this new
-package could be included upstream.
+
+
+--- Comment #1 from Sven Neumann <s.neumann@phase-zero.de>  2009-02-10 15:17:10 UTC ---
+Created an attachment (id=57)
+ --> (https://bugs.busybox.net/attachment.cgi?id=57)
+tar archive with files added in package/multimedia/flac
 
 
 -- 
