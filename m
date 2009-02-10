@@ -1,31 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 10 Feb 2009 13:55:40 +0100
-Subject: [Buildroot] svn error : Connection refused
-In-Reply-To: <1234269855.4559.97.camel@linux-l8en.site> (Sandeep Kumar's
-	message of "Tue\, 10 Feb 2009 18\:14\:15 +0530")
-References: <20090131204302.082727621A@busybox.osuosl.org>
-	<1234269855.4559.97.camel@linux-l8en.site>
-Message-ID: <8763ji5u43.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 10 Feb 2009 13:07:40 +0000 (UTC)
+Subject: [Buildroot] [Bug 95] XGI version mismatch
+In-Reply-To: <bug-95-163@https.bugs.busybox.net/>
+References: <bug-95-163@https.bugs.busybox.net/>
+Message-ID: <20090210130740.AC22676275@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sandeep" == Sandeep Kumar <sandeepk@verismonetworks.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=95
 
- Sandeep> Hi all
- Sandeep> I am trying to checkout a fresh copy of buildroot by following command
 
- Sandeep> 	"svn co svn://uclibc.org/trunk/buildroot"
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
- Sandeep> and getting the following error
- Sandeep> svn: Can't connect to host 'uclibc.org': Connection refused
- Sandeep> My internet connection is working fine and i am able to access
- Sandeep> "uclibc.org". Can antbody help me out to sort out this problem.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |jacmet at uclibc.org
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-You probably have a firewall blocking the svn connections. Use the
--rc4 release of the latest svn snapshot.
+
+
+
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-02-10 13:07:39 UTC ---
+Thanks, good catch. Committed as r25289. Do you have access to XGI hw to test
+it?
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
