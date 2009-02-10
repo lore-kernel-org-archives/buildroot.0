@@ -1,52 +1,40 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue, 10 Feb 2009 16:38:54 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package: gmp mpfr
-Message-ID: <20090210163854.C10CA765E9@busybox.osuosl.org>
+From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
+Date: Tue, 10 Feb 2009 15:17:47 -0200
+Subject: [Buildroot] What's up with the kernel names? (Again)
+In-Reply-To: <d6cda7730902100834j409c7df8te83d42356957608c@mail.gmail.com>
+References: <d6cda7730902031749o51818770l1077d71877f9ad33@mail.gmail.com>
+	<d6cda7730902060631o54f2944rddc0f7cd8278a11a@mail.gmail.com>
+	<1234200240.4143.8.camel@elrond.atmel.com>
+	<87hc3376b4.fsf@macbook.be.48ers.dk>
+	<1234219930.4143.16.camel@elrond.atmel.com>
+	<874oz27iry.fsf@macbook.be.48ers.dk>
+	<078a01c98b68$c18b47c0$f53018ac@Glamdring>
+	<87ab8u5ub5.fsf@macbook.be.48ers.dk>
+	<083a01c98b86$99d10260$f53018ac@Glamdring>
+	<d6cda7730902100834j409c7df8te83d42356957608c@mail.gmail.com>
+Message-ID: <d6cda7730902100917o3aee167fg2ae06ca5e3e402ba@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-02-10 16:38:53 +0000 (Tue, 10 Feb 2009)
-New Revision: 25295
+Hi,
 
-Log:
-gmp/mpfr: use static libraries as make targets
+    Ulf, here. Check the attached patch, this should fix the u-boot
+commands you have added as patches. I'm still building, but the code
+looks ok, so I don't think there will be problems.
+    I think the os command is quite useless, as it says "select the
+kernel version" but there doesn't seam to be any choices at all, but
+anyway, if you want to keep it, it's fixed too. If you want, you can
+apply the patch and commit, I won't commit this directly myself.
 
-The host shared objects are no more.
-
-Modified:
-   trunk/buildroot/package/gmp/gmp.mk
-   trunk/buildroot/package/mpfr/mpfr.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/gmp/gmp.mk
-===================================================================
---- trunk/buildroot/package/gmp/gmp.mk	2009-02-10 15:48:19 UTC (rev 25294)
-+++ trunk/buildroot/package/gmp/gmp.mk	2009-02-10 16:38:53 UTC (rev 25295)
-@@ -10,7 +10,7 @@
- GMP_DIR:=$(TOOL_BUILD_DIR)/gmp-$(GMP_VERSION)
- GMP_TARGET_DIR:=$(BUILD_DIR)/gmp-$(GMP_VERSION)
- GMP_BINARY:=libgmp$(LIBTGTEXT)
--GMP_HOST_BINARY:=libgmp$(HOST_SHREXT)
-+GMP_HOST_BINARY:=libgmp$(HOST_LIBEXT)
- GMP_LIBVERSION:=3.4.2
- 
- # this is a workaround for a bug in GMP, please see
-
-Modified: trunk/buildroot/package/mpfr/mpfr.mk
-===================================================================
---- trunk/buildroot/package/mpfr/mpfr.mk	2009-02-10 15:48:19 UTC (rev 25294)
-+++ trunk/buildroot/package/mpfr/mpfr.mk	2009-02-10 16:38:53 UTC (rev 25295)
-@@ -12,7 +12,7 @@
- MPFR_DIR:=$(TOOL_BUILD_DIR)/mpfr-$(MPFR_VERSION)
- MPFR_TARGET_DIR:=$(BUILD_DIR)/mpfr-$(MPFR_VERSION)
- MPFR_BINARY:=libmpfr$(LIBTGTEXT)
--MPFR_HOST_BINARY:=libmpfr$(HOST_SHREXT)
-+MPFR_HOST_BINARY:=libmpfr$(HOST_LIBEXT)
- MPFR_LIBVERSION:=1.1.2
- 
- # need patch
+Kind Regards,
+   Thiago A. Correa
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: ulf.patch
+Type: application/octet-stream
+Size: 2400 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090210/93471ca4/attachment-0001.obj>
