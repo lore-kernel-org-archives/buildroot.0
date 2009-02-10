@@ -1,61 +1,51 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 10 Feb 2009 13:51:26 +0100
-Subject: [Buildroot] What's up with the kernel names? (Again)
-In-Reply-To: <078a01c98b68$c18b47c0$f53018ac@Glamdring> (Ulf Samuelsson's
-	message of "Tue\, 10 Feb 2009 11\:16\:18 +0100")
-References: <d6cda7730902031749o51818770l1077d71877f9ad33@mail.gmail.com>
-	<873aeue676.fsf@macbook.be.48ers.dk>
-	<1233865432.4148.6.camel@elrond.atmel.com>
-	<87eiycarei.fsf@macbook.be.48ers.dk>
-	<D071C392448744ECA7A451C54A46ABE6@aeglos>
-	<d6cda7730902060631o54f2944rddc0f7cd8278a11a@mail.gmail.com>
-	<1234200240.4143.8.camel@elrond.atmel.com>
-	<87hc3376b4.fsf@macbook.be.48ers.dk>
-	<1234219930.4143.16.camel@elrond.atmel.com>
-	<874oz27iry.fsf@macbook.be.48ers.dk>
-	<078a01c98b68$c18b47c0$f53018ac@Glamdring>
-Message-ID: <87ab8u5ub5.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Tue, 10 Feb 2009 13:01:28 +0000 (UTC)
+Subject: [Buildroot] svn commit:
+	trunk/buildroot/package/x11r7/xdriver_xf86-video-xgi
+Message-ID: <20090210130128.DA8AD76275@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
+Author: jacmet
+Date: 2009-02-10 13:01:28 +0000 (Tue, 10 Feb 2009)
+New Revision: 25289
 
-Hi,
+Log:
+x11/video-xgi: fix vesa/xgi typo
 
- >> See, that's the problem about adding feature patches to BR. Don't
- >> expect other developers to spend time on fixing those things up.
+Closes #95
 
- Ulf> I think you want people to discuss things before committing.
+Modified:
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-xgi/Config.in
+   trunk/buildroot/package/x11r7/xdriver_xf86-video-xgi/xdriver_xf86-video-xgi.mk
 
-Sure.
 
- Ulf> Yet, this patch was committed before an agreement was made.
- Ulf> THAT is the problem.
+Changeset:
+Modified: trunk/buildroot/package/x11r7/xdriver_xf86-video-xgi/Config.in
+===================================================================
+--- trunk/buildroot/package/x11r7/xdriver_xf86-video-xgi/Config.in	2009-02-10 04:10:34 UTC (rev 25288)
++++ trunk/buildroot/package/x11r7/xdriver_xf86-video-xgi/Config.in	2009-02-10 13:01:28 UTC (rev 25289)
+@@ -7,5 +7,5 @@
+ 	select BR2_PACKAGE_XPROTO_XEXTPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
+ 	help
+-	  xf86-video-xgi 1.3.0
++	  xf86-video-xgi 1.5.0
+ 	  XGI based chips video driver
 
-That's part of the problem. I mentioned some of the other issues in my
-earlier mail. The reason for the change was the hardcoded (and imho
-odd) naming convention. I explicitly asked Thiago to commit soon so we
-could get it in the release. It's ofcourse unfortunate that FOSDEM got
-in between and that you have special at91 specific magic in the tree
-which got broken.
-
- >> Sure, we should try to make sure everything still works, but we also
- >> HAVE to make it easy to do so - That means among others that the
- >> various platforms should behave similary.
- >> 
-
- Ulf> Each platform in u-boot behaves differently anyway.
- Ulf> You define the functionality of u-boot in the board header file.
-
-Sure, that's why the only sane default is to use the filenames the
-upstream projects use as that's what people expect.
-
-This doesn't mean that we shouldn't provide a setting (like the
-suffix/prefix thing) to use other names if people want that, but it
-shouldn't be default.
-
--- 
-Bye, Peter Korsgaard
+Modified: trunk/buildroot/package/x11r7/xdriver_xf86-video-xgi/xdriver_xf86-video-xgi.mk
+===================================================================
+--- trunk/buildroot/package/x11r7/xdriver_xf86-video-xgi/xdriver_xf86-video-xgi.mk	2009-02-10 04:10:34 UTC (rev 25288)
++++ trunk/buildroot/package/x11r7/xdriver_xf86-video-xgi/xdriver_xf86-video-xgi.mk	2009-02-10 13:01:28 UTC (rev 25289)
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ XDRIVER_XF86_VIDEO_XGI_VERSION = 1.5.0
+-XDRIVER_XF86_VIDEO_XGI_SOURCE = xf86-video-xgi-$(XDRIVER_XF86_VIDEO_VESA_VERSION).tar.bz2
++XDRIVER_XF86_VIDEO_XGI_SOURCE = xf86-video-xgi-$(XDRIVER_XF86_VIDEO_XGI_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_XGI_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_XGI_AUTORECONF = NO
+ XDRIVER_XF86_VIDEO_XGI_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xextproto xproto_xproto
