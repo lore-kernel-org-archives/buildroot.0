@@ -1,107 +1,134 @@
-From: Eric Malkowski <eric@bvwireless.net>
-Date: Wed, 11 Feb 2009 14:18:55 -0500
-Subject: [Buildroot] Remove and Rebuild "project_build_arch/project/root"
-	tree
-Message-ID: <4993249F.5070502@bvwireless.net>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Wed, 11 Feb 2009 21:03:31 +0100
+Subject: [Buildroot] What's up with the kernel names? (Again)
+In-Reply-To: <d6cda7730902101048w1706b7e9j41d8702d50766756@mail.gmail.com>
+References: <d6cda7730902031749o51818770l1077d71877f9ad33@mail.gmail.com>
+	<87hc3376b4.fsf@macbook.be.48ers.dk>
+	<1234219930.4143.16.camel@elrond.atmel.com>
+	<874oz27iry.fsf@macbook.be.48ers.dk>
+	<078a01c98b68$c18b47c0$f53018ac@Glamdring>
+	<87ab8u5ub5.fsf@macbook.be.48ers.dk>
+	<083a01c98b86$99d10260$f53018ac@Glamdring>
+	<d6cda7730902100834j409c7df8te83d42356957608c@mail.gmail.com>
+	<d6cda7730902100917o3aee167fg2ae06ca5e3e402ba@mail.gmail.com>
+	<08b701c98ba7$906b24f0$f53018ac@Glamdring>
+	<d6cda7730902101048w1706b7e9j41d8702d50766756@mail.gmail.com>
+Message-ID: <1234382611.22044.8.camel@elrond.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi everyone-
+tis 2009-02-10 klockan 16:48 -0200 skrev Thiago A. Corr?a:
+> Hi,
+> 
+> On Tue, Feb 10, 2009 at 3:42 PM, Ulf Samuelsson
+> <ulf.samuelsson@atmel.com> wrote:
+> > No you have totally misunderstood.
+> > U-Boot will, with my patch use an initial default, but you can
+> > update the linux kernel version and then automatically generate the kernel
+> > name for tftp download without recompiling u-boot.
+> >
+> > That is why you have the os command.
+> >
+> > A better implementation would automatically
+> > recompute the linux kernel name when any
+> > part of it is changed.
+> >
+> 
+> But you never update kernel-date env variable. That way it can't guess
+> what to concatenate in there, or it will always generate the same
+> name.
 
-It's been since November, 2007 since I last grabbed a copy of buildroot 
-for a project -- a lot is the same since then, but obviously a lot has 
-changed too.
 
-I'm creating a new project based off the tip of svn which is RC4 + 
-r25295: gmp/mpfr use static since shared libs are gone -- Peter recently 
-committed.  BTW: the unwanted rebuild of mpfr when make is called again 
-appears to work fine for me having seen the issue w/ pure RC4 from 2 
-days ago.
+The user can do thinks like:
 
-In the past I've built everything and then just called make to rebuild 
-stuff and when things look good, I would use a small script to clean out 
-the rootfs and call make to just populate w/ shared libs and binaries by 
-having the "make install" portion of everything take care of re-creating 
-the rootfs tree under project_build_$(ARCH)/project/root.  This is very 
-handy when making wholesale changes to a customized target skeleton so I 
-can be confident there's no stale stuff hanging around in the final 
-rootfs filesystem.  The script is called "rebuild_root.sh" and looked 
-like this:
+setenv kernel-date 20090123 ; os
+setenv kernel-version 2.6.28.1; os
 
-  #!/bin/sh
+to tell u-boot that a new version is to be used.
 
-  set -x
 
-  rm -f build_i486/grub-0.97/.installed
-  rm -f toolchain_build_i486/gcc-4.2.1-final/.libs_installed
 
-  rm -rf project_build_i486/wireless/root
-  rm -f project_build_i486/wireless/.root
-  rm -f build_i486/staging_dir/.fakeroot.00000
+--------------------------
 
-  make
+Just for fun, I checked my OpenSuSE /boot directory
 
-On past projects the above worked great.  With the latest buildroot I'm 
-finding after a complete build of everything from scratch, calling 
-rebuild_root.sh would rebuild (unwantingly) the uClibc 0.9.30 static and 
-shared libs and install those -- that's not too bad -- it would then 
-carry on and just install busybox binaries and various packages 
-rebuilding my rootfs from a fresh target_skeleton.
+Guess what I found:
 
-But -- calling rebuild_root.sh a second time would cause a bunch of 
-additional toolchain related stuff (gcc final) and busybox itself to be 
-recompiled, but NOT uClibc -- it's not consistent.  Calling it a third 
-time is like the first time -- rebuild just uClibc 0.9.30 and then just 
-install busybox, other packages etc.
+"vmlinuz" which happens to be a LINK to
 
-In tracing this a bit, first rebuild causes uClibc to call "make 
-install_runtime" and it recompiles the libs, installs in TARGET_DIR -- 
-everything else just installs, nothing else rebuilds
-The second rebuild causes uClibc to call "make install_runtime 
-install_dev" which skips compling uclibc like the first rebuild, but 
-some headers are re-created which causes a call to just "make 
-install_runtime", that skips compiling uClibc -- fine, but 
-gcc-4.3.2-final would run configure and make and rebuild libiberty -- 
-recompiling all of that.  That then causes busybox to recompile 
-everything due to some dependency on gcc/uclibc being partially rebuilt 
-(I think).  The remaining stuff after busybox installs fine w/o rebuilds.
-Do a third rebuild, it behaves like the first rebuild and the pattern 
-repeats.
+??vmlinuz-$(KERNEL_VERSION)-$(REV)-$PROJECT)
+?
+There was also a:
+vmlinux-$(KERNEL_VERSION)-$(REV)-$PROJECT).gz file
 
-My goal is to be able to somehow remove 
-project_build_$(ARCH)/$(PROJECT)/root and call make to re-populate while 
-minimizing stuff from being rebuilt -- just allow the various "make 
-installs" to re-populate.  Does anyone have any suggestions / 
-alternatives to meet my goal?  I'm open for other approaches -- perhaps 
-what I'm doing is overkill?
+Looks like the guys doing OpenSuSE are as "odd" as I am.
 
-If my approach seems doable -- can anyone advise what files to remove or 
-touch so I can re-build the root from empty and let genxt2fs create my 
-compressed rootfs -- it's very handy when trying to just re-build 
-add-ons to the base buildroot toolchain + packages and re-create the 
-rootfs.
+Would be interesting to know how the /boot directory
+in Fedora, Ubuntu etc look like.
 
-If the toolchain is just too inter-twined with dependencies on things 
-under project_build_$(ARCH)/$(PROJECT)/root, then I will try to work 
-around it -- I guess I can get everything working w/o removing the 
-rootfs wholesale or perhaps not remove the various .so files placed in 
-there by gcc/uclibc/toolchain related "make install" stuff, but 
-suggestions are appreciated.
+BR
+Ulf Samuelsson
 
-On another note -- the OpenSSL and OpenSSH packages for whatever reason 
-don't re-build or re-install their binaries in the rootfs when doing 
-this.  In the past they did and the only package I had to force into 
-re-populating it's binaries was grub as seen above along with the 
-gcc-4.2.1-final libgcc shared libs by removing .libs_installed -- I've 
-noticed .libs_installed is no longer, grub doesn't install it's 
-binaries, and OpenSSL / OpenSSH similar to grub don't install their 
-binaries upon trying to rebuild root.
 
-Sorry to be so long winded -- any ideas appreciated.
 
-Thanks,
-
--Eric Malkowski
+> 
+> One possible way could be:
+> +int do_os (cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
+> +{
+> +       char kname[512];
+> +       char *curname;
+> +       char *kdate;
+> +       int datepos;
+> +       curname = getenv("linux");
+> +       kdate = getenv("kernel-date");
+> +       datepos = strstr(curname, kdate);
+> +       if (datepos) {
+> +               //Replace the hardcoded date
+> +               curname[datepos] = 0;
+> +               sprintf(kname, "%s%s%s", curname, date??, curname +
+> datepos + strlen(kdate));
+> +       } else {
+> +               strcpy(kname, "uImage");
+> +       }
+> +       setenv("linux", kname);
+> +       return 0;
+> +}
+> 
+> This searches the kernel-date inside the name, therefore it can be
+> anywhere, and updates it. But as you can see from date??? I have no
+> idea where the new value comes from.
+> If it comes from some script or program, it could be modified so that
+> it stores the older date in kernel-olddate variable, then you searcho
+> for it and replace with the new date:
+> 
+> +int do_os (cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
+> +{
+> +       char kname[512];
+> +       char *curname;
+> +       char *kdate;
+> +       int datepos;
+> +       curname = getenv("linux");
+> +       kdate = getenv("kernel-olddate");
+> +       datepos = strstr(curname, kdate);
+> +       if (datepos) {
+> +               //Replace the hardcoded date
+> +               curname[datepos] = 0;
+> +               sprintf(kname, "%s%s%s", curname,
+> getenv("kernel-date"), curname + datepos + strlen(kdate));
+> +       } else {
+> +               strcpy(kname, "uImage");
+> +       }
+> +       setenv("linux", kname);
+> +       return 0;
+> +}
+> 
+> 
+> Regards,
+>    Thiago A. Correa
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
