@@ -1,38 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 12 Feb 2009 14:35:18 +0100
-Subject: [Buildroot] Easy Upgrade Path?
-In-Reply-To: <20090212132945.GA30222@zelow.no> (Thomas Lundquist's message of
-	"Thu\, 12 Feb 2009 14\:29\:45 +0100")
-References: <49907BAE.3020509@ethertek.ca> <20090212132945.GA30222@zelow.no>
-Message-ID: <87k57vg4mh.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Thu, 12 Feb 2009 13:39:35 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/dnsmasq
+Message-ID: <20090212133935.7EE4776440@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Lundquist <lists@zelow.no> writes:
+Author: jacmet
+Date: 2009-02-12 13:39:33 +0000 (Thu, 12 Feb 2009)
+New Revision: 25307
 
-Hi,
+Log:
+dnsmasq: bump version
 
- >> What is the recommended method to upgrade to the newest build 
- >> environment so we don't have to re-do everything? Is this possible?
+closes #97.
 
- Thomas> Ulf introduced local/ when he started to commit and this was
- Thomas> a good idea.
+Modified:
+   trunk/buildroot/package/dnsmasq/dnsmasq.mk
 
- Thomas> It got booted out some time later, by someone.
 
-I don't remember the details, but it was afaik quite half baked,
-
- Thomas> The point is that you can put your config files and non-included 
- Thomas> packages there and keep that out of the rest of the tree.
-
- Thomas> I like the idea and would like to put it back in.
-
-I agree that we should realize the fact that any big user of buildroot
-want to customize it somehow and make it easy to do - But we need to
-do it in a clean way.
-
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/package/dnsmasq/dnsmasq.mk
+===================================================================
+--- trunk/buildroot/package/dnsmasq/dnsmasq.mk	2009-02-12 12:17:12 UTC (rev 25306)
++++ trunk/buildroot/package/dnsmasq/dnsmasq.mk	2009-02-12 13:39:33 UTC (rev 25307)
+@@ -5,7 +5,7 @@
+ #############################################################
+ 
+ DNSMASQ_SITE:=http://thekelleys.org.uk/dnsmasq
+-DNSMASQ_UPVER:=2.46
++DNSMASQ_UPVER:=2.47
+ DNSMASQ_SOURCE:=dnsmasq-$(DNSMASQ_UPVER).tar.gz
+ DNSMASQ_DIR:=$(BUILD_DIR)/dnsmasq-$(DNSMASQ_UPVER)
+ DNSMASQ_BINARY:=dnsmasq
