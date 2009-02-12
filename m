@@ -1,37 +1,53 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Thu, 12 Feb 2009 12:17:13 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/libpng
-Message-ID: <20090212121713.5F87A76440@busybox.osuosl.org>
+From: Hinko Kocevar <hinko.kocevar@cetrtapot.si>
+Date: Thu, 12 Feb 2009 13:30:48 +0100
+Subject: [Buildroot] Buildroot 2009.02 released
+In-Reply-To: <87skmkf1s0.fsf@macbook.be.48ers.dk>
+References: <87skmkf1s0.fsf@macbook.be.48ers.dk>
+Message-ID: <49941678.4040902@cetrtapot.si>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-02-12 12:17:12 +0000 (Thu, 12 Feb 2009)
-New Revision: 25306
+Peter Korsgaard wrote:
+> Hi,
+> 
+> Buildroot 2009.02 is released - Go download it at:
+> 
+> http://buildroot.uclibc.org/downloads/buildroot-2009.02.tar.gz
+> 
+> or
+> 
+> http://buildroot.uclibc.org/downloads/buildroot-2009.02.tar.bz2
+> 
 
-Log:
-libpng: bump version
+Building gdb for cris-v10 architecture fails with:
 
-Fixes memory leak and double-free vulnerability
+hecking for long double support in printf... no
+checking for long double support in scanf... no
+checking whether <sys/syscall.h> has __NR_tkill... yes
+checking compiler warning flags...  -Wall -Wdeclaration-after-statement -Wpointer-arith -Wformat-nonliteral -Wno-pointer-sign -Wno-unused -Wno-switch -Wno-char-subscripts 
+checking for cygwin... no
+checking for ELF support in BFD... yes
+checking for X... disabled
+enable_sim = no
+enableval = no
+configure: error: "*** Gdb does not support native target cris-axis-linux-uclibc"
+make[2]: *** [configure-gdb] Error 1
+make[2]: Leaving directory `/work/uclibc.buildroot/buildroot-2009.02/build_cris/gdb-6.8-target'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory `/work/uclibc.buildroot/buildroot-2009.02/build_cris/gdb-6.8-target'
+make: *** [/work/uclibc.buildroot/buildroot-2009.02/build_cris/gdb-6.8-target/gdb/gdb] Error 2
 
-Modified:
-   trunk/buildroot/package/libpng/libpng.mk
+Are we missing uclibc config.guess and config.sub?
 
+Regards, hinko
 
-Changeset:
-Modified: trunk/buildroot/package/libpng/libpng.mk
-===================================================================
---- trunk/buildroot/package/libpng/libpng.mk	2009-02-12 09:33:01 UTC (rev 25305)
-+++ trunk/buildroot/package/libpng/libpng.mk	2009-02-12 12:17:12 UTC (rev 25306)
-@@ -3,7 +3,7 @@
- # libpng (Portable Network Graphic library)
- #
- #############################################################
--LIBPNG_VERSION:=1.2.32
-+LIBPNG_VERSION:=1.2.34
- LIBPNG_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/libpng
- LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.bz2
- LIBPNG_LIBTOOL_PATCH = NO
+-- 
+Hinko Ko?evar, OSS developer
+?ETRTA POT, d.o.o.
+Planina 3, 4000 Kranj, SI EU
+tel     ++386 (0) 4 280 66 03
+e-mail  hinko.kocevar at cetrtapot.si
+http    www.cetrtapot.si
