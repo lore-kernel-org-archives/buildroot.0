@@ -1,9 +1,9 @@
 From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Thu, 12 Feb 2009 19:11:24 +0100
-Subject: [Buildroot] Buildroot 2009.02 released
-References: <87skmkf1s0.fsf@macbook.be.48ers.dk><49941678.4040902@cetrtapot.si>
-	<87ocx7g731.fsf@macbook.be.48ers.dk>
-Message-ID: <60A797DC812E4639BC2F3208D69F6547@aeglos>
+Date: Thu, 12 Feb 2009 19:05:27 +0100
+Subject: [Buildroot] Easy Upgrade Path?
+References: <49907BAE.3020509@ethertek.ca> <20090212132945.GA30222@zelow.no>
+	<87k57vg4mh.fsf@macbook.be.48ers.dk>
+Message-ID: <42127429E1E346F88C87B93D4C60CA1F@aeglos>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,26 +11,48 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
->>>>>> "Hinko" == Hinko Kocevar <hinko.kocevar@cetrtapot.si> writes:
+>>>>>> "Thomas" == Thomas Lundquist <lists@zelow.no> writes:
 >
 > Hi,
 >
-> Hinko> Building gdb for cris-v10 architecture fails with:
+> >> What is the recommended method to upgrade to the newest build
+> >> environment so we don't have to re-do everything? Is this possible?
 >
-> Ahh, seems like you should have tested the release candidates better
-> ;)
+> Thomas> Ulf introduced local/ when he started to commit and this was
+> Thomas> a good idea.
+>
+> Thomas> It got booted out some time later, by someone.
+>
+> I don't remember the details, but it was afaik quite half baked,
+>
+> Thomas> The point is that you can put your config files and non-included
+> Thomas> packages there and keep that out of the rest of the tree.
+>
+> Thomas> I like the idea and would like to put it back in.
+>
+> I agree that we should realize the fact that any big user of buildroot
+> want to customize it somehow and make it easy to do - But we need to
+> do it in a clean way.
 >
 
-As far as I have seen, there has been very little testing activitiy going on 
-before the release.
-There are several packages that does not build, at least for ARM.
-Several packages build but crash when you start the target.
+The proposal was to create the local directory
 
-Zero documentation on what builds and what does not build.
+mkdir local
+touch local/Config.in
+touch local/Makefile.in
 
-Zero documentation on what builds but does not run.
+and include the two new files in toplevel Makefile and Config.in
+If  BUILDROOT_LOCAL exists, this should override local,
+---
 
-Maybe we could put some focus on these points.
+As long as the user is not interested, nothing happens.
+If the user is interested, then the user replaces the local
+with a symlink to his own directory.
+
+Nothing halfbaked about that.
+The idea was rejected, because it gave people an ability to include things
+in their filesystem which was not available in the svn to other users of 
+Buildroot.
 
 Best Regards
 Ulf Samuelsson
