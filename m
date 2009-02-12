@@ -1,53 +1,32 @@
-From: Hinko Kocevar <hinko.kocevar@cetrtapot.si>
-Date: Thu, 12 Feb 2009 13:30:48 +0100
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 12 Feb 2009 13:42:10 +0100
 Subject: [Buildroot] Buildroot 2009.02 released
-In-Reply-To: <87skmkf1s0.fsf@macbook.be.48ers.dk>
+In-Reply-To: <49941678.4040902@cetrtapot.si> (Hinko Kocevar's message of "Thu\,
+	12 Feb 2009 13\:30\:48 +0100")
 References: <87skmkf1s0.fsf@macbook.be.48ers.dk>
-Message-ID: <49941678.4040902@cetrtapot.si>
+	<49941678.4040902@cetrtapot.si>
+Message-ID: <87ocx7g731.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard wrote:
-> Hi,
-> 
-> Buildroot 2009.02 is released - Go download it at:
-> 
-> http://buildroot.uclibc.org/downloads/buildroot-2009.02.tar.gz
-> 
-> or
-> 
-> http://buildroot.uclibc.org/downloads/buildroot-2009.02.tar.bz2
-> 
+>>>>> "Hinko" == Hinko Kocevar <hinko.kocevar@cetrtapot.si> writes:
 
-Building gdb for cris-v10 architecture fails with:
+Hi,
 
-hecking for long double support in printf... no
-checking for long double support in scanf... no
-checking whether <sys/syscall.h> has __NR_tkill... yes
-checking compiler warning flags...  -Wall -Wdeclaration-after-statement -Wpointer-arith -Wformat-nonliteral -Wno-pointer-sign -Wno-unused -Wno-switch -Wno-char-subscripts 
-checking for cygwin... no
-checking for ELF support in BFD... yes
-checking for X... disabled
-enable_sim = no
-enableval = no
-configure: error: "*** Gdb does not support native target cris-axis-linux-uclibc"
-make[2]: *** [configure-gdb] Error 1
-make[2]: Leaving directory `/work/uclibc.buildroot/buildroot-2009.02/build_cris/gdb-6.8-target'
-make[1]: *** [all] Error 2
-make[1]: Leaving directory `/work/uclibc.buildroot/buildroot-2009.02/build_cris/gdb-6.8-target'
-make: *** [/work/uclibc.buildroot/buildroot-2009.02/build_cris/gdb-6.8-target/gdb/gdb] Error 2
+ Hinko> Building gdb for cris-v10 architecture fails with:
 
-Are we missing uclibc config.guess and config.sub?
+Ahh, seems like you should have tested the release candidates better
+;)
 
-Regards, hinko
+ Hinko> make: *** [/work/uclibc.buildroot/buildroot-2009.02/build_cris/gdb-6.8-target/gdb/gdb] Error 2
+
+ Hinko> Are we missing uclibc config.guess and config.sub?
+
+No, gdk.mk does the CONFIG_UPDATE stuff, and
+package/gnuconfig/config.guess seems to have have the cris entries.
 
 -- 
-Hinko Ko?evar, OSS developer
-?ETRTA POT, d.o.o.
-Planina 3, 4000 Kranj, SI EU
-tel     ++386 (0) 4 280 66 03
-e-mail  hinko.kocevar at cetrtapot.si
-http    www.cetrtapot.si
+Bye, Peter Korsgaard
