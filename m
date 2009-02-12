@@ -1,35 +1,38 @@
-From: Thomas Lundquist <lists@zelow.no>
-Date: Thu, 12 Feb 2009 14:29:45 +0100
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 12 Feb 2009 14:35:18 +0100
 Subject: [Buildroot] Easy Upgrade Path?
-In-Reply-To: <49907BAE.3020509@ethertek.ca>
-References: <49907BAE.3020509@ethertek.ca>
-Message-ID: <20090212132945.GA30222@zelow.no>
+In-Reply-To: <20090212132945.GA30222@zelow.no> (Thomas Lundquist's message of
+	"Thu\, 12 Feb 2009 14\:29\:45 +0100")
+References: <49907BAE.3020509@ethertek.ca> <20090212132945.GA30222@zelow.no>
+Message-ID: <87k57vg4mh.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Feb 09, 2009 at 10:53:34AM -0800, Dan Pattison wrote:
-> 
-> Hello List:
-> 
-> I've been getting used to the buildroot development environment using 
-> 2009.02-RC2 for ARM AT91SAM9g20-EK. I have made lots of changes and 
-> additions that suit our project (config files, packages, etc.) We have 
-> successfully compiled and included some of our own programs.
-> 
-> What is the recommended method to upgrade to the newest build 
-> environment so we don't have to re-do everything? Is this possible?
+>>>>> "Thomas" == Thomas Lundquist <lists@zelow.no> writes:
 
-Ulf introduced local/ when he started to commit and this was a good idea.
+Hi,
 
-It got booted out some time later, by someone.
+ >> What is the recommended method to upgrade to the newest build 
+ >> environment so we don't have to re-do everything? Is this possible?
 
-The point is that you can put your config files and non-included 
-packages there and keep that out of the rest of the tree.
+ Thomas> Ulf introduced local/ when he started to commit and this was
+ Thomas> a good idea.
 
-I like the idea and would like to put it back in.
+ Thomas> It got booted out some time later, by someone.
 
+I don't remember the details, but it was afaik quite half baked,
 
-Thomas.
+ Thomas> The point is that you can put your config files and non-included 
+ Thomas> packages there and keep that out of the rest of the tree.
+
+ Thomas> I like the idea and would like to put it back in.
+
+I agree that we should realize the fact that any big user of buildroot
+want to customize it somehow and make it easy to do - But we need to
+do it in a clean way.
+
+-- 
+Bye, Peter Korsgaard
