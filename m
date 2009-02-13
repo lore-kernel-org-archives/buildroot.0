@@ -1,32 +1,25 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Thu, 5 Feb 2009 17:10:34 +0100
-Subject: [Buildroot] [patch] mplayer: bump to v1.0rc2
-Message-ID: <20090205171034.341e8a1c@hcegtvedt>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 13 Feb 2009 20:35:05 +0100
+Subject: [Buildroot] X not compiling
+In-Reply-To: <20090213151304.kec0npcmososccc0@webmail.digibel.be>
+	(steve@c2root.be's message of "Fri\,
+	13 Feb 2009 15\:13\:04 +0100")
+References: <20090213092541.zth6uhlvmswks4oo@webmail.digibel.be>
+	<20090213151304.kec0npcmososccc0@webmail.digibel.be>
+Message-ID: <87y6wadtau.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+>>>>> "steve" == steve  <steve@c2root.be> writes:
 
-The attached patch bumps mplayer to v1.0rc2. I am unsure if any of the
-following patches needs to be converted as well:
+ steve> Solved
+ steve> was missing font-utils on the host system
 
-mplayer-1.0rc1-largefile.patch
-mplayer-1.0rc1-ppc-configure.patch
-mplayer-1.0rc1-remove-sys-timeb.patch
-
-The other patches in SVN are not needed for v1.0rc2. This patch also
-contains the Atmel vendor patch to give a boost on AVR32 devices.
+Hmm, we should probably compile it in BR for the host then. Will
+investigate ..
 
 -- 
-Best regards,
-Hans-Christian Egtvedt
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: mplayer-bump-v1.0rc2.patch
-Type: text/x-patch
-Size: 218159 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090205/85e4438e/attachment-0001.bin>
+Bye, Peter Korsgaard
