@@ -1,24 +1,24 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 13 Feb 2009 20:58:20 +0100
-Subject: [Buildroot] [PATCH] Add udev path_id and firmware.sh support
-In-Reply-To: <20090213135108.GA4038@mcrowe.com> (Mike Crowe's message of "Fri\,
-	13 Feb 2009 13\:51\:08 +0000")
-References: <20090213135108.GA4038@mcrowe.com>
-Message-ID: <87mycqds83.fsf@macbook.be.48ers.dk>
+From: Markus Heidelberg <markus.heidelberg@web.de>
+Date: Fri, 13 Feb 2009 21:23:43 +0100
+Subject: [Buildroot] [patch] mplayer: bump to v1.0rc2
+In-Reply-To: <20090205171034.341e8a1c@hcegtvedt>
+References: <20090205171034.341e8a1c@hcegtvedt>
+Message-ID: <200902132123.44238.markus.heidelberg@web.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Mike" == Mike Crowe <mac@mcrowe.com> writes:
+Hans-Christian Egtvedt, 05.02.2009:
+> Hi
+> 
+> The attached patch bumps mplayer to v1.0rc2. I am unsure if any of the
+> following patches needs to be converted as well:
+> 
+> mplayer-1.0rc1-remove-sys-timeb.patch
 
- Mike> This patch adds options to install udev's path_id and firmware.sh
- Mike> extras into the target.
+I sent it upstream, it's included since 2009-01-29.
+Can be removed with rc3 :)
 
- Mike> Signed-off-by: Mike Crowe <mac@mcrowe.com>
-
-Thanks, committed as r25327.
-
--- 
-Bye, Peter Korsgaard
+Markus
