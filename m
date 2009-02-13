@@ -1,24 +1,23 @@
 From: Markus Heidelberg <markus.heidelberg@web.de>
-Date: Fri, 13 Feb 2009 21:23:43 +0100
+Date: Fri, 13 Feb 2009 21:26:50 +0100
 Subject: [Buildroot] [patch] mplayer: bump to v1.0rc2
-In-Reply-To: <20090205171034.341e8a1c@hcegtvedt>
+In-Reply-To: <87tz6ydt41.fsf@macbook.be.48ers.dk>
 References: <20090205171034.341e8a1c@hcegtvedt>
-Message-ID: <200902132123.44238.markus.heidelberg@web.de>
+	<87tz6ydt41.fsf@macbook.be.48ers.dk>
+Message-ID: <200902132126.51355.markus.heidelberg@web.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hans-Christian Egtvedt, 05.02.2009:
-> Hi
+Peter Korsgaard, 13.02.2009:
+> >>>>> "Hans-Christian" == Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> writes:
+>  Hans-Christian>  		--enable-cross-compile \
+>  Hans-Christian> -		--disable-mpdvdkit \
 > 
-> The attached patch bumps mplayer to v1.0rc2. I am unsure if any of the
-> following patches needs to be converted as well:
-> 
-> mplayer-1.0rc1-remove-sys-timeb.patch
+> Did that option go away?
 
-I sent it upstream, it's included since 2009-01-29.
-Can be removed with rc3 :)
+I think I can remember, when I tried to upgrade to rc2.
 
 Markus
