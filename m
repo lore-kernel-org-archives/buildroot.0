@@ -1,31 +1,40 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 13 Feb 2009 09:18:45 +0000 (UTC)
-Subject: [Buildroot] [Bug 105] menuconfig segfaults on tinyx if wchar is not
-	selected
-In-Reply-To: <bug-105-163@https.bugs.busybox.net/>
-References: <bug-105-163@https.bugs.busybox.net/>
-Message-ID: <20090213091845.F128176449@busybox.osuosl.org>
+Date: Fri, 13 Feb 2009 09:57:40 +0000 (UTC)
+Subject: [Buildroot] [Bug 107] New: convert libvorbis to
+	Makefile.autotools.in
+Message-ID: <bug-107-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=105
+https://bugs.busybox.net/show_bug.cgi?id=107
+
+           Summary: convert libvorbis to Makefile.autotools.in
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P3
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: s.neumann at phase-zero.de
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Created an attachment (id=65)
+ --> (https://bugs.busybox.net/attachment.cgi?id=65)
+patch to make libvorbis.mk use Makefile.autotools.in
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|ASSIGNED                    |RESOLVED
-         Resolution|                            |FIXED
+Attached is a patch that converts libvorbis.mk to use Makefile.autotools.in.
+This is not only simpler, it also fixes a problem I had with wrong library
+paths in the libvorbis*.la files in the staging dir.
 
-
-
-
---- Comment #3 from Peter Korsgaard <jacmet@uclibc.org>  2009-02-13 09:18:44 UTC ---
-Workaround committed as r25316
+I suggest to apply this patch before dealing with bug #101.
 
 
 -- 
