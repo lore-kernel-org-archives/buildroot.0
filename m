@@ -1,40 +1,45 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 13 Feb 2009 09:14:38 +0000 (UTC)
-Subject: [Buildroot] [Bug 105] menuconfig segfaults on tinyx if wchar is not
-	selected
-In-Reply-To: <bug-105-163@https.bugs.busybox.net/>
-References: <bug-105-163@https.bugs.busybox.net/>
-Message-ID: <20090213091438.6CE8B7644D@busybox.osuosl.org>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Fri, 13 Feb 2009 09:18:10 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package
+Message-ID: <20090213091810.4B55C76449@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=105
+Author: jacmet
+Date: 2009-02-13 09:18:08 +0000 (Fri, 13 Feb 2009)
+New Revision: 25316
+
+Log:
+package: work around kconfig crash issue with comments in choice entries
+
+Modified:
+   trunk/buildroot/package/Config.in
 
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |jacmet at uclibc.org
-             Status|NEW                         |ASSIGNED
-
-
-
-
---- Comment #2 from Peter Korsgaard <jacmet@uclibc.org>  2009-02-13 09:14:37 UTC ---
-It seems like Kconfig doesn't like comment entries in choice selections. The
-comments were added to make it clear why you can't select xorg/tinyx, but you
-are ofcourse not supposed to be able to select those comments.
-
-It seems to me that the easiest fix (besides reporting upstream, the bug exists
-in the latest kernel as well) is to move the comments outside the choice /
-endchoice
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Changeset:
+Modified: trunk/buildroot/package/Config.in
+===================================================================
+--- trunk/buildroot/package/Config.in	2009-02-13 08:34:08 UTC (rev 25315)
++++ trunk/buildroot/package/Config.in	2009-02-13 09:18:08 UTC (rev 25316)
+@@ -327,14 +327,15 @@
+ 	bool "modular xorg"
+ 	depends on BR2_USE_WCHAR # && BR2_ENABLE_LOCALE
+ # depending on BR2_ENABLE_LOCALE gives a recursion error with dbus
+-comment "xorg requires a toolchain with LOCALE and WCHAR support"
+-	depends on !(BR2_USE_WCHAR && BR2_ENABLE_LOCALE)
+ config BR2_PACKAGE_XSERVER_tinyx
+ 	bool "tinyx"
+ 	depends on BR2_USE_WCHAR
++endchoice
++
++comment "xorg requires a toolchain with LOCALE and WCHAR support"
++	depends on !(BR2_USE_WCHAR && BR2_ENABLE_LOCALE)
+ comment "tinyx requires a toolchain with WCHAR support"
+ 	depends on !BR2_USE_WCHAR
+-endchoice
+ 
+ config BR2_X11_PREFIX
+ 	string
