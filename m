@@ -1,56 +1,117 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 13 Feb 2009 20:39:10 +0100
-Subject: [Buildroot] [patch] mplayer: bump to v1.0rc2
-In-Reply-To: <20090205171034.341e8a1c@hcegtvedt> (Hans-Christian Egtvedt's
-	message of "Thu\, 5 Feb 2009 17\:10\:34 +0100")
-References: <20090205171034.341e8a1c@hcegtvedt>
-Message-ID: <87tz6ydt41.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Fri, 13 Feb 2009 19:58:00 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/udev
+Message-ID: <20090213195801.27F5576449@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Hans-Christian" == Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> writes:
+Author: jacmet
+Date: 2009-02-13 19:57:59 +0000 (Fri, 13 Feb 2009)
+New Revision: 25327
 
- Hans-Christian> Hi
+Log:
+udev: options for path_id and firmware.sh
 
- Hans-Christian> The attached patch bumps mplayer to v1.0rc2. I am
- Hans-Christian> unsure if any of the following patches needs to be
- Hans-Christian> converted as well:
+Patch by Mike Crowe.
 
-Thanks.
+Modified:
+   trunk/buildroot/package/udev/Config.in
+   trunk/buildroot/package/udev/udev.mk
 
- Hans-Christian> mplayer-1.0rc1-largefile.patch
- Hans-Christian> mplayer-1.0rc1-ppc-configure.patch
- Hans-Christian> mplayer-1.0rc1-remove-sys-timeb.patch
 
-If they still applies then the problem most likely isn't solved yet,
-so yes.
+Changeset:
+Modified: trunk/buildroot/package/udev/Config.in
+===================================================================
+--- trunk/buildroot/package/udev/Config.in	2009-02-13 18:57:43 UTC (rev 25326)
++++ trunk/buildroot/package/udev/Config.in	2009-02-13 19:57:59 UTC (rev 25327)
+@@ -27,4 +27,15 @@
+ 	help
+ 	  Build and install SCSI disk identification library.
+ 
++config BR2_PACKAGE_UDEV_PATH_ID
++	bool "udev-path_id"
++	depends on BR2_PACKAGE_UDEV_VOLUME_ID
++	help
++	  Install udev's unique device path generation program path_id.
++
++config BR2_PACKAGE_UDEV_FIRMWARE_SH
++	bool "udev-firmware_sh"
++	depends on BR2_PACKAGE_UDEV_VOLUME_ID
++	help
++	  Install udev's firmware loading script firmware.sh.
+ endmenu
 
- Hans-Christian> The other patches in SVN are not needed for
- Hans-Christian> v1.0rc2. This patch also contains the Atmel vendor
- Hans-Christian> patch to give a boost on AVR32 devices.
-
-What's the upstream status of that?
-
- Hans-Christian>  		--enable-cross-compile \
- Hans-Christian> -		--disable-mpdvdkit \
-
-Did that option go away?
-
- Hans-Christian> +++ b/package/multimedia/mplayer/mplayer-1.0rc2-100-atmel.1.patch	2009-02-05 17:01:13.000000000 +0100
-
- Hans-Christian> ++++ b/version.sh
- Hans-Christian> +@@ -1,3 +1,3 @@
- Hans-Christian> + #!/bin/sh
- Hans-Christian> +-echo "#define VERSION \"1.0rc2-$1\"" > version.h
- Hans-Christian> +-echo "#define MP_TITLE \"MPlayer 1.0rc2-$1 (C) 2000-2007 MPlayer Team\"" >> version.h
- Hans-Christian> ++echo "#define VERSION \"1.0rc2.atmel.1-$1\"" > version.h
- Hans-Christian> ++echo "#define MP_TITLE \"MPlayer 1.0rc2.atmel.1-$1 (C) 2000-2007 MPlayer Team\"" >> version.h
-
-NACK. Either we rename the patch to .patch.avr32 so it only gets
-applied to avr32, or we get rid of that hunk.
-
--- 
-Bye, Peter Korsgaard
+Modified: trunk/buildroot/package/udev/udev.mk
+===================================================================
+--- trunk/buildroot/package/udev/udev.mk	2009-02-13 18:57:43 UTC (rev 25326)
++++ trunk/buildroot/package/udev/udev.mk	2009-02-13 19:57:59 UTC (rev 25327)
+@@ -154,6 +154,54 @@
+ UDEV_DIRCLEAN_DEPS+=udev-scsi_id-dirclean
+ endif
+ 
++#####################################################################
++ifeq ($(BR2_PACKAGE_UDEV_PATH_ID),y)
++.PHONY: udev-path_id udev-path_id-clean udev-path_id-dirclean
++
++$(TARGET_DIR)/lib/udev/path_id: $(STAGING_DIR)/usr/lib/libvolume_id.so.$(UDEV_VOLUME_ID_VERSION)
++	$(MAKE) CROSS_COMPILE=$(TARGET_CROSS) \
++		CFLAGS="$(BR2_UDEV_CFLAGS)" \
++		USE_LOG=false USE_SELINUX=false \
++		udevdir=$(UDEV_ROOT) EXTRAS="extras/path_id" -C $(UDEV_DIR)
++	$(INSTALL) -m 0755 -D $(UDEV_DIR)/extras/path_id/path_id $@
++
++udev-path_id: udev $(TARGET_DIR)/lib/udev/path_id
++
++udev-path_id-clean:
++	rm -f $(TARGET_DIR)/lib/udev/path_id
++	rmdir --ignore-fail-on-non-empty $(TARGET_DIR)/lib/udev
++
++udev-path_id-dirclean:
++	-$(MAKE) EXTRAS="extras/path_id" -C $(UDEV_DIR) clean
++
++UDEV_CLEAN_DEPS+=udev-path_id-clean
++UDEV_DIRCLEAN_DEPS+=udev-path_id-dirclean
++endif
++
++#####################################################################
++ifeq ($(BR2_PACKAGE_UDEV_FIRMWARE_SH),y)
++.PHONY: udev-firmware_sh udev-firmware_sh-clean udev-firmware_sh-dirclean
++
++$(TARGET_DIR)/lib/udev/firmware.sh: $(STAGING_DIR)/usr/lib/libvolume_id.so.$(UDEV_VOLUME_ID_VERSION)
++	$(MAKE) CROSS_COMPILE=$(TARGET_CROSS) \
++		CFLAGS="$(BR2_UDEV_CFLAGS)" \
++		USE_LOG=false USE_SELINUX=false \
++		udevdir=$(UDEV_ROOT) EXTRAS="extras/firmware" -C $(UDEV_DIR)
++	$(INSTALL) -m 0755 -D $(UDEV_DIR)/extras/firmware/firmware.sh $@
++
++udev-firmware_sh: udev $(TARGET_DIR)/lib/udev/firmware.sh
++
++udev-firmware_sh-clean:
++	rm -f $(TARGET_DIR)/lib/udev/firmware.sh
++	rmdir --ignore-fail-on-non-empty $(TARGET_DIR)/lib/udev
++
++udev-firmware_sh-dirclean:
++	-$(MAKE) EXTRAS="extras/firmware" -C $(UDEV_DIR) clean
++
++UDEV_CLEAN_DEPS+=udev-firmware_sh-clean
++UDEV_DIRCLEAN_DEPS+=udev-firmware_sh-dirclean
++endif
++
+ #############################################################
+ #
+ # Toplevel Makefile options
+@@ -170,3 +218,11 @@
+ ifeq ($(BR2_PACKAGE_UDEV_SCSI_ID),y)
+ TARGETS+=udev-scsi_id
+ endif
++
++ifeq ($(BR2_PACKAGE_UDEV_PATH_ID),y)
++TARGETS+=udev-path_id
++endif
++
++ifeq ($(BR2_PACKAGE_UDEV_FIRMWARE_SH),y)
++TARGETS+=udev-firmware_sh
++endif
