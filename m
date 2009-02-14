@@ -1,10 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 14 Feb 2009 17:44:43 +0000 (UTC)
+Date: Sat, 14 Feb 2009 17:47:16 +0000 (UTC)
 Subject: [Buildroot] [Bug 71] ./wchar.h:41:12: error: empty filename in
 	#include
 In-Reply-To: <bug-71-163@https.bugs.busybox.net/>
 References: <bug-71-163@https.bugs.busybox.net/>
-Message-ID: <20090214174443.C88B076440@busybox.osuosl.org>
+Message-ID: <20090214174716.6801E76440@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,9 +18,7 @@ swalker <admin@tpconn.com> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-                 CC|                            |admin at tpconn.com
-              Build|                            |2009.02
-             Target|ARM                         |x86
+             Target|x86                         |x86&ARM
 
 
 
