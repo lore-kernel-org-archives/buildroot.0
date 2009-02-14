@@ -1,29 +1,28 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 14 Feb 2009 17:47:16 +0000 (UTC)
-Subject: [Buildroot] [Bug 71] ./wchar.h:41:12: error: empty filename in
-	#include
-In-Reply-To: <bug-71-163@https.bugs.busybox.net/>
-References: <bug-71-163@https.bugs.busybox.net/>
-Message-ID: <20090214174716.6801E76440@busybox.osuosl.org>
+From: steve caster <steve@c2root.be>
+Date: Sat, 14 Feb 2009 18:52:57 +0100
+Subject: [Buildroot] qtopia compilation
+Message-ID: <000601c98ecd$11cf06b0$356d1410$@be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=71
+Does anyone manage to compile qtopia?
 
+Each time it is complaining FILE is not defined, spitting a loads of errors
+and ending in an error 2
 
-swalker <admin@tpconn.com> changed:
+ 
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Target|x86                         |x86&ARM
+:s 
 
+ 
 
+Regards
 
+Steve
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090214/a52f2b35/attachment.htm>
