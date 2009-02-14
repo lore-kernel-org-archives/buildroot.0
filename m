@@ -1,144 +1,22 @@
-From: Daniel.Li <lida_mail@163.com>
-Date: Sat, 14 Feb 2009 07:17:33 +0800
-Subject: [Buildroot] 2009.02-rc4 released
-In-Reply-To: <87ljsf7f2f.fsf@macbook.be.48ers.dk>
-References: <87ljsf7f2f.fsf@macbook.be.48ers.dk>
-Message-ID: <1234567053.7737.1.camel@daniel-laptop>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Sat, 14 Feb 2009 13:42:41 +1100
+Subject: [Buildroot] Buildroot 2009.02 released
+In-Reply-To: <87skmkf1s0.fsf@macbook.be.48ers.dk>
+References: <87skmkf1s0.fsf@macbook.be.48ers.dk>
+Message-ID: <20090214024241.GA26387@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear All,
-I'm using ubuntu.
-I just downloaded 2009.02, and met some error. What's the problem? How
-can I solve the issue? Thanks.
+On Thu, Feb 12, 2009 at 10:22:07AM +0100, Peter Korsgaard wrote:
+> Buildroot 2009.02 is released - Go download it at:
 
-daniel at daniel-laptop:~/work2/buildroot$ make menuconfig
-make CC="/usr/bin/gcc" -C package/config conf mconf
-make[1]: Entering directory
-`/home/daniel/work2/buildroot/package/config'
-/usr/bin/gcc -DCURSES_LOC="<curses.h>" -DLOCALE  -g -O2  -c conf.c -o
-conf.o
-conf.c: ???'conf_askvalue'?:
-conf.c:112: ??: ????? warn_unused_result ???'fgets'????
-conf.c: ???'conf_choice'?:
-conf.c:363: ??: ????? warn_unused_result ???'fgets'????
-/usr/bin/gcc -DCURSES_LOC="<curses.h>" -DLOCALE  -g -O2  -c kxgettext.c
--o kxgettext.o
-/usr/bin/gcc -DCURSES_LOC="<curses.h>" -DLOCALE  -g -O2  -c
-lxdialog/checklist.c -o lxdialog/checklist.o
-In file included from lxdialog/checklist.c:24:
-lxdialog/dialog.h:32:20: error: curses.h: ????????
-In file included from lxdialog/checklist.c:24:
-lxdialog/dialog.h:97: ??: expected specifier-qualifier-list before
-'chtype'
-lxdialog/dialog.h:187: ??: expected ')' before '*' token
-lxdialog/dialog.h:194: ??: expected ')' before '*' token
-lxdialog/dialog.h:196: ??: expected ')' before '*' token
-lxdialog/dialog.h:197: ??: expected ')' before '*' token
-lxdialog/dialog.h:198: ??: expected ')' before '*' token
-lxdialog/dialog.h:199: ??: expected ')' before '*' token
-lxdialog/dialog.h:201: ??: expected ')' before '*' token
-lxdialog/checklist.c:31: ??: expected ')' before '*' token
-lxdialog/checklist.c:59: ??: expected ')' before '*' token
-lxdialog/checklist.c:95: ??: expected ')' before '*' token
-lxdialog/checklist.c: ???'dialog_checklist'?:
-lxdialog/checklist.c:116: ??: 'WINDOW'???(??????????)
-lxdialog/checklist.c:116: ??: (????????????,???????????
-lxdialog/checklist.c:116: ??: ?????????????)
-lxdialog/checklist.c:116: ??: 'dialog'???(??????????)
-lxdialog/checklist.c:116: ??: 'list'???(??????????)
-lxdialog/checklist.c:129: ??: 'stdscr'???(??????????)
-lxdialog/checklist.c:130: ??: 'KEY_MAX'???(??????????)
-lxdialog/checklist.c:137: ??: 'COLS'???(??????????)
-lxdialog/checklist.c:138: ??: 'LINES'???(??????????)
-lxdialog/checklist.c:143: ??: 'TRUE'???(??????????)
-lxdialog/checklist.c:146: ??: 'struct dialog_color'????'atr'???
-lxdialog/checklist.c:146: ??: 'struct dialog_color'????'atr'???
-lxdialog/checklist.c:147: ??: 'struct dialog_color'????'atr'???
-lxdialog/checklist.c:151: ??: 'struct dialog_color'????'atr'???
-lxdialog/checklist.c:156: ??: 'struct dialog_color'????'atr'???
-lxdialog/checklist.c:171: ??: 'struct dialog_color'????'atr'???
-lxdialog/checklist.c:171: ??: 'struct dialog_color'????'atr'???
-lxdialog/checklist.c:210: ??: 'KEY_UP'???(??????????)
-lxdialog/checklist.c:210: ??: 'KEY_DOWN'???(??????????)
-lxdialog/checklist.c:220: ??: 'FALSE'???(??????????)
-lxdialog/checklist.c:297: ??: 'KEY_LEFT'???(??????????)
-lxdialog/checklist.c:298: ??: 'KEY_RIGHT'???(??????????)
-lxdialog/checklist.c:312: ??: 'KEY_RESIZE'???(??????????)
-make[1]: *** [lxdialog/checklist.o] Error 1
-make[1]: Leaving directory `/home/daniel/work2/buildroot/package/config'
-make: *** [package/config/mconf] Error 2
-daniel at daniel-laptop:~/work2/buildroot$ make menuconfig
-make CC="/usr/bin/gcc" -C package/config conf mconf
-make[1]: Entering directory
-`/home/daniel/work2/buildroot/package/config'
-/usr/bin/gcc -DCURSES_LOC="<curses.h>" -DLOCALE  -g -O2  -c
-lxdialog/checklist.c -o lxdialog/checklist.o
-In file included from lxdialog/checklist.c:24:
-lxdialog/dialog.h:32:20: error: curses.h: ????????
-In file included from lxdialog/checklist.c:24:
-lxdialog/dialog.h:97: ??: expected specifier-qualifier-list before
-'chtype'
-lxdialog/dialog.h:187: ??: expected ')' before '*' token
-lxdialog/dialog.h:194: ??: expected ')' before '*' token
-lxdialog/dialog.h:196: ??: expected ')' before '*' token
-lxdialog/dialog.h:197: ??: expected ')' before '*' token
-lxdialog/dialog.h:198: ??: expected ')' before '*' token
-lxdialog/dialog.h:199: ??: expected ')' before '*' token
-lxdialog/dialog.h:201: ??: expected ')' before '*' token
-lxdialog/checklist.c:31: ??: expected ')' before '*' token
-lxdialog/checklist.c:59: ??: expected ')' before '*' token
-lxdialog/checklist.c:95: ??: expected ')' before '*' token
-lxdialog/checklist.c: ???'dialog_checklist'?:
-lxdialog/checklist.c:116: ??: 'WINDOW'???(??????????)
-lxdialog/checklist.c:116: ??: (????????????,???????????
-lxdialog/checklist.c:116: ??: ?????????????)
-lxdialog/checklist.c:116: ??: 'dialog'???(??????????)
-lxdialog/checklist.c:116: ??: 'list'???(??????????)
-lxdialog/checklist.c:129: ??: 'stdscr'???(??????????)
-lxdialog/checklist.c:130: ??: 'KEY_MAX'???(??????????)
-lxdialog/checklist.c:137: ??: 'COLS'???(??????????)
-lxdialog/checklist.c:138: ??: 'LINES'???(??????????)
-lxdialog/checklist.c:143: ??: 'TRUE'???(??????????)
-lxdialog/checklist.c:146: ??: 'struct dialog_color'????'atr'???
-lxdialog/checklist.c:146: ??: 'struct dialog_color'????'atr'???
-lxdialog/checklist.c:147: ??: 'struct dialog_color'????'atr'???
-lxdialog/checklist.c:151: ??: 'struct dialog_color'????'atr'???
-lxdialog/checklist.c:156: ??: 'struct dialog_color'????'atr'???
-lxdialog/checklist.c:171: ??: 'struct dialog_color'????'atr'???
-lxdialog/checklist.c:171: ??: 'struct dialog_color'????'atr'???
-lxdialog/checklist.c:210: ??: 'KEY_UP'???(??????????)
-lxdialog/checklist.c:210: ??: 'KEY_DOWN'???(??????????)
-lxdialog/checklist.c:220: ??: 'FALSE'???(??????????)
-lxdialog/checklist.c:297: ??: 'KEY_LEFT'???(??????????)
-lxdialog/checklist.c:298: ??: 'KEY_RIGHT'???(??????????)
-lxdialog/checklist.c:312: ??: 'KEY_RESIZE'???(??????????)
-make[1]: *** [lxdialog/checklist.o] Error 1
-make[1]: Leaving directory `/home/daniel/work2/buildroot/package/config'
-make: *** [package/config/mconf] Error 2
+Well done all, and especially Peter for the final sprint work.
 
-On Mon, 2009-02-09 at 17:25 +0100, Peter Korsgaard wrote:
-> Hi,
-> 
-> Yes, I know I said I would cut the final 2009.02 release at FOSDEM,
-> but as we had more than 50 changes since rc3 (and to critical stuff
-> like toolchain/) I decided to do a rc4:
-> 
-> http://buildroot.uclibc.org/downloads/buildroot-2009.02-rc4.tar.gz
-> 
-> or
-> 
-> http://buildroot.uclibc.org/downloads/buildroot-2009.02-rc4.tar.bz2
-> 
-> Please give it a spin and report back issues to the mailing list or
-> the bug tracker.
-> 
-> Is there anything that we absolutely need to fix for 2009.02? Unless I
-> hear anything, 2009.02 will be released this Thursday.
-> 
+
+
+Hamish
 -- 
-Daniel.Li <lida_mail@163.com>
-PALFocus (http://palfocus.oicp.net)
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
