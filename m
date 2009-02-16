@@ -1,60 +1,32 @@
-From: Sven Neumann <s.neumann@phase-zero.de>
-Date: Mon, 16 Feb 2009 10:20:32 +0100
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 16 Feb 2009 14:09:47 +0100
 Subject: [Buildroot] outstanding patches in bugzilla
-Message-ID: <1234776032.6303.18.camel@sven>
+In-Reply-To: <1234776032.6303.18.camel@sven> (Sven Neumann's message of "Mon\,
+	16 Feb 2009 10\:20\:32 +0100")
+References: <1234776032.6303.18.camel@sven>
+Message-ID: <87vdracyuc.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Sven" == Sven Neumann <s.neumann@phase-zero.de> writes:
 
-just a quick reminder that there are some patches in Bugzilla that were
-supposed to be committed after the release. Now would be a good time to
-have another look at them and perhaps get them into trunk. Here's a list
-of bugs that I consider ready for inclusion, in the order they should
-preferably be committed:
+ Sven> Hi,
 
+ Sven> just a quick reminder that there are some patches in Bugzilla
+ Sven> that were supposed to be committed after the release. Now would
+ Sven> be a good time to have another look at them and perhaps get
+ Sven> them into trunk. Here's a list of bugs that I consider ready
+ Sven> for inclusion, in the order they should preferably be
+ Sven> committed:
 
-tslib puts staging_dir into pkgconfig file
-https://bugs.busybox.net/show_bug.cgi?id=61
-This bug has a patch that converts tslib to use Makefile.autotools.in.
-This fixes a problem with the tslib.pc file.
+Don't worry, we haven't forgotten ;)
 
+I looked through some of them last weekend, and except for a few minor
+fixups to apply to svn the stuff I saw was fine. I'll verify and
+commit stuff shortly.
 
-convert libvorbis to Makefile.autotools.in
-https://bugs.busybox.net/show_bug.cgi?id=107
-This bug has a patch that converts libvorbis to use
-Makefile.autotools.in. This fixes a problem with wrong paths being
-written to the libvorbis*.la files.
-
-
-update libglib2 to version 2.18.4
-https://bugs.busybox.net/show_bug.cgi?id=37
-Here's a patch to update libglib2 to the latest stable version.
-This is a prerequisite for bug 35, see below.
-
-
-new packages: libsoup, gssdp, gupnp, gupnp-av
-https://bugs.busybox.net/show_bug.cgi?id=35
-This bug report has a patch that adds the GUPnP stack to buildroot.
-
-
-update gstreamer packages
-https://bugs.busybox.net/show_bug.cgi?id=101
-Here's a patch to update the GStreamer packages to the latest stable
-releases. It also removes some patches which have been applied upstream.
-
-
-new package: flac
-https://bugs.busybox.net/show_bug.cgi?id=99
-libFLAC is a library to handle the free lossless audio codec. The
-patches attached to this bug report add the flac package and also add
-flac support as an option to gst-plugins-good.
-
-
-I'd very much appreciate if these patches could go upstream. Thanks.
-
-
-Sven
+-- 
+Bye, Peter Korsgaard
