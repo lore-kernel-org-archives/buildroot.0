@@ -1,11 +1,7 @@
-From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
-Date: Tue, 17 Feb 2009 17:56:19 -0300
-Subject: [Buildroot] Easy Upgrade Path?
-In-Reply-To: <49922B53.50608@ethertek.ca>
-References: <49907BAE.3020509@ethertek.ca>
-	<d6cda7730902091413h5e7cbd21ra41d7154ca60909e@mail.gmail.com>
-	<49922B53.50608@ethertek.ca>
-Message-ID: <d6cda7730902171256y335886b6xb2924e2e69aa1c44@mail.gmail.com>
+From: Stridh, Robin ActeSE <robin.stridh@acteembedded.se>
+Date: Tue, 17 Feb 2009 22:23:00 +0100
+Subject: [Buildroot] GTK applications fails on AT91SAM9263
+Message-ID: <5B920D714A1C354D8949DBF58C2A35D604139AE3@freja.acte.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,22 +10,19 @@ To: buildroot@busybox.net
 
 Hi,
 
-On Tue, Feb 10, 2009 at 10:35 PM, Dan Pattison <dan.pattison@ethertek.ca> wrote:
-> Thanks for the reply Thiago. I will see if I can get a svn server going and
-> try your method.
->
+The default system for AT91SAM9263 using at91sam9263ek_defconfig builds without errors on my Ubuntu 8.10 (after some small fixes on the host system). However running GTK programs on the target using this root file system fails with the following error:
 
-   Just for the sake of documentation, if anyone wants to try my "home method",
+# gtk-demo 
+** GLib:ERROR:(gstrfuncs.c:379):IA__g_ascii_strtod: assertion failed: (decimal_point_len != 0)
 
-   svn merge svn://uclibc.org/trunk/buildroot -rupstream.rev:HEAD
+After finding out that this was related to "locale", I rebuilt my toolchain without locale support (I also removed wchar) and suddenly it works (ok, still a lot of things missing, but at least the application gtk-demo starts).
 
-   Seams to work much, much better, and you get --dry-run to see will
-be the merge result :)
+I know wchar and locale support are ususally demanded for building tinyX, but obviously not allowed for building GTK stuff. Does this mean you cannot use the same toolchain for building X and GTK-DirectFB applications?
 
-   Please, notice again that there might be better methods. I tried to
-locate the script Peter mentioned, but I couldn't get it to be
-installed in my gentoo distro :(
-   But svn merge seams to be doing what the perl script does.
+Can someone explain what locale support in the toolchain actually means, and how come it conflicts with GTK? 
 
-Kind Regards,
-    Thiago A. Correa
+Best regards,
+Robin
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090217/0873cbda/attachment.htm>
