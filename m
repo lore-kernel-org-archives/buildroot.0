@@ -1,47 +1,50 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 17 Feb 2009 12:26:54 +0100
-Subject: [Buildroot] What's up with the kernel names? (Again)
-In-Reply-To: <d6cda7730902161421u7e11244cydf5dc4812a1bc851@mail.gmail.com>
-	("Thiago A. =?utf-8?Q?Corr=C3=AAa=22's?= message of "Mon\, 16 Feb 2009
-	19\:21\:49 -0300")
-References: <d6cda7730902031749o51818770l1077d71877f9ad33@mail.gmail.com>
-	<87ab8u5ub5.fsf@macbook.be.48ers.dk>
-	<083a01c98b86$99d10260$f53018ac@Glamdring>
-	<d6cda7730902100834j409c7df8te83d42356957608c@mail.gmail.com>
-	<d6cda7730902100917o3aee167fg2ae06ca5e3e402ba@mail.gmail.com>
-	<08b701c98ba7$906b24f0$f53018ac@Glamdring>
-	<d6cda7730902101048w1706b7e9j41d8702d50766756@mail.gmail.com>
-	<1234382611.22044.8.camel@elrond.atmel.com>
-	<87zlgsg26x.fsf@macbook.be.48ers.dk>
-	<DC9C4AC978BF4D23BD014FFB5ACEA3FF@aeglos>
-	<d6cda7730902161421u7e11244cydf5dc4812a1bc851@mail.gmail.com>
-Message-ID: <87eixxcni9.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Tue, 17 Feb 2009 14:04:50 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/mtd/mtd-utils
+Message-ID: <20090217140450.E917176ABD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thiago" == Thiago A Corr?a <thiago.correa@gmail.com> writes:
+Author: jacmet
+Date: 2009-02-17 14:04:49 +0000 (Tue, 17 Feb 2009)
+New Revision: 25353
 
-Hi,
+Log:
+mtd-utils: flashcp: handle non-power-of-2 erase size (E.G. for dataflash)
 
- Thiago> The current solution does allow you to do the exact same
- Thiago> thing, while still giving the flexibility of opting not to
- Thiago> use it at all. We are not limiting your options, but rather
- Thiago> giving more, why can't we just let this thread go?
+Added:
+   trunk/buildroot/package/mtd/mtd-utils/mtd-utils-1.1.0-all-flashcp-npow2-erase.patch
 
-I agree, I'm also getting tired of it. The new setup is more flexible
-than before and still nice and clean.
 
- >> It is a good idea to make things as simple as possible, you are
- >> trying to make things simpler than that.
-
- Thiago> Hard coded prefix, suffix and extension plus symlink is much
- Thiago> closer to overcomplicated than current solution is to over
- Thiago> simplification.
-
-Agreed.
-
--- 
-Bye, Peter Korsgaard
+Changeset:
+Added: trunk/buildroot/package/mtd/mtd-utils/mtd-utils-1.1.0-all-flashcp-npow2-erase.patch
+===================================================================
+--- trunk/buildroot/package/mtd/mtd-utils/mtd-utils-1.1.0-all-flashcp-npow2-erase.patch	                        (rev 0)
++++ trunk/buildroot/package/mtd/mtd-utils/mtd-utils-1.1.0-all-flashcp-npow2-erase.patch	2009-02-17 14:04:49 UTC (rev 25353)
+@@ -0,0 +1,23 @@
++flashcp: handle non-power-of-2 erase size (E.G. for dataflash)
++
++Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
++---
++ flashcp.c |    4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++Index: mtd-utils-1.1.0/flashcp.c
++===================================================================
++--- mtd-utils-1.1.0.orig/flashcp.c	2007-08-03 15:55:51.000000000 +0200
+++++ mtd-utils-1.1.0/flashcp.c	2009-02-17 14:02:09.000000000 +0100
++@@ -255,8 +255,9 @@
++ #warning "Check for smaller erase regions"
++ 
++ 	erase.start = 0;
++-	erase.length = filestat.st_size & ~(mtd.erasesize - 1);
++-	if (filestat.st_size % mtd.erasesize) erase.length += mtd.erasesize;
+++	erase.length = (filestat.st_size + mtd.erasesize - 1) / mtd.erasesize;
+++	erase.length *= mtd.erasesize;
+++
++ 	if (flags & FLAG_VERBOSE)
++ 	{
++ 		/* if the user wants verbose output, erase 1 block at a time and show him/her what's going on */
