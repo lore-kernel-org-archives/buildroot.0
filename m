@@ -1,100 +1,147 @@
-From: Kelvin Chan <kelvinc@positronics.com>
-Date: Mon, 16 Feb 2009 19:06:25 -0800
-Subject: [Buildroot] kernel hangs after NET: Registered protocol family 16
-Message-ID: <A2E63C94AB8EE543B8743CB1AD8F976159036534@NEWPOSISERVER.positronics.local>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Tue, 17 Feb 2009 16:02:18 +1100
+Subject: [Buildroot] RFC: option to Makefile.autotools.in to build
+	in	$(PROJECT_BUILD_DIR)
+Message-ID: <20090217050218.GA20875@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi guys,
+I've got a package which will use Makefile.autotools.in that needs to
+build in $(PROJECT_BUILD_DIR), because it builds kernel modules.
 
-I'm using a ALIX 2c3 and my kernel hangs after "NET: Registered protocol family 16"
-I'm almost sure this is more of a kernel build config issue but not sure where to find answers. The dump looks like kernel is waiting for a subsystem or driver to init but that particular system/driver is not built. Can someone confirm that?
+Here is my proposed patch to Makefile.autotools.in to support this (via
+a FOO_BUILD_PROJECT_DIR = YES/NO option). Feedback welcome; unless
+there's issues I will commit in a day or two.
 
-The kernel is built without network support, trying to make things easier. All I want to see is boot process make it to init into user space.
+Hamish
 
-Buildroot is at latest svn trunk version. And here's the dump from kernel.
 
-root   (hd0,0)
- Filesystem type is ext2fs, partition type 0x83
-kernel   /boot/bzImage rw root=/dev/hda1 console=ttyS0,115200 noinitrd rootfsty
-pe=ext2
-   [Linux-bzImage, setup=0x3e00, size=0x12de40]
-
-BIOS EBDA/lowmem at: 00000000/000a0000
-Linux version 2.6.28.2 (kel at boxfish) (gcc version 4.3.2 (GCC) ) #1 PREEMPT Fri Feb 13 12:58:16 PST 2009
-KERNEL supported cpus:
-  Intel GenuineIntel
-  AMD AuthenticAMD
-  NSC Geode by NSC
-  Cyrix CyrixInstead
-  Centaur CentaurHauls
-  Transmeta GenuineTMx86
-  Transmeta TransmetaCPU
-  UMC UMC UMC UMC
-BIOS-provided physical RAM map:
- BIOS-e820: 0000000000000000 - 00000000000a0000 (usable)
- BIOS-e820: 00000000000f0000 - 0000000000100000 (reserved)
- BIOS-e820: 0000000000100000 - 0000000010000000 (usable)
- BIOS-e820: 00000000fff00000 - 0000000100000000 (reserved)
-DMI not present or invalid.
-last_pfn = 0x10000 max_arch_pfn = 0x100000
-0MB HIGHMEM available.
-256MB LOWMEM available.
-  mapped low ram: 0 - 10000000
-  low ram: 00000000 - 10000000
-  bootmap 00001000 - 00003000
-(6 early reservations) ==> bootmem [0000000000 - 0010000000]
-  #0 [0000000000 - 0000001000]   BIOS data page ==> [0000000000 - 0000001000]
-  #1 [0000100000 - 000039e18c]    TEXT DATA BSS ==> [0000100000 - 000039e18c]
-  #2 [000039f000 - 00003a1000]    INIT_PG_TABLE ==> [000039f000 - 00003a1000]
-  #3 [000009f000 - 0000100000]    BIOS reserved ==> [000009f000 - 0000100000]
-  #4 [0000007000 - 0000008000]          PGTABLE ==> [0000007000 - 0000008000]
-  #5 [0000001000 - 0000003000]          BOOTMAP ==> [0000001000 - 0000003000]
-Zone PFN ranges:
-  DMA      0x00000000 -> 0x00001000
-  Normal   0x00001000 -> 0x00010000
-  HighMem  0x00010000 -> 0x00010000
-Movable zone start PFN for each node
-early_node_map[2] active PFN ranges
-    0: 0x00000000 -> 0x000000a0
-    0: 0x00000100 -> 0x00010000
-Allocating PCI resources starting at 20000000 (gap: 10000000:eff00000)
-Built 1 zonelists in Zone order, mobility grouping on.  Total pages: 64928
-Kernel command line: rw root=/dev/hda1 console=ttyS0,115200 noinitrd rootfstype=ext2
-Initializing CPU#0
-PID hash table entries: 1024 (order: 10, 4096 bytes)
-Fast TSC calibration using PIT
-Detected 497.993 MHz processor.
-Console: colour dummy device 80x25
-console [ttyS0] enabled
-Dentry cache hash table entries: 32768 (order: 5, 131072 bytes)
-Inode-cache hash table entries: 16384 (order: 4, 65536 bytes)
-Memory: 256620k/262144k available (1866k kernel code, 4956k reserved, 423k data, 156k init, 0k highmem)
-virtual kernel memory layout:
-    fixmap  : 0xfffee000 - 0xfffff000   (  68 kB)
-    pkmap   : 0xff800000 - 0xffc00000   (4096 kB)
-    vmalloc : 0xd0800000 - 0xff7fe000   ( 751 MB)
-    lowmem  : 0xc0000000 - 0xd0000000   ( 256 MB)
-      .init : 0xc0340000 - 0xc0367000   ( 156 kB)
-      .data : 0xc02d284a - 0xc033c63c   ( 423 kB)
-      .text : 0xc0100000 - 0xc02d284a   (1866 kB)
-Checking if this processor honours the WP bit even in supervisor mode...Ok.
-Calibrating delay loop (skipped), value calculated using timer frequency.. 995.98 BogoMIPS (lpj=1991972)
-Mount-cache hash table entries: 512
-CPU: L1 I Cache: 64K (32 bytes/line), D cache 64K (32 bytes/line)
-CPU: L2 Cache: 128K (32 bytes/line)
-CPU: Geode(TM) Integrated Processor by AMD PCS stepping 02
-Checking 'hlt' instruction... OK.
-Freeing SMP alternatives: 0k freed
-net_namespace: 288 bytes
-NET: Registered protocol family 16
-
-Kelvin Chan               | Positronics Ent.
-Product Development       |
-                          | unit 272
-604-628-9330 (direct)     | 8128 128th St.
-604-585-2119 at 104 (main)   | Surrey, BC
-604-585-3056 (fax)        | Canada, V3W 1R1
+Index: package/Makefile.autotools.in
+===================================================================
+--- package/Makefile.autotools.in	(revision 8043)
++++ package/Makefile.autotools.in	(working copy)
+@@ -64,6 +64,8 @@
+ #	make
+ # FOO_DIR_PREFIX [default empty]
+ #	toplevel relative path to package *.mk file and corresponding patches
++# FOO_BUILD_PROJECT_DIR [YES/NO, default NO]
++#	Do you want to build in $(PROJECT_BUILD_DIR) rather than $(BUILD_DIR)?
+ #
+ ## The following variables contain hook target names
+ ## by default they do nothing, they can be overriden in package makefiles
+@@ -134,7 +136,7 @@
+ ################################################################################
+ 
+ # Retrieve and unpack the archive
+-$(BUILD_DIR)/%/.stamp_downloaded:
++$(BUILD_DIR)/%/.stamp_downloaded $(PROJECT_BUILD_DIR)/%/.stamp_downloaded:
+ # support make source-check/external-deps
+ ifneq ($(SPIDER),)
+ 	$(WGET) -P $(DL_DIR) $($(PKG)_SITE)/$($(PKG)_SOURCE)
+@@ -152,7 +154,7 @@
+ endif
+ 
+ # Retrieve and unpack the archive
+-$(BUILD_DIR)/%/.stamp_extracted:
++$(BUILD_DIR)/%/.stamp_extracted $(PROJECT_BUILD_DIR)/%/.stamp_extracted:
+ 	$(call MESSAGE,"Extracting")
+ 	$(Q)mkdir -p $(@D)
+ 	$(Q)$(INFLATE$(suffix $($(PKG)_SOURCE))) $(DL_DIR)/$($(PKG)_SOURCE) | \
+@@ -162,7 +164,7 @@
+ 	$(Q)touch $@
+ 
+ # Fix libtool support if required by the package
+-$(BUILD_DIR)/%/.stamp_libtool_patch:
++$(BUILD_DIR)/%/.stamp_libtool_patch $(PROJECT_BUILD_DIR)/%/.stamp_libtool_patch:
+ 	$(call MESSAGE,"Patching libtool")
+ # if the package uses libtool, patch it for cross-compiling in buildroot
+ 	$(Q)if test "$($(PKG)_LIBTOOL_PATCH)" = "YES"; then \
+@@ -176,8 +178,8 @@
+ # XXX: FIXME: This has to be done differently and path-independent, i.e. use
+ # XXX: FIXME: the dir-part of the stem as base-dir (instead of hardcoding
+ # XXX: FIXME: "package/".
+-$(BUILD_DIR)/%/.stamp_patched: NAMEVER = $($(PKG)_NAME)-$($(PKG)_VERSION)
+-$(BUILD_DIR)/%/.stamp_patched:
++$(BUILD_DIR)/%/.stamp_patched $(PROJECT_BUILD_DIR)/%/.stamp_patched: NAMEVER = $($(PKG)_NAME)-$($(PKG)_VERSION)
++$(BUILD_DIR)/%/.stamp_patched $(PROJECT_BUILD_DIR)/%/.stamp_patched:
+ 	$(call MESSAGE,"Patching $($(PKG)_DIR_PREFIX)/$($(PKG)_NAME)")
+ 	$(if $($(PKG)_PATCH),toolchain/patch-kernel.sh $(@D) $(DL_DIR) $($(PKG)_PATCH))
+ 	$(Q)( \
+@@ -202,7 +204,7 @@
+ 	$(Q)touch $@
+ 
+ # Running autoreconf
+-$(BUILD_DIR)/%/.stamp_autoconfigured:
++$(BUILD_DIR)/%/.stamp_autoconfigured $(PROJECT_BUILD_DIR)/%/.stamp_autoconfigured:
+ 	$(call MESSAGE,"Running autoreconf")
+ 	$(Q)cd $(@D)/$($(PKG)_SUBDIR) && $(AUTORECONF)
+ # if the package uses libtool, patch it for cross-compiling in buildroot
+@@ -214,7 +216,7 @@
+ 	$(Q)touch $@
+ 
+ # Configuring
+-$(BUILD_DIR)/%/.stamp_configured:
++$(BUILD_DIR)/%/.stamp_configured $(PROJECT_BUILD_DIR)/%/.stamp_configured:
+ 	$(call MESSAGE,"Configuring")
+ 	cd $(@D)/$($(PKG)_SUBDIR) && rm -f config.cache && \
+ 	$(TARGET_CONFIGURE_OPTS) \
+@@ -233,13 +235,13 @@
+ 	$(Q)touch $@
+ 
+ # Build
+-$(BUILD_DIR)/%/.stamp_built:
++$(BUILD_DIR)/%/.stamp_built $(PROJECT_BUILD_DIR)/%/.stamp_built:
+ 	$(call MESSAGE,"Building")
+ 	$($(PKG)_MAKE_ENV) $(MAKE) $($(PKG)_MAKE_OPT) -C $(@D)/$($(PKG)_SUBDIR)
+ 	$(Q)touch $@
+ 
+ # Install to staging dir
+-$(BUILD_DIR)/%/.stamp_staging_installed:
++$(BUILD_DIR)/%/.stamp_staging_installed $(PROJECT_BUILD_DIR)/%/.stamp_staging_installed:
+ 	$(call MESSAGE,'Installing to host (staging directory)')
+ 	$($(PKG)_MAKE_ENV) $(MAKE) $($(PKG)_INSTALL_STAGING_OPT) -C $(@D)/$($(PKG)_SUBDIR)
+ #	toolchain/replace.sh $(STAGING_DIR)/usr/lib ".*\.la" "\(['= ]\)/usr" "\\1$(STAGING_DIR)/usr"
+@@ -264,19 +266,19 @@
+ 	done)
+ 	touch $@
+ 
+-$(BUILD_DIR)/%/.stamp_cleaned:
++$(BUILD_DIR)/%/.stamp_cleaned $(PROJECT_BUILD_DIR)/%/.stamp_cleaned:
+ 	$(call MESSAGE,"Cleaning up")
+ 	-$($(PKG)_MAKE_ENV) $(MAKE)  $($(PKG)_CLEAN_OPT) -C $(@D)/$($(PKG)_SUBDIR)
+ 	rm -f $(@D)/.stamp_built
+ 
+-$(BUILD_DIR)/%/.stamp_uninstalled:
++$(BUILD_DIR)/%/.stamp_uninstalled $(PROJECT_BUILD_DIR)/%/.stamp_uninstalled:
+ 	$(call MESSAGE,"Uninstalling")
+ 	$($(PKG)_MAKE_ENV) $(MAKE) $($(PKG)_UNINSTALL_STAGING_OPT) -C $(@D)/$($(PKG)_SUBDIR)
+ 	rm -f $(@D)/.stamp_staging_installed
+ 	$($(PKG)_MAKE_ENV) $(MAKE) $($(PKG)_UNINSTALL_TARGET_OPT) -C $(@D)/$($(PKG)_SUBDIR)
+ 	rm -f $($(PKG)_TARGET_INSTALL_TARGET) $($(PKG)_HOOK_POST_INSTALL)
+ 
+-$(BUILD_DIR)/%/.stamp_dircleaned:
++$(BUILD_DIR)/%/.stamp_dircleaned $(PROJECT_BUILD_DIR)/%/.stamp_dircleaned:
+ 	rm -Rf $(@D)
+ 
+ 
+@@ -299,7 +301,14 @@
+ # define package-specific variables to default values
+ $(2)_NAME			=  $(1)
+ $(2)_VERSION			?= undefined
+-$(2)_DIR			=  $$(BUILD_DIR)/$(1)-$$($(2)_VERSION)
++$(2)_BUILD_PROJECT_DIR		?= NO
++
++ifeq ($$($(2)_BUILD_PROJECT_DIR),YES)
++$(2)_DIR			= $$(PROJECT_BUILD_DIR)/$(1)-$$($(2)_VERSION)
++else
++$(2)_DIR			= $$(BUILD_DIR)/$(1)-$$($(2)_VERSION)
++endif
++
+ $(2)_SOURCE			?= $(1)-$$($(2)_VERSION).tar.gz
+ $(2)_SITE			?= \
+ 	http://$$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/$(1)
+-- 
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
