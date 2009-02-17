@@ -1,50 +1,35 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue, 17 Feb 2009 14:04:50 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/mtd/mtd-utils
-Message-ID: <20090217140450.E917176ABD@busybox.osuosl.org>
+From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
+Date: Tue, 17 Feb 2009 17:56:19 -0300
+Subject: [Buildroot] Easy Upgrade Path?
+In-Reply-To: <49922B53.50608@ethertek.ca>
+References: <49907BAE.3020509@ethertek.ca>
+	<d6cda7730902091413h5e7cbd21ra41d7154ca60909e@mail.gmail.com>
+	<49922B53.50608@ethertek.ca>
+Message-ID: <d6cda7730902171256y335886b6xb2924e2e69aa1c44@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-02-17 14:04:49 +0000 (Tue, 17 Feb 2009)
-New Revision: 25353
+Hi,
 
-Log:
-mtd-utils: flashcp: handle non-power-of-2 erase size (E.G. for dataflash)
+On Tue, Feb 10, 2009 at 10:35 PM, Dan Pattison <dan.pattison@ethertek.ca> wrote:
+> Thanks for the reply Thiago. I will see if I can get a svn server going and
+> try your method.
+>
 
-Added:
-   trunk/buildroot/package/mtd/mtd-utils/mtd-utils-1.1.0-all-flashcp-npow2-erase.patch
+   Just for the sake of documentation, if anyone wants to try my "home method",
 
+   svn merge svn://uclibc.org/trunk/buildroot -rupstream.rev:HEAD
 
-Changeset:
-Added: trunk/buildroot/package/mtd/mtd-utils/mtd-utils-1.1.0-all-flashcp-npow2-erase.patch
-===================================================================
---- trunk/buildroot/package/mtd/mtd-utils/mtd-utils-1.1.0-all-flashcp-npow2-erase.patch	                        (rev 0)
-+++ trunk/buildroot/package/mtd/mtd-utils/mtd-utils-1.1.0-all-flashcp-npow2-erase.patch	2009-02-17 14:04:49 UTC (rev 25353)
-@@ -0,0 +1,23 @@
-+flashcp: handle non-power-of-2 erase size (E.G. for dataflash)
-+
-+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-+---
-+ flashcp.c |    4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+Index: mtd-utils-1.1.0/flashcp.c
-+===================================================================
-+--- mtd-utils-1.1.0.orig/flashcp.c	2007-08-03 15:55:51.000000000 +0200
-++++ mtd-utils-1.1.0/flashcp.c	2009-02-17 14:02:09.000000000 +0100
-+@@ -255,8 +255,9 @@
-+ #warning "Check for smaller erase regions"
-+ 
-+ 	erase.start = 0;
-+-	erase.length = filestat.st_size & ~(mtd.erasesize - 1);
-+-	if (filestat.st_size % mtd.erasesize) erase.length += mtd.erasesize;
-++	erase.length = (filestat.st_size + mtd.erasesize - 1) / mtd.erasesize;
-++	erase.length *= mtd.erasesize;
-++
-+ 	if (flags & FLAG_VERBOSE)
-+ 	{
-+ 		/* if the user wants verbose output, erase 1 block at a time and show him/her what's going on */
+   Seams to work much, much better, and you get --dry-run to see will
+be the merge result :)
+
+   Please, notice again that there might be better methods. I tried to
+locate the script Peter mentioned, but I couldn't get it to be
+installed in my gentoo distro :(
+   But svn merge seams to be doing what the perl script does.
+
+Kind Regards,
+    Thiago A. Correa
