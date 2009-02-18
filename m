@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Wed, 18 Feb 2009 14:16:24 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/kernel-headers
-Message-ID: <20090218141624.F1B5476A00@busybox.osuosl.org>
+Date: Wed, 18 Feb 2009 14:16:31 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/busybox
+Message-ID: <20090218141631.76BC876A00@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,242 +9,36 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2009-02-18 14:16:23 +0000 (Wed, 18 Feb 2009)
-New Revision: 25361
+Date: 2009-02-18 14:16:30 +0000 (Wed, 18 Feb 2009)
+New Revision: 25362
 
 Log:
-kernel-headers: bump 2.6.27/2.6.28 stable versions
+busybox: 1.13.2 killall fix
 
 Added:
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.6-cris-eth-driver-netpoll.patch
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.6-cris-headers.patch
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.6-cris-objcopy-flags.patch
-
-Removed:
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.5-cris-eth-driver-netpoll.patch
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.5-cris-headers.patch
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.5-cris-objcopy-flags.patch
-
-Modified:
-   trunk/buildroot/toolchain/kernel-headers/Config.in
+   trunk/buildroot/package/busybox/busybox-1.13.2-killall.patch
 
 
 Changeset:
-Modified: trunk/buildroot/toolchain/kernel-headers/Config.in
+Added: trunk/buildroot/package/busybox/busybox-1.13.2-killall.patch
 ===================================================================
---- trunk/buildroot/toolchain/kernel-headers/Config.in	2009-02-18 14:05:54 UTC (rev 25360)
-+++ trunk/buildroot/toolchain/kernel-headers/Config.in	2009-02-18 14:16:23 UTC (rev 25361)
-@@ -117,7 +117,7 @@
- 	default "2.6.24.7"	if BR2_KERNEL_HEADERS_2_6_24
- 	default "2.6.25.19"	if BR2_KERNEL_HEADERS_2_6_25
- 	default "2.6.26.8"	if BR2_KERNEL_HEADERS_2_6_26
--	default "2.6.27.16"	if BR2_KERNEL_HEADERS_2_6_27
--	default "2.6.28.5"	if BR2_KERNEL_HEADERS_2_6_28
-+	default "2.6.27.18"	if BR2_KERNEL_HEADERS_2_6_27
-+	default "2.6.28.6"	if BR2_KERNEL_HEADERS_2_6_28
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 
-
-Deleted: trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.5-cris-eth-driver-netpoll.patch
-===================================================================
---- trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.5-cris-eth-driver-netpoll.patch	2009-02-18 14:05:54 UTC (rev 25360)
-+++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.5-cris-eth-driver-netpoll.patch	2009-02-18 14:16:23 UTC (rev 25361)
-@@ -1,11 +0,0 @@
----- a/drivers/net/cris/eth_v10.c.org	2009-01-28 09:19:09.000000000 +0100
--+++ b/drivers/net/cris/eth_v10.c	2009-01-28 09:19:16.000000000 +0100
--@@ -1707,7 +1707,7 @@
-- static void
-- e100_netpoll(struct net_device* netdev)
-- {
---	e100rxtx_interrupt(NETWORK_DMA_TX_IRQ_NBR, netdev, NULL);
--+	e100rxtx_interrupt(NETWORK_DMA_TX_IRQ_NBR, netdev);
-- }
-- #endif
-- 
-
-Deleted: trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.5-cris-headers.patch
-===================================================================
---- trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.5-cris-headers.patch	2009-02-18 14:05:54 UTC (rev 25360)
-+++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.5-cris-headers.patch	2009-02-18 14:16:23 UTC (rev 25361)
-@@ -1,28 +0,0 @@
--diff -urN linux-2.6.28/arch/cris/include/arch-v10/arch/Kbuild linux-2.6.28.my/arch/cris/include/arch-v10/arch/Kbuild
----- linux-2.6.28/arch/cris/include/arch-v10/arch/Kbuild	2008-12-25 00:26:37.000000000 +0100
--+++ linux-2.6.28.my/arch/cris/include/arch-v10/arch/Kbuild	2009-01-12 12:59:06.000000000 +0100
--@@ -1,3 +1,5 @@
--+header-y += elf.h
--+header-y += ptrace.h
-- header-y += user.h
-- header-y += svinto.h
-- header-y += sv_addr_ag.h
--diff -urN linux-2.6.28/arch/cris/include/asm/Kbuild linux-2.6.28.my/arch/cris/include/asm/Kbuild
----- linux-2.6.28/arch/cris/include/asm/Kbuild	2008-12-25 00:26:37.000000000 +0100
--+++ linux-2.6.28.my/arch/cris/include/asm/Kbuild	2009-01-12 13:14:40.000000000 +0100
--@@ -1,11 +1,13 @@
-- include include/asm-generic/Kbuild.asm
-- 
---header-y += arch-v10/
---header-y += arch-v32/
--+header-y += ../arch-v10/arch/
--+header-y += ../arch-v32/arch/
-- 
--+header-y += elf.h
-- header-y += ethernet.h
-- header-y += rtc.h
-- header-y += sync_serial.h
--+header-y += user.h
-- 
-- unifdef-y += etraxgpio.h
-- unifdef-y += rs485.h
-
-Deleted: trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.5-cris-objcopy-flags.patch
-===================================================================
---- trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.5-cris-objcopy-flags.patch	2009-02-18 14:05:54 UTC (rev 25360)
-+++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.5-cris-objcopy-flags.patch	2009-02-18 14:16:23 UTC (rev 25361)
-@@ -1,45 +0,0 @@
----- linux-2.6.28/arch/cris/Makefile	2008-12-25 00:26:37.000000000 +0100
--+++ linux-2.6.28.my/arch/cris/Makefile	2009-01-12 13:21:44.000000000 +0100
--@@ -40,7 +40,7 @@
-- 
-- LD = $(CROSS_COMPILE)ld -mcrislinux
-- 
---OBJCOPYFLAGS := -O binary -R .note -R .comment -S
--+OBJCOPYFLAGS := -O binary -R .note -R .note.gnu.build-id -R .comment
-- 
-- CPPFLAGS_vmlinux.lds = -DDRAM_VIRTUAL_BASE=0x$(CONFIG_ETRAX_DRAM_VIRTUAL_BASE)
-- 
--diff -urN linux-2.6.28/arch/cris/arch-v10/boot/Makefile linux-2.6.28.my/arch/cris/arch-v10/boot/Makefile
----- linux-2.6.28/arch/cris/arch-v10/boot/Makefile	2008-12-25 00:26:37.000000000 +0100
--+++ linux-2.6.28.my/arch/cris/arch-v10/boot/Makefile	2009-01-12 13:28:25.000000000 +0100
--@@ -2,8 +2,6 @@
-- # arch/cris/arch-v10/boot/Makefile
-- #
-- 
---OBJCOPYFLAGS = -O binary --remove-section=.bss
---
-- subdir- := compressed rescue
-- targets := Image
-- 
--diff -urN linux-2.6.28/arch/cris/arch-v10/boot/compressed/Makefile linux-2.6.28.my/arch/cris/arch-v10/boot/compressed/Makefile
----- linux-2.6.28/arch/cris/arch-v10/boot/compressed/Makefile	2008-12-25 00:26:37.000000000 +0100
--+++ linux-2.6.28.my/arch/cris/arch-v10/boot/compressed/Makefile	2009-01-12 13:28:33.000000000 +0100
--@@ -6,7 +6,6 @@
-- ccflags-y += -O2 $(LINUXINCLUDE)
-- ldflags-y += -T $(srctree)/$(src)/decompress.lds
-- OBJECTS = $(obj)/head.o $(obj)/misc.o
---OBJCOPYFLAGS = -O binary --remove-section=.bss
-- 
-- quiet_cmd_image = BUILD   $@
-- cmd_image = cat $(obj)/decompress.bin $(obj)/piggy.gz > $@
--diff -urN linux-2.6.28/arch/cris/arch-v10/boot/rescue/Makefile linux-2.6.28.my/arch/cris/arch-v10/boot/rescue/Makefile
----- linux-2.6.28/arch/cris/arch-v10/boot/rescue/Makefile	2008-12-25 00:26:37.000000000 +0100
--+++ linux-2.6.28.my/arch/cris/arch-v10/boot/rescue/Makefile	2009-01-12 13:28:40.000000000 +0100
--@@ -5,7 +5,6 @@
-- ccflags-y += -O2 $(LINUXINCLUDE)
-- asflags-y += $(LINUXINCLUDE)
-- ldflags-y += -T $(srctree)/$(src)/rescue.lds
---OBJCOPYFLAGS = -O binary --remove-section=.bss
-- obj-$(CONFIG_ETRAX_AXISFLASHMAP) = head.o
-- OBJECT := $(obj)/head.o
-- 
-
-Copied: trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.6-cris-eth-driver-netpoll.patch (from rev 25353, trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.5-cris-eth-driver-netpoll.patch)
-===================================================================
---- trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.6-cris-eth-driver-netpoll.patch	                        (rev 0)
-+++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.6-cris-eth-driver-netpoll.patch	2009-02-18 14:16:23 UTC (rev 25361)
-@@ -0,0 +1,11 @@
-+--- a/drivers/net/cris/eth_v10.c.org	2009-01-28 09:19:09.000000000 +0100
-++++ b/drivers/net/cris/eth_v10.c	2009-01-28 09:19:16.000000000 +0100
-+@@ -1707,7 +1707,7 @@
-+ static void
-+ e100_netpoll(struct net_device* netdev)
-+ {
-+-	e100rxtx_interrupt(NETWORK_DMA_TX_IRQ_NBR, netdev, NULL);
-++	e100rxtx_interrupt(NETWORK_DMA_TX_IRQ_NBR, netdev);
-+ }
-+ #endif
-+ 
-
-Copied: trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.6-cris-headers.patch (from rev 25353, trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.5-cris-headers.patch)
-===================================================================
---- trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.6-cris-headers.patch	                        (rev 0)
-+++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.6-cris-headers.patch	2009-02-18 14:16:23 UTC (rev 25361)
-@@ -0,0 +1,28 @@
-+diff -urN linux-2.6.28/arch/cris/include/arch-v10/arch/Kbuild linux-2.6.28.my/arch/cris/include/arch-v10/arch/Kbuild
-+--- linux-2.6.28/arch/cris/include/arch-v10/arch/Kbuild	2008-12-25 00:26:37.000000000 +0100
-++++ linux-2.6.28.my/arch/cris/include/arch-v10/arch/Kbuild	2009-01-12 12:59:06.000000000 +0100
-+@@ -1,3 +1,5 @@
-++header-y += elf.h
-++header-y += ptrace.h
-+ header-y += user.h
-+ header-y += svinto.h
-+ header-y += sv_addr_ag.h
-+diff -urN linux-2.6.28/arch/cris/include/asm/Kbuild linux-2.6.28.my/arch/cris/include/asm/Kbuild
-+--- linux-2.6.28/arch/cris/include/asm/Kbuild	2008-12-25 00:26:37.000000000 +0100
-++++ linux-2.6.28.my/arch/cris/include/asm/Kbuild	2009-01-12 13:14:40.000000000 +0100
-+@@ -1,11 +1,13 @@
-+ include include/asm-generic/Kbuild.asm
-+ 
-+-header-y += arch-v10/
-+-header-y += arch-v32/
-++header-y += ../arch-v10/arch/
-++header-y += ../arch-v32/arch/
-+ 
-++header-y += elf.h
-+ header-y += ethernet.h
-+ header-y += rtc.h
-+ header-y += sync_serial.h
-++header-y += user.h
-+ 
-+ unifdef-y += etraxgpio.h
-+ unifdef-y += rs485.h
-
-Copied: trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.6-cris-objcopy-flags.patch (from rev 25353, trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.5-cris-objcopy-flags.patch)
-===================================================================
---- trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.6-cris-objcopy-flags.patch	                        (rev 0)
-+++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.6-cris-objcopy-flags.patch	2009-02-18 14:16:23 UTC (rev 25361)
-@@ -0,0 +1,45 @@
-+--- linux-2.6.28/arch/cris/Makefile	2008-12-25 00:26:37.000000000 +0100
-++++ linux-2.6.28.my/arch/cris/Makefile	2009-01-12 13:21:44.000000000 +0100
-+@@ -40,7 +40,7 @@
-+ 
-+ LD = $(CROSS_COMPILE)ld -mcrislinux
-+ 
-+-OBJCOPYFLAGS := -O binary -R .note -R .comment -S
-++OBJCOPYFLAGS := -O binary -R .note -R .note.gnu.build-id -R .comment
-+ 
-+ CPPFLAGS_vmlinux.lds = -DDRAM_VIRTUAL_BASE=0x$(CONFIG_ETRAX_DRAM_VIRTUAL_BASE)
-+ 
-+diff -urN linux-2.6.28/arch/cris/arch-v10/boot/Makefile linux-2.6.28.my/arch/cris/arch-v10/boot/Makefile
-+--- linux-2.6.28/arch/cris/arch-v10/boot/Makefile	2008-12-25 00:26:37.000000000 +0100
-++++ linux-2.6.28.my/arch/cris/arch-v10/boot/Makefile	2009-01-12 13:28:25.000000000 +0100
-+@@ -2,8 +2,6 @@
-+ # arch/cris/arch-v10/boot/Makefile
-+ #
-+ 
-+-OBJCOPYFLAGS = -O binary --remove-section=.bss
-+-
-+ subdir- := compressed rescue
-+ targets := Image
-+ 
-+diff -urN linux-2.6.28/arch/cris/arch-v10/boot/compressed/Makefile linux-2.6.28.my/arch/cris/arch-v10/boot/compressed/Makefile
-+--- linux-2.6.28/arch/cris/arch-v10/boot/compressed/Makefile	2008-12-25 00:26:37.000000000 +0100
-++++ linux-2.6.28.my/arch/cris/arch-v10/boot/compressed/Makefile	2009-01-12 13:28:33.000000000 +0100
-+@@ -6,7 +6,6 @@
-+ ccflags-y += -O2 $(LINUXINCLUDE)
-+ ldflags-y += -T $(srctree)/$(src)/decompress.lds
-+ OBJECTS = $(obj)/head.o $(obj)/misc.o
-+-OBJCOPYFLAGS = -O binary --remove-section=.bss
-+ 
-+ quiet_cmd_image = BUILD   $@
-+ cmd_image = cat $(obj)/decompress.bin $(obj)/piggy.gz > $@
-+diff -urN linux-2.6.28/arch/cris/arch-v10/boot/rescue/Makefile linux-2.6.28.my/arch/cris/arch-v10/boot/rescue/Makefile
-+--- linux-2.6.28/arch/cris/arch-v10/boot/rescue/Makefile	2008-12-25 00:26:37.000000000 +0100
-++++ linux-2.6.28.my/arch/cris/arch-v10/boot/rescue/Makefile	2009-01-12 13:28:40.000000000 +0100
-+@@ -5,7 +5,6 @@
-+ ccflags-y += -O2 $(LINUXINCLUDE)
-+ asflags-y += $(LINUXINCLUDE)
-+ ldflags-y += -T $(srctree)/$(src)/rescue.lds
-+-OBJCOPYFLAGS = -O binary --remove-section=.bss
-+ obj-$(CONFIG_ETRAX_AXISFLASHMAP) = head.o
-+ OBJECT := $(obj)/head.o
-+ 
+--- trunk/buildroot/package/busybox/busybox-1.13.2-killall.patch	                        (rev 0)
++++ trunk/buildroot/package/busybox/busybox-1.13.2-killall.patch	2009-02-18 14:16:30 UTC (rev 25362)
+@@ -0,0 +1,17 @@
++--- busybox-1.13.2/include/libbb.h	Wed Dec 31 04:06:45 2008
+++++ busybox-1.13.2-killall/include/libbb.h	Sat Feb 14 02:41:18 2009
++@@ -1275,7 +1275,13 @@
++ 	PSSCAN_UTIME    = 1 << 13,
++ 	PSSCAN_TTY      = 1 << 14,
++ 	PSSCAN_SMAPS	= (1 << 15) * ENABLE_FEATURE_TOPMEM,
++-	PSSCAN_ARGVN    = (1 << 16) * (ENABLE_PGREP || ENABLE_PKILL || ENABLE_PIDOF),
+++	/* NB: used by find_pid_by_name(). Any applet using it
+++	 * needs to be mentioned here. */
+++	PSSCAN_ARGVN    = (1 << 16) * (ENABLE_KILLALL
+++				|| ENABLE_PGREP || ENABLE_PKILL
+++				|| ENABLE_PIDOF
+++				|| ENABLE_SESTATUS 
+++				),
++ 	USE_SELINUX(PSSCAN_CONTEXT = 1 << 17,)
++ 	PSSCAN_START_TIME = 1 << 18,
++ 	PSSCAN_CPU      = 1 << 19,
