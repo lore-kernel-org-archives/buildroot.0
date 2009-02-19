@@ -1,43 +1,34 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Thu, 19 Feb 2009 15:45:05 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/multimedia/libvorbis
-Message-ID: <20090219154505.DB5AF766F5@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 19 Feb 2009 15:47:18 +0000 (UTC)
+Subject: [Buildroot] [Bug 107] convert libvorbis to Makefile.autotools.in
+In-Reply-To: <bug-107-163@https.bugs.busybox.net/>
+References: <bug-107-163@https.bugs.busybox.net/>
+Message-ID: <20090219154718.57E9E766F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-02-19 15:45:05 +0000 (Thu, 19 Feb 2009)
-New Revision: 25388
-
-Log:
-libvorbis: select libogg dependency
-
-Library dependencies should be selected, and not use depends on.
-
-Modified:
-   trunk/buildroot/package/multimedia/libvorbis/Config.in
+https://bugs.busybox.net/show_bug.cgi?id=107
 
 
-Changeset:
-Modified: trunk/buildroot/package/multimedia/libvorbis/Config.in
-===================================================================
---- trunk/buildroot/package/multimedia/libvorbis/Config.in	2009-02-19 15:45:00 UTC (rev 25387)
-+++ trunk/buildroot/package/multimedia/libvorbis/Config.in	2009-02-19 15:45:05 UTC (rev 25388)
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_LIBVORBIS
- 	bool "libvorbis"
--	depends on BR2_PACKAGE_LIBOGG
-+	select BR2_PACKAGE_LIBOGG
- 	select BR2_PACKAGE_PKGCONFIG
- 	help
- 	  Library for the Vorbis open source audio decoder
-@@ -20,6 +20,3 @@
- 	depends on BR2_PACKAGE_LIBVORBIS
- 	help
- 	  Use the Tremor fixed point implementation
--
--comment "libvorbis requires the package libogg to build"
--	depends on !BR2_PACKAGE_LIBOGG
+Peter Korsgaard <jacmet@uclibc.org> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |jacmet at uclibc.org
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
+
+
+
+
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-02-19 15:47:17 UTC ---
+Thanks, committed as r25387
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
