@@ -1,52 +1,46 @@
-From: Roeland Van Praet <roelvp@mind.be>
-Date: Thu, 19 Feb 2009 11:57:42 +0100
-Subject: [Buildroot] VLC media player + some libraries
-Message-ID: <1235041062.6377.1.camel@ess-roelvp>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 19 Feb 2009 12:12:49 +0100
+Subject: [Buildroot] BR-2009.01 U-Boot not working on my AT91SAM9261ek
+	Board
+In-Reply-To: <BAY124-DS7756E1F27FE5A88524B2BD2B20@phx.gbl>
+	(quickx@hotmail.com's message of "Wed\,
+	18 Feb 2009 16\:58\:06 -0800")
+References: <BAY124-DS7756E1F27FE5A88524B2BD2B20@phx.gbl>
+Message-ID: <871vtubrym.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "QuickX" == QuickX  <quickx@hotmail.com> writes:
+
 Hi,
 
-I work as an embedded developer and we needed to port the VLC media
-player to buildroot in one of our recent projects.
-Since this project began some months ago, the buildroot version used is
-that of 20081020.
-I noticed that VLC is already ported in the current version, though
-under the multimedia subfolder, but apparantly it's only a framework.
-It has no extra options and from the work I've done I noticed that this
-build would fail.
+ QuickX> I've finally had some time to attempt to update my project to
+ QuickX> BR-2009.02 and noticed some things, so thought I'd share.
+ 
+ QuickX> 1. microperl (default config option) doesn't build on Kubuntu
+ QuickX> 8.10 (Make Errors).
 
-Therefor, I archived my VLC files (with patches), together with 3
-additional libraries I ported: ffmpeg, libdc1394 and libmpeg2.
-These are no patches for the buildroot sourcetree since the VLC files
-moved from package/ to package/multimedia/.
+Details please.
 
-If there is additional information required, please contact me on this
-e-mail.
+ QuickX> 2. php (default config option) doesn't build on Kubuntu 8.10
+ QuickX> (it doesn't try to download but complains it can't find it in
+ QuickX> the dl directory).
 
-With kind regards,
+Details please.
 
+ QuickX> 3. U-Boot (Add architecture specific patch -> Add AT91
+ QuickX> specific patches to u-Boot) causes u-Boot to not work on
+ QuickX> board.
+ 
+ QuickX> Little more info on "3" is if this option is set (default)
+ QuickX> then Hyperterminal sits at the at91bootstrap message forever
+ QuickX> and doesn't load u-boot.  If I turn this option off and then
+ QuickX> issue the following, it works.
 
-Roeland Van Praet
+Sigh, Ulf - This is your mess, please sort it out.
 
-Embedded Software Developer
-Mind - an ESSENSIUM nv division
-Gaston Geenslaan 9 - B 3001 Leuven - Belgium
-web : www.mind.be
-mail: roelvp at mind.be
-tel : +32 16 28 65 34
-fax : +32 16 28 65 01 
-BE 872 984 063 RPR Leuven
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090219/0cd37bb4/attachment-0001.htm>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: vlc.tar.bz2
-Type: application/x-bzip-compressed-tar
-Size: 4790 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090219/0cd37bb4/attachment-0001.bin>
+-- 
+Bye, Peter Korsgaard
