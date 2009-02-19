@@ -1,37 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 18 Feb 2009 15:36:13 +0100
-Subject: [Buildroot] [patch] mplayer: bump to v1.0rc2
-In-Reply-To: <20090218153415.3ebcf83b@hcegtvedt> (Hans-Christian Egtvedt's
-	message of "Wed\, 18 Feb 2009 15\:34\:15 +0100")
-References: <20090205171034.341e8a1c@hcegtvedt>
-	<87tz6ydt41.fsf@macbook.be.48ers.dk>
-	<20090218153415.3ebcf83b@hcegtvedt>
-Message-ID: <87k57nbyn6.fsf@macbook.be.48ers.dk>
+From: QuickX <quickx@hotmail.com>
+Date: Wed, 18 Feb 2009 16:58:06 -0800
+Subject: [Buildroot] BR-2009.01 U-Boot not working on my AT91SAM9261ek Board
+Message-ID: <BAY124-DS7756E1F27FE5A88524B2BD2B20@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Hans-Christian" == Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> writes:
+I've finally had some time to attempt to update my project to BR-2009.02 and noticed some things, so thought I'd share.
 
-Hi,
+1. microperl (default config option) doesn't build on Kubuntu 8.10 (Make Errors).
+2. php (default config option) doesn't build on Kubuntu 8.10 (it doesn't try to download but complains it can't find it in the dl directory).
+3. U-Boot (Add architecture specific patch -> Add AT91 specific patches to u-Boot) causes u-Boot to not work on board.
 
- >> What's the upstream status of that?
- >> 
+Little more info on "3" is if this option is set (default) then Hyperterminal sits at the at91bootstrap message forever and doesn't load u-boot.  If I turn this option off and then issue the following, it works.
 
- Hans-Christian> I just sent a second revision of reviewed patches to
- Hans-Christian> ffmpeg/MPlayer.  Hopefully they will be in in not too
- Hans-Christian> far future. This means the vendor patch can vanish
- Hans-Christian> once and for all.
+$ make menuconfig (turn off u-boot at91 patch)
+$ rm -rf *build_*
+$ make
 
-Great!
 
- Hans-Christian> Agreed, when we can move to a SVN revision or the
- Hans-Christian> future v1.0rc3, then hopefully all these small
- Hans-Christian> patches can be gone.
 
-That would be good.
-
--- 
-Bye, Peter Korsgaard
+The Hyperterminal (in the non-working case, with patch set) looks like this (and sits there forever):
+>AT91Bootstrap-2.10...AT45DB642D detected
+>From:  [0x00008400] To:        [0x23F00000] Size:      [0x00032000]
+.......SUCCESS
+>Start: [0x23F00000] Error Timeout
+Error Timeout
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090218/b9520fe6/attachment.htm>
