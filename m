@@ -1,52 +1,35 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 19 Feb 2009 20:15:27 +0100
-Subject: [Buildroot] Buildroot 2009.02 released
-In-Reply-To: <60A797DC812E4639BC2F3208D69F6547@aeglos> (Ulf Samuelsson's
-	message of "Thu\, 12 Feb 2009 19\:11\:24 +0100")
-References: <87skmkf1s0.fsf@macbook.be.48ers.dk>
-	<49941678.4040902@cetrtapot.si> <87ocx7g731.fsf@macbook.be.48ers.dk>
-	<60A797DC812E4639BC2F3208D69F6547@aeglos>
-Message-ID: <87ljs28chc.fsf@macbook.be.48ers.dk>
+Date: Thu, 19 Feb 2009 20:20:40 +0100
+Subject: [Buildroot] kernel hangs after NET: Registered protocol family
+	16
+In-Reply-To: <A2E63C94AB8EE543B8743CB1AD8F976159036534@NEWPOSISERVER.positronics.local>
+	(Kelvin Chan's message of "Mon\, 16 Feb 2009 19\:06\:25 -0800")
+References: <A2E63C94AB8EE543B8743CB1AD8F976159036534@NEWPOSISERVER.positronics.local>
+Message-ID: <87hc2q8c8n.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
+>>>>> "Kelvin" == Kelvin Chan <kelvinc@positronics.com> writes:
 
-Hi,
+ Kelvin> Hi guys,
 
- >> Ahh, seems like you should have tested the release candidates better
- >> ;)
- >> 
+ Kelvin> I'm using a ALIX 2c3 and my kernel hangs after "NET:
+ Kelvin> Registered protocol family 16" I'm almost sure this is more
+ Kelvin> of a kernel build config issue but not sure where to find
+ Kelvin> answers. The dump looks like kernel is waiting for a
+ Kelvin> subsystem or driver to init but that particular system/driver
+ Kelvin> is not built. Can someone confirm that?
 
- Ulf> As far as I have seen, there has been very little testing activitiy
- Ulf> going on before the release.
+ Kelvin> Freeing SMP alternatives: 0k freed
+ Kelvin> net_namespace: 288 bytes
+ Kelvin> NET: Registered protocol family 16
 
-Some testing was certainly done, but more is ofcourse always welcome.
-
- Ulf> There are several packages that does not build, at least for ARM.
-
-Well, let's work on them then. Please start by providing a list -
-Either here or as bugtracker issues.
-
- Ulf> Several packages build but crash when you start the target.
-
-Again, which ones?
-
- Ulf> Zero documentation on what builds and what does not build.
-
-Everything (in the default versions atleast) is supposed to build,
-what doesn't?
-
- Ulf> Zero documentation on what builds but does not run.
-
-Which ones?
-
- Ulf> Maybe we could put some focus on these points.
-
-Sure, but please be a bit more specific.
+This is normally where device drivers get initialized. Try booting
+with initcall_debug added to the kernel cmdline to see if that gives a
+hint to where it hangs.
 
 -- 
 Bye, Peter Korsgaard
