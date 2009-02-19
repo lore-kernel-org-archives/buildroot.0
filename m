@@ -1,46 +1,59 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Thu, 19 Feb 2009 16:04:20 +0000 (UTC)
-Subject: [Buildroot] svn commit:
-	trunk/buildroot/package/multimedia/alsa-utils
-Message-ID: <20090219160420.D7A1F764B9@busybox.osuosl.org>
+From: =?utf-8?Q?Hinko_Ko=C4=8Devar?= <hinko.kocevar@cetrtapot.si>
+Date: Thu, 19 Feb 2009 18:41:22 +0100 (CET)
+Subject: [Buildroot] Buildroot 2009.02 released
+In-Reply-To: <53818555.3401235065156991.JavaMail.root@zimbra-store.cetrtapot.si>
+Message-ID: <1983108078.3421235065282329.JavaMail.root@zimbra-store.cetrtapot.si>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-02-19 16:04:20 +0000 (Thu, 19 Feb 2009)
-New Revision: 25389
 
-Log:
-alsa-utils: select ncurses library dependency
-
-Modified:
-   trunk/buildroot/package/multimedia/alsa-utils/Config.in
+----- Original Message -----
+From: "Ulf Samuelsson" <ulf.samuelsson@atmel.com>
+To: "Hinko Kocevar" <hinko.kocevar@cetrtapot.si>, "Peter Korsgaard" <jacmet@uclibc.org>
+Cc: buildroot at uclibc.org
+Sent: Thursday, February 12, 2009 7:11:24 PM GMT +01:00 Amsterdam / Berlin / Bern / Rome / Stockholm / Vienna
+Subject: Re: [Buildroot] Buildroot 2009.02 released
 
 
-Changeset:
-Modified: trunk/buildroot/package/multimedia/alsa-utils/Config.in
-===================================================================
---- trunk/buildroot/package/multimedia/alsa-utils/Config.in	2009-02-19 15:45:05 UTC (rev 25388)
-+++ trunk/buildroot/package/multimedia/alsa-utils/Config.in	2009-02-19 16:04:20 UTC (rev 25389)
-@@ -1,17 +1,13 @@
- config BR2_PACKAGE_ALSA_UTILS
- 	bool "alsa-utils"
- 	depends on BR2_PACKAGE_ALSA_LIB
--	depends on BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_NCURSES
- 	help
- 	  This package contains the command line utilities for the ALSA
- 	  project.
- 
- 	  http://www.alsa-project.org/
- 
--comment "alsa-utils needs ncurses"
--	depends on BR2_PACKAGE_ALSA_LIB
--	depends on !BR2_PACKAGE_NCURSES
--
- menu "ALSA utils selection"
- 	depends on BR2_PACKAGE_ALSA_UTILS
- 
+>>>>>> "Hinko" == Hinko Kocevar <hinko.kocevar@cetrtapot.si> writes:
+>
+> Hi,
+>
+> Hinko> Building gdb for cris-v10 architecture fails with:
+>
+> Ahh, seems like you should have tested the release candidates better
+> ;)
+>
+
+As far as I have seen, there has been very little testing activitiy going on 
+before the release.
+There are several packages that does not build, at least for ARM.
+Several packages build but crash when you start the target.
+
+Zero documentation on what builds and what does not build.
+
+Zero documentation on what builds but does not run.
+
+True.
+
+Maybe we could put some focus on these points.
+
+I'll try to steal some time to try out basic packages (for starters) that build & run on cris-v10 arch. That's the only embedded arch I can test.
+
+What about he packages that can not be built for some specific arch, for some reason or another (too few resources CPU, mem, flash, ..)? Should they be marked or noted somehow to inform us about its status on selected arch?
+
+Regards,
+Hinko
+
+
+-- 
+?ETRTA POT, d.o.o., Kranj
+Planina 3
+4000 Kranj
+Slovenia, Europe
+Tel. +386 (0) 4 280 66 03
+E-mail: hinko.kocevar at cetrtapot.si
+Http: www.cetrtapot.si
