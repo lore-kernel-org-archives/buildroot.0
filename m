@@ -1,41 +1,75 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 19 Feb 2009 13:43:06 +0100
-Subject: [Buildroot] RFC: option to Makefile.autotools.in to build in
-	$(PROJECT_BUILD_DIR)
-In-Reply-To: <20090219123430.GD1829@mx.loc> (Bernhard Reutner-Fischer's
-	message of "Thu\, 19 Feb 2009 13\:34\:30 +0100")
-References: <20090217050218.GA20875@cloud.net.au>
-	<87wsbmad7g.fsf@macbook.be.48ers.dk> <20090219113320.GB1829@mx.loc>
-	<87fxiaaain.fsf@macbook.be.48ers.dk> <20090219123430.GD1829@mx.loc>
-Message-ID: <87bpsya97p.fsf@macbook.be.48ers.dk>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Thu, 19 Feb 2009 14:39:30 +0100
+Subject: [Buildroot] BR-2009.01 U-Boot not working on my AT91SAM9261ek
+	Board
+References: <BAY124-DS7756E1F27FE5A88524B2BD2B20@phx.gbl>
+	<871vtubrym.fsf@macbook.be.48ers.dk>
+Message-ID: <8FBA208F64F44F5CB99ACBC50EE5CF84@aeglos>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernhard" == Bernhard Reutner-Fischer <rep.dot.nop@gmail.com> writes:
-
-Hi,
-
- >> The target-specific-variable make feature is indeed usefull, but I
- >> don't quite see how to apply it in this case.
-
- Bernhard> in this case just pickup an eventually given per-package
- Bernhard> objdir instead of always using BUILD_DIR, perhaps something
- Bernhard> like OBJDIR=$(if
- Bernhard> $$($(2)_BUILDDIR),$$($(2)_BUILDDIR),$(BUILD_DIR))
-
- Bernhard> so you can just
- Bernhard> package/foo/foo.mk:FOO_BUILDDIR=$(PROJECT_BUILDDIR)
- Bernhard> (modulo typos)
-
-That's pretty much what I suggested, but it doesn't remove the etra
-complexity to the Makefile.autotools.in rules (there's a generic set
-of rules going $(BUILD_DIR)/%/.stamp_<something>:). The package
-settings for the other things are done with ?= <default>, so adding a
-$(2)_BUILDDIR ?= $(BUILD_DIR) would be enough.
+Sent: Thursday, February 19, 2009 12:12 PM
+Subject: Re: [Buildroot] BR-2009.01 U-Boot not working on my AT91SAM9261ek 
+Board
 
 
--- 
-Bye, Peter Korsgaard
+>>>>>> "QuickX" == QuickX  <quickx@hotmail.com> writes:
+>
+> Hi,
+>
+> QuickX> I've finally had some time to attempt to update my project to
+> QuickX> BR-2009.02 and noticed some things, so thought I'd share.
+>
+> QuickX> 1. microperl (default config option) doesn't build on Kubuntu
+> QuickX> 8.10 (Make Errors).
+>
+> Details please.
+>
+> QuickX> 2. php (default config option) doesn't build on Kubuntu 8.10
+> QuickX> (it doesn't try to download but complains it can't find it in
+> QuickX> the dl directory).
+>
+> Details please.
+>
+> QuickX> 3. U-Boot (Add architecture specific patch -> Add AT91
+> QuickX> specific patches to u-Boot) causes u-Boot to not work on
+> QuickX> board.
+>
+> QuickX> Little more info on "3" is if this option is set (default)
+> QuickX> then Hyperterminal sits at the at91bootstrap message forever
+> QuickX> and doesn't load u-boot.  If I turn this option off and then
+> QuickX> issue the following, it works.
+>
+
+
+U-Boot builds if you build manually:
+make sure that the buildroot toolchain is in your path.
+$make u-boot-unpacked (or similar)
+$ cd $(UBOOT_DIR)
+$ make <board>
+$ make
+
+I have seen this problem as well, that is why I reintroduced the 
+1.2.0-atmel.
+
+> Sigh, Ulf - This is your mess, please sort it out.
+
+When I got time.
+
+>
+> -- 
+> Bye, Peter Korsgaard
+>
+
+
+
+Best Regards
+Ulf Samuelsson                ulf at atmel.com
+Atmel Nordic AB
+Mail:  Box 2033, 174 02 Sundbyberg, Sweden
+Visit:  Kavalleriv?gen 24, 174 58 Sundbyberg, Sweden
+Phone +46 (8) 441 54 22     Fax +46 (8) 441 54 29
+GSM    +46 (706) 22 44 57
