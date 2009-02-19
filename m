@@ -1,43 +1,37 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 19 Feb 2009 16:14:56 +0100
-Subject: [Buildroot] Shell history w/ ASH spans multiple ash instances
-In-Reply-To: <499D717F.9010003@bvwireless.net> (Eric Malkowski's message of
-	"Thu\, 19 Feb 2009 09\:49\:35 -0500")
-References: <499CEA40.1000907@bvwireless.net>
-	<8763j6bvf5.fsf@macbook.be.48ers.dk> <499D717F.9010003@bvwireless.net>
-Message-ID: <877i3ma26n.fsf@macbook.be.48ers.dk>
+Date: Thu, 19 Feb 2009 16:34:03 +0100
+Subject: [Buildroot] Easy Upgrade Path?
+In-Reply-To: <d6cda7730902171256y335886b6xb2924e2e69aa1c44@mail.gmail.com>
+	("Thiago A. =?utf-8?Q?Corr=C3=AAa=22's?= message of "Tue\, 17 Feb 2009
+	17\:56\:19 -0300")
+References: <49907BAE.3020509@ethertek.ca>
+	<d6cda7730902091413h5e7cbd21ra41d7154ca60909e@mail.gmail.com>
+	<49922B53.50608@ethertek.ca>
+	<d6cda7730902171256y335886b6xb2924e2e69aa1c44@mail.gmail.com>
+Message-ID: <873aeaa1as.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Eric" == Eric Malkowski <eric@bvwireless.net> writes:
+>>>>> "Thiago" == Thiago A Corr?a <thiago.correa@gmail.com> writes:
 
 Hi,
 
- Eric> To follow up briefly: In looking at the source in libbb it appears
- Eric> disabling CONFIG_FEATURE_EDITING_SAVEHISTORY will stop libbb from
- Eric> writing to ~/.ash_history
- Eric> Older versions I've used had SAVEHISTORY enabled but didn't
- Eric> dynamically load it from various instances of interactive shells
- Eric> causing thr cross-shell history sharing -- perhaps this is a new
- Eric> "feature".  I don't need the history saved and loaded constantly or on
- Eric> shell exit so I'll try turning that off.
+ Thiago>    svn merge svn://uclibc.org/trunk/buildroot -rupstream.rev:HEAD
 
-Ok.
+ Thiago>    Seams to work much, much better, and you get --dry-run to see will
+ Thiago> be the merge result :)
 
- Eric> Sorry for using the wrong list -- but at least you can see my
- Eric> reasoning for starting w/ the buildroot list.
+ Thiago>    Please, notice again that there might be better methods. I tried to
+ Thiago> locate the script Peter mentioned, but I couldn't get it to be
+ Thiago> installed in my gentoo distro :(
+ Thiago>    But svn merge seams to be doing what the perl script does.
 
-No problem, it's just that (even though there's a certain overlap
-between buildroot and busybox people) the busybox people normally know
-the finer details of their program better than we do.
+You can grab it from subversion svn:
 
- Eric> If anything further is needed w/ this topic, I'll move over to the
- Eric> busybox list.
-
-Thanks.
+http://svn.collab.net/repos/svn/trunk/contrib/client-side/svn_load_dirs/
 
 -- 
 Bye, Peter Korsgaard
