@@ -1,34 +1,46 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 19 Feb 2009 15:47:18 +0000 (UTC)
-Subject: [Buildroot] [Bug 107] convert libvorbis to Makefile.autotools.in
-In-Reply-To: <bug-107-163@https.bugs.busybox.net/>
-References: <bug-107-163@https.bugs.busybox.net/>
-Message-ID: <20090219154718.57E9E766F5@busybox.osuosl.org>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Thu, 19 Feb 2009 16:04:20 +0000 (UTC)
+Subject: [Buildroot] svn commit:
+	trunk/buildroot/package/multimedia/alsa-utils
+Message-ID: <20090219160420.D7A1F764B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=107
+Author: jacmet
+Date: 2009-02-19 16:04:20 +0000 (Thu, 19 Feb 2009)
+New Revision: 25389
+
+Log:
+alsa-utils: select ncurses library dependency
+
+Modified:
+   trunk/buildroot/package/multimedia/alsa-utils/Config.in
 
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |jacmet at uclibc.org
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
-
-
-
-
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-02-19 15:47:17 UTC ---
-Thanks, committed as r25387
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Changeset:
+Modified: trunk/buildroot/package/multimedia/alsa-utils/Config.in
+===================================================================
+--- trunk/buildroot/package/multimedia/alsa-utils/Config.in	2009-02-19 15:45:05 UTC (rev 25388)
++++ trunk/buildroot/package/multimedia/alsa-utils/Config.in	2009-02-19 16:04:20 UTC (rev 25389)
+@@ -1,17 +1,13 @@
+ config BR2_PACKAGE_ALSA_UTILS
+ 	bool "alsa-utils"
+ 	depends on BR2_PACKAGE_ALSA_LIB
+-	depends on BR2_PACKAGE_NCURSES
++	select BR2_PACKAGE_NCURSES
+ 	help
+ 	  This package contains the command line utilities for the ALSA
+ 	  project.
+ 
+ 	  http://www.alsa-project.org/
+ 
+-comment "alsa-utils needs ncurses"
+-	depends on BR2_PACKAGE_ALSA_LIB
+-	depends on !BR2_PACKAGE_NCURSES
+-
+ menu "ALSA utils selection"
+ 	depends on BR2_PACKAGE_ALSA_UTILS
+ 
