@@ -1,69 +1,88 @@
-From: Robert Urban <urban@unix-beratung.de>
-Date: Fri, 20 Feb 2009 02:21:43 +0100
-Subject: [Buildroot] problem building openswan using svn-buildroot
-Message-ID: <499E05A7.2070403@unix-beratung.de>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 20 Feb 2009 09:23:42 +0100
+Subject: [Buildroot] Buildroot 2009.02 released
+In-Reply-To: <02578E7FA1EB4C8380989D73D0C6C40C@aeglos> (Ulf Samuelsson's
+	message of "Thu\, 19 Feb 2009 23\:38\:12 +0100")
+References: <87skmkf1s0.fsf@macbook.be.48ers.dk>
+	<49941678.4040902@cetrtapot.si> <87ocx7g731.fsf@macbook.be.48ers.dk>
+	<60A797DC812E4639BC2F3208D69F6547@aeglos>
+	<87ljs28chc.fsf@macbook.be.48ers.dk>
+	<02578E7FA1EB4C8380989D73D0C6C40C@aeglos>
+Message-ID: <87bpsx8qk1.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Folks,
+>>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 
-I'm getting the following error when trying to build openswan, as part of a
-'make all':
+Hi,
 
-/big/home/urban/Build/Buildroot/svn/buildroot/build_i686/staging_dir/usr/bin/i686-linux-uclibc-gcc
- -I/big/home/urban/Build/Buildroot/svn/buildroot/build_i686/openswan-2.4.9/programs/pluto/linux26
--I/big/home/urban/Build/Buildroot/svn/buildroot/build_i686/openswan-2.4.9/include
--I/big/home/urban/Build/Buildroot/svn/buildroot/build_i686/openswan-2.4.9/lib/libcrypto
--I/big/home/urban/Build/Buildroot/svn/buildroot/build_i686/openswan-2.4.9/linux/include
-   -DPLUTO_SENDS_VENDORID -DUSE_KEYRR   -DKERNEL26_SUPPORT
--DKERNEL26_HAS_KAME_DUPLICATES  -DX509     -DPLUTO -DKLIPS
--DBUILDER=\"urban at noisy\" -DDEBUG -DGCC_LINT -DUSE_AES -DUSE_3DES -DIKE_ALG
--DKERNEL_ALG -DDB_CONTEXT -DAGGRESSIVE -DXAUTH -DMODECFG  -DNAT_TRAVERSAL
--DVIRTUAL_IP  -DI_KNOW_TRANSPORT_MODE_HAS_SECURITY_CONCERN_BUT_I_WANT_IT
- -DSHARED_SECRETS_FILE=\"/etc/ipsec.secrets\"
--DPOLICYGROUPSDIR=\"/etc/ipsec.d/policies\"
--DPERPEERLOGDIR=\"/var/log/pluto/peer\" -g -Wall -W -Wmissing-prototypes
--Wpointer-arith -Wbad-function-cast -Wcast-qual -Wmissing-declarations
--Wwrite-strings -Wstrict-prototypes  -UDEBUG -DNO_DEBUG -ULEAK_DETECTIVE -Os
--pipe -Os
--I/big/home/urban/Build/Buildroot/svn/buildroot/build_i686/staging_dir/usr/include
--I/big/home/urban/Build/Buildroot/svn/buildroot/build_i686/staging_dir/include
---sysroot=/big/home/urban/Build/Buildroot/svn/buildroot/build_i686/staging_dir/
--isysroot
-/big/home/urban/Build/Buildroot/svn/buildroot/build_i686/staging_dir
--mtune=i686 -march=i686 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -isysroot
-/big/home/urban/Build/Buildroot/svn/buildroot/build_i686/staging_dir
--I/big/home/urban/Build/Buildroot/svn/buildroot/project_build_i686/uclibc/root/usr/include
--c connections.c
-In file included from connections.c:48:
-connections.h:199: error: expected specifier-qualifier-list before
-?CIRCLEQ_ENTRY?
-connections.c: In function ?host_pair_enqueue_pending?:
-connections.c:118: error: ?const struct connection? has no member named
-?host_pair?
-connections.c:119: error: ?const struct connection? has no member named
-?host_pair?
-connections.c: In function ?host_pair_first_pending?:
+ >> Some testing was certainly done, but more is ofcourse always welcome.
 
-I pulled the svn copy a few days ago...
+ Ulf> I am not aware that anyone but myself has published any test results.
 
-My config can be found at:
+I did for the toolchains, and for everything else I just fixed the
+problems when I found any.
 
-	http://www.spielwiese.de/rob/Buildroot/config
+ Ulf> There is no recommended way to publish test results.
+ Ulf> No recommended format etc.
 
-and an excerpt of the build logfile (starting just after openswan sources
-are copied) can be found here:
+Sure, like with all other issues - Add an issue to the tracker or mail
+the list, both preferably with a patch.
 
-	http://www.spielwiese.de/rob/Buildroot/openswan.log
+ Ulf> Once it is discovered that there is a problem, there is no clean
+ Ulf> way to inform the user that there is a problem with a certain
+ Ulf> package so each new user will waste a lot of time trying
+ Ulf> to build what is known to be broken.
 
-My build host is x86 Fedora Core 10 box, with all current updates.
+Well, if you mail the list or add an issue, there is.
 
-anyone have any idea what might be wrong?
+ Ulf> Depending on BROKEN is wrong if it builds for other architectures,
 
-thanks,
+Yes, it should be depends on BROKEN if BR2_<arch> ofcourse.
 
-Rob Urban
+ Ulf> There are several packages that does not build, at least for ARM.
+ >> 
+ >> Well, let's work on them then. Please start by providing a list -
+ >> Either here or as bugtracker issues.
+ >> 
+
+ Ulf> My docs/buildall.sh has comments on what is broken for ARM.
+
+And as I commented several times, your setup is not representative for
+normal buildroot users as several packages that didn't build with your
+script builds just fine in a normal buildroot setup.
+
+ Ulf> I think that running this for different architectures will show if
+ Ulf> they build or not.
+
+ Ulf> As for running different applications, I hear that gtk does not run,
+ Ulf> but I dont extensively test applications.
+
+I used it ~1 month ago on ARM without problems. If you find problems,
+then please report them to the list / tracker.
+
+ Ulf> Maybe we could put some focus on these points.
+ >> 
+ >> Sure, but please be a bit more specific.
+
+ Ulf> I think it is amateurish  to just go about trying to fix issues.
+ Ulf> We need to establish the structure for how we test,
+ Ulf> how we publish what we test and how we mark
+ Ulf> packages with problem so that users do not waste their time.
+
+Heh, I would certainly prefer to spend our energy on actually fixing
+stuff than arguing about how to show what's broken. Everything broken
+is a bug, and bugs should get fixed.
+
+Again, please use the bug tracker.
+
+I'm not against doing more structured build tests, and will look into
+getting buildbot running again with some sensible defconfigs soonish,
+but that shouldn't stop you or anyone else from reporting (and fixing)
+bugs.
+
+-- 
+Bye, Peter Korsgaard
