@@ -1,34 +1,39 @@
-From: maarten van es <maarten.h.van.es@gmail.com>
-Date: Sat, 21 Feb 2009 11:36:36 +0000
-Subject: [Buildroot] kexec fails to build
-Message-ID: <bca65b460902210336u54c72447o50e052109db59c37@mail.gmail.com>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Sat, 21 Feb 2009 13:04:03 +0000 (UTC)
+Subject: [Buildroot] svn commit:
+	trunk/buildroot/package/multimedia/libsndfile
+Message-ID: <20090221130404.4E2B076564@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Author: jacmet
+Date: 2009-02-21 13:04:02 +0000 (Sat, 21 Feb 2009)
+New Revision: 25407
 
-I've been playing around a while now with buildroot and I like it.  I
-run into an issue now however with kexec. It fails to build:
+Log:
+libsndfile: cleanup help text
 
-kexec/arch/i386/kexec-multiboot-x86.c:50:22: error: asm/page.h: No
-such file or directory
-...
-make[1]: Leaving directory
-`/home/Maarten/buildroot/build_i686/kexec-tools-1.101'
+Modified:
+   trunk/buildroot/package/multimedia/libsndfile/Config.in
 
-page.h only exists in various subdirectories of
-project_build_i686/uclibc/linux-2.6.28.4 or
-toolchain_build_i686/linux-2.6.28.4/ at this stage.
 
-My environment:
-buildroot-20090211
-host: OpenSuse 11.0 x86-64
-target: i686-linux-uclibc
-
-Any ideas on how to solve this?
-
-Regards
-Maarten
+Changeset:
+Modified: trunk/buildroot/package/multimedia/libsndfile/Config.in
+===================================================================
+--- trunk/buildroot/package/multimedia/libsndfile/Config.in	2009-02-21 09:06:48 UTC (rev 25406)
++++ trunk/buildroot/package/multimedia/libsndfile/Config.in	2009-02-21 13:04:02 UTC (rev 25407)
+@@ -1,7 +1,8 @@
+ config BR2_PACKAGE_LIBSNDFILE
+ 	bool "libsndfile"
+ 	help
+-	    Libsndfile is a C library for reading and writing files containing
+-	    sampled sound (such as MS Windows WAV and the Apple/SGI AIFF format)
+-	    through one standard library interface.
++	  Libsndfile is a C library for reading and writing files containing
++	  sampled sound (such as MS Windows WAV and the Apple/SGI AIFF format)
++	  through one standard library interface.
+ 
++	  http://www.mega-nerd.com/libsndfile/
