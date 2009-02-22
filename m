@@ -1,25 +1,31 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 21 Feb 2009 20:32:33 +0100
-Subject: [Buildroot] kexec fails to build
-In-Reply-To: <bca65b460902210336u54c72447o50e052109db59c37@mail.gmail.com>
-	(maarten van es's message of "Sat\, 21 Feb 2009 11\:36\:36 +0000")
-References: <bca65b460902210336u54c72447o50e052109db59c37@mail.gmail.com>
-Message-ID: <87k57j7fhq.fsf@macbook.be.48ers.dk>
+Date: Sun, 22 Feb 2009 07:48:45 +0100
+Subject: [Buildroot] buildroot questions
+In-Reply-To: <20090221101200.93c469aa1a7909be7482dcef974e4045.c842ca055e.wbe@email.secureserver.net>
+	(gsam@ixltc.com's message of "Sat\, 21 Feb 2009 10\:12\:00 -0700")
+References: <20090221101200.93c469aa1a7909be7482dcef974e4045.c842ca055e.wbe@email.secureserver.net>
+Message-ID: <87fxi76k6q.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "maarten" == maarten van es <maarten.h.van.es@gmail.com> writes:
+>>>>> "gsam" == gsam  <gsam@ixltc.com> writes:
 
- maarten> Hello,
+ gsam> Any help would be most appreciated...
 
- maarten> I've been playing around a while now with buildroot and I
- maarten> like it.  I run into an issue now however with kexec. It
- maarten> fails to build:
+ gsam> 1. Is there a log file output of the make when building from buildroot?
 
-Fixed in r25409 by changing to kexec 2.0.0.
+Not automatically, but just run
+
+make 2>&1 | tee buildroot.log
+
+to generate a buildroot.log of the output of make.
+
+ gsam> 2. Is there anyway to verify the buildroot installation after make completes?
+
+What do you exactly mean? Some way of booting the rootfs?
 
 -- 
 Bye, Peter Korsgaard
