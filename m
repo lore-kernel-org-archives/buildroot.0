@@ -1,29 +1,37 @@
-From: Will Wagner <will_wagner@carallon.com>
-Date: Mon, 23 Feb 2009 11:14:08 +0000
+From: Daniel Mack <daniel@caiaq.de>
+Date: Mon, 23 Feb 2009 13:09:50 +0100
 Subject: [Buildroot] broken alsa-lib
-In-Reply-To: <87prh92yrs.fsf@macbook.be.48ers.dk>
-References: <20090222224350.GG5893@buzzloop.caiaq.de>	<49A268F5.5030300@carallon.com>
-	<87y6vx33tx.fsf@macbook.be.48ers.dk>	<20090223094515.GB15722@buzzloop.caiaq.de>
-	<87prh92yrs.fsf@macbook.be.48ers.dk>
-Message-ID: <49A28500.50608@carallon.com>
+In-Reply-To: <877i3h4k5z.fsf@macbook.be.48ers.dk>
+References: <20090222224350.GG5893@buzzloop.caiaq.de>
+	<87myce3vvb.fsf@macbook.be.48ers.dk>
+	<20090222232955.GA10011@buzzloop.caiaq.de>
+	<877i3h4k5z.fsf@macbook.be.48ers.dk>
+Message-ID: <20090223120950.GB16934@buzzloop.caiaq.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->  Daniel> We'd need to find out if the avr-inline patch is still needed
->  Daniel> for 1.0.19 or if that's been fixed upstream now. Apart from
->  Daniel> that, I rebased the fix-ott_t-patch.
+On Mon, Feb 23, 2009 at 09:44:24AM +0100, Peter Korsgaard wrote:
+>  Daniel> Yes, true, forgot to mention that. We locally patched to use
+>  Daniel> 1.0.19 but that was merely because I hoped to fix the problem
+>  Daniel> by that - the same problem exists with 1.0.18. And I got this
+>  Daniel> problem since a long time and always patched my way around it
+>  Daniel> (by overriding the value with some hard-coded constant) as I
+>  Daniel> thought it is a minor issue that will be fixed sooner or
+>  Daniel> later. But as it turns out, the problem seems to be bigger
+>  Daniel> and might also have other impact than just that single
+>  Daniel> failing function call.
 > 
-> That was afaik committed upstream - Didn't it make it for 1.0.19?
-> 
+> Please report those kind of problems to us so we have a chance to fix
+> them. This is the first I hear of it.
 
-I don't believe it made it for 1.0.19. I also submitted a couple of others things that 
-waiting on 1.0.20
--- 
-------------------------------------------------------------------------
-Will Wagner                                     will_wagner at carallon.com
-Development Manager                      Office Tel: +44 (0)20 7371 2032
-Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
-------------------------------------------------------------------------
+I'm playing ping-pong between the two lists now, and over there they
+pointed out that this was indeed reported quite a while ago:
+
+	http://lists.busybox.net/pipermail/buildroot/2008-July/009884.html
+
+Anyway, let's make sure to apply this patch asap :)
+
+Daniel
