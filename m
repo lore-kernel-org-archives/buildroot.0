@@ -1,28 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 23 Feb 2009 10:10:41 +0100
-Subject: [Buildroot] Toolchain error
-In-Reply-To: <1E3D081C7B502B4A988F643E604CF9634721AD@INDEXCH.corp.proxim.com>
-	(Rajeev Bansal's message of "Sat\, 21 Feb 2009 22\:44\:29 -0800")
-References: <1E3D081C7B502B4A988F643E604CF9634721AD@INDEXCH.corp.proxim.com>
-Message-ID: <873ae54iy6.fsf@macbook.be.48ers.dk>
+From: Will Wagner <will_wagner@carallon.com>
+Date: Mon, 23 Feb 2009 09:14:29 +0000
+Subject: [Buildroot] broken alsa-lib
+In-Reply-To: <20090222224350.GG5893@buzzloop.caiaq.de>
+References: <20090222224350.GG5893@buzzloop.caiaq.de>
+Message-ID: <49A268F5.5030300@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Rajeev" == Rajeev Bansal <rbansal@proxim.com> writes:
+Daniel Mack wrote:
+> Hi,
+> 
+> as pointed out in two threads on the alsa-dev ML, there seems to be
+> general problem with ALSA libraries built by buildroot:
+> 
+> 	http://mailman.alsa-project.org/pipermail/alsa-devel/2009-February/014999.html
+> 	http://mailman.alsa-project.org/pipermail/alsa-devel/2009-February/015005.html
+> 
+> Any hints, anyone?
 
- Rajeev> Hi All,
+Not sure if this is the same as a problem I was seeing with alsa-lib. It was a while ago 
+so not entirely sure. However I found my problem was to do with the complicated alsa 
+versioning API meaning that the wrong version of the function was called. I fixed it by 
+adding --with-versioned="no" to the alsa-lib configure (I also moved to 1.0.19 as that had 
+a number of bug fixes for other things I needed).
 
- Rajeev> This is my first experience with the Buildroot, I have used
- Rajeev> the latest stable version "buildroot-2009.02.tar.bz2 to build
- Rajeev> the MIPS cross-toolchain. During building of toolchain I got
- Rajeev> the following error
+Hope that helps,
 
-You selected Native POSIX Threading (NPTL) for pthread instead of the
-default linuxthreads old. NPTL isn't available for mips yet, so change
-it back and the build will work.
+Will
 
 -- 
-Bye, Peter Korsgaard
+------------------------------------------------------------------------
+Will Wagner                                     will_wagner at carallon.com
+Development Manager                      Office Tel: +44 (0)20 7371 2032
+Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
+------------------------------------------------------------------------
