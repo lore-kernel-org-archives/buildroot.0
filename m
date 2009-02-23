@@ -1,37 +1,29 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 23 Feb 2009 12:14:15 +0100
-Subject: [Buildroot] problem building openswan using svn-buildroot
-In-Reply-To: <20090223102825.GB31413@cbg.dyndns.org> (Steffen Schulz's message
-	of "Mon\, 23 Feb 2009 11\:28\:25 +0100")
-References: <499E05A7.2070403@unix-beratung.de>
-	<87bpsv6ik4.fsf@macbook.be.48ers.dk>
-	<49A17E91.7060104@unix-beratung.de>
-	<87y6vy5okv.fsf@macbook.be.48ers.dk>
-	<20090223102825.GB31413@cbg.dyndns.org>
-Message-ID: <87hc2l2yns.fsf@macbook.be.48ers.dk>
+From: Will Wagner <will_wagner@carallon.com>
+Date: Mon, 23 Feb 2009 11:14:08 +0000
+Subject: [Buildroot] broken alsa-lib
+In-Reply-To: <87prh92yrs.fsf@macbook.be.48ers.dk>
+References: <20090222224350.GG5893@buzzloop.caiaq.de>	<49A268F5.5030300@carallon.com>
+	<87y6vx33tx.fsf@macbook.be.48ers.dk>	<20090223094515.GB15722@buzzloop.caiaq.de>
+	<87prh92yrs.fsf@macbook.be.48ers.dk>
+Message-ID: <49A28500.50608@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Steffen" == Steffen Schulz <pepe_ml@gmx.net> writes:
+>  Daniel> We'd need to find out if the avr-inline patch is still needed
+>  Daniel> for 1.0.19 or if that's been fixed upstream now. Apart from
+>  Daniel> that, I rebased the fix-ott_t-patch.
+> 
+> That was afaik committed upstream - Didn't it make it for 1.0.19?
+> 
 
-Hi,
-
- Robert> thanks for your reply.  I was beginning to get the impression
- Robert> that nobody cares about openswan :) Is there a better
- Robert> alternative?
- >> 
- >> Sorry, I don't know - Anyone else?
-
- Steffen> strongSwan is, to my knowledge, the only free IKEv1/IKEv2 server
- Steffen> that is in active development and ready for productive use.
-
- Steffen> It's far from small though.
-
-Ok, anyone wants to step up and support openswan/strongswan? Otherwise
-I think our users are better off if we remove the package.
-
+I don't believe it made it for 1.0.19. I also submitted a couple of others things that 
+waiting on 1.0.20
 -- 
-Bye, Peter Korsgaard
+------------------------------------------------------------------------
+Will Wagner                                     will_wagner at carallon.com
+Development Manager                      Office Tel: +44 (0)20 7371 2032
+Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
+------------------------------------------------------------------------
