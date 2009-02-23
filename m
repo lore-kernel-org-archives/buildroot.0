@@ -1,27 +1,32 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 23 Feb 2009 12:10:45 +0100
+Date: Mon, 23 Feb 2009 12:11:51 +0100
 Subject: [Buildroot] broken alsa-lib
-In-Reply-To: <49A2701D.7090507@carallon.com> (Will Wagner's message of "Mon\,
-	23 Feb 2009 09\:45\:01 +0000")
+In-Reply-To: <20090223094515.GB15722@buzzloop.caiaq.de> (Daniel Mack's message
+	of "Mon\, 23 Feb 2009 10\:45\:15 +0100")
 References: <20090222224350.GG5893@buzzloop.caiaq.de>
 	<49A268F5.5030300@carallon.com> <87y6vx33tx.fsf@macbook.be.48ers.dk>
-	<49A2701D.7090507@carallon.com>
-Message-ID: <87r61p2ytm.fsf@macbook.be.48ers.dk>
+	<20090223094515.GB15722@buzzloop.caiaq.de>
+Message-ID: <87prh92yrs.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Will" == Will Wagner <will_wagner@carallon.com> writes:
+>>>>> "Daniel" == Daniel Mack <daniel@caiaq.de> writes:
 
- >> 
- >> Care to send a patch for both?
- >> 
+Hi,
 
- Will> I will, might take me a while to get it into shape as we have made a number of changes.
+ Daniel> We'd need to find out if the avr-inline patch is still needed
+ Daniel> for 1.0.19 or if that's been fixed upstream now. Apart from
+ Daniel> that, I rebased the fix-ott_t-patch.
 
-Ok, thanks.
+That was afaik committed upstream - Didn't it make it for 1.0.19?
+
+ Daniel> Can anyone with a AVR32 environment try to build and use
+ Daniel> 1.0.19 without that patch?
+
+Yes please.
 
 -- 
 Bye, Peter Korsgaard
