@@ -1,42 +1,52 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Mon, 23 Feb 2009 09:29:10 +0100
-Subject: [Buildroot] uClibc-0.9.30-avr32-2.1.5.tar.bz2 is missing
-References: <d6cda7730902041111h26b28bc7l4ab8f2fff3ef9e1c@mail.gmail.com><F5677F2913BF4E44A9D6D3B4D74FB21C@aeglos><d6cda7730902041425g5aab0fc3q44c25f2af088ae35@mail.gmail.com><2CBF71990FD040DA91787A2E5CDEE141@aeglos>
-	<87bpsu5imd.fsf@macbook.be.48ers.dk>
-Message-ID: <005701c99590$dc72f380$a13118ac@Glamdring>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 23 Feb 2009 09:44:24 +0100
+Subject: [Buildroot] broken alsa-lib
+In-Reply-To: <20090222232955.GA10011@buzzloop.caiaq.de> (Daniel Mack's message
+	of "Mon\, 23 Feb 2009 00\:29\:55 +0100")
+References: <20090222224350.GG5893@buzzloop.caiaq.de>
+	<87myce3vvb.fsf@macbook.be.48ers.dk>
+	<20090222232955.GA10011@buzzloop.caiaq.de>
+Message-ID: <877i3h4k5z.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------ Original Message ----- 
-From: "Peter Korsgaard" <jacmet@uclibc.org>
-To: "Ulf Samuelsson" <ulf.samuelsson@atmel.com>
-Cc: "Thiago A. Corr?a" <thiago.correa@gmail.com>; <buildroot@uclibc.org>
-Sent: Sunday, February 22, 2009 9:20 PM
-Subject: Re: [Buildroot] uClibc-0.9.30-avr32-2.1.5.tar.bz2 is missing
+>>>>> "Daniel" == Daniel Mack <daniel@caiaq.de> writes:
 
+Hi,
 
->>>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
->
-> >> On Wed, Feb 4, 2009 at 7:23 PM, Ulf Samuelsson
->
-> Ulf> Hopefully, www.at91.com should be up and running sometime
-> Ulf> tomorrow.  Think they will put some priorit on this as soon as
-> Ulf> the problem is noticed.
->
-> Still seems to be down?
->
+ >> Alsa-lib had an issue with !LARGEFILE support that we fixed recently
+ >> and pushed upstream, but other than that I don't remember any
+ >> bugreports.
 
+ Daniel> Hmm, what I see is certainly not a LARGEFILE issue.
 
-I has been up and running, but I guess there is a new problem.
+Probably not, just mentioning the only bugs we've found in alsa lib
+recently.
 
-Best Regards
-Ulf Samuelsson
+ >> You mentioned something about 1.0.19, but buildroot is still using
+ >> 1.0.18, are you using some local changes?
 
+ Daniel> Yes, true, forgot to mention that. We locally patched to use
+ Daniel> 1.0.19 but that was merely because I hoped to fix the problem
+ Daniel> by that - the same problem exists with 1.0.18. And I got this
+ Daniel> problem since a long time and always patched my way around it
+ Daniel> (by overriding the value with some hard-coded constant) as I
+ Daniel> thought it is a minor issue that will be fixed sooner or
+ Daniel> later. But as it turns out, the problem seems to be bigger
+ Daniel> and might also have other impact than just that single
+ Daniel> failing function call.
 
+Please report those kind of problems to us so we have a chance to fix
+them. This is the first I hear of it.
 
-> -- 
-> Bye, Peter Korsgaard
-> 
+ Daniel> I'll build alsa-lib and alsa-utils with OE tomorrow and see
+ Daniel> whether that makes any difference.
+
+Great, Please send us the config.log from OE and BR if it works under
+OE.
+
+-- 
+Bye, Peter Korsgaard
