@@ -1,43 +1,39 @@
-From: Daniel Mack <daniel@caiaq.de>
-Date: Mon, 23 Feb 2009 13:46:07 +0100
-Subject: [Buildroot] broken alsa-lib
-In-Reply-To: <87d4d92v88.fsf@macbook.be.48ers.dk>
-References: <20090222224350.GG5893@buzzloop.caiaq.de>
-	<87myce3vvb.fsf@macbook.be.48ers.dk>
-	<20090222232955.GA10011@buzzloop.caiaq.de>
-	<877i3h4k5z.fsf@macbook.be.48ers.dk>
-	<20090223120950.GB16934@buzzloop.caiaq.de>
-	<87d4d92v88.fsf@macbook.be.48ers.dk>
-Message-ID: <20090223124607.GC16934@buzzloop.caiaq.de>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Mon, 23 Feb 2009 13:01:28 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/multimedia/alsa-lib
+Message-ID: <20090223130128.6034776564@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Feb 23, 2009 at 01:28:23PM +0100, Peter Korsgaard wrote:
->  Daniel> I'm playing ping-pong between the two lists now, and over
->  Daniel> there they pointed out that this was indeed reported quite a
->  Daniel> while ago:
-> 
->  Daniel> http://lists.busybox.net/pipermail/buildroot/2008-July/009884.html
-> 
-> Ahh, nothing happened to that mail as the submitter never replied to
-> Daniel Laird's mail.
-> 
->  Daniel> Anyway, let's make sure to apply this patch asap :)
-> 
-> So what exactly needs to get committed? The --with-versioned=no is
-> easy, but should the:
+Author: jacmet
+Date: 2009-02-23 13:01:26 +0000 (Mon, 23 Feb 2009)
+New Revision: 25427
 
-This one is certainly needed.
+Log:
+alsa-lib: don't use versioned symbols
 
-> ifeq ($(BR2_arm),y)
-> ALSA_LIB_CFLAGS+=-mabi=aapcs-linux
-> endif
-> 
-> Be in an EABI conditional?
+As reported by Dirk Vermaak and Daniel Mack. Fixes runtime issues with
+alsa-lib, see
+http://mailman.alsa-project.org/pipermail/alsa-devel/2009-February/014999.html
+for details.
 
-I'm not aware of any ABI problem with that, so I can't say.
+Modified:
+   trunk/buildroot/package/multimedia/alsa-lib/alsa-lib.mk
 
-Daniel
+
+Changeset:
+Modified: trunk/buildroot/package/multimedia/alsa-lib/alsa-lib.mk
+===================================================================
+--- trunk/buildroot/package/multimedia/alsa-lib/alsa-lib.mk	2009-02-23 11:18:30 UTC (rev 25426)
++++ trunk/buildroot/package/multimedia/alsa-lib/alsa-lib.mk	2009-02-23 13:01:26 UTC (rev 25427)
+@@ -57,6 +57,7 @@
+ 		--enable-shared \
+ 		--enable-static \
+ 		--disable-docs \
++		--without-versioned \
+ 		$(ALSA_LIB_CONFIGURE_OPTS) \
+ 		$(SOFT_FLOAT) \
+ 		$(DISABLE_NLS) \
