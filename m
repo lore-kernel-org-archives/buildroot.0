@@ -1,32 +1,38 @@
-From: Daniel Mack <daniel@caiaq.de>
-Date: Mon, 23 Feb 2009 10:42:26 +0100
-Subject: [Buildroot] broken alsa-lib
-In-Reply-To: <49A268F5.5030300@carallon.com>
-References: <20090222224350.GG5893@buzzloop.caiaq.de>
-	<49A268F5.5030300@carallon.com>
-Message-ID: <20090223094226.GA15722@buzzloop.caiaq.de>
+From: Rajeev Bansal <rbansal@proxim.com>
+Date: Mon, 23 Feb 2009 15:12:40 +0530
+Subject: [Buildroot] Toolchain error
+In-Reply-To: <873ae54iy6.fsf@macbook.be.48ers.dk>
+References: <1E3D081C7B502B4A988F643E604CF9634721AD@INDEXCH.corp.proxim.com>
+	<873ae54iy6.fsf@macbook.be.48ers.dk>
+Message-ID: <1235382160.2951.52.camel@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Feb 23, 2009 at 09:14:29AM +0000, Will Wagner wrote:
->> as pointed out in two threads on the alsa-dev ML, there seems to be
->> general problem with ALSA libraries built by buildroot:
->>
->> 	http://mailman.alsa-project.org/pipermail/alsa-devel/2009-February/014999.html
->> 	http://mailman.alsa-project.org/pipermail/alsa-devel/2009-February/015005.html
->>
->> Any hints, anyone?
->
-> Not sure if this is the same as a problem I was seeing with alsa-lib. It 
-> was a while ago so not entirely sure. However I found my problem was to 
-> do with the complicated alsa versioning API meaning that the wrong 
-> version of the function was called. I fixed it by adding 
-> --with-versioned="no" to the alsa-lib configure (I also moved to 1.0.19 
-> as that had a number of bug fixes for other things I needed).
+Hello Peter, 
 
-Aha, that fixed it for me, too. Thanks :)
+Thanks for your response. I think MIPS has the support for NPTL, I am
+building the toolchain explicitly for NPTL support only. Kindly see this
+link
 
-Daniel
+http://www.linux-mips.org/wiki/NPTL
+
+Thanks
+Rajeev Bansal.
+
+On Mon, 2009-02-23 at 10:10 +0100, Peter Korsgaard wrote:
+> >>>>> "Rajeev" == Rajeev Bansal <rbansal@proxim.com> writes:
+> 
+>  Rajeev> Hi All,
+> 
+>  Rajeev> This is my first experience with the Buildroot, I have used
+>  Rajeev> the latest stable version "buildroot-2009.02.tar.bz2 to build
+>  Rajeev> the MIPS cross-toolchain. During building of toolchain I got
+>  Rajeev> the following error
+> 
+> You selected Native POSIX Threading (NPTL) for pthread instead of the
+> default linuxthreads old. NPTL isn't available for mips yet, so change
+> it back and the build will work.
+> 
