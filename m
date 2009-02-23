@@ -1,38 +1,35 @@
-From: Rajeev Bansal <rbansal@proxim.com>
-Date: Mon, 23 Feb 2009 15:12:40 +0530
-Subject: [Buildroot] Toolchain error
-In-Reply-To: <873ae54iy6.fsf@macbook.be.48ers.dk>
-References: <1E3D081C7B502B4A988F643E604CF9634721AD@INDEXCH.corp.proxim.com>
-	<873ae54iy6.fsf@macbook.be.48ers.dk>
-Message-ID: <1235382160.2951.52.camel@localhost.localdomain>
+From: Daniel Mack <daniel@caiaq.de>
+Date: Mon, 23 Feb 2009 10:45:15 +0100
+Subject: [Buildroot] broken alsa-lib
+In-Reply-To: <87y6vx33tx.fsf@macbook.be.48ers.dk>
+References: <20090222224350.GG5893@buzzloop.caiaq.de>
+	<49A268F5.5030300@carallon.com>
+	<87y6vx33tx.fsf@macbook.be.48ers.dk>
+Message-ID: <20090223094515.GB15722@buzzloop.caiaq.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter, 
-
-Thanks for your response. I think MIPS has the support for NPTL, I am
-building the toolchain explicitly for NPTL support only. Kindly see this
-link
-
-http://www.linux-mips.org/wiki/NPTL
-
-Thanks
-Rajeev Bansal.
-
-On Mon, 2009-02-23 at 10:10 +0100, Peter Korsgaard wrote:
-> >>>>> "Rajeev" == Rajeev Bansal <rbansal@proxim.com> writes:
+On Mon, Feb 23, 2009 at 10:22:34AM +0100, Peter Korsgaard wrote:
+>  Will> Not sure if this is the same as a problem I was seeing with
+>  Will> alsa-lib. It was a while ago so not entirely sure. However I found my
+>  Will> problem was to do with the complicated alsa versioning API meaning
+>  Will> that the wrong version of the function was called. I fixed it by
+>  Will> adding --with-versioned="no" to the alsa-lib configure (I also moved
+>  Will> to 1.0.19 as that had a number of bug fixes for other things I
+>  Will> needed).
 > 
->  Rajeev> Hi All,
+>  Will> Hope that helps,
 > 
->  Rajeev> This is my first experience with the Buildroot, I have used
->  Rajeev> the latest stable version "buildroot-2009.02.tar.bz2 to build
->  Rajeev> the MIPS cross-toolchain. During building of toolchain I got
->  Rajeev> the following error
-> 
-> You selected Native POSIX Threading (NPTL) for pthread instead of the
-> default linuxthreads old. NPTL isn't available for mips yet, so change
-> it back and the build will work.
-> 
+> Care to send a patch for both?
+
+We'd need to find out if the avr-inline patch is still needed for 1.0.19
+or if that's been fixed upstream now. Apart from that, I rebased the
+fix-ott_t-patch.
+
+Can anyone with a AVR32 environment try to build and use 1.0.19 without
+that patch?
+
+Daniel
