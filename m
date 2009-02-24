@@ -1,28 +1,33 @@
-From: jeff angielski <jeff@theptrgroup.com>
-Date: Tue, 24 Feb 2009 09:04:03 -0500
-Subject: [Buildroot] Integrating buildroot with source control tools
-Message-ID: <1235484243.27200.11.camel@penguin>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 24 Feb 2009 15:10:23 +0100
+Subject: [Buildroot] glibc philosophy
+In-Reply-To: <1235484053.27200.7.camel@penguin> (jeff angielski's message of
+	"Tue\, 24 Feb 2009 09\:00\:53 -0500")
+References: <1235484053.27200.7.camel@penguin>
+Message-ID: <871vto0vu8.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "jeff" == jeff angielski <jeff@theptrgroup.com> writes:
 
-How are people integrating their buildroot environments with their
-source control tools?
+Hi,
 
-Are you downloading all of the source (make source) and then putting the
-entire dl tree under software configuration managemet (SCM)?
+ jeff> Is there a plan to support building glibc from scratch in buildroot,
+ jeff> just like uclibc is currently supported?  
 
-Are you creating a local server to house the packages and download from
-that server?  Of course putting those packages under SCM on that server?
+It's afaik not on the radar of any of the BR developers.
 
-Or perhaps are you overriding the download commands and perhaps changing
-it to git pull or svn checkout?
+ jeff> Or is the official stance to only allow buildroot to build against
+ jeff> pre-compiled glibc toolchains?
 
+That depends. If someone submits clean enough patches to do it, and
+people are willing to support it, then I don't see any problem with
+doing it.
+
+But I'm not personally interested in it, so I won't be working on it.
 
 -- 
-Jeff Angielski
-The PTR Group
-www.theptrgroup.com
+Bye, Peter Korsgaard
