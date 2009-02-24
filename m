@@ -1,8 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue, 24 Feb 2009 13:29:51 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/x11r7: mesa3d
-	xserver_xorg-server
-Message-ID: <20090224132951.E32707669C@busybox.osuosl.org>
+Date: Tue, 24 Feb 2009 13:29:56 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/x11r7/mesa3d
+Message-ID: <20090224132956.513057669C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,43 +9,31 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2009-02-24 13:29:50 +0000 (Tue, 24 Feb 2009)
-New Revision: 25440
+Date: 2009-02-24 13:29:55 +0000 (Tue, 24 Feb 2009)
+New Revision: 25441
 
 Log:
-xserver-xorg: select mesa3d in kconfig
-
-xserver-xorg depends on mesa3d, so select it in kconfig as well.
+mesa3d: use MAKE1 instead of playing around with BR2_JLEVEL
 
 Modified:
-   trunk/buildroot/package/x11r7/mesa3d/Config.in
-   trunk/buildroot/package/x11r7/xserver_xorg-server/Config.in
+   trunk/buildroot/package/x11r7/mesa3d/mesa3d.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/x11r7/mesa3d/Config.in
+Modified: trunk/buildroot/package/x11r7/mesa3d/mesa3d.mk
 ===================================================================
---- trunk/buildroot/package/x11r7/mesa3d/Config.in	2009-02-24 11:13:56 UTC (rev 25439)
-+++ trunk/buildroot/package/x11r7/mesa3d/Config.in	2009-02-24 13:29:50 UTC (rev 25440)
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_MESA3D
- 	bool "Mesa 3D Graphics Library"
- 	select BR2_PACKAGE_XPROTO_GLPROTO
--	select BR2_PACKAGE_XSERVER_XORG_SERVER
-+	depends on BR2_PACKAGE_XSERVER_XORG_SERVER
- 	help
- 	  Mesa 3D, an open-source implementation of the OpenGL specification.
+--- trunk/buildroot/package/x11r7/mesa3d/mesa3d.mk	2009-02-24 13:29:50 UTC (rev 25440)
++++ trunk/buildroot/package/x11r7/mesa3d/mesa3d.mk	2009-02-24 13:29:55 UTC (rev 25441)
+@@ -36,11 +36,10 @@
+ 	) >> $(MESA_CONFIG_FILE)
+ 	touch $@
  
-
-Modified: trunk/buildroot/package/x11r7/xserver_xorg-server/Config.in
-===================================================================
---- trunk/buildroot/package/x11r7/xserver_xorg-server/Config.in	2009-02-24 11:13:56 UTC (rev 25439)
-+++ trunk/buildroot/package/x11r7/xserver_xorg-server/Config.in	2009-02-24 13:29:50 UTC (rev 25440)
-@@ -52,6 +52,7 @@
- 	select BR2_PACKAGE_XPROTO_XPROTO
- 	select BR2_PACKAGE_PIXMAN
- 	select BR2_PACKAGE_XLIB_LIBXSCRNSAVER
-+	select BR2_PACKAGE_MESA3D if BR2_PACKAGE_XSERVER_xorg
- 	help
- 	  xorg-server 1.4
- 	  No description available
+-$(MESA3D_DIR)/.built: BR2_JLEVEL=1
+ $(MESA3D_DIR)/.built: $(MESA3D_DIR)/.configured
+ 	gccinc=$$($(TARGET_CC) -print-search-dirs | grep '^install:' | sed 's@^install: @@')include; \
+ 	rm -f $(MESA3D_DIR)/config/current
+-	env $(MESA_BUILD_ENV) $(MAKE) \
++	env $(MESA_BUILD_ENV) $(MAKE1) \
+ 		MKDEP="makedepend -I$$gccinc" \
+ 		CC=$(TARGET_CC) CXX=$(TARGET_CXX) CC_FOR_BUILD=/usr/bin/gcc \
+ 		-C $(MESA3D_DIR) $(MESA_TARGET)
