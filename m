@@ -1,29 +1,43 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 25 Feb 2009 11:18:20 +0100
-Subject: [Buildroot] native toolchain compilation problem
-In-Reply-To: <20090225191212.c5a31f46.william@brodie-tyrrell.org> (William
-	Brodie-Tyrrell's message of "Wed\, 25 Feb 2009 19\:12\:12 +0900")
-References: <20090225174424.09d0badc.william@brodie-tyrrell.org>
-	<87iqmyoogi.fsf@macbook.be.48ers.dk>
-	<20090225191212.c5a31f46.william@brodie-tyrrell.org>
-Message-ID: <8763iyom4z.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Wed, 25 Feb 2009 14:26:07 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot: target/linux
+	toolchain/kernel-headers to etc...
+Message-ID: <20090225142608.1E1C57669C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "William" == William Brodie-Tyrrell <william@brodie-tyrrell.org> writes:
+Author: jacmet
+Date: 2009-02-25 14:26:03 +0000 (Wed, 25 Feb 2009)
+New Revision: 25451
 
-Hi,
+Log:
+kernel-headers: remove 2.6.20-22 variants and outdated impi/lzma patches
 
- >> Hmm, 23434 is half a year old, and we have had various toolchain fixes
- >> since then. Could you try with svn head?
+Removed:
+   trunk/buildroot/toolchain/kernel-headers/empty/.empty
+   trunk/buildroot/toolchain/kernel-headers/ipmi/linux-2.6.20.4-ipmisensors-20070314-1214.patch
+   trunk/buildroot/toolchain/kernel-headers/ipmi/linux-2.6.21.5-007-ipmisensors-20070314-1214.patch
+   trunk/buildroot/toolchain/kernel-headers/ipmi/linux-2.6.22.1-007-ipmisensors-20070314-1214.patch
+   trunk/buildroot/toolchain/kernel-headers/ipmi/linux-2.6.22.9-007-ipmisensors-20070314-1214.patch
+   trunk/buildroot/toolchain/kernel-headers/lzma/linux-2.6.21.5-001-lzma-vmlinuz.00.patch
+   trunk/buildroot/toolchain/kernel-headers/lzma/linux-2.6.21.5-002-lzma-vmlinuz.01.patch
+   trunk/buildroot/toolchain/kernel-headers/lzma/linux-2.6.22.1-001-lzma-vmlinuz.00.patch
+   trunk/buildroot/toolchain/kernel-headers/lzma/linux-2.6.22.1-002-lzma-vmlinuz.01.patch
+   trunk/buildroot/toolchain/kernel-headers/lzma/linux-2.6.22.1-003-lzma-vmlinuz.patch
 
- William> OK, I'll give it a go.  Will it be sufficient to copy over my .config
- William> and run make oldconfig or something like that?
+Modified:
+   trunk/buildroot/target/linux/Makefile.in
+   trunk/buildroot/target/linux/Makefile.in.advanced
+   trunk/buildroot/toolchain/kernel-headers/Config.in
+   trunk/buildroot/toolchain/kernel-headers/kernel-headers-new.makefile
 
-Yes, that should be fine (depending on what that atmel patch does).
 
--- 
-Bye, Peter Korsgaard
+Changeset:
+
+Sorry, the patch is too large to include (61865 lines).
+Please use ViewCVS to see it!
+
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=25451
