@@ -1,14 +1,25 @@
-From: Xavian-Anderson Macpherson <Shingoshi@comcast.net>
-Date: Wed, 25 Feb 2009 01:06:10 -0800
-Subject: [Buildroot] [Fwd: Re:  I apologize for asking...]
-In-Reply-To: <49A3D452.4030606@comcast.net>
-References: <49A3D452.4030606@comcast.net>
-Message-ID: <49A50A02.2070105@comcast.net>
+From: Hinko Kocevar <hinko.kocevar@cetrtapot.si>
+Date: Wed, 25 Feb 2009 10:10:44 +0100
+Subject: [Buildroot] dmalloc
+Message-ID: <49A50B14.10203@cetrtapot.si>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090225/832f8b59/attachment.htm>
+Hi,
+
+http://dmalloc.com/releases is not a valid dmalloc location.
+
+
+Best regards,
+Hinko
+
+-- 
+Hinko Ko?evar, OSS developer
+?ETRTA POT, d.o.o.
+Planina 3, 4000 Kranj, SI EU
+tel     ++386 (0) 4 280 66 03
+e-mail  hinko.kocevar at cetrtapot.si
+http    www.cetrtapot.si
