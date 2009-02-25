@@ -1,36 +1,30 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 25 Feb 2009 11:11:21 +0100
-Subject: [Buildroot] Cris strace-4.5.18 patch
-In-Reply-To: <49A516ED.9050603@cetrtapot.si> (Hinko Kocevar's message of "Wed\,
-	25 Feb 2009 11\:01\:17 +0100")
-References: <49A50682.2050903@cetrtapot.si> <20090225100001.3e6bffd7@hcegtvedt>
-	<20090225100317.4e26431f@hcegtvedt> <49A516ED.9050603@cetrtapot.si>
-Message-ID: <87ab8aomgm.fsf@macbook.be.48ers.dk>
+From: William Brodie-Tyrrell <william@brodie-tyrrell.org>
+Date: Wed, 25 Feb 2009 19:12:12 +0900
+Subject: [Buildroot] native toolchain compilation problem
+In-Reply-To: <87iqmyoogi.fsf@macbook.be.48ers.dk>
+References: <20090225174424.09d0badc.william@brodie-tyrrell.org>
+	<87iqmyoogi.fsf@macbook.be.48ers.dk>
+Message-ID: <20090225191212.c5a31f46.william@brodie-tyrrell.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Hinko" == Hinko Kocevar <hinko.kocevar@cetrtapot.si> writes:
+On Wed, 25 Feb 2009 10:28:13 +0100
+Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-Hi,
+> Hmm, 23434 is half a year old, and we have had various toolchain fixes
+> since then. Could you try with svn head?
 
- >> Woha, look at me, I'm on the strace-devel list as well and though this
- >> was mailed there. You should email the patch there, so that it will be
- >> included in mainline.
+OK, I'll give it a go.  Will it be sufficient to copy over my .config
+and run make oldconfig or something like that?
 
- Hinko> I'll do that and re-base the patch against CVS tree.
-
-Thanks.
-
- >> For Buildroot you should make a patch changing what needs to be
- >> done in SVN and adding your patch properly.
-
- Hinko> Right, I don't have SVN commit permissions, so I'll resend the
- Hinko> patch here. Is that OK?
-
-Yes, that's fine.
 
 -- 
-Bye, Peter Korsgaard
+William Brodie-Tyrrell
+
+Carpe Diem - fish of the day.
+
+<william@brodie-tyrrell.org>
+http://www.brodie-tyrrell.org/
