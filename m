@@ -1,42 +1,83 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Wed, 25 Feb 2009 14:28:50 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/target:
-	device/Atmel/arch-avr32/kernel-headers-2 etc...
-Message-ID: <20090225142850.F20E17669C@busybox.osuosl.org>
+From: Eric Malkowski <eric@bvwireless.net>
+Date: Wed, 25 Feb 2009 09:38:41 -0500
+Subject: [Buildroot] [Fwd: Re:  I apologize for asking...]
+In-Reply-To: <49A50A02.2070105@comcast.net>
+References: <49A3D452.4030606@comcast.net> <49A50A02.2070105@comcast.net>
+Message-ID: <49A557F1.30401@bvwireless.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-02-25 14:28:49 +0000 (Wed, 25 Feb 2009)
-New Revision: 25454
+I created your problem and fixed it using the method described earlier.  
+A transcript follows...
+Are you using bash for your shell?
 
-Log:
-avr32: rename 2.6.28.x kernel patches to match current kernel headers version
+emalkowski at eric-lnx:/local/emalkowski/buildroot$ export CFLAGS=blah
+emalkowski at eric-lnx:/local/emalkowski/buildroot$ make
 
-Added:
-   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-headers-2.6.28.2/linux-2.6.28.7-100-avr32.patch
-   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-headers-2.6.28.2/linux-2.6.28.7-201-avr32-atmel_mpopfb-disable-debug.patch
-   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-headers-2.6.28.2/linux-2.6.28.7-202-avr32-atmel_mpopfb-add-signal-to-disable-line-caching.patch
-   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-headers-2.6.28.2/linux-2.6.28.7-203-avr32-fix-arch-header-byteorder.patch
-   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-headers-2.6.28.2/linux-2.6.28.7-204-avr32-ap700x-fix-det_pin-for-nand-flash.patch
-
-Removed:
-   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-headers-2.6.28.2/linux-2.6.28.2-100-avr32.patch
-   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-headers-2.6.28.2/linux-2.6.28.2-201-avr32-atmel_mpopfb-disable-debug.patch
-   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-headers-2.6.28.2/linux-2.6.28.2-202-avr32-atmel_mpopfb-add-signal-to-disable-line-caching.patch
-   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-headers-2.6.28.2/linux-2.6.28.2-203-avr32-fix-arch-header-byteorder.patch
-   trunk/buildroot/target/device/Atmel/arch-avr32/kernel-headers-2.6.28.2/linux-2.6.28.2-204-avr32-ap700x-fix-det_pin-for-nand-flash.patch
-
-Modified:
-   trunk/buildroot/target/linux/Config.in.versions
+Checking build system dependencies:
+BUILDROOT_DL_DIR clean:                         Ok
+CC clean:                                       Ok
+CXX clean:                                      Ok
+CPP clean:                                      Ok
+CFLAGS clean:                                   FALSE
 
 
-Changeset:
+You must run 'unset CFLAGS' so buildroot can run with
+a clean environment on your build machine
 
-Sorry, the patch is too large to include (33974 lines).
-Please use ViewCVS to see it!
+make: *** [dependencies] Error 1
+emalkowski at eric-lnx:/local/emalkowski/buildroot$ env | grep CFLAGS
+CFLAGS=blah
+emalkowski at eric-lnx:/local/emalkowski/buildroot$ unset CFLAGS
+emalkowski at eric-lnx:/local/emalkowski/buildroot$ env | grep CFL
+emalkowski at eric-lnx:/local/emalkowski/buildroot$ make
 
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=25454
+Checking build system dependencies:
+BUILDROOT_DL_DIR clean:                         Ok
+CC clean:                                       Ok
+CXX clean:                                      Ok
+CPP clean:                                      Ok
+CFLAGS clean:                                   Ok
+INCLUDES clean:                                 Ok
+CXXFLAGS clean:                                 Ok
+which installed:                                Ok
+sed works:                                      Ok (/bin/sed)
+GNU make version '3.81':                        Ok
+C compiler '/usr/bin/gcc'
+C compiler version '4.1.1':                     Ok
+C++ compiler '/usr/bin/g++'
+C++ compiler version '4.1.1':                   Ok
+awk installed:                                  Ok
+bash installed:                                 Ok
+bison installed:                                Ok
+flex installed:                                 Ok
+gettext installed:                              Ok
+makeinfo installed:                             Ok
+Build system dependencies:                      Ok
+
+rm -rf 
+/local/emalkowski/buildroot/project_build_i586/vehicle_manager/buildro
+ot-config
+mkdir -p /local/emalkowski/buildroot/project_build_i586/vehicle_manager
+cp -dpRf package/config/buildroot-config 
+/local/emalkowski/buildroot/project_
+build_i586/vehicle_manager/buildroot-config
+
+<< snip >>
+
+Xavian-Anderson Macpherson wrote:
+> Would some one please just make a utility to "unset CFLAGS", so that I 
+> can get this to work. Maybe provide a setting from within buildroot 
+> itself to set this properly. Nothing I do can get this to work.
+>
+> Xavian-Anderson Macpherson
+> Shingoshi
+> ------------------------------------------------------------------------
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
