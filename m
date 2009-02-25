@@ -1,104 +1,144 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 25 Feb 2009 17:22:27 +0000 (UTC)
-Subject: [Buildroot] [Bug 127] New: python_fuse_clean fails when
- python_clean called beforehand
-Message-ID: <bug-127-163@https.bugs.busybox.net/>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Wed, 25 Feb 2009 19:51:41 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/php
+Message-ID: <20090225195142.3A26E7669C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=127
+Author: jacmet
+Date: 2009-02-25 19:51:41 +0000 (Wed, 25 Feb 2009)
+New Revision: 25455
 
-           Summary: python_fuse_clean fails when python_clean called
-                    beforehand
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Keywords: patch
-          Severity: minor
-          Priority: P3
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: yann_baud at yahoo.fr
-                CC: buildroot at uclibc.org
-   Estimated Hours: 1.0
+Log:
+php: Config.ext is in a BR2_PACKAGE_PHP conditional, so get rid of depends
+
+Hunks missing from r25406.
+
+Modified:
+   trunk/buildroot/package/php/Config.ext
 
 
-- Buildroot packages python_fuse and python are selected in menuconfig.
-- Buildroot builds successfully.
-- from buildroot dir: make python-clean
-- from buildroot dir: make python-fuse-clean
-
-This command fails with:
-
-baud at galway:~/sandbox/WatsonEFM/WatsonEFMPlugin/trunk/src/base/buildroot$ make
-python-fuse-clean
-cd
-/home/baud/sandbox/WatsonEFM/WatsonEFMPlugin/trunk/src/base/buildroot/build_arm/python-fuse-2.5;
-\
-       
-/home/baud/sandbox/WatsonEFM/WatsonEFMPlugin/trunk/src/base/buildroot/build_arm/Python-2.4.5/hostpython
-setup.py clean
-Could not find platform independent libraries <prefix>
-Could not find platform dependent libraries <exec_prefix>
-Consider setting $PYTHONHOME to <prefix>[:<exec_prefix>]
-'import site' failed; use -v for traceback
-Traceback (most recent call last):
-  File "setup.py", line 7, in ?
-    from distutils.core import setup, Extension
-ImportError: No module named distutils.core
-make: *** [python-fuse-clean] Error 1
-
-REMARK: from buildroot dir: "make clean" fails for the same reason:
-python_clean called before python_fuse_clean.
-
-PROPOSED FIX: when python_fuse package configured, make python_clean dependent
-on python_fuse_clean.
-
-Patched python package makefile:
-================================
-baud at galway:~/sandbox/WatsonEFM/WatsonEFMPlugin/trunk/src/base/buildroot/package/python$
-svn diff
-Index: python.mk
+Changeset:
+Modified: trunk/buildroot/package/php/Config.ext
 ===================================================================
---- python.mk   (revision 11664)
-+++ python.mk   (working copy)
-@@ -12,6 +12,7 @@
- PYTHON_BINARY:=python
- PYTHON_TARGET_BINARY:=usr/bin/python
- PYTHON_DEPS:=
-+PYTHON_CLEAN_DEPS:=
-
-PYTHON_SITE_PACKAGE_DIR=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_SHORT)/site-packages
-
- BR2_PYTHON_DISABLED_MODULES=dbm zipfile
-@@ -56,6 +57,10 @@
- PYTHON_DEPS += openssl
- endif
-
-+ifeq ($(BR2_PYTHON_FUSE),y)
-+PYTHON_CLEAN_DEPS += python-fuse-clean
-+endif
-+
- ifneq ($(BR2_PACKAGE_PYTHON_NIS),y)
- BR2_PYTHON_DISABLED_MODULES += nis
- endif
-@@ -168,7 +173,7 @@
-
- python: uclibc $(PYTHON_DEPS) $(TARGET_DIR)/$(PYTHON_TARGET_BINARY)
-
--python-clean:
-+python-clean: $(PYTHON_CLEAN_DEPS)
-        -$(MAKE) -C $(PYTHON_DIR) distclean
-        rm -f $(PYTHON_DIR)/.configured $(TARGET_DIR)/$(PYTHON_TARGET_BINARY)
-        -rm -rf $(TARGET_DIR)/usr/lib/python* $(TARGET_DIR)/usr/include/python*
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+--- trunk/buildroot/package/php/Config.ext	2009-02-25 14:28:49 UTC (rev 25454)
++++ trunk/buildroot/package/php/Config.ext	2009-02-25 19:51:41 UTC (rev 25455)
+@@ -51,73 +51,65 @@
+ 
+ config BR2_PACKAGE_PHP_EXT_EXIF
+ 	bool "EXIF"
+-	depends on BR2_PACKAGE_PHP
+ 	help
+ 	  EXIF support
+ 
+ config BR2_PACKAGE_PHP_EXT_FTP
+ 	bool "FTP"
+-	depends on BR2_PACKAGE_PHP
+ 	help
+ 	  FTP Support
+ 
+ config BR2_PACKAGE_PHP_EXT_GETTEXT
+ 	bool "gettext"
+-	depends on BR2_PACKAGE_PHP && BR2_PACKAGE_GETTEXT
++	depends on BR2_PACKAGE_GETTEXT
+ 	help
+ 	  gettext support
+ 
+ config BR2_PACKAGE_PHP_EXT_GMP
+ 	bool "gmp"
+-	depends on BR2_PACKAGE_PHP && BR2_PACKAGE_LIBGMP
++	depends on BR2_PACKAGE_LIBGMP
+ 	help
+ 	  GMP support
+ 
+ config BR2_PACKAGE_PHP_EXT_JSON
+ 	bool "JSON"
+-	depends on BR2_PACKAGE_PHP
+ 	help
+ 	  JSON support
+ 
+ config BR2_PACKAGE_PHP_EXT_READLINE
+ 	bool "readline"
+-	depends on BR2_PACKAGE_PHP && (BR2_PACKAGE_PHP_CLI || BR2_PACKAGE_PHP_CGI) && BR2_PACKAGE_READLINE
++	depends on (BR2_PACKAGE_PHP_CLI || BR2_PACKAGE_PHP_CGI) && BR2_PACKAGE_READLINE
+ 	help
+ 	  readline support
+ 
+ config BR2_PACKAGE_PHP_EXT_NCURSES
+ 	bool "ncurses"
+-	depends on BR2_PACKAGE_PHP && (BR2_PACKAGE_PHP_CLI || BR2_PACKAGE_PHP_CGI) && BR2_PACKAGE_NCURSES
++	depends on (BR2_PACKAGE_PHP_CLI || BR2_PACKAGE_PHP_CGI) && BR2_PACKAGE_NCURSES
+ 	help
+ 	  ncurses support
+ 
+ config BR2_PACKAGE_PHP_EXT_SYSVMSG
+ 	bool "sysvmsg - System V Message queue"
+-	depends on BR2_PACKAGE_PHP
+ 	help
+ 	  System V Message queue support
+ 
+ config BR2_PACKAGE_PHP_EXT_SYSVSEM
+ 	bool "sysvsem - System V Semaphores"
+-	depends on BR2_PACKAGE_PHP
+ 	help
+ 	  System V Sempahore support
+ 
+ config BR2_PACKAGE_PHP_EXT_SYSVSHM
+ 	bool "sysvshm - System V Shared memory"
+-	depends on BR2_PACKAGE_PHP
+ 	help
+ 	  System V Shared memory support
+ 
+ config BR2_PACKAGE_PHP_EXT_ZIP
+ 	bool "zip"
+-	depends on BR2_PACKAGE_PHP
+ 	help
+ 	  Zip Support
+ 
+ config BR2_PACKAGE_PHP_EXT_FILTER
+ 	bool "filter"
+-	depends on BR2_PACKAGE_PHP
+ 	help
+ 	  Input filter support
+ 
+@@ -125,34 +117,32 @@
+ 
+ config BR2_PACKAGE_PHP_EXT_SQLITE
+ 	bool "sqlite"
+-	depends on BR2_PACKAGE_PHP
+ 	default y
+ 	help
+ 	  SQLite
+ 
+ config BR2_PACKAGE_PHP_EXT_SQLITE_UTF8
+ 	bool "sqlite UTF8 support"
+-	depends on BR2_PACKAGE_PHP && BR2_PACKAGE_PHP_EXT_SQLITE
++	depends on BR2_PACKAGE_PHP_EXT_SQLITE
+ 	help
+ 	  UTF8 Support for sqlite
+ 
+ config BR2_PACKAGE_PHP_EXT_PDO
+ 	bool "PDO"
+-	depends on BR2_PACKAGE_PHP
+ 	default y
+ 	help
+ 	  PDO support
+ 
+ config BR2_PACKAGE_PHP_EXT_PDO_SQLITE
+ 	bool "PDO_SQLite"
+-	depends on BR2_PACKAGE_PHP && BR2_PACKAGE_PHP_EXT_PDO
++	depends on BR2_PACKAGE_PHP_EXT_PDO
+ 	default y
+ 	help
+ 	  SQLite support for PDO
+ 
+ config BR2_PACKAGE_PHP_EXT_PDO_MYSQL
+ 	bool "PDO_MySQL"
+-	depends on BR2_PACKAGE_PHP && BR2_PACKAGE_PHP_EXT_PDO
++	depends on BR2_PACKAGE_PHP_EXT_PDO
+ 	select BR2_PACKAGE_MYSQL_CLIENT
+ 	help
+ 	  MySQL support for PDO
