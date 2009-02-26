@@ -1,25 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 26 Feb 2009 09:05:58 +0100
-Subject: [Buildroot] [PATCH] gst-plugins-good: remove dependencies for
-	matroska plugin
-In-Reply-To: <200902260225.11224.markus.heidelberg@web.de> (Markus
-	Heidelberg's message of "Thu\, 26 Feb 2009 02\:25\:11 +0100")
-References: <200902260225.11224.markus.heidelberg@web.de>
-Message-ID: <87ljrtmxll.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 26 Feb 2009 12:22:05 +0100
+Subject: [Buildroot] Qtopia4 build issue
+Message-ID: <20090226122205.390e848a@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Markus" == Markus Heidelberg <markus.heidelberg@web.de> writes:
-
 Hi,
 
- Markus> This was forgotten when adding config options for zlib and bzip2. The
- Markus> matroska plugin doesn't need these dependencies, they are optional.
+With latest SVN, Qtopia4 doesn't build on i386. The problem is that
+'qmake' is being built with the target compiler instead of the host
+compiler, while qmake is supposed to be executed on the host.
 
-Thanks, committed as r25458.
+Buildroot's qtopia4.mk Makefile patches the Qmake configuration file to
+set the correct path to the compiler.
 
+But Qt's ./configure script looks inside the Qmake configuration to
+know which compiler to use to compile Qmake itself, unless the CC and
+CXX variables are overriden.
+
+So I'm not sure what the correct fix for this issue is (maybe setting
+CC and CXX ?), but there's clearly an issue here.
+
+Anyone having the same problem ?
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
