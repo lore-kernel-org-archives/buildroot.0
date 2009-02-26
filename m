@@ -1,34 +1,32 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 25 Feb 2009 19:52:23 +0000 (UTC)
-Subject: [Buildroot] [Bug 99] new package: flac
-In-Reply-To: <bug-99-163@https.bugs.busybox.net/>
-References: <bug-99-163@https.bugs.busybox.net/>
-Message-ID: <20090225195223.991687669C@busybox.osuosl.org>
+From: Markus Heidelberg <markus.heidelberg@web.de>
+Date: Thu, 26 Feb 2009 02:05:56 +0100
+Subject: [Buildroot] [PATCH] gst-plugins-good: add missing FLAC dependency
+In-Reply-To: <20090225195146.D3F0F7669C@busybox.osuosl.org>
+References: <20090225195146.D3F0F7669C@busybox.osuosl.org>
+Message-ID: <200902260205.56349.markus.heidelberg@web.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=99
 
+Signed-off-by: Markus Heidelberg <markus.heidelberg@web.de>
+---
+ .../gst-plugins-good/gst-plugins-good.mk           |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|ASSIGNED                    |RESOLVED
-         Resolution|                            |FIXED
-
-
-
-
---- Comment #6 from Peter Korsgaard <jacmet@uclibc.org>  2009-02-25 19:52:22 UTC ---
-Thanks, applied libflac and gstreamer patches. I've updated libsndfile so it
-builds with libflac instead of your workaround.
-
-
+diff --git a/package/multimedia/gst-plugins-good/gst-plugins-good.mk b/package/multimedia/gst-plugins-good/gst-plugins-good.mk
+index abeb3ba..99fea7b 100644
+--- a/package/multimedia/gst-plugins-good/gst-plugins-good.mk
++++ b/package/multimedia/gst-plugins-good/gst-plugins-good.mk
+@@ -275,6 +275,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_FLAC),y)
+ GST_PLUGINS_GOOD_CONF_OPT += --enable-flac
++GST_PLUGINS_GOOD_DEPENDENCIES += flac
+ else
+ GST_PLUGINS_GOOD_CONF_OPT += --disable-flac
+ endif
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.6.2.rc1.34.g8925
