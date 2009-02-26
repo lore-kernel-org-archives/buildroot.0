@@ -1,31 +1,50 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 26 Feb 2009 16:37:52 +0000 (UTC)
-Subject: [Buildroot] [Bug 81] New package wpa_supplicant
-In-Reply-To: <bug-81-163@https.bugs.busybox.net/>
-References: <bug-81-163@https.bugs.busybox.net/>
-Message-ID: <20090226163752.4EE237656F@busybox.osuosl.org>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Thu, 26 Feb 2009 20:57:30 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package: avahi dnsmasq
+Message-ID: <20090226205730.A54E97669C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=81
+Author: jacmet
+Date: 2009-02-26 20:57:29 +0000 (Thu, 26 Feb 2009)
+New Revision: 25467
+
+Log:
+avahi/dnsmasq: adjust dbus dep after Makefile.autotools.in conversion
+
+Modified:
+   trunk/buildroot/package/avahi/avahi.mk
+   trunk/buildroot/package/dnsmasq/dnsmasq.mk
 
 
+Changeset:
+Modified: trunk/buildroot/package/avahi/avahi.mk
+===================================================================
+--- trunk/buildroot/package/avahi/avahi.mk	2009-02-26 12:49:14 UTC (rev 25466)
++++ trunk/buildroot/package/avahi/avahi.mk	2009-02-26 20:57:29 UTC (rev 25467)
+@@ -37,7 +37,7 @@
+ 
+ ifeq ($(BR2_PACKAGE_DBUS),y)
+ AVAHI_DISABLE_DBUS:=
+-AVAHI_EXTRA_DEPS+=$(STAGING_DIR)/usr/bin/dbus-daemon
++AVAHI_EXTRA_DEPS+=dbus
+ else
+ AVAHI_DISABLE_DBUS:=--disable-dbus
+ endif
 
-
-
---- Comment #3 from Gustavo Zacarias <gustavo@zacarias.com.ar>  2009-02-26 16:37:51 UTC ---
-Created an attachment (id=75)
- --> (https://bugs.busybox.net/attachment.cgi?id=75)
-New wpa_supplicant package take 3
-
-Take 3: honour CFLAGS and use version 0.6.8 (new stable upstream) instead of
-0.5.11 (old stable).
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Modified: trunk/buildroot/package/dnsmasq/dnsmasq.mk
+===================================================================
+--- trunk/buildroot/package/dnsmasq/dnsmasq.mk	2009-02-26 12:49:14 UTC (rev 25466)
++++ trunk/buildroot/package/dnsmasq/dnsmasq.mk	2009-02-26 20:57:29 UTC (rev 25467)
+@@ -26,7 +26,7 @@
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_DBUS),y)
+-DNSMASQ_DBUS:=$(TARGET_DIR)/usr/bin/dbus-daemon
++DNSMASQ_DBUS:=dbus
+ else
+ DNSMASQ_DBUS:=
+ endif
