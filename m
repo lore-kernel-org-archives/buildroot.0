@@ -1,25 +1,36 @@
-From: Markus Heidelberg <markus.heidelberg@web.de>
-Date: Fri, 27 Feb 2009 00:02:45 +0100
-Subject: [Buildroot] [PATCH] gst-plugins-good: add missing FLAC
-	dependency
-In-Reply-To: <87prh5mxmb.fsf@macbook.be.48ers.dk>
-References: <20090225195146.D3F0F7669C@busybox.osuosl.org>
-	<200902260205.56349.markus.heidelberg@web.de>
-	<87prh5mxmb.fsf@macbook.be.48ers.dk>
-Message-ID: <200902270002.46968.markus.heidelberg@web.de>
+From: Maxim Grigoriev <maxim@tensilica.com>
+Date: Thu, 26 Feb 2009 19:20:05 -0800
+Subject: [Buildroot] Add $(CONFIG_UPDATE) for a few packages
+Message-ID: <49A75BE5.3020701@hq.tensilica.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard, 26.02.2009:
-> >>>>> "Markus" == Markus Heidelberg <markus.heidelberg@web.de> writes:
-> 
-> Working late, eh? ;)
+Hello All,
 
-It's a doom loop. Staying up long, getting up and going to work late.
-And each weekend I'm sure it will change the next week, but that's not
-always true :)
+Can somebody review this update, please ?
 
-Markus
+If you decide it's reasonable can you please, go ahead
+and apply the attached patch ?
+
+I don't have write-access to the BUILDROOT repository.
+So I cannot check it in even after approval.
+
+The suggested comment would be :
+
+"Add $(CONFIG_UPDATE) calls in all subdirectories that need it for a few packages."
+
+Thanks,
+-- Maxim
+
+
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: package_configs.patch
+Type: text/x-patch
+Size: 8262 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090226/cd416c84/attachment-0001.bin>
