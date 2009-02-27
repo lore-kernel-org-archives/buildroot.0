@@ -1,43 +1,52 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 27 Feb 2009 10:15:27 +0100
-Subject: [Buildroot] gcc compilation issues on AT91SAM9G20
-In-Reply-To: <20090226151511.da1c9b65.william@brodie-tyrrell.org> (William
-	Brodie-Tyrrell's message of "Thu\, 26 Feb 2009 15\:15\:11 +0900")
-References: <20090225174424.09d0badc.william@brodie-tyrrell.org>
-	<87iqmyoogi.fsf@macbook.be.48ers.dk>
-	<20090225191212.c5a31f46.william@brodie-tyrrell.org>
-	<8763iyom4z.fsf@macbook.be.48ers.dk>
-	<20090226151511.da1c9b65.william@brodie-tyrrell.org>
-Message-ID: <87hc2gmea8.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 27 Feb 2009 09:24:08 +0000 (UTC)
+Subject: [Buildroot] [Bug 133] New: Modify ncurses5-config to get correct
+	include path
+Message-ID: <bug-133-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "William" == William Brodie-Tyrrell <william@brodie-tyrrell.org> writes:
+https://bugs.busybox.net/show_bug.cgi?id=133
 
-Hi,
+              Host: PC SuSe 11.1
+            Target: ARM
+           Summary: Modify ncurses5-config to get correct include path
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: henry.margies at gmx.de
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
- William> OK, so I'm trying to build the latest (downloaded SVN HEAD
- William> version last night) version of buildroot because v23434 (as
- William> indicated on linux4sam.org) doesn't want to build a native
- William> toolchain.
 
- William> The problem I'm having now is two-fold.  Firstly, the
- William> following line appears in my .config when I run make
- William> menuconfig: BR2_GCC_TARGET_ABI="aapcs-linux"
+Created an attachment (id=77)
+ --> (https://bugs.busybox.net/attachment.cgi?id=77)
+Patch for ncurses
 
-Are you trying an EABI or OABI build? The aapcs-linux stuff is for
-EABI.
+Some tools (e.g. alsamixer) are using ncurses5-config --cflags --libs to get
+the include and library path needed for ncurses. With ncurses6 installed on
+your host system, ncurses5-config --cflags returns -I/usr/include/ncurses which
+will break your build.
 
- William> thanks...
+This patch will modify the prefix setting to point to the staging dir.
 
-We don't have a defconfig for that specific board in BR, but I just
-tried the at91sam9g20dfc defconfig where I added "native toolchain in
-the target filesystem", and that builds without problems.
+Let me know what you think.
 
-Could you post your .config?
+Best regards,
+
+Henry
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
