@@ -1,49 +1,53 @@
-From: Maxim Grigoriev <maxim@tensilica.com>
-Date: Fri, 27 Feb 2009 10:44:22 -0800
-Subject: [Buildroot] Add $(CONFIG_UPDATE) for a few packages
-In-Reply-To: <20090227090702.GD30901@mx.loc>
-References: <49A75BE5.3020701@hq.tensilica.com> <20090227090702.GD30901@mx.loc>
-Message-ID: <49A83486.8030500@hq.tensilica.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 27 Feb 2009 22:30:49 +0100
+Subject: [Buildroot] I want to know how the buildroot works inside when
+ build and install a new package
+In-Reply-To: <2ae8403e0902261945w682609fbwa4758e1bcf01f742@mail.gmail.com>
+References: <2ae8403e0902261945w682609fbwa4758e1bcf01f742@mail.gmail.com>
+Message-ID: <20090227223049.4cb8362a@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks for your feedback, Bernhard.
+Hi,
 
->> Most of these packages should be converted to Makefile.autotools.in
+Le Fri, 27 Feb 2009 11:45:55 +0800,
+IaMaPlAyEr <iamaplayer@gmail.com> a ?crit :
 
-Converting to Makefile.autotools.in is a much bigger job, and it can be 
-done later,
-meanwhile this simple one line per package patches get our platform to work,
-and it's probably helpful to other people.
+> And how the buildroot works inside?
 
--- Maxim
+Most of the autotools-based packages are released with the configure
+script and Makefile.in files already generated (i.e, aclocal, autoconf,
+autoheader and automake have been run by the developer and integrated
+inside the released tarball). So, the automagic thing available in
+Buildroot to compile autotools-based packages will basically do :
 
+ ./configure
+ make
+ make install
 
-Bernhard Reutner-Fischer wrote:
-> On Thu, Feb 26, 2009 at 07:20:05PM -0800, Maxim Grigoriev wrote:
->   
->> Hello All,
->>
->> Can somebody review this update, please ?
->>
->> If you decide it's reasonable can you please, go ahead
->> and apply the attached patch ?
->>
->> I don't have write-access to the BUILDROOT repository.
->> So I cannot check it in even after approval.
->>
->> The suggested comment would be :
->>
->> "Add $(CONFIG_UPDATE) calls in all subdirectories that need it for a few packages."
->>     
->
-> Most of these packages should be converted to Makefile.autotools.in
-> If there is no way to override or add "CONFIG_UPDATE copy to" dirs
-> in there then this should be fixed.
->
-> Just a thought..
->
->   
+(passing of course the correct options and setting the appropriate
+environment variables to get cross-compilation to work properly).
+
+However, if for some reason you want the whole aclocal, autoconf,
+autoheader and automake process to be run before compiling the package,
+you can add :
+
+FOO_AUTORECONF=YES
+
+in your Buildroot Makefile. This is particularly useful if you patch
+the configure.in file or the Makefile.am files.
+
+Does that answer your question ? If not, don't hesitate to ask for
+details.
+
+Sincerly,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
