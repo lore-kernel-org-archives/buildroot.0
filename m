@@ -1,62 +1,68 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Wed, 25 Feb 2009 06:40:39 +0100
-Subject: [Buildroot] problem building openswan using svn-buildroot
-References: <499E05A7.2070403@unix-beratung.de><87bpsv6ik4.fsf@macbook.be.48ers.dk><49A17E91.7060104@unix-beratung.de><87y6vy5okv.fsf@macbook.be.48ers.dk><20090223102825.GB31413@cbg.dyndns.org><87hc2l2yns.fsf@macbook.be.48ers.dk><1235456068.24843.35.camel@elrond.atmel.com><87mycc1etl.fsf@macbook.be.48ers.dk><93F12DDAEC3E4BBFBAA4E030667F5EDD@aeglos>
-	<87skm3zcvd.fsf@macbook.be.48ers.dk>
-Message-ID: <42C9F67C3D4248559AAB9171E4F39305@aeglos>
+From: William Brodie-Tyrrell <william@brodie-tyrrell.org>
+Date: Fri, 27 Feb 2009 19:07:10 +0900
+Subject: [Buildroot] gcc compilation issues on AT91SAM9G20
+In-Reply-To: <87hc2gmea8.fsf@macbook.be.48ers.dk>
+References: <20090225174424.09d0badc.william@brodie-tyrrell.org>
+	<87iqmyoogi.fsf@macbook.be.48ers.dk>
+	<20090225191212.c5a31f46.william@brodie-tyrrell.org>
+	<8763iyom4z.fsf@macbook.be.48ers.dk>
+	<20090226151511.da1c9b65.william@brodie-tyrrell.org>
+	<87hc2gmea8.fsf@macbook.be.48ers.dk>
+Message-ID: <20090227190710.83ff1d6d.william@brodie-tyrrell.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Fri, 27 Feb 2009 10:15:27 +0100
+Peter Korsgaard <jacmet@uclibc.org> wrote:
 
->>>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
-> 
-> Hi,
-> 
-> >> Well - It's HUGE (>7M), but OK, I'll mark it as BROKEN and remove if
-> >> after the 2009.05 release unless someone steps up to fix it. I'll also
-> >> remove the kernel patches as we remove old kernel versions.
-> 
-> Ulf> If you feel that the stuff should not be in the svn, then
-> Ulf> make the patches loadable and store the patches in the mirror.
-> 
-> What will that change if it's broken?
-> 
-> Ulf> As pointed out to you earlier, buildroot users are using
-> Ulf> linux-2.6.22 and later so there is no reason to remove things
-> Ulf> which is active use.  Again, it makes sense to move the patches
-> Ulf> to the mirror, but yuu are the only one to have write acdess as
-> Ulf> far as I know.
-> 
-> Active openswan users? How come we haven't seen any bugreports or
-> patches since 2007 then?
-> 
+> Are you trying an EABI or OABI build? The aapcs-linux stuff is for
+> EABI.
 
-No active kernel users.
-You indicate that you want to "remove old kernel versions",
-and at the moment, I think that there is no need to do this.
-It is desirable to make older patches downloadable from the mirror server.
+EABI, though not for any particular reason other than that's what the
+linux4sam-provided .config does. The gcc configure only works if I
+leave the BR2_GCC_TARGET_ABI line out of the .config. The cross
+compiler (when it's working) is called arm-linux-uclibcgnueabi-gcc so
+perhaps I should put linux-uclibcgnueabi in the BR2_GCC_TARGET_ABI?
 
-I believe we should do the following for openswan.
-* Mark the package as broken in Config
-* Move the latest kernel patches to the mirror server.
-* Add a comment about this in the Config
-* Remove all openswan kernel patches from svn.
-Even if someone does not use openswan today, it seems
-to be useful and I would like to have some encouragement 
-left for people to fix it.
+> We don't have a defconfig for that specific board in BR, but I just
+> tried the at91sam9g20dfc defconfig where I added "native toolchain in
+> the target filesystem", and that builds without problems.
+> 
+> Could you post your .config?
+
+It's attached.  It's entirely possible there's something that the
+linux4sam patches do that is missing from this fresh build I'm doing,
+but I don't know nearly enough about buildroot to spot it.  I copied in
+my old/working .config and local/AT91 directory and ran 'make oldconfig'
+to update the .config.
+
+PS: when one gets a fresh copy of HEAD from SVN, the scripts/wget.sh
+file is missing.
 
 
-> As said earlier, I think it's absolutely critical to trim the package
-> versions between releases, otherwise we'll never be able to get any
-> significant testing coverage.
-> 
-> -- 
-> Bye, Peter Korsgaard
->
+thanks,
 
+-- 
+William Brodie-Tyrrell
 
-Best Regards
-Ulf Samuelsson 
+Carpe Diem - fish of the day.
+
+<william@brodie-tyrrell.org>
+http://www.brodie-tyrrell.org/
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: config.gz
+Type: application/x-gzip
+Size: 4651 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090227/a4167faa/attachment-0001.bin>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 197 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090227/a4167faa/attachment-0001.pgp>
