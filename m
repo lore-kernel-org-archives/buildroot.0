@@ -1,53 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Feb 2009 22:30:49 +0100
-Subject: [Buildroot] I want to know how the buildroot works inside when
- build and install a new package
-In-Reply-To: <2ae8403e0902261945w682609fbwa4758e1bcf01f742@mail.gmail.com>
-References: <2ae8403e0902261945w682609fbwa4758e1bcf01f742@mail.gmail.com>
-Message-ID: <20090227223049.4cb8362a@surf>
+From: Markus Heidelberg <markus.heidelberg@web.de>
+Date: Fri, 27 Feb 2009 23:05:07 +0100
+Subject: [Buildroot] misc development news
+In-Reply-To: <87d4d4md5o.fsf@macbook.be.48ers.dk>
+References: <87d4d4md5o.fsf@macbook.be.48ers.dk>
+Message-ID: <200902272305.08173.markus.heidelberg@web.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Peter Korsgaard, 27.02.2009:
+> Hi,
+> 
+> misc development news:
+> 
+>  - svn->git: Migration is starting to take shape. We have digged
+>    through svn history and found proper author/email info for all
+>    developers for the conversion, and the osuosl.org staff is setting
+>    up gitweb, commit notifications and various minor stuff for the
+>    conversion. Expect more info in ~1 weeks time.
 
-Le Fri, 27 Feb 2009 11:45:55 +0800,
-IaMaPlAyEr <iamaplayer@gmail.com> a ?crit :
+I'm looking forward to it.
 
-> And how the buildroot works inside?
+> - website: I recently bought buildroot.net and set up apache to
+>   respond to it, so you can now reach the buildroot website at the
+>   shorter http://buildroot.net address
 
-Most of the autotools-based packages are released with the configure
-script and Makefile.in files already generated (i.e, aclocal, autoconf,
-autoheader and automake have been run by the developer and integrated
-inside the released tarball). So, the automagic thing available in
-Buildroot to compile autotools-based packages will basically do :
+Until now I've always used buildroot.org, what's wrong with that?
 
- ./configure
- make
- make install
-
-(passing of course the correct options and setting the appropriate
-environment variables to get cross-compilation to work properly).
-
-However, if for some reason you want the whole aclocal, autoconf,
-autoheader and automake process to be run before compiling the package,
-you can add :
-
-FOO_AUTORECONF=YES
-
-in your Buildroot Makefile. This is particularly useful if you patch
-the configure.in file or the Makefile.am files.
-
-Does that answer your question ? If not, don't hesitate to ask for
-details.
-
-Sincerly,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Markus
