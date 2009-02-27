@@ -1,36 +1,58 @@
-From: Maxim Grigoriev <maxim@tensilica.com>
-Date: Thu, 26 Feb 2009 19:20:05 -0800
-Subject: [Buildroot] Add $(CONFIG_UPDATE) for a few packages
-Message-ID: <49A75BE5.3020701@hq.tensilica.com>
+From: IaMaPlAyEr <iamaplayer@gmail.com>
+Date: Fri, 27 Feb 2009 11:45:55 +0800
+Subject: [Buildroot] I want to know how the buildroot works inside when
+	build and install a new package
+Message-ID: <2ae8403e0902261945w682609fbwa4758e1bcf01f742@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All,
+Hi, all,
 
-Can somebody review this update, please ?
+    I want to know how the buildroot works inside when build and install a
+new package.
+I view the doc, but can not find the answer.
 
-If you decide it's reasonable can you please, go ahead
-and apply the attached patch ?
+    Just as the buildroot.html said, if I want to add new package, which I
+have to do
+is to writing a makefile(foo.mk) just like blow:
 
-I don't have write-access to the BUILDROOT repository.
-So I cannot check it in even after approval.
+     1  #############################################################
+     2  #
+     3  # foo
+     4  #
+     5  #############################################################
+     6  FOO_VERSION:=1.0
+     7  FOO_SOURCE:=foo-$(FOO_VERSION).tar.gz
+     8  FOO_SITE:=http://www.foosoftware.org/downloads
+     9  FOO_INSTALL_STAGING = YES
+     10  FOO_INSTALL_TARGET = YES
+     11  FOO_CONF_OPT =  --enable-shared
+     12  FOO_DEPENDENCIES = libglib2 pkgconfig
+     13  $(eval $(call AUTOTARGETS,package,foo))
 
-The suggested comment would be :
+It is the rule of the package needed.
+I know it is the Makefile which autotools-based type, and also know the
+default work-flow
+ of autotools is:
+autoscan(configure.scan)----------(edit configure.ac
+)----------aclocal(aclocal.m4)-----autoconf(configure)
 
-"Add $(CONFIG_UPDATE) calls in all subdirectories that need it for a few packages."
+(edit configure.ac)----------autoheader(config.h.in)
 
-Thanks,
--- Maxim
+Makefile.am----autoconf(configure)
 
+autoconf(configure)+autoconf(configure)-----./configure(Makefile)
 
+And how the buildroot works inside?
 
+Thanks in advance for any assistance.
+
+-- 
+--
+HaveF
 -------------- next part --------------
-A non-text attachment was scrubbed...
-Name: package_configs.patch
-Type: text/x-patch
-Size: 8262 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090226/cd416c84/attachment-0001.bin>
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090227/c7a37d32/attachment.htm>
