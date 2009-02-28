@@ -1,43 +1,41 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 28 Feb 2009 09:51:56 +0100
-Subject: [Buildroot] I want to know how the buildroot works inside when
-	build and install a new package
-In-Reply-To: <2ae8403e0902271849o73d3e76do4614e837ac83c55a@mail.gmail.com>
-	(iamaplayer@gmail.com's message of "Sat\,
-	28 Feb 2009 10\:49\:09 +0800")
-References: <2ae8403e0902261945w682609fbwa4758e1bcf01f742@mail.gmail.com>
-	<20090227223049.4cb8362a@surf>
-	<2ae8403e0902271849o73d3e76do4614e837ac83c55a@mail.gmail.com>
-Message-ID: <87myc7kkpf.fsf@macbook.be.48ers.dk>
+Date: Sat, 28 Feb 2009 09:55:54 +0100
+Subject: [Buildroot] buildbot infrastructure
+In-Reply-To: <734988.78183.qm@web56907.mail.re3.yahoo.com> (Frank Hoeflich's
+	message of "Fri\, 27 Feb 2009 15\:44\:45 -0800 \(PST\)")
+References: <734988.78183.qm@web56907.mail.re3.yahoo.com>
+Message-ID: <8763ivkkit.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "IaMaPlAyEr" == IaMaPlAyEr  <iamaplayer@gmail.com> writes:
+>>>>> "Frank" == Frank Hoeflich <frankhoeflich@yahoo.com> writes:
 
 Hi,
 
- IaMaPlAyEr> I want to know how the foo.mk(the example in doc of
- IaMaPlAyEr> buildroot) pass parameter to the autotools or
- IaMaPlAyEr> ./configure, or make.
+ Frank> I tried to look into this and couldn't find anything for
+ Frank> buildbot in my copy of the tree.  Is it available for
+ Frank> developers to inspect?
 
- IaMaPlAyEr> Not only just use
- IaMaPlAyEr> FOO_INSTALL_TARGET = YES
- IaMaPlAyEr> FOO_AUTORECONF=YES
+We don't have anything in the tree, but setting up buildbot is quite
+easy. I have it running at work for the targets we're using.
 
- IaMaPlAyEr> but how the parameter will be used in
- IaMaPlAyEr> Makefile.autotools.in or something else?
+Building is just a matter of:
 
-Have a look at the top of Makefile.autotools.in, it has some
-documentation of the variables.
+svn update
+yes ''|make <target>_defconfig
+yes ''|make
 
- IaMaPlAyEr> btw, do you know the OpenWRT? It also based on buildroot,
- IaMaPlAyEr> and it has his own packages mechanism just like i2c-tools:
+Or in buildbot syntax:
 
-I'm not familiar with the fine details of how openwrt's buildroot fork
-works.
+    f1 = factory.BuildFactory()
+    f1.addStep(SVN(svnurl=SVNURL, mode="copy"))
+    f1.addStep(Configure(command="yes ''|make "+target + "_defconfig"))
+    f1.addStep(Compile(command="yes ''|make -s"))
+
+The yes '' stuff is for when buildroot asks for user input.
 
 -- 
 Bye, Peter Korsgaard
