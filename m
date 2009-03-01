@@ -1,29 +1,33 @@
-From: Robert Urban <urban@unix-beratung.de>
-Date: Sun, 01 Mar 2009 18:20:50 +0100
-Subject: [Buildroot] vtun patch for lzo headers
-Message-ID: <49AAC3F2.6050301@unix-beratung.de>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun,  1 Mar 2009 20:19:51 +0000 (UTC)
+Subject: [Buildroot] [Bug 69] tar refuses to build
+In-Reply-To: <bug-69-163@https.bugs.busybox.net/>
+References: <bug-69-163@https.bugs.busybox.net/>
+Message-ID: <20090301201951.51E1E7719F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I had to change the "--with-lzo-headers" and add "/lzo" to get configure to
-be happy...
+https://bugs.busybox.net/show_bug.cgi?id=69
 
-buildroot version is svn, copied today.
 
-Rob Urban
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
--snip-
---- vtun.mk     2009-03-01 18:17:44.785466135 +0100
-+++ vtun.mk.patched     2009-03-01 18:17:35.263461892 +0100
-@@ -50,7 +50,7 @@
-                --mandir=/usr/man \
-                --infodir=/usr/info \
-                --with-ssl-headers=$(STAGING_DIR)/usr/include/openssl \
--               --with-lzo-headers=$(STAGING_DIR)/usr/include \
-+               --with-lzo-headers=$(STAGING_DIR)/usr/include/lzo \
-                --with-lzo-lib=$(STAGING_DIR)/usr/lib \
-        )
-        touch $(VTUN_DIR)/.configured
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|ASSIGNED                    |RESOLVED
+         Resolution|                            |FIXED
+
+
+
+
+--- Comment #5 from Peter Korsgaard <jacmet@uclibc.org>  2009-03-01 20:19:49 UTC ---
+Fixed by upgrading to tar 1.21
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
