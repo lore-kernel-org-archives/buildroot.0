@@ -1,56 +1,46 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Mon, 2 Mar 2009 13:06:44 +0100
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 02 Mar 2009 13:24:47 +0100
 Subject: [Buildroot] depend or select in Config.in & Autotarget question
-In-Reply-To: <20090302124019.106a2593@bandomeer.europe.flane.local>
+In-Reply-To: <20090302124019.106a2593@bandomeer.europe.flane.local> (Olaf
+	Rempel's message of "Mon\, 2 Mar 2009 12\:40\:19 +0100")
 References: <20090302124019.106a2593@bandomeer.europe.flane.local>
-Message-ID: <20090302130644.1162039b@hcegtvedt>
+Message-ID: <87ocwkjenk.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 2 Mar 2009 12:40:19 +0100
-Olaf Rempel <razzor@kopf-tisch.de> wrote:
+>>>>> "Olaf" == Olaf Rempel <razzor@kopf-tisch.de> writes:
 
-> Hi List,
-> 
-> what is the preferred method to resolve package dependencies in
-> Config.in? eg. when package-B needs package-A to build, should B
-> "select" A or should B "depend" on A?
+Hi,
 
-Packages can select other packages. For example if you application
-depends on one or more libraries/software, then you should select these
-packages.
+ Olaf> what is the preferred method to resolve package dependencies in
+ Olaf> Config.in?  eg. when package-B needs package-A to build, should
+ Olaf> B "select" A or should B "depend" on A?
 
-Packages depends on toolchain options, so that you need to configure
-your toolchain correct before you go out selecting packages.
+We normally use select for dependencies to libraries, and depends on
+toolchain configuration settings (E.G. C++ support).
 
-Changing the toolchain after a first build will set you back all the
-way to start.
+The reason for this is that it isn't always obvious what you need to
+enable to be able to select a certain program, and people normally
+think in terms of applications and not libraries.
 
-> And when using "depend" should there be an info when A is not active
-> (like ipsec-tools => openssl)?
->
+Changes to the toolchain on the other hand has a lot bigger impact, so
+that shouldn't be done behind the back of the user (E.G. with a
+select).
 
-Yes, but typically we make a comment which depends on the missing
-depends.
+ Olaf> And when using "depend" should there be an info when A is not
+ Olaf> active (like ipsec-tools => openssl)?
 
-I.e. "Qt - disabled (requires C++ support)", or I think something
-similar is present in the kconfig menu.
+ipsec-tools should select openssl instead - Will fix.
 
-> I've started with the Makefile.autotools.in conversion of some
-> packages that I use. When should a AUTORECONF:=yes be used? So far it
-> had no affect in my tests?
-> 
+ Olaf> I've started with the Makefile.autotools.in conversion of some
+ Olaf> packages that I use.  When should a AUTORECONF:=yes be used? So
+ Olaf> far it had no affect in my tests?
 
-autoreconf may be needed for packages where mainline is shipping
-outdated scripts which does not work anymore for up to date
-distributions/new architectures.
-
-If it's not needed for the package to compile, do not set it. It will
-only slow down the build time.
+Autoreconf is normally only used if you change the auto* source files
+(configure.ac, Makefile.am, ..) and want to regenerate the derived files.
 
 -- 
-Best regards,
-Hans-Christian Egtvedt
+Bye, Peter Korsgaard
