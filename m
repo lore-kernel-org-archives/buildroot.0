@@ -1,46 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 02 Mar 2009 13:24:47 +0100
-Subject: [Buildroot] depend or select in Config.in & Autotarget question
-In-Reply-To: <20090302124019.106a2593@bandomeer.europe.flane.local> (Olaf
-	Rempel's message of "Mon\, 2 Mar 2009 12\:40\:19 +0100")
-References: <20090302124019.106a2593@bandomeer.europe.flane.local>
-Message-ID: <87ocwkjenk.fsf@macbook.be.48ers.dk>
+From: Mirek23 <miroslaw.dach@psi.ch>
+Date: Mon, 2 Mar 2009 06:28:05 -0800 (PST)
+Subject: [Buildroot]  error when building screen
+Message-ID: <22289100.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Olaf" == Olaf Rempel <razzor@kopf-tisch.de> writes:
 
-Hi,
+Dear All,
 
- Olaf> what is the preferred method to resolve package dependencies in
- Olaf> Config.in?  eg. when package-B needs package-A to build, should
- Olaf> B "select" A or should B "depend" on A?
+I am trying to build buildroot toolchain for mips architecture. I have
+configured buildroot to include screen program. Unfortunately when building
+the executables and libraries I have got an error:
 
-We normally use select for dependencies to libraries, and depends on
-toolchain configuration settings (E.G. C++ support).
+rm -rf
+/root/buildroot-2009.02/buildroot-2009.02/project_build_mips/uclibc/buildroot-config
+mkdir -p /root/buildroot-2009.02/buildroot-2009.02/project_build_mips/uclibc
+cp -dpRf package/config/buildroot-config
+/root/buildroot-2009.02/buildroot-2009.02/project_build_mips/uclibc/buildroot-config
+>>> screen 4.0.2 Extracting
+tar: unrecognized option `--strip-components=1'
+Try `tar --help' for more information.
+make: ***
+[/root/buildroot-2009.02/buildroot-2009.02/build_mips/screen-4.0.2/.stamp_extracted]
+Error 2
 
-The reason for this is that it isn't always obvious what you need to
-enable to be able to select a certain program, and people normally
-think in terms of applications and not libraries.
+Does anybody have an idea what could be wrong?
 
-Changes to the toolchain on the other hand has a lot bigger impact, so
-that shouldn't be done behind the back of the user (E.G. with a
-select).
+Best Regards
 
- Olaf> And when using "depend" should there be an info when A is not
- Olaf> active (like ipsec-tools => openssl)?
-
-ipsec-tools should select openssl instead - Will fix.
-
- Olaf> I've started with the Makefile.autotools.in conversion of some
- Olaf> packages that I use.  When should a AUTORECONF:=yes be used? So
- Olaf> far it had no affect in my tests?
-
-Autoreconf is normally only used if you change the auto* source files
-(configure.ac, Makefile.am, ..) and want to regenerate the derived files.
+Mirek
 
 -- 
-Bye, Peter Korsgaard
+View this message in context: http://www.nabble.com/error-when-building-screen-tp22289100p22289100.html
+Sent from the BuildRoot mailing list archive at Nabble.com.
