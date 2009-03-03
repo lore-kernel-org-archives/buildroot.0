@@ -1,76 +1,80 @@
 From: Olaf Rempel <razzor@kopf-tisch.de>
-Date: Tue,  3 Mar 2009 11:58:29 +0100
-Subject: [Buildroot] lzop: new package
-In-Reply-To: <1236077910-15674-7-git-send-email-razzor@kopf-tisch.de>
+Date: Tue,  3 Mar 2009 11:58:28 +0100
+Subject: [Buildroot] ctorrent: new package
+In-Reply-To: <1236077910-15674-6-git-send-email-razzor@kopf-tisch.de>
 References: <> <1236077910-15674-1-git-send-email-razzor@kopf-tisch.de>
 	<1236077910-15674-2-git-send-email-razzor@kopf-tisch.de>
 	<1236077910-15674-3-git-send-email-razzor@kopf-tisch.de>
 	<1236077910-15674-4-git-send-email-razzor@kopf-tisch.de>
 	<1236077910-15674-5-git-send-email-razzor@kopf-tisch.de>
 	<1236077910-15674-6-git-send-email-razzor@kopf-tisch.de>
-	<1236077910-15674-7-git-send-email-razzor@kopf-tisch.de>
-Message-ID: <1236077910-15674-8-git-send-email-razzor@kopf-tisch.de>
+Message-ID: <1236077910-15674-7-git-send-email-razzor@kopf-tisch.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-lzop is a file compressor which is very similar to gzip.
-lzop uses the LZO data compression library for compression services.
-http://www.lzop.org/
+CTorrent is a BitTorrent client implemented in C++
+to be lightweight and quick.
+This is the enhanced version from
+http://www.rahul.net/dholmes/ctorrent/
 ---
- package/Config.in      |    1 +
- package/lzop/Config.in |    9 +++++++++
- package/lzop/lzop.mk   |   12 ++++++++++++
- 3 files changed, 22 insertions(+), 0 deletions(-)
- create mode 100644 package/lzop/Config.in
- create mode 100644 package/lzop/lzop.mk
+ package/Config.in            |    1 +
+ package/ctorrent/Config.in   |   14 ++++++++++++++
+ package/ctorrent/ctorrent.mk |   11 +++++++++++
+ 3 files changed, 26 insertions(+), 0 deletions(-)
+ create mode 100644 package/ctorrent/Config.in
+ create mode 100644 package/ctorrent/ctorrent.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 6f566f4..e0b906b 100644
+index 59d2a43..6f566f4 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -403,6 +403,7 @@ if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
- source "package/gzip/Config.in"
+@@ -132,6 +132,7 @@ source "package/boa/Config.in"
  endif
- source "package/lzo/Config.in"
-+source "package/lzop/Config.in"
- source "package/lzma/Config.in"
- source "package/zlib/Config.in"
- endmenu
-diff --git a/package/lzop/Config.in b/package/lzop/Config.in
+ source "package/bind/Config.in"
+ source "package/bridge-utils/Config.in"
++source "package/ctorrent/Config.in"
+ if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
+ source "package/dhcp/Config.in"
+ endif
+diff --git a/package/ctorrent/Config.in b/package/ctorrent/Config.in
 new file mode 100644
-index 0000000..c529207
+index 0000000..9a99c5a
 --- /dev/null
-+++ b/package/lzop/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_LZOP
-+	bool "lzop"
++++ b/package/ctorrent/Config.in
+@@ -0,0 +1,14 @@
++comment "ctorrent requires a toolchain with C++ support enabled"
++	depends on !BR2_GCC_CROSS_CXX
++
++config BR2_PACKAGE_CTORRENT
++	bool "ctorrent"
++	depends on BR2_GCC_CROSS_CXX
 +	default n
-+	select BR2_PACKAGE_LZO
 +	help
-+	  lzop is a file compressor which is very similar to gzip.
-+	  lzop uses the LZO data compression library for compression services.
++	  CTorrent is a BitTorrent client implemented in C++
++	  to be lightweight and quick.
++	  http://ctorrent.sourceforge.net/
 +
-+	  http://www.lzop.org/
-diff --git a/package/lzop/lzop.mk b/package/lzop/lzop.mk
++	  This is the enhanced version from
++	  http://www.rahul.net/dholmes/ctorrent/
+diff --git a/package/ctorrent/ctorrent.mk b/package/ctorrent/ctorrent.mk
 new file mode 100644
-index 0000000..796686a
+index 0000000..2560881
 --- /dev/null
-+++ b/package/lzop/lzop.mk
-@@ -0,0 +1,12 @@
++++ b/package/ctorrent/ctorrent.mk
+@@ -0,0 +1,11 @@
 +#############################################################
 +#
-+# lzop
++# enhanced ctorrent
 +#
 +#############################################################
-+LZOP_VERSION:=1.02rc1
-+LZOP_SOURCE:=lzop-$(LZOP_VERSION).tar.gz
-+LZOP_SITE:=http://www.lzop.org/download/
-+LZOP_CONF_OPT:=--program-prefix=""
-+LZOP_DEPENDENCIES:=lzo
++CTORRENT_VERSION:=dnh3.3.2
++CTORRENT_SOURCE:=ctorrent-$(CTORRENT_VERSION).tar.gz
++CTORRENT_SITE:=http://www.rahul.net/dholmes/ctorrent/
++CTORRENT_CONF_OPT:=--with-ssl=no
 +
-+$(eval $(call AUTOTARGETS,package,lzop))
++$(eval $(call AUTOTARGETS,package,ctorrent))
 -- 
 1.5.4.3
