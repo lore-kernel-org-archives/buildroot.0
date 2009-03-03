@@ -1,36 +1,32 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  3 Mar 2009 17:17:51 +0000 (UTC)
-Subject: [Buildroot] [Bug 139] Bump sqlite to 3.6.11 and convert to
-	Makefile.autotools.in
-In-Reply-To: <bug-139-163@https.bugs.busybox.net/>
-References: <bug-139-163@https.bugs.busybox.net/>
-Message-ID: <20090303171751.6F0C97620E@busybox.osuosl.org>
+From: Darcy Watkins <DWatkins@tranzeo.com>
+Date: Tue, 3 Mar 2009 09:10:12 -0800
+Subject: [Buildroot] Sending Patches, Updates Etc.
+Message-ID: <D61182AC8012EA4EBC531B3AF23BE109769AC1@tranzeo-mail2.12stewart.tranzeo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=139
+Hello,
 
+Someone please advise me regarding the preferred approach, guidelines,
+etc. to submitting changes, updates, etc.  Many months back, I submitted
+a patch to mkcramfs and it never made it in.  I'd like to resubmit it
+and other changes for consideration.  Also, I have modified the
+menuconfig/config utility so that the "source" command's filespec uses
+'glob' to handle wildcards, e.g. like...
 
-Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
+  source "package/*/Config.in"
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-  Attachment #93 is|0                           |1
-           obsolete|                            |
+...and I have a few other ideas, I'd like to discuss in relation to
+this.  
 
+Do I need to open a bug report first, then submit a patch?
 
+Has anyone considered setting up a patchwork web for buildroot, uclibc
+and busybox projects?
 
+Regards,
 
---- Comment #1 from Gustavo Zacarias <gustavo@zacarias.com.ar>  2009-03-03 17:17:50 UTC ---
-Created an attachment (id=95)
- --> (https://bugs.busybox.net/attachment.cgi?id=95)
-Bump sqlite to 3.6.11, convert to Makefile.autotools.in with uninstall target
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Darcy
