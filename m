@@ -1,51 +1,24 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue,  3 Mar 2009 22:28:16 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/iptables
-Message-ID: <20090303222816.DD9FE7626F@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 03 Mar 2009 23:28:29 +0100
+Subject: [Buildroot] iptables: bump version
+In-Reply-To: <1236077910-15674-3-git-send-email-razzor@kopf-tisch.de> (Olaf
+	Rempel's message of "Tue\, 3 Mar 2009 11\:58\:24 +0100")
+References: <1236077910-15674-1-git-send-email-razzor@kopf-tisch.de>
+	<1236077910-15674-2-git-send-email-razzor@kopf-tisch.de>
+	<1236077910-15674-3-git-send-email-razzor@kopf-tisch.de>
+Message-ID: <87tz6ags1e.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-03-03 22:28:15 +0000 (Tue, 03 Mar 2009)
-New Revision: 25516
+>>>>> "Olaf" == Olaf Rempel <razzor@kopf-tisch.de> writes:
 
-Log:
-iptables: bump version
+ Olaf> - bump version to 1.4.2
+ Olaf> - add uninstall target
 
-- bump version to 1.4.2
-- add uninstall target
+Thanks, committed as r25516.
 
-Patch by Olaf Rempel <razzor@kopf-tisch.de>
-
-Modified:
-   trunk/buildroot/package/iptables/iptables.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/iptables/iptables.mk
-===================================================================
---- trunk/buildroot/package/iptables/iptables.mk	2009-03-03 22:23:22 UTC (rev 25515)
-+++ trunk/buildroot/package/iptables/iptables.mk	2009-03-03 22:28:15 UTC (rev 25516)
-@@ -3,7 +3,7 @@
- # iptables
- #
- #############################################################
--IPTABLES_VERSION = 1.4.1
-+IPTABLES_VERSION = 1.4.2
- IPTABLES_SOURCE = iptables-$(IPTABLES_VERSION).tar.bz2
- IPTABLES_SITE = http://ftp.netfilter.org/pub/iptables
- 
-@@ -16,3 +16,10 @@
- IPTABLES_MAKE_OPT = GLIB_GENMARSHAL=$(HOST_GLIB)/bin/glib-genmarshal GLIB_MKENUMS=$(HOST_GLIB)/bin/glib-mkenums
- 
- $(eval $(call AUTOTARGETS,package,iptables))
-+
-+$(IPTABLES_TARGET_UNINSTALL):
-+	$(call MESSAGE,"Uninstalling")
-+	rm -f $(TARGET_DIR)/usr/bin/iptables-xml
-+	rm -f $(TARGET_DIR)/usr/sbin/iptables* $(TARGET_DIR)/usr/sbin/ip6tables*
-+	rm -rf $(TARGET_DIR)/usr/lib/xtables
-+	rm -f $(IPTABLES_TARGET_INSTALL_TARGET)
+-- 
+Bye, Peter Korsgaard
