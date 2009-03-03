@@ -1,30 +1,48 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Tue, 3 Mar 2009 16:51:51 +0100
-Subject: [Buildroot] Kernel Configuration 2.6.28.7
-In-Reply-To: <22310694.post@talk.nabble.com>
-References: <22310694.post@talk.nabble.com>
-Message-ID: <20090303155151.GA31119@mx.loc>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue,  3 Mar 2009 16:39:19 +0000 (UTC)
+Subject: [Buildroot] [Bug 139] New: Bump sqlite to 3.6.11 and convert to
+ Makefile.autotools.in
+Message-ID: <bug-139-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Mar 03, 2009 at 07:22:46AM -0800, RainerB wrote:
->
->Hi,
->
->i use the latest svn revision with the at91sam9263ek_defconfig. Creating
->,modifying and mounting of a jffs2 filesystem works without problems.
->Using the kernel on my hardware cause a fault. Therefore i want' to
->configurate the kernel to switch off some unneeded features and check the
->configuration. 
->I have read the documentation but found no hint how to do this. 
+https://bugs.busybox.net/show_bug.cgi?id=139
 
-In docs/README please reread the paragraph that is titled
-More finegrained configuration:
-===============================
+              Host: i686-linux
+            Target: arm-softfloat-linux-uclibcgnueabi
+           Summary: Bump sqlite to 3.6.11 and convert to
+                    Makefile.autotools.in
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: gustavo at zacarias.com.ar
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
->Thanks for any help.
 
-HTH,
+Created an attachment (id=93)
+ --> (https://bugs.busybox.net/attachment.cgi?id=93)
+Bump sqlite to 3.6.11, convert to Makefile.autotools.in
+
+Bump sqlite package from version 3.6.10 to 3.6.11, minor improvements including
+backup/restore functionality in the CLI.
+Also convert package to Makefile.autotools.in
+Make readline support an option, it's just used for command-line editing of the
+CLI and a big space saver (since it needs ncurses too).
+The old version failed to properly build with support for readline/ncurses, so
+it brought in both libraries for nothing :-)
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
