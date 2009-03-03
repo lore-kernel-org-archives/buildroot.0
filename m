@@ -1,25 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Mar 2009 09:31:32 +0100
-Subject: [Buildroot] MIPS arch on NPTL branch
-In-Reply-To: <49AC5D4D.3030600@katalix.com>
-References: <49AC5D4D.3030600@katalix.com>
-Message-ID: <20090303093132.00de3467@surf>
+Date: Tue, 3 Mar 2009 09:34:20 +0100
+Subject: [Buildroot] Xtensa BUILDROOT support
+In-Reply-To: <49ACD317.6060205@hq.tensilica.com>
+References: <49ACD317.6060205@hq.tensilica.com>
+Message-ID: <20090303093420.77f7c3dd@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 02 Mar 2009 22:27:25 +0000,
-James Chapman <jchapman@katalix.com> a ?crit :
+Le Mon, 02 Mar 2009 22:49:59 -0800,
+Maxim Grigoriev <maxim@tensilica.com> a ?crit :
 
-> Just wondering what the status of the MIPS arch is on the uclibc-NPTL
-> branch tip.  I'm seeing compile errors because _dl_find_hash() now has
-> an extra argument. Is MIPS missing an update after generic ldso
-> changes? Perhaps someone is already working on this?
+>       Xtensa BUILDROOT uses a concept of source overlays,
+>       which are necessary because Xtensa processors are
+>       configurable and extensible. Xtensa tools, e.g.
+>       gcc, gdb, and binutils, use source overlays, which
+>       can not be substituted by the current BUILDROOT
+>       patching mechanism. This update makes patch-kernel.sh
+>       script capable of handling these overlays.
 
-This question seems to belong to the uclibc list rather than the
-Buildroot list.
+Can you detail how this concept of source overlays work, technically ?
 
 Thomas
 -- 
