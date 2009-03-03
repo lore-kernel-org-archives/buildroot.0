@@ -1,27 +1,22 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 03 Mar 2009 23:25:15 +0100
-Subject: [Buildroot] linux kernel configuration for lex CV860A (VIA C3)
-	Motherboard
-In-Reply-To: <49A97CDF.1070402@unix-beratung.de> (Robert Urban's message of
-	"Sat\, 28 Feb 2009 19\:05\:19 +0100")
-References: <49A97CDF.1070402@unix-beratung.de>
-Message-ID: <874oyai6r8.fsf@macbook.be.48ers.dk>
+Date: Tue, 03 Mar 2009 23:25:54 +0100
+Subject: [Buildroot] Xorg 7.4
+In-Reply-To: <f8955f9e0903031135x6b8daf42n2b88af82cc5326cb@mail.gmail.com>
+	(Dan Lykowski's message of "Tue\, 3 Mar 2009 11\:35\:20 -0800")
+References: <f8955f9e0903031135x6b8daf42n2b88af82cc5326cb@mail.gmail.com>
+Message-ID: <87zlg2gs5p.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Robert" == Robert Urban <urban@unix-beratung.de> writes:
+>>>>> "Dan" == Dan Lykowski <lykowdk@gmail.com> writes:
 
- Robert> Hi Folks,
- Robert> I looking for a kernel configuration for a recent kernel tailored to this
- Robert> motherboard.  Has anyone already done this?  Is there some database
- Robert> somewhere where such things can be sought?
+ Dan> All,
+ Dan> ? Is anyone interested in a patch to Xorg 7.4? Has it been done yet?
 
-Not afaik, and the configuration would very much depend on what you
-want to do with it. I would suggest you start with a minimal config
-and compile, test, add stuff until everything you need works.
+Sure, and no, I don't remember seing any X patches lately.
 
 -- 
 Bye, Peter Korsgaard
