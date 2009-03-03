@@ -1,10 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 03 Mar 2009 23:23:47 +0100
-Subject: [Buildroot] vtun patch for lzo headers
-In-Reply-To: <49AAC3F2.6050301@unix-beratung.de> (Robert Urban's message of
-	"Sun\, 01 Mar 2009 18\:20\:50 +0100")
-References: <49AAC3F2.6050301@unix-beratung.de>
-Message-ID: <878wnmi6to.fsf@macbook.be.48ers.dk>
+Date: Tue, 03 Mar 2009 23:25:15 +0100
+Subject: [Buildroot] linux kernel configuration for lex CV860A (VIA C3)
+	Motherboard
+In-Reply-To: <49A97CDF.1070402@unix-beratung.de> (Robert Urban's message of
+	"Sat\, 28 Feb 2009 19\:05\:19 +0100")
+References: <49A97CDF.1070402@unix-beratung.de>
+Message-ID: <874oyai6r8.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,10 +14,14 @@ To: buildroot@busybox.net
 
 >>>>> "Robert" == Robert Urban <urban@unix-beratung.de> writes:
 
- Robert> I had to change the "--with-lzo-headers" and add "/lzo" to
- Robert> get configure to be happy...
+ Robert> Hi Folks,
+ Robert> I looking for a kernel configuration for a recent kernel tailored to this
+ Robert> motherboard.  Has anyone already done this?  Is there some database
+ Robert> somewhere where such things can be sought?
 
-Thanks, committed as r25515.
+Not afaik, and the configuration would very much depend on what you
+want to do with it. I would suggest you start with a minimal config
+and compile, test, add stuff until everything you need works.
 
 -- 
 Bye, Peter Korsgaard
