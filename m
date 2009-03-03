@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue,  3 Mar 2009 20:23:13 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
-Message-ID: <20090303202313.B6DF57626F@busybox.osuosl.org>
+Date: Tue,  3 Mar 2009 20:23:18 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/database/sqlite
+Message-ID: <20090303202319.141177626F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,95 +9,155 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2009-03-03 20:23:10 +0000 (Tue, 03 Mar 2009)
-New Revision: 25510
+Date: 2009-03-03 20:23:18 +0000 (Tue, 03 Mar 2009)
+New Revision: 25511
 
 Log:
-uclibc: cleanup version handling
+sqlite: bump version and convert to Makefile.autotools.in format
 
-Based on 0171c72 in Bernhards' tree.
+Patch by Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Closes #139.
 
 Modified:
-   trunk/buildroot/toolchain/uClibc/Config.in
-   trunk/buildroot/toolchain/uClibc/uclibc.mk
+   trunk/buildroot/package/database/sqlite/Config.in
+   trunk/buildroot/package/database/sqlite/sqlite.mk
 
 
 Changeset:
-Modified: trunk/buildroot/toolchain/uClibc/Config.in
+Modified: trunk/buildroot/package/database/sqlite/Config.in
 ===================================================================
---- trunk/buildroot/toolchain/uClibc/Config.in	2009-03-03 18:47:56 UTC (rev 25509)
-+++ trunk/buildroot/toolchain/uClibc/Config.in	2009-03-03 20:23:10 UTC (rev 25510)
-@@ -41,6 +41,14 @@
+--- trunk/buildroot/package/database/sqlite/Config.in	2009-03-03 20:23:10 UTC (rev 25510)
++++ trunk/buildroot/package/database/sqlite/Config.in	2009-03-03 20:23:18 UTC (rev 25511)
+@@ -1,9 +1,16 @@
+ config BR2_PACKAGE_SQLITE
+ 	bool "sqlite"
+-	select BR2_PACKAGE_NCURSES
+-	select BR2_PACKAGE_READLINE
  	help
- 	    Use latest snapshot or one from a specific date?
+ 	  SQLite is a small C library that implements a self-contained,
+ 	  embeddable, zero-configuration SQL database engine.
  
-+config BR2_UCLIBC_VERSION_STRING
-+	string
-+	default 0.9.28.3	if BR2_UCLIBC_VERSION_0_9_28_3
-+	default 0.9.29		if BR2_UCLIBC_VERSION_0_9_29
-+	default 0.9.30		if BR2_UCLIBC_VERSION_0_9_30
-+	default 0.9.30.1	if BR2_UCLIBC_VERSION_0_9_30_1
-+	default $BR2_USE_UCLIBC_SNAPSHOT	if BR2_UCLIBC_VERSION_SNAPSHOT
+ 	  http://www.sqlite.org/
 +
- config BR2_UCLIBC_CONFIG
- 	string "uClibc configuration file to use?"
- 	default "toolchain/uClibc/uClibc-0.9.28.config" if BR2_UCLIBC_VERSION_0_9_28_3
++config BR2_PACKAGE_SQLITE_READLINE
++	bool "Command-line editing"
++	depends on BR2_PACKAGE_SQLITE
++	select BR2_PACKAGE_NCURSES
++	select BR2_PACKAGE_READLINE
++	help
++	  Enable command-line editing. This requires ncurses and readline.
++
 
-Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
+Modified: trunk/buildroot/package/database/sqlite/sqlite.mk
 ===================================================================
---- trunk/buildroot/toolchain/uClibc/uclibc.mk	2009-03-03 18:47:56 UTC (rev 25509)
-+++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2009-03-03 20:23:10 UTC (rev 25510)
-@@ -13,45 +13,29 @@
- #")
- endif
+--- trunk/buildroot/package/database/sqlite/sqlite.mk	2009-03-03 20:23:10 UTC (rev 25510)
++++ trunk/buildroot/package/database/sqlite/sqlite.mk	2009-03-03 20:23:18 UTC (rev 25511)
+@@ -4,77 +4,38 @@
+ #
+ #############################################################
  
-+UCLIBC_VER:=$(subst ",,$(BR2_UCLIBC_VERSION_STRING))
-+#")
-+
-+UCLIBC_OFFICIAL_VERSION:=$(UCLIBC_VER)$(VENDOR_SUFFIX)$(VENDOR_UCLIBC_RELEASE)
-+
- ifeq ($(BR2_UCLIBC_VERSION_SNAPSHOT),y)
--# Be aware that this changes daily....
--UCLIBC_VER:=0.9.30
--UCLIBC_DIR:=$(TOOL_BUILD_DIR)/uClibc
--UCLIBC_SOURCE:=uClibc-$(strip $(subst ",, $(BR2_USE_UCLIBC_SNAPSHOT))).tar.bz2
--#"))
- UCLIBC_SITE:=http://www.uclibc.org/downloads/snapshots
--UCLIBC_PATCH_DIR:=toolchain/uClibc/
-+UCLIBC_DIR:=$(TOOL_BUILD_DIR)/uClibc
- else
--# releases
--ifeq ($(BR2_UCLIBC_VERSION_0_9_30_1),y)
--UCLIBC_VER:=0.9.30.1
--endif
--ifeq ($(BR2_UCLIBC_VERSION_0_9_30),y)
--UCLIBC_VER:=0.9.30
--endif
--ifeq ($(BR2_UCLIBC_VERSION_0_9_29),y)
--UCLIBC_VER:=0.9.29
--endif
--ifeq ($(BR2_UCLIBC_VERSION_0_9_28_3),y)
--UCLIBC_VER:=0.9.28.3
--endif
-+UCLIBC_DIR:=$(TOOL_BUILD_DIR)/uClibc-$(UCLIBC_OFFICIAL_VERSION)
- UCLIBC_SITE:=http://www.uclibc.org/downloads
--
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_SOURCE),y)
- UCLIBC_SITE:=$(VENDOR_SITE)
- endif
+-SQLITE_VERSION:=3.6.10
+-SQLITE_SOURCE:=sqlite-$(SQLITE_VERSION).tar.gz
+-SQLITE_SITE:=http://www.sqlite.org
+-SQLITE_DIR:=$(BUILD_DIR)/sqlite-$(SQLITE_VERSION)
+-SQLITE_CAT:=$(ZCAT)
++SQLITE_VERSION = 3.6.11
++SQLITE_SOURCE = sqlite-$(SQLITE_VERSION).tar.gz
++SQLITE_SITE = http://www.sqlite.org
++SQLITE_INSTALL_STAGING = YES
++SQLITE_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
++SQLITE_LIBTOOL_PATCH = NO
++SQLITE_DEPENDENCIES = uclibc
+ 
+-$(DL_DIR)/$(SQLITE_SOURCE):
+-	$(call DOWNLOAD,$(SQLITE_SITE),$(SQLITE_SOURCE))
++SQLITE_CONF_OPT =	--enable-shared \
++			--enable-static \
++			--enable-tempstore=yes \
++			--enable-threadsafe \
++			--enable-releasemode \
++			--disable-tcl \
++			--localstatedir=/var
+ 
+-$(SQLITE_DIR)/.unpacked: $(DL_DIR)/$(SQLITE_SOURCE)
+-	$(SQLITE_CAT) $(DL_DIR)/$(SQLITE_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	touch $(SQLITE_DIR)/.unpacked
++ifeq ($(BR2_PACKAGE_SQLITE_READLINE),y)
++SQLITE_DEPENDENCIES += ncurses readline
++SQLITE_CONF_OPT += --with-readline-inc="-I$(STAGING_DIR)/usr/include"
++else
++SQLITE_CONF_OPT += --disable-readline
 +endif
  
--UCLIBC_OFFICIAL_VERSION:=$(UCLIBC_VER)$(VENDOR_SUFFIX)$(VENDOR_UCLIBC_RELEASE)
+-$(SQLITE_DIR)/.configured: $(SQLITE_DIR)/.unpacked
+-	(cd $(SQLITE_DIR); rm -rf config.cache; \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		$(TARGET_CONFIGURE_ARGS) \
+-		config_BUILD_CC="$(HOSTCC)" \
+-		config_TARGET_CFLAGS="$(TARGET_CFLAGS)" \
+-		config_TARGET_CC="$(TARGET_CC)" \
+-		config_TARGET_READLINE_LIBS="-L$(TARGET_DIR)/usr/lib -L$(TARGET_DIR)/lib -lncurses -lreadline" \
+-		config_TARGET_READLINE_INC="-I$(STAGING_DIR)/usr/include" \
+-		./configure \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		--prefix=/usr \
+-		--sysconfdir=/etc \
+-		--localstatedir=/var \
+-		--enable-shared \
+-		--enable-static \
+-		--disable-tcl \
+-		--enable-tempstore \
+-		--enable-threadsafe \
+-		--enable-releasemode \
+-	)
+-	touch $(SQLITE_DIR)/.configured
++$(eval $(call AUTOTARGETS,package,sqlite))
+ 
+-$(SQLITE_DIR)/sqlite3: $(SQLITE_DIR)/.configured
+-	$(MAKE) -C $(SQLITE_DIR)
++$(SQLITE_TARGET_UNINSTALL):
++	$(call MESSAGE,"Uninstalling")
++	rm -f $(TARGET_DIR)/usr/bin/sqlite3
++	rm -f $(TARGET_DIR)/usr/lib/libsqlite3*
++	rm -f $(STAGING_DIR)/usr/bin/sqlite3
++	rm -f $(STAGING_DIR)/usr/lib/libsqlite3*
++	rm -f $(STAGING_DIR)/usr/lib/pkgconfig/sqlite3.pc
++	rm -f $(STAGING_DIR)/usr/include/sqlite3*.h
++	rm -f $(SQLITE_TARGET_INSTALL_TARGET) $(SQLITE_HOOK_POST_INSTALL)
+ 
+-$(STAGING_DIR)/usr/bin/sqlite3: $(SQLITE_DIR)/sqlite3
+-	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(SQLITE_DIR) install
+-	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libsqlite3.la
 -
- ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
- UCLIBC_PATCH_DIR:=toolchain/uClibc/
- else
- UCLIBC_PATCH_DIR:=toolchain/uClibc/ext_source/$(VENDOR_PATCH_DIR)/$(UCLIBC_OFFICIAL_VERSION)
- endif
- 
--UCLIBC_DIR:=$(TOOL_BUILD_DIR)/uClibc-$(UCLIBC_OFFICIAL_VERSION)
- UCLIBC_SOURCE:=uClibc-$(UCLIBC_OFFICIAL_VERSION).tar.bz2
+-$(TARGET_DIR)/usr/bin/sqlite3: $(STAGING_DIR)/usr/bin/sqlite3
+-	$(INSTALL) -m 0755 -D $^ $@
+-	$(STRIPCMD) $(STRIP_STRIP_ALL) $@
+-	cp -dpf $(STAGING_DIR)/usr/lib/libsqlite3*.so* $(TARGET_DIR)/usr/lib/
+-	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libsqlite3.so
+-
+-sqlite: uclibc ncurses $(TARGET_DIR)/usr/bin/sqlite3
+-
+-sqlite-source: $(DL_DIR)/$(SQLITE_SOURCE)
+-
+-sqlite-clean:
+-	-$(MAKE) -C $(SQLITE_DIR) clean
+-	-rm -rf $(STAGING_DIR)/usr/lib/libsqlite*
+-	-rm -rf $(STAGING_DIR)/usr/bin/sqlite3
+-	-rm -rf $(STAGING_DIR)/usr/include/sqlite*
+-	-rm -rf $(STAGING_DIR)/usr/lib/pkgconfig/sqlite*
+-	-rm -rf $(TARGET_DIR)/usr/lib/libsqlite*
+-	-rm -rf $(TARGET_DIR)/usr/bin/sqlite3
+-
+-sqlite-dirclean:
+-	rm -rf $(SQLITE_DIR)
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_SQLITE),y)
+-TARGETS+=sqlite
 -endif
- 
- UCLIBC_CAT:=$(BZCAT)
- 
