@@ -1,27 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 04 Mar 2009 14:23:10 +0100
-Subject: [Buildroot] dmraid: fix build & convert to Makefile.autotools.in
-In-Reply-To: <1236077910-15674-6-git-send-email-razzor@kopf-tisch.de> (Olaf
-	Rempel's message of "Tue\, 3 Mar 2009 11\:58\:27 +0100")
-References: <1236077910-15674-1-git-send-email-razzor@kopf-tisch.de>
-	<1236077910-15674-2-git-send-email-razzor@kopf-tisch.de>
-	<1236077910-15674-3-git-send-email-razzor@kopf-tisch.de>
-	<1236077910-15674-4-git-send-email-razzor@kopf-tisch.de>
-	<1236077910-15674-5-git-send-email-razzor@kopf-tisch.de>
-	<1236077910-15674-6-git-send-email-razzor@kopf-tisch.de>
-Message-ID: <87ocwhh16p.fsf@macbook.be.48ers.dk>
+From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
+Date: Wed, 04 Mar 2009 14:27:05 +0100
+Subject: [Buildroot] svn
+	commit:	trunk/buildroot/package/multimedia/alsa-utils
+In-Reply-To: <20090304132251.3B72D7626E@busybox.osuosl.org>
+References: <20090304132251.3B72D7626E@busybox.osuosl.org>
+Message-ID: <49AE81A9.2090605@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Olaf" == Olaf Rempel <razzor@kopf-tisch.de> writes:
+jacmet at uclibc.org wrote:
 
- Olaf> - was not building at all (x86 uclibc)
- Olaf> - adding devicemapper dependency
+<snipp>
 
-Thanks, committed as r25522.
+> --- trunk/buildroot/package/multimedia/alsa-utils/Config.in	2009-03-04 13:22:44 UTC (rev 25523)
+> +++ trunk/buildroot/package/multimedia/alsa-utils/Config.in	2009-03-04 13:22:50 UTC (rev 25524)
+> @@ -35,9 +35,12 @@
+>  
+>  config BR2_PACKAGE_ALSA_UTILS_APLAY
+>  	bool "aplay"
+> -	select BR2_LARGEFILE
+> +	depends on BR2_LARGEFILE
+>  	depends on BR2_PACKAGE_ALSA_UTILS
+>  
+> +comment "aplay requires a toolchain with LARGEFILE support"
+> +	depends on !BR2_LARGEFILE
+> +
+>  config BR2_PACKAGE_ALSA_UTILS_ARECORD
+>  	bool "arecord"
+>  	depends on BR2_PACKAGE_ALSA_UTILS
+> 
+
+I guess this also depends on LARGEFILE, arecord is just a symlink to aplay.
 
 -- 
-Bye, Peter Korsgaard
+Best regards,
+Hans-Christian Egtvedt
