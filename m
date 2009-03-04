@@ -1,67 +1,96 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  4 Mar 2009 16:48:56 +0000 (UTC)
-Subject: [Buildroot] [Bug 143] New: Convert php package to
- Makefile.autotools.in and a ton of other improvements
-Message-ID: <bug-143-163@https.bugs.busybox.net/>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Wed,  4 Mar 2009 20:16:22 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/iproute2
+Message-ID: <20090304201622.301B97626E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=143
+Author: jacmet
+Date: 2009-03-04 20:16:21 +0000 (Wed, 04 Mar 2009)
+New Revision: 25529
 
-              Host: i686-linux
-            Target: arm-softfloat-linux-uclibcgnueabi
-           Summary: Convert php package to Makefile.autotools.in and a ton
-                    of other improvements
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: enhancement
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: gustavo at zacarias.com.ar
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Log:
+iproute: fix makefile
 
+Patch by Olaf Rempel <razzor@kopf-tisch.de>.
 
-Created an attachment (id=103)
- --> (https://bugs.busybox.net/attachment.cgi?id=103)
-Convert php to Makefile.autotools.in and other improvements
+- bump version to 2.6.28
+- fix download
+- change compile ordering (build tc after ip)
+- remove both binaries from target when cleaning up
 
-This patch is a biggie:
+[Peter: fixed target install strip]
 
-* Migrate php package to Makefile.autotools.in
-
-* Make PCRE regex an option (previously forced on)
-
-* Add calendar option from bug #77
-
-* Add external sqlite3 option from bug #141
-New option BR2_PACKAGE_PHP_PDO_SQLITE_EXTERNAL
-
-* Add alternate php.ini configuration option from bug #5
-Named BR2_PACKAGE_PHP_CONFIG and defaults to shipped config.
-In most scenarios the shipped config isn't good enough, it has a high memory
-limit for embedded for example.
-
-* Changed some options from depends to select
-Namely openssl, libxml2, zlib, gettext, gmp.
-
-* Disabled some 'y' defaults to make things lighter by default
-Namely libxml2, sqlite, pdo and pdo_sqlite.
-
-* Made some of the extensions help text more verbose
-
-Remember this one obsoletes my previous bugs #5, #77 and #141.
-Hope i'm not stepping into someone's toes...
+Modified:
+   trunk/buildroot/package/iproute2/iproute2.mk
 
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Changeset:
+Modified: trunk/buildroot/package/iproute2/iproute2.mk
+===================================================================
+--- trunk/buildroot/package/iproute2/iproute2.mk	2009-03-04 17:56:00 UTC (rev 25528)
++++ trunk/buildroot/package/iproute2/iproute2.mk	2009-03-04 20:16:21 UTC (rev 25529)
+@@ -3,30 +3,29 @@
+ # iproute2
+ #
+ #############################################################
+-IPROUTE2_VERSION:=2.6.18
+-IPROUTE2_STAMP:=061002
+-IPROUTE2_SOURCE:=iproute2-$(IPROUTE2_VERSION)-$(IPROUTE2_STAMP).tar.gz
++IPROUTE2_VERSION:=2.6.28
++IPROUTE2_SOURCE:=iproute2-$(IPROUTE2_VERSION).tar.bz2
+ IPROUTE2_SITE:=http://developer.osdl.org/dev/iproute2/download/
+-IPROUTE2_DIR:=$(BUILD_DIR)/iproute2-$(IPROUTE2_VERSION)-$(IPROUTE2_STAMP)
+-IPROUTE2_CAT:=$(ZCAT)
++IPROUTE2_DIR:=$(BUILD_DIR)/iproute2-$(IPROUTE2_VERSION)
++IPROUTE2_CAT:=$(BZCAT)
+ IPROUTE2_BINARY:=tc/tc
+ IPROUTE2_TARGET_BINARY:=sbin/tc
+ 
+ $(DL_DIR)/$(IPROUTE2_SOURCE):
+-	$(call DOWNLOAD,$(IPROUTE2_SITE)$(IPROUTE2_SOURCE))
++	$(call DOWNLOAD,$(IPROUTE2_SITE),$(IPROUTE2_SOURCE))
+ 
+ iproute2-source: $(DL_DIR)/$(IPROUTE2_SOURCE)
+ 
+ $(IPROUTE2_DIR)/.unpacked: $(DL_DIR)/$(IPROUTE2_SOURCE)
+ 	$(IPROUTE2_CAT) $(DL_DIR)/$(IPROUTE2_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	touch $(IPROUTE2_DIR)/.unpacked
++	touch $@
+ 
+ $(IPROUTE2_DIR)/.configured: $(IPROUTE2_DIR)/.unpacked
+ 	(cd $(IPROUTE2_DIR); \
+ 		./configure; \
+ 		$(SED) '/TC_CONFIG_ATM/s:=.*:=n:' Config; \
+ 		$(SED) '/^CCOPTS/s:-O2.*:$(TARGET_CFLAGS):' Makefile)
+-	touch $(IPROUTE2_DIR)/.configured
++	touch $@
+ 
+ $(IPROUTE2_DIR)/$(IPROUTE2_BINARY): $(IPROUTE2_DIR)/.configured
+ 	$(MAKE) \
+@@ -35,16 +34,18 @@
+ 		CC=$(TARGET_CC) \
+ 		AR=$(TARGET_CROSS)ar \
+ 		NETEM_DIST="" \
+-		SUBDIRS="lib tc ip"
++		SUBDIRS="lib ip tc"
+ 
+ $(TARGET_DIR)/$(IPROUTE2_TARGET_BINARY): $(IPROUTE2_DIR)/$(IPROUTE2_BINARY)
+-	install -Dc $(IPROUTE2_DIR)/ip/ip $(TARGET_DIR)/sbin/ip
+-	install -Dc $(IPROUTE2_DIR)/$(IPROUTE2_BINARY) $(TARGET_DIR)/$(IPROUTE2_TARGET_BINARY)
++	$(INSTALL) -m 0755 $(IPROUTE2_DIR)/ip/ip $(TARGET_DIR)/sbin/ip
++	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/sbin/ip
++	$(INSTALL) -m 0755 $(IPROUTE2_DIR)/$(IPROUTE2_BINARY) $@
++	$(STRIPCMD) $(STRIP_STRIP_ALL) $@
+ 
+ iproute2: $(TARGET_DIR)/$(IPROUTE2_TARGET_BINARY)
+ 
+ iproute2-clean:
+-	rm -f $(TARGET_DIR)/$(IPROUTE2_TARGET_BINARY)
++	rm -f $(TARGET_DIR)/sbin/ip $(TARGET_DIR)/$(IPROUTE2_TARGET_BINARY)
+ 	-$(MAKE) -C $(IPROUTE2_DIR) clean
+ 
+ iproute2-dirclean:
