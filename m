@@ -1,30 +1,23 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  4 Mar 2009 01:01:37 +0000 (UTC)
-Subject: [Buildroot] [Bug 71] ./wchar.h:41:12: error: empty filename in
-	#include
-In-Reply-To: <bug-71-163@https.bugs.busybox.net/>
-References: <bug-71-163@https.bugs.busybox.net/>
-Message-ID: <20090304010137.5BB6A7644B@busybox.osuosl.org>
+From: Zac Wheeler <zac.wheeler@gmail.com>
+Date: Tue, 3 Mar 2009 17:46:18 -0800
+Subject: [Buildroot] [PATCH] mDNSresponder cross-compilation
+Message-ID: <206b9e70903031746n64eb2b82n459ca3092b12f6a1@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=71
+This patch fixes the mdnsresponder package from Apple so that it will
+cross-compile on arm. It also fixes an incorrect usage of $(PKG)_SITE.
 
+It is against the 2009.02 release.
 
-Paul Jones <paul.jones@iwtech.com.au> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-    Attachment #101|application/text            |text/plain
-          mime type|                            |
-
-
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Please let me know if this format does not work well and I will resubmit.
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: mdnsresponder-cross-compile.patch
+Type: text/x-diff
+Size: 2974 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090303/85e20148/attachment.bin>
