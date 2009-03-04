@@ -1,32 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  4 Mar 2009 11:01:56 +0000 (UTC)
-Subject: [Buildroot] [Bug 71] ./wchar.h:41:12: error: empty filename in
-	#include
-In-Reply-To: <bug-71-163@https.bugs.busybox.net/>
-References: <bug-71-163@https.bugs.busybox.net/>
-Message-ID: <20090304110157.DBD5576457@busybox.osuosl.org>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Wed,  4 Mar 2009 11:14:40 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/target/generic
+Message-ID: <20090304111441.2308D7621E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=71
+Author: jacmet
+Date: 2009-03-04 11:14:40 +0000 (Wed, 04 Mar 2009)
+New Revision: 25521
+
+Log:
+target/generic: development system needs wchar + program invocation
+
+Modified:
+   trunk/buildroot/target/generic/Config.in
 
 
-
-
-
---- Comment #4 from Paul Jones <paul.jones@iwtech.com.au>  2009-03-04 11:01:54 UTC ---
-In Menuconfig I did this:
-
-Target Architecture -> ARM
-Target Architecture Variant -> arm920t
-Target options -> * ARM Ltd. Device Support
-                  * Generic development system 
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Changeset:
+Modified: trunk/buildroot/target/generic/Config.in
+===================================================================
+--- trunk/buildroot/target/generic/Config.in	2009-03-04 09:56:23 UTC (rev 25520)
++++ trunk/buildroot/target/generic/Config.in	2009-03-04 11:14:40 UTC (rev 25521)
+@@ -18,6 +18,7 @@
+ 
+ config BR2_TARGET_GENERIC_DEV_SYSTEM
+ 	bool "Generic development system"
++	depends on BR2_USE_WCHAR && BR2_UCLIBC_PROGRAM_INVOCATION
+ 	select BR2_CCACHE
+ 	select BR2_PACKAGE_GDB
+ 	select BR2_PACKAGE_GDB_SERVER
+@@ -56,3 +57,5 @@
+ 	help
+ 	  Board support for a generic development system.
+ 
++comment "Generic development system requires a toolchain with WCHAR and PROGRAM_INVOCATION support"
++	depends on !(BR2_USE_WCHAR && BR2_UCLIBC_PROGRAM_INVOCATION)
