@@ -1,56 +1,67 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Wed,  4 Mar 2009 14:17:01 +0000 (UTC)
-Subject: [Buildroot] svn commit:
-	trunk/buildroot/package/multimedia/alsa-utils
-Message-ID: <20090304141702.2759E7626E@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed,  4 Mar 2009 16:48:56 +0000 (UTC)
+Subject: [Buildroot] [Bug 143] New: Convert php package to
+ Makefile.autotools.in and a ton of other improvements
+Message-ID: <bug-143-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-03-04 14:17:00 +0000 (Wed, 04 Mar 2009)
-New Revision: 25527
+https://bugs.busybox.net/show_bug.cgi?id=143
 
-Log:
-alsa-utils: the entire package needs largefile support, not just aplay
+              Host: i686-linux
+            Target: arm-softfloat-linux-uclibcgnueabi
+           Summary: Convert php package to Makefile.autotools.in and a ton
+                    of other improvements
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: gustavo at zacarias.com.ar
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Modified:
-   trunk/buildroot/package/multimedia/alsa-utils/Config.in
+
+Created an attachment (id=103)
+ --> (https://bugs.busybox.net/attachment.cgi?id=103)
+Convert php to Makefile.autotools.in and other improvements
+
+This patch is a biggie:
+
+* Migrate php package to Makefile.autotools.in
+
+* Make PCRE regex an option (previously forced on)
+
+* Add calendar option from bug #77
+
+* Add external sqlite3 option from bug #141
+New option BR2_PACKAGE_PHP_PDO_SQLITE_EXTERNAL
+
+* Add alternate php.ini configuration option from bug #5
+Named BR2_PACKAGE_PHP_CONFIG and defaults to shipped config.
+In most scenarios the shipped config isn't good enough, it has a high memory
+limit for embedded for example.
+
+* Changed some options from depends to select
+Namely openssl, libxml2, zlib, gettext, gmp.
+
+* Disabled some 'y' defaults to make things lighter by default
+Namely libxml2, sqlite, pdo and pdo_sqlite.
+
+* Made some of the extensions help text more verbose
+
+Remember this one obsoletes my previous bugs #5, #77 and #141.
+Hope i'm not stepping into someone's toes...
 
 
-Changeset:
-Modified: trunk/buildroot/package/multimedia/alsa-utils/Config.in
-===================================================================
---- trunk/buildroot/package/multimedia/alsa-utils/Config.in	2009-03-04 14:13:37 UTC (rev 25526)
-+++ trunk/buildroot/package/multimedia/alsa-utils/Config.in	2009-03-04 14:17:00 UTC (rev 25527)
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_ALSA_UTILS
- 	bool "alsa-utils"
-+	depends on BR2_LARGEFILE
- 	depends on BR2_PACKAGE_ALSA_LIB
- 	select BR2_PACKAGE_NCURSES
- 	help
-@@ -8,6 +9,9 @@
- 
- 	  http://www.alsa-project.org/
- 
-+comment "alsa-utils requires a toolchain with LARGEFILE support"
-+	depends on !BR2_LARGEFILE
-+
- if BR2_PACKAGE_ALSA_UTILS
- menu "ALSA utils selection"
- 
-@@ -30,11 +34,7 @@
- 
- config BR2_PACKAGE_ALSA_UTILS_APLAY
- 	bool "aplay"
--	depends on BR2_LARGEFILE
- 
--comment "aplay requires a toolchain with LARGEFILE support"
--	depends on !BR2_LARGEFILE
--
- config BR2_PACKAGE_ALSA_UTILS_ARECORD
- 	bool "arecord"
- 
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
