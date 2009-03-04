@@ -1,40 +1,44 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Wed, 04 Mar 2009 14:27:05 +0100
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 04 Mar 2009 14:34:19 +0100
 Subject: [Buildroot] svn
 	commit:	trunk/buildroot/package/multimedia/alsa-utils
-In-Reply-To: <20090304132251.3B72D7626E@busybox.osuosl.org>
+In-Reply-To: <49AE81A9.2090605@atmel.com> (Hans-Christian Egtvedt's message of
+	"Wed\, 04 Mar 2009 14\:27\:05 +0100")
 References: <20090304132251.3B72D7626E@busybox.osuosl.org>
-Message-ID: <49AE81A9.2090605@atmel.com>
+	<49AE81A9.2090605@atmel.com>
+Message-ID: <87k575h0o4.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-jacmet at uclibc.org wrote:
+>>>>> "Hans-Christian" == Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> writes:
 
-<snipp>
+Hi,
 
-> --- trunk/buildroot/package/multimedia/alsa-utils/Config.in	2009-03-04 13:22:44 UTC (rev 25523)
-> +++ trunk/buildroot/package/multimedia/alsa-utils/Config.in	2009-03-04 13:22:50 UTC (rev 25524)
-> @@ -35,9 +35,12 @@
->  
->  config BR2_PACKAGE_ALSA_UTILS_APLAY
->  	bool "aplay"
-> -	select BR2_LARGEFILE
-> +	depends on BR2_LARGEFILE
->  	depends on BR2_PACKAGE_ALSA_UTILS
->  
-> +comment "aplay requires a toolchain with LARGEFILE support"
-> +	depends on !BR2_LARGEFILE
-> +
->  config BR2_PACKAGE_ALSA_UTILS_ARECORD
->  	bool "arecord"
->  	depends on BR2_PACKAGE_ALSA_UTILS
-> 
+ >> config BR2_PACKAGE_ALSA_UTILS_APLAY
+ >> bool "aplay"
+ >> -	select BR2_LARGEFILE
+ >> +	depends on BR2_LARGEFILE
+ >> depends on BR2_PACKAGE_ALSA_UTILS
+ >> +comment "aplay requires a toolchain with LARGEFILE support"
+ >> +	depends on !BR2_LARGEFILE
+ >> +
+ >> config BR2_PACKAGE_ALSA_UTILS_ARECORD
+ >> bool "arecord"
+ >> depends on BR2_PACKAGE_ALSA_UTILS
+ >> 
 
-I guess this also depends on LARGEFILE, arecord is just a symlink to aplay.
+ Hans-Christian> I guess this also depends on LARGEFILE, arecord is
+ Hans-Christian> just a symlink to aplay.
+
+Ok, but why do we have the config option if it's just a symlink?
+
+.. checking the .mk - Ahh, we always build everything and the config
+options is just to decide what gets copied to the target, so I guess
+alsa-utils is broken on !BR2_LARGEFILE or the depends was wrong to
+begin with.
 
 -- 
-Best regards,
-Hans-Christian Egtvedt
+Bye, Peter Korsgaard
