@@ -1,101 +1,27 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Wed,  4 Mar 2009 13:22:55 +0000 (UTC)
-Subject: [Buildroot] svn commit:
-	trunk/buildroot/package/multimedia/alsa-utils
-Message-ID: <20090304132255.6D2047626E@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 04 Mar 2009 14:23:10 +0100
+Subject: [Buildroot] dmraid: fix build & convert to Makefile.autotools.in
+In-Reply-To: <1236077910-15674-6-git-send-email-razzor@kopf-tisch.de> (Olaf
+	Rempel's message of "Tue\, 3 Mar 2009 11\:58\:27 +0100")
+References: <1236077910-15674-1-git-send-email-razzor@kopf-tisch.de>
+	<1236077910-15674-2-git-send-email-razzor@kopf-tisch.de>
+	<1236077910-15674-3-git-send-email-razzor@kopf-tisch.de>
+	<1236077910-15674-4-git-send-email-razzor@kopf-tisch.de>
+	<1236077910-15674-5-git-send-email-razzor@kopf-tisch.de>
+	<1236077910-15674-6-git-send-email-razzor@kopf-tisch.de>
+Message-ID: <87ocwhh16p.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-03-04 13:22:54 +0000 (Wed, 04 Mar 2009)
-New Revision: 25525
+>>>>> "Olaf" == Olaf Rempel <razzor@kopf-tisch.de> writes:
 
-Log:
-alsa-utils: use conditional for utils selection menu items
+ Olaf> - was not building at all (x86 uclibc)
+ Olaf> - adding devicemapper dependency
 
-Modified:
-   trunk/buildroot/package/multimedia/alsa-utils/Config.in
+Thanks, committed as r25522.
 
-
-Changeset:
-Modified: trunk/buildroot/package/multimedia/alsa-utils/Config.in
-===================================================================
---- trunk/buildroot/package/multimedia/alsa-utils/Config.in	2009-03-04 13:22:50 UTC (rev 25524)
-+++ trunk/buildroot/package/multimedia/alsa-utils/Config.in	2009-03-04 13:22:54 UTC (rev 25525)
-@@ -8,69 +8,58 @@
- 
- 	  http://www.alsa-project.org/
- 
-+if BR2_PACKAGE_ALSA_UTILS
- menu "ALSA utils selection"
--	depends on BR2_PACKAGE_ALSA_UTILS
- 
- config BR2_PACKAGE_ALSA_UTILS_ALSACONF
- 	bool "alsaconf"
--	depends on BR2_PACKAGE_ALSA_UTILS
- 
- config BR2_PACKAGE_ALSA_UTILS_ALSACTL
- 	bool "alsactl"
- 	default y
--	depends on BR2_PACKAGE_ALSA_UTILS
- 
- config BR2_PACKAGE_ALSA_UTILS_ALSAMIXER
- 	bool "alsamixer"
- 	default y
--	depends on BR2_PACKAGE_ALSA_UTILS
- 
- config BR2_PACKAGE_ALSA_UTILS_AMIDI
- 	bool "amidi"
--	depends on BR2_PACKAGE_ALSA_UTILS
- 
- config BR2_PACKAGE_ALSA_UTILS_AMIXER
- 	bool "amixer"
--	depends on BR2_PACKAGE_ALSA_UTILS
- 
- config BR2_PACKAGE_ALSA_UTILS_APLAY
- 	bool "aplay"
- 	depends on BR2_LARGEFILE
--	depends on BR2_PACKAGE_ALSA_UTILS
- 
- comment "aplay requires a toolchain with LARGEFILE support"
- 	depends on !BR2_LARGEFILE
- 
- config BR2_PACKAGE_ALSA_UTILS_ARECORD
- 	bool "arecord"
--	depends on BR2_PACKAGE_ALSA_UTILS
- 
- config BR2_PACKAGE_ALSA_UTILS_IECSET
- 	bool "iecset"
--	depends on BR2_PACKAGE_ALSA_UTILS
- 
- config BR2_PACKAGE_ALSA_UTILS_ACONNECT
- 	bool "aconnect"
--	depends on BR2_PACKAGE_ALSA_UTILS
- 
- config BR2_PACKAGE_ALSA_UTILS_APLAYMIDI
- 	bool "aplaymidi"
--	depends on BR2_PACKAGE_ALSA_UTILS
- 
- config BR2_PACKAGE_ALSA_UTILS_ARECORDMIDI
- 	bool "arecordmidi"
--	depends on BR2_PACKAGE_ALSA_UTILS
- 
- config BR2_PACKAGE_ALSA_UTILS_ASEQDUMP
- 	bool "aseqdump"
--	depends on BR2_PACKAGE_ALSA_UTILS
- 
- config BR2_PACKAGE_ALSA_UTILS_ASEQNET
- 	bool "aseqnet"
--	depends on BR2_PACKAGE_ALSA_UTILS
- 
- config BR2_PACKAGE_ALSA_UTILS_SPEAKER_TEST
- 	bool "speaker-test"
--	depends on BR2_PACKAGE_ALSA_UTILS
- 
- endmenu
-+
-+endif
-+
+-- 
+Bye, Peter Korsgaard
