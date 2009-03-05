@@ -1,43 +1,53 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  5 Mar 2009 13:07:41 +0000 (UTC)
-Subject: [Buildroot] [Bug 151] New: openssl package trivial fixes
-Message-ID: <bug-151-163@https.bugs.busybox.net/>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Thu,  5 Mar 2009 13:33:07 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/bind
+Message-ID: <20090305133307.66DF67626F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=151
+Author: jacmet
+Date: 2009-03-05 13:33:06 +0000 (Thu, 05 Mar 2009)
+New Revision: 25541
 
-              Host: i686-linux
-            Target: arm-softfloat-linux-uclibcgnueabi
-           Summary: openssl package trivial fixes
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: trivial
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: gustavo at zacarias.com.ar
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Log:
+bind: needs largefile support, not ipv6
+
+And at the same time move the comment below the install tools entry so it
+gets identied properly.
+
+Modified:
+   trunk/buildroot/package/bind/Config.in
 
 
-Created an attachment (id=109)
- --> (https://bugs.busybox.net/attachment.cgi?id=109)
-openssl package misc fixes
-
-* Avoid fips directory completely since it just installs source file cruft in
-lib
-* Point openssldir to a more friendly and common /etc/ssl rather than
-/usr/lib/ssl
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Changeset:
+Modified: trunk/buildroot/package/bind/Config.in
+===================================================================
+--- trunk/buildroot/package/bind/Config.in	2009-03-05 13:28:55 UTC (rev 25540)
++++ trunk/buildroot/package/bind/Config.in	2009-03-05 13:33:06 UTC (rev 25541)
+@@ -3,7 +3,7 @@
+ 
+ config BR2_PACKAGE_BIND
+ 	bool "bind"
+-	depends on BR2_INET_IPV6
++	depends on BR2_LARGEFILE
+ 	help
+ 	  BIND (Berkeley Internet Name Domain) is an implementation of
+ 	  the Domain Name System (DNS) protocols and provides an openly
+@@ -24,12 +24,11 @@
+ 
+ 	  http://www.isc.org/sw/bind/
+ 
+-comment "bind requires a toolchain with IPv6 support"
+-	depends on !BR2_INET_IPV6
+-
+ config BR2_PACKAGE_BIND_TOOLS
+ 	bool "Install tools"
+ 	depends on BR2_PACKAGE_BIND
+ 	help
+ 	  Install tools (host, nslookup, dig, nsupdate)
+ 
++comment "bind requires a toolchain with LARGEFILE support"
++	depends on !BR2_LARGEFILE
