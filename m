@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Thu,  5 Mar 2009 19:00:18 +0000 (UTC)
-Subject: [Buildroot] svn commit: [25555] trunk/buildroot/package/logrotate
-Message-ID: <20090305190018.85BAD76465@busybox.osuosl.org>
+Date: Thu,  5 Mar 2009 19:25:13 +0000 (UTC)
+Subject: [Buildroot] svn commit: [25557] trunk/buildroot/package/xerces
+Message-ID: <20090305192513.DEA76775EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,31 +9,30 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2009-03-05 19:00:17 +0000 (Thu, 05 Mar 2009)
-New Revision: 25555
+Date: 2009-03-05 19:25:13 +0000 (Thu, 05 Mar 2009)
+New Revision: 25557
 
 Log:
-logrotate: only install logrotate.conf if not present in target_skeleton
-
-Allow platforms to provide a custom logrotate.conf in their target_skeleton.
+xerces: needs C++ support in toolchain
 
 Modified:
-   trunk/buildroot/package/logrotate/logrotate.mk
+   trunk/buildroot/package/xerces/Config.in
 
 
 Changeset:
-Modified: trunk/buildroot/package/logrotate/logrotate.mk
+Modified: trunk/buildroot/package/xerces/Config.in
 ===================================================================
---- trunk/buildroot/package/logrotate/logrotate.mk	2009-03-05 19:00:11 UTC (rev 25554)
-+++ trunk/buildroot/package/logrotate/logrotate.mk	2009-03-05 19:00:17 UTC (rev 25555)
-@@ -18,7 +18,9 @@
+--- trunk/buildroot/package/xerces/Config.in	2009-03-05 19:07:01 UTC (rev 25556)
++++ trunk/buildroot/package/xerces/Config.in	2009-03-05 19:25:13 UTC (rev 25557)
+@@ -1,7 +1,11 @@
+ config BR2_PACKAGE_XERCES
+ 	bool "xerces-c++"
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	select BR2_PACKAGE_LIBICONV
+ 	help
+ 	  Xerces-C++ is a validating XML parser written in portable C++.
  
- $(TARGET_DIR)/$(LOGROTATE_TARGET_BINARY): $(LOGROTATE_DIR)/$(LOGROTATE_BINARY)
- 	$(MAKE) PREFIX=$(TARGET_DIR) -C $(LOGROTATE_DIR) install
--	$(INSTALL) -m 0644 package/logrotate/logrotate.conf $(TARGET_DIR)/etc/logrotate.conf
-+	if [ ! -f $(TARGET_DIR)/etc/logrotate.conf ]; then
-+		$(INSTALL) -m 0644 package/logrotate/logrotate.conf $(TARGET_DIR)/etc/logrotate.conf;
-+	fi
- 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/logrotate.d
- 
- logrotate: popt $(TARGET_DIR)/$(LOGROTATE_TARGET_BINARY)
+ 	  http://xml.apache.org/xerces-c/
++
++comment "xerces-c++ requires a toolchain with C++ support enabled"
++	depends on !BR2_INSTALL_LIBSTDCPP
