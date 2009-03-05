@@ -1,19 +1,18 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  5 Mar 2009 12:38:53 +0000 (UTC)
-Subject: [Buildroot] [Bug 147] New: buildroot toolchain fails to build
-	w/binutils-2.19.1
-Message-ID: <bug-147-163@https.bugs.busybox.net/>
+Date: Thu,  5 Mar 2009 13:07:41 +0000 (UTC)
+Subject: [Buildroot] [Bug 151] New: openssl package trivial fixes
+Message-ID: <bug-151-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=147
+https://bugs.busybox.net/show_bug.cgi?id=151
 
               Host: i686-linux
             Target: arm-softfloat-linux-uclibcgnueabi
-           Summary: buildroot toolchain fails to build w/binutils-2.19.1
+           Summary: openssl package trivial fixes
            Product: buildroot
            Version: unspecified
           Platform: PC
@@ -28,9 +27,14 @@ https://bugs.busybox.net/show_bug.cgi?id=147
    Estimated Hours: 0.0
 
 
-It fails in the patch stage since there's no toolchain/binutils/2.19.1
-directory.
-Solution: create an empty directory.
+Created an attachment (id=109)
+ --> (https://bugs.busybox.net/attachment.cgi?id=109)
+openssl package misc fixes
+
+* Avoid fips directory completely since it just installs source file cruft in
+lib
+* Point openssldir to a more friendly and common /etc/ssl rather than
+/usr/lib/ssl
 
 
 -- 
