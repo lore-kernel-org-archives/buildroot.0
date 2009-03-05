@@ -1,12 +1,12 @@
-From: Will Wagner <will_wagner@carallon.com>
-Date: Thu, 05 Mar 2009 15:22:49 +0000
-Subject: [Buildroot] svn commit: trunk/buildroot/package:
- fuse	lzma	netkitbase qtopia4
+From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
+Date: Thu, 05 Mar 2009 16:30:42 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package: fuse
+ lzma	netkitbase qtopia4
 In-Reply-To: <87vdqodmje.fsf@macbook.be.48ers.dk>
 References: <20090305141755.ED5BC7626F@busybox.osuosl.org>	<49AFE41E.2060605@atmel.com>
 	<874oy8f2qm.fsf@macbook.be.48ers.dk>	<49AFE922.2060109@atmel.com>
 	<87vdqodmje.fsf@macbook.be.48ers.dk>
-Message-ID: <49AFEE49.1080505@carallon.com>
+Message-ID: <49AFF022.3060404@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -41,12 +41,14 @@ Peter Korsgaard wrote:
 > E.G. it has always been like that.
 > 
 
-I have been patching qtopia4 config for a long time to remove the NPTL select. Works fine 
-on arm and x86 with both old linux threads and linux threads.
+I have no idea what have happened, but the select does not trigger...
+
+~ > grep NATIVE .config
+# BR2_PTHREADS_NATIVE is not set
+
+~ > grep NATIVE toolchain_build_avr32/uClibc-0.9.30/.config
+~ >
 
 -- 
-------------------------------------------------------------------------
-Will Wagner                                     will_wagner at carallon.com
-Development Manager                      Office Tel: +44 (0)20 7371 2032
-Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
-------------------------------------------------------------------------
+Best regards,
+Hans-Christian Egtvedt
