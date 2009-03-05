@@ -1,43 +1,40 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Thu,  5 Mar 2009 15:35:38 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/package/qtopia4
-Message-ID: <20090305153538.8B0CD7626F@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu,  5 Mar 2009 16:06:47 +0000 (UTC)
+Subject: [Buildroot] [Bug 81] New package wpa_supplicant
+In-Reply-To: <bug-81-163@https.bugs.busybox.net/>
+References: <bug-81-163@https.bugs.busybox.net/>
+Message-ID: <20090305160648.1A59C76462@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-03-05 15:35:37 +0000 (Thu, 05 Mar 2009)
-New Revision: 25549
-
-Log:
-qtopia4: remove invalid PTHREADS_NATIVE dependency
-
-Modified:
-   trunk/buildroot/package/qtopia4/Config.in
+https://bugs.busybox.net/show_bug.cgi?id=81
 
 
-Changeset:
-Modified: trunk/buildroot/package/qtopia4/Config.in
-===================================================================
---- trunk/buildroot/package/qtopia4/Config.in	2009-03-05 15:30:57 UTC (rev 25548)
-+++ trunk/buildroot/package/qtopia4/Config.in	2009-03-05 15:35:37 UTC (rev 25549)
-@@ -1,14 +1,13 @@
- config BR2_PACKAGE_QTOPIA4
- 	bool "qtopia4"
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_PTHREADS_NATIVE
- 	help
- 	  Qtopia core 4.
- 
- 	  http://www.trolltech.com/
- 
--comment "qtopia4 requires a toolchain with C++ and NPTL support enabled"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_PTHREADS_NATIVE
-+comment "qtopia4 requires a toolchain with C++ support enabled"
-+	depends on !BR2_INSTALL_LIBSTDCPP
- 
- if BR2_PACKAGE_QTOPIA4
- 
+Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+  Attachment #51 is|0                           |1
+           obsolete|                            |
+  Attachment #75 is|0                           |1
+           obsolete|                            |
+
+
+
+
+--- Comment #4 from Gustavo Zacarias <gustavo@zacarias.com.ar>  2009-03-05 16:06:46 UTC ---
+Created an attachment (id=111)
+ --> (https://bugs.busybox.net/attachment.cgi?id=111)
+New wpa_supplicant package take 4
+
+Take 4: converted to Makefile.autotools.in
+Not so different since wpa_supplicant isn't autotools-based, just cleaner.
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
