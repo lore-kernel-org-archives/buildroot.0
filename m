@@ -1,58 +1,107 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 Mar 2009 15:13:59 +0100
-Subject: [Buildroot] Duplication and size of binaries in generated toolchain
-Message-ID: <20090305151359.20b37039@surf>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Thu,  5 Mar 2009 14:17:55 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package: fuse lzma
+	netkitbase qtopia4
+Message-ID: <20090305141755.ED5BC7626F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Author: jacmet
+Date: 2009-03-05 14:17:55 +0000 (Thu, 05 Mar 2009)
+New Revision: 25547
 
-After compiling a toolchain with Buildroot (no packages, no kernel, see
-attached configuration file), I end up with duplicated binaries in the
-STAGING_DIR.
+Log:
+package: convert some Config.in selects to depends
 
-For example, for the 'ar' binutil. The first copy is in :
+Patch by Olaf Rempel <razzor@kopf-tisch.de>.
 
-$ ls -l usr/bin/arm-linux-uclibcgnueabi-ar 
--rwxr-xr-x 2 thomas thomas 2500708 2009-03-05 14:19 usr/bin/arm-linux-uclibcgnueabi-ar
-$ md5sum usr/bin/arm-linux-uclibcgnueabi-ar 
-82a898a705b8313ff156ee2287552a60  usr/bin/arm-linux-uclibcgnueabi-ar
+quick grep showed theses invalid selects of toolchain options.
 
-And the second copy is in :
+Modified:
+   trunk/buildroot/package/fuse/Config.in
+   trunk/buildroot/package/lzma/Config.in
+   trunk/buildroot/package/netkitbase/Config.in
+   trunk/buildroot/package/qtopia4/Config.in
 
-$ ls -l usr/arm-linux/bin/ar 
--rwxr-xr-x 2 thomas thomas 2500708 2009-03-05 14:19 usr/arm-linux/bin/ar
-$ md5sum usr/arm-linux/bin/ar 
-82a898a705b8313ff156ee2287552a60  usr/arm-linux/bin/ar
 
-Same story for as, c++, g++, gcc, ld, nm, objcopy, objdump, ranlib,
-strip. In total, it's 24 MB of binaries that are duplicated.
+Changeset:
+Modified: trunk/buildroot/package/fuse/Config.in
+===================================================================
+--- trunk/buildroot/package/fuse/Config.in	2009-03-05 13:48:29 UTC (rev 25546)
++++ trunk/buildroot/package/fuse/Config.in	2009-03-05 14:17:55 UTC (rev 25547)
+@@ -1,7 +1,10 @@
+ config BR2_PACKAGE_LIBFUSE
+ 	bool "libfuse"
+-	select BR2_LARGEFILE
++	depends on BR2_LARGEFILE
+ 	help
+ 	  FUSE (Filesystem in UserSpacE)
+ 
+ 	  http://fuse.sourceforge.net/
++
++comment "libfuse requires a toolchain with LARGEFILE support"
++        depends on !BR2_LARGEFILE
 
-I'm not sure why the binaries without the arm-linux prefix are needed
-in usr/arm-linux/bin. But if they are, couldn't they be symbolic links.
+Modified: trunk/buildroot/package/lzma/Config.in
+===================================================================
+--- trunk/buildroot/package/lzma/Config.in	2009-03-05 13:48:29 UTC (rev 25546)
++++ trunk/buildroot/package/lzma/Config.in	2009-03-05 14:17:55 UTC (rev 25547)
+@@ -1,11 +1,14 @@
+ config BR2_PACKAGE_LZMA_TARGET
+ 	bool "Install lzma for the target system"
+-	select BR2_GCC_CROSS_CXX
++	depends on BR2_GCC_CROSS_CXX
+ 	help
+ 	  lzma utils on the target
+ 
+ 	  http://tukaani.org/lzma/
+ 
++comment "lzma requires a toolchain with C++ support"
++        depends on !BR2_GCC_CROSS_CXX
++
+ config BR2_PACKAGE_LZMA_TARGET_HEADERS
+ 	bool "lzma headers in target"
+ 	depends on BR2_PACKAGE_LZMA_TARGET
 
-Last question: why are the individual binutils so big ? For example,
-the strip program is 2.9 MB, ar is 2.4 MB. This looks ridiculously big
-for such simple tools. First of all, they are not stripped and they
-include debugging symbols, is it really necessary ? Even after
-stripping, strip itself is still ~650 KB. Is it because of the static
-linking against libbfd ?
+Modified: trunk/buildroot/package/netkitbase/Config.in
+===================================================================
+--- trunk/buildroot/package/netkitbase/Config.in	2009-03-05 13:48:29 UTC (rev 25546)
++++ trunk/buildroot/package/netkitbase/Config.in	2009-03-05 14:17:55 UTC (rev 25547)
+@@ -1,7 +1,10 @@
+ config BR2_PACKAGE_NETKITBASE
+ 	bool "netkitbase"
+-	select BR2_INET_RPC
++	depends on BR2_INET_RPC
+ 	help
+ 	  Old-style inetd.
+ 
+ 	  ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/
++
++comment "netkitbase requires a toolchain with RPC support"
++        depends on !BR2_INET_RPC
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: .config
-Type: application/octet-stream
-Size: 17514 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090305/b7fd5497/attachment-0001.obj>
+Modified: trunk/buildroot/package/qtopia4/Config.in
+===================================================================
+--- trunk/buildroot/package/qtopia4/Config.in	2009-03-05 13:48:29 UTC (rev 25546)
++++ trunk/buildroot/package/qtopia4/Config.in	2009-03-05 14:17:55 UTC (rev 25547)
+@@ -1,14 +1,14 @@
+ config BR2_PACKAGE_QTOPIA4
+ 	bool "qtopia4"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	select BR2_PTHREADS_NATIVE
++	depends on BR2_PTHREADS_NATIVE
+ 	help
+ 	  Qtopia core 4.
+ 
+ 	  http://www.trolltech.com/
+ 
+-comment "qtopia4 requires a toolchain with C++ support enabled"
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "qtopia4 requires a toolchain with C++ and NPTL support enabled"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_PTHREADS_NATIVE
+ 
+ if BR2_PACKAGE_QTOPIA4
+ 
