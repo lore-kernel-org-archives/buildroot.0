@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Thu,  5 Mar 2009 12:11:27 +0000 (UTC)
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/uClibc
-Message-ID: <20090305121127.837B27626F@busybox.osuosl.org>
+Date: Thu,  5 Mar 2009 12:11:37 +0000 (UTC)
+Subject: [Buildroot] svn commit: trunk/buildroot/package/bind
+Message-ID: <20090305121137.69F7E7626F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,66 +9,296 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2009-03-05 12:11:26 +0000 (Thu, 05 Mar 2009)
-New Revision: 25535
+Date: 2009-03-05 12:11:36 +0000 (Thu, 05 Mar 2009)
+New Revision: 25536
 
 Log:
-uclibc: 0.9.30.1 fix for ppc32 C99 math
+bind: bump version and convert to Makefile.autotools.in
 
-From Bernhard.
+Patch by Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Closes #145.
+
+Current bind package is version 9.3.2 which is from the 9.3 branch and is
+EOLed. It has many security bugs probably fixed in 9.3.6-P1 but since it
+won't be supported for long it's probably metter to move on to a supported
+branch. CVE-2009-0025, CVE-2008-1447, CVE-2008-0122, CVE-2007-2926 and
+probably more. While at it migrate to Makefile.autotools.in too. Also
+introduced an option for/not to install userland tools (dig, host, nslookup,
+nsupdate).
+
+[ Peter: don't install into staging ]
 
 Added:
-   trunk/buildroot/toolchain/uClibc/uClibc-0.9.30.1-c99-ldbl-math.patch
+   trunk/buildroot/package/bind/bind-9.5.1-P1-cross.patch
+   trunk/buildroot/package/bind/bind-9.5.1-P1-susv3-legacy.patch
+
+Removed:
+   trunk/buildroot/package/bind/bind-9.3.2-susv3-legacy.patch
+   trunk/buildroot/package/bind/bind-cross-fix.patch
+
+Modified:
+   trunk/buildroot/package/bind/Config.in
+   trunk/buildroot/package/bind/bind.mk
 
 
 Changeset:
-Added: trunk/buildroot/toolchain/uClibc/uClibc-0.9.30.1-c99-ldbl-math.patch
+Modified: trunk/buildroot/package/bind/Config.in
 ===================================================================
---- trunk/buildroot/toolchain/uClibc/uClibc-0.9.30.1-c99-ldbl-math.patch	                        (rev 0)
-+++ trunk/buildroot/toolchain/uClibc/uClibc-0.9.30.1-c99-ldbl-math.patch	2009-03-05 12:11:26 UTC (rev 25535)
-@@ -0,0 +1,45 @@
-+Index: uClibc-0.9.30.1/libc/sysdeps/linux/powerpc/bits/wordsize.h
-+===================================================================
-+--- uClibc-0.9.30.1/libc/sysdeps/linux/powerpc/bits/wordsize.h	(revision 25503)
-++++ uClibc-0.9.30.1/libc/sysdeps/linux/powerpc/bits/wordsize.h	(working copy)
-+@@ -14,6 +14,6 @@
-+    to the double functions.  */
-+ # define __LONG_DOUBLE_MATH_OPTIONAL   1
-+ # ifndef __LONG_DOUBLE_128__
-+-#  undef __UCLIBC_HAS_LONG_DOUBLE_MATH__
-++#  define __NO_LONG_DOUBLE_MATH	1
-+ # endif
-+ #endif
-+Index: uClibc-0.9.30.1/libc/sysdeps/linux/powerpc/bits/mathdef.h
-+===================================================================
-+--- uClibc-0.9.30.1/libc/sysdeps/linux/powerpc/bits/mathdef.h	(revision 25503)
-++++ uClibc-0.9.30.1/libc/sysdeps/linux/powerpc/bits/mathdef.h	(working copy)
-+@@ -70,6 +70,8 @@ typedef double double_t;
-+ /* Signal that we do not really have a `long double'.  The disables the
-+    declaration of all the `long double' function variants.  */
-+ # if __WORDSIZE == 32
-+-#  undef __UCLIBC_HAS_LONG_DOUBLE_MATH__
-++#  define __NO_LONG_DOUBLE_MATH	1
-++# elif !defined __UCLIBC_HAS_LONG_DOUBLE_MATH__
-++#  define __NO_LONG_DOUBLE_MATH	1
-+ # endif  /* __WORDSIZE == 32 */
-+ #endif  /* __UCLIBC_HAS_LONG_DOUBLE_MATH__ */
-+Index: uClibc-0.9.30.1/libc/sysdeps/linux/powerpc/bits/mathinline.h
-+===================================================================
-+--- uClibc-0.9.30.1/libc/sysdeps/linux/powerpc/bits/mathinline.h	(revision 25503)
-++++ uClibc-0.9.30.1/libc/sysdeps/linux/powerpc/bits/mathinline.h	(working copy)
-+@@ -107,6 +107,14 @@ __NTH (lrintf (float __x))
-+ }
-+ # endif
+--- trunk/buildroot/package/bind/Config.in	2009-03-05 12:11:26 UTC (rev 25535)
++++ trunk/buildroot/package/bind/Config.in	2009-03-05 12:11:36 UTC (rev 25536)
+@@ -22,3 +22,10 @@
+ 	  intended to be linked with applications requiring name service.
+ 
+ 	  http://www.isc.org/sw/bind/
++
++config BR2_PACKAGE_BIND_TOOLS
++	bool "Install tools"
++	depends on BR2_PACKAGE_BIND
++	help
++	  Install tools (host, nslookup, dig, nsupdate)
++
+
+Deleted: trunk/buildroot/package/bind/bind-9.3.2-susv3-legacy.patch
+===================================================================
+--- trunk/buildroot/package/bind/bind-9.3.2-susv3-legacy.patch	2009-03-05 12:11:26 UTC (rev 25535)
++++ trunk/buildroot/package/bind/bind-9.3.2-susv3-legacy.patch	2009-03-05 12:11:36 UTC (rev 25536)
+@@ -1,33 +0,0 @@
+----
+- lib/isc/unix/ifiter_ioctl.c |    7 ++++---
+- 1 file changed, 4 insertions(+), 3 deletions(-)
+-
+-Index: bind-9.3.2/lib/isc/unix/ifiter_ioctl.c
+-===================================================================
+---- bind-9.3.2.orig/lib/isc/unix/ifiter_ioctl.c
+-+++ bind-9.3.2/lib/isc/unix/ifiter_ioctl.c
+-@@ -17,11 +17,12 @@
+- 
+- /* $Id: ifiter_ioctl.c,v 1.19.2.5.2.17 2005/10/14 02:13:07 marka Exp $ */
+- 
+-+#include <string.h>
+-+
+- /*
+-  * Obtain the list of network interfaces using the SIOCGLIFCONF ioctl.
+-  * See netintro(4).
+-  */
+--
+- #if defined(SIOCGLIFCONF) && defined(SIOCGLIFADDR)
+- #ifdef ISC_PLATFORM_HAVEIF_LADDRCONF
+- #define lifc_len iflc_len
+-@@ -478,8 +479,8 @@
+- 	for (i = 0; i < 16; i++) {
+- 		unsigned char byte;
+- 		static const char hex[] = "0123456789abcdef";
+--		byte = ((index(hex, address[i * 2]) - hex) << 4) |
+--		       (index(hex, address[i * 2 + 1]) - hex);
+-+		byte = ((strchr(hex, address[i * 2]) - hex) << 4) |
+-+		       (strchr(hex, address[i * 2 + 1]) - hex);
+- 		addr6.s6_addr[i] = byte;
+- 	}
+- 	iter->current.af = AF_INET6;
+
+Added: trunk/buildroot/package/bind/bind-9.5.1-P1-cross.patch
+===================================================================
+--- trunk/buildroot/package/bind/bind-9.5.1-P1-cross.patch	                        (rev 0)
++++ trunk/buildroot/package/bind/bind-9.5.1-P1-cross.patch	2009-03-05 12:11:36 UTC (rev 25536)
+@@ -0,0 +1,14 @@
++diff -Nura bind-9.5.1-P1/lib/dns/Makefile.in bind-9.5.1-P1.gencross/lib/dns/Makefile.in
++--- bind-9.5.1-P1/lib/dns/Makefile.in	2007-09-11 22:09:08.000000000 -0300
+++++ bind-9.5.1-P1.gencross/lib/dns/Makefile.in	2009-03-04 16:35:23.000000000 -0200
++@@ -160,8 +160,8 @@
++ 	./gen -s ${srcdir} > code.h
 + 
-++/* __MATH_INLINE int
-++__NTH (__finite (double __x))
-++{
-++  return (__extension__
-++    (((union { double __d; int __i[2]; }) { __d: __x}.__i[1]
-++      & 0x7fffffff) - 0x7ff00000) >> 31);
-++}
-++*/
-+ __MATH_INLINE double fdim (double __x, double __y) __THROW;
-+ __MATH_INLINE double
-+ __NTH (fdim (double __x, double __y))
++ gen: gen.c
++-	${BUILD_CC} ${BUILD_CFLAGS} -I${top_srcdir}/lib/isc/include \
++-	${BUILD_CPPFLAGS} ${BUILD_LDFLAGS} -o $@ ${srcdir}/gen.c ${BUILD_LIBS}
+++	${HOSTCC} ${HOST_CFLAGS} -I${top_srcdir}/lib/isc/include \
+++	${HOST_LDFLAGS} -o $@ ${srcdir}/gen.c
++ 
++ rbtdb64. at O@: rbtdb.c
++ 
+
+Added: trunk/buildroot/package/bind/bind-9.5.1-P1-susv3-legacy.patch
+===================================================================
+--- trunk/buildroot/package/bind/bind-9.5.1-P1-susv3-legacy.patch	                        (rev 0)
++++ trunk/buildroot/package/bind/bind-9.5.1-P1-susv3-legacy.patch	2009-03-05 12:11:36 UTC (rev 25536)
+@@ -0,0 +1,23 @@
++diff -Nura bind-9.5.1-P1/lib/isc/unix/ifiter_ioctl.c bind-9.5.1-P1.nosusv3/lib/isc/unix/ifiter_ioctl.c
++--- bind-9.5.1-P1/lib/isc/unix/ifiter_ioctl.c	2007-08-30 03:02:28.000000000 -0300
+++++ bind-9.5.1-P1.nosusv3/lib/isc/unix/ifiter_ioctl.c	2009-03-04 16:31:20.000000000 -0200
++@@ -17,6 +17,8 @@
++ 
++ /* $Id: ifiter_ioctl.c,v 1.58 2007/08/30 06:02:28 marka Exp $ */
++ 
+++#include <string.h>
+++
++ /*! \file
++  * \brief
++  * Obtain the list of network interfaces using the SIOCGLIFCONF ioctl.
++@@ -479,8 +481,8 @@
++ 	for (i = 0; i < 16; i++) {
++ 		unsigned char byte;
++ 		static const char hex[] = "0123456789abcdef";
++-		byte = ((index(hex, address[i * 2]) - hex) << 4) |
++-		       (index(hex, address[i * 2 + 1]) - hex);
+++		byte = ((strchr(hex, address[i * 2]) - hex) << 4) |
+++			(strchr(hex, address[i * 2 + 1]) - hex);
++ 		addr6.s6_addr[i] = byte;
++ 	}
++ 	iter->current.af = AF_INET6;
+
+Deleted: trunk/buildroot/package/bind/bind-cross-fix.patch
+===================================================================
+--- trunk/buildroot/package/bind/bind-cross-fix.patch	2009-03-05 12:11:26 UTC (rev 25535)
++++ trunk/buildroot/package/bind/bind-cross-fix.patch	2009-03-05 12:11:36 UTC (rev 25536)
+@@ -1,11 +0,0 @@
+---- bind-9.3.2/lib/dns/Makefile.in
+-+++ bind-9.3.2/lib/dns/Makefile.in
+-@@ -156,7 +156,7 @@
+- 	./gen -s ${srcdir} > code.h
+- 
+- gen: gen.c
+--	${CC} ${ALL_CFLAGS} ${LDFLAGS} -o $@ ${srcdir}/gen.c ${LIBS}
+-+	cc ${ALL_CFLAGS} -o $@ ${srcdir}/gen.c
+- 
+- rbtdb64. at O@: rbtdb.c
+- 
+
+Modified: trunk/buildroot/package/bind/bind.mk
+===================================================================
+--- trunk/buildroot/package/bind/bind.mk	2009-03-05 12:11:26 UTC (rev 25535)
++++ trunk/buildroot/package/bind/bind.mk	2009-03-05 12:11:36 UTC (rev 25536)
+@@ -3,99 +3,45 @@
+ # bind
+ #
+ #############################################################
+-BIND_VERSION:=9.3.2
+-BIND_SOURCE:=bind-$(BIND_VERSION).tar.gz
+-BIND_SITE:=ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+-BIND_DIR1:=$(TOOL_BUILD_DIR)/bind-$(BIND_VERSION)
+-BIND_DIR2:=$(BUILD_DIR)/bind-$(BIND_VERSION)
+-BIND_CAT:=$(ZCAT)
+-BIND_BINARY:=bin/named/named
+-BIND_TARGET_BINARY:=usr/sbin/named
+-
+-$(DL_DIR)/$(BIND_SOURCE):
+-	 $(call DOWNLOAD,$(BIND_SITE),$(BIND_SOURCE))
+-
+-bind-source: $(DL_DIR)/$(BIND_SOURCE)
+-
+-#############################################################
+-#
+-# build bind for use on the target system
+-#
+-#############################################################
+-$(BIND_DIR2)/.unpacked: $(DL_DIR)/$(BIND_SOURCE)
+-	$(BIND_CAT) $(DL_DIR)/$(BIND_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(BIND_DIR2) package/bind/ bind\*.patch
+-	touch $@
+-
+-$(BIND_DIR2)/Makefile: $(BIND_DIR2)/.unpacked
+-	(cd $(BIND_DIR2); rm -rf config.cache; \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		$(TARGET_CONFIGURE_ARGS) \
+-		./configure \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		--prefix=/usr \
+-		--libdir=/lib \
+-		--libexecdir=/usr/lib \
+-		--libdir=/lib \
+-		--includedir=/include \
++BIND_VERSION = 9.5.1-P1
++BIND_SOURCE = bind-$(BIND_VERSION).tar.gz
++BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
++BIND_LIBTOOL_PATCH = NO
++BIND_DEPENDENCIES = uclibc
++BIND_INSTALL_STAGING = NO
++BIND_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
++BIND_TARGET_SBINS = lwresd named named-checkconf named-checkzone
++BIND_TARGET_SBINS += named-compilezone rndc rndc-confgen
++BIND_TARGET_SBINS += dnssec-keygen dnssec-signzone
++BIND_TARGET_BINS = dig host nslookup nsupdate
++BIND_TARGET_LIBS = libbind9.* libdns.* libisccc.* libisccfg.* libisc.* liblwres.*
++BIND_CONF_ENV =	BUILD_CC="$(TARGET_CC)" \
++		BUILD_CFLAGS="$(TARGET_CFLAGS)"
++BIND_CONF_OPT =	$(DISABLE_IPV6) \
+ 		--sysconfdir=/etc \
+ 		--localstatedir=/var \
+-		--without-openssl \
+-		--with-randomdev=/dev/random \
+-		$(DISABLE_IPV6) \
+-		--with-libtool \
++		--with-randomdev=/dev/urandom \
++		--with-openssl=no \
++		--with-libxml2=no \
+ 		--with-pic \
+-	)
++		--with-libtool \
++		--disable-epoll \
++		--disable-threads
+ 
+-$(BIND_DIR2)/$(BIND_BINARY): $(BIND_DIR2)/Makefile
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -j1 -C $(BIND_DIR2)
+-	touch -c $@
++$(eval $(call AUTOTARGETS,package,bind))
+ 
+-#############################################################
+-#
+-# install bind binaries
+-#
+-#############################################################
+-$(TARGET_DIR)/$(BIND_TARGET_BINARY): $(BIND_DIR2)/$(BIND_BINARY)
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -j1 MAKEDEFS="INSTALL_DATA=true" \
+-		DESTDIR=$(TARGET_DIR) -C $(BIND_DIR2)/bin install
+-	cd $(TARGET_DIR)/usr/man; rmdir --ignore-fail-on-non-empty man8 man5 `pwd`
++$(BIND_HOOK_POST_INSTALL):
++	rm -f $(TARGET_DIR)/isc-config.sh
++ifneq ($(BR2_PACKAGE_BIND_TOOLS),y)
++	rm -rf $(addprefix $(TARGET_DIR)/usr/bin/, $(BIND_TARGET_BINS))
++endif
+ 	$(INSTALL) -m 0755 -D package/bind/bind.sysvinit $(TARGET_DIR)/etc/init.d/S81named
+ 
+-bind-bin: $(TARGET_DIR)/$(BIND_TARGET_BINARY) bind-lib
++$(BIND_TARGET_UNINSTALL):
++	$(call MESSAGE,"Uninstalling")
++	rm -rf $(addprefix $(TARGET_DIR)/usr/sbin/, $(BIND_TARGET_SBINS))
++	rm -rf $(addprefix $(TARGET_DIR)/usr/bin/, $(BIND_TARGET_BINS))
++	rm -rf $(addprefix $(TARGET_DIR)/usr/lib/, $(BIND_TARGET_LIBS))
++	rm -f $(TARGET_DIR)/etc/init.d/S81named
++	rm -f $(BIND_TARGET_INSTALL_TARGET) $(BIND_HOOK_POST_INSTALL)
+ 
+-#############################################################
+-#
+-# install bind libraries
+-#
+-#############################################################
+-$(STAGING_DIR)/lib/libdns.so: $(BIND_DIR2)/$(BIND_BINARY)
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -j1 DESTDIR=$(STAGING_DIR) -C $(BIND_DIR2)/lib install
+-
+-$(TARGET_DIR)/lib/libdns.so: $(STAGING_DIR)/lib/libdns.so
+-	mkdir -p $(TARGET_DIR)/lib
+-	cd $(STAGING_DIR)/lib; \
+-	    cp -a libdns*so* libisc*so* libbind9*so* \
+-	    liblwres*so* $(TARGET_DIR)/lib
+-
+-bind-lib: $(STAGING_DIR)/lib/libdns.so $(TARGET_DIR)/lib/libdns.so
+-
+-bind: uclibc bind-bin bind-lib
+-
+-bind-clean:
+-	-$(MAKE) -C $(BIND_DIR2) clean
+-
+-bind-dirclean:
+-	rm -rf $(BIND_DIR2)
+-
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_BIND),y)
+-TARGETS+=bind
+-endif
+-
