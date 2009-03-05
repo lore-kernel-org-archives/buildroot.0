@@ -1,26 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 05 Mar 2009 15:56:18 +0100
-Subject: [Buildroot] Duplication and size of binaries in generated
-	toolchain
-In-Reply-To: <20090305154750.0ff0c0aa@surf> (Thomas Petazzoni's message of
-	"Thu\, 5 Mar 2009 15\:47\:50 +0100")
-References: <20090305151359.20b37039@surf>
-	<878wnkf3r7.fsf@macbook.be.48ers.dk> <20090305154750.0ff0c0aa@surf>
-Message-ID: <87zlg0dnn1.fsf@macbook.be.48ers.dk>
+From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
+Date: Thu, 05 Mar 2009 16:00:50 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/package: fuse
+ lzma	netkitbase qtopia4
+In-Reply-To: <874oy8f2qm.fsf@macbook.be.48ers.dk>
+References: <20090305141755.ED5BC7626F@busybox.osuosl.org>	<49AFE41E.2060605@atmel.com>
+	<874oy8f2qm.fsf@macbook.be.48ers.dk>
+Message-ID: <49AFE922.2060109@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Peter Korsgaard wrote:
+>>>>>> "Hans-Christian" == Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> writes:
+> 
+>  Hans-Christian> jacmet at uclibc.org wrote:
+>  Hans-Christian> <snipp>
+> 
+>  >> -comment "qtopia4 requires a toolchain with C++ support enabled"
+>  >> -	depends on !BR2_INSTALL_LIBSTDCPP
+>  >> +comment "qtopia4 requires a toolchain with C++ and NPTL support enabled"
+>  >> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_PTHREADS_NATIVE
+>  >> 
+> 
+>  Hans-Christian> No, it does not require NPTL. Qtopia builds fine on
+>  Hans-Christian> AVR32 which does not support NPTL. I think you might
+>  Hans-Christian> run into problems with webkit, so enabling webkit
+>  Hans-Christian> might depend on BR2_PTHREADS_NATIVE.
+> 
+> So how did that work with the select BR2_PTHREADS_NATIVE?
+> 
 
- >> They are hard links to the same file:
-
- Thomas> Ok, I missed that. But why are they needed in the first place ?
-
-They are not really needed for us, but gcc afaik creates them
-automatically for cross compilers.
+Probably because I did not compile qtopia4 from mainstream trunk after 
+that select was introduced.
 
 -- 
-Bye, Peter Korsgaard
+Best regards,
+Hans-Christian Egtvedt
