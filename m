@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Thu,  5 Mar 2009 19:25:13 +0000 (UTC)
-Subject: [Buildroot] svn commit: [25557] trunk/buildroot/package/xerces
-Message-ID: <20090305192513.DEA76775EA@busybox.osuosl.org>
+Date: Thu,  5 Mar 2009 19:25:17 +0000 (UTC)
+Subject: [Buildroot] svn commit: [25558] trunk/buildroot/package/xerces
+Message-ID: <20090305192517.8EFAA775EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,30 +9,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2009-03-05 19:25:13 +0000 (Thu, 05 Mar 2009)
-New Revision: 25557
+Date: 2009-03-05 19:25:17 +0000 (Thu, 05 Mar 2009)
+New Revision: 25558
 
 Log:
-xerces: needs C++ support in toolchain
+xerces: bump version
 
 Modified:
-   trunk/buildroot/package/xerces/Config.in
+   trunk/buildroot/package/xerces/xerces.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/xerces/Config.in
+Modified: trunk/buildroot/package/xerces/xerces.mk
 ===================================================================
---- trunk/buildroot/package/xerces/Config.in	2009-03-05 19:07:01 UTC (rev 25556)
-+++ trunk/buildroot/package/xerces/Config.in	2009-03-05 19:25:13 UTC (rev 25557)
-@@ -1,7 +1,11 @@
- config BR2_PACKAGE_XERCES
- 	bool "xerces-c++"
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_LIBICONV
- 	help
- 	  Xerces-C++ is a validating XML parser written in portable C++.
- 
- 	  http://xml.apache.org/xerces-c/
-+
-+comment "xerces-c++ requires a toolchain with C++ support enabled"
-+	depends on !BR2_INSTALL_LIBSTDCPP
+--- trunk/buildroot/package/xerces/xerces.mk	2009-03-05 19:25:13 UTC (rev 25557)
++++ trunk/buildroot/package/xerces/xerces.mk	2009-03-05 19:25:17 UTC (rev 25558)
+@@ -3,7 +3,7 @@
+ # xerces
+ #
+ #############################################################
+-XERCES_VERSION:=3.0.0
++XERCES_VERSION:=3.0.1
+ XERCES_SOURCE:=xerces-c-$(XERCES_VERSION).tar.gz
+ XERCES_SITE:=http://apache.jumper.nu/xerces/c/3/sources/
+ XERCES_CAT:=$(ZCAT)
