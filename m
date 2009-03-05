@@ -1,96 +1,58 @@
-From: Olaf Rempel <razzor@kopf-tisch.de>
-Date: Thu,  5 Mar 2009 15:03:07 +0100
-Subject: [Buildroot] convert some Config.in selects to depends
-In-Reply-To: <>
-References: <>
-Message-ID: <1236261787-13705-1-git-send-email-razzor@kopf-tisch.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 5 Mar 2009 15:13:59 +0100
+Subject: [Buildroot] Duplication and size of binaries in generated toolchain
+Message-ID: <20090305151359.20b37039@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-quick grep showed theses invalid selects of toolchain options.
----
- package/fuse/Config.in       |    5 ++++-
- package/lzma/Config.in       |    5 ++++-
- package/netkitbase/Config.in |    5 ++++-
- package/qtopia4/Config.in    |    6 +++---
- 4 files changed, 15 insertions(+), 6 deletions(-)
+Hi,
 
-diff --git a/package/fuse/Config.in b/package/fuse/Config.in
-index afe64ff..dffadf8 100644
---- a/package/fuse/Config.in
-+++ b/package/fuse/Config.in
-@@ -1,7 +1,10 @@
- config BR2_PACKAGE_LIBFUSE
- 	bool "libfuse"
--	select BR2_LARGEFILE
-+	depends on BR2_LARGEFILE
- 	help
- 	  FUSE (Filesystem in UserSpacE)
- 
- 	  http://fuse.sourceforge.net/
-+
-+comment "libfuse requires a toolchain with LARGEFILE support"
-+        depends on !BR2_LARGEFILE
-diff --git a/package/lzma/Config.in b/package/lzma/Config.in
-index e2e44f3..9ca3c02 100644
---- a/package/lzma/Config.in
-+++ b/package/lzma/Config.in
-@@ -1,11 +1,14 @@
- config BR2_PACKAGE_LZMA_TARGET
- 	bool "Install lzma for the target system"
--	select BR2_GCC_CROSS_CXX
-+	depends on BR2_GCC_CROSS_CXX
- 	help
- 	  lzma utils on the target
- 
- 	  http://tukaani.org/lzma/
- 
-+comment "lzma requires a toolchain with C++ support"
-+        depends on !BR2_GCC_CROSS_CXX
-+
- config BR2_PACKAGE_LZMA_TARGET_HEADERS
- 	bool "lzma headers in target"
- 	depends on BR2_PACKAGE_LZMA_TARGET
-diff --git a/package/netkitbase/Config.in b/package/netkitbase/Config.in
-index 410d282..725e500 100644
---- a/package/netkitbase/Config.in
-+++ b/package/netkitbase/Config.in
-@@ -1,7 +1,10 @@
- config BR2_PACKAGE_NETKITBASE
- 	bool "netkitbase"
--	select BR2_INET_RPC
-+	depends on BR2_INET_RPC
- 	help
- 	  Old-style inetd.
- 
- 	  ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/
-+
-+comment "netkitbase requires a toolchain with RPC support"
-+        depends on !BR2_INET_RPC
-diff --git a/package/qtopia4/Config.in b/package/qtopia4/Config.in
-index 4477ee3..b88d19a 100644
---- a/package/qtopia4/Config.in
-+++ b/package/qtopia4/Config.in
-@@ -1,14 +1,14 @@
- config BR2_PACKAGE_QTOPIA4
- 	bool "qtopia4"
- 	depends on BR2_INSTALL_LIBSTDCPP
--	select BR2_PTHREADS_NATIVE
-+	depends on BR2_PTHREADS_NATIVE
- 	help
- 	  Qtopia core 4.
- 
- 	  http://www.trolltech.com/
- 
--comment "qtopia4 requires a toolchain with C++ support enabled"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "qtopia4 requires a toolchain with C++ and NPTL support enabled"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_PTHREADS_NATIVE
- 
- if BR2_PACKAGE_QTOPIA4
- 
+After compiling a toolchain with Buildroot (no packages, no kernel, see
+attached configuration file), I end up with duplicated binaries in the
+STAGING_DIR.
+
+For example, for the 'ar' binutil. The first copy is in :
+
+$ ls -l usr/bin/arm-linux-uclibcgnueabi-ar 
+-rwxr-xr-x 2 thomas thomas 2500708 2009-03-05 14:19 usr/bin/arm-linux-uclibcgnueabi-ar
+$ md5sum usr/bin/arm-linux-uclibcgnueabi-ar 
+82a898a705b8313ff156ee2287552a60  usr/bin/arm-linux-uclibcgnueabi-ar
+
+And the second copy is in :
+
+$ ls -l usr/arm-linux/bin/ar 
+-rwxr-xr-x 2 thomas thomas 2500708 2009-03-05 14:19 usr/arm-linux/bin/ar
+$ md5sum usr/arm-linux/bin/ar 
+82a898a705b8313ff156ee2287552a60  usr/arm-linux/bin/ar
+
+Same story for as, c++, g++, gcc, ld, nm, objcopy, objdump, ranlib,
+strip. In total, it's 24 MB of binaries that are duplicated.
+
+I'm not sure why the binaries without the arm-linux prefix are needed
+in usr/arm-linux/bin. But if they are, couldn't they be symbolic links.
+
+Last question: why are the individual binutils so big ? For example,
+the strip program is 2.9 MB, ar is 2.4 MB. This looks ridiculously big
+for such simple tools. First of all, they are not stripped and they
+include debugging symbols, is it really necessary ? Even after
+stripping, strip itself is still ~650 KB. Is it because of the static
+linking against libbfd ?
+
+Thanks,
+
+Thomas
 -- 
-1.5.4.3
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: .config
+Type: application/octet-stream
+Size: 17514 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090305/b7fd5497/attachment-0001.obj>
