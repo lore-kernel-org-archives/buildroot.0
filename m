@@ -1,35 +1,32 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Thu,  5 Mar 2009 21:38:45 +0000 (UTC)
-Subject: [Buildroot] svn commit: [25564] trunk/buildroot/package/avahi
-Message-ID: <20090305213845.1F4CC775EA@busybox.osuosl.org>
+From: Robert Urban <urban@unix-beratung.de>
+Date: Fri, 06 Mar 2009 00:35:05 +0100
+Subject: [Buildroot] (apparently) HUGE kernel
+Message-ID: <49B061A9.7020404@unix-beratung.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-03-05 21:38:44 +0000 (Thu, 05 Mar 2009)
-New Revision: 25564
+Hi Folks,
 
-Log:
-avahi: bump version
+I'm trying to build a modest linux-2.6.28.7 kernel for a VIA C3 based
+router/firewall which will boot from CF-card.
 
-Modified:
-   trunk/buildroot/package/avahi/avahi.mk
+I've removed everything I can think of that is superfluous for my
+application, things like virtualization, various things to support SMP,
+almost all debug options, etc.  I've only left the IPV4 networking,
+netfilter, QoS, a bit of USB support, etc.
 
+Still the kernel (bzImage) is 12MB large.  gah.  On my Fedora10 system the
+kernel is 2.5MB large.  A 12MB kernel isn't the end of the world, but it
+just seems too large.
 
-Changeset:
-Modified: trunk/buildroot/package/avahi/avahi.mk
-===================================================================
---- trunk/buildroot/package/avahi/avahi.mk	2009-03-05 21:38:40 UTC (rev 25563)
-+++ trunk/buildroot/package/avahi/avahi.mk	2009-03-05 21:38:44 UTC (rev 25564)
-@@ -10,7 +10,7 @@
- # either version 2.1 of the License, or (at your option) any
- # later version.
- 
--AVAHI_VERSION = 0.6.22
-+AVAHI_VERSION = 0.6.23
- AVAHI_SOURCE = avahi-$(AVAHI_VERSION).tar.gz
- AVAHI_SITE = http://www.avahi.org/download/
- AVAHI_INSTALL_STAGING = YES
+I would be grateful if someone could have a look at my config-file and
+possibly offer an explanation.  The config file is here:
+
+	http://www.spielwiese.de/rob/Buildroot/linux-config
+
+cheers,
+
+Rob Urban
