@@ -1,43 +1,96 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 05 Mar 2009 14:57:06 +0100
-Subject: [Buildroot] AT91RM9200df,
-	some applications depend on libintl/libiconv
-In-Reply-To: <1236122909.5689.22.camel@bernd-desktop> (Thomas's message of
-	"Wed\, 04 Mar 2009 00\:28\:29 +0100")
-References: <1236122909.5689.22.camel@bernd-desktop>
-Message-ID: <87ljrkf4y5.fsf@macbook.be.48ers.dk>
+From: Olaf Rempel <razzor@kopf-tisch.de>
+Date: Thu,  5 Mar 2009 15:03:07 +0100
+Subject: [Buildroot] convert some Config.in selects to depends
+In-Reply-To: <>
+References: <>
+Message-ID: <1236261787-13705-1-git-send-email-razzor@kopf-tisch.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas  <tokant@gmx.net> writes:
+quick grep showed theses invalid selects of toolchain options.
+---
+ package/fuse/Config.in       |    5 ++++-
+ package/lzma/Config.in       |    5 ++++-
+ package/netkitbase/Config.in |    5 ++++-
+ package/qtopia4/Config.in    |    6 +++---
+ 4 files changed, 15 insertions(+), 6 deletions(-)
 
- Thomas> Hello,
-
- Thomas> I am trying to create a "light" root file system for an
- Thomas> AT91RM9200df system with the latest 2009.02 buildroot
- Thomas> release. So I disabled a lot of the packages and libraries
- Thomas> (for example libintl and libiconv) and got a partly working
- Thomas> root file system.
-
-Did you do a clean rebuild after doing this?
-
- Thomas> Some of the package applications do not work, because they
- Thomas> seem to depend on libintl/libiconv: wget, chattr, lsattr
- Thomas> uuidgen, e2fsck, mke2fs and badblocks for example. They
-
-I take this is "big" wget, and not the busybox applet? I would be
-suprised if wget/e2fsprogs could build with libintl support if you
-don't have that enabled.
-
- Thomas> terminate with "can't load library 'libintl.so.8'". These
- Thomas> applications work, if I enable libintl and libiconv, but I
- Thomas> would like to save the 800 kB which where occupied by
- Thomas> libiconv.
-
-Any special reason why you don't use the busybox wget applet instead?
-
+diff --git a/package/fuse/Config.in b/package/fuse/Config.in
+index afe64ff..dffadf8 100644
+--- a/package/fuse/Config.in
++++ b/package/fuse/Config.in
+@@ -1,7 +1,10 @@
+ config BR2_PACKAGE_LIBFUSE
+ 	bool "libfuse"
+-	select BR2_LARGEFILE
++	depends on BR2_LARGEFILE
+ 	help
+ 	  FUSE (Filesystem in UserSpacE)
+ 
+ 	  http://fuse.sourceforge.net/
++
++comment "libfuse requires a toolchain with LARGEFILE support"
++        depends on !BR2_LARGEFILE
+diff --git a/package/lzma/Config.in b/package/lzma/Config.in
+index e2e44f3..9ca3c02 100644
+--- a/package/lzma/Config.in
++++ b/package/lzma/Config.in
+@@ -1,11 +1,14 @@
+ config BR2_PACKAGE_LZMA_TARGET
+ 	bool "Install lzma for the target system"
+-	select BR2_GCC_CROSS_CXX
++	depends on BR2_GCC_CROSS_CXX
+ 	help
+ 	  lzma utils on the target
+ 
+ 	  http://tukaani.org/lzma/
+ 
++comment "lzma requires a toolchain with C++ support"
++        depends on !BR2_GCC_CROSS_CXX
++
+ config BR2_PACKAGE_LZMA_TARGET_HEADERS
+ 	bool "lzma headers in target"
+ 	depends on BR2_PACKAGE_LZMA_TARGET
+diff --git a/package/netkitbase/Config.in b/package/netkitbase/Config.in
+index 410d282..725e500 100644
+--- a/package/netkitbase/Config.in
++++ b/package/netkitbase/Config.in
+@@ -1,7 +1,10 @@
+ config BR2_PACKAGE_NETKITBASE
+ 	bool "netkitbase"
+-	select BR2_INET_RPC
++	depends on BR2_INET_RPC
+ 	help
+ 	  Old-style inetd.
+ 
+ 	  ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/
++
++comment "netkitbase requires a toolchain with RPC support"
++        depends on !BR2_INET_RPC
+diff --git a/package/qtopia4/Config.in b/package/qtopia4/Config.in
+index 4477ee3..b88d19a 100644
+--- a/package/qtopia4/Config.in
++++ b/package/qtopia4/Config.in
+@@ -1,14 +1,14 @@
+ config BR2_PACKAGE_QTOPIA4
+ 	bool "qtopia4"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	select BR2_PTHREADS_NATIVE
++	depends on BR2_PTHREADS_NATIVE
+ 	help
+ 	  Qtopia core 4.
+ 
+ 	  http://www.trolltech.com/
+ 
+-comment "qtopia4 requires a toolchain with C++ support enabled"
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "qtopia4 requires a toolchain with C++ and NPTL support enabled"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_PTHREADS_NATIVE
+ 
+ if BR2_PACKAGE_QTOPIA4
+ 
 -- 
-Bye, Peter Korsgaard
+1.5.4.3
