@@ -1,41 +1,43 @@
-From: Maxim Grigoriev <maxim@tensilica.com>
-Date: Fri, 06 Mar 2009 11:45:40 -0800
-Subject: [Buildroot] Question about Buildroot concepts and strategies
-Message-ID: <49B17D64.50707@hq.tensilica.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 06 Mar 2009 22:21:16 +0100
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/binutils
+In-Reply-To: <d6cda7730903060956r6a3c5fe8ra2ee09251ce81d61@mail.gmail.com>
+	("Thiago A. =?utf-8?Q?Corr=C3=AAa=22's?= message of "Fri\, 6 Mar 2009
+	14\:56\:38 -0300")
+References: <20090303220951.E40FB7626F@busybox.osuosl.org>
+	<d6cda7730903060956r6a3c5fe8ra2ee09251ce81d61@mail.gmail.com>
+Message-ID: <878wnie4ab.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter and BUILDROOT maintainers,
+>>>>> "Thiago" == Thiago A Corr?a <thiago.correa@gmail.com> writes:
 
-I understand you are busy individuals, and I'm sorry
-for bothering you. An excuse could be I'm trying to
-understand what BUILDROOT project is all about. Is it
-similar to other open source projects or somewhat different ?
+Hi,
 
-Are BUILDROOT maintainers interested in adding new
-architectures to the project ?
+ >> + ? ? ? ? ? ? ? depends on BR2_DEPRECATED
+ >> ? ? ? ? ? ? ? ?depends on BR2_EXT_BINUTILS_VERSION_2_18
+ >> ? ? ? ? ? ? ? ?bool "binutils 2.18"
+ >> 
 
-On March 3d, I tried to start submitting Xtensa BUILDROOT :
+ Thiago> This breaks AVR32 external toolchain thing. I tried to make it:
+ Thiago> depends on BR2_DEPRECATED if !BR2_avr32
 
-http://lists.busybox.net/pipermail/buildroot/2009-March/026260.html
+ Thiago> but it didn't work, looks like kconfig doesn't accept ! logic
+ Thiago> with depends
 
-follow-ups :
+I think depends on BR2_DEPRECATED || BR2_avr32 works.
 
-http://lists.busybox.net/pipermail/buildroot/2009-March/026263.html
-http://lists.busybox.net/pipermail/buildroot/2009-March/026289.html
+Sorry, I keep on forgetting about avr32 being so special.
 
-Tensilica is eager to become a part of BUILDROOT.
-We made a commitment to support Xtensa BUILDROOT
-and try to do our best to improve generic BUILDROOT.
+I'll fix it.
 
-Does BUILDROOT project has a concept of architecture
-maintainers ? I mean developers with write-access,
-who can check in architecture-specific updates without
-approval and commit generic updates after approval from
-main maintainers.
+ Thiago> Is there a way around? Right now I've removed that line from
+ Thiago> my local repository to keep things working.
 
-Thanks,
--- Maxim
+How's avr32 support for newer binutils/gcc going?
+
+-- 
+Bye, Peter Korsgaard
