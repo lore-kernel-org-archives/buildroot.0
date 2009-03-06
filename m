@@ -1,39 +1,41 @@
-From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
-Date: Fri, 6 Mar 2009 14:56:38 -0300
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/binutils
-In-Reply-To: <20090303220951.E40FB7626F@busybox.osuosl.org>
-References: <20090303220951.E40FB7626F@busybox.osuosl.org>
-Message-ID: <d6cda7730903060956r6a3c5fe8ra2ee09251ce81d61@mail.gmail.com>
+From: Maxim Grigoriev <maxim@tensilica.com>
+Date: Fri, 06 Mar 2009 11:45:40 -0800
+Subject: [Buildroot] Question about Buildroot concepts and strategies
+Message-ID: <49B17D64.50707@hq.tensilica.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hello Peter and BUILDROOT maintainers,
 
-On Tue, Mar 3, 2009 at 7:09 PM,  <jacmet@uclibc.org> wrote:
-> Changeset:
-> Modified: trunk/buildroot/toolchain/binutils/Config.in
-> ===================================================================
-> --- trunk/buildroot/toolchain/binutils/Config.in ? ? ? ?2009-03-03 21:23:34 UTC (rev 25512)
-> +++ trunk/buildroot/toolchain/binutils/Config.in ? ? ? ?2009-03-03 22:09:50 UTC (rev 25513)
-> @@ -20,6 +20,7 @@
->
-> ? ? ? ?config BR2_BINUTILS_VERSION_2_18
-> ? ? ? ? ? ? ? ?depends on !BR2_nios2
-> + ? ? ? ? ? ? ? depends on BR2_DEPRECATED
-> ? ? ? ? ? ? ? ?depends on BR2_EXT_BINUTILS_VERSION_2_18
-> ? ? ? ? ? ? ? ?bool "binutils 2.18"
->
+I understand you are busy individuals, and I'm sorry
+for bothering you. An excuse could be I'm trying to
+understand what BUILDROOT project is all about. Is it
+similar to other open source projects or somewhat different ?
 
-This breaks AVR32 external toolchain thing. I tried to make it:
-depends on BR2_DEPRECATED if !BR2_avr32
+Are BUILDROOT maintainers interested in adding new
+architectures to the project ?
 
-but it didn't work, looks like kconfig doesn't accept ! logic with depends
+On March 3d, I tried to start submitting Xtensa BUILDROOT :
 
-Is there a way around? Right now I've removed that line from my local
-repository to keep things working.
+http://lists.busybox.net/pipermail/buildroot/2009-March/026260.html
 
-Kind Regards,
-   Thiago A. Correa
+follow-ups :
+
+http://lists.busybox.net/pipermail/buildroot/2009-March/026263.html
+http://lists.busybox.net/pipermail/buildroot/2009-March/026289.html
+
+Tensilica is eager to become a part of BUILDROOT.
+We made a commitment to support Xtensa BUILDROOT
+and try to do our best to improve generic BUILDROOT.
+
+Does BUILDROOT project has a concept of architecture
+maintainers ? I mean developers with write-access,
+who can check in architecture-specific updates without
+approval and commit generic updates after approval from
+main maintainers.
+
+Thanks,
+-- Maxim
