@@ -1,83 +1,39 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  6 Mar 2009 13:14:27 +0000 (UTC)
-Subject: [Buildroot] [Bug 153] New: not able to build buildroot
-Message-ID: <bug-153-163@https.bugs.busybox.net/>
+From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
+Date: Fri, 6 Mar 2009 14:56:38 -0300
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain/binutils
+In-Reply-To: <20090303220951.E40FB7626F@busybox.osuosl.org>
+References: <20090303220951.E40FB7626F@busybox.osuosl.org>
+Message-ID: <d6cda7730903060956r6a3c5fe8ra2ee09251ce81d61@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=153
+Hi Peter,
 
-           Summary: not able to build buildroot
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P3
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: ruben at puettmann.net
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+On Tue, Mar 3, 2009 at 7:09 PM,  <jacmet@uclibc.org> wrote:
+> Changeset:
+> Modified: trunk/buildroot/toolchain/binutils/Config.in
+> ===================================================================
+> --- trunk/buildroot/toolchain/binutils/Config.in ? ? ? ?2009-03-03 21:23:34 UTC (rev 25512)
+> +++ trunk/buildroot/toolchain/binutils/Config.in ? ? ? ?2009-03-03 22:09:50 UTC (rev 25513)
+> @@ -20,6 +20,7 @@
+>
+> ? ? ? ?config BR2_BINUTILS_VERSION_2_18
+> ? ? ? ? ? ? ? ?depends on !BR2_nios2
+> + ? ? ? ? ? ? ? depends on BR2_DEPRECATED
+> ? ? ? ? ? ? ? ?depends on BR2_EXT_BINUTILS_VERSION_2_18
+> ? ? ? ? ? ? ? ?bool "binutils 2.18"
+>
 
+This breaks AVR32 external toolchain thing. I tried to make it:
+depends on BR2_DEPRECATED if !BR2_avr32
 
-Created an attachment (id=113)
- --> (https://bugs.busybox.net/attachment.cgi?id=113)
-Config for Buildroot
+but it didn't work, looks like kconfig doesn't accept ! logic with depends
 
-hy,
+Is there a way around? Right now I've removed that line from my local
+repository to keep things working.
 
-I have tried building my buildroot and I got only this compile error:
-
-  STRIP -x -R .note -R .comment lib/libutil.a
-  LD libutil-0.9.30.so
-  CC libpthread/linuxthreads/sysdeps/x86_64/pspinlock.oS
-  CC libpthread/linuxthreads/sysdeps/unix/sysv/linux/fork.oS
-  CC libpthread/linuxthreads/sysdeps/unix/sysv/linux/pt-sigsuspend.oS
-  CC libpthread/linuxthreads/sysdeps/unix/sysv/linux/register-atfork.oS
-  CC libpthread/linuxthreads/sysdeps/unix/sysv/linux/unregister-atfork.oS
-  CC libpthread/linuxthreads/sysdeps/pthread/errno-loc.oS
-In file included from libpthread/linuxthreads/sysdeps/pthread/errno-loc.c:23:
-./libpthread/linuxthreads/sysdeps/unix/sysv/linux/x86_64/sysdep-cancel.h:20:20:
-error: sysdep.h: No such file or directory
-make[1]: *** [libpthread/linuxthreads/sysdeps/pthread/errno-loc.oS] Error 1
-make[1]: Leaving directory
-`/root/buildroot-2009.02/toolchain_build_x86_64/uClibc-0.9.30'
-make: ***
-[/root/buildroot-2009.02/toolchain_build_x86_64/uClibc-0.9.30/lib/libc.a] Error
-2
-
-
-System: 
- Linux app0 2.6.27.8 #1 SMP Tue Dec 9 19:27:54 CET 2008 x86_64 GNU/Linux
- Debian Testing
-
-Also: 
-root at app0:[~/buildroot-2009.02] > find . -name 'sysdep.h'
-./toolchain_build_x86_64/uClibc-0.9.30/libc/string/ia64/sysdep.h
-./toolchain_build_x86_64/uClibc-0.9.30/libc/string/mips/sysdep.h
-./toolchain_build_x86_64/uClibc-0.9.30/libc/sysdeps/linux/cris/sysdep.h
-./toolchain_build_x86_64/uClibc-0.9.30/libc/sysdeps/linux/xtensa/sysdep.h
-./toolchain_build_x86_64/uClibc-0.9.30/libc/sysdeps/linux/ia64/sysdep.h
-./toolchain_build_x86_64/uClibc-0.9.30/libc/sysdeps/linux/bfin/sysdep.h
-./toolchain_build_x86_64/uClibc-0.9.30/libc/sysdeps/linux/powerpc/bits/sysdep.h
-./toolchain_build_x86_64/uClibc-0.9.30/libpthread/linuxthreads/sysdeps/arm/sysdep.h
-./toolchain_build_x86_64/binutils-2.19/opcodes/sysdep.h
-./toolchain_build_x86_64/binutils-2.19/ld/sysdep.h
-./toolchain_build_x86_64/binutils-2.19/bfd/sysdep.h
-./toolchain_build_x86_64/binutils-2.19/binutils/sysdep.h
-root at app0:[~/buildroot-2009.02] > 
-
-
-
-I have attached teh .config.
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Kind Regards,
+   Thiago A. Correa
