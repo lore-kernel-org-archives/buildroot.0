@@ -1,30 +1,38 @@
-From: Robert Urban <urban@unix-beratung.de>
-Date: Fri, 06 Mar 2009 01:19:55 +0100
-Subject: [Buildroot] (apparently) HUGE kernel
-In-Reply-To: <49B061A9.7020404@unix-beratung.de>
-References: <49B061A9.7020404@unix-beratung.de>
-Message-ID: <49B06C2B.4070001@unix-beratung.de>
+From: Steffen Schulz <pepe_ml@gmx.net>
+Date: Fri, 6 Mar 2009 11:25:41 +0100
+Subject: [Buildroot] iptables without IPV6
+In-Reply-To: <c88e466f0903050920o60b62f7ft3f221960eb865ab@mail.gmail.com>
+References: <c88e466f0903050920o60b62f7ft3f221960eb865ab@mail.gmail.com>
+Message-ID: <20090306102541.GA23751@cbg.dyndns.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Robert Urban wrote:
-> Still the kernel (bzImage) is 12MB large.  gah.  On my Fedora10 system the
-> kernel is 2.5MB large.  A 12MB kernel isn't the end of the world, but it
-> just seems too large.
+On 090305 at 18:30, Michel Benoit wrote:
+> Hej,
 > 
-> I would be grateful if someone could have a look at my config-file and
-> possibly offer an explanation.  The config file is here:
+> Has anyone been able to build iptables 1.4.1 when BR2_INET_IPV6 is not set?
+> I'm performing a clean build of buildroot-2009.02 for an AT91SAM9260 target.
 > 
-> 	http://www.spielwiese.de/rob/Buildroot/linux-config
+> It worked fine with an older version of buildroot and iptables (1.3.8).
 
-as someone pointed out (thanks again), my bzImage includes the initramfs,
-which is controlled by
+Attached patch adds a patch to current iptables package that adds the
+switch. It simply prevents compilation of the ip6tables binaries.
 
-	CONFIG_INITRAMFS_SOURCE="..."
+Its automatically used when BR_INET_IPV6 is not set.
 
-cheers,
-
-Rob Urban
+/steffen
+-- 
+       _----------------
+ (o< ?-_    Less CO2    |  _o)                         +49/1781384223
+ //\    | for more ice! |  /\\  .o) .o)       gpg --recv-key A04D7875
+ V_/_    ---------------  _\_V _(\)_(\)   mailto: pepe@cbg.dyndns.org
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: iptables.patch
+Type: text/x-diff
+Size: 3468 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090306/7eb50985/attachment-0001.bin>
