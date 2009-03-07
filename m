@@ -1,63 +1,32 @@
-From: Marc Gauthier <marc@tensilica.com>
-Date: Fri, 6 Mar 2009 21:58:00 -0800
-Subject: [Buildroot] Question about Buildroot concepts and strategies
-In-Reply-To: <49B17D64.50707@hq.tensilica.com>
-Message-ID: <AB11D1C0663F47A1938E3FDEF9B0CA9C@hq.tensilica.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat,  7 Mar 2009 13:11:04 +0000 (UTC)
+Subject: [Buildroot] [Bug 111] binutils 2.17 fails to build when texinfo >=
+	4.10
+In-Reply-To: <bug-111-163@https.bugs.busybox.net/>
+References: <bug-111-163@https.bugs.busybox.net/>
+Message-ID: <20090307131104.65ADE76525@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, 
-
-Maxim Grigoriev wrote:
-> Hello Peter and BUILDROOT maintainers,
-> 
-> I understand you are busy individuals, and I'm sorry
-> for bothering you. An excuse could be I'm trying to
-> understand what BUILDROOT project is all about. Is it
-> similar to other open source projects or somewhat different ?
-> 
-> Are BUILDROOT maintainers interested in adding new
-> architectures to the project ?
-
-Not to worry, I got nice responses last year (Feb 2nd and Dec 10th)
-when I thought we'd be ready for submission.
-Everyone's probably a bit busy.
-
-All help getting the port submitted is greatly appreciated!
-
-Thanks,
--Marc
+https://bugs.busybox.net/show_bug.cgi?id=111
 
 
 
-> On March 3d, I tried to start submitting Xtensa BUILDROOT :
-> 
-> http://lists.busybox.net/pipermail/buildroot/2009-March/026260.html
-> 
-> follow-ups :
-> 
-> http://lists.busybox.net/pipermail/buildroot/2009-March/026263.html
-> http://lists.busybox.net/pipermail/buildroot/2009-March/026289.html
-> 
-> Tensilica is eager to become a part of BUILDROOT.
-> We made a commitment to support Xtensa BUILDROOT
-> and try to do our best to improve generic BUILDROOT.
-> 
-> Does BUILDROOT project has a concept of architecture
-> maintainers ? I mean developers with write-access,
-> who can check in architecture-specific updates without
-> approval and commit generic updates after approval from
-> main maintainers.
-> 
-> Thanks,
-> -- Maxim
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+
+
+--- Comment #3 from Luke <luke_tucker@yahoo.co.uk>  2009-03-07 13:11:03 UTC ---
+The reason I was using binutils 2.17 is because I'm building applications for a
+reverse engineered platform (TViX DVICO 6500) and I am trying to keep
+everything as close to the toolchain used by the original developers even
+though 2.19 will probably work as you say.
+
+Thanks for the fix.
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
