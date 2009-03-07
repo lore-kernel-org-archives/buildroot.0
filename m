@@ -1,32 +1,38 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat,  7 Mar 2009 13:11:04 +0000 (UTC)
-Subject: [Buildroot] [Bug 111] binutils 2.17 fails to build when texinfo >=
-	4.10
-In-Reply-To: <bug-111-163@https.bugs.busybox.net/>
-References: <bug-111-163@https.bugs.busybox.net/>
-Message-ID: <20090307131104.65ADE76525@busybox.osuosl.org>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Sat,  7 Mar 2009 13:51:22 +0000 (UTC)
+Subject: [Buildroot] svn commit: [25567] trunk/buildroot/toolchain/binutils
+Message-ID: <20090307135122.8A0F37646C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=111
+Author: jacmet
+Date: 2009-03-07 13:51:22 +0000 (Sat, 07 Mar 2009)
+New Revision: 25567
+
+Log:
+binutils: undeprecate 2.18 for avr32
+
+As discussed on the list. AVR32 is still stuck at 2.18, so don't mark it as
+deprecated yet.
+
+Modified:
+   trunk/buildroot/toolchain/binutils/Config.in
 
 
-
-
-
---- Comment #3 from Luke <luke_tucker@yahoo.co.uk>  2009-03-07 13:11:03 UTC ---
-The reason I was using binutils 2.17 is because I'm building applications for a
-reverse engineered platform (TViX DVICO 6500) and I am trying to keep
-everything as close to the toolchain used by the original developers even
-though 2.19 will probably work as you say.
-
-Thanks for the fix.
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Changeset:
+Modified: trunk/buildroot/toolchain/binutils/Config.in
+===================================================================
+--- trunk/buildroot/toolchain/binutils/Config.in	2009-03-07 01:54:24 UTC (rev 25566)
++++ trunk/buildroot/toolchain/binutils/Config.in	2009-03-07 13:51:22 UTC (rev 25567)
+@@ -20,7 +20,7 @@
+ 
+ 	config BR2_BINUTILS_VERSION_2_18
+ 		depends on !BR2_nios2
+-		depends on BR2_DEPRECATED
++		depends on BR2_DEPRECATED || BR2_avr32
+ 		depends on BR2_EXT_BINUTILS_VERSION_2_18
+ 		bool "binutils 2.18"
+ 
