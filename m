@@ -1,29 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 07 Mar 2009 21:16:47 +0100
-Subject: [Buildroot] svn commit: [25555]
-	trunk/buildroot/package/logrotate
-In-Reply-To: <d6a0e5a20903071134r76b57442j84dd87b627a3b4f7@mail.gmail.com>
-	(Hiroshi Shinji's message of "Sun\, 8 Mar 2009 04\:34\:54 +0900")
-References: <20090305190018.85BAD76465@busybox.osuosl.org>
-	<d6a0e5a20903071134r76b57442j84dd87b627a3b4f7@mail.gmail.com>
-Message-ID: <87zlfxccls.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Sat,  7 Mar 2009 20:17:23 +0000 (UTC)
+Subject: [Buildroot] svn commit: [25568] trunk/buildroot/package/logrotate
+Message-ID: <20090307201723.9F6697646C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Hiroshi" == Hiroshi Shinji <hiroshi.shinji@gmail.com> writes:
+Author: jacmet
+Date: 2009-03-07 20:17:23 +0000 (Sat, 07 Mar 2009)
+New Revision: 25568
 
- Hiroshi> Hi,
- >> +       if [ ! -f $(TARGET_DIR)/etc/logrotate.conf ]; then
- >> +               $(INSTALL) -m 0644 package/logrotate/logrotate.conf $(TARGET_DIR)/etc/logrotate.conf;
+Log:
+logrotate: fix logrotate.conf check
 
- Hiroshi> You need to append backslashes to the end of these lines.
+Thanks to Hiroshi Shinji for noticing.
 
-But ofcourse - Thanks.
+Modified:
+   trunk/buildroot/package/logrotate/logrotate.mk
 
-That's what I get from trying to do too many things at once.
 
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/package/logrotate/logrotate.mk
+===================================================================
+--- trunk/buildroot/package/logrotate/logrotate.mk	2009-03-07 13:51:22 UTC (rev 25567)
++++ trunk/buildroot/package/logrotate/logrotate.mk	2009-03-07 20:17:23 UTC (rev 25568)
+@@ -18,8 +18,8 @@
+ 
+ $(TARGET_DIR)/$(LOGROTATE_TARGET_BINARY): $(LOGROTATE_DIR)/$(LOGROTATE_BINARY)
+ 	$(MAKE) PREFIX=$(TARGET_DIR) -C $(LOGROTATE_DIR) install
+-	if [ ! -f $(TARGET_DIR)/etc/logrotate.conf ]; then
+-		$(INSTALL) -m 0644 package/logrotate/logrotate.conf $(TARGET_DIR)/etc/logrotate.conf;
++	if [ ! -f $(TARGET_DIR)/etc/logrotate.conf ]; then \
++		$(INSTALL) -m 0644 package/logrotate/logrotate.conf $(TARGET_DIR)/etc/logrotate.conf; \
+ 	fi
+ 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/logrotate.d
+ 
