@@ -1,9 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun,  8 Mar 2009 00:02:52 +0000 (UTC)
+Date: Sun,  8 Mar 2009 00:22:35 +0000 (UTC)
 Subject: [Buildroot] [Bug 155] uClibc 0.9.28.3 fails to build
 In-Reply-To: <bug-155-163@https.bugs.busybox.net/>
 References: <bug-155-163@https.bugs.busybox.net/>
-Message-ID: <20090308000252.D33B87646C@busybox.osuosl.org>
+Message-ID: <20090308002235.A64D97646C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,21 +16,42 @@ https://bugs.busybox.net/show_bug.cgi?id=155
 
 
 
---- Comment #1 from Luke <luke_tucker@yahoo.co.uk>  2009-03-08 00:02:52 UTC ---
-I looked at 0.9.29 and found an easy patch:
+--- Comment #2 from Luke <luke_tucker@yahoo.co.uk>  2009-03-08 00:22:35 UTC ---
+Ooops, I jumped the gun a bit. The asm directory also needs patching in the
+following files.
 
---- uClibc-0.9.28.3/libc/sysdeps/linux/mips/clone.S.orig        2009-03-08
-01:00:30.000000000 +0100
-+++ uClibc-0.9.28.3/libc/sysdeps/linux/mips/clone.S     2009-03-08
-01:01:06.000000000 +0100
-@@ -24,7 +24,7 @@
- #include <sys/regdef.h>
- #define _ERRNO_H       1
- #include <bits/errno.h>
+
+--- uClibc-0.9.28.3/libc/sysdeps/linux/mips/pipe.S.orig 2009-03-08
+01:15:35.000000000 +0100
++++ uClibc-0.9.28.3/libc/sysdeps/linux/mips/pipe.S      2009-03-08
+01:16:35.000000000 +0100
+@@ -3,9 +3,9 @@
+ /*see uClibc's sh/pipe.c and glibc-2.2.4's mips/pipe.S */
+
+ #include <features.h>
 -#include <asm/asm.h>
 +#include <sys/asm.h>
+ #include <asm/unistd.h>
+-#include <asm/regdef.h>
++#include <sys/regdef.h>
 
- /* int clone(int (*fn)(void *arg), void *child_stack, int flags, void *arg) */
+         .globl  pipe
+         .ent    pipe, 0
+--- uClibc-0.9.28.3/libc/sysdeps/linux/mips/syscall.S.orig      2009-03-08
+01:07:34.000000000 +0100
++++ uClibc-0.9.28.3/libc/sysdeps/linux/mips/syscall.S   2009-03-08
+01:09:24.000000000 +0100
+@@ -17,8 +17,8 @@
+    02111-1307 USA.  */
+
+ #include <features.h>
+-#include <asm/asm.h>
+-#include <asm/regdef.h>
++#include <sys/asm.h>
++#include <sys/regdef.h>
+
+ #ifdef __PIC__
+        .option pic2
 
 
 -- 
