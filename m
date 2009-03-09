@@ -1,37 +1,36 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 09 Mar 2009 21:06:30 +0100
-Subject: [Buildroot] uClibc compilation problem
-In-Reply-To: <200903092009.25554.miciu@gmx.de> (Michael Unterkalmsteiner's
-	message of "Mon\, 9 Mar 2009 20\:09\:25 +0100")
-References: <200903092009.25554.miciu@gmx.de>
-Message-ID: <87sklmbgvt.fsf@macbook.be.48ers.dk>
+Date: Mon, 09 Mar 2009 21:09:34 +0100
+Subject: [Buildroot] Question about Buildroot concepts and strategies
+In-Reply-To: <49B17D64.50707@hq.tensilica.com> (Maxim Grigoriev's message of
+	"Fri\, 06 Mar 2009 11\:45\:40 -0800")
+References: <49B17D64.50707@hq.tensilica.com>
+Message-ID: <87ocwabgqp.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Michael" == Michael Unterkalmsteiner <miciu@gmx.de> writes:
+>>>>> "Maxim" == Maxim Grigoriev <maxim@tensilica.com> writes:
 
- Michael> Hi, 
+ Maxim> Hello Peter and BUILDROOT maintainers,
+ Maxim> I understand you are busy individuals, and I'm sorry
+ Maxim> for bothering you. An excuse could be I'm trying to
+ Maxim> understand what BUILDROOT project is all about. Is it
+ Maxim> similar to other open source projects or somewhat different ?
 
- Michael> I'd like to build a toolchain for mips with nommu (using
- Michael> buildroot-2009.02). I get the following error:
+It's similar to the other source based embedded rootfs projects
+(Openembedded, ptxdist, openwrt, ..). We do have a bit more focus on
+busybox/uclibc than the others because of our tighter connection to
+those projects.
 
-Please post your .config
+ Maxim> Are BUILDROOT maintainers interested in adding new
+ Maxim> architectures to the project ?
 
- Michael> [...]  
- Michael>   CC libc/stdio/tmpnam.o
- Michael>   CC libc/stdio/tmpnam_r.o
- Michael>   CC libc/stdio/popen.o
- Michael> libc/stdio/popen.c:45: error: 'fork' undeclared here (not in a function)
- Michael> libc/stdio/popen.c:45: warning: type defaults to 'int' in declaration of 
- Michael> 'fork'
- Michael> libc/stdio/popen.c: In function 'popen':
- Michael> libc/stdio/popen.c:100: error: called object 'fork' is not a function
- Michael> [...]
+Yes, if someone is willing to keep it working.
 
-You might have more luck asking on the uclibc mailing list.
+Thanks for adding the bug report, I will get around to looking at it
+soonish.
 
 -- 
 Bye, Peter Korsgaard
