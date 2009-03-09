@@ -1,44 +1,46 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon,  9 Mar 2009 14:09:25 +0000 (UTC)
-Subject: [Buildroot] svn commit: [25587] trunk/buildroot/package/sysklogd
-Message-ID: <20090309140925.C3280764AC@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon,  9 Mar 2009 17:13:41 +0000 (UTC)
+Subject: [Buildroot] [Bug 161] New: vim fails on patching with errors in
+	configure.patch
+Message-ID: <bug-161-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-03-09 14:09:25 +0000 (Mon, 09 Mar 2009)
-New Revision: 25587
+https://bugs.busybox.net/show_bug.cgi?id=161
 
-Log:
-sysklogd: only install init script / config file if not present in skeleton
+           Summary: vim fails on patching with errors in configure.patch
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: igor47 at moomers.org
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Allow platforms to provide a custom initscript / syslog.conf in their
-target_skeleton.
 
-Modified:
-   trunk/buildroot/package/sysklogd/sysklogd.mk
+1 out of 423 hunks FAILED -- saving rejects to file src/auto/configure.rej
+Patch failed!  Please fix configure.patch!
+make: *** [/provisioning/buildroot/buildroot-2009.02/build_i686/vim71/.patched]
+Error 1
+
+the earlier error is:
+misordered hunks! output would be garbled
+Hunk #399 FAILED at 14947.
+
+removing that hunk from the patch file only causes additional errors.
+i couldn't fix this, but after the error simply touch vim71/.patched and
+continuing on with the make seems to be a usable workaround.
 
 
-Changeset:
-Modified: trunk/buildroot/package/sysklogd/sysklogd.mk
-===================================================================
---- trunk/buildroot/package/sysklogd/sysklogd.mk	2009-03-09 14:09:20 UTC (rev 25586)
-+++ trunk/buildroot/package/sysklogd/sysklogd.mk	2009-03-09 14:09:25 UTC (rev 25587)
-@@ -32,8 +32,12 @@
- $(TARGET_DIR)/$(SYSKLOGD_TARGET_BINARY): $(SYSKLOGD_DIR)/$(SYSKLOGD_BINARY)
- 	$(INSTALL) -m 0755 -D $(SYSKLOGD_DIR)/$(SYSKLOGD_SYSLOGD_BINARY) $(TARGET_DIR)/$(SYSKLOGD_SYSLOGD_TARGET_BINARY)
- 	$(INSTALL) -m 0755 -D $(SYSKLOGD_DIR)/$(SYSKLOGD_KLOGD_BINARY) $(TARGET_DIR)/$(SYSKLOGD_KLOGD_TARGET_BINARY)
--	$(INSTALL) -m 0755 -D package/sysklogd/S25syslog $(TARGET_DIR)/etc/init.d
--	$(INSTALL) -m 0644 -D package/sysklogd/syslog.conf $(TARGET_DIR)/etc/syslog.conf
-+	if [ ! -f $(TARGET_DIR)/etc/init.d/S25syslog ]; then \
-+		$(INSTALL) -m 0755 -D package/sysklogd/S25syslog $(TARGET_DIR)/etc/init.d; \
-+	fi
-+	if [ ! -f $(TARGET_DIR)/etc/syslog.conf ]; then \
-+		$(INSTALL) -m 0644 -D package/sysklogd/syslog.conf $(TARGET_DIR)/etc/syslog.conf; \
-+	fi
- 
- sysklogd: uclibc $(TARGET_DIR)/$(SYSKLOGD_TARGET_BINARY)
- 
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
