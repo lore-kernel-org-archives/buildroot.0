@@ -1,43 +1,37 @@
-From: Michael Unterkalmsteiner <miciu@gmx.de>
-Date: Mon, 9 Mar 2009 20:09:25 +0100
-Subject: [Buildroot] uClibc compilation problem
-Message-ID: <200903092009.25554.miciu@gmx.de>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Mon,  9 Mar 2009 19:47:55 +0000 (UTC)
+Subject: [Buildroot] svn commit: [25592] trunk/buildroot/package/editors/vim
+Message-ID: <20090309194755.9831D764AC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, 
-I'd like to build a toolchain for mips with nommu (using buildroot-2009.02). I 
-get the following error: 
+Author: jacmet
+Date: 2009-03-09 19:47:55 +0000 (Mon, 09 Mar 2009)
+New Revision: 25592
 
-[...]  
-  CC libc/stdio/tmpnam.o
-  CC libc/stdio/tmpnam_r.o
-  CC libc/stdio/popen.o
-libc/stdio/popen.c:45: error: 'fork' undeclared here (not in a function)
-libc/stdio/popen.c:45: warning: type defaults to 'int' in declaration of 
-'fork'
-libc/stdio/popen.c: In function 'popen':
-libc/stdio/popen.c:100: error: called object 'fork' is not a function
-[...]
+Log:
+vim: fixup patch download location after change to DOWNLOAD macro.
 
-The problematic part in popen.c is:
+Closes #161.
 
-[...]
-/* uClinux-2.0 has vfork, but Linux 2.0 doesn't */
-#include <sys/syscall.h>
-#if ! defined __NR_vfork
-# define vfork fork
-# define VFORK_LOCK             ((void) 0)
-# define VFORK_UNLOCK           ((void) 0)
-libc_hidden_proto(fork)
-#endif
-[...]
+Modified:
+   trunk/buildroot/package/editors/vim/vim.mk
 
-I'm wondering why __NR_vfork is not defined...
-Can someone give me a punch into the right direction?
 
-Thanks,
-Michael
+Changeset:
+Modified: trunk/buildroot/package/editors/vim/vim.mk
+===================================================================
+--- trunk/buildroot/package/editors/vim/vim.mk	2009-03-09 17:22:16 UTC (rev 25591)
++++ trunk/buildroot/package/editors/vim/vim.mk	2009-03-09 19:47:55 UTC (rev 25592)
+@@ -9,7 +9,7 @@
+ VIM_SOURCE_SITE:=$(VIM_SITE)/unix
+ VIM_PATCH_SITE:=$(VIM_SITE)/patches/7.1
+ VIM_DIR:=$(BUILD_DIR)/vim71
+-VIM_PATCHES:=$(shell sed -e 's:^:$(DL_DIR)/vim/$(VIM_VERSION).:' package/editors/vim/patches)
++VIM_PATCHES:=$(shell sed -e 's:^:$(DL_DIR)/$(VIM_VERSION).:' package/editors/vim/patches)
+ VIM_CONFIG_H:=$(VIM_DIR)/src/auto/config.h
+ VIM_CONFIG_MK:=$(VIM_DIR)/src/auto/config.mk
+ 
