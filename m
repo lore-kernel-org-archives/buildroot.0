@@ -1,46 +1,39 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon,  9 Mar 2009 17:13:41 +0000 (UTC)
-Subject: [Buildroot] [Bug 161] New: vim fails on patching with errors in
-	configure.patch
-Message-ID: <bug-161-163@https.bugs.busybox.net/>
+From: Karl Krach <mailinglists@blueSpirit.la>
+Date: Mon, 09 Mar 2009 18:18:51 +0100
+Subject: [Buildroot] socket(PF_FILE, SOCK_STREAM, 0) not implemented
+Message-ID: <kg91ff.12vtc6@webmail.variomedia.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=161
 
-           Summary: vim fails on patching with errors in configure.patch
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: enhancement
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: igor47 at moomers.org
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Hello,
 
+I have a handheld device with kernel 2.4.19 and am working with qt 3.3, gcc
+version 2.95 and glibc.
 
-1 out of 423 hunks FAILED -- saving rejects to file src/auto/configure.rej
-Patch failed!  Please fix configure.patch!
-make: *** [/provisioning/buildroot/buildroot-2009.02/build_i686/vim71/.patched]
-Error 1
+For evaluation purposes I try to get the latest Qt version (4.5.0) running. So
+i need the uClibc 0.9.29 or greater and the gcc with at least version 4.0.1.
 
-the earlier error is:
-misordered hunks! output would be garbled
-Hunk #399 FAILED at 14947.
+I have downloaded the latest buildroot sources from svn (gcc 4.3.3, uClibc
+0.9.30), compiled qt and created a chroot on my board. I ve also mounted /proc
+and /dev. But when using sockets (e.g. for qt's QWS), I get the error
+"Function not implemented":
 
-removing that hunk from the patch file only causes additional errors.
-i couldn't fix this, but after the error simply touch vim71/.patched and
-continuing on with the make seems to be a usable workaround.
+brk(0x137f4)                    = 0x137f4
+brk(0x14000)                    = 0x14000
+socket(PF_FILE, SOCK_STREAM, 0) = -1 ENOSYS (Function not implemented)
+stat64("/root/Settings/Trolltech.conf", 0xbffff2d8) = -1 ENOENT
 
+With my old environment (gcc 2.95 and glibc) the same test code is working
+without problems.
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+When checking the uClibc code, I got stuck at a _syscall2. Do I have
+incompatibilities between the uClibc and my kernel? Is my chroot not right
+configured?
+
+Thank a lot,
+
+Charly
