@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon,  9 Mar 2009 09:53:42 +0000 (UTC)
-Subject: [Buildroot] svn commit: [25583] trunk/buildroot/package/e2fsprogs
-Message-ID: <20090309095342.27793764AC@busybox.osuosl.org>
+Date: Mon,  9 Mar 2009 10:26:04 +0000 (UTC)
+Subject: [Buildroot] svn commit: [25584] trunk/buildroot/package/libglib2
+Message-ID: <20090309102604.D215D7656F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,51 +9,39 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2009-03-09 09:53:41 +0000 (Mon, 09 Mar 2009)
-New Revision: 25583
+Date: 2009-03-09 10:26:04 +0000 (Mon, 09 Mar 2009)
+New Revision: 25584
 
 Log:
-e2fsprogs: install into staging so other stuff can find the libs/includes
+libglib2: bump version
 
-And explicitly install the libuuid headers. Needed for the gupnp stuff in #35.
+Patch by Sven Neumann <s.neumann@phase-zero.de>
+
+Closes #37.
 
 Modified:
-   trunk/buildroot/package/e2fsprogs/e2fsprogs.mk
+   trunk/buildroot/package/libglib2/libglib2.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/e2fsprogs/e2fsprogs.mk
+Modified: trunk/buildroot/package/libglib2/libglib2.mk
 ===================================================================
---- trunk/buildroot/package/e2fsprogs/e2fsprogs.mk	2009-03-09 09:53:37 UTC (rev 25582)
-+++ trunk/buildroot/package/e2fsprogs/e2fsprogs.mk	2009-03-09 09:53:41 UTC (rev 25583)
-@@ -41,7 +41,7 @@
- 		--exec-prefix=/usr \
- 		--bindir=/bin \
- 		--sbindir=/sbin \
--		--libdir=/lib \
-+		--libdir=/usr/lib \
- 		--libexecdir=/usr/lib \
- 		--sysconfdir=/etc \
- 		--datadir=/usr/share \
-@@ -69,6 +69,12 @@
- 	#$(STRIPCMD) $(E2FSPROGS_DIR)/lib/lib*.so.*.*
- 	touch -c $@
+--- trunk/buildroot/package/libglib2/libglib2.mk	2009-03-09 09:53:41 UTC (rev 25583)
++++ trunk/buildroot/package/libglib2/libglib2.mk	2009-03-09 10:26:04 UTC (rev 25584)
+@@ -3,13 +3,14 @@
+ # libglib2
+ #
+ #############################################################
+-LIBGLIB2_VERSION_MAJOR = 2.16
+-LIBGLIB2_VERSION_MINOR = 6
++LIBGLIB2_VERSION_MAJOR = 2.18
++LIBGLIB2_VERSION_MINOR = 4
+ LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).$(LIBGLIB2_VERSION_MINOR)
+ LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.bz2
+ LIBGLIB2_SITE = http://ftp.gtk.org/pub/glib/$(LIBGLIB2_VERSION_MAJOR)
  
-+$(STAGING_DIR)/$(E2FSPROGS_TARGET_BINARY): $(E2FSPROGS_DIR)/$(E2FSPROGS_BINARY)
-+	$(MAKE1) PATH=$(TARGET_PATH) DESTDIR=$(STAGING_DIR) LDCONFIG=true \
-+		-C $(E2FSPROGS_DIR) install
-+	$(MAKE1) PATH=$(TARGET_PATH) DESTDIR=$(STAGING_DIR) LDCONFIG=true \
-+		-C $(E2FSPROGS_DIR)/lib/uuid install
-+
- E2FSPROGS_RM$(BR2_PACKAGE_E2FSPROGS_BADBLOCKS) += ${TARGET_DIR}/sbin/badblocks
- E2FSPROGS_RM$(BR2_PACKAGE_E2FSPROGS_BLKID) += ${TARGET_DIR}/sbin/blkid
- E2FSPROGS_RM$(BR2_PACKAGE_E2FSPROGS_CHATTR) += ${TARGET_DIR}/bin/chattr
-@@ -83,7 +89,7 @@
- E2FSPROGS_RM$(BR2_PACKAGE_E2FSPROGS_MKLOSTFOUND) += ${TARGET_DIR}/sbin/mklost+found
- E2FSPROGS_RM$(BR2_PACKAGE_E2FSPROGS_UUIDGEN) += ${TARGET_DIR}/bin/uuidgen
- 
--$(TARGET_DIR)/$(E2FSPROGS_TARGET_BINARY): $(E2FSPROGS_DIR)/$(E2FSPROGS_BINARY)
-+$(TARGET_DIR)/$(E2FSPROGS_TARGET_BINARY): $(STAGING_DIR)/$(E2FSPROGS_TARGET_BINARY)
- 	$(MAKE1) PATH=$(TARGET_PATH) DESTDIR=$(TARGET_DIR) LDCONFIG=true \
- 		-C $(E2FSPROGS_DIR) install
- 	rm -rf ${TARGET_DIR}/sbin/mkfs.ext[234] \
+ LIBGLIB2_AUTORECONF = NO
++LIBGLIB2_LIBTOOL_PATCH = NO
+ LIBGLIB2_INSTALL_STAGING = YES
+ LIBGLIB2_INSTALL_TARGET = YES
+ LIBGLIB2_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
