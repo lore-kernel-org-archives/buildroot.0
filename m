@@ -1,34 +1,37 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon,  9 Mar 2009 19:48:19 +0000 (UTC)
-Subject: [Buildroot] [Bug 161] vim fails on patching with errors in
-	configure.patch
-In-Reply-To: <bug-161-163@https.bugs.busybox.net/>
-References: <bug-161-163@https.bugs.busybox.net/>
-Message-ID: <20090309194819.8D41F764AC@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 09 Mar 2009 21:06:30 +0100
+Subject: [Buildroot] uClibc compilation problem
+In-Reply-To: <200903092009.25554.miciu@gmx.de> (Michael Unterkalmsteiner's
+	message of "Mon\, 9 Mar 2009 20\:09\:25 +0100")
+References: <200903092009.25554.miciu@gmx.de>
+Message-ID: <87sklmbgvt.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=161
+>>>>> "Michael" == Michael Unterkalmsteiner <miciu@gmx.de> writes:
 
+ Michael> Hi, 
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+ Michael> I'd like to build a toolchain for mips with nommu (using
+ Michael> buildroot-2009.02). I get the following error:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+Please post your .config
 
+ Michael> [...]  
+ Michael>   CC libc/stdio/tmpnam.o
+ Michael>   CC libc/stdio/tmpnam_r.o
+ Michael>   CC libc/stdio/popen.o
+ Michael> libc/stdio/popen.c:45: error: 'fork' undeclared here (not in a function)
+ Michael> libc/stdio/popen.c:45: warning: type defaults to 'int' in declaration of 
+ Michael> 'fork'
+ Michael> libc/stdio/popen.c: In function 'popen':
+ Michael> libc/stdio/popen.c:100: error: called object 'fork' is not a function
+ Michael> [...]
 
-
-
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-03-09 19:48:19 UTC ---
-Thanks, fixed in r25592.
-
+You might have more luck asking on the uclibc mailing list.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
