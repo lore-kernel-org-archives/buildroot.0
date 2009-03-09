@@ -1,36 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 09 Mar 2009 21:09:34 +0100
-Subject: [Buildroot] Question about Buildroot concepts and strategies
-In-Reply-To: <49B17D64.50707@hq.tensilica.com> (Maxim Grigoriev's message of
-	"Fri\, 06 Mar 2009 11\:45\:40 -0800")
-References: <49B17D64.50707@hq.tensilica.com>
-Message-ID: <87ocwabgqp.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon,  9 Mar 2009 20:22:18 +0000 (UTC)
+Subject: [Buildroot] [Bug 163] Xtensa architecrute port
+In-Reply-To: <bug-163-163@https.bugs.busybox.net/>
+References: <bug-163-163@https.bugs.busybox.net/>
+Message-ID: <20090309202218.9FDA27669C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Maxim" == Maxim Grigoriev <maxim@tensilica.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=163
 
- Maxim> Hello Peter and BUILDROOT maintainers,
- Maxim> I understand you are busy individuals, and I'm sorry
- Maxim> for bothering you. An excuse could be I'm trying to
- Maxim> understand what BUILDROOT project is all about. Is it
- Maxim> similar to other open source projects or somewhat different ?
 
-It's similar to the other source based embedded rootfs projects
-(Openembedded, ptxdist, openwrt, ..). We do have a bit more focus on
-busybox/uclibc than the others because of our tighter connection to
-those projects.
 
- Maxim> Are BUILDROOT maintainers interested in adding new
- Maxim> architectures to the project ?
 
-Yes, if someone is willing to keep it working.
 
-Thanks for adding the bug report, I will get around to looking at it
-soonish.
+--- Comment #1 from Maxim Grigoriev <maxim2405@gmail.com>  2009-03-09 20:22:16 UTC ---
+Created an attachment (id=115)
+ --> (https://bugs.busybox.net/attachment.cgi?id=115)
+This is the first patch in a set of Xtensa port patches
+
+      Xtensa BUILDROOT uses a concept of source overlays,
+      which are necessary because Xtensa processors are
+      configurable and extensible. Xtensa tools, e.g.
+      gcc, gdb, and binutils, use source overlays, which
+      can not be substituted by the current BUILDROOT
+      patching mechanism. This update makes patch-kernel.sh
+      script capable of handling these overlays.
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
