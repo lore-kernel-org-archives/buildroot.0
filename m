@@ -1,35 +1,28 @@
-From: Michael Unterkalmsteiner <miciu@gmx.de>
-Date: Mon, 9 Mar 2009 23:17:21 +0100
-Subject: [Buildroot] uClibc compilation problem
-In-Reply-To: <87sklmbgvt.fsf@macbook.be.48ers.dk>
-References: <200903092009.25554.miciu@gmx.de>
-	<87sklmbgvt.fsf@macbook.be.48ers.dk>
-Message-ID: <200903092317.21799.miciu@gmx.de>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon,  9 Mar 2009 22:28:14 +0000 (UTC)
+Subject: [Buildroot] [Bug 163] Xtensa architecture port
+In-Reply-To: <bug-163-163@https.bugs.busybox.net/>
+References: <bug-163-163@https.bugs.busybox.net/>
+Message-ID: <20090309222814.44153764AC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday 09 March 2009 21.06.30 Peter Korsgaard wrote:
-> >>>>> "Michael" == Michael Unterkalmsteiner <miciu@gmx.de> writes:
+https://bugs.busybox.net/show_bug.cgi?id=163
 
->
-> Please post your .config
 
-Ok, both buildroot and uclibc configs are attached.
+Maxim Grigoriev <maxim2405@gmail.com> changed:
 
->
-> You might have more luck asking on the uclibc mailing list.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+            Summary|Xtensa architecrute port    |Xtensa architecture port
 
-Thanks, I'll consider that too.
-Btw, when enabling MMU support in uClibc, everything compiles fine.
 
-Michael
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: configs.tar.bz2
-Type: application/x-bzip-compressed-tar
-Size: 5510 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090309/09a2db61/attachment.bin>
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
