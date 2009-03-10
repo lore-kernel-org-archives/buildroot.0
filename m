@@ -1,25 +1,34 @@
-From: Daniel Mack <daniel@caiaq.de>
-Date: Tue, 10 Mar 2009 17:12:51 +0100
-Subject: [Buildroot] gcc-4.3.2: add backport fix for PR 32044
-In-Reply-To: <87prgpag33.fsf@macbook.be.48ers.dk>
-References: <20090310010600.GA3263@buzzloop.caiaq.de>
-	<87prgpag33.fsf@macbook.be.48ers.dk>
-Message-ID: <20090310161251.GE10574@buzzloop.caiaq.de>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 10 Mar 2009 16:14:24 +0000 (UTC)
+Subject: [Buildroot] [Bug 163] Xtensa architecture port
+In-Reply-To: <bug-163-163@https.bugs.busybox.net/>
+References: <bug-163-163@https.bugs.busybox.net/>
+Message-ID: <20090310161424.6AEC376203@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Mar 10, 2009 at 10:21:20AM +0100, Peter Korsgaard wrote:
-> >>>>> "Daniel" == Daniel Mack <daniel@caiaq.de> writes:
-> 
->  Daniel> Hi,
->  Daniel> gcc-4.3.2 needs a backported patch for issue PR 32044, below is a patch
->  Daniel> that adds this to buildroot2.
-> 
-> Thanks - And 4.3.1 / 4.3.3 as well I guess?
+https://bugs.busybox.net/show_bug.cgi?id=163
 
-I can't tell - only checked 4.3.2, sorry.
 
-Daniel
+
+
+
+--- Comment #3 from Bernhard <rep.dot.nop@gmail.com>  2009-03-10 16:14:23 UTC ---
+First, there are superfluous trailing ';' chars in your patch.
+
+Does this:
++       uncomp="tar cf - --exclude=.svn --no-anchored -C";
+work with busybox's tar?
+
+What is "uparm" ment to be? Please use a more descriptive name.
+
+Last, can you give some examples that show why you need these changes?
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
