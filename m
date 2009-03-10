@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue, 10 Mar 2009 21:03:11 +0000 (UTC)
-Subject: [Buildroot] svn commit: [25599] trunk/buildroot/package/ipsec-tools
-Message-ID: <20090310210311.3915076465@busybox.osuosl.org>
+Date: Tue, 10 Mar 2009 21:03:15 +0000 (UTC)
+Subject: [Buildroot] svn commit: [25600] trunk/buildroot/package/libcurl
+Message-ID: <20090310210315.31D0176465@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,86 +9,30 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2009-03-10 21:03:10 +0000 (Tue, 10 Mar 2009)
-New Revision: 25599
+Date: 2009-03-10 21:03:14 +0000 (Tue, 10 Mar 2009)
+New Revision: 25600
 
 Log:
-ipsec-tools: fix printf format string for size_t (on 64bit)
+libcurl: fix configure with openssl when target == host.
 
-Use %zu instead of %d for printing out size_t variables. Fixes a build issue
-on 64bit as ipsec-tools uses -Werror.
-
-Added:
-   trunk/buildroot/package/ipsec-tools/ipsec-tools-0.6.7-printf-format-string.patch
+Modified:
+   trunk/buildroot/package/libcurl/libcurl.mk
 
 
 Changeset:
-Added: trunk/buildroot/package/ipsec-tools/ipsec-tools-0.6.7-printf-format-string.patch
+Modified: trunk/buildroot/package/libcurl/libcurl.mk
 ===================================================================
---- trunk/buildroot/package/ipsec-tools/ipsec-tools-0.6.7-printf-format-string.patch	                        (rev 0)
-+++ trunk/buildroot/package/ipsec-tools/ipsec-tools-0.6.7-printf-format-string.patch	2009-03-10 21:03:10 UTC (rev 25599)
-@@ -0,0 +1,64 @@
-+[patch]: ipsec-tools: fix printf format string for size_t
-+
-+Use %zu instead of %d for printing out size_t variables. Fixes a build issue
-+on 64bit as ipsec-tools uses -Werror.
-+
-+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-+---
-+ src/racoon/algorithm.c |    6 +++---
-+ src/racoon/oakley.c    |    4 ++--
-+ 2 files changed, 5 insertions(+), 5 deletions(-)
-+
-+Index: ipsec-tools-0.6.7/src/racoon/oakley.c
-+===================================================================
-+--- ipsec-tools-0.6.7.orig/src/racoon/oakley.c
-++++ ipsec-tools-0.6.7/src/racoon/oakley.c
-+@@ -252,7 +252,7 @@
-+ 
-+ #ifdef ENABLE_STATS
-+ 	gettimeofday(&end, NULL);
-+-	syslog(LOG_NOTICE, "%s(%s%d): %8.6f", __func__,
-++	syslog(LOG_NOTICE, "%s(%s%zu): %8.6f", __func__,
-+ 		s_attr_isakmp_group(dh->type), dh->prime->l << 3,
-+ 		timedelta(&start, &end));
-+ #endif
-+@@ -299,7 +299,7 @@
-+ 
-+ #ifdef ENABLE_STATS
-+ 	gettimeofday(&end, NULL);
-+-	syslog(LOG_NOTICE, "%s(%s%d): %8.6f", __func__,
-++	syslog(LOG_NOTICE, "%s(%s%zu): %8.6f", __func__,
-+ 		s_attr_isakmp_group(dh->type), dh->prime->l << 3,
-+ 		timedelta(&start, &end));
-+ #endif
-+Index: ipsec-tools-0.6.7/src/racoon/algorithm.c
-+===================================================================
-+--- ipsec-tools-0.6.7.orig/src/racoon/algorithm.c
-++++ ipsec-tools-0.6.7/src/racoon/algorithm.c
-+@@ -394,7 +394,7 @@
-+ 
-+ #ifdef ENABLE_STATS
-+ 	gettimeofday(&end, NULL);
-+-	syslog(LOG_NOTICE, "%s(%s size=%d): %8.6f", __func__,
-++	syslog(LOG_NOTICE, "%s(%s size=%zu): %8.6f", __func__,
-+ 		f->name, buf->l, timedelta(&start, &end));
-+ #endif
-+ 
-+@@ -506,7 +506,7 @@
-+ 
-+ #ifdef ENABLE_STATS
-+ 	gettimeofday(&end, NULL);
-+-	syslog(LOG_NOTICE, "%s(%s klen=%d size=%d): %8.6f", __func__,
-++	syslog(LOG_NOTICE, "%s(%s klen=%zu size=%zu): %8.6f", __func__,
-+ 		f->name, key->l << 3, buf->l, timedelta(&start, &end));
-+ #endif
-+ 	return res;
-+@@ -535,7 +535,7 @@
-+ 
-+ #ifdef ENABLE_STATS
-+ 	gettimeofday(&end, NULL);
-+-	syslog(LOG_NOTICE, "%s(%s klen=%d size=%d): %8.6f", __func__,
-++	syslog(LOG_NOTICE, "%s(%s klen=%zu size=%zu): %8.6f", __func__,
-+ 		f->name, key->l << 3, buf->l, timedelta(&start, &end));
-+ #endif
-+ 	return res;
+--- trunk/buildroot/package/libcurl/libcurl.mk	2009-03-10 21:03:10 UTC (rev 25599)
++++ trunk/buildroot/package/libcurl/libcurl.mk	2009-03-10 21:03:14 UTC (rev 25600)
+@@ -13,6 +13,11 @@
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ LIBCURL_DEPENDENCIES += openssl
+ LIBCURL_CONF_ENV += ac_cv_lib_crypto_CRYPTO_lock=yes
++# configure adds the cross openssl dir to LD_LIBRARY_PATH which screws up
++# native stuff during the rest of configure when target == host.
++# Fix it by setting LD_LIBRARY_PATH to something sensible so those libs
++# are found first.
++LIBCURL_CONF_ENV += LD_LIBRARY_PATH=$$LD_LIBRARY_PATH:/lib:/usr/lib
+ LIBCURL_CONF_OPT += --with-ssl=$(STAGING_DIR)/usr --with-random=/dev/urandom
+ endif
+ 
