@@ -1,45 +1,37 @@
-From: Rajeev Bansal <rbansal@proxim.com>
-Date: Tue, 10 Mar 2009 09:55:17 -0700
-Subject: [Buildroot] MIPS32 toolchain with NPTL support
-In-Reply-To: <20090310100925.595b865a@surf>
-Message-ID: <1E3D081C7B502B4A988F643E604CF9634B981F@INDEXCH.corp.proxim.com>
+From: Robert Urban <urban@unix-beratung.de>
+Date: Tue, 10 Mar 2009 19:47:06 +0100
+Subject: [Buildroot] problems configuring libcurl
+In-Reply-To: <87ljrdaapy.fsf@macbook.be.48ers.dk>
+References: <49B5BA80.5090103@unix-beratung.de>	<87tz61aigp.fsf@macbook.be.48ers.dk>
+	<49B634A0.30600@unix-beratung.de>
+	<87ljrdaapy.fsf@macbook.be.48ers.dk>
+Message-ID: <49B6B5AA.5000401@unix-beratung.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks a lot for your help. I will definitely try this.
+Peter Korsgaard wrote:
+>>>>>> "Robert" == Robert Urban <urban@unix-beratung.de> writes:
+> 
+> Hi,
+> 
+>  Robert> bash: project_build_i586/robix/root/bin/grep:
+>  Robert> /lib/ld-uClibc.so.0: bad ELF interpreter: No such file or
+>  Robert> directory -snip-
+> 
+>  >> Please post your .config
+> 
+>  Robert> .config can be found at:
+> 
+>  Robert> 	http://www.spielwiese.de/rob/Buildroot/config
+> 
+> It builds fine here (on a x86_64 host though). I'll change the target
+> to x86_64 and try again.
+> 
+> What distribution are you using?
 
-Thanks
-Rajeev Bansal. 
+Fedora 10
 
------Original Message-----
-From: buildroot-bounces@busybox.net [mailto:buildroot-bounces at busybox.net] On Behalf Of Thomas Petazzoni
-Sent: Tuesday, March 10, 2009 2:39 PM
-To: buildroot at busybox.net
-Subject: Re: [Buildroot] MIPS32 toolchain with NPTL support
-
-Hi,
-
-Le Mon, 9 Mar 2009 18:51:08 -0700,
-"Rajeev Bansal" <rbansal@proxim.com> a ?crit :
-
-> I am looking for a Linux cross toolchain for MIPS32 architecture with 
-> NPTL support, so please help me how can I build it or from where I can 
-> get it? I came to know uclibc doesn't have the support for NPTL, so 
-> glibc will also OK for me.
-
-Buildroot only allows to generate uclibc-based toolchains. You may want to try crosstool-ng <http://ymorin.is-a-geek.org/dokuwiki/projects/crosstool>.
-
-Sincerly,
-
-Thomas
---
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development, consulting, training and support.
-http://free-electrons.com
-_______________________________________________
-buildroot mailing list
-buildroot at busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
+-RLU
