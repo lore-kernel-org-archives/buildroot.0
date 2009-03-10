@@ -1,40 +1,28 @@
-From: Karl Krach <mailinglists@blueSpirit.la>
-Date: Tue, 10 Mar 2009 07:43:20 +0100
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 10 Mar 2009 07:59:27 +0100
 Subject: [Buildroot] socket(PF_FILE, SOCK_STREAM, 0) not implemented
-Message-ID: <kga2o8.4opixu@webmail.variomedia.de>
+In-Reply-To: <kga2o8.4opixu@webmail.variomedia.de> (Karl Krach's message of
+	"Tue\, 10 Mar 2009 07\:43\:20 +0100")
+References: <kga2o8.4opixu@webmail.variomedia.de>
+Message-ID: <87y6vdamnk.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Will Newton <will.newton@gmail.com> schrieb:
-> >
-> > Hello,
-> >
-> > I have an arm handheld device with kernel 2.4.19 and am working
-> > with qt 3.3, gcc version 2.95 and glibc.
-> >
-> > [...]
-> >
-> > brk(0x137f4) ? ? ? ? ? ? ? ? ? ?= 0x137f4
-> > brk(0x14000) ? ? ? ? ? ? ? ? ? ?= 0x14000
-> > socket(PF_FILE, SOCK_STREAM, 0) = -1 ENOSYS
-> >                                  (Function not implemented)
-> > stat64("/root/Settings/Trolltech.conf", 0xbffff2d8) = -1 ENOENT
-> >
-> > [...]
-> >
-> 
-> It looks as if the kernel headers you built uClibc with do not match
-> your kernel.
-> 
-Yes, of course - you re right. I'm using the kernel headers which are
-downloaded and installed by buildroot (2.5.28.x). Provides the buildroot
-configuration a way to used custom kernel headers? What do you think, is there
-a chance to get it working with a 2.4 kernel?
+>>>>> "Karl" == Karl Krach <mailinglists@blueSpirit.la> writes:
 
-Now I'm going to fix it manually (by replacing the kernel header files in
-"toolchain_build_arm/linux") and will report how far I get.
+Hi,
 
-Charly
+ Karl> Yes, of course - you re right. I'm using the kernel headers which are
+ Karl> downloaded and installed by buildroot (2.5.28.x). Provides the buildroot
+ Karl> configuration a way to used custom kernel headers? What do you think, is there
+ Karl> a chance to get it working with a 2.4 kernel?
+
+I've recently removed 2.4.31 kernel headers, but you could try
+checking out r25435, then you should be able to select it after you
+enable build options->Show package that are deprecated.
+
+-- 
+Bye, Peter Korsgaard
