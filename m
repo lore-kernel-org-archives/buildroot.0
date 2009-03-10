@@ -1,38 +1,32 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue, 10 Mar 2009 21:03:15 +0000 (UTC)
-Subject: [Buildroot] svn commit: [25600] trunk/buildroot/package/libcurl
-Message-ID: <20090310210315.31D0176465@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 10 Mar 2009 22:03:57 +0100
+Subject: [Buildroot] problems configuring libcurl
+In-Reply-To: <49B6B5AA.5000401@unix-beratung.de> (Robert Urban's message of
+	"Tue\, 10 Mar 2009 19\:47\:06 +0100")
+References: <49B5BA80.5090103@unix-beratung.de>
+	<87tz61aigp.fsf@macbook.be.48ers.dk> <49B634A0.30600@unix-beratung.de>
+	<87ljrdaapy.fsf@macbook.be.48ers.dk>
+	<49B6B5AA.5000401@unix-beratung.de>
+Message-ID: <871vt59jk2.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-03-10 21:03:14 +0000 (Tue, 10 Mar 2009)
-New Revision: 25600
+>>>>> "Robert" == Robert Urban <urban@unix-beratung.de> writes:
 
-Log:
-libcurl: fix configure with openssl when target == host.
+Hi,
 
-Modified:
-   trunk/buildroot/package/libcurl/libcurl.mk
+ >> It builds fine here (on a x86_64 host though). I'll change the target
+ >> to x86_64 and try again.
+ >> 
+ >> What distribution are you using?
 
+ Robert> Fedora 10
 
-Changeset:
-Modified: trunk/buildroot/package/libcurl/libcurl.mk
-===================================================================
---- trunk/buildroot/package/libcurl/libcurl.mk	2009-03-10 21:03:10 UTC (rev 25599)
-+++ trunk/buildroot/package/libcurl/libcurl.mk	2009-03-10 21:03:14 UTC (rev 25600)
-@@ -13,6 +13,11 @@
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- LIBCURL_DEPENDENCIES += openssl
- LIBCURL_CONF_ENV += ac_cv_lib_crypto_CRYPTO_lock=yes
-+# configure adds the cross openssl dir to LD_LIBRARY_PATH which screws up
-+# native stuff during the rest of configure when target == host.
-+# Fix it by setting LD_LIBRARY_PATH to something sensible so those libs
-+# are found first.
-+LIBCURL_CONF_ENV += LD_LIBRARY_PATH=$$LD_LIBRARY_PATH:/lib:/usr/lib
- LIBCURL_CONF_OPT += --with-ssl=$(STAGING_DIR)/usr --with-random=/dev/urandom
- endif
- 
+Could you give r25600 a try? That fixes the issue for me with target
+== host.
+
+-- 
+Bye, Peter Korsgaard
