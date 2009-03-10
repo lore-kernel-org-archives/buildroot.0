@@ -1,51 +1,40 @@
-From: IaMaPlAyEr <iamaplayer@gmail.com>
-Date: Tue, 10 Mar 2009 12:13:12 +0800
-Subject: [Buildroot] [buildroot] help! stopped at gcc build
-Message-ID: <2ae8403e0903092113g94dd0b8x19a38947031dc2a6@mail.gmail.com>
+From: Karl Krach <mailinglists@blueSpirit.la>
+Date: Tue, 10 Mar 2009 07:43:20 +0100
+Subject: [Buildroot] socket(PF_FILE, SOCK_STREAM, 0) not implemented
+Message-ID: <kga2o8.4opixu@webmail.variomedia.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-hi,all
+Will Newton <will.newton@gmail.com> schrieb:
+> >
+> > Hello,
+> >
+> > I have an arm handheld device with kernel 2.4.19 and am working
+> > with qt 3.3, gcc version 2.95 and glibc.
+> >
+> > [...]
+> >
+> > brk(0x137f4) ? ? ? ? ? ? ? ? ? ?= 0x137f4
+> > brk(0x14000) ? ? ? ? ? ? ? ? ? ?= 0x14000
+> > socket(PF_FILE, SOCK_STREAM, 0) = -1 ENOSYS
+> >                                  (Function not implemented)
+> > stat64("/root/Settings/Trolltech.conf", 0xbffff2d8) = -1 ENOENT
+> >
+> > [...]
+> >
+> 
+> It looks as if the kernel headers you built uClibc with do not match
+> your kernel.
+> 
+Yes, of course - you re right. I'm using the kernel headers which are
+downloaded and installed by buildroot (2.5.28.x). Provides the buildroot
+configuration a way to used custom kernel headers? What do you think, is there
+a chance to get it working with a 2.4 kernel?
 
-when i build buildroot, some error appeared.
-i select
+Now I'm going to fix it manually (by replacing the kernel header files in
+"toolchain_build_arm/linux") and will report how far I get.
 
-Target Architecture (arm)  --->
-Target Architecture Variant (arm920t)  --->
-Target ABI (EABI)  --->
-
-
-error message:
-
-/home/havef/src/buildroot/toolchain_build_arm/gcc-4.3.3/libgcc/../gcc/crtstuff.c:
-In function '__do_global_dtors_aux':
-/home/havef/src/buildroot/toolchain_build_arm/gcc-4.3.3/libgcc/../gcc/crtstuff.c:306:
-error: '__DTOR_LIST__' undeclared (first use in this function)
-/home/havef/src/buildroot/toolchain_build_arm/gcc-4.3.3/libgcc/../gcc/crtstuff.c:306:
-error: (Each undeclared identifier is reported only once
-/home/havef/src/buildroot/toolchain_build_arm/gcc-4.3.3/libgcc/../gcc/crtstuff.c:306:
-error: for each function it appears in.)
-make[2]: *** [crtbegin.o] Error 1
-make[2]: Leaving directory
-`/home/havef/src/buildroot/toolchain_build_arm/gcc-4.3.3-initial/arm-linux-uclibc/libgcc'
-make[1]: *** [all-target-libgcc] Error 2
-make[1]: Leaving directory
-`/home/havef/src/buildroot/toolchain_build_arm/gcc-4.3.3-initial'
-make: ***
-[/home/havef/src/buildroot/toolchain_build_arm/gcc-4.3.3-initial/.compiled]
-Error 2
-
-
-
-great thanks for your tips!
--- 
---
-Sincerly,
-
-HaveF
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090310/4ed29344/attachment.htm>
+Charly
