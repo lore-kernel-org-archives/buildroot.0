@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue, 10 Mar 2009 21:03:05 +0000 (UTC)
-Subject: [Buildroot] svn commit: [25598] trunk/buildroot/toolchain/uClibc
-Message-ID: <20090310210306.56E0176465@busybox.osuosl.org>
+Date: Tue, 10 Mar 2009 21:03:11 +0000 (UTC)
+Subject: [Buildroot] svn commit: [25599] trunk/buildroot/package/ipsec-tools
+Message-ID: <20090310210311.3915076465@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,122 +9,86 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2009-03-10 21:03:04 +0000 (Tue, 10 Mar 2009)
-New Revision: 25598
+Date: 2009-03-10 21:03:10 +0000 (Tue, 10 Mar 2009)
+New Revision: 25599
 
 Log:
-uClibc: strtouq fix for 64bit
+ipsec-tools: fix printf format string for size_t (on 64bit)
+
+Use %zu instead of %d for printing out size_t variables. Fixes a build issue
+on 64bit as ipsec-tools uses -Werror.
 
 Added:
-   trunk/buildroot/toolchain/uClibc/uClibc-0.9.30-64bit-strtouq.patch
-   trunk/buildroot/toolchain/uClibc/uClibc-0.9.30.1-64bit-strtouq.patch
+   trunk/buildroot/package/ipsec-tools/ipsec-tools-0.6.7-printf-format-string.patch
 
 
 Changeset:
-Added: trunk/buildroot/toolchain/uClibc/uClibc-0.9.30-64bit-strtouq.patch
+Added: trunk/buildroot/package/ipsec-tools/ipsec-tools-0.6.7-printf-format-string.patch
 ===================================================================
---- trunk/buildroot/toolchain/uClibc/uClibc-0.9.30-64bit-strtouq.patch	                        (rev 0)
-+++ trunk/buildroot/toolchain/uClibc/uClibc-0.9.30-64bit-strtouq.patch	2009-03-10 21:03:04 UTC (rev 25598)
-@@ -0,0 +1,48 @@
-+[PATCH]: Add strtouq alias (to strtoul) for 64bit
+--- trunk/buildroot/package/ipsec-tools/ipsec-tools-0.6.7-printf-format-string.patch	                        (rev 0)
++++ trunk/buildroot/package/ipsec-tools/ipsec-tools-0.6.7-printf-format-string.patch	2009-03-10 21:03:10 UTC (rev 25599)
+@@ -0,0 +1,64 @@
++[patch]: ipsec-tools: fix printf format string for size_t
 +
-+The strtouq alias was only available on 32bit, breaking compilation of stuff
-+using strtouq on 64bit machines. At the same time use the correct return
-+type (u_quad_t).
++Use %zu instead of %d for printing out size_t variables. Fixes a build issue
++on 64bit as ipsec-tools uses -Werror.
 +
-+Signed-of-by: Peter Korsgaard <jacmet@sunsite.dk>
++Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 +---
-+ include/stdlib.h     |    4 +++-
-+ libc/stdlib/stdlib.c |    1 +
-+ 2 files changed, 4 insertions(+), 1 deletion(-)
++ src/racoon/algorithm.c |    6 +++---
++ src/racoon/oakley.c    |    4 ++--
++ 2 files changed, 5 insertions(+), 5 deletions(-)
 +
-+Index: uClibc-0.9.30.1/libc/stdlib/stdlib.c
++Index: ipsec-tools-0.6.7/src/racoon/oakley.c
 +===================================================================
-+--- uClibc-0.9.30.1.orig/libc/stdlib/stdlib.c
-++++ uClibc-0.9.30.1/libc/stdlib/stdlib.c
-+@@ -401,6 +401,9 @@
-+ libc_hidden_proto(__XL_NPP(strtoull))
-+ strong_alias(__XL_NPP(strtoul),__XL_NPP(strtoull))
-+ libc_hidden_def(__XL_NPP(strtoull))
-++#if !defined(L_strtoul_l)
-++strong_alias(strtoul,strtouq)
-++#endif
++--- ipsec-tools-0.6.7.orig/src/racoon/oakley.c
+++++ ipsec-tools-0.6.7/src/racoon/oakley.c
++@@ -252,7 +252,7 @@
++ 
++ #ifdef ENABLE_STATS
++ 	gettimeofday(&end, NULL);
++-	syslog(LOG_NOTICE, "%s(%s%d): %8.6f", __func__,
+++	syslog(LOG_NOTICE, "%s(%s%zu): %8.6f", __func__,
++ 		s_attr_isakmp_group(dh->type), dh->prime->l << 3,
++ 		timedelta(&start, &end));
++ #endif
++@@ -299,7 +299,7 @@
++ 
++ #ifdef ENABLE_STATS
++ 	gettimeofday(&end, NULL);
++-	syslog(LOG_NOTICE, "%s(%s%d): %8.6f", __func__,
+++	syslog(LOG_NOTICE, "%s(%s%zu): %8.6f", __func__,
++ 		s_attr_isakmp_group(dh->type), dh->prime->l << 3,
++ 		timedelta(&start, &end));
++ #endif
++Index: ipsec-tools-0.6.7/src/racoon/algorithm.c
++===================================================================
++--- ipsec-tools-0.6.7.orig/src/racoon/algorithm.c
+++++ ipsec-tools-0.6.7/src/racoon/algorithm.c
++@@ -394,7 +394,7 @@
++ 
++ #ifdef ENABLE_STATS
++ 	gettimeofday(&end, NULL);
++-	syslog(LOG_NOTICE, "%s(%s size=%d): %8.6f", __func__,
+++	syslog(LOG_NOTICE, "%s(%s size=%zu): %8.6f", __func__,
++ 		f->name, buf->l, timedelta(&start, &end));
 + #endif
 + 
++@@ -506,7 +506,7 @@
 + 
-+Index: uClibc-0.9.30.1/include/stdlib.h
-+===================================================================
-+--- uClibc-0.9.30.1.orig/include/stdlib.h
-++++ uClibc-0.9.30.1/include/stdlib.h
-+@@ -203,6 +203,8 @@
-+ __END_NAMESPACE_STD
-+ 
-+ #ifdef __USE_BSD
-++#include <sys/types.h> /* for u_quad_t */
-++
-+ /* Convert a string to a quadword integer.  */
-+ __extension__
-+ extern long long int strtoq (__const char *__restrict __nptr,
-+@@ -210,7 +212,7 @@
-+      __THROW __nonnull ((1)) __wur;
-+ /* Convert a string to an unsigned quadword integer.  */
-+ __extension__
-+-extern unsigned long long int strtouq (__const char *__restrict __nptr,
-++extern u_quad_t strtouq (__const char *__restrict __nptr,
-+ 				       char **__restrict __endptr, int __base)
-+      __THROW __nonnull ((1)) __wur;
-+ #endif /* GCC and use BSD.  */
-
-Added: trunk/buildroot/toolchain/uClibc/uClibc-0.9.30.1-64bit-strtouq.patch
-===================================================================
---- trunk/buildroot/toolchain/uClibc/uClibc-0.9.30.1-64bit-strtouq.patch	                        (rev 0)
-+++ trunk/buildroot/toolchain/uClibc/uClibc-0.9.30.1-64bit-strtouq.patch	2009-03-10 21:03:04 UTC (rev 25598)
-@@ -0,0 +1,48 @@
-+[PATCH]: Add strtouq alias (to strtoul) for 64bit
-+
-+The strtouq alias was only available on 32bit, breaking compilation of stuff
-+using strtouq on 64bit machines. At the same time use the correct return
-+type (u_quad_t).
-+
-+Signed-of-by: Peter Korsgaard <jacmet@sunsite.dk>
-+---
-+ include/stdlib.h     |    4 +++-
-+ libc/stdlib/stdlib.c |    1 +
-+ 2 files changed, 4 insertions(+), 1 deletion(-)
-+
-+Index: uClibc-0.9.30.1/libc/stdlib/stdlib.c
-+===================================================================
-+--- uClibc-0.9.30.1.orig/libc/stdlib/stdlib.c
-++++ uClibc-0.9.30.1/libc/stdlib/stdlib.c
-+@@ -401,6 +401,9 @@
-+ libc_hidden_proto(__XL_NPP(strtoull))
-+ strong_alias(__XL_NPP(strtoul),__XL_NPP(strtoull))
-+ libc_hidden_def(__XL_NPP(strtoull))
-++#if !defined(L_strtoul_l)
-++strong_alias(strtoul,strtouq)
-++#endif
++ #ifdef ENABLE_STATS
++ 	gettimeofday(&end, NULL);
++-	syslog(LOG_NOTICE, "%s(%s klen=%d size=%d): %8.6f", __func__,
+++	syslog(LOG_NOTICE, "%s(%s klen=%zu size=%zu): %8.6f", __func__,
++ 		f->name, key->l << 3, buf->l, timedelta(&start, &end));
 + #endif
++ 	return res;
++@@ -535,7 +535,7 @@
 + 
-+ 
-+Index: uClibc-0.9.30.1/include/stdlib.h
-+===================================================================
-+--- uClibc-0.9.30.1.orig/include/stdlib.h
-++++ uClibc-0.9.30.1/include/stdlib.h
-+@@ -203,6 +203,8 @@
-+ __END_NAMESPACE_STD
-+ 
-+ #ifdef __USE_BSD
-++#include <sys/types.h> /* for u_quad_t */
-++
-+ /* Convert a string to a quadword integer.  */
-+ __extension__
-+ extern long long int strtoq (__const char *__restrict __nptr,
-+@@ -210,7 +212,7 @@
-+      __THROW __nonnull ((1)) __wur;
-+ /* Convert a string to an unsigned quadword integer.  */
-+ __extension__
-+-extern unsigned long long int strtouq (__const char *__restrict __nptr,
-++extern u_quad_t strtouq (__const char *__restrict __nptr,
-+ 				       char **__restrict __endptr, int __base)
-+      __THROW __nonnull ((1)) __wur;
-+ #endif /* GCC and use BSD.  */
++ #ifdef ENABLE_STATS
++ 	gettimeofday(&end, NULL);
++-	syslog(LOG_NOTICE, "%s(%s klen=%d size=%d): %8.6f", __func__,
+++	syslog(LOG_NOTICE, "%s(%s klen=%zu size=%zu): %8.6f", __func__,
++ 		f->name, key->l << 3, buf->l, timedelta(&start, &end));
++ #endif
++ 	return res;
