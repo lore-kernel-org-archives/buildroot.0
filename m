@@ -1,48 +1,222 @@
-From: Robert Urban <urban@unix-beratung.de>
-Date: Tue, 10 Mar 2009 01:55:28 +0100
-Subject: [Buildroot] problems configuring libcurl
-Message-ID: <49B5BA80.5090103@unix-beratung.de>
+From: Daniel Mack <daniel@caiaq.de>
+Date: Tue, 10 Mar 2009 02:06:00 +0100
+Subject: [Buildroot] gcc-4.3.2: add backport fix for PR 32044
+Message-ID: <20090310010600.GA3263@buzzloop.caiaq.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Folks,
+Hi,
 
-i've enabled libcurl in svn-buildroot, but the configure-run fails with:
+gcc-4.3.2 needs a backported patch for issue PR 32044, below is a patch
+that adds this to buildroot2.
 
--snip-
-checking for openssl/engine.h... yes
-checking for ENGINE_load_builtin_engines... yes
-checking for RAND_status... yes
-checking for RAND_screen... no
-checking for RAND_egd... yes
-checking for CRYPTO_cleanup_all_ex_data... yes
-checking for SSL_get_shutdown... yes
-checking for yaSSL using OpenSSL compatibility mode... no
-configure: Added
-/big/home/urban/Build/Buildroot/svn/buildroot/build_i586/staging_dir/usr/lib
-to LD_LIBRARY_PATH
-checking for inflateEnd in -lz... grep: error while loading shared
-libraries: libc.so.0: cannot open shared object file: No such file or directory
-no
-checking zlib.h usability... grep: error while loading shared libraries:
-libc.so.0: cannot open shared object file: No such file or directory
-no
-checking zlib.h presence... grep: error while loading shared libraries:
-libc.so.0: cannot open shared object file: No such file or directory
-yes
-configure: WARNING: zlib.h: present but cannot be compiled
-configure: WARNING: zlib.h:     check for missing prerequisite headers?
-configure: WARNING: zlib.h: see the Autoconf documentation
-configure: WARNING: zlib.h:     section "Present But Cannot Be Compiled"
-configure: WARNING: zlib.h: proceeding with the preprocessor's result
--snip-
+Many thanks to Uwe Kleine-K?nig for the backport and to Robert Schwebel
+for pointing me there.
 
-it seems "grep" is failing, but an "ldd" of /bin/grep doesn't even list
-"libc.so.0". hmm.
+The original posting is here:
 
-Anyone have a suggestion?
+http://www.nabble.com/Backport-fix-for-PR-32044-(final-value-replacement-too-aggressive)-%09to-gcc-4.3-td22199271.html                        
 
-Rob Urban
+Not sure yet whether this solves a number of strange crashes on a PXA
+board, but the patch is certainly needed.
+
+Best regards,
+Daniel
+
+
+Index: toolchain/gcc/4.3.2/901-backport-fix-for-bug-32044.patch
+===================================================================
+--- toolchain/gcc/4.3.2/901-backport-fix-for-bug-32044.patch	(revision 0)
++++ toolchain/gcc/4.3.2/901-backport-fix-for-bug-32044.patch	(revision 0)
+@@ -0,0 +1,188 @@
++Index: gcc-4.3.2/gcc/tree-scalar-evolution.c
++===================================================================
++--- gcc-4.3.2.orig/gcc/tree-scalar-evolution.c	2009-01-28 10:14:37.000000000 +0100
+++++ gcc-4.3.2/gcc/tree-scalar-evolution.c	2009-01-28 10:17:50.000000000 +0100
++@@ -2716,6 +2716,50 @@
++   scalar_evolution_info = NULL;
++ }
++ 
+++/* Returns true if the expression EXPR is considered to be too expensive
+++   for scev_const_prop.  */
+++
+++bool
+++expression_expensive_p (tree expr)
+++{
+++  enum tree_code code;
+++
+++  if (is_gimple_val (expr))
+++    return false;
+++
+++  code = TREE_CODE (expr);
+++  if (code == TRUNC_DIV_EXPR
+++      || code == CEIL_DIV_EXPR
+++      || code == FLOOR_DIV_EXPR
+++      || code == ROUND_DIV_EXPR
+++      || code == TRUNC_MOD_EXPR
+++      || code == CEIL_MOD_EXPR
+++      || code == FLOOR_MOD_EXPR
+++      || code == ROUND_MOD_EXPR
+++      || code == EXACT_DIV_EXPR)
+++    {
+++      /* Division by power of two is usually cheap, so we allow it.
+++	 Forbid anything else.  */
+++      if (!integer_pow2p (TREE_OPERAND (expr, 1)))
+++	return true;
+++    }
+++
+++  switch (TREE_CODE_CLASS (code))
+++    {
+++    case tcc_binary:
+++    case tcc_comparison:
+++      if (expression_expensive_p (TREE_OPERAND (expr, 1)))
+++	return true;
+++
+++      /* Fallthru.  */
+++    case tcc_unary:
+++      return expression_expensive_p (TREE_OPERAND (expr, 0));
+++
+++    default:
+++      return true;
+++    }
+++}
+++
++ /* Replace ssa names for that scev can prove they are constant by the
++    appropriate constants.  Also perform final value replacement in loops,
++    in case the replacement expressions are cheap.
++@@ -2802,12 +2846,6 @@
++ 	continue;
++ 
++       niter = number_of_latch_executions (loop);
++-      /* We used to check here whether the computation of NITER is expensive,
++-	 and avoided final value elimination if that is the case.  The problem
++-	 is that it is hard to evaluate whether the expression is too
++-	 expensive, as we do not know what optimization opportunities the
++-	 the elimination of the final value may reveal.  Therefore, we now
++-	 eliminate the final values of induction variables unconditionally.  */
++       if (niter == chrec_dont_know)
++ 	continue;
++ 
++@@ -2838,7 +2876,15 @@
++ 	      /* Moving the computation from the loop may prolong life range
++ 		 of some ssa names, which may cause problems if they appear
++ 		 on abnormal edges.  */
++-	      || contains_abnormal_ssa_name_p (def))
+++	      || contains_abnormal_ssa_name_p (def)
+++	      /* Do not emit expensive expressions.  The rationale is that
+++		 when someone writes a code like
+++
+++		 while (n > 45) n -= 45;
+++
+++		 he probably knows that n is not large, and does not want it
+++		 to be turned into n %= 45.  */
+++	      || expression_expensive_p (def))
++ 	    continue;
++ 
++ 	  /* Eliminate the PHI node and replace it by a computation outside
++Index: gcc-4.3.2/gcc/tree-scalar-evolution.h
++===================================================================
++--- gcc-4.3.2.orig/gcc/tree-scalar-evolution.h	2009-01-28 10:22:47.000000000 +0100
+++++ gcc-4.3.2/gcc/tree-scalar-evolution.h	2009-01-28 10:23:10.000000000 +0100
++@@ -35,6 +35,7 @@
++ extern void scev_analysis (void);
++ unsigned int scev_const_prop (void);
++ 
+++bool expression_expensive_p (tree);
++ extern bool simple_iv (struct loop *, tree, tree, affine_iv *, bool);
++ 
++ /* Returns the loop of the polynomial chrec CHREC.  */
++Index: gcc-4.3.2/gcc/testsuite/gcc.dg/pr34027-1.c
++===================================================================
++--- gcc-4.3.2.orig/gcc/testsuite/gcc.dg/pr34027-1.c	2009-01-28 10:24:09.000000000 +0100
+++++ gcc-4.3.2/gcc/testsuite/gcc.dg/pr34027-1.c	2009-01-28 10:24:43.000000000 +0100
++@@ -8,5 +8,9 @@
++   return ns;
++ }
++ 
++-/* { dg-final { scan-tree-dump "ns % 10000" "optimized" } } */
+++/* This test was originally introduced to test that we transform
+++   to ns % 10000.  See the discussion of PR 32044 why we do not do
+++   that anymore.  */
+++/* { dg-final { scan-tree-dump-times "%" 0 "optimized" } } */
+++/* { dg-final { scan-tree-dump-times "/" 0 "optimized" } } */
++ /* { dg-final { cleanup-tree-dump "optimized" } } */
++Index: gcc-4.3.2/gcc/testsuite/gcc.dg/tree-ssa/pr32044.c
++===================================================================
++--- /dev/null	1970-01-01 00:00:00.000000000 +0000
+++++ gcc-4.3.2/gcc/testsuite/gcc.dg/tree-ssa/pr32044.c	2009-01-28 10:25:50.000000000 +0100
++@@ -0,0 +1,55 @@
+++/* { dg-do compile } */
+++/* { dg-options "-O2 -fdump-tree-empty -fdump-tree-final_cleanup" } */
+++
+++int foo (int n)
+++{
+++  while (n >= 45)
+++    n -= 45;
+++
+++  return n;
+++}
+++
+++int bar (int n)
+++{
+++  while (n >= 64)
+++    n -= 64;
+++
+++  return n;
+++}
+++
+++int bla (int n)
+++{
+++  int i = 0;
+++
+++  while (n >= 45)
+++    {
+++      i++;
+++      n -= 45;
+++    }
+++
+++  return i;
+++}
+++
+++int baz (int n)
+++{
+++  int i = 0;
+++
+++  while (n >= 64)
+++    {
+++      i++;
+++      n -= 64;
+++    }
+++
+++  return i;
+++}
+++
+++/* The loops computing division/modulo by 64 should be eliminated.  */
+++/* { dg-final { scan-tree-dump-times "Removing empty loop" 2 "empty" } } */
+++
+++/* There should be no division/modulo in the final dump (division and modulo
+++   by 64 are done using bit operations).  */
+++/* { dg-final { scan-tree-dump-times "/" 0 "final_cleanup" } } */
+++/* { dg-final { scan-tree-dump-times "%" 0 "final_cleanup" } } */
+++
+++/* { dg-final { cleanup-tree-dump "empty" } } */
+++/* { dg-final { cleanup-tree-dump "final_cleanup" } } */
++Index: gcc-4.3.2/gcc/tree-ssa-loop-ivopts.c
++===================================================================
++--- gcc-4.3.2.orig/gcc/tree-ssa-loop-ivopts.c	2009-01-28 10:26:04.000000000 +0100
+++++ gcc-4.3.2/gcc/tree-ssa-loop-ivopts.c	2009-01-28 10:27:09.000000000 +0100
++@@ -3778,7 +3778,12 @@
++     return false;
++ 
++   cand_value_at (loop, cand, use->stmt, nit, &bnd);
+++
++   *bound = aff_combination_to_tree (&bnd);
+++  /* It is unlikely that computing the number of iterations using division
+++     would be more profitable than keeping the original induction variable.  */
+++  if (expression_expensive_p (*bound))
+++    return false;
++   return true;
++ }
