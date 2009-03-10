@@ -1,34 +1,23 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 10 Mar 2009 10:09:25 +0100
-Subject: [Buildroot] MIPS32 toolchain with NPTL support
-In-Reply-To: <1E3D081C7B502B4A988F643E604CF9634B96D4@INDEXCH.corp.proxim.com>
-References: <1E3D081C7B502B4A988F643E604CF9634B96D4@INDEXCH.corp.proxim.com>
-Message-ID: <20090310100925.595b865a@surf>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 10 Mar 2009 10:21:20 +0100
+Subject: [Buildroot] gcc-4.3.2: add backport fix for PR 32044
+In-Reply-To: <20090310010600.GA3263@buzzloop.caiaq.de> (Daniel Mack's message
+	of "Tue\, 10 Mar 2009 02\:06\:00 +0100")
+References: <20090310010600.GA3263@buzzloop.caiaq.de>
+Message-ID: <87prgpag33.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Daniel" == Daniel Mack <daniel@caiaq.de> writes:
 
-Le Mon, 9 Mar 2009 18:51:08 -0700,
-"Rajeev Bansal" <rbansal@proxim.com> a ?crit :
+ Daniel> Hi,
+ Daniel> gcc-4.3.2 needs a backported patch for issue PR 32044, below is a patch
+ Daniel> that adds this to buildroot2.
 
-> I am looking for a Linux cross toolchain for MIPS32 architecture with
-> NPTL support, so please help me how can I build it or from where I can
-> get it? I came to know uclibc doesn't have the support for NPTL, so
-> glibc will also OK for me. 
+Thanks - And 4.3.1 / 4.3.3 as well I guess?
 
-Buildroot only allows to generate uclibc-based toolchains. You may want
-to try crosstool-ng
-<http://ymorin.is-a-geek.org/dokuwiki/projects/crosstool>.
-
-Sincerly,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
