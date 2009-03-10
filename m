@@ -1,43 +1,33 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 10 Mar 2009 08:16:32 +0000 (UTC)
-Subject: [Buildroot] [Bug 171] New: xorg-server / kernel headers 2.6.26 -
- vm86.c:225: error: 'IF_MASK' undeclared (first use in this function)
-Message-ID: <bug-171-163@https.bugs.busybox.net/>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 10 Mar 2009 09:29:58 +0100
+Subject: [Buildroot] problems configuring libcurl
+In-Reply-To: <49B5BA80.5090103@unix-beratung.de> (Robert Urban's message of
+	"Tue\, 10 Mar 2009 01\:55\:28 +0100")
+References: <49B5BA80.5090103@unix-beratung.de>
+Message-ID: <87tz61aigp.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=171
+>>>>> "Robert" == Robert Urban <urban@unix-beratung.de> writes:
 
-              Host: Ubuntu 8.10 (64bit)
-            Target: i586
-             Build: buildroot-2009.02
-           Summary: xorg-server / kernel headers 2.6.26 - vm86.c:225: error:
-                    'IF_MASK' undeclared (first use in this function)
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P2
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: mathis_w at gmx.net
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+ Robert> Hi Folks,
+ Robert> i've enabled libcurl in svn-buildroot, but the configure-run fails with:
 
+ Robert> configure: Added
+ Robert> /big/home/urban/Build/Buildroot/svn/buildroot/build_i586/staging_dir/usr/lib
+ Robert> to LD_LIBRARY_PATH
+ Robert> checking for inflateEnd in -lz... grep: error while loading shared
+ Robert> libraries: libc.so.0: cannot open shared object file: No such
+ Robert> file or directory
 
-Created an attachment (id=127)
- --> (https://bugs.busybox.net/attachment.cgi?id=127)
-Have vm86.h fall back to X86_EFLAGS_*
+Are you building for the same architecture as your host? Are you also
+building grep? It seems like configure somehow picked up the target
+version of grep.
 
-Found on http://bugs.gentoo.org/235789
-
+Please post your .config
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
