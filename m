@@ -1,41 +1,54 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 11 Mar 2009 13:56:15 +0000 (UTC)
-Subject: [Buildroot] [Bug 179] New: Upgrade dropbear to Makefile.autotools.in
-Message-ID: <bug-179-163@https.bugs.busybox.net/>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Wed, 11 Mar 2009 15:01:56 +0000 (UTC)
+Subject: [Buildroot] svn commit: [25607] trunk/buildroot/package/directfb
+Message-ID: <20090311150156.D7C027645B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=179
+Author: jacmet
+Date: 2009-03-11 15:01:56 +0000 (Wed, 11 Mar 2009)
+New Revision: 25607
 
-              Host: i686-linux
-            Target: arm-softfloat-linux-uclibcgnueabi
-           Summary: Upgrade dropbear to Makefile.autotools.in
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: enhancement
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: gustavo at zacarias.com.ar
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Log:
+directfb: add option for linuxinput input driver
+
+Modified:
+   trunk/buildroot/package/directfb/Config.in
+   trunk/buildroot/package/directfb/directfb.mk
 
 
-Created an attachment (id=141)
- --> (https://bugs.busybox.net/attachment.cgi?id=141)
-Upgrade dropbear to Makefile.autotools.in
+Changeset:
+Modified: trunk/buildroot/package/directfb/Config.in
+===================================================================
+--- trunk/buildroot/package/directfb/Config.in	2009-03-11 14:40:00 UTC (rev 25606)
++++ trunk/buildroot/package/directfb/Config.in	2009-03-11 15:01:56 UTC (rev 25607)
+@@ -45,6 +45,11 @@
+ 	depends on BR2_PACKAGE_DIRECTFB
+ 	depends on BR2_i386 || BR2_x86_64
+ 
++config BR2_PACKAGE_DIRECTFB_LINUXINPUT
++	bool "compile /dev/input/eventX input driver"
++	default y
++	depends on BR2_PACKAGE_DIRECTFB
++
+ config BR2_PACKAGE_DIRECTFB_KEYBOARD
+ 	bool "compile keyboard input driver"
+ 	default y
 
-This patch upgrades dropbear to Makefile.autotools.in
-It also avoids installing the initscript if there was one before.
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Modified: trunk/buildroot/package/directfb/directfb.mk
+===================================================================
+--- trunk/buildroot/package/directfb/directfb.mk	2009-03-11 14:40:00 UTC (rev 25606)
++++ trunk/buildroot/package/directfb/directfb.mk	2009-03-11 15:01:56 UTC (rev 25607)
+@@ -56,6 +56,9 @@
+ endif
+ 
+ DIRECTFB_INPUT:=
++ifeq ($(BR2_PACKAGE_DIRECTFB_LINUXINPUT),y)
++DIRECTFB_INPUT+= linuxinput
++endif
+ ifeq ($(BR2_PACKAGE_DIRECTFB_KEYBOARD),y)
+ DIRECTFB_INPUT+= keyboard
+ endif
