@@ -1,34 +1,33 @@
-From: correa at uclibc.org <correa@uclibc.org>
-Date: Wed, 11 Mar 2009 22:00:47 +0000 (UTC)
-Subject: [Buildroot] svn commit: [25619] trunk/buildroot/package/qtopia4
-Message-ID: <20090311220047.8DF497645B@busybox.osuosl.org>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Wed, 11 Mar 2009 22:15:54 +0000 (UTC)
+Subject: [Buildroot] svn commit: [25620] trunk/buildroot/package/automake
+Message-ID: <20090311221554.5DABA7645B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: correa
-Date: 2009-03-11 22:00:46 +0000 (Wed, 11 Mar 2009)
-New Revision: 25619
+Author: jacmet
+Date: 2009-03-11 22:15:53 +0000 (Wed, 11 Mar 2009)
+New Revision: 25620
 
 Log:
-Default yes to GUI module install on Qtopia4
+automake: depends on autoconf, so select it
 
 Modified:
-   trunk/buildroot/package/qtopia4/Config.in
+   trunk/buildroot/package/automake/Config.in
 
 
 Changeset:
-Modified: trunk/buildroot/package/qtopia4/Config.in
+Modified: trunk/buildroot/package/automake/Config.in
 ===================================================================
---- trunk/buildroot/package/qtopia4/Config.in	2009-03-11 21:40:00 UTC (rev 25618)
-+++ trunk/buildroot/package/qtopia4/Config.in	2009-03-11 22:00:46 UTC (rev 25619)
-@@ -90,6 +90,7 @@
- 
- config BR2_PACKAGE_QTOPIA4_GUI_MODULE
- 	bool "Gui Module"
-+	default y
+--- trunk/buildroot/package/automake/Config.in	2009-03-11 22:00:46 UTC (rev 25619)
++++ trunk/buildroot/package/automake/Config.in	2009-03-11 22:15:53 UTC (rev 25620)
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_AUTOMAKE
+ 	bool "automake"
++	select BR2_PACKAGE_AUTOCONF
  	help
- 	  Turns on support to Gui applications. If your board don't have
- 	  video output, or you don't require Qt GUI, say n.
+ 	  Tool for automatically generating Makefile's for input to
+ 	  configure scripts (made by autoconf).
