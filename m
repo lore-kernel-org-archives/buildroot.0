@@ -1,35 +1,26 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Wed, 11 Mar 2009 23:30:29 +0000 (UTC)
-Subject: [Buildroot] svn commit: [25622] trunk/buildroot/package/fontconfig
-Message-ID: <20090311233029.7B90C7645B@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 12 Mar 2009 00:30:42 +0100
+Subject: [Buildroot] fontconfig 2.6.0 fails
+In-Reply-To: <22461265.post@talk.nabble.com> (RainerB's message of "Wed\,
+	11 Mar 2009 11\:12\:30 -0700 \(PDT\)")
+References: <22461265.post@talk.nabble.com>
+Message-ID: <87vdqf7i3h.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-03-11 23:30:29 +0000 (Wed, 11 Mar 2009)
-New Revision: 25622
+>>>>> "RainerB" == RainerB  <berns@BEKA-Elektronik.de> writes:
 
-Log:
-fontconfig: fix typo added in r25611
+ RainerB> Hi,
 
-Modified:
-   trunk/buildroot/package/fontconfig/fontconfig.mk
+ RainerB> i have used the latest svn revision and try to build it.
+ RainerB> The configuration is a modified at91sam9263ek_defconfig.
 
+ RainerB> I got the following error:
 
-Changeset:
-Modified: trunk/buildroot/package/fontconfig/fontconfig.mk
-===================================================================
---- trunk/buildroot/package/fontconfig/fontconfig.mk	2009-03-11 22:15:59 UTC (rev 25621)
-+++ trunk/buildroot/package/fontconfig/fontconfig.mk	2009-03-11 23:30:29 UTC (rev 25622)
-@@ -15,7 +15,7 @@
- 
- FONTCONFIG_CONF_OPT = --with-arch=$(GNU_TARGET_NAME) \
- 		--with-freetype-config="$(STAGING_DIR)/usr/bin/freetype-config" \
--		--with-cache-dir=/var/cache/fontconfig
-+		--with-cache-dir=/var/cache/fontconfig \
- 		--with-expat="$(STAGING_DIR)/usr/lib" \
- 		--with-expat-lib=$(STAGING_DIR)/usr/lib \
- 		--with-expat-includes=$(STAGING_DIR)/usr/include \
+Sorry, I recently added a typo. Fixed in r25622.
+
+-- 
+Bye, Peter Korsgaard
