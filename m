@@ -1,28 +1,34 @@
-From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
-Date: Wed, 11 Mar 2009 18:57:24 -0300
-Subject: [Buildroot] svn commit: [25617] trunk/buildroot:
-	package/qtopia4 target/device/Atmel/arch etc...
-In-Reply-To: <874oxz91g8.fsf@macbook.be.48ers.dk>
-References: <20090311213508.40B567645B@busybox.osuosl.org>
-	<874oxz91g8.fsf@macbook.be.48ers.dk>
-Message-ID: <d6cda7730903111457s66ad7bces799ad7e549946b3a@mail.gmail.com>
+From: correa at uclibc.org <correa@uclibc.org>
+Date: Wed, 11 Mar 2009 22:00:47 +0000 (UTC)
+Subject: [Buildroot] svn commit: [25619] trunk/buildroot/package/qtopia4
+Message-ID: <20090311220047.8DF497645B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Author: correa
+Date: 2009-03-11 22:00:46 +0000 (Wed, 11 Mar 2009)
+New Revision: 25619
 
-On Wed, Mar 11, 2009 at 6:47 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->
-> Wouldn't you expect most people enabling QT wanting to have this
-> enabled? E.G. shouldn't it have a 'default y' ?
+Log:
+Default yes to GUI module install on Qtopia4
 
-Sure, it would be nice to keep the old behavior.
+Modified:
+   trunk/buildroot/package/qtopia4/Config.in
 
-> (I take it that the u-boot stuff was a mistake)
->
 
-Yeah, I already reverted it. I wasn't fast enough on the Ctrl+C when I
-noticed the mistake :(
+Changeset:
+Modified: trunk/buildroot/package/qtopia4/Config.in
+===================================================================
+--- trunk/buildroot/package/qtopia4/Config.in	2009-03-11 21:40:00 UTC (rev 25618)
++++ trunk/buildroot/package/qtopia4/Config.in	2009-03-11 22:00:46 UTC (rev 25619)
+@@ -90,6 +90,7 @@
+ 
+ config BR2_PACKAGE_QTOPIA4_GUI_MODULE
+ 	bool "Gui Module"
++	default y
+ 	help
+ 	  Turns on support to Gui applications. If your board don't have
+ 	  video output, or you don't require Qt GUI, say n.
