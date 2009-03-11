@@ -1,33 +1,33 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Wed, 11 Mar 2009 20:32:45 +0000 (UTC)
-Subject: [Buildroot] svn commit: [25615] trunk/buildroot/package/dropbear
-Message-ID: <20090311203245.126177645B@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 11 Mar 2009 20:33:28 +0000 (UTC)
+Subject: [Buildroot] [Bug 179] Upgrade dropbear to Makefile.autotools.in
+In-Reply-To: <bug-179-163@https.bugs.busybox.net/>
+References: <bug-179-163@https.bugs.busybox.net/>
+Message-ID: <20090311203328.D6C387645B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-03-11 20:32:44 +0000 (Wed, 11 Mar 2009)
-New Revision: 25615
-
-Log:
-dropbear: needs zlib, so select it
-
-Modified:
-   trunk/buildroot/package/dropbear/Config.in
+https://bugs.busybox.net/show_bug.cgi?id=179
 
 
-Changeset:
-Modified: trunk/buildroot/package/dropbear/Config.in
-===================================================================
---- trunk/buildroot/package/dropbear/Config.in	2009-03-11 20:32:39 UTC (rev 25614)
-+++ trunk/buildroot/package/dropbear/Config.in	2009-03-11 20:32:44 UTC (rev 25615)
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_DROPBEAR
- 	bool "dropbear"
-+	select BR2_PACKAGE_ZLIB
- 	help
- 	  A small SSH 2 server designed for small memory environments.
- 
+Peter Korsgaard <jacmet@uclibc.org> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
+
+
+
+
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-03-11 20:33:28 UTC ---
+Thanks, committed as r25614.
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
