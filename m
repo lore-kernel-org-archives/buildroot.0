@@ -1,33 +1,48 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 11 Mar 2009 20:33:28 +0000 (UTC)
-Subject: [Buildroot] [Bug 179] Upgrade dropbear to Makefile.autotools.in
-In-Reply-To: <bug-179-163@https.bugs.busybox.net/>
-References: <bug-179-163@https.bugs.busybox.net/>
-Message-ID: <20090311203328.D6C387645B@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 11 Mar 2009 21:52:24 +0100
+Subject: [Buildroot] automated build of cross toolchains
+In-Reply-To: <49B783C6.8070107@yahoo.fr> (Hichem Boussetta's message of "Wed\,
+	11 Mar 2009 10\:26\:30 +0100")
+References: <49B783C6.8070107@yahoo.fr>
+Message-ID: <878wnb93zr.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=179
+>>>>> "Hichem" == Hichem Boussetta <boussettahichem@yahoo.fr> writes:
 
+ Hichem> Hi,
+ Hichem> I am a newbie to buildroot, and I would like to know if it is possible
+ Hichem> to make the configuration process of buildroot automated.
+ Hichem> I mean that, for example, if I wanted to build, in a batch mode,
+ Hichem> several cross toolchains for some specific architecturse that I would
+ Hichem> have defined beforehand, how should I proceed.
+ Hichem> In fact, I thought about making a script that runs many times the
+ Hichem> "make config" command and that supplies the adequate configuration,
+ Hichem> but I don't think this is the best solution.
+ Hichem> Is there any other solution like generating a default config by
+ Hichem> running "make config" and somehow modifying the .config file each time
+ Hichem> it is necessary in the script ?
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Just copy your .config's somewhere else and copy them in place
+whenever you want to build that configuration. This is pretty much
+what the make <project>_defconfig make target does.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+Also have a look at the make O=</path/to/build/in> support.
 
+E.G. something like:
 
+for project in projectA projectB projectC;
+do
+        cp configs/$project .config
+        yes ''|make oldconfig
+        make O=/tmp/build/$project
+done
 
-
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-03-11 20:33:28 UTC ---
-Thanks, committed as r25614.
-
+(the yes '' part is to accept the defaults for new configuration
+options)
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
