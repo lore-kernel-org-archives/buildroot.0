@@ -1,25 +1,38 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 11 Mar 2009 10:43:49 +0000 (UTC)
-Subject: [Buildroot] [Bug 177] xdriver_xf86-input-keyboard does not build
-In-Reply-To: <bug-177-163@https.bugs.busybox.net/>
-References: <bug-177-163@https.bugs.busybox.net/>
-Message-ID: <20090311104349.784A076A00@busybox.osuosl.org>
+Date: Wed, 11 Mar 2009 13:56:15 +0000 (UTC)
+Subject: [Buildroot] [Bug 179] New: Upgrade dropbear to Makefile.autotools.in
+Message-ID: <bug-179-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=177
+https://bugs.busybox.net/show_bug.cgi?id=179
+
+              Host: i686-linux
+            Target: arm-softfloat-linux-uclibcgnueabi
+           Summary: Upgrade dropbear to Makefile.autotools.in
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: gustavo at zacarias.com.ar
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
 
+Created an attachment (id=141)
+ --> (https://bugs.busybox.net/attachment.cgi?id=141)
+Upgrade dropbear to Makefile.autotools.in
 
-
-
---- Comment #2 from Mathis <mathis_w@gmx.net>  2009-03-11 10:43:48 UTC ---
-Created an attachment (id=139)
- --> (https://bugs.busybox.net/attachment.cgi?id=139)
-build-logfile
+This patch upgrades dropbear to Makefile.autotools.in
+It also avoids installing the initscript if there was one before.
 
 
 -- 
