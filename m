@@ -1,28 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 12 Mar 2009 11:29:28 +0100
-Subject: [Buildroot] [buildroot question] question about toolchain
-	options----large file support
-In-Reply-To: <20090312112246.302f8f2d@surf> (Thomas Petazzoni's message of
-	"Thu\, 12 Mar 2009 11\:22\:46 +0100")
-References: <2ae8403e0903120212h78d65edduaa7e2f5a9dde5da1@mail.gmail.com>
-	<87k56vt7ne.fsf@macbook.be.48ers.dk> <20090312112246.302f8f2d@surf>
-Message-ID: <87fxhjt4on.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Thu, 12 Mar 2009 12:32:12 +0000 (UTC)
+Subject: [Buildroot] svn commit: [25627] trunk/buildroot/package/libgtk2
+Message-ID: <20090312123212.7A95B76268@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Author: jacmet
+Date: 2009-03-12 12:32:11 +0000 (Thu, 12 Mar 2009)
+New Revision: 25627
 
-Hi,
+Log:
+libgtk2: also get rid of gtk-demo executable
 
- >> You better delete all the build dirs (rm -rf *build_*) to be safe.
+Modified:
+   trunk/buildroot/package/libgtk2/libgtk2.mk
 
- Thomas> Is there any "make somethingclean" to do that ? I also frequently end
- Thomas> up doing rm -rf *build_*.
 
-make distclean afaik does.
-
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/package/libgtk2/libgtk2.mk
+===================================================================
+--- trunk/buildroot/package/libgtk2/libgtk2.mk	2009-03-12 10:21:21 UTC (rev 25626)
++++ trunk/buildroot/package/libgtk2/libgtk2.mk	2009-03-12 12:32:11 UTC (rev 25627)
+@@ -135,5 +135,5 @@
+ 
+ $(LIBGTK2_HOOK_POST_INSTALL):
+ 	$(INSTALL) -m 755 package/libgtk2/S26libgtk2 $(TARGET_DIR)/etc/init.d/
+-	rm -rf $(TARGET_DIR)/usr/share/gtk-2.0/demo
++	rm -rf $(TARGET_DIR)/usr/share/gtk-2.0/demo $(TARGET_DIR)/usr/bin/gtk-demo
+ 	touch $@
