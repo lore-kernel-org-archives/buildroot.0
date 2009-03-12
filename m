@@ -1,25 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 12 Mar 2009 09:55:51 +0100
-Subject: [Buildroot] fontconfig 2.6.0 fails
-In-Reply-To: <22471223.post@talk.nabble.com> (RainerB's message of "Thu\,
-	12 Mar 2009 00\:49\:07 -0700 \(PDT\)")
-References: <22461265.post@talk.nabble.com> <22471223.post@talk.nabble.com>
-Message-ID: <87ocw7t90o.fsf@macbook.be.48ers.dk>
+From: IaMaPlAyEr <iamaplayer@gmail.com>
+Date: Thu, 12 Mar 2009 17:12:59 +0800
+Subject: [Buildroot] [buildroot question] question about toolchain
+	options----large file support
+Message-ID: <2ae8403e0903120212h78d65edduaa7e2f5a9dde5da1@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "RainerB" == RainerB  <berns@BEKA-Elektronik.de> writes:
+Hi, all
 
- RainerB> Hi Peter,
+would somebody tell me if i build all project use origional build toolchain
+option.
+and after that, i want to use some package which need some toolchain
+option(large file support) be selected.
 
- RainerB> sorry but it still have the same problem.
+I want to delete all toolchain_build_mips dir and rebuild all project,  is
+the best way ?
 
-Did you do a clean rebuild? E.G. rm -rf *build_*; make
+and another question is, if i build some package use my own toolchain
+option, and after that,
+ i put it on to my origional rootfs, could it works?
 
-It works here.
+
+thanks a lot!
 
 -- 
-Bye, Peter Korsgaard
+--
+Sincerly,
+
+HaveF
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090312/18220884/attachment.htm>
