@@ -1,31 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 12 Mar 2009 11:22:46 +0100
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 12 Mar 2009 11:29:28 +0100
 Subject: [Buildroot] [buildroot question] question about toolchain
- options----large file support
-In-Reply-To: <87k56vt7ne.fsf@macbook.be.48ers.dk>
+	options----large file support
+In-Reply-To: <20090312112246.302f8f2d@surf> (Thomas Petazzoni's message of
+	"Thu\, 12 Mar 2009 11\:22\:46 +0100")
 References: <2ae8403e0903120212h78d65edduaa7e2f5a9dde5da1@mail.gmail.com>
-	<87k56vt7ne.fsf@macbook.be.48ers.dk>
-Message-ID: <20090312112246.302f8f2d@surf>
+	<87k56vt7ne.fsf@macbook.be.48ers.dk> <20090312112246.302f8f2d@surf>
+Message-ID: <87fxhjt4on.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 12 Mar 2009 10:25:25 +0100,
-Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
->  IaMaPlAyEr> I want to delete all toolchain_build_mips dir and rebuild
->  IaMaPlAyEr> all project,? is the best way ?
-> 
-> You better delete all the build dirs (rm -rf *build_*) to be safe.
+Hi,
 
-Is there any "make somethingclean" to do that ? I also frequently end
-up doing rm -rf *build_*.
+ >> You better delete all the build dirs (rm -rf *build_*) to be safe.
 
-Thomas
+ Thomas> Is there any "make somethingclean" to do that ? I also frequently end
+ Thomas> up doing rm -rf *build_*.
+
+make distclean afaik does.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
