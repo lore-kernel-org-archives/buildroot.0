@@ -1,23 +1,42 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 15 Mar 2009 14:55:26 +0100
-Subject: [Buildroot] [PATCH] qtopia4: remove selection of GPL/LPGL
-	licenses
-In-Reply-To: <200903151151.08262.markus.heidelberg@web.de> (Markus
-	Heidelberg's message of "Sun\, 15 Mar 2009 11\:51\:07 +0100")
-References: <200903151151.08262.markus.heidelberg@web.de>
-Message-ID: <87ljr6riup.fsf@macbook.be.48ers.dk>
+From: Robert Urban <urban@unix-beratung.de>
+Date: Sun, 15 Mar 2009 15:18:08 +0100
+Subject: [Buildroot] added new package: ndyndns-1.14
+Message-ID: <49BD0E20.7050906@unix-beratung.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Markus" == Markus Heidelberg <markus.heidelberg@web.de> writes:
+Hello,
 
- Markus> Choosing between GPL or LGPL doesn't change the build process, so it's
- Markus> sufficient to have a selection for the commercial license.
+ndyndns is an update utility for dyndns. It depends on libcurl.  Here's the
+package/Config.in diff:
 
-Thanks, committed as r25663.
+Index: Config.in
+===================================================================
+--- Config.in   (revision 25601)
++++ Config.in   (working copy)
+@@ -170,6 +170,7 @@
+ source "package/mutt/Config.in"
+ source "package/nbd/Config.in"
+ source "package/ncftp/Config.in"
++source "package/ndyndns/Config.in"
+ source "package/neon/Config.in"
+ if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
+ source "package/netcat/Config.in"
 
--- 
-Bye, Peter Korsgaard
+
+The files under package/ndyndns (including ndyndns directory) can be found at:
+
+	http://www.spielwiese.de/rob/Buildroot/package-ndyndns.tgz
+
+cheers,
+
+Rob Urban
+
+P.S. ndyndns is using ispunct()/isalnum() to process config files with lines
+of the form "username=A_USERNAME". Apparently ispunct() doesn't think
+equals-sign ('=') is punctuation.  I had to patch ndyndns to check for '\r'
+and '\n' instead.  Is there some way of influencing what ispunct() thinks is
+valid punctuation?
