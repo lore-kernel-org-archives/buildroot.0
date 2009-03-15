@@ -1,48 +1,77 @@
-From: Markus Heidelberg <markus.heidelberg@web.de>
-Date: Sun, 15 Mar 2009 12:39:23 +0100
-Subject: [Buildroot] [PATCH] vim: fix download of patches
-In-Reply-To: <20090309194755.9831D764AC@busybox.osuosl.org>
-References: <20090309194755.9831D764AC@busybox.osuosl.org>
-Message-ID: <200903151239.24015.markus.heidelberg@web.de>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 15 Mar 2009 13:31:16 +0000 (UTC)
+Subject: [Buildroot] [Bug 187] New: ntfs-3g: could not build cross
+Message-ID: <bug-187-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following error:
-No rule to make target '$(DL_DIR)/7.1.001', needed by 'vim-source'
+https://bugs.busybox.net/show_bug.cgi?id=187
 
-Signed-off-by: Markus Heidelberg <markus.heidelberg@web.de>
----
+              Host: Linux version 2.6.23 (gentoo 2008 , gcc version 4.1.1)
+            Target: linux i686
+             Build: buildroot 2009.2.1
+           Summary: ntfs-3g: could not build cross
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Keywords: assemble-failure
+          Severity: enhancement
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: zhouqm27 at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-jacmet at uclibc.org, 09.03.2009:
-> Author: jacmet
-> Date: 2009-03-09 19:47:55 +0000 (Mon, 09 Mar 2009)
-> New Revision: 25592
-> 
-> Log:
-> vim: fixup patch download location after change to DOWNLOAD macro.
 
-Didn't work after this commit if the vim patches weren't yet available
-as dl/7.1.*, but still in dl/vim/7.1.*
+Created an attachment (id=151)
+ --> (https://bugs.busybox.net/attachment.cgi?id=151)
+config files , and error message when build ntfs-3g
+
+Hi,erery one.
+
+When I select ntfs-3g in buildroot's  menuconfig and build the softwares, it
+will show some error messages about ntfs-3g.
+
+following messages are the errors:
+---------------------------------------
+unistr.c: In function 'ntfs_ucstombs':
+unistr.c:752: error: 'MB_CUR_MAX' undeclared (first use in this function)
+unistr.c:752: error: (Each undeclared identifier is reported only once
+unistr.c:752: error: for each function it appears in.)
+unistr.c:760: warning: implicit declaration of function 'wctomb'
+unistr.c: In function 'ntfs_mbstoucs':
+unistr.c:874: warning: implicit declaration of function 'mbstowcs'
+unistr.c:898: warning: implicit declaration of function 'mbtowc'
+make[2]: *** [libntfs_3g_la-unistr.lo] error 1
+make[2]: Leaving directory
+`/mnt/sda3/buildroot-20090315/build_i686/ntfs-3g-1.5130/libntfs-3g'
+make[1]: *** [all-recursive] error 1
+make[1]: Leaving directory
+`/mnt/sda3/buildroot-20090315/build_i686/ntfs-3g-1.5130'
+make: *** [all] error 2
+---------------------------------------
+This report's attachment file is a bar file include buildroot's config files
+and the error message file. [buildroot 2009.05 ; gcc 4.3.3 ; uclibc 0.9.30.1; ]
+
+This error alse exist in past version's buildroot.
+
+And I wish you can add partimage to buildroot's package.
+
+Thank you.
 
 
- package/editors/vim/vim.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+zhouqimin
+2009-03-15
+zhouqm27 at gmail.com
 
-diff --git a/package/editors/vim/vim.mk b/package/editors/vim/vim.mk
-index 79d892b..9d42354 100644
---- a/package/editors/vim/vim.mk
-+++ b/package/editors/vim/vim.mk
-@@ -16,7 +16,7 @@ VIM_CONFIG_MK:=$(VIM_DIR)/src/auto/config.mk
- $(DL_DIR)/$(VIM_SOURCE):
- 	$(call DOWNLOAD,$(VIM_SOURCE_SITE),$(VIM_SOURCE))
- 
--$(DL_DIR)/vim/%:
-+$(DL_DIR)/%:
- 	$(call DOWNLOAD,$(VIM_PATCH_SITE),$*)
- 
- vim-source: $(DL_DIR)/$(VIM_SOURCE) $(VIM_PATCHES)
+
 -- 
-1.6.2.106.gc2bb8
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
