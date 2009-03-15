@@ -1,39 +1,29 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Sun, 15 Mar 2009 13:51:30 +0000 (UTC)
-Subject: [Buildroot] svn commit: [25662] trunk/buildroot/package/editors/vim
-Message-ID: <20090315135130.8A912763D5@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 15 Mar 2009 14:51:51 +0100
+Subject: [Buildroot] [PATCH] vim: fix download of patches
+In-Reply-To: <200903151239.24015.markus.heidelberg@web.de> (Markus
+	Heidelberg's message of "Sun\, 15 Mar 2009 12\:39\:23 +0100")
+References: <20090309194755.9831D764AC@busybox.osuosl.org>
+	<200903151239.24015.markus.heidelberg@web.de>
+Message-ID: <87prgirj0o.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-03-15 13:51:30 +0000 (Sun, 15 Mar 2009)
-New Revision: 25662
+>>>>> "Markus" == Markus Heidelberg <markus.heidelberg@web.de> writes:
 
-Log:
-vim: really fix patch download
+Hi,
 
-Thanks to Markus Heidelberg for noticing.
+ >> Log:
+ >> vim: fixup patch download location after change to DOWNLOAD macro.
 
-Modified:
-   trunk/buildroot/package/editors/vim/vim.mk
+ Markus> Didn't work after this commit if the vim patches weren't yet
+ Markus> available as dl/7.1.*, but still in dl/vim/7.1.*
 
+Ahh yes, thanks. I committed as slightly different version as r25662 (I
+didn't like a catch-all DL_DIR/% rule).
 
-Changeset:
-Modified: trunk/buildroot/package/editors/vim/vim.mk
-===================================================================
---- trunk/buildroot/package/editors/vim/vim.mk	2009-03-15 07:28:12 UTC (rev 25661)
-+++ trunk/buildroot/package/editors/vim/vim.mk	2009-03-15 13:51:30 UTC (rev 25662)
-@@ -16,8 +16,8 @@
- $(DL_DIR)/$(VIM_SOURCE):
- 	$(call DOWNLOAD,$(VIM_SOURCE_SITE),$(VIM_SOURCE))
- 
--$(DL_DIR)/vim/%:
--	$(call DOWNLOAD,$(VIM_PATCH_SITE),$*)
-+$(DL_DIR)/$(VIM_VERSION).%:
-+	$(call DOWNLOAD,$(VIM_PATCH_SITE),$(notdir $@))
- 
- vim-source: $(DL_DIR)/$(VIM_SOURCE) $(VIM_PATCHES)
- 
+-- 
+Bye, Peter Korsgaard
