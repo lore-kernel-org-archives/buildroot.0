@@ -1,34 +1,43 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 14 Mar 2009 14:59:28 +0000 (UTC)
-Subject: [Buildroot] [Bug 181] Update to Xorg 7.4
-In-Reply-To: <bug-181-163@https.bugs.busybox.net/>
-References: <bug-181-163@https.bugs.busybox.net/>
-Message-ID: <20090314145928.E298276262@busybox.osuosl.org>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Sun, 15 Mar 2009 07:28:07 +0000 (UTC)
+Subject: [Buildroot] svn commit: [25660] trunk/buildroot/package/openssl
+Message-ID: <20090315072807.972A176419@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=181
+Author: jacmet
+Date: 2009-03-15 07:28:06 +0000 (Sun, 15 Mar 2009)
+New Revision: 25660
+
+Log:
+openssl: strip libraries
+
+Modified:
+   trunk/buildroot/package/openssl/openssl.mk
 
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|ASSIGNED                    |RESOLVED
-         Resolution|                            |FIXED
-
-
-
-
---- Comment #4 from Peter Korsgaard <jacmet@uclibc.org>  2009-03-14 14:59:28 UTC ---
-Thanks, I fixed up the conflicts in the 1st patch and committed as r25653 -
-Please check that everything is OK.
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Changeset:
+Modified: trunk/buildroot/package/openssl/openssl.mk
+===================================================================
+--- trunk/buildroot/package/openssl/openssl.mk	2009-03-15 04:56:51 UTC (rev 25659)
++++ trunk/buildroot/package/openssl/openssl.mk	2009-03-15 07:28:06 UTC (rev 25660)
+@@ -58,10 +58,16 @@
+ ifeq ($(BR2_PACKAGE_OPENSSL_BIN),y)
+ 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/bin/openssl
+ else
++	# libraries gets installed read only, so strip fails
++	for i in $(addprefix $(TARGET_DIR)/usr/lib/,libcrypto.so.* libssl.so.*); \
++	do chmod +w $$i; $(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $$i; done
+ 	rm -f $(TARGET_DIR)/usr/bin/c_rehash
+ 	rm -f $(TARGET_DIR)/usr/bin/openssl
+ endif
+ ifneq ($(BR2_PACKAGE_OPENSSL_ENGINES),y)
+ 	rm -rf $(TARGET_DIR)/usr/lib/engines
++else
++	chmod +w $(TARGET_DIR)/usr/lib/engines/lib*.so
++	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/engines/lib*.so
+ endif
+ 	touch $@
