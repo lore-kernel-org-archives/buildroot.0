@@ -1,36 +1,40 @@
-From: correa at uclibc.org <correa@uclibc.org>
-Date: Mon, 16 Mar 2009 11:38:33 +0000 (UTC)
-Subject: [Buildroot] svn commit: [25672] trunk/buildroot/target/linux
-Message-ID: <20090316113834.272EA7643C@busybox.osuosl.org>
+From: Hichem Boussetta <boussettahichem@yahoo.fr>
+Date: Mon, 16 Mar 2009 14:06:44 +0100
+Subject: [Buildroot] Use of buildroot in an embedded linux project
+Message-ID: <49BE4EE4.9000709@yahoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: correa
-Date: 2009-03-16 11:38:33 +0000 (Mon, 16 Mar 2009)
-New Revision: 25672
+Hi everyone,
 
-Log:
-Fix dependency for custom patches when custom patch is empty.
+I am working on a project about building embedded linux systems, and I 
+have to choose between many tools that generate cross gnu toolchains and 
+root filesystem (buildroot, scratchbox, ELDK...). So, it would be 
+grateful if someone could tell me about the advantages of using 
+buildroot and about its limitations, because I heard that we found some 
+difficulties to cross compile certain packages, like Kerberos5.
 
-Modified:
-   trunk/buildroot/target/linux/Makefile.in.advanced
+Any comment is welcome.
+Thanks.
+
+-- 
+Hichem.
 
 
-Changeset:
-Modified: trunk/buildroot/target/linux/Makefile.in.advanced
-===================================================================
---- trunk/buildroot/target/linux/Makefile.in.advanced	2009-03-16 06:52:00 UTC (rev 25671)
-+++ trunk/buildroot/target/linux/Makefile.in.advanced	2009-03-16 11:38:33 UTC (rev 25672)
-@@ -71,7 +71,9 @@
- LINUX26_BSP_PATCH:=$(strip $(subst ",,$(BR2_LINUX_BSP_PATCH)))
- #"))
- 
-+ifneq ($(LINUX26_BSP_PATCH),)
- LINUX_HEADERS_DEPENDS:=  $(DL_DIR)/$(LINUX26_BSP_PATCH)
-+endif
- 
- ifneq ($(LINUX26_PATCH_SOURCE),)
- LINUX_HEADERS_DEPENDS+=$(DL_DIR)/$(LINUX26_PATCH_SOURCE)
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: boussettahichem.vcf
+Type: text/x-vcard
+Size: 330 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090316/c73b5aeb/attachment.vcf>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: smime.p7s
+Type: application/x-pkcs7-signature
+Size: 3278 bytes
+Desc: S/MIME Cryptographic Signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090316/c73b5aeb/attachment.bin>
