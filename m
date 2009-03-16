@@ -1,41 +1,56 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 16 Mar 2009 09:38:43 +0100
-Subject: [Buildroot] Changing the selection of kernel in buildroot
-In-Reply-To: <COL104-W7087909B192B1EAEBC0814EE9B0@phx.gbl> (T. Y. Lai's
-	message of "Mon\, 16 Mar 2009 16\:21\:33 +0800")
-References: <COL104-W83AF8BEBACE3D5C6708B29EE9B0@phx.gbl>
-	<87ab7lrjmu.fsf@macbook.be.48ers.dk>
-	<COL104-W7087909B192B1EAEBC0814EE9B0@phx.gbl>
-Message-ID: <871vsxrhf0.fsf@macbook.be.48ers.dk>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Mon, 16 Mar 2009 11:47:56 +0100
+Subject: [Buildroot] svn commit: [25641] trunk/buildroot/target/linux
+In-Reply-To: <20090313043143.8D1F07643C@busybox.osuosl.org>
+References: <20090313043143.8D1F07643C@busybox.osuosl.org>
+Message-ID: <1237200476.5838.461.camel@grond>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "T" == T Y Lai <d_unno@hotmail.com> writes:
+fre 2009-03-13 klockan 04:31 +0000 skrev correa at uclibc.org:
+> Author: correa
+> Date: 2009-03-13 04:31:43 +0000 (Fri, 13 Mar 2009)
+> New Revision: 25641
+> 
+> Log:
+> Fix build (dependency) with custom patch option
+> 
+> Modified:
+>    trunk/buildroot/target/linux/Makefile.in.advanced
+> 
+> 
+> Changeset:
+> Modified: trunk/buildroot/target/linux/Makefile.in.advanced
+> ===================================================================
+> --- trunk/buildroot/target/linux/Makefile.in.advanced	2009-03-12 23:04:19 UTC (rev 25640)
+> +++ trunk/buildroot/target/linux/Makefile.in.advanced	2009-03-13 04:31:43 UTC (rev 25641)
+> @@ -71,7 +71,7 @@
+>  LINUX26_BSP_PATCH:=$(strip $(subst ",,$(BR2_LINUX_BSP_PATCH)))
+>  #"))
+>  
+> -LINUX_HEADERS_DEPENDS:=  $(LINUX26_BSP_PATCH)
+> +LINUX_HEADERS_DEPENDS:=  $(DL_DIR)/$(LINUX26_BSP_PATCH)
+>  
+This patch breaks the build.
+If $(LINUX26_BSP_PATCH) is empty, then you depend
+on the download directory, which is touched
+every time you download a new file, forcing the
+rebuild of Linux.
+If there is a patch applied, this gets applied once more
+and the build fails.
 
- T> Hi,
+Pls fix.
 
- T> I'm working on RTAI with arm which support kernel is 2.6.20.13 and
- T> gcc 3.4.6
+BR
+Ulf Samuelsson
 
-Poor you ;)
-
- T> I did try out the oldest 2006 release with kernel 2.6.12 which i
- T> can find on the web It causes some kernel oops with the release,?
- T> most probably is the issue on the kernel header while building the
- T> toolchain.
-
- T> Is there any method which i can get my hands on 2.6.20.13 release?
- T> else I'll have to give 2009.02 release a shot or roll out my own
- T> toolchain.
-
-I would be very surprised if the change from 2.6.20.13 -> 2.6.20.20
-would make any difference, but you could always edit
-toolchain/kernel-headers/Config.in to change 2.6.20.20 to 2.6.20.13 at
-the bottom, and then run make oldconfig; rm -rf *build_*; make to test
-it.
-
--- 
-Bye, Peter Korsgaard
+>  ifneq ($(LINUX26_PATCH_SOURCE),)
+>  LINUX_HEADERS_DEPENDS+=$(DL_DIR)/$(LINUX26_PATCH_SOURCE)
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
