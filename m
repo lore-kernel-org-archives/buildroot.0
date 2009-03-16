@@ -1,38 +1,68 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 16 Mar 2009 20:26:59 +0100
-Subject: [Buildroot] svn commit: [25683] trunk/buildroot: package project
-In-Reply-To: <20090316200849.2beaada3@surf> (Thomas Petazzoni's message of
-	"Mon\, 16 Mar 2009 20\:08\:49 +0100")
-References: <20090316154844.13B657643C@busybox.osuosl.org>
-	<20090316200849.2beaada3@surf>
-Message-ID: <87fxhdp8u4.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Mon, 16 Mar 2009 20:57:57 +0000 (UTC)
+Subject: [Buildroot] svn commit: [25690] trunk/buildroot/package/dbus
+Message-ID: <20090316205757.3516F7649F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Author: jacmet
+Date: 2009-03-16 20:57:56 +0000 (Mon, 16 Mar 2009)
+New Revision: 25690
 
-Hi,
+Log:
+dbus: compile with X support if libX11 is available
 
- Thomas> I haven't read the whole patch in its context, but from a
- Thomas> quick look, I would I've written:
+Modified:
+   trunk/buildroot/package/dbus/dbus.mk
 
- Thomas>  PKG_CONFIG="$(HOST_DIR)/usr/bin/pkg-config" \
- Thomas>  PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig/:$(PKG_CONFIG_PATH)"
 
- Thomas> since the pkg-config binary compiled by Buildroot should probably be
- Thomas> installed in $(HOST_DIR) (since it's a host binary) and the .pc files
- Thomas> for the target architecture are installed in
- Thomas> $(STAGING_DIR)/usr/lib/pkgconfig.
-
-Yes, but I didn't want to move pkgconfig just yet. The PKG_CONFIG_PATH
-is correct though, as this is HOST_CONFIGURE_OPTS, E.G. the options to
-configure where you're compiling for the host.
-
-I'll move over the existing host tools (pkgconfig, auto*, libtool)
-soonish.
-
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/package/dbus/dbus.mk
+===================================================================
+--- trunk/buildroot/package/dbus/dbus.mk	2009-03-16 20:54:45 UTC (rev 25689)
++++ trunk/buildroot/package/dbus/dbus.mk	2009-03-16 20:57:56 UTC (rev 25690)
+@@ -18,14 +18,6 @@
+ 
+ DBUS_DEPENDENCIES = uclibc pkgconfig
+ 
+-ifeq ($(BR2_DBUS_EXPAT),y)
+-DBUS_XML:=expat
+-DBUS_DEPENDENCIES += expat
+-else
+-DBUS_XML:=libxml
+-DBUS_DEPENDENCIES += libxml2
+-endif
+-
+ DBUS_CONF_ENV = ac_cv_have_abstract_sockets=yes
+ DBUS_CONF_OPT = --program-prefix="" \
+ 		--with-dbus-user=dbus \
+@@ -37,11 +29,24 @@
+ 		--disable-doxygen-docs \
+ 		--disable-static \
+ 		--enable-dnotify \
+-		--without-x \
+-		--with-xml=$(DBUS_XML) \
+ 		--with-system-socket=/var/run/dbus/system_bus_socket \
+ 		--with-system-pid-file=/var/run/messagebus.pid
+ 
++ifeq ($(BR2_DBUS_EXPAT),y)
++DBUS_CONF_OPT += --with-xml=expat
++DBUS_DEPENDENCIES += expat
++else
++DBUS_CONF_OPT += --with-xml=libxml
++DBUS_DEPENDENCIES += libxml2
++endif
++
++ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
++DBUS_CONF_OPT += --with-x
++DBUS_DEPENDENCIES += xlib_libX11
++else
++DBUS_CONF_OPT += --without-x
++endif
++
+ $(eval $(call AUTOTARGETS,package,dbus))
+ 
+ $(DBUS_HOOK_POST_INSTALL): $(DBUS_TARGET_INSTALL_TARGET)
