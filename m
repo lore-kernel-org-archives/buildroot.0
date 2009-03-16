@@ -1,34 +1,39 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon, 16 Mar 2009 15:49:12 +0000 (UTC)
-Subject: [Buildroot] svn commit: [25686] trunk/buildroot/package/libgtk2
-Message-ID: <20090316154912.231C57643C@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 16 Mar 2009 20:08:49 +0100
+Subject: [Buildroot] svn commit: [25683] trunk/buildroot: package project
+In-Reply-To: <20090316154844.13B657643C@busybox.osuosl.org>
+References: <20090316154844.13B657643C@busybox.osuosl.org>
+Message-ID: <20090316200849.2beaada3@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-03-16 15:49:11 +0000 (Mon, 16 Mar 2009)
-New Revision: 25686
+Le Mon, 16 Mar 2009 15:48:44 +0000 (UTC),
+jacmet at uclibc.org a ?crit :
 
-Log:
-libgtk2: init script: make sure /etc/gtk-2.0 exists
+> -		ORIGINAL_OBJDUMP_FOR_TARGET="$(TARGET_OBJDUMP)"
+> +		ORIGINAL_OBJDUMP_FOR_TARGET="$(TARGET_OBJDUMP)" \
+> +		PKG_CONFIG="$(STAGING_DIR)/usr/bin/pkg-config" \
+> +             PKG_CONFIG_PATH="$(HOST_DIR)/usr/lib/pkgconfig:$(PKG_CONFIG_PATH)"
 
-Modified:
-   trunk/buildroot/package/libgtk2/S26libgtk2
+I haven't read the whole patch in its context, but from a quick look, I
+would I've written:
 
+ PKG_CONFIG="$(HOST_DIR)/usr/bin/pkg-config" \
+ PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig/:$(PKG_CONFIG_PATH)"
 
-Changeset:
-Modified: trunk/buildroot/package/libgtk2/S26libgtk2
-===================================================================
---- trunk/buildroot/package/libgtk2/S26libgtk2	2009-03-16 15:49:03 UTC (rev 25685)
-+++ trunk/buildroot/package/libgtk2/S26libgtk2	2009-03-16 15:49:11 UTC (rev 25686)
-@@ -7,6 +7,7 @@
- case "$1" in
-     start|"")
- 	if [ ! -f "$FILE" ] ; then
-+	    mkdir -p /etc/gtk-2.0
- 	    /usr/bin/gdk-pixbuf-query-loaders > "$FILE"
- 	fi
- 	;;
+since the pkg-config binary compiled by Buildroot should probably be
+installed in $(HOST_DIR) (since it's a host binary) and the .pc files
+for the target architecture are installed in
+$(STAGING_DIR)/usr/lib/pkgconfig.
+
+Again, I might completely wrong.
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
