@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue, 17 Mar 2009 13:49:12 +0000 (UTC)
-Subject: [Buildroot] svn commit: [25708] trunk/buildroot/package/libglib2
-Message-ID: <20090317134912.BBBDC76419@busybox.osuosl.org>
+Date: Tue, 17 Mar 2009 14:44:21 +0000 (UTC)
+Subject: [Buildroot] svn commit: [25709] trunk/buildroot/package/avahi
+Message-ID: <20090317144421.50F1D76419@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,66 +9,49 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2009-03-17 13:49:12 +0000 (Tue, 17 Mar 2009)
-New Revision: 25708
+Date: 2009-03-17 14:44:20 +0000 (Tue, 17 Mar 2009)
+New Revision: 25709
 
 Log:
-libglib2: pkgconfig patch no longer needed as we have HOST_DIR in path
-
-Removed:
-   trunk/buildroot/package/libglib2/libglib2-pkgconfig-cc.patch
+avahi: enable glib / gtk support if available
 
 Modified:
-   trunk/buildroot/package/libglib2/libglib2.mk
+   trunk/buildroot/package/avahi/avahi.mk
 
 
 Changeset:
-Deleted: trunk/buildroot/package/libglib2/libglib2-pkgconfig-cc.patch
+Modified: trunk/buildroot/package/avahi/avahi.mk
 ===================================================================
---- trunk/buildroot/package/libglib2/libglib2-pkgconfig-cc.patch	2009-03-17 13:49:03 UTC (rev 25707)
-+++ trunk/buildroot/package/libglib2/libglib2-pkgconfig-cc.patch	2009-03-17 13:49:12 UTC (rev 25708)
-@@ -1,27 +0,0 @@
--glib2: prefix glib binaries in pkgconfig file with BIN_DIR
--
--Make sure the host versions of the glib binaries are used.
-----
-- glib-2.0.pc.in |    7 ++++---
-- 1 file changed, 4 insertions(+), 3 deletions(-)
--
--Index: glib-2.18.4/glib-2.0.pc.in
--===================================================================
----- glib-2.18.4.orig/glib-2.0.pc.in
--+++ glib-2.18.4/glib-2.0.pc.in
--@@ -1,11 +1,12 @@
--+BIN_DIR=
-- prefix=@prefix@
-- exec_prefix=@exec_prefix@
-- libdir=@libdir@
-- includedir=@includedir@
-- 
---glib_genmarshal=glib-genmarshal
---gobject_query=gobject-query
---glib_mkenums=glib-mkenums
--+glib_genmarshal=${BIN_DIR}glib-genmarshal
--+gobject_query=$(BIN_DIR}gobject-query
--+glib_mkenums=${BIN_DIR}glib-mkenums
-- 
-- Name: GLib
-- Description: C Utility Library
-
-Modified: trunk/buildroot/package/libglib2/libglib2.mk
-===================================================================
---- trunk/buildroot/package/libglib2/libglib2.mk	2009-03-17 13:49:03 UTC (rev 25707)
-+++ trunk/buildroot/package/libglib2/libglib2.mk	2009-03-17 13:49:12 UTC (rev 25708)
-@@ -64,11 +64,6 @@
+--- trunk/buildroot/package/avahi/avahi.mk	2009-03-17 13:49:12 UTC (rev 25708)
++++ trunk/buildroot/package/avahi/avahi.mk	2009-03-17 14:44:20 UTC (rev 25709)
+@@ -72,11 +72,8 @@
+ 		avahi_cv_sys_cxx_works=yes
  
- $(eval $(call AUTOTARGETS,package,libglib2))
+ AVAHI_CONF_OPT = --localstatedir=/var \
+-		--disable-glib \
+-		--disable-gobject \
+ 		--disable-qt3 \
+ 		--disable-qt4 \
+-		--disable-gtk \
+ 		--disable-gdbm \
+ 		--disable-python-dbus \
+ 		--disable-pygtk \
+@@ -112,6 +109,18 @@
+ AVAHI_CONF_OPT += --disable-dbus
+ endif
  
--$(LIBGLIB2_HOOK_POST_INSTALL): $(LIBGLIB2_TARGET_INSTALL_STAGING)
--	$(SED) 's~^BIN_DIR=.*~BIN_DIR=$(HOST_DIR)/usr/bin/~' \
--		$(STAGING_DIR)/usr/lib/pkgconfig/glib-2.0.pc
--	touch $@
--
- # libglib2 for the host
- LIBGLIB2_HOST_DIR:=$(BUILD_DIR)/libglib2-$(LIBGLIB2_VERSION)-host
- LIBGLIB2_HOST_BINARY:=$(HOST_DIR)/usr/bin/glib-genmarshal
++ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
++AVAHI_DEPENDENCIES += libglib2
++else
++AVAHI_CONF_OPT += --disable-glib --disable-gobject
++endif
++
++ifeq ($(BR2_PACKAGE_LIBGTK2),y)
++AVAHI_DEPENDENCIES += libgtk2
++else
++AVAHI_CONF_OPT += --disable-gtk
++endif
++
+ ifeq ($(BR2_PACKAGE_PYTHON),y)
+ AVAHI_CONF_ENV += am_cv_pathless_PYTHON=python \
+ 		am_cv_path_PYTHON=$(PYTHON_TARGET_BINARY) \
