@@ -1,81 +1,36 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon, 16 Mar 2009 20:58:15 +0000 (UTC)
-Subject: [Buildroot] svn commit: [25695] trunk/buildroot/package/dbus
-Message-ID: <20090316205816.10E0F7649F@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 17 Mar 2009 08:55:35 +0100
+Subject: [Buildroot] svn commit: [25683] trunk/buildroot: package project
+In-Reply-To: <87fxhdp8u4.fsf@macbook.be.48ers.dk>
+References: <20090316154844.13B657643C@busybox.osuosl.org>
+	<20090316200849.2beaada3@surf> <87fxhdp8u4.fsf@macbook.be.48ers.dk>
+Message-ID: <20090317085535.28fe4e4d@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-03-16 20:58:15 +0000 (Mon, 16 Mar 2009)
-New Revision: 25695
+Le Mon, 16 Mar 2009 20:26:59 +0100,
+Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
-Log:
-dbus: add host-dbus support
+> Yes, but I didn't want to move pkgconfig just yet. The PKG_CONFIG_PATH
+> is correct though, as this is HOST_CONFIGURE_OPTS, E.G. the options to
+> configure where you're compiling for the host.
 
-Modified:
-   trunk/buildroot/package/dbus/dbus.mk
+Ok, got it.
 
+> I'll move over the existing host tools (pkgconfig, auto*, libtool)
+> soonish.
 
-Changeset:
-Modified: trunk/buildroot/package/dbus/dbus.mk
-===================================================================
---- trunk/buildroot/package/dbus/dbus.mk	2009-03-16 20:58:12 UTC (rev 25694)
-+++ trunk/buildroot/package/dbus/dbus.mk	2009-03-16 20:58:15 UTC (rev 25695)
-@@ -53,3 +53,54 @@
- 	rm -rf $(TARGET_DIR)/usr/lib/dbus-1.0
- 	$(INSTALL) -m 0755 package/dbus/S30dbus $(TARGET_DIR)/etc/init.d
- 	touch $@
-+
-+# dbus for the host
-+DBUS_HOST_DIR:=$(BUILD_DIR)/dbus-$(DBUS_VERSION)-host
-+DBUS_HOST_BINARY:=$(HOST_DIR)/usr/bin/dbus-daemon
-+
-+$(DBUS_HOST_DIR)/.unpacked: $(DL_DIR)/$(DBUS_SOURCE)
-+	mkdir -p $(@D)
-+	$(INFLATE$(suffix $(DBUS_SOURCE))) $< | \
-+		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
-+	touch $@
-+
-+$(DBUS_HOST_DIR)/.configured: $(DBUS_HOST_DIR)/.unpacked $(EXPAT_HOST_BINARY)
-+	(cd $(@D); rm -rf config.cache; \
-+		$(HOST_CONFIGURE_OPTS) \
-+		CFLAGS="$(HOST_CFLAGS)" \
-+		LDFLAGS="$(HOST_LDFLAGS)" \
-+		$(@D)/configure \
-+		--prefix=$(HOST_DIR)/usr \
-+		--sysconfdir=$(HOST_DIR)/etc \
-+		--with-dbus-user=dbus \
-+		--disable-tests \
-+		--disable-asserts \
-+		--enable-abstract-sockets \
-+		--disable-selinux \
-+		--disable-xml-docs \
-+		--disable-doxygen-docs \
-+		--disable-static \
-+		--enable-dnotify \
-+		--without-x \
-+		--with-xml=expat \
-+	)
-+	touch $@
-+
-+$(DBUS_HOST_DIR)/.compiled: $(DBUS_HOST_DIR)/.configured
-+	$(MAKE) -C $(@D)
-+	touch $@
-+
-+$(DBUS_HOST_BINARY): $(DBUS_HOST_DIR)/.compiled
-+	$(MAKE) -C $(<D) install
-+
-+host-dbus: $(DBUS_HOST_BINARY)
-+
-+host-dbus-source: dbus-source
-+
-+host-dbus-clean:
-+	rm -f $(addprefix $(DBUS_HOST_DIR)/,.unpacked .configured .compiled)
-+	$(MAKE) -C $(DBUS_HOST_DIR) uninstall
-+	$(MAKE) -C $(DBUS_HOST_DIR) clean
-+
-+host-dbus-dirclean:
-+	rm -rf $(DBUS_HOST_DIR)
+Great. What about the toolchain itself ? It is a host tool after all,
+isn't it ?
+
+Sincerly,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
