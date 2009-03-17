@@ -1,36 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Mar 2009 08:55:35 +0100
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 17 Mar 2009 09:23:33 +0100
 Subject: [Buildroot] svn commit: [25683] trunk/buildroot: package project
-In-Reply-To: <87fxhdp8u4.fsf@macbook.be.48ers.dk>
+In-Reply-To: <20090317085535.28fe4e4d@surf> (Thomas Petazzoni's message of
+	"Tue\, 17 Mar 2009 08\:55\:35 +0100")
 References: <20090316154844.13B657643C@busybox.osuosl.org>
 	<20090316200849.2beaada3@surf> <87fxhdp8u4.fsf@macbook.be.48ers.dk>
-Message-ID: <20090317085535.28fe4e4d@surf>
+	<20090317085535.28fe4e4d@surf>
+Message-ID: <87y6v4o8vu.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 16 Mar 2009 20:26:59 +0100,
-Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-> Yes, but I didn't want to move pkgconfig just yet. The PKG_CONFIG_PATH
-> is correct though, as this is HOST_CONFIGURE_OPTS, E.G. the options to
-> configure where you're compiling for the host.
+Hi,
 
-Ok, got it.
+ >> I'll move over the existing host tools (pkgconfig, auto*, libtool)
+ >> soonish.
 
-> I'll move over the existing host tools (pkgconfig, auto*, libtool)
-> soonish.
+ Thomas> Great. What about the toolchain itself ? It is a host tool after all,
+ Thomas> isn't it ?
 
-Great. What about the toolchain itself ? It is a host tool after all,
-isn't it ?
+True - But it seems like setting BR2_STAGING_DIR to something outside
+the tree (E.G. /opt/toolchain) and using it outside buildroot is
+fairly common - The other host tools are just needed for building the
+rootfs and are not (generally) useful outside BR.
 
-Sincerly,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
