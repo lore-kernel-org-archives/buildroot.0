@@ -1,57 +1,69 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue, 17 Mar 2009 14:44:21 +0000 (UTC)
-Subject: [Buildroot] svn commit: [25709] trunk/buildroot/package/avahi
-Message-ID: <20090317144421.50F1D76419@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 18 Mar 2009 11:08:07 +0000 (UTC)
+Subject: [Buildroot] [Bug 191] New: alsa-lib ARM binaries always built with
+	EABI
+Message-ID: <bug-191-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-03-17 14:44:20 +0000 (Tue, 17 Mar 2009)
-New Revision: 25709
+https://bugs.busybox.net/show_bug.cgi?id=191
 
-Log:
-avahi: enable glib / gtk support if available
+            Target: xscale dev board
+             Build: buildroot-2009.02
+           Summary: alsa-lib ARM binaries always built with EABI
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: per-henrik.lundblom at connectblue.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.5
 
-Modified:
-   trunk/buildroot/package/avahi/avahi.mk
 
+When configuring buildroot-2009.02 for OABI binaries (both uClibc/GCC and
+kernel) and enabling ALSA lib, the output binaries always will be EABI
+binaries.
 
-Changeset:
-Modified: trunk/buildroot/package/avahi/avahi.mk
-===================================================================
---- trunk/buildroot/package/avahi/avahi.mk	2009-03-17 13:49:12 UTC (rev 25708)
-+++ trunk/buildroot/package/avahi/avahi.mk	2009-03-17 14:44:20 UTC (rev 25709)
-@@ -72,11 +72,8 @@
- 		avahi_cv_sys_cxx_works=yes
- 
- AVAHI_CONF_OPT = --localstatedir=/var \
--		--disable-glib \
--		--disable-gobject \
- 		--disable-qt3 \
- 		--disable-qt4 \
--		--disable-gtk \
- 		--disable-gdbm \
- 		--disable-python-dbus \
- 		--disable-pygtk \
-@@ -112,6 +109,18 @@
- AVAHI_CONF_OPT += --disable-dbus
+Relevant buildroot config options:
+
+BR2_VERSION="2009.02"
+BR2_arm=y
+BR2_xscale=y
+BR2_ARM_TYPE="ARM_XSCALE"
+BR2_ARM_OABI=y
+BR2_ARCH="arm"
+BR2_ENDIAN="LITTLE"
+BR2_GCC_TARGET_TUNE="xscale"
+BR2_GCC_TARGET_ABI="apcs-gnu"
+BR2_PACKAGE_ALSA_LIB=y
+
+This is due to a misconfiguration in package/multimedia/alsa-lib/alsa-lib.mk
+
+Supplied patch should fix everything:
+
+--- buildroot-2009.02/package/multimedia/alsa-lib/alsa-lib.mk   2009-02-12
+09:49:56.000000000 +0100
++++ buildroot-2009.02-patched/package/multimedia/alsa-lib/alsa-lib.mk  
+2009-03-18 11:16:01.000000000 +0100
+@@ -13,7 +13,7 @@ ALSA_LIB_TARGET_BINARY:=usr/lib/$(ALSA_L
+
+ ALSA_LIB_CFLAGS=$(TARGET_CFLAGS)
+
+-ifeq ($(BR2_arm),y)
++ifeq ($(BR2_ARM_EABI),y)
+ ALSA_LIB_CFLAGS+=-mabi=aapcs-linux
  endif
- 
-+ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
-+AVAHI_DEPENDENCIES += libglib2
-+else
-+AVAHI_CONF_OPT += --disable-glib --disable-gobject
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBGTK2),y)
-+AVAHI_DEPENDENCIES += libgtk2
-+else
-+AVAHI_CONF_OPT += --disable-gtk
-+endif
-+
- ifeq ($(BR2_PACKAGE_PYTHON),y)
- AVAHI_CONF_ENV += am_cv_pathless_PYTHON=python \
- 		am_cv_path_PYTHON=$(PYTHON_TARGET_BINARY) \
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
