@@ -1,898 +1,884 @@
-From: Daniel Mack <daniel@caiaq.de>
-Date: Thu, 19 Mar 2009 09:39:53 +0100
-Subject: [Buildroot] Tool building problem EABI+PXA270
-In-Reply-To: <20090318155323.GG27893@whatever.nu>
-References: <20090318112308.GA27893@whatever.nu>
-	<20090318114711.GA19956@buzzloop.caiaq.de>
-	<20090318122515.GB27893@whatever.nu>
-	<20090318123004.GE18723@buzzloop.caiaq.de>
-	<20090318131349.GD27893@whatever.nu>
-	<20090318132530.GF18723@buzzloop.caiaq.de>
-	<20090318142514.GE27893@whatever.nu>
-	<20090318144657.GC19956@buzzloop.caiaq.de>
-	<20090318155323.GG27893@whatever.nu>
-Message-ID: <20090319083953.GE30293@buzzloop.caiaq.de>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Thu, 19 Mar 2009 11:06:48 +0000 (UTC)
+Subject: [Buildroot] svn commit: [25755] trunk/buildroot: package
+	package/atk package/cairo packa etc...
+Message-ID: <20090319110648.9242F7763E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Mar 18, 2009 at 04:53:23PM +0100, Per-Henrik Lundblom wrote:
-> Did a find . -anem config.log|xargs tail in
-> toolchain_build_arm/gcc-4.3.2-initial and looked for "exit 1". One error
-> showed up in
-> /toolchain_build_arm/gcc-4.3.2-initial/arm-linux-uclibc/libgcc/config.log.
-> 
-> I have attached that file. I need to leave work for the day now, but i
-> guess it is just a misconfiguration at my side.
+Author: jacmet
+Date: 2009-03-19 11:06:47 +0000 (Thu, 19 Mar 2009)
+New Revision: 25755
 
-[...]
+Log:
+package: add STAMP_DIR and use for host builds
 
-> conftest.c:1: error: iwmmxt requires an AAPCS compatible ABI for proper operation
-> conftest.c:1: sorry, unimplemented: iWMMXt and hardware floating point
-> configure:2591: $? = 1
-> configure: failed program was:
+Move stamp (dependency) files outside the (version specific) source
+directories, so other packages can hardcode dependencies on them instead
+of having to use <PACKAGE>_VERSION variables.
 
-Hmm, that's not good.
+This is important as the variables in the make rules are evaluated when
+the rules is seen, which might be before the dependent makefile is parsed
+(and hence <PACKAGE>_VERSION variable is known, screwing up stuff.
 
-I attached my config - if that works, you can diff it against your local
-one to find the root cause.
+The downside of this is that the package isn't automatically rebuilt
+when the version changes (E.G. by a svn update) and you now also have to
+remove the stamp files next to $(BUILD_DIR)/<PACKAGE>-* to force a rebuild.
 
-Daniel
+Modified:
+   trunk/buildroot/Makefile
+   trunk/buildroot/package/Makefile.in
+   trunk/buildroot/package/atk/atk.mk
+   trunk/buildroot/package/cairo/cairo.mk
+   trunk/buildroot/package/dbus-glib/dbus-glib.mk
+   trunk/buildroot/package/dbus/dbus.mk
+   trunk/buildroot/package/expat/expat.mk
+   trunk/buildroot/package/fontconfig/fontconfig.mk
+   trunk/buildroot/package/freetype/freetype.mk
+   trunk/buildroot/package/libglib2/libglib2.mk
+   trunk/buildroot/package/libgtk2/libgtk2.mk
+   trunk/buildroot/package/pango/pango.mk
+   trunk/buildroot/package/pixman/pixman.mk
+   trunk/buildroot/package/pkgconfig/pkgconfig.mk
+   trunk/buildroot/project/Makefile.in
 
--------------- next part --------------
-#
-# Automatically generated make config: don't edit
-# Sun Mar  8 18:08:48 2009
-#
-BR2_HAVE_DOT_CONFIG=y
-BR2_VERSION="2009.02-svn"
-# BR2_alpha is not set
-BR2_arm=y
-# BR2_armeb is not set
-# BR2_avr32 is not set
-# BR2_cris is not set
-# BR2_ia64 is not set
-# BR2_i386 is not set
-# BR2_m68k is not set
-# BR2_mips is not set
-# BR2_mipsel is not set
-# BR2_nios2 is not set
-# BR2_powerpc is not set
-# BR2_sh is not set
-# BR2_sh64 is not set
-# BR2_sparc is not set
-# BR2_sparc64 is not set
-# BR2_x86_64 is not set
-# BR2_generic_arm is not set
-# BR2_arm7tdmi is not set
-# BR2_arm610 is not set
-# BR2_arm710 is not set
-# BR2_arm720t is not set
-# BR2_arm920t is not set
-# BR2_arm922t is not set
-# BR2_arm926t is not set
-# BR2_arm10t is not set
-# BR2_arm1136jf_s is not set
-# BR2_arm1176jz_s is not set
-# BR2_arm1176jzf_s is not set
-# BR2_sa110 is not set
-# BR2_sa1100 is not set
-# BR2_xscale is not set
-BR2_iwmmxt=y
-BR2_ARM_TYPE="ARM_IWMMXT"
-# BR2_ARM_OABI is not set
-BR2_ARM_EABI=y
-BR2_ARCH="arm"
-BR2_ENDIAN="LITTLE"
-BR2_GCC_TARGET_TUNE="iwmmxt"
-BR2_GCC_TARGET_ARCH="iwmmxt"
-BR2_GCC_TARGET_ABI="aapcs-linux"
 
-#
-# Target options
-#
+Changeset:
+Modified: trunk/buildroot/Makefile
+===================================================================
+--- trunk/buildroot/Makefile	2009-03-19 08:34:23 UTC (rev 25754)
++++ trunk/buildroot/Makefile	2009-03-19 11:06:47 UTC (rev 25755)
+@@ -283,7 +283,7 @@
+ 
+ dirs: $(DL_DIR) $(TOOL_BUILD_DIR) $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+ 	$(HOST_DIR) $(BR2_DEPENDS_DIR) $(BINARIES_DIR) $(PROJECT_BUILD_DIR) \
+-	$(PROJECT_BUILD_DIR)/autotools-stamps
++	$(PROJECT_BUILD_DIR)/autotools-stamps $(STAMP_DIR)
+ 
+ $(BASE_TARGETS): dirs
+ 
+@@ -295,7 +295,7 @@
+ 	$(TARGETS_CLEAN) $(TARGETS_DIRCLEAN) $(TARGETS_SOURCE) \
+ 	$(DL_DIR) $(TOOL_BUILD_DIR) $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+ 	$(HOST_DIR) $(BR2_DEPENDS_DIR) $(BINARIES_DIR) $(PROJECT_BUILD_DIR) \
+-	$(PROJECT_BUILD_DIR)/autotools-stamps
++	$(PROJECT_BUILD_DIR)/autotools-stamps $(STAMP_DIR)
+ 
+ #############################################################
+ #
+@@ -304,7 +304,7 @@
+ #
+ #############################################################
+ $(DL_DIR) $(TOOL_BUILD_DIR) $(BUILD_DIR) $(HOST_DIR) $(PROJECT_BUILD_DIR) \
+-	$(PROJECT_BUILD_DIR)/autotools-stamps $(BINARIES_DIR):
++	$(PROJECT_BUILD_DIR)/autotools-stamps $(BINARIES_DIR) $(STAMP_DIR):
+ 	@mkdir -p $@
+ 
+ $(STAGING_DIR):
+@@ -365,10 +365,10 @@
+ #
+ #############################################################
+ clean: $(TARGETS_CLEAN)
+-	rm -rf $(STAGING_DIR) $(TARGET_DIR) $(IMAGE) $(PROJECT_BUILD_DIR)/.root $(PROJECT_BUILD_DIR)/autotools-stamps
++	rm -rf $(STAGING_DIR) $(TARGET_DIR) $(IMAGE) $(PROJECT_BUILD_DIR)/.root $(PROJECT_BUILD_DIR)/autotools-stamps $(STAMP_DIR)
+ 
+ dirclean: $(TARGETS_DIRCLEAN)
+-	rm -rf $(STAGING_DIR) $(TARGET_DIR) $(IMAGE) $(PROJECT_BUILD_DIR)/.root $(PROJECT_BUILD_DIR)/autotools-stamps
++	rm -rf $(STAGING_DIR) $(TARGET_DIR) $(IMAGE) $(PROJECT_BUILD_DIR)/.root $(PROJECT_BUILD_DIR)/autotools-stamps $(STAMP_DIR)
+ 
+ distclean:
+ ifeq ($(DL_DIR),$(BASE_DIR)/dl)
 
-#
-# Project Options
-#
-BR2_PROJECT="uclibc"
-BR2_HOSTNAME="uclibc"
-BR2_BANNER="Welcome to Buildroot"
+Modified: trunk/buildroot/package/Makefile.in
+===================================================================
+--- trunk/buildroot/package/Makefile.in	2009-03-19 08:34:23 UTC (rev 25754)
++++ trunk/buildroot/package/Makefile.in	2009-03-19 11:06:47 UTC (rev 25755)
+@@ -252,7 +252,7 @@
+ 		DEFAULT_LINKER="$(TARGET_LD)" \
+ 		PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)" \
+ 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+-		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig:$(PKG_CONFIG_PATH)" \
++		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig$(PKG_CONFIG_PATH)" \
+ 		STAGING_DIR="$(STAGING_DIR)"
+ 
+ TARGET_CONFIGURE_ENV=\
+@@ -297,7 +297,7 @@
+ 		ORIGINAL_NM_FOR_TARGET="$(TARGET_NM)" \
+ 		ORIGINAL_OBJDUMP_FOR_TARGET="$(TARGET_OBJDUMP)" \
+ 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+-		PKG_CONFIG_PATH="$(HOST_DIR)/usr/lib/pkgconfig:$(PKG_CONFIG_PATH)"
++		PKG_CONFIG_PATH="$(HOST_DIR)/usr/lib/pkgconfig$(PKG_CONFIG_PATH)"
+ 
+ HOST_MAKE_ENV=PATH=$(HOST_PATH)
+ 
 
-#
-# Preset Devices
-#
-# BR2_TARGET_ARMLTD is not set
-# BR2_TARGET_ATMEL is not set
-# BR2_TARGET_KWIKBYTE is not set
+Modified: trunk/buildroot/package/atk/atk.mk
+===================================================================
+--- trunk/buildroot/package/atk/atk.mk	2009-03-19 08:34:23 UTC (rev 25754)
++++ trunk/buildroot/package/atk/atk.mk	2009-03-19 11:06:47 UTC (rev 25755)
+@@ -59,41 +59,41 @@
+ 
+ # atk for the host
+ ATK_HOST_DIR:=$(BUILD_DIR)/atk-$(ATK_VERSION)-host
+-ATK_HOST_BINARY:=$(HOST_DIR)/usr/lib/libatk-1.0.a
+ 
+-$(ATK_HOST_DIR)/.unpacked: $(DL_DIR)/$(ATK_SOURCE)
+-	mkdir -p $(@D)
++$(STAMP_DIR)/host_atk_unpacked: $(DL_DIR)/$(ATK_SOURCE)
++	mkdir -p $(ATK_HOST_DIR)
+ 	$(INFLATE$(suffix $(ATK_SOURCE))) $< | \
+-		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
++		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(ATK_HOST_DIR) $(TAR_OPTIONS) -
+ 	touch $@
+ 
+-$(ATK_HOST_DIR)/.configured: $(ATK_HOST_DIR)/.unpacked $(LIBGLIB2_HOST_BINARY) $(PKG_CONFIG_HOST_BINARY)
+-	(cd $(@D); rm -rf config.cache; \
++$(STAMP_DIR)/host_atk_configured: $(STAMP_DIR)/host_atk_unpacked $(STAMP_DIR)/host_libglib2_installed $(STAMP_DIR)/host_pkgconfig_installed
++	(cd $(ATK_HOST_DIR); rm -rf config.cache; \
+ 		$(HOST_CONFIGURE_OPTS) \
+ 		CFLAGS="$(HOST_CFLAGS)" \
+ 		LDFLAGS="$(HOST_LDFLAGS)" \
+-		$(@D)/configure \
+-		--prefix=$(HOST_DIR)/usr \
+-		--sysconfdir=$(HOST_DIR)/etc \
++		./configure \
++		--prefix="$(HOST_DIR)/usr" \
++		--sysconfdir="$(HOST_DIR)/etc" \
+ 		--enable-shared \
+ 		--disable-static \
+ 		--disable-glibtest \
+ 	)
+ 	touch $@
+ 
+-$(ATK_HOST_DIR)/.compiled: $(ATK_HOST_DIR)/.configured
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
++$(STAMP_DIR)/host_atk_compiled: $(STAMP_DIR)/host_atk_configured
++	$(HOST_MAKE_ENV) $(MAKE) -C $(ATK_HOST_DIR)
+ 	touch $@
+ 
+-$(ATK_HOST_BINARY): $(ATK_HOST_DIR)/.compiled
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(<D) install
++$(STAMP_DIR)/host_atk_installed: $(STAMP_DIR)/host_atk_compiled
++	$(HOST_MAKE_ENV) $(MAKE) -C $(ATK_HOST_DIR) install
++	touch $@
+ 
+-host-atk: $(ATK_HOST_BINARY)
++host-atk: $(STAMP_DIR)/host_atk_installed
+ 
+ host-atk-source: atk-source
+ 
+ host-atk-clean:
+-	rm -f $(addprefix $(ATK_HOST_DIR)/,.unpacked .configured .compiled)
++	rm -f $(addprefix $(STAMP_DIR)/host_atk_,unpacked configured compiled installed)
+ 	-$(MAKE) -C $(ATK_HOST_DIR) uninstall
+ 	-$(MAKE) -C $(ATK_HOST_DIR) clean
+ 
 
-#
-# Generic System Support
-#
-# BR2_TARGET_GENERIC_ACCESS_POINT is not set
-# BR2_TARGET_GENERIC_FIREWALL is not set
-# BR2_TARGET_GENERIC_DEV_SYSTEM is not set
+Modified: trunk/buildroot/package/cairo/cairo.mk
+===================================================================
+--- trunk/buildroot/package/cairo/cairo.mk	2009-03-19 08:34:23 UTC (rev 25754)
++++ trunk/buildroot/package/cairo/cairo.mk	2009-03-19 11:06:47 UTC (rev 25755)
+@@ -86,22 +86,21 @@
+ 
+ # cairo for the host
+ CAIRO_HOST_DIR:=$(BUILD_DIR)/cairo-$(CAIRO_VERSION)-host
+-CAIRO_HOST_BINARY:=$(HOST_DIR)/usr/lib/libcairo.a
+ 
+-$(CAIRO_HOST_DIR)/.unpacked: $(DL_DIR)/$(CAIRO_SOURCE)
+-	mkdir -p $(@D)
++$(STAMP_DIR)/host_cairo_unpacked: $(DL_DIR)/$(CAIRO_SOURCE)
++	mkdir -p $(CAIRO_HOST_DIR)
+ 	$(INFLATE$(suffix $(CAIRO_SOURCE))) $< | \
+-		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
++		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(CAIRO_HOST_DIR) $(TAR_OPTIONS) -
+ 	touch $@
+ 
+-$(CAIRO_HOST_DIR)/.configured: $(CAIRO_HOST_DIR)/.unpacked $(PKG_CONFIG_HOST_BINARY) $(FONTCONFIG_HOST_BINARY) $(PIXMAN_HOST_BINARY)
+-	(cd $(@D); rm -rf config.cache; \
++$(STAMP_DIR)/host_cairo_configured: $(STAMP_DIR)/host_cairo_unpacked $(STAMP_DIR)/host_pkgconfig_installed $(STAMP_DIR)/host_fontconfig_installed $(STAMP_DIR)/host_pixman_installed
++	(cd $(CAIRO_HOST_DIR); rm -rf config.cache; \
+ 		$(HOST_CONFIGURE_OPTS) \
+ 		CFLAGS="$(HOST_CFLAGS)" \
+ 		LDFLAGS="$(HOST_LDFLAGS)" \
+-		$(@D)/configure \
+-		--prefix=$(HOST_DIR)/usr \
+-		--sysconfdir=$(HOST_DIR)/etc \
++		./configure \
++		--prefix="$(HOST_DIR)/usr" \
++		--sysconfdir="$(HOST_DIR)/etc" \
+ 		--enable-ps \
+ 		--enable-pdf \
+ 		--enable-xlib \
+@@ -111,19 +110,20 @@
+ 	)
+ 	touch $@
+ 
+-$(CAIRO_HOST_DIR)/.compiled: $(CAIRO_HOST_DIR)/.configured
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
++$(STAMP_DIR)/host_cairo_compiled: $(STAMP_DIR)/host_cairo_configured
++	$(HOST_MAKE_ENV) $(MAKE) -C $(CAIRO_HOST_DIR)
+ 	touch $@
+ 
+-$(CAIRO_HOST_BINARY): $(CAIRO_HOST_DIR)/.compiled
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(<D) install
++$(STAMP_DIR)/host_cairo_installed: $(STAMP_DIR)/host_cairo_compiled
++	$(HOST_MAKE_ENV) $(MAKE) -C $(CAIRO_HOST_DIR) install
++	touch $@
+ 
+-host-cairo: $(CAIRO_HOST_BINARY)
++host-cairo: $(STAMP_DIR)/host_cairo_installed
+ 
+ host-cairo-source: cairo-source
+ 
+ host-cairo-clean:
+-	rm -f $(addprefix $(CAIRO_HOST_DIR)/,.unpacked .configured .compiled)
++	rm -f $(addprefix $(STAMP_DIR)/host_cairo_,unpacked configured compiled installed)
+ 	-$(MAKE) -C $(CAIRO_HOST_DIR) uninstall
+ 	-$(MAKE) -C $(CAIRO_HOST_DIR) clean
+ 
 
-#
-# Build options
-#
-BR2_WGET="wget --passive-ftp -nd"
-BR2_SVN_CO="svn co"
-BR2_SVN_UP="svn up"
-BR2_GIT="git clone"
-BR2_ZCAT="gzip -d -c"
-BR2_BZCAT="bzcat"
-BR2_TAR_OPTIONS=""
-BR2_DL_DIR="$(BASE_DIR)/dl"
-BR2_COPYTO=""
+Modified: trunk/buildroot/package/dbus/dbus.mk
+===================================================================
+--- trunk/buildroot/package/dbus/dbus.mk	2009-03-19 08:34:23 UTC (rev 25754)
++++ trunk/buildroot/package/dbus/dbus.mk	2009-03-19 11:06:47 UTC (rev 25755)
+@@ -56,23 +56,22 @@
+ 
+ # dbus for the host
+ DBUS_HOST_DIR:=$(BUILD_DIR)/dbus-$(DBUS_VERSION)-host
+-DBUS_HOST_BINARY:=$(HOST_DIR)/usr/bin/dbus-daemon
+ DBUS_HOST_INTROSPECT:=$(DBUS_HOST_DIR)/introspect.xml
+ 
+-$(DBUS_HOST_DIR)/.unpacked: $(DL_DIR)/$(DBUS_SOURCE)
+-	mkdir -p $(@D)
++$(STAMP_DIR)/host_dbus_unpacked: $(DL_DIR)/$(DBUS_SOURCE)
++	mkdir -p $(DBUS_HOST_DIR)
+ 	$(INFLATE$(suffix $(DBUS_SOURCE))) $< | \
+-		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
++		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(DBUS_HOST_DIR) $(TAR_OPTIONS) -
+ 	touch $@
+ 
+-$(DBUS_HOST_DIR)/.configured: $(DBUS_HOST_DIR)/.unpacked $(EXPAT_HOST_BINARY)
+-	(cd $(@D); rm -rf config.cache; \
++$(STAMP_DIR)/host_dbus_configured: $(DBUS_HOST_DIR)/.unpacked $(STAMP_DIR)/host_expat_installed $(STAMP_DIR)/host_pkgconfig_installed
++	(cd $(DBUS_HOST_DIR); rm -rf config.cache; \
+ 		$(HOST_CONFIGURE_OPTS) \
+ 		CFLAGS="$(HOST_CFLAGS)" \
+ 		LDFLAGS="$(HOST_LDFLAGS)" \
+-		$(@D)/configure \
+-		--prefix=$(HOST_DIR)/usr \
+-		--sysconfdir=$(HOST_DIR)/etc \
++		./configure \
++		--prefix="$(HOST_DIR)/usr" \
++		--sysconfdir="$(HOST_DIR)/etc" \
+ 		--with-dbus-user=dbus \
+ 		--disable-tests \
+ 		--disable-asserts \
+@@ -87,25 +86,24 @@
+ 	)
+ 	touch $@
+ 
+-$(DBUS_HOST_DIR)/.compiled: $(DBUS_HOST_DIR)/.configured
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
++$(STAMP_DIR)/host_dbus_compiled: $(STAMP_DIR)/host_dbus_configured
++	$(HOST_MAKE_ENV) $(MAKE) -C $(DBUS_HOST_DIR)
+ 	touch $@
+ 
+-$(DBUS_HOST_BINARY): $(DBUS_HOST_DIR)/.compiled
+-	$(MAKE) -C $(<D) install
++$(STAMP_DIR)/host_dbus_installed: $(STAMP_DIR)/host_dbus_compiled
++	$(MAKE) -C $(DBUS_HOST_DIR) install
++	$(HOST_DIR)/usr/bin/dbus-daemon --introspect > $(DBUS_HOST_INTROSPECT)
++	touch $@
+ 
+-$(DBUS_HOST_INTROSPECT): $(DBUS_HOST_BINARY)
+-	$(DBUS_HOST_BINARY) --introspect > $@
++host-dbus: $(STAMP_DIR)/host_dbus_installed
+ 
+-host-dbus: $(DBUS_HOST_INTROSPECT)
+-
+ host-dbus-source: dbus-source
+ 
+ host-dbus-clean:
+-	rm -f $(addprefix $(DBUS_HOST_DIR)/,.unpacked .configured .compiled)
++	rm -f $(addprefix $(STAMP_DIR)/host_dbus_,unpacked configured compiled installed)
+ 	rm -f $(DBUS_HOST_INTROSPECT)
+-	$(MAKE) -C $(DBUS_HOST_DIR) uninstall
+-	$(MAKE) -C $(DBUS_HOST_DIR) clean
++	-$(MAKE) -C $(DBUS_HOST_DIR) uninstall
++	-$(MAKE) -C $(DBUS_HOST_DIR) clean
+ 
+ host-dbus-dirclean:
+ 	rm -rf $(DBUS_HOST_DIR)
 
-#
-# Mirrors and Download locations
-#
-BR2_PRIMARY_SITE=""
-BR2_BACKUP_SITE="http://buildroot.uclibc.org/downloads/sources/"
-BR2_SOURCEFORGE_MIRROR="easynews"
-BR2_KERNEL_MIRROR="http://www.kernel.org/pub/"
-BR2_GNU_MIRROR="http://ftp.gnu.org/pub/gnu"
-BR2_DEBIAN_MIRROR="http://ftp.debian.org"
+Modified: trunk/buildroot/package/dbus-glib/dbus-glib.mk
+===================================================================
+--- trunk/buildroot/package/dbus-glib/dbus-glib.mk	2009-03-19 08:34:23 UTC (rev 25754)
++++ trunk/buildroot/package/dbus-glib/dbus-glib.mk	2009-03-19 11:06:47 UTC (rev 25755)
+@@ -31,20 +31,20 @@
+ DBUS_GLIB_HOST_DIR:=$(BUILD_DIR)/dbus-glib-$(DBUS_GLIB_VERSION)-host
+ DBUS_GLIB_HOST_BINARY:=$(HOST_DIR)/usr/bin/dbus-binding-tool
+ 
+-$(DBUS_GLIB_HOST_DIR)/.unpacked: $(DL_DIR)/$(DBUS_GLIB_SOURCE)
+-	mkdir -p $(@D)
++$(STAMP_DIR)/host_dbusglib_unpacked: $(DL_DIR)/$(DBUS_GLIB_SOURCE)
++	mkdir -p $(DBUS_GLIB_HOST_DIR)
+ 	$(INFLATE$(suffix $(DBUS_GLIB_SOURCE))) $< | \
+-		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
++		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(DBUS_GLIB_HOST_DIR) $(TAR_OPTIONS) -
+ 	touch $@
+ 
+-$(DBUS_GLIB_HOST_DIR)/.configured: $(DBUS_GLIB_HOST_DIR)/.unpacked $(EXPAT_HOST_BINARY)
+-	(cd $(@D); rm -rf config.cache; \
++$(STAMP_DIR)/host_dbusglib_configured: $(STAMP_DIR)/host_dbusglib_unpacked $(STAMP_DIR)/host_dbus_installed
++	(cd $(DBUS_GLIB_HOST_DIR); rm -rf config.cache; \
+ 		$(HOST_CONFIGURE_OPTS) \
+ 		CFLAGS="$(HOST_CFLAGS)" \
+ 		LDFLAGS="$(HOST_LDFLAGS)" \
+-		$(@D)/configure \
+-		--prefix=$(HOST_DIR)/usr \
+-		--sysconfdir=$(HOST_DIR)/etc \
++		./configure \
++		--prefix="$(HOST_DIR)/usr" \
++		--sysconfdir="$(HOST_DIR)/etc" \
+ 		--disable-tests \
+ 		--disable-xml-docs \
+ 		--disable-bash-completion \
+@@ -53,21 +53,22 @@
+ 	)
+ 	touch $@
+ 
+-$(DBUS_GLIB_HOST_DIR)/.compiled: $(DBUS_GLIB_HOST_DIR)/.configured
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
++$(STAMP_DIR)/host_dbusglib_compiled: $(STAMP_DIR)/host_dbusglib_configured
++	$(HOST_MAKE_ENV) $(MAKE) -C $(DBUS_GLIB_HOST_DIR)
+ 	touch $@
+ 
+-$(DBUS_GLIB_HOST_BINARY): $(DBUS_GLIB_HOST_DIR)/.compiled
+-	$(MAKE) -C $(<D) install
++$(STAMP_DIR)/host_dbusglib_installed: $(STAMP_DIR)/host_dbusglib_compiled
++	$(HOST_MAKE_ENV) $(MAKE) -C $(DBUS_GLIB_HOST_DIR) install
++	touch $@
+ 
+-host-dbus-glib: $(DBUS_GLIB_HOST_BINARY)
++host-dbus-glib: $(STAMP_DIR)/host_dbusglib_installed
+ 
+ host-dbus-glib-source: dbus-glib-source
+ 
+ host-dbus-glib-clean:
+-	rm -f $(addprefix $(DBUS_GLIB_HOST_DIR)/,.unpacked .configured .compiled)
+-	$(MAKE) -C $(DBUS_GLIB_HOST_DIR) uninstall
+-	$(MAKE) -C $(DBUS_GLIB_HOST_DIR) clean
++	rm -f $(addprefix $(STAMP_DIR)/host_dbusglib_,unpacked configured compiled installed)
++	-$(MAKE) -C $(DBUS_GLIB_HOST_DIR) uninstall
++	-$(MAKE) -C $(DBUS_GLIB_HOST_DIR) clean
+ 
+ host-dbus-glib-dirclean:
+ 	rm -rf $(DBUS_GLIB_HOST_DIR)
 
-#
-# Atmel Mirrors
-#
-BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot/"
-BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
-BR2_STAGING_DIR="$(BUILD_DIR)/staging_dir"
-# BR2_FPU_SUFFIX is not set
-BR2_TOPDIR_PREFIX=""
-BR2_TOPDIR_SUFFIX=""
-BR2_GNU_BUILD_SUFFIX="pc-linux-gnu"
-BR2_GNU_TARGET_SUFFIX="linux-uclibcgnueabi"
-BR2_JLEVEL=4
-# BR2_PREFER_IMA is not set
-# BR2_DEPRECATED is not set
-BR2_RECENT=y
-# BR2_CONFIG_CACHE is not set
-# BR2_ENABLE_DEBUG is not set
-BR2_STRIP_strip=y
-# BR2_STRIP_sstrip is not set
-# BR2_STRIP_none is not set
-# BR2_OPTIMIZE_0 is not set
-# BR2_OPTIMIZE_1 is not set
-# BR2_OPTIMIZE_2 is not set
-# BR2_OPTIMIZE_3 is not set
-BR2_OPTIMIZE_S=y
-# BR2_PREFER_STATIC_LIB is not set
-# BR2_HAVE_MANPAGES is not set
-# BR2_HAVE_INFOPAGES is not set
-# BR2_HAVE_DOCUMENTATION is not set
-# BR2_HAVE_DEVFILES is not set
-BR2_UPDATE_CONFIG=y
+Modified: trunk/buildroot/package/expat/expat.mk
+===================================================================
+--- trunk/buildroot/package/expat/expat.mk	2009-03-19 08:34:23 UTC (rev 25754)
++++ trunk/buildroot/package/expat/expat.mk	2009-03-19 11:06:47 UTC (rev 25755)
+@@ -26,40 +26,40 @@
+ 
+ # expat for the host
+ EXPAT_HOST_DIR:=$(BUILD_DIR)/expat-$(EXPAT_VERSION)-host
+-EXPAT_HOST_BINARY:=$(HOST_DIR)/usr/lib/libexpat.a
+ 
+-$(EXPAT_HOST_DIR)/.unpacked: $(DL_DIR)/$(EXPAT_SOURCE)
+-	mkdir -p $(@D)
++$(STAMP_DIR)/host_expat_unpacked: $(DL_DIR)/$(EXPAT_SOURCE)
++	mkdir -p $(EXPAT_HOST_DIR)
+ 	$(INFLATE$(suffix $(EXPAT_SOURCE))) $< | \
+-		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
++		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(EXPAT_HOST_DIR) $(TAR_OPTIONS) -
+ 	touch $@
+ 
+-$(EXPAT_HOST_DIR)/.configured: $(EXPAT_HOST_DIR)/.unpacked
+-	(cd $(@D); rm -rf config.cache; \
++$(STAMP_DIR)/host_expat_configured: $(STAMP_DIR)/host_expat_unpacked
++	(cd $(EXPAT_HOST_DIR); rm -rf config.cache; \
+ 		$(HOST_CONFIGURE_OPTS) \
+ 		CFLAGS="$(HOST_CFLAGS)" \
+ 		LDFLAGS="$(HOST_LDFLAGS)" \
+-		$(@D)/configure \
+-		--prefix=$(HOST_DIR)/usr \
+-		--sysconfdir=$(HOST_DIR)/etc \
++		./configure \
++		--prefix="$(HOST_DIR)/usr" \
++		--sysconfdir="$(HOST_DIR)/etc" \
+ 	)
+ 	touch $@
+ 
+-$(EXPAT_HOST_DIR)/.compiled: $(EXPAT_HOST_DIR)/.configured
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
++$(STAMP_DIR)/host_expat_compiled: $(STAMP_DIR)/host_expat_configured
++	$(HOST_MAKE_ENV) $(MAKE) -C $(EXPAT_HOST_DIR)
+ 	touch $@
+ 
+-$(EXPAT_HOST_BINARY): $(EXPAT_HOST_DIR)/.compiled
+-	$(MAKE) -C $(<D) installlib
++$(STAMP_DIR)/host_expat_installed: $(STAMP_DIR)/host_expat_compiled
++	$(MAKE) -C $(EXPAT_HOST_DIR) installlib
++	touch $@
+ 
+-host-expat: $(EXPAT_HOST_BINARY)
++host-expat: $(STAM_DIR)/host_expat_installed
+ 
+ host-expat-source: expat-source
+ 
+ host-expat-clean:
+-	rm -f $(addprefix $(EXPAT_HOST_DIR)/,.unpacked .configured .compiled)
+-	$(MAKE) -C $(EXPAT_HOST_DIR) uninstall
+-	$(MAKE) -C $(EXPAT_HOST_DIR) clean
++	rm -f $(addprefix $(STAMP_DIR)/host_expat_,unpacked configured compiled installed)
++	-$(MAKE) -C $(EXPAT_HOST_DIR) uninstall
++	-$(MAKE) -C $(EXPAT_HOST_DIR) clean
+ 
+ host-expat-dirclean:
+ 	rm -rf $(EXPAT_HOST_DIR)
 
-#
-# Toolchain
-#
-BR2_TOOLCHAIN_BUILDROOT=y
-# BR2_TOOLCHAIN_EXTERNAL is not set
-# BR2_TOOLCHAIN_EXTERNAL_SOURCE is not set
-BR2_TOOLCHAIN_SOURCE=y
-BR2_EXT_GCC_VERSION_4_1_2=y
-BR2_EXT_GCC_VERSION_4_2_1=y
-BR2_EXT_GCC_VERSION_4_2_2=y
-BR2_EXT_GCC_VERSION_4_2_3=y
-BR2_EXT_BINUTILS_VERSION_2_17=y
-BR2_EXT_BINUTILS_VERSION_2_18=y
-BR2_EXT_UCLIBC_VERSION_0_9_28_3=y
-BR2_EXT_UCLIBC_VERSION_0_9_29=y
-BR2_EXT_UCLIBC_VERSION_0_9_30=y
+Modified: trunk/buildroot/package/fontconfig/fontconfig.mk
+===================================================================
+--- trunk/buildroot/package/fontconfig/fontconfig.mk	2009-03-19 08:34:23 UTC (rev 25754)
++++ trunk/buildroot/package/fontconfig/fontconfig.mk	2009-03-19 11:06:47 UTC (rev 25755)
+@@ -27,40 +27,40 @@
+ 
+ # fontconfig for the host
+ FONTCONFIG_HOST_DIR:=$(BUILD_DIR)/fontconfig-$(FONTCONFIG_VERSION)-host
+-FONTCONFIG_HOST_BINARY:=$(HOST_DIR)/usr/bin/fc-cache
+ 
+-$(FONTCONFIG_HOST_DIR)/.unpacked: $(DL_DIR)/$(FONTCONFIG_SOURCE)
+-	mkdir -p $(@D)
++$(STAMP_DIR)/host_fontconfig_unpacked: $(DL_DIR)/$(FONTCONFIG_SOURCE)
++	mkdir -p $(FONTCONFIG_HOST_DIR)
+ 	$(INFLATE$(suffix $(FONTCONFIG_SOURCE))) $< | \
+-		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
++		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(FONTCONFIG_HOST_DIR) $(TAR_OPTIONS) -
+ 	touch $@
+ 
+-$(FONTCONFIG_HOST_DIR)/.configured: $(FONTCONFIG_HOST_DIR)/.unpacked $(FREETYPE_HOST_BINARY) $(EXPAT_HOST_BINARY)
+-	(cd $(@D); rm -rf config.cache; \
++$(STAMP_DIR)/host_fontconfig_configured: $(STAMP_DIR)/host_fontconfig_unpacked $(STAMP_DIR)/host_freetype_installed $(STAMP_DIR)/host_expat_installed
++	(cd $(FONTCONFIG_HOST_DIR); rm -rf config.cache; \
+ 		$(HOST_CONFIGURE_OPTS) \
+ 		CFLAGS="$(HOST_CFLAGS)" \
+ 		LDFLAGS="$(HOST_LDFLAGS)" \
+-		$(@D)/configure \
+-		--prefix=$(HOST_DIR)/usr \
+-		--sysconfdir=$(HOST_DIR)/etc \
++		./configure \
++		--prefix="$(HOST_DIR)/usr" \
++		--sysconfdir="$(HOST_DIR)/etc" \
+ 		--disable-docs \
+ 		--disable-static \
+ 	)
+ 	touch $@
+ 
+-$(FONTCONFIG_HOST_DIR)/.compiled: $(FONTCONFIG_HOST_DIR)/.configured
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
++$(STAMP_DIR)/host_fontconfig_compiled: $(STAMP_DIR)/host_fontconfig_configured
++	$(HOST_MAKE_ENV) $(MAKE) -C $(FONTCONFIG_HOST_DIR)
+ 	touch $@
+ 
+-$(FONTCONFIG_HOST_BINARY): $(FONTCONFIG_HOST_DIR)/.compiled
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(<D) install
++$(STAMP_DIR)/host_fontconfig_installed: $(STAMP_DIR)/host_fontconfig_compiled
++	$(HOST_MAKE_ENV) $(MAKE) -C $(FONTCONFIG_HOST_DIR) install
++	touch $@
+ 
+-host-fontconfig: $(FONTCONFIG_HOST_BINARY)
++host-fontconfig: $(STAMP_DIR)/host_fontconfig_installed
+ 
+ host-fontconfig-source: fontconfig-source
+ 
+ host-fontconfig-clean:
+-	rm -f $(addprefix $(FONTCONFIG_HOST_DIR)/,.unpacked .configured .compiled)
++	rm -f $(addprefix $(STAMP_DIR)/host_fontconfig_,unpacked configured compiled installed)
+ 	-$(MAKE) -C $(FONTCONFIG_HOST_DIR) uninstall
+ 	-$(MAKE) -C $(FONTCONFIG_HOST_DIR) clean
+ 
 
-#
-# Kernel Header Options
-#
-# BR2_KERNEL_HEADERS_2_4_31 is not set
-# BR2_KERNEL_HEADERS_2_6_20_4 is not set
-# BR2_KERNEL_HEADERS_2_6_20 is not set
-# BR2_KERNEL_HEADERS_2_6_21_5 is not set
-# BR2_KERNEL_HEADERS_2_6_21 is not set
-# BR2_KERNEL_HEADERS_2_6_22_1 is not set
-# BR2_KERNEL_HEADERS_2_6_22_10 is not set
-# BR2_KERNEL_HEADERS_2_6_22 is not set
-# BR2_KERNEL_HEADERS_2_6_23 is not set
-# BR2_KERNEL_HEADERS_2_6_24 is not set
-# BR2_KERNEL_HEADERS_2_6_25 is not set
-# BR2_KERNEL_HEADERS_2_6_26 is not set
-# BR2_KERNEL_HEADERS_2_6_27 is not set
-BR2_KERNEL_HEADERS_2_6_28=y
-# BR2_KERNEL_HEADERS_SNAP is not set
-# BR2_KERNEL_HEADERS_PATCH_DIR is not set
-BR2_DEFAULT_KERNEL_HEADERS="2.6.28.3"
+Modified: trunk/buildroot/package/freetype/freetype.mk
+===================================================================
+--- trunk/buildroot/package/freetype/freetype.mk	2009-03-19 08:34:23 UTC (rev 25754)
++++ trunk/buildroot/package/freetype/freetype.mk	2009-03-19 11:06:47 UTC (rev 25755)
+@@ -25,38 +25,38 @@
+ 
+ # freetype for the host
+ FREETYPE_HOST_DIR:=$(BUILD_DIR)/freetype-$(FREETYPE_VERSION)-host
+-FREETYPE_HOST_BINARY:=$(HOST_DIR)/usr/bin/freetype-config
+ 
+-$(FREETYPE_HOST_DIR)/.unpacked: $(DL_DIR)/$(FREETYPE_SOURCE)
+-	mkdir -p $(@D)
++$(STAMP_DIR)/host_freetype_unpacked: $(DL_DIR)/$(FREETYPE_SOURCE)
++	mkdir -p $(FREETYPE_HOST_DIR)
+ 	$(INFLATE$(suffix $(FREETYPE_SOURCE))) $< | \
+-		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
++		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(FREETYPE_HOST_DIR) $(TAR_OPTIONS) -
+ 	touch $@
+ 
+-$(FREETYPE_HOST_DIR)/.configured: $(FREETYPE_HOST_DIR)/.unpacked $(PKG_CONFIG_HOST_BINARY)
+-	(cd $(@D); rm -rf config.cache; \
++$(STAMP_DIR)/host_freetype_configured: $(STAMP_DIR)/host_freetype_unpacked $(STAMP_DIR)/host_pkgconfig_installed
++	(cd $(FREETYPE_HOST_DIR); rm -rf config.cache; \
+ 		$(HOST_CONFIGURE_OPTS) \
+ 		CFLAGS="$(HOST_CFLAGS)" \
+ 		LDFLAGS="$(HOST_LDFLAGS)" \
+-		$(@D)/configure \
+-		--prefix=$(HOST_DIR)/usr \
+-		--sysconfdir=$(HOST_DIR)/etc \
++		./configure \
++		--prefix="$(HOST_DIR)/usr" \
++		--sysconfdir="$(HOST_DIR)/etc" \
+ 	)
+ 	touch $@
+ 
+-$(FREETYPE_HOST_DIR)/.compiled: $(FREETYPE_HOST_DIR)/.configured
+-	$(MAKE) -C $(@D)
++$(STAMP_DIR)/host_freetype_compiled: $(STAMP_DIR)/host_freetype_configured
++	$(MAKE) -C $(FREETYPE_HOST_DIR)
+ 	touch $@
+ 
+-$(FREETYPE_HOST_BINARY): $(FREETYPE_HOST_DIR)/.compiled
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(<D) install
++$(STAMP_DIR)/host_freetype_installed: $(STAMP_DIR)/host_freetype_compiled
++	$(HOST_MAKE_ENV) $(MAKE) -C $(FREETYPE_HOST_DIR) install
++	touch $@
+ 
+-host-freetype: $(FREETYPE_HOST_BINARY)
++host-freetype: $(STAMP_DIR)/host_freetype_installed
+ 
+ host-freetype-source: freetype-source
+ 
+ host-freetype-clean:
+-	rm -f $(addprefix $(FREETYPE_HOST_DIR)/,.unpacked .configured .compiled)
++	rm -f $(addprefix $(STAMP_DIR)/host_freetype_,unpacked configured compiled installed)
+ 	-$(MAKE) -C $(FREETYPE_HOST_DIR) uninstall
+ 	-$(MAKE) -C $(FREETYPE_HOST_DIR) clean
+ 
 
-#
-# uClibc Options
-#
-# BR2_UCLIBC_VERSION_0_9_28_3 is not set
-# BR2_UCLIBC_VERSION_0_9_29 is not set
-BR2_UCLIBC_VERSION_0_9_30=y
-# BR2_UCLIBC_VERSION_SNAPSHOT is not set
-BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.30.config"
-# BR2_PTHREAD_DEBUG is not set
-# BR2_UCLIBC_PROGRAM_INVOCATION is not set
-# BR2_UCLIBC_INSTALL_TEST_SUITE is not set
+Modified: trunk/buildroot/package/libglib2/libglib2.mk
+===================================================================
+--- trunk/buildroot/package/libglib2/libglib2.mk	2009-03-19 08:34:23 UTC (rev 25754)
++++ trunk/buildroot/package/libglib2/libglib2.mk	2009-03-19 11:06:47 UTC (rev 25755)
+@@ -68,20 +68,20 @@
+ LIBGLIB2_HOST_DIR:=$(BUILD_DIR)/libglib2-$(LIBGLIB2_VERSION)-host
+ LIBGLIB2_HOST_BINARY:=$(HOST_DIR)/usr/bin/glib-genmarshal
+ 
+-$(LIBGLIB2_HOST_DIR)/.unpacked: $(DL_DIR)/$(LIBGLIB2_SOURCE)
+-	mkdir -p $(@D)
++$(STAMP_DIR)/host_libglib2_unpacked: $(DL_DIR)/$(LIBGLIB2_SOURCE)
++	mkdir -p $(LIBGLIB2_HOST_DIR)
+ 	$(INFLATE$(suffix $(LIBGLIB2_SOURCE))) $< | \
+-		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
++		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(LIBGLIB2_HOST_DIR) $(TAR_OPTIONS) -
+ 	touch $@
+ 
+-$(LIBGLIB2_HOST_DIR)/.configured: $(LIBGLIB2_HOST_DIR)/.unpacked
+-	(cd $(@D); rm -rf config.cache; \
++$(STAMP_DIR)/host_libglib2_configured: $(STAMP_DIR)/host_libglib2_unpacked $(STAMP_DIR)/host_pkgconfig_installed
++	(cd $(LIBGLIB2_HOST_DIR); rm -rf config.cache; \
+ 		$(HOST_CONFIGURE_OPTS) \
+ 		CFLAGS="$(HOST_CFLAGS)" \
+ 		LDFLAGS="$(HOST_LDFLAGS)" \
+-		$(@D)/configure \
+-		--prefix=$(HOST_DIR)/usr \
+-		--sysconfdir=$(HOST_DIR)/etc \
++		./configure \
++		--prefix="$(HOST_DIR)/usr" \
++		--sysconfdir="$(HOST_DIR)/etc" \
+ 		--enable-shared \
+ 		--disable-static \
+ 		--disable-gtk-doc \
+@@ -89,21 +89,22 @@
+ 	)
+ 	touch $@
+ 
+-$(LIBGLIB2_HOST_DIR)/.compiled: $(LIBGLIB2_HOST_DIR)/.configured
+-	$(MAKE) -C $(@D)
++$(STAMP_DIR)/host_libglib2_compiled: $(STAMP_DIR)/host_libglib2_configured
++	$(MAKE) -C $(LIBGLIB2_HOST_DIR)
+ 	touch $@
+ 
+-$(LIBGLIB2_HOST_BINARY): $(LIBGLIB2_HOST_DIR)/.compiled
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(<D) install
++$(STAMP_DIR)/host_libglib2_installed: $(STAMP_DIR)/host_libglib2_compiled
++	$(HOST_MAKE_ENV) $(MAKE) -C $(LIBGLIB2_HOST_DIR) install
++	touch $@
+ 
+-host-libglib2: $(LIBGLIB2_HOST_BINARY)
++host-libglib2: $(STAMP_DIR)/host_libglib2_installed
+ 
+ host-libglib2-source: libglib2-source
+ 
+ host-libglib2-clean:
+-	rm -f $(addprefix $(LIBGLIB2_HOST_DIR)/,.unpacked .configured .compiled)
+-	$(MAKE) -C $(LIBGLIB2_HOST_DIR) uninstall
+-	$(MAKE) -C $(LIBGLIB2_HOST_DIR) clean
++	rm -f $(addprefix $(STAMP_DIR)/host_libglib2_,unpacked configured compiled installed)
++	-$(MAKE) -C $(LIBGLIB2_HOST_DIR) uninstall
++	-$(MAKE) -C $(LIBGLIB2_HOST_DIR) clean
+ 
+ host-libglib2-dirclean:
+ 	rm -rf $(LIBGLIB2_HOST_DIR)
 
-#
-# Binutils Options
-#
-# BR2_BINUTILS_VERSION_2_17 is not set
-# BR2_BINUTILS_VERSION_2_17_50_0_17 is not set
-# BR2_BINUTILS_VERSION_2_18 is not set
-# BR2_BINUTILS_VERSION_2_18_50_0_1 is not set
-# BR2_BINUTILS_VERSION_2_18_50_0_3 is not set
-# BR2_BINUTILS_VERSION_2_18_50_0_6 is not set
-# BR2_BINUTILS_VERSION_2_18_50_0_8 is not set
-# BR2_BINUTILS_VERSION_2_18_50_0_9 is not set
-BR2_BINUTILS_VERSION_2_19=y
-BR2_BINUTILS_VERSION="2.19"
-BR2_EXTRA_BINUTILS_CONFIG_OPTIONS=""
+Modified: trunk/buildroot/package/libgtk2/libgtk2.mk
+===================================================================
+--- trunk/buildroot/package/libgtk2/libgtk2.mk	2009-03-19 08:34:23 UTC (rev 25754)
++++ trunk/buildroot/package/libgtk2/libgtk2.mk	2009-03-19 11:06:47 UTC (rev 25755)
+@@ -134,22 +134,21 @@
+ 
+ # libgtk2 for the host
+ LIBGTK2_HOST_DIR:=$(BUILD_DIR)/libgtk2-$(LIBGTK2_VERSION)-host
+-LIBGTK2_HOST_BINARY:=$(HOST_DIR)/usr/bin/gdk-pixbuf-csource
+ 
+-$(LIBGTK2_HOST_DIR)/.unpacked: $(DL_DIR)/$(LIBGTK2_SOURCE)
+-	mkdir -p $(@D)
++$(STAMP_DIR)/host_libgtk2_unpacked: $(DL_DIR)/$(LIBGTK2_SOURCE)
++	mkdir -p $(LIBGTK2_HOST_DIR)
+ 	$(INFLATE$(suffix $(LIBGTK2_SOURCE))) $< | \
+-		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
++		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(LIBGTK2_HOST_DIR) $(TAR_OPTIONS) -
+ 	touch $@
+ 
+-$(LIBGTK2_HOST_DIR)/.configured: $(LIBGTK2_HOST_DIR)/.unpacked $(PKG_CONFIG_HOST_BINARY) $(CAIRO_HOST_BINARY) $(LIBGLIB2_HOST_BINARY) $(PANGO_HOST_BINARY) $(ATK_HOST_BINARY)
+-	(cd $(@D); rm -rf config.cache; \
++$(STAMP_DIR)/host_libgtk2_configured: $(STAMP_DIR)/host_libgtk2_unpacked $(STAMP_DIR)/host_cairo_installed $(STAMP_DIR)/host_libglib2_installed $(STAMP_DIR)/host_pango_installed $(STAMP_DIR)/host_atk_installed
++	(cd $(LIBGTK2_HOST_DIR); rm -rf config.cache; \
+ 		$(HOST_CONFIGURE_OPTS) \
+ 		CFLAGS="$(HOST_CFLAGS)" \
+ 		LDFLAGS="$(HOST_LDFLAGS)" \
+-		$(@D)/configure \
+-		--prefix=$(HOST_DIR)/usr \
+-		--sysconfdir=$(HOST_DIR)/etc \
++		./configure \
++		--prefix="$(HOST_DIR)/usr" \
++		--sysconfdir="$(HOST_DIR)/etc" \
+ 		--disable-static \
+ 		--disable-glibtest \
+ 		--without-libtiff \
+@@ -162,19 +161,20 @@
+ 	)
+ 	touch $@
+ 
+-$(LIBGTK2_HOST_DIR)/.compiled: $(LIBGTK2_HOST_DIR)/.configured
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
++$(STAMP_DIR)/host_libgtk2_compiled: $(STAMP_DIR)/host_libgtk2_configured
++	$(HOST_MAKE_ENV) $(MAKE) -C $(LIBGTK2_HOST_DIR)
+ 	touch $@
+ 
+-$(LIBGTK2_HOST_BINARY): $(LIBGTK2_HOST_DIR)/.compiled
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(<D) install
++$(STAMP_DIR)/host_libgtk2_installed: $(STAMP_DIR)/host_libgtk2_compiled
++	$(HOST_MAKE_ENV) $(MAKE) -C $(LIBGTK2_HOST_DIR) install
++	touch $@
+ 
+-host-libgtk2: $(LIBGTK2_HOST_BINARY)
++host-libgtk2: $(STAMP_DIR)/host_libgtk2_installed
+ 
+ host-libgtk2-source: libgtk2-source
+ 
+ host-libgtk2-clean:
+-	rm -f $(addprefix $(LIBGTK2_HOST_DIR)/,.unpacked .configured .compiled)
++	rm -f $(addprefix $(STAMP_DIR)/host_libgtk2_,unpacked configured compiled installed)
+ 	-$(MAKE) -C $(LIBGTK2_HOST_DIR) uninstall
+ 	-$(MAKE) -C $(LIBGTK2_HOST_DIR) clean
+ 
 
-#
-# GCC Options
-#
-# BR2_GCC_VERSION_3_4_6 is not set
-# BR2_GCC_VERSION_4_0_4 is not set
-# BR2_GCC_VERSION_4_1_2 is not set
-# BR2_GCC_VERSION_4_2_1 is not set
-# BR2_GCC_VERSION_4_2_2 is not set
-# BR2_GCC_VERSION_4_2_3 is not set
-# BR2_GCC_VERSION_4_2_4 is not set
-# BR2_GCC_VERSION_4_3_1 is not set
-BR2_GCC_VERSION_4_3_2=y
-BR2_GCC_SUPPORTS_SYSROOT=y
-BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE=y
-BR2_GCC_VERSION="4.3.2"
-BR2_TOOLCHAIN_SYSROOT=y
-# BR2_GCC_USE_SJLJ_EXCEPTIONS is not set
-BR2_EXTRA_GCC_CONFIG_OPTIONS=""
-# BR2_GCC_CROSS_FORTRAN is not set
-# BR2_INSTALL_LIBGCJ is not set
-# BR2_INSTALL_OBJC is not set
-# BR2_INSTALL_FORTRAN is not set
-BR2_GCC_SHARED_LIBGCC=y
+Modified: trunk/buildroot/package/pango/pango.mk
+===================================================================
+--- trunk/buildroot/package/pango/pango.mk	2009-03-19 08:34:23 UTC (rev 25754)
++++ trunk/buildroot/package/pango/pango.mk	2009-03-19 11:06:47 UTC (rev 25755)
+@@ -66,40 +66,41 @@
+ PANGO_HOST_DIR:=$(BUILD_DIR)/pango-$(PANGO_VERSION)-host
+ PANGO_HOST_BINARY:=$(HOST_DIR)/usr/bin/pango-querymodules
+ 
+-$(PANGO_HOST_DIR)/.unpacked: $(DL_DIR)/$(PANGO_SOURCE)
+-	mkdir -p $(@D)
++$(STAMP_DIR)/host_pango_unpacked: $(DL_DIR)/$(PANGO_SOURCE)
++	mkdir -p $(PANGO_HOST_DIR)
+ 	$(INFLATE$(suffix $(PANGO_SOURCE))) $< | \
+-		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(@D) package/pango/ \*.patch
++		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(PANGO_HOST_DIR) $(TAR_OPTIONS) -
++	toolchain/patch-kernel.sh $(PANGO_HOST_DIR) package/pango/ \*.patch
+ 	touch $@
+ 
+-$(PANGO_HOST_DIR)/.configured: $(PANGO_HOST_DIR)/.unpacked $(PKG_CONFIG_HOST_BINARY) $(CAIRO_HOST_BINARY) $(LIBGLIB2_HOST_BINARY)
+-	(cd $(@D); rm -rf config.cache; \
++$(STAMP_DIR)/host_pango_configured: $(STAMP_DIR)/host_pango_unpacked $(STAMP_DIR)/host_cairo_installed $(STAMP_DIR)/host_libglib2_installed
++	(cd $(PANGO_HOST_DIR); rm -rf config.cache; \
+ 		$(HOST_CONFIGURE_OPTS) \
+ 		CFLAGS="$(HOST_CFLAGS)" \
+ 		LDFLAGS="$(HOST_LDFLAGS)" \
+-		$(@D)/configure \
+-		--prefix=$(HOST_DIR)/usr \
+-		--sysconfdir=$(HOST_DIR)/etc \
++		./configure \
++		--prefix="$(HOST_DIR)/usr" \
++		--sysconfdir="$(HOST_DIR)/etc" \
+ 		--disable-static \
+ 		$(if $(BR2_PACKAGE_XSERVER_none),--without-x,--with-x) \
+ 		--disable-debug \
+ 	)
+ 	touch $@
+ 
+-$(PANGO_HOST_DIR)/.compiled: $(PANGO_HOST_DIR)/.configured
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
++$(STAMP_DIR)/host_pango_compiled: $(STAMP_DIR)/host_pango_configured
++	$(HOST_MAKE_ENV) $(MAKE) -C $(PANGO_HOST_DIR)
+ 	touch $@
+ 
+-$(PANGO_HOST_BINARY): $(PANGO_HOST_DIR)/.compiled
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(<D) install
++$(STAMP_DIR)/host_pango_installed: $(STAMP_DIR)/host_pango_compiled
++	$(HOST_MAKE_ENV) $(MAKE) -C $(PANGO_HOST_DIR) install
++	touch $@
+ 
+-host-pango: $(PANGO_HOST_BINARY)
++host-pango: $(STAMP_DIR)/host_pango_installed
+ 
+ host-pango-source: pango-source
+ 
+ host-pango-clean:
+-	rm -f $(addprefix $(PANGO_HOST_DIR)/,.unpacked .configured .compiled)
++	rm -f $(addprefix $(STAMP_DIR)/host_pango_,unpacked configured compiled installed)
+ 	-$(MAKE) -C $(PANGO_HOST_DIR) uninstall
+ 	-$(MAKE) -C $(PANGO_HOST_DIR) clean
+ 
 
-#
-# Ccache Options
-#
-# BR2_CCACHE is not set
+Modified: trunk/buildroot/package/pixman/pixman.mk
+===================================================================
+--- trunk/buildroot/package/pixman/pixman.mk	2009-03-19 08:34:23 UTC (rev 25754)
++++ trunk/buildroot/package/pixman/pixman.mk	2009-03-19 11:06:47 UTC (rev 25755)
+@@ -13,38 +13,38 @@
+ 
+ # pixman for the host
+ PIXMAN_HOST_DIR:=$(BUILD_DIR)/pixman-$(PIXMAN_VERSION)-host
+-PIXMAN_HOST_BINARY:=$(HOST_DIR)/usr/lib/libpixman-1.0.a
+ 
+-$(PIXMAN_HOST_DIR)/.unpacked: $(DL_DIR)/$(PIXMAN_SOURCE)
+-	mkdir -p $(@D)
++$(STAMP_DIR)/host_pixman_unpacked: $(DL_DIR)/$(PIXMAN_SOURCE)
++	mkdir -p $(PIXMAN_HOST_DIR)
+ 	$(INFLATE$(suffix $(PIXMAN_SOURCE))) $< | \
+-		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
++		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(PIXMAN_HOST_DIR) $(TAR_OPTIONS) -
+ 	touch $@
+ 
+-$(PIXMAN_HOST_DIR)/.configured: $(PIXMAN_HOST_DIR)/.unpacked
+-	(cd $(@D); rm -rf config.cache; \
++$(STAMP_DIR)/host_pixman_configured: $(STAMP_DIR)/host_pixman_unpacked
++	(cd $(PIXMAN_HOST_DIR); rm -rf config.cache; \
+ 		$(HOST_CONFIGURE_OPTS) \
+ 		CFLAGS="$(HOST_CFLAGS)" \
+ 		LDFLAGS="$(HOST_LDFLAGS)" \
+-		$(@D)/configure \
+-		--prefix=$(HOST_DIR)/usr \
+-		--sysconfdir=$(HOST_DIR)/etc \
++		./configure \
++		--prefix="$(HOST_DIR)/usr" \
++		--sysconfdir="$(HOST_DIR)/etc" \
+ 	)
+ 	touch $@
+ 
+-$(PIXMAN_HOST_DIR)/.compiled: $(PIXMAN_HOST_DIR)/.configured
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
++$(STAMP_DIR)/host_pixman_compiled: $(STAMP_DIR)/host_pixman_configured
++	$(HOST_MAKE_ENV) $(MAKE) -C $(PIXMAN_HOST_DIR)
+ 	touch $@
+ 
+-$(PIXMAN_HOST_BINARY): $(PIXMAN_HOST_DIR)/.compiled
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(<D) install
++$(STAMP_DIR)/host_pixman_installed: $(STAMP_DIR)/host_pixman_compiled
++	$(HOST_MAKE_ENV) $(MAKE) -C $(PIXMAN_HOST_DIR) install
++	touch $@
+ 
+-host-pixman: $(PIXMAN_HOST_BINARY)
++host-pixman: $(STAMP_DIR)/host_pixman_installed
+ 
+ host-pixman-source: pixman-source
+ 
+ host-pixman-clean:
+-	rm -f $(addprefix $(PIXMAN_HOST_DIR)/,.unpacked .configured .compiled)
++	rm -f $(addprefix $(STAMP_DIR)/host_pixman_,unpacked configured compiled installed)
+ 	-$(MAKE) -C $(PIXMAN_HOST_DIR) uninstall
+ 	-$(MAKE) -C $(PIXMAN_HOST_DIR) clean
+ 
 
-#
-# Gdb Options
-#
-BR2_PACKAGE_GDB=y
-BR2_PACKAGE_GDB_SERVER=y
-# BR2_PACKAGE_GDB_HOST is not set
-# BR2_GDB_VERSION_6_2_1 is not set
-# BR2_GDB_VERSION_6_3 is not set
-# BR2_GDB_VERSION_6_4 is not set
-# BR2_GDB_VERSION_6_5 is not set
-# BR2_GDB_VERSION_6_6 is not set
-# BR2_GDB_VERSION_6_7_1 is not set
-BR2_GDB_VERSION_6_8=y
-# BR2_GDB_VERSION_SNAPSHOT is not set
-BR2_GDB_VERSION="6.8"
+Modified: trunk/buildroot/package/pkgconfig/pkgconfig.mk
+===================================================================
+--- trunk/buildroot/package/pkgconfig/pkgconfig.mk	2009-03-19 08:34:23 UTC (rev 25754)
++++ trunk/buildroot/package/pkgconfig/pkgconfig.mk	2009-03-19 11:06:47 UTC (rev 25755)
+@@ -21,34 +21,38 @@
+ PKG_CONFIG_HOST_DIR:=$(BUILD_DIR)/pkg-config-$(PKG_CONFIG_VERSION)-host
+ PKG_CONFIG_HOST_BINARY:=$(HOST_DIR)/usr/bin/pkg-config
+ 
+-$(PKG_CONFIG_HOST_DIR)/.unpacked: $(DL_DIR)/$(PKG_CONFIG_SOURCE)
+-	mkdir -p $(@D)
++$(STAMP_DIR)/host_pkgconfig_unpacked: $(DL_DIR)/$(PKG_CONFIG_SOURCE)
++	mkdir -p $(PKG_CONFIG_HOST_DIR)
+ 	$(INFLATE$(suffix $(PKG_CONFIG_SOURCE))) $< | \
+-		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(@D) package/pkgconfig/ \*.patch
++		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(PKG_CONFIG_HOST_DIR) $(TAR_OPTIONS) -
++	toolchain/patch-kernel.sh $(PKG_CONFIG_HOST_DIR) package/pkgconfig/ \*.patch
+ 	touch $@
+ 
+-$(PKG_CONFIG_HOST_DIR)/.configured: $(PKG_CONFIG_HOST_DIR)/.unpacked
+-	(cd $(@D); rm -rf config.cache; \
++$(STAMP_DIR)/host_pkgconfig_configured: $(STAMP_DIR)/host_pkgconfig_unpacked
++	(cd $(PKG_CONFIG_HOST_DIR); rm -rf config.cache; \
++		$(HOST_CONFIGURE_OPTS) \
++		CFLAGS="$(HOST_CFLAGS)" \
++		LDFLAGS="$(HOST_LDFLAGS)" \
+ 		./configure \
+-		--prefix=$(HOST_DIR)/usr \
+-		--sysconfdir=$(HOST_DIR)/etc \
++		--prefix="$(HOST_DIR)/usr" \
++		--sysconfdir="$(HOST_DIR)/etc" \
+ 		--with-pc-path="$(STAGING_DIR)/usr/lib/pkgconfig" \
+ 		--disable-static \
+ 	)
+ 	touch $@
+ 
+-$(PKG_CONFIG_HOST_DIR)/.compiled: $(PKG_CONFIG_HOST_DIR)/.configured
+-	$(MAKE) -C $(@D)
++$(STAMP_DIR)/host_pkgconfig_compiled: $(STAMP_DIR)/host_pkgconfig_configured
++	$(MAKE) -C $(PKG_CONFIG_HOST_DIR)
+ 	touch $@
+ 
+-$(PKG_CONFIG_HOST_BINARY): $(PKG_CONFIG_HOST_DIR)/.compiled
+-	$(MAKE) -C $(<D) install
++$(STAMP_DIR)/host_pkgconfig_installed: $(STAMP_DIR)/host_pkgconfig_compiled
++	$(MAKE) -C $(PKG_CONFIG_HOST_DIR) install
++	touch $@
+ 
+-host-pkgconfig: $(PKG_CONFIG_HOST_BINARY)
++host-pkgconfig: $(STAMP_DIR)/host_pkgconfig_installed
+ 
+ host-pkgconfig-clean:
+-	rm -f $(addprefix $(PKG_CONFIG_HOST_DIR)/,.unpacked .configured .compiled)
++	rm -f $(addprefix $(STAMP_DIR)/host_pkgconfig_,unpacked configured compiled installed)
+ 	-$(MAKE) -C $(PKG_CONFIG_HOST_DIR) uninstall
+ 	-$(MAKE) -C $(PKG_CONFIG_HOST_DIR) clean
+ 
 
-#
-# Common Toolchain Options
-#
-BR2_LARGEFILE=y
-# BR2_INET_IPV6 is not set
-BR2_INET_RPC=y
-# BR2_ENABLE_LOCALE is not set
-BR2_USE_WCHAR=y
-BR2_SOFT_FLOAT=y
-# BR2_PTHREADS_NONE is not set
-# BR2_PTHREADS is not set
-BR2_PTHREADS_OLD=y
-# BR2_PTHREADS_NATIVE is not set
-BR2_GCC_CROSS_CXX=y
-BR2_INSTALL_LIBSTDCPP=y
-BR2_TARGET_OPTIMIZATION="-Os -pipe"
-# BR2_ELF2FLT is not set
-# BR2_MKLIBS is not set
-# BR2_PACKAGE_SSTRIP_TARGET is not set
-# BR2_PACKAGE_SSTRIP_HOST is not set
-# BR2_ENABLE_MULTILIB is not set
-BR2_CROSS_TOOLCHAIN_TARGET_UTILS=y
-
-#
-# Package Selection for the target
-#
-BR2_PACKAGE_BUSYBOX=y
-# BR2_BUSYBOX_VERSION_1_2_2_1 is not set
-# BR2_BUSYBOX_VERSION_1_6_1 is not set
-# BR2_BUSYBOX_VERSION_1_7_X is not set
-# BR2_BUSYBOX_VERSION_1_8_X is not set
-# BR2_BUSYBOX_VERSION_1_9_X is not set
-# BR2_BUSYBOX_VERSION_1_10_X is not set
-# BR2_BUSYBOX_VERSION_1_11_X is not set
-# BR2_BUSYBOX_VERSION_1_12_X is not set
-BR2_BUSYBOX_VERSION_1_13_X=y
-# BR2_PACKAGE_BUSYBOX_SNAPSHOT is not set
-BR2_BUSYBOX_VERSION="1.13.2"
-BR2_PACKAGE_BUSYBOX_FULLINSTALL=y
-BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.13.x.config"
-# BR2_PACKAGE_BUSYBOX_HIDE_OTHERS is not set
-# BR2_PACKAGE_BUSYBOX_SKELETON is not set
-
-#
-# The minimum needed to build a uClibc development system
-#
-BR2_PACKAGE_BASH=y
-# BR2_PACKAGE_BZIP2 is not set
-# BR2_PACKAGE_COREUTILS is not set
-# BR2_PACKAGE_DIFFUTILS is not set
-# BR2_PACKAGE_FINDUTILS is not set
-# BR2_PACKAGE_FLEX is not set
-# BR2_PACKAGE_GAWK is not set
-# BR2_PACKAGE_GCC_TARGET is not set
-# BR2_PACKAGE_GREP is not set
-# BR2_PACKAGE_MAKE is not set
-# BR2_PACKAGE_PATCH is not set
-# BR2_PACKAGE_SED is not set
-# BR2_PACKAGE_TAR is not set
-
-#
-# Other development stuff
-#
-# BR2_PACKAGE_AUTOCONF is not set
-# BR2_PACKAGE_AUTOMAKE is not set
-# BR2_PACKAGE_BISON is not set
-# BR2_PACKAGE_CCACHE_TARGET is not set
-# BR2_PACKAGE_CVS is not set
-# BR2_PACKAGE_DISTCC is not set
-# BR2_PACKAGE_DMALLOC is not set
-# BR2_PACKAGE_FAKEROOT is not set
-BR2_HOST_FAKEROOT=y
-BR2_PACKAGE_GETTEXT=y
-# BR2_PACKAGE_GETTEXT_STATIC is not set
-BR2_PACKAGE_LIBINTL=y
-# BR2_PACKAGE_LIBGMP is not set
-# BR2_PACKAGE_GPERF is not set
-# BR2_PACKAGE_LIBMPFR is not set
-# BR2_PACKAGE_LIBTOOL is not set
-# BR2_PACKAGE_M4 is not set
-# BR2_PACKAGE_MPATROL is not set
-# BR2_PACKAGE_OPROFILE is not set
-BR2_PACKAGE_PKGCONFIG=y
-# BR2_PACKAGE_READLINE is not set
-# BR2_PACKAGE_PCRE is not set
-
-#
-# Other stuff
-#
-# BR2_PACKAGE_AT is not set
-# BR2_PACKAGE_BEECRYPT is not set
-# BR2_PACKAGE_BERKELEYDB is not set
-# BR2_PACKAGE_BSDIFF is not set
-# BR2_PACKAGE_BOOTUTILS is not set
-# BR2_PACKAGE_CUPS is not set
-# BR2_PACKAGE_CUSTOMIZE is not set
-# BR2_PACKAGE_DASH is not set
-# BR2_PACKAGE_FILE is not set
-# BR2_PACKAGE_GAMIN is not set
-# BR2_PACKAGE_ICU is not set
-# BR2_PACKAGE_KEXEC is not set
-# BR2_PACKAGE_LESS is not set
-# BR2_PACKAGE_LIBCONFIG is not set
-# BR2_PACKAGE_LIBCONFUSE is not set
-# BR2_PACKAGE_LIBDAEMON is not set
-# BR2_PACKAGE_LIBELF is not set
-# BR2_PACKAGE_LIBEVENT is not set
-# BR2_PACKAGE_LIBGCRYPT is not set
-# BR2_PACKAGE_LIBGPG_ERROR is not set
-BR2_PACKAGE_LIBICONV=y
-# BR2_PACKAGE_LIBIDN is not set
-# BR2_PACKAGE_LIBLOCKFILE is not set
-BR2_PACKAGE_LIBOIL=y
-# BR2_PACKAGE_LIBSYSFS is not set
-# BR2_PACKAGE_LOCKFILE_PROGS is not set
-# BR2_PACKAGE_LOGROTATE is not set
-# BR2_PACKAGE_LSOF is not set
-# BR2_PACKAGE_LTP-TESTSUITE is not set
-# BR2_PACKAGE_LTRACE is not set
-# BR2_PACKAGE_MEMSTAT is not set
-# BR2_PACKAGE_MODULE_INIT_TOOLS is not set
-# BR2_PACKAGE_NG_SPICE_REWORK is not set
-# BR2_PACKAGE_POPT is not set
-# BR2_PACKAGE_PROCPS is not set
-# BR2_PACKAGE_PSMISC is not set
-# BR2_PACKAGE_SCREEN is not set
-# BR2_PACKAGE_STARTUP_NOTIFICATION is not set
-BR2_PACKAGE_STRACE=y
-# BR2_PACKAGE_SUDO is not set
-# BR2_PACKAGE_SYSKLOGD is not set
-# BR2_PACKAGE_SYSVINIT is not set
-# BR2_PACKAGE_UTIL-LINUX is not set
-# BR2_PACKAGE_WHICH is not set
-
-#
-# Database
-#
-# BR2_PACKAGE_MYSQL_CLIENT is not set
-# BR2_PACKAGE_SQLITE is not set
-
-#
-# Text editors
-#
-# BR2_PACKAGE_ED is not set
-# BR2_PACKAGE_NANO is not set
-# BR2_PACKAGE_UEMACS is not set
-# BR2_PACKAGE_VIM is not set
-
-#
-# Networking
-#
-
-#
-# Networking applications
-#
-# BR2_PACKAGE_ARGUS is not set
-# BR2_PACKAGE_AVAHI is not set
-# BR2_PACKAGE_AXEL is not set
-# BR2_PACKAGE_BOA is not set
-# BR2_PACKAGE_BIND is not set
-# BR2_PACKAGE_BRIDGE is not set
-# BR2_PACKAGE_ISC_DHCP is not set
-# BR2_PACKAGE_DNSMASQ is not set
-BR2_PACKAGE_DROPBEAR=y
-BR2_PACKAGE_ETHTOOL=y
-BR2_PACKAGE_GUPNP=y
-BR2_PACKAGE_GUPNP_AV=y
-# BR2_PACKAGE_GUPNP_IGD is not set
-BR2_PACKAGE_GSSDP=y
-# BR2_PACKAGE_HASERL is not set
-# BR2_PACKAGE_IFPLUGD is not set
-BR2_PACKAGE_IPERF=y
-# BR2_PACKAGE_IPROUTE2 is not set
-
-#
-# ipsec-tools	- disabled (requires openssl, flex and the flex library (libfl.a) )
-#
-# BR2_PACKAGE_IPTABLES is not set
-# BR2_PACKAGE_KISMET is not set
-# BR2_PACKAGE_L2TP is not set
-# BR2_PACKAGE_LIBCGI is not set
-# BR2_PACKAGE_LIBCGICC is not set
-# BR2_PACKAGE_LIBCURL is not set
-# BR2_PACKAGE_LIBDNET is not set
-# BR2_PACKAGE_LIBEXOSIP2 is not set
-# BR2_PACKAGE_LIBOSIP2 is not set
-# BR2_PACKAGE_LIBPCAP is not set
-BR2_PACKAGE_LIBSOUP=y
-# BR2_PACKAGE_LIBUPNP is not set
-# BR2_PACKAGE_LIGHTTPD is not set
-# BR2_PACKAGE_LINKS is not set
-# BR2_PACKAGE_LRZSZ is not set
-# BR2_PACKAGE_MDNSRESPONDER is not set
-# BR2_PACKAGE_MICROCOM is not set
-# BR2_PACKAGE_MIIDIAG is not set
-# BR2_PACKAGE_MROUTED is not set
-# BR2_PACKAGE_MUTT is not set
-# BR2_PACKAGE_NBD is not set
-# BR2_PACKAGE_NCFTP is not set
-# BR2_PACKAGE_NEON is not set
-BR2_PACKAGE_NETCAT=y
-BR2_PACKAGE_NETKITBASE=y
-# BR2_PACKAGE_NETKITTELNET is not set
-# BR2_PACKAGE_NETPLUG is not set
-# BR2_PACKAGE_NETSNMP is not set
-# BR2_PACKAGE_NFS_UTILS is not set
-# BR2_PACKAGE_NTP is not set
-# BR2_PACKAGE_OLSR is not set
-# BR2_PACKAGE_OPENNTPD is not set
-BR2_PACKAGE_OPENSSH=y
-BR2_PACKAGE_OPENSSL=y
-# BR2_PACKAGE_OPENSSL_BIN is not set
-# BR2_PACKAGE_OPENSSL_ENGINES is not set
-# BR2_PACKAGE_OPENVPN is not set
-# BR2_PACKAGE_OPENSWAN is not set
-# BR2_PACKAGE_PORTMAP is not set
-# BR2_PACKAGE_PPPD is not set
-# BR2_PACKAGE_RP_PPPOE is not set
-# BR2_PACKAGE_PPTP_LINUX is not set
-# BR2_PACKAGE_PROFTPD is not set
-
-#
-# quagga suite
-#
-# BR2_PACKAGE_QUAGGA_ZEBRA is not set
-# BR2_PACKAGE_QUAGGA_BGPD is not set
-# BR2_PACKAGE_QUAGGA_RIPD is not set
-# BR2_PACKAGE_QUAGGA_RIPNGD is not set
-# BR2_PACKAGE_QUAGGA_OSPFD is not set
-# BR2_PACKAGE_QUAGGA_WATCHQUAGGA is not set
-# BR2_PACKAGE_QUAGGA_ISISD is not set
-BR2_PACKAGE_RSYNC=y
-# BR2_PACKAGE_SAMBA is not set
-# BR2_PACKAGE_SOCAT is not set
-# BR2_PACKAGE_STUNNEL is not set
-# BR2_PACKAGE_TCPDUMP is not set
-# BR2_PACKAGE_DHCPDUMP is not set
-# BR2_PACKAGE_TFTPD is not set
-# BR2_PACKAGE_THTTPD is not set
-# BR2_PACKAGE_TINYHTTPD is not set
-# BR2_PACKAGE_TN5250 is not set
-# BR2_PACKAGE_TTCP is not set
-# BR2_PACKAGE_UDPCAST is not set
-# BR2_PACKAGE_VPNC is not set
-# BR2_PACKAGE_VSFTPD is not set
-# BR2_PACKAGE_VTUN is not set
-# BR2_PACKAGE_WEBIF is not set
-# BR2_PACKAGE_WGET is not set
-BR2_PACKAGE_WIRELESS_TOOLS=y
-BR2_PACKAGE_WPA_SUPPLICANT=y
-
-#
-# Hardware handling / blockdevices and filesystem maintenance
-#
-# BR2_PACKAGE_DBUS is not set
-# BR2_PACKAGE_DEVMEM2 is not set
-# BR2_PACKAGE_DM is not set
-# BR2_PACKAGE_DMRAID is not set
-BR2_PACKAGE_E2FSPROGS=y
-BR2_PACKAGE_E2FSPROGS_BADBLOCKS=y
-BR2_PACKAGE_E2FSPROGS_BLKID=y
-BR2_PACKAGE_E2FSPROGS_CHATTR=y
-BR2_PACKAGE_E2FSPROGS_DUMPE2FS=y
-BR2_PACKAGE_E2FSPROGS_E2FSCK=y
-BR2_PACKAGE_E2FSPROGS_E2LABEL=y
-BR2_PACKAGE_E2FSPROGS_FILEFRAG=y
-BR2_PACKAGE_E2FSPROGS_FINDFS=y
-BR2_PACKAGE_E2FSPROGS_FSCK=y
-BR2_PACKAGE_E2FSPROGS_LOGSAVE=y
-BR2_PACKAGE_E2FSPROGS_LSATTR=y
-BR2_PACKAGE_E2FSPROGS_MKE2FS=y
-BR2_PACKAGE_E2FSPROGS_MKLOSTFOUND=y
-BR2_PACKAGE_E2FSPROGS_TUNE2FS=y
-BR2_PACKAGE_E2FSPROGS_UUIDGEN=y
-BR2_PACKAGE_E2FSPROGS_LIBUUID=y
-# BR2_PACKAGE_EEPROG is not set
-# BR2_PACKAGE_FCONFIG is not set
-# BR2_PACKAGE_FIS is not set
-# BR2_PACKAGE_LIBFUSE is not set
-# BR2_PACKAGE_GADGETFS_TEST is not set
-# BR2_PACKAGE_HAL is not set
-# BR2_PACKAGE_HDPARM is not set
-# BR2_PACKAGE_HOTPLUG is not set
-# BR2_PACKAGE_HWDATA is not set
-# BR2_PACKAGE_I2C_TOOLS is not set
-# BR2_PACKAGE_INPUT_TOOLS is not set
-# BR2_PACKAGE_IOSTAT is not set
-# BR2_PACKAGE_LIBAIO is not set
-# BR2_PACKAGE_LIBRAW1394 is not set
-BR2_PACKAGE_LIBUSB=y
-# BR2_PACKAGE_LM_SENSORS is not set
-# BR2_PACKAGE_LVM2 is not set
-# BR2_PACKAGE_MDADM is not set
-# BR2_PACKAGE_MEMTESTER is not set
-# BR2_PACKAGE_MKDOSFS is not set
-BR2_PACKAGE_MTD=y
-BR2_PACKAGE_MTD_UTILS=y
-# BR2_PACKAGE_MTD_20061007 is not set
-# BR2_PACKAGE_MTD_20050122 is not set
-# BR2_PACKAGE_MTD_UTILS_GIT is not set
-
-#
-# MTD tools selection
-#
-BR2_PACKAGE_MTD_DOCFDISK=y
-BR2_PACKAGE_MTD_DOC_LOADBIOS=y
-BR2_PACKAGE_MTD_FLASHCP=y
-BR2_PACKAGE_MTD_FLASH_ERASE=y
-BR2_PACKAGE_MTD_FLASH_ERASEALL=y
-BR2_PACKAGE_MTD_FLASH_INFO=y
-BR2_PACKAGE_MTD_FLASH_LOCK=y
-BR2_PACKAGE_MTD_FLASH_UNLOCK=y
-BR2_PACKAGE_MTD_FTL_CHECK=y
-BR2_PACKAGE_MTD_FTL_FORMAT=y
-BR2_PACKAGE_MTD_JFFS2DUMP=y
-BR2_PACKAGE_MTD_MKFSJFFS2=y
-BR2_PACKAGE_MTD_MKFSJFFS=y
-BR2_PACKAGE_MTD_MTD_DEBUG=y
-BR2_PACKAGE_MTD_NANDDUMP=y
-BR2_PACKAGE_MTD_NANDWRITE=y
-BR2_PACKAGE_MTD_NFTL_FORMAT=y
-BR2_PACKAGE_MTD_NFTLDUMP=y
-BR2_PACKAGE_MTD_SUMTOOL=y
-# BR2_PACKAGE_NTFS-3G is not set
-# BR2_PACKAGE_PCIUTILS is not set
-# BR2_PACKAGE_SETSERIAL is not set
-# BR2_PACKAGE_SFDISK is not set
-# BR2_PACKAGE_SMARTMONTOOLS is not set
-BR2_PACKAGE_UDEV=y
-# BR2_PACKAGE_UDEV_UTILS is not set
-
-#
-# Extra udev tools
-#
-# BR2_PACKAGE_UDEV_VOLUME_ID is not set
-# BR2_PACKAGE_USBMOUNT is not set
-BR2_PACKAGE_USBUTILS=y
-# BR2_PACKAGE_WIPE is not set
-# BR2_PACKAGE_XFSPROGS is not set
-
-#
-# Audio and video libraries and applications
-#
-BR2_PACKAGE_ALSA_LIB=y
-BR2_PACKAGE_ALSA_UTILS=y
-
-#
-# ALSA utils selection
-#
-BR2_PACKAGE_ALSA_UTILS_ALSACONF=y
-BR2_PACKAGE_ALSA_UTILS_ALSACTL=y
-BR2_PACKAGE_ALSA_UTILS_ALSAMIXER=y
-# BR2_PACKAGE_ALSA_UTILS_AMIDI is not set
-# BR2_PACKAGE_ALSA_UTILS_AMIXER is not set
-BR2_PACKAGE_ALSA_UTILS_APLAY=y
-BR2_PACKAGE_ALSA_UTILS_ARECORD=y
-# BR2_PACKAGE_ALSA_UTILS_IECSET is not set
-# BR2_PACKAGE_ALSA_UTILS_ACONNECT is not set
-# BR2_PACKAGE_ALSA_UTILS_APLAYMIDI is not set
-# BR2_PACKAGE_ALSA_UTILS_ARECORDMIDI is not set
-# BR2_PACKAGE_ALSA_UTILS_ASEQDUMP is not set
-# BR2_PACKAGE_ALSA_UTILS_ASEQNET is not set
-# BR2_PACKAGE_ALSA_UTILS_SPEAKER_TEST is not set
-# BR2_PACKAGE_AUMIX is not set
-# BR2_PACKAGE_FLAC is not set
-# BR2_PACKAGE_GSTREAMER is not set
-BR2_PACKAGE_LIBID3TAG=y
-BR2_PACKAGE_LIBMAD=y
-# BR2_PACKAGE_LIBMAD_TARGET_HEADERS is not set
-# BR2_PACKAGE_LIBMPD is not set
-# BR2_PACKAGE_LIBOGG is not set
-# BR2_PACKAGE_LIBSNDFILE is not set
-# BR2_PACKAGE_LIBTHEORA is not set
-
-#
-# libvorbis requires the package libogg to build
-#
-BR2_PACKAGE_MADPLAY=y
-BR2_PACKAGE_MADPLAY_ALSA=y
-BR2_PACKAGE_MPG123=y
-BR2_PACKAGE_MPLAYER=y
-# BR2_PACKAGE_SPEEX is not set
-# BR2_PACKAGE_FESTIVAL is not set
-# BR2_PACKAGE_VLC is not set
-
-#
-# Graphic libraries and applications (graphic/text)
-#
-
-#
-# text rendering libraries
-#
-BR2_PACKAGE_NCURSES=y
-# BR2_PACKAGE_NCURSES_TARGET_PANEL is not set
-# BR2_PACKAGE_NCURSES_TARGET_FORM is not set
-# BR2_PACKAGE_NCURSES_TARGET_MENU is not set
-# BR2_PACKAGE_NCURSES_TARGET_HEADERS is not set
-# BR2_PACKAGE_NEWT is not set
-# BR2_PACKAGE_SLANG is not set
-
-#
-# text rendering applications
-#
-# BR2_PACKAGE_DIALOG is not set
-
-#
-# graphic libraries
-#
-BR2_PACKAGE_DIRECTFB=y
-# BR2_PACKAGE_DIRECTFB_MULTI is not set
-BR2_PACKAGE_DIRECTFB_KEYBOARD=y
-# BR2_PACKAGE_DIRECTFB_SERIALMOUSE is not set
-BR2_PACKAGE_DIRECTFB_PNG=y
-BR2_PACKAGE_DIRECTFB_TSLIB=y
-BR2_PACKAGE_DIRECTFB_GIF=y
-BR2_PACKAGE_DIRECTFB_JPEG=y
-BR2_PACKAGE_DIRECTFB_EXAMPLES=y
-# BR2_PACKAGE_DIRECTFB_EXAMPLES_ANDI is not set
-# BR2_PACKAGE_DIRECTFB_EXAMPLES_BLTLOAD is not set
-# BR2_PACKAGE_DIRECTFB_EXAMPLES_CPULOAD is not set
-# BR2_PACKAGE_DIRECTFB_EXAMPLES_DATABUFFER is not set
-# BR2_PACKAGE_DIRECTFB_EXAMPLES_DIOLOAD is not set
-BR2_PACKAGE_DIRECTFB_EXAMPLES_DOK=y
-# BR2_PACKAGE_DIRECTFB_EXAMPLES_DRIVERTEST is not set
-# BR2_PACKAGE_DIRECTFB_EXAMPLES_FIRE is not set
-BR2_PACKAGE_DIRECTFB_EXAMPLES_FLIP=y
-# BR2_PACKAGE_DIRECTFB_EXAMPLES_FONTS is not set
-BR2_PACKAGE_DIRECTFB_EXAMPLES_INPUT=y
-# BR2_PACKAGE_DIRECTFB_EXAMPLES_JOYSTICK is not set
-# BR2_PACKAGE_DIRECTFB_EXAMPLES_KNUCKLES is not set
-# BR2_PACKAGE_DIRECTFB_EXAMPLES_LAYER is not set
-BR2_PACKAGE_DIRECTFB_EXAMPLES_NEO=y
-# BR2_PACKAGE_DIRECTFB_EXAMPLES_NETLOAD is not set
-# BR2_PACKAGE_DIRECTFB_EXAMPLES_PALETTE is not set
-BR2_PACKAGE_DIRECTFB_EXAMPLES_PARTICLE=y
-# BR2_PACKAGE_DIRECTFB_EXAMPLES_PORTER is not set
-# BR2_PACKAGE_DIRECTFB_EXAMPLES_STRESS is not set
-# BR2_PACKAGE_DIRECTFB_EXAMPLES_TEXTURE is not set
-# BR2_PACKAGE_DIRECTFB_EXAMPLES_VIDEO is not set
-# BR2_PACKAGE_DIRECTFB_EXAMPLES_VIDEO_PARTICLE is not set
-BR2_PACKAGE_DIRECTFB_EXAMPLES_WINDOW=y
-# BR2_PACKAGE_FBDUMP is not set
-# BR2_PACKAGE_IMAGEMAGICK is not set
-BR2_PACKAGE_JPEG=y
-# BR2_PACKAGE_LIBART is not set
-BR2_PACKAGE_LIBPNG=y
-BR2_PACKAGE_LIBUNGIF=y
-# BR2_PACKAGE_LINUX_FUSION is not set
-# BR2_PACKAGE_LITE is not set
-# BR2_PACKAGE_PIXMAN is not set
-# BR2_PACKAGE_SAWMAN is not set
-# BR2_PACKAGE_SDL is not set
-# BR2_PACKAGE_TIFF is not set
-
-#
-# busybox graphic applications
-#
-
-#
-# --> May be broken in busybox
-#
-# BR2_PACKAGE_FBV is not set
-# BR2_PACKAGE_FBSET is not set
-
-#
-# other GUIs
-#
-# BR2_PACKAGE_QTOPIA4 is not set
-BR2_PACKAGE_XSERVER_none=y
-# BR2_PACKAGE_XSERVER_xorg is not set
-
-#
-# xorg requires a toolchain with LOCALE and WCHAR support
-#
-# BR2_PACKAGE_XSERVER_tinyx is not set
-
-#
-# X libraries and helper libraries
-#
-# BR2_PACKAGE_ATK is not set
-# BR2_PACKAGE_CAIRO is not set
-# BR2_PACKAGE_PANGO is not set
-# BR2_PACKAGE_LIBDRM is not set
-# BR2_PACKAGE_LIBERATION is not set
-# BR2_PACKAGE_LIBGLIB12 is not set
-BR2_PACKAGE_LIBGLIB2=y
-# BR2_PACKAGE_LIBGTK2 is not set
-# BR2_PACKAGE_OPENMOTIF is not set
-# BR2_PACKAGE_FONTCONFIG is not set
-BR2_PACKAGE_FREETYPE=y
-# BR2_FREETYPE_VERSION_2_2_1 is not set
-BR2_FREETYPE_VERSION_2_3_7=y
-BR2_FREETYPE_VERSION="2.3.7"
-BR2_PACKAGE_TSLIB=y
-# BR2_PACKAGE_WEBKIT is not set
-
-#
-# X Window managers
-#
-# BR2_PACKAGE_MATCHBOX is not set
-
-#
-# X applications
-#
-# BR2_PACKAGE_ALSAMIXERGUI is not set
-
-#
-# dillo		- disabled (requires jpeg,libglib12,libgtk12,zlib,libpng and Xorg(7))
-#
-# BR2_PACKAGE_GQVIEW is not set
-# BR2_PACKAGE_LEAFPAD is not set
-
-#
-# midori		- disabled (requires Xorg(7))
-#
-# BR2_PACKAGE_PCMANFM is not set
-# BR2_PACKAGE_SYLPHEED is not set
-# BR2_PACKAGE_TORSMO is not set
-# BR2_PACKAGE_X11VNC is not set
-# BR2_PACKAGE_XPDF is not set
-# BR2_PACKAGE_XSTROKE is not set
-# BR2_PACKAGE_XVKBD is not set
-
-#
-# Compressors / decompressors
-#
-# BR2_PACKAGE_GZIP is not set
-BR2_PACKAGE_LZO=y
-# BR2_PACKAGE_LZMA_TARGET is not set
-# BR2_PACKAGE_LZMA_HOST is not set
-BR2_PACKAGE_ZLIB=y
-# BR2_PACKAGE_ZLIB_TARGET_HEADERS is not set
-
-#
-# Package managers
-#
-# BR2_PACKAGE_IPKG is not set
-# BR2_PACKAGE_PORTAGE is not set
-# BR2_PACKAGE_RPM is not set
-
-#
-# Interpreter languages / Scripting
-#
-# BR2_PACKAGE_LUA is not set
-# BR2_PACKAGE_MICROPERL is not set
-# BR2_PACKAGE_PYTHON is not set
-# BR2_PACKAGE_RUBY is not set
-# BR2_PACKAGE_TCL is not set
-# BR2_PACKAGE_PHP is not set
-
-#
-# XML handling
-#
-# BR2_PACKAGE_EXPAT is not set
-BR2_PACKAGE_EZXML=y
-BR2_PACKAGE_LIBXML2=y
-# BR2_PACKAGE_LIBXSLT is not set
-# BR2_PACKAGE_XERCES is not set
-
-#
-# Java
-#
-# BR2_PACKAGE_CLASSPATH is not set
-
-#
-# Games
-#
-# BR2_PACKAGE_GNUCHESS is not set
-# BR2_PACKAGE_MAGICCUBE4D is not set
-# BR2_PACKAGE_PRBOOM is not set
-# BR2_PACKAGE_RUBIX is not set
-# BR2_PACKAGE_VICE is not set
-# BR2_PACKAGE_XBOARD is not set
-
-#
-# Target filesystem options
-#
-BR2_ROOTFS_PREFIX="rootfs"
-BR2_ROOTFS_SUFFIX=""
-
-#
-# filesystem for target device
-#
-# BR2_TARGET_ROOTFS_CRAMFS is not set
-# BR2_TARGET_ROOTFS_CLOOP is not set
-BR2_TARGET_ROOTFS_EXT2=y
-BR2_TARGET_ROOTFS_EXT2_BLOCKS=0
-BR2_TARGET_ROOTFS_EXT2_INODES=0
-BR2_TARGET_ROOTFS_EXT2_RESBLKS=0
-BR2_TARGET_ROOTFS_EXT2_SQUASH=y
-BR2_TARGET_ROOTFS_EXT2_OUTPUT="$(IMAGE).ext2"
-BR2_TARGET_ROOTFS_EXT2_NONE=y
-# BR2_TARGET_ROOTFS_EXT2_GZIP is not set
-# BR2_TARGET_ROOTFS_EXT2_BZIP2 is not set
-# BR2_TARGET_ROOTFS_EXT2_LZMA is not set
-BR2_TARGET_ROOTFS_EXT2_COPYTO=""
-# BR2_TARGET_ROOTFS_JFFS2 is not set
-# BR2_TARGET_ROOTFS_UBIFS is not set
-# BR2_TARGET_ROOTFS_SQUASHFS is not set
-# BR2_TARGET_ROOTFS_TAR is not set
-# BR2_TARGET_ROOTFS_CPIO is not set
-# BR2_TARGET_ROOTFS_INITRAMFS is not set
-# BR2_TARGET_ROOTFS_ROMFS is not set
-
-#
-# bootloader for target device
-#
-# BR2_TARGET_UBOOT is not set
-
-#
-# Kernel
-#
-BR2_KERNEL_none=y
-# BR2_KERNEL_LINUX_ADVANCED is not set
-# BR2_KERNEL_LINUX is not set
-# BR2_KERNEL_HURD is not set
+Modified: trunk/buildroot/project/Makefile.in
+===================================================================
+--- trunk/buildroot/project/Makefile.in	2009-03-19 08:34:23 UTC (rev 25754)
++++ trunk/buildroot/project/Makefile.in	2009-03-19 11:06:47 UTC (rev 25755)
+@@ -71,6 +71,9 @@
+ # packages compiled for the host goes here
+ HOST_DIR:=$(BUILD_DIR)/host_dir
+ 
++# stamp (dependency) files go here
++STAMP_DIR:=$(BUILD_DIR)/stamps
++
+ # All configurable packages (like Busybox,Linux etc) should be built
+ # in PROJECT_BUILD_DIR
+ PROJECT_BUILD_DIR:=$(BASE_DIR)/$(TOPDIR_PREFIX)project_build_$(ARCH)$(ARCH_FPU_SUFFIX)$(TOPDIR_SUFFIX)/$(PROJECT)
