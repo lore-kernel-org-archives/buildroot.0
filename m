@@ -1,48 +1,39 @@
-From: Patrick Fischer <pf@stollmann.de>
-Date: Fri, 20 Mar 2009 09:42:20 +0100
-Subject: [Buildroot] how to find ununsed libs
-Message-ID: <20090320084220.17551.qmail@bux.stollmann.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 20 Mar 2009 10:37:51 +0100
+Subject: [Buildroot] Buildroot presentation at Embedded Linux Conference 2009
+Message-ID: <20090320103751.3652df54@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello
+Hi,
 
-I wrote a small script to check which libs are needed on the target.
-So i found that libstdc++.so.5.0.7 is installed but not needed by any prog.
-(this is not about why this is in the target, I'm using a very old 
-version of buildroot)
+Even though I'm by far not the most active developer of Buildroot, I
+thought that the recent revival of the project was an interesting
+opportunity to promote the project. So, I've submitted a presentation
+for the Embedded Linux Conference [1], that will be held from April, 6th to
+April, 8th in San Francisco, US and this presentation has been accepted
+[2].
 
-But my script told me that i don't need a lot of libs like
-libuClibc-0.9.28.so
-(ld-uClibc-0.9.28.so is needed)
+I will both present why systems like Buildroot are necessary
+(cross-compilation is painful, sharing recipes is nice, and having an
+automated and reproducible build systems is a must) and then how
+Buildroot fill these needs, how it works and how it can be extended.
 
-I think this is a bug in my script.
-Can anybody check my script if it works fine?
+I'll try to share my slides prior to the conference so that the
+Buildroot community can help in improving the presentation so that the
+project will be promoted as best as possible.
 
+Sincerly,
 
-#!/bin/sh
+Thomas
 
-LIBSNEEDED=needed_libs
-LIBSFOUND=fount_libs
-LDD=mipsel-linux-ldd
-ROOTFS=build_mipsel/root/
-
-find $ROOTFS -type f -exec $LDD  {} 2>/dev/null  \; | grep -v "not a 
-dynamic executable" | cut -d"=" -f1 | tr -d "\t" | sort -n > $LIBSNEEDED
-find $ROOTFS -name "*so*" -type f  -exec ls -l {} \;| cut -d " " -f 5,9 
-| sort -n -r > $LIBSFOUND
-
-cat $LIBSFOUND | while read size lib
-do
-        #example build_mipsel/root/lib/libresolv-0.9.28.so -> libresolv
-        if grep `basename $lib | cut -d"-" -f1 | cut -d"." -f1` 
-$LIBSNEEDED > /dev/null;
-        then
-                echo $lib is needed
-        else
-                echo $lib not needed, you can save $size bytes
-        fi
-done
+[1] http://www.embeddedlinuxconference.com/elc_2009/index.html
+[2] http://www.embeddedlinuxconference.com/elc_2009/sessions.html#Petazzoni
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
