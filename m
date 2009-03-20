@@ -1,23 +1,36 @@
-From: Stephan Raue <mailinglists@openelec.tv>
-Date: Thu, 19 Mar 2009 20:32:24 +0100
-Subject: [Buildroot] embedded Linuxdistribution to start ELISA
-Message-ID: <49C29DC8.5070103@openelec.tv>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 20 Mar 2009 06:03:27 +0000 (UTC)
+Subject: [Buildroot] [Bug 65] new package: dbus c++ language bindings
+In-Reply-To: <bug-65-163@https.bugs.busybox.net/>
+References: <bug-65-163@https.bugs.busybox.net/>
+Message-ID: <20090320060327.D504D76268@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-I would like you to imagine my Project. Under http://www.openelec.tv 
-you'll find a small embedded Linux distribution which Elisa for your 
-HTPC project starts. There is still much to do and I want you to invite 
-me in to help with development. Check out the sources via Launchpad 
-download and with a simple "make" an image and the kernel was build . 
-This both has a size of about 40MB and can be tested by qemu. 
-Unfortunately I still have some problems with the Gstreamer installation 
-so I want someone I can also help.
+https://bugs.busybox.net/show_bug.cgi?id=65
 
-For questions, you can enjoy on the mailing list.
 
-Stephan
+Peter Korsgaard <jacmet@uclibc.org> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
+
+
+
+
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-03-20 06:03:27 UTC ---
+Hi,
+
+i don't quite like the git handling as there's no control of what revision
+you're downloading. Do you have any idea if a release is coming up soon? If so,
+then I would prefer to wait until then.
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
