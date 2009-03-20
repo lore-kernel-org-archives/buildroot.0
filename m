@@ -1,37 +1,97 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 20 Mar 2009 11:20:02 +0100
-Subject: [Buildroot] Buildroot presentation at Embedded Linux Conference
-	2009
-In-Reply-To: <20090320103751.3652df54@surf> (Thomas Petazzoni's message of
-	"Fri\, 20 Mar 2009 10\:37\:51 +0100")
-References: <20090320103751.3652df54@surf>
-Message-ID: <87vdq4mr71.fsf@macbook.be.48ers.dk>
+From: Patrick Fischer <pf@stollmann.de>
+Date: Fri, 20 Mar 2009 13:35:32 +0100
+Subject: [Buildroot] how to find ununsed libs
+In-Reply-To: <20090320084220.17551.qmail@bux.stollmann.net>
+References: <20090320084220.17551.qmail@bux.stollmann.net>
+Message-ID: <20090320123533.27816.qmail@bux.stollmann.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+I found my mistake.
+I don't follow symlinks.
+libc.so.0 -> libuClibc-0.9.28.so
 
- Thomas> Hi,
+I also can't find out if a lib will loaded dynamic on runtime.
+for example iptables  will load some libs only if they are needed.
 
- Thomas> Even though I'm by far not the most active developer of
- Thomas> Buildroot, I thought that the recent revival of the project
- Thomas> was an interesting opportunity to promote the project. So,
- Thomas> I've submitted a presentation for the Embedded Linux
- Thomas> Conference [1], that will be held from April, 6th to April,
- Thomas> 8th in San Francisco, US and this presentation has been
- Thomas> accepted [2].
+It is an ugly way but it works for me.
 
-Great, thanks for doing this!
+I also link some libs static if they are only used once.
 
- Thomas> I'll try to share my slides prior to the conference so that
- Thomas> the Buildroot community can help in improving the
- Thomas> presentation so that the project will be promoted as best as
- Thomas> possible.
+Now my Image is 700k smaller
 
-Perfect.
+Best regards
+Patrick
+
+
+
+
+
+Patrick Fischer schrieb:
+> Hello
+>
+> I wrote a small script to check which libs are needed on the target.
+> So i found that libstdc++.so.5.0.7 is installed but not needed by any 
+> prog.
+> (this is not about why this is in the target, I'm using a very old 
+> version of buildroot)
+>
+> But my script told me that i don't need a lot of libs like
+> libuClibc-0.9.28.so
+> (ld-uClibc-0.9.28.so is needed)
+>
+> I think this is a bug in my script.
+> Can anybody check my script if it works fine?
+>
+>
+> #!/bin/sh
+>
+> LIBSNEEDED=needed_libs
+> LIBSFOUND=fount_libs
+> LDD=mipsel-linux-ldd
+> ROOTFS=build_mipsel/root/
+>
+> find $ROOTFS -type f -exec $LDD  {} 2>/dev/null  \; | grep -v "not a 
+> dynamic executable" | cut -d"=" -f1 | tr -d "\t" | sort -n > $LIBSNEEDED
+> find $ROOTFS -name "*so*" -type f  -exec ls -l {} \;| cut -d " " -f 
+> 5,9 | sort -n -r > $LIBSFOUND
+>
+> cat $LIBSFOUND | while read size lib
+> do
+>        #example build_mipsel/root/lib/libresolv-0.9.28.so -> libresolv
+>        if grep `basename $lib | cut -d"-" -f1 | cut -d"." -f1` 
+> $LIBSNEEDED > /dev/null;
+>        then
+>                echo $lib is needed
+>        else
+>                echo $lib not needed, you can save $size bytes
+>        fi
+> done
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+>
+
 
 -- 
-Bye, Peter Korsgaard
+Patrick Fischer
+
+Software Developer
+Phone: +49 40 890 88-443
+Email: pf at stollmann.de
+
+-------------------------------------------------------------
+http://www.stollmann.de
+Tel: +49 40 890 88-0
+Fax: +49 40 890 88 444
+Stollmann E+V GmbH, Mendelssohnstr. 15D, D-22761 Hamburg,
+HRB Hamburg 55634, VAT-ID DE 811 675 541
+GF: Peter Herrmann, Christian L?hrs
+mailto:pf at stollmann.de
+-------------------------------------------------------------
