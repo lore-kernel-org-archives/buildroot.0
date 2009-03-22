@@ -1,60 +1,43 @@
-From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
-Date: Sat, 21 Mar 2009 21:17:29 -0300
-Subject: [Buildroot] Package license constraints
-In-Reply-To: <200903211906.04999.markus.heidelberg@web.de>
-References: <49C3C0EF.8010003@maxim-ic.com>
-	<200903211906.04999.markus.heidelberg@web.de>
-Message-ID: <d6cda7730903211717x33f412e7g3706c57232850ae3@mail.gmail.com>
+From: Robert Urban <urban@unix-beratung.de>
+Date: Sun, 22 Mar 2009 15:46:50 +0100
+Subject: [Buildroot] handling packages that use /usr/bin/libtool
+Message-ID: <49C64F5A.9000006@unix-beratung.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi Folks,
 
-On Sat, Mar 21, 2009 at 3:06 PM, Markus Heidelberg
-<markus.heidelberg@web.de> wrote:
-> Gr?gory Rom?, 20.03.2009:
->> Hello,
->>
->> Can I add a proprietary package to buildroot which could be redistributed?
->
-> I think generally it's OK, otherwise we shouldn't allow building the
-> commercial license version of Qt, for example.
+I've narrowed things down a bit with cpufrequtils-005.
 
-I guess it depends on what you want to push. Qt is GPL, LGPL and
-Commercial. It already made sense to have it before, having the
-commercial support was just a matter of a few config changes. On the
-other hand, we don't have any thing on buildroot that *requires* Qt
-commercial, because it's proprietary code or something like that.
+From what I gather, libtool is not conducive to cross-compiling.  Apparently
+many packages are packaged with their own libtool, known as 'ltmain.sh',
+which can be patched by buildroot.
 
-In general, proprietary code isn't shared at all, unless it's dual
-licensed. If you mean a binary package, them I guess the answer would
-be pretty much "No".
+cpufrequtils, however, simply calls /usr/bin/libtool.  I have tried to patch
+the cpufrequtils Makefile to use buildroot's idea of $GCC, and the libtool
+script *does* get called with the cross-compilation gcc and switches, but
+when the library is actually linked by libtool, it simply calls 'gcc':
 
-Not that we are open source zealots, but rather that it would just be
-impossible to crosscompile and have other platforms use it at all. We
-also would not like to host your binary packages for you and on the
-top of that, it could most likely be something that is not generic
-enough for many users to take advantage of that package, etc.
+-snip-
+/usr/bin/libtool --tag=CC --mode=link
+/data/buildroot/build_i586/staging_dir/usr/bin/i586-linux-uclibc-gcc -Os
+-pipe -Os  -I/data/buildroot/build_i586/staging_dir/usr/include
+-I/data/buildroot/build_i586/staging_dir/include
+--sysroot=/data/buildroot/build_i586/staging_dir/ -isysroot
+/data/buildroot/build_i586/staging_dir -mtune=i586 -march=i586
+-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+--sysroot=/data/buildroot/build_i586/staging_dir -o libcpufreq.la -rpath \
+                /usr/lib -version-info 0:0:0 lib/cpufreq.lo lib/proc.lo
+lib/sysfs.lo
+mkdir .libs
+gcc -shared  lib/.libs/cpufreq.o lib/.libs/proc.o lib/.libs/sysfs.o
+-isysroot /data/buildroot/build_i586/staging_dir -mtune=i586 -march=i586
+-Wl,-soname -Wl,libcpufreq.so.0 -o .libs/libcpufreq.so.0.0.0
+-snip-
 
-But hey, if you could describe your package a little more, what it is,
-what it does, and what are the licensing terms, then we could be more
-specific than this "maybe/probably" answer :)
-Also, then you would have much greater chance to get a reply from our
-maintainer with a final answer.
+Does someone perhaps have a suggestion how this problem can be solved?
 
->> Generally, what are the license constraints?
->
-> No idea.
->
-
-Same here, so far we never had that question raised AFAIK. It could be
-complicated if your licensing terms would not permit us from
-redistributing it in the first place since we keep a mirror of the
-packages to ensure things will keep working for some time after
-release. Please be more specific.
-
-Kind Regards,
-   Thiago A. Correa
+Rob Urban
