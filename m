@@ -1,7 +1,8 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon, 23 Mar 2009 21:46:47 +0000 (UTC)
-Subject: [Buildroot] svn commit: [25802] trunk/buildroot/package: autoconf m4
-Message-ID: <20090323214647.D586076A00@busybox.osuosl.org>
+Date: Mon, 23 Mar 2009 21:46:51 +0000 (UTC)
+Subject: [Buildroot] svn commit: [25803] trunk/buildroot/package: autoconf
+	libtool
+Message-ID: <20090323214651.C860C76A00@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,99 +10,103 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2009-03-23 21:46:47 +0000 (Mon, 23 Mar 2009)
-New Revision: 25802
+Date: 2009-03-23 21:46:51 +0000 (Mon, 23 Mar 2009)
+New Revision: 25803
 
 Log:
-m4: cleanup
+libtool: cleanup
 
 - Convert into Makefile.autotools.in format for target build
 - Build host version in BUILD_DIR and install into HOST_DIR
 
 Modified:
    trunk/buildroot/package/autoconf/autoconf.mk
-   trunk/buildroot/package/m4/m4.mk
+   trunk/buildroot/package/libtool/libtool.mk
 
 
 Changeset:
 Modified: trunk/buildroot/package/autoconf/autoconf.mk
 ===================================================================
---- trunk/buildroot/package/autoconf/autoconf.mk	2009-03-23 21:46:43 UTC (rev 25801)
-+++ trunk/buildroot/package/autoconf/autoconf.mk	2009-03-23 21:46:47 UTC (rev 25802)
+--- trunk/buildroot/package/autoconf/autoconf.mk	2009-03-23 21:46:47 UTC (rev 25802)
++++ trunk/buildroot/package/autoconf/autoconf.mk	2009-03-23 21:46:51 UTC (rev 25803)
 @@ -31,7 +31,7 @@
  	toolchain/patch-kernel.sh $(AUTOCONF_HOST_DIR) package/autoconf/ \*.patch
  	touch $@
  
--$(STAMP_DIR)/host_autoconf_configured: $(STAMP_DIR)/host_autoconf_unpacked
-+$(STAMP_DIR)/host_autoconf_configured: $(STAMP_DIR)/host_autoconf_unpacked $(STAMP_DIR)/host_m4_installed
+-$(STAMP_DIR)/host_autoconf_configured: $(STAMP_DIR)/host_autoconf_unpacked $(STAMP_DIR)/host_m4_installed
++$(STAMP_DIR)/host_autoconf_configured: $(STAMP_DIR)/host_autoconf_unpacked $(STAMP_DIR)/host_m4_installed  $(STAMP_DIR)/host_libtool_installed
  	(cd $(AUTOCONF_HOST_DIR); rm -rf config.cache; \
  		$(HOST_CONFIGURE_OPTS) \
  		CFLAGS="$(HOST_CFLAGS)" \
 
-Modified: trunk/buildroot/package/m4/m4.mk
+Modified: trunk/buildroot/package/libtool/libtool.mk
 ===================================================================
---- trunk/buildroot/package/m4/m4.mk	2009-03-23 21:46:43 UTC (rev 25801)
-+++ trunk/buildroot/package/m4/m4.mk	2009-03-23 21:46:47 UTC (rev 25802)
-@@ -3,135 +3,60 @@
- # m4
+--- trunk/buildroot/package/libtool/libtool.mk	2009-03-23 21:46:47 UTC (rev 25802)
++++ trunk/buildroot/package/libtool/libtool.mk	2009-03-23 21:46:51 UTC (rev 25803)
+@@ -3,152 +3,57 @@
+ # libtool
  #
  #############################################################
--M4_VERSION:=1.4.9
--M4_SOURCE:=m4-$(M4_VERSION).tar.bz2
--M4_CAT:=$(BZCAT)
--M4_SITE:=$(BR2_GNU_MIRROR)/m4
--M4_DIR:=$(BUILD_DIR)/m4-$(M4_VERSION)
--M4_HOST_DIR:=$(TOOL_BUILD_DIR)/m4-$(M4_VERSION)
--M4_BINARY:=m4
--M4_TARGET_BINARY:=usr/bin/m4
-+M4_VERSION = 1.4.9
-+M4_SOURCE = m4-$(M4_VERSION).tar.bz2
-+M4_SITE = $(BR2_GNU_MIRROR)/m4
+-LIBTOOL_VERSION:=1.5.24
+-LIBTOOL_SOURCE:=libtool-$(LIBTOOL_VERSION).tar.gz
+-LIBTOOL_SITE:=$(BR2_GNU_MIRROR)/libtool
+-LIBTOOL_CAT:=$(ZCAT)
+-LIBTOOL_SRC_DIR:=$(TOOL_BUILD_DIR)/libtool-$(LIBTOOL_VERSION)
+-LIBTOOL_DIR:=$(BUILD_DIR)/libtool-$(LIBTOOL_VERSION)
+-LIBTOOL_HOST_DIR:=$(TOOL_BUILD_DIR)/libtool-$(LIBTOOL_VERSION)-host
+-LIBTOOL_BINARY:=libtool
+-LIBTOOL_TARGET_BINARY:=usr/bin/libtool
+-LIBTOOL:=$(STAGING_DIR)/usr/bin/libtool
++LIBTOOL_VERSION = 1.5.24
++LIBTOOL_SOURCE = libtool-$(LIBTOOL_VERSION).tar.gz
++LIBTOOL_SITE = $(BR2_GNU_MIRROR)/libtool
  
--ifeq ($(UCLIBC_HAS_REGEX),y)
--gl_cv_func_re_compile_pattern_working=gl_cv_func_re_compile_pattern_working=yes
-+ifeq ($(BR2_ENABLE_DEBUG),y) # no install-exec
-+M4_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
- endif
--ifneq ($(BR2_USE_WCHAR),y)
--gt_cv_c_wchar_t=gt_cv_c_wchar_t=no
--gl_cv_absolute_wchar_h=gl_cv_absolute_wchar_h=__fpending.h
--endif
- 
--$(DL_DIR)/$(M4_SOURCE):
--	 $(call DOWNLOAD,$(M4_SITE),$(M4_SOURCE))
-+M4_CONF_ENV = gl_cv_func_gettimeofday_clobber=no
- 
--m4-source: $(DL_DIR)/$(M4_SOURCE)
+-$(DL_DIR)/$(LIBTOOL_SOURCE):
+-	 $(call DOWNLOAD,$(LIBTOOL_SITE),$(LIBTOOL_SOURCE))
 -
--$(M4_DIR)/.unpacked: $(DL_DIR)/$(M4_SOURCE)
--	$(M4_CAT) $(DL_DIR)/$(M4_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(M4_DIR) package/m4 m4\*.patch
--	$(CONFIG_UPDATE) $(@D)
+-libtool-source: $(DL_DIR)/$(LIBTOOL_SOURCE)
+-
+-$(LIBTOOL_SRC_DIR)/.unpacked: $(DL_DIR)/$(LIBTOOL_SOURCE)
+-	$(LIBTOOL_CAT) $(DL_DIR)/$(LIBTOOL_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS) -
+-	$(CONFIG_UPDATE) $(LIBTOOL_SRC_DIR)
+-	$(CONFIG_UPDATE) $(LIBTOOL_SRC_DIR)/libltdl
 -	touch $@
 -
--$(M4_DIR)/.configured: $(M4_DIR)/.unpacked
--	(cd $(M4_DIR); rm -rf config.cache; \
+-#############################################################
+-#
+-# libtool for the target
+-#
+-#############################################################
+-
+-$(LIBTOOL_DIR)/.configured: $(LIBTOOL_SRC_DIR)/.unpacked
+-	mkdir -p $(LIBTOOL_DIR)
+-	(cd $(LIBTOOL_DIR); rm -rf config.cache; \
 -		$(TARGET_CONFIGURE_OPTS) \
 -		$(TARGET_CONFIGURE_ARGS) \
--		gl_cv_func_gettimeofday_clobber=no \
--		$(gl_cv_func_re_compile_pattern_working) \
--		$(gt_cv_c_wchar_t) \
--		$(gl_cv_absolute_wchar_h) \
--		./configure \
+-		$(LIBTOOL_SRC_DIR)/configure \
 -		--target=$(GNU_TARGET_NAME) \
 -		--host=$(GNU_TARGET_NAME) \
 -		--build=$(GNU_HOST_NAME) \
 -		--prefix=/usr \
 -		--exec-prefix=/usr \
--		$(DISABLE_LARGEFILE) \
+-		--bindir=/usr/bin \
+-		--sbindir=/usr/sbin \
+-		--libdir=/lib \
+-		--libexecdir=/usr/lib \
+-		--sysconfdir=/etc \
+-		--datadir=/usr/share \
+-		--localstatedir=/var \
+-		--mandir=/usr/share/man \
+-		--infodir=/usr/share/info \
+-		$(DISABLE_NLS) \
 -	)
 -	touch $@
 -
--$(M4_DIR)/src/$(M4_BINARY): $(M4_DIR)/.configured
--	$(MAKE) CC=$(TARGET_CC) RANLIB=$(TARGET_RANLIB) AR=$(TARGET_AR) -C $(M4_DIR)
+-$(LIBTOOL_DIR)/$(LIBTOOL_BINARY): $(LIBTOOL_DIR)/.configured
+-	$(MAKE) CC=$(TARGET_CC) RANLIB=$(TARGET_RANLIB) AR=$(TARGET_AR) -C $(LIBTOOL_DIR)
+-	touch -c $@
 -
--$(TARGET_DIR)/$(M4_TARGET_BINARY): $(M4_DIR)/src/$(M4_BINARY)
+-$(TARGET_DIR)/$(LIBTOOL_TARGET_BINARY): $(LIBTOOL_DIR)/$(LIBTOOL_BINARY)
 -	$(MAKE) \
 -	    prefix=$(TARGET_DIR)/usr \
 -	    exec_prefix=$(TARGET_DIR)/usr \
@@ -115,93 +120,107 @@ Modified: trunk/buildroot/package/m4/m4.mk
 -	    infodir=$(TARGET_DIR)/usr/share/info \
 -	    mandir=$(TARGET_DIR)/usr/share/man \
 -	    includedir=$(TARGET_DIR)/usr/include \
--	    -C $(M4_DIR) install
--	$(STRIPCMD) $(TARGET_DIR)/$(M4_TARGET_BINARY) > /dev/null 2>&1
+-	    -C $(LIBTOOL_DIR) install
+-	$(STRIPCMD) $(TARGET_DIR)//usr/lib/libltdl.so.*.*.* > /dev/null 2>&1
+-	$(SED) "s,^CC.*,CC=\"/usr/bin/gcc\"," $(TARGET_DIR)/usr/bin/libtool
+-	$(SED) "s,^LD.*,LD=\"/usr/bin/ld\"," $(TARGET_DIR)/usr/bin/libtool
+-	rm -rf $(TARGET_DIR)/share/locale
+-	rm -rf $(TARGET_DIR)/usr/share/doc
 -ifneq ($(BR2_HAVE_INFOPAGES),y)
 -	rm -rf $(TARGET_DIR)/usr/share/info
-+ifneq ($(BR2_USE_WCHAR),y)
-+M4_CONF_ENV += gt_cv_c_wchar_t=no gl_cv_absolute_wchar_h=__fpending.h
++ifeq ($(BR2_ENABLE_DEBUG),y) # install-exec doesn't install aclocal stuff
++LIBTOOL_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
  endif
 -ifneq ($(BR2_HAVE_MANPAGES),y)
 -	rm -rf $(TARGET_DIR)/usr/share/man
 -endif
--	rm -rf $(TARGET_DIR)/share/locale
--	rm -rf $(TARGET_DIR)/usr/share/doc
 -	touch -c $@
  
--m4: uclibc $(TARGET_DIR)/$(M4_TARGET_BINARY)
-+M4_DEPENDENCIES = uclibc
+-libtool: uclibc $(TARGET_DIR)/$(LIBTOOL_TARGET_BINARY)
++LIBTOOL_DEPENDENCIES = uclibc
  
--m4-clean:
--	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(M4_DIR) uninstall
--	-$(MAKE) -C $(M4_DIR) clean
-+$(eval $(call AUTOTARGETS,package,m4))
+-libtool-clean:
+-	-$(MAKE) DESTDIR=$(TARGET_DIR) -C $(LIBTOOL_DIR) uninstall
+-	-$(MAKE) -C $(LIBTOOL_DIR) clean
++$(eval $(call AUTOTARGETS,package,libtool))
  
--m4-dirclean:
--	rm -rf $(M4_DIR)
+-libtool-cross: uclibc $(LIBTOOL_DIR)/$(LIBTOOL_BINARY)
+-
+-libtool-cross-clean:
+-	-$(MAKE) -C $(LIBTOOL_DIR) clean
+-
+-libtool-dirclean:
+-	rm -rf $(LIBTOOL_DIR)
 -
 -#############################################################
 -#
- # m4 for the host
+ # libtool for the host
 -#
 -#############################################################
-+M4_HOST_DIR:=$(BUILD_DIR)/m4-$(M4_VERSION)-host
++LIBTOOL_HOST_DIR:=$(BUILD_DIR)/libtool-$(LIBTOOL_VERSION)-host
  
--$(M4_HOST_DIR)/.unpacked: $(DL_DIR)/$(M4_SOURCE)
--	$(M4_CAT) $(DL_DIR)/$(M4_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(M4_HOST_DIR) package/m4 m4\*.patch
--	$(CONFIG_UPDATE) $(@D)
-+$(STAMP_DIR)/host_m4_unpacked: $(DL_DIR)/$(M4_SOURCE)
-+	mkdir -p $(M4_HOST_DIR)
-+	$(INFLATE$(suffix $(M4_SOURCE))) $< | \
-+		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(M4_HOST_DIR) $(TAR_OPTIONS) -
-+	toolchain/patch-kernel.sh $(M4_HOST_DIR) package/m4/ \*.patch
- 	touch $@
- 
--$(M4_HOST_DIR)/.configured: $(M4_HOST_DIR)/.unpacked
-+$(STAMP_DIR)/host_m4_configured: $(STAMP_DIR)/host_m4_unpacked
- 	(cd $(M4_HOST_DIR); rm -rf config.cache; \
+-$(LIBTOOL_HOST_DIR)/.configured: $(LIBTOOL_SRC_DIR)/.unpacked
++# variables used by other packages
++LIBTOOL:=$(HOST_DIR)/usr/bin/libtool
++
++$(STAMP_DIR)/host_libtool_unpacked: $(DL_DIR)/$(LIBTOOL_SOURCE)
+ 	mkdir -p $(LIBTOOL_HOST_DIR)
++	$(INFLATE$(suffix $(LIBTOOL_SOURCE))) $< | \
++		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(LIBTOOL_HOST_DIR) $(TAR_OPTIONS) -
++	toolchain/patch-kernel.sh $(LIBTOOL_HOST_DIR) package/libtool/ \*.patch
++	touch $@
++
++$(STAMP_DIR)/host_libtool_configured: $(STAMP_DIR)/host_libtool_unpacked
+ 	(cd $(LIBTOOL_HOST_DIR); rm -rf config.cache; \
  		$(HOST_CONFIGURE_OPTS) \
  		CFLAGS="$(HOST_CFLAGS)" \
  		LDFLAGS="$(HOST_LDFLAGS)" \
--		gl_cv_func_gettimeofday_clobber=no \
--		$(gl_cv_func_re_compile_pattern_working) \
- 		./configure \
+-		$(LIBTOOL_SRC_DIR)/configure \
 -		--prefix=$(STAGING_DIR)/usr \
--		$(DISABLE_LARGEFILE) \
+-		$(DISABLE_NLS) \
++		./configure \
 +		--prefix="$(HOST_DIR)/usr" \
 +		--sysconfdir="$(HOST_DIR)/etc" \
 +		--disable-static \
  	)
  	touch $@
  
--$(M4_HOST_DIR)/src/$(M4_BINARY): $(M4_HOST_DIR)/.configured
-+$(STAMP_DIR)/host_m4_compiled: $(STAMP_DIR)/host_m4_configured
- 	$(MAKE) -C $(M4_HOST_DIR)
+-$(LIBTOOL_HOST_DIR)/$(LIBTOOL_BINARY): $(LIBTOOL_HOST_DIR)/.configured
++$(STAMP_DIR)/host_libtool_compiled: $(STAMP_DIR)/host_libtool_configured
+ 	$(MAKE) -C $(LIBTOOL_HOST_DIR)
+-	touch -c $@
 +	touch $@
  
--$(STAGING_DIR)/$(M4_TARGET_BINARY): $(M4_HOST_DIR)/src/$(M4_BINARY)
-+$(STAMP_DIR)/host_m4_installed: $(STAMP_DIR)/host_m4_compiled
- 	$(MAKE) -C $(M4_HOST_DIR) install
+-$(LIBTOOL): $(LIBTOOL_HOST_DIR)/$(LIBTOOL_BINARY)
++$(STAMP_DIR)/host_libtool_installed: $(STAMP_DIR)/host_libtool_compiled
+ 	$(MAKE) -C $(LIBTOOL_HOST_DIR) install
+-	rm -rf $(STAGING_DIR)/share/locale
+-	rm -rf $(STAGING_DIR)/usr/share/doc
+-ifneq ($(BR2_HAVE_INFOPAGES),y)
+-	rm -rf $(STAGING_DIR)/usr/share/info
+-endif
+-ifneq ($(BR2_HAVE_MANPAGES),y)
+-	rm -rf $(STAGING_DIR)/usr/share/man
+-endif
+-	touch -c $@
 +	touch $@
  
--host-m4: uclibc $(STAGING_DIR)/$(M4_TARGET_BINARY)
-+host-m4: $(STAMP_DIR)/host_m4_installed
+-host-libtool: $(LIBTOOL)
++host-libtool: $(STAMP_DIR)/host_libtool_installed
  
- host-m4-clean:
--	$(MAKE) -C $(M4_HOST_DIR) uninstall
-+	rm -f $(addprefix $(STAMP_DIR)/host_m4_,unpacked configured compiled installed)
-+	-$(MAKE) -C $(M4_HOST_DIR) uninstall
- 	-$(MAKE) -C $(M4_HOST_DIR) clean
+ host-libtool-clean:
++	rm -f $(addprefix $(STAMP_DIR)/host_libtool_,unpacked configured compiled installed)
+ 	-$(MAKE) -C $(LIBTOOL_HOST_DIR) uninstall
+ 	-$(MAKE) -C $(LIBTOOL_HOST_DIR) clean
  
- host-m4-dirclean:
- 	rm -rf $(M4_HOST_DIR)
+ host-libtool-dirclean:
+ 	rm -rf $(LIBTOOL_HOST_DIR)
 -
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_M4),y)
--TARGETS+=m4
+-ifeq ($(BR2_PACKAGE_LIBTOOL),y)
+-TARGETS+=libtool
 -endif
