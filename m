@@ -1,44 +1,35 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon, 23 Mar 2009 09:44:13 +0000 (UTC)
-Subject: [Buildroot] svn commit: [25791] trunk/buildroot/target/generic
-Message-ID: <20090323094413.6E9FC7656C@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 23 Mar 2009 10:46:09 +0100
+Subject: [Buildroot] svn commit: [25775] trunk/buildroot/target/generic:
+	target_busybox_skeleton/etc target_skel etc...
+In-Reply-To: <d6a0e5a20903221839o5275f3eakc9b506bfde9f9174@mail.gmail.com>
+	(Hiroshi Shinji's message of "Mon\, 23 Mar 2009 10\:39\:56 +0900")
+References: <20090320215943.DCCB87656C@busybox.osuosl.org>
+	<d6a0e5a20903221839o5275f3eakc9b506bfde9f9174@mail.gmail.com>
+Message-ID: <87mybclggu.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-03-23 09:44:13 +0000 (Mon, 23 Mar 2009)
-New Revision: 25791
+>>>>> "Hiroshi" == Hiroshi Shinji <hiroshi.shinji@gmail.com> writes:
 
-Log:
-target/generic: s/TTYSO/TTYS0/
+ Hiroshi> Hi,
+ >> +choice
+ >> +       prompt "Serial port to run a getty on"
+ >> +       default BR2_TARGET_GENERIC_GETTY_TTYSO
+ >> +       help
+ >> +         Select a port to run a getty (login prompt) on.
+ >> +
+ >> +config BR2_TARGET_GENERIC_GETTY_NONE
+ >> +       bool "none"
+ >> +config BR2_TARGET_GENERIC_GETTY_TTYSO
 
-Thanks to Hiroshi Shinji for noticing.
+ Hiroshi> The last character of "BR2_TARGET_GENERIC_GETTY_TTYSO" is not "0"(zero).
+ Hiroshi> Please fix it.
 
-Modified:
-   trunk/buildroot/target/generic/Config.in
+Ahh yes, thanks - Fixed in r25791.
 
-
-Changeset:
-Modified: trunk/buildroot/target/generic/Config.in
-===================================================================
---- trunk/buildroot/target/generic/Config.in	2009-03-23 09:44:07 UTC (rev 25790)
-+++ trunk/buildroot/target/generic/Config.in	2009-03-23 09:44:13 UTC (rev 25791)
-@@ -68,13 +68,13 @@
- 
- choice
- 	prompt "Serial port to run a getty on"
--	default BR2_TARGET_GENERIC_GETTY_TTYSO
-+	default BR2_TARGET_GENERIC_GETTY_TTYS0
- 	help
- 	  Select a port to run a getty (login prompt) on.
- 
- config BR2_TARGET_GENERIC_GETTY_NONE
- 	bool "none"
--config BR2_TARGET_GENERIC_GETTY_TTYSO
-+config BR2_TARGET_GENERIC_GETTY_TTYS0
- 	bool "ttyS0"
- config BR2_TARGET_GENERIC_GETTY_TTYS1
- 	bool "ttyS1"
+-- 
+Bye, Peter Korsgaard
