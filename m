@@ -1,57 +1,39 @@
-From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
-Date: Mon, 23 Mar 2009 12:01:35 -0300
-Subject: [Buildroot] Package license constraints
-In-Reply-To: <49C7858F.2080904@maxim-ic.com>
-References: <49C3C0EF.8010003@maxim-ic.com>
-	<200903211906.04999.markus.heidelberg@web.de>
-	<d6cda7730903211717x33f412e7g3706c57232850ae3@mail.gmail.com>
-	<49C7858F.2080904@maxim-ic.com>
-Message-ID: <d6cda7730903230801m47d9b4f2oca19ed0a72ae4d74@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 23 Mar 2009 16:10:05 +0100
+Subject: [Buildroot] help
+In-Reply-To: <33966b5d0903230724l7508be23m9e114af609f41cb6@mail.gmail.com>
+	(mzee mzee's message of "Mon\, 23 Mar 2009 14\:24\:50 +0000")
+References: <33966b5d0903230724l7508be23m9e114af609f41cb6@mail.gmail.com>
+Message-ID: <87iqm0l1gy.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gr?gory,
+>>>>> "mzee" == mzee mzee <wanyumba@gmail.com> writes:
 
-2009/3/23 Gr?gory Rom? <gregory.rome@maxim-ic.com>:
-> On 03/22/2009 01:17 AM, Thiago A. Corr?a wrote:
->
-> My goal in this case is not to share a package, but to add a 'pure' binary
-> package to the Buildroot I provide to my customer (to avoid two entry
-> points, one for the open source components and one for the others).
->
-> Obviously, I'm very careful to respect the open source license!
->
-[cut]
-> A cryptographic library that we sale to our customers but we don't want to
-> provide the source code (to protect the implementation).
+ mzee> #
+ mzee> hi,i need helpthis is my problem
 
-Doesn't it depend on libs from the buildroot environment? Say, if we
-decide to update uClibc or update one of the other toolchain packages,
-wouldn't that break the binary package?
+ mzee> ??? ??? /usr/bin/make -j1 CROSS_COMPILE="/home/thuoeg/builroot/buildrootsnap/
+ mzee> build_i686/staging_dir/usr/bin/i686-linux-uclibc-" ARCH=i386 \
+ mzee> ??? ??? ?-C /home/thuoeg/builroot/buildrootsnap/project_build_i686/mzee/
+ mzee> u-boot-2009.01
 
-If you say yes to those last 2 questions then it sounds like the best
-approach for you and your customers might be a fork, so if we change
-things, it doesn't suddenly stop working for them. Then you would have
-more control over things and you could merge our changes into your
-tree as you review them, and hopefully, send back changes in your tree
-that are generic enough to be usefull to others for inclusion into
-upstream.
+U-Boot for i686?
 
-I guess the only reason to roll your own crypto library is to use a
-crypto support inside one of your chips. Since it runs linux(as you
-use buildroot), it would really be best if it were added to existing
-crypto libraries, so existing apps could take advantage of that. This
-would still actually only benefiting your customers directly and not
-those of some other chip maker as the internal registers are likely
-different anyway.
-Of course, that is just my 2 cents, I don't really know what business
-model you are trying to achieve.
+ mzee> /home/thuoeg/builroot/buildrootsnap/build_i686/staging_dir/usr/bin/
+ mzee> i686-linux-uclibc-gcc -g? -Os?? -fPIC -ffixed-r14 -meabi -fno-strict-aliasing
+ mzee> -D__KERNEL__ -DTEXT_BASE=0xFFFC0000 -I/home/thuoeg/builroot/buildrootsnap/
+ mzee> project_build_i686/mzee/u-boot-2009.01/include -fno-builtin -ffreestanding
+ mzee> -nostdinc -isystem /home/thuoeg/builroot/buildrootsnap/build_i686/staging_dir/
+ mzee> usr/bin-ccache/../lib/gcc/i686-linux-uclibc/4.3.3/include -pipe? -DCONFIG_I386
+ mzee> -D__I386__ -DCONFIG_4xx -ffixed-r2 -mstring -msoft-float -Wa,-m405 -mcpu=405
 
-Anyway, it doesn't look much practical to have a binary package added
-to buildroot, mostly because of the dependencies.
+U-Boot seems to think you have ppc405 instead. Did you try a ppc
+compile before? Can you build u-boot by hand with the buildroot cross
+compiler? Where is your .config?
 
-Kind Regards,
-   Thiago A. Correa
+-- 
+Bye, Peter Korsgaard
