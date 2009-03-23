@@ -1,35 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 23 Mar 2009 10:46:09 +0100
-Subject: [Buildroot] svn commit: [25775] trunk/buildroot/target/generic:
-	target_busybox_skeleton/etc target_skel etc...
-In-Reply-To: <d6a0e5a20903221839o5275f3eakc9b506bfde9f9174@mail.gmail.com>
-	(Hiroshi Shinji's message of "Mon\, 23 Mar 2009 10\:39\:56 +0900")
-References: <20090320215943.DCCB87656C@busybox.osuosl.org>
-	<d6a0e5a20903221839o5275f3eakc9b506bfde9f9174@mail.gmail.com>
-Message-ID: <87mybclggu.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Mon, 23 Mar 2009 11:40:10 +0000 (UTC)
+Subject: [Buildroot] svn commit: [25792]
+	trunk/buildroot/package/x11r7/xlib_libpciaccess
+Message-ID: <20090323114010.D1D9E7656C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Hiroshi" == Hiroshi Shinji <hiroshi.shinji@gmail.com> writes:
+Author: jacmet
+Date: 2009-03-23 11:40:10 +0000 (Mon, 23 Mar 2009)
+New Revision: 25792
 
- Hiroshi> Hi,
- >> +choice
- >> +       prompt "Serial port to run a getty on"
- >> +       default BR2_TARGET_GENERIC_GETTY_TTYSO
- >> +       help
- >> +         Select a port to run a getty (login prompt) on.
- >> +
- >> +config BR2_TARGET_GENERIC_GETTY_NONE
- >> +       bool "none"
- >> +config BR2_TARGET_GENERIC_GETTY_TTYSO
+Log:
+libpciaccess: needs large file support
 
- Hiroshi> The last character of "BR2_TARGET_GENERIC_GETTY_TTYSO" is not "0"(zero).
- Hiroshi> Please fix it.
+Modified:
+   trunk/buildroot/package/x11r7/xlib_libpciaccess/Config.in
 
-Ahh yes, thanks - Fixed in r25791.
 
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/package/x11r7/xlib_libpciaccess/Config.in
+===================================================================
+--- trunk/buildroot/package/x11r7/xlib_libpciaccess/Config.in	2009-03-23 09:44:13 UTC (rev 25791)
++++ trunk/buildroot/package/x11r7/xlib_libpciaccess/Config.in	2009-03-23 11:40:10 UTC (rev 25792)
+@@ -1,5 +1,9 @@
+ config BR2_PACKAGE_XLIB_LIBPCIACCESS
+ 	bool "libpciaccess"
++	depends on BR2_LARGEFILE
+ 	help
+ 	  libpciaccess 0.10.3
+ 	  X.Org libpciaccess
++
++comment "libpciaccess requires a toolchain with LARGEFILE support"
++	depends on !BR2_LARGEFILE
