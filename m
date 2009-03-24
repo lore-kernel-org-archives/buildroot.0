@@ -1,8 +1,7 @@
-From: Mark Fisher <fobs12@ymail.com>
-Date: Tue, 24 Mar 2009 13:38:34 -0700 (PDT)
-Subject: [Buildroot] Stuck at installing kernel,
-	rootfs and grub to compact flash
-Message-ID: <997570.39073.qm@web43416.mail.sp1.yahoo.com>
+From: Daniel Jabbour <daniel@laptouchinc.com>
+Date: Tue, 24 Mar 2009 16:26:19 -0400
+Subject: [Buildroot] Build fails with external toolchain (sysroots error)
+Message-ID: <585ACB2A-2E0B-4AA5-9A71-E437724E4018@laptouchinc.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,16 +10,53 @@ To: buildroot@busybox.net
 
 Hi,
 
-I've recently discovered buildroot and have?used it to configure a custom 2.6.27 kernel, root file system, and have selected the grub as the bootloader. But now I'm stuck at figuring out how to install?the rootfs..i586.ext file and the grub bootloader onto a Compact Flash that I can boot a PC104 type board from. 
+I have configured buildroot to use an external toolchain provided by  
+the manufacturer of my board. This is a glibc toolchain. I am able to  
+cross compile against it outside of buildroot.
 
-I've searched the mailing list and google but can't seem to find a proper example of how to do this. If anyone can provide help on how to do this it would be?much appreciated. In addition to being new to buildroot I'm also somewhat new to Linux too.
+However, when I try to make buildroot, it exits with the following  
+configure error when trying to build "lzo":
 
-Thanks,
+configure:2090: checking for C compiler default output file name
+configure:2093: /opt/jztoolchain//bin/mipsel-linux-gcc -O2  -I/home/ 
+djabbour/source/buildroot/build_mips/staging_dir/include -I/home/ 
+djabbour/source/buildroot/build_mips/staging_dir/usr/include -I/opt/ 
+jztoolchain//mipsel-linux/include --sysroot /home/djabbour/source/ 
+buildroot/build_mips/staging_dir/ -O2  -I/home/djabbour/source/ 
+buildroot/build_mips/staging_dir/include -I/home/djabbour/source/ 
+buildroot/build_mips/staging_dir/usr/include -I/opt/jztoolchain// 
+mipsel-linux/include --sysroot /home/djabbour/source/buildroot/ 
+build_mips/staging_dir/  -L/home/djabbour/source/buildroot/build_mips/ 
+staging_dir/lib -L/home/djabbour/source/buildroot/build_mips/ 
+staging_dir/usr/lib conftest.c  >&5
+/opt/jztoolchain/bin/../lib/gcc/mipsel-linux/4.1.2/../../../../mipsel- 
+linux/bin/ld: this linker was not configured to use sysroots
+collect2: ld returned 1 exit status
+configure:2096: $? = 1
+configure: failed program was:
+| /* confdefs.h.  */
+|
+| #define PACKAGE_NAME "lzo"
+| #define PACKAGE_TARNAME "lzo"
+| #define PACKAGE_VERSION "2.03"
+| #define PACKAGE_STRING "lzo 2.03"
+| #define PACKAGE_BUGREPORT "markus at oberhumer.com"
+| /* end confdefs.h.  */
+|
+| int
+| main ()
+| {
+|
+|   ;
+|   return 0;
+| }
+configure:2135: error: C compiler cannot create executables
 
-Mark
+How can I resolve this issue? From my understanding, it seems like the  
+sysroots flag is unsupported in my toolchain. Can buildroot work  
+without this option? Thanks,
 
-
-      
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090324/172784f4/attachment.htm>
+--
+Daniel Jabbour
+Software Engineer
+Laptouch, Inc.
