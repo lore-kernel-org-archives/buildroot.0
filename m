@@ -1,7 +1,8 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue, 24 Mar 2009 08:51:58 +0000 (UTC)
-Subject: [Buildroot] svn commit: [25806] trunk/buildroot/package/busybox
-Message-ID: <20090324085158.27F0476A00@busybox.osuosl.org>
+Date: Tue, 24 Mar 2009 09:17:33 +0000 (UTC)
+Subject: [Buildroot] svn commit: [25807]
+	trunk/buildroot/toolchain/kernel-headers
+Message-ID: <20090324091733.A1BB377192@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,198 +10,242 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2009-03-24 08:51:57 +0000 (Tue, 24 Mar 2009)
-New Revision: 25806
+Date: 2009-03-24 09:17:33 +0000 (Tue, 24 Mar 2009)
+New Revision: 25807
 
 Log:
-busybox: 1.13.3 hush fix
+kernel-headers: bump 2.6.27.x / 2.6.28.x versions
 
 Added:
-   trunk/buildroot/package/busybox/busybox-1.13.3-hush.patch
+   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.9-cris-eth-driver-netpoll.patch
+   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.9-cris-headers.patch
+   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.9-cris-objcopy-flags.patch
+
+Removed:
+   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.8-cris-eth-driver-netpoll.patch
+   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.8-cris-headers.patch
+   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.8-cris-objcopy-flags.patch
+
+Modified:
+   trunk/buildroot/toolchain/kernel-headers/Config.in
 
 
 Changeset:
-Added: trunk/buildroot/package/busybox/busybox-1.13.3-hush.patch
+Modified: trunk/buildroot/toolchain/kernel-headers/Config.in
 ===================================================================
---- trunk/buildroot/package/busybox/busybox-1.13.3-hush.patch	                        (rev 0)
-+++ trunk/buildroot/package/busybox/busybox-1.13.3-hush.patch	2009-03-24 08:51:57 UTC (rev 25806)
-@@ -0,0 +1,179 @@
-+diff -urpN busybox-1.13.3/shell/hush.c busybox-1.13.3-hush/shell/hush.c
-+--- busybox-1.13.3/shell/hush.c	2009-02-26 12:46:55.000000000 +0100
-++++ busybox-1.13.3-hush/shell/hush.c	2009-03-22 12:46:42.000000000 +0100
-+@@ -458,8 +458,11 @@ struct globals {
-+ 	smallint fake_mode;
-+ 	/* these three support $?, $#, and $1 */
-+ 	smalluint last_return_code;
-+-	char **global_argv;
-++	/* is global_argv and global_argv[1..n] malloced? (note: not [0]) */
-++	smalluint global_args_malloced;
-++	/* how many non-NULL argv's we have. NB: $# + 1 */
-+ 	int global_argc;
-++	char **global_argv;
-+ #if ENABLE_HUSH_LOOPS
-+ 	unsigned depth_break_continue;
-+ 	unsigned depth_of_loop;
-+@@ -633,7 +636,7 @@ static char *unbackslash(char *src)
-+ 	return dst;
-+ }
-+ 
-+-static char **add_strings_to_strings(char **strings, char **add)
-++static char **add_strings_to_strings(char **strings, char **add, int need_to_dup)
+--- trunk/buildroot/toolchain/kernel-headers/Config.in	2009-03-24 08:51:57 UTC (rev 25806)
++++ trunk/buildroot/toolchain/kernel-headers/Config.in	2009-03-24 09:17:33 UTC (rev 25807)
+@@ -61,7 +61,7 @@
+ 	default "2.6.24.7"	if BR2_KERNEL_HEADERS_2_6_24
+ 	default "2.6.25.19"	if BR2_KERNEL_HEADERS_2_6_25
+ 	default "2.6.26.8"	if BR2_KERNEL_HEADERS_2_6_26
+-	default "2.6.27.20"	if BR2_KERNEL_HEADERS_2_6_27
+-	default "2.6.28.8"	if BR2_KERNEL_HEADERS_2_6_28
++	default "2.6.27.21"	if BR2_KERNEL_HEADERS_2_6_27
++	default "2.6.28.9"	if BR2_KERNEL_HEADERS_2_6_28
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 
+
+Deleted: trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.8-cris-eth-driver-netpoll.patch
+===================================================================
+--- trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.8-cris-eth-driver-netpoll.patch	2009-03-24 08:51:57 UTC (rev 25806)
++++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.8-cris-eth-driver-netpoll.patch	2009-03-24 09:17:33 UTC (rev 25807)
+@@ -1,11 +0,0 @@
+---- a/drivers/net/cris/eth_v10.c.org	2009-01-28 09:19:09.000000000 +0100
+-+++ b/drivers/net/cris/eth_v10.c	2009-01-28 09:19:16.000000000 +0100
+-@@ -1707,7 +1707,7 @@
+- static void
+- e100_netpoll(struct net_device* netdev)
+- {
+--	e100rxtx_interrupt(NETWORK_DMA_TX_IRQ_NBR, netdev, NULL);
+-+	e100rxtx_interrupt(NETWORK_DMA_TX_IRQ_NBR, netdev);
+- }
+- #endif
+- 
+
+Deleted: trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.8-cris-headers.patch
+===================================================================
+--- trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.8-cris-headers.patch	2009-03-24 08:51:57 UTC (rev 25806)
++++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.8-cris-headers.patch	2009-03-24 09:17:33 UTC (rev 25807)
+@@ -1,28 +0,0 @@
+-diff -urN linux-2.6.28/arch/cris/include/arch-v10/arch/Kbuild linux-2.6.28.my/arch/cris/include/arch-v10/arch/Kbuild
+---- linux-2.6.28/arch/cris/include/arch-v10/arch/Kbuild	2008-12-25 00:26:37.000000000 +0100
+-+++ linux-2.6.28.my/arch/cris/include/arch-v10/arch/Kbuild	2009-01-12 12:59:06.000000000 +0100
+-@@ -1,3 +1,5 @@
+-+header-y += elf.h
+-+header-y += ptrace.h
+- header-y += user.h
+- header-y += svinto.h
+- header-y += sv_addr_ag.h
+-diff -urN linux-2.6.28/arch/cris/include/asm/Kbuild linux-2.6.28.my/arch/cris/include/asm/Kbuild
+---- linux-2.6.28/arch/cris/include/asm/Kbuild	2008-12-25 00:26:37.000000000 +0100
+-+++ linux-2.6.28.my/arch/cris/include/asm/Kbuild	2009-01-12 13:14:40.000000000 +0100
+-@@ -1,11 +1,13 @@
+- include include/asm-generic/Kbuild.asm
+- 
+--header-y += arch-v10/
+--header-y += arch-v32/
+-+header-y += ../arch-v10/arch/
+-+header-y += ../arch-v32/arch/
+- 
+-+header-y += elf.h
+- header-y += ethernet.h
+- header-y += rtc.h
+- header-y += sync_serial.h
+-+header-y += user.h
+- 
+- unifdef-y += etraxgpio.h
+- unifdef-y += rs485.h
+
+Deleted: trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.8-cris-objcopy-flags.patch
+===================================================================
+--- trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.8-cris-objcopy-flags.patch	2009-03-24 08:51:57 UTC (rev 25806)
++++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.8-cris-objcopy-flags.patch	2009-03-24 09:17:33 UTC (rev 25807)
+@@ -1,45 +0,0 @@
+---- linux-2.6.28/arch/cris/Makefile	2008-12-25 00:26:37.000000000 +0100
+-+++ linux-2.6.28.my/arch/cris/Makefile	2009-01-12 13:21:44.000000000 +0100
+-@@ -40,7 +40,7 @@
+- 
+- LD = $(CROSS_COMPILE)ld -mcrislinux
+- 
+--OBJCOPYFLAGS := -O binary -R .note -R .comment -S
+-+OBJCOPYFLAGS := -O binary -R .note -R .note.gnu.build-id -R .comment
+- 
+- CPPFLAGS_vmlinux.lds = -DDRAM_VIRTUAL_BASE=0x$(CONFIG_ETRAX_DRAM_VIRTUAL_BASE)
+- 
+-diff -urN linux-2.6.28/arch/cris/arch-v10/boot/Makefile linux-2.6.28.my/arch/cris/arch-v10/boot/Makefile
+---- linux-2.6.28/arch/cris/arch-v10/boot/Makefile	2008-12-25 00:26:37.000000000 +0100
+-+++ linux-2.6.28.my/arch/cris/arch-v10/boot/Makefile	2009-01-12 13:28:25.000000000 +0100
+-@@ -2,8 +2,6 @@
+- # arch/cris/arch-v10/boot/Makefile
+- #
+- 
+--OBJCOPYFLAGS = -O binary --remove-section=.bss
+--
+- subdir- := compressed rescue
+- targets := Image
+- 
+-diff -urN linux-2.6.28/arch/cris/arch-v10/boot/compressed/Makefile linux-2.6.28.my/arch/cris/arch-v10/boot/compressed/Makefile
+---- linux-2.6.28/arch/cris/arch-v10/boot/compressed/Makefile	2008-12-25 00:26:37.000000000 +0100
+-+++ linux-2.6.28.my/arch/cris/arch-v10/boot/compressed/Makefile	2009-01-12 13:28:33.000000000 +0100
+-@@ -6,7 +6,6 @@
+- ccflags-y += -O2 $(LINUXINCLUDE)
+- ldflags-y += -T $(srctree)/$(src)/decompress.lds
+- OBJECTS = $(obj)/head.o $(obj)/misc.o
+--OBJCOPYFLAGS = -O binary --remove-section=.bss
+- 
+- quiet_cmd_image = BUILD   $@
+- cmd_image = cat $(obj)/decompress.bin $(obj)/piggy.gz > $@
+-diff -urN linux-2.6.28/arch/cris/arch-v10/boot/rescue/Makefile linux-2.6.28.my/arch/cris/arch-v10/boot/rescue/Makefile
+---- linux-2.6.28/arch/cris/arch-v10/boot/rescue/Makefile	2008-12-25 00:26:37.000000000 +0100
+-+++ linux-2.6.28.my/arch/cris/arch-v10/boot/rescue/Makefile	2009-01-12 13:28:40.000000000 +0100
+-@@ -5,7 +5,6 @@
+- ccflags-y += -O2 $(LINUXINCLUDE)
+- asflags-y += $(LINUXINCLUDE)
+- ldflags-y += -T $(srctree)/$(src)/rescue.lds
+--OBJCOPYFLAGS = -O binary --remove-section=.bss
+- obj-$(CONFIG_ETRAX_AXISFLASHMAP) = head.o
+- OBJECT := $(obj)/head.o
+- 
+
+Copied: trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.9-cris-eth-driver-netpoll.patch (from rev 25806, trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.8-cris-eth-driver-netpoll.patch)
+===================================================================
+--- trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.9-cris-eth-driver-netpoll.patch	                        (rev 0)
++++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.9-cris-eth-driver-netpoll.patch	2009-03-24 09:17:33 UTC (rev 25807)
+@@ -0,0 +1,11 @@
++--- a/drivers/net/cris/eth_v10.c.org	2009-01-28 09:19:09.000000000 +0100
+++++ b/drivers/net/cris/eth_v10.c	2009-01-28 09:19:16.000000000 +0100
++@@ -1707,7 +1707,7 @@
++ static void
++ e100_netpoll(struct net_device* netdev)
 + {
-+ 	int i;
-+ 	unsigned count1;
-+@@ -658,7 +661,7 @@ static char **add_strings_to_strings(cha
-+ 	v[count1 + count2] = NULL;
-+ 	i = count2;
-+ 	while (--i >= 0)
-+-		v[count1 + i] = add[i];
-++		v[count1 + i] = (need_to_dup ? xstrdup(add[i]) : add[i]);
-+ 	return v;
++-	e100rxtx_interrupt(NETWORK_DMA_TX_IRQ_NBR, netdev, NULL);
+++	e100rxtx_interrupt(NETWORK_DMA_TX_IRQ_NBR, netdev);
 + }
++ #endif
 + 
-+@@ -667,7 +670,7 @@ static char **add_string_to_strings(char
-+ 	char *v[2];
-+ 	v[0] = add;
-+ 	v[1] = NULL;
-+-	return add_strings_to_strings(strings, v);
-++	return add_strings_to_strings(strings, v, /*dup:*/ 0);
-+ }
+
+Copied: trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.9-cris-headers.patch (from rev 25806, trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.8-cris-headers.patch)
+===================================================================
+--- trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.9-cris-headers.patch	                        (rev 0)
++++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.9-cris-headers.patch	2009-03-24 09:17:33 UTC (rev 25807)
+@@ -0,0 +1,28 @@
++diff -urN linux-2.6.28/arch/cris/include/arch-v10/arch/Kbuild linux-2.6.28.my/arch/cris/include/arch-v10/arch/Kbuild
++--- linux-2.6.28/arch/cris/include/arch-v10/arch/Kbuild	2008-12-25 00:26:37.000000000 +0100
+++++ linux-2.6.28.my/arch/cris/include/arch-v10/arch/Kbuild	2009-01-12 12:59:06.000000000 +0100
++@@ -1,3 +1,5 @@
+++header-y += elf.h
+++header-y += ptrace.h
++ header-y += user.h
++ header-y += svinto.h
++ header-y += sv_addr_ag.h
++diff -urN linux-2.6.28/arch/cris/include/asm/Kbuild linux-2.6.28.my/arch/cris/include/asm/Kbuild
++--- linux-2.6.28/arch/cris/include/asm/Kbuild	2008-12-25 00:26:37.000000000 +0100
+++++ linux-2.6.28.my/arch/cris/include/asm/Kbuild	2009-01-12 13:14:40.000000000 +0100
++@@ -1,11 +1,13 @@
++ include include/asm-generic/Kbuild.asm
 + 
-+ static void putenv_all(char **strings)
-+@@ -1213,8 +1216,13 @@ static int o_glob(o_string *o, int n)
-+  * Otherwise, just finish current list[] and start new */
-+ static int o_save_ptr(o_string *o, int n)
-+ {
-+-	if (o->o_glob)
-+-		return o_glob(o, n); /* o_save_ptr_helper is inside */
-++	if (o->o_glob) { /* if globbing is requested */
-++		/* If o->has_empty_slot, list[n] was already globbed
-++		 * (if it was requested back then when it was filled)
-++		 * so don't do that again! */
-++		if (!o->has_empty_slot)
-++			return o_glob(o, n); /* o_save_ptr_helper is inside */
-++	}
-+ 	return o_save_ptr_helper(o, n);
-+ }
++-header-y += arch-v10/
++-header-y += arch-v32/
+++header-y += ../arch-v10/arch/
+++header-y += ../arch-v32/arch/
 + 
-+@@ -4279,6 +4287,11 @@ int hush_main(int argc, char **argv)
-+ 		switch (opt) {
-+ 		case 'c':
-+ 			G.global_argv = argv + optind;
-++			if (!argv[optind]) {
-++				/* -c 'script' (no params): prevent empty $0 */
-++				*--G.global_argv = argv[0];
-++				optind--;
-++			} /* else -c 'script' PAR0 PAR1: $0 is PAR0 */
-+ 			G.global_argc = argc - optind;
-+ 			opt = parse_and_run_string(optarg, 0 /* parse_flag */);
-+ 			goto final_return;
-+@@ -4639,17 +4652,68 @@ static int builtin_read(char **argv)
-+ 	return set_local_var(string, 0);
-+ }
+++header-y += elf.h
++ header-y += ethernet.h
++ header-y += rtc.h
++ header-y += sync_serial.h
+++header-y += user.h
 + 
-+-/* built-in 'set [VAR=value]' handler */
-++/* built-in 'set' handler
-++ * SUSv3 says:
-++ * set [-abCefmnuvx] [-h] [-o option] [argument...]
-++ * set [+abCefmnuvx] [+h] [+o option] [argument...]
-++ * set -- [argument...]
-++ * set -o
-++ * set +o
-++ * Implementations shall support the options in both their hyphen and
-++ * plus-sign forms. These options can also be specified as options to sh.
-++ * Examples:
-++ * Write out all variables and their values: set
-++ * Set $1, $2, and $3 and set "$#" to 3: set c a b
-++ * Turn on the -x and -v options: set -xv
-++ * Unset all positional parameters: set --
-++ * Set $1 to the value of x, even if it begins with '-' or '+': set -- "$x"
-++ * Set the positional parameters to the expansion of x, even if x expands
-++ * with a leading '-' or '+': set -- $x
-++ *
-++ * So far, we only support "set -- [argument...]" by ignoring all options
-++ * (also, "-o option" will be mishandled by taking "option" as parameter #1).
-++ */
-+ static int builtin_set(char **argv)
-+ {
-+-	char *temp = argv[1];
-+ 	struct variable *e;
-++	char **pp;
-++	char *arg = *++argv;
++ unifdef-y += etraxgpio.h
++ unifdef-y += rs485.h
+
+Copied: trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.9-cris-objcopy-flags.patch (from rev 25806, trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.8-cris-objcopy-flags.patch)
+===================================================================
+--- trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.9-cris-objcopy-flags.patch	                        (rev 0)
++++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.9-cris-objcopy-flags.patch	2009-03-24 09:17:33 UTC (rev 25807)
+@@ -0,0 +1,45 @@
++--- linux-2.6.28/arch/cris/Makefile	2008-12-25 00:26:37.000000000 +0100
+++++ linux-2.6.28.my/arch/cris/Makefile	2009-01-12 13:21:44.000000000 +0100
++@@ -40,7 +40,7 @@
 + 
-+-	if (temp == NULL)
-++	if (arg == NULL) {
-+ 		for (e = G.top_var; e; e = e->next)
-+ 			puts(e->varstr);
-+-	else
-+-		set_local_var(xstrdup(temp), 0);
-++	} else {
-++		/* NB: G.global_argv[0] ($0) is never freed/changed */
-++
-++		if (G.global_args_malloced) {
-++			pp = G.global_argv;
-++			while (*++pp)
-++				free(*pp);
-++			G.global_argv[1] = NULL;
-++		} else {
-++			G.global_args_malloced = 1;
-++			pp = xzalloc(sizeof(pp[0]) * 2);
-++			pp[0] = G.global_argv[0]; /* retain $0 */
-++			G.global_argv = pp;
-++		}
-++		do  {
-++			if (arg[0] == '+')
-++				continue;
-++			if (arg[0] != '-')
-++				break;
-++			if (arg[1] == '-' && arg[2] == '\0') {
-++				argv++;
-++				break;
-++			}
-++		} while ((arg = *++argv) != NULL);
-++		/* Now argv[0] is 1st argument */
-++
-++		/* This realloc's G.global_argv */
-++		G.global_argv = pp = add_strings_to_strings(G.global_argv, argv, /*dup:*/ 1);
-++		G.global_argc = 1;
-++		while (*++pp)
-++			G.global_argc++;
-++	}
++ LD = $(CROSS_COMPILE)ld -mcrislinux
 + 
-+ 	return EXIT_SUCCESS;
-+ }
-+@@ -4661,9 +4725,14 @@ static int builtin_shift(char **argv)
-+ 		n = atoi(argv[1]);
-+ 	}
-+ 	if (n >= 0 && n < G.global_argc) {
-+-		G.global_argv[n] = G.global_argv[0];
-++		if (G.global_args_malloced) {
-++			int m = 1;
-++			while (m <= n)
-++				free(G.global_argv[m++]);
-++		}
-+ 		G.global_argc -= n;
-+-		G.global_argv += n;
-++		memmove(&G.global_argv[1], &G.global_argv[n+1],
-++				G.global_argc * sizeof(G.global_argv[0]));
-+ 		return EXIT_SUCCESS;
-+ 	}
-+ 	return EXIT_FAILURE;
-+diff -urpN busybox-1.13.3/shell/hush_test/hush-parsing/starquoted2.right busybox-1.13.3-hush/shell/hush_test/hush-parsing/starquoted2.right
-+--- busybox-1.13.3/shell/hush_test/hush-parsing/starquoted2.right	2009-02-26 12:46:52.000000000 +0100
-++++ busybox-1.13.3-hush/shell/hush_test/hush-parsing/starquoted2.right	2009-03-22 12:46:20.000000000 +0100
-+@@ -1,2 +1,3 @@
-+ Should be printed
-+ Should be printed
-++Empty:
-+diff -urpN busybox-1.13.3/shell/hush_test/hush-parsing/starquoted2.tests busybox-1.13.3-hush/shell/hush_test/hush-parsing/starquoted2.tests
-+--- busybox-1.13.3/shell/hush_test/hush-parsing/starquoted2.tests	2009-02-26 12:46:52.000000000 +0100
-++++ busybox-1.13.3-hush/shell/hush_test/hush-parsing/starquoted2.tests	2009-03-22 12:46:20.000000000 +0100
-+@@ -12,3 +12,6 @@ for a in "$@"""; do echo Should not be p
-+ for a in """$@"; do echo Should not be printed; done
-+ for a in """$@"''"$@"''; do echo Should not be printed; done
-+ for a in ""; do echo Should be printed; done
-++
-++# Bug 207: "$@" expands to nothing, and we erroneously glob "%s\\n" twice:
-++printf "Empty:%s\\n" "$@"
++-OBJCOPYFLAGS := -O binary -R .note -R .comment -S
+++OBJCOPYFLAGS := -O binary -R .note -R .note.gnu.build-id -R .comment
++ 
++ CPPFLAGS_vmlinux.lds = -DDRAM_VIRTUAL_BASE=0x$(CONFIG_ETRAX_DRAM_VIRTUAL_BASE)
++ 
++diff -urN linux-2.6.28/arch/cris/arch-v10/boot/Makefile linux-2.6.28.my/arch/cris/arch-v10/boot/Makefile
++--- linux-2.6.28/arch/cris/arch-v10/boot/Makefile	2008-12-25 00:26:37.000000000 +0100
+++++ linux-2.6.28.my/arch/cris/arch-v10/boot/Makefile	2009-01-12 13:28:25.000000000 +0100
++@@ -2,8 +2,6 @@
++ # arch/cris/arch-v10/boot/Makefile
++ #
++ 
++-OBJCOPYFLAGS = -O binary --remove-section=.bss
++-
++ subdir- := compressed rescue
++ targets := Image
++ 
++diff -urN linux-2.6.28/arch/cris/arch-v10/boot/compressed/Makefile linux-2.6.28.my/arch/cris/arch-v10/boot/compressed/Makefile
++--- linux-2.6.28/arch/cris/arch-v10/boot/compressed/Makefile	2008-12-25 00:26:37.000000000 +0100
+++++ linux-2.6.28.my/arch/cris/arch-v10/boot/compressed/Makefile	2009-01-12 13:28:33.000000000 +0100
++@@ -6,7 +6,6 @@
++ ccflags-y += -O2 $(LINUXINCLUDE)
++ ldflags-y += -T $(srctree)/$(src)/decompress.lds
++ OBJECTS = $(obj)/head.o $(obj)/misc.o
++-OBJCOPYFLAGS = -O binary --remove-section=.bss
++ 
++ quiet_cmd_image = BUILD   $@
++ cmd_image = cat $(obj)/decompress.bin $(obj)/piggy.gz > $@
++diff -urN linux-2.6.28/arch/cris/arch-v10/boot/rescue/Makefile linux-2.6.28.my/arch/cris/arch-v10/boot/rescue/Makefile
++--- linux-2.6.28/arch/cris/arch-v10/boot/rescue/Makefile	2008-12-25 00:26:37.000000000 +0100
+++++ linux-2.6.28.my/arch/cris/arch-v10/boot/rescue/Makefile	2009-01-12 13:28:40.000000000 +0100
++@@ -5,7 +5,6 @@
++ ccflags-y += -O2 $(LINUXINCLUDE)
++ asflags-y += $(LINUXINCLUDE)
++ ldflags-y += -T $(srctree)/$(src)/rescue.lds
++-OBJCOPYFLAGS = -O binary --remove-section=.bss
++ obj-$(CONFIG_ETRAX_AXISFLASHMAP) = head.o
++ OBJECT := $(obj)/head.o
++ 
