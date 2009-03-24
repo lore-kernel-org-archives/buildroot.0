@@ -1,8 +1,8 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue, 24 Mar 2009 09:17:33 +0000 (UTC)
-Subject: [Buildroot] svn commit: [25807]
+Date: Tue, 24 Mar 2009 09:17:49 +0000 (UTC)
+Subject: [Buildroot] svn commit: [25808]
 	trunk/buildroot/toolchain/kernel-headers
-Message-ID: <20090324091733.A1BB377192@busybox.osuosl.org>
+Message-ID: <20090324091749.C487D77192@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,242 +10,566 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2009-03-24 09:17:33 +0000 (Tue, 24 Mar 2009)
-New Revision: 25807
+Date: 2009-03-24 09:17:49 +0000 (Tue, 24 Mar 2009)
+New Revision: 25808
 
 Log:
-kernel-headers: bump 2.6.27.x / 2.6.28.x versions
-
-Added:
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.9-cris-eth-driver-netpoll.patch
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.9-cris-headers.patch
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.9-cris-objcopy-flags.patch
+kernel-headers: remove unused patches for ancient versions
 
 Removed:
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.8-cris-eth-driver-netpoll.patch
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.8-cris-headers.patch
-   trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.8-cris-objcopy-flags.patch
-
-Modified:
-   trunk/buildroot/toolchain/kernel-headers/Config.in
+   trunk/buildroot/toolchain/kernel-headers/linux-2.6.20.4-dwmw2-combined.01.diff
+   trunk/buildroot/toolchain/kernel-headers/linux-2.6.21.5-001-add-linkage-header.patch
+   trunk/buildroot/toolchain/kernel-headers/linux-2.6.21.5-006-wait-for-async-scanned-block-devices.patch
 
 
 Changeset:
-Modified: trunk/buildroot/toolchain/kernel-headers/Config.in
+Deleted: trunk/buildroot/toolchain/kernel-headers/linux-2.6.20.4-dwmw2-combined.01.diff
 ===================================================================
---- trunk/buildroot/toolchain/kernel-headers/Config.in	2009-03-24 08:51:57 UTC (rev 25806)
-+++ trunk/buildroot/toolchain/kernel-headers/Config.in	2009-03-24 09:17:33 UTC (rev 25807)
-@@ -61,7 +61,7 @@
- 	default "2.6.24.7"	if BR2_KERNEL_HEADERS_2_6_24
- 	default "2.6.25.19"	if BR2_KERNEL_HEADERS_2_6_25
- 	default "2.6.26.8"	if BR2_KERNEL_HEADERS_2_6_26
--	default "2.6.27.20"	if BR2_KERNEL_HEADERS_2_6_27
--	default "2.6.28.8"	if BR2_KERNEL_HEADERS_2_6_28
-+	default "2.6.27.21"	if BR2_KERNEL_HEADERS_2_6_27
-+	default "2.6.28.9"	if BR2_KERNEL_HEADERS_2_6_28
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 
-
-Deleted: trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.8-cris-eth-driver-netpoll.patch
-===================================================================
---- trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.8-cris-eth-driver-netpoll.patch	2009-03-24 08:51:57 UTC (rev 25806)
-+++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.8-cris-eth-driver-netpoll.patch	2009-03-24 09:17:33 UTC (rev 25807)
-@@ -1,11 +0,0 @@
----- a/drivers/net/cris/eth_v10.c.org	2009-01-28 09:19:09.000000000 +0100
--+++ b/drivers/net/cris/eth_v10.c	2009-01-28 09:19:16.000000000 +0100
--@@ -1707,7 +1707,7 @@
-- static void
-- e100_netpoll(struct net_device* netdev)
+--- trunk/buildroot/toolchain/kernel-headers/linux-2.6.20.4-dwmw2-combined.01.diff	2009-03-24 09:17:33 UTC (rev 25807)
++++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.20.4-dwmw2-combined.01.diff	2009-03-24 09:17:49 UTC (rev 25808)
+@@ -1,460 +0,0 @@
+-\\\\ dwmw2's --combine -fwhole-program patch for the kernel
+-\\ original of this incarnation was here:
+-\\ http://david.woodhou.se/linux-combine-build.patch
+-diff -rduNp linux-2.6.20.4.orig/drivers/md/md.c linux-2.6.20.4/drivers/md/md.c
+---- linux-2.6.20.4.orig/drivers/md/md.c	2007-03-13 19:27:08.000000000 +0100
+-+++ linux-2.6.20.4/drivers/md/md.c	2007-03-24 20:14:10.000000000 +0100
+-@@ -2944,6 +2944,7 @@ static struct kobj_type md_ktype = {
+- };
+- 
+- int mdp_major = 0;
+-+__internal_export(mdp_major);
+- 
+- static struct kobject *md_probe(dev_t dev, int *part, void *data)
 - {
---	e100rxtx_interrupt(NETWORK_DMA_TX_IRQ_NBR, netdev, NULL);
--+	e100rxtx_interrupt(NETWORK_DMA_TX_IRQ_NBR, netdev);
+-@@ -5602,7 +5603,7 @@ void md_autodetect_dev(dev_t dev)
+- 	if (dev_cnt >= 0 && dev_cnt < 127)
+- 		detected_devices[dev_cnt++] = dev;
 - }
+--
+-+__internal_export(md_autodetect_dev);
+- 
+- static void autostart_arrays(int part)
+- {
+-diff -rduNp linux-2.6.20.4.orig/drivers/video/fbcvt.c linux-2.6.20.4/drivers/video/fbcvt.c
+---- linux-2.6.20.4.orig/drivers/video/fbcvt.c	2007-03-13 19:27:08.000000000 +0100
+-+++ linux-2.6.20.4/drivers/video/fbcvt.c	2007-03-24 20:14:10.000000000 +0100
+-@@ -376,3 +376,4 @@ int fb_find_mode_cvt(struct fb_videomode
+- 
+- 	return 0;
+- }
+-+__internal_export(fb_find_mode_cvt);
+-diff -rduNp linux-2.6.20.4.orig/fs/debugfs/inode.c linux-2.6.20.4/fs/debugfs/inode.c
+---- linux-2.6.20.4.orig/fs/debugfs/inode.c	2007-03-13 19:27:08.000000000 +0100
+-+++ linux-2.6.20.4/fs/debugfs/inode.c	2007-03-24 20:14:10.000000000 +0100
+-@@ -29,7 +29,7 @@
+- #define DEBUGFS_MAGIC	0x64626720
+- 
+- /* declared over in file.c */
+--extern struct file_operations debugfs_file_operations;
+-+extern const struct file_operations debugfs_file_operations;
+- 
+- static struct vfsmount *debugfs_mount;
+- static int debugfs_mount_count;
+-diff -rduNp linux-2.6.20.4.orig/fs/devpts/inode.c linux-2.6.20.4/fs/devpts/inode.c
+---- linux-2.6.20.4.orig/fs/devpts/inode.c	2007-03-13 19:27:08.000000000 +0100
+-+++ linux-2.6.20.4/fs/devpts/inode.c	2007-03-24 20:14:10.000000000 +0100
+-@@ -185,6 +185,7 @@ int devpts_pty_new(struct tty_struct *tt
+- 
+- 	return 0;
+- }
+-+__internal_export(devpts_pty_new);
+- 
+- struct tty_struct *devpts_get_tty(int number)
+- {
+-@@ -202,6 +203,7 @@ struct tty_struct *devpts_get_tty(int nu
+- 
+- 	return tty;
+- }
+-+__internal_export(devpts_get_tty);
+- 
+- void devpts_pty_kill(int number)
+- {
+-@@ -218,6 +220,7 @@ void devpts_pty_kill(int number)
+- 	}
+- 	mutex_unlock(&devpts_root->d_inode->i_mutex);
+- }
+-+__internal_export(devpts_pty_kill);
+- 
+- static int __init init_devpts_fs(void)
+- {
+-diff -rduNp linux-2.6.20.4.orig/fs/hfsplus/inode.c linux-2.6.20.4/fs/hfsplus/inode.c
+---- linux-2.6.20.4.orig/fs/hfsplus/inode.c	2007-03-13 19:27:08.000000000 +0100
+-+++ linux-2.6.20.4/fs/hfsplus/inode.c	2007-03-24 20:14:10.000000000 +0100
+-@@ -269,7 +269,7 @@ static int hfsplus_file_release(struct i
+- }
+- 
+- extern struct inode_operations hfsplus_dir_inode_operations;
+--extern struct file_operations hfsplus_dir_operations;
+-+extern const struct file_operations hfsplus_dir_operations;
+- 
+- static struct inode_operations hfsplus_file_inode_operations = {
+- 	.lookup		= hfsplus_file_lookup,
+-diff -rduNp linux-2.6.20.4.orig/fs/hugetlbfs/inode.c linux-2.6.20.4/fs/hugetlbfs/inode.c
+---- linux-2.6.20.4.orig/fs/hugetlbfs/inode.c	2007-03-13 19:27:08.000000000 +0100
+-+++ linux-2.6.20.4/fs/hugetlbfs/inode.c	2007-03-24 20:14:10.000000000 +0100
+-@@ -45,6 +45,7 @@ static struct backing_dev_info hugetlbfs
+- };
+- 
+- int sysctl_hugetlb_shm_group;
+-+__internal_export(sysctl_hugetlb_shm_group);
+- 
+- static void huge_pagevec_release(struct pagevec *pvec)
+- {
+-@@ -562,6 +563,7 @@ const struct file_operations hugetlbfs_f
+- 	.fsync			= simple_sync_file,
+- 	.get_unmapped_area	= hugetlb_get_unmapped_area,
+- };
+-+__internal_export(hugetlbfs_file_operations);
+- 
+- static struct inode_operations hugetlbfs_dir_inode_operations = {
+- 	.create		= hugetlbfs_create,
+-@@ -701,6 +703,7 @@ int hugetlb_get_quota(struct address_spa
+- 
+- 	return ret;
+- }
+-+__internal_export(hugetlb_get_quota);
+- 
+- void hugetlb_put_quota(struct address_space *mapping)
+- {
+-@@ -712,6 +715,7 @@ void hugetlb_put_quota(struct address_sp
+- 		spin_unlock(&sbinfo->stat_lock);
+- 	}
+- }
+-+__internal_export(hugetlb_put_quota);
+- 
+- static int hugetlbfs_get_sb(struct file_system_type *fs_type,
+- 	int flags, const char *dev_name, void *data, struct vfsmount *mnt)
+-@@ -794,6 +798,7 @@ out_shm_unlock:
+- 	user_shm_unlock(size, current->user);
+- 	return ERR_PTR(error);
+- }
+-+__internal_export(hugetlb_zero_setup);
+- 
+- static int __init init_hugetlbfs_fs(void)
+- {
+-diff -rduNp linux-2.6.20.4.orig/fs/proc/base.c linux-2.6.20.4/fs/proc/base.c
+---- linux-2.6.20.4.orig/fs/proc/base.c	2007-03-13 19:27:08.000000000 +0100
+-+++ linux-2.6.20.4/fs/proc/base.c	2007-03-24 20:18:09.000000000 +0100
+-@@ -71,6 +71,7 @@
+- #include <linux/cpuset.h>
+- #include <linux/audit.h>
+- #include <linux/poll.h>
+-+#include <linux/module.h>
+- #include <linux/nsproxy.h>
+- #include <linux/oom.h>
+- #include "internal.h"
+-@@ -2030,6 +2031,7 @@ struct dentry *proc_pid_lookup(struct in
+- out:
+- 	return result;
+- }
+-+__internal_export(proc_flush_task);
+- 
+- /*
+-  * Find the first task with tgid >= tgid
+-diff -rduNp linux-2.6.20.4.orig/fs/proc/generic.c linux-2.6.20.4/fs/proc/generic.c
+---- linux-2.6.20.4.orig/fs/proc/generic.c	2007-03-13 19:27:08.000000000 +0100
+-+++ linux-2.6.20.4/fs/proc/generic.c	2007-03-24 20:14:10.000000000 +0100
+-@@ -20,8 +20,8 @@
+- #include <linux/namei.h>
+- #include <linux/bitops.h>
+- #include <linux/spinlock.h>
+-+#include <linux/module.h>
+- #include <asm/uaccess.h>
+--
+- #include "internal.h"
+- 
+- static ssize_t proc_file_read(struct file *file, char __user *buf,
+-@@ -38,6 +38,7 @@ int proc_match(int len, const char *name
+- 		return 0;
+- 	return !memcmp(name, de->name, len);
+- }
+-+__internal_export(proc_match);
+- 
+- static struct file_operations proc_file_operations = {
+- 	.llseek		= proc_file_lseek,
+-diff -rduNp linux-2.6.20.4.orig/fs/proc/kcore.c linux-2.6.20.4/fs/proc/kcore.c
+---- linux-2.6.20.4.orig/fs/proc/kcore.c	2007-03-13 19:27:08.000000000 +0100
+-+++ linux-2.6.20.4/fs/proc/kcore.c	2007-03-24 20:14:10.000000000 +0100
+-@@ -19,6 +19,7 @@
+- #include <linux/vmalloc.h>
+- #include <linux/highmem.h>
+- #include <linux/init.h>
+-+#include <linux/module.h>
+- #include <asm/uaccess.h>
+- #include <asm/io.h>
+- 
+-@@ -66,6 +67,7 @@ kclist_add(struct kcore_list *new, void 
+- 	kclist = new;
+- 	write_unlock(&kclist_lock);
+- }
+-+__internal_export(kclist_add);
+- 
+- static size_t get_kcore_size(int *nphdr, size_t *elf_buflen)
+- {
+-diff -rduNp linux-2.6.20.4.orig/fs/proc/proc_tty.c linux-2.6.20.4/fs/proc/proc_tty.c
+---- linux-2.6.20.4.orig/fs/proc/proc_tty.c	2007-03-13 19:27:08.000000000 +0100
+-+++ linux-2.6.20.4/fs/proc/proc_tty.c	2007-03-24 20:14:10.000000000 +0100
+-@@ -201,6 +201,7 @@ void proc_tty_register_driver(struct tty
+- 
+- 	driver->proc_entry = ent;
+- }
+-+__internal_export(proc_tty_register_driver);
+- 
+- /*
+-  * This function is called by tty_unregister_driver()
+-@@ -217,6 +218,7 @@ void proc_tty_unregister_driver(struct t
+- 	
+- 	driver->proc_entry = NULL;
+- }
+-+__internal_export(proc_tty_unregister_driver);
+- 
+- /*
+-  * Called by proc_root_init() to initialize the /proc/tty subtree
+-diff -rduNp linux-2.6.20.4.orig/fs/proc/root.c linux-2.6.20.4/fs/proc/root.c
+---- linux-2.6.20.4.orig/fs/proc/root.c	2007-03-13 19:27:08.000000000 +0100
+-+++ linux-2.6.20.4/fs/proc/root.c	2007-03-24 20:14:10.000000000 +0100
+-@@ -21,7 +21,9 @@
+- 
+- #include "internal.h"
+- 
+--struct proc_dir_entry *proc_net, *proc_net_stat, *proc_bus, *proc_root_fs, *proc_root_driver;
+-+struct proc_dir_entry *proc_net;
+-+
+-+struct proc_dir_entry *proc_net_stat, *proc_bus, *proc_root_fs, *proc_root_driver;
+- 
+- #ifdef CONFIG_SYSCTL
+- struct proc_dir_entry *proc_sys_root;
+-@@ -91,6 +93,7 @@ void __init proc_root_init(void)
+- #endif
+- 	proc_bus = proc_mkdir("bus", NULL);
+- }
+-+__internal_export(proc_root_init);
+- 
+- static int proc_root_getattr(struct vfsmount *mnt, struct dentry *dentry, struct kstat *stat
+- )
+-@@ -163,6 +166,7 @@ struct proc_dir_entry proc_root = {
+- 	.parent		= &proc_root,
+- };
+- 
+-+__internal_export(proc_sys_root);
+- EXPORT_SYMBOL(proc_symlink);
+- EXPORT_SYMBOL(proc_mkdir);
+- EXPORT_SYMBOL(create_proc_entry);
+-diff -rduNp linux-2.6.20.4.orig/fs/ramfs/inode.c linux-2.6.20.4/fs/ramfs/inode.c
+---- linux-2.6.20.4.orig/fs/ramfs/inode.c	2007-03-13 19:27:08.000000000 +0100
+-+++ linux-2.6.20.4/fs/ramfs/inode.c	2007-03-24 20:14:10.000000000 +0100
+-@@ -225,5 +225,6 @@ int __init init_rootfs(void)
+- {
+- 	return register_filesystem(&rootfs_fs_type);
+- }
+-+__internal_export(init_rootfs);
+- 
+- MODULE_LICENSE("GPL");
+-diff -rduNp linux-2.6.20.4.orig/fs/reiserfs/dir.c linux-2.6.20.4/fs/reiserfs/dir.c
+---- linux-2.6.20.4.orig/fs/reiserfs/dir.c	2007-03-13 19:27:08.000000000 +0100
+-+++ linux-2.6.20.4/fs/reiserfs/dir.c	2007-03-24 20:14:10.000000000 +0100
+-@@ -11,7 +11,7 @@
+- #include <linux/buffer_head.h>
+- #include <asm/uaccess.h>
+- 
+--extern struct reiserfs_key MIN_KEY;
+-+extern const struct reiserfs_key MIN_KEY;
+- 
+- static int reiserfs_readdir(struct file *, void *, filldir_t);
+- static int reiserfs_dir_fsync(struct file *filp, struct dentry *dentry,
+-diff -rduNp linux-2.6.20.4.orig/include/linux/module.h linux-2.6.20.4/include/linux/module.h
+---- linux-2.6.20.4.orig/include/linux/module.h	2007-03-13 19:27:08.000000000 +0100
+-+++ linux-2.6.20.4/include/linux/module.h	2007-03-24 20:14:10.000000000 +0100
+-@@ -20,6 +20,15 @@
+- 
+- #include <asm/module.h>
+- 
+-+
+-+#ifdef CONFIG_COMBINED_COMPILE
+-+#define __externally_visible__ __attribute__((externally_visible,used))
+-+#define __internal_export(sym) extern typeof(sym) sym  __externally_visible__
+-+#else
+-+#define __externally_visible__
+-+#define __internal_export(sym)
+-+#endif
+-+
+- /* Not Yet Implemented */
+- #define MODULE_SUPPORTED_DEVICE(name)
+- 
+-@@ -188,7 +197,7 @@ void *__symbol_get_gpl(const char *symbo
+- 
+- /* For every exported symbol, place a struct in the __ksymtab section */
+- #define __EXPORT_SYMBOL(sym, sec)				\
+--	extern typeof(sym) sym;					\
+-+	extern typeof(sym) sym __externally_visible__;		\
+- 	__CRC_SYMBOL(sym, sec)					\
+- 	static const char __kstrtab_##sym[]			\
+- 	__attribute__((section("__ksymtab_strings")))		\
+-@@ -212,8 +221,8 @@ void *__symbol_get_gpl(const char *symbo
+- #define EXPORT_UNUSED_SYMBOL(sym) __EXPORT_SYMBOL(sym, "_unused")
+- #define EXPORT_UNUSED_SYMBOL_GPL(sym) __EXPORT_SYMBOL(sym, "_unused_gpl")
+- #else
+--#define EXPORT_UNUSED_SYMBOL(sym)
+--#define EXPORT_UNUSED_SYMBOL_GPL(sym)
+-+#define EXPORT_UNUSED_SYMBOL(sym) __internal_export(sym)
+-+#define EXPORT_UNUSED_SYMBOL_GPL(sym) __internal_export(sym)
 - #endif
 - 
-
-Deleted: trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.8-cris-headers.patch
-===================================================================
---- trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.8-cris-headers.patch	2009-03-24 08:51:57 UTC (rev 25806)
-+++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.8-cris-headers.patch	2009-03-24 09:17:33 UTC (rev 25807)
-@@ -1,28 +0,0 @@
--diff -urN linux-2.6.28/arch/cris/include/arch-v10/arch/Kbuild linux-2.6.28.my/arch/cris/include/arch-v10/arch/Kbuild
----- linux-2.6.28/arch/cris/include/arch-v10/arch/Kbuild	2008-12-25 00:26:37.000000000 +0100
--+++ linux-2.6.28.my/arch/cris/include/arch-v10/arch/Kbuild	2009-01-12 12:59:06.000000000 +0100
--@@ -1,3 +1,5 @@
--+header-y += elf.h
--+header-y += ptrace.h
-- header-y += user.h
-- header-y += svinto.h
-- header-y += sv_addr_ag.h
--diff -urN linux-2.6.28/arch/cris/include/asm/Kbuild linux-2.6.28.my/arch/cris/include/asm/Kbuild
----- linux-2.6.28/arch/cris/include/asm/Kbuild	2008-12-25 00:26:37.000000000 +0100
--+++ linux-2.6.28.my/arch/cris/include/asm/Kbuild	2009-01-12 13:14:40.000000000 +0100
--@@ -1,11 +1,13 @@
-- include include/asm-generic/Kbuild.asm
+- #endif
+-@@ -471,11 +480,12 @@ void module_add_driver(struct module *, 
+- void module_remove_driver(struct device_driver *);
 - 
---header-y += arch-v10/
---header-y += arch-v32/
--+header-y += ../arch-v10/arch/
--+header-y += ../arch-v32/arch/
+- #else /* !CONFIG_MODULES... */
+--#define EXPORT_SYMBOL(sym)
+--#define EXPORT_SYMBOL_GPL(sym)
+--#define EXPORT_SYMBOL_GPL_FUTURE(sym)
+--#define EXPORT_UNUSED_SYMBOL(sym)
+--#define EXPORT_UNUSED_SYMBOL_GPL(sym)
+-+
+-+#define EXPORT_SYMBOL(sym) __internal_export(sym)
+-+#define EXPORT_SYMBOL_GPL(sym) __internal_export(sym)
+-+#define EXPORT_SYMBOL_GPL_FUTURE(sym) __internal_export(sym)
+-+#define EXPORT_UNUSED_SYMBOL(sym) __internal_export(sym)
+-+#define EXPORT_UNUSED_SYMBOL_GPL(sym) __internal_export(sym)
 - 
--+header-y += elf.h
-- header-y += ethernet.h
-- header-y += rtc.h
-- header-y += sync_serial.h
--+header-y += user.h
+- /* Given an address, look for it in the exception tables. */
+- static inline const struct exception_table_entry *
+-diff -rduNp linux-2.6.20.4.orig/init/do_mounts.c linux-2.6.20.4/init/do_mounts.c
+---- linux-2.6.20.4.orig/init/do_mounts.c	2007-03-13 19:27:08.000000000 +0100
+-+++ linux-2.6.20.4/init/do_mounts.c	2007-03-24 20:14:10.000000000 +0100
+-@@ -26,6 +26,10 @@ static char __initdata saved_root_name[6
 - 
-- unifdef-y += etraxgpio.h
-- unifdef-y += rs485.h
-
-Deleted: trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.8-cris-objcopy-flags.patch
-===================================================================
---- trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.8-cris-objcopy-flags.patch	2009-03-24 08:51:57 UTC (rev 25806)
-+++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.8-cris-objcopy-flags.patch	2009-03-24 09:17:33 UTC (rev 25807)
-@@ -1,45 +0,0 @@
----- linux-2.6.28/arch/cris/Makefile	2008-12-25 00:26:37.000000000 +0100
--+++ linux-2.6.28.my/arch/cris/Makefile	2009-01-12 13:21:44.000000000 +0100
--@@ -40,7 +40,7 @@
+- dev_t ROOT_DEV;
 - 
-- LD = $(CROSS_COMPILE)ld -mcrislinux
+-+__internal_export(root_mountflags);
+-+__internal_export(rd_doload);
+-+__internal_export(ROOT_DEV);
+-+
+- static int __init load_ramdisk(char *str)
+- {
+- 	rd_doload = simple_strtol(str,NULL,0) & 3;
+-@@ -205,6 +209,7 @@ fail:
+- 	res = 0;
+- 	goto done;
+- }
+-+__internal_export(name_to_dev_t);
 - 
---OBJCOPYFLAGS := -O binary -R .note -R .comment -S
--+OBJCOPYFLAGS := -O binary -R .note -R .note.gnu.build-id -R .comment
-- 
-- CPPFLAGS_vmlinux.lds = -DDRAM_VIRTUAL_BASE=0x$(CONFIG_ETRAX_DRAM_VIRTUAL_BASE)
-- 
--diff -urN linux-2.6.28/arch/cris/arch-v10/boot/Makefile linux-2.6.28.my/arch/cris/arch-v10/boot/Makefile
----- linux-2.6.28/arch/cris/arch-v10/boot/Makefile	2008-12-25 00:26:37.000000000 +0100
--+++ linux-2.6.28.my/arch/cris/arch-v10/boot/Makefile	2009-01-12 13:28:25.000000000 +0100
--@@ -2,8 +2,6 @@
-- # arch/cris/arch-v10/boot/Makefile
-- #
-- 
---OBJCOPYFLAGS = -O binary --remove-section=.bss
+- static int __init root_dev_setup(char *line)
+- {
+-@@ -446,4 +451,4 @@ out:
+- 	sys_chroot(".");
+- 	security_sb_post_mountroot();
+- }
 --
-- subdir- := compressed rescue
-- targets := Image
+-+__internal_export(prepare_namespace);
+-diff -rduNp linux-2.6.20.4.orig/init/do_mounts_initrd.c linux-2.6.20.4/init/do_mounts_initrd.c
+---- linux-2.6.20.4.orig/init/do_mounts_initrd.c	2007-03-13 19:27:08.000000000 +0100
+-+++ linux-2.6.20.4/init/do_mounts_initrd.c	2007-03-24 20:18:32.000000000 +0100
+-@@ -6,6 +6,7 @@
+- #include <linux/romfs_fs.h>
+- #include <linux/initrd.h>
+- #include <linux/sched.h>
+-+#include <linux/module.h>
+- #include <linux/freezer.h>
 - 
--diff -urN linux-2.6.28/arch/cris/arch-v10/boot/compressed/Makefile linux-2.6.28.my/arch/cris/arch-v10/boot/compressed/Makefile
----- linux-2.6.28/arch/cris/arch-v10/boot/compressed/Makefile	2008-12-25 00:26:37.000000000 +0100
--+++ linux-2.6.28.my/arch/cris/arch-v10/boot/compressed/Makefile	2009-01-12 13:28:33.000000000 +0100
--@@ -6,7 +6,6 @@
-- ccflags-y += -O2 $(LINUXINCLUDE)
-- ldflags-y += -T $(srctree)/$(src)/decompress.lds
-- OBJECTS = $(obj)/head.o $(obj)/misc.o
---OBJCOPYFLAGS = -O binary --remove-section=.bss
+- #include "do_mounts.h"
+-@@ -16,6 +17,11 @@ unsigned int real_root_dev;	/* do_proc_d
+- static int __initdata old_fd, root_fd;
+- static int __initdata mount_initrd = 1;
 - 
-- quiet_cmd_image = BUILD   $@
-- cmd_image = cat $(obj)/decompress.bin $(obj)/piggy.gz > $@
--diff -urN linux-2.6.28/arch/cris/arch-v10/boot/rescue/Makefile linux-2.6.28.my/arch/cris/arch-v10/boot/rescue/Makefile
----- linux-2.6.28/arch/cris/arch-v10/boot/rescue/Makefile	2008-12-25 00:26:37.000000000 +0100
--+++ linux-2.6.28.my/arch/cris/arch-v10/boot/rescue/Makefile	2009-01-12 13:28:40.000000000 +0100
--@@ -5,7 +5,6 @@
-- ccflags-y += -O2 $(LINUXINCLUDE)
-- asflags-y += $(LINUXINCLUDE)
-- ldflags-y += -T $(srctree)/$(src)/rescue.lds
---OBJCOPYFLAGS = -O binary --remove-section=.bss
-- obj-$(CONFIG_ETRAX_AXISFLASHMAP) = head.o
-- OBJECT := $(obj)/head.o
+-+__internal_export(initrd_start);
+-+__internal_export(initrd_end);
+-+__internal_export(initrd_below_start_ok);
+-+__internal_export(real_root_dev);
+-+
+- static int __init no_initrd(char *str)
+- {
+- 	mount_initrd = 0;
+-diff -rduNp linux-2.6.20.4.orig/init/do_mounts_rd.c linux-2.6.20.4/init/do_mounts_rd.c
+---- linux-2.6.20.4.orig/init/do_mounts_rd.c	2007-03-13 19:27:08.000000000 +0100
+-+++ linux-2.6.20.4/init/do_mounts_rd.c	2007-03-24 20:14:10.000000000 +0100
+-@@ -7,12 +7,14 @@
+- #include <linux/cramfs_fs.h>
+- #include <linux/initrd.h>
+- #include <linux/string.h>
+-+#include <linux/module.h>
 - 
+- #include "do_mounts.h"
+- 
+- #define BUILD_CRAMDISK
+- 
+- int __initdata rd_prompt = 1;/* 1 = prompt for RAM disk, 0 = don't prompt */
+-+__internal_export(rd_prompt);
+- 
+- static int __init prompt_ramdisk(char *str)
+- {
+-@@ -22,6 +24,7 @@ static int __init prompt_ramdisk(char *s
+- __setup("prompt_ramdisk=", prompt_ramdisk);
+- 
+- int __initdata rd_image_start;		/* starting block # of image */
+-+__internal_export(rd_image_start);
+- 
+- static int __init ramdisk_start_setup(char *str)
+- {
+-diff -rduNp linux-2.6.20.4.orig/init/Kconfig linux-2.6.20.4/init/Kconfig
+---- linux-2.6.20.4.orig/init/Kconfig	2007-03-13 19:27:08.000000000 +0100
+-+++ linux-2.6.20.4/init/Kconfig	2007-03-24 20:14:10.000000000 +0100
+-@@ -526,6 +526,11 @@ config MODULE_FORCE_UNLOAD
+- 	  rmmod).  This is mainly for kernel developers and desperate users.
+- 	  If unsure, say N.
+- 
+-+config COMBINED_COMPILE
+-+        bool "Use combined compilation (gcc --combine)"
+-+	help
+-+	  fish
+-+	
+- config MODVERSIONS
+- 	bool "Module versioning support"
+- 	depends on MODULES
+-diff -rduNp linux-2.6.20.4.orig/net/netfilter/core.c linux-2.6.20.4/net/netfilter/core.c
+---- linux-2.6.20.4.orig/net/netfilter/core.c	2007-03-13 19:27:08.000000000 +0100
+-+++ linux-2.6.20.4/net/netfilter/core.c	2007-03-24 20:14:10.000000000 +0100
+-@@ -279,3 +279,5 @@ void __init netfilter_init(void)
+- 	if (netfilter_log_init() < 0)
+- 		panic("cannot initialize nf_log");
+- }
+-+__internal_export(netfilter_init);
+-+
+-diff -rduNp linux-2.6.20.4.orig/scripts/Makefile.build linux-2.6.20.4/scripts/Makefile.build
+---- linux-2.6.20.4.orig/scripts/Makefile.build	2007-03-13 19:27:08.000000000 +0100
+-+++ linux-2.6.20.4/scripts/Makefile.build	2007-03-24 20:14:10.000000000 +0100
+-@@ -128,6 +128,11 @@ $(multi-objs-y:.o=.i)   : modname = $(mo
+- $(multi-objs-y:.o=.s)   : modname = $(modname-multi)
+- $(multi-objs-y:.o=.lst) : modname = $(modname-multi)
+- 
+-+ifdef CONFIG_COMBINED_COMPILE
+-+$(multi-used-m)		: CFLAGS += -fwhole-program --combine $(sort $(addprefix $(srctree)/$(obj)/,$($(subst $(obj)/,,$(@:.o=-y)):.o=.c) $($(subst $(obj)/,,$(@:.o=-objs)):.o=.c)))
+-+$(multi-used-y)		: CFLAGS += -fwhole-program --combine $(sort $(addprefix $(srctree)/$(obj)/,$($(subst $(obj)/,,$(@:.o=-y)):.o=.c) $($(subst $(obj)/,,$(@:.o=-objs)):.o=.c)))
+-+endif
+-+
+- quiet_cmd_cc_s_c = CC $(quiet_modtag)  $@
+- cmd_cc_s_c       = $(CC) $(c_flags) -fverbose-asm -S -o $@ $<
+- 
+-@@ -284,6 +289,22 @@ $(lib-target): $(lib-y) FORCE
+- targets += $(lib-target)
+- endif
+- 
+-+ifdef CONFIG_COMBINED_COMPILE
+-+# We would rather have a list of rules like
+-+# 	foo.o: $(foo-objs)
+-+# but that's not so easy, so we rather make all composite objects depend
+-+# on the set of all their parts
+-+
+-+$(multi-used-y) : %.o: $(srctree)/dummy.c $(multi-objs-y:.o=.c) FORCE
+-+	$(call cmd,force_checksrc)
+-+	$(call if_changed_rule,cc_o_c)
+-+
+-+$(multi-used-m) : %.o: $(srctree)/dummy.c $(multi-objs-m:.o=.c) FORCE
+-+	$(call cmd,force_checksrc)
+-+	$(call if_changed_rule,cc_o_c)
+-+
+-+targets += $(multi-used-y) $(multi-used-m)
+-+else
+- #
+- # Rule to link composite objects
+- #
+-@@ -314,7 +335,7 @@ $(multi-used-m) : %.o: $(multi-objs-m) F
+- 	@{ echo $(@:.o=.ko); echo $(link_multi_deps); } > $(MODVERDIR)/$(@F:.o=.mod)
+- 
+- targets += $(multi-used-y) $(multi-used-m)
+--
+-+endif
+- 
+- # Descending
+- # ---------------------------------------------------------------------------
 
-Copied: trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.9-cris-eth-driver-netpoll.patch (from rev 25806, trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.8-cris-eth-driver-netpoll.patch)
+Deleted: trunk/buildroot/toolchain/kernel-headers/linux-2.6.21.5-001-add-linkage-header.patch
 ===================================================================
---- trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.9-cris-eth-driver-netpoll.patch	                        (rev 0)
-+++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.9-cris-eth-driver-netpoll.patch	2009-03-24 09:17:33 UTC (rev 25807)
-@@ -0,0 +1,11 @@
-+--- a/drivers/net/cris/eth_v10.c.org	2009-01-28 09:19:09.000000000 +0100
-++++ b/drivers/net/cris/eth_v10.c	2009-01-28 09:19:16.000000000 +0100
-+@@ -1707,7 +1707,7 @@
-+ static void
-+ e100_netpoll(struct net_device* netdev)
-+ {
-+-	e100rxtx_interrupt(NETWORK_DMA_TX_IRQ_NBR, netdev, NULL);
-++	e100rxtx_interrupt(NETWORK_DMA_TX_IRQ_NBR, netdev);
-+ }
-+ #endif
-+ 
+--- trunk/buildroot/toolchain/kernel-headers/linux-2.6.21.5-001-add-linkage-header.patch	2009-03-24 09:17:33 UTC (rev 25807)
++++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.21.5-001-add-linkage-header.patch	2009-03-24 09:17:49 UTC (rev 25808)
+@@ -1,18 +0,0 @@
+-diff -ur linux-2.6.21.5/include/asm-arm/Kbuild linux-2.6.21.5-patched/include/asm-arm/Kbuild
+---- linux-2.6.21.5/include/asm-arm/Kbuild	2007-06-11 13:37:06.000000000 -0500
+-+++ linux-2.6.21.5-patched/include/asm-arm/Kbuild	2008-02-27 18:17:46.999128276 -0600
+-@@ -1 +1,3 @@
+- include include/asm-generic/Kbuild.asm
+-+
+-+header-y += linkage.h
+-diff -ur linux-2.6.21.5/include/linux/Kbuild linux-2.6.21.5-patched/include/linux/Kbuild
+---- linux-2.6.21.5/include/linux/Kbuild	2007-06-11 13:37:06.000000000 -0500
+-+++ linux-2.6.21.5-patched/include/linux/Kbuild	2008-02-27 18:15:05.921149678 -0600
+-@@ -100,6 +100,7 @@
+- header-y += jffs2.h
+- header-y += keyctl.h
+- header-y += limits.h
+-+header-y += linkage.h
+- header-y += lock_dlm_plock.h
+- header-y += magic.h
+- header-y += major.h
 
-Copied: trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.9-cris-headers.patch (from rev 25806, trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.8-cris-headers.patch)
+Deleted: trunk/buildroot/toolchain/kernel-headers/linux-2.6.21.5-006-wait-for-async-scanned-block-devices.patch
 ===================================================================
---- trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.9-cris-headers.patch	                        (rev 0)
-+++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.9-cris-headers.patch	2009-03-24 09:17:33 UTC (rev 25807)
-@@ -0,0 +1,28 @@
-+diff -urN linux-2.6.28/arch/cris/include/arch-v10/arch/Kbuild linux-2.6.28.my/arch/cris/include/arch-v10/arch/Kbuild
-+--- linux-2.6.28/arch/cris/include/arch-v10/arch/Kbuild	2008-12-25 00:26:37.000000000 +0100
-++++ linux-2.6.28.my/arch/cris/include/arch-v10/arch/Kbuild	2009-01-12 12:59:06.000000000 +0100
-+@@ -1,3 +1,5 @@
-++header-y += elf.h
-++header-y += ptrace.h
-+ header-y += user.h
-+ header-y += svinto.h
-+ header-y += sv_addr_ag.h
-+diff -urN linux-2.6.28/arch/cris/include/asm/Kbuild linux-2.6.28.my/arch/cris/include/asm/Kbuild
-+--- linux-2.6.28/arch/cris/include/asm/Kbuild	2008-12-25 00:26:37.000000000 +0100
-++++ linux-2.6.28.my/arch/cris/include/asm/Kbuild	2009-01-12 13:14:40.000000000 +0100
-+@@ -1,11 +1,13 @@
-+ include include/asm-generic/Kbuild.asm
-+ 
-+-header-y += arch-v10/
-+-header-y += arch-v32/
-++header-y += ../arch-v10/arch/
-++header-y += ../arch-v32/arch/
-+ 
-++header-y += elf.h
-+ header-y += ethernet.h
-+ header-y += rtc.h
-+ header-y += sync_serial.h
-++header-y += user.h
-+ 
-+ unifdef-y += etraxgpio.h
-+ unifdef-y += rs485.h
-
-Copied: trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.9-cris-objcopy-flags.patch (from rev 25806, trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.8-cris-objcopy-flags.patch)
-===================================================================
---- trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.9-cris-objcopy-flags.patch	                        (rev 0)
-+++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.28.9-cris-objcopy-flags.patch	2009-03-24 09:17:33 UTC (rev 25807)
-@@ -0,0 +1,45 @@
-+--- linux-2.6.28/arch/cris/Makefile	2008-12-25 00:26:37.000000000 +0100
-++++ linux-2.6.28.my/arch/cris/Makefile	2009-01-12 13:21:44.000000000 +0100
-+@@ -40,7 +40,7 @@
-+ 
-+ LD = $(CROSS_COMPILE)ld -mcrislinux
-+ 
-+-OBJCOPYFLAGS := -O binary -R .note -R .comment -S
-++OBJCOPYFLAGS := -O binary -R .note -R .note.gnu.build-id -R .comment
-+ 
-+ CPPFLAGS_vmlinux.lds = -DDRAM_VIRTUAL_BASE=0x$(CONFIG_ETRAX_DRAM_VIRTUAL_BASE)
-+ 
-+diff -urN linux-2.6.28/arch/cris/arch-v10/boot/Makefile linux-2.6.28.my/arch/cris/arch-v10/boot/Makefile
-+--- linux-2.6.28/arch/cris/arch-v10/boot/Makefile	2008-12-25 00:26:37.000000000 +0100
-++++ linux-2.6.28.my/arch/cris/arch-v10/boot/Makefile	2009-01-12 13:28:25.000000000 +0100
-+@@ -2,8 +2,6 @@
-+ # arch/cris/arch-v10/boot/Makefile
-+ #
-+ 
-+-OBJCOPYFLAGS = -O binary --remove-section=.bss
-+-
-+ subdir- := compressed rescue
-+ targets := Image
-+ 
-+diff -urN linux-2.6.28/arch/cris/arch-v10/boot/compressed/Makefile linux-2.6.28.my/arch/cris/arch-v10/boot/compressed/Makefile
-+--- linux-2.6.28/arch/cris/arch-v10/boot/compressed/Makefile	2008-12-25 00:26:37.000000000 +0100
-++++ linux-2.6.28.my/arch/cris/arch-v10/boot/compressed/Makefile	2009-01-12 13:28:33.000000000 +0100
-+@@ -6,7 +6,6 @@
-+ ccflags-y += -O2 $(LINUXINCLUDE)
-+ ldflags-y += -T $(srctree)/$(src)/decompress.lds
-+ OBJECTS = $(obj)/head.o $(obj)/misc.o
-+-OBJCOPYFLAGS = -O binary --remove-section=.bss
-+ 
-+ quiet_cmd_image = BUILD   $@
-+ cmd_image = cat $(obj)/decompress.bin $(obj)/piggy.gz > $@
-+diff -urN linux-2.6.28/arch/cris/arch-v10/boot/rescue/Makefile linux-2.6.28.my/arch/cris/arch-v10/boot/rescue/Makefile
-+--- linux-2.6.28/arch/cris/arch-v10/boot/rescue/Makefile	2008-12-25 00:26:37.000000000 +0100
-++++ linux-2.6.28.my/arch/cris/arch-v10/boot/rescue/Makefile	2009-01-12 13:28:40.000000000 +0100
-+@@ -5,7 +5,6 @@
-+ ccflags-y += -O2 $(LINUXINCLUDE)
-+ asflags-y += $(LINUXINCLUDE)
-+ ldflags-y += -T $(srctree)/$(src)/rescue.lds
-+-OBJCOPYFLAGS = -O binary --remove-section=.bss
-+ obj-$(CONFIG_ETRAX_AXISFLASHMAP) = head.o
-+ OBJECT := $(obj)/head.o
-+ 
+--- trunk/buildroot/toolchain/kernel-headers/linux-2.6.21.5-006-wait-for-async-scanned-block-devices.patch	2009-03-24 09:17:33 UTC (rev 25807)
++++ trunk/buildroot/toolchain/kernel-headers/linux-2.6.21.5-006-wait-for-async-scanned-block-devices.patch	2009-03-24 09:17:49 UTC (rev 25808)
+@@ -1,55 +0,0 @@
+-diff --git a/init/do_mounts.c b/init/do_mounts.c
+-index 46fe407..efc134c 100644
+---- a/init/do_mounts.c
+-+++ b/init/do_mounts.c
+-@@ -25,6 +25,7 @@ int __initdata rd_doload;	/* 1 = load RAM disk, 0 = don't load */
+- int root_mountflags = MS_RDONLY | MS_SILENT;
+- char * __initdata root_device_name;
+- static char __initdata saved_root_name[64];
+-+int __initdata root_wait;
+- 
+- dev_t ROOT_DEV;
+- 
+-@@ -216,6 +217,14 @@ static int __init root_dev_setup(char *line)
+- 
+- __setup("root=", root_dev_setup);
+- 
+-+static int __init rootwait_setup(char *line)
+-+{
+-+	root_wait = simple_strtol(line,NULL,0);
+-+	return 1;
+-+}
+-+
+-+__setup("rootwait=", rootwait_setup);
+-+
+- static char * __initdata root_mount_data;
+- static int __init root_data_setup(char *str)
+- {
+-@@ -438,11 +447,24 @@ void __init prepare_namespace(void)
+- 			root_device_name += 5;
+- 	}
+- 
+--	is_floppy = MAJOR(ROOT_DEV) == FLOPPY_MAJOR;
+--
+- 	if (initrd_load())
+- 		goto out;
+- 
+-+	/* wait for any asynchronous scanning to complete */
+-+	if ((ROOT_DEV == 0) && root_wait) {
+-+		printk(KERN_INFO "Waiting for root device %s...\n",
+-+			saved_root_name);
+-+		do {
+-+			while (driver_probe_done() != 0)
+-+				msleep(100);
+-+			ROOT_DEV = name_to_dev_t(saved_root_name);
+-+			if (ROOT_DEV == 0)
+-+				msleep(100);
+-+		} while (ROOT_DEV == 0);
+-+	}
+-+
+-+	is_floppy = MAJOR(ROOT_DEV) == FLOPPY_MAJOR;
+-+
+- 	if (is_floppy && rd_doload && rd_load_disk(0))
+- 		ROOT_DEV = Root_RAM0;
+- 
+-
