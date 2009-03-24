@@ -1,34 +1,29 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue, 24 Mar 2009 19:57:48 +0000 (UTC)
-Subject: [Buildroot] svn commit: [25812] trunk/buildroot/target/device/x86
-Message-ID: <20090324195749.1086177196@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 24 Mar 2009 20:59:44 +0100
+Subject: [Buildroot] svn update
+In-Reply-To: <87k56ek9v2.fsf@macbook.be.48ers.dk> (Peter Korsgaard's message
+	of "Tue\, 24 Mar 2009 20\:18\:41 +0100")
+References: <BD79186B4FD85F4B8E60E381CAEE19090147E261@mi8nycmail19.Mi8.com>
+	<87k56ek9v2.fsf@macbook.be.48ers.dk>
+Message-ID: <87bprqk7yn.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-03-24 19:57:48 +0000 (Tue, 24 Mar 2009)
-New Revision: 25812
+>>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
 
-Log:
-target/device/x86: only include Makefile if BR2_TARGET_X86 is enabled
+>>>>> "H" == H Hartley Sweeten <hartleys@visionengravers.com> writes:
+ H> Hello all.
+ H> Is uclibc.org down? I have been trying to do a svn up since yesterday
+ H> and keep getting:
 
-Fixes build breakage for !BR2_TARGET_X86 in kernel headers.
+ Peter> The machine is running, but the svnserve process isn't. I have
+ Peter> sent a mail to the osuosl.org people to restart it, so I
+ Peter> expect it will be up and running again soon.
 
-Modified:
-   trunk/buildroot/target/device/x86/Makefile.in
+It's back up again now.
 
-
-Changeset:
-Modified: trunk/buildroot/target/device/x86/Makefile.in
-===================================================================
---- trunk/buildroot/target/device/x86/Makefile.in	2009-03-24 16:58:49 UTC (rev 25811)
-+++ trunk/buildroot/target/device/x86/Makefile.in	2009-03-24 19:57:48 UTC (rev 25812)
-@@ -1,4 +1,4 @@
--ifeq ($(BR2_i386),y)
-+ifeq ($(BR2_TARGET_X86),y)
- include target/device/x86/*/Makefile.in
- endif
- 
+-- 
+Bye, Peter Korsgaard
