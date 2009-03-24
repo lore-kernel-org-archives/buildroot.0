@@ -1,35 +1,32 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue, 24 Mar 2009 16:58:49 +0000 (UTC)
-Subject: [Buildroot] svn commit: [25811] trunk/buildroot/package/pango
-Message-ID: <20090324165850.0A2EE76BFC@busybox.osuosl.org>
+From: H Hartley Sweeten <hartleys@visionengravers.com>
+Date: Tue, 24 Mar 2009 13:23:16 -0400
+Subject: [Buildroot] svn update
+Message-ID: <BD79186B4FD85F4B8E60E381CAEE19090147E261@mi8nycmail19.Mi8.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-03-24 16:58:49 +0000 (Tue, 24 Mar 2009)
-New Revision: 25811
+Hello all.
 
-Log:
-pango: host build needs automake/autoconf
+Is uclibc.org down? I have been trying to do a svn up since yesterday
+and keep getting:
 
-Modified:
-   trunk/buildroot/package/pango/pango.mk
+$ svn up
+svn: Can't connect to host 'uclibc.org': Connection refused
 
+$ svn info
+Path: .
+URL: svn://uclibc.org/trunk/buildroot
+Repository Root: svn://uclibc.org
+Repository UUID: 69ca8d6d-28ef-0310-b511-8ec308f3f277
+Revision: 25745
+Node Kind: directory
+Schedule: normal
+Last Changed Author: jacmet
+Last Changed Rev: 25745
+Last Changed Date: 2009-03-18 16:14:59 -0700 (Wed, 18 Mar 2009)
 
-Changeset:
-Modified: trunk/buildroot/package/pango/pango.mk
-===================================================================
---- trunk/buildroot/package/pango/pango.mk	2009-03-24 10:58:04 UTC (rev 25810)
-+++ trunk/buildroot/package/pango/pango.mk	2009-03-24 16:58:49 UTC (rev 25811)
-@@ -76,7 +76,7 @@
- 	toolchain/patch-kernel.sh $(PANGO_HOST_DIR) package/pango/ \*.patch
- 	touch $@
- 
--$(STAMP_DIR)/host_pango_configured: $(STAMP_DIR)/host_pango_unpacked $(STAMP_DIR)/host_cairo_installed $(STAMP_DIR)/host_libglib2_installed
-+$(STAMP_DIR)/host_pango_configured: $(STAMP_DIR)/host_pango_unpacked $(STAMP_DIR)/host_cairo_installed $(STAMP_DIR)/host_libglib2_installed $(STAMP_DIR)/host_autoconf_installed  $(STAMP_DIR)/host_automake_installed
- 	(cd $(PANGO_HOST_DIR); rm -rf config.cache; \
- 		$(HOST_CONFIGURE_OPTS) \
- 		CFLAGS="$(HOST_CFLAGS)" \
+Thanks,
+Hartley
