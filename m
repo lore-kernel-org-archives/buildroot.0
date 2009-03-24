@@ -1,35 +1,38 @@
-From: Tobias McNulty <tobias@caktusgroup.com>
-Date: Tue, 24 Mar 2009 18:40:12 -0400
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 24 Mar 2009 23:56:48 +0100
 Subject: [Buildroot] using linux 2.4 headers
-Message-ID: <49C9614C.6010205@caktusgroup.com>
+In-Reply-To: <49C9614C.6010205@caktusgroup.com> (Tobias McNulty's message of
+	"Tue\, 24 Mar 2009 18\:40\:12 -0400")
+References: <49C9614C.6010205@caktusgroup.com>
+Message-ID: <877i2ejzrj.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I just downloaded the latest version of buildroot and managed to build a
-very small file system that includes python and sqlite (exactly what I'm
-looking for!) in no time at all.  Very impressed, thanks for all your
-hard work everyone!
+>>>>> "Tobias" == Tobias McNulty <tobias@caktusgroup.com> writes:
 
-Now, pardon my ignorance, but is there a way to make buildroot use linux
-2.4 headers instead of the default 2.6?  I only have 2 options when I go
-to select the kernel headers, and they're both fairly recent iterations
-of the 2.6 kernel.
+Hi,
 
-I see that ?Clibc supports 2.4 or greater, but I don't see any mention
-of 2.4 in the buildroot docs.
+ Tobias> I just downloaded the latest version of buildroot and managed
+ Tobias> to build a very small file system that includes python and
+ Tobias> sqlite (exactly what I'm looking for!) in no time at all.
+ Tobias> Very impressed, thanks for all your hard work everyone!
 
-The file system I'm trying to build is for a TS-7400 (arm) and the 2.6
-kernel support doesn't seem that great unfortunately.
+Thanks.
 
-Thanks
-Tobias
+ Tobias> Now, pardon my ignorance, but is there a way to make
+ Tobias> buildroot use linux 2.4 headers instead of the default 2.6?
+ Tobias> I only have 2 options when I go to select the kernel headers,
+ Tobias> and they're both fairly recent iterations of the 2.6 kernel.
+
+The 2009.02 release had support for 2.4.41 if you go to build
+options->Show packages that are deprecated or obsolete, but we have
+removed it from subversion after the release.
+
+Notice though that there aren't many people using the 2.4 support, so
+something might not work ..
+
 -- 
-Tobias McNulty
-Caktus Consulting Group, LLC
-P.O. Box 1454
-Carrboro, NC 27510
-(919) 951-0052
-http://www.caktusgroup.com
+Bye, Peter Korsgaard
