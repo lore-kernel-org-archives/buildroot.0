@@ -1,35 +1,42 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue, 24 Mar 2009 08:28:05 +0000 (UTC)
-Subject: [Buildroot] svn commit: [25805] trunk/buildroot/target/linux
-Message-ID: <20090324082805.8543476A00@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 24 Mar 2009 09:29:42 +0100
+Subject: [Buildroot] help
+In-Reply-To: <33966b5d0903232133y17f08766me879b0149154b34c@mail.gmail.com>
+	(mzee mzee's message of "Tue\, 24 Mar 2009 04\:33\:06 +0000")
+References: <33966b5d0903230724l7508be23m9e114af609f41cb6@mail.gmail.com>
+	<87iqm0l1gy.fsf@macbook.be.48ers.dk>
+	<33966b5d0903232133y17f08766me879b0149154b34c@mail.gmail.com>
+Message-ID: <87ab7bl3wp.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-03-24 08:28:04 +0000 (Tue, 24 Mar 2009)
-New Revision: 25805
+>>>>> "mzee" == mzee mzee <wanyumba@gmail.com> writes:
 
-Log:
-target/linux: default to bzImage for i386/x86_64
+Hi,
 
-Modified:
-   trunk/buildroot/target/linux/Config.in.advanced
+ Peter> U-Boot seems to think you have ppc405 instead. Did you try a ppc
+ Peter> compile before? Can you build u-boot by hand with the buildroot cross
+ Peter> compiler? Where is your .config?
 
+ mzee> here is my .config file
+ mzee> #
+ mzee> # Kernel
+ mzee> #
+ mzee> # BR2_KERNEL_none is not set
+ mzee> BR2_KERNEL_LINUX_ADVANCED=y
+ mzee> # BR2_KERNEL_LINUX is not set
+ mzee> # BR2_KERNEL_HURD is not set
+ mzee> BR2_PACKAGE_LINUX=y
+ mzee> BR2_PACKAGE_LINUX_FORMAT="uImage"
 
-Changeset:
-Modified: trunk/buildroot/target/linux/Config.in.advanced
-===================================================================
---- trunk/buildroot/target/linux/Config.in.advanced	2009-03-23 21:48:50 UTC (rev 25804)
-+++ trunk/buildroot/target/linux/Config.in.advanced	2009-03-24 08:28:04 UTC (rev 25805)
-@@ -433,6 +433,8 @@
- choice
- 	prompt "kernel binary format"
- 	depends on BR2_PACKAGE_LINUX
-+	default BR2_LINUX_BIN_BZIMAGE if BR2_i386
-+	default BR2_LINUX_BIN_BZIMAGE if BR2_x86_64
- 	default BR2_LINUX_BIN_UIMAGE
- 	help
- 	  Select the specific Linux binary type you want to use
+This seems to be your problem. Change to bzImage and disable U-Boot
+compilation and it should work.
+
+I have changed the defaults in svn to use bzImage for i386/x86_64
+instead of uImage.
+
+-- 
+Bye, Peter Korsgaard
