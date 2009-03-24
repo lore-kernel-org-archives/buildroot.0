@@ -1,62 +1,35 @@
-From: Daniel Jabbour <daniel@laptouchinc.com>
-Date: Tue, 24 Mar 2009 16:26:19 -0400
-Subject: [Buildroot] Build fails with external toolchain (sysroots error)
-Message-ID: <585ACB2A-2E0B-4AA5-9A71-E437724E4018@laptouchinc.com>
+From: Tobias McNulty <tobias@caktusgroup.com>
+Date: Tue, 24 Mar 2009 18:40:12 -0400
+Subject: [Buildroot] using linux 2.4 headers
+Message-ID: <49C9614C.6010205@caktusgroup.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+I just downloaded the latest version of buildroot and managed to build a
+very small file system that includes python and sqlite (exactly what I'm
+looking for!) in no time at all.  Very impressed, thanks for all your
+hard work everyone!
 
-I have configured buildroot to use an external toolchain provided by  
-the manufacturer of my board. This is a glibc toolchain. I am able to  
-cross compile against it outside of buildroot.
+Now, pardon my ignorance, but is there a way to make buildroot use linux
+2.4 headers instead of the default 2.6?  I only have 2 options when I go
+to select the kernel headers, and they're both fairly recent iterations
+of the 2.6 kernel.
 
-However, when I try to make buildroot, it exits with the following  
-configure error when trying to build "lzo":
+I see that ?Clibc supports 2.4 or greater, but I don't see any mention
+of 2.4 in the buildroot docs.
 
-configure:2090: checking for C compiler default output file name
-configure:2093: /opt/jztoolchain//bin/mipsel-linux-gcc -O2  -I/home/ 
-djabbour/source/buildroot/build_mips/staging_dir/include -I/home/ 
-djabbour/source/buildroot/build_mips/staging_dir/usr/include -I/opt/ 
-jztoolchain//mipsel-linux/include --sysroot /home/djabbour/source/ 
-buildroot/build_mips/staging_dir/ -O2  -I/home/djabbour/source/ 
-buildroot/build_mips/staging_dir/include -I/home/djabbour/source/ 
-buildroot/build_mips/staging_dir/usr/include -I/opt/jztoolchain// 
-mipsel-linux/include --sysroot /home/djabbour/source/buildroot/ 
-build_mips/staging_dir/  -L/home/djabbour/source/buildroot/build_mips/ 
-staging_dir/lib -L/home/djabbour/source/buildroot/build_mips/ 
-staging_dir/usr/lib conftest.c  >&5
-/opt/jztoolchain/bin/../lib/gcc/mipsel-linux/4.1.2/../../../../mipsel- 
-linux/bin/ld: this linker was not configured to use sysroots
-collect2: ld returned 1 exit status
-configure:2096: $? = 1
-configure: failed program was:
-| /* confdefs.h.  */
-|
-| #define PACKAGE_NAME "lzo"
-| #define PACKAGE_TARNAME "lzo"
-| #define PACKAGE_VERSION "2.03"
-| #define PACKAGE_STRING "lzo 2.03"
-| #define PACKAGE_BUGREPORT "markus at oberhumer.com"
-| /* end confdefs.h.  */
-|
-| int
-| main ()
-| {
-|
-|   ;
-|   return 0;
-| }
-configure:2135: error: C compiler cannot create executables
+The file system I'm trying to build is for a TS-7400 (arm) and the 2.6
+kernel support doesn't seem that great unfortunately.
 
-How can I resolve this issue? From my understanding, it seems like the  
-sysroots flag is unsupported in my toolchain. Can buildroot work  
-without this option? Thanks,
-
---
-Daniel Jabbour
-Software Engineer
-Laptouch, Inc.
+Thanks
+Tobias
+-- 
+Tobias McNulty
+Caktus Consulting Group, LLC
+P.O. Box 1454
+Carrboro, NC 27510
+(919) 951-0052
+http://www.caktusgroup.com
