@@ -1,9 +1,8 @@
-From: Daniel Mack <daniel@caiaq.de>
-Date: Tue, 24 Mar 2009 15:39:04 +0100
+From: Per-Henrik Lundblom <ph@whatever.nu>
+Date: Tue, 24 Mar 2009 15:46:17 +0100
 Subject: [Buildroot] Tool building problem EABI+PXA270
-In-Reply-To: <20090324135302.GY27893@whatever.nu>
-References: <20090318132530.GF18723@buzzloop.caiaq.de>
-	<20090318142514.GE27893@whatever.nu>
+In-Reply-To: <20090324143904.GD22599@buzzloop.caiaq.de>
+References: <20090318142514.GE27893@whatever.nu>
 	<20090318144657.GC19956@buzzloop.caiaq.de>
 	<20090318155323.GG27893@whatever.nu>
 	<20090319083953.GE30293@buzzloop.caiaq.de>
@@ -12,40 +11,38 @@ References: <20090318132530.GF18723@buzzloop.caiaq.de>
 	<20090324131904.GX27893@whatever.nu>
 	<20090324132946.GA23829@buzzloop.caiaq.de>
 	<20090324135302.GY27893@whatever.nu>
-Message-ID: <20090324143904.GD22599@buzzloop.caiaq.de>
+	<20090324143904.GD22599@buzzloop.caiaq.de>
+Message-ID: <20090324144617.GZ27893@whatever.nu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Mar 24, 2009 at 02:53:02PM +0100, Per-Henrik Lundblom wrote:
-> > 
-> >   http://lists.arm.linux.org.uk/lurker/message/20090123.185306.b2c4bb05.en.html
-> > 
-> > Conclusion is: do not build your kernel using a compiler that generates
-> > iwmmxt code. As these extensions can't be used from both the kernel and
-> > userspace at the same time, it is reserved for user's binaries and hence
-> > forbidden in the kernel.
+* Daniel Mack <daniel@caiaq.de> [090324 15:39]:
+ 
+> You can't judge from the names, but the location is fine. Just make
+> sure you get a EABI enabled gcc that does not use the fancy iwmmxt
+> extensions _by_default_. Play around with the br2-settings, your problem
+> is certainly somewhere there. And could you post the solution here for
+> others? :)
 
-I was a little unprecise here: you can use the same compiler to build
-your kernel and iwmmxt enabled user space binaries, the important thing
-is that gcc does not generate code with these extensions unless it was
-explicitly asked to do so. Screwed up br2 configs in conjunction with
-some broken internal dependencies in buildroot (which habe been fixed
-already) made gcc to do than unprovoked, which caused the built of
-unbootable kernels.
+Got that from the thread you linked to. Do the options listed with
+xxx-gcc -v show what options that is used by default och what options
+gcc was compiled for and therefore supports? For example I have this:
 
-> That makes sense... Shouldn't buildroot automagically just solve this
-> for me? ;)
-> 
-> In build_arm/staging_dir/usr/bin I only have arm-linux-uclibcgnueabi-*
-> gcc tools. I guess those is not the right ones to build the kernel then?
+./build_arm/staging_dir/usr/bin/arm-linux-uclibcgnueabi-gcc -v
+Using built-in specs.
+Target: arm-linux-uclibcgnueabi
+Configured with:
+/home/per-henrik.lundblom/KB9202B/kuk/br/buildroot-2009.02/toolchain_build_arm/gcc-4.3.2/configure --prefix=/usr --build=i386-pc-linux-gnu --host=i386-pc-linux-gnu --target=arm-linux-uclibcgnueabi --enable-languages=c --with-sysroot=/home/per-henrik.lundblom/KB9202B/kuk/br/buildroot-2009.02/build_arm/staging_dir --with-build-time-tools=/home/per-henrik.lundblom/KB9202B/kuk/br/buildroot-2009.02/build_arm/staging_dir/usr/arm-linux-uclibcgnueabi/bin --disable-__cxa_atexit --enable-target-optspace --with-gnu-ld --disable-shared --with-gmp=/home/per-henrik.lundblom/KB9202B/kuk/br/buildroot-2009.02/toolchain_build_arm/gmp --with-mpfr=/home/per-henrik.lundblom/KB9202B/kuk/br/buildroot-2009.02/toolchain_build_arm/mpfr --disable-nls --enable-threads --disable-multilib --disable-decimal-float --with-float=soft --with-abi=aapcs-linux --with-arch=iwmmxt --with-tune=iwmmxt : (reconfigured) /home/per-henrik.lundblom/KB9202B/kuk/br/buildroot-2009.02/toolchain_build_arm/gcc-4.3.2/configure --prefix=/usr --build=i386-pc-linux-gnu --host=i386-pc-linux-gnu --target=arm-linux-uclibcgnueabi --enable-languages=c --with-sysroot=/home/per-henrik.lundblom/KB9202B/kuk/br/buildroot-2009.02/build_arm/staging_dir --with-build-time-tools=/home/per-henrik.lundblom/KB9202B/kuk/br/buildroot-2009.02/build_arm/staging_dir/usr/arm-linux-uclibcgnueabi/bin --disable-__cxa_atexit --enable-target-optspace --with-gnu-ld --disable-shared --with-gmp=/home/per-henrik.lundblom/KB9202B/kuk/br/buildroot-2009.02/toolchain_build_arm/gmp --with-mpfr=/home/per-henrik.lundblom/KB9202B/kuk/br/buildroot-2009.02/toolchain_build_arm/mpfr --disable-nls --enable-threads --disable-multilib --disable-decimal-float --with-float=soft --with-abi=aapcs-linux --with-arch=iwmmxt --with-tune=iwmmxt
+Thread model: posix
+gcc version 4.3.2 (GCC)
 
-You can't judge from the names, but the location is fine. Just make
-sure you get a EABI enabled gcc that does not use the fancy iwmmxt
-extensions _by_default_. Play around with the br2-settings, your problem
-is certainly somewhere there. And could you post the solution here for
-others? :)
+How do I know if the iwmmxt stuff is used by default?
 
-Daniel
+/PH
+
+--
+Per-Henrik Lundblom           epost: ph at whatever.nu
+telefon: 0733-20 71 26        hemsida: www.whatever.nu
