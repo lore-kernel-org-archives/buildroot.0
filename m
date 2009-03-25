@@ -1,61 +1,47 @@
-From: H Hartley Sweeten <hartleys@visionengravers.com>
-Date: Wed, 25 Mar 2009 18:14:05 -0400
-Subject: [Buildroot] External toolchain
-Message-ID: <BD79186B4FD85F4B8E60E381CAEE1909014E2516@mi8nycmail19.Mi8.com>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Thu, 26 Mar 2009 10:26:10 +1100
+Subject: [Buildroot] using linux 2.4 headers AND python
+In-Reply-To: <49CA4F52.705@caktusgroup.com>
+References: <49C9614C.6010205@caktusgroup.com>
+	<877i2ejzrj.fsf@macbook.be.48ers.dk>
+	<49C9ABB0.8080501@caktusgroup.com> <49CA4F52.705@caktusgroup.com>
+Message-ID: <20090325232609.GA30311@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+On Wed, Mar 25, 2009 at 11:35:46AM -0400, Tobias McNulty wrote:
+> Tobias McNulty wrote:
+> > and, sure enough, I don't see os.py anywhere on the filesystem.  I have
+> > not looked at the python build output yet but I'll do that tomorrow when
+> > I'm more awake.
+> 
+> Sure enough, the installer is installing all the .py files and then
+> removing them again.  It appears the line at fault is the last one in
+> the following section of python.mk
+> 
+> ifneq ($(BR2_PACKAGE_PYTHON_DEV),y)
+>         rm -rf $(TARGET_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)
+>         rm -rf
+> $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/config
+>         find $(TARGET_DIR)/usr/lib/ -name '*.py' -exec rm {} \;
+> endif
+> 
+> Is that line really supposed to be there?
 
-This might not be the correct list to ask this on but I'll try anyway..
+No it isn't, but you should also have the .pyc file (unless you have set
+BR2_PACKAGE_PYTHON_PY_ONLY) so 'import os' will still work. You might
+want to build python with logging and post the log here, ie
 
-I have been using Buildroot with an external toolchain provided by
-Cirrus Logic for an ARM ep93xx based board. This toolchain has worked
-fine ever since I started using it.
+make python-dirclean python 2>&1 > pybuild.log
 
-$ arm-linux-gcc --version
-arm-linux-gcc (GCC) 4.1.1
-Copyright (C) 2006 Free Software Foundation, Inc.
-This is free software; see the source for copying conditions.  There is
-NO
-warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR
-PURPOSE.
 
-I just grabbed the latest 2.6.29 kernel and it appears the 4.1.1
-compiler is not compatible, this is in include/linux/compiler-gcc4.h:
+'svn blame' suggests this is my mistake. I use ..._PYC_ONLY so I didn't
+notice.
 
-/* GCC 4.1.[01] miscompiles __weak */
-#if __GNUC_MINOR__ == 1 && __GNUC_PATCHLEVEL__ <= 1
-# error Your version of gcc miscompiles the __weak directive
-#endif
 
-Ok.. Fine... I needed/wanted to switch to a newer toolchain for
-sometime. On recommendation from another ep93xx user I downloaded the
-Code Sourcery G++ 207q3-51 toolchain.
-
-$ arm-none-linux-gnueabi-gcc --version
-arm-none-linux-gnueabi-gcc (CodeSourcery Sourcery G++ Lite 2007q3-51)
-4.2.1
-Copyright (C) 2007 Free Software Foundation, Inc.
-This is free software; see the source for copying conditions.  There is
-NO
-warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR
-PURPOSE.
-
-Now I have a problem I can't figure out.
-
-I can get Buildroot to use the Code Sourcery toolchain and it compiles
-the 2.6.29 kernel fine. But, when I try to boot the kernel it just hangs
-after the "Uncompressing Linux.... done, booting the kernel." step.
-
-I went back to kernel 2.6.28.8 and tried it with the Code Sourcery
-toolchain, same results. But, if I switch back to the Cirrus 4.1.1
-toolchain the kernel boots fine.
-
-Am I just missing something? Any help would be appreciated.
-
-Thanks,
-Hartley
+Hamish
+-- 
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
