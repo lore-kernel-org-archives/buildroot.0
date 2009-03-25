@@ -1,42 +1,59 @@
-From: Bai Shuwei <baishuwei@gmail.com>
-Date: Wed, 25 Mar 2009 10:19:08 +0800
-Subject: [Buildroot] compile the buildroot
-Message-ID: <f3566d60903241919y397834derc61bca2835e5a192@mail.gmail.com>
+From: Tobias McNulty <tobias@caktusgroup.com>
+Date: Tue, 24 Mar 2009 23:57:36 -0400
+Subject: [Buildroot] using linux 2.4 headers AND python
+In-Reply-To: <877i2ejzrj.fsf@macbook.be.48ers.dk>
+References: <49C9614C.6010205@caktusgroup.com>
+	<877i2ejzrj.fsf@macbook.be.48ers.dk>
+Message-ID: <49C9ABB0.8080501@caktusgroup.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-all, hi:
-  when i compile the buildroot, I got the bellow error message:
+Peter Korsgaard wrote:
+> The 2009.02 release had support for 2.4.41 if you go to build
+> options->Show packages that are deprecated or obsolete, but we have
+> removed it from subversion after the release.
+> 
+> Notice though that there aren't many people using the 2.4 support, so
+> something might not work ..
 
-rm -rf
-/home/baishw/projects/cross-compile/buildroot/project_build_i386/via/buildroot-config
-mkdir -p
-/home/baishw/projects/cross-compile/buildroot/project_build_i386/via
-cp -dpRf package/config/buildroot-config
-/home/baishw/projects/cross-compile/buildroot/project_build_i386/via/buildroot-config
+Thanks that seemed to work.  I had to add some typedefs for __u32 and
+__u8 to watchdog.h but otherwise it built fine.  There is probably a
+smarter fix.
 
-cp -dpf
-/home/baishw/projects/cross-compile/buildroot/project_build_i386/via/linux-2.6.28.7/.config
-cp: missing destination file operand after
-?/home/baishw/projects/cross-compile/buildroot/project_build_i386/via/linux-2.6.28.7/.config?
+Upon further investigation Python doesn't seem to be complete though:
 
+$ python -v
+Could not find platform independent libraries <prefix>
+Consider setting $PYTHONHOME to <prefix>[:<exec_prefix>]
+# installing zipimport hook
+import zipimport # builtin
+# installed zipimport hook
+'import site' failed; traceback:
+ImportError: No module named site
+Python 2.4.5 (#1, Mar 24 2009, 23:15:27)
+[GCC 4.3.2] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import os
+Traceback (most recent call last):
+  File "<stdin>", line 1, in ?
+ImportError: No module named os
+>>>
 
-I think a parameter is lost for cp, but I know how to fix it. I am glad if
-you can give some idea! thanks all!
+and, sure enough, I don't see os.py anywhere on the filesystem.  I have
+not looked at the python build output yet but I'll do that tomorrow when
+I'm more awake.
 
-Best Regards!
+(It was also this way before the rebuild, the switch to 2.4 did not
+introduce the problem.)
 
-Bai Shuwei
-
+Toby
 -- 
-Love other people, as same as love yourself!
-Don't think all the time, do it by your hands!
-
-Personal URL: http://dslab.lzu.edu.cn:8080/members/baishw/
-E-Mail: baishuwei at gmail.com or baishuwei at dslab.lzu.edu.cn
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090325/729dfed4/attachment.htm>
+Tobias McNulty
+Caktus Consulting Group, LLC
+P.O. Box 1454
+Carrboro, NC 27510
+(919) 951-0052
+http://www.caktusgroup.com
