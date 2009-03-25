@@ -1,20 +1,38 @@
-From: Lloyd Sargent <lsargent@txdigital.com>
-Date: Wed, 25 Mar 2009 09:18:04 -0500
-Subject: [Buildroot] Hi, new to buildroot list... how do I submit it?
-Message-ID: <200903250918.04360.lsargent@txdigital.com>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Wed, 25 Mar 2009 14:21:49 +0000 (UTC)
+Subject: [Buildroot] svn commit: [25814]
+	trunk/buildroot/package/wpa_supplicant
+Message-ID: <20090325142149.EEF0C76A00@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I searched the list but probably didn't use the right keywords. I would like 
-to submit an addition for wxWidgets (sans GUI as we don't use it for our 
-application).
+Author: jacmet
+Date: 2009-03-25 14:21:49 +0000 (Wed, 25 Mar 2009)
+New Revision: 25814
 
-What is the customary form? List it all in an email? Attachment? I would like 
-to avoid the ire of the community!
+Log:
+wpa_supplicant: bump version
 
-Cheers,
+Patch by Gustavo Zacarias <gustavo@zacarias.com.ar>, closes #213.
 
-Lloyd
+Modified:
+   trunk/buildroot/package/wpa_supplicant/wpa_supplicant.mk
+
+
+Changeset:
+Modified: trunk/buildroot/package/wpa_supplicant/wpa_supplicant.mk
+===================================================================
+--- trunk/buildroot/package/wpa_supplicant/wpa_supplicant.mk	2009-03-25 03:55:53 UTC (rev 25813)
++++ trunk/buildroot/package/wpa_supplicant/wpa_supplicant.mk	2009-03-25 14:21:49 UTC (rev 25814)
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-WPA_SUPPLICANT_VERSION = 0.6.8
++WPA_SUPPLICANT_VERSION = 0.6.9
+ WPA_SUPPLICANT_SOURCE = wpa_supplicant-$(WPA_SUPPLICANT_VERSION).tar.gz
+ WPA_SUPPLICANT_SITE = http://hostap.epitest.fi/releases
+ WPA_SUPPLICANT_LIBTOOL_PATCH = NO
