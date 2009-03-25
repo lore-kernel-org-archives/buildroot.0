@@ -1,29 +1,45 @@
-From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
-Date: Wed, 25 Mar 2009 15:23:19 -0300
+From: Steve Calfee <nospamcalfee@yahoo.com>
+Date: Wed, 25 Mar 2009 11:46:42 -0700 (PDT)
 Subject: [Buildroot] Buildroot presentation at Embedded Linux Conference
 	2009
 In-Reply-To: <20090325174654.76057513@surf>
-References: <20090320103751.3652df54@surf> <87vdq4mr71.fsf@macbook.be.48ers.dk>
-	<20090325174654.76057513@surf>
-Message-ID: <d6cda7730903251123g35acf285s8ed5328c6a1cbd0c@mail.gmail.com>
+Message-ID: <80864.26513.qm@web58205.mail.re3.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
 
-  On page 7, you might want to add ARM to the Atmel bullet. We have
-defconfigs for Atmel ARM kits and Ulf works specifically with that
-stuff from what I understand.
+--- On Wed, 3/25/09, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+> 
+> A first draft of the slides is available at :
+> 
+> 
+> http://free-electrons.com/~thomas/buildroot-conf/buildroot.pdf
+> 
 
-  About openwrt, it's a very different fork, not sure if we can call
-it buildroot anymore. They have a different way to organize their
-makefiles and they employ function calls inside those makefiles much
-more heavily than we do.
+Very nice, and when all done, make sure you get it put on the buildroot.org website as documentation.
 
-  That's all I could think of. Nice work :)
+It seems to me that buildroot is a union of multiple builds.
 
-Kind Regards,
-   Thiago A. Correa
+1) Gcc and uclibc
+2) Busybox
+3) root file system and source packages
+4) Linux kernel
+5) bootstrap -u-boot, grub etc.
+
+1 and 2 are configurable, but I don't think most people do much customization. They are reasonably stable packages and seem to integrate well.
+
+3 is now under control with Peter fixing the packages and for the first time really reliably building with at least the defaults.
+
+4 and 5 are configurable, but not really within the buildroot menu/make system. I think a slide or two describing how you, in your demo customize and build the kernel and bootstrap would be great. Also how you knit together the root file system and the bootstrap and kernel via a multiple flash filesystem or single disk image. I think many people just copy the files together into some final nfs or flash form, but I don't think it is well described or documented.
+
+What I think would be great for people learning and evaluating buildroot is a documented procedure to do a minimal, default build that would generate an x86 image (using grub?) that could be run tested via qemu or vmware. This would also allow people to work on their application while the real embedded hardware was being "brought up". It would also be a more automated way to test new buildroot releases.
+
+My $.02
+
+Regards, Steve
+
+
+      
