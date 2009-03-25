@@ -1,40 +1,34 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Wed, 25 Mar 2009 15:54:46 +0000 (UTC)
-Subject: [Buildroot] svn commit: [25819] trunk/buildroot/docs
-Message-ID: <20090325155446.EC4B676A00@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 25 Mar 2009 17:35:17 +0100
+Subject: [Buildroot] Hi, new to buildroot list... how do I submit it?
+In-Reply-To: <200903250918.04360.lsargent@txdigital.com>
+References: <200903250918.04360.lsargent@txdigital.com>
+Message-ID: <20090325173517.660c31a1@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-03-25 15:54:46 +0000 (Wed, 25 Mar 2009)
-New Revision: 25819
+Le Wed, 25 Mar 2009 09:18:04 -0500,
+Lloyd Sargent <lsargent@txdigital.com> a ?crit :
 
-Log:
-docs/about.html: Capitalize Buildroot
+> I searched the list but probably didn't use the right keywords. I
+> would like to submit an addition for wxWidgets (sans GUI as we don't
+> use it for our application).
+> 
+> What is the customary form? List it all in an email? Attachment? I
+> would like to avoid the ire of the community!
 
-Modified:
-   trunk/buildroot/docs/about.html
+An entry in the bug tracker, https://bugs.uclibc.net (product
+buildroot), is probably the best way. It's going to be tracked, and the
+list is notified when a new bug is entered anyway.
 
+Sincerly,
 
-Changeset:
-Modified: trunk/buildroot/docs/about.html
-===================================================================
---- trunk/buildroot/docs/about.html	2009-03-25 15:54:41 UTC (rev 25818)
-+++ trunk/buildroot/docs/about.html	2009-03-25 15:54:46 UTC (rev 25819)
-@@ -19,11 +19,11 @@
- systems.  Embedded systems often use processors that are not the regular
- x86 processors everyone is used to using on their PC. It can be PowerPC
- processors, MIPS processors, ARM processors, etc.  And to be extra safe,
--you do not need to be root to build or run buildroot.
-+you do not need to be root to build or run Buildroot.
- 
- <p>
- 
--buildroot is maintained by <a href=
-+Buildroot is maintained by <a href=
- "mailto:jacmet@uclibc.org">Peter Korsgaard</a>, and
- licensed under the
- <a href="http://www.gnu.org/copyleft/lgpl.html">GNU LIBRARY GENERAL PUBLIC LICENSE</a>.
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
