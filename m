@@ -1,41 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 26 Mar 2009 21:45:36 +0100
-Subject: [Buildroot] svn commit: [25827] trunk/buildroot/package/automake
-In-Reply-To: <20090326213421.55dae490@surf> (Thomas Petazzoni's message of
-	"Thu\, 26 Mar 2009 21\:34\:21 +0100")
-References: <20090326165522.5C989771F6@busybox.osuosl.org>
-	<87tz5ggqup.fsf@macbook.be.48ers.dk> <20090326213421.55dae490@surf>
-Message-ID: <87zlf8f1xr.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Thu, 26 Mar 2009 20:47:39 +0000 (UTC)
+Subject: [Buildroot] svn commit: [25834] trunk/buildroot/scripts
+Message-ID: <20090326204739.134AE772E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Author: jacmet
+Date: 2009-03-26 20:47:38 +0000 (Thu, 26 Mar 2009)
+New Revision: 25834
 
-Hi,
+Log:
+scripts/setlocalversion: Renamed 'git-svn' to 'git svn'
 
- Thomas> At least, my (maybe incorrect) change fixes the issue I reported in
- Thomas> the mail titled "Bug while autoreconfiguring tslib", sent today. But
- Thomas> maybe the correct fix is something like
+Git 1.6.x+ got rid of git-<subcommand> in the normal path.
 
- Thomas> - AUTORECONF=$(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" $(HOST_DIR)/usr/bin/autoreconf -v -f -i -I "$(ACLOCAL_DIR)"
- Thomas> + AUTORECONF=$(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" $(HOST_DIR)/usr/bin/autoreconf -v -f -i -I "$(HOST_ACLOCAL_DIR)"
+Signed-off-by: Michael Roth <mroth@nessie.de>
 
-I think the best/simplest solution is to just copy the aclocal files
-of the cross tools (pkgconfig +auto*) from HOST_DIR to STAGING_DIR and
-point ACLOCAL_DIR to STAGING_DIR - I'll give it a test.
+Modified:
+   trunk/buildroot/scripts/setlocalversion
 
- Thomas> BTW, could you remind me why we need to compile all these tools for the
- Thomas> host (pkg-config, automake, autoconf). Couldn't they be dependencies of
- Thomas> Buildroot ?
 
-pkg-config to make it look in staging_dir and not the host directory,
-and the auto* stuff simply because of the exact version dependencies
-(E.G. certain stuff works with 2.61 and not with 2.63 or the other
-way, so it keeps us a bit more sane to know that everyone uses the
-same version).
-
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/scripts/setlocalversion
+===================================================================
+--- trunk/buildroot/scripts/setlocalversion	2009-03-26 19:37:38 UTC (rev 25833)
++++ trunk/buildroot/scripts/setlocalversion	2009-03-26 20:47:38 UTC (rev 25834)
+@@ -21,7 +21,7 @@
+ 
+ 	# Is this git on svn?
+ 	if git config --get svn-remote.svn.url >/dev/null; then
+-	        printf -- '-svn%s' "`git-svn find-rev $head`"
++	        printf -- '-svn%s' "`git svn find-rev $head`"
+ 	fi
+ 
+ 	# Are there uncommitted changes?
