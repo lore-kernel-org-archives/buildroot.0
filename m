@@ -1,60 +1,40 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Thu, 26 Mar 2009 19:37:39 +0000 (UTC)
-Subject: [Buildroot] svn commit: [25833] trunk/buildroot/package/mtd
-Message-ID: <20090326193739.5CB1C772DC@busybox.osuosl.org>
+From: Lloyd Sargent <lsargent@txdigital.com>
+Date: Thu, 26 Mar 2009 14:41:58 -0500
+Subject: [Buildroot] Buildroot logo
+In-Reply-To: <87ljqsgkkz.fsf@macbook.be.48ers.dk>
+References: <87ljqsgkkz.fsf@macbook.be.48ers.dk>
+Message-ID: <200903261441.59019.lsargent@txdigital.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-03-26 19:37:38 +0000 (Thu, 26 Mar 2009)
-New Revision: 25833
+I know I'm new on the lists, but it works for me!
 
-Log:
-package/mtd: don't enable rarely used commands by default
+Next: T-shirts!
 
-Most people don't need them, so don't enable mkfsjffs + doc tools by default.
+Cheers,
 
-Modified:
-   trunk/buildroot/package/mtd/Config.in
+Lloyd
 
 
-Changeset:
-Modified: trunk/buildroot/package/mtd/Config.in
-===================================================================
---- trunk/buildroot/package/mtd/Config.in	2009-03-26 19:37:34 UTC (rev 25832)
-+++ trunk/buildroot/package/mtd/Config.in	2009-03-26 19:37:38 UTC (rev 25833)
-@@ -39,11 +39,9 @@
- 
- config BR2_PACKAGE_MTD_DOCFDISK
- 	bool "docfdisk"
--	default y
- 
- config BR2_PACKAGE_MTD_DOC_LOADBIOS
- 	bool "doc_loadbios"
--	default y
- 
- config BR2_PACKAGE_MTD_ERASE
- 	bool "erase"
-@@ -97,7 +95,6 @@
- 
- config BR2_PACKAGE_MTD_MKFSJFFS
- 	bool "mkfs.jffs"
--	default y
- 	depends on BR2_PACKAGE_MTD_20050122 || BR2_PACKAGE_MTD_20061007 || BR2_PACKAGE_MTD_UTILS
- 
- config BR2_PACKAGE_MTD_MTD_DEBUG
-@@ -119,11 +116,9 @@
- 
- config BR2_PACKAGE_MTD_NFTL_FORMAT
- 	bool "nftl_format"
--	default y
- 
- config BR2_PACKAGE_MTD_NFTLDUMP
- 	bool "nftldump"
--	default y
- 
- config BR2_PACKAGE_MTD_SUMTOOL
- 	bool "sumtool"
+On Thursday 26 March 2009 14:17:32 Peter Korsgaard wrote:
+> Hi everyone,
+>
+> Buildroot doesn't have any official logo - The website has used the
+> busybox logo of the simple reason that it was a copy of the busybox
+> website, but we'te not busybox, so that's kind of silly.
+>
+> Therefore I decided to do something about it.. Now, I'm far from a
+> graphics artist, so bear with me - But here goes:
+>
+> http://buildroot.eu/images/logo.png
+>
+> And here's how it looks in small on the website:
+>
+> http://buildroot.eu
+>
+> What do you think? Too ugly for words? ;) If someone wants to step up
+> and create something nicer, then that's fine by me - But I think we
+> should atleast have a logo.
