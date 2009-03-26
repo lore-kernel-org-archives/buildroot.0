@@ -1,40 +1,35 @@
-From: Jean-Christian de Rivaz <jc@eclis.ch>
-Date: Thu, 26 Mar 2009 10:10:50 +0100
-Subject: [Buildroot] [PATCH] Add host-libglib2 dependencie to dbus-glib
-Message-ID: <49CB469A.5080404@eclis.ch>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Thu, 26 Mar 2009 09:29:10 +0000 (UTC)
+Subject: [Buildroot] svn commit: [25825] trunk/buildroot/package/util-linux
+Message-ID: <20090326092910.D2C4C76A00@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Author: jacmet
+Date: 2009-03-26 09:29:09 +0000 (Thu, 26 Mar 2009)
+New Revision: 25825
 
-I need the small patch below to successfully buils the dbus-glib. This was tested on a board that is almost like the AT91SAM9261EK, although I don't think it matter for this kind of problem. Without the patch the error was:
+Log:
+util-linux: fix download URL
 
-(cd /home/xxx/buildroot/build_arm/dbus-glib-0.80-host; [...]
-[...]
-checking pkg-config is at least version 0.9.0... yes
-checking for DBUS... yes
-checking for DBUS_GLIB... no
-checking for DBUS_GLIB_THREADS... no
-configure: error: GLib development libraries not found
-make: *** [/home/xxx/buildroot/build_arm/dbus-glib-0.80-host/.configured] Error 1
+Modified:
+   trunk/buildroot/package/util-linux/util-linux.mk
 
-Index: package/dbus-glib/dbus-glib.mk
+
+Changeset:
+Modified: trunk/buildroot/package/util-linux/util-linux.mk
 ===================================================================
---- package/dbus-glib/dbus-glib.mk      (r?vision 25823)
-+++ package/dbus-glib/dbus-glib.mk      (copie de travail)
-@@ -23,7 +23,7 @@
-                --disable-doxygen-docs \
-                --enable-asserts=yes
- 
--DBUS_GLIB_DEPENDENCIES = uclibc host-pkgconfig dbus host-dbus host-dbus-glib libglib2
-+DBUS_GLIB_DEPENDENCIES = uclibc host-pkgconfig dbus host-dbus host-libglib2 host-dbus-glib libglib2
- 
- $(eval $(call AUTOTARGETS,package,dbus-glib))
- 
-
-Best Regards,
--- 
-Jean-Christian de Rivaz
+--- trunk/buildroot/package/util-linux/util-linux.mk	2009-03-26 08:51:47 UTC (rev 25824)
++++ trunk/buildroot/package/util-linux/util-linux.mk	2009-03-26 09:29:09 UTC (rev 25825)
+@@ -5,7 +5,7 @@
+ #############################################################
+ UTIL-LINUX_VERSION:=2.13-pre7
+ UTIL-LINUX_SOURCE:=util-linux-$(UTIL-LINUX_VERSION).tar.bz2
+-UTIL-LINUX_SITE:=$(BR2_KERNEL_MIRROR)/linux/utils/util-linux
++UTIL-LINUX_SITE:=$(BR2_KERNEL_MIRROR)/linux/utils/util-linux/testing
+ UTIL-LINUX_DIR:=$(BUILD_DIR)/util-linux-$(UTIL-LINUX_VERSION)
+ UTIL-LINUX_CAT:=$(BZCAT)
+ UTIL-LINUX_BINARY:=$(UTIL-LINUX_DIR)/misc-utils/chkdupexe
