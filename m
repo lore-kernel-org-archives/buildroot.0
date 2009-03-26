@@ -1,124 +1,256 @@
 From: Michael Roth <mroth@nessie.de>
-Date: Thu, 26 Mar 2009 21:20:06 +0100
-Subject: [Buildroot] [PATCH 4/5] mtd-utils: Version bump of the GIT source
+Date: Thu, 26 Mar 2009 21:20:03 +0100
+Subject: [Buildroot] [PATCH 1/5] mtd-utils: Prepare for version dump
 In-Reply-To: <1238098807-5648-1-git-send-email-mroth@nessie.de>
 References: <1238098807-5648-1-git-send-email-mroth@nessie.de>
-Message-ID: <1238098807-5648-5-git-send-email-mroth@nessie.de>
+Message-ID: <1238098807-5648-2-git-send-email-mroth@nessie.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-GIT version of mtd-utils bumped to 2009-03-26 and support
-for the included mkfs.ubifs added.
+Prepared for new mtd-utils version and some cleanup and
+clarification on configure options.
 
 Signed-off-by: Michael Roth <mroth@nessie.de>
 ---
- package/mtd/Config.in                              |    9 +
- package/mtd/git/mtd.mk                             |  178 ++++++++++++++++++++
- package/mtd/git/remove-file-offset-bits.patch      |   11 ++
- .../mtd/mtd-utils.git/mtd-utils-all-targets.patch  |   34 ----
- .../mtd/mtd-utils.git/mtd-utils-target-acl.patch   |   48 ------
- package/mtd/mtd-utils.git/mtd.mk                   |  145 ----------------
- package/mtd/mtd.mk                                 |    2 +-
- 7 files changed, 199 insertions(+), 228 deletions(-)
- create mode 100644 package/mtd/git/mtd.mk
- create mode 100644 package/mtd/git/remove-file-offset-bits.patch
- delete mode 100644 package/mtd/mtd-utils.git/mtd-utils-all-targets.patch
- delete mode 100644 package/mtd/mtd-utils.git/mtd-utils-target-acl.patch
- delete mode 100644 package/mtd/mtd-utils.git/mtd.mk
+ package/mtd/1.1.0/mtd-utils-1.1.0-all-acl.patch    |   48 ++++++++
+ .../mtd-utils-1.1.0-all-flashcp-npow2-erase.patch  |   23 ++++
+ ...ils-1.1.0-all-mkfs.jffs2-device_table-fix.patch |   23 ++++
+ .../mtd/1.1.0/mtd-utils-1.1.0-all-targets.patch    |   34 +++++
+ package/mtd/1.1.0/mtd.mk                           |  128 ++++++++++++++++++++
+ package/mtd/Config.in                              |   49 ++++----
+ .../mtd/mtd-utils/mtd-utils-1.1.0-all-acl.patch    |   48 --------
+ .../mtd-utils-1.1.0-all-flashcp-npow2-erase.patch  |   23 ----
+ ...ils-1.1.0-all-mkfs.jffs2-device_table-fix.patch |   23 ----
+ .../mtd-utils/mtd-utils-1.1.0-all-targets.patch    |   34 -----
+ package/mtd/mtd-utils/mtd.mk                       |  128 --------------------
+ package/mtd/mtd.mk                                 |    8 +-
+ 12 files changed, 287 insertions(+), 282 deletions(-)
+ create mode 100644 package/mtd/1.1.0/mtd-utils-1.1.0-all-acl.patch
+ create mode 100644 package/mtd/1.1.0/mtd-utils-1.1.0-all-flashcp-npow2-erase.patch
+ create mode 100644 package/mtd/1.1.0/mtd-utils-1.1.0-all-mkfs.jffs2-device_table-fix.patch
+ create mode 100644 package/mtd/1.1.0/mtd-utils-1.1.0-all-targets.patch
+ create mode 100644 package/mtd/1.1.0/mtd.mk
+ delete mode 100644 package/mtd/mtd-utils/mtd-utils-1.1.0-all-acl.patch
+ delete mode 100644 package/mtd/mtd-utils/mtd-utils-1.1.0-all-flashcp-npow2-erase.patch
+ delete mode 100644 package/mtd/mtd-utils/mtd-utils-1.1.0-all-mkfs.jffs2-device_table-fix.patch
+ delete mode 100644 package/mtd/mtd-utils/mtd-utils-1.1.0-all-targets.patch
+ delete mode 100644 package/mtd/mtd-utils/mtd.mk
 
-diff --git a/package/mtd/Config.in b/package/mtd/Config.in
-index 8c78a97..ffc02e4 100644
---- a/package/mtd/Config.in
-+++ b/package/mtd/Config.in
-@@ -1,6 +1,7 @@
- menuconfig BR2_PACKAGE_MTD
- 	bool "mtd/jffs2 utilities"
- 	select BR2_PACKAGE_ZLIB
-+	select BR2_PACKAGE_LZO
- 	help
- 	  Build mtd/jffs utilities
- 
-@@ -131,6 +132,14 @@ config BR2_PACKAGE_MTD_MKFSJFFS2
- 	default y
- 	depends on BR2_PACKAGE_MTD
- 
-+config BR2_PACKAGE_MTD_MKFSUBIFS
-+	bool "mkfs.ubifs"
-+	default n
-+	depends on BR2_PACKAGE_MTD_UTILS_GIT && BR2_LARGEFILE && BR2_PACKAGE_E2FSPROGS
-+
-+comment "mkfs.ubifs requires LARGEFILE support and depends on e2fsprogs"
-+        depends on BR2_PACKAGE_MTD_UTILS_GIT && (!BR2_LARGEFILE || !BR2_PACKAGE_E2FSPROGS)
-+
- config BR2_PACKAGE_MTD_MTD_DEBUG
- 	bool "mtd_debug"
- 	default y
-diff --git a/package/mtd/git/mtd.mk b/package/mtd/git/mtd.mk
+diff --git a/package/mtd/1.1.0/mtd-utils-1.1.0-all-acl.patch b/package/mtd/1.1.0/mtd-utils-1.1.0-all-acl.patch
 new file mode 100644
-index 0000000..fffc84a
+index 0000000..953786e
 --- /dev/null
-+++ b/package/mtd/git/mtd.mk
-@@ -0,0 +1,178 @@
++++ b/package/mtd/1.1.0/mtd-utils-1.1.0-all-acl.patch
+@@ -0,0 +1,48 @@
++Author:	Ulf Samuelsson
++Date:	2007-01-25
++
++Log:
++Patch adding "sys/acl.h" needed to compile mtd.
++
++Modified:
++	package/mtd/mtd_acl.patch
++
++Changeset
++	package/mtd/mtd_acl.patch
++
++diff -urN mtd_orig-0rig/include/sys/acl.h mtd_orig/include/sys/acl.h
++--- mtd_orig-0rig/include/sys/acl.h	1970-01-01 01:00:00.000000000 +0100
+++++ mtd_orig/include/sys/acl.h	2007-01-17 20:11:22.000000000 +0100
++@@ -0,0 +1,32 @@
+++/*
+++  File: linux/posix_acl.h
+++
+++  (C) 2002 Andreas Gruenbacher, <a.gruenbacher@computer.org>
+++*/
+++
+++
+++#ifndef __LINUX_POSIX_ACL_H
+++#define __LINUX_POSIX_ACL_H
+++
+++#define ACL_UNDEFINED_ID	(-1)
+++
+++/* a_type field in acl_user_posix_entry_t */
+++#define ACL_TYPE_ACCESS		(0x8000)
+++#define ACL_TYPE_DEFAULT	(0x4000)
+++
+++/* e_tag entry in struct posix_acl_entry */
+++#define ACL_USER_OBJ		(0x01)
+++#define ACL_USER		(0x02)
+++#define ACL_GROUP_OBJ		(0x04)
+++#define ACL_GROUP		(0x08)
+++#define ACL_MASK		(0x10)
+++#define ACL_OTHER		(0x20)
+++
+++/* permissions in the e_perm field */
+++#define ACL_READ		(0x04)
+++#define ACL_WRITE		(0x02)
+++#define ACL_EXECUTE		(0x01)
+++//#define ACL_ADD		(0x08)
+++//#define ACL_DELETE		(0x10)
+++
+++#endif  /* __LINUX_POSIX_ACL_H */
+diff --git a/package/mtd/1.1.0/mtd-utils-1.1.0-all-flashcp-npow2-erase.patch b/package/mtd/1.1.0/mtd-utils-1.1.0-all-flashcp-npow2-erase.patch
+new file mode 100644
+index 0000000..b9a0a60
+--- /dev/null
++++ b/package/mtd/1.1.0/mtd-utils-1.1.0-all-flashcp-npow2-erase.patch
+@@ -0,0 +1,23 @@
++flashcp: handle non-power-of-2 erase size (E.G. for dataflash)
++
++Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
++---
++ flashcp.c |    4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++Index: mtd-utils-1.1.0/flashcp.c
++===================================================================
++--- mtd-utils-1.1.0.orig/flashcp.c	2007-08-03 15:55:51.000000000 +0200
+++++ mtd-utils-1.1.0/flashcp.c	2009-02-17 14:02:09.000000000 +0100
++@@ -255,8 +255,9 @@
++ #warning "Check for smaller erase regions"
++ 
++ 	erase.start = 0;
++-	erase.length = filestat.st_size & ~(mtd.erasesize - 1);
++-	if (filestat.st_size % mtd.erasesize) erase.length += mtd.erasesize;
+++	erase.length = (filestat.st_size + mtd.erasesize - 1) / mtd.erasesize;
+++	erase.length *= mtd.erasesize;
+++
++ 	if (flags & FLAG_VERBOSE)
++ 	{
++ 		/* if the user wants verbose output, erase 1 block at a time and show him/her what's going on */
+diff --git a/package/mtd/1.1.0/mtd-utils-1.1.0-all-mkfs.jffs2-device_table-fix.patch b/package/mtd/1.1.0/mtd-utils-1.1.0-all-mkfs.jffs2-device_table-fix.patch
+new file mode 100644
+index 0000000..1fe23c8
+--- /dev/null
++++ b/package/mtd/1.1.0/mtd-utils-1.1.0-all-mkfs.jffs2-device_table-fix.patch
+@@ -0,0 +1,23 @@
++mkfs.jffs2.c: fix device_table handling
++
++find_filesystem_entry would ignore device_table entries for existing elements
++if the device type / permissions weren't exactly the same, effectively
++rendering device_table useless.
++---
++ mkfs.jffs2.c |    3 +--
++ 1 file changed, 1 insertion(+), 2 deletions(-)
++
++Index: mtd-utils-1.1.0/mkfs.jffs2.c
++===================================================================
++--- mtd-utils-1.1.0.orig/mkfs.jffs2.c
+++++ mtd-utils-1.1.0/mkfs.jffs2.c
++@@ -246,8 +246,7 @@
++ 		e = dir->files;
++ 	}
++ 	while (e) {
++-		/* Only bother to do the expensive strcmp on matching file types */
++-		if (type == (e->sb.st_mode & S_IFMT)) {
+++		if (1) {
++ 			if (S_ISDIR(e->sb.st_mode)) {
++ 				int len = strlen(e->fullname);
++ 
+diff --git a/package/mtd/1.1.0/mtd-utils-1.1.0-all-targets.patch b/package/mtd/1.1.0/mtd-utils-1.1.0-all-targets.patch
+new file mode 100644
+index 0000000..e887118
+--- /dev/null
++++ b/package/mtd/1.1.0/mtd-utils-1.1.0-all-targets.patch
+@@ -0,0 +1,34 @@
++diff -urN mtd-utils-1.1.0-0rig/Makefile mtd-utils-1.1.0/Makefile
++--- mtd-utils-1.1.0-0rig/Makefile	2007-08-03 15:55:51.000000000 +0200
+++++ mtd-utils-1.1.0/Makefile	2007-09-27 08:20:55.000000000 +0200
++@@ -72,6 +72,30 @@
++ $(BUILDDIR)/sumtool: $(BUILDDIR)/sumtool.o $(BUILDDIR)/crc32.o
++ 	$(CC) $(LDFLAGS) -o $@ $^
++ 
+++ftl_format:	$(BUILDDIR)/ftl_format
+++flash_erase:	$(BUILDDIR)/flash_erase
+++flash_eraseall:	$(BUILDDIR)/flash_eraseall
+++nanddump:	$(BUILDDIR)/nanddump
+++doc_loadbios:	$(BUILDDIR)/doc_loadbios
+++mkfs.jffs:	$(BUILDDIR)/mkfs.jffs
+++ftl_check:	$(BUILDDIR)/ftl_check
+++mkfs.jffs2:	$(BUILDDIR)/mkfs.jffs2
+++flash_lock:	$(BUILDDIR)/flash_lock
+++flash_unlock:	$(BUILDDIR)/flash_unlock
+++flash_info:	$(BUILDDIR)/flash_info
+++flash_otp_info:	$(BUILDDIR)/flash_otp_info
+++flash_otp_dump:	$(BUILDDIR)/flash_otp_dump
+++mtd_debug:	$(BUILDDIR)/mtd_debug
+++flashcp:	$(BUILDDIR)/flashcp
+++nandwrite:	$(BUILDDIR)/nandwrite
+++jffs2dump:	$(BUILDDIR)/jffs2dump
+++nftldump:	$(BUILDDIR)/nftldump
+++nftl_format:	$(BUILDDIR)/nftl_format
+++docfdisk:	$(BUILDDIR)/docfdisk
+++rfddump:	$(BUILDDIR)/rfddump
+++rfdformat:	$(BUILDDIR)/rfdformat
+++sumtool:	$(BUILDDIR)/sumtool
+++
++ install: ${TARGETS}
++ 	mkdir -p ${DESTDIR}/${SBINDIR}
++ 	install -m0755 ${TARGETS} ${DESTDIR}/${SBINDIR}/
+diff --git a/package/mtd/1.1.0/mtd.mk b/package/mtd/1.1.0/mtd.mk
+new file mode 100644
+index 0000000..e89e9ce
+--- /dev/null
++++ b/package/mtd/1.1.0/mtd.mk
+@@ -0,0 +1,128 @@
 +#############################################################
 +#
-+# mtd provides flash, jffs2 and ubifs utilities
++# mtd provides jffs2 utilities
 +#
 +#############################################################
-+MTD_VERSION:=0e9ed134f2092cef975f05aea2c1e415137e0c10
-+MTD_SOURCE:=mtd-utils-$(MTD_VERSION).tar.gz
-+MTD_URL:=http://git.infradead.org/mtd-utils.git?a=snapshot;h=$(MTD_VERSION);sf=tgz
-+MTD_HOST_DIR:= $(TOOL_BUILD_DIR)/mtd-utils-$(MTD_VERSION)
-+MTD_DIR:=$(BUILD_DIR)/mtd-utils-$(MTD_VERSION)
-+MTD_CAT:=$(ZCAT)
-+MTD_NAME:=mtd-utils
++MTD_VERSION:=1.1.0
++MTD_SOURCE:=mtd-utils-$(MTD_VERSION).tar.bz2
++MTD_SITE:=ftp://ftp.infradead.org/pub/mtd-utils
++MTD_HOST_DIR:= $(TOOL_BUILD_DIR)/mtd_orig
++MTD_DIR:=$(BUILD_DIR)/mtd_orig
++MTD_CAT:=$(BZCAT)
++MTD_NAME:=mtd-utils-$(MTD_VERSION)
 +
 +#############################################################
 +#
-+# Build mkfs.jffs2, sumtool and mkfs.ubifs for use on the local
-+# host system if needed by target/jffs2 and target/ubifs.
++# Build mkfs.jffs2 and sumtool for use on the local host system if
++# needed by target/jffs2root.
 +#
 +#############################################################
 +MKFS_JFFS2 := $(MTD_HOST_DIR)/mkfs.jffs2
 +SUMTOOL := $(MTD_HOST_DIR)/sumtool
-+MKFS_UBIFS := $(MTD_HOST_DIR)/mkfs.ubifs/mkfs.ubifs
 +
 +$(DL_DIR)/$(MTD_SOURCE):
-+	$(WGET) -O $(DL_DIR)/$(MTD_SOURCE) "$(MTD_URL)"
++	$(call DOWNLOAD,$(MTD_SITE),$(MTD_SOURCE))
 +
 +$(MTD_HOST_DIR)/.unpacked: $(DL_DIR)/$(MTD_SOURCE)
 +	$(MTD_CAT) $(DL_DIR)/$(MTD_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS) -
 +	rm -rf $(MTD_HOST_DIR)
 +	mv $(TOOL_BUILD_DIR)/$(MTD_NAME) $(MTD_HOST_DIR)
++	toolchain/patch-kernel.sh $(MTD_HOST_DIR) \
++		package/mtd/1.1.0 mtd-utils-$(MTD_VERSION)-all\*.patch
++	toolchain/patch-kernel.sh $(MTD_HOST_DIR) \
++		package/mtd/1.1.0 mtd-utils-$(MTD_VERSION)-host\*.patch
 +	touch $@
 +
-+$(MKFS_JFFS2) $(SUMTOOL): $(MTD_HOST_DIR)/.unpacked
-+	$(MAKE) CFLAGS= LDFLAGS= \
++
++$(MKFS_JFFS2): $(MTD_HOST_DIR)/.unpacked
++	CC="$(HOSTCC)" CROSS= CFLAGS=-I$(LINUX_HEADERS_DIR)/include \
++		$(MAKE) LINUXDIR=$(LINUX_DIR) \
 +		BUILDDIR=$(MTD_HOST_DIR) \
-+		CC="$(HOSTCC)" CROSS= WITHOUT_XATTR=1 -C $(MTD_HOST_DIR) \
-+		$(MKFS_JFFS2) $(SUMTOOL)
++		-C $(MTD_HOST_DIR) mkfs.jffs2
 +
-+$(MKFS_UBIFS): $(MTD_HOST_DIR)/.unpacked
-+	$(MAKE) CFLAGS= LDFLAGS= \
-+		BUILDDIR=$(MTD_HOST_DIR)/mkfs.ubifs \
-+		CC="$(HOSTCC)" CROSS= WITHOUT_XATTR=1 -C $(MTD_HOST_DIR)/mkfs.ubifs \
-+		$(MKFS_UBIFS)
++$(SUMTOOL): $(MTD_HOST_DIR)/.unpacked
++	CC="$(HOSTCC)" CROSS= CFLAGS=-I$(LINUX_HEADERS_DIR)/include \
++		$(MAKE) LINUXDIR=$(LINUX_DIR) \
++		BUILDDIR=$(MTD_HOST_DIR) \
++		-C $(MTD_HOST_DIR) sumtool
 +
-+mtd-host-jffs2: $(MKFS_JFFS2) $(SUMTOOL)
-+
-+mtd-host-jffs2-clean:
-+	-$(MAKE) -C $(MTD_HOST_DIR) clean
-+
-+mtd-host-ubifs: $(MKFS_UBIFS)
-+
-+mtd-host-ubifs-clean:
-+	-$(MAKE) -C $(MTD_HOST_DIR)/mkfs.ubifs clean
-+
-+mtd-host: mtd-host-jffs2 mtd-host-ubifs
++mtd-host: $(MKFS_JFFS2) $(SUMTOOL)
 +
 +mtd-host-source: $(DL_DIR)/$(MTD_SOURCE)
++
++mtd-host-clean:
++	-$(MAKE) -C $(MTD_HOST_DIR) clean
 +
 +mtd-host-dirclean:
 +	rm -rf $(MTD_HOST_DIR)
@@ -130,11 +262,9 @@ index 0000000..fffc84a
 +#############################################################
 +$(MTD_DIR)/.unpacked: $(DL_DIR)/$(MTD_SOURCE)
 +	$(MTD_CAT) $(DL_DIR)/$(MTD_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+	rm -rf $(MTD_DIR)
 +	mv $(BUILD_DIR)/$(MTD_NAME) $(MTD_DIR)
-+ifneq ($(BR2_LARGEFILE),y)
-+	toolchain/patch-kernel.sh $(MTD_DIR) package/mtd/git remove-file-offset-bits.patch
-+endif
++	toolchain/patch-kernel.sh $(MTD_DIR) package/mtd/1.1.0 mtd-utils-$(MTD_VERSION)-all\*.patch
++	toolchain/patch-kernel.sh $(MTD_DIR) package/mtd/1.1.0 mtd-utils-$(MTD_VERSION)-target\*.patch
 +	touch $@
 +
 +MTD_TARGETS_n :=
@@ -147,81 +277,36 @@ index 0000000..fffc84a
 +MTD_TARGETS_$(BR2_PACKAGE_MTD_FLASH_UNLOCK) += flash_unlock
 +MTD_TARGETS_$(BR2_PACKAGE_MTD_FLASHCP) += flashcp
 +MTD_TARGETS_$(BR2_PACKAGE_MTD_MKFSJFFS2) += mkfs.jffs2
++MTD_TARGETS_$(BR2_PACKAGE_MTD_MKFSJFFS) += mkfs.jffs
 +MTD_TARGETS_$(BR2_PACKAGE_MTD_JFFS2DUMP) += jffs2dump
++#MTD_TARGETS_$(BR2_PACKAGE_MTD_JFFS3DUMP) += jffs3dump
 +MTD_TARGETS_$(BR2_PACKAGE_MTD_SUMTOOL) += sumtool
 +MTD_TARGETS_$(BR2_PACKAGE_MTD_FTL_CHECK) += ftl_check
 +MTD_TARGETS_$(BR2_PACKAGE_MTD_FTL_FORMAT) += ftl_format
 +MTD_TARGETS_$(BR2_PACKAGE_MTD_NFTLDUMP) += nftldump
 +MTD_TARGETS_$(BR2_PACKAGE_MTD_NFTL_FORMAT) += nftl_format
 +MTD_TARGETS_$(BR2_PACKAGE_MTD_NANDDUMP) += nanddump
-+MTD_TARGETS_$(BR2_PACKAGE_MTD_NANDTEST) += nandtest
 +MTD_TARGETS_$(BR2_PACKAGE_MTD_NANDWRITE) += nandwrite
 +MTD_TARGETS_$(BR2_PACKAGE_MTD_MTD_DEBUG) += mtd_debug
 +MTD_TARGETS_$(BR2_PACKAGE_MTD_DOCFDISK) += docfdisk
 +MTD_TARGETS_$(BR2_PACKAGE_MTD_DOC_LOADBIOS) += doc_loadbios
-+MTD_TARGETS_$(BR2_PACKAGE_MTD_SERVE_IMAGE) += serve_image
-+MTD_TARGETS_$(BR2_PACKAGE_MTD_RECV_IMAGE) += recv_image
-+
-+MTD_TARGETS_UBI_n :=
-+MTD_TARGETS_UBI_y :=
-+
-+MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIATTACH) += ubiattach
-+MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBICRC32) += ubicrc32
-+MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIDETACH) += ubidetach
-+MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIFORMAT) += ubiformat
-+MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIMKVOL) += ubimkvol
-+MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBINFO) += ubinfo
-+MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBINIZE) += ubinize
-+MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIRMVOL) += ubirmvol
-+MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIUPDATEVOL) += ubiupdatevol
-+
-+MTD_TARGETS_MKFSUBIFS_n :=
-+MTD_TARGETS_MKFSUBIFS_y :=
-+
-+MTD_TARGETS_MKFSUBIFS_$(BR2_PACKAGE_MTD_MKFSUBIFS) += mkfs.ubifs
 +
 +MTD_BUILD_TARGETS := $(addprefix $(MTD_DIR)/, $(MTD_TARGETS_y))
-+MTD_BUILD_UBI_TARGETS := $(addprefix $(MTD_DIR)/ubi-utils/, $(MTD_TARGETS_UBI_y))
-+MTD_BUILD_MKFSUBIFS_TARGETS := $(addprefix $(MTD_DIR)/mkfs.ubifs/, $(MTD_TARGETS_MKFSUBIFS_y))
 +
 +$(MTD_BUILD_TARGETS): $(MTD_DIR)/.unpacked
-+	$(MAKE) CFLAGS="-I$(STAGING_DIR)/usr/include $(TARGET_CFLAGS)" \
++	mkdir -p $(TARGET_DIR)/usr/sbin
++	$(MAKE) CFLAGS="-I. -I./include -I$(LINUX_HEADERS_DIR)/include -I$(STAGING_DIR)/usr/include $(TARGET_CFLAGS)" \
 +		LDFLAGS="$(TARGET_LDFLAGS)" \
 +		BUILDDIR=$(MTD_DIR) \
-+		CROSS=$(TARGET_CROSS) WITHOUT_XATTR=1 -C $(MTD_DIR) \
-+		$(MTD_BUILD_TARGETS)
-+
-+$(MTD_BUILD_UBI_TARGETS): $(MTD_DIR)/.unpacked
-+	$(MAKE) CFLAGS="-I$(STAGING_DIR)/usr/include $(TARGET_CFLAGS)" \
-+		LDFLAGS="$(TARGET_LDFLAGS)" \
-+		BUILDDIR=$(MTD_DIR)/ubi-utils \
-+		CROSS=$(TARGET_CROSS) -C $(MTD_DIR)/ubi-utils \
-+		$(MTD_BUILD_UBI_TARGETS)
-+
-+$(MTD_BUILD_MKFSUBIFS_TARGETS): $(MTD_HOST_DIR)/.unpacked
-+	$(MAKE) CFLAGS="-I$(STAGING_DIR)/usr/include $(TARGET_CFLAGS)" \
-+		LDFLAGS="$(TARGET_LDFLAGS)" \
-+		BUILDDIR=$(MTD_DIR)/mkfs.ubifs \
-+		CROSS=$(TARGET_CROSS) -C $(MTD_DIR)/mkfs.ubifs \
-+		$(MTD_BUILD_MKFSUBIFS_TARGETS)
++		CROSS=$(TARGET_CROSS) CC=$(TARGET_CC) LINUXDIR=$(LINUX26_DIR) WITHOUT_XATTR=1 -C $(MTD_DIR)
 +
 +MTD_TARGETS := $(addprefix $(TARGET_DIR)/usr/sbin/, $(MTD_TARGETS_y))
-+MTD_UBI_TARGETS := $(addprefix $(TARGET_DIR)/usr/sbin/, $(MTD_TARGETS_UBI_y))
-+MTD_MKFSUBIFS_TARGETS := $(addprefix $(TARGET_DIR)/usr/sbin/, $(MTD_TARGETS_MKFSUBIFS_y))
 +
 +$(MTD_TARGETS): $(TARGET_DIR)/usr/sbin/% : $(MTD_DIR)/%
 +	cp -f $< $@
 +	$(STRIPCMD) $@
 +
-+$(MTD_UBI_TARGETS): $(TARGET_DIR)/usr/sbin/% : $(MTD_DIR)/ubi-utils/%
-+	cp -f $< $@
-+	$(STRIPCMD) $@
-+
-+$(MTD_MKFSUBIFS_TARGETS): $(TARGET_DIR)/usr/sbin/% : $(MTD_DIR)/mkfs.ubifs/%
-+	cp -f $< $@
-+	$(STRIPCMD) $@
-+
-+mtd: zlib lzo $(MTD_TARGETS) $(MTD_UBI_TARGETS) $(MTD_MKFSUBIFS_TARGETS)
++mtd: zlib $(MTD_TARGETS)
 +
 +mtd-source: $(DL_DIR)/$(MTD_SOURCE)
 +
@@ -240,67 +325,100 @@ index 0000000..fffc84a
 +ifeq ($(BR2_PACKAGE_MTD),y)
 +TARGETS+=mtd
 +endif
-diff --git a/package/mtd/git/remove-file-offset-bits.patch b/package/mtd/git/remove-file-offset-bits.patch
-new file mode 100644
-index 0000000..1905a8a
---- /dev/null
-+++ b/package/mtd/git/remove-file-offset-bits.patch
-@@ -0,0 +1,11 @@
-+diff -ur mtd-utils.git/common.mk mtd-utils.work/common.mk
-+--- mtd-utils.git/common.mk	2009-03-25 22:58:54.000000000 +0100
-++++ mtd-utils.work/common.mk	2009-03-26 01:22:24.000000000 +0100
-+@@ -12,7 +12,6 @@
-+ 	$(call cc-option,-Wwrite-strings) \
-+ 	$(call cc-option,-Wno-sign-compare)
-+ CFLAGS += $(WFLAGS)
-+-CPPFLAGS += -D_FILE_OFFSET_BITS=64
-+ 
-+ DESTDIR ?= /usr/local
-+ PREFIX=/usr
-diff --git a/package/mtd/mtd-utils.git/mtd-utils-all-targets.patch b/package/mtd/mtd-utils.git/mtd-utils-all-targets.patch
-deleted file mode 100644
-index e887118..0000000
---- a/package/mtd/mtd-utils.git/mtd-utils-all-targets.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--diff -urN mtd-utils-1.1.0-0rig/Makefile mtd-utils-1.1.0/Makefile
----- mtd-utils-1.1.0-0rig/Makefile	2007-08-03 15:55:51.000000000 +0200
--+++ mtd-utils-1.1.0/Makefile	2007-09-27 08:20:55.000000000 +0200
--@@ -72,6 +72,30 @@
-- $(BUILDDIR)/sumtool: $(BUILDDIR)/sumtool.o $(BUILDDIR)/crc32.o
-- 	$(CC) $(LDFLAGS) -o $@ $^
-- 
--+ftl_format:	$(BUILDDIR)/ftl_format
--+flash_erase:	$(BUILDDIR)/flash_erase
--+flash_eraseall:	$(BUILDDIR)/flash_eraseall
--+nanddump:	$(BUILDDIR)/nanddump
--+doc_loadbios:	$(BUILDDIR)/doc_loadbios
--+mkfs.jffs:	$(BUILDDIR)/mkfs.jffs
--+ftl_check:	$(BUILDDIR)/ftl_check
--+mkfs.jffs2:	$(BUILDDIR)/mkfs.jffs2
--+flash_lock:	$(BUILDDIR)/flash_lock
--+flash_unlock:	$(BUILDDIR)/flash_unlock
--+flash_info:	$(BUILDDIR)/flash_info
--+flash_otp_info:	$(BUILDDIR)/flash_otp_info
--+flash_otp_dump:	$(BUILDDIR)/flash_otp_dump
--+mtd_debug:	$(BUILDDIR)/mtd_debug
--+flashcp:	$(BUILDDIR)/flashcp
--+nandwrite:	$(BUILDDIR)/nandwrite
--+jffs2dump:	$(BUILDDIR)/jffs2dump
--+nftldump:	$(BUILDDIR)/nftldump
--+nftl_format:	$(BUILDDIR)/nftl_format
--+docfdisk:	$(BUILDDIR)/docfdisk
--+rfddump:	$(BUILDDIR)/rfddump
--+rfdformat:	$(BUILDDIR)/rfdformat
--+sumtool:	$(BUILDDIR)/sumtool
--+
-- install: ${TARGETS}
-- 	mkdir -p ${DESTDIR}/${SBINDIR}
-- 	install -m0755 ${TARGETS} ${DESTDIR}/${SBINDIR}/
-diff --git a/package/mtd/mtd-utils.git/mtd-utils-target-acl.patch b/package/mtd/mtd-utils.git/mtd-utils-target-acl.patch
+diff --git a/package/mtd/Config.in b/package/mtd/Config.in
+index 0bf489b..e2f2306 100644
+--- a/package/mtd/Config.in
++++ b/package/mtd/Config.in
+@@ -6,31 +6,36 @@ menuconfig BR2_PACKAGE_MTD
+ 
+ if BR2_PACKAGE_MTD
+ choice
+-	prompt "Source package selection"
++	prompt "MTD-utils Version"
+ 	depends on BR2_PACKAGE_MTD
+-	default BR2_PACKAGE_MTD20061007
++	default BR2_PACKAGE_MTD_UTILS_1_1_0
+ 
+-config BR2_PACKAGE_MTD_UTILS
+-	bool "Use MTD-utils release"
+-	depends on BR2_PACKAGE_MTD
+-	select BR2_PACKAGE_LZO
++
++config BR2_PACKAGE_MTD_UTILS_20050122
++	bool "mtd-utils 20050122"
++	depends on BR2_DEPRECATED
+ 	help
+-	  Build mtd/jffs utilities with Dataflash support
++	  MTD snapshot from 20050122.
+ 
+-config BR2_PACKAGE_MTD_20061007
+-	bool "Use MTD snapshot from 20061007"
++config BR2_PACKAGE_MTD_UTILS_20061007
++	bool "mtd-utils 20061007"
+ 	depends on BR2_PACKAGE_MTD
+ 	help
+-	  Build mtd/jffs utilities with Dataflash support
++	  MTD snapshot from 20061007.
+ 
+-config BR2_PACKAGE_MTD_20050122
+-	bool "Use MTD snapshot from 20050122"
+-	depends on BR2_DEPRECATED
++	  Build mtd/jffs utilities with Dataflash support.
++
++config BR2_PACKAGE_MTD_UTILS_1_1_0
++	bool "mtd-utils 1.1.0"
++	depends on BR2_PACKAGE_MTD
++	select BR2_PACKAGE_LZO
+ 	help
+-	  Use the stable release.
++	  MTD Utils release 1.1.0.
++
++	  Build mtd/jffs utilities with Dataflash support.
+ 
+ config BR2_PACKAGE_MTD_UTILS_GIT
+-	bool "Use MTD-utils from GIT"
++	bool "mtd-utils (almost) latest GIT"
+ 	help
+ 	  Use the latest from GIT or a particular revision.
+ 	  You should probably say NO except for specific purpose.
+@@ -53,7 +58,7 @@ config BR2_PACKAGE_MTD_DOC_LOADBIOS
+ config BR2_PACKAGE_MTD_ERASE
+ 	bool "erase"
+ 	default y
+-	depends on BR2_PACKAGE_MTD_20050122
++	depends on BR2_PACKAGE_MTD_UTILS_20050122
+ 
+ config BR2_PACKAGE_MTD_FLASHCP
+ 	bool "flashcp"
+@@ -103,18 +108,18 @@ config BR2_PACKAGE_MTD_JFFS2DUMP
+ config BR2_PACKAGE_MTD_JFFS3DUMP
+ 	bool "jffs3dump"
+ 	default y
+-	depends on BR2_PACKAGE_MTD_20050122
++	depends on BR2_PACKAGE_MTD_UTILS_20050122
++
++config BR2_PACKAGE_MTD_MKFSJFFS
++	bool "mkfs.jffs"
++	default y
++	depends on BR2_PACKAGE_MTD_UTILS_20050122 || BR2_PACKAGE_MTD_UTILS_20061007 || BR2_PACKAGE_MTD_UTILS_1_1_0
+ 
+ config BR2_PACKAGE_MTD_MKFSJFFS2
+ 	bool "mkfs.jffs2"
+ 	default y
+ 	depends on BR2_PACKAGE_MTD
+ 
+-config BR2_PACKAGE_MTD_MKFSJFFS
+-	bool "mkfs.jffs"
+-	default y
+-	depends on BR2_PACKAGE_MTD_20050122 || BR2_PACKAGE_MTD_20061007 || BR2_PACKAGE_MTD_UTILS
+-
+ config BR2_PACKAGE_MTD_MTD_DEBUG
+ 	bool "mtd_debug"
+ 	default y
+diff --git a/package/mtd/mtd-utils/mtd-utils-1.1.0-all-acl.patch b/package/mtd/mtd-utils/mtd-utils-1.1.0-all-acl.patch
 deleted file mode 100644
 index 953786e..0000000
---- a/package/mtd/mtd-utils.git/mtd-utils-target-acl.patch
+--- a/package/mtd/mtd-utils/mtd-utils-1.1.0-all-acl.patch
 +++ /dev/null
 @@ -1,48 +0,0 @@
 -Author:	Ulf Samuelsson
@@ -351,24 +469,122 @@ index 953786e..0000000
 -+//#define ACL_DELETE		(0x10)
 -+
 -+#endif  /* __LINUX_POSIX_ACL_H */
-diff --git a/package/mtd/mtd-utils.git/mtd.mk b/package/mtd/mtd-utils.git/mtd.mk
+diff --git a/package/mtd/mtd-utils/mtd-utils-1.1.0-all-flashcp-npow2-erase.patch b/package/mtd/mtd-utils/mtd-utils-1.1.0-all-flashcp-npow2-erase.patch
 deleted file mode 100644
-index e4ec4b2..0000000
---- a/package/mtd/mtd-utils.git/mtd.mk
+index b9a0a60..0000000
+--- a/package/mtd/mtd-utils/mtd-utils-1.1.0-all-flashcp-npow2-erase.patch
 +++ /dev/null
-@@ -1,145 +0,0 @@
+@@ -1,23 +0,0 @@
+-flashcp: handle non-power-of-2 erase size (E.G. for dataflash)
+-
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+----
+- flashcp.c |    4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-Index: mtd-utils-1.1.0/flashcp.c
+-===================================================================
+---- mtd-utils-1.1.0.orig/flashcp.c	2007-08-03 15:55:51.000000000 +0200
+-+++ mtd-utils-1.1.0/flashcp.c	2009-02-17 14:02:09.000000000 +0100
+-@@ -255,8 +255,9 @@
+- #warning "Check for smaller erase regions"
+- 
+- 	erase.start = 0;
+--	erase.length = filestat.st_size & ~(mtd.erasesize - 1);
+--	if (filestat.st_size % mtd.erasesize) erase.length += mtd.erasesize;
+-+	erase.length = (filestat.st_size + mtd.erasesize - 1) / mtd.erasesize;
+-+	erase.length *= mtd.erasesize;
+-+
+- 	if (flags & FLAG_VERBOSE)
+- 	{
+- 		/* if the user wants verbose output, erase 1 block at a time and show him/her what's going on */
+diff --git a/package/mtd/mtd-utils/mtd-utils-1.1.0-all-mkfs.jffs2-device_table-fix.patch b/package/mtd/mtd-utils/mtd-utils-1.1.0-all-mkfs.jffs2-device_table-fix.patch
+deleted file mode 100644
+index 1fe23c8..0000000
+--- a/package/mtd/mtd-utils/mtd-utils-1.1.0-all-mkfs.jffs2-device_table-fix.patch
++++ /dev/null
+@@ -1,23 +0,0 @@
+-mkfs.jffs2.c: fix device_table handling
+-
+-find_filesystem_entry would ignore device_table entries for existing elements
+-if the device type / permissions weren't exactly the same, effectively
+-rendering device_table useless.
+----
+- mkfs.jffs2.c |    3 +--
+- 1 file changed, 1 insertion(+), 2 deletions(-)
+-
+-Index: mtd-utils-1.1.0/mkfs.jffs2.c
+-===================================================================
+---- mtd-utils-1.1.0.orig/mkfs.jffs2.c
+-+++ mtd-utils-1.1.0/mkfs.jffs2.c
+-@@ -246,8 +246,7 @@
+- 		e = dir->files;
+- 	}
+- 	while (e) {
+--		/* Only bother to do the expensive strcmp on matching file types */
+--		if (type == (e->sb.st_mode & S_IFMT)) {
+-+		if (1) {
+- 			if (S_ISDIR(e->sb.st_mode)) {
+- 				int len = strlen(e->fullname);
+- 
+diff --git a/package/mtd/mtd-utils/mtd-utils-1.1.0-all-targets.patch b/package/mtd/mtd-utils/mtd-utils-1.1.0-all-targets.patch
+deleted file mode 100644
+index e887118..0000000
+--- a/package/mtd/mtd-utils/mtd-utils-1.1.0-all-targets.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-diff -urN mtd-utils-1.1.0-0rig/Makefile mtd-utils-1.1.0/Makefile
+---- mtd-utils-1.1.0-0rig/Makefile	2007-08-03 15:55:51.000000000 +0200
+-+++ mtd-utils-1.1.0/Makefile	2007-09-27 08:20:55.000000000 +0200
+-@@ -72,6 +72,30 @@
+- $(BUILDDIR)/sumtool: $(BUILDDIR)/sumtool.o $(BUILDDIR)/crc32.o
+- 	$(CC) $(LDFLAGS) -o $@ $^
+- 
+-+ftl_format:	$(BUILDDIR)/ftl_format
+-+flash_erase:	$(BUILDDIR)/flash_erase
+-+flash_eraseall:	$(BUILDDIR)/flash_eraseall
+-+nanddump:	$(BUILDDIR)/nanddump
+-+doc_loadbios:	$(BUILDDIR)/doc_loadbios
+-+mkfs.jffs:	$(BUILDDIR)/mkfs.jffs
+-+ftl_check:	$(BUILDDIR)/ftl_check
+-+mkfs.jffs2:	$(BUILDDIR)/mkfs.jffs2
+-+flash_lock:	$(BUILDDIR)/flash_lock
+-+flash_unlock:	$(BUILDDIR)/flash_unlock
+-+flash_info:	$(BUILDDIR)/flash_info
+-+flash_otp_info:	$(BUILDDIR)/flash_otp_info
+-+flash_otp_dump:	$(BUILDDIR)/flash_otp_dump
+-+mtd_debug:	$(BUILDDIR)/mtd_debug
+-+flashcp:	$(BUILDDIR)/flashcp
+-+nandwrite:	$(BUILDDIR)/nandwrite
+-+jffs2dump:	$(BUILDDIR)/jffs2dump
+-+nftldump:	$(BUILDDIR)/nftldump
+-+nftl_format:	$(BUILDDIR)/nftl_format
+-+docfdisk:	$(BUILDDIR)/docfdisk
+-+rfddump:	$(BUILDDIR)/rfddump
+-+rfdformat:	$(BUILDDIR)/rfdformat
+-+sumtool:	$(BUILDDIR)/sumtool
+-+
+- install: ${TARGETS}
+- 	mkdir -p ${DESTDIR}/${SBINDIR}
+- 	install -m0755 ${TARGETS} ${DESTDIR}/${SBINDIR}/
+diff --git a/package/mtd/mtd-utils/mtd.mk b/package/mtd/mtd-utils/mtd.mk
+deleted file mode 100644
+index f6b67da..0000000
+--- a/package/mtd/mtd-utils/mtd.mk
++++ /dev/null
+@@ -1,128 +0,0 @@
 -#############################################################
 -#
 -# mtd provides jffs2 utilities
 -#
 -#############################################################
--MTD_VERSION:=fcb52ccc99679460640386c297023f852b108f68
--MTD_SOURCE:=mtd-utils-$(MTD_VERSION).tar.gz
--MTD_URL:=http://git.infradead.org/mtd-utils.git?a=snapshot;h=$(MTD_VERSION);sf=tgz
--MTD_HOST_DIR:= $(TOOL_BUILD_DIR)/mtd-utils-$(MTD_VERSION)
--MTD_DIR:=$(BUILD_DIR)/mtd-utils-$(MTD_VERSION)
--MTD_CAT:=$(ZCAT)
--MTD_NAME:=mtd-utils
+-MTD_VERSION:=1.1.0
+-MTD_SOURCE:=mtd-utils-$(MTD_VERSION).tar.bz2
+-MTD_SITE:=ftp://ftp.infradead.org/pub/mtd-utils
+-MTD_HOST_DIR:= $(TOOL_BUILD_DIR)/mtd_orig
+-MTD_DIR:=$(BUILD_DIR)/mtd_orig
+-MTD_CAT:=$(BZCAT)
+-MTD_NAME:=mtd-utils-$(MTD_VERSION)
 -
 -#############################################################
 -#
@@ -380,29 +596,29 @@ index e4ec4b2..0000000
 -SUMTOOL := $(MTD_HOST_DIR)/sumtool
 -
 -$(DL_DIR)/$(MTD_SOURCE):
--	$(call DOWNLOAD,"$(MTD_URL)")
+-	$(call DOWNLOAD,$(MTD_SITE),$(MTD_SOURCE))
 -
 -$(MTD_HOST_DIR)/.unpacked: $(DL_DIR)/$(MTD_SOURCE)
 -	$(MTD_CAT) $(DL_DIR)/$(MTD_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS) -
 -	rm -rf $(MTD_HOST_DIR)
 -	mv $(TOOL_BUILD_DIR)/$(MTD_NAME) $(MTD_HOST_DIR)
 -	toolchain/patch-kernel.sh $(MTD_HOST_DIR) \
--		package/mtd/mtd-utils.git mtd-utils-all\*.patch
+-		package/mtd/mtd-utils mtd-utils-$(MTD_VERSION)-all\*.patch
 -	toolchain/patch-kernel.sh $(MTD_HOST_DIR) \
--		package/mtd/mtd-utils.git mtd-utils-host\*.patch
+-		package/mtd/mtd-utils mtd-utils-$(MTD_VERSION)-host\*.patch
 -	touch $@
 -
 -
 -$(MKFS_JFFS2): $(MTD_HOST_DIR)/.unpacked
 -	CC="$(HOSTCC)" CROSS= CFLAGS=-I$(LINUX_HEADERS_DIR)/include \
--		$(MAKE) \
--		BUILDDIR=$(MTD_HOST_DIR) WITHOUT_XATTR=1 \
+-		$(MAKE) LINUXDIR=$(LINUX_DIR) \
+-		BUILDDIR=$(MTD_HOST_DIR) \
 -		-C $(MTD_HOST_DIR) mkfs.jffs2
 -
 -$(SUMTOOL): $(MTD_HOST_DIR)/.unpacked
 -	CC="$(HOSTCC)" CROSS= CFLAGS=-I$(LINUX_HEADERS_DIR)/include \
--		$(MAKE) \
--		BUILDDIR=$(MTD_HOST_DIR) WITHOUT_XATTR=1 \
+-		$(MAKE) LINUXDIR=$(LINUX_DIR) \
+-		BUILDDIR=$(MTD_HOST_DIR) \
 -		-C $(MTD_HOST_DIR) sumtool
 -
 -mtd-host: $(MKFS_JFFS2) $(SUMTOOL)
@@ -422,10 +638,9 @@ index e4ec4b2..0000000
 -#############################################################
 -$(MTD_DIR)/.unpacked: $(DL_DIR)/$(MTD_SOURCE)
 -	$(MTD_CAT) $(DL_DIR)/$(MTD_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	rm -rf $(MTD_DIR)
 -	mv $(BUILD_DIR)/$(MTD_NAME) $(MTD_DIR)
--	toolchain/patch-kernel.sh $(MTD_DIR) package/mtd/mtd-utils.git mtd-utils-all\*.patch
--	toolchain/patch-kernel.sh $(MTD_DIR) package/mtd/mtd-utils.git mtd-utils-target\*.patch
+-	toolchain/patch-kernel.sh $(MTD_DIR) package/mtd/mtd-utils mtd-utils-$(MTD_VERSION)-all\*.patch
+-	toolchain/patch-kernel.sh $(MTD_DIR) package/mtd/mtd-utils mtd-utils-$(MTD_VERSION)-target\*.patch
 -	touch $@
 -
 -MTD_TARGETS_n :=
@@ -438,52 +653,36 @@ index e4ec4b2..0000000
 -MTD_TARGETS_$(BR2_PACKAGE_MTD_FLASH_UNLOCK) += flash_unlock
 -MTD_TARGETS_$(BR2_PACKAGE_MTD_FLASHCP) += flashcp
 -MTD_TARGETS_$(BR2_PACKAGE_MTD_MKFSJFFS2) += mkfs.jffs2
+-MTD_TARGETS_$(BR2_PACKAGE_MTD_MKFSJFFS) += mkfs.jffs
 -MTD_TARGETS_$(BR2_PACKAGE_MTD_JFFS2DUMP) += jffs2dump
+-#MTD_TARGETS_$(BR2_PACKAGE_MTD_JFFS3DUMP) += jffs3dump
 -MTD_TARGETS_$(BR2_PACKAGE_MTD_SUMTOOL) += sumtool
 -MTD_TARGETS_$(BR2_PACKAGE_MTD_FTL_CHECK) += ftl_check
 -MTD_TARGETS_$(BR2_PACKAGE_MTD_FTL_FORMAT) += ftl_format
 -MTD_TARGETS_$(BR2_PACKAGE_MTD_NFTLDUMP) += nftldump
 -MTD_TARGETS_$(BR2_PACKAGE_MTD_NFTL_FORMAT) += nftl_format
 -MTD_TARGETS_$(BR2_PACKAGE_MTD_NANDDUMP) += nanddump
--MTD_TARGETS_$(BR2_PACKAGE_MTD_NANDTEST) += nandtest
 -MTD_TARGETS_$(BR2_PACKAGE_MTD_NANDWRITE) += nandwrite
 -MTD_TARGETS_$(BR2_PACKAGE_MTD_MTD_DEBUG) += mtd_debug
 -MTD_TARGETS_$(BR2_PACKAGE_MTD_DOCFDISK) += docfdisk
 -MTD_TARGETS_$(BR2_PACKAGE_MTD_DOC_LOADBIOS) += doc_loadbios
 -
--MTD_TARGETS_UBI_n :=
--MTD_TARGETS_UBI_y :=
--
--MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIATTACH) += ubiattach
--MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBICRC32) += ubicrc32
--MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIDETACH) += ubidetach
--MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIMIRROR) += ubimirror
--MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIMKVOL) += ubimkvol
--MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBINFO) += ubinfo
--MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIRMVOL) += ubirmvol
--MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIUPDATEVOL) += ubiupdatevol
--
--MTD_BUILD_TARGETS := $(addprefix $(MTD_DIR)/, $(MTD_TARGETS_y)) $(addprefix $(MTD_DIR)/ubi-utils/, $(MTD_TARGETS_UBI_y))
+-MTD_BUILD_TARGETS := $(addprefix $(MTD_DIR)/, $(MTD_TARGETS_y))
 -
 -$(MTD_BUILD_TARGETS): $(MTD_DIR)/.unpacked
 -	mkdir -p $(TARGET_DIR)/usr/sbin
--	$(MAKE1) OPTFLAGS="-DNEED_BCOPY -Dbcmp=memcmp -I$(STAGING_DIR)/usr/include $(TARGET_CFLAGS)" \
+-	$(MAKE) CFLAGS="-I. -I./include -I$(LINUX_HEADERS_DIR)/include -I$(STAGING_DIR)/usr/include $(TARGET_CFLAGS)" \
 -		LDFLAGS="$(TARGET_LDFLAGS)" \
--	       BUILDDIR=$(MTD_DIR) \
--	       CROSS=$(TARGET_CROSS) CC=$(TARGET_CC) WITHOUT_XATTR=1 -C $(MTD_DIR)
+-		BUILDDIR=$(MTD_DIR) \
+-		CROSS=$(TARGET_CROSS) CC=$(TARGET_CC) LINUXDIR=$(LINUX26_DIR) WITHOUT_XATTR=1 -C $(MTD_DIR)
 -
 -MTD_TARGETS := $(addprefix $(TARGET_DIR)/usr/sbin/, $(MTD_TARGETS_y))
--MTD_UBI_TARGETS := $(addprefix $(TARGET_DIR)/usr/sbin/, $(MTD_TARGETS_UBI_y))
 -
 -$(MTD_TARGETS): $(TARGET_DIR)/usr/sbin/% : $(MTD_DIR)/%
 -	cp -f $< $@
 -	$(STRIPCMD) $@
 -
--$(MTD_UBI_TARGETS): $(TARGET_DIR)/usr/sbin/% : $(MTD_DIR)/ubi-utils/%
--	cp -f $< $@
--	$(STRIPCMD) $@
--
--mtd: zlib lzo $(MTD_TARGETS) $(MTD_UBI_TARGETS)
+-mtd: zlib $(MTD_TARGETS)
 -
 -mtd-source: $(DL_DIR)/$(MTD_SOURCE)
 -
@@ -503,15 +702,23 @@ index e4ec4b2..0000000
 -TARGETS+=mtd
 -endif
 diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-index 7a2c70e..f7222b3 100644
+index c7774fd..9d66698 100644
 --- a/package/mtd/mtd.mk
 +++ b/package/mtd/mtd.mk
-@@ -11,5 +11,5 @@ ifeq ($(BR2_PACKAGE_MTD_UTILS_20050122),y)
+@@ -1,10 +1,10 @@
+-ifeq ($(BR2_PACKAGE_MTD_UTILS),y)
+-include package/mtd/mtd-utils/mtd.mk
++ifeq ($(BR2_PACKAGE_MTD_UTILS_1_1_0),y)
++include package/mtd/1.1.0/mtd.mk
+ endif
+-ifeq ($(BR2_PACKAGE_MTD_20061007),y)
++ifeq ($(BR2_PACKAGE_MTD_UTILS_20061007),y)
+ include package/mtd/20061007/mtd.mk
+ endif
+-ifeq ($(BR2_PACKAGE_MTD_20050122),y)
++ifeq ($(BR2_PACKAGE_MTD_UTILS_20050122),y)
  include package/mtd/20050122/mtd.mk
  endif
  ifeq ($(BR2_PACKAGE_MTD_UTILS_GIT),y)
--include package/mtd/mtd-utils.git/mtd.mk
-+include package/mtd/git/mtd.mk
- endif
 -- 
 1.6.0.6
