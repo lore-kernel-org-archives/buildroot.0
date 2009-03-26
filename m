@@ -1,36 +1,33 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Thu, 26 Mar 2009 19:21:03 +0000 (UTC)
-Subject: [Buildroot] svn commit: [25829] trunk/buildroot/package/m4
-Message-ID: <20090326192103.53F03772DC@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 26 Mar 2009 19:21:52 +0000 (UTC)
+Subject: [Buildroot] [Bug 219] Toolchain build fails on m4
+In-Reply-To: <bug-219-163@https.bugs.busybox.net/>
+References: <bug-219-163@https.bugs.busybox.net/>
+Message-ID: <20090326192152.9E44F772DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-03-26 19:21:02 +0000 (Thu, 26 Mar 2009)
-New Revision: 25829
-
-Log:
-m4: provide download target (missing from r25810)
-
-Modified:
-   trunk/buildroot/package/m4/m4.mk
+https://bugs.busybox.net/show_bug.cgi?id=219
 
 
-Changeset:
-Modified: trunk/buildroot/package/m4/m4.mk
-===================================================================
---- trunk/buildroot/package/m4/m4.mk	2009-03-26 18:14:16 UTC (rev 25828)
-+++ trunk/buildroot/package/m4/m4.mk	2009-03-26 19:21:02 UTC (rev 25829)
-@@ -24,6 +24,9 @@
- # m4 for the host
- M4_HOST_DIR:=$(BUILD_DIR)/m4-$(M4_VERSION)-host
- 
-+$(DL_DIR)/$(M4_SOURCE):
-+	$(call DOWNLOAD,$(M4_SITE),$(M4_SOURCE))
-+
- $(STAMP_DIR)/host_m4_unpacked: $(DL_DIR)/$(M4_SOURCE)
- 	mkdir -p $(M4_HOST_DIR)
- 	$(INFLATE$(suffix $(M4_SOURCE))) $< | \
+Peter Korsgaard <jacmet@uclibc.org> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
+
+
+
+
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-03-26 19:21:52 UTC ---
+sorry about that, fixed in r25829
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
