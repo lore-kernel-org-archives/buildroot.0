@@ -1,55 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 26 Mar 2009 21:34:21 +0100
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 26 Mar 2009 21:45:36 +0100
 Subject: [Buildroot] svn commit: [25827] trunk/buildroot/package/automake
-In-Reply-To: <87tz5ggqup.fsf@macbook.be.48ers.dk>
+In-Reply-To: <20090326213421.55dae490@surf> (Thomas Petazzoni's message of
+	"Thu\, 26 Mar 2009 21\:34\:21 +0100")
 References: <20090326165522.5C989771F6@busybox.osuosl.org>
-	<87tz5ggqup.fsf@macbook.be.48ers.dk>
-Message-ID: <20090326213421.55dae490@surf>
+	<87tz5ggqup.fsf@macbook.be.48ers.dk> <20090326213421.55dae490@surf>
+Message-ID: <87zlf8f1xr.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 26 Mar 2009 18:02:06 +0100,
-Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-> Hmm, isn't this mixing up the host aclocal dir and the target
-> (staging) one? The host packages install into HOST_DIR (and hence
-> HOST_DIR/usr/share/aclocal), and the target libraries install into
-> STAGING_DIR.
-> 
-> I guess auto* won't be able to find the m4 files for the packages
-> where we don't build a host version with this change.
+Hi,
 
-I must admit I don't know. But, when AUTORECONF is set in the package
-(as is done by tslib), then the command in the $(AUTORECONF) variable,
-defined in autoconf/autoconf.mk is called. This command is :
+ Thomas> At least, my (maybe incorrect) change fixes the issue I reported in
+ Thomas> the mail titled "Bug while autoreconfiguring tslib", sent today. But
+ Thomas> maybe the correct fix is something like
 
-AUTORECONF=$(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" $(HOST_DIR)/usr/bin/autoreconf -v -f -i -I "$(ACLOCAL_DIR)"
+ Thomas> - AUTORECONF=$(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" $(HOST_DIR)/usr/bin/autoreconf -v -f -i -I "$(ACLOCAL_DIR)"
+ Thomas> + AUTORECONF=$(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" $(HOST_DIR)/usr/bin/autoreconf -v -f -i -I "$(HOST_ACLOCAL_DIR)"
 
-So it uses the host autoreconf tool, and gives ACLOCAL_DIR as the path
-for m4 files. So obviously, this ACLOCAL_DIR should be relative to
-HOST_DIR and not STAGING_DIR.
+I think the best/simplest solution is to just copy the aclocal files
+of the cross tools (pkgconfig +auto*) from HOST_DIR to STAGING_DIR and
+point ACLOCAL_DIR to STAGING_DIR - I'll give it a test.
 
-At least, my (maybe incorrect) change fixes the issue I reported in
-the mail titled "Bug while autoreconfiguring tslib", sent today. But
-maybe the correct fix is something like
+ Thomas> BTW, could you remind me why we need to compile all these tools for the
+ Thomas> host (pkg-config, automake, autoconf). Couldn't they be dependencies of
+ Thomas> Buildroot ?
 
-- AUTORECONF=$(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" $(HOST_DIR)/usr/bin/autoreconf -v -f -i -I "$(ACLOCAL_DIR)"
-+ AUTORECONF=$(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" $(HOST_DIR)/usr/bin/autoreconf -v -f -i -I "$(HOST_ACLOCAL_DIR)"
+pkg-config to make it look in staging_dir and not the host directory,
+and the auto* stuff simply because of the exact version dependencies
+(E.G. certain stuff works with 2.61 and not with 2.63 or the other
+way, so it keeps us a bit more sane to know that everyone uses the
+same version).
 
-And then defining HOST_ACLOCAL_DIR relatively to $(HOST_DIR).
-
-BTW, could you remind me why we need to compile all these tools for the
-host (pkg-config, automake, autoconf). Couldn't they be dependencies of
-Buildroot ?
-
-Sincerly,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
