@@ -1,32 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 26 Mar 2009 14:48:59 +0100
-Subject: [Buildroot] svn commit: [25817] trunk/buildroot/docs:  images
-In-Reply-To: <20090326140121.4a7f3922@surf> (Thomas Petazzoni's message of
-	"Thu\, 26 Mar 2009 14\:01\:21 +0100")
-References: <20090325155430.6477B76A00@busybox.osuosl.org>
-	<20090326140121.4a7f3922@surf>
-Message-ID: <873ad0ied0.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 26 Mar 2009 14:04:45 +0000 (UTC)
+Subject: [Buildroot] [Bug 217] New: Bump openssl package to 0.9.8k (security)
+Message-ID: <bug-217-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=217
 
- Thomas> Le Wed, 25 Mar 2009 15:54:30 +0000 (UTC),
- Thomas> jacmet at uclibc.org a ??crit :
+              Host: i686-linux
+            Target: arm-softfloat-linux-uclibcgnueabi
+           Summary: Bump openssl package to 0.9.8k (security)
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+               URL: http://www.openssl.org/news/secadv_20090325.txt
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: gustavo at zacarias.com.ar
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
- >> Added:
- >> trunk/buildroot/docs/images/menuconfig.png
- >> trunk/buildroot/docs/images/menuconfig_small.png
 
- Thomas> It seems that SVN didn't get the fact that these files are binary files
- Thomas> (probably because you're using git-svn). See
- Thomas> <http://svnbook.red-bean.com/en/1.1/apas08.html>. The svn:mime-type
- Thomas> property should be set on those files.
+Bump the openssl package from 0.9.8j to 0.9.8k, fixes various security issues.
+Affected by CVE-2009-0590, CVE-2009-0591, CVE-2009-0789.
 
-Ahh yes, thanks - Fixed in r25826.
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
