@@ -1,36 +1,31 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 26 Mar 2009 20:52:10 +0100
-Subject: [Buildroot] Error building libX11 on Buildroot 0.90.2 stable
-In-Reply-To: <41370a610903261143r9ec110cu2edeaa3c6136cafd@mail.gmail.com> (Ed
-	Stafford's message of "Thu\, 26 Mar 2009 13\:43\:48 -0500")
-References: <41370a610903261143r9ec110cu2edeaa3c6136cafd@mail.gmail.com>
-Message-ID: <874oxggiz9.fsf@macbook.be.48ers.dk>
+From: Michael Roth <mroth@nessie.de>
+Date: Thu, 26 Mar 2009 21:21:38 +0100
+Subject: [Buildroot] [PATCH] scripts/setlocalversion: Renamed 'git-svn' to
+	'git svn'
+Message-ID: <1238098898-5749-1-git-send-email-mroth@nessie.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ed" == Ed Stafford <ed.stafford@gmail.com> writes:
+Signed-off-by: Michael Roth <mroth@nessie.de>
+---
+ scripts/setlocalversion |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Hi,
-
- Ed> checking keysymdef.h... configure: error: Cannot find keysymdef.h
- Ed> make: *** [/home/ed/src/buildroot-2009.02/build_i386/xlib_libX11-1.1.3/.stamp_configured]
-
-Taking a look at config.log shows the reason:
-
-configure:23596: checking keysymdef.h
-configure:23601: result: /usr/include/X11/keysymdef.h
-
-So it searches for and finds the host header. I'll look into fixing
-this, but in the mean time you can install it on your host (something
-like x11proto-core-dev) to continue.
-
-These things unfortunately sometimes happen. I have had
-'setup-buildbot-with-builders-on-minimal-systems' on my todo list for
-a while, and once that's running it should be easy to detect this kind
-of errors.
-
+diff --git a/scripts/setlocalversion b/scripts/setlocalversion
+index f6946cf..cc2c128 100755
+--- a/scripts/setlocalversion
++++ b/scripts/setlocalversion
+@@ -21,7 +21,7 @@ if head=`git rev-parse --verify --short HEAD 2>/dev/null`; then
+ 
+ 	# Is this git on svn?
+ 	if git config --get svn-remote.svn.url >/dev/null; then
+-	        printf -- '-svn%s' "`git-svn find-rev $head`"
++	        printf -- '-svn%s' "`git svn find-rev $head`"
+ 	fi
+ 
+ 	# Are there uncommitted changes?
 -- 
-Bye, Peter Korsgaard
+1.6.0.6
