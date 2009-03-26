@@ -1,39 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 26 Mar 2009 17:48:48 +0100
-Subject: [Buildroot] Bug while autoreconfiguring tslib
-Message-ID: <20090326174848.4b1db278@surf>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 26 Mar 2009 18:02:06 +0100
+Subject: [Buildroot] svn commit: [25827] trunk/buildroot/package/automake
+In-Reply-To: <20090326165522.5C989771F6@busybox.osuosl.org>
+	(tpetazzoni@uclibc.org's message of "Thu\,
+	26 Mar 2009 16\:55\:22 +0000 \(UTC\)")
+References: <20090326165522.5C989771F6@busybox.osuosl.org>
+Message-ID: <87tz5ggqup.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "tpetazzoni" == tpetazzoni  <tpetazzoni@uclibc.org> writes:
 
-While autoreconfiguring tslib, issue :
+ tpetazzoni> Author: tpetazzoni
+ tpetazzoni> Date: 2009-03-26 16:55:21 +0000 (Thu, 26 Mar 2009)
+ tpetazzoni> New Revision: 25827
 
->>> tslib 1.0 Running autoreconf
-autoreconf: Entering directory `.'
-autoreconf: configure.ac: not using Gettext
-autoreconf: running: /home/thomas/local/buildroot/build_arm/host_dir/usr/bin/aclocal -I /home/thomas/local/buildroot/build_arm/staging_dir/usr/share/aclocal --force -I m4/internal -I m4/external
-aclocal: couldn't open directory `/home/thomas/local/buildroot/build_arm/staging_dir/usr/share/aclocal': No such file or directory
-autoreconf: /home/thomas/local/buildroot/build_arm/host_dir/usr/bin/aclocal failed with exit status: 1
-make: ***
-[/home/thomas/local/buildroot/build_arm/tslib-1.0/.stamp_autoconfigured]
-Error 1
+ tpetazzoni> Log:
+ tpetazzoni> /usr/share/aclocal is now in $(HOST_DIR) and not $(STAGING_DIR).
 
-.config file included.
+Hmm, isn't this mixing up the host aclocal dir and the target
+(staging) one? The host packages install into HOST_DIR (and hence
+HOST_DIR/usr/share/aclocal), and the target libraries install into
+STAGING_DIR.
 
-Thomas
+I guess auto* won't be able to find the m4 files for the packages
+where we don't build a host version with this change.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: .config
-Type: application/octet-stream
-Size: 16091 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090326/ab78ce1e/attachment-0001.obj>
+Bye, Peter Korsgaard
