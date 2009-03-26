@@ -1,30 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 26 Mar 2009 14:01:21 +0100
-Subject: [Buildroot] svn commit: [25817] trunk/buildroot/docs:  images
-In-Reply-To: <20090325155430.6477B76A00@busybox.osuosl.org>
-References: <20090325155430.6477B76A00@busybox.osuosl.org>
-Message-ID: <20090326140121.4a7f3922@surf>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Thu, 26 Mar 2009 13:48:46 +0000 (UTC)
+Subject: [Buildroot] svn commit: [25826] trunk/buildroot/docs/images
+Message-ID: <20090326134846.ECD1E771F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 25 Mar 2009 15:54:30 +0000 (UTC),
-jacmet at uclibc.org a ??crit :
+Author: jacmet
+Date: 2009-03-26 13:48:46 +0000 (Thu, 26 Mar 2009)
+New Revision: 25826
 
-> Added:
->    trunk/buildroot/docs/images/menuconfig.png
->    trunk/buildroot/docs/images/menuconfig_small.png
+Log:
+docs/images: set svn:mime-type on .png's
 
-It seems that SVN didn't get the fact that these files are binary files
-(probably because you're using git-svn). See
-<http://svnbook.red-bean.com/en/1.1/apas08.html>. The svn:mime-type
-property should be set on those files.
+Thanks to Thomas for noticing.
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+
+Modified:
+   trunk/buildroot/docs/images/busybox1.png
+   trunk/buildroot/docs/images/menuconfig.png
+   trunk/buildroot/docs/images/menuconfig_small.png
+   trunk/buildroot/docs/images/valid-html401.png
+
+
+Changeset:
+
+Property changes on: trunk/buildroot/docs/images/busybox1.png
+___________________________________________________________________
+Modified: svn:mime-type
+   - application/octet-stream
+   + image/png
+
+
+Property changes on: trunk/buildroot/docs/images/menuconfig.png
+___________________________________________________________________
+Added: svn:mime-type
+   + image/png
+
+
+Property changes on: trunk/buildroot/docs/images/menuconfig_small.png
+___________________________________________________________________
+Added: svn:mime-type
+   + image/png
+
+
+Property changes on: trunk/buildroot/docs/images/valid-html401.png
+___________________________________________________________________
+Modified: svn:mime-type
+   - application/octet-stream
+   + image/png
