@@ -1,34 +1,56 @@
-From: daniele_dll <d.albano@gmail.com>
-Date: Thu, 26 Mar 2009 18:50:25 +0100
-Subject: [Buildroot] Failt to build a root for i386 architecture using
-	lastest stable release
-Message-ID: <159a01660903261050x5dc9a13sd2583dd74f4eac79@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 26 Mar 2009 18:19:54 +0000 (UTC)
+Subject: [Buildroot] [Bug 219] New: Toolchain build fails on m4
+Message-ID: <bug-219-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi to all,
+https://bugs.busybox.net/show_bug.cgi?id=219
 
-this is my first post here! I've discovered buildroot few days again
-... i'ts great!
+              Host: Linux archlinux 2.6.28-ARCH #1 SMP PREEMPT Sun Feb 8
+                    10:13:45 UTC 2009 i686 Intel(R) Xeon(R) CPU X3350 @
+                    2.66GHz GenuineIntel GNU/Linux
+            Target: x86-64
+             Build: buildroot-20090326
+           Summary: Toolchain build fails on m4
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: critical
+          Priority: P2
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: info at je-eigen-domein.nl
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-I'm trying to build a root system for coLinux ( Cooperative Linux)
-because i need to reduce a lot memory and space requirements. I've
-tried a lot of time to compile a i386 architecture (with i686 as
-target architecture) but i can't get uclibc compiled, it's fails. I've
-tried using uclibc 0.9.29, 0.9.30 and daily snapshot.
 
-Using stable uclibc he said that sysdep.h is missing. If i comment the
-include i get an error later, when the linker try to link thread
-library (linuxthreads and nptl give the same error).
+Buildroot fails building the toolchain:
 
-I've tried all combinations (gcc, binutils, kernel ...) but nothing to do.
+===
 
-This a known problem?
+# Make sure we have 'cc'.
+if [ ! -e /home/max/buildroot/project_build_x86_64/maxtest/root/usr/bin/cc ];
+then \
+                ln -snf gcc
+/home/max/buildroot/project_build_x86_64/maxtest/root/usr/bin/cc; \
+        fi
+# These are in /lib, so...
+#rm -rf
+/home/max/buildroot/project_build_x86_64/maxtest/root/usr/lib/libgcc_s*.so*
+touch -c /home/max/buildroot/project_build_x86_64/maxtest/root/usr/bin/gcc
+make: *** No rule to make target `/home/max/buildroot/dl/m4-1.4.9.tar.bz2',
+needed by `/home/max/buildroot/build_x86_64/stamps/host_m4_unpacked'.  Stop.
 
-Thank you!
+===
 
-(I'm at office, and i don't have the error message here, i'll post it
-when i'll back to the home)
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
