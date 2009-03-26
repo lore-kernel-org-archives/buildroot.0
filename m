@@ -1,71 +1,41 @@
-From: H Hartley Sweeten <hartleys@visionengravers.com>
-Date: Wed, 25 Mar 2009 19:45:04 -0400
-Subject: [Buildroot] External toolchain
-In-Reply-To: <20090325233625.GA20034@buzzloop.caiaq.de>
-References: <BD79186B4FD85F4B8E60E381CAEE1909014E2516@mi8nycmail19.Mi8.com>
-	<20090325233625.GA20034@buzzloop.caiaq.de>
-Message-ID: <BD79186B4FD85F4B8E60E381CAEE1909014E2553@mi8nycmail19.Mi8.com>
+From: Tobias McNulty <tobias@caktusgroup.com>
+Date: Wed, 25 Mar 2009 20:27:19 -0400
+Subject: [Buildroot] using linux 2.4 headers AND python
+In-Reply-To: <20090325232609.GA30311@cloud.net.au>
+References: <49C9614C.6010205@caktusgroup.com>	<877i2ejzrj.fsf@macbook.be.48ers.dk>	<49C9ABB0.8080501@caktusgroup.com>
+	<49CA4F52.705@caktusgroup.com>
+	<20090325232609.GA30311@cloud.net.au>
+Message-ID: <49CACBE7.80504@caktusgroup.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday, March 25, 2009 4:36 PM, Daniel Mack wrote:
-> On Wed, Mar 25, 2009 at 06:14:05PM -0400, H Hartley Sweeten wrote:
-> > This might not be the correct list to ask this on but I'll try
-> > anyway..
-> > 
-> > I have been using Buildroot with an external toolchain provided
-> > by Cirrus Logic for an ARM ep93xx based board. This toolchain has
-> > worked fine ever since I started using it.
+Hamish Moffatt wrote:
+>> Is that line really supposed to be there?
 > 
-> Just curious - why don't you let buildroot build the toolchain for
-> you?
-
-I tried that once before and just ended up with a big mess.
-
-That's one of the pieces of Buildroot that I really don't get.. :-(
-
-[...]
-
-> > Now I have a problem I can't figure out.
-> > 
-> > I can get Buildroot to use the Code Sourcery toolchain and it
-> > compiles the 2.6.29 kernel fine. But, when I try to boot the
-> > kernel it just hangs after the "Uncompressing Linux.... done,
-> > booting the kernel." step.
-> >  
-> > I went back to kernel 2.6.28.8 and tried it with the Code
-> > Sourcery toolchain, same results. But, if I switch back to the
-> > Cirrus 4.1.1 toolchain the kernel boots fine.
+> No it isn't, but you should also have the .pyc file (unless you have set
+> BR2_PACKAGE_PYTHON_PY_ONLY) so 'import os' will still work. You might
+> want to build python with logging and post the log here, ie
 > 
-> We had similar problems discussed on that list just recently. Not
-> sure whether you're facing exactly the same thing here, but it might
-> be a pointer.
-
-I'll look at the thread and see if anything help.
-
-> The problem on other ARM based boards was configurations of gcc
-> using cpu-specific extensions by default which makes the kernel
-> build system used them to build the kernel - which eventually
-> results in unbootable images.
-
-The strange thing is, the Code Sourcery toolchain works fine with the
-other ep93xx user. I'm hoping I just have something messed up.
-
-Also, I would assume if the toolchain had some default cpu-specific
-extensions then the "Uncompressing Linux... " wouldn't even work.
-But, again I don't know...
-
-> See this thread:
+> make python-dirclean python 2>&1 > pybuild.log
 > 
->   http://lists.busybox.net/pipermail/buildroot/2009-March/026580.html
-> 
-> Hope that helps :) And if it does, it might be worth including some
-> proven to work configs in the buildroot repository.
+> 'svn blame' suggests this is my mistake. I use ..._PYC_ONLY so I didn't
+> notice.
 
-I'll look it over. Maybe it will help.
+Cool, thanks for the quick reply.  I do have BR2_PACKAGE_PYTHON_PY_ONLY
+selected, but only because that's the default.  Is PYC generally
+smaller/faster?  A quick google seems to suggest that it's not much
+faster..but maybe the difference is more noticeable on smaller embedded
+machines.
 
-Thanks,
-Hartley
+Toby
+
+-- 
+Tobias McNulty
+Caktus Consulting Group, LLC
+P.O. Box 1454
+Carrboro, NC 27510
+(919) 951-0052
+http://www.caktusgroup.com
