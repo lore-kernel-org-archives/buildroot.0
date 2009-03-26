@@ -1,129 +1,128 @@
 From: Michael Roth <mroth@nessie.de>
-Date: Thu, 26 Mar 2009 21:20:07 +0100
-Subject: [Buildroot] [PATCH 5/5] target/ubifs: Switched to mkfs.ubifs
-	included in mtd-utils
+Date: Thu, 26 Mar 2009 21:20:05 +0100
+Subject: [Buildroot] [PATCH 3/5] mtd-utils: Prepare for upcoming mtd-utils
+	with included mkfs.ubifs
 In-Reply-To: <1238098807-5648-1-git-send-email-mroth@nessie.de>
 References: <1238098807-5648-1-git-send-email-mroth@nessie.de>
-Message-ID: <1238098807-5648-6-git-send-email-mroth@nessie.de>
+Message-ID: <1238098807-5648-4-git-send-email-mroth@nessie.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The mkfs.ubifs is included in the upcomming mtd-utils. So
-the ubifs root filesytem target uses the mtd-utils package
-analog to the jffs2 root filesystem target.
+The upcoming mtd-utils have mkfs.ubifs included. So some minor
+tweaks to the jffs2 root filesystem build are necessary to
+distinguish it from an ubifs root filesytem build.
 
 Signed-off-by: Michael Roth <mroth@nessie.de>
 ---
- target/ubifs/Config.in    |    4 +++
- target/ubifs/ubifsroot.mk |   53 ++++++++++++---------------------------------
- 2 files changed, 18 insertions(+), 39 deletions(-)
+ package/mtd/1.1.0/mtd.mk    |    4 ++--
+ package/mtd/1.2.0/mtd.mk    |    4 ++--
+ package/mtd/20050122/mtd.mk |    4 ++--
+ package/mtd/20061007/mtd.mk |    4 ++--
+ target/jffs2/jffs2root.mk   |    6 +++---
+ 5 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/target/ubifs/Config.in b/target/ubifs/Config.in
-index 85229f6..7544b50 100644
---- a/target/ubifs/Config.in
-+++ b/target/ubifs/Config.in
-@@ -1,9 +1,13 @@
- config BR2_TARGET_ROOTFS_UBIFS
- 	bool "ubifs root filesystem"
- 	select BR2_HOST_FAKEROOT
-+	depends on BR2_PACKAGE_MTD_UTILS_GIT
- 	help
- 	  Build a ubifs root filesystem
+diff --git a/package/mtd/1.1.0/mtd.mk b/package/mtd/1.1.0/mtd.mk
+index e89e9ce..76131a8 100644
+--- a/package/mtd/1.1.0/mtd.mk
++++ b/package/mtd/1.1.0/mtd.mk
+@@ -46,11 +46,11 @@ $(SUMTOOL): $(MTD_HOST_DIR)/.unpacked
+ 		BUILDDIR=$(MTD_HOST_DIR) \
+ 		-C $(MTD_HOST_DIR) sumtool
  
-+comment "ubifs root filesystem depends on latest mtd-utils (from GIT)"
-+        depends on !BR2_PACKAGE_MTD_UTILS_GIT
-+
- config BR2_TARGET_ROOTFS_UBIFS_LEBSIZE
- 	hex "UBI logical erase block size"
- 	depends on BR2_TARGET_ROOTFS_UBIFS
-diff --git a/target/ubifs/ubifsroot.mk b/target/ubifs/ubifsroot.mk
-index f0b519d..632e5ee 100644
---- a/target/ubifs/ubifsroot.mk
-+++ b/target/ubifs/ubifsroot.mk
-@@ -1,37 +1,5 @@
- #############################################################
- #
--# mkfs.ubifs to build to target ubifs filesystems
--#
--#############################################################
--#MKFS_UBIFS_VERSION=2582f128dad78591bc3adcc87c343c690bb82e61
--#MKFS_UBIFS_URL=http://git.infradead.org/users/dedekind/mkfs.ubifs.git?a=snapshot;h=$(MKFS_UBIFS_VERSION);sf=tgz
--MKFS_UBIFS_VERSION=v0.4
--MKFS_UBIFS_URL=http://git.infradead.org/users/dedekind/mkfs.ubifs.git?a=snapshot;h=refs/tags/mkfs.ubifs-$(MKFS_UBIFS_VERSION);sf=tgz
--MKFS_UBIFS_SOURCE:=mkfs.ubifs-$(MKFS_UBIFS_VERSION).tar.gz
--MKFS_UBIFS_DIR:= $(BUILD_DIR)/mkfs-ubifs-$(MKFS_UBIFS_VERSION)
--MKFS_UBIFS_CAT:=$(ZCAT)
--MKFS_UBIFS_NAME:=mkfs.ubifs
--
--$(DL_DIR)/$(MKFS_UBIFS_SOURCE):
--	$(call DOWNLOAD,"$(MKFS_UBIFS_URL)")
--
--$(MKFS_UBIFS_DIR)/.unpacked: $(DL_DIR)/$(MKFS_UBIFS_SOURCE)
--	$(ZCAT) $(DL_DIR)/$(MKFS_UBIFS_SOURCE) | tar -C $(BUILD_DIR) -xvf -
--	mv $(BUILD_DIR)/$(MKFS_UBIFS_NAME) $(MKFS_UBIFS_DIR)
--	toolchain/patch-kernel.sh $(MKFS_UBIFS_DIR) target/ubifs/ mkfs-ubifs-\*.patch
--	touch $@
--
--$(MKFS_UBIFS_DIR)/mkfs.ubifs: $(MKFS_UBIFS_DIR)/.unpacked
--	$(MAKE) -C $(MKFS_UBIFS_DIR)
--	touch -c $@
--
--mkfs.ubifs-dirclean:
--	rm -rf $(MKFS_UBIFS_DIR)
--
--mkfs.ubifs: $(MKFS_UBIFS_DIR)/mkfs.ubifs
--
--#############################################################
--#
- # Build the ubifs root filesystem image
- #
- #############################################################
-@@ -76,7 +44,14 @@ else
- UBIFS_TARGET := $(UBIFS_BASE)
- endif
+-mtd-host: $(MKFS_JFFS2) $(SUMTOOL)
++mtd-host-jffs2: $(MKFS_JFFS2) $(SUMTOOL)
  
--$(UBIFS_BASE): host-fakeroot makedevs mkfs.ubifs
-+
-+#
-+# mtd-host-ubifs is a dependency which builds a local copy of mkfs.jffs2 if it is needed.
-+# the actual build is done from package/mtd/mtd.mk and it sets the
-+# value of MKFS_UBIFS to either the previously installed copy or the one
-+# just built.
-+#
-+$(UBIFS_BASE): host-fakeroot makedevs mtd-host-ubifs
+ mtd-host-source: $(DL_DIR)/$(MTD_SOURCE)
+ 
+-mtd-host-clean:
++mtd-host-jffs2-clean:
+ 	-$(MAKE) -C $(MTD_HOST_DIR) clean
+ 
+ mtd-host-dirclean:
+diff --git a/package/mtd/1.2.0/mtd.mk b/package/mtd/1.2.0/mtd.mk
+index 76340e5..979075a 100644
+--- a/package/mtd/1.2.0/mtd.mk
++++ b/package/mtd/1.2.0/mtd.mk
+@@ -44,11 +44,11 @@ $(SUMTOOL): $(MTD_HOST_DIR)/.unpacked
+ 		BUILDDIR=$(MTD_HOST_DIR) \
+ 		-C $(MTD_HOST_DIR) sumtool
+ 
+-mtd-host: $(MKFS_JFFS2) $(SUMTOOL)
++mtd-host-jffs2: $(MKFS_JFFS2) $(SUMTOOL)
+ 
+ mtd-host-source: $(DL_DIR)/$(MTD_SOURCE)
+ 
+-mtd-host-clean:
++mtd-host-jffs2-clean:
+ 	-$(MAKE) -C $(MTD_HOST_DIR) clean
+ 
+ mtd-host-dirclean:
+diff --git a/package/mtd/20050122/mtd.mk b/package/mtd/20050122/mtd.mk
+index b5a9d5c..a456edd 100644
+--- a/package/mtd/20050122/mtd.mk
++++ b/package/mtd/20050122/mtd.mk
+@@ -40,11 +40,11 @@ $(SUMTOOL): $(MTD_HOST_DIR)/.unpacked
+ 	CFLAGS=-I$(LINUX_HEADERS_DIR)/include $(MAKE) CC="$(HOSTCC)" CROSS= \
+ 		LINUXDIR=$(LINUX_DIR) -C $(MTD_HOST_DIR)/util sumtool
+ 
+-mtd-host: $(MKFS_JFFS2) $(SUMTOOL)
++mtd-host-jffs2: $(MKFS_JFFS2) $(SUMTOOL)
+ 
+ mtd-host-source: $(DL_DIR)/$(MTD_SOURCE)
+ 
+-mtd-host-clean:
++mtd-host-jffs2-clean:
+ 	-$(MAKE) -C $(MTD_HOST_DIR) clean
+ 
+ mtd-host-dirclean:
+diff --git a/package/mtd/20061007/mtd.mk b/package/mtd/20061007/mtd.mk
+index dfd3485..f299a60 100644
+--- a/package/mtd/20061007/mtd.mk
++++ b/package/mtd/20061007/mtd.mk
+@@ -38,11 +38,11 @@ $(SUMTOOL): $(MTD_HOST_DIR)/.unpacked
+ 	CC="$(HOSTCC)" CROSS= CFLAGS=-I$(LINUX_HEADERS_DIR)/include \
+ 		$(MAKE) LINUXDIR=$(LINUX_DIR) -C $(MTD_HOST_DIR) sumtool
+ 
+-mtd-host: $(MKFS_JFFS2) $(SUMTOOL)
++mtd-host-jffs2: $(MKFS_JFFS2) $(SUMTOOL)
+ 
+ mtd-host-source: $(DL_DIR)/$(MTD_SOURCE)
+ 
+-mtd-host-clean:
++mtd-host-jffs2-clean:
+ 	-$(MAKE) -C $(MTD_HOST_DIR) clean
+ 
+ mtd-host-dirclean:
+diff --git a/target/jffs2/jffs2root.mk b/target/jffs2/jffs2root.mk
+index dc176cd..d80e89e 100644
+--- a/target/jffs2/jffs2root.mk
++++ b/target/jffs2/jffs2root.mk
+@@ -44,12 +44,12 @@ endif
+ 
+ 
+ #
+-# mtd-host is a dependency which builds a local copy of mkfs.jffs2 if it is needed.
++# mtd-host-jffs2 is a dependency which builds a local copy of mkfs.jffs2 if it is needed.
+ # the actual build is done from package/mtd/mtd.mk and it sets the
+ # value of MKFS_JFFS2 to either the previously installed copy or the one
+ # just built.
+ #
+-$(JFFS2_TARGET): host-fakeroot makedevs mtd-host
++$(JFFS2_TARGET): host-fakeroot makedevs mtd-host-jffs2
  	- at find $(TARGET_DIR) -type f -perm +111 | xargs $(STRIPCMD) 2>/dev/null || true
  ifneq ($(BR2_HAVE_MANPAGES),y)
  	@rm -rf $(TARGET_DIR)/usr/man
-@@ -102,7 +77,7 @@ ifneq ($(TARGET_DEVICE_TABLE),)
- 		>> $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
- endif
- 	# Use fakeroot so mkfs.ubifs believes the previous fakery
--	echo "$(MKFS_UBIFS_DIR)/mkfs.ubifs -d $(TARGET_DIR) " \
-+	echo "$(MKFS_UBIFS) -d $(TARGET_DIR) " \
- 		"$(UBIFS_OPTS) -o $(UBIFS_BASE)" >> $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
- 	chmod a+x $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
- 	$(STAGING_DIR)/usr/bin/fakeroot -- $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
-@@ -122,13 +97,13 @@ ifneq ($(UBIFS_COPYTO),)
- 	@cp -f $(UBIFS_TARGET) $(UBIFS_COPYTO)
- endif
+@@ -99,7 +99,7 @@ endif
  
--ubifsroot-source: $(DL_DIR)/$(GENUBIFS_SOURCE)
-+ubifsroot-source: mtd-host-source
+ jffs2root-source: mtd-host-source
  
--ubifsroot-clean:
--	-$(MAKE) -C $(MKFS_UBIFS_DIR) clean
-+ubifsroot-clean: mtd-host-ubifs-clean
-+	rm -f $(UBIFS_TARGET)
+-jffs2root-clean: mtd-host-clean
++jffs2root-clean: mtd-host-jffs2-clean
+ 	-rm -f $(JFFS2_TARGET)
  
--ubifsroot-dirclean:
--	rm -rf $(MKFS_UBIFS_DIR)
-+ubifsroot-dirclean: mtd-host-dirclean
-+	rm -f $(UBIFS_TARGET)
- 
- #############################################################
- #
+ jffs2root-dirclean: mtd-host-dirclean
 -- 
 1.6.0.6
