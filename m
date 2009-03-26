@@ -1,22 +1,19 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 26 Mar 2009 21:47:57 +0100
-Subject: [Buildroot] [PATCH] scripts/setlocalversion: Renamed 'git-svn'
-	to 'git svn'
-In-Reply-To: <1238098898-5749-1-git-send-email-mroth@nessie.de> (Michael
-	Roth's message of "Thu\, 26 Mar 2009 21\:21\:38 +0100")
-References: <1238098898-5749-1-git-send-email-mroth@nessie.de>
-Message-ID: <87vdpwf1tu.fsf@macbook.be.48ers.dk>
+From: Michael Roth <mroth@nessie.de>
+Date: Thu, 26 Mar 2009 22:34:34 +0100
+Subject: [Buildroot] [PATCH v2 0/5] mtd-utils
+Message-ID: <1238103279-8040-1-git-send-email-mroth@nessie.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Michael" == Michael Roth <mroth@nessie.de> writes:
+Hello,
 
- Michael> Signed-off-by: Michael Roth <mroth@nessie.de>
+This is the second version of my mtd-utils patch series
+with the conflicts on the actual svn-version resolved.
 
-Thanks, committed as r25834.
+Hope it is ok. If not, please let me know.
 
--- 
-Bye, Peter Korsgaard
+
+Michael Roth
