@@ -1,32 +1,32 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Fri, 27 Mar 2009 08:51:46 +0000 (UTC)
-Subject: [Buildroot] svn commit: [25837] trunk/buildroot/docs:  images
-Message-ID: <20090327085147.056907742D@busybox.osuosl.org>
+From: Mirko ROCCO <mirko.rocco@gmail.com>
+Date: Fri, 27 Mar 2009 09:52:58 +0100
+Subject: [Buildroot] target/Makefile.in problem
+Message-ID: <10d6046f0903270152p681242fekf02862a27d0797ab@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-03-27 08:51:45 +0000 (Fri, 27 Mar 2009)
-New Revision: 25837
+Hi, I have downloaded the last snapshot of buildroot by means of svn...
+After menuconfig(-uration) for target PowerPC I give "make source" command
+but the compilation right there fails with this error:
 
-Log:
-docs/: use new logo
+target/Makefile.in:22: Extraneous text after `else' directive
+target/Makefile.in:38: *** only one `else' per conditional. Stop.
 
-Added:
-   trunk/buildroot/docs/images/logo.png
-   trunk/buildroot/docs/images/logo.xcf
-   trunk/buildroot/docs/images/logo_small.png
+So I have modified Makefile.in, adding a new line after `else' in line 22.
+The error became:
 
-Modified:
-   trunk/buildroot/docs/header.html
+target/Makefile.in:86: *** missing `endif'. Stop.
 
 
-Changeset:
+So I wondering: Am I following the right way? Is It right to modify
+Makefile.in?
 
-Sorry, the patch is too large to include (1945 lines).
-Please use ViewCVS to see it!
+Thanks for any suggestion in advance!
 
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=25837
+Mirko ROCCO
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090327/e6689ef7/attachment.htm>
