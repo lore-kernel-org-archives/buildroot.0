@@ -1,32 +1,30 @@
-From: Daniele Palmas <Daniele.Palmas@telit.com>
-Date: Fri, 27 Mar 2009 09:22:27 +0100
-Subject: [Buildroot] Cannot find libbfd library in compiled toolchain
-Message-ID: <B3B0FE219DFDB64F8905B1567ECB01BC8B3FC2@urano.tmt.telital.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 27 Mar 2009 09:43:58 +0100
+Subject: [Buildroot] Buildroot logo
+In-Reply-To: <20090326212557.731e231a@surf> (Thomas Petazzoni's message of
+	"Thu\, 26 Mar 2009 21\:25\:57 +0100")
+References: <87ljqsgkkz.fsf@macbook.be.48ers.dk> <20090326212557.731e231a@surf>
+Message-ID: <87myb7fj8x.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- 
+ >> What do you think? Too ugly for words? ;) If someone wants to step up
+ >> and create something nicer, then that's fine by me - But I think we
+ >> should atleast have a logo.
 
-Using buildroot-20080312 I'm trying to build a toolchain for ARM. I have
-succeded, but I need libbfd which cannot be found inside the usr/lib
-directory of the compiled toolchain. Which config voice should I enable
-to have the libbfd library built?
+ Thomas> Good idea, and I think that even without being a graphics artist, you
+ Thomas> created a nice-looking logo.
 
- 
+ Thomas> On overall, I'm very happy to see the Buildroot project moving again
+ Thomas> under your strong impulsion. I wish I could contribute a little bit
+ Thomas> more.
 
-Thanks in advance,
+Thanks for the kind words.
 
-Daniele
-
- 
-
- 
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090327/660c797d/attachment.htm>
+-- 
+Bye, Peter Korsgaard
