@@ -1,25 +1,33 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Fri, 27 Mar 2009 12:22:12 +0000 (UTC)
-Subject: [Buildroot] svn commit: [25841] trunk/buildroot/docs/images
-Message-ID: <20090327122212.4D07A7742D@busybox.osuosl.org>
+From: Lloyd Sargent <lloyd@cannasoftware.com>
+Date: Fri, 27 Mar 2009 08:55:00 -0500
+Subject: [Buildroot] Buildroot GUI
+Message-ID: <5077064A-237A-4F92-9395-197141542D06@cannasoftware.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-03-27 12:22:11 +0000 (Fri, 27 Mar 2009)
-New Revision: 25841
+Hi,
 
-Log:
-docs/images: remove unused busybox logo
+I don't know if this has been done or even if it is a good idea, but  
+I've been toying with the idea of a Buildroot GUI.
 
-Removed:
-   trunk/buildroot/docs/images/busybox1.png
+Not that Buildroot is a hard system to learn, but it can be very  
+daunting to the guy who "just wants to run code".
 
+I hadn't on making this a full IDE (I've worked with TI's DevRocket  
+and was NOT impressed), but would in fact allow people to set it up to  
+call their editor of choice. I'm not keen on writing editors.
 
-Changeset:
-Deleted: trunk/buildroot/docs/images/busybox1.png
-===================================================================
-(Binary files differ)
+So, is this a good idea, bad idea, or very problematic given the way  
+Buildroot changes?
+
+Cheers,
+
+Lloyd
+
+-----
+
+Lloyd Sargent
+Canna Software
