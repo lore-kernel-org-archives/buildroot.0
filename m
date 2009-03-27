@@ -1,33 +1,35 @@
-From: Tobias McNulty <tobias@caktusgroup.com>
-Date: Thu, 26 Mar 2009 23:04:22 -0400
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 27 Mar 2009 08:44:42 +0100
 Subject: [Buildroot] Buildroot logo
-In-Reply-To: <87ljqsgkkz.fsf@macbook.be.48ers.dk>
+In-Reply-To: <49CC4236.7090009@caktusgroup.com> (Tobias McNulty's message of
+	"Thu\, 26 Mar 2009 23\:04\:22 -0400")
 References: <87ljqsgkkz.fsf@macbook.be.48ers.dk>
-Message-ID: <49CC4236.7090009@caktusgroup.com>
+	<49CC4236.7090009@caktusgroup.com>
+Message-ID: <87r60jflzp.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard wrote:
-> What do you think? Too ugly for words? ;) If someone wants to step up
-> and create something nicer, then that's fine by me - But I think we
-> should atleast have a logo.
+>>>>> "Tobias" == Tobias McNulty <tobias@caktusgroup.com> writes:
 
-Also new to the list, but since you asked:
+ Tobias> Peter Korsgaard wrote:
+ >> What do you think? Too ugly for words? ;) If someone wants to step up
+ >> and create something nicer, then that's fine by me - But I think we
+ >> should atleast have a logo.
 
-I find it hard to read "Making Embedded Linux Easy" when it crosses over
-the black drop shadow on the hard hat.. can you add a
-border/shadow/color to make it stand out a little more?
+ Tobias> Also new to the list, but since you asked:
 
-otherwise I like it
+ Tobias> I find it hard to read "Making Embedded Linux Easy" when it
+ Tobias> crosses over the black drop shadow on the hard hat.. can you
+ Tobias> add a border/shadow/color to make it stand out a little more?
 
-Toby
+True. Is this better? (press refresh)
+
+ Tobias> otherwise I like it
+
+Thanks.
+
 -- 
-Tobias McNulty
-Caktus Consulting Group, LLC
-P.O. Box 1454
-Carrboro, NC 27510
-(919) 951-0052
-http://www.caktusgroup.com
+Bye, Peter Korsgaard
