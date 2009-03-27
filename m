@@ -1,51 +1,49 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Fri, 27 Mar 2009 10:19:54 +0100
-Subject: [Buildroot] Buildroot logo
-In-Reply-To: <1238144841.6667.10.camel@ess-roelvp>
-References: <87ljqsgkkz.fsf@macbook.be.48ers.dk> <20090326212557.731e231a@surf>
-	<87myb7fj8x.fsf@macbook.be.48ers.dk>
-	<1238144841.6667.10.camel@ess-roelvp>
-Message-ID: <20090327101954.1803f1b1@hcegtvedt>
+From: Alessio.Stella at gidi.it <Alessio.Stella@gidi.it>
+Date: Fri, 27 Mar 2009 11:09:00 +0100
+Subject: [Buildroot] stack size
+Message-ID: <OF550F5D38.9329BA67-ONC1257586.003798D4-C1257586.0038C0EB@gidi.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 27 Mar 2009 10:07:20 +0100
-Roeland Van Praet <roelvp@mind.be> wrote:
 
-> Hi,
-> 
-> Just my 2 cents: I like the logo a lot and I think it's a very good
-> idea to have an own logo of Buildroot.
-> 
+Excuse me
 
-Agreed
+I am cross compiling for an embedded system that my colleague has build up
+using buildroot and uclibc
 
-> Now I'm wondering if it is possible to put this logo on the website of
-> the company I work for?
->
+I have a strange behaviour of my code so i asked him how much is the stack
+size (per thread) but he doesn't know
+How to check it?
 
-Get a license on the logo from day one, there are several to choose
-from, but I have not a lot of knowledge about licenses on images.
 
-> We use a lot of technologies, including Buildroot, which we promote on
-> the website.
-> Since our core bussiness is consultancy in free and open source
-> software, Buildroot is an often used solution.
-> 
+Alessio Stella
+(+39)051 642 3319
+R&D / Machine SW
+G.D
+Via Emilia Ponente 49 - 40011 Anzola Emilia - Bologna - Italy
+Headquarters: Via Battindarno 91 - 40133 Bologna Italy
+www.gidi.it
 
-Exactly, and you are probably not the only one. I would like to use in
-presentation when I show of the tools available for Atmel AVR32 and
-AT91 products.
 
-> Do you agree with this? Do you think the logo is in a final state or
-> not?
->
 
-It got added to SVN, so at least consider it a RC ;)
 
--- 
-Best regards,
-Hans-Christian Egtvedt
+---------------------------------------------------------------------------------------------------------
+Le informazioni contenute in questo messaggio di posta elettronica,
+allegati inclusi, sono riservate e confidenziali e ne ? vietata la
+diffusione in qualunque modo eseguita. Qualora Lei non fosse la persona a
+cui il presente messaggio ? destinato La invito ad eliminarlo ed a non
+leggerlo, dandomene gentilmente comunicazione.
+La prego inoltre di considerare la natura non personale di questo messaggio
+di posta aziendale, ovvero l'eventualita' che la sua risposta possa essere
+conosciuta anche da altri ruoli nell'ambito dell'organizzazione -
+
+The information contained in this email message, including the attachments,
+is confidential and its diffusion in any form is prohibited.
+If you are not the intended recipient, you are kindly requested to cancel
+this message without reading it and to notify the sender.
+Please also consider the impersonal nature of this company e-mail message,
+i.e. the possibility that also other members within the organization may be
+aware of the contents of any reply of yours.
