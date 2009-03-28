@@ -1,22 +1,66 @@
-From: Lloyd Sargent <lloyd@cannasoftware.com>
-Date: Sat, 28 Mar 2009 20:12:04 -0500
-Subject: [Buildroot] Buildroot GUI
-In-Reply-To: <1238165107.6667.31.camel@ess-roelvp>
-References: <5077064A-237A-4F92-9395-197141542D06@cannasoftware.com>
-	<1238163903.6667.28.camel@ess-roelvp>
-	<20090327153235.27e7bc22@surf>
-	<1238165107.6667.31.camel@ess-roelvp>
-Message-ID: <BF31178E-A9AB-4458-BC65-8E820DB33DED@cannasoftware.com>
+From: Dan Pattison <dan.pattison@ethertek.ca>
+Date: Sat, 28 Mar 2009 12:53:23 -0700
+Subject: [Buildroot] Lighttpd with -pcre support
+Message-ID: <49CE8033.6080403@ethertek.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks for everyone's opinions... I think I'm going to design something.
+Hello List:
 
-Is it possible to get the Hardhat image without "Buildroot" on it?
+I want to use mod_redirect with lighttpd to redirect any normal http 
+request to secure https.
+I get this error message:
 
-Cheers,
+Starting HTTP Server...
+can't handle '$HTTP[host] =~ ...' as you compiled without pcre support.
 
-Lloyd
+I made sure -prce support was enabled in the menuconfig. Still no go.
+I hard coded the lighttpd.mk file to force --with pcre support. Still no go.
+I deleted both lighttpd and pcre-7.7 and watched buildroot re-configure 
+and make them again. I still can't make lighttpd compile with pcre support.
+
+Here is the output from lighttpd -V:
+
+# lighttpd -V
+lighttpd-1.4.20 (ssl) - a light and fast webserver
+Build-Date: Feb 13 2009 00:04:10
+
+Event Handlers:
+
+        + select (generic)
+        + poll (Unix)
+        + rt-signals (Linux 2.4+)
+        + epoll (Linux 2.6)
+        - /dev/poll (Solaris)
+        - kqueue (FreeBSD)
+
+Network handler:
+
+        + writev
+        + mmap support
+
+Features:
+
+        + IPv6 support
+        - zlib support
+        - bzip2 support
+        + crypt support
+        + SSL Support
+        - PCRE support
+        - mySQL support
+        - LDAP support
+        - memcached support
+        - FAM support
+        - LUA support
+        - xml support
+        - SQLite support
+        - GDBM support
+
+
+What am I doing wrong?
+
+Best Regards,
+Dan Pattison
