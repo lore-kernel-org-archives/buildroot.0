@@ -1,10 +1,10 @@
-From: Roeland Van Praet <roelvp@mind.be>
-Date: Fri, 27 Mar 2009 15:45:07 +0100
-Subject: [Buildroot] Buildroot GUI
-In-Reply-To: <20090327153235.27e7bc22@surf>
-References: <5077064A-237A-4F92-9395-197141542D06@cannasoftware.com>
-	<1238163903.6667.28.camel@ess-roelvp>  <20090327153235.27e7bc22@surf>
-Message-ID: <1238165107.6667.31.camel@ess-roelvp>
+From: kelvincheung <keguang.zhang@gmail.com>
+Date: Fri, 27 Mar 2009 23:59:21 -0700 (PDT)
+Subject: [Buildroot] EABI broken on arm926t?
+In-Reply-To: <22738895.post@talk.nabble.com>
+References: <76d9e2a30810181737u6987153fsb6509635312f5141@mail.gmail.com>
+	<22738895.post@talk.nabble.com>
+Message-ID: <22754259.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,48 +12,73 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-On Fri, 2009-03-27 at 15:32 +0100, Thomas Petazzoni wrote:
+I fond the sulotion:
+http://lists.uclibc.org/pipermail/buildroot/2007-June/003189.html
 
-> Le Fri, 27 Mar 2009 15:25:03 +0100,
-> Roeland Van Praet <roelvp@mind.be> a ?crit :
+To us EABI for ARM920T in the buildroot, two options are needed to the main
+buildroot config:
+BR2_EXTRA_BINUTILS_CONFIG_OPTIONS="--with-arch=armv4t"
+BR2_EXTRA_GCC_CONFIG_OPTIONS="--with-arch=armv4t"
+or
+BR2_EXTRA_BINUTILS_CONFIG_OPTIONS="--with-cpu=arm920t"
+BR2_EXTRA_GCC_CONFIG_OPTIONS="--with-cpu=arm920t"
+
+
+kelvincheung wrote:
 > 
-> > As far as implementation goes, I don't think it will be difficult.
-> > The GUI should just be able to read the Config.in files and the tree
-> > structure, show the contents and generate a .config file.
-> > This will continue to work independently of any changes to the
-> > packages.
+> I have the same problem.
+> My buildroot version is: buildroot-2009.02
+> Any one know the solution?
 > 
-> You mean just like xconfig/gconfig in the kernel source tree, which
-> already does that ? :-)
-
-
-Yes, something like that. But I've never used that.
-
-
+> Thanks!
 > 
-> Thomas
-> -- 
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers and embedded Linux development,
-> consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> Hai Zaar-2 wrote:
+>> 
+>> Good day!
+>> I'm building two weeks old buildroot snapshot for AT91SAM9260 board.
+>> 
+>> All I do it:
+>> make at91sam9260dfc_defconfig
+>> make menuconfig (select arm926t, EABI and remove games, etc...)
+>> make
+>> 
+>> Results:
+>> All kernels from 2.6.25 and later finish boot like this:
+>>    VFS: Mounted root (ext2 filesystem).
+>>    Freeing init memory: 128K
+>>    Kernel panic - not syncing: Attempted to kill init!
+>> 
+>> The only kernel that worked is 2.6.24. After checking the kernel
+>> config, I've found out that CONFIG_AEABI was not set (in spite of EABI
+>> being selected in buildroot's config). Disabling EABI on later
+>> kernels, (or enabling CONFIG_OABI_COMPAT) made them (almost)work.
+>> 
+>> Currently the situation is as follows:
+>> 
+>> EABI kernel + EABI rootfs = kernel panic (busibox's linuxrc dies)
+>> EABI kernel + OABI rootfs = kernel panic (busibox's linuxrc dies)
+>> OABI kernel + EABI rootfs = works, but some things like ping and nfs
+>> return 'Illegal instruction'
+>> EABI+OABI_COMPAT kernel + EABI rootfs = works, but some things like
+>> ping and nfs return 'Illegal instruction'
+>> EABI+OABI_COMPAT kernel + OABI rootfs = work correctly
+>> OABI kernel + OABI rootfs = works correctly
+>> 
+>> 1. Is EABI support broken for this platform in buildroot?
+>> 2. How can further investigate this issue?
+>> 
+>> -- 
+>> Zaar
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at uclibc.org
+>> http://busybox.net/mailman/listinfo/buildroot
+>> 
+>> 
+> 
+> 
 
-
-
-Roeland Van Praet
-
-Embedded Software Developer
-Mind - an ESSENSIUM nv division
-Gaston Geenslaan 9 - B 3001 Leuven - Belgium
-web : www.mind.be
-mail: roelvp at mind.be
-tel : +32 16 28 65 34
-fax : +32 16 28 65 01 
-BE 872 984 063 RPR Leuven
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090327/6ac00cbd/attachment.htm>
+-- 
+View this message in context: http://www.nabble.com/EABI-broken-on-arm926t--tp20052144p22754259.html
+Sent from the BuildRoot mailing list archive at Nabble.com.
