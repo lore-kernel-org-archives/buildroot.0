@@ -1,21 +1,22 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 28 Mar 2009 14:10:31 +0100
-Subject: [Buildroot] [PATCH] mplayer: disable LIVE555 Streaming Media
-In-Reply-To: <200903281221.34475.markus.heidelberg@web.de> (Markus
-	Heidelberg's message of "Sat\, 28 Mar 2009 12\:21\:33 +0100")
-References: <200903281221.34475.markus.heidelberg@web.de>
-Message-ID: <8763htg5dk.fsf@macbook.be.48ers.dk>
+From: Lloyd Sargent <lloyd@cannasoftware.com>
+Date: Sat, 28 Mar 2009 20:12:04 -0500
+Subject: [Buildroot] Buildroot GUI
+In-Reply-To: <1238165107.6667.31.camel@ess-roelvp>
+References: <5077064A-237A-4F92-9395-197141542D06@cannasoftware.com>
+	<1238163903.6667.28.camel@ess-roelvp>
+	<20090327153235.27e7bc22@surf>
+	<1238165107.6667.31.camel@ess-roelvp>
+Message-ID: <BF31178E-A9AB-4458-BC65-8E820DB33DED@cannasoftware.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Markus" == Markus Heidelberg <markus.heidelberg@web.de> writes:
+Thanks for everyone's opinions... I think I'm going to design something.
 
- Markus> Disable LIVE555, since it's not available in Buildroot.
+Is it possible to get the Hardhat image without "Buildroot" on it?
 
-Thanks, committed as r25855.
+Cheers,
 
--- 
-Bye, Peter Korsgaard
+Lloyd
