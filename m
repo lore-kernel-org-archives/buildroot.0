@@ -1,36 +1,27 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 29 Mar 2009 23:26:09 +0200
-Subject: [Buildroot] Cannot find libbfd library in compiled toolchain
-In-Reply-To: <B3B0FE219DFDB64F8905B1567ECB01BC8B3FC2@urano.tmt.telital.com>
-	(Daniele Palmas's message of "Fri\, 27 Mar 2009 09\:22\:27 +0100")
-References: <B3B0FE219DFDB64F8905B1567ECB01BC8B3FC2@urano.tmt.telital.com>
-Message-ID: <87eiwgc972.fsf@macbook.be.48ers.dk>
+Date: Sun, 29 Mar 2009 23:33:42 +0200
+Subject: [Buildroot] Buildroot GUI
+In-Reply-To: <BF31178E-A9AB-4458-BC65-8E820DB33DED@cannasoftware.com> (Lloyd
+	Sargent's message of "Sat\, 28 Mar 2009 20\:12\:04 -0500")
+References: <5077064A-237A-4F92-9395-197141542D06@cannasoftware.com>
+	<1238163903.6667.28.camel@ess-roelvp> <20090327153235.27e7bc22@surf>
+	<1238165107.6667.31.camel@ess-roelvp>
+	<BF31178E-A9AB-4458-BC65-8E820DB33DED@cannasoftware.com>
+Message-ID: <87ab74c8uh.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Daniele" == Daniele Palmas <Daniele.Palmas@telit.com> writes:
+>>>>> "Lloyd" == Lloyd Sargent <lloyd@cannasoftware.com> writes:
 
- Daniele> Hello,
+ Lloyd> Thanks for everyone's opinions... I think I'm going to design something.
 
- Daniele> Using buildroot-20080312 I?m trying to build a toolchain for
- Daniele> ARM.
+ Lloyd> Is it possible to get the Hardhat image without "Buildroot" on
+ Lloyd> it?
 
-I take it that you mean 20090312?
-
- Daniele> I have succeded, but I need libbfd which cannot be found
- Daniele> inside the usr/lib directory of the compiled
- Daniele> toolchain. Which config voice should I enable to have the
- Daniele> libbfd library built?
-
-libbfd from binutils for the target? That's currently only available
-if you enable gcc for the target, but you can manually add it to your
-rootfs by running make binutils_target.
-
-It's quite uncommon for anything else than gcc/binutils to need
-libbfd, may I ask what you need it for?
+Hardhat? Ehh, ask Montavista.
 
 -- 
 Bye, Peter Korsgaard
