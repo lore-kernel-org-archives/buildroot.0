@@ -1,66 +1,59 @@
-From: Dan Pattison <dan.pattison@ethertek.ca>
-Date: Sat, 28 Mar 2009 12:53:23 -0700
-Subject: [Buildroot] Lighttpd with -pcre support
-Message-ID: <49CE8033.6080403@ethertek.ca>
+From: tpetazzoni at uclibc.org <tpetazzoni@uclibc.org>
+Date: Sun, 29 Mar 2009 18:32:19 +0000 (UTC)
+Subject: [Buildroot] svn commit: [25879] trunk/buildroot/package
+Message-ID: <20090329183219.3F8197743B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello List:
+Author: tpetazzoni
+Date: 2009-03-29 18:32:18 +0000 (Sun, 29 Mar 2009)
+New Revision: 25879
 
-I want to use mod_redirect with lighttpd to redirect any normal http 
-request to secure https.
-I get this error message:
+Log:
+Another external toolchain fix
 
-Starting HTTP Server...
-can't handle '$HTTP[host] =~ ...' as you compiled without pcre support.
+Change the definition of TARGET_LDFLAGS to use --sysroot
+$(STAGING_DIR) instead of -L$(STAGING_DIR)/lib
+-L$(STAGING_DIR)/usr/lib. It fixes the following failure while trying
+to build mtd-utils :
 
-I made sure -prce support was enabled in the menuconfig. Still no go.
-I hard coded the lighttpd.mk file to force --with pcre support. Still no go.
-I deleted both lighttpd and pcre-7.7 and watched buildroot re-configure 
-and make them again. I still can't make lighttpd compile with pcre support.
+/usr/local/xtools/arm-unknown-linux-uclibcgnueabi/bin/arm-unknown-linux-uclibcgnueabi-gcc -L/home/thomas/local/buildroot-output/build_arm/staging_dir/lib -L/home/thomas/local/buildroot-output/build_arm/staging_dir/usr/lib -o /home/thomas/local/buildroot-output/build_arm/mtd_orig/flash_eraseall /home/thomas/local/buildroot-output/build_arm/mtd_orig/crc32.o /home/thomas/local/buildroot-output/build_arm/mtd_orig/flash_eraseall.o
+/usr/local/xtools/arm-unknown-linux-uclibcgnueabi/lib/gcc/arm-unknown-linux-uclibcgnueabi/4.3.2/../../../../arm-unknown-linux-uclibcgnueabi/bin/ld: cannot find /lib/libc.so.0
+collect2: ld returned 1 exit status
+make[1]: *** [/home/thomas/local/buildroot-output/build_arm/mtd_orig/flash_eraseall] Error 1
 
-Here is the output from lighttpd -V:
+At the same time, simplify the definition of TARGET_CFLAGS, because
+the -I$(STAGING_DIR)/include -I$(STAGING_DIR)/usr/include
+-I$(TOOLCHAIN_EXTERNAL_PATH)/$(TOOLCHAIN_EXTERNAL_PREFIX)/include are
+no longer necessary since we sysroot the toolchain in $(SYSROOT_DIR).
 
-# lighttpd -V
-lighttpd-1.4.20 (ssl) - a light and fast webserver
-Build-Date: Feb 13 2009 00:04:10
+This patch has no effect on non-external toolchain builds.
 
-Event Handlers:
-
-        + select (generic)
-        + poll (Unix)
-        + rt-signals (Linux 2.4+)
-        + epoll (Linux 2.6)
-        - /dev/poll (Solaris)
-        - kqueue (FreeBSD)
-
-Network handler:
-
-        + writev
-        + mmap support
-
-Features:
-
-        + IPv6 support
-        - zlib support
-        - bzip2 support
-        + crypt support
-        + SSL Support
-        - PCRE support
-        - mySQL support
-        - LDAP support
-        - memcached support
-        - FAM support
-        - LUA support
-        - xml support
-        - SQLite support
-        - GDBM support
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 
-What am I doing wrong?
 
-Best Regards,
-Dan Pattison
+Modified:
+   trunk/buildroot/package/Makefile.in
+
+
+Changeset:
+Modified: trunk/buildroot/package/Makefile.in
+===================================================================
+--- trunk/buildroot/package/Makefile.in	2009-03-29 17:25:14 UTC (rev 25878)
++++ trunk/buildroot/package/Makefile.in	2009-03-29 18:32:18 UTC (rev 25879)
+@@ -93,9 +93,9 @@
+ # else it's an external toolchain
+ #########################################################################
+ else
+-TARGET_CFLAGS=$(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING) -I$(STAGING_DIR)/include -I$(STAGING_DIR)/usr/include -I$(TOOLCHAIN_EXTERNAL_PATH)/$(TOOLCHAIN_EXTERNAL_PREFIX)/include --sysroot $(STAGING_DIR)/
++TARGET_CFLAGS=$(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING) --sysroot $(STAGING_DIR)/
+ TARGET_CXXFLAGS=$(TARGET_CFLAGS)
+-TARGET_LDFLAGS=-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib
++TARGET_LDFLAGS=--sysroot $(STAGING_DIR)/
+ endif
+ #########################################################################
+ #ifeq ($(BR2_ROOTFS_SUFFIX),)
