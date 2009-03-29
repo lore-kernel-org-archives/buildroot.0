@@ -1,28 +1,36 @@
-From: Chris Elliott <Chris@PinsonConsulting.com>
-Date: Sun, 29 Mar 2009 17:22:40 -0400
-Subject: [Buildroot] PPC won't build with soft float
-In-Reply-To: <87r60gcbqi.fsf@macbook.be.48ers.dk>
-References: <49CFD553.7030909@PinsonConsulting.com>
-	<87r60gcbqi.fsf@macbook.be.48ers.dk>
-Message-ID: <49CFE6A0.6000202@PinsonConsulting.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 29 Mar 2009 23:26:09 +0200
+Subject: [Buildroot] Cannot find libbfd library in compiled toolchain
+In-Reply-To: <B3B0FE219DFDB64F8905B1567ECB01BC8B3FC2@urano.tmt.telital.com>
+	(Daniele Palmas's message of "Fri\, 27 Mar 2009 09\:22\:27 +0100")
+References: <B3B0FE219DFDB64F8905B1567ECB01BC8B3FC2@urano.tmt.telital.com>
+Message-ID: <87eiwgc972.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Daniele" == Daniele Palmas <Daniele.Palmas@telit.com> writes:
 
-> Chris> Recently I have been unable to build when soft float is set. I have
->  Chris> tried 20090323 and 20090329.  The configuration is below.  It fails
->  Chris> saying that the C compiler cannot create executables.  The failure is
->  Chris> in libmudflap.  Checking config.log I see the specific error is
->  Chris> ".../gcc-4.3.3-final/./gcc/libgcc_s.so: undefined reference to
->  Chris> copysignl'"  Is there a fix or workaround?
->
-> Strange, that used to work. Does it work if you disable
-> BR2_GCC_SHARED_LIBGCC? What host distribution do you use?
->
->   
-It does build when I disable shared libgcc.  I'm building on Fedora 9.
+ Daniele> Hello,
 
-Thanks
+ Daniele> Using buildroot-20080312 I?m trying to build a toolchain for
+ Daniele> ARM.
+
+I take it that you mean 20090312?
+
+ Daniele> I have succeded, but I need libbfd which cannot be found
+ Daniele> inside the usr/lib directory of the compiled
+ Daniele> toolchain. Which config voice should I enable to have the
+ Daniele> libbfd library built?
+
+libbfd from binutils for the target? That's currently only available
+if you enable gcc for the target, but you can manually add it to your
+rootfs by running make binutils_target.
+
+It's quite uncommon for anything else than gcc/binutils to need
+libbfd, may I ask what you need it for?
+
+-- 
+Bye, Peter Korsgaard
