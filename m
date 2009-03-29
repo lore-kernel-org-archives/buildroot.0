@@ -1,121 +1,27 @@
-From: Chris Elliott <Chris@PinsonConsulting.com>
-Date: Sun, 29 Mar 2009 16:08:51 -0400
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 29 Mar 2009 22:31:17 +0200
 Subject: [Buildroot] PPC won't build with soft float
-Message-ID: <49CFD553.7030909@PinsonConsulting.com>
+In-Reply-To: <49CFD553.7030909@PinsonConsulting.com> (Chris Elliott's message
+	of "Sun\, 29 Mar 2009 16\:08\:51 -0400")
+References: <49CFD553.7030909@PinsonConsulting.com>
+Message-ID: <87r60gcbqi.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Recently I have been unable to build when soft float is set.  I have 
-tried 20090323 and 20090329.  The configuration is below.  It fails 
-saying that the C compiler cannot create executables.  The failure is in 
-libmudflap.  Checking config.log I see the specific error is 
-".../gcc-4.3.3-final/./gcc/libgcc_s.so: undefined reference to 
-'copysignl'"  Is there a fix or workaround?
+>>>>> "Chris" == Chris Elliott <Chris@PinsonConsulting.com> writes:
 
-BR2_HAVE_DOT_CONFIG=y
-BR2_VERSION="2009.05-svn"
-BR2_powerpc=y
-BR2_powerpc_405=y
-BR2_ARCH="powerpc"
-BR2_ENDIAN="BIG"
-BR2_GCC_TARGET_TUNE="405"
-BR2_PROJECT="uclibc"
-BR2_HOSTNAME="uclibc"
-BR2_BANNER="Welcome to Buildroot"
-BR2_WGET="wget --passive-ftp -nd"
-BR2_SVN_CO="svn co"
-BR2_SVN_UP="svn up"
-BR2_GIT="git clone"
-BR2_ZCAT="gzip -d -c"
-BR2_BZCAT="bzcat"
-BR2_TAR_OPTIONS=""
-BR2_DL_DIR="$(BASE_DIR)/dl"
-BR2_COPYTO=""
-BR2_PRIMARY_SITE=""
-BR2_BACKUP_SITE="http://buildroot.net/downloads/sources/"
-BR2_SOURCEFORGE_MIRROR="easynews"
-BR2_KERNEL_MIRROR="http://www.kernel.org/pub/"
-BR2_GNU_MIRROR="http://ftp.gnu.org/pub/gnu"
-BR2_DEBIAN_MIRROR="http://ftp.debian.org"
-BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot/"
-BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
-BR2_STAGING_DIR="$(BUILD_DIR)/staging_dir"
-BR2_TOPDIR_PREFIX=""
-BR2_TOPDIR_SUFFIX=""
-BR2_GNU_BUILD_SUFFIX="pc-linux-gnu"
-BR2_GNU_TARGET_SUFFIX="linux-uclibc"
-BR2_JLEVEL=1
-BR2_RECENT=y
-BR2_STRIP_strip=y
-BR2_OPTIMIZE_S=y
-BR2_UPDATE_CONFIG=y
-BR2_TOOLCHAIN_BUILDROOT=y
-BR2_TOOLCHAIN_SOURCE=y
-BR2_EXT_GCC_VERSION_4_1_2=y
-BR2_EXT_GCC_VERSION_4_2_1=y
-BR2_EXT_GCC_VERSION_4_2_2=y
-BR2_EXT_GCC_VERSION_4_2_3=y
-BR2_EXT_BINUTILS_VERSION_2_17=y
-BR2_EXT_BINUTILS_VERSION_2_18=y
-BR2_EXT_UCLIBC_VERSION_0_9_28_3=y
-BR2_EXT_UCLIBC_VERSION_0_9_29=y
-BR2_EXT_UCLIBC_VERSION_0_9_30=y
-BR2_EXT_UCLIBC_VERSION_0_9_30_1=y
-BR2_KERNEL_HEADERS_2_6_28=y
-BR2_DEFAULT_KERNEL_HEADERS="2.6.28.8"
-BR2_UCLIBC_VERSION_0_9_30_1=y
-BR2_UCLIBC_VERSION_STRING="0.9.30.1"
-BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.30.config"
-BR2_BINUTILS_VERSION_2_19_1=y
-BR2_BINUTILS_VERSION="2.19.1"
-BR2_EXTRA_BINUTILS_CONFIG_OPTIONS=""
-BR2_GCC_VERSION_4_3_3=y
-BR2_GCC_SUPPORTS_SYSROOT=y
-BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE=y
-BR2_GCC_VERSION="4.3.3"
-BR2_TOOLCHAIN_SYSROOT=y
-BR2_EXTRA_GCC_CONFIG_OPTIONS=""
-BR2_GCC_SHARED_LIBGCC=y
-BR2_INET_RPC=y
-BR2_SOFT_FLOAT=y
-BR2_PTHREADS_OLD=y
-BR2_TARGET_OPTIMIZATION="-Os -pipe"
-BR2_CROSS_TOOLCHAIN_TARGET_UTILS=y
-BR2_PACKAGE_BUSYBOX=y
-BR2_BUSYBOX_VERSION_1_13_X=y
-BR2_BUSYBOX_VERSION="1.13.3"
-BR2_PACKAGE_BUSYBOX_FULLINSTALL=y
-BR2_PACKAGE_BUSYBOX_CONFIG="../configs/busybox.config"
-BR2_PACKAGE_BUSYBOX_HIDE_OTHERS=y
-BR2_HOST_FAKEROOT=y
-BR2_PACKAGE_CUSTOMIZE=y
-BR2_PACKAGE_DROPBEAR=y
-BR2_PACKAGE_LIBPCAP=y
-BR2_PACKAGE_TCPDUMP=y
-BR2_PACKAGE_TTCP=y
-BR2_PACKAGE_MTD=y
-BR2_PACKAGE_MTD_UTILS=y
-BR2_PACKAGE_MTD_FLASHCP=y
-BR2_PACKAGE_MTD_FLASH_ERASE=y
-BR2_PACKAGE_MTD_FLASH_ERASEALL=y
-BR2_PACKAGE_MTD_FLASH_INFO=y
-BR2_PACKAGE_MTD_JFFS2DUMP=y
-BR2_PACKAGE_MTD_MKFSJFFS2=y
-BR2_PACKAGE_MTD_MKFSJFFS=y
-BR2_PACKAGE_XSERVER_none=y
-BR2_PACKAGE_LZO=y
-BR2_PACKAGE_ZLIB=y
-BR2_ROOTFS_PREFIX="rootfs"
-BR2_ROOTFS_SUFFIX=""
-BR2_TARGET_ROOTFS_EXT2=y
-BR2_TARGET_ROOTFS_EXT2_BLOCKS=0
-BR2_TARGET_ROOTFS_EXT2_INODES=0
-BR2_TARGET_ROOTFS_EXT2_RESBLKS=0
-BR2_TARGET_ROOTFS_EXT2_SQUASH=y
-BR2_TARGET_ROOTFS_EXT2_OUTPUT="$(IMAGE).ext2"
-BR2_TARGET_ROOTFS_EXT2_GZIP=y
-BR2_TARGET_ROOTFS_EXT2_COPYTO=""
-BR2_KERNEL_none=y
+ Chris> Recently I have been unable to build when soft float is set.  I have
+ Chris> tried 20090323 and 20090329.  The configuration is below.  It fails
+ Chris> saying that the C compiler cannot create executables.  The failure is
+ Chris> in libmudflap.  Checking config.log I see the specific error is
+ Chris> ".../gcc-4.3.3-final/./gcc/libgcc_s.so: undefined reference to
+ Chris> copysignl'"  Is there a fix or workaround?
+
+Strange, that used to work. Does it work if you disable
+BR2_GCC_SHARED_LIBGCC? What host distribution do you use?
+
+-- 
+Bye, Peter Korsgaard
