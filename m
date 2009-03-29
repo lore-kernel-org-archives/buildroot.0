@@ -1,27 +1,31 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 29 Mar 2009 22:31:17 +0200
-Subject: [Buildroot] PPC won't build with soft float
-In-Reply-To: <49CFD553.7030909@PinsonConsulting.com> (Chris Elliott's message
-	of "Sun\, 29 Mar 2009 16\:08\:51 -0400")
-References: <49CFD553.7030909@PinsonConsulting.com>
-Message-ID: <87r60gcbqi.fsf@macbook.be.48ers.dk>
+Date: Sun, 29 Mar 2009 22:32:59 +0200
+Subject: [Buildroot] target/Makefile.in problem
+In-Reply-To: <10d6046f0903270152p681242fekf02862a27d0797ab@mail.gmail.com>
+	(Mirko ROCCO's message of "Fri\, 27 Mar 2009 09\:52\:58 +0100")
+References: <10d6046f0903270152p681242fekf02862a27d0797ab@mail.gmail.com>
+Message-ID: <87myb4cbno.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Chris" == Chris Elliott <Chris@PinsonConsulting.com> writes:
+>>>>> "Mirko" == Mirko ROCCO <mirko.rocco@gmail.com> writes:
 
- Chris> Recently I have been unable to build when soft float is set.  I have
- Chris> tried 20090323 and 20090329.  The configuration is below.  It fails
- Chris> saying that the C compiler cannot create executables.  The failure is
- Chris> in libmudflap.  Checking config.log I see the specific error is
- Chris> ".../gcc-4.3.3-final/./gcc/libgcc_s.so: undefined reference to
- Chris> copysignl'"  Is there a fix or workaround?
+Hi,
 
-Strange, that used to work. Does it work if you disable
-BR2_GCC_SHARED_LIBGCC? What host distribution do you use?
+ Mirko> Hi, I have downloaded the last snapshot of buildroot by means
+ Mirko> of svn...  After menuconfig(-uration) for target PowerPC I
+ Mirko> give "make source" command but the compilation right there
+ Mirko> fails with this error:
+
+ Mirko> target/Makefile.in:22: Extraneous text after `else' directive
+ Mirko> target/Makefile.in:38: *** only one `else' per conditional. Stop.
+
+Strange, I use powerpc almost every day and have never seen that
+error. Please post your .config and tell us what host distribution and
+make version (type make --version) you are using.
 
 -- 
 Bye, Peter Korsgaard
