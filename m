@@ -1,41 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 29 Mar 2009 21:36:23 +0200
-Subject: [Buildroot] Buildroot logo
-In-Reply-To: <20090327101954.1803f1b1@hcegtvedt> (Hans-Christian Egtvedt's
-	message of "Fri\, 27 Mar 2009 10\:19\:54 +0100")
-References: <87ljqsgkkz.fsf@macbook.be.48ers.dk>
-	<20090326212557.731e231a@surf> <87myb7fj8x.fsf@macbook.be.48ers.dk>
-	<1238144841.6667.10.camel@ess-roelvp>
-	<20090327101954.1803f1b1@hcegtvedt>
-Message-ID: <87d4c0dsug.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 29 Mar 2009 19:43:38 +0000 (UTC)
+Subject: [Buildroot] [Bug 225] m4 macros are out of place
+In-Reply-To: <bug-225-163@https.bugs.busybox.net/>
+References: <bug-225-163@https.bugs.busybox.net/>
+Message-ID: <20090329194338.4C875771F2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Hans-Christian" == Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=225
 
- >> Now I'm wondering if it is possible to put this logo on the website of
- >> the company I work for?
 
- Hans-Christian> Get a license on the logo from day one, there are
- Hans-Christian> several to choose from, but I have not a lot of
- Hans-Christian> knowledge about licenses on images.
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-Yeah, The Debian one seems nice and simple to me:
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-http://www.debian.org/logos/index.en.html (the 'with Debian' part).
 
- Hans-Christian> Exactly, and you are probably not the only one. I
- Hans-Christian> would like to use in presentation when I show of the
- Hans-Christian> tools available for Atmel AVR32 and AT91 products.
 
-No problem for me.
 
- Hans-Christian> It got added to SVN, so at least consider it a RC ;)
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-03-29 19:43:37 UTC ---
+Actually it's the other way around. r25827 wrongly changed the aclocal search
+dir to point to HOST_DIR instead of STAGING_DIR. It's fixed in r25880.
 
-Exactly ;)
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
