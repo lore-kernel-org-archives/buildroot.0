@@ -1,31 +1,33 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 29 Mar 2009 22:32:59 +0200
-Subject: [Buildroot] target/Makefile.in problem
-In-Reply-To: <10d6046f0903270152p681242fekf02862a27d0797ab@mail.gmail.com>
-	(Mirko ROCCO's message of "Fri\, 27 Mar 2009 09\:52\:58 +0100")
-References: <10d6046f0903270152p681242fekf02862a27d0797ab@mail.gmail.com>
-Message-ID: <87myb4cbno.fsf@macbook.be.48ers.dk>
+Date: Sun, 29 Mar 2009 22:34:53 +0200
+Subject: [Buildroot] VLC media player patched + some libraries added
+In-Reply-To: <1238144505.6667.3.camel@ess-roelvp> (Roeland Van Praet's message
+	of "Fri\, 27 Mar 2009 10\:01\:45 +0100")
+References: <1237822592.7539.12.camel@ess-roelvp>
+	<1238144505.6667.3.camel@ess-roelvp>
+Message-ID: <87iqlscbki.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Mirko" == Mirko ROCCO <mirko.rocco@gmail.com> writes:
+>>>>> "Roeland" == Roeland Van Praet <roelvp@mind.be> writes:
 
-Hi,
+ Roeland> Hi all,
 
- Mirko> Hi, I have downloaded the last snapshot of buildroot by means
- Mirko> of svn...  After menuconfig(-uration) for target PowerPC I
- Mirko> give "make source" command but the compilation right there
- Mirko> fails with this error:
+ Roeland> Since I still haven't read about any response concerning my
+ Roeland> path, I'm wondering if somebody is testing this or not?
 
- Mirko> target/Makefile.in:22: Extraneous text after `else' directive
- Mirko> target/Makefile.in:38: *** only one `else' per conditional. Stop.
+I haven't heard any testing reports here or on IRC ..
 
-Strange, I use powerpc almost every day and have never seen that
-error. Please post your .config and tell us what host distribution and
-make version (type make --version) you are using.
+ Roeland> I hope it doesn't go by unnoticed since there are some nice
+ Roeland> multimedia libraries included in the patch.
+
+Definately not. It's still on my todo list, but my time is
+unfortunately quite limited at the moment.
+
+I will try to find time for it this coming week. Thanks for the patch.
 
 -- 
 Bye, Peter Korsgaard
