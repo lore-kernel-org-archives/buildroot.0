@@ -1,7 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 30 Mar 2009 19:49:08 +0000 (UTC)
-Subject: [Buildroot] [Bug 237] New: ncftp: convert to Makefile.autotools.in
-Message-ID: <bug-237-163@https.bugs.busybox.net/>
+Date: Mon, 30 Mar 2009 19:50:00 +0000 (UTC)
+Subject: [Buildroot] [Bug 237] ncftp: convert to Makefile.autotools.in
+In-Reply-To: <bug-237-163@https.bugs.busybox.net/>
+References: <bug-237-163@https.bugs.busybox.net/>
+Message-ID: <20090330195000.59F7B775EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,28 +12,14 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=237
 
-              Host: i686-linux
-            Target: i686-linux
-             Build: i386-pc-linux-gnu
-           Summary: ncftp: convert to Makefile.autotools.in
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-               URL: http://lists.busybox.net/pipermail/buildroot/2009-
-                    March/026269.html
-        OS/Version: Linux
-            Status: NEW
-          Severity: enhancement
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: razzor at kopf-tisch.de
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
 
 
-- ncftpspooler is just a link to ncftpbatch
-- only ncftpbookmarks needs ncurses, also change from "depends" to "select"
+
+
+--- Comment #1 from Olaf Rempel <razzor@kopf-tisch.de>  2009-03-30 19:49:59 UTC ---
+Created an attachment (id=203)
+ --> (https://bugs.busybox.net/attachment.cgi?id=203)
+[PATCH] ncftp: convert to Makefile.autotools.in
 
 
 -- 
