@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Mon, 30 Mar 2009 18:41:58 +0000 (UTC)
-Subject: [Buildroot] svn commit: [25898] trunk/buildroot/package/iptables
-Message-ID: <20090330184159.0D145775ED@busybox.osuosl.org>
+Date: Mon, 30 Mar 2009 18:42:03 +0000 (UTC)
+Subject: [Buildroot] svn commit: [25899] trunk/buildroot/package/iptables
+Message-ID: <20090330184203.18F22775ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,29 +9,37 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2009-03-30 18:41:58 +0000 (Mon, 30 Mar 2009)
-New Revision: 25898
+Date: 2009-03-30 18:42:02 +0000 (Mon, 30 Mar 2009)
+New Revision: 25899
 
 Log:
-iptables: needs largefile support in toolchain
+iptables: use correct variable for configure options
+
+Introduced in r23409.
 
 Modified:
-   trunk/buildroot/package/iptables/Config.in
+   trunk/buildroot/package/iptables/iptables.mk
 
 
 Changeset:
-Modified: trunk/buildroot/package/iptables/Config.in
+Modified: trunk/buildroot/package/iptables/iptables.mk
 ===================================================================
---- trunk/buildroot/package/iptables/Config.in	2009-03-30 18:41:53 UTC (rev 25897)
-+++ trunk/buildroot/package/iptables/Config.in	2009-03-30 18:41:58 UTC (rev 25898)
-@@ -1,6 +1,10 @@
- config BR2_PACKAGE_IPTABLES
- 	bool "iptables"
-+	depends on BR2_LARGEFILE
- 	help
- 	  Linux kernel (2.4+) firewall, NAT, and packet mangling tools.
+--- trunk/buildroot/package/iptables/iptables.mk	2009-03-30 18:41:58 UTC (rev 25898)
++++ trunk/buildroot/package/iptables/iptables.mk	2009-03-30 18:42:02 UTC (rev 25899)
+@@ -7,7 +7,7 @@
+ IPTABLES_SOURCE = iptables-$(IPTABLES_VERSION).tar.bz2
+ IPTABLES_SITE = http://ftp.netfilter.org/pub/iptables
  
- 	  http://www.iptables.org/
-+
-+comment "iptables requires a toolchain with LARGEFILE support"
-+        depends on !BR2_LARGEFILE
+-IPTABLES_CONF_OPT = --libexecdir=/usr/lib
++IPTABLES_CONF_OPT = --libexecdir=/usr/lib --with-kernel=$(LINUX_HEADERS_DIR)
+ ifneq ($(BR2_INET_IPV6),y)
+ IPTABLES_CONF_OPT += --enable-ipv6=no
+ endif
+@@ -16,7 +16,6 @@
+ 
+ IPTABLES_AUTORECONF = YES
+ IPTABLES_DEPENDENCIES =
+-IPTABLES_CONFIGURE_OPT = --with-kernel=$(LINUX_HEADERS_DIR)
+ 
+ $(eval $(call AUTOTARGETS,package,iptables))
+ 
