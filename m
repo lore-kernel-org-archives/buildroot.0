@@ -1,45 +1,52 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 30 Mar 2009 20:58:34 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain: binutils
-	external-toolchain gcc uClibc
-In-Reply-To: <20090330175842.1960fed2@surf> (Thomas Petazzoni's message of
-	"Mon\, 30 Mar 2009 17\:58\:42 +0200")
-References: <20090130162827.2A05D765E9@busybox.osuosl.org>
-	<20090330153259.0a7ee398@surf> <87ab73azsj.fsf@macbook.be.48ers.dk>
-	<20090330175842.1960fed2@surf>
-Message-ID: <87prfyald1.fsf@macbook.be.48ers.dk>
+From: Roeland Van Praet <roelvp@mind.be>
+Date: Mon, 30 Mar 2009 21:08:00 +0200
+Subject: [Buildroot] VLC media player patched + some libraries added
+In-Reply-To: <87iqlscbki.fsf@macbook.be.48ers.dk>
+References: <1237822592.7539.12.camel@ess-roelvp>
+	<1238144505.6667.3.camel@ess-roelvp>
+	<87iqlscbki.fsf@macbook.be.48ers.dk>
+Message-ID: <1238440080.6396.0.camel@ess-roelvp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Thanks, I'll read the outcome on the mailing list :)
 
-Hi,
 
- >> Now, the current approach is certainly nice from a maitenance POV as
- >> there's only one set of options so they are always in sync, but I
- >> agree that it isn't that userfriendly.
+On Sun, 2009-03-29 at 22:34 +0200, Peter Korsgaard wrote:
 
- Thomas> The best option would be to compute automatically these
- Thomas> configuration options when using an external toolchain. But I
- Thomas> don't see how this can be done with how the kconfig system
- Thomas> works.
+> >>>>> "Roeland" == Roeland Van Praet <roelvp@mind.be> writes:
+> 
+>  Roeland> Hi all,
+> 
+>  Roeland> Since I still haven't read about any response concerning my
+>  Roeland> path, I'm wondering if somebody is testing this or not?
+> 
+> I haven't heard any testing reports here or on IRC ..
+> 
+>  Roeland> I hope it doesn't go by unnoticed since there are some nice
+>  Roeland> multimedia libraries included in the patch.
+> 
+> Definately not. It's still on my todo list, but my time is
+> unfortunately quite limited at the moment.
+> 
+> I will try to find time for it this coming week. Thanks for the patch.
+> 
 
-Not without running some kind of configure script to append Kconfig
-settins when you're using an external toolchain. I don't quite know
-how to integrate this nicely though.
 
- Thomas> Does something like :
 
- Thomas> config BR2_ENABLE_LOCALE bool "Enable locale" if
- Thomas> BR2_TOOLCHAIN_BUILDROOT bool "Is locale enabled in your
- Thomas> toolchain ?" if BR2_TOOLCHAIN_EXTERNAL
+Roeland Van Praet
 
- Thomas> works ?
-
-Unfortunately not - That's the problem.
-
--- 
-Bye, Peter Korsgaard
+Embedded Software Developer
+Mind - an ESSENSIUM nv division
+Gaston Geenslaan 9 - B 3001 Leuven - Belgium
+web : www.mind.be
+mail: roelvp at mind.be
+tel : +32 16 28 65 34
+fax : +32 16 28 65 01 
+BE 872 984 063 RPR Leuven
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090330/3ce26d07/attachment.htm>
