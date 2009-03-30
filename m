@@ -1,52 +1,40 @@
-From: Roeland Van Praet <roelvp@mind.be>
-Date: Mon, 30 Mar 2009 21:08:00 +0200
-Subject: [Buildroot] VLC media player patched + some libraries added
-In-Reply-To: <87iqlscbki.fsf@macbook.be.48ers.dk>
-References: <1237822592.7539.12.camel@ess-roelvp>
-	<1238144505.6667.3.camel@ess-roelvp>
-	<87iqlscbki.fsf@macbook.be.48ers.dk>
-Message-ID: <1238440080.6396.0.camel@ess-roelvp>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 30 Mar 2009 19:49:08 +0000 (UTC)
+Subject: [Buildroot] [Bug 237] New: ncftp: convert to Makefile.autotools.in
+Message-ID: <bug-237-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks, I'll read the outcome on the mailing list :)
+https://bugs.busybox.net/show_bug.cgi?id=237
+
+              Host: i686-linux
+            Target: i686-linux
+             Build: i386-pc-linux-gnu
+           Summary: ncftp: convert to Makefile.autotools.in
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+               URL: http://lists.busybox.net/pipermail/buildroot/2009-
+                    March/026269.html
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: razzor at kopf-tisch.de
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
 
-On Sun, 2009-03-29 at 22:34 +0200, Peter Korsgaard wrote:
-
-> >>>>> "Roeland" == Roeland Van Praet <roelvp@mind.be> writes:
-> 
->  Roeland> Hi all,
-> 
->  Roeland> Since I still haven't read about any response concerning my
->  Roeland> path, I'm wondering if somebody is testing this or not?
-> 
-> I haven't heard any testing reports here or on IRC ..
-> 
->  Roeland> I hope it doesn't go by unnoticed since there are some nice
->  Roeland> multimedia libraries included in the patch.
-> 
-> Definately not. It's still on my todo list, but my time is
-> unfortunately quite limited at the moment.
-> 
-> I will try to find time for it this coming week. Thanks for the patch.
-> 
+- ncftpspooler is just a link to ncftpbatch
+- only ncftpbookmarks needs ncurses, also change from "depends" to "select"
 
 
-
-Roeland Van Praet
-
-Embedded Software Developer
-Mind - an ESSENSIUM nv division
-Gaston Geenslaan 9 - B 3001 Leuven - Belgium
-web : www.mind.be
-mail: roelvp at mind.be
-tel : +32 16 28 65 34
-fax : +32 16 28 65 01 
-BE 872 984 063 RPR Leuven
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090330/3ce26d07/attachment.htm>
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
