@@ -1,34 +1,76 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 30 Mar 2009 11:54:42 +0000 (UTC)
-Subject: [Buildroot] [Bug 187] ntfs-3g: could not build cross
-In-Reply-To: <bug-187-163@https.bugs.busybox.net/>
-References: <bug-187-163@https.bugs.busybox.net/>
-Message-ID: <20090330115442.D3309775EC@busybox.osuosl.org>
+From: Olaf Rempel <razzor@kopf-tisch.de>
+Date: Mon, 30 Mar 2009 14:21:33 +0200
+Subject: [Buildroot] svn commit: [25893] trunk/buildroot/package/ntfs-3g
+In-Reply-To: <20090330115341.3E748775EC@busybox.osuosl.org>
+References: <20090330115341.3E748775EC@busybox.osuosl.org>
+Message-ID: <20090330142133.549fd9e8@bandomeer.europe.flane.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=187
+Newer Versions of ntfs-3g don't need libfuse anymore:
 
+http://lists.busybox.net/pipermail/buildroot/2009-March/026271.html
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Should I submit those not-applied patches to the bugtracker?
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+Regards
+Olaf
 
+On Mon, 30 Mar 2009 11:53:41 +0000 (UTC)
+jacmet at uclibc.org wrote:
 
-
-
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-03-30 11:54:42 UTC ---
-Thanks. NTFS-3G needs WCHAR (and LARGEFILE) support in the toolchain. I've
-fixed the Kconfig stuff up in r25895 to make this clear.
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+> Author: jacmet
+> Date: 2009-03-30 11:53:40 +0000 (Mon, 30 Mar 2009)
+> New Revision: 25893
+> 
+> Log:
+> ntfs-3g: needs libfuse which requires LARGEFILE, so update kconfig to match
+> 
+> Fixup tabs/spaces and trailing spaces mismatch while we're at it.
+> 
+> Modified:
+>    trunk/buildroot/package/ntfs-3g/Config.in
+> 
+> 
+> Changeset:
+> Modified: trunk/buildroot/package/ntfs-3g/Config.in
+> ===================================================================
+> --- trunk/buildroot/package/ntfs-3g/Config.in	2009-03-30 11:53:37 UTC (rev 25892)
+> +++ trunk/buildroot/package/ntfs-3g/Config.in	2009-03-30 11:53:40 UTC (rev 25893)
+> @@ -1,14 +1,19 @@
+> -comment "ntfs-3g has no inherent support for AVR32" 
+> +comment "ntfs-3g has no inherent support for AVR32"
+>  	depends on BR2_avr32 && BR2_PACKAGE_NTFS_3G
+>  
+>  config BR2_PACKAGE_NTFS-3G
+> -        bool "ntfs-3g"
+> -        help
+> +	bool "ntfs-3g"
+> +	select BR2_PACKAGE_LIBFUSE
+> +	depends on BR2_LARGEFILE
+> +	help
+>  	  The NTFS-3G driver is an open source, freely available
+> -          read/write NTFS driver for Linux, FreeBSD, Mac OS X, NetBSD,
+> -          and Haiku. It provides safe and fast handling of the Windows
+> -          XP, Windows Server 2003, Windows 2000 and Windows Vista file
+> -          systems. Most POSIX file system operations are supported, with
+> -          the exception of full file ownership and access right support.
+> +	  read/write NTFS driver for Linux, FreeBSD, Mac OS X, NetBSD,
+> +	  and Haiku. It provides safe and fast handling of the Windows
+> +	  XP, Windows Server 2003, Windows 2000 and Windows Vista file
+> +	  systems. Most POSIX file system operations are supported, with
+> +	  the exception of full file ownership and access right support.
+>  
+>  	  http://www.ntfs-3g.org/
+> +
+> +comment "ntfs-3g requires a toolchain with LARGEFILE support"
+> +	depends on !BR2_LARGEFILE
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
