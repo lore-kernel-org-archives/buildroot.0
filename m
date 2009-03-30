@@ -1,34 +1,118 @@
-From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
-Date: Mon, 30 Mar 2009 13:39:04 -0300
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain: binutils
-	external-toolchain gcc uClibc
-In-Reply-To: <20090330175842.1960fed2@surf>
-References: <20090130162827.2A05D765E9@busybox.osuosl.org>
-	<20090330153259.0a7ee398@surf> <87ab73azsj.fsf@macbook.be.48ers.dk>
-	<20090330175842.1960fed2@surf>
-Message-ID: <d6cda7730903300939u12cbb6c6md954983fa64fe691@mail.gmail.com>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Mon, 30 Mar 2009 18:41:53 +0000 (UTC)
+Subject: [Buildroot] svn commit: [25897] trunk/buildroot/package/iptables
+Message-ID: <20090330184153.A8590775ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Author: jacmet
+Date: 2009-03-30 18:41:53 +0000 (Mon, 30 Mar 2009)
+New Revision: 25897
 
-On Mon, Mar 30, 2009 at 12:58 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
->> Now, the current approach is certainly nice from a maitenance POV as
->> there's only one set of options so they are always in sync, but I
->> agree that it isn't that userfriendly.
->
-> The best option would be to compute automatically these configuration
-> options when using an external toolchain. But I don't see how this can
-> be done with how the kconfig system works.
+Log:
+iptables: fix build without ipv6 support in toolchain
 
-Perhaps if you could make a script that probes those values, it could
-be called before kconfig in menuconfig target and set it before hand.
+Patch by Steffen Schulz <sf@cbg.dyndns.org>, closes #233.
 
-Just an idea.
+Added:
+   trunk/buildroot/package/iptables/iptables-optional-ipv6.patch
 
-Kind Regards,
-   Thiago A. Correa
+Modified:
+   trunk/buildroot/package/iptables/iptables.mk
+
+
+Changeset:
+Added: trunk/buildroot/package/iptables/iptables-optional-ipv6.patch
+===================================================================
+--- trunk/buildroot/package/iptables/iptables-optional-ipv6.patch	                        (rev 0)
++++ trunk/buildroot/package/iptables/iptables-optional-ipv6.patch	2009-03-30 18:41:53 UTC (rev 25897)
+@@ -0,0 +1,70 @@
++Make ipv6 support optional. Patch by Steffen Schulz <sf@cbg.dyndns.org>
++
++Submitted upstream as http://bugzilla.netfilter.org/show_bug.cgi?id=588
++diff -ru iptables-1.4.2/configure.ac iptables-1.4.2_patched/configure.ac
++--- iptables-1.4.2/configure.ac	2009-03-29 15:49:24.764299587 +0000
+++++ iptables-1.4.2_patched/configure.ac	2009-03-29 15:38:29.082512186 +0000
++@@ -37,6 +37,9 @@
++ 	[enable_devel="$enableval"], [enable_devel="yes"])
++ AC_ARG_ENABLE([libipq],
++ 	AS_HELP_STRING([--enable-libipq], [Build and install libipq]))
+++AC_ARG_ENABLE([ipv6],
+++    AS_HELP_STRING([--enable-ipv6], [Build and install ip6tables]),
+++    [enable_ipv6="$enableval"], [enable_ipv6="yes"])
++ AC_ARG_WITH([pkgconfigdir], AS_HELP_STRING([--with-pkgconfigdir=PATH],
++ 	[Path to the pkgconfig directory [[LIBDIR/pkgconfig]]]),
++ 	[pkgconfigdir="$withval"], [pkgconfigdir='${libdir}/pkgconfig'])
++@@ -53,6 +56,7 @@
++ AM_CONDITIONAL([ENABLE_SHARED], [test "$enable_shared" = "yes"])
++ AM_CONDITIONAL([ENABLE_DEVEL], [test "$enable_devel" = "yes"])
++ AM_CONDITIONAL([ENABLE_LIBIPQ], [test "$enable_libipq" = "yes"])
+++AM_CONDITIONAL([ENABLE_IPV6], [test "$enable_ipv6" == "yes"])
++ 
++ regular_CFLAGS="-D_LARGEFILE_SOURCE=1 -D_LARGE_FILES -D_FILE_OFFSET_BITS=64 \
++ 	-D_REENTRANT -Wall -Waggregate-return -Wmissing-declarations \
++Only in iptables-1.4.2: configure.ac.orig
++Only in iptables-1.4.2: configure.ac.rej
++diff -ru iptables-1.4.2/Makefile.am iptables-1.4.2_patched/Makefile.am
++--- iptables-1.4.2/Makefile.am	2008-10-08 16:31:58.000000000 +0000
+++++ iptables-1.4.2_patched/Makefile.am	2009-03-29 15:38:29.082512186 +0000
++@@ -80,11 +80,17 @@
++ endif
++ 
++ if ENABLE_STATIC
++-sbin_PROGRAMS += iptables-static ip6tables-static
+++sbin_PROGRAMS += iptables-static
+++if ENABLE_IPV6
+++sbin_PROGRAMS += ip6tables-static
+++endif
+++
++ endif
++ if ENABLE_SHARED
++-sbin_PROGRAMS += iptables iptables-multi iptables-restore iptables-save \
++-                 ip6tables ip6tables-multi ip6tables-restore ip6tables-save
+++sbin_PROGRAMS += iptables iptables-multi iptables-restore iptables-save
+++if ENABLE_IPV6
+++sbin_PROGRAMS += ip6tables ip6tables-multi ip6tables-restore ip6tables-save
+++endif
++ endif
++ 
++ iptables.8: ${srcdir}/iptables.8.in extensions/matches4.man extensions/targets4.man
++diff -ru iptables-1.4.2/xtables.c iptables-1.4.2_patched/xtables.c
++--- iptables-1.4.2/xtables.c	2008-10-08 16:31:58.000000000 +0000
+++++ iptables-1.4.2_patched/xtables.c	2009-03-29 15:38:29.082512186 +0000
++@@ -964,6 +964,8 @@
++ 	}
++ }
++ 
+++#ifdef ENABLE_IPV6
+++
++ const char *ip6addr_to_numeric(const struct in6_addr *addrp)
++ {
++ 	/* 0000:0000:0000:0000:0000:000.000.000.000
++@@ -1189,6 +1191,7 @@
++ 			}
++ 	}
++ }
+++#endif
++ 
++ void save_string(const char *value)
++ {
+
+Modified: trunk/buildroot/package/iptables/iptables.mk
+===================================================================
+--- trunk/buildroot/package/iptables/iptables.mk	2009-03-30 13:59:22 UTC (rev 25896)
++++ trunk/buildroot/package/iptables/iptables.mk	2009-03-30 18:41:53 UTC (rev 25897)
+@@ -8,6 +8,10 @@
+ IPTABLES_SITE = http://ftp.netfilter.org/pub/iptables
+ 
+ IPTABLES_CONF_OPT = --libexecdir=/usr/lib
++ifneq ($(BR2_INET_IPV6),y)
++IPTABLES_CONF_OPT += --enable-ipv6=no
++endif
++
+ IPTABLES_INSTALL_TARGET = YES
+ 
+ IPTABLES_AUTORECONF = YES
