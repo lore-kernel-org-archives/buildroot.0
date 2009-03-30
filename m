@@ -1,24 +1,24 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 30 Mar 2009 19:54:42 +0000 (UTC)
-Subject: [Buildroot] [Bug 243] New: ctorrent: new package
-Message-ID: <bug-243-163@https.bugs.busybox.net/>
+Date: Mon, 30 Mar 2009 19:56:07 +0000 (UTC)
+Subject: [Buildroot] [Bug 245] New: lzop: new package
+Message-ID: <bug-245-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=243
+https://bugs.busybox.net/show_bug.cgi?id=245
 
               Host: i686-linux
             Target: i686-linux
              Build: i386-pc-linux-gnu
-           Summary: ctorrent: new package
+           Summary: lzop: new package
            Product: buildroot
            Version: unspecified
           Platform: PC
                URL: http://lists.busybox.net/pipermail/buildroot/2009-
-                    March/026273.html
+                    March/026272.html
         OS/Version: Linux
             Status: NEW
           Severity: enhancement
@@ -30,14 +30,13 @@ https://bugs.busybox.net/show_bug.cgi?id=243
    Estimated Hours: 0.0
 
 
-Created an attachment (id=209)
- --> (https://bugs.busybox.net/attachment.cgi?id=209)
-[PATCH] ctorrent: new package
+Created an attachment (id=211)
+ --> (https://bugs.busybox.net/attachment.cgi?id=211)
+[PATCH] lzop: new package
 
-CTorrent is a BitTorrent client implemented in C++
-to be lightweight and quick.
-This is the enhanced version from
-http://www.rahul.net/dholmes/ctorrent/
+lzop is a file compressor which is very similar to gzip.
+lzop uses the LZO data compression library for compression services.
+http://www.lzop.org/
 
 
 -- 
