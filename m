@@ -1,191 +1,85 @@
-From: Hiroshi Shinji <hiroshi.shinji@gmail.com>
-Date: Tue, 31 Mar 2009 22:29:11 +0900
-Subject: [Buildroot] svn commit: [25897] trunk/buildroot/package/iptables
-In-Reply-To: <20090330184153.A8590775ED@busybox.osuosl.org>
-References: <20090330184153.A8590775ED@busybox.osuosl.org>
-Message-ID: <d6a0e5a20903310629t5fd37336s93d0e0c639c43da6@mail.gmail.com>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Tue, 31 Mar 2009 14:29:30 +0000 (UTC)
+Subject: [Buildroot] svn commit: [25906] trunk/buildroot/package/qtopia4
+Message-ID: <20090331142930.C9F22771A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Author: jacmet
+Date: 2009-03-31 14:29:30 +0000 (Tue, 31 Mar 2009)
+New Revision: 25906
 
-When I build r25899 with iptables and BR2_INET_IPV6=y, the following
-error occurred.
+Log:
+qtopia4: make qmake.conf handling more robust (fixes build for x86/x86_64/ppc)
 
-<snip>
-/mnt/data/work/buildroot-25899-ph/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-gcc
--Os -pipe -Os -I/mnt/data/work/buildroot-25899-ph/build_powerpc/staging_dir/usr/include
--I/mnt/data/work/buildroot-25899-ph/build_powerpc/staging_dir/include
---sysroot=/mnt/data/work/buildroot-25899-ph/build_powerpc/staging_dir/
--isysroot /mnt/data/work/buildroot-25899-ph/build_powerpc/staging_dir
--mtune=405 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE=1 -D_LARGE_FILES
--D_FILE_OFFSET_BITS=64 -D_REENTRANT -Wall -Waggregate-return
--Wmissing-declarations -Wmissing-prototypes -Wredundant-decls -Wshadow
--Wstrict-prototypes -Winline -pipe
--DXTABLES_LIBDIR=\"/usr/lib/xtables\" -DXTABLES_INTERNAL -I./include
--I./include -I /mnt/data/work/buildroot-25899-ph/toolchain_build_powerpc/linux/include
--I /mnt/data/work/buildroot-25899-ph/toolchain_build_powerpc/linux/include
--Os -pipe -Os -I/mnt/data/work/buildroot-25899-ph/build_powerpc/staging_dir/usr/include
--I/mnt/data/work/buildroot-25899-ph/build_powerpc
-/staging_dir/include
---sysroot=/mnt/data/work/buildroot-25899-ph/build_powerpc/staging_dir/
--isysroot /mnt/data/work/buildroot-25899-ph/build_powerpc/staging_dir
--mtune=405 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -rdynamic
---sysroot=/mnt/data/work/buildroot-25899-ph/build_powerpc/staging_dir/
--o ip6tables ip6tables-standalone.o ip6tables.o
--L/mnt/data/work/buildroot-25899-ph/build_powerpc/staging_dir/lib
--L/mnt/data/work/buildroot-25899-ph/build_powerpc/staging_dir/usr/lib
--ldl -lm libiptc/libiptc.a extensions/libext6.a ./.libs/libxtables.so
- -Wl,--rpath -Wl,/mnt/data/work/buildroot-25899-ph/build_powerpc/iptables-1.4.2/.libs
-ip6tables.o: In function `print_firewall':
-ip6tables.c:(.text+0x8b4): undefined reference to `ip6addr_to_numeric'
-ip6tables.c:(.text+0x8c0): undefined reference to `ip6addr_to_anyname'
-ip6tables.c:(.text+0x8d4): undefined reference to `ip6mask_to_numeric'
-ip6tables.c:(.text+0x97c): undefined reference to `ip6addr_to_numeric'
-ip6tables.c:(.text+0x988): undefined reference to `ip6addr_to_anyname'
-ip6tables.c:(.text+0x99c): undefined reference to `ip6mask_to_numeric'
-ip6tables.o: In function `do_command6':
-ip6tables.c:(.text+0x26a0): undefined reference to `ip6parse_hostnetworkmask'
-ip6tables.c:(.text+0x26bc): undefined reference to `ip6parse_hostnetworkmask'
-collect2: ld returned 1 exit status
-make[3]: *** [ip6tables] Error 1
-make[3]: Leaving directory
-`/mnt/data/work/buildroot-25899-ph/build_powerpc/iptables-1.4.2'
-make[2]: *** [all-recursive] Error 1
-make[2]: Leaving directory
-`/mnt/data/work/buildroot-25899-ph/build_powerpc/iptables-1.4.2'
-make[1]: *** [all] Error 2
-make[1]: Leaving directory
-`/mnt/data/work/buildroot-25899-ph/build_powerpc/iptables-1.4.2'
-make: *** [/mnt/data/work/buildroot-25899-ph/build_powerpc/iptables-1.4.2/.stamp_built]
-Error 2
+qmake.conf needs to be tweaked to make QT use the correct toolchain for
+building, but the current approach relies on the fact that the selected
+platform qmake.conf has QMAKE_{CC,CXX,LINK,LINK_SHLIB,AR,OBJCOPY,RANLIB,STRIP}
+lines that are then adapted to the correct settings.
+
+This is true for some configs (namely arm and avr32), but not for others -
+Causing the build to fail (or build for the host).
+
+Instead add a QTOPIA4_QMAKE_SET macro which removes any existing lines
+and add the correct lines to the qmake.conf, so it works no matter if the
+platform provides them or not.
+
+Modified:
+   trunk/buildroot/package/qtopia4/qtopia4.mk
 
 
-I think this error was occurred by the fix of r25897....
-Please help me on this.
-
-Thanks.
-
-
-
-
-2009/3/31  <jacmet@uclibc.org>:
-> Author: jacmet
-> Date: 2009-03-30 18:41:53 +0000 (Mon, 30 Mar 2009)
-> New Revision: 25897
->
-> Log:
-> iptables: fix build without ipv6 support in toolchain
->
-> Patch by Steffen Schulz <sf@cbg.dyndns.org>, closes #233.
->
-> Added:
-> ? trunk/buildroot/package/iptables/iptables-optional-ipv6.patch
->
-> Modified:
-> ? trunk/buildroot/package/iptables/iptables.mk
->
->
-> Changeset:
-> Added: trunk/buildroot/package/iptables/iptables-optional-ipv6.patch
-> ===================================================================
-> --- trunk/buildroot/package/iptables/iptables-optional-ipv6.patch ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? (rev 0)
-> +++ trunk/buildroot/package/iptables/iptables-optional-ipv6.patch ? ? ? 2009-03-30 18:41:53 UTC (rev 25897)
-> @@ -0,0 +1,70 @@
-> +Make ipv6 support optional. Patch by Steffen Schulz <sf@cbg.dyndns.org>
-> +
-> +Submitted upstream as http://bugzilla.netfilter.org/show_bug.cgi?id=588
-> +diff -ru iptables-1.4.2/configure.ac iptables-1.4.2_patched/configure.ac
-> +--- iptables-1.4.2/configure.ac ? ? ? ?2009-03-29 15:49:24.764299587 +0000
-> ++++ iptables-1.4.2_patched/configure.ac ? ? ? ?2009-03-29 15:38:29.082512186 +0000
-> +@@ -37,6 +37,9 @@
-> + ? ? ? [enable_devel="$enableval"], [enable_devel="yes"])
-> + AC_ARG_ENABLE([libipq],
-> + ? ? ? AS_HELP_STRING([--enable-libipq], [Build and install libipq]))
-> ++AC_ARG_ENABLE([ipv6],
-> ++ ? ?AS_HELP_STRING([--enable-ipv6], [Build and install ip6tables]),
-> ++ ? ?[enable_ipv6="$enableval"], [enable_ipv6="yes"])
-> + AC_ARG_WITH([pkgconfigdir], AS_HELP_STRING([--with-pkgconfigdir=PATH],
-> + ? ? ? [Path to the pkgconfig directory [[LIBDIR/pkgconfig]]]),
-> + ? ? ? [pkgconfigdir="$withval"], [pkgconfigdir='${libdir}/pkgconfig'])
-> +@@ -53,6 +56,7 @@
-> + AM_CONDITIONAL([ENABLE_SHARED], [test "$enable_shared" = "yes"])
-> + AM_CONDITIONAL([ENABLE_DEVEL], [test "$enable_devel" = "yes"])
-> + AM_CONDITIONAL([ENABLE_LIBIPQ], [test "$enable_libipq" = "yes"])
-> ++AM_CONDITIONAL([ENABLE_IPV6], [test "$enable_ipv6" == "yes"])
-> +
-> + regular_CFLAGS="-D_LARGEFILE_SOURCE=1 -D_LARGE_FILES -D_FILE_OFFSET_BITS=64 \
-> + ? ? ? -D_REENTRANT -Wall -Waggregate-return -Wmissing-declarations \
-> +Only in iptables-1.4.2: configure.ac.orig
-> +Only in iptables-1.4.2: configure.ac.rej
-> +diff -ru iptables-1.4.2/Makefile.am iptables-1.4.2_patched/Makefile.am
-> +--- iptables-1.4.2/Makefile.am 2008-10-08 16:31:58.000000000 +0000
-> ++++ iptables-1.4.2_patched/Makefile.am 2009-03-29 15:38:29.082512186 +0000
-> +@@ -80,11 +80,17 @@
-> + endif
-> +
-> + if ENABLE_STATIC
-> +-sbin_PROGRAMS += iptables-static ip6tables-static
-> ++sbin_PROGRAMS += iptables-static
-> ++if ENABLE_IPV6
-> ++sbin_PROGRAMS += ip6tables-static
-> ++endif
-> ++
-> + endif
-> + if ENABLE_SHARED
-> +-sbin_PROGRAMS += iptables iptables-multi iptables-restore iptables-save \
-> +- ? ? ? ? ? ? ? ? ip6tables ip6tables-multi ip6tables-restore ip6tables-save
-> ++sbin_PROGRAMS += iptables iptables-multi iptables-restore iptables-save
-> ++if ENABLE_IPV6
-> ++sbin_PROGRAMS += ip6tables ip6tables-multi ip6tables-restore ip6tables-save
-> ++endif
-> + endif
-> +
-> + iptables.8: ${srcdir}/iptables.8.in extensions/matches4.man extensions/targets4.man
-> +diff -ru iptables-1.4.2/xtables.c iptables-1.4.2_patched/xtables.c
-> +--- iptables-1.4.2/xtables.c ? 2008-10-08 16:31:58.000000000 +0000
-> ++++ iptables-1.4.2_patched/xtables.c ? 2009-03-29 15:38:29.082512186 +0000
-> +@@ -964,6 +964,8 @@
-> + ? ? ? }
-> + }
-> +
-> ++#ifdef ENABLE_IPV6
-> ++
-> + const char *ip6addr_to_numeric(const struct in6_addr *addrp)
-> + {
-> + ? ? ? /* 0000:0000:0000:0000:0000:000.000.000.000
-> +@@ -1189,6 +1191,7 @@
-> + ? ? ? ? ? ? ? ? ? ? ? }
-> + ? ? ? }
-> + }
-> ++#endif
-> +
-> + void save_string(const char *value)
-> + {
->
-> Modified: trunk/buildroot/package/iptables/iptables.mk
-> ===================================================================
-> --- trunk/buildroot/package/iptables/iptables.mk ? ? ? ?2009-03-30 13:59:22 UTC (rev 25896)
-> +++ trunk/buildroot/package/iptables/iptables.mk ? ? ? ?2009-03-30 18:41:53 UTC (rev 25897)
-> @@ -8,6 +8,10 @@
-> ?IPTABLES_SITE = http://ftp.netfilter.org/pub/iptables
->
-> ?IPTABLES_CONF_OPT = --libexecdir=/usr/lib
-> +ifneq ($(BR2_INET_IPV6),y)
-> +IPTABLES_CONF_OPT += --enable-ipv6=no
-> +endif
-> +
-> ?IPTABLES_INSTALL_TARGET = YES
->
-> ?IPTABLES_AUTORECONF = YES
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+Changeset:
+Modified: trunk/buildroot/package/qtopia4/qtopia4.mk
+===================================================================
+--- trunk/buildroot/package/qtopia4/qtopia4.mk	2009-03-31 13:14:18 UTC (rev 25905)
++++ trunk/buildroot/package/qtopia4/qtopia4.mk	2009-03-31 14:29:30 UTC (rev 25906)
+@@ -327,6 +327,21 @@
+ # Variable for other Qt applications to use
+ QTOPIA4_QMAKE:=$(STAGING_DIR)/usr/bin/qmake -spec qws/linux-$(BR2_PACKAGE_QTOPIA4_EMB_PLATFORM)-g++
+ 
++################################################################################
++# QTOPIA4_QMAKE_SET -- helper macro to set QMAKE_<variable> = <value> in
++# QTOPIA_QMAKE_CONF. Will remove existing variable declaration if available.
++#
++# Argument 1 is the variable name (without QMAKE_)
++# Argument 2 is the value to set variable to
++#
++# E.G. use like this:
++# $(call QTOPIA4_QMAKE_SET,variable,value)
++################################################################################
++define QTOPIA4_QMAKE_SET
++	$(SED) '/QMAKE_$(1)/d' $(QTOPIA4_QMAKE_CONF)
++	$(SED) '/include.*qws.conf/aQMAKE_$(1) = $(2)' $(QTOPIA4_QMAKE_CONF)
++endef
++
+ $(DL_DIR)/$(QTOPIA4_SOURCE):
+ 	$(call DOWNLOAD,$(QTOPIA4_SITE),$(QTOPIA4_SOURCE))
+ 
+@@ -346,16 +361,15 @@
+ 	$(SED) 's/^CFG_IPV6IFNAME=auto/CFG_IPV6IFNAME=no/' $(QTOPIA4_TARGET_DIR)/configure
+ endif
+ 	$(SED) 's/^CFG_XINERAMA=auto/CFG_XINERAMA=no/' $(QTOPIA4_TARGET_DIR)/configure
+-	#$(SED) 's,-O2,$(TARGET_CFLAGS),' $(QTOPIA4_QMAKE_CONF)
+ 	# Fix compiler path
+-	$(SED) '\,QMAKE_CC[ 	]*=, c\QMAKE_CC = $(TARGET_CC)' $(QTOPIA4_QMAKE_CONF)
+-	$(SED) '\,QMAKE_CXX[ 	]*=, c\QMAKE_CXX = $(TARGET_CXX)' $(QTOPIA4_QMAKE_CONF)
+-	$(SED) '\,QMAKE_LINK[ 	]*=, c\QMAKE_LINK = $(TARGET_CXX)' $(QTOPIA4_QMAKE_CONF)
+-	$(SED) '\,QMAKE_LINK_SHLIB[ 	]*=, c\QMAKE_LINK_SHLIB = $(TARGET_CXX)' $(QTOPIA4_QMAKE_CONF)
+-	$(SED) '\,QMAKE_AR[ 	]*=, c\QMAKE_AR = $(TARGET_AR) cqs' $(QTOPIA4_QMAKE_CONF)
+-	$(SED) '\,QMAKE_RANLIB[ 	]*=, c\QMAKE_RANLIB = $(TARGET_RANLIB)' $(QTOPIA4_QMAKE_CONF)
+-	$(SED) '\,QMAKE_STRIP[ 	]*=, c\QMAKE_STRIP = $(TARGET_STRIP)' $(QTOPIA4_QMAKE_CONF)
+-
++	$(call QTOPIA4_QMAKE_SET,CC,$(TARGET_CC))
++	$(call QTOPIA4_QMAKE_SET,CXX,$(TARGET_CXX))
++	$(call QTOPIA4_QMAKE_SET,LINK,$(TARGET_CXX))
++	$(call QTOPIA4_QMAKE_SET,LINK_SHLIB,$(TARGET_CXX))
++	$(call QTOPIA4_QMAKE_SET,AR,$(TARGET_AR))
++	$(call QTOPIA4_QMAKE_SET,OBJCOPY,$(TARGET_OBJCOPY))
++	$(call QTOPIA4_QMAKE_SET,RANLIB,$(TARGET_RANLIB))
++	$(call QTOPIA4_QMAKE_SET,STRIP,$(TARGET_STRIP))
+ 	-[ -f $(QTOPIA4_QCONFIG_FILE) ] && cp $(QTOPIA4_QCONFIG_FILE) \
+ 		$(QTOPIA4_TARGET_DIR)/$(QTOPIA4_QCONFIG_FILE_LOCATION)
+ # Qt doesn't use PKG_CONFIG, it searches for pkg-config with 'which'.
