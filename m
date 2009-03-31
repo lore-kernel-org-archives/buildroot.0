@@ -1,34 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Apr 2009 01:28:41 +0200
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain: binutils
- external-toolchain gcc uClibc
-In-Reply-To: <d6cda7730903301256r2e9adf8bmf613118daf62eb61@mail.gmail.com>
-References: <20090130162827.2A05D765E9@busybox.osuosl.org>
-	<20090330153259.0a7ee398@surf> <87ab73azsj.fsf@macbook.be.48ers.dk>
-	<20090330175842.1960fed2@surf> <87prfyald1.fsf@macbook.be.48ers.dk>
-	<d6cda7730903301256r2e9adf8bmf613118daf62eb61@mail.gmail.com>
-Message-ID: <20090401012841.585dc38e@surf>
+Date: Wed, 1 Apr 2009 01:31:16 +0200
+Subject: [Buildroot] Qtopia4 build issue
+In-Reply-To: <874ox98ijk.fsf@macbook.be.48ers.dk>
+References: <20090226122205.390e848a@surf> <20090226162124.2d78cfa4@surf>
+	<20090227152717.5cefcd92@surf> <874ox98ijk.fsf@macbook.be.48ers.dk>
+Message-ID: <20090401013116.1b9ba88c@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 30 Mar 2009 16:56:54 -0300,
-Thiago A. Corr?a <thiago.correa@gmail.com> a ?crit :
+Hi Peter,
 
-> Would that be a bad thing? Even if it's not integrated but a script,
-> say: ./script/fix-external-toolchain.sh
-> 
-> Before/after running kconfig.
-> 
-> It beats having the user to guess or remember.
+Le Tue, 31 Mar 2009 23:54:39 +0200,
+Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
-Or maybe we could just *not* show these options, and let a script
-auto-detect the values. For uClibc, they can easily be guessed from
-some uClibc-config.h script available in the toolchain.
+> Is this still needed? I don't normally use QT, but built it earlier
+> today without problems (after the fixes I committed today).
 
-Sincerly,
+I worked on Qt build issues on Sunday, but didn't had the time to reach
+a submitable state before the end of day. Definitely, on Sunday, quite
+a few modifications were needed to get Qtopia4 to build properly (with
+an external toolchain, or on a x86). But I suspect that your recent
+changes fix at least part of these issues. I'll have a try at them
+soonish and I'll let you know.
+
+Thanks for the improvements!
 
 Thomas
 -- 
