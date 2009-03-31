@@ -1,44 +1,43 @@
-From: Lloyd Sargent <lloyd@cannasoftware.com>
-Date: Tue, 31 Mar 2009 12:16:26 -0500
-Subject: [Buildroot] make rebuilds cross tools every time ?
-In-Reply-To: <1238464652.5157.44.camel@localhost.localdomain>
-References: <1238464652.5157.44.camel@localhost.localdomain>
-Message-ID: <BDF5A472-B016-4916-BB20-8D0D3FDA748D@cannasoftware.com>
+From: Markus Heidelberg <markus.heidelberg@web.de>
+Date: Tue, 31 Mar 2009 21:08:58 +0200
+Subject: [Buildroot] User defined packages?
+In-Reply-To: <FD8B1EC7-BDA6-4BF5-9A65-5BF62E054683@cannasoftware.com>
+References: <FD8B1EC7-BDA6-4BF5-9A65-5BF62E054683@cannasoftware.com>
+Message-ID: <200903312108.58755.markus.heidelberg@web.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mar 30, 2009, at 8:57 PM, Jeff Steele wrote:
+Lloyd Sargent, 31.03.2009:
+> As a noob on this list, if there isn't already a way to add user  
+> defined packages, could I suggest the following?
+> 
+> In package/Config.in add the following line:
+> 
+> source "user_package/Config.in"
+> 
+> In a new directory named "user_package" have a file called Config.in  
+> with the following:
+> 
+> menu "User Packages"
+> source "package/YourUserDefinedPackage/Config.in"
 
-> Hi,
->
-> I'm brand new to buildroot, and so far I'm very pleased with it.  One
-> problem I've been having is that it seems to rebuild uClibc and the
-> cross compiler/toolchain *every time* I type "make".
->
-> For example, tar-1.18 failed to compile, so I edited tar.mk to bump  
-> the
-> version up to 1.20.  Then I did:
->
-> # rm -rf tar-1.18
-> # make
->
-> Before I find out if the new version of tar compiles (it does,  
-> BTW...),
-> I have to wait for the whole toolchain to be rebuilt.
->
-> Am I doing something wrong ?  Shouldn't the toolchain be independent  
-> of
-> target apps ?
+I guess you meant user_package/ here and not package/
 
-I had it recompiling Linux everytime on one system and now, on this  
-one, it recompiles DBUS.
+> endmenu
+> 
+> The advantage to this is that it allows users to add to their list of  
+> packages without affecting (or in anyway touching) the files within  
+> the "package" directory. And it gives noobs such as myself a feeling  
+> of security that they aren't messing up something important.
 
-Like you I'm new to buildroot and don't even know WHERE to start  
-looking.
+For a real feeling of security you should use a VCS.
 
-Cheers,
+I personally don't like the idea of a separate package directory.
+Putting them into package/ only touches package/Config.in. You can add a
+new 'menu "My Packages"' at the end of the file or wherever if you like,
+this doesn't affect the official files much.
 
-Lloyd
+Markus
