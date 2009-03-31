@@ -1,33 +1,23 @@
-From: Jeff Steele <jsteele@coloradocollege.edu>
-Date: Mon, 30 Mar 2009 19:57:32 -0600
-Subject: [Buildroot] make rebuilds cross tools every time ?
-Message-ID: <1238464652.5157.44.camel@localhost.localdomain>
+From: Bernhard Weirich <weirich@riedel.net>
+Date: Tue, 31 Mar 2009 12:00:32 +0200
+Subject: [Buildroot] how to add user to rootfs?
+Message-ID: <1238493632.14498.11.camel@hactar.vie.riedel.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-I'm brand new to buildroot, and so far I'm very pleased with it.  One
-problem I've been having is that it seems to rebuild uClibc and the
-cross compiler/toolchain *every time* I type "make".
+I have added a new user to /etc/shadow and /etc/passwd but how do I tell
+genext2 that the directory /home/user does not belong to root?
+There is some magic going on that /home/default is owned by "default" in
+the resulting rootfs but I have not understood how it works.
+Can anyone help me on this?
 
-For example, tar-1.18 failed to compile, so I edited tar.mk to bump the
-version up to 1.20.  Then I did:
-
-# rm -rf tar-1.18
-# make
-
-Before I find out if the new version of tar compiles (it does, BTW...),
-I have to wait for the whole toolchain to be rebuilt.
-
-Am I doing something wrong ?  Shouldn't the toolchain be independent of
-target apps ?
-
-
-THx
-
-
-BTW, I'm using buildroot-2009.02, building for armeb, host is x86.
+Thx,
+Bernhard Weirich
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090331/12359a33/attachment.htm>
