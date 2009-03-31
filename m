@@ -1,43 +1,39 @@
-From: Markus Heidelberg <markus.heidelberg@web.de>
-Date: Tue, 31 Mar 2009 21:08:58 +0200
-Subject: [Buildroot] User defined packages?
-In-Reply-To: <FD8B1EC7-BDA6-4BF5-9A65-5BF62E054683@cannasoftware.com>
-References: <FD8B1EC7-BDA6-4BF5-9A65-5BF62E054683@cannasoftware.com>
-Message-ID: <200903312108.58755.markus.heidelberg@web.de>
+From: Michael Roth <mroth@nessie.de>
+Date: Tue, 31 Mar 2009 23:12:34 +0200
+Subject: [Buildroot] [PATCH] libusb: Fix host autotools dependency
+Message-ID: <1238533954-31225-1-git-send-email-mroth@nessie.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Lloyd Sargent, 31.03.2009:
-> As a noob on this list, if there isn't already a way to add user  
-> defined packages, could I suggest the following?
-> 
-> In package/Config.in add the following line:
-> 
-> source "user_package/Config.in"
-> 
-> In a new directory named "user_package" have a file called Config.in  
-> with the following:
-> 
-> menu "User Packages"
-> source "package/YourUserDefinedPackage/Config.in"
+Signed-off-by: Michael Roth <mroth@nessie.de>
+---
+ package/libusb/libusb.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-I guess you meant user_package/ here and not package/
-
-> endmenu
-> 
-> The advantage to this is that it allows users to add to their list of  
-> packages without affecting (or in anyway touching) the files within  
-> the "package" directory. And it gives noobs such as myself a feeling  
-> of security that they aren't messing up something important.
-
-For a real feeling of security you should use a VCS.
-
-I personally don't like the idea of a separate package directory.
-Putting them into package/ only touches package/Config.in. You can add a
-new 'menu "My Packages"' at the end of the file or wherever if you like,
-this doesn't affect the official files much.
-
-Markus
+diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
+index bf831da..f7cad77 100644
+--- a/package/libusb/libusb.mk
++++ b/package/libusb/libusb.mk
+@@ -23,7 +23,7 @@ $(DL_DIR)/$(LIBUSB_SOURCE): $(LIBUSB_PATCH)
+ libusb-source: $(DL_DIR)/$(LIBUSB_SOURCE) $(LIBUSB_PATCH)
+ 
+ libusb-unpacked: $(LIBUSB_DIR)/.unpacked
+-$(LIBUSB_DIR)/.unpacked: $(AUTOCONF) $(AUTOMAKE) $(LIBTOOL) $(DL_DIR)/$(LIBUSB_SOURCE)
++$(LIBUSB_DIR)/.unpacked: $(DL_DIR)/$(LIBUSB_SOURCE)
+ 	$(LIBUSB_CAT) $(DL_DIR)/$(LIBUSB_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+ ifneq ($(LIBUSB_PATCH_FILE),)
+ 	(cd $(LIBUSB_DIR) && $(LIBUSB_CAT) $(LIBUSB_PATCH) | patch -p1)
+@@ -58,7 +58,7 @@ $(TARGET_DIR)/$(LIBUSB_BINARY): $(STAGING_DIR)/usr/lib/libusb.so
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libusb*.so* $(TARGET_DIR)/usr/lib/
+ 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libusb*.so*
+ 
+-libusb: uclibc host-pkgconfig $(TARGET_DIR)/$(LIBUSB_BINARY)
++libusb: uclibc host-pkgconfig host-automake host-autoconf host-libtool $(TARGET_DIR)/$(LIBUSB_BINARY)
+ 
+ libusb-clean:
+ 	rm -f $(STAGING_DIR)/bin/libusb-config
+-- 
+1.6.0.6
