@@ -1,79 +1,40 @@
-From: Lloyd Sargent <lloyd@cannasoftware.com>
-Date: Tue, 31 Mar 2009 19:23:17 -0500
-Subject: [Buildroot] User defined packages?
-In-Reply-To: <200904010211.48696.markus.heidelberg@web.de>
-References: <FD8B1EC7-BDA6-4BF5-9A65-5BF62E054683@cannasoftware.com>
-	<200903312108.58755.markus.heidelberg@web.de>
-	<200903311637.14499.lsargent@txdigital.com>
-	<200904010211.48696.markus.heidelberg@web.de>
-Message-ID: <7E85F0AA-3BE6-44EF-8579-559D0D7E860D@cannasoftware.com>
+From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
+Date: Tue, 31 Mar 2009 23:43:09 -0300
+Subject: [Buildroot] svn commit: trunk/buildroot/toolchain: binutils
+	external-toolchain gcc uClibc
+In-Reply-To: <20090401012841.585dc38e@surf>
+References: <20090130162827.2A05D765E9@busybox.osuosl.org>
+	<20090330153259.0a7ee398@surf> <87ab73azsj.fsf@macbook.be.48ers.dk>
+	<20090330175842.1960fed2@surf> <87prfyald1.fsf@macbook.be.48ers.dk>
+	<d6cda7730903301256r2e9adf8bmf613118daf62eb61@mail.gmail.com>
+	<20090401012841.585dc38e@surf>
+Message-ID: <d6cda7730903311943o576aa1a9p932aecc9f5ada27f@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mar 31, 2009, at 7:11 PM, Markus Heidelberg wrote:
+Hi,
 
-> Hi, please keep the list in the reply.
-> So quoting the whole mail.
+2009/3/31 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+> Le Mon, 30 Mar 2009 16:56:54 -0300,
+> Thiago A. Corr?a <thiago.correa@gmail.com> a ?crit :
 >
-> Lloyd Sargent, 31.03.2009:
->> On Tuesday 31 March 2009 14:08:58 Markus Heidelberg wrote:
->>> Lloyd Sargent, 31.03.2009:
->>>> As a noob on this list, if there isn't already a way to add user
->>>> defined packages, could I suggest the following?
->>>>
->>>> In package/Config.in add the following line:
->>>>
->>>> source "user_package/Config.in"
->>>>
->>>> In a new directory named "user_package" have a file called  
->>>> Config.in
->>>> with the following:
->>>>
->>>> menu "User Packages"
->>>> source "package/YourUserDefinedPackage/Config.in"
->>>
->>> I guess you meant user_package/ here and not package/
+>> Would that be a bad thing? Even if it's not integrated but a script,
+>> say: ./script/fix-external-toolchain.sh
 >>
->> Oops! Yeah, that's what I means :)
+>> Before/after running kconfig.
 >>
->>>> endmenu
->>>>
->>>> The advantage to this is that it allows users to add to their  
->>>> list of
->>>> packages without affecting (or in anyway touching) the files within
->>>> the "package" directory. And it gives noobs such as myself a  
->>>> feeling
->>>> of security that they aren't messing up something important.
->>>
->>> For a real feeling of security you should use a VCS.
->>
->> Actually, I use Subversion, but there you go... :)
->>
->>> I personally don't like the idea of a separate package directory.
->>> Putting them into package/ only touches package/Config.in. You can  
->>> add a
->>> new 'menu "My Packages"' at the end of the file or wherever if you  
->>> like,
->>> this doesn't affect the official files much.
->>
->> I was looking at it going forward. We have a need to update our  
->> packages from
->> time to time. It seems to me easier to copy a directory than go in  
->> and edit a
->> file over and over.
+>> It beats having the user to guess or remember.
 >
-> I did the same: updating to newer releases. But when working in a VCS
-> (git for me), it should not be necessary to bother with copying  
-> files or
-> directories around at all. Rebasing onto the next release or merging  
-> the
-> changes in should do it.
+> Or maybe we could just *not* show these options, and let a script
+> auto-detect the values. For uClibc, they can easily be guessed from
+> some uClibc-config.h script available in the toolchain.
+>
 
-Ah, good point.
+It must be "guessed" before entering kconfig because of the package
+options that depend on them. Specially large file support and IPv6.
 
-Cheers,
-
-Lloyd
+Kind Regards,
+   Thiago A. Correa
