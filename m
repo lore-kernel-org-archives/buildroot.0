@@ -1,31 +1,32 @@
-From: Jeff Steele <jsteele@coloradocollege.edu>
-Date: Wed, 01 Apr 2009 10:04:16 -0600
-Subject: [Buildroot] util-linux error : blkid/blkid.h not found ?
-Message-ID: <1238601856.5157.78.camel@localhost.localdomain>
+From: Lloyd Sargent <lloyd@cannasoftware.com>
+Date: Wed, 1 Apr 2009 11:33:27 -0500
+Subject: [Buildroot] Do I need to install twice?
+Message-ID: <461F49CC-88D4-4278-947D-453AAFCFDDC5@cannasoftware.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Okay, I'm really, close to finishing the wxWidgets make and  
+configuration files.
 
+HOWEVER, I'm a little stumped. If I do the following:
 
-I *finally* got everything to build.  (svn, armeb, OABI). But there was
-one error I had to fix by hand.
+	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(WXWIDGETS_DIR) install
 
+The include directory is deleted so I am unable to build files for  
+WxWidgets. But my libraries are in the right place.
 
-The package util-linux-2.13-pre7 failed to compile due to a missing
-header file : blkid/blkid.h
+To have include files I can build against I added this line:
 
-This header file is in the package e2fsprogs-1-41.3, but I can't find
-anything in the Makefile, configure, etc. for e21fsprogs that installs
-the headers.  In order to get util-linux to compile, I did the
-following :
+	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(WXWIDGETS_DIR) install
 
-# cd e2fsprogs-1.41.3
-# for i in blkid e2p et ext2fs ss uuid; do
-# mkdir ../../staging_dir/usr/include/$i;
-# cp $i/*.h ../../staging_dir/usr/include/$i;
-# done;
+It gets me the include files but I've this bad feeling that it isn't  
+the right way to do it.
 
-After this, util-linux compiled just fine.
+So have I got this right? Or have I just made a blunder?
+
+Cheers,
+
+Lloyd
