@@ -1,57 +1,33 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Wed,  1 Apr 2009 20:52:48 +0000 (UTC)
-Subject: [Buildroot] svn commit: [25925] trunk/buildroot/package/ncftp
-Message-ID: <20090401205248.42ED877673@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed,  1 Apr 2009 20:53:14 +0000 (UTC)
+Subject: [Buildroot] [Bug 237] ncftp: convert to Makefile.autotools.in
+In-Reply-To: <bug-237-163@https.bugs.busybox.net/>
+References: <bug-237-163@https.bugs.busybox.net/>
+Message-ID: <20090401205314.B350977673@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-04-01 20:52:47 +0000 (Wed, 01 Apr 2009)
-New Revision: 25925
-
-Log:
-ncftp: cleanup Config.in
-
-Subentries of a menu automatically gets hidden if the dependencies of the
-menu element aren't available, so get rid of the individual depends on
-BR2_PACKAGE_NCFTP.
-
-Modified:
-   trunk/buildroot/package/ncftp/Config.in
+https://bugs.busybox.net/show_bug.cgi?id=237
 
 
-Changeset:
-Modified: trunk/buildroot/package/ncftp/Config.in
-===================================================================
---- trunk/buildroot/package/ncftp/Config.in	2009-04-01 20:52:41 UTC (rev 25924)
-+++ trunk/buildroot/package/ncftp/Config.in	2009-04-01 20:52:47 UTC (rev 25925)
-@@ -12,26 +12,21 @@
- config BR2_PACKAGE_NCFTP_GET
- 	bool "NcFTPGet - command-line utility program"
- 	default y
--	depends on BR2_PACKAGE_NCFTP
- 
- config BR2_PACKAGE_NCFTP_PUT
- 	bool "NcFTPPut - command-line utility program"
- 	default y
--	depends on BR2_PACKAGE_NCFTP
- 
- config BR2_PACKAGE_NCFTP_LS
- 	bool "NcFTPLs - command-line utility program"
- 	default y
--	depends on BR2_PACKAGE_NCFTP
- 
- config BR2_PACKAGE_NCFTP_BATCH
- 	bool "NcFTPBatch & NcFTPSpooler - background FTP program for individual users"
- 	default y
--	depends on BR2_PACKAGE_NCFTP
- 
- config BR2_PACKAGE_NCFTP_BOOKMARKS
- 	bool "NcFTPBookmarks - ncurses based Bookmark Editor"
--	depends on BR2_PACKAGE_NCFTP
- 	select BR2_PACKAGE_NCURSES
- 
- endmenu
+Peter Korsgaard <jacmet@uclibc.org> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
+
+
+
+
+--- Comment #2 from Peter Korsgaard <jacmet@uclibc.org>  2009-04-01 20:53:13 UTC ---
+Thanks, committed as r25924.
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
