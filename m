@@ -1,36 +1,35 @@
-From: Lloyd Sargent <lloyd@cannasoftware.com>
-Date: Wed, 1 Apr 2009 08:26:38 -0500
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 01 Apr 2009 15:32:05 +0200
 Subject: [Buildroot] Working on a wxWidgets build
-Message-ID: <79A10089-9847-4B61-A91D-0C0AA181F1C1@cannasoftware.com>
+In-Reply-To: <79A10089-9847-4B61-A91D-0C0AA181F1C1@cannasoftware.com> (Lloyd
+	Sargent's message of "Wed\, 1 Apr 2009 08\:26\:38 -0500")
+References: <79A10089-9847-4B61-A91D-0C0AA181F1C1@cannasoftware.com>
+Message-ID: <87iqlo7b56.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Forgive me if Make files are not my forte, but how do I create two  
-sets of dependancies in my wxwidget.mk file? The example in the  
-documentation has:
+>>>>> "Lloyd" == Lloyd Sargent <lloyd@cannasoftware.com> writes:
 
-foo: uclibc ncurses $(TARGET_DIR)/$(FOO_TARGET_BINARY)
+Hi,
 
-Which makes sense. However I need something along the lines of:
+ Lloyd> foo: uclibc ncurses $(TARGET_DIR)/$(FOO_TARGET_BINARY)
 
-foo: uclibc libglib2 libgtk2  $(TARGET_DIR)/$(FOO_TARGET_BINARY)
+ Lloyd> Which makes sense. However I need something along the lines of:
 
-for one set of options and
+ Lloyd> foo: uclibc libglib2 libgtk2  $(TARGET_DIR)/$(FOO_TARGET_BINARY)
 
-foo: uclibc $(TARGET_DIR)/$(FOO_TARGET_BINARY)
+ Lloyd> for one set of options and
 
-for a different set of options.
+ Lloyd> foo: uclibc $(TARGET_DIR)/$(FOO_TARGET_BINARY)
 
-Since I'm not really terribly familiar with these build scripts  
-(better than day one!), I'd like to get a script that can build the  
-entire wx_widget library rather than submit a one that does only what  
-I need.
+ Lloyd> for a different set of options.
 
-Please let me know if I need to clarify.
+Stick them in a variable or use the $(if ) construct. See
+package/grep/grep.mk or package/multimedia/alsa-utils/alsa-utils.mk
+for examples.
 
-Cheers,
-
-Lloyd
+-- 
+Bye, Peter Korsgaard
