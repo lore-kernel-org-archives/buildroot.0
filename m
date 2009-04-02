@@ -1,45 +1,46 @@
 From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Thu, 2 Apr 2009 11:56:13 +1100
-Subject: [Buildroot] svn commit: trunk/buildroot/toolchain:
-	binutils	external-toolchain gcc uClibc
-In-Reply-To: <d6cda7730903311943o576aa1a9p932aecc9f5ada27f@mail.gmail.com>
-References: <20090130162827.2A05D765E9@busybox.osuosl.org>
-	<20090330153259.0a7ee398@surf> <87ab73azsj.fsf@macbook.be.48ers.dk>
-	<20090330175842.1960fed2@surf> <87prfyald1.fsf@macbook.be.48ers.dk>
-	<d6cda7730903301256r2e9adf8bmf613118daf62eb61@mail.gmail.com>
-	<20090401012841.585dc38e@surf>
-	<d6cda7730903311943o576aa1a9p932aecc9f5ada27f@mail.gmail.com>
-Message-ID: <20090402005613.GE29488@cloud.net.au>
+Date: Thu, 2 Apr 2009 12:24:20 +1100
+Subject: [Buildroot] [PATCH] libusb: Fix host autotools dependency
+In-Reply-To: <1238533954-31225-1-git-send-email-mroth@nessie.de>
+References: <1238533954-31225-1-git-send-email-mroth@nessie.de>
+Message-ID: <20090402012420.GF29488@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Mar 31, 2009 at 11:43:09PM -0300, Thiago A. Corr?a wrote:
-> Hi,
+On Tue, Mar 31, 2009 at 11:12:34PM +0200, Michael Roth wrote:
+> Signed-off-by: Michael Roth <mroth@nessie.de>
+> ---
+>  package/libusb/libusb.mk |    4 ++--
+>  1 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> 2009/3/31 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> > Le Mon, 30 Mar 2009 16:56:54 -0300,
-> > Thiago A. Corr?a <thiago.correa@gmail.com> a ?crit :
-> >
-> >> Would that be a bad thing? Even if it's not integrated but a script,
-> >> say: ./script/fix-external-toolchain.sh
-> >>
-> >> Before/after running kconfig.
-> >>
-> >> It beats having the user to guess or remember.
-> >
-> > Or maybe we could just *not* show these options, and let a script
-> > auto-detect the values. For uClibc, they can easily be guessed from
-> > some uClibc-config.h script available in the toolchain.
-> 
-> It must be "guessed" before entering kconfig because of the package
-> options that depend on them. Specially large file support and IPv6.
+> diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
+> index bf831da..f7cad77 100644
+> --- a/package/libusb/libusb.mk
+> +++ b/package/libusb/libusb.mk
+> @@ -23,7 +23,7 @@ $(DL_DIR)/$(LIBUSB_SOURCE): $(LIBUSB_PATCH)
+>  libusb-source: $(DL_DIR)/$(LIBUSB_SOURCE) $(LIBUSB_PATCH)
+>  
+>  libusb-unpacked: $(LIBUSB_DIR)/.unpacked
+> -$(LIBUSB_DIR)/.unpacked: $(AUTOCONF) $(AUTOMAKE) $(LIBTOOL) $(DL_DIR)/$(LIBUSB_SOURCE)
+> +$(LIBUSB_DIR)/.unpacked: $(DL_DIR)/$(LIBUSB_SOURCE)
+>  	$(LIBUSB_CAT) $(DL_DIR)/$(LIBUSB_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+>  ifneq ($(LIBUSB_PATCH_FILE),)
+>  	(cd $(LIBUSB_DIR) && $(LIBUSB_CAT) $(LIBUSB_PATCH) | patch -p1)
+> @@ -58,7 +58,7 @@ $(TARGET_DIR)/$(LIBUSB_BINARY): $(STAGING_DIR)/usr/lib/libusb.so
+>  	cp -dpf $(STAGING_DIR)/usr/lib/libusb*.so* $(TARGET_DIR)/usr/lib/
+>  	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libusb*.so*
+>  
+> -libusb: uclibc host-pkgconfig $(TARGET_DIR)/$(LIBUSB_BINARY)
+> +libusb: uclibc host-pkgconfig host-automake host-autoconf host-libtool $(TARGET_DIR)/$(LIBUSB_BINARY)
 
-Should those options (particularly large file support) just become
-standard ie required?
+What does this fix?
 
+I had lots of problems with libusb being rebuilt every time a while ago
+with a change like the above. It might be better now with $(HOST_DIR)
+etc. Please check.
 
 Hamish
 -- 
