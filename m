@@ -1,42 +1,38 @@
 From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Thu, 2 Apr 2009 11:38:22 +1100
-Subject: [Buildroot] [PATCH 5/5] target/ubifs: Switched to
-	mkfs.ubifs	included in mtd-utils
-In-Reply-To: <1238098807-5648-6-git-send-email-mroth@nessie.de>
+Date: Thu, 2 Apr 2009 11:40:33 +1100
+Subject: [Buildroot] [PATCH 4/5] mtd-utils: Version bump of the
+	GIT	source
+In-Reply-To: <1238098807-5648-5-git-send-email-mroth@nessie.de>
 References: <1238098807-5648-1-git-send-email-mroth@nessie.de>
-	<1238098807-5648-6-git-send-email-mroth@nessie.de>
-Message-ID: <20090402003822.GB29488@cloud.net.au>
+	<1238098807-5648-5-git-send-email-mroth@nessie.de>
+Message-ID: <20090402004033.GC29488@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Mar 26, 2009 at 09:20:07PM +0100, Michael Roth wrote:
-> The mkfs.ubifs is included in the upcomming mtd-utils. So
-> the ubifs root filesytem target uses the mtd-utils package
-> analog to the jffs2 root filesystem target.
+On Thu, Mar 26, 2009 at 09:20:06PM +0100, Michael Roth wrote:
+> GIT version of mtd-utils bumped to 2009-03-26 and support
+> for the included mkfs.ubifs added.
+> 
+[...]
+> +config BR2_PACKAGE_MTD_MKFSUBIFS
+> +	bool "mkfs.ubifs"
 
-Thanks, I just did something similar in my own tree.
+It's pretty unlikely that you would want mkfs.ubifs on your target
+system but I guess it's correct to include it. Actually I may need it
+for my current project anyway :-|
 
-> diff --git a/target/ubifs/Config.in b/target/ubifs/Config.in
-> index 85229f6..7544b50 100644
-> --- a/target/ubifs/Config.in
-> +++ b/target/ubifs/Config.in
-> @@ -1,9 +1,13 @@
->  config BR2_TARGET_ROOTFS_UBIFS
->  	bool "ubifs root filesystem"
->  	select BR2_HOST_FAKEROOT
-> +	depends on BR2_PACKAGE_MTD_UTILS_GIT
+> +	default n
 
-This is needed due to the ugly multiple MTD versions stuff, but it 
-has the unfortunate side-effect of adding target binaries too - 
-all the default MTD utilities.
+That's superflous.
 
-One solution would be to duplicate the mtd-utils.git stuff within a
-separate host-only mkfs.ubifs target. Either inside target/ubifsroot, or
-in toolchain or whatever. That could be switched over to mtd-utils 1.x.0
-when it's released.
+> +	depends on BR2_PACKAGE_MTD_UTILS_GIT && BR2_LARGEFILE && BR2_PACKAGE_E2FSPROGS
+
+Depending on BR2_PACKAGE_E2FSPROGS also means a bunch of other binaries
+get included by default. I think libuuid needs to be split out into a
+separate package built from the same source tarball.
 
 
 
