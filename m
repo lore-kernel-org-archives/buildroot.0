@@ -1,47 +1,33 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Thu, 2 Apr 2009 12:24:20 +1100
-Subject: [Buildroot] [PATCH] libusb: Fix host autotools dependency
-In-Reply-To: <1238533954-31225-1-git-send-email-mroth@nessie.de>
-References: <1238533954-31225-1-git-send-email-mroth@nessie.de>
-Message-ID: <20090402012420.GF29488@cloud.net.au>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 02 Apr 2009 07:22:40 +0200
+Subject: [Buildroot] using linux 2.4 headers AND python
+In-Reply-To: <20090402002811.GA29488@cloud.net.au> (Hamish Moffatt's message
+	of "Thu\, 2 Apr 2009 11\:28\:11 +1100")
+References: <49C9614C.6010205@caktusgroup.com>
+	<877i2ejzrj.fsf@macbook.be.48ers.dk>
+	<49C9ABB0.8080501@caktusgroup.com> <49CA4F52.705@caktusgroup.com>
+	<20090325232609.GA30311@cloud.net.au>
+	<87bproixeh.fsf@macbook.be.48ers.dk>
+	<20090402002811.GA29488@cloud.net.au>
+Message-ID: <87ljqj634v.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Mar 31, 2009 at 11:12:34PM +0200, Michael Roth wrote:
-> Signed-off-by: Michael Roth <mroth@nessie.de>
-> ---
->  package/libusb/libusb.mk |    4 ++--
->  1 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
-> index bf831da..f7cad77 100644
-> --- a/package/libusb/libusb.mk
-> +++ b/package/libusb/libusb.mk
-> @@ -23,7 +23,7 @@ $(DL_DIR)/$(LIBUSB_SOURCE): $(LIBUSB_PATCH)
->  libusb-source: $(DL_DIR)/$(LIBUSB_SOURCE) $(LIBUSB_PATCH)
->  
->  libusb-unpacked: $(LIBUSB_DIR)/.unpacked
-> -$(LIBUSB_DIR)/.unpacked: $(AUTOCONF) $(AUTOMAKE) $(LIBTOOL) $(DL_DIR)/$(LIBUSB_SOURCE)
-> +$(LIBUSB_DIR)/.unpacked: $(DL_DIR)/$(LIBUSB_SOURCE)
->  	$(LIBUSB_CAT) $(DL_DIR)/$(LIBUSB_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
->  ifneq ($(LIBUSB_PATCH_FILE),)
->  	(cd $(LIBUSB_DIR) && $(LIBUSB_CAT) $(LIBUSB_PATCH) | patch -p1)
-> @@ -58,7 +58,7 @@ $(TARGET_DIR)/$(LIBUSB_BINARY): $(STAGING_DIR)/usr/lib/libusb.so
->  	cp -dpf $(STAGING_DIR)/usr/lib/libusb*.so* $(TARGET_DIR)/usr/lib/
->  	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libusb*.so*
->  
-> -libusb: uclibc host-pkgconfig $(TARGET_DIR)/$(LIBUSB_BINARY)
-> +libusb: uclibc host-pkgconfig host-automake host-autoconf host-libtool $(TARGET_DIR)/$(LIBUSB_BINARY)
+>>>>> "Hamish" == Hamish Moffatt <hamish@cloud.net.au> writes:
 
-What does this fix?
+ >> Will you fix it or should I?
 
-I had lots of problems with libusb being rebuilt every time a while ago
-with a change like the above. It might be better now with $(HOST_DIR)
-etc. Please check.
+ Hamish> I will.
 
-Hamish
+ Hamish> The Python package needs a bit of work anyway. I am using 2.5
+ Hamish> in my tree (2.4 is in the repo). There should be a proper
+ Hamish> build for the host now that we have $(HOST_DIR) too.
+
+Exactly. I had it on my todo list, but feel free to do it if you have
+time for it, I don't normally use Python.
+
 -- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+Bye, Peter Korsgaard
