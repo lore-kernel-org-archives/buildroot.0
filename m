@@ -1,7 +1,8 @@
-From: Jean-Christian de Rivaz <jc@eclis.ch>
-Date: Thu, 02 Apr 2009 15:22:29 +0200
-Subject: [Buildroot] dbus-python and pyexpat
-Message-ID: <49D4BC15.2070100@eclis.ch>
+From: Darcy L. Watkins <dwatkins@tranzeo.com>
+Date: Thu, 02 Apr 2009 11:01:48 -0700
+Subject: [Buildroot] The make target: cross fails because
+ toolchain_build_<arch>/bin/sed not found
+Message-ID: <1238695308.2640.14.camel@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,36 +11,31 @@ To: buildroot@busybox.net
 
 Hello,
 
-I try to use the dbus-python package. It compile fine, but when
-I try to use it on the target, I get this error:
+In the toplevel Makefile is a target 'cross' that appears to be intended
+to allow you to build the cross toolchain without building everything
+else.  Unfortunately it doesn't work from a clean extract of the
+tarball.
 
-# python
-Python 2.4.5 (#1, Mar 26 2009, 16:56:57) 
-[GCC 4.3.3] on linux2
-Type "help", "copyright", "credits" or "license" for more information.
->>> import dbus
-Traceback (most recent call last):
-  File "<stdin>", line 1, in ?
-  File "/usr/lib/python2.4/site-packages/dbus/__init__.py", line 100, in ?
-    from dbus._dbus import Bus, SystemBus, SessionBus, StarterBus
-  File "/usr/lib/python2.4/site-packages/dbus/_dbus.py", line 46, in ?
-    from dbus.bus import BusConnection
-  File "/usr/lib/python2.4/site-packages/dbus/bus.py", line 46, in ?
-    from dbus.connection import Connection
-  File "/usr/lib/python2.4/site-packages/dbus/connection.py", line 42, in ?
-    from dbus.proxies import ProxyObject
-  File "/usr/lib/python2.4/site-packages/dbus/proxies.py", line 35, in ?
-    from dbus._expat_introspect_parser import process_introspection_data
-  File "/usr/lib/python2.4/site-packages/dbus/_expat_introspect_parser.py", line 26, in ?
-    from xml.parsers.expat import ExpatError, ParserCreate
-  File "/usr/lib/python2.4/xml/parsers/expat.py", line 4, in ?
-ImportError: No module named pyexpat
->>> 
+If you invoke 'make cross' an error happens because sed is missing.
 
-The strange thing is that there seem to be no pyexpat package in
-buildroot yet. So I don't understand how dbus-python can be
-functional on the target.
+The following appears to fix it... [based on the 2009.02 release]
 
-Best Regards,
--- 
-Jean-Christian de Rivaz
+Signed-off-by: Darcy L. Watkins <dwatkins@tranzeo.com>
+
+--- buildroot-2009.02_powerpc/Makefile.orig	2009-02-12 00:50:20.000000000 -0800
++++ buildroot-2009.02_powerpc/Makefile	2009-04-02 10:38:03.000000000 -0700
+@@ -499,7 +499,7 @@ log:	.lognr.$(PROJECT)
+ 	@$(MAKE) > $(PROJECT)-`cat .lognr.$(PROJECT)`.log 2>&1
+ 
+ 
+-cross: $(BASE_TARGETS)
++cross: dependencies dirs target-host-info $(BASE_TARGETS)
+ 
+ help:
+ 	@echo 'Cleaning:'
+
+
+
+Regards,
+
+Darcy
