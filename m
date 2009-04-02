@@ -1,36 +1,26 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 02 Apr 2009 11:25:34 +0200
-Subject: [Buildroot] [PATCH 2/5] mtd-utils: Added mtd-utils-1.2.0
-In-Reply-To: <49D48376.2060708@nessie.de> (Michael Roth's message of "Thu\,
-	02 Apr 2009 11\:20\:54 +0200")
-References: <1238103279-8040-1-git-send-email-mroth@nessie.de>
-	<1238103279-8040-3-git-send-email-mroth@nessie.de>
-	<20090402004150.GD29488@cloud.net.au>
-	<87hc175yvt.fsf@macbook.be.48ers.dk> <49D48376.2060708@nessie.de>
-Message-ID: <87d4bv5rw1.fsf@macbook.be.48ers.dk>
+From: Michael Roth <mroth@nessie.de>
+Date: Thu, 02 Apr 2009 11:32:48 +0200
+Subject: [Buildroot] [PATCH] libusb: Fix host autotools dependency
+In-Reply-To: <20090402012420.GF29488@cloud.net.au>
+References: <1238533954-31225-1-git-send-email-mroth@nessie.de>
+	<20090402012420.GF29488@cloud.net.au>
+Message-ID: <49D48640.5020703@nessie.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Michael" == Michael Roth <mroth@nessie.de> writes:
+> What does this fix?
 
-Hi,
+Problem was, that autotools were not build because $(AUTOCONF),
+$(AUTOMAKE) and $(LIBTOOL) don't have any dependency.
 
- Michael> Should the xxx-2005 and xxx-2006 snapshots of mtd-utils be
- Michael> also removed?
-
-Yes. They are marked as deprecated, and as I mentioned in the 2009.02
-annoucement [1], I *WILL* remove deprecated stuff to cleanup. We might
-as well do it now as in a few weeks.
-
- Michael> This will clean up a lot of special handling of different mtd-utils.
-
-Exactly.
-
-[1]: http://lists.busybox.net/pipermail/buildroot/2009-February/025974.html
+Maybe I should make the commit messages more explicit.
 
 
--- 
-Bye, Peter Korsgaard
+> I had lots of problems with libusb being rebuilt every time a while ago
+> with a change like the above. It might be better now with $(HOST_DIR)
+> etc. Please check.
+
+Hmm. I will check this.
