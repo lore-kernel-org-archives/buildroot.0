@@ -1,32 +1,37 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 03 Apr 2009 14:42:41 +0200
-Subject: [Buildroot] [NEWBIE] Disable U-Boot
-In-Reply-To: <39f1c8d30904030431m793edfc1md570b73135cbe941@mail.gmail.com>
-	(Roger Varley's message of "Fri\, 3 Apr 2009 14\:31\:20 +0300")
-References: <39f1c8d30904030431m793edfc1md570b73135cbe941@mail.gmail.com>
-Message-ID: <87wsa152ny.fsf@macbook.be.48ers.dk>
+Date: Fri, 03 Apr 2009 14:50:24 +0200
+Subject: [Buildroot] compiling with older kernel headers and uclibc
+In-Reply-To: <898285d30904030431p4195b8fdj60d7275648e54c5@mail.gmail.com>
+	(abhishek desai's message of "Fri\, 3 Apr 2009 17\:01\:13 +0530")
+References: <898285d30904030431p4195b8fdj60d7275648e54c5@mail.gmail.com>
+Message-ID: <87skkp52b3.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Roger" == Roger Varley <roger.varley@googlemail.com> writes:
+>>>>> "abhishek" == abhishek desai <abhi00@gmail.com> writes:
 
- Roger> Hi
- Roger> I have installed buildroot-2902 and I'm trying my hand at my first
- Roger> "make" It fails when it tries to build u-boot-2009-01 with
- Roger> the error
+ abhishek> Hi, I am trying to compile uclibc and gcc toolchains(with
+ abhishek> gcj) for mipsel architecture using buildroot-2009.02. I
+ abhishek> want to use older versions for kernel-headers and uclibc
 
- Roger> make[1] *** no rule to make target "vortex_config"
+ abhishek> kernel headers - 2.6.12,
 
- Roger> I don't use u-boot, I've selected the grub option but the system won't
- Roger> allow me to switch off the "Das U-Boot Boot Monitor".
- Roger> How do I stop buildroot from trying to build U-Boot
+That got removed back on August 4, 2008 (r23020).
 
-Did you by any chance select the advanced Linux kernel config and
-uImage as "kernel binary format"? If so, then that's why it tries to
-build U-Boot. You probably want bzImage instead.
+ abhishek> uclibc - 0.9.28
+
+We have 0.9.28.3 which is the same as 0.9.28, just with a few
+bugfixes.
+
+ abhishek> Even under deprecated versions?make menuconfig does not
+ abhishek> provide options for these versions. Is there any method by
+ abhishek> which I can use them.
+
+You could check out a svn version earlier than r23020, or use
+something a bit more modern than those ancient versions.
 
 -- 
 Bye, Peter Korsgaard
