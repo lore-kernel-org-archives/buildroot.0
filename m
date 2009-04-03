@@ -1,33 +1,25 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 03 Apr 2009 09:20:36 +0200
-Subject: [Buildroot] [PATCH 2/5] mtd-utils: Added mtd-utils-1.2.0
-In-Reply-To: <20090403012901.GA30190@cloud.net.au> (Hamish Moffatt's message
-	of "Fri\, 3 Apr 2009 12\:29\:01 +1100")
-References: <1238103279-8040-1-git-send-email-mroth@nessie.de>
-	<1238103279-8040-3-git-send-email-mroth@nessie.de>
-	<20090402004150.GD29488@cloud.net.au>
-	<87hc175yvt.fsf@macbook.be.48ers.dk> <49D48376.2060708@nessie.de>
-	<87d4bv5rw1.fsf@macbook.be.48ers.dk>
-	<20090403012901.GA30190@cloud.net.au>
-Message-ID: <878wmi5hkr.fsf@macbook.be.48ers.dk>
+From: abhishek desai <abhi00@gmail.com>
+Date: Fri, 3 Apr 2009 17:01:13 +0530
+Subject: [Buildroot] compiling with older kernel headers and uclibc
+Message-ID: <898285d30904030431p4195b8fdj60d7275648e54c5@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Hamish" == Hamish Moffatt <hamish@cloud.net.au> writes:
-
 Hi,
 
- Michael> This will clean up a lot of special handling of different mtd-utils.
+I am trying to compile uclibc and gcc toolchains(with gcj) for mipsel
+architecture using buildroot-2009.02. I want to use older versions for
+kernel-headers and uclibc
 
- Hamish> Yes.. if there was an mtd-utils release that included mkfs.ubifs, we
- Hamish> could scrub the multiple versions completely..
+kernel headers - 2.6.12,
+uclibc - 0.9.28
 
-Yes, including the git version. Supporting multiple versions of a
-package (especially when the difference is so relatively large) is a
-PITA from a maintainence / testing POV.
-
--- 
-Bye, Peter Korsgaard
+Even under deprecated versions make menuconfig does not provide
+options for these versions. Is there any method by which I can use
+them.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090403/669b07ff/attachment.htm>
