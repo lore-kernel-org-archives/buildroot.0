@@ -1,23 +1,32 @@
-From: Roger Varley <roger.varley@googlemail.com>
-Date: Fri, 3 Apr 2009 14:31:20 +0300
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 03 Apr 2009 14:42:41 +0200
 Subject: [Buildroot] [NEWBIE] Disable U-Boot
-Message-ID: <39f1c8d30904030431m793edfc1md570b73135cbe941@mail.gmail.com>
+In-Reply-To: <39f1c8d30904030431m793edfc1md570b73135cbe941@mail.gmail.com>
+	(Roger Varley's message of "Fri\, 3 Apr 2009 14\:31\:20 +0300")
+References: <39f1c8d30904030431m793edfc1md570b73135cbe941@mail.gmail.com>
+Message-ID: <87wsa152ny.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+>>>>> "Roger" == Roger Varley <roger.varley@googlemail.com> writes:
 
-I have installed buildroot-2902 and I'm trying my hand at my first
-"make" It fails when it tries to build u-boot-2009-01 with
-the error
+ Roger> Hi
+ Roger> I have installed buildroot-2902 and I'm trying my hand at my first
+ Roger> "make" It fails when it tries to build u-boot-2009-01 with
+ Roger> the error
 
-make[1] *** no rule to make target "vortex_config"
+ Roger> make[1] *** no rule to make target "vortex_config"
 
-I don't use u-boot, I've selected the grub option but the system won't
-allow me to switch off the "Das U-Boot Boot Monitor".
-How do I stop buildroot from trying to build U-Boot
+ Roger> I don't use u-boot, I've selected the grub option but the system won't
+ Roger> allow me to switch off the "Das U-Boot Boot Monitor".
+ Roger> How do I stop buildroot from trying to build U-Boot
 
-Regards
+Did you by any chance select the advanced Linux kernel config and
+uImage as "kernel binary format"? If so, then that's why it tries to
+build U-Boot. You probably want bzImage instead.
+
+-- 
+Bye, Peter Korsgaard
