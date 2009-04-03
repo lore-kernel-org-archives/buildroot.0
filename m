@@ -1,37 +1,40 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 03 Apr 2009 14:50:24 +0200
-Subject: [Buildroot] compiling with older kernel headers and uclibc
-In-Reply-To: <898285d30904030431p4195b8fdj60d7275648e54c5@mail.gmail.com>
-	(abhishek desai's message of "Fri\, 3 Apr 2009 17\:01\:13 +0530")
-References: <898285d30904030431p4195b8fdj60d7275648e54c5@mail.gmail.com>
-Message-ID: <87skkp52b3.fsf@macbook.be.48ers.dk>
+Date: Fri, 03 Apr 2009 16:51:49 +0200
+Subject: [Buildroot] [NEWBIE] Disable U-Boot
+In-Reply-To: <39f1c8d30904030716u38c3b238jb62178d41184a9c8@mail.gmail.com>
+	(Roger Varley's message of "Fri\, 3 Apr 2009 17\:16\:08 +0300")
+References: <39f1c8d30904030431m793edfc1md570b73135cbe941@mail.gmail.com>
+	<87wsa152ny.fsf@macbook.be.48ers.dk>
+	<39f1c8d30904030716u38c3b238jb62178d41184a9c8@mail.gmail.com>
+Message-ID: <87myax4woq.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "abhishek" == abhishek desai <abhi00@gmail.com> writes:
+>>>>> "Roger" == Roger Varley <roger.varley@googlemail.com> writes:
 
- abhishek> Hi, I am trying to compile uclibc and gcc toolchains(with
- abhishek> gcj) for mipsel architecture using buildroot-2009.02. I
- abhishek> want to use older versions for kernel-headers and uclibc
+Hi,
 
- abhishek> kernel headers - 2.6.12,
+ Roger> Thanks for your response - that was the problem. Now I'm getting a
+ Roger> failure later in the "make" process.
 
-That got removed back on August 4, 2008 (r23020).
+ Roger> In file included from .stdint.h:87
+ Roger>                      from <long path name
+ to> /build_i486/staging_dir/usr/include/stdlib.h:860
+ Roger>                      from ./stdlib.h:44
+ Roger>                      from allocsa.h:24
+ Roger>                      from allocsa.h:22
+ Roger> ./wchar.h:41:12: error: empty filename in #include
 
- abhishek> uclibc - 0.9.28
+What package is this from? Coreutils?
 
-We have 0.9.28.3 which is the same as 0.9.28, just with a few
-bugfixes.
+ Roger> This happens whether I've selected wchar support or not
+ Roger> through menuconfig.
 
- abhishek> Even under deprecated versions?make menuconfig does not
- abhishek> provide options for these versions. Is there any method by
- abhishek> which I can use them.
-
-You could check out a svn version earlier than r23020, or use
-something a bit more modern than those ancient versions.
+You have to do a complete rebuild (rm -rf *build_*; make) after you
+change something to the toolchain config.
 
 -- 
 Bye, Peter Korsgaard
