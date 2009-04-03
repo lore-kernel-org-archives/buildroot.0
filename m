@@ -1,25 +1,23 @@
-From: abhishek desai <abhi00@gmail.com>
-Date: Fri, 3 Apr 2009 17:01:13 +0530
-Subject: [Buildroot] compiling with older kernel headers and uclibc
-Message-ID: <898285d30904030431p4195b8fdj60d7275648e54c5@mail.gmail.com>
+From: Roger Varley <roger.varley@googlemail.com>
+Date: Fri, 3 Apr 2009 14:31:20 +0300
+Subject: [Buildroot] [NEWBIE] Disable U-Boot
+Message-ID: <39f1c8d30904030431m793edfc1md570b73135cbe941@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi
 
-I am trying to compile uclibc and gcc toolchains(with gcj) for mipsel
-architecture using buildroot-2009.02. I want to use older versions for
-kernel-headers and uclibc
+I have installed buildroot-2902 and I'm trying my hand at my first
+"make" It fails when it tries to build u-boot-2009-01 with
+the error
 
-kernel headers - 2.6.12,
-uclibc - 0.9.28
+make[1] *** no rule to make target "vortex_config"
 
-Even under deprecated versions make menuconfig does not provide
-options for these versions. Is there any method by which I can use
-them.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090403/669b07ff/attachment.htm>
+I don't use u-boot, I've selected the grub option but the system won't
+allow me to switch off the "Das U-Boot Boot Monitor".
+How do I stop buildroot from trying to build U-Boot
+
+Regards
