@@ -1,41 +1,42 @@
-From: Darcy L. Watkins <dwatkins@tranzeo.com>
-Date: Thu, 02 Apr 2009 11:01:48 -0700
-Subject: [Buildroot] The make target: cross fails because
- toolchain_build_<arch>/bin/sed not found
-Message-ID: <1238695308.2640.14.camel@localhost.localdomain>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Fri, 3 Apr 2009 12:29:01 +1100
+Subject: [Buildroot] [PATCH 2/5] mtd-utils: Added mtd-utils-1.2.0
+In-Reply-To: <87d4bv5rw1.fsf@macbook.be.48ers.dk>
+References: <1238103279-8040-1-git-send-email-mroth@nessie.de>
+	<1238103279-8040-3-git-send-email-mroth@nessie.de>
+	<20090402004150.GD29488@cloud.net.au>
+	<87hc175yvt.fsf@macbook.be.48ers.dk> <49D48376.2060708@nessie.de>
+	<87d4bv5rw1.fsf@macbook.be.48ers.dk>
+Message-ID: <20090403012901.GA30190@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Thu, Apr 02, 2009 at 11:25:34AM +0200, Peter Korsgaard wrote:
+> >>>>> "Michael" == Michael Roth <mroth@nessie.de> writes:
+> 
+> Hi,
+> 
+>  Michael> Should the xxx-2005 and xxx-2006 snapshots of mtd-utils be
+>  Michael> also removed?
+> 
+> Yes. They are marked as deprecated, and as I mentioned in the 2009.02
+> annoucement [1], I *WILL* remove deprecated stuff to cleanup. We might
+> as well do it now as in a few weeks.
 
-In the toplevel Makefile is a target 'cross' that appears to be intended
-to allow you to build the cross toolchain without building everything
-else.  Unfortunately it doesn't work from a clean extract of the
-tarball.
+There was some claim about Atmel data flash or something like that not being 
+properly supported by more recent versions.. I don't know if that's
+correct. The relevant people should be sending patches to the linux-mtd
+folks I should think.
 
-If you invoke 'make cross' an error happens because sed is missing.
+>  Michael> This will clean up a lot of special handling of different mtd-utils.
 
-The following appears to fix it... [based on the 2009.02 release]
-
-Signed-off-by: Darcy L. Watkins <dwatkins@tranzeo.com>
-
---- buildroot-2009.02_powerpc/Makefile.orig	2009-02-12 00:50:20.000000000 -0800
-+++ buildroot-2009.02_powerpc/Makefile	2009-04-02 10:38:03.000000000 -0700
-@@ -499,7 +499,7 @@ log:	.lognr.$(PROJECT)
- 	@$(MAKE) > $(PROJECT)-`cat .lognr.$(PROJECT)`.log 2>&1
- 
- 
--cross: $(BASE_TARGETS)
-+cross: dependencies dirs target-host-info $(BASE_TARGETS)
- 
- help:
- 	@echo 'Cleaning:'
+Yes.. if there was an mtd-utils release that included mkfs.ubifs, we
+could scrub the multiple versions completely..
 
 
-
-Regards,
-
-Darcy
+Hamish
+-- 
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
