@@ -1,31 +1,33 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon,  6 Apr 2009 15:43:37 +0000 (UTC)
-Subject: [Buildroot] [Bug 267] The make target: cross fails because
- toolchain_build_<arch>/bin/sed not found
-In-Reply-To: <bug-267-163@https.bugs.busybox.net/>
-References: <bug-267-163@https.bugs.busybox.net/>
-Message-ID: <20090406154337.D9EA17718C@busybox.osuosl.org>
+From: Darcy Watkins <DWatkins@tranzeo.com>
+Date: Mon, 6 Apr 2009 10:13:21 -0700
+Subject: [Buildroot] misc development news
+Message-ID: <D61182AC8012EA4EBC531B3AF23BE1097FBE61@tranzeo-mail2.12stewart.tranzeo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=267
+Hello,
 
+Perhaps an alternative to releasing bugfix versions would be bugfix
+update patches.  Apply the latest update after extracting the 2009.02
+release tarball.
 
+2009.02.update.01.patch
+2009.02.update.02.patch
+...etc.
 
+And for the benefit of those who would apply updates as they go,
+incrementals updates would be helpful too - such as.
 
+2009.02.inc-update.01-02.patch
+2009.02.inc-update.02-03.patch
+...etc.
 
---- Comment #1 from Darcy Watkins <dwatkins@tranzeo.com>  2009-04-06 15:43:37 UTC ---
-Created an attachment (id=229)
- --> (https://bugs.busybox.net/attachment.cgi?id=229)
-Patch with proposed fix.
+And I agree, it should be limited to critical fixes, security issues,
+etc.
 
-This the same proposed fix I emailed to the list.
+Regards,
 
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Darcy
