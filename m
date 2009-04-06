@@ -1,45 +1,40 @@
-From: Bai Shuwei <baishuwei@gmail.com>
-Date: Sun, 5 Apr 2009 21:13:06 +0800
-Subject: [Buildroot] cp: missing destination file operand after
-	`/uclibc/linux-2.6.29/.config'
-Message-ID: <f3566d60904050613p223161dav5da090976914e1ee@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 5 Apr 2009 17:22:43 -0700
+Subject: [Buildroot] misc development news
+In-Reply-To: <874ox99yko.fsf@macbook.be.48ers.dk>
+References: <87d4d4md5o.fsf@macbook.be.48ers.dk>
+	<874ox99yko.fsf@macbook.be.48ers.dk>
+Message-ID: <20090405172243.4a0ba14c@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-all:
-  hi, when i build my project by buildrootm, an error message is showed.
+Le Tue, 31 Mar 2009 23:23:03 +0200,
+Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
- rm -rf
-/home/projects/crosscompile/buildroot/project_build_i386/uclibc/buildroot-config
-mkdir -p /home/projects/crosscompile/buildroot/project_build_i386/uclibc
-cp -dpRf package/config/buildroot-config
-/home/projects/crosscompile/buildroot/project_build_i386/uclibc/buildroot-config
-cp -dpf
-/home/projects/crosscompile/buildroot/project_build_i386/uclibc/linux-2.6.29/.config
-cp: missing destination file operand after
-`/home/projects/crosscompile/buildroot/project_build_i386/uclibc/linux-2.6.29/.config'
-Try `cp --help' for more information.
-make: ***
-[/home/projects/crosscompile/buildroot/project_build_i386/uclibc/linux-2.6.29/.configured]
-Error 1
+> But notice that you don't have write access, so you cannot push
+> changes directly. Instead push your changes to your own tree and send
+> pull requests to the list. You can add personal repos on uclibc.org by
+> storing them in ~/git/ and touching ~/git/<repo>/git-daemon-export-ok,
+> after which the hourly cronjob will pick them up and show them in
+> cgit.
 
-I have copied my configure file of linux kernel to the
-/home/projects/crosscompile/buildroot/project_build_i386/uclibc/linux-2.6.29/.config.
-But the messaged is showed too.
+Ok.
 
-Hope your help soon!
+> This is still the case. The aim is currently to close the tree for new
+> features and release 2009.05-rc1 sometime in the weekend 24-25th of
+> April.
 
-Best Regards!
+What about bug-fix versions of the latest stable release ? Do we plan
+to release things such as 2009.02.1, 2009.02.2, etc. ? When trying
+to use 2009.02 for a demo today, I faced several issues that have been
+fixed since then. But maybe it's too much burden for the moment ?
 
+Thomas
 -- 
-Love other people, as same as love yourself!
-Don't think all the time, do it by your hands!
-
-Personal URL: http://dslab.lzu.edu.cn:8080/members/baishw/
-E-Mail: baishuwei at gmail.com or baishuwei at dslab.lzu.edu.cn
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090405/989cf0c4/attachment.htm>
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
