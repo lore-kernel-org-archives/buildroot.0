@@ -1,31 +1,48 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 06 Apr 2009 09:45:44 +0200
-Subject: [Buildroot] misc development news
-In-Reply-To: <20090405172243.4a0ba14c@surf> (Thomas Petazzoni's message of
-	"Sun\, 5 Apr 2009 17\:22\:43 -0700")
-References: <87d4d4md5o.fsf@macbook.be.48ers.dk>
-	<874ox99yko.fsf@macbook.be.48ers.dk> <20090405172243.4a0ba14c@surf>
-Message-ID: <871vs64447.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Mon,  6 Apr 2009 09:21:22 +0000 (UTC)
+Subject: [Buildroot] svn commit: [25974] trunk/buildroot
+Message-ID: <20090406092122.E795577182@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Author: jacmet
+Date: 2009-04-06 09:21:22 +0000 (Mon, 06 Apr 2009)
+New Revision: 25974
 
-Hi,
+Log:
+Makefile: target-devfiles: combine .a / .la find invocation
 
- Thomas> What about bug-fix versions of the latest stable release ? Do we plan
- Thomas> to release things such as 2009.02.1, 2009.02.2, etc. ? When trying
- Thomas> to use 2009.02 for a demo today, I faced several issues that have been
- Thomas> fixed since then. But maybe it's too much burden for the moment ?
+Modified:
+   trunk/buildroot/Makefile
 
-I'm not against doing that, but I'm afraid I don't have the bandwidth
-to do it alone. If people want to help point out commits we should
-backport, then we could do it.
 
-This should be limited to the absolutely critical stuff ofcourse.
-
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/Makefile
+===================================================================
+--- trunk/buildroot/Makefile	2009-04-06 08:15:49 UTC (rev 25973)
++++ trunk/buildroot/Makefile	2009-04-06 09:21:22 UTC (rev 25974)
+@@ -331,7 +331,7 @@
+ 		touch $(STAGING_DIR)/.fakeroot.00000; \
+ 	fi
+ 	-find $(TARGET_DIR) -type d -name CVS -o -name .svn | xargs rm -rf
+-	-find $(TARGET_DIR) -type f -name .empty | xargs rm -rf	
++	-find $(TARGET_DIR) -type f -name .empty | xargs rm -rf
+ 	touch $@
+ 
+ $(TARGET_DIR): $(PROJECT_BUILD_DIR)/.root
+@@ -344,10 +344,8 @@
+ 	( scripts/copy.sh $(STAGING_DIR) $(TARGET_DIR) )
+ else
+ 	rm -rf $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/lib/pkgconfig
+-	find $(TARGET_DIR)/usr/lib -name '*.a' -delete
+-	find $(TARGET_DIR)/lib -name '*.a' -delete
+-	find $(TARGET_DIR)/usr/lib -name '*.la' -delete
+-	find $(TARGET_DIR)/lib -name '*.la' -delete
++	find $(TARGET_DIR)/lib \( -name '*.a' -o -name '*.la' \) -delete
++	find $(TARGET_DIR)/usr/lib \( -name '*.a' -o -name '*.la' \) -delete
+ endif
+ 
+ source: $(TARGETS_SOURCE) $(HOST_SOURCE)
