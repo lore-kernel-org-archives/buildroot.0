@@ -1,33 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  7 Apr 2009 07:01:35 +0000 (UTC)
-Subject: [Buildroot] [Bug 217] Bump openssl package to 0.9.8k (security)
-In-Reply-To: <bug-217-163@https.bugs.busybox.net/>
-References: <bug-217-163@https.bugs.busybox.net/>
-Message-ID: <20090407070136.21184768C5@busybox.osuosl.org>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Tue,  7 Apr 2009 07:16:37 +0000 (UTC)
+Subject: [Buildroot] svn commit: [26008] trunk/buildroot/package/rsync
+Message-ID: <20090407071637.B8BA8768C5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=217
+Author: jacmet
+Date: 2009-04-07 07:16:37 +0000 (Tue, 07 Apr 2009)
+New Revision: 26008
+
+Log:
+rsync: bump version
+
+Modified:
+   trunk/buildroot/package/rsync/rsync.mk
 
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
-
-
-
-
---- Comment #2 from Peter Korsgaard <jacmet@uclibc.org>  2009-04-07 07:01:35 UTC ---
-Thanks, committed as r26007.
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Changeset:
+Modified: trunk/buildroot/package/rsync/rsync.mk
+===================================================================
+--- trunk/buildroot/package/rsync/rsync.mk	2009-04-07 07:01:20 UTC (rev 26007)
++++ trunk/buildroot/package/rsync/rsync.mk	2009-04-07 07:16:37 UTC (rev 26008)
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-RSYNC_VERSION:=3.0.3
++RSYNC_VERSION:=3.0.5
+ RSYNC_SOURCE:=rsync-$(RSYNC_VERSION).tar.gz
+ RSYNC_SITE:=http://rsync.samba.org/ftp/rsync/src
+ RSYNC_AUTORECONF:=no
