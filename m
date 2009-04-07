@@ -1,35 +1,30 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue,  7 Apr 2009 07:16:37 +0000 (UTC)
-Subject: [Buildroot] svn commit: [26008] trunk/buildroot/package/rsync
-Message-ID: <20090407071637.B8BA8768C5@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 7 Apr 2009 08:35:40 -0700
+Subject: [Buildroot] JFFS2 / MTD suggestions
+Message-ID: <20090407083540.15437e75@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-04-07 07:16:37 +0000 (Tue, 07 Apr 2009)
-New Revision: 26008
+Hi,
 
-Log:
-rsync: bump version
+When selecting jffs2 as the output filesystem, mtd-utils gets compiled
+both on the host and on the target. I think that generating a jffs2
+filesystem image should *not* trigger the compilation/installation of
+mtd-utils inside the target since this is not necessary.
 
-Modified:
-   trunk/buildroot/package/rsync/rsync.mk
+Moreover, the compilation of host mtd-utils fails with "lzo/lzo1.h not
+found" if the liblzo-dev package is not installed on the host. We
+should probably add a test checking this and telling the user to
+install liblzo-dev, because the current state is quite confusing.
 
+Sincerly,
 
-Changeset:
-Modified: trunk/buildroot/package/rsync/rsync.mk
-===================================================================
---- trunk/buildroot/package/rsync/rsync.mk	2009-04-07 07:01:20 UTC (rev 26007)
-+++ trunk/buildroot/package/rsync/rsync.mk	2009-04-07 07:16:37 UTC (rev 26008)
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--RSYNC_VERSION:=3.0.3
-+RSYNC_VERSION:=3.0.5
- RSYNC_SOURCE:=rsync-$(RSYNC_VERSION).tar.gz
- RSYNC_SITE:=http://rsync.samba.org/ftp/rsync/src
- RSYNC_AUTORECONF:=no
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
