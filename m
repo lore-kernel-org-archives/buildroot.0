@@ -1,50 +1,36 @@
-From: mike sander <msander@cogeco.ca>
-Date: Wed, 08 Apr 2009 10:08:14 -0400
-Subject: [Buildroot] u-boot fails with custom board support
-Message-ID: <49DCAFCE.4030001@cogeco.ca>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 8 Apr 2009 07:50:04 -0700
+Subject: [Buildroot] JFFS2 / MTD suggestions
+In-Reply-To: <878wmc2y8c.fsf@macbook.be.48ers.dk>
+References: <20090407083540.15437e75@surf> <878wmc2y8c.fsf@macbook.be.48ers.dk>
+Message-ID: <20090408075004.18784e45@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All:
+Le Tue, 07 Apr 2009 19:02:43 +0200,
+Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
-I'm using buildroot-2009.02.  I have a custom board based on atmel 
-at91sam9g20.    I have created a top level board config.
+> Or even better, compile lzo for the host and link against that.
 
-I invoke make as follows:
+I know that's what we do for automake, autoconf, pkg-config, m4 and a
+bunch of other stuff. But I must admit, that personnaly, I'm not
+really a fan of this. I would rather prefer to leverage what's
+installed on the host, and consider that Buildroot having dependencies
+on installed packages (liblzo-dev and others) is normal.
 
-make BOARD=xx
+Currently, one of the strong advantage of Buildroot compared to more
+heavyweight solutions like OpenEmbedded is that the time for Buildroot
+checkout to the first basic root filesystem being produced is very
+small (15 minutes or so). If we start compiling more and more host
+tools to the point that we basically recompile everything that's on the
+host, we'll to some extent loose this advantage.
 
-u-boot is failing with the following messages (see below).   I have 
-specified "at91sam9g20ek" in the "board name" section for u-boot (same 
-behaviour with default setting).  It appears that u-boot does correctly 
-do the at91sam9g20ek_config.   I cannot see how/why make is looking for 
-"Project Name" items under u-boot towards the end of the u-boot 
-build.      Manually building u-boot with "make 
-at91sam9g20ek_config;make" works fine.   Stock u-boot is perfectly 
-acceptable.
-
-I've read the br docs.  I did not see any indication that u-boot needs 
-to be tailored when using custom board support.  Any suggestions on how 
-to force u-boot  to build the stock config?  I have tried latest br 
-snapshot too.  same behavior.   I suspect I have missed something obvious.
-
-
-
-/usr/bin/make -C board/atmel/xx/
-make: Entering an unknown directory
-make: *** board/atmel/xx/: No such file or directory.  Stop.
-make: Leaving an unknown directory
-make[1]: *** [board/atmel/xx/libxx.a] Error 2
-make[1]: Leaving directory 
-`/home/br/buildroot/project_build_arm/xx/u-boot-2009.03'
-make: *** 
-[/home/br/buildroot/project_build_arm/xx/u-boot-2009.03/u-boot.bin] Error 2
-
-
-
-thanks in advance,
-
-mike sander
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
