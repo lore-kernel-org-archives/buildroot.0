@@ -1,37 +1,21 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Wed,  8 Apr 2009 20:50:04 +0000 (UTC)
-Subject: [Buildroot] svn commit: [26027] trunk/buildroot/package/lua
-Message-ID: <20090408205005.827EC76475@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 08 Apr 2009 22:50:19 +0200
+Subject: [Buildroot] [PATCH] lua: Bump version to 5.1.4
+In-Reply-To: <1238534409-32741-1-git-send-email-mroth@nessie.de> (Michael
+	Roth's message of "Tue\, 31 Mar 2009 23\:20\:09 +0200")
+References: <1238534409-32741-1-git-send-email-mroth@nessie.de>
+Message-ID: <87d4bmzx84.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-04-08 20:50:03 +0000 (Wed, 08 Apr 2009)
-New Revision: 26027
+>>>>> "Michael" == Michael Roth <mroth@nessie.de> writes:
 
-Log:
-lua: bump version
+ Michael> Signed-off-by: Michael Roth <mroth@nessie.de>
 
-Patch by Michael Roth <mroth@nessie.de>.
+Thanks, committed as r26027.
 
-Modified:
-   trunk/buildroot/package/lua/lua.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/lua/lua.mk
-===================================================================
---- trunk/buildroot/package/lua/lua.mk	2009-04-08 16:59:24 UTC (rev 26026)
-+++ trunk/buildroot/package/lua/lua.mk	2009-04-08 20:50:03 UTC (rev 26027)
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--LUA_VERSION=5.1.2
-+LUA_VERSION=5.1.4
- 
- LUA_SOURCE=lua-$(LUA_VERSION).tar.gz
- LUA_CAT:=$(ZCAT)
+-- 
+Bye, Peter Korsgaard
