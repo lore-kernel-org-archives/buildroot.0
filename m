@@ -1,28 +1,50 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 08 Apr 2009 15:02:27 +0200
-Subject: [Buildroot] JFFS2 / MTD suggestions
-In-Reply-To: <980CE415-4586-46DB-ABA4-D6962163D0C6@cannasoftware.com> (Lloyd
-	Sargent's message of "Tue\, 7 Apr 2009 10\:57\:40 -0500")
-References: <20090407083540.15437e75@surf>
-	<980CE415-4586-46DB-ABA4-D6962163D0C6@cannasoftware.com>
-Message-ID: <871vs31eos.fsf@macbook.be.48ers.dk>
+From: mike sander <msander@cogeco.ca>
+Date: Wed, 08 Apr 2009 10:08:14 -0400
+Subject: [Buildroot] u-boot fails with custom board support
+Message-ID: <49DCAFCE.4030001@cogeco.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Lloyd" == Lloyd Sargent <lloyd@cannasoftware.com> writes:
+Hi All:
 
- Lloyd> I ran into this issue as well and ""lzo/lzo1.h not found" is terribly
- Lloyd> confusing. Adding just "on host" to the end of the message would
- Lloyd> clarify it immensely.
+I'm using buildroot-2009.02.  I have a custom board based on atmel 
+at91sam9g20.    I have created a top level board config.
 
-Notice that this is not an error message we're writing, but an error
-message from configure/gcc.
+I invoke make as follows:
 
-Anyway, the real fix is to build lzo for the host before mkfs.jffs2,
-just like we do for the target.
+make BOARD=xx
 
--- 
-Bye, Peter Korsgaard
+u-boot is failing with the following messages (see below).   I have 
+specified "at91sam9g20ek" in the "board name" section for u-boot (same 
+behaviour with default setting).  It appears that u-boot does correctly 
+do the at91sam9g20ek_config.   I cannot see how/why make is looking for 
+"Project Name" items under u-boot towards the end of the u-boot 
+build.      Manually building u-boot with "make 
+at91sam9g20ek_config;make" works fine.   Stock u-boot is perfectly 
+acceptable.
+
+I've read the br docs.  I did not see any indication that u-boot needs 
+to be tailored when using custom board support.  Any suggestions on how 
+to force u-boot  to build the stock config?  I have tried latest br 
+snapshot too.  same behavior.   I suspect I have missed something obvious.
+
+
+
+/usr/bin/make -C board/atmel/xx/
+make: Entering an unknown directory
+make: *** board/atmel/xx/: No such file or directory.  Stop.
+make: Leaving an unknown directory
+make[1]: *** [board/atmel/xx/libxx.a] Error 2
+make[1]: Leaving directory 
+`/home/br/buildroot/project_build_arm/xx/u-boot-2009.03'
+make: *** 
+[/home/br/buildroot/project_build_arm/xx/u-boot-2009.03/u-boot.bin] Error 2
+
+
+
+thanks in advance,
+
+mike sander
