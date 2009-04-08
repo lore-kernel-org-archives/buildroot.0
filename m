@@ -1,45 +1,43 @@
-From: Lloyd Sargent <lsargent@txdigital.com>
-Date: Wed, 8 Apr 2009 13:59:34 -0500
-Subject: [Buildroot] DBUS keeps getting installed...
-In-Reply-To: <87prfnyoxt.fsf@macbook.be.48ers.dk>
-References: <200904081213.21064.lsargent@txdigital.com>
-	<87prfnyoxt.fsf@macbook.be.48ers.dk>
-Message-ID: <200904081359.35038.lsargent@txdigital.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 08 Apr 2009 21:01:22 +0200
+Subject: [Buildroot] Error while configuring QTOPIA 4
+In-Reply-To: <26fbce020904081145x3966a6f2sb118941d363ccd86@mail.gmail.com>
+	(Luciano Greiner's message of "Wed\, 8 Apr 2009 15\:45\:37 -0300")
+References: <26fbce020904081145x3966a6f2sb118941d363ccd86@mail.gmail.com>
+Message-ID: <87hc0zynp9.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> >>>>> "Lloyd" == Lloyd Sargent <lsargent@txdigital.com> writes:
->
-> Hi,
->
->  Lloyd> Okay, I'm really puzzled. In my initial build I had
->  Lloyd> DBUS. Well, it was taking too many resources so I removed it.
->
->  Lloyd> Or so I thought.
->
->  Lloyd> In my next build, there was DBUS again!
->
->  Lloyd> So I checked the .config file:
->
->  Lloyd> # BR2_PACKAGE_DBUS is not set
->
->  Lloyd> Perhaps I misread something, but I was under the impression
->  Lloyd> that if DBUS was not set, then it wouldn't be included in the
->  Lloyd> build?
->
-> That's true. Do you do a clean rebuild (rm -rf *build_*) or just edit
-> the configuration and run make again? Packages don't automatically get
-> removed from the target file system if you deselect them again.
+>>>>> "Luciano" == Luciano Greiner <luciano.greiner@gmail.com> writes:
 
-AH! This I was not aware of (or did not properly understand).
+ Luciano> Hello.
+ Luciano> I am using the trunk version of Buildroot. I am getting the following
+ Luciano> error while it's configuring QTOPIA 4:
 
-This is most likely the issue.
+ Luciano> Creating qmake. Please wait...
+ Luciano> make[1]: Entering directory
+ Luciano> `/mnt/lfs/buildroot/build_i686/qt-embedded-linux-opensource-src-4.5.0/qmake'
+ Luciano> g++: @: No such file or directory
+ Luciano> make[1]: *** [property.o] Error 1
 
-> The other option is some other package needing dbus, and hence forcing
-> it to be built, but then it should normally also depend / select it in
-> Kconfig, so you should see it in your .config
+ Luciano> Dows anyone know what may be wrong here?
 
-No, nothing I'm building requires dbus.
+Strange, seems like is doesn't like:
+
+property.o: property.cpp project.h option.h
+        $(CXX) -c -o $@ $(CXXFLAGS) property.cpp
+
+Which looks perfectly fine. Could you change the line in
+qt-embedded-linux-opensource-src-4.5.0/qmake/Makefile to read:
+
+property.o: property.cpp project.h option.h
+        echo $(CXX) -c -o $@ $(CXXFLAGS) property.cpp
+        false
+
+And run make again?
+
+-- 
+Bye, Peter Korsgaard
