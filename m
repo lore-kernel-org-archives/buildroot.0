@@ -1,43 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 08 Apr 2009 21:01:22 +0200
-Subject: [Buildroot] Error while configuring QTOPIA 4
-In-Reply-To: <26fbce020904081145x3966a6f2sb118941d363ccd86@mail.gmail.com>
-	(Luciano Greiner's message of "Wed\, 8 Apr 2009 15\:45\:37 -0300")
-References: <26fbce020904081145x3966a6f2sb118941d363ccd86@mail.gmail.com>
-Message-ID: <87hc0zynp9.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Wed,  8 Apr 2009 20:50:04 +0000 (UTC)
+Subject: [Buildroot] svn commit: [26027] trunk/buildroot/package/lua
+Message-ID: <20090408205005.827EC76475@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Luciano" == Luciano Greiner <luciano.greiner@gmail.com> writes:
+Author: jacmet
+Date: 2009-04-08 20:50:03 +0000 (Wed, 08 Apr 2009)
+New Revision: 26027
 
- Luciano> Hello.
- Luciano> I am using the trunk version of Buildroot. I am getting the following
- Luciano> error while it's configuring QTOPIA 4:
+Log:
+lua: bump version
 
- Luciano> Creating qmake. Please wait...
- Luciano> make[1]: Entering directory
- Luciano> `/mnt/lfs/buildroot/build_i686/qt-embedded-linux-opensource-src-4.5.0/qmake'
- Luciano> g++: @: No such file or directory
- Luciano> make[1]: *** [property.o] Error 1
+Patch by Michael Roth <mroth@nessie.de>.
 
- Luciano> Dows anyone know what may be wrong here?
+Modified:
+   trunk/buildroot/package/lua/lua.mk
 
-Strange, seems like is doesn't like:
 
-property.o: property.cpp project.h option.h
-        $(CXX) -c -o $@ $(CXXFLAGS) property.cpp
-
-Which looks perfectly fine. Could you change the line in
-qt-embedded-linux-opensource-src-4.5.0/qmake/Makefile to read:
-
-property.o: property.cpp project.h option.h
-        echo $(CXX) -c -o $@ $(CXXFLAGS) property.cpp
-        false
-
-And run make again?
-
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/package/lua/lua.mk
+===================================================================
+--- trunk/buildroot/package/lua/lua.mk	2009-04-08 16:59:24 UTC (rev 26026)
++++ trunk/buildroot/package/lua/lua.mk	2009-04-08 20:50:03 UTC (rev 26027)
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-LUA_VERSION=5.1.2
++LUA_VERSION=5.1.4
+ 
+ LUA_SOURCE=lua-$(LUA_VERSION).tar.gz
+ LUA_CAT:=$(ZCAT)
