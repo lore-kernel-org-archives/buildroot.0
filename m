@@ -1,10 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 08 Apr 2009 22:50:19 +0200
-Subject: [Buildroot] [PATCH] lua: Bump version to 5.1.4
-In-Reply-To: <1238534409-32741-1-git-send-email-mroth@nessie.de> (Michael
-	Roth's message of "Tue\, 31 Mar 2009 23\:20\:09 +0200")
-References: <1238534409-32741-1-git-send-email-mroth@nessie.de>
-Message-ID: <87d4bmzx84.fsf@macbook.be.48ers.dk>
+Date: Wed, 08 Apr 2009 22:53:53 +0200
+Subject: [Buildroot] [PATCH 1/5] mtd-utils: Prepare for version dump
+In-Reply-To: <1238103279-8040-2-git-send-email-mroth@nessie.de> (Michael
+	Roth's message of "Thu\, 26 Mar 2009 22\:34\:35 +0100")
+References: <1238103279-8040-1-git-send-email-mroth@nessie.de>
+	<1238103279-8040-2-git-send-email-mroth@nessie.de>
+Message-ID: <878wmazx26.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,9 +14,11 @@ To: buildroot@busybox.net
 
 >>>>> "Michael" == Michael Roth <mroth@nessie.de> writes:
 
- Michael> Signed-off-by: Michael Roth <mroth@nessie.de>
+ Michael> Prepared for new mtd-utils version and some cleanup and
+ Michael> clarification on configure options.
 
-Thanks, committed as r26027.
+Is this just a move from mtd-utils -> 1.1.0? Please use the -M option
+to git format-patch.
 
 -- 
 Bye, Peter Korsgaard
