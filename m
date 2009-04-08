@@ -1,30 +1,32 @@
-From: Luciano Greiner <luciano.greiner@gmail.com>
-Date: Wed, 8 Apr 2009 15:45:37 -0300
-Subject: [Buildroot] Error while configuring QTOPIA 4
-Message-ID: <26fbce020904081145x3966a6f2sb118941d363ccd86@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 08 Apr 2009 20:51:49 +0200
+Subject: [Buildroot] DBUS keeps getting installed...
+In-Reply-To: <200904081320.48119.lsargent@txdigital.com> (Lloyd Sargent's
+	message of "Wed\, 8 Apr 2009 13\:20\:47 -0500")
+References: <200904081213.21064.lsargent@txdigital.com>
+	<20090408105858.2af75456@surf>
+	<200904081320.48119.lsargent@txdigital.com>
+Message-ID: <87ljqbyo56.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello.
+>>>>> "Lloyd" == Lloyd Sargent <lsargent@txdigital.com> writes:
 
-I am using the trunk version of Buildroot. I am getting the following
-error while it's configuring QTOPIA 4:
+Hi,
 
-Creating qmake. Please wait...
-make[1]: Entering directory
-`/mnt/lfs/buildroot/build_i686/qt-embedded-linux-opensource-src-4.5.0/qmake'
-g++: @: No such file or directory
-make[1]: *** [property.o] Error 1
-make[1]: Leaving directory
-`/mnt/lfs/buildroot/build_i686/qt-embedded-linux-opensource-src-4.5.0/qmake'
-make: *** [/mnt/lfs/buildroot/build_i686/qt-embedded-linux-opensource-src-4.5.0/.configured]
-Error 2
+ Lloyd> #
+ Lloyd> # User Packages
+ Lloyd> #
+ Lloyd> BR2_PACKAGE_HELLOWORLD=y
+ Lloyd> BR2_PACKAGE_WXWIDGETS=y
+ Lloyd> BR2_PACKAGE_MIDDLEWARE=y
+ Lloyd> BR2_PACKAGE_AVNG=y
 
-Dows anyone know what may be wrong here?
+Could it be that one of these local packages depends on either dbus or
+XSERVER (which depends on dbus)?
 
-Thanks!
-
-Luciano Greiner
+-- 
+Bye, Peter Korsgaard
