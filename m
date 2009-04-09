@@ -1,48 +1,40 @@
-From: Cyril HAENEL <chaenel@free.fr>
-Date: Thu, 09 Apr 2009 10:07:22 +0200
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 09 Apr 2009 11:34:40 +0200
 Subject: [Buildroot] JFFS2 / MTD suggestions
-In-Reply-To: <874ox02xqa.fsf@macbook.be.48ers.dk>
+In-Reply-To: <49DDACBA.8020708@free.fr> (Cyril HAENEL's message of "Thu\,
+	09 Apr 2009 10\:07\:22 +0200")
 References: <20090407083540.15437e75@surf> <49DB861E.8040503@free.fr>
-	<874ox02xqa.fsf@macbook.be.48ers.dk>
-Message-ID: <49DDACBA.8020708@free.fr>
+	<874ox02xqa.fsf@macbook.be.48ers.dk> <49DDACBA.8020708@free.fr>
+Message-ID: <87zleqxj9r.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Cyril" == Cyril HAENEL <chaenel@free.fr> writes:
 
+Hi,
 
-Peter Korsgaard a ?crit :
->>>>>> "Cyril" == Cyril HAENEL <chaenel@free.fr> writes:
->>>>>>             
->
->  Cyril> checking whether we are using the GNU C++ compiler...
->
->  Cyril> 1 hour after it's alway blocked on the last line...
->
->  Cyril> Any idea !?
->
-> Not really, but take a look at the configure script around there to
-> see what it is doing (add a few echo lines).
->
->   
-I need to try to print some echo to find the blocking part in the 
-configure script, but I tried to launch the configure script manually 
-from the lzo directory with the right option :
+ Cyril> ./configure --target=arm-linux --host=arm-linux
+ Cyril> --build=i386-pc-linux-gnu --prefix=/usr --exec-prefix=/usr
+ Cyril> --sysconfdir=/etc --without-html-dir --disable-gtk-doc --disable-nls
+ Cyril> --disable-largefile
 
-./configure --target=arm-linux --host=arm-linux 
---build=i386-pc-linux-gnu --prefix=/usr --exec-prefix=/usr 
---sysconfdir=/etc --without-html-dir --disable-gtk-doc --disable-nls 
---disable-largefile
+ Cyril> And it works !! And make compiles lzo successfully.
 
-And it works !! And make compiles lzo successfully.
-Really curious, the configure script blocks (with exactly the same 
-command line) only when called from high level makefile !?
+You also need to set CC to your target compiler and so on.
 
-Cyril
+ Cyril> Really curious, the configure script blocks (with exactly the same
+ Cyril> command line) only when called from high level makefile !?
+
+Well, you need to compare apples to apples - Buildroot sets a bunch of
+environment variables before calling configure as you can see when you
+run it.
+
+It's kind of hard to debug here as I cannot reproduce it. Do you have
+C++ support enabled in your config? Do you get anything interesting in
+the build_arm/lzo-2.03/config.log file?
 
 -- 
-
-Cyril Haenel
-Registered Linux User #332632
+Bye, Peter Korsgaard
