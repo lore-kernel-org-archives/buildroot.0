@@ -1,40 +1,77 @@
-From: Andreas Schweigstill <andreas@schweigstill.de>
-Date: Thu, 9 Apr 2009 02:46:19 -0700 (PDT)
-Subject: [Buildroot] target/Makefile.in problem
-In-Reply-To: <87myb4cbno.fsf@macbook.be.48ers.dk>
-References: <10d6046f0903270152p681242fekf02862a27d0797ab@mail.gmail.com>
-	<87myb4cbno.fsf@macbook.be.48ers.dk>
-Message-ID: <22967644.post@talk.nabble.com>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Thu,  9 Apr 2009 09:46:54 +0000 (UTC)
+Subject: [Buildroot] svn commit: [26041] trunk/buildroot/package:  lzop
+Message-ID: <20090409094654.B36F3769D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Author: jacmet
+Date: 2009-04-09 09:46:54 +0000 (Thu, 09 Apr 2009)
+New Revision: 26041
+
+Log:
+lzop: new package
+
+Patch by Olaf Rempel <razzor@kopf-tisch.de>, closes #245.
+
+lzop is a file compressor which is very similar to gzip.
+lzop uses the LZO data compression library for compression services.
+http://www.lzop.org/
+
+Added:
+   trunk/buildroot/package/lzop/
+   trunk/buildroot/package/lzop/Config.in
+   trunk/buildroot/package/lzop/lzop.mk
+
+Modified:
+   trunk/buildroot/package/Config.in
 
 
-jacmet wrote:
-> 
->>>>>> "Mirko" == Mirko ROCCO <mirko.rocco@gmail.com> writes:
-> 
->  Mirko> target/Makefile.in:22: Extraneous text after `else' directive
->  Mirko> target/Makefile.in:38: *** only one `else' per conditional. Stop.
-> 
-> Strange, I use powerpc almost every day and have never seen that
-> error. Please post your .config and tell us what host distribution and
-> make version (type make --version) you are using.
-> 
+Changeset:
+Modified: trunk/buildroot/package/Config.in
+===================================================================
+--- trunk/buildroot/package/Config.in	2009-04-09 09:46:48 UTC (rev 26040)
++++ trunk/buildroot/package/Config.in	2009-04-09 09:46:54 UTC (rev 26041)
+@@ -404,6 +404,7 @@
+ source "package/gzip/Config.in"
+ endif
+ source "package/lzo/Config.in"
++source "package/lzop/Config.in"
+ source "package/lzma/Config.in"
+ source "package/zlib/Config.in"
+ endmenu
 
-I notice the same behavior when trying to build buildroot-2009.02 on an
-old SuSE Linux 9.3 system (from ~2005). It uses make 3.80 and
-GCC 3.3.5, so it is quite old-fashioned. On newer systems (openSUSE
-10.3 and 11.0) with GNU make 3.82 I don't have any problems. But
-due to some customer's requirements I have to setup a buildroot
-environment which also builds on old Linux systems.
+Added: trunk/buildroot/package/lzop/Config.in
+===================================================================
+--- trunk/buildroot/package/lzop/Config.in	                        (rev 0)
++++ trunk/buildroot/package/lzop/Config.in	2009-04-09 09:46:54 UTC (rev 26041)
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LZOP
++	bool "lzop"
++	select BR2_PACKAGE_LZO
++	help
++	  lzop is a file compressor which is very similar to gzip.
++	  lzop uses the LZO data compression library for compression services.
++
++	  http://www.lzop.org/
 
-With best regards
-Andreas Schweigstill
-
--- 
-View this message in context: http://www.nabble.com/target-Makefile.in-problem-tp22737921p22967644.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+Added: trunk/buildroot/package/lzop/lzop.mk
+===================================================================
+--- trunk/buildroot/package/lzop/lzop.mk	                        (rev 0)
++++ trunk/buildroot/package/lzop/lzop.mk	2009-04-09 09:46:54 UTC (rev 26041)
+@@ -0,0 +1,12 @@
++#############################################################
++#
++# lzop
++#
++#############################################################
++LZOP_VERSION:=1.02rc1
++LZOP_SOURCE:=lzop-$(LZOP_VERSION).tar.gz
++LZOP_SITE:=http://www.lzop.org/download/
++LZOP_CONF_OPT:=--program-prefix=""
++LZOP_DEPENDENCIES:=lzo
++
++$(eval $(call AUTOTARGETS,package,lzop))
