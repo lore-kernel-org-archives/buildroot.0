@@ -1,53 +1,44 @@
-From: Mike Sander <msander@cogeco.ca>
-Date: Thu, 09 Apr 2009 09:37:08 -0400
+From: Andreas Schweigstill <aschweig@schweigstill.de>
+Date: Thu, 9 Apr 2009 15:52:29 +0200
 Subject: [Buildroot] losetup /dev/loop0: No such device or address
-Message-ID: <49DDFA04.8040904@cogeco.ca>
+In-Reply-To: <49DDFA04.8040904@cogeco.ca>
+References: <49DDFA04.8040904@cogeco.ca>
+Message-ID: <1239285149472382500@schweigstill.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+Hello!
 
-Im using buildroot-2009.02 on atmel at91sam9g20ek.  It is a fairly stock 
-cofiguration. 
+Mike Sander  wrote:
+> When I execute "losetup /dev/loop0 /mnt/flash/backing_file.vfat" i get 
+> the error "losetup /dev/loop0: No such device or address". 
 
-When I execute "losetup /dev/loop0 /mnt/flash/backing_file.vfat" i get 
-the error "losetup /dev/loop0: No such device or address".    /mnt/flash 
-exist and has a mounted jffs2 filesystem on it.As far as I can tell, it 
-is working correctly.  I can read/write files. I have checked all the 
-obvious suspects (including erroneous error message)
+> [...]
 
-here is the output from mount
-# mount                      
-rootfs on / type rootfs (rw)
-proc on /proc type proc (rw)
-devpts on /dev/pts type devpts (rw,gid=5,mode=620)
-tmpfs on /tmp type tmpfs (rw)
-sysfs on /sys type sysfs (rw)
-/dev/mtdblock2 on /mnt/flash type jffs2 (rw)
+> /dev/loop0 definitely exists and appears to be correctly defined (I think).
 
-looks like a valid mounted filesystem.
+It just means that the device file exists which is independend of the kernel
+handler for block device (7,x).
 
-# ls /mnt/flash
-backing_file.vfat  hosts
+So you should check your Linux kernel configuration. Loopback device
+support has to be enabled in .config:
 
-the file I am trying to connect to loop0 definately exists.  I copied 
-/etc/hosts to it to verify read/write operation.
+CONFIG_BLK_DEV_LOOP=y
 
+And in /sys/block also some entries have to be present, normally
+/sys/block/loop0 to /sys/block/loop7.
 
-here are the /dev/loop* devices
-# ls -atl loop*
-brw-r-----    1 root     root       7,   0 Dec 31 17:00 loop0
-brw-r-----    1 root     root       7,   1 Dec 31 17:00 loop1
- 
-/dev/loop0 definitely exists and appears to be correctly defined (I think).
+Regards
+Andreas Schweigstill
 
-Anyone aware of issues using losetup?   Is there some obscure dependency 
-I might be missing.  any suggestions on how to debug this short of 
-printf() from losetup code?
+-- 
+BITTE BEACHTEN SIE UNSERE GE?NDERTEN TELEFONNUMMERN!
 
-Regards,
-
-mike
+Dipl.-Phys. Andreas Schweigstill
+Schweigstill IT | Embedded Systems
+Schauenburgerstra?e 116, D-24118 Kiel, Germany
+Phone: (+49) 431 53035-435, Fax: (+49) 431 53035-436
+Mobile: (+49) 171 6921973, Web: http://www.schweigstill.de/
