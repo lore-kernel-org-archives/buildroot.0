@@ -1,42 +1,45 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 13 Apr 2009 03:36:36 +0000 (UTC)
-Subject: [Buildroot] [Bug 271] New: Library 'libgcc_s.so.1' not installed in
-	search path
-Message-ID: <bug-271-163@https.bugs.busybox.net/>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 13 Apr 2009 20:03:50 +0200
+Subject: [Buildroot] buildroot openssl compile error
+In-Reply-To: <49E16433.9010707@comcast.net> (Brad Johnson's message of "Sat\,
+	11 Apr 2009 22\:46\:59 -0500")
+References: <49E16433.9010707@comcast.net>
+Message-ID: <87fxgcbfcp.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=271
+>>>>> "Brad" == Brad Johnson <bradjohn263@comcast.net> writes:
 
-            Target: x86-64
-             Build: buildroot-20090412
-           Summary: Library 'libgcc_s.so.1' not installed in search path
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: enhancement
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: info at je-eigen-domein.nl
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Hi,
 
+ Brad> I am using buildroot to cross-compile an embedded ARM
+ Brad> system. Everything else works fine, but I can not get openssl to
+ Brad> compile (I am trying to add openssh and it requires openssl and
+ Brad> zlib). It can not find zlib.h, although I have zlib1g-dev installed on
+ Brad> my build machine (a 386 Ubuntu system).
+ Brad> I have tried manually configuring openssl (./Configure
+ Brad> --with-zlib-include=/usr/include), with no success.
+ Brad> Here is the error I get:
 
-When booting the target system created by buildroot, I get a lot of "can't load
-library 'libgcc_s.so.1'" messages.
+Any special reason why you cannot use dropbear?
 
-The library exists in the folder /usr/lib64, but it seems that folder is not in
-the default ld search path.
-System works fine after copying the library to /lib
+Is this with an internal or external toolchain?
 
+There's no -I$(STAGING_DIR)/usr/include in the gcc invocation, so that
+probably fails with an external toolchain.
+
+ Brad> /opt/arm-linux/usr/bin/arm-linux-gcc -I.. -I../.. -I../../include
+ Brad> -fPIC -DOPENSS
+ Brad> L_PIC -DZLIB_SHARED -DZLIB -DOPENSSL_THREADS -D_REENTRANT -DDSO_DLFCN
+ Brad> -DHAVE_DLF
+ Brad> CN_H -DTERMIO -O3 -fomit-frame-pointer -Wall   -c -o c_zlib.o c_zlib.c
+ Brad> c_zlib.c:25:18: error: zlib.h: No such file or directory
+
+If not, do you have a build_arm/staging_dir/usr/include/zlib.h? Please
+post your .config
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
