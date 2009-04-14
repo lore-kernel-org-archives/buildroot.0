@@ -1,36 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Apr 2009 10:41:34 +0200
-Subject: [Buildroot] buildroot openssl compile error
-In-Reply-To: <20090414090907.2c297e77@surf>
-References: <49E16433.9010707@comcast.net> <87fxgcbfcp.fsf@macbook.be.48ers.dk>
-	<20090413220823.210225fe@surf> <49E3FEAF.7040705@comcast.net>
-	<20090414090907.2c297e77@surf>
-Message-ID: <20090414104134.6b4d0362@surf>
+From: Mark Fisher <fobs12@ymail.com>
+Date: Tue, 14 Apr 2009 06:55:14 -0700 (PDT)
+Subject: [Buildroot] /dev files not being created correctly
+Message-ID: <204928.46075.qm@web43412.mail.sp1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 14 Apr 2009 09:09:07 +0200,
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
+Hi,
 
-> $(OPENSSL_TARGET_BUILD):
->         $(MAKE1) CC=$(TARGET_CC) -C $(OPENSSL_DIR) all build-shared
->         $(MAKE1) CC=$(TARGET_CC) -C $(OPENSSL_DIR) do_linux-shared
->         touch $@
+I'm relatively new to buildroot and am using the 2009.02 release of buildroot on a Fedora 9 platform and targeting an embedded device with an Intel Atom processor. 
 
-Here, using CC="$(TARGET_CC) $(TARGET_CFLAGS)" allows openssl to find
-zlib.h properly. However, it fails later with make thinking that the
--Os and --sysroot options are for him (and not for gcc). The openssl
-build system looks strange, I don't have the time to look at time now.
-Maybe tomorrow.
+When the root filesystem is built the types of the files are all set to plain text files. So for instance the /dev/console is not set to be a character device. This has already create problems when I try to boot because the console could not be opened. I manually fixed /dev/console and /dev/null. I'm still having trouble booting the image and also after a?re-build my custom changes were lost.
 
-Sincerly,
+Is this a known problem, and is there a fix? If not should I delete all the files in the /dev directory and then re-create them based on the settings in the device_table.txt?
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Thanks,
+
+Mark
+
+
+
+      
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090414/3d8edb79/attachment.htm>
