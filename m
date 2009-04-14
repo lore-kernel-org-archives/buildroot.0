@@ -1,67 +1,51 @@
 From: Brad Johnson <bradjohn263@comcast.net>
-Date: Mon, 13 Apr 2009 21:00:14 -0500
+Date: Mon, 13 Apr 2009 22:10:39 -0500
 Subject: [Buildroot] buildroot openssl compile error
-In-Reply-To: <87fxgcbfcp.fsf@macbook.be.48ers.dk>
+In-Reply-To: <20090413220823.210225fe@surf>
 References: <49E16433.9010707@comcast.net> <87fxgcbfcp.fsf@macbook.be.48ers.dk>
-Message-ID: <49E3EE2E.7050902@comcast.net>
+	<20090413220823.210225fe@surf>
+Message-ID: <49E3FEAF.7040705@comcast.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
-What I have is a buildroot-built toolchain, but I initially installed 
-the toolchain outside the buildroot tree so it could be shared by other 
-developers (BR2_STAGING_DIR=/opt/arm-linux). I then changed it to use 
-the externally installed toolchain, so other developers could start from 
-the same shared config files and build a root file system without having 
-to rebuild the toolchain every time.
-I do have a build_arm/staging_dir/usr/include/zlib.h, but no 
-/opt/arm-linux/usr/include/zlib.h.
-And as I explain this, I think I understand that my problem is that when 
-I add new packages (like ssh) to the buildroot config, I probably need 
-to rebuild the externally installed toolchain so the proper header files 
-get installed there? At the time, it seemed to me that it would be 
-capable of finding the internal 
-build_arm/staging_dir/usr/include/zlib.h, but it could be that it now 
-only includes the external usr/include location?
-I have attached my .config file.
+Hello Thomas,
+I tried to build the latest (4/13/09) svn version of buildroot with my 
+external buildroot toolchain (cross-compiler for arm). I assume the fix 
+described in r25879 is in this version?
+I still get an error compiling openssl:
+
+/opt/arm-linux/usr/bin/arm-linux-gcc -I.. -I../.. -I../../include -fPIC 
+-DOPENSS
+L_PIC -DZLIB_SHARED -DZLIB -DOPENSSL_THREADS -D_REENTRANT -DDSO_DLFCN 
+-DHAVE_DLF
+CN_H -DTERMIO -O3 -fomit-frame-pointer -Wall   -c -o c_zlib.o c_zlib.c
+c_zlib.c:25:18: error: zlib.h: No such file or directory
+
+I do not see a --sysroot gcc argument. There is a 
+build_arm/staging_dir/usr/include/zlib.h.
+Please advise me as to how I can build openssl within buildroot using an 
+external toolchain.
+
 Thanks,
 Brad
 
-On 4/13/2009 1:03 PM, Peter Korsgaard wrote:
->>>>>> "Brad" == Brad Johnson <bradjohn263@comcast.net> writes:
->>>>>>             
+On 4/13/2009 3:08 PM, Thomas Petazzoni wrote:
+> Le Mon, 13 Apr 2009 20:03:50 +0200,
+> Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 >
-> Hi,
+>   
+>> There's no -I$(STAGING_DIR)/usr/include in the gcc invocation, so that
+>> probably fails with an external toolchain.
+>>     
 >
->  Brad> I am using buildroot to cross-compile an embedded ARM
->  Brad> system. Everything else works fine, but I can not get openssl to
->  Brad> compile (I am trying to add openssh and it requires openssl and
->  Brad> zlib). It can not find zlib.h, although I have zlib1g-dev installed on
->  Brad> my build machine (a 386 Ubuntu system).
->  Brad> I have tried manually configuring openssl (./Configure
->  Brad> --with-zlib-include=/usr/include), with no success.
->  Brad> Here is the error I get:
+> There's no need for -I$(STAGING_DIR)/usr/include with an external
+> toolchain if --sysroot $(STAGING_DIR) is passed (at least my
+> experiments confirm this). See r25879.
 >
-> Any special reason why you cannot use dropbear?
->
-> Is this with an internal or external toolchain?
->
-> There's no -I$(STAGING_DIR)/usr/include in the gcc invocation, so that
-> probably fails with an external toolchain.
->
->  Brad> /opt/arm-linux/usr/bin/arm-linux-gcc -I.. -I../.. -I../../include
->  Brad> -fPIC -DOPENSS
->  Brad> L_PIC -DZLIB_SHARED -DZLIB -DOPENSSL_THREADS -D_REENTRANT -DDSO_DLFCN
->  Brad> -DHAVE_DLF
->  Brad> CN_H -DTERMIO -O3 -fomit-frame-pointer -Wall   -c -o c_zlib.o c_zlib.c
->  Brad> c_zlib.c:25:18: error: zlib.h: No such file or directory
->
-> If not, do you have a build_arm/staging_dir/usr/include/zlib.h? Please
-> post your .config
->
+> Thomas
 >   
 > ------------------------------------------------------------------------
 >
@@ -71,7 +55,3 @@ On 4/13/2009 1:03 PM, Peter Korsgaard wrote:
 > Version: 8.0.238 / Virus Database: 270.11.54/2056 - Release Date: 04/13/09 05:51:00
 >
 >   
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: buildroot.config
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090413/6964a653/attachment-0001.diff>
