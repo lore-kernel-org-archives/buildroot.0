@@ -1,58 +1,48 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 15 Apr 2009 15:50:01 +0200
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 15 Apr 2009 10:59:00 -0300
 Subject: [Buildroot] OpenSSL build system knowledge somewhere ?
-In-Reply-To: <20090415154103.53f867d1@surf> (Thomas Petazzoni's message of
-	"Wed\, 15 Apr 2009 15\:41\:03 +0200")
-References: <49E16433.9010707@comcast.net>
-	<87fxgcbfcp.fsf@macbook.be.48ers.dk> <20090413220823.210225fe@surf>
-	<49E3FEAF.7040705@comcast.net> <20090414090907.2c297e77@surf>
-	<20090414104134.6b4d0362@surf> <20090415110647.1bf85daa@surf>
-	<87ab6i9irh.fsf@macbook.be.48ers.dk> <20090415154103.53f867d1@surf>
-Message-ID: <87vdp681rq.fsf@macbook.be.48ers.dk>
+In-Reply-To: <87ab6i9irh.fsf@macbook.be.48ers.dk>
+References: <49E16433.9010707@comcast.net>	<87fxgcbfcp.fsf@macbook.be.48ers.dk>
+	<20090413220823.210225fe@surf>	<49E3FEAF.7040705@comcast.net>
+	<20090414090907.2c297e77@surf>	<20090414104134.6b4d0362@surf>
+	<20090415110647.1bf85daa@surf> <87ab6i9irh.fsf@macbook.be.48ers.dk>
+Message-ID: <49E5E824.7070205@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Peter Korsgaard wrote:
 
-Hi,
+> From a quick look it seems to just be a matter of adding
+> CFLAG='$(TARGET_CFLAGS) <extra flags>' on the make command line, where
+> <extra flags> are the flags openssl uses internally (something like
+> -DOPENSSL_THREADS -D_REENTRANT -DDSO_DLCFN -DHAVE_DLFCN_H -DTERMIO).
+> 
+> The question is why is all of a sudden failed? I thought I had seen
+> positive reports with external toolchains after r23458, where openssl
+> was changed to Makefile.autotools.in format. Notice that we used to
+> patch up the Makefile with sed to change the compiler flags.
+> 
+> I'm wondering if it wouldn't be simpler to use a wrapper script around
+> gcc / g++ when using external toolchains, which would add -sysroot
+> and -I$(STAGING_DIR)/include -I$(STAGING_DIR)/usr/include to the
+> argument list instead of all of this.
 
- >> From a quick look it seems to just be a matter of adding
- >> CFLAG='$(TARGET_CFLAGS) <extra flags>' on the make command line, where
- >> <extra flags> are the flags openssl uses internally (something like
- >> -DOPENSSL_THREADS -D_REENTRANT -DDSO_DLCFN -DHAVE_DLFCN_H -DTERMIO).
+Adding this in $(OPENSSL_TARGET_CONFIGURE) just before the end:
+$(SED) "s:-march=[-a-z0-9] ::" -e "s:-mcpu=[-a-z0-9] ::g"
+$(OPENSSL_DIR)/Makefile
+$(SED) "s:-O[0-9]:$(TARGET_CFLAGS):" $(OPENSSL_DIR)/Makefile
+Gets rid of the "guesstimate" optimizations openssl does and we win on
+size optimization while at it.
 
- Thomas> How do I know, in a proper way, what these <extra flags> are ? (I mean,
- Thomas> without hardcoding them in Buildroot's .mk file)
+For ARM EABI old size:
+1542542 libcrypto.so.0.9.8
+296769 libssl.so.0.9.8
 
-You don't. Either you do like we used to do and fix the makefile with
-sed (s/^CFLAG = /CFLAG = -sysroot .../) and live with the fact that
-openssl likes to compile with -O3 no mather what optimization level
-you have selected in BR, or you hardcode the list in openssl.mk (it
-probably doesn't change that often).
+New size:
+1435414 libcrypto.so.0.9.8
+279543 libssl.so.0.9.8
 
- >> The question is why is all of a sudden failed?
-
- Thomas> I have no idea, I've never myself compiled openssl with
- Thomas> external toolchain.
-
-Ahh ok.
-
- Thomas> What's your suggestion to work around the issue ?
-
-One of the options above (hardcoded list or sed invocation).
-
- Thomas> Moreover, the --sysroot option is just part of
- Thomas> $(TARGET_CFLAGS), which might as well contain other flags
- Thomas> (march, mtune, mcpu, Os, O2 or whatever), so the .mk should
- Thomas> be written so that the build process of all packages really
- Thomas> take into account $(TARGET_CFLAGS). And if they do, then
- Thomas> there's no point in adding a wrapper script specially for the
- Thomas> --sysroot case.
-
-Ok.
-
--- 
-Bye, Peter Korsgaard
+Regards.
