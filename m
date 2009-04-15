@@ -1,39 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 15 Apr 2009 20:01:47 +0200
-Subject: [Buildroot] Properly setting up hotplug
-In-Reply-To: <20090414103327.2fd69516@danhplaptop> (Dan Lyke's message of
-	"Tue\, 14 Apr 2009 10\:33\:27 -0700")
-References: <20090414103327.2fd69516@danhplaptop>
-Message-ID: <87eivtx0c4.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 15 Apr 2009 18:22:19 +0000 (UTC)
+Subject: [Buildroot] [Bug 275] New: Bump bind package to 9.5.1-P2 (security)
+Message-ID: <bug-275-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Dan" == Dan Lyke <danlyke@flutterby.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=275
 
- Dan> So I know I've gotten a Buildroot install that did this automatically
- Dan> once, but through various incremental steps I've gotten a kernel that
- Dan> has the hotplug stuff enabled, and if I
+              Host: i686-linux
+            Target: arm-softfloat-linux-uclibcgnueabi
+           Summary: Bump bind package to 9.5.1-P2 (security)
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: trivial
+          Priority: P5
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: gustavo at zacarias.com.ar
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
- Dan> echo /bin/mdev > /proc/sys/kernel/hotplug
 
- Dan> or just run "mdev -s" manually I get my hot-plugged devices created, but
- Dan> I'm sure that at some point I had a system where buildroot had created
- Dan> the appropriate init script for me.
+Created an attachment (id=231)
+ --> (https://bugs.busybox.net/attachment.cgi?id=231)
+Bump bind package from 9.5.1-P1 to 9.5.1-P2
 
- Dan> Am I hallucinating, or to get this as part of the compile do I need to
- Dan> copy my configs across to a fresh buildroot and make again?
+Trivial enough.
+Fixes a security issue with DNSSEC DLV.
 
-The target_busybox does this ("use minimal target skeleton" under the
-busybox config).
-
- Dan> And what's the "make" argument for Buildroot that should clean
- Dan> everything, but not destroy my configs? "make clean" destroys configs,
- Dan> or at least did last time I typed it...
-
-make distclean.
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
