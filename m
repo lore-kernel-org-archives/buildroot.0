@@ -1,31 +1,39 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 15 Apr 2009 16:38:25 +0200
-Subject: [Buildroot] Simple glibc-based external toolchain support
-In-Reply-To: <20090415162319.757eadd8@surf> (Thomas Petazzoni's message of
-	"Wed\, 15 Apr 2009 16\:23\:19 +0200")
-References: <20090413221219.0819d500@surf> <20090415160314.1de1229f@surf>
-	<87zleivwbi.fsf@macbook.be.48ers.dk> <20090415162319.757eadd8@surf>
-Message-ID: <87r5zuvv6m.fsf@macbook.be.48ers.dk>
+Date: Wed, 15 Apr 2009 20:01:47 +0200
+Subject: [Buildroot] Properly setting up hotplug
+In-Reply-To: <20090414103327.2fd69516@danhplaptop> (Dan Lyke's message of
+	"Tue\, 14 Apr 2009 10\:33\:27 -0700")
+References: <20090414103327.2fd69516@danhplaptop>
+Message-ID: <87eivtx0c4.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Dan" == Dan Lyke <danlyke@flutterby.com> writes:
 
-Hi,
+ Dan> So I know I've gotten a Buildroot install that did this automatically
+ Dan> once, but through various incremental steps I've gotten a kernel that
+ Dan> has the hotplug stuff enabled, and if I
 
- Thomas> This raises the following point: do we need these options at
- Thomas> all ?  Can't we just hardcode in ext-took.mk the list of
- Thomas> libraries that have to be imported in the target, depending
- Thomas> on the choosen C library ?
+ Dan> echo /bin/mdev > /proc/sys/kernel/hotplug
 
-Sure, if the value is the same for all library versions, with/without
-tls/ntpl, endianness, abi, ..
+ Dan> or just run "mdev -s" manually I get my hot-plugged devices created, but
+ Dan> I'm sure that at some point I had a system where buildroot had created
+ Dan> the appropriate init script for me.
 
-Alternatively we could add 3 options: uclibc, glibc and custom, and
-then only display the setting for custom.
+ Dan> Am I hallucinating, or to get this as part of the compile do I need to
+ Dan> copy my configs across to a fresh buildroot and make again?
+
+The target_busybox does this ("use minimal target skeleton" under the
+busybox config).
+
+ Dan> And what's the "make" argument for Buildroot that should clean
+ Dan> everything, but not destroy my configs? "make clean" destroys configs,
+ Dan> or at least did last time I typed it...
+
+make distclean.
 
 -- 
 Bye, Peter Korsgaard
