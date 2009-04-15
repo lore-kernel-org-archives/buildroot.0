@@ -1,7 +1,7 @@
 From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Wed, 15 Apr 2009 13:42:09 +0000 (UTC)
-Subject: [Buildroot] svn commit: [26113] trunk/buildroot/package/busybox
-Message-ID: <20090415134209.659F07767F@busybox.osuosl.org>
+Date: Wed, 15 Apr 2009 13:42:13 +0000 (UTC)
+Subject: [Buildroot] svn commit: [26114] trunk/buildroot/target/generic
+Message-ID: <20090415134213.58D4D7767F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,25 +9,35 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Author: jacmet
-Date: 2009-04-15 13:42:08 +0000 (Wed, 15 Apr 2009)
-New Revision: 26113
+Date: 2009-04-15 13:42:12 +0000 (Wed, 15 Apr 2009)
+New Revision: 26114
 
 Log:
-busybox: remove ancient versions
-
-Removed:
-   trunk/buildroot/package/busybox/busybox-1.2.2.1-max_host_len_40.patch
-   trunk/buildroot/package/busybox/busybox-1.2.2.1.config
-   trunk/buildroot/package/busybox/busybox-1.6.0.config
+target/generic: support for busybox >= 1.14.x speed=0 handling
 
 Modified:
-   trunk/buildroot/package/busybox/Config.in
-   trunk/buildroot/package/busybox/busybox.mk
+   trunk/buildroot/target/generic/Config.in
 
 
 Changeset:
-
-Sorry, the patch is too large to include (1497 lines).
-Please use ViewCVS to see it!
-
-http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=26113
+Modified: trunk/buildroot/target/generic/Config.in
+===================================================================
+--- trunk/buildroot/target/generic/Config.in	2009-04-15 13:42:08 UTC (rev 26113)
++++ trunk/buildroot/target/generic/Config.in	2009-04-15 13:42:12 UTC (rev 26114)
+@@ -163,6 +163,8 @@
+ 	help
+ 	  Select a baudrate to use.
+ 
++config BR2_TARGET_GENERIC_GETTY_BAUDRATE_KEEP
++       bool "keep kernel default"
+ config BR2_TARGET_GENERIC_GETTY_BAUDRATE_9600
+ 	bool "9600"
+ config BR2_TARGET_GENERIC_GETTY_BAUDRATE_19200
+@@ -177,6 +179,7 @@
+ 
+ config BR2_TARGET_GENERIC_GETTY_BAUDRATE
+ 	string
++	default "0"		if BR2_TARGET_GENERIC_GETTY_BAUDRATE_KEEP
+ 	default "9600"		if BR2_TARGET_GENERIC_GETTY_BAUDRATE_9600
+ 	default "19200"		if BR2_TARGET_GENERIC_GETTY_BAUDRATE_19200
+ 	default "38400"		if BR2_TARGET_GENERIC_GETTY_BAUDRATE_38400
