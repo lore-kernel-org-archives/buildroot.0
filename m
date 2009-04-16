@@ -1,42 +1,28 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 16 Apr 2009 15:14:27 +0000 (UTC)
-Subject: [Buildroot] [Bug 277] New: Bump sqlite package to 3.6.16
-Message-ID: <bug-277-163@https.bugs.busybox.net/>
+From: Will Wagner <will_wagner@carallon.com>
+Date: Thu, 16 Apr 2009 17:33:34 +0100
+Subject: [Buildroot] tslib broken
+Message-ID: <49E75DDE.60605@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=277
+Seems like tslib has got broken when it was converted to use autotools, it has lost a 
+couple of the customisations needed.
 
-              Host: i686-linux
-            Target: arm-softfloat-linux-uclibcgnueabi
-           Summary: Bump sqlite package to 3.6.16
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-               URL: http://www.sqlite.org/releaselog/3_6_13.html
-        OS/Version: Linux
-            Status: NEW
-          Severity: trivial
-          Priority: P5
-         Component: Outdated package
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: gustavo at zacarias.com.ar
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Attached is my patch that works as it did before. Note this patch deliberately removes a 
+couple of the tslib patches as I believe they are wrong - see 
+http://lists.busybox.net/pipermail/buildroot/2008-June/021164.html
 
-
-Created an attachment (id=233)
- --> (https://bugs.busybox.net/attachment.cgi?id=233)
-Bump sqlite package from 3.6.12 to 3.6.13
-
-Bump sqlite package from 3.6.12->3.6.13
-Stability/segfault fixes mostly.
-
-
+Will
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+------------------------------------------------------------------------
+Will Wagner                                     will_wagner at carallon.com
+Development Manager                      Office Tel: +44 (0)20 7371 2032
+Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
+------------------------------------------------------------------------
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: tslib.patch
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090416/52232eaf/attachment.diff>
