@@ -1,35 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 16 Apr 2009 09:10:27 +0200
-Subject: [Buildroot] Properly setting up hotplug
-In-Reply-To: <87eivtx0c4.fsf@macbook.be.48ers.dk>
-References: <20090414103327.2fd69516@danhplaptop>
-	<87eivtx0c4.fsf@macbook.be.48ers.dk>
-Message-ID: <20090416091027.6c6153fe@surf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 16 Apr 2009 15:14:27 +0000 (UTC)
+Subject: [Buildroot] [Bug 277] New: Bump sqlite package to 3.6.16
+Message-ID: <bug-277-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 15 Apr 2009 20:01:47 +0200,
-Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+https://bugs.busybox.net/show_bug.cgi?id=277
 
->  Dan> And what's the "make" argument for Buildroot that should clean
->  Dan> everything, but not destroy my configs? "make clean" destroys
->  Dan> configs, or at least did last time I typed it...
-> 
-> make distclean.
+              Host: i686-linux
+            Target: arm-softfloat-linux-uclibcgnueabi
+           Summary: Bump sqlite package to 3.6.16
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+               URL: http://www.sqlite.org/releaselog/3_6_13.html
+        OS/Version: Linux
+            Status: NEW
+          Severity: trivial
+          Priority: P5
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: gustavo at zacarias.com.ar
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Which is quite confusing since :
 
-$ make help | grep distclean
-  distclean              - delete all non-source files (including .config)
+Created an attachment (id=233)
+ --> (https://bugs.busybox.net/attachment.cgi?id=233)
+Bump sqlite package from 3.6.12 to 3.6.13
 
- :-)
+Bump sqlite package from 3.6.12->3.6.13
+Stability/segfault fixes mostly.
 
-Thomas
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
