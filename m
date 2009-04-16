@@ -1,36 +1,46 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 16 Apr 2009 19:59:39 +0200
-Subject: [Buildroot] Properly setting up hotplug
-In-Reply-To: <20090416091027.6c6153fe@surf> (Thomas Petazzoni's message of
-	"Thu\, 16 Apr 2009 09\:10\:27 +0200")
-References: <20090414103327.2fd69516@danhplaptop>
-	<87eivtx0c4.fsf@macbook.be.48ers.dk> <20090416091027.6c6153fe@surf>
-Message-ID: <87ocuwa390.fsf@macbook.be.48ers.dk>
+From: Luciano Greiner <luciano.greiner@gmail.com>
+Date: Thu, 16 Apr 2009 17:02:02 -0300
+Subject: [Buildroot] A new QTOPIA error
+In-Reply-To: <26fbce020904141244l627cf9a8udc8af0cc80af2148@mail.gmail.com>
+References: <26fbce020904141244l627cf9a8udc8af0cc80af2148@mail.gmail.com>
+Message-ID: <26fbce020904161302x7e94966bsa77c2981c308908a@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Nobody but me with QTOPIA compilation errors? I tryed to change host 3
+times, and the same happens.
 
-Hi,
+Thanks
 
- >> make distclean.
 
- Thomas> Which is quite confusing since :
+Luciano Greiner
 
- Thomas> $ make help | grep distclean
- Thomas>   distclean              - delete all non-source files (including .config)
 
- Thomas>  :-)
 
-I agree. The clean targets are quite a mess (especially when
-considering the project stuff).
-
-I think we should probably just have clean and distclean (and the
-individual <target>-clean / -dirclean stuff), where distclean is
-clean + rm .config
-
--- 
-Bye, Peter Korsgaard
+On Tue, Apr 14, 2009 at 4:44 PM, Luciano Greiner
+<luciano.greiner@gmail.com> wrote:
+> Hi. I installed a new basic debian host system to QTOPIA4. I've got no
+> more g++ not found errors, but compilation fails with:
+>
+> compiling io/qabstractfileengine.cpp
+> moc io/qbuffer.h
+> /bin/sh: /root/buildroot/build_i386/qt-embedded-linux-opensource-src-4.5.0/bin/moc:
+> No such file or directory
+> make[2]: *** [.moc/release-shared-emb-x86/moc_qbuffer.cpp] Error 127
+> make[2]: Leaving directory
+> `/root/buildroot/build_i386/qt-embedded-linux-opensource-src-4.5.0/src/corelib'
+> make[1]: *** [sub-corelib-make_default-ordered] Error 2
+> make[1]: Leaving directory
+> `/root/buildroot/build_i386/qt-embedded-linux-opensource-src-4.5.0'
+> make: *** [/root/buildroot/build_i386/qt-embedded-linux-opensource-src-4.5.0/.compiled]
+> Error 2
+>
+> Does anyone know what may be happening here?
+>
+> Thanks
+>
+> Luciano Greiner
+>
