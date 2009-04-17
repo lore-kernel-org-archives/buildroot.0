@@ -1,12 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 17 Apr 2009 15:56:15 +0200
-Subject: [Buildroot] Properly setting up hotplug
-In-Reply-To: <d6cda7730904170152o5bfccb10u56409f747d8f1783@mail.gmail.com>
+Date: Fri, 17 Apr 2009 16:00:34 +0200
+Subject: [Buildroot] Qt Embedded build problem for x86 target (was Re: A
+	new QTOPIA error)
+In-Reply-To: <d6cda7730904170243v9ff8a13jcd7e70fe0b486264@mail.gmail.com>
 	("Thiago A. =?utf-8?Q?Corr=C3=AAa=22's?= message of "Fri\, 17 Apr 2009
-	05\:52\:48 -0300")
-References: <35AF1D2435E24FA6B1C89344B22D099E@apexjs>
-	<d6cda7730904170152o5bfccb10u56409f747d8f1783@mail.gmail.com>
-Message-ID: <873ac79yf4.fsf@macbook.be.48ers.dk>
+	06\:43\:22 -0300")
+References: <d6cda7730904170243v9ff8a13jcd7e70fe0b486264@mail.gmail.com>
+Message-ID: <87y6tz8jnh.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,19 +17,22 @@ To: buildroot@busybox.net
 
 Hi,
 
- Thiago> I actually will do rm -rf build_* binaries project_* most of
- Thiago> the time.
+ Thiago> I built i686_defconfig with Qtopia enabled and was able to reproduce
+ Thiago> his first bug with the g++@ missing.
+ Thiago> The workaround was to add -platform linux-g++ to configure. I guess
+ Thiago> Nokia/QtSoftware's configure script has a bug somewhere that during
+ Thiago> x86 to x86 crosscompiling it's unable to figure out the proper
+ Thiago> platform for the host tools.
 
-I normally do rm -rf *build_*.
+Ahh ok, thanks for looking into it.
 
- Thiago> I don't like distclean because it will remove the downloaded files,
+ Thiago> The problem is, if we just commit this work around, then build would
+ Thiago> fail for other hosts, such as freebsd, macos, etc.
 
-Only if you have it set as BASE_DIR/dl. I expect most people who use
-BR on a regular schedule to store their downloads somewhere else.
-
- Thiago> and clean usually leaves a lot of stuff in the rootfs.
-
-That would be a bug, but yes.
+What exactly breaks for those people? My guess is that non-Linux users
+compiling for x86 are a pretty small group, but if it's an issue we
+can always detect host OS and only add the configure flag for Linux
+users.
 
 -- 
 Bye, Peter Korsgaard
