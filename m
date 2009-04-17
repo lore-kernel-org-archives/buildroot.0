@@ -1,33 +1,41 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 17 Apr 2009 07:39:13 +0000 (UTC)
-Subject: [Buildroot] [Bug 277] Bump sqlite package to 3.6.16
-In-Reply-To: <bug-277-163@https.bugs.busybox.net/>
-References: <bug-277-163@https.bugs.busybox.net/>
-Message-ID: <20090417073913.4AFA2763EE@busybox.osuosl.org>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Fri, 17 Apr 2009 10:33:52 +0200
+Subject: [Buildroot] Properly setting up hotplug
+Message-ID: <35AF1D2435E24FA6B1C89344B22D099E@apexjs>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=277
-
-
-Peter Korsgaard <jacmet@uclibc.org> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
-
-
-
-
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-04-17 07:39:12 UTC ---
-Thanks, committed as r26130.
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Hi 
+ 
+cleaning :
+ 
+I don't trust the disclean, it most ends op in a mess.
+ 
+If i do a clean i do :
+ 
+remove the entire root dir in project_build_arm
+remove .root  as well
+remove all contents from build_arm
+remove all stuff in project_build_arm/../autotools-stamps.
+ 
+i am still wondering why they have put dependencies in
+project_build_arm/../autotools-stamps. instead of in build_arm
+ 
+removing the entire root seems the only way to make sure packages enabled in
+a previous build and disabled now are no longer a lonely ghost in the
+rootfs.
+ 
+ 
+besides this, there are still othter issues, the libssp.so.0 gets build but
+not installed in the target root directory.
+ 
+ 
+ 
+Johan
+ 
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090417/77507a20/attachment.htm>
