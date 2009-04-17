@@ -1,28 +1,33 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 17 Apr 2009 07:20:18 +0200
-Subject: [Buildroot] Properly setting up hotplug
-In-Reply-To: <20090417004209.GA12990@cloud.net.au> (Hamish Moffatt's message
-	of "Fri\, 17 Apr 2009 10\:42\:09 +1000")
-References: <20090414103327.2fd69516@danhplaptop>
-	<87eivtx0c4.fsf@macbook.be.48ers.dk> <20090416091027.6c6153fe@surf>
-	<87ocuwa390.fsf@macbook.be.48ers.dk>
-	<20090417004209.GA12990@cloud.net.au>
-Message-ID: <87fxg7amb1.fsf@macbook.be.48ers.dk>
+Date: Fri, 17 Apr 2009 07:22:13 +0200
+Subject: [Buildroot] A new QTOPIA error
+In-Reply-To: <d6cda7730904161718q61ae7440vd40e589f0aea8a6@mail.gmail.com>
+	("Thiago A. =?utf-8?Q?Corr=C3=AAa=22's?= message of "Thu\, 16 Apr 2009
+	21\:18\:48 -0300")
+References: <26fbce020904141244l627cf9a8udc8af0cc80af2148@mail.gmail.com>
+	<26fbce020904161302x7e94966bsa77c2981c308908a@mail.gmail.com>
+	<d6cda7730904161602o50047f0ei1fea9c0dc51b26f0@mail.gmail.com>
+	<26fbce020904161703p4c5d48c4l136a77055d8a68b4@mail.gmail.com>
+	<d6cda7730904161718q61ae7440vd40e589f0aea8a6@mail.gmail.com>
+Message-ID: <87bpqvam7u.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Hamish" == Hamish Moffatt <hamish@cloud.net.au> writes:
+>>>>> "Thiago" == Thiago A Corr?a <thiago.correa@gmail.com> writes:
 
-Hi,
+ Thiago> Yes, I did the commit for the 4.4.3 update :) The LGPL
+ Thiago> license new in 4.5.0 probably is what will enable most people
+ Thiago> to use Qt Embedded. Btw, Peter probably also has Qt 4.5.0
+ Thiago> working as well (he uses x86 and ARM AFAIK), since he updated
+ Thiago> the sed part of the makefiles after the 4.5.0 change.
 
- Hamish> Are the individual package -clean targets of any value? I never use
- Hamish> them, you are just rebuilding from the same source so what's changed?
+Powerpc mainly, but yes - It works for me.
 
-I do use them while developing - E.G. tweak something in the config
-and do make <target>-{,dir}clean; make to test.
+I don't normally use it, but a friend of mine wanted to evaluate it
+for a project, so I checked it and fixed ppc compilation.
 
 -- 
 Bye, Peter Korsgaard
