@@ -1,28 +1,44 @@
-From: Chris Bare <chris@bareflix.com>
-Date: Fri, 17 Apr 2009 12:02:41 -0400 (EDT)
-Subject: [Buildroot] package patches
-Message-ID: <20090417160420.475DB3FCBC@fraxinus.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 17 Apr 2009 17:43:19 +0000 (UTC)
+Subject: [Buildroot] [Bug 285] New: compilation of samba fails if IPV6
+	support is missing
+Message-ID: <bug-285-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I created a patch and put the patch file in my packages/libxmlrpc-c/
-next to Config.in and libxmlrpc-c.mk
+https://bugs.busybox.net/show_bug.cgi?id=285
 
-I run the build and I see:
+           Summary: compilation of samba fails if IPV6 support is missing
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P3
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: s.neumann at phase-zero.de
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-libxmlrpc-c 1.06.32 Downloading
-libxmlrpc-c 1.06.32 Extracting
-libxmlrpc-c 1.06.32 Patching libtool
-libxmlrpc-c 1.06.32 Patching package/libxmlrpc-c
-libxmlrpc-c 1.06.32 Configuring
 
-but the patch is not applied. I looked at various other packages that include
-patch files, but didn't see any place where they told buildroot about them.
-Where/how do I have to list the patch file to get it automatically applied?
+Created an attachment (id=243)
+ --> (https://bugs.busybox.net/attachment.cgi?id=243)
+patch to fix samba compilation
+
+Compilation of Samba breaks if IPV6 support is missing on the target but is
+available on the host.
+
+The attached patch fixes this. It also introduces a new configure option that
+allows to keep the libsmbclient library installed. This will be needed for the
+gvfs package that I am about to add to buildroot.
+
 
 -- 
-Chris Bare
-chris at bareflix.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
