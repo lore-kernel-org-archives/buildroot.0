@@ -1,27 +1,52 @@
-From: Sven Neumann <s.neumann@phase-zero.de>
-Date: Fri, 17 Apr 2009 12:33:12 +0200
-Subject: [Buildroot] autoreconf fails
-Message-ID: <1239964392.6397.11.camel@sven>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 17 Apr 2009 10:37:59 +0000 (UTC)
+Subject: [Buildroot] [Bug 279] New: update libglib2 to version 2.20.1
+Message-ID: <bug-279-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+https://bugs.busybox.net/show_bug.cgi?id=279
 
-with the latest buildroot snapshot, all packages that use autoreconf
-fail to compile with this error:
+           Summary: update libglib2 to version 2.20.1
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P4
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: s.neumann at phase-zero.de
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Can't locate Autom4te/ChannelDefs.pm in @INC (@INC
-contains: /home/sven/buildroot/build_arm/host_dir/usr/share/autoconf /etc/perl /usr/local/lib/perl/5.10.0 /usr/local/share/perl/5.10.0 /usr/lib/perl5 /usr/share/perl5 /usr/lib/perl/5.10 /usr/share/perl/5.10 /usr/local/lib/site_perl .) at /home/sven/buildroot-new/build_arm/host_dir/usr/bin/autoreconf line 42.
-BEGIN failed--compilation aborted
-at /home/sven/buildroot-new/build_arm/host_dir/usr/bin/autoreconf line
-42.
-make: *** [/home/sven/buildroot-new/build_arm/libusb-0.1.12/.unpacked]
-Error 2
 
-Any idea how this could be fixed?
+Created an attachment (id=235)
+ --> (https://bugs.busybox.net/attachment.cgi?id=235)
+patch to bump the libglib2 version
+
+GLib 2.20 stable release
+
+March 16, 2009
+
+GLib 2.20 is a stable release adding an incremental improvement in
+functionality over GLib 2.18 while maintaining binary and source compatibility.
+
+Major new features include:
+
+    * Optimizations of GHashTable and GMarkup
+    * Support for in-place decoding of base64 strings
+    * When launching applications, always pass fuse file:// uris whe possible,
+      and let gio convert such uris back to gio uris. This can be turned off
+      using the X-GIO-NoFuse desktop file key.
+    * GIO has a concept of ?shadowed? mounts
 
 
-Sven
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
