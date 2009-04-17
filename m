@@ -1,42 +1,63 @@
-From: Hamish Moffatt <hamish@cloud.net.au>
-Date: Fri, 17 Apr 2009 10:42:09 +1000
-Subject: [Buildroot] Properly setting up hotplug
-In-Reply-To: <87ocuwa390.fsf@macbook.be.48ers.dk>
-References: <20090414103327.2fd69516@danhplaptop>
-	<87eivtx0c4.fsf@macbook.be.48ers.dk> <20090416091027.6c6153fe@surf>
-	<87ocuwa390.fsf@macbook.be.48ers.dk>
-Message-ID: <20090417004209.GA12990@cloud.net.au>
+From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
+Date: Fri, 17 Apr 2009 07:00:19 +0200
+Subject: [Buildroot] tslib broken
+In-Reply-To: <49E75DDE.60605@carallon.com>
+References: <49E75DDE.60605@carallon.com>
+Message-ID: <20090417070019.72d26189@hcegtvedt>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Apr 16, 2009 at 07:59:39PM +0200, Peter Korsgaard wrote:
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
-> 
-> Hi,
-> 
->  >> make distclean.
-> 
->  Thomas> Which is quite confusing since :
-> 
->  Thomas> $ make help | grep distclean
->  Thomas>   distclean              - delete all non-source files (including .config)
-> 
->  Thomas>  :-)
-> 
-> I agree. The clean targets are quite a mess (especially when
-> considering the project stuff).
-> 
-> I think we should probably just have clean and distclean (and the
-> individual <target>-clean / -dirclean stuff), where distclean is
-> clean + rm .config
+On Thu, 16 Apr 2009 17:33:34 +0100
+Will Wagner <will_wagner@carallon.com> wrote:
 
-Are the individual package -clean targets of any value? I never use
-them, you are just rebuilding from the same source so what's changed?
+<snipp>
 
+> Index: package/tslib/tslib.mk
+> ===================================================================
+> --- package/tslib/tslib.mk	(revision 25500)
+> +++ package/tslib/tslib.mk	(working copy)
+> @@ -15,8 +15,25 @@
+>  TSLIB_CONF_OPT = \
+>  	--enable-shared	\
+>  	--prefix=/usr	\
+> -	--sysconfdir=/etc
+> +	--sysconfdir=/etc \
+> +	--disable-linear-h2200 \
+> +	--disable-ucb1x00 \
+> +	--disable-corgi \
+> +	--disable-collie \
+> +	--disable-h3600 \
+> +	--disable-mk712 \
+> +	--disable-arctic2 \
+> +	--enable-input
+> 
 
-Hamish
+Looks sane, as long as nobody uses the specific old style touch
+interfaces. AFAIK /dev/input/event is the way to go these days.
+ 
+>  TSLIB_DEPENDENCIES = uclibc
+>  
+>  $(eval $(call AUTOTARGETS,package,tslib))
+> +	
+> +$(TSLIB_HOOK_POST_EXTRACT):
+> +	-rm package/tslib/tslib-1.0-absbit.patch
+> +	-rm
+> package/tslib/tslib-1.0-remove-return-on-error-from-check-df.patch
+
+Huh? This looks wrong. Do you mean to remove .orig patch files from the
+extracted directory? If so, please refresh the patches using quilt:
+
+QUILT_DIFF_OPTS="-p --ignore-blank-lines --strip-trailing-cr" quilt
+refresh -p ab --no-timestamps --no-index
+
+My preferred way of making patches for Buildroot that are smooth to
+source control.
+
+<snipp>
+
 -- 
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
+Best regards,
+Hans-Christian Egtvedt
