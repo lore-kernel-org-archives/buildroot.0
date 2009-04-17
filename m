@@ -1,9 +1,8 @@
 From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
-Date: Fri, 17 Apr 2009 05:52:48 -0300
-Subject: [Buildroot] Properly setting up hotplug
-In-Reply-To: <35AF1D2435E24FA6B1C89344B22D099E@apexjs>
-References: <35AF1D2435E24FA6B1C89344B22D099E@apexjs>
-Message-ID: <d6cda7730904170152o5bfccb10u56409f747d8f1783@mail.gmail.com>
+Date: Fri, 17 Apr 2009 06:43:22 -0300
+Subject: [Buildroot] Qt Embedded build problem for x86 target (was Re: A new
+	QTOPIA error)
+Message-ID: <d6cda7730904170243v9ff8a13jcd7e70fe0b486264@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +11,23 @@ To: buildroot@busybox.net
 
 Hi,
 
-On Fri, Apr 17, 2009 at 5:33 AM, Sagaert Johan <sagaert.johan@skynet.be> wrote:
-> Hi
+On Tue, Apr 14, 2009 at 4:44 PM, Luciano Greiner
+<luciano.greiner@gmail.com> wrote:
+> Hi. I installed a new basic debian host system to QTOPIA4. I've got no
+> more g++ not found errors, but compilation fails with:
 >
-> cleaning :
->
-> I don't trust the disclean, it most ends op in a mess.
 
-Same here.
+I built i686_defconfig with Qtopia enabled and was able to reproduce
+his first bug with the g++@ missing.
+The workaround was to add -platform linux-g++ to configure. I guess
+Nokia/QtSoftware's configure script has a bug somewhere that during
+x86 to x86 crosscompiling it's unable to figure out the proper
+platform for the host tools.
 
-> If i do a clean i do :
->
-> remove the entire root dir in project_build_arm
-> remove .root? as well
-> remove all contents from build_arm
-> remove all stuff?in project_build_arm/../autotools-stamps.
+The problem is, if we just commit this work around, then build would
+fail for other hosts, such as freebsd, macos, etc.
 
-I actually will do rm -rf build_* binaries project_* most of the time.
-If I'm only fixing a package, I might just remove it's folder in the
-build_*, but when I want to make sure everything is proper or when
-creating an image to download to the device, I will even remove
-toolchain_*
-
-I don't like distclean because it will remove the downloaded files,
-and clean usually leaves a lot of stuff in the rootfs.
+Any Ideas?
 
 Kind Regards,
-   Thiago A. Correa
+    Thiago A. Correa
