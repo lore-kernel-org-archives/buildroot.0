@@ -1,38 +1,39 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 17 Apr 2009 16:00:34 +0200
-Subject: [Buildroot] Qt Embedded build problem for x86 target (was Re: A
-	new QTOPIA error)
-In-Reply-To: <d6cda7730904170243v9ff8a13jcd7e70fe0b486264@mail.gmail.com>
-	("Thiago A. =?utf-8?Q?Corr=C3=AAa=22's?= message of "Fri\, 17 Apr 2009
-	06\:43\:22 -0300")
-References: <d6cda7730904170243v9ff8a13jcd7e70fe0b486264@mail.gmail.com>
-Message-ID: <87y6tz8jnh.fsf@macbook.be.48ers.dk>
+Date: Fri, 17 Apr 2009 16:18:10 +0200
+Subject: [Buildroot] pkgconfig confusion
+In-Reply-To: <1239962164.6397.6.camel@sven> (Sven Neumann's message of "Fri\,
+	17 Apr 2009 11\:56\:04 +0200")
+References: <1239962164.6397.6.camel@sven>
+Message-ID: <87prfb8iu5.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thiago" == Thiago A Corr?a <thiago.correa@gmail.com> writes:
+>>>>> "Sven" == Sven Neumann <s.neumann@phase-zero.de> writes:
 
-Hi,
+ Sven> Hi,
+ Sven> I've tried to update to the latest buildroot snapshot today and ran into
+ Sven> a problem with pkg-config:
 
- Thiago> I built i686_defconfig with Qtopia enabled and was able to reproduce
- Thiago> his first bug with the g++@ missing.
- Thiago> The workaround was to add -platform linux-g++ to configure. I guess
- Thiago> Nokia/QtSoftware's configure script has a bug somewhere that during
- Thiago> x86 to x86 crosscompiling it's unable to figure out the proper
- Thiago> platform for the host tools.
+ >>>> pkgconfig undefined Extracting
+ Sven> gzip: /home/sven/buildroot-new/dl/pkgconfig-undefined.tar.gz: No such
+ Sven> file or directory
+ Sven> tar: This does not look like a tar archive
 
-Ahh ok, thanks for looking into it.
+This is pkg-config for the target. Is that really what you want?
 
- Thiago> The problem is, if we just commit this work around, then build would
- Thiago> fail for other hosts, such as freebsd, macos, etc.
+ Sven> So I had a look at package/pkgconfig/pkgconfig.mk and found that it
+ Sven> defines all variables with the PKG_CONFIG prefix instead of using
+ Sven> PKGCONFIG. Changing this seems to fix the problem (see attached diff).
+ Sven> Alternatively one could rename pkgconfig/pkgconfig.mk to
+ Sven> pkg-config/pkg-config.mk.
 
-What exactly breaks for those people? My guess is that non-Linux users
-compiling for x86 are a pretty small group, but if it's an issue we
-can always detect host OS and only add the configure flag for Linux
-users.
+Yes, the correct fix looks to be renaming the dir / file and the
+AUTOTARGETS line.
+
+Will fix.
 
 -- 
 Bye, Peter Korsgaard
