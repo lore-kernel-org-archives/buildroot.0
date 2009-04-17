@@ -1,62 +1,42 @@
-From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
-Date: Thu, 16 Apr 2009 21:18:48 -0300
-Subject: [Buildroot] A new QTOPIA error
-In-Reply-To: <26fbce020904161703p4c5d48c4l136a77055d8a68b4@mail.gmail.com>
-References: <26fbce020904141244l627cf9a8udc8af0cc80af2148@mail.gmail.com>
-	<26fbce020904161302x7e94966bsa77c2981c308908a@mail.gmail.com>
-	<d6cda7730904161602o50047f0ei1fea9c0dc51b26f0@mail.gmail.com>
-	<26fbce020904161703p4c5d48c4l136a77055d8a68b4@mail.gmail.com>
-Message-ID: <d6cda7730904161718q61ae7440vd40e589f0aea8a6@mail.gmail.com>
+From: Hamish Moffatt <hamish@cloud.net.au>
+Date: Fri, 17 Apr 2009 10:42:09 +1000
+Subject: [Buildroot] Properly setting up hotplug
+In-Reply-To: <87ocuwa390.fsf@macbook.be.48ers.dk>
+References: <20090414103327.2fd69516@danhplaptop>
+	<87eivtx0c4.fsf@macbook.be.48ers.dk> <20090416091027.6c6153fe@surf>
+	<87ocuwa390.fsf@macbook.be.48ers.dk>
+Message-ID: <20090417004209.GA12990@cloud.net.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yes, I did the commit for the 4.4.3 update :)
+On Thu, Apr 16, 2009 at 07:59:39PM +0200, Peter Korsgaard wrote:
+> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+> 
+> Hi,
+> 
+>  >> make distclean.
+> 
+>  Thomas> Which is quite confusing since :
+> 
+>  Thomas> $ make help | grep distclean
+>  Thomas>   distclean              - delete all non-source files (including .config)
+> 
+>  Thomas>  :-)
+> 
+> I agree. The clean targets are quite a mess (especially when
+> considering the project stuff).
+> 
+> I think we should probably just have clean and distclean (and the
+> individual <target>-clean / -dirclean stuff), where distclean is
+> clean + rm .config
 
-The LGPL license new in 4.5.0 probably is what will enable most people
-to use Qt Embedded. Btw, Peter probably also has Qt 4.5.0 working as
-well (he uses x86 and ARM AFAIK), since he updated the sed part of the
-makefiles after the 4.5.0 change.
+Are the individual package -clean targets of any value? I never use
+them, you are just rebuilding from the same source so what's changed?
 
-BR,
-   Thiago A. Correa
 
-On Thu, Apr 16, 2009 at 9:03 PM, Luciano Greiner
-<luciano.greiner@gmail.com> wrote:
-> Are you building 4.5.0 version yet?
->
-> Thanks
->
-> 2009/4/16 Thiago A. Corr?a <thiago.correa@gmail.com>:
->> Hi,
->>
->>
->> On Thu, Apr 16, 2009 at 5:02 PM, Luciano Greiner
->> <luciano.greiner@gmail.com> wrote:
->>> Nobody but me with QTOPIA compilation errors? I tryed to change host 3
->>> times, and the same happens.
->>>
->>
->> ? I'm sorry to say, but I guess yeah. It builds and works quite
->> nicely on AVR32 target, built from a Gentoo host. The only part that I
->> know isn't working is xmlpatterns module because it crashes the AVR32
->> toolchain, but that's a problem with Atmel's patches, plus, it's not
->> even enabled by default.
->>
->> ?If you could post your .config, I can give it a try here.
->>
->> Kind Regards,
->> ? Thiago A. Correa
->>
->
->
->
-> --
-> Luciano Greiner
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+Hamish
+-- 
+Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
