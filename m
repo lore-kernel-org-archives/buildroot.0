@@ -1,18 +1,18 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 17 Apr 2009 19:41:23 +0000 (UTC)
-Subject: [Buildroot] [Bug 287] New: New package libnl
-Message-ID: <bug-287-163@https.bugs.busybox.net/>
+Date: Fri, 17 Apr 2009 19:41:33 +0000 (UTC)
+Subject: [Buildroot] [Bug 289] New: New package iw
+Message-ID: <bug-289-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=287
+https://bugs.busybox.net/show_bug.cgi?id=289
 
               Host: i686-linux
             Target: arm-softfloat-linux-uclibcgnueabi
-           Summary: New package libnl
+           Summary: New package iw
            Product: buildroot
            Version: unspecified
           Platform: PC
@@ -27,11 +27,14 @@ https://bugs.busybox.net/show_bug.cgi?id=287
    Estimated Hours: 0.0
 
 
-Created an attachment (id=245)
- --> (https://bugs.busybox.net/attachment.cgi?id=245)
-New libnl package
+Created an attachment (id=247)
+ --> (https://bugs.busybox.net/attachment.cgi?id=247)
+New iw package
 
-Introduce new libnl package (netlink socket interface library).
+Introduce new iw package.
+This package is a wireless configuration utility for the linux mac80211 kernel
+stack.
+This package depends on libnl (new package from bug #287).
 
 
 -- 
