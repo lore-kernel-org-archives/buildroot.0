@@ -1,63 +1,28 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Fri, 17 Apr 2009 07:00:19 +0200
-Subject: [Buildroot] tslib broken
-In-Reply-To: <49E75DDE.60605@carallon.com>
-References: <49E75DDE.60605@carallon.com>
-Message-ID: <20090417070019.72d26189@hcegtvedt>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 17 Apr 2009 07:20:18 +0200
+Subject: [Buildroot] Properly setting up hotplug
+In-Reply-To: <20090417004209.GA12990@cloud.net.au> (Hamish Moffatt's message
+	of "Fri\, 17 Apr 2009 10\:42\:09 +1000")
+References: <20090414103327.2fd69516@danhplaptop>
+	<87eivtx0c4.fsf@macbook.be.48ers.dk> <20090416091027.6c6153fe@surf>
+	<87ocuwa390.fsf@macbook.be.48ers.dk>
+	<20090417004209.GA12990@cloud.net.au>
+Message-ID: <87fxg7amb1.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 16 Apr 2009 17:33:34 +0100
-Will Wagner <will_wagner@carallon.com> wrote:
+>>>>> "Hamish" == Hamish Moffatt <hamish@cloud.net.au> writes:
 
-<snipp>
+Hi,
 
-> Index: package/tslib/tslib.mk
-> ===================================================================
-> --- package/tslib/tslib.mk	(revision 25500)
-> +++ package/tslib/tslib.mk	(working copy)
-> @@ -15,8 +15,25 @@
->  TSLIB_CONF_OPT = \
->  	--enable-shared	\
->  	--prefix=/usr	\
-> -	--sysconfdir=/etc
-> +	--sysconfdir=/etc \
-> +	--disable-linear-h2200 \
-> +	--disable-ucb1x00 \
-> +	--disable-corgi \
-> +	--disable-collie \
-> +	--disable-h3600 \
-> +	--disable-mk712 \
-> +	--disable-arctic2 \
-> +	--enable-input
-> 
+ Hamish> Are the individual package -clean targets of any value? I never use
+ Hamish> them, you are just rebuilding from the same source so what's changed?
 
-Looks sane, as long as nobody uses the specific old style touch
-interfaces. AFAIK /dev/input/event is the way to go these days.
- 
->  TSLIB_DEPENDENCIES = uclibc
->  
->  $(eval $(call AUTOTARGETS,package,tslib))
-> +	
-> +$(TSLIB_HOOK_POST_EXTRACT):
-> +	-rm package/tslib/tslib-1.0-absbit.patch
-> +	-rm
-> package/tslib/tslib-1.0-remove-return-on-error-from-check-df.patch
-
-Huh? This looks wrong. Do you mean to remove .orig patch files from the
-extracted directory? If so, please refresh the patches using quilt:
-
-QUILT_DIFF_OPTS="-p --ignore-blank-lines --strip-trailing-cr" quilt
-refresh -p ab --no-timestamps --no-index
-
-My preferred way of making patches for Buildroot that are smooth to
-source control.
-
-<snipp>
+I do use them while developing - E.G. tweak something in the config
+and do make <target>-{,dir}clean; make to test.
 
 -- 
-Best regards,
-Hans-Christian Egtvedt
+Bye, Peter Korsgaard
