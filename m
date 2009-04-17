@@ -1,33 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 17 Apr 2009 07:22:13 +0200
-Subject: [Buildroot] A new QTOPIA error
-In-Reply-To: <d6cda7730904161718q61ae7440vd40e589f0aea8a6@mail.gmail.com>
-	("Thiago A. =?utf-8?Q?Corr=C3=AAa=22's?= message of "Thu\, 16 Apr 2009
-	21\:18\:48 -0300")
-References: <26fbce020904141244l627cf9a8udc8af0cc80af2148@mail.gmail.com>
-	<26fbce020904161302x7e94966bsa77c2981c308908a@mail.gmail.com>
-	<d6cda7730904161602o50047f0ei1fea9c0dc51b26f0@mail.gmail.com>
-	<26fbce020904161703p4c5d48c4l136a77055d8a68b4@mail.gmail.com>
-	<d6cda7730904161718q61ae7440vd40e589f0aea8a6@mail.gmail.com>
-Message-ID: <87bpqvam7u.fsf@macbook.be.48ers.dk>
+From: correa at uclibc.org <correa@uclibc.org>
+Date: Fri, 17 Apr 2009 05:44:02 +0000 (UTC)
+Subject: [Buildroot] svn commit: [26128]
+	trunk/buildroot/target/device/x86/i686
+Message-ID: <20090417054402.6001A763A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thiago" == Thiago A Corr?a <thiago.correa@gmail.com> writes:
+Author: correa
+Date: 2009-04-17 05:44:01 +0000 (Fri, 17 Apr 2009)
+New Revision: 26128
 
- Thiago> Yes, I did the commit for the 4.4.3 update :) The LGPL
- Thiago> license new in 4.5.0 probably is what will enable most people
- Thiago> to use Qt Embedded. Btw, Peter probably also has Qt 4.5.0
- Thiago> working as well (he uses x86 and ARM AFAIK), since he updated
- Thiago> the sed part of the makefiles after the 4.5.0 change.
+Log:
+Fix busybox config file location
 
-Powerpc mainly, but yes - It works for me.
+Modified:
+   trunk/buildroot/target/device/x86/i686/i686_defconfig
 
-I don't normally use it, but a friend of mine wanted to evaluate it
-for a project, so I checked it and fixed ppc compilation.
 
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/target/device/x86/i686/i686_defconfig
+===================================================================
+--- trunk/buildroot/target/device/x86/i686/i686_defconfig	2009-04-17 00:01:04 UTC (rev 26127)
++++ trunk/buildroot/target/device/x86/i686/i686_defconfig	2009-04-17 05:44:01 UTC (rev 26128)
+@@ -280,7 +280,7 @@
+ # BR2_PACKAGE_BUSYBOX_SNAPSHOT is not set
+ BR2_BUSYBOX_VERSION="1.13.2"
+ BR2_PACKAGE_BUSYBOX_FULLINSTALL=y
+-BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.6.0.config"
++BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.13.x.config"
+ BR2_PACKAGE_BUSYBOX_HIDE_OTHERS=y
+ # BR2_PACKAGE_BUSYBOX_SKELETON is not set
+ 
