@@ -1,38 +1,33 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Fri, 17 Apr 2009 07:38:04 +0000 (UTC)
-Subject: [Buildroot] svn commit: [26130]
-	trunk/buildroot/package/database/sqlite
-Message-ID: <20090417073804.55CB1763EE@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 17 Apr 2009 07:39:13 +0000 (UTC)
+Subject: [Buildroot] [Bug 277] Bump sqlite package to 3.6.16
+In-Reply-To: <bug-277-163@https.bugs.busybox.net/>
+References: <bug-277-163@https.bugs.busybox.net/>
+Message-ID: <20090417073913.4AFA2763EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-04-17 07:38:03 +0000 (Fri, 17 Apr 2009)
-New Revision: 26130
-
-Log:
-sqlite: bump version
-
-Closes #277.
-
-Modified:
-   trunk/buildroot/package/database/sqlite/sqlite.mk
+https://bugs.busybox.net/show_bug.cgi?id=277
 
 
-Changeset:
-Modified: trunk/buildroot/package/database/sqlite/sqlite.mk
-===================================================================
---- trunk/buildroot/package/database/sqlite/sqlite.mk	2009-04-17 05:50:44 UTC (rev 26129)
-+++ trunk/buildroot/package/database/sqlite/sqlite.mk	2009-04-17 07:38:03 UTC (rev 26130)
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--SQLITE_VERSION = 3.6.12
-+SQLITE_VERSION = 3.6.13
- SQLITE_SOURCE = sqlite-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org
- SQLITE_INSTALL_STAGING = YES
+Peter Korsgaard <jacmet@uclibc.org> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
+
+
+
+
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-04-17 07:39:12 UTC ---
+Thanks, committed as r26130.
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
