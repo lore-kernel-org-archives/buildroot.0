@@ -1,52 +1,31 @@
-From: Lloyd Sargent <lloyd@cannasoftware.com>
-Date: Fri, 17 Apr 2009 09:19:19 -0500
+From: Dan Lyke <danlyke@flutterby.com>
+Date: Fri, 17 Apr 2009 07:19:48 -0700
 Subject: [Buildroot] Properly setting up hotplug
-In-Reply-To: <873ac79yf4.fsf@macbook.be.48ers.dk>
-References: <35AF1D2435E24FA6B1C89344B22D099E@apexjs>
-	<d6cda7730904170152o5bfccb10u56409f747d8f1783@mail.gmail.com>
-	<873ac79yf4.fsf@macbook.be.48ers.dk>
-Message-ID: <6C09CA91-9038-415C-937F-8B9BC7058CE6@cannasoftware.com>
+In-Reply-To: <20090417004209.GA12990@cloud.net.au>
+References: <20090414103327.2fd69516@danhplaptop>
+	<87eivtx0c4.fsf@macbook.be.48ers.dk> <20090416091027.6c6153fe@surf>
+	<87ocuwa390.fsf@macbook.be.48ers.dk>
+	<20090417004209.GA12990@cloud.net.au>
+Message-ID: <20090417071948.1592090e@danhplaptop>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Apr 17, 2009, at 8:56 AM, Peter Korsgaard wrote:
+On Fri, 17 Apr 2009 10:42:09 +1000
+Hamish Moffatt <hamish@cloud.net.au> wrote:
+> Are the individual package -clean targets of any value? I never use
+> them, you are just rebuilding from the same source so what's changed?
 
->>>>>> "Thiago" == Thiago A Corr?a <thiago.correa@gmail.com> writes:
->
-> Hi,
->
-> Thiago> I don't like distclean because it will remove the downloaded  
-> files,
->
-> Only if you have it set as BASE_DIR/dl. I expect most people who use
-> BR on a regular schedule to store their downloads somewhere else.
+Although makefiles *should* pick all the dependencies, it's my
+experience that they don't. Especially when it comes to changing config
+options or random stuff down in the board configs.
 
-I would argue then that, conceptually, for BR there should be two  
-forms of distclean:
+The command line
 
-1) to clean up the projects files (i.e. as if you did 'make distclean'  
-for directfb)
+pushd  project_build_arm/at91sam9261ek/linux-2.6.28/ ; make clean ; popd
 
-2) to clean up ALL of BR (i.e. clean up BR for shipment)
+is an alias on my system...
 
-The reasoning is that distclean for a package is DIFFERENT than  
-distclean for BR - for obvious reasons.
-
-I understand the desire to keep the same underpinnings (since we all  
-know about clean and distclean for particular packages) but because BR  
-is not about ONE package but many, I think it is conceptually  
-stretched, possibly, to the point of failure. Or worse - that saying  
-"distclean" means two different things to two different people.
-
-I would argue two types of distclean - package and BR. Now, how to  
-implement them I leave up to the experts.
-
-Look forward to my book "The Philosophical Underpinnings of DistClean  
-and Why The Guardrails of the Abyss Have Been Removed"
-
-Cheers,
-
-Lloyd
+Dan
