@@ -1,8 +1,7 @@
-From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
-Date: Fri, 17 Apr 2009 06:43:22 -0300
-Subject: [Buildroot] Qt Embedded build problem for x86 target (was Re: A new
-	QTOPIA error)
-Message-ID: <d6cda7730904170243v9ff8a13jcd7e70fe0b486264@mail.gmail.com>
+From: Sven Neumann <s.neumann@phase-zero.de>
+Date: Fri, 17 Apr 2009 11:56:04 +0200
+Subject: [Buildroot] pkgconfig confusion
+Message-ID: <1239962164.6397.6.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,23 +10,28 @@ To: buildroot@busybox.net
 
 Hi,
 
-On Tue, Apr 14, 2009 at 4:44 PM, Luciano Greiner
-<luciano.greiner@gmail.com> wrote:
-> Hi. I installed a new basic debian host system to QTOPIA4. I've got no
-> more g++ not found errors, but compilation fails with:
->
+I've tried to update to the latest buildroot snapshot today and ran into
+a problem with pkg-config:
 
-I built i686_defconfig with Qtopia enabled and was able to reproduce
-his first bug with the g++@ missing.
-The workaround was to add -platform linux-g++ to configure. I guess
-Nokia/QtSoftware's configure script has a bug somewhere that during
-x86 to x86 crosscompiling it's unable to figure out the proper
-platform for the host tools.
+>>> pkgconfig undefined Extracting
+gzip: /home/sven/buildroot-new/dl/pkgconfig-undefined.tar.gz: No such
+file or directory
+tar: This does not look like a tar archive
 
-The problem is, if we just commit this work around, then build would
-fail for other hosts, such as freebsd, macos, etc.
+So I had a look at package/pkgconfig/pkgconfig.mk and found that it
+defines all variables with the PKG_CONFIG prefix instead of using
+PKGCONFIG. Changing this seems to fix the problem (see attached diff).
+Alternatively one could rename pkgconfig/pkgconfig.mk to
+pkg-config/pkg-config.mk.
 
-Any Ideas?
 
-Kind Regards,
-    Thiago A. Correa
+Sven
+
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: pkgconfig.diff
+Type: text/x-patch
+Size: 3283 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090417/a1823cac/attachment.bin>
