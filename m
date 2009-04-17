@@ -1,29 +1,38 @@
-From: Sven Neumann <s.neumann@phase-zero.de>
-Date: Fri, 17 Apr 2009 12:44:14 +0200
-Subject: [Buildroot] autoreconf fails
-In-Reply-To: <1239964392.6397.11.camel@sven>
-References: <1239964392.6397.11.camel@sven>
-Message-ID: <1239965054.6397.13.camel@sven>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 17 Apr 2009 11:18:22 +0000 (UTC)
+Subject: [Buildroot] [Bug 281] New: update DirectFB to version 1.2.8
+Message-ID: <bug-281-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+https://bugs.busybox.net/show_bug.cgi?id=281
 
-On Fri, 2009-04-17 at 12:33 +0200, Sven Neumann wrote:
+           Summary: update DirectFB to version 1.2.8
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P4
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: s.neumann at phase-zero.de
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-> with the latest buildroot snapshot, all packages that use autoreconf
-> fail to compile with this error:
-> 
-> Can't locate Autom4te/ChannelDefs.pm in @INC (@INC
-> contains: /home/sven/buildroot/build_arm/host_dir/usr/share/autoconf /etc/perl /usr/local/lib/perl/5.10.0 /usr/local/share/perl/5.10.0 /usr/lib/perl5 /usr/share/perl5 /usr/lib/perl/5.10 /usr/share/perl/5.10 /usr/local/lib/site_perl .) at /home/sven/buildroot-new/build_arm/host_dir/usr/bin/autoreconf line 42.
-> BEGIN failed--compilation aborted
 
-Looks like autoconf and automake need to be enabled in the .config file
-in order to build packages that use host-autoconf and host-automake.
-Shouldn't this option be selected automagically then?
+Created an attachment (id=237)
+ --> (https://bugs.busybox.net/attachment.cgi?id=237)
+update DirectFB to version 1.2.8
+
+DirectFB 1.2.8 is a bug-fix release in the stable DirectFB 1.2 series.
 
 
-Sven
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
