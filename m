@@ -1,9 +1,7 @@
 From: Sven Neumann <s.neumann@phase-zero.de>
-Date: Fri, 17 Apr 2009 12:25:04 +0200
-Subject: [Buildroot] pkgconfig confusion
-In-Reply-To: <1239962164.6397.6.camel@sven>
-References: <1239962164.6397.6.camel@sven>
-Message-ID: <1239963904.6397.9.camel@sven>
+Date: Fri, 17 Apr 2009 12:33:12 +0200
+Subject: [Buildroot] autoreconf fails
+Message-ID: <1239964392.6397.11.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,27 +10,18 @@ To: buildroot@busybox.net
 
 Hi,
 
-On Fri, 2009-04-17 at 11:56 +0200, Sven Neumann wrote:
-> Hi,
-> 
-> I've tried to update to the latest buildroot snapshot today and ran into
-> a problem with pkg-config:
-> 
-> >>> pkgconfig undefined Extracting
-> gzip: /home/sven/buildroot-new/dl/pkgconfig-undefined.tar.gz: No such
-> file or directory
-> tar: This does not look like a tar archive
-> 
-> So I had a look at package/pkgconfig/pkgconfig.mk and found that it
-> defines all variables with the PKG_CONFIG prefix instead of using
-> PKGCONFIG. Changing this seems to fix the problem (see attached diff).
-> Alternatively one could rename pkgconfig/pkgconfig.mk to
-> pkg-config/pkg-config.mk.
+with the latest buildroot snapshot, all packages that use autoreconf
+fail to compile with this error:
 
-Actually, the patch from my last mail changes a bit too much.
-PKG_CONFIG_HOST_DIR and PKG_CONFIG_HOST_BINARY must not be changed as
-other packages use these variables. Perhaps the best solution is really
-to rename the package from pkgconfig to pkg-config.
+Can't locate Autom4te/ChannelDefs.pm in @INC (@INC
+contains: /home/sven/buildroot/build_arm/host_dir/usr/share/autoconf /etc/perl /usr/local/lib/perl/5.10.0 /usr/local/share/perl/5.10.0 /usr/lib/perl5 /usr/share/perl5 /usr/lib/perl/5.10 /usr/share/perl/5.10 /usr/local/lib/site_perl .) at /home/sven/buildroot-new/build_arm/host_dir/usr/bin/autoreconf line 42.
+BEGIN failed--compilation aborted
+at /home/sven/buildroot-new/build_arm/host_dir/usr/bin/autoreconf line
+42.
+make: *** [/home/sven/buildroot-new/build_arm/libusb-0.1.12/.unpacked]
+Error 2
+
+Any idea how this could be fixed?
 
 
 Sven
