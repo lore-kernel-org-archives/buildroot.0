@@ -1,42 +1,42 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 17 Apr 2009 15:36:01 +0200
-Subject: [Buildroot] Properly setting up hotplug
-In-Reply-To: <35AF1D2435E24FA6B1C89344B22D099E@apexjs> (Sagaert Johan's
-	message of "Fri\, 17 Apr 2009 10\:33\:52 +0200")
-References: <35AF1D2435E24FA6B1C89344B22D099E@apexjs>
-Message-ID: <877i1j9zcu.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Fri, 17 Apr 2009 13:53:07 +0000 (UTC)
+Subject: [Buildroot] svn commit: [26133] trunk/buildroot
+Message-ID: <20090417135307.E578D77697@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
+Author: jacmet
+Date: 2009-04-17 13:53:07 +0000 (Fri, 17 Apr 2009)
+New Revision: 26133
 
- Sagaert> Hi
- Sagaert> cleaning :
+Log:
+Makefile: distclean: remove correct dirs
+
+Remove toolchain build dir, and don't try to remove the non-existing include
+dir. Also don't explicitly remove the kernel image located in binaries as
+we're already removing that dir.
+
+Modified:
+   trunk/buildroot/Makefile
+
+
+Changeset:
+Modified: trunk/buildroot/Makefile
+===================================================================
+--- trunk/buildroot/Makefile	2009-04-17 13:52:51 UTC (rev 26132)
++++ trunk/buildroot/Makefile	2009-04-17 13:53:07 UTC (rev 26133)
+@@ -402,9 +402,8 @@
+ ifeq ($(DL_DIR),$(BASE_DIR)/dl)
+ 	rm -rf $(DL_DIR)
+ endif
+-	rm -rf $(BUILD_DIR) $(PROJECT_BUILD_DIR) $(BINARIES_DIR) \
+-	$(LINUX_KERNEL) $(BASE_DIR)/include \
+-		.config.cmd
++	rm -rf $(TOOL_BUILD_DIR) $(BUILD_DIR) $(PROJECT_BUILD_DIR) $(BINARIES_DIR) \
++	.config.cmd
+ 	$(MAKE) -C $(CONFIG) clean
  
- Sagaert> I don't trust the disclean, it most ends op in a mess.
-
-distclean does a rm -rf dl build_<arch> project_build_<arch>/<project>
-binaries/<project>, so that's pretty good.
-
-It currently doesn't get rid for toolchain_build_<arch>, but I'll fix
-that now.
- 
- Sagaert> i am still wondering why they have put dependencies in
- Sagaert> project_build_arm/../ autotools-stamps. instead of in
- Sagaert> build_arm
-
-Because of the project stuff. There's been discussion about getting
-rid of that and simply use the external toolchain stuff if you want to
-build seperate rootfs'es for similar hw, and I'm seriously considering
-doing so.
- 
- Sagaert> besides this, there are still othter issues, the libssp.so.0
- Sagaert> gets build but not installed in the target root directory.
-
-Ohh, details please.
-
--- 
-Bye, Peter Korsgaard
+ sourceball:
