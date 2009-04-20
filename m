@@ -1,28 +1,43 @@
-From: Sven Neumann <s.neumann@phase-zero.de>
-Date: Mon, 20 Apr 2009 12:52:42 +0200
-Subject: [Buildroot] problem with dbus-daemon
-In-Reply-To: <1239991165.6397.20.camel@sven>
-References: <1239991165.6397.20.camel@sven>
-Message-ID: <1240224762.6315.24.camel@sven>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 20 Apr 2009 12:04:30 +0000 (UTC)
+Subject: [Buildroot] [Bug 293] New: update samba to version 3.3.3
+Message-ID: <bug-293-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+https://bugs.busybox.net/show_bug.cgi?id=293
 
-On Fri, 2009-04-17 at 19:59 +0200, Sven Neumann wrote:
+           Summary: update samba to version 3.3.3
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P3
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: s.neumann at phase-zero.de
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-> I am trying to run dbus-daemon (out of buildroot) on an ARM platform and
-> keep getting this error:
-> 
-> Can't modify application's text section; use the GCC option -fPIE for
-> position-independent executables.
 
-Thanks to an advice I received off-list, I have changed from uCLibC
-0.9.30 to 0.9.30.1, recompiled everything, and now dbus is up and
-running.  :-)
+Created an attachment (id=253)
+ --> (https://bugs.busybox.net/attachment.cgi?id=253)
+update samba to version 3.3.3
+
+Samba is somewhat outdated in buildroot with version 3.2.7. The attached patch
+changes the version to the latest stable release (version 3.3.3) and also takes
+care of updating the patches accordingly.
+
+Please consider this for inclusion in buildroot. I am working on further
+changes to Samba, so getting this patch into SVN would help me a lot.
 
 
-Sven
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
