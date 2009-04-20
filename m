@@ -1,7 +1,9 @@
-From: Sven Neumann <s.neumann@phase-zero.de>
-Date: Mon, 20 Apr 2009 10:18:42 +0200
-Subject: [Buildroot] outstanding patches
-Message-ID: <1240215522.6315.17.camel@sven>
+From: Vania Joloboff <vania.joloboff@tsinghua.edu.cn>
+Date: Mon, 20 Apr 2009 16:29:39 +0800
+Subject: [Buildroot] Bug with gmp and mpfr
+In-Reply-To: <4989680E.4010807@liama.ia.ac.cn>
+References: <4989680E.4010807@liama.ia.ac.cn>
+Message-ID: <49EC3273.5000100@tsinghua.edu.cn>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,51 +12,48 @@ To: buildroot@busybox.net
 
 Hi,
 
-I'd very much appreciate if one of the core developers could have a look
-at the patches that I submitted to your bug-tracker:
 
+We have a problem. We have build gcc with buildroot and in most cases it 
+works fine.
+But in one case we do not want to use the _start entry point because we 
+redefine it.
+So we use option -nostdlib and then we explicitly want to link with 
+libstdc++ and libgcc
 
---------------------------------------------------------------------------
-new packages: libsoup, gssdp, gupnp, gupnp-av
-https://bugs.busybox.net/show_bug.cgi?id=35
+so we use a command like
 
-I have attached a new patch here that only adds libsoup. That patch
-should be unproblematic (I hope) and it would get us one step closer to
-finally getting the gupnp stack into buildroot.
---------------------------------------------------------------------------
+g++ -nostdlib path/to/ourfiles $options -lstdc++ -lc -lgcc
 
---------------------------------------------------------------------------
-update gstreamer packages
-https://bugs.busybox.net/show_bug.cgi?id=101
+We get
 
-There hasn't been any comment on this one. As far as I can see the patch
-should be unproblematic. We are using it in our tree for a while now.
---------------------------------------------------------------------------
+/usr/local/cross/arm/usr/bin/../lib/gcc/arm-linux-uclibc/4.3.2/../../../../arm-linux-uclibc/bin/ld: 
+warning: libgcc_s.so.1, needed by 
+/usr/local/cross/arm/usr/arm-linux-uclibc/lib/libstdc++.so, not found 
+(try using -rpath or -rpath-link)
+and then many  undefined references to _Unwind_*
 
---------------------------------------------------------------------------
-update DirectFB to version 1.2.8
-https://bugs.busybox.net/show_bug.cgi?id=281
+We have tried using
 
-Just a minor update in the stable DirectFB 1.2 series.
---------------------------------------------------------------------------
+1. -L options on the command line with the directories where are 
+libgcc_s.so.1 and libstdc++
+2.  the  -static-libgcc option
+3. using export LD_LIBRARY_PATH=/path/to/libs
+4. using LD_RUN_PATH=/path/to/libs
 
---------------------------------------------------------------------------
-add taglib
-https://bugs.busybox.net/show_bug.cgi?id=283
+None of the 4 above work.
 
-This simple patch adds a new package to buildroot.
---------------------------------------------------------------------------
+Does anybody have any clue ?
 
---------------------------------------------------------------------------
-compilation of samba fails if IPV6 support is missing
-https://bugs.busybox.net/show_bug.cgi?id=285
+Can we build buildroot so that it uses only static linking ?
 
-This one is probably a little more controversial. It would be nice to
-get some feedback though.
---------------------------------------------------------------------------
+PS: Using the -L option just works fine if we build gcc with binutils 
+and newlib.
+It does not work with uclibc.
 
-Getting these changes integrated upstream would help us a lot and it
-would also improve buildroot. Thanks.
-
-
-Sven
+-- 
+Sincerely,
+-- Vania Joloboff
+======================================================================
+Tsinghua University, FIT Building, 3-605, Beijing 100040, China
+Tel: +80 10 6279 6979 x605
+email: vania.joloboff at tsinghua.edu.cn
