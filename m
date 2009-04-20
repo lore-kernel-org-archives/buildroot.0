@@ -1,40 +1,28 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 20 Apr 2009 10:25:35 +0000 (UTC)
-Subject: [Buildroot] [Bug 285] compilation of samba fails if IPV6 support is
-	missing
-In-Reply-To: <bug-285-163@https.bugs.busybox.net/>
-References: <bug-285-163@https.bugs.busybox.net/>
-Message-ID: <20090420102535.2FD94771E4@busybox.osuosl.org>
+From: Sven Neumann <s.neumann@phase-zero.de>
+Date: Mon, 20 Apr 2009 12:52:42 +0200
+Subject: [Buildroot] problem with dbus-daemon
+In-Reply-To: <1239991165.6397.20.camel@sven>
+References: <1239991165.6397.20.camel@sven>
+Message-ID: <1240224762.6315.24.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=285
+Hi,
+
+On Fri, 2009-04-17 at 19:59 +0200, Sven Neumann wrote:
+
+> I am trying to run dbus-daemon (out of buildroot) on an ARM platform and
+> keep getting this error:
+> 
+> Can't modify application's text section; use the GCC option -fPIE for
+> position-independent executables.
+
+Thanks to an advice I received off-list, I have changed from uCLibC
+0.9.30 to 0.9.30.1, recompiled everything, and now dbus is up and
+running.  :-)
 
 
-Sven Neumann <s.neumann@phase-zero.de> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
- Attachment #243 is|0                           |1
-           obsolete|                            |
-
-
-
-
---- Comment #1 from Sven Neumann <s.neumann@phase-zero.de>  2009-04-20 10:25:34 UTC ---
-Created an attachment (id=251)
- --> (https://bugs.busybox.net/attachment.cgi?id=251)
-patch that just fixes the reported build issue
-
-Here's a simpler patch that just fixes the reported build issue. Building and
-installing libsmbclient correctly will need more changes. I will try to get
-this done and open a new bug report for it.
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Sven
