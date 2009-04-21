@@ -1,46 +1,22 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 21 Apr 2009 08:11:04 +0200
-Subject: [Buildroot] future of project support
-In-Reply-To: <20090420003249.GA18066@cloud.net.au> (Hamish Moffatt's message
-	of "Mon\, 20 Apr 2009 10\:32\:49 +1000")
-References: <35AF1D2435E24FA6B1C89344B22D099E@apexjs>
-	<877i1j9zcu.fsf@macbook.be.48ers.dk>
-	<20090420003249.GA18066@cloud.net.au>
-Message-ID: <877i1esfif.fsf@macbook.be.48ers.dk>
+From: Sven Neumann <s.neumann@phase-zero.de>
+Date: Tue, 21 Apr 2009 17:03:40 +0200
+Subject: [Buildroot] trouble with FUSE (Filesystem in Userspace)
+Message-ID: <1240326220.8272.4.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Hamish" == Hamish Moffatt <hamish@cloud.net.au> writes:
-
 Hi,
 
- >> Because of the project stuff. There's been discussion about getting
- >> rid of that and simply use the external toolchain stuff if you want to
- >> build seperate rootfs'es for similar hw, and I'm seriously considering
- >> doing so.
+we are using buildroot on an ARM platform with uCLibC 0.9.30.1 and Linux
+2.6.30rc2 and can't get FUSE to work. I tried the simple hello.c example
+from the fuse-2.7.3 sources and everything seems to work fine until I
+try to read from the filesystem. This read blocks forever. Now I wonder
+if anyone on this list has ever got FUSE and uCLibC to work on an ARM or
+if there are known problems with this combination? Any help would be
+much appreciated as I am running out of ideas here...
 
- Hamish> I'm in favour of some simplification. Here's my usage:
 
- Hamish> I have a few related projects. I want to build them from the
- Hamish> same source tree. Ideally I can have them all built within
- Hamish> one check-out, so I can quickly make a change and test it in
- Hamish> multiple projects (without checking in, updating the other
- Hamish> check out etc).
-
-Have you ever used the out-of-tree build feature? I use it all the
-time, and it seems to fit this use case. Simply do make
-O=/output/dir/for/project1 and all the build / binaries dirs gets in
-/output/dir/for/project1.
-
- Hamish> I don't care if everything is rebuilt for each project.. (except the
- Hamish> toolchain possibly). I think the current mix of build_arch /
- Hamish> project_build_arch is a mess, I'd prefer to have everything in
- Hamish> project_build_arch really.
-
-Or simply build_arch if we get rid of the project stuff.
-
--- 
-Bye, Peter Korsgaard
+Sven
