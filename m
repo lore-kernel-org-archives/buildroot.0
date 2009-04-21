@@ -1,22 +1,40 @@
-From: Sven Neumann <s.neumann@phase-zero.de>
-Date: Tue, 21 Apr 2009 17:03:40 +0200
-Subject: [Buildroot] trouble with FUSE (Filesystem in Userspace)
-Message-ID: <1240326220.8272.4.camel@sven>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Tue, 21 Apr 2009 15:10:39 +0000 (UTC)
+Subject: [Buildroot] svn commit: [26175] trunk/buildroot/package/dbus
+Message-ID: <20090421151039.EDDE277137@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Author: jacmet
+Date: 2009-04-21 15:10:39 +0000 (Tue, 21 Apr 2009)
+New Revision: 26175
 
-we are using buildroot on an ARM platform with uCLibC 0.9.30.1 and Linux
-2.6.30rc2 and can't get FUSE to work. I tried the simple hello.c example
-from the fuse-2.7.3 sources and everything seems to work fine until I
-try to read from the filesystem. This read blocks forever. Now I wonder
-if anyone on this list has ever got FUSE and uCLibC to work on an ARM or
-if there are known problems with this combination? Any help would be
-much appreciated as I am running out of ideas here...
+Log:
+dbus: fix rebuild if /var/lib is a symlink to /tmp for target
+
+/tmp/dbus will end up being a recursive symlink to itself on the build host.
+
+Modified:
+   trunk/buildroot/package/dbus/dbus.mk
 
 
-Sven
+Changeset:
+Modified: trunk/buildroot/package/dbus/dbus.mk
+===================================================================
+--- trunk/buildroot/package/dbus/dbus.mk	2009-04-21 11:23:56 UTC (rev 26174)
++++ trunk/buildroot/package/dbus/dbus.mk	2009-04-21 15:10:39 UTC (rev 26175)
+@@ -50,6 +50,11 @@
+ 
+ $(eval $(call AUTOTARGETS,package,dbus))
+ 
++# fix rebuild if /var/lib is a symlink to /tmp
++$(DBUS_HOOK_POST_BUILD): $(DBUS_TARGET_BUILD)
++	rm -rf /tmp/dbus
++	touch $@
++
+ $(DBUS_HOOK_POST_INSTALL): $(DBUS_TARGET_INSTALL_TARGET)
+ 	rm -rf $(TARGET_DIR)/usr/lib/dbus-1.0
+ 	rm -rf $(TARGET_DIR)/var/lib/dbus
