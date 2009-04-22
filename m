@@ -1,41 +1,48 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 22 Apr 2009 11:17:19 +0200
-Subject: [Buildroot] additional patches post or pre ?
-In-Reply-To: <EA208D36C9EC4E91934F2BC1305454EE@apexjs> (Sagaert Johan's
-	message of "Wed\, 22 Apr 2009 11\:07\:36 +0200")
-References: <EA208D36C9EC4E91934F2BC1305454EE@apexjs>
-Message-ID: <878wltoxnk.fsf@macbook.be.48ers.dk>
+From: Steffen Schulz <pepe_ml@gmx.net>
+Date: Wed, 22 Apr 2009 14:48:29 +0200
+Subject: [Buildroot] [PATCH] Add host-libglib2 dependencie to dbus-glib
+In-Reply-To: <49CB469A.5080404@eclis.ch>
+References: <49CB469A.5080404@eclis.ch>
+Message-ID: <20090422124829.GA28316@cbg.dyndns.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
+Hi,
 
- Sagaert> Peter i was talking about :
+I just had the same problem when trying to compile trunk for i686.
+However, after applying the fix I got an error about missing '-lexpat'.
+Adding expat to the dependencies fixed that.
 
- Sagaert> Make menuconfig
- -> kernel
- -> patches
- -> additional patch to apply from $DL_DIR
- 
- Sagaert> I was wondering if the patches from DL_DIR are aplied last.
 
-From target/linux/Makefile.in.advanced:
-$(LINUX26_DIR)/.patched: $(LINUX26_DIR)/.unpacked $(LINUX_HEADERS_DEPENDS)
-ifneq ($(LINUX26_PATCH_SOURCE),)
-        toolchain/patch-kernel.sh $(LINUX26_DIR) $(DL_DIR) $(LINUX26_PATCH_SOURC
-E)
-endif
-ifneq ($(LINUX26_BSP_PATCH),)
-        toolchain/patch-kernel.sh $(LINUX26_DIR) $(DL_DIR) $(LINUX26_BSP_PATCH)
-endif
-        toolchain/patch-kernel.sh $(LINUX26_DIR) toolchain/kernel-headers \
-                linux-$(LINUX26_VERSION)-\*.patch{,.gz,.bz2}
-
-So after the BR2_KERNEL_PATCH, but before the toolchain/kernel-headers
-patches.
+On 090326 at 09:15, Jean-Christian de Rivaz wrote:
+> I need the small patch below to successfully buils the dbus-glib. This was tested on a board that is almost like the AT91SAM9261EK, although I don't think it matter for this kind of problem. Without the patch the error was:
+>
+> (cd /home/xxx/buildroot/build_arm/dbus-glib-0.80-host; [...]
+> [...]
+> checking pkg-config is at least version 0.9.0... yes
+> checking for DBUS... yes
+> checking for DBUS_GLIB... no
+> checking for DBUS_GLIB_THREADS... no
+> configure: error: GLib development libraries not found
+> make: *** [/home/xxx/buildroot/build_arm/dbus-glib-0.80-host/.configured] Error 1
+>
+> Index: package/dbus-glib/dbus-glib.mk
+> ===================================================================
+> --- package/dbus-glib/dbus-glib.mk      (r?vision 25823)
+> +++ package/dbus-glib/dbus-glib.mk      (copie de travail)
+> @@ -23,7 +23,7 @@
+>                --disable-doxygen-docs \
+>                --enable-asserts=yes
+>
+> -DBUS_GLIB_DEPENDENCIES = uclibc host-pkgconfig dbus host-dbus host-dbus-glib libglib2
+> +DBUS_GLIB_DEPENDENCIES = uclibc host-pkgconfig dbus host-dbus host-libglib2 host-dbus-glib libglib2
+>
+> $(eval $(call AUTOTARGETS,package,dbus-glib))
+>
+>
+> Best Regards,
 
 -- 
-Bye, Peter Korsgaard
