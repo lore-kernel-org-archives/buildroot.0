@@ -1,117 +1,69 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Wed, 22 Apr 2009 07:27:22 +0000 (UTC)
-Subject: [Buildroot] svn commit: [26183] trunk/buildroot/toolchain: uClibc
-Message-ID: <20090422072722.61A47776C5@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 22 Apr 2009 10:52:56 +0200
+Subject: [Buildroot] Properly setting up hotplug
+In-Reply-To: <E8FBAEC0D1A8452EA1A58E35916B04E6@apexjs> (Sagaert Johan's
+	message of "Sat\, 18 Apr 2009 12\:10\:53 +0200")
+References: <E8FBAEC0D1A8452EA1A58E35916B04E6@apexjs>
+Message-ID: <87hc0hoys7.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-04-22 07:27:22 +0000 (Wed, 22 Apr 2009)
-New Revision: 26183
+>>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
 
-Log:
-toolchain: add BR2_USE_SSP option for stack protection support
+Hi,
 
-Using the support in uClibc.
+ Sagaert> 1) libssp issue
 
-Modified:
-   trunk/buildroot/toolchain/Config.in.2
-   trunk/buildroot/toolchain/uClibc/uClibc-0.9.29.config
-   trunk/buildroot/toolchain/uClibc/uClibc-0.9.30.config
-   trunk/buildroot/toolchain/uClibc/uclibc.mk
+ Sagaert> I started of with a clean build again to do the check:
 
+ Sagaert> I enabled the packages openssh ,openssl
 
-Changeset:
-Modified: trunk/buildroot/toolchain/Config.in.2
-===================================================================
---- trunk/buildroot/toolchain/Config.in.2	2009-04-22 07:27:17 UTC (rev 26182)
-+++ trunk/buildroot/toolchain/Config.in.2	2009-04-22 07:27:22 UTC (rev 26183)
-@@ -85,6 +85,15 @@
- 
- 	  Most people will answer N.
- 
-+config BR2_USE_SSP
-+	bool "Enable stack protection support"
-+	help
-+	  Enable stack smashing protection support using GCCs
-+	  -fstack-protector[-all] option.
-+
-+	  See http://www.linuxfromscratch.org/hints/downloads/files/ssp.txt
-+	  for details.
-+
- choice
- 	prompt "Thread library implementation"
- 	default BR2_PTHREADS_OLD
+ Sagaert> After building the libssp.so.0,libssp.so.0.0.0 and libssp.so are under
+ Sagaert> build_arm/stagingdir/usr/arm-linux-uclibc/lib
+ Sagaert> But they are NOT insite the project_build_arm/.../root
 
-Modified: trunk/buildroot/toolchain/uClibc/uClibc-0.9.29.config
-===================================================================
---- trunk/buildroot/toolchain/uClibc/uClibc-0.9.29.config	2009-04-22 07:27:17 UTC (rev 26182)
-+++ trunk/buildroot/toolchain/uClibc/uClibc-0.9.29.config	2009-04-22 07:27:22 UTC (rev 26183)
-@@ -173,14 +173,18 @@
- #
- # uClibc security related options
- #
--# UCLIBC_SECURITY is not set
- # UCLIBC_BUILD_PIE is not set
- # UCLIBC_HAS_ARC4RANDOM is not set
- # HAVE_NO_SSP is not set
--# UCLIBC_HAS_SSP is not set
-+UCLIBC_HAS_SSP=y
-+# UCLIBC_HAS_SSP_COMPAT is not set
-+# SSP_QUICK_CANARY is not set
-+PROPOLICE_BLOCK_ABRT=y
-+# PROPOLICE_BLOCK_SEGV is not set
-+# UCLIBC_BUILD_SSP is not set
- UCLIBC_BUILD_RELRO=y
- UCLIBC_BUILD_NOW=y
--# UCLIBC_BUILD_NOEXECSTACK is not set
-+UCLIBC_BUILD_NOEXECSTACK=y
- 
- #
- # uClibc development/debugging options
+ Sagaert> Generating RSA Key...
+ Sagaert> /usr/bin/ssh-keygen: can't load library 'libssp.so.0'
+ Sagaert> Generating DSA Key...
+ Sagaert> THIS CAN TAKE A MINUTE OR TWO DEPENDING ON YOUR PROCESSOR!
 
-Modified: trunk/buildroot/toolchain/uClibc/uClibc-0.9.30.config
-===================================================================
---- trunk/buildroot/toolchain/uClibc/uClibc-0.9.30.config	2009-04-22 07:27:17 UTC (rev 26182)
-+++ trunk/buildroot/toolchain/uClibc/uClibc-0.9.30.config	2009-04-22 07:27:22 UTC (rev 26183)
-@@ -196,12 +196,17 @@
- # Security options
- #
- # UCLIBC_BUILD_PIE is not set
--UCLIBC_HAS_ARC4RANDOM=y
-+# UCLIBC_HAS_ARC4RANDOM is not set
- # HAVE_NO_SSP is not set
--# UCLIBC_HAS_SSP is not set
-+UCLIBC_HAS_SSP=y
-+# UCLIBC_HAS_SSP_COMPAT is not set
-+# SSP_QUICK_CANARY is not set
-+PROPOLICE_BLOCK_ABRT=y
-+# PROPOLICE_BLOCK_SEGV is not set
-+# UCLIBC_BUILD_SSP is not set
- UCLIBC_BUILD_RELRO=y
- UCLIBC_BUILD_NOW=y
--# UCLIBC_BUILD_NOEXECSTACK is not set
-+UCLIBC_BUILD_NOEXECSTACK=y
- 
- #
- # uClibc development/debugging options
+ Sagaert> /usr/bin/ssh-keygen: can't load library 'libssp.so.0'
 
-Modified: trunk/buildroot/toolchain/uClibc/uclibc.mk
-===================================================================
---- trunk/buildroot/toolchain/uClibc/uclibc.mk	2009-04-22 07:27:17 UTC (rev 26182)
-+++ trunk/buildroot/toolchain/uClibc/uclibc.mk	2009-04-22 07:27:22 UTC (rev 26183)
-@@ -303,6 +303,11 @@
- 		-e 's,.*UCLIBC_HAS_FPU.*,UCLIBC_HAS_FPU=y\nHAS_FPU=y\nUCLIBC_HAS_FLOATS=y\n,g' \
- 		$(UCLIBC_DIR)/.oldconfig
- endif
-+ifeq ($(BR2_USE_SSP),y)
-+	$(SED) 's,^.*UCLIBC_HAS_SSP[^_].*,UCLIBC_HAS_SSP=y,g' $(UCLIBC_DIR)/.oldconfig
-+else
-+	$(SED) 's,^.*UCLIBC_HAS_SSP[^_].*,UCLIBC_HAS_SSP=n,g' $(UCLIBC_DIR)/.oldconfig
-+endif
- 	$(SED) '/UCLIBC_HAS_THREADS/d' $(UCLIBC_DIR)/.oldconfig
- 	$(SED) '/LINUXTHREADS/d' $(UCLIBC_DIR)/.oldconfig
- 	$(SED) '/LINUXTHREADS_OLD/d' $(UCLIBC_DIR)/.oldconfig
+That's not really an issue with openssh as such, but the fact that we
+used to compile gcc with --enable-libssp and NOT install the libs in
+the target. It should be fixed in r26182 - r26183.
+
+ Sagaert> 2) dbus
+
+ Sagaert> After distclean the build_arm directoory gets cleaned,but
+ Sagaert> the autotools-stamps not, As a result dbus get build again
+ Sagaert> but never installed again.(this may apply to others too)
+
+Hmm.. distclean removes toolchain_build_arch, build_arch,
+project_build_arch and binaries, so this I don't get. Are you talking
+about the dbus-clean / dbus-dirclean make targets instead?
+
+ Sagaert> 3) .. /root/var
+
+ Sagaert> I always remove the var directory and replace it with a
+ Sagaert> symlink to /tmp/ I then create the required directory
+ Sagaert> structure (var lock, etc) in init.d/ S00mktmp Doing so
+ Sagaert> results in var been actually on tmpfs, this avoids that my
+ Sagaert> flash gets written.
+
+Yes, that's pretty similar to what the generic target does (/var is on
+rootfs, but the subdirs cache, lock, log, pcmcia, run, spool, tmp are
+all symlinks to /tmp.
+
+ Sagaert> Maybe this is something to consider making this configurable.
+
+ Sagaert> (for the same reason i have put a symplink /etc/resolv.conf
+ Sagaert> pointing to /tmp/ resolv.conf )
+
+Same for the generic target.
+
+-- 
+Bye, Peter Korsgaard
