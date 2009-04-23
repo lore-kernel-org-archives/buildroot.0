@@ -1,7 +1,7 @@
 From: Will Newton <will.newton@gmail.com>
-Date: Thu, 23 Apr 2009 11:21:00 +0100
-Subject: [Buildroot] [PATCH] Update config.sub even if we called autoreconf
-Message-ID: <87a5b0800904230321q7ba4ba27ge6a4f7d8b491af7f@mail.gmail.com>
+Date: Thu, 23 Apr 2009 11:28:55 +0100
+Subject: [Buildroot] [PATCH] Update qtopia4 source URL
+Message-ID: <87a5b0800904230328r3be9da5cldb5c9eb3ce4efa26@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,35 +10,26 @@ To: buildroot@busybox.net
 
 Hi all,
 
-If a package asks for autoreconf to be called and the user has also
-asked for the config.{sub,guess} to be updated then the
-config.{sub,guess} will be copied but overwritten by the autoreconf.
-This patch does a second copy after the autoreconf to make sure the
-user preference is preserved. I think this is safe to do because
-nothing in the autoreconf directly depends upon the contents of
-config.sub.
+The location of the Qt source tarballs is moving away from the
+Trolltech domain. Also I think it's better to use http instead of ftp,
+especially in corporate environments. The attached patch updates the
+source URL to the most recent http one.
 
---- package/Makefile.autotools.in       21 Apr 2009 10:42:40 -0000      1.1.1.2
-+++ package/Makefile.autotools.in       23 Apr 2009 10:14:44 -0000
-@@ -232,6 +232,13 @@
-                toolchain/patch-kernel.sh $${i%/*} package
-buildroot-libtool.patch; \
-                done \
-        fi
-+ifeq ($(BR2_UPDATE_CONFIG),y)
-+       $(Q)(for file in config.guess config.sub; do \
-+               for i in $$(find $(@D) -name $$file); do \
-+                       cp package/gnuconfig/$$file $$i; \
-+               done; \
-+       done)
-+endif
-        $(Q)touch $@
-
- # Configuring
+--- package/qtopia4/qtopia4.mk  21 Apr 2009 10:42:40 -0000      1.1.1.3
++++ package/qtopia4/qtopia4.mk  23 Apr 2009 10:26:02 -0000
+@@ -37,7 +37,7 @@
+ QTOPIA4_TARGET_DIR:=$(BUILD_DIR)/qt-embedded-linux-commercial-src-$(QTOPIA4_VERSION)
+ QTOPIA4_CONFIGURE+= -no-sql-oci -no-sql-tds -no-sql-db2
+ else # Good, good, we are free:
+-QTOPIA4_SITE=ftp://ftp.trolltech.com/qt/source
++QTOPIA4_SITE=http://get.qtsoftware.com/qt/source
+ QTOPIA4_SOURCE:=qt-embedded-linux-opensource-src-$(QTOPIA4_VERSION).tar.bz2
+ QTOPIA4_TARGET_DIR:=$(BUILD_DIR)/qt-embedded-linux-opensource-src-$(QTOPIA4_VERSION)
+ ifeq ($(BR2_PACKAGE_QTOPIA4_LICENSE_APPROVED),y)
 -------------- next part --------------
 A non-text attachment was scrubbed...
-Name: autotools-config-update.patch
+Name: qtopia4-source-url.patch
 Type: application/octet-stream
-Size: 501 bytes
+Size: 857 bytes
 Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090423/8c10b766/attachment.obj>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090423/597ab13f/attachment-0001.obj>
