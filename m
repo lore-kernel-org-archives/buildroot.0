@@ -1,28 +1,38 @@
-From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
-Date: Thu, 23 Apr 2009 13:27:08 -0300
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 23 Apr 2009 20:41:25 +0200
 Subject: [Buildroot] svn commit: [26195] trunk/buildroot/package/qtopia4
-In-Reply-To: <20090423124937.4166977108@busybox.osuosl.org>
+In-Reply-To: <d6cda7730904230927j18346c76ie7207660af0301f6@mail.gmail.com>
+	("Thiago A. =?utf-8?Q?Corr=C3=AAa=22's?= message of "Thu\, 23 Apr 2009
+	13\:27\:08 -0300")
 References: <20090423124937.4166977108@busybox.osuosl.org>
-Message-ID: <d6cda7730904230927j18346c76ie7207660af0301f6@mail.gmail.com>
+	<d6cda7730904230927j18346c76ie7207660af0301f6@mail.gmail.com>
+Message-ID: <87mya7mcve.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Thiago" == Thiago A Corr?a <thiago.correa@gmail.com> writes:
 
-On Thu, Apr 23, 2009 at 9:49 AM,  <jacmet@uclibc.org> wrote:
-> -QTOPIA4_SITE=ftp://ftp.trolltech.com/qt/source
-> +QTOPIA4_SITE=http://get.qtsoftware.com/qt/source
+ Thiago> Hi,
+ Thiago> On Thu, Apr 23, 2009 at 9:49 AM,  <jacmet@uclibc.org> wrote:
+ >> -QTOPIA4_SITE=ftp://ftp.trolltech.com/qt/source
+ >> +QTOPIA4_SITE=http://get.qtsoftware.com/qt/source
 
-That's a fix that didn't need fixing, ftp.trolltech.com works perfectly too.
+ Thiago> That's a fix that didn't need fixing, ftp.trolltech.com works
+ Thiago> perfectly too.
 
-Well, as long as it works, it's fine by me.
+Sure, but we normally use http URLs where possible as they more often
+work behind firewalls than ftp ones.
 
-I've just received an email from Nokia/Qt Software that 4.5.1 is out,
-I will update the version as soon as I finish testing if the x86
-workaround is still necessary or not.
+ Thiago> Well, as long as it works, it's fine by me.
 
-Thanks,
-   Thiago A. Correa
+ Thiago> I've just received an email from Nokia/Qt Software that 4.5.1 is out,
+ Thiago> I will update the version as soon as I finish testing if the x86
+ Thiago> workaround is still necessary or not.
+
+Great!
+
+-- 
+Bye, Peter Korsgaard
