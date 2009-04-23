@@ -1,9 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 23 Apr 2009 11:07:47 +0000 (UTC)
+Date: Thu, 23 Apr 2009 11:08:46 +0000 (UTC)
 Subject: [Buildroot] [Bug 299] add shared-mime-info package
 In-Reply-To: <bug-299-163@https.bugs.busybox.net/>
 References: <bug-299-163@https.bugs.busybox.net/>
-Message-ID: <20090423110747.C8ED277105@busybox.osuosl.org>
+Message-ID: <20090423110846.979BD77105@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,10 +16,10 @@ https://bugs.busybox.net/show_bug.cgi?id=299
 
 
 
---- Comment #2 from Sven Neumann <s.neumann@phase-zero.de>  2009-04-23 11:07:47 UTC ---
-Created an attachment (id=259)
- --> (https://bugs.busybox.net/attachment.cgi?id=259)
-Config.in for shared-mime-info
+--- Comment #3 from Sven Neumann <s.neumann@phase-zero.de>  2009-04-23 11:08:45 UTC ---
+Created an attachment (id=261)
+ --> (https://bugs.busybox.net/attachment.cgi?id=261)
+shared-mime-info.mk
 
 
 -- 
