@@ -1,7 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 23 Apr 2009 10:58:06 +0000 (UTC)
-Subject: [Buildroot] [Bug 299] New: add shared-mime-info package
-Message-ID: <bug-299-163@https.bugs.busybox.net/>
+Date: Thu, 23 Apr 2009 10:59:23 +0000 (UTC)
+Subject: [Buildroot] [Bug 299] add shared-mime-info package
+In-Reply-To: <bug-299-163@https.bugs.busybox.net/>
+References: <bug-299-163@https.bugs.busybox.net/>
+Message-ID: <20090423105923.93C8277105@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +12,14 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=299
 
-           Summary: add shared-mime-info package
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: enhancement
-          Priority: P4
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: s.neumann at phase-zero.de
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
 
 
-The shared-mime-info package contains the core database of common types and the
-update-mime-database command used to extend it.
 
-The attached files and patches add the shared-mime-info package to buildroot.
-The only thing that is actually needed in the target is the file mime.cache. In
-order to generate that file, shared-mime-info is installed into the
-staging-dir. The idea is that other packages might add more mime-info files and
-these should be collected in staging-dir. From there the mime.cache file is
-created using tools installed in host-dir and copied to target.
+
+--- Comment #1 from Sven Neumann <s.neumann@phase-zero.de>  2009-04-23 10:59:23 UTC ---
+Created an attachment (id=257)
+ --> (https://bugs.busybox.net/attachment.cgi?id=257)
+add host-libxml2 target for xmllint
 
 
 -- 
