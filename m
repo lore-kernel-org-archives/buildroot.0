@@ -1,28 +1,32 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 23 Apr 2009 11:29:05 +0000 (UTC)
-Subject: [Buildroot] [Bug 303] add gvfs package
-In-Reply-To: <bug-303-163@https.bugs.busybox.net/>
-References: <bug-303-163@https.bugs.busybox.net/>
-Message-ID: <20090423112906.1AD2D77105@busybox.osuosl.org>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Thu, 23 Apr 2009 11:44:49 +0000 (UTC)
+Subject: [Buildroot] svn commit: [26191] trunk/buildroot/toolchain/gcc:
+	4.3.1 4.3.2 4.3.3
+Message-ID: <20090423114449.4F61776454@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=303
+Author: jacmet
+Date: 2009-04-23 11:44:48 +0000 (Thu, 23 Apr 2009)
+New Revision: 26191
+
+Log:
+toolchain/gcc: fix PR 32044 patch
+
+Somehow the patch was a patch adding a patch instead of the patch itself.
+
+Modified:
+   trunk/buildroot/toolchain/gcc/4.3.1/901-backport-fix-for-bug-32044.patch
+   trunk/buildroot/toolchain/gcc/4.3.2/901-backport-fix-for-bug-32044.patch
+   trunk/buildroot/toolchain/gcc/4.3.3/901-backport-fix-for-bug-32044.patch
 
 
+Changeset:
 
+Sorry, the patch is too large to include (1157 lines).
+Please use ViewCVS to see it!
 
-
---- Comment #2 from Sven Neumann <s.neumann@phase-zero.de>  2009-04-23 11:29:05 UTC ---
-Created an attachment (id=269)
- --> (https://bugs.busybox.net/attachment.cgi?id=269)
-gvfs.mk
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+http://uclibc.org/cgi-bin/viewcvs.cgi?view=rev&root=svn&rev=26191
