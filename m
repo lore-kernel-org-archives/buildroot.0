@@ -1,42 +1,36 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Fri, 24 Apr 2009 18:42:18 +0000 (UTC)
-Subject: [Buildroot] svn commit: [26202] trunk/buildroot/toolchain/uClibc
-Message-ID: <20090424184219.14D7077148@busybox.osuosl.org>
+From: Mike Tinnes <mike_tinnes@hotmail.com>
+Date: Fri, 24 Apr 2009 14:59:18 -0500
+Subject: [Buildroot] Qt compiler flags
+Message-ID: <BAY105-W31F28B116E99DD4097DB1991720@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-04-24 18:42:18 +0000 (Fri, 24 Apr 2009)
-New Revision: 26202
 
-Log:
-toolchain/uClibc: 0.9.30.1 getaddrinfo fix for intfs without address
+ 
 
-From uClibc r24336.
+I'm building a Mipsel32 toolchain with Qt enabled and ran into an issue when compiling the Qt libs.  I got the following error repeated:
 
-Added:
-   trunk/buildroot/toolchain/uClibc/uClibc-0.9.30.1-fix-getaddrinfo.patch
+ 
+
+Error: opcode not supported on this processor: mips1 (mips1) `ll $8,0($4)'
+
+ 
+
+I was able to correct this by adding -mips32 to the CXX_FLAGS in the makefiles of the failing subprojects. C_FLAGS has -mips32, CXX_FLAGS does not.
+
+ 
+
+I'm wondering if this is an issue with the buildroot or the Qt configure?
+
+Thanks, Mike
 
 
-Changeset:
-Added: trunk/buildroot/toolchain/uClibc/uClibc-0.9.30.1-fix-getaddrinfo.patch
-===================================================================
---- trunk/buildroot/toolchain/uClibc/uClibc-0.9.30.1-fix-getaddrinfo.patch	                        (rev 0)
-+++ trunk/buildroot/toolchain/uClibc/uClibc-0.9.30.1-fix-getaddrinfo.patch	2009-04-24 18:42:18 UTC (rev 26202)
-@@ -0,0 +1,13 @@
-+[PATCH]: runp->ifa_addr can be NULL. Backport of r24336.
-+diff -Narup uClibc-0.9.30.1.orig/libc/inet/getaddrinfo.c uClibc-0.9.30.1/libc/inet/getaddrinfo.c
-+--- uClibc-0.9.30.1.orig/libc/inet/getaddrinfo.c	2009-02-26 21:49:14.000000000 +0900
-++++ uClibc-0.9.30.1/libc/inet/getaddrinfo.c	2009-03-06 00:59:23.000000000 +0900
-+@@ -187,6 +187,8 @@ static unsigned __check_pf(void)
-+ 		}
-+ 
-+ 		for (runp = ifa; runp != NULL; runp = runp->ifa_next) {
-++			if (runp->ifa_addr == NULL)
-++				continue;
-+ #if defined __UCLIBC_HAS_IPV4__
-+ 			if (runp->ifa_addr->sa_family == PF_INET)
-+ 				seen |= SEEN_IPV4;
+ 
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090424/c8ae2edd/attachment-0001.htm>
