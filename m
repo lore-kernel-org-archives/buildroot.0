@@ -1,9 +1,11 @@
 From: =?gb2312?B?sMu95LjnuOf=?= <l0op8ack@hotmail.com>
-Date: Fri, 24 Apr 2009 17:07:07 +0000
-Subject: [Buildroot] this may be a bug in busybox
-In-Reply-To: <4B27817CD25E4E418A227BED51393574@apexjs>
-References: <4B27817CD25E4E418A227BED51393574@apexjs>
-Message-ID: <BLU139-W2910E8768336396EA17148DD720@phx.gbl>
+Date: Fri, 24 Apr 2009 17:28:04 +0000
+Subject: [Buildroot] ping/wget/ftpget 'Segmentation fault' while PPPoE
+ interface up
+In-Reply-To: <d6a0e5a20904231919v3a41e15ei4cde751e1be86703@mail.gmail.com>
+References: <BLU139-W15BCD6DE5E4658EA20F91DDD750@phx.gbl>
+	<d6a0e5a20904231919v3a41e15ei4cde751e1be86703@mail.gmail.com>
+Message-ID: <BLU139-W341D9DA8E84C62448CACA2DD720@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,43 +13,100 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-route -n
--n Don't resolve names
+Hi,
+
+  Yes, this patch works.
 
  
-> From: sagaert.johan at skynet.be
-> To: buildroot at busybox.net
-> Date: Fri, 24 Apr 2009 19:03:23 +0200
-> Subject: [Buildroot] this may be a bug in busybox
+
+  The physical interface 'eth2' 'ppp0' used has no ipv4/ipv6 address.
+
+ 
+
+  Thanks.
+
+ 
+> Date: Fri, 24 Apr 2009 11:19:41 +0900
+> Subject: Re: [Buildroot] ping/wget/ftpget 'Segmentation fault' while PPPoE interface up
+> From: hiroshi.shinji at gmail.com
+> To: l0op8ack at hotmail.com
+> CC: buildroot at busybox.net
 > 
-> hi
+> Hi,
 > 
-> in busybox 1.14.0
+> If the interface used by ppp0 or others has no address,
+> try to patch the file append to this mail to uClibc 0.9.30.1
+> (or use uClibc snapshot).
 > 
-> # route
-> Kernel IP routing table
-> Destination Gateway Genmask Flags Metric Ref Use
-> Iface
-> 192.168.1.0 * 255.255.255.0 U 0 0 0 eth0
-> 127.0.0.0 * 255.0.0.0 U 0 0 0 lo
-> default 1.1.168.192.in- 0.0.0.0 UG 0 0 0 eth0
-> #
+> This patch already applied to uClibc snapshot.
+> 
+> Regards,
 > 
 > 
-> 1.1.168.192 should be 192.168.1.1
+> 2009/4/24 ???????? <l0op8ack@hotmail.com>:
+> > hi,all
+> > I'm a buildroot user who struggle to make an old celeron pc with 2 ethernet
+> > NICs as access router.
+> > The leased line is ADSL(PPPoE).
+> >
+> > I statically linked busybox against uclibc 0.9.30.1 ,using buildroot.
+> >
+> > Bringing up ppp0 interface by rp-pppoe pppoe-connect script,so far so good.
+> > Executing 'ping' ip address, the 'ping' command reports 'Segmentation
+> > fault'.
+> > In fact, any network related command , such as wget/ftpget, report
+> > 'Segmentation fault'.
+> >
+> > Shutdown the ppp0 interface by killing the 'pppd' and 'pppoe' processes,
+> > ping some local ip address, no 'Segmentation fault' reportes this time,
+> > and wget/ftpget work.
+> >
+> > Bringing up ppp interface will crash the network related command.
+> >
+> > I follow the busybox-1.13.4/networking/ping.c,
+> > and find that the reason is 'getaddrinfo' call faults in fucntion 'static
+> > len_and_sockaddr* str2sockaddr',
+> > at line 191,busyb ox-1.13.4/libbb/xconnect.c
+> >
+> > 135 static len_and_sockaddr* str2sockaddr(
+> > 136 const char *host, int port,
+> > 137 USE_FEATURE_IPV6(sa_family_t af,)
+> > 138 int ai_flags)
+> > 139 {
+> > 140 int rc;
+> > 141 len_and_sockaddr *r = NULL;
+> > 142 struct addrinfo *result = NULL;
+> > 143 struct addrinfo *used_res;
+> > 144 const char *org_host = host; /* only for error msg */
+> > 145 const char *cp;
+> > 146 struct addrinfo hint;
+> > ...
+> > 191 rc = getaddrinfo(host , NULL, &hint, &result);
+> > ...
+> >
+> > I build busybox against glibc ,linked statically and try again,
+> > busybox works fine, whether bringing up ppp interface or not.
+> >
+> > It's a uclibc problem, maybe.
+> >
+> > ________________________________
+> > ??MSN???????????????????????????????? ??????????
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> >
 > 
-> Anyone else noticed this ?
-> Johan
 > 
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> -- 
+> ?`?? ??
+> hiroshi.shinji at gmail.com
+> http://d.hatena.ne.jp/hshinji/
 
 _________________________________________________________________
-?Windows Live ??????????Messenger?
-http://im.live.cn/
+Live Search??????????????????????????????
+http://www.live.com/?scope=video
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090424/64995c91/attachment.htm>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090424/84ac21be/attachment.htm>
