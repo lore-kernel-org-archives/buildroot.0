@@ -1,27 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 27 Apr 2009 08:59:29 +0200
-Subject: [Buildroot] build process needs host executable
-In-Reply-To: <20090416212454.5D43A1C806D@whitealder.osuosl.org> (Chris Bare's
-	message of "Thu\, 16 Apr 2009 17\:23\:16 -0400 \(EDT\)")
-References: <20090416212454.5D43A1C806D@whitealder.osuosl.org>
-Message-ID: <87preyh99q.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 27 Apr 2009 07:41:47 +0000 (UTC)
+Subject: [Buildroot] [Bug 269] iptables fails to compile
+In-Reply-To: <bug-269-163@https.bugs.busybox.net/>
+References: <bug-269-163@https.bugs.busybox.net/>
+Message-ID: <20090427074147.2B9C17745E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Chris" == Chris Bare <chris@bareflix.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=269
 
-Hi,
 
- Chris> Can anyone point me to an example of how this was dealt with
- Chris> in other packages?  In this case, I don't think the executable
- Chris> is needed on the target, it is just part of the build process.
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-Look at the packages we have which first build a -host version and
-uses the binaries from there. dbus-glib is an example (it needs
-dbus-binding-tool).
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
+
+
+
+
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-04-27 07:41:46 UTC ---
+Sorry, I cannot reproduce it here. It builds fine for x86-64 with ipv6 support
+her (Debian x86-64). Please post your .config and info about your host setup if
+you still have this problem.
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
