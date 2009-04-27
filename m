@@ -1,23 +1,24 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 27 Apr 2009 14:10:13 +0000 (UTC)
-Subject: [Buildroot] [Bug 261] Patch to add wxWidgets to Buildroot
-In-Reply-To: <bug-261-163@https.bugs.busybox.net/>
-References: <bug-261-163@https.bugs.busybox.net/>
-Message-ID: <20090427141013.8808B7745E@busybox.osuosl.org>
+Date: Mon, 27 Apr 2009 14:10:20 +0000 (UTC)
+Subject: [Buildroot] [Bug 269] iptables fails to compile
+In-Reply-To: <bug-269-163@https.bugs.busybox.net/>
+References: <bug-269-163@https.bugs.busybox.net/>
+Message-ID: <20090427141020.3E1747745E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=261
+https://bugs.busybox.net/show_bug.cgi?id=269
 
 
 
 
 
---- Comment #2 from Lloyd Sargent <lsargent@txdigital.com>  2009-04-27 14:10:12 UTC ---
-Added the patch. My bad.
+--- Comment #4 from Peter Korsgaard <jacmet@uclibc.org>  2009-04-27 14:10:19 UTC ---
+hmm, I'm afraid my machines all run 64bit, so you'll have to debug that
+yourself. try comparing libext4.a from the 32bit and 64bit builds.
 
 
 -- 
