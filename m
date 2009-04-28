@@ -1,35 +1,23 @@
-From: jacmet at uclibc.org <jacmet@uclibc.org>
-Date: Tue, 28 Apr 2009 07:07:12 +0000 (UTC)
-Subject: [Buildroot] svn commit: [26224]
-	trunk/buildroot/toolchain/kernel-headers
-Message-ID: <20090428070712.A062C766D5@busybox.osuosl.org>
+From: Steffen Schulz <pepe_ml@gmx.net>
+Date: Tue, 28 Apr 2009 11:10:39 +0200
+Subject: [Buildroot] No network interface when used as DomU
+In-Reply-To: <20090427173625.GA19953@cbg.dyndns.org>
+References: <20090427173625.GA19953@cbg.dyndns.org>
+Message-ID: <20090428091038.GA21964@cbg.dyndns.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: jacmet
-Date: 2009-04-28 07:07:11 +0000 (Tue, 28 Apr 2009)
-New Revision: 26224
+On 090427 at 19:45, Steffen Schulz wrote:
+> Does anybody know what this can be? Do I need to compile against
+> xen-kernel? Am I missing some switches? Does some lib/tool not support
+> virtual xen interfaces?
 
-Log:
-toolchain/kernel-headers: bump 2.6.29 version
+Nevermind. The stock opensuse kernel has the xen pseudo driver as
+a module, so it needs to be in the ramdisk of course..
 
-Modified:
-   trunk/buildroot/toolchain/kernel-headers/Config.in
-
-
-Changeset:
-Modified: trunk/buildroot/toolchain/kernel-headers/Config.in
-===================================================================
---- trunk/buildroot/toolchain/kernel-headers/Config.in	2009-04-27 23:29:14 UTC (rev 26223)
-+++ trunk/buildroot/toolchain/kernel-headers/Config.in	2009-04-28 07:07:11 UTC (rev 26224)
-@@ -62,6 +62,6 @@
- 	default "2.6.26.8"	if BR2_KERNEL_HEADERS_2_6_26
- 	default "2.6.27.21"	if BR2_KERNEL_HEADERS_2_6_27
- 	default "2.6.28.9"	if BR2_KERNEL_HEADERS_2_6_28
--	default "2.6.29.1"	if BR2_KERNEL_HEADERS_2_6_29
-+	default "2.6.29.2"	if BR2_KERNEL_HEADERS_2_6_29
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 
+-- 
+pepe at unixfan.net                            gpg --recv-key A04D7875
+Key fingerprint: B805 57BE E4AF 0104 CC51  77A1 CE6F 8D46 A04D 7875
