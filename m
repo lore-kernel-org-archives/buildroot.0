@@ -1,27 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 28 Apr 2009 23:22:51 +0200
-Subject: [Buildroot] svn commit: [26226] trunk/buildroot/package/openssl
-In-Reply-To: <20090428230519.1b413103@surf> (Thomas Petazzoni's message of
-	"Tue\, 28 Apr 2009 23\:05\:19 +0200")
-References: <20090428183006.9CFDB77118@busybox.osuosl.org>
-	<20090428230519.1b413103@surf>
-Message-ID: <874ow8fp78.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 28 Apr 2009 22:05:47 +0000 (UTC)
+Subject: [Buildroot] [Bug 299] add shared-mime-info package
+In-Reply-To: <bug-299-163@https.bugs.busybox.net/>
+References: <bug-299-163@https.bugs.busybox.net/>
+Message-ID: <20090428220547.DD9E576469@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=299
 
- Thomas> Le Tue, 28 Apr 2009 18:30:06 +0000 (UTC),
- Thomas> jacmet at uclibc.org a ?crit :
 
- >> package/openssl: make sure TARGET_CFLAGS are used
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
- Thomas> I confirm that this patch fixes OpenSSL build with external toolchain.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         AssignedTo|unassigned at buildroot.uclibc.|thomas.petazzoni at free-
+                   |org                         |electrons.com
 
-Great, thanks!
+
+
+
+--- Comment #5 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2009-04-28 22:05:47 UTC ---
+I'm testing these patches now.
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
