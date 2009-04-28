@@ -1,30 +1,24 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 28 Apr 2009 22:05:47 +0000 (UTC)
-Subject: [Buildroot] [Bug 299] add shared-mime-info package
-In-Reply-To: <bug-299-163@https.bugs.busybox.net/>
-References: <bug-299-163@https.bugs.busybox.net/>
-Message-ID: <20090428220547.DD9E576469@busybox.osuosl.org>
+Date: Tue, 28 Apr 2009 22:07:19 +0000 (UTC)
+Subject: [Buildroot] [Bug 271] Library 'libgcc_s.so.1' not installed in
+	search path
+In-Reply-To: <bug-271-163@https.bugs.busybox.net/>
+References: <bug-271-163@https.bugs.busybox.net/>
+Message-ID: <20090428220719.6DB9C76475@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=299
-
-
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         AssignedTo|unassigned at buildroot.uclibc.|thomas.petazzoni at free-
-                   |org                         |electrons.com
+https://bugs.busybox.net/show_bug.cgi?id=271
 
 
 
 
---- Comment #5 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2009-04-28 22:05:47 UTC ---
-I'm testing these patches now.
+
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2009-04-28 22:07:18 UTC ---
+Can you send a simple .config reproducing the issue ?
 
 
 -- 
