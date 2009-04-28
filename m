@@ -1,107 +1,81 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Apr 2009 22:28:27 +0200
-Subject: [Buildroot] [PATCH] Improve external toolchain checks
-Message-ID: <20090428222827.0ee278a7@surf>
+From: Tobias McNulty <tobias@caktusgroup.com>
+Date: Tue, 28 Apr 2009 16:46:47 -0400
+Subject: [Buildroot] udhcpc: sendto: Network is down
+Message-ID: <49F76B37.9040601@caktusgroup.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Improve external toolchain checks
+I've been working with a buildroot-2009.02 environment that I built for
+a TS-7400 board (uses a 2.4 kernel) quite successfully for several
+months now.  So far I've been configuring the board's network settings
+manually using ifconfig and route.
 
-This patch adds some checks on the external toolchains.
+Recently I tried to start using DHCP, but udhcpc is not happy about
+something:
 
-First, it checks that the C library selection is correct, by looking
-if gcc is able to find the main C library file through the
--print-file-name option.
+# ifconfig eth0 up
+# ifconfig eth0
 
-Then, it attempts to check if the Buildroot toolchain options match
-the configuration of the toolchain :
+eth0      Link encap:Ethernet  HWaddr 00:D0:69:40:7C:D6
 
- * for glibc, it checks that IPv6, RPC, locales, wide-char, large file
-   support Buildroot options are enabled, since with glibc all these
-   features are always available (at least this is the assumption we
-   make) ;
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
 
- * for uClibc, it checks the Buildroot options with the uClibc
-   configuration file in $SYSROOT_DIR/usr/include/bits/uClibc_config.h
+          RX packets:51 errors:0 dropped:0 overruns:0 frame:0
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/external-toolchain/ext-tool.mk |   51 +++++++++++++++++++++++++++++++
- 1 file changed, 51 insertions(+)
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
 
-Index: buildroot/toolchain/external-toolchain/ext-tool.mk
-===================================================================
---- buildroot.orig/toolchain/external-toolchain/ext-tool.mk
-+++ buildroot/toolchain/external-toolchain/ext-tool.mk
-@@ -56,10 +56,61 @@
- EXTERNAL_LIBS=ld-linux.so.3 libcrypt.so.1 libdl.so.2 libgcc_s.so.1 libm.so.6 libnsl.so.1 libpthread.so.0 libresolv.so.2 librt.so.1 libutil.so.1 libnss_files.so.2
- endif
- 
-+check_clibrary = \
-+	if ! test -f `$(TARGET_CC) -print-file-name=$(EXTERNAL_LIBC)` ; then \
-+		echo "Incorrect selection of the C library"; \
-+		exit -1; \
-+	fi
-+
-+# 1: Buildroot option name
-+# 2: message
-+check_glibc_feature = \
-+	if [ x$($(1)) != x"y" ] ; then \
-+		echo "$(2) available in C library, please enable $(1)" ; \
-+		exit 1 ; \
-+	fi
-+
-+check_glibc = \
-+	$(call check_glibc_feature,BR2_LARGEFILE,Large file support) ;\
-+	$(call check_glibc_feature,BR2_INET_IPV6,IPv6 support) ;\
-+	$(call check_glibc_feature,BR2_INET_RPC,RPC support) ;\
-+	$(call check_glibc_feature,BR2_ENABLE_LOCALE,Locale support) ;\
-+	$(call check_glibc_feature,BR2_USE_WCHAR,Wide char support)
-+
-+# 1: uClibc macro name
-+# 2: Buildroot option name
-+# 3: uClibc config file
-+# 4: message
-+check_uclibc_feature = \
-+	IS_IN_LIBC=`grep -q "\#define $(1) 1" $(3) && echo y` ; \
-+	if [ x$($(2)) != x"y" -a x$${IS_IN_LIBC} == x"y" ] ; then \
-+		echo "$(4) available in C library, please enable $(2)" ; \
-+		exit 1 ; \
-+	fi ; \
-+	if [ x$($(2)) == x"y" -a x$${IS_IN_LIBC} != x"y" ] ; then \
-+		echo "$(4) not available in C library, please disable $(2)" ; \
-+		exit 1 ; \
-+	fi
-+
-+check_uclibc = \
-+	SYSROOT_DIR=`$(TARGET_CC) -v 2>&1 | grep ^Configured | tr " " "\n" | grep -- "--with-sysroot" | cut -f2 -d=`; \
-+	UCLIBC_CONFIG_FILE=$${SYSROOT_DIR}/usr/include/bits/uClibc_config.h ; \
-+	$(call check_uclibc_feature,__UCLIBC_HAS_LFS__,BR2_LARGEFILE,$${UCLIBC_CONFIG_FILE},Large file support) ;\
-+	$(call check_uclibc_feature,__UCLIBC_HAS_IPV6__,BR2_INET_IPV6,$${UCLIBC_CONFIG_FILE},IPv6 support) ;\
-+	$(call check_uclibc_feature,__UCLIBC_HAS_RPC__,BR2_INET_RPC,$${UCLIBC_CONFIG_FILE},RPC support) ;\
-+	$(call check_uclibc_feature,__UCLIBC_HAS_LOCALE__,BR2_ENABLE_LOCALE,$${UCLIBC_CONFIG_FILE},Locale support) ;\
-+	$(call check_uclibc_feature,__UCLIBC_HAS_WCHAR__,BR2_USE_WCHAR,$${UCLIBC_CONFIG_FILE},Wide char support) ;\
- 
- uclibc: dependencies $(TARGET_DIR)/lib/$(EXTERNAL_LIBC)
- 
- $(TARGET_DIR)/lib/$(EXTERNAL_LIBC):
-+	@echo "Checking external toolchain settings"
-+	@$(call check_clibrary)
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
-+	@$(call check_uclibc)
-+else
-+	@$(call check_glibc)
-+endif
- 	mkdir -p $(TARGET_DIR)/lib
- 	@echo "Copy external toolchain libraries to target..."
- 	@$(call copy_toolchain_lib_root, $(EXTERNAL_LIBC), /lib, $(BR2_TOOLCHAIN_EXTERNAL_STRIP))
+          collisions:0 txqueuelen:1000
+
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+          Interrupt:39
+# udhcpc -i eth0
+
+udhcpc (v1.13.2) started
+
+Sending discover...
+
+udhcpc: sendto: Network is down
+
+Sending discover...
+
+udhcpc: sendto: Network is down
 
 
+I've verified the network is actually up (all the lights are on).  If I
+configure an IP address manually it works fine, e.g.:
+
+# ifconfig eth0 192.168.1.30 up
+
+# ping 192.168.1.1
+
+PING 192.168.1.1 (192.168.1.1): 56 data bytes
+
+64 bytes from 192.168.1.1: seq=0 ttl=64 time=0.000 ms
+
+64 bytes from 192.168.1.1: seq=1 ttl=64 time=0.000 ms
+
+64 bytes from 192.168.1.1: seq=2 ttl=64 time=0.000 ms
+
+
+
+--- 192.168.1.1 ping statistics ---
+
+3 packets transmitted, 3 packets received, 0% packet loss
+
+round-trip min/avg/max = 0.000/0.000/0.000 ms
+
+What could I be missing?
+
+Thanks
+Tobias
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Tobias McNulty
+Caktus Consulting Group, LLC
+P.O. Box 1454
+Carrboro, NC 27510
+(919) 951-0052
+http://www.caktusgroup.com
