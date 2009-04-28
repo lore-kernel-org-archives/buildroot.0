@@ -1,50 +1,52 @@
-From: wberrier at uclibc.org <wberrier@uclibc.org>
-Date: Tue, 28 Apr 2009 17:33:44 +0000 (UTC)
-Subject: [Buildroot] svn commit: [26225] trunk/buildroot
-Message-ID: <20090428173345.49B65766D5@busybox.osuosl.org>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Tue, 28 Apr 2009 18:30:06 +0000 (UTC)
+Subject: [Buildroot] svn commit: [26226] trunk/buildroot/package/openssl
+Message-ID: <20090428183006.9CFDB77118@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: wberrier
-Date: 2009-04-28 17:33:44 +0000 (Tue, 28 Apr 2009)
-New Revision: 26225
+Author: jacmet
+Date: 2009-04-28 18:30:06 +0000 (Tue, 28 Apr 2009)
+New Revision: 26226
 
 Log:
-Older versions of 'find' don't have the '-delete' option
+package/openssl: make sure TARGET_CFLAGS are used
 
-Use find's '-print0' and 'xargs -0' as an equivalent alternative.
+And remove the unnedded c_rehash binary while we're at it.
+
+Patch by Gustavo Zacarias <gustavo@zacarias.com.br>, closes #307.
+
+Saves ~250k on PPC with default config (E.G. -Os)
 
 Modified:
-   trunk/buildroot/Makefile
+   trunk/buildroot/package/openssl/openssl.mk
 
 
 Changeset:
-Modified: trunk/buildroot/Makefile
+Modified: trunk/buildroot/package/openssl/openssl.mk
 ===================================================================
---- trunk/buildroot/Makefile	2009-04-28 07:07:11 UTC (rev 26224)
-+++ trunk/buildroot/Makefile	2009-04-28 17:33:44 UTC (rev 26225)
-@@ -334,8 +334,8 @@
- 		fi; \
- 		touch $(STAGING_DIR)/.fakeroot.00000; \
- 	fi
--	-find $(TARGET_DIR) -type d -name CVS -o -name .svn | xargs rm -rf
--	-find $(TARGET_DIR) -type f -name .empty | xargs rm -rf
-+	-find $(TARGET_DIR) -type d -name CVS -o -name .svn -print0 | xargs -0 rm -rf
-+	-find $(TARGET_DIR) -type f -name .empty -print0 | xargs -0 rm -rf
+--- trunk/buildroot/package/openssl/openssl.mk	2009-04-28 17:33:44 UTC (rev 26225)
++++ trunk/buildroot/package/openssl/openssl.mk	2009-04-28 18:30:06 UTC (rev 26226)
+@@ -46,6 +46,8 @@
+ 			no-rc5 \
+ 			zlib-dynamic \
+ 	)
++	$(SED) "s:-march=[-a-z0-9] ::" -e "s:-mcpu=[-a-z0-9] ::g" $(OPENSSL_DIR)/Makefile
++	$(SED) "s:-O[0-9]:$(TARGET_CFLAGS):" $(OPENSSL_DIR)/Makefile
  	touch $@
  
- $(TARGET_DIR): $(PROJECT_BUILD_DIR)/.root
-@@ -348,8 +348,8 @@
- 	( scripts/copy.sh $(STAGING_DIR) $(TARGET_DIR) )
- else
- 	rm -rf $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/lib/pkgconfig
--	find $(TARGET_DIR)/lib \( -name '*.a' -o -name '*.la' \) -delete
--	find $(TARGET_DIR)/usr/lib \( -name '*.a' -o -name '*.la' \) -delete
-+	find $(TARGET_DIR)/lib \( -name '*.a' -o -name '*.la' \) -print0 | xargs -0 rm -f
-+	find $(TARGET_DIR)/usr/lib \( -name '*.a' -o -name '*.la' \) -print0 | xargs -0 rm -f
+ $(OPENSSL_TARGET_BUILD):
+@@ -61,9 +63,9 @@
+ 	# libraries gets installed read only, so strip fails
+ 	for i in $(addprefix $(TARGET_DIR)/usr/lib/,libcrypto.so.* libssl.so.*); \
+ 	do chmod +w $$i; $(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $$i; done
+-	rm -f $(TARGET_DIR)/usr/bin/c_rehash
+ 	rm -f $(TARGET_DIR)/usr/bin/openssl
  endif
- ifneq ($(BR2_HAVE_MANPAGES),y)
- 	rm -rf $(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/man
++	rm -f $(TARGET_DIR)/usr/bin/c_rehash
+ ifneq ($(BR2_PACKAGE_OPENSSL_ENGINES),y)
+ 	rm -rf $(TARGET_DIR)/usr/lib/engines
+ else
