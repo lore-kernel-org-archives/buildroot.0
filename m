@@ -1,43 +1,20 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 28 Apr 2009 14:55:27 +0000 (UTC)
-Subject: [Buildroot] [Bug 307] New: make openssl package respect build flags
-Message-ID: <bug-307-163@https.bugs.busybox.net/>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Tue, 28 Apr 2009 18:24:08 +0200
+Subject: [Buildroot] gdb snapshot
+Message-ID: <1240935848.19264.2.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=307
+Hi,
 
-              Host: i686-linux
-            Target: arm-softfloat-linux-uclibcgnueabi
-           Summary: make openssl package respect build flags
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: enhancement
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: gustavo at zacarias.com.ar
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+as I am having problems with gdb 6.8 on our ARM platform, I thought I'd
+give the gdb snapshot a try and selected it in the buildroot menu. But
+this fails as the patches in toolchain/gdb/snapshot seem to be targetted
+at a particular snapshot (gdb-6.3.50.20050915). Does this work for
+anyone else? Can this possibly work?
 
 
-Created an attachment (id=281)
- --> (https://bugs.busybox.net/attachment.cgi?id=281)
-Make openssl package respect build flags
-
-This patch makes the openssl package respect build flags.
-It probably solves issues with external toolchain (i don't use that myself) and
-allows it to be built using size optimization for example (important size
-gains).
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Sven
