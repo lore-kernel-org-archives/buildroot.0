@@ -1,34 +1,40 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 28 Apr 2009 14:25:35 +0000 (UTC)
-Subject: [Buildroot] [Bug 301] allow to install libsmbclient
-In-Reply-To: <bug-301-163@https.bugs.busybox.net/>
-References: <bug-301-163@https.bugs.busybox.net/>
-Message-ID: <20090428142535.5FEE876449@busybox.osuosl.org>
+Date: Tue, 28 Apr 2009 14:55:27 +0000 (UTC)
+Subject: [Buildroot] [Bug 307] New: make openssl package respect build flags
+Message-ID: <bug-307-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=301
+https://bugs.busybox.net/show_bug.cgi?id=307
+
+              Host: i686-linux
+            Target: arm-softfloat-linux-uclibcgnueabi
+           Summary: make openssl package respect build flags
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: gustavo at zacarias.com.ar
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
 
-Sven Neumann <s.neumann@raumfeld.com> changed:
+Created an attachment (id=281)
+ --> (https://bugs.busybox.net/attachment.cgi?id=281)
+Make openssl package respect build flags
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
- Attachment #263 is|0                           |1
-           obsolete|                            |
-
-
-
-
---- Comment #1 from Sven Neumann <s.neumann@raumfeld.com>  2009-04-28 14:25:34 UTC ---
-Created an attachment (id=279)
- --> (https://bugs.busybox.net/attachment.cgi?id=279)
-fixed patch
-
-Sorry, the patch I attached earlier broke due to the many changes to samba.
+This patch makes the openssl package respect build flags.
+It probably solves issues with external toolchain (i don't use that myself) and
+allows it to be built using size optimization for example (important size
+gains).
 
 
 -- 
