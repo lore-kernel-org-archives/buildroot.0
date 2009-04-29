@@ -1,64 +1,37 @@
-From: tpetazzoni at uclibc.org <tpetazzoni@uclibc.org>
-Date: Wed, 29 Apr 2009 08:51:39 +0000 (UTC)
-Subject: [Buildroot] svn commit: [26238]
-	trunk/buildroot/package/shared-mime-info
-Message-ID: <20090429085139.9DDC87646C@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 29 Apr 2009 10:52:21 +0200
+Subject: [Buildroot] svn commit: [26236] trunk/buildroot/package:
+ shared-mime-info
+In-Reply-To: <87vdonewzf.fsf@macbook.be.48ers.dk>
+References: <20090429072102.E9C2F7646C@busybox.osuosl.org>
+	<87vdonewzf.fsf@macbook.be.48ers.dk>
+Message-ID: <20090429105221.4ccad471@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Author: tpetazzoni
-Date: 2009-04-29 08:51:39 +0000 (Wed, 29 Apr 2009)
-New Revision: 26238
+Le Wed, 29 Apr 2009 09:32:20 +0200,
+Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
-Log:
-Fix issues in shared-mime-info
+> Don't forget to close the bugtracker issue. It's also nice to mention
+> the number in the commit message (E.G. closes #299).
 
- * Properly indent Config.in
- * Remove unneeded SHARED_MIME_INFO_INSTALL_STAGING_OPT definition
+Ok, will do next time.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> This should be indented with a <tab>
+> 
+> And these with <tab><space><space>
+> 
+> That's the same as the default value for _INSTALL_STAGING_OPT, so it
+> can get removed.
 
+Fixed by r26238. Thanks for the review and comments!
 
-
-Modified:
-   trunk/buildroot/package/shared-mime-info/Config.in
-   trunk/buildroot/package/shared-mime-info/shared-mime-info.mk
-
-
-Changeset:
-Modified: trunk/buildroot/package/shared-mime-info/Config.in
-===================================================================
---- trunk/buildroot/package/shared-mime-info/Config.in	2009-04-29 08:12:22 UTC (rev 26237)
-+++ trunk/buildroot/package/shared-mime-info/Config.in	2009-04-29 08:51:39 UTC (rev 26238)
-@@ -1,10 +1,10 @@
- config BR2_PACKAGE_SHARED_MIME_INFO
- 	bool "shared-mime-info"
- 	select BR2_PACKAGE_LIBGLIB2
--        select BR2_PACKAGE_LIBXML2
-+	select BR2_PACKAGE_LIBXML2
- 	help
--                The shared-mime-info package contains the core
--                database of common types and the update-mime-database
--                command used to extend it.
-+	  The shared-mime-info package contains the core
-+	  database of common types and the update-mime-database
-+	  command used to extend it.
- 
--                http://freedesktop.org/wiki/Software/shared-mime-info
-+	  http://freedesktop.org/wiki/Software/shared-mime-info
-
-Modified: trunk/buildroot/package/shared-mime-info/shared-mime-info.mk
-===================================================================
---- trunk/buildroot/package/shared-mime-info/shared-mime-info.mk	2009-04-29 08:12:22 UTC (rev 26237)
-+++ trunk/buildroot/package/shared-mime-info/shared-mime-info.mk	2009-04-29 08:51:39 UTC (rev 26238)
-@@ -8,7 +8,6 @@
- SHARED_MIME_INFO_SITE = http://freedesktop.org/~hadess
- 
- SHARED_MIME_INFO_INSTALL_STAGING = YES
--SHARED_MIME_INFO_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install
- SHARED_MIME_INFO_INSTALL_TARGET = NO
- 
- SHARED_MIME_INFO_AUTORECONF = NO
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
