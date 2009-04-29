@@ -1,40 +1,64 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 29 Apr 2009 07:29:25 +0000 (UTC)
-Subject: [Buildroot] [Bug 299] add shared-mime-info package
-In-Reply-To: <bug-299-163@https.bugs.busybox.net/>
-References: <bug-299-163@https.bugs.busybox.net/>
-Message-ID: <20090429072925.9ACE17646C@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 29 Apr 2009 09:32:20 +0200
+Subject: [Buildroot] svn commit: [26236] trunk/buildroot/package:
+	shared-mime-info
+In-Reply-To: <20090429072102.E9C2F7646C@busybox.osuosl.org>
+	(tpetazzoni@uclibc.org's message of "Wed\,
+	29 Apr 2009 07\:21\:02 +0000 \(UTC\)")
+References: <20090429072102.E9C2F7646C@busybox.osuosl.org>
+Message-ID: <87vdonewzf.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=299
+>>>>> "tpetazzoni" == tpetazzoni  <tpetazzoni@uclibc.org> writes:
 
+ tpetazzoni> Author: tpetazzoni
+ tpetazzoni> Date: 2009-04-29 07:21:02 +0000 (Wed, 29 Apr 2009)
+ tpetazzoni> New Revision: 26236
 
+ tpetazzoni> Log:
+ tpetazzoni> Add the shared-mime-info package
 
+Thanks.
 
+ >> From Sven Neumann <s.neumann@raumfeld.com>
 
---- Comment #6 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2009-04-29 07:29:25 UTC ---
-I've committed your patches with small modifications (r26235 and r26236). They
-build correctly for me, for my limited testing.
+Don't forget to close the bugtracker issue. It's also nice to mention
+the number in the commit message (E.G. closes #299).
+ tpetazzoni> +++ trunk/buildroot/package/shared-mime-info/Config.in	2009-04-29 07:21:02 UTC (rev 26236)
+ tpetazzoni> @@ -0,0 +1,10 @@
+ tpetazzoni> +config BR2_PACKAGE_SHARED_MIME_INFO
+ tpetazzoni> +	bool "shared-mime-info"
+ tpetazzoni> +	select BR2_PACKAGE_LIBGLIB2
+ tpetazzoni> +        select BR2_PACKAGE_LIBXML2
 
-However, there's one thing that I'm not sure about. You re-generate the MIME
-cache from $(STAGING_DIR)/usr/share/mime in the POST_INSTALL hook of
-shared-mime-info. But what if a Buildroot package adds a file to
-$(STAGING_DIR)/usr/share/mime *after* the execution of shared-mime-info's
-POST_INSTALL hook ?
+This should be indented with a <tab>
 
-If a package adds something in $(STAGING_DIR)/usr/share/mime, it should
-probably depend on shared-mime-info, which will trigger the compilation of
-shared-mime-info and the execution of its POST_INSTALL hook before the
-compilation of the package.
+ tpetazzoni> +	help
+ tpetazzoni> +                The shared-mime-info package contains the core
+ tpetazzoni> +                database of common types and the update-mime-database
+ tpetazzoni> +                command used to extend it.
+ tpetazzoni> +
+ tpetazzoni> +                http://freedesktop.org/wiki/Software/shared-mime-info
 
-Am I misunderstanding ? If not, what solution does you see to this problem ?
+And these with <tab><space><space>
+ tpetazzoni> +#############################################################
+ tpetazzoni> +#
+ tpetazzoni> +# shared-mime-info
+ tpetazzoni> +#
+ tpetazzoni> +#############################################################
+ tpetazzoni> +SHARED_MIME_INFO_VERSION = 0.60
+ tpetazzoni> +SHARED_MIME_INFO_SOURCE = shared-mime-info-$(SHARED_MIME_INFO_VERSION).tar.bz2
+ tpetazzoni> +SHARED_MIME_INFO_SITE = http://freedesktop.org/~hadess
+ tpetazzoni> +
+ tpetazzoni> +SHARED_MIME_INFO_INSTALL_STAGING = YES
+ tpetazzoni> +SHARED_MIME_INFO_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install
 
+That's the same as the default value for _INSTALL_STAGING_OPT, so it
+can get removed.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
