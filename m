@@ -1,40 +1,204 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 29 Apr 2009 11:08:59 +0200
-Subject: [Buildroot] gdb snapshot
-In-Reply-To: <1240992766.6605.7.camel@sven> (Sven Neumann's message of "Wed\,
-	29 Apr 2009 10\:12\:46 +0200")
-References: <1240935848.19264.2.camel@sven> <20090428184043.3e10c50a@surf>
-	<1240992766.6605.7.camel@sven>
-Message-ID: <87k553esic.fsf@macbook.be.48ers.dk>
+From: Michael Roth <mroth@nessie.de>
+Date: Wed, 29 Apr 2009 11:32:02 +0200
+Subject: [Buildroot] [PATCH] uClibc: fix 0.9.30.1 build with linuxthreads on
+	ARM
+Message-ID: <1240997522-10973-1-git-send-email-mroth@nessie.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
+Patch by Will Wagner <will_wagner@carallon.com> - From uclibc svn r25099.
 
-Hi,
+Signed-off-by: Michael Roth <mroth@nessie.de>
+---
+ ...libc-0.9.30.1-arm-fix-linuxthreads-sysdep.patch |  177 ++++++++++++++++++++
+ 1 files changed, 177 insertions(+), 0 deletions(-)
+ create mode 100644 toolchain/uClibc/uClibc-0.9.30.1-arm-fix-linuxthreads-sysdep.patch
 
- Sven> [root at proto2 /]# gdb hello
- Sven> GNU gdb 6.8
- Sven> Copyright (C) 2008 Free Software Foundation, Inc.
- Sven> License GPLv3+: GNU GPL version 3 or later
- Sven> <http://gnu.org/licenses/gpl.html>
- Sven> This is free software: you are free to change and redistribute it.
- Sven> There is NO WARRANTY, to the extent permitted by law.  Type "show
- Sven> copying" and "show warranty" for details.
- Sven> This GDB was configured as "arm-linux-uclibcgnueabi"...
- Sven> (gdb) r
- Sven> Starting program: /hello 
- Sven> Hello world
-
- Sven> [1]+  Stopped(SIGCHLD)        gdb hello
-
- Sven> Is there anything special I need to do to run gdb on the ARM platform?
-
-Strange, it has atleast worked in the past. Do you have the same
-problem with gdbserver?
-
+diff --git a/toolchain/uClibc/uClibc-0.9.30.1-arm-fix-linuxthreads-sysdep.patch b/toolchain/uClibc/uClibc-0.9.30.1-arm-fix-linuxthreads-sysdep.patch
+new file mode 100644
+index 0000000..65e2360
+--- /dev/null
++++ b/toolchain/uClibc/uClibc-0.9.30.1-arm-fix-linuxthreads-sysdep.patch
+@@ -0,0 +1,177 @@
++From 1b6e90090da7194a8f94277aa132873044f7e8e7 Mon Sep 17 00:00:00 2001
++From: carmelo <carmelo@69ca8d6d-28ef-0310-b511-8ec308f3f277>
++Date: Wed, 28 Jan 2009 15:23:51 +0000
++Subject: [PATCH] Added sysdep.h and sysdep-cancel.h for linuxthreads ARM
++
++Signed-off-by: Will Wagner <will_wagner@carallon.com>
++
++
++
++git-svn-id: svn+ssh://uclibc.org/svn/trunk/uClibc at 25099 69ca8d6d-28ef-0310-b511-8ec308f3f277
++---
++ .../linuxthreads/sysdeps/arm/sysdep-cancel.h       |    8 +
++ libpthread/linuxthreads/sysdeps/arm/sysdep.h       |  137 ++++++++++++++++++++
++ 2 files changed, 145 insertions(+), 0 deletions(-)
++ create mode 100644 libpthread/linuxthreads/sysdeps/arm/sysdep-cancel.h
++ create mode 100644 libpthread/linuxthreads/sysdeps/arm/sysdep.h
++
++diff --git a/libpthread/linuxthreads/sysdeps/arm/sysdep-cancel.h b/libpthread/linuxthreads/sysdeps/arm/sysdep-cancel.h
++new file mode 100644
++index 0000000..ba6a1e0
++--- /dev/null
+++++ b/libpthread/linuxthreads/sysdeps/arm/sysdep-cancel.h
++@@ -0,0 +1,8 @@
+++#include <sysdep.h>
+++
+++/* No multi-thread handling enabled.  */
+++#define SINGLE_THREAD_P (1)
+++#define RTLD_SINGLE_THREAD_P (1)
+++#define LIBC_CANCEL_ASYNC()	0 /* Just a dummy value.  */
+++#define LIBC_CANCEL_RESET(val)	((void)(val)) /* Nothing, but evaluate it.  */
+++#define LIBC_CANCEL_HANDLED()	/* Nothing.  */
++diff --git a/libpthread/linuxthreads/sysdeps/arm/sysdep.h b/libpthread/linuxthreads/sysdeps/arm/sysdep.h
++new file mode 100644
++index 0000000..15d951c
++--- /dev/null
+++++ b/libpthread/linuxthreads/sysdeps/arm/sysdep.h
++@@ -0,0 +1,137 @@
+++/* Generic asm macros used on many machines.
+++   Copyright (C) 1991,92,93,96,98,2002,2003 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+++   02111-1307 USA.  */
+++
+++#ifndef C_LABEL
+++
+++/* Define a macro we can use to construct the asm name for a C symbol.  */
+++#ifdef	NO_UNDERSCORES
+++#ifdef	__STDC__
+++#define C_LABEL(name)		name##:
+++#else
+++#define C_LABEL(name)		name/**/:
+++#endif
+++#else
+++#ifdef	__STDC__
+++#define C_LABEL(name)		_##name##:
+++#else
+++#define C_LABEL(name)		_/**/name/**/:
+++#endif
+++#endif
+++
+++#endif
+++
+++#ifdef __ASSEMBLER__
+++/* Mark the end of function named SYM.  This is used on some platforms
+++   to generate correct debugging information.  */
+++#ifndef END
+++#define END(sym)
+++#endif
+++
+++#ifndef JUMPTARGET
+++#define JUMPTARGET(sym)		sym
+++#endif
+++
+++/* Makros to generate eh_frame unwind information.  */
+++# ifdef HAVE_ASM_CFI_DIRECTIVES
+++#  define cfi_startproc			.cfi_startproc
+++#  define cfi_endproc			.cfi_endproc
+++#  define cfi_def_cfa(reg, off)		.cfi_def_cfa reg, off
+++#  define cfi_def_cfa_register(reg)	.cfi_def_cfa_register reg
+++#  define cfi_def_cfa_offset(off)	.cfi_def_cfa_offset off
+++#  define cfi_adjust_cfa_offset(off)	.cfi_adjust_cfa_offset off
+++#  define cfi_offset(reg, off)		.cfi_offset reg, off
+++#  define cfi_rel_offset(reg, off)	.cfi_rel_offset reg, off
+++#  define cfi_register(r1, r2)		.cfi_register r1, r2
+++#  define cfi_return_column(reg)	.cfi_return_column reg
+++#  define cfi_restore(reg)		.cfi_restore reg
+++#  define cfi_same_value(reg)		.cfi_same_value reg
+++#  define cfi_undefined(reg)		.cfi_undefined reg
+++#  define cfi_remember_state		.cfi_remember_state
+++#  define cfi_restore_state		.cfi_restore_state
+++#  define cfi_window_save		.cfi_window_save
+++# else
+++#  define cfi_startproc
+++#  define cfi_endproc
+++#  define cfi_def_cfa(reg, off)
+++#  define cfi_def_cfa_register(reg)
+++#  define cfi_def_cfa_offset(off)
+++#  define cfi_adjust_cfa_offset(off)
+++#  define cfi_offset(reg, off)
+++#  define cfi_rel_offset(reg, off)
+++#  define cfi_register(r1, r2)
+++#  define cfi_return_column(reg)
+++#  define cfi_restore(reg)
+++#  define cfi_same_value(reg)
+++#  define cfi_undefined(reg)
+++#  define cfi_remember_state
+++#  define cfi_restore_state
+++#  define cfi_window_save
+++# endif
+++
+++#else /* ! ASSEMBLER */
+++# ifdef HAVE_ASM_CFI_DIRECTIVES
+++#  define CFI_STRINGIFY(Name) CFI_STRINGIFY2 (Name)
+++#  define CFI_STRINGIFY2(Name) #Name
+++#  define CFI_STARTPROC	".cfi_startproc"
+++#  define CFI_ENDPROC	".cfi_endproc"
+++#  define CFI_DEF_CFA(reg, off)	\
+++   ".cfi_def_cfa " CFI_STRINGIFY(reg) "," CFI_STRINGIFY(off)
+++#  define CFI_DEF_CFA_REGISTER(reg) \
+++   ".cfi_def_cfa_register " CFI_STRINGIFY(reg)
+++#  define CFI_DEF_CFA_OFFSET(off) \
+++   ".cfi_def_cfa_offset " CFI_STRINGIFY(off)
+++#  define CFI_ADJUST_CFA_OFFSET(off) \
+++   ".cfi_adjust_cfa_offset " CFI_STRINGIFY(off)
+++#  define CFI_OFFSET(reg, off) \
+++   ".cfi_offset " CFI_STRINGIFY(reg) "," CFI_STRINGIFY(off)
+++#  define CFI_REL_OFFSET(reg, off) \
+++   ".cfi_rel_offset " CFI_STRINGIFY(reg) "," CFI_STRINGIFY(off)
+++#  define CFI_REGISTER(r1, r2) \
+++   ".cfi_register " CFI_STRINGIFY(r1) "," CFI_STRINGIFY(r2)
+++#  define CFI_RETURN_COLUMN(reg) \
+++   ".cfi_return_column " CFI_STRINGIFY(reg)
+++#  define CFI_RESTORE(reg) \
+++   ".cfi_restore " CFI_STRINGIFY(reg)
+++#  define CFI_UNDEFINED(reg) \
+++   ".cfi_undefined " CFI_STRINGIFY(reg)
+++#  define CFI_REMEMBER_STATE \
+++   ".cfi_remember_state"
+++#  define CFI_RESTORE_STATE \
+++   ".cfi_restore_state"
+++#  define CFI_WINDOW_SAVE \
+++   ".cfi_window_save"
+++# else
+++#  define CFI_STARTPROC
+++#  define CFI_ENDPROC
+++#  define CFI_DEF_CFA(reg, off)
+++#  define CFI_DEF_CFA_REGISTER(reg)
+++#  define CFI_DEF_CFA_OFFSET(off)
+++#  define CFI_ADJUST_CFA_OFFSET(off)
+++#  define CFI_OFFSET(reg, off)
+++#  define CFI_REL_OFFSET(reg, off)
+++#  define CFI_REGISTER(r1, r2)
+++#  define CFI_RETURN_COLUMN(reg)
+++#  define CFI_RESTORE(reg)
+++#  define CFI_UNDEFINED(reg)
+++#  define CFI_REMEMBER_STATE
+++#  define CFI_RESTORE_STATE
+++#  define CFI_WINDOW_SAVE
+++# endif
+++
+++#endif /* __ASSEMBLER__ */
++-- 
++1.5.6.5
++
 -- 
-Bye, Peter Korsgaard
+1.6.0.6
