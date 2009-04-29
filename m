@@ -1,49 +1,135 @@
-From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
-Date: Wed, 29 Apr 2009 18:17:12 -0300
-Subject: [Buildroot] misc development news
-In-Reply-To: <200904292300.40446.markus.heidelberg@web.de>
-References: <87d4d4md5o.fsf@macbook.be.48ers.dk>
-	<878wlkfp84.fsf@macbook.be.48ers.dk>
-	<d6cda7730904290758r250060del52fa1fbafad25474@mail.gmail.com>
-	<200904292300.40446.markus.heidelberg@web.de>
-Message-ID: <d6cda7730904291417w3cc8d949u80e4eaf6db45b0d2@mail.gmail.com>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Wed, 29 Apr 2009 21:25:25 +0000 (UTC)
+Subject: [Buildroot] svn commit: [26247] trunk/buildroot/target/device:
+	ARMLTD/integrator926 ARMLTD/integrator92 etc...
+Message-ID: <20090429212525.BCF99775F2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Apr 29, 2009 at 6:00 PM, Markus Heidelberg
-<markus.heidelberg@web.de> wrote:
-> Thiago A. Corr?a, 29.04.2009:
->> 2009/4/28 Peter Korsgaard <jacmet@uclibc.org>:
->>
->> > In fact I would like us to move to a workflow where all changes are
->> > first posted to the list before committing to the official tree,
->> > similar to how it's handled in the Linux kernel, U-Boot, ?..
->>
->> I don't see that working. It does for the linux kernel because of the
->> size of it's contributor base, we are greatly under powered for this
->> scheme. Patches would just get a big backlog for you to handle and we
->> would be unable to help.
->> I think the current commit first review later works best in our case.
->> We don't quite have enough ppl reviewing changes and reverting a patch
->> has been uncommon, yet, it's not that hard when necessary.
->
-> Peter seems to review many commits and fixes them or asks the committers
-> to fix them. So maybe the work isn't really less nowadays, but I'm not
-> sure.
->
+Author: jacmet
+Date: 2009-04-29 21:25:25 +0000 (Wed, 29 Apr 2009)
+New Revision: 26247
 
-Indeed unfortunally I don't offer as much help as I would like to, but
-at least I don't get in the way *smile*
-Imagine that on top of that, he would have to commit your patches, my
-patches, etc.
-It does look like it is work to do the same job.
+Log:
+target/device: fix busybox version / .config in defconfigs
 
-If we don't sort out how we are going to work, this move could just
-send ppl away, frustrated because we can't get things done.
-I for one am still clueless on how should I continue to contribute,
-and yet I'm afraid that I will have to keep track of several different
-trees, on top of the 2 I already have (My private development +
-upstream buildroot).
+Modified:
+   trunk/buildroot/target/device/ARMLTD/integrator926/integrator926_defconfig
+   trunk/buildroot/target/device/ARMLTD/integrator926_huge/integrator926_huge_defconfig
+   trunk/buildroot/target/device/Atmel/at91sam9260pf/at91sam9260pf_defconfig
+   trunk/buildroot/target/device/Atmel/atstk1005/atstk1005_defconfig
+   trunk/buildroot/target/device/KwikByte/kb9202/kb9202_defconfig
+   trunk/buildroot/target/device/x86/i686/i386_defconfig
+
+
+Changeset:
+Modified: trunk/buildroot/target/device/ARMLTD/integrator926/integrator926_defconfig
+===================================================================
+--- trunk/buildroot/target/device/ARMLTD/integrator926/integrator926_defconfig	2009-04-29 20:08:19 UTC (rev 26246)
++++ trunk/buildroot/target/device/ARMLTD/integrator926/integrator926_defconfig	2009-04-29 21:25:25 UTC (rev 26247)
+@@ -270,9 +270,9 @@
+ # BR2_BUSYBOX_VERSION_1_12_X is not set
+ BR2_BUSYBOX_VERSION_1_13_X=y
+ # BR2_PACKAGE_BUSYBOX_SNAPSHOT is not set
+-BR2_BUSYBOX_VERSION="1.13.2"
++BR2_BUSYBOX_VERSION="1.13.4"
+ BR2_PACKAGE_BUSYBOX_FULLINSTALL=y
+-BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.6.0.config"
++BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.13.x.config"
+ BR2_PACKAGE_BUSYBOX_HIDE_OTHERS=y
+ BR2_PACKAGE_BUSYBOX_SKELETON=y
+ 
+
+Modified: trunk/buildroot/target/device/ARMLTD/integrator926_huge/integrator926_huge_defconfig
+===================================================================
+--- trunk/buildroot/target/device/ARMLTD/integrator926_huge/integrator926_huge_defconfig	2009-04-29 20:08:19 UTC (rev 26246)
++++ trunk/buildroot/target/device/ARMLTD/integrator926_huge/integrator926_huge_defconfig	2009-04-29 21:25:25 UTC (rev 26247)
+@@ -271,9 +271,9 @@
+ # BR2_BUSYBOX_VERSION_1_12_X is not set
+ BR2_BUSYBOX_VERSION_1_13_X=y
+ # BR2_PACKAGE_BUSYBOX_SNAPSHOT is not set
+-BR2_BUSYBOX_VERSION="1.13.2"
++BR2_BUSYBOX_VERSION="1.13.4"
+ BR2_PACKAGE_BUSYBOX_FULLINSTALL=y
+-BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.6.0.config"
++BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.13.x.config"
+ BR2_PACKAGE_BUSYBOX_HIDE_OTHERS=y
+ BR2_PACKAGE_BUSYBOX_SKELETON=y
+ 
+
+Modified: trunk/buildroot/target/device/Atmel/at91sam9260pf/at91sam9260pf_defconfig
+===================================================================
+--- trunk/buildroot/target/device/Atmel/at91sam9260pf/at91sam9260pf_defconfig	2009-04-29 20:08:19 UTC (rev 26246)
++++ trunk/buildroot/target/device/Atmel/at91sam9260pf/at91sam9260pf_defconfig	2009-04-29 21:25:25 UTC (rev 26247)
+@@ -236,11 +236,11 @@
+ # BR2_BUSYBOX_VERSION_1_5_0 is not set
+ # BR2_BUSYBOX_VERSION_1_5_1 is not set
+ # BR2_BUSYBOX_VERSION_1_6_0 is not set
+-BR2_BUSYBOX_VERSION_1_6_1=y
++BR2_BUSYBOX_VERSION_1_13_X=y
+ # BR2_PACKAGE_BUSYBOX_SNAPSHOT is not set
+-BR2_BUSYBOX_VERSION="1.6.1"
++BR2_BUSYBOX_VERSION="1.13.4"
+ BR2_PACKAGE_BUSYBOX_INSTALL_SYMLINKS=y
+-BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.6.0.config"
++BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.13.x.config"
+ # BR2_PACKAGE_BUSYBOX_HIDE_OTHERS is not set
+ # BR2_PACKAGE_BUSYBOX_SKELETON is not set
+ 
+
+Modified: trunk/buildroot/target/device/Atmel/atstk1005/atstk1005_defconfig
+===================================================================
+--- trunk/buildroot/target/device/Atmel/atstk1005/atstk1005_defconfig	2009-04-29 20:08:19 UTC (rev 26246)
++++ trunk/buildroot/target/device/Atmel/atstk1005/atstk1005_defconfig	2009-04-29 21:25:25 UTC (rev 26247)
+@@ -293,9 +293,9 @@
+ # BR2_BUSYBOX_VERSION_1_12_X is not set
+ BR2_BUSYBOX_VERSION_1_13_X=y
+ # BR2_PACKAGE_BUSYBOX_SNAPSHOT is not set
+-BR2_BUSYBOX_VERSION="1.13.2"
++BR2_BUSYBOX_VERSION="1.13.4"
+ BR2_PACKAGE_BUSYBOX_FULLINSTALL=y
+-BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.6.0.config"
++BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.13.x.config"
+ BR2_PACKAGE_BUSYBOX_HIDE_OTHERS=y
+ BR2_PACKAGE_BUSYBOX_SKELETON=y
+ 
+
+Modified: trunk/buildroot/target/device/KwikByte/kb9202/kb9202_defconfig
+===================================================================
+--- trunk/buildroot/target/device/KwikByte/kb9202/kb9202_defconfig	2009-04-29 20:08:19 UTC (rev 26246)
++++ trunk/buildroot/target/device/KwikByte/kb9202/kb9202_defconfig	2009-04-29 21:25:25 UTC (rev 26247)
+@@ -263,11 +263,11 @@
+ # BR2_BUSYBOX_VERSION_1_7_X is not set
+ # BR2_BUSYBOX_VERSION_1_8_X is not set
+ # BR2_BUSYBOX_VERSION_1_9_X is not set
+-BR2_BUSYBOX_VERSION_1_10_X=y
++BR2_BUSYBOX_VERSION_1_13_X=y
+ # BR2_PACKAGE_BUSYBOX_SNAPSHOT is not set
+-BR2_BUSYBOX_VERSION="1.10.3"
++BR2_BUSYBOX_VERSION="1.13.4"
+ BR2_PACKAGE_BUSYBOX_FULLINSTALL=y
+-BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.6.0.config"
++BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.13.x.config"
+ # BR2_PACKAGE_BUSYBOX_HIDE_OTHERS is not set
+ # BR2_PACKAGE_BUSYBOX_SKELETON is not set
+ 
+
+Modified: trunk/buildroot/target/device/x86/i686/i386_defconfig
+===================================================================
+--- trunk/buildroot/target/device/x86/i686/i386_defconfig	2009-04-29 20:08:19 UTC (rev 26246)
++++ trunk/buildroot/target/device/x86/i686/i386_defconfig	2009-04-29 21:25:25 UTC (rev 26247)
+@@ -278,9 +278,9 @@
+ # BR2_BUSYBOX_VERSION_1_12_X is not set
+ BR2_BUSYBOX_VERSION_1_13_X=y
+ # BR2_PACKAGE_BUSYBOX_SNAPSHOT is not set
+-BR2_BUSYBOX_VERSION="1.13.2"
++BR2_BUSYBOX_VERSION="1.13.4"
+ BR2_PACKAGE_BUSYBOX_FULLINSTALL=y
+-BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.6.0.config"
++BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.13.x.config"
+ BR2_PACKAGE_BUSYBOX_HIDE_OTHERS=y
+ # BR2_PACKAGE_BUSYBOX_SKELETON is not set
+ 
