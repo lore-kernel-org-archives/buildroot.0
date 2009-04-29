@@ -1,33 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 29 Apr 2009 07:59:14 +0000 (UTC)
-Subject: [Buildroot] [Bug 299] add shared-mime-info package
-In-Reply-To: <bug-299-163@https.bugs.busybox.net/>
-References: <bug-299-163@https.bugs.busybox.net/>
-Message-ID: <20090429075914.49D627625C@busybox.osuosl.org>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Wed, 29 Apr 2009 08:12:23 +0000 (UTC)
+Subject: [Buildroot] svn commit: [26237] trunk/buildroot/docs
+Message-ID: <20090429081223.D112D7646C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=299
+Author: jacmet
+Date: 2009-04-29 08:12:22 +0000 (Wed, 29 Apr 2009)
+New Revision: 26237
+
+Log:
+docs/buildroot.html: fix typo
+
+Modified:
+   trunk/buildroot/docs/buildroot.html
 
 
-
-
-
---- Comment #7 from Sven Neumann <s.neumann@raumfeld.com>  2009-04-29 07:59:13 UTC ---
-If a package needs to add mime-types, then it needs to install them in
-staging_dir and invoke update-mime-database with the correct paths. In order to
-make this work, we probably need to install update-mime-database into host_dir.
-It shouldn't be hard to get this working. So far I don't have a need for this
-though and without a package that actually installs new mime-types it is
-probably not worth to prepare the infrastructure for this.
-
-I suggest that this bug is closed as FIXED.
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Changeset:
+Modified: trunk/buildroot/docs/buildroot.html
+===================================================================
+--- trunk/buildroot/docs/buildroot.html	2009-04-29 07:21:02 UTC (rev 26236)
++++ trunk/buildroot/docs/buildroot.html	2009-04-29 08:12:22 UTC (rev 26237)
+@@ -32,7 +32,7 @@
+       <li><a href="#custom_uclibc">Customizing the uClibc
+       configuration</a></li>
+       <li><a href="#buildroot_innards">How Buildroot works</a></li>
+-      <li><a href="#multi_project"Building several projects in the
++      <li><a href="#multi_project">Building several projects in the
+       same buildroot source tree</a></li>
+       <li><a href="#using_toolchain">Using the uClibc toolchain
+       outside Buildroot</a></li>
