@@ -1,10 +1,10 @@
 From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Wed, 29 Apr 2009 11:55:44 +0200
-Subject: [Buildroot] gdb snapshot
-In-Reply-To: <87k553esic.fsf@macbook.be.48ers.dk>
-References: <1240935848.19264.2.camel@sven> <20090428184043.3e10c50a@surf>
-	<1240992766.6605.7.camel@sven>  <87k553esic.fsf@macbook.be.48ers.dk>
-Message-ID: <1240998944.6605.9.camel@sven>
+Date: Wed, 29 Apr 2009 12:17:52 +0200
+Subject: [Buildroot] Buildroot 2009.02 released
+In-Reply-To: <873abrer5u.fsf@macbook.be.48ers.dk>
+References: <87skmkf1s0.fsf@macbook.be.48ers.dk>
+	<873abrer5u.fsf@macbook.be.48ers.dk>
+Message-ID: <1241000272.6605.12.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,12 +13,23 @@ To: buildroot@busybox.net
 
 Hi,
 
-On Wed, 2009-04-29 at 11:08 +0200, Peter Korsgaard wrote:
+On Wed, 2009-04-29 at 11:38 +0200, Peter Korsgaard wrote:
 
-> Strange, it has atleast worked in the past. Do you have the same
-> problem with gdbserver?
+> I plan to release 2009.05-rc1 this coming weekend, so if you have any
+> new features that you would like to see in the release, NOW is the
+> time to post them / remind me. After the release candidate I'll only
+> look at patches fixing problems so we can stabilize the tree for a
+> release mid May.
 
-Yes, exactly the same problem.
+It would be nice to get the GStreamer and Samba updates into the next
+release:
+
+ https://bugs.busybox.net/show_bug.cgi?id=101
+ https://bugs.busybox.net/show_bug.cgi?id=293
+
+And of course I'd welcome the addition of the gupnp stack and gvfs. But
+since there are some unresolved difficulties with these, perhaps focus
+on the updates mentioned above.
 
 
 Sven
