@@ -1,24 +1,38 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Wed, 29 Apr 2009 17:49:53 +0200
-Subject: [Buildroot] HEADS UP: svn->git transition
-In-Reply-To: <20090429113849.GB18534@mx.loc>
-References: <20090429113849.GB18534@mx.loc>
-Message-ID: <20090429154953.GD18534@mx.loc>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Wed, 29 Apr 2009 15:52:24 +0000 (UTC)
+Subject: [Buildroot] svn commit: [26243] trunk/buildroot/package
+Message-ID: <20090429155224.DF86A775F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Apr 29, 2009 at 01:38:49PM +0200, Bernhard Reutner-Fischer wrote:
->Hi,
->
->We will be switching to git (instead of svn) for our repositories.
->Svn will be frozen during the conversion which is scheduled to begin
+Author: jacmet
+Date: 2009-04-29 15:52:24 +0000 (Wed, 29 Apr 2009)
+New Revision: 26243
 
-Correction:
-thursday, 10 AM PDT
-$ date -u -d 'thursday 10 AM PDT'
-Thu Apr 30 17:00:00 UTC 2009
+Log:
+package/: remove obsolete qte package
 
-sorry for the confusion..
+
+Removed:
+   trunk/buildroot/package/qte/
+
+Modified:
+   trunk/buildroot/package/Config.in
+
+
+Changeset:
+Modified: trunk/buildroot/package/Config.in
+===================================================================
+--- trunk/buildroot/package/Config.in	2009-04-29 13:12:56 UTC (rev 26242)
++++ trunk/buildroot/package/Config.in	2009-04-29 15:52:24 UTC (rev 26243)
+@@ -313,7 +313,6 @@
+ source "package/fbset/Config.in"
+ 
+ comment "other GUIs"
+-source "package/qte/Config.in"
+ source "package/qtopia4/Config.in"
+ 
+ #source "package/microwin/Config.in"
