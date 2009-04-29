@@ -1,23 +1,43 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 29 Apr 2009 11:41:00 +0200
-Subject: [Buildroot] [PATCH] uClibc: fix 0.9.30.1 build with
-	linuxthreads on ARM
-In-Reply-To: <1240997522-10973-1-git-send-email-mroth@nessie.de> (Michael
-	Roth's message of "Wed\, 29 Apr 2009 11\:32\:02 +0200")
-References: <1240997522-10973-1-git-send-email-mroth@nessie.de>
-Message-ID: <87y6tjdcgj.fsf@macbook.be.48ers.dk>
+Date: Wed, 29 Apr 2009 11:44:44 +0200
+Subject: [Buildroot] misc development news
+In-Reply-To: <874ox99yko.fsf@macbook.be.48ers.dk> (Peter Korsgaard's message
+	of "Tue\, 31 Mar 2009 23\:23\:03 +0200")
+References: <87d4d4md5o.fsf@macbook.be.48ers.dk>
+	<874ox99yko.fsf@macbook.be.48ers.dk>
+Message-ID: <87r5zbdcab.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Michael" == Michael Roth <mroth@nessie.de> writes:
+>>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
 
- Michael> Patch by Will Wagner <will_wagner@carallon.com> - From uclibc svn r25099.
+Hi,
 
-Is this identical to the existing
-toolchain/uClibc/uClibc-0.9.30-arm-fix-linuxthreads-sysdep.patch ?
+ Peter> - svn->git: Migration is starting to take shape. We have digged
+ Peter> through svn history and found proper author/email info for all
+ Peter> developers for the conversion, and the osuosl.org staff is setting
+ Peter> up gitweb, commit notifications and various minor stuff for the
+ Peter> conversion. Expect more info in ~1 weeks time.
+
+ Peter> Ok - Timing was "slightly" off, but the svn->git migration
+ Peter> uclibc.org-wide is almost completed. The repo can be browsed through
+ Peter> cgit at:
+
+..
+
+ Peter> The repo was synched on the 17th, so it's missing the latest
+ Peter> changes. The svn repo will be turned read only once the final sync is
+ Peter> done, but more info about that later.
+
+From the osuosl.org staff:
+
+Hi, if you are satisfied with the test git setup I am ready to perform
+the final conversion.  I expect about an hour between freezing the SVN
+repo and having the git repos ready if everything goes according to
+plan.  Would Thursday at 10AM be an acceptable time?
 
 -- 
 Bye, Peter Korsgaard
