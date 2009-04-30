@@ -1,34 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 30 Apr 2009 13:32:33 +0200
-Subject: [Buildroot] HEADS UP: svn->git transition
-In-Reply-To: <200904301248.33425.vda.linux@googlemail.com> (Denys Vlasenko's
-	message of "Thu\, 30 Apr 2009 12\:48\:33 +0200")
-References: <20090429113849.GB18534@mx.loc>
-	<200904300153.39528.vda.linux@googlemail.com>
-	<87k552brg9.fsf@macbook.be.48ers.dk>
-	<200904301248.33425.vda.linux@googlemail.com>
-Message-ID: <87y6ti9y26.fsf@macbook.be.48ers.dk>
+From: jacmet at uclibc.org <jacmet@uclibc.org>
+Date: Thu, 30 Apr 2009 13:34:59 +0000 (UTC)
+Subject: [Buildroot] svn commit: [26250] trunk/buildroot/docs
+Message-ID: <20090430133459.8E23577546@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Denys" == Denys Vlasenko <vda.linux@googlemail.com> writes:
+Author: jacmet
+Date: 2009-04-30 13:34:58 +0000 (Thu, 30 Apr 2009)
+New Revision: 26250
 
-Hi,
+Log:
+docs/lists.html: mention gmane interface to list
 
- Denys> Do you expect every single member of the mailing list
- Denys> to track that? I have no doubts that I can spend a few hours
- Denys> and figure out where the new git tree is, and how to use it.
+Modified:
+   trunk/buildroot/docs/lists.html
 
-Mailing list? You were one of the 5 or so people directly in the to/cc.
 
- Denys> That's not my point. My point is that this information
- Denys> is not *easily* accessible.
- Denys> We might be pissing off our users.
-
-So why didn't you do anything about it in the last month?
-
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/docs/lists.html
+===================================================================
+--- trunk/buildroot/docs/lists.html	2009-04-30 06:33:27 UTC (rev 26249)
++++ trunk/buildroot/docs/lists.html	2009-04-30 13:34:58 UTC (rev 26250)
+@@ -8,8 +8,10 @@
+ <a href="http://lists.busybox.net/mailman/listinfo/buildroot">this page</a>.
+ Only subscribers to the Buildroot mailing list are allowed to post
+ to this list.
+-
+ <p>
++The list is also available through <a
++href="http://gmane.org">Gmane</a> at <a href="http://dir.gmane.org/gmane.comp.lib.uclibc.buildroot">gmane.comp.lib.uclibc.buildroot</a>.
++<p>
+ 
+ <h3>Search the List Archives</h3>
+ Please search the mailing list archives before asking questions on the mailing
