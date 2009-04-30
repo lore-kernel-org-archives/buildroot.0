@@ -1,28 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 30 Apr 2009 08:12:22 +0200
-Subject: [Buildroot] HEADS UP: svn->git transition
-In-Reply-To: <200904300153.39528.vda.linux@googlemail.com> (Denys Vlasenko's
-	message of "Thu\, 30 Apr 2009 01\:53\:39 +0200")
-References: <20090429113849.GB18534@mx.loc> <49F85AF3.4060501@t-online.de>
-	<20090429143400.GC18534@mx.loc>
-	<200904300153.39528.vda.linux@googlemail.com>
-Message-ID: <87k552brg9.fsf@macbook.be.48ers.dk>
+From: correa at uclibc.org <correa@uclibc.org>
+Date: Thu, 30 Apr 2009 06:27:34 +0000 (UTC)
+Subject: [Buildroot] svn commit: [26248] trunk/buildroot/target/u-boot
+Message-ID: <20090430062734.413E17746F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Denys" == Denys Vlasenko <vda.linux@googlemail.com> writes:
+Author: correa
+Date: 2009-04-30 06:27:33 +0000 (Thu, 30 Apr 2009)
+New Revision: 26248
 
-Hi,
+Log:
+Undeprecate u-boot 2008.10 since this is the last version known to work with JFFS2 fs and AVR32
 
- Denys> git clone git+ssh://vda at busybox.net/var/lib/git/busybox.git
+Modified:
+   trunk/buildroot/target/u-boot/Config.in
 
- Denys> clones some oldish tree.
 
-Yes, from March 17th. Did you miss the mail thread from last month
-with Ian from osuosl.org?
-
--- 
-Bye, Peter Korsgaard
+Changeset:
+Modified: trunk/buildroot/target/u-boot/Config.in
+===================================================================
+--- trunk/buildroot/target/u-boot/Config.in	2009-04-29 21:25:25 UTC (rev 26247)
++++ trunk/buildroot/target/u-boot/Config.in	2009-04-30 06:27:33 UTC (rev 26248)
+@@ -26,7 +26,6 @@
+ 
+ config BR2_TARGET_UBOOT_2008_10
+ 	bool "u-boot-2008.10"
+-	depends on BR2_DEPRECATED
+ 
+ config BR2_TARGET_UBOOT_1_3_4
+ 	bool "u-boot-1.3.4"
