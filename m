@@ -1,28 +1,34 @@
-From: Chris Bare <chris@bareflix.com>
-Date: Fri, 1 May 2009 12:14:25 -0400 (EDT)
-Subject: [Buildroot] avr32 support question
-Message-ID: <20090501162116.B66CF1C8467@whitealder.osuosl.org>
+From: Gaye Abdoulaye Walsimou <walsimou@walsimou.com>
+Date: Fri, 01 May 2009 19:05:16 +0200
+Subject: [Buildroot] HEADS UP: svn->git transition
+In-Reply-To: <200905011856.30347.vda.linux@googlemail.com>
+References: <20090429113849.GB18534@mx.loc>
+	<20090429143400.GC18534@mx.loc>	<49FB2082.2000501@gmail.com>
+	<200905011856.30347.vda.linux@googlemail.com>
+Message-ID: <49FB2BCC.3050408@walsimou.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm working with the Atmel NGW100 using the buildroot from their website which
-is based on buildroot 20081218.
 
-Recently I've seen some interesting patches go in (like for reducing the size
-of openssl). But when I compare the latest to the Atmel version, I see things
-missing, like the avr32-asm patch for openssl.
+> Busybox svn has been migrated to git.
+>
+> I check out fresh tree with:
+>
+> git clone git+ssh://vda at busybox.net/var/lib/git/busybox.git
+>
+> Then in that tree I can do:
+>
+> git pull          -- analog of "svn update"
+> git add new_file  -- IIUC this is "svn add" analog
+> git commit -a     -- create a local change which includes all files
+>                      modified since last commit.
+>   
 
-I realize that ideally that should be integrated upstream in the openssl
-package, but I'm curious what other avr32 users are doing right now.
+You can add -s :
 
-Currently I'm sticking with the Atmel version, and have pulled in a few
-package updates from the buildroot head, but that doesn't seem like a good
-long term solution.
+git commit -a -s
 
-Any thoughts or suggestions?
--- 
-Chris Bare
-chris at bareflix.com
+In order to have a "Signed-off-by" added automatically.
