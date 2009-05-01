@@ -1,36 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Apr 2009 01:31:16 +0200
-Subject: [Buildroot] Qtopia4 build issue
-In-Reply-To: <874ox98ijk.fsf@macbook.be.48ers.dk>
-References: <20090226122205.390e848a@surf> <20090226162124.2d78cfa4@surf>
-	<20090227152717.5cefcd92@surf> <874ox98ijk.fsf@macbook.be.48ers.dk>
-Message-ID: <20090401013116.1b9ba88c@surf>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 01 May 2009 14:43:39 +0200
+Subject: [Buildroot] goodbye svn, hello git
+Message-ID: <87tz45803o.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hi,
 
-Le Tue, 31 Mar 2009 23:54:39 +0200,
-Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+Ok, it's done - The repository is migrated to git and svn is now read
+only.
 
-> Is this still needed? I don't normally use QT, but built it earlier
-> today without problems (after the fixes I committed today).
+My mail of last month [1] contained the details of how to access it,
+but here's a small reminder:
 
-I worked on Qt build issues on Sunday, but didn't had the time to reach
-a submitable state before the end of day. Definitely, on Sunday, quite
-a few modifications were needed to get Qtopia4 to build properly (with
-an external toolchain, or on a x86). But I suspect that your recent
-changes fix at least part of these issues. I'll have a try at them
-soonish and I'll let you know.
+The repo can be browsed through cgit at:
 
-Thanks for the improvements!
+http://git.buildroot.net/buildroot/
 
-Thomas
+It can be cloned anonymously using:
+
+git clone git://git.buildroot.net/buildroot/ or
+git clone http://git.buildroot.net/buildroot/ if you're behind a
+firwall blocking git access.
+
+I'll update the website later today, and daily snapshots should also
+soon work again.
+
+[1] http://lists.busybox.net/pipermail/buildroot/2009-March/026875.html
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
