@@ -1,29 +1,28 @@
-From: Asbjoern Laurberg <asl@thrane.com>
-Date: Fri, 01 May 2009 15:14:35 +0200
-Subject: [Buildroot] goodbye svn, hello git
-In-Reply-To: <87tz45803o.fsf@macbook.be.48ers.dk>
-References: <87tz45803o.fsf@macbook.be.48ers.dk>
-Message-ID: <49FAF5BB.4040005@thrane.com>
+From: Chris Bare <chris@bareflix.com>
+Date: Fri, 1 May 2009 12:14:25 -0400 (EDT)
+Subject: [Buildroot] avr32 support question
+Message-ID: <20090501162116.B66CF1C8467@whitealder.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard wrote:
-> Ok, it's done - The repository is migrated to git and svn is now read
-> only.
+I'm working with the Atmel NGW100 using the buildroot from their website which
+is based on buildroot 20081218.
 
-Great news !
+Recently I've seen some interesting patches go in (like for reducing the size
+of openssl). But when I compare the latest to the Atmel version, I see things
+missing, like the avr32-asm patch for openssl.
 
-> It can be cloned anonymously using:
-> 
-> git clone git://git.buildroot.net/buildroot/
+I realize that ideally that should be integrated upstream in the openssl
+package, but I'm curious what other avr32 users are doing right now.
 
-... and it seems to work.
+Currently I'm sticking with the Atmel version, and have pulled in a few
+package updates from the buildroot head, but that doesn't seem like a good
+long term solution.
 
+Any thoughts or suggestions?
 -- 
-Best regards,
-Asbjoern Laurberg
-Development Engineer
-Thrane & Thrane A/S
+Chris Bare
+chris at bareflix.com
