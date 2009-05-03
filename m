@@ -1,34 +1,49 @@
-From: Markus Heidelberg <markus.heidelberg@web.de>
-Date: Sun,  3 May 2009 13:54:19 +0200
-Subject: [Buildroot] [PATCH] Makefile.autotools.in: fix minimal foo.mk
-	example
-Message-ID: <1241351659-5506-1-git-send-email-markus.heidelberg@web.de>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun,  3 May 2009 15:42:37 +0000 (UTC)
+Subject: [Buildroot] [Bug 311] New: util-linux-pre7 complains swapon has 1
+	args
+Message-ID: <bug-311-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The directory argument was introduced to support packages in
-subdirectories of package/ several months ago.
+https://bugs.busybox.net/show_bug.cgi?id=311
 
-Signed-off-by: Markus Heidelberg <markus.heidelberg@web.de>
----
- package/Makefile.autotools.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+              Host: Slackware Linux 12.1 - x86
+            Target: Generic x86 firewall
+           Summary: util-linux-pre7 complains swapon has 1 args
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: cassiano at polaco.pro.br
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-diff --git a/package/Makefile.autotools.in b/package/Makefile.autotools.in
-index 3c01837..d6da7e8 100644
---- a/package/Makefile.autotools.in
-+++ b/package/Makefile.autotools.in
-@@ -10,7 +10,7 @@
- # | FOO_VERSION = 1.0
- # | FOO_SOURCE = foo-$(FOO_VERSION).tar.gz
- # | FOO_SITE = http://www.libfoo.org/dist
--# | $(eval $(call AUTOTARGETS,foo))
-+# | $(eval $(call AUTOTARGETS,package,foo))
- #
- ## The following targets can be called from the shell:
- #
+
+Created an attachment (id=289)
+ --> (https://bugs.busybox.net/attachment.cgi?id=289)
+Fix the wrong argument count for swapon
+
+I had to patch util-linux in order to compile, on the last SVN version of
+buildroot (v2009.05-svn)
+
+when compiling, it reports that libc has only 1 arg to swapon function, but 
+in fact it requires 2.
+
+I Included a patch to fix that.
+
+thanks.
+
+
 -- 
-1.6.3.rc4.11.g6eda9
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
