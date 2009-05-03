@@ -1,49 +1,24 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun,  3 May 2009 15:42:37 +0000 (UTC)
-Subject: [Buildroot] [Bug 311] New: util-linux-pre7 complains swapon has 1
-	args
-Message-ID: <bug-311-163@https.bugs.busybox.net/>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 03 May 2009 22:14:05 +0200
+Subject: [Buildroot] [PATCH] Makefile.autotools.in: fix minimal foo.mk
+	example
+In-Reply-To: <1241351659-5506-1-git-send-email-markus.heidelberg@web.de>
+	(Markus Heidelberg's message of "Sun\,
+	3 May 2009 13\:54\:19 +0200")
+References: <1241351659-5506-1-git-send-email-markus.heidelberg@web.de>
+Message-ID: <87ocua6j1u.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=311
+>>>>> "Markus" == Markus Heidelberg <markus.heidelberg@web.de> writes:
 
-              Host: Slackware Linux 12.1 - x86
-            Target: Generic x86 firewall
-           Summary: util-linux-pre7 complains swapon has 1 args
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: cassiano at polaco.pro.br
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+ Markus> The directory argument was introduced to support packages in
+ Markus> subdirectories of package/ several months ago.
 
-
-Created an attachment (id=289)
- --> (https://bugs.busybox.net/attachment.cgi?id=289)
-Fix the wrong argument count for swapon
-
-I had to patch util-linux in order to compile, on the last SVN version of
-buildroot (v2009.05-svn)
-
-when compiling, it reports that libc has only 1 arg to swapon function, but 
-in fact it requires 2.
-
-I Included a patch to fix that.
-
-thanks.
-
+Thanks, committed.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
