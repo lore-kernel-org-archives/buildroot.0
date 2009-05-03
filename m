@@ -1,24 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 03 May 2009 22:14:05 +0200
-Subject: [Buildroot] [PATCH] Makefile.autotools.in: fix minimal foo.mk
-	example
-In-Reply-To: <1241351659-5506-1-git-send-email-markus.heidelberg@web.de>
-	(Markus Heidelberg's message of "Sun\,
-	3 May 2009 13\:54\:19 +0200")
-References: <1241351659-5506-1-git-send-email-markus.heidelberg@web.de>
-Message-ID: <87ocua6j1u.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun,  3 May 2009 20:20:53 +0000 (UTC)
+Subject: [Buildroot] [Bug 311] util-linux-pre7 complains swapon has 1 args
+In-Reply-To: <bug-311-163@https.bugs.busybox.net/>
+References: <bug-311-163@https.bugs.busybox.net/>
+Message-ID: <20090503202053.E63FB7757F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Markus" == Markus Heidelberg <markus.heidelberg@web.de> writes:
+https://bugs.busybox.net/show_bug.cgi?id=311
 
- Markus> The directory argument was introduced to support packages in
- Markus> subdirectories of package/ several months ago.
 
-Thanks, committed.
+Peter Korsgaard <jacmet@uclibc.org> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
+
+
+
+
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-05-03 20:20:53 UTC ---
+Sorry, but that patch seems bogus. Doesn't your compiler complain about the
+'define' line? I gather we should figure out why mount/swap.configure
+misdetects the SWAPON_HAS_TWO_ARGS instead. Does config.log contain anything
+interesting?
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
