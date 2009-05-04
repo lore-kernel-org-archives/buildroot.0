@@ -1,25 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 04 May 2009 21:47:31 +0200
-Subject: [Buildroot] [PATCH] Add a .gitignore file
-In-Reply-To: <49FFED11.D58A.0070.1@alliedtelesis.co.nz> (angus salkeld's
-	message of "Tue\, 05 May 2009 07\:38\:57 +1200")
-References: <49FEE4470200007000014C15@gwia.alliedtelesyn.co.nz>
-	<49FEAF91.8050403@nessie.de>
-	<49FFED11.D58A.0070.1@alliedtelesis.co.nz>
-Message-ID: <8763gg646k.fsf@macbook.be.48ers.dk>
+From: Cyril HAENEL <chaenel@free.fr>
+Date: Mon, 04 May 2009 21:52:11 +0200
+Subject: [Buildroot] Problem with LZO package in ARM configuration,
+ need help to solve the problem
+In-Reply-To: <87eiv465a9.fsf@macbook.be.48ers.dk>
+References: <49FEC5F7.9070808@free.fr>
+	<877i0x6r8l.fsf@macbook.be.48ers.dk>	<49FED95C.5040802@free.fr>
+	<87y6td59d7.fsf@macbook.be.48ers.dk>	<49FEEB68.30800@free.fr>
+	<87tz4156qv.fsf@macbook.be.48ers.dk>	<49FEF1D5.8020203@free.fr>
+	<87eiv465a9.fsf@macbook.be.48ers.dk>
+Message-ID: <49FF476B.5040605@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "angus" == angus salkeld <angus.salkeld@alliedtelesis.co.nz> writes:
 
- angus> Hi
- angus> Thanks for the feedback.
- angus> Here is a patch with the suggested changes.
+>  Cyril> The problem was in build_arm directory, thus I think it's the target
+>  Cyril> compilation which fails when we have an already installed (old) arm
+>  Cyril> toolchain.
+>
+> I've just committed a workaround to git (a035275) - Could you give it
+> a try please?
+>
+>   
+Sorry, but I don't understand, what do you want I try to do ?
 
-Thanks, committed.
 
 -- 
-Bye, Peter Korsgaard
+
+Cyril Haenel
+Registered Linux User #332632
