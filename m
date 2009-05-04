@@ -1,11 +1,9 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon,  4 May 2009 16:21:18 +0200
-Subject: [Buildroot] [PATCH 3/3] package/: add gob2 for target/host and use
-	for gmpc compilation
-In-Reply-To: <1241446878-32056-2-git-send-email-jacmet@uclibc.org>
+Date: Mon,  4 May 2009 16:21:17 +0200
+Subject: [Buildroot] [PATCH 2/3] kernel-headers: bump 2.6.27.x / 2.6.28.x
+In-Reply-To: <1241446878-32056-1-git-send-email-jacmet@uclibc.org>
 References: <1241446878-32056-1-git-send-email-jacmet@uclibc.org>
-	<1241446878-32056-2-git-send-email-jacmet@uclibc.org>
-Message-ID: <1241446878-32056-3-git-send-email-jacmet@uclibc.org>
+Message-ID: <1241446878-32056-2-git-send-email-jacmet@uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,180 +14,239 @@ From: Peter Korsgaard <jacmet@sunsite.dk>
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in                                |    1 +
- package/gmpc/gmpc.mk                             |   12 +----
- package/gob2/Config.in                           |   10 ++++
- package/gob2/gob2-dont-include-from-prefix.patch |   40 +++++++++++++++
- package/gob2/gob2.mk                             |   56 ++++++++++++++++++++++
- 5 files changed, 110 insertions(+), 9 deletions(-)
- create mode 100644 package/gob2/Config.in
- create mode 100644 package/gob2/gob2-dont-include-from-prefix.patch
- create mode 100644 package/gob2/gob2.mk
+ toolchain/kernel-headers/Config.in                 |    4 +-
+ .../linux-2.6.28.10-cris-eth-driver-netpoll.patch  |   11 +++++
+ .../linux-2.6.28.10-cris-headers.patch             |   28 ++++++++++++
+ .../linux-2.6.28.10-cris-objcopy-flags.patch       |   45 ++++++++++++++++++++
+ .../linux-2.6.28.9-cris-eth-driver-netpoll.patch   |   11 -----
+ .../linux-2.6.28.9-cris-headers.patch              |   28 ------------
+ .../linux-2.6.28.9-cris-objcopy-flags.patch        |   45 --------------------
+ 7 files changed, 86 insertions(+), 86 deletions(-)
+ create mode 100644 toolchain/kernel-headers/linux-2.6.28.10-cris-eth-driver-netpoll.patch
+ create mode 100644 toolchain/kernel-headers/linux-2.6.28.10-cris-headers.patch
+ create mode 100644 toolchain/kernel-headers/linux-2.6.28.10-cris-objcopy-flags.patch
+ delete mode 100644 toolchain/kernel-headers/linux-2.6.28.9-cris-eth-driver-netpoll.patch
+ delete mode 100644 toolchain/kernel-headers/linux-2.6.28.9-cris-headers.patch
+ delete mode 100644 toolchain/kernel-headers/linux-2.6.28.9-cris-objcopy-flags.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index f01f6f6..251888b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -384,6 +384,7 @@ source "package/dillo/Config.in"
- source "package/docker/Config.in"
- source "package/gqview/Config.in"
- source "package/gmpc/Config.in"
-+source "package/gob2/Config.in"
- source "package/gtkperf/Config.in"
- source "package/leafpad/Config.in"
- source "package/midori/Config.in"
-diff --git a/package/gmpc/gmpc.mk b/package/gmpc/gmpc.mk
-index 95795dd..7110d15 100644
---- a/package/gmpc/gmpc.mk
-+++ b/package/gmpc/gmpc.mk
-@@ -7,10 +7,11 @@ GMPC_VERSION = 0.17.0
- GMPC_SOURCE = gmpc-$(GMPC_VERSION).tar.gz
- GMPC_SITE = http://download.sarine.nl/download/Programs/gmpc/$(GMPC_VERSION)/
- GMPC_LIBTOOL_PATCH = NO
--GMPC_CONF_ENV = ac_cv_lib_curl_curl_global_init=yes
-+GMPC_CONF_ENV = ac_cv_lib_curl_curl_global_init=yes \
-+		ac_cv_path_GOB2=$(GOB2_HOST_BINARY)
- GMPC_CONF_OPT = --disable-mmkeys
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 46c8d8d..6c457c7 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -60,8 +60,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.24.7"	if BR2_KERNEL_HEADERS_2_6_24
+ 	default "2.6.25.19"	if BR2_KERNEL_HEADERS_2_6_25
+ 	default "2.6.26.8"	if BR2_KERNEL_HEADERS_2_6_26
+-	default "2.6.27.21"	if BR2_KERNEL_HEADERS_2_6_27
+-	default "2.6.28.9"	if BR2_KERNEL_HEADERS_2_6_28
++	default "2.6.27.22"	if BR2_KERNEL_HEADERS_2_6_27
++	default "2.6.28.10"	if BR2_KERNEL_HEADERS_2_6_28
+ 	default "2.6.29.2"	if BR2_KERNEL_HEADERS_2_6_29
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
  
--GMPC_DEPENDENCIES = libglib2 libgtk2 libglade libcurl libmpd
-+GMPC_DEPENDENCIES = libglib2 libgtk2 libglade libcurl libmpd host-gob2
- 
- ifeq ($(BR2_PACKAGE_XLIB_LIBSM),y)
- GMPC_DEPENENCIES += xlib_libSM
-@@ -20,10 +21,3 @@ GMPC_CONF_OPT += --disable-sm
- endif
- 
- $(eval $(call AUTOTARGETS,package,gmpc))
--
--# we NEED a host gob2
--ifeq ($(BR2_PACKAGE_GMPC),y)
--ifeq ($(wildcard $(shell which gob2 || echo /usr/bin/gob2)),)
--$(error Host gob2 not found. Please install GTK+ Object Builder package on your host (something like gob2))
--endif
--endif
-diff --git a/package/gob2/Config.in b/package/gob2/Config.in
+diff --git a/toolchain/kernel-headers/linux-2.6.28.10-cris-eth-driver-netpoll.patch b/toolchain/kernel-headers/linux-2.6.28.10-cris-eth-driver-netpoll.patch
 new file mode 100644
-index 0000000..314a1da
+index 0000000..5711767
 --- /dev/null
-+++ b/package/gob2/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_GOB2
-+	bool "gob2"
-+	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_FLEX
-+	select BR2_PACKAGE_BISON
-+	help
-+	  GOB (GTK+ Object Builder) is a preprocessor which simplifies
-+	  the writing of GObjects in C.
-+
-+	  http://www.jirka.org/gob.html
-diff --git a/package/gob2/gob2-dont-include-from-prefix.patch b/package/gob2/gob2-dont-include-from-prefix.patch
-new file mode 100644
-index 0000000..1b603d7
---- /dev/null
-+++ b/package/gob2/gob2-dont-include-from-prefix.patch
-@@ -0,0 +1,40 @@
-+[PATCH] Don't search $prefix/include for header files
-+
-+Don't add $prefix/include to the header file search path, as that breaks
-+cross compilation (build $prefix/include isn't the same as target
-+$prefix/include).
-+
-+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-+---
-+ src/Makefile.am |    3 +--
-+ src/Makefile.in |    3 +--
-+ 2 files changed, 2 insertions(+), 4 deletions(-)
-+
-+Index: gob2-2.0.15/src/Makefile.am
-+===================================================================
-+--- gob2-2.0.15.orig/src/Makefile.am
-++++ gob2-2.0.15/src/Makefile.am
-+@@ -17,8 +17,7 @@ INCLUDES = \
-+ 	-I$(top_builddir)	\
-+ 	-I$(top_builddir)/src	\
-+ 	-I$(top_srcdir)		\
-+-	-I$(top_srcdir)/src	\
-+-	-I$(includedir)
-++	-I$(top_srcdir)/src
++++ b/toolchain/kernel-headers/linux-2.6.28.10-cris-eth-driver-netpoll.patch
+@@ -0,0 +1,11 @@
++--- a/drivers/net/cris/eth_v10.c.org	2009-01-28 09:19:09.000000000 +0100
+++++ b/drivers/net/cris/eth_v10.c	2009-01-28 09:19:16.000000000 +0100
++@@ -1707,7 +1707,7 @@
++ static void
++ e100_netpoll(struct net_device* netdev)
++ {
++-	e100rxtx_interrupt(NETWORK_DMA_TX_IRQ_NBR, netdev, NULL);
+++	e100rxtx_interrupt(NETWORK_DMA_TX_IRQ_NBR, netdev);
++ }
++ #endif
 + 
-+ if NOINSTGOB
-+ noinst_PROGRAMS = @NOINSTGOB@
-+Index: gob2-2.0.15/src/Makefile.in
-+===================================================================
-+--- gob2-2.0.15.orig/src/Makefile.in
-++++ gob2-2.0.15/src/Makefile.in
-+@@ -193,8 +193,7 @@ INCLUDES = \
-+ 	-I$(top_builddir)	\
-+ 	-I$(top_builddir)/src	\
-+ 	-I$(top_srcdir)		\
-+-	-I$(top_srcdir)/src	\
-+-	-I$(includedir)
-++	-I$(top_srcdir)/src
-+ 
-+ @NOINSTGOB_TRUE at noinst_PROGRAMS = @NOINSTGOB@
-+ @NOINSTGOB_FALSE at bin_PROGRAMS = @INSTGOB@
-diff --git a/package/gob2/gob2.mk b/package/gob2/gob2.mk
+diff --git a/toolchain/kernel-headers/linux-2.6.28.10-cris-headers.patch b/toolchain/kernel-headers/linux-2.6.28.10-cris-headers.patch
 new file mode 100644
-index 0000000..a36f9ad
+index 0000000..ff2fa49
 --- /dev/null
-+++ b/package/gob2/gob2.mk
-@@ -0,0 +1,56 @@
-+#############################################################
-+#
-+# gob2
-+#
-+#############################################################
-+GOB2_VERSION = 2.0.15
-+GOB2_SOURCE = gob2-$(GOB2_VERSION).tar.gz
-+GOB2_SITE = http://ftp.5z.com/pub/gob/
-+
-+GOB2_DEPENDENCIES = libglib2 flex bison host-pkgconfig
-+
-+$(eval $(call AUTOTARGETS,package,gob2))
-+
-+# gob2 for the host
-+GOB2_HOST_DIR:=$(BUILD_DIR)/gob2-$(GOB2_VERSION)-host
-+GOB2_HOST_BINARY:=$(HOST_DIR)/usr/bin/gob2
-+
-+$(DL_DIR)/$(GOB2_SOURCE):
-+	$(call DOWNLOAD,$(GOB2_SITE),$(GOB2_SOURCE))
-+
-+$(STAMP_DIR)/host_gob2_unpacked: $(DL_DIR)/$(GOB2_SOURCE)
-+	mkdir -p $(GOB2_HOST_DIR)
-+	$(INFLATE$(suffix $(GOB2_SOURCE))) $< | \
-+		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(GOB2_HOST_DIR) $(TAR_OPTIONS) -
-+	touch $@
-+
-+$(STAMP_DIR)/host_gob2_configured: $(STAMP_DIR)/host_gob2_unpacked $(STAMP_DIR)/host_libglib2_installed
-+	(cd $(GOB2_HOST_DIR); rm -rf config.cache; \
-+		$(HOST_CONFIGURE_OPTS) \
-+		CFLAGS="$(HOST_CFLAGS)" \
-+		LDFLAGS="$(HOST_LDFLAGS)" \
-+		./configure \
-+		--prefix="$(HOST_DIR)/usr" \
-+		--sysconfdir="$(HOST_DIR)/etc" \
-+	)
-+	touch $@
-+
-+$(STAMP_DIR)/host_gob2_compiled: $(STAMP_DIR)/host_gob2_configured
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(GOB2_HOST_DIR)
-+	touch $@
-+
-+$(STAMP_DIR)/host_gob2_installed: $(STAMP_DIR)/host_gob2_compiled
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(GOB2_HOST_DIR) install
-+	touch $@
-+
-+host-gob2: $(STAMP_DIR)/host_gob2_installed
-+
-+host-gob2-source: gob2-source
-+
-+host-gob2-clean:
-+	rm -f $(addprefix $(STAMP_DIR)/host_gob2_,unpacked configured compiled installed)
-+	-$(MAKE) -C $(GOB2_HOST_DIR) uninstall
-+	-$(MAKE) -C $(GOB2_HOST_DIR) clean
-+
-+host-gob2-dirclean:
-+	rm -rf $(GOB2_HOST_DIR)
++++ b/toolchain/kernel-headers/linux-2.6.28.10-cris-headers.patch
+@@ -0,0 +1,28 @@
++diff -urN linux-2.6.28/arch/cris/include/arch-v10/arch/Kbuild linux-2.6.28.my/arch/cris/include/arch-v10/arch/Kbuild
++--- linux-2.6.28/arch/cris/include/arch-v10/arch/Kbuild	2008-12-25 00:26:37.000000000 +0100
+++++ linux-2.6.28.my/arch/cris/include/arch-v10/arch/Kbuild	2009-01-12 12:59:06.000000000 +0100
++@@ -1,3 +1,5 @@
+++header-y += elf.h
+++header-y += ptrace.h
++ header-y += user.h
++ header-y += svinto.h
++ header-y += sv_addr_ag.h
++diff -urN linux-2.6.28/arch/cris/include/asm/Kbuild linux-2.6.28.my/arch/cris/include/asm/Kbuild
++--- linux-2.6.28/arch/cris/include/asm/Kbuild	2008-12-25 00:26:37.000000000 +0100
+++++ linux-2.6.28.my/arch/cris/include/asm/Kbuild	2009-01-12 13:14:40.000000000 +0100
++@@ -1,11 +1,13 @@
++ include include/asm-generic/Kbuild.asm
++ 
++-header-y += arch-v10/
++-header-y += arch-v32/
+++header-y += ../arch-v10/arch/
+++header-y += ../arch-v32/arch/
++ 
+++header-y += elf.h
++ header-y += ethernet.h
++ header-y += rtc.h
++ header-y += sync_serial.h
+++header-y += user.h
++ 
++ unifdef-y += etraxgpio.h
++ unifdef-y += rs485.h
+diff --git a/toolchain/kernel-headers/linux-2.6.28.10-cris-objcopy-flags.patch b/toolchain/kernel-headers/linux-2.6.28.10-cris-objcopy-flags.patch
+new file mode 100644
+index 0000000..32da2f0
+--- /dev/null
++++ b/toolchain/kernel-headers/linux-2.6.28.10-cris-objcopy-flags.patch
+@@ -0,0 +1,45 @@
++--- linux-2.6.28/arch/cris/Makefile	2008-12-25 00:26:37.000000000 +0100
+++++ linux-2.6.28.my/arch/cris/Makefile	2009-01-12 13:21:44.000000000 +0100
++@@ -40,7 +40,7 @@
++ 
++ LD = $(CROSS_COMPILE)ld -mcrislinux
++ 
++-OBJCOPYFLAGS := -O binary -R .note -R .comment -S
+++OBJCOPYFLAGS := -O binary -R .note -R .note.gnu.build-id -R .comment
++ 
++ CPPFLAGS_vmlinux.lds = -DDRAM_VIRTUAL_BASE=0x$(CONFIG_ETRAX_DRAM_VIRTUAL_BASE)
++ 
++diff -urN linux-2.6.28/arch/cris/arch-v10/boot/Makefile linux-2.6.28.my/arch/cris/arch-v10/boot/Makefile
++--- linux-2.6.28/arch/cris/arch-v10/boot/Makefile	2008-12-25 00:26:37.000000000 +0100
+++++ linux-2.6.28.my/arch/cris/arch-v10/boot/Makefile	2009-01-12 13:28:25.000000000 +0100
++@@ -2,8 +2,6 @@
++ # arch/cris/arch-v10/boot/Makefile
++ #
++ 
++-OBJCOPYFLAGS = -O binary --remove-section=.bss
++-
++ subdir- := compressed rescue
++ targets := Image
++ 
++diff -urN linux-2.6.28/arch/cris/arch-v10/boot/compressed/Makefile linux-2.6.28.my/arch/cris/arch-v10/boot/compressed/Makefile
++--- linux-2.6.28/arch/cris/arch-v10/boot/compressed/Makefile	2008-12-25 00:26:37.000000000 +0100
+++++ linux-2.6.28.my/arch/cris/arch-v10/boot/compressed/Makefile	2009-01-12 13:28:33.000000000 +0100
++@@ -6,7 +6,6 @@
++ ccflags-y += -O2 $(LINUXINCLUDE)
++ ldflags-y += -T $(srctree)/$(src)/decompress.lds
++ OBJECTS = $(obj)/head.o $(obj)/misc.o
++-OBJCOPYFLAGS = -O binary --remove-section=.bss
++ 
++ quiet_cmd_image = BUILD   $@
++ cmd_image = cat $(obj)/decompress.bin $(obj)/piggy.gz > $@
++diff -urN linux-2.6.28/arch/cris/arch-v10/boot/rescue/Makefile linux-2.6.28.my/arch/cris/arch-v10/boot/rescue/Makefile
++--- linux-2.6.28/arch/cris/arch-v10/boot/rescue/Makefile	2008-12-25 00:26:37.000000000 +0100
+++++ linux-2.6.28.my/arch/cris/arch-v10/boot/rescue/Makefile	2009-01-12 13:28:40.000000000 +0100
++@@ -5,7 +5,6 @@
++ ccflags-y += -O2 $(LINUXINCLUDE)
++ asflags-y += $(LINUXINCLUDE)
++ ldflags-y += -T $(srctree)/$(src)/rescue.lds
++-OBJCOPYFLAGS = -O binary --remove-section=.bss
++ obj-$(CONFIG_ETRAX_AXISFLASHMAP) = head.o
++ OBJECT := $(obj)/head.o
++ 
+diff --git a/toolchain/kernel-headers/linux-2.6.28.9-cris-eth-driver-netpoll.patch b/toolchain/kernel-headers/linux-2.6.28.9-cris-eth-driver-netpoll.patch
+deleted file mode 100644
+index 5711767..0000000
+--- a/toolchain/kernel-headers/linux-2.6.28.9-cris-eth-driver-netpoll.patch
++++ /dev/null
+@@ -1,11 +0,0 @@
+---- a/drivers/net/cris/eth_v10.c.org	2009-01-28 09:19:09.000000000 +0100
+-+++ b/drivers/net/cris/eth_v10.c	2009-01-28 09:19:16.000000000 +0100
+-@@ -1707,7 +1707,7 @@
+- static void
+- e100_netpoll(struct net_device* netdev)
+- {
+--	e100rxtx_interrupt(NETWORK_DMA_TX_IRQ_NBR, netdev, NULL);
+-+	e100rxtx_interrupt(NETWORK_DMA_TX_IRQ_NBR, netdev);
+- }
+- #endif
+- 
+diff --git a/toolchain/kernel-headers/linux-2.6.28.9-cris-headers.patch b/toolchain/kernel-headers/linux-2.6.28.9-cris-headers.patch
+deleted file mode 100644
+index ff2fa49..0000000
+--- a/toolchain/kernel-headers/linux-2.6.28.9-cris-headers.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-diff -urN linux-2.6.28/arch/cris/include/arch-v10/arch/Kbuild linux-2.6.28.my/arch/cris/include/arch-v10/arch/Kbuild
+---- linux-2.6.28/arch/cris/include/arch-v10/arch/Kbuild	2008-12-25 00:26:37.000000000 +0100
+-+++ linux-2.6.28.my/arch/cris/include/arch-v10/arch/Kbuild	2009-01-12 12:59:06.000000000 +0100
+-@@ -1,3 +1,5 @@
+-+header-y += elf.h
+-+header-y += ptrace.h
+- header-y += user.h
+- header-y += svinto.h
+- header-y += sv_addr_ag.h
+-diff -urN linux-2.6.28/arch/cris/include/asm/Kbuild linux-2.6.28.my/arch/cris/include/asm/Kbuild
+---- linux-2.6.28/arch/cris/include/asm/Kbuild	2008-12-25 00:26:37.000000000 +0100
+-+++ linux-2.6.28.my/arch/cris/include/asm/Kbuild	2009-01-12 13:14:40.000000000 +0100
+-@@ -1,11 +1,13 @@
+- include include/asm-generic/Kbuild.asm
+- 
+--header-y += arch-v10/
+--header-y += arch-v32/
+-+header-y += ../arch-v10/arch/
+-+header-y += ../arch-v32/arch/
+- 
+-+header-y += elf.h
+- header-y += ethernet.h
+- header-y += rtc.h
+- header-y += sync_serial.h
+-+header-y += user.h
+- 
+- unifdef-y += etraxgpio.h
+- unifdef-y += rs485.h
+diff --git a/toolchain/kernel-headers/linux-2.6.28.9-cris-objcopy-flags.patch b/toolchain/kernel-headers/linux-2.6.28.9-cris-objcopy-flags.patch
+deleted file mode 100644
+index 32da2f0..0000000
+--- a/toolchain/kernel-headers/linux-2.6.28.9-cris-objcopy-flags.patch
++++ /dev/null
+@@ -1,45 +0,0 @@
+---- linux-2.6.28/arch/cris/Makefile	2008-12-25 00:26:37.000000000 +0100
+-+++ linux-2.6.28.my/arch/cris/Makefile	2009-01-12 13:21:44.000000000 +0100
+-@@ -40,7 +40,7 @@
+- 
+- LD = $(CROSS_COMPILE)ld -mcrislinux
+- 
+--OBJCOPYFLAGS := -O binary -R .note -R .comment -S
+-+OBJCOPYFLAGS := -O binary -R .note -R .note.gnu.build-id -R .comment
+- 
+- CPPFLAGS_vmlinux.lds = -DDRAM_VIRTUAL_BASE=0x$(CONFIG_ETRAX_DRAM_VIRTUAL_BASE)
+- 
+-diff -urN linux-2.6.28/arch/cris/arch-v10/boot/Makefile linux-2.6.28.my/arch/cris/arch-v10/boot/Makefile
+---- linux-2.6.28/arch/cris/arch-v10/boot/Makefile	2008-12-25 00:26:37.000000000 +0100
+-+++ linux-2.6.28.my/arch/cris/arch-v10/boot/Makefile	2009-01-12 13:28:25.000000000 +0100
+-@@ -2,8 +2,6 @@
+- # arch/cris/arch-v10/boot/Makefile
+- #
+- 
+--OBJCOPYFLAGS = -O binary --remove-section=.bss
+--
+- subdir- := compressed rescue
+- targets := Image
+- 
+-diff -urN linux-2.6.28/arch/cris/arch-v10/boot/compressed/Makefile linux-2.6.28.my/arch/cris/arch-v10/boot/compressed/Makefile
+---- linux-2.6.28/arch/cris/arch-v10/boot/compressed/Makefile	2008-12-25 00:26:37.000000000 +0100
+-+++ linux-2.6.28.my/arch/cris/arch-v10/boot/compressed/Makefile	2009-01-12 13:28:33.000000000 +0100
+-@@ -6,7 +6,6 @@
+- ccflags-y += -O2 $(LINUXINCLUDE)
+- ldflags-y += -T $(srctree)/$(src)/decompress.lds
+- OBJECTS = $(obj)/head.o $(obj)/misc.o
+--OBJCOPYFLAGS = -O binary --remove-section=.bss
+- 
+- quiet_cmd_image = BUILD   $@
+- cmd_image = cat $(obj)/decompress.bin $(obj)/piggy.gz > $@
+-diff -urN linux-2.6.28/arch/cris/arch-v10/boot/rescue/Makefile linux-2.6.28.my/arch/cris/arch-v10/boot/rescue/Makefile
+---- linux-2.6.28/arch/cris/arch-v10/boot/rescue/Makefile	2008-12-25 00:26:37.000000000 +0100
+-+++ linux-2.6.28.my/arch/cris/arch-v10/boot/rescue/Makefile	2009-01-12 13:28:40.000000000 +0100
+-@@ -5,7 +5,6 @@
+- ccflags-y += -O2 $(LINUXINCLUDE)
+- asflags-y += $(LINUXINCLUDE)
+- ldflags-y += -T $(srctree)/$(src)/rescue.lds
+--OBJCOPYFLAGS = -O binary --remove-section=.bss
+- obj-$(CONFIG_ETRAX_AXISFLASHMAP) = head.o
+- OBJECT := $(obj)/head.o
+- 
 -- 
 1.6.2
