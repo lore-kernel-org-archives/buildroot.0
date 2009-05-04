@@ -1,28 +1,38 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 04 May 2009 21:23:42 +0200
-Subject: [Buildroot] Problem with LZO package in ARM configuration,
-	need help to solve the problem
-In-Reply-To: <49FEF1D5.8020203@free.fr> (Cyril HAENEL's message of "Mon\,
-	04 May 2009 15\:47\:01 +0200")
-References: <49FEC5F7.9070808@free.fr> <877i0x6r8l.fsf@macbook.be.48ers.dk>
-	<49FED95C.5040802@free.fr> <87y6td59d7.fsf@macbook.be.48ers.dk>
-	<49FEEB68.30800@free.fr> <87tz4156qv.fsf@macbook.be.48ers.dk>
-	<49FEF1D5.8020203@free.fr>
-Message-ID: <87eiv465a9.fsf@macbook.be.48ers.dk>
+Date: Mon,  4 May 2009 21:24:26 +0200
+Subject: [Buildroot] [PATCH] package: set CXX to false rather than "" if no
+	C++ support is enabled
+Message-ID: <1241465066-9795-1-git-send-email-jacmet@uclibc.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Cyril" == Cyril HAENEL <chaenel@free.fr> writes:
+From: Peter Korsgaard <jacmet@sunsite.dk>
 
- Cyril> The problem was in build_arm directory, thus I think it's the target
- Cyril> compilation which fails when we have an already installed (old) arm
- Cyril> toolchain.
+Some configure scripts seems to ignore CXX settings if it is set to
+the empty string, and goes back to the default (<arch>-linux-g++),
+so use false instead, as that will loudly break the build if the
+C++ compiler is ever used.
 
-I've just committed a workaround to git (a035275) - Could you give it
-a try please?
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/Makefile.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 2605639..7daa3b4 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -371,7 +371,7 @@ DISABLE_IPV6= --disable-ipv6
+ endif
+ 
+ ifneq ($(BR2_GCC_CROSS_CXX),y)
+-TARGET_CONFIGURE_OPTS+=CXX=""
++TARGET_CONFIGURE_OPTS+=CXX=false
+ endif
+ 
+ ifeq ($(BR2_ENABLE_DEBUG),y)
 -- 
-Bye, Peter Korsgaard
+1.6.2
