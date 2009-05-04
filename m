@@ -1,189 +1,49 @@
-From: angus salkeld <angus.salkeld@alliedtelesis.co.nz>
-Date: Mon, 04 May 2009 12:50:44 +1200
-Subject: [Buildroot] [PATCH] gcc-4.3.3: add a patch to link with the math
-	lib to	 get copysignal
-Message-ID: <49FEE4A40200007000014C19@gwia.alliedtelesyn.co.nz>
+From: Gaye Abdoulaye Walsimou <walsimou@walsimou.com>
+Date: Mon, 04 May 2009 10:00:49 +0200
+Subject: [Buildroot] [PATCH] Add a .gitignore file
+In-Reply-To: <49FEE4470200007000014C15@gwia.alliedtelesyn.co.nz>
+References: <49FEE4470200007000014C15@gwia.alliedtelesyn.co.nz>
+Message-ID: <49FEA0B1.8050602@walsimou.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Conditionally apply the following patch by Bernhard Reutner-Fischer which
-solves a link error on powerpc (with softfloat) when using a shared libgcc_s
+angus salkeld wrote:
+> ---
+>  .gitignore |   16 ++++++++++++++++
+>  1 files changed, 16 insertions(+), 0 deletions(-)
+>  create mode 100644 .gitignore
+>
+> diff --git a/.gitignore b/.gitignore
+> new file mode 100644
+> index 0000000..191e148
+> --- /dev/null
+> +++ b/.gitignore
+> @@ -0,0 +1,16 @@
+> +build_*
+> +project_*
+> +toolchain_*
+> +binaries/*
+> +.auto.deps
+> +.config.cmd
+> +.config.old
+> +package/config/buildroot-config/
+> +package/config/.depend
+> +package/config/conf
+> +package/config/mconf
+> +package/config/*.o
+> +package/config/lex.zconf.c
+> +package/config/lxdialog/*.o
+> +package/config/zconf.hash.c
+> +package/config/zconf.tab.c
+>   
+Hello Angus,
+I think it is better to add .gitignore file in each subdirectory. So if
+a subdirectory comes to be changed, you don't have to modify the
+.gitignore file in the root directory, and this avoids having a long
+list of ignored files in .gitignore.
+Other wise, yes, .gitignore files is a good idea.
 
-See: http://gcc.gnu.org/ml/gcc-patches/2008-10/msg00237.html
-http://www.nabble.com/PPC-won't-build-with-soft-float-td22772110.html
----
- .../powerpc-link-with-math-lib.patch.conditional   |  130 ++++++++++++++++++++
- toolchain/gcc/gcc-uclibc-4.x.mk                    |    5 +
- 2 files changed, 135 insertions(+), 0 deletions(-)
- create mode 100644 toolchain/gcc/4.3.3/powerpc-link-with-math-lib.patch.conditional
-
-diff --git a/toolchain/gcc/4.3.3/powerpc-link-with-math-lib.patch.conditional b/toolchain/gcc/4.3.3/powerpc-link-with-math-lib.patch.conditional
-new file mode 100644
-index 0000000..7d6aa5e
---- /dev/null
-+++ b/toolchain/gcc/4.3.3/powerpc-link-with-math-lib.patch.conditional
-@@ -0,0 +1,130 @@
-+See: http://gcc.gnu.org/ml/gcc-patches/2008-10/msg00237.html
-+Patch by: Bernhard Reutner-Fischer
-+
-+diff -rdup gcc-4.4.0.old/gcc/config/t-slibgcc-elf-ver gcc-4.4.0/gcc/config/t-slibgcc-elf-ver
-+--- gcc-4.4.0.old/gcc/config/t-slibgcc-elf-ver	2005-10-31 18:03:08.000000000 +0100
-++++ gcc-4.4.0/gcc/config/t-slibgcc-elf-ver	2008-10-07 19:28:13.000000000 +0200
-+@@ -9,7 +9,7 @@ SHLIB_MAP = @shlib_map_file@
-+ SHLIB_OBJS = @shlib_objs@
-+ SHLIB_DIR = @multilib_dir@
-+ SHLIB_SLIBDIR_QUAL = @shlib_slibdir_qual@
-+-SHLIB_LC = -lc
-++SHLIB_LC = @libgcc_libm@ -lc
-+ 
-+ SHLIB_LINK = $(GCC_FOR_TARGET) $(LIBGCC2_CFLAGS) -shared -nodefaultlibs \
-+ 	-Wl,--soname=$(SHLIB_SONAME) \
-+diff -rdup gcc-4.4.0.old/libgcc/configure gcc-4.4.0/libgcc/configure
-+--- gcc-4.4.0.old/libgcc/configure	2008-07-17 10:40:53.000000000 +0200
-++++ gcc-4.4.0/libgcc/configure	2008-10-07 19:40:48.000000000 +0200
-+@@ -272,7 +272,7 @@ PACKAGE_STRING='GNU C Runtime Library 1.
-+ PACKAGE_BUGREPORT=''
-+ 
-+ ac_unique_file="static-object.mk"
-+-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS libgcc_topdir enable_shared slibdir INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA AWK build build_cpu build_vendor build_os host host_cpu host_vendor host_os host_noncanonical build_libsubdir build_subdir host_subdir target_subdir AR ac_ct_AR LIPO ac_ct_LIPO NM ac_ct_NM RANLIB ac_ct_RANLIB STRIP ac_ct_STRIP LN_S CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT CPP decimal_float enable_decimal_float fixed_point vis_hide set_have_cc_tls tmake_file extra_parts asm_hidden_op LIBOBJS LTLIBOBJS'
-++ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS libgcc_topdir enable_shared slibdir INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA AWK build build_cpu build_vendor build_os host host_cpu host_vendor host_os host_noncanonical build_libsubdir build_subdir host_subdir target_subdir AR ac_ct_AR LIPO ac_ct_LIPO NM ac_ct_NM RANLIB ac_ct_RANLIB STRIP ac_ct_STRIP LN_S CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT CPP decimal_float enable_decimal_float fixed_point vis_hide set_have_cc_tls LIBGCC_LIBM tmake_file extra_parts asm_hidden_op LIBOBJS LTLIBOBJS'
-+ ac_subst_files=''
-+ ac_pwd=`pwd`
-+ 
-+@@ -3522,6 +3522,39 @@ if test "$enable_tls $gcc_cv_have_cc_tls
-+ fi
-+ 
-+ 
-++# On powerpc libgcc_s references copysignl which is a libm function but
-++# glibc apparently also provides it via libc as opposed to uClibc where
-++# it lives in libm.
-++echo "$as_me:$LINENO: checking for library containing copysignl" >&5
-++echo $ECHO_N "checking for library containing copysignl... $ECHO_C" >&6
-++if test "${libgcc_cv_copysignl_lib+set}" = set; then
-++  echo $ECHO_N "(cached) $ECHO_C" >&6
-++else
-++
-++    echo '#include <features.h>' > conftest.c
-++    echo 'int the_libc = __UCLIBC__ + __powerpc__;' >> conftest.c
-++    libgcc_cv_copysignl_lib="-lc"
-++    if { ac_try='${CC-cc} -S conftest.c -o conftest.s 1>&5'
-++  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-++  (eval $ac_try) 2>&5
-++  ac_status=$?
-++  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-++  (exit $ac_status); }; }
-++    then
-++	libgcc_cv_copysignl_lib="-lm"
-++    fi
-++    rm -f conftest.*
-++
-++fi
-++echo "$as_me:$LINENO: result: $libgcc_cv_copysignl_lib" >&5
-++echo "${ECHO_T}$libgcc_cv_copysignl_lib" >&6
-++
-++case /${libgcc_cv_copysignl_lib}/ in
-++  /-lm/) LIBGCC_LIBM="$LIBGCC_LIBM -lm" ;;
-++  *) LIBGCC_LIBM= ;;
-++esac
-++
-++
-+ # Conditionalize the makefile for this target machine.
-+ tmake_file_=
-+ for f in ${tmake_file}
-+@@ -4242,6 +4275,7 @@ s, at enable_decimal_float@,$enable_decimal
-+ s, at fixed_point@,$fixed_point,;t t
-+ s, at vis_hide@,$vis_hide,;t t
-+ s, at set_have_cc_tls@,$set_have_cc_tls,;t t
-++s, at LIBGCC_LIBM@,$LIBGCC_LIBM,;t t
-+ s, at tmake_file@,$tmake_file,;t t
-+ s, at extra_parts@,$extra_parts,;t t
-+ s, at asm_hidden_op@,$asm_hidden_op,;t t
-+diff -rdup gcc-4.4.0.old/libgcc/configure.ac gcc-4.4.0/libgcc/configure.ac
-+--- gcc-4.4.0.old/libgcc/configure.ac	2008-07-17 10:40:53.000000000 +0200
-++++ gcc-4.4.0/libgcc/configure.ac	2008-10-07 19:34:48.000000000 +0200
-+@@ -203,6 +203,27 @@ if test "$enable_tls $gcc_cv_have_cc_tls
-+ fi
-+ AC_SUBST(set_have_cc_tls)
-+ 
-++# On powerpc libgcc_s references copysignl which is a libm function but
-++# glibc apparently also provides it via libc as opposed to uClibc where
-++# it lives in libm.
-++AC_CACHE_CHECK([for library containing copysignl],
-++  libgcc_cv_copysignl_lib, [
-++    echo '#include <features.h>' > conftest.c
-++    echo 'int the_libc = __UCLIBC__ + __powerpc__;' >> conftest.c
-++    libgcc_cv_copysignl_lib="-lc"
-++    if AC_TRY_COMMAND(${CC-cc} -S conftest.c -o conftest.s 1>&AS_MESSAGE_LOG_FD)
-++    then
-++	libgcc_cv_copysignl_lib="-lm"
-++    fi
-++    rm -f conftest.*
-++  ])
-++
-++case /${libgcc_cv_copysignl_lib}/ in
-++  /-lm/) LIBGCC_LIBM="$LIBGCC_LIBM -lm" ;;
-++  *) LIBGCC_LIBM= ;;
-++esac
-++AC_SUBST(LIBGCC_LIBM)
-++
-+ # Conditionalize the makefile for this target machine.
-+ tmake_file_=
-+ for f in ${tmake_file}
-+diff -rdup gcc-4.4.0.old/libgcc/Makefile.in gcc-4.4.0/libgcc/Makefile.in
-+--- gcc-4.4.0.old/libgcc/Makefile.in	2008-07-17 10:40:53.000000000 +0200
-++++ gcc-4.4.0/libgcc/Makefile.in	2008-10-07 19:28:13.000000000 +0200
-+@@ -40,6 +40,7 @@ enable_shared = @enable_shared@
-+ decimal_float = @decimal_float@
-+ enable_decimal_float = @enable_decimal_float@
-+ fixed_point = @fixed_point@
-++LIBGCC_LIBM = @LIBGCC_LIBM@
-+ 
-+ host_noncanonical = @host_noncanonical@
-+ 
-+@@ -786,9 +787,10 @@ libgcc_s$(SHLIB_EXT): $(libgcc-s-objects
-+ 		@multilib_dir@,$(MULTIDIR),$(subst \
-+ 		@shlib_objs@,$(objects),$(subst \
-+ 		@shlib_base_name@,libgcc_s,$(subst \
-++		@libgcc_libm@,$(LIBGCC_LIBM),$(subst \
-+ 		@shlib_map_file@,$(mapfile),$(subst \
-+ 		@shlib_slibdir_qual@,$(MULTIOSSUBDIR),$(subst \
-+-		@shlib_slibdir@,$(shlib_slibdir),$(SHLIB_LINK))))))))
-++		@shlib_slibdir@,$(shlib_slibdir),$(SHLIB_LINK)))))))))
-+ 
-+ libunwind$(SHLIB_EXT): $(libunwind-s-objects) $(extra-parts)
-+ 	# @multilib_flags@ is still needed because this may use
-+
-diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
-index 8ecd97a..42e9d29 100644
---- a/toolchain/gcc/gcc-uclibc-4.x.mk
-+++ b/toolchain/gcc/gcc-uclibc-4.x.mk
-@@ -178,6 +178,11 @@ endif
- ifeq ("$(strip $(ARCH))","armeb")
- 	toolchain/patch-kernel.sh $(GCC_DIR) toolchain/gcc/$(GCC_VERSION) arm-softfloat.patch.conditional
- endif
-+ifeq ($(BR2_GCC_SHARED_LIBGCC),y)
-+ifeq ("$(strip $(ARCH))","powerpc")
-+	toolchain/patch-kernel.sh $(GCC_DIR) toolchain/gcc/$(GCC_VERSION) powerpc-link-with-math-lib.patch.conditional
-+endif
-+endif
- endif
- 	touch $@
- 
--- 
-1.5.6
-
-
-NOTICE: This message contains privileged and confidential
-information intended only for the use of the addressee
-named above. If you are not the intended recipient of
-this message you are hereby notified that you must not
-disseminate, copy or take any action in reliance on it.
-If you have received this message in error please
-notify Allied Telesis Labs Ltd immediately.
-Any views expressed in this message are those of the
-individual sender, except where the sender has the
-authority to issue and specifically states them to
-be the views of Allied Telesis Labs.
+Cheers,
