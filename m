@@ -1,24 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 03 May 2009 22:25:44 +0200
-Subject: [Buildroot] [PATCH 0/4] scripts/package wizard: fixes and
-	improvements
-In-Reply-To: <1241350918-32451-1-git-send-email-markus.heidelberg@web.de>
-	(Markus Heidelberg's message of "Sun\,
-	3 May 2009 13\:41\:54 +0200")
-References: <1241350918-32451-1-git-send-email-markus.heidelberg@web.de>
-Message-ID: <87k54y6iif.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon,  4 May 2009 00:38:39 +0000 (UTC)
+Subject: [Buildroot] [Bug 311] util-linux-pre7 complains swapon has 1 args
+In-Reply-To: <bug-311-163@https.bugs.busybox.net/>
+References: <bug-311-163@https.bugs.busybox.net/>
+Message-ID: <20090504003839.632B777579@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Markus" == Markus Heidelberg <markus.heidelberg@web.de> writes:
+https://bugs.busybox.net/show_bug.cgi?id=311
 
- Markus> I had this in my tree for too long time now without ever finishing it. Now it's
- Markus> finally done and I hope I can delete my branch soon :)
 
-Thanks, committed.
+Cassiano Martin <cassiano@polaco.pro.br> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|buildroot at uclibc.org        |
+
+
+
+
+--- Comment #2 from Cassiano Martin <cassiano@polaco.pro.br>  2009-05-04 00:38:38 UTC ---
+Thanks for replying, and forget about the patch, Its broken.
+
+I'll try to reproduce the problem again, as I had to manually edit the source
+to
+build my project.
+
+[]'s
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
