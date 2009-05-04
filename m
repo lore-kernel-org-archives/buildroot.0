@@ -1,104 +1,33 @@
-From: angus salkeld <angus.salkeld@alliedtelesis.co.nz>
-Date: Tue, 05 May 2009 08:04:39 +1200
-Subject: [Buildroot] [PATCH] fix gcc install problem on	
-	powerpc+soft-float+install_libgcc_s
-Message-ID: <49FFF317.D58A.0070.1@alliedtelesis.co.nz>
+From: Cyril HAENEL <chaenel@free.fr>
+Date: Mon, 04 May 2009 22:05:39 +0200
+Subject: [Buildroot] Problem with LZO package in ARM configuration,
+ need help to solve the problem
+In-Reply-To: <871vr463hl.fsf@macbook.be.48ers.dk>
+References: <49FEC5F7.9070808@free.fr>
+	<877i0x6r8l.fsf@macbook.be.48ers.dk>	<49FED95C.5040802@free.fr>
+	<87y6td59d7.fsf@macbook.be.48ers.dk>	<49FEEB68.30800@free.fr>
+	<87tz4156qv.fsf@macbook.be.48ers.dk>	<49FEF1D5.8020203@free.fr>
+	<87eiv465a9.fsf@macbook.be.48ers.dk>	<49FF476B.5040605@free.fr>
+	<871vr463hl.fsf@macbook.be.48ers.dk>
+Message-ID: <49FF4A93.3010601@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
 
-I am building with:
-gcc-4.3.3
-powerpc-8540
-soft-float
-install libgcc_s
-install libstd++
+>  Cyril> Sorry, but I don't understand, what do you want I try to do ?
+>
+> Checkout git (git clone git://git.buildroot.net/buildroot) and do a
+> fresh build to see if my fix solved your problem.
+>
+>   
+Ok, I use svn habitually, it's why I didn't understood !
 
-I get the following error:
+The git clone is in progress, I keep you informed
 
-# These are in /lib, so...
-rm -rf /home/anguss/imports/buildroot/project_build_powerpc/r1/root/usr/lib/libgcc_s*.so*
-cp -dpf
-/home/anguss/imports/buildroot/build_powerpc/staging_dir/usr/powerpc-linux-uclibc/lib/libgcc_s* \
-                /home/anguss/imports/buildroot/project_build_powerpc/r1/root/lib/
-cp: cannot stat
-`/home/anguss/imports/buildroot/build_powerpc/staging_dir/usr/powerpc-linux-uclibc/lib/libgcc_s*':
-No such file or directory
-make:
-[/home/anguss/imports/buildroot/project_build_powerpc/r1/autotools-stamps/gcc_libs_target_installed]
-Error 1 (ignored)
-/home/anguss/imports/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-strip
---remove-section=.comment --remove-section=.note --strip-unneeded
-/home/anguss/imports/buildroot/project_build_powerpc/r1/root/lib/libgcc_s*
-/home/anguss/imports/buildroot/build_powerpc/staging_dir/usr/bin/powerpc-linux-uclibc-strip:
-'/home/anguss/imports/buildroot/project_build_powerpc/r1/root/lib/libgcc_s*': No such file
-make:
-[/home/anguss/imports/buildroot/project_build_powerpc/r1/autotools-stamps/gcc_libs_target_installed]
-Error 1 (ignored)
-mkdir -p /home/anguss/imports/buildroot/project_build_powerpc/r1/root/usr/lib
-cp -dpf
-/home/anguss/imports/buildroot/build_powerpc/staging_dir/usr/powerpc-linux-uclibc/lib/libstdc++.so*
-\
-                /home/anguss/imports/buildroot/project_build_powerpc/r1/root/usr/lib/
-cp: cannot stat
-`/home/anguss/imports/buildroot/build_powerpc/staging_dir/usr/powerpc-linux-uclibc/lib/libstdc++.so*':
-No such file or directory
-make:
-[/home/anguss/imports/buildroot/project_build_powerpc/r1/autotools-stamps/gcc_libs_target_installed]
-Error 1 (ignored)
+-- 
 
-
-So here is a patch that fixes it for me.
-
-Note:
-
-1) I only include this for powerpc (maybe it should only check for soft float)?
-2) I have removed the ignore "-" from the copy, as it think that it is
-   a problem if you want a library installed but it fails to install.
-
-Regards
-Angus Salkeld
-
-diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
-index 42e9d29..ff6acfd 100644
---- a/toolchain/gcc/gcc-uclibc-4.x.mk
-+++ b/toolchain/gcc/gcc-uclibc-4.x.mk
-@@ -140,6 +140,12 @@ ifeq ($(BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE),y)
- GCC_DECIMAL_FLOAT:=--disable-decimal-float
- endif
- 
-+ifeq ($(BR2_SOFT_FLOAT),y)
-+ifeq ($(ARCH),powerpc)
-+GCC_NOF_DIR:=/nof
-+endif
-+endif
-+
- # gcc version < 4.2.0 don't have -Wno-overlength-strings and the configure
- # script has problems detecting it, so help it
- ifeq ($(shell test $(HOSTCC_VERSION) -lt 420 && echo OLD),OLD)
-@@ -347,18 +353,19 @@ endif
-        mkdir -p $(TARGET_DIR)/usr/lib $(TARGET_DIR)/usr/sbin
-        touch $@
- 
-+
- $(PROJECT_BUILD_DIR)/autotools-stamps/gcc_libs_target_installed: $(GCC_BUILD_DIR2)/.installed
- ifeq ($(BR2_GCC_SHARED_LIBGCC),y)
-        # These are in /lib, so...
-        rm -rf $(TARGET_DIR)/usr/lib/libgcc_s*.so*
--   -cp -dpf $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib/libgcc_s* \
-+ cp -dpf $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib$(GCC_NOF_DIR)/libgcc_s* \
-                $(TARGET_DIR)/lib/
-        -$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/lib/libgcc_s*
- endif
- ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
- ifeq ($(BR2_GCC_SHARED_LIBGCC),y)
-        mkdir -p $(TARGET_DIR)/usr/lib
--   -cp -dpf $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib/libstdc++.so* \
-+ cp -dpf $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib$(GCC_NOF_DIR)/libstdc++.so* \
-                $(TARGET_DIR)/usr/lib/
-        -$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libstdc++.so*
- endif
+Cyril Haenel
+Registered Linux User #332632
