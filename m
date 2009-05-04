@@ -1,38 +1,57 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon,  4 May 2009 21:24:26 +0200
-Subject: [Buildroot] [PATCH] package: set CXX to false rather than "" if no
-	C++ support is enabled
-Message-ID: <1241465066-9795-1-git-send-email-jacmet@uclibc.org>
+From: angus salkeld <angus.salkeld@alliedtelesis.co.nz>
+Date: Tue, 05 May 2009 07:38:57 +1200
+Subject: [Buildroot] [PATCH] Add a .gitignore file
+In-Reply-To: <49FEAF91.8050403@nessie.de>
+References: <49FEE4470200007000014C15@gwia.alliedtelesyn.co.nz>
+	<49FEAF91.8050403@nessie.de>
+Message-ID: <49FFED11.D58A.0070.1@alliedtelesis.co.nz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Peter Korsgaard <jacmet@sunsite.dk>
+Hi
 
-Some configure scripts seems to ignore CXX settings if it is set to
-the empty string, and goes back to the default (<arch>-linux-g++),
-so use false instead, as that will loudly break the build if the
-C++ compiler is ever used.
+Thanks for the feedback.
+Here is a patch with the suggested changes.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Regards
+-Angus Salkeld
+
 ---
- package/Makefile.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ .gitignore                |    9 +++++++++
+ package/config/.gitignore |    6 ++++++
+ 2 files changed, 15 insertions(+), 0 deletions(-)
+ create mode 100644 .gitignore
+ create mode 100644 package/config/.gitignore
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 2605639..7daa3b4 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -371,7 +371,7 @@ DISABLE_IPV6= --disable-ipv6
- endif
- 
- ifneq ($(BR2_GCC_CROSS_CXX),y)
--TARGET_CONFIGURE_OPTS+=CXX=""
-+TARGET_CONFIGURE_OPTS+=CXX=false
- endif
- 
- ifeq ($(BR2_ENABLE_DEBUG),y)
+diff --git a/.gitignore b/.gitignore
+new file mode 100644
+index 0000000..f901994
+--- /dev/null
++++ b/.gitignore
+@@ -0,0 +1,9 @@
++/build_*
++/project_*
++/toolchain_*
++/binaries/*
++/.auto.deps
++/.config.cmd
++/.config.old
++*.depend
++*.o
+diff --git a/package/config/.gitignore b/package/config/.gitignore
+new file mode 100644
+index 0000000..9067e68
+--- /dev/null
++++ b/package/config/.gitignore
+@@ -0,0 +1,6 @@
++/buildroot-config
++/conf
++/mconf
++/lex.zconf.c
++/zconf.hash.c
++/zconf.tab.c
 -- 
-1.6.2
+1.5.6
