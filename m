@@ -1,28 +1,32 @@
-From: Daniel Mack <daniel@caiaq.de>
-Date: Tue, 5 May 2009 09:46:09 +0200
-Subject: [Buildroot] Create user git repository at uclibc.org
-In-Reply-To: <d6cda7730905041746p7a9e8eaeg4ab32b4016ba73e6@mail.gmail.com>
-References: <d6cda7730905041746p7a9e8eaeg4ab32b4016ba73e6@mail.gmail.com>
-Message-ID: <20090505074609.GA22117@buzzloop.caiaq.de>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 05 May 2009 12:30:19 +0200
+Subject: [Buildroot] BR 2009.05-rc1 released
+Message-ID: <87ab5rhmf8.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, May 04, 2009 at 09:46:30PM -0300, Thiago A. Corr?a wrote:
->    Peter, I'm still lost here :(
->    I've created a git folder at my home then did a git clone from
-> buildroot, but that didn't expose a private branch. Then I thought I
-> needed to do a git init, but then again, all I got was a .git folder.
->    As I said, your message [1] still isn't clear to those of us who
-> don't know this beast.
+Hi,
 
-There is no 'private branch' in the upstream git. You need to create one
-for your purpose after cloning with 'git checkout -b myprivatebranch'.
+I have just released 2009.05-rc1 as promised [1]. For an overview of
+the changes, see
+http://git.buildroot.net/buildroot/plain/CHANGES?id=2009.05_rc1
 
-See http://www.kernel.org/pub/software/scm/git/docs/gittutorial.html and
-all the other docs on this site. A post that I found quite comprehensive
-is http://tomayko.com/writings/the-thing-about-git.
+You can download the tarball here:
 
-Daniel
+http://buildroot.net/downloads/buildroot-2009.05-rc1.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.net/buildroot
+
+Please give it a spin and report any problems to the mailing list or
+bug tracker. The plan is to release the final 2009.05 release in the
+2nd half of May.
+
+[1] http://lists.busybox.net/pipermail/buildroot/2009-April/027241.html
+
+-- 
+Bye, Peter Korsgaard
