@@ -1,174 +1,28 @@
-From: Angus Salkeld <angus.salkeld@alliedtelesis.co.nz>
-Date: Wed,  6 May 2009 08:04:52 +1200
-Subject: [Buildroot] [PATCH] gcc-4.3.3: add a patch to link with the math
-	lib to get copysignal
-In-Reply-To: <4A00C388.CHCDOM1.CHCPO1.100.1706A38.1.15693.1@1:49F559F8.CHCDOM1.CHCPO1.100.1706A38.1.15208.1@13>
-References: <4A00C388.CHCDOM1.CHCPO1.100.1706A38.1.15693.1@1:49F559F8.CHCDOM1.CHCPO1.100.1706A38.1.15208.1@13>
-Message-ID: <1241553892-17581-1-git-send-email-angus.salkeld@alliedtelesis.co.nz>
+From: Olaf Rempel <razzor@kopf-tisch.de>
+Date: Wed, 6 May 2009 12:11:10 +0200
+Subject: [Buildroot] 2009.05-rc1: fix dmraid build
+Message-ID: <20090506121110.46c105f8@bandomeer.europe.flane.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Conditionally apply the following patch by Bernhard Reutner-Fischer which
-solves a link error on powerpc (with softfloat or multilib) when using
-a shared libgcc_s.
+Hi,
 
-See: http://gcc.gnu.org/ml/gcc-patches/2008-10/msg00237.html
-http://www.nabble.com/PPC-won't-build-with-soft-float-td22772110.html
----
- .../powerpc-link-with-math-lib.patch.conditional   |  125 ++++++++++++++++++++
- toolchain/gcc/gcc-uclibc-4.x.mk                    |    5 +
- 2 files changed, 130 insertions(+), 0 deletions(-)
- create mode 100644 toolchain/gcc/4.3.3/powerpc-link-with-math-lib.patch.conditional
+the dmraid build seems to be broken.
+On x86 it bails out with missing include files.
+I think it's some sort of $FOO_SUBDIR issue, but I couldn't find/fix it.
 
-diff --git a/toolchain/gcc/4.3.3/powerpc-link-with-math-lib.patch.conditional b/toolchain/gcc/4.3.3/powerpc-link-with-math-lib.patch.conditional
-new file mode 100644
-index 0000000..9d01eba
---- /dev/null
-+++ b/toolchain/gcc/4.3.3/powerpc-link-with-math-lib.patch.conditional
-@@ -0,0 +1,125 @@
-+See: http://gcc.gnu.org/ml/gcc-patches/2008-10/msg00237.html
-+Patch by: Bernhard Reutner-Fischer
-+
-+--- gcc-4.3.3/gcc/config/t-slibgcc-elf-ver	2005-02-20 00:44:10.000000000 +1300
-++++ gcc-4.3.3-p/gcc/config/t-slibgcc-elf-ver	2009-05-06 07:05:50.000000000 +1200
-+@@ -9,7 +9,7 @@
-+ SHLIB_OBJS = @shlib_objs@
-+ SHLIB_DIR = @multilib_dir@
-+ SHLIB_SLIBDIR_QUAL = @shlib_slibdir_qual@
-+-SHLIB_LC = -lc
-++SHLIB_LC = @libgcc_libm@ -lc
-+ 
-+ SHLIB_LINK = $(GCC_FOR_TARGET) $(LIBGCC2_CFLAGS) -shared -nodefaultlibs \
-+ 	-Wl,--soname=$(SHLIB_SONAME) \
-+--- gcc-4.3.3/libgcc/configure	2008-11-21 06:09:53.000000000 +1300
-++++ gcc-4.3.3-p/libgcc/configure	2009-05-06 07:05:50.000000000 +1200
-+@@ -272,7 +272,7 @@
-+ PACKAGE_BUGREPORT=''
-+ 
-+ ac_unique_file="static-object.mk"
-+-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS libgcc_topdir enable_shared slibdir INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA AWK build build_cpu build_vendor build_os host host_cpu host_vendor host_os host_noncanonical build_libsubdir build_subdir host_subdir target_subdir AR ac_ct_AR LIPO ac_ct_LIPO NM ac_ct_NM RANLIB ac_ct_RANLIB STRIP ac_ct_STRIP LN_S CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT CPP decimal_float enable_decimal_float fixed_point vis_hide set_have_cc_tls tmake_file extra_parts asm_hidden_op LIBOBJS LTLIBOBJS'
-++ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS libgcc_topdir enable_shared slibdir INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA AWK build build_cpu build_vendor build_os host host_cpu host_vendor host_os host_noncanonical build_libsubdir build_subdir host_subdir target_subdir AR ac_ct_AR LIPO ac_ct_LIPO NM ac_ct_NM RANLIB ac_ct_RANLIB STRIP ac_ct_STRIP LN_S CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT CPP decimal_float enable_decimal_float fixed_point vis_hide set_have_cc_tls LIBGCC_LIBM tmake_file extra_parts asm_hidden_op LIBOBJS LTLIBOBJS'
-+ ac_subst_files=''
-+ 
-+ # Initialize some variables set by options.
-+@@ -3505,6 +3505,39 @@
-+ fi
-+ 
-+ 
-++# On powerpc libgcc_s references copysignl which is a libm function but
-++# glibc apparently also provides it via libc as opposed to uClibc where
-++# it lives in libm.
-++echo "$as_me:$LINENO: checking for library containing copysignl" >&5
-++echo $ECHO_N "checking for library containing copysignl... $ECHO_C" >&6
-++if test "${libgcc_cv_copysignl_lib+set}" = set; then
-++  echo $ECHO_N "(cached) $ECHO_C" >&6
-++else
-++
-++    echo '#include <features.h>' > conftest.c
-++    echo 'int the_libc = __UCLIBC__ + __powerpc__;' >> conftest.c
-++    libgcc_cv_copysignl_lib="-lc"
-++    if { ac_try='${CC-cc} -S conftest.c -o conftest.s 1>&5'
-++  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-++  (eval $ac_try) 2>&5
-++  ac_status=$?
-++  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-++  (exit $ac_status); }; }
-++    then
-++	libgcc_cv_copysignl_lib="-lm"
-++    fi
-++    rm -f conftest.*
-++
-++fi
-++echo "$as_me:$LINENO: result: $libgcc_cv_copysignl_lib" >&5
-++echo "${ECHO_T}$libgcc_cv_copysignl_lib" >&6
-++
-++case /${libgcc_cv_copysignl_lib}/ in
-++  /-lm/) LIBGCC_LIBM="$LIBGCC_LIBM -lm" ;;
-++  *) LIBGCC_LIBM= ;;
-++esac
-++
-++
-+ # Conditionalize the makefile for this target machine.
-+ tmake_file_=
-+ for f in ${tmake_file}
-+@@ -4225,6 +4258,7 @@
-+ s, at fixed_point@,$fixed_point,;t t
-+ s, at vis_hide@,$vis_hide,;t t
-+ s, at set_have_cc_tls@,$set_have_cc_tls,;t t
-++s, at LIBGCC_LIBM@,$LIBGCC_LIBM,;t t
-+ s, at tmake_file@,$tmake_file,;t t
-+ s, at extra_parts@,$extra_parts,;t t
-+ s, at asm_hidden_op@,$asm_hidden_op,;t t
-+--- gcc-4.3.3/libgcc/configure.ac	2008-11-21 06:09:53.000000000 +1300
-++++ gcc-4.3.3-p/libgcc/configure.ac	2009-05-06 07:05:50.000000000 +1200
-+@@ -207,6 +207,27 @@
-+ fi
-+ AC_SUBST(set_have_cc_tls)
-+ 
-++# On powerpc libgcc_s references copysignl which is a libm function but
-++# glibc apparently also provides it via libc as opposed to uClibc where
-++# it lives in libm.
-++AC_CACHE_CHECK([for library containing copysignl],
-++  libgcc_cv_copysignl_lib, [
-++    echo '#include <features.h>' > conftest.c
-++    echo 'int the_libc = __UCLIBC__ + __powerpc__;' >> conftest.c
-++    libgcc_cv_copysignl_lib="-lc"
-++    if AC_TRY_COMMAND(${CC-cc} -S conftest.c -o conftest.s 1>&AS_MESSAGE_LOG_FD)
-++    then
-++	libgcc_cv_copysignl_lib="-lm"
-++    fi
-++    rm -f conftest.*
-++  ])
-++
-++case /${libgcc_cv_copysignl_lib}/ in
-++  /-lm/) LIBGCC_LIBM="$LIBGCC_LIBM -lm" ;;
-++  *) LIBGCC_LIBM= ;;
-++esac
-++AC_SUBST(LIBGCC_LIBM)
-++
-+ # Conditionalize the makefile for this target machine.
-+ tmake_file_=
-+ for f in ${tmake_file}
-+--- gcc-4.3.3/libgcc/Makefile.in	2008-06-17 21:32:34.000000000 +1200
-++++ gcc-4.3.3-p/libgcc/Makefile.in	2009-05-06 07:05:50.000000000 +1200
-+@@ -40,6 +40,7 @@
-+ decimal_float = @decimal_float@
-+ enable_decimal_float = @enable_decimal_float@
-+ fixed_point = @fixed_point@
-++LIBGCC_LIBM = @LIBGCC_LIBM@
-+ 
-+ host_noncanonical = @host_noncanonical@
-+ 
-+@@ -738,9 +739,10 @@
-+ 		@multilib_dir@,$(MULTIDIR),$(subst \
-+ 		@shlib_objs@,$(objects),$(subst \
-+ 		@shlib_base_name@,libgcc_s,$(subst \
-++		@libgcc_libm@,$(LIBGCC_LIBM),$(subst \
-+ 		@shlib_map_file@,$(mapfile),$(subst \
-+ 		@shlib_slibdir_qual@,$(MULTIOSSUBDIR),$(subst \
-+-		@shlib_slibdir@,$(shlib_slibdir),$(SHLIB_LINK))))))))
-++		@shlib_slibdir@,$(shlib_slibdir),$(SHLIB_LINK)))))))))
-+ 
-+ libunwind$(SHLIB_EXT): $(libunwind-s-objects) $(extra-parts)
-+ 	# @multilib_flags@ is still needed because this may use
-diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
-index 4fe3fa5..2c9ce11 100644
---- a/toolchain/gcc/gcc-uclibc-4.x.mk
-+++ b/toolchain/gcc/gcc-uclibc-4.x.mk
-@@ -185,6 +185,11 @@ ifeq ("$(strip $(ARCH))","armeb")
- 	toolchain/patch-kernel.sh $(GCC_DIR) toolchain/gcc/$(GCC_VERSION) arm-softfloat.patch.conditional
- endif
- endif
-+ifeq ($(ARCH)-$(BR2_GCC_SHARED_LIBGCC),powerpc-y)
-+ifneq ($(BR2_SOFT_FLOAT)$(BR2_ENABLE_MULTILIB),)
-+	toolchain/patch-kernel.sh $(GCC_DIR) toolchain/gcc/$(GCC_VERSION) powerpc-link-with-math-lib.patch.conditional
-+endif
-+endif
- 	touch $@
- 
- #############################################################
--- 
-1.5.6
+After adding the "include" dir to CFLAGS it compiles, but fails during linking.
+Disabling parallel build (I'm using -j2) fixed that too.
+
+Regards
+Olaf
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-dmraid-fix-build.patch
+Type: text/x-patch
+Size: 873 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090506/7e36bb64/attachment.bin>
