@@ -1,43 +1,27 @@
-From: sudheer.bangera <bsudheer143@indiatimes.com>
-Date: Thu, 7 May 2009 04:52:25 -0700 (PDT)
-Subject: [Buildroot]  Getting problem when make menuconfig
-Message-ID: <23407612.post@talk.nabble.com>
+From: Michael Roth <mroth@nessie.de>
+Date: Thu, 07 May 2009 14:21:16 +0200
+Subject: [Buildroot] [PATCH] .gitignore: Add download directory 'dl'
+In-Reply-To: <200905070544.51649.markus.heidelberg@web.de>
+References: <1241649940-16168-1-git-send-email-mroth@nessie.de>
+	<200905070544.51649.markus.heidelberg@web.de>
+Message-ID: <4A02D23C.309@nessie.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Markus Heidelberg schrieb:
 
-Hello,
-I want to port embedded linux in ARM board.
-I have started with buildroot download.
-steps finished:
-1.downloaded buildroot-snapshot.tar.bz2 and untar done.
-2. cd /buildroot folder
-then
-3.make menuconfig command
-following is the result for that command.
-[root at localhost buildroot]# make menuconfig
-make: warning: File 'Makefile' has modification time 2.8e+06s in the future
-make CC = " /usr/bin/gcc" -c package / config conf mconf
-make[1]: Entering directory ' /home/sudheer/buildroot/package/config'
-make[1]: warning : File ' Makefile.kconfig' has modification time 2.8e+06s
-in the future
-/usr/bin/gcc  -DCURSES_LOC = '<ncurses.h>" -DLOCALE  -g  -02 -MM *.c >
-.depend 2>/dec/null || ;
-make[1]: Entering directory ' /home/sudheer/buildroot/package/config'
-make[1]: warning : File ' Makefile.kconfig' has modification time 2.8e+06s
-in the future
-/usr/bin/gcc  -DCURSES_LOC = '<ncurses.h>" -DLOCALE  -g  -02 -MM *.c >
-.depend 2>/dec/null || ;
+> What about additionally adding /.config* ?
+> I guess it's quite common to have some configs laying around.
 
-It is contineously  repeating untill we stop (Cntr C) 
-please help me to solve this problem.
-i am using following software and hardware config:
+Hmm, yes, but maybe different people use different names:
+For example I'm using config.foobar and you're maybe using
+.config.foobar and others maybe using foobar.config etc.
 
-1.Ubuntu 8.04 linux
-2. Intel based motherboard
--- 
-View this message in context: http://www.nabble.com/Getting-problem-when-make-menuconfig-tp23407612p23407612.html
-Sent from the BuildRoot mailing list archive at Nabble.com.
+So I don't think, there exists a global rule for custom .config
+file names.
+
+
+Michael
