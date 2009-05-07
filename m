@@ -1,42 +1,30 @@
-From: Markus Heidelberg <markus.heidelberg@web.de>
-Date: Thu, 7 May 2009 05:44:51 +0200
-Subject: [Buildroot] [PATCH] .gitignore: Add download directory 'dl'
-In-Reply-To: <1241649940-16168-1-git-send-email-mroth@nessie.de>
-References: <1241649940-16168-1-git-send-email-mroth@nessie.de>
-Message-ID: <200905070544.51649.markus.heidelberg@web.de>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 07 May 2009 09:34:30 +0200
+Subject: [Buildroot] 2009.05-rc1: fix dmraid build
+In-Reply-To: <20090506121110.46c105f8@bandomeer.europe.flane.local> (Olaf
+	Rempel's message of "Wed\, 6 May 2009 12\:11\:10 +0200")
+References: <20090506121110.46c105f8@bandomeer.europe.flane.local>
+Message-ID: <871vr1e589.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Michael Roth, 07.05.2009:
-> (And additionally, ease /binaries pattern.)
+>>>>> "Olaf" == Olaf Rempel <razzor@kopf-tisch.de> writes:
 
-Yes, the current /binaries/* hid the directory, but completely removed
-it by "git-clean -d", which should not be intended.
+ Olaf> Hi,
+ Olaf> the dmraid build seems to be broken.
+ Olaf> On x86 it bails out with missing include files.
+ Olaf> I think it's some sort of $FOO_SUBDIR issue, but I couldn't find/fix it.
 
-> Signed-off-by: Michael Roth <mroth@nessie.de>
-> ---
->  .gitignore |    3 ++-
->  1 files changed, 2 insertions(+), 1 deletions(-)
-> 
-> diff --git a/.gitignore b/.gitignore
-> index 4a2de4e..e7117d3 100644
-> --- a/.gitignore
-> +++ b/.gitignore
-> @@ -1,7 +1,8 @@
->  /build_*
->  /project_*
->  /toolchain_*
-> -/binaries/*
-> +/binaries
-> +/dl
->  /.auto.deps
->  /.config.cmd
->  /.config.old
+ Olaf> After adding the "include" dir to CFLAGS it compiles, but fails during linking.
+ Olaf> Disabling parallel build (I'm using -j2) fixed that too.
 
-What about additionally adding /.config* ?
-I guess it's quite common to have some configs laying around.
+Hmm, can you be a bit more specific? I see that the dmraid build
+system is broken, as lib and tools race against each other with
+parallel builds. I've fixed that in git - But other than that it
+builds for me (x86-64 host, x86-core2 target).
 
-Markus
+-- 
+Bye, Peter Korsgaard
