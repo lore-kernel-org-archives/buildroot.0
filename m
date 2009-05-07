@@ -1,74 +1,71 @@
-From: Steffen Schulz <pepe_ml@gmx.net>
-Date: Thu, 7 May 2009 10:29:27 +0200
-Subject: [Buildroot] X11 and buildroot..
-In-Reply-To: <87y6tadzww.fsf@macbook.be.48ers.dk>
-References: <20090506124243.GB2496@cbg.dyndns.org>
-	<87y6tadzww.fsf@macbook.be.48ers.dk>
-Message-ID: <20090507082927.GB16268@cbg.dyndns.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu,  7 May 2009 08:36:14 +0000 (UTC)
+Subject: [Buildroot] [Bug 321] New: alsa-lib uses host include files for
+ python which breaks builds on 64 bit Linux
+Message-ID: <bug-321-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=321
+
+              Host: OpenSuse 11.1 64 bit on Core i7 processor
+            Target: at91sam9261ek_defconfig
+           Summary: alsa-lib uses host include files for python which breaks
+                    builds on 64 bit Linux
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: blocker
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: ulf.samuelsson at atmel.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
 
-Second attempt, seems my attachments were too big..
+at91sam9261ek_defconfig was updated to use the latest 
+binutils, gcc, kernel headers etc, and this is yet
+to be committed.
+
+When you build alsa-lib, with python enabled, it tries to include some python
+headers.
+These are included from the host machine and not the target machine.
+
+/home/ulf/projects/Buildroot/20090506/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibc-gcc
+-Os -pipe -Os 
+-I/home/ulf/projects/Buildroot/20090506/buildroot/build_arm/staging_dir/usr/include
+-I/home/ulf/projects/Buildroot/20090506/buildroot/build_arm/staging_dir/include
+--sysroot=/home/ulf/projects/Buildroot/20090506/buildroot/build_arm/staging_dir/
+-isysroot /home/ulf/projects/Buildroot/20090506/buildroot/build_arm/staging_dir
+-mabi=apcs-gnu -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+-shared  .libs/sbase.o  -Wl,--rpath
+-Wl,/home/ulf/projects/Buildroot/20090506/buildroot/build_arm/alsa-lib-1.0.18/src/.libs
+-L/home/ulf/projects/Buildroot/20090506/buildroot/build_arm/staging_dir/lib
+-L/home/ulf/projects/Buildroot/20090506/buildroot/build_arm/staging_dir/usr/lib
+-lm ../../../src/.libs/libasound.so  -mabi=apcs-gnu -mabi=apcs-gnu -Wl,-soname
+-Wl,smixer-sbase.so -o .libs/smixer-sbase.so
+In file included from /usr/include/python2.6/Python.h:58,
+                 from python.c:22:
+/usr/include/python2.6/pyport.h:685:2: error: #error "LONG_BIT definition
+appears wrong for platform (bad gcc/glibc config?)."
 
 
-On 090506 at 17:30, Peter Korsgaard wrote:
-> >>>>> "Steffen" == Steffen Schulz <pepe_ml@gmx.net> writes:
->  Steffen> is there any buildroot configuration that gives me a working
->  Steffen> X11 using the framebuffer?
-> 
->  Steffen> I saw updates in the X11 area again for the current rc1, but
->  Steffen> I still fail to compile anything using X11.
-> 
-> Strange, it works here ..
-
-That is good to hear. Care to send a sample .config?
-
->  Steffen> Currently, if I select tinyX and xserver, xfont-encodings
->  Steffen> will complain about missing mkfontscale. If I add that to
->  Steffen> the dependencies, it still complains since the binary is not
->  Steffen> copied to staging. Even then it seems some shared libraries
->  Steffen> are missing that ldd fails to tell me about.
-> Hmm, maybe it needs it at build time, E.G. present on the host. Do you
-> have it installed on your host? Send your .config and I'll give it a
-> try, we should probably build it for the host as well.
- 
-I have mkfontscale on the host. And when I copy it from the build
-directory to staging, it is used by xfont_encodings. But libs are
-missing. I tried and failed so often with previous svn versions
-that I did not investigate further.
-
-My .config is very simple since I just wanted to see if the build is
-getting somewhere. For X11, I activated TinyX and then xorg-server.
-This pulls in several libraries and needs i18n, WCHAR etc.
-
-The qtopia error is also at compile time. It might just work if I
-enable that funny switch, but since it is not enabled it seems this is
-not a common problem either.
-
-I essentially need a minimal X using fbdev so that I can try to port
-some apps(virt-manager and a ton of dependencies)..
+Since the host is 64 bit and the target is 32 bit, the check fails.
+It would not fail the test if the host is running 32 bit Linux.
+The real problem (using host includes) still exist and can cause subtle bugs
 
 
-/steffen
+This was also reported to the mailing list by Matt Wood 
+Dec 19, 2008; 07:48pm.
+
+
 -- 
-pepe at unixfan.net                            gpg --recv-key A04D7875
-Key fingerprint: B805 57BE E4AF 0104 CC51  77A1 CE6F 8D46 A04D 7875
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: br_config_x11.gz
-Type: application/octet-stream
-Size: 5840 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090507/d075cf21/attachment.obj>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: br_config_qtopia.gz
-Type: application/octet-stream
-Size: 4749 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090507/d075cf21/attachment-0001.obj>
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
