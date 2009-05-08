@@ -1,49 +1,70 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  8 May 2009 09:29:10 +0000 (UTC)
-Subject: [Buildroot] [Bug 325] New: New package ratpoison
-Message-ID: <bug-325-163@https.bugs.busybox.net/>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 08 May 2009 11:48:19 +0200
+Subject: [Buildroot] [GIT PULL] avr32 updates
+In-Reply-To: <d6cda7730905080217u3ade15c6r401cb5832d5d1609@mail.gmail.com>
+	("Thiago A. =?utf-8?Q?Corr=C3=AAa=22's?= message of "Fri\, 8 May 2009
+	06\:17\:27 -0300")
+References: <d6cda7730905072152p4cce227cx2919291711edaf4d@mail.gmail.com>
+	<877i0scbjf.fsf@macbook.be.48ers.dk>
+	<d6cda7730905080059o7fa58ba6w3bf66241b0c90bc2@mail.gmail.com>
+	<87hbzwatgw.fsf@macbook.be.48ers.dk>
+	<d6cda7730905080217u3ade15c6r401cb5832d5d1609@mail.gmail.com>
+Message-ID: <87ab5oapss.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=325
+>>>>> "Thiago" == Thiago A Corr?a <thiago.correa@gmail.com> writes:
 
-           Summary: New package ratpoison
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: enhancement
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: spambox at nurd.se
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Hi,
 
+ Thiago> Ok, after an hour of wrestling with git and it's man pages, I
+ Thiago> think I got it right :) I was even able to split the kernel
+ Thiago> update commit.
 
-Created an attachment (id=295)
- --> (https://bugs.busybox.net/attachment.cgi?id=295)
-Patch to add ratpoison
+Heh, was git rebase -i that bad?
 
-I'm using this window manager in a project since it's a light weight (about
-100kB) window manager that doesn't need a mouse.
+ >> ?Thiago> Something is wrong in the kernel headers in previous versions.
+ >> ?Thiago> Something in byteorder.h prevended it from building earlier.
+ >> 
+ >> But the Linux.advanced stuff doesn't have anything to do with kernel
+ >> headers, right?
 
-Description:
-Ratpoison is a simple Window Manager. It is largely modelled after
-GNU Screen and focuses on the keyboard instead of a mouse.
+ Thiago> Unfortunally, it doesn't look like it. Even if I select
+ Thiago> 2.6.29 for the linux headers (toolchain), the build
+ Thiago> fails. Unless I actually update the kernel on the target, it
+ Thiago> fails to build for avr32. According to the avr32-linux
+ Thiago> mailling list, there was a byteorder.h restructuring a while
+ Thiago> back, so I guess some versions of the headers are not what
+ Thiago> iptables expects.
 
-The screen can be split into non-overlapping frames. All windows are kept 
-maximized inside their frames to take full advantage of your precious 
-screen real estate. 
+I still don't get it - I've never used the Linux.advanced stuff, but
+it's just used to build a kernel for the target and doesn't have
+anything to do with the rootfs, right? How can it then influence the
+iptables build?
 
-URL: http://www.nongnu.org/ratpoison/
+ >> Ok. git am is easy - Simply save the mail and run git am -s <file>
 
+ Thiago> A bit easier said than done *smile*.
+
+ Thiago> I do all of my buildroot development over ssh.
+
+And? Do you mean that your desktop machine is running Windows?
+
+ Thiago> Anyway, what happens if I apply a patch and then you apply it
+ Thiago> a while later before pulling from my tree? I guess we will
+ Thiago> conflict right?
+
+No, if none of us modify the patch then the git sha1 id will be the
+same and the commit just ignored (if one of us modifies it you will
+most likely get a merge conflict that you'll have to resolve when you
+rebase your changes against me).
+
+ Thiago> my git pull-request: (thanks for the tip)
+
+pulled and pushed.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
