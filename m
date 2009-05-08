@@ -1,41 +1,41 @@
-From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
-Date: Fri, 8 May 2009 02:53:45 -0300
-Subject: [Buildroot] license info for buildroot
-In-Reply-To: <4A03C217.2020501@atmel.com>
-References: <BLU143-W181C7B250C892039D3235DCA640@phx.gbl>
-	<4A03C217.2020501@atmel.com>
-Message-ID: <d6cda7730905072253s1dcf4294r715b6521b984636c@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 08 May 2009 09:13:24 +0200
+Subject: [Buildroot] [GIT PULL] avr32 updates
+In-Reply-To: <d6cda7730905072152p4cce227cx2919291711edaf4d@mail.gmail.com>
+	("Thiago A. =?utf-8?Q?Corr=C3=AAa=22's?= message of "Fri\, 8 May 2009
+	01\:52\:27 -0300")
+References: <d6cda7730905072152p4cce227cx2919291711edaf4d@mail.gmail.com>
+Message-ID: <877i0scbjf.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Thiago" == Thiago A Corr?a <thiago.correa@gmail.com> writes:
 
-On Fri, May 8, 2009 at 2:24 AM, Hans-Christian Egtvedt
-<hans-christian.egtvedt@atmel.com> wrote:
-> Live Coder wrote:
->>
->> uClibc contains a link to GPLv3 whereas the downloaded tarball contains
->> GPLv2 license http://git.uclibc.org/uClibc/tree/COPYING.LIB
->>
->> Similarly, the buildroot webpage contains a ref to GPLv3 but the download
->> itself does not contain any license info. Can someone confirm the actual
->> license is v2 or v3?
->>
->
-> Did Buildroot change to GPLv3? IMHO GPLv2 ought to be enough for the
-> project.
->
+ Thiago> Hi Peter,
+ Thiago>     I'm newbie with this git thing, so please bear with me...
 
-Not that I've known of... The website (http://www.buildroot.net/) says
-LGPL and the parent git link actually points to LGPL v2.1
-Acording to uclibc.org, the library is also under LGPL. But please
-notice uClibc != buildroot
+ Thiago>     Please pull git clone git://git.buildroot.net/~correa/git/buildroot.git for:
 
-We share some infrastructure and perhaps some developers, but they are
-different projects.
+ Thiago>  * Update Linux Advanced to 2.6.29.2 - this fixes iptables compile
+ Thiago>  * Add dl folder to gitignore
+ Thiago>  * Update atngw100_defconfig
 
-Kind Regards,
-   Thiago A. Correa
+I had a quick look, and it basically looks good, but there's a few
+things I would like you to fix:
+
+- Please sign off on your fixes (git commit -s)
+- Don't commit unrelated things together (Linux advanced together with
+  atngw100 defconfig)
+- What do you mean with 'this fixes iptables compile'? What does the
+  kernel has to do with iptables compilation?
+
+You are welcome to put the fixes for 2009.05 in a seperate branch
+(upstream, stable or whatever) if that's easier for you to keep it
+seperate for new feature development while we're stabilizing for the
+release. I might create a 'next' branch for new stuff.
+
+-- 
+Bye, Peter Korsgaard
