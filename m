@@ -1,27 +1,32 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 08 May 2009 19:07:18 +0200
-Subject: [Buildroot] Commit messages
-In-Reply-To: <873abgcbi7.fsf@macbook.be.48ers.dk> (Peter Korsgaard's message
-	of "Fri\, 08 May 2009 09\:14\:08 +0200")
-References: <d6cda7730905071852r2041f850s39ff8174e48aff1b@mail.gmail.com>
-	<873abgcbi7.fsf@macbook.be.48ers.dk>
-Message-ID: <873abfa5h5.fsf@macbook.be.48ers.dk>
+From: Gaye Abdoulaye Walsimou <walsimou@walsimou.com>
+Date: Fri, 08 May 2009 19:17:25 +0200
+Subject: [Buildroot] [PATCH, RFC]: Allow cloning a git branch of uClibc
+In-Reply-To: <1241608550-17668-1-git-send-email-walsimou@walsimou.com>
+References: <1241608550-17668-1-git-send-email-walsimou@walsimou.com>
+Message-ID: <4A046925.1090303@walsimou.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
+Abdoulaye Walsimou Gaye wrote:
+> This patch allows to clone a branch of uClibc git repository (instead of a
+> release or snapshot source).
+>
+> Signed-off-by: Abdoulaye Walsimou Gaye <walsimou@walsimou.com>
+> ---
+>  toolchain/uClibc/Config.in         |   10 ++
+>  toolchain/uClibc/uClibc-git.config |  229 ++++++++++++++++++++++++++++++++++++
+>  toolchain/uClibc/uclibc.mk         |   27 ++++-
+>  3 files changed, 265 insertions(+), 1 deletions(-)
+>  create mode 100644 toolchain/uClibc/uClibc-git.config
+>   
+Hello there,
 
- Thiago> Will the commit messages be re-enabled? We lost them from the svn
- Thiago> to git export. It's nice to see what changed in the main repository
- Thiago> and perhaps be able to comment on changes.
+No comments ...? Nacked ...?
 
- Peter> Yes, they should be working again now.
+How guys do you do to try master branch of uClibc whithin buildtroot, or
+nptl branch (which was what I wanted to try)?
 
-Apparently there's still something wrong with it. I've sent a mail to
-Mike asking him to look into it.
-
--- 
-Bye, Peter Korsgaard
+Cheers
