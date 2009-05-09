@@ -1,35 +1,38 @@
-From: Markus Heidelberg <markus.heidelberg@web.de>
-Date: Sat, 9 May 2009 11:18:16 +0200
-Subject: [Buildroot] [GIT PULL] avr32 updates
-In-Reply-To: <d6cda7730905080356i3e2db098yc8d3cc66c41f6ac7@mail.gmail.com>
-References: <d6cda7730905072152p4cce227cx2919291711edaf4d@mail.gmail.com>
-	<87ab5oapss.fsf@macbook.be.48ers.dk>
-	<d6cda7730905080356i3e2db098yc8d3cc66c41f6ac7@mail.gmail.com>
-Message-ID: <200905091118.16708.markus.heidelberg@web.de>
+From: daniele_dll <d.albano@gmail.com>
+Date: Sat, 9 May 2009 16:56:01 +0200
+Subject: [Buildroot] Buildroot and Thread Support for Toolchain:
+	sysdep-cancel.h error
+Message-ID: <159a01660905090756r2390f7bfgec9de71ad79d9831@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thiago A. Corr?a, 08.05.2009:
-> I somehow managed
-> to completely trash my local tree and had to clone it again from the
-> remote.
+Hi to all,
 
-You shouldn't ever need to do a complete clone again, unless you did
-something really strange. If you messed you local branches, then you can
-recreate them from the remote branches or from the reflog which also
-contains local changes. If you removed remote branches, you can simply
-do "git fetch".
+i follow this mailing list from some time because i've tried in my
+spare time to build a little x86 system for a old pentium 200mhz
+without success. However, in these days, i got this stuff back because
+i need to build a ppc405 base system for a university project.
 
-> I really miss svn revert... If I remove some file from the
-> local tree, I can't bring it back with git fetch, git checkout or git
-> reset.
+After some errors and some googling i managed to build a root system
+without threads and disabling libgomp and libssp on gcc and, actually,
+without development tools on target too. Would be great have threads
+(nptl or old linuxthreads) enabled because i can use them for my
+project instead of fork in the code!
 
-Yes, you can, with checkout/reset. But it's be a bit different compared
-to svn because of git's index. "git status" gives you hints what to do.
-To prevent confusion: if you want to revert a particular file, that is
-currently in the index, you need to invoke 2 commands: reset && checkout
+I'm actually using buildroot 2009.05-rc1, but i got the same problem
+before with 2009.02, on a Ubuntu Jaunty 9.04 32bit. I get the error
+simply setting up basilar parameters like architecture and cpu and
+enabling thread support and leaving all the stuff on default values.
+While it compile libpthread -> uclibc it print out the error message
+saying that it can't found sysdep-cancel.h requested by
+toolchain_build_powerpc/uClibc-0.9.30.1/libpthread/linuxthreads/sysdeps/pthread/errno-loc.c.
 
-Markus
+Has someone a solution to this problem? I tried to comment out, just
+for a test, but without success because it is requested in another
+file!
+
+
+Thanks for the support and for this great project!
