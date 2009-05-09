@@ -1,8 +1,8 @@
 From: daniele_dll <d.albano@gmail.com>
-Date: Sat, 9 May 2009 16:56:01 +0200
-Subject: [Buildroot] Buildroot and Thread Support for Toolchain:
-	sysdep-cancel.h error
-Message-ID: <159a01660905090756r2390f7bfgec9de71ad79d9831@mail.gmail.com>
+Date: Sun, 10 May 2009 01:18:15 +0200
+Subject: [Buildroot] Problem compiling microperl package for a virtex ii pro
+	xc2vp30 (using a ppc405 no fpu)
+Message-ID: <159a01660905091618t2b347c53mc361a9091b981c9b@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,28 +11,74 @@ To: buildroot@busybox.net
 
 Hi to all,
 
-i follow this mailing list from some time because i've tried in my
-spare time to build a little x86 system for a old pentium 200mhz
-without success. However, in these days, i got this stuff back because
-i need to build a ppc405 base system for a university project.
+i'm trying to set up a development platform on a virtex ii board
+(ppc405 no fpu based board) but i getting some problems. I'm tryng to
+compile all the stuff but when it should compiler microperl package
+give an error!
 
-After some errors and some googling i managed to build a root system
-without threads and disabling libgomp and libssp on gcc and, actually,
-without development tools on target too. Would be great have threads
-(nptl or old linuxthreads) enabled because i can use them for my
-project instead of fork in the code!
+I've seen on archives that there was a problem related to this on
+2009.02-rc3 build of buildroot but there wasn't any solution.
 
-I'm actually using buildroot 2009.05-rc1, but i got the same problem
-before with 2009.02, on a Ubuntu Jaunty 9.04 32bit. I get the error
-simply setting up basilar parameters like architecture and cpu and
-enabling thread support and leaving all the stuff on default values.
-While it compile libpthread -> uclibc it print out the error message
-saying that it can't found sysdep-cancel.h requested by
-toolchain_build_powerpc/uClibc-0.9.30.1/libpthread/linuxthreads/sysdeps/pthread/errno-loc.c.
+Here there is some output:
+------------------------
+[SNIP]
+Now you need to generate make dependencies by running "make depend".
+You might prefer to run it in background: "make depend > makedepend.out &"
+It can take a while, so you might not want to run it right now.
 
-Has someone a solution to this problem? I tried to comment out, just
-for a test, but without success because it is requested in another
-file!
+Run make depend now? [y]
+make[1]: ingresso nella directory
+?/home/daniele/Development/Projects/xupv2p/Buildroot/build_powerpc/perl-5.8.8?
+sh ./makedepend MAKE=make
+make[2]: Entering directory
+`/home/daniele/Development/Projects/xupv2p/Buildroot/build_powerpc/perl-5.8.8'
+sh writemain lib/auto/DynaLoader/DynaLoader.a  > perlmain.c
+rm -f opmini.c
+cp op.c opmini.c
+echo  av.c scope.c op.c doop.c doio.c dump.c hv.c mg.c reentr.c perl.c
+perly.c pp.c pp_hot.c pp_ctl.c pp_sys.c regcomp.c regexec.c utf8.c
+gv.c sv.c taint.c toke.c util.c deb.c run.c universal.c xsutils.c
+pad.c globals.c perlio.c perlapi.c numeric.c locale.c pp_pack.c
+pp_sort.c miniperlmain.c perlmain.c opmini.c | tr ' ' '\n' >.clist
+make[2]: Leaving directory
+`/home/daniele/Development/Projects/xupv2p/Buildroot/build_powerpc/perl-5.8.8'
+./makedepend: 1: Syntax error: Unterminated quoted string
+make[1]: *** [depend] Errore 2
+make[1]: uscita dalla directory
+?/home/daniele/Development/Projects/xupv2p/Buildroot/build_powerpc/perl-5.8.8?
 
+If you compile perl5 on a different machine or from a different object
+directory, copy the Policy.sh file from this object directory to the
+new one before you run Configure -- this will help you with most of
+the policy defaults.
 
-Thanks for the support and for this great project!
+touch /home/daniele/Development/Projects/xupv2p/Buildroot/build_powerpc/perl-5.8.8/.host_configured
+/home/daniele/Development/Projects/xupv2p/Buildroot/toolchain_build_powerpc/bin/sed
+-i -e 's/^.*<command-line>.*//g'
+/home/daniele/Development/Projects/xupv2p/Buildroot/build_powerpc/perl-5.8.8/makefile
+/home/daniele/Development/Projects/xupv2p/Buildroot/toolchain_build_powerpc/bin/sed
+-i -e 's/^.*<command-line>.*//g'
+/home/daniele/Development/Projects/xupv2p/Buildroot/build_powerpc/perl-5.8.8/x2p/makefile
+/home/daniele/Development/Projects/xupv2p/Buildroot/toolchain_build_powerpc/bin/sed:
+impossibile leggere
+/home/daniele/Development/Projects/xupv2p/Buildroot/build_powerpc/perl-5.8.8/x2p/makefile:
+Nessun file o directory
+make: *** [/home/daniele/Development/Projects/xupv2p/Buildroot/build_powerpc/perl-5.8.8/.host_configured_and_fixed]
+Errore 2
+------------------------
+
+makefile in x2p directory is missing!
+
+I need to add the development tools to the root filesystem, someone
+has a solution or a suggestion?
+
+Attached there is my .config file!
+
+Thank you for this great work!!!
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: .config
+Type: application/octet-stream
+Size: 19424 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090510/a03a89ce/attachment-0001.obj>
