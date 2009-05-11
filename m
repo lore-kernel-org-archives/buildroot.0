@@ -1,35 +1,20 @@
-From: Kelvin Cheung <keguang.zhang@gmail.com>
-Date: Mon, 11 May 2009 15:33:47 +0800
-Subject: [Buildroot] EABI broken on arm926t?
-In-Reply-To: <87k567ba8i.fsf@macbook.be.48ers.dk>
-References: <76d9e2a30810181737u6987153fsb6509635312f5141@mail.gmail.com>
-	<22738895.post@talk.nabble.com> <22754259.post@talk.nabble.com>
-	<87ocvjbdvs.fsf@macbook.be.48ers.dk>
-	<87k567ba8i.fsf@macbook.be.48ers.dk>
-Message-ID: <48ab7e010905110033o3e682541oe1d4915badf9a300@mail.gmail.com>
+From: angus salkeld <angus.salkeld@alliedtelesis.co.nz>
+Date: Mon, 11 May 2009 21:37:38 +1200
+Subject: [Buildroot] Follow uo on the powerpc patches.
+Message-ID: <4A089AA20200007000014E37@gwia.alliedtelesyn.co.nz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2009/3/30 Peter Korsgaard <jacmet@uclibc.org>
+Hi
 
-> >>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
->
-> Hi,
->
->  Peter> I've fixed the GCC_TARGET_ARCH table for ARM in r25889 - Could you
->  Peter> give it a try to verify?
->
-> Sorry, make that r25890.
->
-> --
-> Bye, Peter Korsgaard
->
+Is there anything else I need to do to get these committed?
 
-It works for me now.
-Thanks!
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090511/ae5c6b2a/attachment.htm>
+http://lists.busybox.net/pipermail/buildroot/2009-May/027333.html
+
+http://lists.busybox.net/pipermail/buildroot/2009-May/027346.html
+
+Regards
+Angus Salkeld
