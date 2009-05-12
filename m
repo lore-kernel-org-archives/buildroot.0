@@ -1,95 +1,44 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Mon, 11 May 2009 20:30:24 +0200
-Subject: [Buildroot] [PATCH] qtopia4: Add kconfig option to
-	build	linuxis mouse driver
-In-Reply-To: <20090511182221.GQ7314@mx.loc>
-References: <1242065043-1191-1-git-send-email-mroth@nessie.de>
-	<20090511182221.GQ7314@mx.loc>
-Message-ID: <20090511183024.GR7314@mx.loc>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 12 May 2009 12:20:48 +0200
+Subject: [Buildroot] [PATCH] fix gcc install problem on	
+	powerpc+soft-float+install_libgcc_s
+In-Reply-To: <49FFF317.D58A.0070.1@alliedtelesis.co.nz> (angus salkeld's
+	message of "Tue\, 05 May 2009 08\:04\:39 +1200")
+References: <49FFF317.D58A.0070.1@alliedtelesis.co.nz>
+Message-ID: <87eiuu7hbz.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, May 11, 2009 at 08:22:21PM +0200, Bernhard Reutner-Fischer wrote:
->On Mon, May 11, 2009 at 08:04:03PM +0200, Michael Roth wrote:
->>'linuxis' is a mouse driver for the Linux event interface
->>(/dev/input/eventX).
->>
->>This driver can be built only as a plugin.
->>
->>Signed-off-by: Michael Roth <mroth@nessie.de>
->>---
->> package/qtopia4/Config.mouse.in |    3 +++
->> package/qtopia4/qtopia4.mk      |    6 +++++-
->> 2 files changed, 8 insertions(+), 1 deletions(-)
->>
->>diff --git a/package/qtopia4/Config.mouse.in b/package/qtopia4/Config.mouse.in
->>index 7b39460..9788b10 100644
->>--- a/package/qtopia4/Config.mouse.in
->>+++ b/package/qtopia4/Config.mouse.in
->>@@ -9,6 +9,9 @@ config BR2_PACKAGE_QTOPIA4_MOUSE_BUS
->> config BR2_PACKAGE_QTOPIA4_MOUSE_LINUXTP
->> 	bool "linuxtp"
->> 
->>+config BR2_PACKAGE_QTOPIA4_MOUSE_LINUXIS
->>+	bool "linuxis (plugin)"
->	default n
->	# which is, IIRC the default anyway. If yes, this comment and the
->	# default is moot, of course
->	help
->	  Describe what that thing does
->
->>+
->> config BR2_PACKAGE_QTOPIA4_MOUSE_YOPY
->> 	bool "yopy"
->> 
->>diff --git a/package/qtopia4/qtopia4.mk b/package/qtopia4/qtopia4.mk
->>index a198a41..eb28ff0 100644
->>--- a/package/qtopia4/qtopia4.mk
->>+++ b/package/qtopia4/qtopia4.mk
->>@@ -151,6 +151,9 @@ QTOPIA4_CONFIGURE += -qt-mouse-linuxtp
->> else
->> QTOPIA4_CONFIGURE += -no-mouse-linuxtp
->> endif
->>+ifeq ($(BR2_PACKAGE_QTOPIA4_MOUSE_LINUXIS),y)
->>+QTOPIA4_CONFIGURE += -plugin-mouse-linuxis
+>>>>> "angus" == angus salkeld <angus.salkeld@alliedtelesis.co.nz> writes:
 
-QTOPIA4_PLUGINS_INSTALL += mousedrivers
+ angus> Hi
+ angus> I am building with:
+ angus> gcc-4.3.3
+ angus> powerpc-8540
+ angus> soft-float
+ angus> install libgcc_s
+ angus> install libstd++
 
-and tweak \"imageformats\" while at it, then..
->>+endif
->> ifeq ($(BR2_PACKAGE_QTOPIA4_MOUSE_YOPY),y)
->> QTOPIA4_CONFIGURE += -qt-mouse-yopy
->> else
->>@@ -485,8 +488,9 @@ qtopia4-gui: $(STAGING_DIR)/usr/lib/libQtCore.la
->> 	cp -dpf $(STAGING_DIR)/usr/lib/fonts/helvetica*.qpf $(TARGET_DIR)/usr/lib/fonts
->> 	cp -dpf $(STAGING_DIR)/usr/lib/fonts/fixed*.qpf $(TARGET_DIR)/usr/lib/fonts
->> 	cp -dpf $(STAGING_DIR)/usr/lib/fonts/micro*.qpf $(TARGET_DIR)/usr/lib/fonts
->>-	# Install image plugins if they are built
->->+	# Install image and/or mousedriver plugins if they are built
->+	# Install plugins if they are built
->
->Avoids unwarranted comment jitter.
->
-	for plug_install in $(QTOPIA4_PLUGINS_INSTALL);do \
-		$(call QTOPIA4_INSTALL_PLUGINS,$$plug_install); \
-	done
-->> 	$(call QTOPIA4_INSTALL_PLUGINS,imageformats)
-->>+	$(call QTOPIA4_INSTALL_PLUGINS,mousedrivers)
+ angus> I get the following error:
 
-for additional bonus and cleanup-points ;)
+Strange - I cannot reproduce it here - Could you send your config
+please? With your other patch applied a
+ppc405/softfloat/libgcc_2/libstdc++ config builds here, and I don't
+see any */lib/nof dirs.
 
-You could even do somthing like my tree WRT GCC_COMMON_PREREQ
-to automatically rebuild and re-install that package in case the
-user changed one of these knobs, fwiw. Talks to Jacmet to pickup that
-additional dependency cleanup- or tweak.
-Cheers,
+BR2_powerpc_405=y
+BR2_KERNEL_HEADERS_2_6_29=y
+BR2_UCLIBC_VERSION_0_9_30_1=y
+BR2_BINUTILS_VERSION_2_19_1=y
+BR2_GCC_VERSION_4_3_3=y
+BR2_TOOLCHAIN_SYSROOT=y
+BR2_GCC_SHARED_LIBGCC=y
+BR2_SOFT_FLOAT=y
+BR2_GCC_CROSS_CXX=y
+BR2_INSTALL_LIBSTDCPP=y
 
->> ifeq ($(BR2_PACKAGE_QTOPIA4_SHARED),y)
->> 	cp -dpf $(STAGING_DIR)/usr/lib/libQtGui.so.* $(TARGET_DIR)/usr/lib/
->> endif
->
->Care to resend?
->TIA,
+-- 
+Bye, Peter Korsgaard
