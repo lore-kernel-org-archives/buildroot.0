@@ -1,45 +1,33 @@
-From: Wade Berrier <wberrier@gmail.com>
-Date: Tue, 12 May 2009 13:32:04 -0600
-Subject: [Buildroot] [git commit] Fix gcc 3.4.6 build with newer host libc
-	versions
-Message-ID: <20090512212347.4435C777E7@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 12 May 2009 23:25:58 +0200
+Subject: [Buildroot] [GIT PULL] Fix gcc 3.4.6 build with newer libc
+	headers
+In-Reply-To: <bbbeeccd0905121332s2009c0c8jab47064205afe924@mail.gmail.com>
+	(Wade Berrier's message of "Tue\, 12 May 2009 14\:32\:35 -0600")
+References: <bbbeeccd0905121332s2009c0c8jab47064205afe924@mail.gmail.com>
+Message-ID: <87vdo63teh.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9e114500d500ade3472db9d8663cf6013a5f928b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Wade" == Wade Berrier <wberrier@gmail.com> writes:
 
+ Wade> The following changes since commit 9e114500d500ade3472db9d8663cf6013a5f928b:
+ Wade>   Wade Berrier (1):
+ Wade>         Fix gcc 3.4.6 build with newer host libc versions
 
-The build of gcc 3.4.6 fails when host libc is too new.
-I pulled the fix from this bug report:
+ Wade> are available in the git repository at:
 
-http://bugs.openembedded.net/show_bug.cgi?id=4626
+Thanks, pulled and pushed.
 
-Signed-off-by: Wade Berrier <wberrier@gmail.com>
----
- toolchain/gcc/3.4.6/950-open_ocreat_mode.patch |   11 +++++++++++
- 1 files changed, 11 insertions(+), 0 deletions(-)
- create mode 100644 toolchain/gcc/3.4.6/950-open_ocreat_mode.patch
+ Wade>   uclibc.org:/home/wberrier/git/buildroot.git master
 
-diff --git a/toolchain/gcc/3.4.6/950-open_ocreat_mode.patch b/toolchain/gcc/3.4.6/950-open_ocreat_mode.patch
-new file mode 100644
-index 0000000..5dba905
---- /dev/null
-+++ b/toolchain/gcc/3.4.6/950-open_ocreat_mode.patch
-@@ -0,0 +1,11 @@
-+--- gcc-3.4.6/gcc/collect2.c.orig	2009-05-11 13:00:31.000000000 -0600
-++++ gcc-3.4.6/gcc/collect2.c	2009-05-11 13:00:26.000000000 -0600
-+@@ -1534,7 +1534,7 @@
-+   if (redir)
-+     {
-+       /* Open response file.  */
-+-      redir_handle = open (redir, O_WRONLY | O_TRUNC | O_CREAT);
-++      redir_handle = open (redir, O_WRONLY | O_TRUNC | O_CREAT, O_RDWR);
-+ 
-+       /* Duplicate the stdout and stderr file handles
-+ 	 so they can be restored later.  */
+A git:// url is nicer for people who don't have ssh access to morris
+- E.G.
+
+git://git.buildroot.net/~wberrier/git/buildroot.git master
+
 -- 
-1.6.0.6
+Bye, Peter Korsgaard
