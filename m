@@ -1,34 +1,26 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 13 May 2009 09:05:55 +0000 (UTC)
-Subject: [Buildroot] [Bug 295] gamin installs python support even if python
-	is disabled
-In-Reply-To: <bug-295-163@https.bugs.busybox.net/>
-References: <bug-295-163@https.bugs.busybox.net/>
-Message-ID: <20090513090555.A2C5D777E7@busybox.osuosl.org>
+From: Will Wagner <will_wagner@carallon.com>
+Date: Wed, 13 May 2009 11:32:57 +0100
+Subject: [Buildroot] Obtaining old SVN revision
+Message-ID: <4A0AA1D9.1030808@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=295
+Hello all,
 
+Following the transition to git how can I checkout buildroot to a specific SVN revision?
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+I had hoped that the SVN repository would remain read only for a while but it seems to 
+have gone away. Presumably I can clone git and then checkout back to the revision I want, 
+I'm just not sure how to specify that in git. Do I just have to work out what date the SVN 
+revision was?
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
-
-
-
-
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-05-13 09:05:55 UTC ---
-Thanks, committed
-
-
+Will
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+------------------------------------------------------------------------
+Will Wagner                                     will_wagner at carallon.com
+Development Manager                      Office Tel: +44 (0)20 7371 2032
+Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
+------------------------------------------------------------------------
