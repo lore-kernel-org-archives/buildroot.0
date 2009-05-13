@@ -1,27 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 13 May 2009 11:02:46 +0200
-Subject: [Buildroot] Bug 295: gamin installs python support even if
-	python is disabled
-In-Reply-To: <1242204363.6293.5.camel@sven> (Sven Neumann's message of "Wed\,
-	13 May 2009 10\:46\:03 +0200")
-References: <1242204363.6293.5.camel@sven>
-Message-ID: <87vdo5s7d5.fsf@macbook.be.48ers.dk>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Wed, 13 May 2009 11:04:13 +0200
+Subject: [Buildroot] [git commit] gamin: only enable python support if
+	enabled
+Message-ID: <20090513090519.82643777E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=419257b191d71bd50f6b8a561a5d79a6f688f5a6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Sven> Hi,
- Sven> Bug 295 (https://bugs.uclibc.org/show_bug.cgi?id=295) looks totally
- Sven> straight-forward. You will want to consider to still apply this patch
- Sven> before the next release. Or is there anything wrong about it?
 
-That indeed seems straight forward, so I'll commit it now.
+Closes #295.
 
-Sorry, been busy with real life stuff lately.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/gamin/gamin.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
+diff --git a/package/gamin/gamin.mk b/package/gamin/gamin.mk
+index f0a2a1f..180d89e 100644
+--- a/package/gamin/gamin.mk
++++ b/package/gamin/gamin.mk
+@@ -12,6 +12,10 @@ GAMIN_INSTALL_TARGET = YES
+ 
+ GAMIN_CONF_OPT = --program-prefix="" --disable-debug
+ 
++ifneq ($(BR2_PACKAGE_PYTHON),y)
++GAMIN_CONF_OPT += --without-python
++endif
++
+ GAMIN_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
+ 
+ GAMIN_CONF_ENV = have_abstract_sockets=no
 -- 
-Bye, Peter Korsgaard
+1.6.0.6
