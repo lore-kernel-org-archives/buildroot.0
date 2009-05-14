@@ -1,63 +1,72 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 14 May 2009 19:25:25 +0200
-Subject: [Buildroot] [PATCH 3/5] cups: add pdftops option
-In-Reply-To: <1242321927-10185-2-git-send-email-jacmet@sunsite.dk>
-References: <1242321927-10185-1-git-send-email-jacmet@sunsite.dk>
-	<1242321927-10185-2-git-send-email-jacmet@sunsite.dk>
-Message-ID: <1242321927-10185-3-git-send-email-jacmet@sunsite.dk>
+Date: Thu, 14 May 2009 19:25:23 +0200
+Subject: [Buildroot] [PATCH 1/5] busybox: additional 1.14.0 patches
+Message-ID: <1242321927-10185-1-git-send-email-jacmet@sunsite.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The pdftops support in cups needs C++ support, whereas the rest doesn't.
-Add a BR2_PACKAGE_CUPS_PDFTOPS (depending on C++ support) to enable it
-if needed.
+The original mdev patch was buggy.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/cups/Config.in |   13 +++++++++++++
- package/cups/cups.mk   |    6 ++++++
- 2 files changed, 19 insertions(+), 0 deletions(-)
+ package/busybox/busybox-1.14.0-mdev.patch   |   14 +-------------
+ package/busybox/busybox-1.14.0-sysctl.patch |   18 ++++++++++++++++++
+ 2 files changed, 19 insertions(+), 13 deletions(-)
+ create mode 100644 package/busybox/busybox-1.14.0-sysctl.patch
 
-diff --git a/package/cups/Config.in b/package/cups/Config.in
-index 8b1f8a5..0176423 100644
---- a/package/cups/Config.in
-+++ b/package/cups/Config.in
-@@ -4,3 +4,16 @@ config BR2_PACKAGE_CUPS
- 	  The Common Unix Printing System
- 
- 	  http://www.cups.org
-+
-+if BR2_PACKAGE_CUPS
-+
-+config BR2_PACKAGE_CUPS_PDFTOPS
-+       bool "pdftops support"
-+       depends on BR2_INSTALL_LIBSTDCPP
-+       help
-+         Enable pdftops support
-+
-+comment "pdftops support requires a toolchain with C++ support enabled"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+
-+endif
-diff --git a/package/cups/cups.mk b/package/cups/cups.mk
-index e3d6f78..d1bf0fa 100644
---- a/package/cups/cups.mk
-+++ b/package/cups/cups.mk
-@@ -58,6 +58,12 @@ else
- 	CUPS_CONF_OPT +=	--disable-python
- endif
- 
-+ifeq ($(BR2_PACKAGE_CUPS_PDFTOPS),y)
-+	CUPS_CONF_OPT += --enable-pdftops
-+else
-+	CUPS_CONF_OPT += --disable-pdftops
-+endif
-+
- $(DL_DIR)/$(CUPS_SOURCE):
- 	 $(call DOWNLOAD,$(CUPS_SITE),$(CUPS_SOURCE))
- 
+diff --git a/package/busybox/busybox-1.14.0-mdev.patch b/package/busybox/busybox-1.14.0-mdev.patch
+index 4cefd0d..21535b0 100644
+--- a/package/busybox/busybox-1.14.0-mdev.patch
++++ b/package/busybox/busybox-1.14.0-mdev.patch
+@@ -1,5 +1,5 @@
+ --- busybox-1.14.0/util-linux/mdev.c	Tue Apr 14 23:23:04 2009
+-+++ busybox-1.14.0-mdev/util-linux/mdev.c	Sat May  2 16:31:34 2009
+++++ busybox-1.14.0-mdev/util-linux/mdev.c	Mon May  4 19:58:47 2009
+ @@ -181,7 +181,8 @@
+  		 * the rest of fields unless keep_matching == 1 */
+  
+@@ -10,15 +10,3 @@
+  
+  		/* 3rd field: mode - device permissions */
+  		mode = strtoul(tokens[2], NULL, 8);
+-@@ -524,7 +525,10 @@
+- 				make_device(temp, 1);
+- 		}
+- 		else if (strcmp(action, "add") == 0) {
+--			make_device(temp, 0);
+-+			/* N.B. make_device() mangles the device path, so save it */
+-+			char *s = xstrdup(temp);
+-+			make_device(s, 0);
+-+			free(s);
+- 			if (ENABLE_FEATURE_MDEV_LOAD_FIRMWARE) {
+- 				if (fw)
+- 					load_firmware(fw, temp);
+diff --git a/package/busybox/busybox-1.14.0-sysctl.patch b/package/busybox/busybox-1.14.0-sysctl.patch
+new file mode 100644
+index 0000000..6738386
+--- /dev/null
++++ b/package/busybox/busybox-1.14.0-sysctl.patch
+@@ -0,0 +1,18 @@
++--- busybox-1.14.0/procps/sysctl.c	Tue Apr 14 01:43:09 2009
+++++ busybox-1.14.0-sysctl/procps/sysctl.c	Sun May 10 23:40:52 2009
++@@ -214,11 +214,11 @@
++ // (but _whitespace_ from ends should be trimmed first (and we do it right))
++ //TODO: "var==1" is mishandled (must use "=1" as a value, but uses "1")
++ 	while (config_read(parser, token, 2, 2, "# \t=", PARSE_NORMAL)) {
+++		char *tp;
++ 		sysctl_dots_to_slashes(token[0]);
++-		/* Save ~4 bytes by using parser internals */
++-		/* parser->line is big enough for sprintf */
++-		sprintf(parser->line, "%s=%s", token[0], token[1]);
++-		sysctl_act_recursive(parser->line);
+++		tp = xasprintf("%s=%s", token[0], token[1]);
+++		sysctl_act_recursive(tp);
+++		free(tp);
++ 	}
++ 	if (ENABLE_FEATURE_CLEAN_UP)
++ 		config_close(parser);
 -- 
 1.6.2
