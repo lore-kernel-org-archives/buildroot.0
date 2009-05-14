@@ -1,51 +1,63 @@
-From: sudheer.bangera <bsudheer143@indiatimes.com>
-Date: Thu, 14 May 2009 09:45:53 -0700 (PDT)
-Subject: [Buildroot]  Errror during make command
-Message-ID: <23544482.post@talk.nabble.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 14 May 2009 19:25:25 +0200
+Subject: [Buildroot] [PATCH 3/5] cups: add pdftops option
+In-Reply-To: <1242321927-10185-2-git-send-email-jacmet@sunsite.dk>
+References: <1242321927-10185-1-git-send-email-jacmet@sunsite.dk>
+	<1242321927-10185-2-git-send-email-jacmet@sunsite.dk>
+Message-ID: <1242321927-10185-3-git-send-email-jacmet@sunsite.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The pdftops support in cups needs C++ support, whereas the rest doesn't.
+Add a BR2_PACKAGE_CUPS_PDFTOPS (depending on C++ support) to enable it
+if needed.
 
-Hello,
-I want to port embedded linux in ARM board.
-I have started with buildroot download.
-steps finished:
-1.downloaded buildroot-snapshot.tar.bz2 and untar done.
-2. cd /buildroot folder
-then
-3.make menuconfig command
-4. Then make command , It takes more time and finally it gives the error
-like this
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/cups/Config.in |   13 +++++++++++++
+ package/cups/cups.mk   |    6 ++++++
+ 2 files changed, 19 insertions(+), 0 deletions(-)
 
-*** Unpacking kernel source
-bzcat /root/sudheer/buildroot/dl/linux-2.6.29.3.tar.bz2 | tar -C
-/root/sudheer/buildroot/project_build_arm/uclibc -xf -
-touch
-/root/sudheer/buildroot/project_build_arm/uclibc/linux-2.6.29.3/.unpacked
-toolchain/patch-kernel.sh
-/root/sudheer/buildroot/project_build_arm/uclibc/linux-2.6.29.3
-toolchain/kernel-headers \
-linux-2.6.29.3-\*.patch{,.gz,.bz2}
-touch
-/root/sudheer/buildroot/project_build_arm/uclibc/linux-2.6.29.3/.patched
-cp -dpf
-/root/sudheer/buildroot/project_build_arm/uclibc/linux-2.6.29.3/.config
-cp: missing destination file operand after
-`/root/sudheer/buildroot/project_build_arm/uclibc/linux-2.6.29.3/.config'
-Try `cp --help' for more information.
-make: ***
-[/root/sudheer/buildroot/project_build_arm/uclibc/linux-2.6.29.3/.configured]
-Error 1
-
-
-please help me to solve this problem.
-i am using following software and hardware config:
-
-1.Ubuntu 8.04 linux
-2. Intel based motherboard
+diff --git a/package/cups/Config.in b/package/cups/Config.in
+index 8b1f8a5..0176423 100644
+--- a/package/cups/Config.in
++++ b/package/cups/Config.in
+@@ -4,3 +4,16 @@ config BR2_PACKAGE_CUPS
+ 	  The Common Unix Printing System
+ 
+ 	  http://www.cups.org
++
++if BR2_PACKAGE_CUPS
++
++config BR2_PACKAGE_CUPS_PDFTOPS
++       bool "pdftops support"
++       depends on BR2_INSTALL_LIBSTDCPP
++       help
++         Enable pdftops support
++
++comment "pdftops support requires a toolchain with C++ support enabled"
++	depends on !BR2_INSTALL_LIBSTDCPP
++
++endif
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index e3d6f78..d1bf0fa 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
+@@ -58,6 +58,12 @@ else
+ 	CUPS_CONF_OPT +=	--disable-python
+ endif
+ 
++ifeq ($(BR2_PACKAGE_CUPS_PDFTOPS),y)
++	CUPS_CONF_OPT += --enable-pdftops
++else
++	CUPS_CONF_OPT += --disable-pdftops
++endif
++
+ $(DL_DIR)/$(CUPS_SOURCE):
+ 	 $(call DOWNLOAD,$(CUPS_SITE),$(CUPS_SOURCE))
+ 
 -- 
-View this message in context: http://www.nabble.com/Errror-during-make-command-tp23544482p23544482.html
-Sent from the BuildRoot mailing list archive at Nabble.com.
+1.6.2
