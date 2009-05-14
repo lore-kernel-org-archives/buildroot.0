@@ -1,35 +1,51 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 14 May 2009 16:24:57 +0000 (UTC)
-Subject: [Buildroot] [Bug 289] New package iw
-In-Reply-To: <bug-289-163@https.bugs.busybox.net/>
-References: <bug-289-163@https.bugs.busybox.net/>
-Message-ID: <20090514162457.2E49A77820@busybox.osuosl.org>
+From: sudheer.bangera <bsudheer143@indiatimes.com>
+Date: Thu, 14 May 2009 09:45:53 -0700 (PDT)
+Subject: [Buildroot]  Errror during make command
+Message-ID: <23544482.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=289
+
+Hello,
+I want to port embedded linux in ARM board.
+I have started with buildroot download.
+steps finished:
+1.downloaded buildroot-snapshot.tar.bz2 and untar done.
+2. cd /buildroot folder
+then
+3.make menuconfig command
+4. Then make command , It takes more time and finally it gives the error
+like this
+
+*** Unpacking kernel source
+bzcat /root/sudheer/buildroot/dl/linux-2.6.29.3.tar.bz2 | tar -C
+/root/sudheer/buildroot/project_build_arm/uclibc -xf -
+touch
+/root/sudheer/buildroot/project_build_arm/uclibc/linux-2.6.29.3/.unpacked
+toolchain/patch-kernel.sh
+/root/sudheer/buildroot/project_build_arm/uclibc/linux-2.6.29.3
+toolchain/kernel-headers \
+linux-2.6.29.3-\*.patch{,.gz,.bz2}
+touch
+/root/sudheer/buildroot/project_build_arm/uclibc/linux-2.6.29.3/.patched
+cp -dpf
+/root/sudheer/buildroot/project_build_arm/uclibc/linux-2.6.29.3/.config
+cp: missing destination file operand after
+`/root/sudheer/buildroot/project_build_arm/uclibc/linux-2.6.29.3/.config'
+Try `cp --help' for more information.
+make: ***
+[/root/sudheer/buildroot/project_build_arm/uclibc/linux-2.6.29.3/.configured]
+Error 1
 
 
-Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
+please help me to solve this problem.
+i am using following software and hardware config:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
- Attachment #247 is|0                           |1
-           obsolete|                            |
-
-
-
-
---- Comment #1 from Gustavo Zacarias <gustavo@zacarias.com.ar>  2009-05-14 16:24:56 UTC ---
-Created an attachment (id=327)
- --> (https://bugs.busybox.net/attachment.cgi?id=327)
-Updated patch - description in Config.in was too long
-
-
+1.Ubuntu 8.04 linux
+2. Intel based motherboard
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+View this message in context: http://www.nabble.com/Errror-during-make-command-tp23544482p23544482.html
+Sent from the BuildRoot mailing list archive at Nabble.com.
