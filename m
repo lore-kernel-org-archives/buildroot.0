@@ -1,9 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 14 May 2009 08:09:23 +0000 (UTC)
+Date: Thu, 14 May 2009 08:13:07 +0000 (UTC)
 Subject: [Buildroot] [Bug 303] add gvfs package
 In-Reply-To: <bug-303-163@https.bugs.busybox.net/>
 References: <bug-303-163@https.bugs.busybox.net/>
-Message-ID: <20090514080923.3D8947781C@busybox.osuosl.org>
+Message-ID: <20090514081307.5AB647781C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +13,19 @@ To: buildroot@busybox.net
 https://bugs.busybox.net/show_bug.cgi?id=303
 
 
-Sven Neumann <s.neumann@raumfeld.com> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
- Attachment #269 is|0                           |1
-           obsolete|                            |
 
 
 
+--- Comment #4 from Sven Neumann <s.neumann@raumfeld.com>  2009-05-14 08:13:06 UTC ---
+Created an attachment (id=325)
+ --> (https://bugs.busybox.net/attachment.cgi?id=325)
+patch to make the http and webdav backends compile with libsoup-2.4.1
 
---- Comment #3 from Sven Neumann <s.neumann@raumfeld.com>  2009-05-14 08:09:22 UTC ---
-Created an attachment (id=323)
- --> (https://bugs.busybox.net/attachment.cgi?id=323)
-gvfs.mk with some fixes
-
-This version of gvfs.mk fixes some issues with the last version and adds
-support for the http backend if libsoup is available.
+The http and webdav backends of gvfs depend on libsoup-gnome. libsoup-gnome is
+libsoup with some small API additions. The main point is to respect the HTTP
+proxy configuration of the GNOME desktop. This patch makes some small
+adjustments to the configure script and to the code so that the backends will
+compile with plain libsoup version 2.4.1 as included in buildroot.
 
 
 -- 
