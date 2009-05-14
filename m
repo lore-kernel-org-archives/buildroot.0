@@ -1,30 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 14 May 2009 17:29:38 +0200
-Subject: [Buildroot] [PATCH] Update default linux config for x86
-In-Reply-To: <1242251013-25228-8-git-send-email-thiago.correa@gmail.com>
-	(root's message of "Wed\, 13 May 2009 18\:43\:30 -0300")
-References: <1242251013-25228-1-git-send-email-thiago.correa@gmail.com>
-	<1242251013-25228-2-git-send-email-thiago.correa@gmail.com>
-	<1242251013-25228-3-git-send-email-thiago.correa@gmail.com>
-	<1242251013-25228-4-git-send-email-thiago.correa@gmail.com>
-	<1242251013-25228-5-git-send-email-thiago.correa@gmail.com>
-	<1242251013-25228-6-git-send-email-thiago.correa@gmail.com>
-	<1242251013-25228-7-git-send-email-thiago.correa@gmail.com>
-	<1242251013-25228-8-git-send-email-thiago.correa@gmail.com>
-Message-ID: <87y6szpusd.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 14 May 2009 16:24:57 +0000 (UTC)
+Subject: [Buildroot] [Bug 289] New package iw
+In-Reply-To: <bug-289-163@https.bugs.busybox.net/>
+References: <bug-289-163@https.bugs.busybox.net/>
+Message-ID: <20090514162457.2E49A77820@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "root" == root  <thiago.correa@gmail.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=289
 
- root> Signed-off-by: Thiago A. Correa <thiago.correa@gmail.com>
- root> ---
- root>  target/device/x86/i686/linux-2.6.29.2.config | 2157 ++++++++++++++++++++++++++
 
-Latest is 2.6.29.3, but otherwise ok.
+Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+ Attachment #247 is|0                           |1
+           obsolete|                            |
+
+
+
+
+--- Comment #1 from Gustavo Zacarias <gustavo@zacarias.com.ar>  2009-05-14 16:24:56 UTC ---
+Created an attachment (id=327)
+ --> (https://bugs.busybox.net/attachment.cgi?id=327)
+Updated patch - description in Config.in was too long
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
