@@ -1,38 +1,41 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 14 May 2009 19:25:24 +0200
-Subject: [Buildroot] [PATCH 2/5] gamin: only enable python support if enabled
-In-Reply-To: <1242321927-10185-1-git-send-email-jacmet@sunsite.dk>
-References: <1242321927-10185-1-git-send-email-jacmet@sunsite.dk>
-Message-ID: <1242321927-10185-2-git-send-email-jacmet@sunsite.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 14 May 2009 19:20:07 +0000 (UTC)
+Subject: [Buildroot] [Bug 333] New: Bump sqlite package to 3.6.14
+Message-ID: <bug-333-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Sven Neumann <s.neumann@raumfeld.com>
+https://bugs.busybox.net/show_bug.cgi?id=333
 
-Closes #295.
+              Host: i686-linux
+            Target: arm-softfloat-linux-uclibcgnueabi
+           Summary: Bump sqlite package to 3.6.14
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: gustavo at zacarias.com.ar
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/gamin/gamin.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/gamin/gamin.mk b/package/gamin/gamin.mk
-index f0a2a1f..180d89e 100644
---- a/package/gamin/gamin.mk
-+++ b/package/gamin/gamin.mk
-@@ -12,6 +12,10 @@ GAMIN_INSTALL_TARGET = YES
- 
- GAMIN_CONF_OPT = --program-prefix="" --disable-debug
- 
-+ifneq ($(BR2_PACKAGE_PYTHON),y)
-+GAMIN_CONF_OPT += --without-python
-+endif
-+
- GAMIN_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
- 
- GAMIN_CONF_ENV = have_abstract_sockets=no
+Created an attachment (id=329)
+ --> (https://bugs.busybox.net/attachment.cgi?id=329)
+Bump sqlite package to 3.6.14
+
+New sqlite version out.
+Speed improvements, bug fixes, enhanced query optimizer.
+
+
 -- 
-1.6.2
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
