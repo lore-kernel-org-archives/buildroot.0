@@ -1,31 +1,25 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 14 May 2009 21:59:46 +0200
-Subject: [Buildroot] [GIT PULL] For 2009.05-rc2
-In-Reply-To: <d6cda7730905131412m51933373yf34e21ef2ae56d80@mail.gmail.com>
-	("Thiago A. =?utf-8?Q?Corr=C3=AAa=22's?= message of "Wed\, 13 May 2009
-	18\:12\:34 -0300")
-References: <d6cda7730905131309t2c0f8f21m2841072f983c71ac@mail.gmail.com>
-	<87skj8rbz0.fsf@macbook.be.48ers.dk>
-	<d6cda7730905131410s1d88ebdm2c8000e4f28715d9@mail.gmail.com>
-	<d6cda7730905131412m51933373yf34e21ef2ae56d80@mail.gmail.com>
-Message-ID: <87hbznpia5.fsf@macbook.be.48ers.dk>
+From: Maxim Grigoriev <maxim@tensilica.com>
+Date: Thu, 14 May 2009 19:10:33 -0700
+Subject: [Buildroot] [Bug 163] Xtensa architecture port
+In-Reply-To: <20090509015907.31998777BA@busybox.osuosl.org>
+References: <bug-163-163@https.bugs.busybox.net/>
+	<20090509015907.31998777BA@busybox.osuosl.org>
+Message-ID: <4A0CCF19.5040001@tensilica.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thiago" == Thiago A Corr?a <thiago.correa@gmail.com> writes:
+Hello Buildroot maintainers and developers,
 
-Hi,
+Last Friday, I finished submitting Xtensa Buildroot support :
+All the patches are attached to
 
- Thiago> By the way, one or more of my patches got stuck in the
- Thiago> mailling list and is waiting approval because of it's size. I
- Thiago> guess it further illustrates that perhaps we should work
- Thiago> differently.
+    https://bugs.busybox.net/show_bug.cgi?id=163
 
-Yes, we have a max limit of 40kb on the list. I have approved your
-mail and bumped the limit to 100kb.
+Can anybody, please, give me a clue on how good the chances are
+these patches will be reviewed anytime soon ?
 
--- 
-Bye, Peter Korsgaard
+Thanks,
+-- Maxim
