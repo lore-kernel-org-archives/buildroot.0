@@ -1,52 +1,49 @@
 From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
-Date: Fri, 15 May 2009 02:11:23 -0300
-Subject: [Buildroot] [PATCH] Fix avahi build
-In-Reply-To: <877i0jr9i2.fsf@macbook.be.48ers.dk>
-References: <1242251013-25228-1-git-send-email-thiago.correa@gmail.com>
-	<1242251013-25228-2-git-send-email-thiago.correa@gmail.com>
-	<877i0jr9i2.fsf@macbook.be.48ers.dk>
-Message-ID: <d6cda7730905142211u73224c09p6202e672f303cd45@mail.gmail.com>
+Date: Fri, 15 May 2009 02:26:21 -0300
+Subject: [Buildroot] [GIT PULL] For 2009.05-rc2
+In-Reply-To: <87hbznpia5.fsf@macbook.be.48ers.dk>
+References: <d6cda7730905131309t2c0f8f21m2841072f983c71ac@mail.gmail.com>
+	<87skj8rbz0.fsf@macbook.be.48ers.dk>
+	<d6cda7730905131410s1d88ebdm2c8000e4f28715d9@mail.gmail.com>
+	<d6cda7730905131412m51933373yf34e21ef2ae56d80@mail.gmail.com>
+	<87hbznpia5.fsf@macbook.be.48ers.dk>
+Message-ID: <d6cda7730905142226l31621a39v5399418fbe59f5b@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi Peter,
 
-On Thu, May 14, 2009 at 12:26 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "root" == root ?<thiago.correa@gmail.com> writes:
->
-> ?root> Signed-off-by: Thiago A. Correa <thiago.correa@gmail.com>
-> ?root> ---
-> ?root> ?package/avahi/avahi.mk | ? ?1 +
-> ?root> ?1 files changed, 1 insertions(+), 0 deletions(-)
->
-> ?root> +++ b/package/avahi/avahi.mk
-> ?root> @@ -150,6 +150,7 @@ ifeq ($(BR2_PACKAGE_AVAHI_AUTOIPD),y)
-> ?root> ? ? ? ? ?$(INSTALL) -D -m 0755 package/avahi/busybox-udhcpc-default.script $(TARGET_DIR)/usr/share/udhcpc/default.script
-> ?root> ? ? ? ? ?$(INSTALL) -m 0755 package/avahi/S05avahi-setup.sh $(TARGET_DIR)/etc/init.d/
-> ?root> ? ? ? ? ?rm -f $(TARGET_DIR)/var/lib/avahi-autoipd
-> ?root> + ? ? ? ?mkdir -p $(TARGET_DIR)/var/lib/
->
-> What exactly does this fix? It seems like we should have /var/lib/ as
-> we're removing /var/lib/avahi-autoipd?
->
-> A bit more detailed description in your commit message would be good.
+   Could you please cherypick the commits, from the tree or from the
+patches and commit what you feel is important?
+   Please make sure to get the rsync one, that's important, and I've
+tested it, it's clean and I can assure the problem is there and the
+fix resolves it.
 
-Perhaps the order of packages influenced it once that it built onetime
-for whoever wrote that.
-The line below that is:
-ln -sf /tmp/avahi-autoipd $(TARGET_DIR)/var/lib/avahi-autoipd
+   I am too frustrated with not being able to send changes as before.
+I will just refrain for a while from sending anything, at least until
+past the next release. I will have travel next week to see clients
+anyway, so I don't think I will have the time to follow up anyway. I'm
+not giving up on buildroot just yet.
 
-make atngw100-extended_defconfig && make
-and it will fail there, because the folder $(TARGET_DIR)/var/lib/ doesn't exist.
-Apply patch then rm -rf binaries build_* toolchain_* project_* && make
-and it all goes well. That's the actual test procedure I did. I try to
-test most commits with a clean build to make sure I'm not screwing
-things up.
-
-I found the problem testing the atngw100*_defconfig's from the other patches.
-
-Kind Regards,
+Thanks,
     Thiago A. Correa
+
+On Thu, May 14, 2009 at 4:59 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Thiago" == Thiago A Corr?a <thiago.correa@gmail.com> writes:
+>
+> Hi,
+>
+> ?Thiago> By the way, one or more of my patches got stuck in the
+> ?Thiago> mailling list and is waiting approval because of it's size. I
+> ?Thiago> guess it further illustrates that perhaps we should work
+> ?Thiago> differently.
+>
+> Yes, we have a max limit of 40kb on the list. I have approved your
+> mail and bumped the limit to 100kb.
+>
+> --
+> Bye, Peter Korsgaard
+>
