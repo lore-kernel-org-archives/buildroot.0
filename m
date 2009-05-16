@@ -1,71 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 16 May 2009 14:04:55 +0200
-Subject: [Buildroot] [PATCH] Fix avahi build
-In-Reply-To: <d6cda7730905142211u73224c09p6202e672f303cd45@mail.gmail.com>
-	("Thiago A. =?utf-8?Q?Corr=C3=AAa=22's?= message of "Fri\, 15 May 2009
-	02\:11\:23 -0300")
-References: <1242251013-25228-1-git-send-email-thiago.correa@gmail.com>
-	<1242251013-25228-2-git-send-email-thiago.correa@gmail.com>
-	<877i0jr9i2.fsf@macbook.be.48ers.dk>
-	<d6cda7730905142211u73224c09p6202e672f303cd45@mail.gmail.com>
-Message-ID: <87vdo1nti0.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 16 May 2009 13:45:28 +0200
+Subject: [Buildroot] [git commit] docker: fix pkg-config path
+Message-ID: <20090516122840.AB5F977857@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thiago" == Thiago A Corr?a <thiago.correa@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=316c03ed0601de835c513eb5e73696583b392322
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
 
- >> What exactly does this fix? It seems like we should have /var/lib/ as
- >> we're removing /var/lib/avahi-autoipd?
- >> 
- >> A bit more detailed description in your commit message would be good.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/docker/docker.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- Thiago> Perhaps the order of packages influenced it once that it built onetime
- Thiago> for whoever wrote that.
-
-We use it for several projects (most not using much else than
-busybox), so it gets built atleast one a day here without problems.
-
- Thiago> make atngw100-extended_defconfig && make
-
-I take it that you mean atngw100-expanded_defconfig? Did you try
-building that after your latest changes? The defconfig seems
-completely bogus to me - docker tried to use pkg-config from
-staging_dir instead of host_dir (fixed now), and you had turned off
-the X stuff and still tried to build libgtk2/webkit/docker/openmotif.
-
-Furthermore, enabling the Xserver doesn't work as there seems to be
-missing some avr32 support:
-
-xf86Bus.c: In function 'xf86FindPrimaryDevice':
-compiler.h:1447: error: impossible constraint in 'asm'
-compiler.h:1447: error: impossible constraint in 'asm'
-compiler.h:1428: error: impossible constraint in 'asm'
-compiler.h:1447: error: impossible constraint in 'asm'
-compiler.h:1428: error: impossible constraint in 'asm'
-compiler.h:1428: error: impossible constraint in 'asm'
-compiler.h:1447: error: impossible constraint in 'asm'
-compiler.h:1428: error: impossible constraint in 'asm'
-make[6]: *** [xf86Bus.lo] Error 1
-
-And there's indeed no avr32 conditionals in hw/xfree86/common/compiler.h.
-
-Are you using this?
-
- Thiago> and it will fail there, because the folder $(TARGET_DIR)/var/lib/ doesn't exist.
-
-Sorry, I never got that far in the build. I can disable all the X
-stuff, but then I guess it will behave just like the other platforms I
-normally compile avahi for.
-
- Thiago> I found the problem testing the atngw100*_defconfig's from
- Thiago> the other patches.
-
-And you didn't run into the above issues?
-
+diff --git a/package/docker/docker.mk b/package/docker/docker.mk
+index d86e88b..860cd7e 100644
+--- a/package/docker/docker.mk
++++ b/package/docker/docker.mk
+@@ -14,7 +14,7 @@ DOCKER_MAKE_OPT = CC=$(TARGET_CC) CXX=$(TARGET_CXX) LD=$(TARGET_LD) \
+ 					CFLAGS="-I$(STAGING_DIR)/usr/include \
+ 						-I$(STAGING_DIR)/usr/include/glib-2.0 \
+ 						-I$(STAGING_DIR)/usr/lib/glib-2.0/include" \
+-					PKG_CONFIG="$(STAGING_DIR)/usr/bin/pkg-config" \
++					PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+ 					LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib"
+ 
+ DOCKER_INSTALL_TARGET_OPT = PREFIX=$(TARGET_DIR)/usr install
 -- 
-Bye, Peter Korsgaard
+1.6.0.6
