@@ -1,32 +1,63 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 18 May 2009 16:25:45 +0200
-Subject: [Buildroot] [Bug 163] Xtensa architecture port
-In-Reply-To: <4A0CCF19.5040001@tensilica.com> (Maxim Grigoriev's message of
-	"Thu\, 14 May 2009 19\:10\:33 -0700")
-References: <bug-163-163@https.bugs.busybox.net/>
-	<20090509015907.31998777BA@busybox.osuosl.org>
-	<4A0CCF19.5040001@tensilica.com>
-Message-ID: <873ab2o5cm.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 18 May 2009 13:51:52 +0200
+Subject: [Buildroot] [git commit] busybox: 1.14.0 libbb fix
+Message-ID: <20090518143103.97DAB7786D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Maxim" == Maxim Grigoriev <maxim@tensilica.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=c219988fdf1240bed6086d72d4414cfecc7c7c25
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Maxim> Hello Buildroot maintainers and developers,
- Maxim> Last Friday, I finished submitting Xtensa Buildroot support :
- Maxim> All the patches are attached to
 
- Maxim>    https://bugs.busybox.net/show_bug.cgi?id=163
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/busybox/busybox-1.14.0-libbb.patch |   35 ++++++++++++++++++++++++++++
+ 1 files changed, 35 insertions(+), 0 deletions(-)
+ create mode 100644 package/busybox/busybox-1.14.0-libbb.patch
 
- Maxim> Can anybody, please, give me a clue on how good the chances are
- Maxim> these patches will be reviewed anytime soon ?
-
-Sorry for the slow response on this. We're right now busy getting
-2009.05 released, but I'll commit the patches once that's out unless
-someone complains..
-
+diff --git a/package/busybox/busybox-1.14.0-libbb.patch b/package/busybox/busybox-1.14.0-libbb.patch
+new file mode 100644
+index 0000000..327b4ec
+--- /dev/null
++++ b/package/busybox/busybox-1.14.0-libbb.patch
+@@ -0,0 +1,35 @@
++--- busybox-1.14.0/include/libbb.h	Tue Apr 14 02:50:20 2009
+++++ busybox-1.14.0-libbb/include/libbb.h	Fri May 15 23:22:02 2009
++@@ -965,6 +965,12 @@
++ 	/* How long the longest ESC sequence we know? */
++ 	KEYCODE_BUFFER_SIZE = 4
++ };
+++/* Note: fd may be in blocking or non-blocking mode, both make sense.
+++ * For one, less uses non-blocking mode.
+++ * Only the first read syscall inside read_key may block indefinitely
+++ * (unless fd is in non-blocking mode),
+++ * subsequent reads will time out after a few milliseconds.
+++ */
++ int read_key(int fd, smalluint *nbuffered, char *buffer) FAST_FUNC;
++ 
++ 
++--- busybox-1.14.0/libbb/read.c	Tue Apr 14 01:43:00 2009
+++++ busybox-1.14.0-libbb/libbb/read.c	Fri May 15 23:22:02 2009
++@@ -229,7 +229,7 @@
++ 		if (size > 64*1024)
++ 			size = 64*1024;
++ 	}
++-	xrealloc(buf, total + 1);
+++	buf = xrealloc(buf, total + 1);
++ 	buf[total] = '\0';
++ 
++ 	if (maxsz_p)
++@@ -273,7 +273,7 @@
++ 		free(buf);
++ 		return NULL;
++ 	}
++-	xrealloc(buf, size + 1);
+++	buf = xrealloc(buf, size + 1);
++ 	buf[size] = '\0';
++ 
++ 	if (maxsz_p)
 -- 
-Bye, Peter Korsgaard
+1.6.0.6
