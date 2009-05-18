@@ -1,33 +1,32 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 18 May 2009 17:05:50 +0200
-Subject: [Buildroot] [PATCH] Fix avahi build
-In-Reply-To: <877i0eo6ws.fsf@macbook.be.48ers.dk> (Peter Korsgaard's message
-	of "Mon\, 18 May 2009 15\:52\:03 +0200")
-References: <1242251013-25228-1-git-send-email-thiago.correa@gmail.com>
-	<1242251013-25228-2-git-send-email-thiago.correa@gmail.com>
-	<877i0jr9i2.fsf@macbook.be.48ers.dk>
-	<d6cda7730905142211u73224c09p6202e672f303cd45@mail.gmail.com>
-	<87vdo1nti0.fsf@macbook.be.48ers.dk>
-	<d6cda7730905171037r4f4aa9f7y9a12eb9377ab70f8@mail.gmail.com>
-	<87k54fo1tn.fsf@macbook.be.48ers.dk>
-	<d6cda7730905172149h203eba31i5c9bba53609b45ff@mail.gmail.com>
-	<877i0eo6ws.fsf@macbook.be.48ers.dk>
-Message-ID: <87vdnymoxd.fsf@macbook.be.48ers.dk>
+From: Marc Gauthier <marc@tensilica.com>
+Date: Mon, 18 May 2009 08:23:12 -0700
+Subject: [Buildroot] [Bug 163] Xtensa architecture port
+In-Reply-To: <873ab2o5cm.fsf@macbook.be.48ers.dk>
+Message-ID: <522C1DF17AF50042AD8AE87F7887BD3D0158722326@exch.hq.tensilica.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
+Peter Korsgaard wrote:
+> >>>>> "Maxim" == Maxim Grigoriev <maxim@tensilica.com> writes:
+>
+>  Maxim> Hello Buildroot maintainers and developers,
+>  Maxim> Last Friday, I finished submitting Xtensa Buildroot support :
+>  Maxim> All the patches are attached to
+>
+>  Maxim>    https://bugs.busybox.net/show_bug.cgi?id=163
+>
+>  Maxim> Can anybody, please, give me a clue on how good the
+> chances are
+>  Maxim> these patches will be reviewed anytime soon ?
+>
+> Sorry for the slow response on this. We're right now busy getting
+> 2009.05 released, but I'll commit the patches once that's out unless
+> someone complains..
 
-Hi,
 
- Peter> I normally build avahi with ipv4ll support (on ppc) without problems,
- Peter> so it seems specific to atngw100. I'll do a test build and check.
+Cool, thank you!
 
-Ok, atngw100_defconfig works here (without your commit). Could you
-checkout the official tree (so without your changes) and try as well?
-
--- 
-Bye, Peter Korsgaard
+-Marc
