@@ -1,20 +1,23 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 19 May 2009 20:30:19 +0200
-Subject: [Buildroot] [git commit] docs/news.html: announce 2009.05-rc2
-Message-ID: <20090519184514.9FF5B7787B@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 19 May 2009 22:42:31 +0200
+Subject: [Buildroot] 2009.05-rc2 released
+Message-ID: <87tz3glt8o.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b46819df229bf9a75eff4bf96a5ccdfd037d6b7f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Patch is too large, so refusing to show it
+I've released RC2. Unless big issues are found, expect this to be the
+last release candidate before the release - So give it a good test.
 
+Get it from here:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- docs/news.html |   12 ++++++++++++
- 1 files changed, 12 insertions(+), 0 deletions(-)
+http://buildroot.net/downloads/buildroot-2009.05-rc2.tar.bz2
+
+And report any issues found here or in the bugtracker.
+
+-- 
+Bye, Peter Korsgaard
