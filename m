@@ -1,25 +1,24 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 19 May 2009 14:07:24 +0200
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 19 May 2009 14:27:02 +0200
 Subject: [Buildroot] Buildroot tutorial on LinuxDevices.com
-Message-ID: <20090519140724.02ed819f@surf>
+In-Reply-To: <20090519140724.02ed819f@surf> (Thomas Petazzoni's message of
+	"Tue\, 19 May 2009 14\:07\:24 +0200")
+References: <20090519140724.02ed819f@surf>
+Message-ID: <87y6stl1m1.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-LinuxDevices.com has a news [1] pointing to a tutorial explaining how
-to build a Linux system with Buildroot [2]. This should give Buildroot
-a good visibility!
+ Thomas> Hi,
+ Thomas> LinuxDevices.com has a news [1] pointing to a tutorial explaining how
+ Thomas> to build a Linux system with Buildroot [2]. This should give Buildroot
+ Thomas> a good visibility!
 
-Thomas
+Yes, I noticed as well - Nice to see..
 
-[1] http://www.linuxdevices.com/news/NS6116987823.html
-[2] http://www.linuxdevices.com/articles/AT9637011703.html
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
