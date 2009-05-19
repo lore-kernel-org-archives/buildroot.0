@@ -1,32 +1,19 @@
-From: Marc Gauthier <marc@tensilica.com>
-Date: Mon, 18 May 2009 08:23:12 -0700
-Subject: [Buildroot] [Bug 163] Xtensa architecture port
-In-Reply-To: <873ab2o5cm.fsf@macbook.be.48ers.dk>
-Message-ID: <522C1DF17AF50042AD8AE87F7887BD3D0158722326@exch.hq.tensilica.com>
+From: Gopu Subramanian <sgopu@yahoo.com>
+Date: Tue, 19 May 2009 00:10:24 -0700 (PDT)
+Subject: [Buildroot] ARM BE8 linker issue
+Message-ID: <979482.59229.qm@web42105.mail.mud.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard wrote:
-> >>>>> "Maxim" == Maxim Grigoriev <maxim@tensilica.com> writes:
->
->  Maxim> Hello Buildroot maintainers and developers,
->  Maxim> Last Friday, I finished submitting Xtensa Buildroot support :
->  Maxim> All the patches are attached to
->
->  Maxim>    https://bugs.busybox.net/show_bug.cgi?id=163
->
->  Maxim> Can anybody, please, give me a clue on how good the
-> chances are
->  Maxim> these patches will be reviewed anytime soon ?
->
-> Sorry for the slow response on this. We're right now busy getting
-> 2009.05 released, but I'll commit the patches once that's out unless
-> someone complains..
+
+I am trying to build the buildroot 2009.02 version for ARM BE8 platform. If I compile the hello world and did the objdump and in few sections instructions are not swapped. 
+
+Thanks and Regards,
+Gopu
 
 
-Cool, thank you!
 
--Marc
+      Explore and discover exciting holidays and getaways with Yahoo! India Travel http://in.travel.yahoo.com/
