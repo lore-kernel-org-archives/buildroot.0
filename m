@@ -1,37 +1,29 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 20 May 2009 12:15:54 +0200
-Subject: [Buildroot] [git commit] kernel-headers: bump 2.6.27 / 2.6.29
-	versions
-Message-ID: <20090520101609.7509A7785F@busybox.osuosl.org>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Wed, 20 May 2009 16:18:42 +0200
+Subject: [Buildroot] Kernel headers 2.36.8.10 not matching patch level
+Message-ID: <4A33C433D49245E0AF2FB390E7B24639@apexjs>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c9faf999f4c5809cc0aa80d1bd3702c61fd8c0c1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- toolchain/kernel-headers/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index 2b8b2f2..cde510e 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -60,8 +60,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "2.6.24.7"	if BR2_KERNEL_HEADERS_2_6_24
- 	default "2.6.25.19"	if BR2_KERNEL_HEADERS_2_6_25
- 	default "2.6.26.8"	if BR2_KERNEL_HEADERS_2_6_26
--	default "2.6.27.23"	if BR2_KERNEL_HEADERS_2_6_27
-+	default "2.6.27.24"	if BR2_KERNEL_HEADERS_2_6_27
- 	default "2.6.28.10"	if BR2_KERNEL_HEADERS_2_6_28
--	default "2.6.29.3"	if BR2_KERNEL_HEADERS_2_6_29
-+	default "2.6.29.4"	if BR2_KERNEL_HEADERS_2_6_29
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+Hi
  
--- 
-1.6.0.6
+(2009.5 rc2)
+ 
+I noticed while running make and having selected patch level 9 ( 2.6.28.9)
+that buildroot downloads the kernel source 2.6.28.10 ?
+It seems to use the 2.6.28.10 in the toolchain_build_arm,  the one in
+project_build_arm was the right one.
+I have o idea if this could cause problems.
+ 
+Running make linux26menuconfig fails if a full build was never done before.
+ 
+ 
+Johan
+ 
+ 
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090520/6757e50f/attachment.htm>
