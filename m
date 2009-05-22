@@ -1,35 +1,29 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 22 May 2009 13:23:58 +0000 (UTC)
-Subject: [Buildroot] [Bug 333] Bump sqlite package to 3.6.14
-In-Reply-To: <bug-333-163@https.bugs.busybox.net/>
-References: <bug-333-163@https.bugs.busybox.net/>
-Message-ID: <20090522132358.41F9D7784D@busybox.osuosl.org>
+From: Chris Bare <chris@bareflix.com>
+Date: Fri, 22 May 2009 10:25:53 -0400 (EDT)
+Subject: [Buildroot] hang generating DSA keys
+Message-ID: <20090522142624.2FEF618005F@silver.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=333
+This is really odd. I'm using the same buildroot code as I have been for
+weeks, but after flashing my latest code to my Atmel ngw100, it hang in the
+first boot at this step:
 
+Generating DSA Key...
+THIS CAN TAKE A MINUTE OR TWO DEPENDING ON YOUR PROCESSOR!
 
-Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
+Generating public/private dsa key pair.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
- Attachment #329 is|0                           |1
-           obsolete|                            |
+I let it sit overnight and it never finished. I remember seeing some mention
+of this being an entropy problem. I tried pinging the board, but that didn't
+seem to help.
 
-
-
-
---- Comment #3 from Gustavo Zacarias <gustavo@zacarias.com.ar>  2009-05-22 13:23:57 UTC ---
-Created an attachment (id=345)
- --> (https://bugs.busybox.net/attachment.cgi?id=345)
-Use Michael Roth's patch, it's preferred
-
-
+Any idea why this would suddenly start with the same basic setup that worked
+before?
+How do I get it to finish generating the key?
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Chris Bare
+chris at bareflix.com
