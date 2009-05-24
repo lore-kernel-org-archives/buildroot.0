@@ -1,24 +1,56 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 24 May 2009 21:39:37 +0200
-Subject: [Buildroot] ARM BE8 linker issue
-In-Reply-To: <979482.59229.qm@web42105.mail.mud.yahoo.com> (Gopu Subramanian's
-	message of "Tue\, 19 May 2009 00\:10\:24 -0700 \(PDT\)")
-References: <979482.59229.qm@web42105.mail.mud.yahoo.com>
-Message-ID: <87eiueffye.fsf@macbook.be.48ers.dk>
+From: Adam McLaurin <buildroot@irotas.net>
+Date: Sun, 24 May 2009 15:43:32 -0400
+Subject: [Buildroot] Error configuring MPFR - "libgmp not found or uses a
+	different ABI"
+Message-ID: <1243194212.21457.1317005177@webmail.messagingengine.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gopu" == Gopu Subramanian <sgopu@yahoo.com> writes:
+I checked out the latest buildroot from git this morning and
+unfortunately cannot get it to build successfully.
 
- Gopu> I am trying to build the buildroot 2009.02 version for ARM BE8
- Gopu> platform. If I compile the hello world and did the objdump and
- Gopu> in few sections instructions are not swapped.
+The build ends like this:
+checking whether the
+/home/irotas/sandboxes/buildroot/build_i686/staging_dir/usr/bin/i686-linux-uclibc-g++
+-Os -pipe -Os 
+-I/home/irotas/sandboxes/buildroot/build_i686/staging_dir/usr/include
+-I/home/irotas/sandboxes/buildroot/build_i686/staging_dir/include
+--sysroot=/home/irotas/sandboxes/buildroot/build_i686/staging_dir/
+-isysroot /home/irotas/sandboxes/buildroot/build_i686/staging_dir
+-mtune=i686 -march=i686 linker
+(/home/irotas/sandboxes/buildroot/build_i686/staging_dir/usr/bin/i686-linux-uclibc-ld)
+supports shared libraries... yes
+checking dynamic linker characteristics... GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking whether gcc __attribute__ ((mode (XX))) works... yes
+checking for recent GMP... yes
+checking for gmp internal files... no
+checking for working alloca.h... yes
+checking for alloca... yes
+checking for __gmpz_init in -lgmp... no
+configure: error: libgmp not found or uses a different ABI.
+Please read the INSTALL file -- see "In case of problem".
+make: ***
+[/home/irotas/sandboxes/buildroot/build_i686/mpfr-2.4.1/.configured]
+Error 1
 
-Please provide more details - What buildroot configuration exactly,
-and what are you seeing (and what did you expect to see)?
+I've uploaded the build output, configuration files, and MPFR config.log
+to my website:
+http://public.irotas.fastmail.fm/buildroot/buildroot.log.tgz
+http://public.irotas.fastmail.fm/buildroot/config
+http://public.irotas.fastmail.fm/buildroot/config.cmd
+http://public.irotas.fastmail.fm/buildroot/mpfr.config.log
 
--- 
-Bye, Peter Korsgaard
+I also tried downloading 'buildroot-2009.02.tar.gz' and have the same
+problems with that version too, so it looks like it's not a new problem.
+
+I don't know if it matters, but I'm building on Ubuntu 8.10 (Linux
+2.6.27-14).
+
+Any suggestions?
+
+Thanks,
+Adam
