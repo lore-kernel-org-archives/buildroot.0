@@ -1,54 +1,25 @@
-From: Frank Hoeflich <frankhoeflich@yahoo.com>
-Date: Sun, 24 May 2009 11:22:30 -0700 (PDT)
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 24 May 2009 21:03:19 +0200
 Subject: [Buildroot] hang generating DSA keys
-Message-ID: <358556.29433.qm@web56902.mail.re3.yahoo.com>
+In-Reply-To: <358556.29433.qm@web56902.mail.re3.yahoo.com> (Frank Hoeflich's
+	message of "Sun\, 24 May 2009 11\:22\:30 -0700 \(PDT\)")
+References: <358556.29433.qm@web56902.mail.re3.yahoo.com>
+Message-ID: <87my92fhmw.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The entropy mechanism depends on keyboard input - I'd expect it to be waiting for I/O.? If you type some characters it will use them to generate the keys and be on its way.
+>>>>> "Frank" == Frank Hoeflich <frankhoeflich@yahoo.com> writes:
 
---Frank
+ Frank> The entropy mechanism depends on keyboard input - I'd expect
+ Frank> it to be waiting for I/O.  If you type some characters it will
+ Frank> use them to generate the keys and be on its way.
 
- 
-        	>Sunday, May 24, 2009 12:21 AM
-        	
-            
-            
-            >From: "Peter Korsgaard" <jacmet@uclibc.org>
-            
-            	
-            	
-            	
-        	
-        	>To: "Chris Bare" <chris@bareflix.com>
-        	
-        	>Cc: buildroot at lists.busybox.net
-                >>>>> "Chris" == Chris Bare <chris@bareflix.com> writes:
->
->Chris> Generating DSA Key...
->Chris> THIS CAN TAKE A MINUTE OR TWO DEPENDING ON YOUR PROCESSOR!
->
->Chris> Generating public/private dsa key pair.
->
->Chris> I let it sit overnight and it never finished. I remember
->Chris> seeing some mention of this being an entropy problem. I tried
->Chris> pinging the board, but that didn't seem to help.
->
->Chris> Any idea why this would suddenly start with the same basic
->Chris> setup that worked before?? How do I get it to finish
->Chris> generating the key?
->
->Sounds odd - Could you add strace and check what it's busy doing?
->
->-- 
->Bye, Peter Korsgaard
+Yes, if the programs are using /dev/random instead of /dev/urandom. Is
+this openssh or dropbear? Dropbear uses /dev/urandom by default, but I
+don't know what openssh does.
 
-
-
-      
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090524/ebeab4d7/attachment.htm>
+-- 
+Bye, Peter Korsgaard
