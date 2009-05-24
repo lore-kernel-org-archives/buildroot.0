@@ -1,27 +1,211 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 23 May 2009 12:31:32 +0200
-Subject: [Buildroot] Will buildroot run on solaris 10 (x86)?
-In-Reply-To: <29517860905230106t7003380bg4aa1b5cda9e1fb58@mail.gmail.com>
-	(Tiger Big's message of "Sat\, 23 May 2009 16\:06\:55 +0800")
-References: <29517860905230106t7003380bg4aa1b5cda9e1fb58@mail.gmail.com>
-Message-ID: <87ws88f6uz.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 24 May 2009 07:34:09 +0200
+Subject: [Buildroot] [git commit] toolchain/gcc: 4.3.x: fix for arm pr37436
+Message-ID: <20090524053621.7C86E7781D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Tiger" == Tiger Big <br.mailist@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=421f05c913d8e1f4ff08fc0aa4a6a8834c03da17
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Tiger> I'm planning to use buildroot to generate a toolchain(for mips target or
- Tiger> whatever), my host is Solaris10(x86), I'm not sure if it's possible or not.
 
-I don't remember ever seeing any patches for solaris (but we did have
-some for macosx / cygwin), so it may or may not work - I'm afraid
-you're on your own.
+See http://gcc.gnu.org/bugzilla/show_bug.cgi?id=37436 for details.
 
-In any case, the primary OS (E.G. the only target OS and what the
-developers are using) is Linux.
+Reported-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ .../4.3.2/999-4.3.2-arm-fix-for-bug-37436.patch    |   86 ++++++++++++++++++++
+ .../4.3.3/999-4.3.3-arm-fix-for-bug-37436.patch    |   86 ++++++++++++++++++++
+ 2 files changed, 172 insertions(+), 0 deletions(-)
+ create mode 100644 toolchain/gcc/4.3.2/999-4.3.2-arm-fix-for-bug-37436.patch
+ create mode 100644 toolchain/gcc/4.3.3/999-4.3.3-arm-fix-for-bug-37436.patch
 
+diff --git a/toolchain/gcc/4.3.2/999-4.3.2-arm-fix-for-bug-37436.patch b/toolchain/gcc/4.3.2/999-4.3.2-arm-fix-for-bug-37436.patch
+new file mode 100644
+index 0000000..99a016f
+--- /dev/null
++++ b/toolchain/gcc/4.3.2/999-4.3.2-arm-fix-for-bug-37436.patch
+@@ -0,0 +1,86 @@
++gcc svn 142778:
++
++PR target/37436
++* arm.c (arm_legitimate_index): Only accept addresses that are in
++canonical form.
++* predicates.md (arm_reg_or_extendqisi_mem_op): New predicate.
++* arm.md (extendqihi2): Use arm_reg_or_extendqisi_mem_op predicate
++for operand1.
++(extendqisi2): Likewise.
++(arm_extendqisi, arm_extendqisi_v6): Use arm_extendqisi_mem_op
++predicate for operand1.
++
++diff -Nura gcc-4.3.3.orig/gcc/config/arm/arm.c gcc-4.3.3/gcc/config/arm/arm.c
++--- gcc-4.3.3.orig/gcc/config/arm/arm.c	2008-06-11 07:52:55.000000000 -0300
+++++ gcc-4.3.3/gcc/config/arm/arm.c	2009-05-21 16:06:45.000000000 -0300
++@@ -3769,6 +3769,7 @@
++       rtx xop1 = XEXP (x, 1);
++ 
++       return ((arm_address_register_rtx_p (xop0, strict_p)
+++	       && GET_CODE(xop1) == CONST_INT
++ 	       && arm_legitimate_index_p (mode, xop1, outer, strict_p))
++ 	      || (arm_address_register_rtx_p (xop1, strict_p)
++ 		  && arm_legitimate_index_p (mode, xop0, outer, strict_p)));
++diff -Nura gcc-4.3.3.orig/gcc/config/arm/arm.md gcc-4.3.3/gcc/config/arm/arm.md
++--- gcc-4.3.3.orig/gcc/config/arm/arm.md	2007-09-04 01:44:47.000000000 -0300
+++++ gcc-4.3.3/gcc/config/arm/arm.md	2009-05-21 16:06:45.000000000 -0300
++@@ -4199,7 +4199,7 @@
++ 
++ (define_expand "extendqihi2"
++   [(set (match_dup 2)
++-	(ashift:SI (match_operand:QI 1 "general_operand" "")
+++	(ashift:SI (match_operand:QI 1 "arm_reg_or_extendqisi_mem_op" "")
++ 		   (const_int 24)))
++    (set (match_operand:HI 0 "s_register_operand" "")
++ 	(ashiftrt:SI (match_dup 2)
++@@ -4224,7 +4224,7 @@
++ 
++ (define_insn "*arm_extendqihi_insn"
++   [(set (match_operand:HI 0 "s_register_operand" "=r")
++-	(sign_extend:HI (match_operand:QI 1 "memory_operand" "Uq")))]
+++	(sign_extend:HI (match_operand:QI 1 "arm_extendqisi_mem_op" "Uq")))]
++   "TARGET_ARM && arm_arch4"
++   "ldr%(sb%)\\t%0, %1"
++   [(set_attr "type" "load_byte")
++@@ -4235,7 +4235,7 @@
++ 
++ (define_expand "extendqisi2"
++   [(set (match_dup 2)
++-	(ashift:SI (match_operand:QI 1 "general_operand" "")
+++	(ashift:SI (match_operand:QI 1 "arm_reg_or_extendqisi_mem_op" "")
++ 		   (const_int 24)))
++    (set (match_operand:SI 0 "s_register_operand" "")
++ 	(ashiftrt:SI (match_dup 2)
++@@ -4267,7 +4267,7 @@
++ 
++ (define_insn "*arm_extendqisi"
++   [(set (match_operand:SI 0 "s_register_operand" "=r")
++-	(sign_extend:SI (match_operand:QI 1 "memory_operand" "Uq")))]
+++	(sign_extend:SI (match_operand:QI 1 "arm_extendqisi_mem_op" "Uq")))]
++   "TARGET_ARM && arm_arch4 && !arm_arch6"
++   "ldr%(sb%)\\t%0, %1"
++   [(set_attr "type" "load_byte")
++@@ -4278,7 +4278,8 @@
++ 
++ (define_insn "*arm_extendqisi_v6"
++   [(set (match_operand:SI 0 "s_register_operand" "=r,r")
++-	(sign_extend:SI (match_operand:QI 1 "nonimmediate_operand" "r,Uq")))]
+++	(sign_extend:SI
+++	 (match_operand:QI 1 "arm_reg_or_extendqisi_mem_op" "r,Uq")))]
++   "TARGET_ARM && arm_arch6"
++   "@
++    sxtb%?\\t%0, %1
++diff -Nura gcc-4.3.3.orig/gcc/config/arm/predicates.md gcc-4.3.3/gcc/config/arm/predicates.md
++--- gcc-4.3.3.orig/gcc/config/arm/predicates.md	2007-08-02 07:49:31.000000000 -0300
+++++ gcc-4.3.3/gcc/config/arm/predicates.md	2009-05-21 16:06:45.000000000 -0300
++@@ -234,6 +234,10 @@
++        (match_test "arm_legitimate_address_p (mode, XEXP (op, 0), SIGN_EXTEND,
++ 					      0)")))
++ 
+++(define_special_predicate "arm_reg_or_extendqisi_mem_op"
+++  (ior (match_operand 0 "arm_extendqisi_mem_op")
+++       (match_operand 0 "s_register_operand")))
+++
++ (define_predicate "power_of_two_operand"
++   (match_code "const_int")
++ {
+diff --git a/toolchain/gcc/4.3.3/999-4.3.3-arm-fix-for-bug-37436.patch b/toolchain/gcc/4.3.3/999-4.3.3-arm-fix-for-bug-37436.patch
+new file mode 100644
+index 0000000..99a016f
+--- /dev/null
++++ b/toolchain/gcc/4.3.3/999-4.3.3-arm-fix-for-bug-37436.patch
+@@ -0,0 +1,86 @@
++gcc svn 142778:
++
++PR target/37436
++* arm.c (arm_legitimate_index): Only accept addresses that are in
++canonical form.
++* predicates.md (arm_reg_or_extendqisi_mem_op): New predicate.
++* arm.md (extendqihi2): Use arm_reg_or_extendqisi_mem_op predicate
++for operand1.
++(extendqisi2): Likewise.
++(arm_extendqisi, arm_extendqisi_v6): Use arm_extendqisi_mem_op
++predicate for operand1.
++
++diff -Nura gcc-4.3.3.orig/gcc/config/arm/arm.c gcc-4.3.3/gcc/config/arm/arm.c
++--- gcc-4.3.3.orig/gcc/config/arm/arm.c	2008-06-11 07:52:55.000000000 -0300
+++++ gcc-4.3.3/gcc/config/arm/arm.c	2009-05-21 16:06:45.000000000 -0300
++@@ -3769,6 +3769,7 @@
++       rtx xop1 = XEXP (x, 1);
++ 
++       return ((arm_address_register_rtx_p (xop0, strict_p)
+++	       && GET_CODE(xop1) == CONST_INT
++ 	       && arm_legitimate_index_p (mode, xop1, outer, strict_p))
++ 	      || (arm_address_register_rtx_p (xop1, strict_p)
++ 		  && arm_legitimate_index_p (mode, xop0, outer, strict_p)));
++diff -Nura gcc-4.3.3.orig/gcc/config/arm/arm.md gcc-4.3.3/gcc/config/arm/arm.md
++--- gcc-4.3.3.orig/gcc/config/arm/arm.md	2007-09-04 01:44:47.000000000 -0300
+++++ gcc-4.3.3/gcc/config/arm/arm.md	2009-05-21 16:06:45.000000000 -0300
++@@ -4199,7 +4199,7 @@
++ 
++ (define_expand "extendqihi2"
++   [(set (match_dup 2)
++-	(ashift:SI (match_operand:QI 1 "general_operand" "")
+++	(ashift:SI (match_operand:QI 1 "arm_reg_or_extendqisi_mem_op" "")
++ 		   (const_int 24)))
++    (set (match_operand:HI 0 "s_register_operand" "")
++ 	(ashiftrt:SI (match_dup 2)
++@@ -4224,7 +4224,7 @@
++ 
++ (define_insn "*arm_extendqihi_insn"
++   [(set (match_operand:HI 0 "s_register_operand" "=r")
++-	(sign_extend:HI (match_operand:QI 1 "memory_operand" "Uq")))]
+++	(sign_extend:HI (match_operand:QI 1 "arm_extendqisi_mem_op" "Uq")))]
++   "TARGET_ARM && arm_arch4"
++   "ldr%(sb%)\\t%0, %1"
++   [(set_attr "type" "load_byte")
++@@ -4235,7 +4235,7 @@
++ 
++ (define_expand "extendqisi2"
++   [(set (match_dup 2)
++-	(ashift:SI (match_operand:QI 1 "general_operand" "")
+++	(ashift:SI (match_operand:QI 1 "arm_reg_or_extendqisi_mem_op" "")
++ 		   (const_int 24)))
++    (set (match_operand:SI 0 "s_register_operand" "")
++ 	(ashiftrt:SI (match_dup 2)
++@@ -4267,7 +4267,7 @@
++ 
++ (define_insn "*arm_extendqisi"
++   [(set (match_operand:SI 0 "s_register_operand" "=r")
++-	(sign_extend:SI (match_operand:QI 1 "memory_operand" "Uq")))]
+++	(sign_extend:SI (match_operand:QI 1 "arm_extendqisi_mem_op" "Uq")))]
++   "TARGET_ARM && arm_arch4 && !arm_arch6"
++   "ldr%(sb%)\\t%0, %1"
++   [(set_attr "type" "load_byte")
++@@ -4278,7 +4278,8 @@
++ 
++ (define_insn "*arm_extendqisi_v6"
++   [(set (match_operand:SI 0 "s_register_operand" "=r,r")
++-	(sign_extend:SI (match_operand:QI 1 "nonimmediate_operand" "r,Uq")))]
+++	(sign_extend:SI
+++	 (match_operand:QI 1 "arm_reg_or_extendqisi_mem_op" "r,Uq")))]
++   "TARGET_ARM && arm_arch6"
++   "@
++    sxtb%?\\t%0, %1
++diff -Nura gcc-4.3.3.orig/gcc/config/arm/predicates.md gcc-4.3.3/gcc/config/arm/predicates.md
++--- gcc-4.3.3.orig/gcc/config/arm/predicates.md	2007-08-02 07:49:31.000000000 -0300
+++++ gcc-4.3.3/gcc/config/arm/predicates.md	2009-05-21 16:06:45.000000000 -0300
++@@ -234,6 +234,10 @@
++        (match_test "arm_legitimate_address_p (mode, XEXP (op, 0), SIGN_EXTEND,
++ 					      0)")))
++ 
+++(define_special_predicate "arm_reg_or_extendqisi_mem_op"
+++  (ior (match_operand 0 "arm_extendqisi_mem_op")
+++       (match_operand 0 "s_register_operand")))
+++
++ (define_predicate "power_of_two_operand"
++   (match_code "const_int")
++ {
 -- 
-Bye, Peter Korsgaard
+1.6.0.6
