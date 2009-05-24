@@ -1,211 +1,32 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 24 May 2009 07:34:09 +0200
-Subject: [Buildroot] [git commit] toolchain/gcc: 4.3.x: fix for arm pr37436
-Message-ID: <20090524053621.7C86E7781D@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 24 May 2009 09:21:25 +0200
+Subject: [Buildroot] hang generating DSA keys
+In-Reply-To: <20090522142624.2FEF618005F@silver.osuosl.org> (Chris Bare's
+	message of "Fri\, 22 May 2009 10\:25\:53 -0400 \(EDT\)")
+References: <20090522142624.2FEF618005F@silver.osuosl.org>
+Message-ID: <87r5yfezka.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=421f05c913d8e1f4ff08fc0aa4a6a8834c03da17
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Chris" == Chris Bare <chris@bareflix.com> writes:
 
+ Chris> Generating DSA Key...
+ Chris> THIS CAN TAKE A MINUTE OR TWO DEPENDING ON YOUR PROCESSOR!
 
-See http://gcc.gnu.org/bugzilla/show_bug.cgi?id=37436 for details.
+ Chris> Generating public/private dsa key pair.
 
-Reported-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- .../4.3.2/999-4.3.2-arm-fix-for-bug-37436.patch    |   86 ++++++++++++++++++++
- .../4.3.3/999-4.3.3-arm-fix-for-bug-37436.patch    |   86 ++++++++++++++++++++
- 2 files changed, 172 insertions(+), 0 deletions(-)
- create mode 100644 toolchain/gcc/4.3.2/999-4.3.2-arm-fix-for-bug-37436.patch
- create mode 100644 toolchain/gcc/4.3.3/999-4.3.3-arm-fix-for-bug-37436.patch
+ Chris> I let it sit overnight and it never finished. I remember
+ Chris> seeing some mention of this being an entropy problem. I tried
+ Chris> pinging the board, but that didn't seem to help.
 
-diff --git a/toolchain/gcc/4.3.2/999-4.3.2-arm-fix-for-bug-37436.patch b/toolchain/gcc/4.3.2/999-4.3.2-arm-fix-for-bug-37436.patch
-new file mode 100644
-index 0000000..99a016f
---- /dev/null
-+++ b/toolchain/gcc/4.3.2/999-4.3.2-arm-fix-for-bug-37436.patch
-@@ -0,0 +1,86 @@
-+gcc svn 142778:
-+
-+PR target/37436
-+* arm.c (arm_legitimate_index): Only accept addresses that are in
-+canonical form.
-+* predicates.md (arm_reg_or_extendqisi_mem_op): New predicate.
-+* arm.md (extendqihi2): Use arm_reg_or_extendqisi_mem_op predicate
-+for operand1.
-+(extendqisi2): Likewise.
-+(arm_extendqisi, arm_extendqisi_v6): Use arm_extendqisi_mem_op
-+predicate for operand1.
-+
-+diff -Nura gcc-4.3.3.orig/gcc/config/arm/arm.c gcc-4.3.3/gcc/config/arm/arm.c
-+--- gcc-4.3.3.orig/gcc/config/arm/arm.c	2008-06-11 07:52:55.000000000 -0300
-++++ gcc-4.3.3/gcc/config/arm/arm.c	2009-05-21 16:06:45.000000000 -0300
-+@@ -3769,6 +3769,7 @@
-+       rtx xop1 = XEXP (x, 1);
-+ 
-+       return ((arm_address_register_rtx_p (xop0, strict_p)
-++	       && GET_CODE(xop1) == CONST_INT
-+ 	       && arm_legitimate_index_p (mode, xop1, outer, strict_p))
-+ 	      || (arm_address_register_rtx_p (xop1, strict_p)
-+ 		  && arm_legitimate_index_p (mode, xop0, outer, strict_p)));
-+diff -Nura gcc-4.3.3.orig/gcc/config/arm/arm.md gcc-4.3.3/gcc/config/arm/arm.md
-+--- gcc-4.3.3.orig/gcc/config/arm/arm.md	2007-09-04 01:44:47.000000000 -0300
-++++ gcc-4.3.3/gcc/config/arm/arm.md	2009-05-21 16:06:45.000000000 -0300
-+@@ -4199,7 +4199,7 @@
-+ 
-+ (define_expand "extendqihi2"
-+   [(set (match_dup 2)
-+-	(ashift:SI (match_operand:QI 1 "general_operand" "")
-++	(ashift:SI (match_operand:QI 1 "arm_reg_or_extendqisi_mem_op" "")
-+ 		   (const_int 24)))
-+    (set (match_operand:HI 0 "s_register_operand" "")
-+ 	(ashiftrt:SI (match_dup 2)
-+@@ -4224,7 +4224,7 @@
-+ 
-+ (define_insn "*arm_extendqihi_insn"
-+   [(set (match_operand:HI 0 "s_register_operand" "=r")
-+-	(sign_extend:HI (match_operand:QI 1 "memory_operand" "Uq")))]
-++	(sign_extend:HI (match_operand:QI 1 "arm_extendqisi_mem_op" "Uq")))]
-+   "TARGET_ARM && arm_arch4"
-+   "ldr%(sb%)\\t%0, %1"
-+   [(set_attr "type" "load_byte")
-+@@ -4235,7 +4235,7 @@
-+ 
-+ (define_expand "extendqisi2"
-+   [(set (match_dup 2)
-+-	(ashift:SI (match_operand:QI 1 "general_operand" "")
-++	(ashift:SI (match_operand:QI 1 "arm_reg_or_extendqisi_mem_op" "")
-+ 		   (const_int 24)))
-+    (set (match_operand:SI 0 "s_register_operand" "")
-+ 	(ashiftrt:SI (match_dup 2)
-+@@ -4267,7 +4267,7 @@
-+ 
-+ (define_insn "*arm_extendqisi"
-+   [(set (match_operand:SI 0 "s_register_operand" "=r")
-+-	(sign_extend:SI (match_operand:QI 1 "memory_operand" "Uq")))]
-++	(sign_extend:SI (match_operand:QI 1 "arm_extendqisi_mem_op" "Uq")))]
-+   "TARGET_ARM && arm_arch4 && !arm_arch6"
-+   "ldr%(sb%)\\t%0, %1"
-+   [(set_attr "type" "load_byte")
-+@@ -4278,7 +4278,8 @@
-+ 
-+ (define_insn "*arm_extendqisi_v6"
-+   [(set (match_operand:SI 0 "s_register_operand" "=r,r")
-+-	(sign_extend:SI (match_operand:QI 1 "nonimmediate_operand" "r,Uq")))]
-++	(sign_extend:SI
-++	 (match_operand:QI 1 "arm_reg_or_extendqisi_mem_op" "r,Uq")))]
-+   "TARGET_ARM && arm_arch6"
-+   "@
-+    sxtb%?\\t%0, %1
-+diff -Nura gcc-4.3.3.orig/gcc/config/arm/predicates.md gcc-4.3.3/gcc/config/arm/predicates.md
-+--- gcc-4.3.3.orig/gcc/config/arm/predicates.md	2007-08-02 07:49:31.000000000 -0300
-++++ gcc-4.3.3/gcc/config/arm/predicates.md	2009-05-21 16:06:45.000000000 -0300
-+@@ -234,6 +234,10 @@
-+        (match_test "arm_legitimate_address_p (mode, XEXP (op, 0), SIGN_EXTEND,
-+ 					      0)")))
-+ 
-++(define_special_predicate "arm_reg_or_extendqisi_mem_op"
-++  (ior (match_operand 0 "arm_extendqisi_mem_op")
-++       (match_operand 0 "s_register_operand")))
-++
-+ (define_predicate "power_of_two_operand"
-+   (match_code "const_int")
-+ {
-diff --git a/toolchain/gcc/4.3.3/999-4.3.3-arm-fix-for-bug-37436.patch b/toolchain/gcc/4.3.3/999-4.3.3-arm-fix-for-bug-37436.patch
-new file mode 100644
-index 0000000..99a016f
---- /dev/null
-+++ b/toolchain/gcc/4.3.3/999-4.3.3-arm-fix-for-bug-37436.patch
-@@ -0,0 +1,86 @@
-+gcc svn 142778:
-+
-+PR target/37436
-+* arm.c (arm_legitimate_index): Only accept addresses that are in
-+canonical form.
-+* predicates.md (arm_reg_or_extendqisi_mem_op): New predicate.
-+* arm.md (extendqihi2): Use arm_reg_or_extendqisi_mem_op predicate
-+for operand1.
-+(extendqisi2): Likewise.
-+(arm_extendqisi, arm_extendqisi_v6): Use arm_extendqisi_mem_op
-+predicate for operand1.
-+
-+diff -Nura gcc-4.3.3.orig/gcc/config/arm/arm.c gcc-4.3.3/gcc/config/arm/arm.c
-+--- gcc-4.3.3.orig/gcc/config/arm/arm.c	2008-06-11 07:52:55.000000000 -0300
-++++ gcc-4.3.3/gcc/config/arm/arm.c	2009-05-21 16:06:45.000000000 -0300
-+@@ -3769,6 +3769,7 @@
-+       rtx xop1 = XEXP (x, 1);
-+ 
-+       return ((arm_address_register_rtx_p (xop0, strict_p)
-++	       && GET_CODE(xop1) == CONST_INT
-+ 	       && arm_legitimate_index_p (mode, xop1, outer, strict_p))
-+ 	      || (arm_address_register_rtx_p (xop1, strict_p)
-+ 		  && arm_legitimate_index_p (mode, xop0, outer, strict_p)));
-+diff -Nura gcc-4.3.3.orig/gcc/config/arm/arm.md gcc-4.3.3/gcc/config/arm/arm.md
-+--- gcc-4.3.3.orig/gcc/config/arm/arm.md	2007-09-04 01:44:47.000000000 -0300
-++++ gcc-4.3.3/gcc/config/arm/arm.md	2009-05-21 16:06:45.000000000 -0300
-+@@ -4199,7 +4199,7 @@
-+ 
-+ (define_expand "extendqihi2"
-+   [(set (match_dup 2)
-+-	(ashift:SI (match_operand:QI 1 "general_operand" "")
-++	(ashift:SI (match_operand:QI 1 "arm_reg_or_extendqisi_mem_op" "")
-+ 		   (const_int 24)))
-+    (set (match_operand:HI 0 "s_register_operand" "")
-+ 	(ashiftrt:SI (match_dup 2)
-+@@ -4224,7 +4224,7 @@
-+ 
-+ (define_insn "*arm_extendqihi_insn"
-+   [(set (match_operand:HI 0 "s_register_operand" "=r")
-+-	(sign_extend:HI (match_operand:QI 1 "memory_operand" "Uq")))]
-++	(sign_extend:HI (match_operand:QI 1 "arm_extendqisi_mem_op" "Uq")))]
-+   "TARGET_ARM && arm_arch4"
-+   "ldr%(sb%)\\t%0, %1"
-+   [(set_attr "type" "load_byte")
-+@@ -4235,7 +4235,7 @@
-+ 
-+ (define_expand "extendqisi2"
-+   [(set (match_dup 2)
-+-	(ashift:SI (match_operand:QI 1 "general_operand" "")
-++	(ashift:SI (match_operand:QI 1 "arm_reg_or_extendqisi_mem_op" "")
-+ 		   (const_int 24)))
-+    (set (match_operand:SI 0 "s_register_operand" "")
-+ 	(ashiftrt:SI (match_dup 2)
-+@@ -4267,7 +4267,7 @@
-+ 
-+ (define_insn "*arm_extendqisi"
-+   [(set (match_operand:SI 0 "s_register_operand" "=r")
-+-	(sign_extend:SI (match_operand:QI 1 "memory_operand" "Uq")))]
-++	(sign_extend:SI (match_operand:QI 1 "arm_extendqisi_mem_op" "Uq")))]
-+   "TARGET_ARM && arm_arch4 && !arm_arch6"
-+   "ldr%(sb%)\\t%0, %1"
-+   [(set_attr "type" "load_byte")
-+@@ -4278,7 +4278,8 @@
-+ 
-+ (define_insn "*arm_extendqisi_v6"
-+   [(set (match_operand:SI 0 "s_register_operand" "=r,r")
-+-	(sign_extend:SI (match_operand:QI 1 "nonimmediate_operand" "r,Uq")))]
-++	(sign_extend:SI
-++	 (match_operand:QI 1 "arm_reg_or_extendqisi_mem_op" "r,Uq")))]
-+   "TARGET_ARM && arm_arch6"
-+   "@
-+    sxtb%?\\t%0, %1
-+diff -Nura gcc-4.3.3.orig/gcc/config/arm/predicates.md gcc-4.3.3/gcc/config/arm/predicates.md
-+--- gcc-4.3.3.orig/gcc/config/arm/predicates.md	2007-08-02 07:49:31.000000000 -0300
-++++ gcc-4.3.3/gcc/config/arm/predicates.md	2009-05-21 16:06:45.000000000 -0300
-+@@ -234,6 +234,10 @@
-+        (match_test "arm_legitimate_address_p (mode, XEXP (op, 0), SIGN_EXTEND,
-+ 					      0)")))
-+ 
-++(define_special_predicate "arm_reg_or_extendqisi_mem_op"
-++  (ior (match_operand 0 "arm_extendqisi_mem_op")
-++       (match_operand 0 "s_register_operand")))
-++
-+ (define_predicate "power_of_two_operand"
-+   (match_code "const_int")
-+ {
+ Chris> Any idea why this would suddenly start with the same basic
+ Chris> setup that worked before?  How do I get it to finish
+ Chris> generating the key?
+
+Sounds odd - Could you add strace and check what it's busy doing?
+
 -- 
-1.6.0.6
+Bye, Peter Korsgaard
