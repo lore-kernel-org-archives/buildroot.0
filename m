@@ -1,30 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 25 May 2009 10:50:34 +0200
-Subject: [Buildroot] [git commit] xserver: mark as broken on avr32
-In-Reply-To: <20090525104434.4f6245f4@hcegtvedt.norway.atmel.com>
-	(Hans-Christian Egtvedt's message of "Mon\,
-	25 May 2009 10\:44\:34 +0200")
-References: <20090519183052.C8CC77787B@busybox.osuosl.org>
-	<20090525100303.6e1597aa@hcegtvedt.norway.atmel.com>
-	<87ws85egn9.fsf@macbook.be.48ers.dk>
-	<20090525104434.4f6245f4@hcegtvedt.norway.atmel.com>
-Message-ID: <87skitefc5.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 25 May 2009 09:42:54 +0000 (UTC)
+Subject: [Buildroot] [Bug 349] New: update libsoup to version 2.26.2
+Message-ID: <bug-349-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Hans-Christian" == Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=349
 
-Hi,
+           Summary: update libsoup to version 2.26.2
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P4
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: s.neumann at raumfeld.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
- Hans-Christian> Ah, so xserver needs some AVR32 stuff in the
- Hans-Christian> compiler.h file, thanks.
 
-Indeed. Is that something you can look into this week? I would like to
-get 2009.05 out while we're still in .05, and it would be good to have
-X support for avr32.
+Created an attachment (id=347)
+ --> (https://bugs.busybox.net/attachment.cgi?id=347)
+update version in libsoup.mk 
+
+Attached patch updates libsoup to version 2.26.2.
+
+This is relevant for bug 303 as it allows to compile gvfs with much less
+patching.
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
