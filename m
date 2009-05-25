@@ -1,36 +1,30 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Mon, 25 May 2009 10:44:34 +0200
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 25 May 2009 10:50:34 +0200
 Subject: [Buildroot] [git commit] xserver: mark as broken on avr32
-In-Reply-To: <87ws85egn9.fsf@macbook.be.48ers.dk>
+In-Reply-To: <20090525104434.4f6245f4@hcegtvedt.norway.atmel.com>
+	(Hans-Christian Egtvedt's message of "Mon\,
+	25 May 2009 10\:44\:34 +0200")
 References: <20090519183052.C8CC77787B@busybox.osuosl.org>
 	<20090525100303.6e1597aa@hcegtvedt.norway.atmel.com>
 	<87ws85egn9.fsf@macbook.be.48ers.dk>
-Message-ID: <20090525104434.4f6245f4@hcegtvedt.norway.atmel.com>
+	<20090525104434.4f6245f4@hcegtvedt.norway.atmel.com>
+Message-ID: <87skitefc5.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 25 May 2009 10:22:18 +0200
-Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>> "Hans-Christian" == Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> writes:
 
-> >>>>> "Hans-Christian" == Hans-Christian Egtvedt
-> >>>>> <hans-christian.egtvedt@atmel.com> writes:
-> 
-> 
->  Hans-Christian> Why? Could we please type a bit more descriptive
->  Hans-Christian> commit messages?
-> 
-> We had some discussion about it on the list leading up to this:
-> 
-> http://lists.busybox.net/pipermail/buildroot/2009-May/027492.html
-> 
-> I should indeed probably have pasted that error message in the commit.
-> 
+Hi,
 
-Ah, so xserver needs some AVR32 stuff in the compiler.h file, thanks.
+ Hans-Christian> Ah, so xserver needs some AVR32 stuff in the
+ Hans-Christian> compiler.h file, thanks.
+
+Indeed. Is that something you can look into this week? I would like to
+get 2009.05 out while we're still in .05, and it would be good to have
+X support for avr32.
 
 -- 
-Best regards,
-Hans-Christian Egtvedt
+Bye, Peter Korsgaard
