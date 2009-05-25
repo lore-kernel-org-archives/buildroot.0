@@ -1,38 +1,35 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 25 May 2009 09:42:54 +0000 (UTC)
-Subject: [Buildroot] [Bug 349] New: update libsoup to version 2.26.2
-Message-ID: <bug-349-163@https.bugs.busybox.net/>
+Date: Mon, 25 May 2009 09:57:10 +0000 (UTC)
+Subject: [Buildroot] [Bug 303] add gvfs package
+In-Reply-To: <bug-303-163@https.bugs.busybox.net/>
+References: <bug-303-163@https.bugs.busybox.net/>
+Message-ID: <20090525095710.A62F977864@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=349
-
-           Summary: update libsoup to version 2.26.2
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: enhancement
-          Priority: P4
-         Component: Outdated package
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: s.neumann at raumfeld.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+https://bugs.busybox.net/show_bug.cgi?id=303
 
 
-Created an attachment (id=347)
- --> (https://bugs.busybox.net/attachment.cgi?id=347)
-update version in libsoup.mk 
+Sven Neumann <s.neumann@raumfeld.com> changed:
 
-Attached patch updates libsoup to version 2.26.2.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+ Attachment #325 is|0                           |1
+           obsolete|                            |
 
-This is relevant for bug 303 as it allows to compile gvfs with much less
-patching.
+
+
+
+--- Comment #5 from Sven Neumann <s.neumann@raumfeld.com>  2009-05-25 09:57:09 UTC ---
+Created an attachment (id=349)
+ --> (https://bugs.busybox.net/attachment.cgi?id=349)
+simplified patch, depends on libsoup 2.26
+
+Bug #349 updates the libsoup package. This allows us to compile gvfs with a
+much simpler patch.
 
 
 -- 
