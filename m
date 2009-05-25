@@ -1,32 +1,29 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Mon, 25 May 2009 10:03:03 +0200
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 25 May 2009 10:22:18 +0200
 Subject: [Buildroot] [git commit] xserver: mark as broken on avr32
-In-Reply-To: <20090519183052.C8CC77787B@busybox.osuosl.org>
+In-Reply-To: <20090525100303.6e1597aa@hcegtvedt.norway.atmel.com>
+	(Hans-Christian Egtvedt's message of "Mon\,
+	25 May 2009 10\:03\:03 +0200")
 References: <20090519183052.C8CC77787B@busybox.osuosl.org>
-Message-ID: <20090525100303.6e1597aa@hcegtvedt.norway.atmel.com>
+	<20090525100303.6e1597aa@hcegtvedt.norway.atmel.com>
+Message-ID: <87ws85egn9.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 19 May 2009 20:08:14 +0200
-Peter Korsgaard <jacmet@sunsite.dk> wrote:
+>>>>> "Hans-Christian" == Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> writes:
 
-> commit:
-> http://git.buildroot.net/buildroot/commit/?id=3b850e44589944ae0281e62698daaf69547b4bec
-> branch:
-> http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-> 
-> Patch is too large, so refusing to show it
-> 
-> 
-> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 
-Why? Could we please type a bit more descriptive commit messages?
+ Hans-Christian> Why? Could we please type a bit more descriptive
+ Hans-Christian> commit messages?
 
-<snipp diffstats>
+We had some discussion about it on the list leading up to this:
+
+http://lists.busybox.net/pipermail/buildroot/2009-May/027492.html
+
+I should indeed probably have pasted that error message in the commit.
 
 -- 
-Best regards,
-Hans-Christian Egtvedt
+Bye, Peter Korsgaard
