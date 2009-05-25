@@ -1,33 +1,32 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Sun, 24 May 2009 23:53:44 +0200
-Subject: [Buildroot] trouble with FUSE (Filesystem in Userspace)
-In-Reply-To: <871vqefcth.fsf@macbook.be.48ers.dk>
-References: <1240326220.8272.4.camel@sven> <871vqefcth.fsf@macbook.be.48ers.dk>
-Message-ID: <1243202024.7047.1.camel@bender>
+From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
+Date: Mon, 25 May 2009 10:03:03 +0200
+Subject: [Buildroot] [git commit] xserver: mark as broken on avr32
+In-Reply-To: <20090519183052.C8CC77787B@busybox.osuosl.org>
+References: <20090519183052.C8CC77787B@busybox.osuosl.org>
+Message-ID: <20090525100303.6e1597aa@hcegtvedt.norway.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Tue, 19 May 2009 20:08:14 +0200
+Peter Korsgaard <jacmet@sunsite.dk> wrote:
 
-On Sun, 2009-05-24 at 22:47 +0200, Peter Korsgaard wrote:
-
->  Sven> we are using buildroot on an ARM platform with uCLibC 0.9.30.1
->  Sven> and Linux 2.6.30rc2 and can't get FUSE to work. I tried the
->  Sven> simple hello.c example from the fuse-2.7.3 sources and
->  Sven> everything seems to work fine until I try to read from the
->  Sven> filesystem. This read blocks forever. Now I wonder if anyone on
->  Sven> this list has ever got FUSE and uCLibC to work on an ARM or if
->  Sven> there are known problems with this combination? Any help would
->  Sven> be much appreciated as I am running out of ideas here...
+> commit:
+> http://git.buildroot.net/buildroot/commit/?id=3b850e44589944ae0281e62698daaf69547b4bec
+> branch:
+> http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 > 
-> Not on ARM, but I'm using it on PPC without any problems.
+> Patch is too large, so refusing to show it
 > 
-> Are you using EABI or OABI?
+> 
+> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 
-EABI. We gave up on fuse and now use GIO instead.
+Why? Could we please type a bit more descriptive commit messages?
 
+<snipp diffstats>
 
-Sven
+-- 
+Best regards,
+Hans-Christian Egtvedt
