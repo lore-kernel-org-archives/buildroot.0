@@ -1,33 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 25 May 2009 13:59:30 +0200
-Subject: [Buildroot] [git commit] xserver: mark as broken on avr32
-In-Reply-To: <20090525133723.7ac19817@hcegtvedt.norway.atmel.com>
-	(Hans-Christian Egtvedt's message of "Mon\,
-	25 May 2009 13\:37\:23 +0200")
-References: <20090519183052.C8CC77787B@busybox.osuosl.org>
-	<20090525100303.6e1597aa@hcegtvedt.norway.atmel.com>
-	<87ws85egn9.fsf@macbook.be.48ers.dk>
-	<20090525104434.4f6245f4@hcegtvedt.norway.atmel.com>
-	<87skitefc5.fsf@macbook.be.48ers.dk>
-	<20090525133723.7ac19817@hcegtvedt.norway.atmel.com>
-Message-ID: <877i05e6l9.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 26 May 2009 17:10:50 +0000 (UTC)
+Subject: [Buildroot] [Bug 345] libcurl package needs a urandom fix
+In-Reply-To: <bug-345-163@https.bugs.busybox.net/>
+References: <bug-345-163@https.bugs.busybox.net/>
+Message-ID: <20090526171051.2286776490@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Hans-Christian" == Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=345
 
- >> Indeed. Is that something you can look into this week? I would like to
- >> get 2009.05 out while we're still in .05, and it would be good to have
- >> X support for avr32.
 
- Hans-Christian> This is from the hip, but could somebody try the
- Hans-Christian> attached patch? I think adding AVR32 support to
- Hans-Christian> xserver again should be quite strait forward.
 
-Agreed. Could someone with avr32 hw (Thiago?) please give it a try?
+
+
+--- Comment #4 from Gustavo Zacarias <gustavo@zacarias.com.ar>  2009-05-26 17:10:49 UTC ---
+Created an attachment (id=355)
+ --> (https://bugs.busybox.net/attachment.cgi?id=355)
+My buildroot .config
+
+Actually openssl IS installed, just not in the .config
+It seems it's being pulled in by something else in a bad way, probably
+x11r7-related.
+Any (easy) way to trace this?
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
