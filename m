@@ -1,35 +1,35 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 26 May 2009 22:49:06 +0200
-Subject: [Buildroot] [git commit] busybox: fix brown paper bag typo
-	introduced in a7ed91a
-Message-ID: <20090526205143.93E9B7780F@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 26 May 2009 22:51:31 +0200
+Subject: [Buildroot] busybox.mk
+In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE190901862B06@mi8nycmail19.Mi8.com>
+	(H. Hartley Sweeten's message of "Tue\,
+	26 May 2009 14\:44\:16 -0400")
+References: <BD79186B4FD85F4B8E60E381CAEE190901862B06@mi8nycmail19.Mi8.com>
+Message-ID: <878wkja8q4.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8843ded099782497029c1848bb1c1c161255f7a0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "H" == H Hartley Sweeten <hartleys@visionengravers.com> writes:
 
+ H> Hello all,
+ H> Commit a7ed91a957000fc16fd85720c70fb2e4561e1433 modified
+ H> busybox.mk as follows:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/busybox/busybox.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ H> -       $(MAKE) CC=$(TARGET_CC) CROSS_COMPILE="$(TARGET_CROSS)" \
+ H> +q      $(MAKE) CC=$(TARGET_CC) CROSS_COMPILE="$(TARGET_CROSS)" \
+ H>                 CROSS="$(TARGET_CROSS)" PREFIX="$(TARGET_DIR)" \
+ H>                 ARCH=$(KERNEL_ARCH) \
+ H>                 EXTRA_CFLAGS="$(TARGET_CFLAGS)" -C $(BUSYBOX_DIR)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 4f1d038..fcec41a 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -92,7 +92,7 @@ endif
- 
- 
- $(BUSYBOX_DIR)/busybox: $(BUSYBOX_DIR)/.config
--q	$(MAKE) CC=$(TARGET_CC) CROSS_COMPILE="$(TARGET_CROSS)" \
-+	$(MAKE) CC=$(TARGET_CC) CROSS_COMPILE="$(TARGET_CROSS)" \
- 		CROSS="$(TARGET_CROSS)" PREFIX="$(TARGET_DIR)" \
- 		ARCH=$(KERNEL_ARCH) \
- 		EXTRA_CFLAGS="$(TARGET_CFLAGS)" -C $(BUSYBOX_DIR)
+ H> Is the 'q' a typo?  If not what does it do?
+
+Argh, a typo ofcourse - fixed.
+
+Thanks for letting me know - Strangely it still works here with that
+'q'.
+
 -- 
-1.6.0.6
+Bye, Peter Korsgaard
