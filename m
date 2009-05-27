@@ -1,52 +1,45 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 27 May 2009 20:44:08 +0200
-Subject: [Buildroot] [git commit] Update for 2009.05-rc3
-Message-ID: <20090527185052.BA56D7786B@busybox.osuosl.org>
+Date: Wed, 27 May 2009 20:55:49 +0200
+Subject: [Buildroot] [git commit] docs/news.html: announce 2009.05-rc3
+Message-ID: <20090527185736.B35FD7786B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=45e11e2960108fe91384a8170e08504abca070b3
+commit: http://git.buildroot.net/buildroot/commit/?id=3d89b8d64e380de16d97eccd53504b38aa0c4cdb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES   |    9 +++++++++
- Config.in |    2 +-
- 2 files changed, 10 insertions(+), 1 deletions(-)
+ docs/news.html |   13 +++++++++++++
+ 1 files changed, 13 insertions(+), 0 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 73ee66d..ed5efe4 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,12 @@
-+2009.05-rc3, Released May 27th, 2009:
-+
-+	Fixes for toolchain (gcc arm pr37436), stable kernel versions,
-+	busybox, curl, libusb, readline, python and strace.
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#345: libcurl package needs a urandom fix
-+
- 2009.05-rc2, Released May 19th, 2009:
+diff --git a/docs/news.html b/docs/news.html
+index 8007133..f73f53b 100644
+--- a/docs/news.html
++++ b/docs/news.html
+@@ -5,6 +5,19 @@
+ <p>
  
- 	Fixes for toolchain (gcc w/softfloat on ppc, 3.4.6 buildfix
-diff --git a/Config.in b/Config.in
-index 998bcf1..cad5db0 100644
---- a/Config.in
-+++ b/Config.in
-@@ -8,7 +8,7 @@ config BR2_HAVE_DOT_CONFIG
+ <ul>
++  <li><b>27 May 2009 -- 2009.05-rc3 released</b>
++
++    <p>We had a number of fixes post-RC2, so RC3 is out (see <a
++    href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2009.05_rc3">CHANGES</a>
++    for details). Now is the moment to test and verify that everything
++    is working for your favorite config - Expect a final 2009.05 very soon.</p>
++
++    <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
++    <a href="/downloads/buildroot-2009.05-rc3.tar.bz2">2009.05-rc3
++    release candidate</a>, and report any problems found to the <a
++    href="lists.html">mailing list</a> or <a
++    href="http://bugs.uclibc.org">bug tracker</a>.</p>
++
+   <li><b>19 May 2009 -- 2009.05-rc2 released</b>
  
- config BR2_VERSION
- 	string
--	default "2009.05-rc2"
-+	default "2009.05-rc3"
- 
- source "target/Config.in.arch"
- source "target/device/Config.in"
+     <p>RC2 is out with more cleanups and bug fixes (see <a
 -- 
 1.6.0.6
