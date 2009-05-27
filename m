@@ -1,35 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 26 May 2009 22:51:31 +0200
-Subject: [Buildroot] busybox.mk
-In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE190901862B06@mi8nycmail19.Mi8.com>
-	(H. Hartley Sweeten's message of "Tue\,
-	26 May 2009 14\:44\:16 -0400")
-References: <BD79186B4FD85F4B8E60E381CAEE190901862B06@mi8nycmail19.Mi8.com>
-Message-ID: <878wkja8q4.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 27 May 2009 07:18:43 +0200
+Subject: [Buildroot] [git commit] curl: make sure openssl isn't tried when
+	the openssl package isn't enabled
+Message-ID: <20090527052120.EFDBB77855@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "H" == H Hartley Sweeten <hartleys@visionengravers.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=3169b04725d45ed96059f0b14456b80ff1ac02df
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- H> Hello all,
- H> Commit a7ed91a957000fc16fd85720c70fb2e4561e1433 modified
- H> busybox.mk as follows:
 
- H> -       $(MAKE) CC=$(TARGET_CC) CROSS_COMPILE="$(TARGET_CROSS)" \
- H> +q      $(MAKE) CC=$(TARGET_CC) CROSS_COMPILE="$(TARGET_CROSS)" \
- H>                 CROSS="$(TARGET_CROSS)" PREFIX="$(TARGET_DIR)" \
- H>                 ARCH=$(KERNEL_ARCH) \
- H>                 EXTRA_CFLAGS="$(TARGET_CFLAGS)" -C $(BUSYBOX_DIR)
+Works around build errors caused by broken Xorg dependencies.
 
- H> Is the 'q' a typo?  If not what does it do?
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/libcurl/libcurl.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Argh, a typo ofcourse - fixed.
-
-Thanks for letting me know - Strangely it still works here with that
-'q'.
-
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index fb04da0..44c2317 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -19,6 +19,8 @@ LIBCURL_CONF_ENV += ac_cv_lib_crypto_CRYPTO_lock=yes
+ # are found first.
+ LIBCURL_CONF_ENV += LD_LIBRARY_PATH=$$LD_LIBRARY_PATH:/lib:/usr/lib
+ LIBCURL_CONF_OPT += --with-ssl=$(STAGING_DIR)/usr --with-random=/dev/urandom
++else
++LIBCURL_CONF_ENV += --without-ssl
+ endif
+ 
+ $(eval $(call AUTOTARGETS,package,libcurl))
 -- 
-Bye, Peter Korsgaard
+1.6.0.6
