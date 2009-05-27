@@ -1,52 +1,70 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 27 May 2009 20:44:08 +0200
-Subject: [Buildroot] [git commit] Update for 2009.05-rc3
-Message-ID: <20090527214012.5265E7780B@busybox.osuosl.org>
+From: Svein-Erik Skjelbred <at91rm9200@skjelbred.com>
+Date: Thu, 28 May 2009 00:08:47 +0200
+Subject: [Buildroot] 2009.05-rc3 released
+In-Reply-To: <87k5428ixt.fsf@macbook.be.48ers.dk>
+References: <87k5428ixt.fsf@macbook.be.48ers.dk>
+Message-ID: <4A1DB9EF.40002@skjelbred.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=34bf973ba874648c5a21904d44d96bbaadf1c1f0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/tags/2009.05_rc3
+Peter Korsgaard wrote:
+> Hi,
+> 
+> I've released RC3. Unless big issues are found, expect this to be the
+> last release candidate before the release - So give it a good test.
+> 
+> Get it from here:
+> 
+> http://buildroot.net/downloads/buildroot-2009.05-rc3.tar.bz2
+> 
+> And report any issues found here or in the bugtracker.
+> 
+> The plan is to release the final 2009.05 release this weekend.
+> 
+The default linux-header for the tool chain was 2.6.29.4 but the default 
+kernel itself was 2.6.29.2. The attached patch fixes that.
 
+Svein-Erik Skjelbred
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES   |    9 +++++++++
- Config.in |    2 +-
- 2 files changed, 10 insertions(+), 1 deletions(-)
+Start patch
+----------------
+diff --git a/target/linux/Config.in.advanced 
+b/target/linux/Config.in.advanced
+index de54d03..3a171b5 100644
+--- a/target/linux/Config.in.advanced
++++ b/target/linux/Config.in.advanced
+@@ -128,7 +128,7 @@ choice
+           Select the specific Linux version you want to use
 
-diff --git a/CHANGES b/CHANGES
-index 73ee66d..ed5efe4 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,12 @@
-+2009.05-rc3, Released May 27th, 2009:
-+
-+	Fixes for toolchain (gcc arm pr37436), stable kernel versions,
-+	busybox, curl, libusb, readline, python and strace.
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#345: libcurl package needs a urandom fix
-+
- 2009.05-rc2, Released May 19th, 2009:
- 
- 	Fixes for toolchain (gcc w/softfloat on ppc, 3.4.6 buildfix
-diff --git a/Config.in b/Config.in
-index 998bcf1..cad5db0 100644
---- a/Config.in
-+++ b/Config.in
-@@ -8,7 +8,7 @@ config BR2_HAVE_DOT_CONFIG
- 
- config BR2_VERSION
- 	string
--	default "2009.05-rc2"
-+	default "2009.05-rc3"
- 
- source "target/Config.in.arch"
- source "target/device/Config.in"
--- 
-1.6.0.6
+  config BR2_LINUX_2_6_STABLE
+-       bool "The latest stable Linux kernel (2.6.29.2)"
++       bool "The latest stable Linux kernel (2.6.29.4)"
+
+  config BR2_LINUX_2_6_29
+         bool "Linux 2.6.29"
+diff --git a/target/linux/Config.in.versions 
+b/target/linux/Config.in.versions
+index 467f73c..a37a5ad 100644
+--- a/target/linux/Config.in.versions
++++ b/target/linux/Config.in.versions
+@@ -19,13 +19,13 @@ config LINUX26_LATEST_MM_VERSION
+
+  config BR2_KERNEL_CURRENT_VERSION
+         string
+-       default "2.6.29.2"
++       default "2.6.29.4"
+         help
+           This is the latest stable kernel (including minor version)
+
+  config BR2_KERNEL_LATEST_2_6_29
+         string
+-       default "2"
++       default "4"
+
+  config BR2_KERNEL_LATEST_2_6_28
+         string
+------------------------------
+End Patch
