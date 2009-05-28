@@ -1,42 +1,31 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 28 May 2009 14:31:20 +0200
-Subject: [Buildroot] [git commit] dropbear: fix initscript install
-Message-ID: <20090528123336.7515B77839@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 28 May 2009 14:32:38 +0200
+Subject: [Buildroot] [PATCH] fix dropbear install
+In-Reply-To: <522C1DF17AF50042AD8AE87F7887BD3D0158B35BFF@exch.hq.tensilica.com>
+	(Marc Gauthier's message of "Wed\, 27 May 2009 23\:03\:30 -0700")
+References: <522C1DF17AF50042AD8AE87F7887BD3D0158B35BFF@exch.hq.tensilica.com>
+Message-ID: <87my8x76hl.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4088a5294dfd326b77cde77d12a7f97af89500ad
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Marc" == Marc Gauthier <marc@tensilica.com> writes:
 
+ Marc> Fix dropbear install
 
-The -D option to install only works portably when the destination is
-a file. Specifying the filename avoids the following build error (at
-least on some hosts):
+ Marc> The -D option to install only works portably when the
+ Marc> destination is a file.  Specifying the filename avoids the
+ Marc> following build error (at least on some hosts):
+ Marc> "/usr/bin/install: cannot overwrite directory `/tmp/buildroot/
+ Marc> project_build_foobar/uclibc/root/etc/init.d' with
+ Marc> non-directory"
 
-"/usr/bin/install: cannot overwrite directory `/tmp/buildroot/
-project_build_foobar/uclibc/root/etc/init.d' with non-directory"
+On what OS / install version? Anyway, it cannot hurt, so committed.
 
-Signed-off-by: Marc Gauthier <marc@tensilica.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/dropbear/dropbear.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Your patch is writespace mangles / line wrapped, please use git
+send-email instead next time.
 
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index e84df87..63d3daa 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
-@@ -28,7 +28,7 @@ $(DROPBEAR_TARGET_INSTALL_TARGET):
- 	ln -snf ../sbin/dropbear $(TARGET_DIR)/usr/bin/scp
- 	ln -snf ../sbin/dropbear $(TARGET_DIR)/usr/bin/ssh
- 	if [ ! -f $(TARGET_DIR)/etc/init.d/S50dropbear ]; then \
--		$(INSTALL) -m 0755 -D package/dropbear/S50dropbear $(TARGET_DIR)/etc/init.d; \
-+		$(INSTALL) -m 0755 -D package/dropbear/S50dropbear $(TARGET_DIR)/etc/init.d/S50dropbear; \
- 	fi
- 	touch $@
- 
 -- 
-1.6.0.6
+Bye, Peter Korsgaard
