@@ -1,70 +1,35 @@
-From: Svein-Erik Skjelbred <at91rm9200@skjelbred.com>
-Date: Thu, 28 May 2009 00:08:47 +0200
+From: Paul Archer <ptarcher@gmail.com>
+Date: Thu, 28 May 2009 14:32:42 +1000
 Subject: [Buildroot] 2009.05-rc3 released
 In-Reply-To: <87k5428ixt.fsf@macbook.be.48ers.dk>
 References: <87k5428ixt.fsf@macbook.be.48ers.dk>
-Message-ID: <4A1DB9EF.40002@skjelbred.com>
+Message-ID: <56ea0bb80905272132n34933d3fh925bd0e765eb6f5d@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard wrote:
-> Hi,
-> 
-> I've released RC3. Unless big issues are found, expect this to be the
-> last release candidate before the release - So give it a good test.
-> 
-> Get it from here:
-> 
-> http://buildroot.net/downloads/buildroot-2009.05-rc3.tar.bz2
-> 
-> And report any issues found here or in the bugtracker.
-> 
-> The plan is to release the final 2009.05 release this weekend.
-> 
-The default linux-header for the tool chain was 2.6.29.4 but the default 
-kernel itself was 2.6.29.2. The attached patch fixes that.
+On Thu, May 28, 2009 at 5:06 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+Peter> And report any issues found here or in the bugtracker.
+I have been trying to build buildroot with a ubifs image. I haven't
+quite got there yet, but there are some bugs associated with this
+version.
 
-Svein-Erik Skjelbred
+target/ubifs/ubifsroot.mk
+$(call DOWNLOAD,"$(MKFS_UBIFS_URL)")
 
-Start patch
-----------------
-diff --git a/target/linux/Config.in.advanced 
-b/target/linux/Config.in.advanced
-index de54d03..3a171b5 100644
---- a/target/linux/Config.in.advanced
-+++ b/target/linux/Config.in.advanced
-@@ -128,7 +128,7 @@ choice
-           Select the specific Linux version you want to use
+This should be a WGET, not a DOWNLOAD.
 
-  config BR2_LINUX_2_6_STABLE
--       bool "The latest stable Linux kernel (2.6.29.2)"
-+       bool "The latest stable Linux kernel (2.6.29.4)"
+I have been trying to update the UBIFS support as this is now included
+in the mtd-utils package under the mkfs.ubifs.
+ubifs also depends on e2fsprogs as there is uuid support needed in
+mkfs.ubifs. I have at least gotten ubifs to compile with a few changes
+here and there (mainly a change in mtd-utils makefiles to build
+mkfs.ubifs), but I haven't had time to get an image made yet.
 
-  config BR2_LINUX_2_6_29
-         bool "Linux 2.6.29"
-diff --git a/target/linux/Config.in.versions 
-b/target/linux/Config.in.versions
-index 467f73c..a37a5ad 100644
---- a/target/linux/Config.in.versions
-+++ b/target/linux/Config.in.versions
-@@ -19,13 +19,13 @@ config LINUX26_LATEST_MM_VERSION
-
-  config BR2_KERNEL_CURRENT_VERSION
-         string
--       default "2.6.29.2"
-+       default "2.6.29.4"
-         help
-           This is the latest stable kernel (including minor version)
-
-  config BR2_KERNEL_LATEST_2_6_29
-         string
--       default "2"
-+       default "4"
-
-  config BR2_KERNEL_LATEST_2_6_28
-         string
-------------------------------
-End Patch
+-- 
+----
+Regards
+Paul Archer
+ptarcher at gmail.com
