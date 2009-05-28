@@ -1,40 +1,55 @@
-From: Barney Barumba <barney.b@iname.com>
-Date: Fri, 29 May 2009 07:25:18 +1000
-Subject: [Buildroot] Illegal instruction with buildroot busybox for ARM
- DNS323
-Message-ID: <20090528212518.BC4F68735C@cal1-1.us4.outblaze.com>
+From: Pavel Roskin <proski@gnu.org>
+Date: Thu, 28 May 2009 17:39:24 -0400
+Subject: [Buildroot] [PATCH] toolchain/uClibc: add patch to rename getline
+	to get_line in	unifdef.c
+Message-ID: <20090528213924.14428.52394.stgit@mj.roinet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+getline() is a standard libc function with a different signature.
 
-> Quick quess - Did you configure BR for hardware floating point and
-> didn't enable floating point emulation in the kernel?
+Signed-off-by: Pavel Roskin <proski@gnu.org>
+---
 
-Yes, I think the floating point was the problem. I had BR configured for
-hardware floating point and the kernel configured for NWFPE. Investigating
-this a bit more, this article (1) seems to suggest that this configuration
-should work, so I'm not sure why I still got the exception.
+ .../uClibc/uClibc-0.9.30.1-unifdef-getline.patch   |   29 ++++++++++++++++++++
+ 1 files changed, 29 insertions(+), 0 deletions(-)
+ create mode 100644 toolchain/uClibc/uClibc-0.9.30.1-unifdef-getline.patch
 
-There's another article here (2) that seems to suggest that using the EABI
-improves the situation somewhat, but I'm not really sure how that affects
-things.
-
-Anyway, configuring BR for software floating point has fixed the problem
-and, if I understand it correctly, should be faster anyway for this CPU.
-
-Thanks for the pointer - much appreciated.
-
-Barney
-
-(1) http://linux-7110.sourceforge.net/howtos/netbook_new/x1114.htm
-(2) http://wiki.debian.org/ArmEabiPort#ARMfloatingpoints
-
-
--- 
-Be Yourself @ mail.com!
-Choose From 200+ Email Addresses
-Get a Free Account at www.mail.com
+diff --git a/toolchain/uClibc/uClibc-0.9.30.1-unifdef-getline.patch b/toolchain/uClibc/uClibc-0.9.30.1-unifdef-getline.patch
+new file mode 100644
+index 0000000..eb88884
+--- /dev/null
++++ b/toolchain/uClibc/uClibc-0.9.30.1-unifdef-getline.patch
+@@ -0,0 +1,29 @@
++--- uClibc-0.9.30.1.orig/extra/scripts/unifdef.c
+++++ uClibc-0.9.30.1/extra/scripts/unifdef.c
++@@ -206,7 +206,7 @@ static void             done(void);
++ static void             error(const char *);
++ static int              findsym(const char *);
++ static void             flushline(bool);
++-static Linetype         getline(void);
+++static Linetype         get_line(void);
++ static Linetype         ifeval(const char **);
++ static void             ignoreoff(void);
++ static void             ignoreon(void);
++@@ -512,7 +512,7 @@ process(void)
++ 
++ 	for (;;) {
++ 		linenum++;
++-		lineval = getline();
+++		lineval = get_line();
++ 		trans_table[ifstate[depth]][lineval]();
++ 		debug("process %s -> %s depth %d",
++ 		    linetype_name[lineval],
++@@ -526,7 +526,7 @@ process(void)
++  * help from skipcomment().
++  */
++ static Linetype
++-getline(void)
+++get_line(void)
++ {
++ 	const char *cp;
++ 	int cursym;
