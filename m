@@ -1,39 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 28 May 2009 14:22:39 +0200
-Subject: [Buildroot] 2009.05-rc3 released
-In-Reply-To: <56ea0bb80905272131h4aac2dceh86b7b8636031dc7d@mail.gmail.com>
-	(Paul Archer's message of "Thu\, 28 May 2009 14\:31\:56 +1000")
-References: <87k5428ixt.fsf@macbook.be.48ers.dk>
-	<56ea0bb80905272131h4aac2dceh86b7b8636031dc7d@mail.gmail.com>
-Message-ID: <87ws8176y8.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 28 May 2009 14:24:20 +0200
+Subject: [Buildroot] [git commit] target/ubifsroot: mark as broken
+Message-ID: <20090528122651.DB23977839@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Paul" == Paul Archer <ptarcher@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=77fad2fd74867d6d6bf77a52a1fc41379fa803c5
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Paul> On Thu, May 28, 2009 at 5:06 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
- >> And report any issues found here or in the bugtracker.
- Paul> I have been trying to build buildroot with a ubifs image. I haven't
- Paul> quite got there yet, but there are some bugs associated with this
- Paul> version.
 
- Paul> target/ubifs/ubifsroot.mk
- Paul> $(call DOWNLOAD,"$(MKFS_UBIFS_URL)")
+It should get fixed to use mkfs.ubifs from mtd-utils, but that's
+probably unrealistic before the 2009.05 release, so mark as broken
+for now.
 
- Paul> This should be a WGET, not a DOWNLOAD.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ target/ubifs/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-Thanks - Will fix. I just gave it a test, and it seems like the
-upstream git tree is gone, so it won't help you much.
-
-Hamish, I believe you were the one adding ubifs support - What is the
-situation with mkfs.ubifs? Is upstream mtd-utils nowadays like
-mkfs.jff2?
-
-Seems like we'll have to make ubifsroot as broken for the 2009.05
-release :/
-
+diff --git a/target/ubifs/Config.in b/target/ubifs/Config.in
+index 90ebfd9..886c34b 100644
+--- a/target/ubifs/Config.in
++++ b/target/ubifs/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_TARGET_ROOTFS_UBIFS
+ 	bool "ubifs root filesystem"
++	depends on BROKEN # upstream git gone, should use mtd-utils
+ 	select BR2_HOST_FAKEROOT
+ 	help
+ 	  Build a ubifs root filesystem
 -- 
-Bye, Peter Korsgaard
+1.6.0.6
