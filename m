@@ -1,52 +1,79 @@
-From: Paul Archer <ptarcher@gmail.com>
-Date: Thu, 28 May 2009 16:14:48 +1000
-Subject: [Buildroot] GCC-4.3.3 in toolchain fails to compile
-In-Reply-To: <87iqjqfg2c.fsf@macbook.be.48ers.dk>
-References: <56ea0bb80905212032x1e01cdfbt4c427fc85c9b72e3@mail.gmail.com>
-	<87iqjqfg2c.fsf@macbook.be.48ers.dk>
-Message-ID: <56ea0bb80905272314k37d90aaep7af8de9aa846b1f9@mail.gmail.com>
+From: Barney Barumba <barney.b@iname.com>
+Date: Thu, 28 May 2009 17:19:54 +1000
+Subject: [Buildroot] Illegal instruction with buildroot busybox for ARM
+	DNS323
+Message-ID: <20090528071954.43F938735C@cal1-1.us4.outblaze.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey Peter,
+Hi,
 
-Thanks for the reply
+I'm trying to build a buildroot/busybox system for a DLink DNS323 (1), and
+I'm getting an "Illegal instruction" error when I run busybox.
 
-Peter> You have:
-Peter>
-Peter> BR2_ARM_EABI=y
-Peter> BR2_GNU_TARGET_SUFFIX="linux-uclibc"
-Peter>
-Peter> Which doesn't make sense. The correct target suffix for eabi is
-Peter> "linux-uclibcgnueabi". With that change the toolchain builds.
-Making this change let me build the toolchain, and by using the
-snapshot-20090522 I was able to build and boot. Thank you for the
-change.
+For my first attempt I:
 
-Peter> How did you get to that config? Is is based on any defconfig in
-Peter> buildroot?
-It was a mixture of the def config in the buildroot along with some
-changes from linux4sam.com at
-http://www.linux4sam.org/twiki/pub/Linux4SAM/BuildRootGet/buildroot-v23434.patch.
-Finally I tried to remove most things.
+- downloaded buildroot-2009.05-rc3
+- configured this for a generic ARM EABI
+- built the toolchain and busybox with the default busybox configuration
+- ran "make busybox-menuconfig" to build busybox as a static library
+- rebuilt busybox
+- built an initramfs image of the root file system
 
-Peter> and that there's no at91sam9g20ek support in
-Peter> u-boot (well, there is now in u-boot git after the 2009.03 release,
-Peter> but not in any released versions)
-With regards to u-boot, I have u-boot working brilliantly with
-u-boot-2009.06-rc1, however I was having trouble with the u-boot tools
-for reading the enviroment from linux. I had trouble building this run
-on the target, I constantly got can't find file
-'/usr/bin/fw_printenv', but thats another story.
+- downloaded a Debian ARM netboot image (2)
+- extracted the kernel .config file
+- downloaded the vanilla 2.6.30-rc7 kernel source
+- built a kernel using the buildroot toolchain
 
-Thanks for your help peter.
+- converted both the initramfs and kernel to uboot images
+- sent them to the DNS323 over a serial line
+- booted it
+
+At this point, the kernel would fire up and dump it's startup messages to
+the console attached to the serial line, but when it attempted to run the
+init script on the initramfs (which just dropped to a busybox shell) it
+would fail with the "Attempting to kill init" message.
+
+So then I:
+
+- expanded the initramfs from the Debian netboot image
+- fixed the init script to drop to a shell using the Debian built busybox
+- added the buildroot built busybox (busybox-br) alongside the Debian one
+- rebuilt the initramfs and uboot image
+- sent this to the DNS323 and boted with the same kernel as before
+
+This then dropped into a working shell, provided by the Debian busybox
+(built with glibc, if that matters). From there, I could run the buildroot
+busybox to see what was going on.
+
+For simple commands, such as "/bin/busybox-br ls" this worked perfectly, but
+trying more complicated commands, such as "/bin/busybox-br sh" failed with 
+the "Illegal instruction" error.
+
+I also get exactly the same problem with buildroot-2009.02.
+
+So I'm hoping this is as simple as a problem with my toolchain config files
+for the DNS323. Has anyone built a target system for this platform, and have
+a config file they could share? Or is there some other point I'm missing
+here somewhere?
+
+Any help is much appreciated, as I've been trying to get this working for
+quite some time now, and it looks like there's just this final hurdle to
+getting it all working.
+
+Cheers,
+
+Barney
+
+(1) http://wiki.dns323.info/
+(2) http://www.cyrius.com/debian/orion/d-link/dns-323/install.html
+
 
 
 -- 
-----
-Regards
-Paul Archer
-ptarcher at gmail.com
+Be Yourself @ mail.com!
+Choose From 200+ Email Addresses
+Get a Free Account at www.mail.com
