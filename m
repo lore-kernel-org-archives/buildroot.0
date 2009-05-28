@@ -1,30 +1,39 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 28 May 2009 13:18:56 +0200
-Subject: [Buildroot] kernel module dir following move to git
-In-Reply-To: <4A1E5F5F.1040600@carallon.com> (Will Wagner's message of "Thu\,
-	28 May 2009 10\:54\:39 +0100")
-References: <4A1E5E07.2000403@carallon.com> <4A1E5F5F.1040600@carallon.com>
-Message-ID: <871vq98ogv.fsf@macbook.be.48ers.dk>
+Date: Thu, 28 May 2009 14:22:39 +0200
+Subject: [Buildroot] 2009.05-rc3 released
+In-Reply-To: <56ea0bb80905272131h4aac2dceh86b7b8636031dc7d@mail.gmail.com>
+	(Paul Archer's message of "Thu\, 28 May 2009 14\:31\:56 +1000")
+References: <87k5428ixt.fsf@macbook.be.48ers.dk>
+	<56ea0bb80905272131h4aac2dceh86b7b8636031dc7d@mail.gmail.com>
+Message-ID: <87ws8176y8.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Will" == Will Wagner <will_wagner@carallon.com> writes:
+>>>>> "Paul" == Paul Archer <ptarcher@gmail.com> writes:
 
-Hi,
+ Paul> On Thu, May 28, 2009 at 5:06 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+ >> And report any issues found here or in the bugtracker.
+ Paul> I have been trying to build buildroot with a ubifs image. I haven't
+ Paul> quite got there yet, but there are some bugs associated with this
+ Paul> version.
 
- Will> Think I have worked this out now. It is because I have
- Will> CONFIG_LOCALVERSION_AUTO=y set in my kernel config file. Still seems
- Will> odd that it is finding buildroot git rather than a kernel git but
- Will> think I can fix it now.
+ Paul> target/ubifs/ubifsroot.mk
+ Paul> $(call DOWNLOAD,"$(MKFS_UBIFS_URL)")
 
-Well, it's because the kernel's scripts/setlocalversion checks if your
-kernel is in a git repo (which it technically is if you build in the
-tree and have buildroot from git).
+ Paul> This should be a WGET, not a DOWNLOAD.
 
-Another workaround is to simply build out of tree (make O=<somewhere>)
+Thanks - Will fix. I just gave it a test, and it seems like the
+upstream git tree is gone, so it won't help you much.
+
+Hamish, I believe you were the one adding ubifs support - What is the
+situation with mkfs.ubifs? Is upstream mtd-utils nowadays like
+mkfs.jff2?
+
+Seems like we'll have to make ubifsroot as broken for the 2009.05
+release :/
 
 -- 
 Bye, Peter Korsgaard
