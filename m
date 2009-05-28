@@ -1,23 +1,57 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 28 May 2009 16:11:35 +0200
-Subject: [Buildroot] 2009.05-rc3 released
-In-Reply-To: <1243451756.3471.1317505923@webmail.messagingengine.com> (Adam
-	McLaurin's message of "Wed\, 27 May 2009 15\:15\:56 -0400")
-References: <87k5428ixt.fsf@macbook.be.48ers.dk>
-	<1243451756.3471.1317505923@webmail.messagingengine.com>
-Message-ID: <87ab4x71wo.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 28 May 2009 16:14:48 +0200
+Subject: [Buildroot] [git commit] linux-advanced: bump 2.6.29.x kernel
+	version
+Message-ID: <20090528141640.85A067781A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Adam" == Adam McLaurin <buildroot@irotas.net> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=4ee69b6b649b286734a0ab099d60244bc6f35f90
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Adam> Does this release address the MPFR/gmp problem I reported a few days
- Adam> ago?
 
-No, I unfortunately haven't had time to look into that.
+Signed-off-by: Svein-Erik Skjelbred <at91rm9200@skjelbred.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ target/linux/Config.in.advanced |    2 +-
+ target/linux/Config.in.versions |    4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/target/linux/Config.in.advanced b/target/linux/Config.in.advanced
+index de54d03..3a171b5 100644
+--- a/target/linux/Config.in.advanced
++++ b/target/linux/Config.in.advanced
+@@ -128,7 +128,7 @@ choice
+ 	  Select the specific Linux version you want to use
+ 
+ config BR2_LINUX_2_6_STABLE
+-	bool "The latest stable Linux kernel (2.6.29.2)"
++	bool "The latest stable Linux kernel (2.6.29.4)"
+ 
+ config BR2_LINUX_2_6_29
+ 	bool "Linux 2.6.29"
+diff --git a/target/linux/Config.in.versions b/target/linux/Config.in.versions
+index 467f73c..a37a5ad 100644
+--- a/target/linux/Config.in.versions
++++ b/target/linux/Config.in.versions
+@@ -19,13 +19,13 @@ config LINUX26_LATEST_MM_VERSION
+ 
+ config BR2_KERNEL_CURRENT_VERSION
+ 	string
+-	default "2.6.29.2"
++	default "2.6.29.4"
+ 	help
+ 	  This is the latest stable kernel (including minor version)
+ 
+ config BR2_KERNEL_LATEST_2_6_29
+ 	string
+-	default "2"
++	default "4"
+ 
+ config BR2_KERNEL_LATEST_2_6_28
+ 	string
 -- 
-Bye, Peter Korsgaard
+1.6.0.6
