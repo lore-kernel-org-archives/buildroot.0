@@ -1,31 +1,29 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Fri, 29 May 2009 17:36:20 +0200
-Subject: [Buildroot] 202: Illegal number: gcc
-In-Reply-To: <1243610881.4009.9.camel@sven>
-References: <133898.99840.qm@web111905.mail.gq1.yahoo.com>
-	<1243607785.23414.1317827639@webmail.messagingengine.com>
-	<1243610881.4009.9.camel@sven>
-Message-ID: <1243611380.4009.11.camel@sven>
+From: Daniel Mack <daniel@caiaq.de>
+Date: Fri, 29 May 2009 17:42:01 +0200
+Subject: [Buildroot] Embedded practice
+In-Reply-To: <4A1F9952.4020402@gmail.com>
+References: <4A1F9952.4020402@gmail.com>
+Message-ID: <20090529154201.GD26148@buzzloop.caiaq.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Fri, May 29, 2009 at 03:14:10PM +0700, Acil wrote:
+> Im new in embedded, and want to learn how to make linux embedded. I have  
+> an old PC P-III, CF-IDE converter and compact flash 128 mbytes. I want  
+> learn how to build a linux embedded with those stuff, my target is  
+> create a small and robust appliance which only use serial comm, telnet,  
+> some application service that acquisition through serial comm and feed  
+> the data to server via tcp/ip.
+>
+> All I only now is some linux programming with C/C++. Does anybody here  
+> know what are the next steps? any particular tutorial?
 
-On Fri, 2009-05-29 at 17:28 +0200, Sven Neumann wrote:
-> On Fri, 2009-05-29 at 10:36 -0400, Adam McLaurin wrote:
-> > I get the same error on my Ubuntu box, and have for as long as I can
-> > remember.
-> 
-> Perhaps you guys could be a little more specific about your "Ubuntu
-> box"? What version of Ubuntu are you running? We have successfully used
-> buildroot on Ubuntu 9.04 and recently switched to Ubuntu 9.10. So my
-> guess is that you are using an older Ubuntu release?
+There has been an article about how to use Buildroot on Linuxdevices
+lately: http://www.linuxdevices.com/news/NS6116987823.html
 
-Sorry, I messed up the numbers. We are using the 9.04 release now and
-have been using 8.10 until recently.
+Maybe that helps.
 
-
-Sven
+Daniel
