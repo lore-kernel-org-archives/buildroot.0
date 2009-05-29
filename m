@@ -1,40 +1,46 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 29 May 2009 20:27:45 +0000 (UTC)
-Subject: [Buildroot] [Bug 359] New: Upgrade openvpn to Makefile.autotools.in
-Message-ID: <bug-359-163@https.bugs.busybox.net/>
+From: Adam McLaurin <buildroot@irotas.net>
+Date: Fri, 29 May 2009 19:48:48 -0400
+Subject: [Buildroot] 202: Illegal number: gcc
+In-Reply-To: <877hzz6bj6.fsf@macbook.be.48ers.dk>
+References: <133898.99840.qm@web111905.mail.gq1.yahoo.com><1243607785.23414.1317827639@webmail.messagingengine.com>
+	<877hzz6bj6.fsf@macbook.be.48ers.dk>
+Message-ID: <1243640928.25267.1317899377@webmail.messagingengine.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=359
+On Fri, 29 May 2009 19:53 +0200, "Peter Korsgaard" <jacmet@uclibc.org>
+wrote:
+> Ok, what does gcc --version and g++ --version return?
 
-              Host: i686-linux
-            Target: arm-softfloat-linux-uclibcgnueabi
-           Summary: Upgrade openvpn to Makefile.autotools.in
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: enhancement
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: gustavo at zacarias.com.ar
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+-$ g++ -v
+Using built-in specs.
+Target: i486-linux-gnu
+Configured with: ../src/configure -v --with-pkgversion='Ubuntu
+4.3.2-1ubuntu12' --with-bugurl=file:///usr/share/doc/gcc-4.3/README.Bugs
+--enable-languages=c,c++,fortran,objc,obj-c++ --prefix=/usr
+--enable-shared --with-system-zlib --libexecdir=/usr/lib
+--without-included-gettext --enable-threads=posix --enable-nls
+--with-gxx-include-dir=/usr/include/c++/4.3 --program-suffix=-4.3
+--enable-clocale=gnu --enable-libstdcxx-debug --enable-objc-gc
+--enable-mpfr --enable-targets=all --enable-checking=release
+--build=i486-linux-gnu --host=i486-linux-gnu --target=i486-linux-gnu
+Thread model: posix
+gcc version 4.3.2 (Ubuntu 4.3.2-1ubuntu12) 
 
-
-Created an attachment (id=367)
- --> (https://bugs.busybox.net/attachment.cgi?id=367)
-Upgrade openvpn to Makefile.autotools.in
-
-Upgrade openvpn to Makefile.autotools.in, gives a somewhat smaller binary too.
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+-$ gcc -v
+Using built-in specs.
+Target: i486-linux-gnu
+Configured with: ../src/configure -v --with-pkgversion='Ubuntu
+4.3.2-1ubuntu12' --with-bugurl=file:///usr/share/doc/gcc-4.3/README.Bugs
+--enable-languages=c,c++,fortran,objc,obj-c++ --prefix=/usr
+--enable-shared --with-system-zlib --libexecdir=/usr/lib
+--without-included-gettext --enable-threads=posix --enable-nls
+--with-gxx-include-dir=/usr/include/c++/4.3 --program-suffix=-4.3
+--enable-clocale=gnu --enable-libstdcxx-debug --enable-objc-gc
+--enable-mpfr --enable-targets=all --enable-checking=release
+--build=i486-linux-gnu --host=i486-linux-gnu --target=i486-linux-gnu
+Thread model: posix
+gcc version 4.3.2 (Ubuntu 4.3.2-1ubuntu12) 
