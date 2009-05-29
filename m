@@ -1,24 +1,30 @@
-From: Acil <micromatch@gmail.com>
-Date: Fri, 29 May 2009 15:14:10 +0700
-Subject: [Buildroot] Embedded practice
-Message-ID: <4A1F9952.4020402@gmail.com>
+From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+Date: Fri, 29 May 2009 10:53:35 +0200
+Subject: [Buildroot] Building only toolchain
+In-Reply-To: <330EC2471BF24E48B513AF1A6975EB699D04B5@MAIL-UA.ccs.local>
+References: <330EC2471BF24E48B513AF1A6975EB699D04B5@MAIL-UA.ccs.local>
+Message-ID: <20090529085335.GB9858@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+On Fri, May 29, 2009 at 07:25:19AM +0200, Teemu Keskinarkaus wrote:
+>Hi,
+>
+> 
+>
+>Is it possible to build only toolchain in buildroot? I tried to search
 
-Im new in embedded, and want to learn how to make linux embedded. I have 
-an old PC P-III, CF-IDE converter and compact flash 128 mbytes. I want 
-learn how to build a linux embedded with those stuff, my target is 
-create a small and robust appliance which only use serial comm, telnet, 
-some application service that acquisition through serial comm and feed 
-the data to server via tcp/ip.
+yes. IIRC 'make cross_compiler'
 
-All I only now is some linux programming with C/C++. Does anybody here 
-know what are the next steps? any particular tutorial?
+>the makefiles, but I couldn't find a target that would do it.  It seems
+>that there are some absolute paths stored in buildroot toolchain
 
-rgds,
-acil
+You should always use SYSROOT-enabled compilers thus building a compiler
+that you can trivially relocate.
+
+>binaries(at least ccache has) so I can't just copy them to another
+>system. Or can the toolchain be built somehow that it doesn't store any
+>local information there?
