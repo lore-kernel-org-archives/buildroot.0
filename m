@@ -1,28 +1,24 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 29 May 2009 17:15:34 +0200
-Subject: [Buildroot] Building only toolchain
-In-Reply-To: <5f2b60905290021x696e8ec1q5879d38cc8f2477e@mail.gmail.com>
-References: <330EC2471BF24E48B513AF1A6975EB699D04B5@MAIL-UA.ccs.local>
-	<5f2b60905290021x696e8ec1q5879d38cc8f2477e@mail.gmail.com>
-Message-ID: <20090529171534.39e5ba1f@surf>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Fri, 29 May 2009 17:28:01 +0200
+Subject: [Buildroot] 202: Illegal number: gcc
+In-Reply-To: <1243607785.23414.1317827639@webmail.messagingengine.com>
+References: <133898.99840.qm@web111905.mail.gq1.yahoo.com>
+	<1243607785.23414.1317827639@webmail.messagingengine.com>
+Message-ID: <1243610881.4009.9.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri, 29 May 2009 09:21:02 +0200,
-Bj?rn Forsman <bjorn.forsman@gmail.com> a ?crit :
+On Fri, 2009-05-29 at 10:36 -0400, Adam McLaurin wrote:
+> I get the same error on my Ubuntu box, and have for as long as I can
+> remember.
 
-> I have not tested it myself, but I guess it should be ok to setup
-> Buildroot to use a crosstool-ng generated external toolchain.
+Perhaps you guys could be a little more specific about your "Ubuntu
+box"? What version of Ubuntu are you running? We have successfully used
+buildroot on Ubuntu 9.04 and recently switched to Ubuntu 9.10. So my
+guess is that you are using an older Ubuntu release?
 
-It is ok, through the ? External binary toolchain ? option of the
-Toolchain menu.
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Sven
