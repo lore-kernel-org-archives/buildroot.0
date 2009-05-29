@@ -1,31 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 29 May 2009 19:57:59 +0200
-Subject: [Buildroot] 202: Illegal number: gcc
-In-Reply-To: <20090529171328.1842d7f4@surf> (Thomas Petazzoni's message of
-	"Fri\, 29 May 2009 17\:13\:28 +0200")
-References: <133898.99840.qm@web111905.mail.gq1.yahoo.com>
-	<87bppc570t.fsf@macbook.be.48ers.dk> <20090529171328.1842d7f4@surf>
-Message-ID: <873aan6bbs.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 29 May 2009 19:24:26 +0000 (UTC)
+Subject: [Buildroot] [Bug 357] New: New package netstat-nat
+Message-ID: <bug-357-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=357
 
- Thomas> Le Fri, 29 May 2009 16:16:18 +0200,
- Thomas> Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+              Host: i686-linux
+            Target: arm-softfloat-linux-uclibcgnueabi
+           Summary: New package netstat-nat
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: gustavo at zacarias.com.ar
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
- >> Do you have makeinfo installed (the texinfo package) and what is it's
- >> version? Any particular reason why you are building binutils 2.18 and
- >> not the standard 2.19.1?
 
- Thomas> IIRC, there used to be a bug in binutils check for makeinfo. If the
- Thomas> makeinfo version was too recent, then the regexp used in the binutils
- Thomas> check didn't find makeinfo as a valid version.
+Created an attachment (id=365)
+ --> (https://bugs.busybox.net/attachment.cgi?id=365)
+New package netstat-nat
 
-Yes, but that was afaik only in 2.17. (it checked for 4.?, so 4.1x failed).
+New netstat-nat package, like netstat but works on NAT (netfilter) connections.
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
