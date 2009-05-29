@@ -1,37 +1,22 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 29 May 2009 16:54:30 +0000 (UTC)
-Subject: [Buildroot] [Bug 333] Bump sqlite package to 3.6.14
-In-Reply-To: <bug-333-163@https.bugs.busybox.net/>
-References: <bug-333-163@https.bugs.busybox.net/>
-Message-ID: <20090529165431.39B70777FD@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 29 May 2009 19:53:33 +0200
+Subject: [Buildroot] 202: Illegal number: gcc
+In-Reply-To: <1243607785.23414.1317827639@webmail.messagingengine.com> (Adam
+	McLaurin's message of "Fri\, 29 May 2009 10\:36\:25 -0400")
+References: <133898.99840.qm@web111905.mail.gq1.yahoo.com>
+	<1243607785.23414.1317827639@webmail.messagingengine.com>
+Message-ID: <877hzz6bj6.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=333
+>>>>> "Adam" == Adam McLaurin <buildroot@irotas.net> writes:
 
+ Adam> I get the same error on my Ubuntu box, and have for as long as I can remember.
 
-Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
- Attachment #345 is|0                           |1
-           obsolete|                            |
-
-
-
-
---- Comment #4 from Gustavo Zacarias <gustavo@zacarias.com.ar>  2009-05-29 16:54:30 UTC ---
-Created an attachment (id=363)
- --> (https://bugs.busybox.net/attachment.cgi?id=363)
-Bump to sqlite 3.6.14.2
-
-More small fixes, it's now up to 3.6.14.2.
-
+Ok, what does gcc --version and g++ --version return?
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
