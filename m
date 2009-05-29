@@ -1,18 +1,18 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 29 May 2009 19:24:26 +0000 (UTC)
-Subject: [Buildroot] [Bug 357] New: New package netstat-nat
-Message-ID: <bug-357-163@https.bugs.busybox.net/>
+Date: Fri, 29 May 2009 20:27:45 +0000 (UTC)
+Subject: [Buildroot] [Bug 359] New: Upgrade openvpn to Makefile.autotools.in
+Message-ID: <bug-359-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=357
+https://bugs.busybox.net/show_bug.cgi?id=359
 
               Host: i686-linux
             Target: arm-softfloat-linux-uclibcgnueabi
-           Summary: New package netstat-nat
+           Summary: Upgrade openvpn to Makefile.autotools.in
            Product: buildroot
            Version: unspecified
           Platform: PC
@@ -27,11 +27,11 @@ https://bugs.busybox.net/show_bug.cgi?id=357
    Estimated Hours: 0.0
 
 
-Created an attachment (id=365)
- --> (https://bugs.busybox.net/attachment.cgi?id=365)
-New package netstat-nat
+Created an attachment (id=367)
+ --> (https://bugs.busybox.net/attachment.cgi?id=367)
+Upgrade openvpn to Makefile.autotools.in
 
-New netstat-nat package, like netstat but works on NAT (netfilter) connections.
+Upgrade openvpn to Makefile.autotools.in, gives a somewhat smaller binary too.
 
 
 -- 
