@@ -1,29 +1,37 @@
-From: Daniel Mack <daniel@caiaq.de>
-Date: Fri, 29 May 2009 17:42:01 +0200
-Subject: [Buildroot] Embedded practice
-In-Reply-To: <4A1F9952.4020402@gmail.com>
-References: <4A1F9952.4020402@gmail.com>
-Message-ID: <20090529154201.GD26148@buzzloop.caiaq.de>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 29 May 2009 16:54:30 +0000 (UTC)
+Subject: [Buildroot] [Bug 333] Bump sqlite package to 3.6.14
+In-Reply-To: <bug-333-163@https.bugs.busybox.net/>
+References: <bug-333-163@https.bugs.busybox.net/>
+Message-ID: <20090529165431.39B70777FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, May 29, 2009 at 03:14:10PM +0700, Acil wrote:
-> Im new in embedded, and want to learn how to make linux embedded. I have  
-> an old PC P-III, CF-IDE converter and compact flash 128 mbytes. I want  
-> learn how to build a linux embedded with those stuff, my target is  
-> create a small and robust appliance which only use serial comm, telnet,  
-> some application service that acquisition through serial comm and feed  
-> the data to server via tcp/ip.
->
-> All I only now is some linux programming with C/C++. Does anybody here  
-> know what are the next steps? any particular tutorial?
+https://bugs.busybox.net/show_bug.cgi?id=333
 
-There has been an article about how to use Buildroot on Linuxdevices
-lately: http://www.linuxdevices.com/news/NS6116987823.html
 
-Maybe that helps.
+Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
 
-Daniel
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+ Attachment #345 is|0                           |1
+           obsolete|                            |
+
+
+
+
+--- Comment #4 from Gustavo Zacarias <gustavo@zacarias.com.ar>  2009-05-29 16:54:30 UTC ---
+Created an attachment (id=363)
+ --> (https://bugs.busybox.net/attachment.cgi?id=363)
+Bump to sqlite 3.6.14.2
+
+More small fixes, it's now up to 3.6.14.2.
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
