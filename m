@@ -1,7 +1,7 @@
 From: Peter Weichai <peterweichai@yahoo.com>
-Date: Fri, 29 May 2009 17:19:53 -0700 (PDT)
+Date: Fri, 29 May 2009 17:21:38 -0700 (PDT)
 Subject: [Buildroot]  202: Illegal number: gcc
-Message-ID: <809832.26048.qm@web111912.mail.gq1.yahoo.com>
+Message-ID: <327507.92732.qm@web111920.mail.gq1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,68 +10,42 @@ To: buildroot@busybox.net
 
 Hi,
 
-gcc -v
-Using built-in specs.
-Target: i486-linux-gnu
-Configured with: ../src/configure -v --with-pkgversion='Ubuntu 4.3.2-1ubuntu12' --with-bugurl=file:///usr/share/doc/gcc-4.3/README.Bugs --enable-languages=c,c++,fortran,objc,obj-c++ --prefix=/usr --enable-shared --with-system-zlib --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --enable-nls --with-gxx-include-dir=/usr/include/c++/4.3 --program-suffix=-4.3 --enable-clocale=gnu --enable-libstdcxx-debug --enable-objc-gc --enable-mpfr --enable-targets=all --enable-checking=release --build=i486-linux-gnu --host=i486-linux-gnu --target=i486-linux-gnu
-Thread model: posix
-gcc version 4.3.2 (Ubuntu 4.3.2-1ubuntu12) 
+I'm using Ubuntu 8.10
+
+Thanks
 
 
-?g++ -v
-Using built-in specs.
-Target: i486-linux-gnu
-Configured with: ../src/configure -v --with-pkgversion='Ubuntu 4.3.2-1ubuntu12' --with-bugurl=file:///usr/share/doc/gcc-4.3/README.Bugs --enable-languages=c,c++,fortran,objc,obj-c++ --prefix=/usr --enable-shared --with-system-zlib --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --enable-nls --with-gxx-include-dir=/usr/include/c++/4.3 --program-suffix=-4.3 --enable-clocale=gnu --enable-libstdcxx-debug --enable-objc-gc --enable-mpfr --enable-targets=all --enable-checking=release --build=i486-linux-gnu --host=i486-linux-gnu --target=i486-linux-gnu
-Thread model: posix
-gcc version 4.3.2 (Ubuntu 4.3.2-1ubuntu12)
+--- On Fri, 5/29/09, Sven Neumann <s.neumann@raumfeld.com> wrote:
 
-Thanks.
-
---- On Fri, 5/29/09, Adam McLaurin <buildroot@irotas.net> wrote:
-
-From: Adam McLaurin <buildroot@irotas.net>
+From: Sven Neumann <s.neumann@raumfeld.com>
 Subject: Re: [Buildroot] 202: Illegal number: gcc
-To: "Peter Korsgaard" <jacmet@uclibc.org>
-Cc: "Peter Weichai" <peterweichai@yahoo.com>, buildroot at busybox.net
-Date: Friday, May 29, 2009, 11:48 PM
+To: "Adam McLaurin" <buildroot@irotas.net>
+Cc: buildroot at busybox.net, "Peter Weichai" <peterweichai@yahoo.com>
+Date: Friday, May 29, 2009, 3:36 PM
 
-On Fri, 29 May 2009 19:53 +0200, "Peter Korsgaard" <jacmet@uclibc.org>
-wrote:
-> Ok, what does gcc --version and g++ --version return?
+Hi,
 
--$ g++ -v
-Using built-in specs.
-Target: i486-linux-gnu
-Configured with: ../src/configure -v --with-pkgversion='Ubuntu
-4.3.2-1ubuntu12' --with-bugurl=file:///usr/share/doc/gcc-4.3/README.Bugs
---enable-languages=c,c++,fortran,objc,obj-c++ --prefix=/usr
---enable-shared --with-system-zlib --libexecdir=/usr/lib
---without-included-gettext --enable-threads=posix --enable-nls
---with-gxx-include-dir=/usr/include/c++/4.3 --program-suffix=-4.3
---enable-clocale=gnu --enable-libstdcxx-debug --enable-objc-gc
---enable-mpfr --enable-targets=all --enable-checking=release
---build=i486-linux-gnu --host=i486-linux-gnu --target=i486-linux-gnu
-Thread model: posix
-gcc version 4.3.2 (Ubuntu 4.3.2-1ubuntu12) 
+On Fri, 2009-05-29 at 17:28 +0200, Sven Neumann wrote:
+> On Fri, 2009-05-29 at 10:36 -0400, Adam McLaurin wrote:
+> > I get the same error on my Ubuntu box, and have for as long as I can
+> > remember.
+> 
+> Perhaps you guys could be a little more specific about your "Ubuntu
+> box"? What version of Ubuntu are you running? We have successfully used
+> buildroot on Ubuntu 9.04 and recently switched to Ubuntu 9.10. So my
+> guess is that you are using an older Ubuntu release?
 
--$ gcc -v
-Using built-in specs.
-Target: i486-linux-gnu
-Configured with: ../src/configure -v --with-pkgversion='Ubuntu
-4.3.2-1ubuntu12' --with-bugurl=file:///usr/share/doc/gcc-4.3/README.Bugs
---enable-languages=c,c++,fortran,objc,obj-c++ --prefix=/usr
---enable-shared --with-system-zlib --libexecdir=/usr/lib
---without-included-gettext --enable-threads=posix --enable-nls
---with-gxx-include-dir=/usr/include/c++/4.3 --program-suffix=-4.3
---enable-clocale=gnu --enable-libstdcxx-debug --enable-objc-gc
---enable-mpfr --enable-targets=all --enable-checking=release
---build=i486-linux-gnu --host=i486-linux-gnu --target=i486-linux-gnu
-Thread model: posix
-gcc version 4.3.2 (Ubuntu 4.3.2-1ubuntu12) 
+Sorry, I messed up the numbers. We are using the 9.04 release now and
+have been using 8.10 until recently.
+
+
+Sven
+
+
 
 
 
       
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090529/f649180e/attachment.htm>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090529/6fd0feca/attachment.htm>
