@@ -1,15 +1,15 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Mon, 1 Jun 2009 09:00:03 +0200
 Subject: [Buildroot] [git commit] Update for 2009.05
-Message-ID: <20090601070041.2FA54777DF@busybox.osuosl.org>
+Message-ID: <20090601070216.89624777DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a69b3d61fb9f0935006adda9532ba631e70b626b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: http://git.buildroot.net/buildroot/commit/?id=571bf57d9f68cc09da9bd8f8e31c07ba1578b3b1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/tags/2009.05
 
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
