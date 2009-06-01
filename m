@@ -1,32 +1,48 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 01 Jun 2009 08:35:42 +0200
-Subject: [Buildroot] [PATCH] RE: diffutils fails to build
-In-Reply-To: <522C1DF17AF50042AD8AE87F7887BD3D0158B35BFB@exch.hq.tensilica.com>
-	(Marc Gauthier's message of "Wed\, 27 May 2009 22\:41\:59 -0700")
-References: <d9bef6aa0811070426o55805eb1q6d95ddb0476f074b@mail.gmail.com>
-	<522C1DF17AF50042AD8AE87F7887BD3D0158B35BFB@exch.hq.tensilica.com>
-Message-ID: <878wkc4g1t.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 1 Jun 2009 09:00:03 +0200
+Subject: [Buildroot] [git commit] Update for 2009.05
+Message-ID: <20090601070041.2FA54777DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Marc" == Marc Gauthier <marc@tensilica.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=a69b3d61fb9f0935006adda9532ba631e70b626b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Marc> Hi Ian,
 
- Marc> Did you get that question resolved?  I'm hitting the same
- Marc> failure with a tree sync'ed circa April 28th.  Presumably only
- Marc> happens with BR2_STRIP_none=y (but that *is* what I want, for
- Marc> debugging, and I do want diffutils).
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES   |    5 +++++
+ Config.in |    2 +-
+ 2 files changed, 6 insertions(+), 1 deletions(-)
+
+diff --git a/CHANGES b/CHANGES
+index ed5efe4..aadc30c 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,8 @@
++2009.05, Released June 1st, 2009:
++
++	Fixes for dropbear & diffutils, bump linux-advanced 2.6.29.x
++	version and marked ubifsroot as broken.
++
+ 2009.05-rc3, Released May 27th, 2009:
  
- Marc> So I looked at it a bit, and came up with this tentative fix.
- Marc> Works on an incremental build (have yet to try a full clean
- Marc> build, takes a while).  -Marc
-
-Your patch was wordwrapped, but I committed it by hand (and slightly
-changed it) - Thanks.
-
+ 	Fixes for toolchain (gcc arm pr37436), stable kernel versions,
+diff --git a/Config.in b/Config.in
+index cad5db0..1e2e06f 100644
+--- a/Config.in
++++ b/Config.in
+@@ -8,7 +8,7 @@ config BR2_HAVE_DOT_CONFIG
+ 
+ config BR2_VERSION
+ 	string
+-	default "2009.05-rc3"
++	default "2009.05"
+ 
+ source "target/Config.in.arch"
+ source "target/device/Config.in"
 -- 
-Bye, Peter Korsgaard
+1.6.0.6
