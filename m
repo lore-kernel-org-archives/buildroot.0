@@ -1,37 +1,24 @@
-From: Teemu Keskinarkaus <Teemu.Keskinarkaus@cc-systems.com>
-Date: Mon, 1 Jun 2009 06:17:54 +0200
-Subject: [Buildroot] Building only toolchain
-In-Reply-To: <20090529085335.GB9858@mx.loc>
-References: <330EC2471BF24E48B513AF1A6975EB699D04B5@MAIL-UA.ccs.local>
-	<20090529085335.GB9858@mx.loc>
-Message-ID: <330EC2471BF24E48B513AF1A6975EB699D0656@MAIL-UA.ccs.local>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 01 Jun 2009 08:05:47 +0200
+Subject: [Buildroot] [PATCH] toolchain/uClibc: add patch to rename
+	getline to get_line in	unifdef.c
+In-Reply-To: <20090528213924.14428.52394.stgit@mj.roinet.com> (Pavel Roskin's
+	message of "Thu\, 28 May 2009 17\:39\:24 -0400")
+References: <20090528213924.14428.52394.stgit@mj.roinet.com>
+Message-ID: <87my8s4hfo.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Pavel" == Pavel Roskin <proski@gnu.org> writes:
 
-> From: Bernhard Reutner-Fischer [mailto:rep.dot.nop at gmail.com]
-> >Is it possible to build only toolchain in buildroot? I tried to
-search
-> yes. IIRC 'make cross_compiler'
-Yes, that seems to be correct. 
+ Pavel> getline() is a standard libc function with a different signature.
+ Pavel> Signed-off-by: Pavel Roskin <proski@gnu.org>
 
-> >the makefiles, but I couldn't find a target that would do it.  It
-seems
-> >that there are some absolute paths stored in buildroot toolchain
-> 
-> You should always use SYSROOT-enabled compilers thus building a
-compiler
-> that you can trivially relocate.
-SYSROOT is actually enabled, but the problem was ccache that stores
-buildroot directory somewhere itself. This was discussed in another mail
-regarding this same thing.
+I can see how this might confuse stuff, but what error do you get
+exactly? Have you sent this to the uclibc people?
 
-But this problem is solved now and I can compile cross compiler that
-works with out any references to actual buildroot anymore.
-
-Thanks.
-
--Teemu
+-- 
+Bye, Peter Korsgaard
