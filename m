@@ -1,30 +1,21 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 Jun 2009 18:54:29 +0200
-Subject: [Buildroot] External toolchain improvements
-Message-ID: <20090601185429.271af114@surf>
+Date: Mon, 1 Jun 2009 18:54:54 +0200
+Subject: [Buildroot] Buildroot 2009.05 released
+In-Reply-To: <874ov04dwl.fsf@macbook.be.48ers.dk>
+References: <874ov04dwl.fsf@macbook.be.48ers.dk>
+Message-ID: <20090601185454.0ce8d7c3@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Le Mon, 01 Jun 2009 09:22:02 +0200,
+Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
-About one month ago, I posted two patches that try to improve external
-toolchain support. I've rebased these patches and pushed them to a
-public Git repository, in a branch called external-toolchain :
+> Thanks to everyone contributing and testing the release candidates!
 
- http://git.buildroot.net/~tpetazzoni/git/buildroot/commit/?h=external-toolchain
-
-I'm asking for a review of these patches (is the feature worthwhile, is
-it well implemented, etc.), and maybe inclusion of these patches if
-they are suitable.
-
-Also, please don't hesitate to report any issue with the patches: I'm
-not yet completely familiar with Git, so I may have done mistakes when
-generating/publishing the patches.
-
-Thanks,
+And thank you for managing the project!
 
 Thomas
 -- 
