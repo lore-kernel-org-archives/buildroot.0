@@ -1,22 +1,32 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 01 Jun 2009 08:22:56 +0200
-Subject: [Buildroot] dhclient-script empty with dhclient ?
-In-Reply-To: <4A0A4D2A.9000104@free.fr> (Cyril HAENEL's message of "Wed\,
-	13 May 2009 06\:31\:38 +0200")
-References: <4A0A4D2A.9000104@free.fr>
-Message-ID: <87d49o4gn3.fsf@macbook.be.48ers.dk>
+Date: Mon, 01 Jun 2009 08:35:42 +0200
+Subject: [Buildroot] [PATCH] RE: diffutils fails to build
+In-Reply-To: <522C1DF17AF50042AD8AE87F7887BD3D0158B35BFB@exch.hq.tensilica.com>
+	(Marc Gauthier's message of "Wed\, 27 May 2009 22\:41\:59 -0700")
+References: <d9bef6aa0811070426o55805eb1q6d95ddb0476f074b@mail.gmail.com>
+	<522C1DF17AF50042AD8AE87F7887BD3D0158B35BFB@exch.hq.tensilica.com>
+Message-ID: <878wkc4g1t.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Cyril" == Cyril HAENEL <chaenel@free.fr> writes:
+>>>>> "Marc" == Marc Gauthier <marc@tensilica.com> writes:
 
- Cyril> Someone knows why this dhclient-script script is empty ?
+ Marc> Hi Ian,
 
-I think most people use the dhcpc support in busybox instead, but yeah
-- dhclient should work - Will take a look.
+ Marc> Did you get that question resolved?  I'm hitting the same
+ Marc> failure with a tree sync'ed circa April 28th.  Presumably only
+ Marc> happens with BR2_STRIP_none=y (but that *is* what I want, for
+ Marc> debugging, and I do want diffutils).
+ 
+ Marc> So I looked at it a bit, and came up with this tentative fix.
+ Marc> Works on an incremental build (have yet to try a full clean
+ Marc> build, takes a while).  -Marc
+
+Your patch was wordwrapped, but I committed it by hand (and slightly
+changed it) - Thanks.
 
 -- 
 Bye, Peter Korsgaard
