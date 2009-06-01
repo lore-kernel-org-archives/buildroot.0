@@ -1,64 +1,51 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 1 Jun 2009 09:23:11 +0200
-Subject: [Buildroot] [git commit] docs/: announce 2009.05
-Message-ID: <20090601072349.6136377824@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon,  1 Jun 2009 08:04:57 +0000 (UTC)
+Subject: [Buildroot] [Bug 367] New: linux kernel compile error for arm926t
+Message-ID: <bug-367-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0b76735b4703a6f542726d438c5f38f1840fd6db
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=367
+
+              Host: Debian 5.01
+            Target: arm-linux-uclibcgnueabi
+           Summary: linux kernel compile error for arm926t
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: alex_dobrynin at hotmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- docs/download.html |   10 +++++++++-
- docs/news.html     |   10 ++++++++++
- 2 files changed, 19 insertions(+), 1 deletions(-)
+In buildroot-2009.05-rc3 and internal toolchain
+I get an error while compiling linux kernel (2.6.28):
+  CC      arch/arm/kernel/traps.o
+{standard input}: Assembler messages:
+{standard input}:1094: Error: selected processor does not support `pld [r6,#0]'
 
-diff --git a/docs/download.html b/docs/download.html
-index 47db25f..349a7cd 100644
---- a/docs/download.html
-+++ b/docs/download.html
-@@ -6,7 +6,15 @@
- 
- <p>
- 
--The latest release can always be dowloaded from
-+The latest stable release is <b>2009.05</b>, which can be downloaded
-+here:<p>
-+
-+<a href="/downloads/buildroot-2009.05.tar.gz">buildroot-2009.05.tar.gz</a>
-+or
-+<a href="/downloads/buildroot-2009.05.tar.bz2">buildroot-2009.05.tar.bz2</a>.
-+<p>
-+
-+This and earlier releases can always be dowloaded from
- <a href="/downloads/">http://buildroot.net/downloads/</a>.
- 
- <p>
-diff --git a/docs/news.html b/docs/news.html
-index f73f53b..75113c4 100644
---- a/docs/news.html
-+++ b/docs/news.html
-@@ -5,6 +5,16 @@
- <p>
- 
- <ul>
-+  <li><b>1 June 2009 -- 2009.05 released</b>
-+
-+    <p>The stable 2009.05 release is out - Thanks to everyone
-+    contributing and testing the release candidates. See the
-+    <a href="http://lists.busybox.net/pipermail/buildroot/2009-June/027640.html">announcement</a>
-+    or <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2009.05">CHANGES</a>
-+    for more details, and go to the <a href="/downloads/">downloads page</a>
-+    to pick up the <a href="/downloads/buildroot-2009.05.tar.bz2">2009.05
-+    release</a>.</p>
-+
-   <li><b>27 May 2009 -- 2009.05-rc3 released</b>
- 
-     <p>We had a number of fixes post-RC2, so RC3 is out (see <a
+It turns out that buildroot sets --with-arch=armv4t in gcc config
+for target arm and variant arm926t.
+Changing target/Config.in.arch to:
+        default armv4t          if BR2_arm920t
+        default armv4t          if BR2_arm922t
+-       default armv4t          if BR2_arm926t
++       default armv5te         if BR2_arm926t
+        default armv5t          if BR2_arm10t
+        default armv6j          if BR2_arm1136jf_s
+fixes the problem.
+
+
 -- 
-1.6.0.6
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
