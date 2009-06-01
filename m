@@ -1,19 +1,19 @@
-From: Anson Lam <anson.lam@outline.com.hk>
-Date: Mon, 1 Jun 2009 19:04:34 +0800
-Subject: [Buildroot] Thumb instruction set setting for buildroot-v23434
-Message-ID: <097e01c9e2a8$bee21340$a90a0a0a@ansonlam>
+From: Nigel Kukard <nkukard@lbsd.net>
+Date: Mon, 01 Jun 2009 11:30:59 +0000
+Subject: [Buildroot] [PATCH] dmraid linking against host system fix
+Message-ID: <4A23BBF3.1000903@lbsd.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sir/Madam,
-  I use 16-bit SDRAM for AT91SAM9260.  I downloaded the buildroot-v23434.  I want to use Thumb High Code Density 16-bit Instruction Set in my system.  I need to configure SDRAM in 16-bit and compile the code in thumb instruction set.  However, I cannot find any setting in menuconfig for compiling the code in 16-bit thumb instruction set.  Do you have any suggest?  Thanks for your reply.
-
-Regards,
-Anson
-
+dmraid is hard coded with -L$(DESTDIR)$(libdir)  which tries to link in
+the host systems' libs
 -------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090601/b14002f2/attachment.htm>
+A non-text attachment was scrubbed...
+Name: 0001-Why-on-earth-are-we-trying-to-link-against-the-libdi.patch
+Type: text/x-patch
+Size: 1446 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090601/141231b9/attachment.bin>
