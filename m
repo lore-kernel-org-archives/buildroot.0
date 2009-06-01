@@ -1,30 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 Jun 2009 15:58:14 +0200
-Subject: [Buildroot] Thumb instruction set setting for buildroot-v23434
-In-Reply-To: <097e01c9e2a8$bee21340$a90a0a0a@ansonlam>
-References: <097e01c9e2a8$bee21340$a90a0a0a@ansonlam>
-Message-ID: <20090601155814.7d6fc3b9@surf>
+Date: Mon, 1 Jun 2009 18:54:29 +0200
+Subject: [Buildroot] External toolchain improvements
+Message-ID: <20090601185429.271af114@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 1 Jun 2009 19:04:34 +0800,
-"Anson Lam" <anson.lam@outline.com.hk> a ?crit :
+Hi,
 
->   I use 16-bit SDRAM for AT91SAM9260.  I downloaded the
-> buildroot-v23434.  I want to use Thumb High Code Density 16-bit
-> Instruction Set in my system.  I need to configure SDRAM in 16-bit
-> and compile the code in thumb instruction set.  However, I cannot
-> find any setting in menuconfig for compiling the code in 16-bit thumb
-> instruction set.  Do you have any suggest?  Thanks for your reply.
+About one month ago, I posted two patches that try to improve external
+toolchain support. I've rebased these patches and pushed them to a
+public Git repository, in a branch called external-toolchain :
 
-More than one year ago I worked on a simple patch to include Thumb
-support in Buildroot. It hasn't been included so far, but can be a
-starting point if you're interested.
+ http://git.buildroot.net/~tpetazzoni/git/buildroot/commit/?h=external-toolchain
 
-See http://lists.busybox.net/pipermail/buildroot/2008-March/019622.html
+I'm asking for a review of these patches (is the feature worthwhile, is
+it well implemented, etc.), and maybe inclusion of these patches if
+they are suitable.
+
+Also, please don't hesitate to report any issue with the patches: I'm
+not yet completely familiar with Git, so I may have done mistakes when
+generating/publishing the patches.
+
+Thanks,
 
 Thomas
 -- 
