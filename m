@@ -1,41 +1,27 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  2 Jun 2009 00:47:46 +0000 (UTC)
-Subject: [Buildroot] [Bug 369] New: Add SDL_gfx package
-Message-ID: <bug-369-163@https.bugs.busybox.net/>
+From: Chris Bare <chris@bareflix.com>
+Date: Tue, 2 Jun 2009 11:52:06 -0400 (EDT)
+Subject: [Buildroot] hang generating DSA keys
+In-Reply-To: <87my92fhmw.fsf@macbook.be.48ers.dk>
+Message-ID: <20090602155236.8D2171C82BD@whitealder.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=369
+> >>>>> "Frank" == Frank Hoeflich <frankhoeflich@yahoo.com> writes:
+> 
+>  Frank> The entropy mechanism depends on keyboard input - I'd expect
+>  Frank> it to be waiting for I/O.  If you type some characters it will
+>  Frank> use them to generate the keys and be on its way.
+> 
+> Yes, if the programs are using /dev/random instead of /dev/urandom. Is
+> this openssh or dropbear? Dropbear uses /dev/urandom by default, but I
+> don't know what openssh does.
 
-              Host: linux
-            Target: mipsel or any others
-           Summary: Add SDL_gfx package
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: enhancement
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: evan.zelkowitz at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
-
-
-I have added the sdl_gfx package to my local buildroot usage and was opening
-this bug report to see if it should be added to the base code.  SDL_gfx is
-widely used and seemed to be one of the widely used ones missing from the sdl
-packages.  More info is here,
-http://www.ferzkopp.net/joomla/content/view/19/14/ and it is fairly simple to
-add it to buildroot.
-
+sorry for the delay in replying. This was openssh. I ended up disabling it for
+now since I can do everything I need on the console.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Chris Bare
+chris at bareflix.com
