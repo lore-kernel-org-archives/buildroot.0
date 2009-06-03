@@ -1,85 +1,80 @@
 From: Daniel Mack <daniel@caiaq.de>
-Date: Wed,  3 Jun 2009 13:39:04 +0200
-Subject: [Buildroot] [PATCH 1/2] target/ubifs: fix compilation
-Message-ID: <1244029145-11832-1-git-send-email-daniel@caiaq.de>
+Date: Wed,  3 Jun 2009 13:39:05 +0200
+Subject: [Buildroot] [PATCH 2/2] mtd-utils.git: fix targets
+In-Reply-To: <1244029145-11832-1-git-send-email-daniel@caiaq.de>
+References: <1244029145-11832-1-git-send-email-daniel@caiaq.de>
+Message-ID: <1244029145-11832-2-git-send-email-daniel@caiaq.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The ubifs rootfs target does not currently build because the repository
-listed in ubifsroot.mk does not exist anymore. Consequently, the used
-tag is also wrong.
+Update git version for mtd-utils.git.
 
-As the code base for mtd utils seem to have been merged in the past,
-there are dependencies between ubi-utils, mkfs.ubifs and the mtd core
-now, so we have no other option than building the whole thing.
+In this new version, a new tool named 'ubiformat' exists which is
+exported by this patch.
 
-WITHOUT_XATTR was added to the make parameters because it did not build
-on my system without that. Maybe that should become a auto* variable
-dependency in the future.
-
-BUILDDIR is needed by the mtd-utils Makefile, otherwise built object
-files are put to $(PWD) which is the toplevel br2 path.
-
-MKFS_UBIFS_BINARY was added to ease the path chaos a bit.
+The tool ubimirror does not exist anymore, remove support for it.
 
 Signed-off-by: Daniel Mack <daniel@caiaq.de>
 ---
- target/ubifs/ubifsroot.mk |   21 +++++++++++----------
- 1 files changed, 11 insertions(+), 10 deletions(-)
+ package/mtd/Config.in            |   10 +++++-----
+ package/mtd/mtd-utils.git/mtd.mk |    4 ++--
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/target/ubifs/ubifsroot.mk b/target/ubifs/ubifsroot.mk
-index 1707e46..d14bde1 100644
---- a/target/ubifs/ubifsroot.mk
-+++ b/target/ubifs/ubifsroot.mk
-@@ -5,12 +5,13 @@
- #############################################################
- #MKFS_UBIFS_VERSION=2582f128dad78591bc3adcc87c343c690bb82e61
- #MKFS_UBIFS_URL=http://git.infradead.org/users/dedekind/mkfs.ubifs.git?a=snapshot;h=$(MKFS_UBIFS_VERSION);sf=tgz
--MKFS_UBIFS_VERSION=v0.4
--MKFS_UBIFS_URL=http://git.infradead.org/users/dedekind/mkfs.ubifs.git?a=snapshot;h=refs/tags/mkfs.ubifs-$(MKFS_UBIFS_VERSION);sf=tgz
--MKFS_UBIFS_SOURCE:=mkfs.ubifs-$(MKFS_UBIFS_VERSION).tar.gz
--MKFS_UBIFS_DIR:= $(BUILD_DIR)/mkfs-ubifs-$(MKFS_UBIFS_VERSION)
--MKFS_UBIFS_CAT:=$(ZCAT)
--MKFS_UBIFS_NAME:=mkfs.ubifs
-+MKFS_UBIFS_VERSION=HEAD
-+MKFS_UBIFS_URL=http://git.infradead.org/mtd-utils.git?a=snapshot\;h=$(MKFS_UBIFS_VERSION)\;sf=tgz
-+MKFS_UBIFS_SOURCE=mtd-utils-$(MKFS_UBIFS_VERSION).tar.gz
-+MKFS_UBIFS_DIR=$(BUILD_DIR)/mkfs-utils-ubifs
-+MKFS_UBIFS_CAT=$(ZCAT)
-+MKFS_UBIFS_NAME=mtd-utils
-+MKFS_UBIFS_BINARY=$(MKFS_UBIFS_DIR)/mkfs.ubifs/mkfs.ubifs
+diff --git a/package/mtd/Config.in b/package/mtd/Config.in
+index 2dd41be..a21fc45 100644
+--- a/package/mtd/Config.in
++++ b/package/mtd/Config.in
+@@ -139,11 +139,6 @@ config BR2_PACKAGE_MTD_UBIDETACH
+ 	default y
+ 	depends on BR2_PACKAGE_MTD_UTILS_GIT
  
- $(DL_DIR)/$(MKFS_UBIFS_SOURCE):
- 	$(WGET) -O $(DL_DIR)/$(MKFS_UBIFS_SOURCE) "$(MKFS_UBIFS_URL)"
-@@ -21,14 +22,14 @@ $(MKFS_UBIFS_DIR)/.unpacked: $(DL_DIR)/$(MKFS_UBIFS_SOURCE)
- 	toolchain/patch-kernel.sh $(MKFS_UBIFS_DIR) target/ubifs/ mkfs-ubifs-\*.patch
- 	touch $@
+-config BR2_PACKAGE_MTD_UBIMIRROR
+-	bool "ubimirror"
+-	default y
+-	depends on BR2_PACKAGE_MTD_UTILS_GIT
+-
+ config BR2_PACKAGE_MTD_UBIMKVOL
+ 	bool "ubimkvol"
+ 	default y
+@@ -164,5 +159,10 @@ config BR2_PACKAGE_MTD_UBIUPDATEVOL
+ 	default y
+ 	depends on BR2_PACKAGE_MTD_UTILS_GIT
  
--$(MKFS_UBIFS_DIR)/mkfs.ubifs: $(MKFS_UBIFS_DIR)/.unpacked
--	$(MAKE) -C $(MKFS_UBIFS_DIR)
-+$(MKFS_UBIFS_BINARY): $(MKFS_UBIFS_DIR)/.unpacked
-+	$(MAKE) -j1 -C $(MKFS_UBIFS_DIR) BUILDDIR=$(MKFS_UBIFS_DIR) WITHOUT_XATTR=1
- 	touch -c $@
- 
- mkfs.ubifs-dirclean:
- 	rm -rf $(MKFS_UBIFS_DIR)
- 
--mkfs.ubifs: $(MKFS_UBIFS_DIR)/mkfs.ubifs
-+mkfs.ubifs: $(MKFS_UBIFS_BINARY)
- 
- #############################################################
- #
-@@ -88,7 +89,7 @@ ifneq ($(TARGET_DEVICE_TABLE),)
- 		>> $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
++config BR2_PACKAGE_MTD_UBIFORMAT
++	bool "ubiformat"
++	default y
++	depends on BR2_PACKAGE_MTD_UTILS_GIT
++
  endif
- 	# Use fakeroot so mkfs.ubifs believes the previous fakery
--	echo "$(MKFS_UBIFS_DIR)/mkfs.ubifs -d $(TARGET_DIR) " \
-+	echo "$(MKFS_UBIFS_BINARY) -d $(TARGET_DIR) " \
- 		"$(UBIFS_OPTS) -o $(UBIFS_BASE)" >> $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
- 	chmod a+x $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
- 	$(HOST_DIR)/usr/bin/fakeroot -- $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
+ 
+diff --git a/package/mtd/mtd-utils.git/mtd.mk b/package/mtd/mtd-utils.git/mtd.mk
+index ca25ee5..ad3a537 100644
+--- a/package/mtd/mtd-utils.git/mtd.mk
++++ b/package/mtd/mtd-utils.git/mtd.mk
+@@ -3,7 +3,7 @@
+ # mtd provides jffs2 utilities
+ #
+ #############################################################
+-MTD_VERSION:=fcb52ccc99679460640386c297023f852b108f68
++MTD_VERSION:=e783e75e09b4a0a519665afd7bdeaf2985e7a09c
+ MTD_SOURCE:=mtd-utils-$(MTD_VERSION).tar.gz
+ MTD_URL:=http://git.infradead.org/mtd-utils.git?a=snapshot;h=$(MTD_VERSION);sf=tgz
+ MTD_HOST_DIR:= $(TOOL_BUILD_DIR)/mtd-utils-$(MTD_VERSION)
+@@ -98,11 +98,11 @@ MTD_TARGETS_UBI_y :=
+ MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIATTACH) += ubiattach
+ MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBICRC32) += ubicrc32
+ MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIDETACH) += ubidetach
+-MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIMIRROR) += ubimirror
+ MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIMKVOL) += ubimkvol
+ MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBINFO) += ubinfo
+ MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIRMVOL) += ubirmvol
+ MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIUPDATEVOL) += ubiupdatevol
++MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIFORMAT) += ubiformat
+ 
+ MTD_BUILD_TARGETS := $(addprefix $(MTD_DIR)/, $(MTD_TARGETS_y)) $(addprefix $(MTD_DIR)/ubi-utils/, $(MTD_TARGETS_UBI_y))
+ 
 -- 
 1.6.3.1
