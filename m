@@ -1,7 +1,7 @@
-From: Daniele Salvatore Albano <d.albano@gmail.com>
-Date: Thu, 4 Jun 2009 09:51:15 +0200
-Subject: [Buildroot] Set LIBS variabile using new package format
-Message-ID: <159a01660906040051k5dc43776ve49f305dc4841d0a@mail.gmail.com>
+From: Berns <Berns@BEKA-Elektronik.de>
+Date: Thu, 4 Jun 2009 09:34:08 +0200
+Subject: [Buildroot] uclibc locale
+Message-ID: <NDBBKLDECLOIHFJKBINAGEBOEIAA.Berns@BEKA-Elektronik.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,33 +10,17 @@ To: buildroot@busybox.net
 
 Hi,
 
-i'm writing some packages for buildroot, i need them for my little
-project. Currently i added packages for clamav, with support for
-clamd/clamdscan/freshclam, havp, dansguardiand and tinyproxy. For last
-two i used the new package format, looking other packages.
+i try to build buildoot with the latest git revision. My configuration based
+on at91sam9263ek_defconfig and I have added X11.
+When i activate "use pregenerated locale data" the build process trys to
+load a file "uClibc-locale-20081111-32-el.tgz" which doesn't exist at
+www.uclibc.org.
+After changing the entry in ../uClibc-0-9.30.1/extra/localMakefile.in to
+uClibc-locale-030818.tgz, i'am able to build the root file system.
+The additional items "Purge unwanted locale data" and "Locales to keep"
+should only appear when "Use pregenerated locale data" is activated or ?
 
-However i've a problem: there is a little bug in the tinyproxy
-configure so libintl.h is being reknown but -lintl isin't added to
-libraries to link and it fails to link so i need to add it. I've tried
-setting up LIBS variable, PACKAGENAME_LIBS variable and more but
-nothing to do, it doesn't work. I looked for other packages too but
-nothing.
 
-There is a way to set change LIBS or CFLAGS variables? Or is better to
-do a little patch to apply to configure.ac and use
-PACKAGENAME_AUTORECONF to force to rebuild autoconf?
+Regards
 
-There are docs about this new format?
-
-Best Regards,
-Daniele
-
--- 
-Daniele Salvatore Albano
-Consulente Informatico
-http://www.phpsoft.it
-http://www.dacci.it
-
-Servizi:
-- Sviluppo in C# e PHP
-- Installazione e Amministrazione sistemi Ubuntu, CentOS e Fedora
+Rainer
