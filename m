@@ -1,7 +1,7 @@
 From: Berns <Berns@BEKA-Elektronik.de>
-Date: Thu, 4 Jun 2009 09:34:08 +0200
+Date: Thu, 4 Jun 2009 09:54:46 +0200
 Subject: [Buildroot] uclibc locale
-Message-ID: <NDBBKLDECLOIHFJKBINAGEBOEIAA.Berns@BEKA-Elektronik.de>
+Message-ID: <NDBBKLDECLOIHFJKBINAIEBPEIAA.Berns@BEKA-Elektronik.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
