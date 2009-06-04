@@ -1,80 +1,42 @@
-From: Daniel Mack <daniel@caiaq.de>
-Date: Wed,  3 Jun 2009 13:39:05 +0200
-Subject: [Buildroot] [PATCH 2/2] mtd-utils.git: fix targets
-In-Reply-To: <1244029145-11832-1-git-send-email-daniel@caiaq.de>
-References: <1244029145-11832-1-git-send-email-daniel@caiaq.de>
-Message-ID: <1244029145-11832-2-git-send-email-daniel@caiaq.de>
+From: Daniele Salvatore Albano <d.albano@gmail.com>
+Date: Thu, 4 Jun 2009 09:51:15 +0200
+Subject: [Buildroot] Set LIBS variabile using new package format
+Message-ID: <159a01660906040051k5dc43776ve49f305dc4841d0a@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update git version for mtd-utils.git.
+Hi,
 
-In this new version, a new tool named 'ubiformat' exists which is
-exported by this patch.
+i'm writing some packages for buildroot, i need them for my little
+project. Currently i added packages for clamav, with support for
+clamd/clamdscan/freshclam, havp, dansguardiand and tinyproxy. For last
+two i used the new package format, looking other packages.
 
-The tool ubimirror does not exist anymore, remove support for it.
+However i've a problem: there is a little bug in the tinyproxy
+configure so libintl.h is being reknown but -lintl isin't added to
+libraries to link and it fails to link so i need to add it. I've tried
+setting up LIBS variable, PACKAGENAME_LIBS variable and more but
+nothing to do, it doesn't work. I looked for other packages too but
+nothing.
 
-Signed-off-by: Daniel Mack <daniel@caiaq.de>
----
- package/mtd/Config.in            |   10 +++++-----
- package/mtd/mtd-utils.git/mtd.mk |    4 ++--
- 2 files changed, 7 insertions(+), 7 deletions(-)
+There is a way to set change LIBS or CFLAGS variables? Or is better to
+do a little patch to apply to configure.ac and use
+PACKAGENAME_AUTORECONF to force to rebuild autoconf?
 
-diff --git a/package/mtd/Config.in b/package/mtd/Config.in
-index 2dd41be..a21fc45 100644
---- a/package/mtd/Config.in
-+++ b/package/mtd/Config.in
-@@ -139,11 +139,6 @@ config BR2_PACKAGE_MTD_UBIDETACH
- 	default y
- 	depends on BR2_PACKAGE_MTD_UTILS_GIT
- 
--config BR2_PACKAGE_MTD_UBIMIRROR
--	bool "ubimirror"
--	default y
--	depends on BR2_PACKAGE_MTD_UTILS_GIT
--
- config BR2_PACKAGE_MTD_UBIMKVOL
- 	bool "ubimkvol"
- 	default y
-@@ -164,5 +159,10 @@ config BR2_PACKAGE_MTD_UBIUPDATEVOL
- 	default y
- 	depends on BR2_PACKAGE_MTD_UTILS_GIT
- 
-+config BR2_PACKAGE_MTD_UBIFORMAT
-+	bool "ubiformat"
-+	default y
-+	depends on BR2_PACKAGE_MTD_UTILS_GIT
-+
- endif
- 
-diff --git a/package/mtd/mtd-utils.git/mtd.mk b/package/mtd/mtd-utils.git/mtd.mk
-index ca25ee5..ad3a537 100644
---- a/package/mtd/mtd-utils.git/mtd.mk
-+++ b/package/mtd/mtd-utils.git/mtd.mk
-@@ -3,7 +3,7 @@
- # mtd provides jffs2 utilities
- #
- #############################################################
--MTD_VERSION:=fcb52ccc99679460640386c297023f852b108f68
-+MTD_VERSION:=e783e75e09b4a0a519665afd7bdeaf2985e7a09c
- MTD_SOURCE:=mtd-utils-$(MTD_VERSION).tar.gz
- MTD_URL:=http://git.infradead.org/mtd-utils.git?a=snapshot;h=$(MTD_VERSION);sf=tgz
- MTD_HOST_DIR:= $(TOOL_BUILD_DIR)/mtd-utils-$(MTD_VERSION)
-@@ -98,11 +98,11 @@ MTD_TARGETS_UBI_y :=
- MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIATTACH) += ubiattach
- MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBICRC32) += ubicrc32
- MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIDETACH) += ubidetach
--MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIMIRROR) += ubimirror
- MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIMKVOL) += ubimkvol
- MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBINFO) += ubinfo
- MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIRMVOL) += ubirmvol
- MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIUPDATEVOL) += ubiupdatevol
-+MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIFORMAT) += ubiformat
- 
- MTD_BUILD_TARGETS := $(addprefix $(MTD_DIR)/, $(MTD_TARGETS_y)) $(addprefix $(MTD_DIR)/ubi-utils/, $(MTD_TARGETS_UBI_y))
- 
+There are docs about this new format?
+
+Best Regards,
+Daniele
+
 -- 
-1.6.3.1
+Daniele Salvatore Albano
+Consulente Informatico
+http://www.phpsoft.it
+http://www.dacci.it
+
+Servizi:
+- Sviluppo in C# e PHP
+- Installazione e Amministrazione sistemi Ubuntu, CentOS e Fedora
