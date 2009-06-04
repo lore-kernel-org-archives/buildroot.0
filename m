@@ -1,48 +1,20 @@
-From: nickich <nickich@abv.bg>
-Date: Thu, 4 Jun 2009 07:40:24 -0700 (PDT)
-Subject: [Buildroot] switch_root...
-In-Reply-To: <87ab4oysjz.fsf@macbook.be.48ers.dk>
-References: <23869987.post@talk.nabble.com>
-	<87ab4oysjz.fsf@macbook.be.48ers.dk>
-Message-ID: <23871331.post@talk.nabble.com>
+From: Daniel Mack <daniel@caiaq.de>
+Date: Thu, 4 Jun 2009 20:05:24 +0200
+Subject: [Buildroot] [PATCH 1/2] target/ubifs: fix compilation
+In-Reply-To: <1244029145-11832-1-git-send-email-daniel@caiaq.de>
+References: <1244029145-11832-1-git-send-email-daniel@caiaq.de>
+Message-ID: <20090604180524.GB26148@buzzloop.caiaq.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Wed, Jun 03, 2009 at 01:39:04PM +0200, Daniel Mack wrote:
+> The ubifs rootfs target does not currently build because the repository
+> listed in ubifsroot.mk does not exist anymore. Consequently, the used
+> tag is also wrong.
 
+Any oppinion about this one and the follow-up, '2/2'?
 
-
-Peter Korsgaard-3 wrote:
-> 
->>>>>> "nickich" == nickich  <nickich@abv.bg> writes:
-> 
->  nickich> Hi,
-> 
->  nickich> When I use switch_root I have an error "not rootfs", which
->  nickich> comes from the condition !S_ISREG(st1.st_mode). When I
->  nickich> remove this condition, all seems to work fine (or at least I
->  nickich> think so).
-> 
->  nickich> What is this check for? 
->  nickich> Can it be removed safely? 
->  nickich> What's wrong with my system to break here?
-> 
-> Are you talking about the busybox switch_root applet? If so, then
-> better ask on the busybox list (busybox at busybox.net).
-> 
-> -- 
-> Bye, Peter Korsgaard
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> 
-
-Yes, I mean busybox.
-Thanks!
--- 
-View this message in context: http://www.nabble.com/switch_root...-tp23869987p23871331.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+Daniel
