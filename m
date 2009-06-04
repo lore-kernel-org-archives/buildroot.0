@@ -1,28 +1,27 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  4 Jun 2009 13:49:52 +0000 (UTC)
-Subject: [Buildroot] [Bug 373] Support for building gstreamer without libxml
-In-Reply-To: <bug-373-163@https.bugs.busybox.net/>
-References: <bug-373-163@https.bugs.busybox.net/>
-Message-ID: <20090604134952.6354977702@busybox.osuosl.org>
+From: nickich <nickich@abv.bg>
+Date: Thu, 4 Jun 2009 07:31:35 -0700 (PDT)
+Subject: [Buildroot]  switch_root...
+Message-ID: <23869987.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=373
 
+Hi,
 
+When I use switch_root I have an error "not rootfs", which comes from the
+condition !S_ISREG(st1.st_mode). When I remove this condition, all seems to
+work fine (or at least I think so).
 
+What is this check for? 
+Can it be removed safely? 
+What's wrong with my system to break here?
 
-
---- Comment #2 from Will Newton <will.newton@gmail.com>  2009-06-04 13:49:50 UTC ---
-At the moment plugin registry and load/save of pipelines. It should be possible
-to use the binary registry and just lose load/save but I'm not sure if
-gstreamer can be built that way yet.
-
+Regards,
+Nikolay
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+View this message in context: http://www.nabble.com/switch_root...-tp23869987p23869987.html
+Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
