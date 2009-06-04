@@ -1,26 +1,54 @@
-From: Berns <Berns@BEKA-Elektronik.de>
-Date: Thu, 4 Jun 2009 09:54:46 +0200
-Subject: [Buildroot] uclibc locale
-Message-ID: <NDBBKLDECLOIHFJKBINAIEBPEIAA.Berns@BEKA-Elektronik.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 4 Jun 2009 10:22:18 +0200
+Subject: [Buildroot] Set LIBS variabile using new package format
+In-Reply-To: <159a01660906040051k5dc43776ve49f305dc4841d0a@mail.gmail.com>
+References: <159a01660906040051k5dc43776ve49f305dc4841d0a@mail.gmail.com>
+Message-ID: <20090604102218.393a14a5@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Le Thu, 4 Jun 2009 09:51:15 +0200,
+Daniele Salvatore Albano <d.albano@gmail.com> a ?crit :
 
-i try to build buildoot with the latest git revision. My configuration based
-on at91sam9263ek_defconfig and I have added X11.
-When i activate "use pregenerated locale data" the build process trys to
-load a file "uClibc-locale-20081111-32-el.tgz" which doesn't exist at
-www.uclibc.org.
-After changing the entry in ../uClibc-0-9.30.1/extra/localMakefile.in to
-uClibc-locale-030818.tgz, i'am able to build the root file system.
-The additional items "Purge unwanted locale data" and "Locales to keep"
-should only appear when "Use pregenerated locale data" is activated or ?
+> However i've a problem: there is a little bug in the tinyproxy
+> configure so libintl.h is being reknown but -lintl isin't added to
+> libraries to link and it fails to link so i need to add it.
 
+If it's really a bug in tinyproxy itself, then the best solution is to
+write a patch, send it upstream, and while waiting for upstream to make
+a new release, include the patch in Buildroot as well.
 
-Regards
+> I've tried setting up LIBS variable, PACKAGENAME_LIBS variable and
+> more but nothing to do, it doesn't work. I looked for other packages
+> too but nothing.
 
-Rainer
+There's no such thing as PACKAGENAME_LIBS. All the PACKAGENAME_*
+variables are documented at the top of package/Makefile.autotools.in.
+
+In your case, PACKAGE_CONF_ENV would quite certainly be the solution, it
+allows to set variables passed to the ./configure script.
+
+For example, in bind/bind.mk :
+
+BIND_CONF_ENV = BUILD_CC="$(TARGET_CC)" \
+                BUILD_CFLAGS="$(TARGET_CFLAGS)"
+
+> There is a way to set change LIBS or CFLAGS variables? Or is better to
+> do a little patch to apply to configure.ac and use
+> PACKAGENAME_AUTORECONF to force to rebuild autoconf?
+
+As said previously, it depends. If it's a real bug in tinyproxy's
+configure, fix it with a patch. If it's a tuning needed due to
+Buildroot specific things, then do it with BIND_CONF_ENV.
+
+Sincerly,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
