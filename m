@@ -1,44 +1,31 @@
-From: Gopu Subramanian <sgopu@yahoo.com>
-Date: Fri, 5 Jun 2009 01:58:08 -0700 (PDT)
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 05 Jun 2009 11:30:23 +0200
 Subject: [Buildroot] Build instructions for ARM big-endian BE-8 target
-Message-ID: <751481.62632.qm@web42104.mail.mud.yahoo.com>
+In-Reply-To: <400467.96095.qm@web42108.mail.mud.yahoo.com> (Gopu Subramanian's
+	message of "Fri\, 5 Jun 2009 01\:53\:01 -0700 \(PDT\)")
+References: <400467.96095.qm@web42108.mail.mud.yahoo.com>
+Message-ID: <87oct3xc28.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Gopu" == Gopu Subramanian <sgopu@yahoo.com> writes:
 
+Hi,
 
-I am trying to build big-endian tool chain for ARM v6 architecture (ARM 11MPCore) and it should BE-8 format. In BE-8, instructions should be in little-endian. I want the instructions for BE-8 toolchain.
+ Gopu> I am trying to build big-endian tool chain for ARM v6
+ Gopu> architecture (ARM 11MPCore) and it should BE-8 format. In BE-8,
+ Gopu> instructions should be in little-endian. I want the
+ Gopu> instructions for BE-8 toolchain.
 
-I hope this helps.
+Ahh, wasn't aware of the funky BE8 format, but after a bit of
+googling around it seems to just be a matter of adding --be8 to the
+the TARGET_CFLAGS.
 
-Thanks 
-Gopu
+Could you try adding it to line 40 of package/Makefile.in and give it
+a try?
 
---- On Fri, 5/6/09, Peter Korsgaard <jacmet@uclibc.org> wrote:
-
-> From: Peter Korsgaard <jacmet@uclibc.org>
-> Subject: Re: [Buildroot] Build instructions for ARM big-endian BE-8 target
-> To: "Paul Archer" <ptarcher@gmail.com>
-> Cc: "Peter Korsgaard" <jacmet@uclibc.org>, sgopu at yahoo.com, buildroot at busybox.net
-> Date: Friday, 5 June, 2009, 2:05 PM
-> >>>>> "Paul" == Paul
-> Archer <ptarcher@gmail.com>
-> writes:
-> 
->  Paul> I guess
->  Paul> BE-8 = Big Endian 8 bit instructions
->  Paul> BE-32 = Big Endian 32 bit instructions...
-> 
-> That doesn't make much sense. ARM instructions are 32bit
-> (except for
-> thumb) and you cannot talk about endianess on byte values.
-> 
-> -- 
-> Bye, Peter Korsgaard
-> 
-
-
-      Cricket on your mind? Visit the ultimate cricket website. Enter http://beta.cricket.yahoo.com
+-- 
+Bye, Peter Korsgaard
