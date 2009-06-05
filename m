@@ -1,26 +1,68 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 05 Jun 2009 10:35:37 +0200
+From: Gopu Subramanian <sgopu@yahoo.com>
+Date: Fri, 5 Jun 2009 01:53:01 -0700 (PDT)
 Subject: [Buildroot] Build instructions for ARM big-endian BE-8 target
-In-Reply-To: <56ea0bb80906050103x4c49cd28o3a2246499985162b@mail.gmail.com>
-	(Paul Archer's message of "Fri\, 5 Jun 2009 18\:03\:12 +1000")
-References: <645850.50696.qm@web42108.mail.mud.yahoo.com>
-	<871vpzywbm.fsf@macbook.be.48ers.dk>
-	<56ea0bb80906050103x4c49cd28o3a2246499985162b@mail.gmail.com>
-Message-ID: <87skifxeli.fsf@macbook.be.48ers.dk>
+Message-ID: <400467.96095.qm@web42108.mail.mud.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Paul" == Paul Archer <ptarcher@gmail.com> writes:
 
- Paul> I guess
- Paul> BE-8 = Big Endian 8 bit instructions
- Paul> BE-32 = Big Endian 32 bit instructions...
+I am trying to build big-endian tool chain for ARM v6 architecture (ARM 11MPCore) and it should BE-8 format. In BE-8, instructions should be in little-endian. I want the instructions for BE-8 toolchain.
 
-That doesn't make much sense. ARM instructions are 32bit (except for
-thumb) and you cannot talk about endianess on byte values.
+I hope this helps.
 
--- 
-Bye, Peter Korsgaard
+Thanks 
+Gopu
+
+--- On Fri, 5/6/09, Paul Archer <ptarcher@gmail.com> wrote:
+
+> From: Paul Archer <ptarcher@gmail.com>
+> Subject: Re: [Buildroot] Build instructions for ARM big-endian BE-8 target
+> To: "Peter Korsgaard" <jacmet@uclibc.org>
+> Cc: sgopu at yahoo.com, buildroot at busybox.net
+> Date: Friday, 5 June, 2009, 1:33 PM
+> I guess
+> 
+> BE-8 = Big Endian 8 bit instructions
+> BE-32 = Big Endian 32 bit instructions...
+> 
+> Regards Paul
+> 
+> On Fri, Jun 5, 2009 at 5:27 PM, Peter Korsgaard<jacmet@uclibc.org>
+> wrote:
+> >>>>>> "Gopu" == Gopu Subramanian <sgopu@yahoo.com>
+> writes:
+> >
+> > ?Gopu> Hi,
+> >
+> > ?Gopu> Right now ARM big endian selection produces
+> a toolchain for ARM
+> > ?Gopu> big-endian BE-32 target systems. Please
+> provide us the
+> > ?Gopu> instructions to build ARM big-endian BE-8
+> system.
+> >
+> > BE-32? BE-8? What are you talking about? Please be
+> more specific.
+> >
+> > --
+> > Bye, Peter Korsgaard
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> >
+> 
+> 
+> 
+> -- 
+> ----
+> Regards
+> Paul Archer
+> ptarcher at gmail.com
+> 
+
+
+      Cricket on your mind? Visit the ultimate cricket website. Enter http://beta.cricket.yahoo.com
