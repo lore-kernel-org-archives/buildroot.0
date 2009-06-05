@@ -1,28 +1,19 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  4 Jun 2009 19:21:05 +0000 (UTC)
-Subject: [Buildroot] [Bug 373] Support for building gstreamer without libxml
-In-Reply-To: <bug-373-163@https.bugs.busybox.net/>
-References: <bug-373-163@https.bugs.busybox.net/>
-Message-ID: <20090604192106.0E80977829@busybox.osuosl.org>
+From: Gopu Subramanian <sgopu@yahoo.com>
+Date: Thu, 4 Jun 2009 19:14:52 -0700 (PDT)
+Subject: [Buildroot] Build instructions for ARM big-endian BE-8 target
+Message-ID: <645850.50696.qm@web42108.mail.mud.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=373
+
+Hi,
+Right now ARM big endian selection produces a toolchain for ARM big-endian BE-32 target systems. Please provide us the instructions to build ARM big-endian BE-8 system.
+
+Thanks and Regards,
+Gopu
 
 
-
-
-
---- Comment #4 from Markus Heidelberg <markus.heidelberg@web.de>  2009-06-04 19:21:05 UTC ---
-In the gst-plugins-good package there is a plugin called "annodex (XML
-Library)". I guess it should now select BR2_PACKAGE_GSTREAMER_XML instead of
-BR2_PACKAGE_LIBXML2 (or both?).
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+      Explore and discover exciting holidays and getaways with Yahoo! India Travel http://in.travel.yahoo.com/
