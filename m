@@ -1,36 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  5 Jun 2009 16:35:05 +0000 (UTC)
-Subject: [Buildroot] [Bug 373] Support for building gstreamer without libxml
-In-Reply-To: <bug-373-163@https.bugs.busybox.net/>
-References: <bug-373-163@https.bugs.busybox.net/>
-Message-ID: <20090605163505.DDF637783A@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 6 Jun 2009 21:38:07 +0200
+Subject: [Buildroot] [git commit] xdriver_xf86-input-synaptics: fix download
+	url
+Message-ID: <20090606193957.027AE77825@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=373
+commit: http://git.buildroot.net/buildroot/commit/?id=f6fa84f5ff5e4c33f6f9b50a950fa265bd4c3669
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 
+0.15.0 seems to never have been in Debian (it is atleast not on
+snapshot.debian.net), so use the real upstream (freedesktop) instead.
 
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ .../xdriver_xf86-input-synaptics.mk                |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-
---- Comment #6 from Markus Heidelberg <markus.heidelberg@web.de>  2009-06-05 16:35:05 UTC ---
-(In reply to comment #5)
-> Hopefully this takes all the comments above into account.
-
-The config option name and the dependency variable cleanup, yes. But what about
-the annodex plugin?
-Oh, and personally I like "ifeq" more than "ifneq", especially if the true
-condition is the default.
-And while I'm nitpicking: the "enable" is superfluous, it's all about enabling
-and disabling in this configuration system. And I'd rather keep the description
-short (XML dependency) and move further information (registry ...) into a help
-section. But now I'll be quiet :)
-
-
+diff --git a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
+index 27e7898..9146ba6 100644
+--- a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
++++ b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
+@@ -5,8 +5,8 @@
+ ################################################################################
+ 
+ XDRIVER_XF86_INPUT_SYNAPTICS_VERSION = 0.15.0
+-XDRIVER_XF86_INPUT_SYNAPTICS_SOURCE = xfree86-driver-synaptics_$(XDRIVER_XF86_INPUT_SYNAPTICS_VERSION).orig.tar.gz
+-XDRIVER_XF86_INPUT_SYNAPTICS_SITE = http://ftp.de.debian.org/debian/pool/main/x/xfree86-driver-synaptics
++XDRIVER_XF86_INPUT_SYNAPTICS_SOURCE = xf86-input-synaptics-$(XDRIVER_XF86_INPUT_SYNAPTICS_VERSION).tar.bz2
++XDRIVER_XF86_INPUT_SYNAPTICS_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_INPUT_SYNAPTICS_AUTORECONF = NO
+ XDRIVER_XF86_INPUT_SYNAPTICS_DEPENDENCIES = xserver_xorg-server xproto_inputproto xproto_randrproto xproto_xproto
+ XDRIVER_XF86_INPUT_SYNAPTICS_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.6.0.6
