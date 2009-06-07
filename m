@@ -1,32 +1,34 @@
-From: Daniel Mack <daniel@caiaq.de>
-Date: Sun, 7 Jun 2009 20:48:43 +0200
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 07 Jun 2009 20:53:46 +0200
 Subject: [Buildroot] /dev nodes files
-Message-ID: <20090607184843.GK26148@buzzloop.caiaq.de>
+In-Reply-To: <20090607184843.GK26148@buzzloop.caiaq.de> (Daniel Mack's message
+	of "Sun\, 7 Jun 2009 20\:48\:43 +0200")
+References: <20090607184843.GK26148@buzzloop.caiaq.de>
+Message-ID: <874ouryix1.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This has been discussed before, but I don't know if there was any
-result, so I'm asking again.
+>>>>> "Daniel" == Daniel Mack <daniel@caiaq.de> writes:
 
-After each build, the ixnodes in project_build_arm/uclibc/root/dev are
-regular files rather than inodes, which prevents users from exporting
-that directory directly as NFS root. Most people run custom scripts to
-fix that, but I wonder whether there is any change to get that fixed in
-BR2 directly.
+ Daniel> This has been discussed before, but I don't know if there was any
+ Daniel> result, so I'm asking again.
 
-The problem is that mknod can't create the nodes when not run as root,
-and fakeroot doesn't help much in this case. Would it be an option to
+ Daniel> After each build, the ixnodes in project_build_arm/uclibc/root/dev are
+ Daniel> regular files rather than inodes, which prevents users from exporting
+ Daniel> that directory directly as NFS root. Most people run custom scripts to
+ Daniel> fix that, but I wonder whether there is any change to get that fixed in
+ Daniel> BR2 directly.
 
- a) move the invocation of makedevs from target/*/*mk to some higher
-    level. Actually, all fs deployment targets do the same thing, and
-    that could be simplified.
- b) Let users choose whether to use 'fakeroot' or 'sudo' to create the
-    inodes. The latter would need some augmented system priviledges, but
-    as an option, that shouldn't harm.
+Ehh, that's on purpose (E.G. so you don't need root permissions to
+build). Just select the tarball target and extract it on your nfs
+server.
 
-Any oppinion about such an approach?
+ Daniel> Any oppinion about such an approach?
 
-Daniel
+What would this buy us that the tarball target doesn't give?
+
+-- 
+Bye, Peter Korsgaard
