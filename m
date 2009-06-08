@@ -1,42 +1,31 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon,  8 Jun 2009 08:55:07 +0000 (UTC)
-Subject: [Buildroot] [Bug 379] New: update DirectFB to version 1.4.0
-Message-ID: <bug-379-163@https.bugs.busybox.net/>
+From: Daniel Mack <daniel@caiaq.de>
+Date: Mon, 8 Jun 2009 13:41:51 +0200
+Subject: [Buildroot] /dev nodes files
+In-Reply-To: <874ouryix1.fsf@macbook.be.48ers.dk>
+References: <20090607184843.GK26148@buzzloop.caiaq.de>
+	<874ouryix1.fsf@macbook.be.48ers.dk>
+Message-ID: <20090608114151.GR26148@buzzloop.caiaq.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=379
+On Sun, Jun 07, 2009 at 08:53:46PM +0200, Peter Korsgaard wrote:
+>  Daniel> After each build, the ixnodes in project_build_arm/uclibc/root/dev are
+>  Daniel> regular files rather than inodes, which prevents users from exporting
+>  Daniel> that directory directly as NFS root. Most people run custom scripts to
+>  Daniel> fix that, but I wonder whether there is any change to get that fixed in
+>  Daniel> BR2 directly.
+> 
+> Ehh, that's on purpose (E.G. so you don't need root permissions to
+> build). Just select the tarball target and extract it on your nfs
+> server.
+> 
+>  Daniel> Any oppinion about such an approach?
+> 
+> What would this buy us that the tarball target doesn't give?
 
-           Summary: update DirectFB to version 1.4.0
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: enhancement
-          Priority: P4
-         Component: Outdated package
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: s.neumann at raumfeld.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Ok, understood. Thanks :)
 
-
-Created an attachment (id=379)
- --> (https://bugs.busybox.net/attachment.cgi?id=379)
-update DirectFB to version 1.4.0
-
-A new stable version of DirectFB has been released upstream,
-http://directfb.org/index.php?path=Main%2FNews&entry=2009-06-04-1.niels
-
-Attached patch updates the DirectFB package and introduces a BR2 configuration
-option for the RGB16 dithering feature that is new in DirectFB 1.4.0.
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Daniel
