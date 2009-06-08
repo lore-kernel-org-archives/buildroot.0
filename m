@@ -1,42 +1,50 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon,  8 Jun 2009 21:09:21 +0000 (UTC)
-Subject: [Buildroot] [Bug 373] Support for building gstreamer without libxml
-In-Reply-To: <bug-373-163@https.bugs.busybox.net/>
-References: <bug-373-163@https.bugs.busybox.net/>
-Message-ID: <20090608210922.52AE87783B@busybox.osuosl.org>
+From: Paul Archer <ptarcher@gmail.com>
+Date: Tue, 9 Jun 2009 09:35:08 +1000
+Subject: [Buildroot] git upgrade question
+In-Reply-To: <4A2CB6E0.2090807@ethertek.ca>
+References: <4A2CB6E0.2090807@ethertek.ca>
+Message-ID: <56ea0bb80906081635w272c6f4bqce492c08c8ef5b85@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=373
+If you are working on the release you can patch create a patch from
+the 2009.02 release via
 
+$ diff -u original-release-directory/ updated-directory/  > changes.patch
+$ cd newest-release
+$ patch -p1 < changes.patch
 
+If you have used git to grab the checkout of the 2009.02 you can
+re-base your changes (but I don't know how to do that). That or just
+do an update and git should figure out what you have changed and what
+has changed in since 2009.02 in the official tree.
 
+Regards Paul
 
+On Mon, Jun 8, 2009 at 4:59 PM, Dan Pattison<dan.pattison@ethertek.ca> wrote:
+> Hello List,
+>
+> I am using the 2009.02 release of BuildRoot. Is there any way using git to
+> upgrade to 2009.05 without wiping out all of my changes and customizations?
+> I have browsed the git website but found nothing about upgrading a build
+> environment started with svn. Is there a git command to do this?
+>
+> Thanks,
+> Dan Pattison
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
 
---- Comment #8 from Markus Heidelberg <markus.heidelberg@web.de>  2009-06-08 21:09:19 UTC ---
-(In reply to comment #7)
-> Created an attachment (id=381)
- --> (https://bugs.busybox.net/attachment.cgi?id=381) [details]
-> Add support for building gstreamer without libxml2
-> 
-> 
-> I've tweaked it a bti further to take into account comments. I haven't added
-> the annodex change because I'm not sure it's worth it. It would only help a
-> user who disabled the libxml2 dependency explicitly and then selected the
-> annodex plugin that used libxml2.
-
-I wasn't sure about the annodex plugin myself, that's why I wrote "I guess
-...". Given that BR2_PACKAGE_GSTREAMER_LIBXML2 can be seen as an option to
-disable registry and load/save with the side effect that libxml2 is not a
-dependency anymore, I guess annodex doesn't have to be adjusted.
-
-So I'm fine with this.
 
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+----
+Regards
+Paul Archer
+ptarcher at gmail.com
