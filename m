@@ -1,41 +1,45 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon,  8 Jun 2009 14:10:44 +0000 (UTC)
-Subject: [Buildroot] [Bug 373] Support for building gstreamer without libxml
-In-Reply-To: <bug-373-163@https.bugs.busybox.net/>
-References: <bug-373-163@https.bugs.busybox.net/>
-Message-ID: <20090608141044.9FEE9777F5@busybox.osuosl.org>
+From: Daniel Mack <daniel@caiaq.de>
+Date: Mon,  8 Jun 2009 16:57:59 +0200
+Subject: [Buildroot] [PATCH 1/2] Makefile: allow multiple values for
+	TARGET_SKELETON
+Message-ID: <1244473080-8195-1-git-send-email-daniel@caiaq.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=373
+For platforms that need to provide a target fs skeleton for some files,
+multiple entries for the the variable TARGET_SKELETON are handy.
 
+A platform code can then contain the target/generic/ skeleton and only
+provide path to the delta files.
 
-Will Newton <will.newton@gmail.com> changed:
+The only thing to take care for is that none of those file names
+contains spaces, but that's condsidered evil anyway and should not
+happen.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
- Attachment #377 is|0                           |1
-           obsolete|                            |
+Signed-off-by: Daniel Mack <daniel@caiaq.de>
+---
+ Makefile |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-
-
-
---- Comment #7 from Will Newton <will.newton@gmail.com>  2009-06-08 14:10:42 UTC ---
-Created an attachment (id=381)
- --> (https://bugs.busybox.net/attachment.cgi?id=381)
-Add support for building gstreamer without libxml2
-
-
-I've tweaked it a bti further to take into account comments. I haven't added
-the annodex change because I'm not sure it's worth it. It would only help a
-user who disabled the libxml2 dependency explicitly and then selected the
-annodex plugin that used libxml2.
-
-
+diff --git a/Makefile b/Makefile
+index 76dd2cd..2edde72 100644
+--- a/Makefile
++++ b/Makefile
+@@ -329,9 +329,9 @@ endif
+ $(PROJECT_BUILD_DIR)/.root:
+ 	mkdir -p $(TARGET_DIR)
+ 	if ! [ -d "$(TARGET_DIR)/bin" ]; then \
+-		if [ -d "$(TARGET_SKELETON)" ]; then \
+-			cp -fa $(TARGET_SKELETON)/* $(TARGET_DIR)/; \
+-		fi; \
++		for dir in $(TARGET_SKELETON); do \
++			test -d $$dir && cp -fa $$dir/* $(TARGET_DIR)/; \
++		done; \
+ 		touch $(STAGING_DIR)/.fakeroot.00000; \
+ 	fi
+ 	-find $(TARGET_DIR) -type d -name CVS -o -name .svn -print0 | xargs -0 rm -rf
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.6.3.1
