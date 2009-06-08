@@ -1,20 +1,42 @@
-From: Dan Pattison <dan.pattison@ethertek.ca>
-Date: Sun, 07 Jun 2009 23:59:44 -0700
-Subject: [Buildroot] git upgrade question
-Message-ID: <4A2CB6E0.2090807@ethertek.ca>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon,  8 Jun 2009 08:55:07 +0000 (UTC)
+Subject: [Buildroot] [Bug 379] New: update DirectFB to version 1.4.0
+Message-ID: <bug-379-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello List,
+https://bugs.busybox.net/show_bug.cgi?id=379
 
-I am using the 2009.02 release of BuildRoot. Is there any way using git 
-to upgrade to 2009.05 without wiping out all of my changes and 
-customizations? I have browsed the git website but found nothing about 
-upgrading a build environment started with svn. Is there a git command 
-to do this?
+           Summary: update DirectFB to version 1.4.0
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P4
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: s.neumann at raumfeld.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Thanks,
-Dan Pattison
+
+Created an attachment (id=379)
+ --> (https://bugs.busybox.net/attachment.cgi?id=379)
+update DirectFB to version 1.4.0
+
+A new stable version of DirectFB has been released upstream,
+http://directfb.org/index.php?path=Main%2FNews&entry=2009-06-04-1.niels
+
+Attached patch updates the DirectFB package and introduces a BR2 configuration
+option for the RGB16 dithering feature that is new in DirectFB 1.4.0.
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
