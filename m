@@ -1,25 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 08 Jun 2009 14:49:41 +0200
-Subject: [Buildroot] issue with gcc 4.4.0 & sqllite  & U-boot
-In-Reply-To: <6016AF82C3F04F2584DF63620FA0600D@apexjs> (Sagaert Johan's
-	message of "Mon\, 8 Jun 2009 14\:38\:17 +0200")
-References: <6016AF82C3F04F2584DF63620FA0600D@apexjs>
-Message-ID: <878wk2ubyy.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon,  8 Jun 2009 14:10:44 +0000 (UTC)
+Subject: [Buildroot] [Bug 373] Support for building gstreamer without libxml
+In-Reply-To: <bug-373-163@https.bugs.busybox.net/>
+References: <bug-373-163@https.bugs.busybox.net/>
+Message-ID: <20090608141044.9FEE9777F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
+https://bugs.busybox.net/show_bug.cgi?id=373
 
- Sagaert> Hi
 
- Sagaert> When building with the GCC 4.4.0 toolchain i noticed that
- Sagaert> sqllite no longer works.
+Will Newton <will.newton@gmail.com> changed:
 
-Yes, there seems to be quite some problems with 4.4.x / programs not
-fixed yet - That's why 4.3. is still default.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+ Attachment #377 is|0                           |1
+           obsolete|                            |
+
+
+
+
+--- Comment #7 from Will Newton <will.newton@gmail.com>  2009-06-08 14:10:42 UTC ---
+Created an attachment (id=381)
+ --> (https://bugs.busybox.net/attachment.cgi?id=381)
+Add support for building gstreamer without libxml2
+
+
+I've tweaked it a bti further to take into account comments. I haven't added
+the annodex change because I'm not sure it's worth it. It would only help a
+user who disabled the libxml2 dependency explicitly and then selected the
+annodex plugin that used libxml2.
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
