@@ -1,32 +1,22 @@
-From: Olaf Rempel <razzor@kopf-tisch.de>
-Date: Tue, 9 Jun 2009 14:52:04 +0200
-Subject: [Buildroot] [PATCH] Remvoed dm (devicemapper),
- this is included in the new lvm2 package
-In-Reply-To: <4A2E4365.50709@lbsd.net>
-References: <4A2E1F81.4020505@lbsd.net>
-	<20090609110050.4c7ce51c@bandomeer.europe.flane.local>
-	<4A2E4365.50709@lbsd.net>
-Message-ID: <20090609145204.2944be52@bandomeer.europe.flane.local>
+From: Hiroshi Shinji <hiroshi.shinji@gmail.com>
+Date: Tue, 9 Jun 2009 22:01:40 +0900
+Subject: [Buildroot] Next -git version
+Message-ID: <d6a0e5a20906090601w3ac1e27ldc9d37a4d1f01c08@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 09 Jun 2009 11:11:33 +0000
-Nigel Kukard <nkukard@lbsd.net> wrote:
+Hi,
 
-> 
-> > the lvm2 suite has many files and the binary is *big*, so please include 
-> > some logic to only install dmsetup like the patch in Bug#241 had.
-> >   
-> Your patch is a whole log more complete than mine, I'll check it out and
-> submit it to be committed if everything is 100%.
-> 
-> -N
-> 
-I'm currently using that patch with v2.02.45.
-Since .47 is the current upstream version, this might need an update.
+The version of Buildroot is still "2009.05".
+Will you change to "2009.xx-git"?
 
-Regards
-Olaf
+Regards,
+
+
+-- 
+?? ?
+hiroshi.shinji at gmail.com
+http://d.hatena.ne.jp/hshinji/
