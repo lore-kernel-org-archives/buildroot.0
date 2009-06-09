@@ -1,22 +1,41 @@
-From: Hiroshi Shinji <hiroshi.shinji@gmail.com>
-Date: Tue, 9 Jun 2009 22:01:40 +0900
-Subject: [Buildroot] Next -git version
-Message-ID: <d6a0e5a20906090601w3ac1e27ldc9d37a4d1f01c08@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue,  9 Jun 2009 14:13:45 +0000 (UTC)
+Subject: [Buildroot] [Bug 383] New: gst-plugins-good: Allow soup plugin to
+	be configured
+Message-ID: <bug-383-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+https://bugs.busybox.net/show_bug.cgi?id=383
 
-The version of Buildroot is still "2009.05".
-Will you change to "2009.xx-git"?
+           Summary: gst-plugins-good: Allow soup plugin to be configured
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: will.newton at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Regards,
+
+Created an attachment (id=383)
+ --> (https://bugs.busybox.net/attachment.cgi?id=383)
+Allow soup plugin to be configured
+
+This patch adds support for configuring the soup plugin as part of
+gst-plugins-good. The soup plugin uses the libsoup library to access http
+streams.
 
 
 -- 
-?? ?
-hiroshi.shinji at gmail.com
-http://d.hatena.ne.jp/hshinji/
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
