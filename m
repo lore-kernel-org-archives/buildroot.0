@@ -1,35 +1,23 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 9 Jun 2009 16:43:40 +0200
-Subject: [Buildroot] [git commit] Config.in: update version for 2009.08
-	development
-Message-ID: <20090609144407.67CFB776E9@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 09 Jun 2009 16:44:24 +0200
+Subject: [Buildroot] Next -git version
+In-Reply-To: <d6a0e5a20906090601w3ac1e27ldc9d37a4d1f01c08@mail.gmail.com>
+	(Hiroshi Shinji's message of "Tue\, 9 Jun 2009 22\:01\:40 +0900")
+References: <d6a0e5a20906090601w3ac1e27ldc9d37a4d1f01c08@mail.gmail.com>
+Message-ID: <871vptsbzr.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=42eca21d2caaf582d4f4cf08e92b2d163149a259
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Hiroshi" == Hiroshi Shinji <hiroshi.shinji@gmail.com> writes:
 
+ Hiroshi> Hi,
+ Hiroshi> The version of Buildroot is still "2009.05".
+ Hiroshi> Will you change to "2009.xx-git"?
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Sure, done (2009.08-git).
 
-diff --git a/Config.in b/Config.in
-index 1e2e06f..d248565 100644
---- a/Config.in
-+++ b/Config.in
-@@ -8,7 +8,7 @@ config BR2_HAVE_DOT_CONFIG
- 
- config BR2_VERSION
- 	string
--	default "2009.05"
-+	default "2009.08-git"
- 
- source "target/Config.in.arch"
- source "target/device/Config.in"
 -- 
-1.6.0.6
+Bye, Peter Korsgaard
