@@ -1,36 +1,35 @@
-From: Daniel Mack <daniel@caiaq.de>
-Date: Wed, 10 Jun 2009 09:59:03 +0200
-Subject: [Buildroot] [PATCH 2/2] Add target support for MXC based	devices
-In-Reply-To: <87hbyqsios.fsf@macbook.be.48ers.dk>
-References: <1244473080-8195-1-git-send-email-daniel@caiaq.de>
-	<1244473080-8195-2-git-send-email-daniel@caiaq.de>
-	<87prdesr1a.fsf@macbook.be.48ers.dk>
-	<20090608152648.GL29236@buzzloop.caiaq.de>
-	<87hbyqsios.fsf@macbook.be.48ers.dk>
-Message-ID: <20090610075902.GK26688@buzzloop.caiaq.de>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 10 Jun 2009 09:27:02 +0200
+Subject: [Buildroot] [git commit] libcurl: fix --without-ssl typo
+Message-ID: <20090610085145.76CB97782D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jun 08, 2009 at 08:07:31PM +0200, Peter Korsgaard wrote:
->  >> From 3c1b25d96ee33c1d1c8b5b8f6f7a8c48d28cb353 Mon Sep 17 00:00:00 2001
->  Daniel> From: Daniel Mack <daniel@caiaq.de>
->  Daniel> Date: Mon, 8 Jun 2009 17:22:04 +0200
->  Daniel> Subject: [PATCH] Add support for Freescale's MXC serial terminals
-> 
->  Daniel> This patch makes ttymxc0 an option to choose for
->  Daniel> BR2_TARGET_GENERIC_GETTY.
-> 
-> Do all SoCs using the ttymxc driver really all only have 1 uart?
-> 
->  Daniel> +/dev/ttymxc	c	666	0	0	207	16	0	1	3
-> 
-> Apparently not as you're here creating 3 nodes.
+commit: http://git.buildroot.net/buildroot/commit/?id=5198e6642c7235d932187767cf0e47870bdf037e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Agreed, they should all be included. New patch below - also rebased upon
-the current git HEAD.
 
-Thanks,
-Daniel
+Reported-by: Nestor <nestor@traceback.com.br>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/libcurl/libcurl.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 44c2317..cec6e74 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -20,7 +20,7 @@ LIBCURL_CONF_ENV += ac_cv_lib_crypto_CRYPTO_lock=yes
+ LIBCURL_CONF_ENV += LD_LIBRARY_PATH=$$LD_LIBRARY_PATH:/lib:/usr/lib
+ LIBCURL_CONF_OPT += --with-ssl=$(STAGING_DIR)/usr --with-random=/dev/urandom
+ else
+-LIBCURL_CONF_ENV += --without-ssl
++LIBCURL_CONF_OPT += --without-ssl
+ endif
+ 
+ $(eval $(call AUTOTARGETS,package,libcurl))
+-- 
+1.6.0.6
