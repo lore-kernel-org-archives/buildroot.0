@@ -1,29 +1,36 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 10 Jun 2009 09:10:03 +0000 (UTC)
-Subject: [Buildroot] [Bug 383] gst-plugins-good: Allow soup plugin to be
-	configured
-In-Reply-To: <bug-383-163@https.bugs.busybox.net/>
-References: <bug-383-163@https.bugs.busybox.net/>
-Message-ID: <20090610091004.0C661777FA@busybox.osuosl.org>
+From: jing han <jing_han_66@yahoo.com>
+Date: Wed, 10 Jun 2009 08:35:01 -0700 (PDT)
+Subject: [Buildroot] make problem: complain about  ../../src/memory.c
+Message-ID: <300894.70873.qm@web53505.mail.re2.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=383
+
+Hi All,
+
+I downloaded the latest buildroot release buildroot-2009.05.tar.gz , try to install to my linux Fedora Core 5 system (linux 2.6.15).
+
+I did make configmenu, then I did make, but make broke at:
+
+../../src/memory.c: In function '__mp_memquery':
+../../src/memory.c:769: error: lvalue required as left operand of assignment
+make[1]: *** [memory.o] Error 1
+
+Then I browsed buildroot mailing list, and found on July 2007, there was a report about x86 packages
+report this problem and other problems.  And I encounter this  problem when I use the  newest buildroot release.
+
+Can you let me know how to get aroud it? And can you provide me a patch to fix this?
+
+
+I'm looking forward to hearing from you. Thanks a lot.
+
+Best Regards
+jing
 
 
 
-
-
---- Comment #2 from Will Newton <will.newton@gmail.com>  2009-06-10 09:10:03 UTC ---
-
-I tried to follow the existing conventions in the file. Could you point me to
-an example usage of the convention you are talking about?
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+      __________________________________________________________________
+The new Internet Explorer? 8 - Faster, safer, easier.  Optimized for Yahoo!  Get it Now for Free! at http://downloads.yahoo.com/ca/internetexplorer/
