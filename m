@@ -1,46 +1,83 @@
-From: Will Newton <will.newton@gmail.com>
-Date: Wed, 10 Jun 2009 16:50:53 +0100
-Subject: [Buildroot] make problem: complain about ../../src/memory.c
-In-Reply-To: <300894.70873.qm@web53505.mail.re2.yahoo.com>
-References: <300894.70873.qm@web53505.mail.re2.yahoo.com>
-Message-ID: <87a5b0800906100850l122b7ee3y35e1b927f03487df@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 10 Jun 2009 09:59:03 +0200
+Subject: [Buildroot] [git commit] Add support for Freescale's MXC serial
+	terminals
+Message-ID: <20090610180236.99E447782B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jun 10, 2009 at 4:35 PM, jing han<jing_han_66@yahoo.com> wrote:
->
-> Hi All,
->
-> I downloaded the latest buildroot release buildroot-2009.05.tar.gz , try to install to my linux Fedora Core 5 system (linux 2.6.15).
->
-> I did make configmenu, then I did make, but make broke at:
->
-> ../../src/memory.c: In function '__mp_memquery':
-> ../../src/memory.c:769: error: lvalue required as left operand of assignment
-> make[1]: *** [memory.o] Error 1
->
-> Then I browsed buildroot mailing list, and found on July 2007, there was a report about x86 packages
-> report this problem and other problems. ?And I encounter this ?problem when I use the ?newest buildroot release.
->
-> Can you let me know how to get aroud it? And can you provide me a patch to fix this?
+commit: http://git.buildroot.net/buildroot/commit/?id=ee0ebdfd596925277634c8ecde95eb33c960acfc
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Do you need to build mpatrol? You could try disabling the mpatrol
-package, it is only useful for certain kinds of memory debugging.
 
-> I'm looking forward to hearing from you. Thanks a lot.
->
-> Best Regards
-> jing
->
->
->
-> ? ? ?__________________________________________________________________
-> The new Internet Explorer? 8 - Faster, safer, easier. ?Optimized for Yahoo! ?Get it Now for Free! at http://downloads.yahoo.com/ca/internetexplorer/
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+This patch makes ttymxc[012] an option to choose for
+BR2_TARGET_GENERIC_GETTY.
+
+It also adds these ports to the generic device table and to securetty.
+
+Signed-off-by: Daniel Mack <daniel@caiaq.de>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ target/generic/Config.in                     |   12 ++++++++++++
+ target/generic/device_table.txt              |    1 +
+ target/generic/target_skeleton/etc/securetty |    3 +++
+ 3 files changed, 16 insertions(+), 0 deletions(-)
+
+diff --git a/target/generic/Config.in b/target/generic/Config.in
+index cb7ef77..5f5110c 100644
+--- a/target/generic/Config.in
++++ b/target/generic/Config.in
+@@ -107,6 +107,15 @@ config BR2_TARGET_GENERIC_GETTY_TTYSAC2
+ config BR2_TARGET_GENERIC_GETTY_TTYSAC3
+ 	bool "ttySAC3"
+ 	depends on BR2_arm
++config BR2_TARGET_GENERIC_GETTY_TTYMXC0
++	bool "ttymxc0"
++	depends on BR2_arm
++config BR2_TARGET_GENERIC_GETTY_TTYMXC1
++	bool "ttymxc1"
++	depends on BR2_arm
++config BR2_TARGET_GENERIC_GETTY_TTYMXC2
++	bool "ttymxc2"
++	depends on BR2_arm
+ config BR2_TARGET_GENERIC_GETTY_TTYUL0
+ 	bool "ttyUL0"
+ 	depends on BR2_powerpc
+@@ -160,6 +169,9 @@ config BR2_TARGET_GENERIC_GETTY_PORT
+ 	default "ttySAC1"	if BR2_TARGET_GENERIC_GETTY_TTYSAC1
+ 	default "ttySAC2"	if BR2_TARGET_GENERIC_GETTY_TTYSAC2
+ 	default "ttySAC3"	if BR2_TARGET_GENERIC_GETTY_TTYSAC3
++	default "ttymxc0"	if BR2_TARGET_GENERIC_GETTY_TTYMXC0
++	default "ttymxc1"	if BR2_TARGET_GENERIC_GETTY_TTYMXC1
++	default "ttymxc2"	if BR2_TARGET_GENERIC_GETTY_TTYMXC2
+ 	default "ttyUL0"	if BR2_TARGET_GENERIC_GETTY_TTYUL0
+ 	default "ttyUL1"	if BR2_TARGET_GENERIC_GETTY_TTYUL1
+ 	default "ttyUL2"	if BR2_TARGET_GENERIC_GETTY_TTYUL2
+diff --git a/target/generic/device_table.txt b/target/generic/device_table.txt
+index b6dd6b9..a80863e 100644
+--- a/target/generic/device_table.txt
++++ b/target/generic/device_table.txt
+@@ -77,6 +77,7 @@
+ /dev/ttySAC	c	666	0	0	204	64	0	1	4
+ /dev/ttyPSC	c	666	0	0	204	148	0	1	4
+ /dev/ttyUL	c	666	0	0	204	187	0	1	4
++/dev/ttymxc	c	666	0	0	207	16	0	1	3
+ 
+ # Input stuff
+ /dev/input		d	755	0	0	-	-	-	-	-
+diff --git a/target/generic/target_skeleton/etc/securetty b/target/generic/target_skeleton/etc/securetty
+index 0e7cf97..b25f4a5 100644
+--- a/target/generic/target_skeleton/etc/securetty
++++ b/target/generic/target_skeleton/etc/securetty
+@@ -30,3 +30,6 @@ ttyCPM0
+ ttyCPM1
+ ttyCPM2
+ ttyCPM3
++ttymxc0
++ttymxc1
++ttymxc2
+-- 
+1.6.0.6
