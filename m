@@ -1,33 +1,30 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 11 Jun 2009 19:22:34 +0000 (UTC)
-Subject: [Buildroot] [Bug 383] gst-plugins-good: Allow soup plugin to be
-	configured
-In-Reply-To: <bug-383-163@https.bugs.busybox.net/>
-References: <bug-383-163@https.bugs.busybox.net/>
-Message-ID: <20090611192234.7061577826@busybox.osuosl.org>
+Date: Thu, 11 Jun 2009 19:42:45 +0000 (UTC)
+Subject: [Buildroot] [Bug 385] neon: Fix pkgconfig dependency.
+In-Reply-To: <bug-385-163@https.bugs.busybox.net/>
+References: <bug-385-163@https.bugs.busybox.net/>
+Message-ID: <20090611194245.A565977826@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=383
+https://bugs.busybox.net/show_bug.cgi?id=385
+
+
+Peter Korsgaard <jacmet@uclibc.org> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
 
 
 
-
---- Comment #7 from Markus Heidelberg <markus.heidelberg@web.de>  2009-06-11 19:22:33 UTC ---
-(In reply to comment #6)
-> Created an attachment (id=389)
- --> (https://bugs.busybox.net/attachment.cgi?id=389) [details]
-> Allow souphttpsrc support to be configured
-> 
-> 
-> Hopefully this patch takes into account your concerns. Thanks for the feedback.
-
-It's OK. Again, it's not my intention to be annoying. Thanks for the patience
-:)
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-06-11 19:42:45 UTC ---
+Thanks, fixed in git.
 
 
 -- 
