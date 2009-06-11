@@ -1,25 +1,37 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
 Date: Thu, 11 Jun 2009 20:54:26 +0000 (UTC)
-Subject: [Buildroot] [Bug 391] gstreamer: Bump version to 0.10.23
-In-Reply-To: <bug-391-163@https.bugs.busybox.net/>
-References: <bug-391-163@https.bugs.busybox.net/>
-Message-ID: <20090611205426.D48AB77829@busybox.osuosl.org>
+Subject: [Buildroot] [Bug 393] New: gst-plugins-base: Bump version to 0.10.23
+Message-ID: <bug-393-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=391
+https://bugs.busybox.net/show_bug.cgi?id=393
+
+           Summary: gst-plugins-base: Bump version to 0.10.23
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: will.newton at gmail.com
+                CC: buildroot at uclibc.org
+        Depends on: 391
+   Estimated Hours: 0.0
 
 
-Will Newton <will.newton@gmail.com> changed:
+Created an attachment (id=393)
+ --> (https://bugs.busybox.net/attachment.cgi?id=393)
+Bump version of gst-plugins-base to 0.10.23
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Blocks|                            |393
-
-
+Add a config option for the app plugin that was moved from gst-plugins-bad in
+version 0.10.22.
 
 
 -- 
