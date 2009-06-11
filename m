@@ -1,28 +1,30 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 11 Jun 2009 12:24:06 +0000 (UTC)
-Subject: [Buildroot] [Bug 389] New package bmon
-In-Reply-To: <bug-389-163@https.bugs.busybox.net/>
-References: <bug-389-163@https.bugs.busybox.net/>
-Message-ID: <20090611122406.A5D6877820@busybox.osuosl.org>
+Date: Thu, 11 Jun 2009 17:03:14 +0000 (UTC)
+Subject: [Buildroot] [Bug 383] gst-plugins-good: Allow soup plugin to be
+	configured
+In-Reply-To: <bug-383-163@https.bugs.busybox.net/>
+References: <bug-383-163@https.bugs.busybox.net/>
+Message-ID: <20090611170315.40EEE7781E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=389
+https://bugs.busybox.net/show_bug.cgi?id=383
 
 
 
 
 
---- Comment #2 from Gustavo Zacarias <gustavo@zacarias.com.ar>  2009-06-11 12:24:06 UTC ---
-No, it's not, but the upstream website went down some time ago
-(http://people.suug.ch/~tgr/bmon/), thus there's no point in pointing users to
-a dead site is there?
-It's the same case with the libnl package i've submitted, same author actually,
-though libnl now "lives" at http://www.infradead.org/~tgr/libnl/ but only an
-older snapshot.
+--- Comment #3 from Markus Heidelberg <markus.heidelberg@web.de>  2009-06-11 17:03:14 UTC ---
+(In reply to comment #2)
+> I tried to follow the existing conventions in the file. Could you point me to
+> an example usage of the convention you are talking about?
+
+All the other config options for plugins?
+And without knowing what libsoup is all about, I only think on something to
+eat. The words "http client" at least gives some information.
 
 
 -- 
