@@ -1,40 +1,32 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 11 Jun 2009 20:54:26 +0000 (UTC)
-Subject: [Buildroot] [Bug 393] New: gst-plugins-base: Bump version to 0.10.23
-Message-ID: <bug-393-163@https.bugs.busybox.net/>
+From: zealcook <zealcook@gmail.com>
+Date: Fri, 12 Jun 2009 14:06:37 +0800
+Subject: [Buildroot] patch-kernel.sh not work well?
+Message-ID: <1244786798.19560.16.camel@cj>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=393
+Hi, list
 
-           Summary: gst-plugins-base: Bump version to 0.10.23
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: enhancement
-          Priority: P5
-         Component: Outdated package
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: will.newton at gmail.com
-                CC: buildroot at uclibc.org
-        Depends on: 391
-   Estimated Hours: 0.0
+I want to use buildroot for my toolchian first. And I've many kernel's
+patches as my target board. There are sencitive by order. But in patch
+script(patch-kernel.sh) I cannot find it will do in my poinited way.
+It just `ls' all patches and then `patch' them. If it only can do in
+this way. I'm sure the patch cannot be patched for me.
 
+Now i modified the script to tell whether need use `quilt' for this
+thing. So I can write the sequence in series file and use quilt for
+patching them. It works well for me now. 
 
-Created an attachment (id=393)
- --> (https://bugs.busybox.net/attachment.cgi?id=393)
-Bump version of gst-plugins-base to 0.10.23
+But I'm not sure as i'm not familiar with buildroot.
 
-Add a config option for the app plugin that was moved from gst-plugins-bad in
-version 0.10.22.
+Dose buildroot can do patch in a specified order like quilt above or
+else?
 
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Regards,
+
+--
+zc
