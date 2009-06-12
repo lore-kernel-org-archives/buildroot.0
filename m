@@ -1,32 +1,31 @@
-From: zealcook <zealcook@gmail.com>
-Date: Fri, 12 Jun 2009 14:06:37 +0800
-Subject: [Buildroot] patch-kernel.sh not work well?
-Message-ID: <1244786798.19560.16.camel@cj>
+From: laurent laffont <laurent.laffont@gmail.com>
+Date: Fri, 12 Jun 2009 10:24:02 +0200
+Subject: [Buildroot] GTK2 / pango / cairo and libX11 dependencies
+Message-ID: <4a339d7c0906120124u4f4499e5n815f481577bf0da0@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, list
+Hi,
 
-I want to use buildroot for my toolchian first. And I've many kernel's
-patches as my target board. There are sencitive by order. But in patch
-script(patch-kernel.sh) I cannot find it will do in my poinited way.
-It just `ls' all patches and then `patch' them. If it only can do in
-this way. I'm sure the patch cannot be patched for me.
+We want to cross-compile midori for ARM with buildroot, thus GTK2 / pango /
+cairo stuff. We faces many problems due to missing X11 dependencies :
+libX11, libXext ... that are not compiled for HOST, so libgtk2-2.12.12-host
+compilation fails:
 
-Now i modified the script to tell whether need use `quilt' for this
-thing. So I can write the sequence in series file and use quilt for
-patching them. It works well for me now. 
+checking for XOpenDisplay... no
+configure: error: *** libX11 not found. Check 'config.log' for more details.
 
-But I'm not sure as i'm not familiar with buildroot.
+We have selected tinyX and xorg-server.
 
-Dose buildroot can do patch in a specified order like quilt above or
-else?
+Is buildroot supposed to compile GTK2 flawlessly ? Which version do you use
+? We currently use buildroot-2009.05-rc1
 
+Thanks for help.
 
-Regards,
-
---
-zc
+Laurent Laffont
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090612/27349d66/attachment.htm>
