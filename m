@@ -1,32 +1,36 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 15 Jun 2009 15:10:01 +0000 (UTC)
-Subject: [Buildroot] [Bug 355] Please update WebKit - it doesn't compile!
-In-Reply-To: <bug-355-163@https.bugs.busybox.net/>
-References: <bug-355-163@https.bugs.busybox.net/>
-Message-ID: <20090615151001.EC8D177750@busybox.osuosl.org>
+From: pwalters21 at cox.net <pwalters21@cox.net>
+Date: Mon, 15 Jun 2009 12:36:07 -0400 (EDT)
+Subject: [Buildroot] ARCH not being sent by make menuconfig for "geode" -
+ kernel compile fails to start
+Message-ID: <26645697.32155.1245083767476.JavaMail.pwalters21@127.0.0.1>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=355
 
+When "Target Architecture Variant" is selected as 'geode', BR2_ARCH in 
+.config is not set at all, and as result the toolchain fails to build.
 
+I've seen this topic here about a year ago along with a patch to fix it. 
+Unfortuantely the fix has never been adopted. ( 
+http://lists.busybox.net/pipermail/buildroot/2007-July/003704.html )
 
+Please can we get this patch into target/Config.in.arch?
 
+Patch against buildroot-2009.05 file: target/Config.in.arch attached 
+below:
 
---- Comment #3 from laurent laffont <laurent.laffont@gmail.com>  2009-06-15 15:10:00 UTC ---
-Tuxbuilder fork uses revision 40633 :
-https://www.tuxbuilder.org/websvn/filedetails.php?repname=Tuxbuilder&path=%2Ftuxbuilder%2Ftrunk%2Fcross%2Fwebkit%2Fwebkit.mk&rev=47&sc=0
-
-John voltz fork uses revision 35067 :
-http://code.google.com/p/buildroot/source/browse/trunk/package/webkit/webkit.mk?spec=svn669&r=669
-
-I'm going to try both and hope....
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+*** old/Config.in.arch 2009-06-15 09:04:25.000000000 -0700
+--- Config.in.arch 2009-06-15 09:05:07.000000000 -0700
+***************
+*** 465,470 ****
+--- 465,471 ----
+   default "i486" if BR2_x86_i486
+   default "i586" if BR2_x86_i586
+   default "i586" if BR2_x86_pentium_mmx
++ default "i586" if BR2_x86_geode
+   default "i686" if BR2_x86_i686
+   default "i686" if BR2_x86_pentium2
+   default "i686" if BR2_x86_pentium3
