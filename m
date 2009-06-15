@@ -1,52 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 15 Jun 2009 20:46:43 +0200
-Subject: [Buildroot] [git commit] Upgrade classpath version and fix
-	compilation
-Message-ID: <20090617114410.BC308776EC@busybox.osuosl.org>
+From: Pwalters <pwalters21@cox.net>
+Date: Mon, 15 Jun 2009 20:33:11 +0200
+Subject: [Buildroot] [git commit] target/Config.in.arch: fix BR2_ARCH for
+	i386 geode variant
+Message-ID: <20090617114410.7B4877780C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=676032036b45edbe614ced6c7dc48bf7d29a3e1f
+commit: http://git.buildroot.net/buildroot/commit/?id=c239c1944b854cf3c0c1070aa505f16a78c36e73
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 
- * Upgrade to version 0.98
- * Use --disable-Werror, otherwise it doesn't build since warnings are
-   treated as errors
- * Don't depend on tiff, which isn't mandatory, and doesn't
-   build. Once tiff is fixed, we can re-add it as a dependency.
+Signed-off-by: PWalters <pwalters21@cox.net>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/java/classpath/classpath.mk |    7 ++++---
- 1 files changed, 4 insertions(+), 3 deletions(-)
+ target/Config.in.arch |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/java/classpath/classpath.mk b/package/java/classpath/classpath.mk
-index faa6341..71c18a0 100644
---- a/package/java/classpath/classpath.mk
-+++ b/package/java/classpath/classpath.mk
-@@ -3,7 +3,7 @@
- # classpath 0.96.1
- #
- #############################################################
--CLASSPATH_VERSION = 0.97.1
-+CLASSPATH_VERSION = 0.98
- CLASSPATH_SOURCE = classpath-$(CLASSPATH_VERSION).tar.gz
- CLASSPATH_SITE = $(BR2_GNU_MIRROR)/classpath
- CLASSPATH_AUTORECONF = NO
-@@ -51,9 +51,10 @@ CLASSPATH_CONF_OPT = \
- 		--enable-static \
- 		--disable-glibtest --enable-explicit-deps=no \
- 		--disable-debug \
--		--disable-gconf-peer --disable-examples --disable-plugin
-+		--disable-gconf-peer --disable-examples --disable-plugin \
-+		--disable-Werror
- 
--CLASSPATH_DEPENDENCIES = uclibc host-pkgconfig libpng jpeg tiff
-+CLASSPATH_DEPENDENCIES = uclibc host-pkgconfig libpng jpeg
- 
- ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
- 	CLASSPATH_DEPENDENCIES+= alsa-lib
+diff --git a/target/Config.in.arch b/target/Config.in.arch
+index 4a20e44..611210e 100644
+--- a/target/Config.in.arch
++++ b/target/Config.in.arch
+@@ -465,6 +465,7 @@ config BR2_ARCH
+ 	default "i486"		if BR2_x86_i486
+ 	default "i586"		if BR2_x86_i586
+ 	default "i586"		if BR2_x86_pentium_mmx
++	default "i586"		if BR2_x86_geode
+ 	default "i686"		if BR2_x86_i686
+ 	default "i686"		if BR2_x86_pentium2
+ 	default "i686"		if BR2_x86_pentium3
 -- 
 1.6.0.6
