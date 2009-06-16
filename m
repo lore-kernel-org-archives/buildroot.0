@@ -1,57 +1,36 @@
 From: Will Newton <will.newton@gmail.com>
-Date: Tue, 16 Jun 2009 21:40:43 +0100
-Subject: [Buildroot] [git commit] gst-plugins-good: Allow souphttpsrc plugin
-	to be configured.
-Message-ID: <20090618085944.D08397777D@busybox.osuosl.org>
+Date: Tue, 16 Jun 2009 21:45:01 +0100
+Subject: [Buildroot] [git commit] gstreamer: Bump version to 0.10.23.
+Message-ID: <20090618085944.F1A657781D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6a5b9cebfecb5ac840904a10c04c7343dbcc575a
+commit: http://git.buildroot.net/buildroot/commit/?id=da99a9eedefbc6611bfd1237de5db33fd3e3f137
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 
-Add a config option to enable the user to enable or disable the souphttpsrc
-plugin.
-
-Closes #383.
+Closes #391.
 
 Signed-off-by: Will Newton <will.newton@gmail.com>
 ---
- package/multimedia/gst-plugins-good/Config.in      |    4 ++++
- .../gst-plugins-good/gst-plugins-good.mk           |    7 +++++++
- 2 files changed, 11 insertions(+), 0 deletions(-)
+ package/multimedia/gstreamer/gstreamer.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/multimedia/gst-plugins-good/Config.in b/package/multimedia/gst-plugins-good/Config.in
-index 5c5696c..b96f15d 100644
---- a/package/multimedia/gst-plugins-good/Config.in
-+++ b/package/multimedia/gst-plugins-good/Config.in
-@@ -156,4 +156,8 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_FLAC
- config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_OSS
- 	bool "ossaudio (OSS audio)"
- 
-+config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_SOUPHTTPSRC
-+	bool "souphttpsrc (http client)"
-+	select BR2_PACKAGE_LIBSOUP
-+
- endif
-diff --git a/package/multimedia/gst-plugins-good/gst-plugins-good.mk b/package/multimedia/gst-plugins-good/gst-plugins-good.mk
-index 68acdee..75d25c8 100644
---- a/package/multimedia/gst-plugins-good/gst-plugins-good.mk
-+++ b/package/multimedia/gst-plugins-good/gst-plugins-good.mk
-@@ -286,4 +286,11 @@ else
- GST_PLUGINS_GOOD_CONF_OPT += --disable-oss
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_SOUPHTTPSRC),y)
-+GST_PLUGINS_GOOD_CONF_OPT += --enable-soup
-+GST_PLUGINS_GOOD_DEPENDENCIES += libsoup
-+else
-+GST_PLUGINS_GOOD_CONF_OPT += --disable-soup
-+endif
-+
- $(eval $(call AUTOTARGETS,package/multimedia,gst-plugins-good))
+diff --git a/package/multimedia/gstreamer/gstreamer.mk b/package/multimedia/gstreamer/gstreamer.mk
+index 821a233..53f1f75 100644
+--- a/package/multimedia/gstreamer/gstreamer.mk
++++ b/package/multimedia/gstreamer/gstreamer.mk
+@@ -3,7 +3,7 @@
+ # gstreamer
+ #
+ #############################################################
+-GSTREAMER_VERSION = 0.10.22
++GSTREAMER_VERSION = 0.10.23
+ GSTREAMER_SOURCE = gstreamer-$(GSTREAMER_VERSION).tar.bz2
+ GSTREAMER_SITE = http://gstreamer.freedesktop.org/src/gstreamer
+ GSTREAMER_INSTALL_STAGING = YES
 -- 
 1.6.0.6
