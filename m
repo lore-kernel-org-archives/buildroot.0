@@ -1,51 +1,46 @@
-From: Teemu Keskinarkaus <Teemu.Keskinarkaus@cc-systems.com>
-Date: Tue, 16 Jun 2009 10:16:15 +0200
-Subject: [Buildroot] VLC in older buildroot
-Message-ID: <330EC2471BF24E48B513AF1A6975EB69A22CE3@MAIL-UA.ccs.local>
+From: Olaf Rempel <razzor@kopf-tisch.de>
+Date: Tue, 16 Jun 2009 10:38:04 +0200
+Subject: [Buildroot] [PATCHES] device-mapper is now included in LVM2
+In-Reply-To: <4A365D42.5000006@lbsd.net>
+References: <4A365BDB.5070106@lbsd.net>
+	<87a5b0800906150740j19684f5ft3de5e7b0adfa5b1b@mail.gmail.com>
+	<4A365D42.5000006@lbsd.net>
+Message-ID: <20090616103804.639700ab@bandomeer.europe.flane.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm trying to get VLC compiled in a buildroot.  I'm currently using
-buildroot 0.10.0-svn. I know, there are million reasons to upgrade to
-newer, but right now I really don't have time to do it since things have
-changed quite a lot.
+On Mon, 15 Jun 2009 14:40:02 +0000
+Nigel Kukard <nkukard@lbsd.net> wrote:
 
- 
+> 
+> > I think this should close bug 241?
+> >
+> > https://bugs.busybox.net/show_bug.cgi?id=241
+> >   
+> 
+> Yep ... lets just wait a day or so and see if everyone is happy  :)
 
-Is it possible to get VLC compiled in that buildroot version? I was able
-to compile it almost, with some tweaks to the buildroot and vlc, but now
-I get error that I don't know how to solve it. I also don't know if this
-is vlc problem or buildroot.
+Why no conversion to Makefile.autotools.in?
 
- 
+The clean target is not working:
+> lvm2-clean:
+> 	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(LVM2_DIR) uninstall
+make[1]: Entering directory `/home/development/buildroot/build_i586/LVM2.2.02.47'
+make[1]: *** No rule to make target `uninstall'.  Stop.
+make[1]: Leaving directory `/home/development/buildroot/build_i586/LVM2.2.02.47'
 
-/<path-removed>/trunk/buildroot/build_arm/staging_dir/usr/bin/../lib/gcc
-/arm-linux-uclibc/4.2.3/../../../../arm-linux-uclibc/bin/ld: vlc: hidden
-symbol `__udivsi3' in
-/<path-removed>trunk/buildroot/build_arm/staging_dir/usr/bin/../lib/gcc/
-arm-linux-uclibc/4.2.3/libgcc.a(_udivsi3.o) is referenced by DSO
+I've attached an updated version of my patch (against current HEAD) which 
+doesn't use post_install_hooks for stripping the binaries. Seems to be cleaner.
 
-/<path-removed>/trunk/buildroot/build_arm/staging_dir/usr/bin/../lib/gcc
-/arm-linux-uclibc/4.2.3/../../../../arm-linux-uclibc/bin/ld: final link
-failed: Nonrepresentable section on output
-
- 
-
-Before that the system is looking for libraries like pthread, dl, m and
-c. 
-
- 
-
-I looked from google, but couldn't quite figure out what is causing that
-error.  Any idea what might be the problem? 
-
- 
-
--TK
-
+Regards
+Olaf
 -------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090616/5fae8dd8/attachment.htm>
+A non-text attachment was scrubbed...
+Name: 0001-device-mapper-lvm2-build-together-take-2.patch
+Type: text/x-patch
+Size: 14818 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090616/44dfb648/attachment-0001.bin>
