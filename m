@@ -1,45 +1,68 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 18 Jun 2009 07:35:15 +0000 (UTC)
-Subject: [Buildroot] [Bug 355] Please update WebKit - it doesn't compile!
-In-Reply-To: <bug-355-163@https.bugs.busybox.net/>
-References: <bug-355-163@https.bugs.busybox.net/>
-Message-ID: <20090618073515.F0ECE77534@busybox.osuosl.org>
+From: Will Newton <will.newton@gmail.com>
+Date: Tue, 16 Jun 2009 21:33:56 +0100
+Subject: [Buildroot] [git commit] gstreamer: Allow libxml2 dependency to be
+	configured.
+Message-ID: <20090618085944.9E9D577820@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=355
+commit: http://git.buildroot.net/buildroot/commit/?id=9310e12d5bbb5e10f899672980fb63bd24382bd1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 
+gstreamer uses libxml2 to support the plugin registry and pipeline
+load/save features. This change allows the user to build gstreamer without
+libxml2 which saves a large amount of space on the target.
 
+Closes #373.
 
+Signed-off-by: Will Newton <will.newton@gmail.com>
+---
+ package/multimedia/gstreamer/Config.in    |    7 ++++++-
+ package/multimedia/gstreamer/gstreamer.mk |   10 +++++++++-
+ 2 files changed, 15 insertions(+), 2 deletions(-)
 
---- Comment #4 from laurent laffont <laurent.laffont@gmail.com>  2009-06-18 07:35:14 UTC ---
-I managed to build webkit + midori, thanks to John Voltz work.
-
-Here's the steps:
-
-- I checked out trunk of  public buildroot at 
-http://code.google.com/p/buildroot/source/browse/trunk. (It seems to be sync
-with buildroot 2009.02 stable)
-
-- Put the uClibc-0.9.30-linuxthreads.patch in toolchain/uClibc directory (
-http://code.google.com/p/buildroot/source/browse/branches/john-avr32-buildroot/toolchain/uClibc/uClibc-0.9.30-linuxthreads.patch)
-
-- Switched to xlib_libX11 1.1.5 as xlib_libX11 1.1.3 does not compile.
-
-- Replaced package webkit with john's one:
-http://code.google.com/p/buildroot/source/browse/branches/john-avr32-buildroot/package/webkit
-(webkit revision 40813)
-
-- Rollback to midori 0.17 (git commit 1d2af67 Mon Jul 7 12:04:19 2008). I found
-the tarball here:
-http://mirrors.isc.org/pub/MidnightBSD/distfiles/midori-0.0.17.tar.gz
-
-
+diff --git a/package/multimedia/gstreamer/Config.in b/package/multimedia/gstreamer/Config.in
+index 213d650..8c80801 100644
+--- a/package/multimedia/gstreamer/Config.in
++++ b/package/multimedia/gstreamer/Config.in
+@@ -1,8 +1,13 @@
+ config BR2_PACKAGE_GSTREAMER
+ 	bool "gstreamer"
+ 	select BR2_PACKAGE_LIBGLIB2
+-	select BR2_PACKAGE_LIBXML2
+ 	help
+ 	  GStreamer is an open source multimedia framework.
+ 
+ 	  http://gstreamer.freedesktop.org/
++
++config BR2_PACKAGE_GSTREAMER_LIBXML2
++	bool "require libxml2 for registry and load/save"
++	default y
++	select BR2_PACKAGE_LIBXML2
++	depends on BR2_PACKAGE_GSTREAMER
+diff --git a/package/multimedia/gstreamer/gstreamer.mk b/package/multimedia/gstreamer/gstreamer.mk
+index 8b30209..821a233 100644
+--- a/package/multimedia/gstreamer/gstreamer.mk
++++ b/package/multimedia/gstreamer/gstreamer.mk
+@@ -24,6 +24,14 @@ GSTREAMER_CONF_OPT = \
+ 		--disable-tests \
+ 		--disable-failing-tests
+ 
+-GSTREAMER_DEPENDENCIES = libglib2 libxml2 host-pkgconfig
++GSTREAMER_DEPENDENCIES = libglib2 host-pkgconfig
++
++ifeq ($(BR2_PACKAGE_GSTREAMER_LIBXML2),y)
++GSTREAMER_DEPENDENCIES += libxml2
++else
++GSTREAMER_CONF_OPT += \
++	--disable-registry \
++	--disable-loadsave
++endif
+ 
+ $(eval $(call AUTOTARGETS,package/multimedia,gstreamer))
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.6.0.6
