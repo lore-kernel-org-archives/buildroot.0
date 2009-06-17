@@ -1,119 +1,104 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 17 Jun 2009 11:47:20 -0000
-Subject: [Buildroot] [git commit] Simple glibc-based external toolchain
-	support
-Message-ID: <20090617114719.E62877780C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Improve external toolchain checks
+Message-ID: <20090617114720.17BF377487@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=643aa232f0d5ef7545fb4ed1a4d3f70399702ef0
+commit: http://git.buildroot.net/buildroot/commit/?id=9456b58a8b3b4efdd8038a68370acf618aa9465b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 
-The current Buildroot works just well with sysrootable glibc
-toolchains, using the external toolchain feature. The only thing that
-needs to be customized is the set of libraries that must be compiled
-to the target.
+This patch adds some checks on the external toolchains.
 
-The following patch takes a simple approach to making it easier for
-users to use glibc toolchains. It just adds a uClibc/glibc choice in
-the external toolchain menu. Then, depending on that selection, the
-configuration system will choose a sane default value for the library
-files list.
+First, it checks that the C library selection is correct, by looking
+if gcc is able to find the main C library file through the
+-print-file-name option.
 
-The other advantage of having a uClibc/glibc choice is that in the
-future, we'll be able to add checks verifying that the external
-toolchain configuration matches the features selected in Buildroot (in
-terms of IPv6, RPC, locales or large file support).
+Then, it attempts to check if the Buildroot toolchain options match
+the configuration of the toolchain :
+
+ * for glibc, it checks that IPv6, RPC, locales, wide-char, large file
+   support Buildroot options are enabled, since with glibc all these
+   features are always available (at least this is the assumption we
+   make) ;
+
+ * for uClibc, it checks the Buildroot options with the uClibc
+   configuration file in $SYSROOT_DIR/usr/include/bits/uClibc_config.h
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/external-toolchain/Config.in   |   25 ++++++++++---------------
- toolchain/external-toolchain/ext-tool.mk |   24 ++++++++++++++++--------
- 2 files changed, 26 insertions(+), 23 deletions(-)
+ toolchain/external-toolchain/ext-tool.mk |   51 ++++++++++++++++++++++++++++++
+ 1 files changed, 51 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/external-toolchain/Config.in b/toolchain/external-toolchain/Config.in
-index 71dad0d..efc8378 100644
---- a/toolchain/external-toolchain/Config.in
-+++ b/toolchain/external-toolchain/Config.in
-@@ -1,22 +1,17 @@
- #
- 
- if BR2_TOOLCHAIN_EXTERNAL
--config BR2_TOOLCHAIN_EXTERNAL_LIB_C
--	string "The core C library from the external toolchain"
--	default "libc.so.0"
--	help
--	  Specify the core C shared library found in the external
--	  toolchain. This is required in addition to any other
--	  libraries to be copied.
-+choice
-+	prompt "External toolchain C library"
-+	default BR2_TOOLCHAIN_EXTERNAL_UCLIBC
- 
--config BR2_TOOLCHAIN_EXTERNAL_LIBS
--	string "Libraries to copy from the external toolchain"
--	default "ld-uClibc.so.0 libcrypt.so.0 libdl.so.0 libgcc_s.so libm.so.0 libnsl.so.0 libpthread.so.0 libresolv.so.0 librt.so.0 libutil.so.0"
--	help
--	  A space separated list of the shared libraries to be copied
--	  from the external toolchain into the root filesystem. Only
--	  the top-level name is needed, i.e. libc.so, libpthread.so as
--	  the actual shared library symlinked to will be copied also.
-+config BR2_TOOLCHAIN_EXTERNAL_UCLIBC
-+	bool "uClibc"
-+
-+config BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	bool "glibc"
-+
-+endchoice
- 
- config BR2_TOOLCHAIN_EXTERNAL_STRIP
-         bool
 diff --git a/toolchain/external-toolchain/ext-tool.mk b/toolchain/external-toolchain/ext-tool.mk
-index 1c9197b..ca71137 100644
+index ca71137..b904775 100644
 --- a/toolchain/external-toolchain/ext-tool.mk
 +++ b/toolchain/external-toolchain/ext-tool.mk
-@@ -21,7 +21,6 @@ copy_toolchain_lib_root = \
- 	for FILE in `find $${LIB_DIR} -maxdepth 1 -type l -name "$${LIB}*"`; do \
- 		LIB=`basename $${FILE}`; \
- 		while test \! -z "$${LIB}"; do \
--			echo "copy_toolchain_lib_root lib=$${LIB} dst=$${DST}"; \
- 			rm -fr $(TARGET_DIR)$${DST}/$${LIB}; \
- 			mkdir -p $(TARGET_DIR)$${DST}; \
- 			if test -h $${LIB_DIR}/$${LIB}; then \
-@@ -49,14 +48,23 @@ copy_toolchain_sysroot = \
- 	if [ -n "$${SYSROOT_DIR}" ]; then cp -a $${SYSROOT_DIR}/* $(STAGING_DIR)/ ; \
- 	find $(STAGING_DIR) -type d | xargs chmod 755; fi
+@@ -56,10 +56,61 @@ EXTERNAL_LIBC=libc.so.6
+ EXTERNAL_LIBS=ld-linux.so.3 libcrypt.so.1 libdl.so.2 libgcc_s.so.1 libm.so.6 libnsl.so.1 libpthread.so.0 libresolv.so.2 librt.so.1 libutil.so.1 libnss_files.so.2
+ endif
  
--uclibc: dependencies $(TARGET_DIR)/lib/$(strip $(subst ",, $(BR2_TOOLCHAIN_EXTERNAL_LIB_C)))
++check_clibrary = \
++	if ! test -f `$(TARGET_CC) -print-file-name=$(EXTERNAL_LIBC)` ; then \
++		echo "Incorrect selection of the C library"; \
++		exit -1; \
++	fi
++
++# 1: Buildroot option name
++# 2: message
++check_glibc_feature = \
++	if [ x$($(1)) != x"y" ] ; then \
++		echo "$(2) available in C library, please enable $(1)" ; \
++		exit 1 ; \
++	fi
++
++check_glibc = \
++	$(call check_glibc_feature,BR2_LARGEFILE,Large file support) ;\
++	$(call check_glibc_feature,BR2_INET_IPV6,IPv6 support) ;\
++	$(call check_glibc_feature,BR2_INET_RPC,RPC support) ;\
++	$(call check_glibc_feature,BR2_ENABLE_LOCALE,Locale support) ;\
++	$(call check_glibc_feature,BR2_USE_WCHAR,Wide char support)
++
++# 1: uClibc macro name
++# 2: Buildroot option name
++# 3: uClibc config file
++# 4: message
++check_uclibc_feature = \
++	IS_IN_LIBC=`grep -q "\#define $(1) 1" $(3) && echo y` ; \
++	if [ x$($(2)) != x"y" -a x$${IS_IN_LIBC} == x"y" ] ; then \
++		echo "$(4) available in C library, please enable $(2)" ; \
++		exit 1 ; \
++	fi ; \
++	if [ x$($(2)) == x"y" -a x$${IS_IN_LIBC} != x"y" ] ; then \
++		echo "$(4) not available in C library, please disable $(2)" ; \
++		exit 1 ; \
++	fi
++
++check_uclibc = \
++	SYSROOT_DIR=`$(TARGET_CC) -v 2>&1 | grep ^Configured | tr " " "\n" | grep -- "--with-sysroot" | cut -f2 -d=`; \
++	UCLIBC_CONFIG_FILE=$${SYSROOT_DIR}/usr/include/bits/uClibc_config.h ; \
++	$(call check_uclibc_feature,__UCLIBC_HAS_LFS__,BR2_LARGEFILE,$${UCLIBC_CONFIG_FILE},Large file support) ;\
++	$(call check_uclibc_feature,__UCLIBC_HAS_IPV6__,BR2_INET_IPV6,$${UCLIBC_CONFIG_FILE},IPv6 support) ;\
++	$(call check_uclibc_feature,__UCLIBC_HAS_RPC__,BR2_INET_RPC,$${UCLIBC_CONFIG_FILE},RPC support) ;\
++	$(call check_uclibc_feature,__UCLIBC_HAS_LOCALE__,BR2_ENABLE_LOCALE,$${UCLIBC_CONFIG_FILE},Locale support) ;\
++	$(call check_uclibc_feature,__UCLIBC_HAS_WCHAR__,BR2_USE_WCHAR,$${UCLIBC_CONFIG_FILE},Wide char support) ;\
+ 
+ uclibc: dependencies $(TARGET_DIR)/lib/$(EXTERNAL_LIBC)
+ 
+ $(TARGET_DIR)/lib/$(EXTERNAL_LIBC):
++	@echo "Checking external toolchain settings"
++	@$(call check_clibrary)
 +ifeq ($(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
-+EXTERNAL_LIBC=libc.so.0
-+EXTERNAL_LIBS=ld-uClibc.so.0 libcrypt.so.0 libdl.so.0 libgcc_s.so libm.so.0 libnsl.so.0 libpthread.so.0 libresolv.so.0 librt.so.0 libutil.so.0
++	@$(call check_uclibc)
 +else
-+EXTERNAL_LIBC=libc.so.6
-+EXTERNAL_LIBS=ld-linux.so.3 libcrypt.so.1 libdl.so.2 libgcc_s.so.1 libm.so.6 libnsl.so.1 libpthread.so.0 libresolv.so.2 librt.so.1 libutil.so.1 libnss_files.so.2
++	@$(call check_glibc)
 +endif
- 
--$(TARGET_DIR)/lib/$(strip $(subst ",, $(BR2_TOOLCHAIN_EXTERNAL_LIB_C))):
--#"))
-+
-+uclibc: dependencies $(TARGET_DIR)/lib/$(EXTERNAL_LIBC)
-+
-+$(TARGET_DIR)/lib/$(EXTERNAL_LIBC):
  	mkdir -p $(TARGET_DIR)/lib
--	@$(call copy_toolchain_lib_root, $(strip $(subst ",, $(BR2_TOOLCHAIN_EXTERNAL_LIB_C))), /lib, $(BR2_TOOLCHAIN_EXTERNAL_STRIP))
--#")))
--	for libs in $(strip $(subst ",, $(BR2_TOOLCHAIN_EXTERNAL_LIBS))); do \
-+	@echo "Copy external toolchain libraries to target..."
-+	@$(call copy_toolchain_lib_root, $(EXTERNAL_LIBC), /lib, $(BR2_TOOLCHAIN_EXTERNAL_STRIP))
-+	@for libs in $(EXTERNAL_LIBS); do \
- 		$(call copy_toolchain_lib_root, $$libs, /lib, $(BR2_TOOLCHAIN_EXTERNAL_STRIP)); \
- 	done
--	$(call copy_toolchain_sysroot)
-+	@echo "Copy external toolchain sysroot to staging..."
-+	@$(call copy_toolchain_sysroot)
+ 	@echo "Copy external toolchain libraries to target..."
+ 	@$(call copy_toolchain_lib_root, $(EXTERNAL_LIBC), /lib, $(BR2_TOOLCHAIN_EXTERNAL_STRIP))
 -- 
 1.6.0.6
