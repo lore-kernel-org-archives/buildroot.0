@@ -1,36 +1,36 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 17 Jun 2009 22:47:25 +0200
-Subject: [Buildroot] [git commit] docs/docs.html: fix mailing list link
-Message-ID: <20090617204812.4C25577816@busybox.osuosl.org>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Thu, 18 Jun 2009 00:07:11 +0200
+Subject: [Buildroot] [pull request] gstreamer fixes
+In-Reply-To: <87a5b0800906161403y71033af6ue68d3bc8bd851bc8@mail.gmail.com>
+References: <87a5b0800906161403y71033af6ue68d3bc8bd851bc8@mail.gmail.com>
+Message-ID: <1245276431.17559.3.camel@bender>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=95076c1ac491b77321049c521283f6a693a3406f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
+
+On Tue, 2009-06-16 at 22:03 +0100, Will Newton wrote:
+> The following changes since commit 220dca451ef4b2f680ca35caacb29f6a6138068a:
+>   Nigel Kukard (1):
+>         dmraid linking against host system fix
+> 
+> are available in the git repository at:
+> 
+>   git://github.com/willnewton/buildroot.git master
+> 
+> Will Newton (5):
+>       gstreamer: Allow libxml2 dependency to be configured.
+>       gst-plugins-good: Allow souphttpsrc plugin to be configured.
+>       gstreamer: Bump version to 0.10.23.
+>       gst-plugins-base: Bump version to 0.10.23.
+>       gst-plugins-bad: New package.
+
+I"d much appreciate if these changes could be pulled into the buildroot
+master repository. I have successfully done the version bumps in our
+tree. So this request gets +1 from me.
 
 
-As reported on IRC.
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- docs/docs.html |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/docs/docs.html b/docs/docs.html
-index afc10f2..a31d797 100644
---- a/docs/docs.html
-+++ b/docs/docs.html
-@@ -20,7 +20,7 @@ Current documentation for buildroot includes:
- 
-   <li>
-     If you find that you need help with buildroot, you can ask for help on the
--    <a href= "lists/uClibc/">buildroot mailing list</a> at buildroot at mail.uclibc.org.
-+    <a href= "/lists/buildroot/">buildroot mailing list</a> at buildroot at mail.uclibc.org.
-     In addition the BusyBox, uClibc, and buildroot developers are also known to
-     hang out on the uClibc IRC channel: #uclibc on irc.freenode.net.
-   </li>
--- 
-1.6.0.6
+Sven
