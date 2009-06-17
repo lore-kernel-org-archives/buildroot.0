@@ -1,39 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 17 Jun 2009 22:20:39 +0200
-Subject: [Buildroot] Problem making buildroot
-In-Reply-To: <24075410.post@talk.nabble.com> (jdzielski@stevens.edu's message
-	of "Wed\, 17 Jun 2009 08\:25\:55 -0700 \(PDT\)")
-References: <24075410.post@talk.nabble.com>
-Message-ID: <87d4928ve0.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 17 Jun 2009 22:47:25 +0200
+Subject: [Buildroot] [git commit] docs/docs.html: fix mailing list link
+Message-ID: <20090617204812.4C25577816@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "jdzielski" == jdzielski  <jdzielski@stevens.edu> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=95076c1ac491b77321049c521283f6a693a3406f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
 
- jdzielski> Sorry if this is a multiple post.  It's showing up in the
- jdzielski> list that I see but there is an indication that he message
- jdzielski> hasn't been accepted.
+As reported on IRC.
 
- jdzielski> Hi,
- jdzielski>     I'm new at trying to do things at this level, but I'm trying to make the
- jdzielski> buildroot on Ubuntu 8.04.  I've been following the instructions at
- jdzielski> http://docwiki.gumstix.org/index.php/Buildroot which is pretty straight
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ docs/docs.html |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-You should probably ask the gumstix people for details, but this looks
-like the problem with binutils 2.17.x only expecting makeinfo to have
-a single digit after the '.' in it's version, and hence breaking with
-makeinfo 4.1x.
-
-We have a patch for that:
-
-http://git.buildroot.net/buildroot/tree/toolchain/binutils/2.17/500-fix-makeinfo-check.patch
-
-Any particular reason why you are using such an old binutils version?
-
+diff --git a/docs/docs.html b/docs/docs.html
+index afc10f2..a31d797 100644
+--- a/docs/docs.html
++++ b/docs/docs.html
+@@ -20,7 +20,7 @@ Current documentation for buildroot includes:
+ 
+   <li>
+     If you find that you need help with buildroot, you can ask for help on the
+-    <a href= "lists/uClibc/">buildroot mailing list</a> at buildroot at mail.uclibc.org.
++    <a href= "/lists/buildroot/">buildroot mailing list</a> at buildroot at mail.uclibc.org.
+     In addition the BusyBox, uClibc, and buildroot developers are also known to
+     hang out on the uClibc IRC channel: #uclibc on irc.freenode.net.
+   </li>
 -- 
-Bye, Peter Korsgaard
+1.6.0.6
