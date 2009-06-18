@@ -1,24 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 18 Jun 2009 11:00:29 +0200
-Subject: [Buildroot] [pull request] gstreamer fixes
-In-Reply-To: <1245276431.17559.3.camel@bender> (Sven Neumann's message of
-	"Thu\, 18 Jun 2009 00\:07\:11 +0200")
-References: <87a5b0800906161403y71033af6ue68d3bc8bd851bc8@mail.gmail.com>
-	<1245276431.17559.3.camel@bender>
-Message-ID: <87vdmt7w7m.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 18 Jun 2009 09:01:23 +0000 (UTC)
+Subject: [Buildroot] [Bug 373] Support for building gstreamer without libxml
+In-Reply-To: <bug-373-163@https.bugs.busybox.net/>
+References: <bug-373-163@https.bugs.busybox.net/>
+Message-ID: <20090618090123.507E87781D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=373
 
- Sven> I"d much appreciate if these changes could be pulled into the buildroot
- Sven> master repository. I have successfully done the version bumps in our
- Sven> tree. So this request gets +1 from me.
 
-Thanks for the heads up - It's now pulled and pushed.
+Peter Korsgaard <jacmet@uclibc.org> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
+
+
+
+
+--- Comment #9 from Peter Korsgaard <jacmet@uclibc.org>  2009-06-18 09:01:22 UTC ---
+Thanks, fixed in git
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
