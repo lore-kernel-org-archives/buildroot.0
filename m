@@ -1,71 +1,41 @@
-From: laurent laffont <laurent.laffont@gmail.com>
-Date: Thu, 18 Jun 2009 16:34:46 +0200
-Subject: [Buildroot] at91sam9263-ek, Xfbdev wrong resolution
-Message-ID: <4a339d7c0906180734nbe75cacwc6b06e4703c4dd61@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 19 Jun 2009 09:18:59 +0000 (UTC)
+Subject: [Buildroot] [Bug 405] New: New package, OpenVZ tools
+Message-ID: <bug-405-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+https://bugs.busybox.net/show_bug.cgi?id=405
 
-On at91sam9263-ek board, I've built an image with tinyx xorg server. When I
-run Xfbdev, the only mode which work is 320x240 instead of 240x320.
-
-Here's what I get:
-
-# fbset
-
-mode "240x320-56"
-    # D: 4 C997 MHz, H: 17 C910 kHz, V: 55 C622 Hz
-    geometry 240 320 240 320 16
-    timings 200120 1 33 1 0 5 1
-    hsync high
-    vsync high
-    rgba 5/0,5/5,5/10,0/0
-endmode
-
-# Xfbdev -screen 240x320
-atmel_lcdfb atmel_lcdfb.0: 56252 KHz pixel clock is too fast
-Warning: mode not found, using default
-error: Invalid argument
-
-Fatal server error:
-no screens found
-# Xfbdev -screen 320x240
-
-this start an X server but resolution is inverted.
+           Summary: New package, OpenVZ tools
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+               URL: http://lists.busybox.net/pipermail/buildroot/2009-
+                    June/027769.html
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: cristi.magherusan at net.utcluj.ro
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
 
-In board-sam9263.c in the kernel source ( 2.6.28.2 ) I have:
+Created an attachment (id=409)
+ --> (https://bugs.busybox.net/attachment.cgi?id=409)
+buildroot-openvz.patch
+
+The attach patch adds packages fot vzctl and vzquota, see the URL and the
+attached patch for more
 
 
-#if defined(CONFIG_FB_ATMEL) || defined(CONFIG_FB_ATMEL_MODULE)
-static struct fb_videomode at91_tft_vga_modes[] = {
-        {
-                .name           = "TX09D50VM1CCA @ 60",
-                .refresh        = 60,
-                .xres           = 240,          .yres           = 320,
-                .pixclock       = KHZ2PICOS(4965),
-
-                .left_margin    = 1,            .right_margin   = 33,
-                .upper_margin   = 1,            .lower_margin   = 0,
-                .hsync_len      = 5,            .vsync_len      = 1,
-
-                .sync           = FB_SYNC_HOR_HIGH_ACT |
-FB_SYNC_VERT_HIGH_ACT,
-                .vmode          = FB_VMODE_NONINTERLACED,
-        },
-};
-
-
-
-I don't know what to look for now....
-
-Regards,
-
-Laurent Laffont
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090618/f56b7b58/attachment.htm>
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
