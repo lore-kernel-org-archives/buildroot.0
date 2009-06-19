@@ -1,41 +1,27 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 19 Jun 2009 09:18:59 +0000 (UTC)
-Subject: [Buildroot] [Bug 405] New: New package, OpenVZ tools
-Message-ID: <bug-405-163@https.bugs.busybox.net/>
+From: Thomas Lundquist <lists@zelow.no>
+Date: Fri, 19 Jun 2009 12:12:49 +0200
+Subject: [Buildroot] [Patch] OpenVZ tools
+In-Reply-To: <1245097775.15517.30.camel@localhost.localdomain>
+References: <1245097775.15517.30.camel@localhost.localdomain>
+Message-ID: <20090619101249.GB9260@zelow.no>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=405
+On Mon, Jun 15, 2009 at 11:29:35PM +0300, Cristi Magherusan wrote:
+> 
+> By the way, wouldn't it be nicer to have a devlists.sh file which would
+> contain "if" clauses in order to create devices according to the
+> configuration, and the file could be executed to create the real devlist
+> file. This way we could ensure the device needed by a tool is there, and
+> missing when the tool is not compiled.
 
-           Summary: New package, OpenVZ tools
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-               URL: http://lists.busybox.net/pipermail/buildroot/2009-
-                    June/027769.html
-        OS/Version: Linux
-            Status: NEW
-          Severity: enhancement
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: cristi.magherusan at net.utcluj.ro
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+I'd rather have the devices needed contained either in the package 
+makefile or a configuration file in the package directory.
+
+if(defs) like you suggest would soon become a mess.
 
 
-Created an attachment (id=409)
- --> (https://bugs.busybox.net/attachment.cgi?id=409)
-buildroot-openvz.patch
-
-The attach patch adds packages fot vzctl and vzquota, see the URL and the
-attached patch for more
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas.
