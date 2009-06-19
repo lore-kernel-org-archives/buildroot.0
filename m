@@ -1,66 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 19 Jun 2009 15:19:15 +0000 (UTC)
-Subject: [Buildroot] [Bug 409] New: Bump php package to 5.2.10
-Message-ID: <bug-409-163@https.bugs.busybox.net/>
+From: Markus Heidelberg <markus.heidelberg@web.de>
+Date: Fri, 19 Jun 2009 16:34:15 +0200
+Subject: [Buildroot] [git commit] gst-plugins-bad: use "select" for
+	dependencies
+Message-ID: <20090620051954.2BB63777D2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=409
-
-              Host: i686-linux
-            Target: arm-softfloat-linux-uclibcgnueabi
-           Summary: Bump php package to 5.2.10
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: enhancement
-          Priority: P5
-         Component: Outdated package
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: gustavo at zacarias.com.ar
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+commit: http://git.buildroot.net/buildroot/commit/?id=a8fbfdff29e464d65653599003d390be6079b796
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 
-Created an attachment (id=413)
- --> (https://bugs.busybox.net/attachment.cgi?id=413)
-Bump php package to 5.2.10
+Signed-off-by: Markus Heidelberg <markus.heidelberg@web.de>
+---
+ package/multimedia/gst-plugins-bad/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-php-5.2.10 is out, mostly misc bugfixes, one small security fix:
-
-Security Enhancements and Fixes in PHP 5.2.10:
-
-    * Fixed bug #48378 (exif_read_data() segfaults on certain corrupted .jpeg
-files). (Pierre)
-
-Key enhancements in PHP 5.2.10 include:
-
-    * Added "ignore_errors" option to http fopen wrapper. (David Zulke, Sara)
-    * Fixed memory corruptions while reading properties of zip files. (Ilia)
-    * Fixed memory leak in ob_get_clean/ob_get_flush. (Christian)
-    * Fixed segfault on invalid session.save_path. (Hannes)
-    * Fixed leaks in imap when a mail_criteria is used. (Pierre)
-    * Changed default value of array_unique()'s optional sorting type parameter
-back to SORT_STRING to fix backwards compatibility breakage introduced in PHP
-5.2.9. (Moriyoshi)
-    * Fixed bug #47940 (memory leaks in imap_body). (Pierre, Jake Levitt)
-    * Fixed bug #47903 ("@" operator does not work with string offsets).
-(Felipe)
-    * Fixed bug #47644 (Valid integers are truncated with json_decode()).
-(Scott)
-    * Fixed bug #47564 (unpacking unsigned long 32bit big endian returns wrong
-result). (Ilia)
-    * Fixed bug #47365 (ip2long() may allow some invalid values on certain
-64bit systems).
-    * Over 100 bug fixes.
-
-
+diff --git a/package/multimedia/gst-plugins-bad/Config.in b/package/multimedia/gst-plugins-bad/Config.in
+index 16ce4b3..8601cf4 100644
+--- a/package/multimedia/gst-plugins-bad/Config.in
++++ b/package/multimedia/gst-plugins-bad/Config.in
+@@ -1,7 +1,7 @@
+ menuconfig BR2_PACKAGE_GST_PLUGINS_BAD
+ 	bool "gst-plugins-bad"
+ 	depends on BR2_PACKAGE_GSTREAMER
+-	depends on BR2_PACKAGE_GST_PLUGINS_BASE
++	select BR2_PACKAGE_GST_PLUGINS_BASE
+ 	help
+ 	  A set of plug-ins for GStreamer that may be of poor quality or
+ 	  lacking some features.
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.6.0.6
