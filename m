@@ -1,42 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 20 Jun 2009 06:25:57 +0000 (UTC)
-Subject: [Buildroot] [Bug 241] device mapper + lvm2: build together
-In-Reply-To: <bug-241-163@https.bugs.busybox.net/>
-References: <bug-241-163@https.bugs.busybox.net/>
-Message-ID: <20090620062557.E0E86777F5@busybox.osuosl.org>
+From: Cristi Magherusan <Cristi.Magherusan@net.utcluj.ro>
+Date: Sat, 20 Jun 2009 19:26:47 +0300
+Subject: [Buildroot] [pull request] support for compiling git uClibc
+ snapshots as generated from the cgit web interface
+Message-ID: <1245515207.29802.11.camel@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=241
+Hello,
 
+I have a branch of the buildroot repo that contains support for building
+uClibc from git snapshots. 
 
-Nigel Kukard <nkukard@lbsd.net> changed:
+It accepts SHA-1 hashes, git tags or branch names, and it does all this
+by abusing the new cgit web interface.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |nkukard at lbsd.net
-           Severity|enhancement                 |normal
-             Status|NEW                         |RESOLVED
-          Component|Other                       |Outdated package
-         Resolution|                            |FIXED
+My repo is stored at http://cristi.indefero.net/p/buildroot-cristi/
 
-
-
-
---- Comment #1 from Nigel Kukard <nkukard@lbsd.net>  2009-06-20 06:25:57 UTC ---
-Fixed in:
-
-http://git.buildroot.net/buildroot/commit/?id=ddb260707a88a261d1a5b9f6ef3dc64f7c7ea333
-
-http://git.buildroot.net/buildroot/commit/?id=9cf1786bf043b2e5dd7247a31786cd4efb0f982e
-
-http://git.buildroot.net/buildroot/commit/?id=03bcf762232daecdffc25a3b479da0da57d0a1c1
-
+Regards,
+Cristi
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Ing. Cristi M?gheru?an, System/Network Engineer
+Technical University of Cluj-Napoca, Romania
+http://cc.utcluj.ro  +40264 401247
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 197 bytes
+Desc: This is a digitally signed message part
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090620/e380d42f/attachment.pgp>
