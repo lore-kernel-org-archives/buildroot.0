@@ -1,56 +1,37 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 21 Jun 2009 14:42:15 +0200
-Subject: [Buildroot] [git commit] target/generic: add /dev/sd{a, b}*,
-	/dev/ub{a, b}* device nodes
-Message-ID: <20090622132901.1317B777A2@busybox.osuosl.org>
+Date: Mon, 22 Jun 2009 15:16:13 +0200
+Subject: [Buildroot] [git commit] busybox: 1.13.x defconfig: enable devmem
+	applet
+Message-ID: <20090622132901.57D11777A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=691cf5eb424caca0626e9d8c163adc886f2c5d93
+commit: http://git.buildroot.net/buildroot/commit/?id=263c8dc7b89b997b011214e224074e03279a37a0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 
-E.G. for usb disks.
+Small and useful for a lot of early hardware testing/verification.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- target/generic/device_table.txt |   14 ++++++++++----
- 1 files changed, 10 insertions(+), 4 deletions(-)
+ package/busybox/busybox-1.13.x.config |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/target/generic/device_table.txt b/target/generic/device_table.txt
-index a2bfff9..c054000 100644
---- a/target/generic/device_table.txt
-+++ b/target/generic/device_table.txt
-@@ -125,10 +125,10 @@
- #/dev/hdh	b	640	0	0	34	65	1	1	15
- 
- # SCSI Devices
--#/dev/sda	b	640	0	0	8	0	0	0	-
--#/dev/sda	b	640	0	0	8	1	1	1	15
--#/dev/sdb	b	640	0	0	8	16	0	0	-
--#/dev/sdb	b	640	0	0	8	17	1	1	15
-+/dev/sda	b	640	0	0	8	0	0	0	-
-+/dev/sda	b	640	0	0	8	1	1	1	15
-+/dev/sdb	b	640	0	0	8	16	0	0	-
-+/dev/sdb	b	640	0	0	8	17	1	1	15
- #/dev/sdc	b	640	0	0	8	32	0	0	-
- #/dev/sdc	b	640	0	0	8	33	1	1	15
- #/dev/sdd	b	640	0	0	8	48	0	0	-
-@@ -149,6 +149,12 @@
- #/dev/st	c	640	0	0	9	64	1	1	4
- #/dev/st	c	640	0	0	9	96	1	1	4
- 
-+# USB block devices (ub driver)
-+/dev/uba	b	640	0	0	180	0	0	0	-
-+/dev/uba	b	640	0	0	180	1	1	1	6
-+/dev/ubb	b	640	0	0	180	8	0	0	-
-+/dev/ubb	b	640	0	0	180	65	1	1	6
-+
- # Floppy disk devices
- #/dev/fd	b	640	0	0	2	0	0	1	2
- #/dev/fd0d360	b	640	0	0	2	4	0	0	-
+diff --git a/package/busybox/busybox-1.13.x.config b/package/busybox/busybox-1.13.x.config
+index 0846eaf..ee59162 100644
+--- a/package/busybox/busybox-1.13.x.config
++++ b/package/busybox/busybox-1.13.x.config
+@@ -562,7 +562,7 @@ CONFIG_DC=y
+ # CONFIG_DEVFSD_FG_NP is not set
+ # CONFIG_DEVFSD_VERBOSE is not set
+ # CONFIG_FEATURE_DEVFS is not set
+-# CONFIG_DEVMEM is not set
++CONFIG_DEVMEM=y
+ CONFIG_EJECT=y
+ # CONFIG_FEATURE_EJECT_SCSI is not set
+ # CONFIG_FBSPLASH is not set
 -- 
 1.6.0.6
