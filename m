@@ -1,27 +1,42 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Mon, 22 Jun 2009 10:04:09 +0200
-Subject: [Buildroot] Kernel config parameters dcument
-In-Reply-To: <4A3EB704.8070405@linuxha.com>
-References: <4A3EB704.8070405@linuxha.com>
-Message-ID: <1245657849.3794.0.camel@sven>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 22 Jun 2009 11:55:14 +0000 (UTC)
+Subject: [Buildroot] [Bug 411] New: ipsec-tools: Bump version to 0.7.2
+Message-ID: <bug-411-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+https://bugs.busybox.net/show_bug.cgi?id=411
 
-On Sun, 2009-06-21 at 18:41 -0400, Neil Cherry wrote:
-> Sorry to post but I'm getting very confused by all the possible
-> options that can be selected when config'n the kernel. Is there
-> a document that give better information than the '?' key when
-> attempting to compile the kernel? I'm attempting to setup a
-> router with IPV4, IPV6, masq, filtering, etc.
+           Summary: ipsec-tools: Bump version to 0.7.2
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: will.newton at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-What about the documents in the Documentation folder of the kernel
-source tree? Documentation about pretty much everything can be found
-there.
+
+Created an attachment (id=415)
+ --> (https://bugs.busybox.net/attachment.cgi?id=415)
+Bump version of ipsec-tools to 0.7.2
+
+This patch bumps the version of ipsec-tools and fixes the build. The current
+makefile fails downloading the source package from sourceforge.
+
+The new version includes many new features and bug fixes (including security
+fixes).
 
 
-Sven
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
