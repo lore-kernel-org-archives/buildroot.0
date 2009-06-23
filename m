@@ -1,109 +1,36 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Tue, 23 Jun 2009 13:47:14 +0200
-Subject: [Buildroot] [git commit] directfb: bump version
-Message-ID: <20090623115600.6459E7756E@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 23 Jun 2009 13:55:38 +0200
+Subject: [Buildroot] [git commit] CHANGES: add issue 349 + 379
+Message-ID: <20090623115600.A0EE277801@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b26520ba9055f7101e01206f114c387d0ab157e2
+commit: http://git.buildroot.net/buildroot/commit/?id=e61606ad39735000e66b6048d9be1b9d27c36bd0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 
-Closes #379
-
-update DirectFB to version 1.4.0
-
-A new stable version of DirectFB has been released upstream,
-http://directfb.org/index.php?path=Main%2FNews&entry=2009-06-04-1.niels
-
-Attached patch updates the DirectFB package and introduces a BR2
-configuration option for the RGB16 dithering feature that is new in
-DirectFB 1.4.0.
-
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/directfb/Config.in   |   20 ++++++++++++++------
- package/directfb/directfb.mk |   15 ++++++++++-----
- 2 files changed, 24 insertions(+), 11 deletions(-)
+ CHANGES |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/directfb/Config.in b/package/directfb/Config.in
-index 5a5db46..f24b7a1 100644
---- a/package/directfb/Config.in
-+++ b/package/directfb/Config.in
-@@ -66,12 +66,6 @@ config BR2_PACKAGE_DIRECTFB_SERIALMOUSE
- 	default y
- 	depends on BR2_PACKAGE_DIRECTFB
+diff --git a/CHANGES b/CHANGES
+index 8c77671..605d4bd 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -3,8 +3,10 @@
+ 	Issues resolved (http://bugs.uclibc.org):
  
--config BR2_PACKAGE_DIRECTFB_PNG
--	bool "enable PNG support"
--	default y
--	depends on BR2_PACKAGE_DIRECTFB
--	select BR2_PACKAGE_LIBPNG
--
- config BR2_PACKAGE_DIRECTFB_TSLIB
- 	bool "enable touchscreen support"
- 	default y
-@@ -89,3 +83,17 @@ config BR2_PACKAGE_DIRECTFB_JPEG
- 	default y
- 	depends on BR2_PACKAGE_DIRECTFB
- 	select BR2_PACKAGE_JPEG
-+
-+config BR2_PACKAGE_DIRECTFB_PNG
-+	bool "enable PNG support"
-+	default y
-+	depends on BR2_PACKAGE_DIRECTFB
-+	select BR2_PACKAGE_LIBPNG
-+
-+config BR2_PACKAGE_DIRECTB_DITHER_RGB16
-+	bool "enable advanced dithering of RGB16 surfaces"
-+	default n
-+	depends on BR2_PACKAGE_DIRECTFB
-+	help
-+	  Enable dithering when loading images to RGB16 surfaces.
-+	  This increases the data section by 64 KBytes.
-diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
-index a85564b..2826615 100644
---- a/package/directfb/directfb.mk
-+++ b/package/directfb/directfb.mk
-@@ -3,11 +3,9 @@
- # directfb
- #
- #############################################################
--DIRECTFB_VERSION_MAJOR:=1.2
--DIRECTFB_VERSION:=1.2.8
--#DIRECTFB_VERSION:=1.3.0	is a development version
--#DIRECTFB_VERSION_MAJOR:=1.3
--DIRECTFB_SITE:=http://www.directfb.org/downloads/Core
-+DIRECTFB_VERSION_MAJOR:=1.4
-+DIRECTFB_VERSION:=1.4.0
-+DIRECTFB_SITE:=http://www.directfb.org/downloads/Core/DirectFB-$(DIRECTFB_VERSION_MAJOR)
- DIRECTFB_SOURCE:=DirectFB-$(DIRECTFB_VERSION).tar.gz
- DIRECTFB_AUTORECONF = NO
- DIRECTFB_LIBTOOL_PATCH = NO
-@@ -99,6 +97,12 @@ else
- DIRECTFB_JPEG:=--disable-jpeg
- endif
- 
-+ifeq ($(BR2_PACKAGE_DIRECTB_DITHER_RGB16),y)
-+DIRECTFB_DITHER_RGB16:=--with-dither-rgb16=advanced
-+else
-+DIRECTFB_DITHER_RGB16:=--with-dither-rgb16=none
-+endif
-+
- DIRECTFB_CONF_OPT = \
- 	--localstatedir=/var \
- 	--with-gfxdrivers=$(DIRECTFB_GFX) \
-@@ -112,6 +116,7 @@ DIRECTFB_CONF_OPT = \
- 	$(DIRECTFB_PNG) \
- 	$(DIRECTFB_GIF) \
- 	$(DIRECTFB_UNIQUE) \
-+	$(DIRECTFB_DITHER_RGB16) \
- 	--enable-linux-input \
- 	--enable-zlib \
- 	--enable-freetype \
+ 	#241: device mapper + lvm2: build together
++	#349: update libsoup to version 2.26.2
+ 	#367: linux kernel compile error for arm926t
+ 	#373: Support for building gstreamer without libxml
++	#379: update DirectFB to version 1.4.0
+ 	#383: gst-plugins-good: Allow soup plugin to be configured
+ 	#385: neon: Fix pkgconfig dependency
+ 	#391: gstreamer: Bump version to 0.10.23
 -- 
 1.6.0.6
