@@ -1,55 +1,109 @@
 From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Tue, 23 Jun 2009 12:33:40 +0200
-Subject: [Buildroot] [git commit] libsoup: bump version
-Message-ID: <20090623115600.4F7D1777FF@busybox.osuosl.org>
+Date: Tue, 23 Jun 2009 13:47:14 +0200
+Subject: [Buildroot] [git commit] directfb: bump version
+Message-ID: <20090623115600.6459E7756E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e22a39fb44e7862de517f35bcbef7acacfb7e4a7
+commit: http://git.buildroot.net/buildroot/commit/?id=b26520ba9055f7101e01206f114c387d0ab157e2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 
-Closes #349.
+Closes #379
 
-Attached patch updates libsoup to version 2.26.2.
+update DirectFB to version 1.4.0
 
-This is relevant for bug 303 as it allows to compile gvfs with much
-less patching.
+A new stable version of DirectFB has been released upstream,
+http://directfb.org/index.php?path=Main%2FNews&entry=2009-06-04-1.niels
+
+Attached patch updates the DirectFB package and introduces a BR2
+configuration option for the RGB16 dithering feature that is new in
+DirectFB 1.4.0.
 
 Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libsoup/libsoup.mk |    8 +++++---
- 1 files changed, 5 insertions(+), 3 deletions(-)
+ package/directfb/Config.in   |   20 ++++++++++++++------
+ package/directfb/directfb.mk |   15 ++++++++++-----
+ 2 files changed, 24 insertions(+), 11 deletions(-)
 
-diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
-index f9e9331..c0b85e2 100644
---- a/package/libsoup/libsoup.mk
-+++ b/package/libsoup/libsoup.mk
-@@ -4,9 +4,10 @@
+diff --git a/package/directfb/Config.in b/package/directfb/Config.in
+index 5a5db46..f24b7a1 100644
+--- a/package/directfb/Config.in
++++ b/package/directfb/Config.in
+@@ -66,12 +66,6 @@ config BR2_PACKAGE_DIRECTFB_SERIALMOUSE
+ 	default y
+ 	depends on BR2_PACKAGE_DIRECTFB
+ 
+-config BR2_PACKAGE_DIRECTFB_PNG
+-	bool "enable PNG support"
+-	default y
+-	depends on BR2_PACKAGE_DIRECTFB
+-	select BR2_PACKAGE_LIBPNG
+-
+ config BR2_PACKAGE_DIRECTFB_TSLIB
+ 	bool "enable touchscreen support"
+ 	default y
+@@ -89,3 +83,17 @@ config BR2_PACKAGE_DIRECTFB_JPEG
+ 	default y
+ 	depends on BR2_PACKAGE_DIRECTFB
+ 	select BR2_PACKAGE_JPEG
++
++config BR2_PACKAGE_DIRECTFB_PNG
++	bool "enable PNG support"
++	default y
++	depends on BR2_PACKAGE_DIRECTFB
++	select BR2_PACKAGE_LIBPNG
++
++config BR2_PACKAGE_DIRECTB_DITHER_RGB16
++	bool "enable advanced dithering of RGB16 surfaces"
++	default n
++	depends on BR2_PACKAGE_DIRECTFB
++	help
++	  Enable dithering when loading images to RGB16 surfaces.
++	  This increases the data section by 64 KBytes.
+diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
+index a85564b..2826615 100644
+--- a/package/directfb/directfb.mk
++++ b/package/directfb/directfb.mk
+@@ -3,11 +3,9 @@
+ # directfb
  #
  #############################################################
+-DIRECTFB_VERSION_MAJOR:=1.2
+-DIRECTFB_VERSION:=1.2.8
+-#DIRECTFB_VERSION:=1.3.0	is a development version
+-#DIRECTFB_VERSION_MAJOR:=1.3
+-DIRECTFB_SITE:=http://www.directfb.org/downloads/Core
++DIRECTFB_VERSION_MAJOR:=1.4
++DIRECTFB_VERSION:=1.4.0
++DIRECTFB_SITE:=http://www.directfb.org/downloads/Core/DirectFB-$(DIRECTFB_VERSION_MAJOR)
+ DIRECTFB_SOURCE:=DirectFB-$(DIRECTFB_VERSION).tar.gz
+ DIRECTFB_AUTORECONF = NO
+ DIRECTFB_LIBTOOL_PATCH = NO
+@@ -99,6 +97,12 @@ else
+ DIRECTFB_JPEG:=--disable-jpeg
+ endif
  
--LIBSOUP_VERSION:=2.4.1
--LIBSOUP_SOURCE:=libsoup-$(LIBSOUP_VERSION).tar.gz
--LIBSOUP_SITE:=http://ftp.gnome.org/pub/gnome/sources/libsoup/2.4
-+LIBSOUP_MAJOR_VERSION:=2.26
-+LIBSOUP_VERSION:=$(LIBSOUP_MAJOR_VERSION).2
-+LIBSOUP_SOURCE:=libsoup-$(LIBSOUP_VERSION).tar.bz2
-+LIBSOUP_SITE:=http://ftp.gnome.org/pub/gnome/sources/libsoup/$(LIBSOUP_MAJOR_VERSION)
- LIBSOUP_AUTORECONF = NO
- LIBSOUP_INSTALL_STAGING = YES
- LIBSOUP_INSTALL_TARGET = YES
-@@ -23,6 +24,7 @@ LIBSOUP_CONF_OPT = \
- 	--enable-static		\
- 	--disable-explicit-deps \
- 	--disable-glibtest	\
-+	--without-gnome		\
- 	--disable-gtk-doc --without-html-dir
- 
- LIBSOUP_DEPENDENCIES = uclibc gettext libintl host-pkgconfig host-libglib2 libglib2 libxml2
++ifeq ($(BR2_PACKAGE_DIRECTB_DITHER_RGB16),y)
++DIRECTFB_DITHER_RGB16:=--with-dither-rgb16=advanced
++else
++DIRECTFB_DITHER_RGB16:=--with-dither-rgb16=none
++endif
++
+ DIRECTFB_CONF_OPT = \
+ 	--localstatedir=/var \
+ 	--with-gfxdrivers=$(DIRECTFB_GFX) \
+@@ -112,6 +116,7 @@ DIRECTFB_CONF_OPT = \
+ 	$(DIRECTFB_PNG) \
+ 	$(DIRECTFB_GIF) \
+ 	$(DIRECTFB_UNIQUE) \
++	$(DIRECTFB_DITHER_RGB16) \
+ 	--enable-linux-input \
+ 	--enable-zlib \
+ 	--enable-freetype \
 -- 
 1.6.0.6
