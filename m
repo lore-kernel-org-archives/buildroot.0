@@ -1,21 +1,33 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Tue, 23 Jun 2009 13:39:20 +0200
-Subject: [Buildroot] uClibc locale support
-In-Reply-To: <87a5b0800906230353o26db9cbegcd7ccbbe5cbd5b02@mail.gmail.com>
-References: <87a5b0800906230353o26db9cbegcd7ccbbe5cbd5b02@mail.gmail.com>
-Message-ID: <20090623113919.GA22116@mx.loc>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 23 Jun 2009 11:50:44 +0000 (UTC)
+Subject: [Buildroot] [Bug 379] update DirectFB to version 1.4.0
+In-Reply-To: <bug-379-163@https.bugs.busybox.net/>
+References: <bug-379-163@https.bugs.busybox.net/>
+Message-ID: <20090623115045.1655B777FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jun 23, 2009 at 11:53:43AM +0100, Will Newton wrote:
+https://bugs.busybox.net/show_bug.cgi?id=379
 
->Enable WCHAR support BR2_USE_WCHAR
->
->But the uClibc config selects UCLIBC_HAS_WCHAR if UCLIBC_HAS_LOCALE.is
->selected, so surely this option should not be independent?
 
-It's perfectly fine to enable wchar support but not turn on this bloated
-locale stuff.
+Peter Korsgaard <jacmet@uclibc.org> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
+
+
+
+
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-06-23 11:50:44 UTC ---
+Thanks, committed
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
