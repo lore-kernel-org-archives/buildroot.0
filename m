@@ -1,27 +1,42 @@
-From: Will Newton <will.newton@gmail.com>
-Date: Tue, 23 Jun 2009 13:02:45 +0100
-Subject: [Buildroot] uClibc locale support
-In-Reply-To: <20090623113919.GA22116@mx.loc>
-References: <87a5b0800906230353o26db9cbegcd7ccbbe5cbd5b02@mail.gmail.com>
-	<20090623113919.GA22116@mx.loc>
-Message-ID: <87a5b0800906230502n44d6c3e0t56c543107e753536@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 23 Jun 2009 16:21:45 +0000 (UTC)
+Subject: [Buildroot] [Bug 417] New: New package spawn-fcgi
+Message-ID: <bug-417-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jun 23, 2009 at 12:39 PM, Bernhard
-Reutner-Fischer<rep.dot.nop@gmail.com> wrote:
-> On Tue, Jun 23, 2009 at 11:53:43AM +0100, Will Newton wrote:
->
->>Enable WCHAR support BR2_USE_WCHAR
->>
->>But the uClibc config selects UCLIBC_HAS_WCHAR if UCLIBC_HAS_LOCALE.is
->>selected, so surely this option should not be independent?
->
-> It's perfectly fine to enable wchar support but not turn on this bloated
-> locale stuff.
+https://bugs.busybox.net/show_bug.cgi?id=417
 
-Certainly, but I am not sure if the inverse is true. So enabling
-locale should select wchar support IMO.
+              Host: i686-linux
+            Target: arm-softfloat-linux-uclibcgnueabi
+           Summary: New package spawn-fcgi
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: gustavo at zacarias.com.ar
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
+
+
+Created an attachment (id=419)
+ --> (https://bugs.busybox.net/attachment.cgi?id=419)
+New package spawn-fcgi
+
+New package spawn-fcgi, basically a FastCGI process spawner.
+This was previously included in lighttpd up to version 1.4.22 and is now a
+sepparate project.
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
