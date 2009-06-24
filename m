@@ -1,9 +1,10 @@
 From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Wed, 24 Jun 2009 09:59:03 +0200
-Subject: [Buildroot] How to get symbolic debugging to work?
-In-Reply-To: <h1r69p$kd5$1@ger.gmane.org>
-References: <h1p5br$11r$1@ger.gmane.org>  <h1r69p$kd5$1@ger.gmane.org>
-Message-ID: <1245830343.3872.9.camel@sven>
+Date: Wed, 24 Jun 2009 10:31:42 +0200
+Subject: [Buildroot] [git commit] busybox: 1.13.x defconfig: enable
+ devmem applet
+In-Reply-To: <20090622132901.57D11777A2@busybox.osuosl.org>
+References: <20090622132901.57D11777A2@busybox.osuosl.org>
+Message-ID: <1245832302.25464.0.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,23 +13,41 @@ To: buildroot@busybox.net
 
 Hi,
 
-On Tue, 2009-06-23 at 18:18 +0000, Grant Edwards wrote:
-> On 2009-06-22, Grant Edwards <grant.b.edwards@gmail.com> wrote:
+On Mon, 2009-06-22 at 15:16 +0200, Peter Korsgaard wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=263c8dc7b89b997b011214e224074e03279a37a0
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 > 
-> > I've given up temporarily on getting thread support to work in
-> > gdbserver.  Now I'm just trying (and failing) to get basic
-> > symbolic debugging to work.
 > 
-> Gdb 6.8 just plain doesn't work for ARM targets.
+> Small and useful for a lot of early hardware testing/verification.
 > 
-> I switched to 6.7.1, and it works fine (including debugging
-> multiple threaded apps).
+> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+> ---
+>  package/busybox/busybox-1.13.x.config |    2 +-
+>  1 files changed, 1 insertions(+), 1 deletions(-)
+> 
+> diff --git a/package/busybox/busybox-1.13.x.config b/package/busybox/busybox-1.13.x.config
+> index 0846eaf..ee59162 100644
+> --- a/package/busybox/busybox-1.13.x.config
+> +++ b/package/busybox/busybox-1.13.x.config
+> @@ -562,7 +562,7 @@ CONFIG_DC=y
+>  # CONFIG_DEVFSD_FG_NP is not set
+>  # CONFIG_DEVFSD_VERBOSE is not set
+>  # CONFIG_FEATURE_DEVFS is not set
+> -# CONFIG_DEVMEM is not set
+> +CONFIG_DEVMEM=y
+>  CONFIG_EJECT=y
+>  # CONFIG_FEATURE_EJECT_SCSI is not set
+>  # CONFIG_FBSPLASH is not set
 
-We also have problems with gdb 6.8 on the ARM. Or in other words, it
-just plain does not work. I will now follow your advice and switch to
-version 6.7.1. If that actually helps, then buildroot should probably
-select that version when building for an ARM target (similar as what is
-done currently for AVR32).
+This breaks the build for me:
+
+libbb/lib.a(appletlib.o):(.rodata.applet_main+0x88): undefined reference
+to `devmem_main'
+collect2: ld returned 1 exit status
+
+
+Is there perhaps a dependency missing that needs to be selected along
+with devmem ?
 
 
 Sven
