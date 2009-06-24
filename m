@@ -1,43 +1,42 @@
-From: Alper YILDIRIM <ayildirim@aselsan.com.tr>
-Date: Wed, 24 Jun 2009 21:49:03 +0300
-Subject: [Buildroot] Xconfig like configuration interface?
-Message-ID: <EA3971A200867A46BC4C216DA1935AAE452580@POSTA.aselsan.com.tr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 24 Jun 2009 22:41:18 +0200
+Subject: [Buildroot] cannot find patches for mpfr package when buildroot
+In-Reply-To: <693969.74850.qm@web53508.mail.re2.yahoo.com> (jing han's message
+	of "Wed\, 24 Jun 2009 07\:40\:28 -0700 \(PDT\)")
+References: <693969.74850.qm@web53508.mail.re2.yahoo.com>
+Message-ID: <87prct2wlt.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "jing" == jing han <jing_han_66@yahoo.com> writes:
 
-Because of the same Kconfig based configuration interface, I wonder if it is possible to implement a "make xconfig" like interface for buildroot similar to the one in kernel configuration.
+ jing> Hi All,
 
-If it is an easy task, I request from the developers to add this feature to the future releases of buildroot.
+ jing> I experienced a problem when I make MIPS64 environment. Even if
+ jing> I disabled mpfr package, When I make, I still encountered the
+ jing> following error:
 
-This more user friendly interface may take the attraction of newbies and increase the popularity of buildroot.
+It gets built (for the host) because it's needed by the toolchain.
 
-Regards,
-Alper YILDIRIM
+ jing> --10:11:10--  http://www.mpfr.org/mpfr-2.4.1/patches
+ jing> Resolving www.mpfr.org... failed: Temporary failure in name resolution.
+ jing> --10:11:30--  http://buildroot.net/downloads/sources//patches
+ jing> Resolving buildroot.net... 140.211.167.224
+ jing> Connecting to buildroot.net|140.211.167.224|:80... connected.
+ jing> HTTP request sent, awaiting response... 404 Not Found
+ jing> 10:11:30 ERROR 404: Not Found.
 
+mpfr.org is down. We have a fallback system where it will then try to
+download from buildroot.net instead if that fails - Unfortunately this
+doesn't work because the patch file is simply called patches on
+mpfr.org and we rename it after download to mpfr-2.4.1.patch after
+downloading.
 
-######################################################################
-Dikkat:
+I have fixed it by adding a patches -> mpfr-2.4.1.patch symlink on
+buildroot.net - So it should work now.
 
-Bu elektronik posta mesaji kisisel ve ozeldir. Eger size 
-gonderilmediyse lutfen gondericiyi bilgilendirip mesaji siliniz. 
-Firmamiza gelen ve giden mesajlar virus taramasindan gecirilmekte, 
-guvenlik nedeni ile kontrol edilerek saklanmaktadir. Mesajdaki 
-gorusler ve bakis acisi gondericiye ait olup Aselsan A.S. resmi 
-gorusu olmak zorunda degildir.
-
-######################################################################
-Attention: 
-
-This e-mail message is privileged and confidential. If you are 
-not the intended recipient please delete the message and notify 
-the sender. E-mails to and from the company are monitored for 
-operational reasons and in accordance with lawful business practices. 
-Any views or opinions presented are solely those of the author and 
-do not necessarily represent the views of the company.
-
-######################################################################
+-- 
+Bye, Peter Korsgaard
