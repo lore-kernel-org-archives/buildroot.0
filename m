@@ -1,57 +1,27 @@
-From: jing han <jing_han_66@yahoo.com>
-Date: Wed, 24 Jun 2009 07:40:28 -0700 (PDT)
-Subject: [Buildroot] cannot find patches for mpfr package when buildroot
-Message-ID: <693969.74850.qm@web53508.mail.re2.yahoo.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 24 Jun 2009 16:44:32 +0200
+Subject: [Buildroot] How to get symbolic debugging to work?
+In-Reply-To: <1245830343.3872.9.camel@sven> (Sven Neumann's message of "Wed\,
+	24 Jun 2009 09\:59\:03 +0200")
+References: <h1p5br$11r$1@ger.gmane.org> <h1r69p$kd5$1@ger.gmane.org>
+	<1245830343.3872.9.camel@sven>
+Message-ID: <871vp94rov.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
-Hi All,
+ Sven> We also have problems with gdb 6.8 on the ARM. Or in other
+ Sven> words, it just plain does not work. I will now follow your
+ Sven> advice and switch to version 6.7.1. If that actually helps,
+ Sven> then buildroot should probably select that version when
+ Sven> building for an ARM target (similar as what is done currently
+ Sven> for AVR32).
 
-I experienced a problem when I make MIPS64 environment. Even if I disabled mpfr package, When I make, I still encountered the following error:
+Or fix 6.8. I'll take a look at the fedora patches the coming weekend.
 
---10:10:47--  http://www.mpfr.org/mpfr-2.4.1/mpfr-2.4.1.tar.bz2
-Resolving www.mpfr.org... failed: Temporary failure in name resolution.
---10:11:07--  http://buildroot.net/downloads/sources//mpfr-2.4.1.tar.bz2
-Resolving buildroot.net... 140.211.167.224
-Connecting to buildroot.net|140.211.167.224|:80... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 1064281 (1.0M) [application/x-tar]
-Saving to: `/home/jhan/Desktop/buildroot-2009.05/dl/mpfr-2.4.1.tar.bz2'
-
-100%[====================================================================================>] 1,064,281    505K/s   in 2.1s
-
-10:11:10 (505 KB/s) - `/home/jhan/Desktop/buildroot-2009.05/dl/mpfr-2.4.1.tar.bz2' saved [1064281/1064281]
-
---10:11:10--  http://www.mpfr.org/mpfr-2.4.1/patches
-Resolving www.mpfr.org... failed: Temporary failure in name resolution.
---10:11:30--  http://buildroot.net/downloads/sources//patches
-Resolving buildroot.net... 140.211.167.224
-Connecting to buildroot.net|140.211.167.224|:80... connected.
-HTTP request sent, awaiting response... 404 Not Found
-10:11:30 ERROR 404: Not Found.
-
-make: *** [/home/jhan/Desktop/buildroot-2009.05/dl/mpfr-2.4.1.patch] Error 1
-
-
-The reason is: http://buildroot.net/downloads/sources//patches doesn't exist. I did find 
-
-mpfr-2.3.0.patch but it's not in the above link, it's located in the link of:http://buildroot.net/downloads/sources//
-
-that's why the make broke.
-
-This happens since this week.
-
-Can you tell me how to get around this problem?
-
-Thank you in advance!
-
-Best Regards
-jing
-
-
-      __________________________________________________________________
-Be smarter than spam. See how smart SpamGuard is at giving junk email the boot with the All-new Yahoo! Mail.  Click on Options in Mail and switch to New Mail today or register for free at http://mail.yahoo.ca
+-- 
+Bye, Peter Korsgaard
