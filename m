@@ -1,44 +1,39 @@
 From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Wed, 24 Jun 2009 14:50:54 +0000 (UTC)
+Date: Wed, 24 Jun 2009 15:11:44 +0000 (UTC)
 Subject: [Buildroot] How to get symbolic debugging to work?
 References: <h1p5br$11r$1@ger.gmane.org> <h1r69p$kd5$1@ger.gmane.org>
-	<1245830343.3872.9.camel@sven> <20090624091656.GD22116@mx.loc>
-Message-ID: <h1tege$k62$2@ger.gmane.org>
+	<1245830343.3872.9.camel@sven> <871vp94rov.fsf@macbook.be.48ers.dk>
+Message-ID: <h1tfng$p7r$1@ger.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2009-06-24, Bernhard Reutner-Fischer <rep.dot.nop@gmail.com> wrote:
-> On Wed, Jun 24, 2009 at 09:59:03AM +0200, Sven Neumann wrote:
-
->>> Gdb 6.8 just plain doesn't work for ARM targets.
->>> 
->>> I switched to 6.7.1, and it works fine (including debugging
->>> multiple threaded apps).
->>
->>We also have problems with gdb 6.8 on the ARM. Or in other
->>words, it just plain does not work. I will now follow your
->>advice and switch to version 6.7.1. If that actually helps,
->>then buildroot should probably select that version when
->>building for an ARM target (similar as what is done currently
->>for AVR32).
+On 2009-06-24, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 >
-> Alternatively you could check if it works OK with the current
-> gdb and file a bug either against 6.8 with or CVS
+> Sven> We also have problems with gdb 6.8 on the ARM. Or in other
+> Sven> words, it just plain does not work. I will now follow your
+> Sven> advice and switch to version 6.7.1. If that actually helps,
+> Sven> then buildroot should probably select that version when
+> Sven> building for an ARM target (similar as what is done currently
+> Sven> for AVR32).
+>
+> Or fix 6.8. I'll take a look at the fedora patches the coming weekend.
 
-I'll probably not get around to trying the CVS gdb, so I filed
-a bug against 6.8:
+I think the underlying problem for my backtrace and SIG32
+problems is that gdb (on the dev-host) is failing to figure out
+what library files are mmap'ed.  The only one that shows up in
+the output of "info files" is ld-uClibc.so.  If you look at
+/proc/<pid>/maps on the target, you can see the other library
+files (e.g. libgcc_s, libuClibc, libpthread, etc.) that gdb is
+unaware of. There's an example of this shown here:
 
-  http://sourceware.org/bugzilla/show_bug.cgi?id=10328
-
-If somebody does try out CVS, please add the results to the bug
-above.  It might also be useful to know if the same problems
-occur when using glibc instead of uclibc, but this is probably
-the wrong place to ask for data from glibc users. :)
+http://news.gmane.org/find-root.php?message_id=%3ch1po1r%24457%241%40ger.gmane.org%3e
 
 -- 
-Grant Edwards                   grante             Yow! Am I SHOPLIFTING?
-                                  at               
-                               visi.com            
+Grant Edwards                   grante             Yow! Mr and Mrs PED, can I
+                                  at               borrow 26.7% of the RAYON
+                               visi.com            TEXTILE production of the
+                                                   INDONESIAN archipelago?
