@@ -1,25 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 24 Jun 2009 11:24:43 +0200
-Subject: [Buildroot] [git commit] busybox: 1.13.x defconfig: enable
-	devmem applet
-In-Reply-To: <1245834797.25464.2.camel@sven> (Sven Neumann's message of "Wed\,
-	24 Jun 2009 11\:13\:17 +0200")
-References: <20090622132901.57D11777A2@busybox.osuosl.org>
-	<1245832302.25464.0.camel@sven> <1245834797.25464.2.camel@sven>
-Message-ID: <87eita3rxg.fsf@macbook.be.48ers.dk>
+Date: Wed, 24 Jun 2009 11:26:05 +0200
+Subject: [Buildroot] [git commit] busybox: bump 1.14.x version
+Message-ID: <20090624092656.DB08A77802@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=e616c68acc2fff72d5ab1bbf90b5736d61f2e40e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Sven> Please ignore the previous post. I forgot to adjust our build
- Sven> environment accordingly and that caused the problem. Seems to work fine
- Sven> now. Sorry for the noise.
+Patch is too large, so refusing to show it
 
-Ok, no problem - Thanks for the heads up (and the testing!)
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/busybox/Config.in                     |    2 +-
+ package/busybox/busybox-1.14.1-ash.patch      |   13 -
+ package/busybox/busybox-1.14.1-ftpd.patch     |   22 -
+ package/busybox/busybox-1.14.1-httpd.patch    |  655 -------------------------
+ package/busybox/busybox-1.14.1-modprobe.patch |  132 -----
+ package/busybox/busybox-1.14.1-readlink.patch |   88 ----
+ package/busybox/busybox-1.14.1-telnetd.patch  |   85 ----
+ 7 files changed, 1 insertions(+), 996 deletions(-)
+ delete mode 100644 package/busybox/busybox-1.14.1-ash.patch
+ delete mode 100644 package/busybox/busybox-1.14.1-ftpd.patch
+ delete mode 100644 package/busybox/busybox-1.14.1-httpd.patch
+ delete mode 100644 package/busybox/busybox-1.14.1-modprobe.patch
+ delete mode 100644 package/busybox/busybox-1.14.1-readlink.patch
+ delete mode 100644 package/busybox/busybox-1.14.1-telnetd.patch
