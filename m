@@ -1,53 +1,39 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Wed, 24 Jun 2009 10:31:42 +0200
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 24 Jun 2009 11:03:46 +0200
 Subject: [Buildroot] [git commit] busybox: 1.13.x defconfig: enable
- devmem applet
-In-Reply-To: <20090622132901.57D11777A2@busybox.osuosl.org>
+	devmem applet
+In-Reply-To: <1245832302.25464.0.camel@sven> (Sven Neumann's message of "Wed\,
+	24 Jun 2009 10\:31\:42 +0200")
 References: <20090622132901.57D11777A2@busybox.osuosl.org>
-Message-ID: <1245832302.25464.0.camel@sven>
+	<1245832302.25464.0.camel@sven>
+Message-ID: <87iqim3swd.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
+
 Hi,
 
-On Mon, 2009-06-22 at 15:16 +0200, Peter Korsgaard wrote:
-> commit: http://git.buildroot.net/buildroot/commit/?id=263c8dc7b89b997b011214e224074e03279a37a0
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-> 
-> 
-> Small and useful for a lot of early hardware testing/verification.
-> 
-> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-> ---
->  package/busybox/busybox-1.13.x.config |    2 +-
->  1 files changed, 1 insertions(+), 1 deletions(-)
-> 
-> diff --git a/package/busybox/busybox-1.13.x.config b/package/busybox/busybox-1.13.x.config
-> index 0846eaf..ee59162 100644
-> --- a/package/busybox/busybox-1.13.x.config
-> +++ b/package/busybox/busybox-1.13.x.config
-> @@ -562,7 +562,7 @@ CONFIG_DC=y
->  # CONFIG_DEVFSD_FG_NP is not set
->  # CONFIG_DEVFSD_VERBOSE is not set
->  # CONFIG_FEATURE_DEVFS is not set
-> -# CONFIG_DEVMEM is not set
-> +CONFIG_DEVMEM=y
->  CONFIG_EJECT=y
->  # CONFIG_FEATURE_EJECT_SCSI is not set
->  # CONFIG_FBSPLASH is not set
+ >> -# CONFIG_DEVMEM is not set
+ >> +CONFIG_DEVMEM=y
+ >> CONFIG_EJECT=y
+ >> # CONFIG_FEATURE_EJECT_SCSI is not set
+ >> # CONFIG_FBSPLASH is not set
 
-This breaks the build for me:
+ Sven> This breaks the build for me:
 
-libbb/lib.a(appletlib.o):(.rodata.applet_main+0x88): undefined reference
-to `devmem_main'
-collect2: ld returned 1 exit status
+ Sven> libbb/lib.a(appletlib.o):(.rodata.applet_main+0x88): undefined reference
+ Sven> to `devmem_main'
+ Sven> collect2: ld returned 1 exit status
 
+ Sven> Is there perhaps a dependency missing that needs to be selected along
+ Sven> with devmem ?
 
-Is there perhaps a dependency missing that needs to be selected along
-with devmem ?
+Strange - It works fine here (in buildroot and native). Could your
+post your .config?
 
-
-Sven
+-- 
+Bye, Peter Korsgaard
