@@ -1,41 +1,26 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 24 Jun 2009 15:18:27 +0000 (UTC)
-Subject: [Buildroot] [Bug 423] New: cairo: Allow DirectFB backend to be
-	built.
-Message-ID: <bug-423-163@https.bugs.busybox.net/>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Wed, 24 Jun 2009 18:06:48 +0200
+Subject: [Buildroot] How to get symbolic debugging to work?
+In-Reply-To: <h1te5d$k62$1@ger.gmane.org>
+References: <h1p5br$11r$1@ger.gmane.org> <h1r69p$kd5$1@ger.gmane.org>
+	<1245854121.25464.29.camel@sven>  <h1te5d$k62$1@ger.gmane.org>
+Message-ID: <1245859608.25464.30.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=423
+Hi,
 
-           Summary: cairo: Allow DirectFB backend to be built.
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: enhancement
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: will.newton at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+On Wed, 2009-06-24 at 14:45 +0000, Grant Edwards wrote:
+
+> > Our platform is armv5tel with EABI
+> 
+> You could try using gdbserver, but my _guess_ is it's an
+> EABI/OABI issue.
+
+I did try gdbserver, same problem :(  Thanks for your help anyway.
 
 
-Created an attachment (id=425)
- --> (https://bugs.busybox.net/attachment.cgi?id=425)
-Allow cairo DirectFB backend to be configured.
-
-This patch allows the DirectFB backend of cairo to be configured. depends
-rather than select is used in the Config.in to avoid a recursive dependency
-issue.
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Sven
