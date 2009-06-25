@@ -1,42 +1,27 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 24 Jun 2009 22:41:18 +0200
-Subject: [Buildroot] cannot find patches for mpfr package when buildroot
-In-Reply-To: <693969.74850.qm@web53508.mail.re2.yahoo.com> (jing han's message
-	of "Wed\, 24 Jun 2009 07\:40\:28 -0700 \(PDT\)")
-References: <693969.74850.qm@web53508.mail.re2.yahoo.com>
-Message-ID: <87prct2wlt.fsf@macbook.be.48ers.dk>
+From: Neil Cherry <ncherry@linuxha.com>
+Date: Thu, 25 Jun 2009 03:56:35 -0400
+Subject: [Buildroot] Problems compiling microperl
+Message-ID: <4A432DB3.2030206@linuxha.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "jing" == jing han <jing_han_66@yahoo.com> writes:
+I've gotten most of buildroot to compile. I'm having problems
+with microperl. The first first error I get is (trimmed):
 
- jing> Hi All,
+x2p/makefile: No such file or directory
 
- jing> I experienced a problem when I make MIPS64 environment. Even if
- jing> I disabled mpfr package, When I make, I still encountered the
- jing> following error:
+So I manually create the Makefile (Makefile.SH, then copy it to
+makefile). It wil then continue to compile but fail with:
 
-It gets built (for the host) because it's needed by the toolchain.
+ext/IPC/SysV/SysV.c: No such file or directory
 
- jing> --10:11:10--  http://www.mpfr.org/mpfr-2.4.1/patches
- jing> Resolving www.mpfr.org... failed: Temporary failure in name resolution.
- jing> --10:11:30--  http://buildroot.net/downloads/sources//patches
- jing> Resolving buildroot.net... 140.211.167.224
- jing> Connecting to buildroot.net|140.211.167.224|:80... connected.
- jing> HTTP request sent, awaiting response... 404 Not Found
- jing> 10:11:30 ERROR 404: Not Found.
-
-mpfr.org is down. We have a fallback system where it will then try to
-download from buildroot.net instead if that fails - Unfortunately this
-doesn't work because the patch file is simply called patches on
-mpfr.org and we rename it after download to mpfr-2.4.1.patch after
-downloading.
-
-I have fixed it by adding a patches -> mpfr-2.4.1.patch symlink on
-buildroot.net - So it should work now.
+Any ideas?
 
 -- 
-Bye, Peter Korsgaard
+Linux Home Automation         Neil Cherry       ncherry at linuxha.com
+http://www.linuxha.com/                         Main site
+http://linuxha.blogspot.com/                    My HA Blog
+Author of:    	Linux Smart Homes For Dummies
