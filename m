@@ -1,33 +1,27 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 30 Jun 2009 19:47:02 +0000 (UTC)
-Subject: [Buildroot] [Bug 333] Bump sqlite package to 3.6.15
-In-Reply-To: <bug-333-163@https.bugs.busybox.net/>
-References: <bug-333-163@https.bugs.busybox.net/>
-Message-ID: <20090630194703.1FD7477625@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 25 Jun 2009 17:12:48 +0200
+Subject: [Buildroot] [git commit] Fix dropbear compilation with glibc
+Message-ID: <20090701181741.A8329777FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=333
+commit: http://git.buildroot.net/buildroot/commit/?id=b7d98b2d42e8a715230166367d8489b17fbc9498
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Patch is too large, so refusing to show it
 
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+The patch introduced at c579e32dbe6d927bdcfffeede18123aa92abbdd5 was
+incorrect, since __USE_GNU is an internal C library defined, and
+should not be used by programs. _GNU_SOURCE should be used instead.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+This fixes a build failure on Dropbear when compiling against a
+glibc-based toolchain.
 
-
-
-
---- Comment #6 from Peter Korsgaard <jacmet@uclibc.org>  2009-06-30 19:47:01 UTC ---
-Thanks, committed
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../dropbear-fix-missing-TIMEVAL_TO_TIMESPEC.patch |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
