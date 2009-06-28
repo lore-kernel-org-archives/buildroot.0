@@ -1,38 +1,30 @@
-From: Neil Cherry <ncherry@linuxha.com>
-Date: Fri, 26 Jun 2009 00:22:08 -0400
-Subject: [Buildroot] Problems compiling microperl
-In-Reply-To: <4A432DB3.2030206@linuxha.com>
-References: <4A432DB3.2030206@linuxha.com>
-Message-ID: <4A444CF0.6040001@linuxha.com>
+From: Julien Boibessot <julien.boibessot@free.fr>
+Date: Sun, 28 Jun 2009 19:31:32 +0200
+Subject: [Buildroot] bluez
+In-Reply-To: <8CF9D79FB605004381900048F6005988032DFBEB90@mucse405.eu.infineon.com>
+References: <c88e466f0811060612r70f1d4f7nec4376aca9414dbe@mail.gmail.com><20081106174340.208dc156@surf>
+	<49142122.7020405@free.fr>
+	<8CF9D79FB605004381900048F6005988032DDE4169@mucse405.eu.infineon.com>
+	<49ED01FC03EE524BB7BB258E8F93BFF32B2E75@bfl-exchange-1.BFL.local>
+	<8CF9D79FB605004381900048F6005988032DFBEB90@mucse405.eu.infineon.com>
+Message-ID: <4A47A8F4.7060403@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Neil Cherry wrote:
-> I've gotten most of buildroot to compile. I'm having problems
-> with microperl. The first first error I get is (trimmed):
-> 
-> x2p/makefile: No such file or directory
-> 
-> So I manually create the Makefile (Makefile.SH, then copy it to
-> makefile). It wil then continue to compile but fail with:
-> 
-> ext/IPC/SysV/SysV.c: No such file or directory
-> 
-> Any ideas?
+Hi,
 
-I went into the ext/IPC/SysV/ directory, did a perl Makefile.PL
-then a make SysV.c, returned to the main directory and simply
-typed make. It worked now (???) not sure why this is different
-than previous attempts (I did do a make clean in the Perl directory).
+I know this topic is quite old but:
 
-Anyway it's now kind of working. I need to figure out what file
-to modify to add the extra commands.
+Nick.Thompson at infineon.com a ?crit :
+> I have attached a patch to the bug system at http://busybox.net/bugs/view.php?id=6134 to add bluez-libs and bluez-utils version 3.36 to buildroot.
+>
+> Please make sure you use the latest patch as the first had an error in it which causes a build failure on release 0.9.29 uClibc platforms (the patch is not required in the latest 0.9.30-RC3 snapshots.)
+>   
+Do somebody know where this bug report has gone ??
+(I finally get the hardware to test it ;-) )
 
--- 
-Linux Home Automation         Neil Cherry       ncherry at linuxha.com
-http://www.linuxha.com/                         Main site
-http://linuxha.blogspot.com/                    My HA Blog
-Author of:    	Linux Smart Homes For Dummies
+Regards,
+Julien
