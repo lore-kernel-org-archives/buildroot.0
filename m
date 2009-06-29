@@ -1,39 +1,41 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 29 Jun 2009 10:28:20 +0000 (UTC)
-Subject: [Buildroot] [Bug 425] New: enchant: New package for enchant
- spell-checking library.
-Message-ID: <bug-425-163@https.bugs.busybox.net/>
+Date: Mon, 29 Jun 2009 10:57:01 +0000 (UTC)
+Subject: [Buildroot] [Bug 427] New: webkit: Update to WebKit svn r44552.
+Message-ID: <bug-427-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=425
+https://bugs.busybox.net/show_bug.cgi?id=427
 
-           Summary: enchant: New package for enchant spell-checking library.
+           Summary: webkit: Update to WebKit svn r44552.
            Product: buildroot
            Version: unspecified
           Platform: PC
         OS/Version: Linux
             Status: NEW
-          Severity: enhancement
+          Severity: normal
           Priority: P5
          Component: Other
         AssignedTo: unassigned at buildroot.uclibc.org
         ReportedBy: will.newton at gmail.com
                 CC: buildroot at uclibc.org
+        Depends on: 425
    Estimated Hours: 0.0
 
 
-Created an attachment (id=427)
- --> (https://bugs.busybox.net/attachment.cgi?id=427)
-Add package for enchant spell-checking library.
+Created an attachment (id=429)
+ --> (https://bugs.busybox.net/attachment.cgi?id=429)
+Update WebKit to svn r44552.
 
-Enchant is a spell checking library that provides a consistent API across
-a number of spell-checking system backends.
+- Fix generation of configure script and Makefiles.
+ - Add dependencies on libsoup and enchant.
+ - Allow configuration of rendering target (currently X11 or DirectFB).
 
-Enchant is used by recent versions of WebKit.
+This may close bug 355, but I haven't been able to reproduce the specific issue
+in that report.
 
 
 -- 
