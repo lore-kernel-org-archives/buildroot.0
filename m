@@ -1,33 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Jun 2009 09:59:00 +0200
-Subject: [Buildroot] ssh
-In-Reply-To: <49282.172.16.221.250.1246225016.squirrel@www.xtale.biz>
-References: <49282.172.16.221.250.1246225016.squirrel@www.xtale.biz>
-Message-ID: <20090629095900.18579e55@surf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 29 Jun 2009 10:28:20 +0000 (UTC)
+Subject: [Buildroot] [Bug 425] New: enchant: New package for enchant
+ spell-checking library.
+Message-ID: <bug-425-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sun, 28 Jun 2009 21:36:56 -0000 (Europe/London),
-nfrench at xtale.biz a ?crit :
+https://bugs.busybox.net/show_bug.cgi?id=425
 
-> just booted and have a problem with ssh (dropbear) that it needs
-> libgcc_s.so and this is not int the image
+           Summary: enchant: New package for enchant spell-checking library.
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: will.newton at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Which Buildroot mode are you using ? Buildroot toolchain or external
-binary toolchain ?
 
-> I could copy the one from the build of gcc but thats >300k do I need
-> to change some thing in the build options.
+Created an attachment (id=427)
+ --> (https://bugs.busybox.net/attachment.cgi?id=427)
+Add package for enchant spell-checking library.
 
-Here on ARM, my libgcc_s.so.1 unstripped is ~175K, and stripped, it is
-~42K.
+Enchant is a spell checking library that provides a consistent API across
+a number of spell-checking system backends.
 
-Thomas
+Enchant is used by recent versions of WebKit.
+
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
