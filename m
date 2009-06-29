@@ -1,56 +1,38 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 29 Jun 2009 20:59:39 +0200
-Subject: [Buildroot] [git commit] u-boot: add 2009.06 release
-Message-ID: <20090630194636.E623777626@busybox.osuosl.org>
+Date: Mon, 29 Jun 2009 14:29:20 +0200
+Subject: [Buildroot] [git commit] qtopia4: fix build for !QTOPIA4_SHARED
+Message-ID: <20090630194636.648E977625@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a928430ff7f8e40f910db6628efd1d923e96a414
+commit: http://git.buildroot.net/buildroot/commit/?id=2945b06610197422b17dd271e695164088f06f90
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 
+Only try to copy the shared objects from staging to target if QT
+is configured for shared objects.
+
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- target/u-boot/Config.in |    9 +++++++--
- 1 files changed, 7 insertions(+), 2 deletions(-)
+ package/qtopia4/qtopia4.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/target/u-boot/Config.in b/target/u-boot/Config.in
-index bd0251b..a4994c4 100644
---- a/target/u-boot/Config.in
-+++ b/target/u-boot/Config.in
-@@ -13,16 +13,20 @@ config BR2_TARGET_UBOOT_BOARDNAME
+diff --git a/package/qtopia4/qtopia4.mk b/package/qtopia4/qtopia4.mk
+index a198a41..4282519 100644
+--- a/package/qtopia4/qtopia4.mk
++++ b/package/qtopia4/qtopia4.mk
+@@ -542,8 +542,8 @@ endif
  
- choice
- 	prompt "U-Boot Version"
--	default BR2_TARGET_UBOOT_2009_03
-+	default BR2_TARGET_UBOOT_2009_06
- 	help
- 	  Select the specific U-Boot version you want to use
+ $(TARGET_DIR)/usr/lib/libQtCore.so.4: $(STAGING_DIR)/usr/lib/libQtCore.la $(QTOPIA4_LIBS)
+ 	# Strip all installed libs
+-	cp -dpf $(STAGING_DIR)/usr/lib/libQtCore.so.* $(TARGET_DIR)/usr/lib/
+ ifeq ($(BR2_PACKAGE_QTOPIA4_SHARED),y)
++	cp -dpf $(STAGING_DIR)/usr/lib/libQtCore.so.* $(TARGET_DIR)/usr/lib/
+ 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libQt*.so.*
+ endif
  
-+config BR2_TARGET_UBOOT_2009_06
-+	bool "u-boot-2009.06"
-+
- config BR2_TARGET_UBOOT_2009_03
- 	bool "u-boot-2009.03"
-+	depends on BR2_DEPRECATED || BR2_RECENT
- 
- config BR2_TARGET_UBOOT_2009_01
- 	bool "u-boot-2009.01"
--	depends on BR2_DEPRECATED || BR2_RECENT
-+	depends on BR2_DEPRECATED
- 
- config BR2_TARGET_UBOOT_2008_10
- 	bool "u-boot-2008.10"
-@@ -39,6 +43,7 @@ endchoice
- 
- config BR2_UBOOT_VERSION
- 	string
-+	default "2009.06"	if BR2_TARGET_UBOOT_2009_06
- 	default "2009.03"	if BR2_TARGET_UBOOT_2009_03
- 	default "2009.01"	if BR2_TARGET_UBOOT_2009_01
- 	default "2008.10"	if BR2_TARGET_UBOOT_2008_10
 -- 
 1.6.3.3
