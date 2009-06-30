@@ -1,9 +1,9 @@
 From: Lionel Landwerlin <lionel.landwerlin@openwide.fr>
-Date: Wed, 01 Jul 2009 01:50:50 +0200
+Date: Wed, 01 Jul 2009 01:54:33 +0200
 Subject: [Buildroot] External toolchain improvements
 In-Reply-To: <mailman.0.1246405094.1110.buildroot@busybox.net>
 References: <mailman.0.1246405094.1110.buildroot@busybox.net>
-Message-ID: <1246405850.21132.10.camel@coalu.atr>
+Message-ID: <1246406073.21132.13.camel@coalu.atr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -27,4 +27,12 @@ With my current toolchain, I also need :
 
 After that, I also have problems with packages using pkg-config.
 Pkg-config returns paths relatives to the build directory ( -L/usr/lib
-for example). This tries to link with 
+for example). Gcc tries to link with host libraries...
+
+We probably need a double --sysroot parameter to look first where the
+toolchain is installed and then in the given sysroot path.
+
+Regards,
+
+-- 
+Lionel Landwerlin <lionel.landwerlin@openwide.fr>
