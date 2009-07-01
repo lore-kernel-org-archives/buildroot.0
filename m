@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 01 Jul 2009 20:15:15 +0200
-Subject: [Buildroot] [pull request] Fix Matchbox build
-In-Reply-To: <20090701165635.310644fb@surf> (Thomas Petazzoni's message of
-	"Wed\, 1 Jul 2009 16\:56\:35 +0200")
-References: <20090701165635.310644fb@surf>
-Message-ID: <87ljn8clsc.fsf@macbook.be.48ers.dk>
+Date: Wed, 01 Jul 2009 20:16:28 +0200
+Subject: [Buildroot] [pull request] Dropbear fix
+In-Reply-To: <20090701165710.1b509a0a@surf> (Thomas Petazzoni's message of
+	"Wed\, 1 Jul 2009 16\:57\:10 +0200")
+References: <20090701165710.1b509a0a@surf>
+Message-ID: <87hbxwclqb.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,13 +19,12 @@ To: buildroot@busybox.net
 
  Thomas> are available in the git repository at:
 
- Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot matchbox-fix
+ Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot dropbear-fix
 
  Thomas> Thomas Petazzoni (1):
- Thomas>       Fix Matchbox build
+ Thomas>       Fix dropbear compilation with glibc
 
-Pulled, thanks! We should probably convert the matchbox stuff to
-Makefile.autotools.in format in the long run through ..
+Pulled, thanks!
 
 -- 
 Bye, Peter Korsgaard
