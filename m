@@ -1,91 +1,87 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 1 Jul 2009 15:36:19 +0200
-Subject: [Buildroot] [git commit] package: add spawn-fcgi package
-Message-ID: <20090701133733.15F92763B2@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 1 Jul 2009 16:05:13 +0200
+Subject: [Buildroot] External toolchain improvements
+In-Reply-To: <1246406073.21132.13.camel@coalu.atr>
+References: <mailman.0.1246405094.1110.buildroot@busybox.net>
+	<1246406073.21132.13.camel@coalu.atr>
+Message-ID: <20090701160513.2ce29151@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0468be6e07185a57a8d01c57bfefcc2487a16875
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Lionel,
 
+Le Wed, 01 Jul 2009 01:54:33 +0200,
+Lionel Landwerlin <lionel.landwerlin@openwide.fr> a ?crit :
 
-Closes #417,
+> I'm interested by your patches, I'm using a STLinux external toolchain
+> (Linux for SH4 SetTop Boxes).
 
-New package spawn-fcgi, basically a FastCGI process spawner.
-This was previously included in lighttpd up to version 1.4.22 and is now
-a separate project.
+Ok. Nice to see interest in external toolchain support, which is still
+experimental, as you saw.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES                          |    1 +
- package/Config.in                |    1 +
- package/spawn-fcgi/Config.in     |    7 +++++++
- package/spawn-fcgi/spawn-fcgi.mk |   15 +++++++++++++++
- 4 files changed, 24 insertions(+), 0 deletions(-)
- create mode 100644 package/spawn-fcgi/Config.in
- create mode 100644 package/spawn-fcgi/spawn-fcgi.mk
+> The problem is that copying only libraries is not enough to build
+> even a simple program like this one :
 
-diff --git a/CHANGES b/CHANGES
-index 88fdabf..7e4facc 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -15,6 +15,7 @@
- 	#395: gst-plugins-bad: New package
- 	#409: Bump php package to 5.2.10
- 	#411: ipsec-tools: Bump version to 0.7.2
-+	#417: New package spawn-fcgi
- 	#419: Bump lighttpd package to 1.4.23
- 
- 2009.05, Released June 1st, 2009:
-diff --git a/package/Config.in b/package/Config.in
-index 0b09277..1dfdb20 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -198,6 +198,7 @@ source "package/quagga/Config.in"
- source "package/rsync/Config.in"
- source "package/samba/Config.in"
- source "package/socat/Config.in"
-+source "package/spawn-fcgi/Config.in"
- source "package/stunnel/Config.in"
- source "package/tcpdump/Config.in"
- source "package/tftpd/Config.in"
-diff --git a/package/spawn-fcgi/Config.in b/package/spawn-fcgi/Config.in
-new file mode 100644
-index 0000000..34cbbb1
---- /dev/null
-+++ b/package/spawn-fcgi/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_SPAWN_FCGI
-+	bool "spawn-fcgi"
-+	help
-+	  FastCGI process spawner.
-+	  Project split from lighttpd.
-+
-+	  http://redmine.lighttpd.net/projects/spawn-fcgi
-diff --git a/package/spawn-fcgi/spawn-fcgi.mk b/package/spawn-fcgi/spawn-fcgi.mk
-new file mode 100644
-index 0000000..ac33d88
---- /dev/null
-+++ b/package/spawn-fcgi/spawn-fcgi.mk
-@@ -0,0 +1,15 @@
-+#############################################################
-+#
-+# spawn-fcgi
-+#
-+#############################################################
-+
-+SPAWN_FCGI_VERSION = 1.6.2
-+SPAWN_FCGI_SITE = http://www.lighttpd.net/download
-+SPAWN_FCGI_SOURCE = spawn-fcgi-$(SPAWN_FCGI_VERSION).tar.bz2
-+
-+ifneq ($(BR2_INET_IPV6),y)
-+SPAWN_FCGI_CONF_OPT = --disable-ipv6
-+endif
-+
-+$(eval $(call AUTOTARGETS,package,spawn-fcgi))
+I'm not sure which Buildroot version you're using, but 2009.05 and
+current Git don't only copy the libraries. Here is what we do :
+
+ 1) Copy + strip the libraries to the target space
+    (project_build_ARCH/PROJECT/root). Only the files needed for
+    execution need to be copied to the target space.
+
+ 2) Copy the full sysroot to the staging space (build_ARCH/staging_dir).
+
+This is done in toolchain/external-toolchain/ext-took.mk.
+
+> int main (void) { return 0; }
+> 
+> With my current toolchain, I also need :
+> 
+>       * crt1.o crti.o crtn.o
+>       * All headers from the libc & linux
+
+In current Buildroot, all these are copied to the staging directory. In
+an example build, I have :
+
+$ find . -name '*crt*'
+./build_arm/staging_dir/usr/lib/Scrt1.o
+./build_arm/staging_dir/usr/lib/crt1.o
+./build_arm/staging_dir/usr/lib/crti.o
+./build_arm/staging_dir/usr/lib/crtn.o
+
+$ find build_arm/staging_dir/ -name '*.h' | head -5
+build_arm/staging_dir/usr/include/neteconet/ec.h
+build_arm/staging_dir/usr/include/strings.h
+build_arm/staging_dir/usr/include/ttyent.h
+build_arm/staging_dir/usr/include/pty.h
+build_arm/staging_dir/usr/include/mntent.h
+
+> After that, I also have problems with packages using pkg-config.
+> Pkg-config returns paths relatives to the build directory ( -L/usr/lib
+> for example). Gcc tries to link with host libraries...
+
+This should theorically not happen since we should pass --sysroot to
+every gcc/ld compilation step, and therefore all paths should be
+interpreted relative to the sysroot (which is in fact the staging dir).
+
+> We probably need a double --sysroot parameter to look first where the
+> toolchain is installed and then in the given sysroot path.
+
+Could you give more details about what you're doing :
+
+ * Buildroot version
+ * Buildroot .config file
+ * Error messages
+ * External toolchain used
+
+Thanks !
+
+Thomas
 -- 
-1.6.3.3
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
