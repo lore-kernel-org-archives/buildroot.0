@@ -1,75 +1,33 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 29 Jun 2009 11:26:23 +0100
-Subject: [Buildroot] [git commit] enchant: New package for enchant
-	spell-checking library.
-Message-ID: <20090705195450.62D3F777D1@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed,  1 Jul 2009 13:33:35 +0000 (UTC)
+Subject: [Buildroot] [Bug 419] Bump lighttpd package to 1.4.23
+In-Reply-To: <bug-419-163@https.bugs.busybox.net/>
+References: <bug-419-163@https.bugs.busybox.net/>
+Message-ID: <20090701133335.6E5FB777FC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2c3a3af86e072b021a4e4924297a6fbab42d321b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=419
 
 
-Enchant is a spell checking library that provides a consistent API across
-a number of spell-checking system backends.
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-Signed-off-by: Will Newton <will.newton@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Config.in          |    1 +
- package/enchant/Config.in  |    7 +++++++
- package/enchant/enchant.mk |   14 ++++++++++++++
- 3 files changed, 22 insertions(+), 0 deletions(-)
- create mode 100644 package/enchant/Config.in
- create mode 100644 package/enchant/enchant.mk
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-diff --git a/package/Config.in b/package/Config.in
-index 1dfdb20..cb83563 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -61,6 +61,7 @@ source "package/customize/Config.in"
- if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
- source "package/dash/Config.in"
- endif
-+source "package/enchant/Config.in"
- source "package/file/Config.in"
- source "package/gamin/Config.in"
- source "package/icu/Config.in"
-diff --git a/package/enchant/Config.in b/package/enchant/Config.in
-new file mode 100644
-index 0000000..0771a47
---- /dev/null
-+++ b/package/enchant/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_ENCHANT
-+	bool "enchant"
-+	help
-+	  Enchant is a spell-checking library that provides a consistent
-+	  API across a number of spell-checking system backends.
-+
-+	  http://www.abisource.com/projects/enchant/
-diff --git a/package/enchant/enchant.mk b/package/enchant/enchant.mk
-new file mode 100644
-index 0000000..d972465
---- /dev/null
-+++ b/package/enchant/enchant.mk
-@@ -0,0 +1,14 @@
-+#############################################################
-+#
-+# enchant
-+#
-+#############################################################
-+ENCHANT_VERSION = 1.5.0
-+ENCHANT_SOURCE = enchant-$(ENCHANT_VERSION).tar.gz
-+ENCHANT_SITE = http://www.abisource.com/downloads/enchant/$(ENCHANT_VERSION)
-+
-+ENCHANT_INSTALL_STAGING = YES
-+ENCHANT_INSTALL_TARGET = YES
-+ENCHANT_LIBTOOL_PATCH = NO
-+
-+$(eval $(call AUTOTARGETS,package,enchant))
+
+
+
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-07-01 13:33:34 UTC ---
+Thanks, committed
+
+
 -- 
-1.6.3.3
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
