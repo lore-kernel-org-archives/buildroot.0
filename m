@@ -1,57 +1,52 @@
-From: Neil Cherry <ncherry@linuxha.com>
-Date: Thu, 02 Jul 2009 14:04:59 -0400
-Subject: [Buildroot] Following direction, but failing to compile
-Message-ID: <4A4CF6CB.40201@linuxha.com>
+From: Zac Wheeler <zac.wheeler@gmail.com>
+Date: Thu, 2 Jul 2009 13:38:23 -0700
+Subject: [Buildroot] uClibc, gcc get rebuilt on every make
+In-Reply-To: <0E8C14EA-CCA7-4F45-8E17-14321FFB4407@phidgets.com>
+References: <0E8C14EA-CCA7-4F45-8E17-14321FFB4407@phidgets.com>
+Message-ID: <206b9e70907021338s137bdb6fw35e4f35bf38581e4@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I've been having a few problems getting BuildRoot to work. So I
-decided to fall back, read and follow the directions. But this
-too has failed.
+On Tue, Dec 9, 2008 at 10:23 AM, Patrick McNeil <patrick@phidgets.com>wrote:
 
-What I've done is:
+> I'm using svn24232, arm920t, with gcc and headers on the target. Every time
+> I run make, even if I haven't made any changes, the cross compiler
+> toolchain, as well as the target gcc, and uClibc gets rebuilt, taking about
+> half an hour. Any ideas what this is depending on? I know that buildroot
+> from a few months ago did not do this.
+>
 
-tar jxvf buildroot-2009.05.tar.bz2
-cd buildroot-2009.05
-make menuconfig
-make
+Just in case the issue is still there, this is what I did to resolve it:
 
-When I'm compiling all goes well until I hit this:
+diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
+index c8da464..6dff66c 100644
+--- a/toolchain/uClibc/uclibc.mk
++++ b/toolchain/uClibc/uclibc.mk
+@@ -481,7 +482,7 @@ uclibc-menuconfig: host-sed $(UCLIBC_DIR)/.config
+        touch -c $(UCLIBC_DIR)/.config
 
-	:
-  DEPMOD  2.6.29.4-test
-make[1]: Leaving directory
-`/home/njc/stuff/buildroot-2009.05/project_build_i586/LORHA/linux-2.6.29.4'
-+ rm -f
-/home/njc/stuff/buildroot-2009.05/project_build_i586/LORHA/root/lib/modules/2.6.29.4/build
-/home/njc/stuff/buildroot-2009.05/project_build_i586/LORHA/root/lib/modules/2.6.29.4/source
-+ /home/njc/stuff/buildroot-2009.05/build_i586/staging_dir/bin/i586-linux-depmod26 -b
-/home/njc/stuff/buildroot-2009.05/project_build_i586/LORHA/root 2.6.29.4
-WARNING: Couldn't open directory
-/home/njc/stuff/buildroot-2009.05/project_build_i586/LORHA/root/lib/modules/2.6.29.4: No
-such file or directory
-FATAL: Could not open
-/home/njc/stuff/buildroot-2009.05/project_build_i586/LORHA/root/lib/modules/2.6.29.4/modules.dep.temp
-for writing: No such file or directory
-make: ***
-[/home/njc/stuff/buildroot-2009.05/project_build_i586/LORHA/root/lib/modules/2.6.29.4/modules.dep]
-Error 1
 
-I'm having trouble finding where the sequence of commands are
-executed so I can figure out why the directory is not being created.
+-$(STAGING_DIR)/usr/lib/libc.a: $(UCLIBC_DIR)/lib/libc.a
++$(STAGING_DIR)/usr/lib/libc.a: $(UCLIBC_DIR)/.configured $(gcc_initial)
+$(LIBFLOAT_TARGET)
+ ifneq ($(BR2_TOOLCHAIN_SYSROOT),y)
+        $(MAKE1) -C $(UCLIBC_DIR) \
+                PREFIX= \
 
-I can go into the linux-2.6.29.4 directory and manually compile
-the kernel with no errors.
+This also fixes the issue you sent in another mail where libc.a would get
+modified after the initial build and so simply typing "make" again was
+enough to break symbols in libc.a (e.g. python's division).
 
-Any pointers would be appreciated.
+The better way would probably to figure out what is touching
+$(UCLIBC_DIR)/lib/libc.a after the initial build and fix that so that make
+doesn't see a dependency that is newer than the
+$(STAGING_DIR)/usr/lib/libc.a target, but I'm not sure that is easily
+possible given the build sequence.
 
-Thanks
-
--- 
-Linux Home Automation         Neil Cherry       ncherry at linuxha.com
-http://www.linuxha.com/                         Main site
-http://linuxha.blogspot.com/                    My HA Blog
-Author of:    	Linux Smart Homes For Dummies
+Zac
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090702/ede55513/attachment.htm>
