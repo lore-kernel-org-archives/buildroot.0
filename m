@@ -1,41 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Jul 2009 17:34:01 +0200
-Subject: [Buildroot] MSB vs LSB mips library files
-In-Reply-To: <147166.24870.qm@web53506.mail.re2.yahoo.com>
-References: <147166.24870.qm@web53506.mail.re2.yahoo.com>
-Message-ID: <20090702173401.6078dadf@surf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu,  2 Jul 2009 15:55:59 +0000 (UTC)
+Subject: [Buildroot] [Bug 437] New: ltp-testsuite: Bump version to 20090630.
+Message-ID: <bug-437-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 2 Jul 2009 06:40:15 -0700 (PDT),
-jing han <jing_han_66@yahoo.com> a ?crit :
+https://bugs.busybox.net/show_bug.cgi?id=437
 
-> After the make is finished, I checked through the mips files in my
-> mips environment, I found that all the files in
-> buildroot-2009.05/build_mips/staging_dir/usr/bin/* directory are LSB
-> files, all the library files in
-> buildroot-2009.05/build_mips/staging_dir/usr/lib/* directory are MSB
-> files, which supprise me a lot and I don't want. 
+           Summary: ltp-testsuite: Bump version to 20090630.
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: will.newton at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Some of the files in build_mips/staging_dir/usr/bin/ are the
-cross-compiler and other cross-compilation tools. So they are compiled
-for x86 and generate code for MIPS. Or can you provide an example of a
-binary in this directory that is LSB, but not for x86 ?
 
-In build_mips/staging_dir/usr/lib/, are the libraries compiled to run
-on the target, so compiled for the MIPS architecture.
+Created an attachment (id=437)
+ --> (https://bugs.busybox.net/attachment.cgi?id=437)
+Bump ltp version to 20090630.
 
-> Could you tell me which option I could choose in order to avoid MSB
-> library files?
+- Remove a few obsolete patches.
+ - Add a patch to disbale syscall tests unsupported by uClibc.
+ - Add a patch to fix sched_getaffinity build.
 
-Use mipsel instead of mips ?
 
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
