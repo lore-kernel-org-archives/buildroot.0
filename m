@@ -1,51 +1,39 @@
-From: Wenwei Zha <wenweizha@gmail.com>
-Date: Thu, 2 Jul 2009 23:46:37 -0400
-Subject: [Buildroot] buildroot with ELDK 4.1
-Message-ID: <b1907d090907022046l5fba3d82q1a1f80dbed7c3c6f@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 3 Jul 2009 07:19:31 +0200
+Subject: [Buildroot] [git commit] kernel-headers: bump 2.6.27.x / 2.6.29.x /
+	2.6.30.x stable versions
+Message-ID: <20090703052025.9540B77803@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-
-I just started to learn using buildroot to build a root file system. I
-would like to use ELDK 4.1 as my toolchain but has some problem.
-
-I might have some improper settings, but "make saveconfig" gives me no
-error and "make" (without busybox) seems to be fine.
-
-However, when I enable busybox installation, I can't go through
-"make". I encounter error at this command:
-
-/usr/bin/make -j1 CC=/home/wenwei/ELDK/usr/bin/ppc_4xx-gcc
-CROSS_COMPILE="/home/wenwei/ELDK/usr/bin/ppc_4xx-"
-CROSS="/home/wenwei/ELDK/usr/bin/ppc_4xx-"
-PREFIX="/home/wenwei/temp/temp/buildroot-2009.05/project_build_powerpc/linux_26_ml410/root"
-ARCH=powerpc EXTRA_CFLAGS="-Os -pipe -Os  --sysroot
-/home/wenwei/temp/temp/buildroot-2009.05/build_powerpc/staging_dir/"
--C /home/wenwei/temp/temp/buildroot-2009.05/project_build_powerpc/linux_26_ml410/busybox-1.14.1
+commit: http://git.buildroot.net/buildroot/commit/?id=8ae604912bbe506e617d12bf8db3db9cb04d14ab
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 
-make[1]: Entering directory
-`/home/wenwei/temp/temp/buildroot-2009.05/project_build_powerpc/linux_26_ml410/busybox-1.14.1'
- SPLIT   include/autoconf.h -> include/config/*
- GEN     include/bbconfigopts.h
- HOSTCC  applets/usage
-applets/usage.c: In function ?main?:
-applets/usage.c:32: warning: ignoring return value of ?write?,
-declared with attribute warn_unused_result
- GEN     include/usage_compressed.h
- HOSTCC  applets/applet_tables
- GEN     include/applet_tables.h
- CC      applets/applets.o
-cc1: error: unrecognized command line option "-fsysroot"
-                                                                 ~~~~~~~~~~
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/kernel-headers/Config.in |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-Why I get this error? Is there some issue with ELDK? It seems to me
-that buildroot comes with uClib but ELDK should work ....
-
-Anybody went through the same error? Please give some help.
-
-best regards
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 8a98d35..13acecc 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -49,9 +49,9 @@ config BR2_KERNEL_HEADERS_RT
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "2.6.26.8"	if BR2_KERNEL_HEADERS_2_6_26
+-	default "2.6.27.25"	if BR2_KERNEL_HEADERS_2_6_27
++	default "2.6.27.26"	if BR2_KERNEL_HEADERS_2_6_27
+ 	default "2.6.28.10"	if BR2_KERNEL_HEADERS_2_6_28
+-	default "2.6.29.5"	if BR2_KERNEL_HEADERS_2_6_29
+-	default "2.6.30"	if BR2_KERNEL_HEADERS_2_6_30
++	default "2.6.29.6"	if BR2_KERNEL_HEADERS_2_6_29
++	default "2.6.30.1"	if BR2_KERNEL_HEADERS_2_6_30
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 
+-- 
+1.6.3.3
