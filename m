@@ -1,55 +1,51 @@
-From: Zac Wheeler <zac.wheeler@gmail.com>
-Date: Thu, 2 Jul 2009 16:37:04 -0700
-Subject: [Buildroot] uClibc, gcc get rebuilt on every make
-In-Reply-To: <20090702210747.GE14135@mx.loc>
-References: <0E8C14EA-CCA7-4F45-8E17-14321FFB4407@phidgets.com>
-	<206b9e70907021338s137bdb6fw35e4f35bf38581e4@mail.gmail.com>
-	<20090702210747.GE14135@mx.loc>
-Message-ID: <206b9e70907021637h666c10dco969f105de440f643@mail.gmail.com>
+From: Wenwei Zha <wenweizha@gmail.com>
+Date: Thu, 2 Jul 2009 23:46:37 -0400
+Subject: [Buildroot] buildroot with ELDK 4.1
+Message-ID: <b1907d090907022046l5fba3d82q1a1f80dbed7c3c6f@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jul 2, 2009 at 2:07 PM, Bernhard Reutner-Fischer <
-rep.dot.nop@gmail.com> wrote:
+Hi,
 
-> On Thu, Jul 02, 2009 at 01:38:23PM -0700, Zac Wheeler wrote:
-> >On Tue, Dec 9, 2008 at 10:23 AM, Patrick McNeil <patrick@phidgets.com
-> >wrote:
-> >
-> >> I'm using svn24232, arm920t, with gcc and headers on the target. Every
-> time
-> >> I run make, even if I haven't made any changes, the cross compiler
-> >> toolchain, as well as the target gcc, and uClibc gets rebuilt, taking
-> about
-> >> half an hour. Any ideas what this is depending on? I know that buildroot
-> >> from a few months ago did not do this.
-> >>
-> >
-> >Just in case the issue is still there, this is what I did to resolve it:
-> >
-> >diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
-> >index c8da464..6dff66c 100644
-> >--- a/toolchain/uClibc/uclibc.mk
-> >+++ b/toolchain/uClibc/uclibc.mk
-> >@@ -481,7 +482,7 @@ uclibc-menuconfig: host-sed $(UCLIBC_DIR)/.config
-> >        touch -c $(UCLIBC_DIR)/.config
-> >
-> >
-> >-$(STAGING_DIR)/usr/lib/libc.a: $(UCLIBC_DIR)/lib/libc.a
-> >+$(STAGING_DIR)/usr/lib/libc.a: $(UCLIBC_DIR)/.configured $(gcc_initial)
->
-> This doesn't sounds clean to me. My current working theory:
->
-> http://repo.or.cz/w/buildroot.git?a=blob;f=toolchain/uClibc/uclibc.mk;h=5b4e0c6a02daff5a5c498a2d277eb628ca15aad5;hb=HEAD#l509
->
-> http://repo.or.cz/w/buildroot.git?a=blob;f=toolchain/uClibc/uclibc.mk;h=5b4e0c6a02daff5a5c498a2d277eb628ca15aad5;hb=HEAD#l550
->
+I just started to learn using buildroot to build a root file system. I
+would like to use ELDK 4.1 as my toolchain but has some problem.
 
-Cool, I didn't know about order-only prerequisites. Or are the additional CC
-and FLAGS options important for fixing this issue as well?
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090702/a555cc23/attachment.htm>
+I might have some improper settings, but "make saveconfig" gives me no
+error and "make" (without busybox) seems to be fine.
+
+However, when I enable busybox installation, I can't go through
+"make". I encounter error at this command:
+
+/usr/bin/make -j1 CC=/home/wenwei/ELDK/usr/bin/ppc_4xx-gcc
+CROSS_COMPILE="/home/wenwei/ELDK/usr/bin/ppc_4xx-"
+CROSS="/home/wenwei/ELDK/usr/bin/ppc_4xx-"
+PREFIX="/home/wenwei/temp/temp/buildroot-2009.05/project_build_powerpc/linux_26_ml410/root"
+ARCH=powerpc EXTRA_CFLAGS="-Os -pipe -Os  --sysroot
+/home/wenwei/temp/temp/buildroot-2009.05/build_powerpc/staging_dir/"
+-C /home/wenwei/temp/temp/buildroot-2009.05/project_build_powerpc/linux_26_ml410/busybox-1.14.1
+
+
+make[1]: Entering directory
+`/home/wenwei/temp/temp/buildroot-2009.05/project_build_powerpc/linux_26_ml410/busybox-1.14.1'
+ SPLIT   include/autoconf.h -> include/config/*
+ GEN     include/bbconfigopts.h
+ HOSTCC  applets/usage
+applets/usage.c: In function ?main?:
+applets/usage.c:32: warning: ignoring return value of ?write?,
+declared with attribute warn_unused_result
+ GEN     include/usage_compressed.h
+ HOSTCC  applets/applet_tables
+ GEN     include/applet_tables.h
+ CC      applets/applets.o
+cc1: error: unrecognized command line option "-fsysroot"
+                                                                 ~~~~~~~~~~
+
+Why I get this error? Is there some issue with ELDK? It seems to me
+that buildroot comes with uClib but ELDK should work ....
+
+Anybody went through the same error? Please give some help.
+
+best regards
