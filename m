@@ -1,22 +1,38 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Fri, 3 Jul 2009 09:11:39 +0200
-Subject: [Buildroot] uClibc, gcc get rebuilt on every make
-In-Reply-To: <206b9e70907021637h666c10dco969f105de440f643@mail.gmail.com>
-References: <0E8C14EA-CCA7-4F45-8E17-14321FFB4407@phidgets.com>
-	<206b9e70907021338s137bdb6fw35e4f35bf38581e4@mail.gmail.com>
-	<20090702210747.GE14135@mx.loc>
-	<206b9e70907021637h666c10dco969f105de440f643@mail.gmail.com>
-Message-ID: <20090703071139.GB25358@mx.loc>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 3 Jul 2009 10:13:37 +0200
+Subject: [Buildroot] External toolchain improvements
+In-Reply-To: <1246600903.8052.8.camel@coalu.atr>
+References: <mailman.0.1246405094.1110.buildroot@busybox.net>
+	<1246406073.21132.13.camel@coalu.atr>
+	<20090701160513.2ce29151@surf>
+	<1246484614.21132.36.camel@coalu.atr>
+	<20090702145011.6b9f3fe9@surf> <1246600903.8052.8.camel@coalu.atr>
+Message-ID: <20090703101337.7b766edb@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jul 02, 2009 at 04:37:04PM -0700, Zac Wheeler wrote:
->On Thu, Jul 2, 2009 at 2:07 PM, Bernhard Reutner-Fischer <
+Le Fri, 03 Jul 2009 08:01:43 +0200,
+Lionel Landwerlin <lionel.landwerlin@openwide.fr> a ?crit :
 
->Cool, I didn't know about order-only prerequisites. Or are the additional CC
->and FLAGS options important for fixing this issue as well?
+> /usr/lib/libdl.so: file not recognized: File format not recognized
 
-No, they are just a matter of correctness and a different issue.
+Arf, libtool crap.
+
+Can you try with
+
+LIBGLIB2_LIBTOOL_PATCH = YES
+LIBGLIB2_AUTORECONF = YES
+
+in package/libglib2/libglib2.mk ?
+
+This will try to fix ltmain.sh to workaround cross-compiling issues.
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
