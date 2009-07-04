@@ -1,170 +1,35 @@
-From: Lionel Landwerlin <lionel.landwerlin@openwide.fr>
-Date: Fri, 03 Jul 2009 23:24:38 +0200
-Subject: [Buildroot] External toolchain improvements
-In-Reply-To: <20090703101337.7b766edb@surf>
-References: <mailman.0.1246405094.1110.buildroot@busybox.net>
-	<1246406073.21132.13.camel@coalu.atr> <20090701160513.2ce29151@surf>
-	<1246484614.21132.36.camel@coalu.atr> <20090702145011.6b9f3fe9@surf>
-	<1246600903.8052.8.camel@coalu.atr>  <20090703101337.7b766edb@surf>
-Message-ID: <1246656278.1057.12.camel@coalu.atr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat,  4 Jul 2009 21:50:58 +0000 (UTC)
+Subject: [Buildroot] [Bug 423] cairo: Allow DirectFB backend to be built.
+In-Reply-To: <bug-423-163@https.bugs.busybox.net/>
+References: <bug-423-163@https.bugs.busybox.net/>
+Message-ID: <20090704215058.9C9C277808@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le vendredi 03 juillet 2009 ? 10:13 +0200, Thomas Petazzoni a ?crit :
-> Le Fri, 03 Jul 2009 08:01:43 +0200,
-> Lionel Landwerlin <lionel.landwerlin@openwide.fr> a ?crit :
-> 
-> > /usr/lib/libdl.so: file not recognized: File format not recognized
-> 
-> Arf, libtool crap.
-> 
-> Can you try with
-> 
-> LIBGLIB2_LIBTOOL_PATCH = YES
-> LIBGLIB2_AUTORECONF = YES
-> 
-> in package/libglib2/libglib2.mk ?
-> 
-> This will try to fix ltmain.sh to workaround cross-compiling issues.
+https://bugs.busybox.net/show_bug.cgi?id=423
 
 
-The patch can not be applied cleanly. I finished it at hand.
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-Then the reconfiguration of the build scripts fails too :
-
-
-------------------------------->
-
-autoreconf: running: /home/djdeath/src/buildroot/buildroot/build_sh4/host_dir/usr/bin/autoconf --include=/home/djdeath/src/buildroot/buildroot/build_sh4/staging_dir/usr/share/aclocal --force
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
 
 
-configure.in:493: warning: AC_CACHE_VAL(lt_prog_compiler_pic_works, ...): suspicious cache-id, must contain _cv_ to be cached
-../../lib/autoconf/general.m4:1974: AC_CACHE_VAL is expanded from...
-../../lib/autoconf/general.m4:1994: AC_CACHE_CHECK is expanded from...
-aclocal.m4:1766: AC_LIBTOOL_COMPILER_OPTION is expanded from...
-aclocal.m4:6054: AC_LIBTOOL_PROG_COMPILER_PIC is expanded from...
-aclocal.m4:3834: _LT_AC_LANG_C_CONFIG is expanded from...
-aclocal.m4:3833: AC_LIBTOOL_LANG_C_CONFIG is expanded from...
-aclocal.m4:1214: AC_LIBTOOL_SETUP is expanded from...
-aclocal.m4:1194: _AC_PROG_LIBTOOL is expanded from...
-aclocal.m4:1159: AC_PROG_LIBTOOL is expanded from...
-aclocal.m4:7599: AM_PROG_LIBTOOL is expanded from...
-configure.in:493: the top level
-configure.in:493: warning: AC_CACHE_VAL(lt_prog_compiler_static_works, ...): suspicious cache-id, must contain _cv_ to be cached
-aclocal.m4:1811: AC_LIBTOOL_LINKER_OPTION is expanded from...
-configure.in:493: warning: AC_CACHE_VAL(lt_prog_compiler_pic_works_CXX, ...): suspicious cache-id, must contain _cv_ to be cached
-aclocal.m4:3911: _LT_AC_LANG_CXX_CONFIG is expanded from...
-aclocal.m4:3910: AC_LIBTOOL_LANG_CXX_CONFIG is expanded from...
-aclocal.m4:2959: _LT_AC_TAGCONFIG is expanded from...
-configure.in:493: warning: AC_CACHE_VAL(lt_prog_compiler_static_works_CXX, ...): suspicious cache-id, must contain _cv_ to be cached
-configure.in:493: warning: AC_CACHE_VAL(lt_prog_compiler_pic_works_F77, ...): suspicious cache-id, must contain _cv_ to be cached
-aclocal.m4:5133: _LT_AC_LANG_F77_CONFIG is expanded from...
-aclocal.m4:5132: AC_LIBTOOL_LANG_F77_CONFIG is expanded from...
-configure.in:493: warning: AC_CACHE_VAL(lt_prog_compiler_static_works_F77, ...): suspicious cache-id, must contain _cv_ to be cached
-configure.in:493: warning: AC_CACHE_VAL(lt_prog_compiler_pic_works_GCJ, ...): suspicious cache-id, must contain _cv_ to be cached
-aclocal.m4:5242: _LT_AC_LANG_GCJ_CONFIG is expanded from...
-aclocal.m4:5241: AC_LIBTOOL_LANG_GCJ_CONFIG is expanded from...
-configure.in:493: warning: AC_CACHE_VAL(lt_prog_compiler_static_works_GCJ, ...): suspicious cache-id, must contain _cv_ to be cached
-autoreconf: running: /home/djdeath/src/buildroot/buildroot/build_sh4/host_dir/usr/bin/autoheader --include=/home/djdeath/src/buildroot/buildroot/build_sh4/staging_dir/usr/share/aclocal --force
-configure.in:493: warning: AC_CACHE_VAL(lt_prog_compiler_pic_works, ...): suspicious cache-id, must contain _cv_ to be cached
-../../lib/autoconf/general.m4:1974: AC_CACHE_VAL is expanded from...
-../../lib/autoconf/general.m4:1994: AC_CACHE_CHECK is expanded from...
-aclocal.m4:1766: AC_LIBTOOL_COMPILER_OPTION is expanded from...
-aclocal.m4:6054: AC_LIBTOOL_PROG_COMPILER_PIC is expanded from...
-aclocal.m4:3834: _LT_AC_LANG_C_CONFIG is expanded from...
-aclocal.m4:3833: AC_LIBTOOL_LANG_C_CONFIG is expanded from...
-aclocal.m4:1214: AC_LIBTOOL_SETUP is expanded from...
-aclocal.m4:1194: _AC_PROG_LIBTOOL is expanded from...
-aclocal.m4:1159: AC_PROG_LIBTOOL is expanded from...
-aclocal.m4:7599: AM_PROG_LIBTOOL is expanded from...
-configure.in:493: the top level
-configure.in:493: warning: AC_CACHE_VAL(lt_prog_compiler_static_works, ...): suspicious cache-id, must contain _cv_ to be cached
-aclocal.m4:1811: AC_LIBTOOL_LINKER_OPTION is expanded from...
-configure.in:493: warning: AC_CACHE_VAL(lt_prog_compiler_pic_works_CXX, ...): suspicious cache-id, must contain _cv_ to be cached
-aclocal.m4:3911: _LT_AC_LANG_CXX_CONFIG is expanded from...
-aclocal.m4:3910: AC_LIBTOOL_LANG_CXX_CONFIG is expanded from...
-aclocal.m4:2959: _LT_AC_TAGCONFIG is expanded from...
-configure.in:493: warning: AC_CACHE_VAL(lt_prog_compiler_static_works_CXX, ...): suspicious cache-id, must contain _cv_ to be cached
-configure.in:493: warning: AC_CACHE_VAL(lt_prog_compiler_pic_works_F77, ...): suspicious cache-id, must contain _cv_ to be cached
-aclocal.m4:5133: _LT_AC_LANG_F77_CONFIG is expanded from...
-aclocal.m4:5132: AC_LIBTOOL_LANG_F77_CONFIG is expanded from...
-configure.in:493: warning: AC_CACHE_VAL(lt_prog_compiler_static_works_F77, ...): suspicious cache-id, must contain _cv_ to be cached
-configure.in:493: warning: AC_CACHE_VAL(lt_prog_compiler_pic_works_GCJ, ...): suspicious cache-id, must contain _cv_ to be cached
-aclocal.m4:5242: _LT_AC_LANG_GCJ_CONFIG is expanded from...
-aclocal.m4:5241: AC_LIBTOOL_LANG_GCJ_CONFIG is expanded from...
-configure.in:493: warning: AC_CACHE_VAL(lt_prog_compiler_static_works_GCJ, ...): suspicious cache-id, must contain _cv_ to be cached
 
-autoreconf: running: automake --add-missing --copy --force-missing
 
-configure.in:493: warning: AC_CACHE_VAL(lt_prog_compiler_pic_works, ...): suspicious cache-id, must contain _cv_ to be cached
-../../lib/autoconf/general.m4:1974: AC_CACHE_VAL is expanded from...
-../../lib/autoconf/general.m4:1994: AC_CACHE_CHECK is expanded from...
-aclocal.m4:1766: AC_LIBTOOL_COMPILER_OPTION is expanded from...
-aclocal.m4:6054: AC_LIBTOOL_PROG_COMPILER_PIC is expanded from...
-aclocal.m4:3834: _LT_AC_LANG_C_CONFIG is expanded from...
-aclocal.m4:3833: AC_LIBTOOL_LANG_C_CONFIG is expanded from...
-aclocal.m4:1214: AC_LIBTOOL_SETUP is expanded from...
-aclocal.m4:1194: _AC_PROG_LIBTOOL is expanded from...
-aclocal.m4:1159: AC_PROG_LIBTOOL is expanded from...
-aclocal.m4:7599: AM_PROG_LIBTOOL is expanded from...
-configure.in:493: the top level
-configure.in:493: warning: AC_CACHE_VAL(lt_prog_compiler_static_works, ...): suspicious cache-id, must contain _cv_ to be cached
-aclocal.m4:1811: AC_LIBTOOL_LINKER_OPTION is expanded from...
-configure.in:493: warning: AC_CACHE_VAL(lt_prog_compiler_pic_works_CXX, ...): suspicious cache-id, must contain _cv_ to be cached
-aclocal.m4:3911: _LT_AC_LANG_CXX_CONFIG is expanded from...
-aclocal.m4:3910: AC_LIBTOOL_LANG_CXX_CONFIG is expanded from...
-aclocal.m4:2959: _LT_AC_TAGCONFIG is expanded from...
-configure.in:493: warning: AC_CACHE_VAL(lt_prog_compiler_static_works_CXX, ...): suspicious cache-id, must contain _cv_ to be cached
-configure.in:493: warning: AC_CACHE_VAL(lt_prog_compiler_pic_works_F77, ...): suspicious cache-id, must contain _cv_ to be cached
-aclocal.m4:5133: _LT_AC_LANG_F77_CONFIG is expanded from...
-aclocal.m4:5132: AC_LIBTOOL_LANG_F77_CONFIG is expanded from...
-configure.in:493: warning: AC_CACHE_VAL(lt_prog_compiler_static_works_F77, ...): suspicious cache-id, must contain _cv_ to be cached
-configure.in:493: warning: AC_CACHE_VAL(lt_prog_compiler_pic_works_GCJ, ...): suspicious cache-id, must contain _cv_ to be cached
-aclocal.m4:5242: _LT_AC_LANG_GCJ_CONFIG is expanded from...
-aclocal.m4:5241: AC_LIBTOOL_LANG_GCJ_CONFIG is expanded from...
-configure.in:493: warning: AC_CACHE_VAL(lt_prog_compiler_static_works_GCJ, ...): suspicious cache-id, must contain _cv_ to be cached
-gtk-doc.make:7: GTK_DOC_USE_LIBTOOL does not appear in AM_CONDITIONAL
-docs/reference/gio/Makefile.am:107:   `gtk-doc.make' included from here
-gtk-doc.make:50: ENABLE_GTK_DOC does not appear in AM_CONDITIONAL
-docs/reference/gio/Makefile.am:107:   `gtk-doc.make' included from here
-gtk-doc.make:175: ENABLE_GTK_DOC does not appear in AM_CONDITIONAL
-docs/reference/gio/Makefile.am:107:   `gtk-doc.make' included from here
-gtk-doc.make:26: EXTRA_DIST multiply defined in condition TRUE ...
-docs/reference/gio/Makefile.am:107:   `gtk-doc.make' included from here
-Makefile.decl:8: ... `EXTRA_DIST' previously defined here
-docs/reference/gio/Makefile.am:1:   `Makefile.decl' included from here
-gtk-doc.make:7: GTK_DOC_USE_LIBTOOL does not appear in AM_CONDITIONAL
-docs/reference/glib/Makefile.am:73:   `gtk-doc.make' included from here
-gtk-doc.make:50: ENABLE_GTK_DOC does not appear in AM_CONDITIONAL
-docs/reference/glib/Makefile.am:73:   `gtk-doc.make' included from here
-gtk-doc.make:175: ENABLE_GTK_DOC does not appear in AM_CONDITIONAL
-docs/reference/glib/Makefile.am:73:   `gtk-doc.make' included from here
-gtk-doc.make:26: EXTRA_DIST multiply defined in condition TRUE ...
-docs/reference/glib/Makefile.am:73:   `gtk-doc.make' included from here
-Makefile.decl:8: ... `EXTRA_DIST' previously defined here
-docs/reference/glib/Makefile.am:2:   `Makefile.decl' included from here
-docs/reference/glib/Makefile.am:92: `%'-style pattern rules are a GNU make extension
-gtk-doc.make:7: GTK_DOC_USE_LIBTOOL does not appear in AM_CONDITIONAL
-docs/reference/gobject/Makefile.am:61:   `gtk-doc.make' included from here
-gtk-doc.make:50: ENABLE_GTK_DOC does not appear in AM_CONDITIONAL
-docs/reference/gobject/Makefile.am:61:   `gtk-doc.make' included from here
-gtk-doc.make:175: ENABLE_GTK_DOC does not appear in AM_CONDITIONAL
-docs/reference/gobject/Makefile.am:61:   `gtk-doc.make' included from here
-gtk-doc.make:26: EXTRA_DIST multiply defined in condition TRUE ...
-docs/reference/gobject/Makefile.am:61:   `gtk-doc.make' included from here
-Makefile.decl:8: ... `EXTRA_DIST' previously defined here
-docs/reference/gobject/Makefile.am:2:   `Makefile.decl' included from here
-docs/reference/gobject/Makefile.am:74: `%'-style pattern rules are a GNU make extension
-autoreconf: automake failed with exit status: 1
-make: *** [/home/djdeath/src/buildroot/buildroot/build_sh4/libglib2-2.20.1/.stamp_autoconfigured] Erreur 1
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-07-04 21:50:58 UTC ---
+Hmm, the _DEPENDENCIES line is at the wrong location (it gets added if the
+option is NOT enabled), but more importantly, why do we need this patch in the
+first place? The cairo package has supported directfb for a long time (since
+the beginning afaik) transparently, just like the X support
 
-<-------------------------------
-
-This is strange, because autoreconf uses automake from the host instead
-of /home/djdeath/src/buildroot/buildroot/build_sh4/host_dir/usr/bin/automake, just like it's done for autoheader/autoconf/aclocal.
 
 -- 
-Lionel Landwerlin <lionel.landwerlin@openwide.fr>
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
