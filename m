@@ -1,32 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun,  5 Jul 2009 20:12:22 +0000 (UTC)
-Subject: [Buildroot] [Bug 369] Add SDL_gfx package
-In-Reply-To: <bug-369-163@https.bugs.busybox.net/>
-References: <bug-369-163@https.bugs.busybox.net/>
-Message-ID: <20090705201222.5EF06777D1@busybox.osuosl.org>
+From: Daniel Bristot de Oliveira <daniel@bristot.eti.br>
+Date: Sun, 05 Jul 2009 21:31:14 -0300
+Subject: [Buildroot] /var/lock/subsys/nfslock: No such file or directory
+Message-ID: <4A5145D2.1010206@bristot.eti.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=369
+Hi,
 
+I build the buildroot 2009.05 with the package "nfs-utils", and when the 
+system boot, the init script show me "No such file or directory" to 
+create the lock file.
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+----
+Starting network management services: snmpd.
+Starting NFS statd: touch: /var/lock/subsys/nfslock: No such file or 
+directory
+done
+Starting NFS services: done
+Starting NFS daemon: done
+Starting NFS mountd: Cannot register service: RPC: Unable to receive; 
+errno = Connection refused
+done
+touch: /var/lock/subsys/nfs: No such file or directory
+---
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |ASSIGNED
+To workaround I create the directory: /var/lock/subsys/ on $(TARGET_DIR).
 
-
-
-
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-07-05 20:12:21 UTC ---
-Yes, please send a patch to add it - Thanks!
-
-
+Best regards
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Daniel Bristot de Oliveira
+http://bristot.eti.br
