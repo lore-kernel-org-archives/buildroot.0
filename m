@@ -1,46 +1,69 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon,  6 Jul 2009 23:26:30 +0000 (UTC)
-Subject: [Buildroot] [Bug 83] liblockfile fails to compile due to eaccess
-	redefinition
-In-Reply-To: <bug-83-163@https.bugs.busybox.net/>
-References: <bug-83-163@https.bugs.busybox.net/>
-Message-ID: <20090706232630.90E6B77806@busybox.osuosl.org>
+From: Will Newton <will.newton@gmail.com>
+Date: Tue, 7 Jul 2009 11:08:14 +0100
+Subject: [Buildroot] Following direction, but failing to compile
+In-Reply-To: <4A4CF6CB.40201@linuxha.com>
+References: <4A4CF6CB.40201@linuxha.com>
+Message-ID: <87a5b0800907070308y1aa17e91x591256e28f8879a7@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=83
+On Thu, Jul 2, 2009 at 7:04 PM, Neil Cherry<ncherry@linuxha.com> wrote:
+> I've been having a few problems getting BuildRoot to work. So I
+> decided to fall back, read and follow the directions. But this
+> too has failed.
+>
+> What I've done is:
+>
+> tar jxvf buildroot-2009.05.tar.bz2
+> cd buildroot-2009.05
+> make menuconfig
+> make
+>
+> When I'm compiling all goes well until I hit this:
+>
+> ? ? ? ?:
+> ?DEPMOD ?2.6.29.4-test
+> make[1]: Leaving directory
+> `/home/njc/stuff/buildroot-2009.05/project_build_i586/LORHA/linux-2.6.29.4'
+> + rm -f
+> /home/njc/stuff/buildroot-2009.05/project_build_i586/LORHA/root/lib/modules/2.6.29.4/build
+> /home/njc/stuff/buildroot-2009.05/project_build_i586/LORHA/root/lib/modules/2.6.29.4/source
+> + /home/njc/stuff/buildroot-2009.05/build_i586/staging_dir/bin/i586-linux-depmod26 -b
+> /home/njc/stuff/buildroot-2009.05/project_build_i586/LORHA/root 2.6.29.4
+> WARNING: Couldn't open directory
+> /home/njc/stuff/buildroot-2009.05/project_build_i586/LORHA/root/lib/modules/2.6.29.4: No
+> such file or directory
+> FATAL: Could not open
+> /home/njc/stuff/buildroot-2009.05/project_build_i586/LORHA/root/lib/modules/2.6.29.4/modules.dep.temp
+> for writing: No such file or directory
+> make: ***
+> [/home/njc/stuff/buildroot-2009.05/project_build_i586/LORHA/root/lib/modules/2.6.29.4/modules.dep]
+> Error 1
+>
+> I'm having trouble finding where the sequence of commands are
+> executed so I can figure out why the directory is not being created.
+>
+> I can go into the linux-2.6.29.4 directory and manually compile
+> the kernel with no errors.
+>
+> Any pointers would be appreciated.
 
+It looks like it's the modules_install target in the kernel Makefile
+that is failing. Can you make that target successfully i.e. make
+modules_install in the kernel tree?
 
-Lionel Landwerlin <lionel.landwerlin@openwide.fr> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|RESOLVED                    |REOPENED
-         Resolution|WORKSFORME                  |
-
-
-
-
---- Comment #3 from Lionel Landwerlin <lionel.landwerlin@openwide.fr>  2009-07-06 23:26:29 UTC ---
-(In reply to comment #2)
-> I use the current toolchain when compiling my kernel.  I was simply trying to
-> maintain the same toolchain across all builds, but it looks like that may not
-> be the best track to take.
-> 
-
-It's a problem with new glibc which added the eaccess function in unistd.h
-under the _GNU_SOURCE flag.
-It's been fixed in later verions of liblockfile :
-http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=392779.
-
-I just compiled a buildroot with liblockfile version 1.08. Please update the
-version in buildroot.
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+> Thanks
+>
+> --
+> Linux Home Automation ? ? ? ? Neil Cherry ? ? ? ncherry at linuxha.com
+> http://www.linuxha.com/ ? ? ? ? ? ? ? ? ? ? ? ? Main site
+> http://linuxha.blogspot.com/ ? ? ? ? ? ? ? ? ? ?My HA Blog
+> Author of: ? ? ?Linux Smart Homes For Dummies
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
