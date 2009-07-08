@@ -1,95 +1,48 @@
-From: Daniel Mack <daniel@caiaq.de>
-Date: Wed, 8 Jul 2009 15:36:13 +0200
-Subject: [Buildroot] [PATCH 1/2] target/ubifs: fix compilation
-In-Reply-To: <1244029145-11832-1-git-send-email-daniel@caiaq.de>
-References: <1244029145-11832-1-git-send-email-daniel@caiaq.de>
-Message-ID: <20090708133613.GJ9464@buzzloop.caiaq.de>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 8 Jul 2009 16:05:41 +0200
+Subject: [Buildroot] [git commit] qtopia4/directfb: remove default n
+Message-ID: <20090708141147.8DE4D77800@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Is there any comment on these patches Ive sent five weeks ago? It seems
-they got lost ...
+commit: http://git.buildroot.net/buildroot/commit/?id=3a966abb621609440d591ad17545b1bd9dafed61
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks,
-Daniel
 
-On Wed, Jun 03, 2009 at 01:39:04PM +0200, Daniel Mack wrote:
-> The ubifs rootfs target does not currently build because the repository
-> listed in ubifsroot.mk does not exist anymore. Consequently, the used
-> tag is also wrong.
-> 
-> As the code base for mtd utils seem to have been merged in the past,
-> there are dependencies between ubi-utils, mkfs.ubifs and the mtd core
-> now, so we have no other option than building the whole thing.
-> 
-> WITHOUT_XATTR was added to the make parameters because it did not build
-> on my system without that. Maybe that should become a auto* variable
-> dependency in the future.
-> 
-> BUILDDIR is needed by the mtd-utils Makefile, otherwise built object
-> files are put to $(PWD) which is the toplevel br2 path.
-> 
-> MKFS_UBIFS_BINARY was added to ease the path chaos a bit.
-> 
-> Signed-off-by: Daniel Mack <daniel@caiaq.de>
-> ---
->  target/ubifs/ubifsroot.mk |   21 +++++++++++----------
->  1 files changed, 11 insertions(+), 10 deletions(-)
-> 
-> diff --git a/target/ubifs/ubifsroot.mk b/target/ubifs/ubifsroot.mk
-> index 1707e46..d14bde1 100644
-> --- a/target/ubifs/ubifsroot.mk
-> +++ b/target/ubifs/ubifsroot.mk
-> @@ -5,12 +5,13 @@
->  #############################################################
->  #MKFS_UBIFS_VERSION=2582f128dad78591bc3adcc87c343c690bb82e61
->  #MKFS_UBIFS_URL=http://git.infradead.org/users/dedekind/mkfs.ubifs.git?a=snapshot;h=$(MKFS_UBIFS_VERSION);sf=tgz
-> -MKFS_UBIFS_VERSION=v0.4
-> -MKFS_UBIFS_URL=http://git.infradead.org/users/dedekind/mkfs.ubifs.git?a=snapshot;h=refs/tags/mkfs.ubifs-$(MKFS_UBIFS_VERSION);sf=tgz
-> -MKFS_UBIFS_SOURCE:=mkfs.ubifs-$(MKFS_UBIFS_VERSION).tar.gz
-> -MKFS_UBIFS_DIR:= $(BUILD_DIR)/mkfs-ubifs-$(MKFS_UBIFS_VERSION)
-> -MKFS_UBIFS_CAT:=$(ZCAT)
-> -MKFS_UBIFS_NAME:=mkfs.ubifs
-> +MKFS_UBIFS_VERSION=HEAD
-> +MKFS_UBIFS_URL=http://git.infradead.org/mtd-utils.git?a=snapshot\;h=$(MKFS_UBIFS_VERSION)\;sf=tgz
-> +MKFS_UBIFS_SOURCE=mtd-utils-$(MKFS_UBIFS_VERSION).tar.gz
-> +MKFS_UBIFS_DIR=$(BUILD_DIR)/mkfs-utils-ubifs
-> +MKFS_UBIFS_CAT=$(ZCAT)
-> +MKFS_UBIFS_NAME=mtd-utils
-> +MKFS_UBIFS_BINARY=$(MKFS_UBIFS_DIR)/mkfs.ubifs/mkfs.ubifs
->  
->  $(DL_DIR)/$(MKFS_UBIFS_SOURCE):
->  	$(WGET) -O $(DL_DIR)/$(MKFS_UBIFS_SOURCE) "$(MKFS_UBIFS_URL)"
-> @@ -21,14 +22,14 @@ $(MKFS_UBIFS_DIR)/.unpacked: $(DL_DIR)/$(MKFS_UBIFS_SOURCE)
->  	toolchain/patch-kernel.sh $(MKFS_UBIFS_DIR) target/ubifs/ mkfs-ubifs-\*.patch
->  	touch $@
->  
-> -$(MKFS_UBIFS_DIR)/mkfs.ubifs: $(MKFS_UBIFS_DIR)/.unpacked
-> -	$(MAKE) -C $(MKFS_UBIFS_DIR)
-> +$(MKFS_UBIFS_BINARY): $(MKFS_UBIFS_DIR)/.unpacked
-> +	$(MAKE) -j1 -C $(MKFS_UBIFS_DIR) BUILDDIR=$(MKFS_UBIFS_DIR) WITHOUT_XATTR=1
->  	touch -c $@
->  
->  mkfs.ubifs-dirclean:
->  	rm -rf $(MKFS_UBIFS_DIR)
->  
-> -mkfs.ubifs: $(MKFS_UBIFS_DIR)/mkfs.ubifs
-> +mkfs.ubifs: $(MKFS_UBIFS_BINARY)
->  
->  #############################################################
->  #
-> @@ -88,7 +89,7 @@ ifneq ($(TARGET_DEVICE_TABLE),)
->  		>> $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
->  endif
->  	# Use fakeroot so mkfs.ubifs believes the previous fakery
-> -	echo "$(MKFS_UBIFS_DIR)/mkfs.ubifs -d $(TARGET_DIR) " \
-> +	echo "$(MKFS_UBIFS_BINARY) -d $(TARGET_DIR) " \
->  		"$(UBIFS_OPTS) -o $(UBIFS_BASE)" >> $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
->  	chmod a+x $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
->  	$(HOST_DIR)/usr/bin/fakeroot -- $(PROJECT_BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
-> -- 
-> 1.6.3.1
-> 
+N is default, so no need to explicitly state it.
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/directfb/Config.in |    1 -
+ package/qtopia4/Config.in  |    1 -
+ 2 files changed, 0 insertions(+), 2 deletions(-)
+
+diff --git a/package/directfb/Config.in b/package/directfb/Config.in
+index f24b7a1..1f08174 100644
+--- a/package/directfb/Config.in
++++ b/package/directfb/Config.in
+@@ -92,7 +92,6 @@ config BR2_PACKAGE_DIRECTFB_PNG
+ 
+ config BR2_PACKAGE_DIRECTB_DITHER_RGB16
+ 	bool "enable advanced dithering of RGB16 surfaces"
+-	default n
+ 	depends on BR2_PACKAGE_DIRECTFB
+ 	help
+ 	  Enable dithering when loading images to RGB16 surfaces.
+diff --git a/package/qtopia4/Config.in b/package/qtopia4/Config.in
+index 7a702c6..0524312 100644
+--- a/package/qtopia4/Config.in
++++ b/package/qtopia4/Config.in
+@@ -330,7 +330,6 @@ config BR2_PACKAGE_QTOPIA4_SCRIPT
+ config BR2_PACKAGE_QTOPIA4_SCRIPTTOOLS
+ 	bool "Script Tools Module"
+ 	depends on BR2_PACKAGE_QTOPIA4_SCRIPT
+-	default n
+ 	help
+ 	  Build the Qt Script Tools module.
+ 	  if unsure, say n.
+-- 
+1.6.3.3
