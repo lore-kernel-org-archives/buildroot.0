@@ -1,27 +1,65 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 08 Jul 2009 16:18:40 +0200
-Subject: [Buildroot] [PATCH 1/2] target/ubifs: fix compilation
-In-Reply-To: <20090708133613.GJ9464@buzzloop.caiaq.de> (Daniel Mack's message
-	of "Wed\, 8 Jul 2009 15\:36\:13 +0200")
-References: <1244029145-11832-1-git-send-email-daniel@caiaq.de>
-	<20090708133613.GJ9464@buzzloop.caiaq.de>
-Message-ID: <87y6qz9s1r.fsf@macbook.be.48ers.dk>
+From: Neil Cherry <ncherry@linuxha.com>
+Date: Wed, 08 Jul 2009 11:19:57 -0400
+Subject: [Buildroot] Following direction, but failing to compile
+In-Reply-To: <87a5b0800907070308y1aa17e91x591256e28f8879a7@mail.gmail.com>
+References: <4A4CF6CB.40201@linuxha.com>
+	<87a5b0800907070308y1aa17e91x591256e28f8879a7@mail.gmail.com>
+Message-ID: <4A54B91D.4070701@linuxha.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Daniel" == Daniel Mack <daniel@caiaq.de> writes:
+Will Newton wrote:
+> On Thu, Jul 2, 2009 at 7:04 PM, Neil Cherry<ncherry@linuxha.com> wrote:
 
- Daniel> Is there any comment on these patches Ive sent five weeks ago? It seems
- Daniel> they got lost ...
+>> When I'm compiling all goes well until I hit this:
+>>
+>>        :
+>>  DEPMOD  2.6.29.4-test
+>> make[1]: Leaving directory
+>> `/home/njc/stuff/buildroot-2009.05/project_build_i586/LORHA/linux-2.6.29.4'
+>> + rm -f
+>> /home/njc/stuff/buildroot-2009.05/project_build_i586/LORHA/root/lib/modules/2.6.29.4/build
+>> /home/njc/stuff/buildroot-2009.05/project_build_i586/LORHA/root/lib/modules/2.6.29.4/source
+>> + /home/njc/stuff/buildroot-2009.05/build_i586/staging_dir/bin/i586-linux-depmod26 -b
+>> /home/njc/stuff/buildroot-2009.05/project_build_i586/LORHA/root 2.6.29.4
+>> WARNING: Couldn't open directory
+>> /home/njc/stuff/buildroot-2009.05/project_build_i586/LORHA/root/lib/modules/2.6.29.4: No
+>> such file or directory
+>> FATAL: Could not open
+>> /home/njc/stuff/buildroot-2009.05/project_build_i586/LORHA/root/lib/modules/2.6.29.4/modules.dep.temp
+>> for writing: No such file or directory
+>> make: ***
+>> [/home/njc/stuff/buildroot-2009.05/project_build_i586/LORHA/root/lib/modules/2.6.29.4/modules.dep]
+>> Error 1
+>>
+>> I'm having trouble finding where the sequence of commands are
+>> executed so I can figure out why the directory is not being created.
+>>
+>> I can go into the linux-2.6.29.4 directory and manually compile
+>> the kernel with no errors.
+>>
+>> Any pointers would be appreciated.
+> 
+> It looks like it's the modules_install target in the kernel Makefile
+> that is failing. Can you make that target successfully i.e. make
+> modules_install in the kernel tree?
 
-Sorry, it was indeed. I noticed that Artem did some work in mtd-utils
-git recently, but there doesn't seem to be a 1.3 release in sight yet.
+Sorry for the delay.
 
-I'm unfortunately not home all weekend, but I'll review your patches
-ealy next week.
+Yes when I go into the kernel directory I can compile the modules
+with no problems. My fix was to add a mkdir just after the rm -rf
+in that section of the make file (I can't find it right now).
+
+I'll find that info and post it here so we can see if it makes
+any sense to anyone.
+
+Thanks
 
 -- 
-Bye, Peter Korsgaard
+Linux Home Automation         Neil Cherry       ncherry at linuxha.com
+http://www.linuxha.com/                         Main site
+http://linuxha.blogspot.com/                    My HA Blog
+Author of:    	Linux Smart Homes For Dummies
