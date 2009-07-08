@@ -1,32 +1,27 @@
-From: Lionel Landwerlin <lionel.landwerlin@openwide.fr>
-Date: Wed, 08 Jul 2009 10:52:43 +0200
-Subject: [Buildroot] Question about autoreconfiguration of packages
-Message-ID: <1247043163.3743.9.camel@couak.urd44.com>
+From: Will Newton <will.newton@gmail.com>
+Date: Wed, 8 Jul 2009 10:19:04 +0100
+Subject: [Buildroot] Buildroot fails to to compile uClibc-NPTL
+In-Reply-To: <1246997520.32432.396.camel@localhost.localdomain>
+References: <1246997520.32432.396.camel@localhost.localdomain>
+Message-ID: <87a5b0800907080219i41f693e3mb8f0450a349758a0@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Tue, Jul 7, 2009 at 9:12 PM, Cristi
+Magherusan<Cristi.Magherusan@net.utcluj.ro> wrote:
+> Hello,
+>
+> I tried to get the NPTL branch to build in buildroot, but it fails due
+> to some circular symbols dependencies, from what I could tell. It fails
+> both in sh4 and in the experimental x86 port that I'm working on, with
+> similar errors, caused by the __libc_errno symbol which is missing. They
+> both build on their own (sh4 needs some minor fixes in order to build).
+>
+> Is there anyone interested in getting it work, and able to help me on
+> this issue?
 
-there is something I noticed when autoconfiguring a package before
-configure and build it. The autoconfiguration is done by calling :
-	* $buildrootdir/build_$arch/host_dir/usr/bin/aclocal
-	* $buildrootdir/build_$arch/host_dir/usr/bin/autoconf
-	* $buildrootdir/build_$arch/host_dir/usr/bin/autoheader
-	* /usr/bin/automake
-
-I'm wondering why we call automake from the host rather than automake
-from the host built packages. Because, for example, if we don't have
-gtk-doc-tools installed on the host system, it's not possible to
-autoconfigure packages like glib2/gtk+/etc...
-
-Is there a reason for this ?
-
-If not, we have to add the gtk-doc package and build it for the host.
-
-Regards,
-
--- 
-Lionel Landwerlin <lionel.landwerlin@openwide.fr>
+It may be better to ask this question on the uClibc list. Getting
+uClibc to build with NPTL seems to be problematic at the moment.
