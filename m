@@ -1,19 +1,62 @@
-From: Daniel Mack <daniel@caiaq.de>
-Date: Thu, 9 Jul 2009 12:59:25 +0200
-Subject: [Buildroot] [PATCH] Add bonnie++-1.03e package
-In-Reply-To: <1247136529-29913-1-git-send-email-daniel@caiaq.de>
-References: <1247136529-29913-1-git-send-email-daniel@caiaq.de>
-Message-ID: <20090709105925.GA11694@buzzloop.caiaq.de>
+From: laurent.laffont at gmail.com <laurent.laffont@gmail.com>
+Date: Thu,  9 Jul 2009 14:08:51 +0200
+Subject: [Buildroot] [PATCH] Change ruby version to 1.9.1-p129
+Message-ID: <1247141331-8609-1-git-send-email-laurent.laffont@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jul 09, 2009 at 12:48:49PM +0200, Daniel Mack wrote:
-> Signed-off-by: Daniel Mack <daniel@caiaq.de>
+From: laurent laffont <laurent.laffont@gmail.com>
 
-Sorry, I was too quick sending this. Take the amended version below
-instead, please.
+Ruby 1.9.1 handle cross compilation better, espescially extensions (I'm working on ARM at91sam9263-ek).
+This patch also disable ruby doc generation and ipv6.
 
-Daniel
+Signed-off-by: laurent laffont <laurent.laffont@gmail.com>
+---
+ package/ruby/ruby-configure.patch |    6 +++---
+ package/ruby/ruby.mk              |    6 ++++--
+ 2 files changed, 7 insertions(+), 5 deletions(-)
+
+diff --git a/package/ruby/ruby-configure.patch b/package/ruby/ruby-configure.patch
+index ab44ebe..2b58c70 100644
+--- a/package/ruby/ruby-configure.patch
++++ b/package/ruby/ruby-configure.patch
+@@ -1,6 +1,6 @@
+---- ruby-1.8.3/configure.in.orig	2005-11-29 11:18:27.000000000 +0100
+-+++ ruby-1.8.3/configure.in	2005-11-29 11:19:46.000000000 +0100
+-@@ -529,7 +529,25 @@
++--- a/configure.in.orig	2009-07-08 15:23:44.000000000 +0200
+++++ b/configure.in	2009-07-08 15:24:52.000000000 +0200
++@@ -997,7 +997,25 @@
+  fi
+  
+  AC_FUNC_GETPGRP
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index c7dc31f..c4c0d79 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -3,9 +3,9 @@
+ # ruby
+ #
+ #############################################################
+-RUBY_VERSION:=1.8.2
++RUBY_VERSION:=1.9.1-p129
+ RUBY_SOURCE:=ruby-$(RUBY_VERSION).tar.gz
+-RUBY_SITE:=ftp://ftp.ruby-lang.org/pub/ruby/1.8
++RUBY_SITE:=ftp://ftp.ruby-lang.org/pub/ruby/1.9
+ RUBY_DIR:=$(BUILD_DIR)/ruby-$(RUBY_VERSION)
+ RUBY_CAT:=$(ZCAT)
+ RUBY_BINARY:=ruby
+@@ -41,6 +41,8 @@ $(RUBY_DIR)/.configured: $(RUBY_DIR)/.unpacked
+ 		--localstatedir=/var \
+ 		--mandir=/usr/man \
+ 		--infodir=/usr/info \
++		--disable-install-doc \
++		--disable-ipv6 \
+ 		$(DISABLE_NLS) \
+ 		$(DISABLE_LARGEFILE) \
+ 	)
+-- 
+1.6.3.3
