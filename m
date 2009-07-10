@@ -1,31 +1,42 @@
-From: Will Newton <will.newton@gmail.com>
-Date: Fri, 10 Jul 2009 11:26:45 +0100
-Subject: [Buildroot] VLC media player patched + some libraries added
-In-Reply-To: <1247218265.6260.12.camel@ess-roelvp>
-References: <1247218265.6260.12.camel@ess-roelvp>
-Message-ID: <87a5b0800907100326m537a6e0exdf355d217eaa308@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 10 Jul 2009 13:24:32 +0000 (UTC)
+Subject: [Buildroot] [Bug 447] New: website editable by users
+Message-ID: <bug-447-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jul 10, 2009 at 10:31 AM, Roeland Van Praet<roelvp@mind.be> wrote:
-> Hi all,
->
-> In March I already submitted this patch but apparantly it hasn't been
-> accepted yet, even after a reminder.
-> Can someone please review this patch and tell me if it is missing something
-> or not.
->
-> Thank you very much,
+https://bugs.busybox.net/show_bug.cgi?id=447
 
-It would be helpful to submit this patch as a number of entries in the
-bugzilla, one per package - that way if things do get missed on the
-mailing list then someone is more likely to pick them up later.
+           Summary: website editable by users
+           Product: buildroot
+           Version: unspecified
+          Platform: Other
+        OS/Version: Other
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: cristi.magherusan at net.utcluj.ro
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-I notice VLC 1.0.0 is out. Is there a reason why you are using an older version?
 
-Also it appears that the version of ffmpeg is a snapshot which changes
-daily. Is that the case? It would seem useful to have an option to
-pick a particular snapshot so builds are more reproducible.
+Hello, 
+
+It would be nice to have a part of the uclibc/buildroot, et. al websites
+editable by users, something like a wiki, forum or trac installation, where
+registered users could easily add content. The original idea I had was to have
+some kind of wishlist for buildroot packages, but that would only be one
+use-case for such a thing.
+
+Cristi
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
