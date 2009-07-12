@@ -1,182 +1,94 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 12 Jul 2009 21:13:04 +0200
-Subject: [Buildroot] [git commit] busybox: additional 1.14.2 patches
-Message-ID: <20090712195657.4D084764AB@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 12 Jul 2009 22:20:53 +0200
+Subject: [Buildroot] [PATCH] Add bonnie++-1.03e package
+In-Reply-To: <20090709105925.GA11694@buzzloop.caiaq.de> (Daniel Mack's message
+	of "Thu\, 9 Jul 2009 12\:59\:25 +0200")
+References: <1247136529-29913-1-git-send-email-daniel@caiaq.de>
+	<20090709105925.GA11694@buzzloop.caiaq.de>
+Message-ID: <871volac0q.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e5afc25114370c76ab414a45cf1c8b5597b266dd
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Daniel" == Daniel Mack <daniel@caiaq.de> writes:
+
+ Daniel> On Thu, Jul 09, 2009 at 12:48:49PM +0200, Daniel Mack wrote:
+ >> Signed-off-by: Daniel Mack <daniel@caiaq.de>
+
+ Daniel> Sorry, I was too quick sending this. Take the amended version below
+ Daniel> instead, please.
+
+ Daniel> Daniel
 
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/busybox/busybox-1.14.2-df.patch     |  134 +++++++++++++++++++++++++++
- package/busybox/busybox-1.14.2-udhcpd.patch |   12 +++
- 2 files changed, 146 insertions(+), 0 deletions(-)
- create mode 100644 package/busybox/busybox-1.14.2-df.patch
- create mode 100644 package/busybox/busybox-1.14.2-udhcpd.patch
+ >> From 1bb7e420fc3bbd31e5b45589b2cd07356f0a7382 Mon Sep 17 00:00:00 2001
+ Daniel> From: Daniel Mack <daniel@caiaq.de>
+ Daniel> Date: Thu, 9 Jul 2009 12:47:31 +0200
+ Daniel> Subject: [PATCH] Add bonnie++-1.03e package
 
-diff --git a/package/busybox/busybox-1.14.2-df.patch b/package/busybox/busybox-1.14.2-df.patch
-new file mode 100644
-index 0000000..7829f5f
---- /dev/null
-+++ b/package/busybox/busybox-1.14.2-df.patch
-@@ -0,0 +1,134 @@
-+--- busybox-1.14.2/coreutils/df.c	Sun Jul  5 22:59:28 2009
-++++ busybox-1.14.2-df/coreutils/df.c	Sun Jul  5 23:00:09 2009
-+@@ -44,7 +44,6 @@
-+ 	FILE *mount_table;
-+ 	struct mntent *mount_entry;
-+ 	struct statfs s;
-+-	static const char ignored_mounts[] ALIGN1 = "rootfs\0";
-+ 
-+ 	enum {
-+ 		OPT_KILO  = (1 << 0),
-+@@ -120,7 +119,7 @@
-+ 			mount_point = *argv++;
-+ 			if (!mount_point)
-+ 				break;
-+-			mount_entry = find_mount_point(mount_point, bb_path_mtab_file);
-++			mount_entry = find_mount_point(mount_point);
-+ 			if (!mount_entry) {
-+ 				bb_error_msg("%s: can't find mount point", mount_point);
-+  set_error:
-+@@ -154,8 +153,8 @@
-+ 						) / (blocks_used + s.f_bavail);
-+ 			}
-+ 
-+-			/* GNU coreutils 6.10 skip certain mounts, try to be compatible.  */
-+-			if (index_in_strings(device, ignored_mounts) != -1)
-++			/* GNU coreutils 6.10 skips certain mounts, try to be compatible.  */
-++			if (strcmp(device, "rootfs") == 0)
-+ 				continue;
-+ 
-+ #ifdef WHY_WE_DO_IT_FOR_DEV_ROOT_ONLY
-+--- busybox-1.14.2/include/libbb.h	Sun Jul  5 22:59:31 2009
-++++ busybox-1.14.2-df/include/libbb.h	Sun Jul  5 23:00:09 2009
-+@@ -1025,7 +1025,7 @@
-+ 
-+ #ifdef HAVE_MNTENT_H
-+ extern int match_fstype(const struct mntent *mt, const char *fstypes) FAST_FUNC;
-+-extern struct mntent *find_mount_point(const char *name, const char *table) FAST_FUNC;
-++extern struct mntent *find_mount_point(const char *name) FAST_FUNC;
-+ #endif
-+ extern void erase_mtab(const char * name) FAST_FUNC;
-+ extern unsigned int tty_baud_to_value(speed_t speed) FAST_FUNC;
-+--- busybox-1.14.2/libbb/find_mount_point.c	Sun Jul  5 22:59:24 2009
-++++ busybox-1.14.2-df/libbb/find_mount_point.c	Sun Jul  5 23:00:09 2009
-+@@ -17,7 +17,7 @@
-+  * Given any other file (or directory), find the mount table entry for its
-+  * filesystem.
-+  */
-+-struct mntent* FAST_FUNC find_mount_point(const char *name, const char *table)
-++struct mntent* FAST_FUNC find_mount_point(const char *name)
-+ {
-+ 	struct stat s;
-+ 	dev_t mountDevice;
-+@@ -25,27 +25,35 @@
-+ 	struct mntent *mountEntry;
-+ 
-+ 	if (stat(name, &s) != 0)
-+-		return 0;
-++		return NULL;
-+ 
-+-	if ((s.st_mode & S_IFMT) == S_IFBLK)
-++	if (S_ISBLK(s.st_mode))
-+ 		mountDevice = s.st_rdev;
-+ 	else
-+ 		mountDevice = s.st_dev;
-+ 
-+ 
-+-	mountTable = setmntent(table ? table : bb_path_mtab_file, "r");
-++	mountTable = setmntent(bb_path_mtab_file, "r");
-+ 	if (!mountTable)
-+ 		return 0;
-+ 
-+-	while ((mountEntry = getmntent(mountTable)) != 0) {
-++	while ((mountEntry = getmntent(mountTable)) != NULL) {
-++		/* rootfs mount in Linux 2.6 exists always,
-++		 * and it makes sense to always ignore it.
-++		 * Otherwise people can't reference their "real" root! */
-++		if (strcmp(mountEntry->mnt_fsname, "rootfs") == 0)
-++			continue;
-++
-+ 		if (strcmp(name, mountEntry->mnt_dir) == 0
-+ 		 || strcmp(name, mountEntry->mnt_fsname) == 0
-+ 		) { /* String match. */
-+ 			break;
-+ 		}
-+-		if (stat(mountEntry->mnt_fsname, &s) == 0 && s.st_rdev == mountDevice)	/* Match the device. */
-++		/* Match the device. */
-++		if (stat(mountEntry->mnt_fsname, &s) == 0 && s.st_rdev == mountDevice)
-+ 			break;
-+-		if (stat(mountEntry->mnt_dir, &s) == 0 && s.st_dev == mountDevice)	/* Match the directory's mount point. */
-++		/* Match the directory's mount point. */
-++		if (stat(mountEntry->mnt_dir, &s) == 0 && s.st_dev == mountDevice)
-+ 			break;
-+ 	}
-+ 	endmntent(mountTable);
-+--- busybox-1.14.2/util-linux/mkfs_minix.c	Sun Jul  5 22:59:30 2009
-++++ busybox-1.14.2-df/util-linux/mkfs_minix.c	Sun Jul  5 23:00:09 2009
-+@@ -624,7 +624,6 @@
-+ int mkfs_minix_main(int argc, char **argv) MAIN_EXTERNALLY_VISIBLE;
-+ int mkfs_minix_main(int argc UNUSED_PARAM, char **argv)
-+ {
-+-	struct mntent *mp;
-+ 	unsigned opt;
-+ 	char *tmp;
-+ 	struct stat statbuf;
-+@@ -683,11 +682,8 @@
-+ 		G.total_blocks = 65535;
-+ 
-+ 	/* Check if it is mounted */
-+-	mp = find_mount_point(G.device_name, NULL);
-+-	if (mp && strcmp(G.device_name, mp->mnt_fsname) == 0)
-+-		bb_error_msg_and_die("%s is mounted on %s; "
-+-				"refusing to make a filesystem",
-+-				G.device_name, mp->mnt_dir);
-++	if (find_mount_point(G.device_name))
-++		bb_error_msg_and_die("can't format mounted filesystem");
-+ 
-+ 	xmove_fd(xopen(G.device_name, O_RDWR), dev_fd);
-+ 	if (fstat(dev_fd, &statbuf) < 0)
-+--- busybox-1.14.2/util-linux/mkfs_vfat.c	Sun Jul  5 22:59:30 2009
-++++ busybox-1.14.2-df/util-linux/mkfs_vfat.c	Sun Jul  5 23:00:35 2009
-+@@ -273,10 +273,10 @@
-+ 			device_num == 0x0d00 || // xd
-+ 			device_num == 0x1600 )  // hdc, hdd
-+ 		)
-+-			bb_error_msg_and_die("Will not try to make filesystem on full-disk device (use -I if wanted)");
-++			bb_error_msg_and_die("will not try to make filesystem on full-disk device (use -I if wanted)");
-+ 		// can't work on mounted filesystems
-+-		if (find_mount_point(device_name, NULL))
-+-			bb_error_msg_and_die("Can't format mounted filesystem");
-++		if (find_mount_point(device_name))
-++			bb_error_msg_and_die("can't format mounted filesystem");
-+ #endif
-+ 		// get true sector size
-+ 		// (parameter must be int*, not long* or size_t*)
-diff --git a/package/busybox/busybox-1.14.2-udhcpd.patch b/package/busybox/busybox-1.14.2-udhcpd.patch
-new file mode 100644
-index 0000000..a1502b4
---- /dev/null
-+++ b/package/busybox/busybox-1.14.2-udhcpd.patch
-@@ -0,0 +1,12 @@
-+diff -urpN busybox-1.14.2/networking/udhcp/files.c busybox-1.14.2-udhcpd/networking/udhcp/files.c
-+--- busybox-1.14.2/networking/udhcp/files.c	2009-06-22 00:40:29.000000000 +0200
-++++ busybox-1.14.2-udhcpd/networking/udhcp/files.c	2009-07-07 14:58:39.000000000 +0200
-+@@ -420,7 +420,7 @@ void FAST_FUNC read_leases(const char *f
-+ 				continue;
-+ 			/* NB: add_lease takes "relative time", IOW,
-+ 			 * lease duration, not lease deadline. */
-+-			if (!(add_lease(lease.chaddr, lease.yiaddr, expires, lease.hostname))) {
-++			if (!(add_lease(lease.chaddr, lease.yiaddr, expires, NULL /* was lease.hostname. bug in add_lease, disabled */ ))) {
-+ 				bb_error_msg("too many leases while loading %s", file);
-+ 				break;
-+ 			}
+ Daniel> Signed-off-by: Daniel Mack <daniel@caiaq.de>
+ Daniel> ---
+ Daniel>  package/Config.in            |    1 +
+ Daniel>  package/bonnie++/Config.in   |   10 +++++++
+ Daniel>  package/bonnie++/bonnie++.mk |   57 ++++++++++++++++++++++++++++++++++++++++++
+
+ Daniel> +config BR2_PACKAGE_BONNIE
+ Daniel> +	bool "bonnie++"
+ Daniel> +	help
+ Daniel> +	  Bonnie++ is a benchmark suite that is aimed at performing a number
+ Daniel> +	  of simple tests of hard drive and file system performance. Then you
+ Daniel> +	  can decide which test is important and decide how to compare
+ Daniel> +	  different systems after running it.
+ Daniel> +
+ Daniel> +	  http://www.coker.com.au/bonnie++/
+
+
+Bonnie++ is written in C++, right? Then you need to depend on
+BR2_INSTALL_LIBSTDCPP, see package/iperf/Config.in for an example.
+
+ Daniel> +
+ Daniel> diff --git a/package/bonnie++/bonnie++.mk b/package/bonnie++/bonnie++.mk
+ Daniel> new file mode 100644
+ Daniel> index 0000000..756532f
+ Daniel> --- /dev/null
+ Daniel> +++ b/package/bonnie++/bonnie++.mk
+ Daniel> @@ -0,0 +1,57 @@
+ Daniel> +#############################################################
+ Daniel> +#
+ Daniel> +# bonnie
+ Daniel> +#
+ Daniel> +#############################################################
+ Daniel> +BONNIE_VERSION:=1.03e
+ Daniel> +BONNIE_SOURCE:=bonnie++-$(BONNIE_VERSION).tgz
+ Daniel> +BONNIE_SITE:=http://www.coker.com.au/bonnie++/
+ Daniel> +BONNIE_DIR:=$(BUILD_DIR)/bonnie++-$(BONNIE_VERSION)
+ Daniel> +BONNIE_CAT:=$(ZCAT)
+ Daniel> +BONNIE_BINARY:=bonnie++
+ Daniel> +BONNIE_TARGET_BINARY:=usr/bin/bonnie++
+
+Why not use Makefile.autotools.in? Bonnie seems to use autotools.
+
+ Daniel> +
+ Daniel> +$(DL_DIR)/$(BONNIE_SOURCE):
+ Daniel> +	$(call DOWNLOAD,$(BONNIE_SITE),$(BONNIE_SOURCE))
+ Daniel> +
+ Daniel> +bonnie-source: $(DL_DIR)/$(BONNIE_SOURCE)
+ Daniel> +
+ Daniel> +$(BONNIE_DIR)/.unpacked: $(DL_DIR)/$(BONNIE_SOURCE)
+ Daniel> +	$(BONNIE_CAT) $(DL_DIR)/$(BONNIE_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+ Daniel> +	$(CONFIG_UPDATE) $(BONNIE_DIR)
+ Daniel> +	touch $@
+ Daniel> +
+ Daniel> +$(BONNIE_DIR)/.configured: $(BONNIE_DIR)/.unpacked
+ Daniel> +	(cd $(BONNIE_DIR); rm -rf config.cache; \
+ Daniel> +		$(TARGET_CONFIGURE_OPTS) \
+ Daniel> +		$(TARGET_CONFIGURE_ARGS) \
+ Daniel> +		./configure \
+ Daniel> +		--prefix=/ \
+
+Not --prefix=/usr ?
+
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
