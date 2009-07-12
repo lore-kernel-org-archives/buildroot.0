@@ -1,80 +1,36 @@
-From: nfrench at xtale.biz <nfrench@xtale.biz>
-Date: Sat, 11 Jul 2009 19:34:54 -0000 (Europe/London)
-Subject: [Buildroot] [PATCH] Add support for custom post-build script
-Message-ID: <45286.172.16.221.250.1247340894.squirrel@cvs.xtale.biz>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 12 Jul 2009 21:09:56 +0200
+Subject: [Buildroot] [git commit] libvorbis: bump version
+Message-ID: <20090712195657.23EF277800@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: http://git.buildroot.net/buildroot/commit/?id=01674622186a8bd52f9410bb1120be2f82de733c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 
-Thanks Daniel
+bugfix release - Fixes playback of very short files.
 
-It would be nice to have a proto type package aka
-hello world for us first timers. As for me being able to build for two
-different platforms 32bit / 64bit is great feature of buildroot. At the
-moment we have been using lfs for 32 bit and 64 bit. Does a package have
-to have a network location for download as my prototype code / initial
-program ideas go through many revisions before they even get to that stage
-:-).
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/multimedia/libvorbis/libvorbis.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Nick
-
-> On Fri, Jul 10, 2009 at 04:26:39PM
--0000, nfrench at xtale.biz wrote:
->> I am currently building my
-app using the tools in staging_dir to
->> build my app then I
-mount the built ext2 from binaries cp my program on
->> and
-build a new ext2
-> 
-> This is exactly what I want to
-avoid. I know it is possible, but using
-> the post-build script
-method is faster, more logic and more straight
-> forward.
-> 
->> Is there a standard why to do this .ie
->>
-this custom post-build
-> 
-> Well, it's up to you what you
-do with that script. You'll be fed with
-> the target rootfs as $1
-and could then do something like
-> 
-> 	cp
-/path/to/your/hello $1/usr/bin/
-> 
-> Or remove unwanted
-files etc. Up to you.
-> 
->> would it be possible to
-document how to
->> add a simple Hello World app.? So that
-it gets built? with
->> buildroot or have I missed somthing
-in the docs.
-> 
-> No, don't confuse that. Your application
-will not be built by buildroot
-> by the post-build script.
-> 
-> If you want to do that, you need to add your own
-package. See the
-> package/ folder how others do that. And if that
-package is building a
-> publically available project, please
-consider sending a patch back to
-> this list so everybody can
-benefit from it.
-> 
-> Daniel
-> 
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090711/8f5f01e8/attachment.htm>
+diff --git a/package/multimedia/libvorbis/libvorbis.mk b/package/multimedia/libvorbis/libvorbis.mk
+index a318291..e7399e0 100644
+--- a/package/multimedia/libvorbis/libvorbis.mk
++++ b/package/multimedia/libvorbis/libvorbis.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-LIBVORBIS_VERSION = 1.2.2
++LIBVORBIS_VERSION = 1.2.3
+ LIBVORBIS_SOURCE = libvorbis-$(LIBVORBIS_VERSION).tar.gz
+ LIBVORBIS_SITE = http://downloads.xiph.org/releases/vorbis/$(LIBVORBIS-SOURCE)
+ LIBVORBIS_AUTORECONF = NO
+-- 
+1.6.3.3
