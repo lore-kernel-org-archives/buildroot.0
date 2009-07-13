@@ -1,29 +1,36 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 13 Jul 2009 10:44:06 +0000 (UTC)
-Subject: [Buildroot] [Bug 425] enchant: New package for enchant
-	spell-checking library.
-In-Reply-To: <bug-425-163@https.bugs.busybox.net/>
-References: <bug-425-163@https.bugs.busybox.net/>
-Message-ID: <20090713104406.4C72277712@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 13 Jul 2009 12:44:31 +0200
+Subject: [Buildroot] [PATCH] optional DBus support in wpa_supplicant
+In-Reply-To: <1247476399.4007.13.camel@sven> (Sven Neumann's message of "Mon\,
+	13 Jul 2009 11\:13\:19 +0200")
+References: <1247473258.4007.7.camel@sven> <1247476399.4007.13.camel@sven>
+Message-ID: <87ljms981c.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=425
+>>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
+ Sven> Hi,
+ Sven> On Mon, 2009-07-13 at 10:20 +0200, Sven Neumann wrote:
 
-Will Newton <will.newton@gmail.com> changed:
+ >> the attached patch adds the buildroot config option
+ >> BR2_PACKAGE_WPA_SUPPLICANT_DBUS. With this option enabled the DBus
+ >> specific files from wpa_supplicant will be installed to the target and
+ >> support for the DBus control interface will be compiled into
+ >> wpa_supplicant. Please consider to include this patch.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Blocks|427                         |
+ Sven> After updating our copy of buildroot to the latest snapshot, I found
+ Sven> that the patch does not any longer apply cleanly. Attached is an updated
+ Sven> patch that does.
 
+Thanks, but do we really need a special option for this? Shouldn't
+this just always be done if you have dbus enabled?
 
-
+Similiar to how openssl support is handled in various packages
+(E.G. libcurl).
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
