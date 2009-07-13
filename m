@@ -1,45 +1,41 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 13 Jul 2009 12:05:06 +0000 (UTC)
-Subject: [Buildroot] [Bug 451] New: [PATCH] Upgrade from unmaintained
- dosfstools-2.11 to dosfstools-3.0.3
-Message-ID: <bug-451-163@https.bugs.busybox.net/>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Mon, 13 Jul 2009 16:32:44 +0200
+Subject: [Buildroot] [PATCH] optional DBus support in wpa_supplicant
+In-Reply-To: <87ljms981c.fsf@macbook.be.48ers.dk>
+References: <1247473258.4007.7.camel@sven> <1247476399.4007.13.camel@sven>
+	<87ljms981c.fsf@macbook.be.48ers.dk>
+Message-ID: <1247495564.20117.4.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=451
+Hi,
 
-           Summary: [PATCH] Upgrade from unmaintained dosfstools-2.11 to
-                    dosfstools-3.0.3
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Keywords: patch
-          Severity: normal
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: mac at mcrowe.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+On Mon, 2009-07-13 at 12:44 +0200, Peter Korsgaard wrote:
 
+>  >> the attached patch adds the buildroot config option
+>  >> BR2_PACKAGE_WPA_SUPPLICANT_DBUS. With this option enabled the DBus
+>  >> specific files from wpa_supplicant will be installed to the target and
+>  >> support for the DBus control interface will be compiled into
+>  >> wpa_supplicant. Please consider to include this patch.
+> 
+>  Sven> After updating our copy of buildroot to the latest snapshot, I found
+>  Sven> that the patch does not any longer apply cleanly. Attached is an updated
+>  Sven> patch that does.
+> 
+> Thanks, but do we really need a special option for this? Shouldn't
+> this just always be done if you have dbus enabled?
+> 
+> Similiar to how openssl support is handled in various packages
+> (E.G. libcurl).
 
-Created an attachment (id=457)
- --> (https://bugs.busybox.net/attachment.cgi?id=457)
-Upgrade to dosfstools-3.0.3
-
-Move from old unmaintained dosfstools-2.11 (packaged as mkdosfs) to now
-maintained dosfstools-3.0.3. Allow each binary to be installed independently.
-
-Originally posted to mailing list 2009/06/18 but yielded no replies:
-http://thread.gmane.org/gmane.comp.lib.uclibc.buildroot/15572
+I don't have a strong opinion on that. The DBus control interface adds
+about 24kB to the the wpa_supplicant binary size. People might have DBus
+enabled for some other reason and don't need this feature in
+wpa_supplicant. But then, perhaps it's just not worth the extra
+option...
 
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Sven
