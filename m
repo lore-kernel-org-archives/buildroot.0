@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 13 Jul 2009 09:29:34 +0200
-Subject: [Buildroot] [PATCH] add ruby serialport extension
-In-Reply-To: <1247141343-8641-1-git-send-email-laurent.laffont@gmail.com>
-	(laurent laffont's message of "Thu\, 9 Jul 2009 14\:09\:03 +0200")
-References: <1247141343-8641-1-git-send-email-laurent.laffont@gmail.com>
-Message-ID: <87skh182ht.fsf@macbook.be.48ers.dk>
+Date: Mon, 13 Jul 2009 09:23:20 +0200
+Subject: [Buildroot] [PATCH] Change ruby version to 1.9.1-p129
+In-Reply-To: <1247141331-8609-1-git-send-email-laurent.laffont@gmail.com>
+	(laurent laffont's message of "Thu\, 9 Jul 2009 14\:08\:51 +0200")
+References: <1247141331-8609-1-git-send-email-laurent.laffont@gmail.com>
+Message-ID: <87ws6d82s7.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,85 +16,13 @@ To: buildroot@busybox.net
 Hi,
 
  laurent> From: laurent laffont <laurent.laffont@gmail.com>
- laurent> Handle ruby serialport extension cross compilation.
- laurent> http://rubyforge.org/projects/ruby-serialport/
+ laurent> Ruby 1.9.1 handle cross compilation better, espescially extensions (I'm working on ARM at91sam9263-ek).
+ laurent> This patch also disable ruby doc generation and ipv6.
 
- laurent> Signed-off-by: laurent laffont <laurent.laffont@gmail.com>
+We have a DISABLE_IPV6 to handle ipv6 enable/disable, but otherwise it
+looks good - Committed.
 
- laurent> +++ b/package/ruby-serialport/ruby-serialport-fix-1.9.patch
- laurent> @@ -0,0 +1,52 @@
- laurent> +--- a/ext/impl/posix_serialport.c	2008-12-23 20:35:07.000000000 +0000
- laurent> ++++ b/ext/impl/posix_serialport.c	2009-05-21 16:37:13.000000000 +0100
- laurent> +@@ -38,16 +38,16 @@
- laurent> + static int get_fd_helper(obj)
- laurent> +    VALUE obj;
- laurent> + {
- laurent> +-   OpenFile *fptr;
- laurent> ++   rb_io_t *fptr;
-
-
-What is this for? It doesn't seem buildroot specific?
-
-
- laurent> diff --git a/package/ruby-serialport/ruby-serialport.mk b/package/ruby-serialport/ruby-serialport.mk
- laurent> new file mode 100644
- laurent> index 0000000..797646c
- laurent> --- /dev/null
- laurent> +++ b/package/ruby-serialport/ruby-serialport.mk
- laurent> @@ -0,0 +1,53 @@
- laurent> +#############################################################
- laurent> +#
- laurent> +# ruby-serialport
- laurent> +#
- laurent> +#############################################################
- laurent> +RUBY_SERIALPORT_VERSION = 0.7.0
- laurent> +RUBY_SERIALPORT_SOURCE = ruby-serialport-$(RUBY_SERIALPORT_VERSION).tar.gz
- laurent> +RUBY_SERIALPORT_SITE = http://rubyforge.org/frs/download.php/49992
- laurent> +RUBY_SERIALPORT_DIR:=$(BUILD_DIR)/ruby-serialport-$(RUBY_SERIALPORT_VERSION)
- laurent> +RUBY_SERIALPORT_CAT:=$(ZCAT)
- laurent> +
- laurent> +$(DL_DIR)/$(RUBY_SERIALPORT_SOURCE):
- laurent> +	 $(call DOWNLOAD,$(RUBY_SERIALPORT_SITE,$(RUBY_SERIALPORT_SOURCE))
- laurent> +
- laurent> +ruby-serialport-source: $(DL_DIR)/$(RUBY_SERIALPORT_SOURCE)
- laurent> +
- laurent> +$(RUBY_SERIALPORT_DIR)/.unpacked: $(DL_DIR)/$(RUBY_SERIALPORT_SOURCE)
- laurent> +	$(RUBY_SERIALPORT_CAT) $(DL_DIR)/$(RUBY_SERIALPORT_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
- laurent> +	toolchain/patch-kernel.sh $(RUBY_SERIALPORT_DIR) package/ruby-serialport/ ruby-serialport\*.patch
- laurent> +	touch $@
- laurent> +
- laurent> +$(RUBY_SERIALPORT_DIR)/.configured: $(RUBY_SERIALPORT_DIR)/.unpacked
- laurent> +	(cd $(RUBY_SERIALPORT_DIR)/ext; rm Makefile; \
- laurent> +		RUBYLIB=$(RUBY_DIR):$(RUBY_DIR)/lib:$(RUBY_DIR)/.ext ruby-1.9 -e "require 'mkmf'; create_makefile('serialport')";)
-
-
-This expects the host to have ruby 1.9 installed. Either we need to
-add a check with a sensible error message or you need to compile ruby
-for the host in $(HOST_DIR) and use that instead. See libglib2.mk for
-an example.
-
-
- laurent> +$(RUBY_SERIALPORT_DIR)/.installed: $(RUBY_SERIALPORT_DIR)/ext/serialport.so
- laurent> +	(cd $(RUBY_SERIALPORT_DIR)/ext; \
- laurent> +		$(MAKE) DESTDIR=$(TARGET_DIR) extout=$(RUBY_DIR)/.ext install)
-
- 
-Doesn't this need to be stripped?
-
-
- laurent> +	touch $@
- laurent> +
- laurent> +ruby-serialport: $(RUBY_SERIALPORT_DIR)/.installed
- laurent> +
- laurent> +ruby-serialport-clean:
- laurent> +	(cd $(RUBY_SERIALPORT_DIR)/ext; \
- laurent> +		$(MAKE) DESTDIR=$(TARGET_DIR) extout=$(RUBY_DIR)/.ext clean)
-
-
-This will fail if the -source target hasn't executed yet (E.G. running
-make clean; make clean) - You can fix it by prefixing the line with
-'-' to tell make to ignore errors.
-
+Thanks!
 
 -- 
 Bye, Peter Korsgaard
