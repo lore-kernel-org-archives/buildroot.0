@@ -1,37 +1,100 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 13 Jul 2009 09:20:40 +0200
-Subject: [Buildroot] [git commit] ruby: needs WCHAR support in toolchain
-Message-ID: <20090713074533.1BA3F77467@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 13 Jul 2009 09:29:34 +0200
+Subject: [Buildroot] [PATCH] add ruby serialport extension
+In-Reply-To: <1247141343-8641-1-git-send-email-laurent.laffont@gmail.com>
+	(laurent laffont's message of "Thu\, 9 Jul 2009 14\:09\:03 +0200")
+References: <1247141343-8641-1-git-send-email-laurent.laffont@gmail.com>
+Message-ID: <87skh182ht.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ea536503331aea875e84ae598b4610fbd059f167
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "laurent" == laurent laffont <laurent.laffont@gmail.com> writes:
+
+Hi,
+
+ laurent> From: laurent laffont <laurent.laffont@gmail.com>
+ laurent> Handle ruby serialport extension cross compilation.
+ laurent> http://rubyforge.org/projects/ruby-serialport/
+
+ laurent> Signed-off-by: laurent laffont <laurent.laffont@gmail.com>
+
+ laurent> +++ b/package/ruby-serialport/ruby-serialport-fix-1.9.patch
+ laurent> @@ -0,0 +1,52 @@
+ laurent> +--- a/ext/impl/posix_serialport.c	2008-12-23 20:35:07.000000000 +0000
+ laurent> ++++ b/ext/impl/posix_serialport.c	2009-05-21 16:37:13.000000000 +0100
+ laurent> +@@ -38,16 +38,16 @@
+ laurent> + static int get_fd_helper(obj)
+ laurent> +    VALUE obj;
+ laurent> + {
+ laurent> +-   OpenFile *fptr;
+ laurent> ++   rb_io_t *fptr;
 
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/ruby/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+What is this for? It doesn't seem buildroot specific?
 
-diff --git a/package/ruby/Config.in b/package/ruby/Config.in
-index b7e0f83..518302a 100644
---- a/package/ruby/Config.in
-+++ b/package/ruby/Config.in
-@@ -3,7 +3,11 @@ comment "ruby has no inherent support for AVR32"
+
+ laurent> diff --git a/package/ruby-serialport/ruby-serialport.mk b/package/ruby-serialport/ruby-serialport.mk
+ laurent> new file mode 100644
+ laurent> index 0000000..797646c
+ laurent> --- /dev/null
+ laurent> +++ b/package/ruby-serialport/ruby-serialport.mk
+ laurent> @@ -0,0 +1,53 @@
+ laurent> +#############################################################
+ laurent> +#
+ laurent> +# ruby-serialport
+ laurent> +#
+ laurent> +#############################################################
+ laurent> +RUBY_SERIALPORT_VERSION = 0.7.0
+ laurent> +RUBY_SERIALPORT_SOURCE = ruby-serialport-$(RUBY_SERIALPORT_VERSION).tar.gz
+ laurent> +RUBY_SERIALPORT_SITE = http://rubyforge.org/frs/download.php/49992
+ laurent> +RUBY_SERIALPORT_DIR:=$(BUILD_DIR)/ruby-serialport-$(RUBY_SERIALPORT_VERSION)
+ laurent> +RUBY_SERIALPORT_CAT:=$(ZCAT)
+ laurent> +
+ laurent> +$(DL_DIR)/$(RUBY_SERIALPORT_SOURCE):
+ laurent> +	 $(call DOWNLOAD,$(RUBY_SERIALPORT_SITE,$(RUBY_SERIALPORT_SOURCE))
+ laurent> +
+ laurent> +ruby-serialport-source: $(DL_DIR)/$(RUBY_SERIALPORT_SOURCE)
+ laurent> +
+ laurent> +$(RUBY_SERIALPORT_DIR)/.unpacked: $(DL_DIR)/$(RUBY_SERIALPORT_SOURCE)
+ laurent> +	$(RUBY_SERIALPORT_CAT) $(DL_DIR)/$(RUBY_SERIALPORT_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+ laurent> +	toolchain/patch-kernel.sh $(RUBY_SERIALPORT_DIR) package/ruby-serialport/ ruby-serialport\*.patch
+ laurent> +	touch $@
+ laurent> +
+ laurent> +$(RUBY_SERIALPORT_DIR)/.configured: $(RUBY_SERIALPORT_DIR)/.unpacked
+ laurent> +	(cd $(RUBY_SERIALPORT_DIR)/ext; rm Makefile; \
+ laurent> +		RUBYLIB=$(RUBY_DIR):$(RUBY_DIR)/lib:$(RUBY_DIR)/.ext ruby-1.9 -e "require 'mkmf'; create_makefile('serialport')";)
+
+
+This expects the host to have ruby 1.9 installed. Either we need to
+add a check with a sensible error message or you need to compile ruby
+for the host in $(HOST_DIR) and use that instead. See libglib2.mk for
+an example.
+
+
+ laurent> +$(RUBY_SERIALPORT_DIR)/.installed: $(RUBY_SERIALPORT_DIR)/ext/serialport.so
+ laurent> +	(cd $(RUBY_SERIALPORT_DIR)/ext; \
+ laurent> +		$(MAKE) DESTDIR=$(TARGET_DIR) extout=$(RUBY_DIR)/.ext install)
+
  
- config BR2_PACKAGE_RUBY
- 	bool "ruby"
-+	depends on BR2_USE_WCHAR
- 	help
- 	  Object Oriented Scripting Language.
- 
- 	  http://www.ruby-lang.org/
-+
-+comment "ruby requires a toolchain with WCHAR support"
-+	depends on !BR2_USE_WCHAR
+Doesn't this need to be stripped?
+
+
+ laurent> +	touch $@
+ laurent> +
+ laurent> +ruby-serialport: $(RUBY_SERIALPORT_DIR)/.installed
+ laurent> +
+ laurent> +ruby-serialport-clean:
+ laurent> +	(cd $(RUBY_SERIALPORT_DIR)/ext; \
+ laurent> +		$(MAKE) DESTDIR=$(TARGET_DIR) extout=$(RUBY_DIR)/.ext clean)
+
+
+This will fail if the -source target hasn't executed yet (E.G. running
+make clean; make clean) - You can fix it by prefixing the line with
+'-' to tell make to ignore errors.
+
+
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
