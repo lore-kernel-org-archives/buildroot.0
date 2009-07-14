@@ -1,7 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 14 Jul 2009 13:39:22 +0000 (UTC)
-Subject: [Buildroot] [Bug 459] New: libgtk2 autoreconf
-Message-ID: <bug-459-163@https.bugs.busybox.net/>
+Date: Tue, 14 Jul 2009 13:40:00 +0000 (UTC)
+Subject: [Buildroot] [Bug 459] libgtk2 autoreconf
+In-Reply-To: <bug-459-163@https.bugs.busybox.net/>
+References: <bug-459-163@https.bugs.busybox.net/>
+Message-ID: <20090714134001.249E177804@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,36 +12,14 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=459
 
-              Host: x86-64
-            Target: SH4
-           Summary: libgtk2 autoreconf
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: enhancement
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: lionel.landwerlin at openwide.fr
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
 
 
-Hi,
 
-currently it's not possible to reconfigure the libgtk2 packge.
-There is 2 problems :
- 1) gtk-doc m4 macros are missing
- 2) the tests directory which is disabled by the libgtk2-2.12.6-no-tests.patch
-patch is not disabled anymore after reconfiguration.
 
-Please find a patch that fixes both issues as attachment.
-
-Regards,
-
-Lionel
+--- Comment #1 from Lionel Landwerlin <lionel.landwerlin@openwide.fr>  2009-07-14 13:40:00 UTC ---
+Created an attachment (id=467)
+ --> (https://bugs.busybox.net/attachment.cgi?id=467)
+libgtk2 autoreconf fixes
 
 
 -- 
