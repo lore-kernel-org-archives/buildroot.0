@@ -1,31 +1,35 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Tue, 14 Jul 2009 13:04:52 +0200
-Subject: [Buildroot] [PATCH] optional DBus support in wpa_supplicant
-In-Reply-To: <87k52c1lt5.fsf@macbook.be.48ers.dk>
-References: <1247473258.4007.7.camel@sven> <1247476399.4007.13.camel@sven>
-	<87ljms981c.fsf@macbook.be.48ers.dk> <1247495564.20117.4.camel@sven>
-	<4A5B4D46.6010807@zacarias.com.ar> <87k52c1lt5.fsf@macbook.be.48ers.dk>
-Message-ID: <1247569492.21613.7.camel@sven>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 14 Jul 2009 13:03:33 +0000 (UTC)
+Subject: [Buildroot] [Bug 455] Fontconfig problem problem when
+	building/installing
+In-Reply-To: <bug-455-163@https.bugs.busybox.net/>
+References: <bug-455-163@https.bugs.busybox.net/>
+Message-ID: <20090714130333.8B930777D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-
-attached is an updated patch that enables the DBus config interface in
-wpa-supplicant if DBus is enabled in buildroot without introducing
-another config option.
+https://bugs.busybox.net/show_bug.cgi?id=455
 
 
-Sven
 
 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: wpa-supplicant-dbus.diff
-Type: text/x-patch
-Size: 1782 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090714/affec8b1/attachment-0001.bin>
+
+--- Comment #7 from Lionel Landwerlin <lionel.landwerlin@openwide.fr>  2009-07-14 13:03:32 UTC ---
+(In reply to comment #6)
+> > Yes, I have an $(STAGING_DIR)/bin/sh installed.
+> 
+> Ohh? Where does that come from - Bash? That sounds like a bug in the first
+> place
+> 
+
+That's copied from the external toolchain.
+Whatever is in the staging we shouldn't have that kind of problem.
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
