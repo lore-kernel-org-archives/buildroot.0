@@ -1,29 +1,26 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 13 Jul 2009 21:58:29 +0000 (UTC)
-Subject: [Buildroot] [Bug 455] Fontconfig problem problem when
-	building/installing
-In-Reply-To: <bug-455-163@https.bugs.busybox.net/>
-References: <bug-455-163@https.bugs.busybox.net/>
-Message-ID: <20090713215829.21DBB77801@busybox.osuosl.org>
+From: H Hartley Sweeten <hartleys@visionengravers.com>
+Date: Mon, 13 Jul 2009 20:59:51 -0400
+Subject: [Buildroot] [PATCH] .gitignore: add backup files
+Message-ID: <BD79186B4FD85F4B8E60E381CAEE190901A692C4@mi8nycmail19.Mi8.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=455
+Add *.orig and *~ backup files to gitignore.
 
+Signed-off-by: H Hartley Sweeten <hsweeten@visionengravers.com>
 
+---
 
-
-
---- Comment #5 from Lionel Landwerlin <lionel.landwerlin@openwide.fr>  2009-07-13 21:58:28 UTC ---
-Created an attachment (id=465)
- --> (https://bugs.busybox.net/attachment.cgi?id=465)
-External toolchain path order fix
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+diff --git a/.gitignore b/.gitignore
+index e7117d3..93b53bb 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -9,3 +9,5 @@
+ /.config
+ *.depend
+ *.o
++*.orig
++*~ 
