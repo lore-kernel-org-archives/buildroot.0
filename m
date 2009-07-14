@@ -1,26 +1,30 @@
-From: H Hartley Sweeten <hartleys@visionengravers.com>
-Date: Mon, 13 Jul 2009 20:59:51 -0400
-Subject: [Buildroot] [PATCH] .gitignore: add backup files
-Message-ID: <BD79186B4FD85F4B8E60E381CAEE190901A692C4@mi8nycmail19.Mi8.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 14 Jul 2009 10:21:43 +0000 (UTC)
+Subject: [Buildroot] [Bug 455] Fontconfig problem problem when
+	building/installing
+In-Reply-To: <bug-455-163@https.bugs.busybox.net/>
+References: <bug-455-163@https.bugs.busybox.net/>
+Message-ID: <20090714102144.0BFCB777FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add *.orig and *~ backup files to gitignore.
+https://bugs.busybox.net/show_bug.cgi?id=455
 
-Signed-off-by: H Hartley Sweeten <hsweeten@visionengravers.com>
 
----
 
-diff --git a/.gitignore b/.gitignore
-index e7117d3..93b53bb 100644
---- a/.gitignore
-+++ b/.gitignore
-@@ -9,3 +9,5 @@
- /.config
- *.depend
- *.o
-+*.orig
-+*~ 
+
+
+--- Comment #6 from Peter Korsgaard <jacmet@uclibc.org>  2009-07-14 10:21:43 UTC ---
+> Yes, I have an $(STAGING_DIR)/bin/sh installed.
+
+Ohh? Where does that come from - Bash? That sounds like a bug in the first
+place
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
