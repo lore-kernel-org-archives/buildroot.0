@@ -1,25 +1,39 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 14 Jul 2009 13:40:00 +0000 (UTC)
-Subject: [Buildroot] [Bug 459] libgtk2 autoreconf
-In-Reply-To: <bug-459-163@https.bugs.busybox.net/>
-References: <bug-459-163@https.bugs.busybox.net/>
-Message-ID: <20090714134001.249E177804@busybox.osuosl.org>
+Date: Tue, 14 Jul 2009 13:57:31 +0000 (UTC)
+Subject: [Buildroot] [Bug 455] Fontconfig problem problem when
+	building/installing
+In-Reply-To: <bug-455-163@https.bugs.busybox.net/>
+References: <bug-455-163@https.bugs.busybox.net/>
+Message-ID: <20090714135731.A23D977800@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=459
+https://bugs.busybox.net/show_bug.cgi?id=455
 
 
 
 
 
---- Comment #1 from Lionel Landwerlin <lionel.landwerlin@openwide.fr>  2009-07-14 13:40:00 UTC ---
-Created an attachment (id=467)
- --> (https://bugs.busybox.net/attachment.cgi?id=467)
-libgtk2 autoreconf fixes
+--- Comment #8 from Lionel Landwerlin <lionel.landwerlin@openwide.fr>  2009-07-14 13:57:30 UTC ---
+(In reply to comment #7)
+> (In reply to comment #6)
+> > > Yes, I have an $(STAGING_DIR)/bin/sh installed.
+> > 
+> > Ohh? Where does that come from - Bash? That sounds like a bug in the first
+> > place
+> > 
+> 
+> That's copied from the external toolchain.
+> Whatever is in the staging we shouldn't have that kind of problem.
+> 
+
+I think we should remove the staging directory from the PATH variable, as none
+of the binaries it contains can be executed on the host. If some package need
+to execute one binary from another package, we should have this compiled for
+the host.
 
 
 -- 
