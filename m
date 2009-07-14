@@ -1,32 +1,45 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 14 Jul 2009 13:03:33 +0000 (UTC)
-Subject: [Buildroot] [Bug 455] Fontconfig problem problem when
-	building/installing
-In-Reply-To: <bug-455-163@https.bugs.busybox.net/>
-References: <bug-455-163@https.bugs.busybox.net/>
-Message-ID: <20090714130333.8B930777D9@busybox.osuosl.org>
+Date: Tue, 14 Jul 2009 13:39:22 +0000 (UTC)
+Subject: [Buildroot] [Bug 459] New: libgtk2 autoreconf
+Message-ID: <bug-459-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=455
+https://bugs.busybox.net/show_bug.cgi?id=459
+
+              Host: x86-64
+            Target: SH4
+           Summary: libgtk2 autoreconf
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: lionel.landwerlin at openwide.fr
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
 
+Hi,
 
+currently it's not possible to reconfigure the libgtk2 packge.
+There is 2 problems :
+ 1) gtk-doc m4 macros are missing
+ 2) the tests directory which is disabled by the libgtk2-2.12.6-no-tests.patch
+patch is not disabled anymore after reconfiguration.
 
+Please find a patch that fixes both issues as attachment.
 
---- Comment #7 from Lionel Landwerlin <lionel.landwerlin@openwide.fr>  2009-07-14 13:03:32 UTC ---
-(In reply to comment #6)
-> > Yes, I have an $(STAGING_DIR)/bin/sh installed.
-> 
-> Ohh? Where does that come from - Bash? That sounds like a bug in the first
-> place
-> 
+Regards,
 
-That's copied from the external toolchain.
-Whatever is in the staging we shouldn't have that kind of problem.
+Lionel
 
 
 -- 
