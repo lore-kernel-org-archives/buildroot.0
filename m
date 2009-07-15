@@ -1,27 +1,30 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 15 Jul 2009 10:30:15 +0000 (UTC)
-Subject: [Buildroot] [Bug 463] Webkit build with directfb fails
-In-Reply-To: <bug-463-163@https.bugs.busybox.net/>
-References: <bug-463-163@https.bugs.busybox.net/>
-Message-ID: <20090715103015.BB4F377813@busybox.osuosl.org>
+From: nfrench at xtale.biz <nfrench@xtale.biz>
+Date: Wed, 15 Jul 2009 21:16:54 -0000 (Europe/London)
+Subject: [Buildroot] clean build
+Message-ID: <59693.172.16.221.250.1247692614.squirrel@cvs.xtale.biz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=463
 
 
+What is the best way to do a clean build after changing an item in
+menuconfig it seems that a 
+make clean followed by 
+make
 
+does not rebuild everything ie if I have changed the compiler
+flags.
 
+if I do
 
---- Comment #2 from Will Newton <will.newton@gmail.com>  2009-07-15 10:30:14 UTC ---
+make distclean
 
-The patch in bug 427 also adds this functionality.
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+I have to
+do a make menuconfig before a make this also means that all the packages
+are dowloaded again.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090715/50091349/attachment.htm>
