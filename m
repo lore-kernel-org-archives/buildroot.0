@@ -1,41 +1,47 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 15 Jul 2009 07:31:07 +0000 (UTC)
-Subject: [Buildroot] [Bug 455] Fontconfig problem problem when
-	building/installing
-In-Reply-To: <bug-455-163@https.bugs.busybox.net/>
-References: <bug-455-163@https.bugs.busybox.net/>
-Message-ID: <20090715073108.03C07777F3@busybox.osuosl.org>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Wed, 15 Jul 2009 10:11:30 +0200
+Subject: [Buildroot] [PATCH] optional DBus support in wpa_supplicant
+In-Reply-To: <874otf137h.fsf@macbook.be.48ers.dk>
+References: <1247473258.4007.7.camel@sven> <1247476399.4007.13.camel@sven>
+	<87ljms981c.fsf@macbook.be.48ers.dk> <1247495564.20117.4.camel@sven>
+	<4A5B4D46.6010807@zacarias.com.ar> <87k52c1lt5.fsf@macbook.be.48ers.dk>
+	<1247569492.21613.7.camel@sven>  <874otf137h.fsf@macbook.be.48ers.dk>
+Message-ID: <1247645490.3956.12.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=455
+Hi,
 
+On Tue, 2009-07-14 at 21:20 +0200, Peter Korsgaard wrote:
 
-
-
-
---- Comment #12 from Peter Korsgaard <jacmet@uclibc.org>  2009-07-15 07:31:07 UTC ---
-(In reply to comment #11)
-
-> > The problem is the various *-config scripts, like sdl-config which get
-> > installed by various packages and *SHOULD* get called instead of whatever is
-> > present on the host.
+>  Sven> --- ../buildroot-orig/package/wpa_supplicant/wpa_supplicant.mk	2009-07-12 21:13:04.000000000 +0200
+>  Sven> +++ package/wpa_supplicant/wpa_supplicant.mk	2009-07-13 11:07:52.000000000 +0200
+>  Sven> @@ -13,10 +13,14 @@
+>  Sven>  WPA_SUPPLICANT_CONFIG = $(WPA_SUPPLICANT_DIR)/wpa_supplicant/.config
+>  Sven>  WPA_SUPPLICANT_SUBDIR = wpa_supplicant
+>  Sven>  WPA_SUPPLICANT_TARGET_BINS = wpa_cli wpa_supplicant wpa_passphrase
+>  Sven> +WPA_SUPPLICANT_DBUS_SERVICE = fi.epitest.hostap.WPASupplicant
 > 
-> I'm agree, but shouldn't we provides them from the $(HOST_DIR) ?
+> Aren't you missing a ".service" here? Service files seems to normally
+> have the .service extension, and the wpa supplicant file on my machine
+> (Debian) does as well.
+> 
+>  Sven> +	$(INSTALL) -D \
+>  Sven> +	  $(WPA_SUPPLICANT_DIR)/wpa_supplicant/dbus-wpa_supplicant.service \
+>  Sven> +	  $(TARGET_DIR)/usr/share/dbus-1/system-services/$(WPA_SUPPLICANT_DBUS_SERVICE)
+> 
+> Here you don't add it
+>  
+>  Sven> +	rm -f $(TARGET_DIR)/usr/share/dbus-1/system-services/$(WPA_SUPPLICANT_DBUS_SERVICE).service
+> 
+> But here you do.
 
-Well, it's not that simple. HOST_DIR is for stuff for the host, so a sdl-config
-there would point to the host libraries, not the target ones. Also notice that
-these scripts gets installed with make install of the packages, so we don't
-have direct control over it. And finally don't forget the cross compiler which
-also gets installed into STAGING_DIR together with the headers/libs, and people
-expect to simply be able to add STAGING_DIR/usr/bin to their path and be good
-to go.
+Yes, the suffix is missing there. I didn't actually use the DBus
+activation feature that relies on this file. So I didn't notice that I
+got the filename wrong. Well spotted.
 
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Sven
