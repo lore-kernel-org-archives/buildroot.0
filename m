@@ -1,7 +1,7 @@
 From: nfrench at xtale.biz <nfrench@xtale.biz>
-Date: Wed, 15 Jul 2009 22:07:11 -0000 (Europe/London)
-Subject: [Buildroot] 64bit build error Mesa
-Message-ID: <56852.172.16.221.250.1247695631.squirrel@cvs.xtale.biz>
+Date: Wed, 15 Jul 2009 22:39:07 -0000 (Europe/London)
+Subject: [Buildroot] standard libc libm support
+Message-ID: <50200.172.16.221.250.1247697547.squirrel@cvs.xtale.biz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,16 +10,10 @@ To: buildroot@busybox.net
 
 
 
-Have a 64 bit build system and have now added XORG but get the
-following
+Will there be any chance of libm and libc support / options. NVIDIA OpenGL
+drivers a bit of a problem at the moment. ( I know its due to them being
+closed source but they are fast and with the ION chip very good).
 
-/bin/sh: makedepend: command not found
-make[4]:
-*** No rule to make target `depend', needed by `default'.? Stop.
-make[4]: Leaving directory
-`/mnt/wd/buildroot-2009.05/build_x86_64/Mesa-7.2/src/glx/x11'
-
-any pointers please.
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090715/2e948d84/attachment.htm>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090715/2e7ab64a/attachment.htm>
