@@ -1,47 +1,80 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Wed, 15 Jul 2009 10:11:30 +0200
-Subject: [Buildroot] [PATCH] optional DBus support in wpa_supplicant
-In-Reply-To: <874otf137h.fsf@macbook.be.48ers.dk>
-References: <1247473258.4007.7.camel@sven> <1247476399.4007.13.camel@sven>
-	<87ljms981c.fsf@macbook.be.48ers.dk> <1247495564.20117.4.camel@sven>
-	<4A5B4D46.6010807@zacarias.com.ar> <87k52c1lt5.fsf@macbook.be.48ers.dk>
-	<1247569492.21613.7.camel@sven>  <874otf137h.fsf@macbook.be.48ers.dk>
-Message-ID: <1247645490.3956.12.camel@sven>
+From: Daniel Mack <daniel@caiaq.de>
+Date: Wed, 15 Jul 2009 11:21:05 +0200
+Subject: [Buildroot] [PATCH] Add support for custom post-build script
+In-Reply-To: <1247086018-18816-1-git-send-email-daniel@caiaq.de>
+References: <1247086018-18816-1-git-send-email-daniel@caiaq.de>
+Message-ID: <20090715092105.GG9464@buzzloop.caiaq.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+What about this one?
 
-On Tue, 2009-07-14 at 21:20 +0200, Peter Korsgaard wrote:
 
->  Sven> --- ../buildroot-orig/package/wpa_supplicant/wpa_supplicant.mk	2009-07-12 21:13:04.000000000 +0200
->  Sven> +++ package/wpa_supplicant/wpa_supplicant.mk	2009-07-13 11:07:52.000000000 +0200
->  Sven> @@ -13,10 +13,14 @@
->  Sven>  WPA_SUPPLICANT_CONFIG = $(WPA_SUPPLICANT_DIR)/wpa_supplicant/.config
->  Sven>  WPA_SUPPLICANT_SUBDIR = wpa_supplicant
->  Sven>  WPA_SUPPLICANT_TARGET_BINS = wpa_cli wpa_supplicant wpa_passphrase
->  Sven> +WPA_SUPPLICANT_DBUS_SERVICE = fi.epitest.hostap.WPASupplicant
+On Wed, Jul 08, 2009 at 10:46:58PM +0200, Daniel Mack wrote:
+> The config help text says it all:
 > 
-> Aren't you missing a ".service" here? Service files seems to normally
-> have the .service extension, and the wpa supplicant file on my machine
-> (Debian) does as well.
+>   Specify a script to be run after the build has finished and before
+>   the BR2 starts packing the files into selected packages.
 > 
->  Sven> +	$(INSTALL) -D \
->  Sven> +	  $(WPA_SUPPLICANT_DIR)/wpa_supplicant/dbus-wpa_supplicant.service \
->  Sven> +	  $(TARGET_DIR)/usr/share/dbus-1/system-services/$(WPA_SUPPLICANT_DBUS_SERVICE)
+>   This gives users the oportunity to do board-specific cleanups,
+>   add-ons and the like, so the generated files can be used directly
+>   without further processing.
 > 
-> Here you don't add it
+>   The script is called with the target directory name as first and
+>   only argument. Make sure the exit code of that script is 0,
+>   otherwise make will stop after calling it.
+> 
+> Signed-off-by: Daniel Mack <daniel@caiaq.de>
+> Cc: Sven Neumann <s.neumann@raumfeld.com>
+> ---
+>  Makefile         |    4 ++++
+>  target/Config.in |   15 +++++++++++++++
+>  2 files changed, 19 insertions(+), 0 deletions(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index 76dd2cd..dbeede5 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -360,6 +360,10 @@ endif
+>  	find $(TARGET_DIR) -type f -perm +111 | xargs $(STRIPCMD) 2>/dev/null || true
+>  	$(TARGET_LDCONFIG) -r $(TARGET_DIR) 2>/dev/null
 >  
->  Sven> +	rm -f $(TARGET_DIR)/usr/share/dbus-1/system-services/$(WPA_SUPPLICANT_DBUS_SERVICE).service
+> +ifneq ($(BR2_ROOTFS_POST_BUILD_SCRIPT),"")
+> +	$(BR2_ROOTFS_POST_BUILD_SCRIPT) $(TARGET_DIR)
+> +endif
+> +
+>  ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
+>  LOCALE_WHITELIST=$(PROJECT_BUILD_DIR)/locales.nopurge
+>  LOCALE_NOPURGE=$(strip $(subst ",,$(BR2_ENABLE_LOCALE_WHITELIST)))
+> diff --git a/target/Config.in b/target/Config.in
+> index 87abbe6..dbdc2d6 100644
+> --- a/target/Config.in
+> +++ b/target/Config.in
+> @@ -12,6 +12,21 @@ config BR2_ROOTFS_SUFFIX
+>  	help
+>  	  Add a custom string to the end of the root file system name.
+>  
+> +config BR2_ROOTFS_POST_BUILD_SCRIPT
+> +	string "Custom script to run before packing files"
+> +	default ""
+> +	help
+> +	  Specify a script to be run after the build has finished and before
+> +	  the BR2 starts packing the files into selected packages.
+> +
+> +	  This gives users the oportunity to do board-specific cleanups,
+> +	  add-ons and the like, so the generated files can be used directly
+> +	  without further processing.
+> +
+> +	  The script is called with the target directory name as first and
+> +	  only argument. Make sure the exit code of that script is 0,
+> +	  otherwise make will stop after calling it.
+> +
+>  comment "filesystem for target device"
+>  
+>  source "target/cramfs/Config.in"
+> -- 
+> 1.6.3.1
 > 
-> But here you do.
-
-Yes, the suffix is missing there. I didn't actually use the DBus
-activation feature that relies on this file. So I didn't notice that I
-got the filename wrong. Well spotted.
-
-
-Sven
