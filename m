@@ -1,80 +1,27 @@
-From: Daniel Mack <daniel@caiaq.de>
-Date: Wed, 15 Jul 2009 11:21:05 +0200
-Subject: [Buildroot] [PATCH] Add support for custom post-build script
-In-Reply-To: <1247086018-18816-1-git-send-email-daniel@caiaq.de>
-References: <1247086018-18816-1-git-send-email-daniel@caiaq.de>
-Message-ID: <20090715092105.GG9464@buzzloop.caiaq.de>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 15 Jul 2009 10:30:15 +0000 (UTC)
+Subject: [Buildroot] [Bug 463] Webkit build with directfb fails
+In-Reply-To: <bug-463-163@https.bugs.busybox.net/>
+References: <bug-463-163@https.bugs.busybox.net/>
+Message-ID: <20090715103015.BB4F377813@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-What about this one?
+https://bugs.busybox.net/show_bug.cgi?id=463
 
 
-On Wed, Jul 08, 2009 at 10:46:58PM +0200, Daniel Mack wrote:
-> The config help text says it all:
-> 
->   Specify a script to be run after the build has finished and before
->   the BR2 starts packing the files into selected packages.
-> 
->   This gives users the oportunity to do board-specific cleanups,
->   add-ons and the like, so the generated files can be used directly
->   without further processing.
-> 
->   The script is called with the target directory name as first and
->   only argument. Make sure the exit code of that script is 0,
->   otherwise make will stop after calling it.
-> 
-> Signed-off-by: Daniel Mack <daniel@caiaq.de>
-> Cc: Sven Neumann <s.neumann@raumfeld.com>
-> ---
->  Makefile         |    4 ++++
->  target/Config.in |   15 +++++++++++++++
->  2 files changed, 19 insertions(+), 0 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 76dd2cd..dbeede5 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -360,6 +360,10 @@ endif
->  	find $(TARGET_DIR) -type f -perm +111 | xargs $(STRIPCMD) 2>/dev/null || true
->  	$(TARGET_LDCONFIG) -r $(TARGET_DIR) 2>/dev/null
->  
-> +ifneq ($(BR2_ROOTFS_POST_BUILD_SCRIPT),"")
-> +	$(BR2_ROOTFS_POST_BUILD_SCRIPT) $(TARGET_DIR)
-> +endif
-> +
->  ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
->  LOCALE_WHITELIST=$(PROJECT_BUILD_DIR)/locales.nopurge
->  LOCALE_NOPURGE=$(strip $(subst ",,$(BR2_ENABLE_LOCALE_WHITELIST)))
-> diff --git a/target/Config.in b/target/Config.in
-> index 87abbe6..dbdc2d6 100644
-> --- a/target/Config.in
-> +++ b/target/Config.in
-> @@ -12,6 +12,21 @@ config BR2_ROOTFS_SUFFIX
->  	help
->  	  Add a custom string to the end of the root file system name.
->  
-> +config BR2_ROOTFS_POST_BUILD_SCRIPT
-> +	string "Custom script to run before packing files"
-> +	default ""
-> +	help
-> +	  Specify a script to be run after the build has finished and before
-> +	  the BR2 starts packing the files into selected packages.
-> +
-> +	  This gives users the oportunity to do board-specific cleanups,
-> +	  add-ons and the like, so the generated files can be used directly
-> +	  without further processing.
-> +
-> +	  The script is called with the target directory name as first and
-> +	  only argument. Make sure the exit code of that script is 0,
-> +	  otherwise make will stop after calling it.
-> +
->  comment "filesystem for target device"
->  
->  source "target/cramfs/Config.in"
-> -- 
-> 1.6.3.1
-> 
+
+
+
+--- Comment #2 from Will Newton <will.newton@gmail.com>  2009-07-15 10:30:14 UTC ---
+
+The patch in bug 427 also adds this functionality.
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
