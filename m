@@ -1,19 +1,35 @@
-From: nfrench at xtale.biz <nfrench@xtale.biz>
-Date: Wed, 15 Jul 2009 22:39:07 -0000 (Europe/London)
-Subject: [Buildroot] standard libc libm support
-Message-ID: <50200.172.16.221.250.1247697547.squirrel@cvs.xtale.biz>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 16 Jul 2009 00:05:13 +0000 (UTC)
+Subject: [Buildroot] [Bug 369] Add SDL_gfx package
+In-Reply-To: <bug-369-163@https.bugs.busybox.net/>
+References: <bug-369-163@https.bugs.busybox.net/>
+Message-ID: <20090716000514.0219877828@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=369
 
 
-Will there be any chance of libm and libc support / options. NVIDIA OpenGL
-drivers a bit of a problem at the moment. ( I know its due to them being
-closed source but they are fast and with the ION chip very good).
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090715/2e7ab64a/attachment.htm>
+
+
+--- Comment #2 from Evan Zelkowitz <evan.zelkowitz@gmail.com>  2009-07-16 00:05:13 UTC ---
+Created an attachment (id=475)
+ --> (https://bugs.busybox.net/attachment.cgi?id=475)
+Patch to add sdl gfx package
+
+Patched against git from 07/15
+
+This is my first time submitting a patch so hopefully I did alright.  The one
+thing I noticed is that the time stamps on the files are way different, the
+ones in git are from 1969 yet mine show the current date, so I dunno how that
+affects anything.
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
