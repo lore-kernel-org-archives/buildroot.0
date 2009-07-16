@@ -1,38 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 17 Jul 2009 00:25:35 +0200
-Subject: [Buildroot] [git commit] external toolchain: do not copy useless
-	symbolic links
-Message-ID: <20090717205405.2ED41775BB@busybox.osuosl.org>
+Date: Fri, 17 Jul 2009 00:26:23 +0200
+Subject: [Buildroot] [git commit] external toolchain: copy the C++ standard
+	library if needed
+Message-ID: <20090717205405.56010775BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3026e9930eaf9b287aa69c4ed7adfe34913afda3
+commit: http://git.buildroot.net/buildroot/commit/?id=28aa0b47fb5bcb46ddcc24fdb5cc5466c094024f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 
-Do not copy .so symbolic links to target when not needed. Only copy
-.so.X symbolic links and the library itself.
+Obey the BR2_INSTALL_LIBSTDCPP configuration option to copy the C++
+standard library to the target. Suggested by Lionel Landwerlin
+<lionel.landwerlin@openwide.fr>.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/external-toolchain/ext-tool.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ toolchain/external-toolchain/ext-tool.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
 diff --git a/toolchain/external-toolchain/ext-tool.mk b/toolchain/external-toolchain/ext-tool.mk
-index 0e1deb6..6df48f0 100644
+index 6df48f0..e772cda 100644
 --- a/toolchain/external-toolchain/ext-tool.mk
 +++ b/toolchain/external-toolchain/ext-tool.mk
-@@ -46,7 +46,7 @@ copy_toolchain_lib_root = \
- 	STRIP="$(strip $4)"; \
-  \
- 	LIB_DIR="$${SYSROOT_DIR}/lib" ; \
--	for FILE in `find $${LIB_DIR} -maxdepth 1 -type l -name "$${LIB}*"`; do \
-+	for FILE in `find $${LIB_DIR} -maxdepth 1 -name "$${LIB}.*"`; do \
- 		LIB=`basename $${FILE}`; \
- 		while test \! -z "$${LIB}"; do \
- 			rm -fr $(TARGET_DIR)$${DST}/$${LIB}; \
+@@ -190,6 +190,10 @@ else
+ EXTERNAL_LIBS+=ld-linux.so libnss_files.so
+ endif
+ 
++ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
++EXTERNAL_LIBS+=libstdc++.so
++endif
++
+ SYSROOT_DIR=$(shell LANG=C $(TARGET_CC) -v 2>&1 | grep ^Configured | tr " " "\n" | grep -- "--with-sysroot" | cut -f2 -d=)
+ 
+ $(STAMP_DIR)/ext-toolchain-installed:
 -- 
 1.6.3.3
