@@ -1,30 +1,40 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 16 Jul 2009 19:49:16 +0000 (UTC)
-Subject: [Buildroot] [Bug 387] Tremor not installed to toolchain
-In-Reply-To: <bug-387-163@https.bugs.busybox.net/>
-References: <bug-387-163@https.bugs.busybox.net/>
-Message-ID: <20090716194916.3F3A67773C@busybox.osuosl.org>
+Date: Thu, 16 Jul 2009 22:22:04 +0000 (UTC)
+Subject: [Buildroot] [Bug 467] New: DirectFB 1.4.1
+Message-ID: <bug-467-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=387
+https://bugs.busybox.net/show_bug.cgi?id=467
+
+              Host: x86-64
+            Target: SH4
+           Summary: DirectFB 1.4.1
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: lionel.landwerlin at openwide.fr
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+A new version of DirectFB has been released on June 26th :
+http://directfb.org/index.php?path=Main%2FNews&entry=2009-06-26-0.niels .
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+Please bump to 1.4.1.
 
+Regards,
 
-
-
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-07-16 19:49:15 UTC ---
-Thanks, fixed in git (bd26b581)
+Lionel
 
 
 -- 
