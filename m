@@ -1,36 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 17 Jul 2009 11:23:02 +0200
-Subject: [Buildroot] [PATCH 1/1] directfb: bump version
-In-Reply-To: <cover.1247822579.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1247822579.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <5cfe019120097f206545ae4694e9358a0adb75bd.1247822579.git.thomas.petazzoni@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 17 Jul 2009 10:13:12 +0000 (UTC)
+Subject: [Buildroot] [Bug 453] libglib2 autoreconf
+In-Reply-To: <bug-453-163@https.bugs.busybox.net/>
+References: <bug-453-163@https.bugs.busybox.net/>
+Message-ID: <20090717101312.169F5777FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump the version of Direct FB to 1.4.1. Fixes bug #467. Thanks to
-Lionel Landwerlin <lionel.landwerlin@openwide.fr> for the
-notification.
+https://bugs.busybox.net/show_bug.cgi?id=453
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/directfb/directfb.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
-index 2826615..93b4593 100644
---- a/package/directfb/directfb.mk
-+++ b/package/directfb/directfb.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- DIRECTFB_VERSION_MAJOR:=1.4
--DIRECTFB_VERSION:=1.4.0
-+DIRECTFB_VERSION:=1.4.1
- DIRECTFB_SITE:=http://www.directfb.org/downloads/Core/DirectFB-$(DIRECTFB_VERSION_MAJOR)
- DIRECTFB_SOURCE:=DirectFB-$(DIRECTFB_VERSION).tar.gz
- DIRECTFB_AUTORECONF = NO
+
+
+
+--- Comment #3 from Lionel Landwerlin <lionel.landwerlin@openwide.fr>  2009-07-17 10:13:11 UTC ---
+(In reply to comment #2)
+> Why is the patch applied to the dbus-glib package to fix an issue in libglib2 ?
+> 
+
+Sorry, I made a wrong commit on my repository... It was late...
+
+Please find a correct one as attachment.
+
+Thx for review.
+
+
 -- 
-1.6.0.4
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
