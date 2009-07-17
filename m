@@ -1,40 +1,34 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 18 Jul 2009 01:17:31 +0200
-Subject: [Buildroot] [git commit] xutil_makedepend: install to target,
-	not staging
-Message-ID: <20090717231900.9F2D97778E@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 18 Jul 2009 01:21:32 +0200
+Subject: [Buildroot] [PATCH 06/13] dillo: remove configuration comment
+	on X.org dependency
+In-Reply-To: <ca40dacf64bf75389ac16f06b7c79bd67c8c9a3d.1247846597.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Fri\,
+	17 Jul 2009 18\:03\:13 +0200")
+References: <cover.1247846596.git.thomas.petazzoni@free-electrons.com>
+	<cover.1247846596.git.thomas.petazzoni@free-electrons.com>
+	<ca40dacf64bf75389ac16f06b7c79bd67c8c9a3d.1247846597.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87zlb2hp4z.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2de62ac5ad4af39575642318edd97006a591b494
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
+Hi,
 
-makedepend is a program, not a library - So makedepend for the target
-should get installed to target_dir and not to staging_dir.
+ Thomas> Configuration comments make the configuration system
+ Thomas> messy. And if we want to tell the user about the possible
+ Thomas> missing depencies for each and every package, there would be
+ Thomas> an unmaintable mess of configuration comments.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/x11r7/xutil_makedepend/xutil_makedepend.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ Thomas> Let's get rid of them, and let the user figure out using the
+ Thomas> help of each package available in the configuration system.
 
-diff --git a/package/x11r7/xutil_makedepend/xutil_makedepend.mk b/package/x11r7/xutil_makedepend/xutil_makedepend.mk
-index f562f5d..88754d8 100644
---- a/package/x11r7/xutil_makedepend/xutil_makedepend.mk
-+++ b/package/x11r7/xutil_makedepend/xutil_makedepend.mk
-@@ -8,8 +8,8 @@ XUTIL_MAKEDEPEND_VERSION = 1.0.1
- XUTIL_MAKEDEPEND_SOURCE = makedepend-$(XUTIL_MAKEDEPEND_VERSION).tar.bz2
- XUTIL_MAKEDEPEND_SITE = http://xorg.freedesktop.org/releases/individual/util
- XUTIL_MAKEDEPEND_AUTORECONF = NO
--XUTIL_MAKEDEPEND_INSTALL_STAGING = YES
--XUTIL_MAKEDEPEND_INSTALL_TARGET = NO
-+XUTIL_MAKEDEPEND_INSTALL_STAGING = NO
-+XUTIL_MAKEDEPEND_INSTALL_TARGET = YES
- 
- $(eval $(call AUTOTARGETS,package/x11r7,xutil_makedepend))
- 
+Please change the 'depends on' lines for the libraries to 'select'
+then.
+
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
