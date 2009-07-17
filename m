@@ -1,28 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 17 Jul 2009 18:05:26 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	ext-toolchain-target-path
-Message-ID: <cover.1247846723.git.thomas.petazzoni@free-electrons.com>
+From: Alexandre Pereira da Silva <aletes.xgr@gmail.com>
+Date: Fri, 17 Jul 2009 15:37:40 -0300
+Subject: [Buildroot] clean build
+In-Reply-To: <59693.172.16.221.250.1247692614.squirrel@cvs.xtale.biz>
+References: <59693.172.16.221.250.1247692614.squirrel@cvs.xtale.biz>
+Message-ID: <81a4a26e0907171137j7b00c22aj172a76744699c150@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The following changes since commit ea536503331aea875e84ae598b4610fbd059f167:
-  Peter Korsgaard (1):
-        ruby: needs WCHAR support in toolchain
+I just remove, in arm case, "build_arm", "project_build_arm" and
+"toolchain_build_arm"
 
-are available in the git repository at:
+That gives me full build without downloading anything.
 
-  git://git.busybox.net/~tpetazzoni/git/buildroot ext-toolchain-target-path
+On Wed, Jul 15, 2009 at 6:16 PM, <nfrench@xtale.biz> wrote:
 
-Thomas Petazzoni (1):
-      external toolchain: add $(HOST_DIR)/bin to TARGET_PATH
-
- package/Makefile.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-Thanks,
--- 
-Thomas Petazzoni
+> What is the best way to do a clean build after changing an item in
+> menuconfig it seems that a
+> make clean followed by
+> make
+>
+> does not rebuild everything ie if I have changed the compiler flags.
+>
+> if I do
+>
+> make distclean
+>
+> I have to do a make menuconfig before a make this also means that all the
+> packages are dowloaded again.
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090717/cf089c53/attachment-0001.htm>
