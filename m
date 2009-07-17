@@ -1,32 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 17 Jul 2009 18:03:17 +0200
-Subject: [Buildroot] [PATCH 10/13] xorg: remove reference to non-existing
-	BR2_PACKAGE_XSERVER_none
-In-Reply-To: <cover.1247846596.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1247846596.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <030c82ece13fb5ae1a8f13dab71ef5d6d1146ffc.1247846597.git.thomas.petazzoni@free-electrons.com>
+Date: Fri, 17 Jul 2009 18:05:27 +0200
+Subject: [Buildroot] [PATCH 1/1] external toolchain: add $(HOST_DIR)/bin to
+	TARGET_PATH
+In-Reply-To: <cover.1247846723.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1247846723.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <b5d6f341c5196e9fdc86e29571c5cdae060b47a9.1247846723.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Since the move of many host binaries to $(HOST_DIR), the TARGET_PATH
+for internal toolchain had been changed to include $(HOST_DIR)/bin and
+$(HOST_DIR)/usr/bin, but this change was not reflected to the
+TARGET_PATH used in external toolchain configuration. This patches
+fixes this.
+
+We also remove $(STAGING_DIR)/bin and $(STAGING_DIR)/usr/bin from the
+TARGET_PATH in external toolchain configuration, since the STAGING_DIR
+is not supposed to contain host binaries.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ package/Makefile.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 7e7ca00..e7550d0 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -321,7 +321,6 @@ source "package/qtopia4/Config.in"
- source "package/x11r7/Config.in"
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 7daa3b4..dfe4347 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -130,7 +130,7 @@ TOOLCHAIN_EXTERNAL_PATH:=$(strip $(subst ",, $(BR2_TOOLCHAIN_EXTERNAL_PATH)))
+ #"))
+ #TOOL_BUILD_DIR=$(BASE_DIR)/$(TOPDIR_PREFIX)toolchain_build_$(TOOLCHAIN_EXTERNAL_PREFIX)
+ TOOL_BUILD_DIR=$(BASE_DIR)/$(TOPDIR_PREFIX)toolchain_build_$(ARCH)$(COND_ARCH_FPU_SUFFIX)$(TOPDIR_SUFFIX)
+-TARGET_PATH="$(STAGING_DIR)/bin:$(STAGING_DIR)/usr/bin:$(TOOL_BUILD_DIR)/bin:$(TOOLCHAIN_EXTERNAL_PATH)/bin:$(PATH)"
++TARGET_PATH="$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(TOOL_BUILD_DIR)/bin:$(TOOLCHAIN_EXTERNAL_PATH)/bin:$(PATH)"
+ #IMAGE:=$(BINARIES_DIR)/$(BR2_ROOTFS_PREFIX).$(TOOLCHAIN_EXTERNAL_PREFIX)$(ROOTFS_SUFFIX)
+ IMAGE:=$(BINARIES_DIR)/$(BR2_ROOTFS_PREFIX).$(ARCH)$(COND_ARCH_FPU_SUFFIX)$(ROOTFS_SUFFIX)
  
- comment "X libraries and helper libraries"
--#XXX: maybe some of these should depend on !BR2_PACKAGE_XSERVER_none
- source "package/atk/Config.in"
- source "package/cairo/Config.in"
- source "package/pango/Config.in"
 -- 
 1.6.0.4
