@@ -1,33 +1,41 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 17 Jul 2009 21:07:42 +0200
-Subject: [Buildroot] [git commit] CHANGES: add #467
-Message-ID: <20090717200824.C21AE777DB@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 17 Jul 2009 22:50:35 +0200
+Subject: [Buildroot] [PATCH 3/8] external toolchain: use LANG=C when
+	calling gcc -v
+In-Reply-To: <fd5570970e1a488815b8ca94b516f92901cefacb.1247819731.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Fri\,
+	17 Jul 2009 10\:35\:30 +0200")
+References: <cover.1247819731.git.thomas.petazzoni@free-electrons.com>
+	<cover.1247819731.git.thomas.petazzoni@free-electrons.com>
+	<fd5570970e1a488815b8ca94b516f92901cefacb.1247819731.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87ocrjhw4k.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e0debb782161084cf955e26d286003ec4262bdb3
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
+ Thomas> Lionel Landwerlin <lionel.landwerlin@openwide.fr> reported that using
+ Thomas> the external toolchain support when LANG=fr_FR.UTF-8 doesn't work,
+ Thomas> since the messages printed by gcc -v are translated in another
+ Thomas> language, defeating the grep ^Configured test.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ Thomas> Therefore, as per Lionel suggestion, we force LANG=C when calling
+ Thomas> $(TARGET_CC) -v.
 
-diff --git a/CHANGES b/CHANGES
-index 18beb14..fd0c04b 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -20,6 +20,7 @@
- 	#411: ipsec-tools: Bump version to 0.7.2
- 	#417: New package spawn-fcgi
- 	#419: Bump lighttpd package to 1.4.23
-+	#467: DirectFB 1.4.1
- 
- 2009.05, Released June 1st, 2009:
- 
+I use LANG=C/en_US myself, but wouldn't it make sense to fix this
+globally in the main Makefile instead as we might have similar
+problems other places? The only disadvantage I can think of is that
+the users will get error messages in English (but that's a good thing
+when they send logs to us).
+
+Could someone with a different locale test that please? E.G. add an:
+
+export LANG=C
+
+To the toplevel Makefile.
+
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
