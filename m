@@ -1,32 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 17 Jul 2009 21:08:36 +0200
-Subject: [Buildroot] [pull request] Pull request for branch directfb-bump
-In-Reply-To: <cover.1247822579.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Fri\,
-	17 Jul 2009 11\:23\:01 +0200")
-References: <cover.1247822579.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87skgvi0uj.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 17 Jul 2009 11:21:04 +0200
+Subject: [Buildroot] [git commit] directfb: bump version
+Message-ID: <20090717200824.1E7E5777DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
-
- Thomas> The following changes since commit ea536503331aea875e84ae598b4610fbd059f167:
- Thomas>   Peter Korsgaard (1):
- Thomas>         ruby: needs WCHAR support in toolchain
-
- Thomas> are available in the git repository at:
-
- Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot directfb-bump
-
- Thomas> Thomas Petazzoni (1):
- Thomas>       directfb: bump version
-
-Pulled and pushed, thanks!
+commit: http://git.buildroot.net/buildroot/commit/?id=5cfe019120097f206545ae4694e9358a0adb75bd
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 
+Bump the version of Direct FB to 1.4.1. Fixes bug #467. Thanks to
+Lionel Landwerlin <lionel.landwerlin@openwide.fr> for the
+notification.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/directfb/directfb.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
+index 2826615..93b4593 100644
+--- a/package/directfb/directfb.mk
++++ b/package/directfb/directfb.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ DIRECTFB_VERSION_MAJOR:=1.4
+-DIRECTFB_VERSION:=1.4.0
++DIRECTFB_VERSION:=1.4.1
+ DIRECTFB_SITE:=http://www.directfb.org/downloads/Core/DirectFB-$(DIRECTFB_VERSION_MAJOR)
+ DIRECTFB_SOURCE:=DirectFB-$(DIRECTFB_VERSION).tar.gz
+ DIRECTFB_AUTORECONF = NO
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
