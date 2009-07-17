@@ -1,39 +1,32 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 17 Jul 2009 22:53:57 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	external-toolchain
-In-Reply-To: <cover.1247819731.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Fri\,
-	17 Jul 2009 10\:35\:27 +0200")
-References: <cover.1247819731.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87k527hvyy.fsf@macbook.be.48ers.dk>
+Date: Fri, 17 Jul 2009 23:57:22 +0200
+Subject: [Buildroot] 64bit build error Mesa
+In-Reply-To: <56852.172.16.221.250.1247695631.squirrel@cvs.xtale.biz>
+	(nfrench@xtale.biz's message of "Wed\,
+	15 Jul 2009 22\:07\:11 -0000 \(Europe\/London\)")
+References: <56852.172.16.221.250.1247695631.squirrel@cvs.xtale.biz>
+Message-ID: <87fxcvht19.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "nfrench" == nfrench  <nfrench@xtale.biz> writes:
 
- Thomas> The following changes since commit ea536503331aea875e84ae598b4610fbd059f167:
- Thomas>   Peter Korsgaard (1):
- Thomas>         ruby: needs WCHAR support in toolchain
+ nfrench> Have a 64 bit build system and have now added XORG but get
+ nfrench> the following /bin/sh: makedepend: command not found
+ nfrench> make[4]: *** No rule to make target `depend', needed by
+ nfrench> `default'.  Stop.  make[4]: Leaving directory
+ nfrench> `/mnt/wd/buildroot-2009.05/build_x86_64/Mesa-7.2/src
+ nfrench> /glx/x11'
 
- Thomas> are available in the git repository at:
+Mesa needs makedepend installed on the host. Please install it on your
+build machine (on Debian it's in xutils-dev the package) and it should
+work.
 
- Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot external-toolchain
-
- Thomas> Thomas Petazzoni (8):
- Thomas>       external toolchain: fix libraries copy and add ARM ABI check
- Thomas>       external-toolchain: better documentation, cleanup, sysroot check
- Thomas>       external toolchain: use LANG=C when calling gcc -v
- Thomas>       external toolchain: more documentation about the principles
- Thomas>       external toolchain: do not copy useless symbolic links
- Thomas>       external toolchain: copy the C++ standard library if needed
- Thomas>       external toolchain: respect $(Q)
- Thomas>       external toolchain: check cross-compiler existence
-
-Pulled and pushed - Thanks!
+We should probably compile makedepend for the host ourselves or
+atleast complain loudly if it isn't installed instead of this error.
 
 -- 
 Bye, Peter Korsgaard
