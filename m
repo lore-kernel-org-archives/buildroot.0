@@ -1,39 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 17 Jul 2009 18:03:12 +0200
-Subject: [Buildroot] [PATCH 05/13] midori: remove configuration comment on
-	X.org dependency
+Date: Fri, 17 Jul 2009 18:03:10 +0200
+Subject: [Buildroot] [PATCH 03/13] xorg: remove useless configuration comment
 In-Reply-To: <cover.1247846596.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1247846596.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <0c7ee23c9c2b876661fc410f4cb2647f262c2b1c.1247846597.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <8c00f439048fbccbae1b22427648b10390a09748.1247846597.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Configuration comments make the configuration system messy. And if we
-want to tell the user about the possible missing depencies for each
-and every package, there would be an unmaintable mess of configuration
-comments.
-
-Let's get rid of them, and let the user figure out using the help of
-each package available in the configuration system.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/midori/Config.in |    3 ---
- 1 files changed, 0 insertions(+), 3 deletions(-)
+ package/x11r7/Config.in |    4 ----
+ 1 files changed, 0 insertions(+), 4 deletions(-)
 
-diff --git a/package/midori/Config.in b/package/midori/Config.in
-index fd1da35..80b7f77 100644
---- a/package/midori/Config.in
-+++ b/package/midori/Config.in
-@@ -7,6 +7,3 @@ config BR2_PACKAGE_MIDORI
- 	  Midori is a lightweight web browser based on WebKit
- 
- 	  http://software.twotoasts.de/?page=midori
+diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
+index dad0924..ace438a 100644
+--- a/package/x11r7/Config.in
++++ b/package/x11r7/Config.in
+@@ -327,7 +327,3 @@ endmenu
+ 		source package/x11r7/xkeyboard-config/Config.in
+ 	endmenu
+ endif
 -
--comment "midori		- disabled (requires Xorg(7))"
--	depends on !(BR2_PACKAGE_XORG || BR2_PACKAGE_XORG7)
+-comment "X11R7 X Window System disabled"
+-	depends on BR2_PACKAGE_TINYX||BR2_PACKAGE_XORG
+-
 -- 
 1.6.0.4
