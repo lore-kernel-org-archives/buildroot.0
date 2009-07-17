@@ -1,31 +1,45 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 17 Jul 2009 23:55:16 +0000 (UTC)
-Subject: [Buildroot] [Bug 469] build of libgtk2 for host incorrectly assumes
- that X.org development files are installed
-In-Reply-To: <bug-469-163@https.bugs.busybox.net/>
-References: <bug-469-163@https.bugs.busybox.net/>
-Message-ID: <20090717235516.46410772EC@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 17 Jul 2009 17:23:44 +0200
+Subject: [Buildroot] [git commit] external toolchain: add $(HOST_DIR)/bin to
+	TARGET_PATH
+Message-ID: <20090718061625.A238C77827@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=469
+commit: http://git.buildroot.net/buildroot/commit/?id=b5d6f341c5196e9fdc86e29571c5cdae060b47a9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 
+Since the move of many host binaries to $(HOST_DIR), the TARGET_PATH
+for internal toolchain had been changed to include $(HOST_DIR)/bin and
+$(HOST_DIR)/usr/bin, but this change was not reflected to the
+TARGET_PATH used in external toolchain configuration. This patches
+fixes this.
 
+We also remove $(STAGING_DIR)/bin and $(STAGING_DIR)/usr/bin from the
+TARGET_PATH in external toolchain configuration, since the STAGING_DIR
+is not supposed to contain host binaries.
 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Makefile.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
---- Comment #2 from Sven Neumann <s.neumann@raumfeld.com>  2009-07-17 23:55:15 UTC ---
-Neither gtk-update-icon-cache nor gdk-pixbuf-csource have a dependency on GDK.
-It should be possible to build them without building GDK, let alone GTK+. All
-you need is gdk-pixbuf. I suggest that you add options to the GTK+ build system
-to allow building just gdk-pixbuf and these two tools. This change does not
-belong into buildroot though, it should be submitted against upstream GTK+.
-
-
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 7daa3b4..dfe4347 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -130,7 +130,7 @@ TOOLCHAIN_EXTERNAL_PATH:=$(strip $(subst ",, $(BR2_TOOLCHAIN_EXTERNAL_PATH)))
+ #"))
+ #TOOL_BUILD_DIR=$(BASE_DIR)/$(TOPDIR_PREFIX)toolchain_build_$(TOOLCHAIN_EXTERNAL_PREFIX)
+ TOOL_BUILD_DIR=$(BASE_DIR)/$(TOPDIR_PREFIX)toolchain_build_$(ARCH)$(COND_ARCH_FPU_SUFFIX)$(TOPDIR_SUFFIX)
+-TARGET_PATH="$(STAGING_DIR)/bin:$(STAGING_DIR)/usr/bin:$(TOOL_BUILD_DIR)/bin:$(TOOLCHAIN_EXTERNAL_PATH)/bin:$(PATH)"
++TARGET_PATH="$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(TOOL_BUILD_DIR)/bin:$(TOOLCHAIN_EXTERNAL_PATH)/bin:$(PATH)"
+ #IMAGE:=$(BINARIES_DIR)/$(BR2_ROOTFS_PREFIX).$(TOOLCHAIN_EXTERNAL_PREFIX)$(ROOTFS_SUFFIX)
+ IMAGE:=$(BINARIES_DIR)/$(BR2_ROOTFS_PREFIX).$(ARCH)$(COND_ARCH_FPU_SUFFIX)$(ROOTFS_SUFFIX)
+ 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.6.3.3
