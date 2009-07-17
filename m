@@ -1,78 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 17 Jul 2009 18:03:07 +0200
-Subject: [Buildroot] [pull request] Pull request for branch xorg
-Message-ID: <cover.1247846596.git.thomas.petazzoni@free-electrons.com>
+Date: Fri, 17 Jul 2009 18:03:09 +0200
+Subject: [Buildroot] [PATCH 02/13] xorg: reindent configuration option
+	details
+In-Reply-To: <cover.1247846596.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1247846596.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <2c502491f633bd93aca4d7dcdb046c45882e61fb.1247846597.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The following changes since commit ea536503331aea875e84ae598b4610fbd059f167:
-  Peter Korsgaard (1):
-        ruby: needs WCHAR support in toolchain
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/x11r7/Config.in |   17 ++++++++---------
+ 1 files changed, 8 insertions(+), 9 deletions(-)
 
-are available in the git repository at:
-
-  git://git.busybox.net/~tpetazzoni/git/buildroot xorg
-
-Thomas Petazzoni (13):
-      xorg: reorganize the selection of the X.org server type
-      xorg: reindent configuration option details
-      xorg: remove useless configuration comment
-      xorg: simplify dependencies on X.org
-      midori: remove configuration comment on X.org dependency
-      dillo: remove configuration comment on X.org dependency
-      matchbox: fix dependencies
-      xorg server: beautify list of dependencies
-      xorg server: remove dependencies
-      xorg: remove reference to non-existing BR2_PACKAGE_XSERVER_none
-      xorg: use BR2_PACKAGE_XORG instead of BR2_PACKAGE_XSERVER_none
-      xorg: remove references to non-existing configuration options
-      xorg: remove the XSERVER variable
-
- package/Config.in                                  |   33 ----------
- package/Makefile.in                                |   15 -----
- package/atk/atk.mk                                 |    2 +-
- package/blackbox/Config.in                         |    2 +-
- package/blackbox/blackbox.mk                       |    2 +-
- package/cairo/cairo.mk                             |    4 +-
- package/cups/cups.mk                               |    2 +-
- package/dillo/Config.in                            |    5 +-
- package/dillo/dillo.mk                             |    2 +-
- package/directfb/Config.in                         |    2 +-
- package/docker/Config.in                           |    2 +-
- package/docker/docker.mk                           |    2 +-
- package/fltk/Config.in                             |    2 +-
- package/fltk/fltk.mk                               |    2 +-
- package/games/ace_of_penguins/Config.in            |    2 +-
- package/games/ace_of_penguins/ace_of_penguins.mk   |    2 +-
- package/games/lxdoom/Config.in                     |    2 +-
- package/java/classpath/classpath.mk                |    4 +-
- package/java/jamvm/jamvm.mk                        |    4 +-
- package/libgtk12/Config.in                         |    2 +-
- package/libgtk12/libgtk12.mk                       |    2 +-
- package/libgtk2/Config.in                          |    2 +-
- package/libgtk2/libgtk2.mk                         |    4 +-
- package/matchbox/Config.in                         |    1 -
- package/metacity/Config.in                         |    2 +-
- package/metacity/metacity.mk                       |    2 +-
- package/midori/Config.in                           |    5 +-
- package/midori/midori.mk                           |    2 +-
- package/pango/pango.mk                             |   20 +++---
- package/rdesktop/Config.in                         |    2 +-
- package/rdesktop/rdesktop.mk                       |    2 +-
- package/rxvt/Config.in                             |    2 +-
- package/rxvt/rxvt.mk                               |    2 +-
- package/synergy/synergy.mk                         |    2 +-
- package/x11r7/Config.in                            |   52 +++++++++++-----
- package/x11r7/xserver_xorg-server/Config.in        |    4 -
- .../xserver_xorg-server/xserver_xorg-server.mk     |   62 +++++++++++++++----
- package/xpdf/xpdf.mk                               |    4 +-
- package/xvkbd/Config.in                            |    1 +
- package/xvkbd/xvkbd.mk                             |    2 +-
- 40 files changed, 133 insertions(+), 135 deletions(-)
-
-Thanks,
+diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
+index 7af62ee..dad0924 100644
+--- a/package/x11r7/Config.in
++++ b/package/x11r7/Config.in
+@@ -1,13 +1,12 @@
+ menuconfig BR2_PACKAGE_XORG7
+-bool "X.org X Window System, X11R7, release 7.4"
+-default y if BR2_PACKAGE_XSERVER_x11r7
+-select BR2_PACKAGE_ZLIB
+-select BR2_PACKAGE_LIBPNG
+-select BR2_PACKAGE_EXPAT
+-select BR2_PACKAGE_FONTCONFIG
+-help
+-	Support for X11R7 libraries, servers, drivers, and/or
+-	applications in the target.
++	bool "X.org X Window System, X11R7, release 7.4"
++	select BR2_PACKAGE_ZLIB
++	select BR2_PACKAGE_LIBPNG
++	select BR2_PACKAGE_EXPAT
++	select BR2_PACKAGE_FONTCONFIG
++	help
++	  Support for X11R7 libraries, servers, drivers, and/or
++	  applications in the target.
+ 
+ if BR2_PACKAGE_XORG7
+ 
 -- 
-Thomas Petazzoni
+1.6.0.4
