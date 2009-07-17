@@ -1,51 +1,48 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 17 Jul 2009 23:00:51 +0000 (UTC)
-Subject: [Buildroot] [Bug 469] build of libgtk2 for host incorrectly assumes
- that X.org development files are installed
-In-Reply-To: <bug-469-163@https.bugs.busybox.net/>
-References: <bug-469-163@https.bugs.busybox.net/>
-Message-ID: <20090717230051.7E40D7649F@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 18 Jul 2009 01:06:51 +0200
+Subject: [Buildroot] [PATCH 05/13] midori: remove configuration comment
+	on X.org dependency
+In-Reply-To: <0c7ee23c9c2b876661fc410f4cb2647f262c2b1c.1247846597.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Fri\,
+	17 Jul 2009 18\:03\:12 +0200")
+References: <cover.1247846596.git.thomas.petazzoni@free-electrons.com>
+	<cover.1247846596.git.thomas.petazzoni@free-electrons.com>
+	<0c7ee23c9c2b876661fc410f4cb2647f262c2b1c.1247846597.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <874otaj4dw.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=469
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
+Hi,
 
+ Thomas> Configuration comments make the configuration system
+ Thomas> messy. And if we want to tell the user about the possible
+ Thomas> missing depencies for each and every package, there would be
+ Thomas> an unmaintable mess of configuration comments.
 
+I don't completely agree. For toolchain issues such as WCHAR I think
+the comments can be very helpful as it isn't obvious why a package
+isn't visible.
 
+For package dependencies, 'select' should be used for library
+dependencies. For huge things like X, I think it's OK to not show any
+comments as the user most likely doesn't expect an X package to be
+available if they haven't enabled X.
 
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-07-17 23:00:50 UTC ---
-(In reply to comment #0)
-> This is because libxdamage-dev is not installed on my system. The rest of the
-> compilation works because some other X.org development files are installed on
-> my system. But that's just pure coincidence.
-> 
-> With this build of libgtk2 for the host, the X.org development files basically
-> became a requirement for Buildroot to work properly, which is a shame.
-> 
-> Also, building gtk2 twice (once for the host, once for the target) takes a lot
-> of time. And the build for the host is done only for a few command line tools.
-> 
-> Isn't it possible to improve all this ?
+Related to this, I think we should move the X applications into a
+seperate sub menu.
 
-Well, the question is how. The gtk buildsystem afaik needs
-gtk-update-icon-cache / gdk-pixbuf-csource, so we either depend on the user
-having the gtk development package installed on the host (in a compatible
-version), compile it ourselves (either including the X dependencies or require
-those packages on the host) or hack the gtk buildsystem to not use those
-programs / only compile those programs and not all of GTK.
+The stuff that can work with either directfb or X is a bit more
+tricky.
 
-The third option sounds nice, but I won't have time to work on it in the near
-future. It also won't help if we in the future will need to build something
-else for the host, which needs gtk.
+ Thomas> Let's get rid of them, and let the user figure out using the
+ Thomas> help of each package available in the configuration system.
 
-Further discussion should probably better move to the mailing list though. 
-
+How? The package won't be visible if it has unmet dependencies.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
