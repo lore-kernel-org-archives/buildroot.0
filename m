@@ -1,48 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 18 Jul 2009 01:06:51 +0200
-Subject: [Buildroot] [PATCH 05/13] midori: remove configuration comment
-	on X.org dependency
-In-Reply-To: <0c7ee23c9c2b876661fc410f4cb2647f262c2b1c.1247846597.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Fri\,
-	17 Jul 2009 18\:03\:12 +0200")
-References: <cover.1247846596.git.thomas.petazzoni@free-electrons.com>
-	<cover.1247846596.git.thomas.petazzoni@free-electrons.com>
-	<0c7ee23c9c2b876661fc410f4cb2647f262c2b1c.1247846597.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <874otaj4dw.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 18 Jul 2009 01:17:31 +0200
+Subject: [Buildroot] [git commit] xutil_makedepend: install to target,
+	not staging
+Message-ID: <20090717231900.9F2D97778E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=2de62ac5ad4af39575642318edd97006a591b494
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
 
- Thomas> Configuration comments make the configuration system
- Thomas> messy. And if we want to tell the user about the possible
- Thomas> missing depencies for each and every package, there would be
- Thomas> an unmaintable mess of configuration comments.
+makedepend is a program, not a library - So makedepend for the target
+should get installed to target_dir and not to staging_dir.
 
-I don't completely agree. For toolchain issues such as WCHAR I think
-the comments can be very helpful as it isn't obvious why a package
-isn't visible.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/x11r7/xutil_makedepend/xutil_makedepend.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-For package dependencies, 'select' should be used for library
-dependencies. For huge things like X, I think it's OK to not show any
-comments as the user most likely doesn't expect an X package to be
-available if they haven't enabled X.
-
-Related to this, I think we should move the X applications into a
-seperate sub menu.
-
-The stuff that can work with either directfb or X is a bit more
-tricky.
-
- Thomas> Let's get rid of them, and let the user figure out using the
- Thomas> help of each package available in the configuration system.
-
-How? The package won't be visible if it has unmet dependencies.
-
+diff --git a/package/x11r7/xutil_makedepend/xutil_makedepend.mk b/package/x11r7/xutil_makedepend/xutil_makedepend.mk
+index f562f5d..88754d8 100644
+--- a/package/x11r7/xutil_makedepend/xutil_makedepend.mk
++++ b/package/x11r7/xutil_makedepend/xutil_makedepend.mk
+@@ -8,8 +8,8 @@ XUTIL_MAKEDEPEND_VERSION = 1.0.1
+ XUTIL_MAKEDEPEND_SOURCE = makedepend-$(XUTIL_MAKEDEPEND_VERSION).tar.bz2
+ XUTIL_MAKEDEPEND_SITE = http://xorg.freedesktop.org/releases/individual/util
+ XUTIL_MAKEDEPEND_AUTORECONF = NO
+-XUTIL_MAKEDEPEND_INSTALL_STAGING = YES
+-XUTIL_MAKEDEPEND_INSTALL_TARGET = NO
++XUTIL_MAKEDEPEND_INSTALL_STAGING = NO
++XUTIL_MAKEDEPEND_INSTALL_TARGET = YES
+ 
+ $(eval $(call AUTOTARGETS,package/x11r7,xutil_makedepend))
+ 
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
