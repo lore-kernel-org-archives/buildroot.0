@@ -1,9 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 19 Jul 2009 20:42:02 +0000 (UTC)
+Date: Sun, 19 Jul 2009 21:17:20 +0000 (UTC)
 Subject: [Buildroot] [Bug 381] libtheora not using sdl-prefix
 In-Reply-To: <bug-381-163@https.bugs.busybox.net/>
 References: <bug-381-163@https.bugs.busybox.net/>
-Message-ID: <20090719204202.CF72377828@busybox.osuosl.org>
+Message-ID: <20090719211720.DEA8D777F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,29 +13,16 @@ To: buildroot@busybox.net
 https://bugs.busybox.net/show_bug.cgi?id=381
 
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |ASSIGNED
 
 
 
-
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-07-19 20:42:01 UTC ---
-Hmm, I cannot reproduce this. Can you provide some more details please? I take
-it that you are building for the same target as your build host, and that the
-libtheora build picks up your /usr/bin/sdl-config and ends up using your host
-libraries.
-
-I've tried doing a x86-64 build (as that's what my build host is) with and
-without SDL enabled. The libtheora configure script does pick up my host
-sdl-config, but as it is only used for examples and we build with
---disable-examples it has no effect. I also tried with a i686 build with the
-same affect.
-
-Now, adding a --with-sdl-prefix doesn't hurt, but I would like to understand
-the problem first.
+--- Comment #2 from Evan Zelkowitz <evan.zelkowitz@gmail.com>  2009-07-19 21:17:19 UTC ---
+I will try to reproduce again.  I was building for mipsel on an x86 box and it
+ended up linking against the sdl in the box's local /usr/lib instead of the one
+in the buildroot directory, thats why I added the sdl-prefix so it would look
+at the buildroot one.  Since I was building for mipsel it was pretty apparent
+when things werent built correctly since they would fail on linking.  Since you
+were doing an x86 toolchain on an x86 box that may be why you couldnt see it.
 
 
 -- 
