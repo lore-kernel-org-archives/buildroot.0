@@ -1,78 +1,29 @@
-From: Amit Uttamchandani <amit.uttam@gmail.com>
-Date: Mon, 20 Jul 2009 12:12:00 -0700
-Subject: [Buildroot] libgcc build error on arm
-Message-ID: <20090720121200.05b9f0b5@debian.canoga.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 20 Jul 2009 22:13:52 +0200
+Subject: [Buildroot] [PATCH] optional DBus support in wpa_supplicant
+In-Reply-To: <1248089944.8290.13.camel@sven> (Sven Neumann's message of "Mon\,
+	20 Jul 2009 13\:39\:04 +0200")
+References: <1247473258.4007.7.camel@sven> <1247476399.4007.13.camel@sven>
+	<87ljms981c.fsf@macbook.be.48ers.dk> <1247495564.20117.4.camel@sven>
+	<4A5B4D46.6010807@zacarias.com.ar>
+	<87k52c1lt5.fsf@macbook.be.48ers.dk> <1247569492.21613.7.camel@sven>
+	<874otf137h.fsf@macbook.be.48ers.dk> <1247645490.3956.12.camel@sven>
+	<1248089944.8290.13.camel@sven>
+Message-ID: <87zlazdse7.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
-Using the latest git source I get following build error when building a
-toolchain for arm (build log can be found at end of message):
+ Sven> Hi Peter,
 
-I tried the following approaches:
+ Sven> attached is an updated patch that has the missing file suffix
+ Sven> fixed that you spotted in my last patch.
 
- 1. Build without shared libs - fails
- 2. Build with shared libs - fails
- 3. Add '_nofpu' suffix for soft float toolchains - fails
- 4. Git clone from scratch and rebuild - fails
+Thanks, committed.
 
-For the build options I used all the default from Buildroot. Arch build
-options:
-
-BR2_armeb=y
-BR2_generic_arm=y
-BR2_ARM_TYPE="GENERIC_ARM"
-BR2_ARM_EABI=y
-BR2_ARCH="armeb"
-BR2_ENDIAN="LITTLE"
-BR2_GCC_TARGET_ABI="aapcs-linux"
-
-Any help would be appreciated.
-
-Thanks.
-
-/home/amit/src/buildroot/build_armeb/staging_dir/usr/bin/armeb-linux-uclibc-ranlib
-libgcov.a /home/amit/src/buildroot/toolchain_build_armeb/gcc-4.3.3-initial/./gcc/xgcc
--B/home/amit/src/buildroot/toolchain_build_armeb/gcc-4.3.3-initial/./gcc/
--B/home/amit/src/buildroot/build_armeb/staging_dir/usr/armeb-linux-uclibc/bin/
--B/home/amit/src/buildroot/build_armeb/staging_dir/usr/armeb-linux-uclibc/lib/
--isystem /home/amit/src/buildroot/build_armeb/staging_dir/usr/armeb-linux-uclibc/include
--isystem /home/amit/src/buildroot/build_armeb/staging_dir/usr/armeb-linux-uclibc/sys-include
--g -Os -O2 -g -Os -DIN_GCC -DCROSS_DIRECTORY_STRUCTURE   -W -Wall
--Wwrite-strings -Wstrict-prototypes -Wmissing-prototypes
--Wold-style-definition  -isystem ./include  -I. -I.
--I/home/amit/src/buildroot/toolchain_build_armeb/gcc-4.3.3/gcc
--I/home/amit/src/buildroot/toolchain_build_armeb/gcc-4.3.3/gcc/.
--I/home/amit/src/buildroot/toolchain_build_armeb/gcc-4.3.3/gcc/../include
--I/home/amit/src/buildroot/toolchain_build_armeb/gcc-4.3.3/gcc/../libcpp/include
--I/home/amit/src/buildroot/toolchain_build_armeb/gmp/include
--I/home/amit/src/buildroot/toolchain_build_armeb/mpfr/include
--I/home/amit/src/buildroot/toolchain_build_armeb/gcc-4.3.3/gcc/../libdecnumber
--I/home/amit/src/buildroot/toolchain_build_armeb/gcc-4.3.3/gcc/../libdecnumber/dpd
--I../libdecnumber  -g0 -finhibit-size-directive -fno-inline-functions
--fno-exceptions -fno-zero-initialized-in-bss -fno-toplevel-reorder
--fno-tree-vectorize  -I. -I. -I../.././gcc
--I/home/amit/src/buildroot/toolchain_build_armeb/gcc-4.3.3/libgcc
--I/home/amit/src/buildroot/toolchain_build_armeb/gcc-4.3.3/libgcc/.
--I/home/amit/src/buildroot/toolchain_build_armeb/gcc-4.3.3/libgcc/../gcc
--I/home/amit/src/buildroot/toolchain_build_armeb/gcc-4.3.3/libgcc/../include
--o crtbegin.o -MT crtbegin.o -MD -MP -MF crtbegin.dep  \
--c /home/amit/src/buildroot/toolchain_build_armeb/gcc-4.3.3/libgcc/../gcc/crtstuff.c
--DCRT_BEGIN /home/amit/src/buildroot/toolchain_build_armeb/gcc-4.3.3/libgcc/../gcc/crtstuff.c:
-In function
-'__do_global_dtors_aux': /home/amit/src/buildroot/toolchain_build_armeb/gcc-4.3.3/libgcc/../gcc/crtstuff.c:306:
-error: '__DTOR_LIST__' undeclared (first use in this
-function) /home/amit/src/buildroot/toolchain_build_armeb/gcc-4.3.3/libgcc/../gcc/crtstuff.c:306:
-error: (Each undeclared identifier is reported only
-once /home/amit/src/buildroot/toolchain_build_armeb/gcc-4.3.3/libgcc/../gcc/crtstuff.c:306:
-error: for each function it appears in.) make[2]: *** [crtbegin.o]
-Error 1 make[2]: Leaving directory
-`/home/amit/src/buildroot/toolchain_build_armeb/gcc-4.3.3-initial/armeb-linux-uclibc/libgcc'
-make[1]: *** [all-target-libgcc] Error 2 make[1]: Leaving directory
-`/home/amit/src/buildroot/toolchain_build_armeb/gcc-4.3.3-initial'
-make: ***
-[/home/amit/src/buildroot/toolchain_build_armeb/gcc-4.3.3-initial/.compiled]
-Error 2
+-- 
+Bye, Peter Korsgaard
