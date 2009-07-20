@@ -1,58 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 20 Jul 2009 20:28:09 +0000 (UTC)
-Subject: [Buildroot] [Bug 473] memstat_0.5.tar.gz has install with -D and
- that fails "make" (last buildroot git)
-In-Reply-To: <bug-473-163@https.bugs.busybox.net/>
-References: <bug-473-163@https.bugs.busybox.net/>
-Message-ID: <20090720202809.727B3777E7@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 20 Jul 2009 22:35:42 +0200
+Subject: [Buildroot] [PATCH 2/2] mtd-utils.git: fix targets
+In-Reply-To: <20090720112525.GV13236@buzzloop.caiaq.de> (Daniel Mack's message
+	of "Mon\, 20 Jul 2009 13\:25\:25 +0200")
+References: <1244029145-11832-1-git-send-email-daniel@caiaq.de>
+	<1244029145-11832-2-git-send-email-daniel@caiaq.de>
+	<878wikg3sp.fsf@macbook.be.48ers.dk>
+	<20090720112525.GV13236@buzzloop.caiaq.de>
+Message-ID: <87ljmjdrdt.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=473
+>>>>> "Daniel" == Daniel Mack <daniel@caiaq.de> writes:
 
+Hi,
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+ >> What about the patches? They no longer apply:
+ >> 
+ >> Applying mtd-utils-all-targets.patch using plaintext: 
+ >> patching file Makefile
+ >> Hunk #1 FAILED at 72.
+ >> 1 out of 1 hunk FAILED -- saving rejects to file Makefile.rej
+ >> Patch failed!  Please fix mtd-utils-all-targets.patch!
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |jacmet at uclibc.org
+ Daniel> Erm, yes. Sorry. I removed them locally but forgot to add that to the
+ Daniel> patch. They're not needed anymore. Could you do that when commiting?
 
-
-
-
---- Comment #4 from Peter Korsgaard <jacmet@uclibc.org>  2009-07-20 20:28:08 UTC ---
-(In reply to comment #0)
->         /usr/bin/install -m 0644 -D
-> /home/elorrain/buildroot/build_powerpc/memstat-0.5/memstat.conf
-> /home/elorrain/buildroot/project_build_powerpc/Eqam4G/root/etc
-> /usr/bin/install: cannot overwrite directory
-> `/home/elorrain/buildroot/project_build_powerpc/Eqam4G/root/etc' with
-> non-directory
-
-So your host install program doesn't seem to like doing install -D <file> <dir>
-- What version/distribution are you using?
-
-On my Debian machine it works:
-
-mkdir /tmp/blah
-touch /tmp/blih
-install -m 0644 -D /tmp/blih /tmp/blah
-ls -lah /tmp/blih
--rw-r--r-- 1 peko peko 0 2009-07-20 22:24 /tmp/blih
-install --version
-install (GNU coreutils) 7.4
-Copyright (C) 2009 Free Software Foundation, Inc.
-License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
-This is free software: you are free to change and redistribute it.
-There is NO WARRANTY, to the extent permitted by law.
-
-Written by David MacKenzie.
-
+Sure - Both patches?
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
