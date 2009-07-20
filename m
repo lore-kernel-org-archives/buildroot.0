@@ -1,10 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 20 Jul 2009 16:25:56 +0000 (UTC)
+Date: Mon, 20 Jul 2009 17:03:13 +0000 (UTC)
 Subject: [Buildroot] [Bug 473] memstat_0.5.tar.gz has install with -D and
  that fails "make" (last buildroot git)
 In-Reply-To: <bug-473-163@https.bugs.busybox.net/>
 References: <bug-473-163@https.bugs.busybox.net/>
-Message-ID: <20090720162556.CEF1E77812@busybox.osuosl.org>
+Message-ID: <20090720170313.AD57B77740@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,15 +17,28 @@ https://bugs.busybox.net/show_bug.cgi?id=473
 
 
 
---- Comment #2 from Etienne Lorrain <etienne_lorrain@yahoo.fr>  2009-07-20 16:25:55 UTC ---
-Created an attachment (id=485)
- --> (https://bugs.busybox.net/attachment.cgi?id=485)
-main config file
+--- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2009-07-20 17:03:13 UTC ---
+Indeed this directory is $(TARGET_DIR), which contains the filesystem as it
+will be on the target (with a few differences, like missing device files, not
+created in this directory since device files can only be created by the root
+user).
 
- I attach my .comfig, but the problem seems more like that directory:
-/home/elorrain/buildroot/project_build_powerpc/Eqam4G/root/etc
- should exist before trying to install.
- Isn't that the target device /etc ? (just begining with buildroot...)
+The etc/ directory in $(TARGET_DIR) is supposed to be created because the
+target root filesystem is initially filled with the contents of
+target/generic/target_skeleton/.
+
+So, not sure what's happening in your case. Nothing looks odd in your .config.
+Can you run a full build from scratch, and send the corresponding log ?
+
+Something like :
+
+rm -rf build_powerpc
+rm -rf toolchain_build_powerpc
+rm -rf project_build_powerpc
+rm -rf binaries
+make 2>&1 | tee /tmp/buildroot.log
+
+and send us the buildroot.log file.
 
 
 -- 
