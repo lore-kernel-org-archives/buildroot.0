@@ -1,47 +1,58 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 20 Jul 2009 22:17:31 +0200
-Subject: [Buildroot] [git commit] haserl: 0.9.25 array vars fix
-Message-ID: <20090720201811.5854277721@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 20 Jul 2009 20:28:09 +0000 (UTC)
+Subject: [Buildroot] [Bug 473] memstat_0.5.tar.gz has install with -D and
+ that fails "make" (last buildroot git)
+In-Reply-To: <bug-473-163@https.bugs.busybox.net/>
+References: <bug-473-163@https.bugs.busybox.net/>
+Message-ID: <20090720202809.727B3777E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=da6f67d8f2177f8c1d7ab7d029227f04a1c68720
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=473
 
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/haserl/haserl-0.9.25-array-vars-fix.patch |   19 +++++++++++++++++++
- 1 files changed, 19 insertions(+), 0 deletions(-)
- create mode 100644 package/haserl/haserl-0.9.25-array-vars-fix.patch
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-diff --git a/package/haserl/haserl-0.9.25-array-vars-fix.patch b/package/haserl/haserl-0.9.25-array-vars-fix.patch
-new file mode 100644
-index 0000000..e6c959a
---- /dev/null
-+++ b/package/haserl/haserl-0.9.25-array-vars-fix.patch
-@@ -0,0 +1,19 @@
-+haserl: array vars fix
-+
-+Fix buffer overflow error. Len is the length of the name= part of the
-+name=value string, not the value part.
-+
-+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-+Index: haserl-0.9.25/src/haserl.c
-+===================================================================
-+--- haserl-0.9.25.orig/src/haserl.c	2009-07-20 15:05:26.000000000 +0200
-++++ haserl-0.9.25/src/haserl.c	2009-07-20 15:06:05.000000000 +0200
-+@@ -269,7 +269,7 @@
-+ 	      /* if an array, create a new string with this
-+ 	       * value added to the end of the old value(s) 
-+ 	       */
-+-	      temp = xmalloc (strlen (cur->buf) + len + 1);
-++	      temp = xmalloc (strlen (cur->buf) + strlen(entry) - len + 1);
-+ 	      memmove (temp, cur->buf, strlen (cur->buf) + 1);
-+ 	      strcat (temp, "\n");
-+ 	      strcat (temp, str + keylen + 3);
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |jacmet at uclibc.org
+
+
+
+
+--- Comment #4 from Peter Korsgaard <jacmet@uclibc.org>  2009-07-20 20:28:08 UTC ---
+(In reply to comment #0)
+>         /usr/bin/install -m 0644 -D
+> /home/elorrain/buildroot/build_powerpc/memstat-0.5/memstat.conf
+> /home/elorrain/buildroot/project_build_powerpc/Eqam4G/root/etc
+> /usr/bin/install: cannot overwrite directory
+> `/home/elorrain/buildroot/project_build_powerpc/Eqam4G/root/etc' with
+> non-directory
+
+So your host install program doesn't seem to like doing install -D <file> <dir>
+- What version/distribution are you using?
+
+On my Debian machine it works:
+
+mkdir /tmp/blah
+touch /tmp/blih
+install -m 0644 -D /tmp/blih /tmp/blah
+ls -lah /tmp/blih
+-rw-r--r-- 1 peko peko 0 2009-07-20 22:24 /tmp/blih
+install --version
+install (GNU coreutils) 7.4
+Copyright (C) 2009 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+Written by David MacKenzie.
+
+
 -- 
-1.6.3.3
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
