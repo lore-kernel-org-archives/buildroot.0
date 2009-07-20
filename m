@@ -1,47 +1,60 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 20 Jul 2009 17:03:13 +0000 (UTC)
-Subject: [Buildroot] [Bug 473] memstat_0.5.tar.gz has install with -D and
- that fails "make" (last buildroot git)
-In-Reply-To: <bug-473-163@https.bugs.busybox.net/>
-References: <bug-473-163@https.bugs.busybox.net/>
-Message-ID: <20090720170313.AD57B77740@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 20 Jul 2009 19:58:41 +0200
+Subject: [Buildroot] standard libc libm support
+In-Reply-To: <58243.172.16.221.10.1248082385.squirrel@172.16.0.251>
+	(nfrench@xtale.biz's message of "Mon\,
+	20 Jul 2009 09\:33\:05 -0000 \(Europe\/London\)")
+References: <58243.172.16.221.10.1248082385.squirrel@172.16.0.251>
+Message-ID: <874ot7fd7y.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=473
+>>>>> "nfrench" == nfrench  <nfrench@xtale.biz> writes:
 
+ nfrench> Will there be any chance of libm and libc support /
+ nfrench> options. NVIDIA OpenGL drivers a bit of a problem at the
+ nfrench> moment. ( I know its due to them being closed source but
+ nfrench> they are fast and with the ION chip very good).
+ >> 
+ >> What exactly are you missing regarding math support?
 
+ nfrench>  ldd /usr/lib64/libGL.so.185.18.14
+ nfrench>         linux-vdso.so.1 =>  (0x00007fff789a1000)
+ nfrench>         libGLcore.so.1 => /usr/lib64/libGLcore.so.1 (0x00007f3e9d1e0000)
+ nfrench>         libnvidia-tls.so.1 => /usr/lib64/tls/libnvidia-tls.so.1
+ nfrench> (0x00007f3e9d0de000)
+ nfrench>         libm.so.6 => /lib/libm.so.6 (0x00007f3e9cf5e000)
+ nfrench>         libXext.so.6 => /usr/XORG/lib/libXext.so.6 (0x00007f3e9ce4c000)
+ nfrench>         libX11.so.6 => /usr/XORG/lib/libX11.so.6 (0x00007f3e9cc3c000)
+ nfrench>         libdl.so.2 => /lib/libdl.so.2 (0x00007f3e9cb38000)
+ nfrench>         libc.so.6 => /lib/libc.so.6 (0x00007f3e9c90e000)
+ nfrench>         libXau.so.6 => /usr/XORG/lib/libXau.so.6 (0x00007f3e9c80b000)
+ nfrench>         libXdmcp.so.6 => /usr/XORG/lib/libXdmcp.so.6 (0x00007f3e9c706000)
+ nfrench>         /lib/ld-linux-x86-64.so.2 (0x00007f3e9e6eb000)
 
+ nfrench> says it all really, Unfortunately I have no control over NVIDIA :-)
 
+I still don't understand what the problem is. I take it that the above
+is from a glibc compilation? From a recent x86-64 build:
 
---- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2009-07-20 17:03:13 UTC ---
-Indeed this directory is $(TARGET_DIR), which contains the filesystem as it
-will be on the target (with a few differences, like missing device files, not
-created in this directory since device files can only be created by the root
-user).
+ls ./lib
+ld64-uClibc-0.9.30.1.so  libgcc_s.so.1           libresolv.so.0
+ld64-uClibc.so.0         libm-0.9.30.1.so        librt-0.9.30.1.so
+libcrypt-0.9.30.1.so     libm.so.0               librt.so.0
+libcrypt.so.0            libnsl-0.9.30.1.so      libuClibc-0.9.30.1.so
+libc.so.0                libnsl.so.0             libutil-0.9.30.1.so
+libdl-0.9.30.1.so        libpthread-0.9.30.1.so  libutil.so.0
+libdl.so.0               libpthread.so.0
+libgcc_s.so              libresolv-0.9.30.1.so
 
-The etc/ directory in $(TARGET_DIR) is supposed to be created because the
-target root filesystem is initially filled with the contents of
-target/generic/target_skeleton/.
+E.G. it gives you a libm-*.so
 
-So, not sure what's happening in your case. Nothing looks odd in your .config.
-Can you run a full build from scratch, and send the corresponding log ?
-
-Something like :
-
-rm -rf build_powerpc
-rm -rf toolchain_build_powerpc
-rm -rf project_build_powerpc
-rm -rf binaries
-make 2>&1 | tee /tmp/buildroot.log
-
-and send us the buildroot.log file.
-
+Or is the the problem that the nvidia libGL*.so is closed source and
+linked against glibc? Then I guess you're forced into using an
+external glibc toolchain.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
