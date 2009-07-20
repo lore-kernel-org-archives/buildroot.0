@@ -1,60 +1,78 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 20 Jul 2009 19:58:41 +0200
-Subject: [Buildroot] standard libc libm support
-In-Reply-To: <58243.172.16.221.10.1248082385.squirrel@172.16.0.251>
-	(nfrench@xtale.biz's message of "Mon\,
-	20 Jul 2009 09\:33\:05 -0000 \(Europe\/London\)")
-References: <58243.172.16.221.10.1248082385.squirrel@172.16.0.251>
-Message-ID: <874ot7fd7y.fsf@macbook.be.48ers.dk>
+From: Amit Uttamchandani <amit.uttam@gmail.com>
+Date: Mon, 20 Jul 2009 12:12:00 -0700
+Subject: [Buildroot] libgcc build error on arm
+Message-ID: <20090720121200.05b9f0b5@debian.canoga.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "nfrench" == nfrench  <nfrench@xtale.biz> writes:
 
- nfrench> Will there be any chance of libm and libc support /
- nfrench> options. NVIDIA OpenGL drivers a bit of a problem at the
- nfrench> moment. ( I know its due to them being closed source but
- nfrench> they are fast and with the ION chip very good).
- >> 
- >> What exactly are you missing regarding math support?
+Using the latest git source I get following build error when building a
+toolchain for arm (build log can be found at end of message):
 
- nfrench>  ldd /usr/lib64/libGL.so.185.18.14
- nfrench>         linux-vdso.so.1 =>  (0x00007fff789a1000)
- nfrench>         libGLcore.so.1 => /usr/lib64/libGLcore.so.1 (0x00007f3e9d1e0000)
- nfrench>         libnvidia-tls.so.1 => /usr/lib64/tls/libnvidia-tls.so.1
- nfrench> (0x00007f3e9d0de000)
- nfrench>         libm.so.6 => /lib/libm.so.6 (0x00007f3e9cf5e000)
- nfrench>         libXext.so.6 => /usr/XORG/lib/libXext.so.6 (0x00007f3e9ce4c000)
- nfrench>         libX11.so.6 => /usr/XORG/lib/libX11.so.6 (0x00007f3e9cc3c000)
- nfrench>         libdl.so.2 => /lib/libdl.so.2 (0x00007f3e9cb38000)
- nfrench>         libc.so.6 => /lib/libc.so.6 (0x00007f3e9c90e000)
- nfrench>         libXau.so.6 => /usr/XORG/lib/libXau.so.6 (0x00007f3e9c80b000)
- nfrench>         libXdmcp.so.6 => /usr/XORG/lib/libXdmcp.so.6 (0x00007f3e9c706000)
- nfrench>         /lib/ld-linux-x86-64.so.2 (0x00007f3e9e6eb000)
+I tried the following approaches:
 
- nfrench> says it all really, Unfortunately I have no control over NVIDIA :-)
+ 1. Build without shared libs - fails
+ 2. Build with shared libs - fails
+ 3. Add '_nofpu' suffix for soft float toolchains - fails
+ 4. Git clone from scratch and rebuild - fails
 
-I still don't understand what the problem is. I take it that the above
-is from a glibc compilation? From a recent x86-64 build:
+For the build options I used all the default from Buildroot. Arch build
+options:
 
-ls ./lib
-ld64-uClibc-0.9.30.1.so  libgcc_s.so.1           libresolv.so.0
-ld64-uClibc.so.0         libm-0.9.30.1.so        librt-0.9.30.1.so
-libcrypt-0.9.30.1.so     libm.so.0               librt.so.0
-libcrypt.so.0            libnsl-0.9.30.1.so      libuClibc-0.9.30.1.so
-libc.so.0                libnsl.so.0             libutil-0.9.30.1.so
-libdl-0.9.30.1.so        libpthread-0.9.30.1.so  libutil.so.0
-libdl.so.0               libpthread.so.0
-libgcc_s.so              libresolv-0.9.30.1.so
+BR2_armeb=y
+BR2_generic_arm=y
+BR2_ARM_TYPE="GENERIC_ARM"
+BR2_ARM_EABI=y
+BR2_ARCH="armeb"
+BR2_ENDIAN="LITTLE"
+BR2_GCC_TARGET_ABI="aapcs-linux"
 
-E.G. it gives you a libm-*.so
+Any help would be appreciated.
 
-Or is the the problem that the nvidia libGL*.so is closed source and
-linked against glibc? Then I guess you're forced into using an
-external glibc toolchain.
+Thanks.
 
--- 
-Bye, Peter Korsgaard
+/home/amit/src/buildroot/build_armeb/staging_dir/usr/bin/armeb-linux-uclibc-ranlib
+libgcov.a /home/amit/src/buildroot/toolchain_build_armeb/gcc-4.3.3-initial/./gcc/xgcc
+-B/home/amit/src/buildroot/toolchain_build_armeb/gcc-4.3.3-initial/./gcc/
+-B/home/amit/src/buildroot/build_armeb/staging_dir/usr/armeb-linux-uclibc/bin/
+-B/home/amit/src/buildroot/build_armeb/staging_dir/usr/armeb-linux-uclibc/lib/
+-isystem /home/amit/src/buildroot/build_armeb/staging_dir/usr/armeb-linux-uclibc/include
+-isystem /home/amit/src/buildroot/build_armeb/staging_dir/usr/armeb-linux-uclibc/sys-include
+-g -Os -O2 -g -Os -DIN_GCC -DCROSS_DIRECTORY_STRUCTURE   -W -Wall
+-Wwrite-strings -Wstrict-prototypes -Wmissing-prototypes
+-Wold-style-definition  -isystem ./include  -I. -I.
+-I/home/amit/src/buildroot/toolchain_build_armeb/gcc-4.3.3/gcc
+-I/home/amit/src/buildroot/toolchain_build_armeb/gcc-4.3.3/gcc/.
+-I/home/amit/src/buildroot/toolchain_build_armeb/gcc-4.3.3/gcc/../include
+-I/home/amit/src/buildroot/toolchain_build_armeb/gcc-4.3.3/gcc/../libcpp/include
+-I/home/amit/src/buildroot/toolchain_build_armeb/gmp/include
+-I/home/amit/src/buildroot/toolchain_build_armeb/mpfr/include
+-I/home/amit/src/buildroot/toolchain_build_armeb/gcc-4.3.3/gcc/../libdecnumber
+-I/home/amit/src/buildroot/toolchain_build_armeb/gcc-4.3.3/gcc/../libdecnumber/dpd
+-I../libdecnumber  -g0 -finhibit-size-directive -fno-inline-functions
+-fno-exceptions -fno-zero-initialized-in-bss -fno-toplevel-reorder
+-fno-tree-vectorize  -I. -I. -I../.././gcc
+-I/home/amit/src/buildroot/toolchain_build_armeb/gcc-4.3.3/libgcc
+-I/home/amit/src/buildroot/toolchain_build_armeb/gcc-4.3.3/libgcc/.
+-I/home/amit/src/buildroot/toolchain_build_armeb/gcc-4.3.3/libgcc/../gcc
+-I/home/amit/src/buildroot/toolchain_build_armeb/gcc-4.3.3/libgcc/../include
+-o crtbegin.o -MT crtbegin.o -MD -MP -MF crtbegin.dep  \
+-c /home/amit/src/buildroot/toolchain_build_armeb/gcc-4.3.3/libgcc/../gcc/crtstuff.c
+-DCRT_BEGIN /home/amit/src/buildroot/toolchain_build_armeb/gcc-4.3.3/libgcc/../gcc/crtstuff.c:
+In function
+'__do_global_dtors_aux': /home/amit/src/buildroot/toolchain_build_armeb/gcc-4.3.3/libgcc/../gcc/crtstuff.c:306:
+error: '__DTOR_LIST__' undeclared (first use in this
+function) /home/amit/src/buildroot/toolchain_build_armeb/gcc-4.3.3/libgcc/../gcc/crtstuff.c:306:
+error: (Each undeclared identifier is reported only
+once /home/amit/src/buildroot/toolchain_build_armeb/gcc-4.3.3/libgcc/../gcc/crtstuff.c:306:
+error: for each function it appears in.) make[2]: *** [crtbegin.o]
+Error 1 make[2]: Leaving directory
+`/home/amit/src/buildroot/toolchain_build_armeb/gcc-4.3.3-initial/armeb-linux-uclibc/libgcc'
+make[1]: *** [all-target-libgcc] Error 2 make[1]: Leaving directory
+`/home/amit/src/buildroot/toolchain_build_armeb/gcc-4.3.3-initial'
+make: ***
+[/home/amit/src/buildroot/toolchain_build_armeb/gcc-4.3.3-initial/.compiled]
+Error 2
