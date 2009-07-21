@@ -1,46 +1,52 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Tue, 21 Jul 2009 12:47:38 +0200
-Subject: [Buildroot] [git commit] Fix memstat's install
-Message-ID: <20090721104808.7013677806@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 21 Jul 2009 11:02:58 +0000 (UTC)
+Subject: [Buildroot] [Bug 475] New: uImage target for U-boot failed
+	generating
+Message-ID: <bug-475-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9e2bdce02c45edbb65bffb9a31a423de9ccbff3f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=475
+
+              Host: i386-pc-linux-gnu
+            Target: powerpc-unknown-linux-gnu
+             Build: i386-pc-linux-gnu
+           Summary: uImage target for U-boot failed generating
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Windows
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: etienne_lorrain at yahoo.fr
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
 
-Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
----
- package/memstat/memstat.mk |    8 +++++---
- 1 files changed, 5 insertions(+), 3 deletions(-)
+Created an attachment (id=487)
+ --> (https://bugs.busybox.net/attachment.cgi?id=487)
+all config leading to the error
 
-diff --git a/package/memstat/memstat.mk b/package/memstat/memstat.mk
-index 7220aee..a54509a 100644
---- a/package/memstat/memstat.mk
-+++ b/package/memstat/memstat.mk
-@@ -21,15 +21,17 @@ $(MEMSTAT_DIR)/.configured: $(MEMSTAT_DIR)/.unpacked
- 	touch $@
- 
- $(MEMSTAT_DIR)/memstat: $(MEMSTAT_DIR)/.configured
--	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) $(@D)/memstat.c -o $@
-+	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
-+		$(CFLAGS_WHOLE_PROGRAM) $(@D)/memstat.c -o $@
- 
- $(TARGET_DIR)/usr/bin/memstat: $(MEMSTAT_DIR)/memstat
- 	[ -e $(TARGET_DIR)/etc/memstat.conf ] || \
--		$(INSTALL) -m 0644 -D $(^D)/memstat.conf $(TARGET_DIR)/etc
-+		$(INSTALL) -m 0644 -D $(^D)/memstat.conf \
-+			$(TARGET_DIR)/etc/memstat.conf
- 	$(INSTALL) -m 0755 -D $^ $@
- 	$(STRIPCMD) $(STRIP_STRIP_ALL) $@
- 
--memstat: uclibc $(TARGET_DIR)/usr/bin/memstat
-+memstat: $(TARGET_DIR)/usr/bin/memstat
- 
- memstat-source: $(DL_DIR)/$(MEMSTAT_SOURCE)
- 
+BOOTCC  arch/powerpc/boot/fdt_rw.o
+  BOOTCC  arch/powerpc/boot/fdt_strerror.o
+  BOOTAR  arch/powerpc/boot/wrapper.a
+  WRAP    arch/powerpc/boot/uImage
+/home/elorrain/buildroot/project_build_powerpc/Eqam4G/linux-2.6.30.2/arch/powerpc/boot/wrapper:
+line 261: mkimage: command not found
+make[2]: *** [arch/powerpc/boot/uImage] Error 127
+make[1]: *** [uImage] Error 2
+make[1]: Leaving directory
+`/home/elorrain/buildroot/project_build_powerpc/Eqam4G/linux-2.6.30.2'
+make: *** [/home/elorrain/buildroot/binaries/Eqam4G/uImage] Error 2
+
+
 -- 
-1.6.3.3
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
