@@ -1,10 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 21 Jul 2009 10:44:40 +0000 (UTC)
+Date: Tue, 21 Jul 2009 10:45:17 +0000 (UTC)
 Subject: [Buildroot] [Bug 473] memstat_0.5.tar.gz has install with -D and
  that fails "make" (last buildroot git)
 In-Reply-To: <bug-473-163@https.bugs.busybox.net/>
 References: <bug-473-163@https.bugs.busybox.net/>
-Message-ID: <20090721104440.DEC0D77806@busybox.osuosl.org>
+Message-ID: <20090721104517.E060B77806@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,22 +17,36 @@ https://bugs.busybox.net/show_bug.cgi?id=473
 
 
 
---- Comment #8 from Etienne Lorrain <etienne_lorrain@yahoo.fr>  2009-07-21 10:44:40 UTC ---
-Note that the install man page seems to imply that install can be used with a
-target directory only if there is multiple input files:
-NAME
-       ginstall - copy files and set attributes
+--- Comment #9 from Bernhard Reutner-Fischer <aldot@uclibc.org>  2009-07-21 10:45:17 UTC ---
+Right, sorry.
 
-SYNOPSIS
-       install [OPTION]... SOURCE DEST           (1st format)
-       install [OPTION]... SOURCE... DIRECTORY   (2nd format)
-       install -d [OPTION]... DIRECTORY...       (3rd format)
+diff --git a/package/memstat/memstat.mk b/package/memstat/memstat.mk
+index 7220aee..a54509a 100644
+--- a/package/memstat/memstat.mk
++++ b/package/memstat/memstat.mk
+@@ -21,15 +21,17 @@ $(MEMSTAT_DIR)/.configured: $(MEMSTAT_DIR)/.unpacked
+        touch $@
 
-DESCRIPTION
-       In the first two formats, copy SOURCE to DEST or multiple SOURCE(s) to
-       the  existing  DIRECTORY,   while   setting   permission   modes   and
-       owner/group.   In the third format, create all components of the given
-       DIRECTORY(ies).
+ $(MEMSTAT_DIR)/memstat: $(MEMSTAT_DIR)/.configured
+-       $(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) $(@D)/memstat.c -o $@
++       $(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
++               $(CFLAGS_WHOLE_PROGRAM) $(@D)/memstat.c -o $@
+
+ $(TARGET_DIR)/usr/bin/memstat: $(MEMSTAT_DIR)/memstat
+        [ -e $(TARGET_DIR)/etc/memstat.conf ] || \
+-               $(INSTALL) -m 0644 -D $(^D)/memstat.conf $(TARGET_DIR)/etc
++               $(INSTALL) -m 0644 -D $(^D)/memstat.conf \
++                       $(TARGET_DIR)/etc/memstat.conf
+        $(INSTALL) -m 0755 -D $^ $@
+        $(STRIPCMD) $(STRIP_STRIP_ALL) $@
+
+-memstat: uclibc $(TARGET_DIR)/usr/bin/memstat
++memstat: $(TARGET_DIR)/usr/bin/memstat
+
+ memstat-source: $(DL_DIR)/$(MEMSTAT_SOURCE)
+
+
+Better?
 
 
 -- 
