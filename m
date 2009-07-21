@@ -1,30 +1,35 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Tue, 21 Jul 2009 16:30:32 +0200
-Subject: [Buildroot] [PATCH] libglib2: update to upstream release 2.20.4
-Message-ID: <1248186632-32201-1-git-send-email-s.neumann@raumfeld.com>
+From: Zac Wheeler <zac.wheeler@gmail.com>
+Date: Tue, 21 Jul 2009 11:15:22 -0700
+Subject: [Buildroot] clean build
+In-Reply-To: <59693.172.16.221.250.1247692614.squirrel@cvs.xtale.biz>
+References: <59693.172.16.221.250.1247692614.squirrel@cvs.xtale.biz>
+Message-ID: <206b9e70907211115j3a90364bl1d1d8c960ba4cddf@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
----
- package/libglib2/libglib2.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Wed, Jul 15, 2009 at 2:16 PM, <nfrench@xtale.biz> wrote:
 
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 75f0cfc..b2738b0 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- LIBGLIB2_VERSION_MAJOR = 2.20
--LIBGLIB2_VERSION_MINOR = 1
-+LIBGLIB2_VERSION_MINOR = 4
- LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).$(LIBGLIB2_VERSION_MINOR)
- LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.bz2
- LIBGLIB2_SITE = http://ftp.gtk.org/pub/glib/$(LIBGLIB2_VERSION_MAJOR)
--- 
-1.6.0.4
+> What is the best way to do a clean build after changing an item in
+> menuconfig it seems that a
+> make clean followed by
+> make
+>
+> does not rebuild everything ie if I have changed the compiler flags.
+>
+> if I do
+>
+> make distclean
+>
+> I have to do a make menuconfig before a make this also means that all the
+> packages are dowloaded again.
+
+
+I believe this is in the documentation, but if you create a directory in
+buildroot called e.g. permanent_downloads and make dl/ a symoblic link to
+that directory, you avoid having to re-download source packages.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090721/c6688aeb/attachment.htm>
