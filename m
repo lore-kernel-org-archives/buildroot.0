@@ -1,35 +1,55 @@
-From: Zac Wheeler <zac.wheeler@gmail.com>
-Date: Tue, 21 Jul 2009 11:15:22 -0700
-Subject: [Buildroot] clean build
-In-Reply-To: <59693.172.16.221.250.1247692614.squirrel@cvs.xtale.biz>
-References: <59693.172.16.221.250.1247692614.squirrel@cvs.xtale.biz>
-Message-ID: <206b9e70907211115j3a90364bl1d1d8c960ba4cddf@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 21 Jul 2009 22:05:15 +0200
+Subject: [Buildroot] [git commit] Fix memstat's install
+In-Reply-To: <20090721104808.7013677806@busybox.osuosl.org> (Bernhard
+	Reutner-Fischer's message of "Tue\, 21 Jul 2009 12\:47\:38 +0200")
+References: <20090721104808.7013677806@busybox.osuosl.org>
+Message-ID: <874ot5er9g.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jul 15, 2009 at 2:16 PM, <nfrench@xtale.biz> wrote:
+>>>>> "Bernhard" == Bernhard Reutner-Fischer <rep.dot.nop@gmail.com> writes:
 
-> What is the best way to do a clean build after changing an item in
-> menuconfig it seems that a
-> make clean followed by
-> make
->
-> does not rebuild everything ie if I have changed the compiler flags.
->
-> if I do
->
-> make distclean
->
-> I have to do a make menuconfig before a make this also means that all the
-> packages are dowloaded again.
+Hi,
 
+A bit more detailed changelog would be good.
 
-I believe this is in the documentation, but if you create a directory in
-buildroot called e.g. permanent_downloads and make dl/ a symoblic link to
-that directory, you avoid having to re-download source packages.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090721/c6688aeb/attachment.htm>
+ Bernhard> Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+ Bernhard> ---
+ Bernhard>  package/memstat/memstat.mk |    8 +++++---
+ Bernhard>  1 files changed, 5 insertions(+), 3 deletions(-)
+
+ Bernhard> diff --git a/package/memstat/memstat.mk b/package/memstat/memstat.mk
+ Bernhard> index 7220aee..a54509a 100644
+ Bernhard> --- a/package/memstat/memstat.mk
+ Bernhard> +++ b/package/memstat/memstat.mk
+ Bernhard> @@ -21,15 +21,17 @@ $(MEMSTAT_DIR)/.configured: $(MEMSTAT_DIR)/.unpacked
+ Bernhard>  	touch $@
+ 
+ Bernhard>  $(MEMSTAT_DIR)/memstat: $(MEMSTAT_DIR)/.configured
+ Bernhard> -	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) $(@D)/memstat.c -o $@
+ Bernhard> +	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
+ Bernhard> +		$(CFLAGS_WHOLE_PROGRAM) $(@D)/memstat.c -o $@
+
+What is this WHOLE_PROGRAM thing?
+ 
+ Bernhard>  $(TARGET_DIR)/usr/bin/memstat: $(MEMSTAT_DIR)/memstat
+ Bernhard>  	[ -e $(TARGET_DIR)/etc/memstat.conf ] || \
+ Bernhard> -		$(INSTALL) -m 0644 -D $(^D)/memstat.conf $(TARGET_DIR)/etc
+ Bernhard> +		$(INSTALL) -m 0644 -D $(^D)/memstat.conf \
+ Bernhard> +			$(TARGET_DIR)/etc/memstat.conf
+ Bernhard>  	$(INSTALL) -m 0755 -D $^ $@
+ Bernhard>  	$(STRIPCMD) $(STRIP_STRIP_ALL) $@
+ 
+ Bernhard> -memstat: uclibc $(TARGET_DIR)/usr/bin/memstat
+ Bernhard> +memstat: $(TARGET_DIR)/usr/bin/memstat
+
+And why this unrelated change?
+
+Please post patches to the list before committing, thanks.
+
+-- 
+Bye, Peter Korsgaard
