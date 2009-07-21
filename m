@@ -1,32 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Jul 2009 23:54:34 +0200
-Subject: [Buildroot] clean build
-In-Reply-To: <206b9e70907211115j3a90364bl1d1d8c960ba4cddf@mail.gmail.com>
-References: <59693.172.16.221.250.1247692614.squirrel@cvs.xtale.biz>
-	<206b9e70907211115j3a90364bl1d1d8c960ba4cddf@mail.gmail.com>
-Message-ID: <20090721235434.565c5951@surf>
+From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+Date: Wed, 22 Jul 2009 00:03:32 +0200
+Subject: [Buildroot] [git commit] Fix memstat's install
+In-Reply-To: <874ot5er9g.fsf@macbook.be.48ers.dk>
+References: <20090721104808.7013677806@busybox.osuosl.org>
+	<874ot5er9g.fsf@macbook.be.48ers.dk>
+Message-ID: <20090721220332.GJ14135@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 21 Jul 2009 11:15:22 -0700,
-Zac Wheeler <zac.wheeler@gmail.com> a ?crit :
+On Tue, Jul 21, 2009 at 10:05:15PM +0200, Peter Korsgaard wrote:
+>>>>>> "Bernhard" == Bernhard Reutner-Fischer <rep.dot.nop@gmail.com> writes:
+>
+>Hi,
+>
+>A bit more detailed changelog would be good.
 
-> I believe this is in the documentation, but if you create a directory
-> in buildroot called e.g. permanent_downloads and make dl/ a symoblic
-> link to that directory, you avoid having to re-download source
-> packages.
+Well, it does just that: Fix memstat's install stage (aka PR473) :)
 
-Or alternatively, you create a directory outside of the Buildroot tree
-and set the BUILDROOT_DL_DIR environment variable so that it points to
-this directory. Then all Buildroot executions, even after a global
-clean, will not re-download the packages.
+> Bernhard>  $(MEMSTAT_DIR)/memstat: $(MEMSTAT_DIR)/.configured
+> Bernhard> -	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) $(@D)/memstat.c -o $@
+> Bernhard> +	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
+> Bernhard> +		$(CFLAGS_WHOLE_PROGRAM) $(@D)/memstat.c -o $@
+>
+>What is this WHOLE_PROGRAM thing?
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+gcc --help=optimizers | grep whole-program
+> 
+> Bernhard>  $(TARGET_DIR)/usr/bin/memstat: $(MEMSTAT_DIR)/memstat
+> Bernhard>  	[ -e $(TARGET_DIR)/etc/memstat.conf ] || \
+> Bernhard> -		$(INSTALL) -m 0644 -D $(^D)/memstat.conf $(TARGET_DIR)/etc
+> Bernhard> +		$(INSTALL) -m 0644 -D $(^D)/memstat.conf \
+> Bernhard> +			$(TARGET_DIR)/etc/memstat.conf
+> Bernhard>  	$(INSTALL) -m 0755 -D $^ $@
+> Bernhard>  	$(STRIPCMD) $(STRIP_STRIP_ALL) $@
+> 
+> Bernhard> -memstat: uclibc $(TARGET_DIR)/usr/bin/memstat
+> Bernhard> +memstat: $(TARGET_DIR)/usr/bin/memstat
+>
+>And why this unrelated change?
+
+trivial cleanup while at it.
+>
+>Please post patches to the list before committing, thanks.
+
+I accidentally committed it to the wrong repo, my apologies.
