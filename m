@@ -1,34 +1,48 @@
-From: Lionel Landwerlin <lionel.landwerlin@openwide.fr>
-Date: Wed, 22 Jul 2009 10:55:04 +0200
-Subject: [Buildroot] [PATCH] Bump SaWMan to 1.4.1
-Message-ID: <1248252904.27682.15.camel@coalu.atr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 22 Jul 2009 10:22:41 +0000 (UTC)
+Subject: [Buildroot] [Bug 387] Tremor not installed to toolchain
+In-Reply-To: <bug-387-163@https.bugs.busybox.net/>
+References: <bug-387-163@https.bugs.busybox.net/>
+Message-ID: <20090722102241.AD1A77781D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump SaWMan to 1.4.1
+https://bugs.busybox.net/show_bug.cgi?id=387
 
-The current version of sawman (1.2.0-rc1) won't compile with directFB >= 1.4
 
-Signed-off-by: Lionel Landwerlin <lionel.landwerlin@openwide.fr>
----
- package/sawman/sawman.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Sven Neumann <s.neumann@raumfeld.com> changed:
 
-diff --git a/package/sawman/sawman.mk b/package/sawman/sawman.mk
-index 1e525ac..76e599a 100644
---- a/package/sawman/sawman.mk
-+++ b/package/sawman/sawman.mk
-@@ -3,7 +3,7 @@
- # SAWMAN
- #
- #############################################################
--SAWMAN_VERSION:=1.2.0-rc1
-+SAWMAN_VERSION:=1.4.1
- SAWMAN_SOURCE:=SaWMan-$(SAWMAN_VERSION).tar.gz
- SAWMAN_SITE:=http://www.directfb.org/downloads/Extras
- SAWMAN_INSTALL_STAGING = YES
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|RESOLVED                    |REOPENED
+         Resolution|FIXED                       |
+
+
+
+
+--- Comment #4 from Sven Neumann <s.neumann@raumfeld.com>  2009-07-22 10:22:41 UTC ---
+I am sorry, but it is not fixed:
+
+Making all in vorbis
+make[4]: Entering directory
+`/home/sven/git/buildroot/build_arm/gst-plugins-base-0.10.23/ext/vorbis'
+  CC    vorbis.o
+  CC    vorbisparse.o
+  CC    vorbisenc.o
+  CC    vorbisdec.o
+  CC    vorbistag.o
+  LINK  libgstvorbis.la
+/usr/lib/libvorbisenc.so: could not read symbols: File in wrong format
+collect2: ld returned 1 exit status
+
+gst-plugins-base tries to link against libvorbisenc.so and as far as I can see
+this library is not provided by tremor.
+
+
 -- 
-1.6.3.3
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
