@@ -1,40 +1,45 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 22 Jul 2009 14:09:08 +0200
-Subject: [Buildroot] kernel built by buildroot won't boot
-In-Reply-To: <1248251679.3933.11.camel@sven> (Sven Neumann's message of "Wed\,
-	22 Jul 2009 10\:34\:39 +0200")
-References: <1248251679.3933.11.camel@sven>
-Message-ID: <87bpncdimz.fsf@macbook.be.48ers.dk>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Wed, 22 Jul 2009 14:25:05 +0200
+Subject: [Buildroot] [PATCH] linux26: do not set CFLAGS_KERNEL to
+	TARGET_CFLAGS
+In-Reply-To: <87bpncdimz.fsf@macbook.be.48ers.dk>
+References: <87bpncdimz.fsf@macbook.be.48ers.dk>
+Message-ID: <1248265505-25870-1-git-send-email-s.neumann@raumfeld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
+Using TARGET_CFLAGS breaks the kernel build for the arm platform. The
+result is a kernel that can not be booted. So simply do not fiddle with
+the CFLAGS on a kernel build and the kernel build system will do the
+right thing (TM).
 
-Hi,
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+---
+ target/linux/Makefile.in.advanced |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- Sven> We tracked this down to the fact that buildroot passes the
- Sven> TARGET_CFLAGS (with some minor adjustments) to the kernel build
- Sven> as CFLAGS_KERNEL. The problem is that the TARGET_CFLAGS contain
- Sven> "-mtune=iwmmxt -march=iwmmxt", which is fine for the
- Sven> user-space, but you can't build a working kernel with these
- Sven> flags. Not passing any CFLAGS at all solved the problem for us
- Sven> and buildroot now creates a kernel that boots and works nicely.
-
-I don't use the kernel build stuff, but I think it should be fine to
-just get rid of it as the kernel doesn't need to link with any user
-space libraries or similar.
-
-The kernel is also pretty good about passing the correct gcc flags for
-arch variants.
-
- Sven> Is there a particular reason for passing the TARGET_CFLAGS to the kernel
- Sven> build? Could this perhaps be dropped entirely or at least be made
- Sven> optional?
-
-Care to send a patch?
-
+diff --git a/target/linux/Makefile.in.advanced b/target/linux/Makefile.in.advanced
+index 9d878f2..9c11dbe 100644
+--- a/target/linux/Makefile.in.advanced
++++ b/target/linux/Makefile.in.advanced
+@@ -193,7 +193,6 @@ LINUX26_BZCAT:=$(BZCAT)
+ __LINUX26_NO_PIC=-fPIC -fpic -DPIC -fwrapv -ftrapv
+ LINUX26_MAKE_FLAGS = HOSTCC="$(HOSTCC)" HOSTCFLAGS="$(HOSTCFLAGS)" \
+ 	ARCH=$(KERNEL_ARCH) \
+-	CFLAGS_KERNEL="$(filter-out $(__LINUX26_NO_PIC),$(TARGET_CFLAGS))" \
+ 	INSTALL_MOD_PATH=$(TARGET_DIR) \
+ 	CROSS_COMPILE=$(KERNEL_CROSS) \
+ 	LDFLAGS="$(TARGET_LDFLAGS)" \
+@@ -549,6 +548,7 @@ linux-status:
+ 	@echo LINUX26_SOURCE=$(LINUX26_SOURCE)
+ 	@echo LINUX26_TARGETS=$(LINUX26_TARGETS)
+ 	@echo LINUX26_VERSION=$(LINUX26_VERSION)
++	@echo LINUX26_MAKE_FLAGS=$(LINUX26_MAKE_FLAGS)
+ 	@echo PROJECT_BUILD_DIR=$(PROJECT_BUILD_DIR)
+ 	@echo TARGETS=$(TARGETS)
+ 
 -- 
-Bye, Peter Korsgaard
+1.6.0.4
