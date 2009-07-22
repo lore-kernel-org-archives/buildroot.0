@@ -1,35 +1,47 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 21 Jul 2009 16:30:32 +0200
-Subject: [Buildroot] [git commit] libglib2: update to upstream release 2.20.4
-Message-ID: <20090722060606.56D927781D@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 22 Jul 2009 06:36:54 +0000 (UTC)
+Subject: [Buildroot] [Bug 477] New: Add sdl_sound package
+Message-ID: <bug-477-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d4d7c7911a116297e4807a70694f6e9a9deddf23
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=477
+
+           Summary: Add sdl_sound package
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: evan.zelkowitz at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/libglib2/libglib2.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+SDL_sound is a library that handles the decoding of several popular sound file
+formats, such as .WAV and .MP3. It is meant to make the programmer's sound
+playback tasks simpler. The programmer gives SDL_sound a filename, or feeds it
+data directly from one of many sources, and then reads the decoded waveform
+data back at her leisure. If resource constraints are a concern, SDL_sound can
+process sound data in programmer-specified blocks. Alternately, SDL_sound can
+decode a whole sound file and hand back a single pointer to the whole waveform.
+SDL_sound can also handle sample rate, audio format, and channel conversion
+on-the-fly and behind-the-scenes, if the programmer desires. 
 
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 75f0cfc..b2738b0 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- LIBGLIB2_VERSION_MAJOR = 2.20
--LIBGLIB2_VERSION_MINOR = 1
-+LIBGLIB2_VERSION_MINOR = 4
- LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).$(LIBGLIB2_VERSION_MINOR)
- LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.bz2
- LIBGLIB2_SITE = http://ftp.gtk.org/pub/glib/$(LIBGLIB2_VERSION_MAJOR)
+http://icculus.org/SDL_sound/
+
+I have added this to my local buildroot so I figured I would see if this was
+desired on git
+
+
 -- 
-1.6.3.3
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
