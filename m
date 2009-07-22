@@ -1,49 +1,61 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 21 Jul 2009 22:57:29 +0200
-Subject: [Buildroot] [git commit] tremor: provide libvorbis* alias for
-	targets
-Message-ID: <20090722055744.0AF6477420@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 22 Jul 2009 08:01:12 +0200
+Subject: [Buildroot] [git commit] Fix memstat's install
+In-Reply-To: <20090721220332.GJ14135@mx.loc> (Bernhard Reutner-Fischer's
+	message of "Wed\, 22 Jul 2009 00\:03\:32 +0200")
+References: <20090721104808.7013677806@busybox.osuosl.org>
+	<874ot5er9g.fsf@macbook.be.48ers.dk> <20090721220332.GJ14135@mx.loc>
+Message-ID: <87ocrdcl3r.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=11eb084fc79a75395465a95facfc95bac395e4b2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Bernhard" == Bernhard Reutner-Fischer <rep.dot.nop@gmail.com> writes:
+
+Hi,
+
+ Bernhard> On Tue, Jul 21, 2009 at 10:05:15PM +0200, Peter Korsgaard wrote:
+
+ >> A bit more detailed changelog would be good.
+
+ Bernhard> Well, it does just that: Fix memstat's install stage (aka PR473) :)
+
+For ancient versions of install. I would have preferred a commit
+message like:
+
+memstat: workaround issue with older versions of 'install'
+
+Closes #473
+
+Older versions of GNU install have issues with install -D <file>
+<dir>/, but works with install -D <file> <dir>/<file>, so use that
+instead.
 
 
-several packages depend on libvorbis, so also provide libvorbis
-targets when tremor is selected.
+And a corresponding addition to CHANGES
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/multimedia/libvorbis/libvorbis.mk |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+ Bernhard> $(MEMSTAT_DIR)/memstat: $(MEMSTAT_DIR)/.configured
+ Bernhard> -	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) $(@D)/memstat.c -o $@
+ Bernhard> +	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
+ Bernhard> +		$(CFLAGS_WHOLE_PROGRAM) $(@D)/memstat.c -o $@
+ >> 
+ >> What is this WHOLE_PROGRAM thing?
 
-diff --git a/package/multimedia/libvorbis/libvorbis.mk b/package/multimedia/libvorbis/libvorbis.mk
-index 6f90408..a881726 100644
---- a/package/multimedia/libvorbis/libvorbis.mk
-+++ b/package/multimedia/libvorbis/libvorbis.mk
-@@ -83,15 +83,15 @@ $(TARGET_DIR)/usr/lib/tremor.a: $(TARGET_DIR)/usr/lib/tremor.so
- 	cp -dpf $(TREMOR_DIR)/lib/tremor.a $(TARGET_DIR)/usr/lib/
- 	touch $@
- 
--tremor: uclibc host-pkgconfig host-autoconf host-automake libogg $(TARGET_DIR)/usr/lib/tremor.so
-+tremor libvorbis: uclibc host-pkgconfig host-autoconf host-automake libogg $(TARGET_DIR)/usr/lib/tremor.so
- 
--tremor-source: $(DL_DIR)/$(TREMOR_SOURCE)
-+tremor-source libvorbis-source: $(DL_DIR)/$(TREMOR_SOURCE)
- 
--tremor-clean:
-+tremor-clean libvorbis-clean:
- 	$(MAKE) prefix=$(STAGING_DIR)/usr -C $(TREMOR_DIR) uninstall
- 	-$(MAKE) -C $(TREMOR_DIR) clean
- 
--tremor-dirclean:
-+tremor-dirclean libvorbis-dirclean:
- 	rm -rf $(TREMOR_DIR)
- 
- 
+ Bernhard> gcc --help=optimizers | grep whole-program
+
+Yes, I know the -fwhole-program option, but why is this just not
+included in TARGET_CFLAGS?
+
+ >> Please post patches to the list before committing, thanks.
+
+ Bernhard> I accidentally committed it to the wrong repo, my apologies.
+
+Ahh, ok - May I suggest you clone the official repo with git://
+instead of ssh:// to not do that mistake in the future?
+
+Thanks.
+
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
