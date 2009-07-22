@@ -1,48 +1,39 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 22 Jul 2009 10:22:41 +0000 (UTC)
-Subject: [Buildroot] [Bug 387] Tremor not installed to toolchain
-In-Reply-To: <bug-387-163@https.bugs.busybox.net/>
-References: <bug-387-163@https.bugs.busybox.net/>
-Message-ID: <20090722102241.AD1A77781D@busybox.osuosl.org>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Wed, 22 Jul 2009 12:33:46 +0200
+Subject: [Buildroot] [PATCH] gst-plugins-good: disable aalib
+Message-ID: <1248258826-11513-1-git-send-email-s.neumann@raumfeld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=387
+Explictly disable the build of the aasink plug-in. Without this fix
+the plug-in would be built if the aalib headers are found on the host.
 
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+---
+ .../gst-plugins-good/gst-plugins-good.mk           |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-Sven Neumann <s.neumann@raumfeld.com> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|RESOLVED                    |REOPENED
-         Resolution|FIXED                       |
-
-
-
-
---- Comment #4 from Sven Neumann <s.neumann@raumfeld.com>  2009-07-22 10:22:41 UTC ---
-I am sorry, but it is not fixed:
-
-Making all in vorbis
-make[4]: Entering directory
-`/home/sven/git/buildroot/build_arm/gst-plugins-base-0.10.23/ext/vorbis'
-  CC    vorbis.o
-  CC    vorbisparse.o
-  CC    vorbisenc.o
-  CC    vorbisdec.o
-  CC    vorbistag.o
-  LINK  libgstvorbis.la
-/usr/lib/libvorbisenc.so: could not read symbols: File in wrong format
-collect2: ld returned 1 exit status
-
-gst-plugins-base tries to link against libvorbisenc.so and as far as I can see
-this library is not provided by tremor.
-
-
+diff --git a/package/multimedia/gst-plugins-good/gst-plugins-good.mk b/package/multimedia/gst-plugins-good/gst-plugins-good.mk
+index 75d25c8..bd0cb78 100644
+--- a/package/multimedia/gst-plugins-good/gst-plugins-good.mk
++++ b/package/multimedia/gst-plugins-good/gst-plugins-good.mk
+@@ -20,11 +20,12 @@ GST_PLUGINS_GOOD_CONF_OPT = \
+ 		--disable-x \
+ 		--disable-xshm \
+ 		--disable-xvideo \
++		--disable-aalib \
+ 		--disable-aalibtest \
++		--disable-esd \
+ 		--disable-esdtest \
+ 		--disable-shout2 \
+-		--disable-shout2test \
+-		--disable-esd 
++		--disable-shout2test
+ 
+ GST_PLUGINS_GOOD_DEPENDENCIES = gstreamer gst-plugins-base
+ 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.6.0.4
