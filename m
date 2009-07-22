@@ -1,47 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Jul 2009 16:46:16 +0200
-Subject: [Buildroot] checking for XFT... configure: error: *** Required
- xft Librarys not found ***
-In-Reply-To: <711BBECDEF81BA439A6038E213C1DF1406E16ED0@ism-mail03.corp.ad.wrs.com>
-References: <711BBECDEF81BA439A6038E213C1DF1406E16C93@ism-mail03.corp.ad.wrs.com>
-	<20090722132039.5f5c691f@surf>
-	<711BBECDEF81BA439A6038E213C1DF1406E16ED0@ism-mail03.corp.ad.wrs.com>
-Message-ID: <20090722164616.279cb3b6@surf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 22 Jul 2009 15:02:54 +0000 (UTC)
+Subject: [Buildroot] [Bug 387] Tremor not installed to toolchain
+In-Reply-To: <bug-387-163@https.bugs.busybox.net/>
+References: <bug-387-163@https.bugs.busybox.net/>
+Message-ID: <20090722150254.25432777E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 22 Jul 2009 16:13:22 +0200,
-"Franchitti, Alexandre J (Alex)" <alexandre.franchitti@windriver.com> a
-?crit :
+https://bugs.busybox.net/show_bug.cgi?id=387
 
-> Newbie question...how do I apply a patch in buildroot ?
 
-There's nothing specific to Buildroot here, it's just a matter of
-applying a patch just like with any other source code.
 
-Just in case you're not familiar with applying patches, here is how you
-can do that in a nutshell:
 
- 1) Fetch the patch
 
-    wget -O matchbox-fix.patch http://git.buildroot.net/buildroot/patch/?id=51ef5b81224c243aa7f937c4690b1a120c81ccbc
+--- Comment #5 from Peter Korsgaard <jacmet@uclibc.org>  2009-07-22 15:02:53 UTC ---
+(In reply to comment #4)
+> I am sorry, but it is not fixed:
 
- 2) Go the Buildroot directory
+Ahh, sorry - I didn't explicitly enable libvorbis support when I did a test
+compile of gst-plugin-base, so I missed that.
 
-    cd /the/path/to/your/buildroot/directory/
+> gst-plugins-base tries to link against libvorbisenc.so and as far as I can see
+> this library is not provided by tremor.
 
- 3) Apply the patch
+No, tremor is only an implementation of the decoding API. We should either make
+the stuff needing the encoding API depend on !BR2_PACKAGE_LIBVORBIS_TREMOR or
+split up the libvorbis handling in encoding and decoding support, so you can
+use the normal (FPU using) libvorbis stuff for encoding and tremor for decoding
+(which I suspect is what you were doing before by luck as the tremor stuff was
+listed below libvorbis so it was overwriting the FPU version of the lib).
 
-    cat /the/path/to/the/patch/matchbox-fix.path | patch -p1
 
-Does that answer your question ?
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
