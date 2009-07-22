@@ -1,47 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Jul 2009 13:20:39 +0200
-Subject: [Buildroot] checking for XFT... configure: error: *** Required
- xft Librarys not found ***
-In-Reply-To: <711BBECDEF81BA439A6038E213C1DF1406E16C93@ism-mail03.corp.ad.wrs.com>
-References: <711BBECDEF81BA439A6038E213C1DF1406E16C93@ism-mail03.corp.ad.wrs.com>
-Message-ID: <20090722132039.5f5c691f@surf>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 22 Jul 2009 14:06:16 +0200
+Subject: [Buildroot] [git commit] Bump SaWMan to 1.4.1
+Message-ID: <20090722120635.94A65777C7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 22 Jul 2009 09:29:32 +0200,
-"Franchitti, Alexandre J (Alex)" <alexandre.franchitti@windriver.com> a
-?crit :
 
-> I keep hitting this build error related to building the
-> matchbox-keyboard-0.1 component:
-> checking for FAKEKEY... yes
-> checking for XFT... configure: error: *** Required xft Librarys not
-> found ***
-> make: ***
-> [/folk/alexf/arm_linux/buildroot-2009.05/build_arm/matchbox-keyboard-0.1
-> /.configured] Error 1
-> 
-> I believe I enabled everything I had to in order to get xft support
-> but it still won't fly. I even tried to disable keyboard support to
-> move ahead, but obviously, this is enabled by default when the
-> BR2_PACKAGE_MATCHBOX is enabled so I don't have a choice but get it
-> working. Note that I have auto-apt enabled also.
+commit: http://git.buildroot.net/buildroot/commit/?id=0fec1b5ce38d99851ab811bf9a8fa5efa7ff0244
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I've fixed the Matchbox build after 2009.05 release. It was fixed by
-http://git.buildroot.net/buildroot/commit/?id=51ef5b81224c243aa7f937c4690b1a120c81ccbc
+Bump SaWMan to 1.4.1
 
-This commit is not yet part of a stable release. So either pick the
-latest Git development version, of manually apply the patch to the
-2009.05 version.
+The current version of sawman (1.2.0-rc1) won't compile with directFB >= 1.4
 
-Sincerly,
+Signed-off-by: Lionel Landwerlin <lionel.landwerlin@openwide.fr>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/sawman/sawman.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thomas
+diff --git a/package/sawman/sawman.mk b/package/sawman/sawman.mk
+index 1e525ac..76e599a 100644
+--- a/package/sawman/sawman.mk
++++ b/package/sawman/sawman.mk
+@@ -3,7 +3,7 @@
+ # SAWMAN
+ #
+ #############################################################
+-SAWMAN_VERSION:=1.2.0-rc1
++SAWMAN_VERSION:=1.4.1
+ SAWMAN_SOURCE:=SaWMan-$(SAWMAN_VERSION).tar.gz
+ SAWMAN_SITE:=http://www.directfb.org/downloads/Extras
+ SAWMAN_INSTALL_STAGING = YES
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+1.6.3.3
