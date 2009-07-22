@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 22 Jul 2009 22:16:07 +0200
-Subject: [Buildroot] [git commit] gst-plugins-base: don't search host
-	headers if freetype isn't available
-Message-ID: <20090722204048.8D93E774E3@busybox.osuosl.org>
+Date: Wed, 22 Jul 2009 22:43:51 +0200
+Subject: [Buildroot] [git commit] linux26: do not set CFLAGS_KERNEL to
+	TARGET_CFLAGS
+Message-ID: <20090722204437.752507781D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,33 +10,61 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8232850c51e07b99ba84769b492faa147290fdc7
+commit: http://git.buildroot.net/buildroot/commit/?id=7bb5ce002cd9ecd697ed4defd912d3f0de02319b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-freetype is only used by examples, but if it is not found
-and the host has a freetype-config script, then the host
-include dirs are added to the search path causing trouble.
+Using TARGET_CFLAGS breaks the kernel build for the arm platform. The
+result is a kernel that can not be booted. So simply do not fiddle with
+the CFLAGS on a kernel build and the kernel build system will do the
+right thing (TM).
 
+[Peter: do the same thing for the standard kernel build]
+
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../gst-plugins-base/gst-plugins-base.mk           |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ target/linux/Makefile.in          |    3 ---
+ target/linux/Makefile.in.advanced |    3 +--
+ 2 files changed, 1 insertions(+), 5 deletions(-)
 
-diff --git a/package/multimedia/gst-plugins-base/gst-plugins-base.mk b/package/multimedia/gst-plugins-base/gst-plugins-base.mk
-index 88c68e1..63f23cd 100644
---- a/package/multimedia/gst-plugins-base/gst-plugins-base.mk
-+++ b/package/multimedia/gst-plugins-base/gst-plugins-base.mk
-@@ -9,6 +9,11 @@ GST_PLUGINS_BASE_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-base
- GST_PLUGINS_BASE_INSTALL_STAGING = YES
- GST_PLUGINS_BASE_LIBTOOL_PATCH = NO
+diff --git a/target/linux/Makefile.in b/target/linux/Makefile.in
+index ff0b88e..3e8bc7b 100644
+--- a/target/linux/Makefile.in
++++ b/target/linux/Makefile.in
+@@ -89,11 +89,8 @@ LINUX26_PATCH_DIR:=$(BOARD_PATH)/kernel-patches/
+ #"))
+ endif
+ endif
+-__LINUX26_NO_PIC=-fPIC -fpic -DPIC -fwrapv -ftrapv
+-__LINUX26_ZERO_OPTIMIZATION=-O0
+ LINUX26_MAKE_FLAGS = HOSTCC="$(HOSTCC)" HOSTCFLAGS="$(HOSTCFLAGS)" \
+ 	ARCH=$(KERNEL_ARCH) \
+-	CFLAGS_KERNEL="$(filter-out $(__LINUX26_NO_PIC) $(__LINUX26_ZERO_OPTIMIZATION),$(TARGET_CFLAGS))" \
+ 	INSTALL_MOD_PATH=$(TARGET_DIR) \
+ 	CROSS_COMPILE=$(KERNEL_CROSS) \
+ 	LDFLAGS="$(TARGET_LDFLAGS)" \
+diff --git a/target/linux/Makefile.in.advanced b/target/linux/Makefile.in.advanced
+index 9d878f2..47a1f4e 100644
+--- a/target/linux/Makefile.in.advanced
++++ b/target/linux/Makefile.in.advanced
+@@ -190,10 +190,8 @@ LINUX_KERNEL:=$(LINUX26_KERNEL)
+ # -----------------------------------------------------------------------------
+ LINUX26_BZCAT:=$(BZCAT)
  
-+# freetype is only used by examples, but if it is not found
-+# and the host has a freetype-config script, then the host
-+# include dirs are added to the search path causing trouble
-+GST_PLUGINS_BASE_CONF_ENV = FT2_CONFIG=/bin/false
-+
- GST_PLUGINS_BASE_CONF_OPT = \
- 		$(DISABLE_NLS) \
- 		$(DISABLE_LARGEFILE) \
+-__LINUX26_NO_PIC=-fPIC -fpic -DPIC -fwrapv -ftrapv
+ LINUX26_MAKE_FLAGS = HOSTCC="$(HOSTCC)" HOSTCFLAGS="$(HOSTCFLAGS)" \
+ 	ARCH=$(KERNEL_ARCH) \
+-	CFLAGS_KERNEL="$(filter-out $(__LINUX26_NO_PIC),$(TARGET_CFLAGS))" \
+ 	INSTALL_MOD_PATH=$(TARGET_DIR) \
+ 	CROSS_COMPILE=$(KERNEL_CROSS) \
+ 	LDFLAGS="$(TARGET_LDFLAGS)" \
+@@ -549,6 +547,7 @@ linux-status:
+ 	@echo LINUX26_SOURCE=$(LINUX26_SOURCE)
+ 	@echo LINUX26_TARGETS=$(LINUX26_TARGETS)
+ 	@echo LINUX26_VERSION=$(LINUX26_VERSION)
++	@echo LINUX26_MAKE_FLAGS=$(LINUX26_MAKE_FLAGS)
+ 	@echo PROJECT_BUILD_DIR=$(PROJECT_BUILD_DIR)
+ 	@echo TARGETS=$(TARGETS)
+ 
 -- 
 1.6.3.3
