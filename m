@@ -1,36 +1,32 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 24 Jul 2009 15:51:51 +0200
-Subject: [Buildroot] [git commit] TODO: remove outdated stuff
-Message-ID: <20090724135214.DD1CE77800@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 24 Jul 2009 15:52:36 +0200
+Subject: [Buildroot] [git commit] CHANGES: add #163 + #473
+In-Reply-To: <4A69BB36.5070108@zacarias.com.ar> (Gustavo Zacarias's message of
+	"Fri\, 24 Jul 2009 10\:46\:30 -0300")
+References: <20090724055230.2080B77660@busybox.osuosl.org>
+	<20090724110230.3f51597a@surf> <87zlauutcd.fsf@macbook.be.48ers.dk>
+	<20090724153528.7103ad9d@surf> <4A69BB36.5070108@zacarias.com.ar>
+Message-ID: <87my6uur17.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5d79f6caf0d62a3458c4911489d684ba13b52e95
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Gustavo> Thomas Petazzoni wrote:
+ >> BTW, was Perl already a host dependency to run Buildroot ?
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- TODO |    7 -------
- 1 files changed, 0 insertions(+), 7 deletions(-)
+ Gustavo> It probably should be if it's not yet so, some packages
+ Gustavo> depend on it for building, off the top of my head i'd say
+ Gustavo> openssl, it's Configure script is integrally made in perl.
 
-diff --git a/TODO b/TODO
-index 9b89c40..4de15ab 100644
---- a/TODO
-+++ b/TODO
-@@ -5,10 +5,3 @@ Buildroot2 TODOs
- - convert all packages that use autoconf to use the infrastructure of
-   packages/Makefile.autotools.in
- - fix setting of flags for packages
--
--- stabilize for a 0.10.0 release
--
--- think about using a common --config-cache for configure
--  Should take care of expanding TARGET_CONFIGURE_ARGS for cross compiles
--  to working presets.
--
+Exactly. The kernel also needs it.
+
+ Gustavo> Also someone update the TODO, i think it's a bit outdated :)
+
+Thanks, done.
+
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
