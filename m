@@ -1,28 +1,21 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 24 Jul 2009 09:54:30 +0200
-Subject: [Buildroot] Write Access to buildroot?
-In-Reply-To: <4A689265.6030308@atmel.com> (Ulf Samuelsson's message of "Thu\,
-	23 Jul 2009 18\:40\:05 +0200")
-References: <4A689265.6030308@atmel.com>
-Message-ID: <87skgmwm6h.fsf@macbook.be.48ers.dk>
+From: Lars Lockenvitz <l.lockenvitz@fpga-art.de>
+Date: Fri, 24 Jul 2009 10:11:00 +0200
+Subject: [Buildroot] Execute Makefile before genrate rootfs
+Message-ID: <4A696C94.4070905@fpga-art.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
+Hello,
 
- Ulf> What happened to this?
- Ulf> Can't even generate a branch right now...
+I'm looking for a way to execute a Makefile or script after all packages 
+are build and installed but befor buildroot is generating the rootfs filr.
+The reason is that for different projects I maybe need the same 
+platform, packages and so on, but different settings for example in 
+inittab or other coniguration files.
 
-That's on purpose. See:
+I hope someone know how to do this?!
 
-http://lists.busybox.net/pipermail/buildroot/2009-March/026875.html
-
-and
-
-http://buildroot.net/git.html
-
--- 
-Bye, Peter Korsgaard
+Regards
