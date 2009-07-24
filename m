@@ -1,57 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Jul 2009 15:24:48 +0200
-Subject: [Buildroot] Write Access to buildroot?
-In-Reply-To: <4A699CDD.7060703@atmel.com>
-References: <4A689265.6030308@atmel.com> <87skgmwm6h.fsf@macbook.be.48ers.dk>
-	<4A69741A.8010903@atmel.com>
-	<20090724085603.GL13236@buzzloop.caiaq.de>
-	<9E543F22BF68405185D6B77291E4E5EF@aeglos>
-	<20090724121641.2c4cf8bd@surf> <4A699CDD.7060703@atmel.com>
-Message-ID: <20090724152448.4d1f5934@surf>
+Date: Fri, 24 Jul 2009 15:35:28 +0200
+Subject: [Buildroot] [git commit] CHANGES: add #163 + #473
+In-Reply-To: <87zlauutcd.fsf@macbook.be.48ers.dk>
+References: <20090724055230.2080B77660@busybox.osuosl.org>
+	<20090724110230.3f51597a@surf> <87zlauutcd.fsf@macbook.be.48ers.dk>
+Message-ID: <20090724153528.7103ad9d@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Le Fri, 24 Jul 2009 15:02:42 +0200,
+Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
-[ Keeping the list in Cc: since these things should probably be
-  discussed publicly. ]
+> Yes, they are committed and I haven't seen the mails either - seems
+> like the commit hook has issues when I push multiple changes at once.
+> 
+> (Or it might be something else, I'm having mail and hw problems
+> today).
 
-Le Fri, 24 Jul 2009 13:37:01 +0200,
-Ulf Samuelsson <ulf.samuelsson@atmel.com> a ?crit :
+I haven't seen the mails either. So not likely to be a problem on your
+side.
 
-> With read access only, allowing you to make your own tree from the
-> main tree.
-> If you want to share your stuff, before committing to the main tree,
-> you have to do it outside the buildroot world.
-> Am I missing something?
+> I agree that the xtensa stuff is "special" in various ways, but I
+> think it's more productive to get it into git and then work on getting
+> it cleaned up more, instead of having it gather dust in bugzilla.
 
-Yes you're missing something.
+Ok, fair enough. Reading the patches again, they don't look too
+invasive after all.
 
-Look at http://git.buildroot.net/
+I'm concerned by the licensing of
+target/xtensa/xt-buildroot-overlay-install, since this file states:
 
-You have a link to the official Buildroot Git tree, browsable at
-http://git.buildroot.net/buildroot/. This Git tree is read-only, except
-for Peter.
++# Copyright (c) 2003-2008 by Tensilica Inc. ALL RIGHTS RESERVED.
++# These coded instructions, statements, and computer programs are the
++# copyrighted works and confidential proprietary information of Tensilica Inc.
++# They may not be modified, copied, reproduced, distributed, or disclosed to
++# third parties in any manner, medium, or form, in whole or in part, without
++# the prior written consent of Tensilica Inc.
 
-But at the bottom of the page, you have ? User repositories ?. These
-are read/write for their owner. For example, mine is
-http://git.buildroot.net/~tpetazzoni/git/buildroot/. In my own
-repository, I have a master branch which is just a clone of the main
-Buildroot repository. And all the other branches (presently
-directfb-bump, ext-toolchain-target-path, external-toolchain,
-kconfig-update and xorg) contain my *own* work, ready for submission to
-Peter. And some of this work has actually already been integrated in
-mainline (branches directfb-bump, ext-toolchain-target-path and
-external-toolchain).
-
-The link
-http://lists.busybox.net/pipermail/buildroot/2009-March/026875.html
-that I've already posted explains how to use these user repositories,
-that *are read/write.
-
-Does that clarify the situation ?
+BTW, was Perl already a host dependency to run Buildroot ?
 
 Sincerly,
 
