@@ -1,39 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Jul 2009 22:54:46 +0200
-Subject: [Buildroot] [PATCH] [LINUX 1/2] Remove unused file:
- "target/linux/Config.in.experimental"
-In-Reply-To: <4A69DEF5.1020806@atmel.com>
-References: <4A69DEF5.1020806@atmel.com>
-Message-ID: <20090724225446.2533541c@surf>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 24 Jul 2009 22:57:12 +0200
+Subject: [Buildroot] [PATCH][LINUX 0/2]
+In-Reply-To: <4A69DEEB.3010206@atmel.com> (Ulf Samuelsson's message of "Fri\,
+	24 Jul 2009 18\:18\:51 +0200")
+References: <4A69DEEB.3010206@atmel.com>
+Message-ID: <87prbpajfb.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri, 24 Jul 2009 18:19:01 +0200,
-Ulf Samuelsson <ulf.samuelsson@atmel.com> a ?crit :
+>>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 
-> Subject: [PATCH] Remove unused file: "target/linux/Config.in.experimental"
+ Ulf> I am sending two patches to the ML.
+ Ulf> 1: will remove "target/linux/Config.in.experimental" which is not used.
+ Ulf> 2: will update minor/major versions
 
-Thanks for the cleanup.
+ Ulf> They can be pulled from git://git.buildroot.net/~ulf/git/linux.git
 
-> -config BR2_PACKAGE_LINUX_KCONFIG
-> -    string ".config file"
-> -    depends on BR2_PACKAGE_LINUX_USE_KCONFIG
-> -    default
-> "$(BR2_BOARD_PATH)/$(BR2_BOARD_NAME)-linux-$(LINUX26_VERSION).config"
+please remember to sign off on your patches, E.G. use git commit -s
 
-but your patch is word-wrapped, so it doesn't apply.
-
-You can send your patches with "git send-email", or fix your
-Thunderbird to not word-wrap.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
