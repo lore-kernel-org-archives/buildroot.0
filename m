@@ -1,43 +1,36 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 24 Jul 2009 13:51:31 +0000 (UTC)
-Subject: [Buildroot] [Bug 487] New: Make kismet package sexier
-Message-ID: <bug-487-163@https.bugs.busybox.net/>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 24 Jul 2009 15:51:51 +0200
+Subject: [Buildroot] [git commit] TODO: remove outdated stuff
+Message-ID: <20090724135214.DD1CE77800@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=487
 
-              Host: i686-linux
-            Target: arm-softfloat-linux-uclibcgnueabi
-           Summary: Make kismet package sexier
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: enhancement
-          Priority: P5
-         Component: Outdated package
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: gustavo at zacarias.com.ar
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+commit: http://git.buildroot.net/buildroot/commit/?id=5d79f6caf0d62a3458c4911489d684ba13b52e95
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ TODO |    7 -------
+ 1 files changed, 0 insertions(+), 7 deletions(-)
 
-Created an attachment (id=499)
- --> (https://bugs.busybox.net/attachment.cgi?id=499)
-Make kismet package sexier
-
-* Bump kismet from 2007-10-R1 to 2009-06-R1 (newcore: nicer, more features)
-* Migrate to Makefile.autotools.in
-* Introduce new options to just install the server, client, drone or
-combination
-
-
+diff --git a/TODO b/TODO
+index 9b89c40..4de15ab 100644
+--- a/TODO
++++ b/TODO
+@@ -5,10 +5,3 @@ Buildroot2 TODOs
+ - convert all packages that use autoconf to use the infrastructure of
+   packages/Makefile.autotools.in
+ - fix setting of flags for packages
+-
+-- stabilize for a 0.10.0 release
+-
+-- think about using a common --config-cache for configure
+-  Should take care of expanding TARGET_CONFIGURE_ARGS for cross compiles
+-  to working presets.
+-
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.6.3.3
