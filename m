@@ -1,22 +1,48 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 24 Jul 2009 10:46:30 -0300
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 24 Jul 2009 15:50:19 +0200
 Subject: [Buildroot] [git commit] CHANGES: add #163 + #473
-In-Reply-To: <20090724153528.7103ad9d@surf>
-References: <20090724055230.2080B77660@busybox.osuosl.org>	<20090724110230.3f51597a@surf>
-	<87zlauutcd.fsf@macbook.be.48ers.dk> <20090724153528.7103ad9d@surf>
-Message-ID: <4A69BB36.5070108@zacarias.com.ar>
+In-Reply-To: <20090724153528.7103ad9d@surf> (Thomas Petazzoni's message of
+	"Fri\, 24 Jul 2009 15\:35\:28 +0200")
+References: <20090724055230.2080B77660@busybox.osuosl.org>
+	<20090724110230.3f51597a@surf> <87zlauutcd.fsf@macbook.be.48ers.dk>
+	<20090724153528.7103ad9d@surf>
+Message-ID: <87r5w6ur50.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni wrote:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-> BTW, was Perl already a host dependency to run Buildroot ?
+Hi,
 
-It probably should be if it's not yet so, some packages depend on it for
-building, off the top of my head i'd say openssl, it's Configure script
-is integrally made in perl.
-Also someone update the TODO, i think it's a bit outdated :)
-Regards.
+ >> I agree that the xtensa stuff is "special" in various ways, but I
+ >> think it's more productive to get it into git and then work on
+ >> getting it cleaned up more, instead of having it gather dust in
+ >> bugzilla.
+
+ Thomas> Ok, fair enough. Reading the patches again, they don't look
+ Thomas> too invasive after all.
+
+No, it is pretty much self contained.
+
+ Thomas> I'm concerned by the licensing of
+ Thomas> target/xtensa/xt-buildroot-overlay-install, since this file
+ Thomas> states:
+
+ Thomas> +# Copyright (c) 2003-2008 by Tensilica Inc. ALL RIGHTS
+ Thomas> +RESERVED.  # These coded instructions, statements, and
+ Thomas> +computer programs are the # copyrighted works and
+ Thomas> +confidential proprietary information of Tensilica Inc.
+
+Yes, that doesn't fly with the GPL requirements. Maxim, is it OK with
+you to get rid of that header?
+
+ Thomas> BTW, was Perl already a host dependency to run Buildroot ?
+
+Well, it is indirectly as you need Perl to build Linux + a number of
+packages, but nothing in buildroot self was using Perl.
+
+-- 
+Bye, Peter Korsgaard
