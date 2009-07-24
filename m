@@ -1,53 +1,49 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 24 Jul 2009 15:02:42 +0200
-Subject: [Buildroot] [git commit] CHANGES: add #163 + #473
-In-Reply-To: <20090724110230.3f51597a@surf> (Thomas Petazzoni's message of
-	"Fri\, 24 Jul 2009 11\:02\:30 +0200")
-References: <20090724055230.2080B77660@busybox.osuosl.org>
-	<20090724110230.3f51597a@surf>
-Message-ID: <87zlauutcd.fsf@macbook.be.48ers.dk>
+Date: Fri, 24 Jul 2009 15:09:12 +0200
+Subject: [Buildroot] Write Access to buildroot?
+In-Reply-To: <4A69741A.8010903@atmel.com> (Ulf Samuelsson's message of "Fri\,
+	24 Jul 2009 10\:43\:06 +0200")
+References: <4A689265.6030308@atmel.com> <87skgmwm6h.fsf@macbook.be.48ers.dk>
+	<4A69741A.8010903@atmel.com>
+Message-ID: <87vdliut1j.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 
-hi,
+Hi,
 
- Thomas> Le Fri, 24 Jul 2009 07:51:16 +0200,
- Thomas> Peter Korsgaard <jacmet@sunsite.dk> a ?crit :
+ Ulf> Personally, I think it would make sense to have
+ Ulf> a development git with personal branches with write access.
 
- >> +	#163: Xtensa architecture port
+You have the possibility to put your own development tree on the
+server as explained by Thomas.
 
- Thomas> I might wrong or be missing something, but I haven't seen the
- Thomas> corresponding commits for this (maybe patches too large for
- Thomas> the list ?).
+ Ulf> This would complement any personal git's and would allow
+ Ulf> easier testing with other people's patches.
 
-Yes, they are committed and I haven't seen the mails either - seems
-like the commit hook has issues when I push multiple changes at once.
+ Ulf> The main tree, used for the release
+ Ulf> could then pull changes from both the development tree
+ Ulf> and the personal tree's.
 
-(Or it might be something else, I'm having mail and hw problems
-today).
+ Ulf> Is there a list of maintainers?
 
- Thomas> But if it was really committed, I was quite worried by the
- Thomas> complexity added by the ? overlay ? mechanism proposed by
- Thomas> this new architecture port, and that a public discussion on
- Thomas> this new mechanism could have been interesting to see if it's
- Thomas> the best solution, if it's the way we want Buildroot to go
- Thomas> forward, etc.
+Not an explicit list, no.
 
-The patches were discussed on the list when they were first submitted,
-afaik without much comments. the xtensa people have been asking about
-it several times, and I finally promised to commit after 2009.05 was
-released:
+ Ulf> The target/device/Atmel tree will need to be updated due to the
+ Ulf> SAM9G10/G45/M10/M11.
 
-http://lists.busybox.net/pipermail/buildroot/2009-May/027503.html
+You are probably in the best position to do this - Last I looked the
+G45 wasn't publicly announced and no documentation available.
 
-I agree that the xtensa stuff is "special" in various ways, but I
-think it's more productive to get it into git and then work on getting
-it cleaned up more, instead of having it gather dust in bugzilla.
+Patches are welcome.
+
+ Ulf> The target/linux tree is also in need of maintenance.
+
+What exactly do you mean? 2.6.31-rcX options?
 
 -- 
 Bye, Peter Korsgaard
