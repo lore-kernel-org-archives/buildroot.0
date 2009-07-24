@@ -1,30 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Jul 2009 11:00:33 +0200
-Subject: [Buildroot] Write Access to buildroot?
-In-Reply-To: <20090724085603.GL13236@buzzloop.caiaq.de>
-References: <4A689265.6030308@atmel.com> <87skgmwm6h.fsf@macbook.be.48ers.dk>
-	<4A69741A.8010903@atmel.com>
-	<20090724085603.GL13236@buzzloop.caiaq.de>
-Message-ID: <20090724110033.50cdd14c@surf>
+Date: Fri, 24 Jul 2009 11:02:30 +0200
+Subject: [Buildroot] [git commit] CHANGES: add #163 + #473
+In-Reply-To: <20090724055230.2080B77660@busybox.osuosl.org>
+References: <20090724055230.2080B77660@busybox.osuosl.org>
+Message-ID: <20090724110230.3f51597a@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri, 24 Jul 2009 10:56:03 +0200,
-Daniel Mack <daniel@caiaq.de> a ?crit :
+Le Fri, 24 Jul 2009 07:51:16 +0200,
+Peter Korsgaard <jacmet@sunsite.dk> a ?crit :
 
-> There a multiple free git hosting services out there, for example
-> github.com.
+> +	#163: Xtensa architecture port
 
-As explained in
-http://lists.busybox.net/pipermail/buildroot/2009-March/026875.html,
-Buildroot developers also have a public git repository on the uclibc
-server. For example, my own git tree is visible at
-http://git.buildroot.net/~tpetazzoni/git/buildroot/.
+I might wrong or be missing something, but I haven't seen the
+corresponding commits for this (maybe patches too large for the list ?).
 
-Sincerly,
+But if it was really committed, I was quite worried by the complexity
+added by the ? overlay ? mechanism proposed by this new architecture
+port, and that a public discussion on this new mechanism could have
+been interesting to see if it's the best solution, if it's the way we
+want Buildroot to go forward, etc.
 
 Thomas
 -- 
