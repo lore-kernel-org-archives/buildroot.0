@@ -1,48 +1,43 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 24 Jul 2009 15:50:19 +0200
-Subject: [Buildroot] [git commit] CHANGES: add #163 + #473
-In-Reply-To: <20090724153528.7103ad9d@surf> (Thomas Petazzoni's message of
-	"Fri\, 24 Jul 2009 15\:35\:28 +0200")
-References: <20090724055230.2080B77660@busybox.osuosl.org>
-	<20090724110230.3f51597a@surf> <87zlauutcd.fsf@macbook.be.48ers.dk>
-	<20090724153528.7103ad9d@surf>
-Message-ID: <87r5w6ur50.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 24 Jul 2009 13:51:31 +0000 (UTC)
+Subject: [Buildroot] [Bug 487] New: Make kismet package sexier
+Message-ID: <bug-487-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=487
 
-Hi,
+              Host: i686-linux
+            Target: arm-softfloat-linux-uclibcgnueabi
+           Summary: Make kismet package sexier
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: gustavo at zacarias.com.ar
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
- >> I agree that the xtensa stuff is "special" in various ways, but I
- >> think it's more productive to get it into git and then work on
- >> getting it cleaned up more, instead of having it gather dust in
- >> bugzilla.
 
- Thomas> Ok, fair enough. Reading the patches again, they don't look
- Thomas> too invasive after all.
+Created an attachment (id=499)
+ --> (https://bugs.busybox.net/attachment.cgi?id=499)
+Make kismet package sexier
 
-No, it is pretty much self contained.
+* Bump kismet from 2007-10-R1 to 2009-06-R1 (newcore: nicer, more features)
+* Migrate to Makefile.autotools.in
+* Introduce new options to just install the server, client, drone or
+combination
 
- Thomas> I'm concerned by the licensing of
- Thomas> target/xtensa/xt-buildroot-overlay-install, since this file
- Thomas> states:
-
- Thomas> +# Copyright (c) 2003-2008 by Tensilica Inc. ALL RIGHTS
- Thomas> +RESERVED.  # These coded instructions, statements, and
- Thomas> +computer programs are the # copyrighted works and
- Thomas> +confidential proprietary information of Tensilica Inc.
-
-Yes, that doesn't fly with the GPL requirements. Maxim, is it OK with
-you to get rid of that header?
-
- Thomas> BTW, was Perl already a host dependency to run Buildroot ?
-
-Well, it is indirectly as you need Perl to build Linux + a number of
-packages, but nothing in buildroot self was using Perl.
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
