@@ -1,8 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 25 Jul 2009 09:13:44 +0200
-Subject: [Buildroot] [git commit] midori: remove configuration comment on
-	X.org dependency
-Message-ID: <20090725071548.60A1C77713@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] dillo: use select for library dependencies
+Message-ID: <20090725071548.8C01E77713@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,28 +9,44 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=958f2d5fa338c035cce8d29e009c08fd3e158364
+commit: http://git.buildroot.net/buildroot/commit/?id=1d5228acae2a124c84ae235fb5f39bcbab1e6312
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The dependency of Midori on X.org should be pretty obvious to the
-user, and we don't want to unnecessarly clutter the configuration
-interface with comments.
+Use select independs of depends on for library dependencies. We keep
+the depends on for the X.org dependency so that dillo can only be
+selected once X.org is enabled (which, contrary to the library
+dependencies, is a pretty obvious dependency for the user). We then
+get rid of the configuration interface comment.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/midori/Config.in |    3 ---
- 1 files changed, 0 insertions(+), 3 deletions(-)
+ package/dillo/Config.in |   13 +++++--------
+ 1 files changed, 5 insertions(+), 8 deletions(-)
 
-diff --git a/package/midori/Config.in b/package/midori/Config.in
-index fd1da35..80b7f77 100644
---- a/package/midori/Config.in
-+++ b/package/midori/Config.in
-@@ -7,6 +7,3 @@ config BR2_PACKAGE_MIDORI
- 	  Midori is a lightweight web browser based on WebKit
+diff --git a/package/dillo/Config.in b/package/dillo/Config.in
+index 5724691..87418d2 100644
+--- a/package/dillo/Config.in
++++ b/package/dillo/Config.in
+@@ -1,15 +1,12 @@
+ config BR2_PACKAGE_DILLO
+ 	bool "dillo"
+-	depends on BR2_PACKAGE_JPEG
+-	depends on BR2_PACKAGE_LIBGLIB12
+-	depends on BR2_PACKAGE_LIBGTK12
+-	depends on BR2_PACKAGE_ZLIB
+-	depends on BR2_PACKAGE_LIBPNG
++	select BR2_PACKAGE_JPEG
++	select BR2_PACKAGE_LIBGLIB12
++	select BR2_PACKAGE_LIBGTK12
++	select BR2_PACKAGE_ZLIB
++	select BR2_PACKAGE_LIBPNG
+ 	depends on BR2_PACKAGE_XORG7
+ 	help
+ 	  Dillo is a small GTK+ based web browser written in C.
  
- 	  http://software.twotoasts.de/?page=midori
+ 	  http://www.dillo.org/
 -
--comment "midori		- disabled (requires Xorg(7))"
--	depends on !(BR2_PACKAGE_XORG || BR2_PACKAGE_XORG7)
+-comment "dillo		- disabled (requires jpeg,libglib12,libgtk12,zlib,libpng and Xorg(7))"
+-	depends on !BR2_PACKAGE_JPEG || !BR2_PACKAGE_LIBGLIB12 || !BR2_PACKAGE_LIBGTK12 || !BR2_PACKAGE_ZLIB || !BR2_PACKAGE_LIBPNG || !(BR2_PACKAGE_XORG || BR2_PACKAGE_XORG7)
 -- 
 1.6.3.3
