@@ -1,8 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 25 Jul 2009 09:13:44 +0200
-Subject: [Buildroot] [git commit] xorg: reorganize the selection of the
-	X.org server type
-Message-ID: <20090725071547.C7608777D8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] xorg: reindent configuration option details
+Message-ID: <20090725071547.EB31077713@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,16 +9,39 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1956d0f6d640a1acff7ab09be99e890fc202839b
+commit: http://git.buildroot.net/buildroot/commit/?id=2c502491f633bd93aca4d7dcdb046c45882e61fb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The selection of the X.org server type was really strange. The user
-had to select between none, tinyx and modular. Now, the menuconfig
-interface display a single item for X.org, that can be
-selected/unselected. This entry contains a submenu, that allows to
-select the type of the X.org server (tinyX or modular) and that allows
-(as before) to enable/disable X.org libraries, drivers, etc.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/x11r7/Config.in |   17 ++++++++---------
+ 1 files changed, 8 insertions(+), 9 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
+index 7af62ee..dad0924 100644
+--- a/package/x11r7/Config.in
++++ b/package/x11r7/Config.in
+@@ -1,13 +1,12 @@
+ menuconfig BR2_PACKAGE_XORG7
+-bool "X.org X Window System, X11R7, release 7.4"
+-default y if BR2_PACKAGE_XSERVER_x11r7
+-select BR2_PACKAGE_ZLIB
+-select BR2_PACKAGE_LIBPNG
+-select BR2_PACKAGE_EXPAT
+-select BR2_PACKAGE_FONTCONFIG
+-help
+-	Support for X11R7 libraries, servers, drivers, and/or
+-	applications in the target.
++	bool "X.org X Window System, X11R7, release 7.4"
++	select BR2_PACKAGE_ZLIB
++	select BR2_PACKAGE_LIBPNG
++	select BR2_PACKAGE_EXPAT
++	select BR2_PACKAGE_FONTCONFIG
++	help
++	  Support for X11R7 libraries, servers, drivers, and/or
++	  applications in the target.
+ 
+ if BR2_PACKAGE_XORG7
+ 
+-- 
+1.6.3.3
