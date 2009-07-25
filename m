@@ -1,8 +1,8 @@
 From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
 Date: Sat, 25 Jul 2009 08:46:45 +0200
-Subject: [Buildroot] [git commit] Remove unused file:
-	"target/linux/Config.in.experimental"
-Message-ID: <20090725064730.CB9BF777D8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Update kernel "latest" major/minor version
+ numbers including adding support for 2.6.30/2.6.31-rc#
+Message-ID: <20090725064731.B7E12774E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,364 +10,138 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1aeeebc19bf14baa5c238dc9c754542c5478b7bb
+commit: http://git.buildroot.net/buildroot/commit/?id=1a6f22d2a3616e649c8241a3efc5b09aaa0fb849
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 ---
- target/linux/Config.in.experimental |  345 -----------------------------------
- 1 files changed, 0 insertions(+), 345 deletions(-)
- delete mode 100644 target/linux/Config.in.experimental
+ target/linux/Config.in.advanced |   21 +++++++++++++++++----
+ target/linux/Config.in.versions |   16 ++++++++++------
+ 2 files changed, 27 insertions(+), 10 deletions(-)
 
-diff --git a/target/linux/Config.in.experimental b/target/linux/Config.in.experimental
-deleted file mode 100644
-index c75c69b..0000000
---- a/target/linux/Config.in.experimental
-+++ /dev/null
-@@ -1,345 +0,0 @@
--if BR2_KERNEL_LINUX_EXPERIMENTAL
--
--choice
--	prompt "Linux Kernel Version"
--	depends on BR2_PACKAGE_LINUX
--	default BR2_LINUX_2_6_22_1 if !BR2_avr32
--	default BR2_LINUX_2_6_22_10 if BR2_avr32
--	help
--	  Select the specific Linux version you want to use
--
--config BR2_LINUX_2_6_SNAP
--	bool "The latest snapshot for the stable Linux kernel"
--	depends on BR2_PACKAGE_LINUX
--	help
--	  Linux 2.6.x-git#
--
--config BR2_LINUX_2_6_MM
--	bool "With latest -mm patch for the stable Linux kernel"
--	depends on BR2_PACKAGE_LINUX
--	help
--	  Linux 2.6.x-rc#-mm#
--
--config BR2_LINUX_2_6_STABLE
--	bool "The latest stable Linux kernel (2.6.22.1)"
--	depends on BR2_PACKAGE_LINUX
--	help
--	  Linux 2.6.22.1
--
--config BR2_LINUX_2_6_22_10
--	bool "Linux 2.6.22.10"
--	depends on BR2_PACKAGE_LINUX
--	help
--	  Linux 2.6.22.10
--
--config BR2_LINUX_2_6_22_1
--	bool "Linux 2.6.22.1"
--	depends on BR2_PACKAGE_LINUX
--	help
--	  Linux 2.6.22.1
--
--config BR2_LINUX_2_6_22
--	bool "Linux 2.6.22"
--	depends on BR2_PACKAGE_LINUX
--	help
--	  Linux 2.6.22
--
--config BR2_LINUX_2_6_21_6
--	bool "Linux 2.6.21.6"
--	depends on BR2_PACKAGE_LINUX
--	help
--	  Linux 2.6.21.6
--
--config BR2_LINUX_2_6_21_1
--	bool "Linux 2.6.21.1"
--	depends on BR2_PACKAGE_LINUX
--	help
--	  Linux 2.6.21.1
--
--config BR2_LINUX_2_6_21
--	bool "Linux 2.6.21"
--	depends on BR2_PACKAGE_LINUX
--	help
--	  Linux 2.6.21
--
--config BR2_LINUX_2_6_20_4
--	bool "Linux 2.6.20.4"
--	depends on BR2_PACKAGE_LINUX
--	help
--	  Linux 2.6.20.4
--
--config BR2_LINUX_2_6_20
--	bool "Linux 2.6.20"
--	depends on BR2_PACKAGE_LINUX
--	help
--	  Linux 2.6.20
--
--config BR2_LINUX_2_6_19_2
--	bool "Linux 2.6.19.2"
--	depends on BR2_PACKAGE_LINUX
--	help
--	  Linux 2.6.19.2
--
--config BR2_LINUX_2_6_19
--	bool "Linux 2.6.19"
--	depends on BR2_PACKAGE_LINUX
--	help
--	  Linux 2.6.19
--
--config BR2_LINUX_2_6_18
--	bool "Linux 2.6.18"
--	depends on BR2_PACKAGE_LINUX
--	help
--	  Linux 2.6.18
--
--config BR2_LINUX_2_6_17
--	bool "Linux 2.6.17"
--	depends on BR2_PACKAGE_LINUX
--	help
--	  Linux 2.6.17
--
--config BR2_LINUX_2_6_16
--	bool "Linux 2.6.16"
--	depends on BR2_PACKAGE_LINUX
--	help
--	  Linux 2.6.16
--
--config BR2_LINUX_2_6_15
--	bool "Linux 2.6.15"
--	depends on BR2_PACKAGE_LINUX
--	help
--	  Linux 2.6.15
--
--config BR2_LINUX_2_6_23
--	bool "Linux 2.6.23"
--	depends on BR2_PACKAGE_LINUX
--	help
--	  Linux 2.6.23
--
--config BR2_LINUX_CUSTOM
--	bool "Linux <custom> version"
--	depends on BR2_PACKAGE_LINUX
--	help
--	  Linux <your selection>
--
--endchoice
--
--config BR2_CUSTOM_DOWNLOAD_LINUX26_VERSION
--	string "Linux Tarball version"
--	depends on BR2_LINUX_CUSTOM
--	default "linux-2.6.22"
--
--config BR2_CUSTOM_LINUX26_VERSION
--	string "Linux Version"
--	depends on BR2_LINUX_CUSTOM
--	default "linux-2.6.22-version"
--
--config BR2_CUSTOM_LINUX26_RC_PATCH
--	string "RC patch (if needed)"
--	depends on BR2_LINUX_CUSTOM
--	default "patch-2.6.22-rc6-mm1.bz2"
--
--menu "Patches"
--	depends on BR2_PACKAGE_LINUX
--
--config BR2_LINUX_BSP_PATCH
--	string "Additional patch to apply (supply full path)"
--	default ""
--
--endmenu
--
--config BR2_DOWNLOAD_LINUX26_VERSION
--	string #"Selected Tarball:"
--	default "2.6.15" if BR2_LINUX_2_6_15
--	default "2.6.16" if BR2_LINUX_2_6_16
--	default "2.6.17" if BR2_LINUX_2_6_17
--	default "2.6.18" if BR2_LINUX_2_6_18
--	default "2.6.19" if BR2_LINUX_2_6_19
--	default "2.6.19.2" if BR2_LINUX_2_6_19_2
--	default "2.6.20" if BR2_LINUX_2_6_20
--	default "2.6.20.4" if BR2_LINUX_2_6_20_4
--	default "2.6.21" if BR2_LINUX_2_6_21
--	default "2.6.21.1" if BR2_LINUX_2_6_21_1
--	default "2.6.21.6" if BR2_LINUX_2_6_21_6
--	default "2.6.22" if BR2_LINUX_2_6_22
--	default "2.6.22.1" if BR2_LINUX_2_6_22_1
--	default "2.6.22.10" if BR2_LINUX_2_6_22_10
--	default "2.6.22" if BR2_LINUX_2_6_23_RC1
--	default "2.6.22" if BR2_LINUX_2_6_SNAP
--	default "2.6.22" if BR2_LINUX_2_6_MM
--	default $(BR2_CUSTOM_DOWNLOAD_LINUX26_VERSION) if BR2_LINUX_CUSTOM
--
--config BR2_LINUX26_VERSION
--	string #"Selected Version:"
--	default "2.6.15" if BR2_LINUX_2_6_15
--	default "2.6.16" if BR2_LINUX_2_6_16
--	default "2.6.17" if BR2_LINUX_2_6_17
--	default "2.6.18" if BR2_LINUX_2_6_18
--	default "2.6.19" if BR2_LINUX_2_6_19
--	default "2.6.19.2" if BR2_LINUX_2_6_19_2
--	default "2.6.20" if BR2_LINUX_2_6_20
--	default "2.6.20.4" if BR2_LINUX_2_6_20_4
--	default "2.6.21" if BR2_LINUX_2_6_21
--	default "2.6.21.1" if BR2_LINUX_2_6_21_1
--	default "2.6.21.6" if BR2_LINUX_2_6_21_6
--	default "2.6.22" if BR2_LINUX_2_6_22
--	default "2.6.22.1" if BR2_LINUX_2_6_22_1
--	default "2.6.22.10" if BR2_LINUX_2_6_22_10
--	default "2.6.22" if BR2_LINUX_2_6_23_RC1
--	default "2.6.22" if BR2_LINUX_2_6_SNAP
--	default "2.6.22" if BR2_LINUX_2_6_MM
--	default $(BR2_CUSTOM_LINUX26_VERSION) if BR2_LINUX_CUSTOM
--
--config BR2_LINUX26_RC_PATCH
--	string #"Selected Patch:"
--	default "" if BR2_LINUX_2_6_15
--	default "" if BR2_LINUX_2_6_16
--	default "" if BR2_LINUX_2_6_17
--	default "" if BR2_LINUX_2_6_18
--	default "" if BR2_LINUX_2_6_19
--	default "" if BR2_LINUX_2_6_19_2
--	default "" if BR2_LINUX_2_6_20
--	default "" if BR2_LINUX_2_6_20_4
--	default "" if BR2_LINUX_2_6_21
--	default "" if BR2_LINUX_2_6_21_1
--	default "" if BR2_LINUX_2_6_21_6
--	default "" if BR2_LINUX_2_6_22
--	default "" if BR2_LINUX_2_6_22_1
--	default "" if BR2_LINUX_2_6_22_10
--	default "patch-2.6.23-rc1.bz2" if BR2_LINUX_2_6_23_RC1
--	default $(BR2_CUSTOM_LINUX26_RC_PATCH) if BR2_LINUX_CUSTOM
--
--choice
--	prompt "Linux Kernel Configuration"
--	depends on BR2_PACKAGE_LINUX
--	default BR2_PACKAGE_LINUX_USE_KCONFIG
--	help
--	  Select the way to configure the Linux
--
--config BR2_PACKAGE_LINUX_USE_KCONFIG
--	bool ".config file"
--	depends on BR2_PACKAGE_LINUX
--	help
--	  kernel's .config to use to build a kernel for the target.
--
--	  If the above setting is empty, you can change the default
--	  board-imposed value by passing LINUX26_KCONFIG=<path> to
--	  make.
--
--config BR2_LINUX26_DEFCONFIG
--	bool "Run make <board>_defconfig "
--	depends on BR2_PACKAGE_LINUX
--	help
--	  Configure Linux by make <board>_defconfig
--
--config BR2_LINUX_CUSTOMIZE
--	bool "Run make ARCH=$(ARCH) xconfig before build"
--	depends on BR2_PACKAGE_LINUX
--	help
--	  Configure Linux by make xconfig
--endchoice
--
--config BR2_PACKAGE_LINUX_KCONFIG
--	string ".config file"
--	depends on BR2_PACKAGE_LINUX_USE_KCONFIG
--	default "$(BR2_BOARD_PATH)/$(BR2_BOARD_NAME)-linux-$(LINUX26_VERSION).config"
--	help
--	  kernel's .config to use to build a kernel for the target.
--
--	  If the above setting is empty, you can change the default
--	  board-imposed value by passing LINUX26_KCONFIG=<path> to
--	  make.
--
--choice
--	prompt "kernel binary format"
--	depends on BR2_PACKAGE_LINUX
--	default BR2_LINUX_BIN_UIMAGE
--	help
--	  Select the specific Linux binary type you want to use
--
--config BR2_LINUX_BIN_BZIMAGE
--	bool "bzImage"
--	depends on BR2_PACKAGE_LINUX
--	help
--	  Linux 2.6.19.2
--
--config BR2_LINUX_BIN_UIMAGE
--	bool "uImage"
--	depends on BR2_PACKAGE_LINUX
--	help
--	  Build uImage binary
--
--config BR2_LINUX_BIN_VMLINUX
--	bool "vmlinux"
--	depends on BR2_PACKAGE_LINUX
--	help
--	  Build vmlinux binary
--
--config BR2_LINUX_BIN_ZIMAGE
--	bool "zImage"
--	depends on BR2_PACKAGE_LINUX
--	help
--	  Linux 2.6.19.2
--
--config BR2_LINUX_BIN_CUSTOM
--	bool "<custom> Linux binary"
--	depends on BR2_PACKAGE_LINUX
--	help
--	  Build custom Linux binary format
--endchoice
--
--config BR2_LINUX_BIN_CUSTOM_BIN
--	string "custom kernel binary format"
--	depends on BR2_LINUX_BIN_CUSTOM
--	default ""
--	help
--	  Which Linux binary format?
--
--config BR2_PACKAGE_LINUX_FORMAT
--	string #"kernel binary format"
--	depends on BR2_PACKAGE_LINUX
--	default "bzImage" if BR2_LINUX_BIN_BZIMAGE
--	default "uImage" if BR2_LINUX_BIN_UIMAGE
--	default "vmlinux" if BR2_LINUX_BIN_VMLINUX
--	default "zImage" if BR2_LINUX_BIN_ZIMAGE
--	default $(BR2_LINUX_BIN_CUSTOM_BIN) if BR2_LINUX_BIN_CUSTOM
--	help
--	  kernel binary format.
--	  Popular values include:
--	  - bzImage
--	  - zImage
--	  - vmlinux
--	  - zImage
--	  - xipImage
--	  and other, architecture dependant formats.
--
--	  Note that the default format is supposed to be set by your
--	  board-description, if any.
--	  i386 and compatible default to bzImage if nothing was given
--	  above.
--	  If the above setting is empty, you can change the default
--	  board-imposed value by passing LINUX26_FORMAT=<string> to
--	  make.
--
--comment "Destinations for linux kernel binaries"
--	depends on BR2_PACKAGE_LINUX
--
--config BR2_LINUX_IN_ROOTFS
--	bool "Copy kernel to root file system"
--	depends on BR2_PACKAGE_LINUX
--	help
--	  Copy kernel to <root>/boot directory
--
--menuconfig BR2_LINUX_COPY
--	bool "Secondary Copy"
--	depends on BR2_PACKAGE_LINUX
--	default y
--
--config BR2_LINUX_COPYTO
--	string "also copy the image to..."
--	depends on BR2_LINUX_COPY
--	default "/tftpboot"
--	help
--	  Copy kernel to secondary location
--
--endif
+diff --git a/target/linux/Config.in.advanced b/target/linux/Config.in.advanced
+index 3a171b5..6d755d8 100644
+--- a/target/linux/Config.in.advanced
++++ b/target/linux/Config.in.advanced
+@@ -33,6 +33,7 @@ source "target/linux/Config.in.versions"
+ 
+ config BR2_KERNEL_PATCH_LEVEL
+ 	string
++	default $(BR2_KERNEL_LATEST_2_6_30) if BR2_LINUX_2_6_30 && BR2_KERNEL_ADD_LATEST_MINORPATCH
+ 	default $(BR2_KERNEL_LATEST_2_6_29) if BR2_LINUX_2_6_29 && BR2_KERNEL_ADD_LATEST_MINORPATCH
+ 	default $(BR2_KERNEL_LATEST_2_6_28) if BR2_LINUX_2_6_28 && BR2_KERNEL_ADD_LATEST_MINORPATCH
+ 	default $(BR2_KERNEL_LATEST_2_6_27) if BR2_LINUX_2_6_27 && BR2_KERNEL_ADD_LATEST_MINORPATCH
+@@ -47,6 +48,8 @@ config BR2_KERNEL_PATCH_LEVEL
+ 
+ config BR2_KERNEL_NEXT_VERSION
+ 	string
++	default "2.6.31" if BR2_LINUX_2_6_30
++	default "2.6.30" if BR2_LINUX_2_6_29
+ 	default "2.6.29" if BR2_LINUX_2_6_28
+ 	default "2.6.28" if BR2_LINUX_2_6_27
+ 	default "2.6.27" if BR2_LINUX_2_6_26
+@@ -59,6 +62,8 @@ config BR2_KERNEL_NEXT_VERSION
+ 
+ config BR2_KERNEL_THIS_VERSION
+ 	string
++	default "2.6.31" if BR2_LINUX_2_6_31
++	default "2.6.30" if BR2_LINUX_2_6_30
+ 	default "2.6.29" if BR2_LINUX_2_6_29
+ 	default "2.6.28" if BR2_LINUX_2_6_28
+ 	default "2.6.27" if BR2_LINUX_2_6_27
+@@ -128,7 +133,11 @@ choice
+ 	  Select the specific Linux version you want to use
+ 
+ config BR2_LINUX_2_6_STABLE
+-	bool "The latest stable Linux kernel (2.6.29.4)"
++	bool "The latest stable Linux kernel (2.6.30.2)"
++
++config BR2_LINUX_2_6_30
++	bool "Linux 2.6.30"
++	select BR2_KERNEL_BASE
+ 
+ config BR2_LINUX_2_6_29
+ 	bool "Linux 2.6.29"
+@@ -170,6 +179,10 @@ config BR2_LINUX_2_6_20
+ 	bool "Linux 2.6.20"
+ 	select BR2_KERNEL_BASE
+ 
++config BR2_LINUX_2_6_31
++	bool "Linux 2.6.31"
++	select BR2_KERNEL_BASE
++
+ config BR2_LINUX26_CUSTOM
+ 	bool "Linux <custom> version"
+ 
+@@ -178,19 +191,19 @@ endchoice
+ if BR2_LINUX26_CUSTOM
+ config BR2_CUSTOM_DOWNLOAD_LINUX26_VERSION
+ 	string "Linux Tarball version"
+-	default "2.6.30"
++	default "2.6.31"
+ 	help
+ 	  Specify any .tar.bz2 file
+ 
+ config BR2_CUSTOM_LINUX26_VERSION
+ 	string "Linux Version"
+-	default "2.6.30"
++	default "2.6.31"
+ 	help
+ 	  Specify what the linux version will be called
+ 
+ config BR2_CUSTOM_LINUX26_PATCH
+ 	string "patch name"
+-	default "patch-2.6.30-rc4.bz2"
++	default "patch-2.6.31-rc4.bz2"
+ 	help
+ 	  Specify a patch to be downloaded
+ 
+diff --git a/target/linux/Config.in.versions b/target/linux/Config.in.versions
+index a37a5ad..caf1151 100644
+--- a/target/linux/Config.in.versions
++++ b/target/linux/Config.in.versions
+@@ -1,11 +1,11 @@
+ # This file defines the latest version of 
+ # You also have to edit BR2_LINUX_2_6_STABLE
+ # in target/linux/Config.in.advanced
+-# which is approximately at line 132
++# which is approximately at line 136
+ 
+ config LINUX26_LATEST_RC_VERSION
+ 	string
+-	default "2.6.30-rc4" if BR2_KERNEL_ADD_LATEST_RC_PATCH
++	default "2.6.31-rc4" if BR2_KERNEL_ADD_LATEST_RC_PATCH
+ 	help
+ 	  Not really available as of 20090103
+ 
+@@ -19,21 +19,25 @@ config LINUX26_LATEST_MM_VERSION
+ 
+ config BR2_KERNEL_CURRENT_VERSION
+ 	string
+-	default "2.6.29.4"
++	default "2.6.30.2"
+ 	help
+ 	  This is the latest stable kernel (including minor version)
+ 
++config BR2_KERNEL_LATEST_2_6_30
++	string
++	default "2"
++
+ config BR2_KERNEL_LATEST_2_6_29
+ 	string
+-	default "4"
++	default "6"
+ 
+ config BR2_KERNEL_LATEST_2_6_28
+ 	string
+-	default "7"
++	default "10"
+ 
+ config BR2_KERNEL_LATEST_2_6_27
+ 	string
+-	default "13"
++	default "27"
+ 
+ config BR2_KERNEL_LATEST_2_6_26
+ 	string
 -- 
 1.6.3.3
