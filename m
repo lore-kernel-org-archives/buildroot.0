@@ -1,75 +1,41 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 25 Jul 2009 21:08:55 +0200
-Subject: [Buildroot] [git commit] package/gnuconfig: xtensa patch
-Message-ID: <20090725191957.8FDA47639E@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 25 Jul 2009 23:14:57 +0200
+Subject: [Buildroot] [PATCH] Add support for custom post-build script
+In-Reply-To: <1247086018-18816-1-git-send-email-daniel@caiaq.de> (Daniel
+	Mack's message of "Wed\, 8 Jul 2009 22\:46\:58 +0200")
+References: <1247086018-18816-1-git-send-email-daniel@caiaq.de>
+Message-ID: <87vdlgsbvy.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Daniel" == Daniel Mack <daniel@caiaq.de> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0cb591eb55a5071cd4db8c899e2d0edff7cbc110
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-New file missing from cd0b1ce3b
+ Daniel> The config help text says it all: Specify a script to be run
+ Daniel> after the build has finished and before the BR2 starts
+ Daniel> packing the files into selected packages.
 
-Signed-off-by: Maxim Grigoriev <maxim2405@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/gnuconfig/patches/config.xtensa.glob.patch |   44 ++++++++++++++++++++
- 1 files changed, 44 insertions(+), 0 deletions(-)
- create mode 100644 package/gnuconfig/patches/config.xtensa.glob.patch
+ Daniel> This gives users the oportunity to do board-specific
+ Daniel> cleanups, add-ons and the like, so the generated files can be
+ Daniel> used directly without further processing.
 
-diff --git a/package/gnuconfig/patches/config.xtensa.glob.patch b/package/gnuconfig/patches/config.xtensa.glob.patch
-new file mode 100644
-index 0000000..4b37aa7
---- /dev/null
-+++ b/package/gnuconfig/patches/config.xtensa.glob.patch
-@@ -0,0 +1,44 @@
-+diff -rNdup config-orig/config.guess config/config.guess
-+--- config-orig/config.guess	2007-11-13 16:31:20.000000000 -0800
-++++ config/config.guess	2007-11-14 00:26:39.000000000 -0800
-+@@ -954,8 +954,8 @@ EOF
-+     x86_64:Linux:*:*)
-+ 	echo x86_64-unknown-linux-gnu
-+ 	exit ;;
-+-    xtensa:Linux:*:*)
-+-    	echo xtensa-unknown-linux-gnu
-++    xtensa*:Linux:*:*)
-++    	echo ${UNAME_MACHINE}-unknown-linux-gnu
-+ 	exit ;;
-+     i*86:Linux:*:*)
-+ 	# The BFD linker knows what the default object file format is, so
-+diff -rNdup config-orig/config.sub config/config.sub
-+--- config-orig/config.sub	2007-11-13 16:31:20.000000000 -0800
-++++ config/config.sub	2007-11-14 00:48:37.000000000 -0800
-+@@ -369,10 +369,14 @@ case $basic_machine in
-+ 	| v850-* | v850e-* | vax-* \
-+ 	| we32k-* \
-+ 	| x86-* | x86_64-* | xc16x-* | xps100-* | xscale-* | xscalee[bl]-* \
-+-	| xstormy16-* | xtensa-* \
-++	| xstormy16-* | xtensa*-* \
-+ 	| ymp-* \
-+ 	| z8k-*)
-+ 		;;
-++	# Recognize the basic CPU types without company name, with glob match.
-++	xtensa*)
-++		basic_machine=$basic_machine-unknown
-++		;;
-+ 	# Recognize the various machine names and aliases which stand
-+ 	# for a CPU type and a company and sometimes even an OS.
-+ 	386bsd)
-+diff -rNdup config-orig/testsuite/config-sub.data config/testsuite/config-sub.data
-+--- config-orig/testsuite/config-sub.data	2007-11-13 15:56:17.000000000 -0800
-++++ config/testsuite/config-sub.data	2007-11-14 00:31:22.000000000 -0800
-+@@ -109,6 +109,7 @@ fido-elf			fido-unknown-elf
-+ fido				fido-unknown-none
-+ xtensa-elf			xtensa-unknown-elf
-+ xtensa-linux			xtensa-unknown-linux-gnu
-++xtensa_dc232b-linux		xtensa_dc232b-unknown-linux-gnu
-+ i386-drops1.0			i386-pc-drops1.0
-+ mep				mep-unknown-elf
-+ mep-elf				mep-unknown-elf
+ Daniel> The script is called with the target directory name as first
+ Daniel> and only argument. Make sure the exit code of that script is
+ Daniel> 0, otherwise make will stop after calling it.
+
+I have normally done this by simply running make twice - E.G. build
+the rootfs, fixup anything you need under project_build_*/*/root and
+run make again to regenerate the rootfs.
+
+But ok, I can see the desire for such a script. I'll apply it now,
+thanks.
+
+It would be good to have a note about it in the documentation - Could
+I get you to add a short note about it in docs/buildroot.html?
+
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
