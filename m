@@ -1,7 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 25 Jul 2009 09:13:44 +0200
-Subject: [Buildroot] [git commit] xorg: reindent configuration option details
-Message-ID: <20090725071547.EB31077713@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] xorg: remove useless configuration comment
+Message-ID: <20090725071548.1E6B977713@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,39 +9,25 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2c502491f633bd93aca4d7dcdb046c45882e61fb
+commit: http://git.buildroot.net/buildroot/commit/?id=8c00f439048fbccbae1b22427648b10390a09748
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/Config.in |   17 ++++++++---------
- 1 files changed, 8 insertions(+), 9 deletions(-)
+ package/x11r7/Config.in |    4 ----
+ 1 files changed, 0 insertions(+), 4 deletions(-)
 
 diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index 7af62ee..dad0924 100644
+index dad0924..ace438a 100644
 --- a/package/x11r7/Config.in
 +++ b/package/x11r7/Config.in
-@@ -1,13 +1,12 @@
- menuconfig BR2_PACKAGE_XORG7
--bool "X.org X Window System, X11R7, release 7.4"
--default y if BR2_PACKAGE_XSERVER_x11r7
--select BR2_PACKAGE_ZLIB
--select BR2_PACKAGE_LIBPNG
--select BR2_PACKAGE_EXPAT
--select BR2_PACKAGE_FONTCONFIG
--help
--	Support for X11R7 libraries, servers, drivers, and/or
--	applications in the target.
-+	bool "X.org X Window System, X11R7, release 7.4"
-+	select BR2_PACKAGE_ZLIB
-+	select BR2_PACKAGE_LIBPNG
-+	select BR2_PACKAGE_EXPAT
-+	select BR2_PACKAGE_FONTCONFIG
-+	help
-+	  Support for X11R7 libraries, servers, drivers, and/or
-+	  applications in the target.
- 
- if BR2_PACKAGE_XORG7
- 
+@@ -327,7 +327,3 @@ endmenu
+ 		source package/x11r7/xkeyboard-config/Config.in
+ 	endmenu
+ endif
+-
+-comment "X11R7 X Window System disabled"
+-	depends on BR2_PACKAGE_TINYX||BR2_PACKAGE_XORG
+-
 -- 
 1.6.3.3
