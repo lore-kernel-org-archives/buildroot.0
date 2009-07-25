@@ -1,25 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 25 Jul 2009 09:28:49 +0200
-Subject: [Buildroot] error about compile gcc
-In-Reply-To: <3a665c760907240136y2c27829cq78899f6e3aac39f7@mail.gmail.com>
-	(loody's message of "Fri\, 24 Jul 2009 16\:36\:45 +0800")
-References: <3a665c760907230115w47500c7ai1e7a8339f01e907a@mail.gmail.com>
-	<87prbrbofx.fsf@macbook.be.48ers.dk>
-	<3a665c760907240136y2c27829cq78899f6e3aac39f7@mail.gmail.com>
-Message-ID: <87ocr98bm6.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 25 Jul 2009 21:08:55 +0200
+Subject: [Buildroot] [git commit] kernel-headers: bump 2.6.30.x stable
+	version
+Message-ID: <20090725191956.9BA5D77806@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "loody" == loody  <miloody@gmail.com> writes:
 
- loody> thanks for your kind help.
- loody> I find the problem will come out when I change the .config of uclibc.
+commit: http://git.buildroot.net/buildroot/commit/?id=48abfcf5f0d935ca502c2ffcff392387c5153908
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-what exactly did you change in the uclibc config? did you do a clean
-rebuild afterwards? (rm -rf *build_*; make)
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/kernel-headers/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index f1103f2..2a0e793 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -52,6 +52,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.27.27"	if BR2_KERNEL_HEADERS_2_6_27
+ 	default "2.6.28.10"	if BR2_KERNEL_HEADERS_2_6_28
+ 	default "2.6.29.6"	if BR2_KERNEL_HEADERS_2_6_29
+-	default "2.6.30.2"	if BR2_KERNEL_HEADERS_2_6_30
++	default "2.6.30.3"	if BR2_KERNEL_HEADERS_2_6_30
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
