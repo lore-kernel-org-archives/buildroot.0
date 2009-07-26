@@ -1,31 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 26 Jul 2009 21:16:25 +0200
-Subject: [Buildroot] [PATCH] Fix naming mismatch between directfb and
-	kernel on "fusion" version numbers
-In-Reply-To: <4A6CA921.7040807@atmel.com> (Ulf Samuelsson's message of "Sun\,
-	26 Jul 2009 21\:06\:09 +0200")
-References: <4A6BE6A8.9080400@atmel.com> <87k51vsxz0.fsf@macbook.be.48ers.dk>
-	<4A6C2534.3000503@atmel.com> <874oszshqp.fsf@macbook.be.48ers.dk>
-	<4A6CA921.7040807@atmel.com>
-Message-ID: <87zlarqmpi.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 26 Jul 2009 19:27:15 +0000 (UTC)
+Subject: [Buildroot] [Bug 301] allow to install libsmbclient
+In-Reply-To: <bug-301-163@https.bugs.busybox.net/>
+References: <bug-301-163@https.bugs.busybox.net/>
+Message-ID: <20090726192715.6416A777FC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=301
 
-Hi,
 
- >> OK, what driver / setup exactly? Isn't the problem just that we need
- >> to bump the linux-fusion package version?
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
- Ulf> The module is 8.0 and the requirement is 8.0
- Ulf> but since they use different defines it wont work.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
 
-So why don't we just upgrade to linux-fusion-8.1.1 which has that typo
-fixed instead?
+
+
+
+--- Comment #2 from Peter Korsgaard <jacmet@uclibc.org>  2009-07-26 19:27:14 UTC ---
+hmm, the $(TARGET_DIR)/$(SAMBA_TARGET_BINARY) target already calls make
+installlibs, I take it that should either get removed or the new libsmbclient
+target isn't really needed?
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
