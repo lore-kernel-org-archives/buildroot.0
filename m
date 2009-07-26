@@ -1,33 +1,54 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 26 Jul 2009 20:04:31 +0000 (UTC)
-Subject: [Buildroot] [Bug 389] New package bmon
-In-Reply-To: <bug-389-163@https.bugs.busybox.net/>
-References: <bug-389-163@https.bugs.busybox.net/>
-Message-ID: <20090726200432.05FE8777FC@busybox.osuosl.org>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Sun, 26 Jul 2009 22:21:00 +0200
+Subject: [Buildroot] Write Access to buildroot?
+In-Reply-To: <878wibslsk.fsf@macbook.be.48ers.dk>
+References: <4A689265.6030308@atmel.com>
+	<87skgmwm6h.fsf@macbook.be.48ers.dk>	<4A69741A.8010903@atmel.com>	<20090724085603.GL13236@buzzloop.caiaq.de>	<9E543F22BF68405185D6B77291E4E5EF@aeglos>	<20090724121641.2c4cf8bd@surf>
+	<4A699CDD.7060703@atmel.com>	<20090724152448.4d1f5934@surf>
+	<4A69D04E.9040408@atmel.com>	<20090724224516.15b39e30@surf>
+	<4A6BEE7C.4080308@atmel.com>	<87r5w3syn7.fsf@macbook.be.48ers.dk>
+	<4A6C242F.8040704@atmel.com> <878wibslsk.fsf@macbook.be.48ers.dk>
+Message-ID: <4A6CBAAC.2060309@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=389
+Peter Korsgaard skrev:
+>>>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
+> 
+> Hi,
+> 
+>  >> We also don't want to require outsiders to learn git in order to
+>  >> contribute patches.
+>  >> 
+>  Ulf> It it very different to require people to learn git, from
+>  Ulf> blocking people that wants to use git, to work together.
+> 
+> Blocking? Noone is blocking anyone from anything. That particular work
+> flow is not used for the official tree, but you can do what you want
+> to with your own trees.
+> 
 
+I have requested a capability where multiple people have
+write capability to a tree which can then be pulled
+to the official tree.
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+It is possible to do this on another git server,
+but that means that it is less visible to other Buildroot users.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+It is simple to implement.
+Create the "common" user, and let developers have
+write access to "~common/git", possibly using a symbolic link.
 
+> Don't confuse working together with commit access. The Linux kernel
+> gets contributions from ~1000 people for each release, and yet Linus
+> is the only one having commit access to the official tree.
+> 
 
+That comments is irrelevant because I am not asking for commit
+access to the official tree.
 
-
---- Comment #3 from Peter Korsgaard <jacmet@uclibc.org>  2009-07-26 20:04:31 UTC ---
-Thanks, committed
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+BR
+Ulf Samuelsson
