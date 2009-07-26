@@ -1,33 +1,51 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 26 Jul 2009 16:40:00 +0200
-Subject: [Buildroot] [git commit] target/Makefile.in: remove hurd reference
-Message-ID: <20090726144048.EE94B777FC@busybox.osuosl.org>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Sun, 26 Jul 2009 21:06:09 +0200
+Subject: [Buildroot] [PATCH] Fix naming mismatch between directfb and
+ kernel on "fusion" version numbers
+In-Reply-To: <874oszshqp.fsf@macbook.be.48ers.dk>
+References: <4A6BE6A8.9080400@atmel.com>
+	<87k51vsxz0.fsf@macbook.be.48ers.dk>	<4A6C2534.3000503@atmel.com>
+	<874oszshqp.fsf@macbook.be.48ers.dk>
+Message-ID: <4A6CA921.7040807@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Peter Korsgaard skrev:
+>>>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
+> 
+> Hi,
+> 
+>  >> But aren't those kernel modules part of directfb? If not, does
+>  >> stuff actually work (not just build) if you workaround this
+>  >> version incompatibility? Wouldn't it make more sense to fix where
+>  >> the define is set in the first place? Have you sent this by the
+>  >> directfb developers?
+>  >> 
+>  Ulf> As far as I see, the major/minor version numbers provided
+>  Ulf> are the same as requested, but the naming is different.
+> 
+> OK, what driver / setup exactly? Isn't the problem just that we need
+> to bump the linux-fusion package version?
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1f359c2fe0c639488887cb861f56ecc5b719c939
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The module is 8.0 and the requirement is 8.0
+but since they use different defines it wont work.
 
-Missed by b6192fb9752a.
+It is really very simple
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- target/Makefile.in |    2 --
- 1 files changed, 0 insertions(+), 2 deletions(-)
+#define	A 8
+#define B 8
+#if A == B_PROVIDED
+/* OK */
+#else
+#warning ""
+#endif
 
-diff --git a/target/Makefile.in b/target/Makefile.in
-index ff0f6b5..a835353 100644
---- a/target/Makefile.in
-+++ b/target/Makefile.in
-@@ -84,5 +84,3 @@ include target/linux/Makefile.in.advanced
- endif
- 
- include target/device/Makefile.in.linux
--
--include target/hurd/Makefile.in
--- 
-1.6.3.3
+The code should emit a warning if version A and B are not the same.
+They are the same, but the warning will still occur,
+since there is no definition of B_PROVIDED.
+
+BR
+Ulf Samuelsson
