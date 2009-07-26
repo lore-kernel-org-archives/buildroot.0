@@ -1,14 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 26 Jul 2009 22:37:32 +0200
-Subject: [Buildroot] [PATCH] Fix naming mismatch between directfb and
-	kernel on "fusion" version numbers
-In-Reply-To: <4A6CBAEA.2010002@atmel.com> (Ulf Samuelsson's message of "Sun\,
-	26 Jul 2009 22\:22\:02 +0200")
-References: <4A6BE6A8.9080400@atmel.com> <87k51vsxz0.fsf@macbook.be.48ers.dk>
-	<4A6C2534.3000503@atmel.com> <874oszshqp.fsf@macbook.be.48ers.dk>
-	<4A6CA921.7040807@atmel.com> <87zlarqmpi.fsf@macbook.be.48ers.dk>
-	<4A6CBAEA.2010002@atmel.com>
-Message-ID: <87r5w3qiyb.fsf@macbook.be.48ers.dk>
+Date: Sun, 26 Jul 2009 22:39:57 +0200
+Subject: [Buildroot] [git commit] linux-advanced: remove unused ancient
+	kernel versions
+In-Reply-To: <4A6CBC18.1020507@atmel.com> (Ulf Samuelsson's message of "Sun\,
+	26 Jul 2009 22\:27\:04 +0200")
+References: <20090725191956.C0CB37639E@busybox.osuosl.org>
+	<4A6CBC18.1020507@atmel.com>
+Message-ID: <87d47nqiua.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,16 +15,21 @@ To: buildroot@busybox.net
 
 >>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 
- Ulf> The module is 8.0 and the requirement is 8.0
- Ulf> but since they use different defines it wont work.
+ Ulf> Peter Korsgaard skrev:
+ >> commit: http://git.buildroot.net/buildroot/commit/?id=f91315e1710c256b353cdc1eba9a2374826798bc
+ >> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
  >> 
- >> So why don't we just upgrade to linux-fusion-8.1.1 which has that typo
- >> fixed instead?
+ >> More than 2 years old, and no in tree users.
  >> 
 
- Ulf> Be my guest.
+ Ulf> Why do you believe that this is not used?
 
-*Beep* wrong answer. I'll forget about your patch then.
+like I stated above - No in tree users.
+
+ Ulf> I have customers which are still on the 2.6.22 level.
+
+Good for them. They are presumably using a 2 year old BR snapshot as
+well?
 
 -- 
 Bye, Peter Korsgaard
