@@ -1,34 +1,83 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 26 Jul 2009 22:07:30 +0000 (UTC)
-Subject: [Buildroot] [Bug 403] Error while building ISO9660 image
-In-Reply-To: <bug-403-163@https.bugs.busybox.net/>
-References: <bug-403-163@https.bugs.busybox.net/>
-Message-ID: <20090726220730.5AAC2777FE@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 27 Jul 2009 00:15:55 +0200
+Subject: [Buildroot] [git commit] netstat-nat: new package
+Message-ID: <20090726221821.11078777FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=403
 
+commit: http://git.buildroot.net/buildroot/commit/?id=c2dbefd86f9480ba6ca3dc7b5b097401bf6bfbbd
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Closes #3597.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES                            |    1 +
+ package/Config.in                  |    1 +
+ package/netstat-nat/Config.in      |    6 ++++++
+ package/netstat-nat/netstat-nat.mk |   12 ++++++++++++
+ 4 files changed, 20 insertions(+), 0 deletions(-)
+ create mode 100644 package/netstat-nat/Config.in
+ create mode 100644 package/netstat-nat/netstat-nat.mk
 
-
-
-
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-07-26 22:07:29 UTC ---
-The iso9660 target needs a Linux kernel to be built. I have changed the
-dependencies to make this clearer in git.
-
-
+diff --git a/CHANGES b/CHANGES
+index 7111e91..17072ee 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -9,6 +9,7 @@
+ 	#287: New package libnl
+ 	#333: Bump sqlite package to 3.6.15
+ 	#349: update libsoup to version 2.26.2
++	#357: New package netstat-nat
+ 	#359,#413: Upgrade openvpn to Makefile.autotools.in
+ 	#367: linux kernel compile error for arm926t
+ 	#369: Add SDL_gfx package
+diff --git a/package/Config.in b/package/Config.in
+index c4cad8d..d86eb6f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -182,6 +182,7 @@ source "package/netkitbase/Config.in"
+ source "package/netkittelnet/Config.in"
+ source "package/netplug/Config.in"
+ source "package/netsnmp/Config.in"
++source "package/netstat-nat/Config.in"
+ source "package/nfs-utils/Config.in"
+ source "package/ntp/Config.in"
+ source "package/olsr/Config.in"
+diff --git a/package/netstat-nat/Config.in b/package/netstat-nat/Config.in
+new file mode 100644
+index 0000000..6afcf89
+--- /dev/null
++++ b/package/netstat-nat/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_NETSTAT_NAT
++	bool "netstat-nat"
++	help
++	  Displays NAT connections
++
++	  http://tweegy.nl/projects/netstat-nat/
+diff --git a/package/netstat-nat/netstat-nat.mk b/package/netstat-nat/netstat-nat.mk
+new file mode 100644
+index 0000000..4847283
+--- /dev/null
++++ b/package/netstat-nat/netstat-nat.mk
+@@ -0,0 +1,12 @@
++#############################################################
++#
++# netstat-nat
++#
++#############################################################
++
++NETSTAT_NAT_VERSION = 1.4.9
++NETSTAT_NAT_SOURCE = netstat-nat-$(NETSTAT_NAT_VERSION).tar.gz
++NETSTAT_NAT_SITE = http://tweegy.nl/download
++NETSTAT_NAT_DEPENDENCIES = uclibc
++
++$(eval $(call AUTOTARGETS,package,netstat-nat))
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.6.3.3
