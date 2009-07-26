@@ -1,26 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 26 Jul 2009 19:14:23 +0000 (UTC)
-Subject: [Buildroot] [Bug 287] New package libnl
-In-Reply-To: <bug-287-163@https.bugs.busybox.net/>
-References: <bug-287-163@https.bugs.busybox.net/>
-Message-ID: <20090726191423.72539777FC@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 26 Jul 2009 21:10:56 +0200
+Subject: [Buildroot] [git commit] kernel-headers: bump 2.6.27.x stable
+	version
+Message-ID: <20090726191450.3584F777FC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=287
 
+commit: http://git.buildroot.net/buildroot/commit/?id=c972a086e5f4d57b1119809e5e90457792268b22
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/kernel-headers/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-
-
---- Comment #3 from Peter Korsgaard <jacmet@uclibc.org>  2009-07-26 19:14:22 UTC ---
-Thanks, committed.
-
-
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 2a0e793..689c85d 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -49,7 +49,7 @@ config BR2_KERNEL_HEADERS_RT
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "2.6.26.8"	if BR2_KERNEL_HEADERS_2_6_26
+-	default "2.6.27.27"	if BR2_KERNEL_HEADERS_2_6_27
++	default "2.6.27.28"	if BR2_KERNEL_HEADERS_2_6_27
+ 	default "2.6.28.10"	if BR2_KERNEL_HEADERS_2_6_28
+ 	default "2.6.29.6"	if BR2_KERNEL_HEADERS_2_6_29
+ 	default "2.6.30.3"	if BR2_KERNEL_HEADERS_2_6_30
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.6.3.3
