@@ -1,31 +1,27 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 27 Jul 2009 08:54:35 +0000 (UTC)
-Subject: [Buildroot] [Bug 487] Make kismet package sexier
-In-Reply-To: <bug-487-163@https.bugs.busybox.net/>
-References: <bug-487-163@https.bugs.busybox.net/>
-Message-ID: <20090727085435.DCA85764A8@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 27 Jul 2009 11:08:16 +0200
+Subject: [Buildroot] [pull request] Pull request for branch update-changes
+Message-ID: <cover.1248685694.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=487
+The following changes since commit 27ce942e6536174a9fa6f5dd13f87d52bca0950c:
+  Will Newton (1):
+        toolchain: Clean up locale support menu
 
+are available in the git repository at:
 
-Bug 487 depends on bug 287, which changed state.
+  git://git.busybox.net/~tpetazzoni/git/buildroot update-changes
 
-Bug 287 Summary: New package libnl
-https://bugs.busybox.net/show_bug.cgi?id=287
+Thomas Petazzoni (1):
+      Update CHANGES with recent improvements
 
-           What    |Old Value                   |New Value
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+ CHANGES |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
 
-
-
+Thanks,
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni
