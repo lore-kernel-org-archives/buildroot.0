@@ -1,23 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 27 Jul 2009 10:22:32 +0200
-Subject: [Buildroot] [PATCH] toolchain/uClibc: add patch to rename
-	getline to get_line in	unifdef.c
-In-Reply-To: <20090528213924.14428.52394.stgit@mj.roinet.com> (Pavel Roskin's
-	message of "Thu\, 28 May 2009 17\:39\:24 -0400")
-References: <20090528213924.14428.52394.stgit@mj.roinet.com>
-Message-ID: <8763der0vr.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 27 Jul 2009 08:42:22 +0000 (UTC)
+Subject: [Buildroot] [Bug 421] toolchain: Clean up toolchain locale support
+	menu.
+In-Reply-To: <bug-421-163@https.bugs.busybox.net/>
+References: <bug-421-163@https.bugs.busybox.net/>
+Message-ID: <20090727084222.7280E777E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Pavel" == Pavel Roskin <proski@gnu.org> writes:
+https://bugs.busybox.net/show_bug.cgi?id=421
 
- Pavel> getline() is a standard libc function with a different signature.
- Pavel> Signed-off-by: Pavel Roskin <proski@gnu.org>
 
-Thanks, applied.
+Peter Korsgaard <jacmet@uclibc.org> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
+
+
+
+
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-07-27 08:42:21 UTC ---
+thanks, committed
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
