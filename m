@@ -1,48 +1,43 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 27 Jul 2009 13:55:03 +0200
-Subject: [Buildroot] [git commit] linux-advanced: remove unused ancient
-	kernel versions
-In-Reply-To: <87a5b0800907270244h2172338aj7255258ef1fca9fd@mail.gmail.com>
-	(Will Newton's message of "Mon\, 27 Jul 2009 10\:44\:39 +0100")
-References: <20090725191956.C0CB37639E@busybox.osuosl.org>
-	<4A6CBC18.1020507@atmel.com> <87d47nqiua.fsf@macbook.be.48ers.dk>
-	<87a5b0800907270244h2172338aj7255258ef1fca9fd@mail.gmail.com>
-Message-ID: <87d47mpch4.fsf@macbook.be.48ers.dk>
+From: Daniel Mack <daniel@caiaq.de>
+Date: Mon, 27 Jul 2009 13:58:38 +0200
+Subject: [Buildroot] [PATCH] Add support for custom post-build script
+In-Reply-To: <87vdlgsbvy.fsf@macbook.be.48ers.dk>
+References: <1247086018-18816-1-git-send-email-daniel@caiaq.de>
+	<87vdlgsbvy.fsf@macbook.be.48ers.dk>
+Message-ID: <20090727115838.GS13236@buzzloop.caiaq.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Will" == Will Newton <will.newton@gmail.com> writes:
+On Sat, Jul 25, 2009 at 11:14:57PM +0200, Peter Korsgaard wrote:
+> >>>>> "Daniel" == Daniel Mack <daniel@caiaq.de> writes:
+> 
+>  Daniel> The config help text says it all: Specify a script to be run
+>  Daniel> after the build has finished and before the BR2 starts
+>  Daniel> packing the files into selected packages.
+> 
+>  Daniel> This gives users the oportunity to do board-specific
+>  Daniel> cleanups, add-ons and the like, so the generated files can be
+>  Daniel> used directly without further processing.
+> 
+>  Daniel> The script is called with the target directory name as first
+>  Daniel> and only argument. Make sure the exit code of that script is
+>  Daniel> 0, otherwise make will stop after calling it.
+> 
+> I have normally done this by simply running make twice - E.G. build
+> the rootfs, fixup anything you need under project_build_*/*/root and
+> run make again to regenerate the rootfs.
+> 
+> But ok, I can see the desire for such a script. I'll apply it now,
+> thanks.
+> 
+> It would be good to have a note about it in the documentation - Could
+> I get you to add a short note about it in docs/buildroot.html?
 
-hi,
+Sure, see below.
 
- >> ?Ulf> I have customers which are still on the 2.6.22 level.
- >> 
- >> Good for them. They are presumably using a 2 year old BR snapshot
- >> as well?
+Thanks!
 
- Will> What is the cost of keeping these options?
-
-The explosion in config combinations - BR is plenty hard to test to any
-sensible degree as it is already. We cannot keep on adding new
-versions without removing something old. There's several places in BR
-where we have to go through extra hoops to support both old and new
-stuff, or where combinations noone ever tried breaks.
-
-I think the only realistic option is to keep the number of
-combinations down so the remaining options gets more testing.
-
- Will> Userland and build infrastructure often moves much quicker than
- Will> kernels and I often have to patch support for older kernels back into
- Will> buildroot. It's not a big difficulty but if the cost of keeping the
- Will> options is low I don't see what the gain is in removing them.
-
-Notice that the advanced linux config has options for custom (free
-form) versions, so you don't need to patch anything. In fact I think
-we should remove all the presets as they are always out-of-date like I
-mentioned the other day.
-
--- 
-Bye, Peter Korsgaard
+Daniel
