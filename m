@@ -1,29 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Jul 2009 11:13:50 +0200
-Subject: [Buildroot] [PATCH 1/1] Update CHANGES with recent improvements
-In-Reply-To: <5139e9e41281e04d7644bec98305654baa9749d9.1248685694.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1248685694.git.thomas.petazzoni@free-electrons.com>
-	<5139e9e41281e04d7644bec98305654baa9749d9.1248685694.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <20090727111350.0b0d10a8@surf>
+Date: Mon, 27 Jul 2009 11:17:28 +0200
+Subject: [Buildroot] [pull request] Pull request for branch update-changes
+Message-ID: <cover.1248686247.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 27 Jul 2009 11:08:17 +0200,
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
+The following changes since commit 27ce942e6536174a9fa6f5dd13f87d52bca0950c:
+  Will Newton (1):
+        toolchain: Clean up locale support menu
 
-> +	Improvement of external toolchain support: the configuration
-> +	given to Buildroot is not verified against the real toolchain
+are available in the git repository at:
 
-			      ^^ now
+  git://git.busybox.net/~tpetazzoni/git/buildroot update-changes
 
-Sorry for the mess, will resend fixed.
+Thomas Petazzoni (1):
+      Update CHANGES with recent improvements
 
-Thomas
+ CHANGES |   10 ++++++++++
+ 1 files changed, 10 insertions(+), 0 deletions(-)
+
+Thanks,
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Thomas Petazzoni
