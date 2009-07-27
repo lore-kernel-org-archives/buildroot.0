@@ -1,52 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Jul 2009 15:07:18 +0200
-Subject: [Buildroot] [PATCH 4/4] qt: the GUI module requires the network
-	module to work properly
+Date: Mon, 27 Jul 2009 15:07:16 +0200
+Subject: [Buildroot] [PATCH 2/4] qt: put the Qt options into a submenu
 In-Reply-To: <cover.1248700034.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1248700034.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <314cdcbd2541cae9fb1709831ec67e36508ac793.1248700034.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <2845fa66ce8efcf4a48a31e93832325ac1628cf1.1248700034.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Running a simple Qt GUI application on an embedded systems without
-QtNetwork installed doesn't work, the dynamic loader complains that
-QtNetwork is not present.
-
-While I'm not a Qt build system expert, it looks like this dependency
-really exists, since the src/gui/gui.pri file in Qt sources contains
-the following line:
-
-embedded: QT += network
-
-Which would mean that the GUI module needs the network module to
-operate properly. And a few files in src/gui/embedded/ also include
-some QtNetwork stuff. This isn't really surprising since the Qt QWS
-mechanism uses communication between processes through a Unix socket.
-
-Therefore, we add a dependency on the network module in the GUI
-module. We use a 'select' dependency here, since it's might not be
-really obvious to the user that the GUI module requires the network
-one.
+Put the Qt options into a submenu to make the configuration interface
+easier to use. The comment on the dependency on C++ has to be put
+before the menuconfig definition, otherwise kconfig gets confused and
+doesn't put the suboptions into a submenu.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qt/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/qt/Config.in |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/package/qt/Config.in b/package/qt/Config.in
-index 59c691f..b7fe0f9 100644
+index d68c923..59c691f 100644
 --- a/package/qt/Config.in
 +++ b/package/qt/Config.in
-@@ -77,6 +77,7 @@ config BR2_PACKAGE_QT_QT3SUPPORT
- 
- config BR2_PACKAGE_QT_GUI_MODULE
- 	bool "Gui Module"
-+	select BR2_PACKAGE_QT_NETWORK
- 	default y
+@@ -1,4 +1,7 @@
+-config BR2_PACKAGE_QT
++comment "qt requires a toolchain with C++ support enabled"
++	depends on !BR2_INSTALL_LIBSTDCPP
++
++menuconfig BR2_PACKAGE_QT
+ 	bool "Qt"
+ 	depends on BR2_INSTALL_LIBSTDCPP
  	help
- 	  Turns on support to Gui applications. If your board don't have
+@@ -6,9 +9,6 @@ config BR2_PACKAGE_QT
+ 
+ 	  http://www.qtsoftware.com/products/platform/qt-for-embedded-linux
+ 
+-comment "qt requires a toolchain with C++ support enabled"
+-	depends on !BR2_INSTALL_LIBSTDCPP
+-
+ if BR2_PACKAGE_QT
+ 
+ config BR2_PACKAGE_QT_DEBUG
 -- 
 1.6.0.4
