@@ -1,33 +1,36 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 27 Jul 2009 12:11:09 +0000 (UTC)
-Subject: [Buildroot] [Bug 331] Update MPlayer to version 1.0rc2
-In-Reply-To: <bug-331-163@https.bugs.busybox.net/>
-References: <bug-331-163@https.bugs.busybox.net/>
-Message-ID: <20090727121109.DFAA677804@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 27 Jul 2009 14:17:31 +0200
+Subject: [Buildroot] [PATCH] Add support for custom post-build script
+In-Reply-To: <20090727115838.GS13236@buzzloop.caiaq.de> (Daniel Mack's message
+	of "Mon\, 27 Jul 2009 13\:58\:38 +0200")
+References: <1247086018-18816-1-git-send-email-daniel@caiaq.de>
+	<87vdlgsbvy.fsf@macbook.be.48ers.dk>
+	<20090727115838.GS13236@buzzloop.caiaq.de>
+Message-ID: <877hxupbfo.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=331
+>>>>> "Daniel" == Daniel Mack <daniel@caiaq.de> writes:
 
+Hi,
 
+ >> It would be good to have a note about it in the documentation - Could
+ >> I get you to add a short note about it in docs/buildroot.html?
 
+ Daniel> Sure, see below.
 
+Thanks! One comment:
 
---- Comment #5 from Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>  2009-07-27 12:11:09 UTC ---
-(In reply to comment #4)
-> That patch certainly applies cleanly and builds, but I don't have an avr32
-> board to test with so I can't say much more than that.
-> 
+ Daniel> +      find that a certain package generates wrong or unneeded files, you
+ Daniel> +      should rather fix than package than shipping your way around it
+ Daniel> +      with a cleanup script.</p>
 
-I've compiled and run MPlayer v1.0rc2 with that patch, and it worked fine for
-me. I am unsure about the status for integrating the patch into ffmpeg
-upstream, but work has been ongoing for some time.
+I think '.. than working around it with a cleanup script.' sounds a
+bit better - OK with you?
 
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
