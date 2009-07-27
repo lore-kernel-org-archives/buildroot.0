@@ -1,70 +1,42 @@
 From: Steve Bennett <sablists@earthlink.net>
-Date: Mon, 27 Jul 2009 16:18:03 -0400
-Subject: [Buildroot] xlib libXt build problem
-In-Reply-To: <20090727215059.2aa274de@surf>
-References: <8109ECD0-3E25-4BAD-B4D7-DE97BEEBE007@earthlink.net>
-	<20090727215059.2aa274de@surf>
-Message-ID: <E7CDA87B-E069-4814-AD01-9D9D70DD7122@earthlink.net>
+Date: Mon, 27 Jul 2009 16:34:13 -0400
+Subject: [Buildroot] Bug 171 - vm86.c error: IF_MASK undeclared
+Message-ID: <98531B0C-B641-406E-A66F-04C837AF6A90@earthlink.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks, our replies crossed.   But using the actual package makes  
-sense since I'm building on Ubuntu myself, so I've switched to that now.
+https://bugs.busybox.net/show_bug.cgi?id=171
 
-Is there any documentation of any other dependencies assumed to be on  
-the host?  I know some of the packages I needed just to get started  
-(libncurses5-dev, g++, bison, flex, gettext, nasm...), but each one  
-has been a research project, although none needed as much research as  
-this one.
+I just ran into this problem, and worked around it by updating the  
+patch file (below) so it points to the right files, and putting it in  
+my package/x11r7/xserver_xorg-server folder.
+
+That said, I was wondering if there's a different fix, some package  
+or header I'm missing or something, since it seems like a fairly old  
+problem.
 
 -->Steve Bennett
 
+File xserver_xorg-server-1.5-ifmask-fix.patch:
 
-On Jul 27, 2009, at 3:50 PM, Thomas Petazzoni wrote:
+--- xserver_xorg-server-1.5.2.old/hw/kdrive/vesa/vm86.h	2008-10-02  
+17:01:25.000000000 -0400
++++ xserver_xorg-server-1.5.2/hw/kdrive/vesa/vm86.h	2009-07-27  
+15:51:21.000000000 -0400
+@@ -67,6 +67,13 @@
+  #include "os.h"
+  #endif
 
-> Le Mon, 27 Jul 2009 13:30:44 -0400,
-> Steve Bennett <sablists@earthlink.net> a ?crit :
->
->> I'm making an educated guess that the patch effectively overrides
->> the XLIB_LIBXT_CONF_ENV setting (or something else isn't including
->> that setting), but I'm not sure what the right fix for this is.   A
->> brute force fix would be something like changing the patch to read:
->>
->> 	HOST_CC=gcc -I$(STAGING_DIR)/usr/include
->>
->> ...but is that the correct approach here?  And why hasn't anything
->> regarding this issue come up before?  It seems odd that nobody else
->> is running into this.
->
-> I'd say the issue is that makestrs is a program compiled for the host,
-> and the way we compile it in Buildroot assumes that the development
-> headers for X11 are installed on your host (through your  
-> distribution).
-> On my Ubuntu system, X11/Xos.h is part of the x11proto-core-dev  
-> package.
->
-> On my system, this package is installed, so when makestrs gets
-> compiled, the host gcc compiler uses /usr/include/X11/Xos.h during the
-> compilation.
->
-> When building some packages requires things from the host, we have
-> currently two different approaches in Buildroot:
->  * for some dependencies, we rebuild it, and install it in $(HOST_DIR)
->  * for some other dependencies, we assume that it is available on the
->    host
->
-> Sincerly,
->
-> Thomas
-> -- 
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers and embedded Linux development,
-> consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
++#ifndef IF_MASK
++#define IF_MASK X86_EFLAGS_IF
++#endif
++#ifndef IOPL_MASK
++#define IOPL_MASK X86_EFLAGS_IOPL
++#endif
++
+  typedef unsigned char	U8;
+  typedef unsigned short	U16;
+  typedef unsigned int	U32;
