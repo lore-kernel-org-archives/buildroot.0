@@ -1,80 +1,71 @@
-From: Maurice van der Pot <griffon26@kfk4ever.com>
-Date: Mon, 27 Jul 2009 15:22:33 +0200
-Subject: [Buildroot] [PATCH] xf86-video-intel: Fixed cross-compile patch to
-	apply to	version 2.4.2
-Message-ID: <20090727132233.GA28179@kfk4ever.com>
+From: Daniel Mack <daniel@caiaq.de>
+Date: Mon, 27 Jul 2009 15:45:30 +0200
+Subject: [Buildroot] [PATCH] linux: allow own initramfs to be specified
+Message-ID: <1248702330-28741-1-git-send-email-daniel@caiaq.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Maurice van der Pot <griffon26@kfk4ever.com>
+The initramfs source location is removed from the given Linux kernel
+configuration at the moment and only filled in again in case BR2 is
+asked to provide a cpio for that feature.
+
+This patch allows to specify an own location for such an image file.
+
+Signed-off-by: Daniel Mack <daniel@caiaq.de>
 ---
- ...iver_xf86-video-intel-2.4.2-cross-compile.patch |   42 +++++++++-----------
- 1 files changed, 19 insertions(+), 23 deletions(-)
+ target/linux/Config.in.advanced   |   12 ++++++++++++
+ target/linux/Makefile.in.advanced |   13 +++++++++++++
+ 2 files changed, 25 insertions(+), 0 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel-2.4.2-cross-compile.patch b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel-2.4.2-cross-compile.patch
-index ff476bd..ecf1571 100644
---- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel-2.4.2-cross-compile.patch
-+++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel-2.4.2-cross-compile.patch
-@@ -1,30 +1,26 @@
----- xf86-video-intel-2.4.2/configure.ac.orig	2007-06-10 20:59:27.000000000 +0200
--+++ xf86-video-intel-2.4.2/configure.ac	2007-06-10 20:59:50.000000000 +0200
--@@ -92,13 +92,14 @@ AC_HEADER_STDC
-+diff -ruN xf86-video-intel-2.4.2/configure.ac xf86-video-intel-2.4.2-patched/configure.ac
-+--- xf86-video-intel-2.4.2/configure.ac	2008-08-26 03:28:31.000000000 +0200
-++++ xf86-video-intel-2.4.2-patched/configure.ac	2009-07-27 13:39:49.000000000 +0200
-+@@ -91,6 +91,7 @@
-+ # Checks for header files.
-+ AC_HEADER_STDC
-  
-- AC_MSG_CHECKING([whether to include DRI support])
-- if test x$DRI = xauto; then
--+ 	if test "$cross_compiling" = "no" ; then
-++if test "$cross_compiling" = "no" ; then
-+ if test x$DRI != xno; then
-          AC_CHECK_FILE([${sdkdir}/dri.h],
-                        [have_dri_h="yes"], [have_dri_h="no"])
--         AC_CHECK_FILE([${sdkdir}/sarea.h],
--                       [have_sarea_h="yes"], [have_sarea_h="no"])
--         AC_CHECK_FILE([${sdkdir}/dristruct.h],
--                       [have_dristruct_h="yes"], [have_dristruct_h="no"])
---	AC_CHECK_FILE([${sdkdir}/damage.h],
--+		AC_CHECK_FILE([${sdkdir}/damage.h],
--                       [have_damage_h="yes"], [have_damage_h="no"])
-- 
--         if test "$have_dri_h" = yes -a \
--@@ -108,6 +109,12 @@ if test x$DRI = xauto; then
--         else
-+@@ -111,6 +112,14 @@
-                  DRI="no"
-          fi
--+ 	else
--+ 		have_dri_h="yes"
--+ 		have_sarea_h="yes"
--+		have_dristruct_h="yes"
--+		DRI="yes"
--+ 	fi
-  fi
-++else
-++if test x$DRI != xno; then
-++	have_dri_h="yes"
-++	have_sarea_h="yes"
-++	have_dristruct_h="yes"
-++	DRI="yes"
-++fi
-++fi
-  AC_MSG_RESULT([$DRI])
-+ 
-+ save_CFLAGS="$CFLAGS"
+diff --git a/target/linux/Config.in.advanced b/target/linux/Config.in.advanced
+index 3a171b5..53020ac 100644
+--- a/target/linux/Config.in.advanced
++++ b/target/linux/Config.in.advanced
+@@ -429,6 +429,18 @@ config BR2_KERNEL_CONFIG_METHOD
+ 	default "xconfig"	if BR2_MAKE_XCONFIG
+ 	default "menuconfig"	if BR2_MAKE_MENUCONFIG
+ 
++config BR2_PACKAGE_LINUX_INITRAMFS
++	string "initramfs source"
++	depends on BR2_PACKAGE_LINUX
++	help
++	  The initial RAM filesystem is a ramfs which is loaded by the
++	  boot loader (loadlin or lilo) and that is mounted as root
++	  before the normal boot procedure. It is typically used to
++	  load modules needed to mount the "real" root file system,
++	  etc.
++
++	  Specify a path relative to BR2's root folder.
++
+ endmenu
+ 
+ choice
+diff --git a/target/linux/Makefile.in.advanced b/target/linux/Makefile.in.advanced
+index 47a1f4e..71c0eb1 100644
+--- a/target/linux/Makefile.in.advanced
++++ b/target/linux/Makefile.in.advanced
+@@ -377,6 +377,19 @@ ifeq ($(BR2_PACKAGE_BUSYBOX_INITRAMFS),y)
+ 	echo "CONFIG_INITRAMFS_ROOT_UID=0" >> $(LINUX26_DIR)/.config
+ 	echo "CONFIG_INITRAMFS_ROOT_GID=0" >> $(LINUX26_DIR)/.config
+ endif
++ifneq ($(BR2_PACKAGE_LINUX_INITRAMFS),)
++	$(SED) '/CONFIG_INITRAMFS_SOURCE/d' $(LINUX26_DIR)/.config
++	$(SED) '/INITRAMFS_ROOT_.ID/d' $(LINUX26_DIR)/.config
++	echo "CONFIG_BLK_DEV_INITRD=y" >> $(LINUX26_DIR)/.config
++	echo "CONFIG_INITRAMFS_COMPRESSION_GZIP=y" >> $(LINUX26_DIR)/.config
++	echo "# CONFIG_INITRAMFS_COMPRESSION_NONE is not set" >> $(LINUX26_DIR)/.config
++	echo "# CONFIG_INITRAMFS_COMPRESSION_BZIP2 is not set" >> $(LINUX26_DIR)/.config
++	echo "# CONFIG_INITRAMFS_COMPRESSION_LZMA is not set" >> $(LINUX26_DIR)/.config
++	echo "CONFIG_INITRAMFS_SOURCE=\"$(PWD)/$(BR2_PACKAGE_LINUX_INITRAMFS)\"" >> \
++		$(LINUX26_DIR)/.config
++	echo "CONFIG_INITRAMFS_ROOT_UID=0" >> $(LINUX26_DIR)/.config
++	echo "CONFIG_INITRAMFS_ROOT_GID=0" >> $(LINUX26_DIR)/.config
++endif
+ 	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) oldconfig
+ 	touch $@
+ 
 -- 
-1.6.2
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 198 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090727/462dddf0/attachment.pgp>
+1.6.3.1
