@@ -1,97 +1,49 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 27 Jul 2009 21:23:34 +0200
-Subject: [Buildroot] [git commit] ctorrent: new package
-Message-ID: <20090727193324.361C977820@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 27 Jul 2009 21:50:59 +0200
+Subject: [Buildroot] xlib libXt build problem
+In-Reply-To: <8109ECD0-3E25-4BAD-B4D7-DE97BEEBE007@earthlink.net>
+References: <8109ECD0-3E25-4BAD-B4D7-DE97BEEBE007@earthlink.net>
+Message-ID: <20090727215059.2aa274de@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Le Mon, 27 Jul 2009 13:30:44 -0400,
+Steve Bennett <sablists@earthlink.net> a ?crit :
 
-commit: http://git.buildroot.net/buildroot/commit/?id=52dbe0711956ae5cd8e1d9f9776511db44266436
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> I'm making an educated guess that the patch effectively overrides
+> the XLIB_LIBXT_CONF_ENV setting (or something else isn't including
+> that setting), but I'm not sure what the right fix for this is.   A
+> brute force fix would be something like changing the patch to read:
+> 
+> 	HOST_CC=gcc -I$(STAGING_DIR)/usr/include
+> 
+> ...but is that the correct approach here?  And why hasn't anything  
+> regarding this issue come up before?  It seems odd that nobody else  
+> is running into this.
 
-Closes #243.
+I'd say the issue is that makestrs is a program compiled for the host,
+and the way we compile it in Buildroot assumes that the development
+headers for X11 are installed on your host (through your distribution).
+On my Ubuntu system, X11/Xos.h is part of the x11proto-core-dev package.
 
-CTorrent is a BitTorrent client implemented in C++
-to be lightweight and quick.
-This is the enhanced version from
-http://www.rahul.net/dholmes/ctorrent/
+On my system, this package is installed, so when makestrs gets
+compiled, the host gcc compiler uses /usr/include/X11/Xos.h during the
+compilation.
 
-[Peter: minor kconfig tweaks]
+When building some packages requires things from the host, we have
+currently two different approaches in Buildroot:
+ * for some dependencies, we rebuild it, and install it in $(HOST_DIR)
+ * for some other dependencies, we assume that it is available on the
+   host
 
-Signed-off-by: Olaf Rempel <razzor@kopf-tisch.de>
-Tested-by: Will Newton <will.newton@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES                      |    1 +
- package/Config.in            |    1 +
- package/ctorrent/Config.in   |   13 +++++++++++++
- package/ctorrent/ctorrent.mk |   11 +++++++++++
- 4 files changed, 26 insertions(+), 0 deletions(-)
- create mode 100644 package/ctorrent/Config.in
- create mode 100644 package/ctorrent/ctorrent.mk
+Sincerly,
 
-diff --git a/CHANGES b/CHANGES
-index 0d6ac97..010aa5a 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -15,6 +15,7 @@
- 	#83: liblockfile fails to compile due to eaccess redefinition
- 	#163: Xtensa architecture port
- 	#241: device mapper + lvm2: build together
-+	#243: ctorrent: new package
- 	#271: Library 'libgcc_s.so.1' not installed in search path
- 	#287: New package libnl
- 	#331: Update MPlayer to version 1.0rc2
-diff --git a/package/Config.in b/package/Config.in
-index 6cc825d..bd15b62 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -135,6 +135,7 @@ endif
- source "package/bind/Config.in"
- source "package/bmon/Config.in"
- source "package/bridge-utils/Config.in"
-+source "package/ctorrent/Config.in"
- if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
- source "package/dhcp/Config.in"
- endif
-diff --git a/package/ctorrent/Config.in b/package/ctorrent/Config.in
-new file mode 100644
-index 0000000..5e26c12
---- /dev/null
-+++ b/package/ctorrent/Config.in
-@@ -0,0 +1,13 @@
-+comment "ctorrent requires a toolchain with C++ support enabled"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+
-+config BR2_PACKAGE_CTORRENT
-+	bool "ctorrent"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	help
-+	  CTorrent is a BitTorrent client implemented in C++
-+	  to be lightweight and quick.
-+	  http://ctorrent.sourceforge.net/
-+
-+	  This is the enhanced version from
-+	  http://www.rahul.net/dholmes/ctorrent/
-diff --git a/package/ctorrent/ctorrent.mk b/package/ctorrent/ctorrent.mk
-new file mode 100644
-index 0000000..2560881
---- /dev/null
-+++ b/package/ctorrent/ctorrent.mk
-@@ -0,0 +1,11 @@
-+#############################################################
-+#
-+# enhanced ctorrent
-+#
-+#############################################################
-+CTORRENT_VERSION:=dnh3.3.2
-+CTORRENT_SOURCE:=ctorrent-$(CTORRENT_VERSION).tar.gz
-+CTORRENT_SITE:=http://www.rahul.net/dholmes/ctorrent/
-+CTORRENT_CONF_OPT:=--with-ssl=no
-+
-+$(eval $(call AUTOTARGETS,package,ctorrent))
+Thomas
 -- 
-1.6.3.3
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
