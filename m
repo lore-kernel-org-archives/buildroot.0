@@ -1,22 +1,30 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 27 Jul 2009 16:33:38 +0200
-Subject: [Buildroot] [PATCH] xf86-video-intel: Fixed cross-compile patch
-	to apply to	version 2.4.2
-In-Reply-To: <20090727132233.GA28179@kfk4ever.com> (Maurice van der Pot's
-	message of "Mon\, 27 Jul 2009 15\:22\:33 +0200")
-References: <20090727132233.GA28179@kfk4ever.com>
-Message-ID: <87fxcinqkd.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 27 Jul 2009 14:36:15 +0000 (UTC)
+Subject: [Buildroot] [Bug 451] [PATCH] Upgrade from unmaintained
+ dosfstools-2.11 to dosfstools-3.0.3
+In-Reply-To: <bug-451-163@https.bugs.busybox.net/>
+References: <bug-451-163@https.bugs.busybox.net/>
+Message-ID: <20090727143615.43B49777EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Maurice" == Maurice van der Pot <griffon26@kfk4ever.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=451
 
- Maurice> Signed-off-by: Maurice van der Pot <griffon26@kfk4ever.com>
 
-Thanks, committed.
+
+
+
+--- Comment #1 from Will Newton <will.newton@gmail.com>  2009-07-27 14:36:14 UTC ---
+
+Works for me after fixing up the trivial conflict in package/Config.in.
+
+Tested-by: Will Newton <will.newton@gmail.com>
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
