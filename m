@@ -1,38 +1,69 @@
 From: Daniel Mack <daniel@caiaq.de>
-Date: Mon, 27 Jul 2009 18:07:49 +0200
-Subject: [Buildroot] [PATCH 1/2] linux: fix initramfs related config
-	adaptions
-Message-ID: <1248710870-7709-1-git-send-email-daniel@caiaq.de>
+Date: Mon, 27 Jul 2009 18:07:50 +0200
+Subject: [Buildroot] [PATCH 2/2] linux: make modules_install conditional
+In-Reply-To: <1248710870-7709-1-git-send-email-daniel@caiaq.de>
+References: <1248710870-7709-1-git-send-email-daniel@caiaq.de>
+Message-ID: <1248710870-7709-2-git-send-email-daniel@caiaq.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When fiddling with the kernel .config settings manually, make sure the
-dependencies for initramfs are met. Without that, the kernel's
-'make oldconfig' will silently remove the newly added lines again.
+For very small initramfs systems, the kernel modules installation should
+be conditional so it can be switched off on demand. This new value
+defaults to 'y', so it shouldn't break any exisiting config.
 
 Signed-off-by: Daniel Mack <daniel@caiaq.de>
 ---
- target/linux/Makefile.in.advanced |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ Makefile                        |    2 +-
+ target/linux/Config.in          |    6 ++++++
+ target/linux/Config.in.advanced |    5 +++++
+ 3 files changed, 12 insertions(+), 1 deletions(-)
 
-diff --git a/target/linux/Makefile.in.advanced b/target/linux/Makefile.in.advanced
-index 47a1f4e..d176edd 100644
---- a/target/linux/Makefile.in.advanced
-+++ b/target/linux/Makefile.in.advanced
-@@ -361,6 +361,11 @@ endif
- 	$(SED) '/CONFIG_INITRAMFS_SOURCE/d' $(LINUX26_DIR)/.config
- 	$(SED) '/INITRAMFS_ROOT_.ID/d' $(LINUX26_DIR)/.config
- ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
-+	echo "CONFIG_BLK_DEV_INITRD=y" >> $(LINUX26_DIR)/.config
-+	echo "CONFIG_INITRAMFS_COMPRESSION_GZIP=y" >> $(LINUX26_DIR)/.config
-+	echo "# CONFIG_INITRAMFS_COMPRESSION_NONE is not set" >> $(LINUX26_DIR)/.config
-+	echo "# CONFIG_INITRAMFS_COMPRESSION_BZIP2 is not set" >> $(LINUX26_DIR)/.config
-+	echo "# CONFIG_INITRAMFS_COMPRESSION_LZMA is not set" >> $(LINUX26_DIR)/.config
- 	echo "CONFIG_INITRAMFS_SOURCE=\"$(INITRAMFS_TARGET)\"" >> \
- 		$(LINUX26_DIR)/.config
- 	echo "CONFIG_INITRAMFS_ROOT_UID=0" >> $(LINUX26_DIR)/.config
+diff --git a/Makefile b/Makefile
+index dbeede5..65bf853 100644
+--- a/Makefile
++++ b/Makefile
+@@ -256,7 +256,7 @@ else
+ include toolchain/*/*.mk
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LINUX),y)
++ifeq ($(BR2_PACKAGE_LINUX_MODULES_INSTALL),y)
+ TARGETS+=linux26-modules
+ endif
+ 
+diff --git a/target/linux/Config.in b/target/linux/Config.in
+index c79fca2..3cde3e0 100644
+--- a/target/linux/Config.in
++++ b/target/linux/Config.in
+@@ -30,4 +30,10 @@ config BR2_PACKAGE_LINUX_FORMAT
+ 	  If the above setting is empty, you can change the default
+ 	  board-imposed value by passing LINUX26_FORMAT=<string> to
+ 	  make.
++
++config BR2_PACKAGE_LINUX_MODULES_INSTALL
++	bool
++	depends on BR2_PACKAGE_LINUX
++	default y
++
+ endif
+diff --git a/target/linux/Config.in.advanced b/target/linux/Config.in.advanced
+index 3a171b5..6574670 100644
+--- a/target/linux/Config.in.advanced
++++ b/target/linux/Config.in.advanced
+@@ -360,6 +360,11 @@ config BR2_LINUX26_VERSION
+ 	default "$(BR2_KERNEL_CURRENT_VERSION)"if				BR2_LINUX_2_6_STABLE
+ 	default "$(BR2_CUSTOM_LINUX26_VERSION)" if				BR2_LINUX26_CUSTOM
+ 
++config BR2_PACKAGE_LINUX_MODULES_INSTALL
++	bool "Install Linux kernel modules to target"
++	depends on BR2_PACKAGE_LINUX
++	default y
++
+ menu "Linux Kernel Configuration"
+ 
+ choice
 -- 
 1.6.3.1
