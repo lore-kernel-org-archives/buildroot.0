@@ -1,40 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 27 Jul 2009 17:34:39 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	kconfig-update
-In-Reply-To: <cover.1248703870.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Mon\,
-	27 Jul 2009 16\:11\:09 +0200")
-References: <cover.1248703870.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <8763dennqo.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 27 Jul 2009 15:44:41 +0000 (UTC)
+Subject: [Buildroot] [Bug 457] e2fsprogs link problem
+In-Reply-To: <bug-457-163@https.bugs.busybox.net/>
+References: <bug-457-163@https.bugs.busybox.net/>
+Message-ID: <20090727154441.520F5777EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=457
 
- Thomas> The following changes since commit 660952565ed0c76b4a2e345bb79fd553a4f53d77:
- Thomas>   Thomas Petazzoni (1):
- Thomas>         Update CHANGES with recent improvements
 
- Thomas> are available in the git repository at:
+Will Newton <will.newton@gmail.com> changed:
 
- Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot kconfig-update
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+ Attachment #479 is|0                           |1
+           obsolete|                            |
 
- Thomas> Alper Yildirim (2):
- Thomas>       config: Update package/config to Kconfig 2.6.30
- Thomas>       config: Add support for xconfig
 
- Thomas> Thomas Petazzoni (2):
- Thomas>       xconfig: Change titlebar to Buildroot Configuration
- Thomas>       xconfig: Save the configuration properly in qconf
 
-Pulled and pushed, thanks!
 
-A notice about make xconfig in 'make help' and the documentation would
-be good..
+--- Comment #4 from Will Newton <will.newton@gmail.com>  2009-07-27 15:44:40 UTC ---
+(From update of attachment 479)
+
+This patch is not relevant for this package.
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
