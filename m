@@ -1,36 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Jul 2009 15:07:17 +0200
-Subject: [Buildroot] [PATCH 3/4] qt: fix build with external toolchain
+Date: Mon, 27 Jul 2009 15:07:18 +0200
+Subject: [Buildroot] [PATCH 4/4] qt: the GUI module requires the network
+	module to work properly
 In-Reply-To: <cover.1248700034.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1248700034.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <072d89a883c19dc2f69742c65eae7b4cf81b1f63.1248700034.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <314cdcbd2541cae9fb1709831ec67e36508ac793.1248700034.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Set QMAKE_LFLAGS so that at link time --sysroot is passed to the
-linker, and Qt finds the external libraries. This fixes Qt build when
-zlib or other libraries are external, instead of using Qt's internal
-copy.
+Running a simple Qt GUI application on an embedded systems without
+QtNetwork installed doesn't work, the dynamic loader complains that
+QtNetwork is not present.
+
+While I'm not a Qt build system expert, it looks like this dependency
+really exists, since the src/gui/gui.pri file in Qt sources contains
+the following line:
+
+embedded: QT += network
+
+Which would mean that the GUI module needs the network module to
+operate properly. And a few files in src/gui/embedded/ also include
+some QtNetwork stuff. This isn't really surprising since the Qt QWS
+mechanism uses communication between processes through a Unix socket.
+
+Therefore, we add a dependency on the network module in the GUI
+module. We use a 'select' dependency here, since it's might not be
+really obvious to the user that the GUI module requires the network
+one.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qt/qt.mk |    1 +
+ package/qt/Config.in |    1 +
  1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index e07457e..ea59b07 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -448,6 +448,7 @@ endif
- 	$(call QT_QMAKE_SET,STRIP,$(TARGET_STRIP))
- 	$(call QT_QMAKE_SET,CFLAGS,$(TARGET_CFLAGS))
- 	$(call QT_QMAKE_SET,CXXFLAGS,$(TARGET_CXXFLAGS))
-+	$(call QT_QMAKE_SET,LFLAGS,$(TARGET_LDFLAGS))
- 	-[ -f $(QT_QCONFIG_FILE) ] && cp $(QT_QCONFIG_FILE) \
- 		$(QT_TARGET_DIR)/$(QT_QCONFIG_FILE_LOCATION)
- # Qt doesn't use PKG_CONFIG, it searches for pkg-config with 'which'.
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index 59c691f..b7fe0f9 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -77,6 +77,7 @@ config BR2_PACKAGE_QT_QT3SUPPORT
+ 
+ config BR2_PACKAGE_QT_GUI_MODULE
+ 	bool "Gui Module"
++	select BR2_PACKAGE_QT_NETWORK
+ 	default y
+ 	help
+ 	  Turns on support to Gui applications. If your board don't have
 -- 
 1.6.0.4
