@@ -1,27 +1,30 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 27 Jul 2009 14:47:36 +0000 (UTC)
-Subject: [Buildroot] [Bug 451] [PATCH] Upgrade from unmaintained
- dosfstools-2.11 to dosfstools-3.0.3
-In-Reply-To: <bug-451-163@https.bugs.busybox.net/>
-References: <bug-451-163@https.bugs.busybox.net/>
-Message-ID: <20090727144736.2BB98777EA@busybox.osuosl.org>
+Date: Mon, 27 Jul 2009 15:17:32 +0000 (UTC)
+Subject: [Buildroot] [Bug 331] Update MPlayer to version 1.0rc2
+In-Reply-To: <bug-331-163@https.bugs.busybox.net/>
+References: <bug-331-163@https.bugs.busybox.net/>
+Message-ID: <20090727151733.33260777EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=451
+https://bugs.busybox.net/show_bug.cgi?id=331
+
+
+Peter Korsgaard <jacmet@uclibc.org> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|ASSIGNED                    |RESOLVED
+         Resolution|                            |FIXED
 
 
 
 
-
---- Comment #2 from Mike <mac@mcrowe.com>  2009-07-27 14:47:35 UTC ---
-Thanks for testing it.
-
-I later noticed that this upgrade changes the license from GPLv2 to GPLv3 just
-in case that is important to anyone.
+--- Comment #7 from Peter Korsgaard <jacmet@uclibc.org>  2009-07-27 15:17:32 UTC ---
+Thanks, committed!
 
 
 -- 
