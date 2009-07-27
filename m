@@ -1,32 +1,26 @@
-From: Marcelo Martins Maia do Couto <marcelo@marcelocouto.net>
-Date: Mon, 27 Jul 2009 09:26:15 -0300
+From: Daniel Mack <daniel@caiaq.de>
+Date: Mon, 27 Jul 2009 14:38:20 +0200
 Subject: [Buildroot] [PATCH] Add support for custom post-build script
-In-Reply-To: <87vdlgsbvy.fsf@macbook.be.48ers.dk>
-References: <1247086018-18816-1-git-send-email-daniel@caiaq.de> 
+In-Reply-To: <877hxupbfo.fsf@macbook.be.48ers.dk>
+References: <1247086018-18816-1-git-send-email-daniel@caiaq.de>
 	<87vdlgsbvy.fsf@macbook.be.48ers.dk>
-Message-ID: <1802cf090907270526i6537a082rc900637110652b4a@mail.gmail.com>
+	<20090727115838.GS13236@buzzloop.caiaq.de>
+	<877hxupbfo.fsf@macbook.be.48ers.dk>
+Message-ID: <20090727123820.GY19257@buzzloop.caiaq.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Mon, Jul 27, 2009 at 02:17:31PM +0200, Peter Korsgaard wrote:
+> Thanks! One comment:
+> 
+>  Daniel> +      find that a certain package generates wrong or unneeded files, you
+>  Daniel> +      should rather fix than package than shipping your way around it
+>  Daniel> +      with a cleanup script.</p>
+> 
+> I think '.. than working around it with a cleanup script.' sounds a
+> bit better - OK with you?
 
-   I'm engineer and would like to learn how i use buildroot and uclinux
-together... I searched in google and a lot of media but i can't found... And
-you have problems in compile buildroot in x86_64 systems? In my slackware64
-can't build this...
-
-   Thanks for any reply.
-
-Eng. Marcelo Martins Maia do Couto
-Engenheiro de Desenvolvimento
-Coordenador de TI
-Professor de Sistemas Operacionais/Redes/Hardware
-E-mail: marcelo.m.maia at gmail.com
-Site: www.marcelocouto.net
-Skype: marcelo_m_maia
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090727/31301ece/attachment.htm>
+Of course, go ahead :)
