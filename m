@@ -1,26 +1,48 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 27 Jul 2009 14:48:54 +0200
-Subject: [Buildroot] [PATCH] Add support for custom post-build script
-In-Reply-To: <20090727115838.GS13236@buzzloop.caiaq.de> (Daniel Mack's message
-	of "Mon\, 27 Jul 2009 13\:58\:38 +0200")
-References: <1247086018-18816-1-git-send-email-daniel@caiaq.de>
-	<87vdlgsbvy.fsf@macbook.be.48ers.dk>
-	<20090727115838.GS13236@buzzloop.caiaq.de>
-Message-ID: <87zlaqnvex.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 27 Jul 2009 15:07:14 +0200
+Subject: [Buildroot] [pull request] Pull request for branch qt
+Message-ID: <cover.1248700034.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Daniel" == Daniel Mack <daniel@caiaq.de> writes:
+The following changes since commit 660952565ed0c76b4a2e345bb79fd553a4f53d77:
+  Thomas Petazzoni (1):
+        Update CHANGES with recent improvements
 
- >> It would be good to have a note about it in the documentation - Could
- >> I get you to add a short note about it in docs/buildroot.html?
+are available in the git repository at:
 
- Daniel> Sure, see below.
+  git://git.busybox.net/~tpetazzoni/git/buildroot qt
 
-Thanks, committed.
+Thomas Petazzoni (4):
+      qt: rename qtopia4 to qt
+      qt: put the Qt options into a submenu
+      qt: fix build with external toolchain
+      qt: the GUI module requires the network module to work properly
 
+ package/Config.in                                  |    2 +-
+ package/qt/Config.gfx.in                           |   19 +
+ package/{qtopia4 => qt}/Config.in                  |  167 +++---
+ package/qt/Config.mouse.in                         |   24 +
+ package/{qtopia4 => qt}/Config.sql.in              |   18 +-
+ .../qt-4.5.2-fix-qt-zlib-build.patch}              |    0
+ package/qt/qt.mk                                   |  583 ++++++++++++++++++++
+ package/qtopia4/Config.gfx.in                      |   19 -
+ package/qtopia4/Config.mouse.in                    |   24 -
+ package/qtopia4/qtopia4.mk                         |  582 -------------------
+ 10 files changed, 720 insertions(+), 718 deletions(-)
+ create mode 100644 package/qt/Config.gfx.in
+ rename package/{qtopia4 => qt}/Config.in (62%)
+ create mode 100644 package/qt/Config.mouse.in
+ rename package/{qtopia4 => qt}/Config.sql.in (60%)
+ rename package/{qtopia4/qtopia-4.5.2-fix-qt-zlib-build.patch => qt/qt-4.5.2-fix-qt-zlib-build.patch} (100%)
+ create mode 100644 package/qt/qt.mk
+ delete mode 100644 package/qtopia4/Config.gfx.in
+ delete mode 100644 package/qtopia4/Config.mouse.in
+ delete mode 100644 package/qtopia4/qtopia4.mk
+
+Thanks,
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni
