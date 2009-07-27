@@ -1,33 +1,70 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 27 Jul 2009 22:10:28 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	xconfig-documentation
-In-Reply-To: <cover.1248711019.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Mon\,
-	27 Jul 2009 18\:10\:20 +0200")
-References: <cover.1248711019.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87y6q9nayz.fsf@macbook.be.48ers.dk>
+From: Steve Bennett <sablists@earthlink.net>
+Date: Mon, 27 Jul 2009 16:18:03 -0400
+Subject: [Buildroot] xlib libXt build problem
+In-Reply-To: <20090727215059.2aa274de@surf>
+References: <8109ECD0-3E25-4BAD-B4D7-DE97BEEBE007@earthlink.net>
+	<20090727215059.2aa274de@surf>
+Message-ID: <E7CDA87B-E069-4814-AD01-9D9D70DD7122@earthlink.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Thanks, our replies crossed.   But using the actual package makes  
+sense since I'm building on Ubuntu myself, so I've switched to that now.
 
- Thomas> The following changes since commit f26acf61ebf73ad0bfe276fcc9396fd26bb0aad6:
- Thomas>   Mike Crowe (1):
- Thomas>         package: replace mkdosfs with dosfstools
+Is there any documentation of any other dependencies assumed to be on  
+the host?  I know some of the packages I needed just to get started  
+(libncurses5-dev, g++, bison, flex, gettext, nasm...), but each one  
+has been a research project, although none needed as much research as  
+this one.
 
- Thomas> are available in the git repository at:
+-->Steve Bennett
 
- Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot xconfig-documentation
 
- Thomas> Thomas Petazzoni (2):
- Thomas>       Makefile: add the xconfig target to the help of the main Makefile
- Thomas>       documentation: mention the new xconfig interface
+On Jul 27, 2009, at 3:50 PM, Thomas Petazzoni wrote:
 
-Thanks, pulled and pushed.
-
--- 
-Bye, Peter Korsgaard
+> Le Mon, 27 Jul 2009 13:30:44 -0400,
+> Steve Bennett <sablists@earthlink.net> a ?crit :
+>
+>> I'm making an educated guess that the patch effectively overrides
+>> the XLIB_LIBXT_CONF_ENV setting (or something else isn't including
+>> that setting), but I'm not sure what the right fix for this is.   A
+>> brute force fix would be something like changing the patch to read:
+>>
+>> 	HOST_CC=gcc -I$(STAGING_DIR)/usr/include
+>>
+>> ...but is that the correct approach here?  And why hasn't anything
+>> regarding this issue come up before?  It seems odd that nobody else
+>> is running into this.
+>
+> I'd say the issue is that makestrs is a program compiled for the host,
+> and the way we compile it in Buildroot assumes that the development
+> headers for X11 are installed on your host (through your  
+> distribution).
+> On my Ubuntu system, X11/Xos.h is part of the x11proto-core-dev  
+> package.
+>
+> On my system, this package is installed, so when makestrs gets
+> compiled, the host gcc compiler uses /usr/include/X11/Xos.h during the
+> compilation.
+>
+> When building some packages requires things from the host, we have
+> currently two different approaches in Buildroot:
+>  * for some dependencies, we rebuild it, and install it in $(HOST_DIR)
+>  * for some other dependencies, we assume that it is available on the
+>    host
+>
+> Sincerly,
+>
+> Thomas
+> -- 
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers and embedded Linux development,
+> consulting, training and support.
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
