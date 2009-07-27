@@ -1,28 +1,80 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 27 Jul 2009 15:24:49 +0200
-Subject: [Buildroot] [pull request] Pull request for branch qt
-In-Reply-To: <cover.1248700034.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Mon\,
-	27 Jul 2009 15\:07\:14 +0200")
-References: <cover.1248700034.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87skgintr2.fsf@macbook.be.48ers.dk>
+From: Maurice van der Pot <griffon26@kfk4ever.com>
+Date: Mon, 27 Jul 2009 15:22:33 +0200
+Subject: [Buildroot] [PATCH] xf86-video-intel: Fixed cross-compile patch to
+	apply to	version 2.4.2
+Message-ID: <20090727132233.GA28179@kfk4ever.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Signed-off-by: Maurice van der Pot <griffon26@kfk4ever.com>
+---
+ ...iver_xf86-video-intel-2.4.2-cross-compile.patch |   42 +++++++++-----------
+ 1 files changed, 19 insertions(+), 23 deletions(-)
 
- Thomas> The following changes since commit 660952565ed0c76b4a2e345bb79fd553a4f53d77:
- Thomas>   Thomas Petazzoni (1):
- Thomas>         Update CHANGES with recent improvements
-
- Thomas> are available in the git repository at:
-
- Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot qt
-
-Pulled and pushed - Thanks!
-
+diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel-2.4.2-cross-compile.patch b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel-2.4.2-cross-compile.patch
+index ff476bd..ecf1571 100644
+--- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel-2.4.2-cross-compile.patch
++++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel-2.4.2-cross-compile.patch
+@@ -1,30 +1,26 @@
+---- xf86-video-intel-2.4.2/configure.ac.orig	2007-06-10 20:59:27.000000000 +0200
+-+++ xf86-video-intel-2.4.2/configure.ac	2007-06-10 20:59:50.000000000 +0200
+-@@ -92,13 +92,14 @@ AC_HEADER_STDC
++diff -ruN xf86-video-intel-2.4.2/configure.ac xf86-video-intel-2.4.2-patched/configure.ac
++--- xf86-video-intel-2.4.2/configure.ac	2008-08-26 03:28:31.000000000 +0200
+++++ xf86-video-intel-2.4.2-patched/configure.ac	2009-07-27 13:39:49.000000000 +0200
++@@ -91,6 +91,7 @@
++ # Checks for header files.
++ AC_HEADER_STDC
+  
+- AC_MSG_CHECKING([whether to include DRI support])
+- if test x$DRI = xauto; then
+-+ 	if test "$cross_compiling" = "no" ; then
+++if test "$cross_compiling" = "no" ; then
++ if test x$DRI != xno; then
+          AC_CHECK_FILE([${sdkdir}/dri.h],
+                        [have_dri_h="yes"], [have_dri_h="no"])
+-         AC_CHECK_FILE([${sdkdir}/sarea.h],
+-                       [have_sarea_h="yes"], [have_sarea_h="no"])
+-         AC_CHECK_FILE([${sdkdir}/dristruct.h],
+-                       [have_dristruct_h="yes"], [have_dristruct_h="no"])
+--	AC_CHECK_FILE([${sdkdir}/damage.h],
+-+		AC_CHECK_FILE([${sdkdir}/damage.h],
+-                       [have_damage_h="yes"], [have_damage_h="no"])
+- 
+-         if test "$have_dri_h" = yes -a \
+-@@ -108,6 +109,12 @@ if test x$DRI = xauto; then
+-         else
++@@ -111,6 +112,14 @@
+                  DRI="no"
+          fi
+-+ 	else
+-+ 		have_dri_h="yes"
+-+ 		have_sarea_h="yes"
+-+		have_dristruct_h="yes"
+-+		DRI="yes"
+-+ 	fi
+  fi
+++else
+++if test x$DRI != xno; then
+++	have_dri_h="yes"
+++	have_sarea_h="yes"
+++	have_dristruct_h="yes"
+++	DRI="yes"
+++fi
+++fi
+  AC_MSG_RESULT([$DRI])
++ 
++ save_CFLAGS="$CFLAGS"
 -- 
-Bye, Peter Korsgaard
+1.6.2
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 198 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090727/462dddf0/attachment.pgp>
