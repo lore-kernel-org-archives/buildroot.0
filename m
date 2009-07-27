@@ -1,39 +1,32 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 27 Jul 2009 12:19:41 +0000 (UTC)
-Subject: [Buildroot] [Bug 331] Update MPlayer to version 1.0rc2
-In-Reply-To: <bug-331-163@https.bugs.busybox.net/>
-References: <bug-331-163@https.bugs.busybox.net/>
-Message-ID: <20090727121941.9805E7780D@busybox.osuosl.org>
+From: Marcelo Martins Maia do Couto <marcelo@marcelocouto.net>
+Date: Mon, 27 Jul 2009 09:26:15 -0300
+Subject: [Buildroot] [PATCH] Add support for custom post-build script
+In-Reply-To: <87vdlgsbvy.fsf@macbook.be.48ers.dk>
+References: <1247086018-18816-1-git-send-email-daniel@caiaq.de> 
+	<87vdlgsbvy.fsf@macbook.be.48ers.dk>
+Message-ID: <1802cf090907270526i6537a082rc900637110652b4a@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=331
+Hi,
 
+   I'm engineer and would like to learn how i use buildroot and uclinux
+together... I searched in google and a lot of media but i can't found... And
+you have problems in compile buildroot in x86_64 systems? In my slackware64
+can't build this...
 
-Will Newton <will.newton@gmail.com> changed:
+   Thanks for any reply.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
- Attachment #321 is|0                           |1
-           obsolete|                            |
-
-
-
-
---- Comment #6 from Will Newton <will.newton@gmail.com>  2009-07-27 12:19:40 UTC ---
-Created an attachment (id=501)
- --> (https://bugs.busybox.net/attachment.cgi?id=501)
-Update mplayer to 1.0rc2
-
-
-This patch updates mplayer to version 1.0rc2. It removes patches that have been
-applied upstream and updates the others. I can confirm this builds ok on ARM.
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Eng. Marcelo Martins Maia do Couto
+Engenheiro de Desenvolvimento
+Coordenador de TI
+Professor de Sistemas Operacionais/Redes/Hardware
+E-mail: marcelo.m.maia at gmail.com
+Site: www.marcelocouto.net
+Skype: marcelo_m_maia
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090727/31301ece/attachment.htm>
