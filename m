@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 27 Jul 2009 22:09:10 +0200
-Subject: [Buildroot] [git commit] Makefile: add the xconfig target to the
-	help of the main Makefile
-Message-ID: <20090727201013.8246277820@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] documentation: mention the new xconfig
+	interface
+Message-ID: <20090727201013.B94B7771EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,25 +10,76 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7e7576c3d8687a779882d17df9b12ce8486c1ec6
+commit: http://git.buildroot.net/buildroot/commit/?id=d9a9501771d0aeb22967adeec9e0ac232e1a003d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ CHANGES             |    2 ++
+ docs/buildroot.html |   24 ++++++++++++++++++------
+ 2 files changed, 20 insertions(+), 6 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index e61f995..182853c 100644
---- a/Makefile
-+++ b/Makefile
-@@ -561,6 +561,7 @@ help:
- 	@echo
- 	@echo 'Configuration:'
- 	@echo '  menuconfig             - interactive curses-based configurator'
-+	@echo '  xconfig		- interactive Qt-based configurator'
- 	@echo '  oldconfig              - resolve any unresolved symbols in .config'
- 	@echo '  configured             - make {uclibc/busybox/linux26}-config'
- 	@echo '  saveconfig             - save current configuration under local/<project>'
+diff --git a/CHANGES b/CHANGES
+index 0d6ac97..ba3da53 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -10,6 +10,8 @@
+ 	removed mandatory dependency on useless libraries such as
+ 	libXt or libXaw.
+ 
++	New QT-based configurator, usable using 'make xconfig'.
++
+ 	Issues resolved (http://bugs.uclibc.org):
+ 
+ 	#83: liblockfile fails to compile due to eaccess redefinition
+diff --git a/docs/buildroot.html b/docs/buildroot.html
+index b49208c..8cd705d 100644
+--- a/docs/buildroot.html
++++ b/docs/buildroot.html
+@@ -155,6 +155,17 @@
+  $ make menuconfig
+ </pre>
+ 
++<p>to run the curses-based configurator, or</p>
++
++<pre>
++ $ make xconfig
++</pre>
++
++    <p>to run the Qt3-based configurator. On Debian-like systems, the
++    <code>libncurses5-dev</code> package is required to use the
++    <i>menuconfig</i> interface, and the <code>libqt3-mt-dev</code> is
++    required to use the <i>xconfig</i> interface.</p>
++
+     <p>For each entry of the configuration tool, you can find associated help
+     that describes the purpose of the entry. </p>
+ 
+@@ -219,9 +230,9 @@
+     <h3><a name="offline_builds" id="offline_builds"></a>
+     Offline builds</h3>
+ 
+-    <p>If you intend to do an offline-build and just want to download all
+-    sources that you previously selected in &quot;make menuconfig&quot; then
+-    issue:</p>
++    <p>If you intend to do an offline-build and just want to download
++    all sources that you previously selected in the configurator
++    (<i>menuconfig</i> or <i>xconfig</i>) then issue:</p>
+ <pre>
+  $ make source
+ </pre>
+@@ -340,9 +351,10 @@ $ make me&lt;TAB&gt;
+       is made. So simply rebuilding the image by running
+       make should propagate any new changes to the image. </li>
+ 
+-      <li>When configuring the build system, using <code>make menuconfig</code>,
+-      you can specify the contents of the /etc/hostname and /etc/issue
+-      (the welcome banner) in the <code>PROJECT</code> section</li>
++      <li>When configuring the build system, using <code>make
++      menuconfig</code> or <code>make xconfig</code>, you can specify
++      the contents of the /etc/hostname and /etc/issue (the welcome
++      banner) in the <code>PROJECT</code> section</li>
+     </ul>
+ 
+     <h2><a name="custom_busybox" id="custom_busybox"></a>Customizing the
 -- 
 1.6.3.3
