@@ -1,39 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Jul 2009 11:08:17 +0200
-Subject: [Buildroot] [PATCH 1/1] Update CHANGES with recent improvements
-In-Reply-To: <cover.1248685694.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1248685694.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <5139e9e41281e04d7644bec98305654baa9749d9.1248685694.git.thomas.petazzoni@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 27 Jul 2009 09:10:36 +0000 (UTC)
+Subject: [Buildroot] [Bug 89] changing the default string for GNU target
+ suffix does not work
+In-Reply-To: <bug-89-163@https.bugs.busybox.net/>
+References: <bug-89-163@https.bugs.busybox.net/>
+Message-ID: <20090727091036.86BA1777DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mention X.org and external toolchain improvements in the CHANGES file.
+https://bugs.busybox.net/show_bug.cgi?id=89
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- CHANGES |    8 ++++++++
- 1 files changed, 8 insertions(+), 0 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 3b97df9..aa66ca8 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,5 +1,13 @@
- 2009.08, Not yet released:
- 
-+	Improvement of external toolchain support: the configuration
-+	given to Buildroot is not verified against the real toolchain
-+	configuration.
-+
-+	Cleanup X.org support: clarified configuration options, and
-+	removed mandatory dependency on useless libraries such as
-+	libXt or libXaw.
-+
- 	Issues resolved (http://bugs.uclibc.org):
- 
- 	#83: liblockfile fails to compile due to eaccess redefinition
+
+
+
+--- Comment #1 from Will Newton <will.newton@gmail.com>  2009-07-27 09:10:35 UTC ---
+
+I'm not sure if this is a bug. The valid options here are defined by the gcc
+configure system and elf-uclibc is not a valid way to configure gcc. uClibc
+does not support non-Linux systems in any case. 
+
+The help for this option has a reference to hurd which could be removed
+however.
+
+
 -- 
-1.6.0.4
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
