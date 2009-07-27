@@ -1,26 +1,40 @@
-From: Daniel Mack <daniel@caiaq.de>
-Date: Mon, 27 Jul 2009 14:38:20 +0200
-Subject: [Buildroot] [PATCH] Add support for custom post-build script
-In-Reply-To: <877hxupbfo.fsf@macbook.be.48ers.dk>
-References: <1247086018-18816-1-git-send-email-daniel@caiaq.de>
-	<87vdlgsbvy.fsf@macbook.be.48ers.dk>
-	<20090727115838.GS13236@buzzloop.caiaq.de>
-	<877hxupbfo.fsf@macbook.be.48ers.dk>
-Message-ID: <20090727123820.GY19257@buzzloop.caiaq.de>
+From: Guillaume Dargaud <dargaud@lpsc.in2p3.fr>
+Date: Mon, 27 Jul 2009 14:42:34 +0200
+Subject: [Buildroot] Incomplete boot
+Message-ID: <3EE4FC29CAED43DC83B59C2DFD378777@LPSC0173W>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jul 27, 2009 at 02:17:31PM +0200, Peter Korsgaard wrote:
-> Thanks! One comment:
-> 
->  Daniel> +      find that a certain package generates wrong or unneeded files, you
->  Daniel> +      should rather fix than package than shipping your way around it
->  Daniel> +      with a cleanup script.</p>
-> 
-> I think '.. than working around it with a cleanup script.' sounds a
-> bit better - OK with you?
+Hello all,
 
-Of course, go ahead :)
+[PPC/Buildroot/busybox/uClibc setup]
+
+Not sure where to post this, but I have a bunch of embedded cards and 
+sometimes the boot doesn't complete (some of the /etc/init.d/ scripts are 
+not launched). I'm trying to figure out the cause as it seems completely 
+random. The only thing different in the logs is the following:
+
+Jul 27 12:00:08 genepi19 user.notice kernel: klogd: exiting
+Jul 27 12:00:09 genepi19 syslog.info syslogd exiting
+
+
+NFS is not completely reliable. I see a whole bunch of the following 
+messages but tracking the cause a couple months back proved fruitless:
+
+Jul 27 12:01:40 genepi19 user.notice kernel: [   77.765353] nfs: server 
+192.168.1.185 not responding, still trying
+Jul 27 12:01:40 genepi19 user.notice kernel: [   77.773426] nfs: server 
+192.168.1.185 OK
+-- 
+Guillaume Dargaud
+http://www.gdargaud.net/ 
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: smime.p7s
+Type: application/x-pkcs7-signature
+Size: 3562 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090727/d3567030/attachment.bin>
