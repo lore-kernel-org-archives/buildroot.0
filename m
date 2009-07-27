@@ -1,28 +1,48 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 27 Jul 2009 11:47:10 +0000 (UTC)
-Subject: [Buildroot] [Bug 331] Update MPlayer to version 1.0rc2
-In-Reply-To: <bug-331-163@https.bugs.busybox.net/>
-References: <bug-331-163@https.bugs.busybox.net/>
-Message-ID: <20090727114710.4AD89777FC@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 27 Jul 2009 13:55:03 +0200
+Subject: [Buildroot] [git commit] linux-advanced: remove unused ancient
+	kernel versions
+In-Reply-To: <87a5b0800907270244h2172338aj7255258ef1fca9fd@mail.gmail.com>
+	(Will Newton's message of "Mon\, 27 Jul 2009 10\:44\:39 +0100")
+References: <20090725191956.C0CB37639E@busybox.osuosl.org>
+	<4A6CBC18.1020507@atmel.com> <87d47nqiua.fsf@macbook.be.48ers.dk>
+	<87a5b0800907270244h2172338aj7255258ef1fca9fd@mail.gmail.com>
+Message-ID: <87d47mpch4.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=331
+>>>>> "Will" == Will Newton <will.newton@gmail.com> writes:
 
+hi,
 
+ >> ?Ulf> I have customers which are still on the 2.6.22 level.
+ >> 
+ >> Good for them. They are presumably using a 2 year old BR snapshot
+ >> as well?
 
+ Will> What is the cost of keeping these options?
 
+The explosion in config combinations - BR is plenty hard to test to any
+sensible degree as it is already. We cannot keep on adding new
+versions without removing something old. There's several places in BR
+where we have to go through extra hoops to support both old and new
+stuff, or where combinations noone ever tried breaks.
 
---- Comment #4 from Will Newton <will.newton@gmail.com>  2009-07-27 11:47:09 UTC ---
+I think the only realistic option is to keep the number of
+combinations down so the remaining options gets more testing.
 
-That patch certainly applies cleanly and builds, but I don't have an avr32
-board to test with so I can't say much more than that.
+ Will> Userland and build infrastructure often moves much quicker than
+ Will> kernels and I often have to patch support for older kernels back into
+ Will> buildroot. It's not a big difficulty but if the cost of keeping the
+ Will> options is low I don't see what the gain is in removing them.
 
+Notice that the advanced linux config has options for custom (free
+form) versions, so you don't need to patch anything. In fact I think
+we should remove all the presets as they are always out-of-date like I
+mentioned the other day.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
