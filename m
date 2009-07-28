@@ -1,29 +1,32 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 28 Jul 2009 20:03:54 +0000 (UTC)
-Subject: [Buildroot] [Bug 165] openmotif does not build
-In-Reply-To: <bug-165-163@https.bugs.busybox.net/>
-References: <bug-165-163@https.bugs.busybox.net/>
-Message-ID: <20090728200355.2AFDF777E9@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 28 Jul 2009 23:10:10 +0200
+Subject: [Buildroot] Problem using netsnmp
+In-Reply-To: <4A6EE8F1.3060302@tandberg.com> (Chris Smith's message of "Tue\,
+	28 Jul 2009 13\:02\:57 +0100")
+References: <4A6EE8F1.3060302@tandberg.com>
+Message-ID: <87y6q8jyz1.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=165
+>>>>> "Chris" == Chris Smith <chris.smith@tandberg.com> writes:
 
+hi,
 
+ Chris> When I build netsnmp the built snmpd doesn't work on the
+ Chris> target.  All the other snmp stuff works but I get lib.so.6 not
+ Chris> found when trying to run snmpd.
 
+Sure that's 'lib.so.6'? That's a fairly strange library name.
 
+ Chris> Anyone have any thoughts?  It is as if some linkage to host
+ Chris> based libraries has crept in.
 
---- Comment #3 from Mathis <mathis_w@gmx.net>  2009-07-28 20:03:53 UTC ---
-(In reply to comment #2)
-> Do you still need openmotif support ?
-> 
-Not anymore.
+What arch are you building for?
 
+What does build_*/staging_dir/*-readelf -x <snmpd> | grep NEEDED give?
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
