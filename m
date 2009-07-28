@@ -1,35 +1,38 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 28 Jul 2009 04:05:14 +0000 (UTC)
-Subject: [Buildroot] [Bug 477] Add sdl_sound package
-In-Reply-To: <bug-477-163@https.bugs.busybox.net/>
-References: <bug-477-163@https.bugs.busybox.net/>
-Message-ID: <20090728040514.B9D09777D5@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 28 Jul 2009 09:58:45 +0200
+Subject: [Buildroot] Bug 171 - vm86.c error: IF_MASK undeclared
+In-Reply-To: <98531B0C-B641-406E-A66F-04C837AF6A90@earthlink.net>
+References: <98531B0C-B641-406E-A66F-04C837AF6A90@earthlink.net>
+Message-ID: <20090728095845.40fed62a@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=477
+Le Mon, 27 Jul 2009 16:34:13 -0400,
+Steve Bennett <sablists@earthlink.net> a ?crit :
 
+> https://bugs.busybox.net/show_bug.cgi?id=171
+> 
+> I just ran into this problem, and worked around it by updating the  
+> patch file (below) so it points to the right files, and putting it
+> in my package/x11r7/xserver_xorg-server folder.
+> 
+> That said, I was wondering if there's a different fix, some package  
+> or header I'm missing or something, since it seems like a fairly old  
+> problem.
 
+Thanks for the report. To handle this, I will bump the X.org server
+version to 1.5.3, which contains the fix for this issue.
 
+I'll do a test-compile+run of 1.5.3 and send the pull request for this.
 
+Thanks!
 
---- Comment #2 from Evan Zelkowitz <evan.zelkowitz@gmail.com>  2009-07-28 04:05:13 UTC ---
-Created an attachment (id=505)
- --> (https://bugs.busybox.net/attachment.cgi?id=505)
-sdl_snd patch
-
-Patch to add sdl_snd as an option under the sdl options in package selection. 
-Hopefully this patch is ok, I just did a diff against a fresh git and a fresh
-one with the new option.  It diffed a few of the binary git files, but since
-they were binary and just ended up as notifications in the patch I figured they
-were harmless.  Is there an official doc/faq/whatever about the patch
-submission process or any sort of standards for spacing on what not?
-
-
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
