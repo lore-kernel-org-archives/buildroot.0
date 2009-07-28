@@ -1,35 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 29 Jul 2009 07:40:08 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	xorg-bump-versions
-In-Reply-To: <20090728161913.591dc5eb@surf> (Thomas Petazzoni's message of
-	"Tue\, 28 Jul 2009 16\:19\:13 +0200")
-References: <cover.1248774911.git.thomas.petazzoni@free-electrons.com>
-	<20090728161913.591dc5eb@surf>
-Message-ID: <87iqhcjbd3.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 28 Jul 2009 16:18:10 +0200
+Subject: [Buildroot] [git commit] xorg: bump X.org server version to 1.5.3
+Message-ID: <20090729054333.2FE34763CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> Le Tue, 28 Jul 2009 11:55:11 +0200,
- Thomas> Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
+commit: http://git.buildroot.net/buildroot/commit/?id=2831a05d03dc826f98d6bdcf0da6fc032d246ac8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- >> Thomas Petazzoni (4):
- >> xorg: bump libXt to 1.0.6
- >> xorg: bump X.org server version to 1.5.3
- >> xorg: bump version of xutil/macros to 1.2.2
- >> xorg: add a new cross-compile fix for libXt 1.0.6
+This version contains a fix to allow the compilation of the Xvesa
+server against recent versions of the kernel headers (fix
+http://cgit.freedesktop.org/xorg/xserver/commit/?h=server-1.5-branch&id=992a7168f0db5733fe4a6cbd2f40c6b1f2a150e0)
 
- Thomas> I've added a 5th patch on top of this, just to update the CHANGES file
- Thomas> to mark bug #171 as fixed.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../xserver_xorg-server/xserver_xorg-server.mk     |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- Thomas> Should I resend the pull request with the patches ?
-
-No, it's fine - Pulled and pushed.
-
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index e2af324..e9d5f36 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XSERVER_XORG_SERVER_VERSION = 1.5.2
++XSERVER_XORG_SERVER_VERSION = 1.5.3
+ XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.bz2
+ XSERVER_XORG_SERVER_SITE = http://xorg.freedesktop.org/releases/individual/xserver
+ XSERVER_XORG_SERVER_AUTORECONF = NO
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
