@@ -1,42 +1,16 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 28 Jul 2009 12:09:14 +0000 (UTC)
-Subject: [Buildroot] [Bug 491] New: libxml2: Bump version to 0.7.3
-Message-ID: <bug-491-163@https.bugs.busybox.net/>
+From: Chris Smith <chris.smith@tandberg.com>
+Date: Tue, 28 Jul 2009 13:02:57 +0100
+Subject: [Buildroot] Problem using netsnmp
+Message-ID: <4A6EE8F1.3060302@tandberg.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=491
+When I build netsnmp the built snmpd doesn't work on the target.  All 
+the other snmp stuff works but I get
+lib.so.6 not found when trying to run snmpd.
 
-           Summary: libxml2: Bump version to 0.7.3
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: enhancement
-          Priority: P5
-         Component: Outdated package
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: will.newton at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
-
-
-Created an attachment (id=507)
- --> (https://bugs.busybox.net/attachment.cgi?id=507)
-Bump libxml2 version to 2.7.3.
-
-Bump the version of libxml2 from 2.6.32 to 2.7.3. This introduces a number of
-bug fixes and minor improvements.
-
-The deletion of reject files can be removed from the makefile as the reject
-files are gone from the latest release tarballs.
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Anyone have any thoughts?  It is as if some linkage to host based 
+libraries has crept in.
