@@ -1,26 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 28 Jul 2009 14:12:23 +0000 (UTC)
-Subject: [Buildroot] [Bug 165] openmotif does not build
-In-Reply-To: <bug-165-163@https.bugs.busybox.net/>
-References: <bug-165-163@https.bugs.busybox.net/>
-Message-ID: <20090728141223.65E0F777EA@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 28 Jul 2009 16:19:13 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+ xorg-bump-versions
+In-Reply-To: <cover.1248774911.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1248774911.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <20090728161913.591dc5eb@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=165
+Le Tue, 28 Jul 2009 11:55:11 +0200,
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
 
+> Thomas Petazzoni (4):
+>       xorg: bump libXt to 1.0.6
+>       xorg: bump X.org server version to 1.5.3
+>       xorg: bump version of xutil/macros to 1.2.2
+>       xorg: add a new cross-compile fix for libXt 1.0.6
 
+I've added a 5th patch on top of this, just to update the CHANGES file
+to mark bug #171 as fixed.
 
+Should I resend the pull request with the patches ?
 
+Thanks,
 
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2009-07-28 14:12:22 UTC ---
-Do you still need openmotif support ?
-
-
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
