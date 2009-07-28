@@ -1,36 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2009 12:10:39 +0200
-Subject: [Buildroot] [PATCH 4/4] xorg: add a new cross-compile fix for
- libXt 1.0.6
-In-Reply-To: <90a459ce4d27fc6a2527ae29f0a07f24f0993a02.1248774911.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1248774911.git.thomas.petazzoni@free-electrons.com>
-	<90a459ce4d27fc6a2527ae29f0a07f24f0993a02.1248774911.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <20090728121039.14d378c0@surf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 28 Jul 2009 11:07:37 +0000 (UTC)
+Subject: [Buildroot] [Bug 247] ntfsprogs: new package
+In-Reply-To: <bug-247-163@https.bugs.busybox.net/>
+References: <bug-247-163@https.bugs.busybox.net/>
+Message-ID: <20090728110738.0EE997780D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 28 Jul 2009 11:55:15 +0200,
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
+https://bugs.busybox.net/show_bug.cgi?id=247
 
-> The cross-compile fix included in mainline of libXt between 1.0.5 and
-> 1.0.6 is not sufficient. It allows to pass a different compiler for
-> the host tools, but still uses the TARGET_CFLAGS/TARGET_LDFLAGS to
-> compile the host tools, which obviously isn't correct.
-> 
-> The new patch allows to use the CFLAGS_FOR_BUILD/LDFLAGS_FOR_BUILD
-> variables as the CFLAGS/LDFLAGS to build the host tools.
 
-Patch submitted upstream, at
-https://bugs.freedesktop.org/show_bug.cgi?id=23001
 
-Sincerly,
 
-Thomas
+
+--- Comment #1 from Will Newton <will.newton@gmail.com>  2009-07-28 11:07:37 UTC ---
+
+This package requires toolchain locale support so should depend on the
+appropriate config variable (BR2_ENABLE_LOCALE).
+
+Otherwise this patch works ok for me.
+
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
