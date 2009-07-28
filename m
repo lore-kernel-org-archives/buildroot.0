@@ -1,27 +1,39 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 28 Jul 2009 11:07:37 +0000 (UTC)
-Subject: [Buildroot] [Bug 247] ntfsprogs: new package
-In-Reply-To: <bug-247-163@https.bugs.busybox.net/>
-References: <bug-247-163@https.bugs.busybox.net/>
-Message-ID: <20090728110738.0EE997780D@busybox.osuosl.org>
+Date: Tue, 28 Jul 2009 12:09:14 +0000 (UTC)
+Subject: [Buildroot] [Bug 491] New: libxml2: Bump version to 0.7.3
+Message-ID: <bug-491-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=247
+https://bugs.busybox.net/show_bug.cgi?id=491
+
+           Summary: libxml2: Bump version to 0.7.3
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: will.newton at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
 
+Created an attachment (id=507)
+ --> (https://bugs.busybox.net/attachment.cgi?id=507)
+Bump libxml2 version to 2.7.3.
 
+Bump the version of libxml2 from 2.6.32 to 2.7.3. This introduces a number of
+bug fixes and minor improvements.
 
-
---- Comment #1 from Will Newton <will.newton@gmail.com>  2009-07-28 11:07:37 UTC ---
-
-This package requires toolchain locale support so should depend on the
-appropriate config variable (BR2_ENABLE_LOCALE).
-
-Otherwise this patch works ok for me.
+The deletion of reject files can be removed from the makefile as the reject
+files are gone from the latest release tarballs.
 
 
 -- 
