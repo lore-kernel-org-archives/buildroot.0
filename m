@@ -1,7 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 28 Jul 2009 16:18:10 +0200
-Subject: [Buildroot] [git commit] xorg: bump X.org server version to 1.5.3
-Message-ID: <20090729054333.2FE34763CE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] xorg: bump libXt to 1.0.6
+Message-ID: <20090729054333.0FCE57644E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,30 +9,91 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2831a05d03dc826f98d6bdcf0da6fc032d246ac8
+commit: http://git.buildroot.net/buildroot/commit/?id=5d4138392026cfd61e25a8e1a170fbe422f49a83
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This version contains a fix to allow the compilation of the Xvesa
-server against recent versions of the kernel headers (fix
-http://cgit.freedesktop.org/xorg/xserver/commit/?h=server-1.5-branch&id=992a7168f0db5733fe4a6cbd2f40c6b1f2a150e0)
+Bump libXt to 1.0.6 and remove the
+xlib_libXt-1.0.5-makestrs-nocc.patch, which has been included in a
+better form in upstream:
+ http://cgit.freedesktop.org/xorg/lib/libXt/commit/?id=36e9f0d351afbf7fd2595990b2d39e7c551f6420
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../xserver_xorg-server/xserver_xorg-server.mk     |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ .../xlib_libXt-1.0.5-makestrs-nocc.patch           |   52 --------------------
+ package/x11r7/xlib_libXt/xlib_libXt.mk             |    2 +-
+ 2 files changed, 1 insertions(+), 53 deletions(-)
+ delete mode 100644 package/x11r7/xlib_libXt/xlib_libXt-1.0.5-makestrs-nocc.patch
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index e2af324..e9d5f36 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+diff --git a/package/x11r7/xlib_libXt/xlib_libXt-1.0.5-makestrs-nocc.patch b/package/x11r7/xlib_libXt/xlib_libXt-1.0.5-makestrs-nocc.patch
+deleted file mode 100644
+index 284ce62..0000000
+--- a/package/x11r7/xlib_libXt/xlib_libXt-1.0.5-makestrs-nocc.patch
++++ /dev/null
+@@ -1,52 +0,0 @@
+----
+- util/Makefile.in |   13 ++++++++-----
+- 1 file changed, 8 insertions(+), 5 deletions(-)
+-
+-Index: libXt-1.0.5/util/Makefile.in
+-===================================================================
+---- libXt-1.0.5.orig/util/Makefile.in
+-+++ libXt-1.0.5/util/Makefile.in
+-@@ -64,8 +64,11 @@
+- 	$(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
+- 	$(AM_CFLAGS) $(CFLAGS)
+- CCLD = $(CC)
+-+HOST_CC = gcc
+- LINK = $(LIBTOOL) --tag=CC --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+- 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+-+makestrs_LINK = $(HOST_CC) \
+-+	$(AM_CFLAGS) $(CFLAGS_FOR_BUILD) $(AM_LDFLAGS) $(LDFLAGS_FOR_BUILD) -o $@
+- SOURCES = $(makestrs_SOURCES)
+- DIST_SOURCES = $(makestrs_SOURCES)
+- am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
+-@@ -297,7 +300,7 @@
+- 	done
+- makestrs$(EXEEXT): $(makestrs_OBJECTS) $(makestrs_DEPENDENCIES) 
+- 	@rm -f makestrs$(EXEEXT)
+--	$(LINK) $(makestrs_LDFLAGS) $(makestrs_OBJECTS) $(makestrs_LDADD) $(LIBS)
+-+	$(makestrs_LINK) $(makestrs_LDFLAGS) $(makestrs_OBJECTS) $(makestrs_LDADD) $(LIBS)
+- 
+- mostlyclean-compile:
+- 	-rm -f *.$(OBJEXT)
+-@@ -329,18 +332,18 @@
+- @am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
+- 
+- makestrs-makestrs.o: makestrs.c
+-- at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(makestrs_CFLAGS) $(CFLAGS) -MT makestrs-makestrs.o -MD -MP -MF "$(DEPDIR)/makestrs-makestrs.Tpo" -c -o makestrs-makestrs.o `test -f 'makestrs.c' || echo '$(srcdir)/'`makestrs.c; \
+-+ at am__fastdepCC_TRUE@	if $(HOST_CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(makestrs_CFLAGS) $(CFLAGS_FOR_BUILD) -MT makestrs-makestrs.o -MD -MP -MF "$(DEPDIR)/makestrs-makestrs.Tpo" -c -o makestrs-makestrs.o `test -f 'makestrs.c' || echo '$(srcdir)/'`makestrs.c; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/makestrs-makestrs.Tpo" "$(DEPDIR)/makestrs-makestrs.Po"; else rm -f "$(DEPDIR)/makestrs-makestrs.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='makestrs.c' object='makestrs-makestrs.o' libtool=no @AMDEPBACKSLASH@
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-- at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(makestrs_CFLAGS) $(CFLAGS) -c -o makestrs-makestrs.o `test -f 'makestrs.c' || echo '$(srcdir)/'`makestrs.c
+-+ at am__fastdepCC_FALSE@	$(HOST_CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(makestrs_CFLAGS) $(CFLAGS_FOR_BUILD) -c -o makestrs-makestrs.o `test -f 'makestrs.c' || echo '$(srcdir)/'`makestrs.c
+- 
+- makestrs-makestrs.obj: makestrs.c
+-- at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(makestrs_CFLAGS) $(CFLAGS) -MT makestrs-makestrs.obj -MD -MP -MF "$(DEPDIR)/makestrs-makestrs.Tpo" -c -o makestrs-makestrs.obj `if test -f 'makestrs.c'; then $(CYGPATH_W) 'makestrs.c'; else $(CYGPATH_W) '$(srcdir)/makestrs.c'; fi`; \
+-+ at am__fastdepCC_TRUE@	if $(HOST_CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(makestrs_CFLAGS) $(CFLAGS_FOR_BUILD) -MT makestrs-makestrs.obj -MD -MP -MF "$(DEPDIR)/makestrs-makestrs.Tpo" -c -o makestrs-makestrs.obj `if test -f 'makestrs.c'; then $(CYGPATH_W) 'makestrs.c'; else $(CYGPATH_W) '$(srcdir)/makestrs.c'; fi`; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/makestrs-makestrs.Tpo" "$(DEPDIR)/makestrs-makestrs.Po"; else rm -f "$(DEPDIR)/makestrs-makestrs.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='makestrs.c' object='makestrs-makestrs.obj' libtool=no @AMDEPBACKSLASH@
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-- at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(makestrs_CFLAGS) $(CFLAGS) -c -o makestrs-makestrs.obj `if test -f 'makestrs.c'; then $(CYGPATH_W) 'makestrs.c'; else $(CYGPATH_W) '$(srcdir)/makestrs.c'; fi`
+-+@am__fastdepCC_FALSE@	$(HOST_CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(makestrs_CFLAGS) $(CFLAGS_FOR_BUILD) -c -o makestrs-makestrs.obj `if test -f 'makestrs.c'; then $(CYGPATH_W) 'makestrs.c'; else $(CYGPATH_W) '$(srcdir)/makestrs.c'; fi`
+- 
+- mostlyclean-libtool:
+- 	-rm -f *.lo
+diff --git a/package/x11r7/xlib_libXt/xlib_libXt.mk b/package/x11r7/xlib_libXt/xlib_libXt.mk
+index 546721a..13e43c1 100644
+--- a/package/x11r7/xlib_libXt/xlib_libXt.mk
++++ b/package/x11r7/xlib_libXt/xlib_libXt.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XSERVER_XORG_SERVER_VERSION = 1.5.2
-+XSERVER_XORG_SERVER_VERSION = 1.5.3
- XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.bz2
- XSERVER_XORG_SERVER_SITE = http://xorg.freedesktop.org/releases/individual/xserver
- XSERVER_XORG_SERVER_AUTORECONF = NO
+-XLIB_LIBXT_VERSION = 1.0.5
++XLIB_LIBXT_VERSION = 1.0.6
+ XLIB_LIBXT_SOURCE = libXt-$(XLIB_LIBXT_VERSION).tar.bz2
+ XLIB_LIBXT_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXT_AUTORECONF = NO
 -- 
 1.6.3.3
