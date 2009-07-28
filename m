@@ -1,34 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2009 09:58:45 +0200
-Subject: [Buildroot] Bug 171 - vm86.c error: IF_MASK undeclared
-In-Reply-To: <98531B0C-B641-406E-A66F-04C837AF6A90@earthlink.net>
-References: <98531B0C-B641-406E-A66F-04C837AF6A90@earthlink.net>
-Message-ID: <20090728095845.40fed62a@surf>
+Date: Tue, 28 Jul 2009 10:03:33 +0200
+Subject: [Buildroot] xlib libXt build problem
+In-Reply-To: <f8955f9e0907271636p26bea750s1f3e6be1782badac@mail.gmail.com>
+References: <8109ECD0-3E25-4BAD-B4D7-DE97BEEBE007@earthlink.net>
+	<f8955f9e0907271636p26bea750s1f3e6be1782badac@mail.gmail.com>
+Message-ID: <20090728100333.16e1cbc4@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 27 Jul 2009 16:34:13 -0400,
-Steve Bennett <sablists@earthlink.net> a ?crit :
+Le Mon, 27 Jul 2009 16:36:27 -0700,
+Dan Lykowski <lykowdk@gmail.com> a ?crit :
 
-> https://bugs.busybox.net/show_bug.cgi?id=171
+> Steve,
+>  Try to replace the xlib_libXt-1.0.5-makestrs-nocc.patch with this
+> one.
 > 
-> I just ran into this problem, and worked around it by updating the  
-> patch file (below) so it points to the right files, and putting it
-> in my package/x11r7/xserver_xorg-server folder.
-> 
-> That said, I was wondering if there's a different fix, some package  
-> or header I'm missing or something, since it seems like a fairly old  
-> problem.
+> I grabbed it from upstream a while back and haven't had time to
+> submit it. It fixed the problem for me, but I don't know if it 'does
+> the right thing(tm)'.
 
-Thanks for the report. To handle this, I will bump the X.org server
-version to 1.5.3, which contains the fix for this issue.
+This patch has been included in 1.0.6 of libXt. Therefore, I will bump
+the libXt package to 1.0.6.
 
-I'll do a test-compile+run of 1.5.3 and send the pull request for this.
+However, note that in the current development version of Buildroot, the
+compilation of libXt and libXaw is no longer required to compile the
+X.org server. These old (and ugly) toolkits are probably never used on
+embedded systems, so having them as a hard dependency of the X.org
+server was a bit too strong. It also ~1 Mb of space on the target
+filesystem, since these libraries were quite big.
 
-Thanks!
+See
+http://git.buildroot.net/buildroot/commit/?id=ae8bbdf891c8343313cd2d3be2df079214576a4a
+
+If you don't want to use a development version of Buildroot, these
+improvements will be part of the 2009.08, that should be released neext
+month.
+
+Sincerly,
 
 Thomas
 -- 
