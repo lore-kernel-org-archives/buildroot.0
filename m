@@ -1,49 +1,97 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2009 10:03:33 +0200
-Subject: [Buildroot] xlib libXt build problem
-In-Reply-To: <f8955f9e0907271636p26bea750s1f3e6be1782badac@mail.gmail.com>
-References: <8109ECD0-3E25-4BAD-B4D7-DE97BEEBE007@earthlink.net>
-	<f8955f9e0907271636p26bea750s1f3e6be1782badac@mail.gmail.com>
-Message-ID: <20090728100333.16e1cbc4@surf>
+Date: Tue, 28 Jul 2009 11:55:12 +0200
+Subject: [Buildroot] [PATCH 1/4] xorg: bump libXt to 1.0.6
+In-Reply-To: <cover.1248774911.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1248774911.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <5d4138392026cfd61e25a8e1a170fbe422f49a83.1248774911.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 27 Jul 2009 16:36:27 -0700,
-Dan Lykowski <lykowdk@gmail.com> a ?crit :
+Bump libXt to 1.0.6 and remove the
+xlib_libXt-1.0.5-makestrs-nocc.patch, which has been included in a
+better form in upstream:
+ http://cgit.freedesktop.org/xorg/lib/libXt/commit/?id=36e9f0d351afbf7fd2595990b2d39e7c551f6420
 
-> Steve,
->  Try to replace the xlib_libXt-1.0.5-makestrs-nocc.patch with this
-> one.
-> 
-> I grabbed it from upstream a while back and haven't had time to
-> submit it. It fixed the problem for me, but I don't know if it 'does
-> the right thing(tm)'.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../xlib_libXt-1.0.5-makestrs-nocc.patch           |   52 --------------------
+ package/x11r7/xlib_libXt/xlib_libXt.mk             |    2 +-
+ 2 files changed, 1 insertions(+), 53 deletions(-)
+ delete mode 100644 package/x11r7/xlib_libXt/xlib_libXt-1.0.5-makestrs-nocc.patch
 
-This patch has been included in 1.0.6 of libXt. Therefore, I will bump
-the libXt package to 1.0.6.
-
-However, note that in the current development version of Buildroot, the
-compilation of libXt and libXaw is no longer required to compile the
-X.org server. These old (and ugly) toolkits are probably never used on
-embedded systems, so having them as a hard dependency of the X.org
-server was a bit too strong. It also ~1 Mb of space on the target
-filesystem, since these libraries were quite big.
-
-See
-http://git.buildroot.net/buildroot/commit/?id=ae8bbdf891c8343313cd2d3be2df079214576a4a
-
-If you don't want to use a development version of Buildroot, these
-improvements will be part of the 2009.08, that should be released neext
-month.
-
-Sincerly,
-
-Thomas
+diff --git a/package/x11r7/xlib_libXt/xlib_libXt-1.0.5-makestrs-nocc.patch b/package/x11r7/xlib_libXt/xlib_libXt-1.0.5-makestrs-nocc.patch
+deleted file mode 100644
+index 284ce62..0000000
+--- a/package/x11r7/xlib_libXt/xlib_libXt-1.0.5-makestrs-nocc.patch
++++ /dev/null
+@@ -1,52 +0,0 @@
+----
+- util/Makefile.in |   13 ++++++++-----
+- 1 file changed, 8 insertions(+), 5 deletions(-)
+-
+-Index: libXt-1.0.5/util/Makefile.in
+-===================================================================
+---- libXt-1.0.5.orig/util/Makefile.in
+-+++ libXt-1.0.5/util/Makefile.in
+-@@ -64,8 +64,11 @@
+- 	$(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
+- 	$(AM_CFLAGS) $(CFLAGS)
+- CCLD = $(CC)
+-+HOST_CC = gcc
+- LINK = $(LIBTOOL) --tag=CC --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+- 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+-+makestrs_LINK = $(HOST_CC) \
+-+	$(AM_CFLAGS) $(CFLAGS_FOR_BUILD) $(AM_LDFLAGS) $(LDFLAGS_FOR_BUILD) -o $@
+- SOURCES = $(makestrs_SOURCES)
+- DIST_SOURCES = $(makestrs_SOURCES)
+- am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
+-@@ -297,7 +300,7 @@
+- 	done
+- makestrs$(EXEEXT): $(makestrs_OBJECTS) $(makestrs_DEPENDENCIES) 
+- 	@rm -f makestrs$(EXEEXT)
+--	$(LINK) $(makestrs_LDFLAGS) $(makestrs_OBJECTS) $(makestrs_LDADD) $(LIBS)
+-+	$(makestrs_LINK) $(makestrs_LDFLAGS) $(makestrs_OBJECTS) $(makestrs_LDADD) $(LIBS)
+- 
+- mostlyclean-compile:
+- 	-rm -f *.$(OBJEXT)
+-@@ -329,18 +332,18 @@
+- @am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
+- 
+- makestrs-makestrs.o: makestrs.c
+-- at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(makestrs_CFLAGS) $(CFLAGS) -MT makestrs-makestrs.o -MD -MP -MF "$(DEPDIR)/makestrs-makestrs.Tpo" -c -o makestrs-makestrs.o `test -f 'makestrs.c' || echo '$(srcdir)/'`makestrs.c; \
+-+ at am__fastdepCC_TRUE@	if $(HOST_CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(makestrs_CFLAGS) $(CFLAGS_FOR_BUILD) -MT makestrs-makestrs.o -MD -MP -MF "$(DEPDIR)/makestrs-makestrs.Tpo" -c -o makestrs-makestrs.o `test -f 'makestrs.c' || echo '$(srcdir)/'`makestrs.c; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/makestrs-makestrs.Tpo" "$(DEPDIR)/makestrs-makestrs.Po"; else rm -f "$(DEPDIR)/makestrs-makestrs.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='makestrs.c' object='makestrs-makestrs.o' libtool=no @AMDEPBACKSLASH@
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-- at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(makestrs_CFLAGS) $(CFLAGS) -c -o makestrs-makestrs.o `test -f 'makestrs.c' || echo '$(srcdir)/'`makestrs.c
+-+ at am__fastdepCC_FALSE@	$(HOST_CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(makestrs_CFLAGS) $(CFLAGS_FOR_BUILD) -c -o makestrs-makestrs.o `test -f 'makestrs.c' || echo '$(srcdir)/'`makestrs.c
+- 
+- makestrs-makestrs.obj: makestrs.c
+-- at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(makestrs_CFLAGS) $(CFLAGS) -MT makestrs-makestrs.obj -MD -MP -MF "$(DEPDIR)/makestrs-makestrs.Tpo" -c -o makestrs-makestrs.obj `if test -f 'makestrs.c'; then $(CYGPATH_W) 'makestrs.c'; else $(CYGPATH_W) '$(srcdir)/makestrs.c'; fi`; \
+-+ at am__fastdepCC_TRUE@	if $(HOST_CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(makestrs_CFLAGS) $(CFLAGS_FOR_BUILD) -MT makestrs-makestrs.obj -MD -MP -MF "$(DEPDIR)/makestrs-makestrs.Tpo" -c -o makestrs-makestrs.obj `if test -f 'makestrs.c'; then $(CYGPATH_W) 'makestrs.c'; else $(CYGPATH_W) '$(srcdir)/makestrs.c'; fi`; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/makestrs-makestrs.Tpo" "$(DEPDIR)/makestrs-makestrs.Po"; else rm -f "$(DEPDIR)/makestrs-makestrs.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='makestrs.c' object='makestrs-makestrs.obj' libtool=no @AMDEPBACKSLASH@
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-- at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(makestrs_CFLAGS) $(CFLAGS) -c -o makestrs-makestrs.obj `if test -f 'makestrs.c'; then $(CYGPATH_W) 'makestrs.c'; else $(CYGPATH_W) '$(srcdir)/makestrs.c'; fi`
+-+@am__fastdepCC_FALSE@	$(HOST_CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(makestrs_CFLAGS) $(CFLAGS_FOR_BUILD) -c -o makestrs-makestrs.obj `if test -f 'makestrs.c'; then $(CYGPATH_W) 'makestrs.c'; else $(CYGPATH_W) '$(srcdir)/makestrs.c'; fi`
+- 
+- mostlyclean-libtool:
+- 	-rm -f *.lo
+diff --git a/package/x11r7/xlib_libXt/xlib_libXt.mk b/package/x11r7/xlib_libXt/xlib_libXt.mk
+index 546721a..13e43c1 100644
+--- a/package/x11r7/xlib_libXt/xlib_libXt.mk
++++ b/package/x11r7/xlib_libXt/xlib_libXt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XLIB_LIBXT_VERSION = 1.0.5
++XLIB_LIBXT_VERSION = 1.0.6
+ XLIB_LIBXT_SOURCE = libXt-$(XLIB_LIBXT_VERSION).tar.bz2
+ XLIB_LIBXT_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXT_AUTORECONF = NO
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+1.6.0.4
