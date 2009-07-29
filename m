@@ -1,37 +1,93 @@
 From: Daniel Mack <daniel@caiaq.de>
-Date: Wed, 29 Jul 2009 19:20:19 +0200
-Subject: [Buildroot] [PATCH 2/2] mtd-utils.git: fix targets
-In-Reply-To: <878wiiec3n.fsf@macbook.be.48ers.dk>
-References: <1244029145-11832-1-git-send-email-daniel@caiaq.de>
-	<1244029145-11832-2-git-send-email-daniel@caiaq.de>
-	<878wikg3sp.fsf@macbook.be.48ers.dk>
-	<20090720112525.GV13236@buzzloop.caiaq.de>
-	<87ljmjdrdt.fsf@macbook.be.48ers.dk>
-	<20090720210306.GH19257@buzzloop.caiaq.de>
-	<878wiiec3n.fsf@macbook.be.48ers.dk>
-Message-ID: <20090729172019.GS19257@buzzloop.caiaq.de>
+Date: Wed, 29 Jul 2009 19:21:22 +0200
+Subject: [Buildroot] [PATCH 1/2] e2fsprogs: factor out libuuid support
+In-Reply-To: <20090729172019.GS19257@buzzloop.caiaq.de>
+References: <20090729172019.GS19257@buzzloop.caiaq.de>
+Message-ID: <1248888083-11767-1-git-send-email-daniel@caiaq.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jul 21, 2009 at 09:20:28AM +0200, Peter Korsgaard wrote:
-> OK, thanks. It still doesn't build here.
-> 
-> The first problem is that common.mk unconditionally sets
-> FILE_OFFSET_BITS=64, which causes the uclibc headers to error out if
-> you compiled without largefile support (the default). The second is:
-> 
-> /tmp/br/mipsel/build_mipsel/staging_dir/usr/bin/mipsel-linux-uclibcgnueabi-gcc -I../include -I../ubi-utils/include -O2 -g -Wall -Wextra -Wwrite-strings -Wno-sign-compare -c -o /tmp/br/mipsel/build_mipsel/mtd-utils-e783e75e09b4a0a519665afd7bdeaf2985e7a09c/mkfs.ubifs/lpt.o lpt.c -g -Wp,-MD,/tmp/br/mipsel/build_mipsel/mtd-utils-e783e75e09b4a0a519665afd7bdeaf2985e7a09c/mkfs.ubifs/.lpt.c.dep
-> In file included from lpt.c:23:
-> mkfs.ubifs.h:48:23: error: uuid/uuid.h: No such file or directory
-> 
-> Seems like it needs libuuid from e2fsprogs. We should probably make
-> that available without the rest of e2fs, and make the ubifs stuff
-> select it.
+Add a new target for libuuid so it can be built without e2fsprogs.
 
-Ok, done that now. See the two mails following this one. Does it work
-now for you?
+Signed-off-by: Daniel Mack <daniel@caiaq.de>
+---
+ package/e2fsprogs/Config.in    |    4 ++++
+ package/e2fsprogs/e2fsprogs.mk |   23 +++++++++++++++++++++++
+ 2 files changed, 27 insertions(+), 0 deletions(-)
 
-Daniel
+diff --git a/package/e2fsprogs/Config.in b/package/e2fsprogs/Config.in
+index d353fd9..398dc56 100644
+--- a/package/e2fsprogs/Config.in
++++ b/package/e2fsprogs/Config.in
+@@ -1,6 +1,10 @@
++config BR2_PACKAGE_LIBUUID
++	bool
++
+ config BR2_PACKAGE_E2FSPROGS
+ 	bool "e2fsprogs"
+ 	depends on BR2_LARGEFILE
++	select BR2_PACKAGE_LIBUUID
+ 	help
+ 	  The EXT2 file system utilities and libraries
+ 
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index 6400bf5..b4b9279 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -10,6 +10,8 @@ E2FSPROGS_DIR=$(BUILD_DIR)/e2fsprogs-$(E2FSPROGS_VERSION)
+ E2FSPROGS_CAT:=$(ZCAT)
+ E2FSPROGS_BINARY:=misc/mke2fs
+ E2FSPROGS_TARGET_BINARY:=sbin/mke2fs
++LIBUUID_TARGET_DIR:=usr/lib/
++LIBUUID_TARGET_BINARY:=libuuid.so
+ 
+ E2FSPROGS_MISC_STRIP:= \
+ 	badblocks blkid chattr dumpe2fs filefrag fsck logsave \
+@@ -69,9 +71,15 @@ $(E2FSPROGS_DIR)/$(E2FSPROGS_BINARY): $(E2FSPROGS_DIR)/.configured
+ 	#$(STRIPCMD) $(E2FSPROGS_DIR)/lib/lib*.so.*.*
+ 	touch -c $@
+ 
++$(E2FSPROGS_DIR)/lib/$(LIBUUID_BINARY): $(E2FSPROGS_DIR)/.configured
++	$(MAKE1) -C $(E2FSPROGS_DIR)/lib/uuid
++	touch -c $@
++
+ $(STAGING_DIR)/$(E2FSPROGS_TARGET_BINARY): $(E2FSPROGS_DIR)/$(E2FSPROGS_BINARY)
+ 	$(MAKE1) PATH=$(TARGET_PATH) DESTDIR=$(STAGING_DIR) LDCONFIG=true \
+ 		-C $(E2FSPROGS_DIR) install
++
++$(STAGING_DIR)/lib/$(LIBUUID_BINARY): $(E2FSPROGS_DIR)/lib/$(LIBUUID_BINARY)
+ 	$(MAKE1) PATH=$(TARGET_PATH) DESTDIR=$(STAGING_DIR) LDCONFIG=true \
+ 		-C $(E2FSPROGS_DIR)/lib/uuid install
+ 
+@@ -125,7 +133,18 @@ endif
+ 	rm -rf $(TARGET_DIR)/usr/share/doc
+ 	touch -c $@
+ 
++$(TARGET_DIR)/$(LIBUUID_TARGET_DIR)/$(LIBUUID_BINARY): $(STAGING_DIR)/lib/$(LIBUUID_BINARY)
++	$(MAKE1) PATH=$(TARGET_PATH) DESTDIR=$(TARGET_DIR) LDCONFIG=true \
++		-C $(E2FSPROGS_DIR)/lib/uuid install
++	rm -rf $(TARGET_DIR)/usr/include/uuid
++	rm -rf $(TARGET_DIR)/usr/lib/pkgconfig/uuid.pc
++ifneq ($(BR2_HAVE_MANPAGES),y)
++	rm -rf $(TARGET_DIR)/usr/share/man
++endif
++	touch -c $@
++
+ e2fsprogs: uclibc $(TARGET_DIR)/$(E2FSPROGS_TARGET_BINARY)
++libuuid: uclibc $(TARGET_DIR)/$(LIBUUID_TARGET_DIR)/$(LIBUUID_TARGET_BINARY)
+ 
+ e2fsprogs-clean:
+ 	$(MAKE1) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(E2FSPROGS_DIR) uninstall
+@@ -142,3 +161,7 @@ e2fsprogs-dirclean:
+ ifeq ($(BR2_PACKAGE_E2FSPROGS),y)
+ TARGETS+=e2fsprogs
+ endif
++
++ifeq ($(BR2_PACKAGE_LIBUUID),y)
++TARGETS+=libuuid
++endif
+-- 
+1.6.3.3
