@@ -1,39 +1,54 @@
-From: Daniel Mack <daniel@caiaq.de>
-Date: Wed, 29 Jul 2009 16:26:10 +0200
-Subject: [Buildroot] linux .config : override: reassigning tosymbolAEABI
-In-Reply-To: <F81DF98CADE6064F81A746D7C8323593782CB2@fr-ex009.groupinfra.com>
-References: <F81DF98CADE6064F81A746D7C8323593782CAA@fr-ex009.groupinfra.com>
-	<20090729132515.GM19257@buzzloop.caiaq.de>
-	<F81DF98CADE6064F81A746D7C8323593782CAC@fr-ex009.groupinfra.com>
-	<20090729134234.GY13236@buzzloop.caiaq.de>
-	<F81DF98CADE6064F81A746D7C8323593782CB2@fr-ex009.groupinfra.com>
-Message-ID: <20090729142610.GB9464@buzzloop.caiaq.de>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 29 Jul 2009 15:00:40 +0000 (UTC)
+Subject: [Buildroot] [Bug 499] New: make O=... busybox-menuconfig crashes
+Message-ID: <bug-499-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jul 29, 2009 at 03:59:18PM +0200, Courousse, Damien wrote:
-> > Could you check that this condition is met by adding an echo debug in
-> > there?
-> [Damien Courouss?] 
-> Here are the results - EABI is not set: 
-> rm -rf /mnt/fractal/buildroot/buildroot-2009.05/project_build_arm/logica_demo/buildroot-config
-> mkdir -p /mnt/fractal/buildroot/buildroot-2009.05/project_build_arm/logica_demo
-> cp -dpRf package/config/buildroot-config /mnt/fractal/buildroot/buildroot-2009.05/project_build_arm/logica_demo/buildroot-config
-> /mnt/fractal/buildroot/buildroot-2009.05/toolchain_build_arm/bin/sed -i -e '/CONFIG_AEABI=y/d' /mnt/fractal/buildroot/buildroot-2009.05/project_build_arm/logica_demo/linux-2.6.28/.config
-> echo "-- TEST -- BR2_ARM_EABI is not SET"
-> -- TEST -- BR2_ARM_EABI is not SET
-> echo "# CONFIG_AEABI is not set" >> /mnt/fractal/buildroot/buildroot-2009.05/project_build_arm/logica_demo/linux-2.6.28/.config
-> /mnt/fractal/buildroot/buildroot-2009.05/toolchain_build_arm/bin/sed -i -e '/CONFIG_IPV6=y/d' /mnt/fractal/buildroot/buildroot-2009.05/project_build_arm/logica_demo/linux-2.6.28/.config
-> 
-> Maybe I was fooled but the message : "override: reassigning to symbol AEABI". I tought it means that the EABI symbol is set to "y", but it might only mean that the symbol was overridden, with no assumption about the final value!
-> And actually, in my case, as BR2_ARM_EABI is not set, the kernel config EABI symbol is overridden, but with the same value, i.e. it is not set.
-> However it does not explain the kernel panic.
+https://bugs.busybox.net/show_bug.cgi?id=499
 
-Ok, fine. You're digging at the wrong end then :) Try setting
-CONFIG_DEBUG_USER in your kernel config and pass user_debug=255 on
-startup. That will output more details when user space binaries crash.
+           Summary: make O=... busybox-menuconfig crashes
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: thomas.petazzoni at free-electrons.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Daniel
+
+make busybox-menuconfig crashes when used with the out-of-tree option O=:
+
+#
+# using defaults found in .config
+#
+
+interrupted(11)
+make[3]: *** [menuconfig] Error 1
+make[2]: *** [menuconfig] Error 2
+make[2]: Leaving directory
+`/home/thomas/local/buildroot-basic/project_build_arm/uclibc/busybox-1.14.2'
+make[1]: *** [busybox-menuconfig] Error 2
+make[1]: Leaving directory `/home/thomas/local/buildroot'
+
+Interestingly, manually doing
+
+make __TARGET_ARCH=arm -C
+/path/to/the/build/directory/project_build_arm/uclibc/busybox-1.14.2 menuconfig
+
+works nicely. So it's the fact that it's been run by the Buildroot
+infrastructure that makes it crash.
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
