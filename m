@@ -1,235 +1,84 @@
 From: Daniel Mack <daniel@caiaq.de>
-Date: Wed, 29 Jul 2009 19:21:23 +0200
-Subject: [Buildroot] [PATCH 2/2] mtd-utils.git: fix targets
-In-Reply-To: <1248888083-11767-1-git-send-email-daniel@caiaq.de>
-References: <20090729172019.GS19257@buzzloop.caiaq.de>
-	<1248888083-11767-1-git-send-email-daniel@caiaq.de>
-Message-ID: <1248888083-11767-2-git-send-email-daniel@caiaq.de>
+Date: Wed, 29 Jul 2009 19:30:00 +0200
+Subject: [Buildroot] linux .config : override: reassigning tosymbolAEABI
+In-Reply-To: <F81DF98CADE6064F81A746D7C8323593782CC1@fr-ex009.groupinfra.com>
+References: <F81DF98CADE6064F81A746D7C8323593782CAA@fr-ex009.groupinfra.com>
+	<20090729132515.GM19257@buzzloop.caiaq.de>
+	<F81DF98CADE6064F81A746D7C8323593782CAC@fr-ex009.groupinfra.com>
+	<20090729134234.GY13236@buzzloop.caiaq.de>
+	<F81DF98CADE6064F81A746D7C8323593782CB2@fr-ex009.groupinfra.com>
+	<20090729142610.GB9464@buzzloop.caiaq.de>
+	<F81DF98CADE6064F81A746D7C8323593782CC1@fr-ex009.groupinfra.com>
+Message-ID: <20090729173000.GT19257@buzzloop.caiaq.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Update git version for mtd-utils.git.
-- In this new version, a new tool named 'ubiformat' exists which is
-  exported by this patch.
-- The tool ubimirror does not exist anymore, remove support for it.
-- remove two patches that do no longer apply
-- add a patch that removes the unconditional setting of
-  -D_FILE_OFFSET_BITS=64
-- introduce EXTRA_CPPFLAGS that is set to -D_FILE_OFFSET_BITS=64 in case
-  BR2_LARGEFILE is set
-- select BR2_PACKAGE_LIBUUID for BR2_PACKAGE_MTD
+On Wed, Jul 29, 2009 at 06:07:33PM +0200, Courousse, Damien wrote:
+> > Ok, fine. You're digging at the wrong end then :) Try setting
+> > CONFIG_DEBUG_USER in your kernel config and pass user_debug=255 on
+> > startup. That will output more details when user space binaries crash.
+> > 
+> > Daniel
+> > 
+> [Damien Courouss?] 
+> The user_debug option did not change anything :(
 
-Signed-off-by: Daniel Mack <daniel@caiaq.de>
----
- package/mtd/Config.in                              |   11 +++--
- .../mtd/mtd-utils.git/mtd-utils-all-targets.patch  |   34 --------------
- .../mtd/mtd-utils.git/mtd-utils-target-acl.patch   |   48 --------------------
- .../mtd-utils-target-no-file-offset-bits.patch     |   11 +++++
- package/mtd/mtd-utils.git/mtd.mk                   |   15 ++++--
- 5 files changed, 27 insertions(+), 92 deletions(-)
- delete mode 100644 package/mtd/mtd-utils.git/mtd-utils-all-targets.patch
- delete mode 100644 package/mtd/mtd-utils.git/mtd-utils-target-acl.patch
- create mode 100644 package/mtd/mtd-utils.git/mtd-utils-target-no-file-offset-bits.patch
+It only does if you set CONFIG_DEBUG_USER in your kernel config. You
+will need to change it in the config you point your BR2 to.
 
-diff --git a/package/mtd/Config.in b/package/mtd/Config.in
-index 125175f..c325ca4 100644
---- a/package/mtd/Config.in
-+++ b/package/mtd/Config.in
-@@ -1,6 +1,7 @@
- menuconfig BR2_PACKAGE_MTD
- 	bool "mtd/jffs2 utilities"
- 	select BR2_PACKAGE_ZLIB
-+	select BR2_PACKAGE_LIBUUID
- 	help
- 	  Build mtd/jffs utilities
- 
-@@ -127,11 +128,6 @@ config BR2_PACKAGE_MTD_UBIDETACH
- 	default y
- 	depends on BR2_PACKAGE_MTD_UTILS_GIT
- 
--config BR2_PACKAGE_MTD_UBIMIRROR
--	bool "ubimirror"
--	default y
--	depends on BR2_PACKAGE_MTD_UTILS_GIT
--
- config BR2_PACKAGE_MTD_UBIMKVOL
- 	bool "ubimkvol"
- 	default y
-@@ -152,5 +148,10 @@ config BR2_PACKAGE_MTD_UBIUPDATEVOL
- 	default y
- 	depends on BR2_PACKAGE_MTD_UTILS_GIT
- 
-+config BR2_PACKAGE_MTD_UBIFORMAT
-+	bool "ubiformat"
-+	default y
-+	depends on BR2_PACKAGE_MTD_UTILS_GIT
-+
- endif
- 
-diff --git a/package/mtd/mtd-utils.git/mtd-utils-all-targets.patch b/package/mtd/mtd-utils.git/mtd-utils-all-targets.patch
-deleted file mode 100644
-index e887118..0000000
---- a/package/mtd/mtd-utils.git/mtd-utils-all-targets.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--diff -urN mtd-utils-1.1.0-0rig/Makefile mtd-utils-1.1.0/Makefile
----- mtd-utils-1.1.0-0rig/Makefile	2007-08-03 15:55:51.000000000 +0200
--+++ mtd-utils-1.1.0/Makefile	2007-09-27 08:20:55.000000000 +0200
--@@ -72,6 +72,30 @@
-- $(BUILDDIR)/sumtool: $(BUILDDIR)/sumtool.o $(BUILDDIR)/crc32.o
-- 	$(CC) $(LDFLAGS) -o $@ $^
-- 
--+ftl_format:	$(BUILDDIR)/ftl_format
--+flash_erase:	$(BUILDDIR)/flash_erase
--+flash_eraseall:	$(BUILDDIR)/flash_eraseall
--+nanddump:	$(BUILDDIR)/nanddump
--+doc_loadbios:	$(BUILDDIR)/doc_loadbios
--+mkfs.jffs:	$(BUILDDIR)/mkfs.jffs
--+ftl_check:	$(BUILDDIR)/ftl_check
--+mkfs.jffs2:	$(BUILDDIR)/mkfs.jffs2
--+flash_lock:	$(BUILDDIR)/flash_lock
--+flash_unlock:	$(BUILDDIR)/flash_unlock
--+flash_info:	$(BUILDDIR)/flash_info
--+flash_otp_info:	$(BUILDDIR)/flash_otp_info
--+flash_otp_dump:	$(BUILDDIR)/flash_otp_dump
--+mtd_debug:	$(BUILDDIR)/mtd_debug
--+flashcp:	$(BUILDDIR)/flashcp
--+nandwrite:	$(BUILDDIR)/nandwrite
--+jffs2dump:	$(BUILDDIR)/jffs2dump
--+nftldump:	$(BUILDDIR)/nftldump
--+nftl_format:	$(BUILDDIR)/nftl_format
--+docfdisk:	$(BUILDDIR)/docfdisk
--+rfddump:	$(BUILDDIR)/rfddump
--+rfdformat:	$(BUILDDIR)/rfdformat
--+sumtool:	$(BUILDDIR)/sumtool
--+
-- install: ${TARGETS}
-- 	mkdir -p ${DESTDIR}/${SBINDIR}
-- 	install -m0755 ${TARGETS} ${DESTDIR}/${SBINDIR}/
-diff --git a/package/mtd/mtd-utils.git/mtd-utils-target-acl.patch b/package/mtd/mtd-utils.git/mtd-utils-target-acl.patch
-deleted file mode 100644
-index 953786e..0000000
---- a/package/mtd/mtd-utils.git/mtd-utils-target-acl.patch
-+++ /dev/null
-@@ -1,48 +0,0 @@
--Author:	Ulf Samuelsson
--Date:	2007-01-25
--
--Log:
--Patch adding "sys/acl.h" needed to compile mtd.
--
--Modified:
--	package/mtd/mtd_acl.patch
--
--Changeset
--	package/mtd/mtd_acl.patch
--
--diff -urN mtd_orig-0rig/include/sys/acl.h mtd_orig/include/sys/acl.h
----- mtd_orig-0rig/include/sys/acl.h	1970-01-01 01:00:00.000000000 +0100
--+++ mtd_orig/include/sys/acl.h	2007-01-17 20:11:22.000000000 +0100
--@@ -0,0 +1,32 @@
--+/*
--+  File: linux/posix_acl.h
--+
--+  (C) 2002 Andreas Gruenbacher, <a.gruenbacher@computer.org>
--+*/
--+
--+
--+#ifndef __LINUX_POSIX_ACL_H
--+#define __LINUX_POSIX_ACL_H
--+
--+#define ACL_UNDEFINED_ID	(-1)
--+
--+/* a_type field in acl_user_posix_entry_t */
--+#define ACL_TYPE_ACCESS		(0x8000)
--+#define ACL_TYPE_DEFAULT	(0x4000)
--+
--+/* e_tag entry in struct posix_acl_entry */
--+#define ACL_USER_OBJ		(0x01)
--+#define ACL_USER		(0x02)
--+#define ACL_GROUP_OBJ		(0x04)
--+#define ACL_GROUP		(0x08)
--+#define ACL_MASK		(0x10)
--+#define ACL_OTHER		(0x20)
--+
--+/* permissions in the e_perm field */
--+#define ACL_READ		(0x04)
--+#define ACL_WRITE		(0x02)
--+#define ACL_EXECUTE		(0x01)
--+//#define ACL_ADD		(0x08)
--+//#define ACL_DELETE		(0x10)
--+
--+#endif  /* __LINUX_POSIX_ACL_H */
-diff --git a/package/mtd/mtd-utils.git/mtd-utils-target-no-file-offset-bits.patch b/package/mtd/mtd-utils.git/mtd-utils-target-no-file-offset-bits.patch
-new file mode 100644
-index 0000000..c21a909
---- /dev/null
-+++ b/package/mtd/mtd-utils.git/mtd-utils-target-no-file-offset-bits.patch
-@@ -0,0 +1,11 @@
-+--- a/common.mk	2009-07-29 19:07:29.000000000 +0200
-++++ b/common.mk	2009-07-29 19:07:34.000000000 +0200
-+@@ -12,7 +12,7 @@
-+ 	$(call cc-option,-Wwrite-strings) \
-+ 	$(call cc-option,-Wno-sign-compare)
-+ CFLAGS += $(WFLAGS)
-+-CPPFLAGS += -D_FILE_OFFSET_BITS=64
-++CPPFLAGS += $(EXTRA_CPPFLAGS)
-+ 
-+ DESTDIR ?= /usr/local
-+ PREFIX=/usr
-diff --git a/package/mtd/mtd-utils.git/mtd.mk b/package/mtd/mtd-utils.git/mtd.mk
-index ca25ee5..b3f1b7e 100644
---- a/package/mtd/mtd-utils.git/mtd.mk
-+++ b/package/mtd/mtd-utils.git/mtd.mk
-@@ -3,7 +3,7 @@
- # mtd provides jffs2 utilities
- #
- #############################################################
--MTD_VERSION:=fcb52ccc99679460640386c297023f852b108f68
-+MTD_VERSION:=e783e75e09b4a0a519665afd7bdeaf2985e7a09c
- MTD_SOURCE:=mtd-utils-$(MTD_VERSION).tar.gz
- MTD_URL:=http://git.infradead.org/mtd-utils.git?a=snapshot;h=$(MTD_VERSION);sf=tgz
- MTD_HOST_DIR:= $(TOOL_BUILD_DIR)/mtd-utils-$(MTD_VERSION)
-@@ -98,20 +98,25 @@ MTD_TARGETS_UBI_y :=
- MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIATTACH) += ubiattach
- MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBICRC32) += ubicrc32
- MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIDETACH) += ubidetach
--MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIMIRROR) += ubimirror
- MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIMKVOL) += ubimkvol
- MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBINFO) += ubinfo
- MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIRMVOL) += ubirmvol
- MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIUPDATEVOL) += ubiupdatevol
-+MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIFORMAT) += ubiformat
- 
- MTD_BUILD_TARGETS := $(addprefix $(MTD_DIR)/, $(MTD_TARGETS_y)) $(addprefix $(MTD_DIR)/ubi-utils/, $(MTD_TARGETS_UBI_y))
- 
-+ifeq ($(BR2_LARGEFILE),y)
-+TARGET_CPPFLAGS += -D_FILE_OFFSET_BITS=64
-+endif
-+
- $(MTD_BUILD_TARGETS): $(MTD_DIR)/.unpacked
- 	mkdir -p $(TARGET_DIR)/usr/sbin
- 	$(MAKE1) OPTFLAGS="-DNEED_BCOPY -Dbcmp=memcmp -I$(STAGING_DIR)/usr/include $(TARGET_CFLAGS)" \
- 		LDFLAGS="$(TARGET_LDFLAGS)" \
--	       BUILDDIR=$(MTD_DIR) \
--	       CROSS=$(TARGET_CROSS) CC=$(TARGET_CC) WITHOUT_XATTR=1 -C $(MTD_DIR)
-+		BUILDDIR=$(MTD_DIR) \
-+		EXTRA_CPPFLAGS=$(TARGET_CPPFLAGS) \
-+		CROSS=$(TARGET_CROSS) CC=$(TARGET_CC) WITHOUT_XATTR=1 -C $(MTD_DIR)
- 
- MTD_TARGETS := $(addprefix $(TARGET_DIR)/usr/sbin/, $(MTD_TARGETS_y))
- MTD_UBI_TARGETS := $(addprefix $(TARGET_DIR)/usr/sbin/, $(MTD_TARGETS_UBI_y))
-@@ -124,7 +129,7 @@ $(MTD_UBI_TARGETS): $(TARGET_DIR)/usr/sbin/% : $(MTD_DIR)/ubi-utils/%
- 	cp -f $< $@
- 	$(STRIPCMD) $@
- 
--mtd: zlib lzo $(MTD_TARGETS) $(MTD_UBI_TARGETS)
-+mtd: zlib lzo libuuid $(MTD_TARGETS) $(MTD_UBI_TARGETS)
- 
- mtd-source: $(DL_DIR)/$(MTD_SOURCE)
- 
--- 
-1.6.3.3
+> And if I add init=/bin/sh at the end of the kernel command line (using busybox), I get this : 
+> Kernel command line: root=/dev/nfs rw nfsroot=10.84.34.52:/mnt/fractal/buildroot/buildroot-2009.05/project_build_arm/logica_demo/root ip=10.84.34.8:10.84.34.52:10.84.34.1:255.255.255.192:debian_test:eth0:off user_debug=255 init=/bin/sh
+> 
+> Looking up port of RPC 100003/2 on 10.84.34.52
+> Looking up port of RPC 100005/1 on 10.84.34.52
+> VFS: Mounted root (nfs filesystem).
+> Freeing init memory: 116K
+> Kernel panic - not syncing: Attempted to kill init!
+
+With CONFIG_DEBUG_USER=y, you should see more useful output at this
+stage.
+
+> ... and then I have compiled the kernel with initramfs. There I get something working: 
+> IP-Config: Complete:
+>      device=eth0, addr=10.84.34.8, mask=255.255.255.192, gw=10.84.34.1,
+>      host=debian_test, domain=, nis-domain=(none),
+>      bootserver=10.84.34.52, rootserver=10.84.34.52, rootpath=
+> Freeing init memory: 808K
+> Initializing random number generator... done.
+> Starting network...
+> ifup: interface lo already configured
+> Starting NFS statd: touch: /var/lock/subsys/nfslock: No such file or directory
+> done
+> Starting NFS services: done
+> Starting NFS daemon: done
+> Starting NFS mountd: Cannot register service: RPC: Unable to receive; errno = Connection refused
+> done
+> touch: /var/lock/subsys/nfs: No such file or directory
+> 
+> Welcome to Buildroot
+> login: root
+> # ls
+> # ls /
+> bin      dev      init     mnt      root     tmp
+> boot     etc      lib      opt      sbin     usr
+> config   home     linuxrc  proc     sys      var
+> # mount
+> rootfs on / type rootfs (rw)
+> proc on /proc type proc (rw)
+> devpts on /dev/pts type devpts (rw,gid=5,mode=620)
+> tmpfs on /tmp type tmpfs (rw)
+> sysfs on /sys type sysfs (rw)
+> 
+> 
+> 
+> But as you can see nfs root is not mounted (this might be because of a remount of / in inittab), whereas without initramfs, the nfs root is correctly mounted.
+> 
+> What puzzles me is that I though it would be possible to use a nfs root without initramfs. I will continue digging into this...
+
+It is possible, of course. Once you have more debug output, you might
+see where the problem is.
+
+Daniel
