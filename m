@@ -1,33 +1,68 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2009 16:18:10 +0200
-Subject: [Buildroot] [git commit] xorg: update CHANGES after bug fix
-Message-ID: <20090729054333.CC4757644E@busybox.osuosl.org>
+From: Chris Smith <chris.smith@tandberg.com>
+Date: Wed, 29 Jul 2009 09:06:39 +0100
+Subject: [Buildroot] Problem using netsnmp
+In-Reply-To: <87y6q8jyz1.fsf@macbook.be.48ers.dk>
+References: <4A6EE8F1.3060302@tandberg.com>
+	<87y6q8jyz1.fsf@macbook.be.48ers.dk>
+Message-ID: <4A70030F.9080007@tandberg.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Sorry that should have been libc.so.6.
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7a1a334c4216e2d105ceb6b2eceaa8986627ae67
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Building for i486.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- CHANGES |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+I noticed that snmpd is the only thing in the makefile using MAKE1 to 
+build and that it is the only binary with a problem.
 
-diff --git a/CHANGES b/CHANGES
-index cf764e8..77c4398 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -16,6 +16,7 @@
- 
- 	#83: liblockfile fails to compile due to eaccess redefinition
- 	#163: Xtensa architecture port
-+	#171: xorg-server / kernel headers 2.6.26 - vm86.c compilation issue
- 	#241: device mapper + lvm2: build together
- 	#243: ctorrent: new package
- 	#271: Library 'libgcc_s.so.1' not installed in search path
+readelf shows
+ 0x00000001 (NEEDED)                     Shared library: 
+[libnetsnmpagent.so.15]
+ 0x00000001 (NEEDED)                     Shared library: 
+[libnetsnmphelpers.so.15]
+ 0x00000001 (NEEDED)                     Shared library: 
+[libnetsnmpmibs.so.15]
+ 0x00000001 (NEEDED)                     Shared library: [libnetsnmp.so.15]
+ 0x00000001 (NEEDED)                     Shared library: [libdl.so.0]
+ 0x00000001 (NEEDED)                     Shared library: 
+[libcrypto.so.0.9.8]
+ 0x00000001 (NEEDED)                     Shared library: [libgcc_s.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.0]
+
+Which looks ok to me. But on the target...
+
+/usr/sbin/snmpd: can't load library 'libc.so.6'
+
+
+Peter Korsgaard wrote:
+>>>>>> "Chris" == Chris Smith <chris.smith@tandberg.com> writes:
+>>>>>>             
+>
+> hi,
+>
+>  Chris> When I build netsnmp the built snmpd doesn't work on the
+>  Chris> target.  All the other snmp stuff works but I get lib.so.6 not
+>  Chris> found when trying to run snmpd.
+>
+> Sure that's 'lib.so.6'? That's a fairly strange library name.
+>
+>  Chris> Anyone have any thoughts?  It is as if some linkage to host
+>  Chris> based libraries has crept in.
+>
+> What arch are you building for?
+>
+> What does build_*/staging_dir/*-readelf -x <snmpd> | grep NEEDED give?
+>
+>   
+
+
 -- 
-1.6.3.3
+
+--------------------------------------------------------------------
+TANDBERG Telecom UK Ltd
+Registered in England and Wales No: 3390345. 
+Registered address: 
+Unit 2 Pine Trees, Chertsey Lane, Staines, Middlesex, TW18 3HR
