@@ -1,84 +1,47 @@
 From: Daniel Mack <daniel@caiaq.de>
-Date: Wed, 29 Jul 2009 19:30:00 +0200
-Subject: [Buildroot] linux .config : override: reassigning tosymbolAEABI
-In-Reply-To: <F81DF98CADE6064F81A746D7C8323593782CC1@fr-ex009.groupinfra.com>
-References: <F81DF98CADE6064F81A746D7C8323593782CAA@fr-ex009.groupinfra.com>
-	<20090729132515.GM19257@buzzloop.caiaq.de>
-	<F81DF98CADE6064F81A746D7C8323593782CAC@fr-ex009.groupinfra.com>
-	<20090729134234.GY13236@buzzloop.caiaq.de>
-	<F81DF98CADE6064F81A746D7C8323593782CB2@fr-ex009.groupinfra.com>
-	<20090729142610.GB9464@buzzloop.caiaq.de>
-	<F81DF98CADE6064F81A746D7C8323593782CC1@fr-ex009.groupinfra.com>
-Message-ID: <20090729173000.GT19257@buzzloop.caiaq.de>
+Date: Wed, 29 Jul 2009 19:30:45 +0200
+Subject: [Buildroot] [PATCH 1/2] linux: fix initramfs related config
+	adaptions
+In-Reply-To: <1248710870-7709-1-git-send-email-daniel@caiaq.de>
+References: <1248710870-7709-1-git-send-email-daniel@caiaq.de>
+Message-ID: <20090729173045.GU19257@buzzloop.caiaq.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jul 29, 2009 at 06:07:33PM +0200, Courousse, Damien wrote:
-> > Ok, fine. You're digging at the wrong end then :) Try setting
-> > CONFIG_DEBUG_USER in your kernel config and pass user_debug=255 on
-> > startup. That will output more details when user space binaries crash.
-> > 
-> > Daniel
-> > 
-> [Damien Courouss?] 
-> The user_debug option did not change anything :(
+On Mon, Jul 27, 2009 at 06:07:49PM +0200, Daniel Mack wrote:
+> When fiddling with the kernel .config settings manually, make sure the
+> dependencies for initramfs are met. Without that, the kernel's
+> 'make oldconfig' will silently remove the newly added lines again.
+> 
+> Signed-off-by: Daniel Mack <daniel@caiaq.de>
 
-It only does if you set CONFIG_DEBUG_USER in your kernel config. You
-will need to change it in the config you point your BR2 to.
-
-> And if I add init=/bin/sh at the end of the kernel command line (using busybox), I get this : 
-> Kernel command line: root=/dev/nfs rw nfsroot=10.84.34.52:/mnt/fractal/buildroot/buildroot-2009.05/project_build_arm/logica_demo/root ip=10.84.34.8:10.84.34.52:10.84.34.1:255.255.255.192:debian_test:eth0:off user_debug=255 init=/bin/sh
-> 
-> Looking up port of RPC 100003/2 on 10.84.34.52
-> Looking up port of RPC 100005/1 on 10.84.34.52
-> VFS: Mounted root (nfs filesystem).
-> Freeing init memory: 116K
-> Kernel panic - not syncing: Attempted to kill init!
-
-With CONFIG_DEBUG_USER=y, you should see more useful output at this
-stage.
-
-> ... and then I have compiled the kernel with initramfs. There I get something working: 
-> IP-Config: Complete:
->      device=eth0, addr=10.84.34.8, mask=255.255.255.192, gw=10.84.34.1,
->      host=debian_test, domain=, nis-domain=(none),
->      bootserver=10.84.34.52, rootserver=10.84.34.52, rootpath=
-> Freeing init memory: 808K
-> Initializing random number generator... done.
-> Starting network...
-> ifup: interface lo already configured
-> Starting NFS statd: touch: /var/lock/subsys/nfslock: No such file or directory
-> done
-> Starting NFS services: done
-> Starting NFS daemon: done
-> Starting NFS mountd: Cannot register service: RPC: Unable to receive; errno = Connection refused
-> done
-> touch: /var/lock/subsys/nfs: No such file or directory
-> 
-> Welcome to Buildroot
-> login: root
-> # ls
-> # ls /
-> bin      dev      init     mnt      root     tmp
-> boot     etc      lib      opt      sbin     usr
-> config   home     linuxrc  proc     sys      var
-> # mount
-> rootfs on / type rootfs (rw)
-> proc on /proc type proc (rw)
-> devpts on /dev/pts type devpts (rw,gid=5,mode=620)
-> tmpfs on /tmp type tmpfs (rw)
-> sysfs on /sys type sysfs (rw)
-> 
-> 
-> 
-> But as you can see nfs root is not mounted (this might be because of a remount of / in inittab), whereas without initramfs, the nfs root is correctly mounted.
-> 
-> What puzzles me is that I though it would be possible to use a nfs root without initramfs. I will continue digging into this...
-
-It is possible, of course. Once you have more debug output, you might
-see where the problem is.
+Any feelings about these two?
 
 Daniel
+
+> ---
+>  target/linux/Makefile.in.advanced |    5 +++++
+>  1 files changed, 5 insertions(+), 0 deletions(-)
+> 
+> diff --git a/target/linux/Makefile.in.advanced b/target/linux/Makefile.in.advanced
+> index 47a1f4e..d176edd 100644
+> --- a/target/linux/Makefile.in.advanced
+> +++ b/target/linux/Makefile.in.advanced
+> @@ -361,6 +361,11 @@ endif
+>  	$(SED) '/CONFIG_INITRAMFS_SOURCE/d' $(LINUX26_DIR)/.config
+>  	$(SED) '/INITRAMFS_ROOT_.ID/d' $(LINUX26_DIR)/.config
+>  ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
+> +	echo "CONFIG_BLK_DEV_INITRD=y" >> $(LINUX26_DIR)/.config
+> +	echo "CONFIG_INITRAMFS_COMPRESSION_GZIP=y" >> $(LINUX26_DIR)/.config
+> +	echo "# CONFIG_INITRAMFS_COMPRESSION_NONE is not set" >> $(LINUX26_DIR)/.config
+> +	echo "# CONFIG_INITRAMFS_COMPRESSION_BZIP2 is not set" >> $(LINUX26_DIR)/.config
+> +	echo "# CONFIG_INITRAMFS_COMPRESSION_LZMA is not set" >> $(LINUX26_DIR)/.config
+>  	echo "CONFIG_INITRAMFS_SOURCE=\"$(INITRAMFS_TARGET)\"" >> \
+>  		$(LINUX26_DIR)/.config
+>  	echo "CONFIG_INITRAMFS_ROOT_UID=0" >> $(LINUX26_DIR)/.config
+> -- 
+> 1.6.3.1
+> 
