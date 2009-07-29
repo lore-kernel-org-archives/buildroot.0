@@ -1,35 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 29 Jul 2009 20:59:35 +0200
-Subject: [Buildroot] linux .config : override: reassigning to symbol
-	AEABI
-In-Reply-To: <F81DF98CADE6064F81A746D7C8323593782CAA@fr-ex009.groupinfra.com>
-	(Damien Courousse's message of "Wed\,
-	29 Jul 2009 14\:59\:14 +0200")
-References: <F81DF98CADE6064F81A746D7C8323593782CAA@fr-ex009.groupinfra.com>
-Message-ID: <87vdlbxqlk.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 29 Jul 2009 19:15:37 +0000 (UTC)
+Subject: [Buildroot] [Bug 497] OpenSSL RSA key generation hangs on x86_64
+In-Reply-To: <bug-497-163@https.bugs.busybox.net/>
+References: <bug-497-163@https.bugs.busybox.net/>
+Message-ID: <20090729191537.8708E777EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Damien" == Courousse, Damien <damien.courousse@logica.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=497
 
- Damien> The kernel loading gets stuck after mounting the NFS root : 
- Damien> ================================================================
- Damien> ....
- Damien> IP-Config: Complete:
- Damien>      device=eth0, addr=10.84.34.8, mask=255.255.255.192, gw=10.84.34.1,
- Damien>      host=debian_test, domain=, nis-domain=(none),
- Damien>      bootserver=10.84.34.52, rootserver=10.84.34.52, rootpath=
- Damien> Looking up port of RPC 100003/2 on 10.84.34.52
- Damien> Looking up port of RPC 100005/1 on 10.84.34.52
- Damien> VFS: Mounted root (nfs filesystem).
- Damien> Freeing init memory: 116K
- Damien> Kernel panic - not syncing: Attempted to kill init!
 
-Do you use softfloat or fpu emulation in the kernel? (check
-BR2_SOFT_FLOAT).
+Peter Korsgaard <jacmet@uclibc.org> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
+
+
+
+
+--- Comment #2 from Peter Korsgaard <jacmet@uclibc.org>  2009-07-29 19:15:36 UTC ---
+It's because BR2_ARCH is a string value, so it contains " chars as well, E.G.
+the tests have to be written as:
+
+ifeq ($(BR2_ARCH),"x86_64")
+OPENSSL_TARGET_ARCH=x86_64
+endif
+
+I'll fix it in git - Thanks.
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
