@@ -1,36 +1,35 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 29 Jul 2009 20:51:53 +0200
-Subject: [Buildroot] Cygwin PPC Build Possible ?
-In-Reply-To: <4A707399.2030401@dlasys.net> (David H. Lynch J. r.'s message of
-	"Wed\, 29 Jul 2009 12\:06\:49 -0400")
-References: <4A707399.2030401@dlasys.net>
-Message-ID: <873a8fz5iu.fsf@macbook.be.48ers.dk>
+Date: Wed, 29 Jul 2009 20:59:35 +0200
+Subject: [Buildroot] linux .config : override: reassigning to symbol
+	AEABI
+In-Reply-To: <F81DF98CADE6064F81A746D7C8323593782CAA@fr-ex009.groupinfra.com>
+	(Damien Courousse's message of "Wed\,
+	29 Jul 2009 14\:59\:14 +0200")
+References: <F81DF98CADE6064F81A746D7C8323593782CAA@fr-ex009.groupinfra.com>
+Message-ID: <87vdlbxqlk.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "David" == David H Lynch J r <ml@dlasys.net> writes:
+>>>>> "Damien" == Courousse, Damien <damien.courousse@logica.com> writes:
 
- David>     I am trying to use buildroot to create a ppc-405-linux-uClibc
- David> toolchain.
+ Damien> The kernel loading gets stuck after mounting the NFS root : 
+ Damien> ================================================================
+ Damien> ....
+ Damien> IP-Config: Complete:
+ Damien>      device=eth0, addr=10.84.34.8, mask=255.255.255.192, gw=10.84.34.1,
+ Damien>      host=debian_test, domain=, nis-domain=(none),
+ Damien>      bootserver=10.84.34.52, rootserver=10.84.34.52, rootpath=
+ Damien> Looking up port of RPC 100003/2 on 10.84.34.52
+ Damien> Looking up port of RPC 100005/1 on 10.84.34.52
+ Damien> VFS: Mounted root (nfs filesystem).
+ Damien> Freeing init memory: 116K
+ Damien> Kernel panic - not syncing: Attempted to kill init!
 
- David>     Currently I am getting a weird failure building gmp-4.2.4-host
- David>     the error is something like
- David>         configure:1 can't find CollabNet/files
-
-grep -rlsi collab in gmp-4.2.4-host doesn't give anything, so maybe
-you're remembering wrong?
-
- David>     Sorry I am in linux at the moment so I do nto have the exact error.
- David>     Regardless it seems to be some kind of cygwin script handling issue.
-
- David>     Has anyone succeeded in running buildroot under cygwin ?
-
-We have some very basic cygwin support in BR, but I haven't heard
-about anyone using it, certainly none of the developers so it could
-very well be broken.
+Do you use softfloat or fpu emulation in the kernel? (check
+BR2_SOFT_FLOAT).
 
 -- 
 Bye, Peter Korsgaard
