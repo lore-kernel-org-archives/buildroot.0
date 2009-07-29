@@ -1,47 +1,35 @@
-From: Daniel Mack <daniel@caiaq.de>
-Date: Wed, 29 Jul 2009 19:30:45 +0200
-Subject: [Buildroot] [PATCH 1/2] linux: fix initramfs related config
-	adaptions
-In-Reply-To: <1248710870-7709-1-git-send-email-daniel@caiaq.de>
-References: <1248710870-7709-1-git-send-email-daniel@caiaq.de>
-Message-ID: <20090729173045.GU19257@buzzloop.caiaq.de>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 29 Jul 2009 18:39:21 +0000 (UTC)
+Subject: [Buildroot] [Bug 499] make O=... busybox-menuconfig crashes
+In-Reply-To: <bug-499-163@https.bugs.busybox.net/>
+References: <bug-499-163@https.bugs.busybox.net/>
+Message-ID: <20090729183921.5FB48774F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jul 27, 2009 at 06:07:49PM +0200, Daniel Mack wrote:
-> When fiddling with the kernel .config settings manually, make sure the
-> dependencies for initramfs are met. Without that, the kernel's
-> 'make oldconfig' will silently remove the newly added lines again.
-> 
-> Signed-off-by: Daniel Mack <daniel@caiaq.de>
+https://bugs.busybox.net/show_bug.cgi?id=499
 
-Any feelings about these two?
 
-Daniel
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-> ---
->  target/linux/Makefile.in.advanced |    5 +++++
->  1 files changed, 5 insertions(+), 0 deletions(-)
-> 
-> diff --git a/target/linux/Makefile.in.advanced b/target/linux/Makefile.in.advanced
-> index 47a1f4e..d176edd 100644
-> --- a/target/linux/Makefile.in.advanced
-> +++ b/target/linux/Makefile.in.advanced
-> @@ -361,6 +361,11 @@ endif
->  	$(SED) '/CONFIG_INITRAMFS_SOURCE/d' $(LINUX26_DIR)/.config
->  	$(SED) '/INITRAMFS_ROOT_.ID/d' $(LINUX26_DIR)/.config
->  ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
-> +	echo "CONFIG_BLK_DEV_INITRD=y" >> $(LINUX26_DIR)/.config
-> +	echo "CONFIG_INITRAMFS_COMPRESSION_GZIP=y" >> $(LINUX26_DIR)/.config
-> +	echo "# CONFIG_INITRAMFS_COMPRESSION_NONE is not set" >> $(LINUX26_DIR)/.config
-> +	echo "# CONFIG_INITRAMFS_COMPRESSION_BZIP2 is not set" >> $(LINUX26_DIR)/.config
-> +	echo "# CONFIG_INITRAMFS_COMPRESSION_LZMA is not set" >> $(LINUX26_DIR)/.config
->  	echo "CONFIG_INITRAMFS_SOURCE=\"$(INITRAMFS_TARGET)\"" >> \
->  		$(LINUX26_DIR)/.config
->  	echo "CONFIG_INITRAMFS_ROOT_UID=0" >> $(LINUX26_DIR)/.config
-> -- 
-> 1.6.3.1
-> 
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
+
+
+
+
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-07-29 18:39:20 UTC ---
+Strange - It works here (both with a clean tree and after a full build).
+The only issue I remember about O= was fixed long ago with 94b3420da9c94c3044f,
+where packages that also support O= (linux, busybox, ..) got confused as it got
+forwarded.
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
