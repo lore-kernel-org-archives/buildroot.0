@@ -1,41 +1,28 @@
 From: David H. Lynch J.r <ml@dlasys.net>
-Date: Wed, 29 Jul 2009 11:58:16 -0400
-Subject: [Buildroot] ppc 405 buildroot failure
-Message-ID: <4A707198.9090704@dlasys.net>
+Date: Wed, 29 Jul 2009 12:06:49 -0400
+Subject: [Buildroot] Cygwin PPC Build Possible ?
+Message-ID: <4A707399.2030401@dlasys.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-    Attempting to run the latest buildroot from git
 
-I eventually get the following errors:
+    I am trying to use buildroot to create a ppc-405-linux-uClibc
+toolchain.
 
-../utils/ldconfig.c:117: error: expected '=', ',', ';', 'asm' or
-'__attribute__' before 'err'
-../utils/ldconfig.c: In function 'xmalloc':
-../utils/ldconfig.c:153: warning: implicit declaration of function 'err'
-../utils/ldconfig.c: In function 'get_extpath':
-../utils/ldconfig.c:570: warning: ignoring return value of 'fread',
-declared with attribute warn_unused_result
-../utils/ldconfig.c: At top level:
-../utils/ldconfig.c:786: error: expected '=', ',', ';', 'asm' or
-'__attribute__' before 'usage'
-../utils/ldconfig.c: In function 'main':
-../utils/ldconfig.c:882: warning: implicit declaration of function 'usage'
-make[1]: *** [../utils/ldconfig.host] Error 1
-make[1]: Leaving directory
-`/usr/src/pico/bk/linux/git/buildroot/toolchain_build_powerpc/uClibc/utils'
-make: *** [/opt/crosstool/gcc-4.4.1-uclibc/usr/lib/libc.a] Error 2
+    Currently I am getting a weird failure building gmp-4.2.4-host
+    the error is something like
+        configure:1 can't find CollabNet/files
+    Sorry I am in linux at the moment so I do nto have the exact error.
+    Regardless it seems to be some kind of cygwin script handling issue.
 
-I am able to work past this by zapping the attribute_noreturn macro in
-toolchain_build_powerpc/uClibc/include/libc-symbols.h
+    Has anyone succeeded in running buildroot under cygwin ?
+    Any hints or suguestions ?
+    I am using cygwin 1.5 and very recent buildroot from git.
 
-This is apparently not the kosher way of fixing this as anytime I run
-menuconf the problem reappears.
+    What about mingw32/msys rather than cygwin ?
 
-If someone could give me a clue how to do this properly I would be happy
-to put together a patch.
-There does appear to be a configure test for autoreturn but it is ending
-up enabled apparently when it should not be.
+    Or any other way to build a somewhat moder ppc-405 windows/linux 
+uClibc cross compiler ?
