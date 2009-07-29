@@ -1,35 +1,36 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 29 Jul 2009 18:39:21 +0000 (UTC)
-Subject: [Buildroot] [Bug 499] make O=... busybox-menuconfig crashes
-In-Reply-To: <bug-499-163@https.bugs.busybox.net/>
-References: <bug-499-163@https.bugs.busybox.net/>
-Message-ID: <20090729183921.5FB48774F8@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 29 Jul 2009 20:51:53 +0200
+Subject: [Buildroot] Cygwin PPC Build Possible ?
+In-Reply-To: <4A707399.2030401@dlasys.net> (David H. Lynch J. r.'s message of
+	"Wed\, 29 Jul 2009 12\:06\:49 -0400")
+References: <4A707399.2030401@dlasys.net>
+Message-ID: <873a8fz5iu.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=499
+>>>>> "David" == David H Lynch J r <ml@dlasys.net> writes:
 
+ David>     I am trying to use buildroot to create a ppc-405-linux-uClibc
+ David> toolchain.
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+ David>     Currently I am getting a weird failure building gmp-4.2.4-host
+ David>     the error is something like
+ David>         configure:1 can't find CollabNet/files
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |ASSIGNED
+grep -rlsi collab in gmp-4.2.4-host doesn't give anything, so maybe
+you're remembering wrong?
 
+ David>     Sorry I am in linux at the moment so I do nto have the exact error.
+ David>     Regardless it seems to be some kind of cygwin script handling issue.
 
+ David>     Has anyone succeeded in running buildroot under cygwin ?
 
-
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-07-29 18:39:20 UTC ---
-Strange - It works here (both with a clean tree and after a full build).
-The only issue I remember about O= was fixed long ago with 94b3420da9c94c3044f,
-where packages that also support O= (linux, busybox, ..) got confused as it got
-forwarded.
-
+We have some very basic cygwin support in BR, but I haven't heard
+about anyone using it, certainly none of the developers so it could
+very well be broken.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
