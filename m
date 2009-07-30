@@ -1,43 +1,27 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 30 Jul 2009 17:24:42 +0200
-Subject: [Buildroot] 2009.08 release status
-In-Reply-To: <20090730150607.38ced1df@surf> (Thomas Petazzoni's message of
-	"Thu\, 30 Jul 2009 15\:06\:07 +0200")
-References: <87eiryxt8k.fsf@macbook.be.48ers.dk> <20090730150607.38ced1df@surf>
-Message-ID: <87prbiw5vp.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 30 Jul 2009 17:41:03 +0200
+Subject: [Buildroot] [pull request] Pull request for branch kconfig-cleanup
+Message-ID: <cover.1248968461.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+The following changes since commit 7a1a334c4216e2d105ceb6b2eceaa8986627ae67:
+  Thomas Petazzoni (1):
+        xorg: update CHANGES after bug fix
 
-Hi,
+are available in the git repository at:
 
- Thomas> One thing that could be nice to have in the Bugzilla is the
- Thomas> Milestone field
- Thomas> (http://www.bugzilla.org/docs/3.4/en/html/milestones.html). It
- Thomas> would also us to triage bugs between the ones that we want to
- Thomas> see fixed in 2009.08, the one in 2009.11, etc.
+  git://git.busybox.net/~tpetazzoni/git/buildroot kconfig-cleanup
 
-Yes, I'll ask the osuosl.org people to add the milestones.
+Thomas Petazzoni (1):
+      kconfig: tell git to ignore new generated files
 
- >> Notice that I'll be on holidays from the 7th to 24th with very little
- >> connectivity, but I'll take care of the backlog when I get back.
- >> Developers are very welcome to collect fixes in git trees and send me
- >> pull requests to ease my work though.
+ package/config/.gitignore |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
- Thomas> I'll also be on holidays between 7th to 22th, but with good
- Thomas> connectivity, but probably limited time available. I'd like
- Thomas> to say that I will gather the fixes in a git tree, but I
- Thomas> cannot guarantee it.
-
-OK, no problem.
-
- Thomas> Thanks again for taking care of getting Buildroot releases out.
-
-You're welcome - And thanks for all your support.
-
+Thanks,
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni
