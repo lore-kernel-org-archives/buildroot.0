@@ -1,9 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 30 Jul 2009 06:42:52 +0000 (UTC)
+Date: Thu, 30 Jul 2009 06:48:28 +0000 (UTC)
 Subject: [Buildroot] [Bug 505] live555: new package
 In-Reply-To: <bug-505-163@https.bugs.busybox.net/>
 References: <bug-505-163@https.bugs.busybox.net/>
-Message-ID: <20090730064252.9E9C77781B@busybox.osuosl.org>
+Message-ID: <20090730064828.B709A777F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,13 +13,14 @@ To: buildroot@busybox.net
 https://bugs.busybox.net/show_bug.cgi?id=505
 
 
+Kelvin Cheung <keguang.zhang@gmail.com> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+    Attachment #517|patch                       |live555: new package
+        description|                            |
 
 
-
---- Comment #1 from Kelvin Cheung <keguang.zhang@gmail.com>  2009-07-30 06:42:52 UTC ---
-Created an attachment (id=517)
- --> (https://bugs.busybox.net/attachment.cgi?id=517)
-patch
 
 
 -- 
