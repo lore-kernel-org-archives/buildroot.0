@@ -1,9 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 30 Jul 2009 15:55:22 +0000 (UTC)
+Date: Thu, 30 Jul 2009 16:18:44 +0000 (UTC)
 Subject: [Buildroot] [Bug 513] Add new squid package
 In-Reply-To: <bug-513-163@https.bugs.busybox.net/>
 References: <bug-513-163@https.bugs.busybox.net/>
-Message-ID: <20090730155522.5E49677828@busybox.osuosl.org>
+Message-ID: <20090730161844.25F8777804@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +13,13 @@ To: buildroot@busybox.net
 https://bugs.busybox.net/show_bug.cgi?id=513
 
 
-Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
- Attachment #525 is|0                           |1
-           obsolete|                            |
 
 
 
+--- Comment #4 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2009-07-30 16:18:43 UTC ---
+Thanks for the improvements. The patch looks good now (but I didn't test it).
 
---- Comment #3 from Gustavo Zacarias <gustavo@zacarias.com.ar>  2009-07-30 15:55:21 UTC ---
-Created an attachment (id=527)
- --> (https://bugs.busybox.net/attachment.cgi?id=527)
-Add squid package (2)
+Could you also submit the squid patch upstream ?
 
 
 -- 
