@@ -1,38 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Jul 2009 17:41:04 +0200
-Subject: [Buildroot] [PATCH 1/1] kconfig: tell git to ignore new generated
-	files
-In-Reply-To: <cover.1248968461.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1248968461.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <33f13e393f55f12b3887cbf5c849fc14f8d7c666.1248968461.git.thomas.petazzoni@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 30 Jul 2009 15:55:22 +0000 (UTC)
+Subject: [Buildroot] [Bug 513] Add new squid package
+In-Reply-To: <bug-513-163@https.bugs.busybox.net/>
+References: <bug-513-163@https.bugs.busybox.net/>
+Message-ID: <20090730155522.5E49677828@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The update of kconfig and the addition of xconfig support generates
-more files in package/config/. Tell git to ignore them.
+https://bugs.busybox.net/show_bug.cgi?id=513
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/config/.gitignore |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/config/.gitignore b/package/config/.gitignore
-index 9067e68..161a19a 100644
---- a/package/config/.gitignore
-+++ b/package/config/.gitignore
-@@ -1,6 +1,10 @@
- /buildroot-config
- /conf
- /mconf
-+/qconf
-+/qconf.moc
-+/.tmp_qtcheck
-+/lkc_defs.h
- /lex.zconf.c
- /zconf.hash.c
- /zconf.tab.c
+Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+ Attachment #525 is|0                           |1
+           obsolete|                            |
+
+
+
+
+--- Comment #3 from Gustavo Zacarias <gustavo@zacarias.com.ar>  2009-07-30 15:55:21 UTC ---
+Created an attachment (id=527)
+ --> (https://bugs.busybox.net/attachment.cgi?id=527)
+Add squid package (2)
+
+
 -- 
-1.6.0.4
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
