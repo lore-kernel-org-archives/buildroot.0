@@ -1,27 +1,33 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 30 Jul 2009 16:37:43 +0000 (UTC)
-Subject: [Buildroot] [Bug 513] Add new squid package
-In-Reply-To: <bug-513-163@https.bugs.busybox.net/>
-References: <bug-513-163@https.bugs.busybox.net/>
-Message-ID: <20090730163743.E6371777A4@busybox.osuosl.org>
+Date: Thu, 30 Jul 2009 21:52:34 +0000 (UTC)
+Subject: [Buildroot] [Bug 515] New: tcpreplay: new package
+Message-ID: <bug-515-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=513
+https://bugs.busybox.net/show_bug.cgi?id=515
+
+           Summary: tcpreplay: new package
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+               URL: http://tcpreplay.synfin.net/
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: judge.packham at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
 
-
-
-
---- Comment #5 from Gustavo Zacarias <gustavo@zacarias.com.ar>  2009-07-30 16:37:43 UTC ---
-http://www.squid-cache.org/bugs/show_bug.cgi?id=2662
-
-Basically the only big change they need to do with respect to the original
-patch is consider that $build may be wrong thus just pick up CXX_FOR_BUILD or
-HOSTCXX in configure.
+Tcpreplay is a tool for replaying network traffic from files saved with tcpdump
+or other tools which write pcap(3) files.
 
 
 -- 
