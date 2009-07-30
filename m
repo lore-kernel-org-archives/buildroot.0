@@ -1,33 +1,43 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 30 Jul 2009 15:15:01 +0000 (UTC)
-Subject: [Buildroot] [Bug 509] Bump sqlite package to 3.6.16
-In-Reply-To: <bug-509-163@https.bugs.busybox.net/>
-References: <bug-509-163@https.bugs.busybox.net/>
-Message-ID: <20090730151501.966CB77804@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 30 Jul 2009 17:24:42 +0200
+Subject: [Buildroot] 2009.08 release status
+In-Reply-To: <20090730150607.38ced1df@surf> (Thomas Petazzoni's message of
+	"Thu\, 30 Jul 2009 15\:06\:07 +0200")
+References: <87eiryxt8k.fsf@macbook.be.48ers.dk> <20090730150607.38ced1df@surf>
+Message-ID: <87prbiw5vp.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=509
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
+Hi,
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+ Thomas> One thing that could be nice to have in the Bugzilla is the
+ Thomas> Milestone field
+ Thomas> (http://www.bugzilla.org/docs/3.4/en/html/milestones.html). It
+ Thomas> would also us to triage bugs between the ones that we want to
+ Thomas> see fixed in 2009.08, the one in 2009.11, etc.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+Yes, I'll ask the osuosl.org people to add the milestones.
 
+ >> Notice that I'll be on holidays from the 7th to 24th with very little
+ >> connectivity, but I'll take care of the backlog when I get back.
+ >> Developers are very welcome to collect fixes in git trees and send me
+ >> pull requests to ease my work though.
 
+ Thomas> I'll also be on holidays between 7th to 22th, but with good
+ Thomas> connectivity, but probably limited time available. I'd like
+ Thomas> to say that I will gather the fixes in a git tree, but I
+ Thomas> cannot guarantee it.
 
+OK, no problem.
 
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-07-30 15:15:01 UTC ---
-Thanks, committed
+ Thomas> Thanks again for taking care of getting Buildroot releases out.
 
+You're welcome - And thanks for all your support.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
