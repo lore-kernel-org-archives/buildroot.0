@@ -1,15 +1,17 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Jul 2009 16:55:27 +0200
-Subject: [Buildroot] [PATCH 1/1] makefile: remove unused AUTO_CONFIGURE_OPTS
-	variable
-In-Reply-To: <cover.1248965723.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1248965723.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <4e9807a645c11e914ae7bb64e7f6e9a732ad4848.1248965723.git.thomas.petazzoni@free-electrons.com>
+Date: Thu, 30 Jul 2009 17:04:30 +0200
+Subject: [Buildroot] [git commit] makefile: remove unused
+	AUTO_CONFIGURE_OPTS variable
+Message-ID: <20090730150447.9274877804@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+
+commit: http://git.buildroot.net/buildroot/commit/?id=4e9807a645c11e914ae7bb64e7f6e9a732ad4848
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 The AUTO_CONFIGURE_OPTS is not used anywhere in the tree. autoconf
 based packages should used the Makefile.autotools.in machinery
@@ -42,4 +44,4 @@ index f0dc47a..3dcdfe1 100644
  		AR="$(TARGET_AR)" \
  		AS="$(TARGET_AS)" \
 -- 
-1.6.0.4
+1.6.3.3
