@@ -1,20 +1,38 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Thu, 30 Jul 2009 15:18:27 +1200
-Subject: [Buildroot] [PATCH/RFC] add tcpreplay tool
-In-Reply-To: <a038bef50907292010o634882f2p268bceac900afc6f@mail.gmail.com>
-References: <4A71B59E0200006800015A5C@gwia.alliedtelesyn.co.nz>
-	<a038bef50907292010o634882f2p268bceac900afc6f@mail.gmail.com>
-Message-ID: <a038bef50907292018x3041d740k89783f8bf4d5657d@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 30 Jul 2009 06:39:36 +0000 (UTC)
+Subject: [Buildroot] [Bug 505] New: live555: new package
+Message-ID: <bug-505-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jul 30, 2009 at 3:10 PM, Chris Packham<judge.packham@gmail.com> wrote:
-> Hi Buildroot,
->
-> Is there any interest in incorporating tcpreplay as a package?
+https://bugs.busybox.net/show_bug.cgi?id=505
 
-Sorry for the spam but I think gmail ate my homework. If there is
-interest I can resend the patch as an attachment.
+           Summary: live555: new package
+           Product: buildroot
+           Version: unspecified
+          Platform: All
+               URL: http://www.live555.com/liveMedia/
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P3
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: keguang.zhang at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
+
+
+LIVE555 Streaming Media forms a set of C++ libraries for multimedia
+streaming, using open standard protocols (RTP/RTCP, RTSP, SIP).
+
+See: http://www.live555.com/liveMedia/
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
