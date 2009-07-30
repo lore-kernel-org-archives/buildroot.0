@@ -1,32 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 30 Jul 2009 12:12:52 +0000 (UTC)
-Subject: [Buildroot] [Bug 505] live555: new package
-In-Reply-To: <bug-505-163@https.bugs.busybox.net/>
-References: <bug-505-163@https.bugs.busybox.net/>
-Message-ID: <20090730121252.573E17781B@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 30 Jul 2009 14:14:51 +0200
+Subject: [Buildroot] 2009.08 release status
+Message-ID: <87eiryxt8k.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=505
+Hi,
 
+As mentioned in the 2009.05 release announcement
+(http://lists.busybox.net/pipermail/buildroot/2009-June/027640.html),
+the next release is getting near.
 
+As you can see we're already running slightly late. I would like to
+put out -rc1 early next week, so we'll be able to release the final
+2009.08 by the end of August.
 
+I'll run though the open issues in the bugtracker to see what else
+should go in (many thanks to Will and Thomas for their support), and I
+would also like to add gcc 4.3.4 which should get released any moment
+now - Is there anything else that NEEDs to get into the release?
 
+Once -rc1 out I want us to focus purely on bugfixes and not new
+packages / versions (unless that fixes problems).
 
---- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2009-07-30 12:12:51 UTC ---
-After a quick look at the patch :
- * I think we could make the config.arm-linux thing a little more generic, so
-as to support other architectures as well
- * The config.arm-linux should probably be generated, or at least sed'ed by the
-.mk file, to really use $(TARGET_CC), $(TARGET_CFLAGS), $(TARGET_LD),
-$(TARGET_LDFLAGS), etc. This would for example fix this package with external
-toolchains
-
+Notice that I'll be on holidays from the 7th to 24th with very little
+connectivity, but I'll take care of the backlog when I get back.
+Developers are very welcome to collect fixes in git trees and send me
+pull requests to ease my work though.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
