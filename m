@@ -1,27 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Jul 2009 17:41:03 +0200
-Subject: [Buildroot] [pull request] Pull request for branch kconfig-cleanup
-Message-ID: <cover.1248968461.git.thomas.petazzoni@free-electrons.com>
+Date: Thu, 30 Jul 2009 17:41:04 +0200
+Subject: [Buildroot] [PATCH 1/1] kconfig: tell git to ignore new generated
+	files
+In-Reply-To: <cover.1248968461.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1248968461.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <33f13e393f55f12b3887cbf5c849fc14f8d7c666.1248968461.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The following changes since commit 7a1a334c4216e2d105ceb6b2eceaa8986627ae67:
-  Thomas Petazzoni (1):
-        xorg: update CHANGES after bug fix
+The update of kconfig and the addition of xconfig support generates
+more files in package/config/. Tell git to ignore them.
 
-are available in the git repository at:
-
-  git://git.busybox.net/~tpetazzoni/git/buildroot kconfig-cleanup
-
-Thomas Petazzoni (1):
-      kconfig: tell git to ignore new generated files
-
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
  package/config/.gitignore |    4 ++++
  1 files changed, 4 insertions(+), 0 deletions(-)
 
-Thanks,
+diff --git a/package/config/.gitignore b/package/config/.gitignore
+index 9067e68..161a19a 100644
+--- a/package/config/.gitignore
++++ b/package/config/.gitignore
+@@ -1,6 +1,10 @@
+ /buildroot-config
+ /conf
+ /mconf
++/qconf
++/qconf.moc
++/.tmp_qtcheck
++/lkc_defs.h
+ /lex.zconf.c
+ /zconf.hash.c
+ /zconf.tab.c
 -- 
-Thomas Petazzoni
+1.6.0.4
