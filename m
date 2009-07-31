@@ -1,40 +1,24 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 31 Jul 2009 02:10:50 +0000 (UTC)
-Subject: [Buildroot] [Bug 505] live555: new package
-In-Reply-To: <bug-505-163@https.bugs.busybox.net/>
-References: <bug-505-163@https.bugs.busybox.net/>
-Message-ID: <20090731021050.83B30777E4@busybox.osuosl.org>
+From: Mark Constable <markc@renta.net>
+Date: Fri, 31 Jul 2009 13:24:43 +1000
+Subject: [Buildroot] x86_64 error
+Message-ID: <4A7263FB.6050006@renta.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=505
+This is just after make menuconfig from a Git checkout where the
+target is x86_64 on a x86_64 host (I want a 64bit uclibc)...
 
+rm -rf /home/sources/srcpkgs/eth-os/cli/buildroot/src/buildroot-2009.05/project_build_x86_64/uclibc/root/usr/include /home/sources/srcpkgs/eth-os/cli/buildroot/src/buildroot-2009.05/project_build_x86_64/uclibc/root/usr/lib/pkgconfig
+find /home/sources/srcpkgs/eth-os/cli/buildroot/src/buildroot-2009.05/project_build_x86_64/uclibc/root/lib \( -name '*.a' -o -name '*.la' \) -print0 | xargs -0 rm -f
+find /home/sources/srcpkgs/eth-os/cli/buildroot/src/buildroot-2009.05/project_build_x86_64/uclibc/root/usr/lib \( -name '*.a' -o -name '*.la' \) -print0 | xargs -0 rm -f
+rm -rf /home/sources/srcpkgs/eth-os/cli/buildroot/src/buildroot-2009.05/project_build_x86_64/uclibc/root/usr/man /home/sources/srcpkgs/eth-os/cli/buildroot/src/buildroot-2009.05/project_build_x86_64/uclibc/root/usr/share/man
+/home/sources/srcpkgs/eth-os/cli/buildroot/src/buildroot-2009.05/project_build_x86_64/uclibc/root/usr/info /home/sources/srcpkgs/eth-os/cli/buildroot/src/buildroot-2009.05/project_build_x86_64/uclibc/root/usr/share/info
+find /home/sources/srcpkgs/eth-os/cli/buildroot/src/buildroot-2009.05/project_build_x86_64/uclibc/root -type f -perm +111 | xargs /home/sources/srcpkgs/eth-os/cli/buildroot/src/buildroot-2009.05/build_x86_64/staging_dir/usr/bin/x86_64-linux-uclibc-strip --remove-section=.comment --remove-section=.note 2>/dev/null || true
+/home/sources/srcpkgs/eth-os/cli/buildroot/src/buildroot-2009.05/build_x86_64/staging_dir/usr/bin/x86_64-linux-uclibc-ldconfig -r /home/sources/srcpkgs/eth-os/cli/buildroot/src/buildroot-2009.05/project_build_x86_64/uclibc/root 2>/dev/null
+make: *** [target-finalize] Error 127
+make: *** Waiting for unfinished jobs....
 
-
-
-
---- Comment #5 from Kelvin Cheung <keguang.zhang@gmail.com>  2009-07-31 02:10:49 UTC ---
-(In reply to comment #3)
-> After a quick look at the patch :
->  * I think we could make the config.arm-linux thing a little more generic, so
-> as to support other architectures as well
->  * The config.arm-linux should probably be generated, or at least sed'ed by the
-> .mk file, to really use $(TARGET_CC), $(TARGET_CFLAGS), $(TARGET_LD),
-> $(TARGET_LDFLAGS), etc. This would for example fix this package with external
-> toolchains
-> 
-
-Now, the patch could support both x86 and arm.
-
-Other architectures such as alpha and blackfin are already supported by
-'genMakefiles' (something like configure).
-But I do not have toolchains except x86 and arm.
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+--markc
