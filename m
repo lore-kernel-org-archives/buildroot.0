@@ -1,25 +1,37 @@
-From: Mark Constable <markc@renta.net>
-Date: Fri, 31 Jul 2009 14:19:03 +1000
-Subject: [Buildroot] x86_64 error2
-Message-ID: <4A7270B7.3000308@renta.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 31 Jul 2009 04:20:17 +0000 (UTC)
+Subject: [Buildroot] [Bug 505] live555: new package
+In-Reply-To: <bug-505-163@https.bugs.busybox.net/>
+References: <bug-505-163@https.bugs.busybox.net/>
+Message-ID: <20090731042017.7ED3D77804@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Continuing on from the previous error with a manual make, uclibc
-and gcc apparently built but the build ended with this error...
+https://bugs.busybox.net/show_bug.cgi?id=505
 
-...
-/home/sources/srcpkgs/eth-os/cli/buildroot/src/buildroot-2009.05/build_x86_64/makedevs-host
-/usr/bin/gcc -Wall -Werror -O2 /home/sources/srcpkgs/eth-os/cli/buildroot/src/buildroot-2009.05/build_x86_64/makedevs-host/makedevs.c -o /home/sources/srcpkgs/eth-os/cli/buildroot/src/buildroot-2009.05/build_x86_64/makedevs-host/makedevs
-/usr/bin/install -m 755 /home/sources/srcpkgs/eth-os/cli/buildroot/src/buildroot-2009.05/build_x86_64/makedevs-host/makedevs /home/sources/srcpkgs/eth-os/cli/buildroot/src/buildroot-2009.05/build_x86_64/host_dir/usr/bin/makedevs
-make: /usr/bin/install: Command not found
-make: *** [/home/sources/srcpkgs/eth-os/cli/buildroot/src/buildroot-2009.05/build_x86_64/host_dir/usr/bin/makedevs] Error 127
 
-My Archlinux based hosts coreutils package installs "install"
-as /bin/install. Sure I can make a softlink, but shouldn't the
-buildroot procedure just use "install" from the $PATH?
+Kelvin Cheung <keguang.zhang@gmail.com> changed:
 
---markc
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+ Attachment #517 is|0                           |1
+           obsolete|                            |
+
+
+
+
+--- Comment #6 from Kelvin Cheung <keguang.zhang@gmail.com>  2009-07-31 04:20:16 UTC ---
+Created an attachment (id=533)
+ --> (https://bugs.busybox.net/attachment.cgi?id=533)
+live555: new package (updated)
+
+patch updated
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
