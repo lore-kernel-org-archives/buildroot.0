@@ -1,40 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 31 Jul 2009 09:01:06 +0200
-Subject: [Buildroot] [git commit] kconfig: tell git to ignore new generated
-	files
-Message-ID: <20090731070133.7472977804@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 31 Jul 2009 09:01:40 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	kconfig-cleanup
+In-Reply-To: <cover.1248968461.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Thu\,
+	30 Jul 2009 17\:41\:03 +0200")
+References: <cover.1248968461.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87ljm5wd2j.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=33f13e393f55f12b3887cbf5c849fc14f8d7c666
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Thomas> The following changes since commit 7a1a334c4216e2d105ceb6b2eceaa8986627ae67:
+ Thomas>   Thomas Petazzoni (1):
+ Thomas>         xorg: update CHANGES after bug fix
 
-The update of kconfig and the addition of xconfig support generates
-more files in package/config/. Tell git to ignore them.
+ Thomas> are available in the git repository at:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/config/.gitignore |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot kconfig-cleanup
 
-diff --git a/package/config/.gitignore b/package/config/.gitignore
-index 9067e68..161a19a 100644
---- a/package/config/.gitignore
-+++ b/package/config/.gitignore
-@@ -1,6 +1,10 @@
- /buildroot-config
- /conf
- /mconf
-+/qconf
-+/qconf.moc
-+/.tmp_qtcheck
-+/lkc_defs.h
- /lex.zconf.c
- /zconf.hash.c
- /zconf.tab.c
+ Thomas> Thomas Petazzoni (1):
+ Thomas>       kconfig: tell git to ignore new generated files
+
+Thanks, pulled and pushed.
+
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
