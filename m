@@ -1,14 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 31 Jul 2009 15:30:30 +0200
-Subject: [Buildroot] [PATCH 1/3] Fix PROGRAM_INVOCATION handling with
-	external toolchains
-In-Reply-To: <8d880c3e5c68bea752c2a075d0ef0c64805df93f.1249045362.git.thomas.petazzoni@free-electrons.com>
+Date: Fri, 31 Jul 2009 15:30:43 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	program-invocation-and-coreutils
+In-Reply-To: <cover.1249045362.git.thomas.petazzoni@free-electrons.com>
 	(Thomas Petazzoni's message of "Fri\,
-	31 Jul 2009 15\:02\:45 +0200")
+	31 Jul 2009 15\:02\:44 +0200")
 References: <cover.1249045362.git.thomas.petazzoni@free-electrons.com>
-	<cover.1249045362.git.thomas.petazzoni@free-electrons.com>
-	<8d880c3e5c68bea752c2a075d0ef0c64805df93f.1249045362.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87ab2lugi1.fsf@macbook.be.48ers.dk>
+Message-ID: <8763d9ugho.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,17 +15,20 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> BR2_UCLIBC_PROGRAM_INVOCATION is a toolchain configuration option,
- Thomas> like BR2_INET_IPV6, BR2_INET_RPC, on which some packages
- Thomas> depend. Therefore, it should be handled like BR2_INET_IPV6 and
- Thomas> BR2_INET_RPC in order to work properly with external toolchains.
+ Thomas> The following changes since commit d4a8eebf597da6e992e663c73f152c49724f7236:
+ Thomas>   Peter Korsgaard (1):
+ Thomas>         kernel-headers: bump 2.6.27 / 2.6.30 stable versions
 
- Thomas> Since we move it out of toolchain/uClibc/Config.in into
- Thomas> toolchain/Config.in.2, we rename the option to BR2_PROGRAM_INVOCATION
- Thomas> (since BR2_INET_RPC and others don't have UCLIBC in their name).
+ Thomas> are available in the git repository at:
 
-Thanks. We should probably also update the defconfigs that sets this -
-I'll do that.
+ Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot program-invocation-and-coreutils
+
+ Thomas> Thomas Petazzoni (3):
+ Thomas>       Fix PROGRAM_INVOCATION handling with external toolchains
+ Thomas>       coreutils: bump version
+ Thomas>       coreutils: add TODO note about stripping the installed binaries
+
+Thanks, pulled and pushed.
 
 -- 
 Bye, Peter Korsgaard
