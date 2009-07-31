@@ -1,32 +1,70 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 31 Jul 2009 15:37:45 +0200
-Subject: [Buildroot] [PATCH 1/3] Fix PROGRAM_INVOCATION handling with
-	external toolchains
-In-Reply-To: <20090731153256.28e22167@surf> (Thomas Petazzoni's message of
-	"Fri\, 31 Jul 2009 15\:32\:56 +0200")
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 31 Jul 2009 15:58:27 +0200
+Subject: [Buildroot] [PATCH 3/3] coreutils: add TODO note about
+ stripping the installed binaries
+In-Reply-To: <871vnxugef.fsf@macbook.be.48ers.dk>
 References: <cover.1249045362.git.thomas.petazzoni@free-electrons.com>
 	<cover.1249045362.git.thomas.petazzoni@free-electrons.com>
-	<8d880c3e5c68bea752c2a075d0ef0c64805df93f.1249045362.git.thomas.petazzoni@free-electrons.com>
-	<87ab2lugi1.fsf@macbook.be.48ers.dk> <20090731153256.28e22167@surf>
-Message-ID: <87ws5pt1li.fsf@macbook.be.48ers.dk>
+	<385e9e4ea5d66bb6d7189f818f6b28c3df32f277.1249045363.git.thomas.petazzoni@free-electrons.com>
+	<871vnxugef.fsf@macbook.be.48ers.dk>
+Message-ID: <20090731155827.71a41bd7@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Le Fri, 31 Jul 2009 15:32:40 +0200,
+Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
- Thomas> Le Fri, 31 Jul 2009 15:30:30 +0200,
- Thomas> Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+> We should actually rework the strip stuff as it doesn't make much
+> sense to both do strip at package install time and just before
+> generating the file systems.
+> 
+> We would probably simplify stuff a bit to always use install /
+> install-exec and only strip at the end if wanted.
 
- >> Thanks. We should probably also update the defconfigs that sets this -
- >> I'll do that.
+Same thing for the installation of headers or documentation. We have
+different cases :
 
- Thomas> Yes, I've seen them with 'git grep', but I don't know what's the
- Thomas> procedure to update them. Just a quick sed pass ?
+ * Some packages do make install into the staging dir, and then
+   carefully copy only what's needed to the target dir (excluding
+   documentation and headers) ;
 
-Yes, that's what I just did.
+ * Some packages do make install into the target dir, then cleanup
+   what's not needed, sometimes looking at BR2_HAVE_DEVFILS and
+   BR2_HAVE_DOCUMENTATION, sometimes not ;
 
+ * Some packages do make install into the target dir, and don't cleanup
+   anything, waiting for the final global cleanup of the root
+   filesystem done by target-finalize in the main Makefile.
+
+I don't have a particularly strong opinion on this and the strip case.
+Intuitively, I would say I find the solution of letting each package
+handle its stripping and its installation properly to be the cleanest
+solution (i.e no global final cleanup).
+
+I know at least of one corner case that would defeat the global
+stripping approach: binaries developed in OCaml. See
+http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=256900. Admittedly,
+that's a corner case and I don't think we really care about it, but
+that's a known drawback of the global approach: it's not possible to
+make fine-grained exceptions (but is it a problem ? not sure).
+
+Another advantage of the per-package approach is that simply doing
+"make install" to the target space is sometimes too heavy for some
+packages, that install some utility/test/config/sample applications
+that we don't want on the target. Using a per-package approach would
+probably encourage people to be more careful about what they install in
+the target space.
+
+To conclude: I think I have a preference for the per-package approach,
+but I wouldn't complain too much if the global approach only is the one
+we go with :-)
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
