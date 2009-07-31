@@ -1,33 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 31 Jul 2009 15:34:50 +0200
-Subject: [Buildroot] [PATCH 1/1] makefile: don't hardcore install utility
-	location
-In-Reply-To: <cover.1249047287.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1249047287.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <1a2433b58e841f36790bd4015e1a19e5b9793d9a.1249047287.git.thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 31 Jul 2009 15:37:45 +0200
+Subject: [Buildroot] [PATCH 1/3] Fix PROGRAM_INVOCATION handling with
+	external toolchains
+In-Reply-To: <20090731153256.28e22167@surf> (Thomas Petazzoni's message of
+	"Fri\, 31 Jul 2009 15\:32\:56 +0200")
+References: <cover.1249045362.git.thomas.petazzoni@free-electrons.com>
+	<cover.1249045362.git.thomas.petazzoni@free-electrons.com>
+	<8d880c3e5c68bea752c2a075d0ef0c64805df93f.1249045362.git.thomas.petazzoni@free-electrons.com>
+	<87ab2lugi1.fsf@macbook.be.48ers.dk> <20090731153256.28e22167@surf>
+Message-ID: <87ws5pt1li.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Makefile.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 3dcdfe1..0829e8f 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -181,7 +181,7 @@ ifeq ($(BR2_STRIP_none),y)
- TARGET_STRIP=true -Not_stripping
- STRIPCMD=$(TARGET_STRIP)
- endif
--INSTALL=/usr/bin/install
-+INSTALL=$(shell which install || type -p install)
- FLEX:=$(shell which flex || type -p flex)
- BISON:=$(shell which bison || type -p bison)
- 
+ Thomas> Le Fri, 31 Jul 2009 15:30:30 +0200,
+ Thomas> Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+
+ >> Thanks. We should probably also update the defconfigs that sets this -
+ >> I'll do that.
+
+ Thomas> Yes, I've seen them with 'git grep', but I don't know what's the
+ Thomas> procedure to update them. Just a quick sed pass ?
+
+Yes, that's what I just did.
+
 -- 
-1.6.0.4
+Bye, Peter Korsgaard
