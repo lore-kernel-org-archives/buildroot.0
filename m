@@ -1,48 +1,116 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 31 Jul 2009 11:12:49 +0200
-Subject: [Buildroot] BR2_UCLIBC_PROGRAM_INVOCATION symbol missing in
- external toolchain
-In-Reply-To: <159a01660907310134l76b73595q634d30255cf8cf70@mail.gmail.com>
-References: <159a01660907310134l76b73595q634d30255cf8cf70@mail.gmail.com>
-Message-ID: <20090731111249.03cfdf87@surf>
+From: Courousse, Damien <damien.courousse@logica.com>
+Date: Fri, 31 Jul 2009 11:33:49 +0200
+Subject: [Buildroot] linux .config : override: reassigning to symbol
+	AEABI
+References: <F81DF98CADE6064F81A746D7C8323593782CAA@fr-ex009.groupinfra.com>
+	<87vdlbxqlk.fsf@macbook.be.48ers.dk>
+Message-ID: <F81DF98CADE6064F81A746D7C8323593782D2C@fr-ex009.groupinfra.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri, 31 Jul 2009 10:34:41 +0200,
-Daniele Salvatore Albano <d.albano@gmail.com> a ?crit :
 
-> some time ago i started to use buildroot to build a system for
-> pc-appliances, but, for performance reason, i preferred to put glibc
-> instead of uclibc. So, in these days, after some work, i finally
-> managed to build a full toolchain using crosstool-NG. After a fresh
-> checkout from buildroot git (i've seen some patches committed for
-> external toolchains) i've seen, after that i disabled busybox, that i
-> can't select some stuff because of WCHAR and/or PROGRAM_INVOCATION
-> missing. Looking toolchain compile options i seen that
-> PROGRAM_INVOCATION is missing! I've seen that the symbol called
-> BR2_UCLIBC_PROGRAM_INVOCATION is only into toolchain/uClibc/Config.in
-> and not in toolchain/external-toolchain/Config.in (and or
-> Config.in.2).
+Hello all,
+
+This morning I did a complete compilation from a fresh install. I get something working with OABI support (did not test EABI) but using an initramfs only. Once the kernel has booted the nfs mounts are working normally.
+I think I will continue like this because it's OK with my needs.
+
+It looks like there are some kind of cache effects in the buildroot configuration files  when the config files have modified several times, even if make flush or even make clean are executed. Did someone of you had such problem? In this case, what is the better option: starting from a fresh install or something else?
+
+Concerning my first problem I can do further tests if you want so that we  get a better idea of what is going on; I did some tests without being able to get a better idea of the problem. See below.
+
+
+> -----Message d'origine-----
+> De?: Peter Korsgaard [mailto:jacmet at gmail.com] De la part de Peter
+> Korsgaard
+> Envoy??: mercredi 29 juillet 2009 21:00
+> ??: Courousse, Damien
+> Cc?: buildroot at busybox.net
+> Objet?: Re: [Buildroot] linux .config : override: reassigning to symbol
+> AEABI
 > 
-> Is that config symbol only for uClibc? It should appears in external
-> toolchains too or, however, packages that depends on this flag should
-> check if external toolchain is used?
+> >>>>> "Damien" == Courousse, Damien <damien.courousse@logica.com> writes:
+> 
+>  Damien> The kernel loading gets stuck after mounting the NFS root :
+>  Damien> ================================================================
+>  Damien> ....
+>  Damien> IP-Config: Complete:
+>  Damien>      device=eth0, addr=10.84.34.8, mask=255.255.255.192,
+> gw=10.84.34.1,
+>  Damien>      host=debian_test, domain=, nis-domain=(none),
+>  Damien>      bootserver=10.84.34.52, rootserver=10.84.34.52, rootpath=
+>  Damien> Looking up port of RPC 100003/2 on 10.84.34.52
+>  Damien> Looking up port of RPC 100005/1 on 10.84.34.52
+>  Damien> VFS: Mounted root (nfs filesystem).
+>  Damien> Freeing init memory: 116K
+>  Damien> Kernel panic - not syncing: Attempted to kill init!
+> 
+> Do you use softfloat or fpu emulation in the kernel? (check
+> BR2_SOFT_FLOAT).
+> 
+> --
+[Damien Courouss?] 
+Hello Peter, 
+Thanks for helping.
 
-Correct, it should appear in external toolchains configurations, and be
-checked like the other configuration options against the real
-uClibc/glibc configuration.
+My buildroot is configured with softfloat: 
+$ grep SOFT .config
+BR2_SOFT_FLOAT=y
+grep FPU .config
+# BR2_FPU_SUFFIX is not set
 
-I never saw it because I always use Busybox. I will try to make a patch
-to fix it.
+And the kernel config : 
+.../linux$ grep FP .config
+CONFIG_FPE_NWFPE=y
+# CONFIG_FPE_NWFPE_XP is not set
+# CONFIG_FPE_FASTFPE is not set
+# CONFIG_VFP is not set
 
-Thanks a lot for the report,
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Mark : 
+I have activated the DEBUG options in the buildroot and in the kernel config files. However, I do not get more debugging messages; I did append "user_debug=255 or 31" at the end of the kernel command line. Results are identical as what I described on Wednesday : 
+* if I pass nfs_root options + init=/bin/sh to the kernel command line, I get a kernel panic,
+* if I pass nothing more that the nfs_root options to the kernel command line, the kernel hangs after freeing the init memory.
+
+Please find attached my buildroot, kernel and uclibc config files for a complete overview of my config
+
+Thanks all for your kind help,
+Damien
+
+
+Please help Logica to respect the environment by not printing this email  / Pour contribuer comme Logica au respect de l'environnement, merci de ne pas imprimer ce mail /  Bitte drucken Sie diese Nachricht nicht aus und helfen Sie so Logica dabei, die Umwelt zu sch?tzen /  Por favor ajude a Logica a respeitar o ambiente nao imprimindo este correio electronico.
+
+
+
+This e-mail and any attachment is for authorised use by the intended recipient(s) only. It may contain proprietary material, confidential information and/or be subject to legal privilege. It should not be copied, disclosed to, retained or used by, any other party. If you are not an intended recipient then please promptly delete this e-mail and any attachment and all copies and inform the sender. Thank you.
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: uclibc-0.9.30.1.config
+Type: application/octet-stream
+Size: 6039 bytes
+Desc: uclibc-0.9.30.1.config
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090731/1e097d68/attachment-0004.obj>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: buildroot-2009.05.config
+Type: application/octet-stream
+Size: 22371 bytes
+Desc: buildroot-2009.05.config
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090731/1e097d68/attachment-0005.obj>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: busybox-1.14.1.config
+Type: application/octet-stream
+Size: 23058 bytes
+Desc: busybox-1.14.1.config
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090731/1e097d68/attachment-0006.obj>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: linux-2.6.28.config
+Type: application/octet-stream
+Size: 30670 bytes
+Desc: linux-2.6.28.config
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090731/1e097d68/attachment-0007.obj>
