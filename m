@@ -1,34 +1,50 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 31 Jul 2009 11:52:19 +0200
-Subject: [Buildroot] no fontconfig in $(TARGET_DIR)
-In-Reply-To: <4A72BD91.7040703@fpga-art.de> (Lars Lockenvitz's message of
-	"Fri\, 31 Jul 2009 11\:46\:57 +0200")
-References: <4A71A8C8.5030409@fpga-art.de>
-	<87hbwtwcdy.fsf@macbook.be.48ers.dk> <4A72BD91.7040703@fpga-art.de>
-Message-ID: <87k51puqlo.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 31 Jul 2009 12:20:26 +0200
+Subject: [Buildroot] linux .config : override: reassigning tosymbolAEABI
+In-Reply-To: <F81DF98CADE6064F81A746D7C8323593782CC1@fr-ex009.groupinfra.com>
+References: <F81DF98CADE6064F81A746D7C8323593782CAA@fr-ex009.groupinfra.com>
+	<20090729132515.GM19257@buzzloop.caiaq.de>
+	<F81DF98CADE6064F81A746D7C8323593782CAC@fr-ex009.groupinfra.com>
+	<20090729134234.GY13236@buzzloop.caiaq.de>
+	<F81DF98CADE6064F81A746D7C8323593782CB2@fr-ex009.groupinfra.com>
+	<20090729142610.GB9464@buzzloop.caiaq.de>
+	<F81DF98CADE6064F81A746D7C8323593782CC1@fr-ex009.groupinfra.com>
+Message-ID: <20090731122026.1c5d4b86@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Lars" == Lars Lockenvitz <l.lockenvitz@fpga-art.de> writes:
+Hello Damien,
 
-Hi,
+Le Wed, 29 Jul 2009 18:07:33 +0200,
+"Courousse, Damien" <damien.courousse@logica.com> a ?crit :
 
- >> What happens if you delete that file and rerun make?
- >> 
- Lars> If I delete that file and rerun make it install it in target_dir.
- Lars> But I tried to create all from the beginning and now I have it in
- Lars> target_dir but not in staging_dir and I don't have a
- Lars> .stamp_staging_installed.
- Lars> Why that now?
+> root=/dev/nfs rw
+> nfsroot=10.84.34.52:/mnt/fractal/buildroot/buildroot-2009.05/project_build_arm/logica_demo/root
+> ip=10.84.34.8:10.84.34.52:10.84.34.1:255.255.255.192:debian_test:eth0:off
 
-Hmm, I don't quite know. You don't use the -j option to make, do you?
+The /mnt/fractal/buildroot/buildroot-2009.05/project_build_arm/logica_demo/root
+directory cannot be used to boot over NFS, because the /dev directory
+doesn't contain any device file (Buildroot can create them, since it
+requires root priviledges).
 
-How did you do a fresh rebuild (rm -rf *build_*; make)?
+To boot over NFS, you have to do the following things:
 
-Could you retry with latest git and check if you still see the problem?
+ * Enable the generation of a tarball in the Buildroot configuration /
+   Target filesystem options
 
+ * Uncompress the tarball somewhere in your host, while being root (or
+   using sudo), so that tar is allowed to create device files
+
+ * Mount the location where you uncompressed the tarball over NFS
+
+Sincerly,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
