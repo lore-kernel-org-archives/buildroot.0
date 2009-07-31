@@ -1,38 +1,48 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 31 Jul 2009 09:57:44 +0200
-Subject: [Buildroot] [git commit] kernel-headers: bump 2.6.27 / 2.6.30
-	stable versions
-Message-ID: <20090731075758.BFED5777D1@busybox.osuosl.org>
+From: Daniele Salvatore Albano <d.albano@gmail.com>
+Date: Fri, 31 Jul 2009 10:34:41 +0200
+Subject: [Buildroot] BR2_UCLIBC_PROGRAM_INVOCATION symbol missing in
+	external toolchain
+Message-ID: <159a01660907310134l76b73595q634d30255cf8cf70@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d4a8eebf597da6e992e663c73f152c49724f7236
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+some time ago i started to use buildroot to build a system for
+pc-appliances, but, for performance reason, i preferred to put glibc
+instead of uclibc. So, in these days, after some work, i finally
+managed to build a full toolchain using crosstool-NG. After a fresh
+checkout from buildroot git (i've seen some patches committed for
+external toolchains) i've seen, after that i disabled busybox, that i
+can't select some stuff because of WCHAR and/or PROGRAM_INVOCATION
+missing. Looking toolchain compile options i seen that
+PROGRAM_INVOCATION is missing! I've seen that the symbol called
+BR2_UCLIBC_PROGRAM_INVOCATION is only into toolchain/uClibc/Config.in
+and not in toolchain/external-toolchain/Config.in (and or
+Config.in.2).
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- toolchain/kernel-headers/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+Is that config symbol only for uClibc? It should appears in external
+toolchains too or, however, packages that depends on this flag should
+check if external toolchain is used?
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index 689c85d..ad78b00 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -49,9 +49,9 @@ config BR2_KERNEL_HEADERS_RT
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "2.6.26.8"	if BR2_KERNEL_HEADERS_2_6_26
--	default "2.6.27.28"	if BR2_KERNEL_HEADERS_2_6_27
-+	default "2.6.27.29"	if BR2_KERNEL_HEADERS_2_6_27
- 	default "2.6.28.10"	if BR2_KERNEL_HEADERS_2_6_28
- 	default "2.6.29.6"	if BR2_KERNEL_HEADERS_2_6_29
--	default "2.6.30.3"	if BR2_KERNEL_HEADERS_2_6_30
-+	default "2.6.30.4"	if BR2_KERNEL_HEADERS_2_6_30
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 
+Actually i put this symbol in external-toolchain Config.in to let the
+system to compile, but i don't know if this is ok!
+
+
+Really thanks for your support,
+
+Best Regards,
+Daniele
+
 -- 
-1.6.3.3
+Daniele Salvatore Albano
+Consulente Informatico
+http://www.phpsoft.it
+http://www.dacci.it
+
+Servizi:
+- Sviluppo in C# e PHP
+- Installazione e Amministrazione sistemi Ubuntu, CentOS e Fedora
