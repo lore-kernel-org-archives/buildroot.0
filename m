@@ -1,70 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 31 Jul 2009 15:58:27 +0200
-Subject: [Buildroot] [PATCH 3/3] coreutils: add TODO note about
- stripping the installed binaries
-In-Reply-To: <871vnxugef.fsf@macbook.be.48ers.dk>
-References: <cover.1249045362.git.thomas.petazzoni@free-electrons.com>
-	<cover.1249045362.git.thomas.petazzoni@free-electrons.com>
-	<385e9e4ea5d66bb6d7189f818f6b28c3df32f277.1249045363.git.thomas.petazzoni@free-electrons.com>
-	<871vnxugef.fsf@macbook.be.48ers.dk>
-Message-ID: <20090731155827.71a41bd7@surf>
+From: Courousse, Damien <damien.courousse@logica.com>
+Date: Fri, 31 Jul 2009 17:57:17 +0200
+Subject: [Buildroot] linux .config : override: reassigning tosymbolAEABI
+References: <F81DF98CADE6064F81A746D7C8323593782CAA@fr-ex009.groupinfra.com><20090729132515.GM19257@buzzloop.caiaq.de><F81DF98CADE6064F81A746D7C8323593782CAC@fr-ex009.groupinfra.com><20090729134234.GY13236@buzzloop.caiaq.de><F81DF98CADE6064F81A746D7C8323593782CB2@fr-ex009.groupinfra.com><20090729142610.GB9464@buzzloop.caiaq.de><F81DF98CADE6064F81A746D7C8323593782CC1@fr-ex009.groupinfra.com>
+	<20090731122026.1c5d4b86@surf>
+Message-ID: <F81DF98CADE6064F81A746D7C8323593782D4A@fr-ex009.groupinfra.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri, 31 Jul 2009 15:32:40 +0200,
-Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
-> We should actually rework the strip stuff as it doesn't make much
-> sense to both do strip at package install time and just before
-> generating the file systems.
+> -----Message d'origine-----
+> De?: buildroot-bounces at busybox.net [mailto:buildroot-bounces at busybox.net]
+> De la part de Thomas Petazzoni
+> Envoy??: vendredi 31 juillet 2009 12:20
+> ??: buildroot at busybox.net
+> Objet?: Re: [Buildroot] linux .config : override: reassigning
+> tosymbolAEABI
 > 
-> We would probably simplify stuff a bit to always use install /
-> install-exec and only strip at the end if wanted.
+> Hello Damien,
+> 
+> Le Wed, 29 Jul 2009 18:07:33 +0200,
+> "Courousse, Damien" <damien.courousse@logica.com> a ?crit :
+> 
+> > root=/dev/nfs rw
+> > nfsroot=10.84.34.52:/mnt/fractal/buildroot/buildroot-
+> 2009.05/project_build_arm/logica_demo/root
+> >
+> ip=10.84.34.8:10.84.34.52:10.84.34.1:255.255.255.192:debian_test:eth0:off
+> 
+> The /mnt/fractal/buildroot/buildroot-
+> 2009.05/project_build_arm/logica_demo/root
+> directory cannot be used to boot over NFS, because the /dev directory
+> doesn't contain any device file (Buildroot can create them, since it
+> requires root priviledges).
+> 
+> To boot over NFS, you have to do the following things:
+> 
+>  * Enable the generation of a tarball in the Buildroot configuration /
+>    Target filesystem options
+> 
+>  * Uncompress the tarball somewhere in your host, while being root (or
+>    using sudo), so that tar is allowed to create device files
+> 
+>  * Mount the location where you uncompressed the tarball over NFS
+> 
+> Sincerly,
+> 
+> Thomas
+> --
+[Damien Courouss?] 
 
-Same thing for the installation of headers or documentation. We have
-different cases :
+Hello Thomas!
 
- * Some packages do make install into the staging dir, and then
-   carefully copy only what's needed to the target dir (excluding
-   documentation and headers) ;
+I completely forgot to look at the side of the /dev files!
+You spotted the right problem, thanks! Everything is OK now.
 
- * Some packages do make install into the target dir, then cleanup
-   what's not needed, sometimes looking at BR2_HAVE_DEVFILS and
-   BR2_HAVE_DOCUMENTATION, sometimes not ;
+Thanks again to all of you for your help.
 
- * Some packages do make install into the target dir, and don't cleanup
-   anything, waiting for the final global cleanup of the root
-   filesystem done by target-finalize in the main Makefile.
+Kind regards,
+Damien
 
-I don't have a particularly strong opinion on this and the strip case.
-Intuitively, I would say I find the solution of letting each package
-handle its stripping and its installation properly to be the cleanest
-solution (i.e no global final cleanup).
+Please help Logica to respect the environment by not printing this email  / Pour contribuer comme Logica au respect de l'environnement, merci de ne pas imprimer ce mail /  Bitte drucken Sie diese Nachricht nicht aus und helfen Sie so Logica dabei, die Umwelt zu sch?tzen /  Por favor ajude a Logica a respeitar o ambiente nao imprimindo este correio electronico.
 
-I know at least of one corner case that would defeat the global
-stripping approach: binaries developed in OCaml. See
-http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=256900. Admittedly,
-that's a corner case and I don't think we really care about it, but
-that's a known drawback of the global approach: it's not possible to
-make fine-grained exceptions (but is it a problem ? not sure).
 
-Another advantage of the per-package approach is that simply doing
-"make install" to the target space is sometimes too heavy for some
-packages, that install some utility/test/config/sample applications
-that we don't want on the target. Using a per-package approach would
-probably encourage people to be more careful about what they install in
-the target space.
 
-To conclude: I think I have a preference for the per-package approach,
-but I wouldn't complain too much if the global approach only is the one
-we go with :-)
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+This e-mail and any attachment is for authorised use by the intended recipient(s) only. It may contain proprietary material, confidential information and/or be subject to legal privilege. It should not be copied, disclosed to, retained or used by, any other party. If you are not an intended recipient then please promptly delete this e-mail and any attachment and all copies and inform the sender. Thank you.
