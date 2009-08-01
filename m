@@ -1,32 +1,42 @@
-From: Andreas Kinzler <lists@akmail.com>
-Date: Sat, 1 Aug 2009 12:52:59 +0200
-Subject: [Buildroot] Request for package updates/additions
-Message-ID: <qaOEo0MpxLpZXzRytYr7EVVD1jvRxkmX6FIxqKBxXAJ@akmail>
+From: Daniele Salvatore Albano <d.albano@gmail.com>
+Date: Sat, 1 Aug 2009 17:51:09 +0200
+Subject: [Buildroot] Bump LVM2 to 2.02.50 (LVM2.2.02.47.tgz missing on ftp)
+Message-ID: <159a01660908010851g4e37e7eyd7059449b9a7e74e@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello buildroot developers,
+Hi,
 
-thanks so much for your great work with buildroot.
+LVM2.2.02.47.tgz doesn't exists anymore on lvm2 ftp (
+ftp://sources.redhat.com/pub/lvm2/ ), there are two new releases:
+- LVM2.2.02.49.tgz
+- LVM2.2.02.50.tgz
 
-I'd like to kindly ask for some package version updates:
+I've updated the patch level to 50 and it's seems to compile fine,
+however i haven't tested it yet.
 
-  libcurl/curl 7.19.5
-  cryptosetup 1.0.7
-  e2fsprogs 1.41.8
-  util-linux-ng 2.16
-  dhcp 3.12-p1 or 4.1.0 (see current security advisory)
+Attached the patch to upgrade the patch level to 50.
 
-Perhaps you might find one of the patches attached useful (from the web/me).
+Should i open a bug on bugzilla for this?
 
-Regards Andreas
+Thank you!
+
+-- 
+Daniele Salvatore Albano
+Consulente Informatico
+http://www.phpsoft.it
+http://www.dacci.it
+
+Servizi:
+- Sviluppo in C# e PHP
+- Installazione e Amministrazione sistemi Ubuntu, CentOS e Fedora
 -------------- next part --------------
 A non-text attachment was scrubbed...
-Name: not available
+Name: 0001-Bump-lvm2-to-2.02.50.patch
 Type: application/octet-stream
-Size: 9833 bytes
+Size: 727 bytes
 Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090801/6487d03f/attachment.obj>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090801/9f434e2f/attachment.obj>
