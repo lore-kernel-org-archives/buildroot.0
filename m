@@ -1,38 +1,35 @@
-From: Lionel Landwerlin <lionel.landwerlin@openwide.fr>
-Date: Wed, 01 Jul 2009 01:54:33 +0200
-Subject: [Buildroot] External toolchain improvements
-In-Reply-To: <mailman.0.1246405094.1110.buildroot@busybox.net>
-References: <mailman.0.1246405094.1110.buildroot@busybox.net>
-Message-ID: <1246406073.21132.13.camel@coalu.atr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 1 Aug 2009 11:31:29 +0200
+Subject: [Buildroot] [git commit] makefile: don't hardcore install utility
+	location
+Message-ID: <20090801093432.499EC77804@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
 
-I'm interested by your patches, I'm using a STLinux external toolchain
-(Linux for SH4 SetTop Boxes).
+commit: http://git.buildroot.net/buildroot/commit/?id=1a2433b58e841f36790bd4015e1a19e5b9793d9a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The problem is that copying only libraries is not enough to build even a
-simple program like this one :
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Makefile.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-int main (void) { return 0; }
-
-With my current toolchain, I also need :
-
-      * crt1.o crti.o crtn.o
-      * All headers from the libc & linux
-
-After that, I also have problems with packages using pkg-config.
-Pkg-config returns paths relatives to the build directory ( -L/usr/lib
-for example). Gcc tries to link with host libraries...
-
-We probably need a double --sysroot parameter to look first where the
-toolchain is installed and then in the given sysroot path.
-
-Regards,
-
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 3dcdfe1..0829e8f 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -181,7 +181,7 @@ ifeq ($(BR2_STRIP_none),y)
+ TARGET_STRIP=true -Not_stripping
+ STRIPCMD=$(TARGET_STRIP)
+ endif
+-INSTALL=/usr/bin/install
++INSTALL=$(shell which install || type -p install)
+ FLEX:=$(shell which flex || type -p flex)
+ BISON:=$(shell which bison || type -p bison)
+ 
 -- 
-Lionel Landwerlin <lionel.landwerlin@openwide.fr>
+1.6.3.3
