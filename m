@@ -1,36 +1,22 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat,  1 Aug 2009 17:42:55 +0000 (UTC)
+From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+Date: Sat, 1 Aug 2009 20:22:19 +0200
 Subject: [Buildroot] [Bug 523] pciutiles can't find libz
-In-Reply-To: <bug-523-163@https.bugs.busybox.net/>
+In-Reply-To: <20090801174255.46F1B777DF@busybox.osuosl.org>
 References: <bug-523-163@https.bugs.busybox.net/>
-Message-ID: <20090801174255.46F1B777DF@busybox.osuosl.org>
+	<20090801174255.46F1B777DF@busybox.osuosl.org>
+Message-ID: <20090801182219.GA14135@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=523
+On Sat, Aug 01, 2009 at 05:42:55PM +0000, bugzilla at busybox.net wrote:
+>https://bugs.busybox.net/show_bug.cgi?id=523
 
+Oh, and someone might want to pull pciutils from
+http://repo.or.cz/w/buildroot.git?a=tree;f=package/pciutils;hb=HEAD
 
+that one works for me and likely fixes that bug magically
 
-
-
---- Comment #3 from Bernhard Reutner-Fischer <aldot@uclibc.org>  2009-08-01 17:42:54 UTC ---
-(In reply to comment #2)
-
-> broken toolchain and/or toolchain setup.
-> What does
-> $ grep TOOLCHAIN .config
-> say?
-> 
-nm, you attached it, sorry.
-BR2_TOOLCHAIN_EXTERNAL=y
-
-Just use the internal toolchain.
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+HTH,
