@@ -1,52 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  2 Aug 2009 00:37:28 +0200
-Subject: [Buildroot] [PATCH 1/1] pciutils: fix build with external toolchains
-In-Reply-To: <cover.1249166245.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1249166245.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <dcb752b1654d4186d02bbaa9db3b865ac03785cd.1249166245.git.thomas.petazzoni@free-electrons.com>
+Date: Sun,  2 Aug 2009 00:37:27 +0200
+Subject: [Buildroot] [pull request] Pull request for branch pciutils-fix
+Message-ID: <cover.1249166245.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Buildroot Makefile to compile pciutils wasn't passing TARGET_LDFLAGS
-to pciutils build system. Therefore, at link time, the pciutils build
-system was not taking into account the important --sysroot option,
-which was breaking the link with external toolchains.
+The following changes since commit e15c0d07e15e94e800bd9a0cf3c24f45aeacd89c:
+  Peter Korsgaard (1):
+        target/device: rename program invocation symbol in defconfigs
 
-Fixes bug #523.
+are available in the git repository at:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
+  git://git.busybox.net/~tpetazzoni/git/buildroot pciutils-fix
+
+Thomas Petazzoni (1):
+      pciutils: fix build with external toolchains
+
  CHANGES                      |    1 +
  package/pciutils/pciutils.mk |    2 +-
  2 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 527383c..684b394 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -50,6 +50,7 @@
- 	#495: Bump bind package to 9.5.1-P3 (security)
- 	#497: OpenSSL RSA key generation hangs on x86_64
- 	#509: Bump sqlite package to 3.6.16
-+	#527: pciutils broken with external toolchain
- 
- 2009.05, Released June 1st, 2009:
- 
-diff --git a/package/pciutils/pciutils.mk b/package/pciutils/pciutils.mk
-index 0d8155f..976afbf 100644
---- a/package/pciutils/pciutils.mk
-+++ b/package/pciutils/pciutils.mk
-@@ -41,7 +41,7 @@ $(PCIUTILS_DIR)/.unpacked: $(DL_DIR)/$(PCIUTILS_SOURCE) $(DL_DIR)/$(PCIIDS_SOURC
- 	touch $@
- 
- $(PCIUTILS_DIR)/.compiled: $(PCIUTILS_DIR)/.unpacked
--	$(MAKE1) CC="$(TARGET_CC)" OPT="$(TARGET_CFLAGS)" RANLIB=$(TARGET_RANLIB) AR=$(TARGET_AR) -C $(PCIUTILS_DIR) \
-+	$(MAKE1) CC="$(TARGET_CC)" OPT="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)" RANLIB=$(TARGET_RANLIB) AR=$(TARGET_AR) -C $(PCIUTILS_DIR) \
- 		SHAREDIR="/usr/share/misc" \
- 		ZLIB=$(PCIUTILS_HAVE_ZLIB) \
- 		HOST=$(KERNEL_ARCH)-linux \
+Thanks,
 -- 
-1.6.0.4
+Thomas Petazzoni
