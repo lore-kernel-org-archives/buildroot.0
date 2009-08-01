@@ -1,29 +1,32 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 1 Aug 2009 11:35:06 +0200
-Subject: [Buildroot] [pull request] Pull request for branch install-fix
-In-Reply-To: <cover.1249047287.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1249047287.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <9305ca410908010235m3a10a937x1950e6587b64f7c8@mail.gmail.com>
+From: Andreas Kinzler <lists@akmail.com>
+Date: Sat, 1 Aug 2009 12:52:59 +0200
+Subject: [Buildroot] Request for package updates/additions
+Message-ID: <qaOEo0MpxLpZXzRytYr7EVVD1jvRxkmX6FIxqKBxXAJ@akmail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jul 31, 2009 at 3:34 PM, Thomas
-Petazzoni<thomas.petazzoni@free-electrons.com> wrote:
-> The following changes since commit e15c0d07e15e94e800bd9a0cf3c24f45aeacd89c:
-> ?Peter Korsgaard (1):
-> ? ? ? ?target/device: rename program invocation symbol in defconfigs
->
-> are available in the git repository at:
->
-> ?git://git.busybox.net/~tpetazzoni/git/buildroot install-fix
->
-> Thomas Petazzoni (1):
-> ? ? ?makefile: don't hardcore install utility location
+Hello buildroot developers,
 
-Pulled and pushed - Thanks!
+thanks so much for your great work with buildroot.
 
--- 
-Bye, Peter Korsgaard
+I'd like to kindly ask for some package version updates:
+
+  libcurl/curl 7.19.5
+  cryptosetup 1.0.7
+  e2fsprogs 1.41.8
+  util-linux-ng 2.16
+  dhcp 3.12-p1 or 4.1.0 (see current security advisory)
+
+Perhaps you might find one of the patches attached useful (from the web/me).
+
+Regards Andreas
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/octet-stream
+Size: 9833 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090801/6487d03f/attachment.obj>
