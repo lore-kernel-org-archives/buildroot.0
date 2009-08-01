@@ -1,38 +1,34 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat,  1 Aug 2009 22:39:26 +0000 (UTC)
-Subject: [Buildroot] [Bug 523] pciutiles can't find libz
-In-Reply-To: <bug-523-163@https.bugs.busybox.net/>
-References: <bug-523-163@https.bugs.busybox.net/>
-Message-ID: <20090801223927.1609A777E4@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun,  2 Aug 2009 01:14:03 +0200
+Subject: [Buildroot] [PATCH 1/2] Bump lvm2 to 2.02.50
+In-Reply-To: <cover.1249168442.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1249168442.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <44663da45b71c66d0f7b2e5acec31c9a7de8447d.1249168442.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=523
+From: Daniele Salvatore Albano <daniele@linux-ubuntu-dev.local>
 
+Signed-off-by: Daniele Salvatore Albano <d.albano@gmail.com>
+---
+ package/lvm2/lvm2.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         AssignedTo|unassigned at buildroot.uclibc.|thomas.petazzoni at free-
-                   |org                         |electrons.com
-             Status|NEW                         |ASSIGNED
-
-
-
-
---- Comment #5 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2009-08-01 22:39:26 UTC ---
-Created an attachment (id=541)
- --> (https://bugs.busybox.net/attachment.cgi?id=541)
-Patch to fix the issue
-
-The patch that fixes the issue. I've just sent a pull request for it.
-
-
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index 0cefaba..b3467b5 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -25,7 +25,7 @@
+ 
+ LVM2_BASEVER=2.02
+ LVM2_DMVER=1.02
+-LVM2_PATCH=47
++LVM2_PATCH=50
+ LVM2_VERSION=$(LVM2_BASEVER).$(LVM2_PATCH)
+ LVM2_SOURCE:=LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE:=ftp://sources.redhat.com/pub/lvm2
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.6.0.4
