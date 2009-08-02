@@ -1,40 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Aug 2009 01:15:30 +0200
-Subject: [Buildroot] Bump LVM2 to 2.02.50 (LVM2.2.02.47.tgz missing on
- ftp)
-In-Reply-To: <159a01660908010851g4e37e7eyd7059449b9a7e74e@mail.gmail.com>
-References: <159a01660908010851g4e37e7eyd7059449b9a7e74e@mail.gmail.com>
-Message-ID: <20090802011530.256be9c9@surf>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 02 Aug 2009 09:58:15 +0200
+Subject: [Buildroot] [PATCH 1/1] pciutils: fix build with external
+	toolchains
+In-Reply-To: <dcb752b1654d4186d02bbaa9db3b865ac03785cd.1249166245.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Sun\,
+	2 Aug 2009 00\:37\:28 +0200")
+References: <cover.1249166245.git.thomas.petazzoni@free-electrons.com>
+	<cover.1249166245.git.thomas.petazzoni@free-electrons.com>
+	<dcb752b1654d4186d02bbaa9db3b865ac03785cd.1249166245.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <878wi2tzoo.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sat, 1 Aug 2009 17:51:09 +0200,
-Daniele Salvatore Albano <d.albano@gmail.com> a ?crit :
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-> LVM2.2.02.47.tgz doesn't exists anymore on lvm2 ftp (
-> ftp://sources.redhat.com/pub/lvm2/ ), there are two new releases:
-> - LVM2.2.02.49.tgz
-> - LVM2.2.02.50.tgz
-> 
-> I've updated the patch level to 50 and it's seems to compile fine,
-> however i haven't tested it yet.
-> 
-> Attached the patch to upgrade the patch level to 50.
-> 
-> Should i open a bug on bugzilla for this?
+ Thomas> Buildroot Makefile to compile pciutils wasn't passing TARGET_LDFLAGS
+ Thomas> to pciutils build system. Therefore, at link time, the pciutils build
+ Thomas> system was not taking into account the important --sysroot option,
+ Thomas> which was breaking the link with external toolchains.
 
-I've just sent a pull request to Peter contain this fix, and an
-additional fix to improve the installation of lvm2 to the target
-directory.
+ Thomas> Fixes bug #523.
 
-Thanks for the contribution!
+ Thomas> +++ b/CHANGES
+ Thomas> @@ -50,6 +50,7 @@
+ Thomas>  	#495: Bump bind package to 9.5.1-P3 (security)
+ Thomas>  	#497: OpenSSL RSA key generation hangs on x86_64
+ Thomas>  	#509: Bump sqlite package to 3.6.16
+ Thomas> +	#527: pciutils broken with external toolchain
 
-Thomas
+523, not 527 - But I'll fix that up myself.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
