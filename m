@@ -1,9 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun,  2 Aug 2009 13:33:25 +0000 (UTC)
+Date: Sun,  2 Aug 2009 13:34:15 +0000 (UTC)
 Subject: [Buildroot] [Bug 527] misc fixes for dnsmasq package
 In-Reply-To: <bug-527-163@https.bugs.busybox.net/>
 References: <bug-527-163@https.bugs.busybox.net/>
-Message-ID: <20090802133325.6564B777DF@busybox.osuosl.org>
+Message-ID: <20090802133415.C42C9777DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,10 +16,10 @@ https://bugs.busybox.net/show_bug.cgi?id=527
 
 
 
---- Comment #1 from Daniele Salvatore Albano <d.albano@gmail.com>  2009-08-02 13:33:24 UTC ---
-Created an attachment (id=551)
- --> (https://bugs.busybox.net/attachment.cgi?id=551)
-Fix dnsmasq compilation with dbus enabled
+--- Comment #2 from Daniele Salvatore Albano <d.albano@gmail.com>  2009-08-02 13:34:15 UTC ---
+Created an attachment (id=553)
+ --> (https://bugs.busybox.net/attachment.cgi?id=553)
+Fix dnsmasq dependencies if dbus is enabled
 
 
 -- 
