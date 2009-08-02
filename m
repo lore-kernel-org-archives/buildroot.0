@@ -1,30 +1,28 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun,  2 Aug 2009 16:30:09 +0000 (UTC)
-Subject: [Buildroot] [Bug 537] gzip complains about existing function
-	futimens from glibc
-In-Reply-To: <bug-537-163@https.bugs.busybox.net/>
-References: <bug-537-163@https.bugs.busybox.net/>
-Message-ID: <20090802163009.52856777BE@busybox.osuosl.org>
+From: Raed Abu-Sanad <raedbenz@hotmail.com>
+Date: Sun, 2 Aug 2009 17:51:25 +0100
+Subject: [Buildroot] Using Buildroot to make small footprint linux
+Message-ID: <BAY136-W6773916E1BA7831DE5443CE0E0@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=537
+
+Hi,,
+
+I just downloaded latest version buildroot. I am working on ubuntu 8.04.
+how can i started the automated process of buildroot to create filesytem and kernel images and install them on a USB flas or CF ?
+Any simple tutorial?
+
+Thanks
 
 
-Daniele Salvatore Albano <d.albano@gmail.com> changed:
+_________________________________________________________________
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-           Severity|enhancement                 |normal
-         OS/Version|Windows                     |Linux
+Upgrade to Internet Explorer 8 Optimised for MSN.  
 
-
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+http://extras.uk.msn.com/internet-explorer-8/?ocid=T010MSN07A0716U
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090802/f7c4ddb4/attachment.htm>
