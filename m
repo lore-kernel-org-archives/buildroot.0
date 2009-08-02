@@ -1,28 +1,35 @@
-From: Raed Abu-Sanad <raedbenz@hotmail.com>
-Date: Sun, 2 Aug 2009 17:51:25 +0100
-Subject: [Buildroot] Using Buildroot to make small footprint linux
-Message-ID: <BAY136-W6773916E1BA7831DE5443CE0E0@phx.gbl>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun,  2 Aug 2009 20:16:41 +0000 (UTC)
+Subject: [Buildroot] [Bug 427] webkit: Update to WebKit svn r44552.
+In-Reply-To: <bug-427-163@https.bugs.busybox.net/>
+References: <bug-427-163@https.bugs.busybox.net/>
+Message-ID: <20090802201641.5502A777C3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-Hi,,
-
-I just downloaded latest version buildroot. I am working on ubuntu 8.04.
-how can i started the automated process of buildroot to create filesytem and kernel images and install them on a USB flas or CF ?
-Any simple tutorial?
-
-Thanks
+https://bugs.busybox.net/show_bug.cgi?id=427
 
 
-_________________________________________________________________
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-Upgrade to Internet Explorer 8 Optimised for MSN.  
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-http://extras.uk.msn.com/internet-explorer-8/?ocid=T010MSN07A0716U
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090802/f7c4ddb4/attachment.htm>
+
+
+
+--- Comment #5 from Peter Korsgaard <jacmet@uclibc.org>  2009-08-02 20:16:40 UTC ---
+Committed, thanks.
+Maybe we should simply let webkit depend on libgtk2 and use the libgtk2
+dependencies to know if it should build for directfb or X, but that can wait.
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
