@@ -1,34 +1,28 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 2 Aug 2009 10:00:41 +0200
-Subject: [Buildroot] [git commit] CHANGES: pciutils issue is #523, not #527
-Message-ID: <20090802080126.A6F0E777FE@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 02 Aug 2009 10:01:07 +0200
+Subject: [Buildroot] [pull request] Pull request for branch lvm-bump
+In-Reply-To: <cover.1249168442.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Sun\,
+	2 Aug 2009 01\:14\:02 +0200")
+References: <cover.1249168442.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <874osqtzjw.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a7b50b94bf0cca530cfbc13ce70788f83ed1ada2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Thomas> The following changes since commit e15c0d07e15e94e800bd9a0cf3c24f45aeacd89c:
+ Thomas>   Peter Korsgaard (1):
+ Thomas>         target/device: rename program invocation symbol in defconfigs
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ Thomas> are available in the git repository at:
 
-diff --git a/CHANGES b/CHANGES
-index 78b457f..4c3d403 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -51,7 +51,7 @@
- 	#495: Bump bind package to 9.5.1-P3 (security)
- 	#497: OpenSSL RSA key generation hangs on x86_64
- 	#509: Bump sqlite package to 3.6.16
--	#527: pciutils broken with external toolchain
-+	#523: pciutils broken with external toolchain
- 
- 2009.05, Released June 1st, 2009:
- 
+ Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot lvm-bump
+
+Pulled and pushed - Thanks!
+
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
