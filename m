@@ -1,11 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 02 Aug 2009 10:01:07 +0200
-Subject: [Buildroot] [pull request] Pull request for branch lvm-bump
-In-Reply-To: <cover.1249168442.git.thomas.petazzoni@free-electrons.com>
+Date: Sun, 02 Aug 2009 10:01:26 +0200
+Subject: [Buildroot] [pull request] Pull request for branch pciutils-fix
+In-Reply-To: <cover.1249166245.git.thomas.petazzoni@free-electrons.com>
 	(Thomas Petazzoni's message of "Sun\,
-	2 Aug 2009 01\:14\:02 +0200")
-References: <cover.1249168442.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <874osqtzjw.fsf@macbook.be.48ers.dk>
+	2 Aug 2009 00\:37\:27 +0200")
+References: <cover.1249166245.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87zlaiskyx.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,9 +20,12 @@ To: buildroot@busybox.net
 
  Thomas> are available in the git repository at:
 
- Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot lvm-bump
+ Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot pciutils-fix
 
-Pulled and pushed - Thanks!
+ Thomas> Thomas Petazzoni (1):
+ Thomas>       pciutils: fix build with external toolchains
+
+Pulled and pushed, thanks!
 
 -- 
 Bye, Peter Korsgaard
