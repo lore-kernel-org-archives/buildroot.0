@@ -1,9 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun,  2 Aug 2009 20:38:09 +0000 (UTC)
+Date: Sun,  2 Aug 2009 20:53:36 +0000 (UTC)
 Subject: [Buildroot] [Bug 525] sed can't find libintl
 In-Reply-To: <bug-525-163@https.bugs.busybox.net/>
 References: <bug-525-163@https.bugs.busybox.net/>
-Message-ID: <20090802203809.513FB777BE@busybox.osuosl.org>
+Message-ID: <20090802205336.ACF1F777BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +13,21 @@ To: buildroot@busybox.net
 https://bugs.busybox.net/show_bug.cgi?id=525
 
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |ASSIGNED
 
 
 
+--- Comment #6 from Daniele Salvatore Albano <d.albano@gmail.com>  2009-08-02 20:53:36 UTC ---
+I'd prefer to don't use busybox because i'm building an generic appliance root
+for non embed machines: i need some stuff that busybox can't supply so, to use
+it, i should mix too much busybox with non-busybox stuff so i'd preferred to
+don't use it at all.
 
---- Comment #5 from Peter Korsgaard <jacmet@uclibc.org>  2009-08-02 20:38:08 UTC ---
-Strange, I cannot reproduce it here (on an ARM config). Your config is kind of
-strange, as you would normally not enable libintl if your toolchain has locale
-support.
-May I ask why you are not simply using the busybox sed applet instead? Most
-buildroot users do, so that one sees a lot more testing (not that the big sed
-shouldn't work)
+Libintl is selected for dependency, if i don't remember bad, but i cannot check
+now, i've shutdown my compile station, i'll check tommorrow.
+
+I'm using an external toolchain, based on glibc 2.9 and kernel 2.6.29.4, to do
+the build, can this be the problem? I'm using crosstool-ng to build the
+toolchain.
 
 
 -- 
