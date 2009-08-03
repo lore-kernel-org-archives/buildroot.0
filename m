@@ -1,32 +1,29 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 03 Aug 2009 07:24:14 +0200
-Subject: [Buildroot] Buildroot 2009.08-rc1 released
-Message-ID: <87vdl5sc5d.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon,  3 Aug 2009 10:13:35 +0200
+Subject: [Buildroot] [pull request] Pull request for branch oldconfig-fix
+Message-ID: <cover.1249287213.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+The following changes since commit 4840c451d93afb59725900b1d6ca84645113b897:
+  Peter Korsgaard (1):
+        Merge branch 'lvm-bump' of git://git.busybox.net/~tpetazzoni/git/buildroot
 
-I have just released 2009.08-rc1 as promised [1]. For an overview of
-the changes, see
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2009.08_rc1
+are available in the git repository at:
 
-You can download the tarball here:
+  git://git.busybox.net/~tpetazzoni/git/buildroot oldconfig-fix
 
-http://buildroot.net/downloads/buildroot-2009.08-rc1.tar.bz2
+Thomas Petazzoni (1):
+      kconfig: fix oldconfig to generate .config.cmd
 
-Or get it from Git:
+ package/config/conf.c                      |    4 ++
+ package/config/confdata.c                  |    4 +--
+ package/config/kconfig-to-buildroot2.patch |   47 +++++++++++++++------------
+ 3 files changed, 31 insertions(+), 24 deletions(-)
 
-git://git.buildroot.net/buildroot
-
-Please give it a spin and report any problems to the mailing list or
-bug tracker. The plan is to release the final 2009.08 release at the
-end of the month.
-
-[1] http://lists.busybox.net/pipermail/buildroot/2009-July/028491.html
-
+Thanks,
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni
