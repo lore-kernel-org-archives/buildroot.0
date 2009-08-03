@@ -1,47 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 03 Aug 2009 22:48:43 +0200
-Subject: [Buildroot] [PATCH 1/2] e2fsprogs: factor out libuuid support
-In-Reply-To: <20090803150941.GM19257@buzzloop.caiaq.de> (Daniel Mack's message
-	of "Mon\, 3 Aug 2009 17\:09\:41 +0200")
-References: <20090729172019.GS19257@buzzloop.caiaq.de>
-	<1248888083-11767-1-git-send-email-daniel@caiaq.de>
-	<20090803143614.GK19257@buzzloop.caiaq.de>
-	<20090803165815.312deddd@surf>
-	<20090803150941.GM19257@buzzloop.caiaq.de>
-Message-ID: <873a88sjx0.fsf@macbook.be.48ers.dk>
+From: Dan Lyke <danlyke@flutterby.com>
+Date: Mon, 3 Aug 2009 13:49:49 -0700
+Subject: [Buildroot] Building Linux system - Beginner Q2
+In-Reply-To: <BAY136-W9F7845E64DF97AA4705DDCE0F0@phx.gbl>
+References: <mailman.16140.1249312217.24852.buildroot@busybox.net>
+	<BAY136-W9F7845E64DF97AA4705DDCE0F0@phx.gbl>
+Message-ID: <20090803134949.59f5dcc0@danhplaptop>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Daniel" == Daniel Mack <daniel@caiaq.de> writes:
+On Mon, 3 Aug 2009 20:36:00 +0100
+> I found in the dl the kernel package. Do i have to extract it and
+> "make linux26-menuconfig" and then "make" ?? I am asking this because
+> oi found an extracted kernel inside toolchain_build_i686 directory.
+> thanks
 
-Hi,
+I believe that the one you're looking for to modify is in
+project_build_arm/*/linux-* . I find that when I've modified files
+in there (it's been several months since I've had to do that), I've
+needed to do a
 
- >> From 97b17587e8dca5774fb59347426f0b7ae04c3415 Mon Sep 17 00:00:00 2001
- Daniel> From: Daniel Mack <daniel@caiaq.de>
- Daniel> Date: Wed, 29 Jul 2009 19:13:46 +0200
- Daniel> Subject: [PATCH] e2fsprogs: factor out libuuid support
+   pushd project_build_arm/*/linux-*
+   make clean
+   popd
+   make
 
- Daniel> Add a new target for libuuid so it can be built without e2fsprogs.
+To make sure that the kernel gets rebuilt properly, but there's a good
+chance that since I've last played with this the dependency checking
+stuff has gotten better.
 
- Daniel> Signed-off-by: Daniel Mack <daniel@caiaq.de>
- Daniel> ---
- Daniel>  package/e2fsprogs/Config.in    |    4 ++++
- Daniel>  package/e2fsprogs/e2fsprogs.mk |   27 +++++++++++++++++++++++++--
- Daniel>  2 files changed, 29 insertions(+), 2 deletions(-)
+You shouldn't have to extract any files manually, Buildroot should do
+that for you. And if you do a "make menuconfig" at the highest level,
+you can then go to "Kernel->Linux Kernel Configuration", that should be
+the equivalent of just typing "make linux26-menuconfig" directly.
 
- Daniel> diff --git a/package/e2fsprogs/Config.in b/package/e2fsprogs/Config.in
- Daniel> index d353fd9..398dc56 100644
- Daniel> --- a/package/e2fsprogs/Config.in
- Daniel> +++ b/package/e2fsprogs/Config.in
- Daniel> @@ -1,6 +1,10 @@
- Daniel> +config BR2_PACKAGE_LIBUUID
- Daniel> +	bool
-
-Why did you make this a hidden config? Couldn't we imagine someone
-wanting to use libuuid in their own programs?
-
--- 
-Bye, Peter Korsgaard
+Dan
