@@ -1,36 +1,65 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun,  2 Aug 2009 23:12:58 +0000 (UTC)
-Subject: [Buildroot] [Bug 355] Please update WebKit - it doesn't compile!
-In-Reply-To: <bug-355-163@https.bugs.busybox.net/>
-References: <bug-355-163@https.bugs.busybox.net/>
-Message-ID: <20090802231258.C94BD777DF@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 3 Aug 2009 07:14:05 +0200
+Subject: [Buildroot] [git commit] docs/: announce 2009.08-rc1
+Message-ID: <20090803051436.0FE29777E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=355
 
+commit: http://git.buildroot.net/buildroot/commit/?id=efc3aed18132586ad90b0e2bd91dd215633a9b16
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ docs/download.html |    8 ++++++++
+ docs/news.html     |   13 +++++++++++++
+ 2 files changed, 21 insertions(+), 0 deletions(-)
 
-
-
---- Comment #6 from Dan Dart <dandart@googlemail.com>  2009-08-02 23:12:58 UTC ---
-How now do I get it to work? I get:
-
-checking for libintl.h... no
-configure: error:
-*** You must have either have gettext support in your C library, or use the
-*** GNU gettext library. (http://www.gnu.org/software/gettext/gettext.html
-
-Where is it looking? I have /usr/include/libintl.h in the libc6-dev package and
-gettext installed.
-
-Using Ubuntu 9.04.
-
-
+diff --git a/docs/download.html b/docs/download.html
+index 349a7cd..0c34f4a 100644
+--- a/docs/download.html
++++ b/docs/download.html
+@@ -14,6 +14,14 @@ or
+ <a href="/downloads/buildroot-2009.05.tar.bz2">buildroot-2009.05.tar.bz2</a>.
+ <p>
+ 
++The latest release candidate is <b>2009.08-rc1</b>, which can be
++downloaded here:<p>
++
++<a href="/downloads/buildroot-2009.08-rc1.tar.gz">buildroot-2009.08-rc1.tar.gz</a>
++or
++<a href="/downloads/buildroot-2009.08-rc1.tar.bz2">buildroot-2009.08-rc1.tar.bz2</a>.
++<p>
++
+ This and earlier releases can always be dowloaded from
+ <a href="/downloads/">http://buildroot.net/downloads/</a>.
+ 
+diff --git a/docs/news.html b/docs/news.html
+index 65fd892..bb6e2e2 100644
+--- a/docs/news.html
++++ b/docs/news.html
+@@ -5,6 +5,19 @@
+ <p>
+ 
+ <ul>
++  <li><b>2 August 2009 -- 2009.08-rc1 released</b>
++
++    <p>We have a new release candidate! Lots of changes all over the
++    tree, see the <a
++    href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2009.08_rc1">CHANGES</a>
++    file for details.
++
++    <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
++    <a href="/downloads/buildroot-2009.08-rc1.tar.bz2">2009.08-rc1
++    release candidate</a>, and report any problems found to the <a
++    href="lists.html">mailing list</a> or <a
++    href="https://bugs.uclibc.org">bug tracker</a>.</p>
++
+   <li><b>1 June 2009 -- 2009.05 released</b>
+ 
+     <p>The stable 2009.05 release is out - Thanks to everyone
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.6.3.3
