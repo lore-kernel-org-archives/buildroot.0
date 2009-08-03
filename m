@@ -1,90 +1,33 @@
-From: bbj17 at gmx.de <bbj17@gmx.de>
-Date: Mon, 03 Aug 2009 17:17:49 +0200
-Subject: [Buildroot] float, va_arg, printf on x86_64
-Message-ID: <20090803151749.224000@gmx.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon,  3 Aug 2009 18:36:22 +0000 (UTC)
+Subject: [Buildroot] [Bug 527] misc fixes for dnsmasq package
+In-Reply-To: <bug-527-163@https.bugs.busybox.net/>
+References: <bug-527-163@https.bugs.busybox.net/>
+Message-ID: <20090803183623.1B19777812@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=527
+
+
+
+
+
+--- Comment #7 from Daniele Salvatore Albano <d.albano@gmail.com>  2009-08-03 18:36:22 UTC ---
 Hi,
 
-I use buildroot-2009.08-rc1 and want to build a small system for a 64-Bit system.
-I build my version with the following settings: 
-Target architecture = x86_64
-kernel type = advanced
-kernel version = 2.6.30.2
+i've converted the package to new autotools format, actually it works with and
+without dbus with my external toolchain.
 
-The target image boots fine and everything is working, except the output of float values:
+Can someone check if it works with buildroot toolchain?
 
-(printf - busyboy) => printf %f 7 => 0.000000
-(printf - ash) => printf %f 7 => -2681561585988519419770000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+The attached file isin't a patch but he entire .mk file
 
-(tcl format) => format %f 7 => 0.000000
-
-Only perl-printf works right.
-Can anyone explain this behaviour?
-
-PS: same with buildroot-2009.05
-
-c-code example:
-
-#include <fcntl.h>
-#include <stdio.h>
-#include <termios.h>
-#include <unistd.h>
-#include <stdarg.h>
-
-
-void my(int param1, ...) {
-     double f;
-     va_list argptr;
-
-    va_start( argptr, param1 );
-      f = va_arg( argptr, double );
-      va_end( argptr );
-
-      if (f==4.2) {
-      printf("YES #2\n");
-    }
-
-    printf("my -> %.2f \n", f);
-
-}
-
-int main(int argc, char *argv[]) {
-
-  float f3;
-  f3 = 4.2f;
-
-  printf("%d\n", (int)f3);
-  if (f3==4.2f) {
-        printf("YES %2.2f\n",f3);
-  }
-
-  my(3,f3);
-  return 0;
-
-}
-
-
-correct output (opensuse 10.2):
-./a.out
-4
-YES 4.20
-my -> 4.20
-
-incorrect output (BR-2009.08-rc1):
-./testprintf
-4
-YES 0.00
-my -> 0.00
-
-If the target architecture is 32-Bit everything is OK!
-
-Regards BC
 
 -- 
-GRATIS f?r alle GMX-Mitglieder: Die maxdome Movie-FLAT!
-Jetzt freischalten unter http://portal.gmx.net/de/go/maxdome01
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
