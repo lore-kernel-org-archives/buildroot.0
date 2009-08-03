@@ -1,15 +1,17 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon,  3 Aug 2009 10:13:36 +0200
-Subject: [Buildroot] [PATCH 1/1] kconfig: fix oldconfig to generate
+Date: Mon, 3 Aug 2009 10:22:52 +0200
+Subject: [Buildroot] [git commit] kconfig: fix oldconfig to generate
 	.config.cmd
-In-Reply-To: <cover.1249287213.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1249287213.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <c0727fd3192dd3f126b9534174b4f529eeda2a33.1249287213.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <20090803083237.236C677667@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+
+commit: http://git.buildroot.net/buildroot/commit/?id=c0727fd3192dd3f126b9534174b4f529eeda2a33
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Since the recent update of Kconfig to the Kconfig infrastructure found
 in 2.6.30 kernels, make oldconfig was broken because it didn't
@@ -251,4 +253,4 @@ index 3348b85..877caba 100644
   			str = sym_get_string_value(sym);
   			if (str[0] != '0' || (str[1] != 'x' && str[1] != 'X')) {
 -- 
-1.6.0.4
+1.6.3.3
