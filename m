@@ -1,26 +1,24 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon,  3 Aug 2009 09:59:11 +0000 (UTC)
-Subject: [Buildroot] [Bug 525] sed can't find libintl
-In-Reply-To: <bug-525-163@https.bugs.busybox.net/>
-References: <bug-525-163@https.bugs.busybox.net/>
-Message-ID: <20090803095911.E24A9776B0@busybox.osuosl.org>
+From: Raed Abu-Sanad <raedbenz@hotmail.com>
+Date: Mon, 3 Aug 2009 13:29:58 +0100
+Subject: [Buildroot] Building Linux system - Beginner
+Message-ID: <BAY136-W12FA46770D513040299E68CE0F0@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=525
 
+Hi,,
 
+I read the documentation of buildroot. and i manged to configure and build the filesystem using "make menuconfig" and "make" after extracting the downloaded file. I noticed in the begginning it was downloading the kernel 2.6.30.. 
+My wquestion is: where it has been downloaded and how can i configure/compile the kernel? or it is already done?
 
+Thanks
 
-
---- Comment #8 from Daniele Salvatore Albano <d.albano@gmail.com>  2009-08-03 09:59:11 UTC ---
-The problem is related to libintl.so, not to libintl.h
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+_________________________________________________________________
+Windows Live Messenger: Thanks for 10 great years?enjoy free winks and emoticons.
+http://clk.atdmt.com/UKM/go/157562755/direct/01/
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090803/404f623f/attachment.htm>
