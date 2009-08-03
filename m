@@ -1,42 +1,22 @@
-From: Lars Lockenvitz <l.lockenvitz@fpga-art.de>
-Date: Mon, 03 Aug 2009 14:50:36 +0200
-Subject: [Buildroot] Building Linux system - Beginner
-In-Reply-To: <BAY136-W12FA46770D513040299E68CE0F0@phx.gbl>
-References: <BAY136-W12FA46770D513040299E68CE0F0@phx.gbl>
-Message-ID: <4A76DD1C.7090200@fpga-art.de>
+From: Daniel Mack <daniel@caiaq.de>
+Date: Mon, 3 Aug 2009 16:36:14 +0200
+Subject: [Buildroot] [PATCH 1/2] e2fsprogs: factor out libuuid support
+In-Reply-To: <1248888083-11767-1-git-send-email-daniel@caiaq.de>
+References: <20090729172019.GS19257@buzzloop.caiaq.de>
+	<1248888083-11767-1-git-send-email-daniel@caiaq.de>
+Message-ID: <20090803143614.GK19257@buzzloop.caiaq.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Wed, Jul 29, 2009 at 07:21:22PM +0200, Daniel Mack wrote:
+> Add a new target for libuuid so it can be built without e2fsprogs.
+> 
+> Signed-off-by: Daniel Mack <daniel@caiaq.de>
 
-normally all your downloads are in dl directory.
-And you can configure your kernel with "make linux26-menuconfig"
+Hmm, that didn't work well. Let's give the version below a try. This one
+now also selects BR2_PACKAGE_LIBUUID for gupnp.
 
-Try a "make help" and you see witch other options you have with make!
-
-Regards
-
-Raed Abu-Sanad schrieb:
-> Hi,,
->
-> I read the documentation of buildroot. and i manged to configure and 
-> build the filesystem using "make menuconfig" and "make" after 
-> extracting the downloaded file. I noticed in the begginning it was 
-> downloading the kernel 2.6.30..
-> My wquestion is: where it has been downloaded and how can i 
-> configure/compile the kernel? or it is already done?
->
-> Thanks
->
-> ------------------------------------------------------------------------
-> Internet Explorer 8 - accelerate your Hotmail. Download Internet 
-> Explorer 8 <http://clk.atdmt.com/UKM/go/134665338/direct/01/>
-> ------------------------------------------------------------------------
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Daniel
