@@ -1,31 +1,29 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 04 Aug 2009 22:59:51 +0200
-Subject: [Buildroot] [pull request] Pull request for branch sed-fix
-In-Reply-To: <cover.1249415132.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Tue\,
-	4 Aug 2009 21\:47\:59 +0200")
-References: <cover.1249415132.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87r5vrpa60.fsf@macbook.be.48ers.dk>
+From: Raed Abu-Sanad <raedbenz@hotmail.com>
+Date: Tue, 4 Aug 2009 22:00:01 +0100
+Subject: [Buildroot] Building Linux system - Beginner
+In-Reply-To: <mailman.16306.1249386189.24852.buildroot@busybox.net>
+References: <mailman.16306.1249386189.24852.buildroot@busybox.net>
+Message-ID: <BAY136-W16239DD29A416E7AEDD40CE0C0@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> The following changes since commit 5b72dda69f72e1953dfc7987dd1b418e1afe79a4:
- Thomas>   Peter Korsgaard (1):
- Thomas>         buildroot: fix fallout after qtopia4 -> qt rename
+Hi Dan and Hartley,,
 
- Thomas> are available in the git repository at:
+Here is what i am getting:
 
- Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot sed-fix
+root at raed-laptop:/home/raed/temp/buildroot-2009.05# make linux26-menuconfig
+make: *** No rule to make target `linux26-menuconfig'. Stop.
 
- Thomas> Thomas Petazzoni (1):
- Thomas>       sed: fix compilation with external toolchains
+thanks
 
-Pulled and pushed - Thanks!
 
--- 
-Bye, Peter Korsgaard
+
+_________________________________________________________________
+
+Upgrade to Internet Explorer 8 Optimised for MSN.  
+
+http://extras.uk.msn.com/internet-explorer-8/?ocid=T010MSN07A0716U
