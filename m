@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Aug 2009 17:17:07 +0200
-Subject: [Buildroot] [PATCH 1/2] webkit: only show the rendering backend
-	choice when webkit is enabled
+Date: Tue,  4 Aug 2009 17:17:08 +0200
+Subject: [Buildroot] [PATCH 2/2] ipsec-tools: only show the security context
+	choice when ipsec enabled
 In-Reply-To: <cover.1249399026.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1249399026.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <83cc37a0b234970cad2fe6d028cb1c00642e7ec3.1249399026.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <070424f0c84a68078ac08fdc908542830f3d843f.1249399026.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,24 +13,24 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/webkit/Config.in |    4 ++++
+ package/ipsec-tools/Config.in |    4 ++++
  1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/webkit/Config.in b/package/webkit/Config.in
-index e436f9a..ecf8694 100644
---- a/package/webkit/Config.in
-+++ b/package/webkit/Config.in
-@@ -18,6 +18,8 @@ config BR2_PACKAGE_WEBKIT
- comment "webkit requires a toolchain with C++ support and WCHAR enabled"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
+diff --git a/package/ipsec-tools/Config.in b/package/ipsec-tools/Config.in
+index a55ff0c..d29cb86 100644
+--- a/package/ipsec-tools/Config.in
++++ b/package/ipsec-tools/Config.in
+@@ -61,6 +61,8 @@ config BR2_PACKAGE_IPSEC_TOOLS_LIBS
+ 	  Install libipsec.a and libracoon.a under staging_dir/lib for further
+ 	  development on a host machine.
  
-+if BR2_PACKAGE_WEBKIT
++if BR2_PACKAGE_IPSEC_TOOLS
 +
  choice
- 	prompt "Rendering target"
- 	default BR2_PACKAGE_WEBKIT_X
-@@ -32,3 +34,5 @@ config BR2_PACKAGE_WEBKIT_DIRECTFB
- 	select BR2_PACKAGE_DIRECTFB
+ 	prompt "Security context"
+ 	default BR2_PACKAGE_IPSEC_SECCTX_DISABLE
+@@ -77,3 +79,5 @@ config BR2_PACKAGE_IPSEC_SECCTX_KERNEL
+ 	bool "Enable kernel security context"
  
  endchoice
 +
