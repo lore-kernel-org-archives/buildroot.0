@@ -1,46 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Aug 2009 16:16:06 +0200
-Subject: [Buildroot] [PATCH 1/1] microperl: fix build
-In-Reply-To: <cover.1249395363.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1249395363.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <6cd57ce392233177261d218a8697c92bd0f9a764.1249395363.git.thomas.petazzoni@free-electrons.com>
+Date: Tue, 4 Aug 2009 16:29:48 +0200
+Subject: [Buildroot] Problem using netsnmp
+In-Reply-To: <4A6EE8F1.3060302@tandberg.com>
+References: <4A6EE8F1.3060302@tandberg.com>
+Message-ID: <20090804162948.255a47df@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix the little build systems hacks that no longer applied to the
-version of Perl being used. With these fixes in place, microperl
-builds and runs properly simple Perl commands on the target.
+Le Tue, 28 Jul 2009 13:02:57 +0100,
+Chris Smith <chris.smith@tandberg.com> a ?crit :
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/microperl/microperl.mk |    5 ++---
- 1 files changed, 2 insertions(+), 3 deletions(-)
+> When I build netsnmp the built snmpd doesn't work on the target.  All 
+> the other snmp stuff works but I get
+> lib.so.6 not found when trying to run snmpd.
+> 
+> Anyone have any thoughts?  It is as if some linkage to host based 
+> libraries has crept in.
 
-diff --git a/package/microperl/microperl.mk b/package/microperl/microperl.mk
-index 5a41f38..f2a958b 100644
---- a/package/microperl/microperl.mk
-+++ b/package/microperl/microperl.mk
-@@ -33,8 +33,8 @@ $(MICROPERL_DIR)/.host_configured: $(MICROPERL_DIR)/.source
- 
- 
- $(MICROPERL_DIR)/.host_configured_and_fixed: $(MICROPERL_DIR)/.host_configured
--	$(SED) 's/^.*<command-line>.*//g' $(MICROPERL_DIR)/makefile
--	$(SED) 's/^.*<command-line>.*//g' $(MICROPERL_DIR)/x2p/makefile
-+	$(SED) 's/^.*<command-line>.*//g' $(MICROPERL_DIR)/Makefile
-+	$(SED) 's/^.*<command-line>.*//g' $(MICROPERL_DIR)/x2p/Makefile
- 	touch $@
- 
- $(MICROPERL_DIR)/.host_make: $(MICROPERL_DIR)/.host_configured_and_fixed
-@@ -42,7 +42,6 @@ $(MICROPERL_DIR)/.host_make: $(MICROPERL_DIR)/.host_configured_and_fixed
- 	touch $@
- 
- $(MICROPERL_DIR)/.host_make_fixed: $(MICROPERL_DIR)/.host_make
--	$(SED) 's#^.*<asm/page.h>.*##g' $(MICROPERL_DIR)/ext/IPC/SysV/SysV.c
- 	$(MAKE) -C $(MICROPERL_DIR) test	|| echo "An error is expected on make test"
- 	touch $@
- 
+I've converted the package to the Makefile.autotools.in infrastructure.
+And now it builds for me, with openssl support. However, I've removed
+the Perl support since it was broken and took too much time to fix.
+
+Could you test the patch I proposed (available at
+http://git.buildroot.net/~tpetazzoni/git/buildroot/patch/?id=d96368ad9339edf62aa87890d5cea79bf7ddfc34) ?
+
+It builds for me, and the snmpd daemon runs. But as I have absolutely
+no knowledge about SNMP, you'll probably have more ideas on how to
+verify that it is indeed working.
+
+Moreover, I've added a few things in the TODO about netsnmp (see
+http://git.buildroot.net/~tpetazzoni/git/buildroot/patch/?id=d7890dd09302bc912cca13d65aa128eb826f9123).
+If you're interested in helping for one of them (like telling us how
+netsnmp should be packaged, what are the different programs, libraries
+and configuration files useful for), don't hesitate!
+
+Thanks!
+
+Thomas
 -- 
-1.6.0.4
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
