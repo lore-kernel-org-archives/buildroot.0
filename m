@@ -1,34 +1,34 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  4 Aug 2009 14:39:47 +0000 (UTC)
-Subject: [Buildroot] [Bug 523] pciutiles can't find libz
-In-Reply-To: <bug-523-163@https.bugs.busybox.net/>
-References: <bug-523-163@https.bugs.busybox.net/>
-Message-ID: <20090804143947.67ACF77823@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 4 Aug 2009 17:05:48 +0200
+Subject: [Buildroot] [git commit] libusb: fix host libtool dependency
+Message-ID: <20090804150723.D15897781D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=523
 
+commit: http://git.buildroot.net/buildroot/commit/?id=bdca3189a8fc71b0260218e0c4e05bdfd01daa73
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/libusb/libusb.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|ASSIGNED                    |RESOLVED
-         Resolution|                            |FIXED
-
-
-
-
---- Comment #6 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2009-08-04 14:39:45 UTC ---
-Fixed by
-http://git.buildroot.net/buildroot/commit/?id=dcb752b1654d4186d02bbaa9db3b865ac03785cd
-
-
+diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
+index 3d0d798..d613133 100644
+--- a/package/libusb/libusb.mk
++++ b/package/libusb/libusb.mk
+@@ -23,7 +23,7 @@ $(DL_DIR)/$(LIBUSB_SOURCE): $(LIBUSB_PATCH)
+ libusb-source: $(DL_DIR)/$(LIBUSB_SOURCE) $(LIBUSB_PATCH)
+ 
+ libusb-unpacked: $(LIBUSB_DIR)/.unpacked
+-$(LIBUSB_DIR)/.unpacked: $(STAMP_DIR)/host_autoconf_installed $(STAMP_DIR)/host_automake_installed $(LIBTOOL) $(DL_DIR)/$(LIBUSB_SOURCE)
++$(LIBUSB_DIR)/.unpacked: $(STAMP_DIR)/host_autoconf_installed $(STAMP_DIR)/host_automake_installed $(STAMP_DIR)/host_libtool_installed $(DL_DIR)/$(LIBUSB_SOURCE)
+ 	$(LIBUSB_CAT) $(DL_DIR)/$(LIBUSB_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+ ifneq ($(LIBUSB_PATCH_FILE),)
+ 	(cd $(LIBUSB_DIR) && $(LIBUSB_CAT) $(LIBUSB_PATCH) | patch -p1)
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.6.3.3
