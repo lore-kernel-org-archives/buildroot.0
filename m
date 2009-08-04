@@ -1,43 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Aug 2009 16:29:48 +0200
-Subject: [Buildroot] Problem using netsnmp
-In-Reply-To: <4A6EE8F1.3060302@tandberg.com>
-References: <4A6EE8F1.3060302@tandberg.com>
-Message-ID: <20090804162948.255a47df@surf>
+Date: Tue, 4 Aug 2009 16:36:56 +0200
+Subject: [Buildroot] installing binaries
+In-Reply-To: <20090729013305.GG7257@moomers.org>
+References: <20090729013305.GG7257@moomers.org>
+Message-ID: <20090804163656.2d24be34@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 28 Jul 2009 13:02:57 +0100,
-Chris Smith <chris.smith@tandberg.com> a ?crit :
+Hello Igor,
 
-> When I build netsnmp the built snmpd doesn't work on the target.  All 
-> the other snmp stuff works but I get
-> lib.so.6 not found when trying to run snmpd.
-> 
-> Anyone have any thoughts?  It is as if some linkage to host based 
-> libraries has crept in.
+Le Tue, 28 Jul 2009 20:33:05 -0500,
+Igor Serebryany <igor47@moomers.org> a ?crit :
 
-I've converted the package to the Makefile.autotools.in infrastructure.
-And now it builds for me, with openssl support. However, I've removed
-the Perl support since it was broken and took too much time to fix.
+> 	I've been having a hard time figuring out how buildroot
+> decides to install binaries. Using 2009.02 or 2009.05, I often find
+> that the binaries for the packages I've selected do not make it into
+> 	project_build_ARCH/myproject/root
 
-Could you test the patch I proposed (available at
-http://git.buildroot.net/~tpetazzoni/git/buildroot/patch/?id=d96368ad9339edf62aa87890d5cea79bf7ddfc34) ?
+Basically, the decision is package dependent. But we have roughly two
+types of packages :
 
-It builds for me, and the snmpd daemon runs. But as I have absolutely
-no knowledge about SNMP, you'll probably have more ideas on how to
-verify that it is indeed working.
+ * Packages based on the Makefile.autotools.in infrastructure. In that
+   case, the installation to the target space
+   (project_build_ARCH/PROJECT/root) is done if FOO_INSTALL_TARGET is
+   YES (which is the default), and if the
+   project_build_ARCH/PROJECT/autotools-stamps/PKG_NAME_target_installed
+   stamp file does not exist. See package/Makefile.autotools.in for the
+   details ;
 
-Moreover, I've added a few things in the TODO about netsnmp (see
-http://git.buildroot.net/~tpetazzoni/git/buildroot/patch/?id=d7890dd09302bc912cca13d65aa128eb826f9123).
-If you're interested in helping for one of them (like telling us how
-netsnmp should be packaged, what are the different programs, libraries
-and configuration files useful for), don't hesitate!
+ * Packages *not* based on the Makefile.autotools.in. In that case, the
+   install is usually implement with a make target that is a file
+   installed in the target directory. For example, for the flex
+   package, it is $(TARGET_DIR)/$(FLEX_TARGET_BINARY). Therefore,
+   removing this file from the target directory will trigger the
+   re-execution of the make install of that particular package.
 
-Thanks!
+> 	Is there a way to tell buildroot to go through every selected
+> 	package and copy the binaries to the image?
+
+Theorically, removing the target directory completely + removing the
+*_target_installed stamp files from
+project_build_ARCH/PROJECT/autotools-stamps/ should make it. But I
+don't guarantee that it will work for every package.
+
+> 	I think I get all the packages if I make distclean and then
+> make, but many packages fail to compile the first time (like
+> util-linux which always requires a lot of hacking) and I hate to
+> loose my modifications via make distclean
+
+If they are issues in building util-linux, please don't hesitate to
+report them so that we can fix them.
+
+> 	Trying 'make clean' is futile, as most packages fail to clean
+> and make clean always errors out half-way through.
+
+Yes.
+
+> 	I've been working on this for a few days now, so I appreciate
+> any tips...
+
+I gave you the tips that I have. Buildroot is definitely not good
+(yet!) on cleaning up things and handling partial rebuilds. This is
+definitely on my TODO-list, and I think that Peter is also very
+concerned about these issues.
+
+Hope this helps,
 
 Thomas
 -- 
@@ -45,3 +75,10 @@ Thomas Petazzoni, Free Electrons
 Kernel, drivers and embedded Linux development,
 consulting, training and support.
 http://free-electrons.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 197 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090804/473e5dc7/attachment.pgp>
