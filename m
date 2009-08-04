@@ -1,26 +1,30 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  4 Aug 2009 21:59:08 +0000 (UTC)
-Subject: [Buildroot] [Bug 535] gawk can't find libintl
-In-Reply-To: <bug-535-163@https.bugs.busybox.net/>
-References: <bug-535-163@https.bugs.busybox.net/>
-Message-ID: <20090804215908.D1857777FE@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 5 Aug 2009 00:07:00 +0200
+Subject: [Buildroot] [PATCH 1/1] sed: fix compilation with external
+ toolchains
+In-Reply-To: <87vdl3pa9u.fsf@macbook.be.48ers.dk>
+References: <cover.1249415132.git.thomas.petazzoni@free-electrons.com>
+	<cover.1249415132.git.thomas.petazzoni@free-electrons.com>
+	<6ce736a58c8973ceba56bc95f11118b7c1351f11.1249415132.git.thomas.petazzoni@free-electrons.com>
+	<87vdl3pa9u.fsf@macbook.be.48ers.dk>
+Message-ID: <20090805000700.02591bc1@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=535
+Le Tue, 04 Aug 2009 22:57:33 +0200,
+Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
+> This should preferably go after -rc1, but I'll fix that for you.
 
+Ok, sorry. I also didn't see your mail before sending the gzip fix.
+Will do for the next issues, though.
 
-
-
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2009-08-04 21:59:08 UTC ---
-It seems that the attached patch is somehow missing :-)
-
-
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
