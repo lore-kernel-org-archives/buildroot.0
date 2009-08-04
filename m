@@ -1,34 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Aug 2009 16:15:36 +0200
-Subject: [Buildroot] [pull request] Pull request for branch snmp-fix
-Message-ID: <cover.1249395336.git.thomas.petazzoni@free-electrons.com>
+Date: Tue,  4 Aug 2009 16:15:38 +0200
+Subject: [Buildroot] [PATCH 2/3] netsnmp: update TODO
+In-Reply-To: <cover.1249395336.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1249395336.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <d7890dd09302bc912cca13d65aa128eb826f9123.1249395336.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The following changes since commit 5b72dda69f72e1953dfc7987dd1b418e1afe79a4:
-  Peter Korsgaard (1):
-        buildroot: fix fallout after qtopia4 -> qt rename
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ TODO |   10 ++++++++++
+ 1 files changed, 10 insertions(+), 0 deletions(-)
 
-are available in the git repository at:
-
-  git://git.busybox.net/~tpetazzoni/git/buildroot snmp-fix
-
-Thomas Petazzoni (3):
-      netsnmp: convert to autotools.in and fix build issues
-      netsnmp: update TODO
-      netsnmp: add patch to fix CVE-2008-6123
-
- TODO                                               |   10 +
- .../netsnmp/netsnmp-5.4.2.1-CVE-2008-6123.patch    |   29 +++
- .../netsnmp-5.4.2.1-build-system-fixup.patch       |   29 +++
- package/netsnmp/netsnmp.mk                         |  179 ++++++--------------
- 4 files changed, 119 insertions(+), 128 deletions(-)
- create mode 100644 package/netsnmp/netsnmp-5.4.2.1-CVE-2008-6123.patch
- create mode 100644 package/netsnmp/netsnmp-5.4.2.1-build-system-fixup.patch
-
-Thanks,
+diff --git a/TODO b/TODO
+index bf98fea..8a73c7f 100644
+--- a/TODO
++++ b/TODO
+@@ -15,3 +15,13 @@ Buildroot2 TODOs
+   present, and rerun the configuration... with the wrong environment
+   variables (STRIP= is missing). An autoreconf on this package is
+   probably necessary.
++
++- net-snmp:
++   - Figure out why the net-snmp build systems hardcodes rpath into
++     the libraries (and these rpath are completely wrong since they
++     are based on the host directory hierarchy)
++   - Figure out how to get the Perl support compiled
++   - Find someone more knowledgeable in net-snmp usage to tell how the
++     packaging could be improve (many files installed in /usr/share/,
++     many tools in /usr/bin, is this all necessary ? should it be
++     split in subpackages somehow ?)
 -- 
-Thomas Petazzoni
+1.6.0.4
