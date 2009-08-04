@@ -1,28 +1,30 @@
-From: H Hartley Sweeten <hartleys@visionengravers.com>
-Date: Tue, 4 Aug 2009 17:19:39 -0400
-Subject: [Buildroot] Building Linux system - Beginner
-In-Reply-To: <BAY136-W16239DD29A416E7AEDD40CE0C0@phx.gbl>
-References: <mailman.16306.1249386189.24852.buildroot@busybox.net>
-	<BAY136-W16239DD29A416E7AEDD40CE0C0@phx.gbl>
-Message-ID: <BD79186B4FD85F4B8E60E381CAEE190901B77805@mi8nycmail19.Mi8.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue,  4 Aug 2009 23:56:04 +0200
+Subject: [Buildroot] [pull request] Pull request for branch gzip-fix
+Message-ID: <cover.1249422962.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tuesday, August 04, 2009 2:00 PM, Raed Abu-Sanad wrote:
-> Hi Dan and Hartley,,
-> 
-> Here is what i am getting:
-> 
-> root at raed-laptop:/home/raed/temp/buildroot-2009.05# make linux26-menuconfig
-> make: *** No rule to make target `linux26-menuconfig'. Stop.
-> 
+The following changes since commit 5b72dda69f72e1953dfc7987dd1b418e1afe79a4:
+  Peter Korsgaard (1):
+        buildroot: fix fallout after qtopia4 -> qt rename
 
-In your buildroot .config do you have BR2_KERNEL_LINUX or BR2_KERNEL_LINUX_ADVANCED?
-If you don't, the appropriate Makefile will not be included so you will not have
-the rules for the target.
+are available in the git repository at:
 
-Regards,
-Hartley
+  git://git.busybox.net/~tpetazzoni/git/buildroot gzip-fix
+
+Thomas Petazzoni (1):
+      gzip: add patch to fix glibc build
+
+ CHANGES                                        |    1 +
+ package/gzip/gzip-1.3.12-rename-futimens.patch |   48 ++++++++++++++++++++++++
+ package/gzip/gzip.mk                           |    1 +
+ 3 files changed, 50 insertions(+), 0 deletions(-)
+ create mode 100644 package/gzip/gzip-1.3.12-rename-futimens.patch
+
+Thanks,
+-- 
+Thomas Petazzoni
