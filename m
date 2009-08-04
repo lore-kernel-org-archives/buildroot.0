@@ -1,24 +1,34 @@
-From: Will Newton <will.newton@gmail.com>
-Date: Tue, 4 Aug 2009 12:49:29 +0100
-Subject: [Buildroot] Chess for arm
-In-Reply-To: <4A781EAB.8040109@fpga-art.de>
-References: <4A781EAB.8040109@fpga-art.de>
-Message-ID: <87a5b0800908040449v2834010y4fec9a01b519fa66@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue,  4 Aug 2009 16:15:36 +0200
+Subject: [Buildroot] [pull request] Pull request for branch snmp-fix
+Message-ID: <cover.1249395336.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Aug 4, 2009 at 12:42 PM, Lars
-Lockenvitz<l.lockenvitz@fpga-art.de> wrote:
-> Hi,
->
-> I'm using buildroot on an atmel at91cpu and searching for a graphical chess
-> programm.
-> Buildroot offers gnuchess but this isn't only text-base.
->
-> Does someone know a X11 chess that runs on arm?
+The following changes since commit 5b72dda69f72e1953dfc7987dd1b418e1afe79a4:
+  Peter Korsgaard (1):
+        buildroot: fix fallout after qtopia4 -> qt rename
 
-There are a number of graphical front ends to the gnuchess engine, for
-example xboard.
+are available in the git repository at:
+
+  git://git.busybox.net/~tpetazzoni/git/buildroot snmp-fix
+
+Thomas Petazzoni (3):
+      netsnmp: convert to autotools.in and fix build issues
+      netsnmp: update TODO
+      netsnmp: add patch to fix CVE-2008-6123
+
+ TODO                                               |   10 +
+ .../netsnmp/netsnmp-5.4.2.1-CVE-2008-6123.patch    |   29 +++
+ .../netsnmp-5.4.2.1-build-system-fixup.patch       |   29 +++
+ package/netsnmp/netsnmp.mk                         |  179 ++++++--------------
+ 4 files changed, 119 insertions(+), 128 deletions(-)
+ create mode 100644 package/netsnmp/netsnmp-5.4.2.1-CVE-2008-6123.patch
+ create mode 100644 package/netsnmp/netsnmp-5.4.2.1-build-system-fixup.patch
+
+Thanks,
+-- 
+Thomas Petazzoni
