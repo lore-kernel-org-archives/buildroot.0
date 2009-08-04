@@ -1,7 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Tue, 4 Aug 2009 17:05:48 +0200
-Subject: [Buildroot] [git commit] libusb: fix host libtool dependency
-Message-ID: <20090804150723.D15897781D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] docs/copyright.txt: ask people to contact
+	the devs, not Erik
+Message-ID: <20090804150724.0576F7775C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,26 +10,25 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bdca3189a8fc71b0260218e0c4e05bdfd01daa73
+commit: http://git.buildroot.net/buildroot/commit/?id=b1abe04105db032bb6804396ccbbc4642c620592
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libusb/libusb.mk |    2 +-
+ docs/copyright.txt |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
-index 3d0d798..d613133 100644
---- a/package/libusb/libusb.mk
-+++ b/package/libusb/libusb.mk
-@@ -23,7 +23,7 @@ $(DL_DIR)/$(LIBUSB_SOURCE): $(LIBUSB_PATCH)
- libusb-source: $(DL_DIR)/$(LIBUSB_SOURCE) $(LIBUSB_PATCH)
+diff --git a/docs/copyright.txt b/docs/copyright.txt
+index e4b62ab..77fb560 100644
+--- a/docs/copyright.txt
++++ b/docs/copyright.txt
+@@ -25,6 +25,6 @@ HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
  
- libusb-unpacked: $(LIBUSB_DIR)/.unpacked
--$(LIBUSB_DIR)/.unpacked: $(STAMP_DIR)/host_autoconf_installed $(STAMP_DIR)/host_automake_installed $(LIBTOOL) $(DL_DIR)/$(LIBUSB_SOURCE)
-+$(LIBUSB_DIR)/.unpacked: $(STAMP_DIR)/host_autoconf_installed $(STAMP_DIR)/host_automake_installed $(STAMP_DIR)/host_libtool_installed $(DL_DIR)/$(LIBUSB_SOURCE)
- 	$(LIBUSB_CAT) $(DL_DIR)/$(LIBUSB_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
- ifneq ($(LIBUSB_PATCH_FILE),)
- 	(cd $(LIBUSB_DIR) && $(LIBUSB_CAT) $(LIBUSB_PATCH) | patch -p1)
+ You have been warned.
+ 
+-You can contact the webmaster at <andersen@codepoet.org> if you have some sort
++You can contact the webmaster at <buildroot@uclibc.org> if you have some sort
+ of problem with this.
+ 
 -- 
 1.6.3.3
