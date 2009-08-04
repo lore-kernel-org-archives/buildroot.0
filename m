@@ -1,39 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Aug 2009 17:17:08 +0200
-Subject: [Buildroot] [PATCH 2/2] ipsec-tools: only show the security context
-	choice when ipsec enabled
-In-Reply-To: <cover.1249399026.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1249399026.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <070424f0c84a68078ac08fdc908542830f3d843f.1249399026.git.thomas.petazzoni@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue,  4 Aug 2009 15:37:58 +0000 (UTC)
+Subject: [Buildroot] [Bug 525] sed can't find libintl
+In-Reply-To: <bug-525-163@https.bugs.busybox.net/>
+References: <bug-525-163@https.bugs.busybox.net/>
+Message-ID: <20090804153758.CE7BF7781D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ipsec-tools/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+https://bugs.busybox.net/show_bug.cgi?id=525
 
-diff --git a/package/ipsec-tools/Config.in b/package/ipsec-tools/Config.in
-index a55ff0c..d29cb86 100644
---- a/package/ipsec-tools/Config.in
-+++ b/package/ipsec-tools/Config.in
-@@ -61,6 +61,8 @@ config BR2_PACKAGE_IPSEC_TOOLS_LIBS
- 	  Install libipsec.a and libracoon.a under staging_dir/lib for further
- 	  development on a host machine.
- 
-+if BR2_PACKAGE_IPSEC_TOOLS
-+
- choice
- 	prompt "Security context"
- 	default BR2_PACKAGE_IPSEC_SECCTX_DISABLE
-@@ -77,3 +79,5 @@ config BR2_PACKAGE_IPSEC_SECCTX_KERNEL
- 	bool "Enable kernel security context"
- 
- endchoice
-+
-+endif
+
+
+
+
+--- Comment #9 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2009-08-04 15:37:58 UTC ---
+Ok, issue reproduced here.
+
+
 -- 
-1.6.0.4
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
