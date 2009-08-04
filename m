@@ -1,41 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Aug 2009 21:17:40 +0200
-Subject: [Buildroot] [git commit] ipsec-tools: only show the security
-	context choice when ipsec enabled
-Message-ID: <20090804192339.27D01776C5@busybox.osuosl.org>
+Date: Tue, 4 Aug 2009 21:39:50 +0200
+Subject: [Buildroot] Problem using netsnmp
+In-Reply-To: <4A785AE1.8010609@tandberg.com>
+References: <4A6EE8F1.3060302@tandberg.com> <20090804162948.255a47df@surf>
+	<4A785AE1.8010609@tandberg.com>
+Message-ID: <20090804213950.29a1cc76@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=070424f0c84a68078ac08fdc908542830f3d843f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+[ I'm re-adding the Buildroot list in Cc: ]
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ipsec-tools/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+Le Tue, 04 Aug 2009 16:59:29 +0100,
+Chris Smith <chris.smith@tandberg.com> a ?crit :
 
-diff --git a/package/ipsec-tools/Config.in b/package/ipsec-tools/Config.in
-index a55ff0c..d29cb86 100644
---- a/package/ipsec-tools/Config.in
-+++ b/package/ipsec-tools/Config.in
-@@ -61,6 +61,8 @@ config BR2_PACKAGE_IPSEC_TOOLS_LIBS
- 	  Install libipsec.a and libracoon.a under staging_dir/lib for further
- 	  development on a host machine.
- 
-+if BR2_PACKAGE_IPSEC_TOOLS
-+
- choice
- 	prompt "Security context"
- 	default BR2_PACKAGE_IPSEC_SECCTX_DISABLE
-@@ -77,3 +79,5 @@ config BR2_PACKAGE_IPSEC_SECCTX_KERNEL
- 	bool "Enable kernel security context"
- 
- endchoice
-+
-+endif
+> I tested the patch. Seems to work ok.
+
+Thanks for testing the patch!
+
+>  I had some issues with building in parallel,  I have set 4 as the
+> Number of jobs to run simultaneously. I had to try and build a few
+> times before it worked. Just dependency issues I think.
+
+I didn't try with a number of jobs > 1, and before my patch, netsnmp
+was forced to make -j1 even if a number of jobs > 1 was selected
+globally in Buildroot.
+
+I will try to provide another fix for this issue.
+
+> > Moreover, I've added a few things in the TODO about netsnmp (see
+> > http://git.buildroot.net/~tpetazzoni/git/buildroot/patch/?id=d7890dd09302bc912cca13d65aa128eb826f9123).
+> > If you're interested in helping for one of them (like telling us how
+> > netsnmp should be packaged, what are the different programs,
+> > libraries and configuration files useful for), don't hesitate!
+
+Any suggestions about this ?
+
+Thanks again for the report and the test,
+
+Thomas
 -- 
-1.6.3.3
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
