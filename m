@@ -1,31 +1,28 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 05 Aug 2009 09:24:04 +0200
-Subject: [Buildroot] [pull request] Pull request for branch gzip-fix
-In-Reply-To: <cover.1249422962.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Tue\,
-	4 Aug 2009 23\:56\:04 +0200")
-References: <cover.1249422962.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87iqh2pvu3.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed,  5 Aug 2009 07:34:53 +0000 (UTC)
+Subject: [Buildroot] [Bug 535] gawk can't find libintl
+In-Reply-To: <bug-535-163@https.bugs.busybox.net/>
+References: <bug-535-163@https.bugs.busybox.net/>
+Message-ID: <20090805073453.5C774777E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=535
 
- Thomas> The following changes since commit 5b72dda69f72e1953dfc7987dd1b418e1afe79a4:
- Thomas>   Peter Korsgaard (1):
- Thomas>         buildroot: fix fallout after qtopia4 -> qt rename
 
- Thomas> are available in the git repository at:
 
- Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot gzip-fix
 
- Thomas> Thomas Petazzoni (1):
- Thomas>       gzip: add patch to fix glibc build
 
-Pulled and pushed, thanks.
+--- Comment #2 from Daniele Salvatore Albano <d.albano@gmail.com>  2009-08-05 07:34:52 UTC ---
+mmm, lol, i forgot to attach :)
+
+i'll attach when i'll back at home!
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
