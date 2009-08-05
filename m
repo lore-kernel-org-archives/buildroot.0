@@ -1,25 +1,31 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 05 Aug 2009 22:40:22 +0200
-Subject: [Buildroot] v86d?
-In-Reply-To: <50030A7F-0D3D-444C-8635-6D7FF382A4ED@earthlink.net> (Steve
-	Bennett's message of "Wed\, 5 Aug 2009 13\:19\:54 -0400")
-References: <50030A7F-0D3D-444C-8635-6D7FF382A4ED@earthlink.net>
-Message-ID: <87prbam1u1.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed,  5 Aug 2009 22:40:09 +0000 (UTC)
+Subject: [Buildroot] [Bug 515] tcpreplay: new package
+In-Reply-To: <bug-515-163@https.bugs.busybox.net/>
+References: <bug-515-163@https.bugs.busybox.net/>
+Message-ID: <20090805224010.54BD9777E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Steve" == Steve Bennett <sablists@earthlink.net> writes:
+https://bugs.busybox.net/show_bug.cgi?id=515
 
-Hi,
 
- Steve> But uvesafb needs v86d.  I could add that manually, but I was
- Steve> wondering if anything ever happened with adding that to
- Steve> buildroot?
 
-No, I'm afraid that got lost when we had to move to bugzilla :/
+
+
+--- Comment #2 from Chris Packham <judge.packham@gmail.com>  2009-08-05 22:40:08 UTC ---
+Created an attachment (id=575)
+ --> (https://bugs.busybox.net/attachment.cgi?id=575)
+Updated patch
+
+The only change from the previous is to set the program prefix to an empty
+string.
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
