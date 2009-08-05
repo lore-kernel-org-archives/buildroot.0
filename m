@@ -1,9 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  5 Aug 2009 10:50:31 +0000 (UTC)
+Date: Wed,  5 Aug 2009 10:51:44 +0000 (UTC)
 Subject: [Buildroot] [Bug 487] Make kismet package sexier
 In-Reply-To: <bug-487-163@https.bugs.busybox.net/>
 References: <bug-487-163@https.bugs.busybox.net/>
-Message-ID: <20090805105031.DE69C777EC@busybox.osuosl.org>
+Message-ID: <20090805105144.9F808777EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,14 +16,14 @@ https://bugs.busybox.net/show_bug.cgi?id=487
 
 
 
---- Comment #1 from Will Newton <will.newton@gmail.com>  2009-08-05 10:50:31 UTC ---
-Created an attachment (id=571)
- --> (https://bugs.busybox.net/attachment.cgi?id=571)
-Ensure /usr/include does not leak into include path
+--- Comment #2 from Will Newton <will.newton@gmail.com>  2009-08-05 10:51:43 UTC ---
+Created an attachment (id=573)
+ --> (https://bugs.busybox.net/attachment.cgi?id=573)
+Avoid using a few bsd string functions
 
 
-This patch prevents the configure script from adding /usr/include/ncurses into
-the include path.
+This patch avoids the use of some BSD string functions that may not be
+supported by uClibc.
 
 
 -- 
