@@ -1,43 +1,33 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 5 Aug 2009 13:46:05 +0200
-Subject: [Buildroot] [git commit] libuuid: add -source and -clean targets
-Message-ID: <20090805114636.291A9775F7@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 05 Aug 2009 13:47:17 +0200
+Subject: [Buildroot] [PATCH 1/2] e2fsprogs: factor out libuuid support
+In-Reply-To: <20090804082822.GO19257@buzzloop.caiaq.de> (Daniel Mack's message
+	of "Tue\, 4 Aug 2009 10\:28\:22 +0200")
+References: <20090729172019.GS19257@buzzloop.caiaq.de>
+	<1248888083-11767-1-git-send-email-daniel@caiaq.de>
+	<20090803143614.GK19257@buzzloop.caiaq.de>
+	<20090803165815.312deddd@surf>
+	<20090803150941.GM19257@buzzloop.caiaq.de>
+	<873a88sjx0.fsf@macbook.be.48ers.dk>
+	<20090804082822.GO19257@buzzloop.caiaq.de>
+Message-ID: <87ocquo52y.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Daniel" == Daniel Mack <daniel@caiaq.de> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ccc42efe227ab5b4ac23522f6bde879c164b5f66
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ >> Why did you make this a hidden config? Couldn't we imagine someone
+ >> wanting to use libuuid in their own programs?
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/e2fsprogs/e2fsprogs.mk |   11 ++++++++++-
- 1 files changed, 10 insertions(+), 1 deletions(-)
+ Daniel> I didn't image that ;) But you're right, that could help. See
+ Daniel> the new patch below.
 
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index fbadfb0..3931548 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -151,7 +151,16 @@ e2fsprogs-clean:
- e2fsprogs-dirclean:
- 	rm -rf $(E2FSPROGS_DIR)
- 
--libuuid-dirclean:: e2fsprogs-dirclean
-+libuuid-clean:
-+	-$(MAKE1) PATH=$(TARGET_PATH) DESTDIR=$(STAGING_DIR) LDCONFIG=true \
-+		-C $(LIBUUID_DIR) uninstall
-+	# make uninstall misses the includes
-+	rm -rf $(STAGING_DIR)/usr/include/uuid
-+	rm -f $(TARGET_DIR)/$(LIBUUID_TARGET_DIR)/$(LIBUUID_TARGET_BINARY)*
-+	-$(MAKE1) -C $(LIBUUID_DIR) clean
-+
-+libuuid-source: e2fsprogs-source
-+libuuid-dirclean: e2fsprogs-dirclean
- 
- #############################################################
- #
+Thanks, committed.
+
+You were missing -clean and -source targets, but I've added those.
+
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
