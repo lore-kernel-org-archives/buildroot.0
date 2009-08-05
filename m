@@ -1,63 +1,39 @@
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Wed, 5 Aug 2009 16:44:30 +0200
-Subject: [Buildroot] Issue using an external toolchain
-In-Reply-To: <873a86nxap.fsf@macbook.be.48ers.dk>
-References: <c8515bdc0908050628h28decb57nd2f7456c61999f40@mail.gmail.com>
-	<87bpmunzbh.fsf@macbook.be.48ers.dk>
-	<c8515bdc0908050706y65cb1f8ci8fe42c3f49cd078c@mail.gmail.com>
-	<873a86nxap.fsf@macbook.be.48ers.dk>
-Message-ID: <c8515bdc0908050744n31131a32n89487eff61b4b418@mail.gmail.com>
+From: Steve Bennett <sablists@earthlink.net>
+Date: Wed, 5 Aug 2009 13:19:54 -0400
+Subject: [Buildroot] v86d?
+Message-ID: <50030A7F-0D3D-444C-8635-6D7FF382A4ED@earthlink.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sorry. I did not realize I had not copied the buildroot list.
+Hi all!
 
-To answer your questions, I am booting from flash. I have not verified the
-permissions, may be I should do that.
-I'll check that and come back to you.
+Is there a v86d package for buildroot?   I found a reference to one  
+being added last november as part of bug 5914 ("add 915resolution and  
+v86d") in a google search, but nothing beyond that.  Apparently that  
+bug was part of an old bug tracking system -- it doesn't seem to  
+exist in the new system and there's no further reference to v86d I  
+could find.
 
-I'll also play around with the hard and soft float option in buildroot to
-see if it makes a difference.
+The main reason I ask is that I'm having no end of trouble with  
+Xvesa, which was my original plan of attack.  The mouse is erratic  
+for several seconds after you switch to X, and no amount of mucking  
+can get keyboard input working.  Ctrl-Alt-Fx works and that's it, and  
+if I add -keybd keyboard to the Xvesa command line, even *that* stops  
+working.  (If anyone has suggestions for these issues, I'd love to  
+hear them -- otherwise, I'm giving up on Xvesa...)
 
-FYI, I am using buildroot.2009-02.
+A search of the Xorg mailing lists reveals that Xvesa has actually  
+been removed from the development tree and I saw a suggestion to use  
+Xfbdev with uvesafb instead.  I'm a little unsatisfied with this  
+since it means dropping support for any video card which doesn't have  
+VBE 2.0, and we're trying to get this to run on things going back to  
+old i486 machines -- but right now the Xvesa input problems make it  
+unusable.
 
-Gilles
+But uvesafb needs v86d.   I could add that manually, but I was  
+wondering if anything ever happened with adding that to buildroot?
 
-2009/8/5 Peter Korsgaard <jacmet@uclibc.org>
-
-> >>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
->
->  Gilles> Hi Peter,
->  Gilles> Thanks for your help.
->
-> You're welcome. Please keep the buildroot list in the to: so other
-> people can also help/learn.
->
->  Gilles> FYI, it really asks for a password as shown below (output of my
-> console):
->
->  Gilles> Welcome to Buildroot
->  Gilles> (none) login: root
->  Gilles> Password:
->  Gilles> Login incorrect
->
-> Is this booting from flash or NFS? Have you verified the permissions
-> of /etc/passwd / /etc/shadow and the /dev device nodes?
->
->  Gilles> It takes a few seconds before coming back to me saying "login
->  Gilles> incorrect"
->
->  Gilles> I do not know if the toolchain is configured for hard or
->  Gilles> softfloat. Is this important?
->
-> Yes it is.
->
-> --
-> Bye, Peter Korsgaard
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090805/bad6cb21/attachment.htm>
+-->Steve Bennett
