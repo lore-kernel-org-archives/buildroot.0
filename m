@@ -1,38 +1,31 @@
-From: Nigel Kukard <nkukard@lbsd.net>
-Date: Wed, 5 Aug 2009 12:11:08 +0000
-Subject: [Buildroot] [git commit] Build neon with SSL support if available
-Message-ID: <20090805124451.C9463777DA@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 05 Aug 2009 14:44:56 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	neon-support-ssl
+In-Reply-To: <cover.1249474810.git.nkukard@lbsd.net> (Nigel Kukard's message
+	of "Wed\, 5 Aug 2009 12\:21\:36 +0000")
+References: <cover.1249474810.git.nkukard@lbsd.net>
+Message-ID: <87fxc6o2ev.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Nigel" == Nigel Kukard <nkukard@lbsd.net> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9f96221e5e8bb085d2fa805e1d63cd24455488a7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Nigel> The following changes since commit fe370d66958b5bc7f3a5e03cef0cd3f0df2ff0f6:
+ Nigel>   Peter Korsgaard (1):
+ Nigel>         Merge branch 'popt-versoin-update' of git://git.busybox.net/~nkukard/git/buildroot
 
----
- package/neon/neon.mk |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+ Nigel> are available in the git repository at:
 
-diff --git a/package/neon/neon.mk b/package/neon/neon.mk
-index 2e1da07..7f7f391 100644
---- a/package/neon/neon.mk
-+++ b/package/neon/neon.mk
-@@ -32,6 +32,13 @@ ifeq ($(BR2_PACKAGE_NEON_NOXML),y)
- NEON_CONF_OPT+=--disable-webdav
- endif
- 
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+NEON_CONF_OPT+=--with-ssl
-+NEON_DEPENDENCIES+=openssl
-+else
-+NEON_CONF_OPT+=--without-ssl
-+endif
-+
- $(eval $(call AUTOTARGETS,package,neon))
- 
- ifeq ($(BR2_ENABLE_DEBUG),)
+ Nigel>   git://git.busybox.net/~nkukard/git/buildroot neon-support-ssl
+
+ Nigel> Nigel Kukard (1):
+ Nigel>       Build neon with SSL support if available
+
+Pulled and pushed, thanks.
+
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
