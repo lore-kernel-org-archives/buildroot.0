@@ -1,32 +1,32 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 05 Aug 2009 15:51:46 +0200
-Subject: [Buildroot] Issue using an external toolchain
-In-Reply-To: <c8515bdc0908050628h28decb57nd2f7456c61999f40@mail.gmail.com>
-	(gilles TALIS's message of "Wed\, 5 Aug 2009 15\:28\:17 +0200")
-References: <c8515bdc0908050628h28decb57nd2f7456c61999f40@mail.gmail.com>
-Message-ID: <87bpmunzbh.fsf@macbook.be.48ers.dk>
+Date: Wed, 05 Aug 2009 15:52:09 +0200
+Subject: [Buildroot] [PATCH 1/2] e2fsprogs: factor out libuuid support
+In-Reply-To: <20090805115505.GD19257@buzzloop.caiaq.de> (Daniel Mack's message
+	of "Wed\, 5 Aug 2009 13\:55\:05 +0200")
+References: <20090729172019.GS19257@buzzloop.caiaq.de>
+	<1248888083-11767-1-git-send-email-daniel@caiaq.de>
+	<20090803143614.GK19257@buzzloop.caiaq.de>
+	<20090803165815.312deddd@surf>
+	<20090803150941.GM19257@buzzloop.caiaq.de>
+	<873a88sjx0.fsf@macbook.be.48ers.dk>
+	<20090804082822.GO19257@buzzloop.caiaq.de>
+	<87ocquo52y.fsf@macbook.be.48ers.dk>
+	<20090805115505.GD19257@buzzloop.caiaq.de>
+Message-ID: <877hxinzau.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "gilles" == gilles TALIS <gilles.talis@gmail.com> writes:
+>>>>> "Daniel" == Daniel Mack <daniel@caiaq.de> writes:
 
 Hi,
 
- gilles> When I get to the "Welcome to Buildroot" prompt, the login
- gilles> process asks for a password. When I use a toolchain I have
- gilles> built myself using uClibc/crosstool-ng, I am never requested
- gilles> to provide a password.
+ Daniel> Great, thanks. Could you merge the ubifs-target patch as well.
+ Daniel> (That was 2/ of my original posting)
 
- gilles> I tried "root", "admin" whatever as password but it does not
- gilles> work.  Can someone help me and also explain to me why I get
- gilles> requested the password now?
-
-Does it really ask for a password or do you just get the login prompt
-again? If so, is the external toolchain configured for hard- or
-softfloat?
+Sure, I'll have a closer look at it a bit later today.
 
 -- 
 Bye, Peter Korsgaard
