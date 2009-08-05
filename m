@@ -1,31 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 05 Aug 2009 14:44:56 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	neon-support-ssl
-In-Reply-To: <cover.1249474810.git.nkukard@lbsd.net> (Nigel Kukard's message
-	of "Wed\, 5 Aug 2009 12\:21\:36 +0000")
-References: <cover.1249474810.git.nkukard@lbsd.net>
-Message-ID: <87fxc6o2ev.fsf@macbook.be.48ers.dk>
+From: gilles TALIS <gilles.talis@gmail.com>
+Date: Wed, 5 Aug 2009 15:28:17 +0200
+Subject: [Buildroot] Issue using an external toolchain
+Message-ID: <c8515bdc0908050628h28decb57nd2f7456c61999f40@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Nigel" == Nigel Kukard <nkukard@lbsd.net> writes:
+Hi,
 
- Nigel> The following changes since commit fe370d66958b5bc7f3a5e03cef0cd3f0df2ff0f6:
- Nigel>   Peter Korsgaard (1):
- Nigel>         Merge branch 'popt-versoin-update' of git://git.busybox.net/~nkukard/git/buildroot
+I saw that this topic has been raised many times in the buildroot
+discussions but I could not find an answer to my problem.
+I tired using CodeSourcery ARM 2008q3 toolchain (built with glibc) with
+buildroot and could finally build the software I needed.
 
- Nigel> are available in the git repository at:
+Unfortunately, I am facing a strange problem I don't know about to go passed
+it.
+When I get to the "Welcome to Buildroot" prompt, the login process asks for
+a password. When I use a toolchain I have built myself using
+uClibc/crosstool-ng, I am never requested to provide a password.
 
- Nigel>   git://git.busybox.net/~nkukard/git/buildroot neon-support-ssl
+I tried "root", "admin" whatever as password but it does not work.
+Can someone help me and also explain to me why I get requested the password
+now?
 
- Nigel> Nigel Kukard (1):
- Nigel>       Build neon with SSL support if available
-
-Pulled and pushed, thanks.
-
--- 
-Bye, Peter Korsgaard
+thanks
+Gilles.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090805/4901711e/attachment.htm>
