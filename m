@@ -1,27 +1,38 @@
 From: Nigel Kukard <nkukard@lbsd.net>
-Date: Wed,  5 Aug 2009 12:21:36 +0000
-Subject: [Buildroot] [pull request] Pull request for branch neon-support-ssl
-Message-ID: <cover.1249474810.git.nkukard@lbsd.net>
+Date: Wed,  5 Aug 2009 12:21:37 +0000
+Subject: [Buildroot] [PATCH 1/1] Build neon with SSL support if available
+In-Reply-To: <cover.1249474810.git.nkukard@lbsd.net>
+References: <cover.1249474810.git.nkukard@lbsd.net>
+Message-ID: <9f96221e5e8bb085d2fa805e1d63cd24455488a7.1249474810.git.nkukard@lbsd.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The following changes since commit fe370d66958b5bc7f3a5e03cef0cd3f0df2ff0f6:
-  Peter Korsgaard (1):
-        Merge branch 'popt-versoin-update' of git://git.busybox.net/~nkukard/git/buildroot
 
-are available in the git repository at:
-
-  git://git.busybox.net/~nkukard/git/buildroot neon-support-ssl
-
-Nigel Kukard (1):
-      Build neon with SSL support if available
-
+Signed-off-by: Nigel Kukard <nkukard@lbsd.net>
+---
  package/neon/neon.mk |    7 +++++++
  1 files changed, 7 insertions(+), 0 deletions(-)
 
-Thanks,
+diff --git a/package/neon/neon.mk b/package/neon/neon.mk
+index 2e1da07..7f7f391 100644
+--- a/package/neon/neon.mk
++++ b/package/neon/neon.mk
+@@ -32,6 +32,13 @@ ifeq ($(BR2_PACKAGE_NEON_NOXML),y)
+ NEON_CONF_OPT+=--disable-webdav
+ endif
+ 
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++NEON_CONF_OPT+=--with-ssl
++NEON_DEPENDENCIES+=openssl
++else
++NEON_CONF_OPT+=--without-ssl
++endif
++
+ $(eval $(call AUTOTARGETS,package,neon))
+ 
+ ifeq ($(BR2_ENABLE_DEBUG),)
 -- 
-Nigel Kukard
+1.6.4
