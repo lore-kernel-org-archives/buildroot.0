@@ -1,47 +1,43 @@
-From: Mike Crowe <mac@mcrowe.com>
-Date: Wed, 5 Aug 2009 14:55:02 +0100
-Subject: [Buildroot] Having MAKE set in environment causes buildroot to leak
-	its own	value
-Message-ID: <20090805135502.GA16052@mcrowe.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 05 Aug 2009 16:35:26 +0200
+Subject: [Buildroot] Issue using an external toolchain
+In-Reply-To: <c8515bdc0908050706y65cb1f8ci8fe42c3f49cd078c@mail.gmail.com>
+	(Gilles Talis's message of "Wed\, 5 Aug 2009 16\:06\:06 +0200")
+References: <c8515bdc0908050628h28decb57nd2f7456c61999f40@mail.gmail.com>
+	<87bpmunzbh.fsf@macbook.be.48ers.dk>
+	<c8515bdc0908050706y65cb1f8ci8fe42c3f49cd078c@mail.gmail.com>
+Message-ID: <873a86nxap.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Having just spent a while trying to fathom this I thought it
-worthwhile documenting it if only to give people who find the same
-problem something they can google for.
+>>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
 
-I saw problems when building openssl with BR2_JLEVEL set to anything
-higher than 1:
+ Gilles> Hi Peter,
+ Gilles> Thanks for your help.
 
- asn1pars.o: In function `asn1parse_main':
- asn1pars.c:(.text+0xe8): undefined reference to `OBJ_cleanup'
- asn1pars.c:(.text+0x2d0): undefined reference to `OBJ_create_objects'
+You're welcome. Please keep the buildroot list in the to: so other
+people can also help/learn.
 
-It was pretty clear that openssl was building parts of itself with
--j$(BR2_JLEVEL) even though the openssl.mk file specifically uses
-$(MAKE1).
+ Gilles> FYI, it really asks for a password as shown below (output of my console):
 
-I discovered that the options set in the MAKE variable in
-package/Makefile.in were leaking through to recursive makes that
-openssl's Makefile launched. This only occurred if MAKE happened to be
-set in the environment that launched buildroot's make[1]. Although
-openssl's top level make is run linearly any sub-makes it spawns
-receive -j$(BR2_jLEVEL) and run in parallel. :(
+ Gilles> Welcome to Buildroot
+ Gilles> (none) login: root
+ Gilles> Password:
+ Gilles> Login incorrect
 
-I worked around this by ensuring that MAKE was unset before launching
-the buildroot build system.
+Is this booting from flash or NFS? Have you verified the permissions
+of /etc/passwd / /etc/shadow and the /dev device nodes?
 
-Assuming my understanding is correct I wonder if it would be better to
-fix this permanently by adding "unexport MAKE" to package/Makefile.in?
-Alternatively would it be worth adding a check to
-toolchain/dependencies/dependencies.sh?
+ Gilles> It takes a few seconds before coming back to me saying "login
+ Gilles> incorrect"
 
-Thanks.
+ Gilles> I do not know if the toolchain is configured for hard or
+ Gilles> softfloat. Is this important?
 
-Mike.
+Yes it is.
 
-[1] In my case it was being set by our SoC supplier's build system
-which wraps buildroot.
+-- 
+Bye, Peter Korsgaard
