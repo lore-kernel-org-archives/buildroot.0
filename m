@@ -1,36 +1,53 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  6 Aug 2009 20:54:47 +0000 (UTC)
-Subject: [Buildroot] [Bug 543] New: ATK requires X11 on DirectFB target
-Message-ID: <bug-543-163@https.bugs.busybox.net/>
+Date: Thu,  6 Aug 2009 21:55:08 +0000 (UTC)
+Subject: [Buildroot] [Bug 545] New: Webkit doesn't see gtk-doc.make
+Message-ID: <bug-545-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=543
+https://bugs.busybox.net/show_bug.cgi?id=545
 
               Host: i386-pc-linux-gnu
             Target: i386-pc-linux-uclibc
              Build: i386-pc-linux-gnu
-           Summary: ATK requires X11 on DirectFB target
+           Summary: Webkit doesn't see gtk-doc.make
            Product: buildroot
            Version: unspecified
           Platform: PC
         OS/Version: Linux
             Status: NEW
-          Severity: major
-          Priority: P2
-         Component: Other
+          Severity: enhancement
+          Priority: P5
+         Component: Outdated package
         AssignedTo: unassigned at buildroot.uclibc.org
         ReportedBy: dandart at googlemail.com
                 CC: buildroot at uclibc.org
    Estimated Hours: 0.0
 
 
-Once Midori is set up to use DirectFB, it includes gtk which includes ATK. ATK
-requires X11 but Midori isn't supposed to use X11. ATK should not require X11
-or a similar program should be used instead.
+Webkit doesn't see gtk-doc.make
+
+rm -rf /home/dan/xenon/buildroot/project_build_i386/uclibc/buildroot-config
+mkdir -p /home/dan/xenon/buildroot/project_build_i386/uclibc
+cp -dpRf package/config/buildroot-config
+/home/dan/xenon/buildroot/project_build_i386/uclibc/buildroot-config
+/home/dan/xenon/buildroot/toolchain_build_i386/bin/sed -i -e
+'s/AUTOMAKE_FLAGS=.*/AUTOMAKE_FLAGS="--foreign --add-missing --copy"/'
+/home/dan/xenon/buildroot/build_i386/webkit-r44552/autogen.sh
+/home/dan/xenon/buildroot/toolchain_build_i386/bin/sed -i -e
+'s/LIBTOOLIZE_FLAGS=.*/LIBTOOLIZE_FLAGS="--force --automake --copy"/'
+/home/dan/xenon/buildroot/build_i386/webkit-r44552/autogen.sh
+# Don't run the configure step yet
+cd /home/dan/xenon/buildroot/build_i386/webkit-r44552;
+AUTOGEN_CONFIGURE_ARGS=--version ./autogen.sh
+Warning: not running gtk-docize.
+automake: cannot open < gtk-doc.make: No such file or directory
+make: ***
+[/home/dan/xenon/buildroot/build_i386/webkit-r44552/.stamp_hook_post_extract]
+Error 1
 
 
 -- 
