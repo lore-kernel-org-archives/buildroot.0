@@ -1,46 +1,41 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Thu,  6 Aug 2009 18:25:37 +0200
-Subject: [Buildroot] [PATCH] directfb: remove unnecessary dependency on
-	libungif
-Message-ID: <1249575937-6824-1-git-send-email-s.neumann@raumfeld.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu,  6 Aug 2009 17:00:39 +0000 (UTC)
+Subject: [Buildroot] [Bug 541] New: Removal of CVS directories in target
+ filesystem broken
+Message-ID: <bug-541-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The GIF image provider in DirectFB is self-contained and doesn't
-need libungif.
+https://bugs.busybox.net/show_bug.cgi?id=541
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
----
- package/directfb/Config.in   |    1 -
- package/directfb/directfb.mk |    1 -
- 2 files changed, 0 insertions(+), 2 deletions(-)
+           Summary: Removal of CVS directories in target filesystem broken
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: will.newton at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-diff --git a/package/directfb/Config.in b/package/directfb/Config.in
-index e616314..487faf4 100644
---- a/package/directfb/Config.in
-+++ b/package/directfb/Config.in
-@@ -92,7 +92,6 @@ config BR2_PACKAGE_DIRECTFB_GIF
- 	bool "enable GIF support"
- 	default y
- 	depends on BR2_PACKAGE_DIRECTFB
--	select BR2_PACKAGE_LIBUNGIF
- 
- config BR2_PACKAGE_DIRECTFB_JPEG
- 	bool "enable JPEG support"
-diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
-index b3af0ed..5fc8868 100644
---- a/package/directfb/directfb.mk
-+++ b/package/directfb/directfb.mk
-@@ -94,7 +94,6 @@ endif
- 
- ifeq ($(BR2_PACKAGE_DIRECTFB_GIF),y)
- DIRECTFB_GIF:=--enable-gif
--DIRECTFB_DEP+= libungif
- else
- DIRECTFB_GIF:=--disable-gif
- endif
+
+Created an attachment (id=577)
+ --> (https://bugs.busybox.net/attachment.cgi?id=577)
+Fix find command syntax for CVS directory removal
+
+Commit 027aa1d2ec07402d9aa1df3825207f120acae497 stops CVS directories from
+being removed in the target filesystem. The attached patch fixes the problem,
+which is caused by the incorrect use of the find command.
+
+
 -- 
-1.6.0.4
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
