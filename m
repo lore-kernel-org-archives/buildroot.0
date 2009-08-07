@@ -1,32 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Aug 2009 19:07:30 +0200
-Subject: [Buildroot] [PATCH] buildroot: add basic Bazaar support
-In-Reply-To: <1249639074-4058-1-git-send-email-s.neumann@raumfeld.com>
-References: <1249639074-4058-1-git-send-email-s.neumann@raumfeld.com>
-Message-ID: <20090807190730.502e3535@surf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri,  7 Aug 2009 17:08:09 +0000 (UTC)
+Subject: [Buildroot] [Bug 547] berkeleydb: Update config.{sub,
+	guess} in configure step.
+In-Reply-To: <bug-547-163@https.bugs.busybox.net/>
+References: <bug-547-163@https.bugs.busybox.net/>
+Message-ID: <20090807170809.DB4D0777E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri,  7 Aug 2009 11:57:54 +0200,
-Sven Neumann <s.neumann@raumfeld.com> a ?crit :
+https://bugs.busybox.net/show_bug.cgi?id=547
 
-> This change adds the config options BR2_BZR_CO and BR2_BZR_UP that
-> allow to configure the commands for doing a checkout/update from
-> a Bazaar repository.
 
-Pulled and pushed into my for-2009.11 branch, which should be
-integrated into the future 2009.11 release of Buildroot.
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
- http://git.buildroot.net/~tpetazzoni/git/buildroot/log/?h=for-2009.11
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-Thanks,
 
-Thomas
+
+
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2009-08-07 17:08:07 UTC ---
+Pulled and pushed into my for-2009.08 branch, that should be pulled by
+Peter when he comes back from holidays.
+
+ http://git.buildroot.net/~tpetazzoni/git/buildroot/log/?h=for-2009.08
+
+Thanks
+
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
