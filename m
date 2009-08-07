@@ -1,56 +1,40 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Fri,  7 Aug 2009 11:57:54 +0200
-Subject: [Buildroot] [PATCH] buildroot: add basic Bazaar support
-Message-ID: <1249639074-4058-1-git-send-email-s.neumann@raumfeld.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri,  7 Aug 2009 14:53:22 +0000 (UTC)
+Subject: [Buildroot] [Bug 547] New: berkeleydb: Update config.{sub,
+ guess} in configure step.
+Message-ID: <bug-547-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This change adds the config options BR2_BZR_CO and BR2_BZR_UP that
-allow to configure the commands for doing a checkout/update from
-a Bazaar repository.
+https://bugs.busybox.net/show_bug.cgi?id=547
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
----
- Config.in           |    8 ++++++++
- project/Makefile.in |    4 ++++
- 2 files changed, 12 insertions(+), 0 deletions(-)
+           Summary: berkeleydb: Update config.{sub,guess} in configure step.
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: will.newton at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-diff --git a/Config.in b/Config.in
-index d248565..a369d11 100644
---- a/Config.in
-+++ b/Config.in
-@@ -27,6 +27,14 @@ config BR2_SVN_UP
- 	string "Subversion (svn) command to update source tree"
- 	default "svn up"
- 
-+config BR2_BZR_CO
-+	string "Bazaar (bzr) command to download source tree"
-+	default "bzr co"
-+
-+config BR2_BZR_UP
-+	string "Bazaar (bzr) command to update source tree"
-+	default "bzr up"
-+
- config BR2_GIT
- 	string "Git command to download source tree"
- 	default "git clone"
-diff --git a/project/Makefile.in b/project/Makefile.in
-index 85c0eae..8878547 100644
---- a/project/Makefile.in
-+++ b/project/Makefile.in
-@@ -20,6 +20,10 @@ SVN_CO:=$(strip $(subst ",, $(BR2_SVN_CO))) $(QUIET)
- #"))
- SVN_UP:=$(strip $(subst ",, $(BR2_SVN_UP))) $(QUIET)
- #"))
-+BZR_CO:=$(strip $(subst ",, $(BR2_BZR_CO))) $(QUIET)
-+#"))
-+BZR_UP:=$(strip $(subst ",, $(BR2_BZR_UP))) $(QUIET)
-+#"))
- GIT:=$(strip $(subst ",, $(BR2_GIT))) $(QUIET)
- #"))
- ZCAT:=$(strip $(subst ",, $(BR2_ZCAT)))
+
+Created an attachment (id=579)
+ --> (https://bugs.busybox.net/attachment.cgi?id=579)
+Update configure helper scripts for berkeley db
+
+This patch updates the config.{sub,guess} scripts before configuring berkeley
+db, which is required ons ome platforms.
+
+
 -- 
-1.6.0.4
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
