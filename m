@@ -1,36 +1,25 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  7 Aug 2009 16:09:45 +0000 (UTC)
-Subject: [Buildroot] [Bug 549] New: enchant: Fix dependencies.
-Message-ID: <bug-549-163@https.bugs.busybox.net/>
+Date: Fri,  7 Aug 2009 16:11:07 +0000 (UTC)
+Subject: [Buildroot] [Bug 541] Removal of CVS directories in target
+	filesystem broken
+In-Reply-To: <bug-541-163@https.bugs.busybox.net/>
+References: <bug-541-163@https.bugs.busybox.net/>
+Message-ID: <20090807161107.33521777FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=549
-
-           Summary: enchant: Fix dependencies.
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: will.newton at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+https://bugs.busybox.net/show_bug.cgi?id=541
 
 
-Created an attachment (id=581)
- --> (https://bugs.busybox.net/attachment.cgi?id=581)
-Fix enchant package dependencies
 
-The enchant package dependencies were not correctly specified. This patch adds
-all appropriate dependencies to the config and makefile.
+
+
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2009-08-07 16:11:06 UTC ---
+Why in the first place do we have CVS files in the filesystem ? Isn't that a
+left-over from old Buildroot times ?
 
 
 -- 
