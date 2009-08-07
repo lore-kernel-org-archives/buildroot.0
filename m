@@ -1,51 +1,56 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Fri, 07 Aug 2009 10:43:27 +0200
-Subject: [Buildroot] [Bug 331] Update MPlayer to version 1.0rc2
-In-Reply-To: <20090807072228.092c0837@hcegtvedt.norway.atmel.com>
-References: <bug-331-163@https.bugs.busybox.net/>	<20090727151733.33260777EC@busybox.osuosl.org>	<4A7B6261.2030509@atmel.com>
-	<4A7B6D2A.8020206@atmel.com>
-	<20090807072228.092c0837@hcegtvedt.norway.atmel.com>
-Message-ID: <4A7BE92F.9070700@atmel.com>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Fri,  7 Aug 2009 11:57:54 +0200
+Subject: [Buildroot] [PATCH] buildroot: add basic Bazaar support
+Message-ID: <1249639074-4058-1-git-send-email-s.neumann@raumfeld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hans-Christian Egtvedt skrev:
-> On Fri, 07 Aug 2009 01:54:18 +0200
-> Ulf Samuelsson <ulf.samuelsson@atmel.com> wrote:
-> 
->> Ulf Samuelsson skrev:
-> 
-> <snipp>
-> 
->> Could this mean that OE uses a fixed point MP3 decoder
->> while Buildroot mplayer uses a floating point decoder?
->>
-> 
-> Is MPlayer compiled with libmad support and is libmad used as audio
-> codec?
-> 
-> Please post the entire output from a playback, I use
-> a /etc/mplayer.conf to override some basic stuff.
-> 
+This change adds the config options BR2_BZR_CO and BR2_BZR_UP that
+allow to configure the commands for doing a checkout/update from
+a Bazaar repository.
 
-Thanks, I checked the output already, and OE is using libmad,
-while Buildroot is using the builtin mp3lib.
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+---
+ Config.in           |    8 ++++++++
+ project/Makefile.in |    4 ++++
+ 2 files changed, 12 insertions(+), 0 deletions(-)
 
-I have tried configuring with --disable-mp3lib.
-With that mplayer uses ffmpeg [ffmp3].
-This plays OK, but it takes about 60 seconds to start the song :-(.
-
-I looked at ~/stk100x/target_skeleton/etc/mplayer.conf
-and created a file /etc/mplayer.conf containing
-
-ac=mad
-
-and now it starts immediately and plays OK!
-
-Thanks a bundle...
-
-BR
-Ulf
+diff --git a/Config.in b/Config.in
+index d248565..a369d11 100644
+--- a/Config.in
++++ b/Config.in
+@@ -27,6 +27,14 @@ config BR2_SVN_UP
+ 	string "Subversion (svn) command to update source tree"
+ 	default "svn up"
+ 
++config BR2_BZR_CO
++	string "Bazaar (bzr) command to download source tree"
++	default "bzr co"
++
++config BR2_BZR_UP
++	string "Bazaar (bzr) command to update source tree"
++	default "bzr up"
++
+ config BR2_GIT
+ 	string "Git command to download source tree"
+ 	default "git clone"
+diff --git a/project/Makefile.in b/project/Makefile.in
+index 85c0eae..8878547 100644
+--- a/project/Makefile.in
++++ b/project/Makefile.in
+@@ -20,6 +20,10 @@ SVN_CO:=$(strip $(subst ",, $(BR2_SVN_CO))) $(QUIET)
+ #"))
+ SVN_UP:=$(strip $(subst ",, $(BR2_SVN_UP))) $(QUIET)
+ #"))
++BZR_CO:=$(strip $(subst ",, $(BR2_BZR_CO))) $(QUIET)
++#"))
++BZR_UP:=$(strip $(subst ",, $(BR2_BZR_UP))) $(QUIET)
++#"))
+ GIT:=$(strip $(subst ",, $(BR2_GIT))) $(QUIET)
+ #"))
+ ZCAT:=$(strip $(subst ",, $(BR2_ZCAT)))
+-- 
+1.6.0.4
