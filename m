@@ -1,10 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  7 Aug 2009 16:11:07 +0000 (UTC)
+Date: Fri,  7 Aug 2009 16:14:54 +0000 (UTC)
 Subject: [Buildroot] [Bug 541] Removal of CVS directories in target
 	filesystem broken
 In-Reply-To: <bug-541-163@https.bugs.busybox.net/>
 References: <bug-541-163@https.bugs.busybox.net/>
-Message-ID: <20090807161107.33521777FD@busybox.osuosl.org>
+Message-ID: <20090807161454.791C8777FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,9 +17,11 @@ https://bugs.busybox.net/show_bug.cgi?id=541
 
 
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2009-08-07 16:11:06 UTC ---
-Why in the first place do we have CVS files in the filesystem ? Isn't that a
-left-over from old Buildroot times ?
+--- Comment #2 from Will Newton <will.newton@gmail.com>  2009-08-07 16:14:53 UTC ---
+
+I'm not aware of the original reason, but it's useful for people that import
+buildroot into local CVS or Subversion repos. This is quite common in corporate
+environments unfortunately.
 
 
 -- 
