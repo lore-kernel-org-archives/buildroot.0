@@ -1,36 +1,33 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  7 Aug 2009 20:19:28 +0000 (UTC)
-Subject: [Buildroot] [Bug 269] iptables fails to compile
-In-Reply-To: <bug-269-163@https.bugs.busybox.net/>
-References: <bug-269-163@https.bugs.busybox.net/>
-Message-ID: <20090807201928.3EFBB777A9@busybox.osuosl.org>
+Date: Fri,  7 Aug 2009 21:26:46 +0000 (UTC)
+Subject: [Buildroot] [Bug 545] Webkit doesn't see gtk-doc.make
+In-Reply-To: <bug-545-163@https.bugs.busybox.net/>
+References: <bug-545-163@https.bugs.busybox.net/>
+Message-ID: <20090807212646.7A4BF777A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=269
-
-
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|ASSIGNED                    |RESOLVED
-         Resolution|                            |WORKSFORME
+https://bugs.busybox.net/show_bug.cgi?id=545
 
 
 
 
---- Comment #5 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2009-08-07 20:19:27 UTC ---
-I have a 32 bits Ubuntu, I took your .config and compiled it with the latest
-Buildroot Git. And it worked nicely. iptables was generated, including IPv6
-support. I haven't tested the resulting binaries, though, but at least, the
-build completed.
 
-So I'm marking this bug as WORKSFORME. If you are still having the issue, don't
-hesitate to re-open it. Thanks for your contribution!
+--- Comment #5 from Sven Neumann <s.neumann@raumfeld.com>  2009-08-07 21:26:45 UTC ---
+(In reply to comment #3)
+> gtkdocize is attempting to run, it's just not in the path, see "Warning: not
+> running gtk-docize."
+> 
+> Should we depend on host-libgtk2 to make sure gtkdocize is available?
+
+gtkdocize is not part of libgtk2 though. It comes with gtk-doc (see
+http://www.gtk.org/gtk-doc/), which is a separate package that would have to be
+added to buildroot. Since it has lots of dependencies and since it doesn't make
+much sense to build developer documentation for the target, it would make more
+sense to create a dummy gtkdocize in buildroot.
 
 
 -- 
