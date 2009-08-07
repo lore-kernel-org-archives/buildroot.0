@@ -1,40 +1,44 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  7 Aug 2009 19:12:59 +0000 (UTC)
-Subject: [Buildroot] [Bug 545] Webkit doesn't see gtk-doc.make
-In-Reply-To: <bug-545-163@https.bugs.busybox.net/>
-References: <bug-545-163@https.bugs.busybox.net/>
-Message-ID: <20090807191259.EFE5B7764C@busybox.osuosl.org>
+From: Jean-Christian de Rivaz <jc@eclis.ch>
+Date: Fri, 07 Aug 2009 21:52:16 +0200
+Subject: [Buildroot] buildroot-libtool.patch failed with dbus 1.3.0
+Message-ID: <4A7C85F0.7070604@eclis.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=545
+Hi all,
 
+In the hope to close a dbus issue, I tryed to update it to the version
+1.3.0 by changing the DBUS_VERSION in package/dbus/dbus.mk.
+Unfortunately this raised a libtool problem that seem specific to
+buildroot as the native dbus archive compile without this problem:
 
+ >>> dbus 1.3.0 Extracting
+ >>> dbus 1.3.0 Patching libtool
 
+Applying buildroot-libtool.patch using plaintext:
+patching file ltmain.sh
+Hunk #1 FAILED at 273.
+Hunk #2 succeeded at 5425 (offset 3017 lines).
+Hunk #3 FAILED at 5569.
+Hunk #4 FAILED at 5913.
+Hunk #5 succeeded at 8089 with fuzz 1 (offset 2466 lines).
+Hunk #6 FAILED at 8414.
+4 out of 6 hunks FAILED -- saving rejects to file ltmain.sh.rej
+Patch failed!  Please fix buildroot-libtool.patch!
+make: *** 
+[/home/jcdr/try/buildroot/build_i686/dbus-1.3.0/.stamp_libtool_patch] 
+Erreur 1
 
+I tested also the last buildroot git tree with ARM and i386: same
+result.
 
---- Comment #4 from Lionel Landwerlin <lionel.landwerlin@openwide.fr>  2009-08-07 19:12:58 UTC ---
-(In reply to comment #3)
-> gtkdocize is attempting to run, it's just not in the path, see "Warning: not
-> running gtk-docize."
-> 
-> Should we depend on host-libgtk2 to make sure gtkdocize is available?
-> 
-> For now installing gtkdocize in your host system should let you build.
-> 
+If I understand correctly, buildroot have a script
+package/Makefile.autotools.in that try to patch the ltmain.sh for his
+specific need. How can I disable or fix this ?
 
-Hmmm I'm not sure that's true. I have gtk-doc installed and I can't
-autreconfigure packages that depends on gtk-doc.m4.
-If I remember, that's because automake is called with -I argument pointing to
-the staging directory.
+Best Regards,
 
-Installing gtk-doc in staging directory should solve the problem.
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Jean-Christian de Rivaz
