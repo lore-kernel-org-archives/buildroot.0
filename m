@@ -1,36 +1,54 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun,  9 Aug 2009 10:48:20 +0000 (UTC)
-Subject: [Buildroot] [Bug 553] Wrong DirectFB ps2mouse limitation
-In-Reply-To: <bug-553-163@https.bugs.busybox.net/>
-References: <bug-553-163@https.bugs.busybox.net/>
-Message-ID: <20090809104820.E40B3777CB@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 10 Aug 2009 00:17:03 +0200
+Subject: [Buildroot] [PATCH] Re: buildroot-libtool.patch failed with
+ dbus 1.3.0
+In-Reply-To: <4A7DFDF4.3020103@eclis.ch>
+References: <4A7C85F0.7070604@eclis.ch> <20090807221717.53039a10@surf>
+	<4A7C9F65.4060104@eclis.ch> <20090808004346.443b9e49@surf>
+	<4A7CB3CC.8040401@eclis.ch> <20090808200911.4e986c77@surf>
+	<4A7DFDF4.3020103@eclis.ch>
+Message-ID: <20090810001703.396c8e38@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=553
+Le Sun, 09 Aug 2009 00:36:36 +0200,
+Jean-Christian de Rivaz <jc@eclis.ch> a ?crit :
 
-
-
-
-
---- Comment #3 from Lionel Landwerlin <lionel.landwerlin@openwide.fr>  2009-08-09 10:48:20 UTC ---
-(In reply to comment #2)
-> That's probably correct. But wouldn't you better use the linux_input driver for
-> an USB mouse?
+> > However, while dbus compilation works successfully now, dbus-glib
+> > still fails to build here:
+> > 
+> >  /usr/lib/libgobject-2.0.so: could not read symbols: File in wrong
+> >  format collect2: ld returned 1 exit status
+> > 
+> > So it's a libtool patch issue, again :-)
 > 
+> That's strange since I use dbus-glib on a ARM target for about 20
+> applications with the dbus-1.3.0 without that problem. I usually get
+> the wrong format message when I have not do a make clean before
+> switching to an other architecture. Can you post more lines before
+> the error so I can compare with my own build ?
 
-I first thought that I needed the linux_input driver, and configured DirectFB
-with linux_input support but without ps2mouse support. And the mouse I
-connected to my board wasn't detected. So I tried the ps2mouse driver and it
-worked.
+The difference between my setup and your setup is probably that I do
+actually have /usr/lib/libgobject-2.0.so in my filesystem, since the
+libglib2.0-dev package is installed on my distribution. In your case,
+this package is probably not installed, and therefore, libtool doesn't
+think that the correct libgobject library is in /usr/lib.
 
-Maybe I missconfigured something in the kernel... I don't know.
+I've actually tried this hypothesis on another package (webkit that was
+failing in a similar way on libenchant), and remove the development
+files in /usr/lib, and the link succeeded.
 
+It seems to be hard to convince libtool that /usr/lib does *not*
+contain anything interesting.
 
+Sincerly,
+
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
