@@ -1,26 +1,33 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 10 Aug 2009 08:39:14 +0000 (UTC)
-Subject: [Buildroot] [Bug 553] Wrong DirectFB ps2mouse limitation
-In-Reply-To: <bug-553-163@https.bugs.busybox.net/>
-References: <bug-553-163@https.bugs.busybox.net/>
-Message-ID: <20090810083914.E6224777B0@busybox.osuosl.org>
+Date: Mon, 10 Aug 2009 09:06:05 +0000 (UTC)
+Subject: [Buildroot] [Bug 541] Removal of CVS directories in target
+	filesystem broken
+In-Reply-To: <bug-541-163@https.bugs.busybox.net/>
+References: <bug-541-163@https.bugs.busybox.net/>
+Message-ID: <20090810090605.7EB7D777F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=553
+https://bugs.busybox.net/show_bug.cgi?id=541
+
+
+Will Newton <will.newton@gmail.com> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+ Attachment #577 is|0                           |1
+           obsolete|                            |
 
 
 
 
-
---- Comment #4 from Sven Neumann <s.neumann@raumfeld.com>  2009-08-10 08:39:14 UTC ---
-Using a USB mouse with the linux_input driver works for me. Of course you need
-to have support for USB input devices enabled (CONFIG_USB_HID). But anyway, if
-the psmouse driver in DirectFB works on non-i386 platforms, then I see no
-reason not to allow users of buildroot to enable it.
+--- Comment #4 from Will Newton <will.newton@gmail.com>  2009-08-10 09:06:04 UTC ---
+Created an attachment (id=593)
+ --> (https://bugs.busybox.net/attachment.cgi?id=593)
+Fix find command syntax for CVS directory removal
 
 
 -- 
