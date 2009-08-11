@@ -1,58 +1,44 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 11 Aug 2009 12:34:24 +0000 (UTC)
-Subject: [Buildroot] [Bug 559] New: mesa3d build fails
-Message-ID: <bug-559-163@https.bugs.busybox.net/>
+Date: Tue, 11 Aug 2009 13:40:13 +0000 (UTC)
+Subject: [Buildroot] [Bug 561] New: ltp-testsuite failed to install
+Message-ID: <bug-561-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=559
+https://bugs.busybox.net/show_bug.cgi?id=561
 
-              Host: i686
-            Target: i686
-             Build: x86_64
-           Summary: mesa3d build fails
+              Host: Intel Core 2 Duo 32bit Mandriva Linux
+            Target: generic_arm
+           Summary: ltp-testsuite failed to install
            Product: buildroot
            Version: unspecified
-          Platform: All
+          Platform: PC
         OS/Version: Linux
             Status: NEW
           Severity: normal
-          Priority: P5
+          Priority: P3
          Component: Other
         AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: fpasch at googlemail.com
+        ReportedBy: oduclos at mandriva.com
                 CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+   Estimated Hours: 0.3
 
 
-Hello!
+Here is what I got when trying to generate an image for ARM with Linux 2.6.29
+and ltp-testsuite using buildroot 2009.08-rc2.
 
-Just tried to compile x11 for x86 on a x86_64 machine with
-buildroot-2009.08-rc2. I'm using an external glibc-toolchain (created by
-crosstool-ng)
+Applying ltp-testsuite-enable-openposix-for-nptl.patch using plaintext: 
+patching file testcases/Makefile
+Hunk #1 FAILED at 1.
+1 out of 1 hunk FAILED -- saving rejects to file testcases/Makefile.rej
 
-Build of Mesa 7.2 fails with:
-/home/test/crosstool-ng/i686-unknown-linux-gnu/lib/gcc/i686-unknown-linux-gnu/4.3.2/../../../../i686-unknown-linux-gnu/bin/ld:
-cannot find -lX11
-collect2: ld returned 1 exit status
+Can I remove this patch safely ?
 
-
-My current workaround is:
---- 1/package/x11r7/mesa3d/mesa3d.mk~   2009-08-11 14:30:37.000000000 +0200
-+++ 2/package/x11r7/mesa3d/mesa3d.mk    2009-08-11 14:30:42.000000000 +0200
-@@ -47,7 +47,7 @@
-                echo "SRC_DIRS = glx/x11 mesa glu glut/glx" && \
-                echo "USING_EGL = 0" && \
-                echo "X11_INCLUDES = " && \
--               echo "EXTRA_LIB_PATH = " && \
-+               echo "EXTRA_LIB_PATH = -L$(STAGING_DIR)/usr/lib" && \
-                echo "PROGRAM_DIRS =" && \
-                echo "MKDEP_OPTIONS = -fdepend -Y$(STAGING_DIR)/usr/include
--I$(MESA_GCCINCLUDE)" \
-        ) >> $(MESA_CONFIG_FILE)
+Also, because of the patch "ltp-testsuite-generate-needs-bash.patch" we should
+add bash as a dependency of ltp-testsuite.
 
 
 -- 
