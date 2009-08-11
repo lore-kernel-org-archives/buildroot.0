@@ -1,10 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 11 Aug 2009 19:45:21 +0000 (UTC)
+Date: Tue, 11 Aug 2009 21:10:37 +0000 (UTC)
 Subject: [Buildroot] [Bug 563] compiling Linux 2.30.2 for ARM with Atmel
 	support
 In-Reply-To: <bug-563-163@https.bugs.busybox.net/>
 References: <bug-563-163@https.bugs.busybox.net/>
-Message-ID: <20090811194521.55FCC776A6@busybox.osuosl.org>
+Message-ID: <20090811211037.AD024777E2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,25 +14,50 @@ To: buildroot@busybox.net
 https://bugs.busybox.net/show_bug.cgi?id=563
 
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+Ulf Samuelsson <ulf.samuelsson@atmel.com> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-         AssignedTo|unassigned at buildroot.uclibc.|ulf.samuelsson at atmel.com
-                   |org                         |
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
 
 
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2009-08-11 19:45:20 UTC ---
-I'm not sure how to handle this bug. For sure, a patch designed to be applied
-on a particular kernel version will only apply on this particular version. And
-it seems that in Buildroot, Atmel patches are only available up to 2.6.28.
-Which means that newer kernels have not been integrated yet. What behaviour
-would you expect from Buildroot here ?
+--- Comment #2 from Ulf Samuelsson <ulf.samuelsson@atmel.com>  2009-08-11 21:10:37 UTC ---
+You need to check my personal git, where there is support for:
 
-I'm assigning the bug to Ulf Samuelsson, who usually handle Atmel-specific
-issues in Buildroot.
+linux-2.6.30.2
+u-boot-2009.08-rc1
+at91bootstrap-2.12 (soon 2.13-rc1)
+
+Bootstrap compiles on all supported boards.
+Only loaded to a SAM9263EK booting from dataflash.
+
+U_boot has been compiled on the SAM9263/SAM9G10/SAM9G45,
+but only loaded to a SAM9263EK
+
+Linux has been compiled for SAM9263/SAM9G10/SAM9G45,
+but again only loaded to a SAM9263.
+
+After some hassle I have gotten mplayer to play mp3 files
+and I can also display jpeg pictures, although
+the BGR LCD controller is not supported.
+(mplayer assumes RGB)
+
+I have added all the patches I have found on the linux arm mailing
+list, except the MCI patches, but I hope to add them later.
+
+It obviously needs more testing, but thats why we are working
+in a collaborative project, right.
+
+
+
+Personal gits are available at http://git.buildroot.net/
+
+The git in question is:
+
+git://git.busybox.net/~ulf/git/atmel-2009-08-rc2
 
 
 -- 
