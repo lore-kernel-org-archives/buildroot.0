@@ -1,44 +1,38 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 11 Aug 2009 13:40:13 +0000 (UTC)
-Subject: [Buildroot] [Bug 561] New: ltp-testsuite failed to install
-Message-ID: <bug-561-163@https.bugs.busybox.net/>
+Date: Tue, 11 Aug 2009 13:46:55 +0000 (UTC)
+Subject: [Buildroot] [Bug 563] New: compiling Linux 2.30.2 for ARM with
+	Atmel support
+Message-ID: <bug-563-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=561
+https://bugs.busybox.net/show_bug.cgi?id=563
 
-              Host: Intel Core 2 Duo 32bit Mandriva Linux
-            Target: generic_arm
-           Summary: ltp-testsuite failed to install
+              Host: Mandriva Linux 32bit
+            Target: arm_generic
+           Summary: compiling Linux 2.30.2 for ARM with Atmel support
            Product: buildroot
            Version: unspecified
           Platform: PC
         OS/Version: Linux
             Status: NEW
-          Severity: normal
-          Priority: P3
-         Component: Other
+          Severity: major
+          Priority: P2
+         Component: Outdated package
         AssignedTo: unassigned at buildroot.uclibc.org
         ReportedBy: oduclos at mandriva.com
                 CC: buildroot at uclibc.org
-   Estimated Hours: 0.3
+   Estimated Hours: 0.0
 
 
-Here is what I got when trying to generate an image for ARM with Linux 2.6.29
-and ltp-testsuite using buildroot 2009.08-rc2.
+I tried to compile Linux 2.30.2 for ARM with the Atmel devices support but it
+failed.
 
-Applying ltp-testsuite-enable-openposix-for-nptl.patch using plaintext: 
-patching file testcases/Makefile
-Hunk #1 FAILED at 1.
-1 out of 1 hunk FAILED -- saving rejects to file testcases/Makefile.rej
-
-Can I remove this patch safely ?
-
-Also, because of the patch "ltp-testsuite-generate-needs-bash.patch" we should
-add bash as a dependency of ltp-testsuite.
+The patch "linux-2.6.28-at91.patch.bz2" only works with linux 2.6.28 and should
+not be used with other kernels.
 
 
 -- 
