@@ -1,51 +1,25 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Wed, 12 Aug 2009 12:36:26 +0200
-Subject: [Buildroot] [Bug 563] compiling Linux 2.30.2 for ARM with Atmel
- support
-In-Reply-To: <20090812102642.A5E7A77818@busybox.osuosl.org>
-References: <bug-563-163@https.bugs.busybox.net/>
-	<20090812102642.A5E7A77818@busybox.osuosl.org>
-Message-ID: <4A829B2A.3020901@atmel.com>
+From: Raed Abu-Sanad <raedbenz@hotmail.com>
+Date: Wed, 12 Aug 2009 19:42:22 +0100
+Subject: [Buildroot] Bootloader help
+In-Reply-To: <BAY136-W6773916E1BA7831DE5443CE0E0@phx.gbl>
+References: <BAY136-W6773916E1BA7831DE5443CE0E0@phx.gbl>
+Message-ID: <BAY136-W2853B4E8A5FD279DDEFA59CE040@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-bugzilla at busybox.net skrev:
-> https://bugs.busybox.net/show_bug.cgi?id=563
-> 
-> 
-> 
-> 
-> 
-> --- Comment #3 from Olivier Duclos <oduclos@mandriva.com>  2009-08-12 10:26:41 UTC ---
-> Thanks. Will the content of this it repo be included in the next stable release
-> ?
-> 
-> If you ask, I think buildroot should at least print an error message when
-> detecting such incompatibilities.
-> 
-> I've been waisting a lot of time these past few days trying to generate an
-> image as I want, but there are so much of bugs and incompatibilities !
-> 
-> 
-You can apply any patchset you want, the config is just an easy short cut.
 
-When you try to build a non-working patch, you will get your error
-message during the patch process.
+Hi,, I managed to get the rootfilesystem and kernel bzImage. I also enable grub in the filesystem section of buildroot configuration.
+I have copied kernel image and rootfs "rootfs.i686.ext2" to a USB flash with ext2 fs. is that fine?
+how can i install grub to boot the USB?
+hints plz..
+Thanks
 
-You should expect the patch to work for the kernel version it was
-designed for.
-
-You do have the freedom to test the patch on a later kernel, and
-for a range of kernels it will work, but don't expect a patchset
-to work for all future versions.
-
-If you want to use a patchset, on a later kernel than what is supported,
-then you have to manually adapt the patches to your desired kernel
-and then use the custom patch feature.
-
-
-BR
-Ulf Samuelsson
+_________________________________________________________________
+Windows Live Messenger: Celebrate 10 amazing years with free winks and emoticons.
+http://clk.atdmt.com/UKM/go/157562755/direct/01/
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090812/404146a3/attachment.htm>
