@@ -1,10 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 11 Aug 2009 21:10:37 +0000 (UTC)
+Date: Wed, 12 Aug 2009 10:26:42 +0000 (UTC)
 Subject: [Buildroot] [Bug 563] compiling Linux 2.30.2 for ARM with Atmel
 	support
 In-Reply-To: <bug-563-163@https.bugs.busybox.net/>
 References: <bug-563-163@https.bugs.busybox.net/>
-Message-ID: <20090811211037.AD024777E2@busybox.osuosl.org>
+Message-ID: <20090812102642.A5E7A77818@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,50 +14,18 @@ To: buildroot@busybox.net
 https://bugs.busybox.net/show_bug.cgi?id=563
 
 
-Ulf Samuelsson <ulf.samuelsson@atmel.com> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
 
 
 
+--- Comment #3 from Olivier Duclos <oduclos@mandriva.com>  2009-08-12 10:26:41 UTC ---
+Thanks. Will the content of this it repo be included in the next stable release
+?
 
---- Comment #2 from Ulf Samuelsson <ulf.samuelsson@atmel.com>  2009-08-11 21:10:37 UTC ---
-You need to check my personal git, where there is support for:
+If you ask, I think buildroot should at least print an error message when
+detecting such incompatibilities.
 
-linux-2.6.30.2
-u-boot-2009.08-rc1
-at91bootstrap-2.12 (soon 2.13-rc1)
-
-Bootstrap compiles on all supported boards.
-Only loaded to a SAM9263EK booting from dataflash.
-
-U_boot has been compiled on the SAM9263/SAM9G10/SAM9G45,
-but only loaded to a SAM9263EK
-
-Linux has been compiled for SAM9263/SAM9G10/SAM9G45,
-but again only loaded to a SAM9263.
-
-After some hassle I have gotten mplayer to play mp3 files
-and I can also display jpeg pictures, although
-the BGR LCD controller is not supported.
-(mplayer assumes RGB)
-
-I have added all the patches I have found on the linux arm mailing
-list, except the MCI patches, but I hope to add them later.
-
-It obviously needs more testing, but thats why we are working
-in a collaborative project, right.
-
-
-
-Personal gits are available at http://git.buildroot.net/
-
-The git in question is:
-
-git://git.busybox.net/~ulf/git/atmel-2009-08-rc2
+I've been waisting a lot of time these past few days trying to generate an
+image as I want, but there are so much of bugs and incompatibilities !
 
 
 -- 
