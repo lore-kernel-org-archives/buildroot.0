@@ -1,77 +1,57 @@
 From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Date: Thu, 13 Aug 2009 21:55:52 +0200
-Subject: [Buildroot] Buildroot and OpenEmbedded
-In-Reply-To: <87a5b0800908130628i760f152eu84237eb985227c36@mail.gmail.com>
-References: <5f2b60908130604i7175f89h533d1b8f8444e60f@mail.gmail.com>
-	<87a5b0800908130628i760f152eu84237eb985227c36@mail.gmail.com>
-Message-ID: <5f2b60908131255l128ec735r2b07c70e7bb46df9@mail.gmail.com>
+Date: Thu, 13 Aug 2009 23:30:32 +0200
+Subject: [Buildroot]
+	=?utf-8?q?Building_Linux_system_-_Beginner=E2=80=8F?=
+In-Reply-To: <BAY136-W1229649F0F8F25E88E8B70CE050@phx.gbl>
+References: <BAY136-W1229649F0F8F25E88E8B70CE050@phx.gbl>
+Message-ID: <5f2b60908131430yc02f01if52bd71e90e3d0b@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2009/8/13 Will Newton <will.newton@gmail.com>:
-> 2009/8/13 Bj?rn Forsman <bjorn.forsman@gmail.com>:
->> Hi all,
->>
->> When I started out with embedded Linux, Buildroot was of great help.
->> It built a working cross toolchain and a rootfs for me and I was very
->> pleased with it. (Thanks a lot to all developers!) At the same time I
->> had tried OpenEmbedded (OE) without much of a success: it was too
->> complex for me and I could not get it to build anything. Now, about
->> two years later, I started using OE at work and have had very good
->> experiences with it. So good that I must think carefully about why I
->> should use Buildroot for my next project, and not OE. I guess the main
->> reason (for me at least) for thinking about using Buildroot is its
->> easy menu configuration. But at the same time it feels like OE has
->> more to offer in terms of its build system and its package set.
->>
->> What do you guys think? What does Buildroot provide that OE does not?
->> And another thing: could/should the two projects be merged?
+2009/8/13 Raed Abu-Sanad <raedbenz@hotmail.com>:
+> Hi,,
+> I found your email in the mailing list, and you seemed to me quite
+> experienced in buidlroot, I have decided to send you my inquiry, and i would
+> be thankful if you reply me back.
+> i have put my questions before on the mailing list but no response yet.
+
+Please continue to use the mailing list instead of sending private
+emails, even if you not always get replies.
+
+> What i have done so far is:
+> I managed to build the root filesystem "rootfs.i686.ext2" and kernel
+> bzImage.
+> My questionsd are:
 >
-> The reasons I have chosen buildroot over OpenEmbedded are:
->
-> 1. Simplicity.
->
-> OE seems to have lots of config files and an unfamiliar interface. BR
-> lets people configure their root fs in the same way as their kernel.
+> 1- how do use this format of filesystem "rootfs.i686.ext2" ??? usually what
+> i know the rootfs consists of multiple directories or an archive and you
+> untar it to your target device, e.g. USB flash or HDD partition and you get
+> the directories..
 
-Yes, the BR configuration system is very nice. I still don't know how
-to fully customize OE builds, I just build a base image and use opkg
-to add extra packages :-) (Note that I haven't spent much time trying
-to build a custom image either.)
+If you want a tar archive rootfs from Buildroot, select "Target
+filesystem options -> tar the root filesystem". rootfs.i686.ext2 can
+be loop mounted on the development host so that you can see the files,
+and you can use it as a initrd on the target if you like. But if you
+are using USB flash or HDD I guess the tar archive rootfs is the
+easiest way to go.
 
-> 2. Bitbake.
->
-> Asking users to install often very recent versions of a leftfield tool
-> is difficult. BR has a minimum of external dependencies, which is
-> great when your users insist on using 3 year old distros. ;-)
-> Also Makefiles are something almost all software engineers understand
-> so it reduces the support burden for me.
+> 2- I also enabled grub in the filesystem section of the buildroot
+> configuration (when i ussued make menuconfig) in the beginning. how can i
+> use this grub to install a bootloader in a? USB?
+> what i want to do is to put the rootfs and kernel with GRUB bootloader to
+> CF/USB flash and run linux.
+> How can i do that?
 
-I wish OE could do without bitbake. But once it is installed, its not
-so bad :-) Regarding distro dependencies, I believe OE does quite
-well. AFAIK, all native tools that OE needs on the host are simply
-built from OE recipes. This gives complete control over the build
-environment. On the other hand, building all native tools makes the
-initial build, which is already very long, even longer.
+I have little experience with GRUB and no experience with
+GRUB+Buildroot. Maybe someone else can help.
 
-> The things I perceive to be better about OE are:
->
-> 1. Wider range of packages.
-> 2. Probably more vibrant community and more commercial involvement.
+> again, I would be thankful if you could reply me.
+> Thanks
 
-Agree. May I also add that OE built images are named by configuration
-and build date, eliminating the need for manually copying/renaming the
-resulting binaries so that they are not overwritten by subsequent
-(experimental) builds. I remember having manually backed up many BR
-binaries before :-)
+No problem! Just remember to use the list :-)
 
-Thanks for your reply, Will. I hope to hear more from BR users that
-have had some experience with OE, why or for what they use BR and not
-OE. Maybe I have to ask the OE mailing list if there are anyone there
-with BR background too :-)
-
-Regards,
+Best regards,
 Bj?rn Forsman
