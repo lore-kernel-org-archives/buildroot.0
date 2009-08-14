@@ -1,61 +1,52 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 14 Aug 2009 08:32:49 +0000 (UTC)
-Subject: [Buildroot] [Bug 569] New: Alsa-utils build fails
-Message-ID: <bug-569-163@https.bugs.busybox.net/>
+From: Cristi Magherusan <Cristi.Magherusan@net.utcluj.ro>
+Date: Fri, 14 Aug 2009 11:33:29 +0300
+Subject: [Buildroot] Using Buildroot to make small footprint linux
+In-Reply-To: <BAY136-W6773916E1BA7831DE5443CE0E0@phx.gbl>
+References: <BAY136-W6773916E1BA7831DE5443CE0E0@phx.gbl>
+Message-ID: <1250238809.2595.7.camel@ufo>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=569
+On Sun, 2009-08-02 at 17:51 +0100, Raed Abu-Sanad wrote:
+> Hi,,
+> 
+> I just downloaded latest version buildroot. I am working on ubuntu
+> 8.04.
+> how can i started the automated process of buildroot to create
+> filesytem and kernel images and install them on a USB flas or CF ?
+> Any simple tutorial?
+> 
+> Thanks
 
-              Host: i686
-            Target: i686
-             Build: x86_64
-           Summary: Alsa-utils build fails
-           Product: buildroot
-           Version: unspecified
-          Platform: All
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: fpasch at googlemail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Hello,
 
+It should feel very familiar to the people who at least once have
+compiled a Linux kernel.. 
 
-Building alsa-utils for i686 on a x86_64 machine fails while linking alsamixer
-because the linker uses the wrong ncurses-lib.
+Run "make menuconfig" in the root dir, select whatever you need to, then
+run "make", and it will generate whichever you ask it to from the menu
+interface.
 
-I've seen those alsa-utils-1.0.18-acs_map.patch.<ARCH> patches, but for x86
-this approach fails...
+It can generate everything as a Ext3 FS image(other rootfs formats may
+be useful too), which you can just dd to your disk and grow it using
+gparted until it fills it..
 
-The problem is, that alsa-configure uses the script ncurses5-config from host
-to obtain the paths to ncurses-lib.
+Here's the whole documentation, if you won't be satisfied with the two
+commands I wrote before: http://buildroot.uclibc.org/buildroot.html
 
-Perhaps a better workaround than those acs_maps-patches could be to define the
-correct ncurses5-config:
-
---- 1/package/multimedia/alsa-utils/alsa-utils.mk
-+++ 2/package/multimedia/alsa-utils/alsa-utils.mk
-@@ -25,6 +25,7 @@
-        (cd $(ALSA_UTILS_DIR); rm -f config.cache; \
-                $(TARGET_CONFIGURE_OPTS) \
-                $(TARGET_CONFIGURE_ARGS) \
-+               ac_cv_prog_ncurses5_config=$(STAGING_DIR)/bin/ncurses5-config \
-                CFLAGS="$(TARGET_CFLAGS)" \
-                LDFLAGS="$(TARGET_LDFLAGS)" \
-                ./configure \
-
-
-Simon Pasch
-
+Cristi
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Ing. Cristi M?gheru?an, System/Network Engineer
+Technical University of Cluj-Napoca, Romania
+http://cc.utcluj.ro  +40264 401247
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 197 bytes
+Desc: This is a digitally signed message part
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090814/520b0b01/attachment.pgp>
