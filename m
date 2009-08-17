@@ -1,39 +1,53 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 14 Aug 2009 19:54:39 +0000 (UTC)
-Subject: [Buildroot] [Bug 513] Add new squid package
-In-Reply-To: <bug-513-163@https.bugs.busybox.net/>
-References: <bug-513-163@https.bugs.busybox.net/>
-Message-ID: <20090814195439.69AD67719F@busybox.osuosl.org>
+From: Daniel Mierswa <impulze@impulze.org>
+Date: Mon, 17 Aug 2009 08:01:35 +0200
+Subject: [Buildroot] [PATCH] initial util-linux-ng package
+Message-ID: <4A88F23F.7010904@impulze.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=513
 
+This is my first attempt to replace the obsolete util-linux package with
+util-linux-ng. I replaced the susv3 patch with an uptodate version and
+sent it upstream, the nls and umount2 patch were removed because I
+didn't face any issues. If there's platform specific stuff to be added
+we can still figure it out. I hope someone finds interest in this.
+Cheers.
 
-Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
+Signed-off-by: Daniel Mierswa <impulze@impulze.org>
+---
+ package/Config.in                                  |    2 +-
+ ...0001-replace-bcopy-bzero-index-and-rindex.patch |  418 +++++++++++++++++++
+ .../0002-Allow-linking-with-uClibc.patch           |   26 ++
+ package/util-linux-ng/Config.in                    |   14 +
+ package/util-linux-ng/util-linux-ng.mk             |   99 +++++
+ package/util-linux/Config.in                       |    8 -
+ package/util-linux/util-linux-no-nls-fix.patch     |   25 --
+ package/util-linux/util-linux-susv3-legacy.patch   |  429 --------------------
+ package/util-linux/util-linux-umount2-fix.patch    |   20 -
+ package/util-linux/util-linux.mk                   |   92 -----
+ 10 files changed, 558 insertions(+), 575 deletions(-)
+ create mode 100644 package/util-linux-ng/0001-replace-bcopy-bzero-index-and-rindex.patch
+ create mode 100644 package/util-linux-ng/0002-Allow-linking-with-uClibc.patch
+ create mode 100644 package/util-linux-ng/Config.in
+ create mode 100644 package/util-linux-ng/util-linux-ng.mk
+ delete mode 100644 package/util-linux/Config.in
+ delete mode 100644 package/util-linux/util-linux-no-nls-fix.patch
+ delete mode 100644 package/util-linux/util-linux-susv3-legacy.patch
+ delete mode 100644 package/util-linux/util-linux-umount2-fix.patch
+ delete mode 100644 package/util-linux/util-linux.mk
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
- Attachment #527 is|0                           |1
-           obsolete|                            |
+--
+Mierswa, Daniel
 
-
-
-
---- Comment #6 from Gustavo Zacarias <gustavo@zacarias.com.ar>  2009-08-14 19:54:37 UTC ---
-Created an attachment (id=601)
- --> (https://bugs.busybox.net/attachment.cgi?id=601)
-New package: squid-3.0.STABLE17
-
-Bump squid to 3.0.STABLE17, fixes some stability issues.
-Enable heap removal policies in the package build, keep squidclient (useful for
-stats) and bump threads/FDs to handle some moderate load.
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+If you still don't like it, that's ok: that's why I'm boss. I simply know better than you do.
+               --- Linus Torvalds, comp.os.linux.advocacy, 1996/07/22
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-initial-util-linux-ng-package.patch
+Type: text/x-patch
+Size: 40344 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090817/1ca44910/attachment-0001.bin>
