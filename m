@@ -1,72 +1,60 @@
-From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Date: Tue, 18 Aug 2009 14:25:55 +0200
-Subject: [Buildroot] Make Error[After bison-1.75 installing]
-In-Reply-To: <289245.67238.qm@web59314.mail.re1.yahoo.com>
-References: <289245.67238.qm@web59314.mail.re1.yahoo.com>
-Message-ID: <5f2b60908180525o453c9db2ye007d78fcfeb07dd@mail.gmail.com>
+From: suhas dumbhare <s_dumbhare@yahoo.com>
+Date: Tue, 18 Aug 2009 12:04:29 -0700 (PDT)
+Subject: [Buildroot] [Error]Make Error
+Message-ID: <153617.95032.qm@web59316.mail.re1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2009/8/18 suhas dumbhare <s_dumbhare@yahoo.com>:
->
->
->
->
->
-> Hello,
-> sudhir>To Everyone
-> sudhir>Host:ubuntu8.10
-> suhdir>I am installing bison-1.75
-> sudhir>in buildroot-2009.05 directory
-> sudhir>But it again pop out following error
-> sudhir> bison installed:??? ??? ??? FALSE
-> sudhir>You must install 'bison' on your build machine
-> sudhir>make: *** [dependencies] Error 1
->
->
->
-> sudhir>Checking build system dependencies:
-> BUILDROOT_DL_DIR clean:??? ??? ??? ??? Ok
-> CC clean:??? ??? ??? ??? ??? Ok
-> CXX clean:??? ??? ??? ??? ??? Ok
-> CPP clean:??? ??? ??? ??? ??? Ok
-> CFLAGS clean:??? ??? ??? ??? ??? Ok
-> INCLUDES clean:??? ??? ??? ??? ??? Ok
-> CXXFLAGS clean:??? ??? ??? ??? ??? Ok
-> which installed:??? ??? ??? ??? Ok
-> sed works:??? ??? ??? ??? ??? Ok (/bin/sed)
-> GNU make version '3.81':??? ??? ??? Ok
-> C compiler '/usr/bin/gcc'
-> C compiler version '4.3.2':??? ??? ??? Ok
-> C++ compiler '/usr/bin/g++'
-> C++ compiler version '4.3.2':??? ??? ??? Ok
-> awk installed:??? ??? ??? ??? ??? Ok
-> bash installed:??? ??? ??? ??? ??? Ok
-> bison installed:??? ??? ??? FALSE
->
->
-> You must install 'bison' on your build machine
->
-> make: *** [dependencies] Error 1
->
-> sudhir>Pls tell me where & which directory I install bison
 
-To install bison on Ubuntu:
-$ sudo apt-get install bison
 
-> Looking forward to your help~~
->
-> Thanks a lot.
->
-> Sudhir
->
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+
+
+
+
+
+
+
+
+Hello,
+sudhir>To Everyone
+sudhir>Host:ubuntu8.10
+suhdir>after installing some packeges succesfully
+sudhir>it pop out following error
+
+rm -rf /usr/Tools/buildroot-2009.05/project_build_arm/uclibc/buildroot-config
+mkdir -p /usr/Tools/buildroot-2009.05/project_build_arm/uclibc
+cp -dpRf package/config/buildroot-config /usr/Tools/buildroot-2009.05/project_build_arm/uclibc/buildroot-config
+/usr/bin/make -j1 -C /usr/Tools/buildroot-2009.05/toolchain_build_arm/uClibc-0.9.30.1 \
+??? ??? PREFIX= \
+??? ??? DEVEL_PREFIX=/ \
+??? ??? RUNTIME_PREFIX=/ \
+??? ??? HOSTCC="/usr/bin/gcc" \
+??? ??? all
+make[1]: Entering directory `/usr/Tools/buildroot-2009.05/toolchain_build_arm/uClibc-0.9.30.1'
+? AS lib/crti.o
+cc1: error: unrecognized command line option "-mfdpic"
+make[1]: *** [lib/crti.o] Error 1
+make[1]: Leaving directory `/usr/Tools/buildroot-2009.05/toolchain_build_arm/uClibc-0.9.30.1'
+make: *** [/usr/Tools/buildroot-2009.05/toolchain_build_arm/uClibc-0.9.30.1/lib/libc.a] Error 2
+
+
+Looking forward to your help~~
+
+Thanks a lot.
+Sudhir
+
+
+
+      
+
+
+      
+
+
+      
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090818/f2dd6f9e/attachment.htm>
