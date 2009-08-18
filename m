@@ -1,53 +1,37 @@
-From: Daniel Mierswa <impulze@impulze.org>
-Date: Mon, 17 Aug 2009 08:01:35 +0200
-Subject: [Buildroot] [PATCH] initial util-linux-ng package
-Message-ID: <4A88F23F.7010904@impulze.org>
+From: Anthony Best <abest@digitalflex.net>
+Date: Mon, 17 Aug 2009 19:41:30 -0600
+Subject: [Buildroot] 2009-08-rc2 SAM9260-EK Login.
+Message-ID: <4A8A06CA.6040802@digitalflex.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Setup build root for AT91SAM9260-EK and I'm stuck with a login that 
+simply exits.
 
-This is my first attempt to replace the obsolete util-linux package with
-util-linux-ng. I replaced the susv3 patch with an uptodate version and
-sent it upstream, the nls and umount2 patch were removed because I
-didn't face any issues. If there's platform specific stuff to be added
-we can still figure it out. I hope someone finds interest in this.
-Cheers.
+I also tried single user mode, and nothing happened.
 
-Signed-off-by: Daniel Mierswa <impulze@impulze.org>
----
- package/Config.in                                  |    2 +-
- ...0001-replace-bcopy-bzero-index-and-rindex.patch |  418 +++++++++++++++++++
- .../0002-Allow-linking-with-uClibc.patch           |   26 ++
- package/util-linux-ng/Config.in                    |   14 +
- package/util-linux-ng/util-linux-ng.mk             |   99 +++++
- package/util-linux/Config.in                       |    8 -
- package/util-linux/util-linux-no-nls-fix.patch     |   25 --
- package/util-linux/util-linux-susv3-legacy.patch   |  429 --------------------
- package/util-linux/util-linux-umount2-fix.patch    |   20 -
- package/util-linux/util-linux.mk                   |   92 -----
- 10 files changed, 558 insertions(+), 575 deletions(-)
- create mode 100644 package/util-linux-ng/0001-replace-bcopy-bzero-index-and-rindex.patch
- create mode 100644 package/util-linux-ng/0002-Allow-linking-with-uClibc.patch
- create mode 100644 package/util-linux-ng/Config.in
- create mode 100644 package/util-linux-ng/util-linux-ng.mk
- delete mode 100644 package/util-linux/Config.in
- delete mode 100644 package/util-linux/util-linux-no-nls-fix.patch
- delete mode 100644 package/util-linux/util-linux-susv3-legacy.patch
- delete mode 100644 package/util-linux/util-linux-umount2-fix.patch
- delete mode 100644 package/util-linux/util-linux.mk
+Switching to another rootfs from a different build worked (other then 
+being the wrong image).
 
---
-Mierswa, Daniel
+I'm not sure where to look further.
 
-If you still don't like it, that's ok: that's why I'm boss. I simply know better than you do.
-               --- Linus Torvalds, comp.os.linux.advocacy, 1996/07/22
+-- 
+Anthony Best <abest@digitalflex.net>
+
 -------------- next part --------------
 A non-text attachment was scrubbed...
-Name: 0001-initial-util-linux-ng-package.patch
-Type: text/x-patch
-Size: 40344 bytes
+Name: abest.vcf
+Type: text/x-vcard
+Size: 246 bytes
 Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090817/1ca44910/attachment-0001.bin>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090817/0cd50da3/attachment.vcf>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: smime.p7s
+Type: application/x-pkcs7-signature
+Size: 5303 bytes
+Desc: S/MIME Cryptographic Signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090817/0cd50da3/attachment.bin>
