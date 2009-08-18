@@ -1,19 +1,24 @@
 From: suhas dumbhare <s_dumbhare@yahoo.com>
-Date: Tue, 18 Aug 2009 01:54:00 -0700 (PDT)
-Subject: [Buildroot] Make Error
-Message-ID: <476057.22296.qm@web59312.mail.re1.yahoo.com>
+Date: Tue, 18 Aug 2009 02:34:56 -0700 (PDT)
+Subject: [Buildroot] Make Error[After bison-1.75 installing]
+Message-ID: <289245.67238.qm@web59314.mail.re1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+
+
+
+
+
 Hello,
 sudhir>To Everyone
 sudhir>Host:ubuntu8.10
-suhdir>I was trying to Make after
-sudhir>Succesfully configuration
-sudhir>But it pops out following error
+suhdir>I am installing bison-1.75
+sudhir>in buildroot-2009.05 directory
+sudhir>But it again pop out following error
 sudhir> bison installed:??? ??? ??? FALSE
 sudhir>You must install 'bison' on your build machine
 sudhir>make: *** [dependencies] Error 1
@@ -24,7 +29,8 @@ sudhir>Checking build system dependencies:
 BUILDROOT_DL_DIR clean:??? ??? ??? ??? Ok
 CC clean:??? ??? ??? ??? ??? Ok
 CXX clean:??? ??? ??? ??? ??? Ok
-CPP clean:??? ??? ??? ??? ??? Ok
+CPP clean:??? ???
+ ??? ??? ??? Ok
 CFLAGS clean:??? ??? ??? ??? ??? Ok
 INCLUDES clean:??? ??? ??? ??? ??? Ok
 CXXFLAGS clean:??? ??? ??? ??? ??? Ok
@@ -35,7 +41,8 @@ C compiler '/usr/bin/gcc'
 C compiler version '4.3.2':??? ??? ??? Ok
 C++ compiler '/usr/bin/g++'
 C++ compiler version '4.3.2':??? ??? ??? Ok
-awk installed:??? ??? ??? ??? ??? Ok
+awk
+ installed:??? ??? ??? ??? ??? Ok
 bash installed:??? ??? ??? ??? ??? Ok
 bison installed:??? ??? ??? FALSE
 
@@ -44,7 +51,7 @@ You must install 'bison' on your build machine
 
 make: *** [dependencies] Error 1
 
-
+sudhir>Pls tell me where & which directory I install bison
 Looking forward to your help~~
 
 Thanks a lot.
@@ -53,6 +60,9 @@ Sudhir
 
 
       
+
+
+      
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090818/23335c3d/attachment.htm>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090818/a8ffe1cb/attachment.htm>
