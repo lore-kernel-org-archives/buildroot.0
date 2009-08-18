@@ -1,8 +1,9 @@
-From: suhas dumbhare <s_dumbhare@yahoo.com>
-Date: Tue, 18 Aug 2009 12:17:48 -0700 (PDT)
-Subject: [Buildroot] [Error]Make Error:unrecognised command line
-	option"-mfdpic"
-Message-ID: <392627.90117.qm@web59307.mail.re1.yahoo.com>
+From: Raed Abu-Sanad <raedbenz@hotmail.com>
+Date: Tue, 18 Aug 2009 21:10:39 +0100
+Subject: [Buildroot] Exceptional model error
+In-Reply-To: <mailman.5.1250251201.18787.buildroot@busybox.net>
+References: <mailman.5.1250251201.18787.buildroot@busybox.net>
+Message-ID: <BAY136-W202532D9F3C10878BF929ECEFF0@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,64 +11,16 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
+hi,,
 
+I am trying to compile buildroot with C++ enabled, i keep getting "Error:unable to detect exceptional model".
+any help???
 
+cheers
 
-
-
-
-
-
-
-
-
-
-
-
-Hello,
-sudhir>To
- Everyone
-sudhir>Host:ubuntu8.10
-suhdir>after installing some packeges succesfully
-sudhir>it pop out following error
-
-rm -rf /usr/Tools/buildroot-2009.05/project_build_arm/uclibc/buildroot-config
-mkdir -p /usr/Tools/buildroot-2009.05/project_build_arm/uclibc
-cp -dpRf package/config/buildroot-config /usr/Tools/buildroot-2009.05/project_build_arm/uclibc/buildroot-config
-/usr/bin/make -j1 -C /usr/Tools/buildroot-2009.05/toolchain_build_arm/uClibc-0.9.30.1 \
-??? ??? PREFIX= \
-??? ??? DEVEL_PREFIX=/ \
-??? ??? RUNTIME_PREFIX=/ \
-??? ??? HOSTCC="/usr/bin/gcc" \
-??? ??? all
-make[1]: Entering directory `/usr/Tools/buildroot-2009.05/toolchain_build_arm/uClibc-0.9.30.1'
-? AS lib/crti.o
-cc1: error: unrecognized
- command line option "-mfdpic"
-make[1]: *** [lib/crti.o] Error 1
-make[1]: Leaving directory `/usr/Tools/buildroot-2009.05/toolchain_build_arm/uClibc-0.9.30.1'
-make: *** [/usr/Tools/buildroot-2009.05/toolchain_build_arm/uClibc-0.9.30.1/lib/libc.a] Error 2
-
-
-Looking forward to your help~~
-
-Thanks a lot.
-Sudhir
-
-
-
-      
-
-
-      
-
-
-
-
-      
-
-
-      
+_________________________________________________________________
+Windows Live Messenger: Celebrate 10 amazing years with free winks and emoticons.
+http://clk.atdmt.com/UKM/go/157562755/direct/01/
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090818/18421345/attachment.htm>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090818/96427561/attachment.htm>
