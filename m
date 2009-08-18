@@ -1,19 +1,58 @@
-From: Lars Lockenvitz <l.lockenvitz@fpga-art.de>
-Date: Tue, 18 Aug 2009 10:21:06 +0200
-Subject: [Buildroot] Qt apps under matchbox
-Message-ID: <4A8A6472.2080008@fpga-art.de>
+From: suhas dumbhare <s_dumbhare@yahoo.com>
+Date: Tue, 18 Aug 2009 01:54:00 -0700 (PDT)
+Subject: [Buildroot] Make Error
+Message-ID: <476057.22296.qm@web59312.mail.re1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
+sudhir>To Everyone
+sudhir>Host:ubuntu8.10
+suhdir>I was trying to Make after
+sudhir>Succesfully configuration
+sudhir>But it pops out following error
+sudhir> bison installed:??? ??? ??? FALSE
+sudhir>You must install 'bison' on your build machine
+sudhir>make: *** [dependencies] Error 1
 
-I'm using matchbox-window-manager and -desktop and want to use Qt 
-applications with them.
-Is that possible?
-And do I need qt-embedded for that or how to configure qt to use X11?
 
-Regards,
-Lars
+
+sudhir>Checking build system dependencies:
+BUILDROOT_DL_DIR clean:??? ??? ??? ??? Ok
+CC clean:??? ??? ??? ??? ??? Ok
+CXX clean:??? ??? ??? ??? ??? Ok
+CPP clean:??? ??? ??? ??? ??? Ok
+CFLAGS clean:??? ??? ??? ??? ??? Ok
+INCLUDES clean:??? ??? ??? ??? ??? Ok
+CXXFLAGS clean:??? ??? ??? ??? ??? Ok
+which installed:??? ??? ??? ??? Ok
+sed works:??? ??? ??? ??? ??? Ok (/bin/sed)
+GNU make version '3.81':??? ??? ??? Ok
+C compiler '/usr/bin/gcc'
+C compiler version '4.3.2':??? ??? ??? Ok
+C++ compiler '/usr/bin/g++'
+C++ compiler version '4.3.2':??? ??? ??? Ok
+awk installed:??? ??? ??? ??? ??? Ok
+bash installed:??? ??? ??? ??? ??? Ok
+bison installed:??? ??? ??? FALSE
+
+
+You must install 'bison' on your build machine
+
+make: *** [dependencies] Error 1
+
+
+Looking forward to your help~~
+
+Thanks a lot.
+Sudhir
+
+
+
+      
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090818/23335c3d/attachment.htm>
