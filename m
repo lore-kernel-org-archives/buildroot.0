@@ -1,38 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Aug 2009 21:52:28 +0200
-Subject: [Buildroot] unrecognised command line option Error
-In-Reply-To: <428184.39297.qm@web59313.mail.re1.yahoo.com>
-References: <428184.39297.qm@web59313.mail.re1.yahoo.com>
-Message-ID: <20090819215228.278c7ef5@surf>
+From: H Hartley Sweeten <hartleys@visionengravers.com>
+Date: Wed, 19 Aug 2009 16:19:35 -0400
+Subject: [Buildroot] Kernel panic - not syncing: Attempted to kill init!
+In-Reply-To: <20090819214237.534c433f@surf>
+References: <BD79186B4FD85F4B8E60E381CAEE190901BEA43C@mi8nycmail19.Mi8.com>
+	<20090819214237.534c433f@surf>
+Message-ID: <BD79186B4FD85F4B8E60E381CAEE190901BEA476@mi8nycmail19.Mi8.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Wednesday, August 19, 2009 12:43 PM, Thomas Petazzoni wrote:
+>> I haven't been able to figure out what the problem is.  Does anyone
+>> have an idea?  I'm using buildroot version 2009.08-rc2 and kernel
+>> 2.6.30.5 if that's any help.
+>
+> Do you compile your kernel with Buildroot, or do you compile it
+> manually ? If compiled manually, is CONFIG_AEABI enabled in your kernel
+> configuration ?
 
-First, please do *NOT* send several times the same e-mail with the same
-question. You posted four times the same question, this is very
-annoying. These multiple posts is a strong incentive to not answer your
-question. So please avoid that in the future, thanks.
+The kernel and rootfs are both created with Buildroot.
 
-Le Wed, 19 Aug 2009 06:24:24 -0700 (PDT),
-suhas dumbhare <s_dumbhare@yahoo.com> a ?crit :
+For the kernel config I have:
 
->  command line option "-mfdpic"
+CONFIG_AEABI=y
+CONFIG_OABI_COMPAT=y
 
--mfdpic is a gcc option specific to the FRV architecture. So it's
-strange that uClibc uses it if you configured Buildroot for ARM.
+For buildroot's config I have:
 
-Could you post Buildroot configuration file. It is named .config in the
-main Buildroot directory.
+# BR2_ARM_OABI is not set
+BR2_ARM_EABI=y
 
-Sincerly,
+Is there a similar configuration that needs to be set in Busybox?
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Regards,
+Hartley
