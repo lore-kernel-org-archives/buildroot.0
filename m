@@ -1,12 +1,17 @@
 From: suhas dumbhare <s_dumbhare@yahoo.com>
-Date: Tue, 18 Aug 2009 23:00:15 -0700 (PDT)
-Subject: [Buildroot] [Error]Make Error: command line option Error
-Message-ID: <830589.33495.qm@web59307.mail.re1.yahoo.com>
+Date: Wed, 19 Aug 2009 06:24:24 -0700 (PDT)
+Subject: [Buildroot] unrecognised command line option Error
+Message-ID: <428184.39297.qm@web59313.mail.re1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+
+
+
+
 
 
 
@@ -35,6 +40,7 @@ sudhir>To
 sudhir>Host:ubuntu8.10
 sudhir>Target:ARM7
 sudhir>Buildroot:2009.05
+sudhir>uCLibc:0.9.30.1
 
 sudhir>after installing some packeges succesfully
 sudhir>it pop out following error in 
@@ -49,7 +55,8 @@ cp -dpRf package/config/buildroot-config /usr/Tools/buildroot-2009.05/project_bu
 ??? ??? DEVEL_PREFIX=/ \
 ??? ??? RUNTIME_PREFIX=/ \
 ??? ??? HOSTCC="/usr/bin/gcc" \
-??? ??? all
+??? ???
+ all
 make[1]: Entering directory `/usr/Tools/buildroot-2009.05/toolchain_build_arm/uClibc-0.9.30.1'
 ? AS lib/crti.o
 cc1: error: unrecognized
@@ -80,7 +87,12 @@ Sudhir
       
 
 
+
+
+      
+
+
       
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090818/494113df/attachment-0001.htm>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090819/323f08c6/attachment.htm>
