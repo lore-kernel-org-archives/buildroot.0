@@ -1,53 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Aug 2009 23:30:37 +0200
-Subject: [Buildroot] Kernel panic - not syncing: Attempted to kill init!
-In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE190901BEA476@mi8nycmail19.Mi8.com>
-References: <BD79186B4FD85F4B8E60E381CAEE190901BEA43C@mi8nycmail19.Mi8.com>
-	<20090819214237.534c433f@surf>
-	<BD79186B4FD85F4B8E60E381CAEE190901BEA476@mi8nycmail19.Mi8.com>
-Message-ID: <20090819233037.1d8e5a5d@surf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 19 Aug 2009 21:32:10 +0000 (UTC)
+Subject: [Buildroot] [Bug 573] BR2_DEFAULT_KERNEL_HEADERS is undefined with
+ external toolchain
+In-Reply-To: <bug-573-163@https.bugs.busybox.net/>
+References: <bug-573-163@https.bugs.busybox.net/>
+Message-ID: <20090819213210.407557778D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 19 Aug 2009 16:19:35 -0400,
-"H Hartley Sweeten" <hartleys@visionengravers.com> a ?crit :
+https://bugs.busybox.net/show_bug.cgi?id=573
 
-> The kernel and rootfs are both created with Buildroot.
-> 
-> For the kernel config I have:
-> 
-> CONFIG_AEABI=y
-> CONFIG_OABI_COMPAT=y
-> 
-> For buildroot's config I have:
-> 
-> # BR2_ARM_OABI is not set
-> BR2_ARM_EABI=y
 
-That's correct. When I fall into similar issue, I usually end up
-writing a very simple init program that does:
 
-int main(void)
-{
-	write(1, "Hello\n", 6);
-	while(1);
-}
 
-Compile it statically and put it in /sbin/init. Getting this first
-basic program to work is a first step.
 
-> Is there a similar configuration that needs to be set in Busybox?
+--- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2009-08-19 21:32:09 UTC ---
+BTW, this bugzilla is for the official Buildroot version, that you can find at
+http://www.buildroot.org, or in its Git repo at http://git.buildroot.org.
 
-Not that I'm aware of.
+But anyway, I think that the issue you're having might be present in the
+official Buildroot version as well.
 
-Sincerly,
 
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
