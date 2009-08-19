@@ -1,25 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Aug 2009 21:42:37 +0200
-Subject: [Buildroot] Kernel panic - not syncing: Attempted to kill init!
-In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE190901BEA43C@mi8nycmail19.Mi8.com>
-References: <BD79186B4FD85F4B8E60E381CAEE190901BEA43C@mi8nycmail19.Mi8.com>
-Message-ID: <20090819214237.534c433f@surf>
+Date: Wed, 19 Aug 2009 21:52:28 +0200
+Subject: [Buildroot] unrecognised command line option Error
+In-Reply-To: <428184.39297.qm@web59313.mail.re1.yahoo.com>
+References: <428184.39297.qm@web59313.mail.re1.yahoo.com>
+Message-ID: <20090819215228.278c7ef5@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 19 Aug 2009 14:32:24 -0400,
-"H Hartley Sweeten" <hartleys@visionengravers.com> a ?crit :
+Hello,
 
-> I haven't been able to figure out what the problem is.  Does anyone
-> have an idea?  I'm using buildroot version 2009.08-rc2 and kernel
-> 2.6.30.5 if that's any help.
+First, please do *NOT* send several times the same e-mail with the same
+question. You posted four times the same question, this is very
+annoying. These multiple posts is a strong incentive to not answer your
+question. So please avoid that in the future, thanks.
 
-Do you compile your kernel with Buildroot, or do you compile it
-manually ? If compiled manually, is CONFIG_AEABI enabled in your kernel
-configuration ?
+Le Wed, 19 Aug 2009 06:24:24 -0700 (PDT),
+suhas dumbhare <s_dumbhare@yahoo.com> a ?crit :
+
+>  command line option "-mfdpic"
+
+-mfdpic is a gcc option specific to the FRV architecture. So it's
+strange that uClibc uses it if you configured Buildroot for ARM.
+
+Could you post Buildroot configuration file. It is named .config in the
+main Buildroot directory.
 
 Sincerly,
 
