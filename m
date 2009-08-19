@@ -1,106 +1,32 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Wed, 19 Aug 2009 22:49:05 +0200
-Subject: [Buildroot] Buildroot and OpenEmbedded
-In-Reply-To: <5f2b60908131255l128ec735r2b07c70e7bb46df9@mail.gmail.com>
-References: <5f2b60908130604i7175f89h533d1b8f8444e60f@mail.gmail.com>	<87a5b0800908130628i760f152eu84237eb985227c36@mail.gmail.com>
-	<5f2b60908131255l128ec735r2b07c70e7bb46df9@mail.gmail.com>
-Message-ID: <4A8C6541.3080002@atmel.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 19 Aug 2009 21:21:51 +0000 (UTC)
+Subject: [Buildroot] [Bug 575] Buildroot Libtool Patch Fails
+In-Reply-To: <bug-575-163@https.bugs.busybox.net/>
+References: <bug-575-163@https.bugs.busybox.net/>
+Message-ID: <20090819212151.59E27772E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bj?rn Forsman skrev:
-> 2009/8/13 Will Newton <will.newton@gmail.com>:
->> 2009/8/13 Bj?rn Forsman <bjorn.forsman@gmail.com>:
->>> Hi all,
->>>
->>> When I started out with embedded Linux, Buildroot was of great help.
->>> It built a working cross toolchain and a rootfs for me and I was very
->>> pleased with it. (Thanks a lot to all developers!) At the same time I
->>> had tried OpenEmbedded (OE) without much of a success: it was too
->>> complex for me and I could not get it to build anything. Now, about
->>> two years later, I started using OE at work and have had very good
->>> experiences with it. So good that I must think carefully about why I
->>> should use Buildroot for my next project, and not OE. I guess the main
->>> reason (for me at least) for thinking about using Buildroot is its
->>> easy menu configuration. But at the same time it feels like OE has
->>> more to offer in terms of its build system and its package set.
->>>
->>> What do you guys think? What does Buildroot provide that OE does not?
->>> And another thing: could/should the two projects be merged?
->> The reasons I have chosen buildroot over OpenEmbedded are:
->>
->> 1. Simplicity.
->>
->> OE seems to have lots of config files and an unfamiliar interface. BR
->> lets people configure their root fs in the same way as their kernel.
-> 
-> Yes, the BR configuration system is very nice. I still don't know how
-> to fully customize OE builds, I just build a base image and use opkg
-> to add extra packages :-) (Note that I haven't spent much time trying
-> to build a custom image either.)
-
-It is BLACK MAGIC!!!
-But I have something running now...
-
-> 
->> 2. Bitbake.
->>
->> Asking users to install often very recent versions of a leftfield tool
->> is difficult. BR has a minimum of external dependencies, which is
->> great when your users insist on using 3 year old distros. ;-)
->> Also Makefiles are something almost all software engineers understand
->> so it reduces the support burden for me.
-> 
-> I wish OE could do without bitbake. But once it is installed, its not
-> so bad :-) Regarding distro dependencies, I believe OE does quite
-> well. AFAIK, all native tools that OE needs on the host are simply
-> built from OE recipes. This gives complete control over the build
-> environment. On the other hand, building all native tools makes the
-> initial build, which is already very long, even longer.
-> 
-
-Core i7/6GB  < 2 hours for x11-gpe-image
-
->> The things I perceive to be better about OE are:
->>
->> 1. Wider range of packages.
->> 2. Probably more vibrant community and more commercial involvement.
-> 
-> Agree. May I also add that OE built images are named by configuration
-> and build date, eliminating the need for manually copying/renaming the
-> resulting binaries so that they are not overwritten by subsequent
-> (experimental) builds. I remember having manually backed up many BR
-> binaries before :-)
-
-We have had a long discussion about this early this year.
-It is not popular to call linux anything else but uImage.
-I have reintroduced a proper naming scheme (in my opinion)
-in my personal git on the buildroot server,
-where I build 2.6.30.2, u-boot-2009.08-rc2 and at91bootstrap-2.13-rc3
-for the AT91, but it needs a lot more testing.
-
-Help appreciated.
-
-
-> Thanks for your reply, Will. I hope to hear more from BR users that
-> have had some experience with OE, why or for what they use BR and not
-> OE. Maybe I have to ask the OE mailing list if there are anyone there
-> with BR background too :-)
-
-Buildroot is good to hand out to beginners, for them to learn.
-It can do a good job for non-graphic applications.
-If you want an advanced user-interface, then you go OE.
-
-Big Guys are doing OE, but you need to spend more time to get things done.
+https://bugs.busybox.net/show_bug.cgi?id=575
 
 
 
-> Regards,
-> Bj?rn Forsman
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2009-08-19 21:21:50 UTC ---
+Webkit uses libtool 2.x, while Buildroot patch for libtool only applies to
+1.5.x versions of libtool. Therefore, Webkit Makefile should set
+WEBKIT_LIBTOOL_PATCH=NO. However, even with this fix, I have libtool issues
+while compiling Webkit, which is why I haven't submitted the fix yet.
+
+But since you're compiling for a x86 target on a x86 host, setting
+WEBKIT_LIBTOOL_PATCH = NO might be enough for you.
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
