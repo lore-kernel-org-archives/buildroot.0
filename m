@@ -1,52 +1,29 @@
-From: Daniel Mack <daniel@caiaq.de>
-Date: Thu, 20 Aug 2009 10:56:26 +0200
-Subject: [Buildroot] Kernel panic - not syncing: Attempted to kill init!
-In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE190901BEA4AC@mi8nycmail19.Mi8.com>
-References: <BD79186B4FD85F4B8E60E381CAEE190901BEA43C@mi8nycmail19.Mi8.com>
-	<20090819214237.534c433f@surf>
-	<BD79186B4FD85F4B8E60E381CAEE190901BEA476@mi8nycmail19.Mi8.com>
-	<20090819221342.GB19257@buzzloop.caiaq.de>
-	<BD79186B4FD85F4B8E60E381CAEE190901BEA4AC@mi8nycmail19.Mi8.com>
-Message-ID: <20090820085625.GC19257@buzzloop.caiaq.de>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 20 Aug 2009 09:23:54 +0000 (UTC)
+Subject: [Buildroot] [Bug 573] BR2_DEFAULT_KERNEL_HEADERS is undefined with
+ external toolchain
+In-Reply-To: <bug-573-163@https.bugs.busybox.net/>
+References: <bug-573-163@https.bugs.busybox.net/>
+Message-ID: <20090820092354.5B613776D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Aug 19, 2009 at 06:19:54PM -0400, H Hartley Sweeten wrote:
-> On Wednesday, August 19, 2009 3:14 PM, Daniel Mack wrote:
-> > On Wed, Aug 19, 2009 at 04:19:35PM -0400, H Hartley Sweeten wrote:
-> >> On Wednesday, August 19, 2009 12:43 PM, Thomas Petazzoni wrote:
-> >>>
-> >>> Do you compile your kernel with Buildroot, or do you compile it
-> >>> manually ? If compiled manually, is CONFIG_AEABI enabled in your kernel
-> >>> configuration ?
-> >> 
-> >> The kernel and rootfs are both created with Buildroot.
-> >> 
-> >> For the kernel config I have:
-> >> 
-> >> CONFIG_AEABI=y
-> >> CONFIG_OABI_COMPAT=y
-> >
-> > Just a side note: for performance reasons, you shouldn't enable
-> > OABI_COMPAT unless you really can't know which binaries the kernel will
-> > execute.
-> 
-> I had CONFIG_OABI_COMPAT disabled originally.  I just turned it on to see
-> if that helped.
-> 
-> > See http://wiki.debian.org/ArmEabiPort for some more details.
-> 
-> Thanks for the link.
-> 
-> > Other than that, your problem could also be related to VFP emulation
-> > issues. I had such awhile back.
-> 
-> What was your issue then?  Were you able to resolve it?
+https://bugs.busybox.net/show_bug.cgi?id=573
 
-I would try the simple hello-world app Thomas suggested. There is always
-a reason for why processes crash, and so there's always a solution ;)
 
-Daniel
+
+
+
+--- Comment #5 from Phil <n0-1@nwl.cc>  2009-08-20 09:23:53 UTC ---
+Created an attachment (id=609)
+ --> (https://bugs.busybox.net/attachment.cgi?id=609)
+The buildroot config triggering the described behaviour.
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
