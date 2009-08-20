@@ -1,10 +1,10 @@
 From: H Hartley Sweeten <hartleys@visionengravers.com>
-Date: Thu, 20 Aug 2009 12:59:28 -0400
+Date: Thu, 20 Aug 2009 14:45:01 -0400
 Subject: [Buildroot] Kernel panic - not syncing: Attempted to kill init!
-In-Reply-To: <20090820143514.7c5e56a2@surf>
-References: <BD79186B4FD85F4B8E60E381CAEE190901BEA43C@mi8nycmail19.Mi8.com><20090819214237.534c433f@surf><BD79186B4FD85F4B8E60E381CAEE190901BEA476@mi8nycmail19.Mi8.com><20090819233037.1d8e5a5d@surf><BD79186B4FD85F4B8E60E381CAEE190901BEA4AD@mi8nycmail19.Mi8.com>
-	<20090820143514.7c5e56a2@surf>
-Message-ID: <BD79186B4FD85F4B8E60E381CAEE190901BEA58B@mi8nycmail19.Mi8.com>
+In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE190901BEA58B@mi8nycmail19.Mi8.com>
+References: <BD79186B4FD85F4B8E60E381CAEE190901BEA43C@mi8nycmail19.Mi8.com><20090819214237.534c433f@surf><BD79186B4FD85F4B8E60E381CAEE190901BEA476@mi8nycmail19.Mi8.com><20090819233037.1d8e5a5d@surf><BD79186B4FD85F4B8E60E381CAEE190901BEA4AD@mi8nycmail19.Mi8.com><20090820143514.7c5e56a2@surf>
+	<BD79186B4FD85F4B8E60E381CAEE190901BEA58B@mi8nycmail19.Mi8.com>
+Message-ID: <BD79186B4FD85F4B8E60E381CAEE190901BEA5DB@mi8nycmail19.Mi8.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -28,98 +28,82 @@ On Thursday, August 20, 2009 5:35 AM, Thomas Petazzoni wrote:
 > thomas at surf:/tmp$ file hello
 > hello: ELF 32-bit LSB executable, ARM, version 1 (SYSV), statically linked, not stripped
 
-Ok.  That works.
+Follow-up information...
 
-rtc-isl1208 0-006f: setting system clock to 2009-08-20 09:31:48 UTC (1250760708)
-RAMDISK: gzip image found at block 0
-VFS: Mounted root (ext2 filesystem) on device 1:0.
-Freeing init memory: 120K
-run_init_process: /sbin/init
-Hello
-usb 1-1: configuration #1 chosen from 1 choice
-input: HID 04d9:1203 as /devices/platform/ep93xx-ohci/usb1/1-1/1-1:1.0/input/input2
-generic-usb 0003:04D9:1203.0001: input: USB HID v1.11 Keyboard [HID 04d9:1203] on usb-ep93xx-1/input0
-input: HID 04d9:1203 as /devices/platform/ep93xx-ohci/usb1/1-1/1-1:1.1/input/input3
-generic-usb 0003:04D9:1203.0002: input: USB HID v1.11 Device [HID 04d9:1203] on usb-ep93xx-1/input1
+It appears that ext-tool.mk is not copying the correct external toolchain
+libraries for my architecture.
 
-But I had to comile the test init as:
+The ext-tool.mk uses the following to get SYSROOT_DIR:
 
-$ arm-none-linux-gnueabi-gcc -static -march=armv4t -mcpu=arm920t init.c -o init
-$ file init
-init: ELF 32-bit LSB executable, ARM, version 1 (SYSV), for GNU/Linux 2.6.14, statically linked, for GNU/Linux 2.6.14, not stripped
-$ arm-none-linux-gnueabi-readelf -A init Attribute Section: aeabi
-File Attributes
-  Tag_CPU_name: "4T"
-  Tag_CPU_arch: v4T
-  Tag_ARM_ISA_use: Yes
-  Tag_THUMB_ISA_use: Thumb-1
-  Tag_ABI_PCS_wchar_t: 4
-  Tag_ABI_FP_denormal: Needed
-  Tag_ABI_FP_exceptions: Needed
-  Tag_ABI_FP_number_model: IEEE 754
-  Tag_ABI_align8_needed: Yes
-  Tag_ABI_enum_size: int
+SYSROOT_DIR=$(shell LANG=C $(TARGET_CC) -v 2>&1 | grep ^Configured | tr " " "\n" | grep -- "--with-sysroot" | cut -f2 -d=)
 
-If I compile it without the -march=armv4t -mcpu=arm920t flags I get:
+Manually doing that from the command line gives me:
 
-$ arm-none-linux-gnueabi-gcc -static init.c -o init
-$ arm-none-linux-gnueabi-readelf -A init Attribute Section: aeabi
-File Attributes
-  Tag_CPU_name: "ARM10TDMI"
-  Tag_CPU_arch: v5T
-  Tag_ARM_ISA_use: Yes
-  Tag_THUMB_ISA_use: Thumb-1
-  Tag_ABI_PCS_wchar_t: 4
-  Tag_ABI_FP_denormal: Needed
-  Tag_ABI_FP_exceptions: Needed
-  Tag_ABI_FP_number_model: IEEE 754
-  Tag_ABI_align8_needed: Yes
-  Tag_ABI_enum_size: int
+$ arm-none-linux-gnueabi-gcc -v 2>&1 | grep ^Configured | tr " " "\n" | grep -- "--with-sysroot" | cut -f2 -d=
+/opt/codesourcery/arm-none-linux-gnueabi/libc
+$ arm-none-linux-gnueabi-gcc -march=armv4t -v 2>&1 | grep ^Configured | tr " " "\n" | grep -- "--with-sysroot" | cut -f2 -d=
+/opt/codesourcery/arm-none-linux-gnueabi/libc
 
-Can I just add the -march=armv4t -mcpu=arm920t to BR2_TARGET_OPTIMIZATION?  I 
-previously just tried setting it to -march=armv4t but got a linker error about
-a lib file being the wrong version.
+It appears the -march=armv4t option does not effect the -v option.
 
-The CodeSourcery compiler has a strange directory structure, probably due to
-supporting various arm cpu's.  I'm not sure how to configure buildroot so that
-the correct library files are used.
+/opt/codesourcery/arm-none-linux-gnueabi is a hardlink to the real
+location of the files.
 
-The directory tree looks something like this:
+$ ls -la /opt/codesourcery/arm-none-linux-gnueabi
+lrwxrwxrwx 1 root root 70 2009-07-20 17:28 /opt/codesourcery/arm-none-linux-gnueabi -> /home/bigguiness/CodeSourcery/Sourcery_G++_Lite/arm-none-linux-gnueabi
 
-$ tree arm-none-linux-gnueabi/ -d -L 3
-arm-none-linux-gnueabi/
-|-- bin
-|-- include
-|   `-- c++
-|       `-- 4.3.3
-|-- lib
-|   |-- armv4t
-|   |-- boards
-|   |-- ldscripts
-|   `-- thumb2
-`-- libc
-    |-- armv4t
-    |   |-- etc
-    |   |-- lib
-    |   |-- sbin
-    |   `-- usr
-    |-- etc
-    |-- lib
-    |-- sbin
-    |-- thumb2
-    |   |-- etc
-    |   |-- lib
-    |   |-- sbin
-    |   `-- usr
-    `-- usr
-        |-- bin
-        |-- include
-        |-- info
-        |-- lib
-        |-- libexec
-        |-- man
-        |-- sbin
-        `-- share
+But, if I query the directories in the compiler's search path they
+are different.  Note, in the following I clipped the first part of
+all the paths in order to shorten the output.
+
+$ arm-none-linux-gnueabi-gcc -print-search-dirs
+install:
+	bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/
+programs: =
+	bin/../libexec/gcc/arm-none-linux-gnueabi/4.3.3/
+	bin/../libexec/gcc/
+	bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/../../../../arm-none-linux-gnueabi/bin/arm-none-linux-gnueabi/4.3.3/
+	bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/../../../../arm-none-linux-gnueabi/bin/
+libraries: =
+	bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/
+	bin/../lib/gcc/
+	bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/../../../../arm-none-linux-gnueabi/lib/arm-none-linux-gnueabi/4.3.3/
+	bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/../../../../arm-none-linux-gnueabi/lib/
+	bin/../arm-none-linux-gnueabi/libc/lib/arm-none-linux-gnueabi/4.3.3/
+	bin/../arm-none-linux-gnueabi/libc/lib/
+	bin/../arm-none-linux-gnueabi/libc/usr/lib/arm-none-linux-gnueabi/4.3.3/
+	bin/../arm-none-linux-gnueabi/libc/usr/lib/
+
+$ arm-none-linux-gnueabi-gcc -march=armv4t -print-search-dirs
+install: 
+	bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/
+programs: =
+	bin/../libexec/gcc/arm-none-linux-gnueabi/4.3.3/
+	bin/../libexec/gcc/
+	bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/../../../../arm-none-linux-gnueabi/bin/arm-none-linux-gnueabi/4.3.3/
+	bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/../../../../arm-none-linux-gnueabi/bin/
+libraries: =
+	bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/armv4t/
+	bin/../lib/gcc/armv4t/
+	bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/../../../../arm-none-linux-gnueabi/lib/arm-none-linux-gnueabi/4.3.3/armv4t/
+	bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/../../../../arm-none-linux-gnueabi/lib/armv4t/
+	bin/../arm-none-linux-gnueabi/libc/armv4t/lib/arm-none-linux-gnueabi/4.3.3/armv4t/
+	bin/../arm-none-linux-gnueabi/libc/armv4t/lib/armv4t/
+	bin/../arm-none-linux-gnueabi/libc/armv4t/usr/lib/arm-none-linux-gnueabi/4.3.3/armv4t/
+	bin/../arm-none-linux-gnueabi/libc/armv4t/usr/lib/armv4t/
+	bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/
+	bin/../lib/gcc/
+	bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/../../../../arm-none-linux-gnueabi/lib/arm-none-linux-gnueabi/4.3.3/
+	bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/../../../../arm-none-linux-gnueabi/lib/
+	bin/../arm-none-linux-gnueabi/libc/armv4t/lib/arm-none-linux-gnueabi/4.3.3/
+	bin/../arm-none-linux-gnueabi/libc/armv4t/lib/
+	bin/../arm-none-linux-gnueabi/libc/armv4t/usr/lib/arm-none-linux-gnueabi/4.3.3/
+	bin/../arm-none-linux-gnueabi/libc/armv4t/usr/lib/
+
+I think the ARMv5T (default) libraries are getting copied to the
+staging_dir and not the ARMv4T (-march=armv4t) libraries.
+
+Can you think of anyway to fix this?
 
 Regards,
 Hartley
