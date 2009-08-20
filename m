@@ -1,46 +1,55 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Thu, 20 Aug 2009 10:52:41 +0200
-Subject: [Buildroot] Explicit dependencies on uclibc in makefiles
-In-Reply-To: <d6cda7730908130743ic7fa66fy5f32814fc828d887@mail.gmail.com>
-References: <87a5b0800908110855g778df6aanbf9307ca69e676c9@mail.gmail.com>
-	<d6cda7730908130705s11275a7cu78d2dbca3ee15041@mail.gmail.com>
-	<87a5b0800908130719m79b677dbm1e3c12bd9dafddaf@mail.gmail.com>
-	<20090813163709.044199e3@hcegtvedt.norway.atmel.com>
-	<d6cda7730908130743ic7fa66fy5f32814fc828d887@mail.gmail.com>
-Message-ID: <20090820085241.GC22901@mx.loc>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 20 Aug 2009 08:53:22 +0000 (UTC)
+Subject: [Buildroot] [Bug 575] Buildroot Libtool Patch Fails
+In-Reply-To: <bug-575-163@https.bugs.busybox.net/>
+References: <bug-575-163@https.bugs.busybox.net/>
+Message-ID: <20090820085322.5D153776D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Aug 13, 2009 at 11:43:27AM -0300, Thiago A. Corr?a wrote:
->2009/8/13 Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>:
->> On Thu, 13 Aug 2009 15:19:48 +0100
->> Will Newton <will.newton@gmail.com> wrote:
->>
->> <snipp>
->>
->>> Why does bash depend on uclibc but grep doesn't? Does grep have a bug
->>> or can we remove the unneeded dependency from bash?
->>>
->>
->> IIRC uclibc is earlier in the dependency loop anyway, uclibc is in the
->> BASE_TARGETS list. See top level Makefile.
->>
->
->Ah, ok. I never looked it up at the top Makefile. Well, then I guess
->we could drop uclibc from all packages/*
+https://bugs.busybox.net/show_bug.cgi?id=575
 
-indeed.
 
->This actually should be done for the glibc support to work properly I guess.
 
-http://repo.or.cz/w/buildroot.git?a=commit;h=7a1e0eccede82028e176ee4671fe79b1a34c0779
-http://repo.or.cz/w/buildroot.git?a=commit;h=567d5c24536c8462b6df24f6c7654a72b00f202d
-http://repo.or.cz/w/buildroot.git?a=commit;h=ab606461d9033d8dca2dd698751308d9aa0c528f
-http://repo.or.cz/w/buildroot.git?a=commit;h=31cb73c8370d65a2fde86415de59369dc433b02d
 
-and related commits.
 
-As previously stated, i invite anybody to bring your tree up to snuff
+--- Comment #4 from Will Newton <will.newton@gmail.com>  2009-08-20 08:53:21 UTC ---
+(In reply to comment #2)
+> Yes it did go past, bear in mind the host needs gperf to compile it. Maybe that
+> should be added to host tools
+> 
+> However I now get:
+> make[2]: *** [JavaScriptCore/libJavaScriptCore_la-AllInOneFile.lo] Error 1
+> make[2]: *** Waiting for unfinished jobs....
+> In file included from
+> ./WebCore/platform/graphics/transforms/TransformationMatrix.h:36,
+>                  from ./WebCore/rendering/style/RenderStyle.h:28,
+>                  from ./WebCore/rendering/RenderObject.h:33,
+>                  from WebCore/accessibility/AXObjectCache.cpp:46:
+> /home/dan/xenon/buildroot/build_i386/staging_dir/usr/include/cairo/cairo.h:1550:5:
+> warning: "CAIRO_HAS_PNG_FUNCTIONS" is not defined
+> /home/dan/xenon/buildroot/build_i386/staging_dir/usr/include/cairo/cairo.h:1682:5:
+> warning: "CAIRO_HAS_PNG_FUNCTIONS" is not defined
+> mv -f WebCore/accessibility/.deps/libWebCore_la-AXObjectCache.Tpo
+> WebCore/accessibility/.deps/libWebCore_la-AXObjectCache.Plo
+> make[2]: Leaving directory `/home/dan/xenon/buildroot/build_i386/webkit-r44552'
+> make[1]: *** [all] Error 2
+> make[1]: Leaving directory `/home/dan/xenon/buildroot/build_i386/webkit-r44552'
+> make: *** [/home/dan/xenon/buildroot/build_i386/webkit-r44552/.stamp_built]
+> Error 2
+> 
+
+WebKit requires cairo to be built with png support. That can be enabled from
+the menuconfig to get things building.
+
+I need to investigate under which circumstances WebKit uses cairo and it's PNG
+support.
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
