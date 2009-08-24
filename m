@@ -1,71 +1,67 @@
-From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Date: Mon, 24 Aug 2009 10:09:15 +0200
-Subject: [Buildroot] buildroot working config file
-In-Reply-To: <BAY136-W27E8A1A33F6DD5C0C0FBE4CEF90@phx.gbl>
-References: <BAY136-W27E8A1A33F6DD5C0C0FBE4CEF90@phx.gbl>
-Message-ID: <5f2b60908240109gac0bc88oafad6f71261d71eb@mail.gmail.com>
+From: Bai Shuwei <baishuwei@gmail.com>
+Date: Mon, 24 Aug 2009 16:30:54 +0800
+Subject: [Buildroot] [Qemu-devel] diskimage HOWTO
+In-Reply-To: <4A9245EA.9030108@redhat.com>
+References: <f3566d60908232239l268a7233necd10a6dd342f58f@mail.gmail.com>
+	<4A9245EA.9030108@redhat.com>
+Message-ID: <f3566d60908240130o225f99d4s8059da4fb5aca8d8@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-First, _use the buildroot mailing list_. Second, you are replying to an
-email that I've already answered, but now in a _new thread_. Please keep
-related questions in one thread.
+On 8/24/09, Kevin Wolf <kwolf@redhat.com> wrote:
+>
+> Bai Shuwei schrieb:
+> > Hi, All:
+> >   I want to build a test enviroment with QEMU and buildroot. But I don't
+> > know how to build the diskimage which same as linux-0.2.img offered by
+> > BUILD-ROOT. I build the diskimage following the
+> >    buildroot-2009.05/docs/README.diskimage
+> > <
+> http://192.168.1.102/crosscopile/buildroot-2009.05/docs/README.diskimage>,
+> > but failure.
+> >
+> >    The bellow is my process.
+> >
+> >    # dd if=/dev/zero of=img bs=4096 count=16384
+> >    # echo -e "n\np\n1\n\nw\n" | fdisk -C 16065 -H 255 -S 63 ./img
+> >    # losetup -o 512 /dev/loop0 img
+>
+> This looks like the wrong offset. The first partition usually starts at
+> sector 63. But probably you'll want to use kpartx which takes an image
+> and creates device nodes for each partition.
 
-2009/8/24 Raed Abu-Sanad <raedbenz@hotmail.com>:
-> Hi,,
->
-> I keep getting errors every time i build and compile the build root for
-> i386.
 
-Try posting your build log.
+This the result
 
-> Can you plz, for now, give me a config File for build root with basic
-> operations and configurations that could run on a i386 PC (P4).
+qemu/xtratum# fdisk -ul img
 
-I have not used Buildroot for i386 targets so I cannot give you a working
-config for that. Have you tried 'make defconfig'?
+You must set cylinders.
+You can do this from the extra functions menu.
 
+Disk rootfs: 0 MB, 0 bytes
+255 heads, 63 sectors/track, 0 cylinders, total 0 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Disk identifier: 0x545a5c26
+
+ Device Boot      Start         End      Blocks   Id  System
+img1              63   258084224   129042081   83  Linux
+Partition 1 has different physical/logical endings:
+     phys=(1023, 254, 63) logical=(16064, 254, 63)
+
+Kevin
 >
-> Thanks
-> raed
->
-> ________________________________
-> From: raedbenz at hotmail.com
-> To: bjorn.forsman at gmail.com
-> Subject: Building Linux system - Beginner?
-> Date: Thu, 13 Aug 2009 21:08:52 +0100
->
-> Hi,,
-> I found your email in the mailing list, and you seemed to me quite
-> experienced in buidlroot, I have decided to send you my inquiry, and i would
-> be thankful if you reply me back.
-> i have put my questions before on the mailing list but no response yet.
->
-> What i have done so far is:
-> I managed to build the root filesystem "rootfs.i686.ext2" and kernel
-> bzImage.
-> My questionsd are:
->
-> 1- how do use this format of filesystem "rootfs.i686.ext2" ??? usually what
-> i know the rootfs consists of multiple directories or an archive and you
-> untar it to your target device, e.g. USB flash or HDD partition and you get
-> the directories..
->
-> 2- I also enabled grub in the filesystem section of the buildroot
-> configuration (when i ussued make menuconfig) in the beginning. how can i
-> use this grub to install a bootloader in a? USB?
-> what i want to do is to put the rootfs and kernel with GRUB bootloader to
-> CF/USB flash and run linux.
-> How can i do that?
->
-> again, I would be thankful if you could reply me.
->
-> Thanks
-> ________________________________
-> Windows Live Messenger: Celebrate 10 amazing years with free winks and
-> emoticons. Get Them Now
-> ________________________________
-> Internet Explorer 8 - accelerate your Hotmail. Download Internet Explorer 8
+
+
+
+-- 
+Love other people, as same as love yourself!
+Don't think all the time, do it by your hands!
+
+Personal URL: http://dslab.lzu.edu.cn:8080/members/baishw/
+E-Mail: baishuwei at gmail.com or baishuwei at dslab.lzu.edu.cn
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090824/0b2ad94c/attachment.htm>
