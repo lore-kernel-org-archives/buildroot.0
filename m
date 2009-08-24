@@ -1,8 +1,7 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 24 Aug 2009 22:28:47 +0200
-Subject: [Buildroot] [git commit master] kernel-headers: bump 2.6.27.x /
-	2.6.30.x stable versions
-Message-ID: <20090824202958.CF38C7774C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] webkit: select cairo PNG feature
+Message-ID: <20090824202957.C6A5A7774C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,29 +9,36 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f6bd2da7a50846b20b43c645c20c91c1c50bd753
+commit: http://git.buildroot.net/buildroot/commit/?id=26e37dd3c48878ed351092e171840591e2c7e1b8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- toolchain/kernel-headers/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+Webkit currently depends on libgtk2, which itself depends on
+Cairo. However, the dependency of libgtk2 is only on
+BR2_PACKAGE_CAIRO, BR2_PACKAGE_CAIRO_PS and
+BR2_PACKAGE_CAIRO_PDF. While this might be enough for libgtk2 to build
+and work, Webkit makes direct use of the PNG functionnalities of
+Cairo. If this functionnality is not available in Cairo, the Webkit
+build complains that cairo_surface_write_to_png_stream() is not
+defined.
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index ad78b00..e5bd64a 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -49,9 +49,9 @@ config BR2_KERNEL_HEADERS_RT
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "2.6.26.8"	if BR2_KERNEL_HEADERS_2_6_26
--	default "2.6.27.29"	if BR2_KERNEL_HEADERS_2_6_27
-+	default "2.6.27.31"	if BR2_KERNEL_HEADERS_2_6_27
- 	default "2.6.28.10"	if BR2_KERNEL_HEADERS_2_6_28
- 	default "2.6.29.6"	if BR2_KERNEL_HEADERS_2_6_29
--	default "2.6.30.4"	if BR2_KERNEL_HEADERS_2_6_30
-+	default "2.6.30.5"	if BR2_KERNEL_HEADERS_2_6_30
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+Therefore, we make sure that WebKit selects BR2_PACKAGE_CAIRO_PNG.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/webkit/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/package/webkit/Config.in b/package/webkit/Config.in
+index ecf8694..3c669a5 100644
+--- a/package/webkit/Config.in
++++ b/package/webkit/Config.in
+@@ -10,6 +10,7 @@ config BR2_PACKAGE_WEBKIT
+ 	select BR2_PACKAGE_SQLITE
+ 	select BR2_PACKAGE_ENCHANT
+ 	select BR2_PACKAGE_LIBSOUP
++	select BR2_PACKAGE_CAIRO_PNG
+ 	help
+ 	  WebKit is an open source, standards compliant web browser engine.
  
 -- 
 1.6.3.3
