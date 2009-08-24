@@ -1,65 +1,71 @@
-From: Bai Shuwei <baishuwei@gmail.com>
-Date: Mon, 24 Aug 2009 13:39:53 +0800
-Subject: [Buildroot] diskimage HOWTO
-Message-ID: <f3566d60908232239l268a7233necd10a6dd342f58f@mail.gmail.com>
+From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
+Date: Mon, 24 Aug 2009 10:09:15 +0200
+Subject: [Buildroot] buildroot working config file
+In-Reply-To: <BAY136-W27E8A1A33F6DD5C0C0FBE4CEF90@phx.gbl>
+References: <BAY136-W27E8A1A33F6DD5C0C0FBE4CEF90@phx.gbl>
+Message-ID: <5f2b60908240109gac0bc88oafad6f71261d71eb@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, All:
-  I want to build a test enviroment with QEMU and buildroot. But I don't
-know how to build the diskimage which same as linux-0.2.img offered by
-BUILD-ROOT. I build the diskimage following the
-   buildroot-2009.05/docs/README.diskimage<http://192.168.1.102/crosscopile/buildroot-2009.05/docs/README.diskimage>,
-but failure.
+First, _use the buildroot mailing list_. Second, you are replying to an
+email that I've already answered, but now in a _new thread_. Please keep
+related questions in one thread.
 
-   The bellow is my process.
+2009/8/24 Raed Abu-Sanad <raedbenz@hotmail.com>:
+> Hi,,
+>
+> I keep getting errors every time i build and compile the build root for
+> i386.
 
-   # dd if=/dev/zero of=img bs=4096 count=16384
-   # echo -e "n\np\n1\n\nw\n" | fdisk -C 16065 -H 255 -S 63 ./img
-   # losetup -o 512 /dev/loop0 img
-   # mkfs.ext2 -m0 -Lslash /dev/loop0
-   # mount -oloop,rw /dev/loop0 fs/
-   # cp -a ../root/* fs/
-..root is the filesystem built by BUILD-ROOT and the bzImage has been copied
-into root/boot/, grub.lst has been created too.
-  # umount fs/
-  # losetup -d /dev/loop0
-  # losetup /dev/loop0 img
-  # grub --device-map=/dev/null
-grub> device (hd0) img
-device (hd0) img
-grub> geometry (hd0) 16065 255 63
-geometry (hd0) 16065 255 63
-drive 0x80: C/H/S = 16065/255/63, The number of sectors = 258084225, img
-   Partition num: 0,  Filesystem type unknown, partition type 0x83
-grub> root (hd0,0)
-root (hd0,0)
- Filesystem type unknown, partition type 0x83
-grub> setup (hd0)
-setup (hd0)
+Try posting your build log.
 
-*Error 17: Cannot mount selected partition*
-I don't know why it is error. Gald if you can help or give me some document
-on it.
+> Can you plz, for now, give me a config File for build root with basic
+> operations and configurations that could run on a i386 PC (P4).
 
-Best Regards!
+I have not used Buildroot for i386 targets so I cannot give you a working
+config for that. Have you tried 'make defconfig'?
 
-Bai SHuwei
-
-
-
-
-
-
--- 
-Love other people, as same as love yourself!
-Don't think all the time, do it by your hands!
-
-Personal URL: http://dslab.lzu.edu.cn:8080/members/baishw/
-E-Mail: baishuwei at gmail.com or baishuwei at dslab.lzu.edu.cn
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090824/2908e3cd/attachment.htm>
+>
+> Thanks
+> raed
+>
+> ________________________________
+> From: raedbenz at hotmail.com
+> To: bjorn.forsman at gmail.com
+> Subject: Building Linux system - Beginner?
+> Date: Thu, 13 Aug 2009 21:08:52 +0100
+>
+> Hi,,
+> I found your email in the mailing list, and you seemed to me quite
+> experienced in buidlroot, I have decided to send you my inquiry, and i would
+> be thankful if you reply me back.
+> i have put my questions before on the mailing list but no response yet.
+>
+> What i have done so far is:
+> I managed to build the root filesystem "rootfs.i686.ext2" and kernel
+> bzImage.
+> My questionsd are:
+>
+> 1- how do use this format of filesystem "rootfs.i686.ext2" ??? usually what
+> i know the rootfs consists of multiple directories or an archive and you
+> untar it to your target device, e.g. USB flash or HDD partition and you get
+> the directories..
+>
+> 2- I also enabled grub in the filesystem section of the buildroot
+> configuration (when i ussued make menuconfig) in the beginning. how can i
+> use this grub to install a bootloader in a? USB?
+> what i want to do is to put the rootfs and kernel with GRUB bootloader to
+> CF/USB flash and run linux.
+> How can i do that?
+>
+> again, I would be thankful if you could reply me.
+>
+> Thanks
+> ________________________________
+> Windows Live Messenger: Celebrate 10 amazing years with free winks and
+> emoticons. Get Them Now
+> ________________________________
+> Internet Explorer 8 - accelerate your Hotmail. Download Internet Explorer 8
