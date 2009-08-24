@@ -1,32 +1,32 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 24 Aug 2009 22:59:16 +0200
-Subject: [Buildroot] Buildroot and OpenEmbedded
-In-Reply-To: <5f2b60908130604i7175f89h533d1b8f8444e60f@mail.gmail.com>
-	(=?utf-8?Q?=22Bj=C3=B8rn?= Forsman"'s message of "Thu\, 13 Aug 2009
-	15\:04\:39 +0200")
-References: <5f2b60908130604i7175f89h533d1b8f8444e60f@mail.gmail.com>
-Message-ID: <87skfhnd23.fsf@macbook.be.48ers.dk>
+Date: Mon, 24 Aug 2009 22:59:49 +0200
+Subject: [Buildroot] [PATCH] directfb: allow to enable debug and trace
+	support
+In-Reply-To: <20090807190502.003848f7@surf> (Thomas Petazzoni's message of
+	"Fri\, 7 Aug 2009 19\:05\:02 +0200")
+References: <1249554495-26364-1-git-send-email-s.neumann@raumfeld.com>
+	<20090807190502.003848f7@surf>
+Message-ID: <87ocq5nd16.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bj?rn" == Bj?rn Forsman <bjorn.forsman@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Hi,
+ Thomas> Le Thu,  6 Aug 2009 12:28:15 +0200,
+ Thomas> Sven Neumann <s.neumann@raumfeld.com> a ?crit :
 
- Bj?rn> What do you guys think? What does Buildroot provide that OE
- Bj?rn> does not?  And another thing: could/should the two projects be
- Bj?rn> merged?
+ >> This change adds two new options, BR2_PACKAGE_DIRECTFB_DEBUG
+ >> to enable lots of debugging output from DirectFB and
+ >> BR2_PACKAGE_DIRECTFB_TRACE to enable support for call traces
+ >> in case of a crash.
 
-As several people already mentioned, BR is located elsewhere than OE
-on the feature/complexity curve. It is a smaller and (imho atleast)
-simpler system, which is optimized for small embedded systems, rather
-than PDA-style devices, but it clearly doesn't have as many
-packages/features as OE.
+ Thomas> Pulled and pushed into my for-2009.08 branch, that should be pulled by
+ Thomas> Peter when he comes back from holidays.
 
-So it all depends on your requirements, like always.
+Done.
 
 -- 
 Bye, Peter Korsgaard
