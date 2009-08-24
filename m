@@ -1,32 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 24 Aug 2009 22:59:49 +0200
-Subject: [Buildroot] [PATCH] directfb: allow to enable debug and trace
-	support
-In-Reply-To: <20090807190502.003848f7@surf> (Thomas Petazzoni's message of
-	"Fri\, 7 Aug 2009 19\:05\:02 +0200")
-References: <1249554495-26364-1-git-send-email-s.neumann@raumfeld.com>
-	<20090807190502.003848f7@surf>
-Message-ID: <87ocq5nd16.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 24 Aug 2009 23:27:53 +0200
+Subject: [Buildroot] [git commit master] busybox: also enable ipv6 support
+	in ifupdown if ipv6 support is enabled
+Message-ID: <20090824212915.20E617774C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> Le Thu,  6 Aug 2009 12:28:15 +0200,
- Thomas> Sven Neumann <s.neumann@raumfeld.com> a ?crit :
+commit: http://git.buildroot.net/buildroot/commit/?id=4ae691ecb960f79968df454cba0dab04bf1dba9d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- >> This change adds two new options, BR2_PACKAGE_DIRECTFB_DEBUG
- >> to enable lots of debugging output from DirectFB and
- >> BR2_PACKAGE_DIRECTFB_TRACE to enable support for call traces
- >> in case of a crash.
+Reported by: Chris Smith <chris.smith@tandberg.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/busybox/busybox.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
- Thomas> Pulled and pushed into my for-2009.08 branch, that should be pulled by
- Thomas> Peter when he comes back from holidays.
-
-Done.
-
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index a5978da..7be49b3 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -69,8 +69,10 @@ else
+ endif
+ ifeq ($(BR2_INET_IPV6),y)
+ 	$(SED) "s/^.*CONFIG_FEATURE_IPV6.*/CONFIG_FEATURE_IPV6=y/;" $(BUSYBOX_DIR)/.config
++	$(SED) "s/^.*CONFIG_FEATURE_IFUPDOWN_IPV6.*/CONFIG_FEATURE_IFUPDOWN_IPV6=y/;" $(BUSYBOX_DIR)/.config
+ else
+ 	$(SED) "s/^.*CONFIG_FEATURE_IPV6.*/CONFIG_FEATURE_IPV6=n/;" $(BUSYBOX_DIR)/.config
++	$(SED) "s/^.*CONFIG_FEATURE_IFUPDOWN_IPV6.*/CONFIG_FEATURE_IFUPDOWN_IPV6=n/;" $(BUSYBOX_DIR)/.config
+ endif
+ ifeq ($(BR2_INET_RPC),y)
+ 	$(SED) "s/^.*CONFIG_FEATURE_MOUNT_NFS.*/CONFIG_FEATURE_MOUNT_NFS=y/;" $(BUSYBOX_DIR)/.config
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
