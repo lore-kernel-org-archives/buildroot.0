@@ -1,8 +1,7 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 24 Aug 2009 22:28:47 +0200
-Subject: [Buildroot] [git commit master] directfb: remove unnecessary
-	dependency on libungif
-Message-ID: <20090824202956.C1FB1775A4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] libsoup: enable autoreconf
+Message-ID: <20090824202958.395E37774C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,41 +9,29 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7ad7a89244366bd05452689088269a2068b45023
+commit: http://git.buildroot.net/buildroot/commit/?id=843c592a7c89dd564e17158871fa792aec1a5e97
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The GIF image provider in DirectFB is self-contained and doesn't
-need libungif.
+To get the libtool patch to make some effect, an autoreconfiguration
+is necessary.
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/directfb/Config.in   |    1 -
- package/directfb/directfb.mk |    1 -
- 2 files changed, 0 insertions(+), 2 deletions(-)
+ package/libsoup/libsoup.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/directfb/Config.in b/package/directfb/Config.in
-index 5e847ed..bb35530 100644
---- a/package/directfb/Config.in
-+++ b/package/directfb/Config.in
-@@ -87,7 +87,6 @@ config BR2_PACKAGE_DIRECTFB_GIF
- 	bool "enable GIF support"
- 	default y
- 	depends on BR2_PACKAGE_DIRECTFB
--	select BR2_PACKAGE_LIBUNGIF
+diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
+index c0b85e2..b4eaa5a 100644
+--- a/package/libsoup/libsoup.mk
++++ b/package/libsoup/libsoup.mk
+@@ -8,7 +8,7 @@ LIBSOUP_MAJOR_VERSION:=2.26
+ LIBSOUP_VERSION:=$(LIBSOUP_MAJOR_VERSION).2
+ LIBSOUP_SOURCE:=libsoup-$(LIBSOUP_VERSION).tar.bz2
+ LIBSOUP_SITE:=http://ftp.gnome.org/pub/gnome/sources/libsoup/$(LIBSOUP_MAJOR_VERSION)
+-LIBSOUP_AUTORECONF = NO
++LIBSOUP_AUTORECONF = YES
+ LIBSOUP_INSTALL_STAGING = YES
+ LIBSOUP_INSTALL_TARGET = YES
  
- config BR2_PACKAGE_DIRECTFB_JPEG
- 	bool "enable JPEG support"
-diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
-index 2407743..1c3b78a 100644
---- a/package/directfb/directfb.mk
-+++ b/package/directfb/directfb.mk
-@@ -91,7 +91,6 @@ endif
- 
- ifeq ($(BR2_PACKAGE_DIRECTFB_GIF),y)
- DIRECTFB_GIF:=--enable-gif
--DIRECTFB_DEP+= libungif
- else
- DIRECTFB_GIF:=--disable-gif
- endif
 -- 
 1.6.3.3
