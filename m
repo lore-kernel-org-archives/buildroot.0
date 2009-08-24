@@ -1,25 +1,48 @@
 From: Will Newton <will.newton@gmail.com>
-Date: Mon, 24 Aug 2009 17:33:19 +0100
-Subject: [Buildroot] [PATCH] initial util-linux-ng package
-In-Reply-To: <4A88F23F.7010904@impulze.org>
-References: <4A88F23F.7010904@impulze.org>
-Message-ID: <87a5b0800908240933x6482e5aw1d042c1597811567@mail.gmail.com>
+Date: Mon, 24 Aug 2009 17:49:23 +0100
+Subject: [Buildroot] pkg-config problems
+Message-ID: <87a5b0800908240949i3b84ed83je359165a66dabd50@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Aug 17, 2009 at 7:01 AM, Daniel Mierswa<impulze@impulze.org> wrote:
->
-> This is my first attempt to replace the obsolete util-linux package with
-> util-linux-ng. I replaced the susv3 patch with an uptodate version and
-> sent it upstream, the nls and umount2 patch were removed because I
-> didn't face any issues. If there's platform specific stuff to be added
-> we can still figure it out. I hope someone finds interest in this.
-> Cheers.
+Hi all,
 
-This works for me, and I think the switch to util-linux-ng is long
-overdue at this point. Thanks for doing this work.
+I've come across a tricky issue with pkg-config and I was wondering if
+anyone might have any ideas on the best way to sort it out.
 
-Tested-by: Will Newton <will.newton@gmail.com>
+cairo can be built for the target with or without png support. We also
+build a version of cairo for the host, which is always built without
+png support. If we enable png support for cairo (for the target) and
+build a version of pango for the host, the pango build fails. The host
+pango build failure is caused because the pango configure script
+thinks it has a cairo with png support but when it tries to link
+against the host cairo library there are no png related symbols.
+
+The root cause of this is that the host pango is using host pkgconfig
+to determine what libraries are available. The host pkgconfig is
+configured like this however:
+
+ $(STAMP_DIR)/host_pkgconfig_configured: $(STAMP_DIR)/host_pkgconfig_unpacked
+        (cd $(PKG_CONFIG_HOST_DIR); rm -rf config.cache; \
+                $(HOST_CONFIGURE_OPTS) \
+                CFLAGS="$(HOST_CFLAGS)" \
+                LDFLAGS="$(HOST_LDFLAGS)" \
+                ./configure \
+                --prefix="$(HOST_DIR)/usr" \
+                --sysconfdir="$(HOST_DIR)/etc" \
+                --with-pc-path="$(STAGING_DIR)/usr/lib/pkgconfig" \
+# Note that STAGING_DIR is being used here!
+                --disable-static \
+        )
+        touch $@
+
+So the host pkgconfig will pick up any libraries we have installed in
+staging dir, in this case it detects cairo png support that does not
+exist. Does anyone have any ideas how we can work around this?
+
+There doesn't seem to be any way to override the configure time
+pkgconfig path at runtime. Perhaps we need a new type of host
+pkgconfig that really is for host libraries?
