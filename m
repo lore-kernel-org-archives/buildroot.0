@@ -1,29 +1,32 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 24 Aug 2009 22:41:03 +0200
-Subject: [Buildroot] CramFS + SquashFS
-In-Reply-To: <26fbce020908240822l7ef7d181mafdb04f577651bb6@mail.gmail.com>
-	(Luciano Greiner's message of "Mon\,
-	24 Aug 2009 12\:22\:12 -0300")
-References: <26fbce020908240822l7ef7d181mafdb04f577651bb6@mail.gmail.com>
-Message-ID: <87ws4tndwg.fsf@macbook.be.48ers.dk>
+Date: Mon, 24 Aug 2009 22:59:16 +0200
+Subject: [Buildroot] Buildroot and OpenEmbedded
+In-Reply-To: <5f2b60908130604i7175f89h533d1b8f8444e60f@mail.gmail.com>
+	(=?utf-8?Q?=22Bj=C3=B8rn?= Forsman"'s message of "Thu\, 13 Aug 2009
+	15\:04\:39 +0200")
+References: <5f2b60908130604i7175f89h533d1b8f8444e60f@mail.gmail.com>
+Message-ID: <87skfhnd23.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Luciano" == Luciano Greiner <luciano.greiner@gmail.com> writes:
+>>>>> "Bj?rn" == Bj?rn Forsman <bjorn.forsman@gmail.com> writes:
 
- Luciano> Hello.
- Luciano>    I'm doing a custom build for a set-top box. The Dreambox device
- Luciano> uses a CramFS image to hold kernel image and bootloader, and a
- Luciano> squashfs image containing the root file system.
- Luciano> How do i create these separete images using Buildroot?
+Hi,
 
-That's not supported in BR. The easiest option is either to build
-kernel+bootloader+cramfs outside buildroot and just use the squashfs
-target, or use the tarball target and split up the content in
-cramfs+squashfs outside buildroot.
+ Bj?rn> What do you guys think? What does Buildroot provide that OE
+ Bj?rn> does not?  And another thing: could/should the two projects be
+ Bj?rn> merged?
+
+As several people already mentioned, BR is located elsewhere than OE
+on the feature/complexity curve. It is a smaller and (imho atleast)
+simpler system, which is optimized for small embedded systems, rather
+than PDA-style devices, but it clearly doesn't have as many
+packages/features as OE.
+
+So it all depends on your requirements, like always.
 
 -- 
 Bye, Peter Korsgaard
