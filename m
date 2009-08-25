@@ -1,44 +1,37 @@
-From: ccku <ccku1025@gmail.com>
-Date: Tue, 25 Aug 2009 18:36:16 +0800
-Subject: [Buildroot] buildroot for arm with nommu
-Message-ID: <90a1645d0908250336o34a0bc45lcf0d9b8a949e01a1@mail.gmail.com>
+From: Jean-Christian de Rivaz <jc@eclis.ch>
+Date: Tue, 25 Aug 2009 12:44:44 +0200
+Subject: [Buildroot] Buildroot and OpenEmbedded
+In-Reply-To: <5f2b60908250214p357b20d5q1de520d50ec2c1fb@mail.gmail.com>
+References: <5f2b60908130604i7175f89h533d1b8f8444e60f@mail.gmail.com>	<87skfhnd23.fsf@macbook.be.48ers.dk>
+	<5f2b60908250214p357b20d5q1de520d50ec2c1fb@mail.gmail.com>
+Message-ID: <4A93C09C.4020901@eclis.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi,
+Bj?rn Forsman a ?crit :
+> Funny, nobody has commented the "OE+BR merge" I mentioned. Am I the only one
+> dreaming of a BR with its easy configuration combined with the package
+> set provided
+> by OE? But I guess the OE bitbake tool and *.bb files makes a merge
+> impossible...
 
-I'm using buildroot try to build a rootfile. (buildroot-2009.08-rc2)
-My ARM cpu is nommu, but I can't get the rootfile as BFLT format, it always
-generate ELF format,
+A possible way: Make the BR configuration tool generate the 
+corresponding OE configuration for the BR supported subsets.
 
-Thanks for you help in advance.
+A better way: Create a sweet OE configuration tool, capable to make BR 
+obsolete in term of user experience and system performance (size, speed, 
+etc...)
 
-the following is the basic setting
+In the long term, even OE will face concurrence from even better concept 
+more closely related to the main current distributions. Such candidates 
+could be EmDebian or the future Debian Multiarch. ScratchBox have gain 
+more and more attention too.
 
-%make menuconfig
-Target Architecture = arm
-Target Architecture Variant = generic_arm
-Target ABI = EABI
-ToolChain / [*] Enable elf2flt support
+Too many tools fragment the community. I also think that merging the 
+bests features from projects with very similar goal will be a benefit 
+for everyone in the long term.
 
-
-%make uclibc-menuconfig
-Target Architecture (arm)
-Target Architecture Features and Options
-    Target ABI (EABI)
-    Target Processor Type (Generic Arm)
-    Target File Format (STATIC FLAT)
-    Target Processor Endianness (Little Endian)
-     [ ] Target CPU has a memory management unit (MMU)
-     [*] Enable floating point number support
-     [ ]   Target CPU has a floating point unit (FPU)
-     [*]   Enable full C99 math library support
-     [ ]   Enable C99 Floating-point environment
-
-%make
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090825/cca1b0ea/attachment.htm>
+Jean-Christian de Rivaz
