@@ -1,57 +1,78 @@
 From: Will Newton <will.newton@gmail.com>
-Date: Tue, 25 Aug 2009 13:08:39 +0100
-Subject: [Buildroot] [PATCH] package/Makefile.autotools.in: Add
-	$(PKG)_AUTORECONF_OPT variable.
-Message-ID: <87a5b0800908250508n6e9e23a7q2de0a1da16c26ea8@mail.gmail.com>
+Date: Tue, 25 Aug 2009 13:09:22 +0100
+Subject: [Buildroot] [PATCH] package/Makefile.in: Use appropriate paths for
+	host pkg-config.
+Message-ID: <87a5b0800908250509u68a0fb05l80cafbfc6784ba97@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Allow options to be passed to the autoreconf script if necessary.
+PKG_CONFIG_PATH adds a path to the pkg-config search path, but this is not
+enough when we are building host tools - the host pkg-config default path
+is still used, and this will pick up .pc files in the staging_dir tree.
+
+PKG_CONFIG_LIBDIR overrides the pkg-config default path and ensures only
+host .pc files are found. This fixes a pango build failure when building
+for the host with cairo PNG support enabled.
 
 Signed-off-by: Will Newton <will.newton@gmail.com>
 ---
- package/Makefile.autotools.in |    5 ++++-
- 1 files changed, 4 insertions(+), 1 deletions(-)
+ package/Makefile.in    |    9 ++++++---
+ package/pango/pango.mk |    2 +-
+ 2 files changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/package/Makefile.autotools.in b/package/Makefile.autotools.in
-index d6da7e8..c366bee 100644
---- a/package/Makefile.autotools.in
-+++ b/package/Makefile.autotools.in
-@@ -30,6 +30,8 @@
- #	list of (package) targets that must be built before foo
- # FOO_AUTORECONF [YES/NO, default NO]
- #	run <autoreconf> before <configure>
-+# FOO_AUTORECONF_OPT [default empty]
-+#	arguments passed to the <autoreconf> script
- # FOO_LIBTOOL_PATCH [YES/NO, default YES]
- #	Do you want the standard buildroot patch applied to ltmain.sh? (libtool)
- # FOO_USE_CONFIG_CACHE [YES/NO default $(BR2_CONFIG_CACHE)]
-@@ -225,7 +227,7 @@ endif
- # Running autoreconf
- $(BUILD_DIR)/%/.stamp_autoconfigured:
- 	$(call MESSAGE,"Running autoreconf")
--	$(Q)cd $(@D)/$($(PKG)_SUBDIR) && $(AUTORECONF)
-+	$(Q)cd $(@D)/$($(PKG)_SUBDIR) && $(AUTORECONF) $($(PKG)_AUTORECONF_OPT)
- # if the package uses libtool, patch it for cross-compiling in buildroot
- 	$(Q)if test "$($(PKG)_LIBTOOL_PATCH)" = "YES"; then \
- 		for i in `find $(@D)/$($(PKG)_SUBDIR) -name ltmain.sh`; do \
-@@ -329,6 +331,7 @@ $(2)_SITE			?= \
- 	http://$$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/$(1)
- $(2)_DEPENDENCIES		?=
- $(2)_AUTORECONF			?= NO
-+$(2)_AUTORECONF_OPT		?=
- $(2)_LIBTOOL_PATCH		?= YES
- $(2)_USE_CONFIG_CACHE   ?= $(if $(BR2_CONFIG_CACHE),YES,NO)
- $(2)_CONF_ENV			?=
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 0829e8f..5f017a7 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -243,7 +243,7 @@ TARGET_CONFIGURE_OPTS=PATH=$(TARGET_PATH) \
+ 		DEFAULT_LINKER="$(TARGET_LD)" \
+ 		PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)" \
+ 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+-		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig$(PKG_CONFIG_PATH)" \
++		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig:$(PKG_CONFIG_PATH)" \
+ 		STAGING_DIR="$(STAGING_DIR)"
+
+ TARGET_CONFIGURE_ENV=\
+@@ -288,9 +288,12 @@ HOST_CONFIGURE_OPTS=PATH=$(HOST_PATH) \
+ 		ORIGINAL_NM_FOR_TARGET="$(TARGET_NM)" \
+ 		ORIGINAL_OBJDUMP_FOR_TARGET="$(TARGET_OBJDUMP)" \
+ 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+-		PKG_CONFIG_PATH="$(HOST_DIR)/usr/lib/pkgconfig$(PKG_CONFIG_PATH)"
++		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig"
++
++HOST_MAKE_ENV=PATH=$(HOST_PATH) \
++		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
++		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig"
+
+-HOST_MAKE_ENV=PATH=$(HOST_PATH)
+
+ #######################################################################
+ # settings we need to pass to configure
+diff --git a/package/pango/pango.mk b/package/pango/pango.mk
+index 2bcebf3..712fb1f 100644
+--- a/package/pango/pango.mk
++++ b/package/pango/pango.mk
+@@ -91,7 +91,7 @@ $(STAMP_DIR)/host_pango_configured:
+$(STAMP_DIR)/host_pango_unpacked $(STAMP_DIR
+ 	touch $@
+
+ $(STAMP_DIR)/host_pango_compiled: $(STAMP_DIR)/host_pango_configured
+-	$(HOST_MAKE_ENV)
+PKG_CONFIG_PATH="$(HOST_DIR)/usr/lib/pkgconfig$(PKG_CONFIG_PATH)"
+$(MAKE) -C $(PANGO_HOST_DIR)
++	$(HOST_MAKE_ENV) $(MAKE) -C $(PANGO_HOST_DIR)
+ 	touch $@
+
+ $(STAMP_DIR)/host_pango_installed: $(STAMP_DIR)/host_pango_compiled
 -- 
 1.5.5.2
 -------------- next part --------------
 A non-text attachment was scrubbed...
-Name: 0002-package-Makefile.autotools.in-Add-PKG-_AUTORECONF.patch
+Name: 0003-package-Makefile.in-Use-appropriate-paths-for-host.patch
 Type: text/x-patch
-Size: 1796 bytes
+Size: 2555 bytes
 Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090825/7e82ca26/attachment.bin>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090825/223af9e1/attachment.bin>
