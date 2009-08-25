@@ -1,9 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 25 Aug 2009 12:24:37 +0000 (UTC)
-Subject: [Buildroot] [Bug 575] wenkit: Buildroot Libtool Patch Fails
+Date: Tue, 25 Aug 2009 12:26:03 +0000 (UTC)
+Subject: [Buildroot] [Bug 575] webkit: Buildroot Libtool Patch Fails
 In-Reply-To: <bug-575-163@https.bugs.busybox.net/>
 References: <bug-575-163@https.bugs.busybox.net/>
-Message-ID: <20090825122437.97E64776D3@busybox.osuosl.org>
+Message-ID: <20090825122603.3DA9E776C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,8 +17,8 @@ Will Newton <will.newton@gmail.com> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-            Summary|Buildroot Libtool Patch     |wenkit: Buildroot Libtool
-                   |Fails                       |Patch Fails
+            Summary|wenkit: Buildroot Libtool   |webkit: Buildroot Libtool
+                   |Patch Fails                 |Patch Fails
 
 
 
