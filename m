@@ -1,33 +1,32 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 26 Aug 2009 09:43:05 +0200
-Subject: [Buildroot] how to build code checked out from a version
-	control system
-In-Reply-To: <1251195956.10767.16.camel@sven> (Sven Neumann's message of "Tue\,
-	25 Aug 2009 12\:25\:56 +0200")
-References: <1251195956.10767.16.camel@sven>
-Message-ID: <87ocq3m35i.fsf@macbook.be.48ers.dk>
+Date: Wed, 26 Aug 2009 09:45:12 +0200
+Subject: [Buildroot] CramFS + SquashFS
+In-Reply-To: <26fbce020908251102n22cca9f7kd007d83da0cde199@mail.gmail.com>
+	(Luciano Greiner's message of "Tue\,
+	25 Aug 2009 15\:02\:47 -0300")
+References: <26fbce020908240822l7ef7d181mafdb04f577651bb6@mail.gmail.com>
+	<87ws4tndwg.fsf@macbook.be.48ers.dk>
+	<26fbce020908251102n22cca9f7kd007d83da0cde199@mail.gmail.com>
+Message-ID: <87k50rm31z.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
+>>>>> "Luciano" == Luciano Greiner <luciano.greiner@gmail.com> writes:
 
- Sven> Hi,
- Sven> we have some code there that lives in a Bazaar repository and that we
- Sven> would like to build from within our buildroot setup. I have created
- Sven> buildroot packages for these modules, but somehow I ended up with lots
- Sven> of hacks and things are still not working properly. I wonder if there is
- Sven> some example or documentation that I should have a look at. Is anyone
- Sven> doing something similar and could show me how to do this properly?
+ Luciano> Hello Peter.
+ Luciano>   Thanks for your answer. I think it's better to compile kernel and
+ Luciano> create filesystems out of BR too.
+ Luciano> Is there any way to easily export BR cross env variables to my own
+ Luciano> command line shell to make it?
 
-What exactly goes wrong? It's normally just a matter of providing a
-custom source step doing the checkout.
+What exactly do you mean? Normally it's just a matter of adding
+build_*/staging_dir/usr/bin to your path.
 
-See the tremor handling in package/multimedia/libvorbis/libvorbis.mk
-for an example. You could argue about the usefullness of creating a
-dated tarball of the checkout or not.
+See http://buildroot.net/buildroot.html#using_toolchain for more
+details.
 
 -- 
 Bye, Peter Korsgaard
