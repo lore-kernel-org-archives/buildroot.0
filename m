@@ -1,7 +1,9 @@
-From: H Hartley Sweeten <hartleys@visionengravers.com>
-Date: Wed, 26 Aug 2009 12:45:05 -0400
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 26 Aug 2009 22:44:34 +0200
 Subject: [Buildroot] Kernel panic - not syncing: Attempted to kill init!
-In-Reply-To: <20090825190153.GA29206@mx.loc>
+In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE190901C55435@mi8nycmail19.Mi8.com>
+	(H. Hartley Sweeten's message of "Wed\,
+	26 Aug 2009 12\:45\:05 -0400")
 References: <BD79186B4FD85F4B8E60E381CAEE190901BEA738@mi8nycmail19.Mi8.com>
 	<20090822011906.2dd045fc@surf>
 	<BD79186B4FD85F4B8E60E381CAEE19091E7909@mi8nycmail19.Mi8.com>
@@ -13,55 +15,27 @@ References: <BD79186B4FD85F4B8E60E381CAEE190901BEA738@mi8nycmail19.Mi8.com>
 	<BD79186B4FD85F4B8E60E381CAEE190901C551E6@mi8nycmail19.Mi8.com>
 	<BD79186B4FD85F4B8E60E381CAEE190901C552DE@mi8nycmail19.Mi8.com>
 	<20090825190153.GA29206@mx.loc>
-Message-ID: <BD79186B4FD85F4B8E60E381CAEE190901C55435@mi8nycmail19.Mi8.com>
+	<BD79186B4FD85F4B8E60E381CAEE190901C55435@mi8nycmail19.Mi8.com>
+Message-ID: <87fxbemhjh.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tuesday, August 25, 2009 12:02 PM, Bernhard Reutner-Fischer wrote:
-> On Tue, Aug 25, 2009 at 01:48:21PM -0400, H Hartley Sweeten wrote:
->> Thomas,
->>
->> I found this FAQ on the CodeSourcery website.
->> 
->> Installing CodeSourcery Run-time Libraries
->> http://www.codesourcery.com/sgpp/lite/arm/portal/kbentry48
->> 
->> Would this simplify copying the external toolchain libraries
->> to the target rootfs?
->> 
->> What was the original problem with using the external toolchain
->> from it's installed location?  Why do the files need to be
->> copied to $(STAGING_DIR) and the flag "--sysroot $(STAGING_DIR)"
->> added to the TARGET_*FLAGS.
->> 
->> If the external toolchain is used from the install location I
->> think the -march= option will correctly setup the library paths
->> and allow the multilib toolchain to work correctly.  I believe
->> this is how the kernel build works.
-> 
-> except that the kernel won't link against those helper-libs as opposed
-> to userspace which will need some of those libs on the rootfs.
+>>>>> "H" == H Hartley Sweeten <hartleys@visionengravers.com> writes:
 
-I agree that the kernel does not link against the helper-libs in the
-toolchain.
+Hi,
 
-I also agree that those libs need to be copied to the rootfs.
+ H> What I don't understand is why they need to be copied to $(STAGING_DIR)
+ H> and then needing to re-direct the --sysroot to them.  The only comment
+ H> about this in ext-tool.mk says:
 
-What I don't understand is why they need to be copied to $(STAGING_DIR)
-and then needing to re-direct the --sysroot to them.  The only comment
-about this in ext-tool.mk says:
+I didn't write the external toolchain support, but I guess it's
+because the individual packages wants to install their libraries /
+headers, and it's a lot simpler (E.G. similar to the internal
+toolchain) if everything is together in a single directory tree
+instead of 2 trees.
 
-#  3. Copy the libraries and headers to the staging directory. This
-#  will allow all further calls to gcc to be made using --sysroot
-#  $(STAGING_DIR), which greatly simplifies the compilation of the
-#  packages when using external toolchains. So in the end, only the
-#  cross-compiler binaries remains external, all libraries and headers
-#  are imported into the Buildroot tree.
-
-The question is "how" does this actually simplify the compilation?
-
-Thanks,
-Hartley
+-- 
+Bye, Peter Korsgaard
