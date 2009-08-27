@@ -1,58 +1,73 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Thu, 27 Aug 2009 09:49:57 +0200
-Subject: [Buildroot] Kernel panic - not syncing: Attempted to kill init!
-In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE190901C554E3@mi8nycmail19.Mi8.com>
-References: <BD79186B4FD85F4B8E60E381CAEE190901BEA86D@mi8nycmail19.Mi8.com>
-	<20090823081702.445b1b5a@surf>
-	<BD79186B4FD85F4B8E60E381CAEE190901C550E7@mi8nycmail19.Mi8.com>
-	<BD79186B4FD85F4B8E60E381CAEE190901C55101@mi8nycmail19.Mi8.com>
-	<BD79186B4FD85F4B8E60E381CAEE190901C551E6@mi8nycmail19.Mi8.com>
-	<BD79186B4FD85F4B8E60E381CAEE190901C552DE@mi8nycmail19.Mi8.com>
-	<20090825190153.GA29206@mx.loc>
-	<BD79186B4FD85F4B8E60E381CAEE190901C55435@mi8nycmail19.Mi8.com>
-	<87fxbemhjh.fsf@macbook.be.48ers.dk>
-	<BD79186B4FD85F4B8E60E381CAEE190901C554E3@mi8nycmail19.Mi8.com>
-Message-ID: <20090827074957.GB19075@mx.loc>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 27 Aug 2009 08:34:15 +0000 (UTC)
+Subject: [Buildroot] [Bug 559] mesa3d build fails
+In-Reply-To: <bug-559-163@https.bugs.busybox.net/>
+References: <bug-559-163@https.bugs.busybox.net/>
+Message-ID: <20090827083415.808D877764@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Aug 26, 2009 at 05:50:55PM -0400, H Hartley Sweeten wrote:
->diff a/toolchain/external-toolchain/ext-tool.mk b/toolchain/external-toolchain/ext-tool.mk
->--- a/toolchain/external-toolchain/ext-tool.mk
->+++ b/toolchain/external-toolchain/ext-tool.mk
->@@ -205,12 +205,26 @@
-> EXTERNAL_LIBS+=libstdc++.so
-> endif
+https://bugs.busybox.net/show_bug.cgi?id=559
+
+
+
+
+
+--- Comment #2 from Simon Pasch <fpasch@googlemail.com>  2009-08-27 08:34:14 UTC ---
+(In reply to comment #1)
+> Hmm, could you post the entire cmdline? It sounds to me as if -sysroot is
+> missing, otherwise it should look in STAGING_DIR/usr/lib automatically.
 > 
->-SYSROOT_DIR=$(shell LANG=C $(TARGET_CC) -v 2>&1 | grep ^Configured | tr " " "\n" | grep -- "--with-sysroot" | cut -f2 -d=)
->+# We need to pass the -march= option in order to get the correct
->+# multilib sysroot with CROSS-gcc -print-sysroot.
->+ifneq ($(CC_TARGET_ARCH_),)
->+SYSROOT_CFLAGS=-march=$(CC_TARGET_ARCH_)
->+endif
 
-Not that i'd care, but you should always check against (and of course
-use) the full set of flags anyway.
 
->Every time I press Enter after that I get:
->
->sh (441): undefined instruction: pc=0007514c
->Code: e1530001 9a00006f e1110002 0a000071 (e16f2f13)
->
->Please press Enter to activate this console.
->
->I'm not sure how to figure out what the undefined instruction was but my
->guess is it's an ARMv5T instruction.  It seems like something in the busybox
->build did not honor the TARGET_CFLAGS that were setup for my build.
->
->TARGET_CFLAGS= -Os -mtune=arm920t -march=armv4t -mabi=aapcs-linux -msoft-float -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 --sysroot /home/bigguiness/buildroot/build_arm/staging_dir/
->
->Does anyone have any ideas on this?
+/home/test/x-tools/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-gcc -c -I.
+-I../../../include -I../../../include/GL/internal -I../../../src/mesa/main
+-I../../../src/mesa/glapi `pkg-config --cflags libdrm`  -Wall
+-Wmissing-prototypes -std=c99 -ffast-math -Os -pipe -Os  --sysroot
+/home/test/buildroot-2009.08-rc3/build_i686/staging_dir/ -fPIC -m32
+-D_POSIX_SOURCE -D_POSIX_C_SOURCE=199309L -D_SVID_SOURCE -D_BSD_SOURCE
+-D_GNU_SOURCE -DPTHREADS -DUSE_EXTERNAL_DXTN_LIB=1 -DIN_DRI_DRIVER
+-DGLX_DIRECT_RENDERING -DGLX_INDIRECT_RENDERING -DHAVE_ALIAS
+-DHAVE_POSIX_MEMALIGN -DUSE_X86_ASM -DUSE_MMX_ASM -DUSE_3DNOW_ASM -DUSE_SSE_ASM
+-fno-strict-aliasing -DXF86VIDMODE -D_REENTRANT -UIN_DRI_DRIVER
+-DDEFAULT_DRIVER_DIR=\"/usr/local/lib/dri\" ../../../src/mesa/glapi/glthread.c
+-o ../../../src/mesa/glapi/glthread.o
+/home/test/x-tools/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-gcc -c -I.
+-I../../../include -I../../../include/GL/internal -I../../../src/mesa/main
+-I../../../src/mesa/glapi `pkg-config --cflags libdrm`  -Wall
+-Wmissing-prototypes -std=c99 -ffast-math -Os -pipe -Os  --sysroot
+/home/test/buildroot-2009.08-rc3/build_i686/staging_dir/ -fPIC -m32
+-D_POSIX_SOURCE -D_POSIX_C_SOURCE=199309L -D_SVID_SOURCE -D_BSD_SOURCE
+-D_GNU_SOURCE -DPTHREADS -DUSE_EXTERNAL_DXTN_LIB=1 -DIN_DRI_DRIVER
+-DGLX_DIRECT_RENDERING -DGLX_INDIRECT_RENDERING -DHAVE_ALIAS
+-DHAVE_POSIX_MEMALIGN -DUSE_X86_ASM -DUSE_MMX_ASM -DUSE_3DNOW_ASM -DUSE_SSE_ASM
+-fno-strict-aliasing -DXF86VIDMODE -D_REENTRANT -UIN_DRI_DRIVER
+-DDEFAULT_DRIVER_DIR=\"/usr/local/lib/dri\"  ../../../src/mesa/x86/glapi_x86.S
+-o ../../../src/mesa/x86/glapi_x86.o
+/bin/sh ../../../bin/mklib -o GL -linker
+'/home/test/x-tools/i686-unknown-linux-gnu/bin/i686-unknown-linux-gnu-gcc'
+-ldflags '' \
+                -major 1 -minor 2  \
+                -install ../../../lib -id /usr/local/lib/libGL.1.dylib \
+                 -lX11 -lXext -lXxf86vm -lXdamage -lXfixes -lm -lpthread -ldl
+`pkg-config --libs libdrm` glcontextmodes.o clientattrib.o compsize.o eval.o
+glxcmds.o glxcurrent.o glxext.o glxextensions.o indirect.o indirect_init.o
+indirect_size.o indirect_window_pos.o indirect_texture_compression.o
+indirect_transpose_matrix.o indirect_vertex_array.o indirect_vertex_program.o
+pixel.o pixelstore.o render2.o renderpix.o single2.o singlepix.o vertarr.o
+xfont.o glx_pbuffer.o glx_query.o drisw_glx.o dri_common.o dri_glx.o XF86dri.o
+glxhash.o ../../../src/mesa/main/dispatch.o ../../../src/mesa/glapi/glapi.o
+../../../src/mesa/glapi/glthread.o ../../../src/mesa/x86/glapi_x86.o
+mklib: Making Linux shared library:  libGL.so.1.2
+/home/test/x-tools/i686-unknown-linux-gnu/lib/gcc/i686-unknown-linux-gnu/4.3.2/../../../../i686-unknown-linux-gnu/bin/ld:
+cannot find -lX11
+collect2: ld returned 1 exit status
 
-see above. Sounds most likely like an incorrectly used toolchain. I'd
-usually say that you should go bug the people who provide that
-toolchain (or use the internal toolchain ;), but i'm pretty sure that
-in this particular case you just use it incorrectly.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
