@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 27 Aug 2009 14:39:30 +0200
-Subject: [Buildroot] [git commit master] u-boot: mark old 2008.10 version as
-	deprecated
-Message-ID: <20090827124024.6B23277691@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] project: saveconfig/getconfig
+	doesn't need conf
+Message-ID: <20090827124024.33B517770A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,25 +10,44 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1af58aff7222e88a844a2c8f0f9121b99321dd83
+commit: http://git.buildroot.net/buildroot/commit/?id=e5413e83d8d18fa67d1fc1e586d08d70c379b7d9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+And get rid of unused debugging code while we're at it.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- target/u-boot/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ project/project.mk |   13 ++-----------
+ 1 files changed, 2 insertions(+), 11 deletions(-)
 
-diff --git a/target/u-boot/Config.in b/target/u-boot/Config.in
-index a4994c4..a62e851 100644
---- a/target/u-boot/Config.in
-+++ b/target/u-boot/Config.in
-@@ -30,6 +30,7 @@ config BR2_TARGET_UBOOT_2009_01
+diff --git a/project/project.mk b/project/project.mk
+index 26c2ffc..3074eff 100644
+--- a/project/project.mk
++++ b/project/project.mk
+@@ -19,7 +19,7 @@ $(TARGET_DIR)/etc/br-version: .config
+ 	mkdir -p $(TARGET_DIR)/etc
+ 	echo $(BR2_VERSION)$(shell $(TOPDIR)/scripts/setlocalversion) >$@
  
- config BR2_TARGET_UBOOT_2008_10
- 	bool "u-boot-2008.10"
-+	depends on BR2_DEPRECATED
+-saveconfig: $(CONFIG)/conf
++saveconfig:
+ 	mkdir -p $(LOCAL)/$(PROJECT)
+ 	-cp .config $(PROJECT_FILE)
+ 	if [ -f $(LINUX26_DIR)/.config ]; then \
+@@ -48,14 +48,5 @@ saveconfig: $(CONFIG)/conf
+ 			$(LOCAL)/$(PROJECT)/u-boot/$(PROJECT).h; \
+ 	fi
  
- config BR2_TARGET_UBOOT_1_3_4
- 	bool "u-boot-1.3.4"
+-getconfig: $(CONFIG)/conf
++getconfig:
+ 	-cp $(LOCAL)/$(PROJECT)/$(PROJECT).config .config
+-
+-vendor-dbg:
+-	@echo VENDOR_SITE=$(BR2_VENDOR_SITE)
+-	@echo VENDOR_SUFFIX=$(BR2_VENDOR_SUFFIX)
+-	@echo VENDOR_BINUTILS_RELEASE=$(BR2_VENDOR_BINUTILS_RELEASE)
+-	@echo VENDOR_GCC_RELEASE=$(BR2_VENDOR_GCC_RELEASE)
+-	@echo VENDOR_UCLIBC_RELEASE=$(BR2_VENDOR_UCLIBC_RELEASE)
+-	@echo VENDOR_GDB_RELEASE=$(BR2_VENDOR_GDB_RELEASE)
+-	@echo VENDOR_PATCH_DIR=$(BR2_VENDOR_PATCH_DIR)
 -- 
 1.6.3.3
