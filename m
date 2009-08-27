@@ -1,53 +1,48 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 27 Aug 2009 14:39:30 +0200
-Subject: [Buildroot] [git commit master] project: saveconfig/getconfig
-	doesn't need conf
-Message-ID: <20090827124024.33B517770A@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 27 Aug 2009 13:44:48 +0000 (UTC)
+Subject: [Buildroot] [Bug 573] BR2_DEFAULT_KERNEL_HEADERS is undefined with
+ external toolchain
+In-Reply-To: <bug-573-163@https.bugs.busybox.net/>
+References: <bug-573-163@https.bugs.busybox.net/>
+Message-ID: <20090827134448.AC48B77744@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=573
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e5413e83d8d18fa67d1fc1e586d08d70c379b7d9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-And get rid of unused debugging code while we're at it.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- project/project.mk |   13 ++-----------
- 1 files changed, 2 insertions(+), 11 deletions(-)
 
-diff --git a/project/project.mk b/project/project.mk
-index 26c2ffc..3074eff 100644
---- a/project/project.mk
-+++ b/project/project.mk
-@@ -19,7 +19,7 @@ $(TARGET_DIR)/etc/br-version: .config
- 	mkdir -p $(TARGET_DIR)/etc
- 	echo $(BR2_VERSION)$(shell $(TOPDIR)/scripts/setlocalversion) >$@
- 
--saveconfig: $(CONFIG)/conf
-+saveconfig:
- 	mkdir -p $(LOCAL)/$(PROJECT)
- 	-cp .config $(PROJECT_FILE)
- 	if [ -f $(LINUX26_DIR)/.config ]; then \
-@@ -48,14 +48,5 @@ saveconfig: $(CONFIG)/conf
- 			$(LOCAL)/$(PROJECT)/u-boot/$(PROJECT).h; \
- 	fi
- 
--getconfig: $(CONFIG)/conf
-+getconfig:
- 	-cp $(LOCAL)/$(PROJECT)/$(PROJECT).config .config
--
--vendor-dbg:
--	@echo VENDOR_SITE=$(BR2_VENDOR_SITE)
--	@echo VENDOR_SUFFIX=$(BR2_VENDOR_SUFFIX)
--	@echo VENDOR_BINUTILS_RELEASE=$(BR2_VENDOR_BINUTILS_RELEASE)
--	@echo VENDOR_GCC_RELEASE=$(BR2_VENDOR_GCC_RELEASE)
--	@echo VENDOR_UCLIBC_RELEASE=$(BR2_VENDOR_UCLIBC_RELEASE)
--	@echo VENDOR_GDB_RELEASE=$(BR2_VENDOR_GDB_RELEASE)
--	@echo VENDOR_PATCH_DIR=$(BR2_VENDOR_PATCH_DIR)
+
+--- Comment #8 from Bernhard Reutner-Fischer <aldot@uclibc.org>  2009-08-27 13:44:47 UTC ---
+(In reply to comment #7)
+> (In reply to comment #6)
+> > This shouldn't happend with the official BR tree, as we don't display the
+> > BR2_KERNEL_LINUX option when an external toolchain is used.
+> 
+> Indeed. The official tree simply skips kernel compilation or, when
+> BR2_KERNEL_LINUX_ADVANCED
+> has been specified, allows specification of the desired linux version, too.
+
+My tree does not support external toolchains, just FYI.
+> 
+> > Is there any specific reason why you are using Bernhard's tree instead of the
+> > official one?
+> 
+> I was searching for glibc-based toolchain support, which sadly occurs to be not
+> complete in Bernhard's
+
+I only added stub-functionality for the buildroot parts to show people how
+i would implement it cleanly.
+
+Let me note that if you want glibc and an external toolchain then i personally
+would use gentoo or some such.
+
+
 -- 
-1.6.3.3
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
