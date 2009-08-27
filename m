@@ -1,26 +1,30 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 27 Aug 2009 17:29:20 +0200
-Subject: [Buildroot] Linux Kernel 2.6.30 for ARM
-In-Reply-To: <4A96A275.5090909@ethertek.ca> (Dan Pattison's message of "Thu\,
-	27 Aug 2009 08\:12\:53 -0700")
-References: <4A96A275.5090909@ethertek.ca>
-Message-ID: <87iqg9ff73.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 27 Aug 2009 15:56:00 +0000 (UTC)
+Subject: [Buildroot] [Bug 527] misc fixes for dnsmasq package
+In-Reply-To: <bug-527-163@https.bugs.busybox.net/>
+References: <bug-527-163@https.bugs.busybox.net/>
+Message-ID: <20090827155600.B2E0477714@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Dan" == Dan Pattison <dan.pattison@ethertek.ca> writes:
+https://bugs.busybox.net/show_bug.cgi?id=527
 
- Dan> Hello Build Root Maintainers,
- Dan> Will ULF's git tree make it into the newest buildroot release? I would
- Dan> like to take kernel 2.6.30 for a spin.
 
-I haven't seen any pull requests from Ulf, and as the 2009.08 release is
-scheduled for this coming weekend I strongly doubt it.
 
-Ulf?
+
+
+--- Comment #13 from Daniele Salvatore Albano <d.albano@gmail.com>  2009-08-27 15:55:59 UTC ---
+Sorry for the long delay, but i got some troubles with my git copy and being
+full of work i didn't have the time to fix. I just dropping all the stuff
+making a copy of my old tree and reappling patches.
+
+I hope to send patches for this evening
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
