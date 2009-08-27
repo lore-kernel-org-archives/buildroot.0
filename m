@@ -1,48 +1,105 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 27 Aug 2009 13:44:48 +0000 (UTC)
-Subject: [Buildroot] [Bug 573] BR2_DEFAULT_KERNEL_HEADERS is undefined with
- external toolchain
-In-Reply-To: <bug-573-163@https.bugs.busybox.net/>
-References: <bug-573-163@https.bugs.busybox.net/>
-Message-ID: <20090827134448.AC48B77744@busybox.osuosl.org>
+From: Jonathan Dumaresq <jdumaresq@cimeq.qc.ca>
+Date: Thu, 27 Aug 2009 10:51:18 -0400
+Subject: [Buildroot] gmp error with git version
+Message-ID: <4A969D66.1040506@cimeq.qc.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=573
+Hi all,
+
+I'm trying the git version of buildroot for my atngw100 and I got this 
+error.
+
+I did
+
+make atngw100_defconfig
+make
 
 
+bzcat /home/dumarjo/projects/buildroot/dl/gmp-4.2.4.tar.bz2 | tar -C 
+/home/dumarjo/projects/buildroot/toolchain_build_avr32   -xf -
+toolchain/patch-kernel.sh 
+/home/dumarjo/projects/buildroot/toolchain_build_avr32/gmp-4.2.4 
+package/gmp/ \*.patch
+cp -f package/gnuconfig/config.sub package/gnuconfig/config.guess 
+/home/dumarjo/projects/buildroot/toolchain_build_avr32/gmp-4.2.4
+touch 
+/home/dumarjo/projects/buildroot/toolchain_build_avr32/gmp-4.2.4/.unpacked
+mkdir -p 
+/home/dumarjo/projects/buildroot/toolchain_build_avr32/gmp-4.2.4-host
+(cd 
+/home/dumarjo/projects/buildroot/toolchain_build_avr32/gmp-4.2.4-host; 
+rm -rf config.cache; \
+                
+PATH=/home/dumarjo/projects/buildroot/build_avr32/host_dir/bin:/home/dumarjo/projects/buildroot/build_avr32/host_dir/usr/bin:/home/dumarjo/projects/C2T3/buildroot-avr32-v2.3.0-1/buildroot-avr32-v2.3.0/build_avr32/staging_dir/usr/bin: 
+/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games 
+AR="/usr/bin/ar" AS="/usr/bin/as" LD="/usr/bin/ld 
+-L/home/dumarjo/projects/buildroot/build_avr32/host_dir/lib 
+-L/home/dumarjo/projects/buildroot/build_avr32/host_dir/usr/lib" 
+NM="/usr/bin/nm" CC="/usr/bin/gcc 
+-I/home/dumarjo/projects/buildroot/build_avr32/host_dir/include 
+-I/home/dumarjo/projects/buildroot/build_avr32/host_dir/usr/include" 
+GCC="/usr/bin/gcc 
+-I/home/dumarjo/projects/buildroot/build_avr32/host_dir/include 
+-I/home/dumarjo/projects/buildroot/build_avr32/host_dir/usr/include" 
+CXX="/usr/bin/g++ 
+-I/home/dumarjo/projects/buildroot/build_avr32/host_dir/include 
+-I/home/dumarjo/projects/buildroot/build_avr32/host_dir/usr/include" 
+CPP="/usr/bin/cpp 
+-I/home/dumarjo/projects/buildroot/build_avr32/host_dir/include 
+-I/home/dumarjo/projects/buildroot/build_avr32/host_dir/usr/include" 
+AR_FOR_BUILD="/usr/bin/ar" AS_FOR_BUILD="/usr/bin/as" 
+CC_FOR_BUILD="/usr/bin/gcc" GCC_FOR_BUILD="/usr/bin/gcc" 
+CXX_FOR_BUILD="/usr/bin/g++" LD_FOR_BUILD="/usr/bin/ld" 
+FC_FOR_BUILD="/usr/bin/ld" 
+CFLAGS_FOR_BUILD="-I/home/dumarjo/projects/buildroot/build_avr32/host_dir/include 
+-I/home/dumarjo/projects/buildroot/build_avr32/host_dir/usr/include" 
+CXXFLAGS_FOR_BUILD="-I/home/dumarjo/projects/buildroot/build_avr32/host_dir/include 
+-I/home/dumarjo/projects/buildroot/build_avr32/host_dir/usr/include" 
+LDFLAGS_FOR_BUILD="-L/home/dumarjo/projects/buildroot/build_avr32/host_dir/lib 
+-L/home/dumarjo/projects/buildroot/build_avr32/host_dir/usr/lib" 
+FCFLAGS_FOR_BUILD="" 
+AR_FOR_TARGET="/home/dumarjo/projects/buildroot/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-ar" 
+AS_FOR_TARGET="/home/dumarjo/projects/buildroot/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-as" 
+CC_FOR_TARGET="/home/dumarjo/projects/buildroot/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-gcc" 
+LD_FOR_TARGET="/home/dumarjo/projects/buildroot/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-ld" 
+NM_FOR_TARGET="/home/dumarjo/projects/buildroot/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-nm" 
+RANLIB_FOR_TARGET="/home/dumarjo/projects/buildroot/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-ranlib" 
+STRIP_FOR_TARGET="/home/dumarjo/projects/buildroot/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-strip" 
+OBJCOPY_FOR_TARGET="/home/dumarjo/projects/buildroot/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-objcopy" 
+OBJDUMP_FOR_TARGET="/home/dumarjo/projects/buildroot/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-objdump" 
+DEFAULT_ASSEMBLER="/home/dumarjo/projects/buildroot/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-as" 
+DEFAULT_LINKER="/home/dumarjo/projects/buildroot/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-ld" 
+ORIGINAL_AS_FOR_TARGET="/home/dumarjo/projects/buildroot/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-as" 
+ORIGINAL_LD_FOR_TARGET="/home/dumarjo/projects/buildroot/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-ld" 
+ORIGINAL_NM_FOR_TARGET="/home/dumarjo/projects/buildroot/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-nm" 
+ORIGINAL_OBJDUMP_FOR_TARGET="/home/dumarjo/projects/buildroot/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-objdump" 
+PKG_CONFIG="/home/dumarjo/projects/buildroot/build_avr32/host_dir/usr/bin/pkg-config" 
+PKG_CONFIG_PATH="/home/dumarjo/projects/buildroot/build_avr32/host_dir/usr/lib/pkgconfig" 
+\
+                 \
+                
+/home/dumarjo/projects/buildroot/toolchain_build_avr32/gmp-4.2.4/configure \
+                
+--prefix="/home/dumarjo/projects/buildroot/toolchain_build_avr32/gmp" \
+                --build=i386-pc-linux-gnu \
+                --host=i386-pc-linux-gnu \
+                --disable-shared \
+                --enable-static \
+                 \
+        )
+/bin/bash: line 1: 
+/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games: 
+No such file or directory
+make: *** 
+[/home/dumarjo/projects/buildroot/toolchain_build_avr32/gmp-4.2.4-host/.configured] 
+Error 127
 
+I could not what file is missing.
 
+regards
 
---- Comment #8 from Bernhard Reutner-Fischer <aldot@uclibc.org>  2009-08-27 13:44:47 UTC ---
-(In reply to comment #7)
-> (In reply to comment #6)
-> > This shouldn't happend with the official BR tree, as we don't display the
-> > BR2_KERNEL_LINUX option when an external toolchain is used.
-> 
-> Indeed. The official tree simply skips kernel compilation or, when
-> BR2_KERNEL_LINUX_ADVANCED
-> has been specified, allows specification of the desired linux version, too.
-
-My tree does not support external toolchains, just FYI.
-> 
-> > Is there any specific reason why you are using Bernhard's tree instead of the
-> > official one?
-> 
-> I was searching for glibc-based toolchain support, which sadly occurs to be not
-> complete in Bernhard's
-
-I only added stub-functionality for the buildroot parts to show people how
-i would implement it cleanly.
-
-Let me note that if you want glibc and an external toolchain then i personally
-would use gentoo or some such.
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Jonathan
