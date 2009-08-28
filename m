@@ -1,32 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 28 Aug 2009 15:32:21 +0200
-Subject: [Buildroot] SDL_net target name
-In-Reply-To: <4A97928D.6070702@free.fr> (Julien Boibessot's message of "Fri\,
-	28 Aug 2009 10\:17\:17 +0200")
-References: <2d6a9f6f0908271429j91a36e9s2342c23762a8552@mail.gmail.com>
-	<4A97928D.6070702@free.fr>
-Message-ID: <87tyzsdpy2.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 28 Aug 2009 16:27:56 +0200
+Subject: [Buildroot] [git commit master] u-boot: mark old 2008.10
+	version as deprecated
+In-Reply-To: <20090828072354.38044247@hcegtvedt.norway.atmel.com>
+	(Hans-Christian Egtvedt's message of "Fri\,
+	28 Aug 2009 07\:23\:54 +0200")
+References: <20090827124024.6B23277691@busybox.osuosl.org>
+	<d6cda7730908271838qc80efdfj259e9bf1609f396e@mail.gmail.com>
+	<20090828072354.38044247@hcegtvedt.norway.atmel.com>
+Message-ID: <87ljl4dndf.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Julien" == Julien Boibessot <julien.boibessot@free.fr> writes:
+>>>>> "Hans-Christian" == Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> writes:
 
- Julien> Hi,
- Julien> Makefile target name to build SDL_net is "SDL_net" whereas all other
- Julien> SDL_xx extensions are "sdl_xx" (example: make sdl_image, make sdl_ttf,
- Julien> etc...).
- Julien> Moreover it seems that most other BR target are in lowercase.
+Hi,
 
- Julien> Is there any reason why SDL_net target should be an uppercase/lowercase
- Julien> mix ?
- Julien> Can you correct that for the coming release ? (I will soon propose
- Julien> patches that depend on sdl_xx and I don't want to add to some more
- Julien> "SDL_net" if it's not correct )
+ Hans-Christian> You're right, AVR32 triggered something in the generic
+ Hans-Christian> flash stuff.
 
-Not really, fixed in git - Thanks.
+ Hans-Christian> And it is still not fixed...
+
+Is this With 2009.06 or git?
+
+ U-Boot> saveenv
+ Hans-Christian> Saving Environment to Flash...
+ Hans-Christian> Error: start and/or end address not on sector boundary
+
+So noone has used u-boot on avr32 with flash since ~1 year? Strange.
+
+ Hans-Christian> I'll need to prod around for that.
+
+Ok, thanks for the heads up.
 
 -- 
 Bye, Peter Korsgaard
