@@ -1,33 +1,45 @@
-From: Raed Abu-Sanad <raedbenz@hotmail.com>
-Date: Fri, 28 Aug 2009 09:30:50 +0100
-Subject: [Buildroot] perl error????
-In-Reply-To: <mailman.145.1251447477.14877.buildroot@busybox.net>
-References: <mailman.145.1251447477.14877.buildroot@busybox.net>
-Message-ID: <BAY136-W22DFC10923DB693DA666B8CEF50@phx.gbl>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 28 Aug 2009 08:59:50 +0000 (UTC)
+Subject: [Buildroot] [Bug 583] New: build fails with external x86_64
+	toolchain
+Message-ID: <bug-583-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=583
 
-Hi,,
-i am getting this :
+           Summary: build fails with external x86_64 toolchain
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: trivial
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: is at eseco.de
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-/home/raed/work/buildroot-2009.05/build_i686/perl-5.8.8/ext/IPC/SysV/SysV.c
 
-/home/raed/work/buildroot-2009.05/toolchain_build_i686/bin/sed: can't read /home/raed/work/buildroot-2009.05/build_i686/perl-5.8.8/ext/IPC/SysV/SysV.c: No such file or directory
+buildroot 2009.08-rc3
 
-make: *** [/home/raed/work/buildroot-2009.05/build_i686/perl-5.8.8/.host_make_fixed] Error 2
+./toolchain/external-toolchain/ext-tool.mk
 
-the perl folder is there  but many files seem to be missing..
-why??
-thanks
+checks if 'lib/ld-linux.so.*' is present in the toolchain's sysroot. This is
+fine for x86 system, but this check fails for x86_64 systems and crosstool-ng
+toolchains.
+
+Here you have 'lib/ld-linux-x86-64.so.2 -> ld-2.9.so'.
+
+The check could/should be modified to 'lib/ld-linux*.so.*'
 
 
-_________________________________________________________________
-Windows Live Messenger: Thanks for 10 great years?enjoy free winks and emoticons.
-http://clk.atdmt.com/UKM/go/157562755/direct/01/
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090828/ab181e69/attachment.htm>
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
