@@ -1,66 +1,31 @@
-From: Daniele Salvatore Albano <d.albano@gmail.com>
-Date: Fri, 28 Aug 2009 20:05:09 +0200
-Subject: [Buildroot] bash fails to compile with git tree
-In-Reply-To: <159a01660908280221m79835c8dy88aba6ce39dc4bff@mail.gmail.com>
-References: <159a01660908280221m79835c8dy88aba6ce39dc4bff@mail.gmail.com>
-Message-ID: <159a01660908281105l2c9c3fb1r2768286576bc7f92@mail.gmail.com>
+From: Bill Bogstad <bogstad@pobox.com>
+Date: Fri, 28 Aug 2009 17:51:55 -0400
+Subject: [Buildroot] Does the kexec package buildroot-2009.05 for i386?
+In-Reply-To: <87a5b0800908280931x523f6c88k1e006634d612425f@mail.gmail.com>
+References: <2d6a9f6f0908271429j91a36e9s2342c23762a8552@mail.gmail.com>
+	<87fxbcro1c.fsf@macbook.be.48ers.dk>
+	<2d6a9f6f0908280920q41f09dak9120c88370e14aa1@mail.gmail.com>
+	<87a5b0800908280931x523f6c88k1e006634d612425f@mail.gmail.com>
+Message-ID: <2d6a9f6f0908281451i4f7e1ed1s1f5da2693b6559a4@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Doing some tests i seen that problems are related to missing
+Re: suggestion to replace /bin/sh with a link to bash.
 
-CC=$(TARGET_CC) CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)"
+Is this a workaround for an acknowledged bug in buildroot or a
+statement of lack of support for standard Ubuntu installations?
+If Ubuntu isn't supported, which Linux systems are so I can switch my
+build host environment?
 
-(or a part of it)
+In either case, it doesn't matter.  I made the switch and get exactly
+the same error.  I'll be switching it back to the default since it
+doesn't matter and I would prefer a 'standard' Ubuntu host environment
+for other uses of the machine.
 
-in the make command
+Thanks,
+Bill Bogstad
 
-I got differet errors, like errors about libintl missing or termcap.h
-missing on various packages
-
-Should this be added to the $(MAKE) / $(MAKE1) variable?
-
-2009/8/28 Daniele Salvatore Albano <d.albano@gmail.com>:
-> Hi,
->
-> have someone tried to compile bash? Yesterday, trying to fix my
-> buildroot to send patches i moved my tree and cloned the head to get a
-> working one (i got some problems with git) but when i tried to compile
-> my root system, without applying any patches i done (i was just
-> waiting to get errors to apply patches), bash failed to compile with a
-> strange reason: missing termcap.h
->
-> Checking ncurses and bash make files seems all ok, and making a diff
-> with my old tree showed no differences. Toolchain works perfectly
-> because i can build mi initrd (i use two separate br trees) without
-> any problem and that br2 is from git and is up to date too. I don't
-> build bash on my initrd, only busybox with few stuff.
->
-> I can't send my .config, i'm at work, when i'll get at home i'll send
-> it, however someone got problems building bash?
->
-> --
-> Daniele Salvatore Albano
-> Consulente Informatico
-> http://www.phpsoft.it
-> http://www.dacci.it
->
-> Servizi:
-> - Sviluppo in C# e PHP
-> - Installazione e Amministrazione sistemi Ubuntu, CentOS e Fedora
->
-
-
-
--- 
-Daniele Salvatore Albano
-Consulente Informatico
-http://www.phpsoft.it
-http://www.dacci.it
-
-Servizi:
-- Sviluppo in C# e PHP
-- Installazione e Amministrazione sistemi Ubuntu, CentOS e Fedora
+P.S. As I mentioned before, 08-rc3 doesn't seem to have this problem.
