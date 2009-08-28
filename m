@@ -1,40 +1,37 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 28 Aug 2009 16:27:56 +0200
-Subject: [Buildroot] [git commit master] u-boot: mark old 2008.10
-	version as deprecated
-In-Reply-To: <20090828072354.38044247@hcegtvedt.norway.atmel.com>
-	(Hans-Christian Egtvedt's message of "Fri\,
-	28 Aug 2009 07\:23\:54 +0200")
-References: <20090827124024.6B23277691@busybox.osuosl.org>
-	<d6cda7730908271838qc80efdfj259e9bf1609f396e@mail.gmail.com>
-	<20090828072354.38044247@hcegtvedt.norway.atmel.com>
-Message-ID: <87ljl4dndf.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 28 Aug 2009 16:49:51 +0200
+Subject: [Buildroot] Does the kexec package buildroot-2009.05 for i386?
+In-Reply-To: <2d6a9f6f0908271429j91a36e9s2342c23762a8552@mail.gmail.com> (Bill
+	Bogstad's message of "Thu\, 27 Aug 2009 17\:29\:52 -0400")
+References: <2d6a9f6f0908271429j91a36e9s2342c23762a8552@mail.gmail.com>
+Message-ID: <87fxbcro1c.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Hans-Christian" == Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> writes:
+>>>>> "Bill" == Bill Bogstad <bogstad@pobox.com> writes:
 
 Hi,
 
- Hans-Christian> You're right, AVR32 triggered something in the generic
- Hans-Christian> flash stuff.
+ Bill> When I try to use buildroot to to generate a minimal init ramdisk for
+ Bill> i386, I get the following error if I try include the kexec package:
 
- Hans-Christian> And it is still not fixed...
+ Bill> ......
+ Bill> bin/bin-to-hex purgatory < purgatory/purgatory.ro > kexec/purgatory.c
+ Bill> /bin/sh: bin/bin-to-hex: not found
+ Bill> make[1]: *** [kexec/purgatory.c] Error 127
+ Bill> make[1]: Leaving directory
+ Bill> `/home/bogstad/software/buildroot/buildroot-2009.05/build_i386/kexec-2.0.0'
+ Bill> make: *** [/home/bogstad/software/buildroot/buildroot-2009.05/build_i386/kexec-2.0.0/.stamp_built]
+ Bill> Error
 
-Is this With 2009.06 or git?
+ Bill> Does kexec build for any architecture in 2009.05?  Any suggestions on
+ Bill> making this work for i386?
 
- U-Boot> saveenv
- Hans-Christian> Saving Environment to Flash...
- Hans-Christian> Error: start and/or end address not on sector boundary
-
-So noone has used u-boot on avr32 with flash since ~1 year? Strange.
-
- Hans-Christian> I'll need to prod around for that.
-
-Ok, thanks for the heads up.
+It builds here without any problems. Have you set BR2_JLEVEL to
+something else than 1? Could you please post your .config?
 
 -- 
 Bye, Peter Korsgaard
