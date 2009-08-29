@@ -1,49 +1,28 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 29 Aug 2009 17:21:52 +0200
-Subject: [Buildroot] [git commit master] buildroot: fix remaining references
-	to SDL_net instead of sdl_net
-Message-ID: <20090829152229.2140E7773D@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 29 Aug 2009 17:22:54 +0200
+Subject: [Buildroot] SDL_net target name
+In-Reply-To: <4A97FDAD.5030003@free.fr> (Julien Boibessot's message of "Fri\,
+	28 Aug 2009 17\:54\:21 +0200")
+References: <2d6a9f6f0908271429j91a36e9s2342c23762a8552@mail.gmail.com>
+	<4A97928D.6070702@free.fr> <87tyzsdpy2.fsf@macbook.be.48ers.dk>
+	<4A97FDAD.5030003@free.fr>
+Message-ID: <87bplyskz5.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Julien" == Julien Boibessot <julien.boibessot@free.fr> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8ed829a179176bcfc0f74d46e19a74ad2cf2d8ad
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ >> Not really, fixed in git - Thanks.
+ >> 
+ Julien> ok thanks !
+ Julien> but please don't forget package/games/prboom/prboom.mk ;-)
+ Julien> (and probably scripts/buildall.sh)
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/games/prboom/prboom.mk |    2 +-
- scripts/buildall.sh            |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Agh, seems I searched the tree for sdl_net, not SDL_net - Thanks for the
+heads up, fixed now.
 
-diff --git a/package/games/prboom/prboom.mk b/package/games/prboom/prboom.mk
-index 02d018f..65f48cb 100644
---- a/package/games/prboom/prboom.mk
-+++ b/package/games/prboom/prboom.mk
-@@ -5,7 +5,7 @@
- #############################################################
- PRBOOM_VERSION:=2.4.7
- 
--PRBOOM_DEPENDENCIES = sdl SDL_net sdl_mixer
-+PRBOOM_DEPENDENCIES = sdl sdl_net sdl_mixer
- 
- $(eval $(call AUTOTARGETS,package/games,prboom))
- 
-diff --git a/scripts/buildall.sh b/scripts/buildall.sh
-index 1d415a4..3dcd0de 100755
---- a/scripts/buildall.sh
-+++ b/scripts/buildall.sh
-@@ -264,7 +264,7 @@ EXE	mk	sawman				OK
- EXE	mk	sdl				OK	
- EXE	mk	sdl_image			OK	
- EXE	mk	sdl_mixer			OK	
--EXE	mk	SDL_net				OK	
-+EXE	mk	sdl_net				OK	
- EXE	mk	sdl_ttf				OK	
- EXE	mk	tiff				OK	
- comment	busybox graphic applications
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
