@@ -1,40 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 30 Aug 2009 17:28:35 +0200
-Subject: [Buildroot] Does the kexec package buildroot-2009.05 for i386?
-In-Reply-To: <2d6a9f6f0908300738s5da8ba8egd36a334441e32b91@mail.gmail.com>
-	(Bill Bogstad's message of "Sun\, 30 Aug 2009 10\:38\:44 -0400")
-References: <2d6a9f6f0908271429j91a36e9s2342c23762a8552@mail.gmail.com>
-	<87fxbcro1c.fsf@macbook.be.48ers.dk>
-	<2d6a9f6f0908280920q41f09dak9120c88370e14aa1@mail.gmail.com>
-	<877hwlsvmy.fsf@macbook.be.48ers.dk>
-	<2d6a9f6f0908300738s5da8ba8egd36a334441e32b91@mail.gmail.com>
-Message-ID: <87tyzpqq1o.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 30 Aug 2009 22:08:21 +0200
+Subject: [Buildroot] [git commit master] util-linux: fix libblkid detection
+Message-ID: <20090830200849.4B56C7776F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bill" == Bill Bogstad <bogstad@pobox.com> writes:
 
- Bill> On Sun, Aug 30, 2009 at 1:44 AM, Peter Korsgaard<jacmet@uclibc.org> wrote:
- >>>>>>> "Bill" == Bill Bogstad <bogstad@pobox.com> writes:
- >> 
- >> 2009.08 is to be released any moment now though, so maybe you could just
- >> move to that?
+commit: http://git.buildroot.net/buildroot/commit/?id=621e8726f927642359adec4b0916ca5c8c9fec22
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Bill> I think that's what I will do.
+We don't have libblkid in BR, so make sure the configure script doesn't
+detect it if it is installed on the host.
 
-Ok, good.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/util-linux/util-linux.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
- Bill> Thanks for clarifying the bash vs. dash issue as well.  If
- Bill> necessary I could have set up a virtual environment for whatever
- Bill> the build requirements are.  It's just that it is more convenient
- Bill> to use my default environment (Ubuntu 8.04).
-
-The idea is to have it working out of the box on all (sane)
-distributions, but we're apparently not quite there yet on
-Ubuntu. Bugreports and/or patches are as always welcome.
-
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 7f0d740..c9bae16 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -30,6 +30,7 @@ $(UTIL-LINUX_DIR)/.configured: $(UTIL-LINUX_DIR)/.unpacked
+ 	(cd $(UTIL-LINUX_DIR); rm -rf config.cache; \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		$(TARGET_CONFIGURE_ARGS) \
++		ac_cv_lib_blkid_blkid_known_fstype=no \
+ 		./configure \
+ 		--target=$(GNU_TARGET_NAME) \
+ 		--host=$(GNU_TARGET_NAME) \
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
