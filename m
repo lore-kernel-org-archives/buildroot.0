@@ -1,8 +1,8 @@
 From: Vellemans, Noel <Noel.Vellemans@visionBMS.com>
-Date: Mon, 31 Aug 2009 11:24:24 +0200
-Subject: [Buildroot] Recursive variable `UTIL-LINUX_DEPENDENCIES' references
-	itself (eventually).
-Message-ID: <1531E53627F1F749B4FE809BF2A4EB6712C8E5@WETMEX10.loepfe.com>
+Date: Mon, 31 Aug 2009 11:27:35 +0200
+Subject: [Buildroot] FW: Recursive variable `UTIL-LINUX_DEPENDENCIES'
+	references itself (eventually).
+Message-ID: <1531E53627F1F749B4FE809BF2A4EB6712C8E6@WETMEX10.loepfe.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
