@@ -1,33 +1,42 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 31 Aug 2009 08:15:21 +0000 (UTC)
-Subject: [Buildroot] [Bug 531] let e2fsprogs package to export headers to
- staging dir if needed
-In-Reply-To: <bug-531-163@https.bugs.busybox.net/>
-References: <bug-531-163@https.bugs.busybox.net/>
-Message-ID: <20090831081521.CD7C677740@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 31 Aug 2009 10:15:47 +0200
+Subject: [Buildroot] bash fails to compile with git tree
+In-Reply-To: <159a01660908280221m79835c8dy88aba6ce39dc4bff@mail.gmail.com>
+	(Daniele Salvatore Albano's message of "Fri\,
+	28 Aug 2009 11\:21\:13 +0200")
+References: <159a01660908280221m79835c8dy88aba6ce39dc4bff@mail.gmail.com>
+Message-ID: <87pracqtzg.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=531
+>>>>> "Daniele" == Daniele Salvatore Albano <d.albano@gmail.com> writes:
 
+ Hi,
 
+ Daniele> have someone tried to compile bash? Yesterday, trying to fix
+ Daniele> my buildroot to send patches i moved my tree and cloned the
+ Daniele> head to get a working one (i got some problems with git) but
+ Daniele> when i tried to compile my root system, without applying any
+ Daniele> patches i done (i was just waiting to get errors to apply
+ Daniele> patches), bash failed to compile with a strange reason:
+ Daniele> missing termcap.h
 
+ Daniele> Checking ncurses and bash make files seems all ok, and making
+ Daniele> a diff with my old tree showed no differences. Toolchain works
+ Daniele> perfectly because i can build mi initrd (i use two separate br
+ Daniele> trees) without any problem and that br2 is from git and is up
+ Daniele> to date too. I don't build bash on my initrd, only busybox
+ Daniele> with few stuff.
 
+ Daniele> I can't send my .config, i'm at work, when i'll get at home
+ Daniele> i'll send it, however someone got problems building bash?
 
---- Comment #2 from Daniele Salvatore Albano <d.albano@gmail.com>  2009-08-31 08:15:21 UTC ---
-This patch just add headers export to staging dir, not liblkid library support
-... but yes, can be useful have the ability to put this library into the
-target.
-
-I made this modification to fix compilation of util-linux, he need only the
-header, not the library (however i didn't tested the resulting binary because
-i'm having problem to get a working initrd for my rootfs)
-
+Is this with an external toolchain? I just did a quick test build on
+i686 with the normal internal toolchain and bash builds without problems
+here.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
