@@ -1,87 +1,37 @@
-From: Daniel Mack <daniel@caiaq.de>
-Date: Mon, 31 Aug 2009 22:48:17 +0200
-Subject: [Buildroot] [PATCH] libarchive package added
-In-Reply-To: <1251209096-31922-1-git-send-email-daniel@caiaq.de>
-References: <1251209096-31922-1-git-send-email-daniel@caiaq.de>
-Message-ID: <20090831204817.GX4200@buzzloop.caiaq.de>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 31 Aug 2009 22:11:36 +0200
+Subject: [Buildroot] [git commit master] util-linux: use := instead of = to
+	stop recursion
+Message-ID: <20090831205205.A92E976CD8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ping
 
-On Tue, Aug 25, 2009 at 04:04:56PM +0200, Daniel Mack wrote:
-> See http://code.google.com/p/libarchive/
-> 
-> Signed-off-by: Daniel Mack <daniel@caiaq.de>
-> ---
->  package/Config.in                |    1 +
->  package/libarchive/Config.in     |   15 +++++++++++++++
->  package/libarchive/libarchive.mk |   19 +++++++++++++++++++
->  3 files changed, 35 insertions(+), 0 deletions(-)
->  create mode 100644 package/libarchive/Config.in
->  create mode 100644 package/libarchive/libarchive.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 02ffb2d..a53e09a 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -386,6 +386,7 @@ menu "Compressors / decompressors"
->  if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
->  source "package/gzip/Config.in"
->  endif
-> +source "package/libarchive/Config.in"
->  source "package/lzo/Config.in"
->  source "package/lzop/Config.in"
->  source "package/lzma/Config.in"
-> diff --git a/package/libarchive/Config.in b/package/libarchive/Config.in
-> new file mode 100644
-> index 0000000..93bfec2
-> --- /dev/null
-> +++ b/package/libarchive/Config.in
-> @@ -0,0 +1,15 @@
-> +config BR2_PACKAGE_LIBARCHIVE
-> +	bool "libarchive"
-> +	help
-> +	  Libarchive is a reusable C library for reading and writing a
-> +	  variety of streaming archive formats.
-> +
-> +	  http://code.google.com/p/libarchive/
-> +
-> +config BR2_LIBARCHIVE_INSTALL_TO_TARGET
-> +	bool "install libarchive to target"
-> +	depends on BR2_PACKAGE_LIBARCHIVE
-> +	default y
-> +	help
-> +	  Say Y here to make BR2 copy the libarchive files to the target
-> +	  destination folder.
-> diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-> new file mode 100644
-> index 0000000..e3f019b
-> --- /dev/null
-> +++ b/package/libarchive/libarchive.mk
-> @@ -0,0 +1,19 @@
-> +#############################################################
-> +#
-> +# libarchive (reusable C library for archive formats)
-> +#
-> +#############################################################
-> +LIBARCHIVE_VERSION:=2.7.1
-> +LIBARCHIVE_SITE = http://libarchive.googlecode.com/files/
-> +LIBARCHIVE_SOURCE = libarchive-$(LIBARCHIVE_VERSION).tar.gz
-> +LIBARCHIVE_LIBTOOL_PATCH = NO
-> +LIBARCHIVE_INSTALL_STAGING = YES
-> +
-> +ifeq ($(BR2_LIBARCHIVE_INSTALL_TO_TARGET),y)
-> +	LIBARCHIVE_INSTALL_TARGET := YES
-> +endif
-> +
-> +LIBARCHIVE_DEPENDENCIES = uclibc
-> +
-> +$(eval $(call AUTOTARGETS,package,libarchive))
-> +
-> -- 
-> 1.6.3.3
-> 
+commit: http://git.buildroot.net/buildroot/commit/?id=49c47f55a87a5b7bcc688afce07348608ecce454
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Unbreaks util-linux together with busybox
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/util-linux/util-linux.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index ad5a62c..8f38a3c 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -72,7 +72,7 @@ $(UTIL-LINUX_TARGET_BINARY): $(UTIL-LINUX_BINARY)
+ #If both util-linux and busybox are selected, make certain util-linux
+ #wins the fight over who gets to have their utils actually installed
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+-UTIL-LINUX_DEPENDENCIES = busybox $(UTIL-LINUX_DEPENDENCIES)
++UTIL-LINUX_DEPENDENCIES := busybox $(UTIL-LINUX_DEPENDENCIES)
+ endif
+ 
+ util-linux: uclibc $(UTIL-LINUX_DEPENDENCIES) $(UTIL-LINUX_TARGET_BINARY)
+-- 
+1.6.3.3
