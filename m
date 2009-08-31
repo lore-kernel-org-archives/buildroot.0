@@ -1,28 +1,28 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 31 Aug 2009 07:59:19 +0000 (UTC)
-Subject: [Buildroot] [Bug 301] allow to install libsmbclient
-In-Reply-To: <bug-301-163@https.bugs.busybox.net/>
-References: <bug-301-163@https.bugs.busybox.net/>
-Message-ID: <20090831075919.8D0527773A@busybox.osuosl.org>
+Date: Mon, 31 Aug 2009 08:00:12 +0000 (UTC)
+Subject: [Buildroot] [Bug 381] libtheora not using sdl-prefix
+In-Reply-To: <bug-381-163@https.bugs.busybox.net/>
+References: <bug-381-163@https.bugs.busybox.net/>
+Message-ID: <20090831080012.6A5DA7773A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=301
+https://bugs.busybox.net/show_bug.cgi?id=381
 
 
 
 
 
---- Comment #3 from Peter Korsgaard <jacmet@uclibc.org>  2009-08-31 07:59:18 UTC ---
-(In reply to comment #2)
-> hmm, the $(TARGET_DIR)/$(SAMBA_TARGET_BINARY) target already calls make
-> installlibs, I take it that should either get removed or the new libsmbclient
-> target isn't really needed?
+--- Comment #4 from Peter Korsgaard <jacmet@uclibc.org>  2009-08-31 08:00:10 UTC ---
+(In reply to comment #3)
+> I also cannot reproduce it in mipsel either. The reason why I tries x86 was
+> that this is normally the situation where packages gets confused and link with
+> system libs.
 
-Ping?
+Have you been able to reproduce this? 
 
 
 -- 
