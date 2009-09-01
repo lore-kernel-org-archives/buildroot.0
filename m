@@ -1,53 +1,39 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 1 Sep 2009 16:44:06 +0200
-Subject: [Buildroot] [git commit master] sdl_net: rename back to SDL_net
-Message-ID: <20090901145035.4E772776F3@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 01 Sep 2009 16:52:49 +0200
+Subject: [Buildroot] [PATCH] libarchive package added
+In-Reply-To: <1251209096-31922-1-git-send-email-daniel@caiaq.de> (Daniel
+	Mack's message of "Tue\, 25 Aug 2009 16\:04\:56 +0200")
+References: <1251209096-31922-1-git-send-email-daniel@caiaq.de>
+Message-ID: <87skf6pvi6.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Daniel" == Daniel Mack <daniel@caiaq.de> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f38fe3a1a3e4448c2a594615eebf869ca2b13d24
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-It turns out that renaming SDL_net to sdl_net (688c388ce765984af2) isn't
-such a good idea, as the name is also used for the tarball filename to
-download.
+ Daniel> +++ b/package/libarchive/Config.in
+ Daniel> @@ -0,0 +1,15 @@
+ Daniel> +config BR2_PACKAGE_LIBARCHIVE
+ Daniel> +	bool "libarchive"
+ Daniel> +	help
+ Daniel> +	  Libarchive is a reusable C library for reading and writing a
+ Daniel> +	  variety of streaming archive formats.
+ Daniel> +
+ Daniel> +	  http://code.google.com/p/libarchive/
+ Daniel> +
+ Daniel> +config BR2_LIBARCHIVE_INSTALL_TO_TARGET
+ Daniel> +	bool "install libarchive to target"
+ Daniel> +	depends on BR2_PACKAGE_LIBARCHIVE
+ Daniel> +	default y
+ Daniel> +	help
+ Daniel> +	  Say Y here to make BR2 copy the libarchive files to the target
+ Daniel> +	  destination folder.
 
-Instead go back to use SDL_net again, and simply add an sdl_net alias.
+When would you not want to do this?
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/games/prboom/prboom.mk |    2 +-
- package/sdl_net/sdl_net.mk     |    4 +++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/package/games/prboom/prboom.mk b/package/games/prboom/prboom.mk
-index 65f48cb..02d018f 100644
---- a/package/games/prboom/prboom.mk
-+++ b/package/games/prboom/prboom.mk
-@@ -5,7 +5,7 @@
- #############################################################
- PRBOOM_VERSION:=2.4.7
- 
--PRBOOM_DEPENDENCIES = sdl sdl_net sdl_mixer
-+PRBOOM_DEPENDENCIES = sdl SDL_net sdl_mixer
- 
- $(eval $(call AUTOTARGETS,package/games,prboom))
- 
-diff --git a/package/sdl_net/sdl_net.mk b/package/sdl_net/sdl_net.mk
-index 7b7e12a..f01a04c 100644
---- a/package/sdl_net/sdl_net.mk
-+++ b/package/sdl_net/sdl_net.mk
-@@ -14,4 +14,6 @@ SDL_NET_INSTALL_STAGING = YES
- 
- SDL_NET_DEPENDENCIES = sdl
- 
--$(eval $(call AUTOTARGETS,package,sdl_net))
-+$(eval $(call AUTOTARGETS,package,SDL_net))
-+
-+sdl_net: SDL_net
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
