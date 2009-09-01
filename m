@@ -1,20 +1,34 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 31 Aug 2009 22:11:36 +0200
-Subject: [Buildroot] [git tag 2009.08] util-linux: use := instead of = to
-	stop recursion
-Message-ID: <20090901085754.26DFF7776C@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 01 Sep 2009 07:27:35 +0200
+Subject: [Buildroot] Recursive variable `UTIL-LINUX_DEPENDENCIES'
+	references itself (eventually).
+In-Reply-To: <1531E53627F1F749B4FE809BF2A4EB6712C8E5@WETMEX10.loepfe.com>
+	(Noel Vellemans's message of "Mon\, 31 Aug 2009 11\:24\:24 +0200")
+References: <1531E53627F1F749B4FE809BF2A4EB6712C8E5@WETMEX10.loepfe.com>
+Message-ID: <87ab1fqlo8.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Noel" == Vellemans, Noel <Noel.Vellemans@visionBMS.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=11df657b90ba4ca6506abc718120d5f0f667a8aa
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/tags/2009.08
+ Noel> Hi,
 
-Unbreaks util-linux together with busybox
+ Noel> Release 2009.08 build stops (current GIT also).
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 
-this is a tag, so no patch shown
+ Noel> Target : ARM (make at91sam9g20dfc_defconfig)
+
+
+ Noel> package/util-linux/util-linux.mk:75: *** Recursive variable
+ Noel> `UTIL-LINUX_DEPENDENCIES' references itself (eventually).  Stop.
+
+Yeah, I noticed as well :/
+
+I broke it in 014df317d47c1 and fixed it again in 49c47f55a87a5b7 -
+Sorry about that. You just have change the '=' to a ':='
+
+-- 
+Bye, Peter Korsgaard
