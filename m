@@ -1,28 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 01 Sep 2009 07:36:43 +0200
-Subject: [Buildroot] bash fails to compile with git tree
-In-Reply-To: <1251715165.5021.9.camel@sven> (Sven Neumann's message of "Mon\,
-	31 Aug 2009 12\:39\:25 +0200")
-References: <159a01660908280221m79835c8dy88aba6ce39dc4bff@mail.gmail.com>
-	<87pracqtzg.fsf@macbook.be.48ers.dk> <1251715165.5021.9.camel@sven>
-Message-ID: <8763c3ql90.fsf@macbook.be.48ers.dk>
+From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
+Date: Tue, 1 Sep 2009 03:36:15 -0300
+Subject: [Buildroot] [git commit master] u-boot: mark old 2008.10
+	version as deprecated
+In-Reply-To: <20090831072850.3018cb78@hcegtvedt.norway.atmel.com>
+References: <20090827124024.6B23277691@busybox.osuosl.org>
+	<d6cda7730908271838qc80efdfj259e9bf1609f396e@mail.gmail.com>
+	<20090828072354.38044247@hcegtvedt.norway.atmel.com>
+	<87ljl4dndf.fsf@macbook.be.48ers.dk>
+	<20090831072850.3018cb78@hcegtvedt.norway.atmel.com>
+Message-ID: <d6cda7730908312336u4d2945f2oa06272c62754f328@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
-
 Hi,
 
- Sven> I do frequently get errors when building bash. Perhaps in one out
- Sven> of three builds, compilation of bash aborts. This is always
- Sven> easily fixed by typing 'make bash', followed by 'make' to
- Sven> continue the build. My guess is that it is a problem with
- Sven> parallel builds. We use BR2_JLEVEL=4.
+On Mon, Aug 31, 2009 at 2:28 AM, Hans-Christian
+Egtvedt<hans-christian.egtvedt@atmel.com> wrote:
+>> ?U-Boot> saveenv
+>> ?Hans-Christian> Saving Environment to Flash...
+>> ?Hans-Christian> Error: start and/or end address not on sector boundary
+>>
+>> So noone has used u-boot on avr32 with flash since ~1 year? Strange.
+>>
+>
+> None has used U-Boot + AVR32 + CFI driver.
+>
 
-Hmm, that shouldn't be the case as bash.mk uses MAKE1 everywhere.
+I am, but I'm using your tripple revert patch + my own changes to the
+NGW100 code to support my own board with AT49BV640D.
 
--- 
-Bye, Peter Korsgaard
+Kind Regards,
+   Thiago A. Correa
