@@ -1,35 +1,43 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 1 Sep 2009 17:00:29 +0200
-Subject: [Buildroot] [git commit master] xdata_xcursor-themes: -source
-	target should only download, not extract
-Message-ID: <20090901150111.DF40E77749@busybox.osuosl.org>
+From: Daniel Mack <daniel@caiaq.de>
+Date: Tue, 1 Sep 2009 17:07:17 +0200
+Subject: [Buildroot] [PATCH] libarchive package added
+In-Reply-To: <87skf6pvi6.fsf@macbook.be.48ers.dk>
+References: <1251209096-31922-1-git-send-email-daniel@caiaq.de>
+	<87skf6pvi6.fsf@macbook.be.48ers.dk>
+Message-ID: <20090901150717.GC17682@buzzloop.caiaq.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Tue, Sep 01, 2009 at 04:52:49PM +0200, Peter Korsgaard wrote:
+> Date: Tue, 01 Sep 2009 16:52:49 +0200
+> From: Peter Korsgaard <jacmet@uclibc.org>
+> To: Daniel Mack <daniel@caiaq.de>
+> Cc: buildroot at uclibc.org
+> Subject: Re: [Buildroot] [PATCH] libarchive package added
+> Message-ID: <87skf6pvi6.fsf@macbook.be.48ers.dk>
+> User-Agent: Gnus/5.11 (Gnus v5.11) Emacs/22.3 (gnu/linux)
+> 
+> >>>>> "Daniel" == Daniel Mack <daniel@caiaq.de> writes:
+> 
+> Hi,
+> 
+>  Daniel> +config BR2_LIBARCHIVE_INSTALL_TO_TARGET
+>  Daniel> +	bool "install libarchive to target"
+>  Daniel> +	depends on BR2_PACKAGE_LIBARCHIVE
+>  Daniel> +	default y
+>  Daniel> +	help
+>  Daniel> +	  Say Y here to make BR2 copy the libarchive files to the target
+>  Daniel> +	  destination folder.
+> 
+> When would you not want to do this?
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6b0d895f641b5309b000e7165c33daf01eefe7f0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+We need that library for a binary which is linked statically. Installing
+it is not necessary in our case.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- .../xdata_xcursor-themes/xdata_xcursor-themes.mk   |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+But as the default is 'y', this should not be a disadvantage for anyone.
+We could, of course, also delete it manually at a later point.
 
-diff --git a/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk b/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk
-index ccaec82..59d9d49 100644
---- a/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk
-+++ b/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk
-@@ -68,7 +68,7 @@ xdata_xcursor-themes-dirclean:
- 	rm -rf $(XDATA_XCURSOR_THEMES_DIR)
- 
- xdata_xcursor-themes-depends:
--xdata_xcursor-themes-source: $(XDATA_XCURSOR_THEMES_DIR)/.extracted
-+xdata_xcursor-themes-source: $(DL_DIR)/$(XDATA_XCURSOR_THEMES_SOURCE)
- xdata_xcursor-themes-patch: $(XDATA_XCURSOR_THEMES_DIR)/.patched
- xdata_xcursor-themes-configure: $(XDATA_XCURSOR_THEMES_DIR)/.configured
- xdata_xcursor-themes-build: $(XDATA_XCURSOR_THEMES_DIR)/.built
--- 
-1.6.3.3
+Daniel
