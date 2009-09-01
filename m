@@ -1,39 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 01 Sep 2009 16:52:49 +0200
-Subject: [Buildroot] [PATCH] libarchive package added
-In-Reply-To: <1251209096-31922-1-git-send-email-daniel@caiaq.de> (Daniel
-	Mack's message of "Tue\, 25 Aug 2009 16\:04\:56 +0200")
-References: <1251209096-31922-1-git-send-email-daniel@caiaq.de>
-Message-ID: <87skf6pvi6.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 1 Sep 2009 17:00:29 +0200
+Subject: [Buildroot] [git commit master] xdata_xcursor-themes: -source
+	target should only download, not extract
+Message-ID: <20090901150111.DF40E77749@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Daniel" == Daniel Mack <daniel@caiaq.de> writes:
 
-Hi,
+commit: http://git.buildroot.net/buildroot/commit/?id=6b0d895f641b5309b000e7165c33daf01eefe7f0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Daniel> +++ b/package/libarchive/Config.in
- Daniel> @@ -0,0 +1,15 @@
- Daniel> +config BR2_PACKAGE_LIBARCHIVE
- Daniel> +	bool "libarchive"
- Daniel> +	help
- Daniel> +	  Libarchive is a reusable C library for reading and writing a
- Daniel> +	  variety of streaming archive formats.
- Daniel> +
- Daniel> +	  http://code.google.com/p/libarchive/
- Daniel> +
- Daniel> +config BR2_LIBARCHIVE_INSTALL_TO_TARGET
- Daniel> +	bool "install libarchive to target"
- Daniel> +	depends on BR2_PACKAGE_LIBARCHIVE
- Daniel> +	default y
- Daniel> +	help
- Daniel> +	  Say Y here to make BR2 copy the libarchive files to the target
- Daniel> +	  destination folder.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ .../xdata_xcursor-themes/xdata_xcursor-themes.mk   |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-When would you not want to do this?
-
+diff --git a/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk b/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk
+index ccaec82..59d9d49 100644
+--- a/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk
++++ b/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk
+@@ -68,7 +68,7 @@ xdata_xcursor-themes-dirclean:
+ 	rm -rf $(XDATA_XCURSOR_THEMES_DIR)
+ 
+ xdata_xcursor-themes-depends:
+-xdata_xcursor-themes-source: $(XDATA_XCURSOR_THEMES_DIR)/.extracted
++xdata_xcursor-themes-source: $(DL_DIR)/$(XDATA_XCURSOR_THEMES_SOURCE)
+ xdata_xcursor-themes-patch: $(XDATA_XCURSOR_THEMES_DIR)/.patched
+ xdata_xcursor-themes-configure: $(XDATA_XCURSOR_THEMES_DIR)/.configured
+ xdata_xcursor-themes-build: $(XDATA_XCURSOR_THEMES_DIR)/.built
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
