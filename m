@@ -1,33 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 01 Sep 2009 17:16:29 +0200
-Subject: [Buildroot] [PATCH] libarchive package added
-In-Reply-To: <20090901150717.GC17682@buzzloop.caiaq.de> (Daniel Mack's message
-	of "Tue\, 1 Sep 2009 17\:07\:17 +0200")
-References: <1251209096-31922-1-git-send-email-daniel@caiaq.de>
-	<87skf6pvi6.fsf@macbook.be.48ers.dk>
-	<20090901150717.GC17682@buzzloop.caiaq.de>
-Message-ID: <87ocpupueq.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue,  1 Sep 2009 15:18:23 +0000 (UTC)
+Subject: [Buildroot] [Bug 527] misc fixes for dnsmasq package
+In-Reply-To: <bug-527-163@https.bugs.busybox.net/>
+References: <bug-527-163@https.bugs.busybox.net/>
+Message-ID: <20090901151823.91C897777A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Daniel" == Daniel Mack <daniel@caiaq.de> writes:
+https://bugs.busybox.net/show_bug.cgi?id=527
 
-Hi,
 
- >> When would you not want to do this?
 
- Daniel> We need that library for a binary which is linked
- Daniel> statically. Installing it is not necessary in our case.
 
- Daniel> But as the default is 'y', this should not be a disadvantage
- Daniel> for anyone.  We could, of course, also delete it manually at a
- Daniel> later point.
 
-Ok, we don't normally do this per-package - So I'm hessitant to add it
-here. Other than that, it looks fine.
+--- Comment #17 from Gustavo Zacarias <gustavo@zacarias.com.ar>  2009-09-01 15:18:21 UTC ---
+Created an attachment (id=625)
+ --> (https://bugs.busybox.net/attachment.cgi?id=625)
+dnsmasq 2.50 Makefile.autotools.in plus some other improvements
+
+How do you like this take Daniele / Peter?
+
+* Bump to version 2.50 fixes security issues CVE 2009-2957 and 2009-2958.
+* No need for INSTALL_STAGING
+* Add uninstall target
+* Use PREFIX=/usr to avoid files in /usr/local
+* Install manpage conditionally
+* Introduce new DHCP server option
+* Add Peter's dbus fix (not tested, i don't use dbus)
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
