@@ -1,44 +1,34 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  1 Sep 2009 21:09:32 +0000 (UTC)
-Subject: [Buildroot] [Bug 527] misc fixes for dnsmasq package
-In-Reply-To: <bug-527-163@https.bugs.busybox.net/>
-References: <bug-527-163@https.bugs.busybox.net/>
-Message-ID: <20090901210932.94427776BF@busybox.osuosl.org>
+From: Daniel Mack <daniel@caiaq.de>
+Date: Wed, 2 Sep 2009 00:59:17 +0200
+Subject: [Buildroot] [PATCH] libarchive package added
+In-Reply-To: <87ocpupueq.fsf@macbook.be.48ers.dk>
+References: <1251209096-31922-1-git-send-email-daniel@caiaq.de>
+	<87skf6pvi6.fsf@macbook.be.48ers.dk>
+	<20090901150717.GC17682@buzzloop.caiaq.de>
+	<87ocpupueq.fsf@macbook.be.48ers.dk>
+Message-ID: <20090901225917.GE9410@buzzloop.caiaq.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=527
-
-
-Peter Korsgaard <jacmet@uclibc.org> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|ASSIGNED                    |RESOLVED
-         Resolution|                            |FIXED
-
-
-
-
---- Comment #18 from Peter Korsgaard <jacmet@uclibc.org>  2009-09-01 21:09:31 UTC ---
-(In reply to comment #17)
-> Created an attachment (id=625)
- --> (https://bugs.busybox.net/attachment.cgi?id=625) [details]
-> dnsmasq 2.50 Makefile.autotools.in plus some other improvements
+On Tue, Sep 01, 2009 at 05:16:29PM +0200, Peter Korsgaard wrote:
+>  Daniel> We need that library for a binary which is linked
+>  Daniel> statically. Installing it is not necessary in our case.
 > 
-> How do you like this take Daniele / Peter?
+>  Daniel> But as the default is 'y', this should not be a disadvantage
+>  Daniel> for anyone.  We could, of course, also delete it manually at a
+>  Daniel> later point.
+> 
+> Ok, we don't normally do this per-package - So I'm hessitant to add it
+> here. Other than that, it looks fine.
 
-Looks good, except that it still tries to edit a line with --ldflags dbus-1,
-which isn't a valid pkg-config argument, so I left that out.
-Why was that line added in the first place?
+Hmm, maybe that should be an option to more packages then, and it could
+be added on demand, eg. whenever someone needs that.
 
-Committed to git, thanks both of you.
+But I understand that you're hessitant, so drop that part if you like,
+and we remove the installed files later from our postbuild script. No
+problem :)
 
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Daniel
