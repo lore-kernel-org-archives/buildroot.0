@@ -1,297 +1,81 @@
-From: Will Newton <will.newton@gmail.com>
-Date: Wed, 2 Sep 2009 16:04:23 +0100
-Subject: [Buildroot] [PATCH] package: Remove unnecessary dependencies on
-	uclibc.
-Message-ID: <87a5b0800909020804m28a05078idf9cf572b54312a7@mail.gmail.com>
+From: Tim Barr <tbarr@multitech.com>
+Date: Wed, 2 Sep 2009 14:47:20 -0500
+Subject: [Buildroot] Problem with compile using ARM926T vs. generic_arm
+Message-ID: <1CD05B980C94AC408B37C82BBABAA3E61218C078@mtsexchange.dc.multitech.prv>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hopefully this patch isn't too large for the list.
+I am trying to update my build from buildroot-2009.01 and a 2.6.25
+kernel to buildroot-2009.05 and a 2.6.28 kernel. When I try to make the
+at91sam9g20dfc project, so that I have a baseline configuration to
+modify for my board design, I get an the following error if the
+buildroot Target Architecture Variant is set to arm926t:
 
-A C library will have been built by the toolchain makefiles, so there is no
-need for packages to explicitly depend on uclibc.
+CC arch/arm/mm/dma-mapping.o
+{standard input}: Assembler messages:
+{standard input}:1293: Error: selected processor does not support `pld
+[ip,#0]'
+{standard input}:1305: Error: selected processor does not support `pld
+[ip,#0]'
+{standard input}:1325: Error: selected processor does not support `pld
+[ip,#0]'
+make[2]: *** [arch/arm/kernel/traps.o] Error 1
+make[1]: *** [arch/arm/kernel] Error 2
+make[1]: *** Waiting for unfinished jobs....
+CC arch/arm/mm/extable.o
+CC arch/arm/mm/fault.o
+{standard input}: Assembler messages:
+{standard input}:351: Error: selected processor does not support `pld
+[r2,#0]'
+{standard input}:367: Error: selected processor does not support `pld
+[r2,#0]'
+{standard input}:580: Error: selected processor does not support `pld
+[r2,#0]'
+{standard input}:596: Error: selected processor does not support `pld
+[r2,#0]'
+{standard input}:827: Error: selected processor does not support `pld
+[r2,#0]'
+{standard input}:855: Error: selected processor does not support `pld
+[r2,#0]'
+make[2]: *** [arch/arm/mm/dma-mapping.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+make[1]: *** [arch/arm/mm] Error 2
 
-Signed-off-by: Will Newton <will.newton@gmail.com>
----
- package/alsamixergui/alsamixergui.mk               |    2 +-
- package/argus/argus.mk                             |    2 +-
- package/at/at.mk                                   |    2 +-
- package/autoconf/autoconf.mk                       |    2 +-
- package/automake/automake.mk                       |    2 +-
- package/axel/axel.mk                               |    2 +-
- package/bash/bash.mk                               |    4 ++--
- package/berkeleydb/berkeleydb.mk                   |    2 +-
- package/bind/bind.mk                               |    1 -
- package/bison/bison.mk                             |    2 +-
- package/blackbox/blackbox.mk                       |    2 +-
- package/bmon/bmon.mk                               |    2 +-
- package/boa/boa.mk                                 |    2 +-
- package/bridge-utils/bridge.mk                     |    1 -
- package/bsdiff/bsdiff.mk                           |    2 +-
- package/busybox/busybox.mk                         |    2 +-
- package/busybox/initramfs.mk                       |    2 +-
- package/bzip2/bzip2.mk                             |    2 +-
- package/cairo/cairo.mk                             |    2 +-
- package/coreutils/coreutils.mk                     |    4 ++--
- package/cups/cups.mk                               |    2 +-
- package/cvs/cvs.mk                                 |    2 +-
- package/dash/dash.mk                               |    2 +-
- package/database/mysql_client/mysql_client.mk      |    2 +-
- package/database/sqlite/sqlite.mk                  |    1 -
- package/dbus-glib/dbus-glib.mk                     |    2 +-
- package/dbus-python/dbus-python.mk                 |    2 +-
- package/dbus/dbus.mk                               |    2 +-
- package/devmem2/devmem2.mk                         |    2 +-
- package/dhcp/dhcp.mk                               |    6 +++---
- package/dialog/dialog.mk                           |    2 +-
- package/diffutils/diffutils.mk                     |    2 +-
- package/dillo/dillo.mk                             |    2 +-
- package/directfb/directfb.mk                       |    2 +-
- package/distcc/distcc.mk                           |    2 +-
- package/dmalloc/dmalloc.mk                         |    2 +-
- package/dnsmasq/dnsmasq.mk                         |    2 --
- package/docker/docker.mk                           |    2 +-
- package/dosfstools/dosfstools.mk                   |    2 +-
- package/dropbear/dropbear.mk                       |    2 +-
- package/dummy/dummy.mk                             |    2 +-
- package/e2fsprogs/e2fsprogs.mk                     |    4 ++--
- package/editors/nano/nano.mk                       |    2 +-
- package/editors/uemacs/uemacs.mk                   |    2 +-
- package/editors/vim/vim.mk                         |    2 +-
- package/eeprog/eeprog.mk                           |    2 +-
- package/ethtool/ethtool.mk                         |    2 --
- package/expat/expat.mk                             |    2 +-
- package/ezxml/ezxml.mk                             |    2 +-
- package/fakeroot/fakeroot.mk                       |    4 ++--
- package/fbset/fbset.mk                             |    2 +-
- package/fbv/fbv.mk                                 |    2 +-
- package/fconfig/fconfig.mk                         |    2 +-
- package/file/file.mk                               |    2 +-
- package/findutils/findutils.mk                     |    2 +-
- package/fis/fis.mk                                 |    2 +-
- package/flex/flex.mk                               |    2 +-
- package/fltk/fltk.mk                               |    2 +-
- package/fontconfig/fontconfig.mk                   |    2 +-
- package/freetype/freetype.mk                       |    2 +-
- package/fuse/libfuse.mk                            |    2 +-
- package/gadgetfs-test/gadgetfs-test.mk             |    4 ++--
- package/games/ace_of_penguins/ace_of_penguins.mk   |    2 +-
- package/games/gnuchess/gnuchess.mk                 |    2 --
- package/games/magiccube4d/magiccube4d.mk           |    2 --
- package/games/rubix/rubix.mk                       |    2 --
- package/games/vice/vice.mk                         |    2 --
- package/games/xboard/xboard.mk                     |    4 +---
- package/gamin/gamin.mk                             |    2 +-
- package/gawk/gawk.mk                               |    2 +-
- package/gettext/gettext.mk                         |    2 +-
- package/gmp/gmp.mk                                 |    4 ++--
- package/gperf/gperf.mk                             |    6 ------
- package/gqview/gqview.mk                           |    2 +-
- package/gzip/gzip.mk                               |    2 +-
- package/hal/hal.mk                                 |    2 +-
- package/haserl/haserl.mk                           |    2 --
- package/hdparm/hdparm.mk                           |    2 +-
- package/hotplug/hotplug.mk                         |    2 +-
- package/hwdata/hwdata.mk                           |    2 +-
- package/i2c-tools/i2c-tools.mk                     |    2 +-
- package/icu/icu.mk                                 |    2 +-
- package/ifplugd/ifplugd.mk                         |    2 +-
- package/imagemagick/imagemagick.mk                 |    2 +-
- package/input-tools/input-tools.mk                 |    2 +-
- package/iostat/iostat.mk                           |    2 +-
- package/iperf/iperf.mk                             |    2 --
- package/ipkg/ipkg.mk                               |    2 --
- package/ipsec-tools/ipsec-tools.mk                 |    2 +-
- package/java/classpath/classpath.mk                |    2 +-
- package/java/jamvm/jamvm.mk                        |    2 +-
- package/jpeg/jpeg.mk                               |    2 +-
- package/kexec/kexec.mk                             |    4 +---
- package/kismet/kismet.mk                           |    2 +-
- package/l2tp/l2tp.mk                               |    2 +-
- package/leafpad/leafpad.mk                         |    2 +-
- package/less/less.mk                               |    2 +-
- package/libaio/libaio.mk                           |    2 +-
- package/libarchive/libarchive.mk                   |    2 --
- package/libart/libart.mk                           |    2 --
- package/libcgi/libcgi.mk                           |    2 +-
- package/libcgicc/libcgicc.mk                       |    2 +-
- package/libconfig/libconfig.mk                     |    2 --
- package/libconfuse/libconfuse.mk                   |    2 --
- package/libdaemon/libdaemon.mk                     |    2 +-
- package/libdnet/libdnet.mk                         |    4 +---
- package/libdrm/libdrm.mk                           |    2 +-
- package/libeXosip2/libeXosip2.mk                   |    2 +-
- package/libelf/libelf.mk                           |    4 ++--
- package/liberation/liberation.mk                   |    2 +-
- package/libevent/libevent.mk                       |    2 +-
- package/libgcrypt/libgcrypt.mk                     |    2 +-
- package/libglib12/libglib12.mk                     |    2 +-
- package/libglib2/libglib2.mk                       |    2 +-
- package/libgpg-error/libgpg-error.mk               |    2 +-
- package/libgtk12/libgtk12.mk                       |    2 +-
- package/libiconv/libiconv.mk                       |    2 --
- package/libidn/libidn.mk                           |    2 +-
- package/liblockfile/liblockfile.mk                 |    2 +-
- package/liboil/liboil.mk                           |    2 +-
- package/libosip2/libosip2.mk                       |    2 +-
- package/libpcap/libpcap.mk                         |    2 +-
- package/libpng/libpng.mk                           |    2 +-
- package/libraw1394/libraw1394.mk                   |    2 +-
- package/libsoup/libsoup.mk                         |    2 +-
- package/libsysfs/libsysfs.mk                       |    2 +-
- package/libtool/libtool.mk                         |    2 --
- package/libungif/libungif.mk                       |    2 +-
- package/libusb/libusb.mk                           |    2 +-
- package/libxml2/libxml2.mk                         |    2 --
- package/libxslt/libxslt.mk                         |    2 +-
- package/lighttpd/lighttpd.mk                       |    2 +-
- package/links/links.mk                             |    2 +-
- package/linux-fusion/linux-fusion.mk               |    6 +-----
- package/lm-sensors/lm-sensors.mk                   |    2 +-
- package/lockfile-progs/lockfile-progs.mk           |    2 +-
- package/lrzsz/lrzsz.mk                             |    2 +-
- package/lsof/lsof.mk                               |    2 +-
- package/ltp-testsuite/ltp-testsuite.mk             |    2 +-
- package/ltrace/ltrace.mk                           |    2 +-
- package/lua/lua.mk                                 |    2 +-
- package/lvm2/lvm2.mk                               |    4 ++--
- package/lzma/lzma.mk                               |    2 +-
- package/lzo/lzo.mk                                 |    2 --
- package/m4/m4.mk                                   |    2 --
- package/make/make.mk                               |    2 +-
- package/matchbox/matchbox.mk                       |    8 ++++----
- package/mdadm/mdadm.mk                             |    2 +-
- package/mdnsresponder/mdnsresponder.mk             |    2 +-
- package/memtester/memtester.mk                     |    2 +-
- package/metacity/metacity.mk                       |    2 +-
- package/microcom/microcom.mk                       |    2 +-
- package/microperl/microperl.mk                     |    2 +-
- package/microwin/microwin.mk                       |    2 +-
- package/midori/midori.mk                           |    2 +-
- package/mii-diag/mii-diag.mk                       |    2 +-
- package/module-init-tools/module-init-tools.mk     |    2 +-
- package/modutils/modutils.mk                       |    4 ++--
- package/mpatrol/mpatrol.mk                         |    2 +-
- package/mpfr/mpfr.mk                               |    4 ++--
- package/mrouted/mrouted.mk                         |    2 +-
- package/multimedia/alsa-lib/alsa-lib.mk            |    4 +---
- package/multimedia/alsa-utils/alsa-utils.mk        |    2 +-
- package/multimedia/asterisk/asterisk.mk            |    2 +-
- package/multimedia/aumix/aumix.mk                  |    2 +-
- package/multimedia/festival/festival/festival.mk   |    2 +-
- .../festival/speech-tools/speech-tools.mk          |    2 +-
- package/multimedia/libid3tag/libid3tag.mk          |    2 +-
- package/multimedia/libmad/libmad.mk                |    2 +-
- package/multimedia/libmms/libmms.mk                |    2 +-
- package/multimedia/libogg/libogg.mk                |    2 +-
- package/multimedia/libsndfile/libsndfile.mk        |    1 -
- package/multimedia/libvorbis/libvorbis.mk          |    4 ++--
- package/multimedia/madplay/madplay.mk              |    2 +-
- package/multimedia/mpg123/mpg123.mk                |    2 +-
- package/multimedia/mplayer/mplayer.mk              |    2 +-
- package/multimedia/taglib/taglib.mk                |    2 --
- package/multimedia/vlc/vlc.mk                      |    4 ----
- package/mutt/mutt.mk                               |    2 +-
- package/nbd/nbd.mk                                 |    2 +-
- package/netcat/netcat.mk                           |    2 --
- package/netkitbase/netkitbase.mk                   |    2 +-
- package/netkittelnet/netkittelnet.mk               |    2 +-
- package/netplug/netplug.mk                         |    2 +-
- package/netstat-nat/netstat-nat.mk                 |    1 -
- package/newt/newt.mk                               |    2 +-
- package/nfs-utils/nfs-utils.mk                     |    2 +-
- package/ng-spice-rework/ng-spice-rework.mk         |    2 --
- package/ntp/ntp.mk                                 |    2 +-
- package/olsr/olsr.mk                               |    2 +-
- package/openmotif/openmotif.mk                     |    2 +-
- package/openntpd/openntpd.mk                       |    2 +-
- package/openswan/openswan.mk                       |    2 +-
- package/openvpn/openvpn.mk                         |    2 +-
- package/pango/pango.mk                             |    2 +-
- package/patch/patch.mk                             |    2 +-
- package/pciutils/pciutils.mk                       |    2 +-
- package/pcmanfm/pcmanfm.mk                         |    2 +-
- package/pcmcia/pcmcia.mk                           |    2 +-
- package/pcre/pcre.mk                               |    2 --
- package/php/php.mk                                 |    2 +-
- package/pkg-config/pkg-config.mk                   |    2 +-
- package/popt/popt.mk                               |    2 --
- package/portage/portage.mk                         |    4 ++--
- package/portmap/portmap.mk                         |    2 +-
- package/pppd/pppd.mk                               |    2 +-
- package/pptp-linux/pptp-linux.mk                   |    2 +-
- package/procps/procps.mk                           |    2 +-
- package/proftpd/proftpd.mk                         |    2 +-
- package/psmisc/psmisc.mk                           |    2 +-
- package/python/python.mk                           |    2 +-
- package/qt/qt.mk                                   |    2 +-
- package/quagga/quagga.mk                           |    2 +-
- package/radvd/radvd.mk                             |    2 +-
- package/rdesktop/rdesktop.mk                       |    2 +-
- package/rp-pppoe/rp-pppoe.mk                       |    2 +-
- package/rsync/rsync.mk                             |    2 --
- package/ruby/ruby.mk                               |    2 +-
- package/sdl/sdl.mk                                 |    2 +-
- package/sdl_image/sdl_image.mk                     |    2 +-
- package/sdl_mixer/sdl_mixer.mk                     |    2 +-
- package/sdl_ttf/sdl_ttf.mk                         |    2 +-
- package/sed/sed.mk                                 |    2 +-
- package/setserial/setserial.mk                     |    2 +-
- package/sfdisk/sfdisk.mk                           |    2 +-
- package/shared-mime-info/shared-mime-info.mk       |    2 +-
- package/slang/slang.mk                             |    2 +-
- package/smartmontools/smartmontools.mk             |    2 +-
- package/socat/socat.mk                             |    2 +-
- .../startup-notification/startup-notification.mk   |    2 --
- package/strace/strace.mk                           |    2 --
- package/stunnel/stunnel.mk                         |    2 +-
- package/sudo/sudo.mk                               |    2 +-
- package/sylpheed/sylpheed.mk                       |    2 +-
- package/synergy/synergy.mk                         |    2 +-
- package/sysklogd/sysklogd.mk                       |    2 +-
- package/sysvinit/sysvinit.mk                       |    2 +-
- package/tar/tar.mk                                 |    2 +-
- package/tcl/tcl.mk                                 |    2 +-
- package/tcpdump/dhcpdump.mk                        |    2 +-
- package/tcpdump/tcpdump.mk                         |    2 +-
- package/tftpd/tftpd.mk                             |    2 +-
- package/thttpd/thttpd.mk                           |    2 +-
- package/tiff/tiff.mk                               |    2 +-
- package/tinyhttpd/tinyhttpd.mk                     |    2 +-
- package/tn5250/tn5250.mk                           |    2 +-
- package/torsmo/torsmo.mk                           |    2 --
- package/tslib/tslib.mk                             |    2 --
- package/udev/udev.mk                               |    2 +-
- package/udhcp/udhcp.mk                             |    2 +-
- package/udpcast/udpcast.mk                         |    2 +-
- package/usbmount/usbmount.mk                       |    2 +-
- package/usbutils/usbutils.mk                       |    2 +-
- package/util-linux/util-linux.mk                   |    2 +-
- package/vpnc/vpnc.mk                               |    2 +-
- package/vsftpd/vsftpd.mk                           |    4 ++--
- package/vtun/vtun.mk                               |    2 +-
- package/wget/wget.mk                               |    2 +-
- package/which/which.mk                             |    2 --
- package/wipe/wipe.mk                               |    2 +-
- package/wpa_supplicant/wpa_supplicant.mk           |    2 +-
- package/x11r7/pthread-stubs/pthread-stubs.mk       |    1 -
- package/x11r7/xfont_font-util/xfont_font-util.mk   |    2 +-
- package/x11r7/xkeyboard-config/xkeyboard-config.mk |    2 --
- package/x11vnc/x11vnc.mk                           |    2 --
- package/xerces/xerces.mk                           |    2 +-
- package/xfsprogs/xfsprogs.mk                       |    2 +-
- package/xpdf/xpdf.mk                               |    2 +-
- package/xstroke/xstroke.mk                         |    2 --
- package/xvkbd/xvkbd.mk                             |    2 +-
- package/zlib/zlib.mk                               |    2 +-
- 271 files changed, 249 insertions(+), 341 deletions(-)
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-package-Remove-unnecessary-dependencies-on-uclibc.patch
-Type: application/octet-stream
-Size: 154996 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090902/a2f1c3e8/attachment-0001.obj>
+But the make succeeds if the Target Architecture Variant is set to
+generic_arm. The processor is an ARM926EJ-S, so I would assume that
+arm926t is the correct setting. That is the variant that I was using in
+buildroot-2009.01 when I was building a 2.6.25 kernel. I am worried that
+I may run into problems because the build is not tuned for an arm9. I
+did notice that -march is being set to arm4vt instead of arm5vt, is that
+the problem?? And if so, how is that fixed??
+
+/usr/bin/make -j2 HOSTCC="/usr/bin/gcc" HOSTCFLAGS="" ARCH=arm
+CFLAGS_KERNEL="-Os -pipe -O2
+-I/home/falingtrea/buildroot-2009.05/build_arm/staging_dir/usr/include
+-I/home/falingtrea/buildroot-2009.05/build_arm/staging_dir/include
+--sysroot=/home/falingtrea/buildroot-2009.05/build_arm/staging_dir/
+-isysroot /home/falingtrea/buildroot-2009.05/build_arm/staging_dir
+-mtune=arm9tdmi -march=armv4t -mabi=apcs-gnu -D_LARGEFILE_SOURCE
+-D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64"
+INSTALL_MOD_PATH=/home/falingtrea/buildroot-2009.05/project_build_arm/at
+91sam9g20dfc/root
+CROSS_COMPILE=/home/falingtrea/buildroot-2009.05/build_arm/staging_dir/u
+sr/bin/arm-linux-uclibc-
+LDFLAGS="-L/home/falingtrea/buildroot-2009.05/build_arm/staging_dir/lib
+-L/home/falingtrea/buildroot-2009.05/build_arm/staging_dir/usr/lib
+--sysroot=/home/falingtrea/buildroot-2009.05/build_arm/staging_dir/"
+LZMA="/home/falingtrea/buildroot-2009.05/toolchain_build_arm/bin/lzma"
+PATH=/home/falingtrea/buildroot-2009.05/project_build_arm/at91sam9g20dfc
+/u-boot-tools:/opt/timesys/toolchains/armv5l-linux/bin:/opt/timesys/bin:
+/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
+\
+-C
+/home/falingtrea/buildroot-2009.05/project_build_arm/at91sam9g20dfc/linu
+x-2.6.28.2 uImage
+
+Tim Barr 
+Development Engineer 
+Multi-Tech Systems, Inc. 
