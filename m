@@ -1,39 +1,31 @@
-From: Will Newton <will.newton@gmail.com>
-Date: Thu, 3 Sep 2009 20:30:44 +0100
-Subject: [Buildroot] [PATCH] buildroot: Remove old CVS relics.
-In-Reply-To: <20090903172717.GD28419@mx.loc>
-References: <87a5b0800909030904w38f82856pffd93068aa27ef93@mail.gmail.com>
-	<20090903161306.GC32465@mx.loc>
-	<87a5b0800909031015h5da69b8aibe5cf6c92e3b293b@mail.gmail.com>
-	<20090903172717.GD28419@mx.loc>
-Message-ID: <87a5b0800909031230l5ff046fen9778986b855aae76@mail.gmail.com>
+From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+Date: Thu, 3 Sep 2009 22:17:21 +0200
+Subject: [Buildroot] [git commit master] package: Remove unnecessary
+ dependencies on uclibc.
+In-Reply-To: <20090903185705.83F5B7776A@busybox.osuosl.org>
+References: <20090903185705.83F5B7776A@busybox.osuosl.org>
+Message-ID: <20090903201721.GE28419@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Sep 3, 2009 at 6:27 PM, Bernhard
-Reutner-Fischer<rep.dot.nop@gmail.com> wrote:
-> On Thu, Sep 03, 2009 at 06:15:15PM +0100, Will Newton wrote:
+On Thu, Sep 03, 2009 at 08:22:38PM +0200, Peter Korsgaard wrote:
 >
->>Is this patch more appropriate?
->>
->>Subject: [PATCH] gnuconfig: Remove obsolete files and CVS directories.
->>
->>gnuconfig is maintained in git these days, so the CVS directories are of
->>no use. Also update config.sub and config.guess to 2009-08-19.
+>commit: http://git.buildroot.net/buildroot/commit/?id=422ce6536b6d45e4632d526ae04c6af0bd36e80a
+>branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 >
-> It would be handy to knit that external repo to
-> package/gnuconfig/config then, no?
->
-> Alternatively you can "download" (i.e. clone) it instead of downloading
-> a .tar. I think i've done this for libtool and/or gpm in my tree, if
-> you're curious.
->
-> Just a thought..
+>A C library will have been built by the toolchain makefiles, so there is no
+>need for packages to explicitly depend on uclibc.
 
-I considered doing this, I'm not sure what the best way is. I don't
-think we always want to follow the latest version but expressing an
-upstream version as a git hash is not very friendly, there aren't many
-tags in the upstream repo.
+The effect is correct, but the reasoning is unfortunately inaccurate.
+See BASE_TARGETS in the toplevel Makefile. Given that you strive to
+support different libc's, you should apply (first one is basically the
+above):
+
+http://repo.or.cz/w/buildroot.git?a=commit;h=7a1e0eccede82028e176ee4671fe79b1a34c0779
+http://repo.or.cz/w/buildroot.git?a=commit;h=567d5c24536c8462b6df24f6c7654a72b00f202d
+http://repo.or.cz/w/buildroot.git?a=commit;h=ab606461d9033d8dca2dd698751308d9aa0c528f
+http://repo.or.cz/w/buildroot.git?a=commit;h=31cb73c8370d65a2fde86415de59369dc433b02d
+http://repo.or.cz/w/buildroot.git?a=commit;h=056295ebb496aaf941ffa36eeae5f6bf11b2c100
