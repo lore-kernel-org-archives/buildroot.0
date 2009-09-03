@@ -1,7 +1,8 @@
 From: Sven Neumann <s.neumann@raumfeld.com>
 Date: Thu, 3 Sep 2009 21:20:18 +0200
-Subject: [Buildroot] [git commit master] libglib2: bump version to 2.20.5
-Message-ID: <20090903192047.0161477783@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] directfb: update to 1.4.2,
+	add option for pxa3xx driver
+Message-ID: <20090903192047.21FD677513@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,27 +10,54 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7ee403d3c2c80f48da8f100ac1084bb9ca1641b1
+commit: http://git.buildroot.net/buildroot/commit/?id=7b66a9435b9f4be192f8b448a3a6f083af9da690
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libglib2/libglib2.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/directfb/Config.in   |    5 +++++
+ package/directfb/directfb.mk |    5 ++++-
+ 2 files changed, 9 insertions(+), 1 deletions(-)
 
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index c16465b..339792a 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
+diff --git a/package/directfb/Config.in b/package/directfb/Config.in
+index bb35530..487faf4 100644
+--- a/package/directfb/Config.in
++++ b/package/directfb/Config.in
+@@ -50,6 +50,11 @@ config BR2_PACKAGE_DIRECTFB_MATROX
+ 	depends on BR2_PACKAGE_DIRECTFB
+ 	depends on BR2_i386 || BR2_x86_64
+ 
++config BR2_PACKAGE_DIRECTFB_PXA3XX
++	bool "compile pxa3xx graphics driver"
++	depends on BR2_PACKAGE_DIRECTFB
++	depends on BR2_arm
++
+ config BR2_PACKAGE_DIRECTFB_UNICHROME
+ 	bool "compile unichrome graphics driver"
+ 	default y
+diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
+index afbd7c0..4212a4a 100644
+--- a/package/directfb/directfb.mk
++++ b/package/directfb/directfb.mk
 @@ -4,7 +4,7 @@
  #
  #############################################################
- LIBGLIB2_VERSION_MAJOR = 2.20
--LIBGLIB2_VERSION_MINOR = 4
-+LIBGLIB2_VERSION_MINOR = 5
- LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).$(LIBGLIB2_VERSION_MINOR)
- LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.bz2
- LIBGLIB2_SITE = http://ftp.gtk.org/pub/glib/$(LIBGLIB2_VERSION_MAJOR)
+ DIRECTFB_VERSION_MAJOR:=1.4
+-DIRECTFB_VERSION:=1.4.1
++DIRECTFB_VERSION:=1.4.2
+ DIRECTFB_SITE:=http://www.directfb.org/downloads/Core/DirectFB-$(DIRECTFB_VERSION_MAJOR)
+ DIRECTFB_SOURCE:=DirectFB-$(DIRECTFB_VERSION).tar.gz
+ DIRECTFB_AUTORECONF = NO
+@@ -57,6 +57,9 @@ endif
+ ifeq ($(BR2_PACKAGE_DIRECTFB_MATROX),y)
+ DIRECTFB_GFX+= matrox
+ endif
++ifeq ($(BR2_PACKAGE_DIRECTFB_PXA3XX),y)
++DIRECTFB_GFX+= pxa3xx
++endif
+ ifeq ($(BR2_PACKAGE_DIRECTFB_UNICHROME),y)
+ DIRECTFB_GFX+= unichrome
+ endif
 -- 
 1.6.3.3
