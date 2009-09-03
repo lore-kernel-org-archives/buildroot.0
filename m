@@ -1,22 +1,25 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 3 Sep 2009 20:22:38 +0200
-Subject: [Buildroot] [git commit master] package: Remove unnecessary
-	dependencies on uclibc.
-Message-ID: <20090903185705.83F5B7776A@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 03 Sep 2009 21:06:00 +0200
+Subject: [Buildroot] [PATCH] package: Remove unnecessary dependencies on
+	uclibc.
+In-Reply-To: <87a5b0800909020804m28a05078idf9cf572b54312a7@mail.gmail.com>
+	(Will Newton's message of "Wed\, 2 Sep 2009 16\:04\:23 +0100")
+References: <87a5b0800909020804m28a05078idf9cf572b54312a7@mail.gmail.com>
+Message-ID: <87eiqnonl3.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Will" == Will Newton <will.newton@gmail.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=422ce6536b6d45e4632d526ae04c6af0bd36e80a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Will> Hopefully this patch isn't too large for the list.
 
-A C library will have been built by the toolchain makefiles, so there is no
-need for packages to explicitly depend on uclibc.
+ Will> A C library will have been built by the toolchain makefiles, so
+ Will> there is no need for packages to explicitly depend on uclibc.
 
-Signed-off-by: Will Newton <will.newton@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Thanks, committed!
 
-Patch is too large, so refusing to show it
+-- 
+Bye, Peter Korsgaard
