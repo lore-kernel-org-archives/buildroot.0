@@ -1,29 +1,49 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Thu, 3 Sep 2009 22:58:23 +0200
-Subject: [Buildroot] [PATCH] buildroot: Remove old CVS relics.
-In-Reply-To: <87a5b0800909031230l5ff046fen9778986b855aae76@mail.gmail.com>
-References: <87a5b0800909030904w38f82856pffd93068aa27ef93@mail.gmail.com>
-	<20090903161306.GC32465@mx.loc>
-	<87a5b0800909031015h5da69b8aibe5cf6c92e3b293b@mail.gmail.com>
-	<20090903172717.GD28419@mx.loc>
-	<87a5b0800909031230l5ff046fen9778986b855aae76@mail.gmail.com>
-Message-ID: <20090903205823.GF28419@mx.loc>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 4 Sep 2009 11:57:11 +0200
+Subject: [Buildroot] Buildroot Developer Day at ELCE,
+	October 17th in Grenoble France
+Message-ID: <20090904115711.2ed0a62a@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Sep 03, 2009 at 08:30:44PM +0100, Will Newton wrote:
+Hello,
 
->I considered doing this, I'm not sure what the best way is. I don't
->think we always want to follow the latest version but expressing an
+I'm glad to announce that the first Buildroot Developer Day will take
+place on Saturday October 17th in Grenoble, France. This date and
+location have been chosen because it is next to the Embedded Linux
+Conference Europe [1]. The Developer Day will take place in a location
+nearby the conference location (10 minutes by bus).
 
-For these particular 2 packages we do (since the risk is quite low, from
-my experience). YMMV.
+This Developer Day will take place thanks to the sponsoring of Calao
+Systems [2], providing the hosting location, and to Free Electrons
+[3], providing the free lunch for the participants.
 
->upstream version as a git hash is not very friendly, there aren't many
->tags in the upstream repo.
+The purpose of this Developer Day is to let Buildroot developers meet,
+exchange ideas, work on Buildroot and draw the roadmap for the project
+for the next releases.
 
-That's why we had a local co that we could pull upon need.
-Perhaps you can try if that works out fine?
+Due to practical constraints, we have a limited capacity of 6
+persons. Therefore, interested people are invited to send an e-mail to
+Peter and I [4], explaining what their interest or participation in
+Buildroot is. We will of course favor the most active Buildroot
+contributors.
+
+Thanks for your contribution,
+
+Thomas Petazzoni
+
+[1] http://www.embeddedlinuxconference.com/elc_europe09/index.html
+[2] http://www.calao-systems.com/. They design, build and sell nice
+    tiny ARM-based boards. They use Buildroot as their SDK.
+[3] http://www.free-electrons.com/. Embedded Linux development and
+    training services.
+[4] jacmet at uclibc.org
+    thomas.petazzoni at free-electrons.com
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
