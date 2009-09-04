@@ -1,16 +1,16 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  4 Sep 2009 18:22:59 +0000 (UTC)
-Subject: [Buildroot] [Bug 593] New: Missing early check for patch(1)
-Message-ID: <bug-593-163@https.bugs.busybox.net/>
+Date: Fri,  4 Sep 2009 19:09:45 +0000 (UTC)
+Subject: [Buildroot] [Bug 595] New: Missing early check for help2man
+Message-ID: <bug-595-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=593
+https://bugs.busybox.net/show_bug.cgi?id=595
 
-           Summary: Missing early check for patch(1)
+           Summary: Missing early check for help2man
            Product: buildroot
            Version: unspecified
           Platform: PC
@@ -25,14 +25,9 @@ https://bugs.busybox.net/show_bug.cgi?id=593
    Estimated Hours: 0.0
 
 
-I'm preparing a tool-chain inside a fresh virtual machine and although the
-process pretty quickly informed me about the missing bison and flex binaries it
-was just when it was trying to patch the kernel sources (I believe) when it
-realized I didn't have a patch binary installed.
-
-I realize you might never early-check all dependencies for what-ever weird
-configuration options the user might have chosen, but as this is a pretty basic
-one I'm filing this as an enhancement.
+Similar to bug #593, this time it's autoconf which needs help2man to be
+installed. I'll file this and wait for a response to either of them, as I don't
+know if you care about these issues...
 
 
 -- 
