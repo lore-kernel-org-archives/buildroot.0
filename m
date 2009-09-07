@@ -1,51 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 7 Sep 2009 23:45:39 +0200
-Subject: [Buildroot] [git commit master] Announce the first Buildroot
-	Developer Day
-Message-ID: <20090907230107.6812677796@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 08 Sep 2009 01:01:10 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	buildroot-dev-day
+In-Reply-To: <cover.1252359964.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Mon\,
+	7 Sep 2009 23\:46\:05 +0200")
+References: <cover.1252359964.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <871vmi5phl.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=eda15d232752df640d988fe011375e5ce4d30958
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Thomas> The following changes since commit 0642da781803160ec93a7b6d39bae921535d7c19:
+ Thomas>   Peter Korsgaard (1):
+ Thomas>         Merge branch 'qstrip' of git://git.busybox.net/~tpetazzoni/git/buildroot
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- docs/news.html |   18 ++++++++++++++++++
- 1 files changed, 18 insertions(+), 0 deletions(-)
+ Thomas> are available in the git repository at:
 
-diff --git a/docs/news.html b/docs/news.html
-index 48108c8..840a3c9 100644
---- a/docs/news.html
-+++ b/docs/news.html
-@@ -5,6 +5,24 @@
- <p>
- 
- <ul>
-+  <li><b>7 September 2009 -- First Buildroot Developer Day</b>
-+
-+    <p>The first <i>Buildroot Developer Day</i> will take place on
-+    Saturday, October 17th in Grenoble, France, just the day after
-+    Embedded Linux Conference Europe. This <i>Developer Day</i> aims
-+    at allowing Buildroot developers to meet and exchange ideas on the
-+    project and its future.</p>
-+
-+    <p>As the number of places is limited, interested candidates are
-+    invited to send an e-mail to Peter Korsgaard (<code>jacmet at
-+    uclibc dot org</code>) and Thomas Petazzoni (<code>thomas dot
-+    petazzoni at free-electrons dot com</code>).</p>
-+
-+    <p>This <i>Developer Day</i> will take place thanks to the
-+    sponsoring of <a href="http://www.calao-systems.com">Calao
-+    Systems</a> and <a href="http://www.free-electrons.com">Free
-+    Electrons</a>.</p>
-+
-   <li><b>31 August 2009 -- 2009.08 released</b>
- 
-     <p>The stable 2009.08 release is out - Thanks to everyone
+ Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot buildroot-dev-day
+
+Pulled and pushed - Thanks!
+
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
