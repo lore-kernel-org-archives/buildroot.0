@@ -1,34 +1,28 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 07 Sep 2009 23:25:37 +0200
-Subject: [Buildroot] coreutils build failing
-In-Reply-To: <4AA5529F.7050906@rodgers.sdcoxmail.com> (Stephen Rodgers's
-	message of "Mon\, 07 Sep 2009 11\:36\:15 -0700")
-References: <4AA3EBC6.3080306@rodgers.sdcoxmail.com>
-	<877hwbmi5k.fsf@macbook.be.48ers.dk>
-	<4AA5300B.3060804@rodgers.sdcoxmail.com>
-	<87r5ui63d1.fsf@macbook.be.48ers.dk>
-	<4AA5529F.7050906@rodgers.sdcoxmail.com>
-Message-ID: <8763bu5twt.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon,  7 Sep 2009 23:40:52 +0200
+Subject: [Buildroot] [pull request] Pull request for branch for-2009.11
+Message-ID: <cover.1252359650.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Stephen" == Stephen Rodgers <hwstar@rodgers.sdcoxmail.com> writes:
+The following changes since commit 0642da781803160ec93a7b6d39bae921535d7c19:
+  Peter Korsgaard (1):
+        Merge branch 'qstrip' of git://git.busybox.net/~tpetazzoni/git/buildroot
 
-Hi,
+are available in the git repository at:
 
- Stephen> Here's the correct file.
+  git://git.busybox.net/~tpetazzoni/git/buildroot for-2009.11
 
- Stephen> BR2_UCLIBC_VERSION_STRING="0.9.30.1"
- Stephen> BR2_UCLIBC_CONFIG="uClibc.config"
+Sven Neumann (1):
+      buildroot: add basic Bazaar support
 
-You forgot to send your custom uClibc.config. Coreutils builds here
-(Debian) with that config but with the default uclibc config (miniperl
-fails through, looking into that now).
+ Config.in           |    8 ++++++++
+ project/Makefile.in |    2 ++
+ 2 files changed, 10 insertions(+), 0 deletions(-)
 
-Could you either try with the default uclibc config or post your config?
-
+Thanks,
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni
