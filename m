@@ -1,14 +1,25 @@
-From: Will Newton <will.newton@gmail.com>
-Date: Tue, 8 Sep 2009 18:03:58 +0100
+From: Jonathan dumaresq <jdumaresq@cimeq.qc.ca>
+Date: Tue, 8 Sep 2009 15:13:15 -0400
 Subject: [Buildroot] [RFC] [PATCH 0/5] Buildroot cleanup
-In-Reply-To: <cover.1252361088.git.thomas.petazzoni@free-electrons.com>
+In-Reply-To: <87a5b0800909081003t2b923eb5tf1d5a79b56262b7b@mail.gmail.com>
 References: <cover.1252361088.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87a5b0800909081003t2b923eb5tf1d5a79b56262b7b@mail.gmail.com>
+	<87a5b0800909081003t2b923eb5tf1d5a79b56262b7b@mail.gmail.com>
+Message-ID: <!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAALOynQLSc3NItPmMf8Vm5PYBAAAAAA==@cimeq.qc.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+
+
+-----Message d'origine-----
+De?: buildroot-bounces at busybox.net [mailto:buildroot-bounces at busybox.net] De
+la part de Will Newton
+Envoy??: 8 septembre 2009 13:04
+??: Thomas Petazzoni
+Cc?: buildroot at uclibc.org
+Objet?: Re: [Buildroot] [RFC] [PATCH 0/5] Buildroot cleanup
 
 On Mon, Sep 7, 2009 at 11:09 PM, Thomas
 Petazzoni<thomas.petazzoni@free-electrons.com> wrote:
@@ -92,3 +103,16 @@ my target fs from scratch, so:
 It looks like this might be a little bit more complex now. It would be
 good to get some makefile targets that can do this, it's possible they
 already exist but I'm just not aware of them.
+
+I'm in same position. This could be great !
+
+Jonathan
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+This message has been scanned for viruses and
+dangerous content by MailScanner, and is
+believed to be clean.
