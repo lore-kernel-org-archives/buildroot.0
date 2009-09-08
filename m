@@ -1,43 +1,41 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 08 Sep 2009 09:23:26 +0200
+Date: Tue, 08 Sep 2009 09:31:10 +0200
 Subject: [Buildroot] [PATCH 1/5] Remove the "project" feature
-In-Reply-To: <1252394155.13520.2.camel@bender> (Sven Neumann's message of
-	"Tue\, 08 Sep 2009 09\:15\:55 +0200")
+In-Reply-To: <20090908092408.787e9cf7@surf> (Thomas Petazzoni's message of
+	"Tue\, 8 Sep 2009 09\:24\:08 +0200")
 References: <cover.1252361088.git.thomas.petazzoni@free-electrons.com>
+	<cover.1252361088.git.thomas.petazzoni@free-electrons.com>
 	<a57f463ae7b50d932282ded660a431251e1de379.1252361088.git.thomas.petazzoni@free-electrons.com>
-	<20090908082707.18e19d6e@hcegtvedt.norway.atmel.com>
-	<1252393123.11390.5.camel@bender> <87hbvd52z7.fsf@macbook.be.48ers.dk>
-	<1252394155.13520.2.camel@bender>
-Message-ID: <87d461528h.fsf@macbook.be.48ers.dk>
+	<87ljkp5317.fsf@macbook.be.48ers.dk> <20090908092408.787e9cf7@surf>
+Message-ID: <874ord51vl.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
 Hi,
 
- >> We have that already with the external toolchain support. I also don't
- >> use it yet (we're doing like you), but will start to use it soon.
+ >> Stuff like /etc/br-version is handy atleast. I think it would be nice
+ >> to keep all 3, as it is part of the current Kconfig interface, it
+ >> makes it easy to do minimal customization when you use the generic
+ >> rootfs skeleton and it adds only little complexity.
 
- Sven> So how would I go about reusing the buildroot supplied tool-chain
- Sven> for multiple targets? I imagine that one basic target would build
- Sven> the tool-chain and the other targets would then use that as their
- Sven> external tool-chain? Could you give an example or a quick
- Sven> introduction on how to set this up? Or just point me to the docs
- Sven> if I just missed that such documentation exists. That would be
- Sven> much appreciated.
+ Thomas> Agreed, this is something we can keep.
 
-Yes, something like that. Have you read
-http://buildroot.net/buildroot.html#external_toolchain ? As I said
-before, I haven't actually used it yet, maybe Thomas can fill in the
-blanks?
+Good.
 
-It might be an idea to get the toolchain build to write out a .config
-snippet that can get included when using it to ensure we have the
-various toolchain settings correct.
+ >> The u-boot config stuff is imho way too overengineered, and could use
+ >> some cleanup/simplification.
+
+ Thomas> Definitely, but that was not the purpose of this set of patches. I
+ Thomas> don't think it's reasonable to try to fix everything at once.
+
+Certainly not. Seeing the note just reminded me about it.
+
+Thanks for the patch series, much appreciated!
 
 -- 
 Bye, Peter Korsgaard
