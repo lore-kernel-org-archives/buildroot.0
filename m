@@ -1,43 +1,69 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Tue, 08 Sep 2009 09:15:55 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 8 Sep 2009 09:16:41 +0200
 Subject: [Buildroot] [PATCH 1/5] Remove the "project" feature
-In-Reply-To: <87hbvd52z7.fsf@macbook.be.48ers.dk>
+In-Reply-To: <20090908082707.18e19d6e@hcegtvedt.norway.atmel.com>
 References: <cover.1252361088.git.thomas.petazzoni@free-electrons.com>
 	<a57f463ae7b50d932282ded660a431251e1de379.1252361088.git.thomas.petazzoni@free-electrons.com>
 	<20090908082707.18e19d6e@hcegtvedt.norway.atmel.com>
-	<1252393123.11390.5.camel@bender> <87hbvd52z7.fsf@macbook.be.48ers.dk>
-Message-ID: <1252394155.13520.2.camel@bender>
+Message-ID: <20090908091641.56774510@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 2009-09-08 at 09:07 +0200, Peter Korsgaard wrote:
-> >>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
-> 
-> Hi,
-> 
->  >> I use it all the time ;) How do you propose building for multiple
->  >> targets? I would at least like to share the toolchain, preferably
->  >> also libraries.
-> 
->  Sven> Same here. We don't currently use the project feature, but mostly
->  Sven> because we didn't find the time yet to try it. We are building
->  Sven> several targets for the same platform and currently we do a full
->  Sven> rebuild for each target, this includes the toolkit. If there was
->  Sven> an easy way to at least share the tool-chain, then I would
->  Sven> welcome if it wasn't removed from buildroot.
-> 
-> We have that already with the external toolchain support. I also don't
-> use it yet (we're doing like you), but will start to use it soon.
+Le Tue, 8 Sep 2009 08:27:07 +0200,
+Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> a ?crit :
 
-So how would I go about reusing the buildroot supplied tool-chain for
-multiple targets? I imagine that one basic target would build the
-tool-chain and the other targets would then use that as their external
-tool-chain? Could you give an example or a quick introduction on how to
-set this up? Or just point me to the docs if I just missed that such
-documentation exists. That would be much appreciated.
+> I use it all the time ;) How do you propose building for multiple
+> targets? I would at least like to share the toolchain, preferably also
+> libraries.
 
+One solution is to do it outside of Buildroot. Assuming all you want to
+rebuild for the different targets is kernel, u-boot and busybox :
 
-Sven
+ $ make menuconfig
+ Configure for target 1
+ $ make
+ Wait
+ Copy the result image
+ $ rm -rf output/build/linux-* output/build/u-boot-* output/build/busybox-*
+ $ make menuconfig
+ Configure for target 2
+ $ make
+ Wait
+ Copy the result image
+
+And so on. Is this significantly different (in terms of complexity)
+compared to what you have to do today ?
+
+The net advantage of this solution is that it keeps the complexity
+outside of Buildroot, so the users not interested by this feature don't
+see this complexity.
+
+> I did not think project_build_ARCH was confusing, but perhaps project_
+> part would be misleading? I would rather see a build/board/<stuff>
+> setup.
+
+Yes, project_build_ARCH is very confusing. Question from beginners: ?Why
+are some stuff built in project_build_ARCH and some others in
+build_ARCH ??, ?Why is my root filesystem in this strange and far away
+place project_build_ARCH/uclibc/root/ ??, etc.
+
+build/board/ would probably be ok if only the kernel + u-boot would
+differ from one board to the other. But in the current implementation,
+busybox is also treated like the kernel and u-boot (i.e built inside
+project_build_ARCH and not inside build_ARCH).
+
+Moreover, this build/board/ thing only works if your boards are very
+similar (i.e same processor architecture, same instruction set, etc.).
+So it only partially solves the problem we're trying to address.
+
+Sincerly,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
