@@ -1,40 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 09 Sep 2009 09:37:11 +0200
-Subject: [Buildroot] [PATCH 5/5] Rename the output directories
-In-Reply-To: <20090909092256.5a9291ab@surf> (Thomas Petazzoni's message of
-	"Wed\, 9 Sep 2009 09\:22\:56 +0200")
-References: <cover.1252361088.git.thomas.petazzoni@free-electrons.com>
-	<cover.1252361088.git.thomas.petazzoni@free-electrons.com>
-	<91f41119dff00090c4984705e86782b2f6efd1cc.1252361088.git.thomas.petazzoni@free-electrons.com>
-	<87r5ug1tyj.fsf@macbook.be.48ers.dk> <20090909092256.5a9291ab@surf>
-Message-ID: <87eiqg1sd4.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 9 Sep 2009 09:53:59 +0200
+Subject: [Buildroot] [git commit master] kernel-headers: bump 2.6.27.x /
+	2.6.30.x stable versions
+Message-ID: <20090909075433.5B4DD77735@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Hi,
+commit: http://git.buildroot.net/buildroot/commit/?id=8c1189587654cac752d920ac37730afac0c758a7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- >> Why do we still need stamps/ if we get rid of project_build_*? Can't
- >> the stamp files just live with the sources, so you can just do rm -rf
- >> build/<package> to get it rebuilt?
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/kernel-headers/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
- Thomas> Because the compilation of host packages uses the $(STAMP_DIR) a lot,
- Thomas> see the result of "git grep STAMP_DIR". A few other places use
- Thomas> $(STAMP_DIR) as well.
-
-It did that to test the impact of having real dependencies (E.G. so you
-could one day run the top level makefile with -j. If host packages are
-the only thing we need stamps/ for, then I think we should just change
-the few host packages to use the normal virtual targets and ordering.
-
- Thomas> Note: this is also something I don't like, but I think it's better to
- Thomas> fix one thing at a time :-)
-
-;)
-
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index e5bd64a..828ba0c 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -49,9 +49,9 @@ config BR2_KERNEL_HEADERS_RT
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "2.6.26.8"	if BR2_KERNEL_HEADERS_2_6_26
+-	default "2.6.27.31"	if BR2_KERNEL_HEADERS_2_6_27
++	default "2.6.27.32"	if BR2_KERNEL_HEADERS_2_6_27
+ 	default "2.6.28.10"	if BR2_KERNEL_HEADERS_2_6_28
+ 	default "2.6.29.6"	if BR2_KERNEL_HEADERS_2_6_29
+-	default "2.6.30.5"	if BR2_KERNEL_HEADERS_2_6_30
++	default "2.6.30.6"	if BR2_KERNEL_HEADERS_2_6_30
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
