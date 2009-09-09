@@ -1,38 +1,31 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 9 Sep 2009 09:53:59 +0200
-Subject: [Buildroot] [git commit master] kernel-headers: bump 2.6.27.x /
-	2.6.30.x stable versions
-Message-ID: <20090909075433.5B4DD77735@busybox.osuosl.org>
+From: Will Newton <will.newton@gmail.com>
+Date: Wed, 9 Sep 2009 10:36:06 +0100
+Subject: [Buildroot] [RFC] [PATCH 0/5] Buildroot cleanup
+In-Reply-To: <87zl9516bu.fsf@macbook.be.48ers.dk>
+References: <cover.1252361088.git.thomas.petazzoni@free-electrons.com>
+	<87a5b0800909081003t2b923eb5tf1d5a79b56262b7b@mail.gmail.com>
+	<87zl9516bu.fsf@macbook.be.48ers.dk>
+Message-ID: <87a5b0800909090236i3936f7d3u2424eccba398160b@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Tue, Sep 8, 2009 at 10:20 PM, Peter Korsgaard<jacmet@uclibc.org> wrote:
+>>>>>> "Will" == Will Newton <will.newton@gmail.com> writes:
+>
+> Hi,
+>
+> ?>> ?4. Remove BR2_TOPDIR_PREFIX and BR2_TOPDIR_SUFFIX
+> ?>>
+> ?>> ? ?The same thing can be done with O=
+>
+> ?Will> I didn't know this existed either!
+>
+> It's documented though:
+>
+> http://buildroot.net/buildroot.html#building_out_of_tree
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8c1189587654cac752d920ac37730afac0c758a7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- toolchain/kernel-headers/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index e5bd64a..828ba0c 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -49,9 +49,9 @@ config BR2_KERNEL_HEADERS_RT
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "2.6.26.8"	if BR2_KERNEL_HEADERS_2_6_26
--	default "2.6.27.31"	if BR2_KERNEL_HEADERS_2_6_27
-+	default "2.6.27.32"	if BR2_KERNEL_HEADERS_2_6_27
- 	default "2.6.28.10"	if BR2_KERNEL_HEADERS_2_6_28
- 	default "2.6.29.6"	if BR2_KERNEL_HEADERS_2_6_29
--	default "2.6.30.5"	if BR2_KERNEL_HEADERS_2_6_30
-+	default "2.6.30.6"	if BR2_KERNEL_HEADERS_2_6_30
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 
--- 
-1.6.3.3
+I was referring to the TOPDIR prefix and suffix options. Having delved
+into the makefiles it looks to me like O= is a better option.
