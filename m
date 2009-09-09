@@ -1,24 +1,52 @@
-From: Raed Abu-Sanad <raedbenz@hotmail.com>
-Date: Wed, 9 Sep 2009 13:16:23 +0100
-Subject: [Buildroot] GRUB for i386
-Message-ID: <BAY136-W2B7F87FA68D145120E121CEE90@phx.gbl>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 09 Sep 2009 16:29:36 +0200
+Subject: [Buildroot] coreutils build failing
+In-Reply-To: <4AA58BB1.50906@rodgers.sdcoxmail.com> (Stephen Rodgers's message
+	of "Mon\, 07 Sep 2009 15\:39\:45 -0700")
+References: <4AA3EBC6.3080306@rodgers.sdcoxmail.com>
+	<877hwbmi5k.fsf@macbook.be.48ers.dk>
+	<4AA5300B.3060804@rodgers.sdcoxmail.com>
+	<87r5ui63d1.fsf@macbook.be.48ers.dk>
+	<4AA5529F.7050906@rodgers.sdcoxmail.com>
+	<8763bu5twt.fsf@macbook.be.48ers.dk>
+	<4AA58BB1.50906@rodgers.sdcoxmail.com>
+Message-ID: <87r5ugyywf.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Stephen" == Stephen Rodgers <hwstar@rodgers.sdcoxmail.com> writes:
 
-Hi,,
+Hi,
 
-I managed to get a rootfs with all required packages for i386. I put the rootfs in a USB flash stick.
-How can i install GRUB to boot from it?? (the GRUB was one if the selected packages when building buildroot)
+ >> Could you either try with the default uclibc config or post your config?
 
-Thanks
+ Stephen> I can confirm that default uClibc config fails in the same
+ Stephen> way. The only difference between my custom config and the
+ Stephen> default config is the enabling of SUSV3 legacy support which
+ Stephen> is required for Asterisk/Zaptel.
 
-_________________________________________________________________
-Learn how to add other email accounts to Hotmail in 3 easy steps.
-http://clk.atdmt.com/UKM/go/167688463/direct/01/
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090909/2823ce61/attachment.htm>
+ Stephen> In the meantime, As a test I modified the config.h in in the
+ Stephen> build_i686/coreutils-7.4 directory to see if it would compile,
+ Stephen> and it did:
+
+ Stephen> /* Define if rename does not work when the destination file exists, as
+ Stephen> on Windows. */
+ Stephen> /* #define RENAME_DEST_EXISTS_BUG 1 */
+
+Ok, but then you need to figure out why that gets defined. Looking at
+the code it doesn't make any sense to me:
+
+    case "$host_os" in
+      mingw*) gl_cv_func_rename_dest_exists_bug=yes ;;
+      *) gl_cv_func_rename_dest_exists_bug=no ;;
+    esac
+
+your host_os definately shouldn't be mingw on a Linux machine. Could you
+please put your (compressed) coreutils-7.4/config.log file somewhere so
+I can take a look?
+
+-- 
+Bye, Peter Korsgaard
