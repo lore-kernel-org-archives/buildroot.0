@@ -1,14 +1,13 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 09 Sep 2009 09:06:04 +0200
-Subject: [Buildroot] [RFC] [PATCH 0/5] Buildroot cleanup
-In-Reply-To: <20090909082447.7a230c8f@surf> (Thomas Petazzoni's message of
-	"Wed\, 9 Sep 2009 08\:24\:47 +0200")
-References: <4AA62DD20200000D00128C56@gwia.alliedtelesyn.co.nz>
-	<4AA75F310200007000017827@gwia.alliedtelesyn.co.nz>
-	<4AA75F310200007000017827@gwia.alliedtelesyn.co.nz>
-	<1252440948.19600.4.camel@bender> <87vdjt160i.fsf@macbook.be.48ers.dk>
-	<20090909082447.7a230c8f@surf>
-Message-ID: <87iqfs1tsz.fsf@macbook.be.48ers.dk>
+Date: Wed, 09 Sep 2009 09:02:44 +0200
+Subject: [Buildroot] [PATCH 5/5] Rename the output directories
+In-Reply-To: <91f41119dff00090c4984705e86782b2f6efd1cc.1252361088.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Tue\,
+	8 Sep 2009 00\:09\:53 +0200")
+References: <cover.1252361088.git.thomas.petazzoni@free-electrons.com>
+	<cover.1252361088.git.thomas.petazzoni@free-electrons.com>
+	<91f41119dff00090c4984705e86782b2f6efd1cc.1252361088.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87r5ug1tyj.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,19 +16,18 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Hi,
+ Thomas> In the output directory, we now have
+ Thomas>  - build/    where all the packages are built
+ Thomas>  - images/   where the final kernel and rootfs images are stored
+ Thomas>  - staging/  the staging directory (containing the development files
+ Thomas>              and libraries compiled for the target)
+ Thomas>  - target/   which contains the target root filesystem
+ Thomas>  - host/     which contains all the host programs
+ Thomas>  - stamps/   which contains the stamps files
 
- Thomas> That was my plan...
-
- >> This would make BR less selfcontained / one-stop-shop though.
-
- Thomas> until I met Buildroot users (I mean not end-users but organizations
- Thomas> using Buildroot as the build system they ship with their devices) who
- Thomas> told me that the selfcontained nature of BR was something they really
- Thomas> liked.
-
-Yes, I know - I like it myself ;) But maybe integrating crosstool-ng
-support would be good enough?
+Why do we still need stamps/ if we get rid of project_build_*? Can't the
+stamp files just live with the sources, so you can just do rm -rf
+build/<package> to get it rebuilt?
 
 -- 
 Bye, Peter Korsgaard
