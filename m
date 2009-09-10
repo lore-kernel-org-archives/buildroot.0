@@ -1,36 +1,36 @@
-From: Shinya Kuribayashi <skuribay@pobox.com>
-Date: Thu, 10 Sep 2009 23:02:37 +0900
-Subject: [Buildroot] UBOOT 2009.08 & ARM Link Error
-In-Reply-To: <87bpljw4lz.fsf@macbook.be.48ers.dk>
-References: <A41BAEC7EC0449D8BB97311F11270777@apexjs>
-	<87bpljw4lz.fsf@macbook.be.48ers.dk>
-Message-ID: <4AA906FD.4000400@pobox.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 10 Sep 2009 19:51:55 +0200
+Subject: [Buildroot] [git commit master] radvd: bump version
+Message-ID: <20090910175705.5B43377700@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard wrote:
->>>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
-> 
->  Sagaert>  Hi Peter 
->  
->  Sagaert> I ran it outside buildroot to find the problem, from inside
->  Sagaert> buildroot same problem
-> 
->  Sagaert> export CROSS_COMPILE=arm-linux-
->  Sagaert> make clean
->  Sagaert> make at91sam9260ek_nandflash_config
->  Sagaert> make
-> 
-> So that sounds as if it's a problem with u-boot, and nothing to do with
-> buildroot.
-> 
-> Perhaps you could ask on the u-boot list if that's a known problem?
 
-You might be interested in this one:
-http://lists.denx.de/pipermail/u-boot/2009-August/058716.html
+commit: http://git.buildroot.net/buildroot/commit/?id=c4bd271661b57c0e5680463e66e1fb18f999c211
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[ I'm not sure what's going on about U-Boot-ARM these days, sorry.
-  If you have any question, please ask on U-Boot ML! ]
+Fixes segfault issues with plug/unplug and other misc fixes.
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/radvd/radvd.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
+index 07b7224..bf1ac77 100644
+--- a/package/radvd/radvd.mk
++++ b/package/radvd/radvd.mk
+@@ -3,7 +3,7 @@
+ # radvd
+ #
+ #############################################################
+-RADVD_VERSION:=1.2
++RADVD_VERSION:=1.5
+ RADVD_SOURCE:=radvd-$(RADVD_VERSION).tar.gz
+ RADVD_SITE:=http://www.litech.org/radvd/dist/
+ RADVD_AUTORECONF:=no
+-- 
+1.6.3.3
