@@ -1,54 +1,55 @@
-From: Stephen Rodgers <hwstar@rodgers.sdcoxmail.com>
-Date: Wed, 09 Sep 2009 20:53:10 -0700
-Subject: [Buildroot] coreutils build failing
-In-Reply-To: <87r5ugyywf.fsf@macbook.be.48ers.dk>
-References: <4AA3EBC6.3080306@rodgers.sdcoxmail.com>	<877hwbmi5k.fsf@macbook.be.48ers.dk>	<4AA5300B.3060804@rodgers.sdcoxmail.com>	<87r5ui63d1.fsf@macbook.be.48ers.dk>	<4AA5529F.7050906@rodgers.sdcoxmail.com>	<8763bu5twt.fsf@macbook.be.48ers.dk>	<4AA58BB1.50906@rodgers.sdcoxmail.com>
-	<87r5ugyywf.fsf@macbook.be.48ers.dk>
-Message-ID: <4AA87826.5020506@rodgers.sdcoxmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 10 Sep 2009 08:30:10 +0200
+Subject: [Buildroot] [PATCH 4/5] Remove BR2_TOPDIR_PREFIX and
+ BR2_TOPDIR_SUFFIX
+In-Reply-To: <20090909173535.GA17081@mx.loc>
+References: <cover.1252361088.git.thomas.petazzoni@free-electrons.com>
+	<2f7f4e844f89b99bde1ab32524d43ee7a82825a5.1252361088.git.thomas.petazzoni@free-electrons.com>
+	<20090909173535.GA17081@mx.loc>
+Message-ID: <20090910083010.116ab844@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard wrote:
->>>>>> "Stephen" == Stephen Rodgers <hwstar@rodgers.sdcoxmail.com> writes:
-> 
-> Hi,
-> 
->  >> Could you either try with the default uclibc config or post your config?
-> 
->  Stephen> I can confirm that default uClibc config fails in the same
->  Stephen> way. The only difference between my custom config and the
->  Stephen> default config is the enabling of SUSV3 legacy support which
->  Stephen> is required for Asterisk/Zaptel.
-> 
->  Stephen> In the meantime, As a test I modified the config.h in in the
->  Stephen> build_i686/coreutils-7.4 directory to see if it would compile,
->  Stephen> and it did:
-> 
->  Stephen> /* Define if rename does not work when the destination file exists, as
->  Stephen> on Windows. */
->  Stephen> /* #define RENAME_DEST_EXISTS_BUG 1 */
-> 
-> Ok, but then you need to figure out why that gets defined. Looking at
-> the code it doesn't make any sense to me:
-> 
->     case "$host_os" in
->       mingw*) gl_cv_func_rename_dest_exists_bug=yes ;;
->       *) gl_cv_func_rename_dest_exists_bug=no ;;
->     esac
-> 
-> your host_os definately shouldn't be mingw on a Linux machine. Could you
-> please put your (compressed) coreutils-7.4/config.log file somewhere so
-> I can take a look?
-> 
-Hi Peter,
+Hi Bernhard,
 
-As you requested, I tarred up the config.log from the failed
-coreutils-7.4 build. You should be able to wget config.log.tar.gz using
-the following url:
+Thanks for your comments!
 
-http://test.qrvc.com/config.log.tar.gz
+Le Wed, 9 Sep 2009 19:35:35 +0200,
+Bernhard Reutner-Fischer <rep.dot.nop@gmail.com> a ?crit :
 
-Steve.
+Le Wed, 9 Sep 2009 19:35:35 +0200,
+Bernhard Reutner-Fischer <rep.dot.nop@gmail.com> a ?crit :
+
+> 1) COND_ARCH_FPU_SUFFIX is _completely_ useless, to say the least.
+
+This one is removed by PATCH 5/5.
+
+> 2) TOPDIR_PREFIX and TOPDIR_SUFFIX don't hurt and are convenient for
+> some corner-cases. I'd keep them.
+
+As they don't provide any additional value over O=, I'd prefer to keep
+O=. One of the reason for which Buildroot is too complicated today is
+because there are multiple ways of achieving the same thing. This
+multitude of options is confusing for newcomers.
+
+> 3) I'd much prefer if we could
+> rather settle on
+> TOOL_BUILD_DIR=$(BASE_DIR)/$(TOPDIR_PREFIX)$(ARCH)$(ARCH_FPU_SUFFIX)$(ARCH_MMU_SUFFIX)$(TOPDIR_SUFFIX)_toolchain
+> BUILD_DIR
+> =$(BASE_DIR)/$(TOPDIR_PREFIX)$(ARCH)$(ARCH_FPU_SUFFIX)$(ARCH_MMU_SUFFIX)$(TOPDIR_SUFFIX)_build
+> 
+> so you can conveniently rm -rf powerpc_nofpu_* (for example)
+
+See PATCH 5/5, these are completely changed to something else.
+
+Sincerly,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
