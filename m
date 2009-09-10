@@ -1,8 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 10 Sep 2009 10:32:45 +0200
-Subject: [Buildroot] [git commit master] kernel-headers: bump 2.6.27.x
-	stable version
-Message-ID: <20090910083412.C22D0761AD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] toolchain/gcc: make 4.3.4 default
+Message-ID: <20090910083412.DC9CF777A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,26 +9,42 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cd411d0d9c3c580e29cbcf607d71d3acd20b0db6
+commit: http://git.buildroot.net/buildroot/commit/?id=5cc0622a14054b8b2b1e2d5f37565a31f65c6511
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+There still seems to be some issues with 4.4.x and C++.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/kernel-headers/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ toolchain/gcc/Config.in |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index 2768190..5ebea10 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -53,7 +53,7 @@ config BR2_KERNEL_HEADERS_RT
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "2.6.26.8"	if BR2_KERNEL_HEADERS_2_6_26
--	default "2.6.27.32"	if BR2_KERNEL_HEADERS_2_6_27
-+	default "2.6.27.33"	if BR2_KERNEL_HEADERS_2_6_27
- 	default "2.6.28.10"	if BR2_KERNEL_HEADERS_2_6_28
- 	default "2.6.29.6"	if BR2_KERNEL_HEADERS_2_6_29
- 	default "2.6.30.6"	if BR2_KERNEL_HEADERS_2_6_30
+diff --git a/toolchain/gcc/Config.in b/toolchain/gcc/Config.in
+index 8246a95..279e101 100644
+--- a/toolchain/gcc/Config.in
++++ b/toolchain/gcc/Config.in
+@@ -4,7 +4,7 @@ comment "GCC Options"
+ 
+ choice
+ 	prompt "GCC compiler Version"
+-	default BR2_GCC_VERSION_4_3_3 if !BR2_avr32
++	default BR2_GCC_VERSION_4_3_4 if !BR2_avr32
+ 	default BR2_GCC_VERSION_4_2_3 if BR2_avr32
+ 	help
+ 	  Select the version of gcc you wish to use.
+@@ -49,11 +49,12 @@ choice
+ 
+ 	config BR2_GCC_VERSION_4_3_2
+ 		depends on !BR2_avr32 && !BR2_nios2
+-		depends on BR2_RECENT || BR2_DEPRECATED
++		depends on BR2_DEPRECATED
+ 		bool "gcc 4.3.2"
+ 
+ 	config BR2_GCC_VERSION_4_3_3
+ 		depends on !BR2_avr32 && !BR2_nios2
++		depends on BR2_RECENT || BR2_DEPRECATED
+ 		bool "gcc 4.3.3"
+ 
+ 	config BR2_GCC_VERSION_4_3_4
 -- 
 1.6.3.3
