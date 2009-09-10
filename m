@@ -1,7 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 10 Sep 2009 10:32:45 +0200
-Subject: [Buildroot] [git commit master] toolchain/gcc: make 4.3.4 default
-Message-ID: <20090910083412.DC9CF777A4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] kernel-headers: add 2.6.31
+Message-ID: <20090910083412.79E287773A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,42 +9,49 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5cc0622a14054b8b2b1e2d5f37565a31f65c6511
+commit: http://git.buildroot.net/buildroot/commit/?id=a2994caa17189cb9a414ea0d82ad3d8eb79d4cf4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-There still seems to be some issues with 4.4.x and C++.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/gcc/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+ toolchain/kernel-headers/Config.in |    9 +++++++--
+ 1 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/gcc/Config.in b/toolchain/gcc/Config.in
-index 8246a95..279e101 100644
---- a/toolchain/gcc/Config.in
-+++ b/toolchain/gcc/Config.in
-@@ -4,7 +4,7 @@ comment "GCC Options"
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 828ba0c..2768190 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -6,7 +6,7 @@ comment "Kernel Header Options"
  
  choice
- 	prompt "GCC compiler Version"
--	default BR2_GCC_VERSION_4_3_3 if !BR2_avr32
-+	default BR2_GCC_VERSION_4_3_4 if !BR2_avr32
- 	default BR2_GCC_VERSION_4_2_3 if BR2_avr32
+ 	prompt "Kernel Headers"
+-	default BR2_KERNEL_HEADERS_2_6_30
++	default BR2_KERNEL_HEADERS_2_6_31
+ 
  	help
- 	  Select the version of gcc you wish to use.
-@@ -49,11 +49,12 @@ choice
+ 	  Select the version of kernel header files you wish to use.
+@@ -30,10 +30,14 @@ choice
  
- 	config BR2_GCC_VERSION_4_3_2
- 		depends on !BR2_avr32 && !BR2_nios2
--		depends on BR2_RECENT || BR2_DEPRECATED
+ 	config BR2_KERNEL_HEADERS_2_6_29
+ 		bool "Linux 2.6.29.x kernel headers"
+-		depends on BR2_DEPRECATED || BR2_RECENT
 +		depends on BR2_DEPRECATED
- 		bool "gcc 4.3.2"
  
- 	config BR2_GCC_VERSION_4_3_3
- 		depends on !BR2_avr32 && !BR2_nios2
-+		depends on BR2_RECENT || BR2_DEPRECATED
- 		bool "gcc 4.3.3"
+ 	config BR2_KERNEL_HEADERS_2_6_30
+ 		bool "Linux 2.6.30.x kernel headers"
++		depends on BR2_DEPRECATED || BR2_RECENT
++
++	config BR2_KERNEL_HEADERS_2_6_31
++		bool "Linux 2.6.31.x kernel headers"
  
- 	config BR2_GCC_VERSION_4_3_4
+ 	config BR2_KERNEL_HEADERS_SNAP
+ 		bool "Linux 2.6 snapshot"
+@@ -53,5 +57,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.28.10"	if BR2_KERNEL_HEADERS_2_6_28
+ 	default "2.6.29.6"	if BR2_KERNEL_HEADERS_2_6_29
+ 	default "2.6.30.6"	if BR2_KERNEL_HEADERS_2_6_30
++	default "2.6.31"	if BR2_KERNEL_HEADERS_2_6_31
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 
 -- 
 1.6.3.3
