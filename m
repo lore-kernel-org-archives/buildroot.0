@@ -1,55 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 10 Sep 2009 08:30:10 +0200
-Subject: [Buildroot] [PATCH 4/5] Remove BR2_TOPDIR_PREFIX and
- BR2_TOPDIR_SUFFIX
-In-Reply-To: <20090909173535.GA17081@mx.loc>
-References: <cover.1252361088.git.thomas.petazzoni@free-electrons.com>
-	<2f7f4e844f89b99bde1ab32524d43ee7a82825a5.1252361088.git.thomas.petazzoni@free-electrons.com>
-	<20090909173535.GA17081@mx.loc>
-Message-ID: <20090910083010.116ab844@surf>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 10 Sep 2009 09:25:55 +0200
+Subject: [Buildroot] [git commit master] coreutils: fix
+	rename-with-trailing-slash bug override variable name
+Message-ID: <20090910072642.05D46777A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernhard,
 
-Thanks for your comments!
+commit: http://git.buildroot.net/buildroot/commit/?id=dfca1b2e0e70833fd22a3d67bebb38ce497572fa
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le Wed, 9 Sep 2009 19:35:35 +0200,
-Bernhard Reutner-Fischer <rep.dot.nop@gmail.com> a ?crit :
+The variable controlling if coreutils thinks the system has the
+rename-with-trailing-slash bug is called
+gl_cv_func_rename_trailing_slash_bug and not vb_cv_..
 
-Le Wed, 9 Sep 2009 19:35:35 +0200,
-Bernhard Reutner-Fischer <rep.dot.nop@gmail.com> a ?crit :
+Forcing this off works around a bug in coreutils configure, which
+otherwise tries to compile Windows-only workaround code.
 
-> 1) COND_ARCH_FPU_SUFFIX is _completely_ useless, to say the least.
+Reported-by: Stephen Rodgers <hwstar@rodgers.sdcoxmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/coreutils/coreutils.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-This one is removed by PATCH 5/5.
-
-> 2) TOPDIR_PREFIX and TOPDIR_SUFFIX don't hurt and are convenient for
-> some corner-cases. I'd keep them.
-
-As they don't provide any additional value over O=, I'd prefer to keep
-O=. One of the reason for which Buildroot is too complicated today is
-because there are multiple ways of achieving the same thing. This
-multitude of options is confusing for newcomers.
-
-> 3) I'd much prefer if we could
-> rather settle on
-> TOOL_BUILD_DIR=$(BASE_DIR)/$(TOPDIR_PREFIX)$(ARCH)$(ARCH_FPU_SUFFIX)$(ARCH_MMU_SUFFIX)$(TOPDIR_SUFFIX)_toolchain
-> BUILD_DIR
-> =$(BASE_DIR)/$(TOPDIR_PREFIX)$(ARCH)$(ARCH_FPU_SUFFIX)$(ARCH_MMU_SUFFIX)$(TOPDIR_SUFFIX)_build
-> 
-> so you can conveniently rm -rf powerpc_nofpu_* (for example)
-
-See PATCH 5/5, these are completely changed to something else.
-
-Sincerly,
-
-Thomas
+diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
+index 087948b..ad9092c 100644
+--- a/package/coreutils/coreutils.mk
++++ b/package/coreutils/coreutils.mk
+@@ -46,7 +46,7 @@ $(COREUTILS_DIR)/.configured: $(COREUTILS_DIR)/.unpacked
+ 		ac_cv_func_lstat_dereferences_slashed_symlink=yes \
+ 		ac_cv_func_lstat_empty_string_bug=no \
+ 		ac_cv_func_stat_empty_string_bug=no \
+-		vb_cv_func_rename_trailing_slash_bug=no \
++		gl_cv_func_rename_trailing_slash_bug=no \
+ 		ac_cv_have_decl_nanosleep=yes \
+ 		jm_cv_func_nanosleep_works=yes \
+ 		gl_cv_func_working_utimes=yes \
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+1.6.3.3
