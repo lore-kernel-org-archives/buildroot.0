@@ -1,36 +1,43 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 10 Sep 2009 19:51:55 +0200
-Subject: [Buildroot] [git commit master] radvd: bump version
-Message-ID: <20090910175705.5B43377700@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 10 Sep 2009 21:30:57 +0000 (UTC)
+Subject: [Buildroot] [Bug 605] New: [PATCH] Enhancement of libglib2 package
+Message-ID: <bug-605-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=605
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c4bd271661b57c0e5680463e66e1fb18f999c211
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+           Summary: [PATCH] Enhancement of libglib2 package
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: rvpaasen at t3i.nl
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Fixes segfault issues with plug/unplug and other misc fixes.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/radvd/radvd.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Created an attachment (id=645)
+ --> (https://bugs.busybox.net/attachment.cgi?id=645)
+libglib2 patch
 
-diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
-index 07b7224..bf1ac77 100644
---- a/package/radvd/radvd.mk
-+++ b/package/radvd/radvd.mk
-@@ -3,7 +3,7 @@
- # radvd
- #
- #############################################################
--RADVD_VERSION:=1.2
-+RADVD_VERSION:=1.5
- RADVD_SOURCE:=radvd-$(RADVD_VERSION).tar.gz
- RADVD_SITE:=http://www.litech.org/radvd/dist/
- RADVD_AUTORECONF:=no
+Some applications have switched to glib2 (for example mpd). To keep the
+footprint of the rootfs small, it is convenient to only include the necessary
+glib libs.
+
+This patch adds an option to the libglib2 package that allows just a selection
+of libraries to be installed (some of glib, gio, gmodule, gobject, gthread).
+
+
 -- 
-1.6.3.3
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
