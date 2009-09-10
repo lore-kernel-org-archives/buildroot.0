@@ -1,38 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 10 Sep 2009 11:06:48 +0200
+From: Shinya Kuribayashi <skuribay@pobox.com>
+Date: Thu, 10 Sep 2009 23:02:37 +0900
 Subject: [Buildroot] UBOOT 2009.08 & ARM Link Error
-In-Reply-To: <A41BAEC7EC0449D8BB97311F11270777@apexjs> (Sagaert Johan's
-	message of "Thu\, 10 Sep 2009 10\:54\:11 +0200")
+In-Reply-To: <87bpljw4lz.fsf@macbook.be.48ers.dk>
 References: <A41BAEC7EC0449D8BB97311F11270777@apexjs>
-Message-ID: <87bpljw4lz.fsf@macbook.be.48ers.dk>
+	<87bpljw4lz.fsf@macbook.be.48ers.dk>
+Message-ID: <4AA906FD.4000400@pobox.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
+Peter Korsgaard wrote:
+>>>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
+> 
+>  Sagaert>  Hi Peter 
+>  
+>  Sagaert> I ran it outside buildroot to find the problem, from inside
+>  Sagaert> buildroot same problem
+> 
+>  Sagaert> export CROSS_COMPILE=arm-linux-
+>  Sagaert> make clean
+>  Sagaert> make at91sam9260ek_nandflash_config
+>  Sagaert> make
+> 
+> So that sounds as if it's a problem with u-boot, and nothing to do with
+> buildroot.
+> 
+> Perhaps you could ask on the u-boot list if that's a known problem?
 
- Sagaert>  Hi Peter 
- 
- Sagaert> I ran it outside buildroot to find the problem, from inside
- Sagaert> buildroot same problem
+You might be interested in this one:
+http://lists.denx.de/pipermail/u-boot/2009-August/058716.html
 
- Sagaert> export CROSS_COMPILE=arm-linux-
- Sagaert> make clean
- Sagaert> make at91sam9260ek_nandflash_config
- Sagaert> make
-
-So that sounds as if it's a problem with u-boot, and nothing to do with
-buildroot.
-
-Perhaps you could ask on the u-boot list if that's a known problem?
-
- Sagaert> I understand, it's a huge project and i what works for one
- Sagaert> target could be broken for another one.  Thats the price to
- Sagaert> pay when trying to use the 'latest' stuff.... :)
-
-Yes unfortunately. Thanks a lot for doing this early testing.
-
--- 
-Bye, Peter Korsgaard
+[ I'm not sure what's going on about U-Boot-ARM these days, sorry.
+  If you have any question, please ask on U-Boot ML! ]
