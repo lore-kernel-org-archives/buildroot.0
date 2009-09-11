@@ -1,38 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 11 Sep 2009 20:44:15 +0200
-Subject: [Buildroot] coreutils build failing
-In-Reply-To: <4AAA5BC4.8050602@rodgers.sdcoxmail.com> (Stephen Rodgers's
-	message of "Fri\, 11 Sep 2009 07\:16\:36 -0700")
-References: <4AA3EBC6.3080306@rodgers.sdcoxmail.com>
-	<877hwbmi5k.fsf@macbook.be.48ers.dk>
-	<4AA5300B.3060804@rodgers.sdcoxmail.com>
-	<87r5ui63d1.fsf@macbook.be.48ers.dk>
-	<4AA5529F.7050906@rodgers.sdcoxmail.com>
-	<8763bu5twt.fsf@macbook.be.48ers.dk>
-	<4AA58BB1.50906@rodgers.sdcoxmail.com>
-	<87r5ugyywf.fsf@macbook.be.48ers.dk>
-	<4AA87826.5020506@rodgers.sdcoxmail.com>
-	<87ocpjw95j.fsf@macbook.be.48ers.dk>
-	<4AAA142E.2060107@rodgers.sdcoxmail.com>
-	<87eiqdvi96.fsf@macbook.be.48ers.dk>
-	<4AAA5BC4.8050602@rodgers.sdcoxmail.com>
-Message-ID: <87hbv9tj7k.fsf@macbook.be.48ers.dk>
+From: H Hartley Sweeten <hartleys@visionengravers.com>
+Date: Fri, 11 Sep 2009 18:04:44 -0400
+Subject: [Buildroot] Kernel panic - not syncing: Attempted to kill init!
+In-Reply-To: <20090911103438.GB29175@mx.loc>
+References: <BD79186B4FD85F4B8E60E381CAEE190901C551E6@mi8nycmail19.Mi8.com>
+	<BD79186B4FD85F4B8E60E381CAEE190901C552DE@mi8nycmail19.Mi8.com>
+	<20090825190153.GA29206@mx.loc>
+	<BD79186B4FD85F4B8E60E381CAEE190901C55435@mi8nycmail19.Mi8.com>
+	<87fxbemhjh.fsf@macbook.be.48ers.dk>
+	<BD79186B4FD85F4B8E60E381CAEE190901C554E3@mi8nycmail19.Mi8.com>
+	<20090827074957.GB19075@mx.loc>
+	<BD79186B4FD85F4B8E60E381CAEE190901C558CA@mi8nycmail19.Mi8.com>
+	<20090830110318.GD7953@mx.loc>
+	<BD79186B4FD85F4B8E60E381CAEE190901CBED29@mi8nycmail19.Mi8.com>
+	<20090911103438.GB29175@mx.loc>
+Message-ID: <BD79186B4FD85F4B8E60E381CAEE190901CBEF0C@mi8nycmail19.Mi8.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Stephen" == Stephen Rodgers <hwstar@rodgers.sdcoxmail.com> writes:
+On Friday, September 11, 2009 3:35 AM, Bernhard Reutner-Fischer wrote:
+> So whatever buildroot you're using it's handling flags in an incomplete
+> way (this is nothing new; see archives).
+> My tree does:
 
- >> Hmm, it worked here. Is this with a complete clean rebuild? (rm -rf
- >> *build_*; make)
+Bernhard,
 
- Stephen> Yes, it was a complete rebuild with all build dirs. deleted.
+FWIW, my buildroot tree is 2009.11-git with some customization in
+target/device for my platform.  Everything else is straight from the
+git tree.
 
-Strange. I just did a clean rebuild here, and it still works.
+Where is your tree located?  Is it pullable?
 
-Could you please put your config.log somewhere online again?
-
--- 
-Bye, Peter Korsgaard
+Thanks,
+Hartley
