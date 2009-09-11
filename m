@@ -1,30 +1,54 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Fri, 11 Sep 2009 17:17:24 +0200
-Subject: [Buildroot] Yaboot doesn't build
-In-Reply-To: <94D3F226-C067-4F83-8F86-17BF467035B7@earthlink.net>
-References: <94D3F226-C067-4F83-8F86-17BF467035B7@earthlink.net>
-Message-ID: <20090911151724.GC29175@mx.loc>
+From: H Hartley Sweeten <hartleys@visionengravers.com>
+Date: Fri, 11 Sep 2009 13:10:33 -0400
+Subject: [Buildroot] External Toolchain in latest stable buildroot
+In-Reply-To: <330EC2471BF24E48B513AF1A6975EB69AD887B@MAIL-UA.ccs.local>
+References: <330EC2471BF24E48B513AF1A6975EB69AD87F9@MAIL-UA.ccs.local><20090911091415.19422fbb@surf><330EC2471BF24E48B513AF1A6975EB69AD8816@MAIL-UA.ccs.local>
+	<330EC2471BF24E48B513AF1A6975EB69AD887B@MAIL-UA.ccs.local>
+Message-ID: <BD79186B4FD85F4B8E60E381CAEE190901CBEE46@mi8nycmail19.Mi8.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Aug 10, 2009 at 12:44:50PM -0400, Steve Bennett wrote:
->Hi all!
+On Friday, September 11, 2009 3:50 AM, Teemu Keskinarkaus wrote:
+> Hi,
 >
->Am trying to build a PowerPC boot CD with buildroot, and YABOOT
->doesn't seem to build in the latest buildroot.  I get the following
->error:
+> So I was able to get some of the stuff compile and some not. The
+> external toolchain I'm using is Codesourcery's toolchain for arm.
+> Version is(Sourcery G++ Lite 2009q1-203) (gcc version 4.3.3)
+> 
+> I'm quite sure that this is not 100% buildroot problem, but I ask
+> anyway.
+> 
+> I hit problems when compiling bootstrap for AT91.
+> 
+> Get few of these errors:
+> 
+> build/at91sam9263ek/main.o:(.ARM.exidx+0x0): undefined reference to
+> `__aeabi_unwind_cpp_pr1'
+> build/at91sam9263ek/at91sam9263ek.o:(.ARM.exidx+0x0): undefined
+> reference to `__aeabi_unwind_cpp_pr0'
+> 
+> I did some digging and it seems that the problem might be in the
+> toolchain, but it might also need some work in buildroot side.
+> 
+> Has anyone been able to use CodeSourcerys toolchain to compile buildroot
+> for ARM? Or is anyone even using CodeSourcerys toolchain for ARM?
+> 
+> Teemu Keskinarkaus
 
-I suggest you get the 1.3.13 version from
-http://repo.or.cz/w/buildroot.git?a=tree;f=target/powerpc/yaboot;hb=HEAD
-and look at
-http://repo.or.cz/w/buildroot.git?a=tree;f=package/e2fsprogs;hb=HEAD
+The Sourcery G++ Lite 2009q1-203 toolchain is a multilib sysroot toolchain.
+I had similar problems trying to get it to work for an EP93XX processor.
 
-and submit it to Peter for inclusion.
+I think the AT91 processor is an ARM920T so you need to pass -march=armv4t
+to the toolchain to in order for it to compile the code correctly.  This
+is the same option I need for the EP93XX.
 
->Is that the right approach here, or am I missing something?   Anyone
->care to nudge me in the right direction as to how to accomplish this?
+I spent the last three weeks trying to get this toolchain to work correctly.
+I finally got "way" over my head and built my own toolchain with crosstool-ng.
+Personally I would prefer to use a prebuilt external toolchain but at least
+everything works now.
 
-HTH,
+Regards,
+Hartley
