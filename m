@@ -1,51 +1,50 @@
-From: Teemu Keskinarkaus <Teemu.Keskinarkaus@cc-systems.com>
-Date: Fri, 11 Sep 2009 08:48:25 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 11 Sep 2009 09:14:15 +0200
 Subject: [Buildroot] External Toolchain in latest stable buildroot
-Message-ID: <330EC2471BF24E48B513AF1A6975EB69AD87F9@MAIL-UA.ccs.local>
+In-Reply-To: <330EC2471BF24E48B513AF1A6975EB69AD87F9@MAIL-UA.ccs.local>
+References: <330EC2471BF24E48B513AF1A6975EB69AD87F9@MAIL-UA.ccs.local>
+Message-ID: <20090911091415.19422fbb@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello Teemu,
 
- 
+Le Fri, 11 Sep 2009 08:48:25 +0200,
+"Teemu Keskinarkaus" <Teemu.Keskinarkaus@cc-systems.com> a ?crit :
 
-I'm trying to use external toolchain in latest stable buildroot version
-(2009.08). It seems that the setup has changed some from the earlier
-version I was using (0.10.0svn or something like that).
+> Now when I configure external toolchain in use and execute make -
+> command I get result 'Incorret selection of the C library'. Toolchain
+> is EABI and uses glibc. I have tried both uClibc and glibc - settings
+> from the buildroot setup, but still get the same error.  (Of course
+> that's valid for uClibc). 
 
- 
+Which external toolchain are you using ?
 
-Now when I configure external toolchain in use and execute make -
-command I get result 'Incorret selection of the C library'. Toolchain is
-EABI and uses glibc. I have tried both uClibc and glibc - settings from
-the buildroot setup, but still get the same error.  (Of course that's
-valid for uClibc). 
+What does the following command returns ?
 
- 
+ LANG=C $(TARGET_CC) -v 
 
-With older buildroot there were no such problems and I was able to start
-using external toolchain with little troubles. (Although later on I ran
-in to some other problems and that's why I upgraded the buildroot).
+If you see a --with-sysroot thing in the result, could you look in this
+directory, and then in /lib/ to see if there is any ld-linux.* file ?
 
- 
+> With older buildroot there were no such problems and I was able to
+> start using external toolchain with little troubles. (Although later
+> on I ran in to some other problems and that's why I upgraded the
+> buildroot).
 
-All the documents I found are meant for older versions of buildroot and
-use a little different configuration so they are not much help.
+We added more checks to make sure that the configuration of Buildroot
+matches the configuration of the external toolchains. But there's such
+a variety of external toolchains that these checks might need some
+fixes.
 
- 
+Sincerly,
 
-Is there something I should know/do more to get the external toolchain
-to work in latest stable buildroot?
-
- 
-
-Teemu Keskinarkaus
-
- 
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090911/af063199/attachment-0001.htm>
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
