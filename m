@@ -1,7 +1,7 @@
 From: Teemu Keskinarkaus <Teemu.Keskinarkaus@cc-systems.com>
-Date: Fri, 11 Sep 2009 08:55:15 +0200
+Date: Fri, 11 Sep 2009 08:48:25 +0200
 Subject: [Buildroot] External Toolchain in latest stable buildroot
-Message-ID: <330EC2471BF24E48B513AF1A6975EB69AD87FF@MAIL-UA.ccs.local>
+Message-ID: <330EC2471BF24E48B513AF1A6975EB69AD87F9@MAIL-UA.ccs.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -42,12 +42,10 @@ to work in latest stable buildroot?
 
  
 
- 
-
 Teemu Keskinarkaus
 
  
 
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090911/ffd37f34/attachment-0001.htm>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090911/af063199/attachment-0001.htm>
