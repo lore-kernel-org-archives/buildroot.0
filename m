@@ -1,22 +1,34 @@
-From: Joe tech <joetech20@gmail.com>
-Date: Mon, 14 Sep 2009 12:59:07 +0530
-Subject: [Buildroot] [buildroot 0003714]: oprofile doesn't build because bfd
-Message-ID: <4345ac050909140029h6e592d9blb9d4c72fbdc1fbcd@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 14 Sep 2009 11:36:09 +0200
+Subject: [Buildroot] UBOOT 2009.08 & ARM Link Error
+In-Reply-To: <4AADDC89.7070302@atmel.com> (Ulf Samuelsson's message of "Mon\,
+	14 Sep 2009 08\:02\:49 +0200")
+References: <2FAA2DE137CA432EBF8BEE2E967A7993@apexjs>
+	<4AADDC89.7070302@atmel.com>
+Message-ID: <87ljkh3m2e.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I face the same issue as reported here, ?oprofile doesn't build
-because bfd library not found?. I could not find the mentioned patch.
-Is there a way to access the patch or any known fix for this issue? I
-understand the issue is because, binutils are not generating .so
-files. I am using buildroot-2009.08 (as downloaded from busy box url,
-including the same version of gcc, uclibc ,busybox etc ) with 2.6.28
-Linux kernel.
+>>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
 
-It would be great if someone can extend me a helping hand here at the earliest.
+ Ulf> Sagaert Johan skrev:
+ >> Hi
+ >> Did anyone succeed in building the UBOOT 2009.08 version for ARM
+ >> (at91sam9260_config)?
+ >> I always end up with this error :
+ >> 
 
-Regards,
-Joe
+ Ulf> Yes, I can build 2009.08 in my personal git tree.
+ Ulf> git://git.busybox.net/~ulf/git/atmel-2009-08
+
+ Ulf> You need some fixes, which are present there.
+ Ulf> While I did not test the SAM9260 as such, this is a generic
+ Ulf> problem for ARM, which gets fixed by my patches.
+
+Patches are welcome - Are they in upstream u-boot git?
+
+-- 
+Bye, Peter Korsgaard
