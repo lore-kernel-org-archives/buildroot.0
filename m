@@ -1,34 +1,30 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 14 Sep 2009 11:36:09 +0200
-Subject: [Buildroot] UBOOT 2009.08 & ARM Link Error
-In-Reply-To: <4AADDC89.7070302@atmel.com> (Ulf Samuelsson's message of "Mon\,
-	14 Sep 2009 08\:02\:49 +0200")
-References: <2FAA2DE137CA432EBF8BEE2E967A7993@apexjs>
-	<4AADDC89.7070302@atmel.com>
-Message-ID: <87ljkh3m2e.fsf@macbook.be.48ers.dk>
+From: Joe tech <joetech20@gmail.com>
+Date: Mon, 14 Sep 2009 18:44:55 +0530
+Subject: [Buildroot] Enabling oprofiler package on buildroot-2009.08 (MIPS
+	cross-compilation)
+Message-ID: <4345ac050909140614i387f8705yaec4c1c52f8152c2@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
+I have downloaded the latest buildroot (version 2009.08) and have
+crosscompiled it for Mips32 arch. I am using the latest packages, gcc 4.3.3,
+binutils 2.19.1, uClibc-0.9.30.1 &  busybox-1.14.3. Now, I am trying to
+enable the oprofiler package. But i am not succesful in getting the
+oprofiler package compiled. On enabling oprofiler package, i get the error
+"libbfd is not supported". I have verified that libbfd.so is not created in
+the binutils directory.
+Any idea on how to get out of this issue? which is the best way to resolve
+this dependency?
+I am stuck with this error for quiet sometime and not able to proceed
+further. Request some help from any of the users. I suppose, this is the
+best mailing list to get support on buildroot related issues. Let me know if
+you think there a better forum wherein i can put forward this issue.
 
- Ulf> Sagaert Johan skrev:
- >> Hi
- >> Did anyone succeed in building the UBOOT 2009.08 version for ARM
- >> (at91sam9260_config)?
- >> I always end up with this error :
- >> 
-
- Ulf> Yes, I can build 2009.08 in my personal git tree.
- Ulf> git://git.busybox.net/~ulf/git/atmel-2009-08
-
- Ulf> You need some fixes, which are present there.
- Ulf> While I did not test the SAM9260 as such, this is a generic
- Ulf> problem for ARM, which gets fixed by my patches.
-
-Patches are welcome - Are they in upstream u-boot git?
-
--- 
-Bye, Peter Korsgaard
+Regards,
+Joe.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090914/f92607ae/attachment.htm>
