@@ -1,51 +1,34 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Mon, 14 Sep 2009 17:42:02 +0200
-Subject: [Buildroot] UBOOT 2009.08 & ARM Link Error
-References: <2FAA2DE137CA432EBF8BEE2E967A7993@apexjs><4AADDC89.7070302@atmel.com>
-	<87ljkh3m2e.fsf@macbook.be.48ers.dk>
-Message-ID: <000401ca3556$08f25800$223118ac@GLAMDRING>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 14 Sep 2009 18:37:53 +0000 (UTC)
+Subject: [Buildroot] [Bug 499] make O=... busybox-menuconfig crashes
+In-Reply-To: <bug-499-163@https.bugs.busybox.net/>
+References: <bug-499-163@https.bugs.busybox.net/>
+Message-ID: <20090914183753.4E8EC7774C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
->>>>>> "Ulf" == Ulf Samuelsson <ulf.samuelsson@atmel.com> writes:
->
-> Ulf> Sagaert Johan skrev:
-> >> Hi
-> >> Did anyone succeed in building the UBOOT 2009.08 version for ARM
-> >> (at91sam9260_config)?
-> >> I always end up with this error :
-> >>
->
-> Ulf> Yes, I can build 2009.08 in my personal git tree.
-> Ulf> git://git.busybox.net/~ulf/git/atmel-2009-08
->
-> Ulf> You need some fixes, which are present there.
-> Ulf> While I did not test the SAM9260 as such, this is a generic
-> Ulf> problem for ARM, which gets fixed by my patches.
->
-> Patches are welcome - Are they in upstream u-boot git?
->
-> -- 
-> Bye, Peter Korsgaard
->
-
-They were proposed and rejected because it is not needed by the ELDK
-Embedded Linux Development Kit, provided by Denx.
-
-The decision makers for U-boot, think that everyone should compile using 
-ELDK,
-and  really do not care if the Buildroot toolchain can build U-Boot or not.
-
-This is an old problem, and if you build older u-boots for AT91
-the existing patches will handle the problem
-
-If the buildroot compiler can handle "-msoftfloat" the problem will go away 
-by itself.
+https://bugs.busybox.net/show_bug.cgi?id=499
 
 
-Best Regards
-Ulf Samuelsson 
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|ASSIGNED                    |RESOLVED
+         Resolution|                            |WORKSFORME
+
+
+
+
+--- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2009-09-14 18:37:52 UTC ---
+For some reason, works now with Busybox 1.15.0. Either I was crazy when I
+encountered the issue, or something fixed it. Who knows.
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
