@@ -1,37 +1,42 @@
 From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Mon, 14 Sep 2009 15:21:28 +0200
+Date: Mon, 14 Sep 2009 15:36:30 +0200
 Subject: [Buildroot] Enabling oprofiler package on buildroot-2009.08
  (MIPS cross-compilation)
-In-Reply-To: <4345ac050909140614i387f8705yaec4c1c52f8152c2@mail.gmail.com>
+In-Reply-To: <4345ac050909140626td6ccfd1v945553b80704ae83@mail.gmail.com>
 References: <4345ac050909140614i387f8705yaec4c1c52f8152c2@mail.gmail.com>
-Message-ID: <20090914152128.56d8aad2@hcegtvedt.norway.atmel.com>
+	<20090914152128.56d8aad2@hcegtvedt.norway.atmel.com>
+	<4345ac050909140626td6ccfd1v945553b80704ae83@mail.gmail.com>
+Message-ID: <20090914153630.1bfabd3d@hcegtvedt.norway.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 14 Sep 2009 18:44:55 +0530
+On Mon, 14 Sep 2009 18:56:07 +0530
 Joe tech <joetech20@gmail.com> wrote:
 
-> I have downloaded the latest buildroot (version 2009.08) and have
-> crosscompiled it for Mips32 arch. I am using the latest packages, gcc 4.3.3,
-> binutils 2.19.1, uClibc-0.9.30.1 &  busybox-1.14.3. Now, I am trying to
-> enable the oprofiler package. But i am not succesful in getting the
-> oprofiler package compiled. On enabling oprofiler package, i get the error
-> "libbfd is not supported". I have verified that libbfd.so is not created in
-> the binutils directory.
-> Any idea on how to get out of this issue? which is the best way to resolve
-> this dependency?
-> I am stuck with this error for quiet sometime and not able to proceed
-> further. Request some help from any of the users. I suppose, this is the
-> best mailing list to get support on buildroot related issues. Let me know if
-> you think there a better forum wherein i can put forward this issue.
+> Thanks for your prompt reply.
+> 
+> binutils-target is getting built. Only archives (static libraries) getting
+> built. Following is a list of binaries that i see in
+> toolchain_build_mips_nofpu/binutils-2.19.1-build
+> ./libiberty/libiberty.a
+> ./bfd/.libs/libbfd.a
+> ./bfd/libbfd.a
+> ./opcodes/.libs/libopcodes.a
+> ./opcodes/libopcodes.a
+> Is there are way to get the shared libraries built? I tried enabled
+> --enable-shared option without any luck. Do you have any suggestion?
 > 
 
-The binutils-target must be built, this will generate the libbfd
-library you are missing. I have no clue if this works smooth in current
-Buildroot.
+Yes, please do not reply to me only, added the Buildroot list back on
+CC.
+
+> I have no clue if this works smooth in current Buildroot.
+>
+
+And I'll quote myself ^^^^^^
 
 -- 
 Best regards,
