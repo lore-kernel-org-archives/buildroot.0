@@ -1,98 +1,65 @@
-From: Dan Pattison <dan.pattison@ethertek.ca>
-Date: Sat, 12 Sep 2009 08:03:22 -0700
-Subject: [Buildroot] Configure linux kernel within buildroot
-In-Reply-To: <90F28E49-FCA0-4AD2-9884-3BEF12EF93DE@gmail.com>
-References: <F239D13E-838F-4CA7-9AAE-D79234BBAD0A@gmail.com>
-	<4AABB314.9070507@ethertek.ca>
-	<90F28E49-FCA0-4AD2-9884-3BEF12EF93DE@gmail.com>
-Message-ID: <4AABB83A.1050705@ethertek.ca>
+From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
+Date: Mon, 14 Sep 2009 07:57:41 +0200
+Subject: [Buildroot] External Toolchain in latest stable buildroot
+In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE190901CBEE46@mi8nycmail19.Mi8.com>
+References: <330EC2471BF24E48B513AF1A6975EB69AD87F9@MAIL-UA.ccs.local><20090911091415.19422fbb@surf><330EC2471BF24E48B513AF1A6975EB69AD8816@MAIL-UA.ccs.local>	<330EC2471BF24E48B513AF1A6975EB69AD887B@MAIL-UA.ccs.local>
+	<BD79186B4FD85F4B8E60E381CAEE190901CBEE46@mi8nycmail19.Mi8.com>
+Message-ID: <4AADDB55.3050408@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Ben,
+H Hartley Sweeten skrev:
+> On Friday, September 11, 2009 3:50 AM, Teemu Keskinarkaus wrote:
+>> Hi,
+>>
+>> So I was able to get some of the stuff compile and some not. The
+>> external toolchain I'm using is Codesourcery's toolchain for arm.
+>> Version is(Sourcery G++ Lite 2009q1-203) (gcc version 4.3.3)
+>>
+>> I'm quite sure that this is not 100% buildroot problem, but I ask
+>> anyway.
+>>
+>> I hit problems when compiling bootstrap for AT91.
+>>
+>> Get few of these errors:
+>>
+>> build/at91sam9263ek/main.o:(.ARM.exidx+0x0): undefined reference to
+>> `__aeabi_unwind_cpp_pr1'
+>> build/at91sam9263ek/at91sam9263ek.o:(.ARM.exidx+0x0): undefined
+>> reference to `__aeabi_unwind_cpp_pr0'
+>>
+>> I did some digging and it seems that the problem might be in the
+>> toolchain, but it might also need some work in buildroot side.
+>>
+>> Has anyone been able to use CodeSourcerys toolchain to compile buildroot
+>> for ARM? Or is anyone even using CodeSourcerys toolchain for ARM?
+>>
+>> Teemu Keskinarkaus
+> 
+> The Sourcery G++ Lite 2009q1-203 toolchain is a multilib sysroot toolchain.
+> I had similar problems trying to get it to work for an EP93XX processor.
+> 
+> I think the AT91 processor is an ARM920T so you need to pass -march=armv4t
+> to the toolchain to in order for it to compile the code correctly.  This
+> is the same option I need for the EP93XX.
 
-Hey, your right, its not in there. In the main make file, if you type 
-out make help, it lists some configuration options. I either saw it 
-there or read it on the list here somewhere.
-
-Best Regards,
-Dan Pattison
-EtherTek Circuits 
+The AT91SAM9263 is an ARM926EJ-S.
+BR
+Ulf Samuelsson
 
 
-Ben Coughlan wrote:
-> Thanks Dan.  I was hoping there was a 'make linux26-menuconfig'.
->
-> I would like to point out that it doesn't appear on the docco you 
-> linked (I did spend quite some time scouring it :P).
->
-> Cheers,
-> Ben Coughlan
->
-> On 13/09/2009, at 12:41 AM, Dan Pattison wrote:
->
->> Hi Ben,
->>
->> To build your kernel and images, simply type out    make    from your 
->> buildroot main folder.
->> To configure main buildroot settings type:    make menuconfig
->> To configure kernel settings type:   make linux26-menuconfig
->> To configure busybox type:   make busybox-menuconfig
->> To configure uclibc type:   make uclibc-menuconfig
->>
->> Some good docs can be found here: 
->> http://buildroot.uclibc.org/buildroot.html
->>
->> Best Regards,
->> Dan Pattison
->> EtherTek Circuits
->>
->>
->> Ben Coughlan wrote:
->>> Hi All,
->>>
->>> I'm fairly new to Buildroot and I have a sufficiently newbie 
->>> question to ask.
->>>
->>> How do I configure the kernel buildroot produces?  The first 'make' 
->>> gave me a menuconfig for the kernel but I don't know how to get it 
->>> back or alter the cached config.
->>>
->>> Any hints?
->>>
->>> Regards,
->>> Ben Coughlan
->>> _______________________________________________
->>> buildroot mailing list
->>> buildroot at busybox.net
->>> http://lists.busybox.net/mailman/listinfo/buildroot
->>> ------------------------------------------------------------------------ 
->>>
->>>
->>>
->>> No virus found in this incoming message.
->>> Checked by AVG - www.avg.com Version: 8.5.409 / Virus Database: 
->>> 270.13.91/2363 - Release Date: 09/11/09 09:15:00
->>>
->>>
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->
-> ------------------------------------------------------------------------
->
->
-> No virus found in this incoming message.
-> Checked by AVG - www.avg.com 
-> Version: 8.5.409 / Virus Database: 270.13.93/2365 - Release Date: 09/12/09 06:37:00
->
->   
-
--- 
-Dan Pattison
-Ethertek Circuits
+> 
+> I spent the last three weeks trying to get this toolchain to work correctly.
+> I finally got "way" over my head and built my own toolchain with crosstool-ng.
+> Personally I would prefer to use a prebuilt external toolchain but at least
+> everything works now.
+> 
+> Regards,
+> Hartley
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
