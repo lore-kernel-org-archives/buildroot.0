@@ -1,97 +1,48 @@
-From: Ulf Samuelsson <ulf.samuelsson@atmel.com>
-Date: Mon, 14 Sep 2009 08:02:49 +0200
-Subject: [Buildroot] UBOOT 2009.08 & ARM Link Error
-In-Reply-To: <2FAA2DE137CA432EBF8BEE2E967A7993@apexjs>
-References: <2FAA2DE137CA432EBF8BEE2E967A7993@apexjs>
-Message-ID: <4AADDC89.7070302@atmel.com>
+From: =?big5?B?qkyr2KZ3?= <colin@realtek.com.tw>
+Date: Mon, 14 Sep 2009 15:07:56 +0800
+Subject: [Buildroot] mklibs.py has problem on gdbserver
+Message-ID: <F2F08A63C41443DE8CED853D0B47BB57@realtek.com.tw>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sagaert Johan skrev:
-> Hi
->  
-> Did anyone succeed in building the UBOOT 2009.08 version for ARM 
-> (at91sam9260_config)?
->  
-> I always end up with this error :
->  
 
-Yes, I can build 2009.08 in my personal git tree.
-git://git.busybox.net/~ulf/git/atmel-2009-08
+Hi there,
+I am trying to shrink the libraries by using mklibs.py, which is from
+buildroot/toolchain/mklibs.
+It can work on almost all of the dynamic-linked APs in addition to
+gdbserver.
+The platform is of MIPSEL. I tried to see if the x86 executable file of
+gdbserver has the same problem, and the answer is yes.
+Anybody know what the problem is?
 
-You need some fixes, which are present there.
-While I did not test the SAM9260 as such, this is a generic
-problem for ARM, which gets fixed by my patches.
+The gdbserver is from GNU gdb-6.8.
+The log is as following:
+     ../bin/mklibs.py -v    -d trimlib /tmp/gdbserver
+    I: Using ld-linux.so.2 as dynamic linker.
+    I: library reduction pass 1
+    Objects: gdbserver
+    Object: /tmp/gdbserver
+    84 symbols, 84 unresolved
+    reducing libthread_db.so.1
+    No pic file found for /lib//libthread_db.so.1 ; copying
+    reducing libc.so.6
+    No pic file found for /lib//libc.so.6 ; copying
+    I: library reduction pass 2
+    Objects: gdbserver
+    Object: trimlib/libthread_db.so.1-so-stripped
+    Object: /tmp/gdbserver
+    Object: trimlib/libc.so.6-so-stripped
+    104 symbols, 10 unresolved
+    ../bin/mklibs.py:496: DeprecationWarning: raising a string exception is
+deprecated
+      raise "No library provides non-weak " + symbol
+    Traceback (most recent call last):
+      File "../bin/mklibs.py", line 496, in <module>
+        raise "No library provides non-weak " + symbol
+    No library provides non-weak ps_pdread
 
-My git tree also contains linux-2.6.30.2 and an updated
-at91bootstrap.
-Still a lot of testing to be done.
-Help appreciated.
-
-
-
-
-> arm-linux-ld: ERROR: 
-> /home/johan/buildroot/build_arm/staging_dir/usr/bin-ccache/../lib/gcc/arm-linux-uclibc/4.3.3/libgcc.a(_udivsi3.o) 
-> uses hardware FP, whereas u-boot uses software FP
-> arm-linux-ld: failed to merge target specific data of file 
-> /home/johan/buildroot/build_arm/staging_dir/usr/bin-ccache/../lib/gcc/arm-linux-uclibc/4.3.3/libgcc.a(_udivsi3.o)
-> arm-linux-ld: ERROR: 
-> /home/johan/buildroot/build_arm/staging_dir/usr/bin-ccache/../lib/gcc/arm-linux-uclibc/4.3.3/libgcc.a(_divsi3.o) 
-> uses hardware FP, whereas u-boot uses software FP
-> arm-linux-ld: failed to merge target specific data of file 
-> /home/johan/buildroot/build_arm/staging_dir/usr/bin-ccache/../lib/gcc/arm-linux-uclibc/4.3.3/libgcc.a(_divsi3.o)
-> arm-linux-ld: ERROR: 
-> /home/johan/buildroot/build_arm/staging_dir/usr/bin-ccache/../lib/gcc/arm-linux-uclibc/4.3.3/libgcc.a(_umodsi3.o) 
-> uses hardware FP, whereas u-boot uses software FP
-> arm-linux-ld: failed to merge target specific data of file 
-> /home/johan/buildroot/build_arm/staging_dir/usr/bin-ccache/../lib/gcc/arm-linux-uclibc/4.3.3/libgcc.a(_umodsi3.o)
-> arm-linux-ld: ERROR: 
-> /home/johan/buildroot/build_arm/staging_dir/usr/bin-ccache/../lib/gcc/arm-linux-uclibc/4.3.3/libgcc.a(_modsi3.o) 
-> uses hardware FP, whereas u-boot uses software FP
-> arm-linux-ld: failed to merge target specific data of file 
-> /home/johan/buildroot/build_arm/staging_dir/usr/bin-ccache/../lib/gcc/arm-linux-uclibc/4.3.3/libgcc.a(_modsi3.o)
-> arm-linux-ld: ERROR: 
-> /home/johan/buildroot/build_arm/staging_dir/usr/bin-ccache/../lib/gcc/arm-linux-uclibc/4.3.3/libgcc.a(_dvmd_lnx.o) 
-> uses hardware FP, whereas u-boot uses software FP
-> arm-linux-ld: failed to merge target specific data of file 
-> /home/johan/buildroot/build_arm/staging_dir/usr/bin-ccache/../lib/gcc/arm-linux-uclibc/4.3.3/libgcc.a(_dvmd_lnx.o)
-> arm-linux-ld: ERROR: 
-> /home/johan/buildroot/build_arm/staging_dir/usr/bin-ccache/../lib/gcc/arm-linux-uclibc/4.3.3/libgcc.a(_lshrdi3.o) 
-> uses hardware FP, whereas u-boot uses software FP
-> arm-linux-ld: failed to merge target specific data of file 
-> /home/johan/buildroot/build_arm/staging_dir/usr/bin-ccache/../lib/gcc/arm-linux-uclibc/4.3.3/libgcc.a(_lshrdi3.o)
-> arm-linux-ld: ERROR: 
-> /home/johan/buildroot/build_arm/staging_dir/usr/bin-ccache/../lib/gcc/arm-linux-uclibc/4.3.3/libgcc.a(_ashldi3.o) 
-> uses hardware FP, whereas u-boot uses software FP
-> arm-linux-ld: failed to merge target specific data of file 
-> /home/johan/buildroot/build_arm/staging_dir/usr/bin-ccache/../lib/gcc/arm-linux-uclibc/4.3.3/libgcc.a(_ashldi3.o)
-> arm-linux-ld: ERROR: 
-> /home/johan/buildroot/build_arm/staging_dir/usr/bin-ccache/../lib/gcc/arm-linux-uclibc/4.3.3/libgcc.a(_ashrdi3.o) 
-> uses hardware FP, whereas u-boot uses software FP
-> arm-linux-ld: failed to merge target specific data of file 
-> /home/johan/buildroot/build_arm/staging_dir/usr/bin-ccache/../lib/gcc/arm-linux-uclibc/4.3.3/libgcc.a(_ashrdi3.o)
-> make: *** [u-boot] Error 1
->  
-> The 2009.06 version does not produce this error, so i will be using this 
-> one i guess .
->  
-> I wonder if this is a toolchain issue or a uboot error .
->  
-> If a recent version gets pushed into buildroot, does someone then 
-> verifies it works ?
->  
-> Johan
->  
->  
-> 
-> 
-> ------------------------------------------------------------------------
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Regards,
+Colin
