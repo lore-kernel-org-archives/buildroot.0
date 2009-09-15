@@ -1,50 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Sep 2009 06:58:16 +0200
-Subject: [Buildroot] using crosstool-ng with glibc and buildroot
-In-Reply-To: <20090914213907.326740@gmx.net>
-References: <20090914213907.326740@gmx.net>
-Message-ID: <20090915065816.235240d0@surf>
+From: Anders Darander <anders.darander@gmail.com>
+Date: Tue, 15 Sep 2009 08:13:10 +0200
+Subject: [Buildroot] [PATCH] DNS resolv problem with glibc
+Message-ID: <20090915061256.GA9451@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 14 Sep 2009 23:39:07 +0200,
-"Florian Schimmer" <slaanch@gmx.de> a ?crit :
+Fix problem with dns resolv, by copying the libnss_dns.so to the rootfs.
 
-> Checking external toolchain settings
-> Cannot find
-> cross-compiler /home/flo/x-tools/x86_64-unknown-linux-gnu/x86_64-unknown-linux-gnu/bin/-gcc
-> make: ***
-> [/home/xx/xx/buildroot/buildroot-2009.08/build_x86_64/stamps/ext-toolchain-installed]
-> Error 1
+Using glibc from external toolchain, name resolving does not work,
+unless libnss_dns.so is available on the target.
 
-Instead of pointing Buildroot
-to /home/flo/x-tools/x86_64-unknown-linux-gnu/x86_64-unknown-linux-gnu/,
-could you point it to /home/flo/x-tools/x86_64-unknown-linux-gnu/ ? The
-bin/ directory in this directory should contain the cross-compiling
-tools with prefix.
+Signed-off-by: Anders Darander <ad@datarespons.se>
+---
+ toolchain/external-toolchain/ext-tool.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-> ext-tool.mk : 
-> if ! test -f $${SYSROOT_DIR}/lib/ld-linux.so.* ; then \
-> 		echo "Incorrect selection of the C library"; \
-> 		exit -1; \
-> 	fi; \
-> 
-> but crosstools output for ld is:
-> /lib/ld.so.1 and /lib/ld-2.9.so
-
-Can you give me the full list of libraries in $${SYSROOT_DIR}/lib/ ?
-Here, on an ARM toolchain, I have a lib/ld-linux.so.3 symbolic link.
-Maybe it's different per architecture, in which case I could relax the
-test.
-
-Sincerly,
-
-Thomas
+diff --git a/toolchain/external-toolchain/ext-tool.mk b/toolchain/external-toolchain/ext-tool.mk
+index 568ac3a..1f5aa19 100644
+--- a/toolchain/external-toolchain/ext-tool.mk
++++ b/toolchain/external-toolchain/ext-tool.mk
+@@ -198,7 +198,7 @@ EXTERNAL_LIBS=libc.so libcrypt.so libdl.so libgcc_s.so libm.so libnsl.so libpthr
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
+ EXTERNAL_LIBS+=ld-uClibc.so
+ else
+-EXTERNAL_LIBS+=ld-linux.so libnss_files.so
++EXTERNAL_LIBS+=ld-linux.so libnss_files.so libnss_dns.so
+ endif
+ ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+1.6.3.3
