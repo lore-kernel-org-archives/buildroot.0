@@ -1,40 +1,35 @@
-From: Teemu Keskinarkaus <Teemu.Keskinarkaus@cc-systems.com>
-Date: Tue, 15 Sep 2009 13:31:59 +0200
-Subject: [Buildroot] Building buildroot without U-boot
-In-Reply-To: <87vdjk1miw.fsf@macbook.be.48ers.dk>
-References: <330EC2471BF24E48B513AF1A6975EB69B00909@MAIL-UA.ccs.local>
-	<87vdjk1miw.fsf@macbook.be.48ers.dk>
-Message-ID: <330EC2471BF24E48B513AF1A6975EB69B00931@MAIL-UA.ccs.local>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 15 Sep 2009 14:16:40 +0200
+Subject: [Buildroot] [git commit master] busybox: don't default to long gone
+	file for snapshot config
+Message-ID: <20090915121848.CEE37764B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> -----Original Message-----
-> From: Peter Korsgaard [mailto:jacmet at gmail.com] On Behalf Of Peter
-> Korsgaard
-> >>>>> "Teemu" == Teemu Keskinarkaus
-<Teemu.Keskinarkaus@cc-systems.com>
-> writes:
-> 
->  Teemu> Hi,
-> 
->  Teemu> In older version there was selection in menuconfig if to build
->  Teemu> U-boot or not, but in latest stable version that selection is
->  Teemu> removed and U-boot is build everytime. Problem is that I don?t
->  Teemu> need it and more importantly it won?t compile okay. What is
-the
->  Teemu> correct way to disable U-boot from building if there is any?
-> 
->  Ehh, Target filesystem options -> Das U-Boot Boot Monitor is here
-just
->  like it used to be. Just disable that option and it won't get built.
 
-Oh, so I see. I was actually using the Ulf Samuelsson's version of the
-buildroot and mistakenly said that I was using latest stable. In Ulf's
-version there the U-boot is represent differently.
+commit: http://git.buildroot.net/buildroot/commit/?id=6804b484a90d19eabcdac7fc7b02d2e9cdbc1693
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks anyway.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/busybox/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
--Teemu
+diff --git a/package/busybox/Config.in b/package/busybox/Config.in
+index 72cbd12..378f2c1 100644
+--- a/package/busybox/Config.in
++++ b/package/busybox/Config.in
+@@ -59,7 +59,7 @@ config BR2_PACKAGE_BUSYBOX_FULLINSTALL
+ config BR2_PACKAGE_BUSYBOX_CONFIG
+ 	string "BusyBox configuration file to use?"
+ 	depends on BR2_PACKAGE_BUSYBOX
+-	default "target/device/x86/i386/busybox.config" if BR2_PACKAGE_BUSYBOX_SNAPSHOT
++	default "package/busybox/busybox-1.13.x.config" if BR2_PACKAGE_BUSYBOX_SNAPSHOT
+ 	default "package/busybox/busybox-1.11.x.config" if BR2_BUSYBOX_VERSION_1_12_X
+ 	default "package/busybox/busybox-1.13.x.config" if BR2_BUSYBOX_VERSION_1_13_X
+ 	default "package/busybox/busybox-1.13.x.config" if BR2_BUSYBOX_VERSION_1_14_X
+-- 
+1.6.3.3
