@@ -1,35 +1,31 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 15 Sep 2009 12:40:16 +0000 (UTC)
-Subject: [Buildroot] [Bug 609] New: libmicrohttpd: New package.
-Message-ID: <bug-609-163@https.bugs.busybox.net/>
+Date: Wed, 16 Sep 2009 06:48:20 +0000 (UTC)
+Subject: [Buildroot] [Bug 587] Use iptables multipurpose binaries and bump
+	to 1.4.4
+In-Reply-To: <bug-587-163@https.bugs.busybox.net/>
+References: <bug-587-163@https.bugs.busybox.net/>
+Message-ID: <20090916064820.DC9D57779D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=609
-
-           Summary: libmicrohttpd: New package.
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: enhancement
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: will.newton at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+https://bugs.busybox.net/show_bug.cgi?id=587
 
 
-Created an attachment (id=651)
- --> (https://bugs.busybox.net/attachment.cgi?id=651)
-Add support for libmicrohttpd to buildroot.
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-The attached patch adds support for GNU libmicrohttpd to buildroot.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
+
+
+
+
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-09-16 06:48:19 UTC ---
+Committed, thanks!
 
 
 -- 
