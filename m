@@ -1,55 +1,104 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Sep 2009 23:07:43 +0200
-Subject: [Buildroot] [PATCH 3/6] By default,
-	put the output in an output/ directory
+Date: Wed, 16 Sep 2009 23:07:44 +0200
+Subject: [Buildroot] [PATCH 4/6] Remove BR2_TOPDIR_PREFIX and
+	BR2_TOPDIR_SUFFIX
 In-Reply-To: <1253135266-26880-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1253135266-26880-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1253135266-26880-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1253135266-26880-5-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Instead of putting all the build-related stuff as a mess in the
-Buildroot sources, group them in an output/ directory.
+The same effect can be done using out-of-tree build with O=
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile |   15 ++++++---------
- 1 files changed, 6 insertions(+), 9 deletions(-)
+ Config.in           |   18 ------------------
+ Makefile            |   11 +----------
+ package/Makefile.in |    6 +++---
+ 3 files changed, 4 insertions(+), 31 deletions(-)
 
+diff --git a/Config.in b/Config.in
+index 146bb17..2573643 100644
+--- a/Config.in
++++ b/Config.in
+@@ -106,24 +106,6 @@ config BR2_FPU_SUFFIX
+ 	  the "_nofpu" suffix will be added to the toolchain build
+ 	  directory name and to any rootfs image name
+ 
+-config BR2_TOPDIR_PREFIX
+-	string "Custom build dir prefix"
+-	default ""
+-	help
+-	  Add a custom string to the beginning of the build directories.
+-
+-	  build_ARCH -> [PREFIX]_build_ARCH
+-	  toolchain_build_ARCH -> [PREFIX]_toolchain_build_ARCH
+-
+-config BR2_TOPDIR_SUFFIX
+-	string "Custom build dir suffix"
+-	default ""
+-	help
+-	  Add a custom string to the end of the build directories.
+-
+-	  build_ARCH -> build_ARCH_[SUFFIX]
+-	  toolchain_build_ARCH -> toolchain_build_ARCH_[SUFFIX]
+-
+ config BR2_GNU_BUILD_SUFFIX
+ 	string "GNU build hostname suffix"
+ 	default "pc-linux-gnu"
 diff --git a/Makefile b/Makefile
-index cfa5778..8b07786 100644
+index 8b07786..d493200 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -217,21 +217,18 @@ ZCAT:=$(call qstrip,$(BR2_ZCAT))
- BZCAT:=$(call qstrip,$(BR2_BZCAT))
- TAR_OPTIONS=$(call qstrip,$(BR2_TAR_OPTIONS)) -xf
+@@ -230,21 +230,12 @@ endif
+ BASE_DIR := $(shell mkdir -p $(O) && cd $(O) && pwd)
+ $(if $(BASE_DIR),, $(error output directory "$(O)" does not exist))
  
--# Buildroot supports building out of tree similarly to the Linux kernel.
--# To use, add O= to the make command line (make O=/tmp/build)
--BASE_DIR:=$(shell pwd)
--ifdef O
--ifeq ("$(origin O)", "command line")
--BASE_DIR := $(shell mkdir -p $(O) && cd $(O) && pwd)
--$(if $(BASE_DIR),, $(error output directory "$(O)" does not exist))
--
-+ifneq ("$(origin O)", "command line")
-+O:=output
-+else
- # other packages might also support Linux-style out of tree builds
- # with the O=<dir> syntax (E.G. Busybox does). As make automatically
- # forwards command line variable definitions those packages get very
- # confused. Fix this by telling make to not do so
- MAKEOVERRIDES =
- endif
+-TOPDIR_PREFIX:=$(call qstrip,$(BR2_TOPDIR_PREFIX))_
+-TOPDIR_SUFFIX:=_$(call qstrip,$(BR2_TOPDIR_SUFFIX))
+-ifeq ($(TOPDIR_PREFIX),_)
+-TOPDIR_PREFIX:=
 -endif
-+
-+BASE_DIR := $(shell mkdir -p $(O) && cd $(O) && pwd)
-+$(if $(BASE_DIR),, $(error output directory "$(O)" does not exist))
+-ifeq ($(TOPDIR_SUFFIX),_)
+-TOPDIR_SUFFIX:=
+-endif
+-
+ DL_DIR=$(call qstrip,$(BR2_DL_DIR))
+ ifeq ($(DL_DIR),)
+ DL_DIR:=$(BASE_DIR)/dl
+ endif
  
- TOPDIR_PREFIX:=$(call qstrip,$(BR2_TOPDIR_PREFIX))_
- TOPDIR_SUFFIX:=_$(call qstrip,$(BR2_TOPDIR_SUFFIX))
+-BUILD_DIR:=$(BASE_DIR)/$(TOPDIR_PREFIX)build_$(ARCH)$(ARCH_FPU_SUFFIX)$(TOPDIR_SUFFIX)
++BUILD_DIR:=$(BASE_DIR)/build_$(ARCH)$(ARCH_FPU_SUFFIX)
+ 
+ GNU_TARGET_SUFFIX:=-$(call qstrip,$(BR2_GNU_TARGET_SUFFIX))
+ 
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 0ae5bdb..093108d 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -112,7 +112,7 @@ COND_ARCH_FPU_SUFFIX:=
+ endif
+ 
+ ifeq ($(BR2_TOOLCHAIN_SOURCE),y)
+-TOOL_BUILD_DIR=$(BASE_DIR)/$(TOPDIR_PREFIX)toolchain_build_$(ARCH)$(COND_ARCH_FPU_SUFFIX)$(TOPDIR_SUFFIX)
++TOOL_BUILD_DIR=$(BASE_DIR)/toolchain_build_$(ARCH)$(COND_ARCH_FPU_SUFFIX)
+ 
+ # Quotes are needed for spaces et al in path components.
+ TARGET_PATH="$(TOOL_BUILD_DIR)/bin:$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(STAGING_DIR)/bin:$(STAGING_DIR)/usr/bin:$(PATH)"
+@@ -124,8 +124,8 @@ KERNEL_CROSS=$(TARGET_CROSS)
+ else
+ TOOLCHAIN_EXTERNAL_PREFIX:=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))
+ TOOLCHAIN_EXTERNAL_PATH:=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PATH))
+-#TOOL_BUILD_DIR=$(BASE_DIR)/$(TOPDIR_PREFIX)toolchain_build_$(TOOLCHAIN_EXTERNAL_PREFIX)
+-TOOL_BUILD_DIR=$(BASE_DIR)/$(TOPDIR_PREFIX)toolchain_build_$(ARCH)$(COND_ARCH_FPU_SUFFIX)$(TOPDIR_SUFFIX)
++#TOOL_BUILD_DIR=$(BASE_DIR)/toolchain_build_$(TOOLCHAIN_EXTERNAL_PREFIX)
++TOOL_BUILD_DIR=$(BASE_DIR)/toolchain_build_$(ARCH)$(COND_ARCH_FPU_SUFFIX)
+ TARGET_PATH="$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(TOOL_BUILD_DIR)/bin:$(TOOLCHAIN_EXTERNAL_PATH)/bin:$(PATH)"
+ #IMAGE:=$(BINARIES_DIR)/$(BR2_ROOTFS_PREFIX).$(TOOLCHAIN_EXTERNAL_PREFIX)$(ROOTFS_SUFFIX)
+ IMAGE:=$(BINARIES_DIR)/$(BR2_ROOTFS_PREFIX).$(ARCH)$(COND_ARCH_FPU_SUFFIX)$(ROOTFS_SUFFIX)
 -- 
 1.6.0.4
