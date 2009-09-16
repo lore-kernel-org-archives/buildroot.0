@@ -1,36 +1,39 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Wed, 16 Sep 2009 19:09:21 +0200
-Subject: [Buildroot] [git commit master] iptables: use multipurpose
- binaries and bump version
-In-Reply-To: <87vdjizz34.fsf@macbook.be.48ers.dk>
-References: <20090916065152.259397779D@busybox.osuosl.org>
-	<20090916074918.GB26922@mx.loc>
-	<87vdjizz34.fsf@macbook.be.48ers.dk>
-Message-ID: <20090916170921.GG30991@mx.loc>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 16 Sep 2009 23:07:40 +0200
+Subject: [Buildroot] [pull request] Buildroot cleanup, v2
+Message-ID: <1253135266-26880-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Sep 16, 2009 at 05:30:39PM +0200, Peter Korsgaard wrote:
->>>>>> "Bernhard" == Bernhard Reutner-Fischer <rep.dot.nop@gmail.com> writes:
->
->Hi,
->
-> >> - bump version to 1.4.4
->
-> Bernhard> can you please make that 1.4.5?
->
->I gave it a quick try, but:
->
->./.libs/libxtables.so: undefined reference to `in6addr_any'
->collect2: ld returned 1 exit status
->make[3]: *** [iptables-multi] Error 1
->make[3]: *** Waiting for unfinished jobs....
->
->So unless anyone wants to fix that up (I don't use iptables), then I'll
->prefer to keep it at 1.4.4.
+Hello,
 
-This was supposed to be fixed already. Olaf, could you please reopen
-http://bugzilla.netfilter.org/show_bug.cgi?id=588
+Here is a resend of my patch series to cleanup various aspects of
+Buildroot. Changes against the previous version are the following:
+
+ * Modified the patch on using "output" as the default output
+   directory to match Peter suggestion regarding simplification of the
+   implementation
+
+ * Added a documentation patch that updates the documentation with the
+   proposed modifications and also adds informations about various
+   other things
+
+ * Rebased on top of the current git
+
+A discussion on this cleanup already took place, and I think that most
+of the objections have found answers through the proposal of
+alternative solutions.
+
+Therefore, could the huge-cleanup branch at
+git://git.busybox.net/~tpetazzoni/git/buildroot be pulled into the
+master repository ?
+
+If not, please tell me whether other fixes are needed or if I should
+give up with the whole idea for design reasons.
+
+Thanks!
+
+Thomas
