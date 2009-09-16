@@ -1,39 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Sep 2009 23:07:40 +0200
-Subject: [Buildroot] [pull request] Buildroot cleanup, v2
-Message-ID: <1253135266-26880-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Wed, 16 Sep 2009 23:07:42 +0200
+Subject: [Buildroot] [PATCH 2/6] Remove the BOARD/LOCAL feature
+In-Reply-To: <1253135266-26880-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1253135266-26880-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1253135266-26880-3-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This can be achieved by adding a new target in target/device/, and I
+will later propose a mechanism to add external boards and packages, so
+that our users not willing to get their target-specific or
+package-specific things merged can keep them cleanly separated from
+Buildroot tree.
 
-Here is a resend of my patch series to cleanup various aspects of
-Buildroot. Changes against the previous version are the following:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Makefile |   15 ---------------
+ 1 files changed, 0 insertions(+), 15 deletions(-)
 
- * Modified the patch on using "output" as the default output
-   directory to match Peter suggestion regarding simplification of the
-   implementation
-
- * Added a documentation patch that updates the documentation with the
-   proposed modifications and also adds informations about various
-   other things
-
- * Rebased on top of the current git
-
-A discussion on this cleanup already took place, and I think that most
-of the objections have found answers through the proposal of
-alternative solutions.
-
-Therefore, could the huge-cleanup branch at
-git://git.busybox.net/~tpetazzoni/git/buildroot be pulled into the
-master repository ?
-
-If not, please tell me whether other fixes are needed or if I should
-give up with the whole idea for design reasons.
-
-Thanks!
-
-Thomas
+diff --git a/Makefile b/Makefile
+index 8adaff4..cfa5778 100644
+--- a/Makefile
++++ b/Makefile
+@@ -32,14 +32,6 @@ noconfig_targets:=menuconfig xconfig config oldconfig randconfig \
+ 	defconfig allyesconfig allnoconfig release tags \
+ 	source-check help
+ 
+-
+-# Use shell variables, if defined
+-ifneq ($(BUILDROOT_LOCAL),)
+-BR2_LOCAL:=$(BUILDROOT_LOCAL)
+-else
+-BR2_LOCAL:=$(TOPDIR)/local
+-endif
+-
+ # Strip quotes and then whitespaces
+ qstrip=$(strip $(subst ",,$(1)))
+ #"))
+@@ -52,20 +44,13 @@ space:=$(empty) $(empty)
+ # $(shell find . -name *_defconfig |sed 's/.*\///')
+ # Pull in the user's configuration file
+ ifeq ($(filter $(noconfig_targets),$(MAKECMDGOALS)),)
+-ifeq ($(BOARD),)
+-# if "make BOARD=xyz" command
+ -include .config
+-else
+-# if "make" command
+--include $(BR2_LOCAL)/$(BOARD)/$(BOARD).config
+-endif
+ endif
+ 
+ # Override BR2_DL_DIR if shell variable defined
+ ifneq ($(BUILDROOT_DL_DIR),)
+ BR2_DL_DIR:=$(BUILDROOT_DL_DIR)
+ endif
+-LOCAL:=$(BR2_LOCAL)
+ 
+ # To put more focus on warnings, be less verbose as default
+ # Use 'make V=1' to see the full commands
+-- 
+1.6.0.4
