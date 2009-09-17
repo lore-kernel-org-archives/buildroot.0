@@ -1,33 +1,19 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 17 Sep 2009 14:02:12 +0200
-Subject: [Buildroot] [PATCH 2/6] Remove the BOARD/LOCAL feature
-In-Reply-To: <20090917074342.7ea13dd0@surf> (Thomas Petazzoni's message of
-	"Thu\, 17 Sep 2009 07\:43\:42 +0200")
-References: <1253135266-26880-1-git-send-email-thomas.petazzoni@free-electrons.com>
-	<1253135266-26880-3-git-send-email-thomas.petazzoni@free-electrons.com>
-	<d6cda7730909161500xbb81de5j195ce89fd2fd5db2@mail.gmail.com>
-	<20090917000846.2eb5baca@surf>
-	<d6cda7730909161521k54dbdcfaud53cca89589dffe6@mail.gmail.com>
-	<20090917074342.7ea13dd0@surf>
-Message-ID: <87zl8tye2j.fsf@macbook.be.48ers.dk>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Thu, 17 Sep 2009 14:13:56 +0200
+Subject: [Buildroot] root templates
+Message-ID: <001101ca3790$54bb9bc0$7401a8c0@apexlaptop>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hi
 
-Hi,
+I see drastic changes are done in buildroot , maybe consider the fact that until now, every project you start uses the same root template.
+So there maybe a system that allows for several different templates  to choose from. eg in the main project menu, one could for example list the templates available for that architecture including custom made templates.
 
- Thomas> Well, it's already done by the patch (and works). Since a
- Thomas> symbolic link to the BUILDROOT_EXTERNAL_BOARDS directory is
- Thomas> added in target/device/, I just added the -L option to find and
- Thomas> it is able to find the defconfig of the external boards. See
- Thomas> the patch for the one-liner implementation :-)
-
-Doesn't that give problems with the symlinks to /tmp and similar in the
-target_skeleton's? Especially if you build in /tmp.
-
--- 
-Bye, Peter Korsgaard
+Johan
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090917/32460294/attachment.htm>
