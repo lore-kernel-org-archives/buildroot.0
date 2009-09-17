@@ -1,52 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Sep 2009 07:43:42 +0200
-Subject: [Buildroot] [PATCH 2/6] Remove the BOARD/LOCAL feature
-In-Reply-To: <d6cda7730909161521k54dbdcfaud53cca89589dffe6@mail.gmail.com>
-References: <1253135266-26880-1-git-send-email-thomas.petazzoni@free-electrons.com>
-	<1253135266-26880-3-git-send-email-thomas.petazzoni@free-electrons.com>
-	<d6cda7730909161500xbb81de5j195ce89fd2fd5db2@mail.gmail.com>
-	<20090917000846.2eb5baca@surf>
-	<d6cda7730909161521k54dbdcfaud53cca89589dffe6@mail.gmail.com>
-Message-ID: <20090917074342.7ea13dd0@surf>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 17 Sep 2009 09:10:23 +0200
+Subject: [Buildroot] A more readable build output ?
+In-Reply-To: <20090916231925.0a8ce23b@surf> (Thomas Petazzoni's message of
+	"Wed\, 16 Sep 2009 23\:19\:25 +0200")
+References: <20090916231925.0a8ce23b@surf>
+Message-ID: <87fxamyrkw.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 16 Sep 2009 19:21:54 -0300,
-Thiago A. Corr?a <thiago.correa@gmail.com> a ?crit :
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-> Exporting a variable all the time is a bit anoying, but one could
-> always create a script to do that.
+ Thomas> Hello,
+ Thomas> Currently, Buildroot displays the full build log on the standard
+ Thomas> output. Having the full build log is of course nice, but:
 
-Well, you can also do :
+ Thomas>  *) It is quite scary for new users
 
- make BUILDROOT_EXTERNAL_BOARDS=/path/to menuconfig
- make BUILDROOT_EXTERNAL_BOARDS=/path/to
+ Thomas>  *) It makes it more complicated for new users to understand the
+ Thomas>     different steps of the Buildroot build process
 
-but I find it even more annoying.
+ Thomas>  *) It makes it more complicated to see the progression of the build
+ Thomas>     process (what is it doing now ? is it almost at the end ?)
 
-The issue is that it is not possible to store this information in the
-configuration, since depending on this value we must change some
-Config.in file, which has to be done *before* we run the configuration
-system.
+ Thomas> Therefore, I've prototyped a simple thing that redirects the
+ Thomas> build log to a file (so that the full build log is not lost and
+ Thomas> can be examined for diagnostic purposes) and only display
+ Thomas> messages like "Doing this", "Doing that" on the standard
+ Thomas> output. The goal is to disable this behaviour when V=1 is
+ Thomas> passed, but this isn't implemented yet.
 
-> Looks good. It would be nice to add BUILDROOT_EXTERNAL_BOARDS to the
-> find command at the %_defconfig rule, so things like this would work:
-> make mycustomboard_defconfig
+We basically have this already when you build with 'make -s'. It's not
+quite as quiet as we could wish, and non-makefile.autotools.in packages
+don't print their steps, but we could probably fix that.
 
-Well, it's already done by the patch (and works). Since a symbolic link
-to the BUILDROOT_EXTERNAL_BOARDS directory is added in target/device/,
-I just added the -L option to find and it is able to find the defconfig
-of the external boards. See the patch for the one-liner
-implementation :-)
+We can argue about what the default should be though, as the output is
+quite interesting for debugging purposes when things go wrong (your
+suggestion about logging to a file is nice).
 
-Sincerly,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
