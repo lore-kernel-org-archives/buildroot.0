@@ -1,7 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 19 Sep 2009 14:47:35 +0200
-Subject: [Buildroot] [git commit master] Remove the "project" feature
-Message-ID: <20090919152747.4F56477737@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] Remove BR2_TOPDIR_PREFIX and
+	BR2_TOPDIR_SUFFIX
+Message-ID: <20090919152748.5A3C977737@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,117 +10,97 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=397fe5cc0b091c997794d755d27a72848ad210ea
+commit: http://git.buildroot.net/buildroot/commit/?id=fd3800c1979d9d76e2c4f802c2d279290c102218
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The "project" feature was designed to allow to several projects to be
-built inside the same Buildroot source tree and allowing the toolchain
-and non-configurable packages to be shared between the different
-projects on the same architecture. While being interesting in theory,
-this feature adds a level of complexity to Buildroot, both from an
-user perspective and from a developer perspective, while one of the
-main Buildroot strengh is to be simple. Moreover, this feature is only
-seldomly used by our users.
-
-From a user-level perspective, this for example allows to remove the
-project_build_ARCH directory, which was very confusing. The
-autotools-stamps directory is also removed, since these stamps are
-back at their normal location.
-
-Description of the changes involved :
-
- * project/, directory removed
-
- * Makefile
-
-    - Don't include project/Makefile.in and project/project.mk anymore
-
-    - Grab a copy of the contents of project/Makefile.in at the
-      location it was imported, but remove the definition related to
-      PROJECT_BUILD_DIR. The TARGET_DIR is now in
-      $(BUILD_DIR)/target_dir
-
-    - Remove the creation/removal of the $(PROJECT_BUILD_DIR) and
-      $(PROJECT_BUILD_DIR)/autotools-stamps directories
-
-    - Don't make world depends on target-host-info. This target was
-      defined by project/project.mk to customize /etc/issue,
-      /etc/hostname and create /etc/br-version depending on the
-      project definitions. We can of course imagine re-adding such a
-      feature later.
-
-    - Replace PROJECT_BUILD_DIR by BUILD_DIR everywhere
-
-    - Remove the update, log and lognr.$(PROJECT) target, they were
-      specific to the project feature.
-
- * package/Makefile.autotools.in
-
-    - Replace PROJECT_BUILD_DIR by BUILD_DIR for the location of the
-      configure cache
-
-    - Move the INSTALL_TARGET and HOOK_POST_INSTALL stamps to the same
-      directory as the other stamps (i.e, in the package directory).
-
- * package/Makefile.in
-
-    - Replace PROJECT_BUILD_DIR by BUILD_DIR for the location of the
-      configure cache
-
- * package/at/at.mk,
-   package/busybox/busybox.mk,
-   package/busybox/initramfs.mk,
-   package/customize/customize.mk,
-   package/linux-fusion/linux-fusion.mk,
-   package/ltp-testsuite/ltp-testsuite.mk,
-   package/nfs-utils/nfs-utils.mk,
-   target/cpio/cpioroot.mk,
-   target/cramfs/cramfs.mk,
-   target/device/Atmel/DataFlashBoot/DataflashBoot.mk,
-   target/device/Atmel/Makefile.in,
-   target/device/Atmel/at91bootstrap/at91bootstrap.mk,
-   target/device/KwikByte/Makefile.in,
-   target/ext2/ext2root.mk,
-   target/initramfs/initramfs.mk,
-   target/iso9660/iso9660.mk,
-   target/jffs2/jffs2root.mk,
-   target/linux/Makefile.in,
-   target/romfs/romfs.mk,
-   target/squashfs/squashfsroot.mk,
-   target/tar/tarroot.mk,
-   target/ubifs/ubifsroot.mk
-
-    - Replace PROJECT_BUILD_DIR by BUILD_DIR
-
- * target/device/Config.in
-
-    - Do not include project/Config.in anymore
-
- * target/linux/Makefile.in.advanced
-
-    - Replace PROJECT_BUILD_DIR by BUILD_DIR
-
-    - Store the stamps file in $(STAMP_DIR) instead of
-      $(PROJECT_BUILD_DIR)/autotools-stamps
-
- * target/u-boot/Makefile.in
-
-    - Replace PROJECT_BUILD_DIR by BUILD_DIR
-
-    - Remove $(PROJECT) from the U-Boot target binary name
-
-    - Remove the insertion in the configuration of the project name as
-      the hostname
-
-    - The u-boot-autoscript target now generates
-      $(U_BOOT_AUTOSCRIPT).img instead of
-      $(U_BOOT_AUTOSCRIPT).$(PROJECT)
-
- * toolchain/gcc/gcc-uclibc-3.x.mk
-   toolchain/gcc/gcc-uclibc-4.x.mk
-
-    - Move the stamps files to $(STAMP_DIR)
+The same effect can be done using out-of-tree build with O=
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Config.in           |   18 ------------------
+ Makefile            |   11 +----------
+ package/Makefile.in |    6 +++---
+ 3 files changed, 4 insertions(+), 31 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/Config.in b/Config.in
+index 146bb17..2573643 100644
+--- a/Config.in
++++ b/Config.in
+@@ -106,24 +106,6 @@ config BR2_FPU_SUFFIX
+ 	  the "_nofpu" suffix will be added to the toolchain build
+ 	  directory name and to any rootfs image name
+ 
+-config BR2_TOPDIR_PREFIX
+-	string "Custom build dir prefix"
+-	default ""
+-	help
+-	  Add a custom string to the beginning of the build directories.
+-
+-	  build_ARCH -> [PREFIX]_build_ARCH
+-	  toolchain_build_ARCH -> [PREFIX]_toolchain_build_ARCH
+-
+-config BR2_TOPDIR_SUFFIX
+-	string "Custom build dir suffix"
+-	default ""
+-	help
+-	  Add a custom string to the end of the build directories.
+-
+-	  build_ARCH -> build_ARCH_[SUFFIX]
+-	  toolchain_build_ARCH -> toolchain_build_ARCH_[SUFFIX]
+-
+ config BR2_GNU_BUILD_SUFFIX
+ 	string "GNU build hostname suffix"
+ 	default "pc-linux-gnu"
+diff --git a/Makefile b/Makefile
+index 8b07786..d493200 100644
+--- a/Makefile
++++ b/Makefile
+@@ -230,21 +230,12 @@ endif
+ BASE_DIR := $(shell mkdir -p $(O) && cd $(O) && pwd)
+ $(if $(BASE_DIR),, $(error output directory "$(O)" does not exist))
+ 
+-TOPDIR_PREFIX:=$(call qstrip,$(BR2_TOPDIR_PREFIX))_
+-TOPDIR_SUFFIX:=_$(call qstrip,$(BR2_TOPDIR_SUFFIX))
+-ifeq ($(TOPDIR_PREFIX),_)
+-TOPDIR_PREFIX:=
+-endif
+-ifeq ($(TOPDIR_SUFFIX),_)
+-TOPDIR_SUFFIX:=
+-endif
+-
+ DL_DIR=$(call qstrip,$(BR2_DL_DIR))
+ ifeq ($(DL_DIR),)
+ DL_DIR:=$(BASE_DIR)/dl
+ endif
+ 
+-BUILD_DIR:=$(BASE_DIR)/$(TOPDIR_PREFIX)build_$(ARCH)$(ARCH_FPU_SUFFIX)$(TOPDIR_SUFFIX)
++BUILD_DIR:=$(BASE_DIR)/build_$(ARCH)$(ARCH_FPU_SUFFIX)
+ 
+ GNU_TARGET_SUFFIX:=-$(call qstrip,$(BR2_GNU_TARGET_SUFFIX))
+ 
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 0ae5bdb..093108d 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -112,7 +112,7 @@ COND_ARCH_FPU_SUFFIX:=
+ endif
+ 
+ ifeq ($(BR2_TOOLCHAIN_SOURCE),y)
+-TOOL_BUILD_DIR=$(BASE_DIR)/$(TOPDIR_PREFIX)toolchain_build_$(ARCH)$(COND_ARCH_FPU_SUFFIX)$(TOPDIR_SUFFIX)
++TOOL_BUILD_DIR=$(BASE_DIR)/toolchain_build_$(ARCH)$(COND_ARCH_FPU_SUFFIX)
+ 
+ # Quotes are needed for spaces et al in path components.
+ TARGET_PATH="$(TOOL_BUILD_DIR)/bin:$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(STAGING_DIR)/bin:$(STAGING_DIR)/usr/bin:$(PATH)"
+@@ -124,8 +124,8 @@ KERNEL_CROSS=$(TARGET_CROSS)
+ else
+ TOOLCHAIN_EXTERNAL_PREFIX:=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))
+ TOOLCHAIN_EXTERNAL_PATH:=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PATH))
+-#TOOL_BUILD_DIR=$(BASE_DIR)/$(TOPDIR_PREFIX)toolchain_build_$(TOOLCHAIN_EXTERNAL_PREFIX)
+-TOOL_BUILD_DIR=$(BASE_DIR)/$(TOPDIR_PREFIX)toolchain_build_$(ARCH)$(COND_ARCH_FPU_SUFFIX)$(TOPDIR_SUFFIX)
++#TOOL_BUILD_DIR=$(BASE_DIR)/toolchain_build_$(TOOLCHAIN_EXTERNAL_PREFIX)
++TOOL_BUILD_DIR=$(BASE_DIR)/toolchain_build_$(ARCH)$(COND_ARCH_FPU_SUFFIX)
+ TARGET_PATH="$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(TOOL_BUILD_DIR)/bin:$(TOOLCHAIN_EXTERNAL_PATH)/bin:$(PATH)"
+ #IMAGE:=$(BINARIES_DIR)/$(BR2_ROOTFS_PREFIX).$(TOOLCHAIN_EXTERNAL_PREFIX)$(ROOTFS_SUFFIX)
+ IMAGE:=$(BINARIES_DIR)/$(BR2_ROOTFS_PREFIX).$(ARCH)$(COND_ARCH_FPU_SUFFIX)$(ROOTFS_SUFFIX)
+-- 
+1.6.3.3
