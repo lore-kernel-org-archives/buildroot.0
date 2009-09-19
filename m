@@ -1,40 +1,69 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 19 Sep 2009 17:22:12 +0000 (UTC)
-Subject: [Buildroot] [Bug 619] netkittelnet requires netkitbase to install,
- but there's no dependency
-In-Reply-To: <bug-619-163@https.bugs.busybox.net/>
-References: <bug-619-163@https.bugs.busybox.net/>
-Message-ID: <20090919172212.26EC977767@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 19 Sep 2009 19:28:07 +0200
+Subject: [Buildroot] [git commit master] package/: hide more programs with
+	busybox alternatives by default
+Message-ID: <20090919172939.C97B777767@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=619
 
+commit: http://git.buildroot.net/buildroot/commit/?id=797551c8ce0ebe05a02e42359b909e602bd1abd4
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Hide netkitbase / netkittelnet / tftp / devmem2 when
+BR2_PACKAGE_BUSYBOX_HIDE_OTHERS is enabled.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/Config.in |   10 ++++------
+ 1 files changed, 4 insertions(+), 6 deletions(-)
 
-
-
-
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-09-19 17:22:11 UTC ---
-That was fixed in git in f5239c327e303a (E.G. the fix for #617).
-I'll hide the netkit stuff under the "Hide applications that are provided by
-busybox" option which is enabled by default.
-
-We don't maintain a copy of all the busybox kconfig options, but we do have a
-'make busybox-menuconfig make target to make it easy to tweak the busybox
-config.
-
-
+diff --git a/package/Config.in b/package/Config.in
+index fc97222..061838b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -180,9 +180,9 @@ source "package/ncftp/Config.in"
+ source "package/neon/Config.in"
+ if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
+ source "package/netcat/Config.in"
+-endif
+ source "package/netkitbase/Config.in"
+ source "package/netkittelnet/Config.in"
++endif
+ source "package/netplug/Config.in"
+ source "package/netsnmp/Config.in"
+ source "package/netstat-nat/Config.in"
+@@ -207,17 +207,13 @@ source "package/socat/Config.in"
+ source "package/spawn-fcgi/Config.in"
+ source "package/stunnel/Config.in"
+ source "package/tcpdump/Config.in"
+-source "package/tftpd/Config.in"
+ if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
++source "package/tftpd/Config.in"
+ source "package/thttpd/Config.in"
+ source "package/tinyhttpd/Config.in"
+ endif
+ source "package/tn5250/Config.in"
+ source "package/ttcp/Config.in"
+-#if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
+-# ATTENTION! This was merged into busybox!
+-#source "package/udhcp/Config.in"
+-#endif
+ source "package/udpcast/Config.in"
+ source "package/vpnc/Config.in"
+ source "package/vsftpd/Config.in"
+@@ -236,7 +232,9 @@ source "package/acpid/Config.in"
+ source "package/dbus/Config.in"
+ source "package/dbus-glib/Config.in"
+ source "package/dbus-python/Config.in"
++if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
+ source "package/devmem2/Config.in"
++endif
+ source "package/dmraid/Config.in"
+ source "package/dosfstools/Config.in"
+ source "package/e2fsprogs/Config.in"
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.6.3.3
