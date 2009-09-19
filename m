@@ -1,30 +1,29 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 19 Sep 2009 17:27:51 +0200
-Subject: [Buildroot] [pull request] Buildroot cleanup, v2
-In-Reply-To: <1253135266-26880-1-git-send-email-thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Wed\,
-	16 Sep 2009 23\:07\:40 +0200")
-References: <1253135266-26880-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87bpl7x8co.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 19 Sep 2009 15:37:18 +0000 (UTC)
+Subject: [Buildroot] [Bug 617] netkit/inetd requires RPC and fails to build
+ if RPC is disabled
+In-Reply-To: <bug-617-163@https.bugs.busybox.net/>
+References: <bug-617-163@https.bugs.busybox.net/>
+Message-ID: <20090919153718.99A5177737@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=617
 
-Hi,
 
- Thomas> A discussion on this cleanup already took place, and I think
- Thomas> that most of the objections have found answers through the
- Thomas> proposal of alternative solutions.
 
- Thomas> Therefore, could the huge-cleanup branch at
- Thomas> git://git.busybox.net/~tpetazzoni/git/buildroot be pulled into the
- Thomas> master repository ?
 
-Pulled and pushed - Thanks a lot!
+
+--- Comment #3 from Seth LaForge <sethml@ofb.net>  2009-09-19 15:37:17 UTC ---
+Perhaps the netkit-telnet help should mention that recommendation, then?  I
+didn't realize that busybox had a telnetd implementation, so thanks for
+mentioning it!
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
