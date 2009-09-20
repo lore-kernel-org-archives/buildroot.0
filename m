@@ -1,39 +1,34 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 20 Sep 2009 08:07:03 +0000 (UTC)
-Subject: [Buildroot] [Bug 477] Add sdl_sound package
-In-Reply-To: <bug-477-163@https.bugs.busybox.net/>
-References: <bug-477-163@https.bugs.busybox.net/>
-Message-ID: <20090920080703.B3FF177785@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 20 Sep 2009 11:08:51 +0200
+Subject: [Buildroot] [pull request] Buildroot cleanup, v2
+In-Reply-To: <87bpl7x8co.fsf@macbook.be.48ers.dk>
+References: <1253135266-26880-1-git-send-email-thomas.petazzoni@free-electrons.com>
+	<87bpl7x8co.fsf@macbook.be.48ers.dk>
+Message-ID: <20090920110851.7471dde8@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=477
+Hi,
 
+Le Sat, 19 Sep 2009 17:27:51 +0200,
+Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+> Pulled and pushed - Thanks a lot!
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|ASSIGNED                    |RESOLVED
-         Resolution|                            |FIXED
+Thanks for pulling the series and taking the risk of introducing such
+disruptive changes. I'm quite sure they will be some issues here and
+there since I obviously couldn't test the numerous ways of
+using Buildroot. But I'm quite confident that the bug fixing period
+will allow to fix these before the release.
 
+Thanks,
 
-
-
---- Comment #5 from Peter Korsgaard <jacmet@uclibc.org>  2009-09-20 08:07:00 UTC ---
-Thanks, committed with minor changes:
-
- - sdl_snd -> sdl_sound
- - cleaned up help text
- - don't transform binary name
- - add option to keep playsound/playsound_simple - Off by default
- - fix uninstall when BR2_HAVE_DEVFILES isn't enabled
-
-
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
