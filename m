@@ -1,10 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 20 Sep 2009 18:05:21 +0000 (UTC)
+Date: Sun, 20 Sep 2009 19:25:13 +0000 (UTC)
 Subject: [Buildroot] [Bug 621] BR2_USE_WCHAR does not seem to enable WCHAR
  support in uClibc
 In-Reply-To: <bug-621-163@https.bugs.busybox.net/>
 References: <bug-621-163@https.bugs.busybox.net/>
-Message-ID: <20090920180521.77D3477783@busybox.osuosl.org>
+Message-ID: <20090920192513.80D067772E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,25 +14,32 @@ To: buildroot@busybox.net
 https://bugs.busybox.net/show_bug.cgi?id=621
 
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Seth LaForge <sethml@ofb.net> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-             Status|NEW                         |ASSIGNED
+             Status|ASSIGNED                    |RESOLVED
+         Resolution|                            |FIXED
 
 
 
 
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-09-20 18:05:20 UTC ---
-Why do you think that it doesn't give you WCHAR support? Please do provide more
-details. In particular, please show the relevant part of your uclibc config
-(output/toolchain/uClibc-0.9.30.1/.config. It should contain a
-UCLIBC_HAS_WCHAR=y line - If not, please provide your buildroot config and
-explain how you built it.
+--- Comment #2 from Seth LaForge <sethml@ofb.net>  2009-09-20 19:25:12 UTC ---
+I had done a "make menuconfig", turned on WCHAR support, done "make clean",
+then "make", and ended up with a no-wchar build, confirmed by doing "make
+uclibc-menuconfig" and noting that the WCHAR option was not enabled.
 
-Do notice though that you obviously need to recompile everything when you
-change BR2_USE_WCHAR, and that it isn't detected automatically (do rm -rf
-output; make)
+Apparently "make clean" wasn't enough to clean things out properly.  I don't
+have a directory "output", but I re-extracted buildroot from the tarball and
+rebuild with BR2_USE_WCHAR on, and it seems to have worked.  Thanks!
+
+It would be really nice to have a section in the buildroot documentation
+describing what you need to do when rebuilding after changing various settings,
+for example:
+  - After changing a toolchain option.
+  - After changing a uclibc or busybox option.  (And when do the uclibc or
+busybox .configs get clobbered?)
+  - After enabling or disabling a package.
 
 
 -- 
