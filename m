@@ -1,20 +1,23 @@
-From: Olaf Rempel <razzor@kopf-tisch.de>
-Date: Sun, 20 Sep 2009 13:54:02 +0200
-Subject: [Buildroot] [PATCH] iptables: fix disable-ipv6 option
-In-Reply-To: <>
-References: <>
-Message-ID: <1253447642-25865-1-git-send-email-razzor@kopf-tisch.de>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 20 Sep 2009 14:44:12 +0200
+Subject: [Buildroot] [git commit master] iptables: fix disable-ipv6 option
+Message-ID: <20090920125219.D6DC177785@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+
+commit: http://git.buildroot.net/buildroot/commit/?id=1fe7bbb34df56d532e1057696bd73f081ca6c9bf
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
 - bumb version to v1.4.5
 - add fix for --disable-ipv6 option
   (upstream bug: http://bugzilla.netfilter.org/show_bug.cgi?id=608)
 
 Signed-off-by: Olaf Rempel <razzor@kopf-tisch.de>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
  package/iptables/iptables-1.4.5-disable-ipv6.patch |   19 +++++++++++++++++++
  package/iptables/iptables.mk                       |    2 +-
@@ -60,4 +63,4 @@ index 48e5d33..1c3d9be 100644
  IPTABLES_SITE = http://ftp.netfilter.org/pub/iptables
  
 -- 
-1.5.4.3
+1.6.3.3
