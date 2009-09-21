@@ -1,81 +1,48 @@
-From: Austin Foxley <austinf@cetoncorp.com>
-Date: Sun, 20 Sep 2009 16:33:38 -0700
-Subject: [Buildroot] [PATCH] Add a config option for gcc tls support,
-	rather than disabling it blindly
-Message-ID: <1253489618-24753-1-git-send-email-austinf@cetoncorp.com>
+From: Steve Calfee <nospamcalfee@yahoo.com>
+Date: Sun, 20 Sep 2009 19:37:42 -0700 (PDT)
+Subject: [Buildroot] [pull request] Buildroot cleanup, v2
+In-Reply-To: <20090920110851.7471dde8@surf>
+Message-ID: <662858.63691.qm@web58206.mail.re3.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Defaulted to yes, but blocked it from gcc 4.4.x since the disable was
-originally added because of problems with its c++ support reportedly.
+--- On Sun, 9/20/09, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-Signed-off-by: Austin Foxley <austinf@cetoncorp.com>
----
- toolchain/gcc/Config.in         |    7 +++++++
- toolchain/gcc/gcc-uclibc-4.x.mk |   12 +++++++++---
- 2 files changed, 16 insertions(+), 3 deletions(-)
+> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Subject: Re: [Buildroot] [pull request] Buildroot cleanup, v2
+> To: buildroot at busybox.net
+> Date: Sunday, September 20, 2009, 2:08 AM
+> Hi,
+> 
+> Le Sat, 19 Sep 2009 17:27:51 +0200,
+> Peter Korsgaard <jacmet@uclibc.org>
+> a ?crit :
+> 
+> > Pulled and pushed - Thanks a lot!
+> 
+> Thanks for pulling the series and taking the risk of
+> introducing such
+> disruptive changes. I'm quite sure they will be some issues
+> here and
+> there since I obviously couldn't test the numerous ways of
+> using Buildroot. But I'm quite confident that the bug
+> fixing period
+> will allow to fix these before the release.
+> 
+> Thanks,
+> 
+> Thomas
+> -- 
+Hi Thomas,
 
-diff --git a/toolchain/gcc/Config.in b/toolchain/gcc/Config.in
-index 279e101..db7e32e 100644
---- a/toolchain/gcc/Config.in
-+++ b/toolchain/gcc/Config.in
-@@ -175,3 +175,10 @@ config BR2_GCC_SHARED_LIBGCC
- 	help
- 	  Build/install a shared libgcc library
- 
-+config BR2_GCC_ENABLE_TLS
-+	bool "Enable compiler tls support"
-+	default y
-+	depends on !BR2_GCC_VERSION_4_4_X
-+	help
-+	  Enable the compiler to generate code for accessing
-+	  thread local storage variables
-diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
-index 4129152..494984b 100644
---- a/toolchain/gcc/gcc-uclibc-4.x.mk
-+++ b/toolchain/gcc/gcc-uclibc-4.x.mk
-@@ -137,6 +137,12 @@ else
- GCC_SHARED_LIBGCC:=--disable-shared
- endif
- 
-+ifeq ($(BR2_GCC_ENABLE_TLS),y)
-+GCC_TLS:=--enable-tls
-+else
-+GCC_TLS:=--disable-tls
-+endif
-+
- ifeq ($(BR2_KERNEL_HURD),y)
- EXTRA_GCC1_CONFIG_OPTIONS+=--without-headers
- endif
-@@ -219,7 +225,7 @@ $(GCC_BUILD_DIR1)/.configured: $(GCC_DIR)/.patched
- 		--with-gnu-ld \
- 		--disable-shared \
- 		--disable-libssp \
--		--disable-tls \
-+		$(GCC_TLS) \
- 		$(GCC_WITH_HOST_GMP) \
- 		$(GCC_WITH_HOST_MPFR) \
- 		$(DISABLE_NLS) \
-@@ -295,7 +301,7 @@ $(GCC_BUILD_DIR2)/.configured: $(GCC_SRC_DIR)/.patched $(GCC_STAGING_PREREQ)
- 		--enable-target-optspace \
- 		--with-gnu-ld \
- 		--disable-libssp \
--		--disable-tls \
-+		$(GCC_TLS) \
- 		$(GCC_SHARED_LIBGCC) \
- 		$(GCC_WITH_HOST_GMP) \
- 		$(GCC_WITH_HOST_MPFR) \
-@@ -422,7 +428,7 @@ $(GCC_BUILD_DIR3)/.configured: $(GCC_BUILD_DIR3)/.prepared
- 		--disable-__cxa_atexit \
- 		--with-gnu-ld \
- 		--disable-libssp \
--		--disable-tls \
-+		$(GCC_TLS) \
- 		$(GCC_SHARED_LIBGCC) \
- 		$(GCC_WITH_TARGET_GMP) \
- 		$(GCC_WITH_TARGET_MPFR) \
--- 
-1.6.2.5
+I would like to thank you and Peter for doing so much for buildroot. I completely agree with your simplifications. People who have simple needs and are just starting with buildroot should have an easy startup. People with complex multiple arch, multiple platforms should know enough to be able to do it. 
+
+It is central to the unix philosophy in the separation of mechanism and policy. The kernel should provide mechanism, the user policy. Similarly a complete build environment should provide a mechanism and users should implement their own requirements. It should be possible to do complex things, not required for all.
+
+Regards, Steve
+
+
+      
