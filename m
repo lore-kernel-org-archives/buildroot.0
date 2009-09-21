@@ -1,32 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 21 Sep 2009 17:43:17 +0200
-Subject: [Buildroot] [pull request] Miscellaneous fixes and additions
-In-Reply-To: <87a5b0800909201408o33dc19f8m8c644c227fcc86f7@mail.gmail.com>
-	(Will Newton's message of "Sun\, 20 Sep 2009 22\:08\:26 +0100")
-References: <87a5b0800909201408o33dc19f8m8c644c227fcc86f7@mail.gmail.com>
-Message-ID: <87my4ouwve.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 21 Sep 2009 15:44:18 +0000 (UTC)
+Subject: [Buildroot] [Bug 609] libmicrohttpd: New package.
+In-Reply-To: <bug-609-163@https.bugs.busybox.net/>
+References: <bug-609-163@https.bugs.busybox.net/>
+Message-ID: <20090921154418.5A74B77764@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Will" == Will Newton <will.newton@gmail.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=609
 
- Will> Hi,
- Will> This tree contains a number of small fixes to various packages that
- Will> I've been using in my local tree for some time. The first three have
- Will> been posted to the list and the latter two are in bugzilla.
 
- Will> The following changes since commit 1fe7bbb34df56d532e1057696bd73f081ca6c9bf:
- Will>   Olaf Rempel (1):
- Will>         iptables: fix disable-ipv6 option
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
- Will> are available in the git repository at:
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
- Will>   git://github.com/willnewton/buildroot.git master
 
-Thanks, pulled and pushed.
+
+
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-09-21 15:44:17 UTC ---
+pulled, thanks
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
