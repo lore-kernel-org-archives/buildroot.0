@@ -1,38 +1,66 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 21 Sep 2009 17:46:06 +0200
-Subject: [Buildroot] [git commit master] libmicrohttpd: cleanup Config.in
-Message-ID: <20090921154655.E0F2D77764@busybox.osuosl.org>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Mon, 21 Sep 2009 18:21:53 +0200
+Subject: [Buildroot] [PATCH] samba: fix dependencies
+Message-ID: <1253550113-31475-1-git-send-email-s.neumann@raumfeld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The samba configure scripts detects the presence of fam and avahi
+headers in order to decide whether support for fam and/or avahi should
+be built into samba. This patch adds the missing dependencies so that
+fam and/or avahi are built before samba if they are selected in buildroot.
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c5388a1c6267023bc3f99196582e09b52137e1e0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-- 'n' is default, so no need to mention it explicit
-- Add homepage URL
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
 ---
- package/libmicrohttpd/Config.in |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/samba/samba.mk |   19 ++++++++++++++++++-
+ 1 files changed, 18 insertions(+), 1 deletions(-)
 
-diff --git a/package/libmicrohttpd/Config.in b/package/libmicrohttpd/Config.in
-index c8cfd5d..de656ad 100644
---- a/package/libmicrohttpd/Config.in
-+++ b/package/libmicrohttpd/Config.in
-@@ -1,7 +1,8 @@
- config BR2_PACKAGE_LIBMICROHTTPD
- 	bool "libmicrohttpd"
- 	select BR2_PACKAGE_LIBGCRYPT
--	default n
- 	help
- 	  GNU libmicrohttpd is a small C library that makes it easy to
- 	  run an HTTP server as part of another application.
+diff --git a/package/samba/samba.mk b/package/samba/samba.mk
+index 7a5e7b1..2c344a1 100644
+--- a/package/samba/samba.mk
++++ b/package/samba/samba.mk
+@@ -11,6 +11,8 @@ SAMBA_CAT:=$(ZCAT)
+ SAMBA_BINARY:=bin/smbd
+ SAMBA_TARGET_BINARY:=usr/sbin/smbd
+ 
++SAMBA_DEPENDENCIES=libiconv
 +
-+	  http://www.gnu.org/software/libmicrohttpd/
+ ifeq ($(BR2_PACKAGE_SAMBA_LIBSMBCLIENT),y)
+ SAMBA_LIBSMBCLIENT := libsmbclient
+ SAMBA_CONF_OPTIONS := --enable-libsmbclient
+@@ -19,6 +21,21 @@ SAMBA_LIBSMBCLIENT :=
+ SAMBA_CONF_OPTIONS := --disable-libsmbclient
+ endif
+ 
++ifeq ($(BR2_PACKAGE_AVAHI),y)
++SAMBA_CONF_OPTIONS := --enable-avahi
++SAMBA_DEPENDENCIES += avahi
++else
++SAMBA_CONF_OPTIONS := --disable-avahi
++endif
++
++ifeq ($(BR2_PACKAGE_GAMIN),y)
++SAMBA_CONF_OPTIONS := --enable-fam
++SAMBA_DEPENDENCIES += gamin
++else
++SAMBA_CONF_OPTIONS := --disable-fam
++endif
++
++
+ $(DL_DIR)/$(SAMBA_SOURCE):
+ 	$(call DOWNLOAD,$(SAMBA_SITE),$(SAMBA_SOURCE))
+ 
+@@ -146,7 +163,7 @@ libsmbclient: $(SAMBA_DIR)/bin/libsmbclient.so
+ 		DESTDIR="$(STAGING_DIR)" \
+ 		-C $(SAMBA_DIR) installlibs
+ 
+-samba: libiconv $(TARGET_DIR)/$(SAMBA_TARGET_BINARY) $(SAMBA_LIBSMBCLIENT)
++samba: $(SAMBA_DEPENDENCIES) $(TARGET_DIR)/$(SAMBA_TARGET_BINARY) $(SAMBA_LIBSMBCLIENT)
+ 
+ samba-source: $(DL_DIR)/$(SAMBA_SOURCE)
+ 
 -- 
-1.6.3.3
+1.6.0.4
