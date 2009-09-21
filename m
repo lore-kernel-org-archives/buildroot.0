@@ -1,7 +1,7 @@
 From: Anders Darander <anders.darander@gmail.com>
-Date: Mon, 21 Sep 2009 10:14:55 +0200
-Subject: [Buildroot] [PATCH] Updating syslinux to v3.82.
-Message-ID: <1253520895-27598-1-git-send-email-anders.darander@gmail.com>
+Date: Mon, 21 Sep 2009 10:22:44 +0200
+Subject: [Buildroot] [PATCH v2] Updating syslinux to v3.82.
+Message-ID: <1253521364-28259-1-git-send-email-anders.darander@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,19 +12,22 @@ From: Anders Darander <ad@datarespons.se>
 
 Signed-off-by: Anders Darander <ad@datarespons.se>
 ---
- target/x86/syslinux/Config.in                    |    1 +
+ target/x86/syslinux/Config.in                    |    3 ++-
  target/x86/syslinux/syslinux-3.61-makefile.patch |   11 -----------
  target/x86/syslinux/syslinux-3.82-makefile.patch |   11 +++++++++++
  target/x86/syslinux/syslinux.mk                  |    4 ++--
- 4 files changed, 14 insertions(+), 13 deletions(-)
+ 4 files changed, 15 insertions(+), 14 deletions(-)
  delete mode 100644 target/x86/syslinux/syslinux-3.61-makefile.patch
  create mode 100644 target/x86/syslinux/syslinux-3.82-makefile.patch
 
 diff --git a/target/x86/syslinux/Config.in b/target/x86/syslinux/Config.in
-index 6a946e4..59f1c99 100644
+index 6a946e4..03191fd 100644
 --- a/target/x86/syslinux/Config.in
 +++ b/target/x86/syslinux/Config.in
-@@ -3,6 +3,7 @@ config BR2_TARGET_SYSLINUX
+@@ -1,8 +1,9 @@
+ config BR2_TARGET_SYSLINUX
+-	bool "syslinux"
++	bool "syslinux family"
  	depends on BR2_i386
  	help
  	  The syslinux bootloader for x86 systems.
