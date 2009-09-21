@@ -1,92 +1,108 @@
-From: Anders Darander <anders.darander@gmail.com>
-Date: Mon, 21 Sep 2009 10:22:44 +0200
-Subject: [Buildroot] [PATCH v2] Updating syslinux to v3.82.
-Message-ID: <1253521364-28259-1-git-send-email-anders.darander@gmail.com>
+From: Teemu Keskinarkaus <Teemu.Keskinarkaus@cc-systems.com>
+Date: Mon, 21 Sep 2009 11:04:52 +0200
+Subject: [Buildroot] Buildroot 2009.08 fails to build working rootfs
+In-Reply-To: <330EC2471BF24E48B513AF1A6975EB69B00E3F@MAIL-UA.ccs.local>
+References: <330EC2471BF24E48B513AF1A6975EB69B00E3F@MAIL-UA.ccs.local>
+Message-ID: <330EC2471BF24E48B513AF1A6975EB69B00F9F@MAIL-UA.ccs.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Anders Darander <ad@datarespons.se>
+Found a reason why my rootfs wasn't working. The libraries were missing!
 
-Signed-off-by: Anders Darander <ad@datarespons.se>
----
- target/x86/syslinux/Config.in                    |    3 ++-
- target/x86/syslinux/syslinux-3.61-makefile.patch |   11 -----------
- target/x86/syslinux/syslinux-3.82-makefile.patch |   11 +++++++++++
- target/x86/syslinux/syslinux.mk                  |    4 ++--
- 4 files changed, 15 insertions(+), 14 deletions(-)
- delete mode 100644 target/x86/syslinux/syslinux-3.61-makefile.patch
- create mode 100644 target/x86/syslinux/syslinux-3.82-makefile.patch
+ 
 
-diff --git a/target/x86/syslinux/Config.in b/target/x86/syslinux/Config.in
-index 6a946e4..03191fd 100644
---- a/target/x86/syslinux/Config.in
-+++ b/target/x86/syslinux/Config.in
-@@ -1,8 +1,9 @@
- config BR2_TARGET_SYSLINUX
--	bool "syslinux"
-+	bool "syslinux family"
- 	depends on BR2_i386
- 	help
- 	  The syslinux bootloader for x86 systems.
-+          This includes: syslinux, pxelinux, extlinux.
+And now the cause. It seems that if I remove the
+project_build_arm/projectname/root and
+project_build_arm/projectname/.root and make the buildroot, the
+buildroot won't copy the libraries to new root anymore. If I remove the
+build_arm- directory too and let the buildroot compile more stuff the
+root will be more complete although then there will be way too much
+stuff. More than what is said in .config - file in buildroot
+root-directory. Maybe that's because removing that build_arm - directory
+like that.
+
  
- config BR2_TARGET_PXELINUX
- 	bool "pxelinux"
-diff --git a/target/x86/syslinux/syslinux-3.61-makefile.patch b/target/x86/syslinux/syslinux-3.61-makefile.patch
-deleted file mode 100644
-index 22859e8..0000000
---- a/target/x86/syslinux/syslinux-3.61-makefile.patch
-+++ /dev/null
-@@ -1,11 +0,0 @@
----- a/Makefile	2008-02-18 09:39:41.000000000 -0500
--+++ b/Makefile	2008-02-18 09:43:21.000000000 -0500
--@@ -75,7 +75,7 @@ BTARGET  = kwdhash.gen version.gen versi
-- 	   ldlinux.bss ldlinux.sys ldlinux.bin \
-- 	   pxelinux.0 isolinux.bin isolinux-debug.bin \
-- 	   extlinux.bin extlinux.bss extlinux.sys
---BOBJECTS = $(BTARGET) mbr/mbr.bin dos/syslinux.com win32/syslinux.exe \
--+BOBJECTS = $(BTARGET) mbr/mbr.bin dos/syslinux.com  \
-- 	memdisk/memdisk memdump/memdump.com
-- # BESUBDIRS and IESUBDIRS are "early", i.e. before the root; BSUBDIRS
-- # and ISUBDIRS are "late", after the root.
-diff --git a/target/x86/syslinux/syslinux-3.82-makefile.patch b/target/x86/syslinux/syslinux-3.82-makefile.patch
-new file mode 100644
-index 0000000..9e98a78
---- /dev/null
-+++ b/target/x86/syslinux/syslinux-3.82-makefile.patch
-@@ -0,0 +1,11 @@
-+--- syslinux-3.82-org/Makefile	2009-09-17 13:11:23.000000000 +0200
-++++ syslinux-3.82/Makefile	2009-09-17 13:13:32.000000000 +0200
-+@@ -42,7 +42,7 @@
-+ 	mbr/mbr_c.bin mbr/altmbr_c.bin mbr/gptmbr_c.bin \
-+ 	mbr/mbr_f.bin mbr/altmbr_f.bin mbr/gptmbr_f.bin \
-+ 	core/pxelinux.0 core/isolinux.bin core/isolinux-debug.bin \
-+-	gpxe/gpxelinux.0 dos/syslinux.com win32/syslinux.exe \
-++	gpxe/gpxelinux.0 dos/syslinux.com \
-+ 	$(MODULES)
-+ 
-+ # BSUBDIRs build the on-target binary components.
-diff --git a/target/x86/syslinux/syslinux.mk b/target/x86/syslinux/syslinux.mk
-index 27930c7..f45d502 100644
---- a/target/x86/syslinux/syslinux.mk
-+++ b/target/x86/syslinux/syslinux.mk
-@@ -22,12 +22,12 @@ ifeq ($(SYSLINUX_SUPPORTED_ARCH),y)
- #
- #############################################################
+
+It seems for me like buildroot bug, since the old buildroot generated
+root always right after it was removed.
+
  
--SYSLINUX_VERSION:=3.61
-+SYSLINUX_VERSION:=3.82
- SYSLINUX_DIR=$(BUILD_DIR)/syslinux-$(SYSLINUX_VERSION)
- SYSLINUX_DIR2=$(TOOL_BUILD_DIR)/syslinux-$(SYSLINUX_VERSION)
- SYSLINUX_SOURCE=syslinux-$(SYSLINUX_VERSION).tar.bz2
- SYSLINUX_CAT:=$(BZCAT)
--SYSLINUX_SITE=$(BR2_KERNEL_MIRROR)/linux/utils/boot/syslinux/Old
-+SYSLINUX_SITE=$(BR2_KERNEL_MIRROR)/linux/utils/boot/syslinux/
- SYSLINUX_BIN=$(SYSLINUX_DIR2)/mtools/syslinux
+
+Teemu Keskinarkaus
+
  
+
+________________________________
+
+From: buildroot-bounces@busybox.net
+[mailto:buildroot-bounces at busybox.net] On Behalf Of Teemu Keskinarkaus
+Sent: 18. syyskuuta 2009 12:53
+To: buildroot at busybox.net
+Subject: [Buildroot] Buildroot 2009.08 fails to build working rootfs
+
  
--- 
-1.6.4.3
+
+First of all I'm using AT91-version of the buildroot-2009.08, but I'm
+guessing (or more like hoping) that it has nothing to do with the
+problem I'm having.
+
+ 
+
+I finally got the buildroot build okay with external toolchain.
+Toolchain is glibc eabi toolchain (Codesourcery) and kernel (2.6.30.4)
+is configured for eabi too. Kernel boots up just fine and get's rootfs
+mounted, but then panics because init is not found.
+
+ 
+
+VFS: Mounted root (ubifs filesystem) readonly on device 253:1.
+
+Freeing init memory: 100K
+
+Kernel panic - not syncing: No init found.  Try passing init= option to
+kernel.
+
+ 
+
+I manually compiled busybox and made my own small rootfs. Then with the
+same kernel as before, the system booted up nicely. 
+
+ 
+
+I tried to be sneaky and replaced the busybox binary that buildroot was
+compiled, with the one I had compiled and let buildroot regenerate
+rootfs, but that didn't help. I still got the same error.
+
+ 
+
+I programmed the rootfs image as a second partition to unit and booted
+up with older buildroot and checked what was that new rootfs like and it
+seemed to be just fine. I couldn't see anything that was causing the
+problem. And the image was working just fine too.
+
+ 
+
+Kernel command line on both working and non-working case is the same:
+
+ 
+
+Kernel command line: mem=128M console=ttyS0,115200 ubi.mtd=1 ubi.mtd=2
+root=ubi0:rootfs ro rootfstype=ubifs ubi.mtd=3
+
+ 
+
+I'm guessing this must be some simple thing, but I just can't figure it
+out. Has anyone else had similar problems and how did you solve it?
+
+ 
+
+Teemu Keskinarkaus
+
+ 
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090921/9bde5f79/attachment.htm>
