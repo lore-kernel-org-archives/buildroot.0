@@ -1,34 +1,38 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Mon, 21 Sep 2009 18:48:10 +0200
-Subject: [Buildroot] [PATCH] samba: explicitly link with -pthread if avahi
-	support is enabled
-Message-ID: <1253551690-31652-1-git-send-email-s.neumann@raumfeld.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 21 Sep 2009 21:23:58 +0200
+Subject: [Buildroot] [PATCH] samba: fix dependencies
+In-Reply-To: <1253550113-31475-1-git-send-email-s.neumann@raumfeld.com> (Sven
+	Neumann's message of "Mon\, 21 Sep 2009 18\:21\:53 +0200")
+References: <1253550113-31475-1-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <87bpl4umnl.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The avahi-client library makes use of threads. We need to link the
-smbd binary with -pthread if avahi support is enabled. Otherwise the
-binary will crash at startup.
+>>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
----
- package/samba/samba.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ Sven> The samba configure scripts detects the presence of fam and avahi
+ Sven> headers in order to decide whether support for fam and/or avahi should
+ Sven> be built into samba. This patch adds the missing dependencies so that
+ Sven> fam and/or avahi are built before samba if they are selected in buildroot.
 
-diff --git a/package/samba/samba.mk b/package/samba/samba.mk
-index 2c344a1..1cead40 100644
---- a/package/samba/samba.mk
-+++ b/package/samba/samba.mk
-@@ -61,6 +61,7 @@ $(SAMBA_DIR)/.configured: $(SAMBA_DIR)/.unpacked
- 		samba_cv_CC_NEGATIVE_ENUM_VALUES=yes \
- 		samba_cv_fpie=no \
- 		libreplace_cv_HAVE_IPV6=$(if $(BR2_INET_IPV6),yes,no) \
-+		AVAHI_LIBS=-pthread \
- 		./configure \
- 		--target=$(GNU_TARGET_NAME) \
- 		--host=$(GNU_TARGET_NAME) \
+Thanks, but it doesn't apply (which is slightly odd as your patches are
+the only thing changing samba.mk in 2009). Could you recreate against
+git please?
+
+git am -3 -s /tmp/samba.patch
+Applying: samba: fix dependencies
+error: patch failed: package/samba/samba.mk:11
+error: package/samba/samba.mk: patch does not apply
+fatal: sha1 information is lacking or useless (package/samba/samba.mk).
+Repository lacks necessary blobs to fall back on 3-way merge.
+Cannot fall back to three-way merge.
+Patch failed at 0001 samba: fix dependencies
+When you have resolved this problem run "git am -3 --resolved".
+If you would prefer to skip this patch, instead run "git am -3 --skip".
+To restore the original branch and stop patching run "git am -3 --abort"
+
 -- 
-1.6.0.4
+Bye, Peter Korsgaard
