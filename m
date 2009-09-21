@@ -1,39 +1,41 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 21 Sep 2009 21:25:00 +0200
-Subject: [Buildroot] [git commit master] samba: explicitly link with
-	-pthread if avahi support is enabled
-Message-ID: <20090921194548.C305E7774A@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 21 Sep 2009 23:23:37 +0200
+Subject: [Buildroot] [PATCH] samba: fix dependencies
+In-Reply-To: <1253562037.29667.13.camel@bender> (Sven Neumann's message of
+	"Mon\, 21 Sep 2009 21\:40\:37 +0200")
+References: <1253550113-31475-1-git-send-email-s.neumann@raumfeld.com>
+	<87bpl4umnl.fsf@macbook.be.48ers.dk>
+	<1253562037.29667.13.camel@bender>
+Message-ID: <87vdjct2jq.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5fda7023ff87c3103f4eb52b4205fb2549e17423
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Sven> On Mon, 2009-09-21 at 21:23 +0200, Peter Korsgaard wrote:
+ >> >>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
+ >> 
+ Sven> The samba configure scripts detects the presence of fam and avahi
+ Sven> headers in order to decide whether support for fam and/or avahi should
+ Sven> be built into samba. This patch adds the missing dependencies so that
+ Sven> fam and/or avahi are built before samba if they are selected in buildroot.
+ >> 
+ >> Thanks, but it doesn't apply (which is slightly odd as your patches are
+ >> the only thing changing samba.mk in 2009). Could you recreate against
+ >> git please?
 
-The avahi-client library makes use of threads. We need to link the
-smbd binary with -pthread if avahi support is enabled. Otherwise the
-binary will crash at startup.
+ Sven> Well, there is still the patch attached to bug #301 and I have that
+ Sven> applied in our branch. I will merge the patch to the master branch and
+ Sven> resend it...
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/samba/samba.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+Ahh yes. I just took a look at #301, and I just now noticed that the 2nd
+make installlibs had DESTDIR set to staging rather than target, so now
+it all makes sense to me ;)
 
-diff --git a/package/samba/samba.mk b/package/samba/samba.mk
-index 45e9938..82bf152 100644
---- a/package/samba/samba.mk
-+++ b/package/samba/samba.mk
-@@ -36,6 +36,7 @@ $(SAMBA_DIR)/.configured: $(SAMBA_DIR)/.unpacked
- 		samba_cv_CC_NEGATIVE_ENUM_VALUES=yes \
- 		samba_cv_fpie=no \
- 		libreplace_cv_HAVE_IPV6=$(if $(BR2_INET_IPV6),yes,no) \
-+		AVAHI_LIBS=-pthread \
- 		./configure \
- 		--target=$(GNU_TARGET_NAME) \
- 		--host=$(GNU_TARGET_NAME) \
+I'll commit #301 and this one shortly - Sorry for the slow response.
+
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
