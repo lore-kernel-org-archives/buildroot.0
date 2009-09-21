@@ -1,33 +1,38 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 21 Sep 2009 15:44:35 +0000 (UTC)
-Subject: [Buildroot] [Bug 615] python: Don't delete .py files unless asked.
-In-Reply-To: <bug-615-163@https.bugs.busybox.net/>
-References: <bug-615-163@https.bugs.busybox.net/>
-Message-ID: <20090921154436.154BA77764@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 21 Sep 2009 17:46:06 +0200
+Subject: [Buildroot] [git commit master] libmicrohttpd: cleanup Config.in
+Message-ID: <20090921154655.E0F2D77764@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=615
 
+commit: http://git.buildroot.net/buildroot/commit/?id=c5388a1c6267023bc3f99196582e09b52137e1e0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+- 'n' is default, so no need to mention it explicit
+- Add homepage URL
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/libmicrohttpd/Config.in |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-
-
-
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-09-21 15:44:35 UTC ---
-pulled, thanks
-
-
+diff --git a/package/libmicrohttpd/Config.in b/package/libmicrohttpd/Config.in
+index c8cfd5d..de656ad 100644
+--- a/package/libmicrohttpd/Config.in
++++ b/package/libmicrohttpd/Config.in
+@@ -1,7 +1,8 @@
+ config BR2_PACKAGE_LIBMICROHTTPD
+ 	bool "libmicrohttpd"
+ 	select BR2_PACKAGE_LIBGCRYPT
+-	default n
+ 	help
+ 	  GNU libmicrohttpd is a small C library that makes it easy to
+ 	  run an HTTP server as part of another application.
++
++	  http://www.gnu.org/software/libmicrohttpd/
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.6.3.3
