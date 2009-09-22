@@ -1,29 +1,49 @@
-From: Ormund Williams <ormundw@panix.com>
-Date: Tue, 22 Sep 2009 17:23:09 -0400
-Subject: [Buildroot] Is DirectFb.org down?
-In-Reply-To: <1253653547.9090.3.camel@bender>
-References: <BLU126-W2171CCAFA65907A9231DA4C7DE0@phx.gbl>
-	<87k4ztwq6n.fsf@macbook.be.48ers.dk>
-	<1253651876.451.40.camel@station1.ormlab.com>
-	<87my4mu2ca.fsf@macbook.be.48ers.dk> <1253653547.9090.3.camel@bender>
-Message-ID: <1253654589.451.44.camel@station1.ormlab.com>
+From: H Hartley Sweeten <hartleys@visionengravers.com>
+Date: Tue, 22 Sep 2009 18:16:48 -0400
+Subject: [Buildroot] [pull request] Buildroot cleanup, v2
+In-Reply-To: <1253135266-26880-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1253135266-26880-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <BD79186B4FD85F4B8E60E381CAEE190901D422CB@mi8nycmail19.Mi8.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 2009-09-22 at 23:05 +0200, Sven Neumann wrote:
-> buildroot uses the .tar.gz though, not the tar.bz2. I've uploaded our
-> copy of the tar.gz to my website. Peter, please grab it from there and
-> put it on the buildroot mirror:
+On Wednesday, September 16, 2009 2:08 PM, Thomas Petazzoni wrote:
+> Here is a resend of my patch series to cleanup various aspects of
+> Buildroot. Changes against the previous version are the following:
 > 
->  http://svenfoo.org/misc/DirectFB-1.4.2.tar.gz
+>  * Modified the patch on using "output" as the default output
+>    directory to match Peter suggestion regarding simplification of the
+>    implementation
 > 
+>  * Added a documentation patch that updates the documentation with the
+>    proposed modifications and also adds informations about various
+>    other things
 > 
-Thanks Sven, Peter.
+>  * Rebased on top of the current git
+> 
+> A discussion on this cleanup already took place, and I think that most
+> of the objections have found answers through the proposal of
+> alternative solutions.
+> 
+> Therefore, could the huge-cleanup branch at
+> git://git.busybox.net/~tpetazzoni/git/buildroot be pulled into the
+> master repository ?
+> 
+> If not, please tell me whether other fixes are needed or if I should
+> give up with the whole idea for design reasons.
+> 
 
+Thomas,
 
--- 
-Ormund Williams
-OrmLab LLC
+Nice work with the cleanup!
+
+To further cleanup the build do you think it's worthwhile to create a
+"Makefile.autotools.host.in" or just extend "Makefile.autotools.in" to
+handle the various packages that do a make for the host?  At a quick
+glance it appears they all go thru the same steps for the host build.
+
+Regards,
+Hartley
