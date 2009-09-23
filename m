@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Wed, 23 Sep 2009 14:50:50 +0200
-Subject: [Buildroot] [git commit master] openssl: use generic support for
-	avr32
-Message-ID: <20090923125104.DA48F77661@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] CHANGES: update list of
+	new/fixed/updated packages
+Message-ID: <20090923125105.2332B763CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +10,31 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=db5e30586779b3f8b7f97ed3342cd2bf38878167
+commit: http://git.buildroot.net/buildroot/commit/?id=dbc3fd2f21b47a0ac43e004e620ff154f877b365
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Upstream openssl doesn't have avr32 support, and we dropped the
-avr32 optimization patch some time ago.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/openssl/openssl.mk |    3 ---
- 1 files changed, 0 insertions(+), 3 deletions(-)
+ CHANGES |    7 +++++--
+ 1 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index 8c24db1..dcfcf4b 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -9,9 +9,6 @@ OPENSSL_SITE:=http://www.openssl.org/source
- OPENSSL_TARGET_ARCH=generic32
+diff --git a/CHANGES b/CHANGES
+index e0b5720..83b8381 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,8 +1,11 @@
+ 2009.11, Not yet released:
  
- # Some architectures are optimized in OpenSSL
--ifeq ($(ARCH),avr32)
--OPENSSL_TARGET_ARCH=avr32
--endif
- ifeq ($(ARCH),ia64)
- OPENSSL_TARGET_ARCH=ia64
- endif
+-	New packages: divine, libarchive, sdl_sound
++	New packages: divine, libarchive, libmicrohttpd, sdl_sound
+ 
+-	Updated/fixed packages: squashfs
++	Updated/fixed packages: autoconf, busybox, directfb, dnsmasq,
++	iptables, kernel-headers, kismet, libevent, libglib2, netkittelnet,
++	openssl, python, radvd, samba, squashfs, syslinux, u-boot,
++	xdata_xcursor-themes,
+ 
+ 	Issues resolved (http://bugs.uclibc.org):
+ 
 -- 
 1.6.3.3
