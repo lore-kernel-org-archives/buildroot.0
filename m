@@ -1,21 +1,20 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 23 Sep 2009 12:09:31 +0200
-Subject: [Buildroot] [PATCH] Makefile: Remove ancient 'sourceball' target
-In-Reply-To: <1253700240-11140-1-git-send-email-mroth@nessie.de> (Michael
-	Roth's message of "Wed\, 23 Sep 2009 12\:04\:00 +0200")
-References: <1253700240-11140-1-git-send-email-mroth@nessie.de>
-Message-ID: <87d45irmzo.fsf@macbook.be.48ers.dk>
+From: Mark Jackson <mpfj-list@mimc.co.uk>
+Date: Wed, 23 Sep 2009 11:08:27 +0100
+Subject: [Buildroot] Problem with defconfig
+Message-ID: <4AB9F39B.4090300@mimc.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Michael" == Michael Roth <mroth@nessie.de> writes:
+If I pull down the latest git and try to make a defconfig,
+I get the following:-
 
- Michael> Signed-off-by: Michael Roth <mroth@nessie.de>
+$ make atngw100-base_defconfig
+make: *** No rule to make target `atngw100-base_defconfig'. Stop.
 
-Committed, thanks
+I've not used BR since the svn days, so has this changed ?
 
--- 
-Bye, Peter Korsgaard
+Regards
+Mark
