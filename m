@@ -1,47 +1,26 @@
-From: Ormund Williams <ormundw@panix.com>
-Date: Wed, 23 Sep 2009 01:06:59 -0400
-Subject: [Buildroot] Enable i830 graphics driver for DirectFB
-Message-ID: <1253682420.451.64.camel@station1.ormlab.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 23 Sep 2009 08:47:50 +0200
+Subject: [Buildroot] [PATCH] Change the default BR2_DL_DIR location
+In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE190901D422DD@mi8nycmail19.Mi8.com>
+	(H. Hartley Sweeten's message of "Tue\,
+	22 Sep 2009 19\:27\:10 -0400")
+References: <BD79186B4FD85F4B8E60E381CAEE190901D422DD@mi8nycmail19.Mi8.com>
+Message-ID: <873a6etaw9.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm still learning to use git, so if anyone can turn these diffs into a
-real patch I would appreciate it.
+>>>>> "H" == H Hartley Sweeten <hartleys@visionengravers.com> writes:
 
+ H> Change to default Download dir so that different 'make O=<directory>'
+ H> commands will use the same location by default without having to
+ H> create a symlink in <directory> or having to export BUILDROOT_DL_DIR.
 
---- Config.in.old 2009-09-22 17:26:45.000000000 -0400
-+++ Config.in     2009-09-22 14:37:28.000000000 -0400
-@@ -61,6 +61,12 @@
- 	depends on BR2_PACKAGE_DIRECTFB
- 	depends on BR2_i386 || BR2_x86_64
- 
-+config BR2_PACKAGE_DIRECTFB_I830
-+	bool "compile i830 graphics driver"
-+	default y
-+	depends on BR2_PACKAGE_DIRECTFB
-+	depends on BR2_i386 || BR2_x86_64
-+
- config BR2_PACKAGE_DIRECTFB_LINUXINPUT
- 	bool "compile /dev/input/eventX input driver"
- 	default y
+ H> Signed-off-by: H Hartley Sweeten <hsweeten@visionengravers.com>
 
-
---- directfb.mk.old 2009-09-22 17:27:16.000000000 -0400
-+++ directfb.mk	2009-09-22 14:40:47.000000000 -0400
-@@ -63,6 +63,9 @@
- ifeq ($(BR2_PACKAGE_DIRECTFB_UNICHROME),y)
- DIRECTFB_GFX+= unichrome
- endif
-+ifeq ($(BR2_PACKAGE_DIRECTFB_I830),y)
-+DIRECTFB_GFX+= i830
-+endif
- ifeq ($(DIRECTFB_GFX),)
- DIRECTFB_GFX:=none
- else
+Committed, thanks.
 
 -- 
-Ormund Williams
-OrmLab LLC
+Bye, Peter Korsgaard
