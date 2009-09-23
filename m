@@ -1,37 +1,22 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Wed, 23 Sep 2009 13:48:28 +0200
-Subject: [Buildroot] OpenSSL fails to build with AVR32
-In-Reply-To: <4ABA0978.8070707@mimc.co.uk>
-References: <4ABA040E.1000907@mimc.co.uk>
-	<4ABA0978.8070707@mimc.co.uk>
-Message-ID: <20090923134828.308653a9@hcegtvedt.norway.atmel.com>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Wed, 23 Sep 2009 13:54:09 +0200
+Subject: [Buildroot] use of HOST_GLIB
+Message-ID: <1253706849.1618.60.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 23 Sep 2009 12:41:44 +0100
-Mark Jackson <mpfj-list@mimc.co.uk> wrote:
+Hi,
 
-> Mark Jackson wrote:
-> > With the latest git, openssl fails to build (see below).
-> > 
-> > Any ideas ?
-> 
-> <snip>
-> 
-> Aha ... looks like this ?
-> 
-> http://lists.busybox.net/pipermail/buildroot/2008-July/021680.html
-> 
-> But it's broken again ?
->
+I found that package/java/classpath and package/libsoup both use
 
-The patch, yes, since OpenSSL is probably bumped in version number.
+ ac_cv_path_GLIB_GENMARSHAL=$(HOST_GLIB)/glib-genmarshal
 
-You will only loose the optimized routines.
+However HOST_GLIB does not seem to be defined. What is the proper way to
+refer to the glib-genmarshal binary that is installed by the
+host-libglib2 target?
 
--- 
-Best regards,
-Hans-Christian Egtvedt
+
+Sven
