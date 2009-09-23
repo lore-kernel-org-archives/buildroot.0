@@ -1,28 +1,43 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 23 Sep 2009 12:22:03 +0200
-Subject: [Buildroot] [PATCH] Rename BASE_DIR to OUTPUT_DIR
-In-Reply-To: <1253700233-11103-1-git-send-email-mroth@nessie.de> (Michael
-	Roth's message of "Wed\, 23 Sep 2009 12\:03\:53 +0200")
-References: <1253700233-11103-1-git-send-email-mroth@nessie.de>
-Message-ID: <878wg6rmes.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 23 Sep 2009 12:09:08 +0200
+Subject: [Buildroot] [git commit master] Makefile: Remove ancient
+	'sourceball' target
+Message-ID: <20090923102504.4611877740@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Michael" == Michael Roth <mroth@nessie.de> writes:
 
- Michael> To reflect the new output directory hierarchy rename the Makefile
- Michael> variable BASE_DIR to OUTPUT_DIR.
+commit: http://git.buildroot.net/buildroot/commit/?id=18994732d3593a884260d943be3321b9dd4232a3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Michael> Signed-off-by: Michael Roth <mroth@nessie.de>
+Signed-off-by: Michael Roth <mroth@nessie.de>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ Makefile |    9 ---------
+ 1 files changed, 0 insertions(+), 9 deletions(-)
 
-Hmm, this will presumably break downloads for people trying to reuse
-their existing .config? (E.G. DL_DIR gets to point to /dl).
-
-I agree that BASE_DIR isn't the most telling name for what it does, but
-I'm not sure it's worth the trouble.
-
+diff --git a/Makefile b/Makefile
+index 192fdf2..3895473 100644
+--- a/Makefile
++++ b/Makefile
+@@ -450,15 +450,6 @@ endif
+ 	.config.cmd
+ 	$(MAKE) -C $(CONFIG) clean
+ 
+-sourceball:
+-	rm -rf $(BUILD_DIR) $(BUILD_DIR) $(BINARIES_DIR)
+-	set -e; \
+-	cd ..; \
+-	rm -f buildroot.tar.bz2; \
+-	tar -cvf buildroot.tar buildroot; \
+-	bzip2 -9 buildroot.tar; \
+-
+-
+ else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+ 
+ all: menuconfig
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
