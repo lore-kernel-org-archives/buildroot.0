@@ -1,40 +1,31 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 23 Sep 2009 14:50:50 +0200
-Subject: [Buildroot] [git commit master] CHANGES: update list of
-	new/fixed/updated packages
-Message-ID: <20090923125105.2332B763CF@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 23 Sep 2009 14:54:05 +0200
+Subject: [Buildroot] use of HOST_GLIB
+In-Reply-To: <1253706849.1618.60.camel@sven> (Sven Neumann's message of "Wed\,
+	23 Sep 2009 13\:54\:09 +0200")
+References: <1253706849.1618.60.camel@sven>
+Message-ID: <8763b9rfde.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dbc3fd2f21b47a0ac43e004e620ff154f877b365
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Sven> Hi,
+ Sven> I found that package/java/classpath and package/libsoup both use
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES |    7 +++++--
- 1 files changed, 5 insertions(+), 2 deletions(-)
+ Sven>  ac_cv_path_GLIB_GENMARSHAL=$(HOST_GLIB)/glib-genmarshal
 
-diff --git a/CHANGES b/CHANGES
-index e0b5720..83b8381 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,8 +1,11 @@
- 2009.11, Not yet released:
- 
--	New packages: divine, libarchive, sdl_sound
-+	New packages: divine, libarchive, libmicrohttpd, sdl_sound
- 
--	Updated/fixed packages: squashfs
-+	Updated/fixed packages: autoconf, busybox, directfb, dnsmasq,
-+	iptables, kernel-headers, kismet, libevent, libglib2, netkittelnet,
-+	openssl, python, radvd, samba, squashfs, syslinux, u-boot,
-+	xdata_xcursor-themes,
- 
- 	Issues resolved (http://bugs.uclibc.org):
- 
+ Sven> However HOST_GLIB does not seem to be defined. What is the proper
+ Sven> way to refer to the glib-genmarshal binary that is installed by
+ Sven> the host-libglib2 target?
+
+Ahh, those must have been missed when we fixed the glib-genmarshal
+stuff. The proper variable to use is LIBGLIB2_HOST_BINARY.
+
+I'll fix it in git - Thanks.
+
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
