@@ -1,8 +1,8 @@
-From: H Hartley Sweeten <hartleys@visionengravers.com>
+From: Michael Roth <mroth@nessie.de>
 Date: Wed, 23 Sep 2009 09:34:08 +0200
-Subject: [Buildroot] [git commit master] Change the default BR2_DL_DIR
-	location
-Message-ID: <20090923073602.959FA777AB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] Move download directory 'dl' back
+	to the top hierachy of buildroot
+Message-ID: <20090923073603.99695777AB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,38 +10,36 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=be695dcc3c9afd6836b90151301b6322de5dfcd8
+commit: http://git.buildroot.net/buildroot/commit/?id=416323e93442646e344a4e914776520c5e552fa0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Change to default Download dir so that different 'make O=<directory>'
-commands will use the same location by default without having to
-create a symlink in <directory> or having to export BUILDROOT_DL_DIR.
-
-Signed-off-by: H Hartley Sweeten <hsweeten@visionengravers.com>
+Signed-off-by: Michael Roth <mroth@nessie.de>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- Config.in |    4 ++--
+ Makefile |    4 ++--
  1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index 9897a17..cc83a6a 100644
---- a/Config.in
-+++ b/Config.in
-@@ -69,13 +69,13 @@ config BR2_TAR_OPTIONS
+diff --git a/Makefile b/Makefile
+index a8a5858..176992c 100644
+--- a/Makefile
++++ b/Makefile
+@@ -232,7 +232,7 @@ $(if $(BASE_DIR),, $(error output directory "$(O)" does not exist))
  
- config BR2_DL_DIR
- 	string "Download dir"
--	default "$(BASE_DIR)/dl"
-+	default "$(TOPDIR)/dl"
- 	help
- 	  Directory to store all the source files that we need to fetch.
- 	  If the Linux shell environment has defined the BUILDROOT_DL_DIR
- 	  environment variable, then this overrides this configuration item.
+ DL_DIR=$(call qstrip,$(BR2_DL_DIR))
+ ifeq ($(DL_DIR),)
+-DL_DIR:=$(BASE_DIR)/dl
++DL_DIR:=$(TOPDIR)/dl
+ endif
  
--	  The default is $(BASE_DIR)/dl
-+	  The default is $(TOPDIR)/dl
+ BUILD_DIR:=$(BASE_DIR)/build
+@@ -443,7 +443,7 @@ dirclean: $(TARGETS_DIRCLEAN)
+ 	rm -rf $(STAGING_DIR) $(TARGET_DIR) $(IMAGE) $(BUILD_DIR)/.root $(STAMP_DIR)
  
- config BR2_COPYTO
- 	string "Copy result to..."
+ distclean:
+-ifeq ($(DL_DIR),$(BASE_DIR)/dl)
++ifeq ($(DL_DIR),$(TOPDIR)/dl)
+ 	rm -rf $(DL_DIR)
+ endif
+ 	rm -rf $(TOOLCHAIN_DIR) $(BUILD_DIR) $(BINARIES_DIR) \
 -- 
 1.6.3.3
