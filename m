@@ -1,58 +1,49 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 23 Sep 2009 15:01:43 +0200
-Subject: [Buildroot] Problem with defconfig
-In-Reply-To: <4ABA187A.5010709@mimc.co.uk> (Mark Jackson's message of "Wed\,
-	23 Sep 2009 13\:45\:46 +0100")
-References: <4AB9F39B.4090300@mimc.co.uk> <874oqurm9z.fsf@macbook.be.48ers.dk>
-	<4AB9FE2D.1080009@mimc.co.uk> <87my4lrke1.fsf@macbook.be.48ers.dk>
-	<4ABA02F3.6020706@mimc.co.uk> <87eipxrfz0.fsf@macbook.be.48ers.dk>
-	<4ABA187A.5010709@mimc.co.uk>
-Message-ID: <871vlxrf0o.fsf@macbook.be.48ers.dk>
+From: Cavalera Claudio Luigi <Claudio.Cavalera@italtel.it>
+Date: Wed, 23 Sep 2009 15:24:12 +0200
+Subject: [Buildroot] "mconf cannot execute binary file " ??
+Message-ID: <A2167AE7633A5C4DAE56EEBD1428ECC0F3612F@BESONE.corp.dom>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Mark" == Mark Jackson <mpfj-list@mimc.co.uk> writes:
+Hello guys,
+my name is Claudio and I'm new on the list.
+I'm trying to learn buildroot, in the past I've been successful using
+scratchbox but now I want to try buildroot which should be better for my
+MIPS target architecture.
 
-Hi,
+As far as I've understood the only documentation available is this one:
+http://www.buildroot.net/buildroot.html
+is this correct?
 
- >> %_defconfig: $(CONFIG)/conf
- >> cp $(shell find ./target/ -name $@) .config
- >> -@$(MAKE) oldconfig
+Wanting to start with something stable, I've downloaded the tarballs but
+when I issue make menuconfig
+it complains about 'mconf' 
+/bin/sh: package/config/mconf: cannot execute binary file
 
- Mark> I looked at this and put in some @echo lines before and after the cp.
- Mark> They were never executed !?!  Is this some bash / dash setup thing ?
+it seems a MIPS file:
+file package/config/mconf
+package/config/mconf: ELF 32-bit MSB executable, MIPS, MIPS-I version 1
+(SYSV), dynamically linked (uses shared libs), not stripped
 
-Well, they shouldn't as make complains that it doesn't know how to make
-the rule, but I don't get why.
+It seems impossible to me that such a problem made into the buildroot
+release because it would have been reported by many others also but I
+found nothing about it.
 
-Does it work if you change the %_defconfig to atngw100-base_defconfig ?
+So chances are that it's a problem of my environment or something I'm
+doing (but it's just an untar and a make menuconfig).
+Is it ok to run make menuconfig on an x86 build host?
+Maybe it's better to use the latest git instead of the tarballs?
 
- >> So I don't get it why it doesn't trigger for you. Does a simple 'make
- >> blah_defconfig' work for you?
+Thanks a lot,
+Claudio
 
- Mark> No ... everything comes up "no rule to make".
 
-strange.
+Internet Email Confidentiality Footer
+-----------------------------------------------------------------------------------------------------
+La presente comunicazione, con le informazioni in essa contenute e ogni documento o file allegato, e' rivolta unicamente alla/e persona/e cui e' indirizzata ed alle altre da questa autorizzata/e a riceverla. Se non siete i destinatari/autorizzati siete avvisati che qualsiasi azione, copia, comunicazione, divulgazione o simili basate sul contenuto di tali informazioni e' vietata e potrebbe essere contro la legge (art. 616 C.P., D.Lgs n. 196/2003 Codice in materia di protezione dei dati personali). Se avete ricevuto questa comunicazione per errore, vi preghiamo di darne immediata notizia al mittente e di distruggere il messaggio originale e ogni file allegato senza farne copia alcuna o riprodurne in alcun modo il contenuto. 
 
- >> Does it work with the 2009.08 release? What version of make are you using?
-
- Mark> 2009.08 release of buildroot ?  It's not out yet is it ?
-
-Ehh, yes it is. We're no longer in August ;)
-
-http://buildroot.net/downloads/buildroot-2009.08.tar.bz2
-
- Mark> mpfj at mpfj-x64:~/avr32/buildroot$ make -v
- Mark> GNU Make 3.81
- Mark> Copyright (C) 2006  Free Software Foundation, Inc.
- Mark> This is free software; see the source for copying conditions.
- Mark> There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A
- Mark> PARTICULAR PURPOSE.
-
-Ok, I'm using 3.81 as well (Debian).
-
--- 
-Bye, Peter Korsgaard
+This e-mail and its attachments are intended for the addressee(s) only and are confidential and/or may contain legally privileged information. If you have received this message by mistake or are not one of the addressees above, you may take no action based on it, and you may not copy or show it to anyone; please reply to this e-mail and point out the error which has occurred. 
+-----------------------------------------------------------------------------------------------------
