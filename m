@@ -1,39 +1,34 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 24 Sep 2009 12:23:58 +0200
-Subject: [Buildroot] [PATCH] Add i830 graphics driver to DirectFB
-In-Reply-To: <1253754832.451.92.camel@station1.ormlab.com> (Ormund Williams's
-	message of "Wed\, 23 Sep 2009 21\:13\:52 -0400")
-References: <1253754832.451.92.camel@station1.ormlab.com>
-Message-ID: <87vdj863pd.fsf@macbook.be.48ers.dk>
+Date: Thu, 24 Sep 2009 12:27:22 +0200
+Subject: [Buildroot] mpfr-2.4.1.patch not found
+In-Reply-To: <4ABB135A.5010408@cetoncorp.com> (Austin Foxley's message of
+	"Wed\, 23 Sep 2009 23\:36\:10 -0700")
+References: <1253772735.451.111.camel@station1.ormlab.com>
+	<4ABB135A.5010408@cetoncorp.com>
+Message-ID: <87r5tw63jp.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ormund" == Ormund Williams <ormundw@panix.com> writes:
+>>>>> "Austin" == Austin Foxley <austinf@cetoncorp.com> writes:
 
-Hi,
+ Austin> On 09/23/2009 11:12 PM, Ormund Williams wrote:
+ >> /bin/sh: ./../dl/mpfr-2.4.1.patch: No such file or directory
+ >> make: *** [.../buildroot/output/toolchain/mpfr-2.4.1/.unpacked] Error 1
+ >> 
+ >> Where is this patch suppose to come from?
 
-Thanks, committed with minor changes. There's a few things to keep in
-mind for next time though:
+ Austin> http://www.mpfr.org/mpfr-2.4.1/mpfr-2.4.1.patch I would think, but that gives me
+ Austin> a 404 currently.
 
-1: You didn't have a signed-off-by: line - Please use git commit -s to
-add it automatically when you commit.
+http://www.mpfr.org/mpfr-2.4.1/patches to be exact, but we rename that
+unlucky filename to mpfr-2.4.1.patch after downloading (see mpfr.mk).
 
-2: You seem to be missing a -- seperator here, making the diffstat
-output part of the commit message (which it shouldn't be). Did you send
-the patch with git send-email?
+It's on the mirror as well:
 
- Ormund>  package/directfb/Config.in   |    6 ++++++
- Ormund>  package/directfb/directfb.mk |    3 +++
- Ormund>  2 files changed, 9 insertions(+), 0 deletions(-)
-
- Ormund> +config BR2_PACKAGE_DIRECTFB_I830
- Ormund> +	bool "compile i830 graphics driver"
- Ormund> +	default n
- 
-'n' is the default anyway, so there's no need to add it explicitly.
+http://buildroot.net/downloads/sources/mpfr-2.4.1.patch
 
 -- 
 Bye, Peter Korsgaard
