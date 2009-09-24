@@ -1,40 +1,44 @@
-From: Emmanuel Riou <riou.emmanuel@googlemail.com>
-Date: Thu, 24 Sep 2009 15:40:39 +0100
-Subject: [Buildroot] mpfr-2.4.1.patch not found
-In-Reply-To: <87r5tw63jp.fsf@macbook.be.48ers.dk>
-References: <1253772735.451.111.camel@station1.ormlab.com>	<4ABB135A.5010408@cetoncorp.com>
-	<87r5tw63jp.fsf@macbook.be.48ers.dk>
-Message-ID: <4ABB84E7.9070001@gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 24 Sep 2009 17:14:31 +0200
+Subject: [Buildroot] [git commit master] mpfr: use patch-kernel to apply
+	downloaded patch
+Message-ID: <20090924151918.6B4BF7758F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard wrote:
->>>>>> "Austin" == Austin Foxley <austinf@cetoncorp.com> writes:
-> 
->  Austin> On 09/23/2009 11:12 PM, Ormund Williams wrote:
->  >> /bin/sh: ./../dl/mpfr-2.4.1.patch: No such file or directory
->  >> make: *** [.../buildroot/output/toolchain/mpfr-2.4.1/.unpacked] Error 1
->  >> 
->  >> Where is this patch suppose to come from?
-> 
->  Austin> http://www.mpfr.org/mpfr-2.4.1/mpfr-2.4.1.patch I would think, but that gives me
->  Austin> a 404 currently.
-> 
-> http://www.mpfr.org/mpfr-2.4.1/patches to be exact, but we rename that
-> unlucky filename to mpfr-2.4.1.patch after downloading (see mpfr.mk).
-> 
-> It's on the mirror as well:
-> 
-> http://buildroot.net/downloads/sources/mpfr-2.4.1.patch
-> 
-I have just experienced the problem. It looks like this is a relative 
-path issue actually:
-When you look at mpfr.mk the patch command is the following:
-( cd $(MPFR_DIR); patch -p1 -N -Z < $(MPFR_PATCH_SOURCE); )
-with MPFR_PATCH_SOURCE:=$(DL_DIR)/$(MPFR_PATCH_FILE) which is replaced 
-in my case by ./dl/mpfr-2.4.1.patch where it should be an absolute path.
 
-Emmanuel.
+commit: http://git.buildroot.net/buildroot/commit/?id=bdccd7b2e67cc9bfa5a95cb74693bce662293549
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Reported by Emmanuel Riou <riou.emmanuel@googlemail.com>.
+
+With the recent change to use $(TOPDIR)/dl as default for $(DL_DIR)
+(416323e93), DL_DIR is now a relative path (./dl), which breaks the
+mpfr patch handling as it changes dir.
+
+Fix is by using patch-kernel instead of calling patch, which does
+the right thing.
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/mpfr/mpfr.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/mpfr/mpfr.mk b/package/mpfr/mpfr.mk
+index 4bd100c..b0a3cf8 100644
+--- a/package/mpfr/mpfr.mk
++++ b/package/mpfr/mpfr.mk
+@@ -34,7 +34,7 @@ $(MPFR_DIR)/.unpacked: $(DL_DIR)/$(MPFR_SOURCE) $(MPFR_PATCH_SOURCE)
+ 	toolchain/patch-kernel.sh $(MPFR_DIR) package/mpfr/ \*.patch
+ 	$(CONFIG_UPDATE) $(@D)
+ ifneq ($(MPFR_PATCH),)
+-	( cd $(MPFR_DIR); patch -p1 -N -Z < $(MPFR_PATCH_SOURCE); )
++	toolchain/patch-kernel.sh $(MPFR_DIR) $(DL_DIR)/ $(MPFR_PATCH_FILE)
+ endif
+ 	touch $@
+ 
+-- 
+1.6.3.3
