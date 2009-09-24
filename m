@@ -1,8 +1,7 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
+From: Ormund Williams <ormundw@panix.com>
 Date: Thu, 24 Sep 2009 17:14:31 +0200
-Subject: [Buildroot] [git commit master] mpfr: use patch-kernel to apply
-	downloaded patch
-Message-ID: <20090924151918.6B4BF7758F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] Add i830 graphics driver to DirectFB
+Message-ID: <20090924151918.3BC4D77780@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,35 +9,45 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bdccd7b2e67cc9bfa5a95cb74693bce662293549
+commit: http://git.buildroot.net/buildroot/commit/?id=1f09b42f504bfbfb0ce51a94f1033ce05d8d1f08
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Reported by Emmanuel Riou <riou.emmanuel@googlemail.com>.
-
-With the recent change to use $(TOPDIR)/dl as default for $(DL_DIR)
-(416323e93), DL_DIR is now a relative path (./dl), which breaks the
-mpfr patch handling as it changes dir.
-
-Fix is by using patch-kernel instead of calling patch, which does
-the right thing.
-
+Signed-off-by: Ormund Williams <ormundw@panix.com>[A
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/mpfr/mpfr.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/directfb/Config.in   |    5 +++++
+ package/directfb/directfb.mk |    3 +++
+ 2 files changed, 8 insertions(+), 0 deletions(-)
 
-diff --git a/package/mpfr/mpfr.mk b/package/mpfr/mpfr.mk
-index 4bd100c..b0a3cf8 100644
---- a/package/mpfr/mpfr.mk
-+++ b/package/mpfr/mpfr.mk
-@@ -34,7 +34,7 @@ $(MPFR_DIR)/.unpacked: $(DL_DIR)/$(MPFR_SOURCE) $(MPFR_PATCH_SOURCE)
- 	toolchain/patch-kernel.sh $(MPFR_DIR) package/mpfr/ \*.patch
- 	$(CONFIG_UPDATE) $(@D)
- ifneq ($(MPFR_PATCH),)
--	( cd $(MPFR_DIR); patch -p1 -N -Z < $(MPFR_PATCH_SOURCE); )
-+	toolchain/patch-kernel.sh $(MPFR_DIR) $(DL_DIR)/ $(MPFR_PATCH_FILE)
- endif
- 	touch $@
+diff --git a/package/directfb/Config.in b/package/directfb/Config.in
+index 487faf4..0d1c49d 100644
+--- a/package/directfb/Config.in
++++ b/package/directfb/Config.in
+@@ -61,6 +61,11 @@ config BR2_PACKAGE_DIRECTFB_UNICHROME
+ 	depends on BR2_PACKAGE_DIRECTFB
+ 	depends on BR2_i386 || BR2_x86_64
  
++config BR2_PACKAGE_DIRECTFB_I830
++	bool "compile i830 graphics driver"
++	depends on BR2_PACKAGE_DIRECTFB
++	depends on BR2_i386 || BR2_x86_64
++
+ config BR2_PACKAGE_DIRECTFB_LINUXINPUT
+ 	bool "compile /dev/input/eventX input driver"
+ 	default y
+diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
+index 4212a4a..409f791 100644
+--- a/package/directfb/directfb.mk
++++ b/package/directfb/directfb.mk
+@@ -63,6 +63,9 @@ endif
+ ifeq ($(BR2_PACKAGE_DIRECTFB_UNICHROME),y)
+ DIRECTFB_GFX+= unichrome
+ endif
++ifeq ($(BR2_PACKAGE_DIRECTFB_I830),y)
++DIRECTFB_GFX+= i830
++endif
+ ifeq ($(DIRECTFB_GFX),)
+ DIRECTFB_GFX:=none
+ else
 -- 
 1.6.3.3
