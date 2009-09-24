@@ -1,37 +1,39 @@
-From: Emmanuel Riou <riou.emmanuel@googlemail.com>
-Date: Thu, 24 Sep 2009 16:32:46 +0100
-Subject: [Buildroot] mpfr-2.4.1.patch not found
-In-Reply-To: <87y6o4gyk4.fsf@macbook.be.48ers.dk>
-References: <1253772735.451.111.camel@station1.ormlab.com>	<4ABB135A.5010408@cetoncorp.com>
-	<87r5tw63jp.fsf@macbook.be.48ers.dk>	<4ABB81D2.4060602@gmail.com>
-	<87y6o4gyk4.fsf@macbook.be.48ers.dk>
-Message-ID: <4ABB911E.70806@gmail.com>
+From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
+Date: Thu, 24 Sep 2009 12:42:03 -0300
+Subject: [Buildroot] Problem with defconfig
+In-Reply-To: <4ABB4F13.9060102@mimc.co.uk>
+References: <4AB9F39B.4090300@mimc.co.uk> <874oqurm9z.fsf@macbook.be.48ers.dk>
+	<4AB9FE2D.1080009@mimc.co.uk> <87my4lrke1.fsf@macbook.be.48ers.dk>
+	<4ABA02F3.6020706@mimc.co.uk> <87eipxrfz0.fsf@macbook.be.48ers.dk>
+	<4ABB4F13.9060102@mimc.co.uk>
+Message-ID: <d6cda7730909240842r2fc6d565hde24128fb166dd55@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard wrote:
->>>>>> "Emmanuel" == Emmanuel Riou <riou.emmanuel@googlemail.com> writes:
-> 
-Hi!
-> Hi,
-> 
->  Emmanuel> I have just experienced the same problem. It looks like this
->  Emmanuel> is a relative path issue actually: When you look at mpfr.mk
->  Emmanuel> the patch command is the following: ( cd $(MPFR_DIR); patch
->  Emmanuel> -p1 -N -Z < $(MPFR_PATCH_SOURCE); ) with
->  Emmanuel> MPFR_PATCH_SOURCE:=$(DL_DIR)/$(MPFR_PATCH_FILE) which is
->  Emmanuel> replaced
-> 
-> You're right, that's a drop out from the recent dl dir move patch.  I
-> didn't notice as I have BUILDROOT_DL_DIR defined in my environment to an
-> absolute patch.
-> 
-> I have fixed it in git (bdccd7b2e67cc) - Thanks!
-Many thanks for the fix!
+Hi,
 
-Emmanuel.
+On Thu, Sep 24, 2009 at 7:50 AM, Mark Jackson <mpfj-list@mimc.co.uk> wrote:
+> Peter Korsgaard wrote:
+>
+> <snip>
+>
+>>
+>> %_defconfig: $(CONFIG)/conf
+>> ? ? ? ? cp $(shell find ./target/ -name $@) .config
+>> ? ? ? ? -@$(MAKE) oldconfig
+>>
+>> So I don't get it why it doesn't trigger for you. Does a simple 'make
+>> blah_defconfig' work for you?
+>
+> The makefile seems to be looking for the file, but can't find it:-
+>
 
-> 
+I didn't check, but I do remember that there was a clean up where the
+atngw100 variations were removed. I think there is only
+atngw100_defconfig now.
+
+Kind Regards,
+    Thiago A. Correa
