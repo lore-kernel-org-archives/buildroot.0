@@ -1,31 +1,26 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 24 Sep 2009 17:48:24 +0200
-Subject: [Buildroot] Problem with defconfig
-In-Reply-To: <d6cda7730909240842r2fc6d565hde24128fb166dd55@mail.gmail.com>
-	("Thiago A. =?utf-8?Q?Corr=C3=AAa=22's?= message of "Thu\, 24 Sep 2009
-	12\:42\:03 -0300")
-References: <4AB9F39B.4090300@mimc.co.uk> <874oqurm9z.fsf@macbook.be.48ers.dk>
-	<4AB9FE2D.1080009@mimc.co.uk> <87my4lrke1.fsf@macbook.be.48ers.dk>
-	<4ABA02F3.6020706@mimc.co.uk> <87eipxrfz0.fsf@macbook.be.48ers.dk>
-	<4ABB4F13.9060102@mimc.co.uk>
-	<d6cda7730909240842r2fc6d565hde24128fb166dd55@mail.gmail.com>
-Message-ID: <87tyysgx87.fsf@macbook.be.48ers.dk>
+From: Michael Trimarchi <trimarchimichael@yahoo.it>
+Date: Thu, 24 Sep 2009 16:33:13 +0000 (GMT)
+Subject: [Buildroot] Foreigh toolchain
+In-Reply-To: <87tyysgx87.fsf@macbook.be.48ers.dk>
+Message-ID: <185890.9723.qm@web23501.mail.ird.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thiago" == Thiago A Corr?a <thiago.correa@gmail.com> writes:
+Hi,
 
- Thiago> I didn't check, but I do remember that there was a clean up where the
- Thiago> atngw100 variations were removed. I think there is only
- Thiago> atngw100_defconfig now.
+I have this problem using the foreigh toolchain. Can anyone know how to fix
+it?
 
-No, the _base defconfig is still there.
+libtool: relink: /usr/share/gnush4-nofpu_linux_v0701-1/bin/sh3-linux-gcc -Os -pipe -Os  --sysroot /home/michael/lavoro/renesas/buildroot/output/build/staging_dir/ -shared  .libs/gmodule.o   -Wl,-rpath -Wl,/home/michael/lavoro/renesas/buildroot/output/build/staging_dir/usr/lib -ldl -L/home/michael/lavoro/renesas/buildroot/output/target/usr/lib -L/usr/lib -lglib-2.0 -L/home/michael/lavoro/renesas/buildroot/output/build/staging_dir/usr/lib -L/home/michael/lavoro/renesas/buildroot/output/target/home/michael/lavoro/renesas/buildroot/output/build/staging_dir/usr/lib -lintl -lc  -Wl,--export-dynamic   -Wl,-soname -Wl,libgmodule-2.0.so.0 -o .libs/libgmodule-2.0.so.0.2000.5
+/usr/lib/libdl.so: file not recognized: File format not recognized
+collect2: ld returned 1 exit status
+libtool: install: error: relink `libgmodule-2.0.la' with the above command before installing it
 
-find -name \*base\*defconfig
-./Atmel/atngw100-base/atngw100-base_defconfig
 
--- 
-Bye, Peter Korsgaard
+
+
+
+      
