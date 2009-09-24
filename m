@@ -1,36 +1,45 @@
-From: Ormund Williams <ormundw@panix.com>
-Date: Thu, 24 Sep 2009 14:54:23 -0400
-Subject: [Buildroot] mpfr-2.4.1.patch not found
-In-Reply-To: <87y6o4gyk4.fsf@macbook.be.48ers.dk>
-References: <1253772735.451.111.camel@station1.ormlab.com>
-	<4ABB135A.5010408@cetoncorp.com> <87r5tw63jp.fsf@macbook.be.48ers.dk>
-	<4ABB81D2.4060602@gmail.com>  <87y6o4gyk4.fsf@macbook.be.48ers.dk>
-Message-ID: <1253818463.451.130.camel@station1.ormlab.com>
+From: Daniel.Li <lida_mail@163.com>
+Date: Fri, 25 Sep 2009 06:22:04 +0800
+Subject: [Buildroot] latest buildroot build toolchain failed -- help
+Message-ID: <1253830924.12641.2.camel@daniel-laptop>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 2009-09-24 at 17:19 +0200, Peter Korsgaard wrote:
-> >>>>> "Emmanuel" == Emmanuel Riou <riou.emmanuel@googlemail.com> writes:
-> 
-> Hi,
-> 
->  Emmanuel> I have just experienced the same problem. It looks like this
->  Emmanuel> is a relative path issue actually: When you look at mpfr.mk
->  Emmanuel> the patch command is the following: ( cd $(MPFR_DIR); patch
->  Emmanuel> -p1 -N -Z < $(MPFR_PATCH_SOURCE); ) with
->  Emmanuel> MPFR_PATCH_SOURCE:=$(DL_DIR)/$(MPFR_PATCH_FILE) which is
->  Emmanuel> replaced
-> 
-> You're right, that's a drop out from the recent dl dir move patch.  I
-> didn't notice as I have BUILDROOT_DL_DIR defined in my environment to an
-> absolute patch.
-> 
-> I have fixed it in git (bdccd7b2e67cc) - Thanks!
-> 
-Thanks, this had me confused since the patch was in my dl directory.
+Dear All,
+
+I just get a latest buildroot for git repository. And configed to my arm
+processor, but compile failed. How can I fix it?
+
+ARM (920t) , Host (ubuntu Jaunty)
+
+
+checking if _GLOBAL_OFFSET_TABLE_ is prefixed by underscore... no
+checking if the assembler takes cl with shldl... yes
+checking for unsigned short... yes
+checking size of unsigned short... 2
+checking for unsigned... yes
+checking size of unsigned... 4
+checking for unsigned long... yes
+checking size of unsigned long... 4
+checking for mp_limb_t... yes
+checking size of mp_limb_t... 4
+checking for stack_t... yes
+checking for tputs in -lncurses... yes
+checking for readline in -lreadline... no
+checking readline detected... no
+checking for bison... bison -y
+checking for flex... flex
+checking for yywrap in -lfl... yes
+checking lex output file root... configure: error: cannot find output
+from flex; giving up
+make: ***
+[/home/daniel/frwork/buildroot/output/toolchain/gmp-4.2.4-host/.configured] Error 1
+
+
+
+
 -- 
-Ormund Williams
-OrmLab LLC
+Daniel.Li <lida_mail@163.com>
