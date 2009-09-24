@@ -1,53 +1,23 @@
 From: Ormund Williams <ormundw@panix.com>
-Date: Wed, 23 Sep 2009 21:13:52 -0400
-Subject: [Buildroot] [PATCH] Add i830 graphics driver to DirectFB
-Message-ID: <1253754832.451.92.camel@station1.ormlab.com>
+Date: Thu, 24 Sep 2009 02:12:15 -0400
+Subject: [Buildroot] mpfr-2.4.1.patch not found
+Message-ID: <1253772735.451.111.camel@station1.ormlab.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- package/directfb/Config.in   |    6 ++++++
- package/directfb/directfb.mk |    3 +++
- 2 files changed, 9 insertions(+), 0 deletions(-)
+I'm getting this error on a clean build:
 
-diff --git a/package/directfb/Config.in b/package/directfb/Config.in
-index 487faf4..8f4beb8 100644
---- a/package/directfb/Config.in
-+++ b/package/directfb/Config.in
-@@ -61,6 +61,12 @@ config BR2_PACKAGE_DIRECTFB_UNICHROME
- 	depends on BR2_PACKAGE_DIRECTFB
- 	depends on BR2_i386 || BR2_x86_64
- 
-+config BR2_PACKAGE_DIRECTFB_I830
-+	bool "compile i830 graphics driver"
-+	default n
-+	depends on BR2_PACKAGE_DIRECTFB
-+	depends on BR2_i386 || BR2_x86_64
-+
- config BR2_PACKAGE_DIRECTFB_LINUXINPUT
- 	bool "compile /dev/input/eventX input driver"
- 	default y
-diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
-index 4212a4a..409f791 100644
---- a/package/directfb/directfb.mk
-+++ b/package/directfb/directfb.mk
-@@ -63,6 +63,9 @@ endif
- ifeq ($(BR2_PACKAGE_DIRECTFB_UNICHROME),y)
- DIRECTFB_GFX+= unichrome
- endif
-+ifeq ($(BR2_PACKAGE_DIRECTFB_I830),y)
-+DIRECTFB_GFX+= i830
-+endif
- ifeq ($(DIRECTFB_GFX),)
- DIRECTFB_GFX:=none
- else
--- 
-1.5.6.5
+bzcat ./../dl/mpfr-2.4.1.tar.bz2 | tar -C .../buildroot/output/toolchain  -xf -
+toolchain/patch-kernel.sh .../buildroot/output/toolchain/mpfr-2.4.1 package/mpfr/ \*.patch
+cp -f package/gnuconfig/config.sub package/gnuconfig/config.guess .../buildroot/output/toolchain/mpfr-2.4.1
+( cd .../buildroot/output/toolchain/mpfr-2.4.1; patch -p1 -N -Z < ./../dl/mpfr-2.4.1.patch; )
+/bin/sh: ./../dl/mpfr-2.4.1.patch: No such file or directory
+make: *** [.../buildroot/output/toolchain/mpfr-2.4.1/.unpacked] Error 1
 
-_____________________________________________________
-Does this look right?
+Where is this patch suppose to come from?
 -- 
 Ormund Williams
 OrmLab LLC
