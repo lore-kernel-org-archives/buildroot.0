@@ -1,28 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Sep 2009 20:28:01 +0200
-Subject: [Buildroot] Foreigh toolchain
-In-Reply-To: <185890.9723.qm@web23501.mail.ird.yahoo.com>
-References: <87tyysgx87.fsf@macbook.be.48ers.dk>
-	<185890.9723.qm@web23501.mail.ird.yahoo.com>
-Message-ID: <20090924202801.78a69428@surf>
+From: Ormund Williams <ormundw@panix.com>
+Date: Thu, 24 Sep 2009 14:54:23 -0400
+Subject: [Buildroot] mpfr-2.4.1.patch not found
+In-Reply-To: <87y6o4gyk4.fsf@macbook.be.48ers.dk>
+References: <1253772735.451.111.camel@station1.ormlab.com>
+	<4ABB135A.5010408@cetoncorp.com> <87r5tw63jp.fsf@macbook.be.48ers.dk>
+	<4ABB81D2.4060602@gmail.com>  <87y6o4gyk4.fsf@macbook.be.48ers.dk>
+Message-ID: <1253818463.451.130.camel@station1.ormlab.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 24 Sep 2009 16:33:13 +0000 (GMT),
-Michael Trimarchi <trimarchimichael@yahoo.it> a ?crit :
-
-> I have this problem using the foreigh toolchain. Can anyone know how
-> to fix it?
-
-That's a libtool issue, and I haven't yet found the proper solution for
-it. It's probably a matter of recompiling libtool and using our own.
-
-Thomas
+On Thu, 2009-09-24 at 17:19 +0200, Peter Korsgaard wrote:
+> >>>>> "Emmanuel" == Emmanuel Riou <riou.emmanuel@googlemail.com> writes:
+> 
+> Hi,
+> 
+>  Emmanuel> I have just experienced the same problem. It looks like this
+>  Emmanuel> is a relative path issue actually: When you look at mpfr.mk
+>  Emmanuel> the patch command is the following: ( cd $(MPFR_DIR); patch
+>  Emmanuel> -p1 -N -Z < $(MPFR_PATCH_SOURCE); ) with
+>  Emmanuel> MPFR_PATCH_SOURCE:=$(DL_DIR)/$(MPFR_PATCH_FILE) which is
+>  Emmanuel> replaced
+> 
+> You're right, that's a drop out from the recent dl dir move patch.  I
+> didn't notice as I have BUILDROOT_DL_DIR defined in my environment to an
+> absolute patch.
+> 
+> I have fixed it in git (bdccd7b2e67cc) - Thanks!
+> 
+Thanks, this had me confused since the patch was in my dl directory.
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Ormund Williams
+OrmLab LLC
