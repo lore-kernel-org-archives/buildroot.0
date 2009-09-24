@@ -1,34 +1,29 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 24 Sep 2009 12:27:22 +0200
-Subject: [Buildroot] mpfr-2.4.1.patch not found
-In-Reply-To: <4ABB135A.5010408@cetoncorp.com> (Austin Foxley's message of
-	"Wed\, 23 Sep 2009 23\:36\:10 -0700")
-References: <1253772735.451.111.camel@station1.ormlab.com>
-	<4ABB135A.5010408@cetoncorp.com>
-Message-ID: <87r5tw63jp.fsf@macbook.be.48ers.dk>
+From: Mark Jackson <mpfj-list@mimc.co.uk>
+Date: Thu, 24 Sep 2009 11:45:05 +0100
+Subject: [Buildroot] Problem with defconfig
+In-Reply-To: <874oqurm9z.fsf@macbook.be.48ers.dk>
+References: <4AB9F39B.4090300@mimc.co.uk> <874oqurm9z.fsf@macbook.be.48ers.dk>
+Message-ID: <4ABB4DB1.2000201@mimc.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Austin" == Austin Foxley <austinf@cetoncorp.com> writes:
+Peter Korsgaard wrote:
+>>>>>> "Mark" == Mark Jackson <mpfj-list@mimc.co.uk> writes:
+> 
+>  Mark> If I pull down the latest git and try to make a defconfig,
+>  Mark> I get the following:-
+> 
+>  Mark> $ make atngw100-base_defconfig
+>  Mark> make: *** No rule to make target `atngw100-base_defconfig'. Stop.
 
- Austin> On 09/23/2009 11:12 PM, Ormund Williams wrote:
- >> /bin/sh: ./../dl/mpfr-2.4.1.patch: No such file or directory
- >> make: *** [.../buildroot/output/toolchain/mpfr-2.4.1/.unpacked] Error 1
- >> 
- >> Where is this patch suppose to come from?
+I've also noticed that "make saveconfig" does the same ...
 
- Austin> http://www.mpfr.org/mpfr-2.4.1/mpfr-2.4.1.patch I would think, but that gives me
- Austin> a 404 currently.
+mpfj at mpfj-x64:~/avr32/buildroot$ make saveconfig
+make: *** No rule to make target `saveconfig'. Stop.
 
-http://www.mpfr.org/mpfr-2.4.1/patches to be exact, but we rename that
-unlucky filename to mpfr-2.4.1.patch after downloading (see mpfr.mk).
+But "make", "make all" and "make menuconfig" are okay.
 
-It's on the mirror as well:
-
-http://buildroot.net/downloads/sources/mpfr-2.4.1.patch
-
--- 
-Bye, Peter Korsgaard
+Mark
