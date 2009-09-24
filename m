@@ -1,43 +1,64 @@
-From: Mark Jackson <mpfj-list@mimc.co.uk>
-Date: Thu, 24 Sep 2009 11:50:59 +0100
-Subject: [Buildroot] Problem with defconfig
-In-Reply-To: <87eipxrfz0.fsf@macbook.be.48ers.dk>
-References: <4AB9F39B.4090300@mimc.co.uk>
-	<874oqurm9z.fsf@macbook.be.48ers.dk>	<4AB9FE2D.1080009@mimc.co.uk>
-	<87my4lrke1.fsf@macbook.be.48ers.dk>	<4ABA02F3.6020706@mimc.co.uk>
-	<87eipxrfz0.fsf@macbook.be.48ers.dk>
-Message-ID: <4ABB4F13.9060102@mimc.co.uk>
+From: Teemu Keskinarkaus <Teemu.Keskinarkaus@cc-systems.com>
+Date: Thu, 24 Sep 2009 13:52:18 +0200
+Subject: [Buildroot] Buildroot build fails is executed from Makefile
+In-Reply-To: <330EC2471BF24E48B513AF1A6975EB69B015D9@MAIL-UA.ccs.local>
+References: <330EC2471BF24E48B513AF1A6975EB69B015D9@MAIL-UA.ccs.local>
+Message-ID: <330EC2471BF24E48B513AF1A6975EB69B01611@MAIL-UA.ccs.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard wrote:
+It seems that the problem isn't Makefile related. I get same results if
+I from the shell try to execute make -C buildroot.
 
-<snip>
+Teemu Keskinarkaus
 
-> 
-> %_defconfig: $(CONFIG)/conf
->         cp $(shell find ./target/ -name $@) .config
->         -@$(MAKE) oldconfig
-> 
-> So I don't get it why it doesn't trigger for you. Does a simple 'make
-> blah_defconfig' work for you?
+________________________________________
+From: buildroot-bounces@busybox.net
+[mailto:buildroot-bounces at busybox.net] On Behalf Of Teemu Keskinarkaus
+Sent: 24. syyskuuta 2009 12:52
+To: buildroot at busybox.net
+Subject: [Buildroot] Buildroot build fails is executed from Makefile
 
-The makefile seems to be looking for the file, but can't find it:-
+I have main Makefile that's idea is to build the whole system. With the
+old buildroot it worked just fine, but with the latest stable buildroot
+it seems to be failing in kernel build.
 
-mpfj at mpfj-x64:~/avr32/buildroot$ make --debug atngw100-base_defconfig
-GNU Make 3.81
-Copyright (C) 2006  Free Software Foundation, Inc.
-This is free software; see the source for copying conditions.
-There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.
+Here is some of the debug printout I got out from make
 
-This program built for x86_64-pc-linux-gnu
-Reading makefiles...
-Updating goal targets....
- File `atngw100-base_defconfig' does not exist.
-Must remake target `atngw100-base_defconfig'.
-make: *** No rule to make target `atngw100-base_defconfig'. Stop.
-mpfj at mpfj-x64:~/avr32/buildroot$ 
+Must remake target `modules_install'.
+Successfully remade target file `modules_install'.
+make[2]: Leaving directory
+`/opt/buildroot/project_build_arm/project/linux-2.6.27.34'
+WARNING: Can't read module GNU: No such file or directory
+WARNING: Can't read module Make: No such file or directory
+WARNING: Can't read module 3.81: No such file or directory
+WARNING: Can't read module Copyright: No such file or directory
+WARNING: Can't read module (C): No such file or directory
+WARNING: Can't read module 2006: No such file or directory
+WARNING: Can't read module Free: No such file or directory
+WARNING: Can't read module Software: No such file or directory
+WARNING: Can't read module Foundation,: No such file or directory
+
+It seems that for some reason it tries to do something with the text
+that is being printed out somewhere else. I'm not 100% sure if this is
+buildroot problem or actually a kernel problem. 
+
+The buildroot make is called from other makefile either:
+
+$(MAKE) -C buildroot
+
+or
+
+make -C buildroot
+
+or
+
+cd buildroot ; \
+make
+
+but none of those worked and resulted the same error.
+
+Teemu Keskinarkaus
