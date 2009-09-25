@@ -1,51 +1,35 @@
-From: Michael Trimarchi <trimarchimichael@yahoo.it>
-Date: Fri, 25 Sep 2009 07:35:17 +0000 (GMT)
-Subject: [Buildroot] Foreigh toolchain
-In-Reply-To: <20090924202801.78a69428@surf>
-Message-ID: <662263.12146.qm@web23502.mail.ird.yahoo.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 25 Sep 2009 09:57:17 +0200
+Subject: [Buildroot] ARCH=mips and linux-2.6.30.2
+In-Reply-To: <1253809626.16645.27.camel@xd-02.opusvl.com> (Dominic Mason's
+	message of "Thu\, 24 Sep 2009 17\:27\:06 +0100")
+References: <1253809626.16645.27.camel@xd-02.opusvl.com>
+Message-ID: <87bpkzv4ma.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Dominic" == Dominic Mason <dominic@opusvl.com> writes:
 
+Hi,
 
---- Gio 24/9/09, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ha scritto:
+ Dominic> This is using buildroot-2009-08 with kernel 2.6.30.2
 
-> Da: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Oggetto: Re: [Buildroot] Foreigh toolchain
-> A: buildroot at busybox.net
-> Data: Gioved? 24 settembre 2009, 20:28
-> Le Thu, 24 Sep 2009 16:33:13 +0000
-> (GMT),
-> Michael Trimarchi <trimarchimichael@yahoo.it>
-> a ?crit :
-> 
-> > I have this problem using the foreigh toolchain. Can
-> anyone know how
-> > to fix it?
-> 
-> That's a libtool issue, and I haven't yet found the proper
-> solution for
-> it. It's probably a matter of recompiling libtool and using
-> our own.
+ Dominic> For what it's worth, if you copy arch/mips/lib/delay.c 
+ Dominic> from a vanilla 2.6.30.4 kernel, then the error disappears.
 
-Ok, I will try it and investigate on it.
+Really?
 
-Michael
+diff -u linux-2.6.30.{2,4}/arch/mips/lib/delay.c
+(nothing)
 
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers and embedded Linux development,
-> consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+It seems like this fix hasn't made it to any 2.6.30.x stable releases
+yet, but is in mainline since 2.6.31-rc1.
 
+I'll add the patch to kernel-headers, so it should get included if you
+use git and select the simple Linux kernel option.
 
-      
+-- 
+Bye, Peter Korsgaard
