@@ -1,39 +1,87 @@
-From: Dominic Mason <dominic@opusvl.com>
-Date: Fri, 25 Sep 2009 17:41:56 +0100
-Subject: [Buildroot] ARCH=mips and linux-2.6.30.2
-In-Reply-To: <87bpkzv4ma.fsf@macbook.be.48ers.dk>
-References: <1253809626.16645.27.camel@xd-02.opusvl.com>
-	<87bpkzv4ma.fsf@macbook.be.48ers.dk>
-Message-ID: <1253896916.23251.20.camel@xd-02.opusvl.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 25 Sep 2009 20:51:10 +0200
+Subject: [Buildroot] [PATCH] Add Swfdec Free flash library
+In-Reply-To: <1253892756-13583-1-git-send-email-riou.emmanuel@googlemail.com>
+	(Emmanuel Riou's message of "Fri\, 25 Sep 2009 16\:32\:35 +0100")
+References: <1253892756-13583-1-git-send-email-riou.emmanuel@googlemail.com>
+Message-ID: <87vdj6uach.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 2009-09-25 at 09:57 +0200, Peter Korsgaard wrote:
->  Dominic> For what it's worth, if you copy arch/mips/lib/delay.c 
->  Dominic> from a vanilla 2.6.30.4 kernel, then the error disappears.
-> 
-> Really?
-> 
-> diff -u linux-2.6.30.{2,4}/arch/mips/lib/delay.c
-> (nothing)
+>>>>> "Emmanuel" == Emmanuel Riou <riou.emmanuel@googlemail.com> writes:
 
-Oops, it's possible I'd downloaded a patched linux-2.6.30.4 archive from
-somewhere, after doing some searching for that error. I've got a bz2 on
-my system that I've just extracted again and that one was patched. Sorry
-about that, 'twas a couple of weeks ago I did this, and have only just
-got round to subscribing to the buildroot mailing list.
+ Emmanuel> Signed-off-by: Emmanuel Riou <riou.emmanuel@googlemail.com>
+ Emmanuel> ---
 
+Thanks, a few remarks:
 
-> I'll add the patch to kernel-headers, so it should get included if you
-> use git and select the simple Linux kernel option.
+ Emmanuel> +++ b/package/multimedia/swfdec/Config.in
+ Emmanuel> @@ -0,0 +1,27 @@
+ Emmanuel> +config BR2_PACKAGE_SWFDEC
+ Emmanuel> +	bool "swfdec"
+ Emmanuel> +	select BR2_PACKAGE_LIBSOUP
+ Emmanuel> +	select BR2_PACKAGE_LIBOIL
+ Emmanuel> +	select BR2_PACKAGE_ALSA_LIB
+ Emmanuel> +	help
+ Emmanuel> +	  Library to play Flash Files
+ Emmanuel> +	  http://swfdec.freedesktop.org/
 
-Thanks for that.
+We normally have an empty line before the URL.
 
-Regards
+ Emmanuel> +
+ Emmanuel> +config BR2_PACKAGE_SWFDEC_GTK
+ Emmanuel> +        bool "swfdec gtk"
+ Emmanuel> +	depends on BR2_PACKAGE_SWFDEC
+ Emmanuel> +	depends on BR2_PACKAGE_DIRECTFB || BR2_PACKAGE_XORG7
+ Emmanuel> +	select BR2_PACKAGE_LIBGTK2
+ Emmanuel> +	select BR2_PACKAGE_CAIRO_PNG
+ Emmanuel> +	help
+ Emmanuel> +	  Enables swfdec-gtk  
+
+Indentation is wrong for the depends/select lines (should be <tab>). We
+normally don't use select for stuff with complicated dependencies like
+gtk, so I think it would be nicer to simply depen on libgtk2 - Then you
+can also get rid of the directfb || xorg7 stuff.
+
+You furthermore have trailing spaces in the help text. Maybe the config
+option and help text should say something like gtk support?
+
+ Emmanuel> +
+ Emmanuel> +config BR2_PACKAGE_SWFDEC_GSTREAMER
+ Emmanuel> +        bool "swfdec gstreamer"
+ Emmanuel> +	default y
+ Emmanuel> +	depends on BR2_PACKAGE_SWFDEC	
+ Emmanuel> +	select BR2_PACKAGE_GSTREAMER
+ Emmanuel> +	select BR2_PACKAGE_GST_PLUGINS_BASE
+ Emmanuel> +	help
+ Emmanuel> +	  Enables GStreamer support
+
+Same here (identation/trailing spaces). Why should this default to y? (I
+don't know much about flash) Is swfdec not very useful without gstreamer
+support?
+
+ Emmanuel> +#############################################################
+ Emmanuel> +#
+ Emmanuel> +# Swfdec
+ Emmanuel> +#
+ Emmanuel> +#############################################################
+ Emmanuel> +SWFDEC_VERSION_MAJOR:=0.8
+ Emmanuel> +SWFDEC_VERSION_MINOR:=4
+ Emmanuel> +SWFDEC_VERSION = $(SWFDEC_VERSION_MAJOR).$(SWFDEC_VERSION_MINOR)
+ Emmanuel> +
+ Emmanuel> +SWFDEC_SOURCE:=swfdec-$(SWFDEC_VERSION).tar.gz
+ Emmanuel> +SWFDEC_SITE:=http://swfdec.freedesktop.org/download/swfdec/$(SWFDEC_VERSION_MAJOR)
+ Emmanuel> +SWFDEC_LIBTOOL_PATCH = NO
+ Emmanuel> +SWFDEC_INSTALL_STAGING = YES
+ Emmanuel> +SWFDEC_INSTALL_TARGET = YES
+
+You have a mix of styles here (:= vs =, spaces around =) - Is there any
+reason for that?
+
+Otherwise it looks good. Care to fix those issues and resubmit?
 
 -- 
-Dominic Mason <dominic@opusvl.com>
-Opus VL
+Bye, Peter Korsgaard
