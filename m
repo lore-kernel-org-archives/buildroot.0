@@ -1,35 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 25 Sep 2009 09:57:17 +0200
-Subject: [Buildroot] ARCH=mips and linux-2.6.30.2
-In-Reply-To: <1253809626.16645.27.camel@xd-02.opusvl.com> (Dominic Mason's
-	message of "Thu\, 24 Sep 2009 17\:27\:06 +0100")
-References: <1253809626.16645.27.camel@xd-02.opusvl.com>
-Message-ID: <87bpkzv4ma.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 25 Sep 2009 10:01:19 +0200
+Subject: [Buildroot] [git commit master] kernel-headers: bump 2.6.27/30/31
+	stable versions
+Message-ID: <20090925091643.0B1DE77755@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Dominic" == Dominic Mason <dominic@opusvl.com> writes:
 
-Hi,
+commit: http://git.buildroot.net/buildroot/commit/?id=0d7e586a9f8ab07b8c48dccef2870527beebf84a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Dominic> This is using buildroot-2009-08 with kernel 2.6.30.2
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/kernel-headers/Config.in |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
- Dominic> For what it's worth, if you copy arch/mips/lib/delay.c 
- Dominic> from a vanilla 2.6.30.4 kernel, then the error disappears.
-
-Really?
-
-diff -u linux-2.6.30.{2,4}/arch/mips/lib/delay.c
-(nothing)
-
-It seems like this fix hasn't made it to any 2.6.30.x stable releases
-yet, but is in mainline since 2.6.31-rc1.
-
-I'll add the patch to kernel-headers, so it should get included if you
-use git and select the simple Linux kernel option.
-
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index d277d82..4652a77 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -53,10 +53,10 @@ config BR2_KERNEL_HEADERS_RT
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "2.6.26.8"	if BR2_KERNEL_HEADERS_2_6_26
+-	default "2.6.27.34"	if BR2_KERNEL_HEADERS_2_6_27
++	default "2.6.27.35"	if BR2_KERNEL_HEADERS_2_6_27
+ 	default "2.6.28.10"	if BR2_KERNEL_HEADERS_2_6_28
+ 	default "2.6.29.6"	if BR2_KERNEL_HEADERS_2_6_29
+-	default "2.6.30.7"	if BR2_KERNEL_HEADERS_2_6_30
+-	default "2.6.31"	if BR2_KERNEL_HEADERS_2_6_31
++	default "2.6.30.8"	if BR2_KERNEL_HEADERS_2_6_30
++	default "2.6.31.1"	if BR2_KERNEL_HEADERS_2_6_31
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
