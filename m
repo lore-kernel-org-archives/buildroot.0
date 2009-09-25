@@ -1,45 +1,51 @@
-From: Daniel.Li <lida_mail@163.com>
-Date: Fri, 25 Sep 2009 06:22:04 +0800
-Subject: [Buildroot] latest buildroot build toolchain failed -- help
-Message-ID: <1253830924.12641.2.camel@daniel-laptop>
+From: Michael Trimarchi <trimarchimichael@yahoo.it>
+Date: Fri, 25 Sep 2009 07:35:17 +0000 (GMT)
+Subject: [Buildroot] Foreigh toolchain
+In-Reply-To: <20090924202801.78a69428@surf>
+Message-ID: <662263.12146.qm@web23502.mail.ird.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear All,
-
-I just get a latest buildroot for git repository. And configed to my arm
-processor, but compile failed. How can I fix it?
-
-ARM (920t) , Host (ubuntu Jaunty)
 
 
-checking if _GLOBAL_OFFSET_TABLE_ is prefixed by underscore... no
-checking if the assembler takes cl with shldl... yes
-checking for unsigned short... yes
-checking size of unsigned short... 2
-checking for unsigned... yes
-checking size of unsigned... 4
-checking for unsigned long... yes
-checking size of unsigned long... 4
-checking for mp_limb_t... yes
-checking size of mp_limb_t... 4
-checking for stack_t... yes
-checking for tputs in -lncurses... yes
-checking for readline in -lreadline... no
-checking readline detected... no
-checking for bison... bison -y
-checking for flex... flex
-checking for yywrap in -lfl... yes
-checking lex output file root... configure: error: cannot find output
-from flex; giving up
-make: ***
-[/home/daniel/frwork/buildroot/output/toolchain/gmp-4.2.4-host/.configured] Error 1
+--- Gio 24/9/09, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ha scritto:
+
+> Da: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Oggetto: Re: [Buildroot] Foreigh toolchain
+> A: buildroot at busybox.net
+> Data: Gioved? 24 settembre 2009, 20:28
+> Le Thu, 24 Sep 2009 16:33:13 +0000
+> (GMT),
+> Michael Trimarchi <trimarchimichael@yahoo.it>
+> a ?crit :
+> 
+> > I have this problem using the foreigh toolchain. Can
+> anyone know how
+> > to fix it?
+> 
+> That's a libtool issue, and I haven't yet found the proper
+> solution for
+> it. It's probably a matter of recompiling libtool and using
+> our own.
+
+Ok, I will try it and investigate on it.
+
+Michael
+
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers and embedded Linux development,
+> consulting, training and support.
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 
-
-
--- 
-Daniel.Li <lida_mail@163.com>
+      
