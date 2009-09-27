@@ -1,8 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sun, 27 Sep 2009 23:21:50 +0200
-Subject: [Buildroot] [git commit master] shared-mime-info: target
-	compilation needs target versions of libglib2/libxml2
-Message-ID: <20090927212248.F2C9677780@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] busybox: additional 1.15.1 fixes
+Message-ID: <20090927212249.360367744E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,26 +9,100 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=aa59f70425e25e8f6ae9a15445d71de4d3cc1b52
+commit: http://git.buildroot.net/buildroot/commit/?id=255c8ea89c50a7ebc25d0202aef6f6ae53afdd51
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/shared-mime-info/shared-mime-info.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/busybox/busybox-1.15.1-hush.patch |   61 +++++++++++++++++++++++++++++
+ package/busybox/busybox-1.15.1-uniq.patch |   11 +++++
+ 2 files changed, 72 insertions(+), 0 deletions(-)
+ create mode 100644 package/busybox/busybox-1.15.1-hush.patch
+ create mode 100644 package/busybox/busybox-1.15.1-uniq.patch
 
-diff --git a/package/shared-mime-info/shared-mime-info.mk b/package/shared-mime-info/shared-mime-info.mk
-index 578be4b..74ae149 100644
---- a/package/shared-mime-info/shared-mime-info.mk
-+++ b/package/shared-mime-info/shared-mime-info.mk
-@@ -12,7 +12,7 @@ SHARED_MIME_INFO_INSTALL_TARGET = NO
- 
- SHARED_MIME_INFO_AUTORECONF = NO
- SHARED_MIME_INFO_CONF_ENV = XMLLINT=$(HOST_DIR)/usr/bin/xmllint
--SHARED_MIME_INFO_DEPENDENCIES = host-pkgconfig host-libglib2 host-libxml2
-+SHARED_MIME_INFO_DEPENDENCIES = host-pkgconfig host-libglib2 host-libxml2 libxml2 libglib2
- 
- SHARED_MIME_INFO_CONF_OPT = --disable-update-mimedb
- 
+diff --git a/package/busybox/busybox-1.15.1-hush.patch b/package/busybox/busybox-1.15.1-hush.patch
+new file mode 100644
+index 0000000..9ba6614
+--- /dev/null
++++ b/package/busybox/busybox-1.15.1-hush.patch
+@@ -0,0 +1,61 @@
++diff -urpN busybox-1.15.1/shell/hush.c busybox-1.15.1-hush/shell/hush.c
++--- busybox-1.15.1/shell/hush.c	2009-09-12 17:56:20.000000000 +0200
+++++ busybox-1.15.1-hush/shell/hush.c	2009-09-23 03:27:27.000000000 +0200
++@@ -5183,6 +5183,47 @@ static FILE *generate_stream_from_string
++ 		xmove_fd(channel[1], 1);
++ 		/* Prevent it from trying to handle ctrl-z etc */
++ 		IF_HUSH_JOB(G.run_list_level = 1;)
+++		/* Awful hack for `trap` or $(trap).
+++		 *
+++		 * http://www.opengroup.org/onlinepubs/009695399/utilities/trap.html
+++		 * contains an example where "trap" is executed in a subshell:
+++		 *
+++		 * save_traps=$(trap)
+++		 * ...
+++		 * eval "$save_traps"
+++		 *
+++		 * Standard does not say that "trap" in subshell shall print
+++		 * parent shell's traps. It only says that its output
+++		 * must have suitable form, but then, in the above example
+++		 * (which is not supposed to be normative), it implies that.
+++		 *
+++		 * bash (and probably other shell) does implement it
+++		 * (traps are reset to defaults, but "trap" still shows them),
+++		 * but as a result, "trap" logic is hopelessly messed up:
+++		 *
+++		 * # trap
+++		 * trap -- 'echo Ho' SIGWINCH  <--- we have a handler
+++		 * # (trap)        <--- trap is in subshell - no output (correct, traps are reset)
+++		 * # true | trap   <--- trap is in subshell - no output (ditto)
+++		 * # echo `true | trap`    <--- in subshell - output (but traps are reset!)
+++		 * trap -- 'echo Ho' SIGWINCH
+++		 * # echo `(trap)`         <--- in subshell in subshell - output
+++		 * trap -- 'echo Ho' SIGWINCH
+++		 * # echo `true | (trap)`  <--- in subshell in subshell in subshell - output!
+++		 * trap -- 'echo Ho' SIGWINCH
+++		 *
+++		 * The rules when to forget and when to not forget traps
+++		 * get really complex and nonsensical.
+++		 *
+++		 * Our solution: ONLY bare $(trap) or `trap` is special.
+++		 */
+++		s = skip_whitespace(s);
+++		if (strncmp(s, "trap", 4) == 0 && (*skip_whitespace(s + 4) == '\0'))
+++		{
+++			static const char *const argv[] = { NULL, NULL };
+++			builtin_trap((char**)argv);
+++			exit(0); /* not _exit() - we need to fflush */
+++		}
++ #if BB_MMU
++ 		reset_traps_to_defaults();
++ 		parse_and_run_string(s);
++@@ -7057,7 +7098,8 @@ static int FAST_FUNC builtin_trap(char *
++ 			if (G.traps[i]) {
++ 				printf("trap -- ");
++ 				print_escaped(G.traps[i]);
++-				printf(" %s\n", get_signame(i));
+++				/* bash compat: it says SIGxxx, not just xxx */
+++				printf(" SIG%s\n", get_signame(i));
++ 			}
++ 		}
++ 		/*fflush(stdout); - done after each builtin anyway */
+diff --git a/package/busybox/busybox-1.15.1-uniq.patch b/package/busybox/busybox-1.15.1-uniq.patch
+new file mode 100644
+index 0000000..0055544
+--- /dev/null
++++ b/package/busybox/busybox-1.15.1-uniq.patch
+@@ -0,0 +1,11 @@
++diff -urpN busybox-1.15.1/coreutils/uniq.c busybox-1.15.1-uniq/coreutils/uniq.c
++--- busybox-1.15.1/coreutils/uniq.c	2009-09-12 17:55:58.000000000 +0200
+++++ busybox-1.15.1-uniq/coreutils/uniq.c	2009-09-23 12:56:09.132695142 +0200
++@@ -84,6 +84,7 @@ int uniq_main(int argc UNUSED_PARAM, cha
++ 				break;
++ 			}
++ 
+++			free(s1);
++ 			++dups;	 /* note: testing for overflow seems excessive. */
++ 		}
++ 
 -- 
 1.6.3.3
