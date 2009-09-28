@@ -1,42 +1,105 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 28 Sep 2009 09:13:05 +0200
-Subject: [Buildroot] at91bootstrap missing
-In-Reply-To: <330EC2471BF24E48B513AF1A6975EB69B26337@MAIL-UA.ccs.local> (Teemu
-	Keskinarkaus's message of "Mon\, 28 Sep 2009 08\:08\:48 +0200")
-References: <330EC2471BF24E48B513AF1A6975EB69B26337@MAIL-UA.ccs.local>
-Message-ID: <87r5trsfsu.fsf@macbook.be.48ers.dk>
+From: Emmanuel Riou <riou.emmanuel@googlemail.com>
+Date: Mon, 28 Sep 2009 11:55:26 +0100
+Subject: [Buildroot] [PATCH] Add Swfdec Free flash library
+In-Reply-To: <87vdj6uach.fsf@macbook.be.48ers.dk>
+References: <1253892756-13583-1-git-send-email-riou.emmanuel@googlemail.com>
+	<87vdj6uach.fsf@macbook.be.48ers.dk>
+Message-ID: <4AC0961E.100@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Teemu" == Teemu Keskinarkaus <Teemu.Keskinarkaus@cc-systems.com> writes:
+Peter Korsgaard wrote:
+>>>>>> "Emmanuel" == Emmanuel Riou <riou.emmanuel@googlemail.com> writes:
+> 
+>  Emmanuel> Signed-off-by: Emmanuel Riou <riou.emmanuel@googlemail.com>
+>  Emmanuel> ---
+> 
+> Thanks, a few remarks:
+Hi! Thanks for your remarks and sorry for the slow reply...
 
-Hi,
+> 
+>  Emmanuel> +++ b/package/multimedia/swfdec/Config.in
+>  Emmanuel> @@ -0,0 +1,27 @@
+>  Emmanuel> +config BR2_PACKAGE_SWFDEC
+>  Emmanuel> +	bool "swfdec"
+>  Emmanuel> +	select BR2_PACKAGE_LIBSOUP
+>  Emmanuel> +	select BR2_PACKAGE_LIBOIL
+>  Emmanuel> +	select BR2_PACKAGE_ALSA_LIB
+>  Emmanuel> +	help
+>  Emmanuel> +	  Library to play Flash Files
+>  Emmanuel> +	  http://swfdec.freedesktop.org/
+> 
+> We normally have an empty line before the URL.
+Alright I fixed it.
 
- Teemu> I'm baffled. I've been building buildroot with external
- Teemu> toolchain and it needed some tweaking to get it work. For
- Teemu> example bootstrap needed to be disabled because it had some
- Teemu> problems so that I could continue compiling.
+> 
+>  Emmanuel> +
+>  Emmanuel> +config BR2_PACKAGE_SWFDEC_GTK
+>  Emmanuel> +        bool "swfdec gtk"
+>  Emmanuel> +	depends on BR2_PACKAGE_SWFDEC
+>  Emmanuel> +	depends on BR2_PACKAGE_DIRECTFB || BR2_PACKAGE_XORG7
+>  Emmanuel> +	select BR2_PACKAGE_LIBGTK2
+>  Emmanuel> +	select BR2_PACKAGE_CAIRO_PNG
+>  Emmanuel> +	help
+>  Emmanuel> +	  Enables swfdec-gtk  
+> 
+> Indentation is wrong for the depends/select lines (should be <tab>). We
+> normally don't use select for stuff with complicated dependencies like
+> gtk, so I think it would be nicer to simply depen on libgtk2 - Then you
+> can also get rid of the directfb || xorg7 stuff.
+OK fixed.
 
- Teemu> Now that everything else is sorted out I was starting to work
- Teemu> with the at91bootstrap only to notice that I can't figure out
- Teemu> how to enable it! I even cloned new version of the buildroot
- Teemu> from the Ulf's git-repository, but still can't find the place
- Teemu> where it's enabled and setup.
+> 
+> You furthermore have trailing spaces in the help text. Maybe the config
+> option and help text should say something like gtk support?
+You're right, it's a bit more verbose now.
 
- Teemu> Any idea how it's enabled and what am I missing here? I see from
- Teemu> Config.in - files that it should be somewhere in target -
- Teemu> settings, and that's where it is in older buildroot, but now I
- Teemu> can't find it there (or anywhere else).
 
-It hasn't been moved (atleast in the main repo, don't know about Ulf).
+> 
+>  Emmanuel> +
+>  Emmanuel> +config BR2_PACKAGE_SWFDEC_GSTREAMER
+>  Emmanuel> +        bool "swfdec gstreamer"
+>  Emmanuel> +	default y
+>  Emmanuel> +	depends on BR2_PACKAGE_SWFDEC	
+>  Emmanuel> +	select BR2_PACKAGE_GSTREAMER
+>  Emmanuel> +	select BR2_PACKAGE_GST_PLUGINS_BASE
+>  Emmanuel> +	help
+>  Emmanuel> +	  Enables GStreamer support
+> 
+> Same here (identation/trailing spaces). Why should this default to y? (I
+> don't know much about flash) Is swfdec not very useful without gstreamer
+> support?
+I removed the default line. I put it as "default y" because it was 
+needed in my case (not a good reason, I know ;-)). Swfdec relies on 
+Gstreamer for all the audio and video stuff, but it is not mandatory to 
+have it since you can have Flash files without audio nor video.
 
-Target options->Atmel device support->Board support for the Atmel AT91->Build AT91 Bootstrap..
+> 
+>  Emmanuel> +#############################################################
+>  Emmanuel> +#
+>  Emmanuel> +# Swfdec
+>  Emmanuel> +#
+>  Emmanuel> +#############################################################
+>  Emmanuel> +SWFDEC_VERSION_MAJOR:=0.8
+>  Emmanuel> +SWFDEC_VERSION_MINOR:=4
+>  Emmanuel> +SWFDEC_VERSION = $(SWFDEC_VERSION_MAJOR).$(SWFDEC_VERSION_MINOR)
+>  Emmanuel> +
+>  Emmanuel> +SWFDEC_SOURCE:=swfdec-$(SWFDEC_VERSION).tar.gz
+>  Emmanuel> +SWFDEC_SITE:=http://swfdec.freedesktop.org/download/swfdec/$(SWFDEC_VERSION_MAJOR)
+>  Emmanuel> +SWFDEC_LIBTOOL_PATCH = NO
+>  Emmanuel> +SWFDEC_INSTALL_STAGING = YES
+>  Emmanuel> +SWFDEC_INSTALL_TARGET = YES
+> 
+> You have a mix of styles here (:= vs =, spaces around =) - Is there any
+> reason for that?
+Sorry for this inconsistency, it's fixed as well!
 
-Notice the dependencies in target/device/Atmel/at91bootstrap/Config.in -
-It's only visible if you have chosen one of the supported AT91 devices.
+> 
+> Otherwise it looks good. Care to fix those issues and resubmit?
+Thanks, I am resubmitting the patch.
 
--- 
-Bye, Peter Korsgaard
+Emmanuel.
+> 
