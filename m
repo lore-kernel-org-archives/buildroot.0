@@ -1,23 +1,22 @@
-From: Daniel Mack <daniel@caiaq.de>
-Date: Mon, 28 Sep 2009 05:40:28 +0200
-Subject: [Buildroot] BuildROOT Question
-In-Reply-To: <a361493a0909271954m25b27fd9w5d9830a88b21b1f5@mail.gmail.com>
-References: <a361493a0909271954m25b27fd9w5d9830a88b21b1f5@mail.gmail.com>
-Message-ID: <20090928034027.GW9361@buzzloop.caiaq.de>
+From: wu juncor <juncor.wu@gmail.com>
+Date: Mon, 28 Sep 2009 11:46:21 +0800
+Subject: [Buildroot] About SAMBA services
+Message-ID: <a361493a0909272046v2a393063vb748bf9c5eb8104d@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Sep 28, 2009 at 10:54:09AM +0800, wu juncor wrote:
-> I'm new one.I had a question.
-> If I already have the crosspile.
-> Could I just build the rootfile system only use my own crosspile??
-> How can I disbale the build crosscompile from "make menuconfig"??
+Hi Guys:
 
-The answer to your question might be here:
+I want to build samba into buildroot.
+But when I running the /usr/sbin/smbd is not working.
+I check the /var/log/samba/log.smbd.
+It shows "can not open the /etc/samba/secrets.tdb".
+How can I reslove this issue??
 
-  http://buildroot.uclibc.org/buildroot.html#external_toolchain
-
-Daniel
+Juncor
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090928/d7dd9215/attachment.htm>
