@@ -1,25 +1,184 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 29 Sep 2009 11:48:23 +0200
-Subject: [Buildroot] [PATCH] Add Swfdec Free flash library
-In-Reply-To: <1254135823-15969-1-git-send-email-riou.emmanuel@googlemail.com>
-	(Emmanuel Riou's message of "Mon\, 28 Sep 2009 12\:03\:43 +0100")
-References: <1254135823-15969-1-git-send-email-riou.emmanuel@googlemail.com>
-Message-ID: <87ocouozdk.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 29 Sep 2009 11:52:50 +0200
+Subject: [Buildroot] [git commit master] busybox: 1.15.1 lineedit fix
+ Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Message-ID: <20090929095309.39C1B77778@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Emmanuel" == Emmanuel Riou <riou.emmanuel@googlemail.com> writes:
 
- Emmanuel> Signed-off-by: Emmanuel Riou <riou.emmanuel@googlemail.com>
+commit: http://git.buildroot.net/buildroot/commit/?id=abd76618a48d0db187818c24a3ae1ed58111c97d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks - There was still a few issues, but I fixed it up and committed:
+---
+ package/busybox/busybox-1.15.1-lineedit.patch |  156 +++++++++++++++++++++++++
+ 1 files changed, 156 insertions(+), 0 deletions(-)
+ create mode 100644 package/busybox/busybox-1.15.1-lineedit.patch
 
-- pango + cairo png needed by base package
-- libsoup only needed for gtk option
-- typo in makefile (ohost-pkgconfig)
-
+diff --git a/package/busybox/busybox-1.15.1-lineedit.patch b/package/busybox/busybox-1.15.1-lineedit.patch
+new file mode 100644
+index 0000000..20a7a8f
+--- /dev/null
++++ b/package/busybox/busybox-1.15.1-lineedit.patch
+@@ -0,0 +1,156 @@
++diff -urpN busybox-1.15.1/libbb/lineedit.c busybox-1.15.1-lineedit/libbb/lineedit.c
++--- busybox-1.15.1/libbb/lineedit.c	2009-09-12 17:55:58.000000000 +0200
+++++ busybox-1.15.1-lineedit/libbb/lineedit.c	2009-09-28 23:56:03.000000000 +0200
++@@ -114,8 +114,8 @@ struct lineedit_statics {
++ 	unsigned cmdedit_prmt_len; /* length of prompt (without colors etc) */
++ 
++ 	unsigned cursor;
++-	unsigned command_len;
++-	/* *int* maxsize: we want x in "if (x > S.maxsize)"
+++	int command_len; /* must be signed (^D returns -1 len) */
+++	/* signed maxsize: we want x in "if (x > S.maxsize)"
++ 	 * to _not_ be promoted to unsigned */
++ 	int maxsize;
++ 	CHAR_T *command_ps;
++@@ -1095,15 +1095,15 @@ static void save_command_ps_at_cur_histo
++ 		int cur = state->cur_history;
++ 		free(state->history[cur]);
++ 
++-#if ENABLE_FEATURE_ASSUME_UNICODE
+++# if ENABLE_FEATURE_ASSUME_UNICODE
++ 		{
++ 			char tbuf[MAX_LINELEN];
++ 			save_string(tbuf, sizeof(tbuf));
++ 			state->history[cur] = xstrdup(tbuf);
++ 		}
++-#else
+++# else
++ 		state->history[cur] = xstrdup(command_ps);
++-#endif
+++# endif
++ 	}
++ }
++ 
++@@ -1131,7 +1131,7 @@ static int get_next_history(void)
++ 	return 0;
++ }
++ 
++-#if ENABLE_FEATURE_EDITING_SAVEHISTORY
+++# if ENABLE_FEATURE_EDITING_SAVEHISTORY
++ /* We try to ensure that concurrent additions to the history
++  * do not overwrite each other.
++  * Otherwise shell users get unhappy.
++@@ -1256,10 +1256,10 @@ static void save_history(char *str)
++ 		free_line_input_t(st_temp);
++ 	}
++ }
++-#else
++-#define load_history(a) ((void)0)
++-#define save_history(a) ((void)0)
++-#endif /* FEATURE_COMMAND_SAVEHISTORY */
+++# else
+++#  define load_history(a) ((void)0)
+++#  define save_history(a) ((void)0)
+++# endif /* FEATURE_COMMAND_SAVEHISTORY */
++ 
++ static void remember_in_history(char *str)
++ {
++@@ -1290,15 +1290,15 @@ static void remember_in_history(char *st
++ 	/* i <= MAX_HISTORY */
++ 	state->cur_history = i;
++ 	state->cnt_history = i;
++-#if ENABLE_FEATURE_EDITING_SAVEHISTORY
+++# if MAX_HISTORY > 0 && ENABLE_FEATURE_EDITING_SAVEHISTORY
++ 	if ((state->flags & SAVE_HISTORY) && state->hist_file)
++ 		save_history(str);
++-#endif
+++# endif
++ 	IF_FEATURE_EDITING_FANCY_PROMPT(num_ok_lines++;)
++ }
++ 
++ #else /* MAX_HISTORY == 0 */
++-#define remember_in_history(a) ((void)0)
+++# define remember_in_history(a) ((void)0)
++ #endif /* MAX_HISTORY */
++ 
++ 
++@@ -1476,11 +1476,11 @@ static void parse_and_put_prompt(const c
++ 				c = *prmt_ptr++;
++ 
++ 				switch (c) {
++-#if ENABLE_FEATURE_GETUSERNAME_AND_HOMEDIR
+++# if ENABLE_FEATURE_GETUSERNAME_AND_HOMEDIR
++ 				case 'u':
++ 					pbuf = user_buf ? user_buf : (char*)"";
++ 					break;
++-#endif
+++# endif
++ 				case 'h':
++ 					pbuf = free_me = safe_gethostname();
++ 					*strchrnul(pbuf, '.') = '\0';
++@@ -1488,7 +1488,7 @@ static void parse_and_put_prompt(const c
++ 				case '$':
++ 					c = (geteuid() == 0 ? '#' : '$');
++ 					break;
++-#if ENABLE_FEATURE_GETUSERNAME_AND_HOMEDIR
+++# if ENABLE_FEATURE_GETUSERNAME_AND_HOMEDIR
++ 				case 'w':
++ 					/* /home/user[/something] -> ~[/something] */
++ 					pbuf = cwd_buf;
++@@ -1501,7 +1501,7 @@ static void parse_and_put_prompt(const c
++ 						pbuf = free_me = xasprintf("~%s", cwd_buf + l);
++ 					}
++ 					break;
++-#endif
+++# endif
++ 				case 'W':
++ 					pbuf = cwd_buf;
++ 					cp = strrchr(pbuf, '/');
++@@ -1688,13 +1688,15 @@ int FAST_FUNC read_line_input(const char
++ 
++ 	/* With null flags, no other fields are ever used */
++ 	state = st ? st : (line_input_t*) &const_int_0;
++-#if ENABLE_FEATURE_EDITING_SAVEHISTORY
+++#if MAX_HISTORY > 0
+++# if ENABLE_FEATURE_EDITING_SAVEHISTORY
++ 	if ((state->flags & SAVE_HISTORY) && state->hist_file)
++ 		if (state->cnt_history == 0)
++ 			load_history(state);
++-#endif
+++# endif
++ 	if (state->flags & DO_HISTORY)
++ 		state->cur_history = state->cnt_history;
+++#endif
++ 
++ 	/* prepare before init handlers */
++ 	cmdedit_y = 0;  /* quasireal y, not true if line > xt*yt */
++@@ -1716,7 +1718,7 @@ int FAST_FUNC read_line_input(const char
++ 	new_settings.c_cc[VTIME] = 0;
++ 	/* Turn off CTRL-C, so we can trap it */
++ #ifndef _POSIX_VDISABLE
++-#define _POSIX_VDISABLE '\0'
+++# define _POSIX_VDISABLE '\0'
++ #endif
++ 	new_settings.c_cc[VINTR] = _POSIX_VDISABLE;
++ 	tcsetattr_stdin_TCSANOW(&new_settings);
++@@ -2037,7 +2039,8 @@ int FAST_FUNC read_line_input(const char
++  rewrite_line:
++ 			/* Rewrite the line with the selected history item */
++ 			/* change command */
++-			command_len = load_string(state->history[state->cur_history] ? : "", maxsize);
+++			command_len = load_string(state->history[state->cur_history] ?
+++					state->history[state->cur_history] : "", maxsize);
++ 			/* redraw and go to eol (bol, in vi) */
++ 			redraw(cmdedit_y, (state->flags & VI_MODE) ? 9999 : 0);
++ 			break;
++@@ -2121,7 +2124,9 @@ int FAST_FUNC read_line_input(const char
++ #undef command
++ 
++ #if ENABLE_FEATURE_ASSUME_UNICODE
++-	command_len = save_string(command, maxsize - 1);
+++	command[0] = '\0';
+++	if (command_len > 0)
+++		command_len = save_string(command, maxsize - 1);
++ 	free(command_ps);
++ #endif
++ 
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
