@@ -1,35 +1,38 @@
-From: Berns <Berns@BEKA-Elektronik.de>
-Date: Wed, 30 Sep 2009 14:23:54 +0200
-Subject: [Buildroot] x11vnc
-Message-ID: <NDBBKLDECLOIHFJKBINAGEKNEKAA.Berns@BEKA-Elektronik.de>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 30 Sep 2009 17:40:24 +0200
+Subject: [Buildroot] [git commit master] Makefile: be more quiet when make
+	-s is used
+Message-ID: <20090930154438.D23A37779A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-i'am using a custom AT91SAM9263 board with a TFT screen and touch. The
-toolchain and the root filesystem is generated with version 2009.8-git. The
-main application uses X11 and GTK+ 2.0 and runs.
+commit: http://git.buildroot.net/buildroot/commit/?id=89464a96015e89da07b87d18b31f4b25b4c890ba
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For remote controll i'am doing some tests with x11vnc and TightVNC at the
-moment. Viewing the application my PC works and the buttons get the focus
-when i move the mouse in the vnc viewer on my PC.
-But clicking on the buttons in the vnc viewer window doesn't cause any
-reaction at the GTK application.
-The problem seams to be the missing lib libxtst.
-http://www.karlrunge.com/x11vnc/faq.html#faq-missing-xtest
-(Maybe this lib can be selected automatically when x11vnc is selected ?.)
+Somehow got lost in the recent reorganisation.
 
-So I selected the lib, restart the build procedure with make and transfered
-the lib and the links, but this doesn't fixes the problem.
-After rm -rf *_build* i try to rebuild buildroot but now it fails compiling
-fcfreetype.c iconv.h: No such file or directory.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ Makefile |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-I don't understand why buildroot now fails. Can anyody give me a hint ?
-
-Thanks and regards
-
-Rainer Berns
+diff --git a/Makefile b/Makefile
+index 3895473..a7f0b88 100644
+--- a/Makefile
++++ b/Makefile
+@@ -202,6 +202,9 @@ BASE_TARGETS:=uclibc
+ endif
+ TARGETS:=
+ 
++# silent mode requested?
++QUIET:=$(if $(findstring s,$(MAKEFLAGS)),-q)
++
+ # Strip off the annoying quoting
+ ARCH:=$(call qstrip,$(BR2_ARCH))
+ ifeq ($(ARCH),xtensa)
+-- 
+1.6.3.3
