@@ -1,23 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 30 Sep 2009 11:53:17 +0200
-Subject: [Buildroot] [PATCH] zlib: Replace negative logic in Makefile
-	with positive
-In-Reply-To: <1254263763-21605-1-git-send-email-mroth@nessie.de> (Michael
-	Roth's message of "Wed\, 30 Sep 2009 00\:36\:03 +0200")
-References: <1254263763-21605-1-git-send-email-mroth@nessie.de>
-Message-ID: <87iqf0oj1u.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 30 Sep 2009 10:05:48 +0000 (UTC)
+Subject: [Buildroot] [Bug 635] util-linux fails to build in 2009.08
+In-Reply-To: <bug-635-163@https.bugs.busybox.net/>
+References: <bug-635-163@https.bugs.busybox.net/>
+Message-ID: <20090930100548.C622B77715@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Michael" == Michael Roth <mroth@nessie.de> writes:
+https://bugs.busybox.net/show_bug.cgi?id=635
 
- Michael> Positive logic is easier to read and understand than something
- Michael> like 'if not option=yes then foo else bar'.
 
-Committed, thanks.
+
+
+
+--- Comment #1 from igor <igor47@moomers.org>  2009-09-30 10:05:48 UTC ---
+according to a conversation @
+http://ibot.rikers.org/%23uclibc/20031113.html.gz, adding
+
+#include <fcntl.h>
+
+to swapon.c seems to fix half the problem - the part about R_OK undeclared.
+This still leaves the other half:
+
+swapon.c:86: error: expected declaration specifiers or '...' before 'swapon'
+swapon.c:86: error: expected declaration specifiers or '...' before 'path'
+swapon.c:86: error: expected declaration specifiers or '...' before 'flags'
+swapon.c:88: error: expected declaration specifiers or '...' before 'swapoff'
+swapon.c:88: error: expected declaration specifiers or '...' before 'path'
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
