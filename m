@@ -1,70 +1,396 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 30 Sep 2009 09:18:43 +0000 (UTC)
-Subject: [Buildroot] [Bug 635] New: util-linux fails to build in 2009.08
-Message-ID: <bug-635-163@https.bugs.busybox.net/>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 30 Sep 2009 11:23:33 +0200
+Subject: [Buildroot] [git commit master] Fix download directory in default
+	configs
+Message-ID: <20090930092354.39F897775C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=635
 
-           Summary: util-linux fails to build in 2009.08
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: critical
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: igor47 at moomers.org
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+commit: http://git.buildroot.net/buildroot/commit/?id=4d153cff9d0f648eff381ac26350d56dabbd1b04
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Commit a07d6b9d56955bfe0165b5f4ea6d3ed7a92ecff6 changed the meaning
+of $(BASE_DIR). Previously it was the top level buildroot directory,
+now it is the 'output' directory.
+As an side effect, the download directory 'dl' was moved to 'output/dl'.
 
-Created an attachment (id=677)
- --> (https://bugs.busybox.net/attachment.cgi?id=677)
-all my .config files from 'make saveconfig'
+In commit 416323e93442646e344a4e914776520c5e552fa0 the default download
+directory was moved back to the top level of buildroot.
 
-this is absolutely a showstopper for me. i seem to have continuous problems
-building util-linux with several of the past buildroot releases - if nobody
-else is having these problems, maybe it's something about my build environment?
+So the various default configurations should reflect this. Fix them.
 
-a google search shows that these errors might result from large file support
-not being turned on, but it definitely is.
+Signed-off-by: Michael Roth <mroth@nessie.de>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ .../ARMLTD/integrator926/integrator926_defconfig   |    2 +-
+ .../integrator926_huge_defconfig                   |    2 +-
+ .../Atmel/at91rm9200df/at91rm9200df_defconfig      |    2 +-
+ .../at91rm9200df/at91rm9200df_ext_bare_defconfig   |    2 +-
+ .../Atmel/at91rm9200df/at91rm9200df_ext_defconfig  |    2 +-
+ .../Atmel/at91sam9260dfc/arm_toolchain_defconfig   |    2 +-
+ .../Atmel/at91sam9260dfc/at91sam9260dfc_defconfig  |    2 +-
+ .../at91sam9260dfc_ext_bare_defconfig              |    2 +-
+ .../at91sam9260dfc/at91sam9260dfc_ext_defconfig    |    2 +-
+ .../Atmel/at91sam9261ek/at91sam9261ek_defconfig    |    2 +-
+ .../at91sam9261ek/at91sam9261ek_ext_bare_defconfig |    2 +-
+ .../at91sam9261ek/at91sam9261ek_ext_defconfig      |    2 +-
+ .../Atmel/at91sam9263ek/at91sam9263ek_defconfig    |    2 +-
+ .../at91sam9263ek/at91sam9263ek_ext_bare_defconfig |    2 +-
+ .../at91sam9263ek/at91sam9263ek_ext_defconfig      |    2 +-
+ .../Atmel/at91sam9g20dfc/at91sam9g20dfc_defconfig  |    2 +-
+ .../at91sam9g20dfc_ext_bare_defconfig              |    2 +-
+ .../at91sam9g20dfc/at91sam9g20dfc_ext_defconfig    |    2 +-
+ .../Atmel/atngw100-base/atngw100-base_defconfig    |    2 +-
+ target/device/Atmel/atngw100/atngw100_defconfig    |    2 +-
+ target/device/Atmel/atstk1005/atstk1005_defconfig  |    2 +-
+ target/device/Atmel/atstk100x/atstk100x_defconfig  |    2 +-
+ target/device/KwikByte/kb9202/kb9202_defconfig     |    2 +-
+ target/device/valka/v100sc2_defconfig              |    2 +-
+ target/device/x86/i686/i386_defconfig              |    2 +-
+ target/device/x86/i686/i686_defconfig              |    2 +-
+ 26 files changed, 26 insertions(+), 26 deletions(-)
 
-/provisioning/buildroot/buildroot-2009.08/build_i686/staging_dir/usr/bin/i686-linux-uclibc-gcc
- -g -O2   -o pivot_root  pivot_root.o  
-swapon.c:86: error: expected declaration specifiers or '...' before 'swapon'
-swapon.c:86: error: expected declaration specifiers or '...' before 'path'
-swapon.c:86: error: expected declaration specifiers or '...' before 'flags'
-swapon.c:88: error: expected declaration specifiers or '...' before 'swapoff'
-swapon.c:88: error: expected declaration specifiers or '...' before 'path'
-swapon.c: In function 'swapon_all':
-swapon.c:328: error: 'R_OK' undeclared (first use in this function)
-swapon.c:328: error: (Each undeclared identifier is reported only once
-swapon.c:328: error: for each function it appears in.)
-make[3]: *** [swapon.o] Error 1
-make[3]: Leaving directory
-`/provisioning/buildroot/buildroot-2009.08/build_i686/util-linux-2.13-pre7/mount'
-make[2]: *** [all-recursive] Error 1
-make[2]: Leaving directory
-`/provisioning/buildroot/buildroot-2009.08/build_i686/util-linux-2.13-pre7'
-make[1]: *** [all] Error 2
-make[1]: Leaving directory
-`/provisioning/buildroot/buildroot-2009.08/build_i686/util-linux-2.13-pre7'
-make: ***
-[/provisioning/buildroot/buildroot-2009.08/build_i686/util-linux-2.13-pre7/misc-utils/chkdupexe]
-Error 2
-
-please let me know if there's anything else i can supply to help troubleshoot
-this
-
-
+diff --git a/target/device/ARMLTD/integrator926/integrator926_defconfig b/target/device/ARMLTD/integrator926/integrator926_defconfig
+index 652b935..9531f1c 100644
+--- a/target/device/ARMLTD/integrator926/integrator926_defconfig
++++ b/target/device/ARMLTD/integrator926/integrator926_defconfig
+@@ -87,7 +87,7 @@ BR2_GIT="git clone"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+-BR2_DL_DIR="$(BASE_DIR)/dl"
++BR2_DL_DIR="$(TOPDIR)/dl"
+ BR2_COPYTO=""
+ 
+ #
+diff --git a/target/device/ARMLTD/integrator926_huge/integrator926_huge_defconfig b/target/device/ARMLTD/integrator926_huge/integrator926_huge_defconfig
+index a7cdda7..805ac0f 100644
+--- a/target/device/ARMLTD/integrator926_huge/integrator926_huge_defconfig
++++ b/target/device/ARMLTD/integrator926_huge/integrator926_huge_defconfig
+@@ -87,7 +87,7 @@ BR2_GIT="git clone"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+-BR2_DL_DIR="$(BASE_DIR)/dl"
++BR2_DL_DIR="$(TOPDIR)/dl"
+ BR2_COPYTO=""
+ 
+ #
+diff --git a/target/device/Atmel/at91rm9200df/at91rm9200df_defconfig b/target/device/Atmel/at91rm9200df/at91rm9200df_defconfig
+index de1db56..0f584fc 100644
+--- a/target/device/Atmel/at91rm9200df/at91rm9200df_defconfig
++++ b/target/device/Atmel/at91rm9200df/at91rm9200df_defconfig
+@@ -143,7 +143,7 @@ BR2_GIT="git clone"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+-BR2_DL_DIR="$(BASE_DIR)/dl"
++BR2_DL_DIR="$(TOPDIR)/dl"
+ BR2_COPYTO=""
+ 
+ #
+diff --git a/target/device/Atmel/at91rm9200df/at91rm9200df_ext_bare_defconfig b/target/device/Atmel/at91rm9200df/at91rm9200df_ext_bare_defconfig
+index ee7a2e5..48b7eb5 100644
+--- a/target/device/Atmel/at91rm9200df/at91rm9200df_ext_bare_defconfig
++++ b/target/device/Atmel/at91rm9200df/at91rm9200df_ext_bare_defconfig
+@@ -138,7 +138,7 @@ BR2_GIT="git clone"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+-BR2_DL_DIR="$(BASE_DIR)/dl"
++BR2_DL_DIR="$(TOPDIR)/dl"
+ BR2_COPYTO=""
+ 
+ #
+diff --git a/target/device/Atmel/at91rm9200df/at91rm9200df_ext_defconfig b/target/device/Atmel/at91rm9200df/at91rm9200df_ext_defconfig
+index b70fcbd..33174ae 100644
+--- a/target/device/Atmel/at91rm9200df/at91rm9200df_ext_defconfig
++++ b/target/device/Atmel/at91rm9200df/at91rm9200df_ext_defconfig
+@@ -149,7 +149,7 @@ BR2_GIT="git clone"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+-BR2_DL_DIR="$(BASE_DIR)/dl"
++BR2_DL_DIR="$(TOPDIR)/dl"
+ BR2_COPYTO=""
+ 
+ #
+diff --git a/target/device/Atmel/at91sam9260dfc/arm_toolchain_defconfig b/target/device/Atmel/at91sam9260dfc/arm_toolchain_defconfig
+index 3113aae..1c59ae5 100644
+--- a/target/device/Atmel/at91sam9260dfc/arm_toolchain_defconfig
++++ b/target/device/Atmel/at91sam9260dfc/arm_toolchain_defconfig
+@@ -138,7 +138,7 @@ BR2_GIT="git clone"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+-BR2_DL_DIR="$(BASE_DIR)/dl"
++BR2_DL_DIR="$(TOPDIR)/dl"
+ BR2_COPYTO=""
+ 
+ #
+diff --git a/target/device/Atmel/at91sam9260dfc/at91sam9260dfc_defconfig b/target/device/Atmel/at91sam9260dfc/at91sam9260dfc_defconfig
+index c50b25d..1d7e10f 100644
+--- a/target/device/Atmel/at91sam9260dfc/at91sam9260dfc_defconfig
++++ b/target/device/Atmel/at91sam9260dfc/at91sam9260dfc_defconfig
+@@ -156,7 +156,7 @@ BR2_GIT="git clone"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+-BR2_DL_DIR="$(BASE_DIR)/dl"
++BR2_DL_DIR="$(TOPDIR)/dl"
+ BR2_COPYTO=""
+ 
+ #
+diff --git a/target/device/Atmel/at91sam9260dfc/at91sam9260dfc_ext_bare_defconfig b/target/device/Atmel/at91sam9260dfc/at91sam9260dfc_ext_bare_defconfig
+index cfb45b1..6620faf 100644
+--- a/target/device/Atmel/at91sam9260dfc/at91sam9260dfc_ext_bare_defconfig
++++ b/target/device/Atmel/at91sam9260dfc/at91sam9260dfc_ext_bare_defconfig
+@@ -138,7 +138,7 @@ BR2_GIT="git clone"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+-BR2_DL_DIR="$(BASE_DIR)/dl"
++BR2_DL_DIR="$(TOPDIR)/dl"
+ BR2_COPYTO=""
+ 
+ #
+diff --git a/target/device/Atmel/at91sam9260dfc/at91sam9260dfc_ext_defconfig b/target/device/Atmel/at91sam9260dfc/at91sam9260dfc_ext_defconfig
+index 98f2303..4579b46 100644
+--- a/target/device/Atmel/at91sam9260dfc/at91sam9260dfc_ext_defconfig
++++ b/target/device/Atmel/at91sam9260dfc/at91sam9260dfc_ext_defconfig
+@@ -157,7 +157,7 @@ BR2_GIT="git clone"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+-BR2_DL_DIR="$(BASE_DIR)/dl"
++BR2_DL_DIR="$(TOPDIR)/dl"
+ BR2_COPYTO=""
+ 
+ #
+diff --git a/target/device/Atmel/at91sam9261ek/at91sam9261ek_defconfig b/target/device/Atmel/at91sam9261ek/at91sam9261ek_defconfig
+index d7e86aa..ef1e44d 100644
+--- a/target/device/Atmel/at91sam9261ek/at91sam9261ek_defconfig
++++ b/target/device/Atmel/at91sam9261ek/at91sam9261ek_defconfig
+@@ -159,7 +159,7 @@ BR2_GIT="git clone"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+-BR2_DL_DIR="$(BASE_DIR)/dl"
++BR2_DL_DIR="$(TOPDIR)/dl"
+ BR2_COPYTO=""
+ 
+ #
+diff --git a/target/device/Atmel/at91sam9261ek/at91sam9261ek_ext_bare_defconfig b/target/device/Atmel/at91sam9261ek/at91sam9261ek_ext_bare_defconfig
+index f261d9a..03c2acb 100644
+--- a/target/device/Atmel/at91sam9261ek/at91sam9261ek_ext_bare_defconfig
++++ b/target/device/Atmel/at91sam9261ek/at91sam9261ek_ext_bare_defconfig
+@@ -141,7 +141,7 @@ BR2_GIT="git clone"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+-BR2_DL_DIR="$(BASE_DIR)/dl"
++BR2_DL_DIR="$(TOPDIR)/dl"
+ BR2_COPYTO=""
+ 
+ #
+diff --git a/target/device/Atmel/at91sam9261ek/at91sam9261ek_ext_defconfig b/target/device/Atmel/at91sam9261ek/at91sam9261ek_ext_defconfig
+index 61d4ff8..1bd143c 100644
+--- a/target/device/Atmel/at91sam9261ek/at91sam9261ek_ext_defconfig
++++ b/target/device/Atmel/at91sam9261ek/at91sam9261ek_ext_defconfig
+@@ -160,7 +160,7 @@ BR2_GIT="git clone"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+-BR2_DL_DIR="$(BASE_DIR)/dl"
++BR2_DL_DIR="$(TOPDIR)/dl"
+ BR2_COPYTO=""
+ 
+ #
+diff --git a/target/device/Atmel/at91sam9263ek/at91sam9263ek_defconfig b/target/device/Atmel/at91sam9263ek/at91sam9263ek_defconfig
+index 93ff2f5..7ea6a99 100644
+--- a/target/device/Atmel/at91sam9263ek/at91sam9263ek_defconfig
++++ b/target/device/Atmel/at91sam9263ek/at91sam9263ek_defconfig
+@@ -157,7 +157,7 @@ BR2_GIT="git clone"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+-BR2_DL_DIR="$(BASE_DIR)/dl"
++BR2_DL_DIR="$(TOPDIR)/dl"
+ BR2_COPYTO=""
+ 
+ #
+diff --git a/target/device/Atmel/at91sam9263ek/at91sam9263ek_ext_bare_defconfig b/target/device/Atmel/at91sam9263ek/at91sam9263ek_ext_bare_defconfig
+index cc31254..7ba1eed 100644
+--- a/target/device/Atmel/at91sam9263ek/at91sam9263ek_ext_bare_defconfig
++++ b/target/device/Atmel/at91sam9263ek/at91sam9263ek_ext_bare_defconfig
+@@ -140,7 +140,7 @@ BR2_GIT="git clone"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+-BR2_DL_DIR="$(BASE_DIR)/dl"
++BR2_DL_DIR="$(TOPDIR)/dl"
+ BR2_COPYTO=""
+ 
+ #
+diff --git a/target/device/Atmel/at91sam9263ek/at91sam9263ek_ext_defconfig b/target/device/Atmel/at91sam9263ek/at91sam9263ek_ext_defconfig
+index c42bf14..3fd7a36 100644
+--- a/target/device/Atmel/at91sam9263ek/at91sam9263ek_ext_defconfig
++++ b/target/device/Atmel/at91sam9263ek/at91sam9263ek_ext_defconfig
+@@ -159,7 +159,7 @@ BR2_GIT="git clone"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+-BR2_DL_DIR="$(BASE_DIR)/dl"
++BR2_DL_DIR="$(TOPDIR)/dl"
+ BR2_COPYTO=""
+ 
+ #
+diff --git a/target/device/Atmel/at91sam9g20dfc/at91sam9g20dfc_defconfig b/target/device/Atmel/at91sam9g20dfc/at91sam9g20dfc_defconfig
+index a7a5c8c..30a2e4c 100644
+--- a/target/device/Atmel/at91sam9g20dfc/at91sam9g20dfc_defconfig
++++ b/target/device/Atmel/at91sam9g20dfc/at91sam9g20dfc_defconfig
+@@ -157,7 +157,7 @@ BR2_GIT="git clone"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+-BR2_DL_DIR="$(BASE_DIR)/dl"
++BR2_DL_DIR="$(TOPDIR)/dl"
+ BR2_COPYTO=""
+ 
+ #
+diff --git a/target/device/Atmel/at91sam9g20dfc/at91sam9g20dfc_ext_bare_defconfig b/target/device/Atmel/at91sam9g20dfc/at91sam9g20dfc_ext_bare_defconfig
+index 48fe7ff..63e166d 100644
+--- a/target/device/Atmel/at91sam9g20dfc/at91sam9g20dfc_ext_bare_defconfig
++++ b/target/device/Atmel/at91sam9g20dfc/at91sam9g20dfc_ext_bare_defconfig
+@@ -138,7 +138,7 @@ BR2_GIT="git clone"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+-BR2_DL_DIR="$(BASE_DIR)/dl"
++BR2_DL_DIR="$(TOPDIR)/dl"
+ BR2_COPYTO=""
+ 
+ #
+diff --git a/target/device/Atmel/at91sam9g20dfc/at91sam9g20dfc_ext_defconfig b/target/device/Atmel/at91sam9g20dfc/at91sam9g20dfc_ext_defconfig
+index c19a0d9..19ab324 100644
+--- a/target/device/Atmel/at91sam9g20dfc/at91sam9g20dfc_ext_defconfig
++++ b/target/device/Atmel/at91sam9g20dfc/at91sam9g20dfc_ext_defconfig
+@@ -157,7 +157,7 @@ BR2_GIT="git clone"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+-BR2_DL_DIR="$(BASE_DIR)/dl"
++BR2_DL_DIR="$(TOPDIR)/dl"
+ BR2_COPYTO=""
+ 
+ #
+diff --git a/target/device/Atmel/atngw100-base/atngw100-base_defconfig b/target/device/Atmel/atngw100-base/atngw100-base_defconfig
+index 716cb19..0e0b78d 100644
+--- a/target/device/Atmel/atngw100-base/atngw100-base_defconfig
++++ b/target/device/Atmel/atngw100-base/atngw100-base_defconfig
+@@ -91,7 +91,7 @@ BR2_GIT="git clone"
+ BR2_ZCAT="zcat"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+-BR2_DL_DIR="$(BASE_DIR)/dl"
++BR2_DL_DIR="$(TOPDIR)/dl"
+ BR2_COPYTO=""
+ 
+ #
+diff --git a/target/device/Atmel/atngw100/atngw100_defconfig b/target/device/Atmel/atngw100/atngw100_defconfig
+index 8dfb872..ba30c13 100644
+--- a/target/device/Atmel/atngw100/atngw100_defconfig
++++ b/target/device/Atmel/atngw100/atngw100_defconfig
+@@ -91,7 +91,7 @@ BR2_GIT="git clone"
+ BR2_ZCAT="zcat"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+-BR2_DL_DIR="$(BASE_DIR)/dl"
++BR2_DL_DIR="$(TOPDIR)/dl"
+ BR2_COPYTO=""
+ 
+ #
+diff --git a/target/device/Atmel/atstk1005/atstk1005_defconfig b/target/device/Atmel/atstk1005/atstk1005_defconfig
+index 41f2c12..99b740a 100644
+--- a/target/device/Atmel/atstk1005/atstk1005_defconfig
++++ b/target/device/Atmel/atstk1005/atstk1005_defconfig
+@@ -89,7 +89,7 @@ BR2_GIT="git clone"
+ BR2_ZCAT="zcat"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+-BR2_DL_DIR="$(BASE_DIR)/dl"
++BR2_DL_DIR="$(TOPDIR)/dl"
+ BR2_COPYTO=""
+ 
+ #
+diff --git a/target/device/Atmel/atstk100x/atstk100x_defconfig b/target/device/Atmel/atstk100x/atstk100x_defconfig
+index 89f392f..7b6d426 100644
+--- a/target/device/Atmel/atstk100x/atstk100x_defconfig
++++ b/target/device/Atmel/atstk100x/atstk100x_defconfig
+@@ -90,7 +90,7 @@ BR2_GIT="git clone"
+ BR2_ZCAT="zcat"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+-BR2_DL_DIR="$(BASE_DIR)/dl"
++BR2_DL_DIR="$(TOPDIR)/dl"
+ BR2_COPYTO=""
+ 
+ #
+diff --git a/target/device/KwikByte/kb9202/kb9202_defconfig b/target/device/KwikByte/kb9202/kb9202_defconfig
+index 78af5f4..ce50f2c 100644
+--- a/target/device/KwikByte/kb9202/kb9202_defconfig
++++ b/target/device/KwikByte/kb9202/kb9202_defconfig
+@@ -98,7 +98,7 @@ BR2_GIT="git clone"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+-BR2_DL_DIR="$(BASE_DIR)/dl"
++BR2_DL_DIR="$(TOPDIR)/dl"
+ 
+ #
+ # Mirrors and Download locations
+diff --git a/target/device/valka/v100sc2_defconfig b/target/device/valka/v100sc2_defconfig
+index 81f5081..f444951 100644
+--- a/target/device/valka/v100sc2_defconfig
++++ b/target/device/valka/v100sc2_defconfig
+@@ -69,7 +69,7 @@ BR2_GIT="git clone"
+ BR2_ZCAT="zcat"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+-BR2_DL_DIR="$(BASE_DIR)/dl"
++BR2_DL_DIR="$(TOPDIR)/dl"
+ 
+ #
+ # Mirrors and Download locations
+diff --git a/target/device/x86/i686/i386_defconfig b/target/device/x86/i686/i386_defconfig
+index 74de3e0..2df16ef 100644
+--- a/target/device/x86/i686/i386_defconfig
++++ b/target/device/x86/i686/i386_defconfig
+@@ -91,7 +91,7 @@ BR2_GIT="git clone"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+-BR2_DL_DIR="$(BASE_DIR)/dl"
++BR2_DL_DIR="$(TOPDIR)/dl"
+ BR2_COPYTO=""
+ 
+ #
+diff --git a/target/device/x86/i686/i686_defconfig b/target/device/x86/i686/i686_defconfig
+index 441b7a6..af0cc15 100644
+--- a/target/device/x86/i686/i686_defconfig
++++ b/target/device/x86/i686/i686_defconfig
+@@ -91,7 +91,7 @@ BR2_GIT="git clone"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+-BR2_DL_DIR="$(BASE_DIR)/dl"
++BR2_DL_DIR="$(TOPDIR)/dl"
+ BR2_COPYTO=""
+ 
+ #
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.6.3.3
