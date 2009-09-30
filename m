@@ -1,31 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 30 Sep 2009 13:44:22 +0200
-Subject: [Buildroot] multiple architectures
-In-Reply-To: <5f2b60909300320s49960173x193b324f432f7aef@mail.gmail.com>
-	(=?utf-8?Q?=22Bj=C3=B8rn?= Forsman"'s message of "Wed\, 30 Sep 2009
-	12\:20\:30 +0200")
-References: <20090930062658.GG25852@moomers.org> <20090930090102.0189852d@surf>
-	<5f2b60909300113o53ef97b7j6910562af6ebb8be@mail.gmail.com>
-	<20090930103137.304aa012@surf>
-	<5f2b60909300320s49960173x193b324f432f7aef@mail.gmail.com>
-Message-ID: <87eipoodwp.fsf@macbook.be.48ers.dk>
+From: Berns <Berns@BEKA-Elektronik.de>
+Date: Wed, 30 Sep 2009 14:23:54 +0200
+Subject: [Buildroot] x11vnc
+Message-ID: <NDBBKLDECLOIHFJKBINAGEKNEKAA.Berns@BEKA-Elektronik.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bj?rn" == Bj?rn Forsman <bjorn.forsman@gmail.com> writes:
-
 Hi,
 
- Bj?rn> I realize now that it takes more than a simple output-ARCH
- Bj?rn> directory, so I'd like to keep the current functionality with
- Bj?rn> O=.  (Because BR should not be as complex as OE!)
+i'am using a custom AT91SAM9263 board with a TFT screen and touch. The
+toolchain and the root filesystem is generated with version 2009.8-git. The
+main application uses X11 and GTK+ 2.0 and runs.
 
-Indeed. I think one of the main advantages BR has over OE is
-simplicity - We should always keep that in mind before adding new
-features.
+For remote controll i'am doing some tests with x11vnc and TightVNC at the
+moment. Viewing the application my PC works and the buttons get the focus
+when i move the mouse in the vnc viewer on my PC.
+But clicking on the buttons in the vnc viewer window doesn't cause any
+reaction at the GTK application.
+The problem seams to be the missing lib libxtst.
+http://www.karlrunge.com/x11vnc/faq.html#faq-missing-xtest
+(Maybe this lib can be selected automatically when x11vnc is selected ?.)
 
--- 
-Bye, Peter Korsgaard
+So I selected the lib, restart the build procedure with make and transfered
+the lib and the links, but this doesn't fixes the problem.
+After rm -rf *_build* i try to rebuild buildroot but now it fails compiling
+fcfreetype.c iconv.h: No such file or directory.
+
+I don't understand why buildroot now fails. Can anyody give me a hint ?
+
+Thanks and regards
+
+Rainer Berns
