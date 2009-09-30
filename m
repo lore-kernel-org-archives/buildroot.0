@@ -1,38 +1,40 @@
-From: Igor Serebryany <igor47@moomers.org>
-Date: Wed, 30 Sep 2009 02:26:29 -0500
+From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
+Date: Wed, 30 Sep 2009 10:13:22 +0200
 Subject: [Buildroot] multiple architectures
 In-Reply-To: <20090930090102.0189852d@surf>
 References: <20090930062658.GG25852@moomers.org> <20090930090102.0189852d@surf>
-Message-ID: <20090930072629.GH25852@moomers.org>
+Message-ID: <5f2b60909300113o53ef97b7j6910562af6ebb8be@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Sep 30, 2009 at 09:01:02AM +0200, Thomas Petazzoni wrote:
-> Of course, when you make a change to one of the .config, make sure that
-> you update the corresponding config.{x86,x86_64}.
+Hi,
 
-This is the problem that I've been using svn to solve, by 
-* running 'make saveconfig', 
-* committing the resulting local/myproject directory to a repository
-* running 'svn update' in another local/myproject64 directory that
-points at the same repository but the working copy has been customized for
-64bit architecture. 
+2009/9/30 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+> Le Wed, 30 Sep 2009 01:26:58 -0500,
+> Igor Serebryany <igor47@moomers.org> a ?crit :
+>
+>> ? ? ? I need both an x86 and an amd64 version of my buildroot
+>> filesystem and kernel. I've been making this happen by a very
+>> inefficient process - keeping two copies of the buildroot source (one
+>> for each arch), making local/projectname an svn working copy, making
+>> all changes to the x86 version and using 'svn update' to merge changes
+>> ? ? ? back into the amd64 version.
+>>
+>> ? ? ? I'm sure there must be a better way. How do people on here
+>> manage maintaining identical builds for multiple architectures?
+>
+> Use out-of-tree compilation with O=, with two different configurations
+> files.
 
-svn update then merges the config changes, leaving the local
-modifications (especially to the kernel .config) in place.
+How about that the default BR output directory contains an arch
+postfix? This would eliminate the need for manually setting O=
+according to the current .config. Instead it would happen
+automatically.
 
-i was hoping there was some kind of magical make flag that would use the
-same config files but do some kind of 'oh edit it for this other
-architecture' magic.
+Any thoughts?
 
---igor
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 189 bytes
-Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090930/6f0db4ca/attachment.pgp>
+Regards,
+Bj?rn Forsman
