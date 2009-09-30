@@ -1,65 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Sep 2009 09:01:02 +0200
-Subject: [Buildroot] multiple architectures
-In-Reply-To: <20090930062658.GG25852@moomers.org>
-References: <20090930062658.GG25852@moomers.org>
-Message-ID: <20090930090102.0189852d@surf>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 30 Sep 2009 09:03:26 +0200
+Subject: [Buildroot] problems building git head
+In-Reply-To: <1254291803.810.0.camel@coalu.atr> (Lionel Landwerlin's message
+	of "Wed\, 30 Sep 2009 08\:23\:23 +0200")
+References: <c166aa9f0909291340j54ae2835o233fad9d89fdf96b@mail.gmail.com>
+	<87fxa5pif5.fsf@macbook.be.48ers.dk>
+	<c166aa9f0909291514o4ba70e3p277df9dc924f9bb6@mail.gmail.com>
+	<c166aa9f0909292211n7da2f8c0qb6adbde34a2a10f3@mail.gmail.com>
+	<1254291803.810.0.camel@coalu.atr>
+Message-ID: <877hvgq5hd.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 30 Sep 2009 01:26:58 -0500,
-Igor Serebryany <igor47@moomers.org> a ?crit :
+>>>>> "Lionel" == Lionel Landwerlin <lionel.landwerlin@openwide.fr> writes:
 
-> 	I need both an x86 and an amd64 version of my buildroot
-> filesystem and kernel. I've been making this happen by a very
-> inefficient process - keeping two copies of the buildroot source (one
-> for each arch), making local/projectname an svn working copy, making
-> all changes to the x86 version and using 'svn update' to merge changes
-> 	back into the amd64 version.
-> 
-> 	I'm sure there must be a better way. How do people on here
-> manage maintaining identical builds for multiple architectures? 
+Hi,
 
-Use out-of-tree compilation with O=, with two different configurations
-files.
+ Lionel> I had the same problem with gnu make 3.80. Switched to 3.81, it
+ Lionel> fixed the problem.
 
-Say ~/buildroot contains your Buildroot source code :
+It does indeed seem like make 3.80 doesn't like our
+Makefile.autotools.in stuff. I'll update the dependencies check to
+match.
 
- * Store your x86 configuration in ~/buildroot/config.x86 and your
-   x86_64 configuration in ~/buildroot/config.x86_64
+Thanks both of you.
 
- * To run the x86 compilation, do :
-
-    cd ~/buildroot/
-    cp config.x86 .config
-    make O=~/buildroot-x86
-
- * To run the x86_64 compilation, do :
-
-    cd ~/buildroot/
-    cp config.x86_64 .config
-    make O=~/buildroot-x86_64
-
-Of course, when you make a change to one of the .config, make sure that
-you update the corresponding config.{x86,x86_64}.
-
-Do that solves your problem ?
-
-Sincerly,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 197 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20090930/bf48a650/attachment.pgp>
+Bye, Peter Korsgaard
