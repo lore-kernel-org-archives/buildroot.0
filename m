@@ -1,38 +1,51 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 30 Sep 2009 17:40:24 +0200
-Subject: [Buildroot] [git commit master] Makefile: reinstate /etc/br-version
-Message-ID: <20090930154439.15085777AC@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu,  1 Oct 2009 04:57:09 +0000 (UTC)
+Subject: [Buildroot] [Bug 637] New: Kernel .config copy fail
+Message-ID: <bug-637-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=637
 
-commit: http://git.buildroot.net/buildroot/commit/?id=912ea81ad4a2f1b6a87c9cebfefdbbf1f60f526a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+           Summary: Kernel .config copy fail
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: hokanson at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Got lost in the recent cleanup, but is handy to know BR version.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- Makefile |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+The latest snapshot (Oct 1st), and the several I tried before that, die when it
+comes time to compile the Kernel.  I receive the following error:
 
-diff --git a/Makefile b/Makefile
-index a7f0b88..7fe30a7 100644
---- a/Makefile
-+++ b/Makefile
-@@ -404,6 +404,10 @@ endif
- 	find $(TARGET_DIR) -type f -perm +111 | xargs $(STRIPCMD) 2>/dev/null || true
- 	$(TARGET_LDCONFIG) -r $(TARGET_DIR) 2>/dev/null
- 
-+	mkdir -p $(TARGET_DIR)/etc
-+	echo $(BR2_VERSION)$(shell $(TOPDIR)/scripts/setlocalversion) > \
-+		$(TARGET_DIR)/etc/br-version
-+
- ifneq ($(BR2_ROOTFS_POST_BUILD_SCRIPT),"")
- 	$(BR2_ROOTFS_POST_BUILD_SCRIPT) $(TARGET_DIR)
- endif
+rm -rf /home/eric/buildroot/output/build/linux-2.6.31.1
+*** Unpacking kernel source
+bzcat ./dl/linux-2.6.31.1.tar.bz2 | tar -C /home/eric/buildroot/output/build 
+-xf -
+touch /home/eric/buildroot/output/build/linux-2.6.31.1/.unpacked
+toolchain/patch-kernel.sh /home/eric/buildroot/output/build/linux-2.6.31.1
+toolchain/kernel-headers \
+                linux-2.6.31.1-\*.patch{,.gz,.bz2}
+touch /home/eric/buildroot/output/build/linux-2.6.31.1/.patched
+cp -dpf  /home/eric/buildroot/output/build/linux-2.6.31.1/.config
+cp: missing destination file operand after
+`/home/eric/buildroot/output/build/linux-2.6.31.1/.config'
+Try `cp --help' for more information.
+make: *** [/home/eric/buildroot/output/build/linux-2.6.31.1/.configured] Error
+1
+
+
 -- 
-1.6.3.3
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
