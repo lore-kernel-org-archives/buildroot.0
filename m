@@ -1,32 +1,49 @@
-From: Will Newton <will.newton@gmail.com>
-Date: Fri, 2 Oct 2009 14:14:13 +0100
-Subject: [Buildroot] Buildroot and version control systems
-In-Reply-To: <!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAGmhhQKukS5CuVw3jfWJFzEBAAAAAA==@cimeq.qc.ca>
-References: <38479127BA626E41B7397B72623101431B7122@mep-server-1.mep.de>
-	<!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAANIfWqGxed5Gq+toirCYmVEBAAAAAA==@cimeq.qc.ca>
-	<87a5b0800910020604r7f1ace15o55d56c3d824261a@mail.gmail.com>
-	<!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAGmhhQKukS5CuVw3jfWJFzEBAAAAAA==@cimeq.qc.ca>
-Message-ID: <87a5b0800910020614waeff4a1j7d5c79be04e75241@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri,  2 Oct 2009 13:18:05 +0000 (UTC)
+Subject: [Buildroot] [Bug 645] New: allow to build nbd-server with NBD
+	package
+Message-ID: <bug-645-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Oct 2, 2009 at 2:10 PM, Jonathan dumaresq <jdumaresq@cimeq.qc.ca> wrote:
-> Hi Will,
->
->
-> I think this is how most people use buildroot - taking the upstream
-> version and making local modifications. It should be fairly
-> straightforward to do this in any version control system using e.g. in
-> CVS a vendor branch, or in git having two branches, one to track
-> upstream and one for your changes.
->
-> We are using svn as source version control.
+https://bugs.busybox.net/show_bug.cgi?id=645
 
-Subversion has some notion of vendor branches, e.g.:
+           Summary: allow to build nbd-server with NBD package
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P3
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: vincent.palatin_buildroot at m4x.org
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-http://svnbook.red-bean.com/en/1.1/ch07s05.html
 
-But I am not an svn expert so I can't really help with the details.
+Created an attachment (id=681)
+ --> (https://bugs.busybox.net/attachment.cgi?id=681)
+nbd-server binary build
+
+At the moment, the NBD package can only build the "nbd-client" binary.
+The attached patch adds the ability to build "nbd-server" binary (ie the
+userspace daemon used to serve block to a remote client)
+it can activate client, server or both.
+
+It includes 2 patches for nbd-server source code :
+- remove SUSv3 deprecated function "index()"
+- fix read function usage when -EAGAIN occurs (same fix as in nbd-server debian
+package)
+
+I have tested this on an ARM target.
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
