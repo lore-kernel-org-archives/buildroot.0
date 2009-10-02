@@ -1,26 +1,31 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Fri, 02 Oct 2009 13:12:42 +0200
-Subject: [Buildroot] [git commit master] directfb: fix build with
- BR2_PACKAGE_DIRECTFB_DEBUG
-In-Reply-To: <20091002105811.23BFE77762@busybox.osuosl.org>
-References: <20091002105811.23BFE77762@busybox.osuosl.org>
-Message-ID: <1254481962.3924.10.camel@sven>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 02 Oct 2009 13:15:34 +0200
+Subject: [Buildroot] [PATCH] directfb: add host-directfb target for
+	directfb-csource
+In-Reply-To: <1254481869-3415-1-git-send-email-s.neumann@raumfeld.com> (Sven
+	Neumann's message of "Fri\, 2 Oct 2009 13\:11\:09 +0200")
+References: <1254481869-3415-1-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <87iqey6o89.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 2009-10-02 at 12:55 +0200, Peter Korsgaard wrote:
+>>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
-> +Subject: [PATCH] gfxcard: fix build error with --enable-debug
-> +
-> +Commit fdc611ea (Added support for colors and multiple layers in a
-> +glyph implementing outlines) changed dfb_gfxcard_drawglyph() to take
-> +a layers argument instead of index, but the D_DEBUG_AT call wasn't
-> +changed to match.
+ Sven> directfb-csource is a code generation tool that may be needed to build
+ Sven> other packages. Add host-directfb target that installs directfb-csource
+ Sven> in the host_dir.
 
-It that patch upstream already? Otherwise I can take care of that.
+What exactly needs this? I prefer to not add unused stuff. Could we wait
+until there's an actual use for this?
 
+ Sven> +$(STAMP_DIR)/host_directfb_installed: $(STAMP_DIR)/host_directfb_compiled
+ Sven> +	$(INSTALL) -m 0755 $(DIRECTFB_HOST_DIR)/tools/directfb-csource $(HOST_DIR)/usr/bin
 
-Sven
+Is directfb-csource the only thing we could ever imagine other packages
+needing? What about the headers/libs for some other host tool?
+
+-- 
+Bye, Peter Korsgaard
