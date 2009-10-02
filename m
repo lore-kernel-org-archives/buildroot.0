@@ -1,37 +1,41 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 2 Oct 2009 10:33:29 +0200
-Subject: [Buildroot] [git commit master] ltrace: fix build for powerpc
-Message-ID: <20091002083428.7D30F77756@busybox.osuosl.org>
+From: Will Newton <will.newton@gmail.com>
+Date: Fri, 2 Oct 2009 10:00:55 +0100
+Subject: [Buildroot] [***SPAM*** Score: 3.3] problem with locale
+In-Reply-To: <4AC4D0C8.5000109@carallon.com>
+References: <4AC4D0C8.5000109@carallon.com>
+Message-ID: <87a5b0800910020200p3972c259yd46812807d7749f6@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Thu, Oct 1, 2009 at 4:54 PM, William Wagner <will_wagner@carallon.com> wrote:
+> Hello all,
+>
+> Just started moving to latest buildroot dev tree. I have hit an error using
+> the attached config, it is a pretty plain x86 config but with locale
+> support.
+>
+> It fails to build uClibc with this error:
+> ? LN include/sys/vm86.h
+> ? HOSTCC extra/locale/gen_wc8bit
+> extra/locale/gen_wc8bit.c: In function 'main':
+> extra/locale/gen_wc8bit.c:356: warning: array subscript is above array
+> bounds
+> extra/locale/gen_wc8bit.c:415: warning: array subscript is above array
+> bounds
+> extra/locale/gen_wc8bit.c:481: warning: array subscript is above array
+> bounds
+> ? GEN extra/locale/codesets.txt
+> ? GEN extra/locale/c8tables.h
+> setlocale(LC_CTYPE,"en_US.UTF-8") failed!
+> make[1]: *** [extra/locale/c8tables.h] Error 1
+> make[1]: Leaving directory
+> `/home/willw/buildroot/output/toolchain/uClibc-0.9.30.1'
+> make: ***
+> [/home/willw/buildroot/output/toolchain/uClibc-0.9.30.1/.configured]
+> Error 2
 
-commit: http://git.buildroot.net/buildroot/commit/?id=090b407fe16d2fb996c3d010c142d95fd38e155b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-ltrace wants ARCH=ppc when building for powerpc.
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/ltrace/ltrace.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
-
-diff --git a/package/ltrace/ltrace.mk b/package/ltrace/ltrace.mk
-index c5b8096..424c39d 100644
---- a/package/ltrace/ltrace.mk
-+++ b/package/ltrace/ltrace.mk
-@@ -11,7 +11,8 @@ LTRACE_DIR=$(BUILD_DIR)/ltrace-$(LTRACE_VERSION)
- LTRACE_BINARY=ltrace
- LTRACE_TARGET_BINARY=usr/bin/ltrace
- 
--LTRACE_ARCH:=$(KERNEL_ARCH)
-+# ltrace uses arch=ppc for powerpc
-+LTRACE_ARCH:=$(KERNEL_ARCH:powerpc=ppc)
- ifeq ("$(strip $(ARCH))","armeb")
- LTRACE_ARCH:=arm
- endif
--- 
-1.6.3.3
+This looks like your host system does not support the en_US.UTF-8
+locale, although that would seem unlikely. Is it listed by locale -a?
