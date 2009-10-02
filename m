@@ -1,7 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Fri, 2 Oct 2009 10:24:54 +0200
-Subject: [Buildroot] [git commit master] libuuid: cleanup
-Message-ID: <20091002082527.7324477756@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] liblockfile: fix target-install
+	dependencies
+Message-ID: <20091002082528.58AB877756@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,79 +10,62 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=076f06e0f57a8ea8973970e4fc4462e54a36f59f
+commit: http://git.buildroot.net/buildroot/commit/?id=b9df3aefc60c3d569c844fb1fa8f8ec80f65931e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Got rid of LIBUUID_TARGET_DIR, and made sure staging install is only
-done once.
+liblockfile.so.1.0 gets installed into /usr/lib, not /lib, so the target
+install make target is always considered out-of-date.
+
+Do various cleanups while we're here.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/e2fsprogs/e2fsprogs.mk |   20 +++++++++-----------
- 1 files changed, 9 insertions(+), 11 deletions(-)
+ package/liblockfile/liblockfile.mk |   21 ++++++++++-----------
+ 1 files changed, 10 insertions(+), 11 deletions(-)
 
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index 8ab7da9..ed9bacb 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -11,8 +11,7 @@ E2FSPROGS_CAT:=$(ZCAT)
- E2FSPROGS_BINARY:=misc/mke2fs
- E2FSPROGS_TARGET_BINARY:=sbin/mke2fs
- LIBUUID_DIR=$(E2FSPROGS_DIR)/lib/uuid/
--LIBUUID_TARGET_DIR:=usr/lib/
--LIBUUID_TARGET_BINARY:=libuuid.so
-+LIBUUID_TARGET_BINARY:=usr/lib/libuuid.so
+diff --git a/package/liblockfile/liblockfile.mk b/package/liblockfile/liblockfile.mk
+index 950724e..6840b99 100644
+--- a/package/liblockfile/liblockfile.mk
++++ b/package/liblockfile/liblockfile.mk
+@@ -8,7 +8,7 @@ LIBLOCKFILE_SOURCE:=liblockfile_$(LIBLOCKFILE_VERSION).orig.tar.gz
+ LIBLOCKFILE_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/libl/liblockfile/
+ LIBLOCKFILE_CAT:=$(ZCAT)
+ LIBLOCKFILE_DIR:=$(BUILD_DIR)/liblockfile-$(LIBLOCKFILE_VERSION)
+-LIBLOCKFILE_BINARY:=liblockfile.so.1.0
++LIBLOCKFILE_BINARY:=usr/lib/liblockfile.so.1.0
  
- E2FSPROGS_MISC_STRIP:= \
- 	badblocks blkid chattr dumpe2fs filefrag fsck logsave \
-@@ -72,17 +71,19 @@ $(E2FSPROGS_DIR)/$(E2FSPROGS_BINARY): $(E2FSPROGS_DIR)/.configured
- 	#$(STRIPCMD) $(E2FSPROGS_DIR)/lib/lib*.so.*.*
- 	touch -c $@
+ $(DL_DIR)/$(LIBLOCKFILE_SOURCE):
+ 	 $(call DOWNLOAD,$(LIBLOCKFILE_SITE),$(LIBLOCKFILE_SOURCE))
+@@ -37,21 +37,20 @@ $(LIBLOCKFILE_DIR)/.configured: $(LIBLOCKFILE_DIR)/.unpacked
+ 	)
+ 	touch $@
  
--$(E2FSPROGS_DIR)/lib/$(LIBUUID_TARGET_BINARY): $(E2FSPROGS_DIR)/.configured
-+$(E2FSPROGS_DIR)/lib/libuuid.so: $(E2FSPROGS_DIR)/.configured
- 	$(MAKE1) -C $(E2FSPROGS_DIR)/lib/uuid
- 	touch -c $@
- 
- $(STAGING_DIR)/$(E2FSPROGS_TARGET_BINARY): $(E2FSPROGS_DIR)/$(E2FSPROGS_BINARY)
- 	$(MAKE1) PATH=$(TARGET_PATH) DESTDIR=$(STAGING_DIR) LDCONFIG=true \
- 		-C $(E2FSPROGS_DIR) install
+-$(STAGING_DIR)/lib/$(LIBLOCKFILE_BINARY): $(LIBLOCKFILE_DIR)/.configured
++$(STAGING_DIR)/$(LIBLOCKFILE_BINARY): $(LIBLOCKFILE_DIR)/.configured
+ 	mkdir -p $(addprefix $(STAGING_DIR)/usr/share/man/man,1 3)
+-	mkdir -p $(STAGING_DIR)/usr/share/man/man3
+ 	rm -f $(STAGING_DIR)/usr/lib/liblockfile.so
+ 	$(MAKE) -C $(LIBLOCKFILE_DIR) ROOT=$(STAGING_DIR) install
+-	ln -sf $(LIBLOCKFILE_BINARY) $(STAGING_DIR)/usr/lib/liblockfile.so.1
+-	cp -dpf $(LIBLOCKFILE_DIR)/liblockfile.a $(STAGING_DIR)/usr/lib
++	ln -sf liblockfile.so $(STAGING_DIR)/usr/lib/liblockfile.so.1
 +	touch -c $@
  
--$(STAGING_DIR)/usr/lib/$(LIBUUID_TARGET_BINARY): $(E2FSPROGS_DIR)/lib/$(LIBUUID_TARGET_BINARY)
-+$(STAGING_DIR)/$(LIBUUID_TARGET_BINARY): $(E2FSPROGS_DIR)/lib/libuuid.so
- 	$(MAKE1) PATH=$(TARGET_PATH) DESTDIR=$(STAGING_DIR) LDCONFIG=true \
- 		-C $(LIBUUID_DIR) install
+-$(TARGET_DIR)/usr/lib/$(LIBLOCKFILE_BINARY): $(STAGING_DIR)/lib/$(LIBLOCKFILE_BINARY)
+-	mkdir -p $(TARGET_DIR)/usr/lib
+-	cp -a $(STAGING_DIR)/usr/lib/liblockfile.so* $(TARGET_DIR)/usr/lib
+-	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) \
+-		$(TARGET_DIR)/usr/lib/$(LIBLOCKFILE_BINARY)
++$(TARGET_DIR)/$(LIBLOCKFILE_BINARY): $(STAGING_DIR)/$(LIBLOCKFILE_BINARY)
++	mkdir -p $(@D)
++	cp -a $(STAGING_DIR)/usr/lib/liblockfile.so* $(@D)
++	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $@
 +	touch -c $@
  
- E2FSPROGS_RM$(BR2_PACKAGE_E2FSPROGS_BADBLOCKS) += ${TARGET_DIR}/sbin/badblocks
- E2FSPROGS_RM$(BR2_PACKAGE_E2FSPROGS_BLKID) += ${TARGET_DIR}/sbin/blkid
-@@ -134,14 +135,11 @@ endif
- 	rm -rf $(TARGET_DIR)/usr/share/doc
- 	touch -c $@
+-liblockfile: $(TARGET_DIR)/usr/lib/$(LIBLOCKFILE_BINARY)
++liblockfile: $(TARGET_DIR)/$(LIBLOCKFILE_BINARY)
  
--$(TARGET_DIR)/$(LIBUUID_TARGET_DIR)/$(LIBUUID_TARGET_BINARY): $(STAGING_DIR)/usr/lib/$(LIBUUID_TARGET_BINARY)
--	$(MAKE1) PATH=$(TARGET_PATH) DESTDIR=$(STAGING_DIR) LDCONFIG=true \
--		-C $(LIBUUID_DIR) install
--	cp -a $(STAGING_DIR)/$(LIBUUID_TARGET_DIR)/$(LIBUUID_TARGET_BINARY)* \
--		$(TARGET_DIR)/$(LIBUUID_TARGET_DIR)/
-+$(TARGET_DIR)/$(LIBUUID_TARGET_BINARY): $(STAGING_DIR)/$(LIBUUID_TARGET_BINARY)
-+	cp -a $(STAGING_DIR)/$(LIBUUID_TARGET_BINARY)* $(@D)
- 	touch -c $@
- 
--libuuid: $(TARGET_DIR)/$(LIBUUID_TARGET_DIR)/$(LIBUUID_TARGET_BINARY)
-+libuuid: $(TARGET_DIR)/$(LIBUUID_TARGET_BINARY)
- e2fsprogs: libuuid $(TARGET_DIR)/$(E2FSPROGS_TARGET_BINARY)
- 
- e2fsprogs-clean:
-@@ -156,7 +154,7 @@ libuuid-clean:
- 		-C $(LIBUUID_DIR) uninstall
- 	# make uninstall misses the includes
- 	rm -rf $(STAGING_DIR)/usr/include/uuid
--	rm -f $(TARGET_DIR)/$(LIBUUID_TARGET_DIR)/$(LIBUUID_TARGET_BINARY)*
-+	rm -f $(TARGET_DIR)/$(LIBUUID_TARGET_BINARY)*
- 	-$(MAKE1) -C $(LIBUUID_DIR) clean
- 
- libuuid-source: e2fsprogs-source
+ liblockfile-clean:
+ 	rm -f $(TARGET_DIR)/usr/lib/liblockfile.so*
 -- 
 1.6.3.3
