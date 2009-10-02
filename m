@@ -1,36 +1,32 @@
-From: Jonathan dumaresq <jdumaresq@cimeq.qc.ca>
-Date: Fri, 2 Oct 2009 09:10:53 -0400
+From: Will Newton <will.newton@gmail.com>
+Date: Fri, 2 Oct 2009 14:14:13 +0100
 Subject: [Buildroot] Buildroot and version control systems
-In-Reply-To: <87a5b0800910020604r7f1ace15o55d56c3d824261a@mail.gmail.com>
+In-Reply-To: <!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAGmhhQKukS5CuVw3jfWJFzEBAAAAAA==@cimeq.qc.ca>
 References: <38479127BA626E41B7397B72623101431B7122@mep-server-1.mep.de>
 	<!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAANIfWqGxed5Gq+toirCYmVEBAAAAAA==@cimeq.qc.ca>
 	<87a5b0800910020604r7f1ace15o55d56c3d824261a@mail.gmail.com>
-Message-ID: <!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAGmhhQKukS5CuVw3jfWJFzEBAAAAAA==@cimeq.qc.ca>
+	<!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAGmhhQKukS5CuVw3jfWJFzEBAAAAAA==@cimeq.qc.ca>
+Message-ID: <87a5b0800910020614waeff4a1j7d5c79be04e75241@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Will,
+On Fri, Oct 2, 2009 at 2:10 PM, Jonathan dumaresq <jdumaresq@cimeq.qc.ca> wrote:
+> Hi Will,
+>
+>
+> I think this is how most people use buildroot - taking the upstream
+> version and making local modifications. It should be fairly
+> straightforward to do this in any version control system using e.g. in
+> CVS a vendor branch, or in git having two branches, one to track
+> upstream and one for your changes.
+>
+> We are using svn as source version control.
 
+Subversion has some notion of vendor branches, e.g.:
 
-I think this is how most people use buildroot - taking the upstream
-version and making local modifications. It should be fairly
-straightforward to do this in any version control system using e.g. in
-CVS a vendor branch, or in git having two branches, one to track
-upstream and one for your changes.
+http://svnbook.red-bean.com/en/1.1/ch07s05.html
 
-We are using svn as source version control. 
-
-It's always best to make sure any changes that you do make are pushed
-upstream however, it really will save you time in the long term.
-
-I will try to find a way to create patch for what is needed as public. Since
-I work on the NGW100, I will send you my changed needed to get this work. 
-
-I will look at GIT( new for me) to know how to work with this kind of setup.
-
-Regards
-
-Jonathan
+But I am not an svn expert so I can't really help with the details.
