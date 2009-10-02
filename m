@@ -1,48 +1,31 @@
-From: William Wagner <will_wagner@carallon.com>
-Date: Fri, 02 Oct 2009 14:03:24 +0100
-Subject: [Buildroot] [PATCH] Apply kernel board patches when do
-	linux26-menuconfig
-Message-ID: <4AC5FA1C.1010100@carallon.com>
+From: Will Newton <will.newton@gmail.com>
+Date: Fri, 2 Oct 2009 14:04:03 +0100
+Subject: [Buildroot] Buildroot and version control systems
+In-Reply-To: <!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAANIfWqGxed5Gq+toirCYmVEBAAAAAA==@cimeq.qc.ca>
+References: <38479127BA626E41B7397B72623101431B7122@mep-server-1.mep.de>
+	<!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAANIfWqGxed5Gq+toirCYmVEBAAAAAA==@cimeq.qc.ca>
+Message-ID: <87a5b0800910020604r7f1ace15o55d56c3d824261a@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-currently if you have not yet built/upacked linux and you run 
-linux26-menuconfig which unpacks linux and applies patches. However it 
-does not apply board (or arch) specific patches as would happen if you 
-built linux without opening the menuconfig.
+On Fri, Oct 2, 2009 at 1:57 PM, Jonathan dumaresq <jdumaresq@cimeq.qc.ca> wrote:
+> HI,
+>
+>
+>
+> I?m in the same boat as you. I just starting a new project with AVR32
+> (AP7000) with NGW100 board. And I try to find a good way of working with
+> buildroot. We have some customization of buildroot and I have not a really
+> good idea of how we will manage this.
 
-Does that make sense? The patch below fixes it:
+I think this is how most people use buildroot - taking the upstream
+version and making local modifications. It should be fairly
+straightforward to do this in any version control system using e.g. in
+CVS a vendor branch, or in git having two branches, one to track
+upstream and one for your changes.
 
-diff --git a/target/linux/Makefile.in.advanced 
-b/target/linux/Makefile.in.advanced
-index b4774ca..4b2c451
---- a/target/linux/Makefile.in.advanced
-+++ b/target/linux/Makefile.in.advanced
-@@ -399,12 +399,12 @@ $(STAMP_DIR)/linux_modules_target_installed: 
-$(LINUX26_DIR)/.depend_done
-      fi
-      touch $@
-
--linux26-menuconfig: $(LINUX26_DIR)/.patched host-sed
-+linux26-menuconfig: $(LINUX26_DIR)/.patched.board host-sed
-      [ -f $(LINUX26_DIR)/.config ] || cp $(LINUX26_KCONFIG) 
-$(LINUX26_DIR)/.config
-      $(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) menuconfig
-      -[ -f $(LINUX26_DIR)/.config ] && touch $(LINUX26_DIR)/.configured
-
--linux26-xconfig: $(LINUX26_DIR)/.patched host-sed
-+linux26-xconfig: $(LINUX26_DIR)/.patched.board host-sed
-      [ -f $(LINUX26_DIR)/.config ] || cp $(LINUX26_KCONFIG) 
-$(LINUX26_DIR)/.config
-      $(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) xconfig
-      -[ -f $(LINUX26_DIR)/.config ] && touch $(LINUX26_DIR)/.configured
-
--- 
-------------------------------------------------------------------------
-Will Wagner                                     will_wagner at carallon.com
-Development Manager                      Office Tel: +44 (0)20 7371 2032
-Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
-------------------------------------------------------------------------
+It's always best to make sure any changes that you do make are pushed
+upstream however, it really will save you time in the long term.
