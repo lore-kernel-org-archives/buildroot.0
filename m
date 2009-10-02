@@ -1,7 +1,7 @@
 From: Heyendal, Carl <CHeyendal@stanleyworks.com>
-Date: Fri, 2 Oct 2009 14:37:49 -0400
+Date: Fri, 2 Oct 2009 16:20:14 -0400
 Subject: [Buildroot] compile error with 'crtstuff.c'
-Message-ID: <1D6034426110564DA0DEA9EE9793B38357C834B900@NBE-MBX01.americas.swk.pri>
+Message-ID: <1D6034426110564DA0DEA9EE9793B38357C834BA7D@NBE-MBX01.americas.swk.pri>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,9 +10,7 @@ To: buildroot@busybox.net
 
 Hi,
 
-First post.
-
-I'm getting this error when I using Buildroot regarding the cross compiler tools. I searched the archives of this mailing list (nothing) for this problem. I also Googled the net for the problem, lots of hits but there was no definitive fix that I could find.
+I'm getting this error below when I'm using Buildroot regarding the cross compiler tools. I searched the net for references to the same problem, lots of hits but there was no definitive solution that I could find.
 
 Attached is my Buildroot config file. Any help would be appreciated. Please, I'm a newbie, be verbose.
 
@@ -73,11 +71,11 @@ This e-mail, including any attached files, is intended only for the person to wh
 
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091002/73781bc7/attachment-0001.htm>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091002/fb0eeff0/attachment-0001.htm>
 -------------- next part --------------
 A non-text attachment was scrubbed...
 Name: config
 Type: application/octet-stream
 Size: 19338 bytes
 Desc: config
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091002/73781bc7/attachment-0001.obj>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091002/fb0eeff0/attachment-0001.obj>
