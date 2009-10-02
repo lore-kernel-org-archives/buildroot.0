@@ -1,82 +1,26 @@
 From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Fri,  2 Oct 2009 13:11:09 +0200
-Subject: [Buildroot] [PATCH] directfb: add host-directfb target for
-	directfb-csource
-Message-ID: <1254481869-3415-1-git-send-email-s.neumann@raumfeld.com>
+Date: Fri, 02 Oct 2009 13:12:42 +0200
+Subject: [Buildroot] [git commit master] directfb: fix build with
+ BR2_PACKAGE_DIRECTFB_DEBUG
+In-Reply-To: <20091002105811.23BFE77762@busybox.osuosl.org>
+References: <20091002105811.23BFE77762@busybox.osuosl.org>
+Message-ID: <1254481962.3924.10.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-directfb-csource is a code generation tool that may be needed to build
-other packages. Add host-directfb target that installs directfb-csource
-in the host_dir.
+On Fri, 2009-10-02 at 12:55 +0200, Peter Korsgaard wrote:
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
----
- package/directfb/directfb.mk |   52 ++++++++++++++++++++++++++++++++++++++++++
- 1 files changed, 52 insertions(+), 0 deletions(-)
+> +Subject: [PATCH] gfxcard: fix build error with --enable-debug
+> +
+> +Commit fdc611ea (Added support for colors and multiple layers in a
+> +glyph implementing outlines) changed dfb_gfxcard_drawglyph() to take
+> +a layers argument instead of index, but the D_DEBUG_AT call wasn't
+> +changed to match.
 
-diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
-index 5fc8868..d6b6bdc 100644
---- a/package/directfb/directfb.mk
-+++ b/package/directfb/directfb.mk
-@@ -147,3 +147,55 @@ DIRECTFB_CONF_OPT = \
- DIRECTFB_DEPENDENCIES = uclibc $(DIRECTFB_DEP) freetype $(DIRECTFB_FUSION)
- 
- $(eval $(call AUTOTARGETS,package,directfb))
-+
-+
-+# directfb-csource for the host
-+
-+DIRECTFB_HOST_DIR:=$(BUILD_DIR)/directfb-$(DIRECTFB_VERSION)-host
-+DIRECTFB_HOST_BINARY:=$(HOST_DIR)/usr/bin/directfb-csource
-+
-+$(DL_DIR)/$(DIRECTFB_SOURCE):
-+	$(call DOWNLOAD,$(DIRECTFB_SITE),$(DIRECTFB_SOURCE))
-+
-+$(STAMP_DIR)/host_directfb_unpacked: $(DL_DIR)/$(DIRECTFB_SOURCE)
-+	mkdir -p $(DIRECTFB_HOST_DIR)
-+	$(INFLATE$(suffix $(DIRECTFB_SOURCE))) $< | \
-+		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(DIRECTFB_HOST_DIR) $(TAR_OPTIONS) -
-+	touch $@
-+
-+$(STAMP_DIR)/host_directfb_configured: $(STAMP_DIR)/host_directfb_unpacked $(STAMP_DIR)/host_pkgconfig_installed
-+	(cd $(DIRECTFB_HOST_DIR); rm -rf config.cache; \
-+		$(HOST_CONFIGURE_OPTS) \
-+		CFLAGS="$(HOST_CFLAGS)" \
-+		LDFLAGS="$(HOST_LDFLAGS)" \
-+		./configure \
-+		--prefix="$(HOST_DIR)/usr" \
-+		--sysconfdir="$(HOST_DIR)/etc" \
-+		--enable-shared \
-+		--disable-static \
-+		--disable-debug \
-+		--disable-multi \
-+		--with-gfxdrivers=none \
-+		--with-inputdrivers=none \
-+	)
-+	touch $@
-+
-+$(STAMP_DIR)/host_directfb_compiled: $(STAMP_DIR)/host_directfb_configured
-+	$(MAKE) -C $(DIRECTFB_HOST_DIR)/tools directfb-csource
-+	touch $@
-+
-+$(STAMP_DIR)/host_directfb_installed: $(STAMP_DIR)/host_directfb_compiled
-+	$(INSTALL) -m 0755 $(DIRECTFB_HOST_DIR)/tools/directfb-csource $(HOST_DIR)/usr/bin
-+	touch $@
-+
-+host-directfb: $(STAMP_DIR)/host_directfb_installed
-+
-+host-directfb-source: directfb-source
-+
-+host-directfb-clean:
-+	rm -f $(addprefix $(STAMP_DIR)/host_directfb_,unpacked configured compiled installed)
-+	rm -f $(HOST_DIR)/usr/bin/directfb-csource
-+	-$(MAKE) -C $(DIRECTFB_HOST_DIR)/tools clean
-+
-+host-directfb-dirclean:
-+	rm -rf $(DIRECTFB_HOST_DIR)
--- 
-1.6.0.4
+It that patch upstream already? Otherwise I can take care of that.
+
+
+Sven
