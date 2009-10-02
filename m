@@ -1,59 +1,87 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 02 Oct 2009 09:13:19 +0200
-Subject: [Buildroot] buildroot problem
-In-Reply-To: <1D6034426110564DA0DEA9EE9793B38357C834B1C5@NBE-MBX01.americas.swk.pri>
-	(Carl Heyendal's message of "Thu\, 1 Oct 2009 17\:58\:09 -0400")
-References: <1D6034426110564DA0DEA9EE9793B38357C834B1C5@NBE-MBX01.americas.swk.pri>
-Message-ID: <87r5tm6zg0.fsf@macbook.be.48ers.dk>
+Date: Fri, 2 Oct 2009 10:24:54 +0200
+Subject: [Buildroot] [git commit master] libuuid: cleanup
+Message-ID: <20091002082527.7324477756@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Carl" == Heyendal, Carl <CHeyendal@stanleyworks.com> writes:
 
-Hi,
+commit: http://git.buildroot.net/buildroot/commit/?id=076f06e0f57a8ea8973970e4fc4462e54a36f59f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Please send buildroot questions to the buildroot list
-(buildroot at uclibc.org) and not directly to me, thanks.
+Got rid of LIBUUID_TARGET_DIR, and made sure staging install is only
+done once.
 
- Carl> I spotted your name in the patch that failed below. Would you be
- Carl> able to tell me how to fix the problem. I'm pretty much a newbie
- Carl> to Buildroot. (and embedded Linux)
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/e2fsprogs/e2fsprogs.mk |   20 +++++++++-----------
+ 1 files changed, 9 insertions(+), 11 deletions(-)
+
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index 8ab7da9..ed9bacb 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -11,8 +11,7 @@ E2FSPROGS_CAT:=$(ZCAT)
+ E2FSPROGS_BINARY:=misc/mke2fs
+ E2FSPROGS_TARGET_BINARY:=sbin/mke2fs
+ LIBUUID_DIR=$(E2FSPROGS_DIR)/lib/uuid/
+-LIBUUID_TARGET_DIR:=usr/lib/
+-LIBUUID_TARGET_BINARY:=libuuid.so
++LIBUUID_TARGET_BINARY:=usr/lib/libuuid.so
  
- Carl> thanks in advance.
- Carl> /carl h.
+ E2FSPROGS_MISC_STRIP:= \
+ 	badblocks blkid chattr dumpe2fs filefrag fsck logsave \
+@@ -72,17 +71,19 @@ $(E2FSPROGS_DIR)/$(E2FSPROGS_BINARY): $(E2FSPROGS_DIR)/.configured
+ 	#$(STRIPCMD) $(E2FSPROGS_DIR)/lib/lib*.so.*.*
+ 	touch -c $@
  
- Carl> makeinfo installed:      FALSE
-
- Carl> Most likely some packages will fail to build their documentation
- Carl> Either install 'makeinfo' on your host or fix the respective packages.
- Carl> Makeinfo can usually be found in the texinfo package for your host.
- Carl> Build system dependencies:   Ok
-
-Please install makeinfo, so you won't get into trouble later.
-
- Carl> rm -rf /home/heyendal/buildroot/output/build/buildroot-config
- Carl> mkdir -p /home/heyendal/buildroot/output/build
- Carl> cp -dpRf package/config/buildroot-config /home/heyendal/buildroot/output/build/
- Carl> buildroot-config
- Carl> toolchain/patch-kernel.sh /home/heyendal/buildroot/output/toolchain/
- Carl> uClibc-0.9.30.1 toolchain/uClibc/ \
- Carl>   uClibc-0.9.30.1-\*.patch \
- Carl>   uClibc-0.9.30.1-\*.patch.arm
+-$(E2FSPROGS_DIR)/lib/$(LIBUUID_TARGET_BINARY): $(E2FSPROGS_DIR)/.configured
++$(E2FSPROGS_DIR)/lib/libuuid.so: $(E2FSPROGS_DIR)/.configured
+ 	$(MAKE1) -C $(E2FSPROGS_DIR)/lib/uuid
+ 	touch -c $@
  
- Carl> Applying uClibc-0.9.30.1-64bit-strtouq.patch using plaintext:
- Carl> toolchain/patch-kernel.sh: line 52: patch: command not found
-
-You don't have the program 'patch' installed, which is needed by
-buildroot - Please install it.
-
-I've updated the dependencies check in git to also check for patch.
-
- Carl> Patch failed!  Please fix uClibc-0.9.30.1-64bit-strtouq.patch!
- Carl> make: *** [/home/heyendal/buildroot/output/toolchain/uClibc-0.9.30.1/.patched]
- Carl> Error 1
-
+ $(STAGING_DIR)/$(E2FSPROGS_TARGET_BINARY): $(E2FSPROGS_DIR)/$(E2FSPROGS_BINARY)
+ 	$(MAKE1) PATH=$(TARGET_PATH) DESTDIR=$(STAGING_DIR) LDCONFIG=true \
+ 		-C $(E2FSPROGS_DIR) install
++	touch -c $@
+ 
+-$(STAGING_DIR)/usr/lib/$(LIBUUID_TARGET_BINARY): $(E2FSPROGS_DIR)/lib/$(LIBUUID_TARGET_BINARY)
++$(STAGING_DIR)/$(LIBUUID_TARGET_BINARY): $(E2FSPROGS_DIR)/lib/libuuid.so
+ 	$(MAKE1) PATH=$(TARGET_PATH) DESTDIR=$(STAGING_DIR) LDCONFIG=true \
+ 		-C $(LIBUUID_DIR) install
++	touch -c $@
+ 
+ E2FSPROGS_RM$(BR2_PACKAGE_E2FSPROGS_BADBLOCKS) += ${TARGET_DIR}/sbin/badblocks
+ E2FSPROGS_RM$(BR2_PACKAGE_E2FSPROGS_BLKID) += ${TARGET_DIR}/sbin/blkid
+@@ -134,14 +135,11 @@ endif
+ 	rm -rf $(TARGET_DIR)/usr/share/doc
+ 	touch -c $@
+ 
+-$(TARGET_DIR)/$(LIBUUID_TARGET_DIR)/$(LIBUUID_TARGET_BINARY): $(STAGING_DIR)/usr/lib/$(LIBUUID_TARGET_BINARY)
+-	$(MAKE1) PATH=$(TARGET_PATH) DESTDIR=$(STAGING_DIR) LDCONFIG=true \
+-		-C $(LIBUUID_DIR) install
+-	cp -a $(STAGING_DIR)/$(LIBUUID_TARGET_DIR)/$(LIBUUID_TARGET_BINARY)* \
+-		$(TARGET_DIR)/$(LIBUUID_TARGET_DIR)/
++$(TARGET_DIR)/$(LIBUUID_TARGET_BINARY): $(STAGING_DIR)/$(LIBUUID_TARGET_BINARY)
++	cp -a $(STAGING_DIR)/$(LIBUUID_TARGET_BINARY)* $(@D)
+ 	touch -c $@
+ 
+-libuuid: $(TARGET_DIR)/$(LIBUUID_TARGET_DIR)/$(LIBUUID_TARGET_BINARY)
++libuuid: $(TARGET_DIR)/$(LIBUUID_TARGET_BINARY)
+ e2fsprogs: libuuid $(TARGET_DIR)/$(E2FSPROGS_TARGET_BINARY)
+ 
+ e2fsprogs-clean:
+@@ -156,7 +154,7 @@ libuuid-clean:
+ 		-C $(LIBUUID_DIR) uninstall
+ 	# make uninstall misses the includes
+ 	rm -rf $(STAGING_DIR)/usr/include/uuid
+-	rm -f $(TARGET_DIR)/$(LIBUUID_TARGET_DIR)/$(LIBUUID_TARGET_BINARY)*
++	rm -f $(TARGET_DIR)/$(LIBUUID_TARGET_BINARY)*
+ 	-$(MAKE1) -C $(LIBUUID_DIR) clean
+ 
+ libuuid-source: e2fsprogs-source
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
