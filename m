@@ -1,84 +1,75 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Fri,  2 Oct 2009 14:20:04 +0200
-Subject: [Buildroot] [PATCH] directfb: add host-directfb target for
-	directfb-csource
-In-Reply-To: <8763ay6n3j.fsf@macbook.be.48ers.dk>
-References: <8763ay6n3j.fsf@macbook.be.48ers.dk>
-Message-ID: <1254486004-21899-1-git-send-email-s.neumann@raumfeld.com>
+From: Jonathan dumaresq <jdumaresq@cimeq.qc.ca>
+Date: Fri, 2 Oct 2009 08:57:00 -0400
+Subject: [Buildroot] Buildroot and version control systems
+In-Reply-To: <38479127BA626E41B7397B72623101431B7122@mep-server-1.mep.de>
+References: <38479127BA626E41B7397B72623101431B7122@mep-server-1.mep.de>
+Message-ID: <!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAANIfWqGxed5Gq+toirCYmVEBAAAAAA==@cimeq.qc.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-directfb-csource is a code generation tool that may be needed to build
-other packages. Add host-directfb target that installs directfb-csource
-in the host_dir.
+HI,
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
----
- package/directfb/directfb.mk |   52 ++++++++++++++++++++++++++++++++++++++++++
- 1 files changed, 52 insertions(+), 0 deletions(-)
-
-diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
-index 409f791..4175753 100644
---- a/package/directfb/directfb.mk
-+++ b/package/directfb/directfb.mk
-@@ -150,3 +150,55 @@ DIRECTFB_CONF_OPT = \
- DIRECTFB_DEPENDENCIES = $(DIRECTFB_DEP) freetype $(DIRECTFB_FUSION)
  
- $(eval $(call AUTOTARGETS,package,directfb))
-+
-+
-+# directfb-csource for the host
-+
-+DIRECTFB_HOST_DIR:=$(BUILD_DIR)/directfb-$(DIRECTFB_VERSION)-host
-+DIRECTFB_HOST_BINARY:=$(HOST_DIR)/usr/bin/directfb-csource
-+
-+$(DL_DIR)/$(DIRECTFB_SOURCE):
-+        $(call DOWNLOAD,$(DIRECTFB_SITE),$(DIRECTFB_SOURCE))
-+
-+$(STAMP_DIR)/host_directfb_unpacked: $(DL_DIR)/$(DIRECTFB_SOURCE)
-+        mkdir -p $(DIRECTFB_HOST_DIR)
-+        $(INFLATE$(suffix $(DIRECTFB_SOURCE))) $< | \
-+                $(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(DIRECTFB_HOST_DIR) $(TAR_OPTIONS) -
-+        touch $@
-+
-+$(STAMP_DIR)/host_directfb_configured: $(STAMP_DIR)/host_directfb_unpacked $(STAMP_DIR)/host_pkgconfig_installed
-+        (cd $(DIRECTFB_HOST_DIR); rm -rf config.cache; \
-+                $(HOST_CONFIGURE_OPTS) \
-+                CFLAGS="$(HOST_CFLAGS)" \
-+                LDFLAGS="$(HOST_LDFLAGS)" \
-+                ./configure \
-+                --prefix="$(HOST_DIR)/usr" \
-+                --sysconfdir="$(HOST_DIR)/etc" \
-+                --enable-shared \
-+                --disable-static \
-+                --disable-debug \
-+                --disable-multi \
-+                --with-gfxdrivers=none \
-+                --with-inputdrivers=none \
-+        )
-+        touch $@
-+
-+$(STAMP_DIR)/host_directfb_compiled: $(STAMP_DIR)/host_directfb_configured
-+        $(MAKE) -C $(DIRECTFB_HOST_DIR)/tools directfb-csource
-+        touch $@
-+
-+$(STAMP_DIR)/host_directfb_installed: $(STAMP_DIR)/host_directfb_compiled
-+        $(INSTALL) -m 0755 $(DIRECTFB_HOST_DIR)/tools/directfb-csource $(HOST_DIR)/usr/bin
-+        touch $@
-+
-+host-directfb: $(STAMP_DIR)/host_directfb_installed
-+
-+host-directfb-source: directfb-source
-+
-+host-directfb-clean:
-+        rm -f $(addprefix $(STAMP_DIR)/host_directfb_,unpacked configured compiled installed)
-+        rm -f $(HOST_DIR)/usr/bin/directfb-csource
-+        -$(MAKE) -C $(DIRECTFB_HOST_DIR)/tools clean
-+
-+host-directfb-dirclean:
-+        rm -rf $(DIRECTFB_HOST_DIR)
+
+I?m in the same boat as you. I just starting a new project with AVR32
+(AP7000) with NGW100 board. And I try to find a good way of working with
+buildroot. We have some customization of buildroot and I have not a really
+good idea of how we will manage this. 
+
+ 
+
+if someone that is in the same situation can have a spare millisecond !!!
+
+ 
+
+Jonathan
+
+ 
+
+  _____  
+
+De : buildroot-bounces at busybox.net [mailto:buildroot-bounces at busybox.net] De
+la part de Vornefeld, Bernhard
+Envoy? : 2 octobre 2009 06:20
+? : buildroot at busybox.net
+Objet : [Buildroot] Buildroot and version control systems
+
+ 
+
+Hello, 
+
+We are rather new in working with embedded linux. 
+We're using a toolchain from ICnova for AVR32 microcontrollers, which is
+based on buildroot. 
+We want to handle source code using a local version control system (e.g. SVN
+or git). 
+Is there a "best practice" to manage a daily used buildroot via version
+control? 
+Is ignoring the /output - tree during check-ins a must? 
+
+Regards 
+Bernhard 
+
+MEP Kutsch GmbH & Co. KG
+Fla?kuhle 1
+58452 Witten
+Tel.:  02302 28262-36
+Fax.: 02302 28262-99 
+
+ <mailto:bernhard.vornefeld@mep.de> mailto:bernhard.vornefeld at mep.de 
+
+ <http://www.mep.de/> http://www.mep.de 
+
+ 
+
+
 -- 
-1.6.0.4
+This message has been scanned for viruses and 
+dangerous content by  <http://www.mailscanner.info/> MailScanner, and is 
+believed to be clean. 
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091002/92289925/attachment.htm>
