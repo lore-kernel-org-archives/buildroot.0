@@ -1,39 +1,48 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Fri, 2 Oct 2009 11:47:21 +0200
-Subject: [Buildroot] problem with locale
-In-Reply-To: <4AC5C26F.4050608@carallon.com>
-References: <4AC4D0C8.5000109@carallon.com>
-	<87a5b0800910020200p3972c259yd46812807d7749f6@mail.gmail.com>
-	<4AC5C26F.4050608@carallon.com>
-Message-ID: <9930fb0a0910020247t69ee5fe7v297b71fe4706ae0b@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 2 Oct 2009 11:51:47 +0200
+Subject: [Buildroot] [git commit master] festival: needs C++ support
+Message-ID: <20091002095205.659B477768@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yes (as documented)
 
-On Oct 2, 2009 11:06 AM, "William Wagner" <will_wagner@carallon.com> wrote:
+commit: http://git.buildroot.net/buildroot/commit/?id=fa324fb8bc7a0b941a20b4e038da507a741371d8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 02/10/2009 10:00, Will Newton wrote: >> >> It fails to build uClibc with
-this error: >>   LN incl...
-locale -a lists:
-C
-en_GB.utf8
-POSIX
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/multimedia/festival/Config.in |   14 +++++++++-----
+ 1 files changed, 9 insertions(+), 5 deletions(-)
 
-Is the easiest way of fixing this just going to be to add the extra locale?
-
-Thanks.
-
-Will
-
--- ------------------------------------------------------------------------
-Will Wagner          ...
-
-_______________________________________________ buildroot mailing list
-buildroot at busybox.net http://...
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091002/65079914/attachment.htm>
+diff --git a/package/multimedia/festival/Config.in b/package/multimedia/festival/Config.in
+index 0c681d1..2be32f9 100644
+--- a/package/multimedia/festival/Config.in
++++ b/package/multimedia/festival/Config.in
+@@ -1,9 +1,10 @@
+ menuconfig BR2_PACKAGE_FESTIVAL
+-bool "festival text-to-speech system"
+-select BR2_PACKAGE_ALSA_LIB
+-select BR2_PACKAGE_SPEECH_TOOLS
+-help
+-	Text to speech system for Linux
++	bool "festival text-to-speech system"
++	depends on BR2_INSTALL_LIBSTDCPP
++	select BR2_PACKAGE_ALSA_LIB
++	select BR2_PACKAGE_SPEECH_TOOLS
++	help
++	  Text to speech system for Linux
+ 
+ if BR2_PACKAGE_FESTIVAL
+ 
+@@ -20,3 +21,6 @@ if BR2_PACKAGE_FESTIVAL
+ 	endmenu
+ 
+ endif
++
++comment "festival requires a toolchain with C++ support enabled"
++	depends on !BR2_INSTALL_LIBSTDCPP
+-- 
+1.6.3.3
