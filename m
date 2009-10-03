@@ -1,7 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sat, 3 Oct 2009 22:01:08 +0200
-Subject: [Buildroot] [git commit master] quagga: snmp support needs netsnmp
-Message-ID: <20091003200149.D5E93776FB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] kernel-headers: add unifdef getline
+	fix for old kernel
+Message-ID: <20091003200148.87857776FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,56 +10,143 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0d6bea5119e25ee3c331ab27b30886cceee11aa1
+commit: http://git.buildroot.net/buildroot/commit/?id=8360f0c89bbadb798ed4379d19a003f36e4e2685
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fix is in mainline since 2.6.29, and was backported in the 2.6.27.x
+stable versions.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/quagga/Config.in |    1 +
- package/quagga/quagga.mk |    5 ++++-
- 2 files changed, 5 insertions(+), 1 deletions(-)
+ .../linux-2.6.26.8-unifdef-getline.patch           |   56 ++++++++++++++++++++
+ .../linux-2.6.28.10-unifdef-getline.patch          |   56 ++++++++++++++++++++
+ 2 files changed, 112 insertions(+), 0 deletions(-)
+ create mode 100644 toolchain/kernel-headers/linux-2.6.26.8-unifdef-getline.patch
+ create mode 100644 toolchain/kernel-headers/linux-2.6.28.10-unifdef-getline.patch
 
-diff --git a/package/quagga/Config.in b/package/quagga/Config.in
-index e1a5c73..e540cc6 100644
---- a/package/quagga/Config.in
-+++ b/package/quagga/Config.in
-@@ -59,6 +59,7 @@ config BR2_PACKAGE_QUAGGA_NETLINK
- 
- config BR2_PACKAGE_QUAGGA_SNMP
- 	bool "SNMP support"
-+	select BR2_PACKAGE_NETSNMP
- 
- config BR2_PACKAGE_QUAGGA_TCP_ZEBRA
- 	bool "TCP/IP socket connection between zebra and proto daemon"
-diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
-index fb520ee..d2f0616 100644
---- a/package/quagga/quagga.mk
-+++ b/package/quagga/quagga.mk
-@@ -10,6 +10,8 @@ QUAGGA_DIR:=$(BUILD_DIR)/quagga-$(QUAGGA_VERSION)
- QUAGGA_CAT:=$(ZCAT)
- 
- QUAGGA_CONFIGURE:=
-+QUAGGA_DEPENDENCIES:=
+diff --git a/toolchain/kernel-headers/linux-2.6.26.8-unifdef-getline.patch b/toolchain/kernel-headers/linux-2.6.26.8-unifdef-getline.patch
+new file mode 100644
+index 0000000..f4a4820
+--- /dev/null
++++ b/toolchain/kernel-headers/linux-2.6.26.8-unifdef-getline.patch
+@@ -0,0 +1,56 @@
++From d15bd1067b1fcb2b7250d22bc0c7c7fea0b759f7 Mon Sep 17 00:00:00 2001
++From: Justin P. Mattock <justinmattock@gmail.com>
++Date: Sat, 7 Mar 2009 13:31:29 +0100
++Subject: [PATCH] kbuild: fix C libary confusion in unifdef.c due to getline()
 +
- ifeq ($(BR2_PACKAGE_QUAGGA_ZEBRA),y)
- QUAGGA_CONFIGURE+=--enable-zebra
- ifndef QUAGGA_TARGET_BINARY
-@@ -96,6 +98,7 @@ QUAGGA_CONFIGURE+=--disable-netlink
- endif
- ifeq ($(BR2_PACKAGE_QUAGGA_SNMP),y)
- QUAGGA_CONFIGURE+=--enable-snmp
-+QUAGGA_DEPENDENCIES+=netsnmp
- else
- QUAGGA_CONFIGURE+=--disable-snmp
- endif
-@@ -163,7 +166,7 @@ ifneq ($(BR2_HAVE_INFOPAGES),y)
- 	rm -rf $(TARGET_DIR)/usr/info
- endif
- 
--quagga: $(TARGET_DIR)/usr/sbin/$(QUAGGA_TARGET_BINARY)
-+quagga: $(QUAGGA_DEPENDENCIES) $(TARGET_DIR)/usr/sbin/$(QUAGGA_TARGET_BINARY)
- 
- quagga-clean:
- 	-$(MAKE) DESTDIR=$(TARGET_DIR) -C $(QUAGGA_DIR) uninstall
++This fixes an error when compiling the kernel.
++
++  CHK     include/linux/version.h
++  HOSTCC  scripts/unifdef
++scripts/unifdef.c:209: error: conflicting types for 'getline'
++/usr/include/stdio.h:651: note: previous declaration of 'getline' was here
++make[1]: *** [scripts/unifdef] Error 1
++make: *** [__headers] Error 2
++
++Signed-off-by: Justin P. Mattock <justinmattock@gmail.com>
++Cc:  Frederic Weisbecker <fweisbec@gmail.com>
++Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
++Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
++---
++ scripts/unifdef.c |    6 +++---
++ 1 files changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/scripts/unifdef.c b/scripts/unifdef.c
++index 552025e..05a31a6 100644
++--- a/scripts/unifdef.c
+++++ b/scripts/unifdef.c
++@@ -206,7 +206,7 @@ static void             done(void);
++ static void             error(const char *);
++ static int              findsym(const char *);
++ static void             flushline(bool);
++-static Linetype         getline(void);
+++static Linetype         get_line(void);
++ static Linetype         ifeval(const char **);
++ static void             ignoreoff(void);
++ static void             ignoreon(void);
++@@ -512,7 +512,7 @@ process(void)
++ 
++ 	for (;;) {
++ 		linenum++;
++-		lineval = getline();
+++		lineval = get_line();
++ 		trans_table[ifstate[depth]][lineval]();
++ 		debug("process %s -> %s depth %d",
++ 		    linetype_name[lineval],
++@@ -526,7 +526,7 @@ process(void)
++  * help from skipcomment().
++  */
++ static Linetype
++-getline(void)
+++get_line(void)
++ {
++ 	const char *cp;
++ 	int cursym;
++-- 
++1.6.3.3
++
+diff --git a/toolchain/kernel-headers/linux-2.6.28.10-unifdef-getline.patch b/toolchain/kernel-headers/linux-2.6.28.10-unifdef-getline.patch
+new file mode 100644
+index 0000000..f4a4820
+--- /dev/null
++++ b/toolchain/kernel-headers/linux-2.6.28.10-unifdef-getline.patch
+@@ -0,0 +1,56 @@
++From d15bd1067b1fcb2b7250d22bc0c7c7fea0b759f7 Mon Sep 17 00:00:00 2001
++From: Justin P. Mattock <justinmattock@gmail.com>
++Date: Sat, 7 Mar 2009 13:31:29 +0100
++Subject: [PATCH] kbuild: fix C libary confusion in unifdef.c due to getline()
++
++This fixes an error when compiling the kernel.
++
++  CHK     include/linux/version.h
++  HOSTCC  scripts/unifdef
++scripts/unifdef.c:209: error: conflicting types for 'getline'
++/usr/include/stdio.h:651: note: previous declaration of 'getline' was here
++make[1]: *** [scripts/unifdef] Error 1
++make: *** [__headers] Error 2
++
++Signed-off-by: Justin P. Mattock <justinmattock@gmail.com>
++Cc:  Frederic Weisbecker <fweisbec@gmail.com>
++Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
++Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
++---
++ scripts/unifdef.c |    6 +++---
++ 1 files changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/scripts/unifdef.c b/scripts/unifdef.c
++index 552025e..05a31a6 100644
++--- a/scripts/unifdef.c
+++++ b/scripts/unifdef.c
++@@ -206,7 +206,7 @@ static void             done(void);
++ static void             error(const char *);
++ static int              findsym(const char *);
++ static void             flushline(bool);
++-static Linetype         getline(void);
+++static Linetype         get_line(void);
++ static Linetype         ifeval(const char **);
++ static void             ignoreoff(void);
++ static void             ignoreon(void);
++@@ -512,7 +512,7 @@ process(void)
++ 
++ 	for (;;) {
++ 		linenum++;
++-		lineval = getline();
+++		lineval = get_line();
++ 		trans_table[ifstate[depth]][lineval]();
++ 		debug("process %s -> %s depth %d",
++ 		    linetype_name[lineval],
++@@ -526,7 +526,7 @@ process(void)
++  * help from skipcomment().
++  */
++ static Linetype
++-getline(void)
+++get_line(void)
++ {
++ 	const char *cp;
++ 	int cursym;
++-- 
++1.6.3.3
++
 -- 
 1.6.3.3
