@@ -1,8 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sun, 4 Oct 2009 22:20:28 +0200
-Subject: [Buildroot] [git commit master] libupnp: needs largefile support in
-	toolchain
-Message-ID: <20091004202132.8592977762@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] Makefile: update help text
+Message-ID: <20091004202132.D3B1D77762@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,45 +9,63 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d5791db7cd27da91a485b89673a87379a4a57470
+commit: http://git.buildroot.net/buildroot/commit/?id=c48bbb8c0818a44d11b1e222af3ac5a0150d5a05
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+get rid of the removed saveconfig/getconfig targets, and instead document
+randconfig/defconfig/allyesconfig/allnoconfig.
+
+Furthermore, get rid of the unused tags target.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                   |    2 +-
- package/libupnp/Config.in |    4 ++++
- 2 files changed, 5 insertions(+), 1 deletions(-)
+ Makefile |   13 +++++++------
+ 1 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 60ee32f..a53ae81 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -5,7 +5,7 @@
+diff --git a/Makefile b/Makefile
+index 7fe30a7..a14c62d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -29,7 +29,7 @@ CONFIG=package/config
+ DATE:=$(shell date +%Y%m%d)
  
- 	Updated/fixed packages: autoconf, busybox, directfb, dnsmasq,
- 	festival, imagemagick, iptables, kernel-headers, kismet,
--	libevent, libglib2, liblockfile, libmad, libuuid, ltrace,
-+	libevent, libglib2, liblockfile, libmad, libupnp, libuuid, ltrace,
- 	lua, mdadm, ncftp, ncurses, netkittelnet, openssl, python,
- 	quagga, radvd, samba, shared-mime-info, speech-tools,
- 	squashfs, syslinux, u-boot, valgrind, vsftpd, wipe,
-diff --git a/package/libupnp/Config.in b/package/libupnp/Config.in
-index 6b1a6cf..2e6edcd 100644
---- a/package/libupnp/Config.in
-+++ b/package/libupnp/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBUPNP
- 	bool "libupnp"
-+	depends on BR2_LARGEFILE
- 	help
- 	  The portable SDK for UPnP(tm) Devices (libupnp) provides developers
- 	  with an API and open source code for building control points,
-@@ -7,3 +8,6 @@ config BR2_PACKAGE_LIBUPNP
- 	  Universal Plug and Play Device Architecture Specification
+ noconfig_targets:=menuconfig xconfig config oldconfig randconfig \
+-	defconfig allyesconfig allnoconfig release tags \
++	defconfig allyesconfig allnoconfig release \
+ 	source-check help
  
- 	  http://pupnp.sourceforge.net/
-+
-+comment "libupnp requires a toolchain with LARGEFILE support"
-+	depends on !BR2_LARGEFILE
+ # Strip quotes and then whitespaces
+@@ -528,7 +528,6 @@ allyesconfig: $(CONFIG)/conf
+ 	@KCONFIG_AUTOCONFIG=$(CONFIG)/buildroot-config/auto.conf \
+ 		KCONFIG_AUTOHEADER=$(CONFIG)/buildroot-config/autoconf.h \
+ 		$(CONFIG)/conf -y $(CONFIG_CONFIG_IN)
+-	#sed -i -e "s/^CONFIG_DEBUG.*/# CONFIG_DEBUG is not set/" .config
+ 
+ allnoconfig: $(CONFIG)/conf
+ 	@mkdir -p $(CONFIG)/buildroot-config
+@@ -584,11 +583,13 @@ help:
+ 	@echo
+ 	@echo 'Configuration:'
+ 	@echo '  menuconfig             - interactive curses-based configurator'
+-	@echo '  xconfig		- interactive Qt-based configurator'
++	@echo '  xconfig                - interactive Qt-based configurator'
+ 	@echo '  oldconfig              - resolve any unresolved symbols in .config'
++	@echo '  randconfig             - New config with random answer to all options'
++	@echo '  defconfig              - New config with default answer to all options'
++	@echo '  allyesconfig           - New config where all options are accepted with yes'
++	@echo '  allnoconfig            - New config where all options are answered with no'
+ 	@echo '  configured             - make {uclibc/busybox/linux26}-config'
+-	@echo '  saveconfig             - save current configuration under local/<project>'
+-	@echo '  getconfig              - restore saved configuration from local/<project>'
+ 	@echo
+ 	@echo 'Miscellaneous:'
+ 	@echo '  source                 - download all sources needed for offline-build'
+@@ -606,5 +607,5 @@ release: distclean
+ 	rm -rf $$OUT
+ 
+ .PHONY: dummy subdirs release distclean clean config oldconfig \
+-	menuconfig xconfig tags check test depend defconfig help
++	menuconfig xconfig check test depend defconfig help
+ 
 -- 
 1.6.3.3
