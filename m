@@ -1,32 +1,35 @@
 From: Lionel Landwerlin <lionel.landwerlin@openwide.fr>
-Date: Sun, 04 Oct 2009 20:40:02 +0200
+Date: Sun, 04 Oct 2009 20:41:55 +0200
 Subject: [Buildroot] Question about libtool patching
-Message-ID: <1254681602.25803.41.camel@coalu.atr>
+In-Reply-To: <1254681602.25803.41.camel@coalu.atr>
+References: <1254681602.25803.41.camel@coalu.atr>
+Message-ID: <1254681715.25803.42.camel@coalu.atr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+[PATCH] Prevent libtool patching before autoreconf when autoreconf is required
 
-I'm trying to integrate some new packages in buildroot. Those packages
-use the autotools and need to be libtool patched to work with my
-toolchain.
+Signed-off-by: Lionel Landwerlin <lionel.landwerlin@openwide.fr>
+---
+ package/Makefile.autotools.in |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-I'm wondering why the libtool patching is done twice in the build
-process. One time after extraction of the package, another time at
-configuration time.
-
-The reason of this question is that I'm having problems with the first
-patching. As long as the configure script has not been run, the patching
-fails.
-
-Couldn't we just trigger the patch at extraction only if autoreconf is
-not required ?
-
-Here a patch to try to implement this proposition.
-
-
+diff --git a/package/Makefile.autotools.in b/package/Makefile.autotools.in
+index c4c4b1c..d36c884 100644
+--- a/package/Makefile.autotools.in
++++ b/package/Makefile.autotools.in
+@@ -188,7 +188,8 @@ $(BUILD_DIR)/%/.stamp_extracted:
+ $(BUILD_DIR)/%/.stamp_libtool_patch:
+ 	$(call MESSAGE,"Patching libtool")
+ # if the package uses libtool, patch it for cross-compiling in buildroot
+-	$(Q)if test "$($(PKG)_LIBTOOL_PATCH)" = "YES"; then \
++	$(Q)if test "$($(PKG)_LIBTOOL_PATCH)" = "YES" -a \
++	"$($(PKG)_AUTORECONF)" != "YES"; then \
+ 	for i in `find $(@D) -name ltmain.sh`; do \
+ 		toolchain/patch-kernel.sh $${i%/*} package buildroot-libtool.patch; \
+ 		done \
 -- 
-Lionel Landwerlin <lionel.landwerlin@openwide.fr>
+1.6.4.3
