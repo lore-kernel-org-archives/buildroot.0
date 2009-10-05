@@ -1,39 +1,36 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Mon,  5 Oct 2009 10:30:31 +0200
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 05 Oct 2009 10:45:14 +0200
 Subject: [Buildroot] [PATCH] wpa_supplicant: adjust make environment for
 	pkg-config call
-Message-ID: <1254731431-8430-1-git-send-email-s.neumann@raumfeld.com>
+In-Reply-To: <1254731431-8430-1-git-send-email-s.neumann@raumfeld.com> (Sven
+	Neumann's message of "Mon\, 5 Oct 2009 10\:30\:31 +0200")
+References: <1254731431-8430-1-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <87y6nq44bp.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In case that wpa_supplicant is configured with DBus interface,
-it calls pkg-config to find the dbus headers and libraries.
-Adjust the make environment so that it will use the right
-pkg-config search paths.
+>>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
----
- package/wpa_supplicant/wpa_supplicant.mk |    5 ++++-
- 1 files changed, 4 insertions(+), 1 deletions(-)
+Hi,
 
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index 4195b1c..5d78573 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -19,7 +19,10 @@ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_OPENSSL),y)
- 	WPA_SUPPLICANT_DEPENDENCIES += openssl
- endif
- ifeq ($(BR2_PACKAGE_DBUS),y)
--	WPA_SUPPLICANT_DEPENDENCIES += dbus
-+	WPA_SUPPLICANT_DEPENDENCIES += host-pkgconfig dbus
-+	WPA_SUPPLICANT_MAKE_ENV = \
-+		PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)"	\
-+		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig"
- endif
- 
- $(eval $(call AUTOTARGETS,package,wpa_supplicant))
+ Sven> In case that wpa_supplicant is configured with DBus interface,
+ Sven> it calls pkg-config to find the dbus headers and libraries.
+ Sven> Adjust the make environment so that it will use the right
+ Sven> pkg-config search paths.
+
+ Sven>  ifeq ($(BR2_PACKAGE_DBUS),y)
+ Sven> -	WPA_SUPPLICANT_DEPENDENCIES += dbus
+ Sven> +	WPA_SUPPLICANT_DEPENDENCIES += host-pkgconfig dbus
+ Sven> +	WPA_SUPPLICANT_MAKE_ENV = \
+ Sven> +		PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)"	\
+ Sven> +		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig"
+
+Won't this pick up /usr/bin/pkg-config instead of the one in HOST_DIR? I
+would prefer to simply use TARGET_CONFIGURE_OPTS here so the path gets
+set and we only have the pkgconfig magic one place.
+
 -- 
-1.6.0.4
+Bye, Peter Korsgaard
