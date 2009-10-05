@@ -1,36 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Oct 2009 08:48:45 +0200
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 05 Oct 2009 09:09:29 +0200
 Subject: [Buildroot] [git commit master] buildroot;
- move defconfigs to configs/ and print in help
-In-Reply-To: <20091004202133.B35E577762@busybox.osuosl.org>
+	move defconfigs to configs/ and print in help
+In-Reply-To: <20091005084845.023ff120@surf> (Thomas Petazzoni's message of
+	"Mon\, 5 Oct 2009 08\:48\:45 +0200")
 References: <20091004202133.B35E577762@busybox.osuosl.org>
-Message-ID: <20091005084845.023ff120@surf>
+	<20091005084845.023ff120@surf>
+Message-ID: <873a5y5nbq.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sun, 4 Oct 2009 22:20:28 +0200,
-Peter Korsgaard <jacmet@sunsite.dk> a ?crit :
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-> As discussed earlier on the mailing list. It simplifies code, gives
-> more sensible error message on typos and makes the defconfigs easier
-> to find for users.
+Hi,
 
-I have to say I'm not necessarly a big fan of this change. The
-_defconfig files used to be stored together with the kernel
-configuration, busybox configuration, uClibc configuration and target
-skeleton specific to a target (in target/device/<vendor>/<board>).
+ >> As discussed earlier on the mailing list. It simplifies code, gives
+ >> more sensible error message on typos and makes the defconfigs easier
+ >> to find for users.
 
-Now, the _defconfig files are in a separate location, which makes it
-slightly less logical/easy for people to add new targets.
+ Thomas> I have to say I'm not necessarly a big fan of this change. The
+ Thomas> _defconfig files used to be stored together with the kernel
+ Thomas> configuration, busybox configuration, uClibc configuration and target
+ Thomas> skeleton specific to a target (in target/device/<vendor>/<board>).
 
-Cheers!
+ Thomas> Now, the _defconfig files are in a separate location, which makes it
+ Thomas> slightly less logical/easy for people to add new targets.
 
-Thomas
+True - This change makes it slightly harder for developers, but easier
+for users to find (and for us to do a test build of all defconfigs prior
+to release).
+
+The stuff in target/device/ tends to get stale over time, so a bit more
+visibility is imho good.
+
+I obviously like it, and I never had any comments when I proposed it
+back in September:
+
+http://lists.busybox.net/pipermail/buildroot/2009-September/029269.html
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
