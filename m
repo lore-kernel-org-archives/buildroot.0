@@ -1,44 +1,38 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Mon, 05 Oct 2009 11:30:12 +0200
-Subject: [Buildroot] Question about libtool patching
-In-Reply-To: <1254681715.25803.42.camel@coalu.atr>
-References: <1254681602.25803.41.camel@coalu.atr>
-	<1254681715.25803.42.camel@coalu.atr>
-Message-ID: <1254735012.5772.16.camel@sven>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 5 Oct 2009 14:01:38 +0200
+Subject: [Buildroot] [git commit master] do not append localversion
+	automatically
+Message-ID: <20091005120203.E998D7770A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 2009-10-04 at 20:41 +0200, Lionel Landwerlin wrote:
-> [PATCH] Prevent libtool patching before autoreconf when autoreconf is required
-> 
-> Signed-off-by: Lionel Landwerlin <lionel.landwerlin@openwide.fr>
-> ---
->  package/Makefile.autotools.in |    3 ++-
->  1 files changed, 2 insertions(+), 1 deletions(-)
-> 
-> diff --git a/package/Makefile.autotools.in b/package/Makefile.autotools.in
-> index c4c4b1c..d36c884 100644
-> --- a/package/Makefile.autotools.in
-> +++ b/package/Makefile.autotools.in
-> @@ -188,7 +188,8 @@ $(BUILD_DIR)/%/.stamp_extracted:
->  $(BUILD_DIR)/%/.stamp_libtool_patch:
->  	$(call MESSAGE,"Patching libtool")
->  # if the package uses libtool, patch it for cross-compiling in buildroot
-> -	$(Q)if test "$($(PKG)_LIBTOOL_PATCH)" = "YES"; then \
-> +	$(Q)if test "$($(PKG)_LIBTOOL_PATCH)" = "YES" -a \
-> +	"$($(PKG)_AUTORECONF)" != "YES"; then \
->  	for i in `find $(@D) -name ltmain.sh`; do \
->  		toolchain/patch-kernel.sh $${i%/*} package buildroot-libtool.patch; \
->  		done \
 
-Totally makes sense to me and we also ran into problems because of this.
-I have applied this in our tree and it seems to work fine. Actually, it
-finally fixed a long-standing problem :)
+commit: http://git.buildroot.net/buildroot/commit/?id=3ae324f856775c7b0e265c8c35baf6dff40f7a52
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Tested-By: Sven Neumann <s.neumann@raumfeld.com>
+prevents build failures if modules are enabled and localversion is ""
 
+Signed-off-by: aldot <rep.dot.nop@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ target/device/mips/linux26.config |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Sven
+diff --git a/target/device/mips/linux26.config b/target/device/mips/linux26.config
+index 563e9ae..0bcff2f 100644
+--- a/target/device/mips/linux26.config
++++ b/target/device/mips/linux26.config
+@@ -189,7 +189,7 @@ CONFIG_INIT_ENV_ARG_LIMIT=32
+ # General setup
+ #
+ CONFIG_LOCALVERSION=""
+-CONFIG_LOCALVERSION_AUTO=y
++# CONFIG_LOCALVERSION_AUTO is not set
+ CONFIG_SWAP=y
+ CONFIG_SYSVIPC=y
+ # CONFIG_IPC_NS is not set
+-- 
+1.6.3.3
