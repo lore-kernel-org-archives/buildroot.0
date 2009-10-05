@@ -1,25 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 05 Oct 2009 11:10:51 +0200
-Subject: [Buildroot] [PATCH] wpa_supplicant: adjust make environment for
-	pkg-config call
-In-Reply-To: <1254731431-8430-1-git-send-email-s.neumann@raumfeld.com> (Sven
-	Neumann's message of "Mon\, 5 Oct 2009 10\:30\:31 +0200")
-References: <1254731431-8430-1-git-send-email-s.neumann@raumfeld.com>
-Message-ID: <87pr924350.fsf@macbook.be.48ers.dk>
+From: Asbjoern Laurberg <asl@thrane.com>
+Date: Mon, 05 Oct 2009 11:18:12 +0200
+Subject: [Buildroot] compile error with 'crtstuff.c'
+In-Reply-To: <1D6034426110564DA0DEA9EE9793B38357C834B900@NBE-MBX01.americas.swk.pri>
+References: <1D6034426110564DA0DEA9EE9793B38357C834B900@NBE-MBX01.americas.swk.pri>
+Message-ID: <4AC9B9D4.5020305@thrane.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
+Heyendal, Carl wrote:
+> Hi,
 
- Sven> In case that wpa_supplicant is configured with DBus interface,
- Sven> it calls pkg-config to find the dbus headers and libraries.
- Sven> Adjust the make environment so that it will use the right
- Sven> pkg-config search paths.
+Hi,
 
-Committed, thanks.
+> /home/heyendal/buildroot/output/toolchain/gcc-4.3.4/libgcc/../gcc/crtstuff.c 
+> -DCRT_BEGIN
+> /home/heyendal/buildroot/output/toolchain/gcc-4.3.4/libgcc/../gcc/crtstuff.c: 
+> In function '__do_global_dtors_aux':
+> /home/heyendal/buildroot/output/toolchain/gcc-4.3.4/libgcc/../gcc/crtstuff.c:306: 
+> error: '__DTOR_LIST__' undeclared (first use in this function)
+> /home/heyendal/buildroot/output/toolchain/gcc-4.3.4/libgcc/../gcc/crtstuff.c:306: 
+> error: (Each undeclared identifier is reported only once
+> /home/heyendal/buildroot/output/toolchain/gcc-4.3.4/libgcc/../gcc/crtstuff.c:306: 
+> error: for each function it appears in.)
+
+To get GCC compiling in Buildroot with a ARM926 + EABI-configuration the 
+following post+patch was the solution:
+
+http://www.mail-archive.com/gcc-bugs at gcc.gnu.org/msg115966.html
 
 -- 
-Bye, Peter Korsgaard
+Best regards,
+Asbjoern Laurberg
+Development Engineer
+Thrane & Thrane A/S
