@@ -1,51 +1,34 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 6 Oct 2009 15:08:55 +0200
-Subject: [Buildroot] [git commit master] target/generic: /etc/{hostname,
-	issue}:  work around quotes in kconfig
-Message-ID: <20091006131014.4FEF777785@busybox.osuosl.org>
+From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+Date: Tue,  6 Oct 2009 20:26:02 +0200
+Subject: [Buildroot] [PATCH 0/6] misc config-cleanup
+Message-ID: <cover.1254853146.git.rep.dot.nop@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The attached small series ??) starts to cleanup some aspects of Peter's tree
+and starts to sync up with miscellaneous changes from my tree.
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d31c7723ae05b82f501bac1c69bc91a5162edca6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter, please pull.
 
-Otherwise the targets will always run.
+??) git://git.buildroot.org/~aldot/git/buildroot
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- target/generic/Makefile.in |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
+Bernhard Reutner-Fischer (6):
+  atmel mirrors are only needed for atmel targets
+  always append FPU_SUFFIX
+  default to EABI on arm
+  improve arch selection and gcc setup
+  mark odd strip invocations
+  remove superfluous OPTIMIZE and DEBUG config knobs
 
-diff --git a/target/generic/Makefile.in b/target/generic/Makefile.in
-index 31f4a0c..f77f969 100644
---- a/target/generic/Makefile.in
-+++ b/target/generic/Makefile.in
-@@ -7,6 +7,8 @@ TARGET_SKELETON=target/generic/target_busybox_skeleton
- TARGET_DEVICE_TABLE=target/generic/mini_device_table.txt
- endif
- 
-+TARGET_GENERIC_HOSTNAME:=$(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
-+TARGET_GENERIC_ISSUE:=$(call qstrip,$(BR2_TARGET_GENERIC_ISSUE))
- TARGET_GENERIC_GETTY:=$(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT))
- TARGET_GENERIC_GETTY_BAUDRATE:=$(call qstrip,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE))
- 
-@@ -22,11 +24,11 @@ target-generic-getty:
- 	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(TARGET_GENERIC_GETTY)::respawn:/sbin/getty -L $(TARGET_GENERIC_GETTY) $(TARGET_GENERIC_GETTY_BAUDRATE) vt100 #~' \
- 		$(TARGET_DIR)/etc/inittab
- 
--ifneq ($(BR2_TARGET_GENERIC_HOSTNAME),)
-+ifneq ($(TARGET_GENERIC_HOSTNAME),)
- TARGETS += target-generic-hostname
- endif
- 
--ifneq ($(BR2_TARGET_GENERIC_ISSUE),)
-+ifneq ($(TARGET_GENERIC_ISSUE),)
- TARGETS += target-generic-issue
- endif
- 
--- 
-1.6.3.3
+ Config.in                       |  108 +------
+ package/Makefile.in             |   40 +--
+ package/ntfs-3g/ntfs-3g.mk      |    2 +
+ target/Config.in.arch           |  683 +++++++++++++++++++++++++++++++++++----
+ target/device/Config.in.mirrors |    4 +-
+ toolchain/Config.in.2           |   12 +
+ toolchain/gcc/Makefile.in       |   25 ++-
+ toolchain/gcc/gcc-uclibc-4.x.mk |    9 +-
+ 8 files changed, 665 insertions(+), 218 deletions(-)
