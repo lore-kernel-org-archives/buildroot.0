@@ -1,26 +1,48 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 06 Oct 2009 23:07:16 +0200
-Subject: [Buildroot] [PATCH 3/6] default to EABI on arm
-In-Reply-To: <6fe0ac8fa1f42152f604ca708aff08b8f119073a.1254853146.git.rep.dot.nop@gmail.com>
-	(Bernhard Reutner-Fischer's message of "Tue\,
-	6 Oct 2009 20\:26\:05 +0200")
-References: <cover.1254853146.git.rep.dot.nop@gmail.com>
-	<1a6b4f990a536bfd23ae1e57a2cd11527761f8ec.1254853146.git.rep.dot.nop@gmail.com>
-	<4a5a0f10dbaecfd7b024c0cf1e90fd68a6730eac.1254853146.git.rep.dot.nop@gmail.com>
-	<cover.1254853146.git.rep.dot.nop@gmail.com>
-	<6fe0ac8fa1f42152f604ca708aff08b8f119073a.1254853146.git.rep.dot.nop@gmail.com>
-Message-ID: <87bpkk1baz.fsf@macbook.be.48ers.dk>
+From: H Hartley Sweeten <hartleys@visionengravers.com>
+Date: Tue, 6 Oct 2009 17:13:33 -0400
+Subject: [Buildroot] [PATCH 1/6] atmel mirrors are only needed for
+	atmeltargets
+In-Reply-To: <87fx9w1bbc.fsf@macbook.be.48ers.dk>
+References: <cover.1254853146.git.rep.dot.nop@gmail.com><cover.1254853146.git.rep.dot.nop@gmail.com><1a6b4f990a536bfd23ae1e57a2cd11527761f8ec.1254853146.git.rep.dot.nop@gmail.com>
+	<87fx9w1bbc.fsf@macbook.be.48ers.dk>
+Message-ID: <BD79186B4FD85F4B8E60E381CAEE190901DB7951@mi8nycmail19.Mi8.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernhard" == Bernhard Reutner-Fischer <rep.dot.nop@gmail.com> writes:
+On Tuesday, October 06, 2009 2:07 PM, Peter Korsgaard wrote:
+> Bernhard>  	  Usually, just add your country code like XX here:
+> Bernhard>  	  http://ftp.XX.debian.org
+> Bernhard> -
+> Bernhard> +if BR2_TARGET_ATMEL
+> Bernhard>  source	"target/device/Atmel/Config.in.mirrors"
+> Bernhard> -
+>
+> Committed, thanks!
 
- Bernhard> Use of OABI is strongly discouraged since years now.
+Hello Peter,
 
-Committed, thanks!
+Shouldn't there be a whitespace line before the 'if' and after the 'endif'?
+The end of Config.in.mirrors now looks like this:
 
--- 
-Bye, Peter Korsgaard
+config BR2_DEBIAN_MIRROR
+	string "Debian Software mirror"
+	default "http://ftp.debian.org"
+	help
+	  Debian has multiple software mirrors scattered around the world.
+	  The following allows you to select your preferred mirror.
+
+	  Usually, just add your country code like XX here:
+	  http://ftp.XX.debian.org
+if BR2_TARGET_ATMEL
+source	"target/device/Atmel/Config.in.mirrors"
+endif
+endmenu
+
+At first glance it looks like everything at the end goes with
+'config BR2_DEBIAN_MIRROR'.
+
+Regards,
+Hartley
