@@ -1,27 +1,37 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Tue, 06 Oct 2009 22:42:14 +0200
-Subject: [Buildroot] dbus-binding-tool
-Message-ID: <1254861734.11487.8.camel@bender>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 6 Oct 2009 22:43:06 +0200
+Subject: [Buildroot] [git commit master] atmel mirrors are only needed for
+	atmel targets
+Message-ID: <20091006204457.E139E77788@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-we are using the dbus-binding-tool from host-dbus-glib in one of our
-packages and today I found that the dbus-binding-tool binary calls
-'glib-genmarshal'. So unless dbus-binding-tool is called with the PATH
-adjusted to include host_dir/usr/bin before the system path, it will
-fail in case that no glib-genmarshal is available on the host system.
+commit: http://git.buildroot.net/buildroot/commit/?id=f7abeebf54d51e33578495d3779b2015c991779a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I wonder how this should best be handled. For now I have adjusted our
-build to call make with the PATH environment variable adjusted similar
-to how Makefile.autotools.in does it. Should this be the recommended way
-to call make or should we rather patch dbus-binding-tool in the
-host-dbus-glib compile to explicitly call glib-genmarshal from
-host_dir ?
+Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ target/device/Config.in.mirrors |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-
-Sven
+diff --git a/target/device/Config.in.mirrors b/target/device/Config.in.mirrors
+index c647801..e0b1d07 100644
+--- a/target/device/Config.in.mirrors
++++ b/target/device/Config.in.mirrors
+@@ -64,7 +64,7 @@ config BR2_DEBIAN_MIRROR
+ 
+ 	  Usually, just add your country code like XX here:
+ 	  http://ftp.XX.debian.org
+-
++if BR2_TARGET_ATMEL
+ source	"target/device/Atmel/Config.in.mirrors"
+-
++endif
+ endmenu
+-- 
+1.6.3.3
