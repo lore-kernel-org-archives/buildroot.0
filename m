@@ -1,8 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Tue, 6 Oct 2009 22:43:06 +0200
-Subject: [Buildroot] [git commit master] atmel mirrors are only needed for
-	atmel targets
-Message-ID: <20091006204457.E139E77788@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] default to EABI on arm
+Message-ID: <20091006204458.3B80A77788@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,28 +9,41 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f7abeebf54d51e33578495d3779b2015c991779a
+commit: http://git.buildroot.net/buildroot/commit/?id=15a85fce2ac08df62ec02a48e36cb8bf37aece61
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Use of OABI is strongly discouraged since years now.
 
 Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- target/device/Config.in.mirrors |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ target/Config.in.arch |    9 ++++++---
+ 1 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/target/device/Config.in.mirrors b/target/device/Config.in.mirrors
-index c647801..e0b1d07 100644
---- a/target/device/Config.in.mirrors
-+++ b/target/device/Config.in.mirrors
-@@ -64,7 +64,7 @@ config BR2_DEBIAN_MIRROR
+diff --git a/target/Config.in.arch b/target/Config.in.arch
+index e63fc02..e82c8f4 100644
+--- a/target/Config.in.arch
++++ b/target/Config.in.arch
+@@ -116,14 +116,17 @@ config BR2_ARM_TYPE
+ choice
+ 	prompt "Target ABI"
+ 	depends on BR2_arm || BR2_armeb
+-	default BR2_ARM_OABI
++	default BR2_ARM_EABI
+ 	help
+ 	  Application Binary Interface to use
  
- 	  Usually, just add your country code like XX here:
- 	  http://ftp.XX.debian.org
--
-+if BR2_TARGET_ATMEL
- source	"target/device/Atmel/Config.in.mirrors"
--
-+endif
- endmenu
+-config BR2_ARM_OABI
+-	bool "OABI"
++	  Note:
++	    Using OABI is discouraged.
++
+ config BR2_ARM_EABI
+ 	bool "EABI"
++config BR2_ARM_OABI
++	bool "OABI"
+ endchoice
+ 
+ choice
 -- 
 1.6.3.3
