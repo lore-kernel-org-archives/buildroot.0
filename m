@@ -1,49 +1,45 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 6 Oct 2009 22:43:06 +0200
-Subject: [Buildroot] [git commit master] default to EABI on arm
-Message-ID: <20091006204458.3B80A77788@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 06 Oct 2009 23:05:56 +0200
+Subject: [Buildroot] dbus-binding-tool
+In-Reply-To: <1254861734.11487.8.camel@bender> (Sven Neumann's message of
+	"Tue\, 06 Oct 2009 22\:42\:14 +0200")
+References: <1254861734.11487.8.camel@bender>
+Message-ID: <87k4z81bd7.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=15a85fce2ac08df62ec02a48e36cb8bf37aece61
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Sven> Hi,
+ Sven> we are using the dbus-binding-tool from host-dbus-glib in one of our
+ Sven> packages and today I found that the dbus-binding-tool binary calls
+ Sven> 'glib-genmarshal'. So unless dbus-binding-tool is called with the PATH
+ Sven> adjusted to include host_dir/usr/bin before the system path, it will
+ Sven> fail in case that no glib-genmarshal is available on the host system.
 
-Use of OABI is strongly discouraged since years now.
+ Sven> I wonder how this should best be handled. For now I have adjusted our
+ Sven> build to call make with the PATH environment variable adjusted similar
+ Sven> to how Makefile.autotools.in does it. Should this be the recommended way
+ Sven> to call make or should we rather patch dbus-binding-tool in the
+ Sven> host-dbus-glib compile to explicitly call glib-genmarshal from
+ Sven> host_dir ?
 
-Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- target/Config.in.arch |    9 ++++++---
- 1 files changed, 6 insertions(+), 3 deletions(-)
+From a quick look at the dbus-glib code, it seems to be a mistake that
+they are explicitly calling glib-genmarshal, as the configure script
+already gets the correct filename from pkg-config.
 
-diff --git a/target/Config.in.arch b/target/Config.in.arch
-index e63fc02..e82c8f4 100644
---- a/target/Config.in.arch
-+++ b/target/Config.in.arch
-@@ -116,14 +116,17 @@ config BR2_ARM_TYPE
- choice
- 	prompt "Target ABI"
- 	depends on BR2_arm || BR2_armeb
--	default BR2_ARM_OABI
-+	default BR2_ARM_EABI
- 	help
- 	  Application Binary Interface to use
- 
--config BR2_ARM_OABI
--	bool "OABI"
-+	  Note:
-+	    Using OABI is discouraged.
-+
- config BR2_ARM_EABI
- 	bool "EABI"
-+config BR2_ARM_OABI
-+	bool "OABI"
- endchoice
- 
- choice
+Maybe the cleanest solution would be to patch dbus-binding-tool to use
+GLIB_GENMARSHAL, and then ensure that the host version of glib-2.0.pc
+contains the full path to glib-genmarshal (or let configure add
+$prefix/bin in front)? Upstream might even be willing to accept such a
+patch.
+
+Otherwise, simply changing DBUS_GLIB_HOST_BINARY to be
+PATH=.. dbus-binding-tool or making a shellscript wrapper which sets the
+path might be the easiest solution.
+
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
