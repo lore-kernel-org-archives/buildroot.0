@@ -1,127 +1,211 @@
 From: Michael Roth <mroth@nessie.de>
-Date: Wed,  7 Oct 2009 11:20:42 +0200
-Subject: [Buildroot] [PATCH 19/23] qt: remove commercial license option
+Date: Wed,  7 Oct 2009 11:20:43 +0200
+Subject: [Buildroot] [PATCH 20/23] qt: simplify and fix installing qt in the
+	target
 In-Reply-To: <1254907246-5650-1-git-send-email-mroth@nessie.de>
 References: <1254907246-5650-1-git-send-email-mroth@nessie.de>
-Message-ID: <1254907246-5650-20-git-send-email-mroth@nessie.de>
+Message-ID: <1254907246-5650-21-git-send-email-mroth@nessie.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It looks like that nobody is using the commercial license option
-because the code is broken (BR2_QT_COMMERCIAL_PASSWORD typo) and
-dist.trolltech.com became silent long ago and nobody complained about.
+Get rid of unnecessary complex constructs to install Qt in the target
+file system. This also fixes the installation procedure when Qt is
+build static.
 
-So remove the broken and unused stuff.
+Additionally wipe out old Qt files from the staging area and target
+file system before installing the new ones to prevent messiness.
 
 Signed-off-by: Michael Roth <mroth@nessie.de>
 ---
- configs/atstk100x_defconfig |    1 -
- configs/v100sc2_defconfig   |    2 --
- package/qt/Config.in        |   18 ------------------
- package/qt/qt.mk            |   20 ++++----------------
- 4 files changed, 4 insertions(+), 37 deletions(-)
+ package/qt/qt.mk |  123 ++++++++++++++----------------------------------------
+ 1 files changed, 32 insertions(+), 91 deletions(-)
 
-diff --git a/configs/atstk100x_defconfig b/configs/atstk100x_defconfig
-index 9207895..32de940 100644
---- a/configs/atstk100x_defconfig
-+++ b/configs/atstk100x_defconfig
-@@ -690,7 +690,6 @@ BR2_PACKAGE_QT=y
- # BR2_PACKAGE_QT_DEBUG is not set
- BR2_PACKAGE_QT_SHARED=y
- # BR2_PACKAGE_QT_STATIC is not set
--# BR2_PACKAGE_QT_LICENSE_TYPE_COMMERCIAL is not set
- # BR2_PACKAGE_QT_LICENSE_APPROVED is not set
- # BR2_PACKAGE_QT_QT3SUPPORT is not set
- BR2_PACKAGE_QT_GUI_MODULE=y
-diff --git a/configs/v100sc2_defconfig b/configs/v100sc2_defconfig
-index fcece77..799931b 100644
---- a/configs/v100sc2_defconfig
-+++ b/configs/v100sc2_defconfig
-@@ -546,8 +546,6 @@ BR2_PACKAGE_QT=y
- # BR2_PACKAGE_QT_DEBUG is not set
- BR2_PACKAGE_QT_SHARED=y
- # BR2_PACKAGE_QT_STATIC is not set
--BR2_PACKAGE_QT_LICENSE_TYPE_GPL=y
--# BR2_PACKAGE_QT_LICENSE_TYPE_COMMERCIAL is not set
- BR2_PACKAGE_QT_GPL_LICENSE_APPROVED=y
- # BR2_PACKAGE_QT_QT3SUPPORT is not set
- BR2_PACKAGE_QT_PIXEL_DEPTH_8=y
-diff --git a/package/qt/Config.in b/package/qt/Config.in
-index 5ab2dde..01e63ef 100644
---- a/package/qt/Config.in
-+++ b/package/qt/Config.in
-@@ -39,12 +39,8 @@ config BR2_PACKAGE_QT_STATIC
- 
- endchoice
- 
--config BR2_PACKAGE_QT_LICENSE_TYPE_COMMERCIAL
--	bool "Use commercial license"
--
- config BR2_PACKAGE_QT_LICENSE_APPROVED
- 	bool "Approve free license"
--	depends on !BR2_PACKAGE_QT_LICENSE_TYPE_COMMERCIAL
- 	help
- 	  Select this if you approve one of the available free licenses for the
- 	  Qt4 library.
-@@ -54,20 +50,6 @@ config BR2_PACKAGE_QT_LICENSE_APPROVED
- 	  LGPL v2.1: http://doc.trolltech.com/4.5/lgpl.html
- 	  GPL  v3.0: http://doc.trolltech.com/4.5/gpl.html
- 
--config BR2_PACKAGE_QT_COMMERCIAL_USERNAME
--	string "Qt 4 Commercial License Username"
--	depends on BR2_PACKAGE_QT_LICENSE_TYPE_COMMERCIAL
--	help
--	  Commercial users can download their source directly by
--	  providing a username.
--
--config BR2_PACKAGE_QT_COMMERCIAL_PASSWORD
--	string "Qt 4 Commercial License Password"
--	depends on BR2_PACKAGE_QT_LICENSE_TYPE_COMMERCIAL
--	help
--	  Commercial users can download their source directly by
--	  providing a password.
--
- config BR2_PACKAGE_QT_QT3SUPPORT
- 	bool "Compatibility with Qt3"
- 	help
 diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index 8f831ae..d7b0fef 100644
+index d7b0fef..3784dea 100644
 --- a/package/qt/qt.mk
 +++ b/package/qt/qt.mk
-@@ -13,27 +13,15 @@
- ######################################################################
+@@ -313,37 +313,37 @@ endif
  
- QT_VERSION:=4.5.2
-+QT_SOURCE:=qt-embedded-linux-opensource-src-$(QT_VERSION).tar.bz2
-+QT_SITE:=http://get.qtsoftware.com/qt/source
- QT_CAT:=$(BZCAT)
--
--BR2_PACKAGE_QT_COMMERCIAL_USERNAME:=$(call qstrip,$(BR2_PACKAGE_QT_COMMERCIAL_USERNAME))
--BR2_PACKAGE_QT_COMMERCIAL_PASSWORD:=$(call qstrip,$(BR2_PACKAGE_QT_COMMERCIAL_PASSWORD))
-+QT_TARGET_DIR:=$(BUILD_DIR)/qt-embedded-linux-opensource-src-$(QT_VERSION)
+ BR2_PACKAGE_QT_EMB_PLATFORM:=$(call qstrip,$(BR2_PACKAGE_QT_EMB_PLATFORM))
  
- QT_CONFIGURE:=#empty
- 
--# What to download, free or commercial version.
--ifneq ($(BR2_PACKAGE_QT_COMMERCIAL_USERNAME),)
--QT_SITE:=http://$(BR2_PACKAGE_QT_COMMERCIAL_USERNAME):$(BR2_QT_COMMERCIAL_PASSWORD)@dist.trolltech.com/$(BR2_PACKAGE_QT_COMMERCIAL_USERNAME)
--QT_SOURCE:=qt-embedded-linux-commercial-src-$(QT_VERSION).tar.bz2
--QT_TARGET_DIR:=$(BUILD_DIR)/qt-embedded-linux-commercial-src-$(QT_VERSION)
--QT_CONFIGURE+= -commercial
--else # Good, good, we are free:
--QT_SITE=http://get.qtsoftware.com/qt/source
--QT_SOURCE:=qt-embedded-linux-opensource-src-$(QT_VERSION).tar.bz2
--QT_TARGET_DIR:=$(BUILD_DIR)/qt-embedded-linux-opensource-src-$(QT_VERSION)
--QT_CONFIGURE+= -opensource
- ifeq ($(BR2_PACKAGE_QT_LICENSE_APPROVED),y)
--QT_CONFIGURE+= -confirm-license
--endif
-+QT_CONFIGURE += -opensource -confirm-license
+-# Figure out what libs to install in the target
+-QT_LIBS=#empty
++# Figure out what shared libs to install in the target
++QT_LIBS := libQtCore.so
+ ifeq ($(BR2_PACKAGE_QT_GUI_MODULE),y)
+-QT_LIBS+= qt-gui  
++QT_LIBS += libQtGui.so
+ endif
+ ifeq ($(BR2_PACKAGE_QT_SQL_MODULE),y)
+-QT_LIBS+= qt-sql
++QT_LIBS += libQtSql.so
+ endif
+ ifeq ($(BR2_PACKAGE_QT_PHONON),y)
+-QT_LIBS+= qt-phonon
++QT_LIBS += libphonon.so
+ endif
+ ifeq ($(BR2_PACKAGE_QT_SVG),y)
+-QT_LIBS+= qt-svg
++QT_LIBS += libQtSvg.so
+ endif
+ ifeq ($(BR2_PACKAGE_QT_NETWORK),y)
+-QT_LIBS+= qt-network
++QT_LIBS += libQtNetwork.so
+ endif
+ ifeq ($(BR2_PACKAGE_QT_WEBKIT),y)
+-QT_LIBS+= qt-webkit
++QT_LIBS += libQtWebKit.so
+ endif
+ ifeq ($(BR2_PACKAGE_QT_XML),y)
+-QT_LIBS+= qt-xml
++QT_LIBS += libQtXml.so
+ endif
+ ifeq ($(BR2_PACKAGE_QT_XMLPATTERNS),y)
+-QT_LIBS+= qt-xmlpatterns
++QT_LIBS += libQtXmlPatterns.so
+ endif
+ ifeq ($(BR2_PACKAGE_QT_SCRIPT),y)
+-QT_LIBS+= qt-script
++QT_LIBS += libQtScript.so
+ endif
+ ifeq ($(BR2_PACKAGE_QT_SCRIPTTOOLS),y)
+-QT_LIBS+= qt-scripttools
++QT_LIBS += libQtScriptTools.so
  endif
  
- # If you want extra tweaking you can copy
+ QT_UNSTAGE_FILES := $(QT_TARGET_DIR)/.staged		\
+@@ -380,23 +380,6 @@ define QT_QMAKE_SET
+ 	@$(SED) '/include.*qws.conf/aQMAKE_$(1) = $(2)' $(QT_QMAKE_CONF)
+ endef
+ 
+-################################################################################
+-# QT_INSTALL_PLUGINS -- helper macro to install Qt plugins to target and 
+-# strip them
+-#
+-# Argument 1 is the plugin folder
+-# 
+-# E.G. use like this to install plugins/sqldrivers:
+-# $(call QT_INSTALL_PLUGINS,sqldrivers)
+-# ################################################################################
+-define QT_INSTALL_PLUGINS
+-        if [ -d $(STAGING_DIR)/usr/plugins/$(1) ]; then \
+-                mkdir -p $(TARGET_DIR)/usr/plugins; \
+-                cp -dpfr $(STAGING_DIR)/usr/plugins/$(1) $(TARGET_DIR)/usr/plugins/; \
+-                $(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/plugins/$(1)/*; \
+-        fi
+-endef
+-
+ $(DL_DIR)/$(QT_SOURCE):
+ 	$(call DOWNLOAD,$(QT_SITE),$(QT_SOURCE))
+ 
+@@ -460,78 +443,34 @@ $(QT_TARGET_DIR)/.compiled: $(QT_TARGET_DIR)/.configured
+ 	$(MAKE) -C $(QT_TARGET_DIR)
+ 	touch $@
+ 
+-$(STAGING_DIR)/usr/lib/libQtCore.la: $(QT_TARGET_DIR)/.compiled
++$(QT_TARGET_DIR)/.staged: $(QT_TARGET_DIR)/.compiled
++	-rm -rf $(QT_UNSTAGE_FILES)
+ 	$(MAKE) -C $(QT_TARGET_DIR) install
++	touch $@
+ 
+-qt-gui: $(STAGING_DIR)/usr/lib/libQtCore.la
++$(QT_TARGET_DIR)/.installed: $(QT_TARGET_DIR)/.staged
++	-rm -rf $(QT_UNINSTALL_FILES)
++ifeq ($(BR2_PACKAGE_QT_GUI_MODULE),y)
+ 	mkdir -p $(TARGET_DIR)/usr/lib/fonts
+ 	cp -dpf $(STAGING_DIR)/usr/lib/fonts/*.qpf $(TARGET_DIR)/usr/lib/fonts
+ ifneq ($(BR2_PACKAGE_QT_NOFREETYPE),y)
+ 	cp -dpf $(STAGING_DIR)/usr/lib/fonts/*.ttf $(TARGET_DIR)/usr/lib/fonts
+ endif
+-	# Install image plugins if they are built
+-	$(call QT_INSTALL_PLUGINS,imageformats)
+-ifeq ($(BR2_PACKAGE_QT_SHARED),y)
+-	cp -dpf $(STAGING_DIR)/usr/lib/libQtGui.so.* $(TARGET_DIR)/usr/lib/
+-endif
+-
+-qt-sql: $(STAGING_DIR)/usr/lib/libQtCore.la
+-	$(call QT_INSTALL_PLUGINS,sqldrivers)
+-ifeq ($(BR2_PACKAGE_QT_SHARED),y)
+-	cp -dpf $(STAGING_DIR)/usr/lib/libQtSql.so.* $(TARGET_DIR)/usr/lib/
+-endif
+-
+-qt-phonon: $(STAGING_DIR)/usr/lib/libQtCore.la
+-	$(call QT_INSTALL_PLUGINS,phonon_backend)
+-ifeq ($(BR2_PACKAGE_QT_SHARED),y)
+-	cp -dpf $(STAGING_DIR)/usr/lib/libphonon.so.* $(TARGET_DIR)/usr/lib/
+-endif
+-
+-qt-svg: $(STAGING_DIR)/usr/lib/libQtCore.la
+-	$(call QT_INSTALL_PLUGINS,iconengines)
+-ifeq ($(BR2_PACKAGE_QT_SHARED),y)
+-	cp -dpf $(STAGING_DIR)/usr/lib/libQtSvg.so.* $(TARGET_DIR)/usr/lib/
+-endif
+-
+-qt-network: $(STAGING_DIR)/usr/lib/libQtCore.la
+-ifeq ($(BR2_PACKAGE_QT_SHARED),y)
+-	cp -dpf $(STAGING_DIR)/usr/lib/libQtNetwork.so.* $(TARGET_DIR)/usr/lib/
+ endif
+-
+-qt-webkit: $(STAGING_DIR)/usr/lib/libQtCore.la
+ ifeq ($(BR2_PACKAGE_QT_SHARED),y)
+-	cp -dpf $(STAGING_DIR)/usr/lib/libQtWebKit.so.* $(TARGET_DIR)/usr/lib/
+-endif
+-
+-qt-xml: $(STAGING_DIR)/usr/lib/libQtCore.la
+-ifeq ($(BR2_PACKAGE_QT_SHARED),y)
+-	cp -dpf $(STAGING_DIR)/usr/lib/libQtXml.so.* $(TARGET_DIR)/usr/lib/
+-endif
+-
+-qt-xmlpatterns: $(STAGING_DIR)/usr/lib/libQtCore.la
+-ifeq ($(BR2_PACKAGE_QT_SHARED),y)
+-	cp -dpf $(STAGING_DIR)/usr/lib/libQtXmlPatterns.so.* $(TARGET_DIR)/usr/lib/
+-endif
+-
+-qt-script: $(STAGING_DIR)/usr/lib/libQtCore.la
+-ifeq ($(BR2_PACKAGE_QT_SHARED),y)
+-	cp -dpf $(STAGING_DIR)/usr/lib/libQtScript.so.* $(TARGET_DIR)/usr/lib/
+-endif
+-
+-qt-scripttools: $(STAGING_DIR)/usr/lib/libQtCore.la
+-ifeq ($(BR2_PACKAGE_QT_SHARED),y)
+-	cp -dpf $(STAGING_DIR)/usr/lib/libQtScriptTools.so.* $(TARGET_DIR)/usr/lib/
+-endif
+-
+-
+-$(TARGET_DIR)/usr/lib/libQtCore.so.4: $(STAGING_DIR)/usr/lib/libQtCore.la $(QT_LIBS)
+-	# Strip all installed libs
+-ifeq ($(BR2_PACKAGE_QT_SHARED),y)
+-	cp -dpf $(STAGING_DIR)/usr/lib/libQtCore.so.* $(TARGET_DIR)/usr/lib/
+-	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libQt*.so.*
+-endif
++	for lib in $(QT_LIBS); do \
++		cp -dpf $(STAGING_DIR)/usr/lib/$${lib}* $(TARGET_DIR)/usr/lib/; \
++		$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/$${lib}.$(QT_VERSION); \
++	done
++endif
++	if [ -d $(STAGING_DIR)/usr/plugins ]; then \
++		mkdir -p $(TARGET_DIR)/usr/plugins; \
++		cp -dpfr $(STAGING_DIR)/usr/plugins/* $(TARGET_DIR)/usr/plugins/; \
++		$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/plugins/*/*; \
++	fi
++	touch $@
+ 
+-qt: $(QT_DEP_LIBS) $(TARGET_DIR)/usr/lib/libQtCore.so.4
++qt-install: $(QT_DEP_LIBS) $(QT_TARGET_DIR)/.installed
+ 
+ qt-uninstall:
+ 	-rm -rf $(QT_UNSTAGE_FILES) $(QT_UNINSTALL_FILES)
+@@ -547,6 +486,8 @@ qt-confclean:
+ qt-dirclean:
+ 	rm -rf $(QT_TARGET_DIR)
+ 
++qt: qt-install
++
+ #############################################################
+ #
+ # Toplevel Makefile options
 -- 
 1.6.3.3
