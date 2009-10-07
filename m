@@ -1,43 +1,47 @@
 From: Michael Roth <mroth@nessie.de>
-Date: Wed,  7 Oct 2009 11:20:38 +0200
-Subject: [Buildroot] [PATCH 15/23] qt: make sure to install all Qt-fonts and
-	true-type-fonts
+Date: Wed,  7 Oct 2009 11:20:33 +0200
+Subject: [Buildroot] [PATCH 10/23] qt: don't enable internal tslib-module
+	debugging
 In-Reply-To: <1254907246-5650-1-git-send-email-mroth@nessie.de>
 References: <1254907246-5650-1-git-send-email-mroth@nessie.de>
-Message-ID: <1254907246-5650-16-git-send-email-mroth@nessie.de>
+Message-ID: <1254907246-5650-11-git-send-email-mroth@nessie.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Qt gained some more qpf-fonts and also provides some true-type-fonts.
-Make sure to install them all inclusive ttf-fonts when freetype-support
-is enabled. Additionally the empty 'fontdir' file is really not needed.
+In Qt there are virtually hundreds of internal debug flags like
+TSLIBMOUSEHANDLER_DEBUG for every module or even C++ class. There
+is no reason to enable a single such flag when Qt is build with
+debugging symbols and others not.
 
 Signed-off-by: Michael Roth <mroth@nessie.de>
 ---
- package/qt/qt.mk |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+ package/qt/qt.mk |    4 +---
+ 1 files changed, 1 insertions(+), 3 deletions(-)
 
 diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index ca6ae6b..f1e845e 100644
+index c61d70c..47009e8 100644
 --- a/package/qt/qt.mk
 +++ b/package/qt/qt.mk
-@@ -469,10 +469,10 @@ $(STAGING_DIR)/usr/lib/libQtCore.la: $(QT_TARGET_DIR)/.compiled
+@@ -153,8 +153,6 @@ endif
+ ifeq ($(BR2_PACKAGE_QT_MOUSE_TSLIB),y)
+ QT_CONFIGURE += -qt-mouse-tslib
+ QT_DEP_LIBS+=tslib
+-QT_TSLIB_DEB="-D TSLIBMOUSEHANDLER_DEBUG"
+-QT_TSLIB_DEB:=$(call qstrip,$(QT_TSLIB_DEB))
+ else
+ QT_CONFIGURE += -no-mouse-tslib
+ endif
+@@ -165,7 +163,7 @@ QT_CONFIGURE += -no-mouse-qvfb
+ endif
  
- qt-gui: $(STAGING_DIR)/usr/lib/libQtCore.la
- 	mkdir -p $(TARGET_DIR)/usr/lib/fonts
--	touch $(TARGET_DIR)/usr/lib/fonts/fontdir
--	cp -dpf $(STAGING_DIR)/usr/lib/fonts/helvetica*.qpf $(TARGET_DIR)/usr/lib/fonts
--	cp -dpf $(STAGING_DIR)/usr/lib/fonts/fixed*.qpf $(TARGET_DIR)/usr/lib/fonts
--	cp -dpf $(STAGING_DIR)/usr/lib/fonts/micro*.qpf $(TARGET_DIR)/usr/lib/fonts
-+	cp -dpf $(STAGING_DIR)/usr/lib/fonts/*.qpf $(TARGET_DIR)/usr/lib/fonts
-+ifneq ($(BR2_PACKAGE_QT_NOFREETYPE),y)
-+	cp -dpf $(STAGING_DIR)/usr/lib/fonts/*.ttf $(TARGET_DIR)/usr/lib/fonts
-+endif
- 	# Install image plugins if they are built
- 	$(call QT_INSTALL_PLUGINS,imageformats)
- ifeq ($(BR2_PACKAGE_QT_SHARED),y)
+ ifeq ($(BR2_PACKAGE_QT_DEBUG),y)
+-QT_CONFIGURE+= "-debug $(QT_TSLIB_DEB)"
++QT_CONFIGURE+= -debug
+ else
+ QT_CONFIGURE+= -release
+ endif
 -- 
 1.6.3.3
