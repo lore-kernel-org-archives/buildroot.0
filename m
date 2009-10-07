@@ -1,31 +1,31 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 07 Oct 2009 13:30:54 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 7 Oct 2009 13:46:32 +0200
 Subject: [Buildroot] [PATCH 12/23] qt: respect silent mode instead non
-	existing verbose mode
-In-Reply-To: <20091007112738.GH10261@mx.loc> (Bernhard Reutner-Fischer's
-	message of "Wed\, 7 Oct 2009 13\:27\:38 +0200")
+ existing verbose mode
+In-Reply-To: <87ljjnmojl.fsf@macbook.be.48ers.dk>
 References: <1254907246-5650-1-git-send-email-mroth@nessie.de>
 	<1254907246-5650-13-git-send-email-mroth@nessie.de>
 	<20091007115741.4f5e44df@surf> <200910071230.48080.mroth@nessie.de>
-	<20091007112738.GH10261@mx.loc>
-Message-ID: <87hbubmoep.fsf@macbook.be.48ers.dk>
+	<20091007130206.1a6f9821@surf> <87ljjnmojl.fsf@macbook.be.48ers.dk>
+Message-ID: <20091007134632.4472bfd0@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernhard" == Bernhard Reutner-Fischer <rep.dot.nop@gmail.com> writes:
+Le Wed, 07 Oct 2009 13:27:58 +0200,
+Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
-Hi,
+> Maybe this would be a good subject for the dev day?
 
- Bernhard> can't you use the configure invocation of autotools.in?
- Bernhard> $(if $(VERBOSE),--verbose,$(if $(SILENT),--silent,))
- Bernhard> (modulo real names) i.e. if VERBOSE is set, use it, else maybe use
- Bernhard> silent or just leave it at defaults.
+Definetely. I was anyway planning to present my proposal of a very
+silent Buildroot mode (presented a few weeks ago on the list with a
+prototype proposal), so this will be on the list of topics to discuss.
 
-We already do something like that for QUIET, E.G. configure gets a -q
-argument to make it shut up.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
