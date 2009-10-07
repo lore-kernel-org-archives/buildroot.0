@@ -1,74 +1,127 @@
 From: Michael Roth <mroth@nessie.de>
-Date: Wed,  7 Oct 2009 11:20:25 +0200
-Subject: [Buildroot] [PATCH 02/23] qt: new targets qt-uninstall and
-	qt-confclean
+Date: Wed,  7 Oct 2009 11:20:42 +0200
+Subject: [Buildroot] [PATCH 19/23] qt: remove commercial license option
 In-Reply-To: <1254907246-5650-1-git-send-email-mroth@nessie.de>
 References: <1254907246-5650-1-git-send-email-mroth@nessie.de>
-Message-ID: <1254907246-5650-3-git-send-email-mroth@nessie.de>
+Message-ID: <1254907246-5650-20-git-send-email-mroth@nessie.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-'qt-uninstall' removes Qt from the staging area and target filesystem
-while 'qt-confclean' removes the results from running configure in the
-Qt build directory. Use this after changes to the Qt configuration were
-made to re-configure, re-build and re-install Qt.
+It looks like that nobody is using the commercial license option
+because the code is broken (BR2_QT_COMMERCIAL_PASSWORD typo) and
+dist.trolltech.com became silent long ago and nobody complained about.
+
+So remove the broken and unused stuff.
 
 Signed-off-by: Michael Roth <mroth@nessie.de>
 ---
- package/qt/qt.mk |   29 ++++++++++++++++++++++++-----
- 1 files changed, 24 insertions(+), 5 deletions(-)
+ configs/atstk100x_defconfig |    1 -
+ configs/v100sc2_defconfig   |    2 --
+ package/qt/Config.in        |   18 ------------------
+ package/qt/qt.mk            |   20 ++++----------------
+ 4 files changed, 4 insertions(+), 37 deletions(-)
 
+diff --git a/configs/atstk100x_defconfig b/configs/atstk100x_defconfig
+index 9207895..32de940 100644
+--- a/configs/atstk100x_defconfig
++++ b/configs/atstk100x_defconfig
+@@ -690,7 +690,6 @@ BR2_PACKAGE_QT=y
+ # BR2_PACKAGE_QT_DEBUG is not set
+ BR2_PACKAGE_QT_SHARED=y
+ # BR2_PACKAGE_QT_STATIC is not set
+-# BR2_PACKAGE_QT_LICENSE_TYPE_COMMERCIAL is not set
+ # BR2_PACKAGE_QT_LICENSE_APPROVED is not set
+ # BR2_PACKAGE_QT_QT3SUPPORT is not set
+ BR2_PACKAGE_QT_GUI_MODULE=y
+diff --git a/configs/v100sc2_defconfig b/configs/v100sc2_defconfig
+index fcece77..799931b 100644
+--- a/configs/v100sc2_defconfig
++++ b/configs/v100sc2_defconfig
+@@ -546,8 +546,6 @@ BR2_PACKAGE_QT=y
+ # BR2_PACKAGE_QT_DEBUG is not set
+ BR2_PACKAGE_QT_SHARED=y
+ # BR2_PACKAGE_QT_STATIC is not set
+-BR2_PACKAGE_QT_LICENSE_TYPE_GPL=y
+-# BR2_PACKAGE_QT_LICENSE_TYPE_COMMERCIAL is not set
+ BR2_PACKAGE_QT_GPL_LICENSE_APPROVED=y
+ # BR2_PACKAGE_QT_QT3SUPPORT is not set
+ BR2_PACKAGE_QT_PIXEL_DEPTH_8=y
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index 5ab2dde..01e63ef 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -39,12 +39,8 @@ config BR2_PACKAGE_QT_STATIC
+ 
+ endchoice
+ 
+-config BR2_PACKAGE_QT_LICENSE_TYPE_COMMERCIAL
+-	bool "Use commercial license"
+-
+ config BR2_PACKAGE_QT_LICENSE_APPROVED
+ 	bool "Approve free license"
+-	depends on !BR2_PACKAGE_QT_LICENSE_TYPE_COMMERCIAL
+ 	help
+ 	  Select this if you approve one of the available free licenses for the
+ 	  Qt4 library.
+@@ -54,20 +50,6 @@ config BR2_PACKAGE_QT_LICENSE_APPROVED
+ 	  LGPL v2.1: http://doc.trolltech.com/4.5/lgpl.html
+ 	  GPL  v3.0: http://doc.trolltech.com/4.5/gpl.html
+ 
+-config BR2_PACKAGE_QT_COMMERCIAL_USERNAME
+-	string "Qt 4 Commercial License Username"
+-	depends on BR2_PACKAGE_QT_LICENSE_TYPE_COMMERCIAL
+-	help
+-	  Commercial users can download their source directly by
+-	  providing a username.
+-
+-config BR2_PACKAGE_QT_COMMERCIAL_PASSWORD
+-	string "Qt 4 Commercial License Password"
+-	depends on BR2_PACKAGE_QT_LICENSE_TYPE_COMMERCIAL
+-	help
+-	  Commercial users can download their source directly by
+-	  providing a password.
+-
+ config BR2_PACKAGE_QT_QT3SUPPORT
+ 	bool "Compatibility with Qt3"
+ 	help
 diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index 68b4e44..f4a63a4 100644
+index 8f831ae..d7b0fef 100644
 --- a/package/qt/qt.mk
 +++ b/package/qt/qt.mk
-@@ -373,6 +373,22 @@ ifeq ($(BR2_PACKAGE_QT_SCRIPTTOOLS),y)
- QT_LIBS+= qt-scripttools
+@@ -13,27 +13,15 @@
+ ######################################################################
+ 
+ QT_VERSION:=4.5.2
++QT_SOURCE:=qt-embedded-linux-opensource-src-$(QT_VERSION).tar.bz2
++QT_SITE:=http://get.qtsoftware.com/qt/source
+ QT_CAT:=$(BZCAT)
+-
+-BR2_PACKAGE_QT_COMMERCIAL_USERNAME:=$(call qstrip,$(BR2_PACKAGE_QT_COMMERCIAL_USERNAME))
+-BR2_PACKAGE_QT_COMMERCIAL_PASSWORD:=$(call qstrip,$(BR2_PACKAGE_QT_COMMERCIAL_PASSWORD))
++QT_TARGET_DIR:=$(BUILD_DIR)/qt-embedded-linux-opensource-src-$(QT_VERSION)
+ 
+ QT_CONFIGURE:=#empty
+ 
+-# What to download, free or commercial version.
+-ifneq ($(BR2_PACKAGE_QT_COMMERCIAL_USERNAME),)
+-QT_SITE:=http://$(BR2_PACKAGE_QT_COMMERCIAL_USERNAME):$(BR2_QT_COMMERCIAL_PASSWORD)@dist.trolltech.com/$(BR2_PACKAGE_QT_COMMERCIAL_USERNAME)
+-QT_SOURCE:=qt-embedded-linux-commercial-src-$(QT_VERSION).tar.bz2
+-QT_TARGET_DIR:=$(BUILD_DIR)/qt-embedded-linux-commercial-src-$(QT_VERSION)
+-QT_CONFIGURE+= -commercial
+-else # Good, good, we are free:
+-QT_SITE=http://get.qtsoftware.com/qt/source
+-QT_SOURCE:=qt-embedded-linux-opensource-src-$(QT_VERSION).tar.bz2
+-QT_TARGET_DIR:=$(BUILD_DIR)/qt-embedded-linux-opensource-src-$(QT_VERSION)
+-QT_CONFIGURE+= -opensource
+ ifeq ($(BR2_PACKAGE_QT_LICENSE_APPROVED),y)
+-QT_CONFIGURE+= -confirm-license
+-endif
++QT_CONFIGURE += -opensource -confirm-license
  endif
  
-+QT_UNSTAGE_FILES := $(QT_TARGET_DIR)/.staged		\
-+	$(STAGING_DIR)/usr/lib/fonts			\
-+	$(STAGING_DIR)/usr/plugins			\
-+	$(STAGING_DIR)/usr/translations			\
-+	$(STAGING_DIR)/usr/mkspecs			\
-+	$(STAGING_DIR)/usr/include/Qt*			\
-+	$(STAGING_DIR)/usr/lib/libQt*			\
-+	$(STAGING_DIR)/usr/lib/libphonon.*		\
-+	$(STAGING_DIR)/usr/lib/pkgconfig/Qt*.pc
-+
-+QT_UNINSTALL_FILES := $(QT_TARGET_DIR)/.installed	\
-+	$(TARGET_DIR)/usr/lib/fonts			\
-+	$(TARGET_DIR)/usr/plugins			\
-+	$(TARGET_DIR)/usr/lib/libQt*			\
-+	$(TARGET_DIR)/usr/lib/libphonon.*
-+
- QT_QMAKE_CONF:=$(QT_TARGET_DIR)/mkspecs/qws/linux-$(BR2_PACKAGE_QT_EMB_PLATFORM)-g++/qmake.conf
- 
- QT_QMAKE_AR:=$(TARGET_AR) cqs
-@@ -551,13 +567,16 @@ endif
- 
- qt: $(QT_DEP_LIBS) $(TARGET_DIR)/usr/lib/libQtCore.so.4
- 
-+qt-uninstall:
-+	-rm -rf $(QT_UNSTAGE_FILES) $(QT_UNINSTALL_FILES)
-+
- qt-clean:
- 	-$(MAKE) -C $(QT_TARGET_DIR) clean
--	-rm -rf $(TARGET_DIR)/usr/lib/fonts
--ifeq ($(BR2_PACKAGE_QT_SHARED),y)
--	-rm $(TARGET_DIR)/usr/lib/libQt*.so.*
--	-rm $(TARGET_DIR)/usr/lib/libphonon.so.*
--endif
-+	-rm -f $(QT_TARGET_DIR)/.compiled
-+
-+qt-confclean:
-+	-$(MAKE) -C $(QT_TARGET_DIR) confclean
-+	-rm -f $(QT_TARGET_DIR)/.configured
- 
- qt-dirclean:
- 	rm -rf $(QT_TARGET_DIR)
+ # If you want extra tweaking you can copy
 -- 
 1.6.3.3
