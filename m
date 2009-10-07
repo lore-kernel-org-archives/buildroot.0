@@ -1,42 +1,41 @@
 From: Michael Roth <mroth@nessie.de>
-Date: Wed,  7 Oct 2009 11:20:29 +0200
-Subject: [Buildroot] [PATCH 06/23] qt: remove TARGET_CONFIGURE_OPTS from
-	make invocation
+Date: Wed,  7 Oct 2009 11:20:32 +0200
+Subject: [Buildroot] [PATCH 09/23] qt: remove unnecessary comment
 In-Reply-To: <1254907246-5650-1-git-send-email-mroth@nessie.de>
 References: <1254907246-5650-1-git-send-email-mroth@nessie.de>
-Message-ID: <1254907246-5650-7-git-send-email-mroth@nessie.de>
+Message-ID: <1254907246-5650-10-git-send-email-mroth@nessie.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All compiler options, switches and path settings are done in the
-configure step. For the compile and install step there is no need
-for the TARGET_CONFIGURE_OPTS variables.
+Qt in buildroot should not depend on dbus installed on build platform,
+if so this is (or was) a bug in buildroot.
+
+Looks like that this note is left over from ancient buildroot days,
+so remove it.
 
 Signed-off-by: Michael Roth <mroth@nessie.de>
 ---
- package/qt/qt.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/qt/qt.mk |    5 -----
+ 1 files changed, 0 insertions(+), 5 deletions(-)
 
 diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index f0fdfdd..e965a42 100644
+index 85ff9a6..c61d70c 100644
 --- a/package/qt/qt.mk
 +++ b/package/qt/qt.mk
-@@ -487,11 +487,11 @@ endif
- 	touch $@
+@@ -12,11 +12,6 @@
+ #
+ ######################################################################
  
- $(QT_TARGET_DIR)/.compiled: $(QT_TARGET_DIR)/.configured
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(QT_TARGET_DIR)
-+	$(MAKE) -C $(QT_TARGET_DIR)
- 	touch $@
+-# BUG: In "OpenSuSE 10.2", dbus.h is at dbus-1.0/dbus/dbus.h
+-# instead of at "dbus/dbus.h"
+-# (cd /usr/include; sudo ln -s dbus-1.0/dbus dbus)
+-# to fix
+-
+ QT_VERSION:=4.5.2
+ QT_CAT:=$(BZCAT)
  
- $(STAGING_DIR)/usr/lib/libQtCore.la: $(QT_TARGET_DIR)/.compiled
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(QT_TARGET_DIR) install
-+	$(MAKE) -C $(QT_TARGET_DIR) install
- 
- qt-gui: $(STAGING_DIR)/usr/lib/libQtCore.la
- 	mkdir -p $(TARGET_DIR)/usr/lib/fonts
 -- 
 1.6.3.3
