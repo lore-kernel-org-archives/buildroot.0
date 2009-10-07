@@ -1,46 +1,34 @@
-From: Daniel Mack <daniel@caiaq.de>
-Date: Wed, 7 Oct 2009 15:31:32 +0200
-Subject: [Buildroot] [git commit master] e2fsprogs: add a patch to link
-	against SEM_INIT libs
-Message-ID: <20091007135643.0424D77701@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 07 Oct 2009 15:56:24 +0200
+Subject: [Buildroot] [PATCH] e2fsprogs: add a patch to link against
+	SEM_INIT libs
+In-Reply-To: <20091007134105.GW9361@buzzloop.caiaq.de> (Daniel Mack's message
+	of "Wed\, 7 Oct 2009 15\:41\:05 +0200")
+References: <1254826414-20763-1-git-send-email-daniel@caiaq.de>
+	<1254826414-20763-2-git-send-email-daniel@caiaq.de>
+	<8763armir5.fsf@macbook.be.48ers.dk>
+	<20091007134105.GW9361@buzzloop.caiaq.de>
+Message-ID: <871vlfmho7.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Daniel" == Daniel Mack <daniel@caiaq.de> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=44b5637ab28306dcd6f7a46aae56bdcf6284b3e7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ >> But your patch removes stuff (PRIVATE_LIBS_CMT), it doesn't add
+ >> anything?
 
-This patch is needed to make e2fsprogs being linked against
-SEM_INIT libraries. In this particular case, it causes the
-Makefiles to add -lpthread. Without that, all binaries crash
-at startup, at least on x86.
+ Daniel> The e2fsprog make setup is really screwed. They set
+ Daniel> PRIVATE_LIBS_CMT to "#" in configure which then causes all
+ Daniel> subsequent paramters to get ignored. As I think 'CMT' stands
+ Daniel> for 'comment', I guess this is intended. Took me awhile to find
+ Daniel> out what they do, too ;)
 
-Signed-off-by: Daniel Mack <daniel@caiaq.de>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- .../e2fsprogs/e2fsprogs-1.41.9-sem-init-libs.patch |   11 +++++++++++
- 1 files changed, 11 insertions(+), 0 deletions(-)
- create mode 100644 package/e2fsprogs/e2fsprogs-1.41.9-sem-init-libs.patch
+Ahh, ok, thanks for the description.
 
-diff --git a/package/e2fsprogs/e2fsprogs-1.41.9-sem-init-libs.patch b/package/e2fsprogs/e2fsprogs-1.41.9-sem-init-libs.patch
-new file mode 100644
-index 0000000..56f1cc2
---- /dev/null
-+++ b/package/e2fsprogs/e2fsprogs-1.41.9-sem-init-libs.patch
-@@ -0,0 +1,11 @@
-+--- e2fsprogs-1.41.9/MCONFIG.in.orig	2009-10-07 20:25:07.000000000 +0800
-++++ e2fsprogs-1.41.9/MCONFIG.in	2009-10-07 20:21:41.000000000 +0800
-+@@ -85,7 +85,7 @@
-+ #
-+ LIB = $(top_builddir)/lib
-+ LIBSS = $(LIB)/libss at LIB_EXT@ @PRIVATE_LIBS_CMT@ @DLOPEN_LIB@
-+-LIBCOM_ERR = $(LIB)/libcom_err at LIB_EXT@ @PRIVATE_LIBS_CMT@ @SEM_INIT_LIB@
-++LIBCOM_ERR = $(LIB)/libcom_err at LIB_EXT@ @SEM_INIT_LIB@
-+ LIBE2P = $(LIB)/libe2p at LIB_EXT@
-+ LIBEXT2FS = $(LIB)/libext2fs at LIB_EXT@
-+ LIBUUID = @LIBUUID@ @SOCKET_LIB@
+Committed both patches, thanks!
+
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
