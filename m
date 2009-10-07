@@ -1,103 +1,33 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Wed, 7 Oct 2009 20:31:57 +0200
-Subject: [Buildroot] [RFC] *clean targets
-In-Reply-To: <87ocojkqlh.fsf@macbook.be.48ers.dk>
-References: <20091007162422.GI10261@mx.loc>
-	<87ocojkqlh.fsf@macbook.be.48ers.dk>
-Message-ID: <20091007183157.GD23847@mx.loc>
+From: Ravi <phulsundar_ravi@rediffmail.com>
+Date: 7 Oct 2009 18:54:01 -0000
+Subject: [Buildroot] =?utf-8?q?Qtopia?=
+Message-ID: <20091007185401.38976.qmail@f6mail-144-154.rediffmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Oct 07, 2009 at 08:26:34PM +0200, Peter Korsgaard wrote:
->>>>>> "Bernhard" == Bernhard Reutner-Fischer <rep.dot.nop@gmail.com> writes:
->
-> Bernhard> Hi,
-> Bernhard> Currently the clean target (as well as dirclean) does nothing useful.
->
-> Bernhard> I propose the following change:
->
-> Bernhard> # wipe target
-> Bernhard> clean:
-> Bernhard> # remove generated files, retain configs
-> Bernhard> realclean:
-> Bernhard> # remove generated files, including configs (but not DL_DIR!)
-> Bernhard> distclean:
-> Bernhard> # roll a release tarball, in gz, bz2, xz format
-> Bernhard> release:
->
->Sounds sensible. I would prefer to not touch the release target right
->now, as I don't have xz installed, noone else needs it and I already
->have my own release script signing the tarballs and uploading them.
+Dear All, 
 
-There is no need for xz, if it doesn't exists then no .tar.xz will be
-created.
->
-> Bernhard> hm, something like this as a base (probably incomplete, but better than
-> Bernhard> what we have now)
->
-> Bernhard> diff --git a/Makefile b/Makefile
-> Bernhard> index bbd49d4..ddd58ec 100644
-> Bernhard> --- a/Makefile
-> Bernhard> +++ b/Makefile
-> Bernhard> @@ -444,19 +444,20 @@ external-deps:
-> Bernhard>  # Cleanup and misc junk
-> Bernhard>  #
-> Bernhard>  #############################################################
-> Bernhard> +# wipe target
-> Bernhard>  clean: $(TARGETS_CLEAN)
-> Bernhard> -	rm -rf $(STAGING_DIR) $(TARGET_DIR) $(IMAGE) $(BUILD_DIR)/.root $(STAMP_DIR)
-> Bernhard> +	$(Q)rm -rf $(TARGET_DIR) $(IMAGE) $(BUILD_DIR)/.root $(STAMP_DIR)
->
->Makes sense. Why would we want to run the -clean targets of all the
->individual packages first? That just tends to take ages (and fails on
->buggy packages), and we're nuking the TARGET_DIR afterwards anyway.
+I'm trying to use buildroot for my project where I need GUI interface. 
 
-calling the individual targets can be dropped, yes. I just didn't remove
-it (yet).
->
-> 
-> Bernhard> -dirclean: $(TARGETS_DIRCLEAN)
-> Bernhard> -	rm -rf $(STAGING_DIR) $(TARGET_DIR) $(IMAGE) $(BUILD_DIR)/.root $(STAMP_DIR)
-> Bernhard> +# remove generated files, retain configs
-> Bernhard> +dirclean: clean $(TARGETS_DIRCLEAN)
-> Bernhard> +	$(Q)rm -rf $(STAGING_DIR) $(HOST_DIR) $(TOOLCHAIN_DIR)
->
->Same comment about TARGETS_DIRCLEAN.
+I decided to use qtopia. 
 
-ack.
->
-> 
-> Bernhard> -distclean:
-> Bernhard> -ifeq ($(DL_DIR),$(TOPDIR)/dl)
-> Bernhard> -	rm -rf $(DL_DIR)
-> Bernhard> -endif
-> Bernhard> -	rm -rf $(TOOLCHAIN_DIR) $(BUILD_DIR) $(BINARIES_DIR) \
-> Bernhard> -	.config.cmd
-> Bernhard> -	$(MAKE) -C $(CONFIG) clean
-> Bernhard> +# remove generated files, including configs (but not DL_DIR!)
-> Bernhard> +distclean: clean dirclean
-> Bernhard> +	$(Q)$(MAKE) -C $(CONFIG) clean
-> Bernhard> +	$(Q)rm -rf $(TOOLCHAIN_DIR) $(BUILD_DIR) $(BINARIES_DIR) \
->
->dirclean already gets rid of those dirs.
+But while compiling, it shows following errors 
 
-s/those dirs/TOOLCHAIN_DIR/
-ack.
->
-> Bernhard> +		.config .config.cmd .config.old .auto.deps \
-> Bernhard> +		$(BR2_DEPENDS_DIR)
-> Bernhard>  release: distclean
-> Bernhard> -	OUT=buildroot-$$(grep -A2 BR2_VERSION $(CONFIG_CONFIG_IN)|grep default|cut -f2 -d\"); \
-> Bernhard> -	rm -rf ../$$OUT*; cp -al . ../$$OUT; cd ..; \
-> Bernhard> -	tar cfz $$OUT.tar.gz --exclude .svn --exclude .git --exclude \*~ $$OUT; \
-> Bernhard> -	rm -rf $$OUT
-> Bernhard> +	$(Q)BR2_VERSION=$$(grep -A2 BR2_VERSION $(CONFIG_CONFIG_IN)|grep default|cut -f2 -d\"); \
-> Bernhard> +	git archive HEAD --format=tar --prefix="buildroot-$$BR2_VERSION/" > ../buildroot-$$BR2_VERSION.tar; \
->
->The git archive part is fine by me, but my script just expects the
->.tar.gz, so I would like to keep it like that (for now atleast).
+bash: ./build_i386/qt-embedded-linux-opensource-src-4.4.3/bin/qmake: No such file or directory 
 
-It would be nice if you could still pick it up and also sign/upload the .bz2
+But the file exist at same location. 
+
+when I run following command 
+$file qmake: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), dynamically linked (uses shared libs), not stripped 
+
+That means qmake cannnot run on my machine, It is compiled for my target instead of my machine. 
+
+What should I do please help me 
+
+Ravi
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091007/954b426d/attachment.htm>
