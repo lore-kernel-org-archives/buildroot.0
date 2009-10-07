@@ -1,38 +1,42 @@
 From: Michael Roth <mroth@nessie.de>
-Date: Wed,  7 Oct 2009 11:20:23 +0200
-Subject: [Buildroot] [Patch 0/23] Cleanups for Qt
-Message-ID: <1254907246-5650-1-git-send-email-mroth@nessie.de>
+Date: Wed,  7 Oct 2009 11:20:29 +0200
+Subject: [Buildroot] [PATCH 06/23] qt: remove TARGET_CONFIGURE_OPTS from
+	make invocation
+In-Reply-To: <1254907246-5650-1-git-send-email-mroth@nessie.de>
+References: <1254907246-5650-1-git-send-email-mroth@nessie.de>
+Message-ID: <1254907246-5650-7-git-send-email-mroth@nessie.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+All compiler options, switches and path settings are done in the
+configure step. For the compile and install step there is no need
+for the TARGET_CONFIGURE_OPTS variables.
 
-I assembled some cleanups for Qt. Mostly they are small changes
-except twos, namely:
-
-  [PATCH 20/23] qt: simplify and fix installing qt in the target
-  [PATCH 23/23] qt: rename QT_TARGET_DIR to QT_DIR
-
-Patch #20 removes a bunch of lines to simplify the Makfile while
-Patch #23 is only esthetic surgery which could be omitted.
-
-In summary these patches don't change (hopefully...) the current
-Qt build or Kconfig for Qt in fundamental ways.
-
-I tested the series on arm926t and x86.
-
-Additionally I made some larger changes to Kconfig for Qt a few
-months ago which I could port to the current buildroot and release
-in a second series, say in a week, when desired.
-
-
-Michael Roth
+Signed-off-by: Michael Roth <mroth@nessie.de>
 ---
- configs/atstk100x_defconfig |    2 -
- configs/v100sc2_defconfig   |    6 +-
- package/qt/Config.in        |   43 +++----
- package/qt/qt.mk            |  292 +++++++++++++++----------------------------
- 4 files changed, 123 insertions(+), 220 deletions(-)
+ package/qt/qt.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index f0fdfdd..e965a42 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -487,11 +487,11 @@ endif
+ 	touch $@
+ 
+ $(QT_TARGET_DIR)/.compiled: $(QT_TARGET_DIR)/.configured
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(QT_TARGET_DIR)
++	$(MAKE) -C $(QT_TARGET_DIR)
+ 	touch $@
+ 
+ $(STAGING_DIR)/usr/lib/libQtCore.la: $(QT_TARGET_DIR)/.compiled
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(QT_TARGET_DIR) install
++	$(MAKE) -C $(QT_TARGET_DIR) install
+ 
+ qt-gui: $(STAGING_DIR)/usr/lib/libQtCore.la
+ 	mkdir -p $(TARGET_DIR)/usr/lib/fonts
+-- 
+1.6.3.3
