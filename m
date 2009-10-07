@@ -1,39 +1,38 @@
-From: Michael Roth <mroth@nessie.de>
-Date: Wed,  7 Oct 2009 11:20:37 +0200
-Subject: [Buildroot] [PATCH 14/23] qt: make the output of sed hacks much
-	more human readable
-In-Reply-To: <1254907246-5650-1-git-send-email-mroth@nessie.de>
-References: <1254907246-5650-1-git-send-email-mroth@nessie.de>
-Message-ID: <1254907246-5650-15-git-send-email-mroth@nessie.de>
+From: =?big5?B?pKSt7CCxaQ==?= <tnndclub@yahoo.com.tw>
+Date: Wed, 7 Oct 2009 17:21:45 +0800 (CST)
+Subject: [Buildroot] relocation R_MIPS_HI16 against `_gp' can not be used
+	when making a shared object; recompile with -fPIC
+Message-ID: <689310.86704.qm@web73402.mail.tp2.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Make the console output from the QT_QMAKE_SET macro much more
-human readable and additionally respect the QUIET flag.
+Hello,
 
-Signed-off-by: Michael Roth <mroth@nessie.de>
----
- package/qt/qt.mk |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+I am using the MIPS cross toolchain built from buildroot-200908 release.
 
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index 08995d4..ca6ae6b 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -379,8 +379,9 @@ QT_QMAKE_CONF:=$(QT_TARGET_DIR)/mkspecs/qws/linux-$(BR2_PACKAGE_QT_EMB_PLATFORM)
- # $(call QT_QMAKE_SET,variable,value)
- ################################################################################
- define QT_QMAKE_SET
--	$(SED) '/QMAKE_$(1)/d' $(QT_QMAKE_CONF)
--	$(SED) '/include.*qws.conf/aQMAKE_$(1) = $(2)' $(QT_QMAKE_CONF)
-+	@$(if $(QUIET), , echo '$(QT_QMAKE_CONF): QMAKE_$(1) = $(2)')
-+	@$(SED) '/QMAKE_$(1)/d' $(QT_QMAKE_CONF)
-+	@$(SED) '/include.*qws.conf/aQMAKE_$(1) = $(2)' $(QT_QMAKE_CONF)
- endef
- 
- ################################################################################
--- 
-1.6.3.3
+I choose gcc-4.3.4, binutils-2.19.1, uClibc-0.9.30.1 and linux-2.6.29 in the menuconfig.
+The toolchain is generated very well.
+
+After trying to use the toolchain to compile a package, I encounter the following error at link time.
+mips-linux-ld:
+init_mips.o: relocation R_MIPS_HI16 against `_gp' can not be used when
+making a shared object; recompile with -fPIC
+init_mips.o: could not read symbols: Bad value
+
+Does any one know how to solve this problem?
+
+This
+package could be compiled and linked well by using the toolchain
+generated from buildroot-200807 release with gcc-4.2.4, binutils-2.18,
+uClibc-0.9.29 and linux-2.6.24.
+
+
+___________________________________________________ 
+ ??????? ? ???????????????? 
+ http://messenger.yahoo.com.tw/
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091007/ed5e756c/attachment.htm>
