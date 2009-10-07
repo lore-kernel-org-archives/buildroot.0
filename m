@@ -1,47 +1,43 @@
 From: Michael Roth <mroth@nessie.de>
-Date: Wed,  7 Oct 2009 11:20:33 +0200
-Subject: [Buildroot] [PATCH 10/23] qt: don't enable internal tslib-module
-	debugging
+Date: Wed,  7 Oct 2009 11:20:36 +0200
+Subject: [Buildroot] [PATCH 13/23] qt: use configure option instead a sed
+	hack to disable xinerama
 In-Reply-To: <1254907246-5650-1-git-send-email-mroth@nessie.de>
 References: <1254907246-5650-1-git-send-email-mroth@nessie.de>
-Message-ID: <1254907246-5650-11-git-send-email-mroth@nessie.de>
+Message-ID: <1254907246-5650-14-git-send-email-mroth@nessie.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In Qt there are virtually hundreds of internal debug flags like
-TSLIBMOUSEHANDLER_DEBUG for every module or even C++ class. There
-is no reason to enable a single such flag when Qt is build with
-debugging symbols and others not.
+The Qt configure script gained the option '-no-xinerama' in the
+meantime. So use it instead hacking the script itself using sed.
 
 Signed-off-by: Michael Roth <mroth@nessie.de>
 ---
- package/qt/qt.mk |    4 +---
- 1 files changed, 1 insertions(+), 3 deletions(-)
+ package/qt/qt.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
 diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index c61d70c..47009e8 100644
+index b12d3eb..08995d4 100644
 --- a/package/qt/qt.mk
 +++ b/package/qt/qt.mk
-@@ -153,8 +153,6 @@ endif
- ifeq ($(BR2_PACKAGE_QT_MOUSE_TSLIB),y)
- QT_CONFIGURE += -qt-mouse-tslib
- QT_DEP_LIBS+=tslib
--QT_TSLIB_DEB="-D TSLIBMOUSEHANDLER_DEBUG"
--QT_TSLIB_DEB:=$(call qstrip,$(QT_TSLIB_DEB))
- else
- QT_CONFIGURE += -no-mouse-tslib
+@@ -419,7 +419,6 @@ ifneq ($(BR2_INET_IPV6),y)
+ 	$(SED) 's/^CFG_IPV6=auto/CFG_IPV6=no/' $(QT_TARGET_DIR)/configure
+ 	$(SED) 's/^CFG_IPV6IFNAME=auto/CFG_IPV6IFNAME=no/' $(QT_TARGET_DIR)/configure
  endif
-@@ -165,7 +163,7 @@ QT_CONFIGURE += -no-mouse-qvfb
- endif
- 
- ifeq ($(BR2_PACKAGE_QT_DEBUG),y)
--QT_CONFIGURE+= "-debug $(QT_TSLIB_DEB)"
-+QT_CONFIGURE+= -debug
- else
- QT_CONFIGURE+= -release
- endif
+-	$(SED) 's/^CFG_XINERAMA=auto/CFG_XINERAMA=no/' $(QT_TARGET_DIR)/configure
+ 	# Fix compiler path
+ 	$(call QT_QMAKE_SET,CC,$(TARGET_CC))
+ 	$(call QT_QMAKE_SET,CXX,$(TARGET_CXX))
+@@ -446,6 +445,7 @@ endif
+ 		-embedded $(BR2_PACKAGE_QT_EMB_PLATFORM) \
+ 		$(QT_QCONFIG_COMMAND) \
+ 		$(QT_CONFIGURE) \
++		-no-xinerama \
+ 		-no-cups \
+ 		-no-nis \
+ 		-no-accessibility \
 -- 
 1.6.3.3
