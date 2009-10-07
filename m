@@ -1,7 +1,8 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
+From: Sven Neumann <s.neumann@raumfeld.com>
 Date: Wed, 7 Oct 2009 14:52:19 +0200
-Subject: [Buildroot] [git commit master] CHANGES: add gstreamer packages
-Message-ID: <20091007125248.5EF6E77707@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] gstreamer: update to new upstream
+	release 0.10.25
+Message-ID: <20091007125247.81D2D77707@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,27 +10,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=573550d723ddd4760ac2bef72db5bfcbe2e6ef07
+commit: http://git.buildroot.net/buildroot/commit/?id=82cefcbbdaea9483e0a80503721bdb4d1ba604b5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/multimedia/gstreamer/gstreamer.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 3415011..9ddd701 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -4,7 +4,8 @@
- 	sdl_sound, swfdec
- 
- 	Updated/fixed packages: autoconf, busybox, directfb, dnsmasq,
--	festival, imagemagick, iptables, kernel-headers, kismet,
-+	festival, gstreamer, gst-plugins-bad, gst-plugins-base,
-+	gst-plugins-good, imagemagick, iptables, kernel-headers, kismet,
- 	libevent, libglib2, liblockfile, libmad, libupnp, libuuid, ltrace,
- 	lua, mdadm, ncftp, ncurses, netkittelnet, ntfs-3g, openssl, python,
- 	quagga, radvd, samba, shared-mime-info, speech-tools,
+diff --git a/package/multimedia/gstreamer/gstreamer.mk b/package/multimedia/gstreamer/gstreamer.mk
+index 53f1f75..76afa44 100644
+--- a/package/multimedia/gstreamer/gstreamer.mk
++++ b/package/multimedia/gstreamer/gstreamer.mk
+@@ -3,7 +3,7 @@
+ # gstreamer
+ #
+ #############################################################
+-GSTREAMER_VERSION = 0.10.23
++GSTREAMER_VERSION = 0.10.25
+ GSTREAMER_SOURCE = gstreamer-$(GSTREAMER_VERSION).tar.bz2
+ GSTREAMER_SITE = http://gstreamer.freedesktop.org/src/gstreamer
+ GSTREAMER_INSTALL_STAGING = YES
 -- 
 1.6.3.3
