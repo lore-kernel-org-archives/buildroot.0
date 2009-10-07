@@ -1,37 +1,30 @@
-From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
-Date: Wed, 7 Oct 2009 10:28:45 -0300
-Subject: [Buildroot] [PATCH 20/23] qt: simplify and fix installing qt in
-	the target
-In-Reply-To: <20091007131455.0e427cd0@surf>
-References: <1254907246-5650-1-git-send-email-mroth@nessie.de>
-	<1254907246-5650-21-git-send-email-mroth@nessie.de>
-	<20091007131455.0e427cd0@surf>
-Message-ID: <d6cda7730910070628o5aa5ea61lf1c07d967ca87bc1@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 07 Oct 2009 15:33:02 +0200
+Subject: [Buildroot] [PATCH] e2fsprogs: add a patch to link against
+	SEM_INIT libs
+In-Reply-To: <1254826414-20763-2-git-send-email-daniel@caiaq.de> (Daniel
+	Mack's message of "Tue\, 6 Oct 2009 18\:53\:34 +0800")
+References: <1254826414-20763-1-git-send-email-daniel@caiaq.de>
+	<1254826414-20763-2-git-send-email-daniel@caiaq.de>
+Message-ID: <8763armir5.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Daniel" == Daniel Mack <daniel@caiaq.de> writes:
 
-On Wed, Oct 7, 2009 at 8:14 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Le Wed, ?7 Oct 2009 11:20:43 +0200,
-> Michael Roth <mroth@nessie.de> a ?crit :
->
-> Ok, but two remarks:
->
-> ?2. The installation of the libraries to the target/ directory will
-> ? ?include the unnecessary libQt*.so symbolic link (only libQt*.so.X
-> ? ?symbolic links + the library itself are really needed for the
-> ? ?runtime)
->
+ Daniel> This patch is needed to make e2fsprogs being linked against
+ Daniel> SEM_INIT libraries. In this particular case, it causes the
+ Daniel> Makefiles to add -lpthread. Without that, all binaries crash
+ Daniel> at startup, at least on x86.
 
-Also, you seems to drop the BR2_PACKAGE_QT_SHARED checks. If the
-library is built static, those files won't exist. The whole for could
-be skiped. Also plugins install could be skipped, as Qt won't allow
-for shared library plugins when the library itself is static.
+But your patch removes stuff (PRIVATE_LIBS_CMT), it doesn't add
+anything?
 
-Kind Regards,
-    Thiago A. Correa
+ Daniel> +-LIBCOM_ERR = $(LIB)/libcom_err at LIB_EXT@ @PRIVATE_LIBS_CMT@ @SEM_INIT_LIB@
+ Daniel> ++LIBCOM_ERR = $(LIB)/libcom_err at LIB_EXT@ @SEM_INIT_LIB@
+
+-- 
+Bye, Peter Korsgaard
