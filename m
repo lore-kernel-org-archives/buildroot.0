@@ -1,45 +1,39 @@
 From: Michael Roth <mroth@nessie.de>
-Date: Wed,  7 Oct 2009 11:20:30 +0200
-Subject: [Buildroot] [PATCH 07/23] qt: remove PKG_CONFIG workaround
+Date: Wed,  7 Oct 2009 11:20:28 +0200
+Subject: [Buildroot] [PATCH 05/23] qt: remove Makefile variable QT_QMAKE
 In-Reply-To: <1254907246-5650-1-git-send-email-mroth@nessie.de>
 References: <1254907246-5650-1-git-send-email-mroth@nessie.de>
-Message-ID: <1254907246-5650-8-git-send-email-mroth@nessie.de>
+Message-ID: <1254907246-5650-6-git-send-email-mroth@nessie.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-At least Qt 4.5.2 is fixed in the meantime and honors PKG_CONFIG.
-So the PATH workaround is no longer needed.
+The variable is no longer referenced by any buildroot code and not
+needed by external programs.
+
+Once upon a time there was a problem with 'qmake' not finding its
+spec file. But this problem in gone in the meantime.
 
 Signed-off-by: Michael Roth <mroth@nessie.de>
 ---
- package/qt/qt.mk |    8 ++------
- 1 files changed, 2 insertions(+), 6 deletions(-)
+ package/qt/qt.mk |    3 ---
+ 1 files changed, 0 insertions(+), 3 deletions(-)
 
 diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index e965a42..8dac3ca 100644
+index 6351baa..f0fdfdd 100644
 --- a/package/qt/qt.mk
 +++ b/package/qt/qt.mk
-@@ -457,16 +457,12 @@ endif
- 	$(call QT_QMAKE_SET,LFLAGS,$(TARGET_LDFLAGS))
- 	-[ -f $(QT_QCONFIG_FILE) ] && cp $(QT_QCONFIG_FILE) \
- 		$(QT_TARGET_DIR)/$(QT_QCONFIG_FILE_LOCATION)
--# Qt doesn't use PKG_CONFIG, it searches for pkg-config with 'which'.
--# PKG_CONFIG_SYSROOT is only used to avoid a warning from Qt's configure system
--# when cross compiling, Qt 4.4.3 is wrong here.
- # Don't use TARGET_CONFIGURE_OPTS here, qmake would be compiled for the target
--# instead of the host then.
-+# instead of the host then. So set PKG_CONFIG* manually.
- 	(cd $(QT_TARGET_DIR); \
--		PATH=$(TARGET_PATH) \
- 		PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)" \
-+		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
- 		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig:$(PKG_CONFIG_PATH)" \
--		PKG_CONFIG_SYSROOT="$(STAGING_DIR)" \
- 		./configure \
- 		$(if $(VERBOSE),-verbose,-silent) \
- 		-force-pkg-config \
+@@ -391,9 +391,6 @@ QT_UNINSTALL_FILES := $(QT_TARGET_DIR)/.installed	\
+ 
+ QT_QMAKE_CONF:=$(QT_TARGET_DIR)/mkspecs/qws/linux-$(BR2_PACKAGE_QT_EMB_PLATFORM)-g++/qmake.conf
+ 
+-# Variable for other Qt applications to use
+-QT_QMAKE:=$(STAGING_DIR)/usr/bin/qmake -spec qws/linux-$(BR2_PACKAGE_QT_EMB_PLATFORM)-g++
+-
+ ################################################################################
+ # QT_QMAKE_SET -- helper macro to set QMAKE_<variable> = <value> in
+ # QT_QMAKE_CONF. Will remove existing variable declaration if available.
 -- 
 1.6.3.3
