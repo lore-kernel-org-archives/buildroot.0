@@ -1,57 +1,61 @@
 From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Wed,  7 Oct 2009 22:08:23 +0200
-Subject: [Buildroot] [PATCH 00/14] misc cleanups
-Message-ID: <cover.1254945750.git.rep.dot.nop@gmail.com>
+Date: Wed,  7 Oct 2009 22:08:29 +0200
+Subject: [Buildroot] [PATCH 06/14] allow for testing gcc-4.5
+In-Reply-To: <df7563b3e1a87daa6f42ade2c505fecc014aa2a2.1254945750.git.rep.dot.nop@gmail.com>
+References: <cover.1254945750.git.rep.dot.nop@gmail.com>
+	<4acf0a418a2f34c50249d56c6e76b8dba7076302.1254945750.git.rep.dot.nop@gmail.com>
+	<8ddd0fbdd88acec5c801c93ce830b1ad04536118.1254945750.git.rep.dot.nop@gmail.com>
+	<b1a1dc13edb6053d271297a4ac369d848c5f5749.1254945750.git.rep.dot.nop@gmail.com>
+	<a576ef52cd1f156525fd2d327f1e7da466257be2.1254945750.git.rep.dot.nop@gmail.com>
+	<df7563b3e1a87daa6f42ade2c505fecc014aa2a2.1254945750.git.rep.dot.nop@gmail.com>
+Message-ID: <382fdbb8e5e36dd9348dfd57b9267862ef8d2ead.1254945750.git.rep.dot.nop@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+---
+ toolchain/gcc/Config.in |   12 ++++++------
+ 1 files changed, 6 insertions(+), 6 deletions(-)
 
-A bunch of individual (separate) touch-ups.
-They are only numbered so i can easily keep track.
-
-I've split the arch selection improvements into 2 parts as requested by
-Peter and at the end of the series, the _nofpu/_nommu suffix is dropped.
-
-Peter, please apply or pull from my config-cleanup branch
-TIA,
-Bernhard
-
-Bernhard Reutner-Fischer (14):
-  allow menuconfig without a LINUX26_KCONFIG file
-  Allow for specifying kernel version manually
-  handle MMU configuration
-  expand arch selection
-  remove superfluous OPTIMIZE and DEBUG config knobs
-  allow for testing gcc-4.5
-  *-menuconfig needs dirs to exist
-  remove BR2_FPU_SUFFIX
-  tidy up ROOTFS_{PRE,SUF}FIX handling
-  honour DISABLE_IPV6
-  disable-locale implies turning off locale and iconv
-  rsync: bump version
-  enable config.cache per default
-  libpcap, tcpdump: bump version and autotoolify
-
- Config.in                                          |  109 +---
- package/Makefile.autotools.in                      |    1 +
- package/Makefile.in                                |   52 +--
- package/busybox/busybox.mk                         |    2 +-
- package/libpcap/libpcap.mk                         |   92 +---
- package/libpcap/libpcap.patch                      |   13 -
- package/rsync/rsync.mk                             |    8 +-
- .../tcpdump/tcpdump-4.0.0-100-disable-ipv6.patch   |   21 +
- package/tcpdump/tcpdump.mk                         |   77 +--
- target/Config.in.arch                              |  674 ++++++++++++++++++--
- target/linux/Makefile.in                           |   10 +-
- toolchain/Config.in.2                              |   12 +
- toolchain/gcc/Config.in                            |   12 +-
- toolchain/gcc/Makefile.in                          |    5 +
- toolchain/kernel-headers/Config.in                 |   13 +-
- toolchain/uClibc/uclibc.mk                         |    2 +-
- 16 files changed, 719 insertions(+), 384 deletions(-)
- delete mode 100644 package/libpcap/libpcap.patch
- create mode 100644 package/tcpdump/tcpdump-4.0.0-100-disable-ipv6.patch
+diff --git a/toolchain/gcc/Config.in b/toolchain/gcc/Config.in
+index db7e32e..26b531c 100644
+--- a/toolchain/gcc/Config.in
++++ b/toolchain/gcc/Config.in
+@@ -65,10 +65,10 @@ choice
+ 		depends on !BR2_avr32 && !BR2_nios2
+ 		bool "gcc 4.4.x"
+ 
+-#	config BR2_GCC_VERSION_4_3
+-#		depends on !BR2_avr32 && !BR2_nios2
+-#		select BR2_GCC_IS_SNAP
+-#		bool "gcc 4.3"
++	config BR2_GCC_VERSION_4_5
++		depends on !BR2_avr32 && !BR2_nios2
++		select BR2_GCC_IS_SNAP
++		bool "gcc 4.5"
+ endchoice
+ 
+ config BR2_GCC_IS_SNAP
+@@ -87,7 +87,7 @@ config BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE
+ 
+ config BR2_GCC_SNAP_DATE
+ 	string "GCC snapshot date"
+-	default "20070921"
++	default ""
+ 	depends on BR2_GCC_IS_SNAP
+ 	help
+ 	  Enter snapshot date to use for gcc.  Format is:
+@@ -106,7 +106,7 @@ config BR2_GCC_VERSION
+ 	default "4.3.3"     if BR2_GCC_VERSION_4_3_3
+ 	default "4.3.4"     if BR2_GCC_VERSION_4_3_4
+ 	default "4.4.1"     if BR2_GCC_VERSION_4_4_X
+-	default "4.3"       if BR2_GCC_VERSION_4_3
++	default "4.5"       if BR2_GCC_VERSION_4_5
+ 
+ config BR2_TOOLCHAIN_SYSROOT
+ 	bool "Enable toolchain with --sysroot support"
+-- 
+1.6.3.3
