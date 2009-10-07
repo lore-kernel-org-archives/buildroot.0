@@ -1,31 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 7 Oct 2009 13:46:32 +0200
-Subject: [Buildroot] [PATCH 12/23] qt: respect silent mode instead non
- existing verbose mode
-In-Reply-To: <87ljjnmojl.fsf@macbook.be.48ers.dk>
-References: <1254907246-5650-1-git-send-email-mroth@nessie.de>
-	<1254907246-5650-13-git-send-email-mroth@nessie.de>
-	<20091007115741.4f5e44df@surf> <200910071230.48080.mroth@nessie.de>
-	<20091007130206.1a6f9821@surf> <87ljjnmojl.fsf@macbook.be.48ers.dk>
-Message-ID: <20091007134632.4472bfd0@surf>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Wed,  7 Oct 2009 14:15:22 +0200
+Subject: [Buildroot] [PATCH] gstreamer: update to new upstream release
+	0.10.25
+Message-ID: <1254917725-19441-1-git-send-email-s.neumann@raumfeld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 07 Oct 2009 13:27:58 +0200,
-Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+---
+ package/multimedia/gstreamer/gstreamer.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-> Maybe this would be a good subject for the dev day?
-
-Definetely. I was anyway planning to present my proposal of a very
-silent Buildroot mode (presented a few weeks ago on the list with a
-prototype proposal), so this will be on the list of topics to discuss.
-
-Thomas
+diff --git a/package/multimedia/gstreamer/gstreamer.mk b/package/multimedia/gstreamer/gstreamer.mk
+index 53f1f75..76afa44 100644
+--- a/package/multimedia/gstreamer/gstreamer.mk
++++ b/package/multimedia/gstreamer/gstreamer.mk
+@@ -3,7 +3,7 @@
+ # gstreamer
+ #
+ #############################################################
+-GSTREAMER_VERSION = 0.10.23
++GSTREAMER_VERSION = 0.10.25
+ GSTREAMER_SOURCE = gstreamer-$(GSTREAMER_VERSION).tar.bz2
+ GSTREAMER_SITE = http://gstreamer.freedesktop.org/src/gstreamer
+ GSTREAMER_INSTALL_STAGING = YES
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+1.6.0.4
