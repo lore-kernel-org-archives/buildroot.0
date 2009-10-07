@@ -1,62 +1,38 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 7 Oct 2009 23:44:18 +0200
-Subject: [Buildroot] [git commit master] rsync: bump version
-Message-ID: <20091007214451.4874077764@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 07 Oct 2009 23:44:58 +0200
+Subject: [Buildroot] [PATCH 12/14] rsync: bump version
+In-Reply-To: <730af4752b8da4a9b2a2b1583987899fa3eef334.1254945750.git.rep.dot.nop@gmail.com>
+	(Bernhard Reutner-Fischer's message of "Wed\,
+	7 Oct 2009 22\:08\:35 +0200")
+References: <cover.1254945750.git.rep.dot.nop@gmail.com>
+	<4acf0a418a2f34c50249d56c6e76b8dba7076302.1254945750.git.rep.dot.nop@gmail.com>
+	<8ddd0fbdd88acec5c801c93ce830b1ad04536118.1254945750.git.rep.dot.nop@gmail.com>
+	<b1a1dc13edb6053d271297a4ac369d848c5f5749.1254945750.git.rep.dot.nop@gmail.com>
+	<a576ef52cd1f156525fd2d327f1e7da466257be2.1254945750.git.rep.dot.nop@gmail.com>
+	<df7563b3e1a87daa6f42ade2c505fecc014aa2a2.1254945750.git.rep.dot.nop@gmail.com>
+	<382fdbb8e5e36dd9348dfd57b9267862ef8d2ead.1254945750.git.rep.dot.nop@gmail.com>
+	<53e08690da5a307328d4d5dc7d53865215ced09f.1254945750.git.rep.dot.nop@gmail.com>
+	<b01a751a32bbd1ac0bb43898ed65a6c7afd9e0c7.1254945750.git.rep.dot.nop@gmail.com>
+	<ec988dfe40afe8381a2263eeaae1bd2f8ffd9014.1254945750.git.rep.dot.nop@gmail.com>
+	<f77d7f5dd82b8b3945e77fd9351619fa260cff98.1254945750.git.rep.dot.nop@gmail.com>
+	<d97ecb658b37edf74a168fa361436b5be821395c.1254945750.git.rep.dot.nop@gmail.com>
+	<cover.1254945750.git.rep.dot.nop@gmail.com>
+	<730af4752b8da4a9b2a2b1583987899fa3eef334.1254945750.git.rep.dot.nop@gmail.com>
+Message-ID: <878wfmj2ud.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Bernhard" == Bernhard Reutner-Fischer <rep.dot.nop@gmail.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e6bbcb0abaf4069e0f43b1c6f4bf60054270f0f7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Bernhard>   Bump version to 3.0.6.
+ Bernhard>   autoreconf is off per default, so no need to specify it.
+ Bernhard>   Use config.cache (fix the incorrect package instead).
+ Bernhard>   Pass ENABLE_DEBUG setting to configure.
 
-Bump version to 3.0.6.
-autoreconf is off per default, so no need to specify it.
-Use config.cache (fix the incorrect package instead).
-Pass ENABLE_DEBUG setting to configure.
+Committed, thanks.
 
-Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES                |    2 +-
- package/rsync/rsync.mk |    7 +++----
- 2 files changed, 4 insertions(+), 5 deletions(-)
-
-diff --git a/CHANGES b/CHANGES
-index c5ddbfd..13fa44b 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -8,7 +8,7 @@
- 	gst-plugins-good, imagemagick, iptables, kernel-headers, kismet,
- 	libevent, libglib2, liblockfile, libmad, libupnp, libuuid, ltrace,
- 	lua, mdadm, ncftp, ncurses, netkittelnet, ntfs-3g, openssl, python,
--	quagga, radvd, samba, shared-mime-info, speech-tools,
-+	quagga, radvd, rsync, samba, shared-mime-info, speech-tools,
- 	squashfs, syslinux, u-boot, util-linux, valgrind, vsftpd, wipe,
- 	wpa-supplicant, xdata_xcursor-themes, zlib
- 
-diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
-index e24a38c..1ed6812 100644
---- a/package/rsync/rsync.mk
-+++ b/package/rsync/rsync.mk
-@@ -4,13 +4,12 @@
- #
- #############################################################
- 
--RSYNC_VERSION:=3.0.5
-+RSYNC_VERSION:=3.0.6
- RSYNC_SOURCE:=rsync-$(RSYNC_VERSION).tar.gz
--RSYNC_SITE:=http://rsync.samba.org/ftp/rsync/src
--RSYNC_AUTORECONF:=no
--RSYNC_USE_CONFIG_CACHE:=no
-+RSYNC_SITE:=http://rsync.samba.org/ftp/rsync
- RSYNC_INSTALL_STAGING:=NO
- RSYNC_INSTALL_TARGET:=YES
-+RSYNC_CONF_OPT=$(if $(BR2_ENABLE_DEBUG),--enable-debug,--disable-debug)
- ifeq ($(BR2_ENABLE_DEBUG),y)
- RSYNC_INSTALL_TARGET_OPT:=DESTDIR=$(TARGET_DIR) INSTALLCMD='./install-sh -c' \
- 			  install
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
