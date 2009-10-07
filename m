@@ -1,50 +1,64 @@
 From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Wed,  7 Oct 2009 22:08:36 +0200
-Subject: [Buildroot] [PATCH 13/14] enable config.cache per default
-In-Reply-To: <730af4752b8da4a9b2a2b1583987899fa3eef334.1254945750.git.rep.dot.nop@gmail.com>
+Date: Wed,  7 Oct 2009 22:08:26 +0200
+Subject: [Buildroot] [PATCH 03/14] handle MMU configuration
+In-Reply-To: <8ddd0fbdd88acec5c801c93ce830b1ad04536118.1254945750.git.rep.dot.nop@gmail.com>
 References: <cover.1254945750.git.rep.dot.nop@gmail.com>
 	<4acf0a418a2f34c50249d56c6e76b8dba7076302.1254945750.git.rep.dot.nop@gmail.com>
 	<8ddd0fbdd88acec5c801c93ce830b1ad04536118.1254945750.git.rep.dot.nop@gmail.com>
-	<b1a1dc13edb6053d271297a4ac369d848c5f5749.1254945750.git.rep.dot.nop@gmail.com>
-	<a576ef52cd1f156525fd2d327f1e7da466257be2.1254945750.git.rep.dot.nop@gmail.com>
-	<df7563b3e1a87daa6f42ade2c505fecc014aa2a2.1254945750.git.rep.dot.nop@gmail.com>
-	<382fdbb8e5e36dd9348dfd57b9267862ef8d2ead.1254945750.git.rep.dot.nop@gmail.com>
-	<53e08690da5a307328d4d5dc7d53865215ced09f.1254945750.git.rep.dot.nop@gmail.com>
-	<b01a751a32bbd1ac0bb43898ed65a6c7afd9e0c7.1254945750.git.rep.dot.nop@gmail.com>
-	<ec988dfe40afe8381a2263eeaae1bd2f8ffd9014.1254945750.git.rep.dot.nop@gmail.com>
-	<f77d7f5dd82b8b3945e77fd9351619fa260cff98.1254945750.git.rep.dot.nop@gmail.com>
-	<d97ecb658b37edf74a168fa361436b5be821395c.1254945750.git.rep.dot.nop@gmail.com>
-	<730af4752b8da4a9b2a2b1583987899fa3eef334.1254945750.git.rep.dot.nop@gmail.com>
-Message-ID: <78b8984e033470578a90d58e533aa97c31af1071.1254945750.git.rep.dot.nop@gmail.com>
+Message-ID: <b1a1dc13edb6053d271297a4ac369d848c5f5749.1254945750.git.rep.dot.nop@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  It speeds up configuration considerably.
-  If a package breaks due to wrong cache-entries, then the broken
-  other package has to be fixed, not the innocent bystander!
-
-  Put short: There is absolutely _no_ need to ever turn the cache off
-  unless you hack on autotools itself and goof.
+  some arches do not have an MMU at all, some do but it may be
+  desirable not to use it.
 
 Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
 ---
- Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ toolchain/Config.in.2     |   12 ++++++++++++
+ toolchain/gcc/Makefile.in |    5 +++++
+ 2 files changed, 17 insertions(+), 0 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index ca6b298..1201279 100644
---- a/Config.in
-+++ b/Config.in
-@@ -160,6 +160,7 @@ config BR2_RECENT
+diff --git a/toolchain/Config.in.2 b/toolchain/Config.in.2
+index 2a9ce24..d8f7ca0 100644
+--- a/toolchain/Config.in.2
++++ b/toolchain/Config.in.2
+@@ -85,6 +85,18 @@ config BR2_SOFT_FLOAT
  
- config BR2_CONFIG_CACHE
- 	bool "Use a central configure cache file"
+ 	  Most people will answer N.
+ 
++config BR2_HAVE_NOMMU
++	def_bool n
++	# assume that we have an MMU per default.
++
++config BR2_USE_MMU
++	bool "Use MMU"
 +	default y
++	depends on !BR2_HAVE_NOMMU
++	help
++	  If your target has an MMU and you want to use it
++	  then say Y here.
++
+ config BR2_USE_SSP
+ 	bool "Enable stack protection support"
  	help
- 	  This determines if a central config cache is used by
- 	  packages, reducing the configure time for packages as each
+diff --git a/toolchain/gcc/Makefile.in b/toolchain/gcc/Makefile.in
+index e052b83..3c6ddd1 100644
+--- a/toolchain/gcc/Makefile.in
++++ b/toolchain/gcc/Makefile.in
+@@ -49,6 +49,11 @@ SOFT_FLOAT_CONFIG_OPTION:=
+ TARGET_SOFT_FLOAT:=
+ ARCH_FPU_SUFFIX:=
+ endif
++ifeq ($(BR2_USE_MMU),y)
++ARCH_MMU_SUFFIX:=
++else
++ARCH_MMU_SUFFIX:=_nommu
++endif
+ 
+ # some additional defaults
+ ifneq ($(call qstrip,$(BR2_GCC_TARGET_ARCH)),)
 -- 
 1.6.3.3
