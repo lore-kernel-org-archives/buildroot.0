@@ -1,22 +1,26 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Wed, 07 Oct 2009 18:32:23 +0200
-Subject: [Buildroot] [RFC] *clean targets
-In-Reply-To: <20091007162422.GI10261@mx.loc>
-References: <20091007162422.GI10261@mx.loc>
-Message-ID: <1254933143.18927.5.camel@sven>
+From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+Date: Wed, 7 Oct 2009 18:41:59 +0200
+Subject: [Buildroot] 2009.05-rc1: fix rsync build with config cache
+In-Reply-To: <20090506122033.1c849569@bandomeer.europe.flane.local>
+References: <20090506122033.1c849569@bandomeer.europe.flane.local>
+Message-ID: <20091007164159.GA12100@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 2009-10-07 at 18:24 +0200, Bernhard Reutner-Fischer wrote:
+On Wed, May 06, 2009 at 12:20:33PM +0200, Olaf Rempel wrote:
+>Hi,
+>
+>building rsync (x86 target) fails with config cache turned on
+>(at least with my attached .config).
+>
+>With config cache during .configure:
+>checking for struct addrinfo... yes
+>checking for struct sockaddr_storage... (cached) no
 
-> # roll a release tarball, in gz, bz2, xz format
-> release:
+which package did set this to no?
 
-That target is usually called 'dist'. At least that's what automake puts
-in your Makefile...
-
-
-Sven
+Please retest.
+TIA,
