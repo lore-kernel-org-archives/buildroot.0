@@ -1,44 +1,21 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 7 Oct 2009 13:14:55 +0200
-Subject: [Buildroot] [PATCH 20/23] qt: simplify and fix installing qt in
- the target
-In-Reply-To: <1254907246-5650-21-git-send-email-mroth@nessie.de>
+From: Michael Roth <mroth@nessie.de>
+Date: Wed, 7 Oct 2009 13:15:40 +0200
+Subject: [Buildroot] [PATCH 08/23] qt: remove no longer needed
+	'x86x86fix' workaround
+In-Reply-To: <20091007125951.764be92b@surf>
 References: <1254907246-5650-1-git-send-email-mroth@nessie.de>
-	<1254907246-5650-21-git-send-email-mroth@nessie.de>
-Message-ID: <20091007131455.0e427cd0@surf>
+	<200910071226.37310.mroth@nessie.de> <20091007125951.764be92b@surf>
+Message-ID: <200910071315.48306.mroth@nessie.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed,  7 Oct 2009 11:20:43 +0200,
-Michael Roth <mroth@nessie.de> a ?crit :
+Just, for information, I found a commit in the Qt-tree which looks
+like it was the fix for this old problem:
 
-> Get rid of unnecessary complex constructs to install Qt in the target
-> file system. This also fixes the installation procedure when Qt is
-> build static.
-> 
-> Additionally wipe out old Qt files from the staging area and target
-> file system before installing the new ones to prevent messiness.
+	http://qt.gitorious.org/qt/qt/commit/28d2b22a940174b4e64f6fa2f5548a7832fc07e8
 
-Ok, but two remarks:
-
- 1. I'm a little bit confused by the .staged/.installed naming.
-    Instead, could we use a naming closer to the one used in
-    Makefile.autotools.in, which could be: .staging_installed
-    and .target_installed ?
-
- 2. The installation of the libraries to the target/ directory will
-    include the unnecessary libQt*.so symbolic link (only libQt*.so.X
-    symbolic links + the library itself are really needed for the
-    runtime)
-
-Sincerly,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+This commit precedes 4.5.2. So looks like that this issue got really
+fixed in Qt upstream.
