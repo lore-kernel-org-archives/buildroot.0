@@ -1,37 +1,92 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Wed, 7 Oct 2009 20:26:38 +0200
-Subject: [Buildroot] [PATCH 4/6] improve arch selection and gcc setup
-In-Reply-To: <87ocok1hkn.fsf@macbook.be.48ers.dk>
-References: <cover.1254853146.git.rep.dot.nop@gmail.com>
-	<1a6b4f990a536bfd23ae1e57a2cd11527761f8ec.1254853146.git.rep.dot.nop@gmail.com>
-	<4a5a0f10dbaecfd7b024c0cf1e90fd68a6730eac.1254853146.git.rep.dot.nop@gmail.com>
-	<6fe0ac8fa1f42152f604ca708aff08b8f119073a.1254853146.git.rep.dot.nop@gmail.com>
-	<cover.1254853146.git.rep.dot.nop@gmail.com>
-	<582a63d745311a980a8700a2a0ec17c3ae0f5ca9.1254853146.git.rep.dot.nop@gmail.com>
-	<8763as2wuy.fsf@macbook.be.48ers.dk>
-	<20091006184442.GC10261@mx.loc>
-	<87ocok1hkn.fsf@macbook.be.48ers.dk>
-Message-ID: <20091007182638.GC23847@mx.loc>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 07 Oct 2009 20:26:34 +0200
+Subject: [Buildroot] [RFC] *clean targets
+In-Reply-To: <20091007162422.GI10261@mx.loc> (Bernhard Reutner-Fischer's
+	message of "Wed\, 7 Oct 2009 18\:24\:22 +0200")
+References: <20091007162422.GI10261@mx.loc>
+Message-ID: <87ocojkqlh.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Oct 06, 2009 at 08:51:52PM +0200, Peter Korsgaard wrote:
->>>>>> "Bernhard" == Bernhard Reutner-Fischer <rep.dot.nop@gmail.com> writes:
->
-> Bernhard> On Tue, Oct 06, 2009 at 08:36:21PM +0200, Peter Korsgaard wrote:
-> >>>>>>> "Bernhard" == Bernhard Reutner-Fischer <rep.dot.nop@gmail.com> writes:
-> >> 
-> >> Again, please provide more detailed commit messages. This seems to be
-> >> several unrelated changes?
->
-> Bernhard> It adds some arches, fleshes out the cpu selection and
-> Bernhard> provides for a gcc that defaults to generate code for the
-> Bernhard> selected cpu. Any "unrelated" change is making sure that the
-> Bernhard> changes are propagated properly. Ok?
->
->Could you please split it up in 3 patches then? Thanks.
+>>>>> "Bernhard" == Bernhard Reutner-Fischer <rep.dot.nop@gmail.com> writes:
 
-done.
+ Bernhard> Hi,
+ Bernhard> Currently the clean target (as well as dirclean) does nothing useful.
+
+ Bernhard> I propose the following change:
+
+ Bernhard> # wipe target
+ Bernhard> clean:
+ Bernhard> # remove generated files, retain configs
+ Bernhard> realclean:
+ Bernhard> # remove generated files, including configs (but not DL_DIR!)
+ Bernhard> distclean:
+ Bernhard> # roll a release tarball, in gz, bz2, xz format
+ Bernhard> release:
+
+Sounds sensible. I would prefer to not touch the release target right
+now, as I don't have xz installed, noone else needs it and I already
+have my own release script signing the tarballs and uploading them.
+
+ Bernhard> hm, something like this as a base (probably incomplete, but better than
+ Bernhard> what we have now)
+
+ Bernhard> diff --git a/Makefile b/Makefile
+ Bernhard> index bbd49d4..ddd58ec 100644
+ Bernhard> --- a/Makefile
+ Bernhard> +++ b/Makefile
+ Bernhard> @@ -444,19 +444,20 @@ external-deps:
+ Bernhard>  # Cleanup and misc junk
+ Bernhard>  #
+ Bernhard>  #############################################################
+ Bernhard> +# wipe target
+ Bernhard>  clean: $(TARGETS_CLEAN)
+ Bernhard> -	rm -rf $(STAGING_DIR) $(TARGET_DIR) $(IMAGE) $(BUILD_DIR)/.root $(STAMP_DIR)
+ Bernhard> +	$(Q)rm -rf $(TARGET_DIR) $(IMAGE) $(BUILD_DIR)/.root $(STAMP_DIR)
+
+Makes sense. Why would we want to run the -clean targets of all the
+individual packages first? That just tends to take ages (and fails on
+buggy packages), and we're nuking the TARGET_DIR afterwards anyway.
+
+ 
+ Bernhard> -dirclean: $(TARGETS_DIRCLEAN)
+ Bernhard> -	rm -rf $(STAGING_DIR) $(TARGET_DIR) $(IMAGE) $(BUILD_DIR)/.root $(STAMP_DIR)
+ Bernhard> +# remove generated files, retain configs
+ Bernhard> +dirclean: clean $(TARGETS_DIRCLEAN)
+ Bernhard> +	$(Q)rm -rf $(STAGING_DIR) $(HOST_DIR) $(TOOLCHAIN_DIR)
+
+Same comment about TARGETS_DIRCLEAN.
+
+ 
+ Bernhard> -distclean:
+ Bernhard> -ifeq ($(DL_DIR),$(TOPDIR)/dl)
+ Bernhard> -	rm -rf $(DL_DIR)
+ Bernhard> -endif
+ Bernhard> -	rm -rf $(TOOLCHAIN_DIR) $(BUILD_DIR) $(BINARIES_DIR) \
+ Bernhard> -	.config.cmd
+ Bernhard> -	$(MAKE) -C $(CONFIG) clean
+ Bernhard> +# remove generated files, including configs (but not DL_DIR!)
+ Bernhard> +distclean: clean dirclean
+ Bernhard> +	$(Q)$(MAKE) -C $(CONFIG) clean
+ Bernhard> +	$(Q)rm -rf $(TOOLCHAIN_DIR) $(BUILD_DIR) $(BINARIES_DIR) \
+
+dirclean already gets rid of those dirs.
+
+ Bernhard> +		.config .config.cmd .config.old .auto.deps \
+ Bernhard> +		$(BR2_DEPENDS_DIR)
+ Bernhard>  release: distclean
+ Bernhard> -	OUT=buildroot-$$(grep -A2 BR2_VERSION $(CONFIG_CONFIG_IN)|grep default|cut -f2 -d\"); \
+ Bernhard> -	rm -rf ../$$OUT*; cp -al . ../$$OUT; cd ..; \
+ Bernhard> -	tar cfz $$OUT.tar.gz --exclude .svn --exclude .git --exclude \*~ $$OUT; \
+ Bernhard> -	rm -rf $$OUT
+ Bernhard> +	$(Q)BR2_VERSION=$$(grep -A2 BR2_VERSION $(CONFIG_CONFIG_IN)|grep default|cut -f2 -d\"); \
+ Bernhard> +	git archive HEAD --format=tar --prefix="buildroot-$$BR2_VERSION/" > ../buildroot-$$BR2_VERSION.tar; \
+
+The git archive part is fine by me, but my script just expects the
+.tar.gz, so I would like to keep it like that (for now atleast).
+
+-- 
+Bye, Peter Korsgaard
