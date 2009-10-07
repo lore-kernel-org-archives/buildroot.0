@@ -1,35 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 7 Oct 2009 11:42:36 +0200
-Subject: [Buildroot] [PATCH 05/23] qt: remove Makefile variable QT_QMAKE
-In-Reply-To: <1254907246-5650-6-git-send-email-mroth@nessie.de>
+Date: Wed, 7 Oct 2009 11:42:53 +0200
+Subject: [Buildroot] [PATCH 06/23] qt: remove TARGET_CONFIGURE_OPTS from
+ make invocation
+In-Reply-To: <1254907246-5650-7-git-send-email-mroth@nessie.de>
 References: <1254907246-5650-1-git-send-email-mroth@nessie.de>
-	<1254907246-5650-6-git-send-email-mroth@nessie.de>
-Message-ID: <20091007114236.0671ae1a@surf>
+	<1254907246-5650-7-git-send-email-mroth@nessie.de>
+Message-ID: <20091007114253.19bf591f@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed,  7 Oct 2009 11:20:28 +0200,
+Le Wed,  7 Oct 2009 11:20:29 +0200,
 Michael Roth <mroth@nessie.de> a ?crit :
 
-> The variable is no longer referenced by any buildroot code and not
-> needed by external programs.
+> All compiler options, switches and path settings are done in the
+> configure step. For the compile and install step there is no need
+> for the TARGET_CONFIGURE_OPTS variables.
+> 
+> Signed-off-by: Michael Roth <mroth@nessie.de>
 
-Well, it *might* be useful for people willing to add their own Qt
-applications, using the qmake build system, into the Buildroot
-infrastructure.
-
-But unless this is documented somewhere, this is useless. So we should
-either:
-
- * Remove it
-
- * Keep it, but document it somwhere. See my suggestions associated to
-   patch 02/23 for details
-
-Thomas
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -- 
 Thomas Petazzoni, Free Electrons
 Kernel, drivers and embedded Linux development,
