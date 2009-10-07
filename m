@@ -1,7 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Wed, 7 Oct 2009 22:59:49 +0200
-Subject: [Buildroot] [git commit master] remove BR2_FPU_SUFFIX
-Message-ID: <20091007210622.F1360775F3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] enable config.cache per default
+Message-ID: <20091007210623.C127877784@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,69 +9,33 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0bc7a43ff3297ecff969fe9f865ff34e3b88a39e
+commit: http://git.buildroot.net/buildroot/commit/?id=c45cd1fdbbceb4d3db7a129aa4bcc541ac3d10ae
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-hard/softfloat is just one of the many config options, and it only
-clutters the filenames.
+It speeds up configuration considerably.
+  If a package breaks due to wrong cache-entries, then the broken
+  other package has to be fixed, not the innocent bystander!
+
+  Put short: There is absolutely _no_ need to ever turn the cache off
+  unless you hack on autotools itself and goof.
 
 Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- Config.in           |    7 -------
- package/Makefile.in |   10 ++--------
- 2 files changed, 2 insertions(+), 15 deletions(-)
+ Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
 diff --git a/Config.in b/Config.in
-index cc83a6a..86e50ac 100644
+index 86e50ac..6967d25 100644
 --- a/Config.in
 +++ b/Config.in
-@@ -99,13 +99,6 @@ config BR2_STAGING_DIR
- 	  Most people will leave this set to the default value of
- 	  "$(BASE_DIR)/staging".
+@@ -160,6 +160,7 @@ config BR2_RECENT
  
--config BR2_FPU_SUFFIX
--	bool "Add '_nofpu' suffix for softfloat toolchains"
--	help
--	  If the toolchain is configured to use softfloat, then
--	  the "_nofpu" suffix will be added to the toolchain build
--	  directory name and to any rootfs image name
--
- config BR2_GNU_BUILD_SUFFIX
- 	string "GNU build hostname suffix"
- 	default "pc-linux-gnu"
-diff --git a/package/Makefile.in b/package/Makefile.in
-index fa7c740..ccd7480 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -105,18 +105,12 @@ XXXX=xxxx
- ROOTFS_SUFFIX:=-$(BR2_ROOTFS_SUFFIX)
- endif
- 
--ifeq ($(call qstrip,$(BR2_FPU_SUFFIX)),y)
--COND_ARCH_FPU_SUFFIX:=$(ARCH_FPU_SUFFIX)
--else
--COND_ARCH_FPU_SUFFIX:=
--endif
--
- ifeq ($(BR2_TOOLCHAIN_SOURCE),y)
- TOOLCHAIN_DIR=$(BASE_DIR)/toolchain
- 
- # Quotes are needed for spaces et al in path components.
- TARGET_PATH="$(TOOLCHAIN_DIR)/bin:$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(STAGING_DIR)/bin:$(STAGING_DIR)/usr/bin:$(PATH)"
--IMAGE:=$(BINARIES_DIR)/$(BR2_ROOTFS_PREFIX).$(ARCH)$(COND_ARCH_FPU_SUFFIX)$(ROOTFS_SUFFIX)
-+IMAGE:=$(BINARIES_DIR)/$(BR2_ROOTFS_PREFIX).$(ARCH)$(ROOTFS_SUFFIX)
- GNU_TARGET_NAME=$(OPTIMIZE_FOR_CPU)-linux
- REAL_GNU_TARGET_NAME=$(OPTIMIZE_FOR_CPU)$(GNU_TARGET_SUFFIX)
- TARGET_CROSS=$(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-
-@@ -127,7 +121,7 @@ TOOLCHAIN_EXTERNAL_PATH:=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PATH))
- TOOLCHAIN_DIR=$(BASE_DIR)/toolchain
- TARGET_PATH="$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(TOOLCHAIN_DIR)/bin:$(TOOLCHAIN_EXTERNAL_PATH)/bin:$(PATH)"
- #IMAGE:=$(BINARIES_DIR)/$(BR2_ROOTFS_PREFIX).$(TOOLCHAIN_EXTERNAL_PREFIX)$(ROOTFS_SUFFIX)
--IMAGE:=$(BINARIES_DIR)/$(BR2_ROOTFS_PREFIX).$(ARCH)$(COND_ARCH_FPU_SUFFIX)$(ROOTFS_SUFFIX)
-+IMAGE:=$(BINARIES_DIR)/$(BR2_ROOTFS_PREFIX).$(ARCH)$(ROOTFS_SUFFIX)
- 
- REAL_GNU_TARGET_NAME=$(TOOLCHAIN_EXTERNAL_PREFIX)
- GNU_TARGET_NAME=$(TOOLCHAIN_EXTERNAL_PREFIX)
+ config BR2_CONFIG_CACHE
+ 	bool "Use a central configure cache file"
++	default y
+ 	help
+ 	  This determines if a central config cache is used by
+ 	  packages, reducing the configure time for packages as each
 -- 
 1.6.3.3
