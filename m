@@ -1,57 +1,49 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 8 Oct 2009 21:22:16 +0200
-Subject: [Buildroot] [git commit master] x11r7: tweak kconfig
-Message-ID: <20091008202856.2B6B577629@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 08 Oct 2009 22:35:22 +0200
+Subject: [Buildroot] [PATCH 06/10] *-menuconfig needs dirs to exist
+In-Reply-To: <20091008190847.GB2266@mx.loc> (Bernhard Reutner-Fischer's
+	message of "Thu\, 8 Oct 2009 21\:08\:47 +0200")
+References: <87my43j6b6.fsf@macbook.be.48ers.dk>
+	<cover.1254994304.git.rep.dot.nop@gmail.com>
+	<2ab3141d307cc1b3daa8ab8ded7740b1af324336.1254994304.git.rep.dot.nop@gmail.com>
+	<874oq9iukr.fsf@macbook.be.48ers.dk> <20091008190847.GB2266@mx.loc>
+Message-ID: <87zl81hbed.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Bernhard" == Bernhard Reutner-Fischer <rep.dot.nop@gmail.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c9a2b035ee5c70a6c62ceb2df90eda3ea73425c1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Bernhard> On Thu, Oct 08, 2009 at 08:55:48PM +0200, Peter Korsgaard wrote:
+ >>>>>>> "Bernhard" == Bernhard Reutner-Fischer <rep.dot.nop@gmail.com> writes:
+ >> 
+ Bernhard> In a pristine checkout the -menuconfig targets need their build dirs
+ Bernhard> to exist.
+ >> 
+ >> Really? I cannot reproduce it:
+ >> 
+ >> git clone ~/source/buildroot; cd buildroot
+ >> yes ''|make oldconfig >/dev/null
 
-Show comment about what to enable in toolchain to make modular X.org
-visible, and move comment about x11r7 toolchain dependency to end,
-as otherwise kconfig gets confused and doesn't put X options under
-the x11r7 menuconfig.
+ Bernhard> No. You already created the dirs here.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/x11r7/Config.in |    9 ++++++---
- 1 files changed, 6 insertions(+), 3 deletions(-)
+Ok, but you need a config with busybox/uclibc/linux26 enabled, otherwise
+none of those targets make sense.
 
-diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index b827367..25cc455 100644
---- a/package/x11r7/Config.in
-+++ b/package/x11r7/Config.in
-@@ -9,9 +9,6 @@ menuconfig BR2_PACKAGE_XORG7
- 	  Support for X11R7 libraries, servers, drivers, and/or
- 	  applications in the target.
- 
--comment "X.org requires a toolchain with WCHAR support"
--        depends on !BR2_USE_WCHAR
--
- if BR2_PACKAGE_XORG7
- 
- choice
-@@ -25,6 +22,9 @@ config BR2_PACKAGE_XSERVER_xorg
- 	# depending on BR2_ENABLE_LOCALE gives a recursion error with dbus
- 	depends on BR2_LARGEFILE && BR2_INSTALL_LIBSTDCPP # && BR2_ENABLE_LOCALE
- 
-+comment 'X.org requires largefile, locale and C++ support'
-+	depends on !(BR2_LARGEFILE && BR2_INSTALL_LIBSTDCPP && BR2_ENABLE_LOCALE)
-+
- config BR2_PACKAGE_XSERVER_tinyx
- 	bool "TinyX"
- 
-@@ -330,3 +330,6 @@ endmenu
- 		source package/x11r7/xkeyboard-config/Config.in
- 	endmenu
- endif
-+
-+comment "X.org requires a toolchain with WCHAR support"
-+        depends on !BR2_USE_WCHAR
+Anyway, doing:
+
+git clone ~/source/buildroot; cd buildroot
+cp ~/source/buildroot/.config . # has busybox enabled
+make busybox-menuconfig
+Makefile:281: .config.cmd: No such file or directory
+make: *** No rule to make target `.config.cmd'.  Stop.
+
+Adding dirs to the busybox-menuconfig dependency won't change anything
+about that.
+
+doing touch .config.cmd; make busybox-menuconfig works.
+
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
