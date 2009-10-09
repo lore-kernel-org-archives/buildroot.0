@@ -1,12 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 09 Oct 2009 14:42:56 +0200
-Subject: [Buildroot] [PATCH 10/23] qt: don't enable internal
-	tslib-module debugging
-In-Reply-To: <1254907246-5650-11-git-send-email-mroth@nessie.de> (Michael
-	Roth's message of "Wed\, 7 Oct 2009 11\:20\:33 +0200")
+Date: Fri, 09 Oct 2009 14:47:15 +0200
+Subject: [Buildroot] [PATCH 11/23] qt: remove unnecessary call to qstrip
+	macro in Makefile
+In-Reply-To: <1254907246-5650-12-git-send-email-mroth@nessie.de> (Michael
+	Roth's message of "Wed\, 7 Oct 2009 11\:20\:34 +0200")
 References: <1254907246-5650-1-git-send-email-mroth@nessie.de>
-	<1254907246-5650-11-git-send-email-mroth@nessie.de>
-Message-ID: <877hv4g2lr.fsf@macbook.be.48ers.dk>
+	<1254907246-5650-12-git-send-email-mroth@nessie.de>
+Message-ID: <873a5sg2ek.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,10 +15,8 @@ To: buildroot@busybox.net
 
 >>>>> "Michael" == Michael Roth <mroth@nessie.de> writes:
 
- Michael> In Qt there are virtually hundreds of internal debug flags like
- Michael> TSLIBMOUSEHANDLER_DEBUG for every module or even C++ class. There
- Michael> is no reason to enable a single such flag when Qt is build with
- Michael> debugging symbols and others not.
+ Michael> QT_CONFIGURE can never gain double quotes, so there
+ Michael> is no point to remove some.
 
 Committed, thanks.
 
