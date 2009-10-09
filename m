@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Fri, 9 Oct 2009 14:58:32 +0200
-Subject: [Buildroot] [git commit master] qt: remove no longer needed
-	'x86x86fix' workaround
-Message-ID: <20091009130113.865A877784@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] qt: use configure option instead a
+	sed hack to disable xinerama
+Message-ID: <20091009130116.160F1772E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,50 +10,38 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=03bdf67f438ad66a652e860474fc65b9342656f2
+commit: http://git.buildroot.net/buildroot/commit/?id=f9e208866bbed8a75de881b555760b095ced4011
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Tested with 4.5.2.
+The Qt configure script gained the option '-no-xinerama' in the
+meantime. So use it instead hacking the script itself using sed.
 
 Signed-off-by: Michael Roth <mroth@nessie.de>
 Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/qt/qt.mk |   15 ---------------
- 1 files changed, 0 insertions(+), 15 deletions(-)
+ package/qt/qt.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
 diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index 77e7f1a..6fe122c 100644
+index 015312e..a4ca3a9 100644
 --- a/package/qt/qt.mk
 +++ b/package/qt/qt.mk
-@@ -17,10 +17,6 @@
- # (cd /usr/include; sudo ln -s dbus-1.0/dbus dbus)
- # to fix
- 
--# BUG: There is a workaround below (search for x86x86fix) for
--# x86 crosscompiling under linux x86. Please remove it when the workaround
--# is no longer necessary.
--
- QT_VERSION:=4.5.2
- QT_CAT:=$(BZCAT)
- 
-@@ -329,17 +325,6 @@ endif
- QT_CONFIGURE:=$(call qstrip,$(QT_CONFIGURE))
- BR2_PACKAGE_QT_EMB_PLATFORM:=$(call qstrip,$(BR2_PACKAGE_QT_EMB_PLATFORM))
- 
--# x86x86fix
--# Workaround Qt Embedded bug when crosscompiling for x86 under x86 with linux
--# host. It's unclear if this would happen on other hosts.
--ifneq ($(findstring pc-linux,$(BR2_GNU_BUILD_SUFFIX)),)
--ifeq ($(BR2_PACKAGE_QT_EMB_PLATFORM),x86)
--QT_CONFIGURE+= -platform linux-g++
--QT_CONFIGURE:=$(call qstrip,$(QT_CONFIGURE))
--endif
--endif
--# End of workaround.
--
- # Figure out what libs to install in the target
- QT_LIBS=#empty
- ifeq ($(BR2_PACKAGE_QT_GUI_MODULE),y)
+@@ -406,7 +406,6 @@ ifneq ($(BR2_INET_IPV6),y)
+ 	$(SED) 's/^CFG_IPV6=auto/CFG_IPV6=no/' $(QT_TARGET_DIR)/configure
+ 	$(SED) 's/^CFG_IPV6IFNAME=auto/CFG_IPV6IFNAME=no/' $(QT_TARGET_DIR)/configure
+ endif
+-	$(SED) 's/^CFG_XINERAMA=auto/CFG_XINERAMA=no/' $(QT_TARGET_DIR)/configure
+ 	# Fix compiler path
+ 	$(call QT_QMAKE_SET,CC,$(TARGET_CC))
+ 	$(call QT_QMAKE_SET,CXX,$(TARGET_CXX))
+@@ -433,6 +432,7 @@ endif
+ 		-embedded $(BR2_PACKAGE_QT_EMB_PLATFORM) \
+ 		$(QT_QCONFIG_COMMAND) \
+ 		$(QT_CONFIGURE) \
++		-no-xinerama \
+ 		-no-cups \
+ 		-no-nis \
+ 		-no-accessibility \
 -- 
 1.6.3.3
