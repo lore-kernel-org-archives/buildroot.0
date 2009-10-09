@@ -1,7 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Fri, 9 Oct 2009 14:58:32 +0200
-Subject: [Buildroot] [git commit master] qt: enable proper re-configure
-Message-ID: <20091009130112.98985772E1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] qt: remove Makefile variable
+	QT_QMAKE_AR
+Message-ID: <20091009130112.D530177784@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,40 +10,39 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=10efac17fd7db7bd4e7eb8251fe96b45c5ca406d
+commit: http://git.buildroot.net/buildroot/commit/?id=ef951295bf624d3c21753c15ea6e40ecbe1d6839
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The Qt configure script doesn't use config.cache but the
-generated Makefile provides a confclean target to properly
-clean out old configuration.
+The variable is only referenced once, so inline it.
 
 Signed-off-by: Michael Roth <mroth@nessie.de>
 Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/qt/qt.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/qt/qt.mk |    4 +---
+ 1 files changed, 1 insertions(+), 3 deletions(-)
 
 diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index 68b4e44..5b9906e 100644
+index 5b9906e..47b5feb 100644
 --- a/package/qt/qt.mk
 +++ b/package/qt/qt.mk
-@@ -426,6 +426,7 @@ $(QT_TARGET_DIR)/.unpacked: $(DL_DIR)/$(QT_SOURCE)
- 	touch $@
+@@ -375,8 +375,6 @@ endif
  
- $(QT_TARGET_DIR)/.configured: $(QT_TARGET_DIR)/.unpacked
-+	-[ -f $(QT_TARGET_DIR)/Makefile ] && $(MAKE) -C $(QT_TARGET_DIR) confclean
- ifneq ($(BR2_INET_IPV6),y)
- 	$(SED) 's/^CFG_IPV6=auto/CFG_IPV6=no/' $(QT_TARGET_DIR)/configure
- 	$(SED) 's/^CFG_IPV6IFNAME=auto/CFG_IPV6IFNAME=no/' $(QT_TARGET_DIR)/configure
-@@ -450,7 +451,7 @@ endif
- # when cross compiling, Qt 4.4.3 is wrong here.
- # Don't use TARGET_CONFIGURE_OPTS here, qmake would be compiled for the target
- # instead of the host then.
--	(cd $(QT_TARGET_DIR); rm -rf config.cache; \
-+	(cd $(QT_TARGET_DIR); \
- 		PATH=$(TARGET_PATH) \
- 		PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)" \
- 		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig:$(PKG_CONFIG_PATH)" \
+ QT_QMAKE_CONF:=$(QT_TARGET_DIR)/mkspecs/qws/linux-$(BR2_PACKAGE_QT_EMB_PLATFORM)-g++/qmake.conf
+ 
+-QT_QMAKE_AR:=$(TARGET_AR) cqs
+-
+ # Variable for other Qt applications to use
+ QT_QMAKE:=$(STAGING_DIR)/usr/bin/qmake -spec qws/linux-$(BR2_PACKAGE_QT_EMB_PLATFORM)-g++
+ 
+@@ -437,7 +435,7 @@ endif
+ 	$(call QT_QMAKE_SET,CXX,$(TARGET_CXX))
+ 	$(call QT_QMAKE_SET,LINK,$(TARGET_CXX))
+ 	$(call QT_QMAKE_SET,LINK_SHLIB,$(TARGET_CXX))
+-	$(call QT_QMAKE_SET,AR,$(QT_QMAKE_AR))
++	$(call QT_QMAKE_SET,AR,$(TARGET_AR) cqs)
+ 	$(call QT_QMAKE_SET,OBJCOPY,$(TARGET_OBJCOPY))
+ 	$(call QT_QMAKE_SET,RANLIB,$(TARGET_RANLIB))
+ 	$(call QT_QMAKE_SET,STRIP,$(TARGET_STRIP))
 -- 
 1.6.3.3
