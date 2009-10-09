@@ -1,12 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 09 Oct 2009 14:40:05 +0200
-Subject: [Buildroot] [PATCH 06/23] qt: remove TARGET_CONFIGURE_OPTS from
-	make invocation
-In-Reply-To: <1254907246-5650-7-git-send-email-mroth@nessie.de> (Michael
-	Roth's message of "Wed\, 7 Oct 2009 11\:20\:29 +0200")
+Date: Fri, 09 Oct 2009 14:41:49 +0200
+Subject: [Buildroot] [PATCH 09/23] qt: remove unnecessary comment
+In-Reply-To: <1254907246-5650-10-git-send-email-mroth@nessie.de> (Michael
+	Roth's message of "Wed\, 7 Oct 2009 11\:20\:32 +0200")
 References: <1254907246-5650-1-git-send-email-mroth@nessie.de>
-	<1254907246-5650-7-git-send-email-mroth@nessie.de>
-Message-ID: <87fx9sg2qi.fsf@macbook.be.48ers.dk>
+	<1254907246-5650-10-git-send-email-mroth@nessie.de>
+Message-ID: <87bpkgg2nm.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,11 +14,13 @@ To: buildroot@busybox.net
 
 >>>>> "Michael" == Michael Roth <mroth@nessie.de> writes:
 
- Michael> All compiler options, switches and path settings are done in the
- Michael> configure step. For the compile and install step there is no need
- Michael> for the TARGET_CONFIGURE_OPTS variables.
+ Michael> Qt in buildroot should not depend on dbus installed on build platform,
+ Michael> if so this is (or was) a bug in buildroot.
 
-Committed, thanks.
+ Michael> Looks like that this note is left over from ancient buildroot days,
+ Michael> so remove it.
+
+Commited, thanks.
 
 -- 
 Bye, Peter Korsgaard
