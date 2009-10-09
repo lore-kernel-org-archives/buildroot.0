@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 9 Oct 2009 09:51:52 +0200
+Date: Fri, 9 Oct 2009 10:00:08 +0200
 Subject: [Buildroot] [RFC] *clean targets
-In-Reply-To: <20091007162422.GI10261@mx.loc>
+In-Reply-To: <20091009095152.555ceed2@surf>
 References: <20091007162422.GI10261@mx.loc>
-Message-ID: <20091009095152.555ceed2@surf>
+	<20091009095152.555ceed2@surf>
+Message-ID: <20091009100008.7d0f2c65@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,59 +13,40 @@ To: buildroot@busybox.net
 
 Hello,
 
-Good to get a discussion on clean targets. They are currently a mess.
-Thanks for raising the topic and starting a discussion on this topic.
+Le Fri, 9 Oct 2009 09:51:52 +0200,
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
 
-Le Wed, 7 Oct 2009 18:24:22 +0200,
-Bernhard Reutner-Fischer <rep.dot.nop@gmail.com> a ?crit :
+> Good to get a discussion on clean targets. They are currently a mess.
+> Thanks for raising the topic and starting a discussion on this topic.
 
-> # wipe target
-> clean:
+Ignore some of my comments, I didn't see the attached patch (it seems
+it was not inline), making it harder to comment on.
 
-I'm not a fan of a make target that only cleans the target. People
-might think that by doing so, there are able to remove packages from
-their system. However, previously selected packages will still be
-present in the staging/ directory, which is not clean. Consider the
-following scenario :
+ * On the clean target
 
- * We have package A that has an optional dependency on package B. I.e,
-   A does not depend on B, but when A ./configure detects that B is
-   present, then it uses B features, otherwise it just disables this
-   feature flawlessly.
+   I see that all the stamps are removed. So this will trigger
+   basically a reconfigure + rebuild of all packages. Is this what we
+   want ?
 
- * The user select A and B, and compiles the system. In the staging/
-   and target/ directories, we have both A and B
+   Same question as before: is removing the target/ directory without
+   removing the staging/ directory really safe ?
 
- * The user removes B, and does "make clean" with the semantic of your
-   proposal. So target/ is empty, but staging/ still contains A and B
+   Removing $(IMAGE) will not do anything, since $(IMAGE) is the prefix
+   for the filesystem images. I.e, the tar image is $(IMAGE).tar.
+   Shouldn't we just remove $(BINARIES_DIR) ?
 
- * The user runs "make" to regenerate the target/. This will reinstall
-   a version of A that thinks that B will be present on the target,
-   which is not longer the case.
+ * Your description mention realclean, but the patch implements dirclean
 
-Moreover, just removing the target/ directory doesn't trigger the
-reinstallation of packages using the Makefile.autotools.in machinery,
-since this machinery uses stamp files outside of the target/ directory.
+ * Detail: in dirclean (realclean ?), shouldn't we erase $(BASE_DIR)
+   simply, instead of erasing all individual directories it contains ?
 
-Until we have a proven working way of cleanly removing packages, I'd
-prefer not to let the user think that he can remove packages safely.
+ * On distclean: removing the BUILD_DIR and TOOLCHAIN_DIR is already
+   done by dirclean, on which distclean depends. If clean removes
+   BINARIES_DIR as suggested above, we can also drop this clean here.
 
-> # remove generated files, retain configs
-> realclean:
+ * Documentation (both 'make help' and the HTML documentation)
 
-Could you specify "remove generated files" ? And the semantic when O=
-is used ?
-
-> # remove generated files, including configs (but not DL_DIR!)
-> distclean:
-
-Agreed on realclean vs. distclean concerning the removal of .config,
-and the fact that DL_DIR must be kept.
-
-But still need to define what are the ? generated files ? and how you
-plan to remove them.
-
-Sincerly,
+Again, thanks a lot for working on this issue.
 
 Thomas
 -- 
