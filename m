@@ -1,27 +1,36 @@
 From: Lionel Landwerlin <lionel.landwerlin@openwide.fr>
-Date: Fri, 09 Oct 2009 15:48:03 +0200
+Date: Fri, 09 Oct 2009 21:55:49 +0200
 Subject: [Buildroot] [PATCH] Add sysstat tools
-Message-ID: <1255096083.22093.0.camel@coalu.atr>
+In-Reply-To: <1255096083.22093.0.camel@coalu.atr>
+References: <1255096083.22093.0.camel@coalu.atr>
+Message-ID: <1255118149.2236.3.camel@coalu.atr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Well... I mixed some patch with another and ...
+
+Here the good one :
+
+--
+
+Add sysstat tools
 
 Signed-off-by: Lionel Landwerlin <lionel.landwerlin@openwide.fr>
 ---
- package/Config.in                                  |    2 +
+ package/Config.in                                  |    1 +
  package/sysstat/Config.in                          |    7 +++
  .../sysstat-9.0.5-Add-install-strip-rule.patch     |   54 ++++++++++++++++++++
  package/sysstat/sysstat.mk                         |   24 +++++++++
- 4 files changed, 87 insertions(+), 0 deletions(-)
+ 4 files changed, 86 insertions(+), 0 deletions(-)
  create mode 100644 package/sysstat/Config.in
  create mode 100644 package/sysstat/sysstat-9.0.5-Add-install-strip-rule.patch
  create mode 100644 package/sysstat/sysstat.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index c78fd31..f260ae4 100644
+index c78fd31..13c845e 100644
 --- a/package/Config.in
 +++ b/package/Config.in
 @@ -270,6 +270,7 @@ if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
@@ -32,14 +41,6 @@ index c78fd31..f260ae4 100644
  if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
  # mdev
  source "package/udev/Config.in"
-@@ -338,6 +339,7 @@ source "package/libglib12/Config.in"
- source "package/libglib2/Config.in"
- source "package/libgtk12/Config.in"
- source "package/libgtk2/Config.in"
-+source "package/eina/Config.in"
- source "package/gtk2-engines/Config.in"
- source "package/gtk2-themes/Config.in"
- source "package/libsexy/Config.in"
 diff --git a/package/sysstat/Config.in b/package/sysstat/Config.in
 new file mode 100644
 index 0000000..71bafc7
