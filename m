@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Fri, 9 Oct 2009 14:58:32 +0200
-Subject: [Buildroot] [git commit master] qt: remove TARGET_CONFIGURE_OPTS
-	from make invocation
-Message-ID: <20091009130113.16C6377784@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] qt: remove no longer needed
+	'x86x86fix' workaround
+Message-ID: <20091009130113.865A877784@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,37 +10,50 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ad1a8a156aaab584387d5cbfb27c20f21be32a54
+commit: http://git.buildroot.net/buildroot/commit/?id=03bdf67f438ad66a652e860474fc65b9342656f2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-All compiler options, switches and path settings are done in the
-configure step. For the compile and install step there is no need
-for the TARGET_CONFIGURE_OPTS variables.
+Tested with 4.5.2.
 
 Signed-off-by: Michael Roth <mroth@nessie.de>
 Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/qt/qt.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/qt/qt.mk |   15 ---------------
+ 1 files changed, 0 insertions(+), 15 deletions(-)
 
 diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index 47b5feb..09a027d 100644
+index 77e7f1a..6fe122c 100644
 --- a/package/qt/qt.mk
 +++ b/package/qt/qt.mk
-@@ -474,11 +474,11 @@ endif
- 	touch $@
+@@ -17,10 +17,6 @@
+ # (cd /usr/include; sudo ln -s dbus-1.0/dbus dbus)
+ # to fix
  
- $(QT_TARGET_DIR)/.compiled: $(QT_TARGET_DIR)/.configured
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(QT_TARGET_DIR)
-+	$(MAKE) -C $(QT_TARGET_DIR)
- 	touch $@
+-# BUG: There is a workaround below (search for x86x86fix) for
+-# x86 crosscompiling under linux x86. Please remove it when the workaround
+-# is no longer necessary.
+-
+ QT_VERSION:=4.5.2
+ QT_CAT:=$(BZCAT)
  
- $(STAGING_DIR)/usr/lib/libQtCore.la: $(QT_TARGET_DIR)/.compiled
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(QT_TARGET_DIR) install
-+	$(MAKE) -C $(QT_TARGET_DIR) install
+@@ -329,17 +325,6 @@ endif
+ QT_CONFIGURE:=$(call qstrip,$(QT_CONFIGURE))
+ BR2_PACKAGE_QT_EMB_PLATFORM:=$(call qstrip,$(BR2_PACKAGE_QT_EMB_PLATFORM))
  
- qt-gui: $(STAGING_DIR)/usr/lib/libQtCore.la
- 	mkdir -p $(TARGET_DIR)/usr/lib/fonts
+-# x86x86fix
+-# Workaround Qt Embedded bug when crosscompiling for x86 under x86 with linux
+-# host. It's unclear if this would happen on other hosts.
+-ifneq ($(findstring pc-linux,$(BR2_GNU_BUILD_SUFFIX)),)
+-ifeq ($(BR2_PACKAGE_QT_EMB_PLATFORM),x86)
+-QT_CONFIGURE+= -platform linux-g++
+-QT_CONFIGURE:=$(call qstrip,$(QT_CONFIGURE))
+-endif
+-endif
+-# End of workaround.
+-
+ # Figure out what libs to install in the target
+ QT_LIBS=#empty
+ ifeq ($(BR2_PACKAGE_QT_GUI_MODULE),y)
 -- 
 1.6.3.3
