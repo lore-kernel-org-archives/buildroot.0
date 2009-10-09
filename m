@@ -1,7 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Fri, 9 Oct 2009 14:58:32 +0200
-Subject: [Buildroot] [git commit master] qt: remove unnecessary comment
-Message-ID: <20091009130115.0A19077784@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] qt: don't enable internal
+	tslib-module debugging
+Message-ID: <20091009130115.75F0877784@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,37 +10,42 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7f541e304778b85a3f9a07c8b3dadb3df5b2d35c
+commit: http://git.buildroot.net/buildroot/commit/?id=51a3b74b6eee42e335b963b4f3ddbdaa9c6459b0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Qt in buildroot should not depend on dbus installed on build platform,
-if so this is (or was) a bug in buildroot.
-
-Looks like that this note is left over from ancient buildroot days,
-so remove it.
+In Qt there are virtually hundreds of internal debug flags like
+TSLIBMOUSEHANDLER_DEBUG for every module or even C++ class. There
+is no reason to enable a single such flag when Qt is build with
+debugging symbols and others not.
 
 Signed-off-by: Michael Roth <mroth@nessie.de>
 Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/qt/qt.mk |    5 -----
- 1 files changed, 0 insertions(+), 5 deletions(-)
+ package/qt/qt.mk |    4 +---
+ 1 files changed, 1 insertions(+), 3 deletions(-)
 
 diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index 6fe122c..e7c22c3 100644
+index e7c22c3..6c73e04 100644
 --- a/package/qt/qt.mk
 +++ b/package/qt/qt.mk
-@@ -12,11 +12,6 @@
- #
- ######################################################################
+@@ -153,8 +153,6 @@ endif
+ ifeq ($(BR2_PACKAGE_QT_MOUSE_TSLIB),y)
+ QT_CONFIGURE += -qt-mouse-tslib
+ QT_DEP_LIBS+=tslib
+-QT_TSLIB_DEB="-D TSLIBMOUSEHANDLER_DEBUG"
+-QT_TSLIB_DEB:=$(call qstrip,$(QT_TSLIB_DEB))
+ else
+ QT_CONFIGURE += -no-mouse-tslib
+ endif
+@@ -165,7 +163,7 @@ QT_CONFIGURE += -no-mouse-qvfb
+ endif
  
--# BUG: In "OpenSuSE 10.2", dbus.h is at dbus-1.0/dbus/dbus.h
--# instead of at "dbus/dbus.h"
--# (cd /usr/include; sudo ln -s dbus-1.0/dbus dbus)
--# to fix
--
- QT_VERSION:=4.5.2
- QT_CAT:=$(BZCAT)
- 
+ ifeq ($(BR2_PACKAGE_QT_DEBUG),y)
+-QT_CONFIGURE+= "-debug $(QT_TSLIB_DEB)"
++QT_CONFIGURE+= -debug
+ else
+ QT_CONFIGURE+= -release
+ endif
 -- 
 1.6.3.3
