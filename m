@@ -1,34 +1,51 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Fri, 9 Oct 2009 14:06:18 +0200
-Subject: [Buildroot] [PATCH 03/14] RESEND: handle MMU configuration
-In-Reply-To: <87eipchjw9.fsf@macbook.be.48ers.dk>
-References: <87skduj4ut.fsf@macbook.be.48ers.dk>
-	<b1a1dc13edb6053d271297a4ac369d848c5f5749.1254945750.git.rep.dot.nop@gmail.com>
-	<20091009115343.0fae0659@surf> <87r5tchkvv.fsf@macbook.be.48ers.dk>
-	<20091009113902.GM2266@mx.loc> <87eipchjw9.fsf@macbook.be.48ers.dk>
-Message-ID: <20091009120618.GO2266@mx.loc>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 09 Oct 2009 14:07:24 +0200
+Subject: [Buildroot] [PATCH 06/10] *-menuconfig needs dirs to exist
+In-Reply-To: <20091009115425.GN2266@mx.loc> (Bernhard Reutner-Fischer's
+	message of "Fri\, 9 Oct 2009 13\:54\:25 +0200")
+References: <87my43j6b6.fsf@macbook.be.48ers.dk>
+	<cover.1254994304.git.rep.dot.nop@gmail.com>
+	<2ab3141d307cc1b3daa8ab8ded7740b1af324336.1254994304.git.rep.dot.nop@gmail.com>
+	<874oq9iukr.fsf@macbook.be.48ers.dk> <20091008190847.GB2266@mx.loc>
+	<87zl81hbed.fsf@macbook.be.48ers.dk> <20091009093821.GG2266@mx.loc>
+	<87vdiohl1r.fsf@macbook.be.48ers.dk> <20091009112619.GL2266@mx.loc>
+	<87iqeohkam.fsf@macbook.be.48ers.dk> <20091009115425.GN2266@mx.loc>
+Message-ID: <878wfkhitf.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Oct 09, 2009 at 01:44:06PM +0200, Peter Korsgaard wrote:
->>>>>> "Bernhard" == Bernhard Reutner-Fischer <rep.dot.nop@gmail.com> writes:
->
->Hi,
->
-> Thomas> What's the usage of these two new options ?
-> >> 
-> >> Yes, I would like to know this as well. I would imagine properly
-> >> supporting nommu would take quite some more effort than this (E.G. most
-> >> packages should get hidden).
->
-> Bernhard> why would you want to hide most of the package?
->
->Because they use fork or other nommu-nono's?
+>>>>> "Bernhard" == Bernhard Reutner-Fischer <rep.dot.nop@gmail.com> writes:
 
-On a nommu box you'd typically not install KDE or stuff like that.
-The typical package which will be used on nommu boxes should handle
-fork vs, vfork just fine. If a package does not then this package
-needs to be fixed and the fix sent upstream, obviously.
+Hi,
+
+ Bernhard> cool, so let's configure the beast:
+ Bernhard> $ make linux26-menuconfig
+
+OK, that one I can reproduce. So the fix only really fixes a problem
+with linux26, as uclibc has mkdir -p $(TOOLCHAIN_DIR) in it's .unpacked
+rule and busybox depends on BUILD_DIR.
+
+ Bernhard> Note that this is an obvious breakage.
+
+It your commit message would explain the problem, yes ;)
+
+ Bernhard> Look at the makefiles, who do you think should have created
+ Bernhard> the build-dir before that?  And yes, just BUILD_DIR, like
+ Bernhard> busybox does would be sufficient, but later on you will
+ Bernhard> experience that if you just specify BUILD_DIR as prereq then
+ Bernhard> you will die in funny ways for toplevel-parallel makes.  (I
+ Bernhard> can almost hear you saying that this isn't supported right
+ Bernhard> now, so: yes, it isn't but let's just fix it properly to
+ Bernhard> avoid this future problem, ok?)
+
+toplevel parallel builds is a lot bigger cake than I care to eat right
+now, but I don't have a problem with adding dirs (and removing the mkdir
+-p) as a prerequisite to uclibc/busybox/linux26-menuconfig as a cleanup.
+
+Thanks for your presistence.
+
+-- 
+Bye, Peter Korsgaard
