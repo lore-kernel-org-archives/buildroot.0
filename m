@@ -1,35 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 9 Oct 2009 10:01:19 +0200
-Subject: [Buildroot] [RFC] *clean targets
-In-Reply-To: <20091007183157.GD23847@mx.loc>
-References: <20091007162422.GI10261@mx.loc>
-	<87ocojkqlh.fsf@macbook.be.48ers.dk>
-	<20091007183157.GD23847@mx.loc>
-Message-ID: <20091009100119.69ad93db@surf>
+From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+Date: Fri, 9 Oct 2009 11:38:21 +0200
+Subject: [Buildroot] [PATCH 06/10] *-menuconfig needs dirs to exist
+In-Reply-To: <87zl81hbed.fsf@macbook.be.48ers.dk>
+References: <87my43j6b6.fsf@macbook.be.48ers.dk>
+	<cover.1254994304.git.rep.dot.nop@gmail.com>
+	<2ab3141d307cc1b3daa8ab8ded7740b1af324336.1254994304.git.rep.dot.nop@gmail.com>
+	<874oq9iukr.fsf@macbook.be.48ers.dk> <20091008190847.GB2266@mx.loc>
+	<87zl81hbed.fsf@macbook.be.48ers.dk>
+Message-ID: <20091009093821.GG2266@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 7 Oct 2009 20:31:57 +0200,
-Bernhard Reutner-Fischer <rep.dot.nop@gmail.com> a ?crit :
+On Thu, Oct 08, 2009 at 10:35:22PM +0200, Peter Korsgaard wrote:
+>>>>>> "Bernhard" == Bernhard Reutner-Fischer <rep.dot.nop@gmail.com> writes:
+>
+> Bernhard> On Thu, Oct 08, 2009 at 08:55:48PM +0200, Peter Korsgaard wrote:
+> >>>>>>> "Bernhard" == Bernhard Reutner-Fischer <rep.dot.nop@gmail.com> writes:
+> >> 
+> Bernhard> In a pristine checkout the -menuconfig targets need their build dirs
+> Bernhard> to exist.
+> >> 
+> >> Really? I cannot reproduce it:
+> >> 
+> >> git clone ~/source/buildroot; cd buildroot
+> >> yes ''|make oldconfig >/dev/null
+>
+> Bernhard> No. You already created the dirs here.
+>
+>Ok, but you need a config with busybox/uclibc/linux26 enabled, otherwise
+>none of those targets make sense.
+>
+>Anyway, doing:
+>
+>git clone ~/source/buildroot; cd buildroot
+>cp ~/source/buildroot/.config . # has busybox enabled
+>make busybox-menuconfig
+>Makefile:281: .config.cmd: No such file or directory
+>make: *** No rule to make target `.config.cmd'.  Stop.
+>
+>Adding dirs to the busybox-menuconfig dependency won't change anything
+>about that.
 
-> calling the individual targets can be dropped, yes. I just didn't
-> remove it (yet).
+my bad, you're right that i did:
+$ git clone
+$ make defconfig
+$ rm -rf output
+somebody should fix the clean targets!!
+$ make linux26-menuconfig
 
-Agreed. The <pkg>-clean targets of the packages are fragile anyway.
+and that failed.
 
-> >dirclean already gets rid of those dirs.
-> 
-> s/those dirs/TOOLCHAIN_DIR/
-> ack.
-
-and BUILD_DIR.
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+>doing touch .config.cmd; make busybox-menuconfig works.
