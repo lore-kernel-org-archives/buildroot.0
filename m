@@ -1,21 +1,15 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 12 Oct 2009 19:46:47 +0200
-Subject: [Buildroot] [PATCH] kernel-headers: bump 2.6.31 stable version
-In-Reply-To: <1254892603-29653-1-git-send-email-daniel@caiaq.de> (Daniel
-	Mack's message of "Wed\, 7 Oct 2009 13\:16\:42 +0800")
-References: <1254892603-29653-1-git-send-email-daniel@caiaq.de>
-Message-ID: <87r5t84i9k.fsf@macbook.be.48ers.dk>
+From: W.P. <laurentp@wp.pl>
+Date: Mon, 12 Oct 2009 21:55:30 +0200
+Subject: [Buildroot] setting up buildroot for using OLD gcc / binutils
+Message-ID: <4AD389B2.20400@wp.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Daniel" == Daniel Mack <daniel@caiaq.de> writes:
+Hi,
+how can I set up CURRENT buildroot to use OLD gcc/binutils/kernel/uClibc?
+I need gcc 3.4.4, kernel 2.6.12.6-venus, uClibc 0.9.28?
 
- Daniel> Signed-off-by: Daniel Mack <daniel@caiaq.de>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+W.P.
