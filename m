@@ -1,7 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 13 Oct 2009 11:33:22 +0000 (UTC)
-Subject: [Buildroot] [Bug 657] New: Bug in imagemagick-clean target
-Message-ID: <bug-657-163@https.bugs.busybox.net/>
+Date: Tue, 13 Oct 2009 11:36:22 +0000 (UTC)
+Subject: [Buildroot] [Bug 657] Bug in imagemagick-clean target
+In-Reply-To: <bug-657-163@https.bugs.busybox.net/>
+References: <bug-657-163@https.bugs.busybox.net/>
+Message-ID: <20091013113622.BCF237779A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +12,14 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=657
 
-              Host: -
-            Target: -
-             Build: -
-           Summary: Bug in imagemagick-clean target
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: trivial
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: fpasch at googlemail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.1
 
 
-imagemagick-clean target currently tries to remove $(TARGET_DIR) as there is no
-IMAGEMAGICK_BINARY anymore.
 
-Attached patch solves this issue...
 
-Simon Pasch
+--- Comment #1 from Simon Pasch <fpasch@googlemail.com>  2009-10-13 11:36:21 UTC ---
+Created an attachment (id=695)
+ --> (https://bugs.busybox.net/attachment.cgi?id=695)
+imagemagick-target-clean.patch
 
 
 -- 
