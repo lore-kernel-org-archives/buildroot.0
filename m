@@ -1,9 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 13 Oct 2009 11:36:22 +0000 (UTC)
+Date: Tue, 13 Oct 2009 12:24:12 +0000 (UTC)
 Subject: [Buildroot] [Bug 657] Bug in imagemagick-clean target
 In-Reply-To: <bug-657-163@https.bugs.busybox.net/>
 References: <bug-657-163@https.bugs.busybox.net/>
-Message-ID: <20091013113622.BCF237779A@busybox.osuosl.org>
+Message-ID: <20091013122412.95C0177552@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,13 +13,19 @@ To: buildroot@busybox.net
 https://bugs.busybox.net/show_bug.cgi?id=657
 
 
+Peter Korsgaard <jacmet@uclibc.org> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+    Remaining Hours|0.1                         |0.0
+         Resolution|                            |FIXED
 
 
 
---- Comment #1 from Simon Pasch <fpasch@googlemail.com>  2009-10-13 11:36:21 UTC ---
-Created an attachment (id=695)
- --> (https://bugs.busybox.net/attachment.cgi?id=695)
-imagemagick-target-clean.patch
+
+--- Comment #2 from Peter Korsgaard <jacmet@uclibc.org>  2009-10-13 12:24:10 UTC ---
+Thanks, committed!
 
 
 -- 
