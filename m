@@ -1,62 +1,29 @@
-From: Sebastian <bastisoft@arcor.de>
-Date: Wed, 14 Oct 2009 22:40:52 +0200
-Subject: [Buildroot] setting up buildroot for using OLD gcc / binutils
-In-Reply-To: <4AD4FB90.2060202@wp.pl>
-References: <4AD389B2.20400@wp.pl>	<87my3w4bw6.fsf@macbook.be.48ers.dk>	<4AD3918B.5000908@wp.pl>	<20091012203645.GX2266@mx.loc>	<4AD3B2BE.2010809@wp.pl>	<20091013111009.GB23718@mx.loc>	<4AD4C1BB.5000304@wp.pl>	<877huz2m5l.fsf@macbook.be.48ers.dk>	<4AD4C7B6.3000202@wp.pl>	<4AD4D7D6.6020305@wp.pl>
-	<4AD4E640.2030103@arcor.de> <4AD4FB90.2060202@wp.pl>
-Message-ID: <4AD63754.5020502@arcor.de>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 14 Oct 2009 23:26:29 +0200
+Subject: [Buildroot] Add packages
+In-Reply-To: <fffd86390910140137p5292921k973c127039d6e0d4@mail.gmail.com>
+	(Francisco Gonzalez's message of "Wed\,
+	14 Oct 2009 10\:37\:46 +0200")
+References: <fffd86390910140137p5292921k973c127039d6e0d4@mail.gmail.com>
+Message-ID: <87hbu11xbu.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Francisco" == Francisco Gonzalez <gzmorell@gmail.com> writes:
 
->> You can always use an older version of buildroot.
->> [...]
->>
-> Sorry, don't understand. I need to make cross-compile environement with
-> following "parameters":
-> 
-> gcc: 3.4.4
-> binutils 2.15.94
-> kernel 2.6.12.6-venus
-> uClibc 0.9.28
-> busybox 1.1.3
-> 
-> and i am trying to do this with buildroot. could you help?
+ Francisco> Hello,?
+ Francisco> I have recently begin to use buildroot. It's great.
 
-Do the following:
+ Francisco> I could manage to add 2 packages. My question is if there is any way to submit
+ Francisco> this packages (config.in and package.mak) to
+ Francisco> buildroot, for the case any other wants to use it.
+ Francisco> BTW they are GPL packages.
 
-$ git clone git://git.buildroot.net/buildroot
-$ cd buildroot/
-$ git reset --hard gcc3_legacy
-$ make menuconfig
+Sure, send a patch to the mailing list or attach it to a feature request
+in the bugtracker (http://bugs.busybox.net).
 
-Make sure to activate
-"Build options" --> "Show packages that are deprecated or obsolete"
-
-Now you have a version which allows you to use:
-
-gcc 3.4.4
-binutils 2.15 or 2.15.94.0.2.2
-kernel 2.6.12
-uClibc 0.9.28
-busybox 1.1.3
-
-You probably can't get closer to your wished versions (easily).
-
-I don't know what your "-venus" kernel means, but if you want to build a 
-kernel module without the _exact_ sources you will probably be out of luck.
-
-Make sure you tell us if it works! :-)
-
-I do not know how to operate git, and I could not find any reference to 
-the old SVN repository (if it still exists...), so you may be better off 
-asking someone else.
-
-I hope I could help,
-
-Best regards,
-Sebastian
+-- 
+Bye, Peter Korsgaard
