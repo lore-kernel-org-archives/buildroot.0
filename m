@@ -1,53 +1,62 @@
-From: Dan Pattison <dan.pattison@ethertek.ca>
-Date: Wed, 14 Oct 2009 13:07:08 -0700
-Subject: [Buildroot] Default target file permissions ?
-In-Reply-To: <4AD5F268.5080501@mimc.co.uk>
-References: <4AD5F268.5080501@mimc.co.uk>
-Message-ID: <4AD62F6C.3020301@ethertek.ca>
+From: Sebastian <bastisoft@arcor.de>
+Date: Wed, 14 Oct 2009 22:40:52 +0200
+Subject: [Buildroot] setting up buildroot for using OLD gcc / binutils
+In-Reply-To: <4AD4FB90.2060202@wp.pl>
+References: <4AD389B2.20400@wp.pl>	<87my3w4bw6.fsf@macbook.be.48ers.dk>	<4AD3918B.5000908@wp.pl>	<20091012203645.GX2266@mx.loc>	<4AD3B2BE.2010809@wp.pl>	<20091013111009.GB23718@mx.loc>	<4AD4C1BB.5000304@wp.pl>	<877huz2m5l.fsf@macbook.be.48ers.dk>	<4AD4C7B6.3000202@wp.pl>	<4AD4D7D6.6020305@wp.pl>
+	<4AD4E640.2030103@arcor.de> <4AD4FB90.2060202@wp.pl>
+Message-ID: <4AD63754.5020502@arcor.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Mark:
+Hello,
 
-In your Make file for a program, in the install target section you can 
-set the file permissions.
+>> You can always use an older version of buildroot.
+>> [...]
+>>
+> Sorry, don't understand. I need to make cross-compile environement with
+> following "parameters":
+> 
+> gcc: 3.4.4
+> binutils 2.15.94
+> kernel 2.6.12.6-venus
+> uClibc 0.9.28
+> busybox 1.1.3
+> 
+> and i am trying to do this with buildroot. could you help?
 
-Example,
+Do the following:
 
-install:
-    $(INSTALL) -m -0755 my_program my_install_path
+$ git clone git://git.buildroot.net/buildroot
+$ cd buildroot/
+$ git reset --hard gcc3_legacy
+$ make menuconfig
 
-Best Regards,
+Make sure to activate
+"Build options" --> "Show packages that are deprecated or obsolete"
 
--- 
-Dan Pattison
-Ethertek Circuits
+Now you have a version which allows you to use:
 
+gcc 3.4.4
+binutils 2.15 or 2.15.94.0.2.2
+kernel 2.6.12
+uClibc 0.9.28
+busybox 1.1.3
 
+You probably can't get closer to your wished versions (easily).
 
-Mark Jackson wrote:
-> Is it possible to set the default perms for target files / directories ?
->
-> I know you can use the "device_table.txt" file, but I'd like *all* my files to
-> be (say) 'chmod 755' apart from a few which I already spec via device_table.txt.
->
-> Any pointers ?
->
-> Thanks
-> Mark
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->   
-> ------------------------------------------------------------------------
->
->
-> No virus found in this incoming message.
-> Checked by AVG - www.avg.com 
-> Version: 8.5.421 / Virus Database: 270.14.16/2435 - Release Date: 10/14/09 06:33:00
->
->   
+I don't know what your "-venus" kernel means, but if you want to build a 
+kernel module without the _exact_ sources you will probably be out of luck.
+
+Make sure you tell us if it works! :-)
+
+I do not know how to operate git, and I could not find any reference to 
+the old SVN repository (if it still exists...), so you may be better off 
+asking someone else.
+
+I hope I could help,
+
+Best regards,
+Sebastian
