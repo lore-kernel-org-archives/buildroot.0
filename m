@@ -1,29 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 14 Oct 2009 23:26:29 +0200
-Subject: [Buildroot] Add packages
-In-Reply-To: <fffd86390910140137p5292921k973c127039d6e0d4@mail.gmail.com>
-	(Francisco Gonzalez's message of "Wed\,
-	14 Oct 2009 10\:37\:46 +0200")
-References: <fffd86390910140137p5292921k973c127039d6e0d4@mail.gmail.com>
-Message-ID: <87hbu11xbu.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 15 Oct 2009 06:18:47 +0000 (UTC)
+Subject: [Buildroot] [Bug 661] New: lmbench: new package
+Message-ID: <bug-661-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Francisco" == Francisco Gonzalez <gzmorell@gmail.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=661
 
- Francisco> Hello,?
- Francisco> I have recently begin to use buildroot. It's great.
+           Summary: lmbench: new package
+           Product: buildroot
+           Version: unspecified
+          Platform: All
+               URL: http://sourceforge.net/projects/lmbench/
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P3
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: keguang.zhang at gmail.com
+                CC: buildroot at uclibc.org, keguang.zhang at gmail.com
+   Estimated Hours: 0.0
 
- Francisco> I could manage to add 2 packages. My question is if there is any way to submit
- Francisco> this packages (config.in and package.mak) to
- Francisco> buildroot, for the case any other wants to use it.
- Francisco> BTW they are GPL packages.
 
-Sure, send a patch to the mailing list or attach it to a feature request
-in the bugtracker (http://bugs.busybox.net).
+Created an attachment (id=697)
+ --> (https://bugs.busybox.net/attachment.cgi?id=697)
+Add lmbench
+
+lmbench is a suite of simple, portable, ANSI/C microbenchmarks for UNIX/POSIX.
+In general, it measures two key features: latency and bandwidth. lmbench is
+intended to give system developers insight into basic costs of key operations.
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
