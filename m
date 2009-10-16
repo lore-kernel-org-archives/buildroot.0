@@ -1,41 +1,38 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 17 Oct 2009 02:30:08 +0000 (UTC)
-Subject: [Buildroot] [Bug 663] New: Add option for NAND flash with 512B Page
- and 16 kB erasesize when making JFFS2 root filesystem
-Message-ID: <bug-663-163@https.bugs.busybox.net/>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 16 Oct 2009 09:49:26 +0200
+Subject: [Buildroot] relocation R_MIPS_HI16 against `_gp' can not be
+	used when making a shared object; recompile with -fPIC
+In-Reply-To: <689310.86704.qm@web73402.mail.tp2.yahoo.com> (=?utf-8?B?Ig==?=
+	=?utf-8?B?5Lit5Y6fIOW8tS4iJ3M=?= message of "Wed\, 7 Oct 2009 17\:21\:45
+	+0800 \(CST\)")
+References: <689310.86704.qm@web73402.mail.tp2.yahoo.com>
+Message-ID: <878wfb22yh.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=663
+>>>>> "??" == ?? ? <tnndclub@yahoo.com.tw> writes:
 
-           Summary: Add option for NAND flash with 512B Page and 16 kB
-                    erasesize when making JFFS2 root filesystem
-           Product: buildroot
-           Version: unspecified
-          Platform: All
-        OS/Version: Linux
-            Status: NEW
-          Severity: enhancement
-          Priority: P3
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: keguang.zhang at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Hi,
 
+ ??> After trying to use the toolchain to compile a package, I
+ ??> encounter the following error at link time.  mips-linux-ld:
+ ??> init_mips.o: relocation R_MIPS_HI16 against `_gp' can not be used
+ ??> when making a shared object; recompile with -fPIC init_mips.o:
+ ??> could not read symbols: Bad value
 
-Created an attachment (id=699)
- --> (https://bugs.busybox.net/attachment.cgi?id=699)
-Option for NAND flash with 512B Page and 16 kB erasesize
+ ??> Does any one know how to solve this problem?
 
-Add option for NAND flash with 512B Page and 16 kB erasesize when making JFFS2
-root filesystem.
+What package is this?
 
+ ??> This package could be compiled and linked well by using the
+ ??> toolchain generated from buildroot-200807 release with gcc-4.2.4,
+ ??> binutils-2.18, uClibc-0.9.29 and
+
+200807 release? We didn't have a release called that. Do you mean a svn
+snapshot from that day?
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
