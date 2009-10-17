@@ -1,38 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 16 Oct 2009 09:49:26 +0200
-Subject: [Buildroot] relocation R_MIPS_HI16 against `_gp' can not be
-	used when making a shared object; recompile with -fPIC
-In-Reply-To: <689310.86704.qm@web73402.mail.tp2.yahoo.com> (=?utf-8?B?Ig==?=
-	=?utf-8?B?5Lit5Y6fIOW8tS4iJ3M=?= message of "Wed\, 7 Oct 2009 17\:21\:45
-	+0800 \(CST\)")
-References: <689310.86704.qm@web73402.mail.tp2.yahoo.com>
-Message-ID: <878wfb22yh.fsf@macbook.be.48ers.dk>
+From: Mark Constable <markc@renta.net>
+Date: Sun, 18 Oct 2009 02:54:13 +1000
+Subject: [Buildroot] Missing x86_64-linux-uclibc-gcc and
+	uClibc-locale-20081111-64-el.tgz
+Message-ID: <4AD9F6B5.8060300@renta.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "??" == ?? ? <tnndclub@yahoo.com.tw> writes:
+FWIW...
 
-Hi,
+rm -rf /home/buildroot/output/build/buildroot-config
+mkdir -p /home/buildroot/output/build
+cp -dpRf package/config/buildroot-config /home/buildroot/output/build/buildroot-config
+set -x && /usr/bin/make -j1 -C /home/buildroot/output/toolchain/uClibc-0.9.30.1 \
+                ARCH="x86_64" \
+                PREFIX=/home/buildroot/output/toolchain/uClibc_dev/ \
+                DEVEL_PREFIX=/usr/ \
+                RUNTIME_PREFIX=/home/buildroot/output/toolchain/uClibc_dev/ \
+                HOSTCC="/usr/bin/gcc" headers \
+                install_headers
++ /usr/bin/make -j1 -C /home/buildroot/output/toolchain/uClibc-0.9.30.1 ARCH=x86_64 PREFIX=/home/buildroot/output/toolchain/uClibc_dev/ DEVEL_PREFIX=/usr/ RUNTIME_PREFIX=/home/buildroot/output/toolchain/uClibc_dev/ HOSTCC=/usr/bin/gcc headers install_headers
+/bin/sh: /home/buildroot/output/staging/usr/bin/x86_64-linux-uclibc-gcc: No such file or directory
+make[1]: /home/buildroot/output/staging/usr/bin/x86_64-linux-uclibc-gcc: Command not found
+make[1]: Entering directory `/home/buildroot/output/toolchain/uClibc-0.9.30.1'
+make[1]: /home/buildroot/output/staging/usr/bin/x86_64-linux-uclibc-gcc: Command not found
+( cd extra/locale/; wget --passive-ftp http://www.uclibc.org/downloads/uClibc-locale-20081111-64-el.tgz )
+--2009-10-18 02:50:52--  http://www.uclibc.org/downloads/ 
+Resolving www.uclibc.org... 140.211.167.224
+Connecting to www.uclibc.org|140.211.167.224|:80... connected.
+HTTP request sent, awaiting response... 404 Not Found
+2009-10-18 02:50:53 ERROR 404: Not Found.
 
- ??> After trying to use the toolchain to compile a package, I
- ??> encounter the following error at link time.  mips-linux-ld:
- ??> init_mips.o: relocation R_MIPS_HI16 against `_gp' can not be used
- ??> when making a shared object; recompile with -fPIC init_mips.o:
- ??> could not read symbols: Bad value
+make[1]: *** [extra/locale/uClibc-locale-20081111-64-el.tgz] Error 8
+make[1]: Leaving directory `/home/buildroot/output/toolchain/uClibc-0.9.30.1'
+make: *** [/home/buildroot/output/toolchain/uClibc-0.9.30.1/.configured] Error 2
 
- ??> Does any one know how to solve this problem?
-
-What package is this?
-
- ??> This package could be compiled and linked well by using the
- ??> toolchain generated from buildroot-200807 release with gcc-4.2.4,
- ??> binutils-2.18, uClibc-0.9.29 and
-
-200807 release? We didn't have a release called that. Do you mean a svn
-snapshot from that day?
-
--- 
-Bye, Peter Korsgaard
+--markc
