@@ -1,9 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 17 Oct 2009 22:14:24 +0000 (UTC)
+Date: Sat, 17 Oct 2009 22:26:08 +0000 (UTC)
 Subject: [Buildroot] [Bug 665] [PATCH] Samba package
 In-Reply-To: <bug-665-163@https.bugs.busybox.net/>
 References: <bug-665-163@https.bugs.busybox.net/>
-Message-ID: <20091017221424.C18E8776EB@busybox.osuosl.org>
+Message-ID: <20091017222609.0494D776EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,8 +16,9 @@ https://bugs.busybox.net/show_bug.cgi?id=665
 
 
 
---- Comment #3 from Sven Neumann <s.neumann@raumfeld.com>  2009-10-17 22:14:24 UTC ---
-Perhaps I did something wrong, trying again now ...
+--- Comment #4 from Sven Neumann <s.neumann@raumfeld.com>  2009-10-17 22:26:08 UTC ---
+I am sorry, I did apply the patch in the wrong branch. Running a rebuild now,
+will report back later...
 
 
 -- 
