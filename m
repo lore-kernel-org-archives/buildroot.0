@@ -1,43 +1,29 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 17 Oct 2009 21:27:18 +0000 (UTC)
-Subject: [Buildroot] [Bug 667] New: [PATCH] e2fsprogs
-Message-ID: <bug-667-163@https.bugs.busybox.net/>
+Date: Sat, 17 Oct 2009 21:51:56 +0000 (UTC)
+Subject: [Buildroot] [Bug 665] [PATCH] Samba package
+In-Reply-To: <bug-665-163@https.bugs.busybox.net/>
+References: <bug-665-163@https.bugs.busybox.net/>
+Message-ID: <20091017215157.0CA0F77726@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=667
-
-           Summary: [PATCH] e2fsprogs
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: enhancement
-          Priority: P5
-         Component: Outdated package
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: rvpaasen at t3i.nl
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+https://bugs.busybox.net/show_bug.cgi?id=665
 
 
-Created an attachment (id=703)
- --> (https://bugs.busybox.net/attachment.cgi?id=703)
-e2fsprogs package
 
-Hi,
 
-I have updated the e2fsprogs package to the new makefile format. I added the
-tools from the 1.41.9 release of e2fsprogs that could not yet be (de)selected
-(freefrag, e2undo) to the menu in Config.in.
 
-Patch is attached and to be aplied to the current git.
+--- Comment #1 from Sven Neumann <s.neumann@raumfeld.com>  2009-10-17 21:51:56 UTC ---
+I tried to apply this patch to an uptodate git clone, but the patch did not
+apply:
 
-Richard.
+error: patch failed: package/samba/Config.in:8
+error: package/samba/Config.in: patch does not apply
+error: patch failed: package/samba/samba.mk:3
+error: package/samba/samba.mk: patch does not apply
 
 
 -- 
