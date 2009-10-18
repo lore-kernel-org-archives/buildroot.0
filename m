@@ -1,82 +1,34 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Sun, 18 Oct 2009 17:47:32 +0200
-Subject: [Buildroot] [PATCH] Add sysstat tools
-In-Reply-To: <1255874745.19306.8.camel@coalu.atr>
-References: <1255096083.22093.0.camel@coalu.atr>
-	<1255118149.2236.3.camel@coalu.atr>
-	<1255874745.19306.8.camel@coalu.atr>
-Message-ID: <20091018154732.GB13529@mx.loc>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 18 Oct 2009 17:23:14 +0000 (UTC)
+Subject: [Buildroot] [Bug 665] [PATCH] Samba package
+In-Reply-To: <bug-665-163@https.bugs.busybox.net/>
+References: <bug-665-163@https.bugs.busybox.net/>
+Message-ID: <20091018172314.DE9757778B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Oct 18, 2009 at 04:05:45PM +0200, Lionel Landwerlin wrote:
->ping ?
->
->Maybe I should add some informations about this package.
->
->The sysstat package provides a great tool named sar, which gives
->informations about cpu consumption in user/system context, as well as
->number of page faults per seconds, or number of blocks read from
->devices, etc...
->It's a good tool to tune performances on a system/cpu with software
->managed TLB (sh, mips or ppc).
+https://bugs.busybox.net/show_bug.cgi?id=665
 
->> --- /dev/null
->> +++ b/package/sysstat/Config.in
->> @@ -0,0 +1,7 @@
->> +config BR2_PACKAGE_SYSSTAT
->> +	bool "sysstat"
->> +	help
->> +	  System performance tools for the Linux operating system...
 
-too many dots. Perhaps put your expanded description in here too.
 
->> diff --git a/package/sysstat/sysstat-9.0.5-Add-install-strip-rule.patch b/package/sysstat/sysstat-9.0.5-Add-install-strip-rule.patch
->> new file mode 100644
->> index 0000000..afe335f
->> --- /dev/null
->> +++ b/package/sysstat/sysstat-9.0.5-Add-install-strip-rule.patch
 
-You sent this to upstream already, yes?
 
->> diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
->> new file mode 100644
->> index 0000000..cd8919f
->> --- /dev/null
->> +++ b/package/sysstat/sysstat.mk
->> @@ -0,0 +1,24 @@
->> +#############################################################
->> +#
->> +# sysstat
->> +#
->> +#############################################################
->> +
->> +SYSSTAT_VERSION = 9.0.5
->> +SYSSTAT_SOURCE = sysstat-$(SYSSTAT_VERSION).tar.bz2
->> +SYSSTAT_SITE = http://pagesperso-orange.fr/sebastien.godard/
->> +SYSSTAT_AUTORECONF = NO
->> +SYSSTAT_LIBTOOL_PATCH = NO
->> +SYSSTAT_INSTALL_STAGING = YES
->> +SYSSTAT_INSTALL_TARGET = YES
->> +
->> +SYSSTAT_DEPENDENCIES = uclibc
+--- Comment #8 from Sven Neumann <s.neumann@raumfeld.com>  2009-10-18 17:23:14 UTC ---
+While trying to find the cause of the gvfs problem, I attempted to build the
+updated samba package on my Debian sid system. This unveiled a problem in your
+patch. Your patch adds a SAMBA_HOOK_POST_EXTRACT hook that calls the autogen.sh
+script. This will regenerate the configure script (among other things).
+Depending on the version of autoconf that is being called by autogen.sh, the
+resulting configure script will differ. On my system this causes the
+samba-do-not-check-glibc-version.patch to fail. If I remove the
+SAMBA_HOOK_POST_EXTRACT hook entirely, everything works just fine. So it
+appears this is not needed at all?
 
-Every mention of uclibc as dependency of package/* is wrong (since
-uclibc and the cross compiler et al are already deps for any target
-package).
->> +
->> +# Should --disable-man-group ... WTF ?
->> +SYSSTAT_CONF_OPT = --enable-man-group
->> +
->> +EXPAT_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) \
->> +			INSTALL_ISAG=n \
->> +			INSTALL_DOC=n
 
-what's ISAG ?
-INSTALL_DOC would be yes if BR2_HAVE_DOCUMENTATION.
-$(if $(BR2_HAVE_DOCUMENTATION),,INSTALL_DOC=n)
-
-thanks,
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
