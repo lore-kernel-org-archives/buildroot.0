@@ -1,30 +1,37 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 18 Oct 2009 21:59:42 +0000 (UTC)
-Subject: [Buildroot] [Bug 665] [PATCH] Samba package
-In-Reply-To: <bug-665-163@https.bugs.busybox.net/>
-References: <bug-665-163@https.bugs.busybox.net/>
-Message-ID: <20091018215942.5CF0177787@busybox.osuosl.org>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Mon, 19 Oct 2009 23:45:58 +0200
+Subject: [Buildroot] [PATCH 1/2] libnl: handle all installed libraries
+Message-ID: <1255988758-4787-1-git-send-email-s.neumann@raumfeld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=665
+libnl does not only install libnl.so, but also libnl-nf.so,
+libnl-genl.so and libnl-route.so. Change the post-install
+and uninstall hooks to handle these libraries as well.
 
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+---
+ package/libnl/libnl.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-
-
-
---- Comment #10 from Sven Neumann <s.neumann@raumfeld.com>  2009-10-18 21:59:41 UTC ---
-The gvfs patches that I just sent to the mailing-list fix the problem described
-in comment #6. It was indeed unrelated to your patch.
-
-I've also sent an updated patch for samba to the mailing-list that has the
-uclibc dependency and the call to autogen.sh dropped.
-
-
+diff --git a/package/libnl/libnl.mk b/package/libnl/libnl.mk
+index 1a66746..b9224f2 100644
+--- a/package/libnl/libnl.mk
++++ b/package/libnl/libnl.mk
+@@ -14,9 +14,11 @@ $(eval $(call AUTOTARGETS,package,libnl))
+ 
+ $(LIBNL_HOOK_POST_INSTALL): $(LIBNL_TARGET_INSTALL_TARGET)
+ 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libnl.so*
++	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libnl-*.so*
+ 	touch $@
+ 
+ $(LIBNL_TARGET_UNINSTALL):
+ 	$(call MESSAGE,"Uninstalling")
+ 	rm -f $(TARGET_DIR)/usr/lib/libnl.so*
++	rm -f $(TARGET_DIR)/usr/lib/libnl-*.so*
+ 	rm -f $(LIBNL_TARGET_INSTALL_TARGET) $(LIBNL_HOOK_POST_INSTALL)
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.6.5
