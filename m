@@ -1,52 +1,83 @@
-From: Mark Constable <markc@renta.net>
-Date: Tue, 20 Oct 2009 23:55:01 +1000
-Subject: [Buildroot] Git build fails for x86_64 target
-Message-ID: <4ADDC135.6060109@renta.net>
+From: Roman Chertov <rchertov@cs.ucsb.edu>
+Date: Tue, 20 Oct 2009 09:42:38 -0700
+Subject: [Buildroot] uClibc kernel headers problem
+Message-ID: <4ADDE87E.1030601@cs.ucsb.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I just built an i686 variant of i386 using the default settings then
-changed the target to x86_64 and got this. If I knew how to fix it I
-would supply a patch.
+Hello,
 
-...
-touch -c /home/br2/staging/usr/lib/libc.a
-/usr/bin/make -j1 -C /home/br2/toolchain/uClibc-0.9.30.1 \
-                ARCH="x86_64" \
-                PREFIX=/home/br2/target \
-                DEVEL_PREFIX=/usr/ \
+I am using the latest build root release and I am trying to build a tool
+chain for CS-e9302 board which has an ARM chip.  I want to use the
+2.6.24.7 Linux kernel (I patched it to support click modular router).  I
+patched that kernel and u-boot 1.3.3 with patches from
+http://dev.ivanov.eu/projects/cs-e9302/ to enable the board support.  I
+then renamed the tar.bz2 files into file names that buildroot supports
+in the menuconfig (linux-2.6.24.tar.bz2 kernel and
+u-boot-2009.06.tar.bz2) and placed the files into the dl directory.
+
+My current trouble is with uClibc 0.9.30.1.  In the buildroot menuconfig
+I specified that I want to build the entire Linux kernel, so as far as I
+understand there is no need to use the precompiled headers option.  When
+I build the tool chain, it all works up to uClibc.  I get the following
+error "cc1: error: unrecognized command line option "-mbig-endian"".  I
+have included the output log down below.  I would appreciate any help
+with this.
+
+Thanks,
+
+Roman
+
+  Checking build system dependencies:
+BUILDROOT_DL_DIR clean:                         Ok
+CC clean:                                       Ok
+CXX clean:                                      Ok
+CPP clean:                                      Ok
+CFLAGS clean:                                   Ok
+INCLUDES clean:                                 Ok
+CXXFLAGS clean:                                 Ok
+which installed:                                Ok
+sed works:                                      Ok (/bin/sed)
+GNU make version '3.81':                        Ok
+C compiler '/usr/lib/ccache/gcc'
+C compiler version '4.4.1':                     Ok
+C++ compiler '/usr/lib/ccache/g++'
+C++ compiler version '4.4.1':                   Ok
+awk installed:                                  Ok
+bash installed:                                 Ok
+bison installed:                                Ok
+flex installed:                                 Ok
+gettext installed:                              Ok
+makeinfo installed:                             Ok
+Build system dependencies:                      Ok
+
+rm -rf
+/proj/tools/buildroot-2009.08/project_build_arm/uclibc/buildroot-config
+mkdir -p /proj/tools/buildroot-2009.08/project_build_arm/uclibc
+cp -dpRf package/config/buildroot-config
+/proj/tools/buildroot-2009.08/project_build_arm/uclibc/buildroot-config
+/usr/bin/make -j1 -C
+/proj/tools/buildroot-2009.08/toolchain_build_arm/uClibc-0.9.30.1 \
+                PREFIX= \
+                DEVEL_PREFIX=/ \
                 RUNTIME_PREFIX=/ \
-                install_runtime
-make[1]: Entering directory `/home/br2/toolchain/uClibc-0.9.30.1'
-install -d /home/br2/target/lib
-install -m 644 lib/lib*-0.9.30.1.so \
-                /home/br2/target/lib
-cd lib && tar -cf - *.so.* | tar -xf - -C /home/br2/target/lib
-make[1]: Leaving directory `/home/br2/toolchain/uClibc-0.9.30.1'
-touch -c /home/br2/target/lib/libc.so.0
-mkdir -p /home/br2/toolchain/gcc-4.4.1-final
-# Important! Required for limits.h to be fixed.
-ln -snf ../include/ /home/br2/staging/usr/x86_64-linux-uclibc/sys-include
-ln: creating symbolic link `/home/br2/staging/usr/x86_64-linux-uclibc/sys-include': No such file or directory
-make: *** [/home/br2/toolchain/gcc-4.4.1-final/.configured] Error 1
-
-real    0m12.145s
-user    0m7.200s
-sys     0m3.843s
-
-% ll /home/br2/staging/usr/
-total 32
-drwxr-xr-x  2 admin users 4096 2009-10-20 23:47 bin/
-drwxr-xr-x  4 admin users 4096 2009-10-20 23:00 i686-linux-uclibc/
-drwxr-xr-x 17 admin users 4096 2009-10-20 23:47 include/
-drwxr-xr-x  2 admin users 4096 2009-10-20 23:47 info/
-drwxr-xr-x  4 admin users 4096 2009-10-20 23:47 lib/
-drwxr-xr-x  3 admin users 4096 2009-10-20 22:59 libexec/
-drwxr-xr-x  4 admin users 4096 2009-10-20 22:59 man/
-drwxr-xr-x  4 admin users 4096 2009-10-20 22:49 share/
-lrwxrwxrwx  1 admin users   17 2009-10-20 23:11 i686-linux -> i686-linux-uclibc/
-
---markc
+                HOSTCC="/usr/lib/ccache/gcc" \
+                all
+make[1]: Entering directory
+`/proj/tools/buildroot-2009.08/toolchain_build_arm/uClibc-0.9.30.1'
+  GEN include/bits/sysnum.h
+cc1: error: unrecognized command line option "-mbig-endian"
+cc1: error: unrecognized command line option "-mbig-endian"
+ERROR: Could not generate syscalls.
+Make sure that you have proper kernel headers.
+Your .config in KERNEL_HEADERS="" was set to:
+/usr/include/
+make[1]: *** [include/bits/sysnum.h] Error 1
+make[1]: Leaving directory
+`/proj/tools/buildroot-2009.08/toolchain_build_arm/uClibc-0.9.30.1'
+make: ***
+[/proj/tools/buildroot-2009.08/toolchain_build_arm/uClibc-0.9.30.1/lib/libc.a]
+Error 2
