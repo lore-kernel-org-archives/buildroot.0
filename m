@@ -1,64 +1,45 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 20 Oct 2009 22:37:49 +0200
-Subject: [Buildroot] [git commit master] libarchive: make bsdtar and bsdcpio
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 20 Oct 2009 22:37:33 +0200
+Subject: [Buildroot] [PATCH] libarchive: make bsdtar and bsdcpio
 	binaries configurable
-Message-ID: <20091020203841.E69587779A@busybox.osuosl.org>
+In-Reply-To: <1256070708-18078-1-git-send-email-s.neumann@raumfeld.com> (Sven
+	Neumann's message of "Tue\, 20 Oct 2009 22\:31\:48 +0200")
+References: <1256070708-18078-1-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <87ljj5ssxe.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=683a964c8f6bcf2b1ecc58460661e9d3bb98908b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Sven> libarchive comes with two binaries, bsdtar and bsdcpio that used
+ Sven> to be installed by default. This change makes this configurable
+ Sven> with the default not to build and install the binaries.
+ Sven> ---
+ Sven>  package/libarchive/Config.in     |   15 +++++++++++++++
+ Sven>  package/libarchive/libarchive.mk |    4 ++++
+ Sven>  2 files changed, 19 insertions(+), 0 deletions(-)
 
-libarchive comes with two binaries, bsdtar and bsdcpio that used
-to be installed by default. This change makes this configurable
-with the default not to build and install the binaries.
-
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/libarchive/Config.in     |   15 +++++++++++++++
- package/libarchive/libarchive.mk |    4 ++++
- 2 files changed, 19 insertions(+), 0 deletions(-)
-
-diff --git a/package/libarchive/Config.in b/package/libarchive/Config.in
-index 9154861..38928b0 100644
---- a/package/libarchive/Config.in
-+++ b/package/libarchive/Config.in
-@@ -9,3 +9,18 @@ config BR2_PACKAGE_LIBARCHIVE
+ Sven> diff --git a/package/libarchive/Config.in b/package/libarchive/Config.in
+ Sven> index 9154861..079e0f8 100644
+ Sven> --- a/package/libarchive/Config.in
+ Sven> +++ b/package/libarchive/Config.in
+ Sven> @@ -9,3 +9,18 @@ config BR2_PACKAGE_LIBARCHIVE
  
- comment "libarchive requires a toolchain with WCHAR support"
- 	depends on !BR2_USE_WCHAR
-+
-+config BR2_PACKAGE_LIBARCHIVE_BSDTAR
-+	bool "bsdtar"
-+	depends on BR2_PACKAGE_LIBARCHIVE
-+	help
-+	  The 'bsdtar' program is a full-featured 'tar'
-+	  replacement built on libarchive.
-+
-+config BR2_PACKAGE_LIBARCHIVE_BSDCPIO
-+	bool "bsdcpio"
-+	depends on BR2_PACKAGE_LIBARCHIVE
-+	help
-+	  The 'bsdcpio' program is a different interface to
-+	  essentially the same functionality as 'bsdtar'.
-+
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index 472e34b..32f68f7 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
-@@ -10,4 +10,8 @@ LIBARCHIVE_LIBTOOL_PATCH = NO
- LIBARCHIVE_INSTALL_STAGING = YES
- LIBARCHIVE_INSTALL_TARGET = YES
- 
-+LIBARCHIVE_CONF_OPT = \
-+	$(if $(BR2_PACKAGE_LIBARCHIVE_BSDTAR),--enable-bsdtar,--disable-bsdtar) \
-+	$(if $(BR2_PACKAGE_LIBARCHIVE_BSDCPIO),--enable-bsdcpio,--disable-bsdcpio)
-+
- $(eval $(call AUTOTARGETS,package,libarchive))
+ Sven>  comment "libarchive requires a toolchain with WCHAR support"
+ Sven>  	depends on !BR2_USE_WCHAR
+ Sven> +
+ Sven> +config BR2_PACKAGE_LIBARCHIVE_BSDTAR
+ Sven> +	bool "bsdtar"
+ Sven> +	depends on BR2_PACKAGE_LIBARCHIVE
+ Sven> +	help
+ Sven> +	  The 'bsdtar' program is a full-featured 'tar'
+ Sven> +          replacement built on libarchive.
+
+Indentation of 2nd line here and below is wrong - Other than that it
+looks good, committed.
+
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
