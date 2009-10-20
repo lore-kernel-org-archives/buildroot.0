@@ -1,7 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Tue, 20 Oct 2009 22:42:44 +0200
-Subject: [Buildroot] [git commit master] gvfs: update to version 1.4.0
-Message-ID: <20091020204319.DED0C7779A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] gvfs: build archive backend if
+	libarchive is selected
+Message-ID: <20091020204320.88F107779A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,110 +10,64 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f49ef854ca4b6ab3836ef39cb89027ce5b7bd94b
+commit: http://git.buildroot.net/buildroot/commit/?id=0cbfcbe43358ab37f94886b90db70bdb5f8e338c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update the gvfs package to the latest upstream release.
+If BR2_PACKAGE_LIBARCHIVE is enabled, build the gvfs archive
+backend.
 
 Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- ...-gnome.patch => gvfs-1.4.0-libsoup-gnome.patch} |   20 +++++++++++---------
- package/gvfs/gvfs.mk                               |    8 ++++----
- 2 files changed, 15 insertions(+), 13 deletions(-)
- rename package/gvfs/{gvfs-1.2.2-libsoup-gnome.patch => gvfs-1.4.0-libsoup-gnome.patch} (88%)
+ package/gvfs/gvfs.mk |   22 ++++++++++++++--------
+ 1 files changed, 14 insertions(+), 8 deletions(-)
 
-diff --git a/package/gvfs/gvfs-1.2.2-libsoup-gnome.patch b/package/gvfs/gvfs-1.4.0-libsoup-gnome.patch
-similarity index 88%
-rename from package/gvfs/gvfs-1.2.2-libsoup-gnome.patch
-rename to package/gvfs/gvfs-1.4.0-libsoup-gnome.patch
-index cb59221..1fc7944 100644
---- a/package/gvfs/gvfs-1.2.2-libsoup-gnome.patch
-+++ b/package/gvfs/gvfs-1.4.0-libsoup-gnome.patch
-@@ -1,6 +1,7 @@
----- gvfs-1.2.2-orig/configure	2009-04-13 19:30:57.000000000 +0200
--+++ gvfs-1.2.2/configure	2009-05-25 11:49:31.000000000 +0200
--@@ -25645,8 +25645,8 @@
-+diff -ur gvfs-1.4.0-orig/configure gvfs-1.4.0/configure
-+--- gvfs-1.4.0-orig/configure	2009-09-21 16:33:27.000000000 +0200
-++++ gvfs-1.4.0/configure	2009-10-18 13:28:02.000000000 +0200
-+@@ -17056,8 +17056,8 @@
-  
-  if test "x$enable_http" != "xno"; then
-    if test -n "$PKG_CONFIG" && \
-@@ -11,7 +12,7 @@
-    ac_status=$?
-    $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-    (exit $ac_status); }; then
--@@ -25663,12 +25663,12 @@
-+@@ -17074,12 +17074,12 @@
-      pkg_cv_HTTP_CFLAGS="$HTTP_CFLAGS"
-   elif test -n "$PKG_CONFIG"; then
-      if test -n "$PKG_CONFIG" && \
-@@ -27,7 +28,7 @@
-  else
-    pkg_failed=yes
-  fi
--@@ -25679,12 +25679,12 @@
-+@@ -17090,12 +17090,12 @@
-      pkg_cv_HTTP_LIBS="$HTTP_LIBS"
-   elif test -n "$PKG_CONFIG"; then
-      if test -n "$PKG_CONFIG" && \
-@@ -43,7 +44,7 @@
-  else
-    pkg_failed=yes
-  fi
--@@ -25702,14 +25702,14 @@
-+@@ -17113,14 +17113,14 @@
-          _pkg_short_errors_supported=no
-  fi
-          if test $_pkg_short_errors_supported = yes; then
-@@ -61,7 +62,7 @@
-  
-  $HTTP_PKG_ERRORS
-  
--@@ -25720,7 +25720,7 @@
-+@@ -17131,7 +17131,7 @@
-  and HTTP_LIBS to avoid the need to call pkg-config.
-  See the pkg-config man page for more details.
-  " >&5
-@@ -70,8 +71,9 @@
-  
-  $HTTP_PKG_ERRORS
-  
----- gvfs-1.2.2-orig/daemon/gvfsbackendhttp.c	2009-03-06 16:43:19.000000000 +0100
--+++ gvfs-1.2.2/daemon/gvfsbackendhttp.c	2009-05-25 11:48:20.000000000 +0200
-+diff -ur gvfs-1.4.0-orig/daemon/gvfsbackendhttp.c gvfs-1.4.0/daemon/gvfsbackendhttp.c
-+--- gvfs-1.4.0-orig/daemon/gvfsbackendhttp.c	2009-04-20 12:41:37.000000000 +0200
-++++ gvfs-1.4.0/daemon/gvfsbackendhttp.c	2009-10-18 13:28:02.000000000 +0200
- @@ -33,7 +33,7 @@
-  #include <glib/gi18n.h>
-  #include <gio/gio.h>
 diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
-index 9a6562b..5c71fef 100644
+index 5c71fef..94a5eb7 100644
 --- a/package/gvfs/gvfs.mk
 +++ b/package/gvfs/gvfs.mk
-@@ -3,17 +3,17 @@
- # gvfs
- #
- #############################################################
--GVFS_VERSION_MAJOR = 1.2
--GVFS_VERSION_MINOR = 2
-+GVFS_VERSION_MAJOR = 1.4
-+GVFS_VERSION_MINOR = 0
- GVFS_VERSION = $(GVFS_VERSION_MAJOR).$(GVFS_VERSION_MINOR)
- GVFS_SOURCE = gvfs-$(GVFS_VERSION).tar.gz
- GVFS_SITE = http://ftp.gnome.org/pub/GNOME/sources/gvfs/$(GVFS_VERSION_MAJOR)
--
- GVFS_INSTALL_STAGING = NO
- GVFS_INSTALL_TARGET = YES
- GVFS_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
--
- GVFS_AUTORECONF = NO
-+GVFS_LIBTOOL_PATCH = NO
-+
- GVFS_DEPENDENCIES = uclibc host-pkgconfig host-libglib2 libglib2 dbus-glib shared-mime-info
+@@ -22,7 +22,6 @@ GVFS_CONF_OPT = \
+ 	--disable-obexftp		\
+ 	--disable-gphoto2		\
+ 	--disable-keyring		\
+-	--disable-archive		\
+ 	--disable-bash-completion	\
  
- GVFS_CONF_OPT = \
+ ifeq ($(BR2_PACKAGE_AVAHI),y)
+@@ -32,6 +31,20 @@ else
+ GVFS_CONF_OPT += --disable-avahi
+ endif
+ 
++ifeq ($(BR2_PACKAGE_HAL),y)
++GVFS_DEPENDENCIES += hal
++GVFS_CONF_OPT += --enable-hal
++else
++GVFS_CONF_OPT += --disable-hal
++endif
++
++ifeq ($(BR2_PACKAGE_LIBARCHIVE),y)
++GVFS_DEPENDENCIES += libarchive
++GVFS_CONF_OPT += --enable-archive
++else
++GVFS_CONF_OPT += --disable-archive
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBFUSE),y)
+ GVFS_DEPENDENCIES += libfuse
+ GVFS_CONF_OPT += --enable-fuse
+@@ -46,13 +59,6 @@ else
+ GVFS_CONF_OPT += --disable-http
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_HAL),y)
+-GVFS_DEPENDENCIES += hal
+-GVFS_CONF_OPT += --enable-hal
+-else
+-GVFS_CONF_OPT += --disable-hal
+-endif
+-
+ ifeq ($(BR2_PACKAGE_SAMBA_LIBSMBCLIENT),y)
+ GVFS_DEPENDENCIES += samba
+ GVFS_CONF_OPT += \
 -- 
 1.6.3.3
