@@ -1,40 +1,22 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 20 Oct 2009 22:42:44 +0200
-Subject: [Buildroot] [git commit master] gvfs: explicitly specify samba
-	include and library paths
-Message-ID: <20091020204321.1DE8A7779A@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 20 Oct 2009 22:43:24 +0200
+Subject: [Buildroot] [PATCH 1/3] gvfs: update to version 1.4.0
+In-Reply-To: <1255902982-8731-1-git-send-email-s.neumann@raumfeld.com> (Sven
+	Neumann's message of "Sun\, 18 Oct 2009 23\:56\:20 +0200")
+References: <1255902982-8731-1-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <87hbttssnn.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7d5d638a892949cd4033d2284a5777e0cb34591b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Sven> Update the gvfs package to the latest upstream release.
+ Sven> Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
 
-The gvfs configure script has --with-samba-includes and
---with-samba-libs options. Use these to point it to the
-libsmbclient files in the staging dir.
+Thanks, committed all 3.
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/gvfs/gvfs.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
-
-diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
-index 94a5eb7..7d71f34 100644
---- a/package/gvfs/gvfs.mk
-+++ b/package/gvfs/gvfs.mk
-@@ -63,6 +63,8 @@ ifeq ($(BR2_PACKAGE_SAMBA_LIBSMBCLIENT),y)
- GVFS_DEPENDENCIES += samba
- GVFS_CONF_OPT += \
- 	--enable-samba \
-+	--with-samba-includes=$(STAGING_DIR)/usr/include \
-+	--with-samba-libs=$(STAGING_DIR)/usr/lib \
- 	ac_cv_lib_smbclient_smbc_option_get=yes
- else
- GVFS_CONF_OPT += --disable-samba
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
