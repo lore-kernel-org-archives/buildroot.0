@@ -1,82 +1,145 @@
-From: Marcos <marcosr@cointech.com.ar>
-Date: Tue, 20 Oct 2009 15:03:56 -0300
-Subject: [Buildroot] =?windows-1251?q?Phonon_don=92t=92_work_in_Target_Pla?=
-	=?windows-1251?q?tform_with_gstreamer_backend=2E?=
-Message-ID: <5007ECC9311241DDB738B95F5B4D1579@developer>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Tue, 20 Oct 2009 21:21:32 +0200
+Subject: [Buildroot] [PATCH] gst-plugins-good: make new dependency-less
+	plugins configurable
+In-Reply-To: <200910200018.17071.markus.heidelberg@web.de>
+References: <200910200018.17071.markus.heidelberg@web.de>
+Message-ID: <1256066492-8158-1-git-send-email-s.neumann@raumfeld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Problem: 
-??????????? ??Phonon don?t? work in Target Platform with gstreamer backend. 
-Data:
-???????? Develop Platform. 
-- Linux Ubuntu 9.04
-- Qt Embedded 4.5.2
-- Buildroot 2009-08
-- Cross-Compiler ( uClibc 9.30.1, binutils 2.19.1, gcc 4.3.4)
+gst-plugins-good gained a number of dependency-less plugins with
+the last update. This commit makes them configurable in buildroot.
 
-Target Platform. 
-- Microcontroller AT91SAM9263B ?ARM926 ? Evaluation Board Atmel
-AT91SAM9263-EK
-- Kernel 2.6.27.
-- RootFile generated for Builroot.
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+---
+ package/multimedia/gst-plugins-good/Config.in      |   16 ++++++++-
+ .../gst-plugins-good/gst-plugins-good.mk           |   32 +++++++++++++++++--
+ 2 files changed, 42 insertions(+), 6 deletions(-)
 
-Error Message in the target when run one applications that use Phonon with
-GStreamer. 
-??????? 
-can't resolve symbol 'parse_sami' 
-Phonon::GStreamer::Backend: Failed to initialize GStreamer
-
-(<unknown>:442): GStreamer-CRITICAL **: gst_object_ref: assertion `object !=
-NUL???????? 
-
-(<unknown>:442): GStreamer-CRITICAL **: gst_object_sink: assertion
-`GST_IS_OBJEC???????????? 
-# ls9r?I??????? 
-LiTE??? 
-
-(<unknown>:442): GStreamer-CRITICAL **: gst_object_sink: assertion
-`GST_IS_OBJEC
-T (object)' failed
-
-(<unknown>:442): GStreamer-CRITICAL **: gst_object_ref: assertion `object !=
-NUL
-L' failed
-
-(<unknown>:442): GStreamer-CRITICAL **: gst_object_sinkt: assertion
-`G_IS_OBJECT
-?(object)' failed
-
-(<unknown>:442): GStreamer-CRITICAL **: gst_object_ref: assertion `object !=
-NUL
-L' failed
-
-(<unknown>:442): GStreamer-CRITICAL **: gst_object_sink: assertion
-`GST_IS_OBJEC
-T (object)' failed
-
-(<unknown>:442): GStreamer-CRITICAL **: gst_element_set_state: assertion
-`GST_IS
-_ELEMENT (element)' failed
-WARNING: Phonon::createPath: Cannot connect? Phonon::MediaObject ( no
-objectName
-?) to? Phonon::AudioOutput ( no objectName ).
-WARNING: Phonon::createPath: Cannot connect? Phonon::MediaObject ( no
-objectName
-?) to? Phonon::VideoWidget ( no objectName ).
-
-
-Best regards. Marcos Rodriguez.
-
-
-___________________________________________________
-- Descargo de responsabilidad del correo de Internet
-La informacion transmitida en este correo incluyendo sus adjuntos, es para uso exclusivo de la entidad o persona destinataria y puede contener informacion privilegiada y confidencial. Se prohibe retener, editar, retransmitir, difundir, u cualquier otro uso de esta informacion por personas o entidades que no sean los destinatarios previstos. Si usted recibio este mensaje por error, por favor avise al remitente y elimine permanentemente esta informacion de su computador.
-COIN TECH S.A. no acepta la responsabilidad por cualquier error, omision, corrupcion o virus en el contenido de este mensaje o sus adjuntos que resulten de la transmision del mismo.
-
-- Internet E-mail Disclaimer
-The information transmitted in this e-mail including attachments, is intended only for the person or entity to which it is addressed, and may contain confidential and privileged information. Any retention, review, retransmission, dissemination, or other uses of this information by persons or entities other than the intended recipient is prohibited. If you receive this in error, please contact the sender and delete this message from your computer.
-COIN TECH S.A. does not accept liability for any errors, omissions, corruption or virus in the contents of this message or any attachments that arise as a result of e-mail transmission.
+diff --git a/package/multimedia/gst-plugins-good/Config.in b/package/multimedia/gst-plugins-good/Config.in
+index b96f15d..fdb6646 100644
+--- a/package/multimedia/gst-plugins-good/Config.in
++++ b/package/multimedia/gst-plugins-good/Config.in
+@@ -61,8 +61,11 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_AVI
+ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_CUTTER
+ 	bool "cutter"
+ 
+-config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_DEBUG
+-	bool "debug"
++config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_DEBUGUTILS
++	bool "debugutils"
++
++config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_DEINTERLACE
++	bool "deinterlace"
+ 
+ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_EFFECTV
+ 	bool "effectv"
+@@ -70,6 +73,9 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_EFFECTV
+ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_EQUALIZER
+ 	bool "equalizer"
+ 
++config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_FLV
++	bool "flv"
++
+ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_ID3DEMUX
+ 	bool "id3demux (*.mp3 audio)"
+ 
+@@ -115,6 +121,9 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_REPLAYGAIN
+ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_RTP
+ 	bool "rtp"
+ 
++config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_RTPMANAGER
++	bool "rtpmanager"
++
+ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_RTSP
+ 	bool "rtsp"
+ 
+@@ -143,6 +152,9 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_WAVPARSE
+ 	bool "wavparse (*.wav audio)"
+ 	default y
+ 
++config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_Y4M
++	bool "y4m"
++
+ comment "plugins with external dependencies"
+ 
+ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_ANNODEX
+diff --git a/package/multimedia/gst-plugins-good/gst-plugins-good.mk b/package/multimedia/gst-plugins-good/gst-plugins-good.mk
+index 4f4861b..7b6f02b 100644
+--- a/package/multimedia/gst-plugins-good/gst-plugins-good.mk
++++ b/package/multimedia/gst-plugins-good/gst-plugins-good.mk
+@@ -10,8 +10,8 @@ GST_PLUGINS_GOOD_LIBTOOL_PATCH = NO
+ 
+ GST_PLUGINS_GOOD_CONF_OPT = \
+ 		$(DISABLE_NLS) \
++		--disable-debug \
+ 		--disable-examples \
+-		--disable-directdraw \
+ 		--disable-directsound \
+ 		--disable-sunaudio \
+ 		--disable-osx_audio \
+@@ -105,10 +105,16 @@ else
+ GST_PLUGINS_GOOD_CONF_OPT += --disable-cutter
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_DEBUG),y)
+-GST_PLUGINS_GOOD_CONF_OPT += --enable-debug
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_DEBUGUTILS),y)
++GST_PLUGINS_GOOD_CONF_OPT += --enable-debugutils
+ else
+-GST_PLUGINS_GOOD_CONF_OPT += --disable-debug
++GST_PLUGINS_GOOD_CONF_OPT += --disable-debugutils
++endif
++
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_DEINTERLACE),y)
++GST_PLUGINS_GOOD_CONF_OPT += --enable-deinterlace
++else
++GST_PLUGINS_GOOD_CONF_OPT += --disable-deinterlace
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_EFFECTV),y)
+@@ -123,6 +129,12 @@ else
+ GST_PLUGINS_GOOD_CONF_OPT += --disable-equalizer
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_FLV),y)
++GST_PLUGINS_GOOD_CONF_OPT += --enable-flv
++else
++GST_PLUGINS_GOOD_CONF_OPT += --disable-flv
++endif
++
+ ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_ID3DEMUX),y)
+ GST_PLUGINS_GOOD_CONF_OPT += --enable-id3demux
+ else
+@@ -213,6 +225,12 @@ else
+ GST_PLUGINS_GOOD_CONF_OPT += --disable-rtp
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_RTPMANAGER),y)
++GST_PLUGINS_GOOD_CONF_OPT += --enable-rtpmanager
++else
++GST_PLUGINS_GOOD_CONF_OPT += --disable-rtpmanager
++endif
++
+ ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_RTSP),y)
+ GST_PLUGINS_GOOD_CONF_OPT += --enable-rtsp
+ else
+@@ -267,6 +285,12 @@ else
+ GST_PLUGINS_GOOD_CONF_OPT += --disable-wavparse
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_Y4M),y)
++GST_PLUGINS_GOOD_CONF_OPT += --enable-y4m
++else
++GST_PLUGINS_GOOD_CONF_OPT += --disable-y4m
++endif
++
+ ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_ANNODEX),y)
+ GST_PLUGINS_GOOD_CONF_OPT += --enable-annodex
+ GST_PLUGINS_GOOD_DEPENDENCIES += libxml2
+-- 
+1.6.5
