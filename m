@@ -1,27 +1,56 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 21 Oct 2009 14:15:19 +0200
-Subject: [Buildroot] precompiled kernel headers
-In-Reply-To: <4ADE49D7.10001@cs.ucsb.edu> (Roman Chertov's message of "Tue\,
-	20 Oct 2009 16\:37\:59 -0700")
-References: <4ADDE87E.1030601@cs.ucsb.edu> <4ADE49D7.10001@cs.ucsb.edu>
-Message-ID: <87iqe9q6y0.fsf@macbook.be.48ers.dk>
+Date: Wed, 21 Oct 2009 14:38:06 +0200
+Subject: [Buildroot] building toolchain fails
+In-Reply-To: <48B29D7D7EE043AF836DB1647ED0F5C6@apexjs> (Sagaert Johan's
+	message of "Wed\, 21 Oct 2009 14\:26\:08 +0200")
+References: <48B29D7D7EE043AF836DB1647ED0F5C6@apexjs>
+Message-ID: <87eiowrkgh.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Roman" == Roman Chertov <rchertov@cs.ucsb.edu> writes:
+>>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
 
- Roman> Hello,
- Roman> I have the following question regarding buildroot-2009.08.  If a kernel
- Roman> is selected why does the script download the 2.6.30.5 precompiled
- Roman> headers anyway?
+ Sagaert> Peter
 
-Because you have two selections:
+ Sagaert> See attachement concerning my debian
 
-1: What kernel headers to use to build uclibc/toolchain
-2: What kernel (if any) to build next to rootfs
+ Sagaert> I will now look what i can do on the ubuntu machine.
+
+Please keep discussion on the mailing list instead of mailing me
+directly, so others can also follow.
+
+Looking at your config.log makes the problem pretty obvious:
+
+configure:1716: checking for C compiler default output
+configure:1719: /home/johan/buildroot/output/build/staging_dir/usr/bin/arm-linux
+-uclibc-gcc -Os -pipe -O2  -I/home/johan/buildroot/output/build/staging_dir/usr/
+include -I/home/johan/buildroot/output/build/staging_dir/include --sysroot=/home
+/johan/buildroot/output/build/staging_dir/ -isysroot /home/johan/buildroot/outpu
+t/build/staging_dir -mabi=apcs-gnu -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_
+FILE_OFFSET_BITS=64    conftest.c  >&5
+ccache: failed to create /ccache-2.4/cache (No such file or directory)
+
+configure:1722: $? = 1
+configure: failed program was:
+#line 1700 "configure"
+#include "confdefs.h"
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+configure:1745: error: C compiler cannot create executables
+
+So the problem is ccache somehow thinking it should write cache files to
+/ccache-2.4.
+
+Try disabling ccache and rebuild everything (rm -rf output; make).
 
 -- 
 Bye, Peter Korsgaard
