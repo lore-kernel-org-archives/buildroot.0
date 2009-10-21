@@ -1,34 +1,30 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 21 Oct 2009 17:39:31 +0200
-Subject: [Buildroot] problem solved : configure:1745: error: C compiler
-	cannot create executables
-In-Reply-To: <57DB4D275D074D809847969FA4D2D702@apexjs> (Sagaert Johan's
-	message of "Wed\, 21 Oct 2009 16\:37\:21 +0200")
-References: <57DB4D275D074D809847969FA4D2D702@apexjs>
-Message-ID: <8763a8rc24.fsf@macbook.be.48ers.dk>
+Date: Wed, 21 Oct 2009 17:41:18 +0200
+Subject: [Buildroot] precompiled kernel headers
+In-Reply-To: <4ADF24C3.8010204@cs.ucsb.edu> (Roman Chertov's message of "Wed\,
+	21 Oct 2009 08\:12\:03 -0700")
+References: <4ADDE87E.1030601@cs.ucsb.edu> <4ADE49D7.10001@cs.ucsb.edu>
+	<87iqe9q6y0.fsf@macbook.be.48ers.dk> <4ADF24C3.8010204@cs.ucsb.edu>
+Message-ID: <871vkwrbz5.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
+>>>>> "Roman" == Roman Chertov <rchertov@cs.ucsb.edu> writes:
 
- Sagaert> Hi
- Sagaert> The problem was the name of the cache directoy variable
- 
- Sagaert> I used my .config from the 2009.08 in the current release version.
- 
- 
- Sagaert> in the 2009.08 release :
+ >> 1: What kernel headers to use to build uclibc/toolchain
+ >> 2: What kernel (if any) to build next to rootfs
 
- Sagaert> BR2_CCACHE_DIR="$(TOOL_BUILD_DIR)/ccache-$(CCACHE_VER)/cache"
+ Roman> So if I want uclibc/toolchain to run a 2.6.24.7 kernel on the ARM
+ Roman> device, I will have to manually edit the Config which is used by
+ Roman> menuconfig to allow 2.6.24.7 to be used for precompiled headers?
 
- Sagaert> now the line reads
-
- Sagaert> BR2_CCACHE_DIR="$(TOOLCHAIN_DIR)/ccache-$(CCACHE_VER)/cache"
-
-Ahh yes. That change was done on Sep 23rd (cb5710c538f).
+No, not necessarily. The kernel headers for your toolchain doesn't have
+to correspond to the kernel version you are using (E.G. you don't have
+to install a new version of libc every time you update your kernel on
+your PC either - Or the other way around.
 
 -- 
 Bye, Peter Korsgaard
