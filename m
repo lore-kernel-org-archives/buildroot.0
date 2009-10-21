@@ -1,32 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 22 Oct 2009 00:10:08 +0200
-Subject: [Buildroot] x86_64-linux-uclibc-gcc not found
-In-Reply-To: <4ADE7E4E.1020606@renta.net> (Mark Constable's message of "Wed\,
-	21 Oct 2009 13\:21\:50 +1000")
-References: <4ADE7E4E.1020606@renta.net>
-Message-ID: <878wf4pfen.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 22 Oct 2009 00:11:29 +0200
+Subject: [Buildroot] [git commit master] toolchain: mark
+	BR2_ENABLE_LOCALE_PREGENERATED as broken
+Message-ID: <20091021221240.517C477792@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Mark" == Mark Constable <markc@renta.net> writes:
 
- Mark> This is using 2009-08 instead of Git, same problem for a x86_64 target.
- Mark> Minimal selections and a make O=/home/br200908
+commit: http://git.buildroot.net/buildroot/commit/?id=89b33886f7790bed52cfbba882365c4810b022c3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Mark> ( cd extra/locale/; wget --passive-ftp http://www.uclibc.org/downloads/uClibc-locale-20081111-64-el.tgz )
- Mark> --2009-10-21 05:22:25--  http://www.uclibc.org/downloads/uClibc-locale-20081111-64-el.tgz
- Mark> Resolving www.uclibc.org... 140.211.167.224
- Mark> Connecting to www.uclibc.org|140.211.167.224|:80... connected.
- Mark> HTTP request sent, awaiting response... 404 Not Found
- Mark> 2009-10-21 05:22:27 ERROR 404: Not Found.
+There's still no suitable tarball available on uclibc.org, so better
+hide the option for now.
 
- Mark> make[1]: *** [extra/locale/uClibc-locale-20081111-64-el.tgz] Error 8
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/Config.in.2 |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Don't select BR2_ENABLE_LOCALE_PREGENERATED, the uclibc people still
-haven't made a suitable tarball available.
-
+diff --git a/toolchain/Config.in.2 b/toolchain/Config.in.2
+index 2a9ce24..2da5670 100644
+--- a/toolchain/Config.in.2
++++ b/toolchain/Config.in.2
+@@ -37,7 +37,7 @@ config BR2_ENABLE_LOCALE
+ 
+ config BR2_ENABLE_LOCALE_PREGENERATED
+ 	bool "Use pregenerated locale data?"
+-	depends on BR2_ENABLE_LOCALE && BR2_TOOLCHAIN_SOURCE
++	depends on BR2_ENABLE_LOCALE && BR2_TOOLCHAIN_SOURCE && BROKEN # tarball missing
+ 	help
+ 	  Instead of generating the locale data locally you can optionally
+ 	  download a pregenerated set of locales.
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
