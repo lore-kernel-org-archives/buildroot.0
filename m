@@ -1,40 +1,148 @@
-From: Markus Heidelberg <markus.heidelberg@web.de>
-Date: Wed, 21 Oct 2009 23:04:33 +0200
-Subject: [Buildroot] [PATCH] gst-plugins-good: make new dependency-less
-	plugins configurable
-In-Reply-To: <1256145290.19499.0.camel@sven>
-References: <200910200018.17071.markus.heidelberg@web.de>
-	<87my3lq960.fsf@macbook.be.48ers.dk>
-	<1256145290.19499.0.camel@sven>
-Message-ID: <200910212304.34971.markus.heidelberg@web.de>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 21 Oct 2009 23:04:20 +0200
+Subject: [Buildroot] [git commit master] gst-plugins-good: make new
+	dependency-less plugins configurable
+Message-ID: <20091021210611.D003177742@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sven Neumann, 21.10.2009:
-> On Wed, 2009-10-21 at 13:27 +0200, Peter Korsgaard wrote:
-> > >>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
-> > 
-> >  Sven> GST_PLUGINS_GOOD_CONF_OPT = \
-> >  Sven> $(DISABLE_NLS) \
-> >  Sven> +		--disable-debug \
-> >  Sven> --disable-examples \
-> >  Sven> -		--disable-directdraw \
-> > 
-> >  Sven> Hmm, perhaps directdraw should become an option as well, but I thought
-> >  Sven> it's not really interesting for the buildroot target audience.
-> > 
-> > Is that directdraw as in the component of Microsoft DirectX? That indeed
-> > doesn't seem like something we would want to enable. Why did you remove
-> > the line?
-> 
-> Ah right, now I rememeber. It is not any longer a valid configure option
-> for the new release. So I removed it.
 
-Yes, directdraw moved from gst-plugins-good to gst-plugins-bad.
-Would be nice to add this to the commit message then as well as the
-rename from debug to debugutils to avoid confusion.
+commit: http://git.buildroot.net/buildroot/commit/?id=7a3fa3efa151e4a7e5f68857917bc18ba944745e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Markus
+gst-plugins-good gained a number of dependency-less plugins with
+the last update. This commit makes them configurable in buildroot.
+
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/multimedia/gst-plugins-good/Config.in      |   16 ++++++++-
+ .../gst-plugins-good/gst-plugins-good.mk           |   32 +++++++++++++++++--
+ 2 files changed, 42 insertions(+), 6 deletions(-)
+
+diff --git a/package/multimedia/gst-plugins-good/Config.in b/package/multimedia/gst-plugins-good/Config.in
+index b96f15d..fdb6646 100644
+--- a/package/multimedia/gst-plugins-good/Config.in
++++ b/package/multimedia/gst-plugins-good/Config.in
+@@ -61,8 +61,11 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_AVI
+ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_CUTTER
+ 	bool "cutter"
+ 
+-config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_DEBUG
+-	bool "debug"
++config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_DEBUGUTILS
++	bool "debugutils"
++
++config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_DEINTERLACE
++	bool "deinterlace"
+ 
+ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_EFFECTV
+ 	bool "effectv"
+@@ -70,6 +73,9 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_EFFECTV
+ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_EQUALIZER
+ 	bool "equalizer"
+ 
++config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_FLV
++	bool "flv"
++
+ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_ID3DEMUX
+ 	bool "id3demux (*.mp3 audio)"
+ 
+@@ -115,6 +121,9 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_REPLAYGAIN
+ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_RTP
+ 	bool "rtp"
+ 
++config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_RTPMANAGER
++	bool "rtpmanager"
++
+ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_RTSP
+ 	bool "rtsp"
+ 
+@@ -143,6 +152,9 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_WAVPARSE
+ 	bool "wavparse (*.wav audio)"
+ 	default y
+ 
++config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_Y4M
++	bool "y4m"
++
+ comment "plugins with external dependencies"
+ 
+ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_ANNODEX
+diff --git a/package/multimedia/gst-plugins-good/gst-plugins-good.mk b/package/multimedia/gst-plugins-good/gst-plugins-good.mk
+index 4f4861b..7b6f02b 100644
+--- a/package/multimedia/gst-plugins-good/gst-plugins-good.mk
++++ b/package/multimedia/gst-plugins-good/gst-plugins-good.mk
+@@ -10,8 +10,8 @@ GST_PLUGINS_GOOD_LIBTOOL_PATCH = NO
+ 
+ GST_PLUGINS_GOOD_CONF_OPT = \
+ 		$(DISABLE_NLS) \
++		--disable-debug \
+ 		--disable-examples \
+-		--disable-directdraw \
+ 		--disable-directsound \
+ 		--disable-sunaudio \
+ 		--disable-osx_audio \
+@@ -105,10 +105,16 @@ else
+ GST_PLUGINS_GOOD_CONF_OPT += --disable-cutter
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_DEBUG),y)
+-GST_PLUGINS_GOOD_CONF_OPT += --enable-debug
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_DEBUGUTILS),y)
++GST_PLUGINS_GOOD_CONF_OPT += --enable-debugutils
+ else
+-GST_PLUGINS_GOOD_CONF_OPT += --disable-debug
++GST_PLUGINS_GOOD_CONF_OPT += --disable-debugutils
++endif
++
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_DEINTERLACE),y)
++GST_PLUGINS_GOOD_CONF_OPT += --enable-deinterlace
++else
++GST_PLUGINS_GOOD_CONF_OPT += --disable-deinterlace
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_EFFECTV),y)
+@@ -123,6 +129,12 @@ else
+ GST_PLUGINS_GOOD_CONF_OPT += --disable-equalizer
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_FLV),y)
++GST_PLUGINS_GOOD_CONF_OPT += --enable-flv
++else
++GST_PLUGINS_GOOD_CONF_OPT += --disable-flv
++endif
++
+ ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_ID3DEMUX),y)
+ GST_PLUGINS_GOOD_CONF_OPT += --enable-id3demux
+ else
+@@ -213,6 +225,12 @@ else
+ GST_PLUGINS_GOOD_CONF_OPT += --disable-rtp
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_RTPMANAGER),y)
++GST_PLUGINS_GOOD_CONF_OPT += --enable-rtpmanager
++else
++GST_PLUGINS_GOOD_CONF_OPT += --disable-rtpmanager
++endif
++
+ ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_RTSP),y)
+ GST_PLUGINS_GOOD_CONF_OPT += --enable-rtsp
+ else
+@@ -267,6 +285,12 @@ else
+ GST_PLUGINS_GOOD_CONF_OPT += --disable-wavparse
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_Y4M),y)
++GST_PLUGINS_GOOD_CONF_OPT += --enable-y4m
++else
++GST_PLUGINS_GOOD_CONF_OPT += --disable-y4m
++endif
++
+ ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_ANNODEX),y)
+ GST_PLUGINS_GOOD_CONF_OPT += --enable-annodex
+ GST_PLUGINS_GOOD_DEPENDENCIES += libxml2
+-- 
+1.6.3.3
