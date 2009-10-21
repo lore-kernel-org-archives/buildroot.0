@@ -1,56 +1,31 @@
-From: Roman Chertov <rchertov@cs.ucsb.edu>
-Date: Wed, 21 Oct 2009 13:02:14 -0700
-Subject: [Buildroot] uClibc kernel headers problem
-In-Reply-To: <20091021085047.GA23642@mx.loc>
-References: <4ADDE87E.1030601@cs.ucsb.edu> <20091021085047.GA23642@mx.loc>
-Message-ID: <4ADF68C6.7030806@cs.ucsb.edu>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 21 Oct 2009 22:54:33 +0200
+Subject: [Buildroot] building toolchain fails - more details
+In-Reply-To: <1531E53627F1F749B4FE809BF2A4EB67013CED64@WETMEX10.loepfe.com>
+	(Noel Vellemans's message of "Wed\, 21 Oct 2009 16\:31\:19 +0200")
+References: <mailman.7.1256126402.21246.buildroot@busybox.net>
+	<1531E53627F1F749B4FE809BF2A4EB67013CED64@WETMEX10.loepfe.com>
+Message-ID: <87ljj4piwm.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> 
-> if the paths in the tarballs don't match the name of the tarball and the
-> version in the BR config then this will not work.
-> I've sent a patch to the list a couple of days ago where you can set the
-> kernel version manually to ease this particular thing, fyi.
-> This and a handful of other patches are still not applied yet, though.
+>>>>> "Noel" == Vellemans, Noel <Noel.Vellemans@visionBMS.com> writes:
 
-I changed the path names by hand so that linux-2.6.24.7.tar.bz2 is
-linux-2.6.24.tar.bz2 and is extracted into a 2.6.24 directory.
+ Noel> How to simulate?Just type 
 
->> My current trouble is with uClibc 0.9.30.1.  In the buildroot menuconfig
->> I specified that I want to build the entire Linux kernel, so as far as I
->> understand there is no need to use the precompiled headers option.  When
->> I build the tool chain, it all works up to uClibc.  I get the following
->> error "cc1: error: unrecognized command line option "-mbig-endian"".  I
->> have included the output log down below.  I would appreciate any help
->> with this.
-> 
-> How did you configure BR?
+ Noel> A) 'make at91sam9g20dfc_defconfig' (press enter a couple of times....) {
+ Noel> but at91sam9260dfc_defconfig has same problem)
+ Noel> B) make menuconfig 
+ -> kernel -> kernel binary format -> image format : zimage  (so
+ Noel> you can uncheck uboot)
+ -> Target Filesystem options -> de-select 'uboot'. (has nothing to
+ Noel> do with this prob but has some other issue's)
+ -> pakage selcetion - > de-select 'at'
 
-I specified that I have an ARM processor with EABI.  For libc, I used
-the default 0.9.30.1.  For the actual device, I had to make my own entry
-in device.  I copied the following into the Makefile.in
+FYI, the above builds for me with latest git.
 
-UCLIBC_CONFIG_FILE=$(TOOL_BUILD_DIR)/uClibc.config.$(ARCH) from one of
-the device directories.  Once, I commented that out, the problem
-disappeared.
-
-Roman
-
-
-> 
->>  GEN include/bits/sysnum.h
->> cc1: error: unrecognized command line option "-mbig-endian"
->> cc1: error: unrecognized command line option "-mbig-endian"
->> ERROR: Could not generate syscalls.
->> Make sure that you have proper kernel headers.
->> Your .config in KERNEL_HEADERS="" was set to:
->> /usr/include/
-> 
-> Even if you build on an arm box this is incorrect.
-> I suggest you start from a fresh BR config:
-> you at box:buildroot $ rm -f .config ; make menuconfig
-> 
+-- 
+Bye, Peter Korsgaard
