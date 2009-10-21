@@ -1,38 +1,27 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 21 Oct 2009 13:27:19 +0200
-Subject: [Buildroot] [PATCH] gst-plugins-good: make new dependency-less
-	plugins configurable
-In-Reply-To: <1256115940.11240.5.camel@sven> (Sven Neumann's message of "Wed\,
-	21 Oct 2009 11\:05\:40 +0200")
-References: <200910200018.17071.markus.heidelberg@web.de>
-	<1256066492-8158-1-git-send-email-s.neumann@raumfeld.com>
-	<87vdi9qhqe.fsf@macbook.be.48ers.dk> <1256115940.11240.5.camel@sven>
-Message-ID: <87my3lq960.fsf@macbook.be.48ers.dk>
+Date: Wed, 21 Oct 2009 14:15:19 +0200
+Subject: [Buildroot] precompiled kernel headers
+In-Reply-To: <4ADE49D7.10001@cs.ucsb.edu> (Roman Chertov's message of "Tue\,
+	20 Oct 2009 16\:37\:59 -0700")
+References: <4ADDE87E.1030601@cs.ucsb.edu> <4ADE49D7.10001@cs.ucsb.edu>
+Message-ID: <87iqe9q6y0.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
+>>>>> "Roman" == Roman Chertov <rchertov@cs.ucsb.edu> writes:
 
- Sven> GST_PLUGINS_GOOD_CONF_OPT = \
- Sven> $(DISABLE_NLS) \
- Sven> +		--disable-debug \
- Sven> --disable-examples \
- Sven> -		--disable-directdraw \
+ Roman> Hello,
+ Roman> I have the following question regarding buildroot-2009.08.  If a kernel
+ Roman> is selected why does the script download the 2.6.30.5 precompiled
+ Roman> headers anyway?
 
- Sven> Hmm, perhaps directdraw should become an option as well, but I thought
- Sven> it's not really interesting for the buildroot target audience.
+Because you have two selections:
 
-Is that directdraw as in the component of Microsoft DirectX? That indeed
-doesn't seem like something we would want to enable. Why did you remove
-the line?
-
- Sven> --disable-debug should perhaps be configurable or depend on
- Sven> BR2_ENABLE_DEBUG ?
-
-That might be an idea, yes.
+1: What kernel headers to use to build uclibc/toolchain
+2: What kernel (if any) to build next to rootfs
 
 -- 
 Bye, Peter Korsgaard
