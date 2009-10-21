@@ -1,32 +1,33 @@
-From: Roman Chertov <rchertov@cs.ucsb.edu>
-Date: Wed, 21 Oct 2009 08:12:03 -0700
-Subject: [Buildroot] precompiled kernel headers
-In-Reply-To: <87iqe9q6y0.fsf@macbook.be.48ers.dk>
-References: <4ADDE87E.1030601@cs.ucsb.edu> <4ADE49D7.10001@cs.ucsb.edu>
-	<87iqe9q6y0.fsf@macbook.be.48ers.dk>
-Message-ID: <4ADF24C3.8010204@cs.ucsb.edu>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 21 Oct 2009 17:37:50 +0200
+Subject: [Buildroot] building toolchain fails works now with cache
+	disabled.
+In-Reply-To: <C92DA876B3AA4BCA926AD2983C70B38B@apexjs> (Sagaert Johan's
+	message of "Wed\, 21 Oct 2009 15\:42\:35 +0200")
+References: <C92DA876B3AA4BCA926AD2983C70B38B@apexjs>
+Message-ID: <87aazkrc4x.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard wrote:
->>>>>> "Roman" == Roman Chertov <rchertov@cs.ucsb.edu> writes:
-> 
->  Roman> Hello,
->  Roman> I have the following question regarding buildroot-2009.08.  If a kernel
->  Roman> is selected why does the script download the 2.6.30.5 precompiled
->  Roman> headers anyway?
-> 
-> Because you have two selections:
-> 
-> 1: What kernel headers to use to build uclibc/toolchain
-> 2: What kernel (if any) to build next to rootfs
+>>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
 
-So if I want uclibc/toolchain to run a 2.6.24.7 kernel on the ARM
-device, I will have to manually edit the Config which is used by
-menuconfig to allow 2.6.24.7 to be used for precompiled headers?
+ Sagaert> Hi
 
-Thanks
-> 
+ Sagaert> Afrer disabling the cache it worked.
+
+ Sagaert> Maybe the cache path was wrong, i used my .config file from the 2009.08
+ Sagaert> version 
+ Sagaert>  from the config file i read 
+
+ Sagaert> BR2_CCACHE_DIR="$(TOOLCHAIN_DIR)/ccache-$(CCACHE_VER)/cache"
+
+ Sagaert> So i assume TOOLCHAIN_DIR is empty.
+
+Hmm, odd - TOOLCHAIN_DIR is set to BASE_DIR/toolchain, where BASE_DIR is
+normally "output".
+
+-- 
+Bye, Peter Korsgaard
