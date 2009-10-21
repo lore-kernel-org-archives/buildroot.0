@@ -1,31 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 21 Oct 2009 22:54:33 +0200
-Subject: [Buildroot] building toolchain fails - more details
-In-Reply-To: <1531E53627F1F749B4FE809BF2A4EB67013CED64@WETMEX10.loepfe.com>
-	(Noel Vellemans's message of "Wed\, 21 Oct 2009 16\:31\:19 +0200")
-References: <mailman.7.1256126402.21246.buildroot@busybox.net>
-	<1531E53627F1F749B4FE809BF2A4EB67013CED64@WETMEX10.loepfe.com>
-Message-ID: <87ljj4piwm.fsf@macbook.be.48ers.dk>
+From: Markus Heidelberg <markus.heidelberg@web.de>
+Date: Wed, 21 Oct 2009 23:04:33 +0200
+Subject: [Buildroot] [PATCH] gst-plugins-good: make new dependency-less
+	plugins configurable
+In-Reply-To: <1256145290.19499.0.camel@sven>
+References: <200910200018.17071.markus.heidelberg@web.de>
+	<87my3lq960.fsf@macbook.be.48ers.dk>
+	<1256145290.19499.0.camel@sven>
+Message-ID: <200910212304.34971.markus.heidelberg@web.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Noel" == Vellemans, Noel <Noel.Vellemans@visionBMS.com> writes:
+Sven Neumann, 21.10.2009:
+> On Wed, 2009-10-21 at 13:27 +0200, Peter Korsgaard wrote:
+> > >>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
+> > 
+> >  Sven> GST_PLUGINS_GOOD_CONF_OPT = \
+> >  Sven> $(DISABLE_NLS) \
+> >  Sven> +		--disable-debug \
+> >  Sven> --disable-examples \
+> >  Sven> -		--disable-directdraw \
+> > 
+> >  Sven> Hmm, perhaps directdraw should become an option as well, but I thought
+> >  Sven> it's not really interesting for the buildroot target audience.
+> > 
+> > Is that directdraw as in the component of Microsoft DirectX? That indeed
+> > doesn't seem like something we would want to enable. Why did you remove
+> > the line?
+> 
+> Ah right, now I rememeber. It is not any longer a valid configure option
+> for the new release. So I removed it.
 
- Noel> How to simulate?Just type 
+Yes, directdraw moved from gst-plugins-good to gst-plugins-bad.
+Would be nice to add this to the commit message then as well as the
+rename from debug to debugutils to avoid confusion.
 
- Noel> A) 'make at91sam9g20dfc_defconfig' (press enter a couple of times....) {
- Noel> but at91sam9260dfc_defconfig has same problem)
- Noel> B) make menuconfig 
- -> kernel -> kernel binary format -> image format : zimage  (so
- Noel> you can uncheck uboot)
- -> Target Filesystem options -> de-select 'uboot'. (has nothing to
- Noel> do with this prob but has some other issue's)
- -> pakage selcetion - > de-select 'at'
-
-FYI, the above builds for me with latest git.
-
--- 
-Bye, Peter Korsgaard
+Markus
