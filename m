@@ -1,30 +1,32 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Wed, 21 Oct 2009 23:15:16 +0200
-Subject: [Buildroot] [PATCH] gst-plugins-good: make new dependency-less
- plugins configurable
-In-Reply-To: <87d44gpi2h.fsf@macbook.be.48ers.dk>
-References: <200910200018.17071.markus.heidelberg@web.de>
-	<87my3lq960.fsf@macbook.be.48ers.dk> <1256145290.19499.0.camel@sven>
-	<200910212304.34971.markus.heidelberg@web.de>
-	<87d44gpi2h.fsf@macbook.be.48ers.dk>
-Message-ID: <1256159716.5501.17.camel@bender>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 22 Oct 2009 00:10:08 +0200
+Subject: [Buildroot] x86_64-linux-uclibc-gcc not found
+In-Reply-To: <4ADE7E4E.1020606@renta.net> (Mark Constable's message of "Wed\,
+	21 Oct 2009 13\:21\:50 +1000")
+References: <4ADE7E4E.1020606@renta.net>
+Message-ID: <878wf4pfen.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 2009-10-21 at 23:12 +0200, Peter Korsgaard wrote:
-> >>>>> "Markus" == Markus Heidelberg <markus.heidelberg@web.de> writes:
->  Markus> Yes, directdraw moved from gst-plugins-good to gst-plugins-bad.
->  Markus> Would be nice to add this to the commit message then as well as
->  Markus> the rename from debug to debugutils to avoid confusion.
-> 
-> I agree, but I already committed and pushed that one - For next time
-> please.
+>>>>> "Mark" == Mark Constable <markc@renta.net> writes:
 
-I'll send a patch for gst-plugins-bad soon and will try to be more
-careful about the commit messages. Thanks for your review.
+ Mark> This is using 2009-08 instead of Git, same problem for a x86_64 target.
+ Mark> Minimal selections and a make O=/home/br200908
 
+ Mark> ( cd extra/locale/; wget --passive-ftp http://www.uclibc.org/downloads/uClibc-locale-20081111-64-el.tgz )
+ Mark> --2009-10-21 05:22:25--  http://www.uclibc.org/downloads/uClibc-locale-20081111-64-el.tgz
+ Mark> Resolving www.uclibc.org... 140.211.167.224
+ Mark> Connecting to www.uclibc.org|140.211.167.224|:80... connected.
+ Mark> HTTP request sent, awaiting response... 404 Not Found
+ Mark> 2009-10-21 05:22:27 ERROR 404: Not Found.
 
-Sven
+ Mark> make[1]: *** [extra/locale/uClibc-locale-20081111-64-el.tgz] Error 8
+
+Don't select BR2_ENABLE_LOCALE_PREGENERATED, the uclibc people still
+haven't made a suitable tarball available.
+
+-- 
+Bye, Peter Korsgaard
