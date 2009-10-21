@@ -1,32 +1,32 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 21 Oct 2009 23:06:21 +0200
+Date: Wed, 21 Oct 2009 23:12:38 +0200
 Subject: [Buildroot] [PATCH] gst-plugins-good: make new dependency-less
 	plugins configurable
-In-Reply-To: <1256145290.19499.0.camel@sven> (Sven Neumann's message of "Wed\,
-	21 Oct 2009 19\:14\:50 +0200")
+In-Reply-To: <200910212304.34971.markus.heidelberg@web.de> (Markus
+	Heidelberg's message of "Wed\, 21 Oct 2009 23\:04\:33 +0200")
 References: <200910200018.17071.markus.heidelberg@web.de>
-	<1256066492-8158-1-git-send-email-s.neumann@raumfeld.com>
-	<87vdi9qhqe.fsf@macbook.be.48ers.dk> <1256115940.11240.5.camel@sven>
 	<87my3lq960.fsf@macbook.be.48ers.dk> <1256145290.19499.0.camel@sven>
-Message-ID: <87hbtspicy.fsf@macbook.be.48ers.dk>
+	<200910212304.34971.markus.heidelberg@web.de>
+Message-ID: <87d44gpi2h.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
+>>>>> "Markus" == Markus Heidelberg <markus.heidelberg@web.de> writes:
 
 Hi,
 
- >> Is that directdraw as in the component of Microsoft DirectX? That indeed
- >> doesn't seem like something we would want to enable. Why did you remove
- >> the line?
+ >> Ah right, now I rememeber. It is not any longer a valid configure
+ >> option for the new release. So I removed it.
 
- Sven> Ah right, now I rememeber. It is not any longer a valid configure
- Sven> option for the new release. So I removed it.
+ Markus> Yes, directdraw moved from gst-plugins-good to gst-plugins-bad.
+ Markus> Would be nice to add this to the commit message then as well as
+ Markus> the rename from debug to debugutils to avoid confusion.
 
-Ok, committed - Thanks.
+I agree, but I already committed and pushed that one - For next time
+please.
 
 -- 
 Bye, Peter Korsgaard
