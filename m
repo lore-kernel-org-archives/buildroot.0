@@ -1,210 +1,65 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Wed, 21 Oct 2009 12:29:52 +0200
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 21 Oct 2009 13:26:03 +0200
 Subject: [Buildroot] building toolchain fails
-Message-ID: <598EFF531CAB4EC0A53CDCCD0CF8AC77@apexjs>
+In-Reply-To: <598EFF531CAB4EC0A53CDCCD0CF8AC77@apexjs> (Sagaert Johan's
+	message of "Wed\, 21 Oct 2009 12\:29\:52 +0200")
+References: <598EFF531CAB4EC0A53CDCCD0CF8AC77@apexjs>
+Message-ID: <87r5sxq984.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+>>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
+
+ Sagaert> Hi
+ Sagaert> i used the 2009.08 on 2 systems without problems and i decided to give the
+ Sagaert> latest version a try:
  
-i used the 2009.08 on 2 systems without problems and i decided to give the
-latest version a try:
+ Sagaert> I failed in building on both machines :
  
-I failed in building on both machines :
+ Sagaert> on my debian i ended up with :
+
+Your subject seems to imply that you have a problem building toolchains,
+but in both cases it's a problem building a package for the host?
+
+ Sagaert> ....
+ Sagaert> configure: error: C compiler cannot create executables
+ Sagaert> make: *** [/home/johan/buildroot/output/build/ncurses-5.6/.configured] Error 77
+
+Strange. Ncurses builds here (also on Debian). What configure check
+fails? (have a look at config.log in build/ncurses-5.6)
  
-on my debian i ended up with :
+ Sagaert> gcc is on the path,
+ Sagaert>  under buildroot/output/build/staging_dir/usr/bin there is a softlink of
+ Sagaert> arm-linux-gcc   pointing to executable ccache   ???
+
+You have presumably enabled ccache support then.
  
-....
-configure: error: C compiler cannot create executables
-make: *** [/home/johan/buildroot/output/build/ncurses-5.6/.configured] Error
-77
+ Sagaert> on my ubuntu 8.10 machine i ended with an error : error: no acceptable m4 could
+ Sagaert> be found in $PATH.
+ Sagaert> i have 1.4.11 on my system so that should be ok
  
-gcc is on the path, 
- under buildroot/output/build/staging_dir/usr/bin there is a softlink of
-arm-linux-gcc   pointing to executable ccache   ???
+ Sagaert> I have seen Noel Vellemans also reporting this issue, but no solution yet..
  
- under buildroot/output/build/staging_dir/usr/bin-ccache there is a softlink
-arm-linux-gcc   pointing to executable arm-linux-uclibc-gcc (this seems to
-be the cottect compiler )
+ Sagaert> Any clues ?
+ Sagaert> for now i patched my 2009.08 version to use 2.6.31.4 and bbox 1.15.2
  
- 
- 
-on my ubuntu 8.10 machine i ended with an error : error: no acceptable m4
-could be found in $PATH.
-i have 1.4.11 on my system so that should be ok
- 
-I have seen Noel Vellemans also reporting this issue, but no solution yet..
- 
-Any clues ?
-for now i patched my 2009.08 version to use 2.6.31.4 and bbox 1.15.2
- 
-Johan
- 
-Checking build system dependencies:
-Overriding $(DL_DIR) in '.config'.  Ok
-External download directory:   Ok (/home/johan/dl)
-CC clean:     Ok
-CXX clean:     Ok
-CPP clean:     Ok
-CFLAGS clean:     Ok
-INCLUDES clean:     Ok
-CXXFLAGS clean:     Ok
-which installed:    Ok
-sed works:     Ok (/bin/sed)
-GNU make version '3.81':   Ok
-C compiler '/usr/bin/gcc'
-C compiler version '4.3.2':   Ok
-C++ compiler '/usr/bin/g++'
-C++ compiler version '4.3.2':   Ok
-awk installed:     Ok
-bash installed:     Ok
-bison installed:    Ok
-flex installed:     Ok
-gettext installed:    Ok
-makeinfo installed:    Ok
-patch installed:    Ok
-Build system dependencies:   Ok
- 
-rm -rf /home/johan/buildroot/output/build/buildroot-config
-mkdir -p /home/johan/buildroot/output/build
-cp -dpRf package/config/buildroot-config
-/home/johan/buildroot/output/build/buildroot-config
-cp -dpf /home/johan/buildroot/output/build/u-boot-2009.06/tools/mkimage
-/home/johan/buildroot/output/build/staging_dir/usr/bin/
-[7m>>> autoconf 2.64 Configuring[27m
-cd /home/johan/buildroot/output/build/autoconf-2.64/ && rm -f config.cache
-&& \
- 
-PATH="/home/johan/buildroot/output/toolchain/bin:/home/johan/buildroot/outpu
-t/host/bin:/home/johan/buildroot/output/host/usr/bin:/home/johan/buildroot/o
-utput/build/staging_dir/bin:/home/johan/buildroot/output/build/staging_dir/u
-sr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/gam
-es:/home/johan/buildroot/build_arm/staging_dir/usr/bin"
-AR="/home/johan/buildroot/output/build/staging_dir/usr/bin/arm-linux-uclibc-
-ar"
-AS="/home/johan/buildroot/output/build/staging_dir/usr/bin/arm-linux-uclibc-
-as"
-LD="/home/johan/buildroot/output/build/staging_dir/usr/bin/arm-linux-uclibc-
-ld"
-NM="/home/johan/buildroot/output/build/staging_dir/usr/bin/arm-linux-uclibc-
-nm"
-CC="/home/johan/buildroot/output/build/staging_dir/usr/bin/arm-linux-uclibc-
-gcc -Os -pipe -O2
--I/home/johan/buildroot/output/build/staging_dir/usr/include
--I/home/johan/buildroot/output/build/staging_dir/include
---sysroot=/home/johan/buildroot/output/build/staging_dir/ -isysroot
-/home/johan/buildroot/output/build/staging_dir -mabi=apcs-gnu
--D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64"
-GCC="/home/johan/buildroot/output/build/staging_dir/usr/bin/arm-linux-uclibc
--gcc -Os -pipe -O2
--I/home/johan/buildroot/output/build/staging_dir/usr/include
--I/home/johan/buildroot/output/build/staging_dir/include
---sysroot=/home/johan/buildroot/output/build/staging_dir/ -isysroot
-/home/johan/buildroot/output/build/staging_dir -mabi=apcs-gnu
--D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64"
-CPP="/home/johan/buildroot/output/build/staging_dir/usr/bin/arm-linux-uclibc
--cpp -Os -pipe -O2
--I/home/johan/buildroot/output/build/staging_dir/usr/include
--I/home/johan/buildroot/output/build/staging_dir/include
---sysroot=/home/johan/buildroot/output/build/staging_dir/ -isysroot
-/home/johan/buildroot/output/build/staging_dir -mabi=apcs-gnu
--D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64"
-CXX="/home/johan/buildroot/output/build/staging_dir/usr/bin/arm-linux-uclibc
--g++ -Os -pipe -O2
--I/home/johan/buildroot/output/build/staging_dir/usr/include
--I/home/johan/buildroot/output/build/staging_dir/include
---sysroot=/home/johan/buildroot/output/build/staging_dir/ -isysroot
-/home/johan/buildroot/output/build/staging_dir -mabi=apcs-gnu
--D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64"
-FC="/home/johan/buildroot/output/build/staging_dir/usr/bin/arm-linux-uclibc-
-gfortran "
-RANLIB="/home/johan/buildroot/output/build/staging_dir/usr/bin/arm-linux-ucl
-ibc-ranlib"
-STRIP="/home/johan/buildroot/output/build/staging_dir/usr/bin/arm-linux-ucli
-bc-strip"
-OBJCOPY="/home/johan/buildroot/output/build/staging_dir/usr/bin/arm-linux-uc
-libc-objcopy" AR_FOR_BUILD="/usr/bin/ar" AS_FOR_BUILD="/usr/bin/as"
-CC_FOR_BUILD="/usr/bin/gcc" GCC_FOR_BUILD="/usr/bin/gcc"
-CXX_FOR_BUILD="/usr/bin/g++" FC_FOR_BUILD="/usr/bin/ld"
-LD_FOR_BUILD="/usr/bin/ld"
-CFLAGS_FOR_BUILD="-I/home/johan/buildroot/output/host/include
--I/home/johan/buildroot/output/host/usr/include"
-CXXFLAGS_FOR_BUILD="-I/home/johan/buildroot/output/host/include
--I/home/johan/buildroot/output/host/usr/include"
-LDFLAGS_FOR_BUILD="-L/home/johan/buildroot/output/host/lib
--L/home/johan/buildroot/output/host/usr/lib" FCFLAGS_FOR_BUILD=""
-AR_FOR_TARGET="/home/johan/buildroot/output/build/staging_dir/usr/bin/arm-li
-nux-uclibc-ar"
-AS_FOR_TARGET="/home/johan/buildroot/output/build/staging_dir/usr/bin/arm-li
-nux-uclibc-as"
-CC_FOR_TARGET="/home/johan/buildroot/output/build/staging_dir/usr/bin/arm-li
-nux-uclibc-gcc"
-LD_FOR_TARGET="/home/johan/buildroot/output/build/staging_dir/usr/bin/arm-li
-nux-uclibc-ld"
-NM_FOR_TARGET="/home/johan/buildroot/output/build/staging_dir/usr/bin/arm-li
-nux-uclibc-nm"
-DEFAULT_ASSEMBLER="/home/johan/buildroot/output/build/staging_dir/usr/bin/ar
-m-linux-uclibc-as"
-DEFAULT_LINKER="/home/johan/buildroot/output/build/staging_dir/usr/bin/arm-l
-inux-uclibc-ld"
-PKG_CONFIG_SYSROOT_DIR="/home/johan/buildroot/output/build/staging_dir"
-PKG_CONFIG="/home/johan/buildroot/output/host/usr/bin/pkg-config"
-PKG_CONFIG_PATH="/home/johan/buildroot/output/build/staging_dir/usr/lib/pkgc
-onfig:" STAGING_DIR="/home/johan/buildroot/output/build/staging_dir" \
- ac_cv_lbl_unaligned_fail=yes ac_cv_func_mmap_fixed_mapped=yes
-ac_cv_func_memcmp_working=yes ac_cv_have_decl_malloc=yes
-gl_cv_func_malloc_0_nonnull=yes ac_cv_func_malloc_0_nonnull=yes
-ac_cv_func_calloc_0_nonnull=yes ac_cv_func_realloc_0_nonnull=yes
-ac_cv_c_bigendian=no \
- CFLAGS="-Os -pipe -O2
--I/home/johan/buildroot/output/build/staging_dir/usr/include
--I/home/johan/buildroot/output/build/staging_dir/include
---sysroot=/home/johan/buildroot/output/build/staging_dir/ -isysroot
-/home/johan/buildroot/output/build/staging_dir -mabi=apcs-gnu
--D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64"
-CXXFLAGS="-Os -pipe -O2
--I/home/johan/buildroot/output/build/staging_dir/usr/include
--I/home/johan/buildroot/output/build/staging_dir/include
---sysroot=/home/johan/buildroot/output/build/staging_dir/ -isysroot
-/home/johan/buildroot/output/build/staging_dir -mabi=apcs-gnu
--D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64"
-LDFLAGS="-L/home/johan/buildroot/output/build/staging_dir/lib
--L/home/johan/buildroot/output/build/staging_dir/usr/lib
---sysroot=/home/johan/buildroot/output/build/staging_dir/" FCFLAGS=""  \
- EMACS="no" \
- ./configure \
-  --cache-file="/home/johan/buildroot/output/build/tgt-config.cache" \
-  --target=arm-linux \
-  --host=arm-linux \
-  --build=i386-pc-linux-gnu \
-  --prefix=/usr \
-  --exec-prefix=/usr \
-  --sysconfdir=/etc \
-  --disable-gtk-doc \
-   \
-   \
-   \
-   
-configure: loading cache /home/johan/buildroot/output/build/tgt-config.cache
-checking for a BSD-compatible install... /usr/bin/install -c
-checking whether build environment is sane... yes
-checking for arm-linux-strip...
-/home/johan/buildroot/output/build/staging_dir/usr/bin/arm-linux-uclibc-stri
-p
-checking for a thread-safe mkdir -p... /bin/mkdir -p
-checking for gawk... no
-checking for mawk... mawk
-checking whether make sets $(MAKE)... yes
-checking whether /bin/sh -n is known to work... no
-checking for characters that cannot appear in file names... none
-checking whether directories can have trailing spaces... yes
-checking for expr... /usr/bin/expr
-checking for GNU M4 that supports accurate traces... 
-configure: WARNING: unrecognized options: --disable-gtk-doc
-configure: error: no acceptable m4 could be found in $PATH.
-GNU M4 1.4.6 or later is required; 1.4.13 is recommended
-make: ***
-[/home/johan/buildroot/output/build/autoconf-2.64/.stamp_configured] Error 1
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091021/fd82d6d6/attachment-0001.htm>
+ Sagaert>  [7m>>> autoconf 2.64 Configuring [27m
+
+This is autoconfig for the target - A pretty uncommon thing to build.
+
+ Sagaert> checking for GNU M4 that supports accurate traces...
+ Sagaert> configure: WARNING: unrecognized options: --disable-gtk-doc
+ Sagaert> configure: error: no acceptable m4 could be found in $PATH.
+ Sagaert> GNU M4 1.4.6 or later is required; 1.4.13 is recommended
+ Sagaert> make: *** [/home/johan/buildroot/output/build/autoconf-2.64/.stamp_configured]
+
+It seems like autoconf needs a dependency on m4. Could you try adding m4
+to package/autoconf/autoconf.mk: AUTOCONF_DEPENDENCIES  and try again?
+
+If that fails, check config.log to see what/why it fails.
+
+-- 
+Bye, Peter Korsgaard
