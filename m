@@ -1,77 +1,30 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Wed, 21 Oct 2009 15:42:35 +0200
-Subject: [Buildroot] building toolchain fails works now with cache
-	disabled.
-In-Reply-To: <87eiowrkgh.fsf@macbook.be.48ers.dk>
-Message-ID: <C92DA876B3AA4BCA926AD2983C70B38B@apexjs>
+From: Darcy Watkins <DWatkins@tranzeo.com>
+Date: Wed, 21 Oct 2009 06:39:20 -0700
+Subject: [Buildroot] net-snmp version 5.5
+Message-ID: <D61182AC8012EA4EBC531B3AF23BE1098DE5AF@tranzeo-mail2.12stewart.tranzeo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- 
-Hi
+Hello,
 
-Afrer disabling the cache it worked.
+At the URL below, I submitted a simple patch to the net-snmp project for
+net-snmp 5.5 so that I could build it under buildroot.
 
-Maybe the cache path was wrong, i used my .config file from the 2009.08
-version 
- from the config file i read 
+https://sourceforge.net/tracker/?func=detail&aid=2883220&group_id=12694&
+atid=312694
 
-BR2_CCACHE_DIR="$(TOOLCHAIN_DIR)/ccache-$(CCACHE_VER)/cache"
+To use net-snmp 5.5, drop the patch into packages/netsnmp and then
+modify netsnmp.mk to set the version to 5.5 from 5.4.2.1 (or whatever it
+is set to these days).
 
-So i assume TOOLCHAIN_DIR is empty.
+I used this to build net-snmp-5.5 in a buildroot-2009.02 environment for
+a powerpc 405EP embedded linux system.  I then fired it up and played
+with it a bit.
 
------Oorspronkelijk bericht-----
-Van: Peter Korsgaard [mailto:jacmet at gmail.com] Namens Peter Korsgaard
-Verzonden: woensdag 21 oktober 2009 14:38
-Aan: Sagaert Johan; buildroot at uclibc.org
-Onderwerp: Re: [Buildroot] building toolchain fails
 
->>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
+Regards,
 
- Sagaert> Peter
-
- Sagaert> See attachement concerning my debian
-
- Sagaert> I will now look what i can do on the ubuntu machine.
-
-Please keep discussion on the mailing list instead of mailing me directly,
-so others can also follow.
-
-Looking at your config.log makes the problem pretty obvious:
-
-configure:1716: checking for C compiler default output
-configure:1719:
-/home/johan/buildroot/output/build/staging_dir/usr/bin/arm-linux
--uclibc-gcc -Os -pipe -O2
--I/home/johan/buildroot/output/build/staging_dir/usr/
-include -I/home/johan/buildroot/output/build/staging_dir/include
---sysroot=/home /johan/buildroot/output/build/staging_dir/ -isysroot
-/home/johan/buildroot/outpu t/build/staging_dir -mabi=apcs-gnu
--D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_
-FILE_OFFSET_BITS=64    conftest.c  >&5
-ccache: failed to create /ccache-2.4/cache (No such file or directory)
-
-configure:1722: $? = 1
-configure: failed program was:
-#line 1700 "configure"
-#include "confdefs.h"
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-configure:1745: error: C compiler cannot create executables
-
-So the problem is ccache somehow thinking it should write cache files to
-/ccache-2.4.
-
-Try disabling ccache and rebuild everything (rm -rf output; make).
-
---
-Bye, Peter Korsgaard
+Darcy
