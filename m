@@ -1,51 +1,56 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 21 Oct 2009 20:31:28 +0200
-Subject: [Buildroot] building toolchain fails - more details
-In-Reply-To: <1531E53627F1F749B4FE809BF2A4EB67013CED64@WETMEX10.loepfe.com>
-	(Noel Vellemans's message of "Wed\, 21 Oct 2009 16\:31\:19 +0200")
-References: <mailman.7.1256126402.21246.buildroot@busybox.net>
-	<1531E53627F1F749B4FE809BF2A4EB67013CED64@WETMEX10.loepfe.com>
-Message-ID: <87tyxsppj3.fsf@macbook.be.48ers.dk>
+From: Roman Chertov <rchertov@cs.ucsb.edu>
+Date: Wed, 21 Oct 2009 13:02:14 -0700
+Subject: [Buildroot] uClibc kernel headers problem
+In-Reply-To: <20091021085047.GA23642@mx.loc>
+References: <4ADDE87E.1030601@cs.ucsb.edu> <20091021085047.GA23642@mx.loc>
+Message-ID: <4ADF68C6.7030806@cs.ucsb.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Noel" == Vellemans, Noel <Noel.Vellemans@visionBMS.com> writes:
+> 
+> if the paths in the tarballs don't match the name of the tarball and the
+> version in the BR config then this will not work.
+> I've sent a patch to the list a couple of days ago where you can set the
+> kernel version manually to ease this particular thing, fyi.
+> This and a handful of other patches are still not applied yet, though.
 
-Hi,
+I changed the path names by hand so that linux-2.6.24.7.tar.bz2 is
+linux-2.6.24.tar.bz2 and is extracted into a 2.6.24 directory.
 
- Noel> While looking to the the output/build directory it seems that it
- Noel> is -> autoconf-2.64-host.
+>> My current trouble is with uClibc 0.9.30.1.  In the buildroot menuconfig
+>> I specified that I want to build the entire Linux kernel, so as far as I
+>> understand there is no need to use the precompiled headers option.  When
+>> I build the tool chain, it all works up to uClibc.  I get the following
+>> error "cc1: error: unrecognized command line option "-mbig-endian"".  I
+>> have included the output log down below.  I would appreciate any help
+>> with this.
+> 
+> How did you configure BR?
 
-Ok, that's a different issue than Johan's then - The snippet he posted
-was about autoconf for the target.
+I specified that I have an ARM processor with EABI.  For libc, I used
+the default 0.9.30.1.  For the actual device, I had to make my own entry
+in device.  I copied the following into the Makefile.in
 
- Noel> Looking into the config.log into this directory gives me.
+UCLIBC_CONFIG_FILE=$(TOOL_BUILD_DIR)/uClibc.config.$(ARCH) from one of
+the device directories.  Once, I commented that out, the problem
+disappeared.
 
- Noel> << autoconf-2.64-host - config.log snip >>
+Roman
 
- Noel> configure:2356: checking for GNU M4 that supports accurate traces
- Noel> configure:2391: error: no acceptable m4 could be found in $PATH.
- Noel> GNU M4 1.4.6 or later is required; 1.4.13 is recommended
 
-Strange as the host-autoconf package depends on host-m4. Don't you have
-a build/m4-1.4.9-host directory? On my system I get:
-
-configure:2356: checking for GNU M4 that supports accurate traces
-configure:2398: result: /tmp/br/host/usr/bin/m4
-configure:2401: checking whether /tmp/br/host/usr/bin/m4 accepts --gnu
-configure:2411: result: no
-configure:2422: WARNING: The version of M4 that was found does not support -g.
-configure:2424: WARNING: Using it with POSIXLY_CORRECT set may cause problems.
-configure:2428: checking how m4 supports trace files
-configure:2438: result: --debugfile
-
- Noel> A) 'make at91sam9g20dfc_defconfig' (press enter a couple of times....) {
-
-I don't see why it shouldn't work, but I've just started such a build
-anyway.
-
--- 
-Bye, Peter Korsgaard
+> 
+>>  GEN include/bits/sysnum.h
+>> cc1: error: unrecognized command line option "-mbig-endian"
+>> cc1: error: unrecognized command line option "-mbig-endian"
+>> ERROR: Could not generate syscalls.
+>> Make sure that you have proper kernel headers.
+>> Your .config in KERNEL_HEADERS="" was set to:
+>> /usr/include/
+> 
+> Even if you build on an arm box this is incorrect.
+> I suggest you start from a fresh BR config:
+> you at box:buildroot $ rm -f .config ; make menuconfig
+> 
