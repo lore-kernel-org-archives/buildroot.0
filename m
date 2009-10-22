@@ -1,25 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 22 Oct 2009 22:54:19 +0200
-Subject: [Buildroot] [PATCH] package: netkitftp updates
-In-Reply-To: <1256243882-10748-1-git-send-email-hugues@hiegel.fr> (Hugues
-	Hiegel's message of "Thu\, 22 Oct 2009 22\:38\:02 +0200")
-References: <1256243882-10748-1-git-send-email-hugues@hiegel.fr>
-Message-ID: <87d44fno90.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 22 Oct 2009 21:07:05 +0000 (UTC)
+Subject: [Buildroot] [Bug 655] Update sqlite package to version 3.6.18
+In-Reply-To: <bug-655-163@https.bugs.busybox.net/>
+References: <bug-655-163@https.bugs.busybox.net/>
+Message-ID: <20091022210705.CFA747776F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Hugues" == Hugues Hiegel <hugues@hiegel.fr> writes:
+https://bugs.busybox.net/show_bug.cgi?id=655
 
- Hugues> From: Hugues Hiegel <hugues.hiegel@openwide.fr>
 
- Hugues> ---
- Hugues>  package/netkitftp/netkitftp.mk |    7 +++++--
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-Thanks, but err - We don't actually have a netkitftp package, and I
-don't recall we ever had one. What tree is this patch against?
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
+
+
+
+
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-10-22 21:07:03 UTC ---
+Thanks, committed
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
