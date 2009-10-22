@@ -1,48 +1,38 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 22 Oct 2009 18:24:41 +0000 (UTC)
-Subject: [Buildroot] [Bug 679] Autoconf cannot find M4
-In-Reply-To: <bug-679-163@https.bugs.busybox.net/>
-References: <bug-679-163@https.bugs.busybox.net/>
-Message-ID: <20091022182441.4DEE97776D@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 22 Oct 2009 21:26:24 +0200
+Subject: [Buildroot] RT-Linux ucLibc or glibc?
+In-Reply-To: <B44D4D5BF344094DABB900C4E0F6E3533945A36BC5@srv02.nortechonline.net>
+References: <B44D4D5BF344094DABB900C4E0F6E3533945A36BC5@srv02.nortechonline.net>
+Message-ID: <20091022212624.3dbe24ee@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=679
+Le Wed, 21 Oct 2009 15:56:47 +0100,
+"Hodgson, Simon" <Simon.Hodgson@nortechonline.co.uk> a ?crit :
 
-
-
-
-
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-10-22 18:24:40 UTC ---
-(In reply to comment #0)
-> There is a m4 installed in my platform (Ubuntu) with the version, while there
-> is one installed in the system:
+> We're building a system, and want to  make use of the RT-Preempt
+> Kernel patch.
 > 
-> checking for GNU M4 that supports accurate traces... configure: error: no
-> acceptable m4 could be found in $PATH.
-> GNU M4 1.4.6 or later is required; 1.4.13 is recommended
+> My question is, do we need to use glibc, or will uClibc be OK?
 > 
-> # m4 --version
-> m4 (GNU M4) 1.4.11
-> Copyright (C) 2008 Free Software Foundation, Inc.
-> License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
-> This is free software: you are free to change and redistribute it.
-> There is NO WARRANTY, to the extent permitted by law.
+> This wiki page suggests that some of the features required are not
+> present in uclibc
+> (http://rt.wiki.kernel.org/index.php/HOWTO:_Build_an_RT-application)
+> but it was written some time ago.
 > 
+> Just wondered if anyone has any experience of this?
 
-Is this related to
-http://lists.busybox.net/pipermail/buildroot/2009-October/029957.html or
-http://lists.busybox.net/pipermail/buildroot/2009-October/029964.html?
+Last time I looked, it was still the case. Things like
+priority-inheritance mutexes for example were not supported.
 
-In other words, is this autoconf for the target or for the host? In any case,
-you'll need to provide more info - What is your .config, and what make target
-is failing?
+Sincerly,
 
-
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
