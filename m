@@ -1,44 +1,35 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Thu, 22 Oct 2009 21:41:32 +0200
-Subject: [Buildroot] [RFC; PATCH] Use gdbserver from external toolchain
-In-Reply-To: <2c9a759f0910220247u18c004epcb564aa65aa02d2b@mail.gmail.com>
-References: <2c9a759f0910220247u18c004epcb564aa65aa02d2b@mail.gmail.com>
-Message-ID: <1256240492.25025.33.camel@coalu.atr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 22 Oct 2009 22:30:25 +0200
+Subject: [Buildroot] perl depends miniperl
+In-Reply-To: <4AE07A68.8090403@renta.net> (Mark Constable's message of "Fri\,
+	23 Oct 2009 01\:29\:44 +1000")
+References: <4AE07A68.8090403@renta.net>
+Message-ID: <87hbtrnpcu.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le jeudi 22 octobre 2009 ? 11:47 +0200, Anders Darander a ?crit :
-> Hi,
-> 
-> I've attached a patch (formatted by git), which adds the possibility
-> to have buildroot install the already compiled gdbserver from an
-> external toolchain.
-> 
-> To  make sure that debuging works, it is preferred if both the host
-> crosscompiler gdb and gdbserver is built from the same gdb version. If
-> we take the gdbserver from the external toolchain, this is guaranteed.
-> 
-> I'm not sure that the implementation is the best, it migth be  a
-> little bit "hackish". Looking forward to some comments for
-> improvement.
-> 
-> Regards,
-> Anders
+>>>>> "Mark" == Mark Constable <markc@renta.net> writes:
 
-Hi Anders,
+ Mark> In the pursuit of a usable ar I thought I'd select Target options
 
-Interesting patch ;)
+For an ar with write support, you probably need binutils/gcc on the
+target.
 
-Maybe you could add
+ Mark> -> Generic development system and see what happens but it stopped
+ Mark> at this point where, I presume, building perl requires
+ Mark> ../../miniperl.
 
-	depends on BR2_TOOLCHAIN_EXTERNAL
+Our perl is miniperl, so there must be something broken in the miniperl
+package.
 
-to your BR2_TOOLCHAIN_EXTERNAL_GDBSERVER option.
+ Mark> Any suggestion how to work around this one?
 
-Regards,
+ Mark> I really do not want perl at all. Certainly not on the target.
+
+Then don't enable it ;)
 
 -- 
-Lionel Landwerlin <llandwerlin@gmail.com>
+Bye, Peter Korsgaard
