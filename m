@@ -1,48 +1,45 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 22 Oct 2009 16:09:57 +0000 (UTC)
-Subject: [Buildroot] [Bug 679] New: Autoconf cannot find M4
-Message-ID: <bug-679-163@https.bugs.busybox.net/>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Thu, 22 Oct 2009 19:40:19 +0200
+Subject: [Buildroot] [RFC; PATCH] Use gdbserver from external toolchain
+In-Reply-To: <2c9a759f0910220247u18c004epcb564aa65aa02d2b@mail.gmail.com>
+References: <2c9a759f0910220247u18c004epcb564aa65aa02d2b@mail.gmail.com>
+Message-ID: <200910221940.19877.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=679
+Hello Anders!
+Hello All!
 
-              Host: 586
-            Target: 386
-           Summary: Autoconf cannot find M4
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: opalenzuela at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+On Thursday 22 October 2009 11:47:52 Anders Darander wrote:
+> To  make sure that debuging works, it is preferred if both the host
+> crosscompiler gdb and gdbserver is built from the same gdb version. If
+> we take the gdbserver from the external toolchain, this is guaranteed.
 
+Yes, this is highly suggested that the cross-gdb and the gdbserver are
+from the same /version/ of gdb, as they have to speak the same protocol
+on the wire, and that can change between releases.
 
-There is a m4 installed in my platform (Ubuntu) with the version, while there
-is one installed in the system:
+> I'm not sure that the implementation is the best, it migth be  a
+> little bit "hackish". Looking forward to some comments for
+> improvement.
 
-checking for GNU M4 that supports accurate traces... configure: error: no
-acceptable m4 could be found in $PATH.
-GNU M4 1.4.6 or later is required; 1.4.13 is recommended
+I'm afraid this is a bit too crosstool-NG centric. OTOH, there's no clean
+way to know where in an external toolchain we should look for the gdbserver.
 
-# m4 --version
-m4 (GNU M4) 1.4.11
-Copyright (C) 2008 Free Software Foundation, Inc.
-License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
-This is free software: you are free to change and redistribute it.
-There is NO WARRANTY, to the extent permitted by law.
+This is some API that crosstool-NG should expose to outside: tell me where
+in can find the {gdbserver,duma,whatever} and the corresponding dependencies
+(libs, scripts...).
 
+Regards,
+Yann E. MORIN.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+`------------------------------^-------^------------------^--------------------'
