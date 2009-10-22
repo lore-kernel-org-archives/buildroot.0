@@ -1,38 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 22 Oct 2009 21:26:24 +0200
-Subject: [Buildroot] RT-Linux ucLibc or glibc?
-In-Reply-To: <B44D4D5BF344094DABB900C4E0F6E3533945A36BC5@srv02.nortechonline.net>
-References: <B44D4D5BF344094DABB900C4E0F6E3533945A36BC5@srv02.nortechonline.net>
-Message-ID: <20091022212624.3dbe24ee@surf>
+From: Lionel Landwerlin <llandwerlin@gmail.com>
+Date: Thu, 22 Oct 2009 21:41:32 +0200
+Subject: [Buildroot] [RFC; PATCH] Use gdbserver from external toolchain
+In-Reply-To: <2c9a759f0910220247u18c004epcb564aa65aa02d2b@mail.gmail.com>
+References: <2c9a759f0910220247u18c004epcb564aa65aa02d2b@mail.gmail.com>
+Message-ID: <1256240492.25025.33.camel@coalu.atr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 21 Oct 2009 15:56:47 +0100,
-"Hodgson, Simon" <Simon.Hodgson@nortechonline.co.uk> a ?crit :
-
-> We're building a system, and want to  make use of the RT-Preempt
-> Kernel patch.
+Le jeudi 22 octobre 2009 ? 11:47 +0200, Anders Darander a ?crit :
+> Hi,
 > 
-> My question is, do we need to use glibc, or will uClibc be OK?
+> I've attached a patch (formatted by git), which adds the possibility
+> to have buildroot install the already compiled gdbserver from an
+> external toolchain.
 > 
-> This wiki page suggests that some of the features required are not
-> present in uclibc
-> (http://rt.wiki.kernel.org/index.php/HOWTO:_Build_an_RT-application)
-> but it was written some time ago.
+> To  make sure that debuging works, it is preferred if both the host
+> crosscompiler gdb and gdbserver is built from the same gdb version. If
+> we take the gdbserver from the external toolchain, this is guaranteed.
 > 
-> Just wondered if anyone has any experience of this?
+> I'm not sure that the implementation is the best, it migth be  a
+> little bit "hackish". Looking forward to some comments for
+> improvement.
+> 
+> Regards,
+> Anders
 
-Last time I looked, it was still the case. Things like
-priority-inheritance mutexes for example were not supported.
+Hi Anders,
 
-Sincerly,
+Interesting patch ;)
 
-Thomas
+Maybe you could add
+
+	depends on BR2_TOOLCHAIN_EXTERNAL
+
+to your BR2_TOOLCHAIN_EXTERNAL_GDBSERVER option.
+
+Regards,
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Lionel Landwerlin <llandwerlin@gmail.com>
