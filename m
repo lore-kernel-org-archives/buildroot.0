@@ -1,52 +1,48 @@
-From: Mark Constable <markc@renta.net>
-Date: Fri, 23 Oct 2009 01:29:44 +1000
-Subject: [Buildroot] perl depends miniperl
-Message-ID: <4AE07A68.8090403@renta.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 22 Oct 2009 16:09:57 +0000 (UTC)
+Subject: [Buildroot] [Bug 679] New: Autoconf cannot find M4
+Message-ID: <bug-679-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In the pursuit of a usable ar I thought I'd select Target options -> Generic
-development system and see what happens but it stopped at this point where,
-I presume, building perl requires ../../miniperl.
+https://bugs.busybox.net/show_bug.cgi?id=679
 
-Any suggestion how to work around this one?
-
-I really do not want perl at all. Certainly not on the target.
-
- 
-touch /home/sources/buildroot/build_i686/perl-5.8.8/.host_configured_and_fixed
-/usr/bin/make -j1 -C /home/sources/buildroot/build_i686/perl-5.8.8              || echo "An error is expected on make"
-make[1]: Entering directory `/home/sources/buildroot/build_i686/perl-5.8.8'
-make[1]: *** No rule to make target `<command-line>', needed by `miniperlmain.o'.  Stop.
-make[1]: Leaving directory `/home/sources/buildroot/build_i686/perl-5.8.8'
-An error is expected on make
-touch /home/sources/buildroot/build_i686/perl-5.8.8/.host_make
-/usr/bin/make -j1 -C /home/sources/buildroot/build_i686/perl-5.8.8 test || echo "An error is expected on make test"
-make[1]: Entering directory `/home/sources/buildroot/build_i686/perl-5.8.8'
-make[1]: *** No rule to make target `<command-line>', needed by `miniperlmain.o'.  Stop.
-make[1]: Leaving directory `/home/sources/buildroot/build_i686/perl-5.8.8'
-An error is expected on make test
-touch /home/sources/buildroot/build_i686/perl-5.8.8/.host_make_fixed
-# we need to build a perl for the host just for Errno.pm
-(cd /home/sources/buildroot/build_i686/perl-5.8.8; \
-         chmod a+x ext/util/make_ext; \
-         ext/util/make_ext nonxs Errno MAKE="/usr/bin/make" \
-        )
-
-        Making Errno (nonxs)
-ext/util/make_ext: line 122: ../../miniperl: No such file or directory
-Warning: No Makefile!
-make[1]: Entering directory `/home/sources/buildroot/build_i686/perl-5.8.8/ext/Errno'
-make[1]: *** No rule to make target `config'.  Stop.
-make[1]: Leaving directory `/home/sources/buildroot/build_i686/perl-5.8.8/ext/Errno'
-/usr/bin/make config failed, continuing anyway...
-make[1]: Entering directory `/home/sources/buildroot/build_i686/perl-5.8.8/ext/Errno'
-make[1]: *** No rule to make target `all'.  Stop.
-make[1]: Leaving directory `/home/sources/buildroot/build_i686/perl-5.8.8/ext/Errno'
-make: *** [/home/sources/buildroot/build_i686/perl-5.8.8/.configured] Error 2
+              Host: 586
+            Target: 386
+           Summary: Autoconf cannot find M4
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: opalenzuela at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
 
---markc
+There is a m4 installed in my platform (Ubuntu) with the version, while there
+is one installed in the system:
+
+checking for GNU M4 that supports accurate traces... configure: error: no
+acceptable m4 could be found in $PATH.
+GNU M4 1.4.6 or later is required; 1.4.13 is recommended
+
+# m4 --version
+m4 (GNU M4) 1.4.11
+Copyright (C) 2008 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
