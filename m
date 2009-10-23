@@ -1,40 +1,40 @@
-From: Mark Constable <markc@renta.net>
-Date: Fri, 23 Oct 2009 14:03:39 +1000
-Subject: [Buildroot] perl depends miniperl
-In-Reply-To: <87hbtrnpcu.fsf@macbook.be.48ers.dk>
-References: <4AE07A68.8090403@renta.net> <87hbtrnpcu.fsf@macbook.be.48ers.dk>
-Message-ID: <4AE12B1B.8000206@renta.net>
+From: Lionel Landwerlin <llandwerlin@gmail.com>
+Date: Fri, 23 Oct 2009 08:49:54 +0200
+Subject: [Buildroot] [RFC; PATCH] Use gdbserver from external toolchain
+In-Reply-To: <2c9a759f0910222319oa156407g4aa46caef5af7f0@mail.gmail.com>
+References: <2c9a759f0910220247u18c004epcb564aa65aa02d2b@mail.gmail.com>
+	<1256240439.25025.32.camel@coalu.atr>
+	<2c9a759f0910222319oa156407g4aa46caef5af7f0@mail.gmail.com>
+Message-ID: <1256280594.30127.1.camel@coalu.atr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard wrote:
-> For an ar with write support, you probably need binutils/gcc on the
-> target.
-
-Yes, Ive been trying for that for a couple of days now :-)
-
->  Mark> -> Generic development system and see what happens but it stopped
->  Mark> at this point where, I presume, building perl requires
->  Mark> ../../miniperl.
+Le vendredi 23 octobre 2009 ? 08:19 +0200, Anders Darander a ?crit :
+> Hi Lionel,
 > 
-> Our perl is miniperl, so there must be something broken in the miniperl
-> package.
-
-I wish I could submit a fix but I think it'll take me months to
-get a good handle on buildroot and the use of Makefiles.
-
->  Mark> I really do not want perl at all. Certainly not on the target.
+> On Thu, Oct 22, 2009 at 21:40, Lionel Landwerlin <llandwerlin@gmail.com> wrote:
+> > Maybe you could add
+> >
+> >        depends on BR2_TOOLCHAIN_EXTERNAL
+> >
+> > to your BR2_TOOLCHAIN_EXTERNAL_GDBSERVER option.
 > 
-> Then don't enable it ;)
+> Sure that would be no problem.
+> 
+> However, I don't really see what that would gain us. Currently, the
+> option in the menu is guarded the the 'if
+> BR2_TOOLCHAIN_EXTERNAL'-clause that extends to the whole Config.in I'm
+> touching... Thus, I believe that we already have this implicitly. Or
+> am I missing something else that an added depend-statement would gain
+> us?
+> 
 
-Unfortunately (for me) selecting the general devel install auto
-selects autoconf which in turn auto selects miniperl.
+Yeah sorry, I didn't see the 'if BR2_TOOLCHAIN_EXTERNAL' at the top of
+the file. Forget about it :)
 
-And from the error it seems like it's only needed for error.pm!
-(I'm not sure what that means but it might be fairly trivial and
-easy to substitute, perhaps)
 
---markc
+-- 
+Lionel Landwerlin <llandwerlin@gmail.com>
