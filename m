@@ -1,48 +1,34 @@
-From: Hugues <hugues@hiegel.fr>
-Date: Fri, 23 Oct 2009 11:32:59 +0200
-Subject: [Buildroot] [PATCH] package: netkitftp updates
-In-Reply-To: <87vdi6mr03.fsf@macbook.be.48ers.dk> (Peter Korsgaard's message
-	of "Fri\, 23 Oct 2009 10\:52\:28 +0200")
-References: <1256243882-10748-1-git-send-email-hugues@hiegel.fr>
-	<87d44fno90.fsf@macbook.be.48ers.dk>
-	<20091023083912.GG28436@openwide.fr>
-	<87vdi6mr03.fsf@macbook.be.48ers.dk>
-Message-ID: <87k4ymwj3o.fsf@paranoid.sweethome>
+From: Mark Constable <markc@renta.net>
+Date: Fri, 23 Oct 2009 19:57:16 +1000
+Subject: [Buildroot] No gcc 4.4.2
+Message-ID: <4AE17DFC.5020605@renta.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+FWIW I tried to ignorantly force the use of gcc 4.4.2 but it seems
+there needs to be deeper changes than what I am capable of...
 
-Re-,
+/bin/sh: line 0: cd: /home/sources/buildroot/output/target/usr/lib/gcc-lib/i686-linux-uclibc/4.4.2: No such file or directory
+make: [/home/sources/buildroot/output/target/usr/bin/gcc] Error 1 (ignored)
+(cd /home/sources/buildroot/output/target/usr/lib && /home/sources/buildroot/output/staging/usr/bin/i686-linux-uclibc-strip --remove-section=.comment --remove-section=.note libstdc++.so.*.*.* > /dev/null 2>&1)
+(cd /home/sources/buildroot/output/target/lib && /home/sources/buildroot/output/staging/usr/bin/i686-linux-uclibc-strip --remove-section=.comment --remove-section=.note libgcc_s*.so.*.*.* > /dev/null 2>&1)
+make: [/home/sources/buildroot/output/target/usr/bin/gcc] Error 1 (ignored)
+#
+rm -f /home/sources/buildroot/output/target/usr/lib/*.la*
+#rm -rf /home/sources/buildroot/output/target/share/locale /home/sources/buildroot/output/target/usr/info \
+        #       /home/sources/buildroot/output/target/usr/man /home/sources/buildroot/output/target/usr/share/doc
+# Work around problem of missing syslimits.h
+if [ ! -f /home/sources/buildroot/output/target/usr/lib/gcc-lib/i686-linux-uclibc/4.4.2/include/syslimits.h ]; then \
+                echo "warning: working around missing syslimits.h"; \
+                cp -f /home/sources/buildroot/output/staging/lib/gcc-lib/i686-linux-uclibc/4.4.2/include/syslimits.h \
+                        /home/sources/buildroot/output/target/usr/lib/gcc-lib/i686-linux-uclibc/4.4.2/include/; \
+        fi
+warning: working around missing syslimits.h
+cp: cannot stat `/home/sources/buildroot/output/staging/lib/gcc-lib/i686-linux-uclibc/4.4.2/include/syslimits.h': No such file or directory
+make: *** [/home/sources/buildroot/output/target/usr/bin/gcc] Error 1
 
-Ce cher Peter Korsgaard <jacmet@uclibc.org> a dit :
 
->>>>>> "Hugues" == Hugues Hiegel <hugues.hiegel@openwide.fr> writes:
->
-> Hi,
->
->  >> Thanks, but err - We don't actually have a netkitftp package, and I
->  >> don't recall we ever had one. What tree is this patch against?
->
->  Hugues> Mhmm... you're absolutely right !! I messed up between the official
->  Hugues> buildroot and the branch I'm working on for a specific client..
->
->  Hugues> So you should forget about it :o)
->
-> ;)
->
->  Hugues> ..unless you are interested by a netkitftp package ? :)
->  Hugues> (I know busybox provides ftpget and ftpput, but I didn't find any 'ftp'
->  Hugues> only command, based on 2009_08rc2 release.)
->
-> Sure, but I would strongly prefer you to convert it to the "new"
-> Makefile.autotools.in format instead.
-
-Ok,  that's a  good idea,  and  it'll make  me sharpen  my weapons  with
-buildroot stuff ;-)
-
-BR,
--- 
-Hugues Hiegel                                [http://www.hiegel.fr/~hugues/]
+--markc
