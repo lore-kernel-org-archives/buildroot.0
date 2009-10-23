@@ -1,42 +1,38 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 23 Oct 2009 10:15:11 +0200
-Subject: [Buildroot] [git commit master] libarchive: add conditional
-	dependency on zlib
-Message-ID: <20091023081636.629347779A@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 23 Oct 2009 10:52:28 +0200
+Subject: [Buildroot] [PATCH] package: netkitftp updates
+In-Reply-To: <20091023083912.GG28436@openwide.fr> (Hugues Hiegel's message of
+	"Fri\, 23 Oct 2009 10\:39\:12 +0200")
+References: <1256243882-10748-1-git-send-email-hugues@hiegel.fr>
+	<87d44fno90.fsf@macbook.be.48ers.dk>
+	<20091023083912.GG28436@openwide.fr>
+Message-ID: <87vdi6mr03.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Hugues" == Hugues Hiegel <hugues.hiegel@openwide.fr> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dc5ae2c428d1012317653816f5001892574cd3ab
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-If zlib is selected, then it should be built before libarchive so that
-libarchive picks up the headers and includes support for zlib
-compression.
+ >> Thanks, but err - We don't actually have a netkitftp package, and I
+ >> don't recall we ever had one. What tree is this patch against?
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/libarchive/libarchive.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ Hugues> Mhmm... you're absolutely right !! I messed up between the official
+ Hugues> buildroot and the branch I'm working on for a specific client..
 
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index 32f68f7..efd1656 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
-@@ -10,6 +10,10 @@ LIBARCHIVE_LIBTOOL_PATCH = NO
- LIBARCHIVE_INSTALL_STAGING = YES
- LIBARCHIVE_INSTALL_TARGET = YES
- 
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+LIBARCHIVE_DEPENDENCIES = zlib
-+endif
-+
- LIBARCHIVE_CONF_OPT = \
- 	$(if $(BR2_PACKAGE_LIBARCHIVE_BSDTAR),--enable-bsdtar,--disable-bsdtar) \
- 	$(if $(BR2_PACKAGE_LIBARCHIVE_BSDCPIO),--enable-bsdcpio,--disable-bsdcpio)
+ Hugues> So you should forget about it :o)
+
+;)
+
+ Hugues> ..unless you are interested by a netkitftp package ? :)
+ Hugues> (I know busybox provides ftpget and ftpput, but I didn't find any 'ftp'
+ Hugues> only command, based on 2009_08rc2 release.)
+
+Sure, but I would strongly prefer you to convert it to the "new"
+Makefile.autotools.in format instead.
+
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
