@@ -1,40 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 23 Oct 2009 09:41:34 +0200
-Subject: [Buildroot] perl depends miniperl
-In-Reply-To: <4AE12B1B.8000206@renta.net> (Mark Constable's message of "Fri\,
-	23 Oct 2009 14\:03\:39 +1000")
-References: <4AE07A68.8090403@renta.net> <87hbtrnpcu.fsf@macbook.be.48ers.dk>
-	<4AE12B1B.8000206@renta.net>
-Message-ID: <874opqo8up.fsf@macbook.be.48ers.dk>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Fri, 23 Oct 2009 09:53:12 +0200
+Subject: [Buildroot] [PATCH] libarchive: add conditional dependency on zlib
+In-Reply-To: <878wf2o910.fsf@macbook.be.48ers.dk>
+References: <878wf2o910.fsf@macbook.be.48ers.dk>
+Message-ID: <1256284392-30337-1-git-send-email-s.neumann@raumfeld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Mark" == Mark Constable <markc@renta.net> writes:
+If zlib is selected, then it should be built before libarchive so that
+libarchive picks up the headers and includes support for zlib
+compression.
 
-Hi,
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+---
+ package/libarchive/libarchive.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
- >> Our perl is miniperl, so there must be something broken in the
- >> miniperl package.
-
- Mark> I wish I could submit a fix but I think it'll take me months to
- Mark> get a good handle on buildroot and the use of Makefiles.
-
-I'll take a look at it again next week.
-
- Mark> I really do not want perl at all. Certainly not on the target.
- >> 
- >> Then don't enable it ;)
-
- Mark> Unfortunately (for me) selecting the general devel install auto
- Mark> selects autoconf which in turn auto selects miniperl.
-
-Ok, but there's nothing magic about the general devel thing. It's just a
-handy way to select a certain subset of packages. If you don't want all
-the packages of that subset, then just disable the devel thing and only
-select the stuff you want.
-
+diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
+index 32f68f7..efd1656 100644
+--- a/package/libarchive/libarchive.mk
++++ b/package/libarchive/libarchive.mk
+@@ -10,6 +10,10 @@ LIBARCHIVE_LIBTOOL_PATCH = NO
+ LIBARCHIVE_INSTALL_STAGING = YES
+ LIBARCHIVE_INSTALL_TARGET = YES
+ 
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++LIBARCHIVE_DEPENDENCIES = zlib
++endif
++
+ LIBARCHIVE_CONF_OPT = \
+ 	$(if $(BR2_PACKAGE_LIBARCHIVE_BSDTAR),--enable-bsdtar,--disable-bsdtar) \
+ 	$(if $(BR2_PACKAGE_LIBARCHIVE_BSDCPIO),--enable-bsdcpio,--disable-bsdcpio)
 -- 
-Bye, Peter Korsgaard
+1.6.5
