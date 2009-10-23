@@ -1,33 +1,40 @@
-From: Pablo Trujillo <pabloctrujillov@gmail.com>
-Date: Fri, 23 Oct 2009 08:38:53 +0800
-Subject: [Buildroot] UDEV Card reader
-Message-ID: <f5ba0ddf0910221738h66f41585s5c9236b24ac59829@mail.gmail.com>
+From: Mark Constable <markc@renta.net>
+Date: Fri, 23 Oct 2009 14:03:39 +1000
+Subject: [Buildroot] perl depends miniperl
+In-Reply-To: <87hbtrnpcu.fsf@macbook.be.48ers.dk>
+References: <4AE07A68.8090403@renta.net> <87hbtrnpcu.fsf@macbook.be.48ers.dk>
+Message-ID: <4AE12B1B.8000206@renta.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi everyone this is my first post I don't know if is correct to ask
-this here, My natural idiom is not  English so sorry for mistakes:
+Peter Korsgaard wrote:
+> For an ar with write support, you probably need binutils/gcc on the
+> target.
 
-I was working with the buildroot around one year  and I'm very glad
-for all its benefits to make a real small custom system.
+Yes, Ive been trying for that for a couple of days now :-)
 
-Im trying with the udev system (no the mdev that come with busybox).
-But the thing is that i don't understand why no work with card readers
-I was searching in google and I found this:
+>  Mark> -> Generic development system and see what happens but it stopped
+>  Mark> at this point where, I presume, building perl requires
+>  Mark> ../../miniperl.
+> 
+> Our perl is miniperl, so there must be something broken in the miniperl
+> package.
 
-http://shallowsky.com/blog/linux/udev-cardreaders-update.html
+I wish I could submit a fix but I think it'll take me months to
+get a good handle on buildroot and the use of Makefiles.
 
-I try that but nothing happen, I don't know why.
+>  Mark> I really do not want perl at all. Certainly not on the target.
+> 
+> Then don't enable it ;)
 
-if I put the compact flash and later I insert the reader , the system
-detect the card, but if I plug first the reader and after I put the
-CF, nothing happen, I mean the plug & unplug event seem not to work.
+Unfortunately (for me) selecting the general devel install auto
+selects autoconf which in turn auto selects miniperl.
 
-If anyone can help me
+And from the error it seems like it's only needed for error.pm!
+(I'm not sure what that means but it might be fairly trivial and
+easy to substitute, perhaps)
 
-by the way :X86 architecture.
-
-regards
+--markc
