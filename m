@@ -1,35 +1,53 @@
 From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Sat, 24 Oct 2009 19:30:17 +0200
-Subject: [Buildroot] gtk-doc and autoreconfigured packages
-In-Reply-To: <20091024182847.0644398e@surf>
-References: <1256252030.25025.36.camel@coalu.atr>
-	<20091024182847.0644398e@surf>
-Message-ID: <1256405417.28475.28.camel@coalu.atr>
+Date: Sat, 24 Oct 2009 19:41:07 +0200
+Subject: [Buildroot] [RFC; PATCH] Use gdbserver from external toolchain
+In-Reply-To: <20091024182538.69233120@surf>
+References: <2c9a759f0910220247u18c004epcb564aa65aa02d2b@mail.gmail.com>
+	<20091024182538.69233120@surf>
+Message-ID: <1256406067.28475.37.camel@coalu.atr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le samedi 24 octobre 2009 ? 18:28 +0200, Thomas Petazzoni a ?crit :
-> Le Fri, 23 Oct 2009 00:53:50 +0200,
-> Lionel Landwerlin <llandwerlin@gmail.com> a ?crit :
+Le samedi 24 octobre 2009 ? 18:25 +0200, Thomas Petazzoni a ?crit :
+> Hi,
 > 
-> > Is this patch going to be integrated soon ? :
-> > 
-> > http://git.buildroot.net/~tpetazzoni/git/buildroot/commit/?h=gtk-doc-m4-fix&id=b53a6096e4ea53517c7de5f711f381333bd6ac11
-> > 
-> > It solved problems I had with packages using gtk-doc.
+> Le Thu, 22 Oct 2009 11:47:52 +0200,
+> Anders Darander <anders.darander@gmail.com> a ?crit :
 > 
-> I found it kind of hackish to include some gtk-specific stuff into the
-> automake package. But maybe it's the only way ?
+> > I've attached a patch (formatted by git), which adds the possibility
+> > to have buildroot install the already compiled gdbserver from an
+> > external toolchain.
+> > 
+> > To  make sure that debuging works, it is preferred if both the host
+> > crosscompiler gdb and gdbserver is built from the same gdb version. If
+> > we take the gdbserver from the external toolchain, this is guaranteed.
+> > 
+> > I'm not sure that the implementation is the best, it migth be  a
+> > little bit "hackish". Looking forward to some comments for
+> > improvement.
+> 
+> This feature is of course very welcome, but I'd like to see the
+> external toolchain support to be extended to toolchains not generated
+> by Crosstool-NG (Codesourcery toolchains, for example, are still on my
+> TODO-list).
+> 
+> Can we imagine a way of making this more generic ? Maybe we could
+> detect the toolchain ?type? and act differently depending on this type ?
 > 
 
-Well... we are just trying to get rid of the gtk-doc package...
-The "real" fix would be to install gtk-doc as an host package.
-Last time I tried to integrate it, there was too many dependencies... I
-will give it another try.
+What comes up to your mind by "type" ?
+Here is a short list to start with :
+	1) uclibc vs glibc
+	2) contains tools strongly linked to the core toolchain :
+		- gdbserver / gdb / gcc
 
+What else ?
+
+
+Regards,
 
 -- 
 Lionel Landwerlin <llandwerlin@gmail.com>
