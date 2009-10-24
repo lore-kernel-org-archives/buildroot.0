@@ -1,38 +1,32 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 24 Oct 2009 20:36:16 +0200
-Subject: [Buildroot] gtk-doc and autoreconfigured packages
-In-Reply-To: <20091024182847.0644398e@surf> (Thomas Petazzoni's message of
-	"Sat\, 24 Oct 2009 18\:28\:47 +0200")
-References: <1256252030.25025.36.camel@coalu.atr>
-	<20091024182847.0644398e@surf>
-Message-ID: <87pr8czljz.fsf@macbook.be.48ers.dk>
+Date: Sat, 24 Oct 2009 20:37:57 +0200
+Subject: [Buildroot] [PATCH] Fix TARGET_PATH variable with external
+	toolchain
+In-Reply-To: <1256342684.28475.5.camel@coalu.atr> (Lionel Landwerlin's message
+	of "Sat\, 24 Oct 2009 02\:04\:44 +0200")
+References: <1256342684.28475.5.camel@coalu.atr>
+Message-ID: <87ljj0zlh6.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Lionel" == Lionel Landwerlin <llandwerlin@gmail.com> writes:
 
-Hi,
+ Lionel> Some time ago, an external toolchain improvement patch added
+ Lionel> $(HOST_DIR)/bin and $(HOST_DIR)/usr/bin to the TARGET_PATH variable.
+ Lionel> This patch also removed $(STAGING_DIR)/bin and $(STAGING_DIR)/usr/bin
+ Lionel> to TARGET_PATH which breaks the build of the WebKit package for
+ Lionel> example.
 
- >> Is this patch going to be integrated soon ? :
- >> 
- >> http://git.buildroot.net/~tpetazzoni/git/buildroot/commit/?h=gtk-doc-m4-fix&id=b53a6096e4ea53517c7de5f711f381333bd6ac11
- >> 
- >> It solved problems I had with packages using gtk-doc.
+ Lionel> WebKit depends on the icu package, and when configuring the package,
+ Lionel> there is a need to run icu-config which is installed inside the
+ Lionel> staging directory.
 
- Thomas> I found it kind of hackish to include some gtk-specific stuff into the
- Thomas> automake package. But maybe it's the only way ?
-
-It's certainly the easiest way. I agree that it isn't very pretty, but I
-don't have a big problem with us doing "emulation" stuff if that makes
-stuff easier and less error prone to handle.
-
-It would be good to add a comment at the top of gtk-doc.m4, that
-describes why we are doing it, and maybe it should get installed into
-host/usr/share/aclocal as well to fix a similar issue with host
-packages?
+I don't like this, as it mixes binaries/scripts for the host and the
+target - I think it's better for the icu package to install the host
+tool into host/usr/bin as well instead.
 
 -- 
 Bye, Peter Korsgaard
