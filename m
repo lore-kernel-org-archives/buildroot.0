@@ -1,45 +1,46 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 24 Oct 2009 20:14:50 +0200
-Subject: [Buildroot] Autoconf still not building (M4 ) results
-In-Reply-To: <D675D91F830D4777BC8E1C8B2AF4CD7C@apexjs> (Sagaert Johan's
-	message of "Sat\, 24 Oct 2009 11\:56\:35 +0200")
-References: <D675D91F830D4777BC8E1C8B2AF4CD7C@apexjs>
-Message-ID: <87y6n0zmjp.fsf@macbook.be.48ers.dk>
+Date: Sat, 24 Oct 2009 20:31:17 +0200
+Subject: [Buildroot] Nano runtime error
+In-Reply-To: <4AE303B6.4090605@ethertek.ca> (Dan Pattison's message of "Sat\,
+	24 Oct 2009 06\:40\:06 -0700")
+References: <4AE1582B.9050106@ethertek.ca> <4AE303B6.4090605@ethertek.ca>
+Message-ID: <87tyxozlsa.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
+>>>>> "Dan" == Dan Pattison <dan.pattison@ethertek.ca> writes:
 
- Sagaert> Peter
+ Dan> Hello Peter,
 
- Sagaert> ./output/host/usr/bin/m4 -F conftest.m4f </dev/null
+Hi,
 
- Sagaert> Produces a file (see attachement ) and does not complain on the console.
+Please don't mail me directly - That's what we have the mailing list
+for.
 
- Sagaert> This 
- Sagaert> echo 'changequote(<,>)indir(<ifdef>,mac,bug)patsubst(a,\(b\)\|\(a\),\1)dnl'
- Sagaert> |\
- Sagaert>  output/host/usr/bin/m4 --trace=mac
+ Dan> I asked my question on the mailing list but did not receive a
+ Dan> reply.
 
- Sagaert> Does not output anything on the console
+You are too impatient - This is no commercial support system, you only
+sent you mail yesterday.
 
-OK, that all looks normal. This is getting strange - To summarize:
+ Dan> Could you please send me the nano binary file compiled for
+ Dan> ATMEL ARM AT91SAMG20. I am having problems making mine work on my ARM
+ Dan> hardware.
 
-- Fails on Ubuntu (what version?), but not on Debian
-- M4 check fails on autoconf2.64, works on 2.63 - But the M4 check is
-  almost completely the same for the two versions
-- The two tests done by the configure script succeeds when run by hand
+No I cannot. I don't have a rootfs with nano at hand, and even if I did,
+the result would presumably be the same.
 
-Does it also fail if you prepend output/host/bin:output/host/usr/bin to
-the path before running configure by hand (E.G. a setup very close to
-how it's done in buildroot)?
+ Dan> I would like to know if there is a problem with my development
+ Dan> environment, or if it is a nano compiling issue. I keep getting
+ Dan> the error nano: can't resolve symbol '__ctype_b' when running nano
+ Dan> on our hardware.
 
-It's hard for me to debug it here as I cannot reproduce it. It would be
-very helpful if you could add a few debug echo lines to ./configure
-around line 2356, so we can see what's going on.
+Have you tried debugging it? Do your C library have a __ctype_b symbol?
+From a quick google search there seem(ed) to be some issues with
+__ctype_b and uclibc with locales enabled - Do you have locales enabled?
 
 -- 
 Bye, Peter Korsgaard
