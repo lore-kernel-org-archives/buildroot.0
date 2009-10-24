@@ -1,39 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 24 Oct 2009 18:25:38 +0200
-Subject: [Buildroot] [RFC; PATCH] Use gdbserver from external toolchain
-In-Reply-To: <2c9a759f0910220247u18c004epcb564aa65aa02d2b@mail.gmail.com>
-References: <2c9a759f0910220247u18c004epcb564aa65aa02d2b@mail.gmail.com>
-Message-ID: <20091024182538.69233120@surf>
+Date: Sat, 24 Oct 2009 18:28:47 +0200
+Subject: [Buildroot] gtk-doc and autoreconfigured packages
+In-Reply-To: <1256252030.25025.36.camel@coalu.atr>
+References: <1256252030.25025.36.camel@coalu.atr>
+Message-ID: <20091024182847.0644398e@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Le Fri, 23 Oct 2009 00:53:50 +0200,
+Lionel Landwerlin <llandwerlin@gmail.com> a ?crit :
 
-Le Thu, 22 Oct 2009 11:47:52 +0200,
-Anders Darander <anders.darander@gmail.com> a ?crit :
-
-> I've attached a patch (formatted by git), which adds the possibility
-> to have buildroot install the already compiled gdbserver from an
-> external toolchain.
+> Is this patch going to be integrated soon ? :
 > 
-> To  make sure that debuging works, it is preferred if both the host
-> crosscompiler gdb and gdbserver is built from the same gdb version. If
-> we take the gdbserver from the external toolchain, this is guaranteed.
+> http://git.buildroot.net/~tpetazzoni/git/buildroot/commit/?h=gtk-doc-m4-fix&id=b53a6096e4ea53517c7de5f711f381333bd6ac11
 > 
-> I'm not sure that the implementation is the best, it migth be  a
-> little bit "hackish". Looking forward to some comments for
-> improvement.
+> It solved problems I had with packages using gtk-doc.
 
-This feature is of course very welcome, but I'd like to see the
-external toolchain support to be extended to toolchains not generated
-by Crosstool-NG (Codesourcery toolchains, for example, are still on my
-TODO-list).
-
-Can we imagine a way of making this more generic ? Maybe we could
-detect the toolchain ?type? and act differently depending on this type ?
+I found it kind of hackish to include some gtk-specific stuff into the
+automake package. But maybe it's the only way ?
 
 Sincerly,
 
