@@ -1,46 +1,38 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 24 Oct 2009 20:31:17 +0200
-Subject: [Buildroot] Nano runtime error
-In-Reply-To: <4AE303B6.4090605@ethertek.ca> (Dan Pattison's message of "Sat\,
-	24 Oct 2009 06\:40\:06 -0700")
-References: <4AE1582B.9050106@ethertek.ca> <4AE303B6.4090605@ethertek.ca>
-Message-ID: <87tyxozlsa.fsf@macbook.be.48ers.dk>
+Date: Sat, 24 Oct 2009 20:36:16 +0200
+Subject: [Buildroot] gtk-doc and autoreconfigured packages
+In-Reply-To: <20091024182847.0644398e@surf> (Thomas Petazzoni's message of
+	"Sat\, 24 Oct 2009 18\:28\:47 +0200")
+References: <1256252030.25025.36.camel@coalu.atr>
+	<20091024182847.0644398e@surf>
+Message-ID: <87pr8czljz.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Dan" == Dan Pattison <dan.pattison@ethertek.ca> writes:
-
- Dan> Hello Peter,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
 Hi,
 
-Please don't mail me directly - That's what we have the mailing list
-for.
+ >> Is this patch going to be integrated soon ? :
+ >> 
+ >> http://git.buildroot.net/~tpetazzoni/git/buildroot/commit/?h=gtk-doc-m4-fix&id=b53a6096e4ea53517c7de5f711f381333bd6ac11
+ >> 
+ >> It solved problems I had with packages using gtk-doc.
 
- Dan> I asked my question on the mailing list but did not receive a
- Dan> reply.
+ Thomas> I found it kind of hackish to include some gtk-specific stuff into the
+ Thomas> automake package. But maybe it's the only way ?
 
-You are too impatient - This is no commercial support system, you only
-sent you mail yesterday.
+It's certainly the easiest way. I agree that it isn't very pretty, but I
+don't have a big problem with us doing "emulation" stuff if that makes
+stuff easier and less error prone to handle.
 
- Dan> Could you please send me the nano binary file compiled for
- Dan> ATMEL ARM AT91SAMG20. I am having problems making mine work on my ARM
- Dan> hardware.
-
-No I cannot. I don't have a rootfs with nano at hand, and even if I did,
-the result would presumably be the same.
-
- Dan> I would like to know if there is a problem with my development
- Dan> environment, or if it is a nano compiling issue. I keep getting
- Dan> the error nano: can't resolve symbol '__ctype_b' when running nano
- Dan> on our hardware.
-
-Have you tried debugging it? Do your C library have a __ctype_b symbol?
-From a quick google search there seem(ed) to be some issues with
-__ctype_b and uclibc with locales enabled - Do you have locales enabled?
+It would be good to add a comment at the top of gtk-doc.m4, that
+describes why we are doing it, and maybe it should get installed into
+host/usr/share/aclocal as well to fix a similar issue with host
+packages?
 
 -- 
 Bye, Peter Korsgaard
