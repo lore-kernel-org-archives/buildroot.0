@@ -1,35 +1,41 @@
-From: H Hartley Sweeten <hartleys@visionengravers.com>
-Date: Fri, 23 Oct 2009 18:37:23 -0400
-Subject: [Buildroot] BusyBox or kernel bug?
-Message-ID: <BD79186B4FD85F4B8E60E381CAEE190901E24D3D@mi8nycmail19.Mi8.com>
+From: Lionel Landwerlin <llandwerlin@gmail.com>
+Date: Sat, 24 Oct 2009 02:04:44 +0200
+Subject: [Buildroot] [PATCH] Fix TARGET_PATH variable with external toolchain
+Message-ID: <1256342684.28475.5.camel@coalu.atr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
 
-I just tried to run the BusyBox applet 'showkey' and got the following:
+Some time ago, an external toolchain improvement patch added
+$(HOST_DIR)/bin and $(HOST_DIR)/usr/bin to the TARGET_PATH variable.
+This patch also removed $(STAGING_DIR)/bin and $(STAGING_DIR)/usr/bin
+to TARGET_PATH which breaks the build of the WebKit package for
+example.
 
-/ # showkey --help
-BusyBox v1.15.2 (2009-10-12 19:27:27 MST) multi-call binary
+WebKit depends on the icu package, and when configuring the package,
+there is a need to run icu-config which is installed inside the
+staging directory.
 
-Usage: showkey [-a | -k | -s]
+Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
+---
+ package/Makefile.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Show keys pressed
-
-Options:
-        -a      Display decimal/octal/hex values of the keys
-        -k      Display interpreted keycodes (default)
-        -s      Display raw scan-codes
-
-/ # showkey
-showkey: KDGKBMODE: Invalid argument
-/ # uname -r
-2.6.31.4
-
-Any ideas if this is a BusyBox or a kernel problem?
-
-Regards,
-Hartley
+diff --git a/package/Makefile.in b/package/Makefile.in
+index ccd7480..57bd6f5 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -119,7 +119,7 @@ else
+ TOOLCHAIN_EXTERNAL_PREFIX:=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))
+ TOOLCHAIN_EXTERNAL_PATH:=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PATH))
+ TOOLCHAIN_DIR=$(BASE_DIR)/toolchain
+-TARGET_PATH="$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(TOOLCHAIN_DIR)/bin:$(TOOLCHAIN_EXTERNAL_PATH)/bin:$(PATH)"
++TARGET_PATH="$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(TOOLCHAIN_DIR)/bin:$(TOOLCHAIN_EXTERNAL_PATH)/bin:$(STAGING_DIR)/bin:$(STAGING_DIR)/usr/bin:$(PATH)"
+ #IMAGE:=$(BINARIES_DIR)/$(BR2_ROOTFS_PREFIX).$(TOOLCHAIN_EXTERNAL_PREFIX)$(ROOTFS_SUFFIX)
+ IMAGE:=$(BINARIES_DIR)/$(BR2_ROOTFS_PREFIX).$(ARCH)$(ROOTFS_SUFFIX)
+ 
+-- 
+1.6.4.3
