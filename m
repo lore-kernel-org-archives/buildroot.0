@@ -1,59 +1,36 @@
-From: Julien Boibessot <julien.boibessot@free.fr>
-Date: Sun, 25 Oct 2009 22:16:01 +0100
-Subject: [Buildroot] [git commit master] package: Don't hide all editors in
-	menuconfig
-Message-ID: <20091025211704.7E155777C1@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 25 Oct 2009 21:18:32 +0000 (UTC)
+Subject: [Buildroot] [Bug 595] Missing early check for help2man
+In-Reply-To: <bug-595-163@https.bugs.busybox.net/>
+References: <bug-595-163@https.bugs.busybox.net/>
+Message-ID: <20091025211832.D1BF6777C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=595
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8ec5a866162772b60deba2060917cd281eb64cae
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Don't hide all editors in config if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS is not
-selected. Indeed vi is the only editor already provided by busybox.
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Config.in         |    5 -----
- package/editors/Config.in |    3 +++
- 2 files changed, 3 insertions(+), 5 deletions(-)
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
 
-diff --git a/package/Config.in b/package/Config.in
-index afcface..6afa211 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -114,14 +114,9 @@ endif
- 
- source "package/database/Config.in"
- 
--if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
--# busybox has an editor
--
- # text editors
- source "package/editors/Config.in"
- 
--endif
--
- menu "Networking"
- 
- comment "Networking applications"
-diff --git a/package/editors/Config.in b/package/editors/Config.in
-index a1b5fd3..f58f96b 100644
---- a/package/editors/Config.in
-+++ b/package/editors/Config.in
-@@ -2,5 +2,8 @@ menu "Text editors"
- source "package/editors/ed/Config.in"
- source "package/editors/nano/Config.in"
- source "package/editors/uemacs/Config.in"
-+if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-+# busybox has vi
- source "package/editors/vim/Config.in"
-+endif
- endmenu
+
+
+
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-10-25 21:18:32 UTC ---
+Hmm, are you sure? I've built autoconf a lot of times and I don't have any
+help2man binary on my machine:
+
+which help2man
+help2man not found
+
+
 -- 
-1.6.3.3
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
