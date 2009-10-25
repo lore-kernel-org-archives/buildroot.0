@@ -1,32 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 25 Oct 2009 21:33:58 +0100
-Subject: [Buildroot] [RFC] Don't hide all editors in menuconfig
-In-Reply-To: <4AE02F63.8080302@free.fr> (Julien Boibessot's message of "Thu\,
-	22 Oct 2009 12\:09\:39 +0200")
-References: <4AE02F63.8080302@free.fr>
-Message-ID: <87ws2jfc21.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 25 Oct 2009 21:16:57 +0000 (UTC)
+Subject: [Buildroot] [Bug 593] Missing early check for patch(1)
+In-Reply-To: <bug-593-163@https.bugs.busybox.net/>
+References: <bug-593-163@https.bugs.busybox.net/>
+Message-ID: <20091025211657.9695E777C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Julien" == Julien Boibessot <julien.boibessot@free.fr> writes:
+https://bugs.busybox.net/show_bug.cgi?id=593
 
- Julien> Hi,
- Julien> I probably misunderstood the use of BR2_PACKAGE_BUSYBOX_SHOW_OTHERS but
- Julien> I'm in a case where I have to hide packages provided by Busybox and use
- Julien> Nano as editor.
 
-The SHOW_OTHERS toggle (and the HIDE_OTHERS we had earlier), was to make
-it easier for users by hiding packages that have "equivalent" busybox
-applets - Normally the busybox applets are smaller and more often used
-(and hence better tested) in buildroot.
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-But I agree, that calling the busybox vi implementation equivalent to
-all the editors we have is probably a bit of a stretch ..
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-So, committed - Thanks!
+
+
+
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-10-25 21:16:56 UTC ---
+Thanks, fixed in 7f7bf9637e2a9c3 (a few weeks ago)
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
