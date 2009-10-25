@@ -1,66 +1,53 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Sun, 25 Oct 2009 14:52:04 +0100
-Subject: [Buildroot] [PATCH] Fix TARGET_PATH variable with external
- toolchain
-In-Reply-To: <878wf0zgn5.fsf@macbook.be.48ers.dk>
-References: <1256342684.28475.5.camel@coalu.atr>
-	<87ljj0zlh6.fsf@macbook.be.48ers.dk>
-	<1256413962.28475.115.camel@coalu.atr>
-	<878wf0zgn5.fsf@macbook.be.48ers.dk>
-Message-ID: <1256478724.28475.134.camel@coalu.atr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 25 Oct 2009 17:47:27 +0100
+Subject: [Buildroot] Autoconf still not building (M4 ) results
+In-Reply-To: <69D941819FAE46C2977D4B17E848F535@apexjs> (Sagaert Johan's
+	message of "Sun\, 25 Oct 2009 00\:06\:02 +0200")
+References: <69D941819FAE46C2977D4B17E848F535@apexjs>
+Message-ID: <874opnzahs.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le samedi 24 octobre 2009 ? 22:22 +0200, Peter Korsgaard a ?crit :
-> >>>>> "Lionel" == Lionel Landwerlin <llandwerlin@gmail.com> writes:
-> 
->  Lionel> First let me argue that when buildroot is not using an external
->  Lionel> toolchain, the $(STAGING_DIR)/bin and $(STAGING_DIR)/usr/bin
->  Lionel> paths are a part of the TARGET_PATH variable.
-> 
-> Hmm, you're right - what a mess. There's no good reason why these should
-> be different in the regard.
-> 
->  Lionel> The script returns paths relative to the host. This is going to
->  Lionel> be a problem when linking the webkit binaries because the
->  Lionel> linker will have to deal with host binaries... That's the same
->  Lionel> kind of problem we are fixing with the libtool patch.
-> 
-> Yes, but copying the script from staging to host shouldn't change that.
+>>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
 
-Yeah, that an idea. I don't which one is the cleanest.
+ Sagaert> Hi 
 
-> 
->  Lionel> I'm wondering whether adding the following to package/webkit/webkit.mk
->  Lionel> should fix the problem :
-> 
->  Lionel> WEBKIT_CONF_ENV = icu_config=$(STAGING_DIR)/usr/bin/icu-config
-> 
-> If the webkit configure script handles that (didn't check), then that
-> would certainly be the easiest/cleanest solution.
-> 
+ Sagaert> There seems to be a problem somewhere in the configure script
+ Sagaert> of autoconf 2.64
 
-Ok, I just tested it and it works.
+Exactly.
 
-So the next step would probably be to remove $(STAGING_DIR)/bin and
-$(STAGING_DIR)/usr/bin from the TARGET_PATH with source built
-toolchains, but I'm pretty sure it's going to break some other packages.
+ Sagaert> I found a way to solve it by setting the M4 variable in the
+ Sagaert> makefile (line 42) so the configure script does not have to
+ Sagaert> parse and find the m4 path.
 
-Please find a patch as attachment.
+Ok, that's atleast a workaround, but I would like to understand what the
+problem is exactly.
 
-Regards,
+ Sagaert> Something seems to go wrong in the tests done around line 2378 in the
+ Sagaert> configure script (compare with configure script of v2.63 )
 
+ Sagaert> Snip
+ Sagaert>    { test -f "$ac_path_M4" && $as_test_x "$ac_path_M4"; } || continue
+ Sagaert>       # Root out GNU M4 1.4.5, as well as non-GNU m4 that ignore -t, -F.
+ Sagaert>       ac_snippet=change'quote(<,>)in''dir(<if''def>,mac,bug)'
+ Sagaert>       ac_snippet=${ac_snippet}pat'subst(a,\(b\)\|\(a\),\1)d'nl
+ Sagaert>       echo "ac_snippet2=$ac_snippet"
+ Sagaert>       test -z "`$ac_path_M4 -F conftest.m4f </dev/null 2>&1`" \
+ Sagaert>       && test -z "`echo $ac_snippet | $ac_path_M4 --trace=mac 2>&1`" \
+ Sagaert> snip
+
+Indeed. Could you try sticking in a few debug echo lines, to figure out
+what's going on?
+
+ Sagaert> Meanwhile it might be a good idea to update the m4 package in buildroot to
+ Sagaert> 1.4.13 instead of the current 1.4.9
+
+Indeed. But you wrote something earlier about that not having any effect
+on the above problem, right?
 
 -- 
-Lionel Landwerlin <llandwerlin@gmail.com>
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-package-Set-icu-config-path.patch
-Type: text/x-patch
-Size: 748 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091025/02848f92/attachment.bin>
+Bye, Peter Korsgaard
