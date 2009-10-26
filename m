@@ -1,8 +1,13 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 26 Oct 2009 21:41:11 +0100
-Subject: [Buildroot] [git commit master] lzma: convert to
-	Makefile.autotools.in format
-Message-ID: <20091026204433.60DD8777B4@busybox.osuosl.org>
+From: Hugues <hugues@hiegel.fr>
+Date: Mon, 26 Oct 2009 22:15:37 +0100
+Subject: [Buildroot] [PATCH] netkitftp: added package with
+	Makefile.autotools.in support
+In-Reply-To: <874opmf2pe.fsf@macbook.be.48ers.dk> (Peter Korsgaard's message
+	of "Mon\, 26 Oct 2009 19\:08\:13 +0100")
+References: <1256573832-11116-1-git-send-email-hugues@hiegel.fr>
+	<1256573832-11116-2-git-send-email-hugues@hiegel.fr>
+	<874opmf2pe.fsf@macbook.be.48ers.dk>
+Message-ID: <8763a1dfgm.fsf@paranoid.sweethome>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,122 +15,170 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=04bd29b8d853fa36db7c6a39bf736a327865712e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/lzma/lzma.mk |   83 ++++++++------------------------------------------
- 1 files changed, 13 insertions(+), 70 deletions(-)
+Thanks for the comments,
+I've got some questions ;
 
-diff --git a/package/lzma/lzma.mk b/package/lzma/lzma.mk
-index 7cb432b..a5fae5b 100644
---- a/package/lzma/lzma.mk
-+++ b/package/lzma/lzma.mk
-@@ -5,27 +5,30 @@
- #############################################################
- LZMA_VERSION:=4.32.6
- LZMA_SOURCE:=lzma-$(LZMA_VERSION).tar.gz
--LZMA_CAT:=$(ZCAT)
- LZMA_SITE:=http://tukaani.org/lzma/
-+LZMA_INSTALL_STAGING = YES
-+LZMA_INSTALL_TARGET = YES
-+LZMA_CONF_OPT = $(if $(BR2_ENABLE_DEBUG),--enable-debug,--disable-debug)
-+
-+$(eval $(call AUTOTARGETS,package,lzma))
-+
-+######################################################################
-+#
-+# lzma host
-+#
-+######################################################################
-+
-+LZMA_CAT:=$(ZCAT)
- LZMA_HOST_DIR:=$(TOOLCHAIN_DIR)/lzma-$(LZMA_VERSION)
--LZMA_TARGET_DIR:=$(BUILD_DIR)/lzma-$(LZMA_VERSION)
--LZMA_TARGET_BINARY:=bin/lzma
- 
- # lzma binary for use on the host
- LZMA=$(TOOLCHAIN_DIR)/bin/lzma
- HOST_LZMA_BINARY=$(shell package/lzma/lzmacheck.sh)
- HOST_LZMA_IF_ANY=$(shell toolchain/dependencies/check-host-lzma.sh)
- 
--
- $(DL_DIR)/$(LZMA_SOURCE):
- 	$(call DOWNLOAD,$(LZMA_SITE),$(LZMA_SOURCE))
- 
--######################################################################
--#
--# lzma host
--#
--######################################################################
--
- $(LZMA_HOST_DIR)/.unpacked: $(DL_DIR)/$(LZMA_SOURCE)
- 	$(LZMA_CAT) $(DL_DIR)/$(LZMA_SOURCE) | tar -C $(TOOLCHAIN_DIR) $(TAR_OPTIONS) -
- 	toolchain/patch-kernel.sh $(LZMA_HOST_DIR) package/lzma/ lzma\*.patch
-@@ -72,63 +75,3 @@ lzma-host-dirclean:
- 	rm -rf $(LZMA_HOST_DIR)
- 
- lzma-host-install: /usr/local/bin/lzma
--
--######################################################################
--#
--# lzma target
--#
--######################################################################
--
--$(LZMA_TARGET_DIR)/.unpacked: $(DL_DIR)/$(LZMA_SOURCE)
--	$(LZMA_CAT) $(DL_DIR)/$(LZMA_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(LZMA_TARGET_DIR) package/lzma/ lzma\*.patch
--	touch $@
--
--$(LZMA_TARGET_DIR)/.configured: $(LZMA_TARGET_DIR)/.unpacked
--	(cd $(LZMA_TARGET_DIR); rm -f config.cache;\
--		$(TARGET_CONFIGURE_OPTS) \
--		$(TARGET_CONFIGURE_ARGS) \
--		CFLAGS="$(TARGET_CFLAGS)" \
--		ac_cv_func_malloc_0_nonnull=yes \
--		./configure $(QUIET) \
--		--target=$(GNU_TARGET_NAME) \
--		--host=$(GNU_TARGET_NAME) \
--		--build=$(GNU_HOST_NAME) \
--		--prefix=/usr \
--		--exec-prefix=$(TARGET_DIR)/usr/bin \
--		--libdir=$(TARGET_DIR)/lib \
--		--includedir=$(TARGET_DIR)/include \
--		--disable-debug \
--		$(DISABLE_NLS) \
--		$(DISABLE_LARGEFILE) \
--	)
--	touch $@
--
--$(LZMA_TARGET_DIR)/src/lzma/lzma: $(LZMA_TARGET_DIR)/.configured
--	$(MAKE) -C $(LZMA_TARGET_DIR) all
--	touch -c $@
--
--$(TARGET_DIR)/$(LZMA_TARGET_BINARY): $(LZMA_TARGET_DIR)/src/lzma/lzma
--	cp -dpf $(LZMA_TARGET_DIR)/src/lzma/lzma $@
--	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $@
--	touch -c $@
--
--lzma: $(TARGET_DIR)/$(LZMA_TARGET_BINARY)
--
--lzma-source: $(DL_DIR)/$(LZMA_SOURCE)
--
--lzma-clean:
--	rm -f $(TARGET_DIR)/usr/bin/lzma
--	-$(MAKE) -C $(LZMA_TARGET_DIR) clean
--
--lzma-dirclean:
--	rm -rf $(LZMA_DIR)
--
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(BR2_PACKAGE_LZMA),y)
--TARGETS+=lzma
--endif
+Ce cher Peter Korsgaard <jacmet@uclibc.org> a dit :
+
+>>>>>> "Hugues" == Hugues Hiegel <hugues@hiegel.fr> writes:
+>
+> Hi,
+>
+> Thanks for the patch - A few comments:
+>
+>  Hugues> diff --git a/package/netkitftp/Config.in b/package/netkitftp/Config.in
+>  Hugues> new file mode 100644
+>  Hugues> index 0000000..9b37d6e
+>  Hugues> --- /dev/null
+>  Hugues> +++ b/package/netkitftp/Config.in
+>  Hugues> @@ -0,0 +1,9 @@
+>  Hugues> +config BR2_PACKAGE_NETKITFTP
+>  Hugues> +	bool "netkitftp"
+>  Hugues> +	default n
+>
+> 'n' is default, so no need to explictly list that.
+
+Ok.
+
+>  Hugues> +	help
+>  Hugues> +	  ftp client.
+>  Hugues> +	  ftp client version 0.17-16 with debian patch.
+>  Hugues> +	            ftp://ftp.debian.org/debian/pool/main/netkit-ftp/
+>
+> That's not a good help text. We generally don't list version numbers in
+> the help text as they tend to get out of sync with the .mk files fast.
+
+Yup, I  just translated the  french text that  was there just  before, I
+didn't thought about this way :)
+
+I'll correct this.
+
+>  Hugues> +
+>  Hugues> +	  ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/
+>  Hugues> diff --git a/package/netkitftp/netkitftp-configure-noexit.patch b/package/netkitftp/netkitftp-configure-noexit.patch
+>  Hugues> new file mode 100644
+>  Hugues> index 0000000..f588a46
+>  Hugues> --- /dev/null
+>  Hugues> +++ b/package/netkitftp/netkitftp-configure-noexit.patch
+>  Hugues> @@ -0,0 +1,13 @@
+>  Hugues> +diff --git a/configure b/configure
+>  Hugues> +index 0440527..54a5278 100755
+>  Hugues> +--- a/configure
+>  Hugues> ++++ b/configure
+>  Hugues> +@@ -39,7 +39,7 @@ EOF
+>  Hugues> + 	--manmode=*) MANMODE=`echo $1 | sed 's/^[^=]*=//'` ;;
+>  Hugues> + 	--with-c-compiler=*) CC=`echo $1 | sed 's/^[^=]*=//'` ;;
+>  Hugues> + 	--without-readline|--disable-readline) WITHOUT_READLINE=1;;
+>  Hugues> +-	*) echo "Unrecognized option: $1"; exit 1;;
+>  Hugues> ++	*) echo "Unrecognized option: $1";;
+>
+> Please document patches. Why is this needed, and is this something that
+> should get submitted upstream?
+
+Good remark. I'll correct this asap.
+
+>  Hugues> diff --git a/package/netkitftp/netkitftp-configure.patch b/package/netkitftp/netkitftp-configure.patch
+>
+> That one as well.
+
+Well... This one was already packaged with the package I've got, I don't
+have any idea why it is needed. I'll check this and then verify if it is
+really needed (hope it is not :-) )
+
+>  Hugues> +++ b/package/netkitftp/netkitftp.mk
+>  Hugues> @@ -0,0 +1,23 @@
+>  Hugues> +#############################################################
+>  Hugues> +#
+>  Hugues> +# netkitftp
+>  Hugues> +#
+>  Hugues> +#############################################################
+>  Hugues> +NETKITFTP_VERSION:=0.17
+>  Hugues> +NETKITFTP_SOURCE:=netkit-ftp_$(NETKITFTP_VERSION).orig.tar.gz
+>  Hugues> +NETKITFTP_PATCH:=netkit-ftp_0.17-16.diff.gz
+>  Hugues> +NETKITFTP_SITE:=ftp://ftp.debian.org/debian/pool/main/n/netkit-ftp/
+>
+> Is that a stable URL? Would something on snapshot.debian.net be better?
+> We have BR2_DEBIAN_MIRROR, which should be used.
+
+Oh, that's right !
+I'll correct this.
+
+>  Hugues> +
+>  Hugues> +NETKITFTP_CONF_OPT = --installroot=$(TARGET_DIR) \
+>
+> Something regarding TARGET_DIR at configure time? Doesn't that leak
+> paths on the build host to the installed binaries?
+
+Well, I didn't investigated further,  maybe is this not needed. I'll try
+without and throw then this out, if not.
+Or comment it, if needed :o)
+
+>  Hugues> +					--without-readline
+>  Hugues> +NETKITFTP_MAKE_ENV = SUB=ftp
+>
+> A comment to why would be good.
+
+Ok.
+
+>  Hugues> +NETKITFTP_INSTALL_TARGET_OPT = INSTALL_PREFIX=$(TARGET_DIR) install
+>  Hugues> +
+>  Hugues> +$(eval $(call AUTOTARGETS,package,netkitftp))
+>  Hugues> +
+>  Hugues> +$(NETKITFTP_HOOK_POST_BUILD):
+>  Hugues> +	[ ! -d $(TARGET_DIR)/usr/man/man1 ] && install -d $(TARGET_DIR)/usr/man/man1 || true
+>  Hugues> +	[ ! -d $(TARGET_DIR)/usr/man/man5 ] && install -d $(TARGET_DIR)/usr/man/man5 ||?true
+>
+> You have _true at the man5 line.
+
+How, sh*t. These  funky french keyboards on early testing Debian put
+this awkward  unbreakable space  while pressing AltGt+Space...  I didn't
+saw this  earlier. (Seems to have  been corrected since, at  least on my
+personal desktop at  home, which is more fresh than the  one I've got at
+work, it is.) 
+
+> Simply doing mkdir -p
+> $(TARGET_DIR)/usr/man/man1 $(TARGET_DIR)/usr/man/man5 would be simpler
+> to read.
+
+Great remark.
+Anyway, I don't know why I did this way.... O_o
+;)
+
+> Also don't forget to touch $@ so the target isn't always considered out
+> of date.
+
+Ok. I didn't thought it was  necessary at this state, but if you suggest
+it.. ;-)
+
+> A comment to why the above is needed in the first place would also be
+> good.
+
+Ok
+
+>  Hugues> +
+>  Hugues> +$(NETKITFTP_HOOK_POST_INSTALL):
+>  Hugues> +	rm -vfr $(TARGET_DIR)/usr/man
+>
+> Why verbose?
+
+Mhmm.. because with the "fr", it makes "vfr", which is a motorbike.. ;o)
+I'll throw it ;)
+
+> That uninstall would also remove all other man pages, so
+> don't do that.
+
+Mhmm... I'm not sure I understood this.. Why do you talk about uninstall ?
+The  netkitftp's 'install'  rule  does installs  the  manpages with  the
+binary, without ability  to call just the install  of the binary without
+the manpages.
+So I did like I see in other packages : just delete the 
+$(TARGET_DIR)/usr/man folder... Is this a bad idea ?
+What do you suggest at this stage ? 
+Doing nothing, this will be cleaned later ?
+
+
+With best regards,
 -- 
-1.6.3.3
+Hugues Hiegel                                [http://www.hiegel.fr/~hugues/]
