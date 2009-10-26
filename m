@@ -1,49 +1,61 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Mon, 26 Oct 2009 19:12:45 +0100
-Subject: [Buildroot] [RFC; PATCH] Use gdbserver from external toolchain
-In-Reply-To: <20091024182538.69233120@surf>
-References: <2c9a759f0910220247u18c004epcb564aa65aa02d2b@mail.gmail.com>
-	<20091024182538.69233120@surf>
-Message-ID: <200910261912.45928.yann.morin.1998@anciens.enib.fr>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 26 Oct 2009 19:15:11 +0100
+Subject: [Buildroot] [git commit master] Revert "libnl: handle all installed
+	libraries"
+Message-ID: <20091026181616.11356777BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all!
 
-On Saturday 24 October 2009 18:25:38 Thomas Petazzoni wrote:
-> Le Thu, 22 Oct 2009 11:47:52 +0200,
-> Anders Darander <anders.darander@gmail.com> a ?crit :
-> > I've attached a patch (formatted by git), which adds the possibility
-> > to have buildroot install the already compiled gdbserver from an
-> > external toolchain.
-> This feature is of course very welcome, but I'd like to see the
-> external toolchain support to be extended to toolchains not generated
-> by Crosstool-NG (Codesourcery toolchains, for example, are still on my
-> TODO-list).
+commit: http://git.buildroot.net/buildroot/commit/?id=5ebc5683545678736b1940243968394ae892b258
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Yes, the idea is nice, and having a generic way to get such info is
-most wanted. Unfortunately, I'm afraid that most toolchains will not
-provide such means (of course we can try to push it, and it will be
-easier for some than for others).
+This reverts commit 61901bd74a622450139358ea0c0f37d4568ad570.
 
-> Can we imagine a way of making this more generic ? Maybe we could
-> detect the toolchain ?type? and act differently depending on this
-> type ? 
+Turns out the libnl splitup is only needed for the not-released-yet v2.0.
 
-Hmmm... That would require quite some knowledge about the toolchain
-generators, and each may change paths as they see fit, and we'd be
-lagging behind very quickly...
+Conflicts:
 
-Regards,
-Yann E. MORIN.
+	CHANGES
+---
+ CHANGES                |    2 +-
+ package/libnl/libnl.mk |    4 ----
+ 2 files changed, 1 insertions(+), 5 deletions(-)
 
+diff --git a/CHANGES b/CHANGES
+index b35a121..2ec699b 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -6,7 +6,7 @@
+ 	Updated/fixed packages: autoconf, busybox, directfb, dnsmasq,
+ 	e2fsprogs, festival, gstreamer, gst-plugins-bad, gst-plugins-base,
+ 	gst-plugins-good, imagemagick, iptables, kernel-headers, kismet,
+-	libelf, libevent, libglib2, liblockfile, libmad, libnl, libupnp,
++	libelf, libevent, libglib2, liblockfile, libmad, libupnp,
+ 	libuuid, ltrace, lua, lzma, mdadm, ncftp, ncurses, netkittelnet,
+ 	netsnmp, ntfs-3g, openssl, php, python, quagga, radvd, rsync, samba,
+ 	sawman, shared-mime-info, speech-tools, sqlite, squashfs, syslinux,
+diff --git a/package/libnl/libnl.mk b/package/libnl/libnl.mk
+index 04bac2d..1a66746 100644
+--- a/package/libnl/libnl.mk
++++ b/package/libnl/libnl.mk
+@@ -13,14 +13,10 @@ LIBNL_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
+ $(eval $(call AUTOTARGETS,package,libnl))
+ 
+ $(LIBNL_HOOK_POST_INSTALL): $(LIBNL_TARGET_INSTALL_TARGET)
+-ifneq ($(BR2_ENABLE_DEBUG),y)
+ 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libnl.so*
+-	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libnl-*.so*
+-endif
+ 	touch $@
+ 
+ $(LIBNL_TARGET_UNINSTALL):
+ 	$(call MESSAGE,"Uninstalling")
+ 	rm -f $(TARGET_DIR)/usr/lib/libnl.so*
+-	rm -f $(TARGET_DIR)/usr/lib/libnl-*.so*
+ 	rm -f $(LIBNL_TARGET_INSTALL_TARGET) $(LIBNL_HOOK_POST_INSTALL)
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-`------------------------------^-------^------------------^--------------------'
+1.6.3.3
