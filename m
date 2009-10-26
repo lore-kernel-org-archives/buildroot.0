@@ -1,38 +1,23 @@
 From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Tue, 27 Oct 2009 00:45:30 +0100
-Subject: [Buildroot] Autoconf still not building (M4 ) ubuntu / debian
-	shells
-Message-ID: <3C52A17850404A5A90AE41DF6FCA5AE2@apexjs>
+Date: Tue, 27 Oct 2009 00:56:39 +0100
+Subject: [Buildroot] Autoconf building : dash on Ubuntu breaking stuff
+Message-ID: <9A4A63908408452FA247F51FD452EA4F@apexjs>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+Hi guys
  
-I checked my debian 5 and my ubuntu 8.10  for their shell :
+just wanted to  add this :
  
-Both have the same bash version :  /bin/bash --version  shows version
-3.2.39(1)-release ......
+after knowing dash is the culprit  i found this 
  
-Both machines have SHELL=/bin/bash in the environment vars.
- 
-BUT : on my debian /bin/sh  is a sl to /bin/bash
- 
-on the UBUNTU 8.10  /bin/sh is a sl to /bin/dash !!
- 
-just wondering why the env.. var is pointing to /bin/bash ?
- 
-I changed the softlink on my UBUNTU to point to /bin/bash  and all builds
-are perfect now !!!
- 
-Lesson learned : get rid of dash  :)
- 
-This was a nasty one.
+https://bugs.launchpad.net/ubuntu/+source/dash/+bug/141481
  
 Johan
  
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091027/1b41163c/attachment.htm>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091027/69152bf2/attachment.htm>
