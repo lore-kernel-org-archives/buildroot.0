@@ -1,41 +1,61 @@
-From: Anders Darander <anders.darander@gmail.com>
-Date: Mon, 26 Oct 2009 15:26:33 +0100
-Subject: [Buildroot] [RFC;
-	PATCH v2] Use gdbserver from external toolchain
-In-Reply-To: <2c9a759f0910260707k70ffc64fx4ccebb0ae33e812e@mail.gmail.com>
-References: <2c9a759f0910220247u18c004epcb564aa65aa02d2b@mail.gmail.com>
-	<20091024182538.69233120@surf>
-	<2c9a759f0910260032ga08329eo22bcca5cf5ae9415@mail.gmail.com>
-	<2c9a759f0910260322g2e3191e2oa808e13b92fdce38@mail.gmail.com>
-	<20091026121610.7c07f8ad@surf>
-	<2c9a759f0910260707k70ffc64fx4ccebb0ae33e812e@mail.gmail.com>
-Message-ID: <2c9a759f0910260726t43444de5mc099a809065fbee3@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 26 Oct 2009 16:51:06 +0100
+Subject: [Buildroot] [git commit master] lzma: get rid of unused
+	target-headers option
+Message-ID: <20091026155124.4695B77681@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
 
-On Mon, Oct 26, 2009 at 15:07, Anders Darander
-<anders.darander@gmail.com> wrote:
-> I've checked the sent mail, and the attachement in my last mail is
-> indeed the new patch. I should probably have updated the headers in
-> the patch-file from git.
-> (On and off, I'm still struggling a little bit with git format-patch.
-> Currently it seems that git keeps my original date and time of the
-> patch...).
+commit: http://git.buildroot.net/buildroot/commit/?id=81ce2ae61cb3fb301735bde8773521a8e5bd88ca
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Attached is a newly generated patch-file, with new timestamps. To
-better fit in with the git tree it is based on.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/lzma/Config.in |    6 ------
+ package/lzma/lzma.mk   |    6 ------
+ 2 files changed, 0 insertions(+), 12 deletions(-)
 
+diff --git a/package/lzma/Config.in b/package/lzma/Config.in
+index 9ca3c02..8d7036c 100644
+--- a/package/lzma/Config.in
++++ b/package/lzma/Config.in
+@@ -9,12 +9,6 @@ config BR2_PACKAGE_LZMA_TARGET
+ comment "lzma requires a toolchain with C++ support"
+         depends on !BR2_GCC_CROSS_CXX
+ 
+-config BR2_PACKAGE_LZMA_TARGET_HEADERS
+-	bool "lzma headers in target"
+-	depends on BR2_PACKAGE_LZMA_TARGET
+-	help
+-	  Put headers files in the target.
+-
+ config BR2_PACKAGE_LZMA_HOST
+ 	bool "Install lzma for the host/build system"
+ 	help
+diff --git a/package/lzma/lzma.mk b/package/lzma/lzma.mk
+index 9349c19..2de4dcb 100644
+--- a/package/lzma/lzma.mk
++++ b/package/lzma/lzma.mk
+@@ -113,8 +113,6 @@ $(TARGET_DIR)/$(LZMA_TARGET_BINARY): $(LZMA_TARGET_DIR)/src/lzma/lzma
+ 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $@
+ 	touch -c $@
+ 
+-#lzma-headers: $(TARGET_DIR)/$(LZMA_TARGET_BINARY)
+-
+ lzma-target: $(TARGET_DIR)/$(LZMA_TARGET_BINARY)
+ 
+ lzma-source: $(DL_DIR)/$(LZMA_SOURCE)
+@@ -139,7 +137,3 @@ endif
+ ifeq ($(BR2_PACKAGE_LZMA_TARGET),y)
+ TARGETS+=lzma-target
+ endif
+-
+-#ifeq ($(BR2_PACKAGE_LZMA_TARGET_HEADERS),y)
+-#TARGETS+=lzma-headers
+-#endif
 -- 
-Anders Darander
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-Use-gdbserver-from-external-toolchain.patch
-Type: application/octet-stream
-Size: 3209 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091026/d02347c2/attachment.obj>
+1.6.3.3
