@@ -1,176 +1,183 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 26 Oct 2009 08:31:34 +0100
-Subject: [Buildroot] [git commit master] libelf: convert to
-	Makefile.autotools.in and get rid of LIBELF_HEADERS option
-Message-ID: <20091026073314.9912577705@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 26 Oct 2009 09:35:03 +0100
+Subject: [Buildroot] [RFC] Package infrastructure: make variables or
+ make targets ?
+In-Reply-To: <1256514702.11941.85.camel@coalu.atr>
+References: <20091025224056.59c9a6ef@surf>
+	<1256514702.11941.85.camel@coalu.atr>
+Message-ID: <20091026093503.61a72bf7@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Lionel,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a305c33209abba05fa9371e09abc5dc4c397973b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thanks for your input!
 
-We have the generic BR2_HAVE_DEVFILES now.
+Le Mon, 26 Oct 2009 00:51:42 +0100,
+Lionel Landwerlin <llandwerlin@gmail.com> a ?crit :
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES                  |    6 ++--
- package/libelf/Config.in |   14 ++------
- package/libelf/libelf.mk |   84 +++++-----------------------------------------
- package/ltrace/Config.in |    2 +-
- 4 files changed, 16 insertions(+), 90 deletions(-)
+> > ======================================================================
+> > define MYPKG_PRE_CONFIGURE_DO_THIS
+> >  foobar
+> > endef
+> > 
+> > MYPKG_PRE_CONFIGURE_HOOKS += MYPKG_PRE_CONFIGURE_DO_THIS
+> 
+> I like it less.
+> 
+> Why not defining entry points like thoses :
+> 
+> $PACKAGE_PRE_CONFIGURE
+> $PACKAGE_POST_CONFIGURE
+> $PACKAGE_PRE_COMPILE
+> $PACKAGE_POST_COMPILE
+> etc...
+> 
+> And we just do something like this in the Makefile.in :
+> 
+> $(1) => package name
+> 
+> $(BR_OUTPUT)/build/$(1)-$($(1)_VERSION)/.stamp_configured:
+> ifdef $(1)_PRE_CONFIGURE
+> 	$($(1)_PRE_CONFIGURE)
+> endif
+> ifdef $(1)_CONFIGURE
+> 	$($(1)_CONFIGURE)
+> else
+> 	# Do default stuff...
+> endef
+> ifdef $(1)_POST_CONFIGURE
+> 	$($(1)_POST_CONFIGURE)
+> endif
+> 
+> So the package doesn't have to manipulate variables like
+> MYPKG_PRE_CONFIGURE_HOOKS, it just defines its entry points.
 
-diff --git a/CHANGES b/CHANGES
-index d6b7c03..f939cfb 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -6,9 +6,9 @@
- 	Updated/fixed packages: autoconf, busybox, directfb, dnsmasq,
- 	e2fsprogs, festival, gstreamer, gst-plugins-bad, gst-plugins-base,
- 	gst-plugins-good, imagemagick, iptables, kernel-headers, kismet,
--	libevent, libglib2, liblockfile, libmad, libnl, libupnp, libuuid,
--	ltrace, lua, mdadm, ncftp, ncurses, netkittelnet, netsnmp, ntfs-3g,
--	openssl, php, python, quagga, radvd, rsync, samba, sawman,
-+	libelf, libevent, libglib2, liblockfile, libmad, libnl, libupnp,
-+	libuuid, ltrace, lua, mdadm, ncftp, ncurses, netkittelnet, netsnmp,
-+	ntfs-3g, openssl, php, python, quagga, radvd, rsync, samba, sawman,
- 	shared-mime-info, speech-tools, sqlite, squashfs, syslinux, u-boot,
- 	util-linux, valgrind, vsftpd, wipe, wpa-supplicant,
- 	xdata_xcursor-themes, zlib
-diff --git a/package/libelf/Config.in b/package/libelf/Config.in
-index 197f993..600ef68 100644
---- a/package/libelf/Config.in
-+++ b/package/libelf/Config.in
-@@ -1,15 +1,7 @@
- config BR2_PACKAGE_LIBELF
- 	bool "libelf"
- 	help
--	  This is the public release of libelf-0.8.5, a free ELF object
--	  file access library. This build does not generate a shared
--	  library.
-+	  The elf library provides routines to access, and manipulate,
-+	  Elf object files.
- 
--	  http://www.stud.uni-hannover.de/~michael/software/
--
--config BR2_PACKAGE_LIBELF_HEADERS
--	bool "headers on the target"
--	depends on BR2_PACKAGE_LIBELF
--	help
--	  Whether to copy the lib and the headers to the
--	  target system.
-+	  http://www.mr511.de/software/
-diff --git a/package/libelf/libelf.mk b/package/libelf/libelf.mk
-index 1d1b175..ade369e 100644
---- a/package/libelf/libelf.mk
-+++ b/package/libelf/libelf.mk
-@@ -6,82 +6,16 @@
- LIBELF_VERSION=0.8.10
- LIBELF_SOURCE=libelf-$(LIBELF_VERSION).tar.gz
- LIBELF_SITE=http://www.mr511.de/software/
--LIBELF_DIR=$(BUILD_DIR)/libelf-$(LIBELF_VERSION)
-+LIBELF_INSTALL_STAGING = YES
-+LIBELF_INSTALL_STAGING_OPT = instroot=$(STAGING_DIR) install
-+LIBELF_INSTALL_TARGET_OPT = instroot=$(TARGET_DIR) install
- 
--LIBELF_ARCH:=$(ARCH)
--ifeq ("$(strip $(ARCH))","armeb")
--LIBELF_ARCH:=arm
--endif
--
--ifeq ($(BR2_LARGEFILE),y)
--LIBELF_CONFIG:=--enable-elf64
--endif
--
--$(DL_DIR)/$(LIBELF_SOURCE):
--	$(call DOWNLOAD,$(LIBELF_SITE),$(LIBELF_SOURCE))
--
--$(LIBELF_DIR)/.unpacked: $(DL_DIR)/$(LIBELF_SOURCE)
--	$(ZCAT) $(DL_DIR)/$(LIBELF_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(LIBELF_DIR) package/libelf libelf\*.patch
--	$(CONFIG_UPDATE) $(LIBELF_DIR)
--	touch $@
--
--$(LIBELF_DIR)/.configured: $(LIBELF_DIR)/.unpacked
--	(cd $(LIBELF_DIR); rm -f config.cache; \
--		$(TARGET_CONFIGURE_OPTS) \
--		$(TARGET_CONFIGURE_ARGS) \
--		CFLAGS="$(TARGET_CFLAGS)" \
--		libelf_cv_working_memmove=yes \
-+LIBELD_CONF_ENV = libelf_cv_working_memmove=yes \
- 		mr_cv_target_elf=yes \
--		libelf_64bit=yes \
--		./configure $(QUIET) \
--		--target=$(GNU_TARGET_NAME) \
--		--host=$(GNU_TARGET_NAME) \
--		--build=$(GNU_HOST_NAME) \
--		--prefix=/usr \
--		--sysconfdir=/etc \
--		--enable-shared \
--		--disable-debug \
--		--disable-sanity-checks \
--		$(LIBELF_CONFIG) \
--		$(DISABLE_NLS) \
--	)
--	touch $@
--
--$(LIBELF_DIR)/lib/libelf.so.$(LIBELF_VERSION): $(LIBELF_DIR)/.configured
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(LIBELF_DIR)
--
--$(STAGING_DIR)/usr/lib/libelf.a $(STAGING_DIR)/usr/lib/libelf.so.$(LIBELF_VERSION): $(LIBELF_DIR)/lib/libelf.so.$(LIBELF_VERSION)
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) \
--		instroot=$(STAGING_DIR) -C $(LIBELF_DIR) install
--
--ifeq ($(BR2_PACKAGE_LIBELF_HEADERS),y)
--$(TARGET_DIR)/usr/lib/libelf.so.$(LIBELF_VERSION): $(STAGING_DIR)/usr/lib/libelf.a
--	mkdir -p $(@D)
--	cp -dpf $(STAGING_DIR)/usr/lib/libelf* $(@D)
--	mkdir -p $(TARGET_DIR)/usr/include
--	cp -dpR $(STAGING_DIR)/usr/include/{gelf.h,libelf*} $(TARGET_DIR)/usr/include/
--	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $@
-+		libelf_64bit=yes
- 
--libelf: $(TARGET_DIR)/usr/lib/libelf.so.$(LIBELF_VERSION)
--else
--libelf: $(STAGING_DIR)/usr/lib/libelf.so.$(LIBELF_VERSION)
--endif
--libelf-source: $(DL_DIR)/$(LIBELF_SOURCE)
-+LIBELF_CONF_OPT = --enable-shared --disable-sanity-checks \
-+		$(if $(BR2_ENABLE_DEBUG),--enable-debug,--disable-debug) \
-+		$(if $(BR2_LARGEFILE),--enable-elf64)
- 
--libelf-clean:
--	$(MAKE) prefix=$(TARGET_DIR)/usr -C $(LIBELF_DIR) uninstall
--	$(MAKE) instroot=$(STAGING_DIR) -C $(LIBELF_DIR) uninstall
--	-$(MAKE) -C $(LIBELF_DIR) clean
--
--libelf-dirclean:
--	rm -rf $(LIBELF_DIR)
--
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(BR2_PACKAGE_LIBELF),y)
--TARGETS+=libelf
--endif
-+$(eval $(call AUTOTARGETS,package,libelf))
-diff --git a/package/ltrace/Config.in b/package/ltrace/Config.in
-index a8b6a91..8e090a4 100644
---- a/package/ltrace/Config.in
-+++ b/package/ltrace/Config.in
-@@ -4,7 +4,7 @@ comment "ltrace has no inherent support for AVR32"
- config BR2_PACKAGE_LTRACE
- 	bool "ltrace"
- 	#depends on BR2_LARGEFILE
--	select BR2_PACKAGE_LIBELF_HEADERS
-+	select BR2_PACKAGE_LIBELF
- 	help
- 	  Debugging program which runs a specified command until it exits.
- 	  While the command is executing, ltrace intercepts and records
+Because this allows to have only one hook registered for each hook
+location. And this is not enough with the inheritance of
+Makefile.autotools.in from the generic package infrastructure.
+
+The generic package infrastructure will define steps for :
+
+ * download, implemented in a generic way
+ * extract, implemented in a generic way
+ * patch, implemented in a generic way
+ * configure, calling a package specific definition
+ * build, calling a package specific definition
+ * install to target/staging/host, calling a package specific definition
+
+With pre/post hooks mechanism before and after all these steps.
+
+The Makefile.autotools.in infrastructure will plug into the generic one
+by at least :
+
+ * defining what configure, build, install to target/staging/host do
+ * defining a post-patch hook to autoreconf if necessary, patch libtool
+   if necessary
+
+Then, if the package specific makefile using the autotools
+infrastructure wants to define a post-patch hook, it cannot since, the
+?slot? is already used by the generic infrastructure.
+
+Therefore, I was thinking of a mechanism similar to OpenWRT, where the
+hooks variables are list of variables names that in turn contain what
+to do.
+
+See for example
+https://dev.openwrt.org/browser/trunk/include/autotools.mk (the end).
+
+> Could we split the package's makefile in two parts ?
+> 
+> One defining data stuff like package version, source, site, etc...
+> Then we call something like that :
+> 
+> $(eval $(call PKGDATA,package,mypkg))
+> 
+> That defines all paths we need etc...
+> 
+> And them we describe the actions we want to be triggered at each step
+> of the build process, just like you described before.
+> 
+> Finally we call the rule evaluation defining actions with all the
+> stamp files stuff.
+
+Yes, we could. However, for the moment, the only variable I have in
+mind is this package source code directory.
+
+Would look like something like this:
+
+=============================================================================
+ICU_VERSION:=4c-3_8_1
+ICU_SOURCE:=icu$(ICU_VERSION)-src.tgz
+ICU_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/icu
+ICU_DEPENDENCIES:=host-icu
+ICU_SUBDIR:=source
+
+HOST_ICU_VERSION:=$(ICU_VERSION)
+HOST_ICU_SOURCE:=$(ICU_SOURCE)
+HOST_ICU_SITE:=$(ICU_SITE)
+HOST_ICU_SUBDIR:=source
+
+$(eval $(call pkgdefinitions,package,icu,target))
+$(eval $(call pkgdefinitions,package,icu,host))
+
+define HOST_ICU_CONFIGURE
+ $(HOST_CONFIGURE_OPTS) \
+ $(HOST_CONFIGURE_ARGS) \
+ $(HOST_CONFIGURE_ENV)  \
+ ./configure --prefix=/usr
+endef
+
+define HOST_ICU_COMPILE
+ make -C $(ICU_SRCDIR) # this variable was defined by pkgdefinitions above
+endef
+
+define HOST_ICU_INSTALL
+ make -C $(ICU_SRCDIR) DESTDIR=$(HOST_DIR) install
+endef
+
+define ICU_CONFIGURE
+ $(TARGET_CONFIGURE_OPTS) \
+ $(TARGET_CONFIGURE_ARGS) \
+ $(TARGET_CONFIGURE_ENV) \
+ ./configure \
+                --target=$(GNU_TARGET_NAME) \
+                --host=$(GNU_TARGET_NAME) \
+                --build=$(GNU_HOST_NAME) \
+                --prefix=/usr \
+                --mandir=/usr/man \
+                --infodir=/usr/info \
+                --enable-samples
+endef
+
+define ICU_COMPILE
+ make -C $(ICU_SRCDIR)
+endef
+
+$(eval $(call pkgrules,package,icu,target))
+$(eval $(call pkgrules,package,icu,host))
+=============================================================================
+
+Note 1: ICU is a fairly bad example since it should be converted to
+Makefile.autotools.in, but since it is not converted yet, I've used it
+as an example during my prototyping.
+
+Note 2: I'd like HOST_ICU_VERSION, HOST_ICU_SOURCE, HOST_ICU_SITE and
+HOST_ICU_SUBDIR default to ICU_VERSION, ICU_SOURCE, ICU_SITE and
+ICU_SUBDIR so that they aren't duplicated, but this isn't implemented
+in my prototype yet.
+
+So, in the end, I understand you prefer the "make variables" way over
+the "make targets" way. Am I correct ?
+
+Thanks!
+
+Thomas
 -- 
-1.6.3.3
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
