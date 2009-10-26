@@ -1,34 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 26 Oct 2009 13:44:29 +0100
-Subject: [Buildroot] Autoconf still not building (M4 ) results
-In-Reply-To: <1531E53627F1F749B4FE809BF2A4EB67013CF704@WETMEX10.loepfe.com>
-	(Noel Vellemans's message of "Mon\, 26 Oct 2009 13\:20\:19 +0100")
-References: <1531E53627F1F749B4FE809BF2A4EB67013CF4C7@WETMEX10.loepfe.com>
-	<87a5b0800910260335v1849578y2dadfde9b4a91b22@mail.gmail.com>
-	<1531E53627F1F749B4FE809BF2A4EB67013CF69D@WETMEX10.loepfe.com>
-	<87a5b0800910260448i2c2d815ep6d16409288fb63e2@mail.gmail.com>
-	<1531E53627F1F749B4FE809BF2A4EB67013CF6E1@WETMEX10.loepfe.com>
-	<87a5b0800910260511ta958c1ehaaae17914a5792a2@mail.gmail.com>
-	<1531E53627F1F749B4FE809BF2A4EB67013CF704@WETMEX10.loepfe.com>
-Message-ID: <87d44afhoy.fsf@macbook.be.48ers.dk>
+From: Anders Darander <anders.darander@gmail.com>
+Date: Mon, 26 Oct 2009 15:07:25 +0100
+Subject: [Buildroot] [RFC;
+	PATCH v2] Use gdbserver from external toolchain
+In-Reply-To: <20091026121610.7c07f8ad@surf>
+References: <2c9a759f0910220247u18c004epcb564aa65aa02d2b@mail.gmail.com>
+	<20091024182538.69233120@surf>
+	<2c9a759f0910260032ga08329eo22bcca5cf5ae9415@mail.gmail.com>
+	<2c9a759f0910260322g2e3191e2oa808e13b92fdce38@mail.gmail.com>
+	<20091026121610.7c07f8ad@surf>
+Message-ID: <2c9a759f0910260707k70ffc64fx4ccebb0ae33e812e@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Noel" == Vellemans, Noel <Noel.Vellemans@visionBMS.com> writes:
+Hi Thomas,
 
- Noel> Hi Will,
- Noel> I can confirm .
+On Mon, Oct 26, 2009 at 12:16, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hi Anders,
+>
+> Le Mon, 26 Oct 2009 11:22:28 +0100,
+> Anders Darander <anders.darander@gmail.com> a ?crit :
+>
+>> Attached is a version 2 of the patch.
+>
+> Unless I'm mistaken, I think that you sent the incorrect version of the
+> patch.
 
- Noel> /bin/sh -> fails !! (just re-tested it to be sure it still fails, and it
- Noel> does fail)
+I've checked the sent mail, and the attachement in my last mail is
+indeed the new patch. I should probably have updated the headers in
+the patch-file from git.
+(On and off, I'm still struggling a little bit with git format-patch.
+Currently it seems that git keeps my original date and time of the
+patch...).
 
- Noel> /bin/bash -> is SUCCESS !!
-
-Ok, so the configure script of autoconf 2.64 fails with shell =
-dash. Thanks for the debugging.
-
--- 
-Bye, Peter Korsgaard
+Regards,
+Anders
