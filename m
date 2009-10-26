@@ -1,191 +1,154 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Mon, 26 Oct 2009 00:51:42 +0100
-Subject: [Buildroot] [RFC] Package infrastructure: make variables or
- make targets ?
-In-Reply-To: <20091025224056.59c9a6ef@surf>
-References: <20091025224056.59c9a6ef@surf>
-Message-ID: <1256514702.11941.85.camel@coalu.atr>
+From: Vellemans, Noel <Noel.Vellemans@visionBMS.com>
+Date: Mon, 26 Oct 2009 07:37:10 +0100
+Subject: [Buildroot]  Autoconf still not building (M4 ) results
+Message-ID: <1531E53627F1F749B4FE809BF2A4EB67013CF4C7@WETMEX10.loepfe.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Repost .. mail did not reach mailing-list.
 
-Le dimanche 25 octobre 2009 ? 22:40 +0100, Thomas Petazzoni a ?crit :
-> Hello,
-> 
-> I'm currently working on improving the package infrastructure for
-> Buildroot. Basically, the idea is to :
-> 
->  1. Generalize the Makefile.autotools.in infrastructure into something
->     that can be used for any type of package (not limited to packages
->     built using autotools). The advantages over the current
->     situation are mainly :
-> 
->      * Several steps can be automated: download, extraction, patch, etc.
->      * The infrastructure would hide the gory details of the stamp
->        files, ensuring a more coherent handling of the build process
->        throughout our package set
->      * The ability to easily add pre/post operations at the various
->        steps (configure, compile, install, etc.)
-> 
->     Of course, this infrastructure would still let the package .mk file
->     do a lot of things : specify how the package must be configured,
->     built and installed.
-> 
->  2. Rework the Makefile.autotools.in infrastructure so that it inherits
->     from the generic package infrastructure.
-> 
-> I've already started prototyping a solution, but I'm facing a choice on
-> which I'd like to have the community opinion. Usually, I don't like
-> talking without showing patches, but as this choice is fairly intrusive
-> in the design of the new infrastructure, I don't want to start the
-> wrong way.
-> 
-> The choice is on how the individual packages .mk files should specify
-> the operations that must be performed at the configure, build and
-> install steps. We have two choices :
-> 
->  1. Use make variables, such as :
-> 
-> ======================================================================
-> define ICU_CONFIGURE
->  $(TARGET_CONFIGURE_OPTS) \
->  $(TARGET_CONFIGURE_ARGS) \
->  $(TARGET_CONFIGURE_ENV) \
->  ./configure \
->                 --target=$(GNU_TARGET_NAME) \
->                 --host=$(GNU_TARGET_NAME) \
->                 --build=$(GNU_HOST_NAME) \
->                 --prefix=/usr \
->                 --mandir=/usr/man \
->                 --infodir=/usr/info \
->                 --enable-samples
-> endef
-> 
-> define ICU_COMPILE
->  make -C $(@D)/$(ICU_SUBDIR)
-> endef
-> 
-> $(eval $(call PKGTARGETS,package,icu,target))
+Noel,
+________________________________
 
-I like this first approach.
+From: Noel Vellemans  
+ Sent: 26Oct09 00:16
+To: Peter Korsgaard
+Cc: Sagaert Johan; buildroot at uclibc.org; llandwerlin at gmail.com;
+Vellemans, Noel
+Subject: Re: [Buildroot] Autoconf still not building (M4 ) results
 
-> ======================================================================
-> 
->     These variables are defined *before* the call to $(eval
->     $(call ...)). I find this approach fairly clean. This approach
->     also allows to add several hooks as a Pre/Post operation by doing
->     something like : 
-> 
-> ======================================================================
-> define MYPKG_PRE_CONFIGURE_DO_THIS
->  foobar
-> endef
-> 
-> MYPKG_PRE_CONFIGURE_HOOKS += MYPKG_PRE_CONFIGURE_DO_THIS
 
-I like it less.
+Hi all,
 
-Why not defining entry points like thoses :
+Been DIGGING into the configure script ...And I have found SOMETHING
+that possibly is the problem.
 
-$PACKAGE_PRE_CONFIGURE
-$PACKAGE_POST_CONFIGURE
-$PACKAGE_PRE_COMPILE
-$PACKAGE_POST_COMPILE
-etc...
+(have put a lot of echo's into the code to find-out something wierd)
 
-And we just do something like this in the Makefile.in :
+I think the problem is that the LINE 
+'echo
+'changequote(<,>)indir(<ifdef>,mac,bug)patsubst(a,\(b\)\|\(a\),\1)dnl' |
+/buildhome/20091024/buildroot/output/host/usr/bin/m4 --trace=mac' is not
+empty/zero but a strange character printed as a small funny-thing a "00
+01" (graphic thing) , due to this the 'test -z' fails .
 
-$(1) => package name
+A second test I did was remove the '&& test -z "`echo $ac_snippet |
+$ac_path_M4 --trace=mac 2>&1`"line in the script and then everything
+runs normal (no errors).
 
-$(BR_OUTPUT)/build/$(1)-$($(1)_VERSION)/.stamp_configured:
-ifdef $(1)_PRE_CONFIGURE
-	$($(1)_PRE_CONFIGURE)
-endif
-ifdef $(1)_CONFIGURE
-	$($(1)_CONFIGURE)
-else
-	# Do default stuff...
-endef
-ifdef $(1)_POST_CONFIGURE
-	$($(1)_POST_CONFIGURE)
-endif
 
-So the package doesn't have to manipulate variables like
-MYPKG_PRE_CONFIGURE_HOOKS, it just defines its entry points.
+<snip .. echo stuff >
 
-> ======================================================================
-> 
->     This approach is the one used by OpenWRT. The only drawback of this
->     approach is that since the variables are defined *before* calling
->     the generating function $(eval $(call ...)), we don't have access
->     to any variable that could be defined by the generating function.
->     So, for example, the ICU_COMPILE variable must use
->     $(@D)/$(ICU_SUBDIR) as the directory for the sources, instead of
->     something like $(ICU_SRCDIR) that could be defined by the package
->     infrastructure. In OpenWRT, they solved this problem by having a
->     "include package.mk" after the package definition (name, version,
->     URL, etc.), but before the definition of the different steps. But
->     in our case, this means having two $(eval $(call ...)).
+  test -z "$as_dir" && as_dir=.
+    for ac_prog in m4 gm4 gnum4; do
+    for ac_exec_ext in '' $ac_executable_extensions; do
+      ac_path_M4="$as_dir/$ac_prog$ac_exec_ext"
 
-Could we split the package's makefile in two parts ?
+#      echo "\n(0) $ac_path_M4,  $as_dir,  $ac_prog,   $ac_exec_ext,
+$as_test_x"
+ 
+      { test -f "$ac_path_M4" && $as_test_x "$ac_path_M4"; } || continue
+      # Root out GNU M4 1.4.5, as well as non-GNU m4 that ignore -t, -F.
+      ac_snippet=change'quote(<,>)in''dir(<if''def>,mac,bug)'
+      ac_snippet=${ac_snippet}pat'subst(a,\(b\)\|\(a\),\1)d'nl
+      
+      echo "\n(1) $ac_path_M4"
+      echo "$ac_snippet | $ac_path_M4 --trace=mac"
+#      $ac_path_M4 -F conftest.m4f
+#      cat conftest.m4f
+#      rm -f conftest.m4f
+      echo "$ac_snippet | $ac_path_M4 --trace=mac."
+      echo
+'changequote(<,>)indir(<ifdef>,mac,bug)patsubst(a,\(b\)\|\(a\),\1)dnl' |
+/buildhome/20091024/buildroot/output/host/usr/bin/m4 --trace=mac
+## THE ABOVE line prints a strange CHARACTER bug here ???????
 
-One defining data stuff like package version, source, site, etc...
-Then we call something like that :
+      test -z "`$ac_path_M4 -F conftest.m4f </dev/null 2>&1`" \
+      && test -z "`echo $ac_snippet | $ac_path_M4 --trace=mac 2>&1`" \
+      && test -f <snip .. echo stuff >
+conftest.m4f \
+      && ac_cv_path_M4=$ac_path_M4 ac_path_M4_found=:
+      rm -f conftest.m4f
+      $ac_path_M4_found && break 3
+    done
+<snip .. echo stuff >
 
-$(eval $(call PKGDATA,package,mypkg))
 
-That defines all paths we need etc...
+Greetz...... Noel
 
-And them we describe the actions we want to be triggered at each step of
-the build process, just like you described before.
 
-Finally we call the rule evaluation defining actions with all the stamp
-files stuff.
+PS: upgrading to a newer version (> 1.4.9) has the same problem (double
+checked it)
 
-> 
->  2. Use make targets, as we do today for the hooks. The make targets
->     must be defined *after* the call to $(eval $(call ...)). For zlib,
->     it would look like :
-> 
-> ======================================================================
-> $(eval $(call PKGTARGETS,package,zlib,target))
-> 
-> $(ZLIB_TARGET_CONFIGURE):
->         (cd $(PKGSRCDIR); rm -rf config.cache; \
->                 $(TARGET_CONFIGURE_ARGS) \
->                 $(TARGET_CONFIGURE_OPTS) \
->                 CFLAGS="$(TARGET_CFLAGS) $(ZLIB_PIC)" \
->                 ./configure \
->                 $(ZLIB_SHARED) \
->                 --prefix=/usr \
->                 --exec-prefix=$(STAGING_DIR)/usr/bin \
->                 --libdir=$(STAGING_DIR)/usr/lib \
->                 --includedir=$(STAGING_DIR)/usr/include \
->         )
->         touch $@
-> 
-> $(ZLIB_TARGET_BUILD):
->         $(MAKE) -C $(PKGSRCDIR) all libz.a
->         touch $@
-> ======================================================================
-> 
->     The advantage is that the package infrastructure can pass variables
->     to these make targets (here PKGSRCDIR). However, the package
->     infrastructure is much harder to write, we cannot have several
->     hooks registered for the same Pre/Post operation (which makes the
->     inheritance of the autotools infrastructure more difficult), and I
->     find it strange to have some definitions *before* the $(eval
->     $(call ...)) and some others *after*.
-> 
-> Thanks for your input,
-> 
-> Thomas
 
-Regards,
 
--- 
-Lionel Landwerlin <llandwerlin@gmail.com>
+On Sun, Oct 25, 2009 at 5:47 PM, Peter Korsgaard <jacmet@uclibc.org>
+wrote:
+
+
+	>>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be>
+writes:
+	
+	
+	 Sagaert> Hi
+	
+	 Sagaert> There seems to be a problem somewhere in the configure
+script
+	 Sagaert> of autoconf 2.64
+	
+	Exactly.
+	
+	 Sagaert> I found a way to solve it by setting the M4 variable
+in the
+	 Sagaert> makefile (line 42) so the configure script does not
+have to
+	 Sagaert> parse and find the m4 path.
+	
+	Ok, that's atleast a workaround, but I would like to understand
+what the
+	problem is exactly.
+	
+	 Sagaert> Something seems to go wrong in the tests done around
+line 2378 in the
+	 Sagaert> configure script (compare with configure script of
+v2.63 )
+	
+	 Sagaert> Snip
+	 Sagaert>    { test -f "$ac_path_M4" && $as_test_x
+"$ac_path_M4"; } || continue
+	 Sagaert>       # Root out GNU M4 1.4.5, as well as non-GNU m4
+that ignore -t, -F.
+	 Sagaert>
+ac_snippet=change'quote(<,>)in''dir(<if''def>,mac,bug)'
+	 Sagaert>
+ac_snippet=${ac_snippet}pat'subst(a,\(b\)\|\(a\),\1)d'nl
+	 Sagaert>       echo "ac_snippet2=$ac_snippet"
+	 Sagaert>       test -z "`$ac_path_M4 -F conftest.m4f </dev/null
+2>&1`" \
+	 Sagaert>       && test -z "`echo $ac_snippet | $ac_path_M4
+--trace=mac 2>&1`" \
+	 Sagaert> snip
+	
+	Indeed. Could you try sticking in a few debug echo lines, to
+figure out
+	what's going on?
+	
+	 Sagaert> Meanwhile it might be a good idea to update the m4
+package in buildroot to
+	 Sagaert> 1.4.13 instead of the current 1.4.9
+	
+	Indeed. But you wrote something earlier about that not having
+any effect
+	on the above problem, right?
+	
+	--
+	Bye, Peter Korsgaard
+	
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091026/f2c6a74d/attachment.htm>
