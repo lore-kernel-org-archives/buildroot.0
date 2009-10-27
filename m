@@ -1,86 +1,95 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 27 Oct 2009 15:34:02 +0100
-Subject: [Buildroot] [PATCH] netkitftp: ftp client from netkit project
-In-Reply-To: <20091027141842.GP30850@hiegel.fr> (hugues@hiegel.fr's message of
-	"Tue\, 27 Oct 2009 15\:18\:42 +0100")
-References: <1256573832-11116-2-git-send-email-hugues@hiegel.fr>
-	<1256647300-19012-1-git-send-email-hugues@hiegel.fr>
-	<871vkpdlst.fsf@macbook.be.48ers.dk>
-	<20091027141842.GP30850@hiegel.fr>
-Message-ID: <87skd4dhyd.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 27 Oct 2009 15:33:21 +0000 (UTC)
+Subject: [Buildroot] [Bug 683] New: SDL-dfb does not select directfb
+Message-ID: <bug-683-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Hugues" == Hugues  <hugues@hiegel.fr> writes:
+https://bugs.busybox.net/show_bug.cgi?id=683
 
- >> Thanks, looks a lot better, but we're still not quite there yet.
+           Summary: SDL-dfb does not select directfb
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Keywords: patch
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: damien.courousse.logica at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
- Hugues> aha :-)
 
-;)
+Hello,
 
- >> It would be good if you could add a signed-of-by line to the end of the
- >> commit message - E.G.
- >> 
- >> Signed-off-by: Hugues Hiegel <hugues.hiegel@openwide.fr>
+I got a compilation error with SDL-dfb selected while directfb was not
+selected. The compilation reported something like:
 
- Hugues> Well, perhaps should you be the really one who should answer me : 
- Hugues> what's the purpose of this "signed-off-by" !? :)
+(...)
 
-We're using the same system as the Linux kernel, so take a look at
-section 12 of Documentation/SubmittingPatches in the kernel sources for
-the details (http://git.kernel.org/?p=linux/kernel/git/torvalds/linux-2.6.git;a=blob;f=Documentation/SubmittingPatches)
 
-With git it's very easy to do - Simply add the -s argument to git
-commit (or alternatively to git format-patch if you forgot while
-committing).
+o
+./src/video/directfb/SDL_DirectFB_events.c:32:22: error: directfb.h: No such
+file or directory
+In file included from ./src/video/directfb/SDL_DirectFB_events.c:38:
+./src/video/directfb/SDL_DirectFB_video.h:40: error: expected
+specifier-qualifier-list before 'IDirectFB'
+./src/video/directfb/SDL_DirectFB_video.h:60: error: expected declaration
+specifiers or '...' before 'DFBResult'
+./src/video/directfb/SDL_DirectFB_events.c:43: error: expected ')' before '*'
+token
+./src/video/directfb/SDL_DirectFB_events.c:44: error: expected ')' before '*'
+token
+./src/video/directfb/SDL_DirectFB_events.c: In function 'DirectFB_PumpEvents':
+./src/video/directfb/SDL_DirectFB_events.c:51: error: 'DFBInputEvent'
+undeclared (first use in this function)
+./src/video/directfb/SDL_DirectFB_events.c:51: error: (Each undeclared
+identifier is reported only once
+./src/video/directfb/SDL_DirectFB_events.c:51: error: for each function it
+appears in.)
+./src/video/directfb/SDL_DirectFB_events.c:51: error: expected ';' before 'evt'
+./src/video/directfb/SDL_DirectFB_events.c:53: error: 'struct
+SDL_PrivateVideoData' has no member named 'eventbuffer'
+./src/video/directfb/SDL_DirectFB_events.c:53: error: 'struct
+SDL_PrivateVideoData' has no member named 'eventbuffer'
+./src/video/directfb/SDL_DirectFB_events.c:54: error: 'evt' undeclared (first
+use in this function)
+./src/video/directfb/SDL_DirectFB_events.c:54: error: 'DFB_OK' undeclared
+(first use in this function)
+./src/video/directfb/SDL_DirectFB_events.c:60: error: 'DIET_BUTTONPRESS'
+undeclared (first use in this function)
+./src/video/directfb/SDL_DirectFB_events.c:64: error: 'DIET_BUTTONRELEASE'
+undeclared (first use in this function)
+./src/video/directfb/SDL_DirectFB_events.c:68: error: 'DIET_KEYPRESS'
+undeclared (first use in this function)
+(...)
 
- Hugues> +	  "Classic" ftp client with standard behaviour from 
- >> 
- >> Trailing space.
+Hence I think BR2_PACKAGE_SDL_DIRECTFB should select BR2_PACKAGE_DIRECTFB : 
+diff --git a/package/sdl/Config.in b/package/sdl/Config.in
+index 7cba524..ae8b597 100644
+--- a/package/sdl/Config.in
++++ b/package/sdl/Config.in
+@@ -13,6 +13,7 @@ config BR2_PACKAGE_SDL_FBCON
 
- Hugues> Argh, I *really* need to tweak my vim config to show these...
+ config BR2_PACKAGE_SDL_DIRECTFB
+        bool "SDL DirectFB video driver"
++       select BR2_PACKAGE_DIRECTFB
 
-Not a big deal.
+ config BR2_PACKAGE_SDL_QTOPIA
+        bool "SDL Qtopia video driver"
 
- >> You'll also need to prepend netkitftp- to the patch names, as they will
- >> otherwise not get applied and configure errors out on unrecognized
- >> options.
 
- Hugues> Mhm, it seemed to work correctly for me, I'll put another eye with more
- Hugues> coffee ...
+Cheers,
+Damien
 
- >> Are you testing this in some other tree than mainline?
-
- Hugues> Yes, it's a tree that has been grown up from 2009.08_rc2, and
- Hugues> I've got a bunch of configuration that work with.  I should
- Hugues> certainly consider getting a clean and correct config which
- Hugues> works on top of the master branch (on which I cherry-pick my
- Hugues> netkitftp tweaks ;))
-
-That probably explains why you are seeing different things. We afaik
-tightened up the patch handling since then to not apply *.patch* because
-of packages supporting multiple versions.
-
- Hugues> It'll take me some more days,
- Hugues> I've got another bunch of things to do right now :(
-
- Hugues> But I'm still not discouraged ;o)
-
-;)
-
- >> Could you fix those issues please?
-
- Hugues> Oh yeah, no problem :)
-
-Great!
-
- Hugues> Thanks you a lot for your patience...
-
-Same to you.
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
