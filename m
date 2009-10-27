@@ -1,49 +1,39 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 27 Oct 2009 16:28:28 +0000 (UTC)
-Subject: [Buildroot] [Bug 683] SDL-dfb does not select directfb
-In-Reply-To: <bug-683-163@https.bugs.busybox.net/>
-References: <bug-683-163@https.bugs.busybox.net/>
-Message-ID: <20091027162828.B7394777BB@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 27 Oct 2009 17:36:57 +0100
+Subject: [Buildroot] [PATCH] Fix TARGET_PATH variable with external
+	toolchain
+In-Reply-To: <1256638654.32194.44.camel@coalu.atr> (Lionel Landwerlin's
+	message of "Tue\, 27 Oct 2009 11\:17\:34 +0100")
+References: <1256342684.28475.5.camel@coalu.atr>
+	<87ljj0zlh6.fsf@macbook.be.48ers.dk> <20091027084428.6132b429@surf>
+	<1256636707.32194.7.camel@coalu.atr> <20091027105329.0cc61c47@surf>
+	<1256638654.32194.44.camel@coalu.atr>
+Message-ID: <87fx94dc9i.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=683
+>>>>> "Lionel" == Lionel Landwerlin <llandwerlin@gmail.com> writes:
 
+Hi,
 
+ Lionel> By the way, is there a set of configuration files that cover
+ Lionel> the list of package that are known to work with buildroot ?
 
+Not a complete list, no. In concept, we would like all packages to work,
+but as the number of combinations with 600+ packages / 5+ archs is so
+high, there's bound to be issues.
 
+ Lionel> It could be interesting to setup some kind of non regression builds :)
 
---- Comment #2 from Peter Korsgaard <jacmet@uclibc.org>  2009-10-27 16:28:28 UTC ---
-(In reply to comment #1)
-> Thanks Damien for reporting the issue.
-> 
-> I'm wondering whether we should use a select as you suggested, or a depends on.
-> We usually use "select" so that the user doesn't need to care about missing
-> dependencies. But in the case of DirectFB, many things can (and should ?) be
-> configured at the DirectFB level, so I'm not sure that selecting DirectFB
-> behind the user's back is good.
-> 
-> something like:
-> 
->  config BR2_PACKAGE_SDL_DIRECTFB
->         bool "SDL DirectFB video driver"
-> +       depends on BR2_PACKAGE_DIRECTFB
-> 
-> + comment "sdl-dfb requires directfb support"
-> +        depends on !BR2_PACKAGE_DIRECTFB
-> 
-> Peter, your opinion on this ?
+Certainly. I have a buildbot instance running at where I work to test
+the configs we're using, and I'm planning on setting up a public
+buildbot soon.
 
-We should imho use depends on (and also for the qt/x11 backends) similar to how
-it is done for E.G. libgtk2.
-
-Notice that the dependencies in the makefile are likewise missing.
-
+I recently added make all{yes,no,random}packageconfig targets to make it
+easier to test random package combinations.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
