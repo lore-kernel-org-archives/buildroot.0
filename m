@@ -1,117 +1,45 @@
-From: Vellemans, Noel <Noel.Vellemans@visionBMS.com>
-Date: Tue, 27 Oct 2009 09:23:34 +0100
-Subject: [Buildroot] Autoconf - confirmation  !/bin/sh tests. (M4 )
-In-Reply-To: <87d44afhoy.fsf@macbook.be.48ers.dk>
-References: <1531E53627F1F749B4FE809BF2A4EB67013CF4C7@WETMEX10.loepfe.com><87a5b0800910260335v1849578y2dadfde9b4a91b22@mail.gmail.com><1531E53627F1F749B4FE809BF2A4EB67013CF69D@WETMEX10.loepfe.com><87a5b0800910260448i2c2d815ep6d16409288fb63e2@mail.gmail.com><1531E53627F1F749B4FE809BF2A4EB67013CF6E1@WETMEX10.loepfe.com><87a5b0800910260511ta958c1ehaaae17914a5792a2@mail.gmail.com><1531E53627F1F749B4FE809BF2A4EB67013CF704@WETMEX10.loepfe.com>
-	<87d44afhoy.fsf@macbook.be.48ers.dk>
-Message-ID: <1531E53627F1F749B4FE809BF2A4EB67013F6051@WETMEX10.loepfe.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 27 Oct 2009 09:28:02 +0100
+Subject: [Buildroot] [PATCH 14/14] libpcap,
+	tcpdump: bump version and autotoolify
+In-Reply-To: <48acdc63c469c025c69b6c003cc81dbbe421f0c9.1254945750.git.rep.dot.nop@gmail.com>
+	(Bernhard Reutner-Fischer's message of "Wed\,
+	7 Oct 2009 22\:08\:37 +0200")
+References: <cover.1254945750.git.rep.dot.nop@gmail.com>
+	<4acf0a418a2f34c50249d56c6e76b8dba7076302.1254945750.git.rep.dot.nop@gmail.com>
+	<8ddd0fbdd88acec5c801c93ce830b1ad04536118.1254945750.git.rep.dot.nop@gmail.com>
+	<b1a1dc13edb6053d271297a4ac369d848c5f5749.1254945750.git.rep.dot.nop@gmail.com>
+	<a576ef52cd1f156525fd2d327f1e7da466257be2.1254945750.git.rep.dot.nop@gmail.com>
+	<df7563b3e1a87daa6f42ade2c505fecc014aa2a2.1254945750.git.rep.dot.nop@gmail.com>
+	<382fdbb8e5e36dd9348dfd57b9267862ef8d2ead.1254945750.git.rep.dot.nop@gmail.com>
+	<53e08690da5a307328d4d5dc7d53865215ced09f.1254945750.git.rep.dot.nop@gmail.com>
+	<b01a751a32bbd1ac0bb43898ed65a6c7afd9e0c7.1254945750.git.rep.dot.nop@gmail.com>
+	<ec988dfe40afe8381a2263eeaae1bd2f8ffd9014.1254945750.git.rep.dot.nop@gmail.com>
+	<f77d7f5dd82b8b3945e77fd9351619fa260cff98.1254945750.git.rep.dot.nop@gmail.com>
+	<d97ecb658b37edf74a168fa361436b5be821395c.1254945750.git.rep.dot.nop@gmail.com>
+	<730af4752b8da4a9b2a2b1583987899fa3eef334.1254945750.git.rep.dot.nop@gmail.com>
+	<78b8984e033470578a90d58e533aa97c31af1071.1254945750.git.rep.dot.nop@gmail.com>
+	<cover.1254945750.git.rep.dot.nop@gmail.com>
+	<48acdc63c469c025c69b6c003cc81dbbe421f0c9.1254945750.git.rep.dot.nop@gmail.com>
+Message-ID: <87aazddywd.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All..
+>>>>> "Bernhard" == Bernhard Reutner-Fischer <rep.dot.nop@gmail.com> writes:
 
-<Peter > Ok, so the easiest fix is probably to to s^!/bin/sh^!/bin/bash^
-on the
-<Peter > first line of the configure script - And then report the issue
-upstream.
-<Peter > 
-<Peter > What I don't get is that Johan wrote that the configure script
-didn't
-<Peter > break when run outside buildroot - How could that be?
+ Bernhard> Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
 
-Peter, Just to confirm : I checked once more it, and I have to confirm.
-(for !/bin/sh)
-Running from make (autoconf-host) configure fails, running manually with
-the same parameters works.
+ Bernhard> -LIBPCAP_VERSION:=0.9.8
+ Bernhard> -LIBPCAP_DIR:=$(BUILD_DIR)/libpcap-$(LIBPCAP_VERSION)
+ Bernhard> +LIBPCAP_VERSION:=1.0.0
+ Bernhard>  LIBPCAP_SITE:=http://www.tcpdump.org/release
+ Bernhard>  LIBPCAP_SOURCE:=libpcap-$(LIBPCAP_VERSION).tar.gz
+ Bernhard>  LIBPCAP_CAT:=$(ZCAT)
 
-NOTE in the folowing test I have edited the autoconf-host configure
-script .. so that is does echo something on the problematic line .. 
+LIBPCAP_CAT is unused now, otherwise it looks good - Committed, thanks!
 
-[
-echo'changequote(<,>)indir(<ifdef>,mac,bug)patsubst(a,\(b\)\|\(a\),\1)dn
-l' | /buildhome/20091024/buildroot/output/host/usr/bin/m4 --trace=mac 
-as fas as I understood this should not echo anything. ]
-
-
-<< snip >>
-noel at viper:/buildhome/20091024/buildroot$ make
-
-Checking build system dependencies:
-Overriding $(DL_DIR) in '.config'.		Ok
-External download directory:			Ok (/buildhome/dl/)
-CC clean:					Ok
-
-.... removed some stuff ...here...
-.... removed some stuff ...here...
-
-checking for expr... /usr/bin/expr
-checking for GNU M4 that supports accurate traces... 
-
-[!!!! A FUNNY CHARACTER is printed here . NON ASCII !!!!!!!!!!]
-
-configure: error: no acceptable m4 could be found in $PATH.
-GNU M4 1.4.6 or later is required; 1.4.13 is recommended
-make: ***
-[/buildhome/20091024/buildroot/output/stamps/host_autoconf_configured]
-Error 1
-
-<< end snip >>
-
-
-
-
-If I do run the same (modified) configure script manually.
-
-<< snip 2>>
-noel at viper:/buildhome/20091024/buildroot/output/build/autoconf-2.64-host
-$ ./configure --prefix=/buildhome/20091024/buildroot/output/host/usr
---sysconfdir=/buildhome/20091024/buildroot/output/host/etc
---disable-static
-configure: WARNING: unrecognized options: --disable-static
-checking for a BSD-compatible install... /usr/bin/install -c
-checking whether build environment is sane... yes
-checking for a thread-safe mkdir -p... /bin/mkdir -p
-checking for gawk... gawk
-checking whether make sets $(MAKE)... yes
-checking whether /bin/sh -n is known to work... no
-checking for characters that cannot appear in file names... none
-checking whether directories can have trailing spaces... yes
-checking for expr... /usr/bin/expr
-checking for GNU M4 that supports accurate traces... /usr/bin/m4
-checking whether /usr/bin/m4 accepts --gnu... no
-configure: WARNING: The version of M4 that was found does not support
--g.
-configure: WARNING: Using it with POSIXLY_CORRECT set may cause
-problems.
-
-.... removed some stuff ...here...
-.... removed some stuff ...here...
-
-config.status: creating lib/autotest/Makefile
-config.status: creating bin/Makefile
-config.status: executing tests/atconfig commands
-configure: WARNING: unrecognized options: --disable-static
-
-<< end snip 2 >>
-
-Nothing is echo-ed here for the same 'echo'. 
-
-
-Conclusion: 
-1) while running the SAME configure script called from make .. it fails
-(because one because  test -z "`echo $ac_snippet | $ac_path_M4
---trace=mac 2>&1`" is failing) 
-2) If the same (autoconf-host) configure is called manually it runs
-fine.
-
-
-Hope this helps, in reporting this issue upstream. 
-
-
-Also .. a BIG thanks to everyone for helping/debugging.
-
-
-Noel.
+-- 
+Bye, Peter Korsgaard
