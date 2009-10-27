@@ -1,45 +1,60 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 27 Oct 2009 09:28:02 +0100
-Subject: [Buildroot] [PATCH 14/14] libpcap,
-	tcpdump: bump version and autotoolify
-In-Reply-To: <48acdc63c469c025c69b6c003cc81dbbe421f0c9.1254945750.git.rep.dot.nop@gmail.com>
-	(Bernhard Reutner-Fischer's message of "Wed\,
-	7 Oct 2009 22\:08\:37 +0200")
-References: <cover.1254945750.git.rep.dot.nop@gmail.com>
-	<4acf0a418a2f34c50249d56c6e76b8dba7076302.1254945750.git.rep.dot.nop@gmail.com>
-	<8ddd0fbdd88acec5c801c93ce830b1ad04536118.1254945750.git.rep.dot.nop@gmail.com>
-	<b1a1dc13edb6053d271297a4ac369d848c5f5749.1254945750.git.rep.dot.nop@gmail.com>
-	<a576ef52cd1f156525fd2d327f1e7da466257be2.1254945750.git.rep.dot.nop@gmail.com>
-	<df7563b3e1a87daa6f42ade2c505fecc014aa2a2.1254945750.git.rep.dot.nop@gmail.com>
-	<382fdbb8e5e36dd9348dfd57b9267862ef8d2ead.1254945750.git.rep.dot.nop@gmail.com>
-	<53e08690da5a307328d4d5dc7d53865215ced09f.1254945750.git.rep.dot.nop@gmail.com>
-	<b01a751a32bbd1ac0bb43898ed65a6c7afd9e0c7.1254945750.git.rep.dot.nop@gmail.com>
-	<ec988dfe40afe8381a2263eeaae1bd2f8ffd9014.1254945750.git.rep.dot.nop@gmail.com>
-	<f77d7f5dd82b8b3945e77fd9351619fa260cff98.1254945750.git.rep.dot.nop@gmail.com>
-	<d97ecb658b37edf74a168fa361436b5be821395c.1254945750.git.rep.dot.nop@gmail.com>
-	<730af4752b8da4a9b2a2b1583987899fa3eef334.1254945750.git.rep.dot.nop@gmail.com>
-	<78b8984e033470578a90d58e533aa97c31af1071.1254945750.git.rep.dot.nop@gmail.com>
-	<cover.1254945750.git.rep.dot.nop@gmail.com>
-	<48acdc63c469c025c69b6c003cc81dbbe421f0c9.1254945750.git.rep.dot.nop@gmail.com>
-Message-ID: <87aazddywd.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 27 Oct 2009 09:28:40 +0100
+Subject: [Buildroot] [git commit master] Allow for specifying kernel version
+	manually
+Message-ID: <20091027082900.A8D20775E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernhard" == Bernhard Reutner-Fischer <rep.dot.nop@gmail.com> writes:
 
- Bernhard> Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+commit: http://git.buildroot.net/buildroot/commit/?id=434b007fce010a471c64164a3e22b13f4440159d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Bernhard> -LIBPCAP_VERSION:=0.9.8
- Bernhard> -LIBPCAP_DIR:=$(BUILD_DIR)/libpcap-$(LIBPCAP_VERSION)
- Bernhard> +LIBPCAP_VERSION:=1.0.0
- Bernhard>  LIBPCAP_SITE:=http://www.tcpdump.org/release
- Bernhard>  LIBPCAP_SOURCE:=libpcap-$(LIBPCAP_VERSION).tar.gz
- Bernhard>  LIBPCAP_CAT:=$(ZCAT)
+Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/kernel-headers/Config.in |   13 +++++++++++--
+ 1 files changed, 11 insertions(+), 2 deletions(-)
 
-LIBPCAP_CAT is unused now, otherwise it looks good - Committed, thanks!
-
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index f3d5530..07f9f4d 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -39,9 +39,11 @@ choice
+ 	config BR2_KERNEL_HEADERS_2_6_31
+ 		bool "Linux 2.6.31.x kernel headers"
+ 
++	config BR2_KERNEL_HEADERS_VERSION
++		bool "Linux 2.6 (manually specified version)"
++
+ 	config BR2_KERNEL_HEADERS_SNAP
+ 		bool "Linux 2.6 snapshot"
+-
+ endchoice
+ 
+ config BR2_KERNEL_HEADERS_RT
+@@ -50,6 +52,13 @@ config BR2_KERNEL_HEADERS_RT
+ 	help
+ 	  Apply Ingo's realtime extensions to linux
+ 
++config BR2_DEFAULT_KERNEL_VERSION
++	string "linux version"
++	depends on BR2_KERNEL_HEADERS_VERSION
++	help
++	  Specify the version you want to use.
++	  E.g.: 2.6.31.2
++
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "2.6.26.8"	if BR2_KERNEL_HEADERS_2_6_26
+@@ -59,4 +68,4 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.30.9"	if BR2_KERNEL_HEADERS_2_6_30
+ 	default "2.6.31.5"	if BR2_KERNEL_HEADERS_2_6_31
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+-
++	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
