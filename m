@@ -1,110 +1,64 @@
-From: Hugues <hugues@hiegel.fr>
-Date: Tue, 27 Oct 2009 10:35:07 +0100
-Subject: [Buildroot] [PATCH] netkitftp: added package with
-	Makefile.autotools.in support
-In-Reply-To: <1256594402.8809.251.camel@coalu.atr> (Lionel Landwerlin's
-	message of "Mon\, 26 Oct 2009 23\:00\:02 +0100")
-References: <1256573832-11116-1-git-send-email-hugues@hiegel.fr>
-	<1256573832-11116-2-git-send-email-hugues@hiegel.fr>
-	<874opmf2pe.fsf@macbook.be.48ers.dk>
-	<8763a1dfgm.fsf@paranoid.sweethome>
-	<1256594402.8809.251.camel@coalu.atr>
-Message-ID: <87r5spji2c.fsf@paranoid.sweethome>
+From: Lionel Landwerlin <llandwerlin@gmail.com>
+Date: Tue, 27 Oct 2009 10:45:07 +0100
+Subject: [Buildroot] [PATCH] Fix TARGET_PATH variable with external
+ toolchain
+In-Reply-To: <20091027084428.6132b429@surf>
+References: <1256342684.28475.5.camel@coalu.atr>
+	<87ljj0zlh6.fsf@macbook.be.48ers.dk>  <20091027084428.6132b429@surf>
+Message-ID: <1256636707.32194.7.camel@coalu.atr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Le mardi 27 octobre 2009 ? 08:44 +0100, Thomas Petazzoni a ?crit :
+> Le Sat, 24 Oct 2009 20:37:57 +0200,
+> Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+> 
+> >  Lionel> Some time ago, an external toolchain improvement patch added
+> >  Lionel> $(HOST_DIR)/bin and $(HOST_DIR)/usr/bin to the TARGET_PATH
+> >  Lionel> variable. This patch also removed $(STAGING_DIR)/bin and
+> >  Lionel> $(STAGING_DIR)/usr/bin to TARGET_PATH which breaks the build
+> >  Lionel> of the WebKit package for example.
+> > 
+> >  Lionel> WebKit depends on the icu package, and when configuring the
+> >  Lionel> package, there is a need to run icu-config which is
+> >  Lionel> installed inside the staging directory.
+> > 
+> > I don't like this, as it mixes binaries/scripts for the host and the
+> > target - I think it's better for the icu package to install the host
+> > tool into host/usr/bin as well instead.
+> 
+> As part of my work on the package infrastructure, I converted icu over
+> to the new format.
+> 
+> At first, I'd agree with you that icu-config, being executed on the
+> host, should theorically be installed in $(HOST_DIR). However, this
+> raises an issue : icu is compiled twice, once for the host, once for
+> the target.
+> 
+> In the current package/icu/icu.mk, the host icu is not installed at
+> all, but my package infrastructure work converts it to a more normal
+> package where the host icu is installed in $(HOST_DIR). Therefore, the
+> host icu installs its own icu-config in $(HOST_DIR)/usr/bin.
+> 
+> Then, we build the target icu, which also installs its own icu-config,
+> in $(STAGING_DIR)/usr/bin. It is not possible to install this
+> icu-config into $(HOST_DIR)/usr/bin, otherwise it would overwrite the
+> host-icu one.
+> 
+> Therefore, I think we have no other choice than leaving the *-config
+> stuff into $(STAGING_DIR)/usr/bin and then finding some trick to get
+> them executed even if $(STAGING_DIR)/usr/bin is not in the PATH.
+> 
+> What do you think about this ?
+> 
 
-Hello, you ;-)
+Sounds right to me.
 
-Ce cher Lionel Landwerlin <llandwerlin@gmail.com> a dit :
+Let's add
 
-> Le lundi 26 octobre 2009 ? 22:15 +0100, Hugues a ?crit :
->> Hello,
->
->> >  Hugues> diff --git a/package/netkitftp/netkitftp-configure.patch b/package/netkitftp/netkitftp-configure.patch
->> >
->> > That one as well.
->> 
->> Well... This one was already packaged with the package I've got, I don't
->> have any idea why it is needed. I'll check this and then verify if it is
->> really needed (hope it is not :-) )
->
-> It prevents the launch of cross compiled binaries which would make exit
-> the configure script.
+ WEBKIT_CONF_ENV = icu_config=$(STAGING_DIR)/usr/bin/icu-config
 
-Thanks for the check !
-
->> >  Hugues> +++ b/package/netkitftp/netkitftp.mk
->> >  Hugues> @@ -0,0 +1,23 @@
->> >  Hugues> +#############################################################
->> >  Hugues> +#
->> >  Hugues> +# netkitftp
->> >  Hugues> +#
->> >  Hugues> +#############################################################
->> >  Hugues> +NETKITFTP_VERSION:=0.17
->> >  Hugues> +NETKITFTP_SOURCE:=netkit-ftp_$(NETKITFTP_VERSION).orig.tar.gz
->> >  Hugues> +NETKITFTP_PATCH:=netkit-ftp_0.17-16.diff.gz
->> >  Hugues> +NETKITFTP_SITE:=ftp://ftp.debian.org/debian/pool/main/n/netkit-ftp/
->> >
->> > Is that a stable URL? Would something on snapshot.debian.net be better?
->> > We have BR2_DEBIAN_MIRROR, which should be used.
->> 
->> Oh, that's right !
->> I'll correct this.
->> 
->> >  Hugues> +
->> >  Hugues> +NETKITFTP_CONF_OPT = --installroot=$(TARGET_DIR) \
->> >
->> > Something regarding TARGET_DIR at configure time? Doesn't that leak
->> > paths on the build host to the installed binaries?
->> 
->> Well, I didn't investigated further,  maybe is this not needed. I'll try
->> without and throw then this out, if not.
->> Or comment it, if needed :o)
->
-> That package's makefile/configure is definitely strange...
-
-Yeah, isn't it ?
-
-> I just gave it a look and it seems INSTALL_PREFIX is not handled
-> anywhere in the package.
-> So you can probably drop it from the NETKITFTP_INSTALL_TARGET_OPT
-> variable.
-
-Mhmm, that seems correct.
-
->> > That uninstall would also remove all other man pages, so
->> > don't do that.
->> 
->> Mhmm... I'm not sure I understood this.. Why do you talk about uninstall ?
->> The  netkitftp's 'install'  rule  does installs  the  manpages with  the
->> binary, without ability  to call just the install  of the binary without
->> the manpages.
->> So I did like I see in other packages : just delete the 
->> $(TARGET_DIR)/usr/man folder... Is this a bad idea ?
->> What do you suggest at this stage ? 
->> Doing nothing, this will be cleaned later ?
->
-> Yeah, I think what Peter wanted to tell is that man pages cleaning as
-> well as locales cleaning is handled globaly by buildroot that the end of
-> the generation process and depending on your config file.
-
-Ok, right, I just read his answer.
-
-> See top Makefile :
->
-> ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
-> TARGETS+=target-purgelocales
-> endif
->
-> We probably have to make a pass on all unmaintained/old packages to fix
-> that.
-
-And that doesn't look like just an easy job ;-)
-
-Thanks for your comments, dude,
--- 
-Hugues Hiegel                                [http://www.hiegel.fr/~hugues/]
+to the webkit makefile.
