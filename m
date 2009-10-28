@@ -1,32 +1,29 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 28 Oct 2009 21:37:56 +0100
-Subject: [Buildroot] busybox question
-In-Reply-To: <4AE89CFE.5050406@cs.ucsb.edu> (Roman Chertov's message of "Wed\,
-	28 Oct 2009 12\:35\:26 -0700")
-References: <20091027211438.BEC2B7773A@busybox.osuosl.org>
-	<4AE7C7C5.8090001@cs.ucsb.edu> <877hufddx5.fsf@macbook.be.48ers.dk>
-	<4AE870AC.6070601@cs.ucsb.edu> <4AE87550.9090603@toumaz.com>
-	<4AE89CFE.5050406@cs.ucsb.edu>
-Message-ID: <87y6mvb6fv.fsf@macbook.be.48ers.dk>
+Date: Wed, 28 Oct 2009 21:40:10 +0100
+Subject: [Buildroot] problems building vlc against git buildroot
+In-Reply-To: <c166aa9f0910281000m66ea3ce8x379d9c5afe9003c1@mail.gmail.com>
+	(Andrew Dyer's message of "Wed\, 28 Oct 2009 12\:00\:29 -0500")
+References: <c166aa9f0910281000m66ea3ce8x379d9c5afe9003c1@mail.gmail.com>
+Message-ID: <87tyxjb6c5.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Roman" == Roman Chertov <rchertov@cs.ucsb.edu> writes:
+>>>>> "Andrew" == Andrew Dyer <amdyer@gmail.com> writes:
 
- Roman> Emmanuel,
- Roman> I have created a tar fs and then untarred as root so that mknod would
- Roman> work properly.  I have then rebooted the board and pointed it to the new
- Roman> file system.  I get the uClibc prompt, but I can't log in.
+Hi,
 
-With uclibc prompt I guess you mean login prompt, right? What happens if
-you try to login as root?
+ Andrew> but the VLC configure is not picking up that libiconv is available.
 
-Do you get a shell if you boot with init=/bin/sh?
+ Andrew> the attached build log was captured after I did the following:
+ Andrew> Patched the vlc config.in as above, rm'd the entire output directory,
+ Andrew> did a make and vlc build errored, verified that libiconv was in the
+ Andrew> target filesystem, and then did 'make 2>&1 | tee make.log'
 
-Have you verified that you have softfloat enabled like I asked yesterday?
+Have a look at output/build/vlc-0.8.6e/config.log and the corresponding
+lines of configure to see how it tests for iconv and why it fails.
 
 -- 
 Bye, Peter Korsgaard
