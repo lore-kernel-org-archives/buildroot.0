@@ -1,58 +1,40 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 27 Oct 2009 22:12:33 +0100
-Subject: [Buildroot] [git commit master] synergy: needs C++ support
-Message-ID: <20091027211438.BEC2B7773A@busybox.osuosl.org>
+From: Roman Chertov <rchertov@cs.ucsb.edu>
+Date: Tue, 27 Oct 2009 21:25:41 -0700
+Subject: [Buildroot] busybox question
+In-Reply-To: <20091027211438.BEC2B7773A@busybox.osuosl.org>
+References: <20091027211438.BEC2B7773A@busybox.osuosl.org>
+Message-ID: <4AE7C7C5.8090001@cs.ucsb.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fca4e38c80c2187cd492a9223851ba25b817814f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+I have an ARM920T board that I am trying to get going with buildroot and
+uClibc.  I managed to compile the kernel, and it boots up to the point
+where the login must happen.  Nothing happens at that point.  However,
+the machine runs as I can ping it.  I have tried to init=/bin/sh
+init=/bin/ethtool, but I did not get any output to indicate that
+something started.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES                   |    6 +++---
- package/synergy/Config.in |    4 ++++
- 2 files changed, 7 insertions(+), 3 deletions(-)
+I have the following question.  I can build the default image on the
+board (Debian 2.4, glibc) and mount the buildroot root fs over NFS.
+However, if I try to execute any program, I get the following errors:
 
-diff --git a/CHANGES b/CHANGES
-index 5d0214e..36a1372 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -9,9 +9,9 @@
- 	libelf, libevent, libglib2, liblockfile, libmad, libpcap, libupnp,
- 	libuuid, ltrace, lua, lzma, mdadm, ncftp, ncurses, netkittelnet,
- 	netsnmp, ntfs-3g, openssl, php, python, quagga, radvd, rsync, samba,
--	sawman, shared-mime-info, speech-tools, sqlite, squashfs, syslinux,
--	tcpdump, u-boot, util-linux, valgrind, vsftpd, wipe, wpa-supplicant,
--	xdata_xcursor-themes, zlib
-+	sawman, shared-mime-info, speech-tools, sqlite, squashfs, synergy,
-+	syslinux, tcpdump, u-boot, util-linux, valgrind, vsftpd, wipe,
-+	wpa-supplicant, xdata_xcursor-themes, zlib
- 
- 	Removed package: mdnsresponder, mpatrol
- 
-diff --git a/package/synergy/Config.in b/package/synergy/Config.in
-index fe6a634..a2766b1 100644
---- a/package/synergy/Config.in
-+++ b/package/synergy/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_SYNERGY
- 	bool "synergy"
- 	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Synergy lets you easily share a single mouse and
- 	  keyboard between multiple computers with different
-@@ -8,3 +9,6 @@ config BR2_PACKAGE_SYNERGY
- 	  without special hardware.
- 
- 	  http://synergy2.sourceforge.net/
-+
-+comment "synergy requires a toolchain with C++ support enabled"
-+	depends on BR2_PACKAGE_XORG7 && !BR2_INSTALL_LIBSTDCPP
--- 
-1.6.3.3
+root at ts7000:bin# ./busybox
+-bash: ./busybox: No such file or directory
+
+I would expect that at least the program would start and then an error
+would occur due to the fact that uClibc is not present.  I am correct in
+assuming this?  I am trying to debug if I screwed the cross compiling
+(although Linux kernel boots), or if there is a problem with the init
+process.
+
+
+I would appreciate some insight into this issue.
+
+Thanks,
+
+Roman
