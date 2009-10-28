@@ -1,37 +1,43 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 28 Oct 2009 09:35:22 +0000 (UTC)
-Subject: [Buildroot] [Bug 661] lmbench: new package
-In-Reply-To: <bug-661-163@https.bugs.busybox.net/>
-References: <bug-661-163@https.bugs.busybox.net/>
-Message-ID: <20091028093522.5C67E77661@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 28 Oct 2009 11:13:26 +0100
+Subject: [Buildroot] busybox question
+In-Reply-To: <4AE7C7C5.8090001@cs.ucsb.edu> (Roman Chertov's message of "Tue\,
+	27 Oct 2009 21\:25\:41 -0700")
+References: <20091027211438.BEC2B7773A@busybox.osuosl.org>
+	<4AE7C7C5.8090001@cs.ucsb.edu>
+Message-ID: <877hufddx5.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=661
+>>>>> "Roman" == Roman Chertov <rchertov@cs.ucsb.edu> writes:
 
+ Roman> Hello,
+ Roman> I have an ARM920T board that I am trying to get going with buildroot and
+ Roman> uClibc.  I managed to compile the kernel, and it boots up to the point
+ Roman> where the login must happen.  Nothing happens at that point.  However,
+ Roman> the machine runs as I can ping it.  I have tried to init=/bin/sh
+ Roman> init=/bin/ethtool, but I did not get any output to indicate that
+ Roman> something started.
 
-Kelvin Cheung <keguang.zhang@gmail.com> changed:
+And you have set console= to something sensible? What is the last output
+you get from the kernel?
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
- Attachment #697 is|0                           |1
-           obsolete|                            |
+Do you have software floating point support enabled in buildroot?
+(toolchain->Use software floating point by default)
 
+ Roman> I have the following question.  I can build the default image on the
+ Roman> board (Debian 2.4, glibc) and mount the buildroot root fs over NFS.
+ Roman> However, if I try to execute any program, I get the following errors:
 
+ Roman> root at ts7000:bin# ./busybox
+ Roman> -bash: ./busybox: No such file or directory
 
-
---- Comment #1 from Kelvin Cheung <keguang.zhang@gmail.com>  2009-10-28 09:35:21 UTC ---
-Created an attachment (id=705)
- --> (https://bugs.busybox.net/attachment.cgi?id=705)
-Add lmbench updated
-
-lmbench patch updated
+You'll probably have to chroot into the nfs dir to get the dynamic
+linker to work.
 
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
