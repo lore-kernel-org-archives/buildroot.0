@@ -1,36 +1,35 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 29 Oct 2009 21:17:21 +0100
-Subject: [Buildroot] [git commit master]
-	target/device/Atmel/arch-arm/u-boot: Fix u-boot patch dependencies
-Message-ID: <20091029201958.5B7F277667@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 29 Oct 2009 20:38:36 +0000 (UTC)
+Subject: [Buildroot] [Bug 667] [PATCH] e2fsprogs
+In-Reply-To: <bug-667-163@https.bugs.busybox.net/>
+References: <bug-667-163@https.bugs.busybox.net/>
+Message-ID: <20091029203837.0D38D776F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=667
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1ea44bb11a73955b559cc5d4cd61e89bfebd21fa
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Ensure that the 2009.01 u-boot patches can only be enabled for 2009.01 builds.
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- target/device/Atmel/arch-arm/u-boot/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-diff --git a/target/device/Atmel/arch-arm/u-boot/Config.in b/target/device/Atmel/arch-arm/u-boot/Config.in
-index 16f900d..6d32e78 100644
---- a/target/device/Atmel/arch-arm/u-boot/Config.in
-+++ b/target/device/Atmel/arch-arm/u-boot/Config.in
-@@ -7,6 +7,7 @@ choice
- config	BR2_TARGET_U_BOOT_2009_01_ARCH_AT91
- 	bool "AT91 patches for u-boot-2009.01"
- 	depends on BR2_TARGET_ATMEL && BR2_arm
-+	depends on BR2_TARGET_UBOOT_2009_01
- 	help
- 	  Apply the at91 u-boot-2009.01 patches
- 
+
+
+
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-10-29 20:38:35 UTC ---
+Thanks, committed. The libuuid change could potentially be a problem as you now
+need to enable largefile support in toolchain and also enable e2fsprogs, but
+OK, there's no users in the tree.
+
+
 -- 
-1.6.3.3
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
