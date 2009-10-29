@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 29 Oct 2009 16:39:16 +0100
+Date: Thu, 29 Oct 2009 16:42:53 +0100
 Subject: [Buildroot] [RFC] Package infrastructure: make variables or
  make targets ?
-In-Reply-To: <20091027090628.0aa7b0df@surf>
+In-Reply-To: <20091025224056.59c9a6ef@surf>
 References: <20091025224056.59c9a6ef@surf>
-	<20091027090628.0aa7b0df@surf>
-Message-ID: <20091029163916.49c81f50@surf>
+Message-ID: <20091029164253.5ffa870c@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,87 +13,53 @@ To: buildroot@busybox.net
 
 Hello,
 
-Le Tue, 27 Oct 2009 09:06:28 +0100,
+Le Sun, 25 Oct 2009 22:40:56 +0100,
 Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
 
-> > I've already started prototyping a solution, but I'm facing a choice
-> > on which I'd like to have the community opinion. Usually, I don't
-> > like talking without showing patches, but as this choice is fairly
-> > intrusive in the design of the new infrastructure, I don't want to
-> > start the wrong way.
-> 
-> I've pushed a set of commits to
-> http://git.buildroot.net/~tpetazzoni/git/buildroot/log/?h=package-infrastructure
-> which shows the current status of my work. Warning: it is currently in
-> an ugly state: documentation not updated, the generic package
-> infrastructure still contains some autotools-specific stuff, the
-> autotools infrastructure ported over the generic infrastructure does
-> not work yet.
-> 
-> But it still allows you to see how the .mk files look like for three
-> examples : icu, zlib and olsr (randomly choosen).
+>  1. Use make variables, such as :
 
-I've pushed more changes. Since my previous e-mails, the changes are
-the following :
+FWIW, since only Lionel gave his opinion and because as him I was more
+convinced by make variables, I followed this path.
 
- * Improved the autotools infrastructure on top of the new generic
-   package infrastructure. It now works for at least the few packages
-   I've tested ;
+>     This approach is the one used by OpenWRT. The only drawback of
+> this approach is that since the variables are defined *before* calling
+>     the generating function $(eval $(call ...)), we don't have access
+>     to any variable that could be defined by the generating function.
+>     So, for example, the ICU_COMPILE variable must use
+>     $(@D)/$(ICU_SUBDIR) as the directory for the sources, instead of
+>     something like $(ICU_SRCDIR) that could be defined by the package
+>     infrastructure. In OpenWRT, they solved this problem by having a
+>     "include package.mk" after the package definition (name, version,
+>     URL, etc.), but before the definition of the different steps. But
+>     in our case, this means having two $(eval $(call ...)).
 
- * Improved the generic infrastructure to support registration of
-   multiple hooks. The old hook mechanism is also kept for backward
-   compatibility, but if we agree on the new hook mechanism, I'd like
-   to slowly get rid of the old one ;
+In fact this is not true. By escaping the variable expansions, it is
+possible to post-pone the moment at which variables are expanded.
 
- * The pkg-config for host build has been rewritten on top of the new
-   autotools infrastructure. Much simpler. But packages must now depend
-   on host-pkg-config instead of host-pkgconfig (a commit in my branch
-   updates all packages) ;
+If you do :
 
- * directfb + directfb-examples build properly, which means that
-   pkg-config for host, libpng, libts, zlib, freetype, jpeg, directfb
-   and directfb-examples do work on top of the new infrastructure ;
+======================================================================
+define PKG_COMPILE
+ make -C $($(PKG)_SRCDIR)
+endef
 
- * I've added a crappy package statistics script, which tries to guess
-   which package should be converted to autotools, to the new
-   infrastructure, both for target and host.
+$(eval $(call PKGTARGETS,package,foo,target))
+======================================================================
 
-A lot more work remains:
+Then it doesn't work since $(PKG)_SRCDIR is defined while evaluating
+PKGTARGETS. But if you do:
 
- * Cleanup
- * Documentation
- * Testing
+======================================================================
+define PKG_COMPILE
+ make -C $$($$(PKG)_SRCDIR)
+endef
 
-I have one naming issue in the generic package infrastructure
-(package/Makefile.package.in) on which I'd like to get your input. The
-generic package infrastructure let the package specific .mk file
-specify what the configure, build and install steps should do, by
-defining variables :
+$(eval $(call PKGTARGETS,package,foo,target))
+======================================================================
 
- <PKG>_CONFIGURE for configure
- <PKG>_BUILD for build
-
-for installation, I wanted to use
-
- <PKG>_INSTALL_STAGING for staging installation
- <PKG>_INSTALL_TARGET for target installation
-
-but these variables are already existing boolean variables (YES/NO)
-that allows the package to specify whether it wants TARGET installation
-and/or STAGING installation. So we have a naming conflict, that I
-solved by using
-
- <PKG>_INSTALL_STAGING_CMDS
- <PKG>_INSTALL_TARGET_CMDS
-
-for the variables that a package specific .mk must define to list the
-operations to be performed at staging install and target install. But I
-don't like this naming since it isn't coherent with <PKG>_CONFIGURE and
-<PKG>_BUILD.
-
-Any suggestion ?
-
-Sincerly,
+Then things work as expected. Therefore, I've solved what I thought to
+be the main drawback of the "make variables" solution, which is also
+why I've choosen to go deeper into this direction.
 
 Thomas
 -- 
