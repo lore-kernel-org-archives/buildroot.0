@@ -1,105 +1,58 @@
-From: Will Newton <will.newton@gmail.com>
-Date: Thu, 29 Oct 2009 17:41:00 +0000
-Subject: [Buildroot] [RFC] Package infrastructure: make variables or
-	make targets ?
-In-Reply-To: <20091029163916.49c81f50@surf>
-References: <20091025224056.59c9a6ef@surf> <20091027090628.0aa7b0df@surf>
-	<20091029163916.49c81f50@surf>
-Message-ID: <87a5b0800910291041pd74e460le89a5726b825ea31@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 29 Oct 2009 20:01:02 +0000 (UTC)
+Subject: [Buildroot] [Bug 687] Are AT91 patches supplied with
+ Buildroot-2009.08 out of date?
+In-Reply-To: <bug-687-163@https.bugs.busybox.net/>
+References: <bug-687-163@https.bugs.busybox.net/>
+Message-ID: <20091029200102.9CBC377708@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Oct 29, 2009 at 3:39 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> Le Tue, 27 Oct 2009 09:06:28 +0100,
-> Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
->
->> > I've already started prototyping a solution, but I'm facing a choice
->> > on which I'd like to have the community opinion. Usually, I don't
->> > like talking without showing patches, but as this choice is fairly
->> > intrusive in the design of the new infrastructure, I don't want to
->> > start the wrong way.
->>
->> I've pushed a set of commits to
->> http://git.buildroot.net/~tpetazzoni/git/buildroot/log/?h=package-infrastructure
->> which shows the current status of my work. Warning: it is currently in
->> an ugly state: documentation not updated, the generic package
->> infrastructure still contains some autotools-specific stuff, the
->> autotools infrastructure ported over the generic infrastructure does
->> not work yet.
->>
->> But it still allows you to see how the .mk files look like for three
->> examples : icu, zlib and olsr (randomly choosen).
->
-> I've pushed more changes. Since my previous e-mails, the changes are
-> the following :
->
-> ?* Improved the autotools infrastructure on top of the new generic
-> ? package infrastructure. It now works for at least the few packages
-> ? I've tested ;
->
-> ?* Improved the generic infrastructure to support registration of
-> ? multiple hooks. The old hook mechanism is also kept for backward
-> ? compatibility, but if we agree on the new hook mechanism, I'd like
-> ? to slowly get rid of the old one ;
->
-> ?* The pkg-config for host build has been rewritten on top of the new
-> ? autotools infrastructure. Much simpler. But packages must now depend
-> ? on host-pkg-config instead of host-pkgconfig (a commit in my branch
-> ? updates all packages) ;
->
-> ?* directfb + directfb-examples build properly, which means that
-> ? pkg-config for host, libpng, libts, zlib, freetype, jpeg, directfb
-> ? and directfb-examples do work on top of the new infrastructure ;
->
-> ?* I've added a crappy package statistics script, which tries to guess
-> ? which package should be converted to autotools, to the new
-> ? infrastructure, both for target and host.
->
-> A lot more work remains:
->
-> ?* Cleanup
-> ?* Documentation
-> ?* Testing
->
-> I have one naming issue in the generic package infrastructure
-> (package/Makefile.package.in) on which I'd like to get your input. The
-> generic package infrastructure let the package specific .mk file
-> specify what the configure, build and install steps should do, by
-> defining variables :
->
-> ?<PKG>_CONFIGURE for configure
-> ?<PKG>_BUILD for build
->
-> for installation, I wanted to use
->
-> ?<PKG>_INSTALL_STAGING for staging installation
-> ?<PKG>_INSTALL_TARGET for target installation
->
-> but these variables are already existing boolean variables (YES/NO)
-> that allows the package to specify whether it wants TARGET installation
-> and/or STAGING installation. So we have a naming conflict, that I
-> solved by using
->
-> ?<PKG>_INSTALL_STAGING_CMDS
-> ?<PKG>_INSTALL_TARGET_CMDS
->
-> for the variables that a package specific .mk must define to list the
-> operations to be performed at staging install and target install. But I
-> don't like this naming since it isn't coherent with <PKG>_CONFIGURE and
-> <PKG>_BUILD.
->
-> Any suggestion ?
+https://bugs.busybox.net/show_bug.cgi?id=687
 
-Hi Thomas,
 
-This stuff looks really good, it seems to reduce the lines of code in
-each Makefile which is definitely a good sign.
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-Perhaps all the targets should have a _CMDS suffix to distinguish them
-from other types of variables?
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
+
+
+
+
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-10-29 20:01:01 UTC ---
+(In reply to comment #0)
+
+> Trouble is, when it comes to applying the patches the build system falls over
+> with:
+> 
+>     Applying u-boot-2009.01-001-at91rm9200.patch using plaintext: 
+>     patching file include/asm-arm/arch-at91rm9200/at91_pio.h
+>     patching file include/asm-arm/arch-at91rm9200/at91_pmc.h
+>     patching file include/asm-arm/arch-at91rm9200/AT91RM9200.h
+>     Hunk #1 FAILED at 28.
+
+It sounds like you have enabled BR2_TARGET_U_BOOT_2009_01_ARCH_AT91 (AT91
+patches for u-boot-2009.01). Don't do that if you are not using the 2009.01
+version of u-boot. I'll fix up kconfig so you won't be able to do so in the
+future.
+
+On a related note, you won't find support for the 9g20 in the ancient
+1.2.0-atmel release, you better use the 2009.08 release instead.
+
+> So I suppose what I am saying is that i think that the AT91 patches supplied
+> with Buildroot-2009.08 are out of date or just wrong or i am doing something
+> stupid that i can't see (i find it hard to believe i am the only person with
+> this issue).
+
+The AT91 patches we have are indeed fairly old, but most AT91 stuff is in
+mainline nowadays, so you don't need (many) patches.
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
