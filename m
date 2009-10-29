@@ -1,69 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 29 Oct 2009 16:42:53 +0100
-Subject: [Buildroot] [RFC] Package infrastructure: make variables or
- make targets ?
-In-Reply-To: <20091025224056.59c9a6ef@surf>
-References: <20091025224056.59c9a6ef@surf>
-Message-ID: <20091029164253.5ffa870c@surf>
+From: Roman Chertov <rchertov@cs.ucsb.edu>
+Date: Thu, 29 Oct 2009 09:10:26 -0700
+Subject: [Buildroot] busybox question
+In-Reply-To: <87pr87b5el.fsf@macbook.be.48ers.dk>
+References: <20091027211438.BEC2B7773A@busybox.osuosl.org>	<4AE7C7C5.8090001@cs.ucsb.edu>
+	<877hufddx5.fsf@macbook.be.48ers.dk>	<4AE870AC.6070601@cs.ucsb.edu>
+	<4AE87550.9090603@toumaz.com>	<4AE89CFE.5050406@cs.ucsb.edu>
+	<87y6mvb6fv.fsf@macbook.be.48ers.dk>	<4AE8AED3.9040004@cs.ucsb.edu>
+	<87pr87b5el.fsf@macbook.be.48ers.dk>
+Message-ID: <4AE9BE72.4080509@cs.ucsb.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+> 
+> Remember that you need to do a clean rebuild after changing
+> soft/hardfloat (rm -rf output; make if you are using git, rm -rf
+> *build_*; make if you are using the release).
 
-Le Sun, 25 Oct 2009 22:40:56 +0100,
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
+That worked.  I did a full rebuild and now I can boot up and login.  Thanks.
 
->  1. Use make variables, such as :
+Roman
 
-FWIW, since only Lionel gave his opinion and because as him I was more
-convinced by make variables, I followed this path.
-
->     This approach is the one used by OpenWRT. The only drawback of
-> this approach is that since the variables are defined *before* calling
->     the generating function $(eval $(call ...)), we don't have access
->     to any variable that could be defined by the generating function.
->     So, for example, the ICU_COMPILE variable must use
->     $(@D)/$(ICU_SUBDIR) as the directory for the sources, instead of
->     something like $(ICU_SRCDIR) that could be defined by the package
->     infrastructure. In OpenWRT, they solved this problem by having a
->     "include package.mk" after the package definition (name, version,
->     URL, etc.), but before the definition of the different steps. But
->     in our case, this means having two $(eval $(call ...)).
-
-In fact this is not true. By escaping the variable expansions, it is
-possible to post-pone the moment at which variables are expanded.
-
-If you do :
-
-======================================================================
-define PKG_COMPILE
- make -C $($(PKG)_SRCDIR)
-endef
-
-$(eval $(call PKGTARGETS,package,foo,target))
-======================================================================
-
-Then it doesn't work since $(PKG)_SRCDIR is defined while evaluating
-PKGTARGETS. But if you do:
-
-======================================================================
-define PKG_COMPILE
- make -C $$($$(PKG)_SRCDIR)
-endef
-
-$(eval $(call PKGTARGETS,package,foo,target))
-======================================================================
-
-Then things work as expected. Therefore, I've solved what I thought to
-be the main drawback of the "make variables" solution, which is also
-why I've choosen to go deeper into this direction.
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+> 
