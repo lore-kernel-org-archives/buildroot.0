@@ -1,46 +1,104 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 29 Oct 2009 15:44:52 +0100
-Subject: [Buildroot] [git commit master] toolchain/gcc: remove unused
-	(commented out) 4.3 snapshot
-Message-ID: <20091029152013.3F2A57775A@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 29 Oct 2009 16:39:16 +0100
+Subject: [Buildroot] [RFC] Package infrastructure: make variables or
+ make targets ?
+In-Reply-To: <20091027090628.0aa7b0df@surf>
+References: <20091025224056.59c9a6ef@surf>
+	<20091027090628.0aa7b0df@surf>
+Message-ID: <20091029163916.49c81f50@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c9816df8868f2b14feb970664b0cd941e58b1cf5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le Tue, 27 Oct 2009 09:06:28 +0100,
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- toolchain/gcc/Config.in |    6 ------
- 1 files changed, 0 insertions(+), 6 deletions(-)
+> > I've already started prototyping a solution, but I'm facing a choice
+> > on which I'd like to have the community opinion. Usually, I don't
+> > like talking without showing patches, but as this choice is fairly
+> > intrusive in the design of the new infrastructure, I don't want to
+> > start the wrong way.
+> 
+> I've pushed a set of commits to
+> http://git.buildroot.net/~tpetazzoni/git/buildroot/log/?h=package-infrastructure
+> which shows the current status of my work. Warning: it is currently in
+> an ugly state: documentation not updated, the generic package
+> infrastructure still contains some autotools-specific stuff, the
+> autotools infrastructure ported over the generic infrastructure does
+> not work yet.
+> 
+> But it still allows you to see how the .mk files look like for three
+> examples : icu, zlib and olsr (randomly choosen).
 
-diff --git a/toolchain/gcc/Config.in b/toolchain/gcc/Config.in
-index 774057e..dbc5645 100644
---- a/toolchain/gcc/Config.in
-+++ b/toolchain/gcc/Config.in
-@@ -64,11 +64,6 @@ choice
- 	config BR2_GCC_VERSION_4_4_X
- 		depends on !BR2_avr32 && !BR2_nios2
- 		bool "gcc 4.4.x"
--
--#	config BR2_GCC_VERSION_4_3
--#		depends on !BR2_avr32 && !BR2_nios2
--#		select BR2_GCC_IS_SNAP
--#		bool "gcc 4.3"
- endchoice
- 
- config BR2_GCC_IS_SNAP
-@@ -106,7 +101,6 @@ config BR2_GCC_VERSION
- 	default "4.3.3"     if BR2_GCC_VERSION_4_3_3
- 	default "4.3.4"     if BR2_GCC_VERSION_4_3_4
- 	default "4.4.2"     if BR2_GCC_VERSION_4_4_X
--	default "4.3"       if BR2_GCC_VERSION_4_3
- 
- config BR2_TOOLCHAIN_SYSROOT
- 	bool "Enable toolchain with --sysroot support"
+I've pushed more changes. Since my previous e-mails, the changes are
+the following :
+
+ * Improved the autotools infrastructure on top of the new generic
+   package infrastructure. It now works for at least the few packages
+   I've tested ;
+
+ * Improved the generic infrastructure to support registration of
+   multiple hooks. The old hook mechanism is also kept for backward
+   compatibility, but if we agree on the new hook mechanism, I'd like
+   to slowly get rid of the old one ;
+
+ * The pkg-config for host build has been rewritten on top of the new
+   autotools infrastructure. Much simpler. But packages must now depend
+   on host-pkg-config instead of host-pkgconfig (a commit in my branch
+   updates all packages) ;
+
+ * directfb + directfb-examples build properly, which means that
+   pkg-config for host, libpng, libts, zlib, freetype, jpeg, directfb
+   and directfb-examples do work on top of the new infrastructure ;
+
+ * I've added a crappy package statistics script, which tries to guess
+   which package should be converted to autotools, to the new
+   infrastructure, both for target and host.
+
+A lot more work remains:
+
+ * Cleanup
+ * Documentation
+ * Testing
+
+I have one naming issue in the generic package infrastructure
+(package/Makefile.package.in) on which I'd like to get your input. The
+generic package infrastructure let the package specific .mk file
+specify what the configure, build and install steps should do, by
+defining variables :
+
+ <PKG>_CONFIGURE for configure
+ <PKG>_BUILD for build
+
+for installation, I wanted to use
+
+ <PKG>_INSTALL_STAGING for staging installation
+ <PKG>_INSTALL_TARGET for target installation
+
+but these variables are already existing boolean variables (YES/NO)
+that allows the package to specify whether it wants TARGET installation
+and/or STAGING installation. So we have a naming conflict, that I
+solved by using
+
+ <PKG>_INSTALL_STAGING_CMDS
+ <PKG>_INSTALL_TARGET_CMDS
+
+for the variables that a package specific .mk must define to list the
+operations to be performed at staging install and target install. But I
+don't like this naming since it isn't coherent with <PKG>_CONFIGURE and
+<PKG>_BUILD.
+
+Any suggestion ?
+
+Sincerly,
+
+Thomas
 -- 
-1.6.3.3
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
