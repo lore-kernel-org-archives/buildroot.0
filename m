@@ -1,32 +1,21 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 30 Oct 2009 13:16:22 +0100
-Subject: [Buildroot] [pull request] Pull request for branch
-	target-dont-use
-In-Reply-To: <cover.1256890468.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Fri\,
-	30 Oct 2009 09\:14\:30 +0100")
-References: <cover.1256890468.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87bpjpaxgp.fsf@macbook.be.48ers.dk>
+From: Jonathan dumaresq <jdumaresq@cimeq.qc.ca>
+Date: Fri, 30 Oct 2009 08:50:47 -0400
+Subject: [Buildroot] uboot patch
+Message-ID: <!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAJOyWIY1gOxLoBbCpKpnu5EBAAAAAA==@cimeq.qc.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hi,
 
- Thomas> The following changes since commit 83f1ec65a0e3488376976754c5662330eab6fb80:
- Thomas>   Peter Korsgaard (1):
- Thomas>         util-linux: fix kconfig typo
+I try to figure where I should put my u-boot patch to get them applied
+correctly ?
 
- Thomas> are available in the git repository at:
+I have added my board as per the documentation, now, I try to add my custom
+uboot patch. 
 
- Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot target-dont-use
+Regards
 
- Thomas> Thomas Petazzoni (1):
- Thomas>       documentation: insist more on why output/target/ should not be used
-
-Pulled and pushed - Thanks!
-
--- 
-Bye, Peter Korsgaard
+Jonathan 
