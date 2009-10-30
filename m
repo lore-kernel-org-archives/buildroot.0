@@ -1,42 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 30 Oct 2009 15:12:17 +0100
-Subject: [Buildroot] uboot patch
-In-Reply-To: <!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAJOyWIY1gOxLoBbCpKpnu5EBAAAAAA==@cimeq.qc.ca>
-References: <!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAJOyWIY1gOxLoBbCpKpnu5EBAAAAAA==@cimeq.qc.ca>
-Message-ID: <20091030151217.7f8c64f1@surf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 30 Oct 2009 14:34:24 +0000 (UTC)
+Subject: [Buildroot] [Bug 515] tcpreplay: new package
+In-Reply-To: <bug-515-163@https.bugs.busybox.net/>
+References: <bug-515-163@https.bugs.busybox.net/>
+Message-ID: <20091030143424.5BC90777A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri, 30 Oct 2009 08:50:47 -0400,
-"Jonathan dumaresq" <jdumaresq@cimeq.qc.ca> a ?crit :
+https://bugs.busybox.net/show_bug.cgi?id=515
 
-> I try to figure where I should put my u-boot patch to get them applied
-> correctly ?
+
+
+
+
+--- Comment #4 from Chris Packham <judge.packham@gmail.com>  2009-10-30 14:34:23 UTC ---
+(In reply to comment #3)
+>
+> Could you fix this and resubmit?
 > 
-> I have added my board as per the documentation, now, I try to add my
-> custom uboot patch. 
 
-Two solutions:
+Will do. I'm traveling right now so it may take me while to get an updated
+patch.
 
- 1. Add your u-boot patch into your
-    target/device/<company>/<board>/u-boot/ directory, and add:
 
-U_BOOT_ARCH_PATCH_DIR:=target/device/<company>/<board>/u-boot
-
- 2. Set the configuration option BR2_TARGET_UBOOT_CUSTOM_PATCH in your
-    Buildroot configuration
-
-See target/u-boot/Makefile.in, line 73 and the next ones to see how the
-u-boot source gets patched.
-
-Sincerly,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
