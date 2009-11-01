@@ -1,34 +1,60 @@
-From: Marc Egli <marc.egli@hsr.ch>
-Date: Sat, 31 Oct 2009 21:27:32 +0100
-Subject: [Buildroot] wrong path in matchbox-desktop
-Message-ID: <AACDBC45-AC19-4488-9921-427BFA3FC405@hsr.ch>
+From: Lionel Landwerlin <llandwerlin@gmail.com>
+Date: Sun, 01 Nov 2009 22:26:58 +0100
+Subject: [Buildroot] [RFC] Package infrastructure: make variables or
+ make targets ?
+In-Reply-To: <20091027090628.0aa7b0df@surf>
+References: <20091025224056.59c9a6ef@surf>  <20091027090628.0aa7b0df@surf>
+Message-ID: <1257110818.2515.67.camel@coalu.atr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-matchbox-desktop fails with the following message:
-/emb/buildroot/output/toolchain/bin/sed: can't read /usr/lib/ 
-libxcb.la: No such file or directory
-libtool: link: `/usr/lib/libxcb.la' is not a valid libtool archive
-make[3]: *** [dotdesktop.la] Error 1
-make[3]: Leaving directory `/emb/buildroot/output/build/matchbox- 
-desktop-0.9.1/modules'
-make[2]: *** [all-recursive] Error 1
-make[2]: Leaving directory `/emb/buildroot/output/build/matchbox- 
-desktop-0.9.1'
-make[1]: *** [all] Error 2
-make[1]: Leaving directory `/emb/buildroot/output/build/matchbox- 
-desktop-0.9.1'
-make: *** [/emb/buildroot/output/build/matchbox- 
-desktop-0.9.1/.compiled] Error 2
+Le mardi 27 octobre 2009 ? 09:06 +0100, Thomas Petazzoni a ?crit :
+> Hello,
+> 
+> Le Sun, 25 Oct 2009 22:40:56 +0100,
+> Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
+> I've pushed a set of commits to
+> http://git.buildroot.net/~tpetazzoni/git/buildroot/log/?h=package-infrastructure
+> which shows the current status of my work. Warning: it is currently in
+> an ugly state: documentation not updated, the generic package
+> infrastructure still contains some autotools-specific stuff, the
+> autotools infrastructure ported over the generic infrastructure does
+> not work yet.
+> 
+> But it still allows you to see how the .mk files look like for three
+> examples : icu, zlib and olsr (randomly choosen).
+> 
+> Please do not pull this branch anywhere except for experimentations, as
+> I will rebase it heavily.
+> 
+> Sincerly,
 
-i have a /emb/buildroot/output/build/stagingdir/usr/lib/libxcb.la but  
-not in /usr/lib/
+Hi Thomas,
 
-so i think it's a wrong path somewhere. i also made a symlink in /usr/ 
-lib/ and now it builds without a problem. so i think there's something  
-that need's to be fixed.
+First thanks for your work. I like it much, it makes package's makefiles
+a lot more clean.
 
-marc
+I have little question about the autotool stuff. I seen that the
+patching and the autoreconf steps has been merged together. Is it
+because you did not finish yet or do you plan keep it like that ?
+
+I'm asking that because I'm using buildroot more as a development tool
+than a rootfs generation tool. I try to work upstream with packages I'm
+hacking on. A few days ago I sent a patch to allow to retrigger some
+part of the build process on a particular package
+(http://lists.busybox.net/pipermail/buildroot/2009-October/030104.html).
+It currently only work with "autotooled" packages, but with you ongoing
+work it will be easier to provide that feature on all packages.
+
+So to me, it is important to separate the patching from the
+autoreconfiguring part, because when adding new source files to an
+autotooled package there is a need to regenerate the Makefile.in files
+without repatching.
+
+Regards,
+
+-- 
+Lionel Landwerlin <llandwerlin@gmail.com>
