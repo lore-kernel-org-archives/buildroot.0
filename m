@@ -1,100 +1,63 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Tue, 03 Nov 2009 15:01:25 +0100
-Subject: [Buildroot] [RFC] Package infrastructure: make variables or
- make targets ?
-In-Reply-To: <20091103091445.07b50723@surf>
-References: <20091025224056.59c9a6ef@surf> <20091027090628.0aa7b0df@surf>
-	<1257110818.2515.67.camel@coalu.atr>  <20091103091445.07b50723@surf>
-Message-ID: <1257256885.2515.129.camel@coalu.atr>
+From: Dan Christensen <opello@opello.org>
+Date: Tue, 3 Nov 2009 08:33:06 -0600
+Subject: [Buildroot] [PATCH] Introduce support for using either
+	e2fsimage of genext2fs
+In-Reply-To: <87a5b0800911030220o383c9897xaa3838fad0510970@mail.gmail.com>
+References: <6a52edd60910211816g12860f63xc2f70e1ee473a335@mail.gmail.com>
+	<6a52edd60911021808w8d65e45t93c83682c133dfbc@mail.gmail.com>
+	<87a5b0800911030220o383c9897xaa3838fad0510970@mail.gmail.com>
+Message-ID: <6a52edd60911030633t49b6fa80qd96236e9e19775d0@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Woaa, this mail took more than a day to be delivered...
+Thanks for the reply, Will.
 
-Le mardi 03 novembre 2009 ? 09:14 +0100, Thomas Petazzoni a ?crit :
-> Hello,
-> 
-> Thanks Lionel for your feedback.
-> 
-> Le Sun, 01 Nov 2009 22:26:58 +0100,
-> Lionel Landwerlin <llandwerlin@gmail.com> a ?crit :
-> 
-> > First thanks for your work. I like it much, it makes package's
-> > makefiles a lot more clean.
-> 
-> Thanks :)
-> 
-> > I have little question about the autotool stuff. I seen that the
-> > patching and the autoreconf steps has been merged together. Is it
-> > because you did not finish yet or do you plan keep it like that ?
-> 
-> I was planning to keep it like that, but if it's not satisfying, we can
-> probably find ways to improve it.
-> 
-> The generic package infrastructure, in package/Makefile.package.in [1]
-> is not supposed to know anything about autotools. Therefore, it
-> implements a set of generic steps :
-> 
->  * Download
->  * Extract
->  * Patch
->  * Configure
->  * Build
->  * Host installation
->  * Target installation
->  * Staging installation
->  * Clean
->  * Uninstall
-> 
-> ? autoreconf ? is *not* one of these steps because it is autotools
-> specific.
-> 
-> Then, the package/Makefile.autotools.in [2] ? inherits ? from this
-> package infrastructure by :
-> 
->  * Providing a definition for the Configure, Build, Host installation,
->    Target installation, Staging installation, Clean and Uninstall
->    steps ;
-> 
->  * Add hooks for autoreconf and libtool patching. The autoreconf hook
->    is attached to the $(PKG)_POST_PATCH_HOOKS hook point, and is
->    therefore included into the generic ? Patch ? step in terms of stamp
->    files and dependencies
-> 
-> Considering this more or less clean separation between generic
-> infrastructure and autotools infrastructure, I'd like (if possible) to
-> keep autotools-specific things outside the generic infrastructure.
-> 
-> > I'm asking that because I'm using buildroot more as a development tool
-> > than a rootfs generation tool. I try to work upstream with packages
-> > I'm hacking on. A few days ago I sent a patch to allow to retrigger
-> > some part of the build process on a particular package
-> > (http://lists.busybox.net/pipermail/buildroot/2009-October/030104.html).
-> > It currently only work with "autotooled" packages, but with you
-> > ongoing work it will be easier to provide that feature on all
-> > packages.
-> > 
-> > So to me, it is important to separate the patching from the
-> > autoreconfiguring part, because when adding new source files to an
-> > autotooled package there is a need to regenerate the Makefile.in files
-> > without repatching.
-> 
-> Would attaching the autoreconf hook to a
-> (not-yet-existing-but-easily-created) $(PKG)_PRE_CONFIGURE_HOOKS hook
-> point solve the problem ?
-> 
+On Tue, Nov 3, 2009 at 4:20 AM, Will Newton <will.newton@gmail.com> wrote:
+> On Tue, Nov 3, 2009 at 2:08 AM, Dan Christensen <opello@opello.org> wrote:
 
-The fact you had removed the stamp file for the autoreconf step annoyed
-me at first, but in the end I can add a rule that does not prerequise
-the stamp files to retrigger the autogen stuff.
+> I don't personally use ext2 filesystems myself, so I can't really
+> comment on one tool versus the other, but on the whole your patch
+> looks like it makes sense.
 
-Create a PRE_CONFIGURE hook could be better but that's just
-trolling... :)
+That's good news.
 
-Thanks for the explanation/rebased patches.
+>> I did end up with a few questions about how e2fsimage's dependencies
+>> should be met. ?It depends on e2fslibs-dev (debian package name), and
+>> I see that e2fsprogs is already a package built for the target. ?I was
+>> wondering if this could be build for the host as well, similar to how
+>> fakeroot has both a 'target' and a 'host' configuration. ?I wasn't
+>> sure how this would work with the new Makefile.autotools.in changes in
+>> e2fsprogs.mk.
+>> The way I solved this for myself was adding support to build it to my
+>> own e2fsprogs.mk (not included in this patch as it doesn't seem the
+>> correct way to manage the dependency).
+>
+> I think the buildroot way is to try and minimize the dependencies
+> required on the host system, so we build host dependencies where
+> possible. The autotools infrastructure is not currently capable of
+> building host packages, although I think Thomas's upcoming changes
+> will likely fix that.
 
--- 
-Lionel Landwerlin <llandwerlin@gmail.com>
+I'll keep a look out for those changes.
+
+>> The other significant question I had was the CFLAGS that should be
+>> used for e2fsimage. ?I simply copied the ones used for genext2fs
+>> (-Wall -O2 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+>> -D_FILE_OFFSET_BITS=64) and it seemed to work.
+>
+> Do we need to set CFLAGS at all? Won't configure take care of setting
+> some appropriate flags for us?
+
+The configure is pretty minimal (not autotools based) but it did work
+fine in my tests, so probably not necessary.
+I updated the patch to only pass -Wall -O2, since those still seem sensible.
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: ext2-reorganize-and-add-support-for-e2fsimage.patch
+Type: application/octet-stream
+Size: 16992 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091103/067887e8/attachment-0001.obj>
