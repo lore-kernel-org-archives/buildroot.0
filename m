@@ -1,74 +1,99 @@
-From: Dan Christensen <opello@opello.org>
-Date: Mon, 2 Nov 2009 20:08:45 -0600
-Subject: [Buildroot] [PATCH] Introduce support for using either
-	e2fsimage of genext2fs
-In-Reply-To: <6a52edd60910211816g12860f63xc2f70e1ee473a335@mail.gmail.com>
-References: <6a52edd60910211816g12860f63xc2f70e1ee473a335@mail.gmail.com>
-Message-ID: <6a52edd60911021808w8d65e45t93c83682c133dfbc@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 3 Nov 2009 09:14:45 +0100
+Subject: [Buildroot] [RFC] Package infrastructure: make variables or
+ make targets ?
+In-Reply-To: <1257110818.2515.67.camel@coalu.atr>
+References: <20091025224056.59c9a6ef@surf> <20091027090628.0aa7b0df@surf>
+	<1257110818.2515.67.camel@coalu.atr>
+Message-ID: <20091103091445.07b50723@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello.
+Hello,
 
-On Wed, Oct 21, 2009 at 7:16 PM, Dan Christensen <opello@opello.org> wrote:
-> I recently started using buildroot-2009.08 for a project using an AT91
-> series ARM CPU and wanted to boot off of an SD card. ?This was going
-> quite well until I ran into a few problems with U-Boot booting the
-> image I'd written to the SD card. ?It would boot fine off of FAT, and
-> an ext2 filesystem I'd created with mkfs.ext2, but not the filesystem
-> I copied to the card with dd.
->
-> So I started investigating the differences between the two images I
-> had with tune2fs, and it seems as though genext2fs makes a much
-> "simpler" ext2 filesystem than mkfs.ext2 does today. ?I'm not sure
-> about the history or if there is particular significance behind the
-> way it generates the filesystem, if there is any at all. ?This led me
-> to another tool called e2fsimage. ?e2fsimage seems to generate a
-> filesystem more like today's mkfs.ext2 generates.
->
-> The task of incorporating this additional tool into buildroot seemed
-> straight forward, but ultimately led to reorganizing the target/ext2/
-> directory quite a bit. ?I tried to follow the conventions that I'd
-> seen elsewhere, but wasn't sure what guidelines I should be following.
->
-> That being said, I would appreciate it if the following patch could be
-> reviewed for correctness. ?It worked for me (I could toggle between
-> genext2fs and e2fsimage) but I reworked quite a bit of the logic in
-> the makefiles and wouldn't be surprised if there were some bugs I
-> hadn't noticed.
+Thanks Lionel for your feedback.
 
-I was hoping to get some feedback on this, and had some further ideas.
- But I didn't see anyone reply.
+Le Sun, 01 Nov 2009 22:26:58 +0100,
+Lionel Landwerlin <llandwerlin@gmail.com> a ?crit :
 
-I reworked this patch to be from the latest git as of a few minutes
-ago.  I hope this allows someone to examine it more easily, and
-comment on it.
+> First thanks for your work. I like it much, it makes package's
+> makefiles a lot more clean.
 
-I did end up with a few questions about how e2fsimage's dependencies
-should be met.  It depends on e2fslibs-dev (debian package name), and
-I see that e2fsprogs is already a package built for the target.  I was
-wondering if this could be build for the host as well, similar to how
-fakeroot has both a 'target' and a 'host' configuration.  I wasn't
-sure how this would work with the new Makefile.autotools.in changes in
-e2fsprogs.mk.
-The way I solved this for myself was adding support to build it to my
-own e2fsprogs.mk (not included in this patch as it doesn't seem the
-correct way to manage the dependency).
+Thanks :)
 
-The other significant question I had was the CFLAGS that should be
-used for e2fsimage.  I simply copied the ones used for genext2fs
-(-Wall -O2 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64) and it seemed to work.
+> I have little question about the autotool stuff. I seen that the
+> patching and the autoreconf steps has been merged together. Is it
+> because you did not finish yet or do you plan keep it like that ?
 
-Thanks for your time.
-Dan
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: ext2-reorganize-and-add-support-for-e2fsimage.patch
-Type: application/octet-stream
-Size: 17062 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091102/9f3b66a1/attachment-0001.obj>
+I was planning to keep it like that, but if it's not satisfying, we can
+probably find ways to improve it.
+
+The generic package infrastructure, in package/Makefile.package.in [1]
+is not supposed to know anything about autotools. Therefore, it
+implements a set of generic steps :
+
+ * Download
+ * Extract
+ * Patch
+ * Configure
+ * Build
+ * Host installation
+ * Target installation
+ * Staging installation
+ * Clean
+ * Uninstall
+
+? autoreconf ? is *not* one of these steps because it is autotools
+specific.
+
+Then, the package/Makefile.autotools.in [2] ? inherits ? from this
+package infrastructure by :
+
+ * Providing a definition for the Configure, Build, Host installation,
+   Target installation, Staging installation, Clean and Uninstall
+   steps ;
+
+ * Add hooks for autoreconf and libtool patching. The autoreconf hook
+   is attached to the $(PKG)_POST_PATCH_HOOKS hook point, and is
+   therefore included into the generic ? Patch ? step in terms of stamp
+   files and dependencies
+
+Considering this more or less clean separation between generic
+infrastructure and autotools infrastructure, I'd like (if possible) to
+keep autotools-specific things outside the generic infrastructure.
+
+> I'm asking that because I'm using buildroot more as a development tool
+> than a rootfs generation tool. I try to work upstream with packages
+> I'm hacking on. A few days ago I sent a patch to allow to retrigger
+> some part of the build process on a particular package
+> (http://lists.busybox.net/pipermail/buildroot/2009-October/030104.html).
+> It currently only work with "autotooled" packages, but with you
+> ongoing work it will be easier to provide that feature on all
+> packages.
+> 
+> So to me, it is important to separate the patching from the
+> autoreconfiguring part, because when adding new source files to an
+> autotooled package there is a need to regenerate the Makefile.in files
+> without repatching.
+
+Would attaching the autoreconf hook to a
+(not-yet-existing-but-easily-created) $(PKG)_PRE_CONFIGURE_HOOKS hook
+point solve the problem ?
+
+Sincerly,
+
+Thomas
+
+[1]
+http://git.buildroot.net/~tpetazzoni/git/buildroot/tree/package/Makefile.package.in?h=package-infrastructure
+
+[2]
+http://git.buildroot.net/~tpetazzoni/git/buildroot/tree/package/Makefile.autotools.in?h=package-infrastructure
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
