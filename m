@@ -1,28 +1,26 @@
-From: Emmanuel Riou <riou.emmanuel@googlemail.com>
-Date: Wed, 04 Nov 2009 19:58:33 +0000
-Subject: [Buildroot] RPATH issue
-Message-ID: <4AF1DCE9.5080801@gmail.com>
+From: Ormund Williams <ormundw@panix.com>
+Date: Wed, 04 Nov 2009 15:37:42 -0500
+Subject: [Buildroot] Qt fails to build
+Message-ID: <1257367062.3465.51.camel@station1.ormlab.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Hi All,
 
-I am trying to compile linphone (actually only linphonec, i.e. linphone 
-in command line) and am experiencing an rpath linking issue.
-The problem is that an RPATH header is added in both my binary and all 
-the libraries installed in my project_build directory. The RPATH header 
-is set to my lib staging directory which is obviously a problem when I 
-execute my binary on the target.
-the --disable-rpath configure option of linphone doesn't work, hence I 
-tried to patch the configure script to set the relevant hardcode_* 
-variables (i.e. hardcode_into_libs=no and hardcode_libdir_flag_spec="") 
-but with no success. Would you have any advice to fix this?
-I am using buildroot 2009.08.
+I did a git pull this morning and now I get this error, no change to
+the .config file:
 
-Cheers,
+Creating qmake. Please wait...
+make[1]: Entering directory .../buildroot/output/build/qt-embedded-linux-opensource-src-4.5.2/qmake'
+g++: @: No such file or directory
+make[1]: *** [project.o] Error 1
+make[1]: Leaving directory .../buildroot/output/build/qt-embedded-linux-opensource-src-4.5.2/qmake'
+make: *** [.../buildroot/output/build/qt-embedded-linux-opensource-src-4.5.2/.configured] Error 2
+
 
 -- 
-Emmanuel Riou
+Ormund Williams
+OrmLab LLC
