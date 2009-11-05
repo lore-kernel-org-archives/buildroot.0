@@ -1,26 +1,43 @@
-From: Ormund Williams <ormundw@panix.com>
-Date: Wed, 04 Nov 2009 15:37:42 -0500
-Subject: [Buildroot] Qt fails to build
-Message-ID: <1257367062.3465.51.camel@station1.ormlab.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu,  5 Nov 2009 16:18:42 +0000 (UTC)
+Subject: [Buildroot] [Bug 515] tcpreplay: new package
+In-Reply-To: <bug-515-163@https.bugs.busybox.net/>
+References: <bug-515-163@https.bugs.busybox.net/>
+Message-ID: <20091105161842.64FD2777D7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+https://bugs.busybox.net/show_bug.cgi?id=515
 
-I did a git pull this morning and now I get this error, no change to
-the .config file:
 
-Creating qmake. Please wait...
-make[1]: Entering directory .../buildroot/output/build/qt-embedded-linux-opensource-src-4.5.2/qmake'
-g++: @: No such file or directory
-make[1]: *** [project.o] Error 1
-make[1]: Leaving directory .../buildroot/output/build/qt-embedded-linux-opensource-src-4.5.2/qmake'
-make: *** [.../buildroot/output/build/qt-embedded-linux-opensource-src-4.5.2/.configured] Error 2
+Chris Packham <judge.packham@gmail.com> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+ Attachment #707 is|0                           |1
+           obsolete|                            |
+
+
+
+
+--- Comment #8 from Chris Packham <judge.packham@gmail.com>  2009-11-05 16:18:41 UTC ---
+Created an attachment (id=715)
+ --> (https://bugs.busybox.net/attachment.cgi?id=715)
+Patch to expose the libpcap headers
+
+The commit 057568255 (autotoolify of libpcap) inadvertently stopped the pcap.h
+header file from being installed into the staging directory. This patch always
+calls make install (instead of install-strip) when installing into the staging
+directory.
+
+This is the same patch as attachment 707 just with the email address I use to
+post to the list.
 
 
 -- 
-Ormund Williams
-OrmLab LLC
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
