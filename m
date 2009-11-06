@@ -1,44 +1,68 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Fri, 06 Nov 2009 09:52:16 +0100
+From: Joachim Pihl <jpihl@nevion.com>
+Date: Fri, 6 Nov 2009 09:59:28 +0100
 Subject: [Buildroot] Upgrading from Buildroot 0.10 to 2009.08 (ARM)
-In-Reply-To: <op.u2yqk2doyqa4qb@jap-lappis.nevion.com>
+In-Reply-To: <1257497536.1962.15.camel@bender>
 References: <op.u2yqk2doyqa4qb@jap-lappis.nevion.com>
-Message-ID: <1257497536.1962.15.camel@bender>
+	<1257497536.1962.15.camel@bender>
+Message-ID: <op.u2ytxehoyqa4qb@jap-lappis.nevion.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 2009-11-06 at 08:47 +0100, Joachim Pihl wrote:
+On Fri, 06 Nov 2009 09:52:16 +0100, Sven Neumann <s.neumann@raumfeld.com>  
+wrote:
 
-> I had a look in the archives, but did not find any recent information that  
-> seems to cover the problems I am experiencing.
-> 
-> About 18 months ago, we had our target build system configured by a  
-> consultant. This is an Xscale target. We made the root FS fit in the  
-> allotted space, just fine. Preparing to add a new controller card to our  
-> product range, I decided to download a fresh Buildroot, then configure to  
-> match the old setup (which has issues building on Ubuntu 9.04 or later,  
-> possibly due to some package we have added). Busybox and uclibc config  
-> files are copied from the previous buildroot environment.
-> 
-> As it turns out, the rootfs of this configuration is several MBs larger  
-> than the previous one, mainly due to an explosion of shared libraries.
-> 
-> /usr/lib has a lot of glib*.so files that were not previously there, and  
-> also iconv has been added. In addition, both libstd++.so.6.0.9 and  
-> libstd++.so.6.0.10 are added. /usr/lib is now twice the size of that of  
-> the previous target, meaning it won't fit on the target anymore. I believe  
-> glib* are parts of GLIBC, how come it is installed when I am trying to  
-> build a uclibc system?
-
-glib is http://library.gnome.org/devel/glib/stable/glib.html and should
-not be confused with glibc.
-
-I assume that some package you selected pulled in libglib2, which itself
-pulls in other things like iconv. Just check your package selection and
-make sure that you only select the packages you absolutely need.
+>
+> glib is http://library.gnome.org/devel/glib/stable/glib.html and should
+> not be confused with glibc.
+>
+> I assume that some package you selected pulled in libglib2, which itself
+> pulls in other things like iconv. Just check your package selection and
+> make sure that you only select the packages you absolutely need.
 
 
-Sven
+Thanks for clearing that up! I found glib_genmarshal in /usr/bin, but I  
+have absolutely no idea of why it has been included. There is no package I  
+can find that mentions it. Also, this does not explain the duplicate  
+libstdc++ libraries.
+
+
+Attaching the complete configuration.
+
+-- 
+Joachim Pihl
+Senior R&D Engineer
+Nevion
+
+Tel: +47 33 48 94 66
+Fax: +47 33 48 99 98
+Mobile: +47 91 33 98 91
+jpihl at nevion.com
+www.nevion.com
+
+-----------------------------------
+The Global Video Transport Leader
+-----------------------------------
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: uclibc.config
+Type: application/octet-stream
+Size: 5923 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091106/34bd791d/attachment-0003.obj>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: busybox.config
+Type: application/octet-stream
+Size: 22906 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091106/34bd791d/attachment-0004.obj>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: multicon.config
+Type: application/octet-stream
+Size: 19696 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091106/34bd791d/attachment-0005.obj>
