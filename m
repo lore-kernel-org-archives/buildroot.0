@@ -1,31 +1,23 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  6 Nov 2009 15:47:41 +0000 (UTC)
-Subject: [Buildroot] [Bug 693] setting an external toolchain makes the
-	compilation fail
-In-Reply-To: <bug-693-163@https.bugs.busybox.net/>
-References: <bug-693-163@https.bugs.busybox.net/>
-Message-ID: <20091106154741.59EA0777A2@busybox.osuosl.org>
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Fri, 6 Nov 2009 17:35:12 +0000 (UTC)
+Subject: [Buildroot] How to figure out what a package is?
+Message-ID: <hd1mof$7qt$1@ger.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=693
+This sounds a bit stupid, but where do you find a description
+of what a given package is?
 
+I've got a list of packages supported by buildroot.
 
+How do I know what, for example, the package named "lite" is?
 
-
-
---- Comment #1 from Damien Courouss? <damien.courousse.logica@gmail.com>  2009-11-06 15:47:40 UTC ---
-Created an attachment (id=721)
- --> (https://bugs.busybox.net/attachment.cgi?id=721)
-Here is the patch.
-
-Here is the patch.
-
+Googling for the name has proven pointless...
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Grant Edwards                   grante             Yow! But was he mature
+                                  at               enough last night at the
+                               visi.com            lesbian masquerade?
