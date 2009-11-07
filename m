@@ -1,54 +1,56 @@
-From: Joachim Pihl <jpihl@nevion.com>
-Date: Sat, 7 Nov 2009 11:24:01 +0100
-Subject: [Buildroot] Upgrading from Buildroot 0.10 to 2009.08 (ARM)
-In-Reply-To: <87k4y2ve5w.fsf@macbook.be.48ers.dk>
-References: <op.u2yqk2doyqa4qb@jap-lappis.nevion.com>
-	<20091106100459.2624b645@surf>
-	<op.u2yu62ifyqa4qb@jap-lappis.nevion.com>
-	<20091106105325.440f0373@surf>
-	<op.u2y208p6yqa4qb@jap-lappis.nevion.com>
-	<87k4y2ve5w.fsf@macbook.be.48ers.dk>
-Message-ID: <op.u20sibi9yqa4qb@jap-lappis.nevion.com>
+From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
+Date: Sat, 7 Nov 2009 12:57:09 -0200
+Subject: [Buildroot] How to figure out what a package is?
+In-Reply-To: <87vdhnv5qd.fsf@macbook.be.48ers.dk>
+References: <hd1mof$7qt$1@ger.gmane.org>
+	<BD79186B4FD85F4B8E60E381CAEE190901E84907@mi8nycmail19.Mi8.com>
+	<hd1otv$erv$1@ger.gmane.org>
+	<d6cda7730911061024o2da77a2dy65124d3dac4d3904@mail.gmail.com>
+	<hd1qd8$kr2$1@ger.gmane.org> <87vdhnv5qd.fsf@macbook.be.48ers.dk>
+Message-ID: <d6cda7730911070657j3cc8cca2xdeb083b4bdf9c14a@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 07 Nov 2009 11:10:19 +0100, Peter Korsgaard <jacmet@uclibc.org>  
-wrote:
+Btw, about webservers, I got AppWeb to build for AVR32 and I'm
+evaluating it. (Needs minor patching to configure script).
 
->>>>>> "Joachim" == Joachim Pihl <jpihl@nevion.com> writes:
+In case I go for it (because of the ejs engine) then I might send a
+patch to include it in buildroot. So, that could be one more for your
+list :)
+
+Kind Regards,
+    Thiago A. Correa
+
+On Fri, Nov 6, 2009 at 5:00 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Grant" == Grant Edwards <grant.b.edwards@gmail.com> writes:
 >
-> Hi,
+> ?Grant> On 2009-11-06, Thiago A ?Corr?a <thiago.correa@gmail.com> wrote:
+> ?>> On Fri, Nov 6, 2009 at 4:12 PM, Grant Edwards <grant.b.edwards@gmail.com> wrote:
+> ?>>>
+> ?>>> And the help for a package is located...
+> ?>>
+> ?>> From Kconfig (ie, inside the interface from "make menuconfig")
+> ?>> there is a Help button accessible with the arrow keys in your
+> ?>> keyboard. "Clicking" that help button will show you the text
+> ?>> from the help section of the Config.in
 >
->  Joachim> Doesn't look good to me, will revert to previous tool chain to
->  Joachim> have a look at what it says then. In the old buildroot, we had
->  Joachim> the threads library set to linuxthreads, but I have changed
->  Joachim> that to NPTL. Could that be the culprit?
+> ?Grant> Thanks. ?I don't have buildroot installed anywhere at the
+> ?Grant> moment, so I'm just browsing the GIT source tree to come up
+> ?Grant> with a list of available web servers. ?The list stands at
 >
-> Yes, NTPL support in uclibc is still very much work in progress.
-
-Just before I left work yesterday, I discovered that the uclibc .config  
-(inherited from previous project) had "use linuxthreads" set, while  
-buildroot had NPTL set. The mismatch here could be what we are looking for?
-
-I would much prefer NPTL if it works, since our applications are heavily  
-multithreaded (for architecture clarity reasons, among other things), and  
-I suspect that some of the performance issues we have could be caused by  
-context switch/scheduling latency.
-
--- 
-Joachim Pihl
-Senior R&D Engineer
-Nevion
-
-Tel: +47 33 48 94 66
-Fax: +47 33 48 99 98
-Mobile: +47 91 33 98 91
-jpihl at nevion.com
-www.nevion.com
-
------------------------------------
-The Global Video Transport Leader
------------------------------------
+> Ok, I would suggest you download buildroot and run make menuconfig,
+> that's a bit more userfriendly structured (E.G. web servers are located
+> under Networking). Remember to disable the busybox package or select
+> 'Show packages that are also provided by busybox', as other web servers
+> are otherwise hidden.
+>
+> --
+> Bye, Peter Korsgaard
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
