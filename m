@@ -1,38 +1,68 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Mon, 09 Nov 2009 23:43:34 +0100
-Subject: [Buildroot] libtiff compilation fails when libjpeg62-dev is
- present on host
-In-Reply-To: <20091109071956.GC26599@jasper.tkos.co.il>
-References: <20091109071956.GC26599@jasper.tkos.co.il>
-Message-ID: <1257806614.24296.9.camel@coalu.atr>
+From: Daniel Mack <daniel@caiaq.de>
+Date: Mon, 9 Nov 2009 23:59:51 +0100
+Subject: [Buildroot] building kernel modules
+In-Reply-To: <4AF899C8.5010702@cs.ucsb.edu>
+References: <4AF34ADF.7090303@cs.ucsb.edu> <4AF7A886.8000703@cs.ucsb.edu>
+	<20091109065815.GZ14091@buzzloop.caiaq.de>
+	<4AF899C8.5010702@cs.ucsb.edu>
+Message-ID: <20091109225951.GI14091@buzzloop.caiaq.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le lundi 09 novembre 2009 ? 09:19 +0200, Baruch Siach a ?crit :
-> Hi Buildroot list,
+On Mon, Nov 09, 2009 at 02:38:00PM -0800, Roman Chertov wrote:
+> > But don't need all the rest. All you need to provide is ARCH=arm and
+> > CROSS_COMPILE=..., the rest is done automatically. The kernel's build
+> > system is very self-contained and the sources come with all kind of
+> > headers and libraries. No need to point it to any external resources.
+> > 
+> > Following that should make the 2nd error go away.
 > 
-> I need to compile libtiff as a dependency of ImageMagic on a recent Debian 
-> Squeeze host.  The strange this is that when the libjpeg62-dev is installed on 
-> the host libtools finds the host /usr/lib/libjpeg.la file during build, which makes 
-> the build to fail at link time as follows:
+> I have changed my makefile to this
 > 
-> libtool: link: /opt/arm-2009q1/bin/arm-none-linux-gnueabi-gcc -Os -pipe -Os  --sysroot /home/baruch/git/buildroot/build_arm/staging_dir/ -shared  .libs/tif_aux.o .libs/tif_close.o .libs/tif_codec.o .libs/tif_color.o .libs/tif_compress.o .libs/tif_dir.o .libs/tif_dirinfo.o .libs/tif_dirread.o .libs/tif_dirwrite.o .libs/tif_dumpmode.o .libs/tif_error.o .libs/tif_extension.o .libs/tif_fax3.o .libs/tif_fax3sm.o .libs/tif_flush.o .libs/tif_getimage.o .libs/tif_jpeg.o .libs/tif_luv.o .libs/tif_lzw.o .libs/tif_next.o .libs/tif_ojpeg.o .libs/tif_open.o .libs/tif_packbits.o .libs/tif_pixarlog.o .libs/tif_predict.o .libs/tif_print.o .libs/tif_read.o .libs/tif_strip.o .libs/tif_swab.o .libs/tif_thunder.o .libs/tif_tile.o .libs/tif_unix.o .libs/tif_version.o .libs/tif_warning.o .libs/tif_write.o .libs/tif_zip.o  -Wl,--whole-archive ../port/.libs/libport.a -Wl,--no-whole-archive  /usr/lib/libjpeg.so -lz -lm -lc      -Wl,-soname -Wl,libtiff.so.3 -o .libs/libtiff.so.3.8.2
-> /usr/lib/libjpeg.so: file not recognized: File format not recognized
-> collect2: ld returned 1 exit status
+> obj-m  := musec_can.o
+> musec_can-y := main.o hms30c7202_can.o c_can.o \
+>         irq.o open.o close.o read.o write.o ioctl.o
 > 
-> Removing libjpeg62-dev, or even renaming the host /usr/lib/libjpeg.la file 
-> makes the problem go away. Is there a sane solutions for this?
+> The makefile is then invoked via a shell script:
 > 
-> baruch
+> make ARCH=arm \
+> CROSS_COMPILE=/<br_dir>/build_arm/staging_dir/usr/bin/arm-linux-uclibcgnueabi-\
+> -C /proj/tools/buildroot-2009.08/project_build_arm/uclibc/linux-2.6.29 \
+> M=`pwd` modules
 > 
+> 
+> I have also configured buildroot to use gcc 4.4.1.  I also rebuilt
+> uclibc and the kernel with new compiler.  When I make the module, I get
+> the following during the linking phase.
+> 
+> make: Entering directory
+> `/proj/tools/buildroot-2009.08/project_build_arm/uclibc/linux-2.6.29'
+>   Building modules, stage 2.
+>   MODPOST 1 modules
+> WARNING: "__aeabi_uldivmod"
 
-I got the same problem with a bunch of package (gtk/glib/dbus-glib...)
-using an external toolchain.
+Hmm. If you only get this error for your own module (and not the kernel
+itself), you should have a look at the assembly output and see what gcc
+does there and why. It shouldn't be using the __aeabi_uldivmod function
+which is part of libgcc which the kernel does not seem to link on your
+platform. According to the postings below, these errors are likely to be
+caused by false gcc optimisations.
 
-I usually fix the problem by enabling libtool patching on the package.
+You should get around that by altering your sources, but again, without
+the code, this is all speculating.
 
--- 
-Lionel Landwerlin <llandwerlin@gmail.com>
+Those links could also help:
+
+  http://www.spinics.net/lists/arm-kernel/msg48776.html
+  http://lists.arm.linux.org.uk/lurker/message/20080227.081641.1580db5d.en.html
+
+In case you consider bringing your driver mainline, you can also post it
+to LKML and get some feedback there.
+
+After all, what you're seeing is an effect that has to do with your
+code, the kernel and gcc. And not with buildroot :)
+
+Daniel
