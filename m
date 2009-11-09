@@ -1,58 +1,38 @@
-From: Jonathan dumaresq <jdumaresq@cimeq.qc.ca>
-Date: Mon, 9 Nov 2009 16:17:36 -0500
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 09 Nov 2009 22:41:40 +0100
 Subject: [Buildroot] for target toolchain to be compiled
-In-Reply-To: <87iqdjs97e.fsf@macbook.be.48ers.dk>
+In-Reply-To: <!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAB/2nbG5LTJMskyNbh63LRwBAAAAAA==@cimeq.qc.ca>
+	(Jonathan dumaresq's message of "Mon\,
+	9 Nov 2009 16\:17\:36 -0500")
 References: <!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAEZ6jQmWCPNPhTWJOiBE+SEBAAAAAA==@cimeq.qc.ca>
 	<87iqdjs97e.fsf@macbook.be.48ers.dk>
-Message-ID: <!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAB/2nbG5LTJMskyNbh63LRwBAAAAAA==@cimeq.qc.ca>
+	<!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAB/2nbG5LTJMskyNbh63LRwBAAAAAA==@cimeq.qc.ca>
+Message-ID: <87d43rs7e3.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
-
-See the log file attached
-
-Jonathan
-
------Message d'origine-----
-De?: Peter Korsgaard [mailto:jacmet at gmail.com] De la part de Peter Korsgaard
-Envoy??: 9 novembre 2009 16:02
-??: Jonathan dumaresq
-Cc?: buildroot at busybox.net
-Objet?: Re: [Buildroot] for target toolchain to be compiled
-
 >>>>> "Jonathan" == Jonathan dumaresq <jdumaresq@cimeq.qc.ca> writes:
 
- Jonathan> Hi,
- Jonathan> I just installed a fresh kubuntu 9.10 and try to build my .config
-file that
- Jonathan> I was able to do in 9.04. 
+ Jonathan> Hi Peter,
+ Jonathan> See the log file attached
 
- >> From What I see, the target toolchain is not compiled and failed to 
- >> compile
- Jonathan> uclibc. 
+ Jonathan>   HOSTCC extra/scripts/unifdef
+ Jonathan> extra/scripts/unifdef.c:209: error: conflicting types for 'getline'
+ Jonathan> /usr/include/stdio.h:651: note: previous declaration of 'getline' was here
 
- Jonathan> Here a sample of the output.
+Ok, so that's the problem with unifdef defining a getline function which
+conflicts with a function in the C library in never versions of glibc
+with the same name.
 
-There's no error from make in the quoted output. Please provide the full
-log (or atleast the final lines).
+You need to ensure that the
+toolchain/uClibc/uClibc-0.9.30.1-unifdef-getline.patch gets applied to
+your toolchain build - presumably by moving it to
+toolchain/uClibc/ext_source/Atmel/avr32/0.9.30-avr32-2.1.5 and renaming
+it to uClibc-0.9.30-avr32-2.1.5-unifdef-getline.patch
 
+Let me know if that works for you, then I'll fix it in git.
 -- 
 Bye, Peter Korsgaard
-
--- 
-This message has been scanned for viruses and
-dangerous content by MailScanner, and is
-believed to be clean.
-
-Ce message entrant est certifi? sans virus connu.
-Analyse effectu?e par AVG - www.avg.fr 
-Version: 9.0.698 / Base de donn?es virale: 270.14.57/2492 - Date: 11/09/09
-07:11:00
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: error log.txt
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091109/d563ea43/attachment-0001.txt>
