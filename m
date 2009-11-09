@@ -1,74 +1,38 @@
-From: Roman Chertov <rchertov@cs.ucsb.edu>
-Date: Mon, 09 Nov 2009 14:38:00 -0800
-Subject: [Buildroot] building kernel modules
-In-Reply-To: <20091109065815.GZ14091@buzzloop.caiaq.de>
-References: <4AF34ADF.7090303@cs.ucsb.edu> <4AF7A886.8000703@cs.ucsb.edu>
-	<20091109065815.GZ14091@buzzloop.caiaq.de>
-Message-ID: <4AF899C8.5010702@cs.ucsb.edu>
+From: Lionel Landwerlin <llandwerlin@gmail.com>
+Date: Mon, 09 Nov 2009 23:43:34 +0100
+Subject: [Buildroot] libtiff compilation fails when libjpeg62-dev is
+ present on host
+In-Reply-To: <20091109071956.GC26599@jasper.tkos.co.il>
+References: <20091109071956.GC26599@jasper.tkos.co.il>
+Message-ID: <1257806614.24296.9.camel@coalu.atr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> This error is due to an illegal usage of udelay() in the module code.
-> Calling this function at all is frowned upon, and calling it with too
-> big values fail[*] the kernel compilation for very good reasons. You
-> should rather use schedule_timeout() or timer functions to give CPU time
-> to do something useful while waiting for so long. But, without knowing
-> the sources, it's impossible to give any further hints.
+Le lundi 09 novembre 2009 ? 09:19 +0200, Baruch Siach a ?crit :
+> Hi Buildroot list,
+> 
+> I need to compile libtiff as a dependency of ImageMagic on a recent Debian 
+> Squeeze host.  The strange this is that when the libjpeg62-dev is installed on 
+> the host libtools finds the host /usr/lib/libjpeg.la file during build, which makes 
+> the build to fail at link time as follows:
+> 
+> libtool: link: /opt/arm-2009q1/bin/arm-none-linux-gnueabi-gcc -Os -pipe -Os  --sysroot /home/baruch/git/buildroot/build_arm/staging_dir/ -shared  .libs/tif_aux.o .libs/tif_close.o .libs/tif_codec.o .libs/tif_color.o .libs/tif_compress.o .libs/tif_dir.o .libs/tif_dirinfo.o .libs/tif_dirread.o .libs/tif_dirwrite.o .libs/tif_dumpmode.o .libs/tif_error.o .libs/tif_extension.o .libs/tif_fax3.o .libs/tif_fax3sm.o .libs/tif_flush.o .libs/tif_getimage.o .libs/tif_jpeg.o .libs/tif_luv.o .libs/tif_lzw.o .libs/tif_next.o .libs/tif_ojpeg.o .libs/tif_open.o .libs/tif_packbits.o .libs/tif_pixarlog.o .libs/tif_predict.o .libs/tif_print.o .libs/tif_read.o .libs/tif_strip.o .libs/tif_swab.o .libs/tif_thunder.o .libs/tif_tile.o .libs/tif_unix.o .libs/tif_version.o .libs/tif_warning.o .libs/tif_write.o .libs/tif_zip.o  -Wl,--whole-archive ../port/.libs/libport.a -Wl,--no-whole-archive  /usr/lib/libjpeg.so -lz -lm -lc      -Wl,-soname -Wl,libtiff.so.3 -o .libs/libtiff.so.3.8.2
+> /usr/lib/libjpeg.so: file not recognized: File format not recognized
+> collect2: ld returned 1 exit status
+> 
+> Removing libjpeg62-dev, or even renaming the host /usr/lib/libjpeg.la file 
+> makes the problem go away. Is there a sane solutions for this?
+> 
+> baruch
 > 
 
-I have removed udelay calls in the code. (I am porting an old 2.4 driver
-to 2.6.29) and the _bad_udelay error went away.
+I got the same problem with a bunch of package (gtk/glib/dbus-glib...)
+using an external toolchain.
 
-> 
-> But don't need all the rest. All you need to provide is ARCH=arm and
-> CROSS_COMPILE=..., the rest is done automatically. The kernel's build
-> system is very self-contained and the sources come with all kind of
-> headers and libraries. No need to point it to any external resources.
-> 
-> Following that should make the 2nd error go away.
+I usually fix the problem by enabling libtool patching on the package.
 
-I have changed my makefile to this
-
-obj-m  := musec_can.o
-musec_can-y := main.o hms30c7202_can.o c_can.o \
-        irq.o open.o close.o read.o write.o ioctl.o
-
-The makefile is then invoked via a shell script:
-
-make ARCH=arm \
-CROSS_COMPILE=/<br_dir>/build_arm/staging_dir/usr/bin/arm-linux-uclibcgnueabi-\
--C /proj/tools/buildroot-2009.08/project_build_arm/uclibc/linux-2.6.29 \
-M=`pwd` modules
-
-
-I have also configured buildroot to use gcc 4.4.1.  I also rebuilt
-uclibc and the kernel with new compiler.  When I make the module, I get
-the following during the linking phase.
-
-make: Entering directory
-`/proj/tools/buildroot-2009.08/project_build_arm/uclibc/linux-2.6.29'
-  Building modules, stage 2.
-  MODPOST 1 modules
-WARNING: "__aeabi_uldivmod"
-[/proj/tools/can_driver/musec_can/src/musec_can.ko] undefined!
-make: Leaving directory
-`/proj/tools/buildroot-2009.08/project_build_arm/uclibc/linux-2.6.29'
-
-Naturally, this module is not loadable as there an undefined symbol in
-the module.  insmod reports the following:
-
-insmod: can't insert './musec_can.ko': unknown symbol in module, or
-unknown parameter
-
-I would appreciate some help in resolving this.
-
-Thanks,
-
-Roman
-
-> 
-> Daniel
-> 
+-- 
+Lionel Landwerlin <llandwerlin@gmail.com>
