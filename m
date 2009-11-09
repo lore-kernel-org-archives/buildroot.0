@@ -1,50 +1,74 @@
-From: Jonathan dumaresq <jdumaresq@cimeq.qc.ca>
-Date: Mon, 9 Nov 2009 16:46:37 -0500
-Subject: [Buildroot] for target toolchain to be compiled
-In-Reply-To: <87d43rs7e3.fsf@macbook.be.48ers.dk>
-References: <!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAEZ6jQmWCPNPhTWJOiBE+SEBAAAAAA==@cimeq.qc.ca><87iqdjs97e.fsf@macbook.be.48ers.dk><!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAB/2nbG5LTJMskyNbh63LRwBAAAAAA==@cimeq.qc.ca>
-	<87d43rs7e3.fsf@macbook.be.48ers.dk>
-Message-ID: <!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAMLYb/qs2/pPndELxkaSBIYBAAAAAA==@cimeq.qc.ca>
+From: Roman Chertov <rchertov@cs.ucsb.edu>
+Date: Mon, 09 Nov 2009 14:38:00 -0800
+Subject: [Buildroot] building kernel modules
+In-Reply-To: <20091109065815.GZ14091@buzzloop.caiaq.de>
+References: <4AF34ADF.7090303@cs.ucsb.edu> <4AF7A886.8000703@cs.ucsb.edu>
+	<20091109065815.GZ14091@buzzloop.caiaq.de>
+Message-ID: <4AF899C8.5010702@cs.ucsb.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+> This error is due to an illegal usage of udelay() in the module code.
+> Calling this function at all is frowned upon, and calling it with too
+> big values fail[*] the kernel compilation for very good reasons. You
+> should rather use schedule_timeout() or timer functions to give CPU time
+> to do something useful while waiting for so long. But, without knowing
+> the sources, it's impossible to give any further hints.
+> 
 
------Message d'origine-----
-De?: Peter Korsgaard [mailto:jacmet at gmail.com] De la part de Peter Korsgaard
-Envoy??: 9 novembre 2009 16:42
-??: Jonathan dumaresq
-Cc?: 'Peter Korsgaard'; buildroot at busybox.net
-Objet?: Re: [Buildroot] for target toolchain to be compiled
+I have removed udelay calls in the code. (I am porting an old 2.4 driver
+to 2.6.29) and the _bad_udelay error went away.
 
->>>>> "Jonathan" == Jonathan dumaresq <jdumaresq@cimeq.qc.ca> writes:
+> 
+> But don't need all the rest. All you need to provide is ARCH=arm and
+> CROSS_COMPILE=..., the rest is done automatically. The kernel's build
+> system is very self-contained and the sources come with all kind of
+> headers and libraries. No need to point it to any external resources.
+> 
+> Following that should make the 2nd error go away.
 
- Jonathan> Hi Peter,
- Jonathan> See the log file attached
+I have changed my makefile to this
 
- Jonathan>   HOSTCC extra/scripts/unifdef
- Jonathan> extra/scripts/unifdef.c:209: error: conflicting types for
-'getline'
- Jonathan> /usr/include/stdio.h:651: note: previous declaration of 'getline'
-was here
+obj-m  := musec_can.o
+musec_can-y := main.o hms30c7202_can.o c_can.o \
+        irq.o open.o close.o read.o write.o ioctl.o
 
-Ok, so that's the problem with unifdef defining a getline function which
-conflicts with a function in the C library in never versions of glibc
-with the same name.
+The makefile is then invoked via a shell script:
 
-You need to ensure that the
-toolchain/uClibc/uClibc-0.9.30.1-unifdef-getline.patch gets applied to
-your toolchain build - presumably by moving it to
-toolchain/uClibc/ext_source/Atmel/avr32/0.9.30-avr32-2.1.5 and renaming
-it to uClibc-0.9.30-avr32-2.1.5-unifdef-getline.patch
+make ARCH=arm \
+CROSS_COMPILE=/<br_dir>/build_arm/staging_dir/usr/bin/arm-linux-uclibcgnueabi-\
+-C /proj/tools/buildroot-2009.08/project_build_arm/uclibc/linux-2.6.29 \
+M=`pwd` modules
 
-Let me know if that works for you, then I'll fix it in git.
--- 
-Bye, Peter Korsgaard
 
-You rock... That fixed it. 
+I have also configured buildroot to use gcc 4.4.1.  I also rebuilt
+uclibc and the kernel with new compiler.  When I make the module, I get
+the following during the linking phase.
 
-Jonathan
+make: Entering directory
+`/proj/tools/buildroot-2009.08/project_build_arm/uclibc/linux-2.6.29'
+  Building modules, stage 2.
+  MODPOST 1 modules
+WARNING: "__aeabi_uldivmod"
+[/proj/tools/can_driver/musec_can/src/musec_can.ko] undefined!
+make: Leaving directory
+`/proj/tools/buildroot-2009.08/project_build_arm/uclibc/linux-2.6.29'
+
+Naturally, this module is not loadable as there an undefined symbol in
+the module.  insmod reports the following:
+
+insmod: can't insert './musec_can.ko': unknown symbol in module, or
+unknown parameter
+
+I would appreciate some help in resolving this.
+
+Thanks,
+
+Roman
+
+> 
+> Daniel
+> 
