@@ -1,32 +1,56 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 09 Nov 2009 16:38:21 +0100
-Subject: [Buildroot] libtiff compilation fails when libjpeg62-dev is
-	present on host
-In-Reply-To: <20091109071956.GC26599@jasper.tkos.co.il> (Baruch Siach's
-	message of "Mon\, 9 Nov 2009 09\:19\:56 +0200")
-References: <20091109071956.GC26599@jasper.tkos.co.il>
-Message-ID: <87zl6vso7m.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 9 Nov 2009 14:53:04 +0100
+Subject: [Buildroot] [git commit master] toolchain: select sensible floating
+	point mode by default
+Message-ID: <20091109162145.5DF667776D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- Baruch> Hi Buildroot list,
+commit: http://git.buildroot.net/buildroot/commit/?id=13e753b414b4530a610873d44927b320223dc6ba
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Baruch> I need to compile libtiff as a dependency of ImageMagic on a
- Baruch> recent Debian Squeeze host.  The strange this is that when the
- Baruch> libjpeg62-dev is installed on the host libtools finds the host
- Baruch> /usr/lib/libjpeg.la file during build, which makes the build to
- Baruch> fail at link time as follows:
+Introduce BR2_PREFER_SOFT_FLOAT and enable it for arm, avr32 and mips,
+and use it to enable soft float support by default for those archs.
 
- Baruch> libtool: link: /opt/arm-2009q1/bin/arm-none-linux-gnueabi-gcc -Os -pipe -Os  --sysroot /home/baruch/git/buildroot/build_arm/staging_dir/ -shared  .libs/tif_aux.o .libs/tif_close.o .libs/tif_codec.o .libs/tif_color.o .libs/tif_compress.o .libs/tif_dir.o .libs/tif_dirinfo.o .libs/tif_dirread.o .libs/tif_dirwrite.o .libs/tif_dumpmode.o .libs/tif_error.o .libs/tif_extension.o .libs/tif_fax3.o .libs/tif_fax3sm.o .libs/tif_flush.o .libs/tif_getimage.o .libs/tif_jpeg.o .libs/tif_luv.o .libs/tif_lzw.o .libs/tif_next.o .libs/tif_ojpeg.o .libs/tif_open.o .libs/tif_packbits.o .libs/tif_pixarlog.o .libs/tif_predict.o .libs/tif_print.o .libs/tif_read.o .libs/tif_strip.o .libs/tif_swab.o .libs/tif_thunder.o .libs/tif_tile.o .libs/tif_unix.o .libs/tif_version.o .libs/tif_warning.o .libs/tif_write.o .libs/tif_zip.o  -Wl,--whole-archive ../port/.libs/libport.a -Wl,--no-whole-archive  /usr/lib/libjpeg.so -lz -lm -lc      -Wl,-soname -Wl,libtiff.so.3 -o .libs/libtiff.so.3.8.2
+This way people automatically get the correct floating point mode when
+running make menuconfig for the first time (E.G. without a .config) and
+changing the arch from i386 to arm/avr32/mips.
 
-Must be an issue with the external toolchain support, because it builds
-here with an internal toolchain. I'll take a closer look at it next
-weekend when I'm back.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/Config.in.2 |    7 +++++--
+ 1 files changed, 5 insertions(+), 2 deletions(-)
 
+diff --git a/toolchain/Config.in.2 b/toolchain/Config.in.2
+index 2da5670..2f7de75 100644
+--- a/toolchain/Config.in.2
++++ b/toolchain/Config.in.2
+@@ -74,17 +74,20 @@ config BR2_USE_WCHAR
+ 	  If you have an external binary toolchain that has been built 
+ 	  with WCHAR support then enable this option.
+ 
++config BR2_PREFER_SOFT_FLOAT
++	bool
++	default y if BR2_arm || BR2_armeb || BR2_avr32 || BR2_mips || BR2_mipsel || BR2_nios2
++
+ config BR2_SOFT_FLOAT
+ 	bool "Use software floating point by default"
+ 	depends on BR2_arm || BR2_armeb || BR2_avr32 || BR2_mips || BR2_mipsel || BR2_powerpc || BR2_nios2
++	default $(BR2_PREFER_SOFT_FLOAT)
+ 	help
+ 	  If your target CPU does not have a Floating Point Unit (FPU) or a
+ 	  kernel FPU emulator, but you still wish to support floating point
+ 	  functions, then everything will need to be compiled with soft
+ 	  floating point support (-msoft-float).
+ 
+-	  Most people will answer N.
+-
+ config BR2_USE_SSP
+ 	bool "Enable stack protection support"
+ 	help
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
