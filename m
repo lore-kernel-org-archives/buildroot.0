@@ -1,86 +1,31 @@
-From: Daniel Mack <daniel@caiaq.de>
-Date: Mon, 9 Nov 2009 07:58:15 +0100
-Subject: [Buildroot] building kernel modules
-In-Reply-To: <4AF7A886.8000703@cs.ucsb.edu>
-References: <4AF34ADF.7090303@cs.ucsb.edu>
- <4AF7A886.8000703@cs.ucsb.edu>
-Message-ID: <20091109065815.GZ14091@buzzloop.caiaq.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 9 Nov 2009 09:19:56 +0200
+Subject: [Buildroot] libtiff compilation fails when libjpeg62-dev is present
+	on host
+Message-ID: <20091109071956.GC26599@jasper.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Nov 08, 2009 at 09:28:38PM -0800, Roman Chertov wrote:
-> So I figured out how to get the external kernel module compilation
-> going.  The cross compilation works fine, but the linking fails as there
-> are two undefined symbols.  Also, there is a strange error regarding
-> /usr/local/src/mv-kernel/arm-none-linux-gnueabi/bin/arm-none-linux-gnueabi-gcc
-> 
-> However, the compilation proceeds even with that error.
-> 
-> [rchertov at number2 src]$ sh make.sh
-> make:
-> /usr/local/src/mv-kernel/arm-none-linux-gnueabi/bin/arm-none-linux-gnueabi-gcc:
-> Command not found
-> make: Entering directory
-> `/proj/tools/buildroot-2009.08/project_build_arm/uclibc/linux-2.6.29'
->   LD [M]  /proj/tools/can_driver/musec_can/src/musec_can.o
->   Building modules, stage 2.
->   MODPOST 1 modules
-> WARNING: "__bad_udelay"
+Hi Buildroot list,
 
-This error is due to an illegal usage of udelay() in the module code.
-Calling this function at all is frowned upon, and calling it with too
-big values fail[*] the kernel compilation for very good reasons. You
-should rather use schedule_timeout() or timer functions to give CPU time
-to do something useful while waiting for so long. But, without knowing
-the sources, it's impossible to give any further hints.
+I need to compile libtiff as a dependency of ImageMagic on a recent Debian 
+Squeeze host.  The strange this is that when the libjpeg62-dev is installed on 
+the host libtools finds the host /usr/lib/libjpeg.la file during build, which makes 
+the build to fail at link time as follows:
 
-([*] the way they implemented that depending on compile-time constraints
-     is very nice, btw. Dig through the headers if your curious ;))
+libtool: link: /opt/arm-2009q1/bin/arm-none-linux-gnueabi-gcc -Os -pipe -Os  --sysroot /home/baruch/git/buildroot/build_arm/staging_dir/ -shared  .libs/tif_aux.o .libs/tif_close.o .libs/tif_codec.o .libs/tif_color.o .libs/tif_compress.o .libs/tif_dir.o .libs/tif_dirinfo.o .libs/tif_dirread.o .libs/tif_dirwrite.o .libs/tif_dumpmode.o .libs/tif_error.o .libs/tif_extension.o .libs/tif_fax3.o .libs/tif_fax3sm.o .libs/tif_flush.o .libs/tif_getimage.o .libs/tif_jpeg.o .libs/tif_luv.o .libs/tif_lzw.o .libs/tif_next.o .libs/tif_ojpeg.o .libs/tif_open.o .libs/tif_packbits.o .libs/tif_pixarlog.o .libs/tif_predict.o .libs/tif_print.o .libs/tif_read.o .libs/tif_strip.o .libs/tif_swab.o .libs/tif_thunder.o .libs/tif_tile.o .libs/tif_unix.o .libs/tif_version.o .libs/tif_warning.o .libs/tif_write.o .libs/tif_zip.o  -Wl,--whole-archive ../port/.libs/libport.a -Wl,--no-whole-archive  /usr/lib/libjpeg.so -lz -lm -lc      -Wl,-soname -Wl,libtiff.so.3 -o .libs/libtiff.so.3.8.2
+/usr/lib/libjpeg.so: file not recognized: File format not recognized
+collect2: ld returned 1 exit status
 
-> [/proj/tools/can_driver/musec_can/src/musec_can.ko] undefined!
-> WARNING: "__aeabi_uldivmod"
-> [/proj/tools/can_driver/musec_can/src/musec_can.ko] undefined!
->   LD [M]  /proj/tools/can_driver/musec_can/src/musec_can.ko
-> make: Leaving directory
-> `/proj/tools/buildroot-2009.08/project_build_arm/uclibc/linux-2.6.29'
-> 
-> 
-> I believe that the linker uses libc instead of uclibc which was compiled
-> for ARM, and hence the linking step is failing.  I would appreciate it
-> if somebody could point out which linker setting I am missing.  Below, I
-> listed all of the variables that I redefined for the build.
-> 
-> ARCH=arm
-> CROSS_COMPILE=/<br_dir>/build_arm/staging_dir/usr/bin/arm-linux-uclibcgnueabi-
+Removing libjpeg62-dev, or even renaming the host /usr/lib/libjpeg.la file 
+makes the problem go away. Is there a sane solutions for this?
 
-These two look sane.
+baruch
 
-> AS      =$(CROSS_COMPILE)as
-> LD      =$(CROSS_COMPILE)ld
-> CC      =$(CROSS_COMPILE)gcc
-> CPP     =$(CC) -E
-> AR      =$(CROSS_COMPILE)ar
-> NM      =$(CROSS_COMPILE)nm
-> STRIP   =$(CROSS_COMPILE)strip
-> OBJCOPY =$(CROSS_COMPILE)objcopy
-> OBJDUMP =$(CROSS_COMPILE)objdump
-> 
-> 
-> EXTRA_CFLAGS=-I /<br_dir>/project_build_arm/uclibc/linux-2.6.29/include\
-> -I<br_dir>/build_arm/staging_dir/usr/lib/gcc/arm-linux-uclibcgnueabi/4.3.3/include
-> 
-> LDFLAGS=-L/<br_dir>/build_arm/staging_dir/lib
-> 
-> ...
-
-But don't need all the rest. All you need to provide is ARCH=arm and
-CROSS_COMPILE=..., the rest is done automatically. The kernel's build
-system is very self-contained and the sources come with all kind of
-headers and libraries. No need to point it to any external resources.
-
-Following that should make the 2nd error go away.
-
-Daniel
+-- 
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
