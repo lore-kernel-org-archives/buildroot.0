@@ -1,47 +1,53 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 10 Nov 2009 17:24:13 +0000 (UTC)
-Subject: [Buildroot] [Bug 705] New: Bump spawn-fcgi package to 1.6.3
-Message-ID: <bug-705-163@https.bugs.busybox.net/>
+Date: Tue, 10 Nov 2009 17:25:38 +0000 (UTC)
+Subject: [Buildroot] [Bug 707] New: Can`t configure fltk-1.1.7 . configure:
+ error: Configure could not find required X11 libraries
+Message-ID: <bug-707-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=705
+https://bugs.busybox.net/show_bug.cgi?id=707
 
-              Host: i686-linux
-            Target: arm-softfloat-linux-uclibcgnueabi
-           Summary: Bump spawn-fcgi package to 1.6.3
+              Host: Linux server 2.6.31-rt11 #3 SMP Sun Sep 20 21:36:34 MSD
+                    2009 x86_64 GNU/Linux
+            Target: Linux ARM
+             Build: Buildroot git
+           Summary: Can`t configure fltk-1.1.7 . configure: error: Configure
+                    could not find required X11 libraries
            Product: buildroot
            Version: unspecified
           Platform: PC
-               URL: http://redmine.lighttpd.net/news/7
         OS/Version: Linux
             Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Outdated package
+          Keywords: assemble-failure
+          Severity: normal
+          Priority: P1
+         Component: Other
         AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: gustavo at zacarias.com.ar
+        ReportedBy: petka.sokolov at gmail.com
                 CC: buildroot at uclibc.org
    Estimated Hours: 0.0
 
 
-Created an attachment (id=733)
- --> (https://bugs.busybox.net/attachment.cgi?id=733)
-Bump spawn-fcgi package to 1.6.3
+Created an attachment (id=735)
+ --> (https://bugs.busybox.net/attachment.cgi?id=735)
+Config for Buildroot and config log fltk-1.1.7
 
-Some minor improvements and changes:
+Hi!
+Can`t configure fltk-1.1.7
 
-* Fix unix socket mode change to work without specifying user/group for socket
-* Fix Invalid Argument in chmod if mode=-1 (fixes #2033)
-* Fix unix socket mode change to work without specifying user/group for socket
-* Add some ./run script examples for use with daemontools or runit
-* Fix Invalid Argument in chmod if mode=-1 (fixes #2033)
-* Add deprecated and /bin/sh info for -f option; wrap syntax output (fixes
-#2044)
-* Add run script examples in automake dist build
+Console out:
+checking for X... no
+configure: error: Configure could not find required X11 libraries
+./configure: line 10022: exit: aborting.: numeric argument required
+./configure: line 10022: exit: aborting.: numeric argument required
+make: *** [/opt/src/linux-arm/build/fltk-1.1.7/.stamp_configured] ??????
+255
+
+Bye.
 
 
 -- 
