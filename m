@@ -1,31 +1,57 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 10 Nov 2009 11:43:07 +0000 (UTC)
-Subject: [Buildroot] [Bug 697] When I select libusb component,
- the following error occured. If deselect from menuconfig,
- buildroot make process working properly.
-In-Reply-To: <bug-697-163@https.bugs.busybox.net/>
-References: <bug-697-163@https.bugs.busybox.net/>
-Message-ID: <20091110114307.46669777DF@busybox.osuosl.org>
+Date: Tue, 10 Nov 2009 17:08:37 +0000 (UTC)
+Subject: [Buildroot] [Bug 701] New: make install problem with unstripped
+	binaries
+Message-ID: <bug-701-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=697
+https://bugs.busybox.net/show_bug.cgi?id=701
+
+           Summary: make install problem with unstripped binaries
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: trivial
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: llandwerlin at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
 
-Peter Stosz <peter.stosz@freemail.hu> changed:
+Hi,
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|DUPLICATE                   |WORKSFORME
+when BR2_STRIP_none=y, I get this error :
+
+>>> libglib2 2.20.5 Installing to target
+/usr/bin/make -j1
+DESTDIR=/home/users/llandwer/local/src/buildroot/output/target  install-strip
+-C /home/users/llandwer/local/src/buildroot/output/build/libglib2-2.20.5/
+make[1]: Entering directory `/local/src/buildroot/output/build/libglib2-2.20.5'
+/usr/bin/make  INSTALL_PROGRAM="/bin/sh
+/home/users/llandwer/local/src/buildroot/output/build/libglib2-2.20.5/install-sh
+-c -s" \
+          install_sh_PROGRAM="/bin/sh
+/home/users/llandwer/local/src/buildroot/output/build/libglib2-2.20.5/install-sh
+-c -s" INSTALL_STRIP_FLAG=-s \
+          `test -z 'true -Not_stripping' || \
+            echo "INSTALL_PROGRAM_ENV=STRIPPROG=true -Not_stripping"` install
+/usr/bin/make: invalid option -- N
+Usage: make [options] [target] ...
+Options:
+  -b, -m                      Ignored for compatibility.
+  -B, --always-make           Unconditionally make all targets.
+  -C DIRECTORY, --directory=DIRECTORY
 
 
-
-
---- Comment #2 from Peter Stosz <peter.stosz@freemail.hu>  2009-11-10 11:43:05 UTC ---
-it seems to be working...
+I'm currently trying to fix it with the attached patch.
 
 
 -- 
