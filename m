@@ -1,127 +1,39 @@
-From: Anders Darander <anders.darander@gmail.com>
-Date: Tue, 10 Nov 2009 08:08:20 +0100
-Subject: [Buildroot] [PATCH] Use gdbserver from external toolchain.
-In-Reply-To: <1257836602-799-1-git-send-email-ad@datarespons.se>
-References: <1257836602-799-1-git-send-email-ad@datarespons.se>
-Message-ID: <2c9a759f0911092308u134c7686w2c1c250c2de29cd@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 10 Nov 2009 08:37:36 +0100
+Subject: [Buildroot] [git commit master] kernel-headers: bump
+	2.6.27.x/2.6.31.x stable versions
+Message-ID: <20091110073818.F0A99777DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
 
-I'm resending the patch in the parent mail, this time without the RFC
-in the subject.
+commit: http://git.buildroot.net/buildroot/commit/?id=d88b812d7696e374639c7aaa2ecb21b998c142e0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As there was hardly any comments on the patch version 2 in my previous
-mail thread "[RFC PATCH] Use gdbserver from external toolchain", I
-hope that this patch can be applied.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/kernel-headers/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-As is stated in the help section of the Config.in-part, this patch is
-only intended to be used together with an external toolchain built by
-crosstool-NG. The path to the gdbserver is derived as a relative path
-compared to the sysroot. This is done as there is no API to find
-neither the debug-root, nor the gdbserver binary.
-
-Regards,
-Anders Darander
-
-On Tue, Nov 10, 2009 at 08:03, Anders Darander
-<anders.darander@gmail.com> wrote:
-> Allow the user to copy the pre-compiled gdbserver from the external toolchain
-> to the rootfs.
->
-> It is assumed that the external toolchain has been generated with crosstool-NG,
-> as there is no generic way to find the location of gdbserver.
->
-> Signed-off-by: Anders Darander <ad@datarespons.se>
-> ---
-> ?toolchain/external-toolchain/Config.in ? | ? ?9 +++++++
-> ?toolchain/external-toolchain/ext-tool.mk | ? 35 ++++++++++++++++++++++++++++++
-> ?2 files changed, 44 insertions(+), 0 deletions(-)
->
-> diff --git a/toolchain/external-toolchain/Config.in b/toolchain/external-toolchain/Config.in
-> index efc8378..8837f47 100644
-> --- a/toolchain/external-toolchain/Config.in
-> +++ b/toolchain/external-toolchain/Config.in
-> @@ -19,4 +19,13 @@ config BR2_TOOLCHAIN_EXTERNAL_STRIP
-> ? ? ? ? prompt "Strip shared libraries"
-> ? ? ? ?help
-> ? ? ? ? ?Strip shared libraries copied from the external toolchain.
-> +
-> +config BR2_TOOLCHAIN_EXTERNAL_GDBSERVER
-> + ? ? ? bool
-> + ? ? ? prompt "Install the gdbserver"
-> + ? ? ? help
-> + ? ? ? ? Install the gdbserver from the external toolchain.
-> + ? ? ? ? It is assumed that the external toolchain has been generated
-> + ? ? ? ? ?by crosstool-NG, as there is no generic mechanism available
-> + ? ? ? ? ?to find the location of the gdbserver.
-> ?endif
-> diff --git a/toolchain/external-toolchain/ext-tool.mk b/toolchain/external-toolchain/ext-tool.mk
-> index 1f5aa19..0fc7ae8 100644
-> --- a/toolchain/external-toolchain/ext-tool.mk
-> +++ b/toolchain/external-toolchain/ext-tool.mk
-> @@ -72,6 +72,37 @@ copy_toolchain_lib_root = \
-> ? ? ? ?echo -n
->
-> ?#
-> +# Copy selected files from the toolchain debug-root to the target dir.
-> +#
-> +# $1: The sysroot-feature (this is used for the base of the debug-root)
-> +# $2: The file to be installed
-> +# $3: Destination folder on the rootfs.
-> +# $4: strip (y|n), default is to strip
-> +#
-> +copy_toolchain_debugroot = \
-> + ? ? ? DEBUGROOT_DIR="$(strip $1)"/../debug-root; \
-> + ? ? ? FILE="$(strip $2)"; \
-> + ? ? ? DST="$(strip $3)"; \
-> + ? ? ? STRIP="$(strip $4)"; \
-> +\
-> + ? ? ? if $$($(TARGET_CROSS)cc -v 2>&1 | grep crosstool-NG 2>&1 1>/dev/null) ; then \
-> + ? ? ? ? ? ? ? echo "A Crosstool-NG generated toolchain is detected."; \
-> + ? ? ? ? ? ? ? if test -f $${DEBUGROOT_DIR}/usr/bin/$${FILE}; then \
-> + ? ? ? ? ? ? ? ? ? ? ? $(INSTALL) -m0755 $${DEBUGROOT_DIR}/usr/bin/$${FILE} $(TARGET_DIR)/$${DST}/$${FILE}; \
-> + ? ? ? ? ? ? ? ? ? ? ? case "$${STRIP}" in \
-> + ? ? ? ? ? ? ? ? ? ? ? (+ | n | no) \
-> +;; \
-> + ? ? ? ? ? ? ? ? ? ? ? (*) \
-> + ? ? ? ? ? ? ? ? ? ? ? $(TARGET_CROSS)strip $(TARGET_DIR)/$${DST}/$${FILE}; \
-> +;; \
-> + ? ? ? ? ? ? ? ? ? ? ? esac \
-> + ? ? ? ? ? ? ? fi \
-> + ? ? ? else \
-> + ? ? ? ? ? ? ? echo "Error: Not a known toolchain!"; \
-> + ? ? ? ? ? ? ? exit 1; \
-> + ? ? ? fi
-> +
-> +#
-> ?# Copy the full external toolchain sysroot directory to the staging
-> ?# dir
-> ?#
-> @@ -227,6 +258,10 @@ endif
-> ? ? ? ?$(Q)for libs in $(EXTERNAL_LIBS); do \
-> ? ? ? ? ? ? ? ?$(call copy_toolchain_lib_root,$(SYSROOT_DIR),$$libs,/lib,$(BR2_TOOLCHAIN_EXTERNAL_STRIP)); \
-> ? ? ? ?done
-> +ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GDBSERVER),y)
-> + ? ? ? @echo "Copy gdbserver from the external toolchain to target..."
-> + ? ? ? $(Q) $(call copy_toolchain_debugroot,$(SYSROOT_DIR),gdbserver,/usr/bin,$(BR2_TOOLCHAIN_EXTERNAL_STRIP))
-> +endif
-> ? ? ? ?@echo "Copy external toolchain sysroot to staging..."
-> ? ? ? ?$(Q)$(call copy_toolchain_sysroot,$(SYSROOT_DIR))
-> ? ? ? ?@touch $@
-> --
-> 1.6.5.2
->
->
-
-
-
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 07f9f4d..42173f1 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -62,10 +62,10 @@ config BR2_DEFAULT_KERNEL_VERSION
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "2.6.26.8"	if BR2_KERNEL_HEADERS_2_6_26
+-	default "2.6.27.38"	if BR2_KERNEL_HEADERS_2_6_27
++	default "2.6.27.39"	if BR2_KERNEL_HEADERS_2_6_27
+ 	default "2.6.28.10"	if BR2_KERNEL_HEADERS_2_6_28
+ 	default "2.6.29.6"	if BR2_KERNEL_HEADERS_2_6_29
+ 	default "2.6.30.9"	if BR2_KERNEL_HEADERS_2_6_30
+-	default "2.6.31.5"	if BR2_KERNEL_HEADERS_2_6_31
++	default "2.6.31.6"	if BR2_KERNEL_HEADERS_2_6_31
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-Anders Darander
-EPO guidelines 1978: "If the contribution to the known art resides
-solely in a computer program then the subject matter is not
-patentable in whatever manner it may be presented in the claims."
+1.6.3.3
