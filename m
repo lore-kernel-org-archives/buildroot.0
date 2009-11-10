@@ -1,42 +1,34 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 10 Nov 2009 17:27:05 +0000 (UTC)
-Subject: [Buildroot] [Bug 709] New: Bump lighttpd package to 1.4.24
-Message-ID: <bug-709-163@https.bugs.busybox.net/>
+Date: Tue, 10 Nov 2009 17:29:11 +0000 (UTC)
+Subject: [Buildroot] [Bug 513] Add new squid package
+In-Reply-To: <bug-513-163@https.bugs.busybox.net/>
+References: <bug-513-163@https.bugs.busybox.net/>
+Message-ID: <20091110172911.3F93A777D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=709
-
-              Host: i686-linux
-            Target: arm-softfloat-linux-uclibcgnueabi
-           Summary: Bump lighttpd package to 1.4.24
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-               URL: http://www.lighttpd.net/2009/10/25/1-4-24-now-with-tls-
-                    sni-and-money-back-guarantee
-        OS/Version: Linux
-            Status: NEW
-          Severity: enhancement
-          Priority: P5
-         Component: Outdated package
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: gustavo at zacarias.com.ar
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+https://bugs.busybox.net/show_bug.cgi?id=513
 
 
-Created an attachment (id=737)
- --> (https://bugs.busybox.net/attachment.cgi?id=737)
-Bump lighttpd package to 1.4.24
+Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
 
-Many bugfixes, most notable enhancement being added support for TLS SNI.
-mod_rewrite patch picked up from upstream @
-http://redmine.lighttpd.net/projects/lighttpd/repository/revisions/2683 and
-scheduled for 1.4.25.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+ Attachment #601 is|0                           |1
+           obsolete|                            |
+
+
+
+
+--- Comment #7 from Gustavo Zacarias <gustavo@zacarias.com.ar>  2009-11-10 17:29:10 UTC ---
+Created an attachment (id=739)
+ --> (https://bugs.busybox.net/attachment.cgi?id=739)
+New package squid-3.0STABLE19
+
+Bump to squid-3.0STABLE19, bugfixes.
 
 
 -- 
