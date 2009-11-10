@@ -1,61 +1,59 @@
-From: Roman Chertov <rchertov@cs.ucsb.edu>
-Date: Tue, 10 Nov 2009 09:18:33 -0800
-Subject: [Buildroot] building kernel modules
-In-Reply-To: <20091109225951.GI14091@buzzloop.caiaq.de>
-References: <4AF34ADF.7090303@cs.ucsb.edu> <4AF7A886.8000703@cs.ucsb.edu>
-	<20091109065815.GZ14091@buzzloop.caiaq.de>
-	<4AF899C8.5010702@cs.ucsb.edu>
-	<20091109225951.GI14091@buzzloop.caiaq.de>
-Message-ID: <4AF9A069.80404@cs.ucsb.edu>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 10 Nov 2009 17:22:21 +0000 (UTC)
+Subject: [Buildroot] [Bug 703] New: [SECURITY] Update openssl package to
+	0.9.8l
+Message-ID: <bug-703-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> 
-> Hmm. If you only get this error for your own module (and not the kernel
-> itself), you should have a look at the assembly output and see what gcc
-> does there and why. It shouldn't be using the __aeabi_uldivmod function
-> which is part of libgcc which the kernel does not seem to link on your
-> platform. According to the postings below, these errors are likely to be
-> caused by false gcc optimisations.
-> 
-> You should get around that by altering your sources, but again, without
-> the code, this is all speculating.
+https://bugs.busybox.net/show_bug.cgi?id=703
 
-Turns out it was a division of a long that was causing that.  After I
-changed the long to a uint32_t then the problem went away.  Now, I have
-to figure out why I cannot insert the module.
+              Host: i686-linux
+            Target: arm-softfloat-linux-uclibcgnueabi
+           Summary: [SECURITY] Update openssl package to 0.9.8l
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: major
+          Priority: P5
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: gustavo at zacarias.com.ar
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-musec_can: unknown relocation: 40
-insmod: can't insert
-'/proj/tools/can_driver/musec_can/src/musec_can.ko': invalid module format
 
-Modules built during the kernel built work fine.  I guess I have to
-figure out what linker setting I am missing.
+Created an attachment (id=731)
+ --> (https://bugs.busybox.net/attachment.cgi?id=731)
+Bump openssl package to 0.9.8l + security fixes
 
-> 
-> Those links could also help:
-> 
->   http://www.spinics.net/lists/arm-kernel/msg48776.html
->   http://lists.arm.linux.org.uk/lurker/message/20080227.081641.1580db5d.en.html
-> 
-> In case you consider bringing your driver mainline, you can also post it
-> to LKML and get some feedback there.
+http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2009-1377
+The dtls1_buffer_record function in ssl/d1_pkt.c in OpenSSL 0.9.8k and earlier
+0.9.8 versions allows remote attackers to cause a denial of service (memory
+consumption) via a large series of "future epoch" DTLS records that are
+buffered in a queue, aka "DTLS record buffer limitation bug." 
 
-That would be down the road once I actually test the driver and iron out
-any problems that might occur.
+http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2009-1378
+Multiple memory leaks in the dtls1_process_out_of_seq_message function in
+ssl/d1_both.c in OpenSSL 0.9.8k and earlier 0.9.8 versions allow remote
+attackers to cause a denial of service (memory consumption) via DTLS records
+that (1) are duplicates or (2) have sequence numbers much greater than current
+sequence numbers, aka "DTLS fragment handling memory leak." 
 
-> 
-> After all, what you're seeing is an effect that has to do with your
-> code, the kernel and gcc. And not with buildroot :)
+http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2009-1379
+Use-after-free vulnerability in the dtls1_retrieve_buffered_fragment function
+in ssl/d1_both.c in OpenSSL 1.0.0 Beta 2 allows remote attackers to cause a
+denial of service (openssl s_client crash) and possibly have unspecified other
+impact via a DTLS packet, as demonstrated by a packet from a server that uses a
+crafted server certificate.
 
-True.  I was just hoping that somebody would give me a starting point as
-  I new to cross compiling :)  Thanks for the help.
 
-Roman
-
-> 
-> Daniel
-> 
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
