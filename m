@@ -1,41 +1,50 @@
-From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
-Date: Wed, 11 Nov 2009 16:36:28 -0200
-Subject: [Buildroot] [git commit master] buildroot;
-	move defconfigs to 	configs/ and print in help
-In-Reply-To: <20091111150359.579df608@surf>
-References: <20091004202133.B35E577762@busybox.osuosl.org>
-	<20091005084845.023ff120@surf> <873a5y5nbq.fsf@macbook.be.48ers.dk>
-	<20091111150359.579df608@surf>
-Message-ID: <d6cda7730911111036q75d2be10l499409d75940b221@mail.gmail.com>
+From: Roman Chertov <rchertov@cs.ucsb.edu>
+Date: Wed, 11 Nov 2009 11:52:43 -0800
+Subject: [Buildroot] building kernel modules
+In-Reply-To: <20091111005818.GC29442@buzzloop.caiaq.de>
+References: <4AF34ADF.7090303@cs.ucsb.edu> <4AF7A886.8000703@cs.ucsb.edu>
+	<20091109065815.GZ14091@buzzloop.caiaq.de>
+	<4AF899C8.5010702@cs.ucsb.edu>
+	<20091109225951.GI14091@buzzloop.caiaq.de>
+	<4AF9A069.80404@cs.ucsb.edu>
+	<20091111005818.GC29442@buzzloop.caiaq.de>
+Message-ID: <4AFB160B.6070001@cs.ucsb.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Daniel Mack wrote:
+> On Tue, Nov 10, 2009 at 09:18:33AM -0800, Roman Chertov wrote:
+>> Turns out it was a division of a long that was causing that.  After I
+>> changed the long to a uint32_t then the problem went away.  Now, I have
+>> to figure out why I cannot insert the module.
+>>
+>> musec_can: unknown relocation: 40
+>> insmod: can't insert
+>> '/proj/tools/can_driver/musec_can/src/musec_can.ko': invalid module format
 
-On Wed, Nov 11, 2009 at 12:03 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
->
-> Moreover, it breaks the idea of having out-of-tree board support.
-> Before this change, it was relatively easy since the stuff needed to
-> support one board was centralized in one directory (see my proposal at
-> http://git.buildroot.net/~tpetazzoni/git/buildroot/commit/?id=ed47f42a598c665bf42c4e797187f233b955e285).
-> Now, it's split between a directory in target/device and a file in
-> configs/.
+This was due to a kernel bug
+http://lkml.indiana.edu/hypermail/linux/kernel/0903.3/02813.html
+The patch provided in the link fixed the problem for me.
 
-Well, I haven't checked the new implementation, but I guess it's in
-the line of changing find with ls. If a fallback to the out-of-tree
-board support can't be implemented, then I think what we are losing
-greatly outweights what we are gaining here.
-Currently I have to implement my own board support in a very crude
-way, as I'm sticking with the tagged versions to update my SVN
-repository. In my crude implementation, I just extended the find to
-also look up in my board folder. Having out-of-tree board support
-would allow me to get much closer to vanilla buildroot.
 
-Just my 2cts.
-
-Kind Regards,
-    Thiago A. Correa
+>>
+>> Modules built during the kernel built work fine.  I guess I have to
+>> figure out what linker setting I am missing.
+> 
+> See dmesg for more of the reason. There's a comprehensive guideline I
+> can point you to, just in case that differs from what you did:
+> 
+>   http://lwn.net/Articles/21823/
+> 
+>>> After all, what you're seeing is an effect that has to do with your
+>>> code, the kernel and gcc. And not with buildroot :)
+>> True.  I was just hoping that somebody would give me a starting point as
+>>   I new to cross compiling :)  Thanks for the help.
+> 
+> No problem :)
+> 
+> Daniel
+> 
