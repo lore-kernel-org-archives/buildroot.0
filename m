@@ -1,35 +1,29 @@
 From: Gordon Smith <spider.karma+busybox.net@gmail.com>
-Date: Wed, 11 Nov 2009 13:01:31 -0700
-Subject: [Buildroot] Problem: Custom kernel version results in mangled KVER
-	in module directory.
-Message-ID: <2df568dc0911111201w64f1c313hcfe22d8460e353e6@mail.gmail.com>
+Date: Wed, 11 Nov 2009 14:16:18 -0700
+Subject: [Buildroot] Web search forms broken
+Message-ID: <2df568dc0911111316i736d2bfdw10a7b9df37232131@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For example, menuconfig
-? Kernel
-??? Linux Kernel Version (Linux <custom> version)
-??? (2.6.27.35) Linux Tarball version
-??? (2.6.27.35) Linux Version
+The search forms in
+    ${DISTRO_SOURCE}/docs/lists.html
+    http://buildroot.uclibc.org/lists.html
+do not produce results, for example:
 
-results in
-? project_build_i686/lsdtm/linux-2.6.27.35/drivers
-  project_build_i686/lsdtm/root/lib/modules/2.6.272.6.27.35/kernel/drivers
-
-The KVER 2.6.272.6.27.35 is unexpected.
-
-Meanwhile
-? Kernel
-??? Linux Kernel Version (Linux <custom> version)
-??? (2.6.27.35) Linux Tarball version
-??? () Linux Version
-
-results in:
-  project_build_i686/lsdtm/linux-/drivers
-  project_build_i686/lsdtm/root/lib/modules/2.6.27.35/kernel/drivers
+  Your search - Sven Neumann - did not match any documents.
 
 
-This is buildroot 2009.08.
+I'd guess the target site is out of date. They use
+
+<form method="GET" action="http://www.google.com/custom">
+<input type="hidden" name="sitesearch" value="buildroot.uclibc.org">
+
+
+The google search
+  "site:lists.busybox.net Sven Neumann"
+works better:
+
+    Results 1 - 10 of about 146 from lists.busybox.net for Sven Neumann
