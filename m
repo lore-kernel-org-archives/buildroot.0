@@ -1,29 +1,35 @@
 From: Gordon Smith <spider.karma+busybox.net@gmail.com>
-Date: Wed, 11 Nov 2009 14:16:18 -0700
-Subject: [Buildroot] Web search forms broken
-Message-ID: <2df568dc0911111316i736d2bfdw10a7b9df37232131@mail.gmail.com>
+Date: Wed, 11 Nov 2009 17:23:46 -0700
+Subject: [Buildroot] Advice needed on package/customize
+Message-ID: <2df568dc0911111623q6581f6d2ye2ef6416e79acd81@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The search forms in
-    ${DISTRO_SOURCE}/docs/lists.html
-    http://buildroot.uclibc.org/lists.html
-do not produce results, for example:
+Hello -
 
-  Your search - Sven Neumann - did not match any documents.
+I've recently used package/customize to successfully overlay files
+into an initramfs kernel image.
+However, for two from-scratch buildroot builds in a row,
+package/customize has copied ZERO files to the kernel image.
 
+A simple case:
 
-I'd guess the target site is out of date. They use
+In .config:
+    BR2_PACKAGE_CUSTOMIZE=y
 
-<form method="GET" action="http://www.google.com/custom">
-<input type="hidden" name="sitesearch" value="buildroot.uclibc.org">
+In package/customize/source:
+    $ ls -lA package/customize/source
+    total 4
+    -rw-r--r-- 1 gsmith gsmith 0 2009-09-01 02:44 .empty
+    -rw-r--r-- 1 gsmith gsmith 7 2009-11-11 16:57 hello.txt
 
+After "make", there is no hello.txt in the kernel image or in
+rootfs.i686.initramfs_list.
 
-The google search
-  "site:lists.busybox.net Sven Neumann"
-works better:
+buildroot version is 2009.08
 
-    Results 1 - 10 of about 146 from lists.busybox.net for Sven Neumann
+I'm fairly new to buildroot so any suggestions are welcome.
+Thanks
