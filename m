@@ -1,34 +1,42 @@
-From: Mark Constable <markc@renta.net>
-Date: Fri, 13 Nov 2009 01:22:29 +1000
-Subject: [Buildroot] Creating a filesystem for QEMU
-In-Reply-To: <200911121703.07478.cristeab@gmail.com>
-References: <200911121623.45929.cristeab@gmail.com>	<4d28d4b50911120658h67155758k54a7d95599cee1fe@mail.gmail.com>
-	<200911121703.07478.cristeab@gmail.com>
-Message-ID: <4AFC2835.9050000@renta.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 12 Nov 2009 15:44:29 +0000 (UTC)
+Subject: [Buildroot] [Bug 711] New: WebKit host dependencies problems
+Message-ID: <bug-711-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bogdan Cristea wrote:
->    Thank you for your feedback, I'll try to explore these options in the next 
-> days. IMHO it could be extremely useful to have these indications into the 
-> help page of buildroot.
->    Could you expand a little more the last option (Create an ext2 filesystem 
-> and write it on a qemu disk through an install cdrom). I don't understand that 
-> part.
+https://bugs.busybox.net/show_bug.cgi?id=711
 
-It's also possible to loop mount a qemu image if you do not
-use -f qcow...
+              Host: x86
+            Target: x86
+           Summary: WebKit host dependencies problems
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: llandwerlin at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-> qemu-img create qemu.img 4G
-> mount -o loop,offset=32256 qemu.img /mnt
 
-then, for instance, if you created a tarball from Buildroot
-then you should be able to extract the tarball to a temp
-directory and rsync -av /temp/ /mnt
+Hi,
 
-I haven't tried this but it might work.
+I'm working with RH5 distribution, I'm having problems to build WebKit.
+Theses problems are related to the fact that the host system is missing some
+packages, I identified 2 packages : flex and gperf.
 
---markc
+Here is a patch to fix the problem.
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
