@@ -1,40 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 12 Nov 2009 08:41:58 +0100
-Subject: [Buildroot] Advice needed on package/customize
-In-Reply-To: <2df568dc0911111623q6581f6d2ye2ef6416e79acd81@mail.gmail.com>
-References: <2df568dc0911111623q6581f6d2ye2ef6416e79acd81@mail.gmail.com>
-Message-ID: <20091112084158.09e4537f@surf>
+Date: Thu, 12 Nov 2009 08:50:15 +0100
+Subject: [Buildroot] make saveconfig ?
+In-Reply-To: <48ab7e010911112017w3be898b5u76a30d601de81d78@mail.gmail.com>
+References: <9240B9AA093C4A58BEEE7BAE39B8C21A@apexjs>
+	<20091111145650.4aed089e@surf>
+	<48ab7e010911112017w3be898b5u76a30d601de81d78@mail.gmail.com>
+Message-ID: <20091112085015.496ffa12@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 11 Nov 2009 17:23:46 -0700,
-Gordon Smith <spider.karma+busybox.net@gmail.com> a ?crit :
+Hi Kelvin,
 
-> A simple case:
-> 
-> In .config:
->     BR2_PACKAGE_CUSTOMIZE=y
-> 
-> In package/customize/source:
->     $ ls -lA package/customize/source
->     total 4
->     -rw-r--r-- 1 gsmith gsmith 0 2009-09-01 02:44 .empty
->     -rw-r--r-- 1 gsmith gsmith 7 2009-11-11 16:57 hello.txt
-> 
-> After "make", there is no hello.txt in the kernel image or in
-> rootfs.i686.initramfs_list.
+Please do not reply to me directly, but to the list instead.
 
-After changing the contents of package/customize/source, did you make a
-full rebuild (i.e clean everything and restart the build) ?
+Le Thu, 12 Nov 2009 12:17:29 +0800,
+Kelvin Cheung <keguang.zhang@gmail.com> a ?crit :
 
-If not, then the stamp file $(BUILD_DIR)/.customize already existed, so
-the contents of package/customize/source are not copied to the target
-directory. If you want to force the reinstallation of customized files
-without rebuilding everything, then do 'make customize-clean' and
-restart make.
+> I agree with sagaert.
+> 
+> After the board support was added, we need to change and save the
+> default configs sometimes. This could be achieved by the command
+> below.
+> 
+>     make BUILDROOT_LOCAL=target/device/yourcompany saveconfig
+> 
+> So, I think the 'make saveconfig' is still necessary. Could you
+> reserve it ?
+
+When saveconfig is used this way, it makes sense to re-add it, that's
+right. It could be something like:
+
+ make BOARD=yourcompany/yourboard saveboardconfig
+
+Which would save: kernel configuration, uclibc configuration, busybox
+configuration, u-boot configuration to
+target/device/yourcompany/yourboard.
+
+Would this fit your needs ?
 
 Sincerly,
 
