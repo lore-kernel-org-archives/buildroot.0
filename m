@@ -1,10 +1,9 @@
 From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Thu, 12 Nov 2009 23:33:17 +0100
-Subject: [Buildroot] [PATCH 5/6] Added libdvdnav package (dependency of
-	gst-plugins-bad)
+Date: Thu, 12 Nov 2009 23:33:18 +0100
+Subject: [Buildroot] [PATCH 6/6] Fix gst-plugins-bad dependency on libdvdnav
 In-Reply-To: <1258065198-22972-1-git-send-email-llandwerlin@gmail.com>
 References: <1258065198-22972-1-git-send-email-llandwerlin@gmail.com>
-Message-ID: <1258065198-22972-6-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1258065198-22972-7-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,64 +14,42 @@ From: Lionel Landwerlin <llandwerlin@gmail.com>
 
 Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 ---
- package/multimedia/Config.in              |    1 +
- package/multimedia/libdvdnav/Config.in    |    7 +++++++
- package/multimedia/libdvdnav/libdvdnav.mk |   21 +++++++++++++++++++++
- 3 files changed, 29 insertions(+), 0 deletions(-)
- create mode 100644 package/multimedia/libdvdnav/Config.in
- create mode 100644 package/multimedia/libdvdnav/libdvdnav.mk
+ package/multimedia/gst-plugins-bad/Config.in       |    4 ++++
+ .../multimedia/gst-plugins-bad/gst-plugins-bad.mk  |    7 +++++++
+ 2 files changed, 11 insertions(+), 0 deletions(-)
 
-diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-index cd07fdc..1958e2a 100644
---- a/package/multimedia/Config.in
-+++ b/package/multimedia/Config.in
-@@ -11,6 +11,7 @@ source "package/multimedia/gst-plugins-bad/Config.in"
- source "package/multimedia/gst-plugins-ugly/Config.in"
- source "package/multimedia/libcdaudio/Config.in"
- source "package/multimedia/libdvdread/Config.in"
-+source "package/multimedia/libdvdnav/Config.in"
- source "package/multimedia/libid3tag/Config.in"
- source "package/multimedia/libmad/Config.in"
- source "package/multimedia/libmms/Config.in"
-diff --git a/package/multimedia/libdvdnav/Config.in b/package/multimedia/libdvdnav/Config.in
-new file mode 100644
-index 0000000..54b8cf1
---- /dev/null
-+++ b/package/multimedia/libdvdnav/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LIBDVDNAV
-+	bool "libdvdnav"
-+        select BR2_PACKAGE_LIBDVDREAD
-+	help
-+	  libdvdnav is a library that allows easy use of sophisticated
-+	  DVD navigation features such as DVD menus, multiangle
-+	  playback and even interactive DVD games.
-diff --git a/package/multimedia/libdvdnav/libdvdnav.mk b/package/multimedia/libdvdnav/libdvdnav.mk
-new file mode 100644
-index 0000000..ecbb6da
---- /dev/null
-+++ b/package/multimedia/libdvdnav/libdvdnav.mk
-@@ -0,0 +1,21 @@
-+#############################################################
-+#
-+# libdvdnav
-+#
-+#############################################################
+diff --git a/package/multimedia/gst-plugins-bad/Config.in b/package/multimedia/gst-plugins-bad/Config.in
+index 3061822..132a770 100644
+--- a/package/multimedia/gst-plugins-bad/Config.in
++++ b/package/multimedia/gst-plugins-bad/Config.in
+@@ -53,6 +53,10 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DEBUGUTILS
+ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DTMF
+ 	bool "dtmf"
+ 
++config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DVDNAV
++	bool "dvdnav"
++        select BR2_PACKAGE_LIBDVDNAV
 +
-+LIBDVDNAV_VERSION = 4.1.3
-+LIBDVDNAV_SOURCE = libdvdnav_$(LIBDVDNAV_VERSION).orig.tar.gz
-+LIBDVDNAV_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/libd/libdvdnav/
-+LIBDVDNAV_AUTORECONF = YES
-+LIBDVDNAV_LIBTOOL_PATCH = YES
-+LIBDVDNAV_INSTALL_STAGING = YES
-+LIBDVDNAV_INSTALL_TARGET = YES
+ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DVDSPU
+ 	bool "dvdspu"
+ 
+diff --git a/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk b/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
+index 8c73bf0..10cd226 100644
+--- a/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
++++ b/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
+@@ -95,6 +95,13 @@ else
+ GST_PLUGINS_BAD_CONF_OPT += --disable-dtmf
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DVDNAV),y)
++GST_PLUGINS_BAD_CONF_OPT += --enable-dvdnav
++GST_PLUGINS_BAD_DEPENDENCIES += libdvdnav
++else
++GST_PLUGINS_BAD_CONF_OPT += --disable-dvdnav
++endif
 +
-+LIBDVDNAV_DEPENDENCIES = libdvdread
-+
-+# By default libdvdnav tries to find dvdread-config in $PATH. Because
-+# of cross compilation, we prefer using pkg-config.
-+LIBDVDNAV_CONF_OPT = --with-dvdread-config="$(PKG_CONFIG_HOST_BINARY) dvdread"
-+
-+$(eval $(call AUTOTARGETS,package,libdvdnav))
+ ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DVDSPU),y)
+ GST_PLUGINS_BAD_CONF_OPT += --enable-dvdspu
+ else
 -- 
 1.6.5.2
