@@ -1,42 +1,52 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Fri, 13 Nov 2009 15:10:37 +0100
+From: Bogdan Cristea <cristeab@gmail.com>
+Date: Fri, 13 Nov 2009 16:46:42 +0200
 Subject: [Buildroot] Creating a filesystem for QEMU
-In-Reply-To: <a038bef50911130603g11082b75w556db27d94b15eb@mail.gmail.com>
+In-Reply-To: <a038bef50911130559i31605c47k57d27e91d95b28f8@mail.gmail.com>
 References: <200911121623.45929.cristeab@gmail.com>
-	<4AFC1FC8.3020305@gmail.com> <200911131518.14509.cristeab@gmail.com>
-	<4d28d4b50911130556r34138e7ai481140b27d15af53@mail.gmail.com>
-	<4d28d4b50911130557k4bbdfe0xee1a9234b4092050@mail.gmail.com>
-	<a038bef50911130603g11082b75w556db27d94b15eb@mail.gmail.com>
-Message-ID: <4d28d4b50911130610q43e9fbf1k2aad22f7b8e57270@mail.gmail.com>
+	<200911131518.14509.cristeab@gmail.com>
+	<a038bef50911130559i31605c47k57d27e91d95b28f8@mail.gmail.com>
+Message-ID: <200911131646.42695.cristeab@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Nov 13, 2009 at 3:03 PM, Chris Packham <judge.packham@gmail.com>wrote:
-
-> On Fri, Nov 13, 2009 at 8:57 AM, Lionel Landwerlin
-> <llandwerlin@gmail.com> wrote:
-> >>> > Making use of qemus ability to replace the bootloader you can invoke
-> >>> > qemu with
-> >>> >     qemu -kernel output/images/bzImage \
-> >>> >          -initrd output/images/rootfs.i686.cpio
+On Friday 13 November 2009 15:59:46 you wrote:
+> On Fri, Nov 13, 2009 at 8:18 AM, Bogdan Cristea <cristeab@gmail.com> wrote:
+> > On Thursday 12 November 2009 16:46:32 you wrote:
+> >> I've just started doing the same thing myself.  After a bit of googling
+> >> the trick I found was to ask buildroot to generate a cpio target file
+> >> system. Start with the i386_defconfig or i686_defconfig and set
+> >> BR2_TARGET_ROOTFS_CPIO=y (or use "make menuconfig" an find the cpio
+> >> option under the "Target file system" menu)
 > >>
-> >> Shouldn't be the cpio image gunzipped ? :
+> >> Making use of qemus ability to replace the bootloader you can invoke
+> >> qemu with
+> >>     qemu -kernel output/images/bzImage \
+> >>          -initrd output/images/rootfs.i686.cpio
 > >
-> > I mean gzipped of course...
->
-> Unzipped works for me. The cpio target makes 2 files. rootfs.ARCH.cpio
-> and rootfs.ARCH.cpio.gz.
-> I just tried the .gz file and that works too.
->
+> >     I have tried this approach, but it does not seem to work. First
+> > inconvenient is that rootfs.i686.cpio file is very large (600 MB) and
+> > when using the above command I only get a black screen from QEMU while
+> > the entire computer seems to be slower.
+> >    Lionel, suggested other approaches but till now I have no luck. Trying
+> > to obtain first a cloop root filesystem and then convert that to a QEMU
+> > format seem to work and the file size is small (3 MB), but still when
+> > using that disk image, QEMU is not able to recognize any root partition.
+> >    If you have any other suggestion it would be helpful.
+> 
+> I'd double check your configuration. I must admit I started hacking
+> away without looking at the i686_defconfig. But I've got a rootfs
+> thats only 3M and a kernel thats just under 4M. I've attached my
+> buildroot config (.config) and kernel config (i386_defconfig) for your
+> reference.
+> 
+> Also when you are hacking away re-configuring buildroot doesn't know
+> to remove something up if you've de-selected it so you may need to
+> manually clean out output/target/ manually (or start from fresh each
+> time).
+> 
 
-In fact the 600Mb cpio archive is probably the problem ;)
-Maybe the Qemu hardware configuation hasn't enough ram.
-
-Bogdan: You should probably avoid building things like WebKit at least in
-initrd
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091113/3cd96b81/attachment-0001.htm>
+when using your .config file my compilation fails due to a missing patch file
+mpfr-2.4.1.patch. What is the role of that patch ?
