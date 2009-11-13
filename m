@@ -1,30 +1,43 @@
-From: Roman Chertov <rchertov@cs.ucsb.edu>
-Date: Fri, 13 Nov 2009 10:24:09 -0800
-Subject: [Buildroot] br-2009.08 X11 problem
-Message-ID: <4AFDA449.6020005@cs.ucsb.edu>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 13 Nov 2009 18:40:25 +0000 (UTC)
+Subject: [Buildroot] [Bug 719] New: Add lua option to haserl
+Message-ID: <bug-719-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=719
 
-I am using br-2009.08 and I am trying to build x-org server.  X11
-compilation fails because openssl/sha.h is not found:
+              Host: i686-linux
+            Target: arm-softfloat-linux-uclibcgnueabi
+           Summary: Add lua option to haserl
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: gustavo at zacarias.com.ar
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-glyph.c:30:25: error: openssl/sha.h: No such file or directory
-glyph.c: In function 'HashGlyph':
-glyph.c:207: error: 'SHA_CTX' undeclared (first use in this function)
 
-I checked that the openssl package is chosen and is present in my
-package directory.  Also, xserver_xorg-server.mk located in
-<br_dir>/package/x11r7/xserver_xorg-server lists openssl as the
-dependency.  However, during the build process there is no include flag
-that points to the openssl/include directory.  What is the quick and
-dirty way to fix this?  If I modify the x11 Makefile, it gets over
-written during the buildroot make.
+Created an attachment (id=751)
+ --> (https://bugs.busybox.net/attachment.cgi?id=751)
+Add lua option to haserl
 
-Thanks,
+This patch adds the option for haserl-0.9.x to enable it's lua mode.
+Right now it links against lua in LUA_DIR.
+Ideally the lua package should introduce a PACKAGE_LIBLUA option to just
+install libs/headers to STAGING_DIR since haserl doesn't need the binaries.
 
-Roman
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
