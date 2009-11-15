@@ -1,10 +1,10 @@
 From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Sun, 15 Nov 2009 11:12:55 +0100
-Subject: [Buildroot] [PATCH 6/8] gperf: add gperf-host package (required by
-	webkit)
+Date: Sun, 15 Nov 2009 11:12:57 +0100
+Subject: [Buildroot] [PATCH 8/8] webkit: fix dependencies on host tools flex
+	and gperf
 In-Reply-To: <1258279977-1482-1-git-send-email-llandwerlin@gmail.com>
 References: <1258279977-1482-1-git-send-email-llandwerlin@gmail.com>
-Message-ID: <1258279977-1482-7-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1258279977-1482-9-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,17 +15,23 @@ From: Lionel Landwerlin <llandwerlin@gmail.com>
 
 Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 ---
- package/gperf/gperf.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/webkit/webkit.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gperf/gperf.mk b/package/gperf/gperf.mk
-index bb2d4f3..57e0663 100644
---- a/package/gperf/gperf.mk
-+++ b/package/gperf/gperf.mk
-@@ -20,3 +20,4 @@ endef
- GPERF_POST_INSTALL_HOOKS += GPERF_INSTALL_STRIP
+diff --git a/package/webkit/webkit.mk b/package/webkit/webkit.mk
+index 01baa27..389a5fc 100644
+--- a/package/webkit/webkit.mk
++++ b/package/webkit/webkit.mk
+@@ -11,8 +11,8 @@ WEBKIT_INSTALL_STAGING = YES
+ WEBKIT_INSTALL_TARGET = YES
+ WEBKIT_LIBTOOL_PATCH = NO
  
- $(eval $(call AUTOTARGETS,package,gperf))
-+$(eval $(call AUTOTARGETS,package,gperf,host))
+-WEBKIT_DEPENDENCIES = icu curl libxml2 libxslt libgtk2 sqlite enchant \
+-			libsoup
++WEBKIT_DEPENDENCIES = host-flex host-gperf icu curl libxml2 libxslt	\
++			libgtk2 sqlite enchant libsoup
+ 
+ ifeq ($(BR2_PACKAGE_WEBKIT_X11),y)
+ WEBKIT_CONF_OPT = --with-target=x11
 -- 
 1.6.5.2
