@@ -1,50 +1,48 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Sun, 15 Nov 2009 19:04:49 +0100
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 15 Nov 2009 20:24:07 +0100
 Subject: [Buildroot] [PATCH 4/8] flex: add flex-host package (required
- by webkit)
-In-Reply-To: <87ws1ryd6v.fsf@macbook.be.48ers.dk>
+	by webkit)
+In-Reply-To: <1258308289.24296.94.camel@coalu.atr> (Lionel Landwerlin's
+	message of "Sun\, 15 Nov 2009 19\:04\:49 +0100")
 References: <1258279977-1482-1-git-send-email-llandwerlin@gmail.com>
 	<1258279977-1482-5-git-send-email-llandwerlin@gmail.com>
 	<20091115152653.29810036@surf> <1258299584.24296.91.camel@coalu.atr>
 	<87ws1ryd6v.fsf@macbook.be.48ers.dk>
-Message-ID: <1258308289.24296.94.camel@coalu.atr>
+	<1258308289.24296.94.camel@coalu.atr>
+Message-ID: <87skcfy4ko.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le dimanche 15 novembre 2009 ? 17:18 +0100, Peter Korsgaard a ?crit :
-> >>>>> "Lionel" == Lionel Landwerlin <llandwerlin@gmail.com> writes:
-> 
-> Hi,
-> 
->  >> BTW, why do we need to build flex for the host ? flex is part of the
->  >> few tools that we consider to be a dependency of Buildroot.
-> 
->  Lionel> It's required to build webkit. I didn't notice the problem until I built
->  Lionel> it on a host system where it wasn't installed.
-> 
-> Didn't the dependencies.sh check error out?
-> 
-> sudo mv /usr/bin/flex{,-backup}
-> make
-> 
-> flex installed:             FALSE
-> 
-> 
-> You must install 'flex' on your build machine
-> 
-> make: *** [dependencies] Error 1
-> 
+>>>>> "Lionel" == Lionel Landwerlin <llandwerlin@gmail.com> writes:
 
-I will recheck again tomorrow, it was on a machine at work (RH
-enterprise 5).
+Hi,
 
-By the way, what's the policy about host packages that should be
-included in buildroot ?
+ >> You must install 'flex' on your build machine
+ >> 
+ >> make: *** [dependencies] Error 1
 
-Regards,
+ Lionel> I will recheck again tomorrow, it was on a machine at work (RH
+ Lionel> enterprise 5).
+
+OK.
+
+ Lionel> By the way, what's the policy about host packages that should be
+ Lionel> included in buildroot ?
+
+Well, we try to keep the amount of dependencies low to make it easy to
+use, but within sane limits ofcourse, we don't want to build an entire
+host system as well.
+
+There's no hard fixed rules in other words. Certain things just have to
+be there (shell, make, toolchain). For the rest it's a question about:
+
+ - How big is the dependency (E.G. how much effort to compile for host)
+ - How version specific is the dependency (E.G. autoconf)
+ - How "standard" is the dependency - E.G. can we reasonably expect it
+   to be available on all/most developer machines?
 
 -- 
-Lionel Landwerlin
+Bye, Peter Korsgaard
