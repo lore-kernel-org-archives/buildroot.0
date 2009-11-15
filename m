@@ -1,44 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 Nov 2009 15:26:53 +0100
+From: Lionel Landwerlin <llandwerlin@gmail.com>
+Date: Sun, 15 Nov 2009 16:38:23 +0100
 Subject: [Buildroot] [PATCH 4/8] flex: add flex-host package (required
  by webkit)
-In-Reply-To: <1258279977-1482-5-git-send-email-llandwerlin@gmail.com>
+In-Reply-To: <20091115123925.0649e537@surf>
 References: <1258279977-1482-1-git-send-email-llandwerlin@gmail.com>
 	<1258279977-1482-5-git-send-email-llandwerlin@gmail.com>
-Message-ID: <20091115152653.29810036@surf>
+	<20091115123925.0649e537@surf>
+Message-ID: <1258299503.24296.88.camel@coalu.atr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sun, 15 Nov 2009 11:12:53 +0100,
-llandwerlin at gmail.com a ?crit :
+Le dimanche 15 novembre 2009 ? 12:39 +0100, Thomas Petazzoni a ?crit :
+> Hi Lionel,
+> 
+> Le Sun, 15 Nov 2009 11:12:53 +0100,
+> llandwerlin at gmail.com a ?crit :
+> 
+> >  $(eval $(call AUTOTARGETS,package,flex))
+> > +$(eval $(call AUTOTARGETS,package,flex,host))
+> 
+> Thanks for using so quickly the new autotools infrastructure! Have you
+> been able to use it with success ?
 
->  $(eval $(call AUTOTARGETS,package,flex))
-> +$(eval $(call AUTOTARGETS,package,flex,host))
+No problem with a few packages.
 
-BTW, why do we need to build flex for the host ? flex is part of the
-few tools that we consider to be a dependency of Buildroot.
+> 
+> However, please note that if you depend on this new infrastructure,
+> your patches will not be integrated in the upcoming 2009.11 release,
+> because the new infrastructure is post-2009.11 material.
 
-In toolchain/dependencies/dependencies.sh, we check that a host flex is
-available. This tool (along with bison) is anyway mandatory to build
-the toolchain.
-
-So :
-
- * Either we consider flex to be part of Buildroot dependencies and
-   Webkit should not depend on host-flex ;
-
- * Or we don't consider flex to be part of the Buildroot dependencies
-   and we should fix all packages and toolchain that use flex without
-   depending on it.
-
-Sincerly,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Ok no problem.
