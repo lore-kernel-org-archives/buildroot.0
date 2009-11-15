@@ -1,35 +1,45 @@
 From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Sun, 15 Nov 2009 11:12:49 +0100
-Subject: [Buildroot] [Patch 0/8] Webkit host dependencies fixes / package
-	infrastructure
-Message-ID: <1258279977-1482-1-git-send-email-llandwerlin@gmail.com>
+Date: Sun, 15 Nov 2009 11:12:54 +0100
+Subject: [Buildroot] [PATCH 5/8] gperf: convert to autotools infrastructure
+In-Reply-To: <1258279977-1482-1-git-send-email-llandwerlin@gmail.com>
+References: <1258279977-1482-1-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1258279977-1482-6-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+From: Lionel Landwerlin <llandwerlin@gmail.com>
 
-the following patch series fixes problems I met when building webkit
-on a machine with almost no development packages. It also uses the new
-package infrastructure for the 3 packages (flex, gperf and webkit).
+Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
+---
+ package/gperf/gperf.mk |   12 +++++++-----
+ 1 files changed, 7 insertions(+), 5 deletions(-)
 
-Patch list:
-  flex: fix prog-ar patch
-  flex: bump to 2.5.35
-  flex: convert to autotools infrastructure
-  flex: add flex-host package (required by webkit)
-  gperf: convert to autotools infrastructure
-  gperf: add gperf-host package (required by webkit)
-  webkit: convert to autotools infrastructure
-  webkit: fix dependencies on host tools flex and gperf
-
- package/flex/flex-2.5.33-prog-ar.patch |   13 +---
- package/flex/flex.mk                   |  130 ++++++--------------------------
- package/gperf/gperf.mk                 |   13 ++-
- package/webkit/webkit.mk               |   21 +++---
- 4 files changed, 42 insertions(+), 135 deletions(-)
-
---
-Lionel Landwerlin
+diff --git a/package/gperf/gperf.mk b/package/gperf/gperf.mk
+index 0dc6d6e..bb2d4f3 100644
+--- a/package/gperf/gperf.mk
++++ b/package/gperf/gperf.mk
+@@ -9,12 +9,14 @@ GPERF_SITE = $(BR2_GNU_MIRROR)/gperf
+ GPERF_AUTORECONF = NO
+ GPERF_INSTALL_STAGING = NO
+ GPERF_INSTALL_TARGET = YES
+-GPERF_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install
++
++# install-strip rule does not exist in gperf's makefiles
+ GPERF_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
+ 
+-$(eval $(call AUTOTARGETS,package,gperf))
++define GPERF_INSTALL_STRIP
++$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/usr/bin/gperf
++endef
+ 
+-$(GPERF_HOOK_POST_INSTALL): $(GPERF_TARGET_INSTALL_TARGET)
+-	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/usr/bin/gperf
+-	touch $@
++GPERF_POST_INSTALL_HOOKS += GPERF_INSTALL_STRIP
+ 
++$(eval $(call AUTOTARGETS,package,gperf))
+-- 
+1.6.5.2
