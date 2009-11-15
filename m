@@ -1,9 +1,9 @@
 From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Sun, 15 Nov 2009 11:12:54 +0100
-Subject: [Buildroot] [PATCH 5/8] gperf: convert to autotools infrastructure
+Date: Sun, 15 Nov 2009 11:12:51 +0100
+Subject: [Buildroot] [PATCH 2/8] flex: bump to 2.5.35
 In-Reply-To: <1258279977-1482-1-git-send-email-llandwerlin@gmail.com>
 References: <1258279977-1482-1-git-send-email-llandwerlin@gmail.com>
-Message-ID: <1258279977-1482-6-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1258279977-1482-3-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,32 +14,23 @@ From: Lionel Landwerlin <llandwerlin@gmail.com>
 
 Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 ---
- package/gperf/gperf.mk |   12 +++++++-----
- 1 files changed, 7 insertions(+), 5 deletions(-)
+ package/flex/flex.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gperf/gperf.mk b/package/gperf/gperf.mk
-index 0dc6d6e..bb2d4f3 100644
---- a/package/gperf/gperf.mk
-+++ b/package/gperf/gperf.mk
-@@ -9,12 +9,14 @@ GPERF_SITE = $(BR2_GNU_MIRROR)/gperf
- GPERF_AUTORECONF = NO
- GPERF_INSTALL_STAGING = NO
- GPERF_INSTALL_TARGET = YES
--GPERF_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install
-+
-+# install-strip rule does not exist in gperf's makefiles
- GPERF_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
- 
--$(eval $(call AUTOTARGETS,package,gperf))
-+define GPERF_INSTALL_STRIP
-+$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/usr/bin/gperf
-+endef
- 
--$(GPERF_HOOK_POST_INSTALL): $(GPERF_TARGET_INSTALL_TARGET)
--	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/usr/bin/gperf
--	touch $@
-+GPERF_POST_INSTALL_HOOKS += GPERF_INSTALL_STRIP
- 
-+$(eval $(call AUTOTARGETS,package,gperf))
+diff --git a/package/flex/flex.mk b/package/flex/flex.mk
+index b4e0cb9..d8a85bd 100644
+--- a/package/flex/flex.mk
++++ b/package/flex/flex.mk
+@@ -3,8 +3,8 @@
+ # flex
+ #
+ #############################################################
+-FLEX_VERSION:=2.5.33
+-FLEX_PATCH_VERSION:=11
++FLEX_VERSION:=2.5.35
++FLEX_PATCH_VERSION:=9
+ FLEX_SOURCE:=flex_$(FLEX_VERSION).orig.tar.gz
+ FLEX_PATCH:=flex_$(FLEX_VERSION)-$(FLEX_PATCH_VERSION).diff.gz
+ FLEX_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/f/flex
 -- 
 1.6.5.2
