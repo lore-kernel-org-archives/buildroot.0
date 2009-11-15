@@ -1,43 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 13 Nov 2009 18:40:25 +0000 (UTC)
-Subject: [Buildroot] [Bug 719] New: Add lua option to haserl
-Message-ID: <bug-719-163@https.bugs.busybox.net/>
+From: llandwerlin at gmail.com <llandwerlin@gmail.com>
+Date: Sun, 15 Nov 2009 11:12:49 +0100
+Subject: [Buildroot] [Patch 0/8] Webkit host dependencies fixes / package
+	infrastructure
+Message-ID: <1258279977-1482-1-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=719
+Hi,
 
-              Host: i686-linux
-            Target: arm-softfloat-linux-uclibcgnueabi
-           Summary: Add lua option to haserl
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: enhancement
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: gustavo at zacarias.com.ar
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+the following patch series fixes problems I met when building webkit
+on a machine with almost no development packages. It also uses the new
+package infrastructure for the 3 packages (flex, gperf and webkit).
 
+Patch list:
+  flex: fix prog-ar patch
+  flex: bump to 2.5.35
+  flex: convert to autotools infrastructure
+  flex: add flex-host package (required by webkit)
+  gperf: convert to autotools infrastructure
+  gperf: add gperf-host package (required by webkit)
+  webkit: convert to autotools infrastructure
+  webkit: fix dependencies on host tools flex and gperf
 
-Created an attachment (id=751)
- --> (https://bugs.busybox.net/attachment.cgi?id=751)
-Add lua option to haserl
+ package/flex/flex-2.5.33-prog-ar.patch |   13 +---
+ package/flex/flex.mk                   |  130 ++++++--------------------------
+ package/gperf/gperf.mk                 |   13 ++-
+ package/webkit/webkit.mk               |   21 +++---
+ 4 files changed, 42 insertions(+), 135 deletions(-)
 
-This patch adds the option for haserl-0.9.x to enable it's lua mode.
-Right now it links against lua in LUA_DIR.
-Ideally the lua package should introduce a PACKAGE_LIBLUA option to just
-install libs/headers to STAGING_DIR since haserl doesn't need the binaries.
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+--
+Lionel Landwerlin
