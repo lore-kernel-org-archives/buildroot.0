@@ -1,28 +1,44 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 15 Nov 2009 14:27:54 +0100
-Subject: [Buildroot] br-2009.08 X11 problem
-In-Reply-To: <4AFDA449.6020005@cs.ucsb.edu> (Roman Chertov's message of "Fri\,
-	13 Nov 2009 10\:24\:09 -0800")
-References: <4AFDA449.6020005@cs.ucsb.edu>
-Message-ID: <871vjzzzmt.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 15 Nov 2009 15:26:53 +0100
+Subject: [Buildroot] [PATCH 4/8] flex: add flex-host package (required
+ by webkit)
+In-Reply-To: <1258279977-1482-5-git-send-email-llandwerlin@gmail.com>
+References: <1258279977-1482-1-git-send-email-llandwerlin@gmail.com>
+	<1258279977-1482-5-git-send-email-llandwerlin@gmail.com>
+Message-ID: <20091115152653.29810036@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Roman" == Roman Chertov <rchertov@cs.ucsb.edu> writes:
+Le Sun, 15 Nov 2009 11:12:53 +0100,
+llandwerlin at gmail.com a ?crit :
 
- Roman> Hello,
- Roman> I am using br-2009.08 and I am trying to build x-org server.  X11
- Roman> compilation fails because openssl/sha.h is not found:
+>  $(eval $(call AUTOTARGETS,package,flex))
+> +$(eval $(call AUTOTARGETS,package,flex,host))
 
- Roman> glyph.c:30:25: error: openssl/sha.h: No such file or directory
- Roman> glyph.c: In function 'HashGlyph':
- Roman> glyph.c:207: error: 'SHA_CTX' undeclared (first use in this function)
+BTW, why do we need to build flex for the host ? flex is part of the
+few tools that we consider to be a dependency of Buildroot.
 
-Hmm, I'm pretty sure it worked for me last time I tried. Could you post
-your .config so I can reproduce?
+In toolchain/dependencies/dependencies.sh, we check that a host flex is
+available. This tool (along with bison) is anyway mandatory to build
+the toolchain.
 
+So :
+
+ * Either we consider flex to be part of Buildroot dependencies and
+   Webkit should not depend on host-flex ;
+
+ * Or we don't consider flex to be part of the Buildroot dependencies
+   and we should fix all packages and toolchain that use flex without
+   depending on it.
+
+Sincerly,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
