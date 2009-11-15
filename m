@@ -1,28 +1,42 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 15 Nov 2009 20:36:10 +0100
-Subject: [Buildroot] Qt fails to build
-In-Reply-To: <1257367062.3465.51.camel@station1.ormlab.com> (Ormund Williams's
-	message of "Wed\, 04 Nov 2009 15\:37\:42 -0500")
-References: <1257367062.3465.51.camel@station1.ormlab.com>
-Message-ID: <87ocn3y40l.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 15 Nov 2009 20:43:42 +0100
+Subject: [Buildroot] [git commit master] docs/lists.html: adapt google
+	search for lists.busybox.net
+Message-ID: <20091115194419.CDB70777AC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ormund" == Ormund Williams <ormundw@panix.com> writes:
 
- Ormund> Hi All,
- Ormund> I did a git pull this morning and now I get this error, no change to
- Ormund> the .config file:
+commit: http://git.buildroot.net/buildroot/commit/?id=cfccdd350a6034ddd4e33bf9e35e054156c124df
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Ormund> Creating qmake. Please wait...
- Ormund> make[1]: Entering directory .../buildroot/output/build/qt-embedded-linux-opensource-src-4.5.2/qmake'
- Ormund> g++: @: No such file or directory
- Ormund> make[1]: *** [project.o] Error 1
+Reported by Gordon Smith on the ml.
 
-Hmm, it builds here - Could you post your .config?
+The mailing list archives are accessed through lists.busybox.net since
+the move to osuosl. Adapt the google search box to match.
 
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ docs/lists.html |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/docs/lists.html b/docs/lists.html
+index 21ae8f5..31d47d4 100644
+--- a/docs/lists.html
++++ b/docs/lists.html
+@@ -22,8 +22,8 @@ list with frequently asked questions...
+ 
+ <center>
+ <form method="GET" action="http://www.google.com/custom">
+-<input type="hidden" name="domains" value="buildroot.uclibc.org">
+-<input type="hidden" name="sitesearch" value="buildroot.uclibc.org">
++<input type="hidden" name="domains" value="lists.busybox.net">
++<input type="hidden" name="sitesearch" value="lists.busybox.net">
+ <input type="text" name="q" size="31" maxlength="255" value="">
+ <br>
+ <input type="submit" name="sa" value="search the mailing list archives">
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
