@@ -1,32 +1,37 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 16 Nov 2009 12:36:09 +0000 (UTC)
-Subject: [Buildroot] [Bug 715] Bump libidn package to 1.15 and other fixes
-In-Reply-To: <bug-715-163@https.bugs.busybox.net/>
-References: <bug-715-163@https.bugs.busybox.net/>
-Message-ID: <20091116123609.6FA22777A4@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 16 Nov 2009 15:57:30 +0100
+Subject: [Buildroot] [git commit master] libidn: Update Config.in to fulfill
+	LIBIDN_BINARY
+Message-ID: <20091116145841.26053777BF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=715
 
+commit: http://git.buildroot.net/buildroot/commit/?id=638a4214f882f8f0478bcdec3678c23cf79ca02c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/libidn/Config.in |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-
-
---- Comment #2 from Gustavo Zacarias <gustavo@zacarias.com.ar>  2009-11-16 12:36:08 UTC ---
-Created an attachment (id=753)
- --> (https://bugs.busybox.net/attachment.cgi?id=753)
-Update Config.in to fulfill LIBIDN_BINARY
-
-Sure, i care ;-)
-Here it is, probably forgot to update Config.in before making the previous
-patch.
-
-
+diff --git a/package/libidn/Config.in b/package/libidn/Config.in
+index 19e207f..793fbc3 100644
+--- a/package/libidn/Config.in
++++ b/package/libidn/Config.in
+@@ -5,3 +5,9 @@ config BR2_PACKAGE_LIBIDN
+ 	  domain names. 
+ 
+ 	  http://www.gnu.org/software/libidn/
++
++config BR2_PACKAGE_LIBIDN_BINARY
++	bool "idn binary"
++	depends on BR2_PACKAGE_LIBIDN
++	help
++	  Install idn command line tool
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.6.3.3
