@@ -1,92 +1,38 @@
-From: Pablo Trujillo <pabloctrujillov@gmail.com>
-Date: Tue, 17 Nov 2009 14:43:44 +0800
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 17 Nov 2009 08:59:11 +0100
 Subject: [Buildroot] UDEV Card reader
-In-Reply-To: <4B01FF35.5080902@gmail.com>
+In-Reply-To: <f5ba0ddf0911162243q27383293vef97ce31d0ca6e9d@mail.gmail.com>
 References: <f5ba0ddf0910221738h66f41585s5c9236b24ac59829@mail.gmail.com>
 	<4B01FF35.5080902@gmail.com>
-Message-ID: <f5ba0ddf0911162243q27383293vef97ce31d0ca6e9d@mail.gmail.com>
+	<f5ba0ddf0911162243q27383293vef97ce31d0ca6e9d@mail.gmail.com>
+Message-ID: <20091117085911.447dc508@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2009/11/17 Hedwin Koning <hedwin.koning@gmail.com>:
-> Pablo Trujillo wrote:
->>
->> Hi everyone this is my first post I don't know if is correct to ask
->> this here, My natural idiom is not ?English so sorry for mistakes:
->>
->> I was working with the buildroot around one year ?and I'm very glad
->> for all its benefits to make a real small custom system.
->>
->> Im trying with the udev system (no the mdev that come with busybox).
->> But the thing is that i don't understand why no work with card readers
->> I was searching in google and I found this:
->>
->> http://shallowsky.com/blog/linux/udev-cardreaders-update.html
->>
->> I try that but nothing happen, I don't know why.
->>
->> if I put the compact flash and later I insert the reader , the system
->> detect the card, but if I plug first the reader and after I put the
->> CF, nothing happen, I mean the plug & unplug event seem not to work.
->>
->> If anyone can help me
->>
->> by the way :X86 architecture.
->>
->> regards
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->>
->>
->
-> Hi
->
-> The problem with cardreaders is is that when memory cards are inserted after
-> the
-> cardreader itself is inserted no events are sent to the kernel by the
-> cardreader. To
-> solve this you need
-> to run ?a background process that monitors insertion and removals of memory
-> cards. The
-> background process repeatingly tries to open the devices of the cardreader.
-> Once it does
-> the normal events (add, remove) are sent by the kernel which can be handled
-> by either
-> udev of mdev.
-> In linux HAL takes care of this. If you try it on a linux machine you can
-> see the background
-> processes using ps. Once you have the process names you can easily find them
-> back in the
-> HAL source code.
->
-> Hedwin Koning.
->
->
->
->
->
->
+Hello,
 
-Thank you so much for you answer, yes actually after some
-investigation I realise what happening,
-eventually I made the process that take care of polling, each 2 or 3
-second to  device.
-But , for the nature of my project I needed some kind of advise to my
-app to know when the card was inserted/removed.
-As you say HAL take care of this in a Desktop Distribution, so with
-this, I search the HAL source  code and I found that in it, when there
-is no card
-and the polling try to open the device, the errno variable is set to
-NOMEDIUM, so HAL can notice that there is no card.
-I use this condition too, and its works!
+Le Tue, 17 Nov 2009 14:43:44 +0800,
+Pablo Trujillo <pabloctrujillov@gmail.com> a ?crit :
 
-for the record: if someone ask : why don't you use HAL any way?, the
-answer : because is too big and I just need some features, not the
-whole system.
+> for the record: if someone ask : why don't you use HAL any way?, the
+> answer : because is too big and I just need some features, not the
+> whole system.
 
-Thank you Again!
+Note that HAL is now deprecated, and the disk management part of HAL
+has been moved to DeviceKit-disks.
+
+See:
+ http://hal.freedesktop.org/docs/DeviceKit-disks/
+ http://lists.freedesktop.org/archives/hal/2008-May/011560.html
+ http://lists.freedesktop.org/archives/devkit-devel/2009-April/000140.html
+ https://wiki.ubuntu.com/Halsectomy
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
