@@ -1,40 +1,31 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 17 Nov 2009 17:37:11 +0100
-Subject: [Buildroot] [git commit master] toolchain/uClibc: install ldd to
-	target
-Message-ID: <20091117163850.5FF9D7777B@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 17 Nov 2009 17:38:44 +0100
+Subject: [Buildroot] ldd disappearing from rootfs
+In-Reply-To: <4B01CC01.2000907@free.fr> (Julien Boibessot's message of "Mon\,
+	16 Nov 2009 23\:02\:41 +0100")
+References: <4B01CC01.2000907@free.fr>
+Message-ID: <87my2lw1gr.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Julien" == Julien Boibessot <julien.boibessot@free.fr> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=09d62e89e761a238cc4c04108e74be3abdd391c1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Julien> Hi,
+ Julien> While searching why ldd disappeared from the /usr/bin/ of my target
+ Julien> since I updated my Buildroot, I found that the rule installing it was
+ Julien> commented by this commit:
+ Julien> http://git.buildroot.net/buildroot/commit/?id=cb815ae003d40cc971d6e214415c10e9a160ba82
+ Julien> (last chunk of the commit)
 
-Reported by Julien Boibessot <julien.boibessot@free.fr>.
+ Julien> Yes, I know, it's quite old now, but the ldd disappearing is on my TODO
+ Julien> list since ages :-)
+ Julien> Do somebody recall why this line was commented out ? (I don't see the
+ Julien> link with the commit title)
 
-This somehow got disabled by cb815ae003d40cc971d (two years ago!).
+It seems like a mistake to me - Fixed in git, thanks!
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- toolchain/uClibc/uclibc.mk |    3 +--
- 1 files changed, 1 insertions(+), 2 deletions(-)
-
-diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
-index 74b058d..62fc40b 100644
---- a/toolchain/uClibc/uclibc.mk
-+++ b/toolchain/uClibc/uclibc.mk
-@@ -581,8 +581,7 @@ uclibc-clean: uclibc-test-clean
- uclibc-dirclean: uclibc-test-dirclean
- 	rm -rf $(UCLIBC_DIR)
- 
--uclibc-target-utils:
--#$(TARGET_DIR)/usr/bin/ldd
-+uclibc-target-utils: $(TARGET_DIR)/usr/bin/ldd
- 
- uclibc-target-utils-source: $(DL_DIR)/$(UCLIBC_SOURCE)
- 
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
