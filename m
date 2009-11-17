@@ -1,38 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Nov 2009 08:59:11 +0100
-Subject: [Buildroot] UDEV Card reader
-In-Reply-To: <f5ba0ddf0911162243q27383293vef97ce31d0ca6e9d@mail.gmail.com>
-References: <f5ba0ddf0910221738h66f41585s5c9236b24ac59829@mail.gmail.com>
-	<4B01FF35.5080902@gmail.com>
-	<f5ba0ddf0911162243q27383293vef97ce31d0ca6e9d@mail.gmail.com>
-Message-ID: <20091117085911.447dc508@surf>
+From: Ivan Kuten <ivan.kuten@promwad.com>
+Date: Tue, 17 Nov 2009 12:11:19 +0200
+Subject: [Buildroot] ldd disappearing from rootfs
+In-Reply-To: <4B01CC01.2000907@free.fr>
+References: <4B01CC01.2000907@free.fr>
+Message-ID: <4B0276C7.8020309@promwad.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Julien,
 
-Le Tue, 17 Nov 2009 14:43:44 +0800,
-Pablo Trujillo <pabloctrujillov@gmail.com> a ?crit :
+Actually I do not remember the reason why I commented out
+#$(TARGET_DIR)/usr/bin/ldd
+Or may be it was trying to install into my /usr/bin/ replacing my native
+host ldd.
 
-> for the record: if someone ask : why don't you use HAL any way?, the
-> answer : because is too big and I just need some features, not the
-> whole system.
-
-Note that HAL is now deprecated, and the disk management part of HAL
-has been moved to DeviceKit-disks.
-
-See:
- http://hal.freedesktop.org/docs/DeviceKit-disks/
- http://lists.freedesktop.org/archives/hal/2008-May/011560.html
- http://lists.freedesktop.org/archives/devkit-devel/2009-April/000140.html
- https://wiki.ubuntu.com/Halsectomy
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Regards,
+Ivan
+> Hi,
+>
+> While searching why ldd disappeared from the /usr/bin/ of my target
+> since I updated my Buildroot, I found that the rule installing it was
+> commented by this commit:
+> http://git.buildroot.net/buildroot/commit/?id=cb815ae003d40cc971d6e214415c10e9a160ba82
+> (last chunk of the commit)
+>
+> Yes, I know, it's quite old now, but the ldd disappearing is on my TODO
+> list since ages :-)
+> Do somebody recall why this line was commented out ? (I don't see the
+> link with the commit title)
+>
+> I have put Ivan (the author of the commit) in copy.
+>
+> Regards,
+> Julien
+>
+>
+>
+>   
