@@ -1,31 +1,52 @@
-From: Vellemans, Noel <Noel.Vellemans@visionBMS.com>
-Date: Wed, 18 Nov 2009 10:56:35 +0100
-Subject: [Buildroot] at - fails if no HOST-sendmail.
-Message-ID: <1531E53627F1F749B4FE809BF2A4EB67014825A8@WETMEX10.loepfe.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 18 Nov 2009 20:12:58 +0000 (UTC)
+Subject: [Buildroot] [Bug 729] New: sstrip creates corrupted headers
+Message-ID: <bug-729-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+https://bugs.busybox.net/show_bug.cgi?id=729
+
+              Host: x86_64-linux
+            Target: MIPS/MIPSel
+           Summary: sstrip creates corrupted headers
+           Product: buildroot
+           Version: 2009.11
+          Platform: Other
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: minimod at morethan.org
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
 
-Just encountered an issue with the package 'at' .. when cross-compiling,
-and I do not have any clue how I would fix it (maybe someone can help).
+Although only a static file is shown, results are the same for dynamic objects.
 
-When cross-building 'at' on a HOST-system that has a NO 'sendmail'
-program installed the compile bails out with the error "No mail command
-specified" . ( FYI: sendmail does exist (is being build) on the TARGET
-(but not on the host))
+Having selected sstrip:
+mszick at deb2core:/Builds/BLDRT/buildroot$ ls -l output/target/sbin/pkgdetails
+-rwxr-xr-x 1 mszick mszick 42199 2009-11-18 12:41 output/target/sbin/pkgdetails
 
-For the time-being I have installed 'nullmailer' on the host, which
-makes my build work .. but this means that './configure' is looking at
-the HOST-sendmail in stead of the TARGET-sendmail and this is where it
-goes wrong !
+mszick at deb2core:/Builds/BLDRT/buildroot$ file output/target/sbin/pkgdetails
+output/target/sbin/pkgdetails: ELF 32-bit LSB executable, MIPS, MIPS32 rel2
+version 1 (SYSV), statically linked, corrupted section header size
 
-Anyone knows a 'better' fix/solution ?
+Having selected strip:
+mszick at deb2core:/Builds/BLDRT/buildroot/output/target/sbin$ ls -l pkgdetails
+-rwxr-xr-x 1 mszick mszick 46992 2009-11-18 13:38 pkgdetails
+
+mszick at deb2core:/Builds/BLDRT/buildroot/output/target/sbin$ file pkgdetails
+pkgdetails: ELF 32-bit LSB executable, MIPS, MIPS32 rel2 version 1 (SYSV),
+statically linked, with unknown capability 0xf41 = 0x756e6700, stripped
 
 
-
-Regards Noel.
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
