@@ -1,74 +1,74 @@
-From: Laine Walker-Avina <lwalkera@ieee.org>
-Date: Tue, 17 Nov 2009 18:40:13 -0800
-Subject: [Buildroot] [PATCH] Add support for the Cortex-A8 processor
-In-Reply-To: <87aaykx0aw.fsf@macbook.be.48ers.dk>
-References: <dfb660300911171312v7a9533d2q8aea097a5900cc74@mail.gmail.com>
-	<dfb660300911171326y6c6ae77h6649c041d9a8a4e0@mail.gmail.com>
-	<87aaykx0aw.fsf@macbook.be.48ers.dk>
-Message-ID: <dfb660300911171840v73c98b0avfb2d26ca57c5f8db@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 18 Nov 2009 09:55:07 +0100
+Subject: [Buildroot] [git commit master] Add support for the Cortex-A8 ARM
+	target
+Message-ID: <20091118085528.EA529777D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Nov 17, 2009 at 2:18 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Laine" == Laine Walker-Avina <lwalkera@ieee.org> writes:
->
-> ?Laine> These patches add support for the Cortex-A8 processor used in the
-> ?Laine> Beagleboard among others.
->
-> Thanks, see below for a few comments.
->
-> ?Laine> ---
-> ?Laine> Laine Walker-Avina
-> ?Laine> Firmware Engineer
-> ?Laine> PASCO scientific
->
-> ?Laine> From e317f275af94696ba680524120147e5618ccf213 Mon Sep 17 00:00:00 2001
-> ?Laine> From: Laine Walker-Avina <lwalkera@ieee.org>
-> ?Laine> Date: Thu, 29 Oct 2009 10:30:50 -0700
-> ?Laine> Subject: [PATCH] Add support for the Cortex-A8 ARM target
->
->
-> ?Laine> +config BR2_cortex_a8
-> ?Laine> + ? ? ? bool "Cortex-A8"
-> ?Laine> ?config BR2_sa110
-> ?Laine> ? ? ? ? bool "sa110"
-> ?Laine> ?config BR2_sa1100
-> ?Laine> @@ -112,6 +114,7 @@ config BR2_ARM_TYPE
-> ?Laine> ? ? ? ? default ARM_SA1100 ? ? ?if BR2_sa1100
-> ?Laine> ? ? ? ? default ARM_XSCALE ? ? ?if BR2_xscale
-> ?Laine> ? ? ? ? default ARM_IWMMXT ? ? ?if BR2_iwmmxt
-> ?Laine> + ? ? ? default ARM_CORTEXA8 if BR2_cortex_a8
->
-> ?Laine> ?choice
-> ?Laine> ? ? ? ? prompt "Target ABI"
-> ?Laine> @@ -591,6 +594,7 @@ config BR2_GCC_TARGET_TUNE
-> ?Laine> ? ? ? ? default arm1136jf-s ? ? if BR2_arm1136jf_s
-> ?Laine> ? ? ? ? default arm1176jz-s ? ? if BR2_arm1176jz_s
-> ?Laine> ? ? ? ? default arm1176jzf-s ? ?if BR2_arm1176jzf_s
-> ?Laine> + ? ? ? default cortex-a8 ? ? ? ? ? ? ? if BR2_cortex_a8
->
-> Indentation seems wrong, otherwise it's fine. From what gcc version is
-> cortex A8 supported? We should probably make it depend on that minimal
-> version as the build otherwise breaks?
 
-Gcc 4.4.1 added support for armv7-a, but there was a bug for c++
-exceptions that made libstdc++ non-PIC which was fixed in 4.4.2. So
-4.4.2 and later would probably be a good bet.
+commit: http://git.buildroot.net/buildroot/commit/?id=83182dd28edfccd0cbfffd48f2bdfabc5939aedf
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
->
-> ?Laine> ? ? ? ? default strongarm110 ? ?if BR2_sa110
->
-> ?Laine> From 709c9a9140b377112a6721155e2a70bbaa893121 Mon Sep 17 00:00:00 2001
-> ?Laine> From: Laine Walker-Avina <lwalkera@ieee.org>
-> ?Laine> Date: Thu, 5 Nov 2009 14:27:45 -0800
-> ?Laine> Subject: [PATCH] GCC: Add 4.4.2 as the active 4.4.x version
->
-> We already have 4.4.2 support in BR.
-Good to know.
->
-> --
-> Bye, Peter Korsgaard
->
+Signed-off-by: Laine Walker-Avina <lwalkera@ieee.org>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES               |    2 ++
+ target/Config.in.arch |    6 ++++++
+ 2 files changed, 8 insertions(+), 0 deletions(-)
+
+diff --git a/CHANGES b/CHANGES
+index 2bb1197..1da84d8 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,5 +1,7 @@
+ 2009.11, Not yet released:
+ 
++	Toolchain: ARM cortex A8 support, GCC 4.4.2.
++
+ 	New packages: divine, gvfs, libarchive, libmicrohttpd,
+ 	sdl_sound, swfdec, sysstat
+ 
+diff --git a/target/Config.in.arch b/target/Config.in.arch
+index e82c8f4..1e3c78c 100644
+--- a/target/Config.in.arch
++++ b/target/Config.in.arch
+@@ -84,6 +84,9 @@ config BR2_arm1176jz_s
+ 	bool "arm1176jz-s"
+ config BR2_arm1176jzf_s
+ 	bool "arm1176jzf-s"
++comment "cortex-A8 needs gcc >= 4.4.x"
++config BR2_cortex_a8
++	bool "cortex-A8"
+ config BR2_sa110
+ 	bool "sa110"
+ config BR2_sa1100
+@@ -112,6 +115,7 @@ config BR2_ARM_TYPE
+ 	default ARM_SA1100	if BR2_sa1100
+ 	default ARM_XSCALE	if BR2_xscale
+ 	default ARM_IWMMXT	if BR2_iwmmxt
++	default ARM_CORTEXA8	if BR2_cortex_a8
+ 
+ choice
+ 	prompt "Target ABI"
+@@ -591,6 +595,7 @@ config BR2_GCC_TARGET_TUNE
+ 	default arm1136jf-s	if BR2_arm1136jf_s
+ 	default arm1176jz-s	if BR2_arm1176jz_s
+ 	default arm1176jzf-s	if BR2_arm1176jzf_s
++	default cortex-a8	if BR2_cortex_a8
+ 	default strongarm110	if BR2_sa110
+ 	default strongarm1100	if BR2_sa1100
+ 	default xscale		if BR2_xscale
+@@ -703,6 +708,7 @@ config BR2_GCC_TARGET_ARCH
+ 	default armv6j		if BR2_arm1136jf_s
+ 	default armv6zk		if BR2_arm1176jz_s
+ 	default armv6zk		if BR2_arm1176jzf_s
++	default armv7-a		if BR2_cortex_a8
+ 	default armv4		if BR2_sa110
+ 	default armv4		if BR2_sa1100
+ 	default armv5te		if BR2_xscale
+-- 
+1.6.3.3
