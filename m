@@ -1,29 +1,31 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 18 Nov 2009 09:57:43 +0100
-Subject: [Buildroot] [PATCH] Add support for the Cortex-A8 processor
-In-Reply-To: <200911171712.55522.minimod@morethan.org> (Michael S. Zick's
-	message of "Tue\, 17 Nov 2009 17\:12\:53 -0600")
-References: <200911171712.55522.minimod@morethan.org>
-Message-ID: <87y6m4us54.fsf@macbook.be.48ers.dk>
+From: Vellemans, Noel <Noel.Vellemans@visionBMS.com>
+Date: Wed, 18 Nov 2009 10:56:35 +0100
+Subject: [Buildroot] at - fails if no HOST-sendmail.
+Message-ID: <1531E53627F1F749B4FE809BF2A4EB67014825A8@WETMEX10.loepfe.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Michael" == Michael S Zick <minimod@morethan.org> writes:
+Hi all,
 
-Hi,
 
- Michael> Just a FYI - yesterday learned, the hard way (I.E: before
- Michael> reading the release notes):
+Just encountered an issue with the package 'at' .. when cross-compiling,
+and I do not have any clue how I would fix it (maybe someone can help).
 
- Michael> There was an ABI change from gcc-4.3 to gcc-4.4 for
- Michael> MIPS/MIPSel There are a lot of things affected, I gave up on
- Michael> that and switched back to 4.3.whatever
+When cross-building 'at' on a HOST-system that has a NO 'sendmail'
+program installed the compile bails out with the error "No mail command
+specified" . ( FYI: sendmail does exist (is being build) on the TARGET
+(but not on the host))
 
-Yes, there's still some issues with 4.4.x, that's why we still default
-to 4.3.4.
+For the time-being I have installed 'nullmailer' on the host, which
+makes my build work .. but this means that './configure' is looking at
+the HOST-sendmail in stead of the TARGET-sendmail and this is where it
+goes wrong !
 
--- 
-Bye, Peter Korsgaard
+Anyone knows a 'better' fix/solution ?
+
+
+
+Regards Noel.
