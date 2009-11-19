@@ -1,82 +1,83 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 19 Nov 2009 17:13:20 +0200
-Subject: [Buildroot] libtiff compilation fails when libjpeg62-dev is
- present on host
-In-Reply-To: <4d28d4b50911190701h2f580cc9kf89cd32795949467@mail.gmail.com>
-References: <20091109071956.GC26599@jasper.tkos.co.il>
-	<1257806614.24296.9.camel@coalu.atr>
-	<20091110063659.GA5220@jasper.tkos.co.il>
-	<4d28d4b50911190701h2f580cc9kf89cd32795949467@mail.gmail.com>
-Message-ID: <20091119151320.GC21551@jasper.tkos.co.il>
+From: Lionel Landwerlin <llandwerlin@gmail.com>
+Date: Thu, 19 Nov 2009 23:24:52 +0100
+Subject: [Buildroot] [PATCH 4/8] flex: add flex-host package (required
+ by webkit)
+In-Reply-To: <20091115123925.0649e537@surf>
+References: <1258279977-1482-1-git-send-email-llandwerlin@gmail.com>
+	<1258279977-1482-5-git-send-email-llandwerlin@gmail.com>
+	<20091115123925.0649e537@surf>
+Message-ID: <1258669493.24296.100.camel@coalu.atr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Lionel,
+Thomas,
 
-On Thu, Nov 19, 2009 at 04:01:17PM +0100, Lionel Landwerlin wrote:
-> Sorry for timeout, did you try to activate AUTORECONF=YES and
-> LIBTOOL_PATCH=YES ?
+I did had some problem with fontconfig :
 
-I didn't try AUTORECONF=YES. I did try LIBTOOL_PATCH=YES, but, as I said, the 
-patch does not apply. I searched for a newer version of this patch, but didn't 
-find any.
+>>> fontconfig 2.6.0 Extracting
+>>> fontconfig 2.6.0 Patching package/fontconfig
 
-baruch
+Applying fontconfig-2.6.0-parallel-compilation-fix.patch using plaintext: 
+patching file fc-case/Makefile.am
 
-> On Tue, Nov 10, 2009 at 7:37 AM, Baruch Siach <baruch@tkos.co.il> wrote:
+Applying fontconfig-2.6.0-use_for_build.patch using plaintext: 
+patching file fc-arch/Makefile.am
+patching file fc-case/Makefile.am
+patching file fc-glyphname/Makefile.am
+patching file fc-lang/Makefile.am
+/bin/sh: -c: line 0: Erreur de syntaxe pr?s du symbole inattendu ? @echo ?
+/bin/sh: -c: line 0: `(for file in config.guess config.sub; do for i in ; do cp package/gnuconfig/ile ; done; done) 	@echo ">>>   "Autoreconfiguring""'
+make: *** [/home/djdeath/src/buildroot/buildroot_rebase/output/build/fontconfig-2.6.0/.stamp_patched] Erreur 2
+
+
+The following patch fix the problem, but I don't understand why...
+Any idea ?
+
+->>>>>
+
+diff --git a/package/Makefile.autotools.in b/package/Makefile.autotools.in
+index f039903..ebe8299 100644
+--- a/package/Makefile.autotools.in
++++ b/package/Makefile.autotools.in
+@@ -107,6 +107,7 @@ define UPDATE_CONFIG_HOOK
+                        cp package/gnuconfig/$$file $$i; \
+                done; \
+        done)
++
+ endef
+ 
+ ifeq ($(BR2_UPDATE_CONFIG),y)
+
+<<<<<-
+
+Le dimanche 15 novembre 2009 ? 12:39 +0100, Thomas Petazzoni a ?crit :
+> Hi Lionel,
 > 
-> > Hi Lionel,
-> >
-> > On Mon, Nov 09, 2009 at 11:43:34PM +0100, Lionel Landwerlin wrote:
-> > > Le lundi 09 novembre 2009 ? 09:19 +0200, Baruch Siach a ?crit :
-> > > > Hi Buildroot list,
-> > > >
-> > > > I need to compile libtiff as a dependency of ImageMagic on a recent
-> > Debian
-> > > > Squeeze host.  The strange this is that when the libjpeg62-dev is
-> > installed on
-> > > > the host libtools finds the host /usr/lib/libjpeg.la file during
-> > build, which makes
-> > > > the build to fail at link time as follows:
-> > > >
-> > > > libtool: link: /opt/arm-2009q1/bin/arm-none-linux-gnueabi-gcc -Os -pipe
-> > -Os  --sysroot /home/baruch/git/buildroot/build_arm/staging_dir/ -shared
-> >  .libs/tif_aux.o .libs/tif_close.o .libs/tif_codec.o .libs/tif_color.o
-> > .libs/tif_compress.o .libs/tif_dir.o .libs/tif_dirinfo.o .libs/tif_dirread.o
-> > .libs/tif_dirwrite.o .libs/tif_dumpmode.o .libs/tif_error.o
-> > .libs/tif_extension.o .libs/tif_fax3.o .libs/tif_fax3sm.o .libs/tif_flush.o
-> > .libs/tif_getimage.o .libs/tif_jpeg.o .libs/tif_luv.o .libs/tif_lzw.o
-> > .libs/tif_next.o .libs/tif_ojpeg.o .libs/tif_open.o .libs/tif_packbits.o
-> > .libs/tif_pixarlog.o .libs/tif_predict.o .libs/tif_print.o .libs/tif_read.o
-> > .libs/tif_strip.o .libs/tif_swab.o .libs/tif_thunder.o .libs/tif_tile.o
-> > .libs/tif_unix.o .libs/tif_version.o .libs/tif_warning.o .libs/tif_write.o
-> > .libs/tif_zip.o  -Wl,--whole-archive ../port/.libs/libport.a
-> > -Wl,--no-whole-archive  /usr/lib/libjpeg.so -lz -lm -lc      -Wl,-soname
-> > -Wl,libtiff.so.3 -o .libs/libtiff.so.3.8.2
-> > > > /usr/lib/libjpeg.so: file not recognized: File format not recognized
-> > > > collect2: ld returned 1 exit status
-> > > >
-> > > > Removing libjpeg62-dev, or even renaming the host /usr/lib/libjpeg.lafile
-> > > > makes the problem go away. Is there a sane solutions for this?
-> > > >
-> > > > baruch
-> > > >
-> > >
-> > > I got the same problem with a bunch of package (gtk/glib/dbus-glib...)
-> > > using an external toolchain.
-> > >
-> > > I usually fix the problem by enabling libtool patching on the package.
-> >
-> > I tried the libtool patch. Unfortunately this patch does not apply on
-> > ltmain.sh of the tiff package (version 3.8.2). Is there a newer version of
-> > this patch?
-> >
-> > baruch
-
--- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+> Le Sun, 15 Nov 2009 11:12:53 +0100,
+> llandwerlin at gmail.com a ?crit :
+> 
+> >  $(eval $(call AUTOTARGETS,package,flex))
+> > +$(eval $(call AUTOTARGETS,package,flex,host))
+> 
+> Thanks for using so quickly the new autotools infrastructure! Have you
+> been able to use it with success ?
+> 
+> However, please note that if you depend on this new infrastructure,
+> your patches will not be integrated in the upcoming 2009.11 release,
+> because the new infrastructure is post-2009.11 material.
+> 
+> Sincerly,
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers and embedded Linux development,
+> consulting, training and support.
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
