@@ -1,47 +1,41 @@
-From: Nataraj S Narayan <natarajsn@gmail.com>
-Date: Thu, 19 Nov 2009 18:41:10 +0530
-Subject: [Buildroot] cannot find /usr/lib/uclibc_nonshared.a
-Message-ID: <630286c70911190511vdb28c17oaaacd60700300061@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 19 Nov 2009 13:33:00 +0000 (UTC)
+Subject: [Buildroot] [Bug 731] New: Bump iw package to 0.9.17
+Message-ID: <bug-731-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+https://bugs.busybox.net/show_bug.cgi?id=731
 
-On git.
-
-make gives:-
-
-make[4]: Entering directory
-`/home/nataraj/buildroot/output/build/qt-embedded-linux-opensource-src-4.5.2/src/plugins/sqldrivers/mysql'
-rm -f libqsqlmysql.so
-linking ../../../../plugins/sqldrivers/libqsqlmysql.so
-/home/nataraj/buildroot/output/build/staging_dir/usr/bin-ccache/../lib/gcc/arm-linux-uclibcgnueabi/4.3.4/../../../../arm-linux-uclibcgnueabi/bin/ld:
-cannot find /usr/lib/uclibc_nonshared.a
-collect2: ld returned 1 exit status
-make[4]: *** [../../../../plugins/sqldrivers/libqsqlmysql.so] Error 1
-make[4]: Leaving directory
-`/home/nataraj/buildroot/output/build/qt-embedded-linux-opensource-src-4.5.2/src/plugins/sqldrivers/mysql'
-make[3]: *** [sub-mysql-make_default] Error 2
-make[3]: Leaving directory
-`/home/nataraj/buildroot/output/build/qt-embedded-linux-opensource-src-4.5.2/src/plugins/sqldrivers'
-make[2]: *** [sub-sqldrivers-make_default] Error 2
-make[2]: Leaving directory
-`/home/nataraj/buildroot/output/build/qt-embedded-linux-opensource-src-4.5.2/src/plugins'
-make[1]: *** [sub-plugins-make_default-ordered] Error 2
-make[1]: Leaving directory
-`/home/nataraj/buildroot/output/build/qt-embedded-linux-opensource-src-4.5.2'
-make: *** [/home/nataraj/buildroot/output/build/qt-embedded-linux-opensource-src-4.5.2/.compiled]
-Error 2
+              Host: i686-linux
+            Target: arm-softfloat-linux-uclibcgnueabi
+           Summary: Bump iw package to 0.9.17
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: gustavo at zacarias.com.ar
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
 
-But I do have  ./output/build/staging_dir/usr/lib/uclibc_nonshared.a
-and  ./output/toolchain/uClibc-0.9.30.1/lib/uclibc_nonshared.a
+Created an attachment (id=755)
+ --> (https://bugs.busybox.net/attachment.cgi?id=755)
+Bump iw package to 0.9.17
 
-what cud be wrong?
+Bump iw package version from 0.9.15 to 0.9.17
+Many minor improvements.
 
-regards
 
-Nataraj
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
