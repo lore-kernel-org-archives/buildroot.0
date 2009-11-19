@@ -1,89 +1,47 @@
-From: Michael S. Zick <minimod@morethan.org>
-Date: Thu, 19 Nov 2009 07:10:54 -0600
-Subject: [Buildroot] Add ability to force a static BB build
-In-Reply-To: <200911190551.09090.minimod@morethan.org>
-References: <200911190551.09090.minimod@morethan.org>
-Message-ID: <200911190710.56336.minimod@morethan.org>
+From: Nataraj S Narayan <natarajsn@gmail.com>
+Date: Thu, 19 Nov 2009 18:41:10 +0530
+Subject: [Buildroot] cannot find /usr/lib/uclibc_nonshared.a
+Message-ID: <630286c70911190511vdb28c17oaaacd60700300061@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ah, but getting it to build. . .
+Hi
 
-Add: "-static -static-libgcc" to the BusyBox menuconfig "extra cflags":
+On git.
 
-buildroot$ file output/target/bin/busybox
-output/target/bin/busybox: ELF 32-bit LSB executable, MIPS, MIPS32 rel2 version 1 (SYSV), statically linked, with unknown capability 0xf41 = 0x756e6700, stripped
+make gives:-
 
-Now to figure out where in the auto-magic build system to fix "build static"
-Needed:
-CFLAGS+="-static -static-libgcc"
-LDFLAGS+="-static"
+make[4]: Entering directory
+`/home/nataraj/buildroot/output/build/qt-embedded-linux-opensource-src-4.5.2/src/plugins/sqldrivers/mysql'
+rm -f libqsqlmysql.so
+linking ../../../../plugins/sqldrivers/libqsqlmysql.so
+/home/nataraj/buildroot/output/build/staging_dir/usr/bin-ccache/../lib/gcc/arm-linux-uclibcgnueabi/4.3.4/../../../../arm-linux-uclibcgnueabi/bin/ld:
+cannot find /usr/lib/uclibc_nonshared.a
+collect2: ld returned 1 exit status
+make[4]: *** [../../../../plugins/sqldrivers/libqsqlmysql.so] Error 1
+make[4]: Leaving directory
+`/home/nataraj/buildroot/output/build/qt-embedded-linux-opensource-src-4.5.2/src/plugins/sqldrivers/mysql'
+make[3]: *** [sub-mysql-make_default] Error 2
+make[3]: Leaving directory
+`/home/nataraj/buildroot/output/build/qt-embedded-linux-opensource-src-4.5.2/src/plugins/sqldrivers'
+make[2]: *** [sub-sqldrivers-make_default] Error 2
+make[2]: Leaving directory
+`/home/nataraj/buildroot/output/build/qt-embedded-linux-opensource-src-4.5.2/src/plugins'
+make[1]: *** [sub-plugins-make_default-ordered] Error 2
+make[1]: Leaving directory
+`/home/nataraj/buildroot/output/build/qt-embedded-linux-opensource-src-4.5.2'
+make: *** [/home/nataraj/buildroot/output/build/qt-embedded-linux-opensource-src-4.5.2/.compiled]
+Error 2
 
-And clean up that required "-enable-shared -enable-static" library building option.
-That is the correct option pair, the other variations are not required.
 
-Mike
+But I do have  ./output/build/staging_dir/usr/lib/uclibc_nonshared.a
+and  ./output/toolchain/uClibc-0.9.30.1/lib/uclibc_nonshared.a
 
-On Thu November 19 2009, Michael S. Zick wrote:
-> This one I find to be useful for people (like myself)
-> that need a static linked busybox before setting up
-> a dynamically linked system.
-> 
-> A1: Yes, this feature could be selected in the busybox config file;
-> but exposing the feature in BR allows the use of "canned" BB config
-> files without creating a custom one with only "static" changed.
-> 
-> "Signed-off-by" == "works for me"
-> 
-> Signed-off-by: Michael S. Zick <minimod@morethan.org>
-> 
-> diff --git a/package/busybox/Config.in b/package/busybox/Config.in
-> index 7438a8d..90cec45 100644
-> --- a/package/busybox/Config.in
-> +++ b/package/busybox/Config.in
-> @@ -56,6 +56,20 @@ config BR2_PACKAGE_BUSYBOX_FULLINSTALL
->  
->  	  If you wish to just install /bin/busybox, then answer N.
->  
-> +config BR2_PACKAGE_BUSYBOX_MKSTATIC
-> +    bool "Build a staticly linked BusyBox"
-> +    depends on BR2_PACKAGE_BUSYBOX
-> +    default n
-> +    help
-> +        This will produce a staticly linked BusyBox.
-> +
-> +        Over-rides the selection made in the BusyBox config file.
-> +
-> +        Generates a larger BusyBox that can be run independently
-> +        of the rest of the system being built.
-> +        Useful if you need to run BusyBox before setting up for
-> +        a dynamically linked system.
-> +
->  config BR2_PACKAGE_BUSYBOX_CONFIG
->  	string "BusyBox configuration file to use?"
->  	depends on BR2_PACKAGE_BUSYBOX
-> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-> index eb79134..187a06a 100644
-> --- a/package/busybox/busybox.mk
-> +++ b/package/busybox/busybox.mk
-> @@ -77,6 +77,11 @@ ifeq ($(BR2_INET_RPC),y)
->  else
->  	$(SED) "s/^.*CONFIG_FEATURE_MOUNT_NFS.*/CONFIG_FEATURE_MOUNT_NFS=n/;" $(BUSYBOX_DIR)/.config
->  endif
-> +ifeq ($(BR2_PACKAGE_BUSYBOX_MKSTATIC),y)
-> +	# force static build on
-> +	$(SED) "s/^.*CONFIG_STATIC.*/CONFIG_STATIC=y/" $(BUSYBOX_DIR)/.config
-> +	$(SED) "s/^.*CONFIG_PIE.*/CONFIG_PIE=n/" $(BUSYBOX_DIR)/.config
-> +endif
->  ifeq ($(BR2_PACKAGE_BUSYBOX_SKELETON),y)
->  	# force mdev on
->  	$(SED) "s/^.*CONFIG_MDEV.*/CONFIG_MDEV=y/" $(BUSYBOX_DIR)/.config
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> 
+what cud be wrong?
+
+regards
+
+Nataraj
