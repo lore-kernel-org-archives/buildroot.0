@@ -1,46 +1,45 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 20 Nov 2009 17:20:44 +0100
-Subject: [Buildroot] [RFC] *clean targets
-In-Reply-To: <20091120161925.GW919@mx.loc> (Bernhard Reutner-Fischer's message
-	of "Fri\, 20 Nov 2009 17\:19\:25 +0100")
-References: <20091007162422.GI10261@mx.loc> <20091009095152.555ceed2@surf>
-	<20091009100008.7d0f2c65@surf> <20091009094809.GH2266@mx.loc>
-	<87my40hkmz.fsf@macbook.be.48ers.dk>
-	<87vdh5gxeh.fsf@macbook.be.48ers.dk> <20091120152853.GV919@mx.loc>
-	<20091120161925.GW919@mx.loc>
-Message-ID: <87iqd5gobn.fsf@macbook.be.48ers.dk>
+From: Jens Kleinhans <jens.kleinhans@gmx.de>
+Date: Fri, 20 Nov 2009 19:15:05 +0100
+Subject: [Buildroot] help
+Message-ID: <000001ca6a0d$62fb83d0$28f28b70$@kleinhans@gmx.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernhard" == Bernhard Reutner-Fischer <rep.dot.nop@gmail.com> writes:
+ 
 
-Hi,
+Hello,
 
- Bernhard> .. and of course keep DL_DIR
+ 
 
- Bernhard> so, to come back to my initial proposal
+I'm trying to build the buildroot with the explanation on linux4Sam.
 
- Bernhard> # wipe target and staging dirs (think %-uninstall):
- Bernhard> clean:
- Bernhard> # remove generated files, retain: configs and DL_DIR, {m,}conf{,.o}, host-*:
- Bernhard> realclean:
- Bernhard> # remove generated files, including configs {m,}conf host-* (but not DL_DIR!):
- Bernhard> # think git clean -d -x
- Bernhard> distclean:
+I need it for Crosscompiling the Kernel for an ARM Board AT91SAM9260 from
+Atmel.
 
-Check the tree. I believe the commit does that (except we don't have a
-realclean).
+Is there a HOW To or any aid for the configuration for this board?
 
- Bernhard> # make a release tarball; see how existing DL_DIR does not matter:
- Bernhard> dist release: FOO=buildroot VERS=1.2.3
- Bernhard> 	git archive --prefix $(FOO)-$(VERS) HEAD | tee >(bzip2>$(FOO).tar.bz2) >(gzip>$(FOO).tar.gz) | xv>$(FOO).tar.xv
+ 
 
-I prefer to not touch make release right now - Not a high priority as
-I'm the only one using it.
+If you got a HOW TO or some helping information it would be kind if you send
+it to me.
 
+ 
 
--- 
-Bye, Peter Korsgaard
+With kind regards
+
+ 
+
+Jens
+
+ 
+
+ 
+
+ 
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091120/4ab4d147/attachment.htm>
