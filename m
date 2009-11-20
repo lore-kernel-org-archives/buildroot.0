@@ -1,43 +1,25 @@
-From: Jens Kleinhans <jens.kleinhans@gmx.de>
-Date: Fri, 20 Nov 2009 16:08:45 +0100
-Subject: [Buildroot] Problem with "Build buildroot"
-Message-ID: <000001ca69f3$5c32c140$149843c0$@kleinhans@gmx.de>
+From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+Date: Fri, 20 Nov 2009 16:28:53 +0100
+Subject: [Buildroot] [RFC] *clean targets
+In-Reply-To: <87vdh5gxeh.fsf@macbook.be.48ers.dk>
+References: <20091007162422.GI10261@mx.loc> <20091009095152.555ceed2@surf>
+	<20091009100008.7d0f2c65@surf> <20091009094809.GH2266@mx.loc>
+	<87my40hkmz.fsf@macbook.be.48ers.dk>
+	<87vdh5gxeh.fsf@macbook.be.48ers.dk>
+Message-ID: <20091120152853.GV919@mx.loc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Fri, Nov 20, 2009 at 02:04:38PM +0100, Peter Korsgaard wrote:
+>>>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
 
- 
+> Peter> So in other words, we should just have clean and distclean, where the
+> Peter> only difference between those two is that clean doesn't delete your
+> Peter> .config?
+>
+>No objections? Ok, I'll implement it like that then.
 
-I'm trying to build the buildroot with the explanation on linux4Sam.
-
-I need it for Crosscompiling the Kernel for an ARM Board AT91SAM9260 from
-Atmel.
-
-Is there a HOW To or any aid for the configuration for this board?
-
- 
-
-If you got a HOW TO or some helping information it would be kind if you send
-it to me.
-
- 
-
-With kind regards
-
- 
-
-Jens
-
- 
-
- 
-
- 
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091120/3903ad54/attachment-0001.htm>
+I'd keep conf,mconf and related .o on clean
