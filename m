@@ -1,83 +1,38 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Thu, 19 Nov 2009 23:24:52 +0100
-Subject: [Buildroot] [PATCH 4/8] flex: add flex-host package (required
- by webkit)
-In-Reply-To: <20091115123925.0649e537@surf>
-References: <1258279977-1482-1-git-send-email-llandwerlin@gmail.com>
-	<1258279977-1482-5-git-send-email-llandwerlin@gmail.com>
-	<20091115123925.0649e537@surf>
-Message-ID: <1258669493.24296.100.camel@coalu.atr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 20 Nov 2009 14:04:38 +0100
+Subject: [Buildroot] [RFC] *clean targets
+In-Reply-To: <87my40hkmz.fsf@macbook.be.48ers.dk> (Peter Korsgaard's message
+	of "Fri\, 09 Oct 2009 13\:28\:04 +0200")
+References: <20091007162422.GI10261@mx.loc> <20091009095152.555ceed2@surf>
+	<20091009100008.7d0f2c65@surf> <20091009094809.GH2266@mx.loc>
+	<87my40hkmz.fsf@macbook.be.48ers.dk>
+Message-ID: <87vdh5gxeh.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+>>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
 
-I did had some problem with fontconfig :
+>>>>> "Bernhard" == Bernhard Reutner-Fischer <rep.dot.nop@gmail.com> writes:
+ Peter> Hi,
 
->>> fontconfig 2.6.0 Extracting
->>> fontconfig 2.6.0 Patching package/fontconfig
+ >>> * On the clean target
+ >>> 
+ >>> I see that all the stamps are removed. So this will trigger
+ >>> basically a reconfigure + rebuild of all packages. Is this what we
+ >>> want ?
 
-Applying fontconfig-2.6.0-parallel-compilation-fix.patch using plaintext: 
-patching file fc-case/Makefile.am
+ Bernhard> yes, this is what i as a user would expect.
+ Bernhard> Something broke, i have to rebuild stuff, so i
+ Bernhard> make clean ; make
 
-Applying fontconfig-2.6.0-use_for_build.patch using plaintext: 
-patching file fc-arch/Makefile.am
-patching file fc-case/Makefile.am
-patching file fc-glyphname/Makefile.am
-patching file fc-lang/Makefile.am
-/bin/sh: -c: line 0: Erreur de syntaxe pr?s du symbole inattendu ? @echo ?
-/bin/sh: -c: line 0: `(for file in config.guess config.sub; do for i in ; do cp package/gnuconfig/ile ; done; done) 	@echo ">>>   "Autoreconfiguring""'
-make: *** [/home/djdeath/src/buildroot/buildroot_rebase/output/build/fontconfig-2.6.0/.stamp_patched] Erreur 2
+ Peter> So in other words, we should just have clean and distclean, where the
+ Peter> only difference between those two is that clean doesn't delete your
+ Peter> .config?
 
+No objections? Ok, I'll implement it like that then.
 
-The following patch fix the problem, but I don't understand why...
-Any idea ?
-
-->>>>>
-
-diff --git a/package/Makefile.autotools.in b/package/Makefile.autotools.in
-index f039903..ebe8299 100644
---- a/package/Makefile.autotools.in
-+++ b/package/Makefile.autotools.in
-@@ -107,6 +107,7 @@ define UPDATE_CONFIG_HOOK
-                        cp package/gnuconfig/$$file $$i; \
-                done; \
-        done)
-+
- endef
- 
- ifeq ($(BR2_UPDATE_CONFIG),y)
-
-<<<<<-
-
-Le dimanche 15 novembre 2009 ? 12:39 +0100, Thomas Petazzoni a ?crit :
-> Hi Lionel,
-> 
-> Le Sun, 15 Nov 2009 11:12:53 +0100,
-> llandwerlin at gmail.com a ?crit :
-> 
-> >  $(eval $(call AUTOTARGETS,package,flex))
-> > +$(eval $(call AUTOTARGETS,package,flex,host))
-> 
-> Thanks for using so quickly the new autotools infrastructure! Have you
-> been able to use it with success ?
-> 
-> However, please note that if you depend on this new infrastructure,
-> your patches will not be integrated in the upcoming 2009.11 release,
-> because the new infrastructure is post-2009.11 material.
-> 
-> Sincerly,
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers and embedded Linux development,
-> consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+-- 
+Bye, Peter Korsgaard
