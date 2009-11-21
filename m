@@ -1,34 +1,38 @@
-From: Nicholas Walton <nwalton@aplopteng.com>
-Date: Fri, 20 Nov 2009 14:36:16 -0800
-Subject: [Buildroot] help
-In-Reply-To: <3617236271557503935@unknownmsgid>
-References: <3617236271557503935@unknownmsgid>
-Message-ID: <b680c1c10911201436o718d1e1cv828216724bdc222c@mail.gmail.com>
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Sat, 21 Nov 2009 05:00:12 +0000 (UTC)
+Subject: [Buildroot] How do I configure the kernel?
+References: <he74ti$hbd$1@ger.gmane.org>
+	<b680c1c10911201430s25dadd6aj8d1c48afaff91445@mail.gmail.com>
+	<b680c1c10911201435k3e8e6988pea7dcaaa301ee5d7@mail.gmail.com>
+Message-ID: <he7s4s$330$1@ger.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Nov 20, 2009 at 10:15 AM, Jens Kleinhans <jens.kleinhans@gmx.de> wrote:
-> Hello,
+On 2009-11-20, Nicholas Walton <nwalton@aplopteng.com> wrote:
+> On Fri, Nov 20, 2009 at 2:23 PM, Grant Edwards
+><grant.b.edwards@gmail.com> wrote:
+>> How do you configure the kernel when using buildroot?
 >
-> I?m trying to build the buildroot with the explanation on linux4Sam.
+> make linux26-menuconfig
 
-Much of the information about buildroot on Linux4SAM is not relevant
-to the current versions of buildroot and the kernel. A good first step
-is to go through buildroot menuconfig and linux26-menuconfig, select
-the AT91SAM9260 and AT91SAM9260EK options, leave everything else set
-to defaults, and build.
+Doh!  I trield make kernel-menuconfig and several other
+variations.  For future reference, is there somewhere that's
+documented?
 
-Nicholas
+The next question was going to be where do I put a kernel
+.config file if I already have one I want to use.  I can
+probably do a "find" to search for files named .config and
+figure out which is the right one. Then I assume I do "make
+linux26-oldconfig"?
 
-> I need it for Crosscompiling the Kernel for an ARM Board AT91SAM9260 from Atmel.
->
-> Is there a HOW To or any aid for the configuration for this board?
->
-> If you got a HOW TO or some helping information it would be kind if you send it to me.
->
-> With kind regards
->
-> Jens
+> Other targets, such as Busybox, follow the same convention.
+
+Yes, the docs do explain how to configure busybox and uclibc.
+I just hadn't guessed the correct "label" for doing the same
+thing for the kernel.
+
+-- 
+Grant
