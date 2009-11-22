@@ -1,8 +1,8 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
+From: Kelvin Cheung <keguang.zhang@gmail.com>
 Date: Sun, 22 Nov 2009 21:51:46 +0100
-Subject: [Buildroot] [git commit master] package/sdl: fix dependencies for
-	directfb/qt/x11 support
-Message-ID: <20091122210625.6C8A2777EF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] target/jffs2: add support for nand
+	flash with 512B page / 16 kB erasesize
+Message-ID: <20091122210625.AFE87777EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,118 +10,85 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=351b679608e805ed1d6f27a1f6b5e2398eb3a5eb
+commit: http://git.buildroot.net/buildroot/commit/?id=07019b2c13ab85e8bc18128ef2772d090f2d18d5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Closes #683
+Closes #663
 
-And cleanup Kconfig while we're at it.
-
+Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES               |    9 +++++----
- package/sdl/Config.in |   11 ++++++++---
- package/sdl/sdl.mk    |    5 ++++-
- 3 files changed, 17 insertions(+), 8 deletions(-)
+ CHANGES                |    8 ++++----
+ target/jffs2/Config.in |    7 +++++++
+ 2 files changed, 11 insertions(+), 4 deletions(-)
 
 diff --git a/CHANGES b/CHANGES
-index 37931d8..ab1df38 100644
+index ab1df38..421629f 100644
 --- a/CHANGES
 +++ b/CHANGES
-@@ -15,10 +15,10 @@
- 	gst-plugins-good, imagemagick, ipkg, iptables, iw, kernel-headers,
- 	kismet, libelf, libevent, libglib2, libidn, liblockfile, libmad,
- 	libpcap, libupnp, libuuid, lighttpd, ltrace, lua, lzma, mdadm, ncftp,
--	ncurses, netkittelnet, netsnmp, ntfs-3g, openntp, openssl, php, python,
--	quagga, radvd, rsync, samba, sawman, shared-mime-info, spawn-fcgi,
--	speech-tools, sqlite, squashfs, synergy, syslinux, tcpdump, u-boot,
--	util-linux, valgrind, vsftpd, wipe
-+	ncurses, netkittelnet, netsnmp, ntfs-3g, openntp, openssl, php,
-+	python, quagga, radvd, rsync, samba, sawman, sdl, shared-mime-info,
-+	spawn-fcgi, speech-tools, sqlite, squashfs, synergy, syslinux,
-+	tcpdump, u-boot, util-linux, valgrind, vsftpd, wipe
+@@ -18,9 +18,8 @@
+ 	ncurses, netkittelnet, netsnmp, ntfs-3g, openntp, openssl, php,
+ 	python, quagga, radvd, rsync, samba, sawman, sdl, shared-mime-info,
+ 	spawn-fcgi, speech-tools, sqlite, squashfs, synergy, syslinux,
+-	tcpdump, u-boot, util-linux, valgrind, vsftpd, wipe
+-
+-	wpa-supplicant, xdata_xcursor-themes, zlib
++	tcpdump, u-boot, util-linux, valgrind, vsftpd, wipe, wpa-supplicant,
++	xdata_xcursor-themes, zlib
  
- 	wpa-supplicant, xdata_xcursor-themes, zlib
+ 	Removed package: mdnsresponder, mpatrol, gcc 3.4.6 + 4.0.4
  
-@@ -44,6 +44,7 @@
+@@ -38,10 +37,11 @@
+ 	#609: libmicrohttpd: New package
+ 	#615: python: Don't delete .py files unless asked
+ 	#617: netkit/inetd requires RPC and fails to build if RPC is disabled
+-	#619: netkittelnet requires netkitbase to install, but there's no dependency
++	#619: netkittelnet requires netkitbase to install, but there's no ...
+ 	#653: [SECURITY] Update php package to version 5.2.11
+ 	#655: Update sqlite package to version 3.6.18
  	#657: Bug in imagemagick-clean target
++	#663: Add option for NAND flash with 512B Page and 16 kB erasesize ...
  	#665: [PATCH] Samba package
  	#667: [PATCH] e2fsprogs
-+	#683: SDL-dfb does not select directfb
- 	#701: make install problem with unstripped binaries
- 	#703: [SECURITY] Update openssl package to 0.9.8l
- 	#705: Bump spawn-fcgi package to 1.6.3
-diff --git a/package/sdl/Config.in b/package/sdl/Config.in
-index 7cba524..869173d 100644
---- a/package/sdl/Config.in
-+++ b/package/sdl/Config.in
-@@ -1,11 +1,13 @@
- config BR2_PACKAGE_SDL
- 	bool "SDL"
+ 	#683: SDL-dfb does not select directfb
+diff --git a/target/jffs2/Config.in b/target/jffs2/Config.in
+index 16fdcc5..108dfde 100644
+--- a/target/jffs2/Config.in
++++ b/target/jffs2/Config.in
+@@ -19,6 +19,10 @@ config BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_528
+ 	bool "AT45 dataflash with 528 byte pagesize"
+ 	select BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER
+ 
++config BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_512_16K
++	bool "NAND flash with 512B Page and 16 kB erasesize"
++	select BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER
++
+ config BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_2K_128K
+ 	bool "NAND flash with 2kB Page and 128 kB erasesize"
+ 	select BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER
+@@ -52,6 +56,7 @@ config BR2_TARGET_ROOTFS_JFFS2_PAGESIZE
+ 	hex
+ 	default 0x420 if BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_1056
+ 	default 0x210 if BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_528
++	default 0x200 if BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_512_16K
+ 	default 0x800 if BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_2K_128K
+ 	default 0x1000 if BR2_TARGET_ROOTFS_JFFS2_FLASH_128
+ 	default 0x1000 if BR2_TARGET_ROOTFS_JFFS2_FLASH_64
+@@ -61,6 +66,7 @@ config BR2_TARGET_ROOTFS_JFFS2_EBSIZE
+ 	hex
+ 	default 0x2100 if BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_1056
+ 	default 0x1080 if BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_528
++	default 0x4000 if BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_512_16K
+ 	default 0x20000 if BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_2K_128K
+ 	default 0x20000 if BR2_TARGET_ROOTFS_JFFS2_FLASH_128
+ 	default 0x10000 if BR2_TARGET_ROOTFS_JFFS2_FLASH_64
+@@ -70,6 +76,7 @@ config BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER
+ 	bool "Do not use Cleanmarker"
+ 	default y if BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_1056
+ 	default y if BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_528
++	default y if BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_512_16K
+ 	default y if BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_2K_128K
  	help
-+	  Simple DirectMedia Layer - SDL is a library that allows
-+	  programs portable low level access to a video framebuffer,
-+	  audio output, mouse, and keyboard.
- 
- 	  http://www.libsdl.org/
- 
--menu "SDL options selection"
--	depends on BR2_PACKAGE_SDL
-+if BR2_PACKAGE_SDL
- 
- config BR2_PACKAGE_SDL_FBCON
- 	bool "SDL framebuffer console video driver"
-@@ -13,11 +15,14 @@ config BR2_PACKAGE_SDL_FBCON
- 
- config BR2_PACKAGE_SDL_DIRECTFB
- 	bool "SDL DirectFB video driver"
-+	depends on BR2_PACKAGE_DIRECTFB
- 
- config BR2_PACKAGE_SDL_QTOPIA
- 	bool "SDL Qtopia video driver"
-+	depends on BR2_PACKAGE_QT
- 
- config BR2_PACKAGE_SDL_X11
- 	bool "SDL X11 video driver"
-+	depends on BR2_PACKAGE_XORG7
- 
--endmenu
-+endif
-diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
-index e9d6c0c..f66ecc4 100644
---- a/package/sdl/sdl.mk
-+++ b/package/sdl/sdl.mk
-@@ -18,6 +18,7 @@ SDL_FBCON=--enable-video-fbcon=no
- endif
- 
- ifeq ($(BR2_PACKAGE_SDL_DIRECTFB),y)
-+SDL_DEPENDENCIES += directfb
- SDL_DIRECTFB=--enable-video-directfb=yes
- SDL_DIRECTFB_TARGET:=$(STAGING_DIR)/include/directfb
- SDL_DIRECTFB_INCLUDES:=-I$(STAGING_DIR)/usr/include/directfb
-@@ -28,12 +29,14 @@ endif
- 
- ifeq ($(BR2_PACKAGE_SDL_QTOPIA),y)
- SDL_QTOPIA=--enable-video-qtopia=yes
-+SDL_DEPENDENCIES += qt
- else
- SDL_QTOPIA=--enable-video-qtopia=no
- endif
- 
- ifeq ($(BR2_PACKAGE_SDL_X11),y)
- SDL_X11=--enable-video-x11=yes
-+SDL_DEPENDENCIES += xserver_xorg-server
- else
- SDL_X11=--enable-video-x11=no
- endif
-@@ -96,7 +99,7 @@ $(TARGET_DIR)/usr/lib/libSDL.so: $(STAGING_DIR)/usr/lib/libSDL.so
- 	cp -dpf $(STAGING_DIR)/usr/lib/libSDL*.so* $(TARGET_DIR)/usr/lib/
- 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libSDL.so
- 
--SDL sdl: $(TARGET_DIR)/usr/lib/libSDL.so
-+SDL sdl: $(SDL_DEPENDENCIES) $(TARGET_DIR)/usr/lib/libSDL.so
- 
- sdl-unpacked: $(SDL_DIR)/.unpacked
- 
+ 	  Do not use cleanmarkers if using NAND flash or Dataflash where
 -- 
 1.6.3.3
