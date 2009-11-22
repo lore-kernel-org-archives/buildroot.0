@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 22 Nov 2009 21:51:46 +0100
-Subject: [Buildroot] [git commit master] package/Makefile.in: fix 'true'
-	invocation for BR2_STRIP_none
-Message-ID: <20091122210625.2C704777EF@busybox.osuosl.org>
+Date: Sun, 22 Nov 2009 23:24:14 +0100
+Subject: [Buildroot] [git commit master] package/nbd: fix build with
+	!BR2_LARGEFILE
+Message-ID: <20091122222604.A908C777E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,43 +10,63 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3445ff4adebd3674d8e227479800efe987682d07
+commit: http://git.buildroot.net/buildroot/commit/?id=0017d6b3b5e77fc89c531375b5bab7598ae89443
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Closes #701
-
-Coreutils true doesn't understand a -Not_stripping argument.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES             |    1 +
- package/Makefile.in |    2 +-
- 2 files changed, 2 insertions(+), 1 deletions(-)
+ package/nbd/nbd-fix-build-with-disable-lfs.patch |   30 ++++++++++++++++++++++
+ package/nbd/nbd.mk                               |    1 +
+ 2 files changed, 31 insertions(+), 0 deletions(-)
+ create mode 100644 package/nbd/nbd-fix-build-with-disable-lfs.patch
 
-diff --git a/CHANGES b/CHANGES
-index adcd8bd..37931d8 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -44,6 +44,7 @@
- 	#657: Bug in imagemagick-clean target
- 	#665: [PATCH] Samba package
- 	#667: [PATCH] e2fsprogs
-+	#701: make install problem with unstripped binaries
- 	#703: [SECURITY] Update openssl package to 0.9.8l
- 	#705: Bump spawn-fcgi package to 1.6.3
- 	#709: Bump lighttpd package to 1.4.24
-diff --git a/package/Makefile.in b/package/Makefile.in
-index a10abe4..b5a7a8e 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -163,7 +163,7 @@ TARGET_STRIP=$(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-sstrip
- STRIPCMD=$(TARGET_STRIP)
- endif
- ifeq ($(BR2_STRIP_none),y)
--TARGET_STRIP=true -Not_stripping
-+TARGET_STRIP=true Not_stripping
- STRIPCMD=$(TARGET_STRIP)
- endif
- INSTALL:=$(shell which install || type -p install)
+diff --git a/package/nbd/nbd-fix-build-with-disable-lfs.patch b/package/nbd/nbd-fix-build-with-disable-lfs.patch
+new file mode 100644
+index 0000000..5b270aa
+--- /dev/null
++++ b/package/nbd/nbd-fix-build-with-disable-lfs.patch
+@@ -0,0 +1,30 @@
++From 6d452ab0247770a446cfa6dd9b8b4ddea6c8fa4b Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <jacmet@sunsite.dk>
++Date: Sun, 22 Nov 2009 23:01:52 +0100
++Subject: [PATCH] lfs.h: fix build with --disable-lfs
++
++Running ./configure with --disable-lfs #define's NBD_LFS to 0 and
++doesn't #undef it, so the LFS check should use #if rather than #ifdef
++similar to how it is done in cliserv.h
++
++Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
++---
++ lfs.h |    2 +-
++ 1 files changed, 1 insertions(+), 1 deletions(-)
++
++diff --git a/lfs.h b/lfs.h
++index 8f90f81..929ce08 100644
++--- a/lfs.h
+++++ b/lfs.h
++@@ -2,7 +2,7 @@
++ #define LFS_H
++ 
++ #include "config.h"
++-#ifdef NBD_LFS
+++#if NBD_LFS
++ #define _FILE_OFFSET_BITS 64
++ #define _LARGEFILE_SOURCE
++ #endif /* NBD_LFS */
++-- 
++1.6.3.3
++
+diff --git a/package/nbd/nbd.mk b/package/nbd/nbd.mk
+index df8e167..bcb8677 100644
+--- a/package/nbd/nbd.mk
++++ b/package/nbd/nbd.mk
+@@ -39,6 +39,7 @@ $(NBD_DIR)/.configured: $(NBD_DIR)/.patched
+ 		--build=$(GNU_HOST_NAME) \
+ 		--prefix=/usr \
+ 		--sysconfdir=/etc \
++		$(if $(BR2_LARGEFILE),--enable-lfs,--disable-lfs) \
+ 	)
+ 	touch $@
+ 
 -- 
 1.6.3.3
