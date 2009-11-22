@@ -1,8 +1,7 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Date: Sun, 22 Nov 2009 21:51:46 +0100
-Subject: [Buildroot] [git commit master] docs/buildroot.html: document
-	linux26-menuconfig / LINUX26_KCONFIG
-Message-ID: <20091122210626.93DDD777EF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] Bump iw package to 0.9.17
+Message-ID: <20091122210624.8AD40777EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,57 +9,57 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=796e2b6cccfe39e0a049871c3daff073cde00174
+commit: http://git.buildroot.net/buildroot/commit/?id=bd49a62d8ab7616f087620c3f8aa16d4b328a36c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This wasn't menitioned in the documentation as noticed by
-Grant Edwards <grant.b.edwards@gmail.com>.
+Closes #731
 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- docs/buildroot.html |   16 ++++++++++++++++
- 1 files changed, 16 insertions(+), 0 deletions(-)
+ CHANGES          |    9 +++++----
+ package/iw/iw.mk |    2 +-
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/docs/buildroot.html b/docs/buildroot.html
-index d56b663..a04348b 100644
---- a/docs/buildroot.html
-+++ b/docs/buildroot.html
-@@ -29,6 +29,8 @@
-       configuration</a></li>
-       <li><a href="#custom_uclibc">Customizing the uClibc
-       configuration</a></li>
-+      <li><a href="#custom_linux26">Customizing the Linux kernel
-+      configuration</a></li>
-       <li><a href="#rebuilding_packages">Understanding how to rebuild packages</a></li>
-       <li><a href="#buildroot_innards">How Buildroot works</a></li>
-       <li><a href="#using_toolchain">Using the uClibc toolchain
-@@ -269,6 +271,8 @@
-     internal toolchain is selected</li>
-     <li><code>BUSYBOX_CONFIG_FILE=&lt;path/to/.config&gt;</code>, path
-     to the Busybox configuration file</li>
-+    <li><code>LINUX26_KCONFIG=&lt;path/to/.config&gt;</code>, path
-+    to the Linux kernel configuration file</li>
-     <li><code>BUILDROOT_COPYTO</code>, an additional location at which
-     the binary images of the root filesystem, kernel, etc. built by
-     Buildroot are copied</li>
-@@ -414,6 +418,18 @@ $ export BUILDROOT_COPYTO=/tftpboot
-     <p>If you want to use an existing config file for uclibc, then see
-     section <a href="#environment_variables">environment variables</a>. </p>
+diff --git a/CHANGES b/CHANGES
+index c46b129..2255f1d 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -12,10 +12,10 @@
  
-+    <h2><a name="custom_linux26" id="custom_linux26"></a>Customizing
-+    the Linux kernel configuration</h2>
-+
-+    <p>The Linux kernel configuration can be customized just like <a
-+    href="#custom_busybox">BusyBox</a> and <a href="#custom_uclibc">uClibc</a>
-+    using <code>make linux26-menuconfig</code>. Make sure you have
-+    enabled the kernel build in <code>make menuconfig</code> first.
-+    Once done, run <code>make</code> to (re)build everything.</p>
-+
-+    <p>If you want to use an existing config file for Linux, then see
-+    section <a href="#environment_variables">environment variables</a>.</p>
-+
-     <h2><a name="#rebuilding_packages"
-     id="rebuilding_packages">Understanding how to rebuild
-     packages</a></h2>
+ 	Updated/fixed packages: autoconf, busybox, gcc, directfb, dnsmasq,
+ 	e2fsprogs, festival, gstreamer, gst-plugins-bad, gst-plugins-base,
+-	gst-plugins-good, imagemagick, ipkg, iptables, kernel-headers, kismet,
+-	libelf, libevent, libglib2, libidn, liblockfile, libmad, libpcap,
+-	libupnp, libuuid, lighttpd, ltrace, lua, lzma, mdadm, ncftp, ncurses,
+-	netkittelnet, netsnmp, ntfs-3g, openntp, openssl, php, python,
++	gst-plugins-good, imagemagick, ipkg, iptables, iw, kernel-headers,
++	kismet, libelf, libevent, libglib2, libidn, liblockfile, libmad,
++	libpcap, libupnp, libuuid, lighttpd, ltrace, lua, lzma, mdadm, ncftp,
++	ncurses, netkittelnet, netsnmp, ntfs-3g, openntp, openssl, php, python,
+ 	quagga, radvd, rsync, samba, sawman, shared-mime-info, speech-tools,
+ 	sqlite, squashfs, synergy, syslinux, tcpdump, u-boot, util-linux,
+ 	valgrind, vsftpd, wipe
+@@ -49,6 +49,7 @@
+ 	#713: Migrate openntpd package to Makefile.autotools.in
+ 	#715: Bump libidn package to 1.15 and other fixes
+ 	#717: Bump dnsmasq to 2.51 and introduce new IDN option
++	#731: Bump iw package to 0.9.17
+ 
+ 2009.08, Released August 31th, 2009:
+ 
+diff --git a/package/iw/iw.mk b/package/iw/iw.mk
+index dab6eee..9028ba1 100644
+--- a/package/iw/iw.mk
++++ b/package/iw/iw.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-IW_VERSION = 0.9.15
++IW_VERSION = 0.9.17
+ IW_SOURCE = iw-$(IW_VERSION).tar.bz2
+ IW_SITE = http://wireless.kernel.org/download/iw
+ IW_DEPENDENCIES = libnl
 -- 
 1.6.3.3
