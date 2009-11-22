@@ -1,7 +1,8 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sun, 22 Nov 2009 21:51:46 +0100
-Subject: [Buildroot] [git commit master] Bump iw package to 0.9.17
-Message-ID: <20091122210624.8AD40777EF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] package/Makefile.in: fix 'true'
+	invocation for BR2_STRIP_none
+Message-ID: <20091122210625.2C704777EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,57 +10,43 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bd49a62d8ab7616f087620c3f8aa16d4b328a36c
+commit: http://git.buildroot.net/buildroot/commit/?id=3445ff4adebd3674d8e227479800efe987682d07
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Closes #731
+Closes #701
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Coreutils true doesn't understand a -Not_stripping argument.
+
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES          |    9 +++++----
- package/iw/iw.mk |    2 +-
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ CHANGES             |    1 +
+ package/Makefile.in |    2 +-
+ 2 files changed, 2 insertions(+), 1 deletions(-)
 
 diff --git a/CHANGES b/CHANGES
-index c46b129..2255f1d 100644
+index adcd8bd..37931d8 100644
 --- a/CHANGES
 +++ b/CHANGES
-@@ -12,10 +12,10 @@
- 
- 	Updated/fixed packages: autoconf, busybox, gcc, directfb, dnsmasq,
- 	e2fsprogs, festival, gstreamer, gst-plugins-bad, gst-plugins-base,
--	gst-plugins-good, imagemagick, ipkg, iptables, kernel-headers, kismet,
--	libelf, libevent, libglib2, libidn, liblockfile, libmad, libpcap,
--	libupnp, libuuid, lighttpd, ltrace, lua, lzma, mdadm, ncftp, ncurses,
--	netkittelnet, netsnmp, ntfs-3g, openntp, openssl, php, python,
-+	gst-plugins-good, imagemagick, ipkg, iptables, iw, kernel-headers,
-+	kismet, libelf, libevent, libglib2, libidn, liblockfile, libmad,
-+	libpcap, libupnp, libuuid, lighttpd, ltrace, lua, lzma, mdadm, ncftp,
-+	ncurses, netkittelnet, netsnmp, ntfs-3g, openntp, openssl, php, python,
- 	quagga, radvd, rsync, samba, sawman, shared-mime-info, speech-tools,
- 	sqlite, squashfs, synergy, syslinux, tcpdump, u-boot, util-linux,
- 	valgrind, vsftpd, wipe
-@@ -49,6 +49,7 @@
- 	#713: Migrate openntpd package to Makefile.autotools.in
- 	#715: Bump libidn package to 1.15 and other fixes
- 	#717: Bump dnsmasq to 2.51 and introduce new IDN option
-+	#731: Bump iw package to 0.9.17
- 
- 2009.08, Released August 31th, 2009:
- 
-diff --git a/package/iw/iw.mk b/package/iw/iw.mk
-index dab6eee..9028ba1 100644
---- a/package/iw/iw.mk
-+++ b/package/iw/iw.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--IW_VERSION = 0.9.15
-+IW_VERSION = 0.9.17
- IW_SOURCE = iw-$(IW_VERSION).tar.bz2
- IW_SITE = http://wireless.kernel.org/download/iw
- IW_DEPENDENCIES = libnl
+@@ -44,6 +44,7 @@
+ 	#657: Bug in imagemagick-clean target
+ 	#665: [PATCH] Samba package
+ 	#667: [PATCH] e2fsprogs
++	#701: make install problem with unstripped binaries
+ 	#703: [SECURITY] Update openssl package to 0.9.8l
+ 	#705: Bump spawn-fcgi package to 1.6.3
+ 	#709: Bump lighttpd package to 1.4.24
+diff --git a/package/Makefile.in b/package/Makefile.in
+index a10abe4..b5a7a8e 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -163,7 +163,7 @@ TARGET_STRIP=$(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-sstrip
+ STRIPCMD=$(TARGET_STRIP)
+ endif
+ ifeq ($(BR2_STRIP_none),y)
+-TARGET_STRIP=true -Not_stripping
++TARGET_STRIP=true Not_stripping
+ STRIPCMD=$(TARGET_STRIP)
+ endif
+ INSTALL:=$(shell which install || type -p install)
 -- 
 1.6.3.3
