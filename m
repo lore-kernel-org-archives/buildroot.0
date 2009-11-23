@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Mon, 23 Nov 2009 13:03:59 +0100
-Subject: [Buildroot] [git commit master] CHANGES: add non-package changes
-	since 2009.08
-Message-ID: <20091123120642.CF77377782@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] package/bootutils: needs largefile
+	support
+Message-ID: <20091123120643.A21F577782@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,40 +10,48 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b8a917faaa4b330ad86ac0dd1191fe802d9eae9c
+commit: http://git.buildroot.net/buildroot/commit/?id=8fb74cdece55fe31eb87308c8c0cb99841085ad7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Build fails with llseek() linker errors.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES |   12 +++++++++++-
- 1 files changed, 11 insertions(+), 1 deletions(-)
+ CHANGES                     |    4 ++--
+ package/bootutils/Config.in |    3 +++
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/CHANGES b/CHANGES
-index ee33dd2..5245a0f 100644
+index 5245a0f..26bf3fa 100644
 --- a/CHANGES
 +++ b/CHANGES
-@@ -1,11 +1,21 @@
- 2009.11, Not yet released:
- 
-+	Fixes all over the tree and new features.
-+
-+	Cleaned up / Simplified build directory layout. Refer to
-+	docs/buildroot.html#using for details.
-+
-+	Target defconfig files moved to configs/ and listed in 'make help'
-+	output.
-+
- 	Fixed *clean targets. Now clean removes everything generated,
- 	so you can do a fresh rebuild. Distclean furthermore removes
- 	kbuild tools and .config, bringing the source tree back in a
- 	pristine state.
- 
--	Toolchain: ARM cortex A8 support, GCC 4.4.2.
-+	Toolchain: ARM cortex A8 support, GCC 4.4.2, sensible default
-+	soft / hardfloat setting for architecture, ensure target-ldd
-+	gets installed.
- 
+@@ -20,8 +20,8 @@
  	New packages: divine, gvfs, libarchive, libmicrohttpd,
  	sdl_sound, swfdec, sysstat
+ 
+-	Updated/fixed packages: alsamixergui, autoconf, busybox, gcc,
+-	directfb, dnsmasq, e2fsprogs, festival, gstreamer, gst-plugins-bad,
++	Updated/fixed packages: alsamixergui, autoconf, bootutils, busybox,
++	gcc, directfb, dnsmasq, e2fsprogs, festival, gstreamer, gst-plugins-bad,
+ 	gst-plugins-base, gst-plugins-good, imagemagick, ipkg, iptables,
+ 	iw, kernel-headers, kismet, libelf, libevent, libglib2, libidn,
+ 	liblockfile, libmad, libpcap, libupnp, libuuid, lighttpd, ltrace,
+diff --git a/package/bootutils/Config.in b/package/bootutils/Config.in
+index c5254de..06a8fd8 100644
+--- a/package/bootutils/Config.in
++++ b/package/bootutils/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_BOOTUTILS
+ 	bool "bootutils"
++	depends on BR2_LARGEFILE
+ 	help
+ 	  BootUtils is a collection of utilities to facilitate booting of
+ 	  Linux 2.6-based systems. The process of finding the root volume
+@@ -8,3 +9,5 @@ config BR2_PACKAGE_BOOTUTILS
+ 
+ 	  http://bootutils.pr.linuxrulz.org/
+ 
++comment "bootutils requires a toolchain with LARGEFILE support"
++	depends on !BR2_LARGEFILE
 -- 
 1.6.3.3
