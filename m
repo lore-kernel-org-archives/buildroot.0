@@ -1,7 +1,7 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 23 Nov 2009 16:31:35 +0100
-Subject: [Buildroot] [git commit master] sysklogd: needs largefile support
-Message-ID: <20091123153334.3796B777E5@busybox.osuosl.org>
+From: laplace <daniel.kuhne@yahoo.de>
+Date: Mon, 23 Nov 2009 11:08:16 -0800 (PST)
+Subject: [Buildroot]  rxvt: build errors - what to do?
+Message-ID: <26481849.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,49 +9,55 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9627e21153693f296f41c0339e14d6ed18445d7e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+(edit to be resent to list)
+Hi,
 
-It tries to call lseek64():
+i got errors when selecting rxvt from buildroot <Package Selection for the
+target>.
+Can anyone say what to do here? Thx eric.
 
-ksym_mod.o: In function `InitMsyms':
-ksym_mod.c:(.text+0x438): undefined reference to `lseek64'
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES                    |    4 ++--
- package/sysklogd/Config.in |    4 ++++
- 2 files changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/CHANGES b/CHANGES
-index 264c398..7580e52 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -30,8 +30,8 @@
- 	ng-spice-rework, ntfs-3g, openntp, openssl, pcmanfm, php, psmisc,
- 	python, quagga, radvd, rpm, rsync, rubix, samba, sawman, sdl,
- 	shared-mime-info, sfdisk, spawn-fcgi, speech-tools, sqlite, squashfs,
--	synergy, syslinux, target-binutils, tcpdump, torsmo, u-boot, udpcast,
--	util-linux, valgrind, vsftpd, wipe, wpa-supplicant, x11vnc,
-+	synergy, syslinux, sysklogd, target-binutils, tcpdump, torsmo, u-boot,
-+	udpcast, util-linux, valgrind, vsftpd, wipe, wpa-supplicant, x11vnc,
- 	xdata_xcursor-themes, xboard, xfsprogs, xstroke, zlib
+[...]
+rxvt.c:15: error: expected declaration or statement at end of input
+rxvt.c: In function 'rxvt_tt_printf':
+rxvt.c:15: error: expected declaration or statement at end of input
+rxvt.c: In function 'rxvt_check_our_parents':
+rxvt.c:15: error: expected declaration or statement at end of input
+rxvt.c: In function 'rxvt_cmd_write':
+rxvt.c:15: error: expected declaration or statement at end of input
+make[2]: *** [rxvt.o] Fehler 1
+make[2]: Leaving directory
+`/opt/BuildRoot/buildroot-2009.08/build_arm/rxvt-2.7.5/src'
+make[2]: Entering directory
+`/opt/BuildRoot/buildroot-2009.08/build_arm/rxvt-2.7.5/doc'
+make[2]: F?r das Ziel ?all? ist nichts zu tun.
+make[2]: Leaving directory
+`/opt/BuildRoot/buildroot-2009.08/build_arm/rxvt-2.7.5/doc'
+make[2]: Entering directory
+`/opt/BuildRoot/buildroot-2009.08/build_arm/rxvt-2.7.5/rclock'
+make[2]: F?r das Ziel ?all? ist nichts zu tun.
+make[2]: Leaving directory
+`/opt/BuildRoot/buildroot-2009.08/build_arm/rxvt-2.7.5/rclock'
+make[2]: Entering directory
+`/opt/BuildRoot/buildroot-2009.08/build_arm/rxvt-2.7.5/src/graphics'
+make[2]: F?r das Ziel ?all? ist nichts zu tun.
+make[2]: Leaving directory
+`/opt/BuildRoot/buildroot-2009.08/build_arm/rxvt-2.7.5/src/graphics'
+make[2]: Entering directory
+`/opt/BuildRoot/buildroot-2009.08/build_arm/rxvt-2.7.5/src/test'
+make[2]: F?r das Ziel ?all? ist nichts zu tun.
+make[2]: Leaving directory
+`/opt/BuildRoot/buildroot-2009.08/build_arm/rxvt-2.7.5/src/test'
+make[1]: Leaving directory
+`/opt/BuildRoot/buildroot-2009.08/build_arm/rxvt-2.7.5'
+/opt/BuildRoot/buildroot-2009.08/build_arm/staging_dir/usr/bin/arm-linux-uclibcgnueabi-strip
+--remove-section=.comment --remove-section=.note --discard-all
+/opt/BuildRoot/buildroot-2009.08/build_arm/rxvt-2.7.5/src/rxvt
+/opt/BuildRoot/buildroot-2009.08/build_arm/staging_dir/usr/bin/arm-linux-uclibcgnueabi-strip:
+'/opt/BuildRoot/buildroot-2009.08/build_arm/rxvt-2.7.5/src/rxvt': No such
+file
+make: *** [/opt/BuildRoot/buildroot-2009.08/build_arm/rxvt-2.7.5/src/rxvt]
+Fehler 1
  
- 	Removed package: mdnsresponder, mpatrol, gcc 3.4.6 + 4.0.4, vice
-diff --git a/package/sysklogd/Config.in b/package/sysklogd/Config.in
-index 573f1e0..e3cf2ba 100644
---- a/package/sysklogd/Config.in
-+++ b/package/sysklogd/Config.in
-@@ -1,6 +1,10 @@
- config BR2_PACKAGE_SYSKLOGD
- 	bool "syslogd & klogd"
-+	depends on BR2_LARGEFILE
- 	help
- 	  System log daemons syslogd and klogd.
- 
- 	  http://www.infodrom.org/products/sysklogd/
-+
-+comment "syslogd requires a toolchain with LARGEFILE support"
-+	depends on !BR2_LARGEFILE
 -- 
-1.6.3.3
+View this message in context: http://old.nabble.com/rxvt%3A-build-errors---what-to-do--tp26481849p26481849.html
+Sent from the BuildRoot mailing list archive at Nabble.com.
