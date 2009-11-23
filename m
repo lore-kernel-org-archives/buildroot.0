@@ -1,46 +1,32 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Mon, 23 Nov 2009 21:56:07 +0000 (UTC)
-Subject: [Buildroot] How do I configure the kernel?
-References: <he74ti$hbd$1@ger.gmane.org>
-	<b680c1c10911201430s25dadd6aj8d1c48afaff91445@mail.gmail.com>
-	<b680c1c10911201435k3e8e6988pea7dcaaa301ee5d7@mail.gmail.com>
-	<he7s4s$330$1@ger.gmane.org> <87tywmffxl.fsf@macbook.be.48ers.dk>
-	<heemnr$jrk$1@ger.gmane.org> <heepmc$umt$1@ger.gmane.org>
-	<b680c1c10911231239t2e953a40q9eaebdc1daaf72be@mail.gmail.com>
-	<heevib$jnn$1@ger.gmane.org>
-	<b680c1c10911231350p7fd9f9beu6dda424828879727@mail.gmail.com>
-Message-ID: <hef0dm$mr0$1@ger.gmane.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 23 Nov 2009 23:02:14 +0100
+Subject: [Buildroot] [PATCH] SDL_image: fix runtime libjpeg failure
+In-Reply-To: <20091123060922.GA6897@jasper.tkos.co.il> (Baruch Siach's message
+	of "Mon\, 23 Nov 2009 08\:09\:22 +0200")
+References: <20091109130709.GF26599@jasper.tkos.co.il>
+	<20091123060922.GA6897@jasper.tkos.co.il>
+Message-ID: <873a44ew7t.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2009-11-23, Nicholas Walton <nwalton@aplopteng.com> wrote:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
->>> That does work, but a more direct way would be to do the linux
->>> configuration through buildroot.
->>>
->>> ~/buildroot % make menuconfig
->>> ~/buildroot % make linux26-menuconfig
->>> ~/buildroot % cp old-linux.config ?output/build/linux-$version/.config
->>> ~/buildroot % make linux26-$either_config
->>> ~/buildroot % make
->>
->> What is $either_config?
->
-> menuconfig or oldconfig. Oldconfig will prompt you with new
-> options, menuconfig assumes you know what you need to change
-> from defaults.
+ Baruch> Hi Buildroot list,
+ Baruch> Ping?
 
-While make linux26-menuconfig works, I could never get "make
-linux26-oldconfig" to work.  That's why I resorted to the
-method I described.
+Hi, sorry for the slow response.
 
-  $ make linux26-oldconfig
-  make: *** No rule to make target linux26-oldconfig'.  Stop.
+ Baruch> Should I open a Bugzilla entry to have this issue handled?
+ Baruch> Is there a better solutions?
+
+No, it's an OK solution, but it isn't complete as the configure script
+will do the same for png and tiff, so you need --disable-*-shared for
+those as well.
+
+I'll fix that and commit, thanks.
 
 -- 
-Grant Edwards                   grante             Yow! Are you selling NYLON
-                                  at               OIL WELLS??  If so, we can
-                               visi.com            use TWO DOZEN!!
+Bye, Peter Korsgaard
