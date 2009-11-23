@@ -1,21 +1,36 @@
-From: Jens Kleinhans <Jens.Kleinhans@gmx.de>
-Date: Mon, 23 Nov 2009 13:08:40 +0100
-Subject: [Buildroot] help
-Message-ID: <20091123120840.33020@gmx.net>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 23 Nov 2009 13:48:35 +0100
+Subject: [Buildroot] [git commit master] netkittelnet: fix typo introduced
+	in 8d65822f9d
+Message-ID: <20091123124946.02005776A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Customizing the target filesystem/busy box/uclibc 
 
-How do I customize the elements mentioned in subject in general?
-Are ther any commands or changes should be done?
+commit: http://git.buildroot.net/buildroot/commit/?id=9ab3ad73324ab6de0c69875a42723a1bda3259b2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Kind regards
+Netkittelnet needs a toolchain WITH RPC support, not WITHOUT.
 
-Littel
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/netkittelnet/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/netkittelnet/Config.in b/package/netkittelnet/Config.in
+index 5f42dc3..058d210 100644
+--- a/package/netkittelnet/Config.in
++++ b/package/netkittelnet/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_NETKITTELNET
+ 	bool "netkittelnet"
+-	depends on !BR2_INET_RPC
++	depends on BR2_INET_RPC
+ 	select BR2_PACKAGE_NETKITBASE
+ 	help
+ 	  Standard Linux telnet client and server.
 -- 
-GRATIS f?r alle GMX-Mitglieder: Die maxdome Movie-FLAT!
-Jetzt freischalten unter http://portal.gmx.net/de/go/maxdome01
+1.6.3.3
