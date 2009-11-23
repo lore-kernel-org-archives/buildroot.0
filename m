@@ -1,17 +1,32 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 23 Nov 2009 23:20:21 +0100
-Subject: [Buildroot] [git tag 2009.11_rc1] update for 2009.11-rc1
-Message-ID: <20091123222257.947B2777EF@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 23 Nov 2009 23:47:40 +0100
+Subject: [Buildroot] Buildroot 2009.11-rc1 released
+Message-ID: <87vdh0dfjn.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=866b7850a76bfe717706e6d08458c6e308b1c4bd
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/tags/2009.11_rc1
+I've just tagged release candidate 1 of the 2009.11 release. For an
+overview of the changes, see
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+http://git.buildroot.net/buildroot/plain/CHANGES?id=2009.11_rc1
 
-this is a tag, so no patch shown
+You can download the tarball here:
+
+http://buildroot.net/downloads/buildroot-2009.11-rc1.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.net/buildroot
+
+Please give it a spin and report any problems to the mailing list or bug
+tracker. As you might have noticed, we're running a bit late - So
+getting the final release out in November might be hard, but I'll try
+anyway.
+
+-- 
+Bye, Peter Korsgaard
