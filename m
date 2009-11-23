@@ -1,63 +1,83 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 23 Nov 2009 15:29:43 +0100
-Subject: [Buildroot] [git commit master] torsmo: needs X11 support
-Message-ID: <20091123143317.CE7067772B@busybox.osuosl.org>
+From: Jens Kleinhans <Jens.Kleinhans@gmx.de>
+Date: Mon, 23 Nov 2009 16:16:36 +0100
+Subject: [Buildroot] xenomai / ratai --> nee ipipe
+Message-ID: <20091123151636.322080@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+I used RTAI, so I don't want to use Xenomai. Is there another possibility to add the ipipe?
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a9f379abf0569bc99cd1ea12291bfd41521430b8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES                  |    6 +++---
- package/torsmo/Config.in |    1 +
- package/torsmo/torsmo.mk |    2 ++
- 3 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 9ff8793..40ebf17 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -30,9 +30,9 @@
- 	ng-spice-rework, ntfs-3g, openntp, openssl, pcmanfm, php, psmisc,
- 	python, quagga, radvd, rsync, rubix, samba, sawman, sdl,
- 	shared-mime-info, sfdisk, spawn-fcgi, speech-tools, sqlite, squashfs,
--	synergy, syslinux, target-binutils, tcpdump, u-boot, util-linux,
--	valgrind, vsftpd, wipe, wpa-supplicant, xdata_xcursor-themes, xboard,
--	xstroke, zlib
-+	synergy, syslinux, target-binutils, tcpdump, torsmo, u-boot,
-+	util-linux, valgrind, vsftpd, wipe, wpa-supplicant,
-+	xdata_xcursor-themes, xboard, xstroke, zlib
- 
- 	Removed package: mdnsresponder, mpatrol, gcc 3.4.6 + 4.0.4, vice
- 
-diff --git a/package/torsmo/Config.in b/package/torsmo/Config.in
-index 58b9feb..ec9cb22 100644
---- a/package/torsmo/Config.in
-+++ b/package/torsmo/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_TORSMO
- 	bool "torsmo"
-+	depends on BR2_PACKAGE_XORG7
- 	help
- 	  Torsmo is a system monitor that sits in the corner of your desktop.
- 
-diff --git a/package/torsmo/torsmo.mk b/package/torsmo/torsmo.mk
-index f9aa71d..03477d1 100644
---- a/package/torsmo/torsmo.mk
-+++ b/package/torsmo/torsmo.mk
-@@ -12,5 +12,7 @@ TORSMO_INSTALL_TARGET = YES
- 
- TORSMO_CONF_OPT = --x-includes="-I$(STAGING_DIR)/usr/include/X11" --x-libraries="-I$(STAGING_DIR)/usr/lib" --with-x
- 
-+TORSMO_DEPENDENCIES = xserver_xorg-server
-+
- $(eval $(call AUTOTARGETS,package,torsmo))
- 
+
+Looks like you miss-applied a xenomai patch or you're using a xenomai patch that does not support the arm architecture...
+
+On Mon, Nov 23, 2009 at 1:59 PM, Jens Kleinhans <Jens.Kleinhans@gmx.de> wrote:
+On Mon, Nov 23, 2009 at 01:22:21PM +0100, Jens Kleinhans wrote:
+        > I want to crosscompile kernel with the following command:
+        > 
+        > make ARCH=arm  CROSS_COMPILE=<path_to_cross-compiler/cross-compiler-prefix->
+        > 
+        > I build up my buildroot follwing the guide of http://www.at91.com/linux4sam/bin/view/Linux4SAM/BuildRootBuild.
+        > 
+        > What must I replace for "<path_to_cross-compiler/cross-compiler-prefix->".
+        > What is the cross-compiler-prefix?
+        
+        /path/to/your/buildroot/build_arm/staging_dir/usr/bin/arm-linux-
+        
+        should work.
+        
+        Daniel
+        _______________________________________________
+        
+        Hi Daniel I thanks for this information. But when I type I get the following problem. The ipipe directory is missing.  When I do the menuconfig of the Linux Kernel with "$ Make ARCH=arm menuconfig"  no option about ipipe appears. Have you an idea how to solve this problem
+        
+        root at benjamin-laptop:/usr/src/linux# make ARCH=arm CROSS_COMPILE=/buildroot_new/buildroot/build_arm/staging_dir/usr/bin/arm-linux-
+        scripts/kconfig/conf -s arch/arm/Kconfig
+          CHK     include/linux/version.h
+          UPD     include/linux/version.h
+          SYMLINK include/asm-arm/arch -> include/asm-arm/arch-at91
+          Generating include/asm-arm/mach-types.h
+          CHK     include/linux/utsrelease.h
+          UPD     include/linux/utsrelease.h
+          SYMLINK include/asm -> include/asm-arm
+          CC      arch/arm/kernel/asm-offsets.s
+        In file included from include/asm/system.h:366,
+                         from include/asm/bitops.h:27,
+                         from include/linux/bitops.h:17,
+                         from include/linux/kernel.h:15,
+                         from include/linux/sched.h:52,
+                         from arch/arm/kernel/asm-offsets.c:13:
+        include/asm-generic/cmpxchg-local.h:4:28: error: asm/ipipe_base.h: No such file or directory
+        In file included from include/linux/sched.h:62,
+                         from arch/arm/kernel/asm-offsets.c:13:
+        include/linux/ipipe.h:32:23: error: asm/ipipe.h: No such file or directory
+        make[1]: *** [arch/arm/kernel/asm-offsets.s] Fehler 1
+        make: *** [prepare0] Fehler 2
+        root at benjamin-laptop:/usr/src/linux# 
+        
+        -- 
+        GRATIS f?r alle GMX-Mitglieder: Die maxdome Movie-FLAT!
+        Jetzt freischalten unter http://portal.gmx.net/de/go/maxdome01
+        
+        
+        
+        -- 
+        Preisknaller: GMX DSL Flatrate f?r nur 16,99 Euro/mtl.!
+        http://portal.gmx.net/de/go/dsl02
+        
+        _______________________________________________
+        buildroot mailing list
+        buildroot at busybox.net
+        http://lists.busybox.net/mailman/listinfo/buildroot
+        
+
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
 -- 
-1.6.3.3
+Jetzt kostenlos herunterladen: Internet Explorer 8 und Mozilla Firefox 3.5 -
+sicherer, schneller und einfacher! http://portal.gmx.net/de/go/chbrowser
