@@ -1,8 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Mon, 23 Nov 2009 13:03:59 +0100
-Subject: [Buildroot] [git commit master] magiccube4d: needs C++ and X11
-	support
-Message-ID: <20091123120646.E5EB577782@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] vice: mark as broken
+Message-ID: <20091123120647.D7FA977782@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,60 +9,58 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=93341a451ead1c9cab329d97d912f7a4cbc4a02f
+commit: http://git.buildroot.net/buildroot/commit/?id=87d74d94ccedc0724681e256573ba42cb9fa8593
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Dependencies are wrong, and it has never seen any updates, so it probably
+doesn't have any users.
+
+Will remove completely before 2010.02 unless someone fixes it.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                                  |    6 +++---
- package/games/magiccube4d/Config.in      |    5 +++++
- package/games/magiccube4d/magiccube4d.mk |    1 +
- 3 files changed, 9 insertions(+), 3 deletions(-)
+ CHANGES                      |    2 +-
+ package/games/vice/Config.in |    2 ++
+ package/games/vice/vice.mk   |    2 +-
+ 3 files changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/CHANGES b/CHANGES
-index a6e10ef..ba14e67 100644
+index ff911ff..f1cec36 100644
 --- a/CHANGES
 +++ b/CHANGES
-@@ -25,9 +25,9 @@
- 	gst-plugins-base, gst-plugins-good, imagemagick, ipkg, iptables,
- 	iw, kernel-headers, kismet, libelf, libevent, libglib2, libidn,
- 	liblockfile, libmad, libpcap, libupnp, libuuid, lighttpd, ltrace,
--	lua, lzma, matchbox, mdadm, nbd, ncftp, ncurses, netkittelnet,
--	netsnmp, ntfs-3g, openntp, openssl, php, python, quagga, radvd,
--	rsync, samba, sawman, sdl, shared-mime-info, spawn-fcgi,
-+	lua, lzma, magiccube4d, matchbox, mdadm, nbd, ncftp, ncurses,
-+	netkittelnet, netsnmp, ntfs-3g, openntp, openssl, php, python, quagga,
-+	radvd, rsync, samba, sawman, sdl, shared-mime-info, spawn-fcgi,
- 	speech-tools, sqlite, squashfs, synergy, syslinux, target-binutils,
+@@ -32,7 +32,7 @@
  	tcpdump, u-boot, util-linux, valgrind, vsftpd, wipe, wpa-supplicant,
  	xdata_xcursor-themes, xstroke, zlib
-diff --git a/package/games/magiccube4d/Config.in b/package/games/magiccube4d/Config.in
-index ba4bceb..871c3c7 100644
---- a/package/games/magiccube4d/Config.in
-+++ b/package/games/magiccube4d/Config.in
-@@ -1,6 +1,11 @@
- config BR2_PACKAGE_MAGICCUBE4D
- 	bool "magiccube4d"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_PACKAGE_XORG7
+ 
+-	Removed package: mdnsresponder, mpatrol, gcc 3.4.6 + 4.0.4
++	Removed package: mdnsresponder, mpatrol, gcc 3.4.6 + 4.0.4, vice
+ 
+ 	Issues resolved (http://bugs.uclibc.org):
+ 
+diff --git a/package/games/vice/Config.in b/package/games/vice/Config.in
+index 48967e4..e4c5621 100644
+--- a/package/games/vice/Config.in
++++ b/package/games/vice/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_VICE
+ 	bool "vice"
++	depends on BROKEN # doesn't build, wrong dependencies
++	# remove before 2010.02 release
  	help
- 	  Another rubiks cube-like game in 4D
+ 	  VICE is a Commodore emulator
  
- 	  http://avr32linux.org/twiki/bin/viewfile/Main
-+
-+comment "magiccube4d requires a toolchain with C++ support enabled"
-+	depends on !BR2_INSTALL_LIBSTDCPP && BR2_PACKAGE_XORG7
-diff --git a/package/games/magiccube4d/magiccube4d.mk b/package/games/magiccube4d/magiccube4d.mk
-index a92ffd2..20b4231 100644
---- a/package/games/magiccube4d/magiccube4d.mk
-+++ b/package/games/magiccube4d/magiccube4d.mk
-@@ -9,6 +9,7 @@ MAGICCUBE4D_SITE = http://avr32linux.org/twiki/pub/Main/MagicCube4D
- MAGICCUBE4D_INSTALL_STAGING = NO
- MAGICCUBE4D_INSTALL_TARGET = YES
- MAGICCUBE4D_INSTALL_TARGET_OPT = GAMESDIR=$(TARGET_DIR)/usr/games install
-+MAGICCUBE4D_DEPENDENCIES = xserver_xorg-server
+diff --git a/package/games/vice/vice.mk b/package/games/vice/vice.mk
+index b04b892..305809d 100644
+--- a/package/games/vice/vice.mk
++++ b/package/games/vice/vice.mk
+@@ -9,7 +9,7 @@ VICE_SITE = http://www.viceteam.org/online
+ VICE_INSTALL_STAGING = NO
+ VICE_INSTALL_TARGET = YES
  
- $(eval $(call AUTOTARGETS,package/games,magiccube4d))
+-VICE_CONF_OPT = --without-resid --with-alsa CFLAGS="-O0"
++VICE_CONF_OPT = --without-resid --with-alsa
+ 
+ $(eval $(call AUTOTARGETS,package/games,vice))
  
 -- 
 1.6.3.3
