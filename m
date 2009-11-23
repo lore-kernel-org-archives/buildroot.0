@@ -1,7 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Mon, 23 Nov 2009 13:03:59 +0100
-Subject: [Buildroot] [git commit master] vice: mark as broken
-Message-ID: <20091123120647.D7FA977782@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] xboard: needs X11 support and
+	gnuchess
+Message-ID: <20091123120648.455A677782@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,58 +10,53 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=87d74d94ccedc0724681e256573ba42cb9fa8593
+commit: http://git.buildroot.net/buildroot/commit/?id=57ea7207bc68d047a7940db69947b776a89d240b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Dependencies are wrong, and it has never seen any updates, so it probably
-doesn't have any users.
-
-Will remove completely before 2010.02 unless someone fixes it.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                      |    2 +-
- package/games/vice/Config.in |    2 ++
- package/games/vice/vice.mk   |    2 +-
+ CHANGES                        |    2 +-
+ package/games/xboard/Config.in |    2 ++
+ package/games/xboard/xboard.mk |    2 +-
  3 files changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/CHANGES b/CHANGES
-index ff911ff..f1cec36 100644
+index f1cec36..c4779ac 100644
 --- a/CHANGES
 +++ b/CHANGES
-@@ -32,7 +32,7 @@
+@@ -30,7 +30,7 @@
+ 	radvd, rsync, rubix, samba, sawman, sdl, shared-mime-info, spawn-fcgi,
+ 	speech-tools, sqlite, squashfs, synergy, syslinux, target-binutils,
  	tcpdump, u-boot, util-linux, valgrind, vsftpd, wipe, wpa-supplicant,
- 	xdata_xcursor-themes, xstroke, zlib
+-	xdata_xcursor-themes, xstroke, zlib
++	xdata_xcursor-themes, xboard, xstroke, zlib
  
--	Removed package: mdnsresponder, mpatrol, gcc 3.4.6 + 4.0.4
-+	Removed package: mdnsresponder, mpatrol, gcc 3.4.6 + 4.0.4, vice
+ 	Removed package: mdnsresponder, mpatrol, gcc 3.4.6 + 4.0.4, vice
  
- 	Issues resolved (http://bugs.uclibc.org):
- 
-diff --git a/package/games/vice/Config.in b/package/games/vice/Config.in
-index 48967e4..e4c5621 100644
---- a/package/games/vice/Config.in
-+++ b/package/games/vice/Config.in
+diff --git a/package/games/xboard/Config.in b/package/games/xboard/Config.in
+index bb7e001..1821aa0 100644
+--- a/package/games/xboard/Config.in
++++ b/package/games/xboard/Config.in
 @@ -1,5 +1,7 @@
- config BR2_PACKAGE_VICE
- 	bool "vice"
-+	depends on BROKEN # doesn't build, wrong dependencies
-+	# remove before 2010.02 release
+ config BR2_PACKAGE_XBOARD
+ 	bool "xboard"
++	depends on BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_GNUCHESS
  	help
- 	  VICE is a Commodore emulator
+ 	  XBoard and WinBoard are graphical user interfaces for chess.
  
-diff --git a/package/games/vice/vice.mk b/package/games/vice/vice.mk
-index b04b892..305809d 100644
---- a/package/games/vice/vice.mk
-+++ b/package/games/vice/vice.mk
-@@ -9,7 +9,7 @@ VICE_SITE = http://www.viceteam.org/online
- VICE_INSTALL_STAGING = NO
- VICE_INSTALL_TARGET = YES
+diff --git a/package/games/xboard/xboard.mk b/package/games/xboard/xboard.mk
+index be51e99..078e37c 100644
+--- a/package/games/xboard/xboard.mk
++++ b/package/games/xboard/xboard.mk
+@@ -10,7 +10,7 @@ XBOARD_INSTALL_STAGING = NO
+ XBOARD_INSTALL_TARGET = YES
+ XBOARD_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
  
--VICE_CONF_OPT = --without-resid --with-alsa CFLAGS="-O0"
-+VICE_CONF_OPT = --without-resid --with-alsa
+-XBOARD_DEPENDENCIES = gnuchess
++XBOARD_DEPENDENCIES = gnuchess xserver_xorg-server
  
- $(eval $(call AUTOTARGETS,package/games,vice))
+ $(eval $(call AUTOTARGETS,package/games,xboard))
  
 -- 
 1.6.3.3
