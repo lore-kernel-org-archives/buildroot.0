@@ -1,8 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 23 Nov 2009 15:10:53 +0100
-Subject: [Buildroot] [git commit master] sfdisk: fix build with
-	!BR2_LARGEFILE
-Message-ID: <20091123141347.C26DB777BE@busybox.osuosl.org>
+Date: Mon, 23 Nov 2009 15:29:43 +0100
+Subject: [Buildroot] [git commit master] udpcast: needs largefile support
+Message-ID: <20091123143318.0D2E4777D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,46 +9,76 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b7046770181fc465783612e76124e422399c124b
+commit: http://git.buildroot.net/buildroot/commit/?id=57403b74f14ab5ef477067a0b006320eafe5af80
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+And fix Kconfig tab/spaces while we're at it.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                  |    8 ++++----
- package/sfdisk/sfdisk.mk |    2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ CHANGES                   |    2 +-
+ package/udpcast/Config.in |   32 ++++++++++++++++++--------------
+ 2 files changed, 19 insertions(+), 15 deletions(-)
 
 diff --git a/CHANGES b/CHANGES
-index b620a1b..9ff8793 100644
+index 40ebf17..625e764 100644
 --- a/CHANGES
 +++ b/CHANGES
-@@ -29,10 +29,10 @@
- 	matchbox, mdadm, nbd, ncftp, ncurses, netkittelnet, netsnmp,
+@@ -30,7 +30,7 @@
  	ng-spice-rework, ntfs-3g, openntp, openssl, pcmanfm, php, psmisc,
  	python, quagga, radvd, rsync, rubix, samba, sawman, sdl,
--	shared-mime-info, spawn-fcgi, speech-tools, sqlite, squashfs, synergy,
--	syslinux, target-binutils, tcpdump, u-boot, util-linux, valgrind,
--	vsftpd, wipe, wpa-supplicant, xdata_xcursor-themes, xboard, xstroke,
--	zlib
-+	shared-mime-info, sfdisk, spawn-fcgi, speech-tools, sqlite, squashfs,
-+	synergy, syslinux, target-binutils, tcpdump, u-boot, util-linux,
-+	valgrind, vsftpd, wipe, wpa-supplicant, xdata_xcursor-themes, xboard,
-+	xstroke, zlib
+ 	shared-mime-info, sfdisk, spawn-fcgi, speech-tools, sqlite, squashfs,
+-	synergy, syslinux, target-binutils, tcpdump, torsmo, u-boot,
++	synergy, syslinux, target-binutils, tcpdump, torsmo, u-boot, udpcast,
+ 	util-linux, valgrind, vsftpd, wipe, wpa-supplicant,
+ 	xdata_xcursor-themes, xboard, xstroke, zlib
  
- 	Removed package: mdnsresponder, mpatrol, gcc 3.4.6 + 4.0.4, vice
+diff --git a/package/udpcast/Config.in b/package/udpcast/Config.in
+index c3b0dd5..d7ccfb4 100644
+--- a/package/udpcast/Config.in
++++ b/package/udpcast/Config.in
+@@ -1,24 +1,28 @@
+ config BR2_PACKAGE_UDPCAST
+-        bool "udpcast"
+-        help
+-          A multicast protocol implementation which happens to
+-          be very handy for imaging drives over the network.
++	bool "udpcast"
++	depends on BR2_LARGEFILE
++	help
++	  A multicast protocol implementation which happens to
++	  be very handy for imaging drives over the network.
  
-diff --git a/package/sfdisk/sfdisk.mk b/package/sfdisk/sfdisk.mk
-index 87a3f04..81c4943 100644
---- a/package/sfdisk/sfdisk.mk
-+++ b/package/sfdisk/sfdisk.mk
-@@ -21,7 +21,7 @@ $(SFDISK_DIR)/.patched: $(DL_DIR)/$(SFDISK_SOURCE)
- $(SFDISK_DIR)/sfdisk: $(SFDISK_DIR)/.patched
- 	$(MAKE) \
- 		CROSS=$(TARGET_CROSS) DEBUG=false OPTIMIZATION="$(TARGET_CFLAGS)" \
--		-C $(SFDISK_DIR)
-+		DOLFS=$(if $(BR2_LARGEFILE),true,false) -C $(SFDISK_DIR)
- 	-$(STRIPCMD) $(SFDISK_DIR)/sfdisk
- 	touch -c $(SFDISK_DIR)/sfdisk
+-          http://www.udpcast.linux.lu/
++	  http://www.udpcast.linux.lu/
++
++comment "udpcast requires a toolchain with LARGEFILE support"
++	depends on !BR2_LARGEFILE
  
+ menu "udpcast tools selection"
+-        depends on BR2_PACKAGE_UDPCAST
++depends on BR2_PACKAGE_UDPCAST
+ 
+ config BR2_PACKAGE_UDPCAST_SENDER
+-        bool "sender"
+-        depends on BR2_PACKAGE_UDPCAST
+-        help
+-          The udpcast transmitter.
++	bool "sender"
++	depends on BR2_PACKAGE_UDPCAST
++	help
++	  The udpcast transmitter.
+ 
+ config BR2_PACKAGE_UDPCAST_RECEIVER
+-        bool "receiver"
+-        depends on BR2_PACKAGE_UDPCAST
+-        help
+-          The udpcast receiver.
++	bool "receiver"
++	depends on BR2_PACKAGE_UDPCAST
++	help
++	  The udpcast receiver.
+ 
+ endmenu
 -- 
 1.6.3.3
