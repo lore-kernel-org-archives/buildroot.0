@@ -1,8 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Mon, 23 Nov 2009 13:03:59 +0100
-Subject: [Buildroot] [git commit master] alsa-lib: fix build with
-	BR2_CONFIG_CACHE
-Message-ID: <20091123120651.93A5077782@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] rubix: needs X11 support
+Message-ID: <20091123120647.690F777782@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,44 +9,51 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=81e4ba320b982fa4c74d00a46ddb918fc492a1b3
+commit: http://git.buildroot.net/buildroot/commit/?id=2795e3d902def40679c01336c4c263df2a1a0f10
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                                 |    6 +++---
- package/multimedia/alsa-lib/alsa-lib.mk |    2 ++
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ CHANGES                       |    2 +-
+ package/games/rubix/Config.in |    1 +
+ package/games/rubix/rubix.mk  |    2 ++
+ 3 files changed, 4 insertions(+), 1 deletions(-)
 
 diff --git a/CHANGES b/CHANGES
-index 5be5c94..edcb361 100644
+index ba14e67..ff911ff 100644
 --- a/CHANGES
 +++ b/CHANGES
-@@ -20,9 +20,9 @@
- 	New packages: divine, gvfs, libarchive, libmicrohttpd,
- 	sdl_sound, swfdec, sysstat
+@@ -27,7 +27,7 @@
+ 	liblockfile, libmad, libpcap, libupnp, libuuid, lighttpd, ltrace,
+ 	lua, lzma, magiccube4d, matchbox, mdadm, nbd, ncftp, ncurses,
+ 	netkittelnet, netsnmp, ntfs-3g, openntp, openssl, php, python, quagga,
+-	radvd, rsync, samba, sawman, sdl, shared-mime-info, spawn-fcgi,
++	radvd, rsync, rubix, samba, sawman, sdl, shared-mime-info, spawn-fcgi,
+ 	speech-tools, sqlite, squashfs, synergy, syslinux, target-binutils,
+ 	tcpdump, u-boot, util-linux, valgrind, vsftpd, wipe, wpa-supplicant,
+ 	xdata_xcursor-themes, xstroke, zlib
+diff --git a/package/games/rubix/Config.in b/package/games/rubix/Config.in
+index 46dc5ec..6da8c71 100644
+--- a/package/games/rubix/Config.in
++++ b/package/games/rubix/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_RUBIX
+ 	bool "rubix"
++	depends on BR2_PACKAGE_XORG7
+ 	help
+ 	  A 3D rubiks cube game for X
  
--	Updated/fixed packages: alsamixergui, autoconf, bootutils, busybox,
--	gcc, directfb, dnsmasq, e2fsprogs, festival, gamin, gperf, gqview,
--	gstreamer, gst-plugins-bad, gst-plugins-base, gst-plugins-good,
-+	Updated/fixed packages: alsa-lib, alsamixergui, autoconf, bootutils,
-+	busybox, gcc, directfb, dnsmasq, e2fsprogs, festival, gamin, gperf,
-+	gqview, gstreamer, gst-plugins-bad, gst-plugins-base, gst-plugins-good,
- 	imagemagick, ipkg, iptables, iw, kernel-headers, kismet, leafpad,
- 	libelf, libevent, libglib2, libidn, liblockfile, libmad, libpcap,
- 	libupnp, libuuid, lighttpd, ltrace, lua, lzma, magiccube4d, matchbox,
-diff --git a/package/multimedia/alsa-lib/alsa-lib.mk b/package/multimedia/alsa-lib/alsa-lib.mk
-index 5db0393..517021d 100644
---- a/package/multimedia/alsa-lib/alsa-lib.mk
-+++ b/package/multimedia/alsa-lib/alsa-lib.mk
-@@ -39,6 +39,8 @@ endif
+diff --git a/package/games/rubix/rubix.mk b/package/games/rubix/rubix.mk
+index d81780a..308e94b 100644
+--- a/package/games/rubix/rubix.mk
++++ b/package/games/rubix/rubix.mk
+@@ -12,5 +12,7 @@ RUBIX_INSTALL_TARGET_OPT = GAMESDIR=$(TARGET_DIR)/usr/games install
  
- ALSA_LIB_CONF_ENV = CFLAGS="$(ALSA_LIB_CFLAGS)" \
- 		    LDFLAGS="$(TARGET_LDFLAGS) -lm"
-+# the above doesn't work with shared config.cache
-+ALSA_LIB_USE_CONFIG_CACHE = NO
+ RUBIX_MAKE_OPT = CC=$(TARGET_CC) XINC="-I$(STAGING_DIR)/usr/include/X11" XLIB="-L$(STAGING_DIR)/usr/lib -lX11"
  
- $(eval $(call AUTOTARGETS,package/multimedia,alsa-lib))
++RUBIX_DEPENDENCIES = xserver_xorg-server
++
+ $(eval $(call AUTOTARGETS,package/games,rubix))
  
 -- 
 1.6.3.3
