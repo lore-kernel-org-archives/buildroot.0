@@ -1,8 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Mon, 23 Nov 2009 15:29:43 +0100
-Subject: [Buildroot] [git commit master] xfsprogs: needs e2fsprogs and (in
-	turn) largefile support
-Message-ID: <20091123143318.6DAFF777D1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] torsmo: needs X11 support
+Message-ID: <20091123143317.CE7067772B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,45 +9,55 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=08703917d79ddcff3763170b95cbf3ad52540583
+commit: http://git.buildroot.net/buildroot/commit/?id=a9f379abf0569bc99cd1ea12291bfd41521430b8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                    |    2 +-
- package/xfsprogs/Config.in |    5 +++++
- 2 files changed, 6 insertions(+), 1 deletions(-)
+ CHANGES                  |    6 +++---
+ package/torsmo/Config.in |    1 +
+ package/torsmo/torsmo.mk |    2 ++
+ 3 files changed, 6 insertions(+), 3 deletions(-)
 
 diff --git a/CHANGES b/CHANGES
-index ab178b5..41df742 100644
+index 9ff8793..40ebf17 100644
 --- a/CHANGES
 +++ b/CHANGES
-@@ -32,7 +32,7 @@
+@@ -30,9 +30,9 @@
+ 	ng-spice-rework, ntfs-3g, openntp, openssl, pcmanfm, php, psmisc,
+ 	python, quagga, radvd, rsync, rubix, samba, sawman, sdl,
  	shared-mime-info, sfdisk, spawn-fcgi, speech-tools, sqlite, squashfs,
- 	synergy, syslinux, target-binutils, tcpdump, torsmo, u-boot, udpcast,
- 	util-linux, valgrind, vsftpd, wipe, wpa-supplicant, x11vnc,
--	xdata_xcursor-themes, xboard, xstroke, zlib
-+	xdata_xcursor-themes, xboard, xfsprogs, xstroke, zlib
+-	synergy, syslinux, target-binutils, tcpdump, u-boot, util-linux,
+-	valgrind, vsftpd, wipe, wpa-supplicant, xdata_xcursor-themes, xboard,
+-	xstroke, zlib
++	synergy, syslinux, target-binutils, tcpdump, torsmo, u-boot,
++	util-linux, valgrind, vsftpd, wipe, wpa-supplicant,
++	xdata_xcursor-themes, xboard, xstroke, zlib
  
  	Removed package: mdnsresponder, mpatrol, gcc 3.4.6 + 4.0.4, vice
  
-diff --git a/package/xfsprogs/Config.in b/package/xfsprogs/Config.in
-index 6a5c9a1..2f462cb 100644
---- a/package/xfsprogs/Config.in
-+++ b/package/xfsprogs/Config.in
-@@ -4,8 +4,13 @@ comment "Note that xfsprogs needs a toolchain with UCLIBC_SV4_DEPRECATED enabled
- 
- config BR2_PACKAGE_XFSPROGS
- 	bool "xfsprogs"
-+	depends on BR2_LARGEFILE
-+	select BR2_PACKAGE_E2FSPROGS
+diff --git a/package/torsmo/Config.in b/package/torsmo/Config.in
+index 58b9feb..ec9cb22 100644
+--- a/package/torsmo/Config.in
++++ b/package/torsmo/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_TORSMO
+ 	bool "torsmo"
++	depends on BR2_PACKAGE_XORG7
  	help
- 	  The XFS file system utilities and libraries
+ 	  Torsmo is a system monitor that sits in the corner of your desktop.
  
- 	  http://oss.sgi.com/projects/xfs/
+diff --git a/package/torsmo/torsmo.mk b/package/torsmo/torsmo.mk
+index f9aa71d..03477d1 100644
+--- a/package/torsmo/torsmo.mk
++++ b/package/torsmo/torsmo.mk
+@@ -12,5 +12,7 @@ TORSMO_INSTALL_TARGET = YES
  
-+comment "xfssprogs requires a toolchain with LARGEFILE support"
-+	depends on !BR2_LARGEFILE
+ TORSMO_CONF_OPT = --x-includes="-I$(STAGING_DIR)/usr/include/X11" --x-libraries="-I$(STAGING_DIR)/usr/lib" --with-x
+ 
++TORSMO_DEPENDENCIES = xserver_xorg-server
 +
+ $(eval $(call AUTOTARGETS,package,torsmo))
+ 
 -- 
 1.6.3.3
