@@ -1,63 +1,35 @@
-From: laplace <daniel.kuhne@yahoo.de>
-Date: Mon, 23 Nov 2009 11:08:16 -0800 (PST)
-Subject: [Buildroot]  rxvt: build errors - what to do?
-Message-ID: <26481849.post@talk.nabble.com>
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Mon, 23 Nov 2009 19:10:51 +0000 (UTC)
+Subject: [Buildroot] How do I configure the kernel?
+References: <he74ti$hbd$1@ger.gmane.org>
+	<b680c1c10911201430s25dadd6aj8d1c48afaff91445@mail.gmail.com>
+	<b680c1c10911201435k3e8e6988pea7dcaaa301ee5d7@mail.gmail.com>
+	<he7s4s$330$1@ger.gmane.org> <87tywmffxl.fsf@macbook.be.48ers.dk>
+Message-ID: <heemnr$jrk$1@ger.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 2009-11-22, Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-(edit to be resent to list)
-Hi,
+> Grant> The next question was going to be where do I put a kernel
+> Grant> .config file if I already have one I want to use.  I can
+> Grant> probably do a "find" to search for files named .config and
+> Grant> figure out which is the right one. Then I assume I do "make
+> Grant> linux26-oldconfig"?
+>
+> Use the LINUX26_KCONFIG environment variable, similar to
+> BUSYBOX_CONFIG_FILE / UCLIBC_CONFIG_FILE. I'll also update the doc about
+> that one.
 
-i got errors when selecting rxvt from buildroot <Package Selection for the
-target>.
-Can anyone say what to do here? Thx eric.
+Sorry to be so dense, but I still don't get it.  I've got a
+.config file I want to use as the starting point for a
+"make oldconfig".  I can point LINUX26_KCONFIG at that .config
+file, but how do I do the "make oldconfig" step?
 
-[...]
-rxvt.c:15: error: expected declaration or statement at end of input
-rxvt.c: In function 'rxvt_tt_printf':
-rxvt.c:15: error: expected declaration or statement at end of input
-rxvt.c: In function 'rxvt_check_our_parents':
-rxvt.c:15: error: expected declaration or statement at end of input
-rxvt.c: In function 'rxvt_cmd_write':
-rxvt.c:15: error: expected declaration or statement at end of input
-make[2]: *** [rxvt.o] Fehler 1
-make[2]: Leaving directory
-`/opt/BuildRoot/buildroot-2009.08/build_arm/rxvt-2.7.5/src'
-make[2]: Entering directory
-`/opt/BuildRoot/buildroot-2009.08/build_arm/rxvt-2.7.5/doc'
-make[2]: F?r das Ziel ?all? ist nichts zu tun.
-make[2]: Leaving directory
-`/opt/BuildRoot/buildroot-2009.08/build_arm/rxvt-2.7.5/doc'
-make[2]: Entering directory
-`/opt/BuildRoot/buildroot-2009.08/build_arm/rxvt-2.7.5/rclock'
-make[2]: F?r das Ziel ?all? ist nichts zu tun.
-make[2]: Leaving directory
-`/opt/BuildRoot/buildroot-2009.08/build_arm/rxvt-2.7.5/rclock'
-make[2]: Entering directory
-`/opt/BuildRoot/buildroot-2009.08/build_arm/rxvt-2.7.5/src/graphics'
-make[2]: F?r das Ziel ?all? ist nichts zu tun.
-make[2]: Leaving directory
-`/opt/BuildRoot/buildroot-2009.08/build_arm/rxvt-2.7.5/src/graphics'
-make[2]: Entering directory
-`/opt/BuildRoot/buildroot-2009.08/build_arm/rxvt-2.7.5/src/test'
-make[2]: F?r das Ziel ?all? ist nichts zu tun.
-make[2]: Leaving directory
-`/opt/BuildRoot/buildroot-2009.08/build_arm/rxvt-2.7.5/src/test'
-make[1]: Leaving directory
-`/opt/BuildRoot/buildroot-2009.08/build_arm/rxvt-2.7.5'
-/opt/BuildRoot/buildroot-2009.08/build_arm/staging_dir/usr/bin/arm-linux-uclibcgnueabi-strip
---remove-section=.comment --remove-section=.note --discard-all
-/opt/BuildRoot/buildroot-2009.08/build_arm/rxvt-2.7.5/src/rxvt
-/opt/BuildRoot/buildroot-2009.08/build_arm/staging_dir/usr/bin/arm-linux-uclibcgnueabi-strip:
-'/opt/BuildRoot/buildroot-2009.08/build_arm/rxvt-2.7.5/src/rxvt': No such
-file
-make: *** [/opt/BuildRoot/buildroot-2009.08/build_arm/rxvt-2.7.5/src/rxvt]
-Fehler 1
- 
 -- 
-View this message in context: http://old.nabble.com/rxvt%3A-build-errors---what-to-do--tp26481849p26481849.html
-Sent from the BuildRoot mailing list archive at Nabble.com.
+Grant Edwards                   grante             Yow! Here we are in America
+                                  at               ... when do we collect
+                               visi.com            unemployment?
