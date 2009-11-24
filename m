@@ -1,48 +1,34 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Tue, 24 Nov 2009 11:18:55 +0100
-Subject: [Buildroot] patch : dbus  remove existing symbolic link
-Message-ID: <E4B91C4D3521446D8F69144609024A53@apexjs>
+From: Luca Altobelli <LUCA.ALTOBELLI@dimacosystems.com>
+Date: Tue, 24 Nov 2009 11:45:21 +0100
+Subject: [Buildroot] Problem using net-snmp and Buildroot
+Message-ID: <4B0BB941.7090202@dimacosystems.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
- 
-Building dbus fails if the symbolic link is already present.
-this should solve the issue.
- 
- 
-diff -rupN buildroot-2009.11/package/dbus/dbus.mk
-buildroot/package/dbus/dbus.mk
---- buildroot-2009.11/package/dbus/dbus.mk 2009-11-23 23:24:09.000000000
-+0100
-+++ buildroot/package/dbus/dbus.mk 2009-11-24 11:01:44.000000000 +0100
-@@ -53,7 +53,8 @@ $(eval $(call AUTOTARGETS,package,dbus))
- 
- # fix rebuild if /var/lib is a symlink to /tmp
- $(DBUS_HOOK_POST_BUILD): $(DBUS_TARGET_BUILD)
-- rm -rf /tmp/dbus
-+ if [  -h $(TARGET_DIR)/var/lib/dbus ]; then \
-+  rm -rf $(TARGET_DIR)/var/lib/dbus; fi
-  touch $@
- 
- $(DBUS_HOOK_POST_INSTALL): $(DBUS_TARGET_INSTALL_TARGET)
- 
- 
- 
-I hope this is the right way to submit a patch, don't shoot me if it isn't
- 
-Johan
- 
+Dear Sirs
+    I'm using buildroot-2009.08 and I need net-snmp (currently I'm using 
+version 5.4.2.1) installed on my target system. When compiling no 
+problem encountered but,  if I try to launch /snmpd/ on my target 
+system, it gives the message "cannot find libc.so.6". I have libc.so.6 
+on my host system, no trace of it on the target.
+Attached is my Buildroot configuration.
+
+Yours sincerely
+Altobelli Luca.
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091124/eafdf610/attachment-0001.htm>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091124/3fb95d96/attachment.htm>
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: .config
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091124/3fb95d96/attachment.diff>
 -------------- next part --------------
 A non-text attachment was scrubbed...
-Name: br_dbus.patch
-Type: application/octet-stream
-Size: 566 bytes
+Name: LUCA_ALTOBELLI.vcf
+Type: text/x-vcard
+Size: 344 bytes
 Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091124/eafdf610/attachment-0001.obj>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091124/3fb95d96/attachment.vcf>
