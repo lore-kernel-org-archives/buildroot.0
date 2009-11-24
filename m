@@ -1,30 +1,26 @@
-From: Daniel Mack <daniel@caiaq.de>
-Date: Tue, 24 Nov 2009 17:15:35 +0100
-Subject: [Buildroot] [PATCH] gvfs: drop legacy uclibc dependency
-Message-ID: <1259079335-15258-1-git-send-email-daniel@caiaq.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 24 Nov 2009 13:23:18 -0300
+Subject: [Buildroot] [PATCH] Add fuse-sshfs package
+In-Reply-To: <20091124160326.GX14091@buzzloop.caiaq.de>
+References: <1259073650-3843-1-git-send-email-daniel@caiaq.de>
+	<4B0BFF55.2090805@zacarias.com.ar>
+	<87my2bdihl.fsf@macbook.be.48ers.dk>
+	<20091124160326.GX14091@buzzloop.caiaq.de>
+Message-ID: <4B0C0876.8020405@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Daniel Mack <daniel@caiaq.de>
----
- package/gvfs/gvfs.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Daniel Mack wrote:
 
-diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
-index 7d71f34..41ecfa6 100644
---- a/package/gvfs/gvfs.mk
-+++ b/package/gvfs/gvfs.mk
-@@ -14,7 +14,7 @@ GVFS_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
- GVFS_AUTORECONF = NO
- GVFS_LIBTOOL_PATCH = NO
- 
--GVFS_DEPENDENCIES = uclibc host-pkgconfig host-libglib2 libglib2 dbus-glib shared-mime-info
-+GVFS_DEPENDENCIES = host-pkgconfig host-libglib2 libglib2 dbus-glib shared-mime-info
- 
- GVFS_CONF_OPT = \
- 	--disable-gconf			\
--- 
-1.6.5.2
+> Ok, will resend. But this is not a build-time dependency, so I'd say
+> adding BR_PACKAGE_OPENSSH to Config.in will suffice. And I wouldn't add
+> DROPBEAR there, as I didn't test that.
+> 
+> Daniel
+
+Right, did a quick test here and it doesn't seem to be happy about using
+dbclient so openssh sounds right.
+Regards.
