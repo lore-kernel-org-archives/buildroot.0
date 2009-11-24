@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Tue, 24 Nov 2009 19:53:38 +0100
-Subject: [Buildroot] [git commit master] package: remove disabled/broken
-	irda-utils package
-Message-ID: <20091124190730.BB58177756@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] Revert "gvfs: update to version
+	1.4.0"
+Message-ID: <20091124190731.322B07625B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,166 +10,113 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1330cf5b19b9d1e756f0521e55b8155268da71f6
+commit: http://git.buildroot.net/buildroot/commit/?id=70ce96305cb19254576f670e896a66f3e3ba6eff
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-No updates since it got marked as broken back in January, so lets get
-rid of it.
+This reverts commit f49ef854ca4b6ab3836ef39cb89027ce5b7bd94b.
+
+The new gvfs version needs libglib2 >= 2.21.2, but newer libglib2 versions
+need ipv6 support and possibly cause other problems, so simply revert the
+gvfs bump for now.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in                                  |    1 -
- package/irda-utils/Config.in                       |   45 ---------------
- .../irda-utils-0.9.18-install_irnetd.patch         |   12 ----
- package/irda-utils/irda.mk.broken                  |   57 --------------------
- 4 files changed, 0 insertions(+), 115 deletions(-)
- delete mode 100644 package/irda-utils/Config.in
- delete mode 100644 package/irda-utils/irda-utils-0.9.18-install_irnetd.patch
- delete mode 100644 package/irda-utils/irda.mk.broken
+ ...-gnome.patch => gvfs-1.2.2-libsoup-gnome.patch} |   20 +++++++++-----------
+ package/gvfs/gvfs.mk                               |    8 ++++----
+ 2 files changed, 13 insertions(+), 15 deletions(-)
+ rename package/gvfs/{gvfs-1.4.0-libsoup-gnome.patch => gvfs-1.2.2-libsoup-gnome.patch} (88%)
 
-diff --git a/package/Config.in b/package/Config.in
-index 84492a8..c5a2365 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -139,7 +139,6 @@ source "package/ethtool/Config.in"
- source "package/haserl/Config.in"
- source "package/hostap/Config.in"
- source "package/ifplugd/Config.in"
--#source "package/irda-utils/Config.in"
- source "package/iperf/Config.in"
- source "package/iproute2/Config.in"
- source "package/ipsec-tools/Config.in"
-diff --git a/package/irda-utils/Config.in b/package/irda-utils/Config.in
-deleted file mode 100644
-index edb74a1..0000000
---- a/package/irda-utils/Config.in
-+++ /dev/null
-@@ -1,45 +0,0 @@
--menuconfig BR2_PACKAGE_IRDA_UTILS
--	bool "irda_utils"
--	depends on BROKEN
--	help
--	  Tools for accessing the irda-Subsystem of the Linux-Kernel
--	  The makefile is totally broken.
--
--if BR2_PACKAGE_IRDA_UTILS
--config IRDA_IRATTACH
--	bool "irattach"
--	default y
--	help
--		To start the Irda-Subsystem in SIR-Mode you may need this
--
--config IRDA_IRDAPING
--	bool "irdaping"
--	help
--		what ping is for networks is irdaping for Irda
--
--config IRDA_IRNETD
--	bool "irnetd"
--	help
--		Needed for Networking over Irda
--
--config IRDA_IRDADUMP
--	bool "irdadump"
--	help
--		Like tcpdump, but for infrared connections
--
--config IRDA_FINDCHIP
--	bool "findchip"
--
--config IRDA_PSION
--	bool "support psion-dongle"
--
--config IRDA_TEKRAM
--	bool "support tekram-dongle"
--
--config IRDA_SMCINIT
--	bool "support toshiba-laptops"
--	help
--		Some Toshiba Laptops have buggy BIOSes which didn't initialize
--		Irda. This may help those.
--
--endif
-diff --git a/package/irda-utils/irda-utils-0.9.18-install_irnetd.patch b/package/irda-utils/irda-utils-0.9.18-install_irnetd.patch
-deleted file mode 100644
-index 03f1f1d..0000000
---- a/package/irda-utils/irda-utils-0.9.18-install_irnetd.patch
-+++ /dev/null
-@@ -1,12 +0,0 @@
--diff -Naur irda-utils-0.9.18.orig/irnetd/Makefile irda-utils-0.9.18/irnetd/Makefile
----- irda-utils-0.9.18.orig/irnetd/Makefile	2006-07-11 08:16:06.000000000 +0200
--+++ irda-utils-0.9.18/irnetd/Makefile	2007-06-08 20:39:25.000000000 +0200
--@@ -55,7 +55,7 @@
-- 
-- install: irnetd
-- 	$(prn_install)
---	$(ECMD) install irnetd /usr/sbin/
--+	$(ECMD) install irnetd $(ROOT)/usr/sbin/
-- 
-- 
-- clean:
-diff --git a/package/irda-utils/irda.mk.broken b/package/irda-utils/irda.mk.broken
-deleted file mode 100644
-index 8fcf952..0000000
---- a/package/irda-utils/irda.mk.broken
-+++ /dev/null
-@@ -1,57 +0,0 @@
--#############################################################
--#
--# irda-utils
--#
--#############################################################
--IRDA_UTILS_VERSION:=0.9.18
--IRDA_UTILS_SOURCE:=irda-utils-$(IRDA_UTILS_VERSION).tar.gz
--IRDA_UTILS_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/irda/$(IRDA_UTILS_SOURCE)
--IRDA_UTILS_DIR:=$(BUILD_DIR)/irda-utils-$(IRDA_UTILS_VERSION)
--
--ifeq ($(IRDA_IRATTACH),y)
--IRDA_DIRS += irattach
--endif
--ifeq ($(IRDA_IRDAPING),y)
--IRDA_DIRS += irdaping
--endif
--ifeq ($(IRDA_IRNETD),y)
--IRDA_DIRS += irnetd
--endif
--ifeq ($(IRDA_PSION),y)
--IRDA_DIRS += psion
--endif
--ifeq ($(IRDA_TEKRAM),y)
--IRDA_DIRS += tekram
--endif
--ifeq ($(IRDA_FINDCHIP),y)
--IRDA_DIRS += findchip
--endif
--ifeq ($(IRDA_IRDADUMP),y)
--IRDA_DIRS += irdadump
--endif
--ifeq ($(IRDA_SMCINIT),y)
--IRDA_DIRS += smcinit
--endif
--
--IRDA_UTILS_MAKE_OPT:=-e "DIRS=$(IRDA_DIRS)"
--IRDA_UTILS_MAKE_ENV:=CC=$(TARGET_CC) LD=$(TARGET_LD) AR=$(TARGET_AR) RANLIB=$(TARGET_RANLIB) ROOT=$(TARGET_DIR) PREFIX=$(TARGET_DIR)
--
--# Since there is no configure-script
--
--$(IRDA_UTILS_DIR)/.configured: $(IRDA_UTILS_DIR)/.patched
--	touch $@
--
--irda-utils: uclibc $(DL_DIR)/$(IRDA_UTILS_SOURCE) $(IRDA_UTILS_DIR)/.installed
--
--irda-utils-clean: $(IRDA_UTILS_DIR)/.clean
--
--irda-utils-dirclean: $(IRDA_UTILS_DIR)/.dirclean
--
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(BR2_PACKAGE_IRDA_UTILS),y)
--TARGETS+=irda-utils
--endif
+diff --git a/package/gvfs/gvfs-1.4.0-libsoup-gnome.patch b/package/gvfs/gvfs-1.2.2-libsoup-gnome.patch
+similarity index 88%
+rename from package/gvfs/gvfs-1.4.0-libsoup-gnome.patch
+rename to package/gvfs/gvfs-1.2.2-libsoup-gnome.patch
+index 1fc7944..cb59221 100644
+--- a/package/gvfs/gvfs-1.4.0-libsoup-gnome.patch
++++ b/package/gvfs/gvfs-1.2.2-libsoup-gnome.patch
+@@ -1,7 +1,6 @@
+-diff -ur gvfs-1.4.0-orig/configure gvfs-1.4.0/configure
+---- gvfs-1.4.0-orig/configure	2009-09-21 16:33:27.000000000 +0200
+-+++ gvfs-1.4.0/configure	2009-10-18 13:28:02.000000000 +0200
+-@@ -17056,8 +17056,8 @@
++--- gvfs-1.2.2-orig/configure	2009-04-13 19:30:57.000000000 +0200
+++++ gvfs-1.2.2/configure	2009-05-25 11:49:31.000000000 +0200
++@@ -25645,8 +25645,8 @@
+  
+  if test "x$enable_http" != "xno"; then
+    if test -n "$PKG_CONFIG" && \
+@@ -12,7 +11,7 @@ diff -ur gvfs-1.4.0-orig/configure gvfs-1.4.0/configure
+    ac_status=$?
+    $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
+    (exit $ac_status); }; then
+-@@ -17074,12 +17074,12 @@
++@@ -25663,12 +25663,12 @@
+      pkg_cv_HTTP_CFLAGS="$HTTP_CFLAGS"
+   elif test -n "$PKG_CONFIG"; then
+      if test -n "$PKG_CONFIG" && \
+@@ -28,7 +27,7 @@ diff -ur gvfs-1.4.0-orig/configure gvfs-1.4.0/configure
+  else
+    pkg_failed=yes
+  fi
+-@@ -17090,12 +17090,12 @@
++@@ -25679,12 +25679,12 @@
+      pkg_cv_HTTP_LIBS="$HTTP_LIBS"
+   elif test -n "$PKG_CONFIG"; then
+      if test -n "$PKG_CONFIG" && \
+@@ -44,7 +43,7 @@ diff -ur gvfs-1.4.0-orig/configure gvfs-1.4.0/configure
+  else
+    pkg_failed=yes
+  fi
+-@@ -17113,14 +17113,14 @@
++@@ -25702,14 +25702,14 @@
+          _pkg_short_errors_supported=no
+  fi
+          if test $_pkg_short_errors_supported = yes; then
+@@ -62,7 +61,7 @@ diff -ur gvfs-1.4.0-orig/configure gvfs-1.4.0/configure
+  
+  $HTTP_PKG_ERRORS
+  
+-@@ -17131,7 +17131,7 @@
++@@ -25720,7 +25720,7 @@
+  and HTTP_LIBS to avoid the need to call pkg-config.
+  See the pkg-config man page for more details.
+  " >&5
+@@ -71,9 +70,8 @@ diff -ur gvfs-1.4.0-orig/configure gvfs-1.4.0/configure
+  
+  $HTTP_PKG_ERRORS
+  
+-diff -ur gvfs-1.4.0-orig/daemon/gvfsbackendhttp.c gvfs-1.4.0/daemon/gvfsbackendhttp.c
+---- gvfs-1.4.0-orig/daemon/gvfsbackendhttp.c	2009-04-20 12:41:37.000000000 +0200
+-+++ gvfs-1.4.0/daemon/gvfsbackendhttp.c	2009-10-18 13:28:02.000000000 +0200
++--- gvfs-1.2.2-orig/daemon/gvfsbackendhttp.c	2009-03-06 16:43:19.000000000 +0100
+++++ gvfs-1.2.2/daemon/gvfsbackendhttp.c	2009-05-25 11:48:20.000000000 +0200
+ @@ -33,7 +33,7 @@
+  #include <glib/gi18n.h>
+  #include <gio/gio.h>
+diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
+index 7d71f34..fc4716c 100644
+--- a/package/gvfs/gvfs.mk
++++ b/package/gvfs/gvfs.mk
+@@ -3,17 +3,17 @@
+ # gvfs
+ #
+ #############################################################
+-GVFS_VERSION_MAJOR = 1.4
+-GVFS_VERSION_MINOR = 0
++GVFS_VERSION_MAJOR = 1.2
++GVFS_VERSION_MINOR = 2
+ GVFS_VERSION = $(GVFS_VERSION_MAJOR).$(GVFS_VERSION_MINOR)
+ GVFS_SOURCE = gvfs-$(GVFS_VERSION).tar.gz
+ GVFS_SITE = http://ftp.gnome.org/pub/GNOME/sources/gvfs/$(GVFS_VERSION_MAJOR)
++
+ GVFS_INSTALL_STAGING = NO
+ GVFS_INSTALL_TARGET = YES
+ GVFS_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
+-GVFS_AUTORECONF = NO
+-GVFS_LIBTOOL_PATCH = NO
+ 
++GVFS_AUTORECONF = NO
+ GVFS_DEPENDENCIES = uclibc host-pkgconfig host-libglib2 libglib2 dbus-glib shared-mime-info
+ 
+ GVFS_CONF_OPT = \
 -- 
 1.6.3.3
