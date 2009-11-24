@@ -1,75 +1,175 @@
-From: Daniel Mack <daniel@caiaq.de>
-Date: Tue, 24 Nov 2009 17:29:09 +0100
-Subject: [Buildroot] [PATCH] Add fuse-sshfs package
-In-Reply-To: <87fx83dh7z.fsf@macbook.be.48ers.dk>
-References: <87fx83dh7z.fsf@macbook.be.48ers.dk>
-Message-ID: <1259080149-15678-1-git-send-email-daniel@caiaq.de>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 24 Nov 2009 19:53:38 +0100
+Subject: [Buildroot] [git commit master] package: remove disabled/broken
+	irda-utils package
+Message-ID: <20091124190730.BB58177756@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Daniel Mack <daniel@caiaq.de>
+
+commit: http://git.buildroot.net/buildroot/commit/?id=1330cf5b19b9d1e756f0521e55b8155268da71f6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+No updates since it got marked as broken back in January, so lets get
+rid of it.
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in       |    1 +
- package/sshfs/Config.in |   12 ++++++++++++
- package/sshfs/sshfs.mk  |   16 ++++++++++++++++
- 3 files changed, 29 insertions(+), 0 deletions(-)
- create mode 100644 package/sshfs/Config.in
- create mode 100644 package/sshfs/sshfs.mk
+ package/Config.in                                  |    1 -
+ package/irda-utils/Config.in                       |   45 ---------------
+ .../irda-utils-0.9.18-install_irnetd.patch         |   12 ----
+ package/irda-utils/irda.mk.broken                  |   57 --------------------
+ 4 files changed, 0 insertions(+), 115 deletions(-)
+ delete mode 100644 package/irda-utils/Config.in
+ delete mode 100644 package/irda-utils/irda-utils-0.9.18-install_irnetd.patch
+ delete mode 100644 package/irda-utils/irda.mk.broken
 
 diff --git a/package/Config.in b/package/Config.in
-index 84492a8..47163d0 100644
+index 84492a8..c5a2365 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -265,6 +265,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/sfdisk/Config.in"
- endif
- source "package/smartmontools/Config.in"
-+source "package/sshfs/Config.in"
- source "package/sysstat/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- # mdev
-diff --git a/package/sshfs/Config.in b/package/sshfs/Config.in
-new file mode 100644
-index 0000000..b56dd3e
---- /dev/null
-+++ b/package/sshfs/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_SSHFS
-+	bool "sshfs (FUSE)"
-+	depends on BR2_PACKAGE_LIBFUSE
-+	depends on BR2_PACKAGE_LIBGLIB2
-+	depends on BR2_PACKAGE_OPENSSH
-+	help
-+	  FUSE makes it possible to implement a filesystem in a userspace
-+	  program. Features include: simple yet comprehensive API, secure
-+	  mounting by non-root users, support for 2.4 and 2.6 Linux
-+	  kernels, multi-threaded operation. etc...
-+
-+	  http://fuse.sourceforge.net/sshfs.html
-diff --git a/package/sshfs/sshfs.mk b/package/sshfs/sshfs.mk
-new file mode 100644
-index 0000000..4acc293
---- /dev/null
-+++ b/package/sshfs/sshfs.mk
-@@ -0,0 +1,16 @@
-+#############################################################
-+#
-+# sshfs
-+#
-+#############################################################
-+
-+SSHFS_VERSION:=2.2
-+SSHFS_SOURCE:=sshfs-fuse-$(SSHFS_VERSION).tar.gz
-+SSHFS_SITE=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/fuse/$(SSHFS_VERSION)/sshfs-fuse
-+SSHFS_AUTORECONF:=NO
-+SSHFS_INSTALL_STAGING:=NO
-+SSHFS_INSTALL_TARGET:=YES
-+
-+SSHFS_DEPENDENCIES = libglib2 libfuse
-+
-+$(eval $(call AUTOTARGETS,package,sshfs))
+@@ -139,7 +139,6 @@ source "package/ethtool/Config.in"
+ source "package/haserl/Config.in"
+ source "package/hostap/Config.in"
+ source "package/ifplugd/Config.in"
+-#source "package/irda-utils/Config.in"
+ source "package/iperf/Config.in"
+ source "package/iproute2/Config.in"
+ source "package/ipsec-tools/Config.in"
+diff --git a/package/irda-utils/Config.in b/package/irda-utils/Config.in
+deleted file mode 100644
+index edb74a1..0000000
+--- a/package/irda-utils/Config.in
++++ /dev/null
+@@ -1,45 +0,0 @@
+-menuconfig BR2_PACKAGE_IRDA_UTILS
+-	bool "irda_utils"
+-	depends on BROKEN
+-	help
+-	  Tools for accessing the irda-Subsystem of the Linux-Kernel
+-	  The makefile is totally broken.
+-
+-if BR2_PACKAGE_IRDA_UTILS
+-config IRDA_IRATTACH
+-	bool "irattach"
+-	default y
+-	help
+-		To start the Irda-Subsystem in SIR-Mode you may need this
+-
+-config IRDA_IRDAPING
+-	bool "irdaping"
+-	help
+-		what ping is for networks is irdaping for Irda
+-
+-config IRDA_IRNETD
+-	bool "irnetd"
+-	help
+-		Needed for Networking over Irda
+-
+-config IRDA_IRDADUMP
+-	bool "irdadump"
+-	help
+-		Like tcpdump, but for infrared connections
+-
+-config IRDA_FINDCHIP
+-	bool "findchip"
+-
+-config IRDA_PSION
+-	bool "support psion-dongle"
+-
+-config IRDA_TEKRAM
+-	bool "support tekram-dongle"
+-
+-config IRDA_SMCINIT
+-	bool "support toshiba-laptops"
+-	help
+-		Some Toshiba Laptops have buggy BIOSes which didn't initialize
+-		Irda. This may help those.
+-
+-endif
+diff --git a/package/irda-utils/irda-utils-0.9.18-install_irnetd.patch b/package/irda-utils/irda-utils-0.9.18-install_irnetd.patch
+deleted file mode 100644
+index 03f1f1d..0000000
+--- a/package/irda-utils/irda-utils-0.9.18-install_irnetd.patch
++++ /dev/null
+@@ -1,12 +0,0 @@
+-diff -Naur irda-utils-0.9.18.orig/irnetd/Makefile irda-utils-0.9.18/irnetd/Makefile
+---- irda-utils-0.9.18.orig/irnetd/Makefile	2006-07-11 08:16:06.000000000 +0200
+-+++ irda-utils-0.9.18/irnetd/Makefile	2007-06-08 20:39:25.000000000 +0200
+-@@ -55,7 +55,7 @@
+- 
+- install: irnetd
+- 	$(prn_install)
+--	$(ECMD) install irnetd /usr/sbin/
+-+	$(ECMD) install irnetd $(ROOT)/usr/sbin/
+- 
+- 
+- clean:
+diff --git a/package/irda-utils/irda.mk.broken b/package/irda-utils/irda.mk.broken
+deleted file mode 100644
+index 8fcf952..0000000
+--- a/package/irda-utils/irda.mk.broken
++++ /dev/null
+@@ -1,57 +0,0 @@
+-#############################################################
+-#
+-# irda-utils
+-#
+-#############################################################
+-IRDA_UTILS_VERSION:=0.9.18
+-IRDA_UTILS_SOURCE:=irda-utils-$(IRDA_UTILS_VERSION).tar.gz
+-IRDA_UTILS_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/irda/$(IRDA_UTILS_SOURCE)
+-IRDA_UTILS_DIR:=$(BUILD_DIR)/irda-utils-$(IRDA_UTILS_VERSION)
+-
+-ifeq ($(IRDA_IRATTACH),y)
+-IRDA_DIRS += irattach
+-endif
+-ifeq ($(IRDA_IRDAPING),y)
+-IRDA_DIRS += irdaping
+-endif
+-ifeq ($(IRDA_IRNETD),y)
+-IRDA_DIRS += irnetd
+-endif
+-ifeq ($(IRDA_PSION),y)
+-IRDA_DIRS += psion
+-endif
+-ifeq ($(IRDA_TEKRAM),y)
+-IRDA_DIRS += tekram
+-endif
+-ifeq ($(IRDA_FINDCHIP),y)
+-IRDA_DIRS += findchip
+-endif
+-ifeq ($(IRDA_IRDADUMP),y)
+-IRDA_DIRS += irdadump
+-endif
+-ifeq ($(IRDA_SMCINIT),y)
+-IRDA_DIRS += smcinit
+-endif
+-
+-IRDA_UTILS_MAKE_OPT:=-e "DIRS=$(IRDA_DIRS)"
+-IRDA_UTILS_MAKE_ENV:=CC=$(TARGET_CC) LD=$(TARGET_LD) AR=$(TARGET_AR) RANLIB=$(TARGET_RANLIB) ROOT=$(TARGET_DIR) PREFIX=$(TARGET_DIR)
+-
+-# Since there is no configure-script
+-
+-$(IRDA_UTILS_DIR)/.configured: $(IRDA_UTILS_DIR)/.patched
+-	touch $@
+-
+-irda-utils: uclibc $(DL_DIR)/$(IRDA_UTILS_SOURCE) $(IRDA_UTILS_DIR)/.installed
+-
+-irda-utils-clean: $(IRDA_UTILS_DIR)/.clean
+-
+-irda-utils-dirclean: $(IRDA_UTILS_DIR)/.dirclean
+-
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_IRDA_UTILS),y)
+-TARGETS+=irda-utils
+-endif
 -- 
-1.6.5.2
+1.6.3.3
