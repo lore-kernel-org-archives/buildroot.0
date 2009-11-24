@@ -1,64 +1,37 @@
-From: Jonathan dumaresq <jdumaresq@cimeq.qc.ca>
-Date: Tue, 24 Nov 2009 09:17:35 -0500
-Subject: [Buildroot] Buildroot 2009.11-rc1 released
-In-Reply-To: <87vdh0dfjn.fsf@macbook.be.48ers.dk>
-References: <87vdh0dfjn.fsf@macbook.be.48ers.dk>
-Message-ID: <!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAHi5g6aqYv9KiRMMIEffU5IBAAAAAA==@cimeq.qc.ca>
+From: Daniel Mack <daniel@caiaq.de>
+Date: Tue, 24 Nov 2009 15:32:37 +0100
+Subject: [Buildroot] [PATCH] libglib2: bump version number to 2.22
+Message-ID: <1259073157-19511-1-git-send-email-daniel@caiaq.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+When building gvfs, I encountered the following error:
 
-I just would like to thanx everybody that are actively participating to the
-developpement of buildroot. 
+  checking for GLIB... configure: error: Package requirements (glib-2.0 >= 2.21.2 gthread-2.0 gobject-2.0 gmodule-no-export-2.0 gio-unix-2.0 gio-2.0 ) were not met:
+  Requested 'glib-2.0 >= 2.21.2' but version of GLib is 2.20.5
 
-Continue your good work !!!!!
+Signed-off-by: Daniel Mack <daniel@caiaq.de>
+---
+ package/libglib2/libglib2.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-Jonathan 
-
------Message d'origine-----
-De?: buildroot-bounces at busybox.net [mailto:buildroot-bounces at busybox.net] De
-la part de Peter Korsgaard
-Envoy??: 23 novembre 2009 17:48
-??: buildroot at uclibc.org
-Objet?: [Buildroot] Buildroot 2009.11-rc1 released
-
-Hi,
-
-I've just tagged release candidate 1 of the 2009.11 release. For an
-overview of the changes, see
-
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2009.11_rc1
-
-You can download the tarball here:
-
-http://buildroot.net/downloads/buildroot-2009.11-rc1.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.net/buildroot
-
-Please give it a spin and report any problems to the mailing list or bug
-tracker. As you might have noticed, we're running a bit late - So
-getting the final release out in November might be hard, but I'll try
-anyway.
-
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index 7100800..c7d69f3 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -3,8 +3,8 @@
+ # libglib2
+ #
+ #############################################################
+-LIBGLIB2_VERSION_MAJOR = 2.20
+-LIBGLIB2_VERSION_MINOR = 5
++LIBGLIB2_VERSION_MAJOR = 2.22
++LIBGLIB2_VERSION_MINOR = 2
+ LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).$(LIBGLIB2_VERSION_MINOR)
+ LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.bz2
+ LIBGLIB2_SITE = http://ftp.gtk.org/pub/glib/$(LIBGLIB2_VERSION_MAJOR)
 -- 
-Bye, Peter Korsgaard
-_______________________________________________
-buildroot mailing list
-buildroot at busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-This message has been scanned for viruses and
-dangerous content by MailScanner, and is
-believed to be clean.
-
-Ce message entrant est certifi? sans virus connu.
-Analyse effectu?e par AVG - www.avg.fr 
-Version: 9.0.709 / Base de donn?es virale: 270.14.77/2520 - Date: 11/23/09
-02:52:00
+1.6.5.2
