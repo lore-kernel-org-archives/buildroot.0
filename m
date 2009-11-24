@@ -1,9 +1,7 @@
 From: Daniel Mack <daniel@caiaq.de>
-Date: Tue, 24 Nov 2009 17:08:38 +0100
-Subject: [Buildroot] [PATCH] Add fuse-sshfs package
-In-Reply-To: <87my2bdihl.fsf@macbook.be.48ers.dk>
-References: <87my2bdihl.fsf@macbook.be.48ers.dk>
-Message-ID: <1259078918-15070-1-git-send-email-daniel@caiaq.de>
+Date: Tue, 24 Nov 2009 17:15:35 +0100
+Subject: [Buildroot] [PATCH] gvfs: drop legacy uclibc dependency
+Message-ID: <1259079335-15258-1-git-send-email-daniel@caiaq.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,62 +10,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Daniel Mack <daniel@caiaq.de>
 ---
- package/Config.in       |    1 +
- package/sshfs/Config.in |   10 ++++++++++
- package/sshfs/sshfs.mk  |   16 ++++++++++++++++
- 3 files changed, 27 insertions(+), 0 deletions(-)
- create mode 100644 package/sshfs/Config.in
- create mode 100644 package/sshfs/sshfs.mk
+ package/gvfs/gvfs.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 84492a8..47163d0 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -265,6 +265,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/sfdisk/Config.in"
- endif
- source "package/smartmontools/Config.in"
-+source "package/sshfs/Config.in"
- source "package/sysstat/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- # mdev
-diff --git a/package/sshfs/Config.in b/package/sshfs/Config.in
-new file mode 100644
-index 0000000..77d21e5
---- /dev/null
-+++ b/package/sshfs/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_SSHFS
-+	bool "sshfs (FUSE)"
-+	depends on BR2_PACKAGE_LIBFUSE && BR2_PACKAGE_LIBGLIB2 && BR2_PACKAGE_OPENSSH
-+	help
-+	  FUSE makes it possible to implement a filesystem in a userspace
-+	  program. Features include: simple yet comprehensive API, secure
-+	  mounting by non-root users, support for 2.4 and 2.6 Linux
-+	  kernels, multi-threaded operation. etc...
-+
-+	  http://fuse.sourceforge.net/sshfs.html
-diff --git a/package/sshfs/sshfs.mk b/package/sshfs/sshfs.mk
-new file mode 100644
-index 0000000..b99f1a2
---- /dev/null
-+++ b/package/sshfs/sshfs.mk
-@@ -0,0 +1,16 @@
-+#############################################################
-+#
-+# sshfs
-+#
-+#############################################################
-+
-+SSHFS_VERSION:=2.2
-+SSHFS_SOURCE:=sshfs-fuse-$(SSHFS_VERSION).tar.gz
-+SSHFS_SITE=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/fuse/$(SSHFS_VERSION)/sshfs-fuse
-+SSHFS_AUTORECONF:=NO
-+SSHFS_INSTALL_STAGING:=NO
-+SSHFS_INSTALL_TARGET:=YES
-+
-+SSHFS_DEPENDENCIES = libglib2
-+
-+$(eval $(call AUTOTARGETS,package,sshfs))
+diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
+index 7d71f34..41ecfa6 100644
+--- a/package/gvfs/gvfs.mk
++++ b/package/gvfs/gvfs.mk
+@@ -14,7 +14,7 @@ GVFS_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
+ GVFS_AUTORECONF = NO
+ GVFS_LIBTOOL_PATCH = NO
+ 
+-GVFS_DEPENDENCIES = uclibc host-pkgconfig host-libglib2 libglib2 dbus-glib shared-mime-info
++GVFS_DEPENDENCIES = host-pkgconfig host-libglib2 libglib2 dbus-glib shared-mime-info
+ 
+ GVFS_CONF_OPT = \
+ 	--disable-gconf			\
 -- 
 1.6.5.2
