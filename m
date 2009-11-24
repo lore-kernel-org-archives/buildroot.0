@@ -1,30 +1,46 @@
-From: Daniel Mack <daniel@caiaq.de>
-Date: Tue, 24 Nov 2009 16:02:40 +0100
-Subject: [Buildroot] [PATCH] libfuse: bump version number to 2.8.1
-Message-ID: <1259074960-9032-1-git-send-email-daniel@caiaq.de>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 24 Nov 2009 15:41:19 +0000 (UTC)
+Subject: [Buildroot] [Bug 739] New: New/updated hostapd package
+Message-ID: <bug-739-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Daniel Mack <daniel@caiaq.de>
----
- package/fuse/libfuse.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+https://bugs.busybox.net/show_bug.cgi?id=739
 
-diff --git a/package/fuse/libfuse.mk b/package/fuse/libfuse.mk
-index 05bc389..b45f9ee 100644
---- a/package/fuse/libfuse.mk
-+++ b/package/fuse/libfuse.mk
-@@ -3,7 +3,7 @@
- # libfuse
- #
- #############################################################
--LIBFUSE_VERSION:=2.7.3
-+LIBFUSE_VERSION:=2.8.1
- LIBFUSE_SOURCE:=fuse-$(LIBFUSE_VERSION).tar.gz
- LIBFUSE_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/fuse/
- LIBFUSE_DIR:=$(BUILD_DIR)/fuse-$(LIBFUSE_VERSION)
+              Host: i686-linux
+            Target: arm-softfloat-linux-uclibcgnueabi
+           Summary: New/updated hostapd package
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: gustavo at zacarias.com.ar
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
+
+
+Created an attachment (id=759)
+ --> (https://bugs.busybox.net/attachment.cgi?id=759)
+Add new hostapd package
+
+This patch adds the hostapd package which basically replaces the old/deprecated
+hostap package.
+The package "rename" is to match it's new functionality (just a daemon now) and
+upstream naming.
+
+Testers are very much welcome, specially those with master mode capable
+hardware.
+
+
 -- 
-1.6.5.2
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
