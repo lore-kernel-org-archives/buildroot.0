@@ -1,46 +1,75 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 24 Nov 2009 17:23:44 +0100
+From: Daniel Mack <daniel@caiaq.de>
+Date: Tue, 24 Nov 2009 17:29:09 +0100
 Subject: [Buildroot] [PATCH] Add fuse-sshfs package
-In-Reply-To: <1259078918-15070-1-git-send-email-daniel@caiaq.de> (Daniel
-	Mack's message of "Tue\, 24 Nov 2009 17\:08\:38 +0100")
-References: <87my2bdihl.fsf@macbook.be.48ers.dk>
-	<1259078918-15070-1-git-send-email-daniel@caiaq.de>
-Message-ID: <87fx83dh7z.fsf@macbook.be.48ers.dk>
+In-Reply-To: <87fx83dh7z.fsf@macbook.be.48ers.dk>
+References: <87fx83dh7z.fsf@macbook.be.48ers.dk>
+Message-ID: <1259080149-15678-1-git-send-email-daniel@caiaq.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Daniel" == Daniel Mack <daniel@caiaq.de> writes:
+Signed-off-by: Daniel Mack <daniel@caiaq.de>
+---
+ package/Config.in       |    1 +
+ package/sshfs/Config.in |   12 ++++++++++++
+ package/sshfs/sshfs.mk  |   16 ++++++++++++++++
+ 3 files changed, 29 insertions(+), 0 deletions(-)
+ create mode 100644 package/sshfs/Config.in
+ create mode 100644 package/sshfs/sshfs.mk
 
- Daniel> +config BR2_PACKAGE_SSHFS
- Daniel> +	bool "sshfs (FUSE)"
- Daniel> +	depends on BR2_PACKAGE_LIBFUSE && BR2_PACKAGE_LIBGLIB2 && BR2_PACKAGE_OPENSSH
-
-It's nice to keep lines < 80 chars. I would prefer 3 seperate 'depends on'
-lines.
-
- Daniel> +	help
- Daniel> +	  FUSE makes it possible to implement a filesystem in a userspace
- Daniel> +	  program. Features include: simple yet comprehensive API, secure
- Daniel> +	  mounting by non-root users, support for 2.4 and 2.6 Linux
- Daniel> +	  kernels, multi-threaded operation. etc...
-
-This sounds like a description of fuse itself, and not of sshfs?
-
- Daniel> +SSHFS_VERSION:=2.2
- Daniel> +SSHFS_SOURCE:=sshfs-fuse-$(SSHFS_VERSION).tar.gz
- Daniel> +SSHFS_SITE=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/fuse/$(SSHFS_VERSION)/sshfs-fuse
- Daniel> +SSHFS_AUTORECONF:=NO
- Daniel> +SSHFS_INSTALL_STAGING:=NO
- Daniel> +SSHFS_INSTALL_TARGET:=YES
- Daniel> +
- Daniel> +SSHFS_DEPENDENCIES = libglib2
-
-You're forgetting libfuse
-
-Otherwise it looks good, thanks!
-
+diff --git a/package/Config.in b/package/Config.in
+index 84492a8..47163d0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -265,6 +265,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/sfdisk/Config.in"
+ endif
+ source "package/smartmontools/Config.in"
++source "package/sshfs/Config.in"
+ source "package/sysstat/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ # mdev
+diff --git a/package/sshfs/Config.in b/package/sshfs/Config.in
+new file mode 100644
+index 0000000..b56dd3e
+--- /dev/null
++++ b/package/sshfs/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_SSHFS
++	bool "sshfs (FUSE)"
++	depends on BR2_PACKAGE_LIBFUSE
++	depends on BR2_PACKAGE_LIBGLIB2
++	depends on BR2_PACKAGE_OPENSSH
++	help
++	  FUSE makes it possible to implement a filesystem in a userspace
++	  program. Features include: simple yet comprehensive API, secure
++	  mounting by non-root users, support for 2.4 and 2.6 Linux
++	  kernels, multi-threaded operation. etc...
++
++	  http://fuse.sourceforge.net/sshfs.html
+diff --git a/package/sshfs/sshfs.mk b/package/sshfs/sshfs.mk
+new file mode 100644
+index 0000000..4acc293
+--- /dev/null
++++ b/package/sshfs/sshfs.mk
+@@ -0,0 +1,16 @@
++#############################################################
++#
++# sshfs
++#
++#############################################################
++
++SSHFS_VERSION:=2.2
++SSHFS_SOURCE:=sshfs-fuse-$(SSHFS_VERSION).tar.gz
++SSHFS_SITE=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/fuse/$(SSHFS_VERSION)/sshfs-fuse
++SSHFS_AUTORECONF:=NO
++SSHFS_INSTALL_STAGING:=NO
++SSHFS_INSTALL_TARGET:=YES
++
++SSHFS_DEPENDENCIES = libglib2 libfuse
++
++$(eval $(call AUTOTARGETS,package,sshfs))
 -- 
-Bye, Peter Korsgaard
+1.6.5.2
