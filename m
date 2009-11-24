@@ -1,32 +1,48 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 23 Nov 2009 23:47:40 +0100
-Subject: [Buildroot] Buildroot 2009.11-rc1 released
-Message-ID: <87vdh0dfjn.fsf@macbook.be.48ers.dk>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Tue, 24 Nov 2009 11:18:55 +0100
+Subject: [Buildroot] patch : dbus  remove existing symbolic link
+Message-ID: <E4B91C4D3521446D8F69144609024A53@apexjs>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-
-I've just tagged release candidate 1 of the 2009.11 release. For an
-overview of the changes, see
-
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2009.11_rc1
-
-You can download the tarball here:
-
-http://buildroot.net/downloads/buildroot-2009.11-rc1.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.net/buildroot
-
-Please give it a spin and report any problems to the mailing list or bug
-tracker. As you might have noticed, we're running a bit late - So
-getting the final release out in November might be hard, but I'll try
-anyway.
-
--- 
-Bye, Peter Korsgaard
+Hi
+ 
+Building dbus fails if the symbolic link is already present.
+this should solve the issue.
+ 
+ 
+diff -rupN buildroot-2009.11/package/dbus/dbus.mk
+buildroot/package/dbus/dbus.mk
+--- buildroot-2009.11/package/dbus/dbus.mk 2009-11-23 23:24:09.000000000
++0100
++++ buildroot/package/dbus/dbus.mk 2009-11-24 11:01:44.000000000 +0100
+@@ -53,7 +53,8 @@ $(eval $(call AUTOTARGETS,package,dbus))
+ 
+ # fix rebuild if /var/lib is a symlink to /tmp
+ $(DBUS_HOOK_POST_BUILD): $(DBUS_TARGET_BUILD)
+- rm -rf /tmp/dbus
++ if [  -h $(TARGET_DIR)/var/lib/dbus ]; then \
++  rm -rf $(TARGET_DIR)/var/lib/dbus; fi
+  touch $@
+ 
+ $(DBUS_HOOK_POST_INSTALL): $(DBUS_TARGET_INSTALL_TARGET)
+ 
+ 
+ 
+I hope this is the right way to submit a patch, don't shoot me if it isn't
+ 
+Johan
+ 
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091124/eafdf610/attachment-0001.htm>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: br_dbus.patch
+Type: application/octet-stream
+Size: 566 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091124/eafdf610/attachment-0001.obj>
