@@ -1,74 +1,73 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 26 Nov 2009 00:14:20 +0100
-Subject: [Buildroot] Help Booting Kernel on an ml507
-In-Reply-To: <4B2CB099CF3D4F40B1B1442281CA94FFC4C8E2@EXCHANGEVS01.appsig.com>
-	(RYAN NEAL's message of "Wed\, 25 Nov 2009 14\:49\:41 -0800")
-References: <4B2CB099CF3D4F40B1B1442281CA94FFC4C8E2@EXCHANGEVS01.appsig.com>
-Message-ID: <87r5rm9oz7.fsf@macbook.be.48ers.dk>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Thu, 26 Nov 2009 00:19:03 +0100
+Subject: [Buildroot] failure to bump libxml2 to version 2.7.6 :
+	libtool-patch error
+Message-ID: <B8B073A8C8E044988ED5D528DA4EFE70@apexjs>
 List-Id: <buildroot.busybox.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ryan" == NEAL, RYAN <RYAN_NEAL@appsig.com> writes:
+Hi 
+ 
+In order to use the latest libxml 2.7.6 with a lot  bugs fixed
+I get this error when building : (just changed the version in the
+libxml2.mk)
+ 
+I don't see why a libtool-patch is been applied since there are no patch
+files in the package directory.
+ 
+ 
+#make 
+ 
+Checking build system dependencies:
+Overriding $(DL_DIR) in '.config'.  Ok
+External download directory:   Ok (/home/johan/dl)
+CC clean:     Ok
+CXX clean:     Ok
+CPP clean:     Ok
+CFLAGS clean:     Ok
+INCLUDES clean:     Ok
+CXXFLAGS clean:     Ok
+which installed:    Ok
+sed works:     Ok (/bin/sed)
+GNU make version '3.81':   Ok
+C compiler '/usr/bin/gcc'
+C compiler version '4.3.2':   Ok
+C++ compiler '/usr/bin/g++'
+C++ compiler version '4.3.2':   Ok
+awk installed:     Ok
+bash installed:     Ok
+bison installed:    Ok
+flex installed:     Ok
+gettext installed:    Ok
+makeinfo installed:    Ok
+patch installed:    Ok
+Build system dependencies:   Ok
+ 
+rm -rf /home/johan/buildroot/output/build/buildroot-config
+mkdir -p /home/johan/buildroot/output/build
+cp -dpRf package/config/buildroot-config
+/home/johan/buildroot/output/build/buildroot-config
+cp -dpf /home/johan/buildroot/output/build/u-boot-2009.11/tools/mkimage
+/home/johan/buildroot/output/build/staging_dir/usr/bin/
+[7m>>> libxml2 2.7.6 Patching libtool[27m
+ 
+Applying buildroot-libtool.patch using plaintext: 
+patching file ltmain.sh
+Hunk #1 FAILED at 273.
+Hunk #2 FAILED at 2408.
+Hunk #3 FAILED at 2552.
+Hunk #4 FAILED at 2896.
+Hunk #5 FAILED at 5623.
+Hunk #6 FAILED at 5948.
+6 out of 6 hunks FAILED -- saving rejects to file ltmain.sh.rej
+Patch failed!  Please fix buildroot-libtool.patch!
+make: ***
+[/home/johan/buildroot/output/build/libxml2-2.7.6/.stamp_libtool_patch]
+Error 1
 
- Ryan> Hello,
-
- Ryan> I am trying to use buildroot to create a rootfs (specifically a
- Ryan> initramfs) that I can incorporate with the Xilinx linux kernel
- Ryan> (2.6?).
-
-Why would you btw want to use an initramfs instead of a real flash file
-system? Initramfs uses more RAM and typically boots slower than
-E.G. squashfs.
-
- Ryan> When I run this I get the following problems:
-
-
- Ryan> Bootline:              Linux/PowerPC load: console=ttyS0 ip=on
-
- Ryan>                 Bad trap at PC: 4801f1b4, SR: 2d000, vector=2010
-
- Ryan> Bootline:              Linux/PowerPC load: console=ttyS0 ip=on root=/dev/ram
-
- Ryan>                 Bad trap at PC: 4801f1b4, SR: 2d000, vector=2010
-
-
-How big is your cpio.gz / zImage?
-
-
- Ryan> I then tried to just get to a shell by doing the following:
-
- Ryan> Bootline:              Linux/PowerPC load: console=ttyS0 ip=on rdinit=/bin/sh
-
- Ryan> Bootline:              Linux/PowerPC load: console=ttyS0 ip=on root=/dev/ram
- Ryan> rdinit=/bin/sh
-
-  Ryan> Bad trap at PC: 4801f1b4, SR: 2d000, vector=2010
-
- Ryan> init has generated signal 5 but has no handler for it
-
-So it gets all the way to init? Please paste the complete serial output.
-
-Are you using hardware or software floating point in buildroot? please
-paste your buildroot .config.
-
- Ryan> Kernel panic - not syncing: Attempted to kill init!
-
- Ryan> Call Trace:
-
- Ryan> [cf831d80] [c0005f88] show_stack+0x48/0x15c (unreliable)
-
- Ryan> [cf831db0] [c0220c80] panic+0x94/0x174
-
- Ryan> [cf831e00] [c0038490] do_group_exit+0x0/0xb8
-
- Ryan> [cf831e50] [c000bf68] _exception+0x19c/0x1a4
-
- Ryan> [cf831f40] [c000e8c0] ret_from_except_full+0x0/0x4c
-
-Enable CONFIG_KALLSYMS so you get a proper symbolic backtrace.
-
--- 
-Bye, Peter Korsgaard
+ 
+ 
+ 
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091126/d2d02ef1/attachment.htm>
