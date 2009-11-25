@@ -1,57 +1,97 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 25 Nov 2009 23:16:11 +0100
-Subject: [Buildroot] [git commit master] buildroot;
-	move defconfigs to configs/ and print in help
-In-Reply-To: <20091125230213.27e7b090@surf> (Thomas Petazzoni's message of
-	"Wed\, 25 Nov 2009 23\:02\:13 +0100")
-References: <20091004202133.B35E577762@busybox.osuosl.org>
-	<20091005084845.023ff120@surf> <873a5y5nbq.fsf@macbook.be.48ers.dk>
-	<20091111150359.579df608@surf> <87pr7afeyi.fsf@macbook.be.48ers.dk>
-	<20091125230213.27e7b090@surf>
-Message-ID: <87y6lu9ro4.fsf@macbook.be.48ers.dk>
+From: NEAL, RYAN <RYAN_NEAL@appsig.com>
+Date: Wed, 25 Nov 2009 14:49:41 -0800
+Subject: [Buildroot] Help Booting Kernel on an ml507
+Message-ID: <4B2CB099CF3D4F40B1B1442281CA94FFC4C8E2@EXCHANGEVS01.appsig.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hello,
 
-Hi,
+ 
 
- >> I'm sorry to hear. I do kind of like it ;)
+I am trying to use buildroot to create a rootfs (specifically a
+initramfs) that I can incorporate with the Xilinx linux kernel (2.6...).
 
- Thomas> Argh, I still don't like it ;)
 
-:/
+ 
 
-I'll get back to you on this in more detail tomorrow, but just wanted to
-reply to one thing now:
+I am able build properly, I have the rootfs becoming a cpio.gz and the
+initramfs is enabled.  I then take this pass it to the linux kernel
+build environment and get a single elf file.  When I run this I get the
+following problems:
 
- >> With a find-all-files-ending-in-_defconfig-under-here thing? Could be
- >> done, but is kind of ugly - Same for make <foo>_defconfig.
+ 
 
- Thomas> Come on, kind of ugly ? It's a one liner for <foo>_defconfig (something
- Thomas> we already had) :
+Bootline:              Linux/PowerPC load: console=ttyS0 ip=on 
 
- Thomas> %_defconfig: $(CONFIG)/conf
- Thomas> 	cp $(shell find ./target/ -name $@) .config
+                Bad trap at PC: 4801f1b4, SR: 2d000, vector=2010
 
-But that's without error handling! If the user mistypes the defconfig
-name he gets a very odd error:
+Bootline:              Linux/PowerPC load: console=ttyS0 ip=on
+root=/dev/ram
 
-make blah_defconfig
-cp .config
-cp: missing destination file operand after `.config'
-Try `cp --help' for more information.
+                Bad trap at PC: 4801f1b4, SR: 2d000, vector=2010
 
-Whereas with a real dest: target rule like what we have now you get a
-sensible error message:
+ 
 
-make blah_defconfig
-make: *** No rule to make target `blah_defconfig'.  Stop.
+I then tried to just get to a shell by doing the following:
 
-That's what I mean about ugly.
+Bootline:              Linux/PowerPC load: console=ttyS0 ip=on
+rdinit=/bin/sh
 
--- 
-Bye, Peter Korsgaard
+Bootline:              Linux/PowerPC load: console=ttyS0 ip=on
+root=/dev/ram rdinit=/bin/sh
+
+ 
+
+Bad trap at PC: 4801f1b4, SR: 2d000, vector=2010
+
+init has generated signal 5 but has no handler for it
+
+Kernel panic - not syncing: Attempted to kill init!
+
+Call Trace:
+
+[cf831d80] [c0005f88] show_stack+0x48/0x15c (unreliable)
+
+[cf831db0] [c0220c80] panic+0x94/0x174
+
+[cf831e00] [c0038490] do_group_exit+0x0/0xb8
+
+[cf831e50] [c000bf68] _exception+0x19c/0x1a4
+
+[cf831f40] [c000e8c0] ret_from_except_full+0x0/0x4c
+
+Rebooting in 180 seconds.. 
+
+ 
+
+ 
+
+First, do I need the root=/dev/ram line?  
+
+ 
+
+Second, does anyone know what signal 5 is and if it is an error in my
+configuration of BR?  I think it is this because I can "boot" with
+another initramfs image (see:
+http://www.aclevername.com/articles/linux-xilinx-tutorial/minimalist-ini
+tramfs.html).
+
+ 
+
+Any help would be really great! Thanks in advance!!
+
+ 
+
+:: Ryan Neal
+
+Office: 490/279
+
+Phone: 408.774.2747
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091125/f0fd7bd5/attachment-0001.htm>
