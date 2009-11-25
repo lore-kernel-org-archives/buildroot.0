@@ -1,78 +1,65 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Thu, 26 Nov 2009 00:28:54 +0100
-Subject: [Buildroot] failure to bump libxml2 to version 2.7.6 :
- libtool-patch error
-In-Reply-To: <B8B073A8C8E044988ED5D528DA4EFE70@apexjs>
-References: <B8B073A8C8E044988ED5D528DA4EFE70@apexjs>
-Message-ID: <1259191734.4236.2018.camel@coalu.atr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 25 Nov 2009 23:38:38 +0000 (UTC)
+Subject: [Buildroot] [Bug 743] New: Add Transmission bit torrent option to
+	buildroot
+Message-ID: <bug-743-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Which version of buildroot ?
+https://bugs.busybox.net/show_bug.cgi?id=743
 
-Le jeudi 26 novembre 2009 ? 00:19 +0100, Sagaert Johan a ?crit :
-> Hi 
->  
-> In order to use the latest libxml 2.7.6 with a lot  bugs fixed
-> I get this error when building : (just changed the version in the
-> libxml2.mk)
->  
-> I don't see why a libtool-patch is been applied since there are no
-> patch files in the package directory.
->  
->  
-> #make 
->  
-> Checking build system dependencies:
-> Overriding $(DL_DIR) in '.config'.  Ok
-> External download directory:   Ok (/home/johan/dl)
-> CC clean:     Ok
-> CXX clean:     Ok
-> CPP clean:     Ok
-> CFLAGS clean:     Ok
-> INCLUDES clean:     Ok
-> CXXFLAGS clean:     Ok
-> which installed:    Ok
-> sed works:     Ok (/bin/sed)
-> GNU make version '3.81':   Ok
-> C compiler '/usr/bin/gcc'
-> C compiler version '4.3.2':   Ok
-> C++ compiler '/usr/bin/g++'
-> C++ compiler version '4.3.2':   Ok
-> awk installed:     Ok
-> bash installed:     Ok
-> bison installed:    Ok
-> flex installed:     Ok
-> gettext installed:    Ok
-> makeinfo installed:    Ok
-> patch installed:    Ok
-> Build system dependencies:   Ok
->  
-> rm -rf /home/johan/buildroot/output/build/buildroot-config
-> mkdir -p /home/johan/buildroot/output/build
-> cp -dpRf
-> package/config/buildroot-config /home/johan/buildroot/output/build/buildroot-config
-> cp
-> -dpf /home/johan/buildroot/output/build/u-boot-2009.11/tools/mkimage /home/johan/buildroot/output/build/staging_dir/usr/bin/
-> [7m>>> libxml2 2.7.6 Patching libtool[27m
->  
-> Applying buildroot-libtool.patch using plaintext: 
-> patching file ltmain.sh
-> Hunk #1 FAILED at 273.
-> Hunk #2 FAILED at 2408.
-> Hunk #3 FAILED at 2552.
-> Hunk #4 FAILED at 2896.
-> Hunk #5 FAILED at 5623.
-> Hunk #6 FAILED at 5948.
-> 6 out of 6 hunks FAILED -- saving rejects to file ltmain.sh.rej
-> Patch failed!  Please fix buildroot-libtool.patch!
-> make: ***
-> [/home/johan/buildroot/output/build/libxml2-2.7.6/.stamp_libtool_patch] Error 1
-> 
->  
->  
->  
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+           Summary: Add Transmission bit torrent option to buildroot
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: jasaw81 at yahoo.com.au
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
+
+
+Created an attachment (id=761)
+ --> (https://bugs.busybox.net/attachment.cgi?id=761)
+Files that add transmission package option to buildroot.
+
+Transmission is a bit torrent client or daemon. Transmission-remote can be used
+to control transmission daemon remotely.
+
+Dependencies that may have to be updated: libcurl, libevent
+
+I made up a few scripts to help setup a transmission home directory and only
+start transmission when network interface is up.
+
+I have only tested it with:
+- libcurl with large file support enabled
+- libevent version 1.4.11-stable
+
+Just untar the attached tarball and patch the package/Config.in file.
+
+
+
+--- ../../buildroot-2009.08/package/Config.in   2009-11-25 10:22:07.034052000
++1100
++++ Config.in   2009-11-19 16:03:06.897232000 +1100
+@@ -216,6 +216,7 @@ source "package/thttpd/Config.in"
+ source "package/tinyhttpd/Config.in"
+ endif
+ source "package/tn5250/Config.in"
++source "package/transmission/Config.in"
+ source "package/ttcp/Config.in"
+ #if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
+ # ATTENTION! This was merged into busybox!
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
