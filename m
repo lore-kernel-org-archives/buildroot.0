@@ -1,57 +1,27 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 25 Nov 2009 10:22:42 +0100
-Subject: [Buildroot] [git commit master] dbus: fix rebuild for boards where
-	/var/lib isn't a symlink
-Message-ID: <20091125101013.83566777DE@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 25 Nov 2009 11:11:13 +0100
+Subject: [Buildroot] Problem using net-snmp and Buildroot
+In-Reply-To: <4B0BB941.7090202@dimacosystems.com> (Luca Altobelli's message of
+	"Tue\, 24 Nov 2009 11\:45\:21 +0100")
+References: <4B0BB941.7090202@dimacosystems.com>
+Message-ID: <87iqcyc3su.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Luca" == Luca Altobelli <LUCA.ALTOBELLI@dimacosystems.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b1c416bed621e4e494410bcd6db214745ca829c3
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Luca> Dear Sirs
+ Luca> ??? I'm using buildroot-2009.08 and I need net-snmp (currently I'm using
+ Luca> version 5.4.2.1) installed on my target system. When compiling no problem
+ Luca> encountered but,? if I try to launch snmpd on my target system, it gives the
+ Luca> message "cannot find libc.so.6". I have libc.so.6 on my host system, no trace
 
-Based on patch by Sagaert Johan <sagaert.johan@skynet.be>
+I cannot reproduce it here with x86-64 (same as my host) or i386 with
+2009.11-rc1. We did update the netsnmp package after 2009.08, could you
+give 2009.11-rc1 a test?
 
-Dbus rebuilds fails if /var/lib/dbus is a symlink (which it will be),
-and the existing workaround only worked if /var/lib is a symlink to
-/tmp, which isn't always the case.
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES              |    2 +-
- package/dbus/dbus.mk |    4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/CHANGES b/CHANGES
-index a3d6533..cf623e3 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,6 +1,6 @@
- 2009.11, Not released yet:
- 
--	Updated/fixed packages: gvfs
-+	Updated/fixed packages: dbus, gvfs
- 
- 2009.11-rc1, Released November 23rd, 2009:
- 
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index 158aeb5..eb97e76 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -51,9 +51,9 @@ endif
- 
- $(eval $(call AUTOTARGETS,package,dbus))
- 
--# fix rebuild if /var/lib is a symlink to /tmp
-+# fix rebuild (dbus makefile errors out if /var/lib/dbus is a symlink)
- $(DBUS_HOOK_POST_BUILD): $(DBUS_TARGET_BUILD)
--	rm -rf /tmp/dbus
-+	rm -rf $(TARGET_DIR)/var/lib/dbus
- 	touch $@
- 
- $(DBUS_HOOK_POST_INSTALL): $(DBUS_TARGET_INSTALL_TARGET)
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
