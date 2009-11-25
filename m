@@ -1,97 +1,74 @@
-From: NEAL, RYAN <RYAN_NEAL@appsig.com>
-Date: Wed, 25 Nov 2009 14:49:41 -0800
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 26 Nov 2009 00:14:20 +0100
 Subject: [Buildroot] Help Booting Kernel on an ml507
-Message-ID: <4B2CB099CF3D4F40B1B1442281CA94FFC4C8E2@EXCHANGEVS01.appsig.com>
+In-Reply-To: <4B2CB099CF3D4F40B1B1442281CA94FFC4C8E2@EXCHANGEVS01.appsig.com>
+	(RYAN NEAL's message of "Wed\, 25 Nov 2009 14\:49\:41 -0800")
+References: <4B2CB099CF3D4F40B1B1442281CA94FFC4C8E2@EXCHANGEVS01.appsig.com>
+Message-ID: <87r5rm9oz7.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Ryan" == NEAL, RYAN <RYAN_NEAL@appsig.com> writes:
 
- 
+ Ryan> Hello,
 
-I am trying to use buildroot to create a rootfs (specifically a
-initramfs) that I can incorporate with the Xilinx linux kernel (2.6...).
+ Ryan> I am trying to use buildroot to create a rootfs (specifically a
+ Ryan> initramfs) that I can incorporate with the Xilinx linux kernel
+ Ryan> (2.6?).
+
+Why would you btw want to use an initramfs instead of a real flash file
+system? Initramfs uses more RAM and typically boots slower than
+E.G. squashfs.
+
+ Ryan> When I run this I get the following problems:
 
 
- 
+ Ryan> Bootline:              Linux/PowerPC load: console=ttyS0 ip=on
 
-I am able build properly, I have the rootfs becoming a cpio.gz and the
-initramfs is enabled.  I then take this pass it to the linux kernel
-build environment and get a single elf file.  When I run this I get the
-following problems:
+ Ryan>                 Bad trap at PC: 4801f1b4, SR: 2d000, vector=2010
 
- 
+ Ryan> Bootline:              Linux/PowerPC load: console=ttyS0 ip=on root=/dev/ram
 
-Bootline:              Linux/PowerPC load: console=ttyS0 ip=on 
+ Ryan>                 Bad trap at PC: 4801f1b4, SR: 2d000, vector=2010
 
-                Bad trap at PC: 4801f1b4, SR: 2d000, vector=2010
 
-Bootline:              Linux/PowerPC load: console=ttyS0 ip=on
-root=/dev/ram
+How big is your cpio.gz / zImage?
 
-                Bad trap at PC: 4801f1b4, SR: 2d000, vector=2010
 
- 
+ Ryan> I then tried to just get to a shell by doing the following:
 
-I then tried to just get to a shell by doing the following:
+ Ryan> Bootline:              Linux/PowerPC load: console=ttyS0 ip=on rdinit=/bin/sh
 
-Bootline:              Linux/PowerPC load: console=ttyS0 ip=on
-rdinit=/bin/sh
+ Ryan> Bootline:              Linux/PowerPC load: console=ttyS0 ip=on root=/dev/ram
+ Ryan> rdinit=/bin/sh
 
-Bootline:              Linux/PowerPC load: console=ttyS0 ip=on
-root=/dev/ram rdinit=/bin/sh
+  Ryan> Bad trap at PC: 4801f1b4, SR: 2d000, vector=2010
 
- 
+ Ryan> init has generated signal 5 but has no handler for it
 
-Bad trap at PC: 4801f1b4, SR: 2d000, vector=2010
+So it gets all the way to init? Please paste the complete serial output.
 
-init has generated signal 5 but has no handler for it
+Are you using hardware or software floating point in buildroot? please
+paste your buildroot .config.
 
-Kernel panic - not syncing: Attempted to kill init!
+ Ryan> Kernel panic - not syncing: Attempted to kill init!
 
-Call Trace:
+ Ryan> Call Trace:
 
-[cf831d80] [c0005f88] show_stack+0x48/0x15c (unreliable)
+ Ryan> [cf831d80] [c0005f88] show_stack+0x48/0x15c (unreliable)
 
-[cf831db0] [c0220c80] panic+0x94/0x174
+ Ryan> [cf831db0] [c0220c80] panic+0x94/0x174
 
-[cf831e00] [c0038490] do_group_exit+0x0/0xb8
+ Ryan> [cf831e00] [c0038490] do_group_exit+0x0/0xb8
 
-[cf831e50] [c000bf68] _exception+0x19c/0x1a4
+ Ryan> [cf831e50] [c000bf68] _exception+0x19c/0x1a4
 
-[cf831f40] [c000e8c0] ret_from_except_full+0x0/0x4c
+ Ryan> [cf831f40] [c000e8c0] ret_from_except_full+0x0/0x4c
 
-Rebooting in 180 seconds.. 
+Enable CONFIG_KALLSYMS so you get a proper symbolic backtrace.
 
- 
-
- 
-
-First, do I need the root=/dev/ram line?  
-
- 
-
-Second, does anyone know what signal 5 is and if it is an error in my
-configuration of BR?  I think it is this because I can "boot" with
-another initramfs image (see:
-http://www.aclevername.com/articles/linux-xilinx-tutorial/minimalist-ini
-tramfs.html).
-
- 
-
-Any help would be really great! Thanks in advance!!
-
- 
-
-:: Ryan Neal
-
-Office: 490/279
-
-Phone: 408.774.2747
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091125/f0fd7bd5/attachment-0001.htm>
+-- 
+Bye, Peter Korsgaard
