@@ -1,34 +1,45 @@
-From: Michael S. Zick <minimod@morethan.org>
-Date: Thu, 26 Nov 2009 15:21:30 -0600
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 26 Nov 2009 22:36:23 +0100
 Subject: [Buildroot] Non-x86 support question
-Message-ID: <200911261521.32631.minimod@morethan.org>
+In-Reply-To: <200911261521.32631.minimod@morethan.org> (Michael S. Zick's
+	message of "Thu\, 26 Nov 2009 15\:21\:30 -0600")
+References: <200911261521.32631.minimod@morethan.org>
+Message-ID: <87zl696ka0.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Just wondering, does buildroot get tested as a cross-compiler
-building native toolchain?
+>>>>> "Michael" == Michael S Zick <minimod@morethan.org> writes:
 
-There is a similar bug posted, which I think refers to building
-the foreign, native, compiler.
-At least that is my own problem.  ;)
+ Michael> Just wondering, does buildroot get tested as a cross-compiler
+ Michael> building native toolchain?
 
-In my case, gcc's configure is failing when it tries to test for
-the presence of mpfr (which is present, and built) - - -
-(No problem with gpm) 
+The BR2_PACKAGE_GCC_TARGET? No, that isn't commonly used. That doesn't
+mean that it shouldn't work ofcourse.
 
-I have captured the configure command being run and the test file,
-then ran them "by hand" with -v the best I can figure out at that point is:
+ Michael> There is a similar bug posted, which I think refers to building
+ Michael> the foreign, native, compiler.
+ Michael> At least that is my own problem.  ;)
 
-The "canned" test routine is test compiled with the working
-cross-compiler - and it can't find the mpf header file.
+ Michael> In my case, gcc's configure is failing when it tries to test for
+ Michael> the presence of mpfr (which is present, and built) - - -
+ Michael> (No problem with gpm) 
 
-But all of the gcc command line options seem correct to my eye, and the
-search paths that -v reports that gcc is using seem correct.
+Hmm, it worked for me last time I tried (some time this summer).
 
-A true puzzle, not a show-stopper here, anytime by 2010.02 would be fine.
-This is gcc-4.3.whatever targeting mipsel.
+ Michael> I have captured the configure command being run and the test file,
+ Michael> then ran them "by hand" with -v the best I can figure out at
+ Michael> that point is:
 
-Mike
+Could you provide a bit more details? What goes wrong?
+
+ Michael> A true puzzle, not a show-stopper here, anytime by 2010.02
+ Michael> would be fine.  This is gcc-4.3.whatever targeting mipsel.
+
+It would be good if you could add a bugreport to bugzilla so we don't
+forget about it.
+
+-- 
+Bye, Peter Korsgaard
