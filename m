@@ -1,42 +1,42 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 26 Nov 2009 17:12:03 +0100
-Subject: [Buildroot] Problem using net-snmp and Buildroot
-In-Reply-To: <200911261004.40246.minimod@morethan.org> (Michael S. Zick's
-	message of "Thu\, 26 Nov 2009 10\:04\:36 -0600")
-References: <4B0BB941.7090202@dimacosystems.com>
-	<200911260927.02506.minimod@morethan.org>
-	<87pr758fm1.fsf@macbook.be.48ers.dk>
-	<200911261004.40246.minimod@morethan.org>
-Message-ID: <87d4358dv0.fsf@macbook.be.48ers.dk>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Thu, 26 Nov 2009 17:25:27 +0100
+Subject: [Buildroot] libxml2 [PATCH] bump  to version 2.7.6
+In-Reply-To: <87ljht8eeq.fsf@macbook.be.48ers.dk>
+Message-ID: <A65C086EBF4B49298B83E6D5E57EC243@apexjs>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Michael" == Michael S Zick <minimod@morethan.org> writes:
+ 
+Hi
 
-Hi,
+Since i am writing an application using the libxml2, and the fact that a lot
+is fixed in the latest release
+Made me decide to upgrade, i don't know if this is critical for others or
+not.
+Maybe others will respond to this and this could then be a reason to include
+it into 2009.11
 
- Michael> Oh, I missed that translation of your post, I thought you said:
- Michael> "do not have the equipment"
- Michael> not that you said:
- Michael> "do not have the time"
+Johan
 
- Michael> I guess I will have to start using google translate for this list. ;)
 
-;)
+-----Oorspronkelijk bericht-----
+Van: Peter Korsgaard [mailto:jacmet at gmail.com] Namens Peter Korsgaard
+Verzonden: donderdag 26 november 2009 17:00
+Aan: Sagaert Johan
+CC: buildroot at busybox.net
+Onderwerp: Re: [Buildroot] libxml2 [PATCH] bump to version 2.7.6
 
-Could you give Luca's .config a try on your 32bit setup and see if you
-can reproduce the problem?
+>>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
 
-http://lists.busybox.net/pipermail/buildroot/attachments/20091124/3fb95d96/attachment.diff
+ Sagaert> Hi
 
-(change the uclibc + busybox configs to their default values, E.G. 
-BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.30.config"
-BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.13.x.config")
+ Sagaert> This is the patch to update the libxml2 package from version 2.7.3
+to 2.7.6
 
-Thanks.
+Is this critical for 2009.11 or should I wait until after the release?
 
--- 
+--
 Bye, Peter Korsgaard
