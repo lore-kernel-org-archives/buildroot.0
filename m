@@ -1,65 +1,36 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 25 Nov 2009 23:38:38 +0000 (UTC)
-Subject: [Buildroot] [Bug 743] New: Add Transmission bit torrent option to
-	buildroot
-Message-ID: <bug-743-163@https.bugs.busybox.net/>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 26 Nov 2009 07:18:03 +0100
+Subject: [Buildroot] Help Booting Kernel on an ml507
+In-Reply-To: <4B2CB099CF3D4F40B1B1442281CA94FFC4C8E3@EXCHANGEVS01.appsig.com>
+	(RYAN NEAL's message of "Wed\, 25 Nov 2009 15\:28\:26 -0800")
+References: <4B2CB099CF3D4F40B1B1442281CA94FFC4C8E2@EXCHANGEVS01.appsig.com>
+	<87r5rm9oz7.fsf@macbook.be.48ers.dk>
+	<4B2CB099CF3D4F40B1B1442281CA94FFC4C8E3@EXCHANGEVS01.appsig.com>
+Message-ID: <87k4xdajxg.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=743
+>>>>> "Ryan" == NEAL, RYAN <RYAN_NEAL@appsig.com> writes:
 
-           Summary: Add Transmission bit torrent option to buildroot
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: enhancement
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: jasaw81 at yahoo.com.au
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+ Ryan> Peter, 
+ Ryan> That is a good point.  I was intending on using the initramfs because I
+ Ryan> hadn't thought of other options.  I'll look into the squashfs.  
 
+ Ryan> My cpio.gz image is 543K.  
+ Ryan> I am building for the powerpc 440 (no FPU).
 
-Created an attachment (id=761)
- --> (https://bugs.busybox.net/attachment.cgi?id=761)
-Files that add transmission package option to buildroot.
+Then this is probably wrong (unless you have FPU emulation enabled in
+the kernel, which you shouldn't):
 
-Transmission is a bit torrent client or daemon. Transmission-remote can be used
-to control transmission daemon remotely.
+ Ryan> # BR2_SOFT_FLOAT is not set
 
-Dependencies that may have to be updated: libcurl, libevent
+You can find it under toolchain options.
 
-I made up a few scripts to help setup a transmission home directory and only
-start transmission when network interface is up.
-
-I have only tested it with:
-- libcurl with large file support enabled
-- libevent version 1.4.11-stable
-
-Just untar the attached tarball and patch the package/Config.in file.
-
-
-
---- ../../buildroot-2009.08/package/Config.in   2009-11-25 10:22:07.034052000
-+1100
-+++ Config.in   2009-11-19 16:03:06.897232000 +1100
-@@ -216,6 +216,7 @@ source "package/thttpd/Config.in"
- source "package/tinyhttpd/Config.in"
- endif
- source "package/tn5250/Config.in"
-+source "package/transmission/Config.in"
- source "package/ttcp/Config.in"
- #if !BR2_PACKAGE_BUSYBOX_HIDE_OTHERS
- # ATTENTION! This was merged into busybox!
-
+Once you change this you need to rebuild everything (rm -rf *build_*;
+make).
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
