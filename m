@@ -1,38 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 26 Nov 2009 19:38:53 +0100
-Subject: [Buildroot] jffs2 multiple partition
-In-Reply-To: <200911261103.17925.minimod@morethan.org> (Michael S. Zick's
-	message of "Thu\, 26 Nov 2009 11\:03\:15 -0600")
-References: <!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAMvrUXVWIuRMkZRk0Phz6o0BAAAAAA==@cimeq.qc.ca>
-	<20091126161313.57866352@surf>
-	<!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAKFQufuzohdDtAK0gTSeGiIBAAAAAA==@cimeq.qc.ca>
-	<200911261103.17925.minimod@morethan.org>
-Message-ID: <878wdt872a.fsf@macbook.be.48ers.dk>
+From: Michael S. Zick <minimod@morethan.org>
+Date: Thu, 26 Nov 2009 15:21:30 -0600
+Subject: [Buildroot] Non-x86 support question
+Message-ID: <200911261521.32631.minimod@morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Michael" == Michael S Zick <minimod@morethan.org> writes:
+Just wondering, does buildroot get tested as a cross-compiler
+building native toolchain?
 
-Hi,
+There is a similar bug posted, which I think refers to building
+the foreign, native, compiler.
+At least that is my own problem.  ;)
 
- Michael> Perhaps like a "makedev table"?  Used as an "install command"
- Michael> target re-director?  Not that much different than using
- Michael> exclude-from-file and include-from-file tar command options to
- Michael> reorganize the output tarball in user scripting.  Sounds like
- Michael> re-inventing an old, well known, wheel.
+In my case, gcc's configure is failing when it tries to test for
+the presence of mpfr (which is present, and built) - - -
+(No problem with gpm) 
 
-Yes, exactly. It also shouldn't be jffs2 specific - E.G. you might want
-the base system to be on squashfs, and "extra" stuff on jffs2.
+I have captured the configure command being run and the test file,
+then ran them "by hand" with -v the best I can figure out at that point is:
 
- Michael> Hmm... Doesn't the build system already have an option to run things
- Michael> through a user provided script?
+The "canned" test routine is test compiled with the working
+cross-compiler - and it can't find the mpf header file.
 
-It does (BR2_ROOTFS_POST_BUILD_SCRIPT) - But that runs *BEFORE* the
-target fs'es are created. You can ofcause do something like this
-outside BR from the tarball target.
+But all of the gcc command line options seem correct to my eye, and the
+search paths that -v reports that gcc is using seem correct.
 
--- 
-Bye, Peter Korsgaard
+A true puzzle, not a show-stopper here, anytime by 2010.02 would be fine.
+This is gcc-4.3.whatever targeting mipsel.
+
+Mike
