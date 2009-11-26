@@ -1,38 +1,35 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 26 Nov 2009 15:31:17 +0100
-Subject: [Buildroot] 2009.11-rc1 build failure
-In-Reply-To: <op.u3z7srteyqa4qb@jap-lappis> (Joachim Pihl's message of "Thu\,
-	26 Nov 2009 15\:15\:11 +0100")
-References: <op.u3z7srteyqa4qb@jap-lappis>
-Message-ID: <873a419x3e.fsf@macbook.be.48ers.dk>
+Date: Thu, 26 Nov 2009 15:36:40 +0100
+Subject: [Buildroot] jffs2 multiple partition
+In-Reply-To: <!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAE7bH9cGX9lJvelAwnTnzMABAAAAAA==@cimeq.qc.ca>
+	(Jonathan dumaresq's message of "Thu\,
+	26 Nov 2009 09\:30\:24 -0500")
+References: <!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAMvrUXVWIuRMkZRk0Phz6o0BAAAAAA==@cimeq.qc.ca>
+	<20091125222504.5aa3b23d@surf>
+	<!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAE7bH9cGX9lJvelAwnTnzMABAAAAAA==@cimeq.qc.ca>
+Message-ID: <87y6lt8i9z.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Joachim" == Joachim Pihl <jpihl@nevion.com> writes:
+>>>>> "Jonathan" == Jonathan dumaresq <jdumaresq@cimeq.qc.ca> writes:
 
- Joachim> Just trying out building RC1 straight from the "box", basically all
- Joachim> defaults and adding a few packages. Set to use headers matching a
- Joachim> previously configured kernel. Running on Ubuntu 9.10
+Hi,
 
-Huh, that's wrong - The config you attached has:
+ Jonathan> The main idea is to put the usr part in the 8MB serial flash.
+ Jonathan> I don't know if this is something that buildroot should offer
+ Jonathan> ? if yes, I can try to make a patch that add this
+ Jonathan> functionality to buildroot ?  Jonathan
 
-BR2_KERNEL_HEADERS_2_6_31=y
-# BR2_KERNEL_HEADERS_VERSION is not set
-# BR2_KERNEL_HEADERS_SNAP is not set
-BR2_DEFAULT_KERNEL_HEADERS="2.6.31.6"
+The question is how to generalize this and make is simple to
+use/understand. My initial feeling is that for something as specialized
+as this we should just make it easy to do outside BR (like we do with
+the tarball target), instead of add a lot of complexity to BR/Kconfig.
 
-And still you are trying to use headers from 2.6.27.10.
-
-The getline problem is a known issue with old kernels and new
-distributions (fixed in 2.6.29+ and later versions of 2.6.27.x).
-
-Are you sure you're using that exact config and just running make?
-
- Joachim> make[1]: Entering directory
- Joachim> /home/jpihl/system_controller/buildroot-2009.11_rc1/output/toolchain/linux-2.6.27.10'
+But send the patch to the list once you're done, and I'll take a look at
+it.
 
 -- 
 Bye, Peter Korsgaard
