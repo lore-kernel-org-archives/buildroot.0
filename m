@@ -1,35 +1,64 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 26 Nov 2009 15:36:40 +0100
-Subject: [Buildroot] jffs2 multiple partition
-In-Reply-To: <!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAE7bH9cGX9lJvelAwnTnzMABAAAAAA==@cimeq.qc.ca>
-	(Jonathan dumaresq's message of "Thu\,
-	26 Nov 2009 09\:30\:24 -0500")
-References: <!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAMvrUXVWIuRMkZRk0Phz6o0BAAAAAA==@cimeq.qc.ca>
-	<20091125222504.5aa3b23d@surf>
-	<!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAE7bH9cGX9lJvelAwnTnzMABAAAAAA==@cimeq.qc.ca>
-Message-ID: <87y6lt8i9z.fsf@macbook.be.48ers.dk>
+Date: Thu, 26 Nov 2009 15:41:22 +0100
+Subject: [Buildroot] Problem using net-snmp and Buildroot
+In-Reply-To: <4B0E5618.4010605@dimacosystems.com> (Luca Altobelli's message of
+	"Thu\, 26 Nov 2009 11\:19\:04 +0100")
+References: <4B0BB941.7090202@dimacosystems.com>
+	<87iqcyc3su.fsf@macbook.be.48ers.dk>
+	<4B0D5435.4090002@dimacosystems.com>
+	<87einmblsr.fsf@macbook.be.48ers.dk>
+	<4B0E5618.4010605@dimacosystems.com>
+Message-ID: <87tywh8i25.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Jonathan" == Jonathan dumaresq <jdumaresq@cimeq.qc.ca> writes:
+>>>>> "Luca" == Luca Altobelli <LUCA.ALTOBELLI@dimacosystems.com> writes:
 
 Hi,
 
- Jonathan> The main idea is to put the usr part in the 8MB serial flash.
- Jonathan> I don't know if this is something that buildroot should offer
- Jonathan> ? if yes, I can try to make a patch that add this
- Jonathan> functionality to buildroot ?  Jonathan
+ Luca> Dear Peter,
+ Luca> following your istructions:
+ Luca> dpkg -l \*snmp\*|grep ii
+ Luca> ii  libsnmp-base                               5.4.1~dfsg-12ubuntu3
+ Luca> SNMP (Simple Network Management Protocol) MI
+ Luca> ii  libsnmp15                                   5.4.1~dfsg-12ubuntu3
+ Luca> SNMP (Simple Network Management Protocol) li
 
-The question is how to generalize this and make is simple to
-use/understand. My initial feeling is that for something as specialized
-as this we should just make it easy to do outside BR (like we do with
-the tarball target), instead of add a lot of complexity to BR/Kconfig.
+ Luca> mounting the rootfs.i486.ext2 (used 2009.11-rc1 and net-snmp 5.5):
+ Luca> # snmpd -v
+ Luca> snmpd: can't load library 'libcrypto.so.0.9.8'
+ Luca> that I found in the host-lib directory , while in the  target-lib  I
+ Luca> have libcrypt-0.9.30.1.so.
 
-But send the patch to the list once you're done, and I'll take a look at
-it.
+You should also have a libcrypto on the target. E.G. with the config you
+posted I have:
+
+file /tmp/br/target/usr/lib/libcrypto.so.0.9.8                      ~
+/tmp/br/target/usr/lib/libcrypto.so.0.9.8: ELF 32-bit LSB shared object, Intel 80386, version 1 (SYSV), dynamically linked, stripped
+
+If not, it sounds like something goes wrong with the openssl compilation
+and something gets confused about host/target.
+
+I haven't been able to reproduce it with your config, but I'm on a
+x86-64 host, so that might be why - Sorry, I don't have any 32bit
+PCs any more.
+
+sudo mount -o loop,rw /tmp/br/images/rootfs.i486.ext2 /tmp/blah 
+sudo chroot /tmp/blah /bin/sh
+/ # snmpd -v
+
+NET-SNMP version:  5.5
+Web:               http://www.net-snmp.org/
+Email:             net-snmp-coders at lists.sourceforge.net
+
+ Luca> I also asked in the uclibc mailing list and Carmelo Amoroso
+ Luca> replied: "[..]it seems that you are not using uClibc, instead you
+ Luca> are linking against glibc".
+
+Indeed.
 
 -- 
 Bye, Peter Korsgaard
