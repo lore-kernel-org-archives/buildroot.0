@@ -1,70 +1,130 @@
-From: Michael S. Zick <minimod@morethan.org>
-Date: Fri, 27 Nov 2009 11:00:34 -0600
-Subject: [Buildroot] Lua by Buildroot
-Message-ID: <200911271100.36521.minimod@morethan.org>
+From: Joachim Pihl <jpihl@nevion.com>
+Date: Fri, 27 Nov 2009 19:09:27 +0100
+Subject: [Buildroot] 2009.11-rc1 build failure
+In-Reply-To: <87eink70bd.fsf@macbook.be.48ers.dk>
+References: <op.u3z7srteyqa4qb@jap-lappis> <873a419x3e.fsf@macbook.be.48ers.dk>
+	<op.u31nbqpqyqa4qb@jap-lappis.nevion.com>
+	<87eink70bd.fsf@macbook.be.48ers.dk>
+Message-ID: <op.u32fd1kwyqa4qb@jap-lappis>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-My #1 question -
+On Fri, 27 Nov 2009 11:02:14 +0100, Peter Korsgaard <jacmet@uclibc.org>
+wrote:
+> Argh, sorry - I have too many /tmp/.config* files :/
+>
+> Your fix is then to use the 2.6.27.x version instead of hardcoding
+> 2.6.27.10 - That will make you use 2.6.27.39 which has the getline fix.
+>
+> Notice that your kernel headers version doesn't need to be the same as
+> the kernel version you're using.
 
-I will be building Lua extension libraries,
-shall I keep those as local changes, or do
-you want them as "additional application patches"?
+Noted. Tried punching in 2.6.27.x, that failed miserably, but 2.6.27.39
+worked - all the way up to the next hiccup:
 
-My #2 question -
-Should the current implementation be re-organized first?
+...
+checking dynamic linker characteristics... GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+appending configuration tag "F77" to libtool
+checking for arm-linux-gcc... (cached)
+/home/jpihl/system_controller/buildroot-2009.11_rc1/output/staging/usr/bin/arm-linux-uclibcgnueabi-gcc
+-Os -pipe -O3
+-I/home/jpihl/system_controller/buildroot-2009.11_rc1/output/staging/usr/include
+-I/home/jpihl/system_controller/buildroot-2009.11_rc1/output/staging/include
+--sysroot=/home/jpihl/system_controller/buildroot-2009.11_rc1/output/staging/
+-isysroot
+/home/jpihl/system_controller/buildroot-2009.11_rc1/output/staging
+-mtune=xscale -march=armv5te -mabi=aapcs-linux -msoft-float
+checking whether we are using the GNU C compiler... (cached) yes
+checking whether
+/home/jpihl/system_controller/buildroot-2009.11_rc1/output/staging/usr/bin/arm-linux-uclibcgnueabi-gcc
+-Os -pipe -O3
+-I/home/jpihl/system_controller/buildroot-2009.11_rc1/output/staging/usr/include
+-I/home/jpihl/system_controller/buildroot-2009.11_rc1/output/staging/include
+--sysroot=/home/jpihl/system_controller/buildroot-2009.11_rc1/output/staging/
+-isysroot
+/home/jpihl/system_controller/buildroot-2009.11_rc1/output/staging
+-mtune=xscale -march=armv5te -mabi=aapcs-linux -msoft-float accepts -g...
+(cached) yes
+checking for
+/home/jpihl/system_controller/buildroot-2009.11_rc1/output/staging/usr/bin/arm-linux-uclibcgnueabi-gcc
+-Os -pipe -O3
+-I/home/jpihl/system_controller/buildroot-2009.11_rc1/output/staging/usr/include
+-I/home/jpihl/system_controller/buildroot-2009.11_rc1/output/staging/include
+--sysroot=/home/jpihl/system_controller/buildroot-2009.11_rc1/output/staging/
+-isysroot
+/home/jpihl/system_controller/buildroot-2009.11_rc1/output/staging
+-mtune=xscale -march=armv5te -mabi=aapcs-linux -msoft-float option to
+accept ISO C89... (cached) none needed
+checking dependency style of
+/home/jpihl/system_controller/buildroot-2009.11_rc1/output/staging/usr/bin/arm-linux-uclibcgnueabi-gcc
+-Os -pipe -O3
+-I/home/jpihl/system_controller/buildroot-2009.11_rc1/output/staging/usr/include
+-I/home/jpihl/system_controller/buildroot-2009.11_rc1/output/staging/include
+--sysroot=/home/jpihl/system_controller/buildroot-2009.11_rc1/output/staging/
+-isysroot
+/home/jpihl/system_controller/buildroot-2009.11_rc1/output/staging
+-mtune=xscale -march=armv5te -mabi=aapcs-linux -msoft-float... (cached)
+gcc3
+checking how to run the C preprocessor...
+/home/jpihl/system_controller/buildroot-2009.11_rc1/output/staging/usr/bin/arm-linux-uclibcgnueabi-cpp
+-Os -pipe -O3
+-I/home/jpihl/system_controller/buildroot-2009.11_rc1/output/staging/usr/include
+-I/home/jpihl/system_controller/buildroot-2009.11_rc1/output/staging/include
+--sysroot=/home/jpihl/system_controller/buildroot-2009.11_rc1/output/staging/
+-isysroot
+/home/jpihl/system_controller/buildroot-2009.11_rc1/output/staging
+-mtune=xscale -march=armv5te -mabi=aapcs-linux -msoft-float
+checking whether we are using the GNU C++ compiler... (cached) yes
+checking whether
+/home/jpihl/system_controller/buildroot-2009.11_rc1/output/staging/usr/bin/arm-linux-uclibcgnueabi-g++
+-Os -pipe -O3
+-I/home/jpihl/system_controller/buildroot-2009.11_rc1/output/staging/usr/include
+-I/home/jpihl/system_controller/buildroot-2009.11_rc1/output/staging/include
+--sysroot=/home/jpihl/system_controller/buildroot-2009.11_rc1/output/staging/
+-isysroot
+/home/jpihl/system_controller/buildroot-2009.11_rc1/output/staging
+-mtune=xscale -march=armv5te -mabi=aapcs-linux -msoft-float accepts -g...
+(cached) yes
+checking dependency style of
+/home/jpihl/system_controller/buildroot-2009.11_rc1/output/staging/usr/bin/arm-linux-uclibcgnueabi-g++
+-Os -pipe -O3
+-I/home/jpihl/system_controller/buildroot-2009.11_rc1/output/staging/usr/include
+-I/home/jpihl/system_controller/buildroot-2009.11_rc1/output/staging/include
+--sysroot=/home/jpihl/system_controller/buildroot-2009.11_rc1/output/staging/
+-isysroot
+/home/jpihl/system_controller/buildroot-2009.11_rc1/output/staging
+-mtune=xscale -march=armv5te -mabi=aapcs-linux -msoft-float... (cached)
+gcc3
+checking for ld...
+/home/jpihl/system_controller/buildroot-2009.11_rc1/output/staging/usr/bin/arm-linux-uclibcgnueabi-ld
+checking for kernel OProfile support... yes
+checking whether malloc attribute is understood... no
+checking whether __builtin_expect is understood... yes
+checking for sched_setaffinity... yes
+checking for perfmonctl... no
+checking for poptGetContext in -lpopt... yes
+checking libiberty.h usability... yes
+checking libiberty.h presence... yes
+checking for libiberty.h... yes
+checking for cplus_demangle in -liberty... yes
+checking for xcalloc... yes
+checking for xmemdup... yes
+checking for dlopen in -ldl... yes
+checking for main in -lintl... no
+checking for bfd_openr in -lbfd... no
+configure: error: bfd library not found
+make: ***
+[/home/jpihl/system_controller/buildroot-2009.11_rc1/output/build/oprofile-0.9.4/.stamp_configured]
+Error 1
 
-Background:
-"Lua" is an extensible, extension language implemented by libraries.
 
-The "Lua" known to keyboard users, that is, the interactive scripting
-language - that is a few hundred lines of code "extended" by the
-Lua libraries.
+OProfile does not want to build, and a brief search in the config menus
+didn't reveal any options containing "bfd". As far as I could tell from
+the OProfile pages, it should work for the PXA processors?
 
-The "Lua" known to programmers is the extension libraries themself.
-
-A common point of confusion in the "Lua world" - - -
-
-Currently, the "Lua" entry is under "Scripting Languages" -
-But that has already caused some problems,
-I think a re-organization is in order before the sh.. gets any deeper.
-
-My suggestion(s) -
-
-First, move the current "Lua" (minus the interactive and compiler files)
-into "General Supporting Libraries" - and there generate the Lua libraries.
-
-That should simplify things for applications which use "Lua" as a set
-of extension libraries (only) - such as Hasrel.
-
-Now, if your following this, then we need to put back a "Lua-something" under
-"Scripting Languages" - there it will only build the interactive and compiler
-files with a build dependency on the "Lua" in "General Supporting Libraries" -
-Same-same as Hasrel should be (if it isn't already).
-
-Why? Because when used as an "extension library" only the library files are used.
-
-Which brings us to dealing with the "extensible" side of Lua (part 1) - - -
-The things I am adding would be a sub-menu of the "General Supporting Libraries:Lua"
-**not** a sub-menu of "Scripting Languages:Lua"
-(Lua-lpeg, Lua-gd, Lua-<something xml>)
-
-Then there is dealing with the "extensible" side of Lua (part 2) - - -
-This situation is "Lua" being extended by "pure Lua" scripting.
-It isn't usable unless either the compiler and/or interactive language is built.
-Meaning that even though these are "Lua Extensions" they don't belong under
-"General Supporting Libraries:Lua" they need to be on a sub-menu of 
-"Scripting Languages:Lua" - (they just get a "cp -a" and their done).
-(My own Lua-URI is one of many examples.)
-
-Note 1: there is an established fs layout that should also be followed, the
-above re-organization should simplify creating it and maintaining it.
-
-Note 2: I will be building these things locally regardless -
-But if they should someday become "Buildroot" patches,
-it would be nice if what I do fits into the "Buildroot Plan". ;)
-
-Mike
+-- 
+Using Opera's revolutionary e-mail client: http://www.opera.com/mail/
