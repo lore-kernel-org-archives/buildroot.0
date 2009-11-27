@@ -1,54 +1,53 @@
 From: Michael S. Zick <minimod@morethan.org>
-Date: Fri, 27 Nov 2009 04:47:09 -0600
-Subject: [Buildroot] 2009.11-rc1 build failure
-In-Reply-To: <87eink70bd.fsf@macbook.be.48ers.dk>
-References: <op.u3z7srteyqa4qb@jap-lappis>
-	<op.u31nbqpqyqa4qb@jap-lappis.nevion.com>
-	<87eink70bd.fsf@macbook.be.48ers.dk>
-Message-ID: <200911270447.11916.minimod@morethan.org>
+Date: Fri, 27 Nov 2009 06:30:42 -0600
+Subject: [Buildroot] Non-x86 support question
+In-Reply-To: <87zl696ka0.fsf@macbook.be.48ers.dk>
+References: <200911261521.32631.minimod@morethan.org>
+	<87zl696ka0.fsf@macbook.be.48ers.dk>
+Message-ID: <200911270630.54463.minimod@morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri November 27 2009, Peter Korsgaard wrote:
+On Thu November 26 2009, Peter Korsgaard wrote:
+> >>>>> "Michael" == Michael S Zick <minimod@morethan.org> writes:
 > 
-> Notice that your kernel headers version doesn't need to be the same as
-> the kernel version you're using.
+>  Michael> Just wondering, does buildroot get tested as a cross-compiler
+>  Michael> building native toolchain?
 > 
-- - - -
->
-> I don't know about PXA in particular (but even if so, please use the
-> latest in the 2.6.27.x series). In general, the latest stable kernel
-> release (currently 2.6.31.6) is the most sensible choice.
+> The BR2_PACKAGE_GCC_TARGET? No, that isn't commonly used. That doesn't
+> mean that it shouldn't work ofcourse.
+> 
+>  Michael> There is a similar bug posted, which I think refers to building
+>  Michael> the foreign, native, compiler.
+>  Michael> At least that is my own problem.  ;)
+> 
+>  Michael> In my case, gcc's configure is failing when it tries to test for
+>  Michael> the presence of mpfr (which is present, and built) - - -
+>  Michael> (No problem with gpm) 
+> 
+> Hmm, it worked for me last time I tried (some time this summer).
+> 
+>  Michael> I have captured the configure command being run and the test file,
+>  Michael> then ran them "by hand" with -v the best I can figure out at
+>  Michael> that point is:
+> 
+> Could you provide a bit more details? What goes wrong?
 > 
 
-Although a newcomer to using Buildroot -
-the above is not Buildroot specific advice -
-It is a good rule of thumb when building for Linux.
+One more note while waiting for me to document this in a true bug-report.
 
-For example (my current use case):
+I considered handling gpm and mpf as "patches" to gcc - -
+Since gcc will configure and build them if it finds them in its source tree.
 
-I am building user land code against the 2.6.31.6 *headers*
-even though that code will be running on a 2.6.12.6 kernel
-released Aug. 29, 2005. (At least until I replace it.)
+I made up a gcc tarball along those lines and tried it - -
+Same result - cross-compiler builds, native-compiler fails to configure
+while testing for mpf header files (two or three missing and/or renamed symbols).
 
-That is an amazing level of backwards compatibility.
-Of course, it allows a person to build code today that uses
-system calls that might not exist at run-time. ;)
-But in cases like that, your userland code will get an error,
-not break something.
+As a reminder: this is gcc-4.3.x targeting MIPS (32-R2, 24Kc, hard-float).
+gcc-4.4.x is hopeless for MIPS at the moment, implements an ABI change for MIPS,
+mostly in how structures are packed.
 
-On the other hand, I can see your case for wanting to build
-against the oldest, stable (I.E: still supported) kernel.
-Which is 2.6.27.x, most recently released version Nov. 10, 2009.
-Doing that might avoid some of those run-time surprises.  ;)
-
-So it probably depends on your own project goals -
-Greatest degree of compatibility now (2.6.27.x), or
-longest lasting compatibility going forwarded (2.6.31.x).
-
-I am shooting for "rebuild userland every 5 years" myself. ;)
-
-Mike
+Mike 
