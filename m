@@ -1,37 +1,33 @@
-From: Michael S. Zick <minimod@morethan.org>
-Date: Sat, 28 Nov 2009 12:58:23 -0600
-Subject: [Buildroot] Build jobbing
-In-Reply-To: <200911280539.00806.minimod@morethan.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 28 Nov 2009 20:06:05 +0100
+Subject: [Buildroot] BB update Was:  Build jobbing
+In-Reply-To: <200911280935.57255.minimod@morethan.org> (Michael S. Zick's
+	message of "Sat\, 28 Nov 2009 09\:35\:54 -0600")
 References: <200911271522.58858.minimod@morethan.org>
-	<200911280510.28749.minimod@morethan.org>
-	<200911280539.00806.minimod@morethan.org>
-Message-ID: <200911281258.25817.minimod@morethan.org>
+	<87tywe4ube.fsf@macbook.be.48ers.dk>
+	<200911280813.12919.minimod@morethan.org>
+	<200911280935.57255.minimod@morethan.org>
+Message-ID: <87pr724ggy.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat November 28 2009, Michael S. Zick wrote:
-> 
-> After running the uClibc test suite, I'll try the Lua numerical test suite.
-> Lua only has one internal number type: Double. So if that works....
-> 
-> Mike
-> > I am gaining confidence that I have most (all?) of the cockpit
-> > errors out of my setup here.
-> > 
+>>>>> "Michael" == Michael S Zick <minimod@morethan.org> writes:
 
-Well, not quite all of the cockpit error:
+Hi,
 
-/ # chroot /tmp/work
-/ # lua
-Lua 5.1.4  Copyright (C) 1994-2008 Lua.org, PUC-Rio
-> print(math.sin(12))
-table index is NaN
-> os.exit()
-/ #
+ Michael> The build didn't get far enough to find out, it looks like it broke
+ Michael> on the recent scsi commit:
 
-Takes deep breath, starts over with those compiler and build options.  ;)
+ Michael> In file included from miscutils/eject.c:20:
+ Michael> /Builds/BLDRT/br-head/output/toolchain/linux/include/scsi/scsi.h:145: error: expected specifier-qualifier-list before ?u8?
+ Michael> /Builds/BLDRT/br-head/output/toolchain/linux/include/scsi/scsi.h: In function ?scsi_varlen_cdb_length?:
+ Michael> /Builds/BLDRT/br-head/output/toolchain/linux/include/scsi/scsi.h:156: error: ?struct scsi_varlen_cdb_hdr? has no member named ?additional_cdb_length?
 
-Mike
+What kernel headers version are you using? I checked in a fix for
+2.6.31.6 kernel headers today (c589012eecd)
+
+-- 
+Bye, Peter Korsgaard
