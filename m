@@ -1,135 +1,27 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 28 Nov 2009 15:05:52 +0100
-Subject: [Buildroot] [git commit master] busybox: 1.15.2 flash_eraseall fix
-	for modern kernel headers
-Message-ID: <20091128140643.75A9B777E5@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 28 Nov 2009 15:07:01 +0100
+Subject: [Buildroot] Build jobbing
+In-Reply-To: <200911271610.08010.minimod@morethan.org> (Michael S. Zick's
+	message of "Fri\, 27 Nov 2009 16\:10\:05 -0600")
+References: <200911271522.58858.minimod@morethan.org>
+	<877htb638c.fsf@macbook.be.48ers.dk>
+	<200911271610.08010.minimod@morethan.org>
+Message-ID: <87tywe4ube.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Michael" == Michael S Zick <minimod@morethan.org> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4e385ee794978e04701171f06cbfad8b3796e468
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-86cfb70ca upstream.
+ Michael> nand_{erase,lock,unlock) in BB-1.15.2 does not build.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- .../busybox/busybox-1.15.2-flash-eraseall.patch    |  104 ++++++++++++++++++++
- 1 files changed, 104 insertions(+), 0 deletions(-)
- create mode 100644 package/busybox/busybox-1.15.2-flash-eraseall.patch
+I take it that you mean flash_eraseall / flash_unlock / flash_lock?
 
-diff --git a/package/busybox/busybox-1.15.2-flash-eraseall.patch b/package/busybox/busybox-1.15.2-flash-eraseall.patch
-new file mode 100644
-index 0000000..b37c461
---- /dev/null
-+++ b/package/busybox/busybox-1.15.2-flash-eraseall.patch
-@@ -0,0 +1,104 @@
-+From 86cfb70ca5f2bde11f2d071bc59db75291d8552f Mon Sep 17 00:00:00 2001
-+From: Denys Vlasenko <vda.linux@googlemail.com>
-+Date: Fri, 27 Nov 2009 13:26:17 +0100
-+Subject: [PATCH] flash_eraseall: stop using obsolete mtd/jffs2-user.h; code shrink
-+
-+function                                             old     new   delta
-+show_progress                                         68      67      -1
-+flash_eraseall_main                                 1007     882    -125
-+------------------------------------------------------------------------------
-+(add/remove: 0/0 grow/shrink: 0/2 up/down: 0/-126)           Total: -126 bytes
-+
-+Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
-+---
-+ miscutils/flash_eraseall.c |   47 ++++++++++++++++++++++++++++---------------
-+ 1 files changed, 30 insertions(+), 17 deletions(-)
-+
-+diff --git a/miscutils/flash_eraseall.c b/miscutils/flash_eraseall.c
-+index ba0a6b5..ca00a13 100644
-+--- a/miscutils/flash_eraseall.c
-++++ b/miscutils/flash_eraseall.c
-+@@ -12,22 +12,35 @@
-+ 
-+ #include "libbb.h"
-+ #include <mtd/mtd-user.h>
-+-#include <mtd/jffs2-user.h>
-++#include <linux/jffs2.h>
-+ 
-+ #define OPTION_J	(1 << 0)
-+ #define OPTION_Q	(1 << 1)
-+ #define IS_NAND		(1 << 2)
-+ #define BBTEST		(1 << 3)
-+ 
-+-struct globals {
-+-	/* This is used in the cpu_to_je/je_to_cpu macros in jffs2_user.h */
-+-	int tgt_endian;
-+-};
-+-#define G (*(struct globals*)&bb_common_bufsiz1)
-+-#define target_endian	(G.tgt_endian)
-+-#define INIT_G() do { \
-+-	target_endian = __BYTE_ORDER; \
-+-} while (0)
-++/* mtd/jffs2-user.h used to have this atrocity:
-++extern int target_endian;
-++
-++#define t16(x) ({ __u16 __b = (x); (target_endian==__BYTE_ORDER)?__b:bswap_16(__b); })
-++#define t32(x) ({ __u32 __b = (x); (target_endian==__BYTE_ORDER)?__b:bswap_32(__b); })
-++
-++#define cpu_to_je16(x) ((jint16_t){t16(x)})
-++#define cpu_to_je32(x) ((jint32_t){t32(x)})
-++#define cpu_to_jemode(x) ((jmode_t){t32(x)})
-++
-++#define je16_to_cpu(x) (t16((x).v16))
-++#define je32_to_cpu(x) (t32((x).v32))
-++#define jemode_to_cpu(x) (t32((x).m))
-++
-++but mtd/jffs2-user.h is gone now (at least 2.6.31.6 does not have it anymore)
-++*/
-++
-++/* We always use native endianness */
-++#undef cpu_to_je16
-++#undef cpu_to_je32
-++#define cpu_to_je16(v) ((jint16_t){(v)})
-++#define cpu_to_je32(v) ((jint32_t){(v)})
-+ 
-+ static uint32_t crc32(uint32_t val, const void *ss, int len,
-+ 		uint32_t *crc32_table)
-+@@ -40,9 +53,11 @@ static uint32_t crc32(uint32_t val, const void *ss, int len,
-+ 
-+ static void show_progress(mtd_info_t *meminfo, erase_info_t *erase)
-+ {
-+-	printf("\rErasing %d Kibyte @ %x -- %2llu %% complete.",
-+-		(unsigned)meminfo->erasesize / 1024, erase->start,
-+-		(unsigned long long) erase->start * 100 / meminfo->size);
-++	printf("\rErasing %u Kibyte @ %x - %2u%% complete.",
-++		(unsigned)meminfo->erasesize / 1024,
-++		erase->start,
-++		(unsigned) ((unsigned long long) erase->start * 100 / meminfo->size)
-++	);
-+ 	fflush(stdout);
-+ }
-+ 
-+@@ -57,17 +72,15 @@ int flash_eraseall_main(int argc UNUSED_PARAM, char **argv)
-+ 	unsigned int flags;
-+ 	char *mtd_name;
-+ 
-+-	INIT_G();
-+ 	opt_complementary = "=1";
-+ 	flags = BBTEST | getopt32(argv, "jq");
-+ 
-+ 	mtd_name = argv[optind];
-+-	xstat(mtd_name, &st);
-++	fd = xopen(mtd_name, O_RDWR);
-++	fstat(fd, &st);
-+ 	if (!S_ISCHR(st.st_mode))
-+ 		bb_error_msg_and_die("%s: not a char device", mtd_name);
-+ 
-+-	fd = xopen(mtd_name, O_RDWR);
-+-
-+ 	xioctl(fd, MEMGETINFO, &meminfo);
-+ 	erase.length = meminfo.erasesize;
-+ 	if (meminfo.type == MTD_NANDFLASH)
-+-- 
-+1.6.5
-+
+It works for me after 4e385ee7 - Could you update and try again?
+
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
