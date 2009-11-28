@@ -1,54 +1,74 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 28 Nov 2009 23:44:25 +0100
-Subject: [Buildroot] BB update Was:  Build jobbing
-In-Reply-To: <200911281516.07279.minimod@morethan.org> (Michael S. Zick's
-	message of "Sat\, 28 Nov 2009 15\:16\:05 -0600")
-References: <200911271522.58858.minimod@morethan.org>
-	<200911281341.45157.minimod@morethan.org>
-	<87d4324cl3.fsf@macbook.be.48ers.dk>
-	<200911281516.07279.minimod@morethan.org>
-Message-ID: <874ooe46d2.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 29 Nov 2009 00:36:12 +0100
+Subject: [Buildroot] [2010.02] Package infrastructure ready
+Message-ID: <20091129003612.0dd95e2b@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Michael" == Michael S Zick <minimod@morethan.org> writes:
+Hello,
 
-Hi,
+I've now completed the work I wanted to do on the new package
+infrastructures, and consider it ready for inclusion into the next
+version of Buildroot, 2010.02. I'm therefore asking people to review
+the patches and give their opinion and comments.
 
- >> setjmp exceptions is afaik something else. I atleast just built lua
- >> without it being enabled.
+Unless there are comments, I don't plan to make any further change
+before officially sending these patches, right after the 2009.11
+release.
 
- Michael> Look at my print(math.sin(12)) example -
- Michael> bet you don't see any backtrace.
+The code is available at :
+ http://git.buildroot.net/~tpetazzoni/git/buildroot/log/?h=package-infrastructure
 
-Backtrace? Where should I see a backtrace?
+The documentation has been updated accordingly. I've put online the
+corresponding version :
+ http://free-electrons.com/~thomas/buildroot.html#add_packages
 
-Lua on my host (Debian):
-% lua
-Lua 5.1.4  Copyright (C) 1994-2008 Lua.org, PUC-Rio
-> print(math.sin(12))
--0.53657291800043
-> os.exit()
+There are a few points on which I'd like to have your input:
 
-Lua built from BR:
+ * The macro for the generic package infrastructure is named
+   PKGTARGETS, and for the autotools infrastructure, the macro is named
+   AUTOTARGETS. I don't particularly like this naming, but what's your
+   opinion ? Do you have other proposals ? Wouldn't something like
+   make-generic-package and make-autotools-package be more explicit ?
+   Too long ?
 
-% sudo chroot /tmp/blah /bin/sh
-/ # lua
-Lua 5.1.4  Copyright (C) 1994-2008 Lua.org, PUC-Rio
-> print(math.sin(12))
--0.53657291800043
-> os.exit()
-/ # exit
+ * The generic infrastructure is in package/Makefile.package.in. Maybe
+   I should put it into package/Makefile.generic.in. What's your
+   opinion ?
 
-Looks the same to me.
+ * I have a more complicated point about how the directory containing
+   the source code is referenced from the actions listed in the
+   PKG_xxxx_CMDS variables.
 
-And this is without the setjmp exceptions:
+   We can use $(@D), which is the directory that contains the stamp
+   file, so it is the directory that has been extracted by the tarball.
+   $(@D) is short and works well in most situations.
 
-% grep SJL .config
-# BR2_GCC_USE_SJLJ_EXCEPTIONS is not set
+   The situation where $(@D) doesn't work is when the
+   configure/Makefile stuff is in fact in a subdirectory of the tarball
+   (and not in the root directory). In this case, the package should
+   define PKG_SUBDIR = foo, and the package infrastructure will define
+   PKG_SRCDIR. Therefore, the package should use $$($$(PKG)_SRCDIR)
+   (double quoting needed otherwise the variable is evaluated before it
+   is defined). I find this rather ugly.
 
+   Therefore, my proposal is :
+
+    * In the generic infrastructure, to let the .mk developer handle
+      this problem. He has to use $(@D) or $(@D)/something.
+
+    * In the autotools infrastructure, keep the PKG_SUBDIR mechanism we
+      add, so that the $$($$(PKG)_SRCDIR) trick is hidden in
+      Makefile.autotools.in.
+
+Thanks for your input,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
