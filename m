@@ -1,32 +1,38 @@
-From: Michael S. Zick <minimod@morethan.org>
-Date: Fri, 27 Nov 2009 16:59:09 -0600
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 28 Nov 2009 11:40:35 +0100
 Subject: [Buildroot] Build jobbing
-In-Reply-To: <200911271645.42184.minimod@morethan.org>
+In-Reply-To: <200911271616.16112.minimod@morethan.org> (Michael S. Zick's
+	message of "Fri\, 27 Nov 2009 16\:16\:13 -0600")
 References: <200911271522.58858.minimod@morethan.org>
-	<200911271633.14780.minimod@morethan.org>
-	<200911271645.42184.minimod@morethan.org>
-Message-ID: <200911271659.11414.minimod@morethan.org>
+	<877htb638c.fsf@macbook.be.48ers.dk>
+	<200911271610.08010.minimod@morethan.org>
+	<200911271616.16112.minimod@morethan.org>
+Message-ID: <873a3z53vg.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Michael" == Michael S Zick <minimod@morethan.org> writes:
 
-Well, the build completed - -
-Now will see any of this stuff runs.  ;)
+Hi,
 
-Will be doing another complete (as possible) build RSN,
-even if this stuff runs - I didn't notice that I had
-dropped the tune=24kc option during the switch from
-2009.08 to "head" - shame on me.
+ Michael> nbd-server.c:267: Incompatible implicit declaration of built-in function "index"
+ Michael> Disabled, continuing.
 
-You haven't seen that patch yet - because there are a 
-slew of 24kc cores and also a slew of gcc options
-to match - need time (and MTI documentation) to sort
-it all out.
-This processor core **should** be a 24kc-pro (hardware fp)
-but that only narrows it down to three or four fp implementations.
+It sounds like the patches somehow didn't get applied - What does
+output/build/nbd-2.9.11/.applied_patches_list contain?
 
+It should contain:
 
-Mike
+cat output/build/nbd-2.9.11/.applied_patches_list
+nbd-fix-build-with-disable-lfs.patch
+nbd-server-fix-read-eagain.patch
+nbd-server-susv3-legacy.patch
+
+Can you rm output/build/nbd-2.9.11 and try again, and this time check if
+nbd-server-susv3-legacy.patch gets applied?
+
+-- 
+Bye, Peter Korsgaard
