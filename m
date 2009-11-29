@@ -1,51 +1,62 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 29 Nov 2009 09:54:00 +0100
-Subject: [Buildroot] [git commit master] package/ltrace: hide for archs
-	ltrace doesn't support
-Message-ID: <20091129085907.ED928777DE@busybox.osuosl.org>
+From: Michael S. Zick <minimod@morethan.org>
+Date: Sun, 29 Nov 2009 03:16:18 -0600
+Subject: [Buildroot] BB update Was:  Build jobbing
+In-Reply-To: <87r5rh3e8w.fsf@macbook.be.48ers.dk>
+References: <200911271522.58858.minimod@morethan.org>
+	<200911281650.44375.minimod@morethan.org>
+	<87r5rh3e8w.fsf@macbook.be.48ers.dk>
+Message-ID: <200911290316.20688.minimod@morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Sun November 29 2009, Peter Korsgaard wrote:
+> >>>>> "Michael" == Michael S Zick <minimod@morethan.org> writes:
+> 
+> Hi,
+> 
+>  Michael> Try:
+> 
+>  Michael> Lua 5.1.4  Copyright (C) 1994-2008 Lua.org, PUC-Rio
+>  >> print(math.sin(garbage))
+>  Michael> stdin:1: bad argument #1 to 'sin' (number expected, got nil)
+>  Michael> stack traceback:
+>  Michael>         [C]: in function 'sin'
+>  Michael>         stdin:1: in main chunk
+>  Michael>         [C]: ?
+> 
+> 
+> I get exactly the same on BR:
+> 
+> sudo chroot /tmp/blah /bin/sh
+> / # lua
+> Lua 5.1.4  Copyright (C) 1994-2008 Lua.org, PUC-Rio
+> > print(math.sin(garbage))
+> stdin:1: bad argument #1 to 'sin' (number expected, got nil)
+> stack traceback:
+>         [C]: in function 'sin'
+>         stdin:1: in main chunk
+>         [C]: ?
+> 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=69067025c08c5c4f4d3bcfd829a352d2338f7e98
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Found what might lead to the references I need:
+http://www.mips.com/products/processors/32-64-bit-cores/mips32-24k/index.cfm#specifications
 
-Reported-By: Michael S. Zick" <minimod@morethan.org>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES                  |    2 +-
- package/ltrace/Config.in |    5 +----
- 2 files changed, 2 insertions(+), 5 deletions(-)
+Which immediately shows that I made an error - about mid-page;
+Just because the core has "core extend" does not mean it has 
+hardware floating point.
+duh...
+It would seem that if you have enough gates for a pair of DSP
+cores, you would have enough to "waste" a few thousand on H.F.P.
 
-diff --git a/CHANGES b/CHANGES
-index e5bd233..d37b582 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,6 +1,6 @@
- 2009.11, Not released yet:
- 
--	Updated/fixed packages: busybox, dbus, gvfs
-+	Updated/fixed packages: busybox, dbus, gvfs, ltrace
- 
- 2009.11-rc1, Released November 23rd, 2009:
- 
-diff --git a/package/ltrace/Config.in b/package/ltrace/Config.in
-index 8e090a4..72f57b1 100644
---- a/package/ltrace/Config.in
-+++ b/package/ltrace/Config.in
-@@ -1,9 +1,6 @@
--comment "ltrace has no inherent support for AVR32" 
--	depends on BR2_avr32 && BR2_PACKAGE_LTRACE
--
- config BR2_PACKAGE_LTRACE
- 	bool "ltrace"
--	#depends on BR2_LARGEFILE
-+	depends on !(BR2_avr32 || BR2_cris || BR2_mips || BR2_mipsel || BR2_nios2 || BR2_sh || BR2_sh64 || BR2_xtensa)
- 	select BR2_PACKAGE_LIBELF
- 	help
- 	  Debugging program which runs a specified command until it exits.
--- 
-1.6.3.3
+I'll dig into the problem and try to sort it all out today.
+Will also try to figure out why I didn't get a backtrace from
+a NaN error in Lua.  The "no backtrace" is a separate problem
+from "no double" number type.
+
+At first glance, it looks like a case for a Config.in.mips sub-menu.
+Just to get all of the gcc options and core options to match up.
+
+Mike
