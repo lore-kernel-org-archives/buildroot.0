@@ -1,51 +1,51 @@
-From: Michael S. Zick <minimod@morethan.org>
-Date: Sun, 29 Nov 2009 02:56:44 -0600
-Subject: [Buildroot] Build failure - sysstat-9.0.5
-In-Reply-To: <20091129093825.5d18743c@surf>
-References: <200911281949.45336.minimod@morethan.org>
-	<20091129093825.5d18743c@surf>
-Message-ID: <200911290256.46333.minimod@morethan.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 29 Nov 2009 09:54:00 +0100
+Subject: [Buildroot] [git commit master] package/ltrace: hide for archs
+	ltrace doesn't support
+Message-ID: <20091129085907.ED928777DE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun November 29 2009, Thomas Petazzoni wrote:
-> Hi Michael,
-> 
-> Le Sat, 28 Nov 2009 19:49:42 -0600,
-> "Michael S. Zick" <minimod@morethan.org> a ?crit :
-> 
-> > This one might be fixable since the mentioned missing
-> > items are supposed to be built -
-> 
-> Thank you for all your tests.
-> 
-> Wouldn't it be better to fill bug reports in our bug tracking system
-> (http://bugs.uclibc.org) ? Mails to the list are nice, but it's harder
-> to keep track of what has been solved, what hasn't been solved.
-> 
 
-Better for who?
-The submitter or the submittie?
+commit: http://git.buildroot.net/buildroot/commit/?id=69067025c08c5c4f4d3bcfd829a352d2338f7e98
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Working through that bug submit form/process just drops the information
-into a black hole as far as the submitter can tell.
+Reported-By: Michael S. Zick" <minimod@morethan.org>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES                  |    2 +-
+ package/ltrace/Config.in |    5 +----
+ 2 files changed, 2 insertions(+), 5 deletions(-)
 
-It might be a great organizational tool at the submittie end, where
-being able to tag/track e-mail reports could be a pain.
-
-But back at the submitter side = zip, zero, nada feedback to be able
-to even tell if the report went into the bit bucket somewhere -
-At least by e-mail, I get feedback, even the: "you screwed the options"
-helps a lot.
-
-So if you happen to read one of these mails and feel it is a problem that
-will take a long enough time to solve that it might "get lost" please
-feel free to assign it a bug-report number if the bug-tracker.
-
-Mike
-> Thanks!
-> 
-> Thomas
+diff --git a/CHANGES b/CHANGES
+index e5bd233..d37b582 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,6 +1,6 @@
+ 2009.11, Not released yet:
+ 
+-	Updated/fixed packages: busybox, dbus, gvfs
++	Updated/fixed packages: busybox, dbus, gvfs, ltrace
+ 
+ 2009.11-rc1, Released November 23rd, 2009:
+ 
+diff --git a/package/ltrace/Config.in b/package/ltrace/Config.in
+index 8e090a4..72f57b1 100644
+--- a/package/ltrace/Config.in
++++ b/package/ltrace/Config.in
+@@ -1,9 +1,6 @@
+-comment "ltrace has no inherent support for AVR32" 
+-	depends on BR2_avr32 && BR2_PACKAGE_LTRACE
+-
+ config BR2_PACKAGE_LTRACE
+ 	bool "ltrace"
+-	#depends on BR2_LARGEFILE
++	depends on !(BR2_avr32 || BR2_cris || BR2_mips || BR2_mipsel || BR2_nios2 || BR2_sh || BR2_sh64 || BR2_xtensa)
+ 	select BR2_PACKAGE_LIBELF
+ 	help
+ 	  Debugging program which runs a specified command until it exits.
+-- 
+1.6.3.3
