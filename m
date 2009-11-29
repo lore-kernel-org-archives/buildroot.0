@@ -1,31 +1,35 @@
-From: Nicholas Kinar <n.kinar@usask.ca>
-Date: Sat, 28 Nov 2009 19:39:20 -0600
-Subject: [Buildroot] Updated status on the compilation of busybox on Mac OS X
-Message-ID: <4B11D0C8.9050901@usask.ca>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 29 Nov 2009 08:49:20 +0100
+Subject: [Buildroot] Buildroot - ltrace build failure
+In-Reply-To: <200911281932.43827.minimod@morethan.org> (Michael S. Zick's
+	message of "Sat\, 28 Nov 2009 19\:32\:41 -0600")
+References: <200911281932.43827.minimod@morethan.org>
+Message-ID: <87zl653h4v.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello--
+>>>>> "Michael" == Michael S Zick <minimod@morethan.org> writes:
 
-I've recently found a post on this mailing list dating back to 2007.  
-The author of this post had found that busybox would build on Mac OS X 
-up to the point where fakeroot would be required.
+ Michael> If we can believe the messages on stderr:
+ Michael> make[2]: *** No rule to make target `mips/arch.h', needed by `sysdep.h'.  Stop.
+ Michael> make[1]: *** [sysdeps/sysdep.o] Error 2
+ Michael> make[1]: *** Waiting for unfinished jobs....
+ Michael> In file included from ltrace.c:15:
+ Michael> ltrace.h:12:20: error: sysdep.h: No such file or directory
+ Michael> In file included from ltrace.c:15:
+ Michael> ltrace.h:26: error: ?BREAKPOINT_LENGTH? undeclared here (not in a function)
+ Michael> make[1]: *** [ltrace.o] Error 1
+ Michael> make: *** [/Builds/BLDRT/br-head/output/build/ltrace-0.5/ltrace] Error 2
 
-http://lists.busybox.net/pipermail/buildroot/2007-February/002138.html
+ Michael> That one just isn't going to build for MIPS.
 
-I've now downloaded and built fakeroot from "fakeroot_1.14.tar.gz."  My 
-build system was Mac OS X 10.5.8 with Darwin 9.8.0, using 
-i686-apple-darwin9-gcc-4.0.1 (GCC) 4.0.1 (Apple Inc. build 5493).  The 
-source download location was:
+Exactly. It seems like ltrace doesn't have any mips support upstream, so
+I'll hide it for the archs we have that ltrace doesn't support.
 
-http://ftp.debian.org/debian/pool/main/f/fakeroot/
+http://packages.debian.org/lenny/ltrace
 
-However, I've found that the more recent versions of fakeroot (i.e. 
-fakeroot_1.14.3.tar.gz) do not cleanly build on Mac OS X.
-
-What is the updated status on Mac OS X support for buildroot?
-
-Nicholas
+-- 
+Bye, Peter Korsgaard
