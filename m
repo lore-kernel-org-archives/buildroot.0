@@ -1,31 +1,51 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 29 Nov 2009 09:46:43 +0100
-Subject: [Buildroot] Updated status on the compilation of busybox on Mac
-	OS X
-In-Reply-To: <4B11D0C8.9050901@usask.ca> (Nicholas Kinar's message of "Sat\,
-	28 Nov 2009 19\:39\:20 -0600")
-References: <4B11D0C8.9050901@usask.ca>
-Message-ID: <87vdgt3eh8.fsf@macbook.be.48ers.dk>
+From: Michael S. Zick <minimod@morethan.org>
+Date: Sun, 29 Nov 2009 02:56:44 -0600
+Subject: [Buildroot] Build failure - sysstat-9.0.5
+In-Reply-To: <20091129093825.5d18743c@surf>
+References: <200911281949.45336.minimod@morethan.org>
+	<20091129093825.5d18743c@surf>
+Message-ID: <200911290256.46333.minimod@morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Nicholas" == Nicholas Kinar <n.kinar@usask.ca> writes:
+On Sun November 29 2009, Thomas Petazzoni wrote:
+> Hi Michael,
+> 
+> Le Sat, 28 Nov 2009 19:49:42 -0600,
+> "Michael S. Zick" <minimod@morethan.org> a ?crit :
+> 
+> > This one might be fixable since the mentioned missing
+> > items are supposed to be built -
+> 
+> Thank you for all your tests.
+> 
+> Wouldn't it be better to fill bug reports in our bug tracking system
+> (http://bugs.uclibc.org) ? Mails to the list are nice, but it's harder
+> to keep track of what has been solved, what hasn't been solved.
+> 
 
-Hi,
+Better for who?
+The submitter or the submittie?
 
- Nicholas> However, I've found that the more recent versions of fakeroot
- Nicholas> (i.e. fakeroot_1.14.3.tar.gz) do not cleanly build on Mac OS X.
+Working through that bug submit form/process just drops the information
+into a black hole as far as the submitter can tell.
 
- Nicholas> What is the updated status on Mac OS X support for buildroot?
+It might be a great organizational tool at the submittie end, where
+being able to tag/track e-mail reports could be a pain.
 
-I haven't heard about anyone doing it, and as you see, the posting about
-it is almost 3 years old.
+But back at the submitter side = zip, zero, nada feedback to be able
+to even tell if the report went into the bit bucket somewhere -
+At least by e-mail, I get feedback, even the: "you screwed the options"
+helps a lot.
 
-Why would you want to do it in the first place? Doing Linux development
-on !Linux systems is imho a recipe for pain.
+So if you happen to read one of these mails and feel it is a problem that
+will take a long enough time to solve that it might "get lost" please
+feel free to assign it a bug-report number if the bug-tracker.
 
--- 
-Bye, Peter Korsgaard
+Mike
+> Thanks!
+> 
+> Thomas
