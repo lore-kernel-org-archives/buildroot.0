@@ -1,53 +1,31 @@
-From: Michael S. Zick <minimod@morethan.org>
-Date: Sat, 28 Nov 2009 19:49:42 -0600
-Subject: [Buildroot] Build failure - sysstat-9.0.5
-Message-ID: <200911281949.45336.minimod@morethan.org>
+From: Nicholas Kinar <n.kinar@usask.ca>
+Date: Sat, 28 Nov 2009 19:39:20 -0600
+Subject: [Buildroot] Updated status on the compilation of busybox on Mac OS X
+Message-ID: <4B11D0C8.9050901@usask.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This one might be fixable since the mentioned missing
-items are supposed to be built -
+Hello--
 
-make[1]: *** [mpstat] Error 1
-sadc.o: In function `p_write_error':
-sadc.c:(.text+0x120): undefined reference to `libintl_gettext'
-sadc.o: In function `usage':
-sadc.c:(.text+0x1a0): undefined reference to `libintl_gettext'
-sadc.c:(.text+0x1dc): undefined reference to `libintl_gettext'
-sadc.o: In function `setup_file_hdr':
-sadc.c:(.text+0x1000): undefined reference to `libintl_gettext'
-sadc.o: In function `create_sa_file':
-sadc.c:(.text+0x1230): undefined reference to `libintl_gettext'
-sadc.o:sadc.c:(.text+0x15d0): more undefined references to `libintl_gettext' follow
-libsyscom.a(common.o): In function `init_nls':
-common.c:(.text+0x994): undefined reference to `libintl_bindtextdomain'
-common.c:(.text+0x9ac): undefined reference to `libintl_textdomain'
-libsyscom.a(common.o): In function `print_version':
-common.c:(.text+0x12b8): undefined reference to `libintl_gettext'
-libsyscom.a(ioconf.o): In function `transform_devmapname':
-ioconf.c:(.text+0x1f0): undefined reference to `libintl_gettext'
-collect2: ld returned 1 exit status
-make[1]: *** [sadc] Error 1
-iostat.o: In function `usage':
-iostat.c:(.text+0x16fc): undefined reference to `libintl_gettext'
-iostat.c:(.text+0x1738): undefined reference to `libintl_gettext'
-iostat.o: In function `read_proc_stat':
-iostat.c:(.text+0x3120): undefined reference to `libintl_gettext'
-librdstats.a(rd_stats.o): In function `get_proc_cpu_nr':
-rd_stats.c:(.text+0x37d8): undefined reference to `libintl_gettext'
-librdstats.a(rd_stats.o): In function `read_stat_cpu':
-rd_stats.c:(.text+0x3cbc): undefined reference to `libintl_gettext'
-librdstats.a(rd_stats.o):rd_stats.c:(.text+0x3f44): more undefined references to `libintl_gettext' follow
-libsyscom.a(common.o): In function `init_nls':
-common.c:(.text+0x994): undefined reference to `libintl_bindtextdomain'
-common.c:(.text+0x9ac): undefined reference to `libintl_textdomain'
-libsyscom.a(common.o): In function `print_version':
-common.c:(.text+0x12b8): undefined reference to `libintl_gettext'
-libsyscom.a(ioconf.o): In function `transform_devmapname':
-ioconf.c:(.text+0x1f0): undefined reference to `libintl_gettext'
-collect2: ld returned 1 exit status
-make[1]: *** [iostat] Error 1
-make: *** [/Builds/BLDRT/br-head/output/build/sysstat-9.0.5/.stamp_built] Error 2
+I've recently found a post on this mailing list dating back to 2007.  
+The author of this post had found that busybox would build on Mac OS X 
+up to the point where fakeroot would be required.
+
+http://lists.busybox.net/pipermail/buildroot/2007-February/002138.html
+
+I've now downloaded and built fakeroot from "fakeroot_1.14.tar.gz."  My 
+build system was Mac OS X 10.5.8 with Darwin 9.8.0, using 
+i686-apple-darwin9-gcc-4.0.1 (GCC) 4.0.1 (Apple Inc. build 5493).  The 
+source download location was:
+
+http://ftp.debian.org/debian/pool/main/f/fakeroot/
+
+However, I've found that the more recent versions of fakeroot (i.e. 
+fakeroot_1.14.3.tar.gz) do not cleanly build on Mac OS X.
+
+What is the updated status on Mac OS X support for buildroot?
+
+Nicholas
