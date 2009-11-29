@@ -1,38 +1,28 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 29 Nov 2009 21:08:56 +0000 (UTC)
-Subject: [Buildroot] [Bug 635] util-linux fails to build in 2009.08
-In-Reply-To: <bug-635-163@https.bugs.busybox.net/>
-References: <bug-635-163@https.bugs.busybox.net/>
-Message-ID: <20091129210856.CEEE7777F3@busybox.osuosl.org>
+From: Nikos <microvis@cox.net>
+Date: Sun, 29 Nov 2009 13:09:58 -0800
+Subject: [Buildroot] buildroot-2009.08 on Ubuntu 9.04 compiler internal
+ failures+other errors
+Message-ID: <1259528998.4690.31.camel@PentHT>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=635
+Hi, 
 
+Trying to build ARM Cortex8 on Ubuntu 9.04 starting
+from /configs/arm_toolchain_defconfig to which I've added few options. 
+Trying repeatedly compilation either fails or gives compiler internal
+error. Compiler is gcc-4.4.2. In addition "distclean" and "clean"
+targets locks up file system so badly, that reboot+manual fsck is
+required to clean up the mess. 
+Each attempt preformed started with fresh download on clean up
+environment. Download was preformed using git. 
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Are there any known issues on Ubuntu? Are there any known causes on
+compiler faulting on what appears to be routine? I hope I'm missing only
+something simple here...
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |ASSIGNED
-
-
-
-
---- Comment #2 from Peter Korsgaard <jacmet@uclibc.org>  2009-11-29 21:08:56 UTC ---
-(In reply to comment #0)
-
-> this is absolutely a showstopper for me. i seem to have continuous problems
-> building util-linux with several of the past buildroot releases - if nobody
-> else is having these problems, maybe it's something about my build environment?
-
-I haven't been able to reproduce it here atleast.
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thanks
+Nikos
