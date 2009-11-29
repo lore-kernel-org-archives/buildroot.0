@@ -1,65 +1,40 @@
-From: Michael S. Zick <minimod@morethan.org>
-Date: Sun, 29 Nov 2009 03:31:01 -0600
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 29 Nov 2009 11:23:28 +0100
 Subject: [Buildroot] BB update Was:  Build jobbing
-In-Reply-To: <87my253d8o.fsf@macbook.be.48ers.dk>
+In-Reply-To: <200911290331.03877.minimod@morethan.org> (Michael S. Zick's
+	message of "Sun\, 29 Nov 2009 03\:31\:01 -0600")
 References: <200911271522.58858.minimod@morethan.org>
 	<200911290302.13984.minimod@morethan.org>
 	<87my253d8o.fsf@macbook.be.48ers.dk>
-Message-ID: <200911290331.03877.minimod@morethan.org>
+	<200911290331.03877.minimod@morethan.org>
+Message-ID: <87iqct39zz.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun November 29 2009, Peter Korsgaard wrote:
-> >>>>> "Michael" == Michael S Zick <minimod@morethan.org> writes:
-> 
-> Hi,
-> 
->  Michael> Well, then the text in the menu must be mis-leading. . .
->  Michael> it must be refering to generation/use of setjmp/longjmp
->  Michael> somewhere other than in the target applications compiled.
-> 
-> config BR2_GCC_USE_SJLJ_EXCEPTIONS
->         bool "Enable setjmp/longjmp exceptions?"
->         help
->           For some platforms, the 
+>>>>> "Michael" == Michael S Zick <minimod@morethan.org> writes:
 
-            internal 
+ >> That's imho fairly clearly not about basic setjmp/longjmp support.
 
->           stack unwinding 
+ Michael> Only when you are thinking about building a compiler, but if
+ Michael> instead you happen to be an applications programmer, who
+ Michael> doesn't know or care how the compiler works internally...
 
-            that gcc generates for stack traces and debugging info
+Then he probably shouldn't be changing stuff under toolchain options ;)
 
->           works perfectly, 
->           while other platforms must use setjmp/longjmp exceptions for
->           proper stack unwinding during exception handling.  
+ Michael> I only now recognize why it seems clear to you - because I did live
+ Michael> on the gcc list once upon a time - not all of the buildroot users
+ Michael> have that background.
 
-            This does not effect the use of setjmp/longjmp in applications
-            compiled by gcc.
+Actually I haven't done much gcc development. The
+BR2_GCC_USE_SJLJ_EXCEPTIONS option got added back in 2004 by Erik really
+in beginning of BR development. I don't know of anything needing it
+today.
 
->           Most people can leave this set to n.
-> 
-> That's imho fairly clearly not about basic setjmp/longjmp support.
-> 
+In general, we try to use sensible defaults - If you don't understand an
+option, just leave it at default.
 
-Only when you are thinking about building a compiler, but if instead you
-happen to be an applications programmer, who doesn't know or care how
-the compiler works internally...
-
-I only now recognize why it seems clear to you - because I did live
-on the gcc list once upon a time - not all of the buildroot users
-have that background.
-
->  Michael> The most recent build has the option enabled, will see if
->  Michael> it makes a difference.
-> 
->  Michael> I did not test yesterday's build because of local work rules:
->  Michael> 1) No shift longer than 18 hours;
->  Michael> 2) A minimum of 4 hours off between shifts.
-> 
-> ;)
-> 
-
-Mike
+-- 
+Bye, Peter Korsgaard
