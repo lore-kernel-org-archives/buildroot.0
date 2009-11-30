@@ -1,17 +1,40 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 29 Nov 2009 23:26:54 +0100
-Subject: [Buildroot] [git tag 2009.11_rc2] update for 2009.11-rc2
-Message-ID: <20091129222938.9C0F0777EF@busybox.osuosl.org>
+From: Joo Aun Saw <jasaw81@yahoo.com.au>
+Date: Sun, 29 Nov 2009 22:13:39 -0800 (PST)
+Subject: [Buildroot] Failed to run init
+Message-ID: <156139.50263.qm@web52407.mail.re2.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=36277ec7b5d266c549f224e1954ea911eee1e235
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/tags/2009.11_rc2
+I'm using buildroot version 2009.08, target CPU: ARM926EJ-S [41069265] revision 5 (ARMv5TEJ).
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+I want to run linux from a ramdisk but it is not able to run the init file. I mounted the ramdisk on my host machine and the init file is in /sbin/init which points to ../bin/busybox. Any help would be greatly appreciated.
 
-this is a tag, so no patch shown
+Important bits from Boot log:
+Linux version 2.6.29 (jooaun at draco-ubuntu-vm) (gcc version 4.3.3 (GCC) )
+...
+Kernel command line: console=ttyS0,115200 root=/dev/ram0 initrd=0x21100000,16M init=/sbin/init
+...
+checking if image is initramfs...it isn't (bad gzip magic numbers); looks like an initrd
+Freeing initrd memory: 16384K
+...
+RAMDISK: cramfs filesystem found at block 0
+RAMDISK: Loading 3600KiB [1 disk] into ram disk... done.
+VFS: Mounted root (cramfs filesystem) readonly on device 1:0.
+Freeing init memory: 112K
+Failed to execute /sbin/init.  Attempting defaults...
+Kernel panic - not syncing: No init found.  Try passing init= option to kernel.
+
+
+
+Regards,
+JA
+
+
+      __________________________________________________________________________________
+Win 1 of 4 Sony home entertainment packs thanks to Yahoo!7.
+Enter now: http://au.docs.yahoo.com/homepageset/
