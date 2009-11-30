@@ -1,39 +1,54 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 30 Nov 2009 14:48:43 +0000 (UTC)
-Subject: [Buildroot] [Bug 739] New/updated hostapd package
-In-Reply-To: <bug-739-163@https.bugs.busybox.net/>
-References: <bug-739-163@https.bugs.busybox.net/>
-Message-ID: <20091130144843.7857177502@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 30 Nov 2009 16:06:30 +0100
+Subject: [Buildroot] [git commit master] Create $(TARGET_DIR)/usr/lib when
+	installing
+Message-ID: <20091130150725.0024C777DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=739
 
+commit: http://git.buildroot.net/buildroot/commit/?id=6f8597291373a915ddcb9031000442bb1569bf76
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
+In some configurations $(TARGET_DIR)/usr/lib isn't
+created before the target install target for libncurses
+is run.  This change makes sure it is created before
+the install target copies files to it.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
- Attachment #759 is|0                           |1
-           obsolete|                            |
+Signed-off-by: Clark Rawlins <clark@bit63.org>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES                    |    2 +-
+ package/ncurses/ncurses.mk |    1 +
+ 2 files changed, 2 insertions(+), 1 deletions(-)
 
-
-
-
---- Comment #1 from Gustavo Zacarias <gustavo@zacarias.com.ar>  2009-11-30 14:48:42 UTC ---
-Created an attachment (id=777)
- --> (https://bugs.busybox.net/attachment.cgi?id=777)
-Add new hostapd package
-
-
-Pull libnl as a dependency if we detect the package since we use it.
-Fixes broken build with libnl enabled if libnl isn't built before hostapd.
-
-
+diff --git a/CHANGES b/CHANGES
+index f7fbda7..97ca4e7 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -2,7 +2,7 @@
+ 
+ 	Additional fixes and cleanups.
+ 
+-	Updated/fixed packages: alsamixergui, fltk
++	Updated/fixed packages: alsamixergui, fltk, ncurses
+ 
+ 	Issues resolved (http://bugs.uclibc.org):
+ 
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index 2c7bf79..fb22c6c 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -105,6 +105,7 @@ $(STAGING_DIR)/usr/lib/libncurses.so.$(NCURSES_VERSION): $(NCURSES_DIR)/lib/libn
+ 	touch -c $@
+ 
+ $(TARGET_DIR)/usr/lib/libncurses.so.$(NCURSES_VERSION): $(STAGING_DIR)/usr/lib/libncurses.so.$(NCURSES_VERSION)
++	mkdir -p $(TARGET_DIR)/usr/lib
+ 	cp -dpf $(NCURSES_DIR)/lib/libncurses.so* $(TARGET_DIR)/usr/lib/
+ ifeq ($(BR2_PACKAGE_NCURSES_TARGET_PANEL),y)
+ 	cp -dpf $(NCURSES_DIR)/lib/libpanel.so* $(TARGET_DIR)/usr/lib/
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.6.3.3
