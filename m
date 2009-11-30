@@ -1,25 +1,43 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 30 Nov 2009 16:06:53 +0100
-Subject: [Buildroot] [PATCH][BUILD] Create $(TARGET_DIR)/usr/lib when
-	installing
-In-Reply-To: <1259589926.12315.10.camel@venture> (Clark Rawlins's message of
-	"Mon\, 30 Nov 2009 09\:05\:26 -0500")
-References: <1259589926.12315.10.camel@venture>
-Message-ID: <87ocmkyrua.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 30 Nov 2009 15:59:57 +0000 (UTC)
+Subject: [Buildroot] [Bug 749] New: Bump usbutils package to version 0.86
+Message-ID: <bug-749-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Clark" == Clark Rawlins <clark.rawlins@escient.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=749
 
- Clark> In some configurations $(TARGET_DIR)/usr/lib isn't
- Clark> created before the target install target for libncurses
- Clark> is run.  This change makes sure it is created before
- Clark> the install target copies files to it.
+              Host: i686-linux
+            Target: arm-softfloat-linux-uclibcgnueabi
+           Summary: Bump usbutils package to version 0.86
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: gustavo at zacarias.com.ar
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Committed, thanks.
+
+Created an attachment (id=779)
+ --> (https://bugs.busybox.net/attachment.cgi?id=779)
+Bump usbutils package to 0.86
+
+Bump usbutils to version 0.86 and migrate to Makefile.autotools.in infra.
+Introduces new option to use zlib-compressed data files (default=N).
+Good: Smaller data file if you're not using a compressed filesystem.
+Bad: Slower since it has to decompress it every time it runs.
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
