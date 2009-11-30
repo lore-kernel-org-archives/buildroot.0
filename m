@@ -1,40 +1,30 @@
-From: Joo Aun Saw <jasaw81@yahoo.com.au>
-Date: Sun, 29 Nov 2009 22:13:39 -0800 (PST)
-Subject: [Buildroot] Failed to run init
-Message-ID: <156139.50263.qm@web52407.mail.re2.yahoo.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 30 Nov 2009 09:08:29 +0100
+Subject: [Buildroot] [PATCH] gcc: Add option to build final-gcc with
+	sysroot option
+In-Reply-To: <4B1374D2.9090701@st.com> (Carmelo AMOROSO's message of "Mon\,
+	30 Nov 2009 08\:31\:30 +0100")
+References: <1258969104-4217-1-git-send-email-carmelo.amoroso@st.com>
+	<87ws1c58dl.fsf@macbook.be.48ers.dk> <4B0FEA2F.9080508@st.com>
+	<878wdq4c1u.fsf@macbook.be.48ers.dk> <4B1374D2.9090701@st.com>
+Message-ID: <87zl64zb7m.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Carmelo" == Carmelo AMOROSO <carmelo.amoroso@st.com> writes:
 
-I'm using buildroot version 2009.08, target CPU: ARM926EJ-S [41069265] revision 5 (ARMv5TEJ).
+Hi,
 
-I want to run linux from a ramdisk but it is not able to run the init file. I mounted the ramdisk on my host machine and the init file is in /sbin/init which points to ../bin/busybox. Any help would be greatly appreciated.
+ Carmelo> please read the message
+ Carmelo> http://lists.uclibc.org/pipermail/uclibc/2009-November/043303.html
+ Carmelo> I've already noted this, so for gcc 4.x.y it is not required,
+ Carmelo> but it should be applied for gcc 3.x.y. What do you think ?
 
-Important bits from Boot log:
-Linux version 2.6.29 (jooaun at draco-ubuntu-vm) (gcc version 4.3.3 (GCC) )
-...
-Kernel command line: console=ttyS0,115200 root=/dev/ram0 initrd=0x21100000,16M init=/sbin/init
-...
-checking if image is initramfs...it isn't (bad gzip magic numbers); looks like an initrd
-Freeing initrd memory: 16384K
-...
-RAMDISK: cramfs filesystem found at block 0
-RAMDISK: Loading 3600KiB [1 disk] into ram disk... done.
-VFS: Mounted root (cramfs filesystem) readonly on device 1:0.
-Freeing init memory: 112K
-Failed to execute /sbin/init.  Attempting defaults...
-Kernel panic - not syncing: No init found.  Try passing init= option to kernel.
+But isn't sysroot a gcc >= 4.1.x feature? Do old gcc's even understand
+--with-sysroot ?
 
-
-
-Regards,
-JA
-
-
-      __________________________________________________________________________________
-Win 1 of 4 Sony home entertainment packs thanks to Yahoo!7.
-Enter now: http://au.docs.yahoo.com/homepageset/
+-- 
+Bye, Peter Korsgaard
