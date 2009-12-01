@@ -1,43 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Dec 2009 14:48:03 +0100
-Subject: [Buildroot] Updated status on the compilation of busybox on Mac
- OS X
-In-Reply-To: <87einh2n3w.fsf@macbook.be.48ers.dk>
-References: <4B11D0C8.9050901@usask.ca> <87vdgt3eh8.fsf@macbook.be.48ers.dk>
-	<4B128965.2090303@usask.ca> <87einh2n3w.fsf@macbook.be.48ers.dk>
-Message-ID: <20091201144803.26ddbe83@surf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue,  1 Dec 2009 13:50:54 +0000 (UTC)
+Subject: [Buildroot] [Bug 559] mesa3d build fails
+In-Reply-To: <bug-559-163@https.bugs.busybox.net/>
+References: <bug-559-163@https.bugs.busybox.net/>
+Message-ID: <20091201135054.3490C777DE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sun, 29 Nov 2009 19:37:55 +0100,
-Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+https://bugs.busybox.net/show_bug.cgi?id=559
 
->  Nicholas> I know that the Gumstix folks seem to keep a separate build
->  Nicholas> for Mac OS X:
-> 
->  Nicholas> http://docwiki.gumstix.org/index.php/Buildroot_on_MacOSX
-> 
-> Yes, the gumstix people unfortunately haven't been that good at
-> submitting their fixes back to us :/
 
-To be honest, for many years, the Buildroot project was mostly
-unmaintaned, so it was basically not possible for all these forks
-(Gumstix, OpenWRT, Armadeus, etc.) to submit their changes and get some
-proper review and integration.
 
-Nowadays, the project is in a much better shape, and I think the
-situation would be different now that potential contributors see that
-the project is active, has an official maintainer, deliver regular
-releases, etc.
 
-Sincerly,
 
-Thomas
+--- Comment #3 from Clark Rawlins <clark.rawlins@escient.com>  2009-12-01 13:50:52 UTC ---
+Created an attachment (id=783)
+ --> (https://bugs.busybox.net/attachment.cgi?id=783)
+Pass LDFLAGS to the build config file
+
+Without the LDFLAGS in the build configuration file
+building mesa3d fails with an external toolchain on amd64
+machines targeting i686.  The error indicates that libX11
+can't be found.
+
+This change passes the --sysroot parameter (along with any
+others specified by buildroot for LDFLAGS to the mklib script.
+
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
