@@ -1,94 +1,64 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 1 Dec 2009 10:22:12 +0100
-Subject: [Buildroot] [git commit master] package/coreutils: ensure configure
-	isn't considered out-of-date
-Message-ID: <20091201092253.C7529777D4@busybox.osuosl.org>
+Date: Tue, 01 Dec 2009 10:26:51 +0100
+Subject: [Buildroot] [PATCH] implement futimes
+In-Reply-To: <C73880A1.85EA%sergio@ammirata.net> (Sergio M. Ammirata's message
+	of "Sun\, 29 Nov 2009 19\:48\:49 -0500")
+References: <C73880A1.85EA%sergio@ammirata.net>
+Message-ID: <87vdgrgi3o.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Sergio" == Sergio M Ammirata, Ph D <sergio@ammirata.net> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c14fb7c1dde86df909e00d2671b2ccf98485cf30
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-We were patching m4/rename.m4 to workaround an upstream issue, but this
-triggers a auto* rebuild and a configure rerun when we build coreutils
-using whatever auto* versions the user has installed.
+ Sergio> http://lists.uclibc.org/pipermail/uclibc/2009-November/043209.html
+ >> 
+ >> That line should already be fixed by coreutils-7.4-rename-m4-fix.patch
+ >> (see 0ef93af1e4 from July 31st) - Could you try it again and see if that
+ >> patch doesn't get applied or what happens?
+ >> 
 
-Doing a manual autoreconf run after patching is unfortunately not an
-option as the coreutils configure.ac isn't compatible with the autotools
-version we have in BR.
+ Sergio> This is the patch you are talking about:
+ Sergio> http://git.buildroot.net/buildroot/commit/?id=0ef93af1e4e0b019da650bfc305053
+ Sergio> d0b79dc1d0
+ Sergio> It only fixes the problem partially.
 
-Instead, simply cheat by patching configure as well and setting the
-timestamp of m4/rename.m4 sufficiently far back to ensure make doesn't
-consider ./configure out of date.
+ Sergio> My patch is for the same flag on a different file:
+ Sergio> coreutils-7.4/configure
 
-Long term we should convert coreutils to Makefile.autotools.in format,
-but this is good enought for 2009.11.
+You still need to ensure coreutils doesn't consider configure out of
+date and reruns auto* / configure. I committed a slightly more
+complicated patch to git (c14fb7c1dde) that fixes it for me.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES                                            |    3 ++-
- .../coreutils/coreutils-7.4-rename-m4-fix.patch    |   19 +++++++++++++++++++
- package/coreutils/coreutils.mk                     |    3 +++
- 3 files changed, 24 insertions(+), 1 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 5cc8771..1452823 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -2,7 +2,8 @@
- 
- 	Additional fixes and cleanups.
- 
--	Updated/fixed packages: alsamixergui, fltk, microperl, ncurses, vim
-+	Updated/fixed packages: alsamixergui, coreutils, fltk, microperl,
-+	ncurses, vim
- 
- 	Issues resolved (http://bugs.uclibc.org):
- 
-diff --git a/package/coreutils/coreutils-7.4-rename-m4-fix.patch b/package/coreutils/coreutils-7.4-rename-m4-fix.patch
-index f869f43..8177200 100644
---- a/package/coreutils/coreutils-7.4-rename-m4-fix.patch
-+++ b/package/coreutils/coreutils-7.4-rename-m4-fix.patch
-@@ -23,3 +23,22 @@ Index: coreutils-7.4/m4/rename.m4
-        AC_DEFINE([RENAME_DEST_EXISTS_BUG], [1],
-  	[Define if rename does not work when the destination file exists,
-  	 as on Windows.])
-+Index: coreutils-7.4/configure
-+===================================================================
-+--- coreutils-7.4.orig/configure
-++++ coreutils-7.4/configure
-+@@ -28698,12 +28698,12 @@ $as_echo "$gl_cv_func_rename_dest_exists
-+ 
-+ $as_echo "#define rename rpl_rename" >>confdefs.h
-+ 
-+-    if test $gl_cv_func_rename_trailing_slash_bug; then
-++    if test $gl_cv_func_rename_trailing_slash_bug = yes; then
-+ 
-+ $as_echo "#define RENAME_TRAILING_SLASH_BUG 1" >>confdefs.h
-+ 
-+     fi
-+-    if test $gl_cv_func_rename_dest_exists_bug; then
-++    if test $gl_cv_func_rename_dest_exists_bug = yes; then
-+ 
-+ $as_echo "#define RENAME_DEST_EXISTS_BUG 1" >>confdefs.h
-+ 
-diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-index d2a3586..0dcb62b 100644
---- a/package/coreutils/coreutils.mk
-+++ b/package/coreutils/coreutils.mk
-@@ -23,6 +23,9 @@ $(COREUTILS_DIR)/.unpacked: $(DL_DIR)/$(COREUTILS_SOURCE)
- 	$(COREUTILS_CAT) $(DL_DIR)/$(COREUTILS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
- 	toolchain/patch-kernel.sh $(COREUTILS_DIR) package/coreutils/ coreutils\*.patch
- 	$(CONFIG_UPDATE) $(COREUTILS_DIR)/build-aux
-+	# ensure rename.m4 file is older than configure / aclocal.m4 so
-+	# auto* isn't rerun
-+	touch -d '1979-01-01' $(@D)/m4/rename.m4
- 	touch $@
- 
- $(COREUTILS_DIR)/.configured: $(COREUTILS_DIR)/.unpacked
+ Sergio> http://lists.uclibc.org/pipermail/uclibc/2009-November/043210.html
+ >> 
+ >> We had similar reports from people running a recent Ubuntu version, but
+ >> so far noone has been able to track down what the problem is. I cannot
+ >> reproduce it here (Debian), and I don't like adding stuff if I don't
+ >> understand the problem.
+ >> 
+ >> Could you provide more info about this?
+
+ Sergio> I am using ubuntu 8.04. Without the patch to define the
+ Sergio> position of M4, the "configure" step fails complaining about
+ Sergio> not finding M4. Obviously, it cannot find it as part of the
+ Sergio> build process.
+
+But it should find the one in output/host/usr/bin/m4 that we're
+building?
+
+ Sergio> I will send you my perl patch shortly.
+ >> 
+ >> Thanks. I haven't seen it yet though?
+
+ Sergio> Here is my microperl patch:
+
+Thanks, please provide a commit description of what it does and why.
+
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
