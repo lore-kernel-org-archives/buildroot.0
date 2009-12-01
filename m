@@ -1,28 +1,27 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 01 Dec 2009 15:49:34 +0100
-Subject: [Buildroot] external toolchain
-In-Reply-To: <!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAJsvlB0+B11LmskjkLHLmJkBAAAAAA==@cimeq.qc.ca>
-	(Jonathan dumaresq's message of "Tue, 1 Dec 2009 08:59:46 -0500")
-References: <!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAJsvlB0+B11LmskjkLHLmJkBAAAAAA==@cimeq.qc.ca>
-Message-ID: <877ht6lpfl.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 1 Dec 2009 16:05:22 +0100
+Subject: [Buildroot] Buildroot 2009.11 released
+In-Reply-To: <87bpiilpru.fsf@macbook.be.48ers.dk>
+References: <87bpiilpru.fsf@macbook.be.48ers.dk>
+Message-ID: <20091201160522.41bc0588@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Jonathan" == Jonathan dumaresq <jdumaresq@cimeq.qc.ca> writes:
+Hi,
 
- Jonathan> Hi all,
- Jonathan> Does any one here have used the crosstoll-ng for AVR32 with buildroot ?
+Le Tue, 01 Dec 2009 15:42:13 +0100,
+Peter Korsgaard <jacmet@sunsite.dk> a ?crit :
 
-Last I looked, crosstool-ng didn't support avr32-on-linux, only
-barebone?
+> Buildroot 2009.11 is released - Go download it at:
 
- Jonathan> Is it possible to use the toolchain build by buildroot and reusit as
- Jonathan> external toolchain ?
+Thanks again for all your work, and the work of all contributors.
 
-Yes, that should work OK.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
