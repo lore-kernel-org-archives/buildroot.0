@@ -1,46 +1,40 @@
-From: Joachim Pihl <jpihl@nevion.com>
-Date: Tue, 1 Dec 2009 20:29:05 +0100
-Subject: [Buildroot] Buildroot 2009.11 released
-In-Reply-To: <87bpiilpru.fsf@macbook.be.48ers.dk>
-References: <87bpiilpru.fsf@macbook.be.48ers.dk>
-Message-ID: <op.u39xqqnmyqa4qb@jap-lappis.nevion.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue,  1 Dec 2009 20:03:29 +0000 (UTC)
+Subject: [Buildroot] [Bug 753] New: Bump lighttpd package to 1.4.25
+Message-ID: <bug-753-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 01 Dec 2009 15:42:13 +0100, Peter Korsgaard <jacmet@sunsite.dk>  
-wrote:
+https://bugs.busybox.net/show_bug.cgi?id=753
 
-> Buildroot 2009.11 is released - Go download it at:
+              Host: i686-linux
+            Target: arm-softfloat-linux-uclibcgnueabi
+           Summary: Bump lighttpd package to 1.4.25
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: gustavo at zacarias.com.ar
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-It great that someone puts in the effort needed to improve the tool!  
-Thanks and congratulations!
 
-> Other stuff in the pipeline includes:
->
->  - Better external toolchain support and closer cooporation with
->    crosstool-ng (http://ymorin.is-a-geek.org/projects/crosstool)
->  - Generalized package infrastructure (host/non-autotools):
->    http://lists.busybox.net/pipermail/buildroot/2009-November/030600.html
+Created an attachment (id=785)
+ --> (https://bugs.busybox.net/attachment.cgi?id=785)
+Bump lighttpd package to 1.4.25
 
-Where do you keep the wish list? I would love to see Boost as a proper  
-package in BR, but cross compiling Boost for all targets is likely to  
-require some voodoo. You may use our 1.35 package as a starting point - it  
-is likely to need improvements to compile later versions.
+Lots of bugfixes, drop the r2683 changeset since it's upstream now.
+
 
 -- 
-Joachim Pihl
-Senior R&D Engineer
-Nevion
-
-Tel: +47 33 48 94 66
-Fax: +47 33 48 99 98
-Mobile: +47 91 33 98 91
-jpihl at nevion.com
-www.nevion.com
-
------------------------------------
-The Global Video Transport Leader
------------------------------------
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
