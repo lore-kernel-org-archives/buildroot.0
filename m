@@ -1,59 +1,46 @@
-From: Michael S. Zick <minimod@morethan.org>
-Date: Tue, 1 Dec 2009 12:42:45 -0600
-Subject: [Buildroot] Trying to build in an usual place: /opt instead of /
-In-Reply-To: <5cd84ac80912010618n334b9ecck27b26d2b493dca39@mail.gmail.com>
-References: <5cd84ac80912010510k26f4af64x6234af2e35adbde1@mail.gmail.com>
-	<5cd84ac80912010610m79367ab8y592538cc0dac1823@mail.gmail.com>
-	<5cd84ac80912010618n334b9ecck27b26d2b493dca39@mail.gmail.com>
-Message-ID: <200912011242.47113.minimod@morethan.org>
+From: Joachim Pihl <jpihl@nevion.com>
+Date: Tue, 1 Dec 2009 20:29:05 +0100
+Subject: [Buildroot] Buildroot 2009.11 released
+In-Reply-To: <87bpiilpru.fsf@macbook.be.48ers.dk>
+References: <87bpiilpru.fsf@macbook.be.48ers.dk>
+Message-ID: <op.u39xqqnmyqa4qb@jap-lappis.nevion.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue December 1 2009, Olivier Perron wrote:
-> [...]
-> >>>
-> >>
-> >> Why not using chroot ?
-> >>
-> >
-> > Because I still need to access /dev ?
-> >
-> 
-> Hum... bad answer !
-> # mkdir /opt/dev
-> # mount -o bind /dev /opt/dev
-> before chrooting should do the trick.
-> 
+On Tue, 01 Dec 2009 15:42:13 +0100, Peter Korsgaard <jacmet@sunsite.dk>  
+wrote:
 
-You don't need that, unless you want the changes made in
-the chroot/dev to show up outside of the chroot.
+> Buildroot 2009.11 is released - Go download it at:
 
-Just initialize the device nodes in chroot/dev, they will
-work just fine there (the kernel uses the device numbers,
-not the path).
+It great that someone puts in the effort needed to improve the tool!  
+Thanks and congratulations!
 
-Presuming a bare busybox in chroot/bin - (/opt/test/bin)
-Here is the short version:
+> Other stuff in the pipeline includes:
+>
+>  - Better external toolchain support and closer cooporation with
+>    crosstool-ng (http://ymorin.is-a-geek.org/projects/crosstool)
+>  - Generalized package infrastructure (host/non-autotools):
+>    http://lists.busybox.net/pipermail/buildroot/2009-November/030600.html
 
-mount -t proc proc /opt/test/proc
-mount -t sysfs sysfs /opt/test/sys
-chroot /opt/test /bin/busybox sh
-/bin/busybox --install -s
-mdev -s
+Where do you keep the wish list? I would love to see Boost as a proper  
+package in BR, but cross compiling Boost for all targets is likely to  
+require some voodoo. You may use our 1.35 package as a starting point - it  
+is likely to need improvements to compile later versions.
 
-Your done.  Have fun.
+-- 
+Joachim Pihl
+Senior R&D Engineer
+Nevion
 
-Mike
-> Yes, I will try the chroot route then.
-> 
-> Anyway, if someone knows how to do what I wanted to do in first place,
-> please tell me: I'd love to learn what I failed to do !
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> 
+Tel: +47 33 48 94 66
+Fax: +47 33 48 99 98
+Mobile: +47 91 33 98 91
+jpihl at nevion.com
+www.nevion.com
+
+-----------------------------------
+The Global Video Transport Leader
+-----------------------------------
