@@ -1,52 +1,44 @@
-From: Jonathan dumaresq <jdumaresq@cimeq.qc.ca>
-Date: Tue, 1 Dec 2009 15:53:05 -0500
-Subject: [Buildroot] external toolchain
-In-Reply-To: <87k4x6v3j6.fsf@macbook.be.48ers.dk>
-References: <!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAJsvlB0+B11LmskjkLHLmJkBAAAAAA==@cimeq.qc.ca><877ht6lpfl.fsf@macbook.be.48ers.dk><!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAO5pZ1vqswxDqVFerD/3MDIBAAAAAA==@cimeq.qc.ca>
-	<87k4x6v3j6.fsf@macbook.be.48ers.dk>
-Message-ID: <!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAP0fLF1pDdBHldhCeir8MqoBAAAAAA==@cimeq.qc.ca>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 01 Dec 2009 21:54:14 +0100
+Subject: [Buildroot] Buildroot 2009.11 released
+In-Reply-To: <op.u39xqqnmyqa4qb@jap-lappis.nevion.com> (Joachim Pihl's message
+	of "Tue, 1 Dec 2009 20:29:05 +0100")
+References: <87bpiilpru.fsf@macbook.be.48ers.dk>
+	<op.u39xqqnmyqa4qb@jap-lappis.nevion.com>
+Message-ID: <87fx7uv2ix.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
-
------Message d'origine-----
-De?: Peter Korsgaard [mailto:jacmet at gmail.com] De la part de Peter Korsgaard
-Envoy??: 1 d?cembre 2009 15:32
-??: Jonathan dumaresq
-Cc?: 'Peter Korsgaard'; buildroot at busybox.net
-Objet?: Re: [Buildroot] external toolchain
-
->>>>> "Jonathan" == Jonathan dumaresq <jdumaresq@cimeq.qc.ca> writes:
+>>>>> "Joachim" == Joachim Pihl <jpihl@nevion.com> writes:
 
 Hi,
 
- Jonathan> I got this error when I try to use the external toolchain
+ Joachim> It great that someone puts in the effort needed to improve the tool!
+ Joachim> Thanks and congratulations!
 
- Jonathan> Checking external toolchain settings
- Jonathan> External toolchain doesn't support --sysroot. Cannot use.
+You're welcome.
 
-And did you enable sysroot support (BR2_TOOLCHAIN_SYSROOT)?
+ >> - Better external toolchain support and closer cooporation with
+ >> crosstool-ng (http://ymorin.is-a-geek.org/projects/crosstool)
+ >> - Generalized package infrastructure (host/non-autotools):
+ >> http://lists.busybox.net/pipermail/buildroot/2009-November/030600.html
 
+ Joachim> Where do you keep the wish list?
 
-Arrrggghhh
+In my head ;) No seriously, stuff gets discussed here on the
+list. Thomas has been posting updates on his work several times, and
+crosstool-ng mainly comes from the dev day we had at ELC-E.
 
-I'll try it
+ Joachim> I would love to see Boost as a proper package in BR, but cross
+ Joachim> compiling Boost for all targets is likely to require some
+ Joachim> voodoo. You may use our 1.35 package as a starting point - it
+ Joachim> is likely to need improvements to compile later versions.
 
-Jonathan
+Could you attach it to a report in bugzilla? Then I'll have a look at
+it.
 
 -- 
 Bye, Peter Korsgaard
-
--- 
-This message has been scanned for viruses and
-dangerous content by MailScanner, and is
-believed to be clean.
-
-Ce message entrant est certifi? sans virus connu.
-Analyse effectu?e par AVG - www.avg.fr 
-Version: 9.0.709 / Base de donn?es virale: 270.14.88/2538 - Date: 12/01/09
-02:59:00
