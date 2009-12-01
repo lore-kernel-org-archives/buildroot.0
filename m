@@ -1,41 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Dec 2009 14:42:00 +0100
-Subject: [Buildroot] Where did "project name" go?
-In-Reply-To: <op.u384zil4yqa4qb@jap>
-References: <op.u383h9jpyqa4qb@jap> <87zl63gkl3.fsf@macbook.be.48ers.dk>
-	<op.u384zil4yqa4qb@jap>
-Message-ID: <20091201144200.7ef450f0@surf>
+Date: Tue, 1 Dec 2009 14:48:03 +0100
+Subject: [Buildroot] Updated status on the compilation of busybox on Mac
+ OS X
+In-Reply-To: <87einh2n3w.fsf@macbook.be.48ers.dk>
+References: <4B11D0C8.9050901@usask.ca> <87vdgt3eh8.fsf@macbook.be.48ers.dk>
+	<4B128965.2090303@usask.ca> <87einh2n3w.fsf@macbook.be.48ers.dk>
+Message-ID: <20091201144803.26ddbe83@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 1 Dec 2009 10:07:56 +0100,
-Joachim Pihl <jpihl@nevion.com> a ?crit :
+Le Sun, 29 Nov 2009 19:37:55 +0100,
+Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
-> That is the part I was referring to. It does make building the same
-> system for multiple targets easy (from a user perspective), though,
-> and that is now lost. I guess I'm just not the average user.
+>  Nicholas> I know that the Gumstix folks seem to keep a separate build
+>  Nicholas> for Mac OS X:
+> 
+>  Nicholas> http://docwiki.gumstix.org/index.php/Buildroot_on_MacOSX
+> 
+> Yes, the gumstix people unfortunately haven't been that good at
+> submitting their fixes back to us :/
 
-The solution for this, as mentionned by Peter, is to build out-of-tree
-using O=/path/to/output/directory.
+To be honest, for many years, the Buildroot project was mostly
+unmaintaned, so it was basically not possible for all these forks
+(Gumstix, OpenWRT, Armadeus, etc.) to submit their changes and get some
+proper review and integration.
 
-Then you can easily switch between several projects without problem.
-They share the same Buildroot source code, but they have different
-configurations and different output directories.
-
-The old "project" stuff was just duplicating this feature. We had to
-make a choice between both, and the choice of O= was the one that
-allowed to make simplifications in Buildroot that make it much easier
-to use for less advanced users.
-
-Don't hesitate to ask if you have any question or find any limitation
-with the O= scheme.
+Nowadays, the project is in a much better shape, and I think the
+situation would be different now that potential contributors see that
+the project is active, has an official maintainer, deliver regular
+releases, etc.
 
 Sincerly,
 
-Thomas.
+Thomas
 -- 
 Thomas Petazzoni, Free Electrons
 Kernel, drivers and embedded Linux development,
