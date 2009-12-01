@@ -1,36 +1,28 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 1 Dec 2009 15:46:57 +0100
-Subject: [Buildroot] [git commit master] Config.in: Bump version
-Message-ID: <20091201144735.9DD4F776D3@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 01 Dec 2009 15:49:34 +0100
+Subject: [Buildroot] external toolchain
+In-Reply-To: <!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAJsvlB0+B11LmskjkLHLmJkBAAAAAA==@cimeq.qc.ca>
+	(Jonathan dumaresq's message of "Tue, 1 Dec 2009 08:59:46 -0500")
+References: <!&!AAAAAAAAAAAYAAAAAAAAAHWPmCJoh6pNraKNfwnUAkLCgAAAEAAAAJsvlB0+B11LmskjkLHLmJkBAAAAAA==@cimeq.qc.ca>
+Message-ID: <877ht6lpfl.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Jonathan" == Jonathan dumaresq <jdumaresq@cimeq.qc.ca> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5aeecd24877a4c03375bf3b3199dcfb0fe5df068
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Jonathan> Hi all,
+ Jonathan> Does any one here have used the crosstoll-ng for AVR32 with buildroot ?
 
-Tree is open for development again.
+Last I looked, crosstool-ng didn't support avr32-on-linux, only
+barebone?
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ Jonathan> Is it possible to use the toolchain build by buildroot and reusit as
+ Jonathan> external toolchain ?
 
-diff --git a/Config.in b/Config.in
-index 9a11043..e4edaae 100644
---- a/Config.in
-+++ b/Config.in
-@@ -8,7 +8,7 @@ config BR2_HAVE_DOT_CONFIG
- 
- config BR2_VERSION
- 	string
--	default "2009.11"
-+	default "2010.02-git"
- 
- source "target/Config.in.arch"
- source "target/device/Config.in"
+Yes, that should work OK.
+
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
