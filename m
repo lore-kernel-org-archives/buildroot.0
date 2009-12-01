@@ -1,63 +1,25 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 30 Nov 2009 21:34:08 +0000 (UTC)
-Subject: [Buildroot] [Bug 751] New: Kernel 2.6 snapshot fetch fail
-Message-ID: <bug-751-163@https.bugs.busybox.net/>
+Date: Tue,  1 Dec 2009 01:14:49 +0000 (UTC)
+Subject: [Buildroot] [Bug 661] lmbench: new package
+In-Reply-To: <bug-661-163@https.bugs.busybox.net/>
+References: <bug-661-163@https.bugs.busybox.net/>
+Message-ID: <20091201011449.9F11F777F2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=751
-
-              Host: i686
-            Target: arm
-           Summary: Kernel 2.6 snapshot fetch fail
-           Product: buildroot
-           Version: 2009.11
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Keywords: FIXME
-          Severity: blocker
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: xor.gate.engineering at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+https://bugs.busybox.net/show_bug.cgi?id=661
 
 
-Dear Developers,
-There is a bug while fetch snapshot kernel(headers). The correct string is not
-appended to the tar.bz2 filename. See below for the verbose output of the
-error.
-This happens with Buildroot 2009.11-rc2.
+Kelvin Cheung <keguang.zhang@gmail.com> changed:
 
-Kind Regards,
-Jerry Jacobs
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+   Target Milestone|---                         |2010.02
 
 
------ SNIPPED PREVIOUS VERBOSE OUTPUT
-/home/jerry/embedded/buildroot/buildroot-2009.11-rc2/output/build/buildroot-config
-mkdir -p /home/jerry/embedded/buildroot/buildroot-2009.11-rc2/output/build
-cp -dpRf package/config/buildroot-config
-/home/jerry/embedded/buildroot/buildroot-2009.11-rc2/output/build/buildroot-config
---2009-11-30 22:16:01--
-http://www.kernel.org/pub//linux/kernel/v2.6//linux-2.6..tar.bz2
-Resolving www.kernel.org... 199.6.1.164
-Connecting to www.kernel.org|199.6.1.164|:80... connected.
-HTTP request sent, awaiting response... 404 Not Found
-2009-11-30 22:16:01 ERROR 404: Not Found.
-
---2009-11-30 22:16:01--
-http://buildroot.net/downloads/sources//linux-2.6..tar.bz2
-Resolving buildroot.net... 140.211.167.224
-Connecting to buildroot.net|140.211.167.224|:80... connected.
-HTTP request sent, awaiting response... 404 Not Found
-2009-11-30 22:16:02 ERROR 404: Not Found.
-
-make: *** [dl/linux-2.6..tar.bz2] Error 1
 
 
 -- 
