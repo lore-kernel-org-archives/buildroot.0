@@ -1,39 +1,43 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Tue, 1 Dec 2009 14:21:10 +0100
-Subject: [Buildroot] Trying to build in an usual place: /opt instead of /
-In-Reply-To: <5cd84ac80912010510k26f4af64x6234af2e35adbde1@mail.gmail.com>
-References: <5cd84ac80912010510k26f4af64x6234af2e35adbde1@mail.gmail.com>
-Message-ID: <4d28d4b50912010521v34d7a98fv366b4ebd3e3dcf89@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 1 Dec 2009 14:42:00 +0100
+Subject: [Buildroot] Where did "project name" go?
+In-Reply-To: <op.u384zil4yqa4qb@jap>
+References: <op.u383h9jpyqa4qb@jap> <87zl63gkl3.fsf@macbook.be.48ers.dk>
+	<op.u384zil4yqa4qb@jap>
+Message-ID: <20091201144200.7ef450f0@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Dec 1, 2009 at 2:10 PM, Olivier Perron
-<olivier.perron12@gmail.com> wrote:
-> Hello all,
->
-> I'm trying to build a basic buildroot system that would go in /opt on
-> the target. I'm doing this just because there is already another linux
-> system running from / and I want to add my own "enhanced" one that has
-> to be fully independent from the original one. Hence everything has to
-> go in another folder: /opt for instance.
->
-> So far, I've tweaked some config files and some .mk files to reach my
-> goal. I have managed to get uclibc installed in /opt/lib and some
-> userland binaries in /opt/usr/bin.
-> But, yes there is a but... all my dynamically linked binaries try to
-> find the dynamic linker in /lib (e.g. /lib/ld-uClibc.so.0) where as
-> the linker is /opt/lib/ld-uClibc.so.
-> I had a look at the generated libc and ld-uClibc and they all have
-> /opt/lib/ld-uClibc.so hardcoded in them as I was expecting. So I'm
-> quite not so sure where to look now to resolve that issue.
-> It looks like I have configured uclibc correctly but the linked
-> binaries are still wrong.
-> Maybe I also have to adapt the configuration for gcc or binutils ? I
-> had a look at the .mk files but cannot find easily what to change...
-> So I'd be very grateful if someone could point me to the right direction !
->
+Le Tue, 1 Dec 2009 10:07:56 +0100,
+Joachim Pihl <jpihl@nevion.com> a ?crit :
 
-Why not using chroot ?
+> That is the part I was referring to. It does make building the same
+> system for multiple targets easy (from a user perspective), though,
+> and that is now lost. I guess I'm just not the average user.
+
+The solution for this, as mentionned by Peter, is to build out-of-tree
+using O=/path/to/output/directory.
+
+Then you can easily switch between several projects without problem.
+They share the same Buildroot source code, but they have different
+configurations and different output directories.
+
+The old "project" stuff was just duplicating this feature. We had to
+make a choice between both, and the choice of O= was the one that
+allowed to make simplifications in Buildroot that make it much easier
+to use for less advanced users.
+
+Don't hesitate to ask if you have any question or find any limitation
+with the O= scheme.
+
+Sincerly,
+
+Thomas.
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
