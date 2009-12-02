@@ -1,44 +1,86 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 01 Dec 2009 21:54:14 +0100
-Subject: [Buildroot] Buildroot 2009.11 released
-In-Reply-To: <op.u39xqqnmyqa4qb@jap-lappis.nevion.com> (Joachim Pihl's message
-	of "Tue, 1 Dec 2009 20:29:05 +0100")
-References: <87bpiilpru.fsf@macbook.be.48ers.dk>
-	<op.u39xqqnmyqa4qb@jap-lappis.nevion.com>
-Message-ID: <87fx7uv2ix.fsf@macbook.be.48ers.dk>
+From: NEAL, RYAN <RYAN_NEAL@appsig.com>
+Date: Tue, 1 Dec 2009 16:26:58 -0800
+Subject: [Buildroot] Help Booting Kernel on an ml507
+In-Reply-To: <87k4xdajxg.fsf@macbook.be.48ers.dk>
+References: <4B2CB099CF3D4F40B1B1442281CA94FFC4C8E2@EXCHANGEVS01.appsig.com><87r5rm9oz7.fsf@macbook.be.48ers.dk><4B2CB099CF3D4F40B1B1442281CA94FFC4C8E3@EXCHANGEVS01.appsig.com>
+	<87k4xdajxg.fsf@macbook.be.48ers.dk>
+Message-ID: <4B2CB099CF3D4F40B1B1442281CA94FFC4C900@EXCHANGEVS01.appsig.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Joachim" == Joachim Pihl <jpihl@nevion.com> writes:
+Hey Peter!  That helped a lot!  
 
-Hi,
+I upgraded to the br 2009.11 release.  Good work, I like it a lot --
+much simpler :).
 
- Joachim> It great that someone puts in the effort needed to improve the tool!
- Joachim> Thanks and congratulations!
+I am getting two errors and I was wondering if you could help me out
+again?
 
-You're welcome.
+One comes when I use the bootline : Linux/PowerPC load: console=ttyS0
+ip=on root=/dev/ram
 
- >> - Better external toolchain support and closer cooporation with
- >> crosstool-ng (http://ymorin.is-a-geek.org/projects/crosstool)
- >> - Generalized package infrastructure (host/non-autotools):
- >> http://lists.busybox.net/pipermail/buildroot/2009-November/030600.html
+The boot goes as before, but  the last few lines of the boot are:
+	Sending DHCP requests ., OK
+	IP-Config: Got DHCP answer from 0.0.0.0, my address is
+10.49.211.5
+	IP-Config: Complete:
+	     device=eth0, addr=10.49.211.5, mask=255.255.240.0,
+gw=10.49.223.254,
+	     host=10.49.211.5, domain=appsig.com, nis-domain=appsig.com,
+	     bootserver=0.0.0.0, rootserver=0.0.0.0, rootpath=
+	Freeing unused kernel memory: 944k init
+	Initializing random number generator... done.
+	Starting network...
+	ip: RTNETLINK answers: File exists
 
- Joachim> Where do you keep the wish list?
+If I tack on a rdinit=/bin/sh I don't get that error but I get:
+	IP-Config: Got DHCP answer from 0.0.0.0, my address is
+10.49.211.5
+	IP-Config: Complete:
+	     device=eth0, addr=10.49.211.5, mask=255.255.240.0,
+gw=10.49.223.254,
+	     host=10.49.211.5, domain=appsig.com, nis-domain=appsig.com,
+	     bootserver=0.0.0.0, rootserver=0.0.0.0, rootpath=
+	Freeing unused kernel memory: 944k init
+	/bin/sh: can't access tty; job control turned off
+	/ #
+And I can't use the DNS names of any servers.  The good thing is that I
+can now poke around the filesystem(r/w)!  Do you know what settings
+would cause these errors? Is it even in the buildroot config or the
+linux kernel?
 
-In my head ;) No seriously, stuff gets discussed here on the
-list. Thomas has been posting updates on his work several times, and
-crosstool-ng mainly comes from the dev day we had at ELC-E.
+Thanks a ton! 
+::Ryan
+-----Original Message-----
+From: Peter Korsgaard [mailto:jacmet at gmail.com] On Behalf Of Peter
+Korsgaard
+Sent: Wednesday, November 25, 2009 10:18 PM
+To: NEAL, RYAN
+Cc: Peter Korsgaard; buildroot at busybox.net
+Subject: Re: [Buildroot] Help Booting Kernel on an ml507
 
- Joachim> I would love to see Boost as a proper package in BR, but cross
- Joachim> compiling Boost for all targets is likely to require some
- Joachim> voodoo. You may use our 1.35 package as a starting point - it
- Joachim> is likely to need improvements to compile later versions.
+>>>>> "Ryan" == NEAL, RYAN <RYAN_NEAL@appsig.com> writes:
 
-Could you attach it to a report in bugzilla? Then I'll have a look at
-it.
+ Ryan> Peter, 
+ Ryan> That is a good point.  I was intending on using the initramfs
+because I
+ Ryan> hadn't thought of other options.  I'll look into the squashfs.  
+
+ Ryan> My cpio.gz image is 543K.  
+ Ryan> I am building for the powerpc 440 (no FPU).
+
+Then this is probably wrong (unless you have FPU emulation enabled in
+the kernel, which you shouldn't):
+
+ Ryan> # BR2_SOFT_FLOAT is not set
+
+You can find it under toolchain options.
+
+Once you change this you need to rebuild everything (rm -rf *build_*;
+make).
 
 -- 
 Bye, Peter Korsgaard
