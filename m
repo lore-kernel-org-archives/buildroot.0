@@ -1,27 +1,22 @@
 From: NEAL, RYAN <RYAN_NEAL@appsig.com>
-Date: Tue, 1 Dec 2009 16:55:24 -0800
+Date: Tue, 1 Dec 2009 16:58:51 -0800
 Subject: [Buildroot] Help Booting Kernel on an ml507
 In-Reply-To: <200912011837.12322.minimod@morethan.org>
 References: <4B2CB099CF3D4F40B1B1442281CA94FFC4C8E2@EXCHANGEVS01.appsig.com>
 	<87k4xdajxg.fsf@macbook.be.48ers.dk>
 	<4B2CB099CF3D4F40B1B1442281CA94FFC4C900@EXCHANGEVS01.appsig.com>
 	<200912011837.12322.minimod@morethan.org>
-Message-ID: <4B2CB099CF3D4F40B1B1442281CA94FFC4C901@EXCHANGEVS01.appsig.com>
+Message-ID: <4B2CB099CF3D4F40B1B1442281CA94FFC4C902@EXCHANGEVS01.appsig.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-What package to I have to include make this work automatically?
+Urk.  Seriously right after I sent the email I saw the /sbin/udhcpc.
 
-Like on a full distro there is the /sbin/dhclient-script that populates
-the /etc/resolv.conf?
-
-Odd follow-up, how do I add a step to the inittab?
-
-None of this is persistent is the problem, so I need it to be compiled
-into the image.
+Now I just have the problem of how to get it run at startup.  By editing
+the inittab?
 
 ::Ryan
 
