@@ -1,31 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 02 Dec 2009 20:42:56 +0100
-Subject: [Buildroot] [PATCH] Adding openbox to buildroot
-In-Reply-To: <200912021324.52697.minimod@morethan.org> (Michael S. Zick's
-	message of "Wed, 2 Dec 2009 13:24:50 -0600")
-References: <867286CD-192F-48CE-8C3A-00D988A93C6B@hsr.ch>
-	<4d28d4b50912020911h52ef1e70j88e8c5b592fc66f@mail.gmail.com>
-	<1CB99035-2FC1-42B4-B73D-02CAF7A55020@hsr.ch>
-	<200912021324.52697.minimod@morethan.org>
-Message-ID: <87my21tb5r.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed,  2 Dec 2009 19:49:10 +0000 (UTC)
+Subject: [Buildroot] [Bug 767] New: Bump iw package to 0.9.18
+Message-ID: <bug-767-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Michael" == Michael S Zick <minimod@morethan.org> writes:
+https://bugs.busybox.net/show_bug.cgi?id=767
 
-Hi,
+              Host: i686-linux
+            Target: arm-softfloat-linux-uclibcgnueabi
+           Summary: Bump iw package to 0.9.18
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: gustavo at zacarias.com.ar
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
- >> ? Pkg-config
 
- Michael> Building pkgconfig is optional.  
- Michael> If selected, it requires that Internationalism and
- Michael> wide-character be pulled in.
+Created an attachment (id=799)
+ --> (https://bugs.busybox.net/attachment.cgi?id=799)
+Bump iw package to 0.9.18
 
-pkg-config is a compile time dependency, not a runtime one - So this is
-about pkg-config for the host.
+Again... bump iw to 0.9.18
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
