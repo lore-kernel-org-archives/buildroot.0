@@ -1,57 +1,31 @@
-From: Marc Egli <marc.egli@hsr.ch>
-Date: Wed, 2 Dec 2009 19:20:08 +0100
-Subject: [Buildroot] [PATCH] Adding openbox to buildroot
-In-Reply-To: <4d28d4b50912020911h52ef1e70j88e8c5b592fc66f@mail.gmail.com>
-References: <867286CD-192F-48CE-8C3A-00D988A93C6B@hsr.ch>
-	<4d28d4b50912020911h52ef1e70j88e8c5b592fc66f@mail.gmail.com>
-Message-ID: <1CB99035-2FC1-42B4-B73D-02CAF7A55020@hsr.ch>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 02 Dec 2009 19:40:22 +0100
+Subject: [Buildroot] Updated status on the compilation of busybox on Mac
+	OS X
+In-Reply-To: <4B168E68.1060003@usask.ca> (Nicholas Kinar's message of "Wed, 02
+	Dec 2009 09:57:28 -0600")
+References: <4B11D0C8.9050901@usask.ca> <87vdgt3eh8.fsf@macbook.be.48ers.dk>
+	<4B128965.2090303@usask.ca> <87einh2n3w.fsf@macbook.be.48ers.dk>
+	<20091201144803.26ddbe83@surf> <4B153461.1030404@usask.ca>
+	<873a3ulncz.fsf@macbook.be.48ers.dk> <4B15C71D.8020106@usask.ca>
+	<4B168E68.1060003@usask.ca>
+Message-ID: <87tyw9te21.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-good question
-these are the Dependencies written on the openbox homepage:
-	? C compiler (such as GCC)
-	? Libc library and headers (development package)
-	? Xlib library and headers (development package)
-	? Glib-2 library and headers (development package)
-	? LibXML-2 library and headers (development package)
-	? Pango library and headers (development package)
-	? Startup-notification library and headers (development package) - optional but recommended
-	? XCursor library and headers (development package) - optional but recommended
-	? Pkg-config
-i think c compiler libc and pkg config are always here if you build buildroot.
-so i need the name of xlib i have to put into OPENBOX_DEPENDENCIES,
-i'll also add those 2 optional dependencies with an if to add it if they are present.
-i hope to get back with a better version soon, and any hint's are welcome
-Am 02.12.2009 um 18:11 schrieb Lionel Landwerlin:
+>>>>> "Nicholas" == Nicholas Kinar <n.kinar@usask.ca> writes:
 
-> On Wed, Dec 2, 2009 at 6:02 PM, Marc Egli <marc.egli@hsr.ch> wrote:
->> --- /dev/null
->> +++ b/package/openbox/openbox.mk
->> @@ -0,0 +1,16 @@
->> +#############################################################
->> +#
->> +# openbox
->> +#
->> +#############################################################
->> +
->> +OPENBOX_VERSION = 3.4.7.2
->> +OPENBOX_SOURCE = openbox-$(OPENBOX_VERSION).tar.gz
->> +OPENBOX_SITE = http://icculus.org/openbox/releases
->> +OPENBOX_DEPENDENCIES = libglib2 pango libxml2
-> 
-> No x11 dependencies ?
-> 
->> +#OPENBOX_LIBTOOL_PATCH=NO
->> +OPENBOX_INSTALL_STAGING=YES
->> +OPENBOX_INSTALL_TARGET=YES
->> +
->> +$(eval $(call AUTOTARGETS,package,openbox))
->> +
+ Nicholas> In buildroot, how do I set the host system for the configuration of
+ Nicholas> gcc?  This is trivial for a command-line compile of gcc, but how would
+ Nicholas> I do this within Buildroot, so that the appropriate options are passed
+ Nicholas> to ./configure for gcc?
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091202/b22db843/attachment-0001.htm>
+ Nicholas> Perhaps changing this would allow for gcc to more properly compile.
+
+BR2_GNU_BUILD_SUFFIX (Build options->GNU build hostname suffix)
+
+-- 
+Bye, Peter Korsgaard
