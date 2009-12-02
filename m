@@ -1,26 +1,62 @@
-From: Austin Foxley <austinf@cetoncorp.com>
-Date: Wed, 02 Dec 2009 07:59:49 -0800
-Subject: [Buildroot] Updated status on the compilation of busybox on Mac
- OS X
-In-Reply-To: <4B168E68.1060003@usask.ca>
-References: <4B11D0C8.9050901@usask.ca>
-	<87vdgt3eh8.fsf@macbook.be.48ers.dk>	<4B128965.2090303@usask.ca>
-	<87einh2n3w.fsf@macbook.be.48ers.dk>	<20091201144803.26ddbe83@surf>
-	<4B153461.1030404@usask.ca>	<873a3ulncz.fsf@macbook.be.48ers.dk>
-	<4B15C71D.8020106@usask.ca> <4B168E68.1060003@usask.ca>
-Message-ID: <4B168EF5.9000202@cetoncorp.com>
+From: Marc Egli <marc.egli@hsr.ch>
+Date: Wed, 2 Dec 2009 18:02:33 +0100
+Subject: [Buildroot] [PATCH] Adding openbox to buildroot
+Message-ID: <867286CD-192F-48CE-8C3A-00D988A93C6B@hsr.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/02/2009 07:57 AM, Nicholas Kinar wrote:
-> In buildroot, how do I set the host system for the configuration of
-> gcc?  This is trivial for a command-line compile of gcc, but how would I
-> do this within Buildroot, so that the appropriate options are passed to
-> ./configure for gcc?
+I wan't to use the lxde desktop with the openbox window manager. So i integrated those packages into buildroot. While i still have some issues with lxde, openbox is running pretty good.
+So here is my patch that could eventually fit into the next release.
 
-BR2_EXTRA_GCC_CONFIG_OPTIONS?
-
--Austin
+diff --git a/package/Config.in b/package/Config.in
+index c5a2365..d2028cf 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -348,6 +348,7 @@ comment "X Window managers"
+ source "package/matchbox/Config.in"
+ source "package/metacity/Config.in"
+ source "package/blackbox/Config.in"
++source "package/openbox/Config.in"
+ 
+ comment "X applications"
+ source "package/alsamixergui/Config.in"
+diff --git a/package/openbox/Config.in b/package/openbox/Config.in
+new file mode 100644
+index 0000000..53167e6
+--- /dev/null
++++ b/package/openbox/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_OPENBOX
++       bool "openbox windowmanager"
++       select BR2_PACKAGE_PANGO
++       select BR2_PACKAGE_LIBGLIB2
++       select BR2_PACKAGE_LIBXML2
++       depends on BR2_PACKAGE_XORG7
++       help
++               http://icculus.org/openbox/index.php/Main_Page lightwight windowmanager
++
+diff --git a/package/openbox/openbox.mk b/package/openbox/openbox.mk
+new file mode 100644
+index 0000000..29a79aa
+--- /dev/null
++++ b/package/openbox/openbox.mk
+@@ -0,0 +1,16 @@
++#############################################################
++#
++# openbox
++#
++#############################################################
++
++OPENBOX_VERSION = 3.4.7.2
++OPENBOX_SOURCE = openbox-$(OPENBOX_VERSION).tar.gz
++OPENBOX_SITE = http://icculus.org/openbox/releases
++OPENBOX_DEPENDENCIES = libglib2 pango libxml2
++#OPENBOX_LIBTOOL_PATCH=NO
++OPENBOX_INSTALL_STAGING=YES
++OPENBOX_INSTALL_TARGET=YES
++
++$(eval $(call AUTOTARGETS,package,openbox))
++
