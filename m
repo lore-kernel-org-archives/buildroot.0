@@ -1,37 +1,35 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  2 Dec 2009 19:49:10 +0000 (UTC)
-Subject: [Buildroot] [Bug 767] New: Bump iw package to 0.9.18
-Message-ID: <bug-767-163@https.bugs.busybox.net/>
+Date: Wed,  2 Dec 2009 19:50:42 +0000 (UTC)
+Subject: [Buildroot] [Bug 513] Add new squid package
+In-Reply-To: <bug-513-163@https.bugs.busybox.net/>
+References: <bug-513-163@https.bugs.busybox.net/>
+Message-ID: <20091202195042.DC5B5777D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=767
-
-              Host: i686-linux
-            Target: arm-softfloat-linux-uclibcgnueabi
-           Summary: Bump iw package to 0.9.18
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Outdated package
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: gustavo at zacarias.com.ar
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+https://bugs.busybox.net/show_bug.cgi?id=513
 
 
-Created an attachment (id=799)
- --> (https://bugs.busybox.net/attachment.cgi?id=799)
-Bump iw package to 0.9.18
+Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
 
-Again... bump iw to 0.9.18
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+ Attachment #781 is|0                           |1
+           obsolete|                            |
+
+
+
+
+--- Comment #9 from Gustavo Zacarias <gustavo@zacarias.com.ar>  2009-12-02 19:50:42 UTC ---
+Created an attachment (id=801)
+ --> (https://bugs.busybox.net/attachment.cgi?id=801)
+squid-3.0.STABLE20 package
+
+Enabled transparent netfilter mode.
+Enabled SSL mode when openssl is installed.
 
 
 -- 
