@@ -1,39 +1,35 @@
 From: Michael S. Zick <minimod@morethan.org>
-Date: Wed, 2 Dec 2009 07:01:50 -0600
-Subject: [Buildroot] [git tag 2009.11] update for 2009.11
-In-Reply-To: <20091201142204.3F954777B5@busybox.osuosl.org>
-References: <20091201142204.3F954777B5@busybox.osuosl.org>
-Message-ID: <200912020701.52887.minimod@morethan.org>
+Date: Wed, 2 Dec 2009 07:03:07 -0600
+Subject: [Buildroot] Shared objects, load order?
+In-Reply-To: <op.u4bal6mdyqa4qb@jap>
+References: <op.u4auhacnyqa4qb@jap> <200912020644.43103.minimod@morethan.org>
+	<op.u4bal6mdyqa4qb@jap>
+Message-ID: <200912020703.09342.minimod@morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue December 1 2009, Peter Korsgaard wrote:
+On Wed December 2 2009, Joachim Pihl wrote:
+> On Wed, 02 Dec 2009 13:44:40 +0100, Michael S. Zick <minimod@morethan.org>  
+> wrote:
+> >
+> > Did you enable sstrip?
+> > The sstrip in the 2009.8 (and probably in 2009.11, since I never saw it  
+> > fixed)
+> > creates object (and statically linked) objects with corrupted headers.
+> >
+> > Turn it off, rebuild, report back.
 > 
-> commit: http://git.buildroot.net/buildroot/commit/?id=d0cb90792df5873af83f7277b17fe12aa1b91b19
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/tags/2009.11
+> BR2_PACKAGE_SSTRIP_HOST enabled, BR2_PACKAGE_SSTRIP_TARGET disabled, but  
+> BR2_STRIP_strip is the one used.
 > 
-> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+> Will rebuild anyway with BR2_PACKAGE_SSTRIP_HOST disabled, but I doubt it  
+> should make any difference.
 > 
-> this is a tag, so no patch shown
->
 
-Would you please tag the repository with a 2010.02 branch tag?
-
-That way users can continue to fix 2009.11 without being exposed
-to the code-churn of producing 2010.02.
-
-The "release and move-on" type of organization really is not appropriate
-for something as mission critical as the build system in use.
-
-Heck, after a decade, even kernel.org learned that lesson.  ;)
+The "file" command will report the corrupted headers if present.
+Just "file" some old/new objects.
 
 Mike
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> 
