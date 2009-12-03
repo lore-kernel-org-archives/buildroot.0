@@ -1,35 +1,31 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 3 Dec 2009 19:05:34 +0100
-Subject: [Buildroot] [git commit master] kernel-headers: fix 2.6.32 typo
-Message-ID: <20091203180600.42E7F777B0@busybox.osuosl.org>
+Date: Thu, 03 Dec 2009 19:06:13 +0100
+Subject: [Buildroot] [git commit master] kernel-headers: add 2.6.32
+In-Reply-To: <op.u4dfxpxuyqa4qb@jap-lappis.nevion.com> (Joachim Pihl's message
+	of "Thu, 3 Dec 2009 17:54:51 +0100")
+References: <20091203163920.709DF777B6@busybox.osuosl.org>
+	<op.u4dfxpxuyqa4qb@jap-lappis.nevion.com>
+Message-ID: <87aay0rkyy.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Joachim" == Joachim Pihl <jpihl@nevion.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=edee1d78ab38f51844df256615146d522ace6425
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Joachim> On Thu, 03 Dec 2009 15:59:15 +0100, Peter Korsgaard
+ Joachim> <jacmet@sunsite.dk> wrote:
 
-Thanks to Joachim Pihl for noticing.
+ >> default "2.6.29.6"	if BR2_KERNEL_HEADERS_2_6_29
+ >> default "2.6.30.9"	if BR2_KERNEL_HEADERS_2_6_30
+ >> default "2.6.31.6"	if BR2_KERNEL_HEADERS_2_6_31
+ >> +	default "2.6.32"	if BR2_KERNEL_HEADERS_2_6_31
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- toolchain/kernel-headers/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ Joachim> that should  probably be BR2_KERNEL_HEADERS_2_6_32 ?
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index 19f0ae8..a0feea2 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -71,6 +71,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "2.6.29.6"	if BR2_KERNEL_HEADERS_2_6_29
- 	default "2.6.30.9"	if BR2_KERNEL_HEADERS_2_6_30
- 	default "2.6.31.6"	if BR2_KERNEL_HEADERS_2_6_31
--	default "2.6.32"	if BR2_KERNEL_HEADERS_2_6_31
-+	default "2.6.32"	if BR2_KERNEL_HEADERS_2_6_32
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+Argh, but ofcourse! That should teach me to not try to do too many
+things at once :/
+
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
