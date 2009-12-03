@@ -1,29 +1,47 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 03 Dec 2009 11:31:14 +0100
-Subject: [Buildroot] Qt fails to build
-In-Reply-To: <1259797454.1750.34.camel@station1.ormlab.com> (Ormund Williams's
-	message of "Wed, 02 Dec 2009 18:44:14 -0500")
-References: <1257367062.3465.51.camel@station1.ormlab.com>
-	<87ocn3y40l.fsf@macbook.be.48ers.dk>
-	<1259797454.1750.34.camel@station1.ormlab.com>
-Message-ID: <874oo8tklp.fsf@macbook.be.48ers.dk>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Thu, 03 Dec 2009 12:33:17 +0100
+Subject: [Buildroot] tremor / libvorbis confusion
+Message-ID: <1259839997.12310.9.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ormund" == Ormund Williams <ormundw@panix.com> writes:
-
 Hi,
 
- Ormund> I did a new git clone and then git checkout of this commit:
- Ormund> 473a91dbe660cd7b0e56b4afc18121da52c89492 now Qt builds.  There
- Ormund> are about a dozen qt specific commits that follow the one
- Ormund> above, when I get some time later this week I'll try to find
- Ormund> which change caused the problem.
+currently tremor is part of the libvorbis package in buildroot and if
+you select BR2_PACKAGE_LIBVORBIS_TREMOR, then tremor silently takes the
+role of libvorbis. This means that libvorbis is not installed and tremor
+is installed instead of it. This is IMO rather confusing and it doesn't
+work for us (and probably not for other people).
 
-Ok, thanks!
+The reason that it doesn't work for our needs is that tremor is not a
+drop-in replacement for libvorbis. The APIs are similar, becase the
+tremor API is based on an old libvorbis API, but it is not identical.
+Also the library that is built and installed by tremor is not libvorbis,
+but libvorbisidec.
+
+For our project we actually need both. One application in our stack
+needs features from libvorbis. And another application uses
+libvorbisidec. This can not be done with the current setup of tremor
+being hidden in the libvorbis package.
+
+So what I propose is to move tremor out of libvorbis and turn it into a
+regular buildroot package called either 'tremor' or 'libvorbisidec'.
+Then people can select whatever they need and if they need both, they
+select both libraries.
+
+If you agree with this proposal, then I can make patches for this. I
+would then also like to contribute a patch for for gst-plugins-bad that
+allows to configure the build of the ivorbisdec gstreamer plugin.
+
+
+Sven
 
 -- 
-Bye, Peter Korsgaard
+Sven Neumann
+Head of Software Development
+
+RAUMFELD GmbH | Reichenberger Str. 124 | 10999 Berlin | Germany
+Tel: +49.30.340.60.98.0 | Fax: +49.30.340.60.98.99 | s.neumann at raumfeld.com
