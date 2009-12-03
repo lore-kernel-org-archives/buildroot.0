@@ -1,26 +1,66 @@
-From: tike64 at gmail.com <tike64@gmail.com>
-Date: Thu, 03 Dec 2009 14:05:33 +0200
+From: Joo Aun Saw <jasaw81@yahoo.com.au>
+Date: Thu, 3 Dec 2009 04:11:40 -0800 (PST)
 Subject: [Buildroot] make uImage
 In-Reply-To: <20091203113649.297300@gmx.net>
 References: <20091203113649.297300@gmx.net>
-Message-ID: <4B17A98D.5040900@gmail.com>
+Message-ID: <679646.28937.qm@web52407.mail.re2.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jens Kleinhans wrote:
-> root at benjamin-laptop:/usr/src/linux/arch/arm/boot# mkimage -A arm -O linux
-> -C none -T kernel -a 20008000 -e 20008000 -n linux-2.6 -d
-> arch/arm/boot/zImage uImage mkimage [OPTIONS]
-> 
-> Options: -f <MD5 name> ...
+Install mkimage from your host linux package manager and uImage will be built automatically, together with the zImage. Make sure mkimage is in your search path. In your linux menuconfig or buildroot menuconfig, configure it to use uImage instead of zImage.
 
-This seems not to be u-boot's mkimage. Check that the correct mkimage is found
-in your path first. Also he path for the zImage seems not to be correct 
-regarding your current working directory.
 
---
 
-Timo
+
+----- Original Message ----
+From: Jens Kleinhans <Jens.Kleinhans@gmx.de>
+To: Buildroot  <buildroot@busybox.net>; RTAI  <rtai@rtai.org>
+Sent: Thu, 3 December, 2009 10:36:49 PM
+Subject: [Buildroot] make uImage
+
+I crosscompiled the kernel 2.6.20 and now I want to make a uImage out of the zImage. I found the following command for making uImage. But when I type only options are shown. How can I build the uImage the right way?
+
+root at benjamin-laptop:/usr/src/linux/arch/arm/boot# ls
+bootp  compressed  Image  install.sh  Makefile  zImage
+root at benjamin-laptop:/usr/src/linux/arch/arm/boot# mkimage -A arm -O linux -C none -T kernel -a 20008000 -e 20008000 -n linux-2.6 -d arch/arm/boot/zImage uImage
+mkimage [OPTIONS]
+
+Options:
+-f <MD5 name>       Specify an input MD5 file. MD5s must be in jigdo's
+                     pseudo-base64 format
+-j <jigdo name>     Specify the input jigdo file
+-t <template name>  Specify the input template file
+-m <item=path>      Map <item> to <path> to find the files in the mirror
+-M <missing name>   Rather than try to build the image, just check that
+                     all the needed files are available. If any are missing,
+                     list them in this file.
+-v                  Make the output logging more verbose
+-l <logfile>        Specify a logfile to append to.
+                     If not specified, will log to stderr
+-o <outfile>        Specify a file to write the ISO image to.
+                     If not specified, will write to stdout
+-q                  Quick mode. Don't check MD5sums. Dangerous!
+-s <bytenum>        Start byte number; will start at 0 if not specified
+-e <bytenum>        End byte number; will end at EOF if not specified
+-z                  Don't attempt to rebuild the image; simply print its
+                     size in bytes
+
+-- 
+Sarah Kreuz, die DSDS-Siegerin der Herzen, mit ihrem eindrucksvollen          
+Deb?talbum "One Moment in Time". http://portal.gmx.net/de/go/musik
+
+-- 
+Sarah Kreuz, die DSDS-Siegerin der Herzen, mit ihrem eindrucksvollen          
+Deb?talbum "One Moment in Time". http://portal.gmx.net/de/go/musik
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+
+      __________________________________________________________________________________
+See what's on at the movies in your area. Find out now: http://au.movies.yahoo.com/session-times/
