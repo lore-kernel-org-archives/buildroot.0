@@ -1,47 +1,44 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Thu, 03 Dec 2009 12:33:17 +0100
-Subject: [Buildroot] tremor / libvorbis confusion
-Message-ID: <1259839997.12310.9.camel@sven>
+From: Jens Kleinhans <Jens.Kleinhans@gmx.de>
+Date: Thu, 03 Dec 2009 12:36:49 +0100
+Subject: [Buildroot] make uImage
+Message-ID: <20091203113649.297300@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+I crosscompiled the kernel 2.6.20 and now I want to make a uImage out of the zImage. I found the following command for making uImage. But when I type only options are shown. How can I build the uImage the right way?
 
-currently tremor is part of the libvorbis package in buildroot and if
-you select BR2_PACKAGE_LIBVORBIS_TREMOR, then tremor silently takes the
-role of libvorbis. This means that libvorbis is not installed and tremor
-is installed instead of it. This is IMO rather confusing and it doesn't
-work for us (and probably not for other people).
+root at benjamin-laptop:/usr/src/linux/arch/arm/boot# ls
+bootp  compressed  Image  install.sh  Makefile  zImage
+root at benjamin-laptop:/usr/src/linux/arch/arm/boot# mkimage -A arm -O linux -C none -T kernel -a 20008000 -e 20008000 -n linux-2.6 -d arch/arm/boot/zImage uImage
+mkimage [OPTIONS]
 
-The reason that it doesn't work for our needs is that tremor is not a
-drop-in replacement for libvorbis. The APIs are similar, becase the
-tremor API is based on an old libvorbis API, but it is not identical.
-Also the library that is built and installed by tremor is not libvorbis,
-but libvorbisidec.
-
-For our project we actually need both. One application in our stack
-needs features from libvorbis. And another application uses
-libvorbisidec. This can not be done with the current setup of tremor
-being hidden in the libvorbis package.
-
-So what I propose is to move tremor out of libvorbis and turn it into a
-regular buildroot package called either 'tremor' or 'libvorbisidec'.
-Then people can select whatever they need and if they need both, they
-select both libraries.
-
-If you agree with this proposal, then I can make patches for this. I
-would then also like to contribute a patch for for gst-plugins-bad that
-allows to configure the build of the ivorbisdec gstreamer plugin.
-
-
-Sven
+ Options:
+ -f <MD5 name>       Specify an input MD5 file. MD5s must be in jigdo's
+                     pseudo-base64 format
+ -j <jigdo name>     Specify the input jigdo file
+ -t <template name>  Specify the input template file
+ -m <item=path>      Map <item> to <path> to find the files in the mirror
+ -M <missing name>   Rather than try to build the image, just check that
+                     all the needed files are available. If any are missing,
+                     list them in this file.
+ -v                  Make the output logging more verbose
+ -l <logfile>        Specify a logfile to append to.
+                     If not specified, will log to stderr
+ -o <outfile>        Specify a file to write the ISO image to.
+                     If not specified, will write to stdout
+ -q                  Quick mode. Don't check MD5sums. Dangerous!
+ -s <bytenum>        Start byte number; will start at 0 if not specified
+ -e <bytenum>        End byte number; will end at EOF if not specified
+ -z                  Don't attempt to rebuild the image; simply print its
+                     size in bytes
 
 -- 
-Sven Neumann
-Head of Software Development
+Sarah Kreuz, die DSDS-Siegerin der Herzen, mit ihrem eindrucksvollen           
+Deb?talbum "One Moment in Time". http://portal.gmx.net/de/go/musik
 
-RAUMFELD GmbH | Reichenberger Str. 124 | 10999 Berlin | Germany
-Tel: +49.30.340.60.98.0 | Fax: +49.30.340.60.98.99 | s.neumann at raumfeld.com
+-- 
+Sarah Kreuz, die DSDS-Siegerin der Herzen, mit ihrem eindrucksvollen           
+Deb?talbum "One Moment in Time". http://portal.gmx.net/de/go/musik
