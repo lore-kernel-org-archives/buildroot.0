@@ -1,32 +1,26 @@
-From: Jens Kleinhans <Jens.Kleinhans@gmx.de>
-Date: Thu, 03 Dec 2009 12:53:25 +0100
-Subject: [Buildroot] uImage out of zImage
-Message-ID: <20091203115325.192320@gmx.net>
+From: tike64 at gmail.com <tike64@gmail.com>
+Date: Thu, 03 Dec 2009 14:05:33 +0200
+Subject: [Buildroot] make uImage
+In-Reply-To: <20091203113649.297300@gmx.net>
+References: <20091203113649.297300@gmx.net>
+Message-ID: <4B17A98D.5040900@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I use this Kernel, because I want to build a RTAI-patched Kernel for an ARM-Board, and the newest Kernel RTAI offers patches (Arch = arm) for is 2.6.20. I know about the disadvantages, but I see no other way. If you know one, please tell me!
-How can I use this uImage? After Cross-Compiling only a zImage was created, so I thought it might be clever to transform it into an uImage. Isn't there a possibility to do this? With the command I wrote in my last Email I thought it should work...
-
-Thanks so far, Jens
-
-On Thu, Dec 03, 2009 at 12:36:49PM +0100, Jens Kleinhans wrote:
-> I crosscompiled the kernel 2.6.20 and now I want to make a uImage out of the zImage. I found the following command for making uImage. But when I type only options are shown. How can I build the uImage the right way?
+Jens Kleinhans wrote:
+> root at benjamin-laptop:/usr/src/linux/arch/arm/boot# mkimage -A arm -O linux
+> -C none -T kernel -a 20008000 -e 20008000 -n linux-2.6 -d
+> arch/arm/boot/zImage uImage mkimage [OPTIONS]
 > 
-> root at benjamin-laptop:/usr/src/linux/arch/arm/boot# ls
-> bootp  compressed  Image  install.sh  Makefile  zImage
-> root at benjamin-laptop:/usr/src/linux/arch/arm/boot# mkimage -A arm -O linux -C none -T kernel -a 20008000 -e 20008000 -n linux-2.6 -d arch/arm/boot/zImage uImage
+> Options: -f <MD5 name> ...
 
-Why don't you use the uImage target the Linux kernel offers?
+This seems not to be u-boot's mkimage. Check that the correct mkimage is found
+in your path first. Also he path for the zImage seems not to be correct 
+regarding your current working directory.
 
-And you should _really_ consider using a more recent kernel unless you
-have a good reason not to do so. 2.6.20 is indeed ancient.
+--
 
-Daniel
- 
--- 
-Jetzt kostenlos herunterladen: Internet Explorer 8 und Mozilla Firefox 3.5 -
-sicherer, schneller und einfacher! http://portal.gmx.net/de/go/chbrowser
+Timo
