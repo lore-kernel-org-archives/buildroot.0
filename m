@@ -1,82 +1,118 @@
-From: Ormund Williams <ormundw@panix.com>
-Date: Thu, 03 Dec 2009 17:26:28 -0500
-Subject: [Buildroot] Qt fails to build
-In-Reply-To: <87ocn3y40l.fsf@macbook.be.48ers.dk>
-References: <1257367062.3465.51.camel@station1.ormlab.com>
-	<87ocn3y40l.fsf@macbook.be.48ers.dk>
-Message-ID: <1259879188.1750.47.camel@station1.ormlab.com>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Thu,  3 Dec 2009 23:34:18 +0100
+Subject: [Buildroot] [PATCH] gst-plugins-bad: make more dependency-less
+	plugins configurable
+Message-ID: <1259879658-7159-1-git-send-email-s.neumann@raumfeld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 2009-11-15 at 20:36 +0100, Peter Korsgaard wrote:
-> >>>>> "Ormund" == Ormund Williams <ormundw@panix.com> writes:
-> 
->  Ormund> Hi All,
->  Ormund> I did a git pull this morning and now I get this error, no change to
->  Ormund> the .config file:
-> 
->  Ormund> Creating qmake. Please wait...
->  Ormund> make[1]: Entering directory .../buildroot/output/build/qt-embedded-linux-opensource-src-4.5.2/qmake'
->  Ormund> g++: @: No such file or directory
->  Ormund> make[1]: *** [project.o] Error 1
-> 
-> Hmm, it builds here - Could you post your .config?
-> 
-If I undo this change:
+The latest update added a few new plugins that were missing from
+the buildroot configuration system. This commit makes these
+dependency-less plugins configurable.
 
-commit: 03bdf67f438ad66a652e860474fc65b9342656f2
-Tested with 4.5.2.
-
-Signed-off-by: Michael Roth <mroth@nessie.de>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
 ---
- package/qt/qt.mk |   15 ---------------
- 1 files changed, 0 insertions(+), 15 deletions(-)
+ package/multimedia/gst-plugins-bad/Config.in       |   12 ++++++++++
+ .../multimedia/gst-plugins-bad/gst-plugins-bad.mk  |   24 ++++++++++++++++++++
+ 2 files changed, 36 insertions(+), 0 deletions(-)
 
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index 77e7f1a..6fe122c 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -17,10 +17,6 @@
- # (cd /usr/include; sudo ln -s dbus-1.0/dbus dbus)
- # to fix
+diff --git a/package/multimedia/gst-plugins-bad/Config.in b/package/multimedia/gst-plugins-bad/Config.in
+index 8601cf4..c7ebe2a 100644
+--- a/package/multimedia/gst-plugins-bad/Config.in
++++ b/package/multimedia/gst-plugins-bad/Config.in
+@@ -21,6 +21,9 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_AIFFPARSE
+ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_AMRPARSE
+ 	bool "amrparse"
  
--# BUG: There is a workaround below (search for x86x86fix) for
--# x86 crosscompiling under linux x86. Please remove it when the
-workaround
--# is no longer necessary.
--
- QT_VERSION:=4.5.2
- QT_CAT:=$(BZCAT)
++config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_ASFMUX
++	bool "asfmux"
++
+ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_AUTOCONVERT
+ 	bool "autoconvert"
  
-@@ -329,17 +325,6 @@ endif
- QT_CONFIGURE:=$(call qstrip,$(QT_CONFIGURE))
- BR2_PACKAGE_QT_EMB_PLATFORM:=$(call qstrip,
-$(BR2_PACKAGE_QT_EMB_PLATFORM))
+@@ -54,9 +57,15 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FESTIVAL
+ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FREEZE
+ 	bool "freeze"
  
--# x86x86fix
--# Workaround Qt Embedded bug when crosscompiling for x86 under x86 with
-linux
--# host. It's unclear if this would happen on other hosts.
--ifneq ($(findstring pc-linux,$(BR2_GNU_BUILD_SUFFIX)),)
--ifeq ($(BR2_PACKAGE_QT_EMB_PLATFORM),x86)
--QT_CONFIGURE+= -platform linux-g++
--QT_CONFIGURE:=$(call qstrip,$(QT_CONFIGURE))
--endif
--endif
--# End of workaround.
--
- # Figure out what libs to install in the target
- QT_LIBS=#empty
- ifeq ($(BR2_PACKAGE_QT_GUI_MODULE),y)
-
-qt builds. It seems that the x86 fix is still required and still seems
-to be required with 4.5.3.
-
++config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FREI0R
++	bool "frei0r"
++
+ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_H264PARSE
+ 	bool "h264parse"
+ 
++config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_HDVPARSE
++	bool "hdvparse"
++
+ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_LIBRFB
+ 	bool "librfb"
+ 
+@@ -114,6 +123,9 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SDP
+ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SELECTOR
+ 	bool "selector"
+ 
++config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SHAPEWIPE
++	bool "shapewipe"
++
+ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SIREN
+ 	bool "siren"
+ 
+diff --git a/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk b/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
+index c6c5fd0..9a0955f 100644
+--- a/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
++++ b/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
+@@ -33,6 +33,12 @@ else
+ GST_PLUGINS_BAD_CONF_OPT += --disable-amrparse
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_ASFMUX),y)
++GST_PLUGINS_BAD_CONF_OPT += --enable-asfmux
++else
++GST_PLUGINS_BAD_CONF_OPT += --disable-asfmux
++endif
++
+ ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_AUTOCONVERT),y)
+ GST_PLUGINS_BAD_CONF_OPT += --enable-autoconvert
+ else
+@@ -99,12 +105,24 @@ else
+ GST_PLUGINS_BAD_CONF_OPT += --disable-freeze
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FREI0R),y)
++GST_PLUGINS_BAD_CONF_OPT += --enable-frei0r
++else
++GST_PLUGINS_BAD_CONF_OPT += --disable-frei0r
++endif
++
+ ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_H264PARSE),y)
+ GST_PLUGINS_BAD_CONF_OPT += --enable-h264parse
+ else
+ GST_PLUGINS_BAD_CONF_OPT += --disable-h264parse
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_HDVPARSE),y)
++GST_PLUGINS_BAD_CONF_OPT += --enable-hdvparse
++else
++GST_PLUGINS_BAD_CONF_OPT += --disable-hdvparse
++endif
++
+ ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_LIBRFB),y)
+ GST_PLUGINS_BAD_CONF_OPT += --enable-librfb
+ else
+@@ -219,6 +237,12 @@ else
+ GST_PLUGINS_BAD_CONF_OPT += --disable-selector
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SHAPEWIPE),y)
++GST_PLUGINS_BAD_CONF_OPT += --enable-shapewipe
++else
++GST_PLUGINS_BAD_CONF_OPT += --disable-shapewipe
++endif
++
+ ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SIREN),y)
+ GST_PLUGINS_BAD_CONF_OPT += --enable-siren
+ else
 -- 
-Ormund Williams
-OrmLab LLC
+1.6.5.3
