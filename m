@@ -1,31 +1,35 @@
 From: Michael S. Zick <minimod@morethan.org>
-Date: Fri, 4 Dec 2009 11:30:36 -0600
-Subject: [Buildroot] using buildroot for mainstone board
-In-Reply-To: <8955768b0912040825h4ddb6185s6a967151e97cb27@mail.gmail.com>
-References: <8955768b0912040825h4ddb6185s6a967151e97cb27@mail.gmail.com>
-Message-ID: <200912041130.38377.minimod@morethan.org>
+Date: Fri, 4 Dec 2009 12:50:47 -0600
+Subject: [Buildroot] [Bug 769] New: Update configuration menu for MIPS
+	target
+In-Reply-To: <200912031906.38721.minimod@morethan.org>
+References: <bug-769-163@https.bugs.busybox.net/>
+	<200912031906.38721.minimod@morethan.org>
+Message-ID: <200912041250.49202.minimod@morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri December 4 2009, Shivaprashanth Hiremath wrote:
-> hi all
-> i have mainstone board with pxa270 processor. i want to use buildroot to
-> generated kernel and rootfs. anybody have idea?
+On Thu December 3 2009, Michael S. Zick wrote:
+> On Wed December 2 2009, bugzilla at busybox.net wrote:
+> > https://bugs.busybox.net/show_bug.cgi?id=769
+> > 
+> >               Host: Any
+> >             Target: MIPS/MIPSel
+> >            Summary: Update configuration menu for MIPS target
+> >            Product: buildroot
+> >            Version: 2009.11
+> >           Platform: Other
+> >                URL: http://morethan.org/bldrt/mips_arch.ods
+> 
+> Reviewed / Revised earlier version;
 >
 
-The pxa270 is an Xscale processor, Xscale is based on an ARM core.
-The Buildroot system has good support for ARM,
-although I don't know if that includes your processor specifically.
+Now at revision 0.3, document at above link updated.
 
-It should be doable.
+Having had my lessons in en_MIPS and en_GCC will now
+tackle the en_Kconfig language.  ;)
 
 Mike
-> please reply. i am very much new to this.
-> thanks in advance
-> 
-> bye
-> shivap
-> 
