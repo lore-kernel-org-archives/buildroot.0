@@ -1,33 +1,48 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  4 Dec 2009 20:05:20 +0000 (UTC)
-Subject: [Buildroot] [Bug 761] Add binutils 2.20 to toolchain options
-In-Reply-To: <bug-761-163@https.bugs.busybox.net/>
-References: <bug-761-163@https.bugs.busybox.net/>
-Message-ID: <20091204200520.C5C0E777CF@busybox.osuosl.org>
+From: Michael S. Zick <minimod@morethan.org>
+Date: Fri, 4 Dec 2009 15:13:02 -0600
+Subject: [Buildroot] [Bug 769] Q? So why does big-endian MIPS (mips)
+	default to 64bit cores?
+In-Reply-To: <200912041250.49202.minimod@morethan.org>
+References: <bug-769-163@https.bugs.busybox.net/>
+	<200912031906.38721.minimod@morethan.org>
+	<200912041250.49202.minimod@morethan.org>
+Message-ID: <200912041513.05959.minimod@morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=761
 
+Right! There is probably decades of history behind the answer.
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Judging by the overwhelming number of comments on this project, it
+seems the active users of Buildroot for MIPS is down to just "self".
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+Where did I put my delete key?
 
+Mike
 
-
-
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-12-04 20:04:55 UTC ---
-Committed, thanks!
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+On Fri December 4 2009, Michael S. Zick wrote:
+> On Thu December 3 2009, Michael S. Zick wrote:
+> > On Wed December 2 2009, bugzilla at busybox.net wrote:
+> > > https://bugs.busybox.net/show_bug.cgi?id=769
+> > > 
+> > >               Host: Any
+> > >             Target: MIPS/MIPSel
+> > >            Summary: Update configuration menu for MIPS target
+> > >            Product: buildroot
+> > >            Version: 2009.11
+> > >           Platform: Other
+> > >                URL: http://morethan.org/bldrt/mips_arch.ods
+> > 
+> > Reviewed / Revised earlier version;
+> >
+> 
+> Now at revision 0.3, document at above link updated.
+> 
+> Having had my lessons in en_MIPS and en_GCC will now
+> tackle the en_Kconfig language.  ;)
+> 
+> Mike
+> 
