@@ -1,30 +1,25 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Fri, 04 Dec 2009 00:38:22 +0100
-Subject: [Buildroot] [PATCH] gst-plugins-bad: make more dependency-less
- plugins configurable
-In-Reply-To: <1259879658-7159-1-git-send-email-s.neumann@raumfeld.com>
-References: <1259879658-7159-1-git-send-email-s.neumann@raumfeld.com>
-Message-ID: <1259883502.9554.69.camel@coalu.atr>
+From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
+Date: Thu, 3 Dec 2009 22:38:31 -0200
+Subject: [Buildroot] Qt fails to build
+In-Reply-To: <1259879188.1750.47.camel@station1.ormlab.com>
+References: <1257367062.3465.51.camel@station1.ormlab.com>
+	<87ocn3y40l.fsf@macbook.be.48ers.dk>
+	<1259879188.1750.47.camel@station1.ormlab.com>
+Message-ID: <d6cda7730912031638j6108fedfxd6adeecff0c2494d@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Sven,
+Hi,
 
-please consider theses patchs too :
+On Thu, Dec 3, 2009 at 8:26 PM, Ormund Williams <ormundw@panix.com> wrote:
+> qt builds. It seems that the x86 fix is still required and still seems
+> to be required with 4.5.3.
+>
 
-http://lists.busybox.net/pipermail/buildroot/2009-November/030291.html
+Nokia released 4.6.0 this week. Would be nice to test with that too.
 
-Regards,
-
---
-Lionel
-
-Le jeudi 03 d?cembre 2009 ? 23:34 +0100, Sven Neumann a ?crit :
-> The latest update added a few new plugins that were missing from
-> the buildroot configuration system. This commit makes these
-> dependency-less plugins configurable.
-> 
-> Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+Kind Regards,
+    Thiago A. Correa
