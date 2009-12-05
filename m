@@ -1,41 +1,117 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Sat, 5 Dec 2009 11:36:11 +0100
-Subject: [Buildroot] [PATCH] fet rid of quotes when making tar output
-Message-ID: <E782362AE37F4898A139ED5C9EBB6A95@apexjs>
+From: Michael S. Zick <minimod@morethan.org>
+Date: Sat, 5 Dec 2009 06:39:56 -0600
+Subject: [Buildroot] [git commit master] toolchain: get rid of unused
+	gcc 3.x legacy handling
+In-Reply-To: <20091204195654.7B902777CF@busybox.osuosl.org>
+References: <20091204195654.7B902777CF@busybox.osuosl.org>
+Message-ID: <200912050639.59769.minimod@morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is cosmetic, when the image is tarred i noticed quotes around the
-target image name,
-This should fix it.
+On Fri December 4 2009, Peter Korsgaard wrote:
+> 
+> commit: http://git.buildroot.net/buildroot/commit/?id=acc75665e54bc505f46a4f8ce09c0c6634f74b91
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> 
+> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+> ---
+>  toolchain/binutils/binutils.mk  |    3 ---
+>  toolchain/gcc/Makefile.in       |   17 -----------------
+>  toolchain/gcc/gcc-uclibc-3.x.mk |    4 ----
+>
 
-Maybe oyjer output formats (cpio) suffer the same issue.
-Johan
+I suggest that you mark this one as "Legacy" rather than take it out.
 
- 
-diff -ruaN buildroot-2009.11/target/tar/tarroot.mk
-buildroot/target/tar/tarroot.mk
---- buildroot-2009.11/target/tar/tarroot.mk	2009-12-01
-15:27:41.000000000 +0100
-+++ buildroot/target/tar/tarroot.mk	2009-12-02 15:23:22.000000000 +0100
-@@ -5,7 +5,7 @@
- #############################################################
- 
- TAR_OPTS:=$(BR2_TARGET_ROOTFS_TAR_OPTIONS)
--TAR_TARGET:=$(IMAGE).tar
-+TAR_TARGET:=$(call qstrip,$(IMAGE).tar)
- 
- TAR_COMPRESSOR:=
- TAR_COMPRESSOR_EXT:=.none
+Nearly all of the Media Player manufacturers are using a SoC vendor
+provided toolchain based on 3.4.4 -
+Even brand new designs, announced within the past few months!
+(yeah, and they are running kernel 2.6.12.6 but NABRP)
+((Not A BuildRoot Problem))
 
+Due to compiler ABI changes, we still need 3.4.x for add-in software.
 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: br_target_tar.patch
-Type: application/octet-stream
-Size: 474 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091205/1d65447d/attachment.obj>
+Mike
+>  3 files changed, 0 insertions(+), 24 deletions(-)
+> 
+> diff --git a/toolchain/binutils/binutils.mk b/toolchain/binutils/binutils.mk
+> index e482a8a..8cddf2d 100644
+> --- a/toolchain/binutils/binutils.mk
+> +++ b/toolchain/binutils/binutils.mk
+> @@ -27,9 +27,6 @@ endif
+>  BINUTILS_HOST_PREREQ:=
+>  BINUTILS_TARGET_PREREQ:=
+>  
+> -ifeq ($(findstring x3.,x$(GCC_VERSION)),x3.)
+> -BINUTILS_NO_MPFR:=y
+> -endif
+>  ifeq ($(findstring x4.0,x$(GCC_VERSION)),x4.0)
+>  BINUTILS_NO_MPFR:=y
+>  endif
+> diff --git a/toolchain/gcc/Makefile.in b/toolchain/gcc/Makefile.in
+> index e052b83..e92ecbc 100644
+> --- a/toolchain/gcc/Makefile.in
+> +++ b/toolchain/gcc/Makefile.in
+> @@ -19,17 +19,6 @@ GCC_USE_SJLJ_EXCEPTIONS:=--enable-sjlj-exceptions
+>  endif
+>  
+>  ifeq ($(BR2_SOFT_FLOAT),y)
+> -# gcc 3.4.x soft float configuration is different than previous versions.
+> -ifeq ($(findstring x3.4.,x$(GCC_VERSION)),x3.4.)
+> -ifneq ($(BR2_nios2),y)
+> -SOFT_FLOAT_CONFIG_OPTION:=--with-float=soft
+> -endif
+> -else
+> -SOFT_FLOAT_CONFIG_OPTION:=--without-float
+> -endif
+> -
+> -# again... there must be a better way
+> -ifeq ($(findstring x4.,x$(GCC_VERSION)),x4.)
+>  SOFT_FLOAT_CONFIG_OPTION:=--with-float=soft
+>  ifeq ($(BR2_SOFT_FLOAT_FP),y)
+>  TARGET_SOFT_FLOAT:=-mfloat-abi=softfp
+> @@ -40,9 +29,6 @@ else
+>  TARGET_SOFT_FLOAT:=-msoft-float
+>  endif
+>  endif
+> -else # not gcc-4.x
+> -TARGET_SOFT_FLOAT:=-msoft-float
+> -endif
+>  ARCH_FPU_SUFFIX:=_nofpu
+>  else # no softfloat support
+>  SOFT_FLOAT_CONFIG_OPTION:=
+> @@ -89,10 +75,7 @@ endif
+>  EXTRA_TARGET_GCC_CONFIG_OPTIONS+=$(call qstrip,$(BR2_EXTRA_TARGET_GCC_CONFIG_OPTIONS))
+>  
+>  ifeq ($(BR2_PREFER_IMA),y)
+> -# >= 4.x
+> -ifneq ($(findstring x3.,x$(GCC_VERSION)),x3.)
+>  EXTRA_TARGET_GCC_CONFIG_OPTIONS+=--enable-intermodule
+> -endif
+>  endif # BR2_PREFER_IMA=y
+>  
+>  TARGETS+=gcc_target
+> diff --git a/toolchain/gcc/gcc-uclibc-3.x.mk b/toolchain/gcc/gcc-uclibc-3.x.mk
+> index 6531bfc..e737313 100644
+> --- a/toolchain/gcc/gcc-uclibc-3.x.mk
+> +++ b/toolchain/gcc/gcc-uclibc-3.x.mk
+> @@ -57,9 +57,6 @@ endif
+>  GCC_CAT:=$(BZCAT)
+>  GCC_STRIP_HOST_BINARIES:=true
+>  
+> -ifeq ($(findstring x3.,x$(GCC_VERSION)),x3.)
+> -GCC_NO_MPFR:=y
+> -else
+>  ifneq ($(BR2_INSTALL_FORTRAN),y)
+>  # fortran needs gmp and mpfr
+>  ifeq ($(findstring 4.0.,$(GCC_VERSION)),4.0.)
+> @@ -69,7 +66,6 @@ ifeq ($(findstring 4.1.,$(GCC_VERSION)),4.1.)
+>  GCC_NO_MPFR:=y
+>  endif
+>  endif
+> -endif
+>  
+>  #############################################################
+>  #
