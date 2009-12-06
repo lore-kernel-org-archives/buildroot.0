@@ -1,34 +1,298 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun,  6 Dec 2009 17:42:46 +0000 (UTC)
-Subject: [Buildroot] [Bug 765] Add buildroot branding to gcc
-In-Reply-To: <bug-765-163@https.bugs.busybox.net/>
-References: <bug-765-163@https.bugs.busybox.net/>
-Message-ID: <20091206174246.60F2177727@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 6 Dec 2009 18:41:15 +0100
+Subject: [Buildroot] [git commit master] Bump lighttpd package to 1.4.25
+Message-ID: <20091206174304.2151877787@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=765
 
+commit: http://git.buildroot.net/buildroot/commit/?id=1ba3c8434cc150f166862dbb368f8ca35332b39a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Closes #753
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES                                         |    3 +-
+ package/lighttpd/lighttpd-changeset-r2683.patch |  233 -----------------------
+ package/lighttpd/lighttpd.mk                    |    5 +-
+ 3 files changed, 4 insertions(+), 237 deletions(-)
+ delete mode 100644 package/lighttpd/lighttpd-changeset-r2683.patch
 
-
-
-
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-12-06 17:42:44 UTC ---
-Committed, thanks. I've changed it slightly to check for !4.2.x instead so we
-don't need to update it once we add 4.5.x and further.
-
-
+diff --git a/CHANGES b/CHANGES
+index e9c43ea..13ba876 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,9 +1,10 @@
+ 2010.02, Not yet released:
+ 
+-	Updated/fixed packages: autoconf, binutils, busybox
++	Updated/fixed packages: autoconf, binutils, busybox, lighttpd
+ 
+ 	Issues resolved (http://bugs.uclibc.org):
+ 
++	#753: Bump lighttpd package to 1.4.25
+ 	#761: Add binutils 2.20 to toolchain options
+ 
+ 2009.11, Released December 1st, 2009:
+diff --git a/package/lighttpd/lighttpd-changeset-r2683.patch b/package/lighttpd/lighttpd-changeset-r2683.patch
+deleted file mode 100644
+index aacabad..0000000
+--- a/package/lighttpd/lighttpd-changeset-r2683.patch
++++ /dev/null
+@@ -1,233 +0,0 @@
+-diff -Nura lighttpd-1.4.24/src/mod_rewrite.c lighttpd-1.4.24-changeset-r2683/src/mod_rewrite.c
+---- lighttpd-1.4.24/src/mod_rewrite.c	2009-10-12 18:48:47.000000000 -0300
+-+++ lighttpd-1.4.24-changeset-r2683/src/mod_rewrite.c	2009-11-10 13:56:22.000000000 -0300
+-@@ -9,10 +9,9 @@
+- #include <stdlib.h>
+- #include <string.h>
+- 
+--typedef struct {
+- #ifdef HAVE_PCRE_H
+-+typedef struct {
+- 	pcre *key;
+--#endif
+- 
+- 	buffer *value;
+- 
+-@@ -70,7 +69,6 @@
+- }
+- 
+- static int rewrite_rule_buffer_append(rewrite_rule_buffer *kvb, buffer *key, buffer *value, int once) {
+--#ifdef HAVE_PCRE_H
+- 	size_t i;
+- 	const char *errptr;
+- 	int erroff;
+-@@ -109,18 +107,9 @@
+- 	kvb->used++;
+- 
+- 	return 0;
+--#else
+--	UNUSED(kvb);
+--	UNUSED(value);
+--	UNUSED(once);
+--	UNUSED(key);
+--
+--	return -1;
+--#endif
+- }
+- 
+- static void rewrite_rule_buffer_free(rewrite_rule_buffer *kvb) {
+--#ifdef HAVE_PCRE_H
+- 	size_t i;
+- 
+- 	for (i = 0; i < kvb->size; i++) {
+-@@ -130,7 +119,6 @@
+- 	}
+- 
+- 	if (kvb->ptr) free(kvb->ptr);
+--#endif
+- 
+- 	free(kvb);
+- }
+-@@ -201,24 +189,29 @@
+- 							    ((data_string *)(da->value->data[j]))->key,
+- 							    ((data_string *)(da->value->data[j]))->value,
+- 							    once)) {
+--#ifdef HAVE_PCRE_H
+- 				log_error_write(srv, __FILE__, __LINE__, "sb",
+- 						"pcre-compile failed for", da->value->data[j]->key);
+--#else
+--				log_error_write(srv, __FILE__, __LINE__, "s",
+--						"pcre support is missing, please install libpcre and the headers");
+--#endif
+- 			}
+- 		}
+- 	}
+- 
+- 	return 0;
+- }
+-+#else
+-+static int parse_config_entry(server *srv, array *ca, const char *option) {
+-+	static int logged_message = 0;
+-+	if (logged_message) return 0;
+-+	if (NULL != array_get_element(ca, option)) {
+-+		logged_message = 1;
+-+		log_error_write(srv, __FILE__, __LINE__, "s",
+-+			"pcre support is missing, please install libpcre and the headers");
+-+	}
+-+	return 0;
+-+}
+-+#endif
+- 
+- SETDEFAULTS_FUNC(mod_rewrite_set_defaults) {
+--	plugin_data *p = p_d;
+- 	size_t i = 0;
+--
+- 	config_values_t cv[] = {
+- 		{ "url.rewrite-repeat",        NULL, T_CONFIG_LOCAL, T_CONFIG_SCOPE_CONNECTION }, /* 0 */
+- 		{ "url.rewrite-once",          NULL, T_CONFIG_LOCAL, T_CONFIG_SCOPE_CONNECTION }, /* 1 */
+-@@ -243,33 +236,37 @@
+- 		{ NULL,                        NULL, T_CONFIG_UNSET, T_CONFIG_SCOPE_UNSET }
+- 	};
+- 
+-+#ifdef HAVE_PCRE_H
+-+	plugin_data *p = p_d;
+-+
+- 	if (!p) return HANDLER_ERROR;
+- 
+- 	/* 0 */
+- 	p->config_storage = calloc(1, srv->config_context->used * sizeof(specific_config *));
+-+#else
+-+	UNUSED(p_d);
+-+#endif
+- 
+- 	for (i = 0; i < srv->config_context->used; i++) {
+--		plugin_config *s;
+- 		array *ca;
+-+#ifdef HAVE_PCRE_H
+-+		plugin_config *s;
+- 
+- 		s = calloc(1, sizeof(plugin_config));
+- 		s->rewrite = rewrite_rule_buffer_init();
+- 		s->rewrite_NF = rewrite_rule_buffer_init();
+--
+--		cv[0].destination = s->rewrite;
+--		cv[1].destination = s->rewrite;
+--		cv[2].destination = s->rewrite_NF;
+--		cv[3].destination = s->rewrite_NF;
+--		cv[4].destination = s->rewrite;
+--		cv[5].destination = s->rewrite;
+--
+- 		p->config_storage[i] = s;
+-+#endif
+-+
+- 		ca = ((data_config *)srv->config_context->data[i])->value;
+- 
+- 		if (0 != config_insert_values_global(srv, ca, cv)) {
+- 			return HANDLER_ERROR;
+- 		}
+- 
+-+#ifndef HAVE_PCRE_H
+-+# define parse_config_entry(srv, ca, x, option, y) parse_config_entry(srv, ca, option)
+-+#endif
+- 		parse_config_entry(srv, ca, s->rewrite, "url.rewrite-once",      1);
+- 		parse_config_entry(srv, ca, s->rewrite, "url.rewrite-final",     1);
+- 		parse_config_entry(srv, ca, s->rewrite_NF, "url.rewrite-if-not-file",   1);
+-@@ -280,7 +277,9 @@
+- 
+- 	return HANDLER_GO_ON;
+- }
+-+
+- #ifdef HAVE_PCRE_H
+-+
+- #define PATCH(x) \
+- 	p->conf.x = s->x;
+- static int mod_rewrite_patch_connection(server *srv, connection *con, plugin_data *p) {
+-@@ -330,7 +329,7 @@
+- 
+- 	return 0;
+- }
+--#endif
+-+
+- URIHANDLER_FUNC(mod_rewrite_con_reset) {
+- 	plugin_data *p = p_d;
+- 
+-@@ -345,7 +344,6 @@
+- }
+- 
+- static int process_rewrite_rules(server *srv, connection *con, plugin_data *p, rewrite_rule_buffer *kvb) {
+--#ifdef HAVE_PCRE_H
+- 	size_t i;
+- 	handler_ctx *hctx;
+- 
+-@@ -444,19 +442,11 @@
+- 		}
+- #undef N
+- 	}
+--#else
+--	UNUSED(srv);
+--	UNUSED(con);
+--	UNUSED(p);
+--	UNUSED(hctx);
+--	UNUSED(kvb);
+--#endif
+- 
+- 	return HANDLER_GO_ON;
+- }
+- 
+- URIHANDLER_FUNC(mod_rewrite_physical) {
+--#ifdef HAVE_PCRE_H
+- 	plugin_data *p = p_d;
+- 	handler_t r;
+- 	stat_cache_entry *sce;
+-@@ -480,17 +470,11 @@
+- 	default:
+- 		return r;
+- 	}
+--#else
+--	UNUSED(srv);
+--	UNUSED(con);
+--	UNUSED(p_d);
+--#endif
+- 
+- 	return HANDLER_GO_ON;
+- }
+- 
+- URIHANDLER_FUNC(mod_rewrite_uri_handler) {
+--#ifdef HAVE_PCRE_H
+- 	plugin_data *p = p_d;
+- 
+- 	mod_rewrite_patch_connection(srv, con, p);
+-@@ -498,29 +482,27 @@
+- 	if (!p->conf.rewrite) return HANDLER_GO_ON;
+- 
+- 	return process_rewrite_rules(srv, con, p, p->conf.rewrite);
+--#else
+--	UNUSED(srv);
+--	UNUSED(con);
+--	UNUSED(p_d);
+--#endif
+- 
+- 	return HANDLER_GO_ON;
+- }
+-+#endif
+- 
+- int mod_rewrite_plugin_init(plugin *p);
+- int mod_rewrite_plugin_init(plugin *p) {
+- 	p->version     = LIGHTTPD_VERSION_ID;
+- 	p->name        = buffer_init_string("rewrite");
+- 
+-+#ifdef HAVE_PCRE_H
+- 	p->init        = mod_rewrite_init;
+- 	/* it has to stay _raw as we are matching on uri + querystring
+- 	 */
+- 
+- 	p->handle_uri_raw = mod_rewrite_uri_handler;
+- 	p->handle_physical = mod_rewrite_physical;
+--	p->set_defaults = mod_rewrite_set_defaults;
+- 	p->cleanup     = mod_rewrite_free;
+- 	p->connection_reset = mod_rewrite_con_reset;
+-+#endif
+-+	p->set_defaults = mod_rewrite_set_defaults;
+- 
+- 	p->data        = NULL;
+- 
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index 2af19cf..2326722 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
+@@ -4,9 +4,8 @@
+ #
+ #############################################################
+ 
+-LIGHTTPD_VERSION = 1.4.24
+-LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.bz2
+-LIGHTTPD_SITE = http://www.lighttpd.net/download
++LIGHTTPD_VERSION = 1.4.25
++LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-1.4.x
+ LIGHTTPD_LIBTOOL_PATCH = NO
+ LIGHTTPD_DEPENDENCIES =
+ 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.6.3.3
