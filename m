@@ -1,7 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sun, 6 Dec 2009 18:41:15 +0100
-Subject: [Buildroot] [git commit master] Bump lighttpd package to 1.4.25
-Message-ID: <20091206174304.2151877787@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] kernel-headers: make snapshot
+	option more user friendly
+Message-ID: <20091206174304.BAC2377787@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,290 +10,81 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1ba3c8434cc150f166862dbb368f8ca35332b39a
+commit: http://git.buildroot.net/buildroot/commit/?id=79c9a433ed0baaf568aa8b27c692001798905742
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Closes #753
+Closes #751.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Make kernel headers snapshot more user friendly by making it more obvious
+that it's about using a local kernel snapshot, and error out with a sensible
+error message if the option is enabled but no linux-2.6.tar.bz2 is present
+in DL_DIR, rather than trying to fetch it from kernel.org.
+
+Furthermore fix the bug where it tried to use linux-2.6..tar.bz2 instead of
+linux-2.6.tar.bz2.
+
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                                         |    3 +-
- package/lighttpd/lighttpd-changeset-r2683.patch |  233 -----------------------
- package/lighttpd/lighttpd.mk                    |    5 +-
- 3 files changed, 4 insertions(+), 237 deletions(-)
- delete mode 100644 package/lighttpd/lighttpd-changeset-r2683.patch
+ CHANGES                                            |    1 +
+ toolchain/kernel-headers/Config.in                 |    2 +-
+ .../kernel-headers/kernel-headers-new.makefile     |    3 ++-
+ toolchain/kernel-headers/kernel-headers.mk         |    3 +++
+ 4 files changed, 7 insertions(+), 2 deletions(-)
 
 diff --git a/CHANGES b/CHANGES
-index e9c43ea..13ba876 100644
+index 13ba876..04c677b 100644
 --- a/CHANGES
 +++ b/CHANGES
-@@ -1,9 +1,10 @@
- 2010.02, Not yet released:
- 
--	Updated/fixed packages: autoconf, binutils, busybox
-+	Updated/fixed packages: autoconf, binutils, busybox, lighttpd
+@@ -4,6 +4,7 @@
  
  	Issues resolved (http://bugs.uclibc.org):
  
-+	#753: Bump lighttpd package to 1.4.25
++	#751: Kernel 2.6 snapshot fetch fail
+ 	#753: Bump lighttpd package to 1.4.25
  	#761: Add binutils 2.20 to toolchain options
  
- 2009.11, Released December 1st, 2009:
-diff --git a/package/lighttpd/lighttpd-changeset-r2683.patch b/package/lighttpd/lighttpd-changeset-r2683.patch
-deleted file mode 100644
-index aacabad..0000000
---- a/package/lighttpd/lighttpd-changeset-r2683.patch
-+++ /dev/null
-@@ -1,233 +0,0 @@
--diff -Nura lighttpd-1.4.24/src/mod_rewrite.c lighttpd-1.4.24-changeset-r2683/src/mod_rewrite.c
----- lighttpd-1.4.24/src/mod_rewrite.c	2009-10-12 18:48:47.000000000 -0300
--+++ lighttpd-1.4.24-changeset-r2683/src/mod_rewrite.c	2009-11-10 13:56:22.000000000 -0300
--@@ -9,10 +9,9 @@
-- #include <stdlib.h>
-- #include <string.h>
-- 
---typedef struct {
-- #ifdef HAVE_PCRE_H
--+typedef struct {
-- 	pcre *key;
---#endif
-- 
-- 	buffer *value;
-- 
--@@ -70,7 +69,6 @@
-- }
-- 
-- static int rewrite_rule_buffer_append(rewrite_rule_buffer *kvb, buffer *key, buffer *value, int once) {
---#ifdef HAVE_PCRE_H
-- 	size_t i;
-- 	const char *errptr;
-- 	int erroff;
--@@ -109,18 +107,9 @@
-- 	kvb->used++;
-- 
-- 	return 0;
---#else
---	UNUSED(kvb);
---	UNUSED(value);
---	UNUSED(once);
---	UNUSED(key);
---
---	return -1;
---#endif
-- }
-- 
-- static void rewrite_rule_buffer_free(rewrite_rule_buffer *kvb) {
---#ifdef HAVE_PCRE_H
-- 	size_t i;
-- 
-- 	for (i = 0; i < kvb->size; i++) {
--@@ -130,7 +119,6 @@
-- 	}
-- 
-- 	if (kvb->ptr) free(kvb->ptr);
---#endif
-- 
-- 	free(kvb);
-- }
--@@ -201,24 +189,29 @@
-- 							    ((data_string *)(da->value->data[j]))->key,
-- 							    ((data_string *)(da->value->data[j]))->value,
-- 							    once)) {
---#ifdef HAVE_PCRE_H
-- 				log_error_write(srv, __FILE__, __LINE__, "sb",
-- 						"pcre-compile failed for", da->value->data[j]->key);
---#else
---				log_error_write(srv, __FILE__, __LINE__, "s",
---						"pcre support is missing, please install libpcre and the headers");
---#endif
-- 			}
-- 		}
-- 	}
-- 
-- 	return 0;
-- }
--+#else
--+static int parse_config_entry(server *srv, array *ca, const char *option) {
--+	static int logged_message = 0;
--+	if (logged_message) return 0;
--+	if (NULL != array_get_element(ca, option)) {
--+		logged_message = 1;
--+		log_error_write(srv, __FILE__, __LINE__, "s",
--+			"pcre support is missing, please install libpcre and the headers");
--+	}
--+	return 0;
--+}
--+#endif
-- 
-- SETDEFAULTS_FUNC(mod_rewrite_set_defaults) {
---	plugin_data *p = p_d;
-- 	size_t i = 0;
---
-- 	config_values_t cv[] = {
-- 		{ "url.rewrite-repeat",        NULL, T_CONFIG_LOCAL, T_CONFIG_SCOPE_CONNECTION }, /* 0 */
-- 		{ "url.rewrite-once",          NULL, T_CONFIG_LOCAL, T_CONFIG_SCOPE_CONNECTION }, /* 1 */
--@@ -243,33 +236,37 @@
-- 		{ NULL,                        NULL, T_CONFIG_UNSET, T_CONFIG_SCOPE_UNSET }
-- 	};
-- 
--+#ifdef HAVE_PCRE_H
--+	plugin_data *p = p_d;
--+
-- 	if (!p) return HANDLER_ERROR;
-- 
-- 	/* 0 */
-- 	p->config_storage = calloc(1, srv->config_context->used * sizeof(specific_config *));
--+#else
--+	UNUSED(p_d);
--+#endif
-- 
-- 	for (i = 0; i < srv->config_context->used; i++) {
---		plugin_config *s;
-- 		array *ca;
--+#ifdef HAVE_PCRE_H
--+		plugin_config *s;
-- 
-- 		s = calloc(1, sizeof(plugin_config));
-- 		s->rewrite = rewrite_rule_buffer_init();
-- 		s->rewrite_NF = rewrite_rule_buffer_init();
---
---		cv[0].destination = s->rewrite;
---		cv[1].destination = s->rewrite;
---		cv[2].destination = s->rewrite_NF;
---		cv[3].destination = s->rewrite_NF;
---		cv[4].destination = s->rewrite;
---		cv[5].destination = s->rewrite;
---
-- 		p->config_storage[i] = s;
--+#endif
--+
-- 		ca = ((data_config *)srv->config_context->data[i])->value;
-- 
-- 		if (0 != config_insert_values_global(srv, ca, cv)) {
-- 			return HANDLER_ERROR;
-- 		}
-- 
--+#ifndef HAVE_PCRE_H
--+# define parse_config_entry(srv, ca, x, option, y) parse_config_entry(srv, ca, option)
--+#endif
-- 		parse_config_entry(srv, ca, s->rewrite, "url.rewrite-once",      1);
-- 		parse_config_entry(srv, ca, s->rewrite, "url.rewrite-final",     1);
-- 		parse_config_entry(srv, ca, s->rewrite_NF, "url.rewrite-if-not-file",   1);
--@@ -280,7 +277,9 @@
-- 
-- 	return HANDLER_GO_ON;
-- }
--+
-- #ifdef HAVE_PCRE_H
--+
-- #define PATCH(x) \
-- 	p->conf.x = s->x;
-- static int mod_rewrite_patch_connection(server *srv, connection *con, plugin_data *p) {
--@@ -330,7 +329,7 @@
-- 
-- 	return 0;
-- }
---#endif
--+
-- URIHANDLER_FUNC(mod_rewrite_con_reset) {
-- 	plugin_data *p = p_d;
-- 
--@@ -345,7 +344,6 @@
-- }
-- 
-- static int process_rewrite_rules(server *srv, connection *con, plugin_data *p, rewrite_rule_buffer *kvb) {
---#ifdef HAVE_PCRE_H
-- 	size_t i;
-- 	handler_ctx *hctx;
-- 
--@@ -444,19 +442,11 @@
-- 		}
-- #undef N
-- 	}
---#else
---	UNUSED(srv);
---	UNUSED(con);
---	UNUSED(p);
---	UNUSED(hctx);
---	UNUSED(kvb);
---#endif
-- 
-- 	return HANDLER_GO_ON;
-- }
-- 
-- URIHANDLER_FUNC(mod_rewrite_physical) {
---#ifdef HAVE_PCRE_H
-- 	plugin_data *p = p_d;
-- 	handler_t r;
-- 	stat_cache_entry *sce;
--@@ -480,17 +470,11 @@
-- 	default:
-- 		return r;
-- 	}
---#else
---	UNUSED(srv);
---	UNUSED(con);
---	UNUSED(p_d);
---#endif
-- 
-- 	return HANDLER_GO_ON;
-- }
-- 
-- URIHANDLER_FUNC(mod_rewrite_uri_handler) {
---#ifdef HAVE_PCRE_H
-- 	plugin_data *p = p_d;
-- 
-- 	mod_rewrite_patch_connection(srv, con, p);
--@@ -498,29 +482,27 @@
-- 	if (!p->conf.rewrite) return HANDLER_GO_ON;
-- 
-- 	return process_rewrite_rules(srv, con, p, p->conf.rewrite);
---#else
---	UNUSED(srv);
---	UNUSED(con);
---	UNUSED(p_d);
---#endif
-- 
-- 	return HANDLER_GO_ON;
-- }
--+#endif
-- 
-- int mod_rewrite_plugin_init(plugin *p);
-- int mod_rewrite_plugin_init(plugin *p) {
-- 	p->version     = LIGHTTPD_VERSION_ID;
-- 	p->name        = buffer_init_string("rewrite");
-- 
--+#ifdef HAVE_PCRE_H
-- 	p->init        = mod_rewrite_init;
-- 	/* it has to stay _raw as we are matching on uri + querystring
-- 	 */
-- 
-- 	p->handle_uri_raw = mod_rewrite_uri_handler;
-- 	p->handle_physical = mod_rewrite_physical;
---	p->set_defaults = mod_rewrite_set_defaults;
-- 	p->cleanup     = mod_rewrite_free;
-- 	p->connection_reset = mod_rewrite_con_reset;
--+#endif
--+	p->set_defaults = mod_rewrite_set_defaults;
-- 
-- 	p->data        = NULL;
-- 
-diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
-index 2af19cf..2326722 100644
---- a/package/lighttpd/lighttpd.mk
-+++ b/package/lighttpd/lighttpd.mk
-@@ -4,9 +4,8 @@
- #
- #############################################################
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 2677409..df0f9c8 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -47,7 +47,7 @@ choice
+ 		bool "Linux 2.6 (manually specified version)"
  
--LIGHTTPD_VERSION = 1.4.24
--LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.bz2
--LIGHTTPD_SITE = http://www.lighttpd.net/download
-+LIGHTTPD_VERSION = 1.4.25
-+LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-1.4.x
- LIGHTTPD_LIBTOOL_PATCH = NO
- LIGHTTPD_DEPENDENCIES =
+ 	config BR2_KERNEL_HEADERS_SNAP
+-		bool "Linux 2.6 snapshot"
++		bool "Local Linux snapshot (linux-2.6.tar.bz2)"
+ endchoice
  
+ config BR2_KERNEL_HEADERS_RT
+diff --git a/toolchain/kernel-headers/kernel-headers-new.makefile b/toolchain/kernel-headers/kernel-headers-new.makefile
+index 29deaae..d0a3f2a 100644
+--- a/toolchain/kernel-headers/kernel-headers-new.makefile
++++ b/toolchain/kernel-headers/kernel-headers-new.makefile
+@@ -13,9 +13,10 @@ EXTRAVERSION:=$(word 4, $(LNXVER))
+ LOCALVERSION:=
+ 
+ # should contain prepended dot
++SUBLEVEL:=$(if $(SUBLEVEL),.$(SUBLEVEL),)
+ EXTRAVERSION:=$(if $(EXTRAVERSION),.$(EXTRAVERSION),)
+ 
+-LINUX_HEADERS_VERSION:=$(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION)
++LINUX_HEADERS_VERSION:=$(VERSION).$(PATCHLEVEL)$(SUBLEVEL)$(EXTRAVERSION)
+ LINUX_HEADERS_SITE:=$(BR2_KERNEL_MIRROR)/linux/kernel/v2.6/
+ LINUX_HEADERS_SOURCE:=linux-$(LINUX_HEADERS_VERSION).tar.bz2
+ LINUX_HEADERS_CAT:=$(BZCAT)
+diff --git a/toolchain/kernel-headers/kernel-headers.mk b/toolchain/kernel-headers/kernel-headers.mk
+index 1f637f9..8046ef4 100644
+--- a/toolchain/kernel-headers/kernel-headers.mk
++++ b/toolchain/kernel-headers/kernel-headers.mk
+@@ -24,6 +24,9 @@ KERNEL_ARCH:=$(shell $(SHELL) -c "echo \"$(ARCH)\" | sed -e \"s/-.*//\" \
+ include toolchain/kernel-headers/kernel-headers-new.makefile
+ 
+ $(DL_DIR)/$(LINUX_HEADERS_SOURCE):
++ifeq ($(BR2_KERNEL_HEADERS_SNAP),y)
++	$(error No local $@ found, cannot continue. Are you sure you wanted to enable BR2_KERNEL_HEADERS_SNAP?)
++endif
+ 	$(call DOWNLOAD,$(LINUX_HEADERS_SITE),$(LINUX_HEADERS_SOURCE))
+ 
+ kernel-headers: $(LINUX_HEADERS_DIR)/.configured
 -- 
 1.6.3.3
