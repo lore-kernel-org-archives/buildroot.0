@@ -1,26 +1,55 @@
-From: Vellemans, Noel <Noel.Vellemans@visionBMS.com>
-Date: Mon, 7 Dec 2009 09:14:14 +0100
-Subject: [Buildroot] [Bug 679] Autoconf cannot find M4
-Message-ID: <1531E53627F1F749B4FE809BF2A4EB670150A09D@WETMEX10.loepfe.com>
+From: Joachim Pihl <jpihl@nevion.com>
+Date: Mon, 7 Dec 2009 09:36:15 +0100
+Subject: [Buildroot] Strange MTD problem (ARM)
+Message-ID: <op.u4j7ikxlyqa4qb@jap>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
 
-I can CONFIRM that :
-    A) 2009.11  is compiling/building FINE ! 
-    B) Latest GIT (today 20091207) is also working .
+This may not be related to Buildroot, but I am completely stumped:
 
-with the shell "sh -> dash"  (before this failed).
+# ls -al /dev/mtdblock*
+brw-r-----    1 root     root      31,   0 Dec  3 12:26 mtdblock0
+brw-r-----    1 root     root      31,   1 Dec  3 12:26 mtdblock1
+brw-r-----    1 root     root      31,   2 Dec  3 12:26 mtdblock2
+brw-r-----    1 root     root      31,   3 Dec  3 12:26 mtdblock3
+#
+#
+#
+# cp mtdblock2 /dev/mtdblock2
+#
+# ls -al /dev/mtdblock*
+brw-r-----    1 root     root      31,   0 Dec  3 12:26 mtdblock0
+brw-r-----    1 root     root      31,   1 Dec  3 12:26 mtdblock1
+-rw-r--r--    1 root     root      6815744 Dec  7 17:58 mtdblock2
+brw-r-----    1 root     root      31,   3 Dec  3 12:26 mtdblock3
+#
 
 
-Regards, Noel.
+Running 2009.11 on PXA255 with a 2.6.27.39 preemptible kernel, EABI,  
+running the same patches used for 2.6.27.10 (OABI and non-preemptible)  
+where it worked.
+
+mtd_debug write /dev/mtd2 0 0x680000 mtdblock2 works, results does not  
+seems correct for /dev/mtd1.
 
 
- 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091207/4f97f614/attachment.htm>
+Does anyone know where to look, so far I strike out on the google searches.
+
+-- 
+Joachim Pihl
+Senior R&D Engineer
+Nevion Europe
+
+Tel: +47 33 48 94 66
+Fax: +47 33 48 99 98
+Mobile: +47 91 33 98 91
+jpihl at nevion.com
+www.nevion.com
+
+------------------------------------------------------
+The Global Video Transport Leader
+------------------------------------------------------
