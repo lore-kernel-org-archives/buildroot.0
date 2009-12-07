@@ -1,39 +1,24 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 7 Dec 2009 22:18:23 +0100
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 07 Dec 2009 22:33:38 +0100
 Subject: [Buildroot] [2010.02] Package infrastructure ready
-In-Reply-To: <20091129003612.0dd95e2b@surf>
-References: <20091129003612.0dd95e2b@surf>
-Message-ID: <20091207221823.32b9ae26@surf>
+In-Reply-To: <20091207221823.32b9ae26@surf> (Thomas Petazzoni's message of
+	"Mon, 7 Dec 2009 22:18:23 +0100")
+References: <20091129003612.0dd95e2b@surf> <20091207221823.32b9ae26@surf>
+Message-ID: <878wdepiz1.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Le Sun, 29 Nov 2009 00:36:12 +0100,
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
+Hi,
 
-> I've now completed the work I wanted to do on the new package
-> infrastructures, and consider it ready for inclusion into the next
-> version of Buildroot, 2010.02. I'm therefore asking people to review
-> the patches and give their opinion and comments.
-> 
-> Unless there are comments, I don't plan to make any further change
-> before officially sending these patches, right after the 2009.11
-> release.
+ Thomas> No comments ?
 
-No comments ?
+Sorry, my kids have been ill and I didn't got to read through your
+series yet - Give me a day or two and I will.
 
-I will update the patch set for 2010.02 once, but if no news are given,
-I'll give up with this patch set.
-
-Cheers,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
