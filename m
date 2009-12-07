@@ -1,39 +1,26 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon,  7 Dec 2009 08:14:04 +0000 (UTC)
+From: Vellemans, Noel <Noel.Vellemans@visionBMS.com>
+Date: Mon, 7 Dec 2009 09:14:14 +0100
 Subject: [Buildroot] [Bug 679] Autoconf cannot find M4
-In-Reply-To: <bug-679-163@https.bugs.busybox.net/>
-References: <bug-679-163@https.bugs.busybox.net/>
-Message-ID: <20091207081404.D3C5E77805@busybox.osuosl.org>
+Message-ID: <1531E53627F1F749B4FE809BF2A4EB670150A09D@WETMEX10.loepfe.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=679
+Hi All,
+
+I can CONFIRM that :
+    A) 2009.11  is compiling/building FINE ! 
+    B) Latest GIT (today 20091207) is also working .
+
+with the shell "sh -> dash"  (before this failed).
 
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|ASSIGNED                    |RESOLVED
-         Resolution|                            |FIXED
+Regards, Noel.
 
 
-
-
---- Comment #7 from Peter Korsgaard <jacmet@uclibc.org>  2009-12-07 08:14:03 UTC ---
-> I can CONFIRM that :
->??? A) 2009.11? is comipling/building FINE !
->??? B) Latest GIT (today 20091207) is also working .
->
-> with the shell "sh -> dash"? (before this failed).
-
-Great, closing then.
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+ 
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091207/4f97f614/attachment.htm>
