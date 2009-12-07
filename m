@@ -1,45 +1,21 @@
-From: Chrissy <c.pfindel@googlemail.com>
-Date: Mon, 07 Dec 2009 14:20:36 +0100
-Subject: [Buildroot] Problem configuring dbus-glib
-In-Reply-To: <877hszqksf.fsf@macbook.be.48ers.dk>
-References: <4B1C39E5.4020402@googlemail.com>
-	<877hszqksf.fsf@macbook.be.48ers.dk>
-Message-ID: <4B1D0124.5060604@googlemail.com>
+From: Marc Egli <marc.egli@hsr.ch>
+Date: Mon, 7 Dec 2009 21:28:13 +0100
+Subject: [Buildroot] missing kernel headers when compiling kismet
+Message-ID: <A208E45D-08AF-4294-ADEA-4734E3530DDC@hsr.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+configuring kismet fails with the following message:
+checking for linux/wireless.h... (cached) no
+configure: error: Failed to find a usable linux/wireless.h header for Linux Wireless Extensions.  Either your kernel headers are missing or are incorrect.  See config.log for the exact error.  Compiling without wireless headers must be explicitly disabled
+make: *** [/emb/buildroot/output/build/kismet-2009-06-R1/.stamp_configured] Error 1
 
+in the kismetwireless forum i found the following:
+The configure script is pretty much straightforward: If you don't provide a --linux-headers parameter, it adds /lib/modules/!version!/build/include to the header search path. This is SUPPOSED to be the build environment of the running kernel, and as such is SUPPOSED to have linux/foo.h
 
-Peter Korsgaard schrieb:
->>>>>> "Chrissy" == Chrissy  <c.pfindel@googlemail.com> writes:
-> 
->  Chrissy> Hi,
->  Chrissy> while configuring dbus-glib I get the following error:
-> 
-> 
->  >>>> dbus-glib 0.80 Configuring
-> 
->  Chrissy> checking for XML_ParserCreate_MM in -lexpat... (cached) no
->  Chrissy> configure: error: expat library not found, check config.log for failed
->  Chrissy> attempts
-> 
->  Chrissy> I'm using the stable buildroot-2009.11.
->  Chrissy> The XML_ParserCreate_MM can be found in the staging/usr/lib/libexpat.so.
->  Chrissy> So does anybody know how to solve this?
-> 
-> Notice the (cached) part. This means that your configure cache somehow
-> lists expat as not being available. A quick fix is to run "make flush",
-> but please send your .config to the list and I'll try to figure out what
-> package needs to be fixed.
-> 
-> Is this with a clean rebuild or have you first built something and then
-> afterwards added dbus-glib without running make clean in between?
-> 
-oops, forgot the .config
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: .config
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091207/85a9cd54/attachment.diff>
+now how can i give the kernelheader path to the configure script? and wich version do i have to use? i've found about 10 files named wireless.h in buildroot
+
+thx for your help
