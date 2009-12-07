@@ -1,39 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 07 Dec 2009 08:56:48 +0100
-Subject: [Buildroot] Problem configuring dbus-glib
-In-Reply-To: <4B1C39E5.4020402@googlemail.com> (Chrissy's message of "Mon, 07
-	Dec 2009 00:10:29 +0100")
-References: <4B1C39E5.4020402@googlemail.com>
-Message-ID: <877hszqksf.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon,  7 Dec 2009 08:14:04 +0000 (UTC)
+Subject: [Buildroot] [Bug 679] Autoconf cannot find M4
+In-Reply-To: <bug-679-163@https.bugs.busybox.net/>
+References: <bug-679-163@https.bugs.busybox.net/>
+Message-ID: <20091207081404.D3C5E77805@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Chrissy" == Chrissy  <c.pfindel@googlemail.com> writes:
-
- Chrissy> Hi,
- Chrissy> while configuring dbus-glib I get the following error:
+https://bugs.busybox.net/show_bug.cgi?id=679
 
 
- >>>> dbus-glib 0.80 Configuring
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
- Chrissy> checking for XML_ParserCreate_MM in -lexpat... (cached) no
- Chrissy> configure: error: expat library not found, check config.log for failed
- Chrissy> attempts
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|ASSIGNED                    |RESOLVED
+         Resolution|                            |FIXED
 
- Chrissy> I'm using the stable buildroot-2009.11.
- Chrissy> The XML_ParserCreate_MM can be found in the staging/usr/lib/libexpat.so.
- Chrissy> So does anybody know how to solve this?
 
-Notice the (cached) part. This means that your configure cache somehow
-lists expat as not being available. A quick fix is to run "make flush",
-but please send your .config to the list and I'll try to figure out what
-package needs to be fixed.
 
-Is this with a clean rebuild or have you first built something and then
-afterwards added dbus-glib without running make clean in between?
+
+--- Comment #7 from Peter Korsgaard <jacmet@uclibc.org>  2009-12-07 08:14:03 UTC ---
+> I can CONFIRM that :
+>??? A) 2009.11? is comipling/building FINE !
+>??? B) Latest GIT (today 20091207) is also working .
+>
+> with the shell "sh -> dash"? (before this failed).
+
+Great, closing then.
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
