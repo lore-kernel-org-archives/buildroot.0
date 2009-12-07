@@ -1,15 +1,17 @@
 From: Chrissy <c.pfindel@googlemail.com>
-Date: Mon, 07 Dec 2009 14:19:24 +0100
+Date: Mon, 07 Dec 2009 14:20:36 +0100
 Subject: [Buildroot] Problem configuring dbus-glib
 In-Reply-To: <877hszqksf.fsf@macbook.be.48ers.dk>
 References: <4B1C39E5.4020402@googlemail.com>
 	<877hszqksf.fsf@macbook.be.48ers.dk>
-Message-ID: <4B1D00DC.1050005@googlemail.com>
+Message-ID: <4B1D0124.5060604@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+
 
 Peter Korsgaard schrieb:
 >>>>>> "Chrissy" == Chrissy  <c.pfindel@googlemail.com> writes:
@@ -36,14 +38,8 @@ Peter Korsgaard schrieb:
 > Is this with a clean rebuild or have you first built something and then
 > afterwards added dbus-glib without running make clean in between?
 > 
-
-Hi,
-thanks for the hints.
-I did no clean rebuild. I got some errors because of missing libraries 
-in my (external) toolchain, built before with buildroot not having to 
-build the toolchain on every rebuild. I simply went on when the errors 
-were solved.
-So I'll try a clean rebuild and report afterwards.
-My .config is attached.
-Thanks so long
-Chrissy
+oops, forgot the .config
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: .config
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091207/85a9cd54/attachment.diff>
