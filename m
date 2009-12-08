@@ -1,40 +1,125 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 08 Dec 2009 23:09:53 +0100
-Subject: [Buildroot] missing kernel headers when compiling kismet
-In-Reply-To: <F9A30328-AECD-494A-A1BB-D28339481F10@hsr.ch> (Marc Egli's
-	message of "Tue, 8 Dec 2009 22:27:08 +0100")
-References: <A208E45D-08AF-4294-ADEA-4734E3530DDC@hsr.ch>
-	<87r5r5on5c.fsf@macbook.be.48ers.dk>
-	<0BEC155F-0AE3-43B6-B538-9C024D89964F@hsr.ch>
-	<87my1tocab.fsf@macbook.be.48ers.dk>
-	<F9A30328-AECD-494A-A1BB-D28339481F10@hsr.ch>
-Message-ID: <873a3lnmmm.fsf@macbook.be.48ers.dk>
+From: Nicolae T <microvis@cox.net>
+Date: Tue, 08 Dec 2009 14:18:21 -0800
+Subject: [Buildroot] linux-fusion build failure
+In-Reply-To: <a038bef50912080654p11c7bec2gf189a5ffa82bfc4e@mail.gmail.com>
+References: <1260243219.5232.1.camel@RoadRunner>
+	<a038bef50912080654p11c7bec2gf189a5ffa82bfc4e@mail.gmail.com>
+Message-ID: <1260310701.19154.36.camel@RoadRunner>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Marc" == Marc Egli <marc.egli@hsr.ch> writes:
+Thank you. 
+Indeed, there is no .linux-version anywhere. Worse, can't find neither
+linux26-version  nor linux26 make files. 
+Again, kernel .config used is @ custom location and is just a copy form
+arch specific set. I've turned off DirectFB option but it still attempts
+building linux-fusion package. 
 
- Marc> make clean and make did result in the same error i got before:
- Marc> checking for linux/wireless.h... (cached) no
- Marc> find ./ -name wireless.h gave me:
- Marc> ./output/toolchain/linux-2.6.31.6/include/linux/wireless.h
- Marc> ./output/toolchain/uClibc_dev/usr/include/linux/wireless.h
- Marc> ./output/toolchain/linux/include/linux/wireless.h
- Marc> ./output/build/staging_dir/usr/include/linux/wireless.h
- Marc> ./output/build/linux-2.6.31.6/include/config/wireless.h
- Marc> ./output/build/linux-2.6.31.6/include/linux/wireless.h
- Marc> ./output/build/ifplugd-0.28/src/wireless.h
 
- Marc> and my config is attached
+On Tue, 2009-12-08 at 09:54 -0500, Chris Packham wrote:
 
-Hmm, I don't see any issues here with building the network packages you
-had enabled (the most obvious ones to check for linux/wireless.h). I see
-you have some local lxde packages enabled, maybe one of those checks for
-wireless? Could you try temporarily disabling them and doing a clean
-rebuild?
-
--- 
-Bye, Peter Korsgaard
+> Hi,
+> 
+> On Mon, Dec 7, 2009 at 10:33 PM, Nicolae T <microvis@cox.net> wrote:
+> > Hi all,
+> >
+> > Can anyone explain what's going on here with linux-fusion build failing
+> > here?
+> > Thanks
+> 
+> I can provide my interpretation of the error messages although I will
+> caveat that I haven't actually tried building linux-fusion.
+> 
+> > cat: /home/nicolae/buildroot7Dec/output/build/.linux-version: No such file
+> > or directory
+> 
+> In package/linux-fusion/linux-fusion.mk it tries to determine the
+> linux version from a magic file '.linux_version' which in your
+> environment doesn't appear to exist.
+> 
+> This is created by 'make linux26-version' and/or 'make linux26'. In my
+> environment the magic file is there. Linux-fusion does appear to have
+> a dependency on linux26 so that _should_ have done the trick.  Maybe
+> something got cleaned? Anyway 'make linux26-version' should put the
+> file back.
+> 
+> > make[1]: Entering directory
+> > `/home/nicolae/buildroot7Dec/output/build/linux-fusion-8.0.2'
+> > rm -f linux/drivers/char/fusion/Makefile
+> > ln -s Makefile-2. linux/drivers/char/fusion/Makefile
+> > /usr/bin/make -C /home/nicolae/buildroot7Dec/output/build/linux- \
+> 
+> This is wrong. Probably because the kernel version could not be
+> determined this should be something like linux-2.6.30.2 (or whatever
+> your actual kernel is)
+> 
+> > ARCH=arm \
+> > CC=/home/nicolae/buildroot7Dec/output/staging/usr/bin/arm-linux-uclibcgnueabi-gcc
+> > \
+> > AS=/home/nicolae/buildroot7Dec/output/staging/usr/bin/arm-linux-uclibcgnueabi-as
+> > \
+> > CPPFLAGS=" \
+> > -I`pwd`/linux/include \
+> > -I/home/nicolae/buildroot7Dec/output/build/linux-/include \
+> > -I/home/nicolae/buildroot7Dec/output/build/linux-/include \
+> > -I/home/nicolae/buildroot7Dec/output/build/linux-/arch/arm/include \
+> > " \
+> > SUBDIRS=`pwd`/linux/drivers/char/fusion modules
+> 
+> > make: Entering an unknown directory
+> > make: *** /home/nicolae/buildroot7Dec/output/build/linux-: No such file or
+> > directory.  Stop.
+> 
+> This is the actual error message in the sub-make because it couldn't
+> find the directory to change to.
+> 
+> > make: Leaving an unknown directory
+> > make[1]: *** [all] Error 2
+> > make[1]: Leaving directory
+> > `/home/nicolae/buildroot7Dec/output/build/linux-fusion-8.0.2'
+> > make: ***
+> > [/home/nicolae/buildroot7Dec/output/build/linux-fusion-8.0.2/.install] Error
+> > 2
+> 
+> And this is a flow-on error from the one above.
+> 
+> Taking a closer look at my environment I don't think linux-fusion
+> would build for me either because `cat output/build/.linux-version`
+> gives 2.6.30.2-00249-g25a3f99 but `ls output/build/ | grep linux`
+> gives linux-2.6.30.2
+> 
+> At a guess I'd suggest the following patch but its completely untested.
+> 
+> -------8<-------
+> From: Chris Packham <judge.packham@gmail.com>
+> Date: Tue, 8 Dec 2009 09:44:13 -0500
+> Subject: [PATCH] linux-fusion: use buildroots kernel version
+> 
+> Signed-off-by: Chris Packham <judge.packham@gmail.com>
+> ---
+>  package/linux-fusion/linux-fusion.mk |    2 +-
+>  1 files changed, 1 insertions(+), 1 deletions(-)
+> 
+> diff --git a/package/linux-fusion/linux-fusion.mk
+> b/package/linux-fusion/linux-fusion.mk
+> index 058e965..85b9c10 100644
+> --- a/package/linux-fusion/linux-fusion.mk
+> +++ b/package/linux-fusion/linux-fusion.mk
+> @@ -13,7 +13,7 @@ LINUX_FUSION_INSTALL_TARGET = YES
+>  # BR2_LINUX26_VERSION is not really dependable
+>  # LINUX26_VERSION is not yet set.
+>  # Retrieve REAL kernel version from file.
+> -LINUX_FOR_FUSION=`cat $(BUILD_DIR)/.linux-version`
+> +LINUX_FOR_FUSION=BR2_KERNEL_CURRENT_VERSION
+> 
+>  LINUX_FUSION_DIR:=$(BUILD_DIR)/linux-fusion-$(LINUX_FUSION_VERSION)
+>  LINUX_FUSION_ETC_DIR:=$(TARGET_DIR)/etc/udev/rules.d
+> --
+> 1.6.4.2
+> -------8<-------
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091208/d0a389c7/attachment.htm>
