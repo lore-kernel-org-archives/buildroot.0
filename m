@@ -1,78 +1,139 @@
-From: Michael Trimarchi <trimarchimichael@yahoo.it>
-Date: Tue, 8 Dec 2009 20:16:21 +0000 (GMT)
-Subject: [Buildroot] Foreigh toolchain
-Message-ID: <919832.97890.qm@web23508.mail.ird.yahoo.com>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Tue, 8 Dec 2009 21:43:53 +0100
+Subject: [Buildroot] [git commit master] gst-plugins-bad: make more
+	dependency-less plugins configurable
+Message-ID: <20091208204425.DB0DD77783@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi 
 
---- Ven 25/9/09, Michael Trimarchi <trimarchimichael@yahoo.it> ha scritto:
+commit: http://git.buildroot.net/buildroot/commit/?id=5a5992b7f173fd78f035c0f416c95f0fe61552e1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Da: Michael Trimarchi <trimarchimichael@yahoo.it>
-> Oggetto: Re: [Buildroot] Foreigh toolchain
-> A: buildroot at busybox.net, "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> Data: Venerd? 25 settembre 2009, 09:35
-> 
-> 
-> --- Gio 24/9/09, Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ha scritto:
-> 
-> > Da: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > Oggetto: Re: [Buildroot] Foreigh toolchain
-> > A: buildroot at busybox.net
-> > Data: Gioved? 24 settembre 2009, 20:28
-> > Le Thu, 24 Sep 2009 16:33:13 +0000
-> > (GMT),
-> > Michael Trimarchi <trimarchimichael@yahoo.it>
-> > a ?crit :
-> > 
-> > > I have this problem using the foreigh toolchain.
-> Can
-> > anyone know how
-> > > to fix it?
-> > 
-> > That's a libtool issue, and I haven't yet found the
-> proper
-> > solution for
-> > it. It's probably a matter of recompiling libtool and
-> using
-> > our own.
-> 
-> Ok, I will try it and investigate on it.
-> 
-> Michael
+The latest update added a few new plugins that were missing from
+the buildroot configuration system. This commit makes these
+dependency-less plugins configurable.
 
-This compile the glib because the rpath of libtool is controlled
-by prefixm but I don't know possiby regression. I just test
-the package compilation, so at least we know somenthing
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES                                            |    4 +-
+ package/multimedia/gst-plugins-bad/Config.in       |   12 ++++++++++
+ .../multimedia/gst-plugins-bad/gst-plugins-bad.mk  |   24 ++++++++++++++++++++
+ 3 files changed, 38 insertions(+), 2 deletions(-)
 
-> 
-> > 
-> > Thomas
-> > -- 
-> > Thomas Petazzoni, Free Electrons
-> > Kernel, drivers and embedded Linux development,
-> > consulting, training and support.
-> > http://free-electrons.com
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> 
-> 
->
-
-
-      
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: glibc_toolchain.patch
-Type: application/x-download
-Size: 626 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091208/6abbe127/attachment-0001.bin>
+diff --git a/CHANGES b/CHANGES
+index 45697f3..816b26d 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -3,8 +3,8 @@
+ 	New packages: tcpreplay, hostapd
+ 
+ 	Updated/fixed packages: autoconf, bind, binutils, busybox,
+-	directfb, iw, libfuse, libpcap, lighttpd, mesa, pcre, sshfs,
+-	usbutils
++	directfb, gst-plugins-bad, iw, libfuse, libpcap, lighttpd,
++	mesa, pcre, sshfs, usbutils
+ 
+ 	Issues resolved (http://bugs.uclibc.org):
+ 
+diff --git a/package/multimedia/gst-plugins-bad/Config.in b/package/multimedia/gst-plugins-bad/Config.in
+index 8601cf4..c7ebe2a 100644
+--- a/package/multimedia/gst-plugins-bad/Config.in
++++ b/package/multimedia/gst-plugins-bad/Config.in
+@@ -21,6 +21,9 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_AIFFPARSE
+ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_AMRPARSE
+ 	bool "amrparse"
+ 
++config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_ASFMUX
++	bool "asfmux"
++
+ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_AUTOCONVERT
+ 	bool "autoconvert"
+ 
+@@ -54,9 +57,15 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FESTIVAL
+ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FREEZE
+ 	bool "freeze"
+ 
++config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FREI0R
++	bool "frei0r"
++
+ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_H264PARSE
+ 	bool "h264parse"
+ 
++config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_HDVPARSE
++	bool "hdvparse"
++
+ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_LIBRFB
+ 	bool "librfb"
+ 
+@@ -114,6 +123,9 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SDP
+ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SELECTOR
+ 	bool "selector"
+ 
++config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SHAPEWIPE
++	bool "shapewipe"
++
+ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SIREN
+ 	bool "siren"
+ 
+diff --git a/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk b/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
+index c6c5fd0..9a0955f 100644
+--- a/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
++++ b/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
+@@ -33,6 +33,12 @@ else
+ GST_PLUGINS_BAD_CONF_OPT += --disable-amrparse
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_ASFMUX),y)
++GST_PLUGINS_BAD_CONF_OPT += --enable-asfmux
++else
++GST_PLUGINS_BAD_CONF_OPT += --disable-asfmux
++endif
++
+ ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_AUTOCONVERT),y)
+ GST_PLUGINS_BAD_CONF_OPT += --enable-autoconvert
+ else
+@@ -99,12 +105,24 @@ else
+ GST_PLUGINS_BAD_CONF_OPT += --disable-freeze
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FREI0R),y)
++GST_PLUGINS_BAD_CONF_OPT += --enable-frei0r
++else
++GST_PLUGINS_BAD_CONF_OPT += --disable-frei0r
++endif
++
+ ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_H264PARSE),y)
+ GST_PLUGINS_BAD_CONF_OPT += --enable-h264parse
+ else
+ GST_PLUGINS_BAD_CONF_OPT += --disable-h264parse
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_HDVPARSE),y)
++GST_PLUGINS_BAD_CONF_OPT += --enable-hdvparse
++else
++GST_PLUGINS_BAD_CONF_OPT += --disable-hdvparse
++endif
++
+ ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_LIBRFB),y)
+ GST_PLUGINS_BAD_CONF_OPT += --enable-librfb
+ else
+@@ -219,6 +237,12 @@ else
+ GST_PLUGINS_BAD_CONF_OPT += --disable-selector
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SHAPEWIPE),y)
++GST_PLUGINS_BAD_CONF_OPT += --enable-shapewipe
++else
++GST_PLUGINS_BAD_CONF_OPT += --disable-shapewipe
++endif
++
+ ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SIREN),y)
+ GST_PLUGINS_BAD_CONF_OPT += --enable-siren
+ else
+-- 
+1.6.3.3
