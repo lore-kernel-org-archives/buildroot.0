@@ -1,8 +1,8 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Tue, 8 Dec 2009 21:43:53 +0100
-Subject: [Buildroot] [git commit master] gst-plugins-bad: make more
-	dependency-less plugins configurable
-Message-ID: <20091208204425.DB0DD77783@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] kernel-headers: bump 2.6.27.x /
+	2.6.31.x stable versions
+Message-ID: <20091208204426.1E62577792@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,130 +10,37 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5a5992b7f173fd78f035c0f416c95f0fe61552e1
+commit: http://git.buildroot.net/buildroot/commit/?id=5c3817bb46d97bd9e93f1def2eb7f5efb5c16188
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The latest update added a few new plugins that were missing from
-the buildroot configuration system. This commit makes these
-dependency-less plugins configurable.
-
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                                            |    4 +-
- package/multimedia/gst-plugins-bad/Config.in       |   12 ++++++++++
- .../multimedia/gst-plugins-bad/gst-plugins-bad.mk  |   24 ++++++++++++++++++++
- 3 files changed, 38 insertions(+), 2 deletions(-)
+ toolchain/kernel-headers/Config.in                 |    4 ++--
+ ...types-for-headers-exported-to-user-space.patch} |    0
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+ rename toolchain/kernel-headers/{linux-2.6.31.6-scsi-use-__uX-types-for-headers-exported-to-user-space.patch => linux-2.6.31.7-scsi-use-__uX-types-for-headers-exported-to-user-space.patch} (100%)
 
-diff --git a/CHANGES b/CHANGES
-index 45697f3..816b26d 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -3,8 +3,8 @@
- 	New packages: tcpreplay, hostapd
- 
- 	Updated/fixed packages: autoconf, bind, binutils, busybox,
--	directfb, iw, libfuse, libpcap, lighttpd, mesa, pcre, sshfs,
--	usbutils
-+	directfb, gst-plugins-bad, iw, libfuse, libpcap, lighttpd,
-+	mesa, pcre, sshfs, usbutils
- 
- 	Issues resolved (http://bugs.uclibc.org):
- 
-diff --git a/package/multimedia/gst-plugins-bad/Config.in b/package/multimedia/gst-plugins-bad/Config.in
-index 8601cf4..c7ebe2a 100644
---- a/package/multimedia/gst-plugins-bad/Config.in
-+++ b/package/multimedia/gst-plugins-bad/Config.in
-@@ -21,6 +21,9 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_AIFFPARSE
- config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_AMRPARSE
- 	bool "amrparse"
- 
-+config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_ASFMUX
-+	bool "asfmux"
-+
- config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_AUTOCONVERT
- 	bool "autoconvert"
- 
-@@ -54,9 +57,15 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FESTIVAL
- config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FREEZE
- 	bool "freeze"
- 
-+config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FREI0R
-+	bool "frei0r"
-+
- config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_H264PARSE
- 	bool "h264parse"
- 
-+config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_HDVPARSE
-+	bool "hdvparse"
-+
- config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_LIBRFB
- 	bool "librfb"
- 
-@@ -114,6 +123,9 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SDP
- config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SELECTOR
- 	bool "selector"
- 
-+config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SHAPEWIPE
-+	bool "shapewipe"
-+
- config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SIREN
- 	bool "siren"
- 
-diff --git a/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk b/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
-index c6c5fd0..9a0955f 100644
---- a/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
-+++ b/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
-@@ -33,6 +33,12 @@ else
- GST_PLUGINS_BAD_CONF_OPT += --disable-amrparse
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_ASFMUX),y)
-+GST_PLUGINS_BAD_CONF_OPT += --enable-asfmux
-+else
-+GST_PLUGINS_BAD_CONF_OPT += --disable-asfmux
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_AUTOCONVERT),y)
- GST_PLUGINS_BAD_CONF_OPT += --enable-autoconvert
- else
-@@ -99,12 +105,24 @@ else
- GST_PLUGINS_BAD_CONF_OPT += --disable-freeze
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FREI0R),y)
-+GST_PLUGINS_BAD_CONF_OPT += --enable-frei0r
-+else
-+GST_PLUGINS_BAD_CONF_OPT += --disable-frei0r
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_H264PARSE),y)
- GST_PLUGINS_BAD_CONF_OPT += --enable-h264parse
- else
- GST_PLUGINS_BAD_CONF_OPT += --disable-h264parse
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_HDVPARSE),y)
-+GST_PLUGINS_BAD_CONF_OPT += --enable-hdvparse
-+else
-+GST_PLUGINS_BAD_CONF_OPT += --disable-hdvparse
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_LIBRFB),y)
- GST_PLUGINS_BAD_CONF_OPT += --enable-librfb
- else
-@@ -219,6 +237,12 @@ else
- GST_PLUGINS_BAD_CONF_OPT += --disable-selector
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SHAPEWIPE),y)
-+GST_PLUGINS_BAD_CONF_OPT += --enable-shapewipe
-+else
-+GST_PLUGINS_BAD_CONF_OPT += --disable-shapewipe
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SIREN),y)
- GST_PLUGINS_BAD_CONF_OPT += --enable-siren
- else
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index df0f9c8..938f69c 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -66,11 +66,11 @@ config BR2_DEFAULT_KERNEL_VERSION
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "2.6.26.8"	if BR2_KERNEL_HEADERS_2_6_26
+-	default "2.6.27.39"	if BR2_KERNEL_HEADERS_2_6_27
++	default "2.6.27.40"	if BR2_KERNEL_HEADERS_2_6_27
+ 	default "2.6.28.10"	if BR2_KERNEL_HEADERS_2_6_28
+ 	default "2.6.29.6"	if BR2_KERNEL_HEADERS_2_6_29
+ 	default "2.6.30.10"	if BR2_KERNEL_HEADERS_2_6_30
+-	default "2.6.31.6"	if BR2_KERNEL_HEADERS_2_6_31
++	default "2.6.31.7"	if BR2_KERNEL_HEADERS_2_6_31
+ 	default "2.6.32"	if BR2_KERNEL_HEADERS_2_6_32
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-2.6.31.6-scsi-use-__uX-types-for-headers-exported-to-user-space.patch b/toolchain/kernel-headers/linux-2.6.31.7-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-2.6.31.6-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
+rename to toolchain/kernel-headers/linux-2.6.31.7-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
 -- 
 1.6.3.3
