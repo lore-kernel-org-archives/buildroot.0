@@ -1,23 +1,25 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 08 Dec 2009 09:55:10 +0100
-Subject: [Buildroot] [PATCH] Add fuse-sshfs package
-In-Reply-To: <1259080149-15678-1-git-send-email-daniel@caiaq.de> (Daniel
-	Mack's message of "Tue, 24 Nov 2009 17:29:09 +0100")
-References: <87fx83dh7z.fsf@macbook.be.48ers.dk>
-	<1259080149-15678-1-git-send-email-daniel@caiaq.de>
-Message-ID: <87vdghonf5.fsf@macbook.be.48ers.dk>
+Date: Tue, 08 Dec 2009 10:01:03 +0100
+Subject: [Buildroot] missing kernel headers when compiling kismet
+In-Reply-To: <A208E45D-08AF-4294-ADEA-4734E3530DDC@hsr.ch> (Marc Egli's
+	message of "Mon, 7 Dec 2009 21:28:13 +0100")
+References: <A208E45D-08AF-4294-ADEA-4734E3530DDC@hsr.ch>
+Message-ID: <87r5r5on5c.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Daniel" == Daniel Mack <daniel@caiaq.de> writes:
+>>>>> "Marc" == Marc Egli <marc.egli@hsr.ch> writes:
 
- Daniel> Signed-off-by: Daniel Mack <daniel@caiaq.de>
+ Marc> configuring kismet fails with the following message:
+ Marc> checking for linux/wireless.h... (cached) no
+ Marc> configure: error: Failed to find a usable linux/wireless.h header for Linux Wireless Extensions.  Either your kernel headers are missing or are incorrect.  See config.log for the exact error.  Compiling without wireless headers must be explicitly disabled
+ Marc> make: *** [/emb/buildroot/output/build/kismet-2009-06-R1/.stamp_configured] Error 1
 
-Committed, thanks. I slightly tweaked kconfig to use select for the
-library dependencies instead of depends.
+Hmm, it builds here - Please post your config. Notice that the above
+check has been cached, does it work if you run make flush; make?
 
 -- 
 Bye, Peter Korsgaard
