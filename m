@@ -1,40 +1,58 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 09 Dec 2009 14:21:35 +0100
-Subject: [Buildroot] missing kernel headers when compiling kismet
-In-Reply-To: <347DC1AA-225D-4C71-9A84-DC42FDBA068F@hsr.ch> (Marc Egli's
-	message of "Wed, 9 Dec 2009 09:33:20 +0100")
-References: <A208E45D-08AF-4294-ADEA-4734E3530DDC@hsr.ch>
-	<87r5r5on5c.fsf@macbook.be.48ers.dk>
-	<0BEC155F-0AE3-43B6-B538-9C024D89964F@hsr.ch>
-	<87my1tocab.fsf@macbook.be.48ers.dk>
-	<F9A30328-AECD-494A-A1BB-D28339481F10@hsr.ch>
-	<873a3lnmmm.fsf@macbook.be.48ers.dk>
-	<347DC1AA-225D-4C71-9A84-DC42FDBA068F@hsr.ch>
-Message-ID: <871vj4mgf4.fsf@macbook.be.48ers.dk>
+Date: Wed, 09 Dec 2009 14:42:51 +0100
+Subject: [Buildroot] ARM OABI/EABI problem
+In-Reply-To: <OF3B98716C.764E06F3-ONC1257686.0021143A-C1257687.002A0DD7@mentat.hu>
+	(peter stosz's message of "Wed, 9 Dec 2009 08:39:20 +0100")
+References: <OF3B98716C.764E06F3-ONC1257686.0021143A-C1257687.002A0DD7@mentat.hu>
+Message-ID: <87ws0wl0v8.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Marc" == Marc Egli <marc.egli@hsr.ch> writes:
+>>>>> "peter" == peter stosz <peter.stosz@mentat.hu> writes:
 
- Marc> i disabled all the lxde stuff and also openbox (all my own packages). and the result was the same.
- Marc> find gives me 2 packages wich need wireless.h
- Marc> find output/ -name configure* -exec grep -l wireless.h {} \;
- Marc> output/build/kismet-2009-06-R1/configure.in
- Marc> output/build/kismet-2009-06-R1/configure
- Marc> output/build/libpcap-1.0.0/configure.in
- Marc> output/build/libpcap-1.0.0/configure
+Hi,
 
- Marc> i think libpcap has some errors when searching for linux/wireless.h
- Marc> i attached my configcache and my libpcapconfiglog
+ peter> Please explain me, how to build complete OABI 'style' sytem to
+ peter> ARM (RM9200) target.
 
-You're right, I somehow missed that I had already compiled libpcap, so
-it's configure step didn't rerun after I cleared the config cache.
+ peter> I try to compile a minimal Linux 2.6.27 with Busybox 1.15
+ peter> system.  I must OABI, because I need Floating Point Emulator,
+ peter> but it depends on !AEABI || OABI_COMPAT
 
-I've added a fix to git (28ccc22ffd3) for this based on how it is fixed
-in libpcap git. Could you give it a try to see if it fixes your problem?
+Really? Softfloat is a lot faster than kernel emulation.
+
+ peter> As you see (on Build option section) I leave
+ peter> BR2_GNU_TARGET_SUFFIX on the default "linux-uclibcgnueabi" When
+ peter> I change it to "linux-uclibc", I get the following error:
+
+You should use linux-uclibc for OABI.
+
+ peter> warning: working around missing syslimits.h
+ peter> cp: stat ?/srv/buildroot/output/staging/lib/gcc-lib/arm-linux-uclibc/4.4.2/
+ peter> include/syslimits.h? sikertelen: Nincs ilyen f?jl vagy k?nyvt?r  <-- No such
+ peter> file or directory
+ peter> make: *** [/srv/buildroot/output/target/usr/bin/gcc] Error 1
+
+Hmm, could you try with gcc 4.3.4? I've compiled OABI with 4.3.4 without
+problems, but I've never tried 4.4.x.
+
+Remember to run make clean after any toolchain changes.
+
+ peter> Build environment:
+ peter> Ubuntu 9.10 x64 (Hungarian)
+ peter> bash, not dash
+ peter> make as root
+
+Don't do that! Buildroot is designed to work without root permissions,
+and I give absolutely NO guarantee that we won't make a mistake and
+accidently overwrite/delete something, especially if you use a git
+snapshot.
+
+ peter> Buildroot 2009.11
+ peter> 2nd error message on BR daily snapshot (091205)
 
 -- 
 Bye, Peter Korsgaard
