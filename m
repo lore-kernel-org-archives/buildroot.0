@@ -1,81 +1,40 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 9 Dec 2009 14:00:55 +0100
-Subject: [Buildroot] [git commit master] libpcap: fix wireless handling
-Message-ID: <20091209132020.1C7C67776F@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 09 Dec 2009 14:21:35 +0100
+Subject: [Buildroot] missing kernel headers when compiling kismet
+In-Reply-To: <347DC1AA-225D-4C71-9A84-DC42FDBA068F@hsr.ch> (Marc Egli's
+	message of "Wed, 9 Dec 2009 09:33:20 +0100")
+References: <A208E45D-08AF-4294-ADEA-4734E3530DDC@hsr.ch>
+	<87r5r5on5c.fsf@macbook.be.48ers.dk>
+	<0BEC155F-0AE3-43B6-B538-9C024D89964F@hsr.ch>
+	<87my1tocab.fsf@macbook.be.48ers.dk>
+	<F9A30328-AECD-494A-A1BB-D28339481F10@hsr.ch>
+	<873a3lnmmm.fsf@macbook.be.48ers.dk>
+	<347DC1AA-225D-4C71-9A84-DC42FDBA068F@hsr.ch>
+Message-ID: <871vj4mgf4.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Marc" == Marc Egli <marc.egli@hsr.ch> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=28ccc22ffd3d2fa8844f4572e14e32875c4ccd49
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Marc> i disabled all the lxde stuff and also openbox (all my own packages). and the result was the same.
+ Marc> find gives me 2 packages wich need wireless.h
+ Marc> find output/ -name configure* -exec grep -l wireless.h {} \;
+ Marc> output/build/kismet-2009-06-R1/configure.in
+ Marc> output/build/kismet-2009-06-R1/configure
+ Marc> output/build/libpcap-1.0.0/configure.in
+ Marc> output/build/libpcap-1.0.0/configure
 
-Based on ba23aa7b in libpcap upstream.
+ Marc> i think libpcap has some errors when searching for linux/wireless.h
+ Marc> i attached my configcache and my libpcapconfiglog
 
-linux/wireless.h includes linux/if.h, which conflicts with net/if.h as
-they both define if* structures. Fix build by simply using linux/if.h
-instead of net/if.h.
+You're right, I somehow missed that I had already compiled libpcap, so
+it's configure step didn't rerun after I cleared the config cache.
 
-The same fix should be done for the configure script, but cheat by
-presetting it instead.
+I've added a fix to git (28ccc22ffd3) for this based on how it is fixed
+in libpcap git. Could you give it a try to see if it fixes your problem?
 
-This fix in turn fixes kismet build with BR2_CONFIG_CACHE enabled, as
-that uses the same ac_cv_linux_wireless_h cache value.
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/libpcap/libpcap-1.0.0-wireless.patch |   26 ++++++++++++++++++++++++++
- package/libpcap/libpcap.mk                   |    3 ++-
- 2 files changed, 28 insertions(+), 1 deletions(-)
- create mode 100644 package/libpcap/libpcap-1.0.0-wireless.patch
-
-diff --git a/package/libpcap/libpcap-1.0.0-wireless.patch b/package/libpcap/libpcap-1.0.0-wireless.patch
-new file mode 100644
-index 0000000..7bcfcda
---- /dev/null
-+++ b/package/libpcap/libpcap-1.0.0-wireless.patch
-@@ -0,0 +1,26 @@
-+[PATCH]: pcap-linux: fix build with wireless support
-+
-+Based on ba23aa7b upstream.
-+
-+linux/wireless.h includes linux/if.h, which conflicts with net/if.h as
-+they both define if* structures. Fix build by simply using linux/if.h
-+instead of net/if.h.
-+
-+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-+---
-+ pcap-linux.c |    2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+Index: libpcap-1.0.0/pcap-linux.c
-+===================================================================
-+--- libpcap-1.0.0.orig/pcap-linux.c
-++++ libpcap-1.0.0/pcap-linux.c
-+@@ -93,7 +93,7 @@ static const char rcsid[] _U_ =
-+ #include <sys/ioctl.h>
-+ #include <sys/utsname.h>
-+ #include <sys/mman.h>
-+-#include <net/if.h>
-++#include <linux/if.h>
-+ #include <netinet/in.h>
-+ #include <linux/if_ether.h>
-+ #include <net/if_arp.h>
-diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
-index dc72924..801b15e 100644
---- a/package/libpcap/libpcap.mk
-+++ b/package/libpcap/libpcap.mk
-@@ -14,7 +14,8 @@ LIBPCAP_INSTALL_TARGET_OPT= DESTDIR="$(TARGET_DIR)" \
- LIBPCAP_INSTALL_STAGING_OPT= DESTDIR="$(STAGING_DIR)" install \
- 	$(if $(BR2_PREFER_STATIC_LIB),,install-shared)
- LIBPCAP_DEPENDENCIES:=zlib
--LIBPCAP_CONF_ENV:=ac_cv_linux_vers=$(firstword $(subst .,$(space),$(firstword $(call qstrip,$(BR2_DEFAULT_KERNEL_HEADERS)))))
-+LIBPCAP_CONF_ENV:=ac_cv_linux_vers=$(firstword $(subst .,$(space),$(firstword $(call qstrip,$(BR2_DEFAULT_KERNEL_HEADERS))))) \
-+		  ac_cv_header_linux_wireless_h=yes # configure misdetects this
- LIBPCAP_CONF_OPT:=--disable-yydebug --with-pcap=linux
- 
- $(eval $(call AUTOTARGETS,package,libpcap))
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
