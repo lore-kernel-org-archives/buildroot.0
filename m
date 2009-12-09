@@ -1,52 +1,58 @@
-From: NEAL, RYAN <RYAN_NEAL@appsig.com>
-Date: Wed, 9 Dec 2009 14:18:21 -0800
-Subject: [Buildroot] RTNETLINK error
-In-Reply-To: <87hbrzx0hf.fsf@macbook.be.48ers.dk>
-References: <4B2CB099CF3D4F40B1B1442281CA94FFC4C929@EXCHANGEVS01.appsig.com><87vdgfx6ac.fsf@macbook.be.48ers.dk><4B2CB099CF3D4F40B1B1442281CA94FFC4C92A@EXCHANGEVS01.appsig.com><87ocm7x0q9.fsf@macbook.be.48ers.dk><4B2CB099CF3D4F40B1B1442281CA94FFC4C92B@EXCHANGEVS01.appsig.com>
-	<87hbrzx0hf.fsf@macbook.be.48ers.dk>
-Message-ID: <4B2CB099CF3D4F40B1B1442281CA94FFC4C92C@EXCHANGEVS01.appsig.com>
+From: Michael S. Zick <minimod@morethan.org>
+Date: Wed, 9 Dec 2009 16:32:03 -0600
+Subject: [Buildroot] Documentation question
+In-Reply-To: <hfp1uh$6fk$1@ger.gmane.org>
+References: <hfp1uh$6fk$1@ger.gmane.org>
+Message-ID: <200912091632.06109.minimod@morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Does the busybox dhcp client get called by the kernel at some point
-(udhcpc?)?  how do I make this configuration so that the busybox dhcp
-client is used?
+On Wed December 9 2009, Grant Edwards wrote:
+> I've been reading the "buildroot usage and documentation"
+> document over the past couple days, and in order to not be a
+> complete leech, I'm fixing various minor problems (typos,
+> spelling, punctuation, usage, grammar, etc.) and will submmit a
+> patch when I've finished.
+> 
+> However, I've run across one paragraph where I think the actual
+> content could use a tweak, and I thought I should ask about it
+> before making a change.  In the section "Using Buildroot"
+> there's a paragraph that describes what the top-level "make"
+> does:
+> 
+>    $ make
+> 
+>      This command will download, configure and compile all the
+>      selected tools, and finally generate a toolchain, a root
+>      filesystem image and a kernel image (or only one of these
+>      elements, depending on the configuration). 
+> 
+> Doesn't the toolchain have to be generated _before_ the
+> selected tools are configured and compiled?
+> 
 
-I turned off the "IP : kernel level autoconfiguration" (CONFIG_IP_PNP)
-off in the linux kernel, no change. 
+Just needs some clarification.
 
-I then ran with just the boot line "console=ttyS0 root=/dev/ram" and
-still got the failure.  
+"Generate toolchain" in the sentence seems to mean a native
+toolchain (which Buildroot can do - similar to any other package).
 
-::Ryan
+What you are referring too seems to be an cross-compile toolchain.
+Which does not seem to be mentioned (or maybe the native toolchain isn't mentioned).
 
------Original Message-----
-From: Peter Korsgaard [mailto:jacmet at gmail.com] On Behalf Of Peter
-Korsgaard
-Sent: Wednesday, December 09, 2009 2:10 PM
-To: NEAL, RYAN
-Cc: Peter Korsgaard; buildroot at busybox.net
-Subject: Re: [Buildroot] RTNETLINK error
+*) Downloads (either as required, or pre-downloads all (make source))
+*) Configures cross-compile toolchain
+*) Builds cross-compile toolchain
+*) Builds selected packages (optional)
+*) Builds a native toolchain (optional, like any other "package")
+*) Builds a kernel image (optional)
+*) Creates a root filesystem in selectable forms (filesystem, archive, ...)
 
->>>>> "Ryan" == NEAL, RYAN <RYAN_NEAL@appsig.com> writes:
+Or something close to that - notice two (2) "toolchains"
 
- Ryan> Because I am messing up the configuration :).  I want the kernel
-to come
- Ryan> up and setup the dhcp/dns so that the virtex5 is on the network,
- Ryan> pingable, ssh (eventually), ftp (eventually), etc.
-
-DNS is normally not possible with the kernel IP autoconfig, you better
-use the dhcp client in busybox for that.
-
- Ryan> This is some settings inside of the Xilinx kernel then?
-
-Not if you use the busybox version.
-
-Does the above work if you remove the ip=.. part of your kernel command
-line?
-
--- 
-Bye, Peter Korsgaard
+Mike
+> IOW, "generate a toolchain" seems to me to be in the wrong
+> place in the sequence.  Right?
+> 
