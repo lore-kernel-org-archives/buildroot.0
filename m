@@ -1,69 +1,46 @@
-From: Marc Egli <marc.egli@hsr.ch>
-Date: Wed, 9 Dec 2009 09:33:20 +0100
-Subject: [Buildroot] missing kernel headers when compiling kismet
-In-Reply-To: <873a3lnmmm.fsf@macbook.be.48ers.dk>
-References: <A208E45D-08AF-4294-ADEA-4734E3530DDC@hsr.ch>
-	<87r5r5on5c.fsf@macbook.be.48ers.dk>
-	<0BEC155F-0AE3-43B6-B538-9C024D89964F@hsr.ch>
-	<87my1tocab.fsf@macbook.be.48ers.dk>
-	<F9A30328-AECD-494A-A1BB-D28339481F10@hsr.ch>
-	<873a3lnmmm.fsf@macbook.be.48ers.dk>
-Message-ID: <347DC1AA-225D-4C71-9A84-DC42FDBA068F@hsr.ch>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed,  9 Dec 2009 10:28:36 +0000 (UTC)
+Subject: [Buildroot] [Bug 757] U-Boot: mkimage cannot be installed using
+ external toolchain
+In-Reply-To: <bug-757-163@https.bugs.busybox.net/>
+References: <bug-757-163@https.bugs.busybox.net/>
+Message-ID: <20091209102836.8A5177776F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-i disabled all the lxde stuff and also openbox (all my own packages). and the result was the same.
-find gives me 2 packages wich need wireless.h
-find output/ -name configure* -exec grep -l wireless.h {} \;
-output/build/kismet-2009-06-R1/configure.in
-output/build/kismet-2009-06-R1/configure
-output/build/libpcap-1.0.0/configure.in
-output/build/libpcap-1.0.0/configure
-
-i think libpcap has some errors when searching for linux/wireless.h
-i attached my configcache and my libpcapconfiglog
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: tgt-config.cache
-Type: application/octet-stream
-Size: 67821 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091209/0b2c0c2e/attachment-0002.obj>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: config.log
-Type: application/octet-stream
-Size: 107519 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091209/0b2c0c2e/attachment-0003.obj>
--------------- next part --------------
+https://bugs.busybox.net/show_bug.cgi?id=757
 
 
-Am 08.12.2009 um 23:09 schrieb Peter Korsgaard:
+Anders Darander <anders.darander@gmail.com> changed:
 
->>>>>> "Marc" == Marc Egli <marc.egli@hsr.ch> writes:
-> 
-> Marc> make clean and make did result in the same error i got before:
-> Marc> checking for linux/wireless.h... (cached) no
-> Marc> find ./ -name wireless.h gave me:
-> Marc> ./output/toolchain/linux-2.6.31.6/include/linux/wireless.h
-> Marc> ./output/toolchain/uClibc_dev/usr/include/linux/wireless.h
-> Marc> ./output/toolchain/linux/include/linux/wireless.h
-> Marc> ./output/build/staging_dir/usr/include/linux/wireless.h
-> Marc> ./output/build/linux-2.6.31.6/include/config/wireless.h
-> Marc> ./output/build/linux-2.6.31.6/include/linux/wireless.h
-> Marc> ./output/build/ifplugd-0.28/src/wireless.h
-> 
-> Marc> and my config is attached
-> 
-> Hmm, I don't see any issues here with building the network packages you
-> had enabled (the most obvious ones to check for linux/wireless.h). I see
-> you have some local lxde packages enabled, maybe one of those checks for
-> wireless? Could you try temporarily disabling them and doing a clean
-> rebuild?
-> 
-> -- 
-> Bye, Peter Korsgaard
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+ Attachment #789 is|0                           |1
+           obsolete|                            |
+
+
+
+
+--- Comment #1 from Anders Darander <anders.darander@gmail.com>  2009-12-09 10:28:35 UTC ---
+Created an attachment (id=813)
+ --> (https://bugs.busybox.net/attachment.cgi?id=813)
+Rebased patch.
+
+Bumping the issue.
+
+Attached is a rebased version of the patched. It's now based on SHA1 ID:
+b7ed169692dca7a1bc423e982d37f015fc998943.
+
+Please apply to the buildroot git archive.
+
+Regards,
+Anders Darander
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
