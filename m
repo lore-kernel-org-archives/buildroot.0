@@ -1,40 +1,56 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Wed, 9 Dec 2009 21:11:46 +0000 (UTC)
-Subject: [Buildroot] Documentation question
-References: <hfp1uh$6fk$1@ger.gmane.org>
-Message-ID: <hfp3qi$e30$1@ger.gmane.org>
+From: NEAL, RYAN <RYAN_NEAL@appsig.com>
+Date: Wed, 9 Dec 2009 13:20:48 -0800
+Subject: [Buildroot] RTNETLINK error
+In-Reply-To: <87vdgfx6ac.fsf@macbook.be.48ers.dk>
+References: <4B2CB099CF3D4F40B1B1442281CA94FFC4C929@EXCHANGEVS01.appsig.com>
+	<87vdgfx6ac.fsf@macbook.be.48ers.dk>
+Message-ID: <4B2CB099CF3D4F40B1B1442281CA94FFC4C92A@EXCHANGEVS01.appsig.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2009-12-09, Grant Edwards <grant.b.edwards@gmail.com> wrote:
+I am actually not trying to boot from an NFS.  I just want to use an
+initramfs.
 
-> I've been reading the "buildroot usage and documentation"
-> document over the past couple days, and in order to not be a
-> complete leech, I'm fixing various minor problems (typos,
-> spelling, punctuation, usage, grammar, etc.) and will submmit a
-> patch when I've finished.
->
-> However, I've run across one paragraph where I think the actual
-> content could use a tweak, and I thought I should ask about it
-> before making a change.
+output/target% cat etc/network/interfaces
+# Configure Loopback
+auto lo
+iface lo inet loopback
 
-Another question on content -- the doc says
+that all seems reasonable?  I thought I turned off NFS as an option in
+buildroot.
 
-  Buildroot optionally honors some environment variables that
-  are passed to make:
-  
-    HOSTCXX, the host C++ compiler to use
-    HOSTCC, the host C compiler to use
-    UCLIBC_CONFIG_FILE [...]
+Thanks!
 
-From what I've been able to figure out, honoring those is not
-an option.  Aren't they're always honored?  If honoring those
-is optional, how/where is that option configured?
+::Ryan
+-----Original Message-----
+From: Peter Korsgaard [mailto:jacmet at gmail.com] On Behalf Of Peter
+Korsgaard
+Sent: Wednesday, December 09, 2009 12:05 PM
+To: NEAL, RYAN
+Cc: buildroot at busybox.net
+Subject: Re: [Buildroot] RTNETLINK error
+
+>>>>> "Ryan" == NEAL, RYAN <RYAN_NEAL@appsig.com> writes:
+
+Hi,
+
+ Ryan> Starting network...
+
+ Ryan> ip: RTNETLINK answers: File exists
+
+  Ryan> And then it hangs.  I looked through the inittab -> rcS ->
+S40network to find
+ Ryan> that it is coming from the ifup call (on the loopback
+interface?). 
+
+How does your /etc/network/interfaces file look? Do you have an entry
+for eth0?
+
+From the above I assume you're booting from NFS? Reconfiguring eth0
+while you're trying to read from NFS isn't a good thing.
 
 -- 
-Grant Edwards                   grante             Yow! An Italian is COMBING
-                                  at               his hair in suburban DES
-                               visi.com            MOINES!
+Bye, Peter Korsgaard
