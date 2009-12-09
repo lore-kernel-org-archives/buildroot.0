@@ -1,35 +1,103 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 9 Dec 2009 08:36:41 +0100
-Subject: [Buildroot] [git commit master] kernel-headers: bump 2.6.27.x
-	stable version
-Message-ID: <20091209073717.9FE4A777CF@busybox.osuosl.org>
+From: peter.stosz at mentat.hu <peter.stosz@mentat.hu>
+Date: Wed, 9 Dec 2009 08:39:20 +0100
+Subject: [Buildroot] ARM OABI/EABI problem
+Message-ID: <OF3B98716C.764E06F3-ONC1257686.0021143A-C1257687.002A0DD7@mentat.hu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi!
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b7ed169692dca7a1bc423e982d37f015fc998943
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Please explain me, how to build complete OABI 'style' sytem to ARM 
+(RM9200) target.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- toolchain/kernel-headers/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+I try to compile a minimal Linux 2.6.27 with Busybox 1.15 system.
+I must OABI, because I need Floating Point Emulator, but it depends on 
+!AEABI || OABI_COMPAT
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index 938f69c..f27ddca 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -66,7 +66,7 @@ config BR2_DEFAULT_KERNEL_VERSION
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "2.6.26.8"	if BR2_KERNEL_HEADERS_2_6_26
--	default "2.6.27.40"	if BR2_KERNEL_HEADERS_2_6_27
-+	default "2.6.27.41"	if BR2_KERNEL_HEADERS_2_6_27
- 	default "2.6.28.10"	if BR2_KERNEL_HEADERS_2_6_28
- 	default "2.6.29.6"	if BR2_KERNEL_HEADERS_2_6_29
- 	default "2.6.30.10"	if BR2_KERNEL_HEADERS_2_6_30
--- 
-1.6.3.3
+So, every config file I change from EABI to OABI, and the first make is 
+done, the target can boot and start /fs.
+But, when I try to customise uClibc (or only touch uClibc config file), I 
+get the following error message:
+/srv/buildroot-2009.11/output/staging/usr/bin/../lib/gcc/arm-linux-uclibcgnueabi/4.4.2/libgcc.a(_divdi3.o):(.ARM.exidx+0x0): 
+undefined reference to `__aeabi_unwind_cpp_pr0'
+(complete log below)
+
+As you see (on Build option section) I leave BR2_GNU_TARGET_SUFFIX on the 
+default "linux-uclibcgnueabi"
+When I change it to "linux-uclibc", I get the following error: 
+
+warning: working around missing syslimits.h
+cp: stat 
+?/srv/buildroot/output/staging/lib/gcc-lib/arm-linux-uclibc/4.4.2/include/syslimits.h? 
+sikertelen: Nincs ilyen f?jl vagy k?nyvt?r  <-- No such file or directory
+make: *** [/srv/buildroot/output/target/usr/bin/gcc] Error 1
+
+
+Build environment:
+Ubuntu 9.10 x64 (Hungarian)
+bash, not dash
+make as root
+Buildroot 2009.11
+2nd error message on BR daily snapshot (091205)
+
+
+
+Peter
+
+
+# make
+
+Checking build system dependencies:
+BUILDROOT_DL_DIR clean:                         Ok
+CC clean:                                       Ok
+CXX clean:                                      Ok
+CPP clean:                                      Ok
+CFLAGS clean:                                   Ok
+INCLUDES clean:                                 Ok
+CXXFLAGS clean:                                 Ok
+which installed:                                Ok
+sed works:                                      Ok (/bin/sed)
+GNU make version '3.81':                        Ok
+C compiler '/usr/bin/gcc'
+C compiler version '4.4.1':                     Ok
+C++ compiler '/usr/bin/g++'
+C++ compiler version '4.4.1':                   Ok
+awk installed:                                  Ok
+bash installed:                                 Ok
+bison installed:                                Ok
+flex installed:                                 Ok
+gettext installed:                              Ok
+makeinfo installed:                             Ok
+patch installed:                                Ok
+Build system dependencies:                      Ok
+
+rm -rf /srv/buildroot-2009.11/output/build/buildroot-config
+mkdir -p /srv/buildroot-2009.11/output/build
+cp -dpRf package/config/buildroot-config 
+/srv/buildroot-2009.11/output/build/buildroot-config
+/usr/bin/make -j1 -C 
+/srv/buildroot-2009.11/output/toolchain/uClibc-0.9.30.1 \
+                ARCH="arm" \
+                PREFIX=/srv/buildroot-2009.11/output/staging \
+                DEVEL_PREFIX=/usr/ \
+                RUNTIME_PREFIX=/ \
+                install_runtime install_dev
+make[1]: Entering directory 
+`/srv/buildroot-2009.11/output/toolchain/uClibc-0.9.30.1'
+  LD libuClibc-0.9.30.1.so
+/srv/buildroot-2009.11/output/staging/usr/bin/../lib/gcc/arm-linux-uclibcgnueabi/4.4.2/libgcc.a(_divdi3.o):(.ARM.exidx+0x0): 
+undefined reference to `__aeabi_unwind_cpp_pr0'
+collect2: ld returned 1 exit status
+make[1]: *** [lib/libc.so] Error 1
+make[1]: Leaving directory 
+`/srv/buildroot-2009.11/output/toolchain/uClibc-0.9.30.1'
+make: *** [/srv/buildroot-2009.11/output/staging/usr/lib/libc.a] Error 2
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091209/3e3f9bfb/attachment-0001.htm>
