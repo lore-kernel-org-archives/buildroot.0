@@ -1,32 +1,62 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Wed, 9 Dec 2009 17:54:05 +0100
-Subject: [Buildroot] gst-plugins-bad dependencies fix
-In-Reply-To: <873a3kxfbu.fsf@macbook.be.48ers.dk>
-References: <1258065198-22972-1-git-send-email-llandwerlin@gmail.com>
-	<1260377121.4243.7.camel@sven> <873a3kxfbu.fsf@macbook.be.48ers.dk>
-Message-ID: <4d28d4b50912090854q62900397xa6df0bc635c59c93@mail.gmail.com>
+From: NEAL, RYAN <RYAN_NEAL@appsig.com>
+Date: Wed, 9 Dec 2009 11:20:12 -0800
+Subject: [Buildroot]  RTNETLINK error
+Message-ID: <4B2CB099CF3D4F40B1B1442281CA94FFC4C929@EXCHANGEVS01.appsig.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thx guys.
+Hello,
 
-On Wed, Dec 9, 2009 at 5:49 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
->
-> ?Sven> On Thu, 2009-11-12 at 23:33 +0100, llandwerlin at gmail.com wrote:
-> ?>> The following patches fix dependencies problems I had seen when
-> ?>> compiling the gst-plugins-bad package.
->
-> ?Sven> I have reviewed your patches once more and this looks good to me. Peter,
-> ?Sven> can you please incorporate this patchset?
->
-> Yes, I'll hopefully get around to do so tomorrow.
->
-> Thanks for the review.
->
-> --
-> Bye, Peter Korsgaard
->
+ 
+
+I was wondering if anyone could help me figure out why I am getting this
+error:
+
+ 
+
+Sending DHCP requests ., OK
+
+IP-Config: Got DHCP answer from 0.0.0.0, my address is 10.49.211.5
+
+IP-Config: Complete:
+
+     device=eth0, addr=10.49.211.5, mask=255.255.240.0,
+gw=10.49.223.254,
+
+     host=10.49.211.5, domain=appsig.com, nis-domain=appsig.com,
+
+     bootserver=0.0.0.0, rootserver=0.0.0.0, rootpath=
+
+Freeing unused kernel memory: 932k init
+
+Initializing random number generator... done.
+
+Starting network...
+
+ip: RTNETLINK answers: File exists
+
+ 
+
+And then it hangs.  I looked through the inittab -> rcS -> S40network to
+find that it is coming from the ifup call (on the loopback interface?).
+
+
+I have seen some stuff that "explains" the problem, but I am still at a
+loss.
+
+Any insight or help would be great!
+
+ 
+
+:: Ryan Neal
+
+Office: 490/279
+
+Phone: 408.774.2747
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091209/e510040e/attachment.htm>
