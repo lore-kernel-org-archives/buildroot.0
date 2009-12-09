@@ -1,62 +1,32 @@
-From: NEAL, RYAN <RYAN_NEAL@appsig.com>
-Date: Wed, 9 Dec 2009 11:20:12 -0800
-Subject: [Buildroot]  RTNETLINK error
-Message-ID: <4B2CB099CF3D4F40B1B1442281CA94FFC4C929@EXCHANGEVS01.appsig.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 09 Dec 2009 21:04:59 +0100
+Subject: [Buildroot] RTNETLINK error
+In-Reply-To: <4B2CB099CF3D4F40B1B1442281CA94FFC4C929@EXCHANGEVS01.appsig.com>
+	(RYAN NEAL's message of "Wed, 9 Dec 2009 11:20:12 -0800")
+References: <4B2CB099CF3D4F40B1B1442281CA94FFC4C929@EXCHANGEVS01.appsig.com>
+Message-ID: <87vdgfx6ac.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Ryan" == NEAL, RYAN <RYAN_NEAL@appsig.com> writes:
 
- 
+Hi,
 
-I was wondering if anyone could help me figure out why I am getting this
-error:
+ Ryan> Starting network...
 
- 
+ Ryan> ip: RTNETLINK answers: File exists
 
-Sending DHCP requests ., OK
+  Ryan> And then it hangs.  I looked through the inittab -> rcS -> S40network to find
+ Ryan> that it is coming from the ifup call (on the loopback interface?). 
 
-IP-Config: Got DHCP answer from 0.0.0.0, my address is 10.49.211.5
+How does your /etc/network/interfaces file look? Do you have an entry
+for eth0?
 
-IP-Config: Complete:
+From the above I assume you're booting from NFS? Reconfiguring eth0
+while you're trying to read from NFS isn't a good thing.
 
-     device=eth0, addr=10.49.211.5, mask=255.255.240.0,
-gw=10.49.223.254,
-
-     host=10.49.211.5, domain=appsig.com, nis-domain=appsig.com,
-
-     bootserver=0.0.0.0, rootserver=0.0.0.0, rootpath=
-
-Freeing unused kernel memory: 932k init
-
-Initializing random number generator... done.
-
-Starting network...
-
-ip: RTNETLINK answers: File exists
-
- 
-
-And then it hangs.  I looked through the inittab -> rcS -> S40network to
-find that it is coming from the ifup call (on the loopback interface?).
-
-
-I have seen some stuff that "explains" the problem, but I am still at a
-loss.
-
-Any insight or help would be great!
-
- 
-
-:: Ryan Neal
-
-Office: 490/279
-
-Phone: 408.774.2747
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091209/e510040e/attachment.htm>
+-- 
+Bye, Peter Korsgaard
