@@ -1,88 +1,61 @@
-From: Stephan Raue <mailinglists@openelec.tv>
-Date: Thu, 10 Dec 2009 16:48:26 +0100
-Subject: [Buildroot] Creating user accounts in rootfs
-In-Reply-To: <87skbivqqi.fsf@macbook.be.48ers.dk>
-References: <4B053FEB.20104@free.fr> <87skbivqqi.fsf@macbook.be.48ers.dk>
-Message-ID: <20091210164826.21316knhmltxhefe@login-64.openelec.tv>
+From: NEAL, RYAN <RYAN_NEAL@appsig.com>
+Date: Thu, 10 Dec 2009 09:44:33 -0800
+Subject: [Buildroot] RTNETLINK error
+In-Reply-To: <874onzw2mu.fsf@macbook.be.48ers.dk>
+References: <4B2CB099CF3D4F40B1B1442281CA94FFC4C929@EXCHANGEVS01.appsig.com><87vdgfx6ac.fsf@macbook.be.48ers.dk><4B2CB099CF3D4F40B1B1442281CA94FFC4C92A@EXCHANGEVS01.appsig.com><87ocm7x0q9.fsf@macbook.be.48ers.dk><4B2CB099CF3D4F40B1B1442281CA94FFC4C92B@EXCHANGEVS01.appsig.com><87hbrzx0hf.fsf@macbook.be.48ers.dk><4B2CB099CF3D4F40B1B1442281CA94FFC4C92C@EXCHANGEVS01.appsig.com>
+	<874onzw2mu.fsf@macbook.be.48ers.dk>
+Message-ID: <4B2CB099CF3D4F40B1B1442281CA94FFC4C92D@EXCHANGEVS01.appsig.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Zitat von Peter Korsgaard <jacmet@uclibc.org>:
+If I add "rdinit=/bin/sh" to the command line then I don't get the
+RTNETLINK error, I get a prompt.  I anticipate that I should be getting
+a prompt (maybe some other messages between, haven't seen it run)
+shortly after the network is configured.  
 
->>>>>> "Julien" == Julien Boibessot <julien.boibessot@free.fr> writes:
->
-> Hi,
->
->  Julien> Does someone know a better way than the following to create user
->  Julien> accounts ? :
->  Julien> * on the target use "adduser xxx"
->  Julien> * then copy target's "/etc/passwd" and "/etc/shadow" to Host's
->  Julien> "buildroot/target/..../rootfs/target_skeleton/..."
->  Julien> * rebuild rootfs
->
->  Julien> My goal is to have a rootfs with preset user accounts, ready to
->  Julien> be used as soon as the rootfs image has been flashed.
->
-> No, that's certainly the easiest solution (and how I normally do it).
->
-> --
-> Bye, Peter Korsgaard
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
->
+Is there a setting in BR to add that "iface  eth0 ..." to the
+/etc/network/interfaces?  Or do I need edit the file directly before the
+make?
 
-i use an different way (but not with buildroot):
+::Ryan
 
-i have 2 functions:
+-----Original Message-----
+From: Peter Korsgaard [mailto:jacmet at gmail.com] On Behalf Of Peter
+Korsgaard
+Sent: Thursday, December 10, 2009 2:21 AM
+To: NEAL, RYAN
+Cc: Peter Korsgaard; buildroot at busybox.net
+Subject: Re: [Buildroot] RTNETLINK error
 
-add_user() {
-   # Usage: add_user "username" "password" "userid" "groupid"  
-"description" "home" "shell"
-   mkdir -p ${INSTALL}/etc
-   touch ${INSTALL}/etc/passwd
-   if [ -z "`grep "$1:" ${INSTALL}/etc/passwd`" ]; then
-     echo "$1:$2:$3:$4:$5:$6:$7" >> ${INSTALL}/etc/passwd
-   fi
-}
+>>>>> "Ryan" == NEAL, RYAN <RYAN_NEAL@appsig.com> writes:
 
-add_group() {
-   # Usage: add_group "groupname" "groupid"
-   mkdir -p ${INSTALL}/etc
-   touch ${INSTALL}/etc/group
-   if [ -z "`grep "$1:" ${INSTALL}/etc/group`" ]; then
-     echo "$1:x:$2:" >> ${INSTALL}/etc/group
-   fi
-}
+Hi,
 
-that can be called from the buildsripts (like your makefiles) with for  
-example:
+ Ryan> Does the busybox dhcp client get called by the kernel at some
+point
+ Ryan> (udhcpc?)?  how do I make this configuration so that the busybox
+dhcp
+ Ryan> client is used?
 
-add_user haldaemon x 68 68 "HAL daemon" "/" "/bin/sh"
-add_group haldaemon 68
+Not by the kernel, but by ifup (by adding something like this to
+/etc/network/interfaces):
 
-for the password i dont use /etc/shadow (but you can do this also).
-i install an second busybox for my host in in my toolchain dir with  
-only CONFIG_CRYPTPW=y is set so i have busyboxs cryptpw utility on my  
-host
+iface eth0 inet dhcp
+auto eth0
 
-  i have set an variable ROOT_PASSWORD with my rootpassword
+ Ryan> I turned off the "IP : kernel level autoconfiguration"
+(CONFIG_IP_PNP)
+ Ryan> off in the linux kernel, no change. 
 
-and to set my root password i call the function add_user like:
+ Ryan> I then ran with just the boot line "console=ttyS0 root=/dev/ram"
+and
+ Ryan> still got the failure.  
 
-ROOT_PWD="`$ROOT/$TOOLCHAIN/bin/cryptpw $ROOT_PASSWORD`"
-add_user root "$ROOT_PWD" 0 0 "Root User" "/storage" "/bin/sh"
-add_group root 0
-
-stephan
-
+Ok, are you sure that the system hangs in ifup? What do you expect to
+happen afterwards? Have you configured a getty (login program) on ttyS0?
 
 -- 
-               ### OpenELEC.tv ###
-The free and open Mediacenter Distribution 4 you
-               http://www.openelec.tv
+Bye, Peter Korsgaard
