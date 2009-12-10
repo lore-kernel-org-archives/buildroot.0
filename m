@@ -1,69 +1,103 @@
-From: NEAL, RYAN <RYAN_NEAL@appsig.com>
-Date: Thu, 10 Dec 2009 12:13:14 -0800
-Subject: [Buildroot] RTNETLINK error
-In-Reply-To: <87zl5runrt.fsf@macbook.be.48ers.dk>
-References: <4B2CB099CF3D4F40B1B1442281CA94FFC4C929@EXCHANGEVS01.appsig.com><20091210092953.73963a39@surf>
-	<87zl5runrt.fsf@macbook.be.48ers.dk>
-Message-ID: <4B2CB099CF3D4F40B1B1442281CA94FFC4C934@EXCHANGEVS01.appsig.com>
+From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
+Date: Thu, 10 Dec 2009 21:34:21 +0100
+Subject: [Buildroot] *Tons* of BR warnings like
+	"package/Makefile.autotools.in:179: warning: overriding
+	commands for target `/home/bjornfor/raid/forks/buildroot/output'"
+Message-ID: <5f2b60912101234r46ca2234w760ddd2a01032525@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Got it mostly working!!!!! You guys are AWESOME!!!
+Hi all,
 
-Here is what I had to change: 
-	- turn off the 'minimal skeleton' option:
-BR2_PACKAGE_BUSYBOX_SKELETON  (not sure what this did in general...left
-on it caused that RTNETLINK error)
-	- turn on the generic serial and set the rate:
-BR2_TARGET_GENERIC_GETTY ttyS0 at 9600
+I'm having a strange build problem with Buildroot. It gives *tons* of warnings
+like below (it seems like at least one warning per .mk file in BR):
 
-In the kernel:
-	- having the IP auto config off: didn't setup eth0
-	- having the IP auto config on: setup eth0, but didn't run the
-busybox udhcpc
+----
+$ make atngw100_defconfig
+$ make
+package/Makefile.autotools.in:179: warning: overriding commands for
+target `/home/bjornfor/raid/forks/buildroot/output'
+package/Makefile.autotools.in:168: warning: ignoring old commands for
+target `/home/bjornfor/raid/forks/buildroot/output'
+package/Makefile.autotools.in:189: warning: overriding commands for
+target `/home/bjornfor/raid/forks/buildroot/output'
+package/Makefile.autotools.in:179: warning: ignoring old commands for
+target `/home/bjornfor/raid/forks/buildroot/output'
+...snip tons of similar warnings...
+package/mtd/mtd-utils/mtd.mk:98: warning: overriding commands for
+target `/home/bjornfor/raid/forks/buildroot/output'
+package/mtd/mtd-utils/mtd.mk:65: warning: ignoring old commands for
+target `/home/bjornfor/raid/forks/buildroot/output'
+package/mtd/mtd-utils/mtd.mk:97: target
+`/home/bjornfor/raid/forks/buildroot/output' given more than once in
+the same rule.
+package/mtd/mtd-utils/mtd.mk:97: target
+`/home/bjornfor/raid/forks/buildroot/output' given more than once in
+the same rule.
+package/mtd/mtd-utils/mtd.mk:97: target
+`/home/bjornfor/raid/forks/buildroot/output' given more than once in
+the same rule.
+package/mtd/mtd-utils/mtd.mk:97: target
+`/home/bjornfor/raid/forks/buildroot/output' given more than once in
+the same rule.
+package/mtd/mtd-utils/mtd.mk:106: *** multiple target patterns. Stop.
+----
 
-I was wondering if there is a setting to get the udhcpc to run
-automatically, or if I should edit one of the startup scripts manually? 
+And then it dies.
 
-Also, I was wondering if busybox supported telnetd?  I thought it did,
-but I can't find any settings to enable it (and it isn't listed in the
-busybox help).  
+Using 'defconfig' it will start downloading sources, but it still generates
+*lots* of warnings:
+----
+$ make defconfig
+$ make
+...snip lots of warnings...
+Makefile:330: warning: overriding commands for target
+`/home/bjornfor/raid/forks/buildroot/output'
+target/ubifs/ubifsroot.mk:25: warning: ignoring old commands for
+target `/home/bjornfor/raid/forks/buildroot/output'
+Makefile:355: warning: overriding commands for target
+`/home/bjornfor/raid/forks/buildroot/output'
+Makefile:330: warning: ignoring old commands for target
+`/home/bjornfor/raid/forks/buildroot/output'
+Makefile:354: target `/home/bjornfor/raid/forks/buildroot/output'
+given more than once in the same rule.
+Makefile:354: target `/home/bjornfor/raid/forks/buildroot/output'
+given more than once in the same rule.
+Makefile:354: target `/home/bjornfor/raid/forks/buildroot/output'
+given more than once in the same rule.
+Makefile:354: target `/home/bjornfor/raid/forks/buildroot/output'
+given more than once in the same rule.
+Makefile:358: warning: overriding commands for target
+`/home/bjornfor/raid/forks/buildroot/output'
+Makefile:355: warning: ignoring old commands for target
+`/home/bjornfor/raid/forks/buildroot/output'
+Makefile:373: warning: overriding commands for target
+`/home/bjornfor/raid/forks/buildroot/output'
+Makefile:358: warning: ignoring old commands for target
+`/home/bjornfor/raid/forks/buildroot/output'
+...snip me killing BR while it downloads sources...
+----
 
-Overall, this is FANTASTIC.  Thank you soo much for your help!!
 
-::Ryan
+I have used git bisect and it said the first bad commit (where all the warnings
+started to appear) was:
 
------Original Message-----
-From: buildroot-bounces@busybox.net
-[mailto:buildroot-bounces at busybox.net] On Behalf Of Peter Korsgaard
-Sent: Thursday, December 10, 2009 2:28 AM
-To: Thomas Petazzoni
-Cc: buildroot at busybox.net
-Subject: Re: [Buildroot] RTNETLINK error
+commit a07d6b9d56955bfe0165b5f4ea6d3ed7a92ecff6
+Author: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date:   Fri Jul 31 10:24:32 2009 +0200
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-writes:
+    By default, put the output in an output/ directory
 
-Hi,
 
- Thomas> Are you sure your /etc/inittab is properly configured to set-up
- Thomas> a getty or shell on whichever serial line you're using ?
+But I find that strange as I'm pretty sure I've successfully used Buildroot
+revisions after this commit before.
 
- Thomas> This "ip: RTNETLINK" is something I also have, but the system
- Thomas> is fully functional. However, when I forget to adapt the
- Thomas> /etc/inittab to the board serial port configuration, I get the
- Thomas> same behaviour as you do.
+I think it must be something wrong with *my* setup since nobody else has
+noticed this (and the commit is from July), but I don't know what it may be.
+Any suggestions?
 
-My thoughts exactly. Notice that you don't need to edit inittab by hand
-if you use the generic target skeleton, we have kconfig settings for
-this nowadays (Target options->Generic serial port config).
-
--- 
-Bye, Peter Korsgaard
-_______________________________________________
-buildroot mailing list
-buildroot at busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
+Best regards,
+Bj?rn Forsman
