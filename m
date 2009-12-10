@@ -1,10 +1,10 @@
 From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Fri, 11 Dec 2009 00:31:14 +0100
-Subject: [Buildroot] [PATCH 2/6] gst-plugins-bad: Fix dependency on
-	libcdaudio
+Date: Fri, 11 Dec 2009 00:31:15 +0100
+Subject: [Buildroot] [PATCH 3/6] gst-plugins-bad: Fix dependency on openssl
+	through the apexsink element
 In-Reply-To: <1260487878-21126-1-git-send-email-llandwerlin@gmail.com>
 References: <1260487878-21126-1-git-send-email-llandwerlin@gmail.com>
-Message-ID: <1260487878-21126-3-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1260487878-21126-4-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,37 +20,37 @@ Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
  2 files changed, 11 insertions(+), 0 deletions(-)
 
 diff --git a/package/multimedia/gst-plugins-bad/Config.in b/package/multimedia/gst-plugins-bad/Config.in
-index 8601cf4..6aebefd 100644
+index 6aebefd..3061822 100644
 --- a/package/multimedia/gst-plugins-bad/Config.in
 +++ b/package/multimedia/gst-plugins-bad/Config.in
-@@ -33,6 +33,10 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_LEGACYRESAMPLE
- config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_BAYER
- 	bool "bayer"
+@@ -21,6 +21,10 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_AIFFPARSE
+ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_AMRPARSE
+ 	bool "amrparse"
  
-+config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_CDAUDIO
-+	bool "cdaudio"
-+	select BR2_PACKAGE_LIBCDAUDIO
++config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_APEXSINK
++	bool "apexsink"
++	select BR2_PACKAGE_OPENSSL
 +
- config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_CDXAPARSE
- 	bool "cdxaparse"
+ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_AUTOCONVERT
+ 	bool "autoconvert"
  
 diff --git a/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk b/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
-index c6c5fd0..282445e 100644
+index 282445e..8c73bf0 100644
 --- a/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
 +++ b/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
-@@ -63,6 +63,13 @@ else
- GST_PLUGINS_BAD_CONF_OPT += --disable-cdxaparse
+@@ -33,6 +33,13 @@ else
+ GST_PLUGINS_BAD_CONF_OPT += --disable-amrparse
  endif
  
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_CDAUDIO),y)
-+GST_PLUGINS_BAD_CONF_OPT += --enable-cdaudio
-+GST_PLUGINS_BAD_DEPENDENCIES += libcdaudio
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_APEXSINK),y)
++GST_PLUGINS_BAD_CONF_OPT += --enable-apexsink
++GST_PLUGINS_BAD_DEPENDENCIES += openssl
 +else
-+GST_PLUGINS_BAD_CONF_OPT += --disable-cdaudio
++GST_PLUGINS_BAD_CONF_OPT += --disable-apexsink
 +endif
 +
- ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DCCP),y)
- GST_PLUGINS_BAD_CONF_OPT += --enable-dccp
+ ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_AUTOCONVERT),y)
+ GST_PLUGINS_BAD_CONF_OPT += --enable-autoconvert
  else
 -- 
 1.6.5.4
