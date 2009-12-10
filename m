@@ -1,36 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 10 Dec 2009 09:29:53 +0100
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 10 Dec 2009 11:21:29 +0100
 Subject: [Buildroot] RTNETLINK error
-In-Reply-To: <4B2CB099CF3D4F40B1B1442281CA94FFC4C929@EXCHANGEVS01.appsig.com>
+In-Reply-To: <4B2CB099CF3D4F40B1B1442281CA94FFC4C92C@EXCHANGEVS01.appsig.com>
+	(RYAN NEAL's message of "Wed, 9 Dec 2009 14:18:21 -0800")
 References: <4B2CB099CF3D4F40B1B1442281CA94FFC4C929@EXCHANGEVS01.appsig.com>
-Message-ID: <20091210092953.73963a39@surf>
+	<87vdgfx6ac.fsf@macbook.be.48ers.dk>
+	<4B2CB099CF3D4F40B1B1442281CA94FFC4C92A@EXCHANGEVS01.appsig.com>
+	<87ocm7x0q9.fsf@macbook.be.48ers.dk>
+	<4B2CB099CF3D4F40B1B1442281CA94FFC4C92B@EXCHANGEVS01.appsig.com>
+	<87hbrzx0hf.fsf@macbook.be.48ers.dk>
+	<4B2CB099CF3D4F40B1B1442281CA94FFC4C92C@EXCHANGEVS01.appsig.com>
+Message-ID: <874onzw2mu.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 9 Dec 2009 11:20:12 -0800,
-"NEAL, RYAN" <RYAN_NEAL@appsig.com> a ?crit :
+>>>>> "Ryan" == NEAL, RYAN <RYAN_NEAL@appsig.com> writes:
 
-> Starting network...
-> 
-> ip: RTNETLINK answers: File exists
-> 
-> And then it hangs.  I looked through the inittab -> rcS -> S40network
-> to find that it is coming from the ifup call (on the loopback
-> interface?).
+Hi,
 
-Are you sure your /etc/inittab is properly configured to set-up a getty
-or shell on whichever serial line you're using ?
+ Ryan> Does the busybox dhcp client get called by the kernel at some point
+ Ryan> (udhcpc?)?  how do I make this configuration so that the busybox dhcp
+ Ryan> client is used?
 
-This "ip: RTNETLINK" is something I also have, but the system is fully
-functional. However, when I forget to adapt the /etc/inittab to the
-board serial port configuration, I get the same behaviour as you do.
+Not by the kernel, but by ifup (by adding something like this to /etc/network/interfaces):
 
-Thomas
+iface eth0 inet dhcp
+auto eth0
+
+ Ryan> I turned off the "IP : kernel level autoconfiguration" (CONFIG_IP_PNP)
+ Ryan> off in the linux kernel, no change. 
+
+ Ryan> I then ran with just the boot line "console=ttyS0 root=/dev/ram" and
+ Ryan> still got the failure.  
+
+Ok, are you sure that the system hangs in ifup? What do you expect to
+happen afterwards? Have you configured a getty (login program) on ttyS0?
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
