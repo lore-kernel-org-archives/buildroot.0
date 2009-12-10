@@ -1,55 +1,88 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 10 Dec 2009 16:28:48 +0100
-Subject: [Buildroot] [PATCH 1/6] Added libcdaudio package (dependency of
-	gst-plugins-bad)
-In-Reply-To: <1258065198-22972-2-git-send-email-llandwerlin@gmail.com>
-	(llandwerlin@gmail.com's message of "Thu, 12 Nov 2009 23:33:13 +0100")
-References: <1258065198-22972-1-git-send-email-llandwerlin@gmail.com>
-	<1258065198-22972-2-git-send-email-llandwerlin@gmail.com>
-Message-ID: <87iqcevoen.fsf@macbook.be.48ers.dk>
+From: Stephan Raue <mailinglists@openelec.tv>
+Date: Thu, 10 Dec 2009 16:48:26 +0100
+Subject: [Buildroot] Creating user accounts in rootfs
+In-Reply-To: <87skbivqqi.fsf@macbook.be.48ers.dk>
+References: <4B053FEB.20104@free.fr> <87skbivqqi.fsf@macbook.be.48ers.dk>
+Message-ID: <20091210164826.21316knhmltxhefe@login-64.openelec.tv>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "llandwerlin" == llandwerlin  <llandwerlin@gmail.com> writes:
+Zitat von Peter Korsgaard <jacmet@uclibc.org>:
 
-Committed with minor changes, thanks!
+>>>>>> "Julien" == Julien Boibessot <julien.boibessot@free.fr> writes:
+>
+> Hi,
+>
+>  Julien> Does someone know a better way than the following to create user
+>  Julien> accounts ? :
+>  Julien> * on the target use "adduser xxx"
+>  Julien> * then copy target's "/etc/passwd" and "/etc/shadow" to Host's
+>  Julien> "buildroot/target/..../rootfs/target_skeleton/..."
+>  Julien> * rebuild rootfs
+>
+>  Julien> My goal is to have a rootfs with preset user accounts, ready to
+>  Julien> be used as soon as the rootfs image has been flashed.
+>
+> No, that's certainly the easiest solution (and how I normally do it).
+>
+> --
+> Bye, Peter Korsgaard
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+>
 
- llandwerlin> +config BR2_PACKAGE_LIBCDAUDIO
- llandwerlin> +	bool "libcdaudio"
- llandwerlin> +	help
- llandwerlin> +	  libcdaudio is a library designed to provide functions to
- llandwerlin> +	  control operation of a CD-ROM when playing audio CDs. It
- llandwerlin> +	  also contains functions for CDDB and CD Index lookup.
+i use an different way (but not with buildroot):
 
+i have 2 functions:
 
-We normally add the upstream URL here.
+add_user() {
+   # Usage: add_user "username" "password" "userid" "groupid"  
+"description" "home" "shell"
+   mkdir -p ${INSTALL}/etc
+   touch ${INSTALL}/etc/passwd
+   if [ -z "`grep "$1:" ${INSTALL}/etc/passwd`" ]; then
+     echo "$1:$2:$3:$4:$5:$6:$7" >> ${INSTALL}/etc/passwd
+   fi
+}
 
- llandwerlin> diff --git a/package/multimedia/libcdaudio/libcdaudio.mk b/package/multimedia/libcdaudio/libcdaudio.mk
- llandwerlin> new file mode 100644
- llandwerlin> index 0000000..f05b532
- llandwerlin> --- /dev/null
- llandwerlin> +++ b/package/multimedia/libcdaudio/libcdaudio.mk
- llandwerlin> @@ -0,0 +1,15 @@
- llandwerlin> +#############################################################
- llandwerlin> +#
- llandwerlin> +# libcdaudio
- llandwerlin> +#
- llandwerlin> +#############################################################
- llandwerlin> +
- llandwerlin> +LIBCDAUDIO_VERSION = 0.99.12p2
- llandwerlin> +LIBCDAUDIO_SOURCE = libcdaudio-$(LIBCDAUDIO_VERSION).tar.gz
- llandwerlin> +LIBCDAUDIO_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/libcdaudio/libcdaudio/$(LIBCDAUDIO_VERSION)/
- llandwerlin> +LIBCDAUDIO_AUTORECONF = YES
- llandwerlin> +LIBCDAUDIO_LIBTOOL_PATCH = YES
- llandwerlin> +LIBCDAUDIO_INSTALL_STAGING = YES
- llandwerlin> +LIBCDAUDIO_INSTALL_TARGET = YES
- llandwerlin> +
- llandwerlin> +$(eval $(call AUTOTARGETS,package,libcdaudio))
+add_group() {
+   # Usage: add_group "groupname" "groupid"
+   mkdir -p ${INSTALL}/etc
+   touch ${INSTALL}/etc/group
+   if [ -z "`grep "$1:" ${INSTALL}/etc/group`" ]; then
+     echo "$1:x:$2:" >> ${INSTALL}/etc/group
+   fi
+}
 
-The package directory you're using is package/multimedia.
+that can be called from the buildsripts (like your makefiles) with for  
+example:
+
+add_user haldaemon x 68 68 "HAL daemon" "/" "/bin/sh"
+add_group haldaemon 68
+
+for the password i dont use /etc/shadow (but you can do this also).
+i install an second busybox for my host in in my toolchain dir with  
+only CONFIG_CRYPTPW=y is set so i have busyboxs cryptpw utility on my  
+host
+
+  i have set an variable ROOT_PASSWORD with my rootpassword
+
+and to set my root password i call the function add_user like:
+
+ROOT_PWD="`$ROOT/$TOOLCHAIN/bin/cryptpw $ROOT_PASSWORD`"
+add_user root "$ROOT_PWD" 0 0 "Root User" "/storage" "/bin/sh"
+add_group root 0
+
+stephan
+
 
 -- 
-Bye, Peter Korsgaard
+               ### OpenELEC.tv ###
+The free and open Mediacenter Distribution 4 you
+               http://www.openelec.tv
