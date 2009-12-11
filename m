@@ -1,36 +1,54 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 11 Dec 2009 00:39:58 +0100
-Subject: [Buildroot] [PATCH 5/6] Added libdvdnav package (dependency of
-	gst-plugins-bad)
-In-Reply-To: <87ein2v1ta.fsf@macbook.be.48ers.dk> (Peter Korsgaard's message
-	of "Fri, 11 Dec 2009 00:36:49 +0100")
-References: <1258065198-22972-1-git-send-email-llandwerlin@gmail.com>
-	<1258065198-22972-6-git-send-email-llandwerlin@gmail.com>
-	<87ein2v1ta.fsf@macbook.be.48ers.dk>
-Message-ID: <878wdav1o1.fsf@macbook.be.48ers.dk>
+From: Nicolae T <microvis@cox.net>
+Date: Thu, 10 Dec 2009 16:03:55 -0800
+Subject: [Buildroot] u-boot compile error
+Message-ID: <1260489835.17342.6.camel@RoadRunner>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
+Hello all, 
 
->>>>> "llandwerlin" == llandwerlin  <llandwerlin@gmail.com> writes:
- llandwerlin> +++ b/package/multimedia/libdvdnav/Config.in
- llandwerlin> @@ -0,0 +1,7 @@
- llandwerlin> +config BR2_PACKAGE_LIBDVDNAV
- llandwerlin> +	bool "libdvdnav"
- llandwerlin> +        select BR2_PACKAGE_LIBDVDREAD
- llandwerlin> +	help
- llandwerlin> +	  libdvdnav is a library that allows easy use of sophisticated
- llandwerlin> +	  DVD navigation features such as DVD menus, multiangle
- llandwerlin> +	  playback and even interactive DVD games.
+We're getting following compile errors at u-boot build time, for which
+we have no clue.
+There must be something we do in setup that leads to that, but why
+failing with compile error? Set up rather straightforward with  BR built
+cross-compile chain.
+Anyhow, this is wrong and I think it should be looked into.  
+Thanks.
 
- Peter> Same issues as with cdaudio, but I've fixed that myself - Committed,
- Peter> thanks.
 
-Ups, that comment was for libdvdread (but applies here as well).
+make[2]: Entering directory
+`/home/nicolae/buildroot7Dec/output/build/u-boot-2009.08/lib_arm'
+/home/nicolae/buildroot7Dec/output/staging/usr/bin/arm-linux-uclibcgnueabi-gcc  -g  -Os   -fno-strict-aliasing -fno-common -ffixed-r8 -msoft-float   -D__KERNEL__ -DTEXT_BASE=0x80e80000 -I/home/nicolae/buildroot7Dec/output/build/u-boot-2009.08/include -fno-builtin -ffreestanding -nostdinc -isystem /home/nicolae/buildroot7Dec/output/staging/usr/bin/../lib/gcc/arm-linux-uclibcgnueabi/4.4.2/include -pipe  -DCONFIG_ARM -D__ARM__ -marm  -mabi=aapcs-linux -mno-thumb-interwork -march=armv5 -Wall -Wstrict-prototypes -fno-stack-protector   -o board.o board.c -c
+board.c:127: error: inline function ?coloured_LED_init? cannot be
+declared weak
+board.c:129: error: inline function ?red_LED_on? cannot be declared weak
+board.c:131: error: inline function ?red_LED_off? cannot be declared
+weak
+board.c:133: error: inline function ?green_LED_on? cannot be declared
+weak
+board.c:135: error: inline function ?green_LED_off? cannot be declared
+weak
+board.c:137: error: inline function ?yellow_LED_on? cannot be declared
+weak
+board.c:139: error: inline function ?yellow_LED_off? cannot be declared
+weak
+board.c:141: error: inline function ?blue_LED_on? cannot be declared
+weak
+board.c:143: error: inline function ?blue_LED_off? cannot be declared
+weak
+make[2]: *** [board.o] Error 1
+make[2]: Leaving directory
+`/home/nicolae/buildroot7Dec/output/build/u-boot-2009.08/lib_arm'
+make[1]: *** [lib_arm/libarm.a] Error 2
+make[1]: Leaving directory
+`/home/nicolae/buildroot7Dec/output/build/u-boot-2009.08'
+make: ***
+[/home/nicolae/buildroot7Dec/output/build/u-boot-2009.08/u-boot.bin]
+Error 2
 
--- 
-Bye, Peter Korsgaard
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091210/75a8aca6/attachment.htm>
