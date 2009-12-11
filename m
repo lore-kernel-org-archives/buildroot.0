@@ -1,35 +1,33 @@
-From: Nicolae T <microvis@cox.net>
-Date: Fri, 11 Dec 2009 10:07:59 -0800
-Subject: [Buildroot] u-boot compile error
-In-Reply-To: <B683F7F8E0BC46E5816B5E39B9B101B3@apexjs>
-References: <B683F7F8E0BC46E5816B5E39B9B101B3@apexjs>
-Message-ID: <1260554879.12496.3.camel@RoadRunner>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 11 Dec 2009 20:56:01 +0000 (UTC)
+Subject: [Buildroot] [Bug 795] Minor edits to fix typos, grammar, spelling,
+ usage in documentation.
+In-Reply-To: <bug-795-163@https.bugs.busybox.net/>
+References: <bug-795-163@https.bugs.busybox.net/>
+Message-ID: <20091211205602.6AB7F76193@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Johan,
-
-Maybe that's the case. However since we're building for an arm
-cortex-A8, we have to use gcc >= 4.4.x, based on instructions in
-menuconifg.
+https://bugs.busybox.net/show_bug.cgi?id=795
 
 
 
-On Fri, 2009-12-11 at 14:37 +0100, Sagaert Johan wrote:
-> Hi
->  
-> You are using the 4.4.x GCC , the 4.3.x does not cause that error
->  
-> Just change the inline declared functions.
-> As i remember removing the inline keyword fixes it.
->  
-> Johan
->  
->  
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+--- Comment #1 from Grant Edwards <grant.b.edwards@gmail.com>  2009-12-11 20:55:59 UTC ---
+Created an attachment (id=823)
+ --> (https://bugs.busybox.net/attachment.cgi?id=823)
+second pass of document cleanup -- depends on 0001-Clean-up[...].patch
+
+Second pass of document cleanup edits.
+
+Apply after applying 0001-Clean-up-punctuation-grammar-usage-and-typos.patch
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
