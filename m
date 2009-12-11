@@ -1,59 +1,23 @@
-From: Marc Egli <marc.egli@hsr.ch>
-Date: Fri, 11 Dec 2009 14:35:11 +0100
-Subject: [Buildroot] *Tons* of BR warnings like
-	"package/Makefile.autotools.in:179: warning:
-	overriding	commands for target
-	`/home/bjornfor/raid/forks/buildroot/output'"
-In-Reply-To: <5f2b60912110523u6905152cpd4082b247aa620ba@mail.gmail.com>
-References: <5f2b60912101234r46ca2234w760ddd2a01032525@mail.gmail.com>
-	<4B221A6E.3090105@gmail.com>
-	<5f2b60912110236x1373eae0wf181f6720ca56ca3@mail.gmail.com>
-	<20091211121818.675a61bf@surf>
-	<5f2b60912110523u6905152cpd4082b247aa620ba@mail.gmail.com>
-Message-ID: <620C197E-4581-41E7-AB5F-DEC59C0847A6@hsr.ch>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Fri, 11 Dec 2009 14:37:57 +0100
+Subject: [Buildroot] u-boot compile error
+Message-ID: <B683F7F8E0BC46E5816B5E39B9B101B3@apexjs>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-i am working on karamic x86_64 without any of the problems you described here, but i also changed /bin/sh to point to bash instead of dash
-
-marc
-
-Am 11.12.2009 um 14:23 schrieb Bj?rn Forsman:
-
-> 2009/12/11 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
->> Hello,
->> 
->> Le Fri, 11 Dec 2009 11:36:28 +0100,
->> Bj?rn Forsman <bjorn.forsman@gmail.com> a ?crit :
->> 
->>> I'm on Ubuntu 9.10 Karmic amd64. I just tried BR on another machine
->>> (also Karmic amd64) and the same thing happens there. I also tried to
->>> symlink /bin/sh to /bin/dash on one of the machines. It didn't help.
->> 
->> I cannot reproduce here. My buildroot version (from git) works well on
->> a Karmic x86.
->> 
->> Which version of Buildroot are you using exactly ? Which version of
->> make does your system has ? Do you have any BUILDROOT_* environment
->> variable set ?
-> 
-> BR version: HEAD as of now (1323ecdd094f0dd387bfe9db8c00cd9982ac1156)
-> 
-> Make version: 3.81
-> 
-> I don't have any BUILDROOT environment variables:
-> $ env | grep BUILDROOT     # nothing
-> 
-> I really think that some update to Ubuntu 9.10 Karmic amd64 has caused this
-> issue, because I have two machines with the same OS that show this behaviour
-> and I'm pretty sure that the BR versions not working now worked before.
-> 
-> Best regards,
-> Bj?rn Forsman
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Hi
+ 
+You are using the 4.4.x GCC , the 4.3.x does not cause that error
+ 
+Just change the inline declared functions.
+As i remember removing the inline keyword fixes it.
+ 
+Johan
+ 
+ 
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091211/d42b8256/attachment.htm>
