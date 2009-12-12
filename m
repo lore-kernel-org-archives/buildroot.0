@@ -1,28 +1,45 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 12 Dec 2009 14:35:33 +0100
-Subject: [Buildroot] [PATCH 4/6] package: Added libdvdread package
-	(dependency of gst-plugins-bad)
-In-Reply-To: <1260621037.9059.25.camel@coalu.atr> (Lionel Landwerlin's message
-	of "Sat, 12 Dec 2009 13:30:37 +0100")
-References: <1260487878-21126-1-git-send-email-llandwerlin@gmail.com>
-	<1260487878-21126-5-git-send-email-llandwerlin@gmail.com>
-	<1260584626.9059.19.camel@coalu.atr>
-	<87ljh8tybd.fsf@macbook.be.48ers.dk>
-	<1260621037.9059.25.camel@coalu.atr>
-Message-ID: <87ein0tivu.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 12 Dec 2009 23:01:25 +0000 (UTC)
+Subject: [Buildroot] [Bug 797] New: add libplayer package
+Message-ID: <bug-797-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Lionel" == Lionel Landwerlin <llandwerlin@gmail.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=797
 
-Hi,
+           Summary: add libplayer package
+           Product: buildroot
+           Version: 2009.11
+          Platform: PC
+               URL: http://libplayer.geexbox.org/
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: caytchen at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
- Lionel> Thx a lot for your patience.
 
-You too.
+Created an attachment (id=825)
+ --> (https://bugs.busybox.net/attachment.cgi?id=825)
+patch based on 2009.11
+
+This adds libplayer version 1.0.0. See the homepage for detailed information.
+Package has been tested for avr32, both build and execution, and given its
+simplicity, should work on any platform.
+
+Note that, since there is no xine package in buildroot yet, it's not possible
+to select xine as a wrapper in menuconfig, even though support has been
+prepared in the makefile.
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
