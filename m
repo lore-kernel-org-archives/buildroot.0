@@ -1,9 +1,11 @@
-From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Date: Sun, 13 Dec 2009 21:51:35 +0100
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 13 Dec 2009 22:28:56 +0100
 Subject: [Buildroot] *Tons* of BR warnings like
 	"package/Makefile.autotools.in:179: warning: overriding
 	commands for target `/home/bjornfor/raid/forks/buildroot/output'"
-In-Reply-To: <87vdgdttyp.fsf@macbook.be.48ers.dk>
+In-Reply-To: <5f2b60912131251r647113bfj454cbf17c7bca57e@mail.gmail.com>
+	(=?utf-8?Q?=22Bj=C3=B8rn?= Forsman"'s message of "Sun,
+	13 Dec 2009 21:51:35 +0100")
 References: <5f2b60912101234r46ca2234w760ddd2a01032525@mail.gmail.com>
 	<4B221A6E.3090105@gmail.com>
 	<5f2b60912110236x1373eae0wf181f6720ca56ca3@mail.gmail.com>
@@ -12,66 +14,102 @@ References: <5f2b60912101234r46ca2234w760ddd2a01032525@mail.gmail.com>
 	<87zl5ptxv4.fsf@macbook.be.48ers.dk>
 	<5f2b60912110653q3ad5824fpa86b07e38dab5a2@mail.gmail.com>
 	<87vdgdttyp.fsf@macbook.be.48ers.dk>
-Message-ID: <5f2b60912131251r647113bfj454cbf17c7bca57e@mail.gmail.com>
+	<5f2b60912131251r647113bfj454cbf17c7bca57e@mail.gmail.com>
+Message-ID: <87pr6isgvb.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2009/12/11 Peter Korsgaard <jacmet@uclibc.org>:
->>>>>> "Bj?rn" == Bj?rn Forsman <bjorn.forsman@gmail.com> writes:
-> ?Bj?rn> and when building a non-working configuration, there is no other
-> ?Bj?rn> output than the warnings and then full stop. Make quits before
-> ?Bj?rn> running the 'test' target! See the log:
->
-> Ahh yes, you never get that far with those warnings.
->
-> I think your BASE_DIR and/or BUILD_DIR variables somehow gets an extra
-> space appended/prepended.
->
-> Could you change the BASE_DIR := line in the toplevel makefile to simply
-> read:
->
-> BASE_DIR:=home/bjornfor/dev/buildroot/output
->
-> and try again?
+>>>>> "Bj?rn" == Bj?rn Forsman <bjorn.forsman@gmail.com> writes:
 
-I finally found the bug. (Thanks a lot for the hint, Peter.) BASE_DIR ends
-up containing the Buildroot output directory *two* times (separated by a
-space). And it happends because I use the CDPATH environment variable.
+Hi,
 
-Let me demonstrate:
+ Bj?rn> I finally found the bug. (Thanks a lot for the hint, Peter.)
+ Bj?rn> BASE_DIR ends up containing the Buildroot output directory *two*
+ Bj?rn> times (separated by a space). And it happends because I use the
+ Bj?rn> CDPATH environment variable.
 
-$ mkdir dir
-$ (CDPATH= cd dir/)      # no output
-$ (CDPATH=.:.. cd dir/)  # output!
-/tmp/directory/dir
+ Bj?rn> Let me demonstrate:
 
-This means that when the top Makefile in BR says:
+ Bj?rn> $ mkdir dir
+ Bj?rn> $ (CDPATH= cd dir/)      # no output
+ Bj?rn> $ (CDPATH=.:.. cd dir/)  # output!
+ Bj?rn> /tmp/directory/dir
 
-  BASE_DIR := $(shell mkdir -p $(O) && cd $(O) && pwd)
+Ahh - I use zsh dir hashes for that kind of stuff instead.
 
-both 'cd' and 'pwd' will print out the same path (when CDPATH is
-non-empty), BASE_DIR will be containing two identical paths. Make freaks
-out and BR fails.
+ Bj?rn> This means that when the top Makefile in BR says:
 
-So to fix this issue I thought it would be easy to remove CDPATH from
-the Buildroot environment. But how? I tried:
+ Bj?rn>   BASE_DIR := $(shell mkdir -p $(O) && cd $(O) && pwd)
 
+ Bj?rn> both 'cd' and 'pwd' will print out the same path (when CDPATH is
+ Bj?rn> non-empty), BASE_DIR will be containing two identical paths. Make freaks
+ Bj?rn> out and BR fails.
+
+ Bj?rn> So to fix this issue I thought it would be easy to remove CDPATH from
+ Bj?rn> the Buildroot environment. But how? I tried:
+
+ Bj?rn> export CDPATH:=
+ Bj?rn> unexport CDPATH
+
+ Bj?rn> in the top Makefile but neither worked.
+
+It does work, but only for stuff running inside the make rules:
+
+cat Makefile
 export CDPATH:=
-unexport CDPATH
+all:
+        set|grep CDPATH
 
-in the top Makefile but neither worked.
+export CDPATH=.:~
+make
+set|grep CDPATH
+BASH_EXECUTION_STRING='set|grep CDPATH'
+CDPATH=
 
-It is also possible to use absolute paths when defining BASE_DIR. But I
-don't know how to do that when the output variable O can be relative or
-absolute:
+sed -i 's/export/#export/' Makefile
+make
+set|grep CDPATH
+BASH_EXECUTION_STRING='set|grep CDPATH'
+CDPATH=.:/home/peko
 
-  $ make O=/tmp/output
-  $ make O=output
+But if you instead have something using $(shell ) it won't work:
 
-Any suggestions?
+cat Makefile
+export CDPATH:=
+DUMMY:=$(shell set|grep CDPATH >&2)
+all:
+        set|grep CDPATH
 
-Best regards,
-Bj?rn Forsman
+make
+BASH_EXECUTION_STRING='set|grep CDPATH >&2'
+CDPATH=.:/home/peko
+set|grep CDPATH
+BASH_EXECUTION_STRING='set|grep CDPATH'
+CDPATH=
+
+E.G. the export doesn't effect the environment of $(shell ).
+
+So the proper fix is to do:
+
+unset CDPATH:=
+and explicitly work around if for BASE_DIR, E.G.:
+
+BASE_DIR := $(shell mkdir -p $(O) && cd $(O) >/dev/null && pwd)
+
+I'll fix that in git.
+
+ Bj?rn> It is also possible to use absolute paths when defining BASE_DIR. But I
+ Bj?rn> don't know how to do that when the output variable O can be relative or
+ Bj?rn> absolute:
+
+ Bj?rn>   $ make O=/tmp/output
+ Bj?rn>   $ make O=output
+
+Well, that's the point of the 'cd $(O) >/dev/null && pwd' part (convert
+to absolute path).
+
+-- 
+Bye, Peter Korsgaard
