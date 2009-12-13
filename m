@@ -1,17 +1,39 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 12 Dec 2009 23:41:16 +0100
-Subject: [Buildroot] [git commit master] busybox: bump 1.15.x stable version
-Message-ID: <20091213000048.9906B777FF@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 13 Dec 2009 01:45:03 +0000 (UTC)
+Subject: [Buildroot] [Bug 799] New: e2fsprogs small fix
+Message-ID: <bug-799-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=799
 
-commit: http://git.buildroot.net/buildroot/commit/?id=617aa4995a2ea97e9663cac26744d67ea726745a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+           Summary: e2fsprogs small fix
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: rvpaasen at t3i.nl
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 
-Patch is too large, so refusing to show it
+Created an attachment (id=827)
+ --> (https://bugs.busybox.net/attachment.cgi?id=827)
+e2fsprogs patch
+
+lsattr/chattr and e2label/e2undo are mixed up in Config.in. This patch fixes
+that. It applies to the current git repository.
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
