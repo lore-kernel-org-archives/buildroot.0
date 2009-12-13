@@ -1,16 +1,16 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 13 Dec 2009 01:45:03 +0000 (UTC)
-Subject: [Buildroot] [Bug 799] New: e2fsprogs small fix
-Message-ID: <bug-799-163@https.bugs.busybox.net/>
+Date: Sun, 13 Dec 2009 01:47:01 +0000 (UTC)
+Subject: [Buildroot] [Bug 801] New: [PATCH] iperf update to 2.0.4
+Message-ID: <bug-801-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=799
+https://bugs.busybox.net/show_bug.cgi?id=801
 
-           Summary: e2fsprogs small fix
+           Summary: [PATCH] iperf update to 2.0.4
            Product: buildroot
            Version: unspecified
           Platform: PC
@@ -18,19 +18,19 @@ https://bugs.busybox.net/show_bug.cgi?id=799
             Status: NEW
           Severity: enhancement
           Priority: P5
-         Component: Other
+         Component: Outdated package
         AssignedTo: unassigned at buildroot.uclibc.org
         ReportedBy: rvpaasen at t3i.nl
                 CC: buildroot at uclibc.org
    Estimated Hours: 0.0
 
 
-Created an attachment (id=827)
- --> (https://bugs.busybox.net/attachment.cgi?id=827)
-e2fsprogs patch
+Created an attachment (id=829)
+ --> (https://bugs.busybox.net/attachment.cgi?id=829)
+iperf patch
 
-lsattr/chattr and e2label/e2undo are mixed up in Config.in. This patch fixes
-that. It applies to the current git repository.
+Patch updates iperf to 2.0.4.
+It applies to the current git repository.
 
 
 -- 
