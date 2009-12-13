@@ -1,16 +1,17 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 13 Dec 2009 01:58:56 +0000 (UTC)
-Subject: [Buildroot] [Bug 805] New: [PATCH] mdadm - version update
-Message-ID: <bug-805-163@https.bugs.busybox.net/>
+Date: Sun, 13 Dec 2009 02:06:46 +0000 (UTC)
+Subject: [Buildroot] [Bug 807] New: [PATCH] samba - make iconv and smbd
+	optional
+Message-ID: <bug-807-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=805
+https://bugs.busybox.net/show_bug.cgi?id=807
 
-           Summary: [PATCH] mdadm - version update
+           Summary: [PATCH] samba - make iconv and smbd optional
            Product: buildroot
            Version: unspecified
           Platform: PC
@@ -18,20 +19,22 @@ https://bugs.busybox.net/show_bug.cgi?id=805
             Status: NEW
           Severity: enhancement
           Priority: P5
-         Component: Outdated package
+         Component: Other
         AssignedTo: unassigned at buildroot.uclibc.org
         ReportedBy: rvpaasen at t3i.nl
                 CC: buildroot at uclibc.org
    Estimated Hours: 0.0
 
 
-Created an attachment (id=833)
- --> (https://bugs.busybox.net/attachment.cgi?id=833)
-mdadm patch
+Created an attachment (id=835)
+ --> (https://bugs.busybox.net/attachment.cgi?id=835)
+samba patch
 
-This patch updates mdadm to 2.6.9 and uses the new makefile template.
+This patch add a config option to in/exclude smbd and to build with/without
+libiconv. Note: iconv is only needed if samba must support filesystems with
+encoding other than ASCII or UTF-8 (e.g. DOS file systems).
 
-It can be applied to the current git repository.
+The patch can be applied to the current git repository.
 
 
 -- 
