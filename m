@@ -1,133 +1,136 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2009 00:04:34 +0100
-Subject: [Buildroot] [PATCH 02/23] gcc: add avr32 special version
+Date: Tue, 15 Dec 2009 00:04:37 +0100
+Subject: [Buildroot] [PATCH 05/23] uclibc: add avr32 special version
 In-Reply-To: <cover.1260831891.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1260831891.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <d3f383b1eeafa11b093d7a5626d375d07ed2c3d7.1260831891.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <3a24927a0e6f041a018085b5a7fc50312001fddc.1260831891.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- * Add new gcc version 4.2.2-avr32-2.1.5 in Config.in
+ * Add a new 0.9.30-avr32-2.1.5 version of uClibc in Config.in
 
- * Select the Atmel mirror to download gcc with avr32 in their version
-   name, in gcc-uclibc-*.mk
+ * Add a patch for 0.9.20-avr32-2.1.5
 
- * Do not apply patches if the patch directory is empty, in
-   gcc-uclibc-*.mk
+ * Select a different UCLIBC_SITE for avr32 versions in uclibc.mk
+
+ * Add the LINKRELAX=y configuration option to the uClibc .config file
+   in uclibc.mk
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/gcc/Config.in         |    7 ++++++-
- toolchain/gcc/gcc-uclibc-3.x.mk |   16 ++++++++++------
- toolchain/gcc/gcc-uclibc-4.x.mk |   16 ++++++++++------
- 3 files changed, 26 insertions(+), 13 deletions(-)
+ toolchain/uClibc/Config.in                         |   10 +++++-
+ ...uClibc-0.9.30-avr32-2.1.5-unifdef-getline.patch |   29 ++++++++++++++++++++
+ toolchain/uClibc/uclibc.mk                         |    8 +++++-
+ 3 files changed, 44 insertions(+), 3 deletions(-)
+ create mode 100644 toolchain/uClibc/uClibc-0.9.30-avr32-2.1.5-unifdef-getline.patch
 
-diff --git a/toolchain/gcc/Config.in b/toolchain/gcc/Config.in
-index 7e58516..3d3da46 100644
---- a/toolchain/gcc/Config.in
-+++ b/toolchain/gcc/Config.in
-@@ -26,6 +26,10 @@ choice
- 		depends on BR2_DEPRECATED || BR2_avr32
- 		bool "gcc 4.2.2"
+diff --git a/toolchain/uClibc/Config.in b/toolchain/uClibc/Config.in
+index d0486ab..c0ec220 100644
+--- a/toolchain/uClibc/Config.in
++++ b/toolchain/uClibc/Config.in
+@@ -5,7 +5,8 @@ comment "uClibc Options"
  
-+	config BR2_GCC_VERSION_4_2_2_AVR32_2_1_5
-+	       depends on BR2_avr32
-+	       bool "gcc 4.2.2-avr32-2.1.5"
+ choice
+ 	prompt "uClibc C library Version"
+-	default BR2_UCLIBC_VERSION_0_9_30_1
++	default BR2_UCLIBC_VERSION_0_9_30_1 if !BR2_avr32
++	default BR2_UCLIBC_VERSION_0_9_30_AVR32_2_1_5 if BR2_avr32
+ 	help
+ 	  Select the version of uClibc you wish to use.
+ 
+@@ -22,7 +23,10 @@ choice
+ 	config BR2_UCLIBC_VERSION_0_9_30
+ 		depends on BR2_RECENT || BR2_DEPRECATED
+ 		bool "uClibc 0.9.30"
+-		depends on BR2_EXT_UCLIBC_VERSION_0_9_30
 +
- 	config BR2_GCC_VERSION_4_2_3
- 		depends on !BR2_nios2
- 		depends on BR2_EXT_GCC_VERSION_4_2_3
-@@ -66,7 +70,7 @@ config BR2_GCC_SUPPORTS_SYSROOT
++	config BR2_UCLIBC_VERSION_0_9_30_AVR32_2_1_5
++		depends on BR2_avr32
++		bool "uClibc 0.9.30-avr32-2.1.5"
  
- config BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE
- 	bool
--	default y if !BR2_GCC_VERSION_4_1_2 && !BR2_GCC_VERSION_4_2_1 && !BR2_GCC_VERSION_4_2_2 && !BR2_GCC_VERSION_4_2_3 && !BR2_GCC_VERSION_4_2_4
-+	default y if !BR2_GCC_VERSION_4_1_2 && !BR2_GCC_VERSION_4_2_1 && !BR2_GCC_VERSION_4_2_2 && !BR2_GCC_VERSION_4_2_3 && !BR2_GCC_VERSION_4_2_4 && !BR2_GCC_VERSION_4_2_2_AVR32_2_1_5
+ 	config BR2_UCLIBC_VERSION_0_9_30_1
+ 		bool "uClibc 0.9.30.1"
+@@ -47,6 +51,7 @@ config BR2_UCLIBC_VERSION_STRING
+ 	default 0.9.29		if BR2_UCLIBC_VERSION_0_9_29
+ 	default 0.9.30		if BR2_UCLIBC_VERSION_0_9_30
+ 	default 0.9.30.1	if BR2_UCLIBC_VERSION_0_9_30_1
++	default 0.9.30-avr32-2.1.5 if BR2_UCLIBC_VERSION_0_9_30_AVR32_2_1_5
+ 	default $BR2_USE_UCLIBC_SNAPSHOT	if BR2_UCLIBC_VERSION_SNAPSHOT
  
- config BR2_GCC_SNAP_DATE
- 	string "GCC snapshot date"
-@@ -81,6 +85,7 @@ config BR2_GCC_VERSION
- 	default "4.1.2"     if BR2_GCC_VERSION_4_1_2
- 	default "4.2.1"     if BR2_GCC_VERSION_4_2_1
- 	default "4.2.2"     if BR2_GCC_VERSION_4_2_2
-+	default "4.2.2-avr32-2.1.5" if BR2_GCC_VERSION_4_2_2_AVR32_2_1_5
- 	default "4.2.3"     if BR2_GCC_VERSION_4_2_3
- 	default "4.2.4"     if BR2_GCC_VERSION_4_2_4
- 	default "4.3.2"     if BR2_GCC_VERSION_4_3_2
-diff --git a/toolchain/gcc/gcc-uclibc-3.x.mk b/toolchain/gcc/gcc-uclibc-3.x.mk
-index e737313..bc3d423 100644
---- a/toolchain/gcc/gcc-uclibc-3.x.mk
-+++ b/toolchain/gcc/gcc-uclibc-3.x.mk
-@@ -22,13 +22,15 @@ ifeq ($(BR2_TOOLCHAIN_SOURCE),y)
- # without sysroot support. Sysroot toolchain is gcc-uclibc-4.x.mk
- ifneq ($(BR2_TOOLCHAIN_SYSROOT),y)
- 
--ifeq ($(GCC_SNAP_DATE),)
--GCC_OFFICIAL_VER:=$(GCC_VERSION)
--GCC_SITE:=$(BR2_GNU_MIRROR)/gcc/gcc-$(GCC_VERSION)
--#GCC_SITE:=ftp://ftp.ibiblio.org/pub/mirrors/gnu/ftp/gnu/gcc/gcc-$(GCC_OFFICIAL_VER)
-+ifneq ($(GCC_SNAP_DATE),)
-+ GCC_SITE:=ftp://sources.redhat.com/pub/gcc/snapshots/$(GCC_VERSION)
-+ GCC_OFFICIAL_VER:=$(GCC_VERSION)-$(GCC_SNAP_DATE)
-+else ifeq ($(findstring avr32,$(GCC_VERSION)),avr32)
-+ GCC_SITE:=ftp://www.at91.com/pub/buildroot/
-+ GCC_OFFICIAL_VER:=$(GCC_VERSION)
- else
--GCC_OFFICIAL_VER:=$(GCC_VERSION)-$(GCC_SNAP_DATE)
--GCC_SITE:=ftp://sources.redhat.com/pub/gcc/snapshots/$(GCC_OFFICIAL_VER)
-+ GCC_SITE:=$(BR2_GNU_MIRROR)/gcc/gcc-$(GCC_VERSION)
-+ GCC_OFFICIAL_VER:=$(GCC_VERSION)
+ config BR2_UCLIBC_CONFIG
+@@ -55,6 +60,7 @@ config BR2_UCLIBC_CONFIG
+ 	default "toolchain/uClibc/uClibc-0.9.29.config" if BR2_UCLIBC_VERSION_0_9_29
+ 	default "toolchain/uClibc/uClibc-0.9.30.config" if BR2_UCLIBC_VERSION_0_9_30
+ 	default "toolchain/uClibc/uClibc-0.9.30.config" if BR2_UCLIBC_VERSION_0_9_30_1
++	default "toolchain/uClibc/uClibc-0.9.30.config" if BR2_UCLIBC_VERSION_0_9_30_AVR32_2_1_5
+ 	default "toolchain/uClibc/uClibc-snapshot.config" if BR2_UCLIBC_VERSION_SNAPSHOT
+ 	help
+ 	  Some people may wish to use their own modified uClibc configuration
+diff --git a/toolchain/uClibc/uClibc-0.9.30-avr32-2.1.5-unifdef-getline.patch b/toolchain/uClibc/uClibc-0.9.30-avr32-2.1.5-unifdef-getline.patch
+new file mode 100644
+index 0000000..eb88884
+--- /dev/null
++++ b/toolchain/uClibc/uClibc-0.9.30-avr32-2.1.5-unifdef-getline.patch
+@@ -0,0 +1,29 @@
++--- uClibc-0.9.30.1.orig/extra/scripts/unifdef.c
+++++ uClibc-0.9.30.1/extra/scripts/unifdef.c
++@@ -206,7 +206,7 @@ static void             done(void);
++ static void             error(const char *);
++ static int              findsym(const char *);
++ static void             flushline(bool);
++-static Linetype         getline(void);
+++static Linetype         get_line(void);
++ static Linetype         ifeval(const char **);
++ static void             ignoreoff(void);
++ static void             ignoreon(void);
++@@ -512,7 +512,7 @@ process(void)
++ 
++ 	for (;;) {
++ 		linenum++;
++-		lineval = getline();
+++		lineval = get_line();
++ 		trans_table[ifstate[depth]][lineval]();
++ 		debug("process %s -> %s depth %d",
++ 		    linetype_name[lineval],
++@@ -526,7 +526,7 @@ process(void)
++  * help from skipcomment().
++  */
++ static Linetype
++-getline(void)
+++get_line(void)
++ {
++ 	const char *cp;
++ 	int cursym;
+diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
+index 62fc40b..67601b1 100644
+--- a/toolchain/uClibc/uclibc.mk
++++ b/toolchain/uClibc/uclibc.mk
+@@ -19,9 +19,12 @@ UCLIBC_OFFICIAL_VERSION:=$(UCLIBC_VER)$(VENDOR_SUFFIX)$(VENDOR_UCLIBC_RELEASE)
+ ifeq ($(BR2_UCLIBC_VERSION_SNAPSHOT),y)
+ UCLIBC_SITE:=http://www.uclibc.org/downloads/snapshots
+ UCLIBC_DIR:=$(TOOLCHAIN_DIR)/uClibc
+-else
++else ifeq ($(findstring avr32,$(UCLIBC_VERSION)),avr32)
++UCLIBC_SITE:=ftp://www.at91.com/pub/buildroot/
+ UCLIBC_DIR:=$(TOOLCHAIN_DIR)/uClibc-$(UCLIBC_OFFICIAL_VERSION)
++else
+ UCLIBC_SITE:=http://www.uclibc.org/downloads
++UCLIBC_DIR:=$(TOOLCHAIN_DIR)/uClibc-$(UCLIBC_OFFICIAL_VERSION)
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_SOURCE),y)
+ UCLIBC_SITE:=$(VENDOR_SITE)
  endif
- 
- 
-@@ -142,7 +144,9 @@ $(GCC_DIR)/.unpacked: $(DL_DIR)/$(GCC_SOURCE)
- gcc-patched: $(GCC_DIR)/.patched
- $(GCC_DIR)/.patched: $(GCC_DIR)/.unpacked
- 	# Apply any files named gcc-*.patch from the source directory to gcc
-+ifneq ($(wildcard $(GCC_PATCH_DIR)),)
- 	toolchain/patch-kernel.sh $(GCC_DIR) $(GCC_PATCH_DIR) \*.patch
-+endif
- 	# Note: The soft float situation has improved considerably with gcc 3.4.x.
- 	# We can dispense with the custom spec files, as well as libfloat for the arm case.
- 	# However, we still need a patch for arm. There's a similar patch for gcc 3.3.x
-diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
-index d5a889f..14afb36 100644
---- a/toolchain/gcc/gcc-uclibc-4.x.mk
-+++ b/toolchain/gcc/gcc-uclibc-4.x.mk
-@@ -20,13 +20,15 @@
- # sysroot support works with gcc >= 4.2.0 only
- ifeq ($(BR2_TOOLCHAIN_SYSROOT),y)
- 
--ifeq ($(GCC_SNAP_DATE),)
--GCC_OFFICIAL_VERSION:=$(GCC_VERSION)
--GCC_SITE:=$(BR2_GNU_MIRROR)/gcc/gcc-$(GCC_VERSION)
--#GCC_SITE:=ftp://ftp.ibiblio.org/pub/mirrors/gnu/ftp/gnu/gcc/gcc-$(GCC_OFFICIAL_VERSION)
-+ifneq ($(GCC_SNAP_DATE),)
-+ GCC_SITE:=ftp://sources.redhat.com/pub/gcc/snapshots/$(GCC_VERSION)
-+ GCC_OFFICIAL_VER:=$(GCC_VERSION)-$(GCC_SNAP_DATE)
-+else ifeq ($(findstring avr32,$(GCC_VERSION)),avr32)
-+ GCC_SITE:=ftp://www.at91.com/pub/buildroot/
-+ GCC_OFFICIAL_VER:=$(GCC_VERSION)
- else
--GCC_OFFICIAL_VERSION:=$(GCC_VERSION)-$(GCC_SNAP_DATE)
--GCC_SITE:=ftp://sources.redhat.com/pub/gcc/snapshots/$(GCC_OFFICIAL_VERSION)
-+ GCC_SITE:=$(BR2_GNU_MIRROR)/gcc/gcc-$(GCC_VERSION)
-+ GCC_OFFICIAL_VER:=$(GCC_VERSION)
+@@ -257,6 +260,9 @@ else
+ 	/bin/echo "# CONFIG_E500 is not set" >> $(UCLIBC_DIR)/.oldconfig
  endif
- 
- # redefine if using an external prepatched gcc source
-@@ -182,7 +184,9 @@ $(GCC_DIR)/.unpacked: $(DL_DIR)/$(GCC_SOURCE)
- gcc-patched: $(GCC_DIR)/.patched
- $(GCC_DIR)/.patched: $(GCC_DIR)/.unpacked
- 	# Apply any files named gcc-*.patch from the source directory to gcc
-+ifneq ($(wildcard $(GCC_PATCH_DIR)),)
- 	toolchain/patch-kernel.sh $(GCC_DIR) $(GCC_PATCH_DIR) \*.patch $(GCC_PATCH_EXTRA)
+ endif
++ifeq ($(UCLIBC_TARGET_ARCH),avr32)
++	/bin/echo "LINKRELAX=y" >> $(UCLIBC_DIR)/.oldconfig
 +endif
- 
- 	# Note: The soft float situation has improved considerably with gcc 3.4.x.
- 	# We can dispense with the custom spec files, as well as libfloat for the arm case.
+ ifneq ($(UCLIBC_TARGET_ENDIAN),)
+ 	# The above doesn't work for me, so redo
+ 	$(SED) 's/.*\(ARCH_$(UCLIBC_NOT_TARGET_ENDIAN)_ENDIAN\).*/# \1 is not set/g' \
 -- 
 1.6.3.3
