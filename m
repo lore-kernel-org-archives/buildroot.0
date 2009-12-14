@@ -1,44 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 14 Dec 2009 20:36:24 +0000 (UTC)
-Subject: [Buildroot] [Bug 813] New: Drop not very useful generic package
- selection options (access point, firewall, dev system)
-Message-ID: <bug-813-163@https.bugs.busybox.net/>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 14 Dec 2009 17:53:52 -0300
+Subject: [Buildroot] [Bug 803] [PATCH] lua - add shared library patch
+ and config option for readline/ncurses support
+In-Reply-To: <200912141422.01807.minimod@morethan.org>
+References: <bug-803-163@https.bugs.busybox.net/>	<20091214201632.1E292777F5@busybox.osuosl.org>
+	<200912141422.01807.minimod@morethan.org>
+Message-ID: <4B26A5E0.50908@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=813
+Michael S. Zick wrote:
 
-           Summary: Drop not very useful generic package selection options
-                    (access point, firewall, dev system)
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: trivial
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: gustavo at zacarias.com.ar
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+> Depends on the version - but the current and recent version have had the makefile
+> reorganized to always build-in the standard libraries;
+> So yes, the makefile needs to be un-reorganized (by a patch?) to get Lua + shared
+> libraries out of it.
+> (The prior to 5.0 organization).
+> 
+> Mike
 
-
-Created an attachment (id=843)
- --> (https://bugs.busybox.net/attachment.cgi?id=843)
-Drop generic package selection options
-
-Don't think they're too useful or used generally.
-They're open to multiple interpretations so people could ask for more/less
-packages to suit their needs and new options for other things (like generic
-access point, generic NAS, so on...) without a clear definition of which
-packages would be required/the bare minimum for them.
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+I think we're on a different tune here.
+I'm commenting about the proposed patch that changes the lua package in
+the following ways:
+1) Makes a shared liblua instead of a static one.
+2) Allows the package to just install liblua with options for lua and luac.
+3) Also allows for lua to be built without readline support.
+Plain upstream 5.1.4 lua (current in buildroot) doesn't build shared
+libraries by default, and that's what i talking about (point 1) and the
+proposed change in buildroot is probably lacking a patch (or the libtool
+hooks to do so in the .mk file).
+Regards.
