@@ -1,34 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Dec 2009 23:54:27 +0100
-Subject: [Buildroot] [PATCH 1/2] gcc: remove hurd specific details
-In-Reply-To: <cover.1260831265.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1260831265.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <48fbdaaea6800b8fc5a4bc9bfeba105f3c46ae22.1260831265.git.thomas.petazzoni@free-electrons.com>
+Date: Mon, 14 Dec 2009 23:54:26 +0100
+Subject: [Buildroot] [pull request] Pull request for branch hurd-remove
+Message-ID: <cover.1260831265.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/gcc/gcc-uclibc-4.x.mk |    4 ----
- 1 files changed, 0 insertions(+), 4 deletions(-)
+The following changes since commit 8bbb56dd9109354f66e428b4a0f83d637851643b:
+  Peter Korsgaard (1):
+        kernel-headers: bump 2.6.31.x / 2.6.32.x stable versions
 
-diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
-index d5a889f..d25a9b6 100644
---- a/toolchain/gcc/gcc-uclibc-4.x.mk
-+++ b/toolchain/gcc/gcc-uclibc-4.x.mk
-@@ -150,10 +150,6 @@ else
- GCC_TLS:=--disable-tls
- endif
- 
--ifeq ($(BR2_KERNEL_HURD),y)
--EXTRA_GCC1_CONFIG_OPTIONS+=--without-headers
--endif
--
- ifeq ($(BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE),y)
- GCC_DECIMAL_FLOAT:=--disable-decimal-float
- endif
+are available in the git repository at:
+
+  git://git.busybox.net/~tpetazzoni/git/buildroot hurd-remove
+
+Thomas Petazzoni (2):
+      gcc: remove hurd specific details
+      remove BR2_KERNEL_HURD from defconfig files
+
+ configs/arm_toolchain_defconfig           |    1 -
+ configs/at91rm9200df_defconfig            |    1 -
+ configs/at91rm9200df_ext_bare_defconfig   |    1 -
+ configs/at91rm9200df_ext_defconfig        |    1 -
+ configs/at91sam9260dfc_defconfig          |    1 -
+ configs/at91sam9260dfc_ext_bare_defconfig |    1 -
+ configs/at91sam9260dfc_ext_defconfig      |    1 -
+ configs/at91sam9261ek_defconfig           |    1 -
+ configs/at91sam9261ek_ext_bare_defconfig  |    1 -
+ configs/at91sam9261ek_ext_defconfig       |    1 -
+ configs/at91sam9263ek_defconfig           |    1 -
+ configs/at91sam9263ek_ext_bare_defconfig  |    1 -
+ configs/at91sam9263ek_ext_defconfig       |    1 -
+ configs/at91sam9g20dfc_defconfig          |    1 -
+ configs/at91sam9g20dfc_ext_bare_defconfig |    1 -
+ configs/at91sam9g20dfc_ext_defconfig      |    1 -
+ configs/atngw100-base_defconfig           |    1 -
+ configs/atngw100_defconfig                |    1 -
+ configs/atstk1005_defconfig               |    1 -
+ configs/atstk100x_defconfig               |    1 -
+ configs/i386_defconfig                    |    1 -
+ configs/i686_defconfig                    |    1 -
+ configs/integrator926_defconfig           |    1 -
+ configs/integrator926_huge_defconfig      |    1 -
+ configs/kb9202_defconfig                  |    1 -
+ configs/v100sc2_defconfig                 |    1 -
+ scripts/test/Config.in.test.buildall      |    1 -
+ toolchain/gcc/gcc-uclibc-4.x.mk           |    4 ----
+ 28 files changed, 0 insertions(+), 31 deletions(-)
+
+Thanks,
 -- 
-1.6.3.3
+Thomas Petazzoni
