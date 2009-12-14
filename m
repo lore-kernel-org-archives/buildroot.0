@@ -1,37 +1,31 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 14 Dec 2009 22:09:49 +0000 (UTC)
-Subject: [Buildroot] [Bug 807] [PATCH] samba - make iconv and smbd optional
-In-Reply-To: <bug-807-163@https.bugs.busybox.net/>
-References: <bug-807-163@https.bugs.busybox.net/>
-Message-ID: <20091214220949.ABE8077796@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 14 Dec 2009 23:43:40 +0100
+Subject: [Buildroot] SYSROOT_DIR issue with external toolchains
+In-Reply-To: <5f2b60912141113n33fa36f1mdd45dc55313301c3@mail.gmail.com>
+References: <5f2b60912141113n33fa36f1mdd45dc55313301c3@mail.gmail.com>
+Message-ID: <20091214234340.714eb09b@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=807
+Le Mon, 14 Dec 2009 20:13:44 +0100,
+Bj?rn Forsman <bjorn.forsman@gmail.com> a ?crit :
 
+> SYSROOT_DIR=$(shell $(TARGET_CC) -print-sysroot)
+> 
+> Is there any problem with this change?
 
-rvpaasen <rvpaasen@t3i.nl> changed:
+Yes, it doesn't work with all gcc versions.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
- Attachment #835 is|0                           |1
-           obsolete|                            |
+I have
+http://git.buildroot.net/~tpetazzoni/git/buildroot/commit/?h=multilib-toolchain-fix&id=2907415d82b7d306ca3f1f1ead0bbb0c7f1505c3
+in my patch queue. Something I should clean up, test and submit.
 
-
-
-
---- Comment #1 from rvpaasen <rvpaasen@t3i.nl>  2009-12-14 22:09:48 UTC ---
-Created an attachment (id=853)
- --> (https://bugs.busybox.net/attachment.cgi?id=853)
-samba patch
-
-fixed patch: now created with git format-patch
-
-
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
