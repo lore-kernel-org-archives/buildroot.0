@@ -1,39 +1,76 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 15 Dec 2009 00:20:04 +0100
-Subject: [Buildroot] [pull request] Pull request for branch
-	remove-external-toolchain
-In-Reply-To: <cover.1260831891.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Tue, 15 Dec 2009 00:04:32 +0100")
-References: <cover.1260831891.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87fx7dqh23.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 15 Dec 2009 00:19:17 +0100
+Subject: [Buildroot] [git commit master] binutils: add avr32 special version
+Message-ID: <20091214232051.8C5E277796@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> Hello,
- Thomas> This patchset removes the external source toolchain feature from
- Thomas> Buildroot. It was used to build AVR32 toolchains because the AVR32
- Thomas> architecture is unfortunately not supported by upstream
- Thomas> gcc/binutils/gdb/uClibc. So the whole external source toolchain
- Thomas> infrastructure was implemented to allow to get these components from
- Thomas> other places than the normal mirrors.
+commit: http://git.buildroot.net/buildroot/commit/?id=f18480603222ebc9996abc43793082012fb18ab0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> However, this infrastructure is far more complicated than it needs to
- Thomas> be. This patchset replaces it by integrated the avr32 special versions
- Thomas> as normal gcc/binutils/gdb/uClibc versions. The respective .mk files
- Thomas> detect whether the version name contains avr32, and if it does, then
- Thomas> it switches to the AT91 mirror. Only the latest versions of
- Thomas> binutils/gcc/uClibc/gdb for AVR32 were kept (they are already fairly
- Thomas> ancient).
+ * Add a new binutils version 2.18-avr32-1.0.1 to the Config.in
 
- Thomas> I've compiled tested an AVR32 toolchain + BusyBox and an ARM toolchain
- Thomas> + Busybox.
+ * Use a different site to download avr32 binutils version in binutils.mk
 
-Thanks a lot, pulled and pushed! It's much appreciated.
+ * Only apply patches from the patch directory if it exists in
+   binutils.mk
 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/binutils/Config.in   |    5 +++++
+ toolchain/binutils/binutils.mk |    5 +++++
+ 2 files changed, 10 insertions(+), 0 deletions(-)
+
+diff --git a/toolchain/binutils/Config.in b/toolchain/binutils/Config.in
+index b892b6f..4405bcb 100644
+--- a/toolchain/binutils/Config.in
++++ b/toolchain/binutils/Config.in
+@@ -24,6 +24,10 @@ choice
+ 		depends on BR2_DEPRECATED
+ 		bool "binutils 2.18.50.0.9"
+ 
++	config BR2_BINUTILS_VERSION_2_18_AVR32_1_0_1
++	       depends on BR2_avr32
++	       bool "binutils 2.18-avr32-1.0.1"
++
+ 	config BR2_BINUTILS_VERSION_2_19
+ 		depends on !BR2_avr32 && !BR2_nios2
+ 		depends on BR2_DEPRECATED
+@@ -46,6 +50,7 @@ config BR2_BINUTILS_VERSION
+ 	default "2.17"		if BR2_BINUTILS_VERSION_2_17
+ 	default "2.18"		if BR2_BINUTILS_VERSION_2_18
+ 	default "2.18.50.0.9"	if BR2_BINUTILS_VERSION_2_18_50_0_9
++	default "2.18-avr32-1.0.1" if BR2_BINUTILS_VERSION_2_18_AVR32_1_0_1
+ 	default "2.19"		if BR2_BINUTILS_VERSION_2_19
+ 	default "2.19.1"	if BR2_BINUTILS_VERSION_2_19_1
+ 	default "2.20"		if BR2_BINUTILS_VERSION_2_20
+diff --git a/toolchain/binutils/binutils.mk b/toolchain/binutils/binutils.mk
+index 8cddf2d..38bee9e 100644
+--- a/toolchain/binutils/binutils.mk
++++ b/toolchain/binutils/binutils.mk
+@@ -22,6 +22,9 @@ endif
+ ifeq ($(BINUTILS_VERSION),2.17)
+ BINUTILS_SITE:=$(BR2_GNU_MIRROR)/binutils/
+ endif
++ifeq ($(findstring avr32,$(BINUTILS_VERSION)),avr32)
++BINUTILS_SITE:=ftp://www.at91.com/pub/buildroot/
++endif
+ 
+ # We do not rely on the host's gmp/mpfr but use a known working one
+ BINUTILS_HOST_PREREQ:=
+@@ -79,7 +82,9 @@ $(BINUTILS_DIR)/.unpacked: $(DL_DIR)/$(BINUTILS_SOURCE)
+ binutils-patched: $(BINUTILS_DIR)/.patched
+ $(BINUTILS_DIR)/.patched: $(BINUTILS_DIR)/.unpacked
+ 	# Apply appropriate binutils patches.
++ifneq ($(wildcard $(BINUTILS_PATCH_DIR)),)
+ 	toolchain/patch-kernel.sh $(BINUTILS_DIR) $(BINUTILS_PATCH_DIR) \*.patch $(BINUTILS_PATCH_EXTRA)
++endif
+ 	touch $@
+ 
+ $(BINUTILS_DIR1)/.configured: $(BINUTILS_DIR)/.patched
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
