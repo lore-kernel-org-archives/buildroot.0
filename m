@@ -1,74 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2009 00:04:39 +0100
-Subject: [Buildroot] [PATCH 07/23] gcc: improve configuration for snapshot
-	versions
+Date: Tue, 15 Dec 2009 00:04:45 +0100
+Subject: [Buildroot] [PATCH 13/23] uclibc: do not allow selection of
+	non-avr32 versions on AVR32
 In-Reply-To: <cover.1260831891.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1260831891.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <636afc4664238b9555411622f45ff4d00ceffcde.1260831891.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <b642f7eefbf8c7f0111d74528390de31aaacf203.1260831891.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Make the selection of a snapshot version a normal gcc version choice,
-and make sure BR2_GCC_VERSION is properly defined.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/gcc/Config.in   |   11 ++++++-----
- toolchain/gcc/Makefile.in |    2 +-
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ toolchain/uClibc/Config.in |    9 +++++----
+ 1 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/toolchain/gcc/Config.in b/toolchain/gcc/Config.in
-index 07e42a6..10cb841 100644
---- a/toolchain/gcc/Config.in
-+++ b/toolchain/gcc/Config.in
-@@ -55,11 +55,11 @@ choice
- 	config BR2_GCC_VERSION_4_4_X
- 		depends on !BR2_avr32 && !BR2_nios2
- 		bool "gcc 4.4.x"
--endchoice
+diff --git a/toolchain/uClibc/Config.in b/toolchain/uClibc/Config.in
+index c0ec220..cc7dcd1 100644
+--- a/toolchain/uClibc/Config.in
++++ b/toolchain/uClibc/Config.in
+@@ -11,16 +11,17 @@ choice
+ 	  Select the version of uClibc you wish to use.
  
--config BR2_GCC_IS_SNAP
--	depends on !BR2_avr32
--	bool
-+	config BR2_GCC_VERSION_SNAP
-+		depends on !BR2_avr32 && !BR2_nios2
-+		bool "gcc snapshot"
-+endchoice
+ 	config BR2_UCLIBC_VERSION_0_9_28_3
++		depends on !BR2_avr32
+ 		depends on BR2_DEPRECATED
+ 		bool "uClibc 0.9.28.3"
+-		depends on BR2_EXT_UCLIBC_VERSION_0_9_28_3
  
- config BR2_GCC_SUPPORTS_SYSROOT
- 	bool
-@@ -72,7 +72,7 @@ config BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE
- config BR2_GCC_SNAP_DATE
- 	string "GCC snapshot date"
- 	default "20070921"
--	depends on BR2_GCC_IS_SNAP
-+	depends on BR2_GCC_VERSION_SNAP
- 	help
- 	  Enter snapshot date to use for gcc.  Format is:
- 	  YYYYMMDD
-@@ -89,6 +89,7 @@ config BR2_GCC_VERSION
- 	default "4.3.3"     if BR2_GCC_VERSION_4_3_3
- 	default "4.3.4"     if BR2_GCC_VERSION_4_3_4
- 	default "4.4.2"     if BR2_GCC_VERSION_4_4_X
-+	default $BR2_GCC_SNAP_DATE if BR2_GCC_VERSION_SNAP
+ 	config BR2_UCLIBC_VERSION_0_9_29
++		depends on !BR2_avr32
+ 		depends on BR2_DEPRECATED
+ 		bool "uClibc 0.9.29"
+-		depends on BR2_EXT_UCLIBC_VERSION_0_9_29
  
- config BR2_TOOLCHAIN_SYSROOT
- 	bool "Enable toolchain with --sysroot support"
-diff --git a/toolchain/gcc/Makefile.in b/toolchain/gcc/Makefile.in
-index e92ecbc..c3e21cf 100644
---- a/toolchain/gcc/Makefile.in
-+++ b/toolchain/gcc/Makefile.in
-@@ -8,7 +8,7 @@ GCC_VERSION:=$(call qstrip,$(BR2_GCC_VERSION))
- TARGET_OPTIMIZATION:=$(call qstrip,$(BR2_TARGET_OPTIMIZATION))
- EXTRA_GCC_CONFIG_OPTIONS:=$(call qstrip,$(BR2_EXTRA_GCC_CONFIG_OPTIONS))
+ 	config BR2_UCLIBC_VERSION_0_9_30
++		depends on !BR2_avr32
+ 		depends on BR2_RECENT || BR2_DEPRECATED
+ 		bool "uClibc 0.9.30"
  
--ifeq ($(call qstrip,$(BR2_GCC_IS_SNAP)),y)
-+ifeq ($(call qstrip,$(BR2_GCC_VERSION_SNAP)),y)
- GCC_SNAP_DATE:=$(call qstrip,$(BR2_GCC_SNAP_DATE))
- else
- GCC_SNAP_DATE:=
+@@ -29,15 +30,15 @@ choice
+ 		bool "uClibc 0.9.30-avr32-2.1.5"
+ 
+ 	config BR2_UCLIBC_VERSION_0_9_30_1
++		depends on !BR2_avr32
+ 		bool "uClibc 0.9.30.1"
+-		depends on BR2_EXT_UCLIBC_VERSION_0_9_30_1
+ 
+ 	config BR2_UCLIBC_VERSION_SNAPSHOT
++		depends on !BR2_avr32
+ 		bool "daily snapshot"
+ 
+ endchoice
+ 
+-
+ config BR2_USE_UCLIBC_SNAPSHOT
+ 	string "Date (yyyymmdd) of snapshot or 'snapshot' for latest"
+ 	default "snapshot"
 -- 
 1.6.3.3
