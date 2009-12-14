@@ -1,36 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Dec 2009 23:46:00 +0100
-Subject: [Buildroot] [git commit master] gcc: remove hurd specific details
-Message-ID: <20091214231105.C8C3877812@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 15 Dec 2009 00:20:04 +0100
+Subject: [Buildroot] [pull request] Pull request for branch
+	remove-external-toolchain
+In-Reply-To: <cover.1260831891.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Tue, 15 Dec 2009 00:04:32 +0100")
+References: <cover.1260831891.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87fx7dqh23.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=48fbdaaea6800b8fc5a4bc9bfeba105f3c46ae22
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Thomas> Hello,
+ Thomas> This patchset removes the external source toolchain feature from
+ Thomas> Buildroot. It was used to build AVR32 toolchains because the AVR32
+ Thomas> architecture is unfortunately not supported by upstream
+ Thomas> gcc/binutils/gdb/uClibc. So the whole external source toolchain
+ Thomas> infrastructure was implemented to allow to get these components from
+ Thomas> other places than the normal mirrors.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/gcc/gcc-uclibc-4.x.mk |    4 ----
- 1 files changed, 0 insertions(+), 4 deletions(-)
+ Thomas> However, this infrastructure is far more complicated than it needs to
+ Thomas> be. This patchset replaces it by integrated the avr32 special versions
+ Thomas> as normal gcc/binutils/gdb/uClibc versions. The respective .mk files
+ Thomas> detect whether the version name contains avr32, and if it does, then
+ Thomas> it switches to the AT91 mirror. Only the latest versions of
+ Thomas> binutils/gcc/uClibc/gdb for AVR32 were kept (they are already fairly
+ Thomas> ancient).
 
-diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
-index d5a889f..d25a9b6 100644
---- a/toolchain/gcc/gcc-uclibc-4.x.mk
-+++ b/toolchain/gcc/gcc-uclibc-4.x.mk
-@@ -150,10 +150,6 @@ else
- GCC_TLS:=--disable-tls
- endif
- 
--ifeq ($(BR2_KERNEL_HURD),y)
--EXTRA_GCC1_CONFIG_OPTIONS+=--without-headers
--endif
--
- ifeq ($(BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE),y)
- GCC_DECIMAL_FLOAT:=--disable-decimal-float
- endif
+ Thomas> I've compiled tested an AVR32 toolchain + BusyBox and an ARM toolchain
+ Thomas> + Busybox.
+
+Thanks a lot, pulled and pushed! It's much appreciated.
+
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
