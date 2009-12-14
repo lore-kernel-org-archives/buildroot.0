@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2009 00:04:50 +0100
-Subject: [Buildroot] [PATCH 18/23] gdb: remove external sources patches
+Date: Tue, 15 Dec 2009 00:04:51 +0100
+Subject: [Buildroot] [PATCH 19/23] uclibc: remove external sources patches
 In-Reply-To: <cover.1260831891.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1260831891.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <18bc19cb19e9ca8a7e276e6b5d15dd50223173bf.1260831891.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <19d7f0e31503db28dbe984de4601ab018b1cc0a1.1260831891.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,19 +12,162 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- 0 files changed, 0 insertions(+), 0 deletions(-)
- delete mode 100644 toolchain/gdb/ext_source/Atmel/avr32/6.4-avr32-2.0/.empty
- delete mode 100644 toolchain/gdb/ext_source/Atmel/avr32/6.4-avr32-2.1.3/.empty
- delete mode 100644 toolchain/gdb/ext_source/Atmel/avr32/6.7.1-avr32-2.1.5/.empty
+ .../uClibc-0.9.28.3-avr32-2.0-001-libext.patch     |   13 ----
+ ...libc-0.9.28.3-avr32-2.0-002-rm-whitespace.patch |   77 --------------------
+ ...uClibc-0.9.30-avr32-2.1.5-unifdef-getline.patch |   29 --------
+ 3 files changed, 0 insertions(+), 119 deletions(-)
+ delete mode 100644 toolchain/uClibc/ext_source/Atmel/avr32/0.9.28.3-avr32-2.0/uClibc-0.9.28.3-avr32-2.0-001-libext.patch
+ delete mode 100644 toolchain/uClibc/ext_source/Atmel/avr32/0.9.28.3-avr32-2.0/uClibc-0.9.28.3-avr32-2.0-002-rm-whitespace.patch
+ delete mode 100644 toolchain/uClibc/ext_source/Atmel/avr32/0.9.29-avr32-2.1.3/.empty
+ delete mode 100644 toolchain/uClibc/ext_source/Atmel/avr32/0.9.29-avr32-2.1.5/.empty
+ delete mode 100644 toolchain/uClibc/ext_source/Atmel/avr32/0.9.30-avr32-2.1.5/.empty
+ delete mode 100644 toolchain/uClibc/ext_source/Atmel/avr32/0.9.30-avr32-2.1.5/uClibc-0.9.30-avr32-2.1.5-unifdef-getline.patch
 
-diff --git a/toolchain/gdb/ext_source/Atmel/avr32/6.4-avr32-2.0/.empty b/toolchain/gdb/ext_source/Atmel/avr32/6.4-avr32-2.0/.empty
+diff --git a/toolchain/uClibc/ext_source/Atmel/avr32/0.9.28.3-avr32-2.0/uClibc-0.9.28.3-avr32-2.0-001-libext.patch b/toolchain/uClibc/ext_source/Atmel/avr32/0.9.28.3-avr32-2.0/uClibc-0.9.28.3-avr32-2.0-001-libext.patch
+deleted file mode 100644
+index e1740a7..0000000
+--- a/toolchain/uClibc/ext_source/Atmel/avr32/0.9.28.3-avr32-2.0/uClibc-0.9.28.3-avr32-2.0-001-libext.patch
++++ /dev/null
+@@ -1,13 +0,0 @@
+-diff -urN uClibc-0.9.28.3-0rig/Makefile uClibc-0.9.28.3/Makefile
+---- uClibc-0.9.28.3-0rig/Makefile	2007-07-29 08:20:33.000000000 +0200
+-+++ uClibc-0.9.28.3/Makefile	2007-08-20 07:02:53.000000000 +0200
+-@@ -157,7 +157,8 @@
+- install_dev:
+- 	$(INSTALL) -d $(PREFIX)$(DEVEL_PREFIX)lib
+- 	$(INSTALL) -d $(PREFIX)$(DEVEL_PREFIX)include
+--	-$(INSTALL) -m 644 lib/*.[ao] $(PREFIX)$(DEVEL_PREFIX)lib/
+-+	-$(INSTALL) -m 644 lib/*.a $(PREFIX)$(DEVEL_PREFIX)lib/
+-+	-$(INSTALL) -m 644 lib/*.so* $(PREFIX)$(DEVEL_PREFIX)lib/
+- 	if [ "$(KERNEL_SOURCE)" = "$(DEVEL_PREFIX)" ] ; then \
+- 		extra_exclude="--exclude include/linux --exclude include/asm'*'" ; \
+- 	else \
+diff --git a/toolchain/uClibc/ext_source/Atmel/avr32/0.9.28.3-avr32-2.0/uClibc-0.9.28.3-avr32-2.0-002-rm-whitespace.patch b/toolchain/uClibc/ext_source/Atmel/avr32/0.9.28.3-avr32-2.0/uClibc-0.9.28.3-avr32-2.0-002-rm-whitespace.patch
+deleted file mode 100644
+index 2ae0265..0000000
+--- a/toolchain/uClibc/ext_source/Atmel/avr32/0.9.28.3-avr32-2.0/uClibc-0.9.28.3-avr32-2.0-002-rm-whitespace.patch
++++ /dev/null
+@@ -1,77 +0,0 @@
+-diff -urN uClibc-0.9.29-0rig/include/assert.h uClibc-0.9.29/include/assert.h
+---- uClibc-0.9.29-0rig/include/assert.h	2005-11-03 23:42:46.000000000 +0100
+-+++ uClibc-0.9.29/include/assert.h	2007-08-13 19:10:57.000000000 +0200
+-@@ -31,7 +31,7 @@
+- #define	_ASSERT_H	1
+- #include <features.h>
+- 
+--#if defined __cplusplus && __GNUC_PREREQ (2,95)
+-+#if defined __cplusplus && __GNUC_PREREQ(2,95)
+- # define __ASSERT_VOID_CAST static_cast<void>
+- #else
+- # define __ASSERT_VOID_CAST (void)
+-@@ -59,13 +59,17 @@
+-   (__ASSERT_VOID_CAST ((expr) ? 0 :					      \
+- 		       (__assert (__STRING(expr), __FILE__, __LINE__,    \
+- 				       __ASSERT_FUNCTION), 0)))
+--  
+-+
+-+/* Define some temporaries to workaround tinyx makedepend bug */
+-+#define	__GNUC_PREREQ_2_6	__GNUC_PREREQ(2, 6)
+-+#define	__GNUC_PREREQ_2_4	__GNUC_PREREQ(2, 4)
+- /* Version 2.4 and later of GCC define a magical variable `__PRETTY_FUNCTION__'
+-    which contains the name of the function currently being defined.
+-    This is broken in G++ before version 2.6.
+-    C9x has a similar variable called __func__, but prefer the GCC one since
+-    it demangles C++ function names.  */
+--# if defined __cplusplus ? __GNUC_PREREQ (2, 6) : __GNUC_PREREQ (2, 4)
+-+
+-+# if defined __cplusplus ? __GNUC_PREREQ_2_6 : __GNUC_PREREQ_2_4
+- #   define __ASSERT_FUNCTION	__PRETTY_FUNCTION__
+- # else
+- #  if defined __STDC_VERSION__ && __STDC_VERSION__ >= 199901L
+-diff -urN uClibc-0.9.29-0rig/include/complex.h uClibc-0.9.29/include/complex.h
+---- uClibc-0.9.29-0rig/include/complex.h	2002-05-09 10:15:21.000000000 +0200
+-+++ uClibc-0.9.29/include/complex.h	2007-08-13 17:55:29.000000000 +0200
+-@@ -33,7 +33,7 @@
+- /* We might need to add support for more compilers here.  But since ISO
+-    C99 is out hopefully all maintained compilers will soon provide the data
+-    types `float complex' and `double complex'.  */
+--#if __GNUC_PREREQ (2, 7) && !__GNUC_PREREQ (2, 97)
+-+#if __GNUC_PREREQ(2, 7) && !__GNUC_PREREQ(2, 97)
+- # define _Complex __complex__
+- #endif
+- 
+-diff -urN uClibc-0.9.29-0rig/include/features.h uClibc-0.9.29/include/features.h
+---- uClibc-0.9.29-0rig/include/features.h	2006-11-29 22:10:04.000000000 +0100
+-+++ uClibc-0.9.29/include/features.h	2007-08-13 17:55:51.000000000 +0200
+-@@ -143,7 +143,7 @@
+- 
+- /* Convenience macros to test the versions of glibc and gcc.
+-    Use them like this:
+--   #if __GNUC_PREREQ (2,8)
+-+   #if __GNUC_PREREQ(2,8)
+-    ... code requiring gcc 2.8 or later ...
+-    #endif
+-    Note - they won't work for gcc1 or glibc1, since the _MINOR macros
+-@@ -366,7 +366,7 @@
+- #endif	/* !ASSEMBLER */
+- 
+- /* Decide whether we can define 'extern inline' functions in headers.  */
+--#if __GNUC_PREREQ (2, 7) && defined __OPTIMIZE__ \
+-+#if __GNUC_PREREQ(2, 7) && defined __OPTIMIZE__ \
+-     && !defined __OPTIMIZE_SIZE__ && !defined __NO_INLINE__
+- # define __USE_EXTERN_INLINES	1
+- #endif
+-diff -urN uClibc-0.9.29-0rig/include/tgmath.h uClibc-0.9.29/include/tgmath.h
+---- uClibc-0.9.29-0rig/include/tgmath.h	2002-05-09 10:15:21.000000000 +0200
+-+++ uClibc-0.9.29/include/tgmath.h	2007-08-13 17:56:17.000000000 +0200
+-@@ -34,7 +34,7 @@
+-    do not try this for now and instead concentrate only on GNU CC.  Once
+-    we have more information support for other compilers might follow.  */
+- 
+--#if __GNUC_PREREQ (2, 7)
+-+#if __GNUC_PREREQ(2, 7)
+- 
+- # ifdef __NO_LONG_DOUBLE_MATH
+- #  define __tgml(fct) fct
+diff --git a/toolchain/uClibc/ext_source/Atmel/avr32/0.9.29-avr32-2.1.3/.empty b/toolchain/uClibc/ext_source/Atmel/avr32/0.9.29-avr32-2.1.3/.empty
 deleted file mode 100644
 index e69de29..0000000
-diff --git a/toolchain/gdb/ext_source/Atmel/avr32/6.4-avr32-2.1.3/.empty b/toolchain/gdb/ext_source/Atmel/avr32/6.4-avr32-2.1.3/.empty
+diff --git a/toolchain/uClibc/ext_source/Atmel/avr32/0.9.29-avr32-2.1.5/.empty b/toolchain/uClibc/ext_source/Atmel/avr32/0.9.29-avr32-2.1.5/.empty
 deleted file mode 100644
 index e69de29..0000000
-diff --git a/toolchain/gdb/ext_source/Atmel/avr32/6.7.1-avr32-2.1.5/.empty b/toolchain/gdb/ext_source/Atmel/avr32/6.7.1-avr32-2.1.5/.empty
+diff --git a/toolchain/uClibc/ext_source/Atmel/avr32/0.9.30-avr32-2.1.5/.empty b/toolchain/uClibc/ext_source/Atmel/avr32/0.9.30-avr32-2.1.5/.empty
 deleted file mode 100644
 index e69de29..0000000
+diff --git a/toolchain/uClibc/ext_source/Atmel/avr32/0.9.30-avr32-2.1.5/uClibc-0.9.30-avr32-2.1.5-unifdef-getline.patch b/toolchain/uClibc/ext_source/Atmel/avr32/0.9.30-avr32-2.1.5/uClibc-0.9.30-avr32-2.1.5-unifdef-getline.patch
+deleted file mode 100644
+index eb88884..0000000
+--- a/toolchain/uClibc/ext_source/Atmel/avr32/0.9.30-avr32-2.1.5/uClibc-0.9.30-avr32-2.1.5-unifdef-getline.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+---- uClibc-0.9.30.1.orig/extra/scripts/unifdef.c
+-+++ uClibc-0.9.30.1/extra/scripts/unifdef.c
+-@@ -206,7 +206,7 @@ static void             done(void);
+- static void             error(const char *);
+- static int              findsym(const char *);
+- static void             flushline(bool);
+--static Linetype         getline(void);
+-+static Linetype         get_line(void);
+- static Linetype         ifeval(const char **);
+- static void             ignoreoff(void);
+- static void             ignoreon(void);
+-@@ -512,7 +512,7 @@ process(void)
+- 
+- 	for (;;) {
+- 		linenum++;
+--		lineval = getline();
+-+		lineval = get_line();
+- 		trans_table[ifstate[depth]][lineval]();
+- 		debug("process %s -> %s depth %d",
+- 		    linetype_name[lineval],
+-@@ -526,7 +526,7 @@ process(void)
+-  * help from skipcomment().
+-  */
+- static Linetype
+--getline(void)
+-+get_line(void)
+- {
+- 	const char *cp;
+- 	int cursym;
 -- 
 1.6.3.3
