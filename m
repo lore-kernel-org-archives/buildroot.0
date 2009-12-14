@@ -1,48 +1,57 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 14 Dec 2009 12:32:45 +0100
-Subject: [Buildroot] [PATCH] mtd-utils: bump version number
-In-Reply-To: <20091214104935.GA28375@buzzloop.caiaq.de> (Daniel Mack's message
-	of "Mon, 14 Dec 2009 18:49:35 +0800")
-References: <1260575109-7459-1-git-send-email-daniel@caiaq.de>
-	<1260575725-7764-1-git-send-email-daniel@caiaq.de>
-	<87ljh5sx5r.fsf@macbook.be.48ers.dk>
-	<20091214104935.GA28375@buzzloop.caiaq.de>
-Message-ID: <87hbrtssde.fsf@macbook.be.48ers.dk>
+From: Michael S. Zick <minimod@morethan.org>
+Date: Mon, 14 Dec 2009 05:56:08 -0600
+Subject: [Buildroot] [Bug 769] Update configuration menu for MIPS target
+In-Reply-To: <20091213184620.D1DD9777D7@busybox.osuosl.org>
+References: <bug-769-163@https.bugs.busybox.net/>
+	<20091213184620.D1DD9777D7@busybox.osuosl.org>
+Message-ID: <200912140556.10177.minimod@morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Daniel" == Daniel Mack <daniel@caiaq.de> writes:
+On Sun December 13 2009, bugzilla at busybox.net wrote:
+> https://bugs.busybox.net/show_bug.cgi?id=769 
+> 
+> --- Comment #1 from Mike Z <minimod@morethan.org>  2009-12-13 18:46:19 UTC ---
+> Screenshot of new MIPS target configuration sub-menu here:
+> http://morethan.org/bldrt/xconfig2.png
+> 
 
-Hi,
+Well, in spite of all the feedback I am getting on this project,
+I think it looks good.  It also generates the required gcc 
+options for cores from 1984 to October 2009.
 
- Daniel> Ok, the master branch moved forward and I recognized that too late,
- Daniel> hence the two patches.
+Supports three modes:
+"Full automatic" - based on Core codenames
+"Semi-automatic" - Core codename + Manual modification of feature sets.
+"Full manual" - Baby, your on your own.
 
-Ok.
+The real key to this project was the splitting of Config.in.arch
+into per-target files (Config.in.mips, Config.in.arm, ...).
 
- >> It would be nice if the shortname could be computed from MTD_VERSION so
- >> things don't break when someone goes and changes the git id. GNU make
- >> unfortunately doesn't have a substring function, so the easiest solution
- >> is probably cut, E.G.:
+That leaves each target arch to be dealt with by the lead contributor
+and/or target maintainer (12 people rather than 1) **without**
+any cross-target symbol dependencies (which Config.in.arch is full of).
 
- Daniel> I though about that too, but I wasn't sure whether the substring of the
- Daniel> SHA1 ID would always be 7 characters long. I fear that is choses to be
- Daniel> as short as possible but as long as necessary to be unique. Which would
- Daniel> then mean that it changes again at an aribitrary point.
+Each target configuration sub-menu is "wrapped" with:
+menu "MyArch target configuration"
+  depends on MyArch
+- - - -
+endmenu
 
-Currently it is (gitweb calls git rev-parse --short-7), but I get your
-point. This gitweb change is also very recent (since 1.6.6-rc1, released
-December 2nd). I'll add a comment about it.
+Giving the closest thing to a namespace that kbuild understands.
 
- Daniel> Best thing woulod be if the mtd people would just tag a commit with a
- Daniel> new release number. I'll write them and see if I can make them do that
- Daniel> :)
+The output interfaces with the existing Buildroot using the existing
+symbol names + plus target generated booleans to drive the CFLAGS
+option list generation.
 
-Yes, please - It has been 17 months since the last release, so it's
-about time.
+Makes it much, much easier to add/remove/mark broken targets by arch.
+Note: GCC supports 46 targets, **NO** I am not going to write 45 more
+of these things!  Not even if someone paid me.
 
--- 
-Bye, Peter Korsgaard
+But getting the other current targets to continue working again is 
+almost trivial - I planned it that way.
+
+Mike
