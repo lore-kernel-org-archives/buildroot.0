@@ -1,136 +1,239 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2009 00:04:37 +0100
-Subject: [Buildroot] [PATCH 05/23] uclibc: add avr32 special version
+Date: Tue, 15 Dec 2009 00:04:35 +0100
+Subject: [Buildroot] [PATCH 03/23] gcc: add 4.2.2-avr32-2.1.5 patches
 In-Reply-To: <cover.1260831891.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1260831891.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <3a24927a0e6f041a018085b5a7fc50312001fddc.1260831891.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <9e172b3f9178c22d167e4b4c3698bc0fe5bd9228.1260831891.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- * Add a new 0.9.30-avr32-2.1.5 version of uClibc in Config.in
-
- * Add a patch for 0.9.20-avr32-2.1.5
-
- * Select a different UCLIBC_SITE for avr32 versions in uclibc.mk
-
- * Add the LINKRELAX=y configuration option to the uClibc .config file
-   in uclibc.mk
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/uClibc/Config.in                         |   10 +++++-
- ...uClibc-0.9.30-avr32-2.1.5-unifdef-getline.patch |   29 ++++++++++++++++++++
- toolchain/uClibc/uclibc.mk                         |    8 +++++-
- 3 files changed, 44 insertions(+), 3 deletions(-)
- create mode 100644 toolchain/uClibc/uClibc-0.9.30-avr32-2.1.5-unifdef-getline.patch
+ ...-fix-removal-of-redundant-cast-operations.patch |   16 ++
+ ...conditional-insn-which-clobbers-cc_status.patch |  150 ++++++++++++++++++++
+ ...use-movh-to-move-immediates-into-register.patch |   31 ++++
+ 3 files changed, 197 insertions(+), 0 deletions(-)
+ create mode 100644 toolchain/gcc/4.2.2-avr32-2.1.5/903-avr32-fix-removal-of-redundant-cast-operations.patch
+ create mode 100644 toolchain/gcc/4.2.2-avr32-2.1.5/904-avr32-fix-conditional-insn-which-clobbers-cc_status.patch
+ create mode 100644 toolchain/gcc/4.2.2-avr32-2.1.5/905-avr32-optimize-movsf2-use-movh-to-move-immediates-into-register.patch
 
-diff --git a/toolchain/uClibc/Config.in b/toolchain/uClibc/Config.in
-index d0486ab..c0ec220 100644
---- a/toolchain/uClibc/Config.in
-+++ b/toolchain/uClibc/Config.in
-@@ -5,7 +5,8 @@ comment "uClibc Options"
- 
- choice
- 	prompt "uClibc C library Version"
--	default BR2_UCLIBC_VERSION_0_9_30_1
-+	default BR2_UCLIBC_VERSION_0_9_30_1 if !BR2_avr32
-+	default BR2_UCLIBC_VERSION_0_9_30_AVR32_2_1_5 if BR2_avr32
- 	help
- 	  Select the version of uClibc you wish to use.
- 
-@@ -22,7 +23,10 @@ choice
- 	config BR2_UCLIBC_VERSION_0_9_30
- 		depends on BR2_RECENT || BR2_DEPRECATED
- 		bool "uClibc 0.9.30"
--		depends on BR2_EXT_UCLIBC_VERSION_0_9_30
-+
-+	config BR2_UCLIBC_VERSION_0_9_30_AVR32_2_1_5
-+		depends on BR2_avr32
-+		bool "uClibc 0.9.30-avr32-2.1.5"
- 
- 	config BR2_UCLIBC_VERSION_0_9_30_1
- 		bool "uClibc 0.9.30.1"
-@@ -47,6 +51,7 @@ config BR2_UCLIBC_VERSION_STRING
- 	default 0.9.29		if BR2_UCLIBC_VERSION_0_9_29
- 	default 0.9.30		if BR2_UCLIBC_VERSION_0_9_30
- 	default 0.9.30.1	if BR2_UCLIBC_VERSION_0_9_30_1
-+	default 0.9.30-avr32-2.1.5 if BR2_UCLIBC_VERSION_0_9_30_AVR32_2_1_5
- 	default $BR2_USE_UCLIBC_SNAPSHOT	if BR2_UCLIBC_VERSION_SNAPSHOT
- 
- config BR2_UCLIBC_CONFIG
-@@ -55,6 +60,7 @@ config BR2_UCLIBC_CONFIG
- 	default "toolchain/uClibc/uClibc-0.9.29.config" if BR2_UCLIBC_VERSION_0_9_29
- 	default "toolchain/uClibc/uClibc-0.9.30.config" if BR2_UCLIBC_VERSION_0_9_30
- 	default "toolchain/uClibc/uClibc-0.9.30.config" if BR2_UCLIBC_VERSION_0_9_30_1
-+	default "toolchain/uClibc/uClibc-0.9.30.config" if BR2_UCLIBC_VERSION_0_9_30_AVR32_2_1_5
- 	default "toolchain/uClibc/uClibc-snapshot.config" if BR2_UCLIBC_VERSION_SNAPSHOT
- 	help
- 	  Some people may wish to use their own modified uClibc configuration
-diff --git a/toolchain/uClibc/uClibc-0.9.30-avr32-2.1.5-unifdef-getline.patch b/toolchain/uClibc/uClibc-0.9.30-avr32-2.1.5-unifdef-getline.patch
+diff --git a/toolchain/gcc/4.2.2-avr32-2.1.5/903-avr32-fix-removal-of-redundant-cast-operations.patch b/toolchain/gcc/4.2.2-avr32-2.1.5/903-avr32-fix-removal-of-redundant-cast-operations.patch
 new file mode 100644
-index 0000000..eb88884
+index 0000000..59ecbff
 --- /dev/null
-+++ b/toolchain/uClibc/uClibc-0.9.30-avr32-2.1.5-unifdef-getline.patch
-@@ -0,0 +1,29 @@
-+--- uClibc-0.9.30.1.orig/extra/scripts/unifdef.c
-++++ uClibc-0.9.30.1/extra/scripts/unifdef.c
-+@@ -206,7 +206,7 @@ static void             done(void);
-+ static void             error(const char *);
-+ static int              findsym(const char *);
-+ static void             flushline(bool);
-+-static Linetype         getline(void);
-++static Linetype         get_line(void);
-+ static Linetype         ifeval(const char **);
-+ static void             ignoreoff(void);
-+ static void             ignoreon(void);
-+@@ -512,7 +512,7 @@ process(void)
++++ b/toolchain/gcc/4.2.2-avr32-2.1.5/903-avr32-fix-removal-of-redundant-cast-operations.patch
+@@ -0,0 +1,16 @@
++Index: trunk/gcc/config/avr32/avr32.c
++===================================================================
++--- trunk/gcc/config/avr32/avr32.c	(revision 43495)
+++++ trunk/gcc/config/avr32/avr32.c	(revision 43496)
++@@ -6499,6 +6499,11 @@
++ 		    break;
++ 		}
 + 
-+ 	for (;;) {
-+ 		linenum++;
-+-		lineval = getline();
-++		lineval = get_line();
-+ 		trans_table[ifstate[depth]][lineval]();
-+ 		debug("process %s -> %s depth %d",
-+ 		    linetype_name[lineval],
-+@@ -526,7 +526,7 @@ process(void)
-+  * help from skipcomment().
-+  */
-+ static Linetype
-+-getline(void)
-++get_line(void)
+++              /* Check if we have a call and the register is used as an argument. */
+++              if (CALL_P (scan)
+++                  && find_reg_fusage (scan, USE, reg) )
+++                break;
+++
++ 	      if (!reg_mentioned_p (reg, PATTERN (scan)))
++ 		continue;
++ 
+diff --git a/toolchain/gcc/4.2.2-avr32-2.1.5/904-avr32-fix-conditional-insn-which-clobbers-cc_status.patch b/toolchain/gcc/4.2.2-avr32-2.1.5/904-avr32-fix-conditional-insn-which-clobbers-cc_status.patch
+new file mode 100644
+index 0000000..539c666
+--- /dev/null
++++ b/toolchain/gcc/4.2.2-avr32-2.1.5/904-avr32-fix-conditional-insn-which-clobbers-cc_status.patch
+@@ -0,0 +1,150 @@
++Index: gcc-4.2.2/gcc/config/avr32/avr32.c
++===================================================================
++--- gcc-4.2.2.orig/gcc/config/avr32/avr32.c	2008-09-19 14:29:20.000000000 +0200
+++++ gcc-4.2.2/gcc/config/avr32/avr32.c	2008-09-19 14:30:02.000000000 +0200
++@@ -1788,7 +1788,7 @@
++     {
++       if (TREE_CODE (*node) != FUNCTION_DECL)
++ 	{
++-	  warning ("`%s' attribute only applies to functions",
+++	  warning (OPT_Wattributes,"`%s' attribute only applies to functions",
++ 		   IDENTIFIER_POINTER (name));
++ 	  *no_add_attrs = true;
++ 	}
++@@ -1802,7 +1802,7 @@
++ 	{
++ 	  if (avr32_isr_value (args) == AVR32_FT_UNKNOWN)
++ 	    {
++-	      warning ("`%s' attribute ignored", IDENTIFIER_POINTER (name));
+++	      warning (OPT_Wattributes,"`%s' attribute ignored", IDENTIFIER_POINTER (name));
++ 	      *no_add_attrs = true;
++ 	    }
++ 	}
++@@ -1829,7 +1829,7 @@
++ 	    }
++ 	  else
++ 	    {
++-	      warning ("`%s' attribute ignored", IDENTIFIER_POINTER (name));
+++	      warning (OPT_Wattributes,"`%s' attribute ignored", IDENTIFIER_POINTER (name));
++ 	    }
++ 	}
++     }
++@@ -1847,7 +1847,7 @@
 + {
-+ 	const char *cp;
-+ 	int cursym;
-diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
-index 62fc40b..67601b1 100644
---- a/toolchain/uClibc/uclibc.mk
-+++ b/toolchain/uClibc/uclibc.mk
-@@ -19,9 +19,12 @@ UCLIBC_OFFICIAL_VERSION:=$(UCLIBC_VER)$(VENDOR_SUFFIX)$(VENDOR_UCLIBC_RELEASE)
- ifeq ($(BR2_UCLIBC_VERSION_SNAPSHOT),y)
- UCLIBC_SITE:=http://www.uclibc.org/downloads/snapshots
- UCLIBC_DIR:=$(TOOLCHAIN_DIR)/uClibc
--else
-+else ifeq ($(findstring avr32,$(UCLIBC_VERSION)),avr32)
-+UCLIBC_SITE:=ftp://www.at91.com/pub/buildroot/
- UCLIBC_DIR:=$(TOOLCHAIN_DIR)/uClibc-$(UCLIBC_OFFICIAL_VERSION)
-+else
- UCLIBC_SITE:=http://www.uclibc.org/downloads
-+UCLIBC_DIR:=$(TOOLCHAIN_DIR)/uClibc-$(UCLIBC_OFFICIAL_VERSION)
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_SOURCE),y)
- UCLIBC_SITE:=$(VENDOR_SITE)
- endif
-@@ -257,6 +260,9 @@ else
- 	/bin/echo "# CONFIG_E500 is not set" >> $(UCLIBC_DIR)/.oldconfig
- endif
- endif
-+ifeq ($(UCLIBC_TARGET_ARCH),avr32)
-+	/bin/echo "LINKRELAX=y" >> $(UCLIBC_DIR)/.oldconfig
-+endif
- ifneq ($(UCLIBC_TARGET_ENDIAN),)
- 	# The above doesn't work for me, so redo
- 	$(SED) 's/.*\(ARCH_$(UCLIBC_NOT_TARGET_ENDIAN)_ENDIAN\).*/# \1 is not set/g' \
++   if (TREE_CODE (*node) != FUNCTION_DECL)
++     {
++-      warning ("%qs attribute only applies to functions",
+++      warning (OPT_Wattributes,"%qs attribute only applies to functions",
++ 	       IDENTIFIER_POINTER (name));
++       *no_add_attrs = true;
++     }
++@@ -1866,13 +1866,13 @@
++ {
++   if (TREE_CODE (*node) == FUNCTION_TYPE || TREE_CODE (*node) == METHOD_TYPE)
++     {
++-      warning ("`%s' attribute not yet supported...",
+++      warning (OPT_Wattributes,"`%s' attribute not yet supported...",
++ 	       IDENTIFIER_POINTER (name));
++       *no_add_attrs = true;
++       return NULL_TREE;
++     }
++ 
++-  warning ("`%s' attribute only applies to functions",
+++  warning (OPT_Wattributes,"`%s' attribute only applies to functions",
++ 	   IDENTIFIER_POINTER (name));
++   *no_add_attrs = true;
++   return NULL_TREE;
++@@ -4215,51 +4215,6 @@
++ 
++ 
++ void
++-avr32_asm_output_ascii (FILE * stream, char *ptr, int len)
++-{
++-  int i, i_new = 0;
++-  char *new_ptr = xmalloc (4 * len);
++-  if (new_ptr == NULL)
++-    internal_error ("Out of memory.");
++-
++-  for (i = 0; i < len; i++)
++-    {
++-      if (ptr[i] == '\n')
++-	{
++-	  new_ptr[i_new++] = '\\';
++-	  new_ptr[i_new++] = '0';
++-	  new_ptr[i_new++] = '1';
++-	  new_ptr[i_new++] = '2';
++-	}
++-      else if (ptr[i] == '\"')
++-	{
++-	  new_ptr[i_new++] = '\\';
++-	  new_ptr[i_new++] = '\"';
++-	}
++-      else if (ptr[i] == '\\')
++-	{
++-	  new_ptr[i_new++] = '\\';
++-	  new_ptr[i_new++] = '\\';
++-	}
++-      else if (ptr[i] == '\0' && i + 1 < len)
++-	{
++-	  new_ptr[i_new++] = '\\';
++-	  new_ptr[i_new++] = '0';
++-	}
++-      else
++-	{
++-	  new_ptr[i_new++] = ptr[i];
++-	}
++-    }
++-
++-  /* Terminate new_ptr. */
++-  new_ptr[i_new] = '\0';
++-  fprintf (stream, "\t.ascii\t\"%s\"\n", new_ptr);
++-  free (new_ptr);
++-}
++-
++-
++-void
++ avr32_asm_output_label (FILE * stream, const char *name)
++ {
++   name = avr32_strip_name_encoding (name);
++@@ -4444,12 +4399,15 @@
++         rtx cmp;
++         rtx cmp_op0, cmp_op1;
++         rtx cond;
+++        rtx dest;
+++
++         if ( GET_CODE (exp) == COND_EXEC )
++           {
++             cmp_op0 = XEXP (COND_EXEC_TEST (exp), 0);
++             cmp_op1 = XEXP (COND_EXEC_TEST (exp), 1);
++             cond = COND_EXEC_TEST (exp);
++-          } 
+++            dest = SET_DEST (COND_EXEC_CODE (exp));
+++          }
++         else
++           {
++             /* If then else conditional. compare operands are in operands
++@@ -4457,6 +4415,7 @@
++             cmp_op0 = recog_data.operand[4];
++             cmp_op1 = recog_data.operand[5];
++             cond = recog_data.operand[1];
+++            dest = SET_DEST (exp);
++           }
++ 
++         if ( GET_CODE (cmp_op0) == AND )
++@@ -4466,7 +4425,15 @@
++                                  cmp_op0,
++                                  cmp_op1);
++         
++-	if (is_compare_redundant (cmp, cond) == NULL_RTX)
+++        /* Check if the conditional insns updates a register present
+++           in the comparison, if so then we must reset the cc_status. */
+++        if (REG_P (dest)
+++            && (reg_mentioned_p (dest, cmp_op0)
+++                || reg_mentioned_p (dest, cmp_op1)))
+++          {
+++            CC_STATUS_INIT;
+++          }
+++	else if (is_compare_redundant (cmp, cond) == NULL_RTX)
++ 	  {
++ 	    /* Reset the nonstandard flag */
++ 	    CC_STATUS_INIT;
+diff --git a/toolchain/gcc/4.2.2-avr32-2.1.5/905-avr32-optimize-movsf2-use-movh-to-move-immediates-into-register.patch b/toolchain/gcc/4.2.2-avr32-2.1.5/905-avr32-optimize-movsf2-use-movh-to-move-immediates-into-register.patch
+new file mode 100644
+index 0000000..08d972d
+--- /dev/null
++++ b/toolchain/gcc/4.2.2-avr32-2.1.5/905-avr32-optimize-movsf2-use-movh-to-move-immediates-into-register.patch
+@@ -0,0 +1,31 @@
++Index: gcc-4.2.2/gcc/config/avr32/avr32.md
++===================================================================
++--- gcc-4.2.2.orig/gcc/config/avr32/avr32.md	2008-09-19 14:23:34.000000000 +0200
+++++ gcc-4.2.2/gcc/config/avr32/avr32.md	2008-09-19 14:30:18.000000000 +0200
++@@ -803,14 +803,22 @@
++ (define_insn "*movsf_internal"
++   [(set (match_operand:SF 0 "nonimmediate_operand"     "=r,r,r,r,m")
++ 	(match_operand:SF 1 "general_operand"          "r, G,F,m,r"))]
++-  "TARGET_SOFT_FLOAT
++-   && (register_operand (operands[0], SFmode)
++-       || register_operand (operands[1], SFmode))"
+++  "(register_operand (operands[0], SFmode)
+++    || register_operand (operands[1], SFmode))"
++   {
++     switch (which_alternative) {
++       case 0:
++       case 1: return "mov\t%0, %1";
++-      case 2: return "mov\t%0, lo(%1)\;orh\t%0, hi(%1)";
+++      case 2: 
+++       {
+++        HOST_WIDE_INT target_float[2];
+++        real_to_target (target_float, CONST_DOUBLE_REAL_VALUE (operands[1]), SFmode);
+++        if ( TARGET_V2_INSNS 
+++             && avr32_hi16_immediate_operand (GEN_INT (target_float[0]), VOIDmode) )
+++           return "movh\t%0, hi(%1)";
+++        else
+++           return "mov\t%0, lo(%1)\;orh\t%0, hi(%1)";
+++       }
++       case 3:
++         if ( (REG_P(XEXP(operands[1], 0))
++               && REGNO(XEXP(operands[1], 0)) == SP_REGNUM)
 -- 
 1.6.3.3
