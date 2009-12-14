@@ -1,57 +1,62 @@
-From: Michael S. Zick <minimod@morethan.org>
-Date: Mon, 14 Dec 2009 05:56:08 -0600
-Subject: [Buildroot] [Bug 769] Update configuration menu for MIPS target
-In-Reply-To: <20091213184620.D1DD9777D7@busybox.osuosl.org>
-References: <bug-769-163@https.bugs.busybox.net/>
-	<20091213184620.D1DD9777D7@busybox.osuosl.org>
-Message-ID: <200912140556.10177.minimod@morethan.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 14 Dec 2009 13:34:27 +0100
+Subject: [Buildroot] [git commit master] package/mtd-utils: fix git build
+	after gitweb update
+Message-ID: <20091214123452.CE2AD77717@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun December 13 2009, bugzilla at busybox.net wrote:
-> https://bugs.busybox.net/show_bug.cgi?id=769 
-> 
-> --- Comment #1 from Mike Z <minimod@morethan.org>  2009-12-13 18:46:19 UTC ---
-> Screenshot of new MIPS target configuration sub-menu here:
-> http://morethan.org/bldrt/xconfig2.png
-> 
 
-Well, in spite of all the feedback I am getting on this project,
-I think it looks good.  It also generates the required gcc 
-options for cores from 1984 to October 2009.
+commit: http://git.buildroot.net/buildroot/commit/?id=a2d833bf34a7a3a10d24956cd27d02958e2cca38
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Supports three modes:
-"Full automatic" - based on Core codenames
-"Semi-automatic" - Core codename + Manual modification of feature sets.
-"Full manual" - Baby, your on your own.
+Reported by Daniel Mack <daniel@caiaq.de>
 
-The real key to this project was the splitting of Config.in.arch
-into per-target files (Config.in.mips, Config.in.arm, ...).
+The gitweb installation of infradead.org has been updated, and gitweb >=
+1.6.6-rc1 adds the first 7 characters of the git SHA1 to the snapshot
+tarball directory name.
 
-That leaves each target arch to be dealt with by the lead contributor
-and/or target maintainer (12 people rather than 1) **without**
-any cross-target symbol dependencies (which Config.in.arch is full of).
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES                          |    2 +-
+ package/mtd/mtd-utils.git/mtd.mk |    4 +++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-Each target configuration sub-menu is "wrapped" with:
-menu "MyArch target configuration"
-  depends on MyArch
-- - - -
-endmenu
-
-Giving the closest thing to a namespace that kbuild understands.
-
-The output interfaces with the existing Buildroot using the existing
-symbol names + plus target generated booleans to drive the CFLAGS
-option list generation.
-
-Makes it much, much easier to add/remove/mark broken targets by arch.
-Note: GCC supports 46 targets, **NO** I am not going to write 45 more
-of these things!  Not even if someone paid me.
-
-But getting the other current targets to continue working again is 
-almost trivial - I planned it that way.
-
-Mike
+diff --git a/CHANGES b/CHANGES
+index b31d5dc..5217452 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -4,7 +4,7 @@
+ 
+ 	Updated/fixed packages: autoconf, bind, binutils, busybox,
+ 	directfb, gst-plugins-bad, iw, libfuse, libpcap, lighttpd,
+-	mesa, pcre, sshfs, tremor, usbutils
++	mesa, mtd-utils, pcre, sshfs, tremor, usbutils
+ 
+ 	Issues resolved (http://bugs.uclibc.org):
+ 
+diff --git a/package/mtd/mtd-utils.git/mtd.mk b/package/mtd/mtd-utils.git/mtd.mk
+index b7e584e..6cb45c2 100644
+--- a/package/mtd/mtd-utils.git/mtd.mk
++++ b/package/mtd/mtd-utils.git/mtd.mk
+@@ -4,12 +4,14 @@
+ #
+ #############################################################
+ MTD_VERSION:=fcb52ccc99679460640386c297023f852b108f68
++# gitweb >= 1.6.6-rc1 uses first 7 chars of git SHA1 as dir suffix
++MTD_SHORT_VERSION=$(shell echo $(MTD_VERSION)|cut -c -7)
+ MTD_SOURCE:=mtd-utils-$(MTD_VERSION).tar.gz
+ MTD_URL:=http://git.infradead.org/mtd-utils.git?a=snapshot;h=$(MTD_VERSION);sf=tgz
+ MTD_HOST_DIR:= $(TOOLCHAIN_DIR)/mtd-utils-$(MTD_VERSION)
+ MTD_DIR:=$(BUILD_DIR)/mtd-utils-$(MTD_VERSION)
+ MTD_CAT:=$(ZCAT)
+-MTD_NAME:=mtd-utils
++MTD_NAME:=mtd-utils-$(MTD_SHORT_VERSION)
+ 
+ #############################################################
+ #
+-- 
+1.6.3.3
