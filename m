@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2009 00:04:53 +0100
-Subject: [Buildroot] [PATCH 21/23] Update non-AVR32 defconfigs
+Date: Tue, 15 Dec 2009 00:04:55 +0100
+Subject: [Buildroot] [PATCH 23/23] remove unused AVR32 specific uClibc
+	configuration
 In-Reply-To: <cover.1260831891.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1260831891.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <da0ee7e4bc82c4c0965383f0dc31e2cf99bd8495.1260831891.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <c375022823a1c36a03fe576924ef4fcf9a58499a.1260831891.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,503 +13,242 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/arm_toolchain_defconfig           |   11 -----------
- configs/at91rm9200df_defconfig            |   11 -----------
- configs/at91rm9200df_ext_bare_defconfig   |   11 -----------
- configs/at91rm9200df_ext_defconfig        |   11 -----------
- configs/at91sam9260dfc_defconfig          |   11 -----------
- configs/at91sam9260dfc_ext_bare_defconfig |   11 -----------
- configs/at91sam9260dfc_ext_defconfig      |   11 -----------
- configs/at91sam9261ek_defconfig           |   11 -----------
- configs/at91sam9261ek_ext_bare_defconfig  |   11 -----------
- configs/at91sam9261ek_ext_defconfig       |   11 -----------
- configs/at91sam9263ek_defconfig           |   11 -----------
- configs/at91sam9263ek_ext_bare_defconfig  |   11 -----------
- configs/at91sam9263ek_ext_defconfig       |   11 -----------
- configs/at91sam9g20dfc_defconfig          |   11 -----------
- configs/at91sam9g20dfc_ext_bare_defconfig |   11 -----------
- configs/at91sam9g20dfc_ext_defconfig      |   11 -----------
- configs/i386_defconfig                    |   12 ------------
- configs/i686_defconfig                    |   12 ------------
- configs/integrator926_defconfig           |   11 -----------
- configs/integrator926_huge_defconfig      |   11 -----------
- target/xtensa/defconfig                   |    3 +--
- 21 files changed, 1 insertions(+), 224 deletions(-)
+ target/device/Atmel/uClibc.config.avr32 |  227 -------------------------------
+ 1 files changed, 0 insertions(+), 227 deletions(-)
+ delete mode 100644 target/device/Atmel/uClibc.config.avr32
 
-diff --git a/configs/arm_toolchain_defconfig b/configs/arm_toolchain_defconfig
-index 6c903d0..58d0174 100644
---- a/configs/arm_toolchain_defconfig
-+++ b/configs/arm_toolchain_defconfig
-@@ -190,17 +190,6 @@ BR2_UPDATE_CONFIG=y
- #
- BR2_TOOLCHAIN_BUILDROOT=y
- # BR2_TOOLCHAIN_EXTERNAL is not set
--# BR2_TOOLCHAIN_EXTERNAL_SOURCE is not set
--BR2_TOOLCHAIN_SOURCE=y
--BR2_EXT_GCC_VERSION_4_1_2=y
--BR2_EXT_GCC_VERSION_4_2_1=y
--BR2_EXT_GCC_VERSION_4_2_2=y
--BR2_EXT_GCC_VERSION_4_2_3=y
--BR2_EXT_BINUTILS_VERSION_2_17=y
--BR2_EXT_BINUTILS_VERSION_2_18=y
--BR2_EXT_UCLIBC_VERSION_0_9_28_3=y
--BR2_EXT_UCLIBC_VERSION_0_9_29=y
--BR2_EXT_UCLIBC_VERSION_0_9_30=y
- 
- #
- # Kernel Header Options
-diff --git a/configs/at91rm9200df_defconfig b/configs/at91rm9200df_defconfig
-index aba4d0d..a500d21 100644
---- a/configs/at91rm9200df_defconfig
-+++ b/configs/at91rm9200df_defconfig
-@@ -195,17 +195,6 @@ BR2_UPDATE_CONFIG=y
- #
- BR2_TOOLCHAIN_BUILDROOT=y
- # BR2_TOOLCHAIN_EXTERNAL is not set
--# BR2_TOOLCHAIN_EXTERNAL_SOURCE is not set
--BR2_TOOLCHAIN_SOURCE=y
--BR2_EXT_GCC_VERSION_4_1_2=y
--BR2_EXT_GCC_VERSION_4_2_1=y
--BR2_EXT_GCC_VERSION_4_2_2=y
--BR2_EXT_GCC_VERSION_4_2_3=y
--BR2_EXT_BINUTILS_VERSION_2_17=y
--BR2_EXT_BINUTILS_VERSION_2_18=y
--BR2_EXT_UCLIBC_VERSION_0_9_28_3=y
--BR2_EXT_UCLIBC_VERSION_0_9_29=y
--BR2_EXT_UCLIBC_VERSION_0_9_30=y
- 
- #
- # Kernel Header Options
-diff --git a/configs/at91rm9200df_ext_bare_defconfig b/configs/at91rm9200df_ext_bare_defconfig
-index 463f556..07412aa 100644
---- a/configs/at91rm9200df_ext_bare_defconfig
-+++ b/configs/at91rm9200df_ext_bare_defconfig
-@@ -190,19 +190,8 @@ BR2_UPDATE_CONFIG=y
- #
- # BR2_TOOLCHAIN_BUILDROOT is not set
- BR2_TOOLCHAIN_EXTERNAL=y
--# BR2_TOOLCHAIN_EXTERNAL_SOURCE is not set
--# BR2_TOOLCHAIN_SOURCE is not set
- BR2_TOOLCHAIN_EXTERNAL_PATH="$(GCCROOT)"
- BR2_TOOLCHAIN_EXTERNAL_PREFIX="$(ARCH)-linux"
--BR2_EXT_GCC_VERSION_4_1_2=y
--BR2_EXT_GCC_VERSION_4_2_1=y
--BR2_EXT_GCC_VERSION_4_2_2=y
--BR2_EXT_GCC_VERSION_4_2_3=y
--BR2_EXT_BINUTILS_VERSION_2_17=y
--BR2_EXT_BINUTILS_VERSION_2_18=y
--BR2_EXT_UCLIBC_VERSION_0_9_28_3=y
--BR2_EXT_UCLIBC_VERSION_0_9_29=y
--BR2_EXT_UCLIBC_VERSION_0_9_30=y
- BR2_TOOLCHAIN_EXTERNAL_LIB_C="libc.so.0"
- BR2_TOOLCHAIN_EXTERNAL_LIBS="ld-uClibc.so.0 libcrypt.so.0 libdl.so.0 libgcc_s.so libm.so.0 libnsl.so.0 libpthread.so.0 libresolv.so.0 librt.so.0 libutil.so.0"
- BR2_TOOLCHAIN_EXTERNAL_STRIP=y
-diff --git a/configs/at91rm9200df_ext_defconfig b/configs/at91rm9200df_ext_defconfig
-index 4c8d50d..e16b375 100644
---- a/configs/at91rm9200df_ext_defconfig
-+++ b/configs/at91rm9200df_ext_defconfig
-@@ -201,19 +201,8 @@ BR2_UPDATE_CONFIG=y
- #
- # BR2_TOOLCHAIN_BUILDROOT is not set
- BR2_TOOLCHAIN_EXTERNAL=y
--# BR2_TOOLCHAIN_EXTERNAL_SOURCE is not set
--# BR2_TOOLCHAIN_SOURCE is not set
- BR2_TOOLCHAIN_EXTERNAL_PATH="$(GCCROOT)"
- BR2_TOOLCHAIN_EXTERNAL_PREFIX="$(ARCH)-linux"
--BR2_EXT_GCC_VERSION_4_1_2=y
--BR2_EXT_GCC_VERSION_4_2_1=y
--BR2_EXT_GCC_VERSION_4_2_2=y
--BR2_EXT_GCC_VERSION_4_2_3=y
--BR2_EXT_BINUTILS_VERSION_2_17=y
--BR2_EXT_BINUTILS_VERSION_2_18=y
--BR2_EXT_UCLIBC_VERSION_0_9_28_3=y
--BR2_EXT_UCLIBC_VERSION_0_9_29=y
--BR2_EXT_UCLIBC_VERSION_0_9_30=y
- BR2_TOOLCHAIN_EXTERNAL_LIB_C="libc.so.0"
- BR2_TOOLCHAIN_EXTERNAL_LIBS="ld-uClibc.so.0 libcrypt.so.0 libdl.so.0 libgcc_s.so libm.so.0 libnsl.so.0 libpthread.so.0 libresolv.so.0 librt.so.0 libutil.so.0"
- BR2_TOOLCHAIN_EXTERNAL_STRIP=y
-diff --git a/configs/at91sam9260dfc_defconfig b/configs/at91sam9260dfc_defconfig
-index 056a661..35eebb5 100644
---- a/configs/at91sam9260dfc_defconfig
-+++ b/configs/at91sam9260dfc_defconfig
-@@ -208,17 +208,6 @@ BR2_UPDATE_CONFIG=y
- #
- BR2_TOOLCHAIN_BUILDROOT=y
- # BR2_TOOLCHAIN_EXTERNAL is not set
--# BR2_TOOLCHAIN_EXTERNAL_SOURCE is not set
--BR2_TOOLCHAIN_SOURCE=y
--BR2_EXT_GCC_VERSION_4_1_2=y
--BR2_EXT_GCC_VERSION_4_2_1=y
--BR2_EXT_GCC_VERSION_4_2_2=y
--BR2_EXT_GCC_VERSION_4_2_3=y
--BR2_EXT_BINUTILS_VERSION_2_17=y
--BR2_EXT_BINUTILS_VERSION_2_18=y
--BR2_EXT_UCLIBC_VERSION_0_9_28_3=y
--BR2_EXT_UCLIBC_VERSION_0_9_29=y
--BR2_EXT_UCLIBC_VERSION_0_9_30=y
- 
- #
- # Kernel Header Options
-diff --git a/configs/at91sam9260dfc_ext_bare_defconfig b/configs/at91sam9260dfc_ext_bare_defconfig
-index 1048d9c..fbd444b 100644
---- a/configs/at91sam9260dfc_ext_bare_defconfig
-+++ b/configs/at91sam9260dfc_ext_bare_defconfig
-@@ -190,17 +190,6 @@ BR2_UPDATE_CONFIG=y
- #
- # BR2_TOOLCHAIN_BUILDROOT is not set
- BR2_TOOLCHAIN_EXTERNAL=y
--# BR2_TOOLCHAIN_EXTERNAL_SOURCE is not set
--# BR2_TOOLCHAIN_SOURCE is not set
--BR2_EXT_GCC_VERSION_4_1_2=y
--BR2_EXT_GCC_VERSION_4_2_1=y
--BR2_EXT_GCC_VERSION_4_2_2=y
--BR2_EXT_GCC_VERSION_4_2_3=y
--BR2_EXT_BINUTILS_VERSION_2_17=y
--BR2_EXT_BINUTILS_VERSION_2_18=y
--BR2_EXT_UCLIBC_VERSION_0_9_28_3=y
--BR2_EXT_UCLIBC_VERSION_0_9_29=y
--BR2_EXT_UCLIBC_VERSION_0_9_30=y
- BR2_TOOLCHAIN_EXTERNAL_LIB_C="libc.so.0"
- BR2_TOOLCHAIN_EXTERNAL_LIBS="ld-uClibc.so.0 libcrypt.so.0 libdl.so.0 libgcc_s.so libm.so.0 libnsl.so.0 libpthread.so.0 libresolv.so.0 librt.so.0 libutil.so.0"
- BR2_TOOLCHAIN_EXTERNAL_STRIP=y
-diff --git a/configs/at91sam9260dfc_ext_defconfig b/configs/at91sam9260dfc_ext_defconfig
-index 3436849..ab63f1e 100644
---- a/configs/at91sam9260dfc_ext_defconfig
-+++ b/configs/at91sam9260dfc_ext_defconfig
-@@ -209,19 +209,8 @@ BR2_UPDATE_CONFIG=y
- #
- # BR2_TOOLCHAIN_BUILDROOT is not set
- BR2_TOOLCHAIN_EXTERNAL=y
--# BR2_TOOLCHAIN_EXTERNAL_SOURCE is not set
--# BR2_TOOLCHAIN_SOURCE is not set
- BR2_TOOLCHAIN_EXTERNAL_PATH="$(GCCROOT)"
- BR2_TOOLCHAIN_EXTERNAL_PREFIX="$(ARCH)-linux"
--BR2_EXT_GCC_VERSION_4_1_2=y
--BR2_EXT_GCC_VERSION_4_2_1=y
--BR2_EXT_GCC_VERSION_4_2_2=y
--BR2_EXT_GCC_VERSION_4_2_3=y
--BR2_EXT_BINUTILS_VERSION_2_17=y
--BR2_EXT_BINUTILS_VERSION_2_18=y
--BR2_EXT_UCLIBC_VERSION_0_9_28_3=y
--BR2_EXT_UCLIBC_VERSION_0_9_29=y
--BR2_EXT_UCLIBC_VERSION_0_9_30=y
- BR2_TOOLCHAIN_EXTERNAL_LIB_C="libc.so.0"
- BR2_TOOLCHAIN_EXTERNAL_LIBS="ld-uClibc.so.0 libcrypt.so.0 libdl.so.0 libgcc_s.so libm.so.0 libnsl.so.0 libpthread.so.0 libresolv.so.0 librt.so.0 libutil.so.0"
- BR2_TOOLCHAIN_EXTERNAL_STRIP=y
-diff --git a/configs/at91sam9261ek_defconfig b/configs/at91sam9261ek_defconfig
-index 2af89ac..72718a5 100644
---- a/configs/at91sam9261ek_defconfig
-+++ b/configs/at91sam9261ek_defconfig
-@@ -211,17 +211,6 @@ BR2_UPDATE_CONFIG=y
- #
- BR2_TOOLCHAIN_BUILDROOT=y
- # BR2_TOOLCHAIN_EXTERNAL is not set
--# BR2_TOOLCHAIN_EXTERNAL_SOURCE is not set
--BR2_TOOLCHAIN_SOURCE=y
--BR2_EXT_GCC_VERSION_4_1_2=y
--BR2_EXT_GCC_VERSION_4_2_1=y
--BR2_EXT_GCC_VERSION_4_2_2=y
--BR2_EXT_GCC_VERSION_4_2_3=y
--BR2_EXT_BINUTILS_VERSION_2_17=y
--BR2_EXT_BINUTILS_VERSION_2_18=y
--BR2_EXT_UCLIBC_VERSION_0_9_28_3=y
--BR2_EXT_UCLIBC_VERSION_0_9_29=y
--BR2_EXT_UCLIBC_VERSION_0_9_30=y
- 
- #
- # Kernel Header Options
-diff --git a/configs/at91sam9261ek_ext_bare_defconfig b/configs/at91sam9261ek_ext_bare_defconfig
-index 7c11189..c147e54 100644
---- a/configs/at91sam9261ek_ext_bare_defconfig
-+++ b/configs/at91sam9261ek_ext_bare_defconfig
-@@ -193,19 +193,8 @@ BR2_UPDATE_CONFIG=y
- #
- # BR2_TOOLCHAIN_BUILDROOT is not set
- BR2_TOOLCHAIN_EXTERNAL=y
--# BR2_TOOLCHAIN_EXTERNAL_SOURCE is not set
--# BR2_TOOLCHAIN_SOURCE is not set
- BR2_TOOLCHAIN_EXTERNAL_PATH="$(GCCROOT)"
- BR2_TOOLCHAIN_EXTERNAL_PREFIX="$(ARCH)-linux"
--BR2_EXT_GCC_VERSION_4_1_2=y
--BR2_EXT_GCC_VERSION_4_2_1=y
--BR2_EXT_GCC_VERSION_4_2_2=y
--BR2_EXT_GCC_VERSION_4_2_3=y
--BR2_EXT_BINUTILS_VERSION_2_17=y
--BR2_EXT_BINUTILS_VERSION_2_18=y
--BR2_EXT_UCLIBC_VERSION_0_9_28_3=y
--BR2_EXT_UCLIBC_VERSION_0_9_29=y
--BR2_EXT_UCLIBC_VERSION_0_9_30=y
- BR2_TOOLCHAIN_EXTERNAL_LIB_C="libc.so.0"
- BR2_TOOLCHAIN_EXTERNAL_LIBS="ld-uClibc.so.0 libcrypt.so.0 libdl.so.0 libgcc_s.so libm.so.0 libnsl.so.0 libpthread.so.0 libresolv.so.0 librt.so.0 libutil.so.0"
- BR2_TOOLCHAIN_EXTERNAL_STRIP=y
-diff --git a/configs/at91sam9261ek_ext_defconfig b/configs/at91sam9261ek_ext_defconfig
-index e233b94..86595e5 100644
---- a/configs/at91sam9261ek_ext_defconfig
-+++ b/configs/at91sam9261ek_ext_defconfig
-@@ -212,19 +212,8 @@ BR2_UPDATE_CONFIG=y
- #
- # BR2_TOOLCHAIN_BUILDROOT is not set
- BR2_TOOLCHAIN_EXTERNAL=y
--# BR2_TOOLCHAIN_EXTERNAL_SOURCE is not set
--# BR2_TOOLCHAIN_SOURCE is not set
- BR2_TOOLCHAIN_EXTERNAL_PATH="$(GCCROOT)"
- BR2_TOOLCHAIN_EXTERNAL_PREFIX="$(ARCH)-linux"
--BR2_EXT_GCC_VERSION_4_1_2=y
--BR2_EXT_GCC_VERSION_4_2_1=y
--BR2_EXT_GCC_VERSION_4_2_2=y
--BR2_EXT_GCC_VERSION_4_2_3=y
--BR2_EXT_BINUTILS_VERSION_2_17=y
--BR2_EXT_BINUTILS_VERSION_2_18=y
--BR2_EXT_UCLIBC_VERSION_0_9_28_3=y
--BR2_EXT_UCLIBC_VERSION_0_9_29=y
--BR2_EXT_UCLIBC_VERSION_0_9_30=y
- # BR2_KERNEL_HEADERS_2_4_31 is not set
- # BR2_KERNEL_HEADERS_2_6_20_4 is not set
- # BR2_KERNEL_HEADERS_2_6_20 is not set
-diff --git a/configs/at91sam9263ek_defconfig b/configs/at91sam9263ek_defconfig
-index d7645d9..4b08df3 100644
---- a/configs/at91sam9263ek_defconfig
-+++ b/configs/at91sam9263ek_defconfig
-@@ -209,17 +209,6 @@ BR2_UPDATE_CONFIG=y
- #
- BR2_TOOLCHAIN_BUILDROOT=y
- # BR2_TOOLCHAIN_EXTERNAL is not set
--# BR2_TOOLCHAIN_EXTERNAL_SOURCE is not set
--BR2_TOOLCHAIN_SOURCE=y
--BR2_EXT_GCC_VERSION_4_1_2=y
--BR2_EXT_GCC_VERSION_4_2_1=y
--BR2_EXT_GCC_VERSION_4_2_2=y
--BR2_EXT_GCC_VERSION_4_2_3=y
--BR2_EXT_BINUTILS_VERSION_2_17=y
--BR2_EXT_BINUTILS_VERSION_2_18=y
--BR2_EXT_UCLIBC_VERSION_0_9_28_3=y
--BR2_EXT_UCLIBC_VERSION_0_9_29=y
--BR2_EXT_UCLIBC_VERSION_0_9_30=y
- 
- #
- # Kernel Header Options
-diff --git a/configs/at91sam9263ek_ext_bare_defconfig b/configs/at91sam9263ek_ext_bare_defconfig
-index d31b8de..4d3821f 100644
---- a/configs/at91sam9263ek_ext_bare_defconfig
-+++ b/configs/at91sam9263ek_ext_bare_defconfig
-@@ -192,19 +192,8 @@ BR2_UPDATE_CONFIG=y
- #
- # BR2_TOOLCHAIN_BUILDROOT is not set
- BR2_TOOLCHAIN_EXTERNAL=y
--# BR2_TOOLCHAIN_EXTERNAL_SOURCE is not set
--# BR2_TOOLCHAIN_SOURCE is not set
- BR2_TOOLCHAIN_EXTERNAL_PATH="$(GCCROOT)"
- BR2_TOOLCHAIN_EXTERNAL_PREFIX="$(ARCH)-linux"
--BR2_EXT_GCC_VERSION_4_1_2=y
--BR2_EXT_GCC_VERSION_4_2_1=y
--BR2_EXT_GCC_VERSION_4_2_2=y
--BR2_EXT_GCC_VERSION_4_2_3=y
--BR2_EXT_BINUTILS_VERSION_2_17=y
--BR2_EXT_BINUTILS_VERSION_2_18=y
--BR2_EXT_UCLIBC_VERSION_0_9_28_3=y
--BR2_EXT_UCLIBC_VERSION_0_9_29=y
--BR2_EXT_UCLIBC_VERSION_0_9_30=y
- BR2_TOOLCHAIN_EXTERNAL_LIB_C="libc.so.0"
- BR2_TOOLCHAIN_EXTERNAL_LIBS="ld-uClibc.so.0 libcrypt.so.0 libdl.so.0 libgcc_s.so libm.so.0 libnsl.so.0 libpthread.so.0 libresolv.so.0 librt.so.0 libutil.so.0"
- BR2_TOOLCHAIN_EXTERNAL_STRIP=y
-diff --git a/configs/at91sam9263ek_ext_defconfig b/configs/at91sam9263ek_ext_defconfig
-index bda2149..a929c44 100644
---- a/configs/at91sam9263ek_ext_defconfig
-+++ b/configs/at91sam9263ek_ext_defconfig
-@@ -211,19 +211,8 @@ BR2_UPDATE_CONFIG=y
- #
- # BR2_TOOLCHAIN_BUILDROOT is not set
- BR2_TOOLCHAIN_EXTERNAL=y
--# BR2_TOOLCHAIN_EXTERNAL_SOURCE is not set
--# BR2_TOOLCHAIN_SOURCE is not set
- BR2_TOOLCHAIN_EXTERNAL_PATH="$(GCCROOT)"
- BR2_TOOLCHAIN_EXTERNAL_PREFIX="$(ARCH)-linux"
--BR2_EXT_GCC_VERSION_4_1_2=y
--BR2_EXT_GCC_VERSION_4_2_1=y
--BR2_EXT_GCC_VERSION_4_2_2=y
--BR2_EXT_GCC_VERSION_4_2_3=y
--BR2_EXT_BINUTILS_VERSION_2_17=y
--BR2_EXT_BINUTILS_VERSION_2_18=y
--BR2_EXT_UCLIBC_VERSION_0_9_28_3=y
--BR2_EXT_UCLIBC_VERSION_0_9_29=y
--BR2_EXT_UCLIBC_VERSION_0_9_30=y
- BR2_TOOLCHAIN_EXTERNAL_LIB_C="libc.so.0"
- BR2_TOOLCHAIN_EXTERNAL_LIBS="ld-uClibc.so.0 libcrypt.so.0 libdl.so.0 libgcc_s.so libm.so.0 libnsl.so.0 libpthread.so.0 libresolv.so.0 librt.so.0 libutil.so.0"
- BR2_TOOLCHAIN_EXTERNAL_STRIP=y
-diff --git a/configs/at91sam9g20dfc_defconfig b/configs/at91sam9g20dfc_defconfig
-index ed271d8..d8fb95e 100644
---- a/configs/at91sam9g20dfc_defconfig
-+++ b/configs/at91sam9g20dfc_defconfig
-@@ -209,17 +209,6 @@ BR2_UPDATE_CONFIG=y
- #
- BR2_TOOLCHAIN_BUILDROOT=y
- # BR2_TOOLCHAIN_EXTERNAL is not set
--# BR2_TOOLCHAIN_EXTERNAL_SOURCE is not set
--BR2_TOOLCHAIN_SOURCE=y
--BR2_EXT_GCC_VERSION_4_1_2=y
--BR2_EXT_GCC_VERSION_4_2_1=y
--BR2_EXT_GCC_VERSION_4_2_2=y
--BR2_EXT_GCC_VERSION_4_2_3=y
--BR2_EXT_BINUTILS_VERSION_2_17=y
--BR2_EXT_BINUTILS_VERSION_2_18=y
--BR2_EXT_UCLIBC_VERSION_0_9_28_3=y
--BR2_EXT_UCLIBC_VERSION_0_9_29=y
--BR2_EXT_UCLIBC_VERSION_0_9_30=y
- 
- #
- # Kernel Header Options
-diff --git a/configs/at91sam9g20dfc_ext_bare_defconfig b/configs/at91sam9g20dfc_ext_bare_defconfig
-index 0b778eb..6145d7a 100644
---- a/configs/at91sam9g20dfc_ext_bare_defconfig
-+++ b/configs/at91sam9g20dfc_ext_bare_defconfig
-@@ -190,19 +190,8 @@ BR2_UPDATE_CONFIG=y
- #
- # BR2_TOOLCHAIN_BUILDROOT is not set
- BR2_TOOLCHAIN_EXTERNAL=y
--# BR2_TOOLCHAIN_EXTERNAL_SOURCE is not set
--# BR2_TOOLCHAIN_SOURCE is not set
- BR2_TOOLCHAIN_EXTERNAL_PATH="$(GCCROOT)"
- BR2_TOOLCHAIN_EXTERNAL_PREFIX="$(ARCH)-linux"
--BR2_EXT_GCC_VERSION_4_1_2=y
--BR2_EXT_GCC_VERSION_4_2_1=y
--BR2_EXT_GCC_VERSION_4_2_2=y
--BR2_EXT_GCC_VERSION_4_2_3=y
--BR2_EXT_BINUTILS_VERSION_2_17=y
--BR2_EXT_BINUTILS_VERSION_2_18=y
--BR2_EXT_UCLIBC_VERSION_0_9_28_3=y
--BR2_EXT_UCLIBC_VERSION_0_9_29=y
--BR2_EXT_UCLIBC_VERSION_0_9_30=y
- BR2_TOOLCHAIN_EXTERNAL_LIB_C="libc.so.0"
- BR2_TOOLCHAIN_EXTERNAL_LIBS="ld-uClibc.so.0 libcrypt.so.0 libdl.so.0 libgcc_s.so libm.so.0 libnsl.so.0 libpthread.so.0 libresolv.so.0 librt.so.0 libutil.so.0"
- BR2_TOOLCHAIN_EXTERNAL_STRIP=y
-diff --git a/configs/at91sam9g20dfc_ext_defconfig b/configs/at91sam9g20dfc_ext_defconfig
-index 5f5dbe2..ffd28d0 100644
---- a/configs/at91sam9g20dfc_ext_defconfig
-+++ b/configs/at91sam9g20dfc_ext_defconfig
-@@ -209,19 +209,8 @@ BR2_UPDATE_CONFIG=y
- #
- # BR2_TOOLCHAIN_BUILDROOT is not set
- BR2_TOOLCHAIN_EXTERNAL=y
--# BR2_TOOLCHAIN_EXTERNAL_SOURCE is not set
--# BR2_TOOLCHAIN_SOURCE is not set
- BR2_TOOLCHAIN_EXTERNAL_PATH="$(GCCROOT)"
- BR2_TOOLCHAIN_EXTERNAL_PREFIX="$(ARCH)-linux"
--BR2_EXT_GCC_VERSION_4_1_2=y
--BR2_EXT_GCC_VERSION_4_2_1=y
--BR2_EXT_GCC_VERSION_4_2_2=y
--BR2_EXT_GCC_VERSION_4_2_3=y
--BR2_EXT_BINUTILS_VERSION_2_17=y
--BR2_EXT_BINUTILS_VERSION_2_18=y
--BR2_EXT_UCLIBC_VERSION_0_9_28_3=y
--BR2_EXT_UCLIBC_VERSION_0_9_29=y
--BR2_EXT_UCLIBC_VERSION_0_9_30=y
- BR2_TOOLCHAIN_EXTERNAL_LIB_C="libc.so.0"
- BR2_TOOLCHAIN_EXTERNAL_LIBS="ld-uClibc.so.0 libcrypt.so.0 libdl.so.0 libgcc_s.so libm.so.0 libnsl.so.0 libpthread.so.0 libresolv.so.0 librt.so.0 libutil.so.0"
- BR2_TOOLCHAIN_EXTERNAL_STRIP=y
-diff --git a/configs/i386_defconfig b/configs/i386_defconfig
-index 0dec12e..16d8f79 100644
---- a/configs/i386_defconfig
-+++ b/configs/i386_defconfig
-@@ -141,18 +141,6 @@ BR2_UPDATE_CONFIG=y
- #
- BR2_TOOLCHAIN_BUILDROOT=y
- # BR2_TOOLCHAIN_EXTERNAL is not set
--# BR2_TOOLCHAIN_EXTERNAL_SOURCE is not set
--BR2_TOOLCHAIN_SOURCE=y
--BR2_EXT_GCC_VERSION_4_1_2=y
--BR2_EXT_GCC_VERSION_4_2_1=y
--BR2_EXT_GCC_VERSION_4_2_2=y
--BR2_EXT_GCC_VERSION_4_2_3=y
--BR2_EXT_BINUTILS_VERSION_2_17=y
--BR2_EXT_BINUTILS_VERSION_2_18=y
--BR2_EXT_UCLIBC_VERSION_0_9_28_3=y
--BR2_EXT_UCLIBC_VERSION_0_9_29=y
--BR2_EXT_UCLIBC_VERSION_0_9_30=y
--BR2_EXT_UCLIBC_VERSION_0_9_30_1=y
- 
- #
- # Kernel Header Options
-diff --git a/configs/i686_defconfig b/configs/i686_defconfig
-index 90dce72..17b39c3 100644
---- a/configs/i686_defconfig
-+++ b/configs/i686_defconfig
-@@ -141,18 +141,6 @@ BR2_UPDATE_CONFIG=y
- #
- BR2_TOOLCHAIN_BUILDROOT=y
- # BR2_TOOLCHAIN_EXTERNAL is not set
--# BR2_TOOLCHAIN_EXTERNAL_SOURCE is not set
--BR2_TOOLCHAIN_SOURCE=y
--BR2_EXT_GCC_VERSION_4_1_2=y
--BR2_EXT_GCC_VERSION_4_2_1=y
--BR2_EXT_GCC_VERSION_4_2_2=y
--BR2_EXT_GCC_VERSION_4_2_3=y
--BR2_EXT_BINUTILS_VERSION_2_17=y
--BR2_EXT_BINUTILS_VERSION_2_18=y
--BR2_EXT_UCLIBC_VERSION_0_9_28_3=y
--BR2_EXT_UCLIBC_VERSION_0_9_29=y
--BR2_EXT_UCLIBC_VERSION_0_9_30=y
--BR2_EXT_UCLIBC_VERSION_0_9_30_1=y
- 
- #
- # Kernel Header Options
-diff --git a/configs/integrator926_defconfig b/configs/integrator926_defconfig
-index 68b0ff6..57a81d2 100644
---- a/configs/integrator926_defconfig
-+++ b/configs/integrator926_defconfig
-@@ -139,17 +139,6 @@ BR2_UPDATE_CONFIG=y
- #
- BR2_TOOLCHAIN_BUILDROOT=y
- # BR2_TOOLCHAIN_EXTERNAL is not set
--# BR2_TOOLCHAIN_EXTERNAL_SOURCE is not set
--BR2_TOOLCHAIN_SOURCE=y
--BR2_EXT_GCC_VERSION_4_1_2=y
--BR2_EXT_GCC_VERSION_4_2_1=y
--BR2_EXT_GCC_VERSION_4_2_2=y
--BR2_EXT_GCC_VERSION_4_2_3=y
--BR2_EXT_BINUTILS_VERSION_2_17=y
--BR2_EXT_BINUTILS_VERSION_2_18=y
--BR2_EXT_UCLIBC_VERSION_0_9_28_3=y
--BR2_EXT_UCLIBC_VERSION_0_9_29=y
--BR2_EXT_UCLIBC_VERSION_0_9_30=y
- 
- #
- # Kernel Header Options
-diff --git a/configs/integrator926_huge_defconfig b/configs/integrator926_huge_defconfig
-index 69f16de..b676f54 100644
---- a/configs/integrator926_huge_defconfig
-+++ b/configs/integrator926_huge_defconfig
-@@ -139,17 +139,6 @@ BR2_UPDATE_CONFIG=y
- #
- BR2_TOOLCHAIN_BUILDROOT=y
- # BR2_TOOLCHAIN_EXTERNAL is not set
--# BR2_TOOLCHAIN_EXTERNAL_SOURCE is not set
--BR2_TOOLCHAIN_SOURCE=y
--BR2_EXT_GCC_VERSION_4_1_2=y
--BR2_EXT_GCC_VERSION_4_2_1=y
--BR2_EXT_GCC_VERSION_4_2_2=y
--BR2_EXT_GCC_VERSION_4_2_3=y
--BR2_EXT_BINUTILS_VERSION_2_17=y
--BR2_EXT_BINUTILS_VERSION_2_18=y
--BR2_EXT_UCLIBC_VERSION_0_9_28_3=y
--BR2_EXT_UCLIBC_VERSION_0_9_29=y
--BR2_EXT_UCLIBC_VERSION_0_9_30=y
- 
- #
- # Kernel Header Options
-diff --git a/target/xtensa/defconfig b/target/xtensa/defconfig
-index f7a5741..07ab10b 100644
---- a/target/xtensa/defconfig
-+++ b/target/xtensa/defconfig
-@@ -85,9 +85,8 @@ BR2_TARGET_OPTIMIZATION="-Os -pipe"
- BR2_CROSS_TOOLCHAIN_TARGET_UTILS=y
- 
- 
--## These two added by Maxim
-+## Added by Maxim
- BR2_TOOLCHAIN_BUILDROOT=y
--BR2_TOOLCHAIN_SOURCE=y
- 
- 
- # BR2_PACKAGE_BUSYBOX_SHOW_OTHERS is not set
+diff --git a/target/device/Atmel/uClibc.config.avr32 b/target/device/Atmel/uClibc.config.avr32
+deleted file mode 100644
+index d153a4d..0000000
+--- a/target/device/Atmel/uClibc.config.avr32
++++ /dev/null
+@@ -1,227 +0,0 @@
+-#
+-# Automatically generated make config: don't edit
+-# Version: 0.9.30
+-# Thu Jan 29 21:33:38 2009
+-#
+-# TARGET_alpha is not set
+-# TARGET_arm is not set
+-TARGET_avr32=y
+-# TARGET_bfin is not set
+-# TARGET_cris is not set
+-# TARGET_e1 is not set
+-# TARGET_frv is not set
+-# TARGET_h8300 is not set
+-# TARGET_hppa is not set
+-# TARGET_i386 is not set
+-# TARGET_i960 is not set
+-# TARGET_ia64 is not set
+-# TARGET_m68k is not set
+-# TARGET_microblaze is not set
+-# TARGET_mips is not set
+-# TARGET_nios is not set
+-# TARGET_nios2 is not set
+-# TARGET_powerpc is not set
+-# TARGET_sh is not set
+-# TARGET_sh64 is not set
+-# TARGET_sparc is not set
+-# TARGET_v850 is not set
+-# TARGET_vax is not set
+-# TARGET_x86_64 is not set
+-# TARGET_xtensa is not set
+-
+-#
+-# Target Architecture Features and Options
+-#
+-TARGET_ARCH="avr32"
+-FORCE_OPTIONS_FOR_ARCH=y
+-CONFIG_AVR32_AP7=y
+-LINKRELAX=y
+-TARGET_SUBARCH=""
+-
+-#
+-# Using ELF file format
+-#
+-ARCH_BIG_ENDIAN=y
+-
+-#
+-# Using Big Endian
+-#
+-ARCH_HAS_MMU=y
+-ARCH_USE_MMU=y
+-UCLIBC_HAS_FLOATS=y
+-# UCLIBC_HAS_FPU is not set
+-UCLIBC_HAS_SOFT_FLOAT=y
+-DO_C99_MATH=y
+-# UCLIBC_HAS_FENV is not set
+-KERNEL_HEADERS="/home/ulf/projects/Buildroot/20090129/buildroot/toolchain_build_avr32/linux/include"
+-HAVE_DOT_CONFIG=y
+-
+-#
+-# General Library Settings
+-#
+-# HAVE_NO_PIC is not set
+-DOPIC=y
+-# ARCH_HAS_NO_SHARED is not set
+-# ARCH_HAS_NO_LDSO is not set
+-HAVE_SHARED=y
+-FORCE_SHAREABLE_TEXT_SEGMENTS=y
+-LDSO_LDD_SUPPORT=y
+-LDSO_CACHE_SUPPORT=y
+-# LDSO_PRELOAD_FILE_SUPPORT is not set
+-LDSO_BASE_FILENAME="ld.so"
+-# UCLIBC_STATIC_LDCONFIG is not set
+-# LDSO_RUNPATH is not set
+-UCLIBC_CTOR_DTOR=y
+-# LDSO_GNU_HASH_SUPPORT is not set
+-# HAS_NO_THREADS is not set
+-UCLIBC_HAS_THREADS=y
+-# PTHREADS_DEBUG_SUPPORT is not set
+-LINUXTHREADS_OLD=y
+-UCLIBC_HAS_SYSLOG=y
+-UCLIBC_HAS_LFS=y
+-# MALLOC is not set
+-# MALLOC_SIMPLE is not set
+-MALLOC_STANDARD=y
+-MALLOC_GLIBC_COMPAT=y
+-UCLIBC_DYNAMIC_ATEXIT=y
+-# COMPAT_ATEXIT is not set
+-UCLIBC_SUSV3_LEGACY=y
+-UCLIBC_SUSV3_LEGACY_MACROS=y
+-# UCLIBC_HAS_STUBS is not set
+-UCLIBC_HAS_SHADOW=y
+-UCLIBC_HAS_PROGRAM_INVOCATION_NAME=y
+-UCLIBC_HAS___PROGNAME=y
+-UCLIBC_HAS_PTY=y
+-ASSUME_DEVPTS=y
+-UNIX98PTY_ONLY=y
+-# UCLIBC_HAS_GETPT is not set
+-UCLIBC_HAS_TM_EXTENSIONS=y
+-UCLIBC_HAS_TZ_CACHING=y
+-UCLIBC_HAS_TZ_FILE=y
+-UCLIBC_HAS_TZ_FILE_READ_MANY=y
+-UCLIBC_TZ_FILE_PATH="/etc/TZ"
+-
+-#
+-# Advanced Library Settings
+-#
+-UCLIBC_PWD_BUFFER_SIZE=256
+-UCLIBC_GRP_BUFFER_SIZE=256
+-
+-#
+-# Support various families of functions
+-#
+-UCLIBC_LINUX_MODULE_24=y
+-UCLIBC_LINUX_SPECIFIC=y
+-UCLIBC_HAS_GNU_ERROR=y
+-UCLIBC_BSD_SPECIFIC=y
+-UCLIBC_HAS_BSD_ERR=y
+-# UCLIBC_HAS_OBSOLETE_BSD_SIGNAL is not set
+-# UCLIBC_HAS_OBSOLETE_SYSV_SIGNAL is not set
+-# UCLIBC_NTP_LEGACY is not set
+-# UCLIBC_SV4_DEPRECATED is not set
+-UCLIBC_HAS_REALTIME=y
+-UCLIBC_HAS_ADVANCED_REALTIME=y
+-UCLIBC_HAS_EPOLL=y
+-UCLIBC_HAS_XATTR=y
+-UCLIBC_HAS_PROFILING=y
+-UCLIBC_HAS_CRYPT_IMPL=y
+-UCLIBC_HAS_CRYPT=y
+-UCLIBC_HAS_NETWORK_SUPPORT=y
+-UCLIBC_HAS_SOCKET=y
+-UCLIBC_HAS_IPV4=y
+-UCLIBC_HAS_IPV6=y
+-UCLIBC_HAS_RPC=y
+-UCLIBC_HAS_FULL_RPC=y
+-UCLIBC_HAS_REENTRANT_RPC=y
+-# UCLIBC_USE_NETLINK is not set
+-# UCLIBC_HAS_BSD_RES_CLOSE is not set
+-
+-#
+-# String and Stdio Support
+-#
+-UCLIBC_HAS_STRING_GENERIC_OPT=y
+-UCLIBC_HAS_STRING_ARCH_OPT=y
+-UCLIBC_HAS_CTYPE_TABLES=y
+-UCLIBC_HAS_CTYPE_SIGNED=y
+-# UCLIBC_HAS_CTYPE_UNSAFE is not set
+-UCLIBC_HAS_CTYPE_CHECKED=y
+-# UCLIBC_HAS_CTYPE_ENFORCED is not set
+-UCLIBC_HAS_WCHAR=y
+-UCLIBC_HAS_LOCALE=y
+-# UCLIBC_PREGENERATED_LOCALE_DATA is not set
+-# UCLIBC_HAS_XLOCALE is not set
+-UCLIBC_HAS_HEXADECIMAL_FLOATS=y
+-# UCLIBC_HAS_GLIBC_DIGIT_GROUPING is not set
+-UCLIBC_HAS_GLIBC_CUSTOM_PRINTF=y
+-UCLIBC_PRINTF_SCANF_POSITIONAL_ARGS=9
+-UCLIBC_HAS_SCANF_GLIBC_A_FLAG=y
+-# UCLIBC_HAS_STDIO_BUFSIZ_NONE is not set
+-# UCLIBC_HAS_STDIO_BUFSIZ_256 is not set
+-# UCLIBC_HAS_STDIO_BUFSIZ_512 is not set
+-# UCLIBC_HAS_STDIO_BUFSIZ_1024 is not set
+-# UCLIBC_HAS_STDIO_BUFSIZ_2048 is not set
+-UCLIBC_HAS_STDIO_BUFSIZ_4096=y
+-# UCLIBC_HAS_STDIO_BUFSIZ_8192 is not set
+-UCLIBC_HAS_STDIO_BUILTIN_BUFFER_NONE=y
+-# UCLIBC_HAS_STDIO_BUILTIN_BUFFER_4 is not set
+-# UCLIBC_HAS_STDIO_BUILTIN_BUFFER_8 is not set
+-# UCLIBC_HAS_STDIO_SHUTDOWN_ON_ABORT is not set
+-UCLIBC_HAS_STDIO_GETC_MACRO=y
+-UCLIBC_HAS_STDIO_PUTC_MACRO=y
+-UCLIBC_HAS_STDIO_AUTO_RW_TRANSITION=y
+-# UCLIBC_HAS_FOPEN_LARGEFILE_MODE is not set
+-UCLIBC_HAS_FOPEN_EXCLUSIVE_MODE=y
+-UCLIBC_HAS_GLIBC_CUSTOM_STREAMS=y
+-UCLIBC_HAS_PRINTF_M_SPEC=y
+-UCLIBC_HAS_ERRNO_MESSAGES=y
+-# UCLIBC_HAS_SYS_ERRLIST is not set
+-UCLIBC_HAS_SIGNUM_MESSAGES=y
+-# UCLIBC_HAS_SYS_SIGLIST is not set
+-UCLIBC_HAS_GNU_GETOPT=y
+-UCLIBC_HAS_GNU_GETSUBOPT=y
+-
+-#
+-# Big and Tall
+-#
+-UCLIBC_HAS_REGEX=y
+-UCLIBC_HAS_REGEX_OLD=y
+-UCLIBC_HAS_FNMATCH=y
+-UCLIBC_HAS_FNMATCH_OLD=y
+-UCLIBC_HAS_WORDEXP=y
+-UCLIBC_HAS_FTW=y
+-UCLIBC_HAS_GLOB=y
+-UCLIBC_HAS_GNU_GLOB=y
+-
+-#
+-# Library Installation Options
+-#
+-SHARED_LIB_LOADER_PREFIX="/lib"
+-RUNTIME_PREFIX="/"
+-DEVEL_PREFIX="/usr/"
+-
+-#
+-# Security options
+-#
+-# UCLIBC_HAS_ARC4RANDOM is not set
+-# HAVE_NO_SSP is not set
+-# UCLIBC_HAS_SSP is not set
+-UCLIBC_BUILD_RELRO=y
+-# UCLIBC_BUILD_NOW is not set
+-UCLIBC_BUILD_NOEXECSTACK=y
+-
+-#
+-# uClibc development/debugging options
+-#
+-CROSS_COMPILER_PREFIX="/home/ulf/projects/Buildroot/20090129/buildroot/build_avr32/staging_dir/usr/bin/avr32-linux-uclibc-"
+-UCLIBC_EXTRA_CFLAGS=""
+-# DODEBUG is not set
+-# DODEBUG_PT is not set
+-DOSTRIP=y
+-# DOASSERTS is not set
+-# SUPPORT_LD_DEBUG is not set
+-# SUPPORT_LD_DEBUG_EARLY is not set
+-# UCLIBC_MALLOC_DEBUGGING is not set
+-WARNINGS="-Wall"
+-# EXTRA_WARNINGS is not set
+-# DOMULTI is not set
+-# UCLIBC_MJN3_ONLY is not set
 -- 
 1.6.3.3
