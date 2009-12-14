@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2009 00:04:51 +0100
-Subject: [Buildroot] [PATCH 19/23] uclibc: remove external sources patches
+Date: Tue, 15 Dec 2009 00:04:54 +0100
+Subject: [Buildroot] [PATCH 22/23] update AVR32 defconfigs
 In-Reply-To: <cover.1260831891.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1260831891.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <19d7f0e31503db28dbe984de4601ab018b1cc0a1.1260831891.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <8eed9751d92e117dbe632b895e013f26a6d2084a.1260831891.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,162 +12,477 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../uClibc-0.9.28.3-avr32-2.0-001-libext.patch     |   13 ----
- ...libc-0.9.28.3-avr32-2.0-002-rm-whitespace.patch |   77 --------------------
- ...uClibc-0.9.30-avr32-2.1.5-unifdef-getline.patch |   29 --------
- 3 files changed, 0 insertions(+), 119 deletions(-)
- delete mode 100644 toolchain/uClibc/ext_source/Atmel/avr32/0.9.28.3-avr32-2.0/uClibc-0.9.28.3-avr32-2.0-001-libext.patch
- delete mode 100644 toolchain/uClibc/ext_source/Atmel/avr32/0.9.28.3-avr32-2.0/uClibc-0.9.28.3-avr32-2.0-002-rm-whitespace.patch
- delete mode 100644 toolchain/uClibc/ext_source/Atmel/avr32/0.9.29-avr32-2.1.3/.empty
- delete mode 100644 toolchain/uClibc/ext_source/Atmel/avr32/0.9.29-avr32-2.1.5/.empty
- delete mode 100644 toolchain/uClibc/ext_source/Atmel/avr32/0.9.30-avr32-2.1.5/.empty
- delete mode 100644 toolchain/uClibc/ext_source/Atmel/avr32/0.9.30-avr32-2.1.5/uClibc-0.9.30-avr32-2.1.5-unifdef-getline.patch
+ configs/atngw100-base_defconfig |   44 ++++++++-------------------------
+ configs/atngw100_defconfig      |   50 +++++++++++----------------------------
+ configs/atstk1005_defconfig     |   47 ++++++++++--------------------------
+ configs/atstk100x_defconfig     |   50 +++++++++++----------------------------
+ configs/kb9202_defconfig        |    7 -----
+ configs/v100sc2_defconfig       |   24 +------------------
+ 6 files changed, 53 insertions(+), 169 deletions(-)
 
-diff --git a/toolchain/uClibc/ext_source/Atmel/avr32/0.9.28.3-avr32-2.0/uClibc-0.9.28.3-avr32-2.0-001-libext.patch b/toolchain/uClibc/ext_source/Atmel/avr32/0.9.28.3-avr32-2.0/uClibc-0.9.28.3-avr32-2.0-001-libext.patch
-deleted file mode 100644
-index e1740a7..0000000
---- a/toolchain/uClibc/ext_source/Atmel/avr32/0.9.28.3-avr32-2.0/uClibc-0.9.28.3-avr32-2.0-001-libext.patch
-+++ /dev/null
-@@ -1,13 +0,0 @@
--diff -urN uClibc-0.9.28.3-0rig/Makefile uClibc-0.9.28.3/Makefile
----- uClibc-0.9.28.3-0rig/Makefile	2007-07-29 08:20:33.000000000 +0200
--+++ uClibc-0.9.28.3/Makefile	2007-08-20 07:02:53.000000000 +0200
--@@ -157,7 +157,8 @@
-- install_dev:
-- 	$(INSTALL) -d $(PREFIX)$(DEVEL_PREFIX)lib
-- 	$(INSTALL) -d $(PREFIX)$(DEVEL_PREFIX)include
---	-$(INSTALL) -m 644 lib/*.[ao] $(PREFIX)$(DEVEL_PREFIX)lib/
--+	-$(INSTALL) -m 644 lib/*.a $(PREFIX)$(DEVEL_PREFIX)lib/
--+	-$(INSTALL) -m 644 lib/*.so* $(PREFIX)$(DEVEL_PREFIX)lib/
-- 	if [ "$(KERNEL_SOURCE)" = "$(DEVEL_PREFIX)" ] ; then \
-- 		extra_exclude="--exclude include/linux --exclude include/asm'*'" ; \
-- 	else \
-diff --git a/toolchain/uClibc/ext_source/Atmel/avr32/0.9.28.3-avr32-2.0/uClibc-0.9.28.3-avr32-2.0-002-rm-whitespace.patch b/toolchain/uClibc/ext_source/Atmel/avr32/0.9.28.3-avr32-2.0/uClibc-0.9.28.3-avr32-2.0-002-rm-whitespace.patch
-deleted file mode 100644
-index 2ae0265..0000000
---- a/toolchain/uClibc/ext_source/Atmel/avr32/0.9.28.3-avr32-2.0/uClibc-0.9.28.3-avr32-2.0-002-rm-whitespace.patch
-+++ /dev/null
-@@ -1,77 +0,0 @@
--diff -urN uClibc-0.9.29-0rig/include/assert.h uClibc-0.9.29/include/assert.h
----- uClibc-0.9.29-0rig/include/assert.h	2005-11-03 23:42:46.000000000 +0100
--+++ uClibc-0.9.29/include/assert.h	2007-08-13 19:10:57.000000000 +0200
--@@ -31,7 +31,7 @@
-- #define	_ASSERT_H	1
-- #include <features.h>
-- 
---#if defined __cplusplus && __GNUC_PREREQ (2,95)
--+#if defined __cplusplus && __GNUC_PREREQ(2,95)
-- # define __ASSERT_VOID_CAST static_cast<void>
-- #else
-- # define __ASSERT_VOID_CAST (void)
--@@ -59,13 +59,17 @@
--   (__ASSERT_VOID_CAST ((expr) ? 0 :					      \
-- 		       (__assert (__STRING(expr), __FILE__, __LINE__,    \
-- 				       __ASSERT_FUNCTION), 0)))
---  
--+
--+/* Define some temporaries to workaround tinyx makedepend bug */
--+#define	__GNUC_PREREQ_2_6	__GNUC_PREREQ(2, 6)
--+#define	__GNUC_PREREQ_2_4	__GNUC_PREREQ(2, 4)
-- /* Version 2.4 and later of GCC define a magical variable `__PRETTY_FUNCTION__'
--    which contains the name of the function currently being defined.
--    This is broken in G++ before version 2.6.
--    C9x has a similar variable called __func__, but prefer the GCC one since
--    it demangles C++ function names.  */
---# if defined __cplusplus ? __GNUC_PREREQ (2, 6) : __GNUC_PREREQ (2, 4)
--+
--+# if defined __cplusplus ? __GNUC_PREREQ_2_6 : __GNUC_PREREQ_2_4
-- #   define __ASSERT_FUNCTION	__PRETTY_FUNCTION__
-- # else
-- #  if defined __STDC_VERSION__ && __STDC_VERSION__ >= 199901L
--diff -urN uClibc-0.9.29-0rig/include/complex.h uClibc-0.9.29/include/complex.h
----- uClibc-0.9.29-0rig/include/complex.h	2002-05-09 10:15:21.000000000 +0200
--+++ uClibc-0.9.29/include/complex.h	2007-08-13 17:55:29.000000000 +0200
--@@ -33,7 +33,7 @@
-- /* We might need to add support for more compilers here.  But since ISO
--    C99 is out hopefully all maintained compilers will soon provide the data
--    types `float complex' and `double complex'.  */
---#if __GNUC_PREREQ (2, 7) && !__GNUC_PREREQ (2, 97)
--+#if __GNUC_PREREQ(2, 7) && !__GNUC_PREREQ(2, 97)
-- # define _Complex __complex__
-- #endif
-- 
--diff -urN uClibc-0.9.29-0rig/include/features.h uClibc-0.9.29/include/features.h
----- uClibc-0.9.29-0rig/include/features.h	2006-11-29 22:10:04.000000000 +0100
--+++ uClibc-0.9.29/include/features.h	2007-08-13 17:55:51.000000000 +0200
--@@ -143,7 +143,7 @@
-- 
-- /* Convenience macros to test the versions of glibc and gcc.
--    Use them like this:
---   #if __GNUC_PREREQ (2,8)
--+   #if __GNUC_PREREQ(2,8)
--    ... code requiring gcc 2.8 or later ...
--    #endif
--    Note - they won't work for gcc1 or glibc1, since the _MINOR macros
--@@ -366,7 +366,7 @@
-- #endif	/* !ASSEMBLER */
-- 
-- /* Decide whether we can define 'extern inline' functions in headers.  */
---#if __GNUC_PREREQ (2, 7) && defined __OPTIMIZE__ \
--+#if __GNUC_PREREQ(2, 7) && defined __OPTIMIZE__ \
--     && !defined __OPTIMIZE_SIZE__ && !defined __NO_INLINE__
-- # define __USE_EXTERN_INLINES	1
-- #endif
--diff -urN uClibc-0.9.29-0rig/include/tgmath.h uClibc-0.9.29/include/tgmath.h
----- uClibc-0.9.29-0rig/include/tgmath.h	2002-05-09 10:15:21.000000000 +0200
--+++ uClibc-0.9.29/include/tgmath.h	2007-08-13 17:56:17.000000000 +0200
--@@ -34,7 +34,7 @@
--    do not try this for now and instead concentrate only on GNU CC.  Once
--    we have more information support for other compilers might follow.  */
-- 
---#if __GNUC_PREREQ (2, 7)
--+#if __GNUC_PREREQ(2, 7)
-- 
-- # ifdef __NO_LONG_DOUBLE_MATH
-- #  define __tgml(fct) fct
-diff --git a/toolchain/uClibc/ext_source/Atmel/avr32/0.9.29-avr32-2.1.3/.empty b/toolchain/uClibc/ext_source/Atmel/avr32/0.9.29-avr32-2.1.3/.empty
-deleted file mode 100644
-index e69de29..0000000
-diff --git a/toolchain/uClibc/ext_source/Atmel/avr32/0.9.29-avr32-2.1.5/.empty b/toolchain/uClibc/ext_source/Atmel/avr32/0.9.29-avr32-2.1.5/.empty
-deleted file mode 100644
-index e69de29..0000000
-diff --git a/toolchain/uClibc/ext_source/Atmel/avr32/0.9.30-avr32-2.1.5/.empty b/toolchain/uClibc/ext_source/Atmel/avr32/0.9.30-avr32-2.1.5/.empty
-deleted file mode 100644
-index e69de29..0000000
-diff --git a/toolchain/uClibc/ext_source/Atmel/avr32/0.9.30-avr32-2.1.5/uClibc-0.9.30-avr32-2.1.5-unifdef-getline.patch b/toolchain/uClibc/ext_source/Atmel/avr32/0.9.30-avr32-2.1.5/uClibc-0.9.30-avr32-2.1.5-unifdef-getline.patch
-deleted file mode 100644
-index eb88884..0000000
---- a/toolchain/uClibc/ext_source/Atmel/avr32/0.9.30-avr32-2.1.5/uClibc-0.9.30-avr32-2.1.5-unifdef-getline.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
----- uClibc-0.9.30.1.orig/extra/scripts/unifdef.c
--+++ uClibc-0.9.30.1/extra/scripts/unifdef.c
--@@ -206,7 +206,7 @@ static void             done(void);
-- static void             error(const char *);
-- static int              findsym(const char *);
-- static void             flushline(bool);
---static Linetype         getline(void);
--+static Linetype         get_line(void);
-- static Linetype         ifeval(const char **);
-- static void             ignoreoff(void);
-- static void             ignoreon(void);
--@@ -512,7 +512,7 @@ process(void)
-- 
-- 	for (;;) {
-- 		linenum++;
---		lineval = getline();
--+		lineval = get_line();
-- 		trans_table[ifstate[depth]][lineval]();
-- 		debug("process %s -> %s depth %d",
-- 		    linetype_name[lineval],
--@@ -526,7 +526,7 @@ process(void)
--  * help from skipcomment().
--  */
-- static Linetype
---getline(void)
--+get_line(void)
-- {
-- 	const char *cp;
-- 	int cursym;
+diff --git a/configs/atngw100-base_defconfig b/configs/atngw100-base_defconfig
+index b6337ff..7355b3d 100644
+--- a/configs/atngw100-base_defconfig
++++ b/configs/atngw100-base_defconfig
+@@ -139,33 +139,8 @@ BR2_UPDATE_CONFIG=y
+ #
+ # Toolchain
+ #
+-# BR2_TOOLCHAIN_BUILDROOT is not set
++BR2_TOOLCHAIN_BUILDROOT=y
+ # BR2_TOOLCHAIN_EXTERNAL is not set
+-BR2_TOOLCHAIN_EXTERNAL_SOURCE=y
+-BR2_TOOLCHAIN_SOURCE=y
+-# BR2_TOOLCHAIN_ATMEL_AVR32_4_1_2 is not set
+-# BR2_TOOLCHAIN_ATMEL_AVR32_4_2_1 is not set
+-# BR2_TOOLCHAIN_ATMEL_AVR32_4_2_2 is not set
+-BR2_TOOLCHAIN_ATMEL_AVR32_4_2_2_REV_2=y
+-# BR2_TOOLCHAIN_ATMEL_AVR32_4_2_3 is not set
+-# BR2_TOOLCHAIN_UNKNOWNVENDOR is not set
+-BR2_TOOLCHAIN_ATMEL_AVR32=y
+-BR2_VENDOR_SITE="$(BR2_ATMEL_MIRROR)"
+-BR2_VENDOR_SUFFIX="-avr32"
+-BR2_VENDOR_BINUTILS_RELEASE="-1.0.1"
+-BR2_VENDOR_GCC_RELEASE="-1.1.3"
+-BR2_VENDOR_UCLIBC_RELEASE="-2.1.5"
+-BR2_VENDOR_PATCH_DIR="Atmel/avr32"
+-# BR2_EXT_GCC_VERSION_4_1_2 is not set
+-# BR2_EXT_GCC_VERSION_4_2_1 is not set
+-BR2_EXT_GCC_VERSION_4_2_2=y
+-# BR2_EXT_GCC_VERSION_4_2_3 is not set
+-# BR2_EXT_BINUTILS_VERSION_2_17 is not set
+-BR2_EXT_BINUTILS_VERSION_2_18=y
+-# BR2_EXT_UCLIBC_VERSION_0_9_28_3 is not set
+-# BR2_EXT_UCLIBC_VERSION_0_9_29 is not set
+-BR2_EXT_UCLIBC_VERSION_0_9_30=y
+-# BR2_EXT_UCLIBC_VERSION_0_9_30_1 is not set
+ 
+ #
+ # Kernel Header Options
+@@ -185,11 +160,12 @@ BR2_DEFAULT_KERNEL_HEADERS="2.6.29.2"
+ #
+ # BR2_UCLIBC_VERSION_0_9_28_3 is not set
+ # BR2_UCLIBC_VERSION_0_9_29 is not set
+-BR2_UCLIBC_VERSION_0_9_30=y
++# BR2_UCLIBC_VERSION_0_9_30 is not se
++BR2_UCLIBC_VERSION_0_9_30_AVR32_2_1_5=y
+ # BR2_UCLIBC_VERSION_0_9_30_1 is not set
+ # BR2_UCLIBC_VERSION_SNAPSHOT is not set
+-BR2_UCLIBC_VERSION_STRING="0.9.30"
+-BR2_UCLIBC_CONFIG="target/device/Atmel/uClibc.config.avr32"
++BR2_UCLIBC_VERSION_STRING="0.9.30-avr32-2.1.5"
++BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.30.config"
+ # BR2_PTHREAD_DEBUG is not set
+ # BR2_PROGRAM_INVOCATION is not set
+ # BR2_UCLIBC_INSTALL_TEST_SUITE is not set
+@@ -199,15 +175,16 @@ BR2_UCLIBC_CONFIG="target/device/Atmel/uClibc.config.avr32"
+ #
+ # BR2_BINUTILS_VERSION_2_17 is not set
+ # BR2_BINUTILS_VERSION_2_17_50_0_17 is not set
+-BR2_BINUTILS_VERSION_2_18=y
++# BR2_BINUTILS_VERSION_2_18 is not set
+ # BR2_BINUTILS_VERSION_2_18_50_0_1 is not set
+ # BR2_BINUTILS_VERSION_2_18_50_0_3 is not set
+ # BR2_BINUTILS_VERSION_2_18_50_0_6 is not set
+ # BR2_BINUTILS_VERSION_2_18_50_0_8 is not set
+ # BR2_BINUTILS_VERSION_2_18_50_0_9 is not set
++BR2_BINUTILS_VERSION_2_18_AVR32_1_0_1=y
+ # BR2_BINUTILS_VERSION_2_19 is not set
+ # BR2_BINUTILS_VERSION_2_19_1 is not set
+-BR2_BINUTILS_VERSION="2.18"
++BR2_BINUTILS_VERSION="2.18-avr32-1.0.1"
+ BR2_EXTRA_BINUTILS_CONFIG_OPTIONS=""
+ 
+ #
+@@ -217,7 +194,8 @@ BR2_EXTRA_BINUTILS_CONFIG_OPTIONS=""
+ # BR2_GCC_VERSION_4_0_4 is not set
+ # BR2_GCC_VERSION_4_1_2 is not set
+ # BR2_GCC_VERSION_4_2_1 is not set
+-BR2_GCC_VERSION_4_2_2=y
++# BR2_GCC_VERSION_4_2_2 is not set
++BR2_GCC_VERSION_4_2_2_AVR32_2_1_5=y
+ # BR2_GCC_VERSION_4_2_3 is not set
+ # BR2_GCC_VERSION_4_2_4 is not set
+ # BR2_GCC_VERSION_4_3_1 is not set
+@@ -226,7 +204,7 @@ BR2_GCC_VERSION_4_2_2=y
+ # BR2_GCC_VERSION_4_4_X is not set
+ BR2_GCC_SUPPORTS_SYSROOT=y
+ # BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE is not set
+-BR2_GCC_VERSION="4.2.2"
++BR2_GCC_VERSION="4.2.2-avr32-2.1.5"
+ # BR2_TOOLCHAIN_SYSROOT is not set
+ # BR2_GCC_USE_SJLJ_EXCEPTIONS is not set
+ BR2_EXTRA_GCC_CONFIG_OPTIONS=""
+diff --git a/configs/atngw100_defconfig b/configs/atngw100_defconfig
+index 5f05009..adab718 100644
+--- a/configs/atngw100_defconfig
++++ b/configs/atngw100_defconfig
+@@ -139,34 +139,8 @@ BR2_UPDATE_CONFIG=y
+ #
+ # Toolchain
+ #
+-# BR2_TOOLCHAIN_BUILDROOT is not set
++BR2_TOOLCHAIN_BUILDROOT=y
+ # BR2_TOOLCHAIN_EXTERNAL is not set
+-BR2_TOOLCHAIN_EXTERNAL_SOURCE=y
+-BR2_TOOLCHAIN_SOURCE=y
+-# BR2_TOOLCHAIN_ATMEL_AVR32_4_1_2 is not set
+-# BR2_TOOLCHAIN_ATMEL_AVR32_4_2_1 is not set
+-# BR2_TOOLCHAIN_ATMEL_AVR32_4_2_2 is not set
+-BR2_TOOLCHAIN_ATMEL_AVR32_4_2_2_REV_2=y
+-# BR2_TOOLCHAIN_ATMEL_AVR32_4_2_3 is not set
+-# BR2_TOOLCHAIN_UNKNOWNVENDOR is not set
+-BR2_TOOLCHAIN_ATMEL_AVR32=y
+-BR2_VENDOR_SITE="$(BR2_ATMEL_MIRROR)"
+-BR2_VENDOR_SUFFIX="-avr32"
+-BR2_VENDOR_BINUTILS_RELEASE="-1.0.1"
+-BR2_VENDOR_GCC_RELEASE="-1.1.3"
+-BR2_VENDOR_UCLIBC_RELEASE="-2.1.5"
+-BR2_VENDOR_GDB_RELEASE="-2.1.5"
+-BR2_VENDOR_PATCH_DIR="Atmel/avr32"
+-# BR2_EXT_GCC_VERSION_4_1_2 is not set
+-# BR2_EXT_GCC_VERSION_4_2_1 is not set
+-BR2_EXT_GCC_VERSION_4_2_2=y
+-# BR2_EXT_GCC_VERSION_4_2_3 is not set
+-# BR2_EXT_BINUTILS_VERSION_2_17 is not set
+-BR2_EXT_BINUTILS_VERSION_2_18=y
+-# BR2_EXT_UCLIBC_VERSION_0_9_28_3 is not set
+-# BR2_EXT_UCLIBC_VERSION_0_9_29 is not set
+-BR2_EXT_UCLIBC_VERSION_0_9_30=y
+-# BR2_EXT_UCLIBC_VERSION_0_9_30_1 is not set
+ 
+ #
+ # Kernel Header Options
+@@ -186,11 +160,12 @@ BR2_DEFAULT_KERNEL_HEADERS="2.6.29.2"
+ #
+ # BR2_UCLIBC_VERSION_0_9_28_3 is not set
+ # BR2_UCLIBC_VERSION_0_9_29 is not set
+-BR2_UCLIBC_VERSION_0_9_30=y
++# BR2_UCLIBC_VERSION_0_9_30 is not set
++BR2_UCLIBC_VERSION_0_9_30_AVR32_2_1_5=y
+ # BR2_UCLIBC_VERSION_0_9_30_1 is not set
+ # BR2_UCLIBC_VERSION_SNAPSHOT is not set
+-BR2_UCLIBC_VERSION_STRING="0.9.30"
+-BR2_UCLIBC_CONFIG="target/device/Atmel/uClibc.config.avr32"
++BR2_UCLIBC_VERSION_STRING="0.9.30-avr32-2.1.5"
++BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.30.config"
+ # BR2_PTHREAD_DEBUG is not set
+ # BR2_PROGRAM_INVOCATION is not set
+ # BR2_UCLIBC_INSTALL_TEST_SUITE is not set
+@@ -200,15 +175,16 @@ BR2_UCLIBC_CONFIG="target/device/Atmel/uClibc.config.avr32"
+ #
+ # BR2_BINUTILS_VERSION_2_17 is not set
+ # BR2_BINUTILS_VERSION_2_17_50_0_17 is not set
+-BR2_BINUTILS_VERSION_2_18=y
++# BR2_BINUTILS_VERSION_2_18 is not set
+ # BR2_BINUTILS_VERSION_2_18_50_0_1 is not set
+ # BR2_BINUTILS_VERSION_2_18_50_0_3 is not set
+ # BR2_BINUTILS_VERSION_2_18_50_0_6 is not set
+ # BR2_BINUTILS_VERSION_2_18_50_0_8 is not set
+ # BR2_BINUTILS_VERSION_2_18_50_0_9 is not set
++BR2_BINUTILS_VERSION_2_18_AVR32_1_0_1=y
+ # BR2_BINUTILS_VERSION_2_19 is not set
+ # BR2_BINUTILS_VERSION_2_19_1 is not set
+-BR2_BINUTILS_VERSION="2.18"
++BR2_BINUTILS_VERSION="2.18-avr32-1.0.1"
+ BR2_EXTRA_BINUTILS_CONFIG_OPTIONS=""
+ 
+ #
+@@ -218,7 +194,8 @@ BR2_EXTRA_BINUTILS_CONFIG_OPTIONS=""
+ # BR2_GCC_VERSION_4_0_4 is not set
+ # BR2_GCC_VERSION_4_1_2 is not set
+ # BR2_GCC_VERSION_4_2_1 is not set
+-BR2_GCC_VERSION_4_2_2=y
++# BR2_GCC_VERSION_4_2_2 is not set
++BR2_GCC_VERSION_4_2_2_AVR32_2_1_5=y
+ # BR2_GCC_VERSION_4_2_3 is not set
+ # BR2_GCC_VERSION_4_2_4 is not set
+ # BR2_GCC_VERSION_4_3_1 is not set
+@@ -227,7 +204,7 @@ BR2_GCC_VERSION_4_2_2=y
+ # BR2_GCC_VERSION_4_4_X is not set
+ BR2_GCC_SUPPORTS_SYSROOT=y
+ # BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE is not set
+-BR2_GCC_VERSION="4.2.2"
++BR2_GCC_VERSION="4.2.2-avr32-2.1.5"
+ BR2_TOOLCHAIN_SYSROOT=y
+ # BR2_GCC_USE_SJLJ_EXCEPTIONS is not set
+ BR2_EXTRA_GCC_CONFIG_OPTIONS=""
+@@ -248,9 +225,10 @@ BR2_PACKAGE_GDB_HOST=y
+ # BR2_GDB_VERSION_6_4 is not set
+ # BR2_GDB_VERSION_6_5 is not set
+ # BR2_GDB_VERSION_6_6 is not set
+-BR2_GDB_VERSION_6_7_1=y
++# BR2_GDB_VERSION_6_7_1 is not set
++BR2_GDB_VERSION_6_7_1_AVR32_2_1_5=y
+ # BR2_GDB_VERSION_6_8 is not set
+-BR2_GDB_VERSION="6.7.1"
++BR2_GDB_VERSION="6.7.1-avr32-2.1.5"
+ 
+ #
+ # Common Toolchain Options
+diff --git a/configs/atstk1005_defconfig b/configs/atstk1005_defconfig
+index 5241859..fe10570 100644
+--- a/configs/atstk1005_defconfig
++++ b/configs/atstk1005_defconfig
+@@ -139,33 +139,8 @@ BR2_UPDATE_CONFIG=y
+ #
+ # Toolchain
+ #
+-# BR2_TOOLCHAIN_BUILDROOT is not set
++BR2_TOOLCHAIN_BUILDROOT=y
+ # BR2_TOOLCHAIN_EXTERNAL is not set
+-BR2_TOOLCHAIN_EXTERNAL_SOURCE=y
+-BR2_TOOLCHAIN_SOURCE=y
+-# BR2_TOOLCHAIN_ATMEL_AVR32_4_1_2 is not set
+-# BR2_TOOLCHAIN_ATMEL_AVR32_4_2_1 is not set
+-# BR2_TOOLCHAIN_ATMEL_AVR32_4_2_2 is not set
+-BR2_TOOLCHAIN_ATMEL_AVR32_4_2_2_REV_2=y
+-# BR2_TOOLCHAIN_ATMEL_AVR32_4_2_3 is not set
+-# BR2_TOOLCHAIN_UNKNOWNVENDOR is not set
+-BR2_TOOLCHAIN_ATMEL_AVR32=y
+-BR2_VENDOR_SITE="$(BR2_ATMEL_MIRROR)"
+-BR2_VENDOR_SUFFIX="-avr32"
+-BR2_VENDOR_BINUTILS_RELEASE="-1.0.1"
+-BR2_VENDOR_GCC_RELEASE="-1.1.3"
+-BR2_VENDOR_UCLIBC_RELEASE="-2.1.5"
+-BR2_VENDOR_GDB_RELEASE="-2.1.5"
+-BR2_VENDOR_PATCH_DIR="Atmel/avr32"
+-# BR2_EXT_GCC_VERSION_4_1_2 is not set
+-# BR2_EXT_GCC_VERSION_4_2_1 is not set
+-BR2_EXT_GCC_VERSION_4_2_2=y
+-# BR2_EXT_GCC_VERSION_4_2_3 is not set
+-# BR2_EXT_BINUTILS_VERSION_2_17 is not set
+-BR2_EXT_BINUTILS_VERSION_2_18=y
+-# BR2_EXT_UCLIBC_VERSION_0_9_28_3 is not set
+-# BR2_EXT_UCLIBC_VERSION_0_9_29 is not set
+-BR2_EXT_UCLIBC_VERSION_0_9_30=y
+ 
+ #
+ # Kernel Header Options
+@@ -193,9 +168,10 @@ BR2_DEFAULT_KERNEL_HEADERS="2.6.28.2"
+ #
+ # BR2_UCLIBC_VERSION_0_9_28_3 is not set
+ # BR2_UCLIBC_VERSION_0_9_29 is not set
+-BR2_UCLIBC_VERSION_0_9_30=y
++# BR2_UCLIBC_VERSION_0_9_30 is not set
+ # BR2_UCLIBC_VERSION_SNAPSHOT is not set
+-BR2_UCLIBC_CONFIG="target/device/Atmel/uClibc.config.avr32"
++BR2_UCLIBC_VERSION_STRING="0.9.30-avr32-2.1.5"
++BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.30.config"
+ # BR2_PTHREAD_DEBUG is not set
+ # BR2_PROGRAM_INVOCATION is not set
+ # BR2_UCLIBC_INSTALL_TEST_SUITE is not set
+@@ -205,14 +181,15 @@ BR2_UCLIBC_CONFIG="target/device/Atmel/uClibc.config.avr32"
+ #
+ # BR2_BINUTILS_VERSION_2_17 is not set
+ # BR2_BINUTILS_VERSION_2_17_50_0_17 is not set
+-BR2_BINUTILS_VERSION_2_18=y
++# BR2_BINUTILS_VERSION_2_18 is not set
+ # BR2_BINUTILS_VERSION_2_18_50_0_1 is not set
+ # BR2_BINUTILS_VERSION_2_18_50_0_3 is not set
+ # BR2_BINUTILS_VERSION_2_18_50_0_6 is not set
+ # BR2_BINUTILS_VERSION_2_18_50_0_8 is not set
+ # BR2_BINUTILS_VERSION_2_18_50_0_9 is not set
++BR2_BINUTILS_VERSION_2_18_AVR32_1_0_1=y
+ # BR2_BINUTILS_VERSION_2_19 is not set
+-BR2_BINUTILS_VERSION="2.18"
++BR2_BINUTILS_VERSION="2.18-avr32-1.0.1"
+ BR2_EXTRA_BINUTILS_CONFIG_OPTIONS=""
+ 
+ #
+@@ -222,14 +199,15 @@ BR2_EXTRA_BINUTILS_CONFIG_OPTIONS=""
+ # BR2_GCC_VERSION_4_0_4 is not set
+ # BR2_GCC_VERSION_4_1_2 is not set
+ # BR2_GCC_VERSION_4_2_1 is not set
+-BR2_GCC_VERSION_4_2_2=y
++# BR2_GCC_VERSION_4_2_2 is not set
++BR2_GCC_VERSION_4_2_2_AVR32_2_1_5=y
+ # BR2_GCC_VERSION_4_2_3 is not set
+ # BR2_GCC_VERSION_4_2_4 is not set
+ # BR2_GCC_VERSION_4_3_1 is not set
+ # BR2_GCC_VERSION_4_3_2 is not set
+ BR2_GCC_SUPPORTS_SYSROOT=y
+ # BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE is not set
+-BR2_GCC_VERSION="4.2.2"
++BR2_GCC_VERSION="4.2.2-avr32-2.1.5"
+ BR2_TOOLCHAIN_SYSROOT=y
+ # BR2_GCC_USE_SJLJ_EXCEPTIONS is not set
+ BR2_EXTRA_GCC_CONFIG_OPTIONS=""
+@@ -251,10 +229,11 @@ BR2_PACKAGE_GDB_HOST=y
+ # BR2_GDB_VERSION_6_4 is not set
+ # BR2_GDB_VERSION_6_5 is not set
+ # BR2_GDB_VERSION_6_6 is not set
+-BR2_GDB_VERSION_6_7_1=y
++# BR2_GDB_VERSION_6_7_1 is not set
++BR2_GDB_VERSION_6_7_1_AVR32_2_1_5=y
+ # BR2_GDB_VERSION_6_8 is not set
+ # BR2_GDB_VERSION_SNAPSHOT is not set
+-BR2_GDB_VERSION="6.7.1"
++BR2_GDB_VERSION="6.7.1-avr32-2.1.5"
+ 
+ #
+ # Common Toolchain Options
+diff --git a/configs/atstk100x_defconfig b/configs/atstk100x_defconfig
+index c8fb4e4..a692063 100644
+--- a/configs/atstk100x_defconfig
++++ b/configs/atstk100x_defconfig
+@@ -138,34 +138,8 @@ BR2_UPDATE_CONFIG=y
+ #
+ # Toolchain
+ #
+-# BR2_TOOLCHAIN_BUILDROOT is not set
++BR2_TOOLCHAIN_BUILDROOT=y
+ # BR2_TOOLCHAIN_EXTERNAL is not set
+-BR2_TOOLCHAIN_EXTERNAL_SOURCE=y
+-BR2_TOOLCHAIN_SOURCE=y
+-# BR2_TOOLCHAIN_ATMEL_AVR32_4_1_2 is not set
+-# BR2_TOOLCHAIN_ATMEL_AVR32_4_2_1 is not set
+-# BR2_TOOLCHAIN_ATMEL_AVR32_4_2_2 is not set
+-BR2_TOOLCHAIN_ATMEL_AVR32_4_2_2_REV_2=y
+-# BR2_TOOLCHAIN_ATMEL_AVR32_4_2_3 is not set
+-# BR2_TOOLCHAIN_UNKNOWNVENDOR is not set
+-BR2_TOOLCHAIN_ATMEL_AVR32=y
+-BR2_VENDOR_SITE="$(BR2_ATMEL_MIRROR)"
+-BR2_VENDOR_SUFFIX="-avr32"
+-BR2_VENDOR_BINUTILS_RELEASE="-1.0.1"
+-BR2_VENDOR_GCC_RELEASE="-1.1.3"
+-BR2_VENDOR_UCLIBC_RELEASE="-2.1.5"
+-BR2_VENDOR_GDB_RELEASE="-2.1.5"
+-BR2_VENDOR_PATCH_DIR="Atmel/avr32"
+-# BR2_EXT_GCC_VERSION_4_1_2 is not set
+-# BR2_EXT_GCC_VERSION_4_2_1 is not set
+-BR2_EXT_GCC_VERSION_4_2_2=y
+-# BR2_EXT_GCC_VERSION_4_2_3 is not set
+-# BR2_EXT_BINUTILS_VERSION_2_17 is not set
+-BR2_EXT_BINUTILS_VERSION_2_18=y
+-# BR2_EXT_UCLIBC_VERSION_0_9_28_3 is not set
+-# BR2_EXT_UCLIBC_VERSION_0_9_29 is not set
+-BR2_EXT_UCLIBC_VERSION_0_9_30=y
+-# BR2_EXT_UCLIBC_VERSION_0_9_30_1 is not set
+ 
+ #
+ # Kernel Header Options
+@@ -185,11 +159,12 @@ BR2_DEFAULT_KERNEL_HEADERS="2.6.28.9"
+ #
+ # BR2_UCLIBC_VERSION_0_9_28_3 is not set
+ # BR2_UCLIBC_VERSION_0_9_29 is not set
+-BR2_UCLIBC_VERSION_0_9_30=y
++# BR2_UCLIBC_VERSION_0_9_30 is not set
++BR2_UCLIBC_VERSION_0_9_30_AVR32_2_1_5=y
+ # BR2_UCLIBC_VERSION_0_9_30_1 is not set
+ # BR2_UCLIBC_VERSION_SNAPSHOT is not set
+-BR2_UCLIBC_VERSION_STRING="0.9.30"
+-BR2_UCLIBC_CONFIG="target/device/Atmel/uClibc.config.avr32"
++BR2_UCLIBC_VERSION_STRING="0.9.30-avr32-2.1.5"
++BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.30.config"
+ # BR2_PTHREAD_DEBUG is not set
+ BR2_PROGRAM_INVOCATION=y
+ # BR2_UCLIBC_INSTALL_TEST_SUITE is not set
+@@ -199,15 +174,16 @@ BR2_PROGRAM_INVOCATION=y
+ #
+ # BR2_BINUTILS_VERSION_2_17 is not set
+ # BR2_BINUTILS_VERSION_2_17_50_0_17 is not set
+-BR2_BINUTILS_VERSION_2_18=y
++# BR2_BINUTILS_VERSION_2_18 is not set
+ # BR2_BINUTILS_VERSION_2_18_50_0_1 is not set
+ # BR2_BINUTILS_VERSION_2_18_50_0_3 is not set
+ # BR2_BINUTILS_VERSION_2_18_50_0_6 is not set
+ # BR2_BINUTILS_VERSION_2_18_50_0_8 is not set
+ # BR2_BINUTILS_VERSION_2_18_50_0_9 is not set
++BR2_BINUTILS_VERSION_2_18_AVR32_1_0_1=y
+ # BR2_BINUTILS_VERSION_2_19 is not set
+ # BR2_BINUTILS_VERSION_2_19_1 is not set
+-BR2_BINUTILS_VERSION="2.18"
++BR2_BINUTILS_VERSION="2.18-avr32-1.0.1"
+ BR2_EXTRA_BINUTILS_CONFIG_OPTIONS=""
+ 
+ #
+@@ -217,7 +193,8 @@ BR2_EXTRA_BINUTILS_CONFIG_OPTIONS=""
+ # BR2_GCC_VERSION_4_0_4 is not set
+ # BR2_GCC_VERSION_4_1_2 is not set
+ # BR2_GCC_VERSION_4_2_1 is not set
+-BR2_GCC_VERSION_4_2_2=y
++# BR2_GCC_VERSION_4_2_2 is not set
++BR2_GCC_VERSION_4_2_2_AVR32_2_1_5=y
+ # BR2_GCC_VERSION_4_2_3 is not set
+ # BR2_GCC_VERSION_4_2_4 is not set
+ # BR2_GCC_VERSION_4_3_1 is not set
+@@ -226,7 +203,7 @@ BR2_GCC_VERSION_4_2_2=y
+ # BR2_GCC_VERSION_4_4_X is not set
+ BR2_GCC_SUPPORTS_SYSROOT=y
+ # BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE is not set
+-BR2_GCC_VERSION="4.2.2"
++BR2_GCC_VERSION="4.2.2-avr32-2.1.5"
+ BR2_TOOLCHAIN_SYSROOT=y
+ # BR2_GCC_USE_SJLJ_EXCEPTIONS is not set
+ BR2_EXTRA_GCC_CONFIG_OPTIONS=""
+@@ -248,10 +225,11 @@ BR2_PACKAGE_GDB_HOST=y
+ # BR2_GDB_VERSION_6_4 is not set
+ # BR2_GDB_VERSION_6_5 is not set
+ # BR2_GDB_VERSION_6_6 is not set
+-BR2_GDB_VERSION_6_7_1=y
++# BR2_GDB_VERSION_6_7_1 is not set
++BR2_GDB_VERSION_6_7_1_AVR32_2_1_5=y
+ # BR2_GDB_VERSION_6_8 is not set
+ # BR2_GDB_VERSION_SNAPSHOT is not set
+-BR2_GDB_VERSION="6.7.1"
++BR2_GDB_VERSION="6.7.1-avr32-2.1.5"
+ 
+ #
+ # Common Toolchain Options
+diff --git a/configs/kb9202_defconfig b/configs/kb9202_defconfig
+index d41b30b..e7e039a 100644
+--- a/configs/kb9202_defconfig
++++ b/configs/kb9202_defconfig
+@@ -145,13 +145,6 @@ BR2_UPDATE_CONFIG=y
+ #
+ BR2_TOOLCHAIN_BUILDROOT=y
+ # BR2_TOOLCHAIN_EXTERNAL is not set
+-# BR2_TOOLCHAIN_EXTERNAL_SOURCE is not set
+-BR2_TOOLCHAIN_SOURCE=y
+-BR2_EXT_GCC_VERSION_4_1_2=y
+-BR2_EXT_GCC_VERSION_4_2_1=y
+-BR2_EXT_BINUTILS_VERSION_2_17=y
+-BR2_EXT_UCLIBC_VERSION_0_9_29=y
+-BR2_EXT_UCLIBC_VERSION_0_9_28_3=y
+ 
+ #
+ # Kernel Header Options
+diff --git a/configs/v100sc2_defconfig b/configs/v100sc2_defconfig
+index e198353..ecb2804 100644
+--- a/configs/v100sc2_defconfig
++++ b/configs/v100sc2_defconfig
+@@ -115,30 +115,8 @@ BR2_UPDATE_CONFIG=y
+ #
+ # Toolchain
+ #
+-# BR2_TOOLCHAIN_BUILDROOT is not set
++BR2_TOOLCHAIN_BUILDROOT=y
+ # BR2_TOOLCHAIN_EXTERNAL is not set
+-BR2_TOOLCHAIN_EXTERNAL_SOURCE=y
+-BR2_TOOLCHAIN_SOURCE=y
+-# BR2_TOOLCHAIN_ATMEL_AVR32_4_1_2 is not set
+-# BR2_TOOLCHAIN_ATMEL_AVR32_4_2_1 is not set
+-BR2_TOOLCHAIN_ATMEL_AVR32_4_2_2=y
+-# BR2_TOOLCHAIN_ATMEL_AVR32_4_2_3 is not set
+-# BR2_TOOLCHAIN_UNKNOWNVENDOR is not set
+-BR2_TOOLCHAIN_ATMEL_AVR32=y
+-BR2_VENDOR_SITE="$(BR2_ATMEL_MIRROR)"
+-BR2_VENDOR_SUFFIX="-avr32"
+-BR2_VENDOR_BINUTILS_RELEASE="-2.1.5"
+-BR2_VENDOR_GCC_RELEASE="-2.1.5"
+-BR2_VENDOR_UCLIBC_RELEASE="-2.1.5"
+-BR2_VENDOR_GDB_RELEASE="-2.1.5"
+-BR2_VENDOR_PATCH_DIR="Atmel/avr32"
+-# BR2_EXT_GCC_VERSION_4_1_2 is not set
+-# BR2_EXT_GCC_VERSION_4_2_1 is not set
+-BR2_EXT_GCC_VERSION_4_2_2=y
+-# BR2_EXT_GCC_VERSION_4_2_3 is not set
+-BR2_EXT_BINUTILS_VERSION_2_17=y
+-BR2_EXT_UCLIBC_VERSION_0_9_29=y
+-# BR2_EXT_UCLIBC_VERSION_0_9_28_3 is not set
+ 
+ #
+ # Kernel Header Options
 -- 
 1.6.3.3
