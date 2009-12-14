@@ -1,44 +1,34 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 14 Dec 2009 17:29:59 +0100
+From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
+Date: Mon, 14 Dec 2009 15:55:17 -0200
 Subject: [Buildroot] [git commit master] package/qt: bump version
-Message-ID: <20091214163130.AD55F7777C@busybox.osuosl.org>
+In-Reply-To: <20091214163130.AD55F7777C@busybox.osuosl.org>
+References: <20091214163130.AD55F7777C@busybox.osuosl.org>
+Message-ID: <d6cda7730912140955n349a6603u8720fcffa12c55b5@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=81cb4205d053d3cf09dd0718943141500b633137
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, Dec 14, 2009 at 2:29 PM, Peter Korsgaard <jacmet@sunsite.dk> wrote:
+> I know 4.6.0 is out, but I don't have a setup to test it at the moment,
+> so lets stick with 4.5.x for now.
 
-I know 4.6.0 is out, but I don't have a setup to test it at the moment,
-so lets stick with 4.5.x for now.
+Thanks. According to some posts at the avrfreaks.net forum, the 4.6.0
+has some problems compiling with the avr32 toolchain. I haven't tried
+myself yet. Looks like it's the compiler's fault. Atmel already has a
+new gcc toolchain version 2.3.0 based on gcc 4.3.x as binary only
+download for windows, but so far no sources at the website yet. I
+think the one we are using is what they have labeled as 2.1.6
 
-There's apparently no .tar.bz2 of 4.5.3.
+> There's apparently no .tar.bz2 of 4.5.3.
+>
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/qt/qt.mk |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+That's odd. ftp.trolltech.com/pub/qt also doesn't have a .bz2, the
+same goes for 4.6.0 downloads :(
+I guess they dropped the .bz2
 
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index 105998f..e4a354d 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -12,10 +12,10 @@
- #
- ######################################################################
- 
--QT_VERSION:=4.5.2
--QT_SOURCE:=qt-embedded-linux-opensource-src-$(QT_VERSION).tar.bz2
-+QT_VERSION:=4.5.3
-+QT_SOURCE:=qt-embedded-linux-opensource-src-$(QT_VERSION).tar.gz
- QT_SITE:=http://get.qt.nokia.com/qt/source
--QT_CAT:=$(BZCAT)
-+QT_CAT:=$(ZCAT)
- QT_TARGET_DIR:=$(BUILD_DIR)/qt-embedded-linux-opensource-src-$(QT_VERSION)
- 
- QT_CONFIGURE:=#empty
--- 
-1.6.3.3
+Kind Regards,
+    Thiago A. Correa
