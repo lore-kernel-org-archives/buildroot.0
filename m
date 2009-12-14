@@ -1,154 +1,282 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2009 00:04:47 +0100
-Subject: [Buildroot] [PATCH 15/23] Use BR2_TOOLCHAIN_BUILDROOT instead of
-	BR2_TOOLCHAIN_SOURCE
+Date: Tue, 15 Dec 2009 00:04:48 +0100
+Subject: [Buildroot] [PATCH 16/23] Remove external source toolchain options
 In-Reply-To: <cover.1260831891.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1260831891.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <bc994c533cdac1ab843a889c4afaae80234cc6b2.1260831891.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <65e99014ce8a10a32762896f3bbf6826f870788f.1260831891.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The BR2_TOOLCHAIN_SOURCE option is removed in a future commit.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile                        |    4 ++--
- package/Makefile.in             |    4 ++--
- target/Config.in                |    2 +-
- toolchain/Config.in.1           |    2 +-
- toolchain/Config.in.2           |    6 +++---
- toolchain/gcc/gcc-uclibc-3.x.mk |    2 +-
- toolchain/uClibc/uclibc.mk      |    2 +-
- 7 files changed, 11 insertions(+), 11 deletions(-)
+ target/device/Config.in.toolchain |  219 -------------------------------------
+ toolchain/Config.in               |   12 --
+ 2 files changed, 0 insertions(+), 231 deletions(-)
+ delete mode 100644 target/device/Config.in.toolchain
 
-diff --git a/Makefile b/Makefile
-index 5b71051..051b661 100644
---- a/Makefile
-+++ b/Makefile
-@@ -197,7 +197,7 @@ PREFERRED_LIB_FLAGS:=--enable-static --enable-shared
- # along with the packages to build for the target.
- #
- ##############################################################
--ifeq ($(BR2_TOOLCHAIN_SOURCE),y)
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
- BASE_TARGETS:=uclibc-configured binutils cross_compiler uclibc-target-utils kernel-headers
- else
- BASE_TARGETS:=uclibc
-@@ -289,7 +289,7 @@ include .config.cmd
- # We also need the various per-package makefiles, which also add
- # each selected package to TARGETS if that package was selected
- # in the .config file.
--ifeq ($(BR2_TOOLCHAIN_SOURCE),y)
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
- # avoid pulling in external toolchain which is broken for toplvl parallel builds
- # Explicit ordering:
- include toolchain/dependencies/dependencies.mk
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 7c009bb..25dd6da 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -36,7 +36,7 @@ endif
- 
- 
- #########################################################################
--ifeq ($(BR2_TOOLCHAIN_SOURCE),y)
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
- TARGET_CFLAGS=$(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING) \
- 	-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include
- TARGET_LDFLAGS+=-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib
-@@ -105,7 +105,7 @@ XXXX=xxxx
- ROOTFS_SUFFIX:=-$(BR2_ROOTFS_SUFFIX)
- endif
- 
--ifeq ($(BR2_TOOLCHAIN_SOURCE),y)
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
- TOOLCHAIN_DIR=$(BASE_DIR)/toolchain
- 
- # Quotes are needed for spaces et al in path components.
-diff --git a/target/Config.in b/target/Config.in
-index ab46dcb..4cae66c 100644
---- a/target/Config.in
-+++ b/target/Config.in
-@@ -74,7 +74,7 @@ config BR2_KERNEL_LINUX_ADVANCED
- # The kernel with the same version as linux headers cannot be compiled
- # when using an external toolchain, because the linux headers are not
- # handled by Buildroot in this case.
--if BR2_TOOLCHAIN_SOURCE
-+if BR2_TOOLCHAIN_BUILDROOT
- 
- config BR2_KERNEL_LINUX
- 	bool "linux (Same version as linux headers)"
-diff --git a/toolchain/Config.in.1 b/toolchain/Config.in.1
-index 83bc710..5c26858 100644
---- a/toolchain/Config.in.1
-+++ b/toolchain/Config.in.1
-@@ -1,6 +1,6 @@
- #
- 
--if BR2_TOOLCHAIN_SOURCE
-+if BR2_TOOLCHAIN_BUILDROOT
- source "toolchain/kernel-headers/Config.in"
- source "toolchain/uClibc/Config.in"
- source "toolchain/binutils/Config.in"
-diff --git a/toolchain/Config.in.2 b/toolchain/Config.in.2
-index 2f7de75..6317ff4 100644
---- a/toolchain/Config.in.2
-+++ b/toolchain/Config.in.2
-@@ -37,7 +37,7 @@ config BR2_ENABLE_LOCALE
- 
- config BR2_ENABLE_LOCALE_PREGENERATED
- 	bool "Use pregenerated locale data?"
--	depends on BR2_ENABLE_LOCALE && BR2_TOOLCHAIN_SOURCE && BROKEN # tarball missing
-+	depends on BR2_ENABLE_LOCALE && BR2_TOOLCHAIN_BUILDROOT && BROKEN # tarball missing
+diff --git a/target/device/Config.in.toolchain b/target/device/Config.in.toolchain
+deleted file mode 100644
+index b610d1d..0000000
+--- a/target/device/Config.in.toolchain
++++ /dev/null
+@@ -1,219 +0,0 @@
+-if BR2_TOOLCHAIN_EXTERNAL_SOURCE
+-choice
+-	prompt "Source location:"
+-	default BR2_TOOLCHAIN_ATMEL_AVR32_4_2_2 if BR2_avr32
+-	help
+-	  Select whether to use the toolchain built by the buildroot
+-	  system or an external pre-built toolchain.
+-
+-config BR2_TOOLCHAIN_ATMEL_AVR32_4_1_2
+-	bool "Use prepatched source for AVR32 gcc-4.1.2 toolchain"
+-	depends on BR2_avr32
+-	depends on BR2_DEPRECATED
+-	select BR2_EXT_GCC_VERSION_4_1_2
+-	select BR2_EXT_BINUTILS_VERSION_2_17
+-	select BR2_EXT_UCLIBC_VERSION_0_9_29
+-	select BR2_TOOLCHAIN_ATMEL_AVR32
+-	help
+-	  The gcc-4.1.2 toolchain for the AVR32
+-
+-config BR2_TOOLCHAIN_ATMEL_AVR32_4_2_1
+-	bool "Use prepatched source for AVR32 gcc-4.2.1 toolchain"
+-	depends on BR2_avr32
+-	depends on BR2_DEPRECATED
+-	select BR2_EXT_GCC_VERSION_4_2_1
+-	select BR2_EXT_BINUTILS_VERSION_2_17
+-	select BR2_EXT_UCLIBC_VERSION_0_9_29
+-	select BR2_TOOLCHAIN_ATMEL_AVR32
+-	select BR2_GCC_SUPPORTS_SYSROOT
+-	help
+-	  The gcc-4.2.1 toolchain for the AVR32
+-	  * gcc-4.2.1
+-	  * binutils-2.17
+-	  * uClibc-0.9.29
+-	  * gdb-6.4
+-	  This will not be able to build qtopia
+-	  due to internal errors.
+-
+-config BR2_TOOLCHAIN_ATMEL_AVR32_4_2_2
+-	bool "Use prepatched source for AVR32 gcc-4.2.2 toolchain"
+-	depends on BR2_avr32
+-	depends on BR2_DEPRECATED
+-	select BR2_EXT_GCC_VERSION_4_2_2
+-	select BR2_EXT_BINUTILS_VERSION_2_17
+-	select BR2_EXT_UCLIBC_VERSION_0_9_29
+-	select BR2_TOOLCHAIN_ATMEL_AVR32
+-	select BR2_GCC_SUPPORTS_SYSROOT
+-	help
+-	  The gcc-4.2.2 toolchain for the AVR32
+-	  * gcc-4.2.2
+-	  * binutils-2.17
+-	  * uClibc-0.9.29
+-	  * gdb-6.7.1
+-	  It is generated from buildroot-avr32-v2.2.0-rc4
+-	  in http://www.atmel.no/buildroot
+-
+-config BR2_TOOLCHAIN_ATMEL_AVR32_4_2_2_REV_2
+-	bool "Use prepatched source for AVR32 gcc-4.2.2 toolchain"
+-	depends on BR2_avr32
+-	select BR2_EXT_GCC_VERSION_4_2_2
+-	select BR2_EXT_BINUTILS_VERSION_2_18
+-	select BR2_EXT_UCLIBC_VERSION_0_9_30
+-	select BR2_TOOLCHAIN_ATMEL_AVR32
+-	select BR2_GCC_SUPPORTS_SYSROOT
+-	help
+-	  The gcc-4.2.2 toolchain for the AVR32
+-	  * gcc-4.2.2
+-	  * binutils-2.18
+-	  * uClibc-0.9.29/30
+-	  * gdb-6.7.1
+-	  It is generated from buildroot-avr32-v2.3.0-rc1
+-	  in http://www.atmel.no/buildroot
+-
+-config BR2_TOOLCHAIN_ATMEL_AVR32_4_2_3
+-	bool "Use prepatched source for AVR32 gcc-4.2.3 toolchain"
+-	depends on BR2_avr32
+-	depends on BR2_DEPRECATED
+-	depends on BR2_TOOLCHAIN_ATMEL_AVR32_4_2_3_ENABLE
+-	select BR2_EXT_GCC_VERSION_4_2_3
+-	select BR2_EXT_BINUTILS_VERSION_2_17
+-	select BR2_EXT_UCLIBC_VERSION_0_9_29
+-	select BR2_EXT_UCLIBC_VERSION_0_9_30
+-	select BR2_TOOLCHAIN_ATMEL_AVR32
+-	help
+-	  The gcc-4.2.3 toolchain for the AVR32
+-	  * gcc-4.2.3
+-	  * binutils-2.17
+-	  * uClibc-0.9.29
+-	  * gdb-6.7.1
+-	  It is generated from buildroot-avr32-v2.2.0-rc4
+-	  in http://www.atmel.no/buildroot
+-
+-config BR2_TOOLCHAIN_UNKNOWNVENDOR
+-	bool "Use prepatched source from unknown vendor"
+-	depends on !BR2_avr32
+-
+-endchoice
+-
+-config BR2_TOOLCHAIN_ATMEL_AVR32_4_2_3_ENABLE
+-	bool
+-
+-config BR2_TOOLCHAIN_ATMEL_AVR32
+-	bool
+-
+-if BR2_TOOLCHAIN_ATMEL_AVR32
+-config BR2_VENDOR_SITE
+-	string
+-	default "$(BR2_ATMEL_MIRROR)" if BR2_TOOLCHAIN_ATMEL_AVR32
+-
+-config BR2_VENDOR_SUFFIX
+-	string
+-	default "-avr32" if BR2_TOOLCHAIN_ATMEL_AVR32
+-
+-config BR2_VENDOR_BINUTILS_RELEASE
+-	string
+-	default "-2.1.3" if BR2_TOOLCHAIN_ATMEL_AVR32_4_1_2
+-	default "-2.1.3" if BR2_TOOLCHAIN_ATMEL_AVR32_4_2_1
+-	default "-2.1.5" if BR2_TOOLCHAIN_ATMEL_AVR32_4_2_2
+-	default "-1.0.1" if BR2_TOOLCHAIN_ATMEL_AVR32_4_2_2_REV_2
+-	default "-2.1.5" if BR2_TOOLCHAIN_ATMEL_AVR32_4_2_3
+-
+-config BR2_VENDOR_GCC_RELEASE
+-	string
+-	default "-2.0" if BR2_TOOLCHAIN_ATMEL_AVR32_4_1_2
+-	default "-2.1.3" if BR2_TOOLCHAIN_ATMEL_AVR32_4_2_1
+-	default "-2.1.5" if BR2_TOOLCHAIN_ATMEL_AVR32_4_2_2
+-	default "-1.1.3" if BR2_TOOLCHAIN_ATMEL_AVR32_4_2_2_REV_2
+-	default "-2.1.5" if BR2_TOOLCHAIN_ATMEL_AVR32_4_2_3
+-
+-config BR2_VENDOR_UCLIBC_RELEASE
+-	string
+-	default "-2.1.3" if BR2_TOOLCHAIN_ATMEL_AVR32_4_1_2
+-	default "-2.1.3" if BR2_TOOLCHAIN_ATMEL_AVR32_4_2_1
+-	default "-2.1.5" if BR2_TOOLCHAIN_ATMEL_AVR32_4_2_2
+-	default "-2.1.5" if BR2_TOOLCHAIN_ATMEL_AVR32_4_2_2_REV_2
+-	default "-2.1.5" if BR2_TOOLCHAIN_ATMEL_AVR32_4_2_3
+-
+-config BR2_VENDOR_GDB_RELEASE
+-	string
+-	default "-2.1.3" if BR2_GDB_VERSION_6_4
+-	default "-2.1.3" if BR2_GDB_VERSION_6_4
+-	default "-2.1.5" if BR2_GDB_VERSION_6_7_1
+-
+-config BR2_VENDOR_PATCH_DIR
+-	string
+-	default "Atmel/avr32" if BR2_TOOLCHAIN_ATMEL_AVR32
+-endif
+-if BR2_TOOLCHAIN_UNKNOWNVENDOR
+-config BR2_VENDOR_SITE
+-	string "vendor site"
+-	default "http://vendor.com/somewhere/"
+-
+-config BR2_VENDOR_SUFFIX
+-	string "vendor suffix"
+-	default ""
+-
+-config BR2_VENDOR_BINUTILS_RELEASE
+-	string "binutils suffix"
+-	default ""
+-
+-config BR2_VENDOR_GCC_RELEASE
+-	string "gcc suffix"
+-	default ""
+-
+-config BR2_VENDOR_UCLIBC_RELEASE
+-	string "uClibc suffix"
+-	default ""
+-
+-config BR2_VENDOR_GDB_RELEASE
+-	string "gdb suffix"
+-	default ""
+-
+-config BR2_VENDOR_PATCH_DIR
+-	string "local accumulated patchdir"
+-	default "$(VENDOR)/$(ARCH)/"
+-endif
+-
+-
+-endif
+-
+-
+-config	BR2_EXT_GCC_VERSION_4_1_2
+-	bool
+-	default !BR2_TOOLCHAIN_EXTERNAL_SOURCE
+-
+-config	BR2_EXT_GCC_VERSION_4_2_1
+-	bool
+-	default !BR2_TOOLCHAIN_EXTERNAL_SOURCE
+-
+-config	BR2_EXT_GCC_VERSION_4_2_2
+-	bool
+-	default !BR2_TOOLCHAIN_EXTERNAL_SOURCE
+-
+-config	BR2_EXT_GCC_VERSION_4_2_3
+-	bool
+-	default !BR2_TOOLCHAIN_EXTERNAL_SOURCE
+-
+-config	BR2_EXT_BINUTILS_VERSION_2_17
+-	bool
+-	default !BR2_TOOLCHAIN_EXTERNAL_SOURCE
+-
+-config	BR2_EXT_BINUTILS_VERSION_2_18
+-	bool
+-	default !BR2_TOOLCHAIN_EXTERNAL_SOURCE
+-
+-config	BR2_EXT_UCLIBC_VERSION_0_9_28_3
+-	bool
+-	default !BR2_TOOLCHAIN_EXTERNAL_SOURCE
+-
+-config	BR2_EXT_UCLIBC_VERSION_0_9_29
+-	bool
+-	default !BR2_TOOLCHAIN_EXTERNAL_SOURCE
+-
+-config	BR2_EXT_UCLIBC_VERSION_0_9_30
+-	bool
+-	default !BR2_TOOLCHAIN_EXTERNAL_SOURCE
+-
+-config	BR2_EXT_UCLIBC_VERSION_0_9_30_1
+-	bool
+-	default !BR2_TOOLCHAIN_EXTERNAL_SOURCE
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index d66ce1d..ee34e03 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -1,8 +1,6 @@
+ menu "Toolchain"
+ choice
+ 	prompt "Toolchain type"
+-	default BR2_TOOLCHAIN_BUILDROOT if !BR2_avr32
+-	default BR2_TOOLCHAIN_EXTERNAL_SOURCE if BR2_avr32
  	help
- 	  Instead of generating the locale data locally you can optionally
- 	  download a pregenerated set of locales.
-@@ -142,7 +142,7 @@ config BR2_GCC_CROSS_CXX
+ 	  Select whether to use the toolchain provided by buildroot
+ 	  or an external toolchain.
+@@ -12,22 +10,12 @@ choice
  
- config BR2_INSTALL_LIBSTDCPP
- 	bool "Build/install c++ compiler and libstdc++?"
--	select BR2_LARGEFILE if (!BR2_GCC_SUPPORTS_SYSROOT && BR2_TOOLCHAIN_SOURCE)
-+	select BR2_LARGEFILE if (!BR2_GCC_SUPPORTS_SYSROOT && BR2_TOOLCHAIN_BUILDROOT)
- 	select BR2_GCC_CROSS_CXX
- 	help
- 	  If you are building your own toolchain and want to build and install
-@@ -157,7 +157,7 @@ config BR2_TARGET_OPTIMIZATION
- 	help
- 	  Optimizations to use when building for the target host.
+ config BR2_TOOLCHAIN_BUILDROOT
+ 	bool "Buildroot toolchain"
+-	depends on !BR2_avr32
  
--if BR2_TOOLCHAIN_SOURCE
-+if BR2_TOOLCHAIN_BUILDROOT
- source "toolchain/elf2flt/Config.in"
- source "toolchain/mklibs/Config.in"
- source "toolchain/sstrip/Config.in"
-diff --git a/toolchain/gcc/gcc-uclibc-3.x.mk b/toolchain/gcc/gcc-uclibc-3.x.mk
-index 0af3f38..332af88 100644
---- a/toolchain/gcc/gcc-uclibc-3.x.mk
-+++ b/toolchain/gcc/gcc-uclibc-3.x.mk
-@@ -17,7 +17,7 @@
- # along with this program; if not, write to the Free Software
- # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ config BR2_TOOLCHAIN_EXTERNAL
+ 	bool "External binary toolchain"
  
--ifeq ($(BR2_TOOLCHAIN_SOURCE),y)
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+-config BR2_TOOLCHAIN_EXTERNAL_SOURCE
+-	bool "External source toolchain"
+ endchoice
  
- # without sysroot support. Sysroot toolchain is gcc-uclibc-4.x.mk
- ifneq ($(BR2_TOOLCHAIN_SYSROOT),y)
-diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
-index 79d272f..f742d4e 100644
---- a/toolchain/uClibc/uclibc.mk
-+++ b/toolchain/uClibc/uclibc.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
+-config BR2_TOOLCHAIN_SOURCE
+-	bool
+-	default y if BR2_TOOLCHAIN_BUILDROOT || BR2_TOOLCHAIN_EXTERNAL_SOURCE
+-	default n if BR2_TOOLCHAIN_EXTERNAL
+-
+-source "target/device/Config.in.toolchain"
+-
+ source "toolchain/Config.in.1"
+ source "toolchain/external-toolchain/Config.in"
  
--ifeq ($(BR2_TOOLCHAIN_SOURCE),y)
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
- 
- # specifying UCLIBC_CONFIG_FILE on the command-line overrides the .config
- # setting.
 -- 
 1.6.3.3
