@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 15 Dec 2009 00:19:17 +0100
-Subject: [Buildroot] [git commit master] gcc: remove GCC_OFFICIAL_VERSION
-	and just use GCC_VERSION instead
-Message-ID: <20091214232055.9A22377796@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] gcc: improve configuration for
+	snapshot versions
+Message-ID: <20091214232054.3D02577796@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,99 +10,67 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=495e5bdca3146a5debfa98a90b7e1a4e9b2e5c09
+commit: http://git.buildroot.net/buildroot/commit/?id=636afc4664238b9555411622f45ff4d00ceffcde
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Make the selection of a snapshot version a normal gcc version choice,
+and make sure BR2_GCC_VERSION is properly defined.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/gcc/gcc-uclibc-3.x.mk |   17 ++---------------
- toolchain/gcc/gcc-uclibc-4.x.mk |   21 ++++-----------------
- 2 files changed, 6 insertions(+), 32 deletions(-)
+ toolchain/gcc/Config.in   |   11 ++++++-----
+ toolchain/gcc/Makefile.in |    2 +-
+ 2 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/toolchain/gcc/gcc-uclibc-3.x.mk b/toolchain/gcc/gcc-uclibc-3.x.mk
-index c7ae913..0af3f38 100644
---- a/toolchain/gcc/gcc-uclibc-3.x.mk
-+++ b/toolchain/gcc/gcc-uclibc-3.x.mk
-@@ -24,28 +24,15 @@ ifneq ($(BR2_TOOLCHAIN_SYSROOT),y)
+diff --git a/toolchain/gcc/Config.in b/toolchain/gcc/Config.in
+index 07e42a6..10cb841 100644
+--- a/toolchain/gcc/Config.in
++++ b/toolchain/gcc/Config.in
+@@ -55,11 +55,11 @@ choice
+ 	config BR2_GCC_VERSION_4_4_X
+ 		depends on !BR2_avr32 && !BR2_nios2
+ 		bool "gcc 4.4.x"
+-endchoice
  
- ifneq ($(GCC_SNAP_DATE),)
-  GCC_SITE:=ftp://sources.redhat.com/pub/gcc/snapshots/$(GCC_VERSION)
-- GCC_OFFICIAL_VER:=$(GCC_VERSION)-$(GCC_SNAP_DATE)
- else ifeq ($(findstring avr32,$(GCC_VERSION)),avr32)
-  GCC_SITE:=ftp://www.at91.com/pub/buildroot/
-- GCC_OFFICIAL_VER:=$(GCC_VERSION)
+-config BR2_GCC_IS_SNAP
+-	depends on !BR2_avr32
+-	bool
++	config BR2_GCC_VERSION_SNAP
++		depends on !BR2_avr32 && !BR2_nios2
++		bool "gcc snapshot"
++endchoice
+ 
+ config BR2_GCC_SUPPORTS_SYSROOT
+ 	bool
+@@ -72,7 +72,7 @@ config BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE
+ config BR2_GCC_SNAP_DATE
+ 	string "GCC snapshot date"
+ 	default "20070921"
+-	depends on BR2_GCC_IS_SNAP
++	depends on BR2_GCC_VERSION_SNAP
+ 	help
+ 	  Enter snapshot date to use for gcc.  Format is:
+ 	  YYYYMMDD
+@@ -89,6 +89,7 @@ config BR2_GCC_VERSION
+ 	default "4.3.3"     if BR2_GCC_VERSION_4_3_3
+ 	default "4.3.4"     if BR2_GCC_VERSION_4_3_4
+ 	default "4.4.2"     if BR2_GCC_VERSION_4_4_X
++	default $BR2_GCC_SNAP_DATE if BR2_GCC_VERSION_SNAP
+ 
+ config BR2_TOOLCHAIN_SYSROOT
+ 	bool "Enable toolchain with --sysroot support"
+diff --git a/toolchain/gcc/Makefile.in b/toolchain/gcc/Makefile.in
+index e92ecbc..c3e21cf 100644
+--- a/toolchain/gcc/Makefile.in
++++ b/toolchain/gcc/Makefile.in
+@@ -8,7 +8,7 @@ GCC_VERSION:=$(call qstrip,$(BR2_GCC_VERSION))
+ TARGET_OPTIMIZATION:=$(call qstrip,$(BR2_TARGET_OPTIMIZATION))
+ EXTRA_GCC_CONFIG_OPTIONS:=$(call qstrip,$(BR2_EXTRA_GCC_CONFIG_OPTIONS))
+ 
+-ifeq ($(call qstrip,$(BR2_GCC_IS_SNAP)),y)
++ifeq ($(call qstrip,$(BR2_GCC_VERSION_SNAP)),y)
+ GCC_SNAP_DATE:=$(call qstrip,$(BR2_GCC_SNAP_DATE))
  else
-  GCC_SITE:=$(BR2_GNU_MIRROR)/gcc/gcc-$(GCC_VERSION)
-- GCC_OFFICIAL_VER:=$(GCC_VERSION)
- endif
- 
--GCC_SOURCE:=gcc-$(GCC_OFFICIAL_VER).tar.bz2
--GCC_DIR:=$(TOOLCHAIN_DIR)/gcc-$(GCC_OFFICIAL_VER)
--
--ifeq ($(GCC_SNAP_DATE),)
--GCC_PATCH_DIR:=toolchain/gcc/$(GCC_VERSION)
--else
--ifneq ($(wildcard toolchain/gcc/$(GCC_OFFICIAL_VER)),)
--GCC_PATCH_DIR:=toolchain/gcc/$(GCC_OFFICIAL_VER)
--else
-+GCC_SOURCE:=gcc-$(GCC_VERSION).tar.bz2
-+GCC_DIR:=$(TOOLCHAIN_DIR)/gcc-$(GCC_VERSION)
- GCC_PATCH_DIR:=toolchain/gcc/$(GCC_VERSION)
--endif
--endif
--
- GCC_CAT:=$(BZCAT)
- GCC_STRIP_HOST_BINARIES:=true
- 
-diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
-index b3ee266..b162b93 100644
---- a/toolchain/gcc/gcc-uclibc-4.x.mk
-+++ b/toolchain/gcc/gcc-uclibc-4.x.mk
-@@ -22,33 +22,20 @@ ifeq ($(BR2_TOOLCHAIN_SYSROOT),y)
- 
- ifneq ($(GCC_SNAP_DATE),)
-  GCC_SITE:=ftp://sources.redhat.com/pub/gcc/snapshots/$(GCC_VERSION)
-- GCC_OFFICIAL_VER:=$(GCC_VERSION)-$(GCC_SNAP_DATE)
- else ifeq ($(findstring avr32,$(GCC_VERSION)),avr32)
-  GCC_SITE:=ftp://www.at91.com/pub/buildroot/
-- GCC_OFFICIAL_VER:=$(GCC_VERSION)
- else
-  GCC_SITE:=$(BR2_GNU_MIRROR)/gcc/gcc-$(GCC_VERSION)
-- GCC_OFFICIAL_VER:=$(GCC_VERSION)
- endif
- 
--ifeq ($(GCC_SNAP_DATE),) # Not a snapshot
--GCC_PATCH_DIR:=toolchain/gcc/$(GCC_VERSION)
--else # Is a snapshot
--ifneq ($(wildcard toolchain/gcc/$(GCC_OFFICIAL_VERSION)),) # Snapshot patch?
--GCC_PATCH_DIR:=toolchain/gcc/$(GCC_OFFICIAL_VERSION)
--else # Normal patch to snapshot
--# Use the normal location, if the dedicated location does not exist
--GCC_PATCH_DIR:=toolchain/gcc/$(GCC_VERSION)
--endif # Snapshot patch
--endif # Not a snapshot
--
- ifneq ($(filter xtensa%,$(ARCH)),)
- include target/xtensa/patch.in
- GCC_PATCH_EXTRA:=$(call XTENSA_PATCH,gcc,$(GCC_PATCH_DIR),. ..)
- endif
- 
--GCC_SOURCE:=gcc-$(GCC_OFFICIAL_VERSION).tar.bz2
--GCC_DIR:=$(TOOLCHAIN_DIR)/gcc-$(GCC_OFFICIAL_VERSION)
-+GCC_SOURCE:=gcc-$(GCC_VERSION).tar.bz2
-+GCC_PATCH_DIR:=toolchain/gcc/$(GCC_VERSION)
-+GCC_DIR:=$(TOOLCHAIN_DIR)/gcc-$(GCC_VERSION)
- GCC_CAT:=$(BZCAT)
- GCC_STRIP_HOST_BINARIES:=nope
- GCC_SRC_DIR:=$(GCC_DIR)
-@@ -516,7 +503,7 @@ gcc_target-dirclean:
- 	rm -rf $(GCC_BUILD_DIR3)
- 
- gcc-status:
--	@echo GCC_OFFICIAL_VERSION=$(GCC_OFFICIAL_VERSION)
-+	@echo GCC_VERSION=$(GCC_VERSION)
- 	@echo GCC_PATCH_DIR=$(GCC_PATCH_DIR)
- 	@echo GCC_SITE=$(GCC_SITE)
- 
+ GCC_SNAP_DATE:=
 -- 
 1.6.3.3
