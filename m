@@ -1,226 +1,71 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2009 20:30:40 +0100
-Subject: [Buildroot] [PATCH 09/39] Add package statistics script
+Date: Tue, 15 Dec 2009 20:30:43 +0100
+Subject: [Buildroot] [PATCH 12/39] autoconf: add patch to make it work under
+	dash
 In-Reply-To: <cover.1260905467.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1260905467.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <35e635b7ddfdcfac562eaf44809f2ffca119a23a.1260905467.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <cb4ab36bcf15560eb52ab78500db317ad0a963d9.1260905467.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+autoconf >= 2.64 was broken when /bin/sh is symlinked to dash. This
+has been fixed post-2.65 by the commit at
+http://git.savannah.gnu.org/cgit/autoconf.git/commit/?id=7f75858f577f11a844781764f30cd42cfe8a5669.
+
+Compared to the original patch, the patch included in Buildroot
+manually does the change to the ./configure script itself. Otherwise,
+the compilation of host-autoconf would require host-autoconf itself.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- scripts/pkg-stats |  200 +++++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 files changed, 200 insertions(+), 0 deletions(-)
- create mode 100755 scripts/pkg-stats
+ ...toconf-2.65-fix-m4-detection-test-on-dash.patch |   36 ++++++++++++++++++++
+ 1 files changed, 36 insertions(+), 0 deletions(-)
+ create mode 100644 package/autoconf/autoconf-2.65-fix-m4-detection-test-on-dash.patch
 
-diff --git a/scripts/pkg-stats b/scripts/pkg-stats
-new file mode 100755
-index 0000000..0ed420d
+diff --git a/package/autoconf/autoconf-2.65-fix-m4-detection-test-on-dash.patch b/package/autoconf/autoconf-2.65-fix-m4-detection-test-on-dash.patch
+new file mode 100644
+index 0000000..35f99b2
 --- /dev/null
-+++ b/scripts/pkg-stats
-@@ -0,0 +1,200 @@
-+#!/bin/bash
++++ b/package/autoconf/autoconf-2.65-fix-m4-detection-test-on-dash.patch
+@@ -0,0 +1,36 @@
++Patch taken upstream at
++http://git.savannah.gnu.org/cgit/autoconf.git/commit/?id=7f75858f577f11a844781764f30cd42cfe8a5669,
++with the following modifications:
 +
-+# Copyright (C) 2009 by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+#
-+# This program is free software; you can redistribute it and/or modify
-+# it under the terms of the GNU General Public License as published by
-+# the Free Software Foundation; either version 2 of the License, or
-+# (at your option) any later version.
-+#
-+# This program is distributed in the hope that it will be useful,
-+# but WITHOUT ANY WARRANTY; without even the implied warranty of
-+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-+# General Public License for more details.
-+#
-+# You should have received a copy of the GNU General Public License
-+# along with this program; if not, write to the Free Software
-+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
++ * Changes to NEWS file removed to avoid conflicts
 +
-+# This script generates an HTML file that contains a report about all
-+# Buildroot packages, their usage of the different package
-+# infrastructure and possible cleanup actions
-+#
-+# Run the script from the Buildroot toplevel directory:
-+#
-+#  ./scripts/pkg-stats > /tmp/pkg.html
-+#
++ * Changes also made manually to the generated configure
++   script. Otherwise, host-autoconf is needed to compile
++   host-autoconf !
 +
-+echo "<head>
-+<style type=\"text/css\">
-+table {
-+  width: 100%;
-+}
-+td {
-+  border: 1px solid black;
-+}
-+td.centered {
-+  text-align: center;
-+}
-+</style>
-+</head>
-+
-+<a href=\"#results\">Results</a><br/>
-+
-+<table>
-+<tr>
-+<td rowspan=\"2\">Id</td>
-+<td rowspan=\"2\">Package</td>
-+<td colspan=\"2\" class=\"centered\">AUTOTARGETS</td>
-+<td colspan=\"2\" class=\"centered\">GENTARGETS</td>
-+<td colspan=\"2\" class=\"centered\">manual</td>
-+<td rowspan=\"2\" class=\"centered\">Actions</td>
-+</tr>
-+<tr>
-+<td class=\"centered\">host</td>
-+<td class=\"centered\">target</td>
-+<td class=\"centered\">host</td>
-+<td class=\"centered\">target</td>
-+<td class=\"centered\">host</td>
-+<td class=\"centered\">target</td>
-+</tr>"
-+
-+convert_to_generic_target=0
-+convert_to_generic_host=0
-+convert_to_autotools=0
-+cnt=1
-+for i in $(find package/ -name '*.mk') ; do
-+
-+    if test $i = "package/mtd/mtd.mk" -o \
-+	$i = "package/java/java.mk" -o \
-+	$i = "package/database/database.mk" -o \
-+	$i = "package/editors/editors.mk" -o \
-+	$i = "package/games/games.mk" -o \
-+	$i = "package/multimedia/multimedia" -o \
-+	$i = "package/customize/customize.mk" -o \
-+	$i = "package/gnuconfig/gnuconfig.mk" -o \
-+	$i = "package/x11r7/x11r7.mk" ; then
-+	echo "skipping $i" 1>&2
-+	continue
-+    fi
-+
-+    found=0
-+
-+    echo "<tr>"
-+    echo "<td>$cnt</td>"
-+    cnt=$((cnt+1))
-+    echo "<td>$i</td>"
-+
-+    is_auto_host=0
-+    is_auto_target=0
-+    is_pkg_target=0
-+    is_pkg_host=0
-+    is_manual_target=0
-+    is_manual_host=0
-+
-+    echo "<td class=\"centered\">"
-+    if grep -E "\(call AUTOTARGETS,[^,]*,[^,]*,host\)" $i > /dev/null ; then
-+	is_auto_host=1
-+	echo "<b>YES</b>"
-+    else
-+	echo "NO"
-+    fi
-+
-+    echo "<td class=\"centered\">"
-+    if grep -E "\(call AUTOTARGETS,[^,]*,[^,]*(,target|)\)" $i > /dev/null ; then
-+	found=1
-+	is_auto_target=1
-+	echo "<b>YES</b>"
-+    else
-+	echo "NO"
-+    fi
-+    echo "</td>"
-+
-+    echo "<td class=\"centered\">"
-+    if grep -E "\(call GENTARGETS,[^,]*,[^,]*,host\)" $i > /dev/null ; then
-+	found=1
-+	is_pkg_host=1
-+	echo "<b>YES</b>"
-+    else
-+	echo "NO"
-+    fi
-+    echo "</td>"
-+
-+    echo "<td class=\"centered\">"
-+    if grep -E "\(call GENTARGETS,[^,]*,[^,]*(,target|)\)" $i > /dev/null ; then
-+	found=1
-+	is_pkg_target=1
-+	echo "<b>YES</b>"
-+    else
-+	echo "NO"
-+    fi
-+    echo "</td>"
-+
-+    pkg=$(basename $i)
-+    pkg=${pkg%.mk}
-+
-+    echo "<td class=\"centered\">"
-+    if grep "^host-$pkg:" $i > /dev/null ; then
-+	found=1
-+	is_manual_host=1
-+	echo "<b>YES</b>"
-+    else
-+	echo "NO"
-+    fi
-+    echo "</td>"
-+
-+    echo "<td class=\"centered\">"
-+    if grep "^$pkg:" $i > /dev/null ; then
-+	found=1
-+	is_manual_target=1
-+	echo "<b>YES</b>"
-+    else
-+	echo "NO"
-+    fi
-+    echo "</td>"
-+
-+    echo "<td>"
-+    echo "<ul>"
-+    if [ $is_manual_target -eq 1 ]; then
-+	echo "<li>convert to generic target</li>"
-+	convert_to_generic_target=$((convert_to_generic_target+1))
-+    fi
-+    if [ $is_manual_host -eq 1 ]; then
-+	echo "<li>convert to generic host</li>"
-+	convert_to_generic_host=$((convert_to_generic_host+1))
-+    fi
-+    if grep "\./configure" $i > /dev/null ; then
-+	if [ $is_manual_host -ne 1 ] ; then
-+	    echo "<li>convert package to autotools ?</li>"
-+	    convert_to_autotools=$((convert_to_autotools+1))
-+	fi
-+    fi
-+    if [ $found -eq 0 ] ; then
-+	echo "<li>look manually</li>"
-+    fi
-+    echo "</ul>"
-+    echo "</td>"
-+
-+    echo "</tr>"
-+
-+done
-+echo "</table>"
-+
-+echo "<table>"
-+echo "<tr>"
-+echo "<td>Packages to convert to generic target</td>"
-+echo "<td>$convert_to_generic_target</td>"
-+echo "</tr>"
-+echo "<tr>"
-+echo "<td>Packages to convert to generic host</td>"
-+echo "<td>$convert_to_generic_host</td>"
-+echo "</tr>"
-+echo "<tr>"
-+echo "<td>Packages to convert to autotools</td>"
-+echo "<td>$convert_to_autotools</td>"
-+echo "</tr>"
-+echo "<tr>"
-+echo "<td>TOTAL</td>"
-+echo "<td>$cnt</td>"
-+echo "</tr>"
-+echo "</table>"
++Index: autoconf-2.65.old/configure
++===================================================================
++--- autoconf-2.65.old.orig/configure	2009-12-15 16:11:05.175566911 +0100
+++++ autoconf-2.65.old/configure	2009-12-15 16:11:37.739562146 +0100
++@@ -2380,7 +2380,7 @@
++       ac_snippet=change'quote(<,>)in''dir(<if''def>,mac,bug)'
++       ac_snippet=${ac_snippet}pat'subst(a,\(b\)\|\(a\),\1)d'nl
++       test -z "`$ac_path_M4 -F conftest.m4f </dev/null 2>&1`" \
++-      && test -z "`echo $ac_snippet | $ac_path_M4 --trace=mac 2>&1`" \
+++      && test -z "`$as_echo $ac_snippet | $ac_path_M4 --trace=mac 2>&1`" \
++       && test -f conftest.m4f \
++       && ac_cv_path_M4=$ac_path_M4 ac_path_M4_found=:
++       rm -f conftest.m4f
++Index: autoconf-2.65.old/m4/m4.m4
++===================================================================
++--- autoconf-2.65.old.orig/m4/m4.m4	2009-12-15 16:11:05.207566124 +0100
+++++ autoconf-2.65.old/m4/m4.m4	2009-12-15 16:11:18.595562030 +0100
++@@ -29,7 +29,7 @@
++       ac_snippet=change'quote(<,>)in''dir(<if''def>,mac,bug)'
++       ac_snippet=${ac_snippet}pat'subst(a,\(b\)\|\(a\),\1)d'nl
++       test -z "`$ac_path_M4 -F conftest.m4f </dev/null 2>&1`" \
++-      && test -z "`echo $ac_snippet | $ac_path_M4 --trace=mac 2>&1`" \
+++      && test -z "`AS_ECHO([$ac_snippet]) | $ac_path_M4 --trace=mac 2>&1`" \
++       && test -f conftest.m4f \
++       && ac_cv_path_M4=$ac_path_M4 ac_path_M4_found=:
++       rm -f conftest.m4f],
 -- 
 1.6.3.3
