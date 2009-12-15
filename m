@@ -1,24 +1,48 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 15 Dec 2009 12:39:01 +0100
-Subject: [Buildroot] [pull request] Pull request for branch
-	gcc-pkgversion-fix
-In-Reply-To: <cover.1260875280.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Tue, 15 Dec 2009 12:08:08 +0100")
-References: <cover.1260875280.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87hbrspiui.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 15 Dec 2009 12:03:05 +0100
+Subject: [Buildroot] [git commit master] gcc: do not pass --with-pkgversion
+	to gcc < 4.3
+Message-ID: <20091215113914.D90FC777C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> The following changes since commit 687d0958a31f6aee8e8e4d26360961327049d9a8:
- Thomas>   Peter Korsgaard (1):
- Thomas>         toolchain/uClibc: avr32 patch should apply to 0.9.30.1
+commit: http://git.buildroot.net/buildroot/commit/?id=962ea5b29b0ce1966359688f2dffc173073575c8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Pulled and pushed, thanks!
+Commit 09c181f2891276c458de327d241151bab38bde0f added new options
+passed to gcc configure to set --with-pkgversion and --with-bugurl, to
+gcc >= gcc 4.3. To check this, it was checking that the GCC_VERSION
+string does not contain 4.2.
 
+Unfortunately, the test is bogus. It does a findstring on x4.2. (with
+a final dot) but compares the result with x4.2 (without the final
+dot).
+
+The result is that even with 4.2 versions, the test was true, leading
+--with-pkgversion and --with-bugurl being passed to gcc's configure
+script.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/gcc/gcc-uclibc-4.x.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
+index 32f7a1e..6f65cb3 100644
+--- a/toolchain/gcc/gcc-uclibc-4.x.mk
++++ b/toolchain/gcc/gcc-uclibc-4.x.mk
+@@ -45,7 +45,7 @@ GCC_NO_MPFR:=y
+ endif
+ 
+ # Branding works on >= 4.3
+-ifneq ($(findstring x4.2.,x$(GCC_VERSION)),x4.2)
++ifneq ($(findstring x4.2.,x$(GCC_VERSION)),x4.2.)
+ BUILDROOT_VERSION_STRING=$(call qstrip,$(BR2_VERSION))
+ EXTRA_GCC_CONFIG_OPTIONS+=--with-pkgversion="Buildroot $(BUILDROOT_VERSION_STRING)" \
+ 	--with-bugurl="http://bugs.buildroot.net/"
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
