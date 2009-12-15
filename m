@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2009 20:30:55 +0100
-Subject: [Buildroot] [PATCH 24/39] shared-mime-info: convert to autotools
-	infrastructure for host package
+Date: Tue, 15 Dec 2009 20:30:58 +0100
+Subject: [Buildroot] [PATCH 27/39] gob2: convert to autotools infrastructure
+	for host package
 In-Reply-To: <cover.1260905467.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1260905467.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <c01c5010ac9cb24136ad0a678e1f49048e5389fd.1260905467.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <c009e4e3d79bd3e37acfb54afa4cf65e49553f4e.1260905467.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,77 +13,64 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/shared-mime-info/shared-mime-info.mk |   52 +++----------------------
- 1 files changed, 7 insertions(+), 45 deletions(-)
+ package/gob2/gob2.mk |   44 +++-----------------------------------------
+ 1 files changed, 3 insertions(+), 41 deletions(-)
 
-diff --git a/package/shared-mime-info/shared-mime-info.mk b/package/shared-mime-info/shared-mime-info.mk
-index b1833bb..cfd3521 100644
---- a/package/shared-mime-info/shared-mime-info.mk
-+++ b/package/shared-mime-info/shared-mime-info.mk
-@@ -16,57 +16,19 @@ SHARED_MIME_INFO_DEPENDENCIES = host-pkg-config host-libglib2 host-libxml2 libxm
+diff --git a/package/gob2/gob2.mk b/package/gob2/gob2.mk
+index e640ca9..cdf7961 100644
+--- a/package/gob2/gob2.mk
++++ b/package/gob2/gob2.mk
+@@ -9,48 +9,10 @@ GOB2_SITE = http://ftp.5z.com/pub/gob/
  
- SHARED_MIME_INFO_CONF_OPT = --disable-update-mimedb
+ GOB2_DEPENDENCIES = libglib2 flex bison host-pkg-config
  
--$(eval $(call AUTOTARGETS,package,shared-mime-info))
-+HOST_SHARED_MIME_INFO_DEPENDENCIES = host-pkg-config
++HOST_GOB2_DEPENDENCIES = host-libglib2
 +
-+HOST_SHARED_MIME_INFO_CONF_OPT = \
-+	--disable-update-mimedb
+ $(eval $(call AUTOTARGETS,package,gob2))
++$(eval $(call AUTOTARGETS,package,gob2,host))
  
-+$(eval $(call AUTOTARGETS,package,shared-mime-info))
-+$(eval $(call AUTOTARGETS,package,shared-mime-info,host))
- 
- # shared-mime-info for the host
--SHARED_MIME_INFO_HOST_DIR:=$(BUILD_DIR)/shared-mime-info-$(SHARED_MIME_INFO_VERSION)-host
- SHARED_MIME_INFO_HOST_BINARY:=$(HOST_DIR)/usr/bin/update-mime-database
- 
--$(DL_DIR)/$(SHARED_MIME_INFO_SOURCE):
--	$(call DOWNLOAD,$(SHARED_MIME_INFO_SITE),$(SHARED_MIME_INFO_SOURCE))
+ # gob2 for the host
+-GOB2_HOST_DIR:=$(BUILD_DIR)/gob2-$(GOB2_VERSION)-host
+ GOB2_HOST_BINARY:=$(HOST_DIR)/usr/bin/gob2
 -
--$(STAMP_DIR)/host_shared-mime-info_unpacked: $(DL_DIR)/$(SHARED_MIME_INFO_SOURCE)
--	mkdir -p $(SHARED_MIME_INFO_HOST_DIR)
--	$(INFLATE$(suffix $(SHARED_MIME_INFO_SOURCE))) $< | \
--		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(SHARED_MIME_INFO_HOST_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(SHARED_MIME_INFO_HOST_DIR) package/shared-mime-info/ \*.patch
+-$(DL_DIR)/$(GOB2_SOURCE):
+-	$(call DOWNLOAD,$(GOB2_SITE),$(GOB2_SOURCE))
+-
+-$(STAMP_DIR)/host_gob2_unpacked: $(DL_DIR)/$(GOB2_SOURCE)
+-	mkdir -p $(GOB2_HOST_DIR)
+-	$(INFLATE$(suffix $(GOB2_SOURCE))) $< | \
+-		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(GOB2_HOST_DIR) $(TAR_OPTIONS) -
 -	touch $@
 -
--$(STAMP_DIR)/host_shared-mime-info_configured: $(STAMP_DIR)/host_shared-mime-info_unpacked $(STAMP_DIR)/host_pkgconfig_installed
--	(cd $(SHARED_MIME_INFO_HOST_DIR); rm -rf config.cache; \
+-$(STAMP_DIR)/host_gob2_configured: $(STAMP_DIR)/host_gob2_unpacked $(STAMP_DIR)/host_libglib2_installed
+-	(cd $(GOB2_HOST_DIR); rm -rf config.cache; \
 -		$(HOST_CONFIGURE_OPTS) \
 -		CFLAGS="$(HOST_CFLAGS)" \
 -		LDFLAGS="$(HOST_LDFLAGS)" \
 -		./configure $(QUIET) \
 -		--prefix="$(HOST_DIR)/usr" \
 -		--sysconfdir="$(HOST_DIR)/etc" \
--		--disable-update-mimedb \
 -	)
 -	touch $@
 -
--$(STAMP_DIR)/host_shared-mime-info_compiled: $(STAMP_DIR)/host_shared-mime-info_configured
--	$(MAKE) -C $(SHARED_MIME_INFO_HOST_DIR)
+-$(STAMP_DIR)/host_gob2_compiled: $(STAMP_DIR)/host_gob2_configured
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(GOB2_HOST_DIR)
 -	touch $@
 -
--$(STAMP_DIR)/host_shared-mime-info_installed: $(STAMP_DIR)/host_shared-mime-info_compiled
--	$(HOST_MAKE_ENV) $(MAKE) -C $(SHARED_MIME_INFO_HOST_DIR) install
+-$(STAMP_DIR)/host_gob2_installed: $(STAMP_DIR)/host_gob2_compiled
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(GOB2_HOST_DIR) install
 -	touch $@
 -
--host-shared-mime-info: $(STAMP_DIR)/host_shared-mime-info_installed
+-host-gob2: $(STAMP_DIR)/host_gob2_installed
 -
--host-shared-mime-info-source: shared-mime-info-source
+-host-gob2-source: gob2-source
 -
--host-shared-mime-info-clean:
--	rm -f $(addprefix $(STAMP_DIR)/host_shared-mime-info_,unpacked configured compiled installed)
--	-$(MAKE) -C $(SHARED_MIME_INFO_HOST_DIR) uninstall
--	-$(MAKE) -C $(SHARED_MIME_INFO_HOST_DIR) clean
+-host-gob2-clean:
+-	rm -f $(addprefix $(STAMP_DIR)/host_gob2_,unpacked configured compiled installed)
+-	-$(MAKE) -C $(GOB2_HOST_DIR) uninstall
+-	-$(MAKE) -C $(GOB2_HOST_DIR) clean
 -
--host-shared-mime-info-dirclean:
--	rm -rf $(SHARED_MIME_INFO_HOST_DIR)
--
- # update the shared-mime-info database in the target
--$(SHARED_MIME_INFO_HOOK_POST_INSTALL): $(STAMP_DIR)/host_shared-mime-info_installed
-+$(SHARED_MIME_INFO_HOOK_POST_INSTALL): host-shared-mime-info
- 	$(SHARED_MIME_INFO_HOST_BINARY) $(STAGING_DIR)/usr/share/mime
- 	$(INSTALL) -D $(STAGING_DIR)/usr/share/mime/mime.cache $(TARGET_DIR)/usr/share/mime/mime.cache
- 	touch $@
+-host-gob2-dirclean:
+-	rm -rf $(GOB2_HOST_DIR)
 -- 
 1.6.3.3
