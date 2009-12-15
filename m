@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2009 12:23:29 +0100
-Subject: [Buildroot] [PATCH 1/2] uclibc: get rid of avr32 special version
-	since upstream works
+Date: Tue, 15 Dec 2009 12:23:30 +0100
+Subject: [Buildroot] [PATCH 2/2] update avr32 defconfigs after uclibc avr32
+	version removal
 In-Reply-To: <cover.1260876205.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1260876205.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <4e813d99f98f5abc578bf56e5feffdfb34beedc0.1260876205.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <8913798baf56e18fc8e9d07db82b2fd2421e670f.1260876205.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,110 +13,77 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/uClibc/Config.in                         |   12 +-------
- ...uClibc-0.9.30-avr32-2.1.5-unifdef-getline.patch |   29 --------------------
- toolchain/uClibc/uclibc.mk                         |    2 -
- 3 files changed, 1 insertions(+), 42 deletions(-)
- delete mode 100644 toolchain/uClibc/uClibc-0.9.30-avr32-2.1.5-unifdef-getline.patch
+ configs/atngw100-base_defconfig |    5 ++---
+ configs/atngw100_defconfig      |    5 ++---
+ configs/atstk1005_defconfig     |    3 ++-
+ configs/atstk100x_defconfig     |    5 ++---
+ 4 files changed, 8 insertions(+), 10 deletions(-)
 
-diff --git a/toolchain/uClibc/Config.in b/toolchain/uClibc/Config.in
-index cc7dcd1..16708a6 100644
---- a/toolchain/uClibc/Config.in
-+++ b/toolchain/uClibc/Config.in
-@@ -5,8 +5,7 @@ comment "uClibc Options"
- 
- choice
- 	prompt "uClibc C library Version"
--	default BR2_UCLIBC_VERSION_0_9_30_1 if !BR2_avr32
--	default BR2_UCLIBC_VERSION_0_9_30_AVR32_2_1_5 if BR2_avr32
-+	default BR2_UCLIBC_VERSION_0_9_30_1
- 	help
- 	  Select the version of uClibc you wish to use.
- 
-@@ -21,20 +20,13 @@ choice
- 		bool "uClibc 0.9.29"
- 
- 	config BR2_UCLIBC_VERSION_0_9_30
--		depends on !BR2_avr32
- 		depends on BR2_RECENT || BR2_DEPRECATED
- 		bool "uClibc 0.9.30"
- 
--	config BR2_UCLIBC_VERSION_0_9_30_AVR32_2_1_5
--		depends on BR2_avr32
--		bool "uClibc 0.9.30-avr32-2.1.5"
--
- 	config BR2_UCLIBC_VERSION_0_9_30_1
--		depends on !BR2_avr32
- 		bool "uClibc 0.9.30.1"
- 
- 	config BR2_UCLIBC_VERSION_SNAPSHOT
--		depends on !BR2_avr32
- 		bool "daily snapshot"
- 
- endchoice
-@@ -52,7 +44,6 @@ config BR2_UCLIBC_VERSION_STRING
- 	default 0.9.29		if BR2_UCLIBC_VERSION_0_9_29
- 	default 0.9.30		if BR2_UCLIBC_VERSION_0_9_30
- 	default 0.9.30.1	if BR2_UCLIBC_VERSION_0_9_30_1
--	default 0.9.30-avr32-2.1.5 if BR2_UCLIBC_VERSION_0_9_30_AVR32_2_1_5
- 	default $BR2_USE_UCLIBC_SNAPSHOT	if BR2_UCLIBC_VERSION_SNAPSHOT
- 
- config BR2_UCLIBC_CONFIG
-@@ -61,7 +52,6 @@ config BR2_UCLIBC_CONFIG
- 	default "toolchain/uClibc/uClibc-0.9.29.config" if BR2_UCLIBC_VERSION_0_9_29
- 	default "toolchain/uClibc/uClibc-0.9.30.config" if BR2_UCLIBC_VERSION_0_9_30
- 	default "toolchain/uClibc/uClibc-0.9.30.config" if BR2_UCLIBC_VERSION_0_9_30_1
--	default "toolchain/uClibc/uClibc-0.9.30.config" if BR2_UCLIBC_VERSION_0_9_30_AVR32_2_1_5
- 	default "toolchain/uClibc/uClibc-snapshot.config" if BR2_UCLIBC_VERSION_SNAPSHOT
- 	help
- 	  Some people may wish to use their own modified uClibc configuration
-diff --git a/toolchain/uClibc/uClibc-0.9.30-avr32-2.1.5-unifdef-getline.patch b/toolchain/uClibc/uClibc-0.9.30-avr32-2.1.5-unifdef-getline.patch
-deleted file mode 100644
-index eb88884..0000000
---- a/toolchain/uClibc/uClibc-0.9.30-avr32-2.1.5-unifdef-getline.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
----- uClibc-0.9.30.1.orig/extra/scripts/unifdef.c
--+++ uClibc-0.9.30.1/extra/scripts/unifdef.c
--@@ -206,7 +206,7 @@ static void             done(void);
-- static void             error(const char *);
-- static int              findsym(const char *);
-- static void             flushline(bool);
---static Linetype         getline(void);
--+static Linetype         get_line(void);
-- static Linetype         ifeval(const char **);
-- static void             ignoreoff(void);
-- static void             ignoreon(void);
--@@ -512,7 +512,7 @@ process(void)
-- 
-- 	for (;;) {
-- 		linenum++;
---		lineval = getline();
--+		lineval = get_line();
-- 		trans_table[ifstate[depth]][lineval]();
-- 		debug("process %s -> %s depth %d",
-- 		    linetype_name[lineval],
--@@ -526,7 +526,7 @@ process(void)
--  * help from skipcomment().
--  */
-- static Linetype
---getline(void)
--+get_line(void)
-- {
-- 	const char *cp;
-- 	int cursym;
-diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
-index f742d4e..7cd9acf 100644
---- a/toolchain/uClibc/uclibc.mk
-+++ b/toolchain/uClibc/uclibc.mk
-@@ -16,8 +16,6 @@ UCLIBC_VERSION:=$(call qstrip,$(BR2_UCLIBC_VERSION_STRING))
- 
- ifeq ($(BR2_UCLIBC_VERSION_SNAPSHOT),y)
- UCLIBC_SITE:=http://www.uclibc.org/downloads/snapshots
--else ifeq ($(findstring avr32,$(UCLIBC_VERSION)),avr32)
--UCLIBC_SITE:=ftp://www.at91.com/pub/buildroot/
- else
- UCLIBC_SITE:=http://www.uclibc.org/downloads
- endif
+diff --git a/configs/atngw100-base_defconfig b/configs/atngw100-base_defconfig
+index 14417c9..d89daa1 100644
+--- a/configs/atngw100-base_defconfig
++++ b/configs/atngw100-base_defconfig
+@@ -161,10 +161,9 @@ BR2_DEFAULT_KERNEL_HEADERS="2.6.29.2"
+ # BR2_UCLIBC_VERSION_0_9_28_3 is not set
+ # BR2_UCLIBC_VERSION_0_9_29 is not set
+ # BR2_UCLIBC_VERSION_0_9_30 is not se
+-BR2_UCLIBC_VERSION_0_9_30_AVR32_2_1_5=y
+-# BR2_UCLIBC_VERSION_0_9_30_1 is not set
++BR2_UCLIBC_VERSION_0_9_30_1=y
+ # BR2_UCLIBC_VERSION_SNAPSHOT is not set
+-BR2_UCLIBC_VERSION_STRING="0.9.30-avr32-2.1.5"
++BR2_UCLIBC_VERSION_STRING="0.9.30.1"
+ BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.30.config"
+ # BR2_PTHREAD_DEBUG is not set
+ # BR2_PROGRAM_INVOCATION is not set
+diff --git a/configs/atngw100_defconfig b/configs/atngw100_defconfig
+index 093c92c..6e244eb 100644
+--- a/configs/atngw100_defconfig
++++ b/configs/atngw100_defconfig
+@@ -161,10 +161,9 @@ BR2_DEFAULT_KERNEL_HEADERS="2.6.29.2"
+ # BR2_UCLIBC_VERSION_0_9_28_3 is not set
+ # BR2_UCLIBC_VERSION_0_9_29 is not set
+ # BR2_UCLIBC_VERSION_0_9_30 is not set
+-BR2_UCLIBC_VERSION_0_9_30_AVR32_2_1_5=y
+-# BR2_UCLIBC_VERSION_0_9_30_1 is not set
++BR2_UCLIBC_VERSION_0_9_30_1=y
+ # BR2_UCLIBC_VERSION_SNAPSHOT is not set
+-BR2_UCLIBC_VERSION_STRING="0.9.30-avr32-2.1.5"
++BR2_UCLIBC_VERSION_STRING="0.9.30.1"
+ BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.30.config"
+ # BR2_PTHREAD_DEBUG is not set
+ # BR2_PROGRAM_INVOCATION is not set
+diff --git a/configs/atstk1005_defconfig b/configs/atstk1005_defconfig
+index 075a871..ffca235 100644
+--- a/configs/atstk1005_defconfig
++++ b/configs/atstk1005_defconfig
+@@ -169,8 +169,9 @@ BR2_DEFAULT_KERNEL_HEADERS="2.6.28.2"
+ # BR2_UCLIBC_VERSION_0_9_28_3 is not set
+ # BR2_UCLIBC_VERSION_0_9_29 is not set
+ # BR2_UCLIBC_VERSION_0_9_30 is not set
++BR2_UCLIBC_VERSION_0_9_30_1=y
+ # BR2_UCLIBC_VERSION_SNAPSHOT is not set
+-BR2_UCLIBC_VERSION_STRING="0.9.30-avr32-2.1.5"
++BR2_UCLIBC_VERSION_STRING="0.9.30.1"
+ BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.30.config"
+ # BR2_PTHREAD_DEBUG is not set
+ # BR2_PROGRAM_INVOCATION is not set
+diff --git a/configs/atstk100x_defconfig b/configs/atstk100x_defconfig
+index ad91b8d..0b75e47 100644
+--- a/configs/atstk100x_defconfig
++++ b/configs/atstk100x_defconfig
+@@ -160,10 +160,9 @@ BR2_DEFAULT_KERNEL_HEADERS="2.6.28.9"
+ # BR2_UCLIBC_VERSION_0_9_28_3 is not set
+ # BR2_UCLIBC_VERSION_0_9_29 is not set
+ # BR2_UCLIBC_VERSION_0_9_30 is not set
+-BR2_UCLIBC_VERSION_0_9_30_AVR32_2_1_5=y
+-# BR2_UCLIBC_VERSION_0_9_30_1 is not set
++BR2_UCLIBC_VERSION_0_9_30_1=y
+ # BR2_UCLIBC_VERSION_SNAPSHOT is not set
+-BR2_UCLIBC_VERSION_STRING="0.9.30-avr32-2.1.5"
++BR2_UCLIBC_VERSION_STRING="0.9.30.1"
+ BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.30.config"
+ # BR2_PTHREAD_DEBUG is not set
+ BR2_PROGRAM_INVOCATION=y
 -- 
 1.6.3.3
