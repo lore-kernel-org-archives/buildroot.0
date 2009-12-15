@@ -1,8 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2009 12:08:08 +0100
-Subject: [Buildroot] [pull request] Pull request for branch
-	gcc-pkgversion-fix
-Message-ID: <cover.1260875280.git.thomas.petazzoni@free-electrons.com>
+Date: Tue, 15 Dec 2009 12:23:28 +0100
+Subject: [Buildroot] [pull request] Pull request for branch avr32-fixes
+Message-ID: <cover.1260876205.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,13 +14,21 @@ The following changes since commit 687d0958a31f6aee8e8e4d26360961327049d9a8:
 
 are available in the git repository at:
 
-  git://git.busybox.net/~tpetazzoni/git/buildroot gcc-pkgversion-fix
+  git://git.busybox.net/~tpetazzoni/git/buildroot avr32-fixes
 
-Thomas Petazzoni (1):
-      gcc: do not pass --with-pkgversion to gcc < 4.3
+Thomas Petazzoni (2):
+      uclibc: get rid of avr32 special version since upstream works
+      update avr32 defconfigs after uclibc avr32 version removal
 
- toolchain/gcc/gcc-uclibc-4.x.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ configs/atngw100-base_defconfig                    |    5 +--
+ configs/atngw100_defconfig                         |    5 +--
+ configs/atstk1005_defconfig                        |    3 +-
+ configs/atstk100x_defconfig                        |    5 +--
+ toolchain/uClibc/Config.in                         |   12 +-------
+ ...uClibc-0.9.30-avr32-2.1.5-unifdef-getline.patch |   29 --------------------
+ toolchain/uClibc/uclibc.mk                         |    2 -
+ 7 files changed, 9 insertions(+), 52 deletions(-)
+ delete mode 100644 toolchain/uClibc/uClibc-0.9.30-avr32-2.1.5-unifdef-getline.patch
 
 Thanks,
 -- 
