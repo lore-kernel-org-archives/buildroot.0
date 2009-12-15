@@ -1,30 +1,33 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Tue, 15 Dec 2009 17:49:06 +0100
-Subject: [Buildroot] mtd-utils  mkfs.ubifs build fails : can't find uuid.h
-Message-ID: <06EA853CB7CC4BCC80BC4655066CAE79@apexjs>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 15 Dec 2009 20:30:33 +0100
+Subject: [Buildroot] [PATCH 02/39] Define TARGET_MAKE_ENV similarly to
+	HOST_MAKE_ENV
+In-Reply-To: <cover.1260905467.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1260905467.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <497abb8211944fb5c9c012a52e9a630f220510a9.1260905467.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Makefile.in |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 8edd193..5b6161b 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -236,6 +236,8 @@ TARGET_CONFIGURE_ENV=\
+ 	LDFLAGS="$(TARGET_LDFLAGS)" \
+ 	FCFLAGS="$(TARGET_FCFLAGS)" \
  
-When building i noticed that the build of mkfs.ubifs fails.
-It seems to be that the uuid.h is missng from the staging include dir (
-staging_dir/usr/include/uuid/uuid.h)
- 
-The uuid lib is part of the e2fsprogs package and i think that its makefile
-should be modified so that the uuid.h is added to the staging_dir
- 
-Johan
- 
- 
- 
- 
- 
- 
- 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091215/c8ef649f/attachment.htm>
++TARGET_MAKE_ENV=PATH=$(TARGET_PATH)
++
+ HOST_CONFIGURE_OPTS=PATH=$(HOST_PATH) \
+ 		AR="$(HOSTAR)" \
+ 		AS="$(HOSTAS)" \
+-- 
+1.6.3.3
