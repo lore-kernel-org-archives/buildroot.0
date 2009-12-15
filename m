@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2009 20:30:36 +0100
-Subject: [Buildroot] [PATCH 05/39] zlib: rework on top of the generic
-	infrastructure
+Date: Tue, 15 Dec 2009 20:30:37 +0100
+Subject: [Buildroot] [PATCH 06/39] Add $(HOST_DIR)/usr/sbin to the PATH
 In-Reply-To: <cover.1260905467.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1260905467.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <9e1d5ccd4dc0f3f2a614baccb0b79ea3975e0629.1260905467.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <69fa47be3f71c2529cfb18042d9c0b2a978d9898.1260905467.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,129 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/zlib/zlib.mk |   93 +++++++++++++++----------------------------------
- 1 files changed, 29 insertions(+), 64 deletions(-)
+ package/Makefile.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/zlib/zlib.mk b/package/zlib/zlib.mk
-index f207bcf..5365b30 100644
---- a/package/zlib/zlib.mk
-+++ b/package/zlib/zlib.mk
-@@ -5,31 +5,19 @@
- #############################################################
- ZLIB_VERSION:=1.2.3
- ZLIB_SOURCE:=zlib-$(ZLIB_VERSION).tar.bz2
--ZLIB_CAT:=$(BZCAT)
- ZLIB_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/libpng
--ZLIB_DIR:=$(BUILD_DIR)/zlib-$(ZLIB_VERSION)
--
--$(DL_DIR)/$(ZLIB_SOURCE):
--	$(call DOWNLOAD,$(ZLIB_SITE),$(ZLIB_SOURCE))
--
--$(ZLIB_DIR)/.patched: $(DL_DIR)/$(ZLIB_SOURCE)
--	$(ZLIB_CAT) $(DL_DIR)/$(ZLIB_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(ZLIB_DIR) package/zlib/ zlib\*.patch
--	$(CONFIG_UPDATE) $(@D)
--	touch $@
-+ZLIB_INSTALL_STAGING=YES
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 5b6161b..e643577 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -109,7 +109,7 @@ ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+ TOOLCHAIN_DIR=$(BASE_DIR)/toolchain
  
- ifeq ($(BR2_PREFER_STATIC_LIB),y)
- ZLIB_PIC :=
- ZLIB_SHARED :=
--ZLIB_TARGET := $(STAGING_DIR)/usr/lib/libz.a
- else
- ZLIB_PIC := -fPIC
- ZLIB_SHARED := --shared
--ZLIB_TARGET := $(TARGET_DIR)/usr/lib/libz.so
- endif
+ # Quotes are needed for spaces et al in path components.
+-TARGET_PATH="$(TOOLCHAIN_DIR)/bin:$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(STAGING_DIR)/bin:$(STAGING_DIR)/usr/bin:$(PATH)"
++TARGET_PATH="$(TOOLCHAIN_DIR)/bin:$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin/:$(STAGING_DIR)/bin:$(STAGING_DIR)/usr/bin:$(PATH)"
+ IMAGE:=$(BINARIES_DIR)/$(BR2_ROOTFS_PREFIX).$(ARCH)$(ROOTFS_SUFFIX)
+ GNU_TARGET_NAME=$(OPTIMIZE_FOR_CPU)-linux
+ REAL_GNU_TARGET_NAME=$(OPTIMIZE_FOR_CPU)$(GNU_TARGET_SUFFIX)
+@@ -119,7 +119,7 @@ else
+ TOOLCHAIN_EXTERNAL_PREFIX:=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))
+ TOOLCHAIN_EXTERNAL_PATH:=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PATH))
+ TOOLCHAIN_DIR=$(BASE_DIR)/toolchain
+-TARGET_PATH="$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(TOOLCHAIN_DIR)/bin:$(TOOLCHAIN_EXTERNAL_PATH)/bin:$(PATH)"
++TARGET_PATH="$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin/:$(TOOLCHAIN_DIR)/bin:$(TOOLCHAIN_EXTERNAL_PATH)/bin:$(PATH)"
+ #IMAGE:=$(BINARIES_DIR)/$(BR2_ROOTFS_PREFIX).$(TOOLCHAIN_EXTERNAL_PREFIX)$(ROOTFS_SUFFIX)
+ IMAGE:=$(BINARIES_DIR)/$(BR2_ROOTFS_PREFIX).$(ARCH)$(ROOTFS_SUFFIX)
  
--$(ZLIB_DIR)/.configured: $(ZLIB_DIR)/.patched
--	(cd $(ZLIB_DIR); rm -rf config.cache; \
-+define ZLIB_CONFIGURE_CMDS
-+	(cd $(@D); rm -rf config.cache; \
- 		$(TARGET_CONFIGURE_ARGS) \
- 		$(TARGET_CONFIGURE_OPTS) \
- 		CFLAGS="$(TARGET_CFLAGS) $(ZLIB_PIC)" \
-@@ -40,55 +28,32 @@ $(ZLIB_DIR)/.configured: $(ZLIB_DIR)/.patched
- 		--libdir=$(STAGING_DIR)/usr/lib \
- 		--includedir=$(STAGING_DIR)/usr/include \
- 	)
--	touch $@
--
--$(ZLIB_DIR)/libz.a: $(ZLIB_DIR)/.configured
--	$(MAKE) -C $(ZLIB_DIR) all libz.a
--	touch -c $@
--
--$(STAGING_DIR)/usr/lib/libz.a: $(ZLIB_DIR)/libz.a
--	$(INSTALL) -D $(ZLIB_DIR)/libz.a $(STAGING_DIR)/usr/lib/libz.a
--	$(INSTALL) -D $(ZLIB_DIR)/zlib.h $(STAGING_DIR)/usr/include/zlib.h
--	$(INSTALL) $(ZLIB_DIR)/zconf.h $(STAGING_DIR)/usr/include/
--	touch -c $@
--
--$(STAGING_DIR)/usr/lib/libz.so: $(STAGING_DIR)/usr/lib/libz.a
--	cp -dpf $(ZLIB_DIR)/libz.so* $(STAGING_DIR)/usr/lib/
--	touch -c $@
-+endef
-+
-+define ZLIB_BUILD_CMDS
-+	$(MAKE) -C $(@D) all libz.a
-+endef
-+
-+define ZLIB_INSTALL_STAGING_CMDS
-+	$(INSTALL) -D $(@D)/libz.a $(STAGING_DIR)/usr/lib/libz.a
-+	$(INSTALL) -D $(@D)/zlib.h $(STAGING_DIR)/usr/include/zlib.h
-+	$(INSTALL) $(@D)/zconf.h $(STAGING_DIR)/usr/include/
-+	cp -dpf $(@D)/libz.so* $(STAGING_DIR)/usr/lib/
-+endef
-+
-+ifeq ($(BR2_HAVE_DEVFILES),y)
-+define ZLIB_INSTALL_TARGET_HEADERS
-+	$(INSTALL) -D $(@D)/zlib.h $(STAGING_DIR)/usr/include/zlib.h
-+	$(INSTALL) $(@D)/zconf.h $(STAGING_DIR)/usr/include/
-+endef
-+endif
- 
--$(TARGET_DIR)/usr/lib/libz.so: $(STAGING_DIR)/usr/lib/libz.so
-+define ZLIB_INSTALL_TARGET_CMDS
- 	mkdir -p $(TARGET_DIR)/usr/lib
--	cp -dpf $(STAGING_DIR)/usr/lib/libz.so* $(TARGET_DIR)/usr/lib
--	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $@
--	touch -c $@
--
--$(TARGET_DIR)/usr/lib/libz.a: $(STAGING_DIR)/usr/lib/libz.a
--	$(INSTALL) -D $(STAGING_DIR)/usr/include/zlib.h $(TARGET_DIR)/usr/include/zlib.h
--	$(INSTALL) $(STAGING_DIR)/usr/include/zconf.h $(TARGET_DIR)/usr/include/
--	$(INSTALL) -D $(STAGING_DIR)/usr/lib/libz.a $(TARGET_DIR)/usr/lib/libz.a
--	touch -c $@
--
--zlib: $(ZLIB_TARGET) $(if $(BR2_HAVE_DEVFILES),$(TARGET_DIR)/usr/lib/libz.a)
-+	cp -dpf $(@D)/libz.so* $(TARGET_DIR)/usr/lib
-+	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libz.so*
-+	$(INSTALL) -D $(@D)/libz.a $(TARGET_DIR)/usr/lib/libz.a
-+	$(ZLIB_INSTALL_TARGET_HEADERS)
-+endef
- 
--zlib-source: $(DL_DIR)/$(ZLIB_SOURCE)
--
--zlib-clean:
--	rm -f $(TARGET_DIR)/usr/lib/libz.* \
--	      $(TARGET_DIR)/usr/include/zlib.h \
--	      $(TARGET_DIR)/usr/include/zconf.h \
--	      $(STAGING_DIR)/usr/include/zlib.h \
--	      $(STAGING_DIR)/usr/include/zconf.h \
--	      $(STAGING_DIR)/usr/lib/libz.*
--	-$(MAKE) -C $(ZLIB_DIR) clean
--
--zlib-dirclean:
--	rm -rf $(ZLIB_DIR)
--
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(BR2_PACKAGE_ZLIB),y)
--TARGETS+=zlib
--endif
-+$(eval $(call GENTARGETS,package,zlib))
 -- 
 1.6.3.3
