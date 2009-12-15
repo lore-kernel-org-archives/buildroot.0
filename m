@@ -1,31 +1,62 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 15 Dec 2009 09:54:19 +0100
-Subject: [Buildroot] [PATCH 05/23] uclibc: add avr32 special version
-In-Reply-To: <20091215094939.4309e661@hcegtvedt.norway.atmel.com>
-	(Hans-Christian Egtvedt's message of "Tue, 15 Dec 2009 09:49:39
-	+0100")
-References: <cover.1260831891.git.thomas.petazzoni@free-electrons.com>
-	<3a24927a0e6f041a018085b5a7fc50312001fddc.1260831891.git.thomas.petazzoni@free-electrons.com>
-	<20091215081809.071a009e@hcegtvedt.norway.atmel.com>
-	<20091215092418.59c33ca8@surf>
-	<20091215093708.60baae3e@hcegtvedt.norway.atmel.com>
-	<87skbcpr0l.fsf@macbook.be.48ers.dk>
-	<20091215094939.4309e661@hcegtvedt.norway.atmel.com>
-Message-ID: <87ljh4pqh0.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 15 Dec 2009 10:41:07 +0100
+Subject: [Buildroot] [git commit master] uclibc: add prctl syscall fix for
+	AVR32 architecture
+Message-ID: <20091215094137.A130A777F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "HcE" == Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com> writes:
 
-Hi,
+commit: http://git.buildroot.net/buildroot/commit/?id=b4f01dcc10a94dc5ace8a6780fb41c4882fa617b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- HcE> I have no newer patch than the one I sent to the uClibc mailing list,
- HcE> or do you want a BR patch adding the uClibc patch?
+This patch fixes the prctl syscall for the AVR32 architecture, since this
+architecture assumes you handle varargs in a proper way, always.
 
-Yes, please - A file I can stick in toolchain/uClibc/.
+Signed-off-by: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ ...0.9.30-fix-varargs-in-prctl-syscall.patch.avr32 |   29 ++++++++++++++++++++
+ 1 files changed, 29 insertions(+), 0 deletions(-)
+ create mode 100644 toolchain/uClibc/uClibc-0.9.30-fix-varargs-in-prctl-syscall.patch.avr32
 
+diff --git a/toolchain/uClibc/uClibc-0.9.30-fix-varargs-in-prctl-syscall.patch.avr32 b/toolchain/uClibc/uClibc-0.9.30-fix-varargs-in-prctl-syscall.patch.avr32
+new file mode 100644
+index 0000000..8b27a84
+--- /dev/null
++++ b/toolchain/uClibc/uClibc-0.9.30-fix-varargs-in-prctl-syscall.patch.avr32
+@@ -0,0 +1,29 @@
++--- a/libc/sysdeps/linux/common/prctl.c
+++++ b/libc/sysdeps/linux/common/prctl.c
++@@ -12,6 +12,24 @@
++ /* psm: including sys/prctl.h would depend on kernel headers */
++ 
++ #ifdef __NR_prctl
++-extern int prctl (int, long, long, long, long);
++-_syscall5(int, prctl, int, option, long, arg2, long, arg3, long, arg4, long, arg5)
+++#define __NR___syscall_prctl	__NR_prctl
+++static inline _syscall5(int, __syscall_prctl, int, option, long, arg2, long, arg3, long,
+++		arg4, long, arg5);
+++
+++int prctl(int option, ...) {
+++	long arg2 = 0;
+++	long arg3 = 0;
+++	long arg4 = 0;
+++	long arg5 = 0;
+++	va_list ap;
+++
+++	va_start(ap, option);
+++	arg2 = va_arg(ap, long);
+++	arg3 = va_arg(ap, long);
+++	arg4 = va_arg(ap, long);
+++	arg5 = va_arg(ap, long);
+++	va_end(ap);
+++
+++	return __syscall_prctl(option, arg2, arg3, arg4, arg5);
+++}
++ #endif
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
