@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2009 20:31:07 +0100
-Subject: [Buildroot] [PATCH 36/39] i2c-tools: convert to the generic package
-	infrastructure
+Date: Tue, 15 Dec 2009 20:31:05 +0100
+Subject: [Buildroot] [PATCH 34/39] xproto_xproto: convert to autotools
+	infrastructure for host package
 In-Reply-To: <cover.1260905467.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1260905467.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <bc71ad7d5a46c1223fc7933362aab26e49137f98.1260905467.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <e8929df01711b7a5fe893c58fe14989e6e2a64b1.1260905467.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,66 +13,60 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/i2c-tools/i2c-tools.mk |   44 +++++++--------------------------------
- 1 files changed, 8 insertions(+), 36 deletions(-)
+ package/x11r7/xproto_xproto/xproto_xproto.mk |   44 +-------------------------
+ 1 files changed, 1 insertions(+), 43 deletions(-)
 
-diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
-index 5d28e1d..d419524 100644
---- a/package/i2c-tools/i2c-tools.mk
-+++ b/package/i2c-tools/i2c-tools.mk
-@@ -6,45 +6,17 @@
- I2C_TOOLS_VERSION:=3.0.2
- I2C_TOOLS_SOURCE:=i2c-tools-$(I2C_TOOLS_VERSION).tar.bz2
- I2C_TOOLS_SITE:=http://dl.lm-sensors.org/i2c-tools/releases/
--I2C_TOOLS_DIR:=$(BUILD_DIR)/i2c-tools-$(I2C_TOOLS_VERSION)
--I2C_TOOLS_BINARY:=tools/i2cdetect
--I2C_TOOLS_TARGET_BINARY:=usr/bin/i2cdetect
+diff --git a/package/x11r7/xproto_xproto/xproto_xproto.mk b/package/x11r7/xproto_xproto/xproto_xproto.mk
+index 879b554..ff2a042 100644
+--- a/package/x11r7/xproto_xproto/xproto_xproto.mk
++++ b/package/x11r7/xproto_xproto/xproto_xproto.mk
+@@ -12,46 +12,4 @@ XPROTO_XPROTO_INSTALL_STAGING = YES
+ XPROTO_XPROTO_INSTALL_TARGET = NO
  
--$(DL_DIR)/$(I2C_TOOLS_SOURCE):
--	$(call DOWNLOAD,$(I2C_TOOLS_SITE),$(I2C_TOOLS_SOURCE))
-+define I2C_TOOLS_BUILD_CMDS
-+ $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-+endef
- 
--$(I2C_TOOLS_DIR)/.unpacked: $(DL_DIR)/$(I2C_TOOLS_SOURCE)
--	$(BZCAT) $(DL_DIR)/$(I2C_TOOLS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(I2C_TOOLS_DIR) package/i2c-tools/ i2c-tools-$(I2C_TOOLS_VERSION)\*.patch
+ $(eval $(call AUTOTARGETS,package/x11r7,xproto_xproto))
+-
+-# xproto_xproto for the host
+-XPROTO_XPROTO_HOST_DIR:=$(BUILD_DIR)/xproto_xproto-$(XPROTO_XPROTO_VERSION)-host
+-
+-$(DL_DIR)/$(XPROTO_XPROTO_SOURCE):
+-	$(call DOWNLOAD,$(XPROTO_XPROTO_SITE),$(XPROTO_XPROTO_SOURCE))
+-
+-$(STAMP_DIR)/host_xproto_xproto_unpacked: $(DL_DIR)/$(XPROTO_XPROTO_SOURCE)
+-	mkdir -p $(XPROTO_XPROTO_HOST_DIR)
+-	$(INFLATE$(suffix $(XPROTO_XPROTO_SOURCE))) $< | \
+-		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(XPROTO_XPROTO_HOST_DIR) $(TAR_OPTIONS) -
 -	touch $@
 -
--$(I2C_TOOLS_DIR)/$(I2C_TOOLS_BINARY): $(I2C_TOOLS_DIR)/.unpacked
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(I2C_TOOLS_DIR)
+-$(STAMP_DIR)/host_xproto_xproto_configured: $(STAMP_DIR)/host_xproto_xproto_unpacked
+-	(cd $(XPROTO_XPROTO_HOST_DIR); rm -rf config.cache; \
+-		$(HOST_CONFIGURE_OPTS) \
+-		CFLAGS="$(HOST_CFLAGS)" \
+-		LDFLAGS="$(HOST_LDFLAGS)" \
+-		./configure $(QUIET) \
+-		--prefix="$(HOST_DIR)/usr" \
+-		--sysconfdir="$(HOST_DIR)/etc" \
+-	)
+-	touch $@
 -
--$(TARGET_DIR)/$(I2C_TOOLS_TARGET_BINARY): $(I2C_TOOLS_DIR)/$(I2C_TOOLS_BINARY)
--	$(INSTALL) -m 755 -d $(@D)
-+define I2C_TOOLS_INSTALL_TARGET_CMDS
- 	for i in i2cdump i2cget i2cset i2cdetect; \
- 	do \
--		$(INSTALL) -m 755 $(<D)/$$i $(@D); \
--		$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(@D)/$$i; \
-+		$(INSTALL) -m 755 $(@D)/tools/$$i $(TARGET_DIR)/usr/bin/$$i; \
-+		$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/bin/$$i; \
- 	done
-+endef
- 
--i2c-tools: $(TARGET_DIR)/$(I2C_TOOLS_TARGET_BINARY)
+-$(STAMP_DIR)/host_xproto_xproto_compiled: $(STAMP_DIR)/host_xproto_xproto_configured
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(XPROTO_XPROTO_HOST_DIR)
+-	touch $@
 -
--i2c-tools-source: $(DL_DIR)/$(I2C_TOOLS_SOURCE)
+-$(STAMP_DIR)/host_xproto_xproto_installed: $(STAMP_DIR)/host_xproto_xproto_compiled
+-	$(MAKE) -C $(XPROTO_XPROTO_HOST_DIR) install
+-	touch $@
 -
--i2c-tools-clean:
--	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,i2cdump i2cget i2cset i2cdetect)
--	-$(MAKE) -C $(I2C_TOOLS_DIR) clean
+-host-xproto_xproto: $(STAMP_DIR)/host_xproto_xproto_installed
 -
--i2c-tools-dirclean:
--	rm -rf $(I2C_TOOLS_DIR)
+-host-xproto_xproto-source: xproto_xproto-source
 -
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(BR2_PACKAGE_I2C_TOOLS),y)
--TARGETS+=i2c-tools
--endif
-+$(eval $(call GENTARGETS,package,i2c-tools))
+-host-xproto_xproto-clean:
+-	rm -f $(addprefix $(STAMP_DIR)/host_xproto_xproto_,unpacked configured compiled installed)
+-	-$(MAKE) -C $(XPROTO_XPROTO_HOST_DIR) uninstall
+-	-$(MAKE) -C $(XPROTO_XPROTO_HOST_DIR) clean
+-
+-host-xproto_xproto-dirclean:
+-	rm -rf $(XPROTO_XPROTO_HOST_DIR)
++$(eval $(call AUTOTARGETS,package/x11r7,xproto_xproto,host))
 -- 
 1.6.3.3
