@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2009 20:31:06 +0100
-Subject: [Buildroot] [PATCH 35/39] xutil_makedepend: convert to autotools
-	infrastructure for host package
+Date: Tue, 15 Dec 2009 20:31:10 +0100
+Subject: [Buildroot] [PATCH 39/39] documentation: slightly improve CSS
 In-Reply-To: <cover.1260905467.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1260905467.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <b9c569347d24a0ba90240ec6d74235375c320172.1260905467.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <a4eee8c3348fd47d84479eef63341779991e9db7.1260905467.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,63 +12,29 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xutil_makedepend/xutil_makedepend.mk |   46 +------------------
- 1 files changed, 3 insertions(+), 43 deletions(-)
+ docs/stylesheet.css |   10 ++++++++++
+ 1 files changed, 10 insertions(+), 0 deletions(-)
 
-diff --git a/package/x11r7/xutil_makedepend/xutil_makedepend.mk b/package/x11r7/xutil_makedepend/xutil_makedepend.mk
-index edbe251..b0bbafd 100644
---- a/package/x11r7/xutil_makedepend/xutil_makedepend.mk
-+++ b/package/x11r7/xutil_makedepend/xutil_makedepend.mk
-@@ -11,47 +11,7 @@ XUTIL_MAKEDEPEND_AUTORECONF = NO
- XUTIL_MAKEDEPEND_INSTALL_STAGING = NO
- XUTIL_MAKEDEPEND_INSTALL_TARGET = YES
+diff --git a/docs/stylesheet.css b/docs/stylesheet.css
+index 2c36417..ac938c5 100644
+--- a/docs/stylesheet.css
++++ b/docs/stylesheet.css
+@@ -49,6 +49,16 @@ h3 {
+ 	margin-left: 10px;
+ 	margin-right: 10px;
+ 	color: #336699;
++        border-bottom: 2px solid #336699;
++}
++
++h4 { 
++	font: italic normal 14pt georgia; 
++	letter-spacing: 1px; 
++	margin-bottom: 0px; 
++	margin-left: 10px;
++	margin-right: 10px;
++        border-bottom: 1px dashed black;
+ }
  
--$(eval $(call AUTOTARGETS,package/x11r7,xutil_makedepend))
--
--# makedepend for the host
--MAKEDEPEND_HOST_DIR:=$(BUILD_DIR)/makedepend-$(XUTIL_MAKEDEPEND_VERSION)-host
--
--$(DL_DIR)/$(XUTIL_MAKEDEPEND_SOURCE):
--	$(call DOWNLOAD,$(XUTIL_MAKEDEPEND_SITE),$(XUTIL_MAKEDEPEND_SOURCE))
--
--$(STAMP_DIR)/host_makedepend_unpacked: $(DL_DIR)/$(XUTIL_MAKEDEPEND_SOURCE)
--	mkdir -p $(MAKEDEPEND_HOST_DIR)
--	$(INFLATE$(suffix $(XUTIL_MAKEDEPEND_SOURCE))) $< | \
--		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(MAKEDEPEND_HOST_DIR) $(TAR_OPTIONS) -
--	touch $@
--
--$(STAMP_DIR)/host_makedepend_configured: $(STAMP_DIR)/host_makedepend_unpacked $(STAMP_DIR)/host_xproto_xproto_installed
--	(cd $(MAKEDEPEND_HOST_DIR); rm -rf config.cache; \
--		$(HOST_CONFIGURE_OPTS) \
--		CFLAGS="$(HOST_CFLAGS)" \
--		LDFLAGS="$(HOST_LDFLAGS)" \
--		./configure $(QUIET) \
--		--prefix="$(HOST_DIR)/usr" \
--		--sysconfdir="$(HOST_DIR)/etc" \
--	)
--	touch $@
--
--$(STAMP_DIR)/host_makedepend_compiled: $(STAMP_DIR)/host_makedepend_configured
--	$(HOST_MAKE_ENV) $(MAKE) -C $(MAKEDEPEND_HOST_DIR)
--	touch $@
-+HOST_XUTIL_MAKEDEPEND_DEPENDENCIES = host-xproto-xproto
- 
--$(STAMP_DIR)/host_makedepend_installed: $(STAMP_DIR)/host_makedepend_compiled
--	$(MAKE) -C $(MAKEDEPEND_HOST_DIR) install
--	touch $@
--
--host-makedepend: $(STAMP_DIR)/host_makedepend_installed
--
--host-makedepend-source: makedepend-source
--
--host-makedepend-clean:
--	rm -f $(addprefix $(STAMP_DIR)/host_makedepend_,unpacked configured compiled installed)
--	-$(MAKE) -C $(MAKEDEPEND_HOST_DIR) uninstall
--	-$(MAKE) -C $(MAKEDEPEND_HOST_DIR) clean
--
--host-makedepend-dirclean:
--	rm -rf $(MAKEDEPEND_HOST_DIR)
-+$(eval $(call AUTOTARGETS,package/x11r7,xutil_makedepend))
-+$(eval $(call AUTOTARGETS,package/x11r7,xutil_makedepend,host))
+ p {
 -- 
 1.6.3.3
