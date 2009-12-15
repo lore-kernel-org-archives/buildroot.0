@@ -1,24 +1,30 @@
-From: Michael S. Zick <minimod@morethan.org>
-Date: Tue, 15 Dec 2009 09:27:39 -0600
-Subject: [Buildroot] Target executible testing
-Message-ID: <200912150927.42207.minimod@morethan.org>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Tue, 15 Dec 2009 17:49:06 +0100
+Subject: [Buildroot] mtd-utils  mkfs.ubifs build fails : can't find uuid.h
+Message-ID: <06EA853CB7CC4BCC80BC4655066CAE79@apexjs>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Has anyone tried setting up a "Test Phase" in Buildroot?
-
-One that would pass the just created executable(s) to an
-simulator/emulator to runt the test routines that many
-"packages" come with.
-
-I seem to recall something similar discussed (implemented?)
-on the GCC list on the general subject of doing Canadian Cross
-compiles (which is what generating a native/native toolchain
-is called).
-
-Any such thing been done or even discussed as a Buildroot feature?
-
-Mike
+Hi
+ 
+When building i noticed that the build of mkfs.ubifs fails.
+It seems to be that the uuid.h is missng from the staging include dir (
+staging_dir/usr/include/uuid/uuid.h)
+ 
+The uuid lib is part of the e2fsprogs package and i think that its makefile
+should be modified so that the uuid.h is added to the staging_dir
+ 
+Johan
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091215/c8ef649f/attachment.htm>
