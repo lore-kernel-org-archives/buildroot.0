@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2009 20:30:45 +0100
-Subject: [Buildroot] [PATCH 14/39] cairo: convert to autotools
+Date: Tue, 15 Dec 2009 20:30:47 +0100
+Subject: [Buildroot] [PATCH 16/39] libtool: convert to autotools
 	infrastructure for host package
 In-Reply-To: <cover.1260905467.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1260905467.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <5d772cd06980e7e752123ba358e0d574b0fba308.1260905467.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <54ac0a4fb1995db36c08e1735432538e4026775c.1260905467.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,71 +13,74 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/cairo/cairo.mk |   48 +++++-------------------------------------------
- 1 files changed, 5 insertions(+), 43 deletions(-)
+ package/libtool/libtool.mk |   51 ++++++-------------------------------------
+ 1 files changed, 7 insertions(+), 44 deletions(-)
 
-diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
-index 2608e14..0ca99aa 100644
---- a/package/cairo/cairo.mk
-+++ b/package/cairo/cairo.mk
-@@ -79,53 +79,15 @@ else
- 	CAIRO_CONF_OPT += --disable-svg
+diff --git a/package/libtool/libtool.mk b/package/libtool/libtool.mk
+index 14d0835..bbabbb0 100644
+--- a/package/libtool/libtool.mk
++++ b/package/libtool/libtool.mk
+@@ -11,54 +11,17 @@ ifeq ($(BR2_ENABLE_DEBUG),y) # install-exec doesn't install aclocal stuff
+ LIBTOOL_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
  endif
  
--$(eval $(call AUTOTARGETS,package,cairo))
+-$(eval $(call AUTOTARGETS,package,libtool))
 -
--# cairo for the host
--CAIRO_HOST_DIR:=$(BUILD_DIR)/cairo-$(CAIRO_VERSION)-host
+-# libtool for the host
+-LIBTOOL_HOST_DIR:=$(BUILD_DIR)/libtool-$(LIBTOOL_VERSION)-host
 -
--$(DL_DIR)/$(CAIRO_SOURCE):
--	$(call DOWNLOAD,$(CAIRO_SITE),$(CAIRO_SOURCE))
-+HOST_CAIRO_DEPENDENCIES = host-pkg-config host-pixman host-fontconfig
- 
--$(STAMP_DIR)/host_cairo_unpacked: $(DL_DIR)/$(CAIRO_SOURCE)
--	mkdir -p $(CAIRO_HOST_DIR)
--	$(INFLATE$(suffix $(CAIRO_SOURCE))) $< | \
--		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(CAIRO_HOST_DIR) $(TAR_OPTIONS) -
+-# variables used by other packages
+-LIBTOOL:=$(HOST_DIR)/usr/bin/libtool
+-
+-$(DL_DIR)/$(LIBTOOL_SOURCE):
+-	$(call DOWNLOAD,$(LIBTOOL_SITE),$(LIBTOOL_SOURCE))
+-
+-$(STAMP_DIR)/host_libtool_unpacked: $(DL_DIR)/$(LIBTOOL_SOURCE)
+-	mkdir -p $(LIBTOOL_HOST_DIR)
+-	$(INFLATE$(suffix $(LIBTOOL_SOURCE))) $< | \
+-		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(LIBTOOL_HOST_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(LIBTOOL_HOST_DIR) package/libtool/ \*.patch
 -	touch $@
 -
--$(STAMP_DIR)/host_cairo_configured: $(STAMP_DIR)/host_cairo_unpacked $(STAMP_DIR)/host_pkgconfig_installed $(STAMP_DIR)/host_fontconfig_installed $(STAMP_DIR)/host_pixman_installed
--	(cd $(CAIRO_HOST_DIR); rm -rf config.cache; \
+-$(STAMP_DIR)/host_libtool_configured: $(STAMP_DIR)/host_libtool_unpacked
+-	(cd $(LIBTOOL_HOST_DIR); rm -rf config.cache; \
 -		$(HOST_CONFIGURE_OPTS) \
 -		CFLAGS="$(HOST_CFLAGS)" \
 -		LDFLAGS="$(HOST_LDFLAGS)" \
 -		./configure $(QUIET) \
 -		--prefix="$(HOST_DIR)/usr" \
 -		--sysconfdir="$(HOST_DIR)/etc" \
-+HOST_CAIRO_CONF_OPT = \
- 		--enable-ps \
- 		--enable-pdf \
- 		--enable-xlib \
- 		--with-x \
- 		--disable-png \
--		--disable-svg \
+-		--disable-static \
 -	)
 -	touch $@
 -
--$(STAMP_DIR)/host_cairo_compiled: $(STAMP_DIR)/host_cairo_configured
--	$(HOST_MAKE_ENV) $(MAKE) -C $(CAIRO_HOST_DIR)
+-$(STAMP_DIR)/host_libtool_compiled: $(STAMP_DIR)/host_libtool_configured
+-	$(MAKE) -C $(LIBTOOL_HOST_DIR)
 -	touch $@
-+		--disable-svg
+-
+-$(STAMP_DIR)/host_libtool_installed: $(STAMP_DIR)/host_libtool_compiled
+-	$(MAKE) -C $(LIBTOOL_HOST_DIR) install
++define HOST_LIBTOOL_CUSTOM_INSTALL
+ 	install -D -m 0644 $(HOST_DIR)/usr/share/aclocal/libtool.m4 \
+ 		$(STAGING_DIR)/usr/share/aclocal/libtool.m4
+ 	install -D -m 0644 $(HOST_DIR)/usr/share/aclocal/ltdl.m4 \
+ 		$(STAGING_DIR)/usr/share/aclocal/ltdl.m4
+-	touch $@
++endef
  
--$(STAMP_DIR)/host_cairo_installed: $(STAMP_DIR)/host_cairo_compiled
--	$(HOST_MAKE_ENV) $(MAKE) -C $(CAIRO_HOST_DIR) install
--	touch $@
--
--host-cairo: $(STAMP_DIR)/host_cairo_installed
--
--host-cairo-source: cairo-source
--
--host-cairo-clean:
--	rm -f $(addprefix $(STAMP_DIR)/host_cairo_,unpacked configured compiled installed)
--	-$(MAKE) -C $(CAIRO_HOST_DIR) uninstall
--	-$(MAKE) -C $(CAIRO_HOST_DIR) clean
--
--host-cairo-dirclean:
--	rm -rf $(CAIRO_HOST_DIR)
-+$(eval $(call AUTOTARGETS,package,cairo))
-+$(eval $(call AUTOTARGETS,package,cairo,host))
+-host-libtool: $(STAMP_DIR)/host_libtool_installed
++HOST_LIBTOOL_POST_INSTALL_HOOKS += HOST_LIBTOOL_CUSTOM_INSTALL
+ 
+-host-libtool-clean:
+-	rm -f $(addprefix $(STAMP_DIR)/host_libtool_,unpacked configured compiled installed)
+-	-$(MAKE) -C $(LIBTOOL_HOST_DIR) uninstall
+-	-$(MAKE) -C $(LIBTOOL_HOST_DIR) clean
++$(eval $(call AUTOTARGETS,package,libtool))
++$(eval $(call AUTOTARGETS,package,libtool,host))
+ 
+-host-libtool-dirclean:
+-	rm -rf $(LIBTOOL_HOST_DIR)
++# variables used by other packages
++LIBTOOL:=$(HOST_DIR)/usr/bin/libtool
 -- 
 1.6.3.3
