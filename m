@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2009 20:30:52 +0100
-Subject: [Buildroot] [PATCH 21/39] fontconfig: convert to autotools
+Date: Tue, 15 Dec 2009 20:30:53 +0100
+Subject: [Buildroot] [PATCH 22/39] freetype: convert to autotools
 	infrastructure for host package
 In-Reply-To: <cover.1260905467.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1260905467.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <1ef81c0c9c57bb4bfad4d320debd16a84feb8dba.1260905467.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <fc1163d22d905db1a6813d3493a19885f5e97ace.1260905467.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,67 +13,70 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/fontconfig/fontconfig.mk |   49 ++++----------------------------------
- 1 files changed, 5 insertions(+), 44 deletions(-)
+ package/freetype/freetype.mk |   46 ++---------------------------------------
+ 1 files changed, 3 insertions(+), 43 deletions(-)
 
-diff --git a/package/fontconfig/fontconfig.mk b/package/fontconfig/fontconfig.mk
-index df618d0..6cbe2ea 100644
---- a/package/fontconfig/fontconfig.mk
-+++ b/package/fontconfig/fontconfig.mk
-@@ -23,49 +23,10 @@ FONTCONFIG_CONF_OPT = --with-arch=$(GNU_TARGET_NAME) \
+diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+index 06bf6f4..ed73253 100644
+--- a/package/freetype/freetype.mk
++++ b/package/freetype/freetype.mk
+@@ -13,7 +13,10 @@ FREETYPE_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
+ FREETYPE_MAKE_OPT = CCexe="$(HOSTCC)"
+ FREETYPE_DEPENDENCIES = host-pkg-config $(if $(BR2_PACKAGE_ZLIB),zlib)
  
- FONTCONFIG_DEPENDENCIES = freetype expat
++HOST_FREETYPE_DEPENDENCIES = host-pkg-config
++
+ $(eval $(call AUTOTARGETS,package,freetype))
++$(eval $(call AUTOTARGETS,package,freetype,host))
  
--$(eval $(call AUTOTARGETS,package,fontconfig))
+ $(FREETYPE_HOOK_POST_INSTALL):
+ 	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" \
+@@ -26,46 +29,3 @@ ifneq ($(BR2_HAVE_DEVFILES),y)
+ 	rm -f $(TARGET_DIR)/usr/bin/freetype-config
+ endif
+ 	touch $@
 -
--# fontconfig for the host
--FONTCONFIG_HOST_DIR:=$(BUILD_DIR)/fontconfig-$(FONTCONFIG_VERSION)-host
+-# freetype for the host
+-FREETYPE_HOST_DIR:=$(BUILD_DIR)/freetype-$(FREETYPE_VERSION)-host
 -
--$(DL_DIR)/$(FONTCONFIG_SOURCE):
--	$(call DOWNLOAD,$(FONTCONFIG_SITE),$(FONTCONFIG_SOURCE))
+-$(DL_DIR)/$(FREETYPE_SOURCE):
+-	$(call DOWNLOAD,$(FREETYPE_SITE),$(FREETYPE_SOURCE))
 -
--$(STAMP_DIR)/host_fontconfig_unpacked: $(DL_DIR)/$(FONTCONFIG_SOURCE)
--	mkdir -p $(FONTCONFIG_HOST_DIR)
--	$(INFLATE$(suffix $(FONTCONFIG_SOURCE))) $< | \
--		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(FONTCONFIG_HOST_DIR) $(TAR_OPTIONS) -
+-$(STAMP_DIR)/host_freetype_unpacked: $(DL_DIR)/$(FREETYPE_SOURCE)
+-	mkdir -p $(FREETYPE_HOST_DIR)
+-	$(INFLATE$(suffix $(FREETYPE_SOURCE))) $< | \
+-		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(FREETYPE_HOST_DIR) $(TAR_OPTIONS) -
 -	touch $@
 -
--$(STAMP_DIR)/host_fontconfig_configured: $(STAMP_DIR)/host_fontconfig_unpacked $(STAMP_DIR)/host_freetype_installed $(STAMP_DIR)/host_expat_installed
--	(cd $(FONTCONFIG_HOST_DIR); rm -rf config.cache; \
+-$(STAMP_DIR)/host_freetype_configured: $(STAMP_DIR)/host_freetype_unpacked $(STAMP_DIR)/host_pkgconfig_installed
+-	(cd $(FREETYPE_HOST_DIR); rm -rf config.cache; \
 -		$(HOST_CONFIGURE_OPTS) \
 -		CFLAGS="$(HOST_CFLAGS)" \
 -		LDFLAGS="$(HOST_LDFLAGS)" \
 -		./configure $(QUIET) \
 -		--prefix="$(HOST_DIR)/usr" \
 -		--sysconfdir="$(HOST_DIR)/etc" \
-+HOST_FONTCONFIG_DEPENDENCIES = host-freetype host-expat
-+HOST_FONTCONFIG_CONF_OPT = \
- 		--disable-docs \
--		--disable-static \
 -	)
 -	touch $@
 -
--$(STAMP_DIR)/host_fontconfig_compiled: $(STAMP_DIR)/host_fontconfig_configured
--	$(HOST_MAKE_ENV) $(MAKE) -C $(FONTCONFIG_HOST_DIR)
--	touch $@
-+		--disable-static
- 
--$(STAMP_DIR)/host_fontconfig_installed: $(STAMP_DIR)/host_fontconfig_compiled
--	$(HOST_MAKE_ENV) $(MAKE) -C $(FONTCONFIG_HOST_DIR) install
+-$(STAMP_DIR)/host_freetype_compiled: $(STAMP_DIR)/host_freetype_configured
+-	$(MAKE) -C $(FREETYPE_HOST_DIR)
 -	touch $@
 -
--host-fontconfig: $(STAMP_DIR)/host_fontconfig_installed
+-$(STAMP_DIR)/host_freetype_installed: $(STAMP_DIR)/host_freetype_compiled
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(FREETYPE_HOST_DIR) install
+-	touch $@
 -
--host-fontconfig-source: fontconfig-source
+-host-freetype: $(STAMP_DIR)/host_freetype_installed
 -
--host-fontconfig-clean:
--	rm -f $(addprefix $(STAMP_DIR)/host_fontconfig_,unpacked configured compiled installed)
--	-$(MAKE) -C $(FONTCONFIG_HOST_DIR) uninstall
--	-$(MAKE) -C $(FONTCONFIG_HOST_DIR) clean
+-host-freetype-source: freetype-source
 -
--host-fontconfig-dirclean:
--	rm -rf $(FONTCONFIG_HOST_DIR)
-+$(eval $(call AUTOTARGETS,package,fontconfig))
-+$(eval $(call AUTOTARGETS,package,fontconfig,host))
+-host-freetype-clean:
+-	rm -f $(addprefix $(STAMP_DIR)/host_freetype_,unpacked configured compiled installed)
+-	-$(MAKE) -C $(FREETYPE_HOST_DIR) uninstall
+-	-$(MAKE) -C $(FREETYPE_HOST_DIR) clean
+-
+-host-freetype-dirclean:
+-	rm -rf $(FREETYPE_HOST_DIR)
 -- 
 1.6.3.3
