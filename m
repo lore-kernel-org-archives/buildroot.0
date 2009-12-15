@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2009 20:30:50 +0100
-Subject: [Buildroot] [PATCH 19/39] dbus: convert to autotools infrastructure
-	for host package
+Date: Tue, 15 Dec 2009 20:30:52 +0100
+Subject: [Buildroot] [PATCH 21/39] fontconfig: convert to autotools
+	infrastructure for host package
 In-Reply-To: <cover.1260905467.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1260905467.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <368519f649d49f39f1e4aabe146181ccaf193c04.1260905467.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <1ef81c0c9c57bb4bfad4d320debd16a84feb8dba.1260905467.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,102 +13,67 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dbus/dbus.mk |   72 +++++++++++++------------------------------------
- 1 files changed, 19 insertions(+), 53 deletions(-)
+ package/fontconfig/fontconfig.mk |   49 ++++----------------------------------
+ 1 files changed, 5 insertions(+), 44 deletions(-)
 
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index 2780df6..ae65b7d 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -49,41 +49,8 @@ else
- DBUS_CONF_OPT += --without-x
- endif
+diff --git a/package/fontconfig/fontconfig.mk b/package/fontconfig/fontconfig.mk
+index df618d0..6cbe2ea 100644
+--- a/package/fontconfig/fontconfig.mk
++++ b/package/fontconfig/fontconfig.mk
+@@ -23,49 +23,10 @@ FONTCONFIG_CONF_OPT = --with-arch=$(GNU_TARGET_NAME) \
  
--$(eval $(call AUTOTARGETS,package,dbus))
+ FONTCONFIG_DEPENDENCIES = freetype expat
+ 
+-$(eval $(call AUTOTARGETS,package,fontconfig))
 -
--# fix rebuild (dbus makefile errors out if /var/lib/dbus is a symlink)
--$(DBUS_HOOK_POST_BUILD): $(DBUS_TARGET_BUILD)
--	rm -rf $(TARGET_DIR)/var/lib/dbus
+-# fontconfig for the host
+-FONTCONFIG_HOST_DIR:=$(BUILD_DIR)/fontconfig-$(FONTCONFIG_VERSION)-host
+-
+-$(DL_DIR)/$(FONTCONFIG_SOURCE):
+-	$(call DOWNLOAD,$(FONTCONFIG_SITE),$(FONTCONFIG_SOURCE))
+-
+-$(STAMP_DIR)/host_fontconfig_unpacked: $(DL_DIR)/$(FONTCONFIG_SOURCE)
+-	mkdir -p $(FONTCONFIG_HOST_DIR)
+-	$(INFLATE$(suffix $(FONTCONFIG_SOURCE))) $< | \
+-		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(FONTCONFIG_HOST_DIR) $(TAR_OPTIONS) -
 -	touch $@
 -
--$(DBUS_HOOK_POST_INSTALL): $(DBUS_TARGET_INSTALL_TARGET)
--	rm -rf $(TARGET_DIR)/usr/lib/dbus-1.0
--	rm -rf $(TARGET_DIR)/var/lib/dbus
--	ln -sf /tmp/dbus $(TARGET_DIR)/var/lib/dbus
--	$(INSTALL) -m 0755 package/dbus/S30dbus $(TARGET_DIR)/etc/init.d
--	touch $@
--
--# dbus for the host
--DBUS_HOST_DIR:=$(BUILD_DIR)/dbus-$(DBUS_VERSION)-host
--DBUS_HOST_INTROSPECT:=$(DBUS_HOST_DIR)/introspect.xml
--
--$(DL_DIR)/$(DBUS_SOURCE):
--	$(call DOWNLOAD,$(DBUS_SITE),$(DBUS_SOURCE))
--
--$(STAMP_DIR)/host_dbus_unpacked: $(DL_DIR)/$(DBUS_SOURCE)
--	mkdir -p $(DBUS_HOST_DIR)
--	$(INFLATE$(suffix $(DBUS_SOURCE))) $< | \
--		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(DBUS_HOST_DIR) $(TAR_OPTIONS) -
--	touch $@
--
--$(STAMP_DIR)/host_dbus_configured: $(STAMP_DIR)/host_dbus_unpacked $(STAMP_DIR)/host_expat_installed $(STAMP_DIR)/host_pkgconfig_installed
--	(cd $(DBUS_HOST_DIR); rm -rf config.cache; \
+-$(STAMP_DIR)/host_fontconfig_configured: $(STAMP_DIR)/host_fontconfig_unpacked $(STAMP_DIR)/host_freetype_installed $(STAMP_DIR)/host_expat_installed
+-	(cd $(FONTCONFIG_HOST_DIR); rm -rf config.cache; \
 -		$(HOST_CONFIGURE_OPTS) \
 -		CFLAGS="$(HOST_CFLAGS)" \
 -		LDFLAGS="$(HOST_LDFLAGS)" \
 -		./configure $(QUIET) \
 -		--prefix="$(HOST_DIR)/usr" \
 -		--sysconfdir="$(HOST_DIR)/etc" \
-+HOST_DBUS_DEPENDENCIES = host-pkg-config host-expat
-+HOST_DBUS_CONF_OPT = \
- 		--with-dbus-user=dbus \
- 		--disable-tests \
- 		--disable-asserts \
-@@ -94,28 +61,27 @@ $(STAMP_DIR)/host_dbus_configured: $(STAMP_DIR)/host_dbus_unpacked $(STAMP_DIR)/
- 		--disable-static \
- 		--enable-dnotify \
- 		--without-x \
--		--with-xml=expat \
++HOST_FONTCONFIG_DEPENDENCIES = host-freetype host-expat
++HOST_FONTCONFIG_CONF_OPT = \
+ 		--disable-docs \
+-		--disable-static \
 -	)
 -	touch $@
-+		--with-xml=expat
- 
--$(STAMP_DIR)/host_dbus_compiled: $(STAMP_DIR)/host_dbus_configured
--	$(HOST_MAKE_ENV) $(MAKE) -C $(DBUS_HOST_DIR)
+-
+-$(STAMP_DIR)/host_fontconfig_compiled: $(STAMP_DIR)/host_fontconfig_configured
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(FONTCONFIG_HOST_DIR)
 -	touch $@
-+# dbus for the host
-+DBUS_HOST_INTROSPECT:=$(DBUS_HOST_DIR)/introspect.xml
++		--disable-static
  
--$(STAMP_DIR)/host_dbus_installed: $(STAMP_DIR)/host_dbus_compiled
--	$(MAKE) -C $(DBUS_HOST_DIR) install
-+HOST_DBUS_GEN_INTROSPECT = \
- 	$(HOST_DIR)/usr/bin/dbus-daemon --introspect > $(DBUS_HOST_INTROSPECT)
+-$(STAMP_DIR)/host_fontconfig_installed: $(STAMP_DIR)/host_fontconfig_compiled
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(FONTCONFIG_HOST_DIR) install
 -	touch $@
- 
--host-dbus: $(STAMP_DIR)/host_dbus_installed
-+HOST_DBUS_POST_INSTALL_HOOKS += HOST_DBUS_GEN_INTROSPECT
- 
--host-dbus-source: dbus-source
-+$(eval $(call AUTOTARGETS,package,dbus))
-+$(eval $(call AUTOTARGETS,package,dbus,host))
- 
--host-dbus-clean:
--	rm -f $(addprefix $(STAMP_DIR)/host_dbus_,unpacked configured compiled installed)
--	rm -f $(DBUS_HOST_INTROSPECT)
--	-$(MAKE) -C $(DBUS_HOST_DIR) uninstall
--	-$(MAKE) -C $(DBUS_HOST_DIR) clean
-+# fix rebuild (dbus makefile errors out if /var/lib/dbus is a symlink)
-+$(DBUS_HOOK_POST_BUILD): $(DBUS_TARGET_BUILD)
-+	rm -rf $(TARGET_DIR)/var/lib/dbus
-+	touch $@
- 
--host-dbus-dirclean:
--	rm -rf $(DBUS_HOST_DIR)
-+$(DBUS_HOOK_POST_INSTALL): $(DBUS_TARGET_INSTALL_TARGET)
-+	rm -rf $(TARGET_DIR)/usr/lib/dbus-1.0
-+	rm -rf $(TARGET_DIR)/var/lib/dbus
-+	ln -sf /tmp/dbus $(TARGET_DIR)/var/lib/dbus
-+	$(INSTALL) -m 0755 package/dbus/S30dbus $(TARGET_DIR)/etc/init.d
-+	touch $@
+-
+-host-fontconfig: $(STAMP_DIR)/host_fontconfig_installed
+-
+-host-fontconfig-source: fontconfig-source
+-
+-host-fontconfig-clean:
+-	rm -f $(addprefix $(STAMP_DIR)/host_fontconfig_,unpacked configured compiled installed)
+-	-$(MAKE) -C $(FONTCONFIG_HOST_DIR) uninstall
+-	-$(MAKE) -C $(FONTCONFIG_HOST_DIR) clean
+-
+-host-fontconfig-dirclean:
+-	rm -rf $(FONTCONFIG_HOST_DIR)
++$(eval $(call AUTOTARGETS,package,fontconfig))
++$(eval $(call AUTOTARGETS,package,fontconfig,host))
 -- 
 1.6.3.3
