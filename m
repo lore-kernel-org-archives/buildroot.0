@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2009 20:30:49 +0100
-Subject: [Buildroot] [PATCH 18/39] atk: convert to autotools infrastructure
+Date: Tue, 15 Dec 2009 20:30:50 +0100
+Subject: [Buildroot] [PATCH 19/39] dbus: convert to autotools infrastructure
 	for host package
 In-Reply-To: <cover.1260905467.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1260905467.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <e6882586be87d15111e5fa4cfc75a2fb4667f1fc.1260905467.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <368519f649d49f39f1e4aabe146181ccaf193c04.1260905467.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,68 +13,102 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/atk/atk.mk |   48 +++++-------------------------------------------
- 1 files changed, 5 insertions(+), 43 deletions(-)
+ package/dbus/dbus.mk |   72 +++++++++++++------------------------------------
+ 1 files changed, 19 insertions(+), 53 deletions(-)
 
-diff --git a/package/atk/atk.mk b/package/atk/atk.mk
-index 1e8e576..e357f49 100644
---- a/package/atk/atk.mk
-+++ b/package/atk/atk.mk
-@@ -53,50 +53,12 @@ endif
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index 2780df6..ae65b7d 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -49,41 +49,8 @@ else
+ DBUS_CONF_OPT += --without-x
+ endif
  
- ATK_DEPENDENCIES = libglib2 host-pkg-config
- 
--$(eval $(call AUTOTARGETS,package,atk))
+-$(eval $(call AUTOTARGETS,package,dbus))
 -
--# atk for the host
--ATK_HOST_DIR:=$(BUILD_DIR)/atk-$(ATK_VERSION)-host
--
--$(DL_DIR)/$(ATK_SOURCE):
--	$(call DOWNLOAD,$(ATK_SITE),$(ATK_SOURCE))
-+HOST_ATK_DEPENDENCIES = host-libglib2 host-pkg-config
- 
--$(STAMP_DIR)/host_atk_unpacked: $(DL_DIR)/$(ATK_SOURCE)
--	mkdir -p $(ATK_HOST_DIR)
--	$(INFLATE$(suffix $(ATK_SOURCE))) $< | \
--		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(ATK_HOST_DIR) $(TAR_OPTIONS) -
+-# fix rebuild (dbus makefile errors out if /var/lib/dbus is a symlink)
+-$(DBUS_HOOK_POST_BUILD): $(DBUS_TARGET_BUILD)
+-	rm -rf $(TARGET_DIR)/var/lib/dbus
 -	touch $@
 -
--$(STAMP_DIR)/host_atk_configured: $(STAMP_DIR)/host_atk_unpacked $(STAMP_DIR)/host_libglib2_installed $(STAMP_DIR)/host_pkgconfig_installed
--	(cd $(ATK_HOST_DIR); rm -rf config.cache; \
+-$(DBUS_HOOK_POST_INSTALL): $(DBUS_TARGET_INSTALL_TARGET)
+-	rm -rf $(TARGET_DIR)/usr/lib/dbus-1.0
+-	rm -rf $(TARGET_DIR)/var/lib/dbus
+-	ln -sf /tmp/dbus $(TARGET_DIR)/var/lib/dbus
+-	$(INSTALL) -m 0755 package/dbus/S30dbus $(TARGET_DIR)/etc/init.d
+-	touch $@
+-
+-# dbus for the host
+-DBUS_HOST_DIR:=$(BUILD_DIR)/dbus-$(DBUS_VERSION)-host
+-DBUS_HOST_INTROSPECT:=$(DBUS_HOST_DIR)/introspect.xml
+-
+-$(DL_DIR)/$(DBUS_SOURCE):
+-	$(call DOWNLOAD,$(DBUS_SITE),$(DBUS_SOURCE))
+-
+-$(STAMP_DIR)/host_dbus_unpacked: $(DL_DIR)/$(DBUS_SOURCE)
+-	mkdir -p $(DBUS_HOST_DIR)
+-	$(INFLATE$(suffix $(DBUS_SOURCE))) $< | \
+-		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(DBUS_HOST_DIR) $(TAR_OPTIONS) -
+-	touch $@
+-
+-$(STAMP_DIR)/host_dbus_configured: $(STAMP_DIR)/host_dbus_unpacked $(STAMP_DIR)/host_expat_installed $(STAMP_DIR)/host_pkgconfig_installed
+-	(cd $(DBUS_HOST_DIR); rm -rf config.cache; \
 -		$(HOST_CONFIGURE_OPTS) \
 -		CFLAGS="$(HOST_CFLAGS)" \
 -		LDFLAGS="$(HOST_LDFLAGS)" \
 -		./configure $(QUIET) \
 -		--prefix="$(HOST_DIR)/usr" \
 -		--sysconfdir="$(HOST_DIR)/etc" \
-+HOST_ATK_CONF_OPT = \
- 		--enable-shared \
++HOST_DBUS_DEPENDENCIES = host-pkg-config host-expat
++HOST_DBUS_CONF_OPT = \
+ 		--with-dbus-user=dbus \
+ 		--disable-tests \
+ 		--disable-asserts \
+@@ -94,28 +61,27 @@ $(STAMP_DIR)/host_dbus_configured: $(STAMP_DIR)/host_dbus_unpacked $(STAMP_DIR)/
  		--disable-static \
--		--disable-glibtest \
+ 		--enable-dnotify \
+ 		--without-x \
+-		--with-xml=expat \
 -	)
 -	touch $@
--
--$(STAMP_DIR)/host_atk_compiled: $(STAMP_DIR)/host_atk_configured
--	$(HOST_MAKE_ENV) $(MAKE) -C $(ATK_HOST_DIR)
--	touch $@
-+		--disable-glibtest
++		--with-xml=expat
  
--$(STAMP_DIR)/host_atk_installed: $(STAMP_DIR)/host_atk_compiled
--	$(HOST_MAKE_ENV) $(MAKE) -C $(ATK_HOST_DIR) install
+-$(STAMP_DIR)/host_dbus_compiled: $(STAMP_DIR)/host_dbus_configured
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(DBUS_HOST_DIR)
 -	touch $@
--
--host-atk: $(STAMP_DIR)/host_atk_installed
--
--host-atk-source: atk-source
--
--host-atk-clean:
--	rm -f $(addprefix $(STAMP_DIR)/host_atk_,unpacked configured compiled installed)
--	-$(MAKE) -C $(ATK_HOST_DIR) uninstall
--	-$(MAKE) -C $(ATK_HOST_DIR) clean
--
--host-atk-dirclean:
--	rm -rf $(ATK_HOST_DIR)
-+$(eval $(call AUTOTARGETS,package,atk))
-+$(eval $(call AUTOTARGETS,package,atk,host))
++# dbus for the host
++DBUS_HOST_INTROSPECT:=$(DBUS_HOST_DIR)/introspect.xml
+ 
+-$(STAMP_DIR)/host_dbus_installed: $(STAMP_DIR)/host_dbus_compiled
+-	$(MAKE) -C $(DBUS_HOST_DIR) install
++HOST_DBUS_GEN_INTROSPECT = \
+ 	$(HOST_DIR)/usr/bin/dbus-daemon --introspect > $(DBUS_HOST_INTROSPECT)
+-	touch $@
+ 
+-host-dbus: $(STAMP_DIR)/host_dbus_installed
++HOST_DBUS_POST_INSTALL_HOOKS += HOST_DBUS_GEN_INTROSPECT
+ 
+-host-dbus-source: dbus-source
++$(eval $(call AUTOTARGETS,package,dbus))
++$(eval $(call AUTOTARGETS,package,dbus,host))
+ 
+-host-dbus-clean:
+-	rm -f $(addprefix $(STAMP_DIR)/host_dbus_,unpacked configured compiled installed)
+-	rm -f $(DBUS_HOST_INTROSPECT)
+-	-$(MAKE) -C $(DBUS_HOST_DIR) uninstall
+-	-$(MAKE) -C $(DBUS_HOST_DIR) clean
++# fix rebuild (dbus makefile errors out if /var/lib/dbus is a symlink)
++$(DBUS_HOOK_POST_BUILD): $(DBUS_TARGET_BUILD)
++	rm -rf $(TARGET_DIR)/var/lib/dbus
++	touch $@
+ 
+-host-dbus-dirclean:
+-	rm -rf $(DBUS_HOST_DIR)
++$(DBUS_HOOK_POST_INSTALL): $(DBUS_TARGET_INSTALL_TARGET)
++	rm -rf $(TARGET_DIR)/usr/lib/dbus-1.0
++	rm -rf $(TARGET_DIR)/var/lib/dbus
++	ln -sf /tmp/dbus $(TARGET_DIR)/var/lib/dbus
++	$(INSTALL) -m 0755 package/dbus/S30dbus $(TARGET_DIR)/etc/init.d
++	touch $@
 -- 
 1.6.3.3
