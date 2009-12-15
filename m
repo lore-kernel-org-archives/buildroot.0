@@ -1,55 +1,38 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Tue, 15 Dec 2009 22:45:20 +0100
-Subject: [Buildroot] [pull request] Pull request for branch
- package-infrastructure
-In-Reply-To: <cover.1260905467.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1260905467.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <1260913520.14582.4.camel@bender>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 15 Dec 2009 23:54:47 +0000 (UTC)
+Subject: [Buildroot] [Bug 803] [PATCH] lua - add shared library patch and
+ config option for readline/ncurses support
+In-Reply-To: <bug-803-163@https.bugs.busybox.net/>
+References: <bug-803-163@https.bugs.busybox.net/>
+Message-ID: <20091215235447.9F2AF777F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-
-On Tue, 2009-12-15 at 20:30 +0100, Thomas Petazzoni wrote:
-
-> This patchset :
-> 
->  * implements a new infrastructure to support all type of packages,
->    not only packages relying on the autotools build system. Through
->    the new GENTARGETS macro, implemented in
->    package/Makefile.package.in, we will be able to write simpler .mk
->    files and be able to factorize the common parts of the different
->    .mk files. This infrastructure support building both host and
->    target packages.
-> 
->  * rebases the existing autotools infrastructure on top of the new
->    generic infrastructure. This rebasing has no impact on the existing
->    .mk files for autotools packages. With this rebasing, the autotools
->    infrastructure gains the ability to build host packages.
-> 
->  * simplifies most (if not all) .mk files of autotools-based packages
->    that required an host version to be compiled (xutil_makedepend,
->    xproto_xproto, pixman, m4, mtd-utils, lzo, libusb, libgtk2, gob2,
->    expat, dbus-glib, shared-mime-info, libxml2, freetype, fontconfig,
->    directfb, dbus, atk, pango, libtool, libglib2, cairo, automake,
->    pkg-config)
-> 
->  * bumps the version of autoconf to 2.65 and finally fixes the
->    host-autoconf build problem when sh is symlinked to dash.
-> 
->  * converts a few packages to the generic infrastructure (zlib, olsr,
->    udev)
-> 
->  * updates and extends the documentation to cover the new
->    infrastructures with examples and reference information
-
-I only had a quick look at your patches, but I think I can already can
-say that this looks wonderful. With these changes, it becomes a lot
-simpler to create and to maintain buildroot packages. Thanks for your
-work on this.
+https://bugs.busybox.net/show_bug.cgi?id=803
 
 
-Sven
+rvpaasen <rvpaasen@t3i.nl> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+ Attachment #845 is|0                           |1
+           obsolete|                            |
+
+
+
+
+--- Comment #4 from rvpaasen <rvpaasen@t3i.nl>  2009-12-15 23:54:45 UTC ---
+Created an attachment (id=857)
+ --> (https://bugs.busybox.net/attachment.cgi?id=857)
+lua patch with -DLUA_USE_DLOPEN
+
+Patch with -DLUA_USE_DLOPEN added.
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
