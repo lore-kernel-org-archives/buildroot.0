@@ -1,443 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2009 20:30:32 +0100
-Subject: [Buildroot] [PATCH 01/39] Add generic package infrastructure
+Date: Tue, 15 Dec 2009 20:30:44 +0100
+Subject: [Buildroot] [PATCH 13/39] automake: convert to autotools
+	infrastructure for host package
 In-Reply-To: <cover.1260905467.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1260905467.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <e11fe847b2f545446fc3300dd2ba88fd5da05756.1260905467.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <adaf0c909cc002e2ddeedc618d0d0e1e93e1ff07.1260905467.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This new infrastructure allows to write simpler .mk files for packages
-not using the autotools as their build system, by factorizing many
-common steps (download, extract, patching), and will more easily allow
-Buildroot-wide changes in how the packages are handled.
-
-The main macro is called GENTARGETS and works similarly to the
-AUTOTARGETS macro that already exists for autotools-based
-packages. However, the set of variables to be defined before calling
-the macro is different. Refer to the documentation for details.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Makefile.in         |    1 +
- package/Makefile.package.in |  397 +++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 398 insertions(+), 0 deletions(-)
- create mode 100644 package/Makefile.package.in
+ package/automake/automake.mk |   47 ++---------------------------------------
+ 1 files changed, 3 insertions(+), 44 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 25dd6da..8edd193 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -349,3 +349,4 @@ endif
- X11_PREFIX:=$(call qstrip,$(BR2_X11_PREFIX))
+diff --git a/package/automake/automake.mk b/package/automake/automake.mk
+index 82ae9be..65db386 100644
+--- a/package/automake/automake.mk
++++ b/package/automake/automake.mk
+@@ -13,53 +13,12 @@ endif
  
- include package/Makefile.autotools.in
-+include package/Makefile.package.in
-diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-new file mode 100644
-index 0000000..fbd7f69
---- /dev/null
-+++ b/package/Makefile.package.in
-@@ -0,0 +1,397 @@
-+################################################################################
-+# Generic package infrastructure
-+#
-+# This file implements an infrastructure that eases development of
-+# package .mk files. It should be used for all non-autotools based
-+# packages. Autotools-based packages should use the specialized
-+# autotools infrastructure in package/Makefile.autotools.in.
-+#
-+# See the Buildroot documentation for details on the usage of this
-+# infrastructure
-+#
-+# In terms of implementation, this generic infrastructure requires the
-+# .mk file to specify:
-+#
-+#   1. Metadata informations about the package: name, version,
-+#      download URL, etc.
-+#
-+#   2. Description of the commands to be executed to configure, build
-+#      and install the package
-+#
-+# The autotools infrastructure specializes this generic infrastructure
-+# by already implementing the configure, build and install steps.
-+################################################################################
-+
-+# UPPERCASE Macro -- transform its argument to uppercase and replace dots and
-+# hyphens to underscores
-+UPPERCASE = $(shell echo $(1) | tr "a-z.-" "A-Z__")
-+
-+# Define extrators for different archive suffixes
-+INFLATE.bz2 = $(BZCAT)
-+INFLATE.gz  = $(ZCAT)
-+INFLATE.tbz = $(BZCAT)
-+INFLATE.tgz = $(ZCAT)
-+INFLATE.tar = cat
-+
-+# MESSAGE Macro -- display a message in bold type
-+MESSAGE = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION) $(1)$(TERM_RESET)"
-+TERM_BOLD := $(shell tput smso)
-+TERM_RESET := $(shell tput rmso)
-+
-+################################################################################
-+# DOWNLOAD -- Download helper. Will try to download source from:
-+# 1) BR2_PRIMARY_SITE if enabled
-+# 2) Download site
-+# 3) BR2_BACKUP_SITE if enabled
-+#
-+# Argument 1 is the source location
-+# Argument 2 is the source filename
-+#
-+# E.G. use like this:
-+# $(call DOWNLOAD,$(FOO_SITE),$(FOO_SOURCE))
-+################################################################################
-+
-+# support make source-check/external-deps
-+ifneq ($(SPIDER),)
-+DOWNLOAD=$(WGET) -P $(DL_DIR) $(1)/$(2)
-+else
-+define DOWNLOAD
-+	$(Q)test -e $(DL_DIR)/$(2) || \
-+	for site in $(call qstrip,$(BR2_PRIMARY_SITE)) $(1) $(call qstrip,$(BR2_BACKUP_SITE)); \
-+	do $(WGET) -P $(DL_DIR) $$site/$(2) && exit; done
-+endef
-+endif
-+
-+# Utility programs used to build packages
-+TAR ?= tar
-+
-+# Automatically detect tar --strip-path/components option
-+TAR_STRIP_COMPONENTS := \
-+  $(shell $(TAR) --help | grep strip-path > /dev/null ; \
-+  if test $$? = 0 ; then \
-+   echo '--strip-path' ; \
-+  else \
-+   echo '--strip-components' ; \
-+  fi)
-+
-+# Needed for the foreach loops to loop over the list of hooks, so that
-+# each hook call is properly separated by a newline.
-+define sep
-+
-+
-+endef
-+
-+################################################################################
-+# Implicit targets -- produce a stamp file for each step of a package build
-+################################################################################
-+
-+# Retrieve the archive
-+$(BUILD_DIR)/%/.stamp_downloaded:
-+# support make source-check/external-deps
-+ifeq ($(SPIDER),)
-+# Only show the download message if it isn't already downloaded
-+	$(Q)(test -e $(DL_DIR)/$($(PKG)_SOURCE) && \
-+		(test -z $($(PKG)_PATCH) || test -e $(DL_DIR)$($(PKG)_PATCH))) || \
-+		$(call MESSAGE,"Downloading")
-+endif
-+	$(call DOWNLOAD,$($(PKG)_SITE),$($(PKG)_SOURCE))
-+	$(if $($(PKG)_PATCH),$(call DOWNLOAD,$($(PKG)_SITE),$($(PKG)_PATCH)))
-+ifeq ($(SPIDER),)
-+	$(Q)mkdir -p $(@D)
-+	$(Q)touch $@
-+endif
-+
-+# Unpack the archive
-+$(BUILD_DIR)/%/.stamp_extracted:
-+	@$(call MESSAGE,"Extracting")
-+	$(Q)mkdir -p $(@D)
-+	$(Q)$(INFLATE$(suffix $($(PKG)_SOURCE))) $(DL_DIR)/$($(PKG)_SOURCE) | \
-+	$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
-+# some packages have messed up permissions inside
-+	$(Q)chmod -R ug+rw $(@D)
-+	$(foreach hook,$($(PKG)_POST_EXTRACT_HOOKS),$(call $(hook))$(sep))
-+	$(Q)touch $@
-+
-+# Patch
-+#
-+# The NOHOSTPKG variable is the uppercased package name, without the
-+# HOST_ prefix, even for host packages. This allows to find the
-+# patches in the package directory, because $($(NOHOSTPKG)_NAME)
-+# expands to the package directory name.
-+#
-+$(BUILD_DIR)/%/.stamp_patched: NAMEVER = $($(NOHOSTPKG)_NAME)-$($(PKG)_VERSION)
-+$(BUILD_DIR)/%/.stamp_patched:
-+	@$(call MESSAGE,"Patching $($(PKG)_DIR_PREFIX)/$($(PKG)_NAME)")
-+	$(if $($(PKG)_PATCH),toolchain/patch-kernel.sh $(@D) $(DL_DIR) $($(PKG)_PATCH))
-+	$(Q)( \
-+	if test -d $($(PKG)_DIR_PREFIX)/$($(NOHOSTPKG)_NAME); then \
-+	  if test "$(wildcard $($(PKG)_DIR_PREFIX)/$($(NOHOSTPKG)_NAME)/$(NAMEVER)*.patch*)"; then \
-+	    toolchain/patch-kernel.sh $(@D) $($(PKG)_DIR_PREFIX)/$($(NOHOSTPKG)_NAME) $(NAMEVER)\*.patch $(NAMEVER)\*.patch.$(ARCH) || exit 1; \
-+	  else \
-+	    toolchain/patch-kernel.sh $(@D) $($(PKG)_DIR_PREFIX)/$($(NOHOSTPKG)_NAME) $($(NOHOSTPKG)_NAME)\*.patch $($(NOHOSTPKG)_NAME)\*.patch.$(ARCH) || exit 1; \
-+	    if test -d $($(PKG)_DIR_PREFIX)/$($(PKG)_NAME)/$(NAMEVER); then \
-+	      toolchain/patch-kernel.sh $(@D) $($(PKG)_DIR_PREFIX)/$($(NOHOSTPKG)_NAME)/$(NAMEVER) \*.patch \*.patch.$(ARCH) || exit 1; \
-+	    fi; \
-+	  fi; \
-+	fi; \
-+	)
-+	$(foreach hook,$($(PKG)_POST_PATCH_HOOKS),$(call $(hook))$(sep))
-+	$(Q)touch $@
-+
-+# Configure
-+$(BUILD_DIR)/%/.stamp_configured:
-+	@$(call MESSAGE,"Configuring")
-+	$($(PKG)_CONFIGURE_CMDS)
-+	$(foreach hook,$($(PKG)_POST_CONFIGURE_HOOKS),$(call $(hook))$(sep))
-+	$(Q)touch $@
-+
-+# Build
-+$(BUILD_DIR)/%/.stamp_built::
-+	@$(call MESSAGE,"Building")
-+	$($(PKG)_BUILD_CMDS)
-+	$(foreach hook,$($(PKG)_POST_BUILD_HOOKS),$(call $(hook))$(sep))
-+	$(Q)touch $@
-+
-+# Install to host dir
-+$(BUILD_DIR)/%/.stamp_host_installed:
-+	@$(call MESSAGE,'Installing to host directory')
-+	$($(PKG)_INSTALL_CMDS)
-+	$(foreach hook,$($(PKG)_POST_INSTALL_HOOKS),$(call $(hook))$(sep))
-+	$(Q)touch $@
-+
-+# Install to staging dir
-+$(BUILD_DIR)/%/.stamp_staging_installed:
-+	@$(call MESSAGE,'Installing to staging directory')
-+	$($(PKG)_INSTALL_STAGING_CMDS)
-+	$(foreach hook,$($(PKG)_POST_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
-+	$(Q)touch $@
-+
-+# Install to target dir
-+$(BUILD_DIR)/%/.stamp_target_installed:
-+	@$(call MESSAGE,"Installing to target")
-+	$($(PKG)_INSTALL_TARGET_CMDS)
-+	$(foreach hook,$($(PKG)_POST_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
-+	$(if $(BR2_HAVE_MANPAGES),,for d in man share/man; do \
-+		rm -rf $(TARGET_DIR)/$$d $(TARGET_DIR)/usr/$$d; \
-+	done)
-+	$(if $(BR2_HAVE_INFOPAGES),,for d in info share/info; do \
-+		rm -rf $(TARGET_DIR)/$$d $(TARGET_DIR)/usr/$$d; \
-+	done)
-+	$(if $(BR2_HAVE_DOCUMENTATION),,for d in doc share/doc; do \
-+		rm -rf $(TARGET_DIR)/$$d $(TARGET_DIR)/usr/$$d; \
-+	done)
-+	$(Q)touch $@
-+
-+# Clean package
-+$(BUILD_DIR)/%/.stamp_cleaned:
-+	@$(call MESSAGE,"Cleaning up")
-+	$($(PKG)_CLEAN_CMDS)
-+	rm -f $(@D)/.stamp_built
-+
-+# Uninstall package from target and staging
-+$(BUILD_DIR)/%/.stamp_uninstalled:
-+	@$(call MESSAGE,"Uninstalling")
-+	$($(PKG)_UNINSTALL_STAGING_CMDS)
-+	rm -f $($(PKG)_TARGET_INSTALL_STAGING)
-+	$($(PKG)_UNINSTALL_TARGET_CMDS)
-+	rm -f $($(PKG)_TARGET_INSTALL_TARGET) $($(PKG)_HOOK_POST_INSTALL)
-+
-+# Remove package sources
-+$(BUILD_DIR)/%/.stamp_dircleaned:
-+	rm -Rf $(@D)
-+
-+################################################################################
-+# GENTARGETS_INNER -- generates the make targets needed to build a
-+# generic package
-+#
-+#  argument 1 is the lowercase package name
-+#  argument 2 is the uppercase package name, including an HOST_ prefix
-+#             for host packages
-+#  argument 3 is the uppercase package name, without the HOST_ prefix
-+#             for host packages
-+#  argument 4 is the package directory prefix
-+#  argument 5 is the type (target or host)
-+################################################################################
-+
-+define GENTARGETS_INNER
-+
-+# Define default values for various package-related variables, if not
-+# already defined. For some variables (version, source, site and
-+# subdir), if they are undefined, we try to see if a variable without
-+# the HOST_ prefix is defined. If so, we use such a variable, so that
-+# these informations have only to be specified once, for both the
-+# target and host packages of a given .mk file.
-+
-+$(2)_TYPE                       =  $(5)
-+$(2)_NAME			=  $(1)
-+
-+ifndef $(2)_VERSION
-+ ifdef $(3)_VERSION
-+  $(2)_VERSION = $($(3)_VERSION)
-+ else
-+  $(2)_VERSION = undefined
-+ endif
-+endif
-+
-+$(2)_DIR			=  $$(BUILD_DIR)/$(1)-$$($(2)_VERSION)
-+
-+ifndef $(2)_SOURCE
-+ ifdef $(3)_SOURCE
-+  $(2)_SOURCE = $($(3)_SOURCE)
-+ else
-+  $(2)_SOURCE			?= $(1)-$$($(2)_VERSION).tar.gz
-+ endif
-+endif
-+
-+ifndef $(2)_PATCH
-+ ifdef $(3)_PATCH
-+  $(2)_PATCH = $($(3)_PATCH)
-+ endif
-+endif
-+
-+ifndef $(2)_SITE
-+ ifdef $(3)_SITE
-+  $(2)_SITE = $($(3)_SITE)
-+ else
-+  $(2)_SITE			?= \
-+	http://$$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/$(1)
-+ endif
-+endif
-+
-+$(2)_DEPENDENCIES		?=
-+$(2)_INSTALL_STAGING		?= NO
-+$(2)_INSTALL_TARGET		?= YES
-+$(2)_DIR_PREFIX			= $(if $(4),$(4),$(TOP_SRCDIR)/package)
-+
-+# define sub-target stamps
-+$(2)_TARGET_INSTALL_TARGET =	$$($(2)_DIR)/.stamp_target_installed
-+$(2)_TARGET_INSTALL_STAGING =	$$($(2)_DIR)/.stamp_staging_installed
-+$(2)_TARGET_INSTALL_HOST =      $$($(2)_DIR)/.stamp_host_installed
-+$(2)_TARGET_BUILD =		$$($(2)_DIR)/.stamp_built
-+$(2)_TARGET_CONFIGURE =		$$($(2)_DIR)/.stamp_configured
-+$(2)_TARGET_PATCH =		$$($(2)_DIR)/.stamp_patched
-+$(2)_TARGET_EXTRACT =		$$($(2)_DIR)/.stamp_extracted
-+$(2)_TARGET_SOURCE =		$$($(2)_DIR)/.stamp_downloaded
-+$(2)_TARGET_UNINSTALL =		$$($(2)_DIR)/.stamp_uninstalled
-+$(2)_TARGET_CLEAN =		$$($(2)_DIR)/.stamp_cleaned
-+$(2)_TARGET_DIRCLEAN =		$$($(2)_DIR)/.stamp_dircleaned
-+
-+# new-style hooks
-+$(2)_POST_EXTRACT_HOOKS         ?=
-+$(2)_POST_PATCH_HOOKS           ?=
-+$(2)_POST_CONFIGURE_HOOKS       ?=
-+$(2)_POST_BUILD_HOOKS           ?=
-+$(2)_POST_INSTALL_HOOKS         ?=
-+$(2)_POST_INSTALL_STAGING_HOOKS ?=
-+$(2)_POST_INSTALL_TARGET_HOOKS  ?=
-+
-+# old-style hooks
-+$(2)_HOOK_POST_EXTRACT =	$$($(2)_DIR)/.stamp_hook_post_extract
-+$(2)_HOOK_POST_CONFIGURE =	$$($(2)_DIR)/.stamp_hook_post_configure
-+$(2)_HOOK_POST_BUILD =		$$($(2)_DIR)/.stamp_hook_post_build
-+$(2)_HOOK_POST_INSTALL =	$$($(2)_DIR)/.stamp_hook_post_install
-+
-+# human-friendly targets and target sequencing
-+$(1):			$(1)-install
-+
-+ifeq ($$($(2)_TYPE),host)
-+$(1)-install:	        $(1)-install-host $$($(2)_HOOK_POST_INSTALL)
-+else
-+$(1)-install:		$(1)-install-staging $(1)-install-target \
-+			$$($(2)_HOOK_POST_INSTALL)
-+endif
-+
-+ifeq ($$($(2)_INSTALL_TARGET),YES)
-+$(1)-install-target:	$(1)-build \
-+			$$($(2)_TARGET_INSTALL_TARGET)
-+else
-+$(1)-install-target:
-+endif
-+
-+ifeq ($$($(2)_INSTALL_STAGING),YES)
-+$(1)-install-staging:	$(1)-build \
-+			$$($(2)_TARGET_INSTALL_STAGING)
-+else
-+$(1)-install-staging:
-+endif
-+
-+$(1)-install-host:      $(1)-build $$($(2)_TARGET_INSTALL_HOST)
-+
-+$(1)-build:		$(1)-configure \
-+			$$($(2)_TARGET_BUILD) \
-+			$$($(2)_HOOK_POST_BUILD)
-+
-+$(1)-configure:		$(1)-patch \
-+			$$($(2)_TARGET_CONFIGURE) \
-+			$$($(2)_HOOK_POST_CONFIGURE)
-+
-+$(1)-patch:		$(1)-extract $$($(2)_TARGET_PATCH)
-+
-+$(1)-extract:		$(1)-depends \
-+			$$($(2)_TARGET_EXTRACT) \
-+			$$($(2)_HOOK_POST_EXTRACT)
-+
-+$(1)-depends:		$(1)-source $$($(2)_DEPENDENCIES)
-+
-+$(1)-source:		$$($(2)_TARGET_SOURCE)
-+
-+$(1)-uninstall:		$(1)-configure $$($(2)_TARGET_UNINSTALL)
-+
-+$(1)-clean:		$(1)-uninstall \
-+			$$($(2)_TARGET_CLEAN)
-+
-+$(1)-dirclean:		$$($(2)_TARGET_DIRCLEAN)
-+
-+# define the PKG variable for all targets, containing the
-+# uppercase package variable prefix
-+$$($(2)_TARGET_INSTALL_TARGET):		PKG=$(2)
-+$$($(2)_TARGET_INSTALL_STAGING):	PKG=$(2)
-+$$($(2)_TARGET_INSTALL_HOST):           PKG=$(2)
-+$$($(2)_TARGET_BUILD):			PKG=$(2)
-+$$($(2)_TARGET_CONFIGURE):		PKG=$(2)
-+$$($(2)_TARGET_PATCH):			PKG=$(2)
-+$$($(2)_TARGET_PATCH):			NOHOSTPKG=$(3)
-+$$($(2)_TARGET_EXTRACT):		PKG=$(2)
-+$$($(2)_TARGET_SOURCE):			PKG=$(2)
-+$$($(2)_TARGET_UNINSTALL):		PKG=$(2)
-+$$($(2)_TARGET_CLEAN):			PKG=$(2)
-+$$($(2)_TARGET_DIRCLEAN):		PKG=$(2)
-+$$($(2)_HOOK_POST_EXTRACT):		PKG=$(2)
-+$$($(2)_HOOK_POST_CONFIGURE):		PKG=$(2)
-+$$($(2)_HOOK_POST_BUILD):		PKG=$(2)
-+$$($(2)_HOOK_POST_INSTALL):		PKG=$(2)
-+
-+# define hook targets
-+# default hook behaviour: do nothing
-+$$($(2)_HOOK_POST_EXTRACT):
-+$$($(2)_HOOK_POST_CONFIGURE):
-+$$($(2)_HOOK_POST_BUILD):
-+$$($(2)_HOOK_POST_INSTALL):
-+
-+# add package to the general list of targets if requested by the buildroot
-+# configuration
-+
-+ifeq ($$(BR2_PACKAGE_$(2)),y)
-+TARGETS += $(1)
-+endif
-+endef
-+
-+################################################################################
-+# GENTARGETS -- the target generator macro for generic packages
-+#
-+# Argument 1 is the package directory prefix [mandatory]
-+# Argument 2 is the lowercase package name   [mandatory]
-+# Argument 3 is "target" or "host"           [optional, default: "target"]
-+################################################################################
-+
-+define GENTARGETS
-+ifeq ($(3),host)
-+# In the case of host packages, turn the package name "pkg" into "host-pkg"
-+$(call GENTARGETS_INNER,$(3)-$(2),$(call UPPERCASE,$(3)-$(2)),$(call UPPERCASE,$(2)),$(1),host)
-+else
-+# In the case of target packages, keep the package name "pkg"
-+$(call GENTARGETS_INNER,$(2),$(call UPPERCASE,$(2)),$(call UPPERCASE,$(2)),$(1),target)
-+endif
-+endef
-+
-+# :mode=makefile:
+ AUTOMAKE_DEPENDENCIES = autoconf microperl
+ 
+-$(eval $(call AUTOTARGETS,package,automake))
++HOST_AUTOMAKE_DEPENDENCIES = host-autoconf
+ 
+-# automake for the host
+-AUTOMAKE_HOST_DIR:=$(BUILD_DIR)/automake-$(AUTOMAKE_VERSION)-host
++$(eval $(call AUTOTARGETS,package,automake))
++$(eval $(call AUTOTARGETS,package,automake,host))
+ 
+ # variables used by other packages
+ AUTOMAKE:=$(HOST_DIR)/usr/bin/automake
+ ACLOCAL_DIR = $(STAGING_DIR)/usr/share/aclocal
+ ACLOCAL = $(HOST_DIR)/usr/bin/aclocal -I $(ACLOCAL_DIR)
+-
+-$(DL_DIR)/$(AUTOMAKE_SOURCE):
+-	$(call DOWNLOAD,$(AUTOMAKE_SITE),$(AUTOMAKE_SOURCE))
+-
+-$(STAMP_DIR)/host_automake_unpacked: $(DL_DIR)/$(AUTOMAKE_SOURCE)
+-	mkdir -p $(AUTOMAKE_HOST_DIR)
+-	$(INFLATE$(suffix $(AUTOMAKE_SOURCE))) $< | \
+-		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(AUTOMAKE_HOST_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(AUTOMAKE_HOST_DIR) package/automake/ \*.patch
+-	touch $@
+-
+-$(STAMP_DIR)/host_automake_configured: $(STAMP_DIR)/host_automake_unpacked $(STAMP_DIR)/host_autoconf_installed
+-	(cd $(AUTOMAKE_HOST_DIR); rm -rf config.cache; \
+-		$(HOST_CONFIGURE_OPTS) \
+-		CFLAGS="$(HOST_CFLAGS)" \
+-		LDFLAGS="$(HOST_LDFLAGS)" \
+-		./configure $(QUIET) \
+-		--prefix="$(HOST_DIR)/usr" \
+-		--sysconfdir="$(HOST_DIR)/etc" \
+-		--disable-static \
+-	)
+-	touch $@
+-
+-$(STAMP_DIR)/host_automake_compiled: $(STAMP_DIR)/host_automake_configured
+-	$(MAKE) -C $(AUTOMAKE_HOST_DIR)
+-	touch $@
+-
+-$(STAMP_DIR)/host_automake_installed: $(STAMP_DIR)/host_automake_compiled
+-	$(MAKE) -C $(AUTOMAKE_HOST_DIR) install
+-	mkdir -p $(STAGING_DIR)/usr/share/aclocal
+-	touch $@
+-
+-host-automake: $(STAMP_DIR)/host_automake_installed
+-
+-host-automake-clean:
+-	rm -f $(addprefix $(STAMP_DIR)/host_automake_,unpacked configured compiled installed)
+-	-$(MAKE) -C $(AUTOMAKE_HOST_DIR) uninstall
+-	-$(MAKE) -C $(AUTOMAKE_HOST_DIR) clean
+-
+-host-automake-dirclean:
+-	rm -rf $(AUTOMAKE_HOST_DIR)
 -- 
 1.6.3.3
