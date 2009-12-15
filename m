@@ -1,59 +1,46 @@
-From: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
-Date: Tue, 15 Dec 2009 10:36:33 +0100
-Subject: [Buildroot] [PATCH 1/1] uclibc: add prctl syscall fix for AVR32
-	architecture
-Message-ID: <1260869793-2747-1-git-send-email-hans-christian.egtvedt@atmel.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 15 Dec 2009 12:08:09 +0100
+Subject: [Buildroot] [PATCH 1/1] gcc: do not pass --with-pkgversion to gcc <
+	4.3
+In-Reply-To: <cover.1260875280.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1260875280.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <962ea5b29b0ce1966359688f2dffc173073575c8.1260875280.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Peter Korsgaard <jacmet@sunsite.dk>
+Commit 09c181f2891276c458de327d241151bab38bde0f added new options
+passed to gcc configure to set --with-pkgversion and --with-bugurl, to
+gcc >= gcc 4.3. To check this, it was checking that the GCC_VERSION
+string does not contain 4.2.
 
-This patch fixes the prctl syscall for the AVR32 architecture, since this
-architecture assumes you handle varargs in a proper way, always.
+Unfortunately, the test is bogus. It does a findstring on x4.2. (with
+a final dot) but compares the result with x4.2 (without the final
+dot).
 
-Signed-off-by: Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>
+The result is that even with 4.2 versions, the test was true, leading
+--with-pkgversion and --with-bugurl being passed to gcc's configure
+script.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...0.9.30-fix-varargs-in-prctl-syscall.patch.avr32 |   29 ++++++++++++++++++++
- 1 files changed, 29 insertions(+), 0 deletions(-)
- create mode 100644 toolchain/uClibc/uClibc-0.9.30-fix-varargs-in-prctl-syscall.patch.avr32
+ toolchain/gcc/gcc-uclibc-4.x.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/toolchain/uClibc/uClibc-0.9.30-fix-varargs-in-prctl-syscall.patch.avr32 b/toolchain/uClibc/uClibc-0.9.30-fix-varargs-in-prctl-syscall.patch.avr32
-new file mode 100644
-index 0000000..8b27a84
---- /dev/null
-+++ b/toolchain/uClibc/uClibc-0.9.30-fix-varargs-in-prctl-syscall.patch.avr32
-@@ -0,0 +1,29 @@
-+--- a/libc/sysdeps/linux/common/prctl.c
-++++ b/libc/sysdeps/linux/common/prctl.c
-+@@ -12,6 +12,24 @@
-+ /* psm: including sys/prctl.h would depend on kernel headers */
-+ 
-+ #ifdef __NR_prctl
-+-extern int prctl (int, long, long, long, long);
-+-_syscall5(int, prctl, int, option, long, arg2, long, arg3, long, arg4, long, arg5)
-++#define __NR___syscall_prctl	__NR_prctl
-++static inline _syscall5(int, __syscall_prctl, int, option, long, arg2, long, arg3, long,
-++		arg4, long, arg5);
-++
-++int prctl(int option, ...) {
-++	long arg2 = 0;
-++	long arg3 = 0;
-++	long arg4 = 0;
-++	long arg5 = 0;
-++	va_list ap;
-++
-++	va_start(ap, option);
-++	arg2 = va_arg(ap, long);
-++	arg3 = va_arg(ap, long);
-++	arg4 = va_arg(ap, long);
-++	arg5 = va_arg(ap, long);
-++	va_end(ap);
-++
-++	return __syscall_prctl(option, arg2, arg3, arg4, arg5);
-++}
-+ #endif
+diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
+index 32f7a1e..6f65cb3 100644
+--- a/toolchain/gcc/gcc-uclibc-4.x.mk
++++ b/toolchain/gcc/gcc-uclibc-4.x.mk
+@@ -45,7 +45,7 @@ GCC_NO_MPFR:=y
+ endif
+ 
+ # Branding works on >= 4.3
+-ifneq ($(findstring x4.2.,x$(GCC_VERSION)),x4.2)
++ifneq ($(findstring x4.2.,x$(GCC_VERSION)),x4.2.)
+ BUILDROOT_VERSION_STRING=$(call qstrip,$(BR2_VERSION))
+ EXTRA_GCC_CONFIG_OPTIONS+=--with-pkgversion="Buildroot $(BUILDROOT_VERSION_STRING)" \
+ 	--with-bugurl="http://bugs.buildroot.net/"
 -- 
-1.6.0.4
+1.6.3.3
