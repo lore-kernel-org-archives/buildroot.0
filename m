@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2009 20:30:53 +0100
-Subject: [Buildroot] [PATCH 22/39] freetype: convert to autotools
+Date: Tue, 15 Dec 2009 20:30:57 +0100
+Subject: [Buildroot] [PATCH 26/39] expat: convert to autotools
 	infrastructure for host package
 In-Reply-To: <cover.1260905467.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1260905467.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <fc1163d22d905db1a6813d3493a19885f5e97ace.1260905467.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <57fbbfa775a91989ed4c328a386ec1e0d73cd560.1260905467.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,43 +13,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/freetype/freetype.mk |   46 ++---------------------------------------
- 1 files changed, 3 insertions(+), 43 deletions(-)
+ package/expat/expat.mk |   44 +-------------------------------------------
+ 1 files changed, 1 insertions(+), 43 deletions(-)
 
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index 06bf6f4..ed73253 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
-@@ -13,7 +13,10 @@ FREETYPE_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
- FREETYPE_MAKE_OPT = CCexe="$(HOSTCC)"
- FREETYPE_DEPENDENCIES = host-pkg-config $(if $(BR2_PACKAGE_ZLIB),zlib)
+diff --git a/package/expat/expat.mk b/package/expat/expat.mk
+index 9dcb0e7..5b4eb97 100644
+--- a/package/expat/expat.mk
++++ b/package/expat/expat.mk
+@@ -19,50 +19,8 @@ EXPAT_CONF_OPT = --enable-shared
+ EXPAT_DEPENDENCIES = host-pkg-config
  
-+HOST_FREETYPE_DEPENDENCIES = host-pkg-config
-+
- $(eval $(call AUTOTARGETS,package,freetype))
-+$(eval $(call AUTOTARGETS,package,freetype,host))
+ $(eval $(call AUTOTARGETS,package,expat))
++$(eval $(call AUTOTARGETS,package,expat,host))
  
- $(FREETYPE_HOOK_POST_INSTALL):
- 	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" \
-@@ -26,46 +29,3 @@ ifneq ($(BR2_HAVE_DEVFILES),y)
- 	rm -f $(TARGET_DIR)/usr/bin/freetype-config
- endif
+ $(EXPAT_HOOK_POST_INSTALL): $(EXPAT_TARGET_INSTALL_TARGET)
+ 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libexpat.so.*
  	touch $@
 -
--# freetype for the host
--FREETYPE_HOST_DIR:=$(BUILD_DIR)/freetype-$(FREETYPE_VERSION)-host
+-# expat for the host
+-EXPAT_HOST_DIR:=$(BUILD_DIR)/expat-$(EXPAT_VERSION)-host
 -
--$(DL_DIR)/$(FREETYPE_SOURCE):
--	$(call DOWNLOAD,$(FREETYPE_SITE),$(FREETYPE_SOURCE))
+-$(DL_DIR)/$(EXPAT_SOURCE):
+-	$(call DOWNLOAD,$(EXPAT_SITE),$(EXPAT_SOURCE))
 -
--$(STAMP_DIR)/host_freetype_unpacked: $(DL_DIR)/$(FREETYPE_SOURCE)
--	mkdir -p $(FREETYPE_HOST_DIR)
--	$(INFLATE$(suffix $(FREETYPE_SOURCE))) $< | \
--		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(FREETYPE_HOST_DIR) $(TAR_OPTIONS) -
+-$(STAMP_DIR)/host_expat_unpacked: $(DL_DIR)/$(EXPAT_SOURCE)
+-	mkdir -p $(EXPAT_HOST_DIR)
+-	$(INFLATE$(suffix $(EXPAT_SOURCE))) $< | \
+-		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(EXPAT_HOST_DIR) $(TAR_OPTIONS) -
 -	touch $@
 -
--$(STAMP_DIR)/host_freetype_configured: $(STAMP_DIR)/host_freetype_unpacked $(STAMP_DIR)/host_pkgconfig_installed
--	(cd $(FREETYPE_HOST_DIR); rm -rf config.cache; \
+-$(STAMP_DIR)/host_expat_configured: $(STAMP_DIR)/host_expat_unpacked
+-	(cd $(EXPAT_HOST_DIR); rm -rf config.cache; \
 -		$(HOST_CONFIGURE_OPTS) \
 -		CFLAGS="$(HOST_CFLAGS)" \
 -		LDFLAGS="$(HOST_LDFLAGS)" \
@@ -59,24 +53,24 @@ index 06bf6f4..ed73253 100644
 -	)
 -	touch $@
 -
--$(STAMP_DIR)/host_freetype_compiled: $(STAMP_DIR)/host_freetype_configured
--	$(MAKE) -C $(FREETYPE_HOST_DIR)
+-$(STAMP_DIR)/host_expat_compiled: $(STAMP_DIR)/host_expat_configured
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(EXPAT_HOST_DIR)
 -	touch $@
 -
--$(STAMP_DIR)/host_freetype_installed: $(STAMP_DIR)/host_freetype_compiled
--	$(HOST_MAKE_ENV) $(MAKE) -C $(FREETYPE_HOST_DIR) install
+-$(STAMP_DIR)/host_expat_installed: $(STAMP_DIR)/host_expat_compiled
+-	$(MAKE) -C $(EXPAT_HOST_DIR) installlib
 -	touch $@
 -
--host-freetype: $(STAMP_DIR)/host_freetype_installed
+-host-expat: $(STAMP_DIR)/host_expat_installed
 -
--host-freetype-source: freetype-source
+-host-expat-source: expat-source
 -
--host-freetype-clean:
--	rm -f $(addprefix $(STAMP_DIR)/host_freetype_,unpacked configured compiled installed)
--	-$(MAKE) -C $(FREETYPE_HOST_DIR) uninstall
--	-$(MAKE) -C $(FREETYPE_HOST_DIR) clean
+-host-expat-clean:
+-	rm -f $(addprefix $(STAMP_DIR)/host_expat_,unpacked configured compiled installed)
+-	-$(MAKE) -C $(EXPAT_HOST_DIR) uninstall
+-	-$(MAKE) -C $(EXPAT_HOST_DIR) clean
 -
--host-freetype-dirclean:
--	rm -rf $(FREETYPE_HOST_DIR)
+-host-expat-dirclean:
+-	rm -rf $(EXPAT_HOST_DIR)
 -- 
 1.6.3.3
