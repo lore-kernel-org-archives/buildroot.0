@@ -1,91 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2009 12:39:24 +0100
-Subject: [Buildroot] [git commit master] update avr32 defconfigs after
-	uclibc avr32 version removal
-Message-ID: <20091215113952.F1CEC77803@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 15 Dec 2009 12:39:55 +0100
+Subject: [Buildroot] [pull request] Pull request for branch avr32-fixes
+In-Reply-To: <cover.1260876205.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Tue, 15 Dec 2009 12:23:28 +0100")
+References: <cover.1260876205.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87d42gpit0.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8913798baf56e18fc8e9d07db82b2fd2421e670f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Thomas> The following changes since commit 687d0958a31f6aee8e8e4d26360961327049d9a8:
+ Thomas>   Peter Korsgaard (1):
+ Thomas>         toolchain/uClibc: avr32 patch should apply to 0.9.30.1
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- configs/atngw100-base_defconfig |    5 ++---
- configs/atngw100_defconfig      |    5 ++---
- configs/atstk1005_defconfig     |    3 ++-
- configs/atstk100x_defconfig     |    5 ++---
- 4 files changed, 8 insertions(+), 10 deletions(-)
+ Thomas> are available in the git repository at:
 
-diff --git a/configs/atngw100-base_defconfig b/configs/atngw100-base_defconfig
-index 14417c9..d89daa1 100644
---- a/configs/atngw100-base_defconfig
-+++ b/configs/atngw100-base_defconfig
-@@ -161,10 +161,9 @@ BR2_DEFAULT_KERNEL_HEADERS="2.6.29.2"
- # BR2_UCLIBC_VERSION_0_9_28_3 is not set
- # BR2_UCLIBC_VERSION_0_9_29 is not set
- # BR2_UCLIBC_VERSION_0_9_30 is not se
--BR2_UCLIBC_VERSION_0_9_30_AVR32_2_1_5=y
--# BR2_UCLIBC_VERSION_0_9_30_1 is not set
-+BR2_UCLIBC_VERSION_0_9_30_1=y
- # BR2_UCLIBC_VERSION_SNAPSHOT is not set
--BR2_UCLIBC_VERSION_STRING="0.9.30-avr32-2.1.5"
-+BR2_UCLIBC_VERSION_STRING="0.9.30.1"
- BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.30.config"
- # BR2_PTHREAD_DEBUG is not set
- # BR2_PROGRAM_INVOCATION is not set
-diff --git a/configs/atngw100_defconfig b/configs/atngw100_defconfig
-index 093c92c..6e244eb 100644
---- a/configs/atngw100_defconfig
-+++ b/configs/atngw100_defconfig
-@@ -161,10 +161,9 @@ BR2_DEFAULT_KERNEL_HEADERS="2.6.29.2"
- # BR2_UCLIBC_VERSION_0_9_28_3 is not set
- # BR2_UCLIBC_VERSION_0_9_29 is not set
- # BR2_UCLIBC_VERSION_0_9_30 is not set
--BR2_UCLIBC_VERSION_0_9_30_AVR32_2_1_5=y
--# BR2_UCLIBC_VERSION_0_9_30_1 is not set
-+BR2_UCLIBC_VERSION_0_9_30_1=y
- # BR2_UCLIBC_VERSION_SNAPSHOT is not set
--BR2_UCLIBC_VERSION_STRING="0.9.30-avr32-2.1.5"
-+BR2_UCLIBC_VERSION_STRING="0.9.30.1"
- BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.30.config"
- # BR2_PTHREAD_DEBUG is not set
- # BR2_PROGRAM_INVOCATION is not set
-diff --git a/configs/atstk1005_defconfig b/configs/atstk1005_defconfig
-index 075a871..ffca235 100644
---- a/configs/atstk1005_defconfig
-+++ b/configs/atstk1005_defconfig
-@@ -169,8 +169,9 @@ BR2_DEFAULT_KERNEL_HEADERS="2.6.28.2"
- # BR2_UCLIBC_VERSION_0_9_28_3 is not set
- # BR2_UCLIBC_VERSION_0_9_29 is not set
- # BR2_UCLIBC_VERSION_0_9_30 is not set
-+BR2_UCLIBC_VERSION_0_9_30_1=y
- # BR2_UCLIBC_VERSION_SNAPSHOT is not set
--BR2_UCLIBC_VERSION_STRING="0.9.30-avr32-2.1.5"
-+BR2_UCLIBC_VERSION_STRING="0.9.30.1"
- BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.30.config"
- # BR2_PTHREAD_DEBUG is not set
- # BR2_PROGRAM_INVOCATION is not set
-diff --git a/configs/atstk100x_defconfig b/configs/atstk100x_defconfig
-index ad91b8d..0b75e47 100644
---- a/configs/atstk100x_defconfig
-+++ b/configs/atstk100x_defconfig
-@@ -160,10 +160,9 @@ BR2_DEFAULT_KERNEL_HEADERS="2.6.28.9"
- # BR2_UCLIBC_VERSION_0_9_28_3 is not set
- # BR2_UCLIBC_VERSION_0_9_29 is not set
- # BR2_UCLIBC_VERSION_0_9_30 is not set
--BR2_UCLIBC_VERSION_0_9_30_AVR32_2_1_5=y
--# BR2_UCLIBC_VERSION_0_9_30_1 is not set
-+BR2_UCLIBC_VERSION_0_9_30_1=y
- # BR2_UCLIBC_VERSION_SNAPSHOT is not set
--BR2_UCLIBC_VERSION_STRING="0.9.30-avr32-2.1.5"
-+BR2_UCLIBC_VERSION_STRING="0.9.30.1"
- BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.30.config"
- # BR2_PTHREAD_DEBUG is not set
- BR2_PROGRAM_INVOCATION=y
+ Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot avr32-fixes
+
+ Thomas> Thomas Petazzoni (2):
+ Thomas>       uclibc: get rid of avr32 special version since upstream works
+ Thomas>       update avr32 defconfigs after uclibc avr32 version removal
+
+Pulled and pushed, thanks!
+
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
