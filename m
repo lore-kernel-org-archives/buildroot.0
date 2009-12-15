@@ -1,71 +1,85 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2009 20:30:43 +0100
-Subject: [Buildroot] [PATCH 12/39] autoconf: add patch to make it work under
-	dash
+Date: Tue, 15 Dec 2009 20:30:38 +0100
+Subject: [Buildroot] [PATCH 07/39] pkg-config: convert to autotools
+	infrastructure for host package
 In-Reply-To: <cover.1260905467.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1260905467.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <cb4ab36bcf15560eb52ab78500db317ad0a963d9.1260905467.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <d5d5d2942f388a22fd808406645c7033a7d27048.1260905467.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-autoconf >= 2.64 was broken when /bin/sh is symlinked to dash. This
-has been fixed post-2.65 by the commit at
-http://git.savannah.gnu.org/cgit/autoconf.git/commit/?id=7f75858f577f11a844781764f30cd42cfe8a5669.
-
-Compared to the original patch, the patch included in Buildroot
-manually does the change to the ./configure script itself. Otherwise,
-the compilation of host-autoconf would require host-autoconf itself.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...toconf-2.65-fix-m4-detection-test-on-dash.patch |   36 ++++++++++++++++++++
- 1 files changed, 36 insertions(+), 0 deletions(-)
- create mode 100644 package/autoconf/autoconf-2.65-fix-m4-detection-test-on-dash.patch
+ package/pkg-config/pkg-config.mk |   51 ++++++-------------------------------
+ 1 files changed, 9 insertions(+), 42 deletions(-)
 
-diff --git a/package/autoconf/autoconf-2.65-fix-m4-detection-test-on-dash.patch b/package/autoconf/autoconf-2.65-fix-m4-detection-test-on-dash.patch
-new file mode 100644
-index 0000000..35f99b2
---- /dev/null
-+++ b/package/autoconf/autoconf-2.65-fix-m4-detection-test-on-dash.patch
-@@ -0,0 +1,36 @@
-+Patch taken upstream at
-+http://git.savannah.gnu.org/cgit/autoconf.git/commit/?id=7f75858f577f11a844781764f30cd42cfe8a5669,
-+with the following modifications:
-+
-+ * Changes to NEWS file removed to avoid conflicts
-+
-+ * Changes also made manually to the generated configure
-+   script. Otherwise, host-autoconf is needed to compile
-+   host-autoconf !
-+
-+Index: autoconf-2.65.old/configure
-+===================================================================
-+--- autoconf-2.65.old.orig/configure	2009-12-15 16:11:05.175566911 +0100
-++++ autoconf-2.65.old/configure	2009-12-15 16:11:37.739562146 +0100
-+@@ -2380,7 +2380,7 @@
-+       ac_snippet=change'quote(<,>)in''dir(<if''def>,mac,bug)'
-+       ac_snippet=${ac_snippet}pat'subst(a,\(b\)\|\(a\),\1)d'nl
-+       test -z "`$ac_path_M4 -F conftest.m4f </dev/null 2>&1`" \
-+-      && test -z "`echo $ac_snippet | $ac_path_M4 --trace=mac 2>&1`" \
-++      && test -z "`$as_echo $ac_snippet | $ac_path_M4 --trace=mac 2>&1`" \
-+       && test -f conftest.m4f \
-+       && ac_cv_path_M4=$ac_path_M4 ac_path_M4_found=:
-+       rm -f conftest.m4f
-+Index: autoconf-2.65.old/m4/m4.m4
-+===================================================================
-+--- autoconf-2.65.old.orig/m4/m4.m4	2009-12-15 16:11:05.207566124 +0100
-++++ autoconf-2.65.old/m4/m4.m4	2009-12-15 16:11:18.595562030 +0100
-+@@ -29,7 +29,7 @@
-+       ac_snippet=change'quote(<,>)in''dir(<if''def>,mac,bug)'
-+       ac_snippet=${ac_snippet}pat'subst(a,\(b\)\|\(a\),\1)d'nl
-+       test -z "`$ac_path_M4 -F conftest.m4f </dev/null 2>&1`" \
-+-      && test -z "`echo $ac_snippet | $ac_path_M4 --trace=mac 2>&1`" \
-++      && test -z "`AS_ECHO([$ac_snippet]) | $ac_path_M4 --trace=mac 2>&1`" \
-+       && test -f conftest.m4f \
-+       && ac_cv_path_M4=$ac_path_M4 ac_path_M4_found=:
-+       rm -f conftest.m4f],
+diff --git a/package/pkg-config/pkg-config.mk b/package/pkg-config/pkg-config.mk
+index e328544..7caf37b 100644
+--- a/package/pkg-config/pkg-config.mk
++++ b/package/pkg-config/pkg-config.mk
+@@ -15,51 +15,18 @@ PKG_CONFIG_DEPENDENCIES = libglib2
+ 
+ PKG_CONFIG_CONF_OPT = --with-installed-glib
+ 
+-$(eval $(call AUTOTARGETS,package,pkg-config))
+-
+-# pkg-config for the host
+-PKG_CONFIG_HOST_DIR:=$(BUILD_DIR)/pkg-config-$(PKG_CONFIG_VERSION)-host
+-PKG_CONFIG_HOST_BINARY:=$(HOST_DIR)/usr/bin/pkg-config
+-
+-$(DL_DIR)/$(PKG_CONFIG_SOURCE):
+-	$(call DOWNLOAD,$(PKG_CONFIG_SITE),$(PKG_CONFIG_SOURCE))
+-
+-$(STAMP_DIR)/host_pkgconfig_unpacked: $(DL_DIR)/$(PKG_CONFIG_SOURCE)
+-	mkdir -p $(PKG_CONFIG_HOST_DIR)
+-	$(INFLATE$(suffix $(PKG_CONFIG_SOURCE))) $< | \
+-		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(PKG_CONFIG_HOST_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(PKG_CONFIG_HOST_DIR) package/pkg-config/ \*.patch
+-	touch $@
+-
+-$(STAMP_DIR)/host_pkgconfig_configured: $(STAMP_DIR)/host_pkgconfig_unpacked
+-	(cd $(PKG_CONFIG_HOST_DIR); rm -rf config.cache; \
+-		$(HOST_CONFIGURE_OPTS) \
+-		CFLAGS="$(HOST_CFLAGS)" \
+-		LDFLAGS="$(HOST_LDFLAGS)" \
+-		./configure $(QUIET) \
+-		--prefix="$(HOST_DIR)/usr" \
+-		--sysconfdir="$(HOST_DIR)/etc" \
++HOST_PKG_CONFIG_CONF_OPT = \
+ 		--with-pc-path="$(STAGING_DIR)/usr/lib/pkgconfig" \
+-		--disable-static \
+-	)
+-	touch $@
+-
+-$(STAMP_DIR)/host_pkgconfig_compiled: $(STAMP_DIR)/host_pkgconfig_configured
+-	$(MAKE) -C $(PKG_CONFIG_HOST_DIR)
+-	touch $@
++		--disable-static
+ 
+-$(STAMP_DIR)/host_pkgconfig_installed: $(STAMP_DIR)/host_pkgconfig_compiled
+-	$(MAKE) -C $(PKG_CONFIG_HOST_DIR) install
+-	install -D -m 0644 $(HOST_DIR)/usr/share/aclocal/pkg.m4 \
++define HOST_PKG_CONFIG_INSTALL_M4
++install -D -m 0644 $(HOST_DIR)/usr/share/aclocal/pkg.m4 \
+ 		$(STAGING_DIR)/usr/share/aclocal/pkg.m4
+-	touch $@
++endef
+ 
+-host-pkgconfig: $(STAMP_DIR)/host_pkgconfig_installed
++HOST_PKG_CONFIG_POST_INSTALL_HOOKS += HOST_PKG_CONFIG_INSTALL_M4
+ 
+-host-pkgconfig-clean:
+-	rm -f $(addprefix $(STAMP_DIR)/host_pkgconfig_,unpacked configured compiled installed)
+-	-$(MAKE) -C $(PKG_CONFIG_HOST_DIR) uninstall
+-	-$(MAKE) -C $(PKG_CONFIG_HOST_DIR) clean
++$(eval $(call AUTOTARGETS,package,pkg-config))
++$(eval $(call AUTOTARGETS,package,pkg-config,host))
+ 
+-host-pkgconfig-dirclean:
+-	rm -rf $(PKG_CONFIG_HOST_DIR)
++PKG_CONFIG_HOST_BINARY:=$(HOST_DIR)/usr/bin/pkg-config
 -- 
 1.6.3.3
