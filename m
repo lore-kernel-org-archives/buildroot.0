@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Dec 2009 20:31:00 +0100
-Subject: [Buildroot] [PATCH 29/39] libusb: convert to autotools
-	infrastructure for host package
+Date: Tue, 15 Dec 2009 20:31:02 +0100
+Subject: [Buildroot] [PATCH 31/39] mtd-utils: fix dependency on host package
 In-Reply-To: <cover.1260905467.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1260905467.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <f3e2f5c04e4da3bf9ff578d78377ae3cf9fad1e9.1260905467.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <e99f7cacef6becaabed74c07bfe5a05f52830ddb.1260905467.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libusb/libusb.mk |    2 +-
+ package/mtd/mtd-utils/mtd.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
-index b93451b..618d36b 100644
---- a/package/libusb/libusb.mk
-+++ b/package/libusb/libusb.mk
-@@ -23,7 +23,7 @@ $(DL_DIR)/$(LIBUSB_SOURCE): $(LIBUSB_PATCH)
- libusb-source: $(DL_DIR)/$(LIBUSB_SOURCE) $(LIBUSB_PATCH)
+diff --git a/package/mtd/mtd-utils/mtd.mk b/package/mtd/mtd-utils/mtd.mk
+index a686661..ddae44e 100644
+--- a/package/mtd/mtd-utils/mtd.mk
++++ b/package/mtd/mtd-utils/mtd.mk
+@@ -34,7 +34,7 @@ $(MTD_HOST_DIR)/.unpacked: $(DL_DIR)/$(MTD_SOURCE)
+ 	touch $@
  
- libusb-unpacked: $(LIBUSB_DIR)/.unpacked
--$(LIBUSB_DIR)/.unpacked: $(STAMP_DIR)/host_autoconf_installed $(STAMP_DIR)/host_automake_installed $(STAMP_DIR)/host_libtool_installed $(DL_DIR)/$(LIBUSB_SOURCE)
-+$(LIBUSB_DIR)/.unpacked: host-autoconf host-automake host-libtool $(DL_DIR)/$(LIBUSB_SOURCE)
- 	$(LIBUSB_CAT) $(DL_DIR)/$(LIBUSB_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
- ifneq ($(LIBUSB_PATCH_FILE),)
- 	(cd $(LIBUSB_DIR) && $(LIBUSB_CAT) $(LIBUSB_PATCH) | patch -p1)
+ 
+-$(MKFS_JFFS2): $(MTD_HOST_DIR)/.unpacked $(STAMP_DIR)/host_lzo_installed
++$(MKFS_JFFS2): $(MTD_HOST_DIR)/.unpacked host-lzo
+ 	CC="$(HOSTCC)" CROSS= LDFLAGS=-L$(HOST_DIR)/usr/lib \
+ 		$(MAKE) CFLAGS='-I$(HOST_DIR)/usr/include -I./include' \
+ 		LINUXDIR=$(LINUX_DIR) BUILDDIR=$(MTD_HOST_DIR) \
 -- 
 1.6.3.3
