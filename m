@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 16 Dec 2009 16:29:02 +0100
-Subject: [Buildroot] [git commit master] libxml2: convert to autotools
-	infrastructure for host package
-Message-ID: <20091216153053.D6A0477738@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] shared-mime-info: convert to
+	autotools infrastructure for host package
+Message-ID: <20091216153054.6495877738@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,82 +10,82 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a02cf75e19732ee1a5d99498a19ea85cc7bf2750
+commit: http://git.buildroot.net/buildroot/commit/?id=c01c5010ac9cb24136ad0a678e1f49048e5389fd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libxml2/libxml2.mk |   52 ++++++-------------------------------------
- 1 files changed, 8 insertions(+), 44 deletions(-)
+ package/shared-mime-info/shared-mime-info.mk |   52 +++----------------------
+ 1 files changed, 7 insertions(+), 45 deletions(-)
 
-diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-index ceabcd9..a554226 100644
---- a/package/libxml2/libxml2.mk
-+++ b/package/libxml2/libxml2.mk
-@@ -20,7 +20,14 @@ LIBXML2_CONF_OPT = --with-gnu-ld --enable-shared \
- 		--without-debugging --without-python \
- 		--without-threads 
+diff --git a/package/shared-mime-info/shared-mime-info.mk b/package/shared-mime-info/shared-mime-info.mk
+index b1833bb..cfd3521 100644
+--- a/package/shared-mime-info/shared-mime-info.mk
++++ b/package/shared-mime-info/shared-mime-info.mk
+@@ -16,57 +16,19 @@ SHARED_MIME_INFO_DEPENDENCIES = host-pkg-config host-libglib2 host-libxml2 libxm
  
-+HOST_LIBXML2_DEPENDENCIES = host-pkg-config
+ SHARED_MIME_INFO_CONF_OPT = --disable-update-mimedb
+ 
+-$(eval $(call AUTOTARGETS,package,shared-mime-info))
++HOST_SHARED_MIME_INFO_DEPENDENCIES = host-pkg-config
 +
-+HOST_LIBXML2_CONF_OPT = \
-+		--enable-shared --without-debugging --without-python \
-+		--without-threads
-+
- $(eval $(call AUTOTARGETS,package,libxml2))
-+$(eval $(call AUTOTARGETS,package,libxml2,host))
++HOST_SHARED_MIME_INFO_CONF_OPT = \
++	--disable-update-mimedb
  
- $(LIBXML2_HOOK_POST_INSTALL):
- 	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/xml2-config
-@@ -31,47 +38,4 @@ $(LIBXML2_HOOK_POST_INSTALL):
- 	touch $@
++$(eval $(call AUTOTARGETS,package,shared-mime-info))
++$(eval $(call AUTOTARGETS,package,shared-mime-info,host))
  
- # libxml2 for the host
--LIBXML2_HOST_DIR:=$(BUILD_DIR)/libxml2-$(LIBXML2_VERSION)-host
--LIBXML2_HOST_BINARY:=$(HOST_DIR)/usr/bin/xmllint
+ # shared-mime-info for the host
+-SHARED_MIME_INFO_HOST_DIR:=$(BUILD_DIR)/shared-mime-info-$(SHARED_MIME_INFO_VERSION)-host
+ SHARED_MIME_INFO_HOST_BINARY:=$(HOST_DIR)/usr/bin/update-mime-database
+ 
+-$(DL_DIR)/$(SHARED_MIME_INFO_SOURCE):
+-	$(call DOWNLOAD,$(SHARED_MIME_INFO_SITE),$(SHARED_MIME_INFO_SOURCE))
 -
--$(DL_DIR)/$(LIBXML2_SOURCE):
--	$(call DOWNLOAD,$(LIBXML2_SITE),$(LIBXML2_SOURCE))
--
--$(STAMP_DIR)/host_libxml2_unpacked: $(DL_DIR)/$(LIBXML2_SOURCE)
--	mkdir -p $(LIBXML2_HOST_DIR)
--	$(INFLATE$(suffix $(LIBXML2_SOURCE))) $< | \
--		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(LIBXML2_HOST_DIR) $(TAR_OPTIONS) -
+-$(STAMP_DIR)/host_shared-mime-info_unpacked: $(DL_DIR)/$(SHARED_MIME_INFO_SOURCE)
+-	mkdir -p $(SHARED_MIME_INFO_HOST_DIR)
+-	$(INFLATE$(suffix $(SHARED_MIME_INFO_SOURCE))) $< | \
+-		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(SHARED_MIME_INFO_HOST_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(SHARED_MIME_INFO_HOST_DIR) package/shared-mime-info/ \*.patch
 -	touch $@
 -
--$(STAMP_DIR)/host_libxml2_configured: $(STAMP_DIR)/host_libxml2_unpacked $(STAMP_DIR)/host_pkgconfig_installed
--	(cd $(LIBXML2_HOST_DIR); rm -rf config.cache; \
+-$(STAMP_DIR)/host_shared-mime-info_configured: $(STAMP_DIR)/host_shared-mime-info_unpacked $(STAMP_DIR)/host_pkgconfig_installed
+-	(cd $(SHARED_MIME_INFO_HOST_DIR); rm -rf config.cache; \
 -		$(HOST_CONFIGURE_OPTS) \
 -		CFLAGS="$(HOST_CFLAGS)" \
 -		LDFLAGS="$(HOST_LDFLAGS)" \
 -		./configure $(QUIET) \
 -		--prefix="$(HOST_DIR)/usr" \
 -		--sysconfdir="$(HOST_DIR)/etc" \
--		--enable-shared --without-debugging --without-python \
--		--without-threads \
+-		--disable-update-mimedb \
 -	)
 -	touch $@
 -
--$(STAMP_DIR)/host_libxml2_compiled: $(STAMP_DIR)/host_libxml2_configured
--	$(MAKE) -C $(LIBXML2_HOST_DIR)
+-$(STAMP_DIR)/host_shared-mime-info_compiled: $(STAMP_DIR)/host_shared-mime-info_configured
+-	$(MAKE) -C $(SHARED_MIME_INFO_HOST_DIR)
 -	touch $@
 -
--$(STAMP_DIR)/host_libxml2_installed: $(STAMP_DIR)/host_libxml2_compiled
--	$(HOST_MAKE_ENV) $(MAKE) -C $(LIBXML2_HOST_DIR) install
+-$(STAMP_DIR)/host_shared-mime-info_installed: $(STAMP_DIR)/host_shared-mime-info_compiled
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(SHARED_MIME_INFO_HOST_DIR) install
 -	touch $@
 -
--host-libxml2: $(STAMP_DIR)/host_libxml2_installed
+-host-shared-mime-info: $(STAMP_DIR)/host_shared-mime-info_installed
 -
--host-libxml2-source: libxml2-source
+-host-shared-mime-info-source: shared-mime-info-source
 -
--host-libxml2-clean:
--	rm -f $(addprefix $(STAMP_DIR)/host_libxml2_,unpacked configured compiled installed)
--	-$(MAKE) -C $(LIBXML2_HOST_DIR) uninstall
--	-$(MAKE) -C $(LIBXML2_HOST_DIR) clean
+-host-shared-mime-info-clean:
+-	rm -f $(addprefix $(STAMP_DIR)/host_shared-mime-info_,unpacked configured compiled installed)
+-	-$(MAKE) -C $(SHARED_MIME_INFO_HOST_DIR) uninstall
+-	-$(MAKE) -C $(SHARED_MIME_INFO_HOST_DIR) clean
 -
--host-libxml2-dirclean:
--	rm -rf $(LIBXML2_HOST_DIR)
-+LIBXML2_HOST_BINARY:=$(HOST_DIR)/usr/bin/xmllint
-\ No newline@end of file
+-host-shared-mime-info-dirclean:
+-	rm -rf $(SHARED_MIME_INFO_HOST_DIR)
+-
+ # update the shared-mime-info database in the target
+-$(SHARED_MIME_INFO_HOOK_POST_INSTALL): $(STAMP_DIR)/host_shared-mime-info_installed
++$(SHARED_MIME_INFO_HOOK_POST_INSTALL): host-shared-mime-info
+ 	$(SHARED_MIME_INFO_HOST_BINARY) $(STAGING_DIR)/usr/share/mime
+ 	$(INSTALL) -D $(STAGING_DIR)/usr/share/mime/mime.cache $(TARGET_DIR)/usr/share/mime/mime.cache
+ 	touch $@
 -- 
 1.6.3.3
