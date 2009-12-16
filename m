@@ -1,8 +1,8 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 16 Dec 2009 16:29:02 +0100
-Subject: [Buildroot] [git commit master] hal: fix build,
-	correct glib/udev/expat paths
-Message-ID: <20091216153105.3088277738@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] i2c-tools: convert to the generic
+	package infrastructure
+Message-ID: <20091216153100.6805577738@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,78 +10,71 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ebe6ce42941b502fcd40967f53165418064d7d30
+commit: http://git.buildroot.net/buildroot/commit/?id=bc71ad7d5a46c1223fc7933362aab26e49137f98
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/hal/hal.mk                                |   15 ++++++++-------
- package/hal/hal01-configure-buildroot-cross.patch |   10 ----------
- 2 files changed, 8 insertions(+), 17 deletions(-)
- delete mode 100644 package/hal/hal01-configure-buildroot-cross.patch
+ package/i2c-tools/i2c-tools.mk |   44 +++++++--------------------------------
+ 1 files changed, 8 insertions(+), 36 deletions(-)
 
-diff --git a/package/hal/hal.mk b/package/hal/hal.mk
-index a72bc63..754ed85 100644
---- a/package/hal/hal.mk
-+++ b/package/hal/hal.mk
-@@ -12,11 +12,11 @@ HAL_BINARY:=hald/hald
- HAL_TARGET_BINARY:=usr/sbin/hald
+diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
+index 5d28e1d..d419524 100644
+--- a/package/i2c-tools/i2c-tools.mk
++++ b/package/i2c-tools/i2c-tools.mk
+@@ -6,45 +6,17 @@
+ I2C_TOOLS_VERSION:=3.0.2
+ I2C_TOOLS_SOURCE:=i2c-tools-$(I2C_TOOLS_VERSION).tar.bz2
+ I2C_TOOLS_SITE:=http://dl.lm-sensors.org/i2c-tools/releases/
+-I2C_TOOLS_DIR:=$(BUILD_DIR)/i2c-tools-$(I2C_TOOLS_VERSION)
+-I2C_TOOLS_BINARY:=tools/i2cdetect
+-I2C_TOOLS_TARGET_BINARY:=usr/bin/i2cdetect
  
- GLIB_CFLAGS:=-I$(STAGING_DIR)/usr/include/glib-2.0 \
--	     -I$(STAGING_DIR)/lib/glib/include
--GLIB_LIBS:=$(STAGING_DIR)/lib/libglib-2.0.so \
--	   $(STAGING_DIR)/lib/libgmodule-2.0.so \
--	   $(STAGING_DIR)/lib/libgobject-2.0.so \
--	   $(STAGING_DIR)/lib/libgthread-2.0.so
-+	     -I$(STAGING_DIR)/usr/lib/glib-2.0/include
-+GLIB_LIBS:=$(STAGING_DIR)/usr/lib/libglib-2.0.so \
-+	   $(STAGING_DIR)/usr/lib/libgmodule-2.0.so \
-+	   $(STAGING_DIR)/usr/lib/libgobject-2.0.so \
-+	   $(STAGING_DIR)/usr/lib/libgthread-2.0.so
- DBUS_GLIB_LIBS:=$(STAGING_DIR)/usr/lib/libdbus-glib-1.so
+-$(DL_DIR)/$(I2C_TOOLS_SOURCE):
+-	$(call DOWNLOAD,$(I2C_TOOLS_SITE),$(I2C_TOOLS_SOURCE))
++define I2C_TOOLS_BUILD_CMDS
++ $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
++endef
  
- $(DL_DIR)/$(HAL_SOURCE):
-@@ -29,7 +29,7 @@ $(HAL_DIR)/.unpacked: $(DL_DIR)/$(HAL_SOURCE)
- 	toolchain/patch-kernel.sh $(HAL_DIR) package/hal/ \*.patch
- 	touch $(HAL_DIR)/.unpacked
+-$(I2C_TOOLS_DIR)/.unpacked: $(DL_DIR)/$(I2C_TOOLS_SOURCE)
+-	$(BZCAT) $(DL_DIR)/$(I2C_TOOLS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(I2C_TOOLS_DIR) package/i2c-tools/ i2c-tools-$(I2C_TOOLS_VERSION)\*.patch
+-	touch $@
+-
+-$(I2C_TOOLS_DIR)/$(I2C_TOOLS_BINARY): $(I2C_TOOLS_DIR)/.unpacked
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(I2C_TOOLS_DIR)
+-
+-$(TARGET_DIR)/$(I2C_TOOLS_TARGET_BINARY): $(I2C_TOOLS_DIR)/$(I2C_TOOLS_BINARY)
+-	$(INSTALL) -m 755 -d $(@D)
++define I2C_TOOLS_INSTALL_TARGET_CMDS
+ 	for i in i2cdump i2cget i2cset i2cdetect; \
+ 	do \
+-		$(INSTALL) -m 755 $(<D)/$$i $(@D); \
+-		$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(@D)/$$i; \
++		$(INSTALL) -m 755 $(@D)/tools/$$i $(TARGET_DIR)/usr/bin/$$i; \
++		$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/bin/$$i; \
+ 	done
++endef
  
--$(HAL_DIR)/.configured: $(HAL_DIR)/.unpacked /usr/bin/pkg-config
-+$(HAL_DIR)/.configured: $(HAL_DIR)/.unpacked
- 	(cd $(HAL_DIR); rm -rf config.cache; \
- 		$(TARGET_CONFIGURE_OPTS) \
- 		$(TARGET_CONFIGURE_ARGS) \
-@@ -39,7 +39,7 @@ $(HAL_DIR)/.configured: $(HAL_DIR)/.unpacked /usr/bin/pkg-config
- 		DBUS_CFLAGS="-I$(STAGING_DIR)/usr/include/dbus-1.0 -I$(STAGING_DIR)/usr/lib/dbus-1.0/include" \
- 		DBUS_LIBS="$(STAGING_DIR)/usr/lib/libdbus-1.so" \
- 		VOLUME_ID_CFLAGS="$(TARGET_CFLAGS)" \
--		VOLUME_ID_LIBS="$(STAGING_DIR)/usr/lib/libvolume_id.so" \
-+		VOLUME_ID_LIBS="$(STAGING_DIR)/lib/libvolume_id.so" \
- 		ac_cv_path_LIBUSB_CONFIG= \
- 		./configure $(QUIET) \
- 		--target=$(GNU_TARGET_NAME) \
-@@ -49,6 +49,7 @@ $(HAL_DIR)/.configured: $(HAL_DIR)/.unpacked /usr/bin/pkg-config
- 		--sysconfdir=/etc \
- 		--localstatedir=/var \
- 		--with-hwdata=$(TARGET_DIR)/usr/share/hwdata \
-+		--with-expat=$(STAGING_DIR)/usr/ \
- 		--disable-policy-kit \
- 		--disable-gtk-doc \
- 		--disable-static \
-diff --git a/package/hal/hal01-configure-buildroot-cross.patch b/package/hal/hal01-configure-buildroot-cross.patch
-deleted file mode 100644
-index e97a775..0000000
---- a/package/hal/hal01-configure-buildroot-cross.patch
-+++ /dev/null
-@@ -1,10 +0,0 @@
--diff -ur hal-0.5.8/configure hal-0.5.8-patched/configure
----- hal-0.5.8/configure	2006-11-15 12:34:03.000000000 -0600
--+++ hal-0.5.8-patched/configure	2006-11-15 12:33:36.000000000 -0600
--@@ -22014,7 +22014,7 @@
-- echo "$as_me:$LINENO: result: $ac_cv_lib_expat_XML_ParserCreate" >&5
-- echo "${ECHO_T}$ac_cv_lib_expat_XML_ParserCreate" >&6
-- if test $ac_cv_lib_expat_XML_ParserCreate = yes; then
---  EXPAT_LIB="-lexpat"
--+  EXPAT_LIB="\$(STAGING_DIR)/lib/libexpat.so"
-- fi
+-i2c-tools: $(TARGET_DIR)/$(I2C_TOOLS_TARGET_BINARY)
+-
+-i2c-tools-source: $(DL_DIR)/$(I2C_TOOLS_SOURCE)
+-
+-i2c-tools-clean:
+-	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,i2cdump i2cget i2cset i2cdetect)
+-	-$(MAKE) -C $(I2C_TOOLS_DIR) clean
+-
+-i2c-tools-dirclean:
+-	rm -rf $(I2C_TOOLS_DIR)
+-
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_I2C_TOOLS),y)
+-TARGETS+=i2c-tools
+-endif
++$(eval $(call GENTARGETS,package,i2c-tools))
 -- 
 1.6.3.3
