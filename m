@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 16 Dec 2009 16:29:02 +0100
-Subject: [Buildroot] [git commit master] pango: convert to autotools
+Subject: [Buildroot] [git commit master] atk: convert to autotools
 	infrastructure for host package
-Message-ID: <20091216153050.9E22D77738@busybox.osuosl.org>
+Message-ID: <20091216153051.3ABF277738@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,94 +10,73 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1a929ec24151f8d4b891973afca34e4380fcfac5
+commit: http://git.buildroot.net/buildroot/commit/?id=e6882586be87d15111e5fa4cfc75a2fb4667f1fc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pango/pango.mk |   56 ++++++++---------------------------------------
- 1 files changed, 10 insertions(+), 46 deletions(-)
+ package/atk/atk.mk |   48 +++++-------------------------------------------
+ 1 files changed, 5 insertions(+), 43 deletions(-)
 
-diff --git a/package/pango/pango.mk b/package/pango/pango.mk
-index 6a86013..38e163e 100644
---- a/package/pango/pango.mk
-+++ b/package/pango/pango.mk
-@@ -40,8 +40,17 @@ PANGO_CONF_ENV = ac_cv_func_posix_getpwuid_r=yes glib_cv_stack_grows=no \
- PANGO_CONF_OPT = --enable-shared --enable-static \
- 		--enable-explicit-deps=no --disable-debug
+diff --git a/package/atk/atk.mk b/package/atk/atk.mk
+index 1e8e576..e357f49 100644
+--- a/package/atk/atk.mk
++++ b/package/atk/atk.mk
+@@ -53,50 +53,12 @@ endif
  
-+HOST_PANGO_CONF_OPT = \
-+		--disable-static \
-+		$(if $(BR2_PACKAGE_XORG7),--with-x,--without-x) \
-+		--disable-debug \
-+
- PANGO_DEPENDENCIES = gettext libintl host-pkg-config host-pango libglib2 cairo
+ ATK_DEPENDENCIES = libglib2 host-pkg-config
  
-+HOST_PANGO_DEPENDENCIES = host-pkg-config host-cairo host-libglib2 host-autoconf host-automake
-+
-+HOST_PANGO_AUTORECONF = YES
-+
- ifeq ($(BR2_PACKAGE_XORG7),y)
-         PANGO_CONF_OPT += --with-x \
- 		--x-includes=$(STAGING_DIR)/usr/include/X11 \
-@@ -52,6 +61,7 @@ else
- endif
- 
- $(eval $(call AUTOTARGETS,package,pango))
-+$(eval $(call AUTOTARGETS,package,pango,host))
- 
- $(PANGO_HOOK_POST_INSTALL):
- 	mkdir -p $(TARGET_DIR)/etc/pango
-@@ -59,50 +69,4 @@ $(PANGO_HOOK_POST_INSTALL):
- 	$(SED) 's~$(HOST_DIR)~~g' $(TARGET_DIR)/etc/pango/pango.modules
- 	touch $@
- 
--# pango for the host
--PANGO_HOST_DIR:=$(BUILD_DIR)/pango-$(PANGO_VERSION)-host
- PANGO_HOST_BINARY:=$(HOST_DIR)/usr/bin/pango-querymodules
+-$(eval $(call AUTOTARGETS,package,atk))
 -
--$(DL_DIR)/$(PANGO_SOURCE):
--	$(call DOWNLOAD,$(PANGO_SITE),$(PANGO_SOURCE))
+-# atk for the host
+-ATK_HOST_DIR:=$(BUILD_DIR)/atk-$(ATK_VERSION)-host
 -
--$(STAMP_DIR)/host_pango_unpacked: $(DL_DIR)/$(PANGO_SOURCE)
--	mkdir -p $(PANGO_HOST_DIR)
--	$(INFLATE$(suffix $(PANGO_SOURCE))) $< | \
--		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(PANGO_HOST_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(PANGO_HOST_DIR) package/pango/ \*.patch
+-$(DL_DIR)/$(ATK_SOURCE):
+-	$(call DOWNLOAD,$(ATK_SITE),$(ATK_SOURCE))
++HOST_ATK_DEPENDENCIES = host-libglib2 host-pkg-config
+ 
+-$(STAMP_DIR)/host_atk_unpacked: $(DL_DIR)/$(ATK_SOURCE)
+-	mkdir -p $(ATK_HOST_DIR)
+-	$(INFLATE$(suffix $(ATK_SOURCE))) $< | \
+-		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(ATK_HOST_DIR) $(TAR_OPTIONS) -
 -	touch $@
 -
--$(STAMP_DIR)/host_pango_configured: $(STAMP_DIR)/host_pango_unpacked $(STAMP_DIR)/host_cairo_installed $(STAMP_DIR)/host_libglib2_installed $(STAMP_DIR)/host_autoconf_installed  $(STAMP_DIR)/host_automake_installed
--	(cd $(PANGO_HOST_DIR); rm -rf config.cache; \
+-$(STAMP_DIR)/host_atk_configured: $(STAMP_DIR)/host_atk_unpacked $(STAMP_DIR)/host_libglib2_installed $(STAMP_DIR)/host_pkgconfig_installed
+-	(cd $(ATK_HOST_DIR); rm -rf config.cache; \
 -		$(HOST_CONFIGURE_OPTS) \
 -		CFLAGS="$(HOST_CFLAGS)" \
 -		LDFLAGS="$(HOST_LDFLAGS)" \
 -		./configure $(QUIET) \
 -		--prefix="$(HOST_DIR)/usr" \
 -		--sysconfdir="$(HOST_DIR)/etc" \
--		--disable-static \
--		$(if $(BR2_PACKAGE_XORG7),--with-x,--without-x) \
--		--disable-debug \
++HOST_ATK_CONF_OPT = \
+ 		--enable-shared \
+ 		--disable-static \
+-		--disable-glibtest \
 -	)
 -	touch $@
 -
--$(STAMP_DIR)/host_pango_compiled: $(STAMP_DIR)/host_pango_configured
--	$(HOST_MAKE_ENV) $(MAKE) -C $(PANGO_HOST_DIR)
+-$(STAMP_DIR)/host_atk_compiled: $(STAMP_DIR)/host_atk_configured
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(ATK_HOST_DIR)
+-	touch $@
++		--disable-glibtest
+ 
+-$(STAMP_DIR)/host_atk_installed: $(STAMP_DIR)/host_atk_compiled
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(ATK_HOST_DIR) install
 -	touch $@
 -
--$(STAMP_DIR)/host_pango_installed: $(STAMP_DIR)/host_pango_compiled
--	$(HOST_MAKE_ENV) $(MAKE) -C $(PANGO_HOST_DIR) install
--	touch $@
+-host-atk: $(STAMP_DIR)/host_atk_installed
 -
--host-pango: $(STAMP_DIR)/host_pango_installed
+-host-atk-source: atk-source
 -
--host-pango-source: pango-source
+-host-atk-clean:
+-	rm -f $(addprefix $(STAMP_DIR)/host_atk_,unpacked configured compiled installed)
+-	-$(MAKE) -C $(ATK_HOST_DIR) uninstall
+-	-$(MAKE) -C $(ATK_HOST_DIR) clean
 -
--host-pango-clean:
--	rm -f $(addprefix $(STAMP_DIR)/host_pango_,unpacked configured compiled installed)
--	-$(MAKE) -C $(PANGO_HOST_DIR) uninstall
--	-$(MAKE) -C $(PANGO_HOST_DIR) clean
--
--host-pango-dirclean:
--	rm -rf $(PANGO_HOST_DIR)
+-host-atk-dirclean:
+-	rm -rf $(ATK_HOST_DIR)
++$(eval $(call AUTOTARGETS,package,atk))
++$(eval $(call AUTOTARGETS,package,atk,host))
 -- 
 1.6.3.3
