@@ -1,36 +1,36 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 16 Dec 2009 20:47:46 +0100
-Subject: [Buildroot] [git commit master] defconfigs: use new default
-	location for STAGING_DIR
-In-Reply-To: <a038bef50912161135g96cd695m27e23a7811e37fe7@mail.gmail.com>
-	(Chris Packham's message of "Wed, 16 Dec 2009 14:35:16 -0500")
-References: <20091216190433.314B077792@busybox.osuosl.org>
-	<a038bef50912161135g96cd695m27e23a7811e37fe7@mail.gmail.com>
-Message-ID: <87vdg666ql.fsf@macbook.be.48ers.dk>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Wed, 16 Dec 2009 14:56:38 -0500
+Subject: [Buildroot] OT: git workflow question
+In-Reply-To: <hgb3a3$88l$1@ger.gmane.org>
+References: <hgb3a3$88l$1@ger.gmane.org>
+Message-ID: <a038bef50912161156l76de00ev1dd90bd8f9ae281f@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Chris" == Chris Packham <judge.packham@gmail.com> writes:
+On Wed, Dec 16, 2009 at 11:53 AM, Grant Edwards
+<grant.b.edwards@gmail.com> wrote:
+>
+> Here's my question: why was there a conflict?
+>
+> Is this how git is supposed to work?
 
- >> -BR2_STAGING_DIR="/usr/local/$(ARCH)/gcc-$(BR2_GCC_VERSION)-uclibc"
- >> +BR2_STAGING_DIR="$(BASE_DIR)/staging"
- >> ?# BR2_FPU_SUFFIX is not set
- >> ?BR2_TOPDIR_PREFIX=""
- >> ?BR2_TOPDIR_SUFFIX=""
+Chances are you changes got massaged on the way in, either
+intentionally or by some script/git configuration (whitespace.strip
+catches me out a lot). Some maintainers I've seen on other projects
+insist that patches are perfect before they apply them. From what I've
+seen Peter is a bit more pragmatic and is happy to make small
+changes/amendments to patches as they get applied.
 
- Chris> Not that I know anything about arm_toolchain_defconfig but from its
- Chris> name and the old BR2_STAGING_DIR value I'm guessing it attempts to
- Chris> generate a standalone toolchain and install it in /usr/local. You
- Chris> might want to change this one back.
+When you pull from the upstream buildroot git sees both sets of
+changes and flags them as a conflict.
 
-Yes I noticed.
-I actually think we should probably just delete that defconfig - Having
-a generic arm defconfig (which tries to write files under /usr/local/
-where most normal users don't have permissions), uses OABI and has the
-AT91 stuff enabled is probably not that useful after all.
-
--- 
-Bye, Peter Korsgaard
+The best advice would be to work on local branches for logical sets of
+changes (in my case I've just got one branch because I'm only
+tinkering with buildroot). You can then rebase (git rebase
+origin/master <branch> or git pull --rebase) these branches or blow
+them away when you're done (git branch -d <branch>). Git also has a
+merge helper (git mergetool) which can be configured with a graphical
+diff tool like kdiff3 to make resolving merges easier.
