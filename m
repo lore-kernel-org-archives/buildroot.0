@@ -1,7 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Wed, 16 Dec 2009 16:29:02 +0100
-Subject: [Buildroot] [git commit master] hal: fix udev dependency
-Message-ID: <20091216153104.5C94F77738@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] hal: fix build,
+	correct glib/udev/expat paths
+Message-ID: <20091216153105.3088277738@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,43 +10,78 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c09e51037a52984d7faa3ad268dc7de34f7298b5
+commit: http://git.buildroot.net/buildroot/commit/?id=ebe6ce42941b502fcd40967f53165418064d7d30
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-- Selecting symbols with dependencies doesn't work unless you select
-  the dependencies as well
-- udev-volume-id target gone, use the generic udev one instead
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/hal/Config.in |    1 +
- package/hal/hal.mk    |    2 +-
- 2 files changed, 2 insertions(+), 1 deletions(-)
+ package/hal/hal.mk                                |   15 ++++++++-------
+ package/hal/hal01-configure-buildroot-cross.patch |   10 ----------
+ 2 files changed, 8 insertions(+), 17 deletions(-)
+ delete mode 100644 package/hal/hal01-configure-buildroot-cross.patch
 
-diff --git a/package/hal/Config.in b/package/hal/Config.in
-index 56ed428..623825c 100644
---- a/package/hal/Config.in
-+++ b/package/hal/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_HAL
- 	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_DBUS_GLIB
- 	select BR2_PACKAGE_HWDATA
-+	select BR2_PACKAGE_UDEV
- 	select BR2_PACKAGE_UDEV_VOLUME_ID
- 	help
- 	  The Hardware Abstraction Layer (HAL) suite.
 diff --git a/package/hal/hal.mk b/package/hal/hal.mk
-index fb152d6..a72bc63 100644
+index a72bc63..754ed85 100644
 --- a/package/hal/hal.mk
 +++ b/package/hal/hal.mk
-@@ -87,7 +87,7 @@ $(TARGET_DIR)/$(HAL_TARGET_BINARY): $(HAL_DIR)/hald/hald
- 	done
- 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libhal*
+@@ -12,11 +12,11 @@ HAL_BINARY:=hald/hald
+ HAL_TARGET_BINARY:=usr/sbin/hald
  
--hal: host-pkg-config dbus-glib hwdata udev-volume_id $(TARGET_DIR)/$(HAL_TARGET_BINARY)
-+hal: host-pkg-config dbus-glib hwdata udev $(TARGET_DIR)/$(HAL_TARGET_BINARY)
+ GLIB_CFLAGS:=-I$(STAGING_DIR)/usr/include/glib-2.0 \
+-	     -I$(STAGING_DIR)/lib/glib/include
+-GLIB_LIBS:=$(STAGING_DIR)/lib/libglib-2.0.so \
+-	   $(STAGING_DIR)/lib/libgmodule-2.0.so \
+-	   $(STAGING_DIR)/lib/libgobject-2.0.so \
+-	   $(STAGING_DIR)/lib/libgthread-2.0.so
++	     -I$(STAGING_DIR)/usr/lib/glib-2.0/include
++GLIB_LIBS:=$(STAGING_DIR)/usr/lib/libglib-2.0.so \
++	   $(STAGING_DIR)/usr/lib/libgmodule-2.0.so \
++	   $(STAGING_DIR)/usr/lib/libgobject-2.0.so \
++	   $(STAGING_DIR)/usr/lib/libgthread-2.0.so
+ DBUS_GLIB_LIBS:=$(STAGING_DIR)/usr/lib/libdbus-glib-1.so
  
- hal-clean:
- 	rm -f $(TARGET_DIR)/etc/dbus-1/system.d/hal.conf
+ $(DL_DIR)/$(HAL_SOURCE):
+@@ -29,7 +29,7 @@ $(HAL_DIR)/.unpacked: $(DL_DIR)/$(HAL_SOURCE)
+ 	toolchain/patch-kernel.sh $(HAL_DIR) package/hal/ \*.patch
+ 	touch $(HAL_DIR)/.unpacked
+ 
+-$(HAL_DIR)/.configured: $(HAL_DIR)/.unpacked /usr/bin/pkg-config
++$(HAL_DIR)/.configured: $(HAL_DIR)/.unpacked
+ 	(cd $(HAL_DIR); rm -rf config.cache; \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		$(TARGET_CONFIGURE_ARGS) \
+@@ -39,7 +39,7 @@ $(HAL_DIR)/.configured: $(HAL_DIR)/.unpacked /usr/bin/pkg-config
+ 		DBUS_CFLAGS="-I$(STAGING_DIR)/usr/include/dbus-1.0 -I$(STAGING_DIR)/usr/lib/dbus-1.0/include" \
+ 		DBUS_LIBS="$(STAGING_DIR)/usr/lib/libdbus-1.so" \
+ 		VOLUME_ID_CFLAGS="$(TARGET_CFLAGS)" \
+-		VOLUME_ID_LIBS="$(STAGING_DIR)/usr/lib/libvolume_id.so" \
++		VOLUME_ID_LIBS="$(STAGING_DIR)/lib/libvolume_id.so" \
+ 		ac_cv_path_LIBUSB_CONFIG= \
+ 		./configure $(QUIET) \
+ 		--target=$(GNU_TARGET_NAME) \
+@@ -49,6 +49,7 @@ $(HAL_DIR)/.configured: $(HAL_DIR)/.unpacked /usr/bin/pkg-config
+ 		--sysconfdir=/etc \
+ 		--localstatedir=/var \
+ 		--with-hwdata=$(TARGET_DIR)/usr/share/hwdata \
++		--with-expat=$(STAGING_DIR)/usr/ \
+ 		--disable-policy-kit \
+ 		--disable-gtk-doc \
+ 		--disable-static \
+diff --git a/package/hal/hal01-configure-buildroot-cross.patch b/package/hal/hal01-configure-buildroot-cross.patch
+deleted file mode 100644
+index e97a775..0000000
+--- a/package/hal/hal01-configure-buildroot-cross.patch
++++ /dev/null
+@@ -1,10 +0,0 @@
+-diff -ur hal-0.5.8/configure hal-0.5.8-patched/configure
+---- hal-0.5.8/configure	2006-11-15 12:34:03.000000000 -0600
+-+++ hal-0.5.8-patched/configure	2006-11-15 12:33:36.000000000 -0600
+-@@ -22014,7 +22014,7 @@
+- echo "$as_me:$LINENO: result: $ac_cv_lib_expat_XML_ParserCreate" >&5
+- echo "${ECHO_T}$ac_cv_lib_expat_XML_ParserCreate" >&6
+- if test $ac_cv_lib_expat_XML_ParserCreate = yes; then
+--  EXPAT_LIB="-lexpat"
+-+  EXPAT_LIB="\$(STAGING_DIR)/lib/libexpat.so"
+- fi
 -- 
 1.6.3.3
