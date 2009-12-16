@@ -1,40 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Dec 2009 16:41:36 +0100
-Subject: [Buildroot] [git commit master] dependencies: remove useless test
-	doing nothing
-Message-ID: <20091216154216.A04FF777B1@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 16 Dec 2009 16:33:14 +0100
+Subject: [Buildroot] [pull request] Pull request for branch
+	package-infrastructure
+In-Reply-To: <cover.1260905467.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Tue, 15 Dec 2009 20:30:31 +0100")
+References: <cover.1260905467.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87pr6f6iit.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=84b1e44e92208c4be287dbdc1344f3df99f2fa39
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/dependencies/dependencies.sh |    7 -------
- 1 files changed, 0 insertions(+), 7 deletions(-)
+ Thomas> I have tested this patchset in various conditions, but the changes are
+ Thomas> sufficiently complicated that I cannot guarantee a bug-free transition
+ Thomas> to these infrastructures. That's why I think such changes should be
+ Thomas> merge early in the Buildroot development period, so that we have
+ Thomas> enough time before 2010.02 to stabilize these changes (and make a
+ Thomas> larger use of the new infrastructures).
 
-diff --git a/toolchain/dependencies/dependencies.sh b/toolchain/dependencies/dependencies.sh
-index e503097..5c40f0d 100755
---- a/toolchain/dependencies/dependencies.sh
-+++ b/toolchain/dependencies/dependencies.sh
-@@ -11,13 +11,6 @@ export LC_ALL=C
- # check build system 'environment'
- #
- #############################################################
--if test -n "$BUILDROOT_DL_DIR" ; then
--	/bin/echo -e "Overriding \$(DL_DIR) in '.config'.		Ok"
--	/bin/echo -e "External download directory:			Ok ($BUILDROOT_DL_DIR)"
--else
--	echo "BUILDROOT_DL_DIR clean:				Ok"
--fi
--
- if test -n "$CC" ; then
- 	echo "CC clean:						FALSE"
- 	/bin/echo -e "\n\nYou must run 'unset CC' so buildroot can run with";
+Pulled and pushed, thanks a lot! I found a few minor issues, but have
+fixed those up myself.
+
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
