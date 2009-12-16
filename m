@@ -1,43 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 16 Dec 2009 20:26:18 +0100
-Subject: [Buildroot] avahi dependencies on host tools
-In-Reply-To: <20091216154756.7e5b3db2@surf> (Thomas Petazzoni's message of
-	"Wed, 16 Dec 2009 15:47:56 +0100")
-References: <20091216102451.339e6ba9@surf>
-	<5f2b60912160550x6d3ae47eu4f625f0259737e95@mail.gmail.com>
-	<20091216154756.7e5b3db2@surf>
-Message-ID: <87zl5i67qd.fsf@macbook.be.48ers.dk>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Wed, 16 Dec 2009 14:35:16 -0500
+Subject: [Buildroot] [git commit master] defconfigs: use new default
+	location for STAGING_DIR
+In-Reply-To: <20091216190433.314B077792@busybox.osuosl.org>
+References: <20091216190433.314B077792@busybox.osuosl.org>
+Message-ID: <a038bef50912161135g96cd695m27e23a7811e37fe7@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+On Wed, Dec 16, 2009 at 2:02 PM, Peter Korsgaard <jacmet@sunsite.dk> wrote:
+> diff --git a/configs/arm_toolchain_defconfig b/configs/arm_toolchain_defconfig
+> index e7f9358..f044e51 100644
+> --- a/configs/arm_toolchain_defconfig
+> +++ b/configs/arm_toolchain_defconfig
+> @@ -156,7 +156,7 @@ BR2_DEBIAN_MIRROR="http://ftp.debian.org"
+> ?#
+> ?BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot"
+> ?BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
+> -BR2_STAGING_DIR="/usr/local/$(ARCH)/gcc-$(BR2_GCC_VERSION)-uclibc"
+> +BR2_STAGING_DIR="$(BASE_DIR)/staging"
+> ?# BR2_FPU_SUFFIX is not set
+> ?BR2_TOPDIR_PREFIX=""
+> ?BR2_TOPDIR_SUFFIX=""
 
-Hi,
-
- Thomas> True, but on the other hand, the approach we've been following
- Thomas> since Buildroot maintenance has been taken over by Peter is
- Thomas> that we should only rely on "basic" tools on the host. That's
- Thomas> the reason why we build autoconf, automake, glib, pkg-config
- Thomas> and other stuff for the host as needed. It makes the
- Thomas> compilation process a little longer, but on the other hand, it
- Thomas> makes the build process a *lot* more predictable.
-
-As always it is a tradeoff:
-
-- How common (likely to be installed/available in dist) is the dependency?
-- How big/difficult is it to build?
-- Do we have specific version requirements?
-- Do we need special patches (like we do for pkg-config)?
-
-I would argue for us being able to rely on perl on the host (needed to
-build the Linux kernel among many other things), but specific versions
-of E.G. auto* is a lot harder.
-
-Intltool is as you say just a perl script, so providing that ourselves
-seems the best option.
-
--- 
-Bye, Peter Korsgaard
+Not that I know anything about arm_toolchain_defconfig but from its
+name and the old BR2_STAGING_DIR value I'm guessing it attempts to
+generate a standalone toolchain and install it in /usr/local. You
+might want to change this one back.
