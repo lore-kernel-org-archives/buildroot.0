@@ -1,11 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 16 Dec 2009 21:20:06 +0100
-Subject: [Buildroot] OT: git workflow question
-In-Reply-To: <hgbei7$jgr$2@ger.gmane.org> (Grant Edwards's message of "Wed, 16
-	Dec 2009 20:05:27 +0000 (UTC)")
-References: <hgb3a3$88l$1@ger.gmane.org> <20091216203728.1ddc624c@surf>
-	<hgbei7$jgr$2@ger.gmane.org>
-Message-ID: <87ocly658p.fsf@macbook.be.48ers.dk>
+Date: Wed, 16 Dec 2009 21:32:07 +0100
+Subject: [Buildroot] Failure building default config for ARM integrator
+In-Reply-To: <hgb3r7$88l$2@ger.gmane.org> (Grant Edwards's message of "Wed, 16
+	Dec 2009 17:02:31 +0000 (UTC)")
+References: <hgb3r7$88l$2@ger.gmane.org>
+Message-ID: <87k4wm64oo.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,25 +15,56 @@ To: buildroot@busybox.net
 
 Hi,
 
- >> No. You should have made your changes in a separate branch
- >> instead of a master branch.
+ Grant> I'm trying to build the default config for the ARM integrator
+ Grant> target.  [It's the same architecture as my board, and it's
+ Grant> supported by Qemu, so it's a useful testbed.] It fails when it
+ Grant> tries to build U-Boot.  I don't really care about building
+ Grant> U-Boot, so I could just deselect it.
 
- Grant> Thanks.  That's the clue I was missing.  The tutorials I had
- Grant> read on git didn't say that -- they showed all work being done
- Grant> in the master branch.
+ Grant> However, if it's considered a bug when a "defconfig" target
+ Grant> doesn't "just build", then I'll try to fix it and submit a
+ Grant> patch.  Is this something that needs to be fixed, or is it
+ Grant> normal?
 
-That can work for quick edits, but then you need to remove the commit
-before pulling updates in (git reset --hard origin/master).
-I would recommend just creating a branch instead though as it's so
-easy/fast to do in git (and it allows you to use git-rebase).
+No, it's a bug.
 
- >> This is at least how I'm contributing to Buildroot. Not
- >> necessarly the cleanest way, I'm no git expert.
+ Grant>  $ git clone git://git.buildroot.net/buildroot
+ 
+ Grant>  $ cd buildroot
+  
+ Grant>  $ make integrator926_defconfig
 
- Grant> I certainly sounds like a better approach that what I was doing.
+ Grant>  make[1]: Entering directory `/home/grante/buildroot-git/buildroot/output/build/u-boot-2009.08'
+ Grant>  make[1]: *** No rule to make target `integrator926_config'.  Stop.
 
-And it's what I would consider the "normal" way of working (it's atleast
-how I do it when I contribute something to a project using git).
+So u-boot doesn't have an integrator926 configuration.
+
+It has:
+
+git grep -A10 integrator v2009.08 -- Makefile
+v2009.08:Makefile-ap922_XA10_config     \
+v2009.08:Makefile-ap7_config            \
+v2009.08:Makefile-ap720t_config         \
+v2009.08:Makefile-ap920t_config         \
+v2009.08:Makefile-ap926ejs_config               \
+v2009.08:Makefile-ap946es_config: unconfig
+v2009.08:Makefile:      @board/armltd/integrator/split_by_variant.sh ap $@
+v2009.08:Makefile-
+v2009.08:Makefile:integratorcp_config   \
+v2009.08:Makefile-cp_config             \
+v2009.08:Makefile-cp920t_config         \
+v2009.08:Makefile-cp926ejs_config               \
+v2009.08:Makefile-cp946es_config                \
+v2009.08:Makefile-cp1136_config         \
+v2009.08:Makefile-cp966_config          \
+v2009.08:Makefile-cp922_config          \
+v2009.08:Makefile-cp922_XA10_config     \
+v2009.08:Makefile-cp1026_config: unconfig
+
+I don't remember what the difference is between the ap and cp
+baseboards, but I guess the right config is something like cp926ejs_config
+
+The setting to change is BR2_TARGET_UBOOT_BOARDNAME.
 
 -- 
 Bye, Peter Korsgaard
