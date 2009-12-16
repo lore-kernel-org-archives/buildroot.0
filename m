@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 16 Dec 2009 16:29:02 +0100
-Subject: [Buildroot] [git commit master] olsr: rework on top of the generic
+Subject: [Buildroot] [git commit master] zlib: rework on top of the generic
 	infrastructure
-Message-ID: <20091216153043.C5A1377738@busybox.osuosl.org>
+Message-ID: <20091216153044.5641C77738@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,92 +10,134 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f32a8b02a74eb9600550078786a240e9742c22e7
+commit: http://git.buildroot.net/buildroot/commit/?id=9e1d5ccd4dc0f3f2a614baccb0b79ea3975e0629
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/olsr/olsr.mk |   60 +++++++++++++++----------------------------------
- 1 files changed, 19 insertions(+), 41 deletions(-)
+ package/zlib/zlib.mk |   93 +++++++++++++++----------------------------------
+ 1 files changed, 29 insertions(+), 64 deletions(-)
 
-diff --git a/package/olsr/olsr.mk b/package/olsr/olsr.mk
-index 9107653..75d5d66 100644
---- a/package/olsr/olsr.mk
-+++ b/package/olsr/olsr.mk
-@@ -9,55 +9,33 @@ OLSR_VERSION_MINOR=6
- OLSR_VERSION:=$(OLSR_VERSION_MAJOR).$(OLSR_VERSION_MINOR)
- OLSR_SOURCE:=olsrd-$(OLSR_VERSION).tar.bz2
- OLSR_SITE:=http://www.olsr.org/releases/$(OLSR_VERSION_MAJOR)
--OLSR_DIR:=$(BUILD_DIR)/olsrd-$(OLSR_VERSION)
--OLSR_CAT:=$(BZCAT)
- OLSR_BINARY:=olsrd
- OLSR_TARGET_BINARY:=usr/sbin/olsrd
- #OLSR_PLUGINS=httpinfo tas dot_draw nameservice dyn_gw dyn_gw_plain pgraph bmf quagga secure
- OLSR_PLUGINS=dot_draw dyn_gw secure
- OLSR_TARGET_PLUGIN=usr/lib/
+diff --git a/package/zlib/zlib.mk b/package/zlib/zlib.mk
+index f207bcf..5365b30 100644
+--- a/package/zlib/zlib.mk
++++ b/package/zlib/zlib.mk
+@@ -5,31 +5,19 @@
+ #############################################################
+ ZLIB_VERSION:=1.2.3
+ ZLIB_SOURCE:=zlib-$(ZLIB_VERSION).tar.bz2
+-ZLIB_CAT:=$(BZCAT)
+ ZLIB_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/libpng
+-ZLIB_DIR:=$(BUILD_DIR)/zlib-$(ZLIB_VERSION)
+-
+-$(DL_DIR)/$(ZLIB_SOURCE):
+-	$(call DOWNLOAD,$(ZLIB_SITE),$(ZLIB_SOURCE))
+-
+-$(ZLIB_DIR)/.patched: $(DL_DIR)/$(ZLIB_SOURCE)
+-	$(ZLIB_CAT) $(DL_DIR)/$(ZLIB_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(ZLIB_DIR) package/zlib/ zlib\*.patch
+-	$(CONFIG_UPDATE) $(@D)
+-	touch $@
++ZLIB_INSTALL_STAGING=YES
  
--$(DL_DIR)/$(OLSR_SOURCE):
--	$(call DOWNLOAD,$(OLSR_SITE),$(OLSR_SOURCE))
--
--olsr-source: $(DL_DIR)/$(OLSR_SOURCE)
--
--olsr-unpacked: $(OLSR_DIR)/.unpacked
--$(OLSR_DIR)/.unpacked: $(DL_DIR)/$(OLSR_SOURCE)
--	$(OLSR_CAT) $(DL_DIR)/$(OLSR_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+ ifeq ($(BR2_PREFER_STATIC_LIB),y)
+ ZLIB_PIC :=
+ ZLIB_SHARED :=
+-ZLIB_TARGET := $(STAGING_DIR)/usr/lib/libz.a
+ else
+ ZLIB_PIC := -fPIC
+ ZLIB_SHARED := --shared
+-ZLIB_TARGET := $(TARGET_DIR)/usr/lib/libz.so
+ endif
+ 
+-$(ZLIB_DIR)/.configured: $(ZLIB_DIR)/.patched
+-	(cd $(ZLIB_DIR); rm -rf config.cache; \
++define ZLIB_CONFIGURE_CMDS
++	(cd $(@D); rm -rf config.cache; \
+ 		$(TARGET_CONFIGURE_ARGS) \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		CFLAGS="$(TARGET_CFLAGS) $(ZLIB_PIC)" \
+@@ -40,55 +28,32 @@ $(ZLIB_DIR)/.configured: $(ZLIB_DIR)/.patched
+ 		--libdir=$(STAGING_DIR)/usr/lib \
+ 		--includedir=$(STAGING_DIR)/usr/include \
+ 	)
 -	touch $@
 -
--$(OLSR_DIR)/$(OLSR_BINARY): $(OLSR_DIR)/.unpacked
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(OLSR_DIR) olsrd $(OLSR_PLUGINS)
+-$(ZLIB_DIR)/libz.a: $(ZLIB_DIR)/.configured
+-	$(MAKE) -C $(ZLIB_DIR) all libz.a
+-	touch -c $@
 -
--$(TARGET_DIR)/$(OLSR_TARGET_BINARY): $(OLSR_DIR)/$(OLSR_BINARY)
--	rm -f $(TARGET_DIR)/$(OLSR_TARGET_BINARY)
--	cp -dpf $(OLSR_DIR)/$(OLSR_BINARY) $(TARGET_DIR)/$(OLSR_TARGET_BINARY)
--	cp -R $(OLSR_DIR)/lib/*/olsrd_*.so* $(TARGET_DIR)/$(OLSR_TARGET_PLUGIN)
--	mkdir -p $(TARGET_DIR)/etc/init.d
--	cp -dpf package/olsr/S50olsr $(TARGET_DIR)/etc/init.d/
--	test -r $(TARGET_DIR)/etc/olsrd.conf || \
--		cp -dpf $(OLSR_DIR)/files/olsrd.conf.default.lq $(TARGET_DIR)/etc/olsrd.conf
--	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/$(OLSR_TARGET_PLUGIN)/olsrd_*.so*
--	$(STRIPCMD) $(STRIP_STRIP_ALL) $@
+-$(STAGING_DIR)/usr/lib/libz.a: $(ZLIB_DIR)/libz.a
+-	$(INSTALL) -D $(ZLIB_DIR)/libz.a $(STAGING_DIR)/usr/lib/libz.a
+-	$(INSTALL) -D $(ZLIB_DIR)/zlib.h $(STAGING_DIR)/usr/include/zlib.h
+-	$(INSTALL) $(ZLIB_DIR)/zconf.h $(STAGING_DIR)/usr/include/
+-	touch -c $@
 -
--olsr: $(TARGET_DIR)/$(OLSR_TARGET_BINARY)
--
--olsr-clean:
-+define OLSR_BUILD_CMDS
-+ $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) olsrd $(OLSR_PLUGINS)
+-$(STAGING_DIR)/usr/lib/libz.so: $(STAGING_DIR)/usr/lib/libz.a
+-	cp -dpf $(ZLIB_DIR)/libz.so* $(STAGING_DIR)/usr/lib/
+-	touch -c $@
 +endef
 +
-+define OLSR_INSTALL_TARGET_CMDS
-+ cp -dpf $(@D)/$(OLSR_BINARY) $(TARGET_DIR)/$(OLSR_TARGET_BINARY)
-+ cp -R $(@D)/lib/*/olsrd_*.so* $(TARGET_DIR)/$(OLSR_TARGET_PLUGIN)
-+ mkdir -p $(TARGET_DIR)/etc/init.d
-+ cp -dpf package/olsr/S50olsr $(TARGET_DIR)/etc/init.d/
-+ test -r $(TARGET_DIR)/etc/olsrd.conf || \
-+   cp -dpf $(@D)/files/olsrd.conf.default.lq $(TARGET_DIR)/etc/olsrd.conf
-+ -$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/$(OLSR_TARGET_PLUGIN)/olsrd_*.so*
-+ $(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/$(OLSR_TARGET_BINARY)
++define ZLIB_BUILD_CMDS
++	$(MAKE) -C $(@D) all libz.a
 +endef
 +
-+define OLSR_CLEAN_CMDS
- 	rm -f $(TARGET_DIR)/$(OLSR_TARGET_BINARY) \
- 		$(TARGET_DIR)/$(OLSR_TARGET_PLUGIN)/olsrd_*.so* \
- 		$(TARGET_DIR)/etc/init.d/S50olsr \
- 		$(TARGET_DIR)/etc/olsrd.conf
--	-$(MAKE) -C $(OLSR_DIR) clean
-+	-$(MAKE) -C $(@D) clean
++define ZLIB_INSTALL_STAGING_CMDS
++	$(INSTALL) -D $(@D)/libz.a $(STAGING_DIR)/usr/lib/libz.a
++	$(INSTALL) -D $(@D)/zlib.h $(STAGING_DIR)/usr/include/zlib.h
++	$(INSTALL) $(@D)/zconf.h $(STAGING_DIR)/usr/include/
++	cp -dpf $(@D)/libz.so* $(STAGING_DIR)/usr/lib/
++endef
++
++ifeq ($(BR2_HAVE_DEVFILES),y)
++define ZLIB_INSTALL_TARGET_HEADERS
++	$(INSTALL) -D $(@D)/zlib.h $(STAGING_DIR)/usr/include/zlib.h
++	$(INSTALL) $(@D)/zconf.h $(STAGING_DIR)/usr/include/
++endef
++endif
+ 
+-$(TARGET_DIR)/usr/lib/libz.so: $(STAGING_DIR)/usr/lib/libz.so
++define ZLIB_INSTALL_TARGET_CMDS
+ 	mkdir -p $(TARGET_DIR)/usr/lib
+-	cp -dpf $(STAGING_DIR)/usr/lib/libz.so* $(TARGET_DIR)/usr/lib
+-	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $@
+-	touch -c $@
+-
+-$(TARGET_DIR)/usr/lib/libz.a: $(STAGING_DIR)/usr/lib/libz.a
+-	$(INSTALL) -D $(STAGING_DIR)/usr/include/zlib.h $(TARGET_DIR)/usr/include/zlib.h
+-	$(INSTALL) $(STAGING_DIR)/usr/include/zconf.h $(TARGET_DIR)/usr/include/
+-	$(INSTALL) -D $(STAGING_DIR)/usr/lib/libz.a $(TARGET_DIR)/usr/lib/libz.a
+-	touch -c $@
+-
+-zlib: $(ZLIB_TARGET) $(if $(BR2_HAVE_DEVFILES),$(TARGET_DIR)/usr/lib/libz.a)
++	cp -dpf $(@D)/libz.so* $(TARGET_DIR)/usr/lib
++	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libz.so*
++	$(INSTALL) -D $(@D)/libz.a $(TARGET_DIR)/usr/lib/libz.a
++	$(ZLIB_INSTALL_TARGET_HEADERS)
 +endef
  
--olsr-dirclean:
--	rm -rf $(OLSR_DIR)
+-zlib-source: $(DL_DIR)/$(ZLIB_SOURCE)
+-
+-zlib-clean:
+-	rm -f $(TARGET_DIR)/usr/lib/libz.* \
+-	      $(TARGET_DIR)/usr/include/zlib.h \
+-	      $(TARGET_DIR)/usr/include/zconf.h \
+-	      $(STAGING_DIR)/usr/include/zlib.h \
+-	      $(STAGING_DIR)/usr/include/zconf.h \
+-	      $(STAGING_DIR)/usr/lib/libz.*
+-	-$(MAKE) -C $(ZLIB_DIR) clean
+-
+-zlib-dirclean:
+-	rm -rf $(ZLIB_DIR)
 -
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_OLSR),y)
--TARGETS+=olsr $(OLSR_PLUGINS)
+-ifeq ($(BR2_PACKAGE_ZLIB),y)
+-TARGETS+=zlib
 -endif
-+$(eval $(call GENTARGETS,package,olsr))
++$(eval $(call GENTARGETS,package,zlib))
 -- 
 1.6.3.3
