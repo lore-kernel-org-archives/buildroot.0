@@ -1,30 +1,27 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 16 Dec 2009 16:33:14 +0100
-Subject: [Buildroot] [pull request] Pull request for branch
-	package-infrastructure
-In-Reply-To: <cover.1260905467.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Tue, 15 Dec 2009 20:30:31 +0100")
-References: <cover.1260905467.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87pr6f6iit.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 16 Dec 2009 16:41:36 +0100
+Subject: [Buildroot] [git commit master] dependencies: bail out if makeinfo
+	isn't found
+Message-ID: <20091216154216.0B855777B1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Hi,
+commit: http://git.buildroot.net/buildroot/commit/?id=8dba09de9d62422167164df0038d7d7cf062a252
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> I have tested this patchset in various conditions, but the changes are
- Thomas> sufficiently complicated that I cannot guarantee a bug-free transition
- Thomas> to these infrastructures. That's why I think such changes should be
- Thomas> merge early in the Buildroot development period, so that we have
- Thomas> enough time before 2010.02 to stabilize these changes (and make a
- Thomas> larger use of the new infrastructures).
+makeinfo is mandatory at least to build a toolchain. Currently,
+dependencies.sh doesn't fail if makeinfo is not present and only
+displays a message that can easily be lost. The user will then
+encounter the issue later, when it is more difficult to understand
+what's happening.
 
-Pulled and pushed, thanks a lot! I found a few minor issues, but have
-fixed those up myself.
+So, this patch simply does for makeinfo what the script does for the
+other dependencies: bail out if they aren't available.
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Patch is too large, so refusing to show it
