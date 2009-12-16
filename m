@@ -1,13 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 16 Dec 2009 16:38:07 +0100
-Subject: [Buildroot] [PATCH 29/39] libusb: convert to autotools
-	infrastructure for host package
-In-Reply-To: <f3e2f5c04e4da3bf9ff578d78377ae3cf9fad1e9.1260905467.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Tue, 15 Dec 2009 20:31:00 +0100")
-References: <cover.1260905467.git.thomas.petazzoni@free-electrons.com>
-	<cover.1260905467.git.thomas.petazzoni@free-electrons.com>
-	<f3e2f5c04e4da3bf9ff578d78377ae3cf9fad1e9.1260905467.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87ljh36iao.fsf@macbook.be.48ers.dk>
+Date: Wed, 16 Dec 2009 16:42:07 +0100
+Subject: [Buildroot] [pull request] Pull request for branch
+	dependencies-fix
+In-Reply-To: <cover.1260951255.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Wed, 16 Dec 2009 09:14:17 +0100")
+References: <cover.1260951255.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87d42f6i40.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,21 +14,20 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Hi,
+ Thomas> The following changes since commit f3f1a94313361c251c4dfa164921d475835c763d:
+ Thomas>   Peter Korsgaard (1):
+ Thomas>         Merge branch 'avr32-fixes' of git://git.busybox.net/~tpetazzoni/git/buildroot
 
- Thomas> +++ b/package/libusb/libusb.mk
- Thomas> @@ -23,7 +23,7 @@ $(DL_DIR)/$(LIBUSB_SOURCE): $(LIBUSB_PATCH)
- Thomas>  libusb-source: $(DL_DIR)/$(LIBUSB_SOURCE) $(LIBUSB_PATCH)
- 
- Thomas>  libusb-unpacked: $(LIBUSB_DIR)/.unpacked
- Thomas> -$(LIBUSB_DIR)/.unpacked: $(STAMP_DIR)/host_autoconf_installed $(STAMP_DIR)/host_automake_installed $(STAMP_DIR)/host_libtool_installed $(DL_DIR)/$(LIBUSB_SOURCE)
- Thomas> +$(LIBUSB_DIR)/.unpacked: host-autoconf host-automake host-libtool $(DL_DIR)/$(LIBUSB_SOURCE)
+ Thomas> are available in the git repository at:
 
-This causes the unpack (and in terms configure, build and install) steps
-to always be considered out of date and hence rerun.
+ Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot dependencies-fix
 
-We should probably just add those dependencies to the the toplevel
-libusb target (or even better, convert to AUTOTARGETS).
+ Thomas> Thomas Petazzoni (3):
+ Thomas>       dependencies: bail out if makeinfo isn't found
+ Thomas>       dependencies: remove useless test doing nothing
+ Thomas>       dependencies: cleanup
+
+Pulled and pushed, thanks!
 
 -- 
 Bye, Peter Korsgaard
