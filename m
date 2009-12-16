@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 16 Dec 2009 16:29:02 +0100
-Subject: [Buildroot] [git commit master] freetype: convert to autotools
+Subject: [Buildroot] [git commit master] libxml2: convert to autotools
 	infrastructure for host package
-Message-ID: <20091216153053.5C63277738@busybox.osuosl.org>
+Message-ID: <20091216153053.D6A0477738@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,75 +10,82 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fc1163d22d905db1a6813d3493a19885f5e97ace
+commit: http://git.buildroot.net/buildroot/commit/?id=a02cf75e19732ee1a5d99498a19ea85cc7bf2750
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/freetype/freetype.mk |   46 ++---------------------------------------
- 1 files changed, 3 insertions(+), 43 deletions(-)
+ package/libxml2/libxml2.mk |   52 ++++++-------------------------------------
+ 1 files changed, 8 insertions(+), 44 deletions(-)
 
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index 06bf6f4..ed73253 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
-@@ -13,7 +13,10 @@ FREETYPE_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
- FREETYPE_MAKE_OPT = CCexe="$(HOSTCC)"
- FREETYPE_DEPENDENCIES = host-pkg-config $(if $(BR2_PACKAGE_ZLIB),zlib)
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index ceabcd9..a554226 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -20,7 +20,14 @@ LIBXML2_CONF_OPT = --with-gnu-ld --enable-shared \
+ 		--without-debugging --without-python \
+ 		--without-threads 
  
-+HOST_FREETYPE_DEPENDENCIES = host-pkg-config
++HOST_LIBXML2_DEPENDENCIES = host-pkg-config
 +
- $(eval $(call AUTOTARGETS,package,freetype))
-+$(eval $(call AUTOTARGETS,package,freetype,host))
++HOST_LIBXML2_CONF_OPT = \
++		--enable-shared --without-debugging --without-python \
++		--without-threads
++
+ $(eval $(call AUTOTARGETS,package,libxml2))
++$(eval $(call AUTOTARGETS,package,libxml2,host))
  
- $(FREETYPE_HOOK_POST_INSTALL):
- 	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" \
-@@ -26,46 +29,3 @@ ifneq ($(BR2_HAVE_DEVFILES),y)
- 	rm -f $(TARGET_DIR)/usr/bin/freetype-config
- endif
+ $(LIBXML2_HOOK_POST_INSTALL):
+ 	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/xml2-config
+@@ -31,47 +38,4 @@ $(LIBXML2_HOOK_POST_INSTALL):
  	touch $@
+ 
+ # libxml2 for the host
+-LIBXML2_HOST_DIR:=$(BUILD_DIR)/libxml2-$(LIBXML2_VERSION)-host
+-LIBXML2_HOST_BINARY:=$(HOST_DIR)/usr/bin/xmllint
 -
--# freetype for the host
--FREETYPE_HOST_DIR:=$(BUILD_DIR)/freetype-$(FREETYPE_VERSION)-host
+-$(DL_DIR)/$(LIBXML2_SOURCE):
+-	$(call DOWNLOAD,$(LIBXML2_SITE),$(LIBXML2_SOURCE))
 -
--$(DL_DIR)/$(FREETYPE_SOURCE):
--	$(call DOWNLOAD,$(FREETYPE_SITE),$(FREETYPE_SOURCE))
--
--$(STAMP_DIR)/host_freetype_unpacked: $(DL_DIR)/$(FREETYPE_SOURCE)
--	mkdir -p $(FREETYPE_HOST_DIR)
--	$(INFLATE$(suffix $(FREETYPE_SOURCE))) $< | \
--		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(FREETYPE_HOST_DIR) $(TAR_OPTIONS) -
+-$(STAMP_DIR)/host_libxml2_unpacked: $(DL_DIR)/$(LIBXML2_SOURCE)
+-	mkdir -p $(LIBXML2_HOST_DIR)
+-	$(INFLATE$(suffix $(LIBXML2_SOURCE))) $< | \
+-		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(LIBXML2_HOST_DIR) $(TAR_OPTIONS) -
 -	touch $@
 -
--$(STAMP_DIR)/host_freetype_configured: $(STAMP_DIR)/host_freetype_unpacked $(STAMP_DIR)/host_pkgconfig_installed
--	(cd $(FREETYPE_HOST_DIR); rm -rf config.cache; \
+-$(STAMP_DIR)/host_libxml2_configured: $(STAMP_DIR)/host_libxml2_unpacked $(STAMP_DIR)/host_pkgconfig_installed
+-	(cd $(LIBXML2_HOST_DIR); rm -rf config.cache; \
 -		$(HOST_CONFIGURE_OPTS) \
 -		CFLAGS="$(HOST_CFLAGS)" \
 -		LDFLAGS="$(HOST_LDFLAGS)" \
 -		./configure $(QUIET) \
 -		--prefix="$(HOST_DIR)/usr" \
 -		--sysconfdir="$(HOST_DIR)/etc" \
+-		--enable-shared --without-debugging --without-python \
+-		--without-threads \
 -	)
 -	touch $@
 -
--$(STAMP_DIR)/host_freetype_compiled: $(STAMP_DIR)/host_freetype_configured
--	$(MAKE) -C $(FREETYPE_HOST_DIR)
+-$(STAMP_DIR)/host_libxml2_compiled: $(STAMP_DIR)/host_libxml2_configured
+-	$(MAKE) -C $(LIBXML2_HOST_DIR)
 -	touch $@
 -
--$(STAMP_DIR)/host_freetype_installed: $(STAMP_DIR)/host_freetype_compiled
--	$(HOST_MAKE_ENV) $(MAKE) -C $(FREETYPE_HOST_DIR) install
+-$(STAMP_DIR)/host_libxml2_installed: $(STAMP_DIR)/host_libxml2_compiled
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(LIBXML2_HOST_DIR) install
 -	touch $@
 -
--host-freetype: $(STAMP_DIR)/host_freetype_installed
+-host-libxml2: $(STAMP_DIR)/host_libxml2_installed
 -
--host-freetype-source: freetype-source
+-host-libxml2-source: libxml2-source
 -
--host-freetype-clean:
--	rm -f $(addprefix $(STAMP_DIR)/host_freetype_,unpacked configured compiled installed)
--	-$(MAKE) -C $(FREETYPE_HOST_DIR) uninstall
--	-$(MAKE) -C $(FREETYPE_HOST_DIR) clean
+-host-libxml2-clean:
+-	rm -f $(addprefix $(STAMP_DIR)/host_libxml2_,unpacked configured compiled installed)
+-	-$(MAKE) -C $(LIBXML2_HOST_DIR) uninstall
+-	-$(MAKE) -C $(LIBXML2_HOST_DIR) clean
 -
--host-freetype-dirclean:
--	rm -rf $(FREETYPE_HOST_DIR)
+-host-libxml2-dirclean:
+-	rm -rf $(LIBXML2_HOST_DIR)
++LIBXML2_HOST_BINARY:=$(HOST_DIR)/usr/bin/xmllint
+\ No newline@end of file
 -- 
 1.6.3.3
