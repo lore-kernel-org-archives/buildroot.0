@@ -1,27 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Dec 2009 16:41:36 +0100
-Subject: [Buildroot] [git commit master] dependencies: bail out if makeinfo
-	isn't found
-Message-ID: <20091216154216.0B855777B1@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 16 Dec 2009 16:39:39 +0100
+Subject: [Buildroot] [PATCH 31/39] mtd-utils: fix dependency on host
+	package
+In-Reply-To: <e99f7cacef6becaabed74c07bfe5a05f52830ddb.1260905467.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Tue, 15 Dec 2009 20:31:02 +0100")
+References: <cover.1260905467.git.thomas.petazzoni@free-electrons.com>
+	<cover.1260905467.git.thomas.petazzoni@free-electrons.com>
+	<e99f7cacef6becaabed74c07bfe5a05f52830ddb.1260905467.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87hbrr6i84.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8dba09de9d62422167164df0038d7d7cf062a252
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+  Thomas> -$(MKFS_JFFS2): $(MTD_HOST_DIR)/.unpacked $(STAMP_DIR)/host_lzo_installed
+ Thomas> +$(MKFS_JFFS2): $(MTD_HOST_DIR)/.unpacked host-lzo
+ Thomas>  	CC="$(HOSTCC)" CROSS= LDFLAGS=-L$(HOST_DIR)/usr/lib \
+ Thomas>  		$(MAKE) CFLAGS='-I$(HOST_DIR)/usr/include -I./include' \
 
-makeinfo is mandatory at least to build a toolchain. Currently,
-dependencies.sh doesn't fail if makeinfo is not present and only
-displays a message that can easily be lost. The user will then
-encounter the issue later, when it is more difficult to understand
-what's happening.
+Same issue as libusb. Having real targets (E.G. where work is done)
+depend on phony targets is in general a no-no.
 
-So, this patch simply does for makeinfo what the script does for the
-other dependencies: bail out if they aren't available.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Patch is too large, so refusing to show it
+-- 
+Bye, Peter Korsgaard
