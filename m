@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 16 Dec 2009 16:29:02 +0100
-Subject: [Buildroot] [git commit master] dbus: convert to autotools
+Subject: [Buildroot] [git commit master] freetype: convert to autotools
 	infrastructure for host package
-Message-ID: <20091216153051.BC99077738@busybox.osuosl.org>
+Message-ID: <20091216153053.5C63277738@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,107 +10,75 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=368519f649d49f39f1e4aabe146181ccaf193c04
+commit: http://git.buildroot.net/buildroot/commit/?id=fc1163d22d905db1a6813d3493a19885f5e97ace
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dbus/dbus.mk |   72 +++++++++++++------------------------------------
- 1 files changed, 19 insertions(+), 53 deletions(-)
+ package/freetype/freetype.mk |   46 ++---------------------------------------
+ 1 files changed, 3 insertions(+), 43 deletions(-)
 
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index 2780df6..ae65b7d 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -49,41 +49,8 @@ else
- DBUS_CONF_OPT += --without-x
- endif
+diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+index 06bf6f4..ed73253 100644
+--- a/package/freetype/freetype.mk
++++ b/package/freetype/freetype.mk
+@@ -13,7 +13,10 @@ FREETYPE_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
+ FREETYPE_MAKE_OPT = CCexe="$(HOSTCC)"
+ FREETYPE_DEPENDENCIES = host-pkg-config $(if $(BR2_PACKAGE_ZLIB),zlib)
  
--$(eval $(call AUTOTARGETS,package,dbus))
++HOST_FREETYPE_DEPENDENCIES = host-pkg-config
++
+ $(eval $(call AUTOTARGETS,package,freetype))
++$(eval $(call AUTOTARGETS,package,freetype,host))
+ 
+ $(FREETYPE_HOOK_POST_INSTALL):
+ 	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" \
+@@ -26,46 +29,3 @@ ifneq ($(BR2_HAVE_DEVFILES),y)
+ 	rm -f $(TARGET_DIR)/usr/bin/freetype-config
+ endif
+ 	touch $@
 -
--# fix rebuild (dbus makefile errors out if /var/lib/dbus is a symlink)
--$(DBUS_HOOK_POST_BUILD): $(DBUS_TARGET_BUILD)
--	rm -rf $(TARGET_DIR)/var/lib/dbus
+-# freetype for the host
+-FREETYPE_HOST_DIR:=$(BUILD_DIR)/freetype-$(FREETYPE_VERSION)-host
+-
+-$(DL_DIR)/$(FREETYPE_SOURCE):
+-	$(call DOWNLOAD,$(FREETYPE_SITE),$(FREETYPE_SOURCE))
+-
+-$(STAMP_DIR)/host_freetype_unpacked: $(DL_DIR)/$(FREETYPE_SOURCE)
+-	mkdir -p $(FREETYPE_HOST_DIR)
+-	$(INFLATE$(suffix $(FREETYPE_SOURCE))) $< | \
+-		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(FREETYPE_HOST_DIR) $(TAR_OPTIONS) -
 -	touch $@
 -
--$(DBUS_HOOK_POST_INSTALL): $(DBUS_TARGET_INSTALL_TARGET)
--	rm -rf $(TARGET_DIR)/usr/lib/dbus-1.0
--	rm -rf $(TARGET_DIR)/var/lib/dbus
--	ln -sf /tmp/dbus $(TARGET_DIR)/var/lib/dbus
--	$(INSTALL) -m 0755 package/dbus/S30dbus $(TARGET_DIR)/etc/init.d
--	touch $@
--
--# dbus for the host
--DBUS_HOST_DIR:=$(BUILD_DIR)/dbus-$(DBUS_VERSION)-host
--DBUS_HOST_INTROSPECT:=$(DBUS_HOST_DIR)/introspect.xml
--
--$(DL_DIR)/$(DBUS_SOURCE):
--	$(call DOWNLOAD,$(DBUS_SITE),$(DBUS_SOURCE))
--
--$(STAMP_DIR)/host_dbus_unpacked: $(DL_DIR)/$(DBUS_SOURCE)
--	mkdir -p $(DBUS_HOST_DIR)
--	$(INFLATE$(suffix $(DBUS_SOURCE))) $< | \
--		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(DBUS_HOST_DIR) $(TAR_OPTIONS) -
--	touch $@
--
--$(STAMP_DIR)/host_dbus_configured: $(STAMP_DIR)/host_dbus_unpacked $(STAMP_DIR)/host_expat_installed $(STAMP_DIR)/host_pkgconfig_installed
--	(cd $(DBUS_HOST_DIR); rm -rf config.cache; \
+-$(STAMP_DIR)/host_freetype_configured: $(STAMP_DIR)/host_freetype_unpacked $(STAMP_DIR)/host_pkgconfig_installed
+-	(cd $(FREETYPE_HOST_DIR); rm -rf config.cache; \
 -		$(HOST_CONFIGURE_OPTS) \
 -		CFLAGS="$(HOST_CFLAGS)" \
 -		LDFLAGS="$(HOST_LDFLAGS)" \
 -		./configure $(QUIET) \
 -		--prefix="$(HOST_DIR)/usr" \
 -		--sysconfdir="$(HOST_DIR)/etc" \
-+HOST_DBUS_DEPENDENCIES = host-pkg-config host-expat
-+HOST_DBUS_CONF_OPT = \
- 		--with-dbus-user=dbus \
- 		--disable-tests \
- 		--disable-asserts \
-@@ -94,28 +61,27 @@ $(STAMP_DIR)/host_dbus_configured: $(STAMP_DIR)/host_dbus_unpacked $(STAMP_DIR)/
- 		--disable-static \
- 		--enable-dnotify \
- 		--without-x \
--		--with-xml=expat \
 -	)
 -	touch $@
-+		--with-xml=expat
- 
--$(STAMP_DIR)/host_dbus_compiled: $(STAMP_DIR)/host_dbus_configured
--	$(HOST_MAKE_ENV) $(MAKE) -C $(DBUS_HOST_DIR)
+-
+-$(STAMP_DIR)/host_freetype_compiled: $(STAMP_DIR)/host_freetype_configured
+-	$(MAKE) -C $(FREETYPE_HOST_DIR)
 -	touch $@
-+# dbus for the host
-+DBUS_HOST_INTROSPECT:=$(DBUS_HOST_DIR)/introspect.xml
- 
--$(STAMP_DIR)/host_dbus_installed: $(STAMP_DIR)/host_dbus_compiled
--	$(MAKE) -C $(DBUS_HOST_DIR) install
-+HOST_DBUS_GEN_INTROSPECT = \
- 	$(HOST_DIR)/usr/bin/dbus-daemon --introspect > $(DBUS_HOST_INTROSPECT)
+-
+-$(STAMP_DIR)/host_freetype_installed: $(STAMP_DIR)/host_freetype_compiled
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(FREETYPE_HOST_DIR) install
 -	touch $@
- 
--host-dbus: $(STAMP_DIR)/host_dbus_installed
-+HOST_DBUS_POST_INSTALL_HOOKS += HOST_DBUS_GEN_INTROSPECT
- 
--host-dbus-source: dbus-source
-+$(eval $(call AUTOTARGETS,package,dbus))
-+$(eval $(call AUTOTARGETS,package,dbus,host))
- 
--host-dbus-clean:
--	rm -f $(addprefix $(STAMP_DIR)/host_dbus_,unpacked configured compiled installed)
--	rm -f $(DBUS_HOST_INTROSPECT)
--	-$(MAKE) -C $(DBUS_HOST_DIR) uninstall
--	-$(MAKE) -C $(DBUS_HOST_DIR) clean
-+# fix rebuild (dbus makefile errors out if /var/lib/dbus is a symlink)
-+$(DBUS_HOOK_POST_BUILD): $(DBUS_TARGET_BUILD)
-+	rm -rf $(TARGET_DIR)/var/lib/dbus
-+	touch $@
- 
--host-dbus-dirclean:
--	rm -rf $(DBUS_HOST_DIR)
-+$(DBUS_HOOK_POST_INSTALL): $(DBUS_TARGET_INSTALL_TARGET)
-+	rm -rf $(TARGET_DIR)/usr/lib/dbus-1.0
-+	rm -rf $(TARGET_DIR)/var/lib/dbus
-+	ln -sf /tmp/dbus $(TARGET_DIR)/var/lib/dbus
-+	$(INSTALL) -m 0755 package/dbus/S30dbus $(TARGET_DIR)/etc/init.d
-+	touch $@
+-
+-host-freetype: $(STAMP_DIR)/host_freetype_installed
+-
+-host-freetype-source: freetype-source
+-
+-host-freetype-clean:
+-	rm -f $(addprefix $(STAMP_DIR)/host_freetype_,unpacked configured compiled installed)
+-	-$(MAKE) -C $(FREETYPE_HOST_DIR) uninstall
+-	-$(MAKE) -C $(FREETYPE_HOST_DIR) clean
+-
+-host-freetype-dirclean:
+-	rm -rf $(FREETYPE_HOST_DIR)
 -- 
 1.6.3.3
