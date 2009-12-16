@@ -1,54 +1,65 @@
-From: Stanley <eva2002@gmail.com>
-Date: Wed, 16 Dec 2009 12:30:57 +0800
-Subject: [Buildroot] update on a file in tslib not reflected after doing
-	"Make"
-In-Reply-To: <20091215092751.7d9a48fe@surf>
-References: <ed7750810912142330nbfb9fb5q2b261926c6d2b4c2@mail.gmail.com>
-	<20091215092751.7d9a48fe@surf>
-Message-ID: <ed7750810912152030x7fd04fd1g70a959b28f4ab9e4@mail.gmail.com>
+From: Lionel Landwerlin <llandwerlin@gmail.com>
+Date: Wed, 16 Dec 2009 07:46:02 +0100
+Subject: [Buildroot] [pull request] Pull request for branch
+ package-infrastructure
+In-Reply-To: <1260913520.14582.4.camel@bender>
+References: <cover.1260905467.git.thomas.petazzoni@free-electrons.com>
+	<1260913520.14582.4.camel@bender>
+Message-ID: <1260945962.5150.3.camel@coalu.atr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I tried your method and also tried creating some patches for editing the
-test file. However in both cases, the changes still did not reflect.
+Le mardi 15 d?cembre 2009 ? 22:45 +0100, Sven Neumann a ?crit :
+> Hi,
+> 
+> On Tue, 2009-12-15 at 20:30 +0100, Thomas Petazzoni wrote:
+> 
+> > This patchset :
+> > 
+> >  * implements a new infrastructure to support all type of packages,
+> >    not only packages relying on the autotools build system. Through
+> >    the new GENTARGETS macro, implemented in
+> >    package/Makefile.package.in, we will be able to write simpler .mk
+> >    files and be able to factorize the common parts of the different
+> >    .mk files. This infrastructure support building both host and
+> >    target packages.
+> > 
+> >  * rebases the existing autotools infrastructure on top of the new
+> >    generic infrastructure. This rebasing has no impact on the existing
+> >    .mk files for autotools packages. With this rebasing, the autotools
+> >    infrastructure gains the ability to build host packages.
+> > 
+> >  * simplifies most (if not all) .mk files of autotools-based packages
+> >    that required an host version to be compiled (xutil_makedepend,
+> >    xproto_xproto, pixman, m4, mtd-utils, lzo, libusb, libgtk2, gob2,
+> >    expat, dbus-glib, shared-mime-info, libxml2, freetype, fontconfig,
+> >    directfb, dbus, atk, pango, libtool, libglib2, cairo, automake,
+> >    pkg-config)
+> > 
+> >  * bumps the version of autoconf to 2.65 and finally fixes the
+> >    host-autoconf build problem when sh is symlinked to dash.
+> > 
+> >  * converts a few packages to the generic infrastructure (zlib, olsr,
+> >    udev)
+> > 
+> >  * updates and extends the documentation to cover the new
+> >    infrastructures with examples and reference information
+> 
+> I only had a quick look at your patches, but I think I can already can
+> say that this looks wonderful. With these changes, it becomes a lot
+> simpler to create and to maintain buildroot packages. Thanks for your
+> work on this.
+> 
+> 
+> Sven
 
-However i did see that it got rebuilt after deleting .stamp_built file. What
-I can try out now?
-thanks
+Thanks again for your work Thomas.
 
-On Tue, Dec 15, 2009 at 4:27 PM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+I hope thoses patchs will be integrated soon, so we can update most of
+the packages for this architecture.
 
-> Le Tue, 15 Dec 2009 15:30:06 +0800,
-> Stanley <eva2002@gmail.com> a ?crit :
->
-> > Anyone knows how to resolve this problem?
->
-> Let Buildroot does its compilation process to the end.
->
-> Then, make your modifications to build_arm/tslib-x.x/. Then, remove
-> the build_arm/tslib-x.x/.stamp_build file.
->
-> Re-run make.
->
-> This topic is covered in Buildroot documentation, see
-> docs/buildroot.html.
->
-> Cheers,
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers and embedded Linux development,
-> consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091216/b176f42a/attachment.htm>
+-- 
+Lionel Landwerlin
