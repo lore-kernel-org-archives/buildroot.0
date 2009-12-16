@@ -1,29 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Dec 2009 09:14:17 +0100
-Subject: [Buildroot] [pull request] Pull request for branch dependencies-fix
-Message-ID: <cover.1260951255.git.thomas.petazzoni@free-electrons.com>
+Date: Wed, 16 Dec 2009 09:14:19 +0100
+Subject: [Buildroot] [PATCH 2/3] dependencies: remove useless test doing
+	nothing
+In-Reply-To: <cover.1260951255.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1260951255.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <84b1e44e92208c4be287dbdc1344f3df99f2fa39.1260951255.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The following changes since commit f3f1a94313361c251c4dfa164921d475835c763d:
-  Peter Korsgaard (1):
-        Merge branch 'avr32-fixes' of git://git.busybox.net/~tpetazzoni/git/buildroot
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/dependencies/dependencies.sh |    7 -------
+ 1 files changed, 0 insertions(+), 7 deletions(-)
 
-are available in the git repository at:
-
-  git://git.busybox.net/~tpetazzoni/git/buildroot dependencies-fix
-
-Thomas Petazzoni (3):
-      dependencies: bail out if makeinfo isn't found
-      dependencies: remove useless test doing nothing
-      dependencies: cleanup
-
- toolchain/dependencies/dependencies.sh |  273 +++++---------------------------
- 1 files changed, 38 insertions(+), 235 deletions(-)
-
-Thanks,
+diff --git a/toolchain/dependencies/dependencies.sh b/toolchain/dependencies/dependencies.sh
+index e503097..5c40f0d 100755
+--- a/toolchain/dependencies/dependencies.sh
++++ b/toolchain/dependencies/dependencies.sh
+@@ -11,13 +11,6 @@ export LC_ALL=C
+ # check build system 'environment'
+ #
+ #############################################################
+-if test -n "$BUILDROOT_DL_DIR" ; then
+-	/bin/echo -e "Overriding \$(DL_DIR) in '.config'.		Ok"
+-	/bin/echo -e "External download directory:			Ok ($BUILDROOT_DL_DIR)"
+-else
+-	echo "BUILDROOT_DL_DIR clean:				Ok"
+-fi
+-
+ if test -n "$CC" ; then
+ 	echo "CC clean:						FALSE"
+ 	/bin/echo -e "\n\nYou must run 'unset CC' so buildroot can run with";
 -- 
-Thomas Petazzoni
+1.6.3.3
