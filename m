@@ -1,8 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 16 Dec 2009 16:29:02 +0100
-Subject: [Buildroot] [git commit master] autoconf: convert to autotools
-	infrastructure for host package
-Message-ID: <20091216153047.15FFB77738@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] Add package statistics script
+Message-ID: <20091216153046.8A1ED777E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,77 +9,220 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=67cd864711372ba136016209ebf54684b674e8e2
+commit: http://git.buildroot.net/buildroot/commit/?id=35e635b7ddfdcfac562eaf44809f2ffca119a23a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/autoconf/autoconf.mk |   51 +++++-------------------------------------
- 1 files changed, 6 insertions(+), 45 deletions(-)
+ scripts/pkg-stats |  200 +++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 200 insertions(+), 0 deletions(-)
+ create mode 100755 scripts/pkg-stats
 
-diff --git a/package/autoconf/autoconf.mk b/package/autoconf/autoconf.mk
-index 931d551..a94f23e 100644
---- a/package/autoconf/autoconf.mk
-+++ b/package/autoconf/autoconf.mk
-@@ -16,53 +16,14 @@ AUTOCONF_CONF_ENV = EMACS="no" ac_cv_path_M4=$(HOST_DIR)/usr/bin/m4 \
- 
- AUTOCONF_DEPENDENCIES = microperl host-m4
- 
--$(eval $(call AUTOTARGETS,package,autoconf))
-+HOST_AUTOCONF_CONF_ENV = ac_cv_path_M4=$(HOST_DIR)/usr/bin/m4 \
-+                    	 ac_cv_prog_gnu_m4_gnu=no
+diff --git a/scripts/pkg-stats b/scripts/pkg-stats
+new file mode 100755
+index 0000000..0ed420d
+--- /dev/null
++++ b/scripts/pkg-stats
+@@ -0,0 +1,200 @@
++#!/bin/bash
 +
-+HOST_AUTOCONF_DEPENDENCIES = host-m4 host-libtool
- 
--# autoconf for the host
--AUTOCONF_HOST_DIR:=$(BUILD_DIR)/autoconf-$(AUTOCONF_VERSION)-host
-+$(eval $(call AUTOTARGETS,package,autoconf))
-+$(eval $(call AUTOTARGETS,package,autoconf,host))
- 
- # variables used by other packages
- AUTOCONF:=$(HOST_DIR)/usr/bin/autoconf
- AUTORECONF=$(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" $(HOST_DIR)/usr/bin/autoreconf -v -f -i -I "$(ACLOCAL_DIR)"
--
--$(DL_DIR)/$(AUTOCONF_SOURCE):
--	$(call DOWNLOAD,$(AUTOCONF_SITE),$(AUTOCONF_SOURCE))
--
--$(STAMP_DIR)/host_autoconf_unpacked: $(DL_DIR)/$(AUTOCONF_SOURCE)
--	mkdir -p $(AUTOCONF_HOST_DIR)
--	$(INFLATE$(suffix $(AUTOCONF_SOURCE))) $< | \
--		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(AUTOCONF_HOST_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(AUTOCONF_HOST_DIR) package/autoconf/ \*.patch
--	touch $@
--
--$(STAMP_DIR)/host_autoconf_configured: $(STAMP_DIR)/host_autoconf_unpacked $(STAMP_DIR)/host_m4_installed  $(STAMP_DIR)/host_libtool_installed
--	(cd $(AUTOCONF_HOST_DIR); rm -rf config.cache; \
--		$(HOST_CONFIGURE_OPTS) \
--		CFLAGS="$(HOST_CFLAGS)" \
--		LDFLAGS="$(HOST_LDFLAGS)" \
--		ac_cv_path_M4=$(HOST_DIR)/usr/bin/m4 \
--		ac_cv_prog_gnu_m4_gnu=no \
--		./configure $(QUIET) \
--		--prefix="$(HOST_DIR)/usr" \
--		--sysconfdir="$(HOST_DIR)/etc" \
--		--disable-static \
--	)
--	touch $@
--
--$(STAMP_DIR)/host_autoconf_compiled: $(STAMP_DIR)/host_autoconf_configured
--	$(MAKE) -C $(AUTOCONF_HOST_DIR)
--	touch $@
--
--$(STAMP_DIR)/host_autoconf_installed: $(STAMP_DIR)/host_autoconf_compiled
--	$(MAKE) -C $(AUTOCONF_HOST_DIR) install
--	touch $@
--
--host-autoconf: $(STAMP_DIR)/host_autoconf_installed
--
--host-autoconf-clean:
--	rm -f $(addprefix $(STAMP_DIR)/host_autoconf_,unpacked configured compiled installed)
--	-$(MAKE) -C $(AUTOCONF_HOST_DIR) uninstall
--	-$(MAKE) -C $(AUTOCONF_HOST_DIR) clean
--
--host-autoconf-dirclean:
--	rm -rf $(AUTOCONF_HOST_DIR)
++# Copyright (C) 2009 by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++#
++# This program is free software; you can redistribute it and/or modify
++# it under the terms of the GNU General Public License as published by
++# the Free Software Foundation; either version 2 of the License, or
++# (at your option) any later version.
++#
++# This program is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
++# General Public License for more details.
++#
++# You should have received a copy of the GNU General Public License
++# along with this program; if not, write to the Free Software
++# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
++
++# This script generates an HTML file that contains a report about all
++# Buildroot packages, their usage of the different package
++# infrastructure and possible cleanup actions
++#
++# Run the script from the Buildroot toplevel directory:
++#
++#  ./scripts/pkg-stats > /tmp/pkg.html
++#
++
++echo "<head>
++<style type=\"text/css\">
++table {
++  width: 100%;
++}
++td {
++  border: 1px solid black;
++}
++td.centered {
++  text-align: center;
++}
++</style>
++</head>
++
++<a href=\"#results\">Results</a><br/>
++
++<table>
++<tr>
++<td rowspan=\"2\">Id</td>
++<td rowspan=\"2\">Package</td>
++<td colspan=\"2\" class=\"centered\">AUTOTARGETS</td>
++<td colspan=\"2\" class=\"centered\">GENTARGETS</td>
++<td colspan=\"2\" class=\"centered\">manual</td>
++<td rowspan=\"2\" class=\"centered\">Actions</td>
++</tr>
++<tr>
++<td class=\"centered\">host</td>
++<td class=\"centered\">target</td>
++<td class=\"centered\">host</td>
++<td class=\"centered\">target</td>
++<td class=\"centered\">host</td>
++<td class=\"centered\">target</td>
++</tr>"
++
++convert_to_generic_target=0
++convert_to_generic_host=0
++convert_to_autotools=0
++cnt=1
++for i in $(find package/ -name '*.mk') ; do
++
++    if test $i = "package/mtd/mtd.mk" -o \
++	$i = "package/java/java.mk" -o \
++	$i = "package/database/database.mk" -o \
++	$i = "package/editors/editors.mk" -o \
++	$i = "package/games/games.mk" -o \
++	$i = "package/multimedia/multimedia" -o \
++	$i = "package/customize/customize.mk" -o \
++	$i = "package/gnuconfig/gnuconfig.mk" -o \
++	$i = "package/x11r7/x11r7.mk" ; then
++	echo "skipping $i" 1>&2
++	continue
++    fi
++
++    found=0
++
++    echo "<tr>"
++    echo "<td>$cnt</td>"
++    cnt=$((cnt+1))
++    echo "<td>$i</td>"
++
++    is_auto_host=0
++    is_auto_target=0
++    is_pkg_target=0
++    is_pkg_host=0
++    is_manual_target=0
++    is_manual_host=0
++
++    echo "<td class=\"centered\">"
++    if grep -E "\(call AUTOTARGETS,[^,]*,[^,]*,host\)" $i > /dev/null ; then
++	is_auto_host=1
++	echo "<b>YES</b>"
++    else
++	echo "NO"
++    fi
++
++    echo "<td class=\"centered\">"
++    if grep -E "\(call AUTOTARGETS,[^,]*,[^,]*(,target|)\)" $i > /dev/null ; then
++	found=1
++	is_auto_target=1
++	echo "<b>YES</b>"
++    else
++	echo "NO"
++    fi
++    echo "</td>"
++
++    echo "<td class=\"centered\">"
++    if grep -E "\(call GENTARGETS,[^,]*,[^,]*,host\)" $i > /dev/null ; then
++	found=1
++	is_pkg_host=1
++	echo "<b>YES</b>"
++    else
++	echo "NO"
++    fi
++    echo "</td>"
++
++    echo "<td class=\"centered\">"
++    if grep -E "\(call GENTARGETS,[^,]*,[^,]*(,target|)\)" $i > /dev/null ; then
++	found=1
++	is_pkg_target=1
++	echo "<b>YES</b>"
++    else
++	echo "NO"
++    fi
++    echo "</td>"
++
++    pkg=$(basename $i)
++    pkg=${pkg%.mk}
++
++    echo "<td class=\"centered\">"
++    if grep "^host-$pkg:" $i > /dev/null ; then
++	found=1
++	is_manual_host=1
++	echo "<b>YES</b>"
++    else
++	echo "NO"
++    fi
++    echo "</td>"
++
++    echo "<td class=\"centered\">"
++    if grep "^$pkg:" $i > /dev/null ; then
++	found=1
++	is_manual_target=1
++	echo "<b>YES</b>"
++    else
++	echo "NO"
++    fi
++    echo "</td>"
++
++    echo "<td>"
++    echo "<ul>"
++    if [ $is_manual_target -eq 1 ]; then
++	echo "<li>convert to generic target</li>"
++	convert_to_generic_target=$((convert_to_generic_target+1))
++    fi
++    if [ $is_manual_host -eq 1 ]; then
++	echo "<li>convert to generic host</li>"
++	convert_to_generic_host=$((convert_to_generic_host+1))
++    fi
++    if grep "\./configure" $i > /dev/null ; then
++	if [ $is_manual_host -ne 1 ] ; then
++	    echo "<li>convert package to autotools ?</li>"
++	    convert_to_autotools=$((convert_to_autotools+1))
++	fi
++    fi
++    if [ $found -eq 0 ] ; then
++	echo "<li>look manually</li>"
++    fi
++    echo "</ul>"
++    echo "</td>"
++
++    echo "</tr>"
++
++done
++echo "</table>"
++
++echo "<table>"
++echo "<tr>"
++echo "<td>Packages to convert to generic target</td>"
++echo "<td>$convert_to_generic_target</td>"
++echo "</tr>"
++echo "<tr>"
++echo "<td>Packages to convert to generic host</td>"
++echo "<td>$convert_to_generic_host</td>"
++echo "</tr>"
++echo "<tr>"
++echo "<td>Packages to convert to autotools</td>"
++echo "<td>$convert_to_autotools</td>"
++echo "</tr>"
++echo "<tr>"
++echo "<td>TOTAL</td>"
++echo "<td>$cnt</td>"
++echo "</tr>"
++echo "</table>"
 -- 
 1.6.3.3
