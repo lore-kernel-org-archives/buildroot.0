@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 16 Dec 2009 16:29:02 +0100
-Subject: [Buildroot] [git commit master] gob2: convert to autotools
+Subject: [Buildroot] [git commit master] fontconfig: convert to autotools
 	infrastructure for host package
-Message-ID: <20091216153055.EA79F77738@busybox.osuosl.org>
+Message-ID: <20091216153052.D6D0477738@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,69 +10,72 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c009e4e3d79bd3e37acfb54afa4cf65e49553f4e
+commit: http://git.buildroot.net/buildroot/commit/?id=1ef81c0c9c57bb4bfad4d320debd16a84feb8dba
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gob2/gob2.mk |   44 +++-----------------------------------------
- 1 files changed, 3 insertions(+), 41 deletions(-)
+ package/fontconfig/fontconfig.mk |   49 ++++----------------------------------
+ 1 files changed, 5 insertions(+), 44 deletions(-)
 
-diff --git a/package/gob2/gob2.mk b/package/gob2/gob2.mk
-index e640ca9..cdf7961 100644
---- a/package/gob2/gob2.mk
-+++ b/package/gob2/gob2.mk
-@@ -9,48 +9,10 @@ GOB2_SITE = http://ftp.5z.com/pub/gob/
+diff --git a/package/fontconfig/fontconfig.mk b/package/fontconfig/fontconfig.mk
+index df618d0..6cbe2ea 100644
+--- a/package/fontconfig/fontconfig.mk
++++ b/package/fontconfig/fontconfig.mk
+@@ -23,49 +23,10 @@ FONTCONFIG_CONF_OPT = --with-arch=$(GNU_TARGET_NAME) \
  
- GOB2_DEPENDENCIES = libglib2 flex bison host-pkg-config
+ FONTCONFIG_DEPENDENCIES = freetype expat
  
-+HOST_GOB2_DEPENDENCIES = host-libglib2
-+
- $(eval $(call AUTOTARGETS,package,gob2))
-+$(eval $(call AUTOTARGETS,package,gob2,host))
- 
- # gob2 for the host
--GOB2_HOST_DIR:=$(BUILD_DIR)/gob2-$(GOB2_VERSION)-host
- GOB2_HOST_BINARY:=$(HOST_DIR)/usr/bin/gob2
+-$(eval $(call AUTOTARGETS,package,fontconfig))
 -
--$(DL_DIR)/$(GOB2_SOURCE):
--	$(call DOWNLOAD,$(GOB2_SITE),$(GOB2_SOURCE))
+-# fontconfig for the host
+-FONTCONFIG_HOST_DIR:=$(BUILD_DIR)/fontconfig-$(FONTCONFIG_VERSION)-host
 -
--$(STAMP_DIR)/host_gob2_unpacked: $(DL_DIR)/$(GOB2_SOURCE)
--	mkdir -p $(GOB2_HOST_DIR)
--	$(INFLATE$(suffix $(GOB2_SOURCE))) $< | \
--		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(GOB2_HOST_DIR) $(TAR_OPTIONS) -
+-$(DL_DIR)/$(FONTCONFIG_SOURCE):
+-	$(call DOWNLOAD,$(FONTCONFIG_SITE),$(FONTCONFIG_SOURCE))
+-
+-$(STAMP_DIR)/host_fontconfig_unpacked: $(DL_DIR)/$(FONTCONFIG_SOURCE)
+-	mkdir -p $(FONTCONFIG_HOST_DIR)
+-	$(INFLATE$(suffix $(FONTCONFIG_SOURCE))) $< | \
+-		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(FONTCONFIG_HOST_DIR) $(TAR_OPTIONS) -
 -	touch $@
 -
--$(STAMP_DIR)/host_gob2_configured: $(STAMP_DIR)/host_gob2_unpacked $(STAMP_DIR)/host_libglib2_installed
--	(cd $(GOB2_HOST_DIR); rm -rf config.cache; \
+-$(STAMP_DIR)/host_fontconfig_configured: $(STAMP_DIR)/host_fontconfig_unpacked $(STAMP_DIR)/host_freetype_installed $(STAMP_DIR)/host_expat_installed
+-	(cd $(FONTCONFIG_HOST_DIR); rm -rf config.cache; \
 -		$(HOST_CONFIGURE_OPTS) \
 -		CFLAGS="$(HOST_CFLAGS)" \
 -		LDFLAGS="$(HOST_LDFLAGS)" \
 -		./configure $(QUIET) \
 -		--prefix="$(HOST_DIR)/usr" \
 -		--sysconfdir="$(HOST_DIR)/etc" \
++HOST_FONTCONFIG_DEPENDENCIES = host-freetype host-expat
++HOST_FONTCONFIG_CONF_OPT = \
+ 		--disable-docs \
+-		--disable-static \
 -	)
 -	touch $@
 -
--$(STAMP_DIR)/host_gob2_compiled: $(STAMP_DIR)/host_gob2_configured
--	$(HOST_MAKE_ENV) $(MAKE) -C $(GOB2_HOST_DIR)
+-$(STAMP_DIR)/host_fontconfig_compiled: $(STAMP_DIR)/host_fontconfig_configured
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(FONTCONFIG_HOST_DIR)
+-	touch $@
++		--disable-static
+ 
+-$(STAMP_DIR)/host_fontconfig_installed: $(STAMP_DIR)/host_fontconfig_compiled
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(FONTCONFIG_HOST_DIR) install
 -	touch $@
 -
--$(STAMP_DIR)/host_gob2_installed: $(STAMP_DIR)/host_gob2_compiled
--	$(HOST_MAKE_ENV) $(MAKE) -C $(GOB2_HOST_DIR) install
--	touch $@
+-host-fontconfig: $(STAMP_DIR)/host_fontconfig_installed
 -
--host-gob2: $(STAMP_DIR)/host_gob2_installed
+-host-fontconfig-source: fontconfig-source
 -
--host-gob2-source: gob2-source
+-host-fontconfig-clean:
+-	rm -f $(addprefix $(STAMP_DIR)/host_fontconfig_,unpacked configured compiled installed)
+-	-$(MAKE) -C $(FONTCONFIG_HOST_DIR) uninstall
+-	-$(MAKE) -C $(FONTCONFIG_HOST_DIR) clean
 -
--host-gob2-clean:
--	rm -f $(addprefix $(STAMP_DIR)/host_gob2_,unpacked configured compiled installed)
--	-$(MAKE) -C $(GOB2_HOST_DIR) uninstall
--	-$(MAKE) -C $(GOB2_HOST_DIR) clean
--
--host-gob2-dirclean:
--	rm -rf $(GOB2_HOST_DIR)
+-host-fontconfig-dirclean:
+-	rm -rf $(FONTCONFIG_HOST_DIR)
++$(eval $(call AUTOTARGETS,package,fontconfig))
++$(eval $(call AUTOTARGETS,package,fontconfig,host))
 -- 
 1.6.3.3
