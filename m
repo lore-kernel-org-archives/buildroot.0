@@ -1,33 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 16 Dec 2009 16:42:07 +0100
-Subject: [Buildroot] [pull request] Pull request for branch
-	dependencies-fix
-In-Reply-To: <cover.1260951255.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Wed, 16 Dec 2009 09:14:17 +0100")
-References: <cover.1260951255.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87d42f6i40.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 16 Dec 2009 16:41:36 +0100
+Subject: [Buildroot] [git commit master] dependencies: remove useless test
+	doing nothing
+Message-ID: <20091216154216.A04FF777B1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> The following changes since commit f3f1a94313361c251c4dfa164921d475835c763d:
- Thomas>   Peter Korsgaard (1):
- Thomas>         Merge branch 'avr32-fixes' of git://git.busybox.net/~tpetazzoni/git/buildroot
+commit: http://git.buildroot.net/buildroot/commit/?id=84b1e44e92208c4be287dbdc1344f3df99f2fa39
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> are available in the git repository at:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/dependencies/dependencies.sh |    7 -------
+ 1 files changed, 0 insertions(+), 7 deletions(-)
 
- Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot dependencies-fix
-
- Thomas> Thomas Petazzoni (3):
- Thomas>       dependencies: bail out if makeinfo isn't found
- Thomas>       dependencies: remove useless test doing nothing
- Thomas>       dependencies: cleanup
-
-Pulled and pushed, thanks!
-
+diff --git a/toolchain/dependencies/dependencies.sh b/toolchain/dependencies/dependencies.sh
+index e503097..5c40f0d 100755
+--- a/toolchain/dependencies/dependencies.sh
++++ b/toolchain/dependencies/dependencies.sh
+@@ -11,13 +11,6 @@ export LC_ALL=C
+ # check build system 'environment'
+ #
+ #############################################################
+-if test -n "$BUILDROOT_DL_DIR" ; then
+-	/bin/echo -e "Overriding \$(DL_DIR) in '.config'.		Ok"
+-	/bin/echo -e "External download directory:			Ok ($BUILDROOT_DL_DIR)"
+-else
+-	echo "BUILDROOT_DL_DIR clean:				Ok"
+-fi
+-
+ if test -n "$CC" ; then
+ 	echo "CC clean:						FALSE"
+ 	/bin/echo -e "\n\nYou must run 'unset CC' so buildroot can run with";
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
