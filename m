@@ -1,65 +1,29 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Wed, 16 Dec 2009 07:46:02 +0100
-Subject: [Buildroot] [pull request] Pull request for branch
- package-infrastructure
-In-Reply-To: <1260913520.14582.4.camel@bender>
-References: <cover.1260905467.git.thomas.petazzoni@free-electrons.com>
-	<1260913520.14582.4.camel@bender>
-Message-ID: <1260945962.5150.3.camel@coalu.atr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 16 Dec 2009 09:14:17 +0100
+Subject: [Buildroot] [pull request] Pull request for branch dependencies-fix
+Message-ID: <cover.1260951255.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le mardi 15 d?cembre 2009 ? 22:45 +0100, Sven Neumann a ?crit :
-> Hi,
-> 
-> On Tue, 2009-12-15 at 20:30 +0100, Thomas Petazzoni wrote:
-> 
-> > This patchset :
-> > 
-> >  * implements a new infrastructure to support all type of packages,
-> >    not only packages relying on the autotools build system. Through
-> >    the new GENTARGETS macro, implemented in
-> >    package/Makefile.package.in, we will be able to write simpler .mk
-> >    files and be able to factorize the common parts of the different
-> >    .mk files. This infrastructure support building both host and
-> >    target packages.
-> > 
-> >  * rebases the existing autotools infrastructure on top of the new
-> >    generic infrastructure. This rebasing has no impact on the existing
-> >    .mk files for autotools packages. With this rebasing, the autotools
-> >    infrastructure gains the ability to build host packages.
-> > 
-> >  * simplifies most (if not all) .mk files of autotools-based packages
-> >    that required an host version to be compiled (xutil_makedepend,
-> >    xproto_xproto, pixman, m4, mtd-utils, lzo, libusb, libgtk2, gob2,
-> >    expat, dbus-glib, shared-mime-info, libxml2, freetype, fontconfig,
-> >    directfb, dbus, atk, pango, libtool, libglib2, cairo, automake,
-> >    pkg-config)
-> > 
-> >  * bumps the version of autoconf to 2.65 and finally fixes the
-> >    host-autoconf build problem when sh is symlinked to dash.
-> > 
-> >  * converts a few packages to the generic infrastructure (zlib, olsr,
-> >    udev)
-> > 
-> >  * updates and extends the documentation to cover the new
-> >    infrastructures with examples and reference information
-> 
-> I only had a quick look at your patches, but I think I can already can
-> say that this looks wonderful. With these changes, it becomes a lot
-> simpler to create and to maintain buildroot packages. Thanks for your
-> work on this.
-> 
-> 
-> Sven
+The following changes since commit f3f1a94313361c251c4dfa164921d475835c763d:
+  Peter Korsgaard (1):
+        Merge branch 'avr32-fixes' of git://git.busybox.net/~tpetazzoni/git/buildroot
 
-Thanks again for your work Thomas.
+are available in the git repository at:
 
-I hope thoses patchs will be integrated soon, so we can update most of
-the packages for this architecture.
+  git://git.busybox.net/~tpetazzoni/git/buildroot dependencies-fix
 
+Thomas Petazzoni (3):
+      dependencies: bail out if makeinfo isn't found
+      dependencies: remove useless test doing nothing
+      dependencies: cleanup
+
+ toolchain/dependencies/dependencies.sh |  273 +++++---------------------------
+ 1 files changed, 38 insertions(+), 235 deletions(-)
+
+Thanks,
 -- 
-Lionel Landwerlin
+Thomas Petazzoni
