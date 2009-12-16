@@ -1,38 +1,54 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 15 Dec 2009 23:54:47 +0000 (UTC)
-Subject: [Buildroot] [Bug 803] [PATCH] lua - add shared library patch and
- config option for readline/ncurses support
-In-Reply-To: <bug-803-163@https.bugs.busybox.net/>
-References: <bug-803-163@https.bugs.busybox.net/>
-Message-ID: <20091215235447.9F2AF777F5@busybox.osuosl.org>
+From: Stanley <eva2002@gmail.com>
+Date: Wed, 16 Dec 2009 12:30:57 +0800
+Subject: [Buildroot] update on a file in tslib not reflected after doing
+	"Make"
+In-Reply-To: <20091215092751.7d9a48fe@surf>
+References: <ed7750810912142330nbfb9fb5q2b261926c6d2b4c2@mail.gmail.com>
+	<20091215092751.7d9a48fe@surf>
+Message-ID: <ed7750810912152030x7fd04fd1g70a959b28f4ab9e4@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=803
+I tried your method and also tried creating some patches for editing the
+test file. However in both cases, the changes still did not reflect.
 
+However i did see that it got rebuilt after deleting .stamp_built file. What
+I can try out now?
+thanks
 
-rvpaasen <rvpaasen@t3i.nl> changed:
+On Tue, Dec 15, 2009 at 4:27 PM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
- Attachment #845 is|0                           |1
-           obsolete|                            |
-
-
-
-
---- Comment #4 from rvpaasen <rvpaasen@t3i.nl>  2009-12-15 23:54:45 UTC ---
-Created an attachment (id=857)
- --> (https://bugs.busybox.net/attachment.cgi?id=857)
-lua patch with -DLUA_USE_DLOPEN
-
-Patch with -DLUA_USE_DLOPEN added.
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+> Le Tue, 15 Dec 2009 15:30:06 +0800,
+> Stanley <eva2002@gmail.com> a ?crit :
+>
+> > Anyone knows how to resolve this problem?
+>
+> Let Buildroot does its compilation process to the end.
+>
+> Then, make your modifications to build_arm/tslib-x.x/. Then, remove
+> the build_arm/tslib-x.x/.stamp_build file.
+>
+> Re-run make.
+>
+> This topic is covered in Buildroot documentation, see
+> docs/buildroot.html.
+>
+> Cheers,
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers and embedded Linux development,
+> consulting, training and support.
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091216/b176f42a/attachment.htm>
