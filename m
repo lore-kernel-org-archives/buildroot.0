@@ -1,7 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 16 Dec 2009 16:29:02 +0100
-Subject: [Buildroot] [git commit master] Add $(HOST_DIR)/usr/sbin to the PATH
-Message-ID: <20091216153044.DDE5777738@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] pkg-config: convert to autotools
+	infrastructure for host package
+Message-ID: <20091216153045.615D577738@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,35 +10,78 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=69fa47be3f71c2529cfb18042d9c0b2a978d9898
+commit: http://git.buildroot.net/buildroot/commit/?id=d5d5d2942f388a22fd808406645c7033a7d27048
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Makefile.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/pkg-config/pkg-config.mk |   51 ++++++-------------------------------
+ 1 files changed, 9 insertions(+), 42 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 5b6161b..e643577 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -109,7 +109,7 @@ ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
- TOOLCHAIN_DIR=$(BASE_DIR)/toolchain
+diff --git a/package/pkg-config/pkg-config.mk b/package/pkg-config/pkg-config.mk
+index e328544..7caf37b 100644
+--- a/package/pkg-config/pkg-config.mk
++++ b/package/pkg-config/pkg-config.mk
+@@ -15,51 +15,18 @@ PKG_CONFIG_DEPENDENCIES = libglib2
  
- # Quotes are needed for spaces et al in path components.
--TARGET_PATH="$(TOOLCHAIN_DIR)/bin:$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(STAGING_DIR)/bin:$(STAGING_DIR)/usr/bin:$(PATH)"
-+TARGET_PATH="$(TOOLCHAIN_DIR)/bin:$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin/:$(STAGING_DIR)/bin:$(STAGING_DIR)/usr/bin:$(PATH)"
- IMAGE:=$(BINARIES_DIR)/$(BR2_ROOTFS_PREFIX).$(ARCH)$(ROOTFS_SUFFIX)
- GNU_TARGET_NAME=$(OPTIMIZE_FOR_CPU)-linux
- REAL_GNU_TARGET_NAME=$(OPTIMIZE_FOR_CPU)$(GNU_TARGET_SUFFIX)
-@@ -119,7 +119,7 @@ else
- TOOLCHAIN_EXTERNAL_PREFIX:=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))
- TOOLCHAIN_EXTERNAL_PATH:=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PATH))
- TOOLCHAIN_DIR=$(BASE_DIR)/toolchain
--TARGET_PATH="$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(TOOLCHAIN_DIR)/bin:$(TOOLCHAIN_EXTERNAL_PATH)/bin:$(PATH)"
-+TARGET_PATH="$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin/:$(TOOLCHAIN_DIR)/bin:$(TOOLCHAIN_EXTERNAL_PATH)/bin:$(PATH)"
- #IMAGE:=$(BINARIES_DIR)/$(BR2_ROOTFS_PREFIX).$(TOOLCHAIN_EXTERNAL_PREFIX)$(ROOTFS_SUFFIX)
- IMAGE:=$(BINARIES_DIR)/$(BR2_ROOTFS_PREFIX).$(ARCH)$(ROOTFS_SUFFIX)
+ PKG_CONFIG_CONF_OPT = --with-installed-glib
  
+-$(eval $(call AUTOTARGETS,package,pkg-config))
+-
+-# pkg-config for the host
+-PKG_CONFIG_HOST_DIR:=$(BUILD_DIR)/pkg-config-$(PKG_CONFIG_VERSION)-host
+-PKG_CONFIG_HOST_BINARY:=$(HOST_DIR)/usr/bin/pkg-config
+-
+-$(DL_DIR)/$(PKG_CONFIG_SOURCE):
+-	$(call DOWNLOAD,$(PKG_CONFIG_SITE),$(PKG_CONFIG_SOURCE))
+-
+-$(STAMP_DIR)/host_pkgconfig_unpacked: $(DL_DIR)/$(PKG_CONFIG_SOURCE)
+-	mkdir -p $(PKG_CONFIG_HOST_DIR)
+-	$(INFLATE$(suffix $(PKG_CONFIG_SOURCE))) $< | \
+-		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(PKG_CONFIG_HOST_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(PKG_CONFIG_HOST_DIR) package/pkg-config/ \*.patch
+-	touch $@
+-
+-$(STAMP_DIR)/host_pkgconfig_configured: $(STAMP_DIR)/host_pkgconfig_unpacked
+-	(cd $(PKG_CONFIG_HOST_DIR); rm -rf config.cache; \
+-		$(HOST_CONFIGURE_OPTS) \
+-		CFLAGS="$(HOST_CFLAGS)" \
+-		LDFLAGS="$(HOST_LDFLAGS)" \
+-		./configure $(QUIET) \
+-		--prefix="$(HOST_DIR)/usr" \
+-		--sysconfdir="$(HOST_DIR)/etc" \
++HOST_PKG_CONFIG_CONF_OPT = \
+ 		--with-pc-path="$(STAGING_DIR)/usr/lib/pkgconfig" \
+-		--disable-static \
+-	)
+-	touch $@
+-
+-$(STAMP_DIR)/host_pkgconfig_compiled: $(STAMP_DIR)/host_pkgconfig_configured
+-	$(MAKE) -C $(PKG_CONFIG_HOST_DIR)
+-	touch $@
++		--disable-static
+ 
+-$(STAMP_DIR)/host_pkgconfig_installed: $(STAMP_DIR)/host_pkgconfig_compiled
+-	$(MAKE) -C $(PKG_CONFIG_HOST_DIR) install
+-	install -D -m 0644 $(HOST_DIR)/usr/share/aclocal/pkg.m4 \
++define HOST_PKG_CONFIG_INSTALL_M4
++install -D -m 0644 $(HOST_DIR)/usr/share/aclocal/pkg.m4 \
+ 		$(STAGING_DIR)/usr/share/aclocal/pkg.m4
+-	touch $@
++endef
+ 
+-host-pkgconfig: $(STAMP_DIR)/host_pkgconfig_installed
++HOST_PKG_CONFIG_POST_INSTALL_HOOKS += HOST_PKG_CONFIG_INSTALL_M4
+ 
+-host-pkgconfig-clean:
+-	rm -f $(addprefix $(STAMP_DIR)/host_pkgconfig_,unpacked configured compiled installed)
+-	-$(MAKE) -C $(PKG_CONFIG_HOST_DIR) uninstall
+-	-$(MAKE) -C $(PKG_CONFIG_HOST_DIR) clean
++$(eval $(call AUTOTARGETS,package,pkg-config))
++$(eval $(call AUTOTARGETS,package,pkg-config,host))
+ 
+-host-pkgconfig-dirclean:
+-	rm -rf $(PKG_CONFIG_HOST_DIR)
++PKG_CONFIG_HOST_BINARY:=$(HOST_DIR)/usr/bin/pkg-config
 -- 
 1.6.3.3
