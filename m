@@ -1,38 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Dec 2009 15:47:56 +0100
-Subject: [Buildroot] avahi dependencies on host tools
-In-Reply-To: <5f2b60912160550x6d3ae47eu4f625f0259737e95@mail.gmail.com>
-References: <20091216102451.339e6ba9@surf>
-	<5f2b60912160550x6d3ae47eu4f625f0259737e95@mail.gmail.com>
-Message-ID: <20091216154756.7e5b3db2@surf>
+Date: Wed, 16 Dec 2009 16:29:02 +0100
+Subject: [Buildroot] [git commit master] Define TARGET_MAKE_ENV similarly to
+	HOST_MAKE_ENV
+Message-ID: <20091216153042.BFE3B77570@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 16 Dec 2009 14:50:26 +0100,
-Bj?rn Forsman <bjorn.forsman@gmail.com> a ?crit :
 
-> IMHO, I'd like for Buildroot to build the least amount of host tools
-> so that build times can be kept down. I often start from
-> scratch... :-)
+commit: http://git.buildroot.net/buildroot/commit/?id=497abb8211944fb5c9c012a52e9a630f220510a9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-True, but on the other hand, the approach we've been following since
-Buildroot maintenance has been taken over by Peter is that we should
-only rely on "basic" tools on the host. That's the reason why we build
-autoconf, automake, glib, pkg-config and other stuff for the host as
-needed. It makes the compilation process a little longer, but on the
-other hand, it makes the build process a *lot* more predictable.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Makefile.in |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-In the past, we had tons of reports of build failures that were caused
-by issues in varying versions of the host tools. And these problems are
-particularly annoying since the Buildroot developers often can't
-reproduce them.
-
-Thomas
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 8edd193..5b6161b 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -236,6 +236,8 @@ TARGET_CONFIGURE_ENV=\
+ 	LDFLAGS="$(TARGET_LDFLAGS)" \
+ 	FCFLAGS="$(TARGET_FCFLAGS)" \
+ 
++TARGET_MAKE_ENV=PATH=$(TARGET_PATH)
++
+ HOST_CONFIGURE_OPTS=PATH=$(HOST_PATH) \
+ 		AR="$(HOSTAR)" \
+ 		AS="$(HOSTAS)" \
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+1.6.3.3
