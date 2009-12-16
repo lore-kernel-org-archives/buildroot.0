@@ -1,38 +1,46 @@
 From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Wed, 16 Dec 2009 16:53:24 +0000 (UTC)
-Subject: [Buildroot] OT: git workflow question
-Message-ID: <hgb3a3$88l$1@ger.gmane.org>
+Date: Wed, 16 Dec 2009 17:02:31 +0000 (UTC)
+Subject: [Buildroot] Failure building default config for ARM integrator
+Message-ID: <hgb3r7$88l$2@ger.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I don't seem to "get" git when it comes to working with
-buildroot.
+I'm trying to build the default config for the ARM integrator
+target.  [It's the same architecture as my board, and it's
+supported by Qemu, so it's a useful testbed.] It fails when it
+tries to build U-Boot.  I don't really care about building
+U-Boot, so I could just deselect it.
 
- 1) I cloned the repository about two weeks ago
+However, if it's considered a bug when a "defconfig" target
+doesn't "just build", then I'll try to fix it and submit a
+patch.  Is this something that needs to be fixed, or is it
+normal?
 
- 2) I made a bunch of small edits to docs/buildroot.html and
-    commited them locally.
+ $ git clone git://git.buildroot.net/buildroot
+ 
+ $ cd buildroot
+  
+ $ make integrator926_defconfig
 
- 3) I submitted the changes using git format-patch
+ [...]   
+ [hit <enter> to accept default answers to a bunch of config questions]
+ [...]    
 
- 4) The patches were merged to the "master" repository
+ $ make
 
- 5) Then when I did a "git pull" to update my repository, it
-    failed because of conflicts in docs/buildroot.html
-
-Since I had only changed the one file (and those changes had
-been merged into the master repository) I didn't bother trying
-to resolve the conflict -- I just blew away my repository and
-did a 'clone'.
-
-Here's my question: why was there a conflict?
-
-Is this how git is supposed to work?
+ [...]   
+ [hit <enter> to accept default answers to more config questions]
+ [...]  
+  
+ make[1]: Entering directory `/home/grante/buildroot-git/buildroot/output/build/u-boot-2009.08'
+ make[1]: *** No rule to make target `integrator926_config'.  Stop.
+ make[1]: Leaving directory `/home/grante/buildroot-git/buildroot/output/build/u-boot-2009.08'
+ make: *** [/home/grante/buildroot-git/buildroot/output/build/u-boot-2009.08/.configured] Error 2
 
 -- 
-Grant Edwards                   grante             Yow! I'm ZIPPY the PINHEAD
-                                  at               and I'm totally committed
-                               visi.com            to the festive mode.
+Grant Edwards                   grante             Yow! I smell like a wet
+                                  at               reducing clinic on Columbus
+                               visi.com            Day!
