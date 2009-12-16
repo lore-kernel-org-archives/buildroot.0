@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 16 Dec 2009 16:29:02 +0100
-Subject: [Buildroot] [git commit master] automake: convert to autotools
-	infrastructure for host package
-Message-ID: <20091216153048.9E90677738@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] autoconf: add patch to make it work
+	under dash
+Message-ID: <20091216153048.1D59677738@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,74 +10,64 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=adaf0c909cc002e2ddeedc618d0d0e1e93e1ff07
+commit: http://git.buildroot.net/buildroot/commit/?id=cb4ab36bcf15560eb52ab78500db317ad0a963d9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+autoconf >= 2.64 was broken when /bin/sh is symlinked to dash. This
+has been fixed post-2.65 by the commit at
+http://git.savannah.gnu.org/cgit/autoconf.git/commit/?id=7f75858f577f11a844781764f30cd42cfe8a5669.
+
+Compared to the original patch, the patch included in Buildroot
+manually does the change to the ./configure script itself. Otherwise,
+the compilation of host-autoconf would require host-autoconf itself.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/automake/automake.mk |   47 ++---------------------------------------
- 1 files changed, 3 insertions(+), 44 deletions(-)
+ ...toconf-2.65-fix-m4-detection-test-on-dash.patch |   36 ++++++++++++++++++++
+ 1 files changed, 36 insertions(+), 0 deletions(-)
+ create mode 100644 package/autoconf/autoconf-2.65-fix-m4-detection-test-on-dash.patch
 
-diff --git a/package/automake/automake.mk b/package/automake/automake.mk
-index 82ae9be..65db386 100644
---- a/package/automake/automake.mk
-+++ b/package/automake/automake.mk
-@@ -13,53 +13,12 @@ endif
- 
- AUTOMAKE_DEPENDENCIES = autoconf microperl
- 
--$(eval $(call AUTOTARGETS,package,automake))
-+HOST_AUTOMAKE_DEPENDENCIES = host-autoconf
- 
--# automake for the host
--AUTOMAKE_HOST_DIR:=$(BUILD_DIR)/automake-$(AUTOMAKE_VERSION)-host
-+$(eval $(call AUTOTARGETS,package,automake))
-+$(eval $(call AUTOTARGETS,package,automake,host))
- 
- # variables used by other packages
- AUTOMAKE:=$(HOST_DIR)/usr/bin/automake
- ACLOCAL_DIR = $(STAGING_DIR)/usr/share/aclocal
- ACLOCAL = $(HOST_DIR)/usr/bin/aclocal -I $(ACLOCAL_DIR)
--
--$(DL_DIR)/$(AUTOMAKE_SOURCE):
--	$(call DOWNLOAD,$(AUTOMAKE_SITE),$(AUTOMAKE_SOURCE))
--
--$(STAMP_DIR)/host_automake_unpacked: $(DL_DIR)/$(AUTOMAKE_SOURCE)
--	mkdir -p $(AUTOMAKE_HOST_DIR)
--	$(INFLATE$(suffix $(AUTOMAKE_SOURCE))) $< | \
--		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(AUTOMAKE_HOST_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(AUTOMAKE_HOST_DIR) package/automake/ \*.patch
--	touch $@
--
--$(STAMP_DIR)/host_automake_configured: $(STAMP_DIR)/host_automake_unpacked $(STAMP_DIR)/host_autoconf_installed
--	(cd $(AUTOMAKE_HOST_DIR); rm -rf config.cache; \
--		$(HOST_CONFIGURE_OPTS) \
--		CFLAGS="$(HOST_CFLAGS)" \
--		LDFLAGS="$(HOST_LDFLAGS)" \
--		./configure $(QUIET) \
--		--prefix="$(HOST_DIR)/usr" \
--		--sysconfdir="$(HOST_DIR)/etc" \
--		--disable-static \
--	)
--	touch $@
--
--$(STAMP_DIR)/host_automake_compiled: $(STAMP_DIR)/host_automake_configured
--	$(MAKE) -C $(AUTOMAKE_HOST_DIR)
--	touch $@
--
--$(STAMP_DIR)/host_automake_installed: $(STAMP_DIR)/host_automake_compiled
--	$(MAKE) -C $(AUTOMAKE_HOST_DIR) install
--	mkdir -p $(STAGING_DIR)/usr/share/aclocal
--	touch $@
--
--host-automake: $(STAMP_DIR)/host_automake_installed
--
--host-automake-clean:
--	rm -f $(addprefix $(STAMP_DIR)/host_automake_,unpacked configured compiled installed)
--	-$(MAKE) -C $(AUTOMAKE_HOST_DIR) uninstall
--	-$(MAKE) -C $(AUTOMAKE_HOST_DIR) clean
--
--host-automake-dirclean:
--	rm -rf $(AUTOMAKE_HOST_DIR)
+diff --git a/package/autoconf/autoconf-2.65-fix-m4-detection-test-on-dash.patch b/package/autoconf/autoconf-2.65-fix-m4-detection-test-on-dash.patch
+new file mode 100644
+index 0000000..35f99b2
+--- /dev/null
++++ b/package/autoconf/autoconf-2.65-fix-m4-detection-test-on-dash.patch
+@@ -0,0 +1,36 @@
++Patch taken upstream at
++http://git.savannah.gnu.org/cgit/autoconf.git/commit/?id=7f75858f577f11a844781764f30cd42cfe8a5669,
++with the following modifications:
++
++ * Changes to NEWS file removed to avoid conflicts
++
++ * Changes also made manually to the generated configure
++   script. Otherwise, host-autoconf is needed to compile
++   host-autoconf !
++
++Index: autoconf-2.65.old/configure
++===================================================================
++--- autoconf-2.65.old.orig/configure	2009-12-15 16:11:05.175566911 +0100
+++++ autoconf-2.65.old/configure	2009-12-15 16:11:37.739562146 +0100
++@@ -2380,7 +2380,7 @@
++       ac_snippet=change'quote(<,>)in''dir(<if''def>,mac,bug)'
++       ac_snippet=${ac_snippet}pat'subst(a,\(b\)\|\(a\),\1)d'nl
++       test -z "`$ac_path_M4 -F conftest.m4f </dev/null 2>&1`" \
++-      && test -z "`echo $ac_snippet | $ac_path_M4 --trace=mac 2>&1`" \
+++      && test -z "`$as_echo $ac_snippet | $ac_path_M4 --trace=mac 2>&1`" \
++       && test -f conftest.m4f \
++       && ac_cv_path_M4=$ac_path_M4 ac_path_M4_found=:
++       rm -f conftest.m4f
++Index: autoconf-2.65.old/m4/m4.m4
++===================================================================
++--- autoconf-2.65.old.orig/m4/m4.m4	2009-12-15 16:11:05.207566124 +0100
+++++ autoconf-2.65.old/m4/m4.m4	2009-12-15 16:11:18.595562030 +0100
++@@ -29,7 +29,7 @@
++       ac_snippet=change'quote(<,>)in''dir(<if''def>,mac,bug)'
++       ac_snippet=${ac_snippet}pat'subst(a,\(b\)\|\(a\),\1)d'nl
++       test -z "`$ac_path_M4 -F conftest.m4f </dev/null 2>&1`" \
++-      && test -z "`echo $ac_snippet | $ac_path_M4 --trace=mac 2>&1`" \
+++      && test -z "`AS_ECHO([$ac_snippet]) | $ac_path_M4 --trace=mac 2>&1`" \
++       && test -f conftest.m4f \
++       && ac_cv_path_M4=$ac_path_M4 ac_path_M4_found=:
++       rm -f conftest.m4f],
 -- 
 1.6.3.3
