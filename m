@@ -1,41 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Dec 2009 09:14:18 +0100
-Subject: [Buildroot] [PATCH 1/3] dependencies: bail out if makeinfo isn't
-	found
-In-Reply-To: <cover.1260951255.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1260951255.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <8dba09de9d62422167164df0038d7d7cf062a252.1260951255.git.thomas.petazzoni@free-electrons.com>
+Date: Wed, 16 Dec 2009 10:24:51 +0100
+Subject: [Buildroot] avahi dependencies on host tools
+Message-ID: <20091216102451.339e6ba9@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-makeinfo is mandatory at least to build a toolchain. Currently,
-dependencies.sh doesn't fail if makeinfo is not present and only
-displays a message that can easily be lost. The user will then
-encounter the issue later, when it is more difficult to understand
-what's happening.
+Hi,
 
-So, this patch simply does for makeinfo what the script does for the
-other dependencies: bail out if they aren't available.
+I tried to build the avahi package on a freshly installed Ubuntu system
+(which has almost zero development related packages installed), and the
+build failed because it couldn't find "intltool" on the host.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/dependencies/dependencies.sh |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+Should we build this tool ourself, or should we rely on the user to
+install it ?
 
-diff --git a/toolchain/dependencies/dependencies.sh b/toolchain/dependencies/dependencies.sh
-index a3ee111..e503097 100755
---- a/toolchain/dependencies/dependencies.sh
-+++ b/toolchain/dependencies/dependencies.sh
-@@ -308,6 +308,7 @@ if ! which makeinfo > /dev/null ; then \
- 	/bin/echo -e "\n\nMost likely some packages will fail to build their documentation"
- 	echo "Either install 'makeinfo' on your host or fix the respective packages."
- 	echo "Makeinfo can usually be found in the texinfo package for your host."
-+	exit 1
- else
- 	echo "makeinfo installed:				Ok"
- fi
+This tool itself relies on Perl. Can we assume that host Perl is a
+mandatory dependency of Buildroot, or should we also build Perl ?
+
+Thanks,
+
+Thomas
 -- 
-1.6.3.3
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
