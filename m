@@ -1,8 +1,7 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Wed, 16 Dec 2009 16:29:02 +0100
-Subject: [Buildroot] [git commit master] libgtk2: convert to autotools
-	infrastructure for host package
-Message-ID: <20091216153056.6FE6B77738@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] hal: fix udev dependency
+Message-ID: <20091216153104.5C94F77738@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,86 +9,43 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3fb725c5b13801fdce3a9b7fada98abd1a1a9d8f
+commit: http://git.buildroot.net/buildroot/commit/?id=c09e51037a52984d7faa3ad268dc7de34f7298b5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libgtk2/libgtk2.mk |   55 ++++++-------------------------------------
- 1 files changed, 8 insertions(+), 47 deletions(-)
+- Selecting symbols with dependencies doesn't work unless you select
+  the dependencies as well
+- udev-volume-id target gone, use the generic udev one instead
 
-diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
-index a61fde7..626b2da 100644
---- a/package/libgtk2/libgtk2.mk
-+++ b/package/libgtk2/libgtk2.mk
-@@ -119,33 +119,8 @@ else
- LIBGTK2_CONF_OPT += --disable-cups
- endif
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/hal/Config.in |    1 +
+ package/hal/hal.mk    |    2 +-
+ 2 files changed, 2 insertions(+), 1 deletions(-)
+
+diff --git a/package/hal/Config.in b/package/hal/Config.in
+index 56ed428..623825c 100644
+--- a/package/hal/Config.in
++++ b/package/hal/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_HAL
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_DBUS_GLIB
+ 	select BR2_PACKAGE_HWDATA
++	select BR2_PACKAGE_UDEV
+ 	select BR2_PACKAGE_UDEV_VOLUME_ID
+ 	help
+ 	  The Hardware Abstraction Layer (HAL) suite.
+diff --git a/package/hal/hal.mk b/package/hal/hal.mk
+index fb152d6..a72bc63 100644
+--- a/package/hal/hal.mk
++++ b/package/hal/hal.mk
+@@ -87,7 +87,7 @@ $(TARGET_DIR)/$(HAL_TARGET_BINARY): $(HAL_DIR)/hald/hald
+ 	done
+ 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libhal*
  
--$(eval $(call AUTOTARGETS,package,libgtk2))
--
--$(LIBGTK2_HOOK_POST_INSTALL):
--	$(INSTALL) -m 755 package/libgtk2/S26libgtk2 $(TARGET_DIR)/etc/init.d/
--	rm -rf $(TARGET_DIR)/usr/share/gtk-2.0/demo $(TARGET_DIR)/usr/bin/gtk-demo
--	touch $@
--
--# libgtk2 for the host
--LIBGTK2_HOST_DIR:=$(BUILD_DIR)/libgtk2-$(LIBGTK2_VERSION)-host
--
--$(DL_DIR)/$(LIBGTK2_SOURCE):
--	$(call DOWNLOAD,$(LIBGTK2_SITE),$(LIBGTK2_SOURCE))
--
--$(STAMP_DIR)/host_libgtk2_unpacked: $(DL_DIR)/$(LIBGTK2_SOURCE)
--	mkdir -p $(LIBGTK2_HOST_DIR)
--	$(INFLATE$(suffix $(LIBGTK2_SOURCE))) $< | \
--		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(LIBGTK2_HOST_DIR) $(TAR_OPTIONS) -
--	touch $@
--
--$(STAMP_DIR)/host_libgtk2_configured: $(STAMP_DIR)/host_libgtk2_unpacked $(STAMP_DIR)/host_cairo_installed $(STAMP_DIR)/host_libglib2_installed $(STAMP_DIR)/host_pango_installed $(STAMP_DIR)/host_atk_installed
--	(cd $(LIBGTK2_HOST_DIR); rm -rf config.cache; \
--		$(HOST_CONFIGURE_OPTS) \
--		CFLAGS="$(HOST_CFLAGS)" \
--		LDFLAGS="$(HOST_LDFLAGS)" \
--		./configure $(QUIET) \
--		--prefix="$(HOST_DIR)/usr" \
--		--sysconfdir="$(HOST_DIR)/etc" \
-+HOST_LIBGTK2_DEPENDENCIES = host-cairo host-libglib2 host-pango host-atk
-+HOST_LIBGTK2_CONF_OPT = \
- 		--disable-static \
- 		--disable-glibtest \
- 		--without-libtiff \
-@@ -153,26 +128,12 @@ $(STAMP_DIR)/host_libgtk2_configured: $(STAMP_DIR)/host_libgtk2_unpacked $(STAMP
- 		--with-x \
- 		--with-gdktarget=x11 \
- 		--disable-cups \
--		--disable-debug \
--	)
--	touch $@
-+		--disable-debug
+-hal: host-pkg-config dbus-glib hwdata udev-volume_id $(TARGET_DIR)/$(HAL_TARGET_BINARY)
++hal: host-pkg-config dbus-glib hwdata udev $(TARGET_DIR)/$(HAL_TARGET_BINARY)
  
--$(STAMP_DIR)/host_libgtk2_compiled: $(STAMP_DIR)/host_libgtk2_configured
--	$(HOST_MAKE_ENV) $(MAKE) -C $(LIBGTK2_HOST_DIR)
--	touch $@
-+$(eval $(call AUTOTARGETS,package,libgtk2))
-+$(eval $(call AUTOTARGETS,package,libgtk2,host))
- 
--$(STAMP_DIR)/host_libgtk2_installed: $(STAMP_DIR)/host_libgtk2_compiled
--	$(HOST_MAKE_ENV) $(MAKE) -C $(LIBGTK2_HOST_DIR) install
-+$(LIBGTK2_HOOK_POST_INSTALL):
-+	$(INSTALL) -m 755 package/libgtk2/S26libgtk2 $(TARGET_DIR)/etc/init.d/
-+	rm -rf $(TARGET_DIR)/usr/share/gtk-2.0/demo $(TARGET_DIR)/usr/bin/gtk-demo
- 	touch $@
--
--host-libgtk2: $(STAMP_DIR)/host_libgtk2_installed
--
--host-libgtk2-source: libgtk2-source
--
--host-libgtk2-clean:
--	rm -f $(addprefix $(STAMP_DIR)/host_libgtk2_,unpacked configured compiled installed)
--	-$(MAKE) -C $(LIBGTK2_HOST_DIR) uninstall
--	-$(MAKE) -C $(LIBGTK2_HOST_DIR) clean
--
--host-libgtk2-dirclean:
--	rm -rf $(LIBGTK2_HOST_DIR)
+ hal-clean:
+ 	rm -f $(TARGET_DIR)/etc/dbus-1/system.d/hal.conf
 -- 
 1.6.3.3
