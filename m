@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 16 Dec 2009 16:29:02 +0100
-Subject: [Buildroot] [git commit master] xutil_makedepend: convert to
-	autotools infrastructure for host package
-Message-ID: <20091216153059.C3ED177738@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] gob2: convert to autotools
+	infrastructure for host package
+Message-ID: <20091216153055.EA79F77738@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,38 +10,42 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b9c569347d24a0ba90240ec6d74235375c320172
+commit: http://git.buildroot.net/buildroot/commit/?id=c009e4e3d79bd3e37acfb54afa4cf65e49553f4e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xutil_makedepend/xutil_makedepend.mk |   46 +------------------
- 1 files changed, 3 insertions(+), 43 deletions(-)
+ package/gob2/gob2.mk |   44 +++-----------------------------------------
+ 1 files changed, 3 insertions(+), 41 deletions(-)
 
-diff --git a/package/x11r7/xutil_makedepend/xutil_makedepend.mk b/package/x11r7/xutil_makedepend/xutil_makedepend.mk
-index edbe251..b0bbafd 100644
---- a/package/x11r7/xutil_makedepend/xutil_makedepend.mk
-+++ b/package/x11r7/xutil_makedepend/xutil_makedepend.mk
-@@ -11,47 +11,7 @@ XUTIL_MAKEDEPEND_AUTORECONF = NO
- XUTIL_MAKEDEPEND_INSTALL_STAGING = NO
- XUTIL_MAKEDEPEND_INSTALL_TARGET = YES
+diff --git a/package/gob2/gob2.mk b/package/gob2/gob2.mk
+index e640ca9..cdf7961 100644
+--- a/package/gob2/gob2.mk
++++ b/package/gob2/gob2.mk
+@@ -9,48 +9,10 @@ GOB2_SITE = http://ftp.5z.com/pub/gob/
  
--$(eval $(call AUTOTARGETS,package/x11r7,xutil_makedepend))
+ GOB2_DEPENDENCIES = libglib2 flex bison host-pkg-config
+ 
++HOST_GOB2_DEPENDENCIES = host-libglib2
++
+ $(eval $(call AUTOTARGETS,package,gob2))
++$(eval $(call AUTOTARGETS,package,gob2,host))
+ 
+ # gob2 for the host
+-GOB2_HOST_DIR:=$(BUILD_DIR)/gob2-$(GOB2_VERSION)-host
+ GOB2_HOST_BINARY:=$(HOST_DIR)/usr/bin/gob2
 -
--# makedepend for the host
--MAKEDEPEND_HOST_DIR:=$(BUILD_DIR)/makedepend-$(XUTIL_MAKEDEPEND_VERSION)-host
+-$(DL_DIR)/$(GOB2_SOURCE):
+-	$(call DOWNLOAD,$(GOB2_SITE),$(GOB2_SOURCE))
 -
--$(DL_DIR)/$(XUTIL_MAKEDEPEND_SOURCE):
--	$(call DOWNLOAD,$(XUTIL_MAKEDEPEND_SITE),$(XUTIL_MAKEDEPEND_SOURCE))
--
--$(STAMP_DIR)/host_makedepend_unpacked: $(DL_DIR)/$(XUTIL_MAKEDEPEND_SOURCE)
--	mkdir -p $(MAKEDEPEND_HOST_DIR)
--	$(INFLATE$(suffix $(XUTIL_MAKEDEPEND_SOURCE))) $< | \
--		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(MAKEDEPEND_HOST_DIR) $(TAR_OPTIONS) -
+-$(STAMP_DIR)/host_gob2_unpacked: $(DL_DIR)/$(GOB2_SOURCE)
+-	mkdir -p $(GOB2_HOST_DIR)
+-	$(INFLATE$(suffix $(GOB2_SOURCE))) $< | \
+-		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(GOB2_HOST_DIR) $(TAR_OPTIONS) -
 -	touch $@
 -
--$(STAMP_DIR)/host_makedepend_configured: $(STAMP_DIR)/host_makedepend_unpacked $(STAMP_DIR)/host_xproto_xproto_installed
--	(cd $(MAKEDEPEND_HOST_DIR); rm -rf config.cache; \
+-$(STAMP_DIR)/host_gob2_configured: $(STAMP_DIR)/host_gob2_unpacked $(STAMP_DIR)/host_libglib2_installed
+-	(cd $(GOB2_HOST_DIR); rm -rf config.cache; \
 -		$(HOST_CONFIGURE_OPTS) \
 -		CFLAGS="$(HOST_CFLAGS)" \
 -		LDFLAGS="$(HOST_LDFLAGS)" \
@@ -51,27 +55,24 @@ index edbe251..b0bbafd 100644
 -	)
 -	touch $@
 -
--$(STAMP_DIR)/host_makedepend_compiled: $(STAMP_DIR)/host_makedepend_configured
--	$(HOST_MAKE_ENV) $(MAKE) -C $(MAKEDEPEND_HOST_DIR)
--	touch $@
-+HOST_XUTIL_MAKEDEPEND_DEPENDENCIES = host-xproto-xproto
- 
--$(STAMP_DIR)/host_makedepend_installed: $(STAMP_DIR)/host_makedepend_compiled
--	$(MAKE) -C $(MAKEDEPEND_HOST_DIR) install
+-$(STAMP_DIR)/host_gob2_compiled: $(STAMP_DIR)/host_gob2_configured
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(GOB2_HOST_DIR)
 -	touch $@
 -
--host-makedepend: $(STAMP_DIR)/host_makedepend_installed
+-$(STAMP_DIR)/host_gob2_installed: $(STAMP_DIR)/host_gob2_compiled
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(GOB2_HOST_DIR) install
+-	touch $@
 -
--host-makedepend-source: makedepend-source
+-host-gob2: $(STAMP_DIR)/host_gob2_installed
 -
--host-makedepend-clean:
--	rm -f $(addprefix $(STAMP_DIR)/host_makedepend_,unpacked configured compiled installed)
--	-$(MAKE) -C $(MAKEDEPEND_HOST_DIR) uninstall
--	-$(MAKE) -C $(MAKEDEPEND_HOST_DIR) clean
+-host-gob2-source: gob2-source
 -
--host-makedepend-dirclean:
--	rm -rf $(MAKEDEPEND_HOST_DIR)
-+$(eval $(call AUTOTARGETS,package/x11r7,xutil_makedepend))
-+$(eval $(call AUTOTARGETS,package/x11r7,xutil_makedepend,host))
+-host-gob2-clean:
+-	rm -f $(addprefix $(STAMP_DIR)/host_gob2_,unpacked configured compiled installed)
+-	-$(MAKE) -C $(GOB2_HOST_DIR) uninstall
+-	-$(MAKE) -C $(GOB2_HOST_DIR) clean
+-
+-host-gob2-dirclean:
+-	rm -rf $(GOB2_HOST_DIR)
 -- 
 1.6.3.3
