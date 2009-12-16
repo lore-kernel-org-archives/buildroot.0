@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 16 Dec 2009 16:29:02 +0100
-Subject: [Buildroot] [git commit master] shared-mime-info: convert to
-	autotools infrastructure for host package
-Message-ID: <20091216153054.6495877738@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] dbus-glib: convert to autotools
+	infrastructure for host package
+Message-ID: <20091216153054.E7EFC77738@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,82 +10,78 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c01c5010ac9cb24136ad0a678e1f49048e5389fd
+commit: http://git.buildroot.net/buildroot/commit/?id=258440a2609ea2b53046d2429779d13c68ca85d8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/shared-mime-info/shared-mime-info.mk |   52 +++----------------------
- 1 files changed, 7 insertions(+), 45 deletions(-)
+ package/dbus-glib/dbus-glib.mk |   50 +++++----------------------------------
+ 1 files changed, 7 insertions(+), 43 deletions(-)
 
-diff --git a/package/shared-mime-info/shared-mime-info.mk b/package/shared-mime-info/shared-mime-info.mk
-index b1833bb..cfd3521 100644
---- a/package/shared-mime-info/shared-mime-info.mk
-+++ b/package/shared-mime-info/shared-mime-info.mk
-@@ -16,57 +16,19 @@ SHARED_MIME_INFO_DEPENDENCIES = host-pkg-config host-libglib2 host-libxml2 libxm
+diff --git a/package/dbus-glib/dbus-glib.mk b/package/dbus-glib/dbus-glib.mk
+index c6cebe6..0bf2b3f 100644
+--- a/package/dbus-glib/dbus-glib.mk
++++ b/package/dbus-glib/dbus-glib.mk
+@@ -25,53 +25,17 @@ DBUS_GLIB_CONF_OPT = --localstatedir=/var \
  
- SHARED_MIME_INFO_CONF_OPT = --disable-update-mimedb
+ DBUS_GLIB_DEPENDENCIES = host-pkg-config dbus host-dbus host-dbus-glib libglib2 expat
  
--$(eval $(call AUTOTARGETS,package,shared-mime-info))
-+HOST_SHARED_MIME_INFO_DEPENDENCIES = host-pkg-config
-+
-+HOST_SHARED_MIME_INFO_CONF_OPT = \
-+	--disable-update-mimedb
- 
-+$(eval $(call AUTOTARGETS,package,shared-mime-info))
-+$(eval $(call AUTOTARGETS,package,shared-mime-info,host))
- 
- # shared-mime-info for the host
--SHARED_MIME_INFO_HOST_DIR:=$(BUILD_DIR)/shared-mime-info-$(SHARED_MIME_INFO_VERSION)-host
- SHARED_MIME_INFO_HOST_BINARY:=$(HOST_DIR)/usr/bin/update-mime-database
- 
--$(DL_DIR)/$(SHARED_MIME_INFO_SOURCE):
--	$(call DOWNLOAD,$(SHARED_MIME_INFO_SITE),$(SHARED_MIME_INFO_SOURCE))
+-$(eval $(call AUTOTARGETS,package,dbus-glib))
 -
--$(STAMP_DIR)/host_shared-mime-info_unpacked: $(DL_DIR)/$(SHARED_MIME_INFO_SOURCE)
--	mkdir -p $(SHARED_MIME_INFO_HOST_DIR)
--	$(INFLATE$(suffix $(SHARED_MIME_INFO_SOURCE))) $< | \
--		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(SHARED_MIME_INFO_HOST_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(SHARED_MIME_INFO_HOST_DIR) package/shared-mime-info/ \*.patch
+-# dbus-glib for the host
+-DBUS_GLIB_HOST_DIR:=$(BUILD_DIR)/dbus-glib-$(DBUS_GLIB_VERSION)-host
+-DBUS_GLIB_HOST_BINARY:=$(HOST_DIR)/usr/bin/dbus-binding-tool
++HOST_DBUS_GLIB_DEPENDENCIES = host-dbus host-exapt host-libglib2
+ 
+-$(DL_DIR)/$(DBUS_GLIB_SOURCE):
+-	$(call DOWNLOAD,$(DBUS_GLIB_SITE),$(DBUS_GLIB_SOURCE))
+-
+-$(STAMP_DIR)/host_dbusglib_unpacked: $(DL_DIR)/$(DBUS_GLIB_SOURCE)
+-	mkdir -p $(DBUS_GLIB_HOST_DIR)
+-	$(INFLATE$(suffix $(DBUS_GLIB_SOURCE))) $< | \
+-		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(DBUS_GLIB_HOST_DIR) $(TAR_OPTIONS) -
 -	touch $@
 -
--$(STAMP_DIR)/host_shared-mime-info_configured: $(STAMP_DIR)/host_shared-mime-info_unpacked $(STAMP_DIR)/host_pkgconfig_installed
--	(cd $(SHARED_MIME_INFO_HOST_DIR); rm -rf config.cache; \
+-$(STAMP_DIR)/host_dbusglib_configured: $(STAMP_DIR)/host_dbusglib_unpacked $(STAMP_DIR)/host_dbus_installed $(STAMP_DIR)/host_expat_installed $(STAMP_DIR)/host_libglib2_installed
+-	(cd $(DBUS_GLIB_HOST_DIR); rm -rf config.cache; \
 -		$(HOST_CONFIGURE_OPTS) \
 -		CFLAGS="$(HOST_CFLAGS)" \
 -		LDFLAGS="$(HOST_LDFLAGS)" \
 -		./configure $(QUIET) \
 -		--prefix="$(HOST_DIR)/usr" \
 -		--sysconfdir="$(HOST_DIR)/etc" \
--		--disable-update-mimedb \
++HOST_DBUS_GLIB_CONF_OPT = \
+ 		--disable-tests \
+ 		--disable-xml-docs \
+ 		--disable-bash-completion \
+ 		--disable-doxygen-docs \
+-		--enable-asserts=yes \
 -	)
 -	touch $@
 -
--$(STAMP_DIR)/host_shared-mime-info_compiled: $(STAMP_DIR)/host_shared-mime-info_configured
--	$(MAKE) -C $(SHARED_MIME_INFO_HOST_DIR)
+-$(STAMP_DIR)/host_dbusglib_compiled: $(STAMP_DIR)/host_dbusglib_configured
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(DBUS_GLIB_HOST_DIR)
 -	touch $@
 -
--$(STAMP_DIR)/host_shared-mime-info_installed: $(STAMP_DIR)/host_shared-mime-info_compiled
--	$(HOST_MAKE_ENV) $(MAKE) -C $(SHARED_MIME_INFO_HOST_DIR) install
+-$(STAMP_DIR)/host_dbusglib_installed: $(STAMP_DIR)/host_dbusglib_compiled
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(DBUS_GLIB_HOST_DIR) install
 -	touch $@
 -
--host-shared-mime-info: $(STAMP_DIR)/host_shared-mime-info_installed
+-host-dbus-glib: $(STAMP_DIR)/host_dbusglib_installed
 -
--host-shared-mime-info-source: shared-mime-info-source
--
--host-shared-mime-info-clean:
--	rm -f $(addprefix $(STAMP_DIR)/host_shared-mime-info_,unpacked configured compiled installed)
--	-$(MAKE) -C $(SHARED_MIME_INFO_HOST_DIR) uninstall
--	-$(MAKE) -C $(SHARED_MIME_INFO_HOST_DIR) clean
--
--host-shared-mime-info-dirclean:
--	rm -rf $(SHARED_MIME_INFO_HOST_DIR)
--
- # update the shared-mime-info database in the target
--$(SHARED_MIME_INFO_HOOK_POST_INSTALL): $(STAMP_DIR)/host_shared-mime-info_installed
-+$(SHARED_MIME_INFO_HOOK_POST_INSTALL): host-shared-mime-info
- 	$(SHARED_MIME_INFO_HOST_BINARY) $(STAGING_DIR)/usr/share/mime
- 	$(INSTALL) -D $(STAGING_DIR)/usr/share/mime/mime.cache $(TARGET_DIR)/usr/share/mime/mime.cache
- 	touch $@
+-host-dbus-glib-source: dbus-glib-source
++		--enable-asserts=yes
+ 
+-host-dbus-glib-clean:
+-	rm -f $(addprefix $(STAMP_DIR)/host_dbusglib_,unpacked configured compiled installed)
+-	-$(MAKE) -C $(DBUS_GLIB_HOST_DIR) uninstall
+-	-$(MAKE) -C $(DBUS_GLIB_HOST_DIR) clean
++$(eval $(call AUTOTARGETS,package,dbus-glib))
++$(eval $(call AUTOTARGETS,package,dbus-glib,host))
+ 
+-host-dbus-glib-dirclean:
+-	rm -rf $(DBUS_GLIB_HOST_DIR)
++# dbus-glib for the host
++DBUS_GLIB_HOST_BINARY:=$(HOST_DIR)/usr/bin/dbus-binding-tool
 -- 
 1.6.3.3
