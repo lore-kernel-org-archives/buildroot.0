@@ -1,36 +1,47 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Wed, 16 Dec 2009 14:56:38 -0500
+From: Markus Heidelberg <markus.heidelberg@web.de>
+Date: Wed, 16 Dec 2009 21:00:23 +0100
 Subject: [Buildroot] OT: git workflow question
 In-Reply-To: <hgb3a3$88l$1@ger.gmane.org>
 References: <hgb3a3$88l$1@ger.gmane.org>
-Message-ID: <a038bef50912161156l76de00ev1dd90bd8f9ae281f@mail.gmail.com>
+Message-ID: <200912162100.23649.markus.heidelberg@web.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Dec 16, 2009 at 11:53 AM, Grant Edwards
-<grant.b.edwards@gmail.com> wrote:
->
+Grant Edwards, 2009-12-16:
+> I don't seem to "get" git when it comes to working with
+> buildroot.
+> 
+>  1) I cloned the repository about two weeks ago
+> 
+>  2) I made a bunch of small edits to docs/buildroot.html and
+>     commited them locally.
+> 
+>  3) I submitted the changes using git format-patch
+> 
+>  4) The patches were merged to the "master" repository
+> 
+>  5) Then when I did a "git pull" to update my repository, it
+>     failed because of conflicts in docs/buildroot.html
+
+If you don't have problems with rewritten history, then "git rebase"
+may suit your needs better. Can also be used with "git pull --rebase".
+
+> Since I had only changed the one file (and those changes had
+> been merged into the master repository) I didn't bother trying
+> to resolve the conflict -- I just blew away my repository and
+> did a 'clone'.
+
+You should never need to do a fresh clone. Read about "git reset --hard"
+for escaping from a mess.
+
 > Here's my question: why was there a conflict?
->
-> Is this how git is supposed to work?
 
-Chances are you changes got massaged on the way in, either
-intentionally or by some script/git configuration (whitespace.strip
-catches me out a lot). Some maintainers I've seen on other projects
-insist that patches are perfect before they apply them. From what I've
-seen Peter is a bit more pragmatic and is happy to make small
-changes/amendments to patches as they get applied.
+I'm aware of 2 possible reasons:
+Either Peter has fixed something in your patch before he committed it or
+commit 16c1549fd22af9a5fedd98d173a4c229b909af4c, which touched the same
+file afterwards, caused the conflict.
 
-When you pull from the upstream buildroot git sees both sets of
-changes and flags them as a conflict.
-
-The best advice would be to work on local branches for logical sets of
-changes (in my case I've just got one branch because I'm only
-tinkering with buildroot). You can then rebase (git rebase
-origin/master <branch> or git pull --rebase) these branches or blow
-them away when you're done (git branch -d <branch>). Git also has a
-merge helper (git mergetool) which can be configured with a graphical
-diff tool like kdiff3 to make resolving merges easier.
+Markus
