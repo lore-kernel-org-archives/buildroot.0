@@ -1,31 +1,42 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 16 Dec 2009 21:35:16 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 17 Dec 2009 08:35:47 +0100
 Subject: [Buildroot] update on a file in tslib not reflected after doing
-	"Make"
-In-Reply-To: <ed7750810912152030x7fd04fd1g70a959b28f4ab9e4@mail.gmail.com>
-	(Stanley's message of "Wed, 16 Dec 2009 12:30:57 +0800")
+ "Make"
+In-Reply-To: <87fx7a64jf.fsf@macbook.be.48ers.dk>
 References: <ed7750810912142330nbfb9fb5q2b261926c6d2b4c2@mail.gmail.com>
 	<20091215092751.7d9a48fe@surf>
 	<ed7750810912152030x7fd04fd1g70a959b28f4ab9e4@mail.gmail.com>
-Message-ID: <87fx7a64jf.fsf@macbook.be.48ers.dk>
+	<87fx7a64jf.fsf@macbook.be.48ers.dk>
+Message-ID: <20091217083547.5af1c179@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Stanley" == Stanley  <eva2002@gmail.com> writes:
+Le Wed, 16 Dec 2009 21:35:16 +0100,
+Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
- Stanley> I tried your method and also tried creating some patches for
- Stanley> editing the test file. However in both cases, the changes
- Stanley> still did not reflect.
+> If you are putting new .patch files under package/tslib then you need
+> to rerun the patch step. The easiest way of doing this is simply to
+> delete the build dir (rm -rf output/build/tslib*)
 
- Stanley> However i did see that it got rebuilt after deleting
- Stanley> .stamp_built file. What I can try out now?  thanks
+Yeah, basically:
 
-If you are putting new .patch files under package/tslib then you need to
-rerun the patch step. The easiest way of doing this is simply to delete
-the build dir (rm -rf output/build/tslib*)
+ *) If you hack directly into output/build/tslib*, then you must remove
+    the .stamp_built stamp file and run make again. This will restart
+    the compile process at the build step of tslib (but will *not*
+    reconfigure tslib, so if you made any modifications at the
+    configure level, it won't work)
 
+ *) If you add new patches to package/tslib/, then as Peter said, the
+    easiest way is to rm -rf output/build/tslib.
+
+Cheers,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
