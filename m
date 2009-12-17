@@ -1,73 +1,38 @@
-From: Stanley <eva2002@gmail.com>
-Date: Thu, 17 Dec 2009 18:45:06 +0800
-Subject: [Buildroot] update on a file in tslib not reflected after doing
-	"Make"
-In-Reply-To: <20091217083547.5af1c179@surf>
-References: <ed7750810912142330nbfb9fb5q2b261926c6d2b4c2@mail.gmail.com>
-	<20091215092751.7d9a48fe@surf>
-	<ed7750810912152030x7fd04fd1g70a959b28f4ab9e4@mail.gmail.com>
-	<87fx7a64jf.fsf@macbook.be.48ers.dk> <20091217083547.5af1c179@surf>
-Message-ID: <ed7750810912170245i63b752adtfb11fa836bc4e281@mail.gmail.com>
+From: Marcel <korgull@home.nl>
+Date: Thu, 17 Dec 2009 21:31:19 +0100
+Subject: [Buildroot] development environment
+Message-ID: <200912172131.19962.korgull@home.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks for the reply.
+Hi,
 
-In fact I did try both step ***separately*.
+I'm trying to create a workable environment to work with buildroot for the 
+following :
 
-1) mod directly and remove.stamp_built file
-2) create patches and rm the tslib folder and all related files (lib
-file/folder, bin file) in the staging_dir.
+I use a stable buildroot (which I may regularly upgrade) and will be adding 
+kernel modules, board configurations and packages for my own design.
+The documentation is very clear how to add the packages, so that's no issue.
 
-however in both cases, the changes did not get reflected. I tried by greping
-the mod statement.
+The issue I have is that I want to use CVS for my own developed files and need 
+to set up a workable environment to work efficiently to create patches for 
+buildroot. On the other hand, just creating patches is not a real option as I 
+should be able to compile just one kernel module in order to efficiently test it 
+without requiring a full rebuild of the kernel. Rebuilding the kernel module 
+would require me to edit the patched files within buildroot, but it's very hard 
+to use CVS from that environment because my files are all over the place in 
+buildroot. I can copy files, but this isn't very good practice either.
 
-eg. printf("xres = %d, yres = %d\n",...); << original
-printf("test\n\n\n\n\nxres = %d, test yres = %d\n",...); << mod
+I've been trying some things over the past few days but every idea I come up 
+with is very inefficient.
 
-then enter cmd: grep -r "test" <bin file> --> return nothing
-enter cmd: grep -r "xres" <bin file> --> return 'xres = %d, yres = %d' only
+Does anyone have some tips regarding an efficient workflow ?
 
-Cheers,
-Stanley
+Best regards,
+Marcel
 
-On Thu, Dec 17, 2009 at 3:35 PM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
 
-> Le Wed, 16 Dec 2009 21:35:16 +0100,
-> Peter Korsgaard <jacmet@uclibc.org> a ?crit :
->
-> > If you are putting new .patch files under package/tslib then you need
-> > to rerun the patch step. The easiest way of doing this is simply to
-> > delete the build dir (rm -rf output/build/tslib*)
->
-> Yeah, basically:
->
->  *) If you hack directly into output/build/tslib*, then you must remove
->    the .stamp_built stamp file and run make again. This will restart
->    the compile process at the build step of tslib (but will *not*
->    reconfigure tslib, so if you made any modifications at the
->    configure level, it won't work)
->
->  *) If you add new patches to package/tslib/, then as Peter said, the
->    easiest way is to rm -rf output/build/tslib.
->
-> Cheers,
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers and embedded Linux development,
-> consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091217/d7304cc1/attachment.htm>
+ 
