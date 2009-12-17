@@ -1,35 +1,54 @@
-From: Julien Boibessot <julien.boibessot@free.fr>
-Date: Thu, 17 Dec 2009 22:40:31 +0100
-Subject: [Buildroot] OT: git workflow question
-In-Reply-To: <20091216203728.1ddc624c@surf>
-References: <hgb3a3$88l$1@ger.gmane.org> <20091216203728.1ddc624c@surf>
-Message-ID: <4B2AA54F.7060601@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 17 Dec 2009 22:47:19 +0100
+Subject: [Buildroot] development environment
+In-Reply-To: <200912172131.19962.korgull@home.nl> (Marcel's message of "Thu,
+	17 Dec 2009 21:31:19 +0100")
+References: <200912172131.19962.korgull@home.nl>
+Message-ID: <87fx7946jc.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Marcel" == Marcel  <korgull@home.nl> writes:
 
-Thomas Petazzoni a ?crit :
->
-> No. You should have made your changes in a separate branch instead of a
-> master branch. Then, you submit your patches. When they are merged, you
-> do "git pull" in your master branch. And then "git branch -d
-> yourbranch". If everything has been merged, "git branch -d" will
-> succeed, otherwise it will fail (and you can use "git branch -D" to
-> remove a branch that hasn't been merged).
->
-> This is at least how I'm contributing to Buildroot. Not necessarly the
-> cleanest way, I'm no git expert.
->   
-Could someone update the Buildroot documentation to explain the workflow
-for contributing efficiently to the project ?
-I'm a newbie with git and it takes me significant time when I want to
-share my work with you.
-So I'm pretty sure top contributors have tips to not gather and send
-patches manually ;-)
+ Marcel> Hi,
 
-Regards,
-Julien
+ Marcel> I'm trying to create a workable environment to work with
+ Marcel> buildroot for the following :
+
+ Marcel> I use a stable buildroot (which I may regularly upgrade) and
+ Marcel> will be adding kernel modules, board configurations and
+ Marcel> packages for my own design.  The documentation is very clear
+ Marcel> how to add the packages, so that's no issue.
+
+ Marcel> The issue I have is that I want to use CVS for my own developed
+ Marcel> files and need to set up a workable environment to work
+ Marcel> efficiently to create patches for buildroot.
+
+We're almost in 2010 - Are you really sure you want to do development
+with CVS today?
+
+I've been using a similar setup like your with subversion and git
+without any big issues.
+
+ Marcel> On the other hand, just creating patches is not a real option
+ Marcel> as I should be able to compile just one kernel module in order
+ Marcel> to efficiently test it without requiring a full rebuild of the
+ Marcel> kernel. Rebuilding the kernel module would require me to edit
+ Marcel> the patched files within buildroot, but it's very hard to use
+ Marcel> CVS from that environment because my files are all over the
+ Marcel> place in buildroot. I can copy files, but this isn't very good
+ Marcel> practice either.
+
+I would suggest that you do your basic kernel development by hand first
+and only integrate it into buildroot. BR is very nice for automating
+stuff, but for doing actual kernel development I prefer the flexibility
+of building by hand.
+
+Also the kernel is very simple to build yourself as there's no external
+dependencies.
+
+-- 
+Bye, Peter Korsgaard
