@@ -1,38 +1,47 @@
-From: Marcel <korgull@home.nl>
-Date: Thu, 17 Dec 2009 21:31:19 +0100
-Subject: [Buildroot] development environment
-Message-ID: <200912172131.19962.korgull@home.nl>
+From: NEAL, RYAN <RYAN_NEAL@appsig.com>
+Date: Thu, 17 Dec 2009 13:15:56 -0800
+Subject: [Buildroot] [buildroot] telnetd and udhcpc
+Message-ID: <4B2CB099CF3D4F40B1B1442281CA94FFCED852@EXCHANGEVS01.appsig.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-
-I'm trying to create a workable environment to work with buildroot for the 
-following :
-
-I use a stable buildroot (which I may regularly upgrade) and will be adding 
-kernel modules, board configurations and packages for my own design.
-The documentation is very clear how to add the packages, so that's no issue.
-
-The issue I have is that I want to use CVS for my own developed files and need 
-to set up a workable environment to work efficiently to create patches for 
-buildroot. On the other hand, just creating patches is not a real option as I 
-should be able to compile just one kernel module in order to efficiently test it 
-without requiring a full rebuild of the kernel. Rebuilding the kernel module 
-would require me to edit the patched files within buildroot, but it's very hard 
-to use CVS from that environment because my files are all over the place in 
-buildroot. I can copy files, but this isn't very good practice either.
-
-I've been trying some things over the past few days but every idea I come up 
-with is very inefficient.
-
-Does anyone have some tips regarding an efficient workflow ?
-
-Best regards,
-Marcel
-
+Heya!
 
  
+
+I was looking though the configuration in buildroot, and I couldn't find
+the option to enable the telnetd in busybox?  I tried enabling the
+busybox packages, but to no avail. :(.  I could only find info about the
+--- when using search.  Is this the package I should be using?  Could
+you point me to the right box to check?  Thanks!!!!
+
+ 
+
+The second problem I am having is the udhcpc.  How do I get that to be
+run at startup?  Do I need to  directly edit the S40_network script or
+the inittab?  The build I have right now is coming up fine doing dhcp
+for an address but the resolve.conf is not being populated unless I
+manually run the udhcpc script.   I have the kernel set to have the IP:
+DHCP support enabled (CONFIG_IP_PNP_DHCP).  Should I disable this and
+then somehow set it to call the udhcpc in busybox?  
+
+ 
+
+Thanks again.  You all have been a tremendous help!
+
+ 
+
+:: Ryan Neal
+
+490/279
+
+408-774-2747
+
+ 
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091217/4c4da547/attachment.htm>
