@@ -1,33 +1,47 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 18 Dec 2009 09:12:17 +0100
-Subject: [Buildroot] [Bug 757] U-Boot: mkimage cannot be installed using
-	external toolchain
-In-Reply-To: <20091218085307.4fd6de27@surf> (Thomas Petazzoni's message of
-	"Fri, 18 Dec 2009 08:53:07 +0100")
-References: <bug-757-163@https.bugs.busybox.net/>
-	<20091209102836.8A5177776F@busybox.osuosl.org>
-	<2c9a759f0912172332wb40a41fm4b79427ff40ce11d@mail.gmail.com>
-	<20091218085307.4fd6de27@surf>
-Message-ID: <87zl5g3dlq.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 18 Dec 2009 09:33:45 +0100
+Subject: [Buildroot] [git commit master] target/u-boot: install mkimage to
+	HOST_DIR
+Message-ID: <20091218083552.D374577709@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Hi,
+commit: http://git.buildroot.net/buildroot/commit/?id=d77594ccd7f81ac99af68e00bae1eb6b816fc022
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- >> Recap: The problem is that $(STAGING_DIR)/usr/bin, does not exist when
- >> u-boot tries to install the mkimage binary. Thus, the installation
- >> will fail. This occurs when using an external toolchain.
+As suggested by Thomas.
 
- Thomas> I think the patch is ok to solve the immediate problem. But since
- Thomas> mkimage is a host tool, I would rather prefer changing the u-boot
- Thomas> Makefile.in to install mkimage to $(HOST_DIR)/usr/bin.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ target/u-boot/Makefile.in |    5 ++---
+ 1 files changed, 2 insertions(+), 3 deletions(-)
 
-True. I'll fix that now.
-
+diff --git a/target/u-boot/Makefile.in b/target/u-boot/Makefile.in
+index 5f4cd4c..dd45b42 100644
+--- a/target/u-boot/Makefile.in
++++ b/target/u-boot/Makefile.in
+@@ -14,8 +14,7 @@ U_BOOT_CAT:=$(BZCAT)
+ U_BOOT_BIN:=u-boot.bin
+ U_BOOT_TARGET_BIN:=u-boot-$(U_BOOT_VERSION)-$(DATE).bin
+ 
+-U_BOOT_TOOLS_BIN:=mkimage
+-U_BOOT_TOOLS:=$(STAGING_DIR)/usr/bin/$(U_BOOT_TOOLS_BIN)
++U_BOOT_TOOLS:=$(HOST_DIR)/usr/bin/mkimage
+ MKIMAGE:=$(U_BOOT_TOOLS)
+ U_BOOT_AUTOSCRIPT=$(BINARIES_DIR)/autoscript
+ 
+@@ -170,7 +169,7 @@ $(BINARIES_DIR)/$(U_BOOT_BIN): $(U_BOOT_DIR)/$(U_BOOT_BIN)
+ 
+ $(U_BOOT_TOOLS): $(U_BOOT_DIR)/$(U_BOOT_BIN)
+ 	mkdir -p $(@D)
+-	cp -dpf $(U_BOOT_DIR)/tools/$(U_BOOT_TOOLS_BIN) $(STAGING_DIR)/usr/bin/
++	cp -dpf $(U_BOOT_DIR)/tools/mkimage $@
+ 
+ $(TARGET_DIR)/usr/bin/mkimage: $(U_BOOT_DIR)/$(U_BOOT_BIN)
+ 	mkdir -p $(@D)
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
