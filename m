@@ -1,45 +1,50 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Fri, 18 Dec 2009 21:36:30 +0000 (UTC)
-Subject: [Buildroot] External toolchain: crosstool-NG instead of
-	buildroot?
-References: <hgfudc$e2$1@ger.gmane.org> <20091218223139.2118763c@surf>
-Message-ID: <hggsku$9gv$1@ger.gmane.org>
+From: Cyril HAENEL <chaenel@free.fr>
+Date: Sat, 19 Dec 2009 00:13:57 +0100
+Subject: [Buildroot] Strange behavior with shell redirection
+In-Reply-To: <200912181431.37650.minimod@morethan.org>
+References: <4B2B7141.90804@free.fr>
+	<20091218190354.5302ccfe@surf>	<4B2BD851.1000902@free.fr>
+	<200912181431.37650.minimod@morethan.org>
+Message-ID: <4B2C0CB5.20407@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2009-12-18, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
-> Grant Edwards <grant.b.edwards@gmail.com> a ??crit :
+
+> tmpFS uses swap as its backing store.  How much swap do you have?  By
+> default tmpFS will only use 50% of it.
 >
->> The buildroot docs recommends using crosstool-NG to generate
->> external toolchains.
->> 
->> Is there some reason one shouldn't or can't use a toolchain
->> generated buildroot?
+> Also, you can limit the amount of ram used by tmpFS on the mount command and/or fstab.
 >
-> Theorically, Buildroot should work just as fine as Crosstool-NG for
-> generating toolchain.
+> Mike
+>   
+I have no swap at all :
 
-So far it seems to be working fine.  I haven't figured out what
-the minimal set of required files is.  Initially I took a
-snapshot of everything under output/staging.  Subsequent makes
-using that as an external toolchain failed because it found
-files in output/staging/usr/share that it didn't expect to be
-there.  I removed usr/share from my "toolchain", and now builds
-seem to work fine.
+# cat /etc/fstab
+# /etc/fstab: static file system information.
+#
+# <file system> <mount pt>     <type>    <options>         <dump> <pass>
+/dev/root       /              ext2    rw,noauto         0      1
+proc        /proc           proc     defaults      0     0
+devpts        /dev/pts       devpts   defaults,gid=5,mode=620      0     0
+tmpfs           /tmp           tmpfs    defaults          0      0
+sysfs        /sys           sysfs    defaults      0     0
 
-> In practive, my own *personal* feeling is that the Crosstool-NG
-> community is spending more time to improve this toolchain generation
-> tool than the Buildroot community spends on the toolchain part. I have
-> the impression that they do a better job at following new upstream
-> versions, integrating necessary patches, etc. But again, I have no
-> objective facts to validate these feelings.
+Curious, for / it gives ext2, but in fact it's jffs2....
 
-For now I think I'll stick with a buildroot-generated toolchain.
+# df
+Filesystem                Size      Used Available Use% Mounted on
+/dev/root               508.0M     20.4M    487.6M   4% /
+tmpfs                    30.5M      1.6M     29.0M   5% /tmp
+
+Thanks for the informations, in the next release, I will write my log in 
+/home/potentiostat/ and not /var/log/ !
+
+Cyril
 
 -- 
-Grant Edwards                   grante             Yow! I'm having a
-                                  at               tax-deductible experience!
-                               visi.com            I need an energy crunch!!
+
+Cyril Haenel
+Registered Linux User #332632
