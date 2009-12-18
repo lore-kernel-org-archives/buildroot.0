@@ -1,34 +1,41 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 18 Dec 2009 07:51:35 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 18 Dec 2009 08:53:07 +0100
 Subject: [Buildroot] [Bug 757] U-Boot: mkimage cannot be installed using
  external toolchain
-In-Reply-To: <bug-757-163@https.bugs.busybox.net/>
+In-Reply-To: <2c9a759f0912172332wb40a41fm4b79427ff40ce11d@mail.gmail.com>
 References: <bug-757-163@https.bugs.busybox.net/>
-Message-ID: <20091218075135.C82AD777E4@busybox.osuosl.org>
+	<20091209102836.8A5177776F@busybox.osuosl.org>
+	<2c9a759f0912172332wb40a41fm4b79427ff40ce11d@mail.gmail.com>
+Message-ID: <20091218085307.4fd6de27@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=757
+Hi Anders,
 
+Le Fri, 18 Dec 2009 08:32:00 +0100,
+Anders Darander <anders.darander@gmail.com> a ?crit :
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+> I'm just bumping this issue, as I've not heard anything.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+Good idea. Even if the bug is registered in our bug tracker, it's
+always good to push patches when we don't include them quickly.
 
+> Recap: The problem is that $(STAGING_DIR)/usr/bin, does not exist when
+> u-boot tries to install the mkimage binary. Thus, the installation
+> will fail. This occurs when using an external toolchain.
 
+I think the patch is ok to solve the immediate problem. But since
+mkimage is a host tool, I would rather prefer changing the u-boot
+Makefile.in to install mkimage to $(HOST_DIR)/usr/bin.
 
+Cheers,
 
---- Comment #2 from Peter Korsgaard <jacmet@uclibc.org>  2009-12-18 07:51:35 UTC ---
-Sorry, seems I overlooked this. Committed now, thanks!
-
-
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
