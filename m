@@ -1,29 +1,56 @@
-From: Jonathan dumaresq <jdumaresq@cimeq.qc.ca>
-Date: Fri, 18 Dec 2009 09:47:30 -0500
-Subject: [Buildroot] TR:  OT: git workflow question
-Message-ID: <04E4AE3161084EB2B08FCDDE58DE5DD5@cimeq.ca>
+From: Marcel <korgull@home.nl>
+Date: Fri, 18 Dec 2009 18:36:24 +0100
+Subject: [Buildroot] development environment
+In-Reply-To: <20091218011058.GJ28375@buzzloop.caiaq.de>
+References: <200912172131.19962.korgull@home.nl>
+	<87fx7946jc.fsf@macbook.be.48ers.dk>
+	<20091218011058.GJ28375@buzzloop.caiaq.de>
+Message-ID: <200912181836.24726.korgull@home.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jonathan dumaresq wrote:
-> Hi,
+Hi Daniel,
+
+Thanks for the reply. I already found yesterday that git was used mostly for 
+this purpose and already started to use it. It does look like the right tool 
+or at least far better than CVS for this purpose and explains why I had issues 
+:-)
+
+A small addition to the current document page about some basic workflow using 
+git would be very nice I think.
+
+> On Thu, Dec 17, 2009 at 10:47:19PM +0100, Peter Korsgaard wrote:
+> >  Marcel> I'm trying to create a workable environment to work with
+> >  Marcel> buildroot for the following :
+> >
+> >  Marcel> I use a stable buildroot (which I may regularly upgrade) and
+> >  Marcel> will be adding kernel modules, board configurations and
+> >  Marcel> packages for my own design.  The documentation is very clear
+> >  Marcel> how to add the packages, so that's no issue.
+> >
+> >  Marcel> The issue I have is that I want to use CVS for my own developed
+> >  Marcel> files and need to set up a workable environment to work
+> >  Marcel> efficiently to create patches for buildroot.
+> >
+> > We're almost in 2010 - Are you really sure you want to do development
+> > with CVS today?
+> >
+> > I've been using a similar setup like your with subversion and git
+> > without any big issues.
 > 
-> buildroot-bounces at busybox.net wrote:
->> Hello,
->> 
+> I'd also suggest using git for this purpose. Clone the master branch,
+> fork off your own development branch and add your packages there. You
+> can then keep your master in sync with the upstream repository and
+> rebase your own branch, merge the master or cherry-pick selected
+> commits.
 > 
->> Could someone update the Buildroot documentation to explain the
->> workflow for contributing efficiently to the project ? I'm a newbie
->> with git and it takes me significant time when I want to share my
->> work with you. So I'm pretty sure top contributors have tips to not
->> gather and send patches manually ;-) 
->> 
->> Regards,
->> Julien
+> We do something similar for own projects, and it works wonderfully.
 > 
-> +1
+> And once you got used to git, you'll never want to get back to CVS,
+> believe me ;)
 > 
-> Jonathan
+> Daniel
+> 
