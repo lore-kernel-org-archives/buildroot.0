@@ -1,44 +1,52 @@
-From: Daniel Mack <daniel@caiaq.de>
-Date: Fri, 18 Dec 2009 09:10:58 +0800
-Subject: [Buildroot] development environment
-In-Reply-To: <87fx7946jc.fsf@macbook.be.48ers.dk>
-References: <200912172131.19962.korgull@home.nl>
-	<87fx7946jc.fsf@macbook.be.48ers.dk>
-Message-ID: <20091218011058.GJ28375@buzzloop.caiaq.de>
+From: Kelvin Cheung <keguang.zhang@gmail.com>
+Date: Fri, 18 Dec 2009 12:11:18 +0800
+Subject: [Buildroot] [buildroot] telnetd and udhcpc
+In-Reply-To: <4B2CB099CF3D4F40B1B1442281CA94FFCED852@EXCHANGEVS01.appsig.com>
+References: <4B2CB099CF3D4F40B1B1442281CA94FFCED852@EXCHANGEVS01.appsig.com>
+Message-ID: <48ab7e010912172011u655392c9o668335be401fbe65@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Dec 17, 2009 at 10:47:19PM +0100, Peter Korsgaard wrote:
->  Marcel> I'm trying to create a workable environment to work with
->  Marcel> buildroot for the following :
-> 
->  Marcel> I use a stable buildroot (which I may regularly upgrade) and
->  Marcel> will be adding kernel modules, board configurations and
->  Marcel> packages for my own design.  The documentation is very clear
->  Marcel> how to add the packages, so that's no issue.
-> 
->  Marcel> The issue I have is that I want to use CVS for my own developed
->  Marcel> files and need to set up a workable environment to work
->  Marcel> efficiently to create patches for buildroot.
-> 
-> We're almost in 2010 - Are you really sure you want to do development
-> with CVS today?
-> 
-> I've been using a similar setup like your with subversion and git
-> without any big issues.
-
-I'd also suggest using git for this purpose. Clone the master branch,
-fork off your own development branch and add your packages there. You
-can then keep your master in sync with the upstream repository and
-rebase your own branch, merge the master or cherry-pick selected
-commits.
-
-We do something similar for own projects, and it works wonderfully.
-
-And once you got used to git, you'll never want to get back to CVS,
-believe me ;)
-
-Daniel
+>
+> *I was looking though the configuration in buildroot, and I couldn?t find
+> the option to enable the telnetd in busybox?  I tried enabling the busybox
+> packages, but to no avail. :(.  I could only find info about the --- when
+> using search.  Is this the package I should be using?  Could you point me to
+> the right box to check?  Thanks!!!!*
+>
+>  You could use telnetd indiviually or together with inetd.
+>
+> *The second problem I am having is the udhcpc.  How do I get that to be
+> run at startup?  Do I need to  directly edit the S40_network script or the
+> inittab?  The build I have right now is coming up fine doing dhcp for an
+> address but the resolve.conf is not being populated unless I manually run
+> the udhcpc script.   I have the kernel set to have the IP: DHCP support
+> enabled (CONFIG_IP_PNP_DHCP).  Should I disable this and then somehow set it
+> to call the udhcpc in busybox?  *
+>
+>  Check out the file /etc/network/interfaces which contains network
+> configuration.
+>
+> Thanks again.  You all have been a tremendous help!
+>
+>
+>
+> :: Ryan Neal
+>
+> 490/279
+>
+> 408-774-2747
+>
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091218/eea9eb46/attachment.htm>
