@@ -1,92 +1,36 @@
-From: Michael S. Zick <minimod@morethan.org>
-Date: Fri, 18 Dec 2009 08:19:16 -0600
-Subject: [Buildroot] Strange behavior with shell redirection
-In-Reply-To: <4B2B85A9.8010806@free.fr>
-References: <4B2B7141.90804@free.fr> <200912180630.54828.minimod@morethan.org>
-	<4B2B85A9.8010806@free.fr>
-Message-ID: <200912180819.18914.minimod@morethan.org>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Fri, 18 Dec 2009 09:22:59 -0500
+Subject: [Buildroot] OT: git workflow question
+In-Reply-To: <1531E53627F1F749B4FE809BF2A4EB670155DBC5@WETMEX10.loepfe.com>
+References: <mailman.5919.1260994066.28478.buildroot@busybox.net>
+	<1531E53627F1F749B4FE809BF2A4EB670155DBC5@WETMEX10.loepfe.com>
+Message-ID: <a038bef50912180622l521d28f9r72461b6099478b9b@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri December 18 2009, Cyril HAENEL wrote:
-> 
-> > What is the implementation of that "reboot"?
-> > Yours?  Something else?
-> >   
-> ls -l /sbin/reboot
-> lrwxrwxrwx    1 root     root           14 Jul 14 12:12 /sbin/reboot -> 
-> ../bin/busybox
-> 
-> It's the busybox's reboot implementation
-> > It is very common that "reboot" does just exactly that, reboots.
-> > No file sync, no file closing, nothing but reboot.
-> >
-> > Try syncing the filesystem and unmounting it before rebooting.
-> > mount -o remount <no options> <device name>
-> > will flush the VFS buffers to disk if you don't have a "sync" available.
-> > umount <device name> 
-> > often does not flush/sync the file system, it depends on the FS.
-> > So use both of the above commands - 
-> >   
-> In /etc/inittab, I have :
->                                     
-> # Stuff to do before rebooting                                  
-> null::shutdown:/usr/bin/killall klogd    
-> null::shutdown:/usr/bin/killall syslogd                        
-> null::shutdown:/bin/umount -a -r
-> null::shutdown:/sbin/swapoff -a     
-> 
-> The umount -a -r seem's to umount all mounted FS. But maybe for my jffs2 
-> FS I also need to do a mount -o remount, I look at this, thank for the 
-> idea !
-> But I am not convinced that is the problem, because the board can stay 
-> alive for very long periodsof time, the log can reach several megabytes, 
-> thus I can't believe there is not at least a small part of the previous 
-> log at the next startup. 
->
+On Fri, Dec 18, 2009 at 3:08 AM, Vellemans, Noel
+<Noel.Vellemans@visionbms.com> wrote:
 
-Well, at least one or more erase blocks worth anyway.
-jffs2 does a lot of buffering, it could be that the journal is just
-rolling back the file to when it was created.
+> Is there a known document (or url) that you can recommend, not that we
+> all need/want te be git experts, but a guide that helps us in getting
+> some basic git workflow would be nice.
 
-Also, writing erase blocks is relatively slow (on a cpu time scale) -
-could be that the system is shutting down before jffs2 has time to
-get all of the work done. I.E: its only valid checkpoint is when
-the file was first created.
+Um not sure if you wanted generic git stuff but I found the git
+community book [1] pretty good. Its free to download or the online
+version includes some screencasts (although my company's firewall
+blocks any flash videos so I've not been able to view them).
 
-What about the other log files? The ones created by syslogd?
-Are they complete up to the time of reboot?
+Everyday Git [2] is fairly short and sweet and give a good picture of
+how individuals can interact with a integrator/maintainer. There is
+also a git tutorial [3] and plenty of other resources on the git
+website [4].
 
-Did you include logger in the Busybox build?
-Can you log your application output with logger so it can be
-handled by syslogd?
+---
 
-Are you running with the syslogd circular buffer in RAM?
-
-> I use jffs2 for that, if the FS is not  
-> correctly unmounted because a power failure for example, files are safe 
-> and contain at least the last version of the file before the power failure.
-> 
-> > As to your first question -
-> > Correct, wrong list; try a linux newbee forum.
-> >   
-> I fact I am not a newbee at all in linux, if I asked my question here, 
-> it's really because I now that the problem I have doesn't exist on my 
-> laptop for example !!
-
-I bet your laptop doesn't use flash for its secondary storage.
-More likely it uses a disk drive of some sort; for example.  ;)
-
-So unless your laptop is running embedded Linux with flash as
-its only storage - - -
-You are trying to compare grapes with watermelons.
-
-Mike
-> 
-> Regards,
-> Cyril
-> 
-> 
+[1] http://book.git-scm.com/
+[2] http://www.kernel.org/pub/software/scm/git/docs/everyday.html
+[3] http://www.kernel.org/pub/software/scm/git/docs/gittutorial.html
+[4] http://git-scm.com/
