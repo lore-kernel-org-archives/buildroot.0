@@ -1,39 +1,42 @@
-From: Michael S. Zick <minimod@morethan.org>
-Date: Fri, 18 Dec 2009 14:31:34 -0600
-Subject: [Buildroot] Strange behavior with shell redirection
-In-Reply-To: <4B2BD851.1000902@free.fr>
-References: <4B2B7141.90804@free.fr> <20091218190354.5302ccfe@surf>
-	<4B2BD851.1000902@free.fr>
-Message-ID: <200912181431.37650.minimod@morethan.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 18 Dec 2009 22:31:39 +0100
+Subject: [Buildroot] External toolchain: crosstool-NG instead of
+ buildroot?
+In-Reply-To: <hgfudc$e2$1@ger.gmane.org>
+References: <hgfudc$e2$1@ger.gmane.org>
+Message-ID: <20091218223139.2118763c@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri December 18 2009, Cyril HAENEL wrote:
-> 
-> > In the default Buildroot target skeleton, /var/log is a symbolic link
-> > to /tmp, and /tmp is mounted as a tmpfs (the contents of the filesystem
-> > are stored into memory).
-> >
-> > So with the default Buildroot configuration, the contents of /var/log
-> > (and many other /var directories) are lost when you reboot.
-> >
-> > Cheers,
-> >
-> > Thomas
-> >   
-> Yesss ! Thank, It is the problem ! Thus it's a big problem because what 
-> will be the result when the memory will be full !?
-> 
+Hello,
 
-tmpFS uses swap as its backing store.  How much swap do you have?  By
-default tmpFS will only use 50% of it.
+Le Fri, 18 Dec 2009 13:00:28 +0000 (UTC),
+Grant Edwards <grant.b.edwards@gmail.com> a ?crit :
 
-Also, you can limit the amount of ram used by tmpFS on the mount command and/or fstab.
-
-Mike
-> Regards,
-> Cyril
+> The buildroot docs recommends using crosstool-NG to generate
+> external toolchains.
 > 
+> Is there some reason one shouldn't or can't use a toolchain
+> generated buildroot?
+
+Theorically, Buildroot should work just as fine as Crosstool-NG for
+generating toolchain.
+
+In practive, my own *personal* feeling is that the Crosstool-NG
+community is spending more time to improve this toolchain generation
+tool than the Buildroot community spends on the toolchain part. I have
+the impression that they do a better job at following new upstream
+versions, integrating necessary patches, etc. But again, I have no
+objective facts to validate these feelings.
+
+Cheers,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
