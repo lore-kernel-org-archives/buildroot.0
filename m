@@ -1,93 +1,29 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 18 Dec 2009 09:33:45 +0100
-Subject: [Buildroot] [git commit master] target/u-boot: add 2009.11 and
-	update target mkimage so it builds with 2009.11
-Message-ID: <20091218083553.0FED977709@busybox.osuosl.org>
+From: Anders Darander <anders.darander@gmail.com>
+Date: Fri, 18 Dec 2009 09:49:23 +0100
+Subject: [Buildroot] [Bug 757] U-Boot: mkimage cannot be installed using
+	external toolchain
+In-Reply-To: <87zl5g3dlq.fsf@macbook.be.48ers.dk>
+References: <bug-757-163@https.bugs.busybox.net/>
+	<20091209102836.8A5177776F@busybox.osuosl.org>
+	<2c9a759f0912172332wb40a41fm4b79427ff40ce11d@mail.gmail.com>
+	<20091218085307.4fd6de27@surf> <87zl5g3dlq.fsf@macbook.be.48ers.dk>
+Message-ID: <2c9a759f0912180049i63ed7f4dk7daa381f2655684b@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Fri, Dec 18, 2009 at 09:12, Peter Korsgaard <jacmet@uclibc.org> wrote:
+> ?Thomas> I think the patch is ok to solve the immediate problem. But since
+> ?Thomas> mkimage is a host tool, I would rather prefer changing the u-boot
+> ?Thomas> Makefile.in to install mkimage to $(HOST_DIR)/usr/bin.
+>
+> True. I'll fix that now.
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cc9fb53408964b278d01ec9678f239c9ae28970d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Ok.
 
-In 2009.11, a number of extra files are needed to build mkimage. Adjust
-the makefile to add those if available, so it builds with both 2009.11
-and older releases.
+I was on my way to create a patch, but then I'll let you fix it.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES                   |    2 +-
- target/u-boot/Config.in   |    9 +++++++--
- target/u-boot/Makefile.in |    5 ++++-
- 3 files changed, 12 insertions(+), 4 deletions(-)
-
-diff --git a/CHANGES b/CHANGES
-index b2f21da..01b25aa 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -4,7 +4,7 @@
- 
- 	Updated/fixed packages: autoconf, bind, binutils, busybox,
- 	directfb, gst-plugins-bad, hal, iw, libfuse, libpcap, lighttpd,
--	mesa, mpg123, mtd-utils, pcre, qt, sshfs, tremor, usbutils
-+	mesa, mpg123, mtd-utils, pcre, qt, sshfs, tremor, u-boot, usbutils
- 
- 	Issues resolved (http://bugs.uclibc.org):
- 
-diff --git a/target/u-boot/Config.in b/target/u-boot/Config.in
-index 12a5543..2689f69 100644
---- a/target/u-boot/Config.in
-+++ b/target/u-boot/Config.in
-@@ -13,16 +13,20 @@ config BR2_TARGET_UBOOT_BOARDNAME
- 
- choice
- 	prompt "U-Boot Version"
--	default BR2_TARGET_UBOOT_2009_08
-+	default BR2_TARGET_UBOOT_2009_11
- 	help
- 	  Select the specific U-Boot version you want to use
- 
-+config BR2_TARGET_UBOOT_2009_11
-+	bool "u-boot-2009.11"
-+
- config BR2_TARGET_UBOOT_2009_08
- 	bool "u-boot-2009.08"
-+	depends on BR2_DEPRECATED || BR2_RECENT
- 
- config BR2_TARGET_UBOOT_2009_06
- 	bool "u-boot-2009.06"
--	depends on BR2_DEPRECATED || BR2_RECENT
-+	depends on BR2_DEPRECATED
- 
- config BR2_TARGET_UBOOT_2009_03
- 	bool "u-boot-2009.03"
-@@ -44,6 +48,7 @@ endchoice
- 
- config BR2_UBOOT_VERSION
- 	string
-+	default "2009.11"	if BR2_TARGET_UBOOT_2009_11
- 	default "2009.08"	if BR2_TARGET_UBOOT_2009_08
- 	default "2009.06"	if BR2_TARGET_UBOOT_2009_06
- 	default "2009.03"	if BR2_TARGET_UBOOT_2009_03
-diff --git a/target/u-boot/Makefile.in b/target/u-boot/Makefile.in
-index dd45b42..5efbd54 100644
---- a/target/u-boot/Makefile.in
-+++ b/target/u-boot/Makefile.in
-@@ -175,8 +175,11 @@ $(TARGET_DIR)/usr/bin/mkimage: $(U_BOOT_DIR)/$(U_BOOT_BIN)
- 	mkdir -p $(@D)
- 	$(TARGET_CC) -I$(U_BOOT_DIR)/include -I$(U_BOOT_DIR)/tools \
- 		-DUSE_HOSTCC -o $@ \
--		$(U_BOOT_DIR)/tools/mkimage.c $(U_BOOT_DIR)/common/image.c \
-+		$(U_BOOT_DIR)/common/image.c \
-+		$(wildcard $(addprefix $(U_BOOT_DIR)/tools/,default_image.c \
-+			fit_image.c kwbimage.c mkimage.c)) \
- 		$(addprefix $(U_BOOT_DIR)/lib_generic/,crc32.c md5.c sha1.c) \
-+		$(U_BOOT_DIR)/tools/os_support.c \
- 		$(U_BOOT_DIR)/libfdt/fdt*.c
- 
- 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $@
--- 
-1.6.3.3
+Regards,
+Anders
