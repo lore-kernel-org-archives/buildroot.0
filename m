@@ -1,41 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 18 Dec 2009 08:53:07 +0100
-Subject: [Buildroot] [Bug 757] U-Boot: mkimage cannot be installed using
- external toolchain
-In-Reply-To: <2c9a759f0912172332wb40a41fm4b79427ff40ce11d@mail.gmail.com>
-References: <bug-757-163@https.bugs.busybox.net/>
-	<20091209102836.8A5177776F@busybox.osuosl.org>
-	<2c9a759f0912172332wb40a41fm4b79427ff40ce11d@mail.gmail.com>
-Message-ID: <20091218085307.4fd6de27@surf>
+From: Vellemans, Noel <Noel.Vellemans@visionBMS.com>
+Date: Fri, 18 Dec 2009 09:08:26 +0100
+Subject: [Buildroot] OT: git workflow question
+In-Reply-To: <mailman.5919.1260994066.28478.buildroot@busybox.net>
+References: <mailman.5919.1260994066.28478.buildroot@busybox.net>
+Message-ID: <1531E53627F1F749B4FE809BF2A4EB670155DBC5@WETMEX10.loepfe.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Anders,
+On 16 Dec, 2009 Thomas has written 
+>
+>> Is this how git is supposed to work?
 
-Le Fri, 18 Dec 2009 08:32:00 +0100,
-Anders Darander <anders.darander@gmail.com> a ?crit :
+>No. You should have made your changes in a separate branch instead of a
+>master branch. Then, you submit your patches. When they are merged, you
+>do "git pull" in your master branch. And then "git branch -d
+>yourbranch". If everything has been merged, "git branch -d" will
+>succeed, otherwise it will fail (and you can use "git branch -D" to
+>remove a branch that hasn't been merged).
+>
+>This is at least how I'm contributing to Buildroot. Not necessarly the
+>cleanest way, I'm no git expert.
 
-> I'm just bumping this issue, as I've not heard anything.
 
-Good idea. Even if the bug is registered in our bug tracker, it's
-always good to push patches when we don't include them quickly.
+Thomas, this is a problem most of the 'NEW' users are facing.
 
-> Recap: The problem is that $(STAGING_DIR)/usr/bin, does not exist when
-> u-boot tries to install the mkimage binary. Thus, the installation
-> will fail. This occurs when using an external toolchain.
+What is the correct way (or supposed correct way) of working with the
+buildroot-git, it's quit hard to get the 'picture' of you are not a git
+expert.
 
-I think the patch is ok to solve the immediate problem. But since
-mkimage is a host tool, I would rather prefer changing the u-boot
-Makefile.in to install mkimage to $(HOST_DIR)/usr/bin.
+Is there a known document (or url) that you can recommend, not that we
+all need/want te be git experts, but a guide that helps us in getting
+some basic git workflow would be nice.
 
-Cheers,
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers and embedded Linux development,
-consulting, training and support.
-http://free-electrons.com
+Regards Noel.
