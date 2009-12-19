@@ -1,50 +1,29 @@
-From: Cyril HAENEL <chaenel@free.fr>
-Date: Sat, 19 Dec 2009 00:13:57 +0100
-Subject: [Buildroot] Strange behavior with shell redirection
-In-Reply-To: <200912181431.37650.minimod@morethan.org>
-References: <4B2B7141.90804@free.fr>
-	<20091218190354.5302ccfe@surf>	<4B2BD851.1000902@free.fr>
-	<200912181431.37650.minimod@morethan.org>
-Message-ID: <4B2C0CB5.20407@free.fr>
+From: Souvik Ghosh <mailtosouvik@gmail.com>
+Date: Sat, 19 Dec 2009 09:06:31 +0530
+Subject: [Buildroot] Buildroot with uClibc 0.9.29
+In-Reply-To: <6fff79820910130628peb87f9bo9c41414b461c0d@mail.gmail.com>
+References: <6fff79820910130628peb87f9bo9c41414b461c0d@mail.gmail.com>
+Message-ID: <6fff79820912181936s2c05be0ap78d0982832446477@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello All,
 
-> tmpFS uses swap as its backing store.  How much swap do you have?  By
-> default tmpFS will only use 50% of it.
->
-> Also, you can limit the amount of ram used by tmpFS on the mount command and/or fstab.
->
-> Mike
->   
-I have no swap at all :
+I was compiling boost with arm toolchain. This toolchain includes gcc 4.1.1.
+While building boost I got the following error -
 
-# cat /etc/fstab
-# /etc/fstab: static file system information.
-#
-# <file system> <mount pt>     <type>    <options>         <dump> <pass>
-/dev/root       /              ext2    rw,noauto         0      1
-proc        /proc           proc     defaults      0     0
-devpts        /dev/pts       devpts   defaults,gid=5,mode=620      0     0
-tmpfs           /tmp           tmpfs    defaults          0      0
-sysfs        /sys           sysfs    defaults      0     0
+boost/boost/regex/v4/basic_regex.hpp:95:35: error: macro "index" requires 2
+arguments, but only 1 given
+boost/boost/regex/v4/basic_regex.hpp:100:21: error: macro "index" requires 2
+arguments, but only 1 given
 
-Curious, for / it gives ext2, but in fact it's jffs2....
 
-# df
-Filesystem                Size      Used Available Use% Mounted on
-/dev/root               508.0M     20.4M    487.6M   4% /
-tmpfs                    30.5M      1.6M     29.0M   5% /tmp
+Can anybody please helop in this regard. Thanks in advance.
 
-Thanks for the informations, in the next release, I will write my log in 
-/home/potentiostat/ and not /var/log/ !
-
-Cyril
-
--- 
-
-Cyril Haenel
-Registered Linux User #332632
+Regards
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091219/0d6a67fa/attachment.htm>
