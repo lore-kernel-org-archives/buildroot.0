@@ -1,46 +1,53 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 19 Dec 2009 09:57:35 +0100
-Subject: [Buildroot] uclibc/buildroot build error
-In-Reply-To: <8351cdc2a3a8abf9b1f031824d6770e4.squirrel@webmail.sonic.net>
-	(joyful@sonic.net's message of "Fri, 18 Dec 2009 17:17:12 -0800")
-References: <8351cdc2a3a8abf9b1f031824d6770e4.squirrel@webmail.sonic.net>
-Message-ID: <87fx772veo.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 19 Dec 2009 16:16:00 +0000 (UTC)
+Subject: [Buildroot] [Bug 819] New: kexec for ARM compile error
+Message-ID: <bug-819-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "joyful" == joyful  <joyful@sonic.net> writes:
+https://bugs.busybox.net/show_bug.cgi?id=819
 
- joyful> I don't think I did anything special, merely did make menuconfig and
- joyful> selected some items on the menu, I got this error during make:
+            Target: ARM
+           Summary: kexec for ARM compile error
+           Product: buildroot
+           Version: 2009.08
+          Platform: Other
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: jasaw81 at yahoo.com.au
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
- joyful> *** Unpacking kernel source
- joyful> bzcat /tmp/buildroot/dl/linux-2.6.29.2.tar.bz2 | tar -C
- joyful> /tmp/buildroot/project_build_i686/uclibc   -xf -
- joyful> touch /tmp/buildroot/project_build_i686/uclibc/linux-2.6.29.2/.unpacked
- joyful> toolchain/patch-kernel.sh
- joyful> /tmp/buildroot/project_build_i686/uclibc/linux-2.6.29.2
- joyful> toolchain/kernel-headers \
- joyful>                linux-2.6.29.2-\*.patch{,.gz,.bz2}
- joyful> touch /tmp/buildroot/project_build_i686/uclibc/linux-2.6.29.2/.patched
- joyful> cp -dpf  /tmp/buildroot/project_build_i686/uclibc/linux-2.6.29.2/.config
- joyful> cp: missing destination file operand after
- joyful> `/tmp/buildroot/project_build_i686/uclibc/linux-2.6.29.2/.config'
- joyful> Try `cp --help' for more information.
- joyful> make: ***
- joyful> [/tmp/buildroot/project_build_i686/uclibc/linux-2.6.29.2/.configured]
- joyful> Error 1
 
-Buildroot questions belongs on the buildroot list, this doesn't have
-anything to do with uclibc.
+kexec-zImage-arm.c: error: asm/page.h: No such file or directory
 
-What it says above is that the kernel compilation fails because you
-don't have a kernel configuration (a .config).
+Need a patch to fix this:
 
-I see that you are not using the latest stable release. Please give
-buildroot-2009.11 a try.
+
+
+--- kexec-tools-1.101.orig/kexec/arch/arm/kexec-zImage-arm.c 2009-07-07
+13:24:17.000000000 +0100
++++ kexec-tools-1.101/kexec/arch/arm/kexec-zImage-arm.c 2009-07-07
+13:24:56.000000000 +0100
+@@ -11,7 +11,7 @@
+ #include <stdint.h>
+ #include <getopt.h>
+ #include <arch/options.h>
+-#include <asm/page.h>
++#include <unistd.h>
+ #include "../../kexec.h"
+
+ #define COMMAND_LINE_SIZE 1024
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
