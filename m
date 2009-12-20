@@ -1,61 +1,66 @@
-From: Marcel <korgull@home.nl>
-Date: Sun, 20 Dec 2009 17:05:11 +0100
-Subject: [Buildroot] develop using buildroot
-In-Reply-To: <2daf59620912200746q71473c64r16ce13b9ef7e197c@mail.gmail.com>
-References: <200912201506.20584.korgull@home.nl>
-	<2daf59620912200746q71473c64r16ce13b9ef7e197c@mail.gmail.com>
-Message-ID: <200912201705.12045.korgull@home.nl>
+From: Lionel Landwerlin <llandwerlin@gmail.com>
+Date: Sun, 20 Dec 2009 17:22:25 +0100
+Subject: [Buildroot] [PATCH 6/6] Fix gst-plugins-bad dependency on
+	libdvdnav
+In-Reply-To: <1258065198-22972-7-git-send-email-llandwerlin@gmail.com>
+References: <1258065198-22972-1-git-send-email-llandwerlin@gmail.com>
+	<1258065198-22972-7-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1261326145.5294.2.camel@coalu.atr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Hedwin,
+Hi Peter,
 
-That's exactly how I work now. 
-
-I am just going through the pains of getting my initial environment to work 
-but I'm almost there I think.
-u-boot, kernel and most packages build fine, just the rootfs misses some items 
-like /root/etc/passwd. I guess I forgot something along the way.
+Didn't you forgot this patch ?
 
 Regards,
-Marcel
 
-> Hallo Marcel,
+
+Le jeudi 12 novembre 2009 ? 23:33 +0100, llandwerlin at gmail.com a ?crit :
+> From: Lionel Landwerlin <llandwerlin@gmail.com>
 > 
-> Not sure there is a better way, what you need to look at is what makes
-> it work for you.
+> Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
+> ---
+>  package/multimedia/gst-plugins-bad/Config.in       |    4 ++++
+>  .../multimedia/gst-plugins-bad/gst-plugins-bad.mk  |    7 +++++++
+>  2 files changed, 11 insertions(+), 0 deletions(-)
 > 
-> In my case for example I use buildroot to create a root filesystem
-> while I maintain the kernel and u-boot outside buildroot using git.
-> That works for me.
-> 
-> Hedwin
-> 
-> On Sun, Dec 20, 2009 at 3:06 PM, Marcel <korgull@home.nl> wrote:
-> > Hi,
-> >
-> > I'm having some issues setting up a workable environment.
-> > I need to write my own kernel drivers, add some packages and change
-> > u-boot.
-> >
-> > buildroot requires patches, so that's clear but I wonder how to
-> > efficiently develop those patches.
-> >
-> > Do I set up the kernel and u-boot outside buildroot, than create patches
-> > form there and than include those in buildroot ?
-> >
-> > Or, do I compile buildroot, than develop my code from there and generate
-> > patches ?
-> >
-> > Or.....is there a better way ?
-> >
-> > regards,
-> > Marcel
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+> diff --git a/package/multimedia/gst-plugins-bad/Config.in b/package/multimedia/gst-plugins-bad/Config.in
+> index 3061822..132a770 100644
+> --- a/package/multimedia/gst-plugins-bad/Config.in
+> +++ b/package/multimedia/gst-plugins-bad/Config.in
+> @@ -53,6 +53,10 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DEBUGUTILS
+>  config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DTMF
+>  	bool "dtmf"
+>  
+> +config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DVDNAV
+> +	bool "dvdnav"
+> +        select BR2_PACKAGE_LIBDVDNAV
+> +
+>  config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DVDSPU
+>  	bool "dvdspu"
+>  
+> diff --git a/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk b/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
+> index 8c73bf0..10cd226 100644
+> --- a/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
+> +++ b/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
+> @@ -95,6 +95,13 @@ else
+>  GST_PLUGINS_BAD_CONF_OPT += --disable-dtmf
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DVDNAV),y)
+> +GST_PLUGINS_BAD_CONF_OPT += --enable-dvdnav
+> +GST_PLUGINS_BAD_DEPENDENCIES += libdvdnav
+> +else
+> +GST_PLUGINS_BAD_CONF_OPT += --disable-dvdnav
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DVDSPU),y)
+>  GST_PLUGINS_BAD_CONF_OPT += --enable-dvdspu
+>  else
+
+-- 
+Lionel Landwerlin
