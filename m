@@ -1,25 +1,23 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 20 Dec 2009 19:48:44 +0100
-Subject: [Buildroot] [PATCH 6/6] Fix gst-plugins-bad dependency on
-	libdvdnav
-In-Reply-To: <1261326145.5294.2.camel@coalu.atr> (Lionel Landwerlin's message
-	of "Sun, 20 Dec 2009 17:22:25 +0100")
-References: <1258065198-22972-1-git-send-email-llandwerlin@gmail.com>
-	<1258065198-22972-7-git-send-email-llandwerlin@gmail.com>
-	<1261326145.5294.2.camel@coalu.atr>
-Message-ID: <87fx751nxv.fsf@macbook.be.48ers.dk>
+From: Marcel <korgull@home.nl>
+Date: Sun, 20 Dec 2009 20:09:41 +0100
+Subject: [Buildroot] develop using buildroot
+In-Reply-To: <87tyvl1qjp.fsf@macbook.be.48ers.dk>
+References: <200912201506.20584.korgull@home.nl>
+	<200912201705.12045.korgull@home.nl>
+	<87tyvl1qjp.fsf@macbook.be.48ers.dk>
+Message-ID: <200912202009.41210.korgull@home.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Lionel" == Lionel Landwerlin <llandwerlin@gmail.com> writes:
+On Sunday 20 December 2009 18:52:26 Peter Korsgaard wrote:
+> That one comes from your target skeleton, see
+> target/generic/target_skeleton for an example.
 
- Lionel> Hi Peter,
- Lionel> Didn't you forgot this patch ?
+Thanks for pointing that out. I finally managed to get everything compiled with 
+my own board support.
 
-It indeed seems I did - Sorry about that, comitted now.
-
--- 
-Bye, Peter Korsgaard
+best regards,
+Marcel 
