@@ -1,12 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 20 Dec 2009 18:52:26 +0100
+Date: Sun, 20 Dec 2009 18:53:46 +0100
 Subject: [Buildroot] develop using buildroot
-In-Reply-To: <200912201705.12045.korgull@home.nl> (Marcel's message of "Sun,
-	20 Dec 2009 17:05:11 +0100")
+In-Reply-To: <200912201506.20584.korgull@home.nl> (Marcel's message of "Sun,
+	20 Dec 2009 15:06:20 +0100")
 References: <200912201506.20584.korgull@home.nl>
-	<2daf59620912200746q71473c64r16ce13b9ef7e197c@mail.gmail.com>
-	<200912201705.12045.korgull@home.nl>
-Message-ID: <87tyvl1qjp.fsf@macbook.be.48ers.dk>
+Message-ID: <87skb51qhh.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,16 +13,20 @@ To: buildroot@busybox.net
 
 >>>>> "Marcel" == Marcel  <korgull@home.nl> writes:
 
- Marcel> Hi Hedwin,
- Marcel> That's exactly how I work now. 
+ Marcel> Hi,
+ Marcel> I'm having some issues setting up a workable environment.
+ Marcel> I need to write my own kernel drivers, add some packages and change u-boot.
 
- Marcel> I am just going through the pains of getting my initial environment to work 
- Marcel> but I'm almost there I think.
- Marcel> u-boot, kernel and most packages build fine, just the rootfs misses some items 
- Marcel> like /root/etc/passwd. I guess I forgot something along the way.
+ Marcel> buildroot requires patches, so that's clear but I wonder how to
+ Marcel> efficiently develop those patches.
 
-That one comes from your target skeleton, see
-target/generic/target_skeleton for an example.
+ Marcel> Do I set up the kernel and u-boot outside buildroot, than
+ Marcel> create patches form there and than include those in buildroot ?
+
+Didn't you ask the same question just a few days ago? You can work in
+whatever way suits you best, but personally I prefer to get kernel+uboot
+up and running outside buildroot, and then just add the patches to BR
+once everything is working.
 
 -- 
 Bye, Peter Korsgaard
