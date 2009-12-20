@@ -1,37 +1,57 @@
-From: Marcel <korgull@home.nl>
-Date: Sun, 20 Dec 2009 19:12:21 +0100
-Subject: [Buildroot] develop using buildroot
-In-Reply-To: <87skb51qhh.fsf@macbook.be.48ers.dk>
-References: <200912201506.20584.korgull@home.nl>
-	<87skb51qhh.fsf@macbook.be.48ers.dk>
-Message-ID: <200912201912.21047.korgull@home.nl>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 20 Dec 2009 19:47:57 +0100
+Subject: [Buildroot] [git commit master] Fix gst-plugins-bad dependency on
+	libdvdnav
+Message-ID: <20091220184829.E4E3E777E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Well, I asked about the development environment and found to use git.
-From there I figured it was difficult to use inside buildroot and started to find 
-a way to do it.
-I ended up compiling things outside buildroot but was just wondering if that's 
-a good way to do things or if there's any preferred way to do it.
 
-> >>>>> "Marcel" == Marcel  <korgull@home.nl> writes:
-> 
->  Marcel> Hi,
->  Marcel> I'm having some issues setting up a workable environment.
->  Marcel> I need to write my own kernel drivers, add some packages and
->  change u-boot.
-> 
->  Marcel> buildroot requires patches, so that's clear but I wonder how to
->  Marcel> efficiently develop those patches.
-> 
->  Marcel> Do I set up the kernel and u-boot outside buildroot, than
->  Marcel> create patches form there and than include those in buildroot ?
-> 
-> Didn't you ask the same question just a few days ago? You can work in
-> whatever way suits you best, but personally I prefer to get kernel+uboot
-> up and running outside buildroot, and then just add the patches to BR
-> once everything is working.
-> 
+commit: http://git.buildroot.net/buildroot/commit/?id=4914383ebd7145428a8fda346f2c9831c939c353
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/multimedia/gst-plugins-bad/Config.in       |    4 ++++
+ .../multimedia/gst-plugins-bad/gst-plugins-bad.mk  |    7 +++++++
+ 2 files changed, 11 insertions(+), 0 deletions(-)
+
+diff --git a/package/multimedia/gst-plugins-bad/Config.in b/package/multimedia/gst-plugins-bad/Config.in
+index 180facf..3d2480a 100644
+--- a/package/multimedia/gst-plugins-bad/Config.in
++++ b/package/multimedia/gst-plugins-bad/Config.in
+@@ -56,6 +56,10 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DEBUGUTILS
+ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DTMF
+ 	bool "dtmf"
+ 
++config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DVDNAV
++	bool "dvdnav"
++        select BR2_PACKAGE_LIBDVDNAV
++
+ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DVDSPU
+ 	bool "dvdspu"
+ 
+diff --git a/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk b/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
+index 9b65198..b651247 100644
+--- a/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
++++ b/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
+@@ -101,6 +101,13 @@ else
+ GST_PLUGINS_BAD_CONF_OPT += --disable-dtmf
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DVDNAV),y)
++GST_PLUGINS_BAD_CONF_OPT += --enable-dvdnav
++GST_PLUGINS_BAD_DEPENDENCIES += libdvdnav
++else
++GST_PLUGINS_BAD_CONF_OPT += --disable-dvdnav
++endif
++
+ ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DVDSPU),y)
+ GST_PLUGINS_BAD_CONF_OPT += --enable-dvdspu
+ else
+-- 
+1.6.3.3
