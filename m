@@ -1,47 +1,57 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Sun, 20 Dec 2009 22:37:58 +0100
-Subject: [Buildroot] External toolchain: crosstool-NG instead of
-	buildroot?
-In-Reply-To: <877hsh1l3i.fsf@macbook.be.48ers.dk>
-References: <hgfudc$e2$1@ger.gmane.org> <877hsh1l3i.fsf@macbook.be.48ers.dk>
-Message-ID: <200912202237.58730.yann.morin.1998@anciens.enib.fr>
+From: Souvik Ghosh <mailtosouvik@gmail.com>
+Date: Mon, 21 Dec 2009 08:41:38 +0530
+Subject: [Buildroot] Buildroot with uClibc 0.9.29
+In-Reply-To: <87bpht1m1u.fsf@macbook.be.48ers.dk>
+References: <6fff79820910130628peb87f9bo9c41414b461c0d@mail.gmail.com>
+	<6fff79820912181936s2c05be0ap78d0982832446477@mail.gmail.com>
+	<87bpht1m1u.fsf@macbook.be.48ers.dk>
+Message-ID: <6fff79820912201911q57822421kdbd69470694cab76@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter, and All!
+Hello Peter,
 
-On Sunday 20 December 2009 20:50:09 Peter Korsgaard wrote:
-> we had some discussion about working
-> closer together with the crosstool-NG people, E.G. long term perhaps
-> getting rid of toolchain building in BR, and simply use crosstool-NG for
-> it.
+Thanks for your reply. Probably gcc 4.1.1 defines index in some other was.
+If I put 'undef index' at the top of the concerned boost header
+(basic_regex.hpp) the compilation goes fine.
 
-As you mentioned the subject, I think we should prepare both projects so
-crosstool-NG offers all that buildroot needs, and maybe tweak a few things
-in buildroot to efficiently use crostool-NG.
+I have not managed to search for this indef definition that causing this
+problem yet. Will let you know if I find anything.
 
-The plans for crosstool-NG are a ~4-month release cycle, as 3 months is
-too short for me alone to handle. I think I can adapt the release cycle
-to more closely follow buildroot. In fact, I think that, to be efficient,
-crosstool-NG should be released one month ahead of buildroot, so that
-potential bugs can be fixed and a bug-fix release can be made just before
-the buildroot release. That way, buildroot can rely on an as-stable-as-
-possible release. Next crosstool-NG release is due for late January, so
-that should be a match for the next buildroot (planned February, I guess).
+Thanks,
+Souvik
+.
+On Mon, Dec 21, 2009 at 12:59 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-Apart form that, we could build upon the results of the BR developper day.
-Should I repost my summary to this list?
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-`------------------------------^-------^------------------^--------------------'
+> >>>>> "Souvik" == Souvik Ghosh <mailtosouvik@gmail.com> writes:
+>
+>  Souvik> Hello All,
+>  Souvik> I was compiling boost with arm toolchain. This toolchain includes
+> gcc 4.1.1.
+>  Souvik> While building boost I got the following error -
+>
+>  Souvik> boost/boost/regex/v4/basic_regex.hpp:95:35: error: macro
+>  Souvik> "index" requires 2 arguments, but only 1 given
+>  Souvik> boost/boost/regex/v4/basic_regex.hpp:100:21: error: macro
+>  Souvik> "index" requires 2 arguments, but only 1 given
+>
+> You'll have to dig further into the code to see what index() function it
+> is referring to. The (legacy) index() function in the C library indeed
+> takes 2 arguments:
+>
+> char *index(const char *s, int c);
+>
+> I expect the code above to refer to a local function called index. You
+> can probably fix it by renaming it to something else.
+>
+>  Souvik> Can anybody please helop in this regard. Thanks in advance.
+>
+> --
+> Bye, Peter Korsgaard
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091221/5fb37b42/attachment.htm>
