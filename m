@@ -1,65 +1,60 @@
-From: Nigel Kukard <nkukard@lbsd.net>
-Date: Mon, 21 Dec 2009 12:02:22 +0000
-Subject: [Buildroot] [PATCH 1/1] Update xfsprogs
-In-Reply-To: <87tyvkzoec.fsf@macbook.be.48ers.dk>
-References: <cover.1261379989.git.nkukard@lbsd.net>	<cover.1261379989.git.nkukard@lbsd.net>	<dee3a736226f0c4a4df412fc48fbe0eabca4df9e.1261379989.git.nkukard@lbsd.net>
-	<87tyvkzoec.fsf@macbook.be.48ers.dk>
-Message-ID: <4B2F63CE.1000801@lbsd.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 21 Dec 2009 21:06:08 +0100
+Subject: [Buildroot] External toolchain: crosstool-NG instead of
+	buildroot?
+In-Reply-To: <200912202237.58730.yann.morin.1998@anciens.enib.fr> (Yann
+	E. MORIN's message of "Sun, 20 Dec 2009 22:37:58 +0100")
+References: <hgfudc$e2$1@ger.gmane.org> <877hsh1l3i.fsf@macbook.be.48ers.dk>
+	<200912202237.58730.yann.morin.1998@anciens.enib.fr>
+Message-ID: <871vioytvz.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
 
->>>>>> "Nigel" == Nigel Kukard <nkukard@lbsd.net> writes:
->>>>>>             
->  Nigel> Signed-off-by: Nigel Kukard <nkukard@lbsd.net>
->  Nigel> ---
->  Nigel>  package/xfsprogs/Config.in      |   10 +++---
->  Nigel>  package/xfsprogs/xfsprogs.mk    |    9 ++---
->  Nigel>  package/xfsprogs/xfsprogs.patch |   59 ---------------------------------------
->  Nigel>  3 files changed, 9 insertions(+), 69 deletions(-)
->  Nigel>  delete mode 100644 package/xfsprogs/xfsprogs.patch
->
->  Nigel> diff --git a/package/xfsprogs/Config.in b/package/xfsprogs/Config.in
->  Nigel> index 2f462cb..77e4d61 100644
->  Nigel> --- a/package/xfsprogs/Config.in
->  Nigel> +++ b/package/xfsprogs/Config.in
->  Nigel> @@ -1,6 +1,9 @@
->   
->  Nigel> -comment "xfssprogs requires a toolchain with LARGEFILE support"
->  Nigel> -	depends on !BR2_LARGEFILE
->  Nigel> -
->
-> I don't see any references to the e2fsprogs libuuid?
->   
+Hi,
 
-I'll change it to be auto selected just like BR2_PACKAGE_E2FSPROGS is
+ Yann> Hello Peter, and All!
+ Yann> On Sunday 20 December 2009 20:50:09 Peter Korsgaard wrote:
+ >> we had some discussion about working
+ >> closer together with the crosstool-NG people, E.G. long term perhaps
+ >> getting rid of toolchain building in BR, and simply use crosstool-NG for
+ >> it.
 
->  Nigel> diff --git a/package/xfsprogs/xfsprogs.mk b/package/xfsprogs/xfsprogs.mk
->  Nigel> index 89db6c1..e87485e 100644
->  Nigel> --- a/package/xfsprogs/xfsprogs.mk
->  Nigel> +++ b/package/xfsprogs/xfsprogs.mk
->  Nigel>  	rm -rf $(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc
->  Nigel>  	touch -c $(TARGET_DIR)/$(XFSPROGS_TARGET_BINARY)
->  
->  Nigel> -xfsprogs: e2fsprogs libtool-cross $(TARGET_DIR)/$(XFSPROGS_TARGET_BINARY)
->  Nigel> +xfsprogs: e2fsprogs libtool $(TARGET_DIR)/$(XFSPROGS_TARGET_BINARY)
->
-> You need to select e2fsprogs in kconfig.
+ Yann> As you mentioned the subject, I think we should prepare both
+ Yann> projects so crosstool-NG offers all that buildroot needs, and
+ Yann> maybe tweak a few things in buildroot to efficiently use
+ Yann> crostool-NG.
 
-        select BR2_PACKAGE_E2FSPROGS
+Yes definately - Yann, I'm really sorry that I haven't gotten back to
+you on your mail from ELCE - Things have been kind of crazy here, but
+now holidays are coming up.
 
-its already there. I have now added libuuid aswell.
+ Yann> The plans for crosstool-NG are a ~4-month release cycle, as 3
+ Yann> months is too short for me alone to handle. I think I can adapt
+ Yann> the release cycle to more closely follow buildroot. In fact, I
+ Yann> think that, to be efficient, crosstool-NG should be released one
+ Yann> month ahead of buildroot, so that potential bugs can be fixed and
+ Yann> a bug-fix release can be made just before the buildroot
+ Yann> release. That way, buildroot can rely on an as-stable-as-
+ Yann> possible release. Next crosstool-NG release is due for late
+ Yann> January, so that should be a match for the next buildroot
+ Yann> (planned February, I guess).
 
+Yes, that sounds good. Why is a 3 month release schedule significantly
+more work than a 4 month one? It should just mean less new development
+done per release.
 
->  Why do you need libtool for the
-> target?
->   
+ Yann> Apart form that, we could build upon the results of the BR
+ Yann> developper day.  Should I repost my summary to this list?
 
-I didn't add libtool-cross, I was told to use "libtool" instead in
-future. Maybe the original author of xfsprogs.mk can answer why it was
-there?
+Yes please do.
 
-When I have tested it without libtool I'll send another pull request.
+Talking about developers day, Thomas and me are trying to arrange
+another dev day after FOSDEM (February 8) - Anyone interested?
+
+-- 
+Bye, Peter Korsgaard
