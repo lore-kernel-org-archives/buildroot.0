@@ -1,98 +1,107 @@
-From: Nigel Kukard <nkukard@lbsd.net>
-Date: Mon, 21 Dec 2009 09:51:35 +0000
-Subject: [Buildroot] [PATCH 1/1] Update rpm
-In-Reply-To: <87ljgwzo25.fsf@macbook.be.48ers.dk>
-References: <cover.1261380062.git.nkukard@lbsd.net>	<cover.1261380062.git.nkukard@lbsd.net>	<4e1837c9c17e549a134a69f9bf8829797d879bb4.1261380062.git.nkukard@lbsd.net>
-	<87ljgwzo25.fsf@macbook.be.48ers.dk>
-Message-ID: <4B2F4527.8000509@lbsd.net>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 21 Dec 2009 10:54:14 +0100
+Subject: [Buildroot] [git commit master] qt: add selection for keyboard
+	drivers
+Message-ID: <20091221095432.C64EE777F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/21/09 09:14, Peter Korsgaard wrote:
->>>>>> "Nigel" == Nigel Kukard <nkukard@lbsd.net> writes:
->>>>>>             
->  Nigel> Signed-off-by: Nigel Kukard <nkukard@lbsd.net>
->  Nigel> ---
->  Nigel>  package/rpm/Config.in                             |   26 ++-
->  Nigel>  package/rpm/rpm-5.1.6_exclude-some-tools.patch    |   12 -
->  Nigel>  package/rpm/rpm-5.1.6_magic-file-fix.patch        |   40 ----
->  Nigel>  package/rpm/rpm-5.2.0_depends-fix.patch           |   19 ++
->  Nigel>  package/rpm/rpm-5.2.0_exclude-some-tools.patch    |   30 +++
->  Nigel>  package/rpm/rpm-5.2.0_no-parentdirs.patch         |   14 ++
->  Nigel>  package/rpm/rpm-5.2.0_ordering-fix.patch          |   45 ++++
->  Nigel>  package/rpm/rpm-5.2.0_parentdir-vs-requires.patch |   37 ++++
->  Nigel>  package/rpm/rpm-5.2.0_short-circuit-c99.patch     |  235 +++++++++++++++++++++
->  Nigel>  package/rpm/rpm.mk                                |   21 ++-
->  Nigel>  10 files changed, 416 insertions(+), 63 deletions(-)
->  Nigel>  delete mode 100755 package/rpm/rpm-5.1.6_exclude-some-tools.patch
->  Nigel>  delete mode 100755 package/rpm/rpm-5.1.6_magic-file-fix.patch
->  Nigel>  create mode 100644 package/rpm/rpm-5.2.0_depends-fix.patch
->  Nigel>  create mode 100644 package/rpm/rpm-5.2.0_exclude-some-tools.patch
->  Nigel>  create mode 100644 package/rpm/rpm-5.2.0_no-parentdirs.patch
->  Nigel>  create mode 100644 package/rpm/rpm-5.2.0_ordering-fix.patch
->  Nigel>  create mode 100644 package/rpm/rpm-5.2.0_parentdir-vs-requires.patch
->  Nigel>  create mode 100644 package/rpm/rpm-5.2.0_short-circuit-c99.patch
->
-> Where does those patches come from? Are you the author? Have they been
-> pushed upstream where possible?
->   
 
-All relevant fixes have been resolved upstream in line for 5.3.x.
+commit: http://git.buildroot.net/buildroot/commit/?id=f31bbf9e681f17d3baf4c23b2696d1d04513a603
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-These will not be uptream:
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/qt/Config.in          |    1 +
+ package/qt/Config.keyboard.in |   21 +++++++++++++++++++++
+ package/qt/qt.mk              |   32 ++++++++++++++++++++++++++++++++
+ 3 files changed, 54 insertions(+), 0 deletions(-)
+ create mode 100644 package/qt/Config.keyboard.in
 
-exclude-some-tools - simply excludes tools we don't want
-
-short-circuit-c99 - after alot of hair pulling, this just ignores the c99 test and shoves in "gcc -std=c99"
-
-
-
->  Nigel> diff --git a/package/rpm/Config.in b/package/rpm/Config.in
->  Nigel> index f4f7f90..d50a642 100644
->  Nigel> --- a/package/rpm/Config.in
->  Nigel> +++ b/package/rpm/Config.in
->  Nigel> @@ -1,14 +1,32 @@
->  Nigel>  config BR2_PACKAGE_RPM
->  Nigel>  	bool "rpm"
->  Nigel> -	select BR2_PACKAGE_ZLIB
->  Nigel> -	select BR2_PACKAGE_BZIP2
->  Nigel>  	select BR2_PACKAGE_BEECRYPT
->  Nigel>  	select BR2_PACKAGE_POPT
->  Nigel>  	select BR2_PACKAGE_NEON
->  Nigel>  	select BR2_PACKAGE_NEON_ZLIB
->  Nigel> -	select BR2_PACKAGE_NEON_EXPAT 	if BR2_PACKAGE_EXPAT
->  Nigel> -	select BR2_PACKAGE_NEON_LIBXML2	if BR2_PACKAGE_LIBXML2
->  Nigel> +	select BR2_PACKAGE_NEON_EXPAT if BR2_PACKAGE_EXPAT
->  Nigel> +	select BR2_PACKAGE_NEON_LIBXML2 if BR2_PACKAGE_LIBXML2
->  Nigel> +	select BR2_PACKAGE_NEON_SSL
->
-> Select doesn't work recursively, so you need to select openssl as well.
->   
-
-ok
-
->  Nigel>  	help
->  Nigel>  	  The RPM package management system.
->  
->  Nigel>  	  http://rpm5.org
->  Nigel> +
->  Nigel> +config BR2_PACKAGE_RPM_BZIP2_PAYLOADS
->  Nigel> +	bool "support for bzip2 payloads"
->  Nigel> +	depends on BR2_PACKAGE_RPM
->  Nigel> +	select BR2_PACKAGE_BZIP2
->  Nigel> +	help
->  Nigel> +	  Support for bzip2 payloads in RPM.
->  Nigel> +
->  Nigel> +config BR2_PACKAGE_RPM_XZ_PAYLOADS
->  Nigel> +	bool "support for xz payloads"
->  Nigel> +	depends on BR2_PACKAGE_RPM
->  Nigel> +	depends on BR2_GCC_CROSS_CXX
->
-> Doesn't this need liblzma?
->   
-
-If it finds xz, it will use it, if it doesn't, it will use internal
-copy. So its not required, no.
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index ad5b543..7d9f6f9 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -259,6 +259,7 @@ source "package/qt/Config.sql.in"
+ if BR2_PACKAGE_QT_GUI_MODULE
+ source "package/qt/Config.gfx.in"
+ source "package/qt/Config.mouse.in"
++source "package/qt/Config.keyboard.in"
+ endif
+ 
+ config BR2_PACKAGE_QT_PHONON
+diff --git a/package/qt/Config.keyboard.in b/package/qt/Config.keyboard.in
+new file mode 100644
+index 0000000..7d169a1
+--- /dev/null
++++ b/package/qt/Config.keyboard.in
+@@ -0,0 +1,21 @@
++menu "Keyboard drivers"
++
++config BR2_PACKAGE_QT_KEYBOARD_TTY
++	bool "tty"
++
++config BR2_PACKAGE_QT_KEYBOARD_USB
++	bool "usb"
++
++config BR2_PACKAGE_QT_KEYBOARD_SL5000
++	bool "sl5000"
++
++config BR2_PACKAGE_QT_KEYBOARD_YOPY
++	bool "yopy"
++
++config BR2_PACKAGE_QT_KEYBOARD_VR41XX
++	bool "vr41xx"
++
++config BR2_PACKAGE_QT_KEYBOARD_QVFB
++	bool "qvfb"
++
++endmenu
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index e4a354d..4b6876f 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -147,6 +147,38 @@ else
+ QT_CONFIGURE += -no-mouse-qvfb
+ endif
+ 
++### Keyboard drivers
++ifeq ($(BR2_PACKAGE_QT_KEYBOARD_TTY),y)
++QT_CONFIGURE += -qt-kbd-tty
++else
++QT_CONFIGURE += -no-kbd-tty
++endif
++ifeq ($(BR2_PACKAGE_QT_KEYBOARD_USB),y)
++QT_CONFIGURE += -qt-kbd-usb
++else
++QT_CONFIGURE += -no-kbd-usb
++endif
++ifeq ($(BR2_PACKAGE_QT_KEYBOARD_SL5000),y)
++QT_CONFIGURE += -qt-kbd-sl5000
++else
++QT_CONFIGURE += -no-kbd-sl5000
++endif
++ifeq ($(BR2_PACKAGE_QT_KEYBOARD_YOPY),y)
++QT_CONFIGURE += -qt-kbd-yopy
++else
++QT_CONFIGURE += -no-kbd-yopy
++endif
++ifeq ($(BR2_PACKAGE_QT_KEYBOARD_VR41XX),y)
++QT_CONFIGURE += -qt-kbd-vr41xx
++else
++QT_CONFIGURE += -no-kbd-vr41xx
++endif
++ifeq ($(BR2_PACKAGE_QT_KEYBOARD_QVFB),y)
++QT_CONFIGURE += -qt-kbd-qvfb
++else
++QT_CONFIGURE += -no-kbd-qvfb
++endif
++
+ ifeq ($(BR2_PACKAGE_QT_DEBUG),y)
+ QT_CONFIGURE+= -debug
+ else
+-- 
+1.6.3.3
