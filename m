@@ -1,57 +1,68 @@
-From: Souvik Ghosh <mailtosouvik@gmail.com>
-Date: Mon, 21 Dec 2009 08:41:38 +0530
-Subject: [Buildroot] Buildroot with uClibc 0.9.29
-In-Reply-To: <87bpht1m1u.fsf@macbook.be.48ers.dk>
-References: <6fff79820910130628peb87f9bo9c41414b461c0d@mail.gmail.com>
-	<6fff79820912181936s2c05be0ap78d0982832446477@mail.gmail.com>
-	<87bpht1m1u.fsf@macbook.be.48ers.dk>
-Message-ID: <6fff79820912201911q57822421kdbd69470694cab76@mail.gmail.com>
+From: Stanley <eva2002@gmail.com>
+Date: Mon, 21 Dec 2009 12:39:55 +0800
+Subject: [Buildroot] update on a file in tslib not reflected after doing
+	"Make"
+In-Reply-To: <20091217083547.5af1c179@surf>
+References: <ed7750810912142330nbfb9fb5q2b261926c6d2b4c2@mail.gmail.com>
+	<20091215092751.7d9a48fe@surf>
+	<ed7750810912152030x7fd04fd1g70a959b28f4ab9e4@mail.gmail.com>
+	<87fx7a64jf.fsf@macbook.be.48ers.dk> <20091217083547.5af1c179@surf>
+Message-ID: <ed7750810912202039i5d1f119bkf524569670b09f28@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+Hi all,
 
-Thanks for your reply. Probably gcc 4.1.1 defines index in some other was.
-If I put 'undef index' at the top of the concerned boost header
-(basic_regex.hpp) the compilation goes fine.
+I know what is my problem already and manage to resolve it. It is because
+the changes is not updated into the target folder ie the lib files is update
+in the output/build folder but not copied into the project folder (not
+installed). I think its partly because I am using fakeroot option.
 
-I have not managed to search for this indef definition that causing this
-problem yet. Will let you know if I find anything.
+anyway, I just do the steps mentioned and delete the installed_file in
+/project/<project_name>/autotools-stamps/
 
-Thanks,
-Souvik
-.
-On Mon, Dec 21, 2009 at 12:59 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+Thanks for your help
 
-> >>>>> "Souvik" == Souvik Ghosh <mailtosouvik@gmail.com> writes:
+Regards,
+Stanley
+
+On Thu, Dec 17, 2009 at 3:35 PM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
+
+> Le Wed, 16 Dec 2009 21:35:16 +0100,
+> Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 >
->  Souvik> Hello All,
->  Souvik> I was compiling boost with arm toolchain. This toolchain includes
-> gcc 4.1.1.
->  Souvik> While building boost I got the following error -
+> > If you are putting new .patch files under package/tslib then you need
+> > to rerun the patch step. The easiest way of doing this is simply to
+> > delete the build dir (rm -rf output/build/tslib*)
 >
->  Souvik> boost/boost/regex/v4/basic_regex.hpp:95:35: error: macro
->  Souvik> "index" requires 2 arguments, but only 1 given
->  Souvik> boost/boost/regex/v4/basic_regex.hpp:100:21: error: macro
->  Souvik> "index" requires 2 arguments, but only 1 given
+> Yeah, basically:
 >
-> You'll have to dig further into the code to see what index() function it
-> is referring to. The (legacy) index() function in the C library indeed
-> takes 2 arguments:
+>  *) If you hack directly into output/build/tslib*, then you must remove
+>    the .stamp_built stamp file and run make again. This will restart
+>    the compile process at the build step of tslib (but will *not*
+>    reconfigure tslib, so if you made any modifications at the
+>    configure level, it won't work)
 >
-> char *index(const char *s, int c);
+>  *) If you add new patches to package/tslib/, then as Peter said, the
+>    easiest way is to rm -rf output/build/tslib.
 >
-> I expect the code above to refer to a local function called index. You
-> can probably fix it by renaming it to something else.
+> Cheers,
 >
->  Souvik> Can anybody please helop in this regard. Thanks in advance.
->
+> Thomas
 > --
-> Bye, Peter Korsgaard
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers and embedded Linux development,
+> consulting, training and support.
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091221/5fb37b42/attachment.htm>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091221/86982212/attachment.htm>
