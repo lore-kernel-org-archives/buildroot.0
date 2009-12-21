@@ -1,34 +1,66 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 21 Dec 2009 22:18:28 +0100
-Subject: [Buildroot] uclibc/buildroot build error
-In-Reply-To: <d8fdfca5396745cde67af9bc66e27177.squirrel@webmail.sonic.net>
-	(joyful@sonic.net's message of "Mon, 21 Dec 2009 13:05:46 -0800")
-References: <8351cdc2a3a8abf9b1f031824d6770e4.squirrel@webmail.sonic.net>
-	<87fx772veo.fsf@macbook.be.48ers.dk>
-	<d8fdfca5396745cde67af9bc66e27177.squirrel@webmail.sonic.net>
-Message-ID: <87oclsxbyz.fsf@macbook.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Mon, 21 Dec 2009 23:10:30 +0100
+Subject: [Buildroot] External toolchain: crosstool-NG instead of
+	buildroot?
+In-Reply-To: <871vioytvz.fsf@macbook.be.48ers.dk>
+References: <hgfudc$e2$1@ger.gmane.org>
+	<200912202237.58730.yann.morin.1998@anciens.enib.fr>
+	<871vioytvz.fsf@macbook.be.48ers.dk>
+Message-ID: <200912212310.30182.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "joyful" == joyful  <joyful@sonic.net> writes:
+Peter,
+All,
 
-Hi,
+On Monday 21 December 2009 21:06:08 Peter Korsgaard wrote:
+>  Yann> As you mentioned the subject, I think we should prepare both
+>  Yann> projects so crosstool-NG offers all that buildroot needs, and
+>  Yann> maybe tweak a few things in buildroot to efficiently use
+>  Yann> crostool-NG.
+> Yes definately - Yann, I'm really sorry that I haven't gotten back to
+> you on your mail from ELCE - Things have been kind of crazy here, but
+> now holidays are coming up.
 
- joyful> Hi Peter, thanks for answering my question. However, the
- joyful> problem is in buildroot building uclic part.  Somehow the make
- joyful> file either in buildroot or uclibc missing an operand.  I
- joyful> copied the .config file in the directory manually did not help.
+No problem. I've had stuff to do here as well. Holidays are coming here
+too, but one week will be short enough...
 
- joyful> cp -dpf  /tmp/buildroot/project_build_i686/uclibc/linux-2.6.29.2/.config
- joyful> cp: missing destination file operand after
+[--SNIP--]
+> Yes, that sounds good. Why is a 3 month release schedule significantly
+> more work than a 4 month one? It should just mean less new development
+> done per release.
 
-That line is afaik from the kernel build, not from uclibc building.
+3 months is too short a time to bundle enough new features to warrant a
+new release, while 4 months is just enough to give me a little break
+while still allowing substantial advancement in the project.
 
-Please check if you see the same problem with buildroot 2009.11, and if
-you do, send the .config file to the list and I'll take a look.
+But I do agree that once we join forces on the toolchain part, a 3-month
+cycle will be OK.
+
+>  Yann> Apart form that, we could build upon the results of the BR
+>  Yann> developper day.  Should I repost my summary to this list?
+> Yes please do.
+
+Will do in a separate post.
+
+> Talking about developers day, Thomas and me are trying to arrange
+> another dev day after FOSDEM (February 8) - Anyone interested?
+
+I'll be attending FOSDEM, but am not too sure I'll be able to stay monday.
+In fact, I already have a train home booked on monday. If I can cancel it,
+and arrange for a second day off tuesday, then I'l gladly join, if it makes
+sense.
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+`------------------------------^-------^------------------^--------------------'
