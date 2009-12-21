@@ -1,8 +1,10 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 21 Dec 2009 10:54:14 +0100
-Subject: [Buildroot] [git commit master] qt: add selection for keyboard
-	drivers
-Message-ID: <20091221095432.C64EE777F8@busybox.osuosl.org>
+From: Nigel Kukard <nkukard@lbsd.net>
+Date: Mon, 21 Dec 2009 12:02:22 +0000
+Subject: [Buildroot] [PATCH 1/1] Update xfsprogs
+In-Reply-To: <87tyvkzoec.fsf@macbook.be.48ers.dk>
+References: <cover.1261379989.git.nkukard@lbsd.net>	<cover.1261379989.git.nkukard@lbsd.net>	<dee3a736226f0c4a4df412fc48fbe0eabca4df9e.1261379989.git.nkukard@lbsd.net>
+	<87tyvkzoec.fsf@macbook.be.48ers.dk>
+Message-ID: <4B2F63CE.1000801@lbsd.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,98 +12,54 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f31bbf9e681f17d3baf4c23b2696d1d04513a603
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>>> "Nigel" == Nigel Kukard <nkukard@lbsd.net> writes:
+>>>>>>             
+>  Nigel> Signed-off-by: Nigel Kukard <nkukard@lbsd.net>
+>  Nigel> ---
+>  Nigel>  package/xfsprogs/Config.in      |   10 +++---
+>  Nigel>  package/xfsprogs/xfsprogs.mk    |    9 ++---
+>  Nigel>  package/xfsprogs/xfsprogs.patch |   59 ---------------------------------------
+>  Nigel>  3 files changed, 9 insertions(+), 69 deletions(-)
+>  Nigel>  delete mode 100644 package/xfsprogs/xfsprogs.patch
+>
+>  Nigel> diff --git a/package/xfsprogs/Config.in b/package/xfsprogs/Config.in
+>  Nigel> index 2f462cb..77e4d61 100644
+>  Nigel> --- a/package/xfsprogs/Config.in
+>  Nigel> +++ b/package/xfsprogs/Config.in
+>  Nigel> @@ -1,6 +1,9 @@
+>   
+>  Nigel> -comment "xfssprogs requires a toolchain with LARGEFILE support"
+>  Nigel> -	depends on !BR2_LARGEFILE
+>  Nigel> -
+>
+> I don't see any references to the e2fsprogs libuuid?
+>   
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/qt/Config.in          |    1 +
- package/qt/Config.keyboard.in |   21 +++++++++++++++++++++
- package/qt/qt.mk              |   32 ++++++++++++++++++++++++++++++++
- 3 files changed, 54 insertions(+), 0 deletions(-)
- create mode 100644 package/qt/Config.keyboard.in
+I'll change it to be auto selected just like BR2_PACKAGE_E2FSPROGS is
 
-diff --git a/package/qt/Config.in b/package/qt/Config.in
-index ad5b543..7d9f6f9 100644
---- a/package/qt/Config.in
-+++ b/package/qt/Config.in
-@@ -259,6 +259,7 @@ source "package/qt/Config.sql.in"
- if BR2_PACKAGE_QT_GUI_MODULE
- source "package/qt/Config.gfx.in"
- source "package/qt/Config.mouse.in"
-+source "package/qt/Config.keyboard.in"
- endif
- 
- config BR2_PACKAGE_QT_PHONON
-diff --git a/package/qt/Config.keyboard.in b/package/qt/Config.keyboard.in
-new file mode 100644
-index 0000000..7d169a1
---- /dev/null
-+++ b/package/qt/Config.keyboard.in
-@@ -0,0 +1,21 @@
-+menu "Keyboard drivers"
-+
-+config BR2_PACKAGE_QT_KEYBOARD_TTY
-+	bool "tty"
-+
-+config BR2_PACKAGE_QT_KEYBOARD_USB
-+	bool "usb"
-+
-+config BR2_PACKAGE_QT_KEYBOARD_SL5000
-+	bool "sl5000"
-+
-+config BR2_PACKAGE_QT_KEYBOARD_YOPY
-+	bool "yopy"
-+
-+config BR2_PACKAGE_QT_KEYBOARD_VR41XX
-+	bool "vr41xx"
-+
-+config BR2_PACKAGE_QT_KEYBOARD_QVFB
-+	bool "qvfb"
-+
-+endmenu
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index e4a354d..4b6876f 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -147,6 +147,38 @@ else
- QT_CONFIGURE += -no-mouse-qvfb
- endif
- 
-+### Keyboard drivers
-+ifeq ($(BR2_PACKAGE_QT_KEYBOARD_TTY),y)
-+QT_CONFIGURE += -qt-kbd-tty
-+else
-+QT_CONFIGURE += -no-kbd-tty
-+endif
-+ifeq ($(BR2_PACKAGE_QT_KEYBOARD_USB),y)
-+QT_CONFIGURE += -qt-kbd-usb
-+else
-+QT_CONFIGURE += -no-kbd-usb
-+endif
-+ifeq ($(BR2_PACKAGE_QT_KEYBOARD_SL5000),y)
-+QT_CONFIGURE += -qt-kbd-sl5000
-+else
-+QT_CONFIGURE += -no-kbd-sl5000
-+endif
-+ifeq ($(BR2_PACKAGE_QT_KEYBOARD_YOPY),y)
-+QT_CONFIGURE += -qt-kbd-yopy
-+else
-+QT_CONFIGURE += -no-kbd-yopy
-+endif
-+ifeq ($(BR2_PACKAGE_QT_KEYBOARD_VR41XX),y)
-+QT_CONFIGURE += -qt-kbd-vr41xx
-+else
-+QT_CONFIGURE += -no-kbd-vr41xx
-+endif
-+ifeq ($(BR2_PACKAGE_QT_KEYBOARD_QVFB),y)
-+QT_CONFIGURE += -qt-kbd-qvfb
-+else
-+QT_CONFIGURE += -no-kbd-qvfb
-+endif
-+
- ifeq ($(BR2_PACKAGE_QT_DEBUG),y)
- QT_CONFIGURE+= -debug
- else
--- 
-1.6.3.3
+>  Nigel> diff --git a/package/xfsprogs/xfsprogs.mk b/package/xfsprogs/xfsprogs.mk
+>  Nigel> index 89db6c1..e87485e 100644
+>  Nigel> --- a/package/xfsprogs/xfsprogs.mk
+>  Nigel> +++ b/package/xfsprogs/xfsprogs.mk
+>  Nigel>  	rm -rf $(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc
+>  Nigel>  	touch -c $(TARGET_DIR)/$(XFSPROGS_TARGET_BINARY)
+>  
+>  Nigel> -xfsprogs: e2fsprogs libtool-cross $(TARGET_DIR)/$(XFSPROGS_TARGET_BINARY)
+>  Nigel> +xfsprogs: e2fsprogs libtool $(TARGET_DIR)/$(XFSPROGS_TARGET_BINARY)
+>
+> You need to select e2fsprogs in kconfig.
+
+        select BR2_PACKAGE_E2FSPROGS
+
+its already there. I have now added libuuid aswell.
+
+
+>  Why do you need libtool for the
+> target?
+>   
+
+I didn't add libtool-cross, I was told to use "libtool" instead in
+future. Maybe the original author of xfsprogs.mk can answer why it was
+there?
+
+When I have tested it without libtool I'll send another pull request.
