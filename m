@@ -1,74 +1,98 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 21 Dec 2009 10:00:40 +0100
-Subject: [Buildroot] [git commit master] neon: add optional ssl support
-Message-ID: <20091221091617.6FD777780C@busybox.osuosl.org>
+From: Nigel Kukard <nkukard@lbsd.net>
+Date: Mon, 21 Dec 2009 09:51:35 +0000
+Subject: [Buildroot] [PATCH 1/1] Update rpm
+In-Reply-To: <87ljgwzo25.fsf@macbook.be.48ers.dk>
+References: <cover.1261380062.git.nkukard@lbsd.net>	<cover.1261380062.git.nkukard@lbsd.net>	<4e1837c9c17e549a134a69f9bf8829797d879bb4.1261380062.git.nkukard@lbsd.net>
+	<87ljgwzo25.fsf@macbook.be.48ers.dk>
+Message-ID: <4B2F4527.8000509@lbsd.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 12/21/09 09:14, Peter Korsgaard wrote:
+>>>>>> "Nigel" == Nigel Kukard <nkukard@lbsd.net> writes:
+>>>>>>             
+>  Nigel> Signed-off-by: Nigel Kukard <nkukard@lbsd.net>
+>  Nigel> ---
+>  Nigel>  package/rpm/Config.in                             |   26 ++-
+>  Nigel>  package/rpm/rpm-5.1.6_exclude-some-tools.patch    |   12 -
+>  Nigel>  package/rpm/rpm-5.1.6_magic-file-fix.patch        |   40 ----
+>  Nigel>  package/rpm/rpm-5.2.0_depends-fix.patch           |   19 ++
+>  Nigel>  package/rpm/rpm-5.2.0_exclude-some-tools.patch    |   30 +++
+>  Nigel>  package/rpm/rpm-5.2.0_no-parentdirs.patch         |   14 ++
+>  Nigel>  package/rpm/rpm-5.2.0_ordering-fix.patch          |   45 ++++
+>  Nigel>  package/rpm/rpm-5.2.0_parentdir-vs-requires.patch |   37 ++++
+>  Nigel>  package/rpm/rpm-5.2.0_short-circuit-c99.patch     |  235 +++++++++++++++++++++
+>  Nigel>  package/rpm/rpm.mk                                |   21 ++-
+>  Nigel>  10 files changed, 416 insertions(+), 63 deletions(-)
+>  Nigel>  delete mode 100755 package/rpm/rpm-5.1.6_exclude-some-tools.patch
+>  Nigel>  delete mode 100755 package/rpm/rpm-5.1.6_magic-file-fix.patch
+>  Nigel>  create mode 100644 package/rpm/rpm-5.2.0_depends-fix.patch
+>  Nigel>  create mode 100644 package/rpm/rpm-5.2.0_exclude-some-tools.patch
+>  Nigel>  create mode 100644 package/rpm/rpm-5.2.0_no-parentdirs.patch
+>  Nigel>  create mode 100644 package/rpm/rpm-5.2.0_ordering-fix.patch
+>  Nigel>  create mode 100644 package/rpm/rpm-5.2.0_parentdir-vs-requires.patch
+>  Nigel>  create mode 100644 package/rpm/rpm-5.2.0_short-circuit-c99.patch
+>
+> Where does those patches come from? Are you the author? Have they been
+> pushed upstream where possible?
+>   
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2f3c46561e585ba698e73a91bbff03b2e3be411c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+All relevant fixes have been resolved upstream in line for 5.3.x.
 
-Signed-off-by: Nigel Kukard <nkukard@lbsd.net>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES                |    5 +++--
- package/neon/Config.in |    6 ++++++
- package/neon/neon.mk   |    6 ++++++
- 3 files changed, 15 insertions(+), 2 deletions(-)
+These will not be uptream:
 
-diff --git a/CHANGES b/CHANGES
-index 01b25aa..4d439bc 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -3,8 +3,9 @@
- 	New packages: libcdaudio, libdvdnav, libdvdread, hostapd, tcpreplay
- 
- 	Updated/fixed packages: autoconf, bind, binutils, busybox,
--	directfb, gst-plugins-bad, hal, iw, libfuse, libpcap, lighttpd,
--	mesa, mpg123, mtd-utils, pcre, qt, sshfs, tremor, u-boot, usbutils
-+	directfb, gst-plugins-bad, hal, iw, libfuse, libpcap,
-+	lighttpd, mesa, mpg123, mtd-utils, neon, pcre, qt, sshfs,
-+	tremor, u-boot, usbutils
- 
- 	Issues resolved (http://bugs.uclibc.org):
- 
-diff --git a/package/neon/Config.in b/package/neon/Config.in
-index ce72a2f..318e4c6 100644
---- a/package/neon/Config.in
-+++ b/package/neon/Config.in
-@@ -12,6 +12,12 @@ config BR2_PACKAGE_NEON_ZLIB
- 	help
- 	  build with ZLIB support
- 
-+config BR2_PACKAGE_NEON_SSL
-+	bool "SSL support"
-+	select BR2_PACKAGE_OPENSSL
-+	help
-+	  build with SSL support
-+
- choice
- 	prompt "XML Support"
- 	default BR2_PACKAGE_NEON_NOXML
-diff --git a/package/neon/neon.mk b/package/neon/neon.mk
-index 1f26a0c..ed5f999 100644
---- a/package/neon/neon.mk
-+++ b/package/neon/neon.mk
-@@ -22,6 +22,12 @@ NEON_DEPENDENCIES+=zlib
- else
- NEON_CONF_OPT+=--without-zlib
- endif
-+ifeq ($(BR2_PACKAGE_NEON_SSL),y)
-+NEON_CONF_OPT+=--with-ssl
-+NEON_DEPENDENCIES+=openssl
-+else
-+NEON_CONF_OPT+=--without-ssl
-+endif
- ifeq ($(BR2_PACKAGE_NEON_EXPAT),y)
- NEON_CONF_OPT+=--with-expat=$(STAGING_DIR)/usr/lib/libexpat.la
- NEON_CONF_OPT+=--with-libxml2=no
--- 
-1.6.3.3
+exclude-some-tools - simply excludes tools we don't want
+
+short-circuit-c99 - after alot of hair pulling, this just ignores the c99 test and shoves in "gcc -std=c99"
+
+
+
+>  Nigel> diff --git a/package/rpm/Config.in b/package/rpm/Config.in
+>  Nigel> index f4f7f90..d50a642 100644
+>  Nigel> --- a/package/rpm/Config.in
+>  Nigel> +++ b/package/rpm/Config.in
+>  Nigel> @@ -1,14 +1,32 @@
+>  Nigel>  config BR2_PACKAGE_RPM
+>  Nigel>  	bool "rpm"
+>  Nigel> -	select BR2_PACKAGE_ZLIB
+>  Nigel> -	select BR2_PACKAGE_BZIP2
+>  Nigel>  	select BR2_PACKAGE_BEECRYPT
+>  Nigel>  	select BR2_PACKAGE_POPT
+>  Nigel>  	select BR2_PACKAGE_NEON
+>  Nigel>  	select BR2_PACKAGE_NEON_ZLIB
+>  Nigel> -	select BR2_PACKAGE_NEON_EXPAT 	if BR2_PACKAGE_EXPAT
+>  Nigel> -	select BR2_PACKAGE_NEON_LIBXML2	if BR2_PACKAGE_LIBXML2
+>  Nigel> +	select BR2_PACKAGE_NEON_EXPAT if BR2_PACKAGE_EXPAT
+>  Nigel> +	select BR2_PACKAGE_NEON_LIBXML2 if BR2_PACKAGE_LIBXML2
+>  Nigel> +	select BR2_PACKAGE_NEON_SSL
+>
+> Select doesn't work recursively, so you need to select openssl as well.
+>   
+
+ok
+
+>  Nigel>  	help
+>  Nigel>  	  The RPM package management system.
+>  
+>  Nigel>  	  http://rpm5.org
+>  Nigel> +
+>  Nigel> +config BR2_PACKAGE_RPM_BZIP2_PAYLOADS
+>  Nigel> +	bool "support for bzip2 payloads"
+>  Nigel> +	depends on BR2_PACKAGE_RPM
+>  Nigel> +	select BR2_PACKAGE_BZIP2
+>  Nigel> +	help
+>  Nigel> +	  Support for bzip2 payloads in RPM.
+>  Nigel> +
+>  Nigel> +config BR2_PACKAGE_RPM_XZ_PAYLOADS
+>  Nigel> +	bool "support for xz payloads"
+>  Nigel> +	depends on BR2_PACKAGE_RPM
+>  Nigel> +	depends on BR2_GCC_CROSS_CXX
+>
+> Doesn't this need liblzma?
+>   
+
+If it finds xz, it will use it, if it doesn't, it will use internal
+copy. So its not required, no.
