@@ -1,13 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 21 Dec 2009 10:02:39 +0100
-Subject: [Buildroot] [PATCH 1/1] Install uuid.h into staging a some
-	other apps like xfsprogs need it
-In-Reply-To: <66db896cdd0b2ec3310eec09ee314137c50e7d8d.1261379909.git.nkukard@lbsd.net>
-	(Nigel Kukard's message of "Mon, 21 Dec 2009 07:18:32 +0000")
-References: <cover.1261379909.git.nkukard@lbsd.net>
-	<cover.1261379909.git.nkukard@lbsd.net>
-	<66db896cdd0b2ec3310eec09ee314137c50e7d8d.1261379909.git.nkukard@lbsd.net>
-Message-ID: <87y6kwzols.fsf@macbook.be.48ers.dk>
+Date: Mon, 21 Dec 2009 10:07:07 +0100
+Subject: [Buildroot] [PATCH 1/1] Update xfsprogs
+In-Reply-To: <dee3a736226f0c4a4df412fc48fbe0eabca4df9e.1261379989.git.nkukard@lbsd.net>
+	(Nigel Kukard's message of "Mon, 21 Dec 2009 07:19:52 +0000")
+References: <cover.1261379989.git.nkukard@lbsd.net>
+	<cover.1261379989.git.nkukard@lbsd.net>
+	<dee3a736226f0c4a4df412fc48fbe0eabca4df9e.1261379989.git.nkukard@lbsd.net>
+Message-ID: <87tyvkzoec.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,27 +15,38 @@ To: buildroot@busybox.net
 
 >>>>> "Nigel" == Nigel Kukard <nkukard@lbsd.net> writes:
 
+ Nigel> Signed-off-by: Nigel Kukard <nkukard@lbsd.net>
+ Nigel> ---
+ Nigel>  package/xfsprogs/Config.in      |   10 +++---
+ Nigel>  package/xfsprogs/xfsprogs.mk    |    9 ++---
+ Nigel>  package/xfsprogs/xfsprogs.patch |   59 ---------------------------------------
+ Nigel>  3 files changed, 9 insertions(+), 69 deletions(-)
+ Nigel>  delete mode 100644 package/xfsprogs/xfsprogs.patch
+
+ Nigel> diff --git a/package/xfsprogs/Config.in b/package/xfsprogs/Config.in
+ Nigel> index 2f462cb..77e4d61 100644
+ Nigel> --- a/package/xfsprogs/Config.in
+ Nigel> +++ b/package/xfsprogs/Config.in
+ Nigel> @@ -1,6 +1,9 @@
+  
+ Nigel> -comment "xfssprogs requires a toolchain with LARGEFILE support"
+ Nigel> -	depends on !BR2_LARGEFILE
+ Nigel> -
+
+I don't see any references to the e2fsprogs libuuid?
+
+ Nigel> diff --git a/package/xfsprogs/xfsprogs.mk b/package/xfsprogs/xfsprogs.mk
+ Nigel> index 89db6c1..e87485e 100644
+ Nigel> --- a/package/xfsprogs/xfsprogs.mk
+ Nigel> +++ b/package/xfsprogs/xfsprogs.mk
+ Nigel>  	rm -rf $(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc
+ Nigel>  	touch -c $(TARGET_DIR)/$(XFSPROGS_TARGET_BINARY)
  
- Nigel> +E2FSPROGS_DIR=$(BUILD_DIR)/e2fsprogs-$(E2FSPROGS_VERSION)
- Nigel> +
+ Nigel> -xfsprogs: e2fsprogs libtool-cross $(TARGET_DIR)/$(XFSPROGS_TARGET_BINARY)
+ Nigel> +xfsprogs: e2fsprogs libtool $(TARGET_DIR)/$(XFSPROGS_TARGET_BINARY)
 
-AUTOTARGETS already defines <package>_SRCDIR that we can use.
-
- Nigel>  E2FSPROGS_AUTORECONF = NO
- Nigel>  E2FSPROGS_LIBTOOL_PATCH = NO
- 
- Nigel> @@ -91,5 +93,7 @@ endif
- Nigel>  ifeq ($(BR2_PACKAGE_E2FSPROGS_FINDFS),y)
- Nigel>  	ln -sf e2label ${TARGET_DIR}/usr/sbin/findfs
- Nigel>  endif
- Nigel> +	mkdir -p ${STAGING_DIR}/usr/include/uuid
- Nigel> +	install ${E2FSPROGS_DIR}/lib/uuid/uuid.h ${STAGING_DIR}/usr/include/uuid/uuid.h
- Nigel>  	touch $@
-
-This should only be done if the libuuid library is installed into
-target.
-
-I've fixed those issues and committed, thanks.
+You need to select e2fsprogs in kconfig. Why do you need libtool for the
+target?
 
 -- 
 Bye, Peter Korsgaard
