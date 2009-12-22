@@ -1,48 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 22 Dec 2009 08:54:01 +0100
-Subject: [Buildroot] External toolchain: crosstool-NG instead of
-	buildroot?
-In-Reply-To: <200912212310.30182.yann.morin.1998@anciens.enib.fr> (Yann
-	E. MORIN's message of "Mon, 21 Dec 2009 23:10:30 +0100")
-References: <hgfudc$e2$1@ger.gmane.org>
-	<200912202237.58730.yann.morin.1998@anciens.enib.fr>
-	<871vioytvz.fsf@macbook.be.48ers.dk>
-	<200912212310.30182.yann.morin.1998@anciens.enib.fr>
-Message-ID: <87zl5bwijq.fsf@macbook.be.48ers.dk>
+From: Anders Darander <anders.darander@gmail.com>
+Date: Tue, 22 Dec 2009 09:31:30 +0100
+Subject: [Buildroot] BR + CT-NG integration
+In-Reply-To: <200912212351.11487.yann.morin.1998@anciens.enib.fr>
+References: <200912212351.11487.yann.morin.1998@anciens.enib.fr>
+Message-ID: <2c9a759f0912220031q1e1c0063ja28c1072d377ce84@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
+Hi Yann,
 
-Hi,
+I think that the plan looks good, and that it will be beneficial for Buildroot.
 
- Yann> No problem. I've had stuff to do here as well. Holidays are
- Yann> coming here too, but one week will be short enough...
+On Mon, Dec 21, 2009 at 23:51, Yann E. MORIN
+<yann.morin.1998@anciens.enib.fr> wrote:
+> - rely on user-supplied external toolchain, built with crosstool-NG
+>
+> ?AFAICS, this is currently mostly working, even if some configuration
+> ?items should be reviewed to make it work seamlessly.
+> ?It was also pointed out that some of the toolchain options should be
+> ?made easily available to buildroot (such as endianness, networking
+> ?support (IPv4, IPv6)...). I think that this is easily achievable,
+> ?provided the list of options is known.
 
-Yes, I know .. :/
+If it's not already on the list, I'd like you to add the debug-root as
+a toolchain option available for buildroot. My reason is that I'd like
+to update and get my patch [1] to install gdbserver from crosstool-NG
+to the target system integrated into buildroot.
 
- Yann> 3 months is too short a time to bundle enough new features to warrant a
- Yann> new release, while 4 months is just enough to give me a little break
- Yann> while still allowing substantial advancement in the project.
+I think that it would be possible to create a "cleaner" patch, if such
+an option where available to buildroot.
 
- Yann> But I do agree that once we join forces on the toolchain part, a 3-month
- Yann> cycle will be OK.
+Thanks in advance.
 
-Ok.
+Regards,
+Anders Darander
 
- >> Talking about developers day, Thomas and me are trying to arrange
- >> another dev day after FOSDEM (February 8) - Anyone interested?
-
- Yann> I'll be attending FOSDEM, but am not too sure I'll be able to
- Yann> stay monday.  In fact, I already have a train home booked on
- Yann> monday. If I can cancel it, and arrange for a second day off
- Yann> tuesday, then I'l gladly join, if it makes sense.
-
-It would be very good if you could make it - Otherwise we can discuss
-during FOSDEM instead.
-
--- 
-Bye, Peter Korsgaard
+[1] http://lists.busybox.net/pipermail/buildroot/2009-November/030254.html
