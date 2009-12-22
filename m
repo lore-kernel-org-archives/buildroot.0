@@ -1,39 +1,62 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 22 Dec 2009 08:39:59 +0100
-Subject: [Buildroot] uclibc/buildroot build error
-In-Reply-To: <62f4f618adb8f0fb041b8033370948f3.squirrel@webmail.sonic.net>
-	(joyful@sonic.net's message of "Mon, 21 Dec 2009 16:01:41 -0800")
-References: <8351cdc2a3a8abf9b1f031824d6770e4.squirrel@webmail.sonic.net>
-	<87fx772veo.fsf@macbook.be.48ers.dk>
-	<d8fdfca5396745cde67af9bc66e27177.squirrel@webmail.sonic.net>
-	<87oclsxbyz.fsf@macbook.be.48ers.dk>
-	<62f4f618adb8f0fb041b8033370948f3.squirrel@webmail.sonic.net>
-Message-ID: <87fx73xxrk.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 22 Dec 2009 08:44:52 +0100
+Subject: [Buildroot] [Bug 821] New: cp: illegal operation
+In-Reply-To: <bug-821-163@https.bugs.busybox.net/> (bugzilla@busybox.net's
+	message of "Mon, 21 Dec 2009 23:13:10 +0000 (UTC)")
+References: <bug-821-163@https.bugs.busybox.net/>
+Message-ID: <87bphrxxjf.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "joyful" == joyful  <joyful@sonic.net> writes:
+>>>>> "bugzilla" == bugzilla  <bugzilla@busybox.net> writes:
 
- joyful> Hi Peter,
- joyful> Thanks for helping me. I was merely trying to create a whole new platform.
- joyful> When I type make defconfig, there was no old config
- joyful> file, then I just select items that may fit my needs by hit enter or y or n.
+Hi,
 
- joyful> With 2009.11 verison buildroot, I think it is much better, but I
- joyful> got this message at the end, indication something I was not configured
- joyful> correctly:
+ bugzilla> When building the toolchain on my Mac, it always halts
+ bugzilla> because of an illegal parameter for cp. the parameter "-d" is
+ bugzilla> not supported on Mac OS X. The following patch should work on
+ bugzilla> all systems:
 
- joyful> `/tmp/buildroot-2009.11/output/build/linux-2.6.31.6'
- joyful> make[1]: *** No rule to make target `zImage'.  Stop.
- joyful> make[1]: Leaving directory
- joyful> `/tmp/buildroot-2009.11/output/build/linux-2.6.31.6'
- joyful> make: *** [/tmp/buildroot-2009.11/output/images/zImage] Error 2
+ bugzilla> --- Makefile    2008-02-25 09:15:31.000000000 +0100
+ bugzilla> +++ Makefile    2009-12-22 00:04:29.000000000 +0100
+ bugzilla> @@ -283,11 +257,11 @@
+ bugzilla>  $(BR2_DEPENDS_DIR): .config
+ bugzilla>         rm -rf $@
+ bugzilla>         mkdir -p $(@D)
+ bugzilla> +       cp -af $(CONFIG)/buildroot-config $@
+ bugzilla> -       cp -dpRf $(CONFIG)/buildroot-config $@
 
-This is again the Linux kernel build failing. I think the easiest way of
-figuring out what goes wrong is for you to post your .config file
+That's not the only place cp -d is used:
+
+git grep -l 'cp -d'
+Makefile
+docs/buildroot.html
+package/argus/argus.mk
+package/berkeleydb/berkeleydb.mk
+package/bsdiff/bsdiff.mk
+package/directfb-examples/directfb-examples.mk
+package/dmalloc/dmalloc.mk
+package/dummy/dummy.mk
+package/fuse/libfuse.mk
+package/gettext/gettext.mk
+package/gmp/gmp.mk
+package/imagemagick/imagemagick.mk
+package/input-tools/input-tools.mk
+package/java/concierge/concierge.mk
+package/jpeg/jpeg.mk
+package/l2tp/l2tp.mk
+package/libaio/libaio.mk
+package/libcgi/libcgi.mk
+package/libcgicc/libcgicc.mk
+package/libdrm/libdrm.mk
+package/libeXosip2/libeXosip2.mk
+package/libfloat/libfloat.mk
+package/libgcrypt/libgcrypt.mk
+
+With the above fixed, can you really build on macosx?
 
 -- 
 Bye, Peter Korsgaard
