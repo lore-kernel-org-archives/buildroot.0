@@ -1,35 +1,33 @@
-From: Sven Eisenhauer <sven@sei.dyndns.org>
-Date: Tue, 22 Dec 2009 17:14:14 +0100
-Subject: [Buildroot] =?utf-8?q?BR2=5FARCH_for_Via_C3?=
-Message-ID: <1ec03743bcd140dd21f82a816cf7ea4b@127.0.0.1>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 22 Dec 2009 21:34:12 +0100
+Subject: [Buildroot] BR + CT-NG integration
+In-Reply-To: <4B30BC14.3050207@zacarias.com.ar> (Gustavo Zacarias's message of
+	"Tue, 22 Dec 2009 09:31:16 -0300")
+References: <200912212351.11487.yann.morin.1998@anciens.enib.fr>
+	<4B30BC14.3050207@zacarias.com.ar>
+Message-ID: <87r5qmwxx7.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-   
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Hello *,  
+ Gustavo> Yann E. MORIN wrote:
+ >> So, on the overall, it's not that bad. Crosstool-NG brings in four archs
+ >> that buildroot has no support for, while it is missing five archs. For
+ >> some archs, some work in CT-NG is still needed to support some variants.
 
- I just started playing  around with buildroot (version 2009.11) to
-get linux on a Via Epia board with C3 CPU.  
+ Gustavo> The CRIS architecture is somewhat going to vanish since Axis
+ Gustavo> won't be selling/supporting the chips publically any
+ Gustavo> longer. Peter might want to drop it soonish.  I also doubt
+ Gustavo> it's in working order at the moment either.  For a precise
+ Gustavo> timeline of Axis's plans you can see
+ Gustavo> http://www.axis.com/products/dev/index.htm Regards.
 
- So I just selected C3 processor with make menuconfig and the make
-afterwards ran into an error.  
+We had cris patches submitted earlier this year, so I don't plan on
+removing it right away.
 
- I found out that BR2_ARCH is not set for BR2_x86_c3 in
-targe/Config.in.arch.  
-
- After manually adding the line:  
-
- default "i586"          if BR2_x86_c3  
- the previous error disapeared.  
-
- Perhaps somebody forgot to add this config...  
- Cheers,  
-
- Sven     
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091222/6b92a36e/attachment.htm>
+-- 
+Bye, Peter Korsgaard
