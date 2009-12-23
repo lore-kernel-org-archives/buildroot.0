@@ -1,161 +1,62 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 23 Dec 2009 14:49:54 +0100
-Subject: [Buildroot] [git commit master] Bump mtd-utils to 1.2.0
-Message-ID: <20091223135034.0518877716@busybox.osuosl.org>
+From: joyful at sonic.net <joyful@sonic.net>
+Date: Wed, 23 Dec 2009 14:15:09 -0800
+Subject: [Buildroot] uclibc/buildroot build error
+In-Reply-To: <87fx73xxrk.fsf@macbook.be.48ers.dk>
+References: <8351cdc2a3a8abf9b1f031824d6770e4.squirrel@webmail.sonic.net>
+	<87fx772veo.fsf@macbook.be.48ers.dk>
+	<d8fdfca5396745cde67af9bc66e27177.squirrel@webmail.sonic.net>
+	<87oclsxbyz.fsf@macbook.be.48ers.dk>
+	<62f4f618adb8f0fb041b8033370948f3.squirrel@webmail.sonic.net>
+	<87fx73xxrk.fsf@macbook.be.48ers.dk>
+Message-ID: <e14e708720ddfeae76da70a20047b110.squirrel@webmail.sonic.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Peter,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9400c73582326c543fae82120af3904836145655
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thanks. Attached please see the .config file.  I don't really care
+about using busybox, but the make defconfig would not give me chance
+to say no. Then I just hit enter for the default values.
 
-Closes #827.
+I tried hard to get it working, but it just keeps giving me errors.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES                                            |    1 +
- ...ils-1.1.0-all-mkfs.jffs2-device_table-fix.patch |   23 -------------------
- ...all-acl.patch => mtd-utils-1.2.0-all-acl.patch} |    0
- .../mtd-utils-1.2.0-all-disable-ubi.patch          |   24 ++++++++++++++++++++
- ... mtd-utils-1.2.0-all-flashcp-npow2-erase.patch} |    0
- .../mtd-utils/mtd-utils-1.2.0-all-no-errorh.patch  |   22 ++++++++++++++++++
- ...ets.patch => mtd-utils-1.2.0-all-targets.patch} |    0
- package/mtd/mtd-utils/mtd.mk                       |    2 +-
- 8 files changed, 48 insertions(+), 24 deletions(-)
- delete mode 100644 package/mtd/mtd-utils/mtd-utils-1.1.0-all-mkfs.jffs2-device_table-fix.patch
- rename package/mtd/mtd-utils/{mtd-utils-1.1.0-all-acl.patch => mtd-utils-1.2.0-all-acl.patch} (100%)
- create mode 100644 package/mtd/mtd-utils/mtd-utils-1.2.0-all-disable-ubi.patch
- rename package/mtd/mtd-utils/{mtd-utils-1.1.0-all-flashcp-npow2-erase.patch => mtd-utils-1.2.0-all-flashcp-npow2-erase.patch} (100%)
- create mode 100644 package/mtd/mtd-utils/mtd-utils-1.2.0-all-no-errorh.patch
- rename package/mtd/mtd-utils/{mtd-utils-1.1.0-all-targets.patch => mtd-utils-1.2.0-all-targets.patch} (100%)
+Thanks and Happy Holidays.
 
-diff --git a/CHANGES b/CHANGES
-index 6b6a6e8..9894db9 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -25,6 +25,7 @@
- 	#773: [SECURITY] Update bind to 9.5.2-P1
- 	#795: Minor edits to fix typos, grammar, spelling, usage in documen...
- 	#823: Editor backup files (~) is copied from the target_skeleton
-+	#827: Bump mtd-utils package to version 1.2.0
- 
- 2009.11, Released December 1st, 2009:
- 
-diff --git a/package/mtd/mtd-utils/mtd-utils-1.1.0-all-mkfs.jffs2-device_table-fix.patch b/package/mtd/mtd-utils/mtd-utils-1.1.0-all-mkfs.jffs2-device_table-fix.patch
-deleted file mode 100644
-index 1fe23c8..0000000
---- a/package/mtd/mtd-utils/mtd-utils-1.1.0-all-mkfs.jffs2-device_table-fix.patch
-+++ /dev/null
-@@ -1,23 +0,0 @@
--mkfs.jffs2.c: fix device_table handling
--
--find_filesystem_entry would ignore device_table entries for existing elements
--if the device type / permissions weren't exactly the same, effectively
--rendering device_table useless.
-----
-- mkfs.jffs2.c |    3 +--
-- 1 file changed, 1 insertion(+), 2 deletions(-)
--
--Index: mtd-utils-1.1.0/mkfs.jffs2.c
--===================================================================
----- mtd-utils-1.1.0.orig/mkfs.jffs2.c
--+++ mtd-utils-1.1.0/mkfs.jffs2.c
--@@ -246,8 +246,7 @@
-- 		e = dir->files;
-- 	}
-- 	while (e) {
---		/* Only bother to do the expensive strcmp on matching file types */
---		if (type == (e->sb.st_mode & S_IFMT)) {
--+		if (1) {
-- 			if (S_ISDIR(e->sb.st_mode)) {
-- 				int len = strlen(e->fullname);
-- 
-diff --git a/package/mtd/mtd-utils/mtd-utils-1.1.0-all-acl.patch b/package/mtd/mtd-utils/mtd-utils-1.2.0-all-acl.patch
-similarity index 100%
-rename from package/mtd/mtd-utils/mtd-utils-1.1.0-all-acl.patch
-rename to package/mtd/mtd-utils/mtd-utils-1.2.0-all-acl.patch
-diff --git a/package/mtd/mtd-utils/mtd-utils-1.2.0-all-disable-ubi.patch b/package/mtd/mtd-utils/mtd-utils-1.2.0-all-disable-ubi.patch
-new file mode 100644
-index 0000000..606cb46
---- /dev/null
-+++ b/package/mtd/mtd-utils/mtd-utils-1.2.0-all-disable-ubi.patch
-@@ -0,0 +1,24 @@
-+diff -Nura mtd-utils-1.2.0/Makefile mtd-utils-1.2.0-noubi/Makefile
-+--- mtd-utils-1.2.0/Makefile	2008-06-27 13:21:28.000000000 -0300
-++++ mtd-utils-1.2.0-noubi/Makefile	2009-12-23 10:26:25.000000000 -0300
-+@@ -45,7 +45,6 @@
-+ .SUFFIXES:
-+ 
-+ all: $(TARGETS)
-+-	make -C $(BUILDDIR)/ubi-utils
-+ 
-+ IGNORE=${wildcard $(BUILDDIR)/.*.c.dep}
-+ -include ${IGNORE}
-+@@ -53,7 +52,6 @@
-+ clean:
-+ 	rm -f $(BUILDDIR)/*.o $(TARGETS) $(BUILDDIR)/.*.c.dep $(SYMLINKS)
-+ 	if [ "$(BUILDDIR)x" != ".x" ]; then rm -rf $(BUILDDIR); fi
-+-	make -C $(BUILDDIR)/ubi-utils clean
-+ 
-+ $(SYMLINKS):
-+ 	ln -sf ../fs/jffs2/$@ $@
-+@@ -95,4 +93,3 @@
-+ 	install -m0755 ${TARGETS} ${DESTDIR}/${SBINDIR}/
-+ 	mkdir -p ${DESTDIR}/${MANDIR}/man1
-+ 	gzip -9c mkfs.jffs2.1 > ${DESTDIR}/${MANDIR}/man1/mkfs.jffs2.1.gz
-+-	make -C $(BUILDDIR)/ubi-utils install
-diff --git a/package/mtd/mtd-utils/mtd-utils-1.1.0-all-flashcp-npow2-erase.patch b/package/mtd/mtd-utils/mtd-utils-1.2.0-all-flashcp-npow2-erase.patch
-similarity index 100%
-rename from package/mtd/mtd-utils/mtd-utils-1.1.0-all-flashcp-npow2-erase.patch
-rename to package/mtd/mtd-utils/mtd-utils-1.2.0-all-flashcp-npow2-erase.patch
-diff --git a/package/mtd/mtd-utils/mtd-utils-1.2.0-all-no-errorh.patch b/package/mtd/mtd-utils/mtd-utils-1.2.0-all-no-errorh.patch
-new file mode 100644
-index 0000000..1fde16b
---- /dev/null
-+++ b/package/mtd/mtd-utils/mtd-utils-1.2.0-all-no-errorh.patch
-@@ -0,0 +1,22 @@
-+diff -Nura mtd-utils-1.2.0/recv_image.c mtd-utils-1.2.0-noerror/recv_image.c
-+--- mtd-utils-1.2.0/recv_image.c	2008-06-27 13:21:28.000000000 -0300
-++++ mtd-utils-1.2.0-noerror/recv_image.c	2009-12-23 10:19:22.000000000 -0300
-+@@ -2,7 +2,6 @@
-+ #define _XOPEN_SOURCE 500
-+ 
-+ #include <errno.h>
-+-#include <error.h>
-+ #include <stdio.h>
-+ #define __USE_GNU
-+ #include <netdb.h>
-+diff -Nura mtd-utils-1.2.0/serve_image.c mtd-utils-1.2.0-noerror/serve_image.c
-+--- mtd-utils-1.2.0/serve_image.c	2008-06-27 13:21:28.000000000 -0300
-++++ mtd-utils-1.2.0-noerror/serve_image.c	2009-12-23 10:19:33.000000000 -0300
-+@@ -3,7 +3,6 @@
-+ #include <time.h>
-+ 
-+ #include <errno.h>  	
-+-#include <error.h> 	
-+ #include <netdb.h> 	
-+ #include <stdio.h> 	
-+ #include <stdlib.h> 	
-diff --git a/package/mtd/mtd-utils/mtd-utils-1.1.0-all-targets.patch b/package/mtd/mtd-utils/mtd-utils-1.2.0-all-targets.patch
-similarity index 100%
-rename from package/mtd/mtd-utils/mtd-utils-1.1.0-all-targets.patch
-rename to package/mtd/mtd-utils/mtd-utils-1.2.0-all-targets.patch
-diff --git a/package/mtd/mtd-utils/mtd.mk b/package/mtd/mtd-utils/mtd.mk
-index 6647373..9b114de 100644
---- a/package/mtd/mtd-utils/mtd.mk
-+++ b/package/mtd/mtd-utils/mtd.mk
-@@ -3,7 +3,7 @@
- # mtd provides jffs2 utilities
- #
- #############################################################
--MTD_VERSION:=1.1.0
-+MTD_VERSION:=1.2.0
- MTD_SOURCE:=mtd-utils-$(MTD_VERSION).tar.bz2
- MTD_SITE:=ftp://ftp.infradead.org/pub/mtd-utils
- MTD_HOST_DIR:= $(TOOLCHAIN_DIR)/mtd_orig
--- 
-1.6.3.3
+Joy
+>>>>>> "joyful" == joyful  writes:
+>
+>  joyful> Hi Peter,
+>  joyful> Thanks for helping me. I was merely trying to create a whole new
+> platform.
+>  joyful> When I type make defconfig, there was no old config
+>  joyful> file, then I just select items that may fit my needs by hit enter
+> or y or n.
+>
+>  joyful> With 2009.11 verison buildroot, I think it is much better, but I
+>  joyful> got this message at the end, indication something I was not
+> configured
+>  joyful> correctly:
+>
+>  joyful> `/tmp/buildroot-2009.11/output/build/linux-2.6.31.6'
+>  joyful> make[1]: *** No rule to make target `zImage'.  Stop.
+>  joyful> make[1]: Leaving directory
+>  joyful> `/tmp/buildroot-2009.11/output/build/linux-2.6.31.6'
+>  joyful> make: *** [/tmp/buildroot-2009.11/output/images/zImage] Error 2
+>
+> This is again the Linux kernel build failing. I think the easiest way of
+> figuring out what goes wrong is for you to post your .config file
+>
+> --
+> Bye, Peter Korsgaard
+>
+>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: no.config
+Type: application/xml
+Size: 18743 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091223/6cb2ffec/attachment-0001.xml>
