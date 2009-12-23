@@ -1,7 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 23 Dec 2009 13:45:03 +0000 (UTC)
-Subject: [Buildroot] [Bug 827] New: Bump mtd-utils package to version 1.2.0
-Message-ID: <bug-827-163@https.bugs.busybox.net/>
+Date: Wed, 23 Dec 2009 13:50:32 +0000 (UTC)
+Subject: [Buildroot] [Bug 827] Bump mtd-utils package to version 1.2.0
+In-Reply-To: <bug-827-163@https.bugs.busybox.net/>
+References: <bug-827-163@https.bugs.busybox.net/>
+Message-ID: <20091223135032.CC59577716@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +12,19 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=827
 
-              Host: i686-linux
-            Target: arm-softfloat-linux-uclibcgnueabi
-           Summary: Bump mtd-utils package to version 1.2.0
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Outdated package
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: gustavo at zacarias.com.ar
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+
+Peter Korsgaard <jacmet@uclibc.org> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
 
-Created an attachment (id=867)
- --> (https://bugs.busybox.net/attachment.cgi?id=867)
-Bump mtd-utils package to version 1.2.0
 
-Latest stable mtd-utils is 1.2.0.
-Current buildroot version is 1.1.0.
-Tested against NOR/DataFlash.
+
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2009-12-23 13:50:31 UTC ---
+Committed, thanks!
 
 
 -- 
