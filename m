@@ -1,29 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 23 Dec 2009 12:37:31 +0000 (UTC)
-Subject: [Buildroot] [Bug 803] [PATCH] lua - add shared library patch and
- config option for readline/ncurses support
-In-Reply-To: <bug-803-163@https.bugs.busybox.net/>
-References: <bug-803-163@https.bugs.busybox.net/>
-Message-ID: <20091223123731.2B3C5777F2@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 23 Dec 2009 13:40:56 +0100
+Subject: [Buildroot] [git commit master] neon: fix ssl option dependency
+Message-ID: <20091223124148.EA0A5777F2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=803
 
+commit: http://git.buildroot.net/buildroot/commit/?id=b21c77cc08eb8604011d1df6ac405fdacb46d1ad
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
+Thanks to Gustavo Zacarias for noticing.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Blocks|                            |719
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/neon/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-
-
-
+diff --git a/package/neon/Config.in b/package/neon/Config.in
+index 318e4c6..5ebd64d 100644
+--- a/package/neon/Config.in
++++ b/package/neon/Config.in
+@@ -14,6 +14,7 @@ config BR2_PACKAGE_NEON_ZLIB
+ 
+ config BR2_PACKAGE_NEON_SSL
+ 	bool "SSL support"
++	depends on BR2_PACKAGE_NEON
+ 	select BR2_PACKAGE_OPENSSL
+ 	help
+ 	  build with SSL support
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.6.3.3
