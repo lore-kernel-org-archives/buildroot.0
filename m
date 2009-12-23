@@ -1,46 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Tue, 22 Dec 2009 21:47:51 +0100
-Subject: [Buildroot] BR + CT-NG integration
-In-Reply-To: <87r5qmwxx7.fsf@macbook.be.48ers.dk>
-References: <200912212351.11487.yann.morin.1998@anciens.enib.fr>
-	<4B30BC14.3050207@zacarias.com.ar>
-	<87r5qmwxx7.fsf@macbook.be.48ers.dk>
-Message-ID: <200912222147.51137.yann.morin.1998@anciens.enib.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 23 Dec 2009 09:15:33 +0000 (UTC)
+Subject: [Buildroot] [Bug 823] New: Editor backup files (~) is copied from
+ the target_skeleton.
+Message-ID: <bug-823-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, Gustavo,
-All,
+https://bugs.busybox.net/show_bug.cgi?id=823
 
-On Tuesday 22 December 2009 21:34:12 Peter Korsgaard wrote:
->  Gustavo> The CRIS architecture is somewhat going to vanish since Axis
->  Gustavo> won't be selling/supporting the chips publically any
->  Gustavo> longer. Peter might want to drop it soonish.
-> We had cris patches submitted earlier this year, so I don't plan on
-> removing it right away.
+           Summary: Editor backup files (~) is copied from the
+                    target_skeleton.
+           Product: buildroot
+           Version: 2009.11
+          Platform: All
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: anders.darander at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-I do agree. Ultimately, I'd like crostool-NG (and thus buildroot) to support
-the same arch list as is currently available in uClibc (except maybe those
-marked as 'broken') and the Linux kernel.
 
-So I do not have any plan to _remove_ support for any arch, unless it proves
-impractical to support (ie. it does not build, no one steps in with hardware,
-and there's no qemu support).
+Created an attachment (id=861)
+ --> (https://bugs.busybox.net/attachment.cgi?id=861)
+Patch to rm *~-files in the TARGET_DIR.
 
-Of course, support for said archs should be available for gcc and binutils
-as well. I'm not too keen on bundling arch-support patches in crosstool-NG,
-but avr32 is already in, so...
+While editing files in the target_skeleton, quite a few editors create
+backup-files with tilde appended to the file names. It would be nice to not
+have these copied to the TARGET_DIR, while creating the target root fs.
 
-Regards,
-Yann E. MORIN.
+Attached is a patch, that handles these files in the same manner as
+CVS-directories and .empty-files are handled.
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-`------------------------------^-------^------------------^--------------------'
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
