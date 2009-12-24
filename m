@@ -1,99 +1,86 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Thu, 24 Dec 2009 01:23:11 +0100
-Subject: [Buildroot] [PATCH] lua: install development files to staging by
- default and to target if requested
-Message-ID: <1261614191.5867.1.camel@coalu.atr>
+From: llandwerlin at gmail.com <llandwerlin@gmail.com>
+Date: Thu, 24 Dec 2009 01:35:12 +0100
+Subject: [Buildroot] [PATCH 1/5] efl: added libeet package
+In-Reply-To: <1261614916-8219-1-git-send-email-llandwerlin@gmail.com>
+References: <1261614916-8219-1-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1261614916-8219-2-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Lionel Landwerlin <llandwerlin@gmail.com>
 
 Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 ---
- package/lua/lua.mk |   55 +++++++++++++++++++++++++++++++++++-----------------
- 1 files changed, 37 insertions(+), 18 deletions(-)
+ package/efl/Config.in        |    1 +
+ package/efl/efl.mk           |    1 +
+ package/efl/libeet/Config.in |    9 +++++++++
+ package/efl/libeet/libeet.mk |   17 +++++++++++++++++
+ 4 files changed, 28 insertions(+), 0 deletions(-)
+ create mode 100644 package/efl/libeet/Config.in
+ create mode 100644 package/efl/libeet/libeet.mk
 
-diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index aeb6c82..ea0401e 100644
---- a/package/lua/lua.mk
-+++ b/package/lua/lua.mk
-@@ -34,28 +34,47 @@ $(LUA_DIR)/src/luac: $(LUA_DIR)/src/lua
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index 1a05c4d..1e3d8ae 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -8,5 +8,6 @@ menuconfig BR2_PACKAGE_EFL
+ if BR2_PACKAGE_EFL
  
- $(LUA_DIR)/src/liblua.a: $(LUA_DIR)/src/lua
+ source "package/efl/libeina/Config.in"
++source "package/efl/libeet/Config.in"
  
--$(STAGING_DIR)/usr/lib/liblua.a: $(LUA_DIR)/src/liblua.a
--	cp -dpf $(LUA_DIR)/src/liblua.a $(STAGING_DIR)/usr/lib/liblua.a
-+$(STAGING_DIR)/usr/lib/pkgconfig/lua.pc:
-+	cat $(LUA_DIR)/etc/lua.pc | sed -e s/\\/usr\\/local/\\/usr/ > $@
+ endif # BR2_PACKAGE_EFL
+diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+index 071256e..7125222 100644
+--- a/package/efl/efl.mk
++++ b/package/efl/efl.mk
+@@ -1,5 +1,6 @@
+ ifeq ($(BR2_PACKAGE_EFL),y)
+ EFL_SNAPSHOT_URL=http://download.enlightenment.org/snapshots/2009-12-02
++EFL_RELEASE_URL=http://download.enlightenment.org/releases
  
-+$(STAGING_DIR)/usr/lib/liblua.a: $(LUA_DIR)/src/liblua.a
- $(STAGING_DIR)/usr/bin/lua: $(LUA_DIR)/src/lua
--	cp -dpf $(LUA_DIR)/src/lua $(STAGING_DIR)/usr/bin/lua
--
- $(STAGING_DIR)/usr/bin/luac: $(LUA_DIR)/src/luac
--	cp -dpf $(LUA_DIR)/src/luac $(STAGING_DIR)/usr/bin/luac
--
-+$(STAGING_DIR)/usr/include/lua.h: $(LUA_DIR)/src/lua.h
-+$(STAGING_DIR)/usr/include/luaconf.h: $(LUA_DIR)/src/luaconf.h
-+$(STAGING_DIR)/usr/include/lualib.h: $(LUA_DIR)/src/lualib.h
-+$(STAGING_DIR)/usr/include/lauxlib.h: $(LUA_DIR)/src/lauxlib.h
- $(TARGET_DIR)/usr/lib/liblua.a: $(STAGING_DIR)/usr/lib/liblua.a
--	cp -dpf $(STAGING_DIR)/usr/lib/liblua.a $(TARGET_DIR)/usr/lib/liblua.a
--
- $(TARGET_DIR)/usr/bin/lua: $(STAGING_DIR)/usr/bin/lua
--	cp -dpf $(STAGING_DIR)/usr/bin/lua $(TARGET_DIR)/usr/bin/lua
--
- $(TARGET_DIR)/usr/bin/luac: $(STAGING_DIR)/usr/bin/luac
--	cp -dpf $(STAGING_DIR)/usr/bin/luac $(TARGET_DIR)/usr/bin/luac
--
--
--lua-bins:	$(TARGET_DIR)/usr/bin/lua $(TARGET_DIR)/usr/bin/luac
--
--lua-libs: $(if $(BR2_HAVE_DEVFILES),$(TARGET_DIR)/usr/lib/liblua.a)
-+$(TARGET_DIR)/usr/include/lua.h: $(STAGING_DIR)/usr/include/lua.h
-+$(TARGET_DIR)/usr/include/luaconf.h: $(STAGING_DIR)/usr/include/luaconf.h
-+$(TARGET_DIR)/usr/include/lualib.h: $(STAGING_DIR)/usr/include/lualib.h
-+$(TARGET_DIR)/usr/include/lauxlib.h: $(STAGING_DIR)/usr/include/lauxlib.h
-+$(TARGET_DIR)/usr/lib/pkgconfig/lua.pc: $(STAGING_DIR)/usr/lib/pkgconfig/lua.pc
-+	cp -dpf $< $@
+ include package/efl/*/*.mk
+ endif
+diff --git a/package/efl/libeet/Config.in b/package/efl/libeet/Config.in
+new file mode 100644
+index 0000000..fa1dd2a
+--- /dev/null
++++ b/package/efl/libeet/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_LIBEET
++	bool "libeet"
++	select BR2_PACKAGE_ZLIB
++	select BR2_PACKAGE_JPEG
++	select BR2_PACKAGE_LIBEINA
++	help
++	  Eet is a tiny library designed to write an arbitary set of
++	  chunks of data to a file and optionally compress each chunk
++	  (very much like a zip file).
+diff --git a/package/efl/libeet/libeet.mk b/package/efl/libeet/libeet.mk
+new file mode 100644
+index 0000000..15d245b
+--- /dev/null
++++ b/package/efl/libeet/libeet.mk
+@@ -0,0 +1,17 @@
++#############################################################
++#
++# libeet
++#
++#############################################################
 +
-+LUA_STAGING_DEV_FILES = \
-+	$(STAGING_DIR)/usr/lib/pkgconfig/lua.pc \
-+	$(STAGING_DIR)/usr/lib/liblua.a \
-+	$(STAGING_DIR)/usr/include/lua.h \
-+	$(STAGING_DIR)/usr/include/luaconf.h \
-+	$(STAGING_DIR)/usr/include/lualib.h \
-+	$(STAGING_DIR)/usr/include/lauxlib.h
++LIBEET_VERSION = 1.2.3
++LIBEET_SOURCE = eet-$(LIBEET_VERSION).tar.bz2
++LIBEET_SITE = $(EFL_RELEASE_URL)
++LIBEET_INSTALL_STAGING = YES
++LIBEET_INSTALL_TARGET = YES
 +
-+LUA_TARGET_DEV_FILES = \
-+	$(TARGET_DIR)/usr/lib/liblua.a \
-+	$(TARGET_DIR)/usr/lib/pkgconfig/lua.pc \
-+	$(TARGET_DIR)/usr/include/lua.h \
-+	$(TARGET_DIR)/usr/include/luaconf.h \
-+	$(TARGET_DIR)/usr/include/lualib.h \
-+	$(TARGET_DIR)/usr/include/lauxlib.h
++LIBEET_DEPENDENCIES = host-pkg-config zlib jpeg libeina
 +
-+lua-bins: $(TARGET_DIR)/usr/bin/lua $(TARGET_DIR)/usr/bin/luac
++$(eval $(call AUTOTARGETS,package,libeet))
 +
-+lua-libs: \
-+	$(LUA_STAGING_DEV_FILES) \
-+	$(if $(BR2_HAVE_DEVFILES),$(LUA_TARGET_DEV_FILES))
- 
- lua: readline ncurses lua-bins lua-libs
- 
-@@ -63,9 +82,9 @@ lua-source: $(DL_DIR)/$(LUA_SOURCE)
- 
- lua-clean:
- 	rm -f $(STAGING_DIR)/usr/bin/lua $(TARGET_DIR)/usr/bin/luac
--	rm -f $(STAGING_DIR)/usr/lib/liblua.a
-+	rm -f $(LUA_STAGING_DEV_FILES)
- 	rm -f $(TARGET_DIR)/usr/bin/lua $(TARGET_DIR)/usr/bin/luac
--	rm -f $(TARGET_DIR)/usr/lib/liblua.a
-+	rm -f $(LUA_TARGET_DEV_FILES)
- 	-$(MAKE) -C $(LUA_DIR) clean
- 
- lua-dirclean:
++
 -- 
 1.6.5.7
