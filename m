@@ -1,86 +1,82 @@
-From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Thu, 24 Dec 2009 01:35:16 +0100
-Subject: [Buildroot] [PATCH 5/5] efl: added libedje package
-In-Reply-To: <1261614916-8219-1-git-send-email-llandwerlin@gmail.com>
+From: Lionel Landwerlin <llandwerlin@gmail.com>
+Date: Thu, 24 Dec 2009 07:14:56 +0100
+Subject: [Buildroot] [PATCH 0/5] package: add efl librairies
+In-Reply-To: <e4b6ec780912231706re5a8e95hac91fbac1d34b7ce@mail.gmail.com>
 References: <1261614916-8219-1-git-send-email-llandwerlin@gmail.com>
-Message-ID: <1261614916-8219-6-git-send-email-llandwerlin@gmail.com>
+	<e4b6ec780912231706re5a8e95hac91fbac1d34b7ce@mail.gmail.com>
+Message-ID: <1261635296.5867.6.camel@coalu.atr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Lionel Landwerlin <llandwerlin@gmail.com>
+Le jeudi 24 d?cembre 2009 ? 02:06 +0100, Stefan Schake a ?crit :
+> Hey,
+> 
+> Love to see EFL in buildroot, thanks very much :)
+> Just a small error in all of the packages:
+> when you call AUTOTARGETS, you pass the path, but since you added a
+> subdirectory, you have to add it in the call, too.
+> For example,
+> 
+> $(eval $(call AUTOTARGETS,package,libedje))
+> 
+> becomes
+> 
+> $(eval $(call AUTOTARGETS,package/efl,libedje))
 
-Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
----
- package/efl/Config.in          |    1 +
- package/efl/libedje/Config.in  |   17 +++++++++++++++++
- package/efl/libedje/libedje.mk |   21 +++++++++++++++++++++
- 3 files changed, 39 insertions(+), 0 deletions(-)
- create mode 100644 package/efl/libedje/Config.in
- create mode 100644 package/efl/libedje/libedje.mk
+Thx, I missed that...
 
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 7a89120..2419bac 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -12,5 +12,6 @@ source "package/efl/libecore/Config.in"
- source "package/efl/libeet/Config.in"
- source "package/efl/libevas/Config.in"
- source "package/efl/libembryo/Config.in"
-+source "package/efl/libedje/Config.in"
- 
- endif # BR2_PACKAGE_EFL
-diff --git a/package/efl/libedje/Config.in b/package/efl/libedje/Config.in
-new file mode 100644
-index 0000000..7b4f275
---- /dev/null
-+++ b/package/efl/libedje/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_LIBEDJE
-+	bool "libedje"
-+	select BR2_PACKAGE_LIBEET
-+	select BR2_PACKAGE_LIBECORE
-+	select BR2_PACKAGE_LIBEMBRYO
-+	select BR2_PACKAGE_LIBEVAS
-+        select BR2_PACKAGE_LUA
-+	help
-+          A graphical layout and animation library for animated
-+          resizable, compressed and scalable themes.
-+
-+if BR2_PACKAGE_LIBEDJE
-+
-+config BR2_PACKAGE_LIBEDJE_CC
-+	bool "build edje_cc"
-+
-+endif # BR2_PACKAGE_LIBEDJE
-diff --git a/package/efl/libedje/libedje.mk b/package/efl/libedje/libedje.mk
-new file mode 100644
-index 0000000..78781ac
---- /dev/null
-+++ b/package/efl/libedje/libedje.mk
-@@ -0,0 +1,21 @@
-+#############################################################
-+#
-+# libedje
-+#
-+#############################################################
-+
-+LIBEDJE_VERSION = 0.9.93.063
-+LIBEDJE_SOURCE = edje-$(LIBEDJE_VERSION).tar.bz2
-+LIBEDJE_SITE = $(EFL_SNAPSHOT_URL)
-+LIBEDJE_INSTALL_STAGING = YES
-+LIBEDJE_INSTALL_TARGET = YES
-+
-+LIBEDJE_DEPENDENCIES = host-pkg-config lua libeet libecore libevas libembryo
-+
-+ifeq ($(BR2_PACKAGE_LIBEDJE_CC),y)
-+LIBEDJE_CONF_OPT += --enable-edje-cc
-+else
-+LIBEDJE_CONF_OPT += --disable-edje-cc
-+endif
-+
-+$(eval $(call AUTOTARGETS,package,libedje))
--- 
-1.6.5.7
+> 
+> This might be important when there are patches to apply because of the
+> way AUTOTARGETS searches for them.
+> 
+> Also you're missing a few configuration switches on ecore (ecore-job,
+> ecore-con, ecore-ipc, ecore-txt). These all cleanly compile without
+> any dependencies really, with one exception: ecore-con, which fails
+> for uClibc. I've attached a patch that fixes the problem, but as I
+> look at it, I think it can be done more cleanly. Anyway, still useful
+> to highlight the problem.
+
+Thx again. I just tested with glibc.
+Adding such modules might complexify the dependencies a little bit but I
+will do it.
+
+By the way did you try with a directfb or x11 backend ?
+
+> 
+> Do you have any plans on integrating elementary? Since it is
+> specifically targeting at embedded, it might be very useful for most
+> of buildroot users. I might warn you however, elementary requires the
+> host to have the edje installed since it's calling edjecc during the
+> build, so we will need a host-package of edje for that.
+
+Yes it's planned, thx for the tips.
+I would like to go up to Enna ;)
+
+> 
+> Greetings
+> 
+> 2009/12/24  <llandwerlin@gmail.com>:
+> > With the (not so) recent activity around e17 and the new snapshot
+> > released earlier this month, people might get interested in the EFL
+> > integration in buildroot.
+> >
+> > Currently compiled/tested on directfb. Any comment/fix/test is welcome.
+> > The libedje package depends on another patch on lua :
+> > http://lists.busybox.net/pipermail/buildroot/2009-December/031334.html
+> >
+> >  [PATCH 1/5] efl: added libeet package
+> >  [PATCH 2/5] efl: added libevas package
+> >  [PATCH 3/5] efl: added libecore package
+> >  [PATCH 4/5] efl: added libembryo package
+> >  [PATCH 5/5] efl: added libedje package
+> >
+> > Regards,
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> >
