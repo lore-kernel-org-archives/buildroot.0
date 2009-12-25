@@ -1,82 +1,165 @@
 From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Thu, 24 Dec 2009 07:14:56 +0100
-Subject: [Buildroot] [PATCH 0/5] package: add efl librairies
-In-Reply-To: <e4b6ec780912231706re5a8e95hac91fbac1d34b7ce@mail.gmail.com>
-References: <1261614916-8219-1-git-send-email-llandwerlin@gmail.com>
-	<e4b6ec780912231706re5a8e95hac91fbac1d34b7ce@mail.gmail.com>
-Message-ID: <1261635296.5867.6.camel@coalu.atr>
+Date: Fri, 25 Dec 2009 03:28:37 +0100
+Subject: [Buildroot] [PATCH] lua: conversion to new package infrastructure
+Message-ID: <1261708117.5867.10.camel@coalu.atr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le jeudi 24 d?cembre 2009 ? 02:06 +0100, Stefan Schake a ?crit :
-> Hey,
-> 
-> Love to see EFL in buildroot, thanks very much :)
-> Just a small error in all of the packages:
-> when you call AUTOTARGETS, you pass the path, but since you added a
-> subdirectory, you have to add it in the call, too.
-> For example,
-> 
-> $(eval $(call AUTOTARGETS,package,libedje))
-> 
-> becomes
-> 
-> $(eval $(call AUTOTARGETS,package/efl,libedje))
+Also install development files to staging by default and to target if
+requested.
 
-Thx, I missed that...
+This patch make my previous patch on lua (
+http://lists.busybox.net/pipermail/buildroot/2009-December/031334.html) useless.
 
-> 
-> This might be important when there are patches to apply because of the
-> way AUTOTARGETS searches for them.
-> 
-> Also you're missing a few configuration switches on ecore (ecore-job,
-> ecore-con, ecore-ipc, ecore-txt). These all cleanly compile without
-> any dependencies really, with one exception: ecore-con, which fails
-> for uClibc. I've attached a patch that fixes the problem, but as I
-> look at it, I think it can be done more cleanly. Anyway, still useful
-> to highlight the problem.
+Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
+---
+ package/lua/lua.mk |  123 +++++++++++++++++++++++++--------------------------
+ 1 files changed, 60 insertions(+), 63 deletions(-)
 
-Thx again. I just tested with glibc.
-Adding such modules might complexify the dependencies a little bit but I
-will do it.
-
-By the way did you try with a directfb or x11 backend ?
-
-> 
-> Do you have any plans on integrating elementary? Since it is
-> specifically targeting at embedded, it might be very useful for most
-> of buildroot users. I might warn you however, elementary requires the
-> host to have the edje installed since it's calling edjecc during the
-> build, so we will need a host-package of edje for that.
-
-Yes it's planned, thx for the tips.
-I would like to go up to Enna ;)
-
-> 
-> Greetings
-> 
-> 2009/12/24  <llandwerlin@gmail.com>:
-> > With the (not so) recent activity around e17 and the new snapshot
-> > released earlier this month, people might get interested in the EFL
-> > integration in buildroot.
-> >
-> > Currently compiled/tested on directfb. Any comment/fix/test is welcome.
-> > The libedje package depends on another patch on lua :
-> > http://lists.busybox.net/pipermail/buildroot/2009-December/031334.html
-> >
-> >  [PATCH 1/5] efl: added libeet package
-> >  [PATCH 2/5] efl: added libevas package
-> >  [PATCH 3/5] efl: added libecore package
-> >  [PATCH 4/5] efl: added libembryo package
-> >  [PATCH 5/5] efl: added libedje package
-> >
-> > Regards,
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> >
+diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+index aeb6c82..7de70d0 100644
+--- a/package/lua/lua.mk
++++ b/package/lua/lua.mk
+@@ -5,77 +5,74 @@
+ #############################################################
+ 
+ LUA_VERSION=5.1.4
+-
+ LUA_SOURCE=lua-$(LUA_VERSION).tar.gz
+-LUA_CAT:=$(ZCAT)
+ LUA_SITE=http://www.lua.org/ftp
++LUA_INSTALL_STAGING=YES
+ 
+-LUA_DIR=$(BUILD_DIR)/lua-$(LUA_VERSION)
+-
++#
+ LUA_CFLAGS=-DLUA_USE_LINUX
+ LUA_MYLIBS="-Wl,-E -ldl -lreadline -lhistory -lncurses"
+ 
+-$(DL_DIR)/$(LUA_SOURCE):
+-	$(call DOWNLOAD,$(LUA_SITE),$(LUA_SOURCE))
+-
+-$(LUA_DIR)/.unpacked: $(DL_DIR)/$(LUA_SOURCE)
+-	$(LUA_CAT) $(DL_DIR)/$(LUA_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	touch $(LUA_DIR)/.unpacked
+-
+-$(LUA_DIR)/src/lua: $(LUA_DIR)/.unpacked
+-	rm -f $@
++define LUA_BUILD_CMDS
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) \
+ 		MYCFLAGS=$(LUA_CFLAGS) \
+ 		MYLIBS=$(LUA_MYLIBS) \
+ 		AR="$(TARGET_CROSS)ar rcu" \
+-		-C $(LUA_DIR)/src all
+-
+-$(LUA_DIR)/src/luac: $(LUA_DIR)/src/lua
+-
+-$(LUA_DIR)/src/liblua.a: $(LUA_DIR)/src/lua
+-
+-$(STAGING_DIR)/usr/lib/liblua.a: $(LUA_DIR)/src/liblua.a
+-	cp -dpf $(LUA_DIR)/src/liblua.a $(STAGING_DIR)/usr/lib/liblua.a
+-
+-$(STAGING_DIR)/usr/bin/lua: $(LUA_DIR)/src/lua
+-	cp -dpf $(LUA_DIR)/src/lua $(STAGING_DIR)/usr/bin/lua
+-
+-$(STAGING_DIR)/usr/bin/luac: $(LUA_DIR)/src/luac
+-	cp -dpf $(LUA_DIR)/src/luac $(STAGING_DIR)/usr/bin/luac
+-
+-$(TARGET_DIR)/usr/lib/liblua.a: $(STAGING_DIR)/usr/lib/liblua.a
+-	cp -dpf $(STAGING_DIR)/usr/lib/liblua.a $(TARGET_DIR)/usr/lib/liblua.a
+-
+-$(TARGET_DIR)/usr/bin/lua: $(STAGING_DIR)/usr/bin/lua
+-	cp -dpf $(STAGING_DIR)/usr/bin/lua $(TARGET_DIR)/usr/bin/lua
+-
+-$(TARGET_DIR)/usr/bin/luac: $(STAGING_DIR)/usr/bin/luac
+-	cp -dpf $(STAGING_DIR)/usr/bin/luac $(TARGET_DIR)/usr/bin/luac
+-
+-
+-lua-bins:	$(TARGET_DIR)/usr/bin/lua $(TARGET_DIR)/usr/bin/luac
+-
+-lua-libs: $(if $(BR2_HAVE_DEVFILES),$(TARGET_DIR)/usr/lib/liblua.a)
+-
+-lua: readline ncurses lua-bins lua-libs
+-
+-lua-source: $(DL_DIR)/$(LUA_SOURCE)
+-
+-lua-clean:
+-	rm -f $(STAGING_DIR)/usr/bin/lua $(TARGET_DIR)/usr/bin/luac
+-	rm -f $(STAGING_DIR)/usr/lib/liblua.a
+-	rm -f $(TARGET_DIR)/usr/bin/lua $(TARGET_DIR)/usr/bin/luac
+-	rm -f $(TARGET_DIR)/usr/lib/liblua.a
+-	-$(MAKE) -C $(LUA_DIR) clean
+-
+-lua-dirclean:
+-	rm -rf $(LUA_DIR)
+-
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_LUA),y)
+-TARGETS+=lua
++		-C $(@D)/src all
++endef
++
++define LUA_INSTALL_STAGING_CMDS
++	cat $(@D)/etc/lua.pc | sed -e s/\\/usr\\/local/\\/usr/ > $(STAGING_DIR)/usr/lib/pkgconfig/lua.pc
++	$(INSTALL) $(@D)/src/liblua.a $(STAGING_DIR)/usr/lib
++	$(INSTALL) $(@D)/src/lua $(STAGING_DIR)/usr/bin
++	$(INSTALL) $(@D)/src/luac $(STAGING_DIR)/usr/bin
++	$(INSTALL) $(@D)/src/lua.h $(STAGING_DIR)/usr/include
++	$(INSTALL) $(@D)/src/luaconf.h $(STAGING_DIR)/usr/include
++	$(INSTALL) $(@D)/src/lualib.h $(STAGING_DIR)/usr/include
++	$(INSTALL) $(@D)/src/lauxlib.h $(STAGING_DIR)/usr/include
++endef
++
++ifeq ($(BR2_HAVE_DEVFILES),y)
++define LUA_INSTALL_TARGET_HEADERS
++	install -D $(STAGING_DIR)/usr/lib/pkgconfig/lua.pc $(TARGET_DIR)/usr/lib/pkgconfig/lua.pc
++	$(INSTALL) $(@D)/src/lua.h $(TARGET_DIR)/usr/include
++	$(INSTALL) $(@D)/src/luaconf.h $(TARGET_DIR)/usr/include
++	$(INSTALL) $(@D)/src/lualib.h $(TARGET_DIR)/usr/include
++	$(INSTALL) $(@D)/src/lauxlib.h $(TARGET_DIR)/usr/include
++endef
+ endif
++
++define LUA_INSTALL_TARGET_CMDS
++	$(INSTALL) $(@D)/src/lua $(STAGING_DIR)/usr/bin
++	$(INSTALL) $(@D)/src/luac $(STAGING_DIR)/usr/bin
++	$(INSTALL) -D $(@D)/src/liblua.a $(STAGING_DIR)/usr/lib/liblua.a
++	$(LUA_INSTALL_TARGET_HEADERS)
++endef
++
++LUA_INSTALLED_FILES = \
++	/usr/include/lua.h \
++	/usr/include/luaconf.h \
++	/usr/include/lualib.h \
++	/usr/include/lauxlib.h \
++	/usr/lib/pkgconfig/lua.pc \
++	/usr/bin/lua \
++	/usr/bin/luac \
++	/usr/lib/liblua.a
++
++define LUA_UNINSTALL_STAGING_CMDS
++	for i in $(LUA_INSTALLED_FILES); do \
++		rm -f $(STAGING_DIR)$$i; \
++	done
++endef
++
++define LUA_UNINSTALL_TARGET_CMDS
++	for i in $(LUA_INSTALLED_FILES); do \
++		rm -f $(TARGET_DIR)$$i; \
++	done
++endef
++
++define LUA_CLEAN_CMDS
++	-$(MAKE) $(@D) clean
++endef
++
++$(eval $(call GENTARGETS,package,lua))
+-- 
+1.6.5.7
