@@ -1,21 +1,21 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Sat, 26 Dec 2009 21:22:48 +0100
-Subject: [Buildroot] DirectFB downloads ? website down ?
-Message-ID: <B7055E67090741BC8ED2A5A8927F58E6@apexjs>
+From: Marco Glatz <marco-glatz@web.de>
+Date: Sat, 26 Dec 2009 21:40:38 +0100
+Subject: [Buildroot] gcc-error with latest buildroot
+In-Reply-To: <20091226183602.0f2debb4@surf>
+References: <200912261427.53159.marco-glatz@web.de>
+	<20091226183602.0f2debb4@surf>
+Message-ID: <4B3674C6.7000805@web.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
- 
-Maybe a bit off topic, but does anyone knows what happened to the directfb
-website ?
- 
-Johan
- 
- 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091226/0d03f7ca/attachment.htm>
+Thomas Petazzoni schrieb:
+> Do you really need gcc on your target ?
+>   
+
+no, only the toolchain so i can link against uclibs to build small 
+linux-systems fpr embedded-systems
+
+marco
