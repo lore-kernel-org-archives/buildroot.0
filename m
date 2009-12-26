@@ -1,35 +1,36 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Sat, 26 Dec 2009 17:00:41 +0100
-Subject: [Buildroot] [PATCH] libglib2: bump to 2.22.3
-In-Reply-To: <1259073157-19511-1-git-send-email-daniel@caiaq.de>
-References: <1259073157-19511-1-git-send-email-daniel@caiaq.de>
-Message-ID: <1261843241.5867.17.camel@coalu.atr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 26 Dec 2009 18:36:02 +0100
+Subject: [Buildroot] gcc-error with latest buildroot
+In-Reply-To: <200912261427.53159.marco-glatz@web.de>
+References: <200912261427.53159.marco-glatz@web.de>
+Message-ID: <20091226183602.0f2debb4@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
----
- package/libglib2/libglib2.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+Le Sat, 26 Dec 2009 14:27:53 +0100,
+Marco Glatz <marco-glatz@web.de> a ?crit :
 
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 04e3f2d..5f6ce05 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -3,8 +3,8 @@
- # libglib2
- #
- #############################################################
--LIBGLIB2_VERSION_MAJOR = 2.20
--LIBGLIB2_VERSION_MINOR = 5
-+LIBGLIB2_VERSION_MAJOR = 2.22
-+LIBGLIB2_VERSION_MINOR = 3
- LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).$(LIBGLIB2_VERSION_MINOR)
- LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.bz2
- LIBGLIB2_SITE = http://ftp.gtk.org/pub/glib/$(LIBGLIB2_VERSION_MAJOR)
+> i'm trying to make a toolchain using latest buildroot, but when
+> compiling gcc i get this error:
+
+> [/devel/buildroot/output/build/gcc-4.4.2-target/.configured] Fehler 1
+
+Do you really need gcc on your target ?
+
+(Note: of course this is something we should fix, but having gcc and
+associated development files on the target is an unusual setup, that's
+why it isn't widely tested)
+
+Cheers,
+
+Thomas
 -- 
-1.6.5.7
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
