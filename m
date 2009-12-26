@@ -1,55 +1,35 @@
-From: Michael S. Zick <minimod@morethan.org>
-Date: Sat, 26 Dec 2009 09:16:48 -0600
-Subject: [Buildroot] gcc-error with latest buildroot
-In-Reply-To: <200912261558.18888.marco-glatz@web.de>
-References: <200912261427.53159.marco-glatz@web.de>
-	<200912260829.56765.minimod@morethan.org>
-	<200912261558.18888.marco-glatz@web.de>
-Message-ID: <200912260916.50648.minimod@morethan.org>
+From: Lionel Landwerlin <llandwerlin@gmail.com>
+Date: Sat, 26 Dec 2009 17:00:41 +0100
+Subject: [Buildroot] [PATCH] libglib2: bump to 2.22.3
+In-Reply-To: <1259073157-19511-1-git-send-email-daniel@caiaq.de>
+References: <1259073157-19511-1-git-send-email-daniel@caiaq.de>
+Message-ID: <1261843241.5867.17.camel@coalu.atr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat December 26 2009, Marco Glatz wrote:
-> > Try enabling Fortran compiler in the build, it might "just work".
-> > 
-> > The Buildroot project uses a "tag-it, forget-it and move-on" release cycle;
-> > they aren't staffed to support anything like a mission-critical,
-> > stable release, version of Buildroot.
-> 
-> 
-> hi,
-> 
-> with fortran enabled, the --with-mpfr and --with-gmp get set, but still 
-> doesn'nt work.
-> 
-> i found this:
-> 
-> http://dvb-community.de/wiki/index.php/GCC-uClibC_Toolchain_erstellen
-> 
-> and this:
-> 
-> http://downloads.openwrt.org/docs/buildroot-documentation.html
-> 
 
-Been following OpenWRT (and OpenEmbedded) for several years;
-I may have to switch to OpenWRT's build system myself.
+Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
+---
+ package/libglib2/libglib2.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-I really don't need something that can build an entire distribution -
-But at least those projects do have more people on the maintenance staff.
-
-Will be postponing my own decision until I finish putting full MIPS support
-into 2009.11 - I don't think I want to tackle the Makefile code churn here
-to also put that support into dev-head.
-
-Mike
-> 
-> 
-> i will give it a try. also tried scratchbox, but that din't work either.
-> 
-> 
-> marco
-> 
-> 
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index 04e3f2d..5f6ce05 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -3,8 +3,8 @@
+ # libglib2
+ #
+ #############################################################
+-LIBGLIB2_VERSION_MAJOR = 2.20
+-LIBGLIB2_VERSION_MINOR = 5
++LIBGLIB2_VERSION_MAJOR = 2.22
++LIBGLIB2_VERSION_MINOR = 3
+ LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).$(LIBGLIB2_VERSION_MINOR)
+ LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.bz2
+ LIBGLIB2_SITE = http://ftp.gtk.org/pub/glib/$(LIBGLIB2_VERSION_MAJOR)
+-- 
+1.6.5.7
