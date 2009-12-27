@@ -1,31 +1,44 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Sun, 27 Dec 2009 03:05:43 +0100
-Subject: [Buildroot] DirectFB downloads ? website down ?
-In-Reply-To: <B7055E67090741BC8ED2A5A8927F58E6@apexjs>
-References: <B7055E67090741BC8ED2A5A8927F58E6@apexjs>
-Message-ID: <1261879543.5867.23.camel@coalu.atr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 27 Dec 2009 17:47:53 +0000 (UTC)
+Subject: [Buildroot] [Bug 829] New: Webkit r44552 needs libXt
+Message-ID: <bug-829-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le samedi 26 d?cembre 2009 ? 21:22 +0100, Sagaert Johan a ?crit :
-> Hi
->  
-> Maybe a bit off topic, but does anyone knows what happened to the
-> directfb website ?
->  
-> Johan
->  
-> 
+https://bugs.busybox.net/show_bug.cgi?id=829
 
-The website goes down sometimes... Last time it has been down for couple
-of weeks.
-You should probably ask the dfb mailing list next time it's up.
-There is a buildroot archive here, where you can find dfb source
-packages : http://buildroot.net/downloads/sources/
+              Host: i686-linux-gnu
+            Target: i686-linux-uclibc
+             Build: i686-linux-uclibc
+           Summary: Webkit r44552 needs libXt
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: major
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: dandart at googlemail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
+
+
+I tried to compile (host has Xt with dev headers), but Webkit still doesn't
+compile, maybe due to it being compiled before X (I specified TinyX).
+
+checking for XtOpenDisplay in -lXt... no
+configure: error: X Toolkit Intrinsics library (libXt) not found
+make: ***
+[/home/dan/xenon/buildroot/output/build/webkit-r44552/.stamp_configured] Error
+1
 
 
 -- 
-Lionel Landwerlin
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
