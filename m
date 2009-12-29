@@ -1,7 +1,7 @@
 From: Stanley <eva2002@gmail.com>
-Date: Tue, 29 Dec 2009 14:57:34 +0800
-Subject: [Buildroot] Kernel Panic after selecting qt graphic lib
-Message-ID: <ed7750810912282257t2208d399q697c974e630610db@mail.gmail.com>
+Date: Tue, 29 Dec 2009 16:16:33 +0800
+Subject: [Buildroot] fail to compile after selecting gtk
+Message-ID: <ed7750810912290016l728fc67aq80550268447ea7ab@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,64 +10,80 @@ To: buildroot@busybox.net
 
 Hi all,
 
-I need some help in getting qt embedded to work.
+Once again I need help. I am actually trying to test out some high level /
+front end graphic libraries to aid in my project.
 
-After completing my configuration for buildroot, i do a make
-'make' was successful and the output file (uImage) size was around 7MB.
+when I try QT, I got kernel panic: not syncing. out of memory and no
+killable process...
 
-Halfway through the loading to kernel, I encounter kernel panic. below is
-the message I got.
+So I tried gtk. however, buildroot fail to complete the 'make' process.
+
+I got the following error.
 
 ...
-NET: Registered protocol family
-16
-bio: create slab <bio-0> at
-0
-NET: Registered protocol family
-2
-IP route cache hash table entries: 1024 (order: 0, 4096
-bytes)
-TCP established hash table entries: 1024 (order: 1, 8192
-bytes)
-TCP bind hash table entries: 1024 (order: 0, 4096
-bytes)
-TCP: Hash tables configured (established 1024 bind
-1024)
-TCP reno
-registered
-NetWinder Floating Point Emulator V0.97 (double
-precision)
-Kernel panic - not syncing: Out of memory and no killable processes...
-...
+  CC      init/version.o
+  LD      init/built-in.o
+  LD      .tmp_vmlinux1
+arch/arm/kernel/head.o: In function `__error_p':
+(.text.head+0x194): relocation truncated to fit: R_ARM_PC24 against symbol
+`printascii' defined in .text section in arch/arm/kernel/built-in.o
+arch/arm/kernel/head.o: In function `__error_p':
+(.text.head+0x19c): relocation truncated to fit: R_ARM_PC24 against symbol
+`printhex8' defined in .text section in arch/arm/kernel/built-in.o
+arch/arm/kernel/head.o: In function `__error_p':
+(.text.head+0x1a4): relocation truncated to fit: R_ARM_PC24 against symbol
+`printascii' defined in .text section in arch/arm/kernel/built-in.o
+arch/arm/kernel/head.o: In function `__error_a':
+(.text.head+0x1f0): relocation truncated to fit: R_ARM_PC24 against symbol
+`printascii' defined in .text section in arch/arm/kernel/built-in.o
+arch/arm/kernel/head.o: In function `__error_a':
+(.text.head+0x1f8): relocation truncated to fit: R_ARM_PC24 against symbol
+`printhex8' defined in .text section in arch/arm/kernel/built-in.o
+arch/arm/kernel/head.o: In function `__error_a':
+(.text.head+0x200): relocation truncated to fit: R_ARM_PC24 against symbol
+`printascii' defined in .text section in arch/arm/kernel/built-in.o
+arch/arm/kernel/head.o: In function `__error_a':
+(.text.head+0x21c): relocation truncated to fit: R_ARM_PC24 against symbol
+`printhex8' defined in .text section in arch/arm/kernel/built-in.o
+arch/arm/kernel/head.o: In function `__error_a':
+(.text.head+0x224): relocation truncated to fit: R_ARM_PC24 against symbol
+`printch' defined in .text section in arch/arm/kernel/built-in.o
+arch/arm/kernel/head.o: In function `__error_a':
+(.text.head+0x230): relocation truncated to fit: R_ARM_PC24 against symbol
+`printascii' defined in .text section in arch/arm/kernel/built-in.o
+arch/arm/kernel/head.o: In function `__error_a':
+(.text.head+0x238): relocation truncated to fit: R_ARM_PC24 against symbol
+`printch' defined in .text section in arch/arm/kernel/built-in.o
+arch/arm/kernel/head.o: In function `__error_a':
+(.text.head+0x24c): additional relocation overflows omitted from the output
+make[1]: *** [.tmp_vmlinux1] Error 1
+make[1]: Leaving directory
+`/home/EVA/Desktop/buildroot-2009.08/project_build_arm/Project/linux-2.6.30'
+make: ***
+[/home/EVA/Desktop/buildroot-2009.08/project_build_arm/Project/linux-2.6.30/arch/arm/boot/uImage]
+Error 2
 
+I have totally no idea what it is and how to solve it. Can someone please
+help?
 
-My board is having a 32MB RAM and the uImage size is only 7MB.
-
-How come I still get this message?
-How can I resolve this?
-
-On side note, I can use previously, I was using directfb and the uImage size
-was around 3.1MB and the kernel can be loaded and use.
-
-Not sure how to attach file to mailing list so I did like normal mail
-attachment. Attached is my configuration for both buildroot and linux.
+Attached is my config file for linux and buildroot
 
 Regards,
 Stanley
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091229/eb9b99e3/attachment-0001.htm>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091229/9ca21545/attachment-0001.htm>
 -------------- next part --------------
 A non-text attachment was scrubbed...
-Name: buildroot_w_qt.config
+Name: buildroot.config
 Type: application/octet-stream
-Size: 23681 bytes
+Size: 23418 bytes
 Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091229/eb9b99e3/attachment-0002.obj>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091229/9ca21545/attachment-0002.obj>
 -------------- next part --------------
 A non-text attachment was scrubbed...
 Name: linux.config
 Type: application/octet-stream
 Size: 23185 bytes
 Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091229/eb9b99e3/attachment-0003.obj>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091229/9ca21545/attachment-0003.obj>
