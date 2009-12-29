@@ -1,7 +1,7 @@
 From: Terry Forrest <zippybot7@hotmail.com>
-Date: Tue, 29 Dec 2009 14:37:19 -0500
-Subject: [Buildroot] (no subject)
-Message-ID: <BLU148-W233C2B35C60390FF7C87E0EB7A0@phx.gbl>
+Date: Tue, 29 Dec 2009 14:44:51 -0500
+Subject: [Buildroot] Multiple architectures best practices?
+Message-ID: <BLU148-W126CE5F8A30A9DD8A9BAA5EB7A0@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,6 +9,8 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
+
+[apologies for the duplicate - previous note lacked a subject ] 
 
 Hi All - new to buildroot and am impressed!  Nice design
 and implementation.
@@ -46,12 +48,10 @@ Again, I'm new to BR and want to make sure I'm not
 gonna step in anything.
 
 Thanks!
-Terry
-
- 		 	   		   		 	   		  
+Terry 		 	   		  
 _________________________________________________________________
-Hotmail: Trusted email with powerful SPAM protection.
-http://clk.atdmt.com/GBL/go/177141665/direct/01/
+Hotmail: Powerful Free email with security by Microsoft.
+http://clk.atdmt.com/GBL/go/171222986/direct/01/
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091229/7a9c7888/attachment.htm>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091229/c036d76f/attachment.htm>
