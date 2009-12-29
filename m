@@ -1,136 +1,95 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 27 Dec 2009 18:13:20 +0000 (UTC)
-Subject: [Buildroot] [Bug 355] Please update WebKit - it doesn't compile!
-In-Reply-To: <bug-355-163@https.bugs.busybox.net/>
-References: <bug-355-163@https.bugs.busybox.net/>
-Message-ID: <20091227181320.5B4AD777BA@busybox.osuosl.org>
+From: joyful at sonic.net <joyful@sonic.net>
+Date: Mon, 28 Dec 2009 21:59:59 -0800
+Subject: [Buildroot] uclibc/buildroot build error
+In-Reply-To: <ca97c59d98e2891cf752ddf02b2de681.squirrel@webmail.sonic.net>
+References: <8351cdc2a3a8abf9b1f031824d6770e4.squirrel@webmail.sonic.net>
+	<87fx772veo.fsf@macbook.be.48ers.dk>
+	<d8fdfca5396745cde67af9bc66e27177.squirrel@webmail.sonic.net>
+	<87oclsxbyz.fsf@macbook.be.48ers.dk>
+	<62f4f618adb8f0fb041b8033370948f3.squirrel@webmail.sonic.net>
+	<87fx73xxrk.fsf@macbook.be.48ers.dk>
+	<e14e708720ddfeae76da70a20047b110.squirrel@webmail.sonic.net>
+	<877hsdwchq.fsf@macbook.be.48ers.dk>
+	<ca97c59d98e2891cf752ddf02b2de681.squirrel@webmail.sonic.net>
+Message-ID: <99c29bc6a922cbb004b34bdc010362dd.squirrel@webmail.sonic.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=355
+
+Hi Peter,
+
+I selected few more package and build root gave more errors:
+configure.sh: WARNING: unrecognized options: --disable-gtk-doc, --disable-nls
+
+   rsync 3.0.6 configuration successful
+
+>>> rsync 3.0.6 Building
+PATH="/tmp/buildroot/output/toolchain/bin:/tmp/buildroot/output/host/bin:/tmp/buildroot/output/host/usr/bin:/tmp/buildroot/output/st
+aging/bin:/tmp/buildroot/output/staging/usr/bin:/usr/kerberos/bin:/usr/local/bin:/bin:/usr/bin:/data/dnsmux2/bin"
+ /usr/bin/make -j1
+ -C /tmp/buildroot/output/build/rsync-3.0.6/
+make[1]: Entering directory `/tmp/buildroot/output/build/rsync-3.0.6'
+In file included from ./rsync.h:886,
+                from ./rounding.c:20:
+./lib/addrinfo.h:141: error: redefinition of 'struct sockaddr_storage'
+Failed to create rounding.h!
+make[1]: *** [rounding.h] Error 1
+make[1]: Leaving directory `/tmp/buildroot/output/build/rsync-3.0.6'
+make: *** [/tmp/buildroot/output/build/rsync-3.0.6/.stamp_built] Error 2
+
+I also ran into error when I try to include the latest bind-9.7.0rc1 to
+build both the named and bind-lib.  I found an old bind.mk that build both
+named and bind_lib, but that always fail, too.
 
 
 
 
-
---- Comment #8 from Dan Dart <dandart@googlemail.com>  2009-12-27 18:13:19 UTC ---
-> Do you still see problems with latest git now that we're using r44552?
-
-Yes. And it looks like it's in the same place.
-
-./doltlibtool  --tag=CXX   --mode=compile
-/home/dan/xenon/buildroot/output/staging/usr/bin/i686-linux-uclibc-g++ -Os
--pipe -Os  -I/home/dan/xenon/buildroot/output/staging/usr/include
--I/home/dan/xenon/buildroot/output/staging/include
---sysroot=/home/dan/xenon/buildroot/output/staging/ -isysroot
-/home/dan/xenon/buildroot/output/staging -mtune=i686 -march=i686
--D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
--DHAVE_CONFIG_H -I.  -DBUILDING_CAIRO__=1 -DBUILDING_GTK__=1 -DWTF_CHANGES
--DWTF_USE_ICU_UNICODE=1   -DNDEBUG  -I./JavaScriptCore/ForwardingHeaders
--I./JavaScriptCore/parser -I./JavaScriptCore/wtf -I./DerivedSources
--I./JavaScriptCore -I./JavaScriptCore/API -I./JavaScriptCore/ForwardingHeaders
--I./JavaScriptCore/interpreter -I./JavaScriptCore/bytecode
--I./JavaScriptCore/bytecompiler -I./JavaScriptCore/debugger
--I./JavaScriptCore/jit -I./JavaScriptCore/pcre -I./JavaScriptCore/profiler
--I./JavaScriptCore/runtime -I./JavaScriptCore/wrec -I./JavaScriptCore/jit
--I./JavaScriptCore/assembler -I./JavaScriptCore/wtf/unicode
--I./JavaScriptCore/yarr -I./JavaScriptCore/pcre -I./JavaScriptCore/parser
--I./JavaScriptCore/runtime  -Wall -W -Wcast-align -Wchar-subscripts
--Wreturn-type -Wformat -Wformat-security -Wno-format-y2k -Wundef
--Wmissing-format-attribute -Wpointer-arith -Wwrite-strings
--Wno-unused-parameter -Wno-parentheses -fno-exceptions -fvisibility=hidden
--fvisibility-inlines-hidden -fno-rtti -fstrict-aliasing -O3 -Wall -W
--Wcast-align -Wchar-subscripts -Wreturn-type -Wformat -Wformat-security
--Wno-format-y2k -Wundef -Wmissing-format-attribute -Wpointer-arith
--Wwrite-strings -Wno-unused-parameter -Wno-parentheses -fno-exceptions
--fvisibility=hidden -pthread
--I/home/dan/xenon/buildroot/output/staging/usr/include/glib-2.0
--I/home/dan/xenon/buildroot/output/staging/usr/lib/glib-2.0/include  
--D_REENTRANT -I/home/dan/xenon/buildroot/output/staging/usr/include -Os -pipe
--Os  -I/home/dan/xenon/buildroot/output/staging/usr/include
--I/home/dan/xenon/buildroot/output/staging/include
---sysroot=/home/dan/xenon/buildroot/output/staging/ -isysroot
-/home/dan/xenon/buildroot/output/staging -mtune=i686 -march=i686
--D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -O2 -MT
-JavaScriptCore/libJavaScriptCore_la-AllInOneFile.lo -MD -MP -MF
-JavaScriptCore/.deps/libJavaScriptCore_la-AllInOneFile.Tpo -c -o
-JavaScriptCore/libJavaScriptCore_la-AllInOneFile.lo `test -f
-'JavaScriptCore/AllInOneFile.cpp' || echo './'`JavaScriptCore/AllInOneFile.cpp  
-In file included from JavaScriptCore/runtime/JSFunction.cpp:26,                 
-                 from JavaScriptCore/AllInOneFile.cpp:35:                       
-JavaScriptCore/runtime/JSFunction.h: In member function ?JSC::JSValue (*
-JSC::JSFunction::nativeFunction())(JSC::ExecState*, JSC::JSObject*,
-JSC::JSValue, const JSC::ArgList&)?:                                          
-JavaScriptCore/runtime/JSFunction.h:87: warning: dereferencing type-punned
-pointer will break strict-aliasing rules   
-JavaScriptCore/runtime/JSFunction.h: In member function ?JSC::ScopeChain&
-JSC::JSFunction::scopeChain()?:             
-JavaScriptCore/runtime/JSFunction.h:104: warning: dereferencing type-punned
-pointer will break strict-aliasing rules  
-JavaScriptCore/runtime/JSFunction.h: In member function ?void
-JSC::JSFunction::setScopeChain(const JSC::ScopeChain&)?:
-JavaScriptCore/runtime/JSFunction.h:119: warning: dereferencing type-punned
-pointer will break strict-aliasing rules  
-JavaScriptCore/runtime/JSFunction.h: In member function ?void
-JSC::JSFunction::setNativeFunction(JSC::JSValue (*)(JSC::ExecState*,
-JSC::JSObject*, JSC::JSValue, const JSC::ArgList&))?:                         
-JavaScriptCore/runtime/JSFunction.h:123: warning: dereferencing type-punned
-pointer will break strict-aliasing rules  
-In file included from JavaScriptCore/AllInOneFile.cpp:47:                       
-JavaScriptCore/runtime/Collector.cpp: In function ?void*
-JSC::currentThreadStackBase()?:                              
-JavaScriptCore/runtime/Collector.cpp:451: error: ?pthread_getattr_np? was
-not declared in this scope                  
-mv -f JavaScriptCore/yarr/.deps/libJavaScriptCore_la-RegexJIT.Tpo
-JavaScriptCore/yarr/.deps/libJavaScriptCore_la-RegexJIT.Plo                     
-./doltlibtool  --tag=CXX   --mode=compile
-/home/dan/xenon/buildroot/output/staging/usr/bin/i686-linux-uclibc-g++ -Os
--pipe -Os  -I/home/dan/xenon/buildroot/output/staging/usr/include
--I/home/dan/xenon/buildroot/output/staging/include
---sysroot=/home/dan/xenon/buildroot/output/staging/ -isysroot
-/home/dan/xenon/buildroot/output/staging -mtune=i686 -march=i686
--D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
--DHAVE_CONFIG_H -I.  -DBUILDING_CAIRO__=1 -DBUILDING_GTK__=1 -DWTF_CHANGES
--DWTF_USE_ICU_UNICODE=1   -DNDEBUG  -I./JavaScriptCore/ForwardingHeaders
--I./JavaScriptCore/parser -I./JavaScriptCore/wtf -I./DerivedSources
--I./JavaScriptCore -I./JavaScriptCore/API -I./JavaScriptCore/ForwardingHeaders
--I./JavaScriptCore/interpreter -I./JavaScriptCore/bytecode
--I./JavaScriptCore/bytecompiler -I./JavaScriptCore/debugger
--I./JavaScriptCore/jit -I./JavaScriptCore/pcre -I./JavaScriptCore/profiler
--I./JavaScriptCore/runtime -I./JavaScriptCore/wrec -I./JavaScriptCore/jit
--I./JavaScriptCore/assembler -I./JavaScriptCore/wtf/unicode
--I./JavaScriptCore/yarr -I./JavaScriptCore/pcre -I./JavaScriptCore/parser
--I./JavaScriptCore/runtime  -Wall -W -Wcast-align -Wchar-subscripts
--Wreturn-type -Wformat -Wformat-security -Wno-format-y2k -Wundef
--Wmissing-format-attribute -Wpointer-arith -Wwrite-strings
--Wno-unused-parameter -Wno-parentheses -fno-exceptions -fvisibility=hidden
--fvisibility-inlines-hidden -fno-rtti -fstrict-aliasing -O3 -Wall -W
--Wcast-align -Wchar-subscripts -Wro-format-y2k -Wundef
--Wmissing-format-attribute -Wpointer-arith -Wwrite-strin -fno-exceptions
--fvisibility=hidden -pthread
--I/home/dan/xenon/buildroot/outdan/xenon/buildroot/output/staging/usr/lib/glib-2.0/include
-  -D_REENTRANT -Iusr/include -Os -pipe -Os 
--I/home/dan/xenon/buildroot/output/staging/usr/inctaging/include
---sysroot=/home/dan/xenon/buildroot/output/staging/ -isysroot -mtune=i686
--march=i686 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFF/libJavaScriptCore_la-ParserArena.lo -MD -MP -MF
-JavaScriptCore/parser/.deps/o
-JavaScriptCore/parser/libJavaScriptCore_la-ParserArena.lo `test -f
-'JavaScr./'`JavaScriptCore/parser/ParserArena.cpp
-make[2]: *** [JavaScriptCore/libJavaScriptCore_la-AllInOneFile.lo] Error 1
-make[2]: *** Waiting for unfinished jobs....
-mv -f JavaScriptCore/parser/.deps/libJavaScriptCore_la-ParserArena.Tpo
-JavaSca-ParserArena.Plo
-make[2]: Leaving directory `/home/dan/xenon/buildroot/output/build/webkit-r44
-make[1]: *** [all] Error 2
-make[1]: Leaving directory `/home/dan/xenon/buildroot/output/build/webkit-r44
-make: *** [/home/dan/xenon/buildroot/output/build/webkit-r44552/.stamp_built]
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+>
+> Thanks! I thought without kernel, it would not boot.  That was why I
+> selected to build the kernel. Sorry for the silly mistake!
+>
+> Joy
+>
+>
+>>>>>>> "joyful" == joyful  <joyful@sonic.net> writes:
+>>
+>>  joyful> Hi Peter,
+>>  joyful> Thanks. Attached please see the .config file.  I don't really
+>> care
+>>  joyful> about using busybox, but the make defconfig would not give me
+>> chance
+>>  joyful> to say no. Then I just hit enter for the default values.
+>>
+>>  joyful> I tried hard to get it working, but it just keeps giving me
+>> errors.
+>>
+>>  joyful> Thanks and Happy Holidays.
+>>
+>> You have:
+>>
+>> BR2_KERNEL_LINUX=y
+>> BR2_PACKAGE_LINUX=y
+>> BR2_PACKAGE_LINUX_KCONFIG=""
+>> BR2_PACKAGE_LINUX_FORMAT=""
+>>
+>> E.G. build a Linux kernel with "" as the .config, which ofcourse won't
+>> work.
+>>
+>> Either specify the .config you want to use or disable the Linux kernel
+>> build.
+>>
+>> --
+>> Bye, Peter Korsgaard
+>>
+>>
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+>
