@@ -1,57 +1,53 @@
-From: Terry Forrest <zippybot7@hotmail.com>
-Date: Tue, 29 Dec 2009 14:44:51 -0500
-Subject: [Buildroot] Multiple architectures best practices?
-Message-ID: <BLU148-W126CE5F8A30A9DD8A9BAA5EB7A0@phx.gbl>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 29 Dec 2009 21:26:09 +0100
+Subject: [Buildroot] uclibc/buildroot build error
+In-Reply-To: <99c29bc6a922cbb004b34bdc010362dd.squirrel@webmail.sonic.net>
+	(joyful@sonic.net's message of "Mon, 28 Dec 2009 21:59:59 -0800")
+References: <8351cdc2a3a8abf9b1f031824d6770e4.squirrel@webmail.sonic.net>
+	<87fx772veo.fsf@macbook.be.48ers.dk>
+	<d8fdfca5396745cde67af9bc66e27177.squirrel@webmail.sonic.net>
+	<87oclsxbyz.fsf@macbook.be.48ers.dk>
+	<62f4f618adb8f0fb041b8033370948f3.squirrel@webmail.sonic.net>
+	<87fx73xxrk.fsf@macbook.be.48ers.dk>
+	<e14e708720ddfeae76da70a20047b110.squirrel@webmail.sonic.net>
+	<877hsdwchq.fsf@macbook.be.48ers.dk>
+	<ca97c59d98e2891cf752ddf02b2de681.squirrel@webmail.sonic.net>
+	<99c29bc6a922cbb004b34bdc010362dd.squirrel@webmail.sonic.net>
+Message-ID: <87hbr9v866.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "joyful" == joyful  <joyful@sonic.net> writes:
 
+Hi,
 
-[apologies for the duplicate - previous note lacked a subject ] 
+ joyful> I selected few more package and build root gave more errors:
 
-Hi All - new to buildroot and am impressed!  Nice design
-and implementation.
+ >>>> rsync 3.0.6 Building
+ joyful> PATH="/tmp/buildroot/output/toolchain/bin:/tmp/buildroot/output/host/bin:/tmp/buildroot/output/host/usr/bin:/tmp/buildroot/output/st
+ joyful> aging/bin:/tmp/buildroot/output/staging/usr/bin:/usr/kerberos/bin:/usr/local/bin:/bin:/usr/bin:/data/dnsmux2/bin"
+ joyful> /usr/bin/make -j1 -C /tmp/buildroot/output/build/rsync-3.0.6/
+ joyful> make[1]: Entering directory
+ joyful> `/tmp/buildroot/output/build/rsync-3.0.6' In file included from
+ joyful> ./rsync.h:886, from ./rounding.c:20: ./lib/addrinfo.h:141:
+ joyful> error: redefinition of 'struct sockaddr_storage' Failed to
+ joyful> create rounding.h!  make[1]: *** [rounding.h] Error 1 make[1]:
+ joyful> Leaving directory `/tmp/buildroot/output/build/rsync-3.0.6'
+ joyful> make: ***
+ joyful> [/tmp/buildroot/output/build/rsync-3.0.6/.stamp_built] Error 2
 
-We would like to use BR to build for two architectures from
-the same tree.  We can use a local x86 for a "simulation" mode,
-and the target is arm.  I see that this is cleanly supported in the
-2009.11 release.
+Please post your .config. Rsync builds here on powerpc and ARM without
+any problems.
 
-My question is on a "best practice" for this.  I've set up 
-a top-level Makefile that goes something like this:
+ joyful> I also ran into error when I try to include the latest
+ joyful> bind-9.7.0rc1 to build both the named and bind-lib.  I found an
+ joyful> old bind.mk that build both named and bind_lib, but that always
+ joyful> fail, too.
 
+What error did you run into?
 
-TOPDIR    = path_to_my_top
-BUILD   = ${TOPDIR}/build
-BUILDROOT = buildroot-2009.11
-BROOT    = ${BUILD}/${BUILDROOT}
-
-setup-x86:
-    cp configs/buildroot-config-x86 ${BROOT}/.config
-    ${MAKE} -C ${BROOT} oldconfig
-
-setup-arm:
-    cp configs/buildroot-config-arm ${BROOT}/.config
-    ${MAKE} -C ${BROOT} oldconfig
-
-build-x86: setup-x86
-    make -C ${BROOT} O=${BUILD}/output_x86 
-
-build-arm: setup-arm
-    make -C ${BROOT} O=${BUILD}/output_arm
-
-This seems to work okay - any comments or warnings?
-Again, I'm new to BR and want to make sure I'm not 
-gonna step in anything.
-
-Thanks!
-Terry 		 	   		  
-_________________________________________________________________
-Hotmail: Powerful Free email with security by Microsoft.
-http://clk.atdmt.com/GBL/go/171222986/direct/01/
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091229/c036d76f/attachment.htm>
+-- 
+Bye, Peter Korsgaard
