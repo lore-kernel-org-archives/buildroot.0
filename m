@@ -1,53 +1,33 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 29 Dec 2009 21:26:09 +0100
-Subject: [Buildroot] uclibc/buildroot build error
-In-Reply-To: <99c29bc6a922cbb004b34bdc010362dd.squirrel@webmail.sonic.net>
-	(joyful@sonic.net's message of "Mon, 28 Dec 2009 21:59:59 -0800")
-References: <8351cdc2a3a8abf9b1f031824d6770e4.squirrel@webmail.sonic.net>
-	<87fx772veo.fsf@macbook.be.48ers.dk>
-	<d8fdfca5396745cde67af9bc66e27177.squirrel@webmail.sonic.net>
-	<87oclsxbyz.fsf@macbook.be.48ers.dk>
-	<62f4f618adb8f0fb041b8033370948f3.squirrel@webmail.sonic.net>
-	<87fx73xxrk.fsf@macbook.be.48ers.dk>
-	<e14e708720ddfeae76da70a20047b110.squirrel@webmail.sonic.net>
-	<877hsdwchq.fsf@macbook.be.48ers.dk>
-	<ca97c59d98e2891cf752ddf02b2de681.squirrel@webmail.sonic.net>
-	<99c29bc6a922cbb004b34bdc010362dd.squirrel@webmail.sonic.net>
-Message-ID: <87hbr9v866.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 29 Dec 2009 21:51:29 +0100
+Subject: [Buildroot] [PATCH] jpeg: convert to autotools infrastructure
+In-Reply-To: <4d28d4b50912290214u6b15af37nbefdf6b672b87c3d@mail.gmail.com>
+	(Lionel Landwerlin's message of "Tue, 29 Dec 2009 11:14:16 +0100")
+References: <4d28d4b50912290214u6b15af37nbefdf6b672b87c3d@mail.gmail.com>
+Message-ID: <87aax1v6zy.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "joyful" == joyful  <joyful@sonic.net> writes:
+>>>>> "Lionel" == Lionel Landwerlin <llandwerlin@gmail.com> writes:
 
 Hi,
 
- joyful> I selected few more package and build root gave more errors:
+ Lionel> Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
+ Lionel> ---
+ Lionel> ?package/jpeg/jpeg.mk |?? 73 ++++++-------------------------------------------
+ Lionel> ?1 files changed, 9 insertions(+), 64 deletions(-)
 
- >>>> rsync 3.0.6 Building
- joyful> PATH="/tmp/buildroot/output/toolchain/bin:/tmp/buildroot/output/host/bin:/tmp/buildroot/output/host/usr/bin:/tmp/buildroot/output/st
- joyful> aging/bin:/tmp/buildroot/output/staging/usr/bin:/usr/kerberos/bin:/usr/local/bin:/bin:/usr/bin:/data/dnsmux2/bin"
- joyful> /usr/bin/make -j1 -C /tmp/buildroot/output/build/rsync-3.0.6/
- joyful> make[1]: Entering directory
- joyful> `/tmp/buildroot/output/build/rsync-3.0.6' In file included from
- joyful> ./rsync.h:886, from ./rounding.c:20: ./lib/addrinfo.h:141:
- joyful> error: redefinition of 'struct sockaddr_storage' Failed to
- joyful> create rounding.h!  make[1]: *** [rounding.h] Error 1 make[1]:
- joyful> Leaving directory `/tmp/buildroot/output/build/rsync-3.0.6'
- joyful> make: ***
- joyful> [/tmp/buildroot/output/build/rsync-3.0.6/.stamp_built] Error 2
+Thanks, but the patch is corrupt (some odd unicode character for space):
 
-Please post your .config. Rsync builds here on powerpc and ARM without
-any problems.
+Applying: jpeg: convert to autotools infrastructure
+fatal: corrupt patch at line 10
+Patch failed at 0001 jpeg: convert to autotools infrastructure
 
- joyful> I also ran into error when I try to include the latest
- joyful> bind-9.7.0rc1 to build both the named and bind-lib.  I found an
- joyful> old bind.mk that build both named and bind_lib, but that always
- joyful> fail, too.
-
-What error did you run into?
+How are you sending these patches? Could you use plain git send-email
+instead, that normally does the right thing.
 
 -- 
 Bye, Peter Korsgaard
