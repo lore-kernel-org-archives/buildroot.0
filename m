@@ -1,106 +1,93 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Tue, 29 Dec 2009 11:16:18 +0100
-Subject: [Buildroot] [PATCH] libungif: convert to autotools infrastructure
-Message-ID: <4d28d4b50912290216l31ba262cvccf62dc5a3def244@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 29 Dec 2009 12:07:49 +0000 (UTC)
+Subject: [Buildroot] [Bug 831] New: 4x6.bdf: Command not found
+Message-ID: <bug-831-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
----
- package/libungif/libungif.mk |   65
-++++++-----------------------------------
- 1 files changed, 10 insertions(+), 55 deletions(-)
+https://bugs.busybox.net/show_bug.cgi?id=831
 
-diff --git a/package/libungif/libungif.mk b/package/libungif/libungif.mk
-index 6e3be9c..31934c1 100644
---- a/package/libungif/libungif.mk
-+++ b/package/libungif/libungif.mk
-@@ -6,64 +6,19 @@
- LIBUNGIF_VERSION:=4.1.4
- LIBUNGIF_SOURCE:=libungif-$(LIBUNGIF_VERSION).tar.bz2
- LIBUNGIF_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).
-dl.sourceforge.net/sourceforge/giflib
--LIBUNGIF_DIR:=$(BUILD_DIR)/libungif-$(LIBUNGIF_VERSION)
--LIBUNGIF_CAT:=$(BZCAT)
--LIBUNGIF_BINARY:=libungif.so.$(LIBUNGIF_VERSION)
--LIBUNGIF_TARGET_BINARY:=usr/lib/libungif.so
-+LIBUNGIF_INSTALL_STAGING = YES
-+LIBUNGIF_INSTALL_TARGET = YES
+              Host: opensuse 10.3
+            Target: x86
+             Build: buildroot
+           Summary: 4x6.bdf: Command not found
+           Product: buildroot
+           Version: 2009.08
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: max at olo.com.pl
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
--$(DL_DIR)/$(LIBUNGIF_SOURCE):
--    $(call DOWNLOAD,$(LIBUNGIF_SITE),$(LIBUNGIF_SOURCE))
-+LIBUNGIF_CONF_OPT = --without-x
 
--libungif-source: $(DL_DIR)/$(LIBUNGIF_SOURCE)
--
--$(LIBUNGIF_DIR)/.unpacked: $(DL_DIR)/$(LIBUNGIF_SOURCE)
--    $(LIBUNGIF_CAT) $(DL_DIR)/$(LIBUNGIF_SOURCE) | tar -C $(BUILD_DIR)
-$(TAR_OPTIONS) -
--    toolchain/patch-kernel.sh $(LIBUNGIF_DIR) package/libungif/
-libungif-$(LIBUNGIF_VERSION)\*.patch\*
--    $(CONFIG_UPDATE) $(LIBUNGIF_DIR)
--    touch $@
--
--$(LIBUNGIF_DIR)/.configured: $(LIBUNGIF_DIR)/.unpacked
--    (cd $(LIBUNGIF_DIR); rm -rf config.cache; \
--        $(TARGET_CONFIGURE_ARGS) \
--        $(TARGET_CONFIGURE_OPTS) \
--        CFLAGS="$(TARGET_CFLAGS)" \
--        LDFLAGS="$(TARGET_LDFLAGS)" \
--        ./configure $(QUIET) \
--        --target=$(GNU_TARGET_NAME) \
--        --host=$(GNU_TARGET_NAME) \
--        --build=$(GNU_HOST_NAME) \
--        --sysconfdir=/etc \
--        --enable-shared \
--        --enable-static \
--        --prefix=/usr \
--        --without-x \
--    )
--    touch $@
--
--$(LIBUNGIF_DIR)/lib/.libs/libungif.a: $(LIBUNGIF_DIR)/.configured
--    $(MAKE) -C $(LIBUNGIF_DIR)
--
--$(STAGING_DIR)/usr/lib/libungif.a: $(LIBUNGIF_DIR)/lib/.libs/libungif.a
--    $(MAKE) DESTDIR=$(STAGING_DIR) -C $(LIBUNGIF_DIR) install
-+define LIBUNGIF_INSTALL_STAGING_CMDS
-+    $(MAKE) DESTDIR=$(STAGING_DIR) -C $(@D) install
-     $(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g"
-$(STAGING_DIR)/usr/lib/libungif.la
-+endef
+Created an attachment (id=869)
+ --> (https://bugs.busybox.net/attachment.cgi?id=869)
+My config
 
--$(TARGET_DIR)/$(LIBUNGIF_TARGET_BINARY): $(STAGING_DIR)/usr/lib/libungif.a
--    cp -dpf $(STAGING_DIR)/$(LIBUNGIF_TARGET_BINARY)*
-$(TARGET_DIR)/usr/lib/
-+define LIBUNGIF_INSTALL_TARGET_CMDS
-+    cp -dpf $(STAGING_DIR)/usr/lib/libungif.so* $(TARGET_DIR)/usr/lib/
-     -$(STRIPCMD) $(STRIP_STRIP_UNNEEDED)
-$(TARGET_DIR)/$(LIBUNGIF_TARGET_BINARY)*
-+endef
+I attached my config
 
--libungif: $(TARGET_DIR)/$(LIBUNGIF_TARGET_BINARY)
--
--libungif-clean:
--    rm -f $(TARGET_DIR)/$(LIBUNGIF_TARGET_BINARY)*
--    -$(MAKE) -C $(LIBUNGIF_DIR) clean
--
--libungif-dirclean:
--    rm -rf $(LIBUNGIF_DIR)
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(BR2_PACKAGE_LIBUNGIF),y)
--TARGETS+=libungif
--endif
-+$(eval $(call AUTOTARGETS,package,libungif))
---
-1.6.5.7
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20091229/afd1b55f/attachment.htm>
+I have error when buildroot make font-misc-misc 1.0.0
+
+---------------------------------
+>>> xfont_font-misc-misc 1.0.0 Building
+PATH="/home/buildroot-2009.08/toolchain_build_i686/bin:/home/buildroot-2009.08/build_i686/host_dir/bin:/home/buildroot-2009.08/build_i686/host_dir/usr/bin:/home/buildroot-2009.08/build_i686/staging_dir/bin:/home/buildroot-2009.08/build_i686/staging_dir/usr/bin:/sbin:/usr/sbin:/usr/local/sbin:/opt/gnome/sbin:/usr/local/bin:/usr/bin:/usr/X11R6/bin:/bin:/usr/games:/opt/gnome/bin:/opt/kde3/bin:/usr/lib/mit/bin:/usr/lib/mit/sbin:/home/PROGRAMY/java/bin:/home/PROGRAMY/apache-ant/bin:/home/G/depot_tools:/home/PROGRAMY/java/bin:/home/PROGRAMY/apache-ant/bin:/home/G/depot_tools:/home/PROGRAMY/java/bin:/home/PROGRAMY/apache-ant/bin:/home/G/depot_tools"
+ /usr/bin/make -j1  -C
+/home/buildroot-2009.08/build_i686/xfont_font-misc-misc-1.0.0/
+make[1]: Entering directory
+`/home/buildroot-2009.08/build_i686/xfont_font-misc-misc-1.0.0'
+/usr/bin/bdftopcf -t 4x6.bdf | gzip > 4x6.pcf.gz
+/usr/bin/bdftopcf -t 5x7.bdf | gzip > 5x7.pcf.gz
+/usr/bin/bdftopcf -t 5x8.bdf | gzip > 5x8.pcf.gz
+/usr/bin/bdftopcf -t 6x9.bdf | gzip > 6x9.pcf.gz
+/usr/bin/bdftopcf -t 6x10.bdf | gzip > 6x10.pcf.gz
+/usr/bin/bdftopcf -t 6x12.bdf | gzip > 6x12.pcf.gz
+/usr/bin/bdftopcf -t 6x13.bdf | gzip > 6x13.pcf.gz
+/usr/bin/bdftopcf -t 6x13B.bdf | gzip > 6x13B.pcf.gz
+/usr/bin/bdftopcf -t 6x13O.bdf | gzip > 6x13O.pcf.gz
+/usr/bin/bdftopcf -t 7x13.bdf | gzip > 7x13.pcf.gz
+/usr/bin/bdftopcf -t 7x13B.bdf | gzip > 7x13B.pcf.gz
+/usr/bin/bdftopcf -t 7x13O.bdf | gzip > 7x13O.pcf.gz
+/usr/bin/bdftopcf -t 7x14.bdf | gzip > 7x14.pcf.gz
+/usr/bin/bdftopcf -t 7x14B.bdf | gzip > 7x14B.pcf.gz
+/usr/bin/bdftopcf -t 8x13.bdf | gzip > 8x13.pcf.gz
+/usr/bin/bdftopcf -t 8x13B.bdf | gzip > 8x13B.pcf.gz
+/usr/bin/bdftopcf -t 8x13O.bdf | gzip > 8x13O.pcf.gz
+/usr/bin/bdftopcf -t 9x15.bdf | gzip > 9x15.pcf.gz
+/usr/bin/bdftopcf -t 9x15B.bdf | gzip > 9x15B.pcf.gz
+/usr/bin/bdftopcf -t 9x18.bdf | gzip > 9x18.pcf.gz
+/usr/bin/bdftopcf -t 9x18B.bdf | gzip > 9x18B.pcf.gz
+/usr/bin/bdftopcf -t 10x20.bdf | gzip > 10x20.pcf.gz
+/usr/bin/bdftopcf -t 12x13ja.bdf | gzip > 12x13ja.pcf.gz
+/usr/bin/bdftopcf -t 18x18ja.bdf | gzip > 18x18ja.pcf.gz
+/usr/bin/bdftopcf -t 18x18ko.bdf | gzip > 18x18ko.pcf.gz
+/usr/bin/bdftopcf -t k14.bdf | gzip > k14.pcf.gz
+/usr/bin/bdftopcf -t nil2.bdf | gzip > nil2.pcf.gz
+4x6.bdf
+/home/buildroot-2009.08/build_i686/staging_dir/usr/lib/X11/fonts/util/map-ISO8859-1
+ISO8859-1
+make[1]: 4x6.bdf: Command not found
+make[1]: *** [4x6-ISO8859-1.bdf] Error 127
+make[1]: Leaving directory
+`/home/buildroot-2009.08/build_i686/xfont_font-misc-misc-1.0.0'
+make: ***
+[/home/buildroot-2009.08/build_i686/xfont_font-misc-misc-1.0.0/.stamp_built]
+Error 2
+---------------------------------
+
+I used version from GIT but i have this same error
+
+I tested version: 2009.08, 2009.11 and from repository
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
