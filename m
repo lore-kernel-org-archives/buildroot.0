@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Wed, 30 Dec 2009 13:48:02 +0100
-Subject: [Buildroot] [git commit master] package: fix host build for
-	packages with own libtool patch
-Message-ID: <20091230125025.3ED1A776B0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] jpeg: convert to autotools
+	infrastructure
+Message-ID: <20091230125026.15826776B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,80 +10,105 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c63c2faf55b2eb53eda67532929f3e35419f8c40
+commit: http://git.buildroot.net/buildroot/commit/?id=21bab8862f3c2906af347e5a993ce4cd36c1b063
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Packages which also build a host variant and have LIBTOOL_PATCH = NO,
-should also disable libtool patching for the host build.
-
+[Peter: has own libtool patch, use std staging install, fix target install]
+Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/dbus/dbus.mk         |    1 +
- package/directfb/directfb.mk |    1 +
- package/expat/expat.mk       |    1 +
- package/freetype/freetype.mk |    1 +
- package/libglib2/libglib2.mk |    1 +
- 5 files changed, 5 insertions(+), 0 deletions(-)
+ package/jpeg/jpeg.mk |   77 +++++--------------------------------------------
+ 1 files changed, 8 insertions(+), 69 deletions(-)
 
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index 63f3caa..276009c 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -7,6 +7,7 @@ DBUS_VERSION = 1.2.16
- DBUS_SOURCE = dbus-$(DBUS_VERSION).tar.gz
- DBUS_SITE = http://dbus.freedesktop.org/releases/dbus/
- DBUS_LIBTOOL_PATCH = NO
-+HOST_DBUS_LIBTOOL_PATCH = NO
- DBUS_INSTALL_STAGING = YES
- DBUS_INSTALL_TARGET = YES
- ifeq ($(BR2_ENABLE_DEBUG),y)
-diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
-index 57b2e17..a4ee3bc 100644
---- a/package/directfb/directfb.mk
-+++ b/package/directfb/directfb.mk
-@@ -9,6 +9,7 @@ DIRECTFB_SITE:=http://www.directfb.org/downloads/Core/DirectFB-$(DIRECTFB_VERSIO
- DIRECTFB_SOURCE:=DirectFB-$(DIRECTFB_VERSION).tar.gz
- DIRECTFB_AUTORECONF = NO
- DIRECTFB_LIBTOOL_PATCH = NO
-+HOST_DIRECTFB_LIBTOOL_PATCH = NO
- DIRECTFB_INSTALL_STAGING = YES
- DIRECTFB_INSTALL_TARGET = YES
+diff --git a/package/jpeg/jpeg.mk b/package/jpeg/jpeg.mk
+index 2688084..c3754d4 100644
+--- a/package/jpeg/jpeg.mk
++++ b/package/jpeg/jpeg.mk
+@@ -21,77 +21,16 @@
+ # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ # USA
+ JPEG_VERSION:=6b
+-JPEG_DIR=$(BUILD_DIR)/jpeg-$(JPEG_VERSION)
+ JPEG_SITE:=ftp://ftp.uu.net/graphics/jpeg/
+ JPEG_SOURCE=jpegsrc.v$(JPEG_VERSION).tar.gz
+-JPEG_CAT:=$(ZCAT)
++JPEG_INSTALL_STAGING = YES
++JPEG_INSTALL_TARGET = YES
++JPEG_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
++JPEG_LIBTOOL_PATCH = NO
++JPEG_CONF_OPT = --without-x --enable-shared --enable-static
  
-diff --git a/package/expat/expat.mk b/package/expat/expat.mk
-index 5b4eb97..368a297 100644
---- a/package/expat/expat.mk
-+++ b/package/expat/expat.mk
-@@ -8,6 +8,7 @@ EXPAT_VERSION = 2.0.1
- EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.gz
- EXPAT_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/expat
- EXPAT_LIBTOOL_PATCH = NO
-+HOST_EXPAT_LIBTOOL_PATCH = NO
- EXPAT_INSTALL_STAGING = YES
- EXPAT_INSTALL_TARGET = YES
- # no install-strip / install-exec
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index ed73253..abc0afc 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
-@@ -7,6 +7,7 @@ FREETYPE_VERSION = 2.3.9
- FREETYPE_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/freetype
- FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
- FREETYPE_LIBTOOL_PATCH = NO
-+HOST_FREETYPE_LIBTOOL_PATCH = NO
- FREETYPE_INSTALL_STAGING = YES
- FREETYPE_INSTALL_TARGET = YES
- FREETYPE_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 04e3f2d..5ef7e25 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -11,6 +11,7 @@ LIBGLIB2_SITE = http://ftp.gtk.org/pub/glib/$(LIBGLIB2_VERSION_MAJOR)
+-$(DL_DIR)/$(JPEG_SOURCE):
+-	 $(call DOWNLOAD,$(JPEG_SITE),$(JPEG_SOURCE))
++$(eval $(call AUTOTARGETS,package,jpeg))
  
- LIBGLIB2_AUTORECONF = NO
- LIBGLIB2_LIBTOOL_PATCH = NO
-+HOST_LIBGLIB2_LIBTOOL_PATCH = NO
- LIBGLIB2_INSTALL_STAGING = YES
- LIBGLIB2_INSTALL_TARGET = YES
- LIBGLIB2_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
+-jpeg-source: $(DL_DIR)/$(JPEG_SOURCE)
+-
+-$(JPEG_DIR)/.unpacked: $(DL_DIR)/$(JPEG_SOURCE)
+-	$(JPEG_CAT) $(DL_DIR)/$(JPEG_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(JPEG_DIR) package/jpeg/ jpeg\*.patch
+-	$(CONFIG_UPDATE) $(JPEG_DIR)
+-	touch $@
+-
+-$(JPEG_DIR)/.configured: $(JPEG_DIR)/.unpacked
+-	(cd $(JPEG_DIR); rm -rf config.cache; \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		$(TARGET_CONFIGURE_ARGS) \
+-		./configure $(QUIET) \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		--prefix=/usr \
+-		--exec-prefix=/usr \
+-		--bindir=/usr/bin \
+-		--sbindir=/usr/sbin \
+-		--libdir=/usr/lib \
+-		--libexecdir=/usr/lib \
+-		--sysconfdir=/etc \
+-		--datadir=/usr/share \
+-		--localstatedir=/var \
+-		--includedir=/usr/include \
+-		--mandir=/usr/share/man \
+-		--infodir=/usr/share/info \
+-		--enable-shared \
+-		--enable-static \
+-		--without-x \
+-	)
++$(JPEG_HOOK_POST_INSTALL):
++	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,cjpeg djpeg jpegtrans rdjpgcom wrjpgcom)
+ 	touch $@
+-
+-$(JPEG_DIR)/.libs/libjpeg.a: $(JPEG_DIR)/.configured
+-	$(MAKE) -C $(JPEG_DIR) all
+-	touch -c $@
+-
+-$(STAGING_DIR)/usr/lib/libjpeg.a: $(JPEG_DIR)/.libs/libjpeg.a
+-	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(JPEG_DIR) install
+-	cp -f $(JPEG_DIR)/libjpeg.la $(STAGING_DIR)/usr/lib
+-	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libjpeg.la
+-	touch -c $@
+-
+-$(TARGET_DIR)/usr/lib/libjpeg.so: $(STAGING_DIR)/usr/lib/libjpeg.a
+-	mkdir -p $(TARGET_DIR)/usr/lib
+-	cp -dpf $(STAGING_DIR)/usr/lib/libjpeg.so* $(TARGET_DIR)/usr/lib/
+-	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libjpeg.so*
+-	touch -c $@
+-
+-jpeg: $(TARGET_DIR)/usr/lib/libjpeg.so
+-
+-jpeg-clean:
+-	-$(MAKE) -C $(JPEG_DIR) clean
+-
+-jpeg-dirclean:
+-	rm -rf $(JPEG_DIR)
+-
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_JPEG),y)
+-TARGETS+=jpeg
+-endif
 -- 
 1.6.3.3
