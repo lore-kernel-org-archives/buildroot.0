@@ -1,113 +1,120 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 30 Dec 2009 13:54:06 +0100
-Subject: [Buildroot] [PATCH] jpeg: convert to autotools infrastructure
-In-Reply-To: <1262123141.5867.51.camel@coalu.atr> (Lionel Landwerlin's message
-	of "Tue, 29 Dec 2009 22:45:41 +0100")
-References: <4d28d4b50912290214u6b15af37nbefdf6b672b87c3d@mail.gmail.com>
-	<87aax1v6zy.fsf@macbook.be.48ers.dk>
-	<1262123141.5867.51.camel@coalu.atr>
-Message-ID: <87637ovd01.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 30 Dec 2009 14:05:46 +0100
+Subject: [Buildroot] [git commit master] libungif: convert to autotools
+	infrastructure
+Message-ID: <20091230130642.13D0B776F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Lionel" == Lionel Landwerlin <llandwerlin@gmail.com> writes:
 
- Lionel> Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
+commit: http://git.buildroot.net/buildroot/commit/?id=6415e3a19ad5af9445ae80c897818fdda8905931
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks, this time it came through ok.
+[Peter: use std staging/target install handling]
+Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES                      |    4 +-
+ package/libungif/libungif.mk |   67 +++++++-----------------------------------
+ 2 files changed, 13 insertions(+), 58 deletions(-)
 
-Committed with some changes, see below.
-
- Lionel> ---
- Lionel>  package/jpeg/jpeg.mk |   73 ++++++-------------------------------------------
- Lionel>  1 files changed, 9 insertions(+), 64 deletions(-)
-
- Lionel> diff --git a/package/jpeg/jpeg.mk b/package/jpeg/jpeg.mk
- Lionel> index 2688084..b4afc24 100644
- Lionel> --- a/package/jpeg/jpeg.mk
- Lionel> +++ b/package/jpeg/jpeg.mk
- Lionel> @@ -21,77 +21,22 @@
- Lionel>  # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
- Lionel>  # USA
- Lionel>  JPEG_VERSION:=6b
- Lionel> -JPEG_DIR=$(BUILD_DIR)/jpeg-$(JPEG_VERSION)
- Lionel>  JPEG_SITE:=ftp://ftp.uu.net/graphics/jpeg/
- Lionel>  JPEG_SOURCE=jpegsrc.v$(JPEG_VERSION).tar.gz
- Lionel> -JPEG_CAT:=$(ZCAT)
- Lionel> +JPEG_INSTALL_STAGING = YES
- Lionel> +JPEG_INSTALL_TARGET = YES
-
-Jpeg has it's own libtool patch, so we need JPEG_LIBTOOL_PATCH =
-NO. You didn't see that as the automatic libtool patching recently got
-broken.
+diff --git a/CHANGES b/CHANGES
+index b87cf23..2be6728 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -3,8 +3,8 @@
+ 	New packages: libcdaudio, libdvdnav, libdvdread, hostapd, tcpreplay
  
- Lionel> -$(DL_DIR)/$(JPEG_SOURCE):
- Lionel> -	 $(call DOWNLOAD,$(JPEG_SITE),$(JPEG_SOURCE))
- Lionel> +JPEG_CONF_OPT = --without-x --enable-shared --enable-static
+ 	Updated/fixed packages: autoconf, bind, binutils, busybox,
+-	directfb, e2fsprogs, gst-plugins-bad, hal, iw, libfuse, libpcap,
+-	lighttpd, mesa, mpg123, mtd-utils, neon, pcre, qt, sshfs,
++	directfb, e2fsprogs, gst-plugins-bad, hal, iw, jpeg, libfuse, libpcap,
++	libungif, lighttpd, mesa, mpg123, mtd-utils, neon, pcre, qt, sshfs,
+ 	tremor, u-boot, usbutils, xfsprogs
  
- Lionel> -jpeg-source: $(DL_DIR)/$(JPEG_SOURCE)
- Lionel> -
- Lionel> -$(JPEG_DIR)/.unpacked: $(DL_DIR)/$(JPEG_SOURCE)
- Lionel> -	$(JPEG_CAT) $(DL_DIR)/$(JPEG_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
- Lionel> -	toolchain/patch-kernel.sh $(JPEG_DIR) package/jpeg/ jpeg\*.patch
- Lionel> -	$(CONFIG_UPDATE) $(JPEG_DIR)
- Lionel> -	touch $@
- Lionel> -
- Lionel> -$(JPEG_DIR)/.configured: $(JPEG_DIR)/.unpacked
- Lionel> -	(cd $(JPEG_DIR); rm -rf config.cache; \
- Lionel> -		$(TARGET_CONFIGURE_OPTS) \
- Lionel> -		$(TARGET_CONFIGURE_ARGS) \
- Lionel> -		./configure $(QUIET) \
- Lionel> -		--target=$(GNU_TARGET_NAME) \
- Lionel> -		--host=$(GNU_TARGET_NAME) \
- Lionel> -		--build=$(GNU_HOST_NAME) \
- Lionel> -		--prefix=/usr \
- Lionel> -		--exec-prefix=/usr \
- Lionel> -		--bindir=/usr/bin \
- Lionel> -		--sbindir=/usr/sbin \
- Lionel> -		--libdir=/usr/lib \
- Lionel> -		--libexecdir=/usr/lib \
- Lionel> -		--sysconfdir=/etc \
- Lionel> -		--datadir=/usr/share \
- Lionel> -		--localstatedir=/var \
- Lionel> -		--includedir=/usr/include \
- Lionel> -		--mandir=/usr/share/man \
- Lionel> -		--infodir=/usr/share/info \
- Lionel> -		--enable-shared \
- Lionel> -		--enable-static \
- Lionel> -		--without-x \
- Lionel> -	)
- Lionel> -	touch $@
- Lionel> -
- Lionel> -$(JPEG_DIR)/.libs/libjpeg.a: $(JPEG_DIR)/.configured
- Lionel> -	$(MAKE) -C $(JPEG_DIR) all
- Lionel> -	touch -c $@
- Lionel> -
- Lionel> -$(STAGING_DIR)/usr/lib/libjpeg.a: $(JPEG_DIR)/.libs/libjpeg.a
- Lionel> -	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(JPEG_DIR) install
- Lionel> -	cp -f $(JPEG_DIR)/libjpeg.la $(STAGING_DIR)/usr/lib
- Lionel> +define JPEG_INSTALL_STAGING_CMDS
- Lionel> +	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(@D) install
- Lionel>  	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libjpeg.la
- Lionel> -	touch -c $@
- Lionel> +endef
-
-The standard staging install handling does this as well, so there's no
-need for this.
+ 	Issues resolved (http://bugs.uclibc.org):
+diff --git a/package/libungif/libungif.mk b/package/libungif/libungif.mk
+index 6e3be9c..466a72c 100644
+--- a/package/libungif/libungif.mk
++++ b/package/libungif/libungif.mk
+@@ -6,64 +6,19 @@
+ LIBUNGIF_VERSION:=4.1.4
+ LIBUNGIF_SOURCE:=libungif-$(LIBUNGIF_VERSION).tar.bz2
+ LIBUNGIF_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/giflib
+-LIBUNGIF_DIR:=$(BUILD_DIR)/libungif-$(LIBUNGIF_VERSION)
+-LIBUNGIF_CAT:=$(BZCAT)
+-LIBUNGIF_BINARY:=libungif.so.$(LIBUNGIF_VERSION)
+-LIBUNGIF_TARGET_BINARY:=usr/lib/libungif.so
++LIBUNGIF_INSTALL_STAGING = YES
++LIBUNGIF_INSTALL_TARGET = YES
  
- Lionel> -$(TARGET_DIR)/usr/lib/libjpeg.so: $(STAGING_DIR)/usr/lib/libjpeg.a
- Lionel> +define JPEG_INSTALL_TARGET_CMDS
- Lionel>  	mkdir -p $(TARGET_DIR)/usr/lib
- Lionel>  	cp -dpf $(STAGING_DIR)/usr/lib/libjpeg.so* $(TARGET_DIR)/usr/lib/
- Lionel>  	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libjpeg.so*
-
-It's better to use the existing make install, as that also installs
-headers/manpages/.. for the people having that enabled and then just use
-a post-install hook to clean up anything else (in this case the
-binaries).
-
+-$(DL_DIR)/$(LIBUNGIF_SOURCE):
+-	$(call DOWNLOAD,$(LIBUNGIF_SITE),$(LIBUNGIF_SOURCE))
++LIBUNGIF_CONF_OPT = --without-x
+ 
+-libungif-source: $(DL_DIR)/$(LIBUNGIF_SOURCE)
++LIBUNGIF_BINS = gif2epsn gif2ps gif2rgb gif2x11 gifasm gifbg gifburst gifclip \
++		gifclrmp gifcolor gifcomb gifcompose giffiltr giffix gifflip  \
++		gifhisto gifinfo gifinter gifinto gifovly gifpos gifrotat     \
++		gifrsize gifspnge giftext gifwedge icon2gif raw2gif rgb2gif   \
++		text2gif
+ 
+-$(LIBUNGIF_DIR)/.unpacked: $(DL_DIR)/$(LIBUNGIF_SOURCE)
+-	$(LIBUNGIF_CAT) $(DL_DIR)/$(LIBUNGIF_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(LIBUNGIF_DIR) package/libungif/ libungif-$(LIBUNGIF_VERSION)\*.patch\*
+-	$(CONFIG_UPDATE) $(LIBUNGIF_DIR)
+-	touch $@
++$(eval $(call AUTOTARGETS,package,libungif))
+ 
+-$(LIBUNGIF_DIR)/.configured: $(LIBUNGIF_DIR)/.unpacked
+-	(cd $(LIBUNGIF_DIR); rm -rf config.cache; \
+-		$(TARGET_CONFIGURE_ARGS) \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		CFLAGS="$(TARGET_CFLAGS)" \
+-		LDFLAGS="$(TARGET_LDFLAGS)" \
+-		./configure $(QUIET) \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		--sysconfdir=/etc \
+-		--enable-shared \
+-		--enable-static \
+-		--prefix=/usr \
+-		--without-x \
+-	)
++$(LIBUNGIF_HOOK_POST_INSTALL):
++	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,$(LIBUNGIF_BINS))
+ 	touch $@
+-
+-$(LIBUNGIF_DIR)/lib/.libs/libungif.a: $(LIBUNGIF_DIR)/.configured
+-	$(MAKE) -C $(LIBUNGIF_DIR)
+-
+-$(STAGING_DIR)/usr/lib/libungif.a: $(LIBUNGIF_DIR)/lib/.libs/libungif.a
+-	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(LIBUNGIF_DIR) install
+-	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libungif.la
+-
+-$(TARGET_DIR)/$(LIBUNGIF_TARGET_BINARY): $(STAGING_DIR)/usr/lib/libungif.a
+-	cp -dpf $(STAGING_DIR)/$(LIBUNGIF_TARGET_BINARY)* $(TARGET_DIR)/usr/lib/
+-	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/$(LIBUNGIF_TARGET_BINARY)*
+-
+-libungif: $(TARGET_DIR)/$(LIBUNGIF_TARGET_BINARY)
+-
+-libungif-clean:
+-	rm -f $(TARGET_DIR)/$(LIBUNGIF_TARGET_BINARY)*
+-	-$(MAKE) -C $(LIBUNGIF_DIR) clean
+-
+-libungif-dirclean:
+-	rm -rf $(LIBUNGIF_DIR)
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_LIBUNGIF),y)
+-TARGETS+=libungif
+-endif
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
