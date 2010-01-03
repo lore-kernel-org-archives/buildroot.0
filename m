@@ -1,10 +1,9 @@
 From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Sun,  3 Jan 2010 19:51:48 +0100
-Subject: [Buildroot] [PATCH 2/3] readline: convert to autotools
-	infrastructure
+Date: Sun,  3 Jan 2010 19:51:47 +0100
+Subject: [Buildroot] [PATCH 1/3] ncurses: convert to autotools infrastructure
 In-Reply-To: <1262544709-2771-1-git-send-email-llandwerlin@gmail.com>
 References: <1262544709-2771-1-git-send-email-llandwerlin@gmail.com>
-Message-ID: <1262544709-2771-3-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1262544709-2771-2-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,48 +14,67 @@ From: Lionel Landwerlin <llandwerlin@gmail.com>
 
 Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 ---
- package/readline/readline.mk |  107 ++++++++---------------------------------
- 1 files changed, 21 insertions(+), 86 deletions(-)
+ package/ncurses/ncurses.mk |  188 +++++++++++++++-----------------------------
+ 1 files changed, 65 insertions(+), 123 deletions(-)
 
-diff --git a/package/readline/readline.mk b/package/readline/readline.mk
-index 34c02d8..641cd71 100644
---- a/package/readline/readline.mk
-+++ b/package/readline/readline.mk
-@@ -3,89 +3,24 @@
- # build GNU readline
- #
- #############################################################
--READLINE_VERSION:=5.2
--READLINE_SITE:=$(BR2_GNU_MIRROR)/readline
--READLINE_SOURCE:=readline-$(READLINE_VERSION).tar.gz
--READLINE_DIR:=$(BUILD_DIR)/readline-$(READLINE_VERSION)
--READLINE_CAT:=$(ZCAT)
--READLINE_BINARY:=libhistory.a
--READLINE_SHARED_BINARY:=libhistory.so
--READLINE_TARGET_BINARY:=usr/lib/$(READLINE_BINARY)
--READLINE_TARGET_SHARED_BINARY:=usr/lib/$(READLINE_SHARED_BINARY)
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index fb22c6c..a19e6c8 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -23,99 +23,84 @@
+ # USA
+ 
+ # TARGETS
+-NCURSES_VERSION:=5.6
+-NCURSES_SITE:=$(BR2_GNU_MIRROR)/ncurses
+-NCURSES_DIR:=$(BUILD_DIR)/ncurses-$(NCURSES_VERSION)
+-NCURSES_SOURCE:=ncurses-$(NCURSES_VERSION).tar.gz
+-NCURSES_CAT:=$(ZCAT)
++NCURSES_VERSION = 5.6
++NCURSES_SITE = $(BR2_GNU_MIRROR)/ncurses
++NCURSES_SOURCE = ncurses-$(NCURSES_VERSION).tar.gz
++NCURSES_INSTALL_STAGING = YES
++NCURSES_INSTALL_TARGET = YES
++
++NCURSES_CONF_OPT = \
++	--with-shared \
++	--without-cxx \
++	--without-cxx-binding \
++	--without-ada \
++	--without-progs \
++	--disable-big-core \
++	--without-profile \
++	--disable-rpath \
++	--enable-echo \
++	--enable-const \
++	--enable-overwrite \
++	--enable-broken_linker
+ 
+ ifneq ($(BR2_PACKAGE_NCURSES_TARGET_HEADERS),y)
+-NCURSES_WANT_STATIC=--disable-static
++NCURSES_CONF_OPT += --disable-static
+ endif
+ 
+-$(DL_DIR)/$(NCURSES_SOURCE):
+-	$(call DOWNLOAD,$(NCURSES_SITE),$(NCURSES_SOURCE))
 -
--$(DL_DIR)/$(READLINE_SOURCE):
--	$(call DOWNLOAD,$(READLINE_SITE),$(READLINE_SOURCE))
--
--readline-source: $(DL_DIR)/$(READLINE_SOURCE)
--
--$(READLINE_DIR)/.unpacked: $(DL_DIR)/$(READLINE_SOURCE)
--	mkdir -p $(READLINE_DIR)
--	tar -C $(BUILD_DIR) -zxf $(DL_DIR)/$(READLINE_SOURCE)
--	toolchain/patch-kernel.sh $(READLINE_DIR) package/readline/ readline??-???
--	$(CONFIG_UPDATE) $(READLINE_DIR)
--	$(CONFIG_UPDATE) $(READLINE_DIR)/support
+-$(NCURSES_DIR)/.patched: $(DL_DIR)/$(NCURSES_SOURCE)
+-	$(NCURSES_CAT) $(DL_DIR)/$(NCURSES_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	#use the local tic and not whatever the build system was going to find.
+-	$(SED) 's~\$$srcdir/shlib tic\$$suffix~/usr/bin/tic~' \
+-		$(NCURSES_DIR)/misc/run_tic.in
+-	toolchain/patch-kernel.sh $(NCURSES_DIR) package/ncurses/ ncurses\*.patch
+-	$(CONFIG_UPDATE) $(NCURSES_DIR)
 -	touch $@
 -
--$(READLINE_DIR)/.configured: $(READLINE_DIR)/.unpacked
--	(cd $(READLINE_DIR); rm -rf config.cache; \
--		bash_cv_func_sigsetjmp=yes \
+-$(NCURSES_DIR)/.configured: $(NCURSES_DIR)/.patched
+-	(cd $(NCURSES_DIR); rm -rf config.cache; \
+-		BUILD_CC="$(HOSTCC)" \
 -		$(TARGET_CONFIGURE_OPTS) \
 -		$(TARGET_CONFIGURE_ARGS) \
 -		./configure $(QUIET) \
 -		--target=$(GNU_TARGET_NAME) \
--		--host=$(GNU_TARGET_NAME) \
+-		--host=$(REAL_GNU_TARGET_NAME) \
 -		--build=$(GNU_HOST_NAME) \
 -		--prefix=/usr \
 -		--exec-prefix=/usr \
@@ -67,71 +85,158 @@ index 34c02d8..641cd71 100644
 -		--sysconfdir=/etc \
 -		--datadir=/usr/share \
 -		--localstatedir=/var \
--		--with-shared \
 -		--includedir=/usr/include \
 -		--mandir=/usr/man \
 -		--infodir=/usr/info \
+-		--with-terminfo-dirs=/usr/share/terminfo \
+-		--with-default-terminfo-dir=/usr/share/terminfo \
+-		--with-shared --without-cxx --without-cxx-binding \
+-		--without-ada --without-progs --disable-big-core \
+-		$(DISABLE_NLS) $(DISABLE_LARGEFILE) \
+-		--without-profile --without-debug --disable-rpath \
+-		--enable-echo --enable-const --enable-overwrite \
+-		--enable-broken_linker \
+-		$(NCURSES_WANT_STATIC) \
 -	)
 -	touch $@
 -
--$(READLINE_DIR)/$(READLINE_BINARY): $(READLINE_DIR)/.configured
--	$(MAKE) -C $(READLINE_DIR) SHLIB_LIBS="-lncurses"
--	ls $(READLINE_DIR)/$(READLINE_BINARY)
+-$(NCURSES_DIR)/lib/libncurses.so.$(NCURSES_VERSION): $(NCURSES_DIR)/.configured
+-	$(MAKE1) DESTDIR=$(STAGING_DIR) -C $(NCURSES_DIR) \
+-		libs panel menu form headers
++ifneq ($(BR2_ENABLE_DEBUG),y)
++NCURSES_CONF_OPT += --without-debug
++endif
+ 
+-$(STAGING_DIR)/usr/lib/libncurses.so.$(NCURSES_VERSION): $(NCURSES_DIR)/lib/libncurses.so.$(NCURSES_VERSION)
+-	$(MAKE1) \
+-	    prefix=$(STAGING_DIR)/usr/ \
+-	    exec_prefix=$(STAGING_DIR) \
+-	    bindir=$(STAGING_DIR)/bin \
+-	    sbindir=$(STAGING_DIR)/sbin \
+-	    libexecdir=$(STAGING_DIR)/usr/lib \
+-	    datadir=$(STAGING_DIR)/usr/share \
+-	    sysconfdir=$(STAGING_DIR)/etc \
+-	    localstatedir=$(STAGING_DIR)/var \
+-	    libdir=$(STAGING_DIR)/usr/lib \
+-	    infodir=$(STAGING_DIR)/usr/info \
+-	    mandir=$(STAGING_DIR)/usr/man \
+-	    includedir=$(STAGING_DIR)/usr/include \
+-	    gxx_include_dir=$(STAGING_DIR)/usr/include/c++ \
+-	    ticdir=$(STAGING_DIR)/usr/share/terminfo \
+-	    -C $(NCURSES_DIR) install
+-	chmod a-x $(NCURSES_DIR)/lib/libncurses.so*
++define NCURSES_PATCH_NCURSES_CONFIG
+ 	$(SED) 's^prefix="^prefix="$(STAGING_DIR)^' \
+ 		$(STAGING_DIR)/bin/ncurses5-config
 -	touch -c $@
--
--$(STAGING_DIR)/$(READLINE_TARGET_BINARY): $(READLINE_DIR)/.configured
--	$(MAKE) -C $(READLINE_DIR) install
--	touch -c $@
--
--# Install to Staging area
--$(STAGING_DIR)/usr/include/readline/readline.h: $(READLINE_DIR)/$(READLINE_BINARY)
--	BUILD_CC=$(TARGET_CC) HOSTCC="$(HOSTCC)" CC=$(TARGET_CC) \
--	$(MAKE1) DESTDIR=$(STAGING_DIR) -C $(READLINE_DIR) install
--	touch -c $@
--
--# Install to Target directory
--$(TARGET_DIR)/$(READLINE_TARGET_SHARED_BINARY): $(READLINE_DIR)/$(READLINE_BINARY)
--	# make sure we don't end up with lib{readline,history}...old
--	$(MAKE1) DESTDIR=$(TARGET_DIR) -C $(READLINE_DIR) uninstall
--	BUILD_CC=$(TARGET_CC) HOSTCC="$(HOSTCC)" CC=$(TARGET_CC) \
--	$(MAKE1) DESTDIR=$(TARGET_DIR) \
--		-C $(READLINE_DIR) install-shared uninstall-doc
--	chmod 775 $(TARGET_DIR)/usr/lib/libreadline.so.$(READLINE_VERSION) $(TARGET_DIR)/usr/lib/libhistory.so.$(READLINE_VERSION)
--	$(STRIPCMD) $(TARGET_DIR)/usr/lib/libreadline.so.$(READLINE_VERSION) $(TARGET_DIR)/usr/lib/libhistory.so.$(READLINE_VERSION)
--
--readline: ncurses $(STAGING_DIR)/usr/include/readline/readline.h $(TARGET_DIR)/$(READLINE_TARGET_SHARED_BINARY)
--
--readline-clean:
--	-$(MAKE) -C $(READLINE_DIR) DESTDIR=$(STAGING_DIR) uninstall
--	-$(MAKE) -C $(READLINE_DIR) DESTDIR=$(TARGET_DIR) uninstall
--	-$(MAKE) -C $(READLINE_DIR) clean
--
--readline-dirclean:
--	rm -rf $(READLINE_DIR)
--
--ifeq ($(BR2_PACKAGE_READLINE),y)
--TARGETS+=readline
--endif
-+READLINE_VERSION = 5.2
-+READLINE_SOURCE = readline-$(READLINE_VERSION).tar.gz
-+READLINE_SITE = $(BR2_GNU_MIRROR)/readline
-+READLINE_INSTALL_STAGING = YES
-+READLINE_INSTALL_TARGET = YES
-+
-+READLINE_DEPENDENCIES = ncurses
-+
-+READLINE_CONF_ENV = bash_cv_func_sigsetjmp=yes
-+
-+define READLINE_INSTALL_TARGET_CMDS
-+	$(MAKE1) DESTDIR=$(TARGET_DIR) -C $(@D) uninstall
-+	$(MAKE1) DESTDIR=$(TARGET_DIR) -C $(@D) install-shared uninstall-doc
-+	chmod 775 $(TARGET_DIR)/usr/lib/libreadline.so.$(READLINE_VERSION) \
-+		$(TARGET_DIR)/usr/lib/libhistory.so.$(READLINE_VERSION)
-+	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) \
-+		$(TARGET_DIR)/usr/lib/libreadline.so.$(READLINE_VERSION) \
-+		$(TARGET_DIR)/usr/lib/libhistory.so.$(READLINE_VERSION)
 +endef
 +
-+$(eval $(call AUTOTARGETS,package,readline))
++NCURSES_POST_BUILD_HOOKS += NCURSES_PATCH_NCURSES_CONFIG
++
++ifeq ($(BR2_HAVE_DEVFILES),y)
++define NCURSES_INSTALL_TARGET_DEVFILES
++	mkdir -p $(TARGET_DIR)/usr/include
++	cp -dpf $(NCURSES_DIR)/include/curses.h $(TARGET_DIR)/usr/include/curses.h
++	cp -dpf $(NCURSES_DIR)/include/ncurses_dll.h $(TARGET_DIR)/usr/include/ncurses_dll.h
++	cp -dpf $(NCURSES_DIR)/include/term.h $(TARGET_DIR)/usr/include/
++	cp -dpf $(NCURSES_DIR)/include/unctrl.h $(TARGET_DIR)/usr/include/
++	cp -dpf $(NCURSES_DIR)/include/termcap.h $(TARGET_DIR)/usr/include/
++	cp -dpf $(NCURSES_DIR)/lib/libncurses.a $(TARGET_DIR)/usr/lib/
++	(cd $(TARGET_DIR)/usr/lib; \
++	 ln -fs libncurses.a libcurses.a; \
++	 ln -fs libncurses.a libtermcap.a; \
++	)
++	(cd $(TARGET_DIR)/usr/include; ln -fs curses.h ncurses.h)
++	rm -f $(TARGET_DIR)/usr/lib/libncurses.so
++	(cd $(TARGET_DIR)/usr/lib; ln -fs libncurses.so.$(NCURSES_VERSION) libncurses.so)
++endef
++endif
+ 
+-$(TARGET_DIR)/usr/lib/libncurses.so.$(NCURSES_VERSION): $(STAGING_DIR)/usr/lib/libncurses.so.$(NCURSES_VERSION)
+-	mkdir -p $(TARGET_DIR)/usr/lib
+-	cp -dpf $(NCURSES_DIR)/lib/libncurses.so* $(TARGET_DIR)/usr/lib/
+ ifeq ($(BR2_PACKAGE_NCURSES_TARGET_PANEL),y)
++define NCURSES_INSTALL_TARGET_PANEL
+ 	cp -dpf $(NCURSES_DIR)/lib/libpanel.so* $(TARGET_DIR)/usr/lib/
++endef
+ endif
++
+ ifeq ($(BR2_PACKAGE_NCURSES_TARGET_FORM),y)
++define NCURSES_INSTALL_TARGET_FORM
+ 	cp -dpf $(NCURSES_DIR)/lib/libform.so* $(TARGET_DIR)/usr/lib/
++endef
+ endif
++
+ ifeq ($(BR2_PACKAGE_NCURSES_TARGET_MENU),y)
++define NCURSES_INSTALL_TARGET_MENU
+ 	cp -dpf $(NCURSES_DIR)/lib/libmenu.so* $(TARGET_DIR)/usr/lib/
++endef
+ endif
++
++define NCURSES_INSTALL_TARGET_CMDS
++	mkdir -p $(TARGET_DIR)/usr/lib
++	cp -dpf $(NCURSES_DIR)/lib/libncurses.so* $(TARGET_DIR)/usr/lib/
++	$(NCURSES_INSTALL_TARGET_PANEL)
++	$(NCURSES_INSTALL_TARGET_FORM)
++	$(BR2_PACKAGE_NCURSES_TARGET_MENU)
+ 	ln -snf /usr/share/terminfo $(TARGET_DIR)/usr/lib/terminfo
+ 	mkdir -p $(TARGET_DIR)/usr/share/terminfo/x
+ 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm $(TARGET_DIR)/usr/share/terminfo/x
+@@ -130,51 +115,8 @@ endif
+ 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/a/ansi $(TARGET_DIR)/usr/share/terminfo/a
+ 	mkdir -p $(TARGET_DIR)/usr/share/terminfo/l
+ 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/l/linux $(TARGET_DIR)/usr/share/terminfo/l
+-	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $@
+-	touch -c $@
+-
+-$(NCURSES_DIR)/lib/libncurses.a: $(NCURSES_DIR)/lib/libncurses.so.$(NCURSES_VERSION)
++	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libncurses.so*
++	$(NCURSES_INSTALL_TARGET_DEVFILES)
++endef # NCURSES_INSTALL_TARGET_CMDS
+ 
+-$(TARGET_DIR)/usr/lib/libncurses.a: $(NCURSES_DIR)/lib/libncurses.a
+-	mkdir -p $(TARGET_DIR)/usr/include
+-	cp -dpf $(NCURSES_DIR)/include/curses.h $(TARGET_DIR)/usr/include/curses.h
+-	cp -dpf $(NCURSES_DIR)/include/ncurses_dll.h $(TARGET_DIR)/usr/include/ncurses_dll.h
+-	cp -dpf $(NCURSES_DIR)/include/term.h $(TARGET_DIR)/usr/include/
+-	cp -dpf $(NCURSES_DIR)/include/unctrl.h $(TARGET_DIR)/usr/include/
+-	cp -dpf $(NCURSES_DIR)/include/termcap.h $(TARGET_DIR)/usr/include/
+-	cp -dpf $(NCURSES_DIR)/lib/libncurses.a $(TARGET_DIR)/usr/lib/
+-	(cd $(TARGET_DIR)/usr/lib; \
+-	 ln -fs libncurses.a libcurses.a; \
+-	 ln -fs libncurses.a libtermcap.a; \
+-	)
+-	(cd $(TARGET_DIR)/usr/include; ln -fs curses.h ncurses.h)
+-	rm -f $(TARGET_DIR)/usr/lib/libncurses.so
+-	(cd $(TARGET_DIR)/usr/lib; ln -fs libncurses.so.$(NCURSES_VERSION) libncurses.so)
+-	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libncurses.so.$(NCURSES_VERSION)
+-	touch -c $@
+-
+-ncurses: $(TARGET_DIR)/usr/lib/libncurses.so.$(NCURSES_VERSION) \
+-	$(if $(BR2_HAVE_DEVFILES),$(TARGET_DIR)/usr/lib/libncurses.a)
+-
+-ncurses-unpacked: $(NCURSES_DIR)/.patched
+-
+-ncurses-source: $(DL_DIR)/$(NCURSES_SOURCE)
+-
+-ncurses-clean:
+-	rm -f $(STAGING_DIR)/usr/lib/libncurses.so* $(TARGET_DIR)/usr/lib/libncurses.so*
+-	rm -rf $(STAGING_DIR)/usr/share/tabset $(TARGET_DIR)/usr/share/tabset
+-	rm -rf $(STAGING_DIR)/usr/share/terminfo $(TARGET_DIR)/usr/share/terminfo
+-	rm -rf $(TARGET_DIR)/usr/lib/terminfo
+-	-$(MAKE) -C $(NCURSES_DIR) clean
+-
+-ncurses-dirclean:
+-	rm -rf $(NCURSES_DIR)
+-
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_NCURSES),y)
+-TARGETS+=ncurses
+-endif
++$(eval $(call AUTOTARGETS,package,ncurses))
 -- 
 1.6.5.7
