@@ -1,41 +1,41 @@
-From: Clark Rawlins <clark.rawlins@escient.com>
-Date: Sat, 02 Jan 2010 17:47:47 -0500
-Subject: [Buildroot] [PATCH] cdrtools fails to build with an external
-	toolchain
-Message-ID: <1262472467.23927.21.camel@venture>
+From: Lionel Landwerlin <llandwerlin@gmail.com>
+Date: Sun, 03 Jan 2010 01:13:45 +0100
+Subject: [Buildroot] [PATCH] Permit building grub with an external
+ toolchain.
+In-Reply-To: <1262472376.23927.19.camel@venture>
+References: <1262472376.23927.19.camel@venture>
+Message-ID: <1262477625.23193.2.camel@coalu.atr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cdrtools 2.10 fails to build with an error of "conflicting types
-for `fexecve` cdrtools 2.10.01a70 has a fix in it that repairs the problem.
-This change bumps the version of cdrtools to the latest alpha version
-that includes this change.
+Le samedi 02 janvier 2010 ? 17:46 -0500, Clark Rawlins a ?crit :
+> Grub build failed at the link stage because it
+> couldn't find libcurses. Adding these variable
+> invocations to the configure line make it work.
+> 
+> Signed-off-by: Clark Rawlins <clark.rawlins@escient.com>
+> ---
+>  target/x86/grub/grub.mk |    2 ++
+>  1 files changed, 2 insertions(+), 0 deletions(-)
+> 
+> diff --git a/target/x86/grub/grub.mk b/target/x86/grub/grub.mk
+> index af46244..21f089f 100644
+> --- a/target/x86/grub/grub.mk
+> +++ b/target/x86/grub/grub.mk
+> @@ -81,6 +81,8 @@ $(GRUB_DIR)/.unpacked: $(DL_DIR)/$(GRUB_SOURCE) $(DL_DIR)/$(GRUB_PATCH)
+>  $(GRUB_DIR)/.configured: $(GRUB_DIR)/.unpacked
+>  	(cd $(GRUB_DIR); rm -rf config.cache; \
+>  		$(TARGET_CONFIGURE_OPTS) \
+> +		$(TARGET_CONFIGURE_ARGS) \
+> +		$(TARGET_CONFIGURE_ENV) \
+>  		CFLAGS="$(TARGET_CFLAGS)" \
+>  		CPPFLAGS="$(GRUB_CFLAGS)" \
+>  		./configure $(QUIET) \
 
-Signed-off-by: Clark Rawlins <clark.rawlins@escient.com>
----
- target/iso9660/iso9660.mk |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+Maybe you should consider switching grub to the autotool infrastructure.
 
-diff --git a/target/iso9660/iso9660.mk b/target/iso9660/iso9660.mk
-index 94edf63..46d96f7 100644
---- a/target/iso9660/iso9660.mk
-+++ b/target/iso9660/iso9660.mk
-@@ -3,10 +3,10 @@
- # mkisofs to build to target iso9660 filesystems
- #
- #############################################################
--MKISOFS_SOURCE:=cdrtools-2.01.tar.bz2
-+MKISOFS_SOURCE:=cdrtools-2.01.01a70.tar.bz2
- MKISOFS_CAT:=$(BZCAT)
--MKISOFS_SITE:=ftp://ftp.berlios.de/pub/cdrecord/
--MKISOFS_DIR:=$(BUILD_DIR)/cdrtools-2.01
-+MKISOFS_SITE:=ftp://ftp.berlios.de/pub/cdrecord/alpha/
-+MKISOFS_DIR:=$(BUILD_DIR)/cdrtools-2.01.01
- MKISOFS_TARGET=$(MKISOFS_DIR)/mkisofs/OBJ/$(HOST_ARCH)-linux-cc/mkisofs
- 
- $(DL_DIR)/$(MKISOFS_SOURCE):
 -- 
-1.6.3.3
+Lionel Landwerlin
