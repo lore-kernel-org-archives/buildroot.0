@@ -1,70 +1,87 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Sun, 03 Jan 2010 05:08:14 +0100
+From: Clark Rawlins <clark.rawlins@escient.com>
+Date: Sun, 03 Jan 2010 08:43:38 -0500
 Subject: [Buildroot] [PATCH] Permit building grub with an external
  toolchain.
-In-Reply-To: <1262484948.23927.25.camel@venture>
+In-Reply-To: <1262491694.23193.10.camel@coalu.atr>
 References: <1262472376.23927.19.camel@venture>
 	<1262477625.23193.2.camel@coalu.atr>
 	<1262484948.23927.25.camel@venture>
-Message-ID: <1262491694.23193.10.camel@coalu.atr>
+	<1262491694.23193.10.camel@coalu.atr>
+Message-ID: <1262526218.23927.27.camel@venture>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Here is one example :
+Okay,
 
-http://git.buildroot.org/buildroot/commit/?id=21bab8862f3c2906af347e5a993ce4cd36c1b063
+I've started looking at this but it isn't clear to me how to handle the
+following:
 
-You can find a lot like this in the recent git history.
-I'm think to the new infrastructure because it provides all the glue to
-configure the package, especially the 2 lines you added.
+$(GRUB_DIR)/$(GRUB_BINARY): $(GRUB_DIR)/.configured
+	$(MAKE) CC=$(TARGET_CC) -C $(GRUB_DIR)
+	rm -f $(GRUB_DIR)/$(GRUB_BINARY)
+	$(MAKE) CC=$(TARGET_CC) CFLAGS+=-static -C $(GRUB_DIR)/grub grub
+	mkdir -p $(dir $(STAGING_DIR)/$(GRUB_TARGET_BINARY))
+	mv $(GRUB_DIR)/$(GRUB_BINARY) $(STAGING_DIR)/$(GRUB_TARGET_BINARY).static
+	$(MAKE) CC=$(TARGET_CC) -C $(GRUB_DIR)/grub
 
-Regards,
+This builds everything dynamically linked first then builds the grub binary statically.
+Is the right way to do this to override the target after/before calling the autotools macro?
 
 
-Le samedi 02 janvier 2010 ? 21:15 -0500, Clark Rawlins a ?crit :
-> I could give that a shot.  I thought as a start I would go with the
-> smallest change possible.  Any suggestions for an example to look at for
-> switching grub to the autotools macros?
+On Sun, 2010-01-03 at 05:08 +0100, Lionel Landwerlin wrote:
+> Here is one example :
+> 
+> http://git.buildroot.org/buildroot/commit/?id=21bab8862f3c2906af347e5a993ce4cd36c1b063
+> 
+> You can find a lot like this in the recent git history.
+> I'm think to the new infrastructure because it provides all the glue to
+> configure the package, especially the 2 lines you added.
+> 
+> Regards,
 > 
 > 
-> On Sun, 2010-01-03 at 01:13 +0100, Lionel Landwerlin wrote:
-> > Le samedi 02 janvier 2010 ? 17:46 -0500, Clark Rawlins a ?crit :
-> > > Grub build failed at the link stage because it
-> > > couldn't find libcurses. Adding these variable
-> > > invocations to the configure line make it work.
+> Le samedi 02 janvier 2010 ? 21:15 -0500, Clark Rawlins a ?crit :
+> > I could give that a shot.  I thought as a start I would go with the
+> > smallest change possible.  Any suggestions for an example to look at for
+> > switching grub to the autotools macros?
+> > 
+> > 
+> > On Sun, 2010-01-03 at 01:13 +0100, Lionel Landwerlin wrote:
+> > > Le samedi 02 janvier 2010 ? 17:46 -0500, Clark Rawlins a ?crit :
+> > > > Grub build failed at the link stage because it
+> > > > couldn't find libcurses. Adding these variable
+> > > > invocations to the configure line make it work.
+> > > > 
+> > > > Signed-off-by: Clark Rawlins <clark.rawlins@escient.com>
+> > > > ---
+> > > >  target/x86/grub/grub.mk |    2 ++
+> > > >  1 files changed, 2 insertions(+), 0 deletions(-)
+> > > > 
+> > > > diff --git a/target/x86/grub/grub.mk b/target/x86/grub/grub.mk
+> > > > index af46244..21f089f 100644
+> > > > --- a/target/x86/grub/grub.mk
+> > > > +++ b/target/x86/grub/grub.mk
+> > > > @@ -81,6 +81,8 @@ $(GRUB_DIR)/.unpacked: $(DL_DIR)/$(GRUB_SOURCE) $(DL_DIR)/$(GRUB_PATCH)
+> > > >  $(GRUB_DIR)/.configured: $(GRUB_DIR)/.unpacked
+> > > >  	(cd $(GRUB_DIR); rm -rf config.cache; \
+> > > >  		$(TARGET_CONFIGURE_OPTS) \
+> > > > +		$(TARGET_CONFIGURE_ARGS) \
+> > > > +		$(TARGET_CONFIGURE_ENV) \
+> > > >  		CFLAGS="$(TARGET_CFLAGS)" \
+> > > >  		CPPFLAGS="$(GRUB_CFLAGS)" \
+> > > >  		./configure $(QUIET) \
 > > > 
-> > > Signed-off-by: Clark Rawlins <clark.rawlins@escient.com>
-> > > ---
-> > >  target/x86/grub/grub.mk |    2 ++
-> > >  1 files changed, 2 insertions(+), 0 deletions(-)
+> > > Maybe you should consider switching grub to the autotool infrastructure.
 > > > 
-> > > diff --git a/target/x86/grub/grub.mk b/target/x86/grub/grub.mk
-> > > index af46244..21f089f 100644
-> > > --- a/target/x86/grub/grub.mk
-> > > +++ b/target/x86/grub/grub.mk
-> > > @@ -81,6 +81,8 @@ $(GRUB_DIR)/.unpacked: $(DL_DIR)/$(GRUB_SOURCE) $(DL_DIR)/$(GRUB_PATCH)
-> > >  $(GRUB_DIR)/.configured: $(GRUB_DIR)/.unpacked
-> > >  	(cd $(GRUB_DIR); rm -rf config.cache; \
-> > >  		$(TARGET_CONFIGURE_OPTS) \
-> > > +		$(TARGET_CONFIGURE_ARGS) \
-> > > +		$(TARGET_CONFIGURE_ENV) \
-> > >  		CFLAGS="$(TARGET_CFLAGS)" \
-> > >  		CPPFLAGS="$(GRUB_CFLAGS)" \
-> > >  		./configure $(QUIET) \
+> > > -- 
+> > > Lionel Landwerlin
+> > > 
+> > > _______________________________________________
+> > > buildroot mailing list
+> > > buildroot at busybox.net
+> > > http://lists.busybox.net/mailman/listinfo/buildroot
 > > 
-> > Maybe you should consider switching grub to the autotool infrastructure.
-> > 
-> > -- 
-> > Lionel Landwerlin
-> > 
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
 > 
-
--- 
-Lionel Landwerlin
