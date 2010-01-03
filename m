@@ -1,9 +1,10 @@
 From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Sun,  3 Jan 2010 19:51:47 +0100
-Subject: [Buildroot] [PATCH 1/3] ncurses: convert to autotools infrastructure
+Date: Sun,  3 Jan 2010 19:51:49 +0100
+Subject: [Buildroot] [PATCH 3/3] lua: conversion to new package
+	infrastructure
 In-Reply-To: <1262544709-2771-1-git-send-email-llandwerlin@gmail.com>
 References: <1262544709-2771-1-git-send-email-llandwerlin@gmail.com>
-Message-ID: <1262544709-2771-2-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1262544709-2771-4-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,231 +13,156 @@ To: buildroot@busybox.net
 
 From: Lionel Landwerlin <llandwerlin@gmail.com>
 
+Also install development files to staging by default and to target if
+requested.
+
 Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 ---
- package/ncurses/ncurses.mk |  188 +++++++++++++++-----------------------------
- 1 files changed, 65 insertions(+), 123 deletions(-)
+ package/lua/lua.mk |  124 +++++++++++++++++++++++++--------------------------
+ 1 files changed, 61 insertions(+), 63 deletions(-)
 
-diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-index fb22c6c..a19e6c8 100644
---- a/package/ncurses/ncurses.mk
-+++ b/package/ncurses/ncurses.mk
-@@ -23,99 +23,84 @@
- # USA
+diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+index aeb6c82..9cb1675 100644
+--- a/package/lua/lua.mk
++++ b/package/lua/lua.mk
+@@ -5,77 +5,75 @@
+ #############################################################
  
- # TARGETS
--NCURSES_VERSION:=5.6
--NCURSES_SITE:=$(BR2_GNU_MIRROR)/ncurses
--NCURSES_DIR:=$(BUILD_DIR)/ncurses-$(NCURSES_VERSION)
--NCURSES_SOURCE:=ncurses-$(NCURSES_VERSION).tar.gz
--NCURSES_CAT:=$(ZCAT)
-+NCURSES_VERSION = 5.6
-+NCURSES_SITE = $(BR2_GNU_MIRROR)/ncurses
-+NCURSES_SOURCE = ncurses-$(NCURSES_VERSION).tar.gz
-+NCURSES_INSTALL_STAGING = YES
-+NCURSES_INSTALL_TARGET = YES
-+
-+NCURSES_CONF_OPT = \
-+	--with-shared \
-+	--without-cxx \
-+	--without-cxx-binding \
-+	--without-ada \
-+	--without-progs \
-+	--disable-big-core \
-+	--without-profile \
-+	--disable-rpath \
-+	--enable-echo \
-+	--enable-const \
-+	--enable-overwrite \
-+	--enable-broken_linker
+ LUA_VERSION=5.1.4
+-
+ LUA_SOURCE=lua-$(LUA_VERSION).tar.gz
+-LUA_CAT:=$(ZCAT)
+ LUA_SITE=http://www.lua.org/ftp
++LUA_INSTALL_STAGING=YES
++LUA_DEPENDENCIES = readline ncurses
  
- ifneq ($(BR2_PACKAGE_NCURSES_TARGET_HEADERS),y)
--NCURSES_WANT_STATIC=--disable-static
-+NCURSES_CONF_OPT += --disable-static
- endif
+-LUA_DIR=$(BUILD_DIR)/lua-$(LUA_VERSION)
+-
++#
+ LUA_CFLAGS=-DLUA_USE_LINUX
+ LUA_MYLIBS="-Wl,-E -ldl -lreadline -lhistory -lncurses"
  
--$(DL_DIR)/$(NCURSES_SOURCE):
--	$(call DOWNLOAD,$(NCURSES_SITE),$(NCURSES_SOURCE))
+-$(DL_DIR)/$(LUA_SOURCE):
+-	$(call DOWNLOAD,$(LUA_SITE),$(LUA_SOURCE))
 -
--$(NCURSES_DIR)/.patched: $(DL_DIR)/$(NCURSES_SOURCE)
--	$(NCURSES_CAT) $(DL_DIR)/$(NCURSES_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	#use the local tic and not whatever the build system was going to find.
--	$(SED) 's~\$$srcdir/shlib tic\$$suffix~/usr/bin/tic~' \
--		$(NCURSES_DIR)/misc/run_tic.in
--	toolchain/patch-kernel.sh $(NCURSES_DIR) package/ncurses/ ncurses\*.patch
--	$(CONFIG_UPDATE) $(NCURSES_DIR)
--	touch $@
+-$(LUA_DIR)/.unpacked: $(DL_DIR)/$(LUA_SOURCE)
+-	$(LUA_CAT) $(DL_DIR)/$(LUA_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	touch $(LUA_DIR)/.unpacked
 -
--$(NCURSES_DIR)/.configured: $(NCURSES_DIR)/.patched
--	(cd $(NCURSES_DIR); rm -rf config.cache; \
--		BUILD_CC="$(HOSTCC)" \
--		$(TARGET_CONFIGURE_OPTS) \
--		$(TARGET_CONFIGURE_ARGS) \
--		./configure $(QUIET) \
--		--target=$(GNU_TARGET_NAME) \
--		--host=$(REAL_GNU_TARGET_NAME) \
--		--build=$(GNU_HOST_NAME) \
--		--prefix=/usr \
--		--exec-prefix=/usr \
--		--bindir=/usr/bin \
--		--sbindir=/usr/sbin \
--		--libdir=/usr/lib \
--		--libexecdir=/usr/lib \
--		--sysconfdir=/etc \
--		--datadir=/usr/share \
--		--localstatedir=/var \
--		--includedir=/usr/include \
--		--mandir=/usr/man \
--		--infodir=/usr/info \
--		--with-terminfo-dirs=/usr/share/terminfo \
--		--with-default-terminfo-dir=/usr/share/terminfo \
--		--with-shared --without-cxx --without-cxx-binding \
--		--without-ada --without-progs --disable-big-core \
--		$(DISABLE_NLS) $(DISABLE_LARGEFILE) \
--		--without-profile --without-debug --disable-rpath \
--		--enable-echo --enable-const --enable-overwrite \
--		--enable-broken_linker \
--		$(NCURSES_WANT_STATIC) \
--	)
--	touch $@
+-$(LUA_DIR)/src/lua: $(LUA_DIR)/.unpacked
+-	rm -f $@
++define LUA_BUILD_CMDS
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) \
+ 		MYCFLAGS=$(LUA_CFLAGS) \
+ 		MYLIBS=$(LUA_MYLIBS) \
+ 		AR="$(TARGET_CROSS)ar rcu" \
+-		-C $(LUA_DIR)/src all
 -
--$(NCURSES_DIR)/lib/libncurses.so.$(NCURSES_VERSION): $(NCURSES_DIR)/.configured
--	$(MAKE1) DESTDIR=$(STAGING_DIR) -C $(NCURSES_DIR) \
--		libs panel menu form headers
-+ifneq ($(BR2_ENABLE_DEBUG),y)
-+NCURSES_CONF_OPT += --without-debug
-+endif
- 
--$(STAGING_DIR)/usr/lib/libncurses.so.$(NCURSES_VERSION): $(NCURSES_DIR)/lib/libncurses.so.$(NCURSES_VERSION)
--	$(MAKE1) \
--	    prefix=$(STAGING_DIR)/usr/ \
--	    exec_prefix=$(STAGING_DIR) \
--	    bindir=$(STAGING_DIR)/bin \
--	    sbindir=$(STAGING_DIR)/sbin \
--	    libexecdir=$(STAGING_DIR)/usr/lib \
--	    datadir=$(STAGING_DIR)/usr/share \
--	    sysconfdir=$(STAGING_DIR)/etc \
--	    localstatedir=$(STAGING_DIR)/var \
--	    libdir=$(STAGING_DIR)/usr/lib \
--	    infodir=$(STAGING_DIR)/usr/info \
--	    mandir=$(STAGING_DIR)/usr/man \
--	    includedir=$(STAGING_DIR)/usr/include \
--	    gxx_include_dir=$(STAGING_DIR)/usr/include/c++ \
--	    ticdir=$(STAGING_DIR)/usr/share/terminfo \
--	    -C $(NCURSES_DIR) install
--	chmod a-x $(NCURSES_DIR)/lib/libncurses.so*
-+define NCURSES_PATCH_NCURSES_CONFIG
- 	$(SED) 's^prefix="^prefix="$(STAGING_DIR)^' \
- 		$(STAGING_DIR)/bin/ncurses5-config
--	touch -c $@
-+endef
-+
-+NCURSES_POST_BUILD_HOOKS += NCURSES_PATCH_NCURSES_CONFIG
-+
-+ifeq ($(BR2_HAVE_DEVFILES),y)
-+define NCURSES_INSTALL_TARGET_DEVFILES
-+	mkdir -p $(TARGET_DIR)/usr/include
-+	cp -dpf $(NCURSES_DIR)/include/curses.h $(TARGET_DIR)/usr/include/curses.h
-+	cp -dpf $(NCURSES_DIR)/include/ncurses_dll.h $(TARGET_DIR)/usr/include/ncurses_dll.h
-+	cp -dpf $(NCURSES_DIR)/include/term.h $(TARGET_DIR)/usr/include/
-+	cp -dpf $(NCURSES_DIR)/include/unctrl.h $(TARGET_DIR)/usr/include/
-+	cp -dpf $(NCURSES_DIR)/include/termcap.h $(TARGET_DIR)/usr/include/
-+	cp -dpf $(NCURSES_DIR)/lib/libncurses.a $(TARGET_DIR)/usr/lib/
-+	(cd $(TARGET_DIR)/usr/lib; \
-+	 ln -fs libncurses.a libcurses.a; \
-+	 ln -fs libncurses.a libtermcap.a; \
-+	)
-+	(cd $(TARGET_DIR)/usr/include; ln -fs curses.h ncurses.h)
-+	rm -f $(TARGET_DIR)/usr/lib/libncurses.so
-+	(cd $(TARGET_DIR)/usr/lib; ln -fs libncurses.so.$(NCURSES_VERSION) libncurses.so)
-+endef
-+endif
- 
--$(TARGET_DIR)/usr/lib/libncurses.so.$(NCURSES_VERSION): $(STAGING_DIR)/usr/lib/libncurses.so.$(NCURSES_VERSION)
--	mkdir -p $(TARGET_DIR)/usr/lib
--	cp -dpf $(NCURSES_DIR)/lib/libncurses.so* $(TARGET_DIR)/usr/lib/
- ifeq ($(BR2_PACKAGE_NCURSES_TARGET_PANEL),y)
-+define NCURSES_INSTALL_TARGET_PANEL
- 	cp -dpf $(NCURSES_DIR)/lib/libpanel.so* $(TARGET_DIR)/usr/lib/
-+endef
- endif
-+
- ifeq ($(BR2_PACKAGE_NCURSES_TARGET_FORM),y)
-+define NCURSES_INSTALL_TARGET_FORM
- 	cp -dpf $(NCURSES_DIR)/lib/libform.so* $(TARGET_DIR)/usr/lib/
-+endef
- endif
-+
- ifeq ($(BR2_PACKAGE_NCURSES_TARGET_MENU),y)
-+define NCURSES_INSTALL_TARGET_MENU
- 	cp -dpf $(NCURSES_DIR)/lib/libmenu.so* $(TARGET_DIR)/usr/lib/
-+endef
- endif
-+
-+define NCURSES_INSTALL_TARGET_CMDS
-+	mkdir -p $(TARGET_DIR)/usr/lib
-+	cp -dpf $(NCURSES_DIR)/lib/libncurses.so* $(TARGET_DIR)/usr/lib/
-+	$(NCURSES_INSTALL_TARGET_PANEL)
-+	$(NCURSES_INSTALL_TARGET_FORM)
-+	$(BR2_PACKAGE_NCURSES_TARGET_MENU)
- 	ln -snf /usr/share/terminfo $(TARGET_DIR)/usr/lib/terminfo
- 	mkdir -p $(TARGET_DIR)/usr/share/terminfo/x
- 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm $(TARGET_DIR)/usr/share/terminfo/x
-@@ -130,51 +115,8 @@ endif
- 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/a/ansi $(TARGET_DIR)/usr/share/terminfo/a
- 	mkdir -p $(TARGET_DIR)/usr/share/terminfo/l
- 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/l/linux $(TARGET_DIR)/usr/share/terminfo/l
--	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $@
--	touch -c $@
+-$(LUA_DIR)/src/luac: $(LUA_DIR)/src/lua
 -
--$(NCURSES_DIR)/lib/libncurses.a: $(NCURSES_DIR)/lib/libncurses.so.$(NCURSES_VERSION)
-+	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libncurses.so*
-+	$(NCURSES_INSTALL_TARGET_DEVFILES)
-+endef # NCURSES_INSTALL_TARGET_CMDS
- 
--$(TARGET_DIR)/usr/lib/libncurses.a: $(NCURSES_DIR)/lib/libncurses.a
--	mkdir -p $(TARGET_DIR)/usr/include
--	cp -dpf $(NCURSES_DIR)/include/curses.h $(TARGET_DIR)/usr/include/curses.h
--	cp -dpf $(NCURSES_DIR)/include/ncurses_dll.h $(TARGET_DIR)/usr/include/ncurses_dll.h
--	cp -dpf $(NCURSES_DIR)/include/term.h $(TARGET_DIR)/usr/include/
--	cp -dpf $(NCURSES_DIR)/include/unctrl.h $(TARGET_DIR)/usr/include/
--	cp -dpf $(NCURSES_DIR)/include/termcap.h $(TARGET_DIR)/usr/include/
--	cp -dpf $(NCURSES_DIR)/lib/libncurses.a $(TARGET_DIR)/usr/lib/
--	(cd $(TARGET_DIR)/usr/lib; \
--	 ln -fs libncurses.a libcurses.a; \
--	 ln -fs libncurses.a libtermcap.a; \
--	)
--	(cd $(TARGET_DIR)/usr/include; ln -fs curses.h ncurses.h)
--	rm -f $(TARGET_DIR)/usr/lib/libncurses.so
--	(cd $(TARGET_DIR)/usr/lib; ln -fs libncurses.so.$(NCURSES_VERSION) libncurses.so)
--	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libncurses.so.$(NCURSES_VERSION)
--	touch -c $@
+-$(LUA_DIR)/src/liblua.a: $(LUA_DIR)/src/lua
 -
--ncurses: $(TARGET_DIR)/usr/lib/libncurses.so.$(NCURSES_VERSION) \
--	$(if $(BR2_HAVE_DEVFILES),$(TARGET_DIR)/usr/lib/libncurses.a)
+-$(STAGING_DIR)/usr/lib/liblua.a: $(LUA_DIR)/src/liblua.a
+-	cp -dpf $(LUA_DIR)/src/liblua.a $(STAGING_DIR)/usr/lib/liblua.a
 -
--ncurses-unpacked: $(NCURSES_DIR)/.patched
+-$(STAGING_DIR)/usr/bin/lua: $(LUA_DIR)/src/lua
+-	cp -dpf $(LUA_DIR)/src/lua $(STAGING_DIR)/usr/bin/lua
 -
--ncurses-source: $(DL_DIR)/$(NCURSES_SOURCE)
+-$(STAGING_DIR)/usr/bin/luac: $(LUA_DIR)/src/luac
+-	cp -dpf $(LUA_DIR)/src/luac $(STAGING_DIR)/usr/bin/luac
 -
--ncurses-clean:
--	rm -f $(STAGING_DIR)/usr/lib/libncurses.so* $(TARGET_DIR)/usr/lib/libncurses.so*
--	rm -rf $(STAGING_DIR)/usr/share/tabset $(TARGET_DIR)/usr/share/tabset
--	rm -rf $(STAGING_DIR)/usr/share/terminfo $(TARGET_DIR)/usr/share/terminfo
--	rm -rf $(TARGET_DIR)/usr/lib/terminfo
--	-$(MAKE) -C $(NCURSES_DIR) clean
+-$(TARGET_DIR)/usr/lib/liblua.a: $(STAGING_DIR)/usr/lib/liblua.a
+-	cp -dpf $(STAGING_DIR)/usr/lib/liblua.a $(TARGET_DIR)/usr/lib/liblua.a
 -
--ncurses-dirclean:
--	rm -rf $(NCURSES_DIR)
+-$(TARGET_DIR)/usr/bin/lua: $(STAGING_DIR)/usr/bin/lua
+-	cp -dpf $(STAGING_DIR)/usr/bin/lua $(TARGET_DIR)/usr/bin/lua
+-
+-$(TARGET_DIR)/usr/bin/luac: $(STAGING_DIR)/usr/bin/luac
+-	cp -dpf $(STAGING_DIR)/usr/bin/luac $(TARGET_DIR)/usr/bin/luac
+-
+-
+-lua-bins:	$(TARGET_DIR)/usr/bin/lua $(TARGET_DIR)/usr/bin/luac
+-
+-lua-libs: $(if $(BR2_HAVE_DEVFILES),$(TARGET_DIR)/usr/lib/liblua.a)
+-
+-lua: readline ncurses lua-bins lua-libs
+-
+-lua-source: $(DL_DIR)/$(LUA_SOURCE)
+-
+-lua-clean:
+-	rm -f $(STAGING_DIR)/usr/bin/lua $(TARGET_DIR)/usr/bin/luac
+-	rm -f $(STAGING_DIR)/usr/lib/liblua.a
+-	rm -f $(TARGET_DIR)/usr/bin/lua $(TARGET_DIR)/usr/bin/luac
+-	rm -f $(TARGET_DIR)/usr/lib/liblua.a
+-	-$(MAKE) -C $(LUA_DIR) clean
+-
+-lua-dirclean:
+-	rm -rf $(LUA_DIR)
 -
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_NCURSES),y)
--TARGETS+=ncurses
--endif
-+$(eval $(call AUTOTARGETS,package,ncurses))
+-ifeq ($(BR2_PACKAGE_LUA),y)
+-TARGETS+=lua
++		-C $(@D)/src all
++endef
++
++define LUA_INSTALL_STAGING_CMDS
++	cat $(@D)/etc/lua.pc | sed -e s/\\/usr\\/local/\\/usr/ > $(STAGING_DIR)/usr/lib/pkgconfig/lua.pc
++	$(INSTALL) $(@D)/src/liblua.a $(STAGING_DIR)/usr/lib
++	$(INSTALL) $(@D)/src/lua $(STAGING_DIR)/usr/bin
++	$(INSTALL) $(@D)/src/luac $(STAGING_DIR)/usr/bin
++	$(INSTALL) $(@D)/src/lua.h $(STAGING_DIR)/usr/include
++	$(INSTALL) $(@D)/src/luaconf.h $(STAGING_DIR)/usr/include
++	$(INSTALL) $(@D)/src/lualib.h $(STAGING_DIR)/usr/include
++	$(INSTALL) $(@D)/src/lauxlib.h $(STAGING_DIR)/usr/include
++endef
++
++ifeq ($(BR2_HAVE_DEVFILES),y)
++define LUA_INSTALL_TARGET_HEADERS
++	install -D $(STAGING_DIR)/usr/lib/pkgconfig/lua.pc $(TARGET_DIR)/usr/lib/pkgconfig/lua.pc
++	$(INSTALL) $(@D)/src/lua.h $(TARGET_DIR)/usr/include
++	$(INSTALL) $(@D)/src/luaconf.h $(TARGET_DIR)/usr/include
++	$(INSTALL) $(@D)/src/lualib.h $(TARGET_DIR)/usr/include
++	$(INSTALL) $(@D)/src/lauxlib.h $(TARGET_DIR)/usr/include
++endef
+ endif
++
++define LUA_INSTALL_TARGET_CMDS
++	$(INSTALL) $(@D)/src/lua $(STAGING_DIR)/usr/bin
++	$(INSTALL) $(@D)/src/luac $(STAGING_DIR)/usr/bin
++	$(INSTALL) -D $(@D)/src/liblua.a $(STAGING_DIR)/usr/lib/liblua.a
++	$(LUA_INSTALL_TARGET_HEADERS)
++endef
++
++LUA_INSTALLED_FILES = \
++	/usr/include/lua.h \
++	/usr/include/luaconf.h \
++	/usr/include/lualib.h \
++	/usr/include/lauxlib.h \
++	/usr/lib/pkgconfig/lua.pc \
++	/usr/bin/lua \
++	/usr/bin/luac \
++	/usr/lib/liblua.a
++
++define LUA_UNINSTALL_STAGING_CMDS
++	for i in $(LUA_INSTALLED_FILES); do \
++		rm -f $(STAGING_DIR)$$i; \
++	done
++endef
++
++define LUA_UNINSTALL_TARGET_CMDS
++	for i in $(LUA_INSTALLED_FILES); do \
++		rm -f $(TARGET_DIR)$$i; \
++	done
++endef
++
++define LUA_CLEAN_CMDS
++	-$(MAKE) $(@D) clean
++endef
++
++$(eval $(call GENTARGETS,package,lua))
 -- 
 1.6.5.7
