@@ -1,175 +1,164 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Mon, 4 Jan 2010 14:29:12 +0100
-Subject: [Buildroot] [PATCH] Permit building grub with an external
-	toolchain.
-In-Reply-To: <1262611334.3853.11.camel@venture>
-References: <1262472376.23927.19.camel@venture>
-	<1262477625.23193.2.camel@coalu.atr>
-	<1262484948.23927.25.camel@venture>
-	<1262491694.23193.10.camel@coalu.atr>
-	<1262526218.23927.27.camel@venture> <1262610104.3853.6.camel@venture>
-	<4d28d4b51001040509o5b4bde2i630e2d46c9747a2@mail.gmail.com>
-	<1262611334.3853.11.camel@venture>
-Message-ID: <4d28d4b51001040529x5a9ae432rbe467128701d1fde@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 4 Jan 2010 16:24:22 +0100
+Subject: [Buildroot] Issue for the integration of Codesourcery external
+	toolchains
+Message-ID: <20100104162422.5b7e7bf6@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sorry, I didn't catch the --prefix=/
+Hello,
 
-On Mon, Jan 4, 2010 at 2:22 PM, Clark Rawlins <clark.rawlins@escient.com>wrote:
+Now that the new package infrastructure has been integrated, I started
+working again on the usage of Codesourcery toolchains as external
+toolchains in Buildroot. Compared to the Crosstool-NG toolchains that
+we already support, the main difference is that the Codesoucery
+toolchains are multilib.
 
-> On Mon, 2010-01-04 at 14:09 +0100, Lionel Landwerlin wrote:
-> > Why didn't you remove :
-> > define GRUB_CONFIGURE_CMDS
-> >       (cd $(GRUB_SRCDIR) && rm -rf config.cache && \
-> >       $(TARGET_CONFIGURE_OPTS) \
-> >       $(TARGET_CONFIGURE_ARGS) \
-> >       $(GRUB_CONF_ENV) \
-> >       ./configure \
-> >
-> >               --target=$(GNU_TARGET_NAME) \
-> >               --host=$(GNU_TARGET_NAME) \
-> >               --build=$(GNU_HOST_NAME) \
-> >               --prefix=/ \
-> >               --mandir=/usr/man \
-> >               --infodir=/usr/info \
-> >               $(DISABLE_DOCUMENTATION) \
-> >               $(DISABLE_NLS) \
-> >
-> >               $(DISABLE_LARGEFILE) \
-> >               $(DISABLE_IPV6) \
-> >               $(QUIET) $(GRUB_CONF_OPT) \
-> >       )
-> > endef
-> > This might be handled by the autotool infrastructure.
-> > Otherwise it looks good, thx !
->
-> I would have but I didn't see a way to override the --prefix argument to
-> configure.  Also the TARGET_CONFIGURE_ENV needed to be modified to
-> include GRUB_CFLAGS defined earlier in the make fragment.  Modifying the
-> CFLAGS also caused the config.cache to not match the global
-> configuration cache so I couldn't use that either.
->
-> Of course if I missed a better way of handling these issues I am open to
-> it.
->
-> >
-> > --
-> > Lionel Landwerlin
-> >
-> > On Mon, Jan 4, 2010 at 2:01 PM, Clark Rawlins
-> > <clark.rawlins@escient.com> wrote:
-> >         Here is my attempt to use the autotools macros.
-> >         I look forward to any discussion, suggestions for improvement
-> >         etc.
-> >
-> >         I attach the whole file since it is effectively a rewrite.  If
-> >         it is
-> >         acceptable I will submit as a git diff against head.
-> >
-> >
-> >         On Sun, 2010-01-03 at 08:43 -0500, Clark Rawlins wrote:
-> >         > Okay,
-> >         >
-> >         > I've started looking at this but it isn't clear to me how to
-> >         handle the
-> >         > following:
-> >         >
-> >         > $(GRUB_DIR)/$(GRUB_BINARY): $(GRUB_DIR)/.configured
-> >         >       $(MAKE) CC=$(TARGET_CC) -C $(GRUB_DIR)
-> >         >       rm -f $(GRUB_DIR)/$(GRUB_BINARY)
-> >         >       $(MAKE) CC=$(TARGET_CC) CFLAGS+=-static -C
-> >         $(GRUB_DIR)/grub grub
-> >         >       mkdir -p $(dir $(STAGING_DIR)/$(GRUB_TARGET_BINARY))
-> >         >       mv $(GRUB_DIR)/$(GRUB_BINARY)
-> >         $(STAGING_DIR)/$(GRUB_TARGET_BINARY).static
-> >         >       $(MAKE) CC=$(TARGET_CC) -C $(GRUB_DIR)/grub
-> >         >
-> >         > This builds everything dynamically linked first then builds
-> >         the grub binary statically.
-> >         > Is the right way to do this to override the target
-> >         after/before calling the autotools macro?
-> >         >
-> >         >
-> >         > On Sun, 2010-01-03 at 05:08 +0100, Lionel Landwerlin wrote:
-> >         > > Here is one example :
-> >         > >
-> >         > >
-> >
-> http://git.buildroot.org/buildroot/commit/?id=21bab8862f3c2906af347e5a993ce4cd36c1b063
-> >         > >
-> >         > > You can find a lot like this in the recent git history.
-> >         > > I'm think to the new infrastructure because it provides
-> >         all the glue to
-> >         > > configure the package, especially the 2 lines you added.
-> >         > >
-> >         > > Regards,
-> >         > >
-> >         > >
-> >         > > Le samedi 02 janvier 2010 ? 21:15 -0500, Clark Rawlins a
-> >         ?crit :
-> >         > > > I could give that a shot.  I thought as a start I would
-> >         go with the
-> >         > > > smallest change possible.  Any suggestions for an
-> >         example to look at for
-> >         > > > switching grub to the autotools macros?
-> >         > > >
-> >         > > >
-> >         > > > On Sun, 2010-01-03 at 01:13 +0100, Lionel Landwerlin
-> >         wrote:
-> >         > > > > Le samedi 02 janvier 2010 ? 17:46 -0500, Clark Rawlins
-> >         a ?crit :
-> >         > > > > > Grub build failed at the link stage because it
-> >         > > > > > couldn't find libcurses. Adding these variable
-> >         > > > > > invocations to the configure line make it work.
-> >         > > > > >
-> >         > > > > > Signed-off-by: Clark Rawlins
-> >         <clark.rawlins@escient.com>
-> >         > > > > > ---
-> >         > > > > >  target/x86/grub/grub.mk |    2 ++
-> >         > > > > >  1 files changed, 2 insertions(+), 0 deletions(-)
-> >         > > > > >
-> >         > > > > > diff --git a/target/x86/grub/grub.mk
-> >         b/target/x86/grub/grub.mk
-> >         > > > > > index af46244..21f089f 100644
-> >         > > > > > --- a/target/x86/grub/grub.mk
-> >         > > > > > +++ b/target/x86/grub/grub.mk
-> >         > > > > > @@ -81,6 +81,8 @@ $(GRUB_DIR)/.unpacked:
-> >         $(DL_DIR)/$(GRUB_SOURCE) $(DL_DIR)/$(GRUB_PATCH)
-> >         > > > > >  $(GRUB_DIR)/.configured: $(GRUB_DIR)/.unpacked
-> >         > > > > >       (cd $(GRUB_DIR); rm -rf config.cache; \
-> >         > > > > >               $(TARGET_CONFIGURE_OPTS) \
-> >         > > > > > +             $(TARGET_CONFIGURE_ARGS) \
-> >         > > > > > +             $(TARGET_CONFIGURE_ENV) \
-> >         > > > > >               CFLAGS="$(TARGET_CFLAGS)" \
-> >         > > > > >               CPPFLAGS="$(GRUB_CFLAGS)" \
-> >         > > > > >               ./configure $(QUIET) \
-> >         > > > >
-> >         > > > > Maybe you should consider switching grub to the
-> >         autotool infrastructure.
-> >         > > > >
-> >         > > > > --
-> >         > > > > Lionel Landwerlin
-> >         > > > >
-> >         > > > > _______________________________________________
-> >         > > > > buildroot mailing list
-> >         > > > > buildroot at busybox.net
-> >         > > > > http://lists.busybox.net/mailman/listinfo/buildroot
-> >         > > >
-> >         > >
-> >         >
-> >         > _______________________________________________
-> >         > buildroot mailing list
-> >         > buildroot at busybox.net
-> >         > http://lists.busybox.net/mailman/listinfo/buildroot
-> >
-> >
-> >
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100104/584b8233/attachment-0001.htm>
+Unfortunately, I'm facing an issue for which I haven't found an issue
+and I'm therefore asking for your input and ideas on the matter.
+
+External toolchains in Buildroot
+================================
+
+The external toolchain integration code is in
+toolchain/external-toolchain/ext-tool.mk. As the comment at the top of
+the file says, we basically do three things:
+
+ 1. Do various checks of the toolchain and the compatibility between
+    the options configured in Buildroot and the configuration of the
+    toolchain.
+
+    One of the important check we do is to verify that the toolchain
+    supports the sysroot mechanism. This mechanism allows to copy all
+    the libraries and headers of the toolchain in another location,
+    and using the --sysroot option, tell the compiler/linker where
+    these files are located now. The location of the original sysroot
+    directory is found by running CROSS-gcc -v and looking at the
+    --with-sysroot configuration option of gcc.
+
+ 2. From the toolchain, we copy the C library and other related
+    libraries needed at runtime into $(TARGET_DIR). This will ensure
+    that these libraries will be available on the target.
+
+    We assume that these libraries are available in the lib/ directory
+    of the original sysroot directory. The list of library to copy is
+    taken from a fixed list (EXTERNAL_LIBS in the code)
+
+ 3. Finally, we copy the _complete_ sysroot directory into
+    $(STAGING_DIR). This allows to keep *all* libraries and headers (C
+    library but also other userspace libraries compiled later) into
+    the same directory. This solution makes it very easy to support
+    external toolchains, since we then only have to pass the --sysroot
+    $(STAGING_DIR) option to the compiler.
+
+    For reference, when we introduced external toolchain support, we
+    tried the solution to keep the C library/headers in their original
+    location, and with a combination of -I/-L option, point the
+    compiler/linker to the $(STAGING_DIR). But this solution raised a
+    lot of problems that we easily solved by using --sysroot.
+
+Codesoucery toolchains
+======================
+
+The Codesourcery toolchain (at least the arm2009q1 I've been testing)
+are multilib toolchains. This means that within a single toolchain,
+several variants of the C library are available:
+
+$ arm-none-linux-gnueabi-gcc -print-multi-lib
+.;
+armv4t;@march=armv4t
+thumb2;@mthumb at march=armv7
+
+We have one default variant, one variant for armv4t which is selected
+when -march=armv4t is passed on the gcc command line, and one variant
+for thumb2, which is selected when -mthumb -march=armv7 is passed on
+the gcc command line.
+
+Each variant is associated with a different sysroot:
+
+$ arm-none-linux-gnueabi-gcc -print-sysroot
+/usr/local/xtools/arm-2009q1/bin/../arm-none-linux-gnueabi/libc
+
+$ arm-none-linux-gnueabi-gcc -print-sysroot -march=armv4t
+/usr/local/xtools/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/armv4t
+
+$ arm-none-linux-gnueabi-gcc -print-sysroot -march=armv7 -mthumb
+/usr/local/xtools/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/thumb2
+
+(Note: /usr/local/xtools/arm-2009q1/ is where I installed the
+toolchain)
+
+Issue with the Codesourcery toolchain
+=====================================
+
+The first obvious option that I tried was to copy the sysroot that
+correspond to the selected architecture. For example, copy only the
+contents of
+/usr/local/xtools/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/armv4t
+to $(STAGING_DIR). Unfortunately, this doesn't work, since the header
+files are shared between the three sysroots (the armv4t and thumb2
+directories do not contain any header files).
+
+So there is no other choice that copying the full
+/usr/local/xtools/arm-2009q1/bin/../arm-none-linux-gnueabi/libc
+directory. This is the solution I implemented.
+
+Unfortunately, when you do this, you have the following hierarchy in
+$(STAGING_DIR):
+
+ * armv4t
+   * lib
+   * usr
+     * lib
+ * lib
+ * thumb2
+   * lib
+   * usr
+     * lib
+ * usr
+   * include
+   * lib
+
+When the armv5t architecture is selected, everything works as
+expected: the includes are in $(STAGING_DIR)/usr/include, the
+libraries in $(STAGING_DIR)/lib and $(STAGING_DIR)/usr/lib.
+
+When armv4t is selected, the include files are in
+$(STAGING_DIR)/usr/include, but the libraries are in
+$(STAGING_DIR)/armv4t/lib and $(STAGING_DIR)/armv4t/usr/lib. And the
+linker *only* looks in these directories for the libraries.
+
+Unfortunately, all Buildroot packages install their libraries in
+$(STAGING_DIR)/lib and $(STAGING_DIR)/usr/lib, so the linker doesn't
+find them.
+
+For example, compiling zlib works, but compiling libpng fails because
+it cannot find zlib. This is because zlib has been installed in
+$(STAGING_DIR)/usr/lib and not in $(STAGING_DIR)/armv4t/usr/lib.
+
+Possible solutions
+==================
+
+ * Build a more normal sysroot in $(STAGING_DIR) by combining the
+   contents of armv4t and the header files. But this would require
+   telling gcc that the libraries aren't in armv4t anymore. This is
+   probably possible using a custom spec file, but is quite
+   complicated.
+
+ * Reconsider the solution of copying the sysroot, and try harder with
+   the more traditionnal -L/-I solutions.
+
+ * Another solution ?
+
+Thanks for reading such a long mail, and thanks in advance for your
+ideas!
+
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers and embedded Linux development,
+consulting, training and support.
+http://free-electrons.com
