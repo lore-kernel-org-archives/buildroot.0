@@ -1,19 +1,25 @@
-From: alexperl <alexondi@rambler.ru>
-Date: Mon, 4 Jan 2010 23:28:31 -0800 (PST)
-Subject: [Buildroot]  Possibly bug with Prefere static libs
-Message-ID: <27024646.post@talk.nabble.com>
+From: Julien Boibessot <julien.boibessot@free.fr>
+Date: Tue, 05 Jan 2010 09:26:14 +0100
+Subject: [Buildroot] mdev & usb problem
+In-Reply-To: <OF405E38C2.BA69D5BB-ONC12576A1.0082D712-C12576A2.00013AFE@mentat.hu>
+References: <OF405E38C2.BA69D5BB-ONC12576A1.0082D712-C12576A2.00013AFE@mentat.hu>
+Message-ID: <4B42F7A6.1010100@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
 
-Hello!
-After I select "Prefere static libs" I can't compile libz I have 
-...cannot stat libz*.so... but is already compiled libz.a
-I think this is wrong or not ?
+peter.stosz at mentat.hu a ?crit :
+>
+> When I test it with our very simple usb test program, nothing happen.
+> I try to "test" it with lsusb, nothing too.
+For lsusb: do you have "/var/lib/misc/usb.ids" or an equivalent on your
+system ?
+For your usb test program you should probably give it a try with:
+    # strace us
 
--- 
-View this message in context: http://old.nabble.com/Possibly-bug-with-Prefere-static-libs-tp27024646p27024646.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+Regards,
+Julien
