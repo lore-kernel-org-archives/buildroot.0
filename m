@@ -1,33 +1,29 @@
-From: alexperl <alexondi@rambler.ru>
-Date: Tue, 5 Jan 2010 06:45:55 -0800 (PST)
-Subject: [Buildroot]  Error build X11(libxcb-atom)
-Message-ID: <27026628.post@talk.nabble.com>
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Tue, 5 Jan 2010 14:55:47 +0000 (UTC)
+Subject: [Buildroot] at91sam9g20dfc_defconfig doesn't build (Grant
+	Edwards)
+References: <mailman.11179.1262650413.28478.buildroot@busybox.net>
+	<1531E53627F1F749B4FE809BF2A4EB6701597BAD@WETMEX10.loepfe.com>
+Message-ID: <hhvjtj$quk$1@ger.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 2010-01-05, Vellemans, Noel <Noel.Vellemans@visionBMS.com> wrote:
+> Re: at91sam9g20dfc_defconfig doesn't build (Grant Edwards)
+>
+>
+>
+> Please have a look at
+> http://lists.busybox.net/pipermail/buildroot/2009-November/030376.html
+>
+> De-selecting 'at' will also solve the problem.
 
-Hello!
-I try build X11 with x86_64 target but I have such error
-...
-/home/install/Buildroot/1/buildroot/output/staging/usr/bin/../lib/gcc/x86_64-linux-uclibc/4.3.4/../../../../x86_64-linux-uclibc/bin/ld:
-warning: libxcb-atom.so.0, needed by ../icccm/.libs/libxcb-icccm.so, not
-found (try using -rpath or -rpath-link)
-../icccm/.libs/libxcb-icccm.so: undefined reference to `intern_atom_fast'
-../icccm/.libs/libxcb-icccm.so: undefined reference to `WM_NAME'
-../icccm/.libs/libxcb-icccm.so: undefined reference to `WM_NORMAL_HINTS'
-../icccm/.libs/libxcb-icccm.so: undefined reference to `WM_CLIENT_MACHINE'
-../icccm/.libs/libxcb-icccm.so: undefined reference to `WM_HINTS'
-../icccm/.libs/libxcb-icccm.so: undefined reference to `WM_ICON_NAME'
-../icccm/.libs/libxcb-icccm.so: undefined reference to `WM_SIZE_HINTS'
-../icccm/.libs/libxcb-icccm.so: undefined reference to
-`intern_atom_fast_reply'
-../icccm/.libs/libxcb-icccm.so: undefined reference to `ATOM'
-collect2: ld returned 1 exit status
-...
-can anybody help me with it?
+I don't have any need for 'at', so that works for me.
+
 -- 
-View this message in context: http://old.nabble.com/Error-build-X11%28libxcb-atom%29-tp27026628p27026628.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+Grant Edwards                   grante             Yow! I feel partially
+                                  at               hydrogenated!
+                               visi.com            
