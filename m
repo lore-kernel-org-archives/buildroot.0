@@ -1,212 +1,119 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Tue, 05 Jan 2010 00:23:35 +0100
-Subject: [Buildroot] Issue for the integration of Codesourcery external
- toolchains
-In-Reply-To: <20100104162422.5b7e7bf6@surf>
-References: <20100104162422.5b7e7bf6@surf>
-Message-ID: <1262647415.23193.99.camel@coalu.atr>
+From: peter.stosz at mentat.hu <peter.stosz@mentat.hu>
+Date: Tue, 5 Jan 2010 01:13:26 +0100
+Subject: [Buildroot] mdev & usb problem
+Message-ID: <OF405E38C2.BA69D5BB-ONC12576A1.0082D712-C12576A2.00013AFE@mentat.hu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le lundi 04 janvier 2010 ? 16:24 +0100, Thomas Petazzoni a ?crit :
-> Hello,
-> 
-> Now that the new package infrastructure has been integrated, I started
-> working again on the usage of Codesourcery toolchains as external
-> toolchains in Buildroot. Compared to the Crosstool-NG toolchains that
-> we already support, the main difference is that the Codesoucery
-> toolchains are multilib.
-> 
-> Unfortunately, I'm facing an issue for which I haven't found an issue
-> and I'm therefore asking for your input and ideas on the matter.
-> 
-> External toolchains in Buildroot
-> ================================
-> 
-> The external toolchain integration code is in
-> toolchain/external-toolchain/ext-tool.mk. As the comment at the top of
-> the file says, we basically do three things:
-> 
->  1. Do various checks of the toolchain and the compatibility between
->     the options configured in Buildroot and the configuration of the
->     toolchain.
-> 
->     One of the important check we do is to verify that the toolchain
->     supports the sysroot mechanism. This mechanism allows to copy all
->     the libraries and headers of the toolchain in another location,
->     and using the --sysroot option, tell the compiler/linker where
->     these files are located now. The location of the original sysroot
->     directory is found by running CROSS-gcc -v and looking at the
->     --with-sysroot configuration option of gcc.
-> 
->  2. From the toolchain, we copy the C library and other related
->     libraries needed at runtime into $(TARGET_DIR). This will ensure
->     that these libraries will be available on the target.
-> 
->     We assume that these libraries are available in the lib/ directory
->     of the original sysroot directory. The list of library to copy is
->     taken from a fixed list (EXTERNAL_LIBS in the code)
-> 
->  3. Finally, we copy the _complete_ sysroot directory into
->     $(STAGING_DIR). This allows to keep *all* libraries and headers (C
->     library but also other userspace libraries compiled later) into
->     the same directory. This solution makes it very easy to support
->     external toolchains, since we then only have to pass the --sysroot
->     $(STAGING_DIR) option to the compiler.
-> 
->     For reference, when we introduced external toolchain support, we
->     tried the solution to keep the C library/headers in their original
->     location, and with a combination of -I/-L option, point the
->     compiler/linker to the $(STAGING_DIR). But this solution raised a
->     lot of problems that we easily solved by using --sysroot.
-> 
-> Codesoucery toolchains
-> ======================
-> 
-> The Codesourcery toolchain (at least the arm2009q1 I've been testing)
-> are multilib toolchains. This means that within a single toolchain,
-> several variants of the C library are available:
-> 
-> $ arm-none-linux-gnueabi-gcc -print-multi-lib
-> .;
-> armv4t;@march=armv4t
-> thumb2;@mthumb at march=armv7
-> 
-> We have one default variant, one variant for armv4t which is selected
-> when -march=armv4t is passed on the gcc command line, and one variant
-> for thumb2, which is selected when -mthumb -march=armv7 is passed on
-> the gcc command line.
-> 
-> Each variant is associated with a different sysroot:
-> 
-> $ arm-none-linux-gnueabi-gcc -print-sysroot
-> /usr/local/xtools/arm-2009q1/bin/../arm-none-linux-gnueabi/libc
-> 
-> $ arm-none-linux-gnueabi-gcc -print-sysroot -march=armv4t
-> /usr/local/xtools/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/armv4t
-> 
-> $ arm-none-linux-gnueabi-gcc -print-sysroot -march=armv7 -mthumb
-> /usr/local/xtools/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/thumb2
-> 
-> (Note: /usr/local/xtools/arm-2009q1/ is where I installed the
-> toolchain)
-> 
-> Issue with the Codesourcery toolchain
-> =====================================
-> 
-> The first obvious option that I tried was to copy the sysroot that
-> correspond to the selected architecture. For example, copy only the
-> contents of
-> /usr/local/xtools/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/armv4t
-> to $(STAGING_DIR). Unfortunately, this doesn't work, since the header
-> files are shared between the three sysroots (the armv4t and thumb2
-> directories do not contain any header files).
-> 
-> So there is no other choice that copying the full
-> /usr/local/xtools/arm-2009q1/bin/../arm-none-linux-gnueabi/libc
-> directory. This is the solution I implemented.
-> 
-> Unfortunately, when you do this, you have the following hierarchy in
-> $(STAGING_DIR):
-> 
->  * armv4t
->    * lib
->    * usr
->      * lib
->  * lib
->  * thumb2
->    * lib
->    * usr
->      * lib
->  * usr
->    * include
->    * lib
-> 
-> When the armv5t architecture is selected, everything works as
-> expected: the includes are in $(STAGING_DIR)/usr/include, the
-> libraries in $(STAGING_DIR)/lib and $(STAGING_DIR)/usr/lib.
-> 
-> When armv4t is selected, the include files are in
-> $(STAGING_DIR)/usr/include, but the libraries are in
-> $(STAGING_DIR)/armv4t/lib and $(STAGING_DIR)/armv4t/usr/lib. And the
-> linker *only* looks in these directories for the libraries.
-> 
-> Unfortunately, all Buildroot packages install their libraries in
-> $(STAGING_DIR)/lib and $(STAGING_DIR)/usr/lib, so the linker doesn't
-> find them.
-> 
-> For example, compiling zlib works, but compiling libpng fails because
-> it cannot find zlib. This is because zlib has been installed in
-> $(STAGING_DIR)/usr/lib and not in $(STAGING_DIR)/armv4t/usr/lib.
-> 
-> Possible solutions
-> ==================
-> 
->  * Build a more normal sysroot in $(STAGING_DIR) by combining the
->    contents of armv4t and the header files. But this would require
->    telling gcc that the libraries aren't in armv4t anymore. This is
->    probably possible using a custom spec file, but is quite
->    complicated.
+Hi!
 
-To me, probably the best solution...
-But why would it require a custom spec file ? --sysroot doesn't change
-the headers and librairies' default path in that case ?
+I trying to move our embedded application to busybox/mdev.
+mdev seems like to be working, connected device's device name appear in 
+/dev directory. (Disappear after removing the device)
+But our application not working in this environment.
+Works well openembedded/udev environment, ubuntu(9.10) develompent 
+environment, but not with buildroot/mdev.
 
-> 
->  * Reconsider the solution of copying the sysroot, and try harder with
->    the more traditionnal -L/-I solutions.
-Ergh...
-For more we would need a different treatment for codesourcery toolchains
-and "normal" toolchains. Sounds a bit like a nightmare... (Am I wrong ?)
+When I test it with our very simple usb test program, nothing happen.
+I try to "test" it with lsusb, nothing too.
 
-> 
->  * Another solution ?
-> 
-> Thanks for reading such a long mail, and thanks in advance for your
-> ideas!
+Any idea?
 
 
-I never worked with codesourcery's toolchains (as not working with ARM
-chips).
-Is the set of toolchain you're using available somewhere ?
+Peter
 
-> 
-> Thomas Petazzoni
 
-<Not_so_related>
+initttab snip:
+::sysinit:/bin/mount -t proc none /proc
+::sysinit:/bin/mount -t sysfs none /sys
+::sysinit:/bin/mount -t tmpfs none /tmp
+::sysinit:/bin/mount -t tmpfs -o size=64k,mode=0755 none /dev
+::sysinit:/bin/mkdir /dev/pts
+::sysinit:/bin/mount -t devpts devpts /dev/pts
+::sysinit:/bin/echo /sbin/mdev > /proc/sys/kernel/hotplug
+::sysinit:/sbin/mdev -s
 
-By the way, we still have some problem with the current scripts setting
-up the staging/target directories. Maybe I'm the only one who
-noticed/has_a_strange_setup...
+/opt # cat /etc/br-version 
+2010.02-git-00158-g6415e3a-dirty
+/opt # 
+/opt # usb 1-1: new full speed USB device using at91_ohci and address 5
+usb 1-1: configuration #1 chosen from 1 choice
+ uba: uba1
+usb 1-1: New USB device found, idVendor=0ea0, idProduct=6828
+usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+usb 1-1: Product: Flash Disk 
+usb 1-1: Manufacturer: USB 
+usb 1-1: SerialNumber: D456953F963CC32E
 
-Just like every other linker script :
+/opt # lsusb  { nothing :( }
+/opt # lsusb -t
+/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=at91_ohci/1p, 12M
+    |__ Port 1: Dev 5, If 0, Class=stor., Driver=ub, 12M
+/opt # ./us  { nothing :( }
+/opt # cat us.c
+#include <stdio.h>
+#include <string.h>
+#include <usb.h>
 
-	$(STAGING_DIR)/usr/lib/libpthread.so
-	$(STAGING_DIR)/usr/lib/libc.so
+int main(int argc, const char *argv[])
+{
+    struct usb_bus *usb_bus;
+    struct usb_device *dev;
 
-might be processed to replace the default path, usually /lib/libc.so, by
-$(STAGING_DIR)/lib/libc.so.
-We also need to copy thoses linker scripts to the target directory.
-Otherwise you generate some kind of fucked up binaries when installing
-librairies in target using libtool. In particular with the pthread_*
-symbols, because some of them are defined in libc.so as weak symbols. So
-you end up having librairies calling libc's weak symbols which volontary
-crash because they might be replaced by the pthread's ones when
-pthread.so is loaded.
+    usb_init();
+    usb_find_busses();
+    usb_find_devices();
 
-I didn't noticed the problem with basic monothreaded tools (busybox,
-bash, etc...), until I compile things like directfb which crashes 
-incomprehensibly early at startup.
+    for (usb_bus = usb_busses; usb_bus; usb_bus = usb_bus->next) {
+        printf("\nDevice:\n");
+        for (dev = usb_bus->devices; dev; dev = dev->next) {
+            printf("\tLength: %d\n\tDescriptor type: %d\n\tbcdUSB: 
+%d\n\tDevice class: %d\n\tDevice subclass: %d\n\tDevice protocol: 
+%d\n\tMa....
+        }
+    }
+    return 0;
+}
+/opt # 
 
-Fixing this kind of problem is on my todo list, but I don't have a lot
-of free time these days to make a clean fix. I wanted to let people
-know, so they don't spend 2/3 days finding that kind of vicious bugs
-(whether we can consider that as a bug) ...
 
-</Not_so_related>
+us' output on ubuntu: 
 
--- 
-Lionel Landwerlin
+~/../dev/usb$ ./us:
+
+Device:
+        Length: 18
+        Descriptor type: 1
+        bcdUSB: 512
+        Device class: 9
+        Device subclass: 0
+        Device protocol: 0
+        Max packet size: 64
+        ID: 1d6b:0002
+        bcdDevice: 518
+        Manufacturer: 3
+        Product: 2
+        Serial number: 1
+        Number of configurations: 1
+
+
+Device:
+        Length: 18
+        Descriptor type: 1
+        bcdUSB: 272
+        Device class: 9
+        Device subclass: 0
+        Device protocol: 0
+        Max packet size: 64
+        ID: 1d6b:0001
+        bcdDevice: 518
+        Manufacturer: 3
+        Product: 2
+        Serial number: 1
+...
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100105/439a0f4d/attachment-0001.htm>
