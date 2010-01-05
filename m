@@ -1,31 +1,77 @@
-From: Julien Boibessot <julien.boibessot@free.fr>
-Date: Tue, 05 Jan 2010 13:37:04 +0100
-Subject: [Buildroot] mdev & usb problem
-In-Reply-To: <OF42E07C52.E79A00B9-ONC12576A2.00330B26-C12576A2.003321B3@mentat.hu>
-References: <OF405E38C2.BA69D5BB-ONC12576A1.0082D712-C12576A2.00013AFE@mentat.hu>
-	<4B42F7A6.1010100@free.fr>
-	<OF42E07C52.E79A00B9-ONC12576A2.00330B26-C12576A2.003321B3@mentat.hu>
-Message-ID: <4B433270.6010806@free.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue,  5 Jan 2010 12:42:16 +0000 (UTC)
+Subject: [Buildroot] [Bug 841] New: Build error
+Message-ID: <bug-841-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-peter.stosz at mentat.hu a ?crit :
-> /opt # find / -name usb.ids*
-> /usr/share/usb.ids.gz
-and what gives "strace lsusb" on your board ??
-> /opt #
-> /opt # strace ./us
-> ......
-> ioctl(0, SNDCTL_TMR_TIMEBASE or TCGETS, {B115200 opost isig icanon
-> echo ...}) = 0
-> ioctl(1, SNDCTL_TMR_TIMEBASE or TCGETS, {B115200 opost isig icanon
-> echo ...}) = 0
-> open("/dev/bus/usb", O_RDONLY|O_NONBLOCK|O_DIRECTORY) = -1 ENOENT (No
-> such file or directory)
-seems to be the problem (compare it with "strace us" on your PC)
-Do you have a directory named /dev/bus/usb/ ??
+https://bugs.busybox.net/show_bug.cgi?id=841
 
-Julien
+            Target: ARM 920 (AT91RM9200)
+           Summary: Build error
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: peter.stosz at freemail.hu
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
+
+
+/srv/buildroot/output/staging/usr/bin/arm-linux-uclibc-gcc
+-L/srv/buildroot/output/staging/lib -L/srv/buildroot/output/staging/usr/lib
+--sysroot=/srv/buildroot/output/staging/ -o
+/srv/buildroot/output/build/mtd_orig/serve_image
+/srv/buildroot/output/build/mtd_orig/serve_image.o
+/srv/buildroot/output/build/mtd_orig/crc32.o
+/srv/buildroot/output/build/mtd_orig/fec.o
+/srv/buildroot/output/build/mtd_orig/fec.o: In function `fec_encode_linear':
+/srv/buildroot/output/build/mtd_orig/fec.c:754: undefined reference to `bcopy'
+/srv/buildroot/output/build/mtd_orig/fec.o: In function `fec_encode':
+/srv/buildroot/output/build/mtd_orig/fec.c:734: undefined reference to `bcopy'
+/srv/buildroot/output/build/mtd_orig/fec.o: In function `build_decode_matrix':
+/srv/buildroot/output/build/mtd_orig/fec.c:822: undefined reference to `bcopy'
+/srv/buildroot/output/build/mtd_orig/fec.o: In function `invert_mat':
+/srv/buildroot/output/build/mtd_orig/fec.c:516: undefined reference to `bcmp'
+/srv/buildroot/output/build/mtd_orig/fec.o: In function `fec_decode':
+/srv/buildroot/output/build/mtd_orig/fec.c:883: undefined reference to `bcopy'
+collect2: ld returned 1 exit status
+make[1]: *** [/srv/buildroot/output/build/mtd_orig/serve_image] Error 1
+rm /srv/buildroot/output/build/mtd_orig/nandwrite.o
+/srv/buildroot/output/build/mtd_orig/docfdisk.o
+/srv/buildroot/output/build/mtd_orig/mtd_debug.o
+/srv/buildroot/output/build/mtd_orig/flash_otp_dump.o
+/srv/buildroot/output/build/mtd_orig/rfdformat.o
+/srv/buildroot/output/build/mtd_orig/nftldump.o
+/srv/buildroot/output/build/mtd_orig/flash_info.o
+/srv/buildroot/output/build/mtd_orig/flash_unlock.o
+/srv/buildroot/output/build/mtd_orig/flash_lock.o
+/srv/buildroot/output/build/mtd_orig/flashcp.o
+/srv/buildroot/output/build/mtd_orig/nftl_format.o
+/srv/buildroot/output/build/mtd_orig/doc_loadbios.o
+/srv/buildroot/output/build/mtd_orig/flash_erase.o
+/srv/buildroot/output/build/mtd_orig/ftl_format.o
+/srv/buildroot/output/build/mtd_orig/rfddump.o
+/srv/buildroot/output/build/mtd_orig/nandtest.o
+/srv/buildroot/output/build/mtd_orig/nanddump.o
+/srv/buildroot/output/build/mtd_orig/flash_otp_info.o
+/srv/buildroot/output/build/mtd_orig/ftl_check.o
+make[1]: Leaving directory `/srv/buildroot/output/build/mtd_orig'
+make: *** [/srv/buildroot/output/build/mtd_orig/flash_erase] Error 2
+
+
+Workaround: output/build/mtd_orig/fec.c:52 <-- comment #ifdef MSDOS
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
