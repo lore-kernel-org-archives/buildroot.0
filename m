@@ -1,44 +1,28 @@
-From: Maxime Ripard <maxime.ripard@anandra.org>
-Date: Wed, 6 Jan 2010 19:03:43 +0100
-Subject: [Buildroot] tcl build error
-Message-ID: <20100106180343.GX15153@anandra.org>
+From: H Hartley Sweeten <hartleys@visionengravers.com>
+Date: Wed, 6 Jan 2010 17:07:27 -0500
+Subject: [Buildroot] (no subject)
+Message-ID: <BD79186B4FD85F4B8E60E381CAEE19090208945D@mi8nycmail19.Mi8.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Hello all,
 
-I'm having trouble getting tcl building correctly for generic_arm
-architecture, and using the buildroot-generated toolchain. With
-both of the latest release and the git tree, it cannot build. Here is
-the output :
+Does anyone know what happened to mkfs.jffs in mtd-utils?
 
-In file included from ./../generic/tclPort.h:27,
-                 from ./../generic/tclAlloc.c:29:
-./../generic/../unix/tclUnixPort.h:71: error: expected ?=?, ?,?, ?;?,
-?asm? or ?__attribute__? before ?Tcl_SeekOffset?
-make[1]: *** [tclAlloc.o] Error 1
+I recently updated my buildroot tree to the latest git.  This bumped
+the mtd-utils package from 1.1.0 to 1.2.0.  I did a make mtd-dirclean
+then started the make.  Eventually I got:
 
-I've searched the code to find the error, but couldn't find what causes
-it.
+cp -f /home/bigguiness/buildroot/output/build/mtd_orig/mkfs.jffs /home/bigguiness/buildroot/output/target/usr/sbin/mkfs.jffs
+cp: cannot stat `/home/bigguiness/buildroot/output/build/mtd_orig/mkfs.jffs': No such file or directory
+make: *** [/home/bigguiness/buildroot/output/target/usr/sbin/mkfs.jffs] Error 1
 
-Looking forward to your help,
--- 
-Maxime Ripard
-?tudiant ? l'Universit? de Technologie de Belfort - Montb?liard (UTBM)
-G?nie Informatique (GI 04)
+The mtd Makefile has a target for it but I don't see any source...
 
-6bis rue Paul Giroud
-90000 Belfort
-France
+mkfs.jffs:	$(BUILDDIR)/mkfs.jffs
 
-06 85 40 57 32
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 197 bytes
-Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100106/c89d6ff9/attachment.pgp>
+Thanks for any help,
+Hartley
