@@ -1,67 +1,34 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  8 Jan 2010 19:01:02 +0000 (UTC)
-Subject: [Buildroot] [Bug 851] New: Add option to specify --sysroot value
- for external toolchain
-Message-ID: <bug-851-163@https.bugs.busybox.net/>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 7 Jan 2010 21:44:40 +0100
+Subject: [Buildroot] [git commit master] kernel-headers: default to 2.6.32.x
+Message-ID: <20100108190227.0C936776BA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=851
 
-           Summary: Add option to specify --sysroot value for external
-                    toolchain
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: enhancement
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: grant.b.edwards at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+commit: http://git.buildroot.net/buildroot/commit/?id=64c5a7132532d6163d6f088fc7a547e8a19ef4ba
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/kernel-headers/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Created an attachment (id=887)
- --> (https://bugs.busybox.net/attachment.cgi?id=887)
-Patch to allow use of relocated external toolchains that require a --sysroot
-option
-
-The current support for external toolchains assumes that the
-external toolchain supports but does not require that a sysroot
-value be passed when invoking the compiler, linker, etc.
-
-This is inconvenient and overly restrictive for a couple
-reasons:
-
-  * You might want to be able to switch back and forth between
-    different toolchains.  Building the toolchains with unique
-    install paths is painful.
-
-  * Developers want to be able to do development in "isolated"
-    non-system directories without having to put the external
-    toolchain in a global, hard-wired location -- a location
-    that might be in use by a different project for a different
-    version/flavor of the toolchain.
-
-The attached patch adds a boolean config option that tells
-buildroot that the external toolchain requires a sysroot value.
-IOW, the the sysroot value reported by "gcc -v" is not correct.
-
-It also adds a configuration variable that specifies the
-correct sysroot value for the external toolchain. This value
-defaults to an appropriate value for the already-specified
-location of the sysroot toolchain.  In most cases, setting the
-boolean BR2_TOOLCHAIN_EXTERNAL_NEEDS_SYSROOT will be
-sufficient.
-
-
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 5e07e7d..94e3081 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -6,7 +6,7 @@ comment "Kernel Header Options"
+ 
+ choice
+ 	prompt "Kernel Headers"
+-	default BR2_KERNEL_HEADERS_2_6_31
++	default BR2_KERNEL_HEADERS_2_6_32
+ 
+ 	help
+ 	  Select the version of kernel header files you wish to use.
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.6.3.3
