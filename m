@@ -1,27 +1,18 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Thu, 7 Jan 2010 06:46:30 +0000 (UTC)
-Subject: [Buildroot] MTD build failing: undefined ref's  to bcopy, bcmp
-References: <hi377d$1i5$1@ger.gmane.org> <hi3tpb$k7d$1@ger.gmane.org>
-Message-ID: <hi4006$nin$1@ger.gmane.org>
+From: Luca <lucarx76@gmail.com>
+Date: Thu, 7 Jan 2010 07:07:42 -0800
+Subject: [Buildroot] rngd
+Message-ID: <3d87aabd1001070707m2bbbf281l43545188531d22b6@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2010-01-07, Grant Edwards <grant.b.edwards@gmail.com> wrote:
->
->> Is BR2_PACKAGE_MTD/BR2_PACKAGE_MTD_UTILS actually what I need
->> to provide mtd.h for building the u-boot env set/get target
->> tools, or does mtd.h come from somewhere else?
+Hi all,
+ is it possible to add rng-utils to buildroot?
 
-It's actually mtd/mtd-user.h that's missing.  It looks like it
-should come from the kernel headers. It's there in the kernel
-source tree (and in /usr/include on my development hosts), but
-it's missing from the toolchain's usr/include directory.
-
-How do you get mtd/*.h header files included in /usr/include
-when the toolchain is built?
-
--- 
-Grant
+Thanks in advance,
+ Luca
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100107/0580efbd/attachment.htm>
