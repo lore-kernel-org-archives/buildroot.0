@@ -1,45 +1,56 @@
-From: William Wagner <will_wagner@carallon.com>
-Date: Fri, 08 Jan 2010 16:24:46 +0000
-Subject: [Buildroot] Using buildroot for multiple projects
-Message-ID: <4B475C4E.4010201@carallon.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri,  8 Jan 2010 17:17:46 +0000 (UTC)
+Subject: [Buildroot] [Bug 847] New: Compiling target-gcc v4.4 fails with
+ "libc.so.0: cannot open shared object file: No such file or directory"
+Message-ID: <bug-847-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I have a question about using buildroot for multiple projects.
+https://bugs.busybox.net/show_bug.cgi?id=847
 
-Currently you can specify different output folders with O= and swap 
-between configs either by copying the .config and calling make oldconfig 
-or using make*_defconfig.
+              Host: Linux xxxxxxxx 2.6.32-gentoo-r1 #5 SMP PREEMPT Tue Jan 5
+                    11:39:06 CET 2010 i686 Intel(R) Pentium(R) 4 CPU 3.00GHz
+                    GenuineIntel GNU/Linux
+            Target: 686 + uClib
+           Summary: Compiling target-gcc v4.4 fails with "libc.so.0: cannot
+                    open shared object file: No such file or directory"
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: blocker
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: belef at risx.net
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-This appears to work fine, however the problem is that you can not do 
-builds of two different projects at the same time. This is because of 
-the config files in package/config and the top directory of buildroot.
 
-Anyone know why it wouldn't be possible to make it an option as to where 
-the config files got built to so that they could also be built out of tree?
+Created an attachment (id=883)
+ --> (https://bugs.busybox.net/attachment.cgi?id=883)
+output of target gcc(4.4) before stop
 
-Looking at the top level makefile it looks relatively straight forward, 
-however there are a couple of bits I don't quite understand.
+Something seems to go wrong in the depth of relative paths?
 
-Why do we copy $(CONFIG)/buildroot-config to BR2_DEPENDS_DIR? It appears 
-to be for the headers in$(CONFIG)/buildroot-config/br2 which I assume 
-are build by conf? Why does the $(CONFIG)/buildroot-config exist where 
-it is - why not just generate it into BR2_DEPENDS_DIR then there is no 
-need to copy it?
+I could not find out, where the various Variations of relative paths is
+generated.
 
-Who uses .auto.deps? I can't find anyone, yet we seem to patch config 
-for buildroot so it is created.
+BTW: uClibc-snapshot.tar.bz2 has no directory "uClibc-snapshot" in it, so I had
+to repack/retar with link to uClibc ...
+No way to find out, where this path "uClibc-snapshot/.unpacked" is really
+generated.
 
-Thanks,
+wbr belef
 
-Will
+att
+
 
 -- 
-------------------------------------------------------------------------
-Will Wagner                                     will_wagner at carallon.com
-Development Manager                      Office Tel: +44 (0)20 7371 2032
-Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
-------------------------------------------------------------------------
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
