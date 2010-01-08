@@ -1,37 +1,45 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Fri, 8 Jan 2010 15:38:34 +0000 (UTC)
-Subject: [Buildroot] Customize package makefile seems broken
-References: <hi5jb1$cra$1@ger.gmane.org> <20100108085911.28fd62bb@surf>
-Message-ID: <hi7jhq$v3k$1@ger.gmane.org>
+From: William Wagner <will_wagner@carallon.com>
+Date: Fri, 08 Jan 2010 16:24:46 +0000
+Subject: [Buildroot] Using buildroot for multiple projects
+Message-ID: <4B475C4E.4010201@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2010-01-08, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
-> Le Thu, 7 Jan 2010 21:22:42 +0000 (UTC),
-> Grant Edwards <grant.b.edwards@gmail.com> a ??crit :
->
->> I haven't figured out why two of the 6 files aren't getting
->> copied, but the mislocation appears to be due to a bug in
->> customize.mk:
->
-> Because *.a files are removed from $(TARGET_DIR) as a final
-> cleanup.
->
-> See target-finalize: in the main Makefile:
+I have a question about using buildroot for multiple projects.
 
-Thanks, that's what I had decided after adding some debuging
-"echos" to the customize makefile.  I hadn't tracked down
-exactly where it was done (since it turns out I didn't actually
-need the .a files in question).
+Currently you can specify different output folders with O= and swap 
+between configs either by copying the .config and calling make oldconfig 
+or using make*_defconfig.
 
-The mtd utilities and u-boot env utilities are now building
-cleaning and will run on the target.  [They don't actually
-work, but I think that's a kernel problem with mtd support.]
+This appears to work fine, however the problem is that you can not do 
+builds of two different projects at the same time. This is because of 
+the config files in package/config and the top directory of buildroot.
+
+Anyone know why it wouldn't be possible to make it an option as to where 
+the config files got built to so that they could also be built out of tree?
+
+Looking at the top level makefile it looks relatively straight forward, 
+however there are a couple of bits I don't quite understand.
+
+Why do we copy $(CONFIG)/buildroot-config to BR2_DEPENDS_DIR? It appears 
+to be for the headers in$(CONFIG)/buildroot-config/br2 which I assume 
+are build by conf? Why does the $(CONFIG)/buildroot-config exist where 
+it is - why not just generate it into BR2_DEPENDS_DIR then there is no 
+need to copy it?
+
+Who uses .auto.deps? I can't find anyone, yet we seem to patch config 
+for buildroot so it is created.
+
+Thanks,
+
+Will
 
 -- 
-Grant Edwards                   grante             Yow! My mind is a potato
-                                  at               field ...
-                               visi.com            
+------------------------------------------------------------------------
+Will Wagner                                     will_wagner at carallon.com
+Development Manager                      Office Tel: +44 (0)20 7371 2032
+Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
+------------------------------------------------------------------------
