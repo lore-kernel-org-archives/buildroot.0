@@ -1,49 +1,36 @@
-From: Ravi Kumar Kulkarni <ravilinux4u@gmail.com>
-Date: Fri, 8 Jan 2010 12:35:08 +0530
-Subject: [Buildroot] Compiling error with microperl
-Message-ID: <532dd5841001072305t2fed0ea0g2992e5a04ac61197@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 8 Jan 2010 08:57:16 +0100
+Subject: [Buildroot] MTD build failing: undefined ref's  to bcopy, bcmp
+In-Reply-To: <hi5na6$ngt$2@ger.gmane.org>
+References: <hi377d$1i5$1@ger.gmane.org> <hi5437$id4$1@ger.gmane.org>
+	<20100107183709.74ba1341@surf> <hi57as$vp6$1@ger.gmane.org>
+	<hi5na6$ngt$2@ger.gmane.org>
+Message-ID: <20100108085716.088d1140@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
-I'm New to Embedded Linux. I was trying to compile buildroot in order
-to get a Jffs2 Image for my target . I'm getting a compile error with
-respect to microperl  which is something below
+Le Thu, 7 Jan 2010 22:30:30 +0000 (UTC),
+Grant Edwards <grant.b.edwards@gmail.com> a ?crit :
 
-mkdir -p /media/disk-1/buildroot/buildroot-2009.08/project_build_arm/uclibc
-cp -dpRf package/config/buildroot-config
-/media/disk-1/buildroot/buildroot-2009.08/project_build_arm/uclibc/buildroot-config
-# we need to build a perl for the host just for Errno.pm
-(cd /media/disk-1/buildroot/buildroot-2009.08/build_arm/perl-5.8.8; \
-	 chmod a+x ext/util/make_ext; \
-	 ext/util/make_ext nonxs Errno MAKE="/usr/bin/make" \
-	)
+> The problem is that buildroot expects to find libgcc,
+> libstdc++, et al in $(SYSROOT)/lib
 
-	Making Errno (nonxs)
-ext/util/make_ext: line 122: ../../miniperl: No such file or directory
-Warning: No Makefile!
-make[1]: Entering directory
-`/media/disk-1/buildroot/buildroot-2009.08/build_arm/perl-5.8.8/ext/Errno'
-make[1]: *** No rule to make target `config'.  Stop.
-make[1]: Leaving directory
-`/media/disk-1/buildroot/buildroot-2009.08/build_arm/perl-5.8.8/ext/Errno'
-/usr/bin/make config failed, continuing anyway...
-make[1]: Entering directory
-`/media/disk-1/buildroot/buildroot-2009.08/build_arm/perl-5.8.8/ext/Errno'
-make[1]: *** No rule to make target `all'.  Stop.
-make[1]: Leaving directory
-`/media/disk-1/buildroot/buildroot-2009.08/build_arm/perl-5.8.8/ext/Errno'
-make: *** [/media/disk-1/buildroot/buildroot-2009.08/build_arm/perl-5.8.8/.configured]
-Error 2
+Yes. I have a fix in one of my branches that fixes this. But it's part
+of a set of fixes designed to get Codesourcery toolchains to work in
+Buildroot, which doesn't work yet (see my mail on this topic a few days
+ago).
 
+See
+http://git.buildroot.net/~tpetazzoni/git/buildroot/commit/?h=toolchain-fixes&id=27bd3ec803202f52c336254b276cbab3c6999a35
 
- i tried to find a option to disable to microperl since i dont want it
-at all  and
-Unfortunately (for me) selecting the general devel install auto
-selects autoconf which in turn auto selects miniperl.
- how to deselect microperl from autoconf? thanks.
-warm regards,
-Ravi Kulkarni.
+(but it's not ready for inclusion yet)
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
