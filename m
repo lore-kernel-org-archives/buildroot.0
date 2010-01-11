@@ -1,35 +1,33 @@
-From: Clark Rawlins <clark.rawlins@escient.com>
-Date: Mon, 11 Jan 2010 10:44:11 -0500
-Subject: [Buildroot] [PATCH 1/2] Support for a kernel-modules catagory
-In-Reply-To: <a038bef51001110614y2d1e6130gc88bc5b0cc90d19@mail.gmail.com>
-References: <1263060020.18571.8.camel@venture>
-	<a038bef51001110614y2d1e6130gc88bc5b0cc90d19@mail.gmail.com>
-Message-ID: <1263224651.5210.3.camel@venture>
+From: William Wagner <will_wagner@carallon.com>
+Date: Mon, 11 Jan 2010 20:00:38 +0000
+Subject: [Buildroot] obtaining linux kernel from git
+Message-ID: <4B4B8366.2050007@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 2010-01-11 at 09:14 -0500, Chris Packham wrote:
-> On Sat, Jan 9, 2010 at 1:00 PM, Clark Rawlins <clark.rawlins@escient.com> wrote:
-> > Add support for a catagory of packages called
-> > "Extra kernel modules" in menuconfig and a
-> > new subdirectory similar to the "editors"
-> > subdirectory to hold the kernel-modules packages.
-> > diff --git a/package/kernel-modules/Config.in b/package/kernel-modules/Config.in
-> [snip]
-> > new file mode 100644
-> > index 0000000..ddd27c3
-> > --- /dev/null
-> > +++ b/package/kernel-modules/Config.in
-> > @@ -0,0 +1,3 @@
-> > +menu "Extra Kernel Modules"
-> > +source "package/kernel-modules/cdfs/Config.in"
-> > +endmenu
-> 
-> This depends on code in your next patch. Perhaps just start with an
-> empty menu then add the cdfs part in your next patch. I'm not sure how
-> pedantic buildroot is with creating git bisect points that build.
+Hi All,
 
-I will recreate these patches with this issue resolved.
+I am looking at making it so that buildroot can get the linux kernel 
+from a git repository.
+
+Has anyone else done this before?
+
+Any pointers on what will need doing?
+
+If not then I'll hack away on it for a bit and see where I get to, 
+assuming success I'll post something here. From a cursory look it 
+doesn't look too bad, the biggest problem is knowing the kernel version 
+before obtaining the repository, for now I might just make it that the 
+user has to specify it but I'll see how  I go.
+
+Will
+
+-- 
+------------------------------------------------------------------------
+Will Wagner                                     will_wagner at carallon.com
+Development Manager                      Office Tel: +44 (0)20 7371 2032
+Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
+------------------------------------------------------------------------
