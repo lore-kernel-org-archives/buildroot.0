@@ -1,42 +1,59 @@
-From: Grant Likely <grant.likely@secretlab.ca>
-Date: Tue, 12 Jan 2010 12:15:10 -0700
-Subject: [Buildroot] [PATCH 3/9] Add support for multilib external
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Tue, 12 Jan 2010 23:09:41 +0100
+Subject: [Buildroot] Issue for the integration of Codesourcery external
 	toolchains
-In-Reply-To: <20100112120603.6682e454@surf>
-References: <20081016203220.15826.26173.stgit@localhost.localdomain> 
-	<20081016203230.15826.93873.stgit@localhost.localdomain>
-	<20100112120603.6682e454@surf>
-Message-ID: <fa686aa41001121115i7f12f78fme3a8cf7bfde1446@mail.gmail.com>
+In-Reply-To: <20100112115228.6f81f471@surf>
+References: <20100104162422.5b7e7bf6@surf>
+	<1262647415.23193.99.camel@coalu.atr>
+	<20100112115228.6f81f471@surf>
+Message-ID: <201001122309.41946.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jan 12, 2010 at 4:06 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hi Grant,
->
-> I've recently tried to work again on integrating CodeSourcery
-> toolchains into Buildroot, but I'm facing issues related to multilib.
-> I've summed up these issues in the following post:
->
-> ?http://lists.busybox.net/pipermail/buildroot/2010-January/031421.html
->
-> If you have any idea on how to solve the issues, don't hesitate to tell
-> me.
+Hello Thomas,
+All,
 
-I'm not a gcc expert so I don't know.  It would be ideal if gcc could
-tell you the subdirectory for a given set of flags (instead of trying
-to parse -print-multi-lib output) and then copy only those libraries.
-Include files would need to be copied separately of course.  Then
-you'd either need a symlink in the target directory so that gcc
-doesn't get confused, or a flag to tell gcc to turn off multilib.
+On Tuesday 12 January 2010 11:52:28 Thomas Petazzoni wrote:
+> So maybe our solution of using --sysroot is ugly and we should fall
+> back to the solution where the toolchain sysroot is kept in its
+> original location and we just use -L/-I to indicate where our staging
+> directory is (solution which has proved in the past to be fairly
+> difficult to stabilize).
 
-You might try asking Segher Boessenkool (cc'd).  He's quite adept at gcc-fu.
+Well, for what it's worth, here's an (embrio of an) idea:
 
-g.
+1) do not copy the sysroot to staging, trust gcc to find it properly
+2) add a kind of wrapper to gcc (et al.) that basically does the following:
 
+---8<---
+#!/bin/sh
+exec real-gcc -L "${STAGING_DIR}"{,/usr}/lib    \
+                  -I "${STAGING_DIR}"/usr/include   \
+                  "$@"
+---8<---
+
+That way, we always have out staging/lib and staging/usr/lib in the library
+search path; ditto for the include search path.
+
+It should work with whatever toolchain we're using, internaly-built or
+external. And that means a single way of handling things.
+
+Finally, when the staging is full, we can /overlay/ with a copy of the
+original sysroot libs we get from gcc --print-sysroot
+
+Of course, that's far from being complete!
+
+HTH...
+
+Regards,
+Yann E. MORIN.
 -- 
-Grant Likely, B.Sc., P.Eng.
-Secret Lab Technologies Ltd.
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+`------------------------------^-------^------------------^--------------------'
