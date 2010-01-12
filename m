@@ -1,396 +1,397 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Jan 2010 00:27:25 +0100
-Subject: [Buildroot] [PATCH 6/6] toolchain: Clarify configuration option
-	files organization
+Date: Wed, 13 Jan 2010 00:27:24 +0100
+Subject: [Buildroot] [PATCH 5/6] Update defconfigs after
+	BR2_TARGET_OPTIMIZATION rename
 In-Reply-To: <cover.1263338839.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1263338839.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <d5e7b56275fdde2b36c437e80dcfe398fd462624.1263338839.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <aac922d49c2f3cf2a5b70aaf038e532bf0123a53.1263338839.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Instead of a mess of Config.in, Config.in.1 and Config.in.2 files, the
-organization is now as follows:
-
- * Config.in only provides the Buildroot toolchain vs. external
-   toolchain choices. Depending on this, it sources either
-   Config.in.buildroot or Config.in.external files
-
- * Config.in.buildroot provides the Buildroot toolchain configuration
-   options
-
- * Config.in.external provides the external toolchain configuration
-   options
-
-Options such as RPC, IPv6, large file, wide char, locale support,
-program invocation and so forth are duplicated in Buildroot and
-external toolchain support. This allows to provide an option label
-that really matches what the option is for.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/Config.in                            |   16 +--
- toolchain/Config.in.1                          |    9 --
- toolchain/{Config.in.2 => Config.in.buildroot} |   60 ++++++------
- toolchain/Config.in.external                   |  128 ++++++++++++++++++++++++
- toolchain/external-toolchain/Config.in         |   22 ----
- toolchain/external-toolchain/Config.in.2       |   17 ---
- 6 files changed, 165 insertions(+), 87 deletions(-)
- delete mode 100644 toolchain/Config.in.1
- rename toolchain/{Config.in.2 => Config.in.buildroot} (80%)
- create mode 100644 toolchain/Config.in.external
- delete mode 100644 toolchain/external-toolchain/Config.in
- delete mode 100644 toolchain/external-toolchain/Config.in.2
+ configs/arm_toolchain_defconfig           |    2 +-
+ configs/at91rm9200df_defconfig            |    2 +-
+ configs/at91rm9200df_ext_bare_defconfig   |    2 +-
+ configs/at91rm9200df_ext_defconfig        |    2 +-
+ configs/at91sam9260dfc_defconfig          |    2 +-
+ configs/at91sam9260dfc_ext_bare_defconfig |    2 +-
+ configs/at91sam9260dfc_ext_defconfig      |    2 +-
+ configs/at91sam9260pf_defconfig           |    2 +-
+ configs/at91sam9261ek_defconfig           |    2 +-
+ configs/at91sam9261ek_ext_bare_defconfig  |    2 +-
+ configs/at91sam9261ek_ext_defconfig       |    2 +-
+ configs/at91sam9263ek_defconfig           |    2 +-
+ configs/at91sam9263ek_ext_bare_defconfig  |    2 +-
+ configs/at91sam9263ek_ext_defconfig       |    2 +-
+ configs/at91sam9g20dfc_defconfig          |    2 +-
+ configs/at91sam9g20dfc_ext_bare_defconfig |    2 +-
+ configs/at91sam9g20dfc_ext_defconfig      |    2 +-
+ configs/atngw100-base_defconfig           |    2 +-
+ configs/atngw100_defconfig                |    2 +-
+ configs/atstk1005_defconfig               |    2 +-
+ configs/atstk100x_defconfig               |    2 +-
+ configs/i386_defconfig                    |    2 +-
+ configs/i686_defconfig                    |    2 +-
+ configs/integrator926_defconfig           |    2 +-
+ configs/integrator926_huge_defconfig      |    2 +-
+ configs/kb9202_defconfig                  |    2 +-
+ configs/v100sc2_defconfig                 |    2 +-
+ 27 files changed, 27 insertions(+), 27 deletions(-)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index ee34e03..c3052fc 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -16,16 +16,12 @@ config BR2_TOOLCHAIN_EXTERNAL
+diff --git a/configs/arm_toolchain_defconfig b/configs/arm_toolchain_defconfig
+index f044e51..136b0d7 100644
+--- a/configs/arm_toolchain_defconfig
++++ b/configs/arm_toolchain_defconfig
+@@ -291,7 +291,7 @@ BR2_PTHREADS_OLD=y
+ # BR2_PTHREADS_NATIVE is not set
+ BR2_GCC_CROSS_CXX=y
+ BR2_INSTALL_LIBSTDCPP=y
+-BR2_TARGET_OPTIMIZATION="-Os -pipe"
++BR2_EXTRA_TARGET_CFLAGS="-pipe"
+ # BR2_ELF2FLT is not set
+ # BR2_MKLIBS is not set
+ # BR2_PACKAGE_SSTRIP_TARGET is not set
+diff --git a/configs/at91rm9200df_defconfig b/configs/at91rm9200df_defconfig
+index 3d98b0f..c8786a9 100644
+--- a/configs/at91rm9200df_defconfig
++++ b/configs/at91rm9200df_defconfig
+@@ -306,7 +306,7 @@ BR2_PTHREADS_OLD=y
+ # BR2_PTHREADS_NATIVE is not set
+ BR2_GCC_CROSS_CXX=y
+ BR2_INSTALL_LIBSTDCPP=y
+-BR2_TARGET_OPTIMIZATION="-Os -pipe"
++BR2_EXTRA_TARGET_CFLAGS="-pipe"
+ # BR2_ELF2FLT is not set
+ # BR2_MKLIBS is not set
+ BR2_PACKAGE_SSTRIP_TARGET=y
+diff --git a/configs/at91rm9200df_ext_bare_defconfig b/configs/at91rm9200df_ext_bare_defconfig
+index 84f6b7e..12666a3 100644
+--- a/configs/at91rm9200df_ext_bare_defconfig
++++ b/configs/at91rm9200df_ext_bare_defconfig
+@@ -218,7 +218,7 @@ BR2_PTHREADS_OLD=y
+ # BR2_PTHREADS_NATIVE is not set
+ BR2_GCC_CROSS_CXX=y
+ BR2_INSTALL_LIBSTDCPP=y
+-BR2_TARGET_OPTIMIZATION="-Os -pipe"
++BR2_EXTRA_TARGET_CFLAGS="-pipe"
  
- endchoice
+ #
+ # Package Selection for the target
+diff --git a/configs/at91rm9200df_ext_defconfig b/configs/at91rm9200df_ext_defconfig
+index 1dea062..386777a 100644
+--- a/configs/at91rm9200df_ext_defconfig
++++ b/configs/at91rm9200df_ext_defconfig
+@@ -238,7 +238,7 @@ BR2_PTHREADS_OLD=y
+ # BR2_PTHREADS_NATIVE is not set
+ BR2_GCC_CROSS_CXX=y
+ BR2_INSTALL_LIBSTDCPP=y
+-BR2_TARGET_OPTIMIZATION="-Os -pipe"
++BR2_EXTRA_TARGET_CFLAGS="-pipe"
  
--source "toolchain/Config.in.1"
--source "toolchain/external-toolchain/Config.in"
-+if BR2_TOOLCHAIN_BUILDROOT
-+source "toolchain/Config.in.buildroot"
-+endif
+ #
+ # Package Selection for the target
+diff --git a/configs/at91sam9260dfc_defconfig b/configs/at91sam9260dfc_defconfig
+index 1b4094e..3ab9f0c 100644
+--- a/configs/at91sam9260dfc_defconfig
++++ b/configs/at91sam9260dfc_defconfig
+@@ -324,7 +324,7 @@ BR2_INET_RPC=y
+ BR2_USE_WCHAR=y
+ # BR2_SOFT_FLOAT is not set
+ # BR2_VFP_FLOAT is not set
+-BR2_TARGET_OPTIMIZATION="-Os -pipe"
++BR2_EXTRA_TARGET_CFLAGS="-pipe"
+ BR2_CROSS_TOOLCHAIN_TARGET_UTILS=y
  
--# we want gdb config in the middle of both source and external
--# toolchains, but mconf won't let us source the same file twice,
--# so put it here instead
--source "toolchain/gdb/Config.in"
--comment "Common Toolchain Options"
--
--source "toolchain/Config.in.2"
--source "toolchain/external-toolchain/Config.in.2"
-+if BR2_TOOLCHAIN_EXTERNAL
-+source "toolchain/Config.in.external"
-+endif
+ #
+diff --git a/configs/at91sam9260dfc_ext_bare_defconfig b/configs/at91sam9260dfc_ext_bare_defconfig
+index d99cfa2..835ee14 100644
+--- a/configs/at91sam9260dfc_ext_bare_defconfig
++++ b/configs/at91sam9260dfc_ext_bare_defconfig
+@@ -216,7 +216,7 @@ BR2_PTHREADS_OLD=y
+ # BR2_PTHREADS_NATIVE is not set
+ BR2_GCC_CROSS_CXX=y
+ BR2_INSTALL_LIBSTDCPP=y
+-BR2_TARGET_OPTIMIZATION="-Os -pipe"
++BR2_EXTRA_TARGET_CFLAGS="-pipe"
+ BR2_TOOLCHAIN_EXTERNAL_PATH="$(GCCROOT)"
+ BR2_TOOLCHAIN_EXTERNAL_PREFIX="$(ARCH)-linux"
  
- endmenu
-diff --git a/toolchain/Config.in.1 b/toolchain/Config.in.1
-deleted file mode 100644
-index 5c26858..0000000
---- a/toolchain/Config.in.1
-+++ /dev/null
-@@ -1,9 +0,0 @@
--#
--
--if BR2_TOOLCHAIN_BUILDROOT
--source "toolchain/kernel-headers/Config.in"
--source "toolchain/uClibc/Config.in"
--source "toolchain/binutils/Config.in"
--source "toolchain/gcc/Config.in"
--source "toolchain/ccache/Config.in"
--endif
-diff --git a/toolchain/Config.in.2 b/toolchain/Config.in.buildroot
-similarity index 80%
-rename from toolchain/Config.in.2
-rename to toolchain/Config.in.buildroot
-index e404657..70ac3ec 100644
---- a/toolchain/Config.in.2
-+++ b/toolchain/Config.in.buildroot
-@@ -1,43 +1,58 @@
--#
-+source "toolchain/kernel-headers/Config.in"
-+source "toolchain/uClibc/Config.in"
-+source "toolchain/binutils/Config.in"
-+source "toolchain/gcc/Config.in"
-+source "toolchain/gdb/Config.in"
-+source "toolchain/ccache/Config.in"
-+
-+comment "Toolchain options"
-+
- config BR2_LARGEFILE
- 	bool "Enable large file (files > 2 GB) support?"
- 	depends on !BR2_cris
- 	help
--	  If you are building your own toolchain and you want to 
-+	  If you are building your own toolchain and you want to
- 	  support files larger than 2GB then enable this option.
--	  If you have an external binary toolchain that has been 
--	  built with large file support (files > 2GB) then enable 
--	  this option.
+diff --git a/configs/at91sam9260dfc_ext_defconfig b/configs/at91sam9260dfc_ext_defconfig
+index 14bdc7a..c4f1343 100644
+--- a/configs/at91sam9260dfc_ext_defconfig
++++ b/configs/at91sam9260dfc_ext_defconfig
+@@ -246,7 +246,7 @@ BR2_PTHREADS_OLD=y
+ # BR2_PTHREADS_NATIVE is not set
+ BR2_GCC_CROSS_CXX=y
+ BR2_INSTALL_LIBSTDCPP=y
+-BR2_TARGET_OPTIMIZATION="-Os -pipe"
++BR2_EXTRA_TARGET_CFLAGS="-pipe"
  
- config BR2_INET_IPV6
- 	bool "Enable IPv6"
- 	help
--	  If you are building your own toolchain and you want to 
-+	  If you are building your own toolchain and you want to
- 	  enable IPV6 support then enable this option.
--	  If you have an external binary toolchain that has been 
--	  built with IPV6 support then enable this option.
+ #
+ # Package Selection for the target
+diff --git a/configs/at91sam9260pf_defconfig b/configs/at91sam9260pf_defconfig
+index c668e03..305b349 100644
+--- a/configs/at91sam9260pf_defconfig
++++ b/configs/at91sam9260pf_defconfig
+@@ -216,7 +216,7 @@ BR2_INET_IPV6=y
+ BR2_INET_RPC=y
+ BR2_USE_WCHAR=y
+ # BR2_SOFT_FLOAT is not set
+-BR2_TARGET_OPTIMIZATION="-Os -pipe"
++BR2_EXTRA_TARGET_CFLAGS="-pipe"
+ BR2_CROSS_TOOLCHAIN_TARGET_UTILS=y
  
- config BR2_INET_RPC
- 	bool "Enable RPC"
- 	help
- 	  Enable RPC. RPC support is needed for nfs.
--	  If you are building your own toolchain and you want to 
-+	  If you are building your own toolchain and you want to
- 	  enable RPC support then enable this option.
--	  If you have an external binary toolchain that has been 
--	  built with RPC support then enable this option.
+ #
+diff --git a/configs/at91sam9261ek_defconfig b/configs/at91sam9261ek_defconfig
+index 9598085..413f185 100644
+--- a/configs/at91sam9261ek_defconfig
++++ b/configs/at91sam9261ek_defconfig
+@@ -318,7 +318,7 @@ BR2_INET_RPC=y
+ BR2_USE_WCHAR=y
+ # BR2_SOFT_FLOAT is not set
+ # BR2_VFP_FLOAT is not set
+-BR2_TARGET_OPTIMIZATION="-Os -pipe"
++BR2_EXTRA_TARGET_CFLAGS="-pipe"
+ BR2_CROSS_TOOLCHAIN_TARGET_UTILS=y
  
- config BR2_ENABLE_LOCALE
- 	bool "Enable toolchain locale/i18n support?"
- 	select BR2_USE_WCHAR
- 	help
--	  If you are building your own toolchain and you want to 
-+	  If you are building your own toolchain and you want to
- 	  enable locale/i18n support then enable this option.
--	  If you have an external binary toolchain that has been 
--	  built with locale/i18n support then enable this option.
-+
-+config BR2_USE_WCHAR
-+	bool "Enable WCHAR support"
-+	help
-+	  If you are building your own toolchain and you want to
-+	  enable WCHAR support then enable this option.
-+
-+config BR2_PROGRAM_INVOCATION
-+	bool "Enable 'program invocation name'"
-+	help
-+	  Support for the GNU-specific program_invocation_name and
-+	  program_invocation_short_name strings.  Some GNU packages
-+	  (like tar and coreutils) utilize these for extra useful
-+	  output, but in general are not required.
-+	  If you have an external binary toolchain that has been built
-+	  with program invocation support then enable this option.
+ #
+diff --git a/configs/at91sam9261ek_ext_bare_defconfig b/configs/at91sam9261ek_ext_bare_defconfig
+index 4c534a7..aa0904b 100644
+--- a/configs/at91sam9261ek_ext_bare_defconfig
++++ b/configs/at91sam9261ek_ext_bare_defconfig
+@@ -221,7 +221,7 @@ BR2_PTHREADS_OLD=y
+ # BR2_PTHREADS_NATIVE is not set
+ BR2_GCC_CROSS_CXX=y
+ BR2_INSTALL_LIBSTDCPP=y
+-BR2_TARGET_OPTIMIZATION="-Os -pipe"
++BR2_EXTRA_TARGET_CFLAGS="-pipe"
  
- config BR2_ENABLE_LOCALE_PREGENERATED
- 	bool "Use pregenerated locale data?"
--	depends on BR2_ENABLE_LOCALE && BR2_TOOLCHAIN_BUILDROOT && BROKEN # tarball missing
-+	depends on BR2_ENABLE_LOCALE && BROKEN # tarball missing
- 	help
- 	  Instead of generating the locale data locally you can optionally
- 	  download a pregenerated set of locales.
-@@ -87,16 +102,6 @@ choice
- 		bool "Native POSIX Threading (NPTL)"
- endchoice
+ #
+ # Package Selection for the target
+diff --git a/configs/at91sam9261ek_ext_defconfig b/configs/at91sam9261ek_ext_defconfig
+index e7da95a..a5a7600 100644
+--- a/configs/at91sam9261ek_ext_defconfig
++++ b/configs/at91sam9261ek_ext_defconfig
+@@ -277,7 +277,7 @@ BR2_PTHREADS_OLD=y
+ # BR2_PTHREADS_NATIVE is not set
+ BR2_GCC_CROSS_CXX=y
+ BR2_INSTALL_LIBSTDCPP=y
+-BR2_TARGET_OPTIMIZATION="-Os -pipe"
++BR2_EXTRA_TARGET_CFLAGS="-pipe"
  
--config BR2_PROGRAM_INVOCATION
--	bool "Enable 'program invocation name'"
--	help
--	  Support for the GNU-specific program_invocation_name and
--	  program_invocation_short_name strings.  Some GNU packages
--	  (like tar and coreutils) utilize these for extra useful
--	  output, but in general are not required.
--	  If you have an external binary toolchain that has been built
--	  with program invocation support then enable this option.
--
- config BR2_GCC_CROSS_CXX
- 	bool
- 	help
-@@ -107,7 +112,7 @@ config BR2_GCC_CROSS_CXX
+ #
+ # Package Selection for the target
+diff --git a/configs/at91sam9263ek_defconfig b/configs/at91sam9263ek_defconfig
+index 145700d..5b232c2 100644
+--- a/configs/at91sam9263ek_defconfig
++++ b/configs/at91sam9263ek_defconfig
+@@ -311,7 +311,7 @@ BR2_PTHREADS_OLD=y
+ # BR2_PTHREADS_NATIVE is not set
+ BR2_GCC_CROSS_CXX=y
+ BR2_INSTALL_LIBSTDCPP=y
+-BR2_TARGET_OPTIMIZATION="-Os -pipe"
++BR2_EXTRA_TARGET_CFLAGS="-pipe"
+ # BR2_ELF2FLT is not set
+ # BR2_MKLIBS is not set
+ # BR2_PACKAGE_SSTRIP_TARGET is not set
+diff --git a/configs/at91sam9263ek_ext_bare_defconfig b/configs/at91sam9263ek_ext_bare_defconfig
+index 185372c..6035573 100644
+--- a/configs/at91sam9263ek_ext_bare_defconfig
++++ b/configs/at91sam9263ek_ext_bare_defconfig
+@@ -220,7 +220,7 @@ BR2_PTHREADS_OLD=y
+ # BR2_PTHREADS_NATIVE is not set
+ BR2_GCC_CROSS_CXX=y
+ BR2_INSTALL_LIBSTDCPP=y
+-BR2_TARGET_OPTIMIZATION="-Os -pipe"
++BR2_EXTRA_TARGET_CFLAGS="-pipe"
  
- config BR2_INSTALL_LIBSTDCPP
- 	bool "Build/install c++ compiler and libstdc++?"
--	select BR2_LARGEFILE if (!BR2_GCC_SUPPORTS_SYSROOT && BR2_TOOLCHAIN_BUILDROOT)
-+	select BR2_LARGEFILE if !BR2_GCC_SUPPORTS_SYSROOT
- 	select BR2_GCC_CROSS_CXX
- 	help
- 	  If you are building your own toolchain and want to build and install
-@@ -116,7 +121,6 @@ config BR2_INSTALL_LIBSTDCPP
- 	  support and you want to use the compiler / library then you need 
- 	  to select this option.
+ #
+ # Package Selection for the target
+diff --git a/configs/at91sam9263ek_ext_defconfig b/configs/at91sam9263ek_ext_defconfig
+index 15b4d3b..ae16d78 100644
+--- a/configs/at91sam9263ek_ext_defconfig
++++ b/configs/at91sam9263ek_ext_defconfig
+@@ -239,7 +239,7 @@ BR2_PTHREADS_OLD=y
+ # BR2_PTHREADS_NATIVE is not set
+ BR2_GCC_CROSS_CXX=y
+ BR2_INSTALL_LIBSTDCPP=y
+-BR2_TARGET_OPTIMIZATION="-Os -pipe"
++BR2_EXTRA_TARGET_CFLAGS="-pipe"
  
--if BR2_TOOLCHAIN_BUILDROOT
- source "toolchain/elf2flt/Config.in"
- source "toolchain/mklibs/Config.in"
- source "toolchain/sstrip/Config.in"
-@@ -137,5 +141,3 @@ config BR2_CROSS_TOOLCHAIN_TARGET_UTILS
+ #
+ # Package Selection for the target
+diff --git a/configs/at91sam9g20dfc_defconfig b/configs/at91sam9g20dfc_defconfig
+index a6ef10c..c84684e 100644
+--- a/configs/at91sam9g20dfc_defconfig
++++ b/configs/at91sam9g20dfc_defconfig
+@@ -311,7 +311,7 @@ BR2_PTHREADS_OLD=y
+ # BR2_PTHREADS_NATIVE is not set
+ BR2_GCC_CROSS_CXX=y
+ BR2_INSTALL_LIBSTDCPP=y
+-BR2_TARGET_OPTIMIZATION="-Os -pipe"
++BR2_EXTRA_TARGET_CFLAGS="-pipe"
+ # BR2_ELF2FLT is not set
+ # BR2_MKLIBS is not set
+ BR2_PACKAGE_SSTRIP_TARGET=y
+diff --git a/configs/at91sam9g20dfc_ext_bare_defconfig b/configs/at91sam9g20dfc_ext_bare_defconfig
+index 3feef30..d6f077b 100644
+--- a/configs/at91sam9g20dfc_ext_bare_defconfig
++++ b/configs/at91sam9g20dfc_ext_bare_defconfig
+@@ -218,7 +218,7 @@ BR2_PTHREADS_OLD=y
+ # BR2_PTHREADS_NATIVE is not set
+ BR2_GCC_CROSS_CXX=y
+ BR2_INSTALL_LIBSTDCPP=y
+-BR2_TARGET_OPTIMIZATION="-Os -pipe"
++BR2_EXTRA_TARGET_CFLAGS="-pipe"
  
- 	  Answer Y if you want these apps (if built) copied into the
- 	  cross toolchain dir under <arch>-linux-uclibc/target_utils/.
--
--endif
-diff --git a/toolchain/Config.in.external b/toolchain/Config.in.external
-new file mode 100644
-index 0000000..060b9bb
---- /dev/null
-+++ b/toolchain/Config.in.external
-@@ -0,0 +1,128 @@
-+config BR2_TOOLCHAIN_EXTERNAL_PATH
-+	string "External toolchain path"
-+	default "/path/to/staging_dir/usr"
-+	help
-+	  Path to where the external toolchain is installed.
-+
-+config BR2_TOOLCHAIN_EXTERNAL_PREFIX
-+	string "External toolchain prefix"
-+	default "$(ARCH)-linux"
-+	help
-+	  This the the external toolchain prefix. For example:
-+	    armeb-unknown-linux-gnu, mipsel-unknown-linux-gnu, etc.
-+
-+choice
-+	prompt "External toolchain C library"
-+	default BR2_TOOLCHAIN_EXTERNAL_UCLIBC
-+
-+config BR2_TOOLCHAIN_EXTERNAL_UCLIBC
-+	bool "uClibc"
-+
-+config BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	bool "glibc"
-+
-+endchoice
-+
-+#
-+# Toolchain options with uClibc
-+#
-+if BR2_TOOLCHAIN_EXTERNAL_UCLIBC
-+
-+comment "External toolchain features"
-+
-+config BR2_LARGEFILE
-+	bool "Toolchain has large file (files > 2 GB) support?"
-+	depends on !BR2_cris
-+	help
-+	  Select this option if your external toolchain has a uClibc
-+	  configured with large file support.
-+
-+config BR2_INET_IPV6
-+	bool "Toolchain has IPv6?"
-+	help
-+	  Select this option if your external toolchain has a uClibc
-+	  configured with IPv6 support.
-+
-+config BR2_INET_RPC
-+	bool "Toolchain has RPC?"
-+	help
-+	  Select this option if your external toolchain has a uClibc
-+	  configured with RPC support.
-+
-+config BR2_USE_WCHAR
-+	bool "Toolchain has WCHAR support?"
-+	help
-+	  Select this option if your external toolchain has a uClibc
-+	  configured with wide char support.
-+
-+config BR2_ENABLE_LOCALE
-+	bool "Toolchain has locale/i18n support?"
-+	select BR2_USE_WCHAR
-+	help
-+	  Select this option if your external toolchain has a uClibc
-+	  configured with locale support.
-+
-+config BR2_PROGRAM_INVOCATION
-+	bool "Toolchain supports program invocation name?"
-+	help
-+	  Select this option if your external toolchain has a uClibc
-+	  configured with program invocation support.
-+
-+endif
-+
-+#
-+# Toolchain options with glibc
-+#
-+
-+if BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+
-+config BR2_LARGEFILE
-+       bool
-+       default y
-+
-+config BR2_INET_IPV6
-+       bool
-+       default y
-+
-+config BR2_INET_RPC
-+       bool
-+       default y
-+
-+config BR2_ENABLE_LOCALE
-+       bool
-+       default y
-+
-+config BR2_USE_WCHAR
-+       bool
-+       default y
-+
-+config BR2_PROGRAM_INVOCATION
-+       bool
-+       default y
-+
-+endif
-+
-+#
-+# Common toolchain options
-+#
-+
-+comment "Integration options"
-+
-+config BR2_GCC_CROSS_CXX
-+	bool
-+
-+config BR2_INSTALL_LIBSTDCPP
-+	bool "Install libstdc++?"
-+	select BR2_LARGEFILE
-+	select BR2_GCC_CROSS_CXX
-+	help
-+	  If you have an external toolchain that has been built with C++
-+	  support and you want to use the compiler / library then you need
-+	  to select this option.
-+
-+config BR2_TOOLCHAIN_EXTERNAL_STRIP
-+        bool
-+        default y
-+        prompt "Strip shared libraries"
-+	help
-+	  Strip shared libraries copied from the external toolchain.
-diff --git a/toolchain/external-toolchain/Config.in b/toolchain/external-toolchain/Config.in
-deleted file mode 100644
-index efc8378..0000000
---- a/toolchain/external-toolchain/Config.in
-+++ /dev/null
-@@ -1,22 +0,0 @@
--#
--
--if BR2_TOOLCHAIN_EXTERNAL
--choice
--	prompt "External toolchain C library"
--	default BR2_TOOLCHAIN_EXTERNAL_UCLIBC
--
--config BR2_TOOLCHAIN_EXTERNAL_UCLIBC
--	bool "uClibc"
--
--config BR2_TOOLCHAIN_EXTERNAL_GLIBC
--	bool "glibc"
--
--endchoice
--
--config BR2_TOOLCHAIN_EXTERNAL_STRIP
--        bool
--        default y
--        prompt "Strip shared libraries"
--	help
--	  Strip shared libraries copied from the external toolchain.
--endif
-diff --git a/toolchain/external-toolchain/Config.in.2 b/toolchain/external-toolchain/Config.in.2
-deleted file mode 100644
-index 489558c..0000000
---- a/toolchain/external-toolchain/Config.in.2
-+++ /dev/null
-@@ -1,17 +0,0 @@
--#
--
--if BR2_TOOLCHAIN_EXTERNAL
--config BR2_TOOLCHAIN_EXTERNAL_PATH
--	string "External toolchain path"
--	default "/path/to/staging_dir/usr"
--	help
--	  Path to where the external toolchain is installed.
--
--config BR2_TOOLCHAIN_EXTERNAL_PREFIX
--	string "External toolchain prefix"
--	default "$(ARCH)-linux"
--	help
--	  This the the external toolchain prefix. For example:
--	    armeb-unknown-linux-gnu, mipsel-unknown-linux-gnu, etc.
--
--endif
+ #
+ # Package Selection for the target
+diff --git a/configs/at91sam9g20dfc_ext_defconfig b/configs/at91sam9g20dfc_ext_defconfig
+index 96d9793..0d17dee 100644
+--- a/configs/at91sam9g20dfc_ext_defconfig
++++ b/configs/at91sam9g20dfc_ext_defconfig
+@@ -246,7 +246,7 @@ BR2_PTHREADS_OLD=y
+ # BR2_PTHREADS_NATIVE is not set
+ BR2_GCC_CROSS_CXX=y
+ BR2_INSTALL_LIBSTDCPP=y
+-BR2_TARGET_OPTIMIZATION="-Os -pipe"
++BR2_EXTRA_TARGET_CFLAGS="-pipe"
+ 
+ #
+ # Package Selection for the target
+diff --git a/configs/atngw100-base_defconfig b/configs/atngw100-base_defconfig
+index 6fbc0de..4ea3ecd 100644
+--- a/configs/atngw100-base_defconfig
++++ b/configs/atngw100-base_defconfig
+@@ -236,7 +236,7 @@ BR2_SOFT_FLOAT=y
+ BR2_PTHREADS_OLD=y
+ # BR2_PTHREADS_NATIVE is not set
+ # BR2_INSTALL_LIBSTDCPP is not set
+-BR2_TARGET_OPTIMIZATION="-Os -pipe"
++BR2_EXTRA_TARGET_CFLAGS="-pipe"
+ # BR2_MKLIBS is not set
+ # BR2_PACKAGE_SSTRIP_TARGET is not set
+ # BR2_PACKAGE_SSTRIP_HOST is not set
+diff --git a/configs/atngw100_defconfig b/configs/atngw100_defconfig
+index 7a6cba4..5e75f3a 100644
+--- a/configs/atngw100_defconfig
++++ b/configs/atngw100_defconfig
+@@ -247,7 +247,7 @@ BR2_PTHREADS_OLD=y
+ # BR2_PTHREADS_NATIVE is not set
+ BR2_GCC_CROSS_CXX=y
+ BR2_INSTALL_LIBSTDCPP=y
+-BR2_TARGET_OPTIMIZATION="-Os -pipe"
++BR2_EXTRA_TARGET_CFLAGS="-pipe"
+ # BR2_MKLIBS is not set
+ # BR2_PACKAGE_SSTRIP_TARGET is not set
+ # BR2_PACKAGE_SSTRIP_HOST is not set
+diff --git a/configs/atstk1005_defconfig b/configs/atstk1005_defconfig
+index 309ac08..75442bc 100644
+--- a/configs/atstk1005_defconfig
++++ b/configs/atstk1005_defconfig
+@@ -252,7 +252,7 @@ BR2_PTHREADS_OLD=y
+ # BR2_PTHREADS_NATIVE is not set
+ BR2_GCC_CROSS_CXX=y
+ BR2_INSTALL_LIBSTDCPP=y
+-BR2_TARGET_OPTIMIZATION="-Os -pipe"
++BR2_EXTRA_TARGET_CFLAGS="-pipe"
+ # BR2_MKLIBS is not set
+ # BR2_PACKAGE_SSTRIP_TARGET is not set
+ # BR2_PACKAGE_SSTRIP_HOST is not set
+diff --git a/configs/atstk100x_defconfig b/configs/atstk100x_defconfig
+index b4abff9..16c25cb 100644
+--- a/configs/atstk100x_defconfig
++++ b/configs/atstk100x_defconfig
+@@ -248,7 +248,7 @@ BR2_PTHREADS_OLD=y
+ # BR2_PTHREADS_NATIVE is not set
+ BR2_GCC_CROSS_CXX=y
+ BR2_INSTALL_LIBSTDCPP=y
+-BR2_TARGET_OPTIMIZATION="-Os -pipe"
++BR2_EXTRA_TARGET_CFLAGS="-pipe"
+ # BR2_MKLIBS is not set
+ # BR2_PACKAGE_SSTRIP_TARGET is not set
+ # BR2_PACKAGE_SSTRIP_HOST is not set
+diff --git a/configs/i386_defconfig b/configs/i386_defconfig
+index 97067c4..b1f22a8 100644
+--- a/configs/i386_defconfig
++++ b/configs/i386_defconfig
+@@ -246,7 +246,7 @@ BR2_PTHREADS_OLD=y
+ # BR2_PTHREADS_NATIVE is not set
+ BR2_GCC_CROSS_CXX=y
+ BR2_INSTALL_LIBSTDCPP=y
+-BR2_TARGET_OPTIMIZATION="-Os -pipe"
++BR2_EXTRA_TARGET_CFLAGS="-pipe"
+ # BR2_MKLIBS is not set
+ # BR2_PACKAGE_SSTRIP_TARGET is not set
+ # BR2_PACKAGE_SSTRIP_HOST is not set
+diff --git a/configs/i686_defconfig b/configs/i686_defconfig
+index a3a2683..d2ba8f0 100644
+--- a/configs/i686_defconfig
++++ b/configs/i686_defconfig
+@@ -246,7 +246,7 @@ BR2_PTHREADS_OLD=y
+ # BR2_PTHREADS_NATIVE is not set
+ BR2_GCC_CROSS_CXX=y
+ BR2_INSTALL_LIBSTDCPP=y
+-BR2_TARGET_OPTIMIZATION="-Os -pipe"
++BR2_EXTRA_TARGET_CFLAGS="-pipe"
+ # BR2_MKLIBS is not set
+ # BR2_PACKAGE_SSTRIP_TARGET is not set
+ # BR2_PACKAGE_SSTRIP_HOST is not set
+diff --git a/configs/integrator926_defconfig b/configs/integrator926_defconfig
+index 2d2579b..434e87a 100644
+--- a/configs/integrator926_defconfig
++++ b/configs/integrator926_defconfig
+@@ -242,7 +242,7 @@ BR2_GCC_SHARED_LIBGCC=y
+ # BR2_INET_RPC is not set
+ # BR2_USE_WCHAR is not set
+ BR2_SOFT_FLOAT=y
+-BR2_TARGET_OPTIMIZATION="-Os -pipe -fwrapv"
++BR2_EXTRA_TARGET_CFLAGS="-pipe -fwrapv"
+ BR2_CROSS_TOOLCHAIN_TARGET_UTILS=y
+ 
+ #
+diff --git a/configs/integrator926_huge_defconfig b/configs/integrator926_huge_defconfig
+index 380e2e1..7533259 100644
+--- a/configs/integrator926_huge_defconfig
++++ b/configs/integrator926_huge_defconfig
+@@ -243,7 +243,7 @@ BR2_INET_IPV6=y
+ BR2_INET_RPC=y
+ BR2_USE_WCHAR=y
+ BR2_SOFT_FLOAT=y
+-BR2_TARGET_OPTIMIZATION="-Os -pipe -fwrapv"
++BR2_EXTRA_TARGET_CFLAGS="-pipe -fwrapv"
+ BR2_CROSS_TOOLCHAIN_TARGET_UTILS=y
+ 
+ #
+diff --git a/configs/kb9202_defconfig b/configs/kb9202_defconfig
+index 608eb86..a5708ce 100644
+--- a/configs/kb9202_defconfig
++++ b/configs/kb9202_defconfig
+@@ -244,7 +244,7 @@ BR2_GCC_SHARED_LIBGCC=y
+ # BR2_INET_RPC is not set
+ # BR2_USE_WCHAR is not set
+ BR2_SOFT_FLOAT=y
+-BR2_TARGET_OPTIMIZATION="-Os -pipe"
++BR2_EXTRA_TARGET_CFLAGS="-pipe"
+ BR2_CROSS_TOOLCHAIN_TARGET_UTILS=y
+ 
+ #
+diff --git a/configs/v100sc2_defconfig b/configs/v100sc2_defconfig
+index 336953e..448debc 100644
+--- a/configs/v100sc2_defconfig
++++ b/configs/v100sc2_defconfig
+@@ -217,7 +217,7 @@ BR2_INET_IPV6=y
+ BR2_INET_RPC=y
+ BR2_USE_WCHAR=y
+ BR2_SOFT_FLOAT=y
+-BR2_TARGET_OPTIMIZATION="-Os -pipe"
++BR2_EXTRA_TARGET_CFLAGS="-pipe"
+ BR2_CROSS_TOOLCHAIN_TARGET_UTILS=y
+ 
+ #
 -- 
 1.6.3.3
