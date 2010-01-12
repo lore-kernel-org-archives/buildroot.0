@@ -1,48 +1,26 @@
-From: Chris Robson <Chris.Robson@nrl.navy.mil>
-Date: Tue, 12 Jan 2010 08:41:37 -0500
-Subject: [Buildroot] Application package cross linked to package
- libraries problem
-In-Reply-To: <20100112142157.7c4bcb36@surf>
-References: <4B4C603A.70104@nrl.navy.mil>	<e4b6ec781001120358g3202f322qa8ae8c9408d8de40@mail.gmail.com>	<4B4C6C74.9040703@nrl.navy.mil>
-	<20100112142157.7c4bcb36@surf>
-Message-ID: <4B4C7C11.3080301@nrl.navy.mil>
+From: Paulo Costa <paulo.costa@veridistec.com.br>
+Date: Tue, 12 Jan 2010 15:42:12 -0200
+Subject: [Buildroot] Added package for RxTx Library
+Message-ID: <319f8e0e1001120942w7eed657bv9eb5e43abe08eafb@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+I've created a package for RxTx, a library that supports acessing serial
+ports from Java (http://users.frii.com/jarvi/rxtx/)
 
-Thomas
+I would appreciate any comments/suggestions on this patch
 
-Ah, yes, its the softlink that's missing aka.....
-
-sofia-sip is installed into ....
-$(STAGING_DIR)/usr/include/sofia-sip-[version number]
-thus nua.h is located in:
-$(STAGING_DIR)/usr/include/sofia-sip-[version number]/sofia-sip/nua.h
-ergo what is need is:
-$(STAGING_DIR)/usr/include/sofia-sip -> 
-$(STAGING_DIR)/usr/include/sofia-sip-[version number]
-
-Is there an example how to do this?  (right now its manually coded to 
-get past this)
-
-thanks....Chris
-
-On 01/12/2010 08:21 AM, Thomas Petazzoni wrote:
-> On Tue, 12 Jan 2010 07:35:00 -0500
-> Chris Robson<Chris.Robson@nrl.navy.mil>  wrote:
->
->    
->> build-juniper-commandline.c:8:27: error: sofia-sip/nua.h: No such
->> file or directory
->>      
-> Looks like the sofia-sip headers haven't been installed into
-> $(STAGING_DIR)/usr/include.
->
-> The issue is likely to be in the sofia-sip.mk file rather than in your
-> application .mk.
->
-> Thomas
->    
+Thanks
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100112/1760c6f6/attachment.htm>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: rxtx.patch
+Type: text/x-diff
+Size: 6514 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100112/1760c6f6/attachment.bin>
