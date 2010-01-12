@@ -1,33 +1,66 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 12 Jan 2010 12:41:58 +0000 (UTC)
-Subject: [Buildroot] [Bug 841] Build error
-In-Reply-To: <bug-841-163@https.bugs.busybox.net/>
-References: <bug-841-163@https.bugs.busybox.net/>
-Message-ID: <20100112124158.3E79A77729@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 12 Jan 2010 14:48:00 +0200
+Subject: [Buildroot] Issue for the integration of Codesourcery external
+ toolchains
+In-Reply-To: <20100112115441.0c21b140@surf>
+References: <20100104162422.5b7e7bf6@surf>
+	<20100106065952.GA12127@jasper.tkos.co.il>
+	<20100112115441.0c21b140@surf>
+Message-ID: <20100112124800.GB8097@jasper.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=841
+Hi Thomas,
 
+On Tue, Jan 12, 2010 at 11:54:41AM +0100, Thomas Petazzoni wrote:
+> On Wed, 6 Jan 2010 08:59:53 +0200
+> Baruch Siach <baruch@tkos.co.il> wrote:
+> 
+> > >  * Build a more normal sysroot in $(STAGING_DIR) by combining the
+> > >    contents of armv4t and the header files. But this would require
+> > >    telling gcc that the libraries aren't in armv4t anymore. This is
+> > >    probably possible using a custom spec file, but is quite
+> > >    complicated.
+> > 
+> > How about generating symlinks in the staging directory:
+> > 
+> > armv4t/usr/include -> ../../usr/include
+> > thumb2/usr/include -> ../../usr/include
+> > 
+> > and then using the output of -print-sysroot for each target?
+> 
+> Because everything in Buildroot assumes that the libraries and headers
+> must be installed in $(STAGING_DIR)/usr/include and
+> $(STAGING_DIR)/usr/lib, not in $(STAGING_DIR)/armv4/usr/include and
+> $(STAGING_DIR)/armv4/usr/lib.
 
+I'll clarify. I suggest the following steps:
 
+1. Copy the entire CodeSourcery sysroot (as reported by -print-sysroot) into 
+   $(STAGING_DIR).
 
+2. Create the following symlinks:
 
---- Comment #1 from Will Wagner <will_wagner@carallon.com>  2010-01-12 12:41:57 UTC ---
-Created an attachment (id=913)
- --> (https://bugs.busybox.net/attachment.cgi?id=913)
-Remove sysv legacy functions
+    $(STAGING_DIR)/armv4t/usr/include -> ../../usr/include
+    $(STAGING_DIR)/thumb2/usr/include -> ../../usr/include
 
-The problem here is the toolchain does not have sysv legacy support and mtd
-utils is using deprecated bzero and bcopy
+3. Set as necessary:
 
-Attached patch fixes mtd utils.
+    STAGING_DIR=$(STAGING_DIR)/armv4t
 
+    or
+
+    STAGING_DIR=$(STAGING_DIR)/thumb2
+
+Buildroot then sees libraries and headers in $(STAGING_DIR)/usr/lib and 
+$(STAGING_DIR)/usr/include respectively, as expected.
+
+baruch
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
