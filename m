@@ -1,22 +1,35 @@
-From: Herry Sitepu <hisitepu@gmail.com>
-Date: Wed, 13 Jan 2010 08:52:21 +0700
-Subject: [Buildroot] building software with scons
-Message-ID: <b61ad17e1001121752j4cf9a019p6b4dbb6553825a7f@mail.gmail.com>
+From: Miguel Angel Brintrup <brintrup@gmail.com>
+Date: Wed, 13 Jan 2010 12:06:57 -0300
+Subject: [Buildroot] I need a patch for AT91 to use a 2009.11 buildroot
+	version? like buildroot-v23434.patch in 23434 version
+Message-ID: <3ce6ccff1001130706i2cd1e5cahf159864c92d101e0@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Please help me with some hints,
-how should I cross compile package that uses scons as the build
-infrastructure? when i use scons outside the buildroot and use buildroot
-toolchain (or external toolchain using crosstool-ng), the scons always use
-the headers and libs of the host, and not in the buildroot's staging.
-anybody please, i want to use disko framework with buildroot.
+Hi to all
 
-Regards,
-Herry Sitepu
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100113/caf29379/attachment-0001.htm>
+I'm new at this mail list.
+I'm install a BuildRoot development environment based in 23434 version
+and respective patch. It's described in this page:
+
+http://www.at91.com/linux4sam/bin/view/Linux4SAM/BuildRootBuild#Get_buildroot
+
+I could generate my own file systems with BuildRoot and my own kernel
+with codesourcery tools.
+
+This environment works, but the newest versions of BuildRoot have most
+great tools to my develop.
+
+I need a patch for AT91 (AT91SAM9261) to use a 2009.11 buildroot
+version? like buildroot-v23434.patch I use for BuilRoot 23434 version.
+
+Any of you have a patch to newest versions of BuildRoot for AT91??
+
+Thanks in advanced.
+
+-- 
+Miguel Angel Brintrup B.
+skype: miguel.brintrup
