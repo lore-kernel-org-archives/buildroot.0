@@ -1,73 +1,51 @@
-From: Tim Barr <tbarr@multitech.com>
-Date: Wed, 13 Jan 2010 11:20:01 -0600
-Subject: [Buildroot] I need a patch for AT91 to use a 2009.11
-	buildrootversion? like buildroot-v23434.patch in 23434 version
-Message-ID: <1CD05B980C94AC408B37C82BBABAA3E612CECFF7@mtsexchange.dc.multitech.prv>
+From: Ormund Williams <ormundw@panix.com>
+Date: Wed, 13 Jan 2010 17:55:52 -0500
+Subject: [Buildroot] [PATCH] Re-enable workaround for building qt-ebedded on
+	x86 for	x86 target, also check for x86_64 target.
+Message-ID: <1263423352.12606.28.camel@station1.ormlab.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Linux4sam website has not been updated for all the changes that have
-been made to buildroot since Peter took over as maintainer. Ulf has been
-keeping the buildroot AT91 tree up to date though, so defconfigs for the
-AT91 eval boards usually will work.
+Signed-off-by: Ormund Williams <ormundw@panix.com>
+---
+ package/qt/qt.mk |   15 +++++++++++++++
+ 1 files changed, 15 insertions(+), 0 deletions(-)
 
-Tim Barr
-Development Engineer
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index 4b6876f..d003908 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -347,6 +347,21 @@ endif
+ 
+ BR2_PACKAGE_QT_EMB_PLATFORM:=$(call qstrip,
+$(BR2_PACKAGE_QT_EMB_PLATFORM))
+ 
++# x86x86fix
++# Workaround Qt Embedded bug when crosscompiling for x86 under x86 with
+linux
++# host. It's unclear if this would happen on other hosts.
++ifneq ($(findstring pc-linux,$(BR2_GNU_BUILD_SUFFIX)),)
++ifeq ($(BR2_PACKAGE_QT_EMB_PLATFORM),x86)
++QT_CONFIGURE+= -platform linux-g++
++QT_CONFIGURE:=$(call qstrip,$(QT_CONFIGURE))
++endif
++ifeq ($(BR2_PACKAGE_QT_EMB_PLATFORM),x86_64)
++QT_CONFIGURE+= -platform linux-g++
++QT_CONFIGURE:=$(call qstrip,$(QT_CONFIGURE))
++endif
++endif
++# End of workaround.
++
+ # Figure out what libs to install in the target
+ QT_LIBS=#empty
+ ifeq ($(BR2_PACKAGE_QT_GUI_MODULE),y)
+-- 
+1.5.6.5
 
-Multi-Tech Systems, Inc.
-
-Direct: 763.717.5861
-www.multitech.com 
-Multi-Tech Systems, Inc. 
-2205 Woodale Drive
-Mounds View, MN 55112
-This message is confidential, and any unauthorized disclosure, use or
-dissemination
-(either whole or in part) is prohibited.  If you are not the intended
-recipient of the
-message please notify the sender immediately and delete the message from
-your system.
-
-
-
-> -----Original Message-----
-> From: buildroot-bounces at busybox.net 
-> [mailto:buildroot-bounces at busybox.net] On Behalf Of Miguel 
-> Angel Brintrup
-> Sent: Wednesday, January 13, 2010 9:07 AM
-> To: buildroot at busybox.net
-> Subject: [Buildroot] I need a patch for AT91 to use a 2009.11 
-> buildrootversion? like buildroot-v23434.patch in 23434 version
-> 
-> 
-> Hi to all
-> 
-> I'm new at this mail list.
-> I'm install a BuildRoot development environment based in 
-> 23434 version and respective patch. It's described in this page:
-> 
-> http://www.at91.com/linux4sam/bin/view/Linux4SAM/BuildRootBuil
-d#Get_buildroot
-
-I could generate my own file systems with BuildRoot and my own kernel
-with codesourcery tools.
-
-This environment works, but the newest versions of BuildRoot have most
-great tools to my develop.
-
-I need a patch for AT91 (AT91SAM9261) to use a 2009.11 buildroot
-version? like buildroot-v23434.patch I use for BuilRoot 23434 version.
-
-Any of you have a patch to newest versions of BuildRoot for AT91??
-
-Thanks in advanced.
 
 -- 
-Miguel Angel Brintrup B.
-skype: miguel.brintrup _______________________________________________
-buildroot mailing list
-buildroot at busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
+Ormund Williams
+OrmLab LLC
