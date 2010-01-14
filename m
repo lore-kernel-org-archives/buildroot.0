@@ -1,51 +1,58 @@
-From: Ormund Williams <ormundw@panix.com>
-Date: Wed, 13 Jan 2010 17:55:52 -0500
-Subject: [Buildroot] [PATCH] Re-enable workaround for building qt-ebedded on
-	x86 for	x86 target, also check for x86_64 target.
-Message-ID: <1263423352.12606.28.camel@station1.ormlab.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 14 Jan 2010 10:18:44 +0100
+Subject: [Buildroot] [PATCH 1/1] Add uClibc 0.9.30.2
+In-Reply-To: <cover.1263460719.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1263460719.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <da230e87fe682fc49cb1787b636f98c40d6f1ae8.1263460719.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ormund Williams <ormundw@panix.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qt/qt.mk |   15 +++++++++++++++
- 1 files changed, 15 insertions(+), 0 deletions(-)
+ toolchain/uClibc/Config.in |    7 ++++++-
+ 1 files changed, 6 insertions(+), 1 deletions(-)
 
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index 4b6876f..d003908 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -347,6 +347,21 @@ endif
+diff --git a/toolchain/uClibc/Config.in b/toolchain/uClibc/Config.in
+index 16708a6..b17c60f 100644
+--- a/toolchain/uClibc/Config.in
++++ b/toolchain/uClibc/Config.in
+@@ -5,7 +5,7 @@ comment "uClibc Options"
  
- BR2_PACKAGE_QT_EMB_PLATFORM:=$(call qstrip,
-$(BR2_PACKAGE_QT_EMB_PLATFORM))
+ choice
+ 	prompt "uClibc C library Version"
+-	default BR2_UCLIBC_VERSION_0_9_30_1
++	default BR2_UCLIBC_VERSION_0_9_30_2
+ 	help
+ 	  Select the version of uClibc you wish to use.
  
-+# x86x86fix
-+# Workaround Qt Embedded bug when crosscompiling for x86 under x86 with
-linux
-+# host. It's unclear if this would happen on other hosts.
-+ifneq ($(findstring pc-linux,$(BR2_GNU_BUILD_SUFFIX)),)
-+ifeq ($(BR2_PACKAGE_QT_EMB_PLATFORM),x86)
-+QT_CONFIGURE+= -platform linux-g++
-+QT_CONFIGURE:=$(call qstrip,$(QT_CONFIGURE))
-+endif
-+ifeq ($(BR2_PACKAGE_QT_EMB_PLATFORM),x86_64)
-+QT_CONFIGURE+= -platform linux-g++
-+QT_CONFIGURE:=$(call qstrip,$(QT_CONFIGURE))
-+endif
-+endif
-+# End of workaround.
+@@ -26,6 +26,9 @@ choice
+ 	config BR2_UCLIBC_VERSION_0_9_30_1
+ 		bool "uClibc 0.9.30.1"
+ 
++	config BR2_UCLIBC_VERSION_0_9_30_2
++		bool "uClibc 0.9.30.2"
 +
- # Figure out what libs to install in the target
- QT_LIBS=#empty
- ifeq ($(BR2_PACKAGE_QT_GUI_MODULE),y)
+ 	config BR2_UCLIBC_VERSION_SNAPSHOT
+ 		bool "daily snapshot"
+ 
+@@ -44,6 +47,7 @@ config BR2_UCLIBC_VERSION_STRING
+ 	default 0.9.29		if BR2_UCLIBC_VERSION_0_9_29
+ 	default 0.9.30		if BR2_UCLIBC_VERSION_0_9_30
+ 	default 0.9.30.1	if BR2_UCLIBC_VERSION_0_9_30_1
++	default 0.9.30.2	if BR2_UCLIBC_VERSION_0_9_30_2
+ 	default $BR2_USE_UCLIBC_SNAPSHOT	if BR2_UCLIBC_VERSION_SNAPSHOT
+ 
+ config BR2_UCLIBC_CONFIG
+@@ -52,6 +56,7 @@ config BR2_UCLIBC_CONFIG
+ 	default "toolchain/uClibc/uClibc-0.9.29.config" if BR2_UCLIBC_VERSION_0_9_29
+ 	default "toolchain/uClibc/uClibc-0.9.30.config" if BR2_UCLIBC_VERSION_0_9_30
+ 	default "toolchain/uClibc/uClibc-0.9.30.config" if BR2_UCLIBC_VERSION_0_9_30_1
++	default "toolchain/uClibc/uClibc-0.9.30.config" if BR2_UCLIBC_VERSION_0_9_30_2
+ 	default "toolchain/uClibc/uClibc-snapshot.config" if BR2_UCLIBC_VERSION_SNAPSHOT
+ 	help
+ 	  Some people may wish to use their own modified uClibc configuration
 -- 
-1.5.6.5
-
-
--- 
-Ormund Williams
-OrmLab LLC
+1.6.3.3
