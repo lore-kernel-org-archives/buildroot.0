@@ -1,33 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 15 Jan 2010 22:40:04 +0100
-Subject: [Buildroot] [git commit master] qt: ensure libglib2 is built
-	before qt if enabled for Qt's glib support
-In-Reply-To: <1263587737.5454.12.camel@coalu.atr> (Lionel Landwerlin's message
-	of "Fri, 15 Jan 2010 21:35:37 +0100")
-References: <20100115134832.702BA776C0@busybox.osuosl.org>
-	<1263587737.5454.12.camel@coalu.atr>
-Message-ID: <87d41boxmz.fsf@macbook.be.48ers.dk>
+From: Stanley <eva2002@gmail.com>
+Date: Sat, 16 Jan 2010 07:18:28 +0800
+Subject: [Buildroot] qextserialport
+Message-ID: <ed7750811001151518r262d6eb4va303fc0824ec6e04@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Lionel" == Lionel Landwerlin <llandwerlin@gmail.com> writes:
+Anyone know how to add package into buildroot for qextserialport 1.1 (
+http://sourceforge.net/projects/qextserialport/files/qextserialport/1.1/qextserialport-1.1.tar.gz/download)
+for buildroot 2009.08?
 
-Hi,
+the qextserialport package itself only have 2 commands to run.
 
- Lionel> Hi Peter,
+qmake
+make
 
- Lionel> There is also an option in the Qt configuration for glib
- Lionel> integration. It would be nice to have access to it through
- Lionel> KConfig.
+after that we need to mannually move/copy the lib files in the build folder
+to a LD_LIBRARY_PATH (in most cases should be /usr/lib or just lib) in order
+to use it.
 
-Do you mean something to force the glib dependency or something to not
-enable the glib support even though the user has enabled glib?
+Since its not the same as most package, I am kind of lose in how to add the
+package into buildroot.
 
-We typically don't have user selectable configs for those kind of stuff
-(X support, glib, ..) to keep the amount of settings to a sane number.
+Hope someone can help. Thanks in advance
 
--- 
-Bye, Peter Korsgaard
+Regards,
+Stanley
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100116/2484bc26/attachment.htm>
