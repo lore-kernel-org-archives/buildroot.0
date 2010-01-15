@@ -1,9 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 15 Jan 2010 18:14:03 +0000 (UTC)
+Date: Fri, 15 Jan 2010 18:15:42 +0000 (UTC)
 Subject: [Buildroot] [Bug 907] mkisofs: No such file or directory
 In-Reply-To: <bug-907-163@https.bugs.busybox.net/>
 References: <bug-907-163@https.bugs.busybox.net/>
-Message-ID: <20100115181403.A120577736@busybox.osuosl.org>
+Message-ID: <20100115181542.7885B77651@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,13 +16,9 @@ https://bugs.busybox.net/show_bug.cgi?id=907
 
 
 
---- Comment #2 from Chris Packham <judge.packham@gmail.com>  2010-01-15 18:14:01 UTC ---
-Created an attachment (id=931)
- --> (https://bugs.busybox.net/attachment.cgi?id=931)
-Fix
-
-Here is the fix I submitted to the list. I haven't checked but the new version
-of cdrtools maybe available also.
+--- Comment #3 from Chris Packham <judge.packham@gmail.com>  2010-01-15 18:15:41 UTC ---
+Opps, forgot the URL to my related posting -
+http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/18700
 
 
 -- 
