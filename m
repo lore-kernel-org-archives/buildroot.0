@@ -1,36 +1,55 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 15 Jan 2010 15:22:07 +0100
-Subject: [Buildroot] [pull request] Pull request for branch
-	uclibc-0.9.30.2
-In-Reply-To: <20100114102348.7328dbd4@surf> (Thomas Petazzoni's message of
-	"Thu, 14 Jan 2010 10:23:48 +0100")
-References: <cover.1263460719.git.thomas.petazzoni@free-electrons.com>
-	<20100114102348.7328dbd4@surf>
-Message-ID: <87hbqnphww.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 15 Jan 2010 16:43:01 +0000 (UTC)
+Subject: [Buildroot] [Bug 907] New: mkisofs: No such file or directory
+Message-ID: <bug-907-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=907
 
- Thomas> On Thu, 14 Jan 2010 10:18:43 +0100
- Thomas> Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+           Summary: mkisofs: No such file or directory
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: max at olo.com.pl
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
- >> Add uClibc 0.9.30.2
 
- Thomas> I'm testing it right now. I've just sent the patch early to avoid
- Thomas> duplicate work.
+I selected: 
+Target filesystem options  ---> iso image 
 
-Which would have worked if I had checked my mail ;)
+after run make i have error: 
 
-It seems to work fine here as well (arm11).
+---------------------------------------------------------
+# Use fakeroot so mkisofs believes the previous fakery
+echo
+"/root/buildroot/output/build/cdrtools-2.01/mkisofs/OBJ/i386-linux-cc/mkisofs
+-R -b boot/grub/stage2_eltorito -no-emul-boot " \
+                "-boot-load-size 4 -boot-info-table -o
+/root/buildroot/output/images/rootfs.i686.iso
+/root/buildroot/output/build/iso9660" \
+                >> /root/buildroot/output/build/_fakeroot.rootfs.i686.iso
+chmod a+x /root/buildroot/output/build/_fakeroot.rootfs.i686.iso
+/root/buildroot/output/host/usr/bin/fakeroot --
+/root/buildroot/output/build/_fakeroot.rootfs.i686.iso
+/root/buildroot/output/build/_fakeroot.rootfs.i686.iso: line 2:
+/root/buildroot/output/build/cdrtools-2.01/mkisofs/OBJ/i386-linux-cc/mkisofs:
+No such file or directory
+make: *** [/root/buildroot/output/images/rootfs.i686.iso] Error 127
+--------------------------------------------------------------------------
 
- Thomas> So it looks like all the patches we were carrying for uClibc 0.9.30.1
- Thomas> have been merged upstream.
-
-Exactly.
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
