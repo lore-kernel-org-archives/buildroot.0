@@ -1,42 +1,73 @@
-From: Michael S. Zick <minimod@morethan.org>
-Date: Sat, 16 Jan 2010 07:29:59 -0600
-Subject: [Buildroot] Firmware Loading
-In-Reply-To: <ecbbfeda1001152337n477893fcubb861dc425d9d704@mail.gmail.com>
-References: <ecbbfeda1001152337n477893fcubb861dc425d9d704@mail.gmail.com>
-Message-ID: <201001160730.01752.minimod@morethan.org>
+From: Clark Rawlins <clark.rawlins@escient.com>
+Date: Sat, 16 Jan 2010 19:59:20 -0500
+Subject: [Buildroot] [PATCH] Permit building grub with an external
+ toolchain.
+In-Reply-To: <1262627315.31246.8.camel@venture>
+References: <1262472376.23927.19.camel@venture>
+	<1262477625.23193.2.camel@coalu.atr>
+	<1262484948.23927.25.camel@venture>
+	<1262491694.23193.10.camel@coalu.atr>
+	<1262526218.23927.27.camel@venture>
+	<1262610104.3853.6.camel@venture>  <20100104142056.7ab397fc@surf>
+	<1262611748.3853.16.camel@venture> <1262627315.31246.8.camel@venture>
+Message-ID: <1263689960.6123.2.camel@venture>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat January 16 2010, Andrew Wiley wrote:
-> Okay, I'm back getting a more up to date setup working on my Cirrus Labs
-> EP9302, and things are mostly going well. Buildroot got me a working
-> filesystem the first time, and after some fun with kernels that were too
-> large for the flash partition I had set aside, the thing boots by itself.
-> Now I'm trying to get my USB wireless adapter to work. It's a ZyDas chipset
-> and uses the zd1211rw driver, which loads successfully, but fails to load
-> firmware. The firmware is in /lib/firmware (the driver requests
-> zd1211/zd1211_*, so it's actually in a subdirectory of /lib/firmware), but
-> when I try to do "ifconfig wlan0 up", I get a kernel message stating that
-> the firmware has been requested, a long wait, and an error -2 that the
-> loading the firmware failed.
-> I'm guessing this is user error, and from reading the lists, it looks like
-> mdev is supposed to do firmware loading, but echoing "/sbin/mdev" to
-> "/proc/sys/hotplug" (that second path is probably wrong; it was right when I
-> actually did the command) had no noticeable effect. What do I need to change
-> from the default configuration to get firmware loading to work? I've
-> verified that userspace firmware loading is enabled in my kernel.
+Ping?
+
+Is there anything wrong with this patch that should be fixed prior to
+its inclusion in master?
+
+On Mon, 2010-01-04 at 12:48 -0500, Clark Rawlins wrote:
+> I have attached the complete file for review as well as the git
+> format-patch generated diff.
 > 
-> Andrew Wiley
+> On Mon, 2010-01-04 at 08:29 -0500, Clark Rawlins wrote:
+> > On Mon, 2010-01-04 at 14:20 +0100, Thomas Petazzoni wrote:
+> > > Hello Clark!
+> > > 
+> > > Le Mon, 04 Jan 2010 08:01:44 -0500,
+> > > Clark Rawlins <clark.rawlins@escient.com> a ?crit :
+> > > 
+> > > > Here is my attempt to use the autotools macros.
+> > > > I look forward to any discussion, suggestions for improvement etc.
+> > > > 
+> > > > I attach the whole file since it is effectively a rewrite.  If it is
+> > > > acceptable I will submit as a git diff against head.  
+> > > 
+> > > Thanks for your work.
+> > > 
+> > > Maybe the GRUB_SUPPORTED_ARCH thing should be handled at the
+> > > Config.in level.
+> > 
+> > Of course I was just copying what was already there for that part.
+> > 
+> > In grub/Config.in BR2_TARGET_GRUB depends on BR2_i386 || BR2_x86_64.
+> > It seems that it would be equivalent to replace all the
+> > GRUB_SUPPORTED_ARCH stuff with a single check for 
+> > 
+> > ifeq ($(BR2_TARGET_GRUB),y)
+> > 
+> > endif
+> > 
+> > > 
+> > > Thomas
+> > > -- 
+> > > Thomas Petazzoni, Free Electrons
+> > > Kernel, drivers and embedded Linux development,
+> > > consulting, training and support.
+> > > http://free-electrons.com
+> > > _______________________________________________
+> > > buildroot mailing list
+> > > buildroot at busybox.net
+> > > http://lists.busybox.net/mailman/listinfo/buildroot
+> > 
 > 
-
-Perhaps update the mdev configuration file?
-It ships empty, it has to, too installation specific to pre-define anything.
-
-mdev --help
-will start you off; continue as required with the command descriptions -
-if loaded on your machine during the build or at the busybox web-site.
-
-Mike
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
