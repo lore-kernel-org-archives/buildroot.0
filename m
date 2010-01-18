@@ -1,7 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Mon, 18 Jan 2010 15:14:18 +0100
-Subject: [Buildroot] [git commit master] rpm: needs XML support in libneon
-Message-ID: <20100118141648.20C0377708@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] Makefile.autotools.in: fixup .la
+	files in all lib dirs
+Message-ID: <20100118141647.D52B477708@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,40 +10,31 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1653a281b99d12a4bf69cebb73394edab9485b01
+commit: http://git.buildroot.net/buildroot/commit/?id=ecf5939cfb394289cb275134e2929b5d9076628d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-RPM-5.2.0 needs the optional XML support in libneon.
+Sometimes usr/lib32 or usr/lib64 is used instead of usr/lib, so search
+those for .la files as well.
 
-Restructure kconfig dependencies to ensure rpm can only be selected
-if libneon with XML support (in addition to SSL + ZLIB) is enabled.
+Fixes .la fixup for beecrypt on x86-64.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/rpm/Config.in |    8 +++++---
- 1 files changed, 5 insertions(+), 3 deletions(-)
+ package/Makefile.autotools.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/rpm/Config.in b/package/rpm/Config.in
-index e6e8769..448606c 100644
---- a/package/rpm/Config.in
-+++ b/package/rpm/Config.in
-@@ -1,12 +1,14 @@
-+comment "rpm requires libneon with SSL, XML and ZLIB support"
-+	depends on !BR2_PACKAGE_NEON || BR2_PACKAGE_NEON_NOXML
-+
- config BR2_PACKAGE_RPM
- 	bool "rpm"
- 	select BR2_PACKAGE_BEECRYPT
- 	select BR2_PACKAGE_POPT
- 	select BR2_PACKAGE_OPENSSL
--	select BR2_PACKAGE_NEON
-+	depends on BR2_PACKAGE_NEON
-+	depends on !BR2_PACKAGE_NEON_NOXML
- 	select BR2_PACKAGE_NEON_ZLIB
--	select BR2_PACKAGE_NEON_EXPAT if BR2_PACKAGE_EXPAT
--	select BR2_PACKAGE_NEON_LIBXML2 if BR2_PACKAGE_LIBXML2
- 	select BR2_PACKAGE_NEON_SSL
- 	help
- 	  The RPM package management system.
+diff --git a/package/Makefile.autotools.in b/package/Makefile.autotools.in
+index f0f189f..7114bba 100644
+--- a/package/Makefile.autotools.in
++++ b/package/Makefile.autotools.in
+@@ -201,7 +201,7 @@ endif
+ ifndef $(2)_INSTALL_STAGING_CMDS
+ define $(2)_INSTALL_STAGING_CMDS
+ 	$$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_STAGING_OPT) -C $$($$(PKG)_SRCDIR)
+-	for i in $$$$(find $(STAGING_DIR)/usr/lib/ -name "*.la"); do \
++	for i in $$$$(find $(STAGING_DIR)/usr/lib* -name "*.la"); do \
+ 		cp $$$$i $$$$i~; \
+ 		$$(SED) "s:\(['= ]\)/usr:\\1$(STAGING_DIR)/usr:g" $$$$i; \
+ 	done
 -- 
 1.6.3.3
