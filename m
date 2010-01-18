@@ -1,11 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 18 Jan 2010 12:32:54 +0100
-Subject: [Buildroot] [pull request] Pull request for branch
-	bootutils-update
-In-Reply-To: <cover.1261737329.git.nkukard@lbsd.net> (Nigel Kukard's message
-	of "Fri, 25 Dec 2009 10:35:31 +0000")
-References: <cover.1261737329.git.nkukard@lbsd.net>
-Message-ID: <87k4vfodg9.fsf@macbook.be.48ers.dk>
+Date: Mon, 18 Jan 2010 14:19:13 +0100
+Subject: [Buildroot] [pull request] Pull request for branch rpm-update3
+In-Reply-To: <cover.1261737062.git.nkukard@lbsd.net> (Nigel Kukard's message
+	of "Fri, 25 Dec 2009 10:31:16 +0000")
+References: <cover.1261737062.git.nkukard@lbsd.net>
+Message-ID: <87fx63o8j2.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,9 +19,11 @@ To: buildroot@busybox.net
 
  Nigel> are available in the git repository at:
 
- Nigel>   git://git.busybox.net/~nkukard/git/buildroot bootutils-update
+ Nigel>   git://git.busybox.net/~nkukard/git/buildroot rpm-update3
 
-Pulled, thanks!
+Thanks, pulled!
+
+I found a few minor issues, but will fix those myself now.
 
 -- 
 Bye, Peter Korsgaard
