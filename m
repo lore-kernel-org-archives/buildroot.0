@@ -1,7 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Mon, 18 Jan 2010 15:14:18 +0100
-Subject: [Buildroot] [git commit master] rpm: fix build with !LFS
-Message-ID: <20100118141647.97DD077708@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] CHANGES: add bootutils
+Message-ID: <20100118141646.D691177708@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,42 +9,26 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=59493977cb8c49d4d6bbdba80c79e678f0fab446
+commit: http://git.buildroot.net/buildroot/commit/?id=55f591ed1d45b8eb756d66cfa5459e1527e48cc5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/rpm/rpm-5.2.0-uclibc-no-lfs-fix.patch |   22 ++++++++++++++++++++++
- 1 files changed, 22 insertions(+), 0 deletions(-)
- create mode 100644 package/rpm/rpm-5.2.0-uclibc-no-lfs-fix.patch
+ CHANGES |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/rpm/rpm-5.2.0-uclibc-no-lfs-fix.patch b/package/rpm/rpm-5.2.0-uclibc-no-lfs-fix.patch
-new file mode 100644
-index 0000000..00d0579
---- /dev/null
-+++ b/package/rpm/rpm-5.2.0-uclibc-no-lfs-fix.patch
-@@ -0,0 +1,22 @@
-+[PATCH] rpm: fix build on uClibc with !LFS
-+
-+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-+---
-+ rpmio/fts.c |    4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+Index: rpm-5.2.0/rpmio/fts.c
-+===================================================================
-+--- rpm-5.2.0.orig/rpmio/fts.c
-++++ rpm-5.2.0/rpmio/fts.c
-+@@ -47,6 +47,10 @@ static char sccsid[] = "@(#)fts.c	8.6 (B
-+ #else
-+ #if defined(__UCLIBC__)
-+ #   define __fxstat64(_stat_ver, _fd, _sbp)    fstat((_fd), (_sbp))
-++#   include <features.h>
-++#   ifndef __UCLIBC_HAS_LFS__
-++#     define stat64 stat
-++#   endif
-+ #endif
-+ #if defined(hpux) || defined(__hpux)
-+ # define        _INCLUDE_POSIX_SOURCE
+diff --git a/CHANGES b/CHANGES
+index 2a5e112..e1becf3 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -4,7 +4,7 @@
+ 
+ 	New packages: libcdaudio, libdvdnav, libdvdread, hostapd, tcpreplay
+ 
+-	Updated/fixed packages: autoconf, bind, binutils, busybox,
++	Updated/fixed packages: autoconf, bind, binutils, bootutils, busybox,
+ 	directfb, e2fsprogs, gst-plugins-bad, hal, iw, jpeg, libfuse, libpcap,
+ 	libungif, lighttpd, mesa, mpg123, mtd-utils, neon, pcre, qt, sshfs,
+ 	tremor, u-boot, usbutils, xfsprogs
 -- 
 1.6.3.3
