@@ -1,52 +1,41 @@
-From: H Hartley Sweeten <hartleys@visionengravers.com>
-Date: Tue, 19 Jan 2010 11:41:02 -0500
-Subject: [Buildroot] (no subject)
-In-Reply-To: <87iqaym5tm.fsf@macbook.be.48ers.dk>
-References: <BD79186B4FD85F4B8E60E381CAEE19090208945D@mi8nycmail19.Mi8.com>
-	<87iqaym5tm.fsf@macbook.be.48ers.dk>
-Message-ID: <BD79186B4FD85F4B8E60E381CAEE1909020E8BEF@mi8nycmail19.Mi8.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 19 Jan 2010 18:19:49 +0000 (UTC)
+Subject: [Buildroot] [Bug 913] New: Bump iptables to 1.4.6
+Message-ID: <bug-913-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tuesday, January 19, 2010 9:13 AM, Peter Korsgaard wrote:
->>>>>> "H" == H Hartley Sweeten <hartleys@visionengravers.com> writes:
->
->> Hello all,
->> Does anyone know what happened to mkfs.jffs in mtd-utils?
->>
->> I recently updated my buildroot tree to the latest git.  This bumped
->> the mtd-utils package from 1.1.0 to 1.2.0.  I did a make mtd-dirclean
->> then started the make.  Eventually I got:
->>
->> cp -f /home/bigguiness/buildroot/output/build/mtd_orig/mkfs.jffs /home/bigguiness/buildroot/output/target/usr/sbin/mkfs.jffs
->> cp: cannot stat `/home/bigguiness/buildroot/output/build/mtd_orig/mkfs.jffs': No such file or directory
->> make: *** [/home/bigguiness/buildroot/output/target/usr/sbin/mkfs.jffs] Error 1
->
-> Hmm, it works here. Do you also have the problem if you do a clean
-> rebuild?
+https://bugs.busybox.net/show_bug.cgi?id=913
 
-Hi Peter,
+              Host: i686-linux
+            Target: arm-softfloat-linux-uclibcgnueabi
+           Summary: Bump iptables to 1.4.6
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: gustavo at zacarias.com.ar
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-I figured out the issue already and sent you a patch that fixed it:
 
-commit 5a352cdeba03856fa2d0cf12c707fd80704ebfdd
+Created an attachment (id=937)
+ --> (https://bugs.busybox.net/attachment.cgi?id=937)
+Bump iptables package to 1.4.6
 
-mtd-utils-1.1.0 had this in the file feature-removal-schedule.txt:
+Iptables 1.4.6 supports new kernel 2.6.32 features.
+The ipv6 is upstream now so it's dropped.
 
-What:   mkfs.jffs.c
-When:   Shortly after kernel 2.6.21 is released
-Why:    Support for the JFFS filesystem is being removed from the kernel
-Who:    Josh Boyer <jwboyer@gmail.com>
 
-When the mtd-utils package got bumped to 1.2.0 that file was removed so
-the utility was gone.
-
-I didn't actually need the utility it was just selected in my .config.
-
-Thanks,
-Hartley
-
-PS, Sorry about forgetting to put a subject on this thread.
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
