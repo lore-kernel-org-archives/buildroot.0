@@ -1,31 +1,43 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 19 Jan 2010 17:12:53 +0100
-Subject: [Buildroot] (no subject)
-In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE19090208945D@mi8nycmail19.Mi8.com>
-	(H. Hartley Sweeten's message of "Wed, 6 Jan 2010 17:07:27 -0500")
-References: <BD79186B4FD85F4B8E60E381CAEE19090208945D@mi8nycmail19.Mi8.com>
-Message-ID: <87iqaym5tm.fsf@macbook.be.48ers.dk>
+From: Jens <irimi@gmx.de>
+Date: Tue, 19 Jan 2010 17:32:47 +0100
+Subject: [Buildroot] toolchain problem:wrong path in libSDL.la
+Message-ID: <4B55DEAF.40808@gmx.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "H" == H Hartley Sweeten <hartleys@visionengravers.com> writes:
+Hi,
 
- H> Hello all,
- H> Does anyone know what happened to mkfs.jffs in mtd-utils?
+I'm using recent version 2009.11 and I've added SDL package to my 
+configuration.
 
- H> I recently updated my buildroot tree to the latest git.  This bumped
- H> the mtd-utils package from 1.1.0 to 1.2.0.  I did a make mtd-dirclean
- H> then started the make.  Eventually I got:
+My br installation is at /mnt/ext3data/buildroot/
 
- H> cp -f /home/bigguiness/buildroot/output/build/mtd_orig/mkfs.jffs /home/bigguiness/buildroot/output/target/usr/sbin/mkfs.jffs
- H> cp: cannot stat `/home/bigguiness/buildroot/output/build/mtd_orig/mkfs.jffs': No such file or directory
- H> make: *** [/home/bigguiness/buildroot/output/target/usr/sbin/mkfs.jffs] Error 1
+but br creates a wrong path of libdir in libSDL.la
+(/mnt/ext3data/buildroot/output/build/SDL-1.2.14/build/libSDL.la
+resp. /mnt/ext3data/buildroot/output/build/staging_dir/usr/lib/libSDL.la):
+--- cut ---
+# Libraries that this one depends upon.
+dependency_libs=' 
+-L/mnt/ext3data/buildroot/output/build/staging_dir/usr/lib 
+/mnt/ext3data/buildroot/output/build/staging_dir/usr/lib/libiconv.la 
+-L/mnt/ext3data/buildroot/output/build/staging_dir/lib -lm 
+/mnt/ext3data/buildroot/output/build/staging_dir/usr/lib/libts.la -ldl 
+-lpthread'
+# Directory that this library needs to be installed in:
+libdir='/mnt/ext3data/buildroot/output/build/staging_dir/usr/mnt/ext3data/buildroot/output/build/staging_dir/usr/lib'
+--- cut ---
 
-Hmm, it works here. Do you also have the problem if you do a clean
-rebuild?
+Of course the correct path at my machine is 
+'/mnt/ext3data/buildroot/output/build/staging_dir/usr/lib'
+That makes it impossible to link applications that require the SDL lib, 
+it leads to an linker error:  i.e. 'could not find SDL lib'
 
--- 
-Bye, Peter Korsgaard
+I checked older br versions , but same problem. Also an update (I 
+switched to newer versions in br scripts) of SDL lib didn't help it nor 
+update of libtool (as far as I understood that creates the *.la files !?).
+
+BR,
+Jens
