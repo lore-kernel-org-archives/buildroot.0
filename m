@@ -1,18 +1,18 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 19 Jan 2010 18:19:49 +0000 (UTC)
-Subject: [Buildroot] [Bug 913] New: Bump iptables to 1.4.6
-Message-ID: <bug-913-163@https.bugs.busybox.net/>
+Date: Tue, 19 Jan 2010 18:20:55 +0000 (UTC)
+Subject: [Buildroot] [Bug 919] New: Bump usb_modeswitch package to 1.0.7
+Message-ID: <bug-919-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=913
+https://bugs.busybox.net/show_bug.cgi?id=919
 
               Host: i686-linux
             Target: arm-softfloat-linux-uclibcgnueabi
-           Summary: Bump iptables to 1.4.6
+           Summary: Bump usb_modeswitch package to 1.0.7
            Product: buildroot
            Version: unspecified
           Platform: PC
@@ -27,12 +27,12 @@ https://bugs.busybox.net/show_bug.cgi?id=913
    Estimated Hours: 0.0
 
 
-Created an attachment (id=937)
- --> (https://bugs.busybox.net/attachment.cgi?id=937)
-Bump iptables package to 1.4.6
+Created an attachment (id=943)
+ --> (https://bugs.busybox.net/attachment.cgi?id=943)
+Bump usb_modeswitch package to 1.0.7
 
-Iptables 1.4.6 supports new kernel 2.6.32 features.
-The ipv6 is upstream now so it's dropped.
+Includes new device signatures, improved handling of Huawei devices and other
+fixes.
 
 
 -- 
