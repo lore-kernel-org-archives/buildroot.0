@@ -1,43 +1,52 @@
-From: Jens <irimi@gmx.de>
-Date: Tue, 19 Jan 2010 17:32:47 +0100
-Subject: [Buildroot] toolchain problem:wrong path in libSDL.la
-Message-ID: <4B55DEAF.40808@gmx.de>
+From: H Hartley Sweeten <hartleys@visionengravers.com>
+Date: Tue, 19 Jan 2010 11:41:02 -0500
+Subject: [Buildroot] (no subject)
+In-Reply-To: <87iqaym5tm.fsf@macbook.be.48ers.dk>
+References: <BD79186B4FD85F4B8E60E381CAEE19090208945D@mi8nycmail19.Mi8.com>
+	<87iqaym5tm.fsf@macbook.be.48ers.dk>
+Message-ID: <BD79186B4FD85F4B8E60E381CAEE1909020E8BEF@mi8nycmail19.Mi8.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Tuesday, January 19, 2010 9:13 AM, Peter Korsgaard wrote:
+>>>>>> "H" == H Hartley Sweeten <hartleys@visionengravers.com> writes:
+>
+>> Hello all,
+>> Does anyone know what happened to mkfs.jffs in mtd-utils?
+>>
+>> I recently updated my buildroot tree to the latest git.  This bumped
+>> the mtd-utils package from 1.1.0 to 1.2.0.  I did a make mtd-dirclean
+>> then started the make.  Eventually I got:
+>>
+>> cp -f /home/bigguiness/buildroot/output/build/mtd_orig/mkfs.jffs /home/bigguiness/buildroot/output/target/usr/sbin/mkfs.jffs
+>> cp: cannot stat `/home/bigguiness/buildroot/output/build/mtd_orig/mkfs.jffs': No such file or directory
+>> make: *** [/home/bigguiness/buildroot/output/target/usr/sbin/mkfs.jffs] Error 1
+>
+> Hmm, it works here. Do you also have the problem if you do a clean
+> rebuild?
 
-I'm using recent version 2009.11 and I've added SDL package to my 
-configuration.
+Hi Peter,
 
-My br installation is at /mnt/ext3data/buildroot/
+I figured out the issue already and sent you a patch that fixed it:
 
-but br creates a wrong path of libdir in libSDL.la
-(/mnt/ext3data/buildroot/output/build/SDL-1.2.14/build/libSDL.la
-resp. /mnt/ext3data/buildroot/output/build/staging_dir/usr/lib/libSDL.la):
---- cut ---
-# Libraries that this one depends upon.
-dependency_libs=' 
--L/mnt/ext3data/buildroot/output/build/staging_dir/usr/lib 
-/mnt/ext3data/buildroot/output/build/staging_dir/usr/lib/libiconv.la 
--L/mnt/ext3data/buildroot/output/build/staging_dir/lib -lm 
-/mnt/ext3data/buildroot/output/build/staging_dir/usr/lib/libts.la -ldl 
--lpthread'
-# Directory that this library needs to be installed in:
-libdir='/mnt/ext3data/buildroot/output/build/staging_dir/usr/mnt/ext3data/buildroot/output/build/staging_dir/usr/lib'
---- cut ---
+commit 5a352cdeba03856fa2d0cf12c707fd80704ebfdd
 
-Of course the correct path at my machine is 
-'/mnt/ext3data/buildroot/output/build/staging_dir/usr/lib'
-That makes it impossible to link applications that require the SDL lib, 
-it leads to an linker error:  i.e. 'could not find SDL lib'
+mtd-utils-1.1.0 had this in the file feature-removal-schedule.txt:
 
-I checked older br versions , but same problem. Also an update (I 
-switched to newer versions in br scripts) of SDL lib didn't help it nor 
-update of libtool (as far as I understood that creates the *.la files !?).
+What:   mkfs.jffs.c
+When:   Shortly after kernel 2.6.21 is released
+Why:    Support for the JFFS filesystem is being removed from the kernel
+Who:    Josh Boyer <jwboyer@gmail.com>
 
-BR,
-Jens
+When the mtd-utils package got bumped to 1.2.0 that file was removed so
+the utility was gone.
+
+I didn't actually need the utility it was just selected in my .config.
+
+Thanks,
+Hartley
+
+PS, Sorry about forgetting to put a subject on this thread.
