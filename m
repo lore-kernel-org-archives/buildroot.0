@@ -1,48 +1,44 @@
-From: alexperl <alexondi@rambler.ru>
-Date: Tue, 19 Jan 2010 06:16:14 -0800 (PST)
-Subject: [Buildroot]  Compile Xorg-server with Mesa3D
-Message-ID: <27226452.post@talk.nabble.com>
+From: Tony GOUBERT <tony.goubert@nanomade-concept.com>
+Date: Tue, 19 Jan 2010 17:09:37 +0100
+Subject: [Buildroot] Question concerning your buildroot
+Message-ID: <4b55d943.05ae660a.2586.ffffe336@mx.google.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear,
 
-Hi!
-I try compile target Xorg with Mesa3D but seems in this config compile is
-broken
-here is patch which I made
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index e9d5f36..6272d48 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -70,6 +70,8 @@ XSERVER_XORG_SERVER_CONF_OPT = --disable-config-hal \
- ifeq ($(BR2_PACKAGE_XSERVER_xorg),y)
- XSERVER_XORG_SERVER_DEPENDENCIES += mesa3d
- XSERVER_XORG_SERVER_CONF_OPT +=
---with-mesa-source="$(BUILD_DIR)/Mesa-$(MESA3D_VERSION)" --enable-xorg
-+XSERVER_XORG_SERVER_CONF_ENV = GL_CFLAGS=$(STAGING_DIR)/usr
-+XSERVER_XORG_SERVER_CONF_ENV += GL_LIBS=$(STAGING_DIR)/usr
- else
- XSERVER_XORG_SERVER_CONF_OPT += --disable-xorg
- endif
-@@ -126,3 +128,4 @@ endif
+I have not found a forum in order to ask my queston concerning your product.
 
+Currently, I work with your buildroot in order to build the kernel of
+linux-2.6.22.2 for an ARM9.
 
- $(eval $(call AUTOTARGETS,package/x11r7,xserver_xorg-server))
-+
+When I make 'make ARCH=arm', I have a problem with 'arm-linux-uclibc-gcc',
+in fact the command is not found. I want to know if this gcc is available in
+your buildroot and where, because I have not found it.
 
-But after I call make I have another error
+If you can help me, it is great!!!
 
-/BR2/buildroot/output/staging/usr/bin/x86_64-linux-uclibc-ldconfig -r
-/BR2/buildroot/output/target 2>/dev/null
-make: *** [target-finalize] Error 127
-which I can't understand.
-What I do wrong patch for Xorg or what?
-Thank you!
+ 
 
--- 
-View this message in context: http://old.nabble.com/Compile-Xorg-server-with-Mesa3D-tp27226452p27226452.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+Best Regards.
+
+ 
+
+ 
+
+--
+
+Tony GOUBERT
+
+tony.goubert at nanomade-concept.com
+
+ <mailto:tony.goubert@nanomade-concept.com>  
+
+ 
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100119/33018784/attachment.htm>
