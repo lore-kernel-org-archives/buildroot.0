@@ -1,35 +1,42 @@
-From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
-Date: Tue, 19 Jan 2010 21:32:35 +0200
-Subject: [Buildroot] [PATCH] Fix autotools instalation with symbols
-Message-ID: <20100119193235.2681.75712.stgit@localhost.localdomain>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 19 Jan 2010 20:01:21 +0000 (UTC)
+Subject: [Buildroot] [Bug 937] New: Bump openvpn package to 2.1.1
+Message-ID: <bug-937-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When installing without symbols install-strip is used,
-with symbols - install-exec.
-Since install-exec installs only executables, we should use
-simple install, to install other needed files also
-(like files in /usr/shared) as install-strip does.
+https://bugs.busybox.net/show_bug.cgi?id=937
 
-Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
----
+              Host: i686-linux
+            Target: arm-softfloat-linux-uclibcgnueabi
+           Summary: Bump openvpn package to 2.1.1
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: gustavo at zacarias.com.ar
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
- package/Makefile.autotools.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/Makefile.autotools.in b/package/Makefile.autotools.in
-index 7114bba..a8dd051 100644
---- a/package/Makefile.autotools.in
-+++ b/package/Makefile.autotools.in
-@@ -60,7 +60,7 @@ $(2)_LIBTOOL_PATCH		?= YES
- $(2)_USE_CONFIG_CACHE           ?= $(if $(BR2_CONFIG_CACHE),YES,NO)
- $(2)_INSTALL_STAGING_OPT	?= DESTDIR=$$(STAGING_DIR) install
- ifeq ($(BR2_ENABLE_DEBUG),y)
--$(2)_INSTALL_TARGET_OPT		?= DESTDIR=$$(TARGET_DIR)  install-exec
-+$(2)_INSTALL_TARGET_OPT		?= DESTDIR=$$(TARGET_DIR)  install
- else
- $(2)_INSTALL_TARGET_OPT		?= DESTDIR=$$(TARGET_DIR)  install-strip
- endif
+Created an attachment (id=961)
+ --> (https://bugs.busybox.net/attachment.cgi?id=961)
+Bump openvpn package to 2.1.1
+
+Should work with avr32 (testers wanted).
+Added options to disable LZO/OpenSSL (default=y to keep functionality in the
+previous BR version) - makes binary smaller, lowers deps.
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
