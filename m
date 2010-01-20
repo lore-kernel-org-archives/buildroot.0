@@ -1,16 +1,16 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 20 Jan 2010 09:53:28 +0000 (UTC)
-Subject: [Buildroot] [Bug 931] Bump kismet package to 2010-01-R1
-In-Reply-To: <bug-931-163@https.bugs.busybox.net/>
-References: <bug-931-163@https.bugs.busybox.net/>
-Message-ID: <20100120095328.40363776FF@busybox.osuosl.org>
+Date: Wed, 20 Jan 2010 09:57:02 +0000 (UTC)
+Subject: [Buildroot] [Bug 937] Bump openvpn package to 2.1.1
+In-Reply-To: <bug-937-163@https.bugs.busybox.net/>
+References: <bug-937-163@https.bugs.busybox.net/>
+Message-ID: <20100120095702.D42E6776FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=931
+https://bugs.busybox.net/show_bug.cgi?id=937
 
 
 Peter Korsgaard <jacmet@uclibc.org> changed:
@@ -23,8 +23,9 @@ Peter Korsgaard <jacmet@uclibc.org> changed:
 
 
 
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2010-01-20 09:53:27 UTC ---
-Committed, thanks!
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2010-01-20 09:57:02 UTC ---
+You missed the two select statements under BR2_PACKAGE_OPENVPN, but I fixed
+that myself - Committed, thanks!
 
 
 -- 
