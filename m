@@ -1,16 +1,16 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 20 Jan 2010 09:45:34 +0000 (UTC)
-Subject: [Buildroot] [Bug 913] Bump iptables to 1.4.6
-In-Reply-To: <bug-913-163@https.bugs.busybox.net/>
-References: <bug-913-163@https.bugs.busybox.net/>
-Message-ID: <20100120094534.76368776FF@busybox.osuosl.org>
+Date: Wed, 20 Jan 2010 09:48:51 +0000 (UTC)
+Subject: [Buildroot] [Bug 919] Bump usb_modeswitch package to 1.0.7
+In-Reply-To: <bug-919-163@https.bugs.busybox.net/>
+References: <bug-919-163@https.bugs.busybox.net/>
+Message-ID: <20100120094851.133FB776FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=913
+https://bugs.busybox.net/show_bug.cgi?id=919
 
 
 Peter Korsgaard <jacmet@uclibc.org> changed:
@@ -23,7 +23,7 @@ Peter Korsgaard <jacmet@uclibc.org> changed:
 
 
 
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2010-01-20 09:45:33 UTC ---
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2010-01-20 09:48:50 UTC ---
 Committed, thanks!
 
 
