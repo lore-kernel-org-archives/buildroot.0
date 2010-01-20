@@ -1,27 +1,33 @@
-From: Anders Darander <anders.darander@gmail.com>
-Date: Wed, 20 Jan 2010 10:07:40 +0100
-Subject: [Buildroot] glibc support
-In-Reply-To: <8128F0FD6C26E14C8EB4BFDB92B8D6B2134AE1@2putt.int.lantronix.com>
-References: <8128F0FD6C26E14C8EB4BFDB92B8D6B2134AE1@2putt.int.lantronix.com>
-Message-ID: <2c9a759f1001200107g36629fdcicbaaa824fba9a6da@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 20 Jan 2010 09:45:34 +0000 (UTC)
+Subject: [Buildroot] [Bug 913] Bump iptables to 1.4.6
+In-Reply-To: <bug-913-163@https.bugs.busybox.net/>
+References: <bug-913-163@https.bugs.busybox.net/>
+Message-ID: <20100120094534.76368776FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Matt,
+https://bugs.busybox.net/show_bug.cgi?id=913
 
-On Tue, Jan 19, 2010 at 23:29, Matthew Davison
-<matt.davison@lantronix.com> wrote:
-> Is building with glibc instead of uClibc currently supported in buildroot?
-> If so, what steps are required?
 
-I've done this in a few projects. What I did (and I suppose everyone
-else) is to build the cross-toolchain and glibc using crosstool-NG.
-Then this toolchain can be used as an external toolchain in buildroot,
-together with the glibc that you build. It is mostly pretty
-straightforward.
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-Regards,
-Anders
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
+
+
+
+
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2010-01-20 09:45:33 UTC ---
+Committed, thanks!
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
