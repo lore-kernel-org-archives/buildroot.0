@@ -1,40 +1,34 @@
-From: Ravi Kumar Kulkarni <ravilinux4u@gmail.com>
-Date: Mon, 25 Jan 2010 12:41:26 +0530
-Subject: [Buildroot] Target finalize Error with buildroot
-Message-ID: <532dd5841001242311q4e247324s7217fe9b6b794b84@mail.gmail.com>
+From: julien.boibessot at free.fr <julien.boibessot@free.fr>
+Date: Mon, 25 Jan 2010 19:00:38 +0100
+Subject: [Buildroot] [PATCH] SDL_ttf needs freetype to be built and
+	installed first.
+Message-ID: <1264442438-14868-1-git-send-email-julien.boibessot@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
-i was trying to build a Jffs2 filesystem for my target board
-AT91sam9261. Everything compiles n builds but stops at the last point
-with the following error
+From: Julien Boibessot <julien.boibessot@armadeus.com>
 
-rm -rf /media/disk-1/buildroot/buildroot/output/build/buildroot-config
-mkdir -p /media/disk-1/buildroot/buildroot/output/build
-cp -dpRf package/config/buildroot-config
-/media/disk-1/buildroot/buildroot/output/build/buildroot-config
-rm -rf /media/disk-1/buildroot/buildroot/output/target/usr/include
-/media/disk-1/buildroot/buildroot/output/target/usr/lib/pkgconfig
-find /media/disk-1/buildroot/buildroot/output/target/lib \( -name
-'*.a' -o -name '*.la' \) -print0 | xargs -0 rm -f
-find /media/disk-1/buildroot/buildroot/output/target/usr/lib \( -name
-'*.a' -o -name '*.la' \) -print0 | xargs -0 rm -f
-rm -rf /media/disk-1/buildroot/buildroot/output/target/usr/man
-/media/disk-1/buildroot/buildroot/output/target/usr/share/man
-rm -rf /media/disk-1/buildroot/buildroot/output/target/usr/info
-/media/disk-1/buildroot/buildroot/output/target/usr/share/info
-find /media/disk-1/buildroot/buildroot/output/target -type f -perm
-+111 | xargs /media/disk-1/buildroot/buildroot/output/staging/usr/bin/arm-linux-uclibcgnueabi-strip
---remove-section=.comment --remove-section=.note 2>/dev/null || true
-/media/disk-1/buildroot/buildroot/output/staging/usr/bin/arm-linux-uclibcgnueabi-ldconfig
--r /media/disk-1/buildroot/buildroot/output/target 2>/dev/null
-make: *** [target-finalize] Error 127
 
- is ther something additional tat needs to be enabled?  or any fix to
-this? thanks.
-warm regards,
-Ravi Kulkarni.
+Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+---
+ package/sdl_ttf/sdl_ttf.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/sdl_ttf/sdl_ttf.mk b/package/sdl_ttf/sdl_ttf.mk
+index 29e40e8..21bfc5e 100644
+--- a/package/sdl_ttf/sdl_ttf.mk
++++ b/package/sdl_ttf/sdl_ttf.mk
+@@ -60,7 +60,7 @@ $(TARGET_DIR)/usr/lib/libSDL_ttf.so: $(STAGING_DIR)/usr/lib/libSDL_ttf.so
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libSDL_ttf*.so* $(TARGET_DIR)/usr/lib/
+ 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libSDL_ttf.so
+ 
+-sdl_ttf: sdl $(TARGET_DIR)/usr/lib/libSDL_ttf.so
++sdl_ttf: sdl freetype $(TARGET_DIR)/usr/lib/libSDL_ttf.so
+ 
+ sdl_ttf-clean:
+ 	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(SDL_TTF_DIR) uninstall
+-- 
+1.6.0.4
