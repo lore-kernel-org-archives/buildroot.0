@@ -1,56 +1,66 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 25 Jan 2010 21:43:27 +0000 (UTC)
-Subject: [Buildroot] [Bug 955] New: Grub fails to build with External
-	Toolchain
-Message-ID: <bug-955-163@https.bugs.busybox.net/>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 26 Jan 2010 08:36:28 +0100
+Subject: [Buildroot] [git commit master] busybox: bump version
+Message-ID: <20100126085441.BF5487772D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=955
 
-            Target: i686-nptl-linux-gnu
-             Build: x86_64
-           Summary: Grub fails to build with External Toolchain
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Keywords: patch
-          Severity: normal
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: clark.rawlins at escient.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+commit: http://git.buildroot.net/buildroot/commit/?id=99f74cbec5d5485776e36fc503faec17b737e4a2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/busybox/Config.in |   10 ++++++++--
+ 1 files changed, 8 insertions(+), 2 deletions(-)
 
-Created an attachment (id=979)
- --> (https://bugs.busybox.net/attachment.cgi?id=979)
-Fix external toolchain build error for grub and migrate grub to the autotools
-macro
-
-When building grub with an external toolchain I get the following failure.
-
-make[1]: Entering directory
-`/home/clark/src/br-upstream/output/build/grub-0.97/grub'
-/opt/x-tools/i686-nptl-linux-gnu/bin/i686-nptl-linux-gnu-gcc  -static   -o grub
- main.o asmstub.o ../stage2/libgrub.a  ../lib/libcommon.a -lncurses 
-/opt/x-tools/i686-nptl-linux-gnu/lib/gcc/i686-nptl-linux-gnu/4.3.2/../../../../i686-nptl-linux-gnu/bin/ld:
-cannot find -lncurses
-collect2: ld returned 1 exit status
-make[1]: *** [grub] Error 1
-make[1]: Leaving directory
-`/home/clark/src/br-upstream/output/build/grub-0.97/grub'
-make: *** [/home/clark/src/br-upstream/output/build/grub-0.97/grub/grub] Error
-2
-
-
+diff --git a/package/busybox/Config.in b/package/busybox/Config.in
+index df9cb2e..9428607 100644
+--- a/package/busybox/Config.in
++++ b/package/busybox/Config.in
+@@ -12,7 +12,7 @@ config BR2_PACKAGE_BUSYBOX
+ choice
+ 	prompt "BusyBox Version"
+ 	depends on BR2_PACKAGE_BUSYBOX
+-	default BR2_BUSYBOX_VERSION_1_15_X
++	default BR2_BUSYBOX_VERSION_1_16_X
+ 	help
+ 	  Select the version of BusyBox you wish to use.
+ 
+@@ -26,10 +26,14 @@ choice
+ 
+ 	config BR2_BUSYBOX_VERSION_1_14_X
+ 		bool "BusyBox 1.14.x"
+-		depends on BR2_DEPRECATED || BR2_RECENT
++		depends on BR2_DEPRECATED
+ 
+ 	config BR2_BUSYBOX_VERSION_1_15_X
+ 		bool "BusyBox 1.15.x"
++		depends on BR2_DEPRECATED || BR2_RECENT
++
++	config BR2_BUSYBOX_VERSION_1_16_X
++		bool "BusyBox 1.16.x"
+ 
+ 	config BR2_PACKAGE_BUSYBOX_SNAPSHOT
+ 		bool "daily snapshot"
+@@ -42,6 +46,7 @@ config BR2_BUSYBOX_VERSION
+ 	default "1.13.4"	if BR2_BUSYBOX_VERSION_1_13_X
+ 	default "1.14.4"	if BR2_BUSYBOX_VERSION_1_14_X
+ 	default "1.15.3"	if BR2_BUSYBOX_VERSION_1_15_X
++	default "1.16.0"	if BR2_BUSYBOX_VERSION_1_16_X
+ 
+ config BR2_PACKAGE_BUSYBOX_FULLINSTALL
+ 	bool "Run BusyBox's own full installation"
+@@ -64,6 +69,7 @@ config BR2_PACKAGE_BUSYBOX_CONFIG
+ 	default "package/busybox/busybox-1.13.x.config" if BR2_BUSYBOX_VERSION_1_13_X
+ 	default "package/busybox/busybox-1.13.x.config" if BR2_BUSYBOX_VERSION_1_14_X
+ 	default "package/busybox/busybox-1.13.x.config" if BR2_BUSYBOX_VERSION_1_15_X
++	default "package/busybox/busybox-1.13.x.config" if BR2_BUSYBOX_VERSION_1_16_X
+ 	help
+ 	  Some people may wish to use their own modified BusyBox configuration
+ 	  file, and will specify their config file location with this option.
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.6.3.3
