@@ -1,50 +1,44 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Tue, 26 Jan 2010 16:49:48 +0000 (UTC)
-Subject: [Buildroot] Where is mtd/mtd-user.h supposed to come from?
-References: <hi55gi$ol6$1@ger.gmane.org> <hi5mi4$ngt$1@ger.gmane.org>
-	<4B5F08E6.9030301@carallon.com>
-Message-ID: <hjn6fc$j71$1@ger.gmane.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 26 Jan 2010 21:46:09 +0000 (UTC)
+Subject: [Buildroot] [Bug 985] New: Bump usb_modeswitch package to 1.1.0
+Message-ID: <bug-985-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2010-01-26, Will Wagner <will_wagner@carallon.com> wrote:
-Grant Edwards<grant.b.edwards@gmail.com>  wrote:
+https://bugs.busybox.net/show_bug.cgi?id=985
 
->>> The build of uboot's fw_env target tool is failing because
->>> there is no mtd/mtd-user.h file.
->>>
->> Manually copying the mtd directory from the kernel headers
->> into the toolchain /usr/include directory allows mtd stuff to
->> build. I don't know how to get buildroot to do that when it's
->> building a toolchain.
->
-> Rather belatedly I realise that I am seeing the same problem.
-> When the kernel headers are installed I get mtd-user.h in 
-> toolchain/linux/include. Also when I build mtd-utils the
-> header is in build/mtd_orig/include. However it does not get
-> copied in staging/usr/include so any apps I write that use the
-> header fail to compile.
->
-> I have previously fixed this my adding a rule that copies the
-> headers from build/mtd_orig/include when the mtd package is
-> built.
->
-> Is this a good way to do this? Why aren't all the kernel
-> headers made available in staging/usr/include?
+              Host: i686-linux
+            Target: arm-linux-ucibcgnueabi
+           Summary: Bump usb_modeswitch package to 1.1.0
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: daniel at bristot.eti.br
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Good question.
 
-> How would anyone else fix this?
+Created an attachment (id=1003)
+ --> (https://bugs.busybox.net/attachment.cgi?id=1003)
+Bump usb_modeswitch package to 1.1.0
 
-I ended up writing a shell script to do buildroot "make" runs.
-After building the toolchain, that shell script copies the mtd
-header files and some library files into the places required to
-produce a usable toolchain.
+Major fixes in the wrapper script (stabilizing and time-saving); back to
+unified installation, defaults to "integrated" approach; new -D parameter to
+enable "integrated" behaviour; bugs fixed in success check; man file included
+(borrowed from the Debian package); C code and binary works with the compat
+library from libusb-1.0; some new devices
+
 
 -- 
-Grant Edwards                   grante             Yow! Actually, what I'd
-                                  at               like is a little toy
-                               visi.com            spaceship!!
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
