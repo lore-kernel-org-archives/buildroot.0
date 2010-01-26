@@ -1,18 +1,18 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 26 Jan 2010 16:29:32 +0000 (UTC)
-Subject: [Buildroot] [Bug 967] New: Bump netstat-nat to 1.4.10
-Message-ID: <bug-967-163@https.bugs.busybox.net/>
+Date: Tue, 26 Jan 2010 16:32:52 +0000 (UTC)
+Subject: [Buildroot] [Bug 973] New: Bump iw to 0.9.19
+Message-ID: <bug-973-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=967
+https://bugs.busybox.net/show_bug.cgi?id=973
 
               Host: i686-linux
             Target: arm-softfloat-linux
-           Summary: Bump netstat-nat to 1.4.10
+           Summary: Bump iw to 0.9.19
            Product: buildroot
            Version: unspecified
           Platform: PC
@@ -27,12 +27,12 @@ https://bugs.busybox.net/show_bug.cgi?id=967
    Estimated Hours: 0.0
 
 
-Created an attachment (id=991)
- --> (https://bugs.busybox.net/attachment.cgi?id=991)
-Bump netstat-nat to 1.4.10
+Created an attachment (id=997)
+ --> (https://bugs.busybox.net/attachment.cgi?id=997)
+Bump iw to 0.9.19
 
-Bump netstat-nat package to 1.4.10: fix for properly display DNAT over SNAT
-connection.
+Bump iw package to 0.9.19.
+Now supports listing supported commands by the phy among other improvements.
 
 
 -- 
