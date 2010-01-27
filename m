@@ -1,10 +1,10 @@
 From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Wed, 27 Jan 2010 02:08:58 +0100
-Subject: [Buildroot] [PATCH 10/19] readline: convert to autotools
+Date: Wed, 27 Jan 2010 02:08:59 +0100
+Subject: [Buildroot] [PATCH 11/19] lua: conversion to new package
 	infrastructure
 In-Reply-To: <1264554547-9009-1-git-send-email-llandwerlin@gmail.com>
 References: <1264554547-9009-1-git-send-email-llandwerlin@gmail.com>
-Message-ID: <1264554547-9009-11-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1264554547-9009-12-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,125 +13,156 @@ To: buildroot@busybox.net
 
 From: Lionel Landwerlin <llandwerlin@gmail.com>
 
+Also install development files to staging by default and to target if
+requested.
+
 Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 ---
- package/readline/readline.mk |  107 ++++++++---------------------------------
- 1 files changed, 21 insertions(+), 86 deletions(-)
+ package/lua/lua.mk |  124 +++++++++++++++++++++++++--------------------------
+ 1 files changed, 61 insertions(+), 63 deletions(-)
 
-diff --git a/package/readline/readline.mk b/package/readline/readline.mk
-index 34c02d8..641cd71 100644
---- a/package/readline/readline.mk
-+++ b/package/readline/readline.mk
-@@ -3,89 +3,24 @@
- # build GNU readline
- #
+diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+index aeb6c82..9cb1675 100644
+--- a/package/lua/lua.mk
++++ b/package/lua/lua.mk
+@@ -5,77 +5,75 @@
  #############################################################
--READLINE_VERSION:=5.2
--READLINE_SITE:=$(BR2_GNU_MIRROR)/readline
--READLINE_SOURCE:=readline-$(READLINE_VERSION).tar.gz
--READLINE_DIR:=$(BUILD_DIR)/readline-$(READLINE_VERSION)
--READLINE_CAT:=$(ZCAT)
--READLINE_BINARY:=libhistory.a
--READLINE_SHARED_BINARY:=libhistory.so
--READLINE_TARGET_BINARY:=usr/lib/$(READLINE_BINARY)
--READLINE_TARGET_SHARED_BINARY:=usr/lib/$(READLINE_SHARED_BINARY)
+ 
+ LUA_VERSION=5.1.4
 -
--$(DL_DIR)/$(READLINE_SOURCE):
--	$(call DOWNLOAD,$(READLINE_SITE),$(READLINE_SOURCE))
+ LUA_SOURCE=lua-$(LUA_VERSION).tar.gz
+-LUA_CAT:=$(ZCAT)
+ LUA_SITE=http://www.lua.org/ftp
++LUA_INSTALL_STAGING=YES
++LUA_DEPENDENCIES = readline ncurses
+ 
+-LUA_DIR=$(BUILD_DIR)/lua-$(LUA_VERSION)
 -
--readline-source: $(DL_DIR)/$(READLINE_SOURCE)
++#
+ LUA_CFLAGS=-DLUA_USE_LINUX
+ LUA_MYLIBS="-Wl,-E -ldl -lreadline -lhistory -lncurses"
+ 
+-$(DL_DIR)/$(LUA_SOURCE):
+-	$(call DOWNLOAD,$(LUA_SITE),$(LUA_SOURCE))
 -
--$(READLINE_DIR)/.unpacked: $(DL_DIR)/$(READLINE_SOURCE)
--	mkdir -p $(READLINE_DIR)
--	tar -C $(BUILD_DIR) -zxf $(DL_DIR)/$(READLINE_SOURCE)
--	toolchain/patch-kernel.sh $(READLINE_DIR) package/readline/ readline??-???
--	$(CONFIG_UPDATE) $(READLINE_DIR)
--	$(CONFIG_UPDATE) $(READLINE_DIR)/support
--	touch $@
+-$(LUA_DIR)/.unpacked: $(DL_DIR)/$(LUA_SOURCE)
+-	$(LUA_CAT) $(DL_DIR)/$(LUA_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	touch $(LUA_DIR)/.unpacked
 -
--$(READLINE_DIR)/.configured: $(READLINE_DIR)/.unpacked
--	(cd $(READLINE_DIR); rm -rf config.cache; \
--		bash_cv_func_sigsetjmp=yes \
--		$(TARGET_CONFIGURE_OPTS) \
--		$(TARGET_CONFIGURE_ARGS) \
--		./configure $(QUIET) \
--		--target=$(GNU_TARGET_NAME) \
--		--host=$(GNU_TARGET_NAME) \
--		--build=$(GNU_HOST_NAME) \
--		--prefix=/usr \
--		--exec-prefix=/usr \
--		--bindir=/usr/bin \
--		--sbindir=/usr/sbin \
--		--libdir=/usr/lib \
--		--libexecdir=/usr/lib \
--		--sysconfdir=/etc \
--		--datadir=/usr/share \
--		--localstatedir=/var \
--		--with-shared \
--		--includedir=/usr/include \
--		--mandir=/usr/man \
--		--infodir=/usr/info \
--	)
--	touch $@
+-$(LUA_DIR)/src/lua: $(LUA_DIR)/.unpacked
+-	rm -f $@
++define LUA_BUILD_CMDS
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) \
+ 		MYCFLAGS=$(LUA_CFLAGS) \
+ 		MYLIBS=$(LUA_MYLIBS) \
+ 		AR="$(TARGET_CROSS)ar rcu" \
+-		-C $(LUA_DIR)/src all
 -
--$(READLINE_DIR)/$(READLINE_BINARY): $(READLINE_DIR)/.configured
--	$(MAKE) -C $(READLINE_DIR) SHLIB_LIBS="-lncurses"
--	ls $(READLINE_DIR)/$(READLINE_BINARY)
--	touch -c $@
+-$(LUA_DIR)/src/luac: $(LUA_DIR)/src/lua
 -
--$(STAGING_DIR)/$(READLINE_TARGET_BINARY): $(READLINE_DIR)/.configured
--	$(MAKE) -C $(READLINE_DIR) install
--	touch -c $@
+-$(LUA_DIR)/src/liblua.a: $(LUA_DIR)/src/lua
 -
--# Install to Staging area
--$(STAGING_DIR)/usr/include/readline/readline.h: $(READLINE_DIR)/$(READLINE_BINARY)
--	BUILD_CC=$(TARGET_CC) HOSTCC="$(HOSTCC)" CC=$(TARGET_CC) \
--	$(MAKE1) DESTDIR=$(STAGING_DIR) -C $(READLINE_DIR) install
--	touch -c $@
+-$(STAGING_DIR)/usr/lib/liblua.a: $(LUA_DIR)/src/liblua.a
+-	cp -dpf $(LUA_DIR)/src/liblua.a $(STAGING_DIR)/usr/lib/liblua.a
 -
--# Install to Target directory
--$(TARGET_DIR)/$(READLINE_TARGET_SHARED_BINARY): $(READLINE_DIR)/$(READLINE_BINARY)
--	# make sure we don't end up with lib{readline,history}...old
--	$(MAKE1) DESTDIR=$(TARGET_DIR) -C $(READLINE_DIR) uninstall
--	BUILD_CC=$(TARGET_CC) HOSTCC="$(HOSTCC)" CC=$(TARGET_CC) \
--	$(MAKE1) DESTDIR=$(TARGET_DIR) \
--		-C $(READLINE_DIR) install-shared uninstall-doc
--	chmod 775 $(TARGET_DIR)/usr/lib/libreadline.so.$(READLINE_VERSION) $(TARGET_DIR)/usr/lib/libhistory.so.$(READLINE_VERSION)
--	$(STRIPCMD) $(TARGET_DIR)/usr/lib/libreadline.so.$(READLINE_VERSION) $(TARGET_DIR)/usr/lib/libhistory.so.$(READLINE_VERSION)
+-$(STAGING_DIR)/usr/bin/lua: $(LUA_DIR)/src/lua
+-	cp -dpf $(LUA_DIR)/src/lua $(STAGING_DIR)/usr/bin/lua
 -
--readline: ncurses $(STAGING_DIR)/usr/include/readline/readline.h $(TARGET_DIR)/$(READLINE_TARGET_SHARED_BINARY)
+-$(STAGING_DIR)/usr/bin/luac: $(LUA_DIR)/src/luac
+-	cp -dpf $(LUA_DIR)/src/luac $(STAGING_DIR)/usr/bin/luac
 -
--readline-clean:
--	-$(MAKE) -C $(READLINE_DIR) DESTDIR=$(STAGING_DIR) uninstall
--	-$(MAKE) -C $(READLINE_DIR) DESTDIR=$(TARGET_DIR) uninstall
--	-$(MAKE) -C $(READLINE_DIR) clean
+-$(TARGET_DIR)/usr/lib/liblua.a: $(STAGING_DIR)/usr/lib/liblua.a
+-	cp -dpf $(STAGING_DIR)/usr/lib/liblua.a $(TARGET_DIR)/usr/lib/liblua.a
 -
--readline-dirclean:
--	rm -rf $(READLINE_DIR)
+-$(TARGET_DIR)/usr/bin/lua: $(STAGING_DIR)/usr/bin/lua
+-	cp -dpf $(STAGING_DIR)/usr/bin/lua $(TARGET_DIR)/usr/bin/lua
 -
--ifeq ($(BR2_PACKAGE_READLINE),y)
--TARGETS+=readline
--endif
-+READLINE_VERSION = 5.2
-+READLINE_SOURCE = readline-$(READLINE_VERSION).tar.gz
-+READLINE_SITE = $(BR2_GNU_MIRROR)/readline
-+READLINE_INSTALL_STAGING = YES
-+READLINE_INSTALL_TARGET = YES
-+
-+READLINE_DEPENDENCIES = ncurses
-+
-+READLINE_CONF_ENV = bash_cv_func_sigsetjmp=yes
-+
-+define READLINE_INSTALL_TARGET_CMDS
-+	$(MAKE1) DESTDIR=$(TARGET_DIR) -C $(@D) uninstall
-+	$(MAKE1) DESTDIR=$(TARGET_DIR) -C $(@D) install-shared uninstall-doc
-+	chmod 775 $(TARGET_DIR)/usr/lib/libreadline.so.$(READLINE_VERSION) \
-+		$(TARGET_DIR)/usr/lib/libhistory.so.$(READLINE_VERSION)
-+	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) \
-+		$(TARGET_DIR)/usr/lib/libreadline.so.$(READLINE_VERSION) \
-+		$(TARGET_DIR)/usr/lib/libhistory.so.$(READLINE_VERSION)
+-$(TARGET_DIR)/usr/bin/luac: $(STAGING_DIR)/usr/bin/luac
+-	cp -dpf $(STAGING_DIR)/usr/bin/luac $(TARGET_DIR)/usr/bin/luac
+-
+-
+-lua-bins:	$(TARGET_DIR)/usr/bin/lua $(TARGET_DIR)/usr/bin/luac
+-
+-lua-libs: $(if $(BR2_HAVE_DEVFILES),$(TARGET_DIR)/usr/lib/liblua.a)
+-
+-lua: readline ncurses lua-bins lua-libs
+-
+-lua-source: $(DL_DIR)/$(LUA_SOURCE)
+-
+-lua-clean:
+-	rm -f $(STAGING_DIR)/usr/bin/lua $(TARGET_DIR)/usr/bin/luac
+-	rm -f $(STAGING_DIR)/usr/lib/liblua.a
+-	rm -f $(TARGET_DIR)/usr/bin/lua $(TARGET_DIR)/usr/bin/luac
+-	rm -f $(TARGET_DIR)/usr/lib/liblua.a
+-	-$(MAKE) -C $(LUA_DIR) clean
+-
+-lua-dirclean:
+-	rm -rf $(LUA_DIR)
+-
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_LUA),y)
+-TARGETS+=lua
++		-C $(@D)/src all
 +endef
 +
-+$(eval $(call AUTOTARGETS,package,readline))
++define LUA_INSTALL_STAGING_CMDS
++	cat $(@D)/etc/lua.pc | sed -e s/\\/usr\\/local/\\/usr/ > $(STAGING_DIR)/usr/lib/pkgconfig/lua.pc
++	$(INSTALL) $(@D)/src/liblua.a $(STAGING_DIR)/usr/lib
++	$(INSTALL) $(@D)/src/lua $(STAGING_DIR)/usr/bin
++	$(INSTALL) $(@D)/src/luac $(STAGING_DIR)/usr/bin
++	$(INSTALL) $(@D)/src/lua.h $(STAGING_DIR)/usr/include
++	$(INSTALL) $(@D)/src/luaconf.h $(STAGING_DIR)/usr/include
++	$(INSTALL) $(@D)/src/lualib.h $(STAGING_DIR)/usr/include
++	$(INSTALL) $(@D)/src/lauxlib.h $(STAGING_DIR)/usr/include
++endef
++
++ifeq ($(BR2_HAVE_DEVFILES),y)
++define LUA_INSTALL_TARGET_HEADERS
++	install -D $(STAGING_DIR)/usr/lib/pkgconfig/lua.pc $(TARGET_DIR)/usr/lib/pkgconfig/lua.pc
++	$(INSTALL) $(@D)/src/lua.h $(TARGET_DIR)/usr/include
++	$(INSTALL) $(@D)/src/luaconf.h $(TARGET_DIR)/usr/include
++	$(INSTALL) $(@D)/src/lualib.h $(TARGET_DIR)/usr/include
++	$(INSTALL) $(@D)/src/lauxlib.h $(TARGET_DIR)/usr/include
++endef
+ endif
++
++define LUA_INSTALL_TARGET_CMDS
++	$(INSTALL) $(@D)/src/lua $(STAGING_DIR)/usr/bin
++	$(INSTALL) $(@D)/src/luac $(STAGING_DIR)/usr/bin
++	$(INSTALL) -D $(@D)/src/liblua.a $(STAGING_DIR)/usr/lib/liblua.a
++	$(LUA_INSTALL_TARGET_HEADERS)
++endef
++
++LUA_INSTALLED_FILES = \
++	/usr/include/lua.h \
++	/usr/include/luaconf.h \
++	/usr/include/lualib.h \
++	/usr/include/lauxlib.h \
++	/usr/lib/pkgconfig/lua.pc \
++	/usr/bin/lua \
++	/usr/bin/luac \
++	/usr/lib/liblua.a
++
++define LUA_UNINSTALL_STAGING_CMDS
++	for i in $(LUA_INSTALLED_FILES); do \
++		rm -f $(STAGING_DIR)$$i; \
++	done
++endef
++
++define LUA_UNINSTALL_TARGET_CMDS
++	for i in $(LUA_INSTALLED_FILES); do \
++		rm -f $(TARGET_DIR)$$i; \
++	done
++endef
++
++define LUA_CLEAN_CMDS
++	-$(MAKE) $(@D) clean
++endef
++
++$(eval $(call GENTARGETS,package,lua))
 -- 
 1.6.6
