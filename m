@@ -1,34 +1,26 @@
-From: Jim Thomas <jimthomasembedded@yahoo.com>
-Date: Wed, 27 Jan 2010 07:28:28 -0800 (PST)
-Subject: [Buildroot] Buildroot How-To for QEMU/ARM
-Message-ID: <413172.3712.qm@web44802.mail.sp1.yahoo.com>
+From: Julien Boibessot <julien.boibessot@free.fr>
+Date: Wed, 27 Jan 2010 16:35:07 +0100
+Subject: [Buildroot] [PATCH] "libdir" variable is not set correctly in
+ (generated) $(STAGING_DIR)/usr/lib/libSDL.la
+In-Reply-To: <4d28d4b51001270659v6ca5a6e9ne6015d6bbc4e39a0@mail.gmail.com>
+References: <1264604070-7294-1-git-send-email-julien.boibessot@free.fr>
+	<4d28d4b51001270659v6ca5a6e9ne6015d6bbc4e39a0@mail.gmail.com>
+Message-ID: <4B605D2B.9050205@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-?
-I can build qemu-0.12.2 under Ubuntu 9.10 and boot Linux in QEMU using the pre-built kernel and RFS in arm-test-0.2, also from the QEMU project.
-?
-Now I want to use QEMU to boot a Linux kernel and RFS that I built myself for ARM using buildroot-2009.11.
-?
-I have not had much luck. Based on web searching, I have tried twisting knobs in 'make menuconfig' and rebuilt perhaps a couple of dozen times.
-?
-Rather than do a core dump here of the details, I thought I would ask:
-?
-Has anyone used buildroot-2009.11 to build a kernel and RFS for ARM that boot successfully under qemu-0.12.2?
-?
-Do step-by-step notes exist for how to do this for ARM that were written for these latest versions of Buildroot and QEMU, or that have been verified as still complete and correct?
-?
-Ultimately, I might like to get Buildroot/QEMU working for a particular ARM processor, but for now, a working configuration for any virtualized ARM target is good enough.
-?
-A general purpose Buildroot/QEMU howto for ARM might serve as both a worthwhile regression test, and primary support document visible at the Buildroot web site.
-?
-Thanks.
-?
-Jim
+Hi Lionel,
 
+Lionel Landwerlin a ?crit :
+> It already handled in Makefile.autotools.in
+> <http://Makefile.autotools.in>. That's why you see the path to the
+> staging directory twice, it's twice processed.
+> You can just remove the line.
+you mean: converting package/sdl/sdl.mk to autotools infrastructure will
+solve the problem ?
 
-      
+Regards,
+Julien
