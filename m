@@ -1,16 +1,16 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 27 Jan 2010 13:34:10 +0000 (UTC)
-Subject: [Buildroot] [Bug 961] Bump dnsmasq to 2.52
-In-Reply-To: <bug-961-163@https.bugs.busybox.net/>
-References: <bug-961-163@https.bugs.busybox.net/>
-Message-ID: <20100127133410.BDD4F776FB@busybox.osuosl.org>
+Date: Wed, 27 Jan 2010 13:36:49 +0000 (UTC)
+Subject: [Buildroot] [Bug 967] Bump netstat-nat to 1.4.10
+In-Reply-To: <bug-967-163@https.bugs.busybox.net/>
+References: <bug-967-163@https.bugs.busybox.net/>
+Message-ID: <20100127133649.AEE0B776FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=961
+https://bugs.busybox.net/show_bug.cgi?id=967
 
 
 Peter Korsgaard <jacmet@uclibc.org> changed:
@@ -23,8 +23,8 @@ Peter Korsgaard <jacmet@uclibc.org> changed:
 
 
 
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2010-01-27 13:34:09 UTC ---
-committed, thanks!
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2010-01-27 13:36:49 UTC ---
+Committed, thanks!
 
 
 -- 
