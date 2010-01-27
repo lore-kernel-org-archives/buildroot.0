@@ -1,22 +1,32 @@
-From: Will Wagner <will_wagner@carallon.com>
-Date: Wed, 27 Jan 2010 12:27:17 +0000
-Subject: [Buildroot] PATCH: Add more config options to alsa, bump version
-Message-ID: <4B603125.6070002@carallon.com>
+From: julien.boibessot at free.fr <julien.boibessot@free.fr>
+Date: Wed, 27 Jan 2010 14:20:48 +0100
+Subject: [Buildroot] [PATCH] Do not install some (unneeded) mysql test tools
+	on target.
+Message-ID: <1264598448-16599-1-git-send-email-julien.boibessot@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds a lot of extra config options to alsa-lib (default 
-should be the same as before options existed), with these you can 
-substantially reduce the size of the alsa-lib library.
+From: Julien Boibessot <julien.boibessot@armadeus.com>
 
-It also changes alsa-utils to only depend on ncurses if you have 
-alsa-mixer selected.
+test and bench dirs are already removed from installation.
 
-Finally it bumps the version of alsa-lib and alsa-utils to 1.0.22
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: 0015-bump-alsa-version-add-options.patch
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100127/56484916/attachment.diff>
+Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+---
+ package/database/mysql_client/mysql_client.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/package/database/mysql_client/mysql_client.mk b/package/database/mysql_client/mysql_client.mk
+index 7f3b091..ad01c2b 100644
+--- a/package/database/mysql_client/mysql_client.mk
++++ b/package/database/mysql_client/mysql_client.mk
+@@ -28,4 +28,5 @@ $(eval $(call AUTOTARGETS,package/database,mysql_client))
+ 
+ $(MYSQL_CLIENT_HOOK_POST_INSTALL):
+ 	rm -rf $(TARGET_DIR)/usr/mysql-test $(TARGET_DIR)/usr/sql-bench
++	rm -f $(TARGET_DIR)/usr/bin/mysql_client_test $(TARGET_DIR)/usr/bin/mysqltest
+ 	touch $@
+-- 
+1.6.0.4
