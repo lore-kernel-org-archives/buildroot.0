@@ -1,9 +1,9 @@
 From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Wed, 27 Jan 2010 02:08:55 +0100
-Subject: [Buildroot] [PATCH 07/19] bash: fix configuration
+Date: Wed, 27 Jan 2010 02:08:57 +0100
+Subject: [Buildroot] [PATCH 09/19] ncurses: fix path to patch ncurses5-config
 In-Reply-To: <1264554547-9009-1-git-send-email-llandwerlin@gmail.com>
 References: <1264554547-9009-1-git-send-email-llandwerlin@gmail.com>
-Message-ID: <1264554547-9009-8-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1264554547-9009-10-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +12,27 @@ To: buildroot@busybox.net
 
 From: Lionel Landwerlin <llandwerlin@gmail.com>
 
-Patch bash32-011 modifies the configure.in script. Therefor we need to
-run autoconf before launching the configure script. Otherwise, once
-the configure script called, the makefile's dependencies over
-configure.in will relaunch autoconf without options/environnement
-variables we usually set when calling configure.
-
 Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 ---
- package/bash/bash.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/ncurses/ncurses.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/bash/bash.mk b/package/bash/bash.mk
-index 705ce8d..08039e2 100644
---- a/package/bash/bash.mk
-+++ b/package/bash/bash.mk
-@@ -32,7 +32,8 @@ $(BASH_DIR)/.unpacked: $(DL_DIR)/$(BASH_SOURCE)
- $(BASH_DIR)/.configured: $(BASH_DIR)/.unpacked
- 	# bash_cv_have_mbstate_t=yes
- 	(cd $(BASH_DIR); rm -rf config.cache; \
--		$(TARGET_CONFIGURE_OPTS) \
-+                autoconf && \
-+	        $(TARGET_CONFIGURE_OPTS) \
- 		$(TARGET_CONFIGURE_ARGS) \
- 		CCFLAGS_FOR_BUILD="$(HOST_CFLAGS)" \
- 		ac_cv_func_setvbuf_reversed=no \
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index a19e6c8..0568954 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -53,10 +53,10 @@ endif
+ 
+ define NCURSES_PATCH_NCURSES_CONFIG
+ 	$(SED) 's^prefix="^prefix="$(STAGING_DIR)^' \
+-		$(STAGING_DIR)/bin/ncurses5-config
++		$(STAGING_DIR)/usr/bin/ncurses5-config
+ endef
+ 
+-NCURSES_POST_BUILD_HOOKS += NCURSES_PATCH_NCURSES_CONFIG
++NCURSES_POST_STAGING_INSTALL_HOOKS += NCURSES_PATCH_NCURSES_CONFIG
+ 
+ ifeq ($(BR2_HAVE_DEVFILES),y)
+ define NCURSES_INSTALL_TARGET_DEVFILES
 -- 
 1.6.6
