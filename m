@@ -1,9 +1,9 @@
 From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Wed, 27 Jan 2010 02:08:53 +0100
-Subject: [Buildroot] [PATCH 05/19] gperf: convert to autotools infrastructure
+Date: Wed, 27 Jan 2010 02:08:54 +0100
+Subject: [Buildroot] [PATCH 06/19] bash: remove CC variable when calling make
 In-Reply-To: <1264554547-9009-1-git-send-email-llandwerlin@gmail.com>
 References: <1264554547-9009-1-git-send-email-llandwerlin@gmail.com>
-Message-ID: <1264554547-9009-6-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1264554547-9009-7-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,34 +12,40 @@ To: buildroot@busybox.net
 
 From: Lionel Landwerlin <llandwerlin@gmail.com>
 
+So "/opt/whatever_toolchain/gcc --sysroot $(STAGING_DIR)" isn't
+stripped to "/opt/whatever_toolchain/gcc".
+
 Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 ---
- package/gperf/gperf.mk |   12 +++++++-----
- 1 files changed, 7 insertions(+), 5 deletions(-)
+ package/bash/bash.mk |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gperf/gperf.mk b/package/gperf/gperf.mk
-index 0dc6d6e..bb2d4f3 100644
---- a/package/gperf/gperf.mk
-+++ b/package/gperf/gperf.mk
-@@ -9,12 +9,14 @@ GPERF_SITE = $(BR2_GNU_MIRROR)/gperf
- GPERF_AUTORECONF = NO
- GPERF_INSTALL_STAGING = NO
- GPERF_INSTALL_TARGET = YES
--GPERF_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install
-+
-+# install-strip rule does not exist in gperf's makefiles
- GPERF_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
+diff --git a/package/bash/bash.mk b/package/bash/bash.mk
+index fbb9cfb..705ce8d 100644
+--- a/package/bash/bash.mk
++++ b/package/bash/bash.mk
+@@ -72,11 +72,11 @@ $(BASH_DIR)/.configured: $(BASH_DIR)/.unpacked
+ 	touch $@
  
--$(eval $(call AUTOTARGETS,package,gperf))
-+define GPERF_INSTALL_STRIP
-+$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/usr/bin/gperf
-+endef
+ $(BASH_DIR)/$(BASH_BINARY): $(BASH_DIR)/.configured
+-	$(MAKE1) CC=$(TARGET_CC) CC_FOR_BUILD="$(HOSTCC)" -C $(BASH_DIR)
++	$(MAKE1) CC_FOR_BUILD="$(HOSTCC)" -C $(BASH_DIR)
  
--$(GPERF_HOOK_POST_INSTALL): $(GPERF_TARGET_INSTALL_TARGET)
--	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/usr/bin/gperf
--	touch $@
-+GPERF_POST_INSTALL_HOOKS += GPERF_INSTALL_STRIP
+ $(TARGET_DIR)/$(BASH_TARGET_BINARY): $(BASH_DIR)/$(BASH_BINARY)
+ 	mkdir -p $(TARGET_DIR)/bin
+-	$(MAKE1) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(BASH_DIR) install
++	$(MAKE1) DESTDIR=$(TARGET_DIR) -C $(BASH_DIR) install
+ 	rm -f $(TARGET_DIR)/bin/bash*
+ 	mv $(TARGET_DIR)/usr/bin/bash* $(TARGET_DIR)/bin/
+ 	(cd $(TARGET_DIR)/bin; /bin/ln -fs bash sh)
+@@ -100,7 +100,7 @@ endif
+ # If both bash and busybox are selected, the /bin/sh symlink
+ # may need to be reinstated by the clean targets.
+ bash-clean:
+-	-$(MAKE1) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(BASH_DIR) uninstall
++	-$(MAKE1) DESTDIR=$(TARGET_DIR) -C $(BASH_DIR) uninstall
+ 	rm -f $(TARGET_DIR)/$(BASH_TARGET_BINARY)
+ 	-$(MAKE1) -C $(BASH_DIR) clean
  
-+$(eval $(call AUTOTARGETS,package,gperf))
 -- 
 1.6.6
