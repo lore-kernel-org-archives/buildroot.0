@@ -1,9 +1,9 @@
 From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Wed, 27 Jan 2010 02:09:05 +0100
-Subject: [Buildroot] [PATCH 17/19] package: fix install without strip
+Date: Wed, 27 Jan 2010 02:09:06 +0100
+Subject: [Buildroot] [PATCH 18/19] external toolchain: fix strip of libraries
 In-Reply-To: <1264554547-9009-1-git-send-email-llandwerlin@gmail.com>
 References: <1264554547-9009-1-git-send-email-llandwerlin@gmail.com>
-Message-ID: <1264554547-9009-18-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1264554547-9009-19-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,21 +14,24 @@ From: Lionel Landwerlin <llandwerlin@gmail.com>
 
 Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 ---
- package/Makefile.autotools.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ toolchain/external-toolchain/ext-tool.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Makefile.autotools.in b/package/Makefile.autotools.in
-index 7114bba..96ea453 100644
---- a/package/Makefile.autotools.in
-+++ b/package/Makefile.autotools.in
-@@ -60,7 +60,7 @@ $(2)_LIBTOOL_PATCH		?= YES
- $(2)_USE_CONFIG_CACHE           ?= $(if $(BR2_CONFIG_CACHE),YES,NO)
- $(2)_INSTALL_STAGING_OPT	?= DESTDIR=$$(STAGING_DIR) install
- ifeq ($(BR2_ENABLE_DEBUG),y)
--$(2)_INSTALL_TARGET_OPT		?= DESTDIR=$$(TARGET_DIR)  install-exec
-+$(2)_INSTALL_TARGET_OPT		?= DESTDIR=$$(TARGET_DIR)  install-strip
- else
- $(2)_INSTALL_TARGET_OPT		?= DESTDIR=$$(TARGET_DIR)  install-strip
- endif
+diff --git a/toolchain/external-toolchain/ext-tool.mk b/toolchain/external-toolchain/ext-tool.mk
+index 1f5aa19..39faf84 100644
+--- a/toolchain/external-toolchain/ext-tool.mk
++++ b/toolchain/external-toolchain/ext-tool.mk
+@@ -56,9 +56,9 @@ copy_toolchain_lib_root = \
+ 			elif test -f $${LIB_DIR}/$${LIB}; then \
+ 				$(INSTALL) -D -m0755 $${LIB_DIR}/$${LIB} $(TARGET_DIR)$${DST}/$${LIB}; \
+ 				case "$${STRIP}" in \
+-				(0 | n | no) \
+-;; \
+ 				(*) \
++;; \
++				(y) \
+ 					$(TARGET_CROSS)strip "$(TARGET_DIR)$${DST}/$${LIB}"; \
+ ;; \
+ 				esac; \
 -- 
 1.6.6
