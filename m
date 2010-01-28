@@ -1,23 +1,28 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 28 Jan 2010 17:22:57 +0100
-Subject: [Buildroot] libxml2 [PATCH] bump  to version 2.7.6
-In-Reply-To: <0E6ECDEC6CE14918844F9A10D0BCDCFA@apexjs> (Sagaert Johan's
-	message of "Thu, 26 Nov 2009 16:51:11 +0100")
-References: <0E6ECDEC6CE14918844F9A10D0BCDCFA@apexjs>
-Message-ID: <87636mnqqm.fsf@macbook.be.48ers.dk>
+Date: Thu, 28 Jan 2010 17:26:27 +0100
+Subject: [Buildroot] [PATCH 3/6] Move BR2_SOFT_FLOAT and BR2_VFP_FLOAT
+	to Build options
+In-Reply-To: <dec9e118437c50f39437596da1717c5117b8d416.1263338839.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Wed, 13 Jan 2010 00:27:22 +0100")
+References: <cover.1263338839.git.thomas.petazzoni@free-electrons.com>
+	<cover.1263338839.git.thomas.petazzoni@free-electrons.com>
+	<dec9e118437c50f39437596da1717c5117b8d416.1263338839.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <871vhanqks.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Sagaert> Hi
+ Thomas> The soft floating point related options not only affect how the
+ Thomas> toolchain is built, but more importantly affect how packages are
+ Thomas> built. Therefore, just like optimization or stripping options,
+ Thomas> floating point related options are global, and belong to the Build
+ Thomas> options menu.
 
- Sagaert> This is the patch to update the libxml2 package from version 2.7.3 to 2.7.6
-
-Committed, thanks.
+Hmm, couldn't you say the same for ipv6, largefile and locale stuff?
 
 -- 
 Bye, Peter Korsgaard
