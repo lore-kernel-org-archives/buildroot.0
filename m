@@ -1,34 +1,27 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 28 Jan 2010 16:30:37 +0100
-Subject: [Buildroot] [git commit master] ser2net: bump version
-Message-ID: <20100128153324.6E2B8776A7@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 28 Jan 2010 16:35:15 +0100
+Subject: [Buildroot] [PATCH] bash: remove CC variable when calling make
+In-Reply-To: <1261836208.5867.15.camel@coalu.atr> (Lionel Landwerlin's message
+	of "Sat, 26 Dec 2009 15:03:28 +0100")
+References: <1261836208.5867.15.camel@coalu.atr>
+Message-ID: <87r5pansy4.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Lionel" == Lionel Landwerlin <llandwerlin@gmail.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=62a4149250f42539e8300b9391ce1e0e8bf114ee
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Lionel> So "/opt/whatever_toolchain/gcc --sysroot $(STAGING_DIR)" isn't
+ Lionel> stripped to "/opt/whatever_toolchain/gcc", making gcc to look at
+ Lionel> $(ORIGINAL_TOOLCHAIN_DIRECTORY)/usr/include instead of
+ Lionel> $(STAGING_DIR)/usr/include. For more CC is already filled when
+ Lionel> running the configure script.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/ser2net/ser2net.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ Lionel> This problem should only be visible with an external toolchain.
 
-diff --git a/package/ser2net/ser2net.mk b/package/ser2net/ser2net.mk
-index 3bfe8e3..9c3d136 100644
---- a/package/ser2net/ser2net.mk
-+++ b/package/ser2net/ser2net.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--SER2NET_VERSION = 2.6
-+SER2NET_VERSION = 2.7
- SER2NET_SOURCE = ser2net-$(SER2NET_VERSION).tar.gz
- SER2NET_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/ser2net
- 
+Committed, thanks.
+
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
