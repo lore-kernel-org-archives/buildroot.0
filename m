@@ -1,37 +1,23 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 28 Jan 2010 20:45:25 +0000 (UTC)
-Subject: [Buildroot] [Bug 1003] New: DHCP options disabled with
-	busybox-1.16.0
-Message-ID: <bug-1003-163@https.bugs.busybox.net/>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 28 Jan 2010 21:49:47 +0100
+Subject: [Buildroot] [PATCH 01/19] zlib: fix headers installation in
+	target directory
+In-Reply-To: <1264554547-9009-2-git-send-email-llandwerlin@gmail.com>
+	(llandwerlin@gmail.com's message of "Wed, 27 Jan 2010 02:08:49 +0100")
+References: <1264554547-9009-1-git-send-email-llandwerlin@gmail.com>
+	<1264554547-9009-2-git-send-email-llandwerlin@gmail.com>
+Message-ID: <87ljfilztg.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1003
+>>>>> "llandwerlin" == llandwerlin  <llandwerlin@gmail.com> writes:
 
-           Summary: DHCP options disabled with busybox-1.16.0
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: buildroot at istwok.net
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+ llandwerlin> From: Lionel Landwerlin <llandwerlin@gmail.com>
 
-
-In busybox-1.16.0, the CONFIG_APP_xxDHCPxx configuration options were changed
-to CONFIG_xxDHCPxx (i.e. the "APP" part was dropped.  This causes the DHCP
-options to be disabled when the default, busybox-1.13.x.config is used.
-
+Committed, thanks.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
