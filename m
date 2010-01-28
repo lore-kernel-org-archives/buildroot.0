@@ -1,75 +1,70 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Wed, 27 Jan 2010 20:23:05 +0100
-Subject: [Buildroot] uClibc copying kernel headers
-In-Reply-To: <4B608C1A.70901@carallon.com>
-References: <4B608C1A.70901@carallon.com>
-Message-ID: <20100127192305.GA32049@mx.loc>
+From: llandwerlin at gmail.com <llandwerlin@gmail.com>
+Date: Thu, 28 Jan 2010 01:30:28 +0100
+Subject: [Buildroot] [PATCH 1/2] package: Add $(HOST_DIR)/usr/lib to
+	LD_LIBRARY_PATH for make & configure env variables
+In-Reply-To: <1264554547-9009-13-git-send-email-llandwerlin@gmail.com>
+References: <1264554547-9009-13-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1264638629-24149-1-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jan 27, 2010 at 06:55:22PM +0000, Will Wagner wrote:
->I have been trying to work out who copied the kernel headers from
->toolchain into staging. It appears this is done in uclibc.mk
->
->Looking at the makefile this seems to happen three times, first
->copying into $(TOOLCHAIN_DIR)/uClibc_dev/usr/include, then into
->$(STAGING_DIR)/usr/include and finally into $(TARGET_DIR)/usr/include
->(only if libc.a is on target)
+From: Lionel Landwerlin <llandwerlin@gmail.com>
 
-Some time ago we had the kernel sources unpacked into one place and
-acted on this one copy. This was later on changed to have (at least) two
-places where unpacked kernel tree lives. Just wastes space for no good
-reason (and complicates stuff along the way). Just related but i guess
-your users would welcome the time and space savings by just having one.
->
->All of these cases have different behaviour depending on whether ifeq
->($(LINUX_HEADERS_IS_KERNEL),y) is true. if it is it just copies all
+Some packages like icu requires to be compiled against the host system
+first to be able to compile against the target. This is due to the
+usage of self generated binaries by the package to build itself. When
+the generated tools also depends on generated libraries it is required
+to add the path to these libraries in the library path
+(LD_LIBRARY_PATH).
 
-As you may remember older (as in pre 2.6.13 or so) kernels had to use
-manually sanitized headers. LINUX_HEADERS_IS_KERNEL previously ment that
-you could make headers_install (or however it's called) and get useable
-headers out of the kernel release tarball -- as opposed to headers for
-approx. <=2.6.12. ISTR that there was also the scenario where the
-kernel-headers wouldn't come from the kernel-tarball some were about to
-build (and run) but distributed by a third-party, and in these cases the
-above was also false (and potentially asking for trouble due to
-mismatches).
+Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
+---
+ package/Makefile.in |   13 +++++++++----
+ 1 files changed, 9 insertions(+), 4 deletions(-)
 
-HTH,
-
->th files, otherwise it picks out a specific subset. However search
->all the buildroot files LINUX_HEADERS_IS_KERNEL is never mentioned
->except in uclibc.mk
->
->Looking back through earlier buildroot versions, Peter removed the
->last mention to LINUX_HEADERS_IS_KERNEL with this commit to remove
->2.4.x kernel header support http://lists.busybox.net/pipermail/buildroot/2009-February/026144.html
->
->It appears that before this LINUX_HEADERS_IS_KERNEL was set true for
->2.6.x and false for 2.4.x. It looks to me like that change broke the
->copying of kernel headers for 2.6.x and left code in uclibc.mk that
->was meant for 2.4.x headers.
->
->I think I can just change uclibc.mk so that it acts as if
->LINUX_HEADERS_IS_KERNEL is set.
->
->Does this look right?
->
->As an aside there looks to be an error in uclibc.mk at the moment on
->line 429, although that is code that i think should be removed.
->
->I will attempt to make the changes and if it all works I will submit a patch
->
->Will
->
->
->
->
->
->_______________________________________________
->buildroot mailing list
->buildroot at busybox.net
->http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/Makefile.in b/package/Makefile.in
+index e643577..c3650d6 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -228,15 +228,18 @@ TARGET_CONFIGURE_OPTS=PATH=$(TARGET_PATH) \
+ 		PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)" \
+ 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+ 		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig:$(PKG_CONFIG_PATH)" \
+-		STAGING_DIR="$(STAGING_DIR)"
++		STAGING_DIR="$(STAGING_DIR)" \
++		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)"
+ 
+ TARGET_CONFIGURE_ENV=\
+ 	CFLAGS="$(TARGET_CFLAGS)" \
+ 	CXXFLAGS="$(TARGET_CXXFLAGS)" \
+ 	LDFLAGS="$(TARGET_LDFLAGS)" \
+ 	FCFLAGS="$(TARGET_FCFLAGS)" \
++	LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)"
+ 
+-TARGET_MAKE_ENV=PATH=$(TARGET_PATH)
++TARGET_MAKE_ENV=PATH=$(TARGET_PATH) \
++		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)"
+ 
+ HOST_CONFIGURE_OPTS=PATH=$(HOST_PATH) \
+ 		AR="$(HOSTAR)" \
+@@ -274,11 +277,13 @@ HOST_CONFIGURE_OPTS=PATH=$(HOST_PATH) \
+ 		ORIGINAL_NM_FOR_TARGET="$(TARGET_NM)" \
+ 		ORIGINAL_OBJDUMP_FOR_TARGET="$(TARGET_OBJDUMP)" \
+ 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+-		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig"
++		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig" \
++		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)"
+ 
+ HOST_MAKE_ENV=PATH=$(HOST_PATH) \
+ 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+-		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig"
++		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig" \
++		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)"
+ 
+ 
+ #######################################################################
+-- 
+1.6.6
