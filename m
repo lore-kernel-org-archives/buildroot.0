@@ -1,24 +1,20 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 28 Jan 2010 22:34:04 +0100
-Subject: [Buildroot] [PATCH 10/19] readline: convert to autotools
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 28 Jan 2010 22:31:27 +0100
+Subject: [Buildroot] [git commit master] readline: convert to autotools
 	infrastructure
-In-Reply-To: <1264554547-9009-11-git-send-email-llandwerlin@gmail.com>
-	(llandwerlin@gmail.com's message of "Wed, 27 Jan 2010 02:08:58 +0100")
-References: <1264554547-9009-1-git-send-email-llandwerlin@gmail.com>
-	<1264554547-9009-11-git-send-email-llandwerlin@gmail.com>
-Message-ID: <87hbq5ncc3.fsf@macbook.be.48ers.dk>
+Message-ID: <20100128214805.C825D77751@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "llandwerlin" == llandwerlin  <llandwerlin@gmail.com> writes:
 
- llandwerlin> From: Lionel Landwerlin <llandwerlin@gmail.com>
+commit: http://git.buildroot.net/buildroot/commit/?id=fe6e67ba96b7fedf91faac7992813f7233a5e58b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-You forgot to rename the patches so the infrastructure picks them
-up. I've fixed that and committed, thanks.
+[Peter: renamed patches to get picked up by infrastructure]
+Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 
--- 
-Bye, Peter Korsgaard
+Patch is too large, so refusing to show it
