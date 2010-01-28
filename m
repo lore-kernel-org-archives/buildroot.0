@@ -1,7 +1,8 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+From: Lionel Landwerlin <llandwerlin@gmail.com>
 Date: Thu, 28 Jan 2010 16:05:40 +0100
-Subject: [Buildroot] [git commit master] Bump dnsmasq to 2.52
-Message-ID: <20100128150631.0F44077719@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] flex: convert to autotools
+	infrastructure
+Message-ID: <20100128150632.73C0477719@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,51 +10,156 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3416f262f9c1120eb7900b83615b453f99896258
+commit: http://git.buildroot.net/buildroot/commit/?id=4bbd68f4894d07834334518f35d7c4de10c3b763
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Closes #961.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                    |    3 ++-
- package/dnsmasq/dnsmasq.mk |    2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/flex/flex.mk |  125 ++++++++------------------------------------------
+ 1 files changed, 19 insertions(+), 106 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 25b955c..a0a6e08 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -5,7 +5,7 @@
- 	New packages: libcdaudio, libdvdnav, libdvdread, hostapd, tcpreplay
+diff --git a/package/flex/flex.mk b/package/flex/flex.mk
+index d8a85bd..223f58e 100644
+--- a/package/flex/flex.mk
++++ b/package/flex/flex.mk
+@@ -9,118 +9,31 @@ FLEX_SOURCE:=flex_$(FLEX_VERSION).orig.tar.gz
+ FLEX_PATCH:=flex_$(FLEX_VERSION)-$(FLEX_PATCH_VERSION).diff.gz
+ FLEX_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/f/flex
+ FLEX_DIR:=$(BUILD_DIR)/flex-$(FLEX_VERSION)
+-FLEX_CAT:=$(ZCAT)
+-FLEX_BINARY:=flex
+-FLEX_TARGET_BINARY:=usr/bin/flex
  
- 	Updated/fixed packages: autoconf, bind, binutils, bootutils, busybox,
--	directfb, e2fsprogs, gstreamer, gst-plugins-bad, hal, iptables,
-+	directfb, dnsmasq, e2fsprogs, gstreamer, gst-plugins-bad, hal, iptables,
- 	iw, jpeg, kismet, libfuse, libpcap, libungif, lighttpd, mesa, mpg123,
- 	mtd-utils, neon, openvpn, pcre, qt, rpm, sdl, sdl_ttf, sqlite, sshfs,
- 	tremor, u-boot, usb_modeswitch, usbutils, wpa_supplicant, xfsprogs
-@@ -37,6 +37,7 @@
- 	#931: Bump kismet package to 2010-01-R1
- 	#937: Bump openvpn package to 2.1.1
- 	#943: Bump sqlite package to 3.6.22
-+	#961: Bump dnsmasq to 2.52
+-$(DL_DIR)/$(FLEX_SOURCE):
+-	 $(call DOWNLOAD,$(FLEX_SITE),$(FLEX_SOURCE))
++# lex -> flex
++define FLEX_INSTALL_LEX
++cd $(TARGET_DIR)/usr/bin && ln -snf flex lex
++endef
  
- 2009.11, Released December 1st, 2009:
+-$(DL_DIR)/$(FLEX_PATCH):
+-	 $(call DOWNLOAD,$(FLEX_SITE),$(FLEX_PATCH))
++define FLEX_UNINSTALL_LEX
++-rm $(TARGET_DIR)/usr/bin/lex
++endef
  
-diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
-index 6d66d09..86b3eef 100644
---- a/package/dnsmasq/dnsmasq.mk
-+++ b/package/dnsmasq/dnsmasq.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
+-flex-source: $(DL_DIR)/$(FLEX_SOURCE) $(DL_DIR)/$(FLEX_PATCH)
++FLEX_POST_INSTALL_HOOKS += FLEX_INSTALL_LEX
++FLEX_POST_CLEAN_HOOKS += FLEX_UNINSTALL_LEX
  
--DNSMASQ_VERSION = 2.51
-+DNSMASQ_VERSION = 2.52
- DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
- DNSMASQ_AUTORECONF = NO
- DNSMASQ_MAKE_ENV = CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)"
+-$(FLEX_DIR)/.unpacked: $(DL_DIR)/$(FLEX_SOURCE) $(DL_DIR)/$(FLEX_PATCH)
+-	$(FLEX_CAT) $(DL_DIR)/$(FLEX_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-ifneq ($(FLEX_PATCH),)
+-	toolchain/patch-kernel.sh $(FLEX_DIR) $(DL_DIR) $(FLEX_PATCH)
+-	if [ -d $(FLEX_DIR)/debian/patches ]; then \
+-		toolchain/patch-kernel.sh $(FLEX_DIR) $(FLEX_DIR)/debian/patches \*.patch; \
+-	fi
+-endif
+-	$(CONFIG_UPDATE) $(FLEX_DIR)
+-	touch $@
+-
+-$(FLEX_DIR)/.configured: $(FLEX_DIR)/.unpacked
+-	(cd $(FLEX_DIR); rm -rf config.cache; \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		$(TARGET_CONFIGURE_ARGS) \
+-		./configure $(QUIET) \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		--prefix=/usr \
+-		--exec-prefix=/usr \
+-		--bindir=/usr/bin \
+-		--sbindir=/usr/sbin \
+-		--libdir=/lib \
+-		--libexecdir=/usr/lib \
+-		--sysconfdir=/etc \
+-		--datadir=/usr/share \
+-		--localstatedir=/var \
+-		--mandir=/usr/share/man \
+-		--infodir=/usr/share/info \
+-		--includedir=$(TARGET_DIR)/usr/include \
+-		$(DISABLE_NLS) \
+-		$(DISABLE_LARGEFILE) \
+-	)
+-	touch $@
+-
+-$(FLEX_DIR)/$(FLEX_BINARY): $(FLEX_DIR)/.configured
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(FLEX_DIR)
+-
+-$(TARGET_DIR)/$(FLEX_TARGET_BINARY): $(FLEX_DIR)/$(FLEX_BINARY)
+-	$(MAKE1) \
+-	    prefix=$(TARGET_DIR)/usr \
+-	    exec_prefix=$(TARGET_DIR)/usr \
+-	    bindir=$(TARGET_DIR)/usr/bin \
+-	    sbindir=$(TARGET_DIR)/usr/sbin \
+-	    libexecdir=$(TARGET_DIR)/usr/lib \
+-	    datadir=$(TARGET_DIR)/usr/share \
+-	    sysconfdir=$(TARGET_DIR)/etc \
+-	    sharedstatedir=$(TARGET_DIR)/usr/com \
+-	    localstatedir=$(TARGET_DIR)/var \
+-	    libdir=$(TARGET_DIR)/usr/lib \
+-	    infodir=$(TARGET_DIR)/usr/info \
+-	    mandir=$(TARGET_DIR)/usr/man \
+-	    includedir=$(TARGET_DIR)/usr/include \
+-	    -C $(FLEX_DIR) install
++# libfl installation
+ ifeq ($(BR2_PACKAGE_FLEX_LIBFL),y)
+-	install -D $(FLEX_DIR)/libfl.a $(STAGING_DIR)/usr/lib/libfl.a
+-endif
+-ifneq ($(BR2_HAVE_INFOPAGES),y)
+-	rm -rf $(TARGET_DIR)/usr/share/info
+-endif
+-ifneq ($(BR2_HAVE_MANPAGES),y)
+-	rm -rf $(TARGET_DIR)/usr/share/man
+-endif
+-	rm -rf $(TARGET_DIR)/share/locale
+-	rm -rf $(TARGET_DIR)/usr/share/doc
+-	(cd $(TARGET_DIR)/usr/bin; ln -snf flex lex)
++define FLEX_INSTALL_LIBFL
++install -D $(FLEX_DIR)/libfl.a $(STAGING_DIR)/usr/lib/libfl.a
++endef
+ 
+-flex: $(TARGET_DIR)/$(FLEX_TARGET_BINARY)
++define FLEX_UNINSTALL_LIBFL
++-rm $(STAGING_DIR)/lib/libfl.a
++endef
+ 
+-flex-clean:
+-	$(MAKE) \
+-	    prefix=$(TARGET_DIR)/usr \
+-	    exec_prefix=$(TARGET_DIR)/usr \
+-	    bindir=$(TARGET_DIR)/usr/bin \
+-	    sbindir=$(TARGET_DIR)/usr/sbin \
+-	    libexecdir=$(TARGET_DIR)/usr/lib \
+-	    datadir=$(TARGET_DIR)/usr/share \
+-	    sysconfdir=$(TARGET_DIR)/etc \
+-	    sharedstatedir=$(TARGET_DIR)/usr/com \
+-	    localstatedir=$(TARGET_DIR)/var \
+-	    libdir=$(TARGET_DIR)/usr/lib \
+-	    infodir=$(TARGET_DIR)/usr/share/info \
+-	    mandir=$(TARGET_DIR)/usr/share/man \
+-	    includedir=$(TARGET_DIR)/usr/include \
+-		-C $(FLEX_DIR) uninstall
+-	rm -f $(TARGET_DIR)/usr/bin/lex
+-ifeq ($(BR2_PACKAGE_FLEX_LIBFL),y)
+-	-rm $(STAGING_DIR)/lib/libfl.a
++FLEX_POST_INSTALL_HOOKS += FLEX_INSTALL_LIBFL
++FLEX_POST_CLEAN_HOOKS += FLEX_UNINSTALL_LIBFL
+ endif
+-	-$(MAKE) -C $(FLEX_DIR) clean
+-
+-flex-dirclean:
+-	rm -rf $(FLEX_DIR)
+ 
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_FLEX),y)
+-TARGETS+=flex
+-endif
++$(eval $(call AUTOTARGETS,package,flex))
 -- 
 1.6.3.3
