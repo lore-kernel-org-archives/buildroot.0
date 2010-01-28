@@ -1,8 +1,7 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 28 Jan 2010 16:05:40 +0100
-Subject: [Buildroot] [git commit master] webkit: fix dependencies on host
-	tools flex and gperf
-Message-ID: <20100128150633.DB7C877719@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] CHANGES: add flex, gperf and webkit
+Message-ID: <20100128150634.2676277719@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,29 +9,34 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f7a6cfc22500b5d9d4057d74ac6f4f238780848d
+commit: http://git.buildroot.net/buildroot/commit/?id=4adcdad1e99e0d0999ce93cc9a8d134ed78c563f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/webkit/webkit.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ CHANGES |   10 +++++-----
+ 1 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/webkit/webkit.mk b/package/webkit/webkit.mk
-index 01baa27..389a5fc 100644
---- a/package/webkit/webkit.mk
-+++ b/package/webkit/webkit.mk
-@@ -11,8 +11,8 @@ WEBKIT_INSTALL_STAGING = YES
- WEBKIT_INSTALL_TARGET = YES
- WEBKIT_LIBTOOL_PATCH = NO
+diff --git a/CHANGES b/CHANGES
+index a4fab3f..bfb7855 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -5,11 +5,11 @@
+ 	New packages: libcdaudio, libdvdnav, libdvdread, hostapd, tcpreplay
  
--WEBKIT_DEPENDENCIES = icu curl libxml2 libxslt libgtk2 sqlite enchant \
--			libsoup
-+WEBKIT_DEPENDENCIES = host-flex host-gperf icu curl libxml2 libxslt	\
-+			libgtk2 sqlite enchant libsoup
+ 	Updated/fixed packages: autoconf, bind, binutils, bootutils, busybox,
+-	directfb, dnsmasq, e2fsprogs, gstreamer, gst-plugins-bad, hal,
+-	iptables, iw, jpeg, kismet, libfuse, libpcap, libungif, lighttpd,
+-	mesa, mpg123, mtd-utils, neon, netstat-nat, openvpn, pcre, qt, rpm,
+-	sdl, sdl_ttf, sqlite, sshfs, tremor, u-boot, usb_modeswitch,
+-	usbutils, wpa_supplicant, xfsprogs
++	directfb, dnsmasq, e2fsprogs, gstreamer, gperf, gst-plugins-bad,
++	flex, hal, iptables, iw, jpeg, kismet, libfuse, libpcap, libungif,
++	lighttpd, mesa, mpg123, mtd-utils, neon, netstat-nat, openvpn, pcre,
++	qt, rpm, sdl, sdl_ttf, sqlite, sshfs, tremor, u-boot, usb_modeswitch,
++	usbutils, webkit, wpa_supplicant, xfsprogs
  
- ifeq ($(BR2_PACKAGE_WEBKIT_X11),y)
- WEBKIT_CONF_OPT = --with-target=x11
+ 	Issues resolved (http://bugs.uclibc.org):
+ 
 -- 
 1.6.3.3
