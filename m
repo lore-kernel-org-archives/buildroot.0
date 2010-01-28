@@ -1,8 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 28 Jan 2010 22:55:42 +0100
-Subject: [Buildroot] [git commit master] dbus: fix target installation with
-	BR2_HAVE_DEVFILES
-Message-ID: <20100128220035.8686C77751@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] libxslt: fix dependency on libxml
+Message-ID: <20100128220035.1D54677751@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,42 +9,54 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3470b376f2dad8325a96b5b85a8802cec716e26f
+commit: http://git.buildroot.net/buildroot/commit/?id=b732fe6db6919183c07618b02981873ba5c22da8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+[Peter: fix indentation]
 Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES              |    2 +-
- package/dbus/dbus.mk |    2 ++
- 2 files changed, 3 insertions(+), 1 deletions(-)
+ CHANGES                    |    2 +-
+ package/libxslt/Config.in  |    1 +
+ package/libxslt/libxslt.mk |    2 +-
+ 3 files changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/CHANGES b/CHANGES
-index 2fc503e..2076950 100644
+index 383f0a8..2fc503e 100644
 --- a/CHANGES
 +++ b/CHANGES
-@@ -5,7 +5,7 @@
- 	New packages: libcdaudio, libdvdnav, libdvdread, hostapd, tcpreplay
- 
+@@ -7,7 +7,7 @@
  	Updated/fixed packages: at, autoconf, bash, bind, binutils, bootutils,
--	busybox, directfb, dnsmasq, e2fsprogs, gstreamer, gperf,
-+	busybox, dbus, directfb, dnsmasq, e2fsprogs, gstreamer, gperf,
+ 	busybox, directfb, dnsmasq, e2fsprogs, gstreamer, gperf,
  	gst-plugins-bad, gvfs, flex, hal, iptables, iw, jpeg, kismet, libfuse,
- 	libglib2, libpcap, libungif, libxml2, libxslt, lighttpd, mesa, mpg123,
+-	libglib2, libpcap, libungif, libxml2, lighttpd, mesa, mpg123,
++	libglib2, libpcap, libungif, libxml2, libxslt, lighttpd, mesa, mpg123,
  	mtd-utils, neon, netstat-nat, openvpn, pcre, qt, readline, rpm,
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index 276009c..a97fc02 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -81,7 +81,9 @@ $(DBUS_HOOK_POST_BUILD): $(DBUS_TARGET_BUILD)
- 	touch $@
+ 	sawman, sdl, sdl_ttf, ser2net, sqlite, sshfs, tremor, u-boot,
+ 	usb_modeswitch, usbutils, webkit, wpa_supplicant, xfsprogs, zlib
+diff --git a/package/libxslt/Config.in b/package/libxslt/Config.in
+index c318966..1dca1f0 100644
+--- a/package/libxslt/Config.in
++++ b/package/libxslt/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBXSLT
+ 	bool "libxslt"
++	select BR2_PACKAGE_LIBXML2
+ 	help
+ 	  Install the xslt library which is used
+ 	  to transform XML files to other XML files.
+diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
+index 2478800..03c1131 100644
+--- a/package/libxslt/libxslt.mk
++++ b/package/libxslt/libxslt.mk
+@@ -23,7 +23,7 @@ LIBXSLT_CONF_OPT = --with-gnu-ld --enable-shared \
+ 		--without-threads \
+ 		--with-libxml-prefix=$(STAGING_DIR)/usr/
  
- $(DBUS_HOOK_POST_INSTALL): $(DBUS_TARGET_INSTALL_TARGET)
-+ifneq ($(BR2_HAVE_DEVFILES),y)
- 	rm -rf $(TARGET_DIR)/usr/lib/dbus-1.0
-+endif
- 	rm -rf $(TARGET_DIR)/var/lib/dbus
- 	ln -sf /tmp/dbus $(TARGET_DIR)/var/lib/dbus
- 	$(INSTALL) -m 0755 package/dbus/S30dbus $(TARGET_DIR)/etc/init.d
+-LIBXSLT_DEPENDENCIES = $(LIBXSLT_DEPENDENCIES_EXTRA)
++LIBXSLT_DEPENDENCIES = libxml2 $(LIBXSLT_DEPENDENCIES_EXTRA)
+ 
+ $(eval $(call AUTOTARGETS,package,libxslt))
+ 
 -- 
 1.6.3.3
