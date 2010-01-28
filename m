@@ -1,28 +1,37 @@
-From: William Wagner <will_wagner@carallon.com>
-Date: Thu, 28 Jan 2010 18:09:01 +0000
-Subject: [Buildroot] uClibc copying kernel headers
-In-Reply-To: <4B608C1A.70901@carallon.com>
-References: <4B608C1A.70901@carallon.com>
-Message-ID: <4B61D2BD.4050603@carallon.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 28 Jan 2010 20:45:25 +0000 (UTC)
+Subject: [Buildroot] [Bug 1003] New: DHCP options disabled with
+	busybox-1.16.0
+Message-ID: <bug-1003-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Have tested out this patch on a couple of configs and it all seems to 
-work fine.
+https://bugs.busybox.net/show_bug.cgi?id=1003
 
-Patch just switches behaviour to 2.6.x kernels back to way it used to be
+           Summary: DHCP options disabled with busybox-1.16.0
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: buildroot at istwok.net
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
+
+
+In busybox-1.16.0, the CONFIG_APP_xxDHCPxx configuration options were changed
+to CONFIG_xxDHCPxx (i.e. the "APP" part was dropped.  This causes the DHCP
+options to be disabled when the default, busybox-1.13.x.config is used.
+
 
 -- 
-------------------------------------------------------------------------
-Will Wagner                                     will_wagner at carallon.com
-Development Manager                      Office Tel: +44 (0)20 7371 2032
-Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
-------------------------------------------------------------------------
-
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: 0011-Fix-for-improper-copying-of-kernel-headers.patch
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100128/132983d2/attachment.diff>
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
