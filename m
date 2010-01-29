@@ -1,34 +1,42 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 28 Jan 2010 22:59:16 +0000 (UTC)
-Subject: [Buildroot] [Bug 821] cp: illegal operation
-In-Reply-To: <bug-821-163@https.bugs.busybox.net/>
-References: <bug-821-163@https.bugs.busybox.net/>
-Message-ID: <20100128225916.E22FD77752@busybox.osuosl.org>
+From: RK Raggit <rk.raggit@gmail.com>
+Date: Fri, 29 Jan 2010 10:32:29 +0530
+Subject: [Buildroot] cortex-m3 support ?
+In-Reply-To: <4B61BF98.5010903@zacarias.com.ar>
+References: <ec1f3d401001272243l12a18ad9iee47ff04f7c366ea@mail.gmail.com>
+	<87wrz2mbec.fsf@macbook.be.48ers.dk>
+	<4B61BF98.5010903@zacarias.com.ar>
+Message-ID: <ec1f3d401001282102g3a3e5697yc5489df0e957d1fc@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=821
+>
+> > Isn't cortex-m3 for deeply embedded stuff? There's afaik no Linux or
+> > uClibc support, so that's pretty much a showstopper.
+>
+>
+Yes...but there is growing interest to plant linux on it. ARM has made
+available some (preliminary) kernel patches on its linux-stable repository.
 
+Now concerning buildroot - if i know that gcc4.4.x, binutils 2.19.x
+and uclibc 0.9.30 support cortex-m3 architecture, then alongwith the
+attached patch should not i be able to use buildroot to build a shiny
+new cortex-m3 toolchain ? Or is there something else to it that i
+am missing ?
 
+Please let me know.
 
-
-
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2010-01-28 22:59:15 UTC ---
-Sorry, I think you'll run into a lot more problems than that to use BR on
-!Linux.
-E.G.:
-
-git grep 'cp -d'|wc -l
-185
-
-On top of that comes the build systems of the individual packages. I think
-you'll have a lot easier time dual booting / running Linux in a VM.
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thanks
+--RK
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100129/b5212174/attachment.htm>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: cortex-m3.patch
+Type: application/octet-stream
+Size: 1191 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100129/b5212174/attachment.obj>
