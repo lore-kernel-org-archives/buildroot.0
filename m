@@ -1,40 +1,47 @@
-From: Erwin Ardianto <e2rwin@gmail.com>
-Date: Sat, 30 Jan 2010 11:30:18 +0700
-Subject: [Buildroot] Error in patch buildroot for micromonitor
-In-Reply-To: <da6b69481001292027i78f073f8kc6bac74f2af0be06@mail.gmail.com>
-References: <da6b69481001292027i78f073f8kc6bac74f2af0be06@mail.gmail.com>
-Message-ID: <da6b69481001292030w7241abe0j5fd922f120398c58@mail.gmail.com>
+From: =?ISO-8859-1?Q?Sebasti=E1n_Treu?= <sebastian.treu@gmail.com>
+Date: Sat, 30 Jan 2010 04:10:13 -0300
+Subject: [Buildroot] [newbie]: create a rootfs for cross-compile
+Message-ID: <9e4ade691001292310j28576258yf42249f30794639@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm still build embedded linux system using buildroot for embedded pc
-CSB625. bootloader default in CSB625 is micromonitor so i use patc from link
-below to add bootloader in buildroot because standar buildroot for ARM
-architecture in buildroot is u-boot.
+Hi all,
 
-http://lists.busybox.net/pipermail/buildroot/2008-April/020135.html
+I'm new on this list and with this buildroot things. I'm almost 9 days
+on the go and I have some doubts that the Docs do not cover enough for
+me.
 
-patching process was succesfull. buildroot configuration with "make
-menuconfig" nothing trouble. while i do compilation and instalastion using
-command "make", i have some error like this :
+I successfully build a rootfs for a mips processor. The processor is
+an atheros ar7161 from a routerboard. I removed the licensed routerOS
+and I began with openwrt. But, I needed dev packages to build new
+packages. So I installed the openwrt SDK. And then I went into this
+buildroot with uClibc.
 
-/home/erwin/project-2/buildroot-2009.02/build_arm/staging_dir/usr/bin/../lib/gcc/arm-linux-uclibc/4.3.2/libgcc.a(_dvmd_lnx.o):
-In function `__div0':
-/home/erwin/project-2/buildroot-2009.02/toolchain_build_arm/gcc-4.3.2/libgcc/../gcc/config/arm/lib1funcs.asm:1079:
-undefined reference to `raise'
-make[1]: *** [build_CSB625/boot.elf] Error 1
-make[1]: Leaving directory
-`/home/erwin/project-2/buildroot-2009.02/project_build_arm/uclibc/umon/umon_ports/csb625'
-make: ***
-[/home/erwin/project-2/buildroot-2009.02/project_build_arm/uclibc/umon/umon_ports/csb625/build_$(grep]
-Error 2
+My short question is: Is it possible to make an image of a rootfs for
+x86 with the mips toolchain? The only rootfs images I could make was
+for mips, I chrooted from the board successfully, but compiling on
+those board are quite slow. I read the "how to build outside
+buildroot" but I don't get quite well. How "make" will make use of all
+the needed tools? Isn't it easier to build a jail root so you won't
+mess up with your PATH? It's a n00b question, sry.
 
-what must i do to solve my problem? thanks a lot for your attention.
+What I need and What I want is just extract a tarball, and issue a
+make. If the source can't be cross-compiled (as mysql 5) it's just
+another problem. The truth is that I have all the required tools but
+if it's not from the "make menuconfig" I don't know how to use it with
+a source code.
 
-Erwin Ardianto
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100130/9307a4cf/attachment.htm>
+I managed to use the openwrt SDK for ncurses, but it's too messy the
+Makefile one needs to create. I just want to be transparent as usual,
+just "make". :-)
+
+Thanks in advance,
+Regards,
+-- 
+If you want freedom, compile the source. Get gentoo.
+
+Sebasti?n Treu
+http://labombiya.com.ar
