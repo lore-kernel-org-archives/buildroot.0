@@ -1,48 +1,33 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Sun, 31 Jan 2010 19:06:02 +0000 (UTC)
-Subject: [Buildroot] BE: Buildroot How-To for QEMU/ARM (Jim Thomas)
-References: <mailman.7759.1264608677.5110.buildroot@busybox.net>
-	<1531E53627F1F749B4FE809BF2A4EB6701653FAE@WETMEX10.loepfe.com>
-	<965922.2943.qm@web44814.mail.sp1.yahoo.com>
-	<411591.91959.qm@web44811.mail.sp1.yahoo.com>
-Message-ID: <hk4kaq$l50$1@ger.gmane.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 31 Jan 2010 21:13:41 +0000 (UTC)
+Subject: [Buildroot] [Bug 1003] DHCP options disabled with busybox-1.16.0
+In-Reply-To: <bug-1003-163@https.bugs.busybox.net/>
+References: <bug-1003-163@https.bugs.busybox.net/>
+Message-ID: <20100131211342.04806776D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2010-01-31, Jim Thomas <jimthomasembedded@yahoo.com> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=1003
 
-> I think the Buildroot adoption rate might be higher if there
-> were a documented, streamlined way to build the kernel/RFS and
-> execute it under QEMU, with an end-to-end Buildroot build
-> process triggered by a single 'some_arm_defconfig'.  It might
-> serve as a very useful hardware independent reference
-> platform.
 
-I think that would be usefull as well.  Building for ARM boards
-and then running on Qemu is how I got up to speed on the
-Buildroot "environment", but it was harder than it could have
-been because the tutorials for buildroot/ARM/Qemu were out of
-date and the default configs for the two platforms I tried were
-broken (wouldn't build).
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-Keeping a tutorial up-to-date would take some effort. It might
-be easier if it were in a Wiki format that didn't require
-wrestling with the bug-tracker and the submissions and approval
-of patches.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-If the default configs aren't going to be kept up to date, it
-would be nice if there was something to indicate which
-version(s) of Buildroot they did work with.
 
-It would be easy enough to set up an automated test to check
-that all of the default configs build, but checking to see if
-they work is obviously a lot harder.
+
+
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2010-01-31 21:13:40 UTC ---
+Fixed in git, thanks
+
 
 -- 
-Grant Edwards                   grante             Yow! Well, I'm INVISIBLE
-                                  at               AGAIN ... I might as well
-                               visi.com            pay a visit to the LADIES
-                                                   ROOM ...
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
