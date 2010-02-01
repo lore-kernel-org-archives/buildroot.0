@@ -1,44 +1,21 @@
-From: proclus at gnu-darwin.org <proclus@gnu-darwin.org>
-Date: Sun, 28 Feb 2010 23:15:53 -0500 (EST)
-Subject: [Buildroot] radical mormons
-Message-ID: <20100301041553.17256D5C0D3@gnu-darwin.org>
+From: Cameron Hutchison <lists@xdna.net>
+Date: Mon, 01 Feb 2010 00:51:41 -0000
+Subject: [Buildroot] Fetching kernel via git
+Message-ID: <66a1.4b66259d.a7107@getafix.xdna.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Is there some way to configure buildroot to fetch the kernel sources
+via git?
 
-Those of you who have been following mormonism on the web
-for many years will probably recognize The Radical Mormon
-publication.  This was likely the first attempt to make
-a web portal for latter-day saint people, and this pioneering
-effort helped to inspire many other sites to do likewise.  
-Radical set itself apart as a place where devout and sincere
-LDS and mormons could intelligently discuss controversial
-doctrines in a positive light, at a time when the anti-mormon
-forces were very powerful on the web.  The publication has been
-active off and on ever since that time.  If you are not
-familiar with it, you might want to have a look at it.  This
-site broke new ground at the time that it was started in 1999.
+I am currently downloading my third complete kernel source tree for
+2.6.32.7, previously having downloaded 2.6.23.3 and 2.6.31.6.
 
-http://proclus.tripod.com/radical/
-
-For those who are already familiar with The Radical Mormon,
-you might be interested to know that the editors and 
-contributors have recently started work on some historical
-information regarding the publication, which provides many
-links to related websites.  You can have an advance look, 
-and see as it evolves.  
-
-http://proclus.tripod.com/radical/editor.html
-
-Some of you may even like to contribute something; help us
-fix broken links, contribute a news item, editorial, or
-personal story.  If you were a part of the activity that
-spawned The Radical Mormon, you might like to submit your
-link for inclusion on our contributors page.
-
-Regards,
-proclus
-http://www.gnu-darwin.org/
+I keep a git repository with a clone of Linus's public tree and the
+stable trees, so it would save greatly on bandwidth and time if
+buildroot could clone the kernel from that local repository instead of
+downloading a source tarball every time the extraversion bumps up a
+version.
