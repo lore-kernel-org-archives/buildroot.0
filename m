@@ -1,44 +1,34 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon,  1 Feb 2010 17:02:27 +0000 (UTC)
-Subject: [Buildroot] [Bug 1015] New: [SECURITY] Bump bind to 9.5.1-P2
-Message-ID: <bug-1015-163@https.bugs.busybox.net/>
+From: Francisco Gonzalez <gzmorell@gmail.com>
+Date: Mon, 1 Feb 2010 18:28:01 +0100
+Subject: [Buildroot] New package ser2net request
+In-Reply-To: <87vdemnt7r.fsf@macbook.be.48ers.dk>
+References: <fffd86390912160840v71e07dfta2d23e1cab805012@mail.gmail.com>
+	<87vdemnt7r.fsf@macbook.be.48ers.dk>
+Message-ID: <fffd86391002010928u274d9887n14c7aef562198c9@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1015
+2010/1/28 Peter Korsgaard <jacmet@uclibc.org>
 
-              Host: i686-linux
-            Target: arm-softfloat-linux
-           Summary: [SECURITY] Bump bind to 9.5.1-P2
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Outdated package
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: gustavo at zacarias.com.ar
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+> >>>>> "Francisco" == Francisco Gonzalez <gzmorell@gmail.com> writes:
+>
+> Committed with small whitespace fixes / cleanups.
+>
+> Notice that your mailer corrupted the patch, consider using git
+> send-email next time.
+>
+> OK, I will use git send-email next time.
+Sorry for the time you have had to waste.
+
+Francisco.
 
 
-Created an attachment (id=1021)
- --> (https://bugs.busybox.net/attachment.cgi?id=1021)
-Bump bind to 9.5.1-P2
-
-CVE-2009-4022: BIND 9 Cache Update From Additional Section
-CVE-2010-0097: BIND 9 DNSSEC Validation Code Could Cause Bogus NXDOMAIN
-Responses
-
-All previous versions of bind are vulnerable.
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+> --
+> Bye, Peter Korsgaard
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100201/d58bc0fe/attachment.htm>
