@@ -1,8 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  2 Feb 2010 18:15:11 +0000 (UTC)
-Subject: [Buildroot] [Bug 1027] New: Busybox flqsh commands conflict with
- those from mtd-utils
-Message-ID: <bug-1027-163@https.bugs.busybox.net/>
+Date: Tue,  2 Feb 2010 20:06:19 +0000 (UTC)
+Subject: [Buildroot] [Bug 1027] Busybox flqsh commands conflict with those
+	from mtd-utils
+In-Reply-To: <bug-1027-163@https.bugs.busybox.net/>
+References: <bug-1027-163@https.bugs.busybox.net/>
+Message-ID: <20100202200620.14A677770A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,25 +13,19 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=1027
 
-           Summary: Busybox flqsh commands conflict with those from mtd-
-                    utils
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: buildroot at istwok.net
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+
+Peter Korsgaard <jacmet@uclibc.org> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
 
 
-The new busybox-1.16.x.config enables some flash related commands that can
-conflict with the same commands in the mtd-utils package.  If both are enabled,
-the busybox binary gets overwritten by the mtd-utils binary during the build.
+
+
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2010-02-02 20:06:18 UTC ---
+That is how we normally do it (E.G. let the big versions "win" if both are
+enabled). What would you suggest we do instead?
 
 
 -- 
