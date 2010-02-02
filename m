@@ -1,34 +1,38 @@
-From: William Wagner <will_wagner@carallon.com>
-Date: Tue, 02 Feb 2010 16:05:03 +0000
-Subject: [Buildroot] libglib2 copies unwanted things to target
-Message-ID: <4B684D2F.5090404@carallon.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue,  2 Feb 2010 18:15:11 +0000 (UTC)
+Subject: [Buildroot] [Bug 1027] New: Busybox flqsh commands conflict with
+ those from mtd-utils
+Message-ID: <bug-1027-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+https://bugs.busybox.net/show_bug.cgi?id=1027
 
-Have added the libglib2 package to my target and it seems to copy over a 
-load of unwanted things into the target filesystem. In particular it 
-copies a load of help files to target/usr/share/gtk-doc
+           Summary: Busybox flqsh commands conflict with those from mtd-
+                    utils
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: buildroot at istwok.net
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-The package uses the autotools framework which I'm not expert on so not 
-sure the best way to tackle this. Should there just be a post target 
-install step to go round and delete the unwanted files? I guess better 
-would be to change the glib2 install target to one that does not copy 
-over the help but I'm not familiar with the package so not sure if that 
-is possible.
 
-What does anyone suggest?
+The new busybox-1.16.x.config enables some flash related commands that can
+conflict with the same commands in the mtd-utils package.  If both are enabled,
+the busybox binary gets overwritten by the mtd-utils binary during the build.
 
-Thanks
-Will
 
 -- 
-------------------------------------------------------------------------
-Will Wagner                                     will_wagner at carallon.com
-Development Manager                      Office Tel: +44 (0)20 7371 2032
-Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
-------------------------------------------------------------------------
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
