@@ -1,54 +1,32 @@
-From: M.A. Hockings <veeshooter@hockings.net>
-Date: Wed, 03 Feb 2010 17:02:40 -0500
-Subject: [Buildroot] building buildroot is not successful
-Message-ID: <4B69F280.9070301@hockings.net>
+From: Cameron Hutchison <lists@xdna.net>
+Date: Wed, 03 Feb 2010 22:13:10 -0000
+Subject: [Buildroot] Copying extra libs into image using external
+	toolchain
+References: <39a5.4b68b030.ecb50@getafix.xdna.net> <hkaeil$bis$1@ger.gmane.org>
+Message-ID: <6267.4b69f4f6.222b@getafix.xdna.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Please be gentle with me, I am yet learning Linux and all.  For this I 
-have looked back through the archives but don't see anything that I 
-recognize as being the same problem.
+Grant Edwards <grant.b.edwards@gmail.com> writes:
 
-I am trying to build buildroot on a Centos 5.4 box.  The build fails 
-with a permission denied error when accessing package/config/mconf but 
-it is not clear to me why.  I extracted the source with my id into a 
-directory for which I have full access so I would not expect simple 
-authority to be the problem.
+>On 2010-02-02, Cameron Hutchison <lists@xdna.net> wrote:
 
-Thanks for any suggestions
+>> When I build the image, this library [libstdc++] is not copied into
+>> it. The uClibc libraries are copied.
+>> What do I need to do to get this library copied into the image? 
 
-m
+>I wrote a shell script that does the "make" and then copies to
+>the proper locations the various libraries and include files
+>that buildroot forgets.  
 
+Thanks for that info. I'll add an extra step to my build process. I
+guess I just wanted to make sure I wasn't missing anything built into
+buildroot since...
 
-[xxxxxxxx at eMash buildroot-2009.11]$ make menuconfig
-make CC="/usr/bin/gcc" -C package/config mconf
-make[1]: Entering directory `/media/disk/buildroot-2009.11/package/config'
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE  
--g -O2  -c conf.c -o conf.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE  
--g -O2  -c kxgettext.c -o kxgettext.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE  
--g -O2  -c lxdialog/checklist.c -o lxdialog/checklist.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE  
--g -O2  -c lxdialog/inputbox.c -o lxdialog/inputbox.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE  
--g -O2  -c lxdialog/menubox.c -o lxdialog/menubox.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE  
--g -O2  -c lxdialog/textbox.c -o lxdialog/textbox.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE  
--g -O2  -c lxdialog/util.c -o lxdialog/util.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE  
--g -O2  -c lxdialog/yesno.c -o lxdialog/yesno.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE  
--g -O2  -c mconf.c -o mconf.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE  
--g -O2 -I. -c zconf.tab.c -o zconf.tab.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE  
--g -O2  mconf.o zconf.tab.o lxdialog/checklist.o lxdialog/util.o 
-lxdialog/inputbox.o lxdialog/textbox.o lxdialog/yesno.o 
-lxdialog/menubox.o -lncursesw -o mconf
-make[1]: Leaving directory `/media/disk/buildroot-2009.11/package/config'
-/bin/sh: package/config/mconf: Permission denied
+>> The docco talks about "Core C library from external toolchain"
+>> and "Libraries to copy from the external toolchain" options
+
+....but I could not find them anywhere.
