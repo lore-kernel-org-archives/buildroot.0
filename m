@@ -1,11 +1,7 @@
-From: Tony Mozi <spooflinux@hotmail.fr>
-Date: Wed, 3 Feb 2010 16:08:27 +0100
-Subject: [Buildroot] ip: RTNETLINK answers: File exists? uclibc login:??
- [RESOLVED]
-In-Reply-To: <4e1d.4b696c03.c4fdb@getafix.xdna.net>
-References: <SNT129-W58972AB1A1E9CC737751EBB9560@phx.gbl>,
-	<4e1d.4b696c03.c4fdb@getafix.xdna.net>
-Message-ID: <SNT129-W20965328EF1E58B23AE75AB9560@phx.gbl>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 3 Feb 2010 15:14:43 +0100
+Subject: [Buildroot] [git commit master] mtd: tweak default values
+Message-ID: <20100203151850.8B9E077761@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,78 +9,49 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-It's OK :)
-Generic serial port config was not enable.
-I activated it and I changed 
-ttyS0::respawn:/sbin/getty -L ttyS0 115200 vt100 # GENERIC_SERIAL
-by
-ttyS0::respawn:/sbin/getty -L ttyUSB0 115200 vt100 # GENERIC_SERIAL
-because I use an USB to RS232 converter.
+commit: http://git.buildroot.net/buildroot/commit/?id=d6e6a2e2e26c67b1aec1a1fcc17f76d410d8aa74
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now, when I start the UART, I receive at the end :
-Welcome to Buildroot
-buildroot login :
+Don't enable uncommon tools by default.
 
-I pass the login and I have an access on the serial console.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/mtd/Config.in |    5 -----
+ 1 files changed, 0 insertions(+), 5 deletions(-)
 
-Good job :)
-
-Tony
-
-
-
-> To: buildroot at busybox.net
-> From: lists at xdna.net
-> Date: Wed, 3 Feb 2010 12:28:51 +0000
-> Subject: Re: [Buildroot] ip: RTNETLINK answers: File exists? uclibc login:??
-> 
-> Tony Mozi <spooflinux@hotmail.fr> writes:
-> 
-> >When I start the board, I have 2 problems :
-> 
-> >1/ On minicom -s : 
-> >Starting network...
-> >ip: RTNETLINK answers: File exists 
-> 
-> This isn't a problem. It occurs (I think) because there are commands in
-> /etc/inittab to initialise the loopback interface, which get executed
-> again when "ifup -a" runs from the /etc/init.d/S40network initscript.
-> You can ignore this error.
-> 
-> 
-> >When I write a command, like ls, there is no effect.
-> >What does it mean?
-> 
-> It means there is nothing listening for your command because...
-> 
-> 
-> >2/ On the LCD of the board :
-> >Welcome to Buildroot
-> >uclibc login:
-> 
-> >Have you got an idea?
-> 
-> ....it looks like you are not running a getty on ttyS0 (or whatever your
-> console is on).
-> 
-> In "make menuconfig", under Target Options --> Generic serial port
-> config, there is the option to set the serial port to run a getty on. If
-> you set this properly, you should end up with a line (uncommented) in
-> /etc/inittab that reads:
-> 
-> ttyS0::respawn:/sbin/getty -L ttyS0 115200 vt100 # GENERIC_SERIAL
-> 
-> This line will allow you to log into the system through minicom. You
-> should see the same prompt there you showed above that was on the LCD.
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
- 		 	   		  
-_________________________________________________________________
-T?l?chargez Internet Explorer 8 et surfez sans laisser de trace !
-http://clk.atdmt.com/FRM/go/182932252/direct/01/
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100203/35b05577/attachment.htm>
+diff --git a/package/mtd/Config.in b/package/mtd/Config.in
+index 01fe611..c77cff8 100644
+--- a/package/mtd/Config.in
++++ b/package/mtd/Config.in
+@@ -44,21 +44,17 @@ config BR2_PACKAGE_MTD_FLASH_UNLOCK
+ 
+ config BR2_PACKAGE_MTD_FTL_CHECK
+ 	bool "ftl_check"
+-	default y
+ 
+ config BR2_PACKAGE_MTD_FTL_FORMAT
+ 	bool "ftl_format"
+-	default y
+ 
+ config BR2_PACKAGE_MTD_JFFS2DUMP
+ 	bool "jffs2dump"
+-	default y
+ 
+ config BR2_PACKAGE_MTD_MKFSJFFS2
+ 	bool "mkfs.jffs2"
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_PACKAGE_LZO
+-	default y
+ 
+ config BR2_PACKAGE_MTD_MTD_DEBUG
+ 	bool "mtd_debug"
+@@ -96,7 +92,6 @@ config BR2_PACKAGE_MTD_SERVE_IMAGE
+ 
+ config BR2_PACKAGE_MTD_SUMTOOL
+ 	bool "sumtool"
+-	default y
+ 
+ config BR2_PACKAGE_MTD_UBIATTACH
+ 	bool "ubiattach"
+-- 
+1.6.3.3
