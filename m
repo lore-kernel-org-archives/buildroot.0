@@ -1,31 +1,22 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 03 Feb 2010 11:50:10 +0100
-Subject: [Buildroot] How to bild the android with buildroot
-In-Reply-To: <77d79b081002022353n512ba2bbsa4b148f96c3e181@mail.gmail.com>
-	(=?utf-8?B?IuybkOyaqeykgCIncw==?= message of "Wed, 3 Feb 2010 16:53:16
-	+0900")
-References: <77d79b081002022353n512ba2bbsa4b148f96c3e181@mail.gmail.com>
-Message-ID: <87fx5isie5.fsf@macbook.be.48ers.dk>
+From: Thomas <tokant@gmx.net>
+Date: Wed, 03 Feb 2010 12:31:50 +0100
+Subject: [Buildroot] AT91, missing kernel include files
+In-Reply-To: <1264861629.5256.24.camel@bernd-desktop>
+References: <1264861629.5256.24.camel@bernd-desktop>
+Message-ID: <1265196710.8149.2.camel@bernd-desktop>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "???" == ???  <uhanraks@gmail.com> writes:
+Hello,
+> 
+> If I compare the kernel include files in include/asm-arm/, I can see,
+> that there are a lot of files and directories missing in the 2.6.28.2
+> kernel. How do I get the include files?
 
- ???> Hello.
- ???> I am mailing to ask a question about android(Google).
+I guess now, this is not a buildroot issue. The include files were
+apparently removed from the kernel tree around the 2.6.23 versions.
 
- ???> I would like to execute the [andriod] build in [buildroot].
- ???> Could you let me know the information related to [andriod] build
- ???> or how I can execute it.
- ???> If you have no idea about it, could you tell me the way to execute the
- ???> build seperating source and environment configuration.
-
-We have no android support in buildroot.
-
-Android requires kernel patches and a completely different userland.
-
--- 
-Bye, Peter Korsgaard
+Thanks, Thomas.
