@@ -1,22 +1,43 @@
-From: =?EUC-KR?B?v/i/68HY?= <uhanraks@gmail.com>
-Date: Wed, 3 Feb 2010 16:53:16 +0900
-Subject: [Buildroot] How to bild the android with buildroot
-Message-ID: <77d79b081002022353n512ba2bbsa4b148f96c3e181@mail.gmail.com>
+From: Tony Mozi <spooflinux@hotmail.fr>
+Date: Wed, 3 Feb 2010 10:47:03 +0100
+Subject: [Buildroot] (no subject)
+Message-ID: <SNT129-W51F0690645057486F188F1B9560@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello.
 
-I am mailing to ask a question about android(Google).
+Hi all,
+I'm fighting with the buildroot and for the moment, it's the king of the ring...
 
-I would like to execute the [andriod] build in [buildroot].
-Could you let me know the information related to [andriod] build
-or how I can execute it.
-If you have no idea about it, could you tell me the way to execute the
-build seperating source and environment configuration.
+Well, I want to make the cross-compilation for an ARM.
+I have make 'make menuconfig', load files, ...
 
-I'm looking forward to your kind respond to my email.
-Thank you. Have a great day!
+When I start the board, I have 2 problems :
+
+1/ On minicom -s : 
+Starting network...
+ip: RTNETLINK answers: File exists 
+
+When I write a command, like ls, there is no effect.
+
+What does it mean?
+
+
+2/ On the LCD of the board :
+Welcome to Buildroot
+uclibc login:
+
+Have you got an idea?
+
+BR
+Tony
+ 		 	   		  
+_________________________________________________________________
+T?l?chargez Internet Explorer 8 et surfez sans laisser de trace !
+http://clk.atdmt.com/FRM/go/182932252/direct/01/
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100203/a3d31fe1/attachment.htm>
