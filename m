@@ -1,85 +1,54 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 3 Feb 2010 20:57:30 +0100
-Subject: [Buildroot] [git commit master] nbd: add server patches missing
-	from 6aac003
-Message-ID: <20100203200134.4835E77744@busybox.osuosl.org>
+From: M.A. Hockings <veeshooter@hockings.net>
+Date: Wed, 03 Feb 2010 17:02:40 -0500
+Subject: [Buildroot] building buildroot is not successful
+Message-ID: <4B69F280.9070301@hockings.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Please be gentle with me, I am yet learning Linux and all.  For this I 
+have looked back through the archives but don't see anything that I 
+recognize as being the same problem.
 
-commit: http://git.buildroot.net/buildroot/commit/?id=67a284d82040d03647fc0e09134cb9e6f367dacd
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+I am trying to build buildroot on a Centos 5.4 box.  The build fails 
+with a permission denied error when accessing package/config/mconf but 
+it is not clear to me why.  I extracted the source with my id into a 
+directory for which I have full access so I would not expect simple 
+authority to be the problem.
 
-Somehow these patches never got added.
+Thanks for any suggestions
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES                                      |    2 +-
- package/nbd/nbd-server-fix-read-eagain.patch |   21 +++++++++++++++++++++
- package/nbd/nbd-server-susv3-legacy.patch    |   11 +++++++++++
- 3 files changed, 33 insertions(+), 1 deletions(-)
- create mode 100644 package/nbd/nbd-server-fix-read-eagain.patch
- create mode 100644 package/nbd/nbd-server-susv3-legacy.patch
+m
 
-diff --git a/CHANGES b/CHANGES
-index 2f914e3..c97a64b 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -8,7 +8,7 @@
- 	bind, binutils, bootutils, busybox, dbus, directfb, dnsmasq,
- 	e2fsprogs, gstreamer, gperf, gst-plugins-bad, gvfs, flex, hal,
- 	iptables, iw, jpeg, kismet, libfuse, libglib2, libpcap, libungif,
--	libxml2, libxslt, lighttpd, mesa, mpg123, mtd-utils, neon,
-+	libxml2, libxslt, lighttpd, mesa, mpg123, mtd-utils, nbd, neon,
- 	netstat-nat, openvpn, pcre, php, qt, readline, rpm, sawman, sdl,
- 	sdl_ttf, ser2net, sqlite, sshfs, tremor, u-boot, usb_modeswitch,
- 	usbutils, webkit, wpa_supplicant, xfsprogs, zlib
-diff --git a/package/nbd/nbd-server-fix-read-eagain.patch b/package/nbd/nbd-server-fix-read-eagain.patch
-new file mode 100644
-index 0000000..b1f966c
---- /dev/null
-+++ b/package/nbd/nbd-server-fix-read-eagain.patch
-@@ -0,0 +1,21 @@
-+--- nbd-2.9.11.orig/nbd-server.c
-++++ nbd-2.9.11/nbd-server.c
-+@@ -304,10 +304,14 @@
-+ 	ssize_t res;
-+ 	while (len > 0) {
-+ 		DEBUG("*");
-+-		if ((res = read(f, buf, len)) <= 0)
-+-			err("Read failed: %m");
-+-		len -= res;
-+-		buf += res;
-++		if ((res = read(f, buf, len)) <= 0) {
-++			if(errno != EAGAIN) {
-++				err("Read failed: %m");
-++			}
-++		} else {
-++			len -= res;
-++			buf += res;
-++		}
-+ 	}
-+ }
-+ 
-diff --git a/package/nbd/nbd-server-susv3-legacy.patch b/package/nbd/nbd-server-susv3-legacy.patch
-new file mode 100644
-index 0000000..58d38e1
---- /dev/null
-+++ b/package/nbd/nbd-server-susv3-legacy.patch
-@@ -0,0 +1,11 @@
-+--- nbd-2.9.11/nbd-server.c	2009-10-01 16:10:15.000000000 +0200
-++++ nbd-2.9.11/nbd-server.c	2009-10-01 16:10:32.000000000 +0200
-+@@ -264,7 +264,7 @@
-+   
-+   	inet_aton(opts->clientname, &client);
-+ 	while (fgets(line,LINELEN,f)!=NULL) {
-+-		if((tmp=index(line, '/'))) {
-++		if((tmp=strchr(line, '/'))) {
-+ 			if(strlen(line)<=tmp-line) {
-+ 				msg4(LOG_CRIT, ERRMSG, line, opts->server->authname);
-+ 				return 0;
--- 
-1.6.3.3
+
+[xxxxxxxx at eMash buildroot-2009.11]$ make menuconfig
+make CC="/usr/bin/gcc" -C package/config mconf
+make[1]: Entering directory `/media/disk/buildroot-2009.11/package/config'
+/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE  
+-g -O2  -c conf.c -o conf.o
+/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE  
+-g -O2  -c kxgettext.c -o kxgettext.o
+/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE  
+-g -O2  -c lxdialog/checklist.c -o lxdialog/checklist.o
+/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE  
+-g -O2  -c lxdialog/inputbox.c -o lxdialog/inputbox.o
+/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE  
+-g -O2  -c lxdialog/menubox.c -o lxdialog/menubox.o
+/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE  
+-g -O2  -c lxdialog/textbox.c -o lxdialog/textbox.o
+/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE  
+-g -O2  -c lxdialog/util.c -o lxdialog/util.o
+/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE  
+-g -O2  -c lxdialog/yesno.c -o lxdialog/yesno.o
+/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE  
+-g -O2  -c mconf.c -o mconf.o
+/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE  
+-g -O2 -I. -c zconf.tab.c -o zconf.tab.o
+/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE  
+-g -O2  mconf.o zconf.tab.o lxdialog/checklist.o lxdialog/util.o 
+lxdialog/inputbox.o lxdialog/textbox.o lxdialog/yesno.o 
+lxdialog/menubox.o -lncursesw -o mconf
+make[1]: Leaving directory `/media/disk/buildroot-2009.11/package/config'
+/bin/sh: package/config/mconf: Permission denied
