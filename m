@@ -1,36 +1,50 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  3 Feb 2010 16:25:54 +0000 (UTC)
-Subject: [Buildroot] [Bug 1027] Busybox flqsh commands conflict with those
-	from mtd-utils
-In-Reply-To: <bug-1027-163@https.bugs.busybox.net/>
-References: <bug-1027-163@https.bugs.busybox.net/>
-Message-ID: <20100203162554.2D7FA776BE@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 3 Feb 2010 17:30:38 +0100
+Subject: [Buildroot] [git commit master] Bump bind to 9.5.1-P2
+Message-ID: <20100203163109.41FC2776BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1027
 
+commit: http://git.buildroot.net/buildroot/commit/?id=49d92ebea75f518e2d3047f27da836ac6fb41e22
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Closes #1015.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|ASSIGNED                    |RESOLVED
-         Resolution|                            |FIXED
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES              |    1 +
+ package/bind/bind.mk |    2 +-
+ 2 files changed, 2 insertions(+), 1 deletions(-)
 
-
-
-
---- Comment #3 from Peter Korsgaard <jacmet@uclibc.org>  2010-02-03 16:25:53 UTC ---
-Ahh, ok - That's something completely else. I have updated the mtd-utils
-package in git to 1.3.1, and fixed the target install to use 'install', which
-doesn't follow symlinks.
-
-
+diff --git a/CHANGES b/CHANGES
+index 27915dd..0a37be7 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -45,6 +45,7 @@
+ 	#973: Bump iw to 0.9.19
+ 	#1003: DHCP options disabled with busybox-1.16.0
+ 	#1009: [SECURITY] Bump php to 5.2.12
++	#1015: [SECURITY] Bump bind to 9.5.1-P2
+ 
+ 2009.11, Released December 1st, 2009:
+ 
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 4661eeb..e1baef7 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-BIND_VERSION = 9.5.2-P1
++BIND_VERSION = 9.5.2-P2
+ BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ BIND_LIBTOOL_PATCH = NO
+ BIND_INSTALL_STAGING = NO
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.6.3.3
