@@ -1,61 +1,42 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Wed, 3 Feb 2010 00:04:37 +0000 (UTC)
-Subject: [Buildroot] Copying extra libs into image using external
-	toolchain
-References: <39a5.4b68b030.ecb50@getafix.xdna.net>
-Message-ID: <hkaeil$bis$1@ger.gmane.org>
+From: Cameron Hutchison <lists@xdna.net>
+Date: Wed, 03 Feb 2010 03:36:19 -0000
+Subject: [Buildroot] Confusion with building at91bootstrap
+Message-ID: <411b.4b68ef33.cfddb@getafix.xdna.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2010-02-02, Cameron Hutchison <lists@xdna.net> wrote:
+I am trying to build an image for an AT91SAM9260EK board and I'm getting
+a little confused with the build ot at91bootstrap. I'm using BR 2009.11
 
-> I have two buildroot (2009.11) configs set up:
-> 1. A config that only builds a toolchain and installs it in
-> /opt/brtc/<srch-tag> (with uClibc and C++ support)
-> 2. A config that uses that toolchain as an external toolchain and builds
-> the entire image (at91bootstrap, u-boot, linux, rootfs)
->
-> In the toolchain's output/target/usr/lib is libstdc++.so - as I
-> specified to build a C++ compiler. 
->
-> When I build the image, this library is not copied into it. The uClibc
-> libraries are copied. 
+When at91bootstrap is configured, the buildroot makefile
+(at91bootstrap.mk) runs "make at91sam9260ek_defconfig" which sets up
+at91bootstrap for building for my specific board.
 
-I ran into this a few weeks ago:
+That config file defines IMG_SIZE to be 0x40000 and passes
+-DIMG_SIZE=0x40000 to the compiler.
 
-http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/19226/
+The buildroot makefile passes -DIMG_SIZE=0x32000. This value comes from
+the buildroot config.
 
-> What do I need to do to get this library copied into the image? 
+This causes a build warning that IMG_SIZE is redefined.
 
-I wrote a shell script that does the "make" and then copies to
-the proper locations the various libraries and include files
-that buildroot forgets.  [There are some kernel headers that
-don't get copied also.]  Here's the bash fragment that does that:
+Apart from that I don't yet know what the correct image size should be,
+it looks like the at91bootstrap integration into buildroot is broken.
+The option to set the image size in the BR config cannot work, since the
+at91bootstrap (2.10) source will attempt to override it anyway. Am I
+missing something here?
 
-        # if toolchain is to be used as external toolchain, some
-        # libraries neeed to be moved into expected locations
-        echo "*** copying libs to expected locations ***"
-        cp -av output/staging/usr/arm-linux-uclibc/lib/* output/staging/lib
+Also, the at91bootstrap defconfig for this board adds the suffix of
+"card" to the output file, making that filename contain "dataflashcard"
+when I have configured for "dataflash" not "dataflashcard". I dont yet
+know what the difference is between these (my board does not appear to
+have any sort of card or slot for one), so I'm not sure what should be
+done here, but it appears inconsistent.
 
-        # some required kernel headers don't get copied 
-        echo "*** copying kernel headers ***"
-        cp -av output/toolchain/linux/include/mtd output/staging/usr/include
+Finally, is this the best place to discuss at91bootstrap and other
+issues related to this board and buildroot, or is there a better forum?
 
-> The docco talks about "Core C library from external toolchain"
-> and "Libraries to copy from the external toolchain" options
-> but I cannot find these under menuconfig.
->
-> The option for "Build/install c++ compiler and libstdc++" are
-> enabled in both configs.
-
-After you do the "make" to build to toolchain, you've got to
-manually copy the libraries into the locations where buildroot
-expects to find them.
-
--- 
-Grant Edwards                   grante             Yow! I'm dressing up in
-                                  at               an ill-fitting IVY-LEAGUE
-                               visi.com            SUIT!!  Too late...
+Thanks
