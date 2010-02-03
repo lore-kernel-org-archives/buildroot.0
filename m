@@ -1,8 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Wed, 3 Feb 2010 15:14:43 +0100
-Subject: [Buildroot] [git commit master] mtd: zlib/lzo is only needed for
-	mkfs.jffs2
-Message-ID: <20100203151850.21E8477761@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] mtd: host support cleanup
+Message-ID: <20100203151849.8E6BB77531@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,47 +9,84 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f85ed72c70925c7953c11fa0526bd77fb8698de2
+commit: http://git.buildroot.net/buildroot/commit/?id=6d34b1d0589ce2a9c15bf95c83effafc85ef62c2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Build host version in build/mtd-utils-<VERSION>-host like other host
+packages, and install into host/usr/sbin.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/mtd/Config.in |    3 ++-
- package/mtd/mtd.mk    |    2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/mtd/mtd.mk |   33 +++++++++++++++++++++------------
+ 1 files changed, 21 insertions(+), 12 deletions(-)
 
-diff --git a/package/mtd/Config.in b/package/mtd/Config.in
-index af71252..01fe611 100644
---- a/package/mtd/Config.in
-+++ b/package/mtd/Config.in
-@@ -1,6 +1,5 @@
- menuconfig BR2_PACKAGE_MTD
- 	bool "mtd/jffs2 utilities"
--	select BR2_PACKAGE_ZLIB
- 	help
- 	  Build mtd/jffs utilities
- 
-@@ -57,6 +56,8 @@ config BR2_PACKAGE_MTD_JFFS2DUMP
- 
- config BR2_PACKAGE_MTD_MKFSJFFS2
- 	bool "mkfs.jffs2"
-+	select BR2_PACKAGE_ZLIB
-+	select BR2_PACKAGE_LZO
- 	default y
- 
- config BR2_PACKAGE_MTD_MTD_DEBUG
 diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-index e4f5917..244fd8e 100644
+index 99bdfa7..e4f5917 100644
 --- a/package/mtd/mtd.mk
 +++ b/package/mtd/mtd.mk
-@@ -132,7 +132,7 @@ $(MTD_TARGET_BINS): $(MTD_BUILD_TARGETS)
- 	mkdir -p $(TARGET_DIR)/usr/sbin
- 	$(INSTALL) -m 0755 $^ $(TARGET_DIR)/usr/sbin
+@@ -6,9 +6,8 @@
+ MTD_VERSION:=1.3.1
+ MTD_SOURCE:=mtd-utils-$(MTD_VERSION).tar.bz2
+ MTD_SITE:=ftp://ftp.infradead.org/pub/mtd-utils
+-MTD_NAME:=mtd-utils-$(MTD_VERSION)
+-MTD_HOST_DIR:= $(TOOLCHAIN_DIR)/$(MTD_NAME)
+-MTD_DIR:=$(BUILD_DIR)/$(MTD_NAME)
++MTD_DIR:=$(BUILD_DIR)/mtd-utils-$(MTD_VERSION)
++MTD_HOST_DIR:= $(MTD_DIR)-host
+ MTD_CAT:=$(BZCAT)
  
--mtd: zlib lzo $(MTD_TARGET_BINS)
-+mtd: $(if $(BR2_PACKAGE_MTD_MKFSJFFS2),zlib lzo) $(MTD_TARGET_BINS)
+ #############################################################
+@@ -17,25 +16,34 @@ MTD_CAT:=$(BZCAT)
+ # needed by target/jffs2root.
+ #
+ #############################################################
+-MKFS_JFFS2 := $(MTD_HOST_DIR)/mkfs.jffs2
+-SUMTOOL := $(MTD_HOST_DIR)/sumtool
++MKFS_JFFS2 := $(HOST_DIR)/usr/sbin/mkfs.jffs2
++SUMTOOL := $(HOST_DIR)/usr/sbin/sumtool
  
- mtd-source: $(DL_DIR)/$(MTD_SOURCE)
+ $(DL_DIR)/$(MTD_SOURCE):
+ 	$(call DOWNLOAD,$(MTD_SITE),$(MTD_SOURCE))
  
+ $(MTD_HOST_DIR)/.unpacked: $(DL_DIR)/$(MTD_SOURCE)
+-	$(MTD_CAT) $(DL_DIR)/$(MTD_SOURCE) | tar -C $(TOOLCHAIN_DIR) $(TAR_OPTIONS) -
++	mkdir -p $(@D)
++	$(MTD_CAT) $^ | tar $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
+ 	toolchain/patch-kernel.sh $(MTD_HOST_DIR) \
+ 		package/mtd/ mtd-utils-\*.patch
+ 	touch $@
+ 
+-$(MKFS_JFFS2): $(MTD_HOST_DIR)/.unpacked
+-	CC="$(HOSTCC)" CROSS= $(MAKE) BUILDDIR=$(MTD_HOST_DIR) \
+-		WITHOUT_XATTR=1 -C $(MTD_HOST_DIR) $(MTD_HOST_DIR)/mkfs.jffs2
++$(MTD_HOST_DIR)/mkfs.jffs2: $(MTD_HOST_DIR)/.unpacked
++	CC="$(HOSTCC)" CFLAGS="$(HOST_CFLAGS)" LDFLAGS="$(HOST_LDFLAGS)" \
++		CROSS= $(MAKE) BUILDDIR=$(MTD_HOST_DIR) \
++		WITHOUT_XATTR=1 -C $(MTD_HOST_DIR) $@
+ 
+-$(SUMTOOL): $(MTD_HOST_DIR)/.unpacked
+-	CC="$(HOSTCC)" CROSS= $(MAKE) BUILDDIR=$(MTD_HOST_DIR) \
+-		WITHOUT_XATTR=1 -C $(MTD_HOST_DIR) $(MTD_HOST_DIR)/sumtool
++$(MKFS_JFFS2): $(MTD_HOST_DIR)/mkfs.jffs2
++	install -m 0755 -D $^ $@
++
++$(MTD_HOST_DIR)/sumtool: $(MTD_HOST_DIR)/.unpacked
++	CC="$(HOSTCC)" CFLAGS="$(HOST_CFLAGS)" LDFLAGS="$(HOST_LDFLAGS)" \
++		CROSS= $(MAKE) BUILDDIR=$(MTD_HOST_DIR) \
++		WITHOUT_XATTR=1 -C $(MTD_HOST_DIR) $@
++
++$(SUMTOOL): $(MTD_HOST_DIR)/sumtool
++	install -m 0755 $^ $@
+ 
+ mtd-host: host-lzo $(MKFS_JFFS2) $(SUMTOOL)
+ 
+@@ -43,6 +51,7 @@ mtd-host-source: $(DL_DIR)/$(MTD_SOURCE)
+ 
+ mtd-host-clean:
+ 	-$(MAKE) -C $(MTD_HOST_DIR) clean
++	rm -f $(MKFS_JFFS2) $(SUMTOOL)
+ 
+ mtd-host-dirclean:
+ 	rm -rf $(MTD_HOST_DIR)
 -- 
 1.6.3.3
