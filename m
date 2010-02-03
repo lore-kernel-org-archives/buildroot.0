@@ -1,33 +1,28 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 3 Feb 2010 17:30:38 +0100
-Subject: [Buildroot] [git commit master] CHANGES: #1027 is closed
-Message-ID: <20100203163109.96D98776BE@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed,  3 Feb 2010 17:04:52 +0000 (UTC)
+Subject: [Buildroot] [Bug 1027] Busybox flqsh commands conflict with those
+	from mtd-utils
+In-Reply-To: <bug-1027-163@https.bugs.busybox.net/>
+References: <bug-1027-163@https.bugs.busybox.net/>
+Message-ID: <20100203170452.19E547772D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=1027
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c317439d4d9e5da8c22371b33a34260b8ec0d5ac
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 0a37be7..2f914e3 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -46,6 +46,7 @@
- 	#1003: DHCP options disabled with busybox-1.16.0
- 	#1009: [SECURITY] Bump php to 5.2.12
- 	#1015: [SECURITY] Bump bind to 9.5.1-P2
-+	#1027: Busybox flash commands conflict with those from mtd-utils
- 
- 2009.11, Released December 1st, 2009:
- 
+
+
+--- Comment #4 from David Engel <buildroot@istwok.net>  2010-02-03 17:04:51 UTC ---
+Thanks.  I should have been clearer about the seriousness of clobbering busybox
+the way it did.
+
+
 -- 
-1.6.3.3
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
