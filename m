@@ -1,49 +1,48 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Thu, 04 Feb 2010 01:01:28 +0100
-Subject: [Buildroot] Copying extra libs into image using external
- toolchain
-In-Reply-To: <6267.4b69f4f6.222b@getafix.xdna.net>
-References: <39a5.4b68b030.ecb50@getafix.xdna.net>
-	<hkaeil$bis$1@ger.gmane.org>  <6267.4b69f4f6.222b@getafix.xdna.net>
-Message-ID: <1265241688.2045.48.camel@coalu.atr>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 4 Feb 2010 12:11:37 +0100
+Subject: [Buildroot] [git commit master] fbdump: don't add target program
+	prefix
+Message-ID: <20100204111215.EFE2D772D7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le mercredi 03 f?vrier 2010 ? 22:13 +0000, Cameron Hutchison a ?crit :
-> Grant Edwards <grant.b.edwards@gmail.com> writes:
-> 
-> >On 2010-02-02, Cameron Hutchison <lists@xdna.net> wrote:
-> 
-> >> When I build the image, this library [libstdc++] is not copied into
-> >> it. The uClibc libraries are copied.
-> >> What do I need to do to get this library copied into the image? 
-> 
-> >I wrote a shell script that does the "make" and then copies to
-> >the proper locations the various libraries and include files
-> >that buildroot forgets.  
-> 
-> Thanks for that info. I'll add an extra step to my build process. I
-> guess I just wanted to make sure I wasn't missing anything built into
-> buildroot since...
-> 
-> >> The docco talks about "Core C library from external toolchain"
-> >> and "Libraries to copy from the external toolchain" options
-> 
-> ....but I could not find them anywhere.
-> 
 
-With external toolchains, buildroot assumes that libstdc++ is installed
-in $(SYSROOT)/lib/ which isn't always the case.
-For example the STLinux toolchain has its libstdc++ installed in
-$(SYSROOT)/usr/lib like your toolchain.
+commit: http://git.buildroot.net/buildroot/commit/?id=d131dba8b22bdc856a8975102e73a9f4795c5fca
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We should rather fix the buildroot script that copies the libraries than
-adding extra scripts outside of buildroot. It's in
-toolchain/external-toolchain/ext-tool.mk
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES                  |    2 +-
+ package/fbdump/fbdump.mk |    1 +
+ 2 files changed, 2 insertions(+), 1 deletions(-)
 
-
+diff --git a/CHANGES b/CHANGES
+index 40b5ae5..088de1f 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -7,7 +7,7 @@
+ 
+ 	Updated/fixed packages: alsa-lib, alsa-utils, at, autoconf, bash,
+ 	bind, binutils, bootutils, busybox, dbus, directfb, dnsmasq,
+-	e2fsprogs, gstreamer, gperf, gst-plugins-bad, gvfs, flex, hal,
++	e2fsprogs, gstreamer, gperf, gst-plugins-bad, gvfs, fbdump, flex, hal,
+ 	iptables, iw, jpeg, kismet, libfuse, libglib2, libpcap, libungif,
+ 	libxml2, libxslt, lighttpd, mesa, mpg123, mtd-utils, nbd, neon,
+ 	netstat-nat, openvpn, pcre, php, qt, readline, rpm, sawman, sdl,
+diff --git a/package/fbdump/fbdump.mk b/package/fbdump/fbdump.mk
+index 521b0fd..eb74d8b 100644
+--- a/package/fbdump/fbdump.mk
++++ b/package/fbdump/fbdump.mk
+@@ -7,6 +7,7 @@ FBDUMP_VERSION:=0.4.2
+ FBDUMP_SOURCE:=fbdump-$(FBDUMP_VERSION).tar.gz
+ FBDUMP_SITE:=http://www.rcdrummond.net/fbdump
+ FBDUMP_AUTORECONF = NO
++FBDUMP_CONF_OPT = --program-prefix=''
+ 
+ $(eval $(call AUTOTARGETS,package,fbdump))
+ 
 -- 
-Lionel Landwerlin <llandwerlin@gmail.com>
+1.6.3.3
