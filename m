@@ -1,33 +1,26 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 05 Feb 2010 12:29:08 +0100
-Subject: [Buildroot] Patch submission
-In-Reply-To: <4B6BFCCB.7000506@carallon.com> (Will Wagner's message of "Fri,
-	05 Feb 2010 11:11:07 +0000")
-References: <4B6BFCCB.7000506@carallon.com>
-Message-ID: <87636bq5tn.fsf@macbook.be.48ers.dk>
+Date: Fri, 05 Feb 2010 16:06:05 +0100
+Subject: [Buildroot] buildroot-2009.11 with older kernel
+In-Reply-To: <13abadeb1002050323o44703d06k5d1b40f536379fe2@mail.gmail.com>
+	(Nuno Pereira's message of "Fri, 5 Feb 2010 11:23:30 +0000")
+References: <13abadeb1002050323o44703d06k5d1b40f536379fe2@mail.gmail.com>
+Message-ID: <87sk9foh7m.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Will" == Will Wagner <will_wagner@carallon.com> writes:
+>>>>> "Nuno" == Nuno Pereira <fxss@iol.pt> writes:
 
- Will> I have submitted a number of patches recently, some of which have been
- Will> committed.
+ Nuno> Hi all,
+ Nuno> Is it possible to use the latest release of buildroot with an
+ Nuno> older kernel,
+ Nuno> e.g. 2.4.20?
 
- Will> My question, mainly to Peter I guess, is what do i have to do to get
- Will> my other patches included? I realise they are slightly larger changes
- Will> and would need some testing. Should I log them in bugzilla so they
- Will> don't get lost?
-
-Yes, please do. Real life has been getting in the way of serious BR
-development lately, sorry about that.
-
-We are getting overdue for a 2010.02-rc1 release, which I'll make after
-FOSDEM (E.G. Monday/Tuesday). This means that no new features will get
-added until after the 2010.02 release, so having those patches in
-bugzilla will ensure that they aren't forgotten.
+You cannot build the C library with such old kernel headers, but the
+resulting rootfs would probably work with the old kernel (unless any of
+the packages uses functionality not in 2.4.x ofcourse).
 
 -- 
 Bye, Peter Korsgaard
