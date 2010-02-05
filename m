@@ -1,46 +1,55 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 4 Feb 2010 12:11:37 +0100
-Subject: [Buildroot] [git commit master] CHANGES: ser2net is a new package
-Message-ID: <20100204111215.CAFFB77771@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri,  5 Feb 2010 06:16:10 +0000 (UTC)
+Subject: [Buildroot] [Bug 1039] New: Not compiled on ubuntu karmic
+Message-ID: <bug-1039-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=1039
 
-commit: http://git.buildroot.net/buildroot/commit/?id=731f3c3ea80f1d8f2e5b04db6ce4c47bc7fc8cbe
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+              Host: x86
+            Target: arm
+           Summary: Not compiled on ubuntu karmic
+           Product: buildroot
+           Version: 2009.11
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: edbond at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES |    7 ++++---
- 1 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index c97a64b..40b5ae5 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -2,7 +2,8 @@
- 
- 	Toolchain: uClibc 0.9.30.2, gcc 4.4.3
- 
--	New packages: libcdaudio, libdvdnav, libdvdread, hostapd, tcpreplay
-+	New packages: libcdaudio, libdvdnav, libdvdread, hostapd, ser2net,
-+	tcpreplay
- 
- 	Updated/fixed packages: alsa-lib, alsa-utils, at, autoconf, bash,
- 	bind, binutils, bootutils, busybox, dbus, directfb, dnsmasq,
-@@ -10,8 +11,8 @@
- 	iptables, iw, jpeg, kismet, libfuse, libglib2, libpcap, libungif,
- 	libxml2, libxslt, lighttpd, mesa, mpg123, mtd-utils, nbd, neon,
- 	netstat-nat, openvpn, pcre, php, qt, readline, rpm, sawman, sdl,
--	sdl_ttf, ser2net, sqlite, sshfs, tremor, u-boot, usb_modeswitch,
--	usbutils, webkit, wpa_supplicant, xfsprogs, zlib
-+	sdl_ttf, sqlite, sshfs, tremor, u-boot, usb_modeswitch, usbutils,
-+	webkit, wpa_supplicant, xfsprogs, zlib
- 
- 	Issues resolved (http://bugs.uclibc.org):
- 
+Created an attachment (id=1045)
+ --> (https://bugs.busybox.net/attachment.cgi?id=1045)
+config
+
+Making all in bin
+make[3]: Entering directory
+`/home/eduard/buildroot-2009.11/output/build/autoconf-2.64/bin'
+autom4te_perllibdir='..'/lib AUTOM4TE_CFG='../lib/autom4te.cfg'        
+../bin/autom4te -B '..'/lib -B '..'/lib         --language M4sh --cache ''
+--melt ./autoconf.as -o autoconf.in
+autom4te: need GNU m4 1.4 or later:
+/home/eduard/buildroot-2009.11/output/host/usr/bin/m4
+make[3]: *** [autoconf.in] Error 1
+make[3]: Leaving directory
+`/home/eduard/buildroot-2009.11/output/build/autoconf-2.64/bin'
+make[2]: *** [all-recursive] Error 1
+make[2]: Leaving directory
+`/home/eduard/buildroot-2009.11/output/build/autoconf-2.64'
+
+m4 (GNU M4) 1.4.13
+
+
 -- 
-1.6.3.3
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
