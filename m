@@ -1,20 +1,33 @@
-From: Nuno Pereira <fxss@iol.pt>
-Date: Fri, 5 Feb 2010 11:23:30 +0000
-Subject: [Buildroot] buildroot-2009.11 with older kernel
-Message-ID: <13abadeb1002050323o44703d06k5d1b40f536379fe2@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 05 Feb 2010 12:29:08 +0100
+Subject: [Buildroot] Patch submission
+In-Reply-To: <4B6BFCCB.7000506@carallon.com> (Will Wagner's message of "Fri,
+	05 Feb 2010 11:11:07 +0000")
+References: <4B6BFCCB.7000506@carallon.com>
+Message-ID: <87636bq5tn.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+>>>>> "Will" == Will Wagner <will_wagner@carallon.com> writes:
 
-Is it possible to use the latest release of buildroot with an older kernel,
-e.g. 2.4.20?
+ Will> I have submitted a number of patches recently, some of which have been
+ Will> committed.
 
-Thanks + Regards,
-Nuno
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100205/02fea4ff/attachment.htm>
+ Will> My question, mainly to Peter I guess, is what do i have to do to get
+ Will> my other patches included? I realise they are slightly larger changes
+ Will> and would need some testing. Should I log them in bugzilla so they
+ Will> don't get lost?
+
+Yes, please do. Real life has been getting in the way of serious BR
+development lately, sorry about that.
+
+We are getting overdue for a 2010.02-rc1 release, which I'll make after
+FOSDEM (E.G. Monday/Tuesday). This means that no new features will get
+added until after the 2010.02 release, so having those patches in
+bugzilla will ensure that they aren't forgotten.
+
+-- 
+Bye, Peter Korsgaard
