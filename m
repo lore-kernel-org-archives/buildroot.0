@@ -1,37 +1,89 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  5 Feb 2010 15:57:40 +0000 (UTC)
-Subject: [Buildroot] [Bug 901] new package: gpsd
-In-Reply-To: <bug-901-163@https.bugs.busybox.net/>
-References: <bug-901-163@https.bugs.busybox.net/>
-Message-ID: <20100205155740.4BFF377766@busybox.osuosl.org>
+From: Tony Mozi <spooflinux@hotmail.fr>
+Date: Fri, 5 Feb 2010 17:01:32 +0100
+Subject: [Buildroot] remove 'buildroot login' for cross compilation
+ linux for an ARM
+In-Reply-To: <4d28d4b51002050238m99ac60ay2d2a0b42b90c4ce@mail.gmail.com>
+References: <SNT129-W71192B9563D39A50DCE52B9540@phx.gbl>,
+	<4d28d4b51002050238m99ac60ay2d2a0b42b90c4ce@mail.gmail.com>
+Message-ID: <SNT129-W397AC20ABCC4B50BE11A7AB9540@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=901
+
+Dear,
+It's ok but I don't understand really this modification?
+Can you explan me?
+Is it possible to modify the '/  #' by another thing when the linux start?
+BR
+
+Date: Fri, 5 Feb 2010 11:38:49 +0100
+Subject: Re: [Buildroot] remove 'buildroot login' for cross compilation linux 	for an ARM
+From: llandwerlin@gmail.com
+To: spooflinux at hotmail.fr
+CC: buildroot at uclibc.org
+
+Something like that :
+
+diff --git a/target/generic/Makefile.in b/target/generic/Makefile.in
+index f77f969..44f78f2 100644
+--- a/target/generic/Makefile.in
++++ b/target/generic/Makefile.in
+@@ -21,7 +21,7 @@ target-generic-issue:
+
+        echo "$(TARGET_GENERIC_ISSUE)" > $(TARGET_DIR)/etc/issue
+ 
+ target-generic-getty:
+-       $(SED) '/# GENERIC_SERIAL$/s~^.*#~$(TARGET_GENERIC_GETTY)::respawn:/sbin/getty -L $(TARGET_GENERIC_GETTY) $(TARGET_GENERIC_GETTY_BAUDRATE) vt100 #~' \
+
++       $(SED) '/# GENERIC_SERIAL$/s~^.*#~$(TARGET_GENERIC_GETTY)::respawn:/bin/sh #~' \
+                $(TARGET_DIR)/etc/inittab
+ 
+ ifneq ($(TARGET_GENERIC_HOSTNAME),)
+
+
+
+On Fri, Feb 5, 2010 at 11:31 AM, Tony Mozi <spooflinux@hotmail.fr> wrote:
 
 
 
 
 
---- Comment #1 from Sebastian Schuberth <sschuberth@gmail.com>  2010-02-05 15:57:38 UTC ---
-Created an attachment (id=1063)
- --> (https://bugs.busybox.net/attachment.cgi?id=1063)
-Adds the gpsd 2.90 package, builds libgpsmm
-
-Here's an alternative patch based on
-
-http://lists.uclibc.org/pipermail/buildroot/2008-August/022273.html
-
-that I've modified to work with the most recent gpsd 2.90 release. I'm linking
-against libstdc++ in order to build libgpsmm. If that's not required / desired,
-simply replace the LDFLAGS stuff in GPSD_CONF_OPT with "--disable-libgpsmm",
-and you will get rid of the C++ runtime dependency.
 
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+
+
+
+
+Hi all,
+I make the cross compilation of Linux-2.6.22.2 for an ARM9.
+When I start my board, I have this message :
+
+Welcome to Buildroot                                                            
+buildroot login:
+
+
+Concerning the login, it's root, but it's possible to remove this step? (to start the board whitout login).
+
+BR
+ 		 	   		  
+Vous cherchez l'int?grale des clips de Michael Jackson ? Bing ! Trouvez !
+
+
+_______________________________________________
+
+buildroot mailing list
+
+buildroot at busybox.net
+
+http://lists.busybox.net/mailman/listinfo/buildroot
+
+ 		 	   		  
+_________________________________________________________________
+Tchattez en direct en en vid?o avec vos amis !  
+http://www.windowslive.fr/messenger/
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100205/bbd58b53/attachment.htm>
