@@ -1,26 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 05 Feb 2010 16:06:05 +0100
-Subject: [Buildroot] buildroot-2009.11 with older kernel
-In-Reply-To: <13abadeb1002050323o44703d06k5d1b40f536379fe2@mail.gmail.com>
-	(Nuno Pereira's message of "Fri, 5 Feb 2010 11:23:30 +0000")
-References: <13abadeb1002050323o44703d06k5d1b40f536379fe2@mail.gmail.com>
-Message-ID: <87sk9foh7m.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri,  5 Feb 2010 15:57:40 +0000 (UTC)
+Subject: [Buildroot] [Bug 901] new package: gpsd
+In-Reply-To: <bug-901-163@https.bugs.busybox.net/>
+References: <bug-901-163@https.bugs.busybox.net/>
+Message-ID: <20100205155740.4BFF377766@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Nuno" == Nuno Pereira <fxss@iol.pt> writes:
+https://bugs.busybox.net/show_bug.cgi?id=901
 
- Nuno> Hi all,
- Nuno> Is it possible to use the latest release of buildroot with an
- Nuno> older kernel,
- Nuno> e.g. 2.4.20?
 
-You cannot build the C library with such old kernel headers, but the
-resulting rootfs would probably work with the old kernel (unless any of
-the packages uses functionality not in 2.4.x ofcourse).
+
+
+
+--- Comment #1 from Sebastian Schuberth <sschuberth@gmail.com>  2010-02-05 15:57:38 UTC ---
+Created an attachment (id=1063)
+ --> (https://bugs.busybox.net/attachment.cgi?id=1063)
+Adds the gpsd 2.90 package, builds libgpsmm
+
+Here's an alternative patch based on
+
+http://lists.uclibc.org/pipermail/buildroot/2008-August/022273.html
+
+that I've modified to work with the most recent gpsd 2.90 release. I'm linking
+against libstdc++ in order to build libgpsmm. If that's not required / desired,
+simply replace the LDFLAGS stuff in GPSD_CONF_OPT with "--disable-libgpsmm",
+and you will get rid of the C++ runtime dependency.
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
