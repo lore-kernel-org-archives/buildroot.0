@@ -1,31 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 6 Feb 2010 17:24:51 +0100
-Subject: [Buildroot] Modify the name of the output image
- 'rootfs.arm.ext2'
-In-Reply-To: <SNT129-W65BE80962A75AA0E8E95F8B9540@phx.gbl>
-References: <SNT129-W65BE80962A75AA0E8E95F8B9540@phx.gbl>
-Message-ID: <20100206172451.6afccbfd@surf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat,  6 Feb 2010 22:48:48 +0000 (UTC)
+Subject: [Buildroot] [Bug 545] Webkit doesn't see gtk-doc.make
+In-Reply-To: <bug-545-163@https.bugs.busybox.net/>
+References: <bug-545-163@https.bugs.busybox.net/>
+Message-ID: <20100206224849.05C9377559@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 5 Feb 2010 17:35:09 +0100
-Tony Mozi <spooflinux@hotmail.fr> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=545
 
-> Is it possible to modify the name of the output image
-> 'rootfs.arm.ext2' (which is in buildroot-2009.11/output/images) by
-> 'rootfs.arm.ext2' (for example)? BR 
 
-For ext2, see the option BR2_TARGET_ROOTFS_EXT2_OUTPUT.
 
-For what kind of use case do you need this ? Is renaming the image
-after building Buildroot a problem ?
 
-Thomas
+
+--- Comment #7 from Dan Dart <dandart@googlemail.com>  2010-02-06 22:48:48 UTC ---
+Not sure if we can set this as resolved. In new buildroot versions I have to
+install the GTK Doc Make package for this to work, but when I do, it works.
+
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
