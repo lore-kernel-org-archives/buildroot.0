@@ -1,34 +1,25 @@
-From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Sun,  7 Feb 2010 17:55:39 +0100
-Subject: [Buildroot] [PATCH 07/10] package: fix install without strip
-In-Reply-To: <1265561742-5924-1-git-send-email-llandwerlin@gmail.com>
-References: <1265561742-5924-1-git-send-email-llandwerlin@gmail.com>
-Message-ID: <1265561742-5924-8-git-send-email-llandwerlin@gmail.com>
+From: Julien Boibessot <julien.boibessot@free.fr>
+Date: Sun, 07 Feb 2010 18:15:38 +0100
+Subject: [Buildroot] .gitignore in BR archives
+In-Reply-To: <87bpg1thcf.fsf@macbook.be.48ers.dk>
+References: <4B6D8476.8050308@free.fr> <87bpg1thcf.fsf@macbook.be.48ers.dk>
+Message-ID: <4B6EF53A.7090401@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Lionel Landwerlin <llandwerlin@gmail.com>
+Peter Korsgaard a ?crit :
+>
+> I don't think it bothers people, so I would prefer to keep it in the
+> tarball (we would need to do special handling to remove it). Other
+> git-using projects like the Linux kernel also ships their .gitignore.
+>   
+ok, so I will use --exclude option of tar to handle my special case (as
+suggested by Michael).
 
-Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
----
- package/Makefile.autotools.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Thanks !
 
-diff --git a/package/Makefile.autotools.in b/package/Makefile.autotools.in
-index 7114bba..96ea453 100644
---- a/package/Makefile.autotools.in
-+++ b/package/Makefile.autotools.in
-@@ -60,7 +60,7 @@ $(2)_LIBTOOL_PATCH		?= YES
- $(2)_USE_CONFIG_CACHE           ?= $(if $(BR2_CONFIG_CACHE),YES,NO)
- $(2)_INSTALL_STAGING_OPT	?= DESTDIR=$$(STAGING_DIR) install
- ifeq ($(BR2_ENABLE_DEBUG),y)
--$(2)_INSTALL_TARGET_OPT		?= DESTDIR=$$(TARGET_DIR)  install-exec
-+$(2)_INSTALL_TARGET_OPT		?= DESTDIR=$$(TARGET_DIR)  install-strip
- else
- $(2)_INSTALL_TARGET_OPT		?= DESTDIR=$$(TARGET_DIR)  install-strip
- endif
--- 
-1.6.6
+Regards,
+Julien
