@@ -1,22 +1,41 @@
 From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Sun,  7 Feb 2010 19:07:42 +0100
-Subject: [Buildroot] [PATCH 00/14] Pull-request: Bumps & new packages
-Message-ID: <1265566076-10628-1-git-send-email-llandwerlin@gmail.com>
+Date: Sun,  7 Feb 2010 19:07:44 +0100
+Subject: [Buildroot] [PATCH 02/14] package: added pre-configure hooks
+In-Reply-To: <1265566076-10628-1-git-send-email-llandwerlin@gmail.com>
+References: <1265566076-10628-1-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1265566076-10628-3-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This series of patchs is probably for the next buildroot release (post
-2010.02), some of these patchs depends on previous patchs I submitted
-here :
-http://lists.busybox.net/pipermail/buildroot/2010-February/031868.html
+From: Lionel Landwerlin <llandwerlin@gmail.com>
 
-It's available from :
-     git://git.potipota.net/buildroot various-bumps
+Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
+---
+ package/Makefile.package.in |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Regards,
-
---
-Lionel Landwerlin
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+index d02706d..79d3a13 100644
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -141,6 +141,7 @@ $(BUILD_DIR)/%/.stamp_patched:
+ # Configure
+ $(BUILD_DIR)/%/.stamp_configured:
+ 	@$(call MESSAGE,"Configuring")
++	$(foreach hook,$($(PKG)_PRE_CONFIGURE_HOOKS),$(call $(hook))$(sep))
+ 	$($(PKG)_CONFIGURE_CMDS)
+ 	$(foreach hook,$($(PKG)_POST_CONFIGURE_HOOKS),$(call $(hook))$(sep))
+ 	$(Q)touch $@
+@@ -281,6 +282,7 @@ $(2)_TARGET_DIRCLEAN =		$$($(2)_DIR)/.stamp_dircleaned
+ # new-style hooks
+ $(2)_POST_EXTRACT_HOOKS           ?=
+ $(2)_POST_PATCH_HOOKS             ?=
++$(2)_PRE_CONFIGURE_HOOKS          ?=
+ $(2)_POST_CONFIGURE_HOOKS         ?=
+ $(2)_POST_BUILD_HOOKS             ?=
+ $(2)_POST_INSTALL_HOOKS           ?=
+-- 
+1.6.6
