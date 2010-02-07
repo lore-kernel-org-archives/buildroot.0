@@ -1,10 +1,9 @@
 From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Sun,  7 Feb 2010 17:55:42 +0100
-Subject: [Buildroot] [PATCH 10/10] scripts: force copy of files to erase
-	already present and readonly files
+Date: Sun,  7 Feb 2010 17:55:39 +0100
+Subject: [Buildroot] [PATCH 07/10] package: fix install without strip
 In-Reply-To: <1265561742-5924-1-git-send-email-llandwerlin@gmail.com>
 References: <1265561742-5924-1-git-send-email-llandwerlin@gmail.com>
-Message-ID: <1265561742-5924-11-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1265561742-5924-8-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,30 +14,21 @@ From: Lionel Landwerlin <llandwerlin@gmail.com>
 
 Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 ---
- scripts/copy.sh |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/Makefile.autotools.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/scripts/copy.sh b/scripts/copy.sh
-index 410606d..508ed56 100755
---- a/scripts/copy.sh
-+++ b/scripts/copy.sh
-@@ -5,7 +5,7 @@ TARGET_DIR=$2
- 
- echo "Copying development files to target..."
- 
--cp -a ${STAGING_DIR}/usr/include ${TARGET_DIR}/usr
-+cp -af ${STAGING_DIR}/usr/include ${TARGET_DIR}/usr
- 
- for LIBSDIR in /lib /usr/lib; do
- 	for WILDCARD in *.a *.la; do
-@@ -13,7 +13,7 @@ for LIBSDIR in /lib /usr/lib; do
- 			STAGING_STRIPPED=${FILE_PATH##${STAGING_DIR}}
- 			EXTENDED_DIR=${STAGING_STRIPPED%/${WILDCARD}}
- 			mkdir -p ${TARGET_DIR}${EXTENDED_DIR}
--			cp ${FILE_PATH} ${TARGET_DIR}${STAGING_STRIPPED}
-+			cp -fa ${FILE_PATH} ${TARGET_DIR}${STAGING_STRIPPED}
- 			#echo ${TARGET_DIR}${STAGING_STRIPPED}
- 		done
- 	done
+diff --git a/package/Makefile.autotools.in b/package/Makefile.autotools.in
+index 7114bba..96ea453 100644
+--- a/package/Makefile.autotools.in
++++ b/package/Makefile.autotools.in
+@@ -60,7 +60,7 @@ $(2)_LIBTOOL_PATCH		?= YES
+ $(2)_USE_CONFIG_CACHE           ?= $(if $(BR2_CONFIG_CACHE),YES,NO)
+ $(2)_INSTALL_STAGING_OPT	?= DESTDIR=$$(STAGING_DIR) install
+ ifeq ($(BR2_ENABLE_DEBUG),y)
+-$(2)_INSTALL_TARGET_OPT		?= DESTDIR=$$(TARGET_DIR)  install-exec
++$(2)_INSTALL_TARGET_OPT		?= DESTDIR=$$(TARGET_DIR)  install-strip
+ else
+ $(2)_INSTALL_TARGET_OPT		?= DESTDIR=$$(TARGET_DIR)  install-strip
+ endif
 -- 
 1.6.6
