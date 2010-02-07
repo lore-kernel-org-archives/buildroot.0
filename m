@@ -1,25 +1,22 @@
-From: Julien Boibessot <julien.boibessot@free.fr>
-Date: Sun, 07 Feb 2010 18:15:38 +0100
-Subject: [Buildroot] .gitignore in BR archives
-In-Reply-To: <87bpg1thcf.fsf@macbook.be.48ers.dk>
-References: <4B6D8476.8050308@free.fr> <87bpg1thcf.fsf@macbook.be.48ers.dk>
-Message-ID: <4B6EF53A.7090401@free.fr>
+From: llandwerlin at gmail.com <llandwerlin@gmail.com>
+Date: Sun,  7 Feb 2010 19:07:42 +0100
+Subject: [Buildroot] [PATCH 00/14] Pull-request: Bumps & new packages
+Message-ID: <1265566076-10628-1-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard a ?crit :
->
-> I don't think it bothers people, so I would prefer to keep it in the
-> tarball (we would need to do special handling to remove it). Other
-> git-using projects like the Linux kernel also ships their .gitignore.
->   
-ok, so I will use --exclude option of tar to handle my special case (as
-suggested by Michael).
+This series of patchs is probably for the next buildroot release (post
+2010.02), some of these patchs depends on previous patchs I submitted
+here :
+http://lists.busybox.net/pipermail/buildroot/2010-February/031868.html
 
-Thanks !
+It's available from :
+     git://git.potipota.net/buildroot various-bumps
 
 Regards,
-Julien
+
+--
+Lionel Landwerlin
