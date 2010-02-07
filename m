@@ -1,9 +1,9 @@
 From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Sun,  7 Feb 2010 17:55:38 +0100
-Subject: [Buildroot] [PATCH 06/10] package: Added post uninstall hooks
+Date: Sun,  7 Feb 2010 17:55:40 +0100
+Subject: [Buildroot] [PATCH 08/10] external toolchain: fix strip of libraries
 In-Reply-To: <1265561742-5924-1-git-send-email-llandwerlin@gmail.com>
 References: <1265561742-5924-1-git-send-email-llandwerlin@gmail.com>
-Message-ID: <1265561742-5924-7-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1265561742-5924-9-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,50 +12,26 @@ To: buildroot@busybox.net
 
 From: Lionel Landwerlin <llandwerlin@gmail.com>
 
-$(PKG)_POST_UNINSTALL_STAGING_HOOKS and $(PKG)_POST_UNINSTALL_TARGET_HOOKS
-
 Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 ---
- package/Makefile.package.in |   18 +++++++++++-------
- 1 files changed, 11 insertions(+), 7 deletions(-)
+ toolchain/external-toolchain/ext-tool.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-index fbd7f69..d02706d 100644
---- a/package/Makefile.package.in
-+++ b/package/Makefile.package.in
-@@ -192,8 +192,10 @@ $(BUILD_DIR)/%/.stamp_cleaned:
- $(BUILD_DIR)/%/.stamp_uninstalled:
- 	@$(call MESSAGE,"Uninstalling")
- 	$($(PKG)_UNINSTALL_STAGING_CMDS)
-+	$(foreach hook,$($(PKG)_POST_UNINSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
- 	rm -f $($(PKG)_TARGET_INSTALL_STAGING)
- 	$($(PKG)_UNINSTALL_TARGET_CMDS)
-+	$(foreach hook,$($(PKG)_POST_UNINSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
- 	rm -f $($(PKG)_TARGET_INSTALL_TARGET) $($(PKG)_HOOK_POST_INSTALL)
- 
- # Remove package sources
-@@ -277,13 +279,15 @@ $(2)_TARGET_CLEAN =		$$($(2)_DIR)/.stamp_cleaned
- $(2)_TARGET_DIRCLEAN =		$$($(2)_DIR)/.stamp_dircleaned
- 
- # new-style hooks
--$(2)_POST_EXTRACT_HOOKS         ?=
--$(2)_POST_PATCH_HOOKS           ?=
--$(2)_POST_CONFIGURE_HOOKS       ?=
--$(2)_POST_BUILD_HOOKS           ?=
--$(2)_POST_INSTALL_HOOKS         ?=
--$(2)_POST_INSTALL_STAGING_HOOKS ?=
--$(2)_POST_INSTALL_TARGET_HOOKS  ?=
-+$(2)_POST_EXTRACT_HOOKS           ?=
-+$(2)_POST_PATCH_HOOKS             ?=
-+$(2)_POST_CONFIGURE_HOOKS         ?=
-+$(2)_POST_BUILD_HOOKS             ?=
-+$(2)_POST_INSTALL_HOOKS           ?=
-+$(2)_POST_INSTALL_STAGING_HOOKS   ?=
-+$(2)_POST_INSTALL_TARGET_HOOKS    ?=
-+$(2)_POST_UNINSTALL_STAGING_HOOKS ?=
-+$(2)_POST_UNINSTALL_TARGET_HOOKS  ?=
- 
- # old-style hooks
- $(2)_HOOK_POST_EXTRACT =	$$($(2)_DIR)/.stamp_hook_post_extract
+diff --git a/toolchain/external-toolchain/ext-tool.mk b/toolchain/external-toolchain/ext-tool.mk
+index 1f5aa19..39faf84 100644
+--- a/toolchain/external-toolchain/ext-tool.mk
++++ b/toolchain/external-toolchain/ext-tool.mk
+@@ -56,9 +56,9 @@ copy_toolchain_lib_root = \
+ 			elif test -f $${LIB_DIR}/$${LIB}; then \
+ 				$(INSTALL) -D -m0755 $${LIB_DIR}/$${LIB} $(TARGET_DIR)$${DST}/$${LIB}; \
+ 				case "$${STRIP}" in \
+-				(0 | n | no) \
+-;; \
+ 				(*) \
++;; \
++				(y) \
+ 					$(TARGET_CROSS)strip "$(TARGET_DIR)$${DST}/$${LIB}"; \
+ ;; \
+ 				esac; \
 -- 
 1.6.6
