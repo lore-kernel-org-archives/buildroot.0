@@ -1,10 +1,9 @@
 From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Sun,  7 Feb 2010 17:55:36 +0100
-Subject: [Buildroot] [PATCH 04/10] package: Add $(HOST_DIR)/usr/lib to
-	LD_LIBRARY_PATH for make & configure env variables
+Date: Sun,  7 Feb 2010 17:55:38 +0100
+Subject: [Buildroot] [PATCH 06/10] package: Added post uninstall hooks
 In-Reply-To: <1265561742-5924-1-git-send-email-llandwerlin@gmail.com>
 References: <1265561742-5924-1-git-send-email-llandwerlin@gmail.com>
-Message-ID: <1265561742-5924-5-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1265561742-5924-7-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,58 +12,50 @@ To: buildroot@busybox.net
 
 From: Lionel Landwerlin <llandwerlin@gmail.com>
 
-Some packages like icu requires to be compiled against the host system
-first to be able to compile against the target. This is due to the
-usage of self generated binaries by the package to build itself. When
-the generated tools also depends on generated libraries it is required
-to add the path to these libraries in the library path
-(LD_LIBRARY_PATH).
+$(PKG)_POST_UNINSTALL_STAGING_HOOKS and $(PKG)_POST_UNINSTALL_TARGET_HOOKS
 
 Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 ---
- package/Makefile.in |   13 +++++++++----
- 1 files changed, 9 insertions(+), 4 deletions(-)
+ package/Makefile.package.in |   18 +++++++++++-------
+ 1 files changed, 11 insertions(+), 7 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index bc0ac7c..242ebfc 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -228,15 +228,18 @@ TARGET_CONFIGURE_OPTS=PATH=$(TARGET_PATH) \
- 		PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)" \
- 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
- 		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig:$(PKG_CONFIG_PATH)" \
--		STAGING_DIR="$(STAGING_DIR)"
-+		STAGING_DIR="$(STAGING_DIR)" \
-+		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)"
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+index fbd7f69..d02706d 100644
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -192,8 +192,10 @@ $(BUILD_DIR)/%/.stamp_cleaned:
+ $(BUILD_DIR)/%/.stamp_uninstalled:
+ 	@$(call MESSAGE,"Uninstalling")
+ 	$($(PKG)_UNINSTALL_STAGING_CMDS)
++	$(foreach hook,$($(PKG)_POST_UNINSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
+ 	rm -f $($(PKG)_TARGET_INSTALL_STAGING)
+ 	$($(PKG)_UNINSTALL_TARGET_CMDS)
++	$(foreach hook,$($(PKG)_POST_UNINSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
+ 	rm -f $($(PKG)_TARGET_INSTALL_TARGET) $($(PKG)_HOOK_POST_INSTALL)
  
- TARGET_CONFIGURE_ENV=\
- 	CFLAGS="$(TARGET_CFLAGS)" \
- 	CXXFLAGS="$(TARGET_CXXFLAGS)" \
- 	LDFLAGS="$(TARGET_LDFLAGS)" \
- 	FCFLAGS="$(TARGET_FCFLAGS)" \
-+	LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)"
+ # Remove package sources
+@@ -277,13 +279,15 @@ $(2)_TARGET_CLEAN =		$$($(2)_DIR)/.stamp_cleaned
+ $(2)_TARGET_DIRCLEAN =		$$($(2)_DIR)/.stamp_dircleaned
  
--TARGET_MAKE_ENV=PATH=$(TARGET_PATH)
-+TARGET_MAKE_ENV=PATH=$(TARGET_PATH) \
-+		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)"
+ # new-style hooks
+-$(2)_POST_EXTRACT_HOOKS         ?=
+-$(2)_POST_PATCH_HOOKS           ?=
+-$(2)_POST_CONFIGURE_HOOKS       ?=
+-$(2)_POST_BUILD_HOOKS           ?=
+-$(2)_POST_INSTALL_HOOKS         ?=
+-$(2)_POST_INSTALL_STAGING_HOOKS ?=
+-$(2)_POST_INSTALL_TARGET_HOOKS  ?=
++$(2)_POST_EXTRACT_HOOKS           ?=
++$(2)_POST_PATCH_HOOKS             ?=
++$(2)_POST_CONFIGURE_HOOKS         ?=
++$(2)_POST_BUILD_HOOKS             ?=
++$(2)_POST_INSTALL_HOOKS           ?=
++$(2)_POST_INSTALL_STAGING_HOOKS   ?=
++$(2)_POST_INSTALL_TARGET_HOOKS    ?=
++$(2)_POST_UNINSTALL_STAGING_HOOKS ?=
++$(2)_POST_UNINSTALL_TARGET_HOOKS  ?=
  
- HOST_CONFIGURE_OPTS=PATH=$(HOST_PATH) \
- 		AR="$(HOSTAR)" \
-@@ -274,11 +277,13 @@ HOST_CONFIGURE_OPTS=PATH=$(HOST_PATH) \
- 		ORIGINAL_NM_FOR_TARGET="$(TARGET_NM)" \
- 		ORIGINAL_OBJDUMP_FOR_TARGET="$(TARGET_OBJDUMP)" \
- 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
--		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig"
-+		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig" \
-+		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)"
- 
- HOST_MAKE_ENV=PATH=$(HOST_PATH) \
- 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
--		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig"
-+		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig" \
-+		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)"
- 
- 
- #######################################################################
+ # old-style hooks
+ $(2)_HOOK_POST_EXTRACT =	$$($(2)_DIR)/.stamp_hook_post_extract
 -- 
 1.6.6
