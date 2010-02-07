@@ -1,9 +1,9 @@
 From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Mon,  8 Feb 2010 00:52:37 +0100
+Date: Mon,  8 Feb 2010 00:53:40 +0100
 Subject: [Buildroot] [PATCH] linux-fusion: bump to 8.1.1
-In-Reply-To: <20100207184636.GE5229@mx.loc>
-References: <20100207184636.GE5229@mx.loc>
-Message-ID: <1265586757-20437-1-git-send-email-llandwerlin@gmail.com>
+In-Reply-To: <1265566076-10628-15-git-send-email-llandwerlin@gmail.com>
+References: <1265566076-10628-15-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1265586820-20546-1-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
