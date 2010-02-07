@@ -1,9 +1,9 @@
 From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Sun,  7 Feb 2010 19:07:55 +0100
-Subject: [Buildroot] [PATCH 13/14] target: added BR2_KARCH option
+Date: Sun,  7 Feb 2010 19:07:46 +0100
+Subject: [Buildroot] [PATCH 04/14] package: added lirc
 In-Reply-To: <1265566076-10628-1-git-send-email-llandwerlin@gmail.com>
 References: <1265566076-10628-1-git-send-email-llandwerlin@gmail.com>
-Message-ID: <1265566076-10628-14-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1265566076-10628-5-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,54 +12,146 @@ To: buildroot@busybox.net
 
 From: Lionel Landwerlin <llandwerlin@gmail.com>
 
-For packages building kernel modules (ie linux-fusion), it is required
-to give the ARCH=some_arch argument to make so the kernel's makefile
-are aware of the target architecture. We didn't had the value to fill
-the ARCH variable. BR2_KARCH variable is computed using the BR2_ARCH
-variable.
-
 Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 ---
- target/Config.in.arch |   20 +++++++++++++++++++-
- 1 files changed, 19 insertions(+), 1 deletions(-)
+ package/Config.in      |    1 +
+ package/lirc/Config.in |   37 +++++++++++++++++++++++++++++++++++++
+ package/lirc/S70lircd  |   24 ++++++++++++++++++++++++
+ package/lirc/lirc.mk   |   39 +++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 101 insertions(+), 0 deletions(-)
+ create mode 100644 package/lirc/Config.in
+ create mode 100644 package/lirc/S70lircd
+ create mode 100644 package/lirc/lirc.mk
 
-diff --git a/target/Config.in.arch b/target/Config.in.arch
-index 1e3c78c..91d827f 100644
---- a/target/Config.in.arch
-+++ b/target/Config.in.arch
-@@ -140,7 +140,7 @@ choice
- 	default BR2_mips_1 if BR2_mipsel
- 	help
- 	  Specific CPU variant to use
--	
+diff --git a/package/Config.in b/package/Config.in
+index e673631..bf0767a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -252,6 +252,7 @@ source "package/iostat/Config.in"
+ source "package/libaio/Config.in"
+ source "package/libraw1394/Config.in"
+ source "package/libusb/Config.in"
++source "package/lirc/Config.in"
+ source "package/lm-sensors/Config.in"
+ source "package/lvm2/Config.in"
+ source "package/mdadm/Config.in"
+diff --git a/package/lirc/Config.in b/package/lirc/Config.in
+new file mode 100644
+index 0000000..112d00d
+--- /dev/null
++++ b/package/lirc/Config.in
+@@ -0,0 +1,37 @@
++config BR2_PACKAGE_LIRC
++	bool "lirc"
++	help
++          LIRC is a package that supports receiving and sending IR
++          signals of the most common IR remote controls. It contains a
++          daemon that decodes and sends IR signals, a mouse daemon
++          that translates IR signals to mouse movements and a couple
++          of user programs that allow to control your computer with a
++          remote control.
 +
- 	  64bit cabable: 3, 4, 64, 64r2
- 	  non-64bit capable: 1, 2, 32, 32r2
- 
-@@ -539,6 +539,24 @@ config BR2_ARCH
- 	default "x86_64"	if BR2_x86_64_barcelona
- 	default "xtensa"	if BR2_xtensa
- 
-+config BR2_KARCH
-+	string
-+	default "alpha"		if BR2_alpha
-+	default "arm"		if BR2_arm || BR2_armeb
-+	default "avr32"		if BR2_avr32
-+	default "cris"		if BR2_cris
-+	default "i386"		if BR2_x86_i386 || BR2_x86_i486 || BR2_x86_i586 || BR2_x86_pentium_mmx || BR2_x86_geode || BR2_x86_i686 || BR2_x86_pentium2 || BR2_x86_pentium3 || BR2_x86_pentium4 || BR2_x86_pentium_m || BR2_x86_pentiumpro || BR2_x86_nocona || BR2_x86_core2
-+	default "ia64"		if BR2_ia64
-+	default "m68k"		if BR2_m68k
-+	default "mips"		if BR2_mips || BR2_mipsel
-+	default "nios2"		if BR2_nios2
-+	default "powerpc"	if BR2_powerpc
-+	default "sh"	        if BR2_sh2a_nofpueb || BR2_sh2eb || BR2_sh3 || BR2_sh3eb || BR2_sh4 || BR2_sh4eb
-+	default "sh64"		if BR2_sh64
-+	default "sparc"		if BR2_sparc
-+	default "sparc64"	if BR2_sparc64
-+	default "x86_64"	if BR2_x86_64 || BR2_x86_64_generic || BR2_x86_64_nocona || BR2_x86_64_core2 || BR2_x86_64_opteron || BR2_x86_64_opteron_sse3 || BR2_x86_64_barcelona
-+	default "xtensa"	if BR2_xtensa
- 
- config BR2_ENDIAN
- 	string
++          A list of supported hardware is available on the main page.
++
++	  http://www.lirc.org/
++
++if BR2_PACKAGE_LIRC
++
++choice
++	prompt "lirc drivers"
++	default BR2_PACKAGE_LIRC_ALL
++
++	help
++	  Select the drivers to build in lirc. There is 3 choices, all
++	  of them, one of them, none of them. By selecting 'one of
++	  them', you will have to select which one in the next item.
++
++	config BR2_PACKAGE_LIRC_ALL
++		bool "all"
++
++	config BR2_PACKAGE_LIRC_USERSPACE
++		bool "userspace"
++
++	config BR2_PACKAGE_LIRC_NONE
++		bool "none"
++endchoice
++
++endif # BR2_PACKAGE_LIRC
++
+diff --git a/package/lirc/S70lircd b/package/lirc/S70lircd
+new file mode 100644
+index 0000000..770bef5
+--- /dev/null
++++ b/package/lirc/S70lircd
+@@ -0,0 +1,24 @@
++#!/bin/sh
++
++LIRCD=/usr/sbin/lircd
++PID_FILE=/var/run/lircd.pid
++LIRCFLAGS="-o /dev/lircd -P $PID_FILE"
++
++case "$1" in
++    start)
++	echo -n "Starting daemon lircd: "
++        start-stop-daemon --start --quiet --pidfile $PID_FILE --exec $LIRCD -- $LIRCFLAGS
++        echo "done"
++	;;
++    stop)
++	echo -n "Shutting down daemon lircd: "
++	start-stop-daemon --stop --quiet --pidfile $PID_FILE --exec $LIRCD
++        echo "done"
++	;;
++    *)
++        echo "Usage: $0 {start|stop}"
++        exit 1
++	;;
++esac
++
++exit 0
+diff --git a/package/lirc/lirc.mk b/package/lirc/lirc.mk
+new file mode 100644
+index 0000000..d19f5cd
+--- /dev/null
++++ b/package/lirc/lirc.mk
+@@ -0,0 +1,39 @@
++#############################################################
++#
++# lirc
++#
++#############################################################
++
++LIRC_VERSION = 0.8.6
++LIRC_SOURCE = lirc-$(LIRC_VERSION).tar.bz2
++LIRC_SITE = http://prdownloads.sourceforge.net/lirc
++LIRC_LIBTOOL_PATCH = NO
++LIRC_INSTALL_STAGING = YES
++LIRC_INSTALL_TARGET = YES
++
++LIRC_CONF_OPT = --without-x
++
++ifeq ($(BR2_PACKAGE_LIRC_ALL),y)
++LIRC_CONF_OPT += --with-driver=all
++endif
++ifeq ($(BR2_PACKAGE_LIRC_USERSPACE),y)
++LIRC_CONF_OPT += --with-driver=userspace
++endif
++ifeq ($(BR2_PACKAGE_LIRC_NONE),y)
++LIRC_CONF_OPT += --with-driver=none
++endif
++
++define LIRC_INSTALL_TARGET_SCRIPTS
++	mkdir -p $(TARGET_DIR)/etc/init.d
++	$(INSTALL) -m 0755 package/lirc/S70lircd $(TARGET_DIR)/etc/init.d/
++endef
++
++LIRC_POST_INSTALL_TARGET_HOOKS += LIRC_INSTALL_TARGET_SCRIPTS
++
++define LIRC_UNINSTALL_TARGET_SCRIPTS
++	rm -f $(TARGET_DIR)/etc/init.d/S70lircd
++endef
++
++LIRC_POST_UNINSTALL_TARGET_HOOKS += LIRC_UNINSTALL_TARGET_SCRIPTS
++
++$(eval $(call AUTOTARGETS,package,lirc))
 -- 
 1.6.6
