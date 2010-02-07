@@ -1,36 +1,33 @@
-From: Michael S. Zick <minimod@morethan.org>
-Date: Sun, 7 Feb 2010 07:32:31 -0600
-Subject: [Buildroot] .gitignore in BR archives
-In-Reply-To: <87bpg1thcf.fsf@macbook.be.48ers.dk>
-References: <4B6D8476.8050308@free.fr> <87bpg1thcf.fsf@macbook.be.48ers.dk>
-Message-ID: <201002070732.37983.minimod@morethan.org>
+From: llandwerlin at gmail.com <llandwerlin@gmail.com>
+Date: Sun,  7 Feb 2010 17:55:32 +0100
+Subject: [Buildroot] [PATCH 00/10] Pull-request: A few fixes and conversions
+	to new package infrastructure
+Message-ID: <1265561742-5924-1-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun February 7 2010, Peter Korsgaard wrote:
-> >>>>> "Julien" == Julien Boibessot <julien.boibessot@free.fr> writes:
-> 
->  Julien> Hello,
->  Julien> in the BR tarballs (recent releases or daily snapshots), got from here:
->  Julien> http://www.buildroot.org/download.html , there is a .gitignore file at
->  Julien> the top of the directory hierarchy.
->  Julien> Is this something you need or can it be removed for the next tarball
->  Julien> releases ? (It can be problematic when de-archiving BR in already git
->  Julien> versioned dirs.)
-> 
+Last fixes for 2010.02, I don't know if conversions are relevant so
+close of the release...
 
-Perhaps just tell your archive tool to exclude it when un-archiving?
-As in: tar --extract --exclude=PATTERN 
-Ref: man tar
+Available at :
+          git://git.potipota.net/buildroot various-fixes
 
-Mike
-> It's not that you *REALLY* need it, but it's nice if you're using git as
-> the git status output isn't cluttered.
-> 
-> I don't think it bothers people, so I would prefer to keep it in the
-> tarball (we would need to do special handling to remove it). Other
-> git-using projects like the Linux kernel also ships their .gitignore.
-> 
+The list :
+[PATCH 01/10] ncurses: convert to autotools infrastructure
+[PATCH 02/10] ncurses: fix path to patch ncurses5-config
+[PATCH 03/10] lua: conversion to new package infrastructure
+[PATCH 04/10] package: Add $(HOST_DIR)/usr/lib to LD_LIBRARY_PATH for make & configure env variables
+[PATCH 05/10] Rework icu package on top of the generic infrastructure
+[PATCH 06/10] package: Added post uninstall hooks
+[PATCH 07/10] package: fix install without strip
+[PATCH 08/10] external toolchain: fix strip of libraries
+[PATCH 09/10] ext-toolchain: remove pkgconfig files from the external toolchain
+[PATCH 10/10] scripts: force copy of files to erase already present and readonly files
+
+Regards,
+
+--
+Lionel Landwerlin
