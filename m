@@ -1,46 +1,47 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 8 Feb 2010 15:32:52 +0100
-Subject: [Buildroot] [git commit master] newt: needs slang
-Message-ID: <20100208151038.2E7587770F@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Mon,  8 Feb 2010 16:39:55 +0100
+Subject: [Buildroot] [PATCH] toolchain/gdb: get rid of legacy & unused
+	variables
+Message-ID: <1265643595-30763-1-git-send-email-yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The BR2_VENDOR_SUFFIX and VENDOR_SUFFIX variables are no longer unsettable.
+The only user is gdb, and is totally useless in this case.
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fdb2b2d6a0dd10d47f6e36feabac460acaab844d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
 ---
- CHANGES                |    2 +-
- package/newt/Config.in |    1 +
- 2 files changed, 2 insertions(+), 1 deletions(-)
+ Makefile             |    1 -
+ toolchain/gdb/gdb.mk |    2 +-
+ 2 files changed, 1 insertions(+), 2 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 088de1f..a387063 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -9,7 +9,7 @@
- 	bind, binutils, bootutils, busybox, dbus, directfb, dnsmasq,
- 	e2fsprogs, gstreamer, gperf, gst-plugins-bad, gvfs, fbdump, flex, hal,
- 	iptables, iw, jpeg, kismet, libfuse, libglib2, libpcap, libungif,
--	libxml2, libxslt, lighttpd, mesa, mpg123, mtd-utils, nbd, neon,
-+	libxml2, libxslt, lighttpd, mesa, mpg123, mtd-utils, newt, nbd, neon,
- 	netstat-nat, openvpn, pcre, php, qt, readline, rpm, sawman, sdl,
- 	sdl_ttf, sqlite, sshfs, tremor, u-boot, usb_modeswitch, usbutils,
- 	webkit, wpa_supplicant, xfsprogs, zlib
-diff --git a/package/newt/Config.in b/package/newt/Config.in
-index 067d811..ae6b69c 100644
---- a/package/newt/Config.in
-+++ b/package/newt/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_NEWT
- 	bool "newt"
-+	select BR2_PACKAGE_SLANG
- 	help
- 	  Programming library for color text mode, widget based user interfaces.
+diff --git a/Makefile b/Makefile
+index 5f71148..54a5b7b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -262,7 +262,6 @@ TARGET_DIR:=$(BASE_DIR)/target
  
+ # define values for prepatched source trees for toolchains
+ VENDOR_SITE:=$(call qstrip,$(BR2_VENDOR_SITE))
+-VENDOR_SUFFIX:=$(call qstrip,$(BR2_VENDOR_SUFFIX))
+ VENDOR_BINUTILS_RELEASE:=$(call qstrip,$(BR2_VENDOR_BINUTILS_RELEASE))
+ VENDOR_GCC_RELEASE:=$(call qstrip,$(BR2_VENDOR_GCC_RELEASE))
+ VENDOR_UCLIBC_RELEASE:=$(call qstrip,$(BR2_VENDOR_UCLIBC_RELEASE))
+diff --git a/toolchain/gdb/gdb.mk b/toolchain/gdb/gdb.mk
+index bdefd09..02da152 100644
+--- a/toolchain/gdb/gdb.mk
++++ b/toolchain/gdb/gdb.mk
+@@ -5,7 +5,7 @@
+ ######################################################################
+ GDB_VERSION:=$(call qstrip,$(BR2_GDB_VERSION))
+ 
+-GDB_OFFICIAL_VERSION:=$(GDB_VERSION)$(VENDOR_SUFFIX)$(VENDOR_GDB_RELEASE)
++GDB_OFFICIAL_VERSION:=$(GDB_VERSION)$(VENDOR_GDB_RELEASE)
+ 
+ GDB_SOURCE:=gdb-$(GDB_OFFICIAL_VERSION).tar.bz2
+ GDB_CAT:=$(BZCAT)
 -- 
-1.6.3.3
+1.6.5
