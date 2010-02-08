@@ -1,52 +1,68 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 8 Feb 2010 17:03:03 +0100
-Subject: [Buildroot] [git commit master] toolchain/gdb: get rid of legacy &
-	unused variables
-Message-ID: <20100208160731.5D4667775B@busybox.osuosl.org>
+From: julien.boibessot at free.fr <julien.boibessot@free.fr>
+Date: Mon,  8 Feb 2010 18:39:19 +0100
+Subject: [Buildroot] [PATCH] liboil doesn't build on arm with softfloat
+	(well at least on my arm926 platform).
+Message-ID: <1265650759-5005-1-git-send-email-julien.boibessot@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Julien Boibessot <julien.boibessot@armadeus.com>
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7dd0591183e4f92b760ec87d8139ec596d78ac27
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This patch, got from liboil git (recent commit), fixes the problem.
 
-The BR2_VENDOR_SUFFIX and VENDOR_SUFFIX variables are no longer settable.
-The only user is gdb, and is totally useless in this case.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
 ---
- Makefile             |    1 -
- toolchain/gdb/gdb.mk |    2 +-
- 2 files changed, 1 insertions(+), 2 deletions(-)
+ ...boil-0.3.15-fixes-arm-softfloat-build.patch.arm |   39 ++++++++++++++++++++
+ 1 files changed, 39 insertions(+), 0 deletions(-)
+ create mode 100644 package/liboil/liboil-0.3.15-fixes-arm-softfloat-build.patch.arm
 
-diff --git a/Makefile b/Makefile
-index 5f71148..54a5b7b 100644
---- a/Makefile
-+++ b/Makefile
-@@ -262,7 +262,6 @@ TARGET_DIR:=$(BASE_DIR)/target
- 
- # define values for prepatched source trees for toolchains
- VENDOR_SITE:=$(call qstrip,$(BR2_VENDOR_SITE))
--VENDOR_SUFFIX:=$(call qstrip,$(BR2_VENDOR_SUFFIX))
- VENDOR_BINUTILS_RELEASE:=$(call qstrip,$(BR2_VENDOR_BINUTILS_RELEASE))
- VENDOR_GCC_RELEASE:=$(call qstrip,$(BR2_VENDOR_GCC_RELEASE))
- VENDOR_UCLIBC_RELEASE:=$(call qstrip,$(BR2_VENDOR_UCLIBC_RELEASE))
-diff --git a/toolchain/gdb/gdb.mk b/toolchain/gdb/gdb.mk
-index bdefd09..02da152 100644
---- a/toolchain/gdb/gdb.mk
-+++ b/toolchain/gdb/gdb.mk
-@@ -5,7 +5,7 @@
- ######################################################################
- GDB_VERSION:=$(call qstrip,$(BR2_GDB_VERSION))
- 
--GDB_OFFICIAL_VERSION:=$(GDB_VERSION)$(VENDOR_SUFFIX)$(VENDOR_GDB_RELEASE)
-+GDB_OFFICIAL_VERSION:=$(GDB_VERSION)$(VENDOR_GDB_RELEASE)
- 
- GDB_SOURCE:=gdb-$(GDB_OFFICIAL_VERSION).tar.bz2
- GDB_CAT:=$(BZCAT)
+diff --git a/package/liboil/liboil-0.3.15-fixes-arm-softfloat-build.patch.arm b/package/liboil/liboil-0.3.15-fixes-arm-softfloat-build.patch.arm
+new file mode 100644
+index 0000000..c9a2be3
+--- /dev/null
++++ b/package/liboil/liboil-0.3.15-fixes-arm-softfloat-build.patch.arm
+@@ -0,0 +1,39 @@
++Patch generated from:
++http://cgit.freedesktop.org/liboil/commit/?id=227782d45d14ca0d68ee73b54eab71c1582dcbfa
++
++From 227782d45d14ca0d68ee73b54eab71c1582dcbfa Mon Sep 17 00:00:00 2001
++From: Adrian Bunk <adrian.bunk@movial.com>
++Date: Wed, 09 Sep 2009 13:31:40 +0000
++Subject: fix ARM -mfloat-abi=soft builds
++
++If __SOFTFP__ is defined, VFP support is not available
++even when __VFP_FP__ is defined.
++---
++diff --git a/liboil/arm/math_vfp.c b/liboil/arm/math_vfp.c
++index ffd3981..0bed96e 100644
++--- a/liboil/arm/math_vfp.c
+++++ b/liboil/arm/math_vfp.c
++@@ -30,7 +30,7 @@
++ #include <liboil/liboilclasses.h>
++ #include <liboil/liboilfunction.h>
++ 
++-#if __VFP_FP__
+++#if defined(__VFP_FP__) && !defined(__SOFTFP__)
++ 
++ extern void vfp_add_f32 (float *d, const float *s1, const float *s2, int n);
++ extern void vfp_add_f64 (double *d, const double *s1, const double *s2, int n);
++diff --git a/liboil/arm/math_vfp_asm.S b/liboil/arm/math_vfp_asm.S
++index ea68dba..ae5c803 100644
++--- a/liboil/arm/math_vfp_asm.S
+++++ b/liboil/arm/math_vfp_asm.S
++@@ -24,7 +24,7 @@
++  * SUCH DAMAGE.
++  */
++ 
++-#if __VFP_FP__
+++#if defined(__VFP_FP__) && !defined(__SOFTFP__)
++ /* 
++ ** compile with -mcpu=arm1136j-s -mfpu=vfp -mfloat-abi=softfp
++ **
++--
++cgit v0.8.3-6-g21f6
 -- 
-1.6.3.3
+1.6.0.4
