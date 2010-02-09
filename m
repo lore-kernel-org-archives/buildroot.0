@@ -1,23 +1,42 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 09 Feb 2010 11:45:27 +0100
-Subject: [Buildroot] [PATCH] toolchain/gdb: get rid of another legacy
-	and unused variable
-In-Reply-To: <1265644568-31089-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-	(Yann E. MORIN's message of "Mon, 8 Feb 2010 16:56:08 +0100")
-References: <1265644568-31089-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-Message-ID: <878wb2u1q0.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 9 Feb 2010 11:48:17 +0100
+Subject: [Buildroot] [git commit master] toolchain/gdb: remove external
+	source toolchain leftover
+Message-ID: <20100209105147.182BE77735@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
 
- Yann> BR2_VENDOR_GDB_VERSION and VENDOR_GDB_VERSION are no longer settable.
- Yann> The only user is gdb, and it's totally useless in this case.
+commit: http://git.buildroot.net/buildroot/commit/?id=7a72f7b0d9c0288f60a14e08f312a650fe27f7b1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Committed, thanks.
+Commit 65e99014 (Remove external source toolchain options) removed
+external source-based toolchain support, but there was still a check
+for it in gdb.
 
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/gdb/gdb.mk |    5 +----
+ 1 files changed, 1 insertions(+), 4 deletions(-)
+
+diff --git a/toolchain/gdb/gdb.mk b/toolchain/gdb/gdb.mk
+index 6288959..5e91d98 100644
+--- a/toolchain/gdb/gdb.mk
++++ b/toolchain/gdb/gdb.mk
+@@ -8,10 +8,7 @@ GDB_VERSION:=$(call qstrip,$(BR2_GDB_VERSION))
+ GDB_SOURCE:=gdb-$(GDB_VERSION).tar.bz2
+ GDB_CAT:=$(BZCAT)
+ 
+-ifeq ($(BR2_TOOLCHAIN_EXTERNAL_SOURCE),y)
+- GDB_SITE:=$(VENDOR_SITE)
+- GDB_PATCH_DIR:=toolchain/gdb/ext_source/$(VENDOR_PATCH_DIR)/$(GDB_VERSION)
+-else ifeq ($(findstring avr32,$(GDB_VERSION)),avr32)
++ifeq ($(findstring avr32,$(GDB_VERSION)),avr32)
+  GDB_SITE:=ftp://www.at91.com/pub/buildroot/
+  GDB_PATCH_DIR:=toolchain/gdb/$(GDB_VERSION)
+ else
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
