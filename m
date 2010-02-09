@@ -1,107 +1,50 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Tue, 9 Feb 2010 12:54:45 +0100
-Subject: [Buildroot] [PATCH 04/14] package: added lirc
-In-Reply-To: <20100209123756.78a62141@surf>
-References: <1265566076-10628-1-git-send-email-llandwerlin@gmail.com>
-	<1265566076-10628-5-git-send-email-llandwerlin@gmail.com>
-	<20100209123756.78a62141@surf>
-Message-ID: <4d28d4b51002090354r251fd6bfk5e08ccf9cd460baa@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 9 Feb 2010 13:35:44 +0100
+Subject: [Buildroot] Modify the name of the output image
+ 'rootfs.arm.ext2'
+In-Reply-To: <SNT129-W62A455BE19F0B8522B12F0B9510@phx.gbl>
+References: <SNT129-W65BE80962A75AA0E8E95F8B9540@phx.gbl>
+	<20100206172451.6afccbfd@surf>
+	<SNT129-W62A455BE19F0B8522B12F0B9510@phx.gbl>
+Message-ID: <20100209133544.500877c7@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Feb 9, 2010 at 12:37 PM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+On Mon, 8 Feb 2010 15:32:01 +0100
+Tony Mozi <spooflinux@hotmail.fr> wrote:
 
-> On Sun,  7 Feb 2010 19:07:46 +0100
-> llandwerlin at gmail.com wrote:
->
-> > +if BR2_PACKAGE_LIRC
-> > +
-> > +choice
-> > +     prompt "lirc drivers"
-> > +     default BR2_PACKAGE_LIRC_ALL
-> > +
-> > +     help
-> > +       Select the drivers to build in lirc. There is 3 choices,
-> > all
-> > +       of them, one of them, none of them. By selecting 'one of
-> > +       them', you will have to select which one in the next item.
->
-> I'm not sure the help text actually matches what has been implemented :
->
+> Where Can I find BR2_TARGET_ROOFS_EXT2_OUTPUT?
 
-Oops... a residual of the first try...
+Can you make at least a small effort and search a little bit in
+menuconfig/xconfig ?
 
+Either :
 
-> > +
-> > +     config BR2_PACKAGE_LIRC_ALL
-> > +             bool "all"
-> > +
-> > +     config BR2_PACKAGE_LIRC_USERSPACE
-> > +             bool "userspace"
-> > +
-> > +     config BR2_PACKAGE_LIRC_NONE
-> > +             bool "none"
-> > +endchoice
-> > +
-> > +endif # BR2_PACKAGE_LIRC
-> > +
->
-> > --- /dev/null
-> > +++ b/package/lirc/lirc.mk
-> > @@ -0,0 +1,39 @@
-> > +#############################################################
-> > +#
-> > +# lirc
-> > +#
-> > +#############################################################
-> > +
-> > +LIRC_VERSION = 0.8.6
-> > +LIRC_SOURCE = lirc-$(LIRC_VERSION).tar.bz2
-> > +LIRC_SITE = http://prdownloads.sourceforge.net/lirc
-> > +LIRC_LIBTOOL_PATCH = NO
-> > +LIRC_INSTALL_STAGING = YES
->
-> What is the policy regarding installation to the $(STAGING_DIR)
-> directory for applications ? Some of them say FOO_INSTALL_STAGING=NO,
-> some others FOO_INSTALL_STAGING=YES.
->
+ 1. Use the menuconfig search engine by typing /
 
-I usually install libraries in staging, not binaries.
-Why do you need unstripped binaries ? Are you doing remote debug using the
-staging directory ?
+ 2. Use the xconfig search engine
 
+ 3. Grep Buildroot source code for the option
 
+Target filesystem options
+ -> ext2 root filesystem
+   -> Output File
 
->
-> In my opinion, installation into the $(STAGING_DIR) should be
-> mandatory, since we want to keep unstripped version of the binaries +
-> documentation, etc.
->
-> > +LIRC_INSTALL_TARGET = YES
->
-> This is the default behaviour so it can be removed.
->
+> There is no problem to rename the image after builduilg Buildroot, I
+> want to make it automatically.
 
-Will do !
-Thx for reviewing.
+You can also run:
 
+ make && mv output/images/rootfs.arm.ext2 /path/to/your/location/your.name
 
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100209/41a52985/attachment.htm>
+Not everything necessarly needs to be automated *inside* Buildroot.
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
