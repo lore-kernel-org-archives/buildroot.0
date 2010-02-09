@@ -1,36 +1,64 @@
-From: julien.boibessot at free.fr <julien.boibessot@free.fr>
-Date: Tue,  9 Feb 2010 17:11:04 +0100
-Subject: [Buildroot] [PATCH] get_linux_config.sh: sets THIS_MINOR to 0 if
-	not valid.
-Message-ID: <1265731864-30953-1-git-send-email-julien.boibessot@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 09 Feb 2010 17:14:10 +0100
+Subject: [Buildroot] Buildroot 2010.02-rc1 released
+Message-ID: <87vde6s7xp.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Julien Boibessot <julien.boibessot@armadeus.com>
+Hi,
 
-Sets THIS_MINOR to 0 if not valid, ie when processing a Linux config file who do not
-have a minor number extension; ex: "<name>-linux-2.6.<major>.config"
-Otherwise bash is raising an error/exception (line 59) and script can not complete.
+Buildroot 2010.02-rc1 is released - Go download it at:
 
-Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
----
- scripts/get_linux_config.sh |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+http://buildroot.net/downloads/buildroot-2010.02-rc1.tar.gz
 
-diff --git a/scripts/get_linux_config.sh b/scripts/get_linux_config.sh
-index 1950e9d..5cd0e37 100755
---- a/scripts/get_linux_config.sh
-+++ b/scripts/get_linux_config.sh
-@@ -35,6 +35,7 @@ function linux_version()
- 	KERNEL=`echo ${KCONFIG} | sed s/.*linux-2.6./linux-2.6./g -`
- 	THIS_MAJOR=${KERNEL:10:2}
- 	THIS_MINOR=${KERNEL:13}
-+	THIS_MINOR=${THIS_MINOR:=0}
- }
- 
- # Try to be careful...
+or
+
+http://buildroot.net/downloads/buildroot-2010.02-rc1.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.net/buildroot
+
+Please give it a spin and report any problems to the mailing list or bug
+tracker. Many thanks to the people contributing to this release:
+
+git shortlog -s -n 2009.11..
+   100  Peter Korsgaard
+    70  Thomas Petazzoni
+    27  Lionel Landwerlin
+    22  Gustavo Zacarias
+     4  Nigel Kukard
+     4  Sven Neumann
+     3  Julien Boibessot
+     2  Anders Darander
+     2  Chris Packham
+     2  Daniel Mack
+     2  William Wagner
+     2  Yann E. MORIN
+     1  Clark Rawlins
+     1  Francisco Gonzalez
+     1  H Hartley Sweeten
+     1  Hans-Christian Egtvedt
+     1  Ormund Williams
+     1  Sagaert Johan
+     1  grante
+
+From now on the tree is closed for new features until after the 2010.02
+release (expected at end of month). The 2009.11 announcement [1]
+mentioned 3 areas for development:
+
+ - Generalized package infrastructure
+ - Regression tests (buildbot)
+ - Better external toolchain / crosstool-ng support
+
+The first one we have now (package/Makefile.package.in), and we got the
+2 others pretty well hashed out during the Buildroot development day
+yesterday, so they will hopefully materialize during the 2009.05 cycle.
+
+[1]: http://lists.busybox.net/pipermail/buildroot/2009-December/030672.html
+
 -- 
-1.6.0.4
+Bye, Peter Korsgaard
