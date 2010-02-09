@@ -1,42 +1,49 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 9 Feb 2010 16:34:04 +0100
-Subject: [Buildroot] [git commit master] Makefile: release: use git archive
-Message-ID: <20100209153530.0649677750@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 09 Feb 2010 16:38:20 +0100
+Subject: [Buildroot] [PATCH] get_linux_config.sh: sets THIS_MINOR to 0
+	by default when processing a
+In-Reply-To: <1265726755-15417-1-git-send-email-julien.boibessot@free.fr>
+	(julien boibessot's message of "Tue, 9 Feb 2010 15:45:55 +0100")
+References: <1265726755-15417-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <87zl3is9lf.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "julien" == julien boibessot <julien.boibessot@free.fr> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=23ddf460aa6def6b70a694ed5898750fda8d429a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Commit text truncated?
 
-Create tarballs with git-archive so we're sure they don't contain
-anything not in git (E.G. local backup configs).
+A more detailed commit message would be good.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- Makefile |    6 ++----
- 1 files changed, 2 insertions(+), 4 deletions(-)
+ julien> From: Julien Boibessot <julien.boibessot@armadeus.com>
+ julien> Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+ julien> ---
+ julien>  scripts/get_linux_config.sh |    1 +
+ julien>  1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 177701e..a0c18ba 100644
---- a/Makefile
-+++ b/Makefile
-@@ -634,11 +634,9 @@ help:
- 	@echo 'See docs/README and docs/buildroot.html for further details'
- 	@echo
+ julien> diff --git a/scripts/get_linux_config.sh b/scripts/get_linux_config.sh
+ julien> index 1950e9d..5cd0e37 100755
+ julien> --- a/scripts/get_linux_config.sh
+ julien> +++ b/scripts/get_linux_config.sh
+ julien> @@ -35,6 +35,7 @@ function linux_version()
+ julien>  	KERNEL=`echo ${KCONFIG} | sed s/.*linux-2.6./linux-2.6./g -`
+ julien>  	THIS_MAJOR=${KERNEL:10:2}
+ julien>  	THIS_MINOR=${KERNEL:13}
+ julien> +	THIS_MINOR=${THIS_MINOR:=0}
+ julien>  }
  
--release: distclean
-+release:
- 	OUT=buildroot-$$(grep -A2 BR2_VERSION $(CONFIG_CONFIG_IN)|grep default|cut -f2 -d\"); \
--	rm -rf ../$$OUT*; cp -al . ../$$OUT; cd ..; \
--	tar cfz $$OUT.tar.gz --exclude .svn --exclude .git --exclude \*~ $$OUT; \
--	rm -rf $$OUT
-+	git archive --format=tar --prefix=$$OUT/ master|gzip -9 >$$OUT.tar.gz
- 
- .PHONY: $(noconfig_targets)
- 
+ julien>  # Try to be careful...
+ julien> -- 
+ julien> 1.6.0.4
+
+ julien> _______________________________________________
+ julien> buildroot mailing list
+ julien> buildroot at busybox.net
+ julien> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
