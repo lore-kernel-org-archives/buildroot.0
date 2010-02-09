@@ -1,46 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Feb 2010 13:35:44 +0100
-Subject: [Buildroot] Modify the name of the output image
- 'rootfs.arm.ext2'
-In-Reply-To: <SNT129-W62A455BE19F0B8522B12F0B9510@phx.gbl>
-References: <SNT129-W65BE80962A75AA0E8E95F8B9540@phx.gbl>
-	<20100206172451.6afccbfd@surf>
-	<SNT129-W62A455BE19F0B8522B12F0B9510@phx.gbl>
-Message-ID: <20100209133544.500877c7@surf>
+Date: Tue, 9 Feb 2010 13:37:25 +0100
+Subject: [Buildroot] [PATCH 04/14] package: added lirc
+In-Reply-To: <4d28d4b51002090354r251fd6bfk5e08ccf9cd460baa@mail.gmail.com>
+References: <1265566076-10628-1-git-send-email-llandwerlin@gmail.com>
+	<1265566076-10628-5-git-send-email-llandwerlin@gmail.com>
+	<20100209123756.78a62141@surf>
+	<4d28d4b51002090354r251fd6bfk5e08ccf9cd460baa@mail.gmail.com>
+Message-ID: <20100209133725.53f97148@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 8 Feb 2010 15:32:01 +0100
-Tony Mozi <spooflinux@hotmail.fr> wrote:
+On Tue, 9 Feb 2010 12:54:45 +0100
+Lionel Landwerlin <llandwerlin@gmail.com> wrote:
 
-> Where Can I find BR2_TARGET_ROOFS_EXT2_OUTPUT?
+> > What is the policy regarding installation to the $(STAGING_DIR)
+> > directory for applications ? Some of them say
+> > FOO_INSTALL_STAGING=NO, some others FOO_INSTALL_STAGING=YES.
+> 
+> I usually install libraries in staging, not binaries.
 
-Can you make at least a small effort and search a little bit in
-menuconfig/xconfig ?
+So in this case, lirc contains only applications, so it shouldn't be
+installed to STAGING, no ?
 
-Either :
+> Why do you need unstripped binaries ? Are you doing remote debug
+> using the staging directory ?
 
- 1. Use the menuconfig search engine by typing /
+Yes, this is also what the staging directory is for. In the future, we
+will try if compiling by default all libraries/applications with
+debugging symbols in the $(STAGING_DIR) is doable.
 
- 2. Use the xconfig search engine
-
- 3. Grep Buildroot source code for the option
-
-Target filesystem options
- -> ext2 root filesystem
-   -> Output File
-
-> There is no problem to rename the image after builduilg Buildroot, I
-> want to make it automatically.
-
-You can also run:
-
- make && mv output/images/rootfs.arm.ext2 /path/to/your/location/your.name
-
-Not everything necessarly needs to be automated *inside* Buildroot.
+Thanks!
 
 Thomas
 -- 
