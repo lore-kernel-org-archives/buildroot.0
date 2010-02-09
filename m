@@ -1,38 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Feb 2010 22:02:50 +0100
-Subject: [Buildroot] [PATCH 3/6] Move BR2_SOFT_FLOAT and BR2_VFP_FLOAT
- to Build options
-In-Reply-To: <871vhanqks.fsf@macbook.be.48ers.dk>
-References: <cover.1263338839.git.thomas.petazzoni@free-electrons.com>
-	<cover.1263338839.git.thomas.petazzoni@free-electrons.com>
-	<dec9e118437c50f39437596da1717c5117b8d416.1263338839.git.thomas.petazzoni@free-electrons.com>
-	<871vhanqks.fsf@macbook.be.48ers.dk>
-Message-ID: <20100209220250.367631fd@surf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue,  9 Feb 2010 22:26:02 +0000 (UTC)
+Subject: [Buildroot] [Bug 1069] New: The AT91BOOTSTRAP makefile contains a
+	typo
+Message-ID: <bug-1069-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 28 Jan 2010 17:26:27 +0100
-Peter Korsgaard <jacmet@uclibc.org> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=1069
 
->  Thomas> The soft floating point related options not only affect how
->  Thomas> the toolchain is built, but more importantly affect how
->  Thomas> packages are built. Therefore, just like optimization or
->  Thomas> stripping options, floating point related options are
->  Thomas> global, and belong to the Build options menu.
-> 
-> Hmm, couldn't you say the same for ipv6, largefile and locale stuff?
+              Host: Ubuntu 9.10
+            Target: AT91SAM9G20-EK
+             Build: 2010.02
+           Summary: The AT91BOOTSTRAP makefile contains a typo
+           Product: buildroot
+           Version: 2009.11
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: Rob.Alley at navmanwireless.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Hum, true. I will keep them in the Toolchain part, and will resend the
-full patch set.
 
-Do you agree with the other patches of the patch set ?
+Created an attachment (id=1087)
+ --> (https://bugs.busybox.net/attachment.cgi?id=1087)
+Patch to correct makefile typo
 
-Thomas
+The rule to copy the resulting binary file into the binary directory had a typo
+in the line continuation character that results in a spurious error message
+being produced.
+
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
