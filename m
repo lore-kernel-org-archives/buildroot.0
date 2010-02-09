@@ -1,33 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 Feb 2010 00:46:05 +0100
-Subject: [Buildroot] [pull request] Pull request for branch fixes
-Message-ID: <cover.1265759162.git.thomas.petazzoni@free-electrons.com>
+Date: Wed, 10 Feb 2010 00:46:06 +0100
+Subject: [Buildroot] [PATCH 1/3] Create $(STAGING_DIR)/usr/bin
+	unconditionnally
+In-Reply-To: <cover.1265759162.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1265759162.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <a05c337de5d86f9494fdc6a950e5121256de6ba3.1265759162.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The following changes since commit f0bdacdb5b8fe0fbc276ed510fc58e9a219f5cf8:
-  Peter Korsgaard (1):
-        update for 2010.02-rc1
+This fixes the build of libcap, with external toolchain, when it is
+the first package being built.
 
-are available in the git repository at:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Makefile |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-  git://git.busybox.net/~tpetazzoni/git/buildroot fixes
-
-Thomas Petazzoni (3):
-      Create $(STAGING_DIR)/usr/bin unconditionnally
-      argus: fix compile breakage
-      at: fix compile breakage when flex isn't on the target
-
- Makefile                                           |    1 +
- .../argus-3.0.0.rc.34-01-use-pcap-header.patch     |   27 ++++++++++++++++++++
- package/at/at-3.1.12-0007-include-config-h.patch   |   16 +++++++++++
- 3 files changed, 44 insertions(+), 0 deletions(-)
- create mode 100644 package/argus/argus-3.0.0.rc.34-01-use-pcap-header.patch
- create mode 100644 package/at/at-3.1.12-0007-include-config-h.patch
-
-Thanks,
+diff --git a/Makefile b/Makefile
+index a0c18ba..76eeddb 100644
+--- a/Makefile
++++ b/Makefile
+@@ -371,6 +371,7 @@ ifneq ($(BR2_TOOLCHAIN_EXTERNAL),y)
+ endif
+ endif
+ 	@mkdir -p $(STAGING_DIR)/usr/include
++	@mkdir -p $(STAGING_DIR)/usr/bin
+ 
+ $(BUILD_DIR)/.root:
+ 	mkdir -p $(TARGET_DIR)
 -- 
-Thomas Petazzoni
+1.6.3.3
