@@ -1,49 +1,108 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 09 Feb 2010 16:38:20 +0100
-Subject: [Buildroot] [PATCH] get_linux_config.sh: sets THIS_MINOR to 0
-	by default when processing a
-In-Reply-To: <1265726755-15417-1-git-send-email-julien.boibessot@free.fr>
-	(julien boibessot's message of "Tue, 9 Feb 2010 15:45:55 +0100")
-References: <1265726755-15417-1-git-send-email-julien.boibessot@free.fr>
-Message-ID: <87zl3is9lf.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 9 Feb 2010 16:54:30 +0100
+Subject: [Buildroot] [git commit master] update for 2010.02-rc1
+Message-ID: <20100209160347.E3B967768E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "julien" == julien boibessot <julien.boibessot@free.fr> writes:
 
-Commit text truncated?
+commit: http://git.buildroot.net/buildroot/commit/?id=f0bdacdb5b8fe0fbc276ed510fc58e9a219f5cf8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-A more detailed commit message would be good.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES            |   14 +++++++++++++-
+ Config.in          |    2 +-
+ docs/download.html |   10 +++++-----
+ docs/news.html     |   13 +++++++++++++
+ 4 files changed, 32 insertions(+), 7 deletions(-)
 
- julien> From: Julien Boibessot <julien.boibessot@armadeus.com>
- julien> Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
- julien> ---
- julien>  scripts/get_linux_config.sh |    1 +
- julien>  1 files changed, 1 insertions(+), 0 deletions(-)
-
- julien> diff --git a/scripts/get_linux_config.sh b/scripts/get_linux_config.sh
- julien> index 1950e9d..5cd0e37 100755
- julien> --- a/scripts/get_linux_config.sh
- julien> +++ b/scripts/get_linux_config.sh
- julien> @@ -35,6 +35,7 @@ function linux_version()
- julien>  	KERNEL=`echo ${KCONFIG} | sed s/.*linux-2.6./linux-2.6./g -`
- julien>  	THIS_MAJOR=${KERNEL:10:2}
- julien>  	THIS_MINOR=${KERNEL:13}
- julien> +	THIS_MINOR=${THIS_MINOR:=0}
- julien>  }
+diff --git a/CHANGES b/CHANGES
+index 9f9aa01..c8ddc6e 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,4 +1,16 @@
+-2010.02, Not yet released:
++2010.02-rc1, Released February 9th, 2010:
++
++	Fixes all over the tree and new features.
++
++	Generalized autotools infrastructure to be usable for
++	non-autotools packages, see package/Makefile.package.in for
++	details.
++
++	Cleaned up avr32 toolchain config, external source-based
++	toolchain support is gone.
++
++	Dependency checks: Also check for makeinfo, only print output
++	on errors.
  
- julien>  # Try to be careful...
- julien> -- 
- julien> 1.6.0.4
-
- julien> _______________________________________________
- julien> buildroot mailing list
- julien> buildroot at busybox.net
- julien> http://lists.busybox.net/mailman/listinfo/buildroot
-
-
+ 	Toolchain: uClibc 0.9.30.2, gcc 4.4.3
+ 
+diff --git a/Config.in b/Config.in
+index e4edaae..1dc49d5 100644
+--- a/Config.in
++++ b/Config.in
+@@ -8,7 +8,7 @@ config BR2_HAVE_DOT_CONFIG
+ 
+ config BR2_VERSION
+ 	string
+-	default "2010.02-git"
++	default "2010.02-rc1"
+ 
+ source "target/Config.in.arch"
+ source "target/device/Config.in"
+diff --git a/docs/download.html b/docs/download.html
+index c90f4fc..65e64f2 100644
+--- a/docs/download.html
++++ b/docs/download.html
+@@ -13,15 +13,15 @@ here:<p>
+ or
+ <a href="/downloads/buildroot-2009.11.tar.bz2">buildroot-2009.11.tar.bz2</a>.
+ <p>
+-<!--
+-The latest release candidate is <b>2009.11-rc2</b>, which can be
++
++The latest release candidate is <b>2010.02-rc1</b>, which can be
+ downloaded here:<p>
+ 
+-<a href="/downloads/buildroot-2009.11-rc2.tar.gz">buildroot-2009.11-rc2.tar.gz</a>
++<a href="/downloads/buildroot-2010.02-rc1.tar.gz">buildroot-2010.02-rc1.tar.gz</a>
+ or
+-<a href="/downloads/buildroot-2009.11-rc2.tar.bz2">buildroot-2009.11-rc2.tar.bz2</a>.
++<a href="/downloads/buildroot-2010.02-rc1.tar.bz2">buildroot-2010.02-rc1.tar.bz2</a>.
+ <p>
+--->
++
+ This and earlier releases can always be downloaded from
+ <a href="/downloads/">http://buildroot.net/downloads/</a>.
+ 
+diff --git a/docs/news.html b/docs/news.html
+index 3082c57..250675c 100644
+--- a/docs/news.html
++++ b/docs/news.html
+@@ -5,6 +5,19 @@
+ <p>
+ 
+ <ul>
++  <li><b>9 February 2010 -- 2010.02-rc1 released</b>
++
++    <p>We have a new release candidate! Lots of changes all over the
++    tree, see the <a
++    href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2010.02_rc1">CHANGES</a>
++    file for details.
++
++    <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
++    <a href="/downloads/buildroot-2010.02-rc1.tar.bz2">2010.02-rc1
++    release candidate</a>, and report any problems found to the <a
++    href="lists.html">mailing list</a> or <a
++    href="https://bugs.uclibc.org">bug tracker</a>.</p>
++
+   <li><b>1 December 2009 -- 2009.11 released</b>
+ 
+     <p>The stable 2009.11 release is out - Thanks to everyone
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
