@@ -1,48 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 Feb 2010 00:46:08 +0100
-Subject: [Buildroot] [PATCH 3/3] at: fix compile breakage when flex isn't on
-	the target
-In-Reply-To: <cover.1265759162.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1265759162.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <93df31e4047f0c5708605570de65bcd1d777c01d.1265759162.git.thomas.petazzoni@free-electrons.com>
+Date: Wed, 10 Feb 2010 00:48:22 +0100
+Subject: [Buildroot] libglib2 build failure
+Message-ID: <20100210004822.5cc69bd2@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch that makes sure config.h gets included in a file that uses
-some of the NEEDS_* macros. The yywrap() function was missing when
-flex was not available on the target, even though this configuration
-is supposed to be supported by at (and handled by NEEDS_YYWRAP).
+Hello,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/at/at-3.1.12-0007-include-config-h.patch |   16 ++++++++++++++++
- 1 files changed, 16 insertions(+), 0 deletions(-)
- create mode 100644 package/at/at-3.1.12-0007-include-config-h.patch
+While trying to compile libglib2, I get the following build failure. It
+is the infamous libtool problem, but libglib2 uses libtool 2.x, for
+which our buildroot-libtool.patch does not apply. It happens in an external toolchain configuration, and libglib2.0-dev is installed on the host.
 
-diff --git a/package/at/at-3.1.12-0007-include-config-h.patch b/package/at/at-3.1.12-0007-include-config-h.patch
-new file mode 100644
-index 0000000..8afc502
---- /dev/null
-+++ b/package/at/at-3.1.12-0007-include-config-h.patch
-@@ -0,0 +1,16 @@
-+Make sure to include config.h so that NEEDS_* macros are properly
-+taken into account. This was a problem for NEEDS_YYWRAP, which was set
-+to 1 in config.h, but the corresponding code wasn't compiled in.
-+
-+Index: at-3.1.12/parsetime.l
-+===================================================================
-+--- at-3.1.12.orig/parsetime.l	2010-02-10 00:17:46.000000000 +0100
-++++ at-3.1.12/parsetime.l	2010-02-10 00:18:07.000000000 +0100
-+@@ -4,6 +4,7 @@
-+ #include <time.h>
-+ #include "y.tab.h"
-+ #include "parsetime.h"
-++#include "config.h"
-+ 
-+ char *last_token = NULL;
-+ char **my_argv;
+libtool: relink:  /home/thomas/x-tools/arm-unknown-linux-uclibcgnueabi/bin/arm-linux-gcc -Os -pipe -Os  --sysroot /work/build/thomas/br-test1/staging/ -share
+d  .libs/gappinfo.o .libs/gasynchelper.o .libs/gasyncinitable.o .libs/gasyncresult.o .libs/gbufferedinputstream.o .libs/gbufferedoutputstream.o .libs/gcancel
+lable.o .libs/gcontenttype.o .libs/gdatainputstream.o .libs/gdataoutputstream.o .libs/gdrive.o .libs/gdummyfile.o .libs/gemblem.o .libs/gemblemedicon.o .libs
+/gfile.o .libs/gfileattribute.o .libs/gfileenumerator.o .libs/gfileicon.o .libs/gfileinfo.o .libs/gfileinputstream.o .libs/gfilemonitor.o .libs/gfilenamecomp
+leter.o .libs/gfileoutputstream.o .libs/gfileiostream.o .libs/gfilterinputstream.o .libs/gfilteroutputstream.o .libs/gicon.o .libs/ginetaddress.o .libs/ginet
+socketaddress.o .libs/ginitable.o .libs/ginputstream.o .libs/gioerror.o .libs/giomodule.o .libs/gioscheduler.o .libs/giostream.o .libs/gloadableicon.o .libs/
+gmount.o .libs/gmemoryinputstream.o .libs/gmemoryoutputstream.o .libs/gmountoperation.o .libs/gnativevolumemonitor.o .libs/gnetworkaddress.o .libs/gnetworkse
+rvice.o .libs/goutputstream.o .libs/gpollfilemonitor.o .libs/gresolver.o .libs/gseekable.o .libs/gsimpleasyncresult.o .libs/gsocket.o .libs/gsocketaddress.o
+.libs/gsocketaddressenumerator.o .libs/gsocketclient.o .libs/gsocketconnectable.o .libs/gsocketconnection.o .libs/gsocketcontrolmessage.o .libs/gsocketinputs
+tream.o .libs/gsocketlistener.o .libs/gsocketoutputstream.o .libs/gsocketservice.o .libs/gsrvtarget.o .libs/gtcpconnection.o .libs/gthreadedsocketservice.o .
+libs/gthemedicon.o .libs/gthreadedresolver.o .libs/gunionvolumemonitor.o .libs/gvfs.o .libs/gvolume.o .libs/gvolumemonitor.o .libs/gioenumtypes.o .libs/gioal
+iasdef.o .libs/gdesktopappinfo.o .libs/gunixconnection.o .libs/gunixfdmessage.o .libs/gunixmount.o .libs/gunixmounts.o .libs/gunixresolver.o .libs/gunixsocke
+taddress.o .libs/gunixvolume.o .libs/gunixvolumemonitor.o .libs/gunixinputstream.o .libs/gunixoutputstream.o .libs/glocaldirectorymonitor.o .libs/glocalfile.
+o .libs/glocalfileenumerator.o .libs/glocalfileinfo.o .libs/glocalfileinputstream.o .libs/glocalfilemonitor.o .libs/glocalfileoutputstream.o .libs/glocalfile
+iostream.o .libs/glocalvfs.o .libs/gio-marshal.o  -Wl,--whole-archive inotify/.libs/libinotify.a libasyncns/.libs/libasyncns.a xdgmime/.libs/libxdgmime.a -Wl
+,--no-whole-archive  -Wl,-rpath -Wl,/work/build/thomas/br-test1/staging/usr/lib -L/work/build/thomas/br-test1/build/libglib2-2.22.4/glib/.libs -L/work/build/
+thomas/br-test1/target/usr/lib -L/usr/lib -L/work/build/thomas/br-test1/staging/usr/lib -lgobject-2.0 -lgmodule-2.0 -ldl -lglib-2.0 -lresolv -L/work/build/th
+omas/br-test1/target/work/build/thomas/br-test1/staging/usr/lib -lintl -liconv -lc    -Wl,-soname -Wl,libgio-2.0.so.0 -Wl,-version-script -Wl,.libs/libgio-2.
+0.ver -o .libs/libgio-2.0.so.0.2200.4
+/usr/lib/libgobject-2.0.so: file not recognized: File format not recognized
+collect2: ld returned 1 exit status
+libtool: install: error: relink `libgio-2.0.la' with the above command before installing it
+make[7]: *** [install-libLTLIBRARIES] Error 1
+make[7]: Leaving directory
+`/work/build/thomas/br-test1/build/libglib2-2.22.4/gio'
+
+Thomas
 -- 
-1.6.3.3
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
