@@ -1,54 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Feb 2010 12:32:29 +0100
-Subject: [Buildroot] [PATCH 02/14] package: added pre-configure hooks
-In-Reply-To: <1265566076-10628-3-git-send-email-llandwerlin@gmail.com>
+Date: Tue, 9 Feb 2010 12:37:56 +0100
+Subject: [Buildroot] [PATCH 04/14] package: added lirc
+In-Reply-To: <1265566076-10628-5-git-send-email-llandwerlin@gmail.com>
 References: <1265566076-10628-1-git-send-email-llandwerlin@gmail.com>
-	<1265566076-10628-3-git-send-email-llandwerlin@gmail.com>
-Message-ID: <20100209123229.7ebf86e0@surf>
+	<1265566076-10628-5-git-send-email-llandwerlin@gmail.com>
+Message-ID: <20100209123756.78a62141@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Lionel,
-
-Aren't POST_PATCH hooks sufficient ?
-
-Thomas
-
-On Sun,  7 Feb 2010 19:07:44 +0100
+On Sun,  7 Feb 2010 19:07:46 +0100
 llandwerlin at gmail.com wrote:
 
-> From: Lionel Landwerlin <llandwerlin@gmail.com>
-> 
-> Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
-> ---
->  package/Makefile.package.in |    2 ++
->  1 files changed, 2 insertions(+), 0 deletions(-)
-> 
-> diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-> index d02706d..79d3a13 100644
-> --- a/package/Makefile.package.in
-> +++ b/package/Makefile.package.in
-> @@ -141,6 +141,7 @@ $(BUILD_DIR)/%/.stamp_patched:
->  # Configure
->  $(BUILD_DIR)/%/.stamp_configured:
->  	@$(call MESSAGE,"Configuring")
-> +	$(foreach hook,$($(PKG)_PRE_CONFIGURE_HOOKS),$(call
-> $(hook))$(sep)) $($(PKG)_CONFIGURE_CMDS)
->  	$(foreach hook,$($(PKG)_POST_CONFIGURE_HOOKS),$(call
-> $(hook))$(sep)) $(Q)touch $@
-> @@ -281,6 +282,7 @@ $(2)_TARGET_DIRCLEAN =
-> $$($(2)_DIR)/.stamp_dircleaned # new-style hooks
->  $(2)_POST_EXTRACT_HOOKS           ?=
->  $(2)_POST_PATCH_HOOKS             ?=
-> +$(2)_PRE_CONFIGURE_HOOKS          ?=
->  $(2)_POST_CONFIGURE_HOOKS         ?=
->  $(2)_POST_BUILD_HOOKS             ?=
->  $(2)_POST_INSTALL_HOOKS           ?=
+> +if BR2_PACKAGE_LIRC
+> +
+> +choice
+> +	prompt "lirc drivers"
+> +	default BR2_PACKAGE_LIRC_ALL
+> +
+> +	help
+> +	  Select the drivers to build in lirc. There is 3 choices,
+> all
+> +	  of them, one of them, none of them. By selecting 'one of
+> +	  them', you will have to select which one in the next item.
 
+I'm not sure the help text actually matches what has been implemented :
 
+> +
+> +	config BR2_PACKAGE_LIRC_ALL
+> +		bool "all"
+> +
+> +	config BR2_PACKAGE_LIRC_USERSPACE
+> +		bool "userspace"
+> +
+> +	config BR2_PACKAGE_LIRC_NONE
+> +		bool "none"
+> +endchoice
+> +
+> +endif # BR2_PACKAGE_LIRC
+> +
+
+> --- /dev/null
+> +++ b/package/lirc/lirc.mk
+> @@ -0,0 +1,39 @@
+> +#############################################################
+> +#
+> +# lirc
+> +#
+> +#############################################################
+> +
+> +LIRC_VERSION = 0.8.6
+> +LIRC_SOURCE = lirc-$(LIRC_VERSION).tar.bz2
+> +LIRC_SITE = http://prdownloads.sourceforge.net/lirc
+> +LIRC_LIBTOOL_PATCH = NO
+> +LIRC_INSTALL_STAGING = YES
+
+What is the policy regarding installation to the $(STAGING_DIR)
+directory for applications ? Some of them say FOO_INSTALL_STAGING=NO,
+some others FOO_INSTALL_STAGING=YES.
+
+In my opinion, installation into the $(STAGING_DIR) should be
+mandatory, since we want to keep unstripped version of the binaries +
+documentation, etc.
+
+> +LIRC_INSTALL_TARGET = YES
+
+This is the default behaviour so it can be removed.
+
+Thomas
 -- 
 Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
