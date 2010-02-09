@@ -1,65 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Feb 2010 13:38:25 +0100
-Subject: [Buildroot] [PATCH 05/14] directfb: added support for lirc
-In-Reply-To: <1265566076-10628-6-git-send-email-llandwerlin@gmail.com>
+From: Lionel Landwerlin <llandwerlin@gmail.com>
+Date: Tue, 9 Feb 2010 13:53:40 +0100
+Subject: [Buildroot] [PATCH 04/14] package: added lirc
+In-Reply-To: <20100209133725.53f97148@surf>
 References: <1265566076-10628-1-git-send-email-llandwerlin@gmail.com>
-	<1265566076-10628-6-git-send-email-llandwerlin@gmail.com>
-Message-ID: <20100209133825.51f157d5@surf>
+	<1265566076-10628-5-git-send-email-llandwerlin@gmail.com>
+	<20100209123756.78a62141@surf>
+	<4d28d4b51002090354r251fd6bfk5e08ccf9cd460baa@mail.gmail.com>
+	<20100209133725.53f97148@surf>
+Message-ID: <4d28d4b51002090453p5153429cmf0975abcca3ab28c@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  7 Feb 2010 19:07:47 +0100
-llandwerlin at gmail.com wrote:
+On Tue, Feb 9, 2010 at 1:37 PM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
 
-> From: Lionel Landwerlin <llandwerlin@gmail.com>
-> 
-> Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
+> On Tue, 9 Feb 2010 12:54:45 +0100
+> Lionel Landwerlin <llandwerlin@gmail.com> wrote:
+>
+> > > What is the policy regarding installation to the $(STAGING_DIR)
+> > > directory for applications ? Some of them say
+> > > FOO_INSTALL_STAGING=NO, some others FOO_INSTALL_STAGING=YES.
+> >
+> > I usually install libraries in staging, not binaries.
+>
+> So in this case, lirc contains only applications, so it shouldn't be
+> installed to STAGING, no ?
+>
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-> ---
->  package/directfb/Config.in   |    5 +++++
->  package/directfb/directfb.mk |    4 ++++
->  2 files changed, 9 insertions(+), 0 deletions(-)
-> 
-> diff --git a/package/directfb/Config.in b/package/directfb/Config.in
-> index 7c41cdf..6c78597 100644
-> --- a/package/directfb/Config.in
-> +++ b/package/directfb/Config.in
-> @@ -65,6 +65,11 @@ config BR2_PACKAGE_DIRECTFB_KEYBOARD
->  	bool "compile keyboard input driver"
->  	default y
->  
-> +config BR2_PACKAGE_DIRECTFB_LIRC
-> +	bool "compile lirc input driver"
-> +	select BR2_PACKAGE_LIRC
-> +	default n
-> +
->  config BR2_PACKAGE_DIRECTFB_PS2MOUSE
->  	bool "compile PS2 mouse input driver"
->  	default y
-> diff --git a/package/directfb/directfb.mk
-> b/package/directfb/directfb.mk index 2f095ee..a065a22 100644
-> --- a/package/directfb/directfb.mk
-> +++ b/package/directfb/directfb.mk
-> @@ -80,6 +80,10 @@ endif
->  ifeq ($(BR2_PACKAGE_DIRECTFB_KEYBOARD),y)
->  DIRECTFB_INPUT+= keyboard
->  endif
-> +ifeq ($(BR2_PACKAGE_DIRECTFB_KEYBOARD),y)
-> +DIRECTFB_INPUT+= lirc
-> +DIRECTFB_DEP+= lirc
-> +endif
->  ifeq ($(BR2_PACKAGE_DIRECTFB_PS2MOUSE),y)
->  DIRECTFB_INPUT+= ps2mouse
->  endif
+There is liblirc_client.so in /usr/lib
 
 
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+>
+> > Why do you need unstripped binaries ? Are you doing remote debug
+> > using the staging directory ?
+>
+> Yes, this is also what the staging directory is for. In the future, we
+> will try if compiling by default all libraries/applications with
+> debugging symbols in the $(STAGING_DIR) is doable.
+>
+
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100209/1b166dc9/attachment.htm>
