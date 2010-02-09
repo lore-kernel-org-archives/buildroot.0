@@ -1,56 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 Feb 2010 00:46:07 +0100
-Subject: [Buildroot] [PATCH 2/3] argus: fix compile breakage
+Date: Wed, 10 Feb 2010 00:46:08 +0100
+Subject: [Buildroot] [PATCH 3/3] at: fix compile breakage when flex isn't on
+	the target
 In-Reply-To: <cover.1265759162.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1265759162.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <5f41cfe3cdcda3b66b757c0f5832c6ade6d32438.1265759162.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <93df31e4047f0c5708605570de65bcd1d777c01d.1265759162.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch that includes pcap.h instead of hardcoding an incorrect
-prototype for a function provided by libpcap.
+Add a patch that makes sure config.h gets included in a file that uses
+some of the NEEDS_* macros. The yywrap() function was missing when
+flex was not available on the target, even though this configuration
+is supposed to be supported by at (and handled by NEEDS_YYWRAP).
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../argus-3.0.0.rc.34-01-use-pcap-header.patch     |   27 ++++++++++++++++++++
- 1 files changed, 27 insertions(+), 0 deletions(-)
- create mode 100644 package/argus/argus-3.0.0.rc.34-01-use-pcap-header.patch
+ package/at/at-3.1.12-0007-include-config-h.patch |   16 ++++++++++++++++
+ 1 files changed, 16 insertions(+), 0 deletions(-)
+ create mode 100644 package/at/at-3.1.12-0007-include-config-h.patch
 
-diff --git a/package/argus/argus-3.0.0.rc.34-01-use-pcap-header.patch b/package/argus/argus-3.0.0.rc.34-01-use-pcap-header.patch
+diff --git a/package/at/at-3.1.12-0007-include-config-h.patch b/package/at/at-3.1.12-0007-include-config-h.patch
 new file mode 100644
-index 0000000..2060c93
+index 0000000..8afc502
 --- /dev/null
-+++ b/package/argus/argus-3.0.0.rc.34-01-use-pcap-header.patch
-@@ -0,0 +1,27 @@
-+Instead of hardcoding a wrong prototype for a libcap function, include
-+the correct header.
++++ b/package/at/at-3.1.12-0007-include-config-h.patch
+@@ -0,0 +1,16 @@
++Make sure to include config.h so that NEEDS_* macros are properly
++taken into account. This was a problem for NEEDS_YYWRAP, which was set
++to 1 in config.h, but the corresponding code wasn't compiled in.
 +
-+Index: argus-3.0.0.rc.34/argus/ArgusSource.c
++Index: at-3.1.12/parsetime.l
 +===================================================================
-+--- argus-3.0.0.rc.34.orig/argus/ArgusSource.c	2010-02-09 22:57:21.000000000 +0100
-++++ argus-3.0.0.rc.34/argus/ArgusSource.c	2010-02-09 22:57:29.000000000 +0100
-+@@ -53,6 +53,7 @@
-+ #define PPP_HDRLEN      4       /* length of PPP header */
-+ #endif
++--- at-3.1.12.orig/parsetime.l	2010-02-10 00:17:46.000000000 +0100
+++++ at-3.1.12/parsetime.l	2010-02-10 00:18:07.000000000 +0100
++@@ -4,6 +4,7 @@
++ #include <time.h>
++ #include "y.tab.h"
++ #include "parsetime.h"
+++#include "config.h"
 + 
-++#include <pcap.h>
-+ 
-+ void ArgusGetInterfaceStatus (struct ArgusSourceStruct *src);
-+ 
-+Index: argus-3.0.0.rc.34/argus/ArgusSource.h
-+===================================================================
-+--- argus-3.0.0.rc.34.orig/argus/ArgusSource.h	2010-02-09 22:57:35.000000000 +0100
-++++ argus-3.0.0.rc.34/argus/ArgusSource.h	2010-02-09 22:57:54.000000000 +0100
-+@@ -381,7 +381,6 @@
-+ 
-+ int ArgusCreatePktFromFddi(const struct fddi_header *, struct ether_header *, int);
-+ 
-+-extern char *bpf_image(struct bpf_insn *, int);
-+ 
-+ 
-+ #else /* defined(ArgusSource) */
++ char *last_token = NULL;
++ char **my_argv;
 -- 
 1.6.3.3
