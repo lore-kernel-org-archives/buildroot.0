@@ -1,45 +1,33 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  9 Feb 2010 14:32:15 +0000 (UTC)
-Subject: [Buildroot] [Bug 1063] New: [SECURITY] Update lighttpd to 1.4.26
-Message-ID: <bug-1063-163@https.bugs.busybox.net/>
+From: julien.boibessot at free.fr <julien.boibessot@free.fr>
+Date: Tue,  9 Feb 2010 15:45:55 +0100
+Subject: [Buildroot] [PATCH] get_linux_config.sh: sets THIS_MINOR to 0 by
+	default when processing a
+Message-ID: <1265726755-15417-1-git-send-email-julien.boibessot@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1063
-
-              Host: i686-linux
-            Target: arm-softfloat-linux-uclibcgnueabi
-           Summary: [SECURITY] Update lighttpd to 1.4.26
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Outdated package
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: gustavo at zacarias.com.ar
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+From: Julien Boibessot <julien.boibessot@armadeus.com>
 
 
-Created an attachment (id=1081)
- --> (https://bugs.busybox.net/attachment.cgi?id=1081)
-Bump lighttpd to 1.4.26
+Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+---
+ scripts/get_linux_config.sh |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-lighttpd 1.4.26 fixes:
-
-* Request parser handling for splitted header data
-* FD leak in mod_cgi
-* Segfault with broken configs in mod_rewrite/mod_redirect
-* An OOM/DoS vulnerability (CVE-2010-0295)
-
-
+diff --git a/scripts/get_linux_config.sh b/scripts/get_linux_config.sh
+index 1950e9d..5cd0e37 100755
+--- a/scripts/get_linux_config.sh
++++ b/scripts/get_linux_config.sh
+@@ -35,6 +35,7 @@ function linux_version()
+ 	KERNEL=`echo ${KCONFIG} | sed s/.*linux-2.6./linux-2.6./g -`
+ 	THIS_MAJOR=${KERNEL:10:2}
+ 	THIS_MINOR=${KERNEL:13}
++	THIS_MINOR=${THIS_MINOR:=0}
+ }
+ 
+ # Try to be careful...
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.6.0.4
