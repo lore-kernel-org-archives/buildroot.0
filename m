@@ -1,47 +1,344 @@
 From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Wed, 10 Feb 2010 10:56:06 +0100
+Date: Wed, 10 Feb 2010 11:06:05 +0100
 Subject: [Buildroot] libglib2 build failure
-In-Reply-To: <20100210082659.63d38b8c@surf>
+In-Reply-To: <20100210085118.4501eb2c@surf>
 References: <20100210004822.5cc69bd2@surf> <1265783166.2185.17.camel@coalu.atr>
-	<20100210082659.63d38b8c@surf>
-Message-ID: <4d28d4b51002100156r181bd836mf9c9f367c8578d53@mail.gmail.com>
+	<20100210082659.63d38b8c@surf> <20100210085118.4501eb2c@surf>
+Message-ID: <4d28d4b51002100206s7413352dj339f3865bc228edb@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Feb 10, 2010 at 8:26 AM, Thomas Petazzoni <
+On Wed, Feb 10, 2010 at 8:51 AM, Thomas Petazzoni <
 thomas.petazzoni@free-electrons.com> wrote:
 
-> On Wed, 10 Feb 2010 07:26:06 +0100
-> Lionel Landwerlin <llandwerlin@gmail.com> wrote:
+> On Wed, 10 Feb 2010 08:26:59 +0100
+> Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 >
-> > I recompiled libglib2 2.22.4 recently with an external toolchain and
-> > having libglib2-dev installed on my host, and I don't see the
-> > problem...
+> > Well, I think LIBTOOL_PATCH=YES cannot work, since the
+> > buildroot-libtool.patch only applies properly to packages containing
+> > libtool 1.x, and libglib2 contains libtool 2.x.
 >
-> Ah, ah, interesting. Just for curiosity, which version of libtool is
-> installed on your host ? On mine, it's libtool 1.5.26.
->
-
-2.2.6b here
-
-
->
-> > What if you set AUTORECONF=YES and LIBTOOL_PATCH=YES ?
->
-> Well, I think LIBTOOL_PATCH=YES cannot work, since the
-> buildroot-libtool.patch only applies properly to packages containing
-> libtool 1.x, and libglib2 contains libtool 2.x.
+> In fact, LIBTOOL_PATCH=YES works, but the autoreconfigure afterwards
+> fails (see the log below). Any clue on what the problem is ?
 >
 
-AUTORECONF  shouldn't run libtoolize ?
+With AUTORECONF=YES we wait the autoreconf step to be done to patch the
+ltmain.sh script.
+Maybe that's why you don't see the problem right now, but in my case,
+running autoreconf regenerated
+the ltmain.sh using buildroot's libtool so the patch applies cleanly.
+
 
 >
-> Cheers,
+> For the record, I've added to the test my patch that installs
+> gtk-doc.m4 to $(STAGING_DIR)/usr/share/aclocal/ before running this
+> test, but saw no difference.
 >
-> Thomas
+
+I'm using this one too ;)
+
+
+>
+>  [3m>>>   Patching libtool [23m
+>  [3m>>>   Autoreconfiguring [23m
+> autoreconf: Entering directory `.'
+> autoreconf: configure.in: not using Gettext
+> autoreconf: running: /work/build/thomas/br-test1/host/usr/bin/aclocal -I
+> /work/build/thomas/br-test1/staging/usr/share/aclocal -I
+> /work/build/thomas/br-test1/staging/usr/share/aclocal --force
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_pic_works, ...):
+> suspicious cache-id, must contain _cv_ to be cached
+> ../../lib/autoconf/general.m4:1998: AC_CACHE_VAL is expanded from...
+> ../../lib/autoconf/general.m4:2019: AC_CACHE_CHECK is expanded from...
+> /work/build/thomas/br-test1/staging/usr/share/aclocal/libtool.m4:632:
+> AC_LIBTOOL_COMPILER_OPTION is expanded from...
+> /work/build/thomas/br-test1/staging/usr/share/aclocal/libtool.m4:4932:
+> AC_LIBTOOL_PROG_COMPILER_PIC is expanded from...
+> /work/build/thomas/br-test1/staging/usr/share/aclocal/libtool.m4:2700:
+> _LT_AC_LANG_C_CONFIG is expanded from...
+> /work/build/thomas/br-test1/staging/usr/share/aclocal/libtool.m4:2699:
+> AC_LIBTOOL_LANG_C_CONFIG is expanded from...
+> /work/build/thomas/br-test1/staging/usr/share/aclocal/libtool.m4:80:
+> AC_LIBTOOL_SETUP is expanded from...
+> /work/build/thomas/br-test1/staging/usr/share/aclocal/libtool.m4:60:
+> _AC_PROG_LIBTOOL is expanded from...
+> /work/build/thomas/br-test1/staging/usr/share/aclocal/libtool.m4:25:
+> AC_PROG_LIBTOOL is expanded from...
+> /work/build/thomas/br-test1/staging/usr/share/aclocal/libtool.m4:6477:
+> AM_PROG_LIBTOOL is expanded from...
+> configure.in:510: the top level
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_static_works,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> /work/build/thomas/br-test1/staging/usr/share/aclocal/libtool.m4:677:
+> AC_LIBTOOL_LINKER_OPTION is expanded from...
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_pic_works_CXX,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> /work/build/thomas/br-test1/staging/usr/share/aclocal/libtool.m4:2781:
+> _LT_AC_LANG_CXX_CONFIG is expanded from...
+> /work/build/thomas/br-test1/staging/usr/share/aclocal/libtool.m4:2780:
+> AC_LIBTOOL_LANG_CXX_CONFIG is expanded from...
+> /work/build/thomas/br-test1/staging/usr/share/aclocal/libtool.m4:1825:
+> _LT_AC_TAGCONFIG is expanded from...
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_static_works_CXX,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_pic_works_F77,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> /work/build/thomas/br-test1/staging/usr/share/aclocal/libtool.m4:4007:
+> _LT_AC_LANG_F77_CONFIG is expanded from...
+> /work/build/thomas/br-test1/staging/usr/share/aclocal/libtool.m4:4006:
+> AC_LIBTOOL_LANG_F77_CONFIG is expanded from...
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_static_works_F77,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_pic_works_GCJ,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> /work/build/thomas/br-test1/staging/usr/share/aclocal/libtool.m4:4116:
+> _LT_AC_LANG_GCJ_CONFIG is expanded from...
+> /work/build/thomas/br-test1/staging/usr/share/aclocal/libtool.m4:4115:
+> AC_LIBTOOL_LANG_GCJ_CONFIG is expanded from...
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_static_works_GCJ,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> autoreconf: configure.in: tracing
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_pic_works, ...):
+> suspicious cache-id, must contain _cv_ to be cached
+> ../../lib/autoconf/general.m4:1998: AC_CACHE_VAL is expanded from...
+> ../../lib/autoconf/general.m4:2019: AC_CACHE_CHECK is expanded from...
+> aclocal.m4:1806: AC_LIBTOOL_COMPILER_OPTION is expanded from...
+> aclocal.m4:6094: AC_LIBTOOL_PROG_COMPILER_PIC is expanded from...
+> aclocal.m4:3874: _LT_AC_LANG_C_CONFIG is expanded from...
+> aclocal.m4:3873: AC_LIBTOOL_LANG_C_CONFIG is expanded from...
+> aclocal.m4:1254: AC_LIBTOOL_SETUP is expanded from...
+> aclocal.m4:1234: _AC_PROG_LIBTOOL is expanded from...
+> aclocal.m4:1199: AC_PROG_LIBTOOL is expanded from...
+> aclocal.m4:7639: AM_PROG_LIBTOOL is expanded from...
+> configure.in:510: the top level
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_static_works,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> aclocal.m4:1851: AC_LIBTOOL_LINKER_OPTION is expanded from...
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_pic_works_CXX,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> aclocal.m4:3951: _LT_AC_LANG_CXX_CONFIG is expanded from...
+> aclocal.m4:3950: AC_LIBTOOL_LANG_CXX_CONFIG is expanded from...
+> aclocal.m4:2999: _LT_AC_TAGCONFIG is expanded from...
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_static_works_CXX,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_pic_works_F77,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> aclocal.m4:5173: _LT_AC_LANG_F77_CONFIG is expanded from...
+> aclocal.m4:5172: AC_LIBTOOL_LANG_F77_CONFIG is expanded from...
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_static_works_F77,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_pic_works_GCJ,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> aclocal.m4:5282: _LT_AC_LANG_GCJ_CONFIG is expanded from...
+> aclocal.m4:5281: AC_LIBTOOL_LANG_GCJ_CONFIG is expanded from...
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_static_works_GCJ,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> autoreconf: running: libtoolize --copy --force
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_pic_works, ...):
+> suspicious cache-id, must contain _cv_ to be cached
+> ../../lib/autoconf/general.m4:1998: AC_CACHE_VAL is expanded from...
+> ../../lib/autoconf/general.m4:2019: AC_CACHE_CHECK is expanded from...
+> /work/build/thomas/br-test1/staging/usr/share/aclocal/libtool.m4:632:
+> AC_LIBTOOL_COMPILER_OPTION is expanded from...
+> /work/build/thomas/br-test1/staging/usr/share/aclocal/libtool.m4:4932:
+> AC_LIBTOOL_PROG_COMPILER_PIC is expanded from...
+> /work/build/thomas/br-test1/staging/usr/share/aclocal/libtool.m4:2700:
+> _LT_AC_LANG_C_CONFIG is expanded from...
+> /work/build/thomas/br-test1/staging/usr/share/aclocal/libtool.m4:2699:
+> AC_LIBTOOL_LANG_C_CONFIG is expanded from...
+> /work/build/thomas/br-test1/staging/usr/share/aclocal/libtool.m4:80:
+> AC_LIBTOOL_SETUP is expanded from...
+> /work/build/thomas/br-test1/staging/usr/share/aclocal/libtool.m4:60:
+> _AC_PROG_LIBTOOL is expanded from...
+> /work/build/thomas/br-test1/staging/usr/share/aclocal/libtool.m4:25:
+> AC_PROG_LIBTOOL is expanded from...
+> /work/build/thomas/br-test1/staging/usr/share/aclocal/libtool.m4:6477:
+> AM_PROG_LIBTOOL is expanded from...
+> configure.in:510: the top level
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_static_works,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> /work/build/thomas/br-test1/staging/usr/share/aclocal/libtool.m4:677:
+> AC_LIBTOOL_LINKER_OPTION is expanded from...
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_pic_works_CXX,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> /work/build/thomas/br-test1/staging/usr/share/aclocal/libtool.m4:2781:
+> _LT_AC_LANG_CXX_CONFIG is expanded from...
+> /work/build/thomas/br-test1/staging/usr/share/aclocal/libtool.m4:2780:
+> AC_LIBTOOL_LANG_CXX_CONFIG is expanded from...
+> /work/build/thomas/br-test1/staging/usr/share/aclocal/libtool.m4:1825:
+> _LT_AC_TAGCONFIG is expanded from...
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_static_works_CXX,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_pic_works_F77,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> /work/build/thomas/br-test1/staging/usr/share/aclocal/libtool.m4:4007:
+> _LT_AC_LANG_F77_CONFIG is expanded from...
+> /work/build/thomas/br-test1/staging/usr/share/aclocal/libtool.m4:4006:
+> AC_LIBTOOL_LANG_F77_CONFIG is expanded from...
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_static_works_F77,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_pic_works_GCJ,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> /work/build/thomas/br-test1/staging/usr/share/aclocal/libtool.m4:4116:
+> _LT_AC_LANG_GCJ_CONFIG is expanded from...
+> /work/build/thomas/br-test1/staging/usr/share/aclocal/libtool.m4:4115:
+> AC_LIBTOOL_LANG_GCJ_CONFIG is expanded from...
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_static_works_GCJ,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> autoreconf: running: /work/build/thomas/br-test1/host/usr/bin/autoconf
+> --include=/work/build/thomas/br-test1/staging/usr/share/aclocal --force
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_pic_works, ...):
+> suspicious cache-id, must contain _cv_ to be cached
+> ../../lib/autoconf/general.m4:1998: AC_CACHE_VAL is expanded from...
+> ../../lib/autoconf/general.m4:2019: AC_CACHE_CHECK is expanded from...
+> aclocal.m4:1806: AC_LIBTOOL_COMPILER_OPTION is expanded from...
+> aclocal.m4:6094: AC_LIBTOOL_PROG_COMPILER_PIC is expanded from...
+> aclocal.m4:3874: _LT_AC_LANG_C_CONFIG is expanded from...
+> aclocal.m4:3873: AC_LIBTOOL_LANG_C_CONFIG is expanded from...
+> aclocal.m4:1254: AC_LIBTOOL_SETUP is expanded from...
+> aclocal.m4:1234: _AC_PROG_LIBTOOL is expanded from...
+> aclocal.m4:1199: AC_PROG_LIBTOOL is expanded from...
+> aclocal.m4:7639: AM_PROG_LIBTOOL is expanded from...
+> configure.in:510: the top level
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_static_works,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> aclocal.m4:1851: AC_LIBTOOL_LINKER_OPTION is expanded from...
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_pic_works_CXX,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> aclocal.m4:3951: _LT_AC_LANG_CXX_CONFIG is expanded from...
+> aclocal.m4:3950: AC_LIBTOOL_LANG_CXX_CONFIG is expanded from...
+> aclocal.m4:2999: _LT_AC_TAGCONFIG is expanded from...
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_static_works_CXX,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_pic_works_F77,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> aclocal.m4:5173: _LT_AC_LANG_F77_CONFIG is expanded from...
+> aclocal.m4:5172: AC_LIBTOOL_LANG_F77_CONFIG is expanded from...
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_static_works_F77,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_pic_works_GCJ,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> aclocal.m4:5282: _LT_AC_LANG_GCJ_CONFIG is expanded from...
+> aclocal.m4:5281: AC_LIBTOOL_LANG_GCJ_CONFIG is expanded from...
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_static_works_GCJ,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> autoreconf: running: /work/build/thomas/br-test1/host/usr/bin/autoheader
+> --include=/work/build/thomas/br-test1/staging/usr/share/aclocal --force
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_pic_works, ...):
+> suspicious cache-id, must contain _cv_ to be cached
+> ../../lib/autoconf/general.m4:1998: AC_CACHE_VAL is expanded from...
+> ../../lib/autoconf/general.m4:2019: AC_CACHE_CHECK is expanded from...
+> aclocal.m4:1806: AC_LIBTOOL_COMPILER_OPTION is expanded from...
+> aclocal.m4:6094: AC_LIBTOOL_PROG_COMPILER_PIC is expanded from...
+> aclocal.m4:3874: _LT_AC_LANG_C_CONFIG is expanded from...
+> aclocal.m4:3873: AC_LIBTOOL_LANG_C_CONFIG is expanded from...
+> aclocal.m4:1254: AC_LIBTOOL_SETUP is expanded from...
+> aclocal.m4:1234: _AC_PROG_LIBTOOL is expanded from...
+> aclocal.m4:1199: AC_PROG_LIBTOOL is expanded from...
+> aclocal.m4:7639: AM_PROG_LIBTOOL is expanded from...
+> configure.in:510: the top level
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_static_works,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> aclocal.m4:1851: AC_LIBTOOL_LINKER_OPTION is expanded from...
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_pic_works_CXX,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> aclocal.m4:3951: _LT_AC_LANG_CXX_CONFIG is expanded from...
+> aclocal.m4:3950: AC_LIBTOOL_LANG_CXX_CONFIG is expanded from...
+> aclocal.m4:2999: _LT_AC_TAGCONFIG is expanded from...
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_static_works_CXX,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_pic_works_F77,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> aclocal.m4:5173: _LT_AC_LANG_F77_CONFIG is expanded from...
+> aclocal.m4:5172: AC_LIBTOOL_LANG_F77_CONFIG is expanded from...
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_static_works_F77,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_pic_works_GCJ,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> aclocal.m4:5282: _LT_AC_LANG_GCJ_CONFIG is expanded from...
+> aclocal.m4:5281: AC_LIBTOOL_LANG_GCJ_CONFIG is expanded from...
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_static_works_GCJ,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> autoreconf: running: automake --add-missing --copy --force-missing
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_pic_works, ...):
+> suspicious cache-id, must contain _cv_ to be cached
+> ../../lib/autoconf/general.m4:1998: AC_CACHE_VAL is expanded from...
+> ../../lib/autoconf/general.m4:2019: AC_CACHE_CHECK is expanded from...
+> aclocal.m4:1806: AC_LIBTOOL_COMPILER_OPTION is expanded from...
+> aclocal.m4:6094: AC_LIBTOOL_PROG_COMPILER_PIC is expanded from...
+> aclocal.m4:3874: _LT_AC_LANG_C_CONFIG is expanded from...
+> aclocal.m4:3873: AC_LIBTOOL_LANG_C_CONFIG is expanded from...
+> aclocal.m4:1254: AC_LIBTOOL_SETUP is expanded from...
+> aclocal.m4:1234: _AC_PROG_LIBTOOL is expanded from...
+> aclocal.m4:1199: AC_PROG_LIBTOOL is expanded from...
+> aclocal.m4:7639: AM_PROG_LIBTOOL is expanded from...
+> configure.in:510: the top level
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_static_works,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> aclocal.m4:1851: AC_LIBTOOL_LINKER_OPTION is expanded from...
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_pic_works_CXX,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> aclocal.m4:3951: _LT_AC_LANG_CXX_CONFIG is expanded from...
+> aclocal.m4:3950: AC_LIBTOOL_LANG_CXX_CONFIG is expanded from...
+> aclocal.m4:2999: _LT_AC_TAGCONFIG is expanded from...
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_static_works_CXX,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_pic_works_F77,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> aclocal.m4:5173: _LT_AC_LANG_F77_CONFIG is expanded from...
+> aclocal.m4:5172: AC_LIBTOOL_LANG_F77_CONFIG is expanded from...
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_static_works_F77,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_pic_works_GCJ,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> aclocal.m4:5282: _LT_AC_LANG_GCJ_CONFIG is expanded from...
+> aclocal.m4:5281: AC_LIBTOOL_LANG_GCJ_CONFIG is expanded from...
+> configure.in:510: warning: AC_CACHE_VAL(lt_prog_compiler_static_works_GCJ,
+> ...): suspicious cache-id, must contain _cv_ to be cached
+> gtk-doc.make:53: GTK_DOC_BUILD_HTML does not appear in AM_CONDITIONAL
+> docs/reference/gio/Makefile.am:122:   `gtk-doc.make' included from here
+> gtk-doc.make:58: GTK_DOC_BUILD_PDF does not appear in AM_CONDITIONAL
+> docs/reference/gio/Makefile.am:122:   `gtk-doc.make' included from here
+> gtk-doc.make:26: EXTRA_DIST multiply defined in condition TRUE ...
+> docs/reference/gio/Makefile.am:122:   `gtk-doc.make' included from here
+> Makefile.decl:8: ... `EXTRA_DIST' previously defined here
+> docs/reference/gio/Makefile.am:1:   `Makefile.decl' included from here
+> gtk-doc.make:53: GTK_DOC_BUILD_HTML does not appear in AM_CONDITIONAL
+> docs/reference/glib/Makefile.am:73:   `gtk-doc.make' included from here
+> gtk-doc.make:58: GTK_DOC_BUILD_PDF does not appear in AM_CONDITIONAL
+> docs/reference/glib/Makefile.am:73:   `gtk-doc.make' included from here
+> gtk-doc.make:26: EXTRA_DIST multiply defined in condition TRUE ...
+> docs/reference/glib/Makefile.am:73:   `gtk-doc.make' included from here
+> Makefile.decl:8: ... `EXTRA_DIST' previously defined here
+> docs/reference/glib/Makefile.am:2:   `Makefile.decl' included from here
+> docs/reference/glib/Makefile.am:92: `%'-style pattern rules are a GNU make
+> extension
+> gtk-doc.make:53: GTK_DOC_BUILD_HTML does not appear in AM_CONDITIONAL
+> docs/reference/gobject/Makefile.am:61:   `gtk-doc.make' included from here
+> gtk-doc.make:58: GTK_DOC_BUILD_PDF does not appear in AM_CONDITIONAL
+> docs/reference/gobject/Makefile.am:61:   `gtk-doc.make' included from here
+> gtk-doc.make:26: EXTRA_DIST multiply defined in condition TRUE ...
+> docs/reference/gobject/Makefile.am:61:   `gtk-doc.make' included from here
+> Makefile.decl:8: ... `EXTRA_DIST' previously defined here
+> docs/reference/gobject/Makefile.am:2:   `Makefile.decl' included from here
+> docs/reference/gobject/Makefile.am:74: `%'-style pattern rules are a GNU
+> make extension
+> autoreconf: automake failed with exit status: 1
+> make: ***
+> [/work/build/thomas/br-test1/build/libglib2-2.22.4/.stamp_patched] Error 1
+>
+>
+>
+After a little research in my olds patch lists, I have something that
+patches the Makefile.am at top directory
+of the libglib2 sources to remove the test directory from SRC_SUBDIRS.
+ If I remember correctly, this problem comes from the redefinition of
+EXTRA_DIST...
+
+
 > --
 > Thomas Petazzoni, Free Electrons
 > Kernel, drivers, real-time and embedded Linux
@@ -54,4 +351,11 @@ AUTORECONF  shouldn't run libtoolize ?
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100210/5c46827a/attachment.htm>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100210/c35bf4e0/attachment-0001.htm>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: plop.patch
+Type: text/x-patch
+Size: 1337 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100210/c35bf4e0/attachment-0001.bin>
