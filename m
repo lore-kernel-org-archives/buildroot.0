@@ -1,34 +1,85 @@
-From: brian hawley <sproon@hotmail.com>
-Date: Wed, 10 Feb 2010 16:45:40 -0600
-Subject: [Buildroot] e ink am300 buildroot support
-Message-ID: <COL124-W19EB5771BDF131E98D3967D04F0@phx.gbl>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 11 Feb 2010 08:44:21 +0100
+Subject: [Buildroot] libglib2 build failure
+In-Reply-To: <20100210085118.4501eb2c@surf>
+References: <20100210004822.5cc69bd2@surf> <1265783166.2185.17.camel@coalu.atr>
+	<20100210082659.63d38b8c@surf> <20100210085118.4501eb2c@surf>
+Message-ID: <20100211084421.307d30e6@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
 Hello,
 
-I am new to buildroot and am a student working on a capstone project with the eink am 300 developement board. I know that buildroot supports the am300 board as it is located in the following folder after a successful build:
+On Wed, 10 Feb 2010 08:51:18 +0100
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-./output/build/linux-2.6.32.7/arch/arm/mach-pxa/
+> `Makefile.decl' included from here gtk-doc.make:53:
+> GTK_DOC_BUILD_HTML does not appear in AM_CONDITIONAL
+> docs/reference/glib/Makefile.am:73:   `gtk-doc.make' included from
+> here gtk-doc.make:58: GTK_DOC_BUILD_PDF does not appear in
+> AM_CONDITIONAL docs/reference/glib/Makefile.am:73:   `gtk-doc.make'
+> included from here gtk-doc.make:26: EXTRA_DIST multiply defined in
+> condition TRUE ... docs/reference/glib/Makefile.am:73:
+> `gtk-doc.make' included from here Makefile.decl:8: ... `EXTRA_DIST'
+> previously defined here docs/reference/glib/Makefile.am:2:
+> `Makefile.decl' included from here
+> docs/reference/glib/Makefile.am:92: `%'-style pattern rules are a GNU
+> make extension gtk-doc.make:53: GTK_DOC_BUILD_HTML does not appear in
+> AM_CONDITIONAL docs/reference/gobject/Makefile.am:61:
+> `gtk-doc.make' included from here gtk-doc.make:58: GTK_DOC_BUILD_PDF
+> does not appear in AM_CONDITIONAL
+> docs/reference/gobject/Makefile.am:61:   `gtk-doc.make' included from
+> here gtk-doc.make:26: EXTRA_DIST multiply defined in condition
+> TRUE ... docs/reference/gobject/Makefile.am:61:   `gtk-doc.make'
+> included from here Makefile.decl:8: ... `EXTRA_DIST' previously
+> defined here docs/reference/gobject/Makefile.am:2:   `Makefile.decl'
+> included from here docs/reference/gobject/Makefile.am:74: `%'-style
+> pattern rules are a GNU make extension autoreconf: automake failed
+> with exit status: 1 make: ***
+> [/work/build/thomas/br-test1/build/libglib2-2.22.4/.stamp_patched]
+> Error 1
 
-which includes the support c file for the gumstix processor and the am300 board. How is it possible to add the support for the am300 board to the build? I do not see this as an option when using the command make menuconfig 
+For the record, I've been able to fix this issue by using a more recent
+gtk-doc.m4 version than the one I had in my repo. So now, libglib2
+build with LIBTOOL_PATCH=YES and AUTORECONF=YES works.
 
-I believe that all I need to do is have the support files generate the drivers need for the board, but again I am unsure and am stuck with just assumptions. 
+However, without these, the build breaks for me,
+with /usr/lib/libgobject-2.0.so: file not recognized: File format not
+recognized. What's odd is that in the same conditions (same Buildroot
+version, same version of libtool on the host, libglib-dev installed on
+the host), the build doesn't break for Lionel.
 
-Background information:
-using the gumstix pxa255 arm xscale basix
-gumstix is connected to the e ink am300 development board with an active matrix electrophoretic display
+I've also tried importing the OpenWRT way of handling libtool problems
+into Buildroot, but it fails. For the record, the OpenWRT way is :
 
-Thank you for any help.
-Brian
- 		 	   		  
-_________________________________________________________________
-Your E-mail and More On-the-Go. Get Windows Live Hotmail Free.
-http://clk.atdmt.com/GBL/go/201469229/direct/01/
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100210/40adbaf8/attachment.htm>
+ * Compile libtool for the host, with a few patches
+
+  https://dev.openwrt.org/browser/trunk/package/libtool/patches
+
+ * When a package asks for a libtool fixup, do :
+
+  cp $(HOST_DIR)/usr/share/libtool/ltmain.sh $$($$(PKG)_SRCDIR)
+  cp $(HOST_DIR)/usr/share/aclocal/libtool.m4 $$($$(PKG)_SRCDIR)
+  cp $(HOST_DIR)/usr/bin/libtool $$($$(PKG)_SRCDIR)
+
+It fails with :
+
+ ../../libtool: line 841: X--tag=CC: command not found
+ ../../libtool: line 874: libtool: ignoring unknown tag : command not found
+ [... many more issues ...]
+
+Which, according to quick Google searches, seems to indicate that the
+version of libtool.m4 doesn't match the one bundled into aclocal.m4. Or
+something like this.
+
+This libtool thing is really driving me crazy.
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
