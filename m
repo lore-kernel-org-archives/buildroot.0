@@ -1,38 +1,30 @@
-From: julien.boibessot at free.fr <julien.boibessot@free.fr>
-Date: Thu, 11 Feb 2010 13:46:47 +0100
-Subject: [Buildroot] [PATCH] Updates rsync source repository
-Message-ID: <1265892407-11552-1-git-send-email-julien.boibessot@free.fr>
+From: Andreas Kuehn <Andreas.Kuehn@gin.de>
+Date: Thu, 11 Feb 2010 13:54:42 +0100
+Subject: [Buildroot] buildroot-2009.11 doesn't build kernel modules
+Message-ID: <4B73FE12.6000700@gin.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Julien Boibessot <julien.boibessot@armadeus.com>
+Hi All!
 
-rsync source repository has moved (?).
-Bump version while we are at it.
 
-Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
----
- package/rsync/rsync.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+I trying to build an at91sam9263 based system. At earlier versions a
+full compilation run on buildroot creates all pieces including *.ko.
+The current buildroot does not.
 
-diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
-index 1ed6812..e1bb28e 100644
---- a/package/rsync/rsync.mk
-+++ b/package/rsync/rsync.mk
-@@ -4,9 +4,9 @@
- #
- #############################################################
- 
--RSYNC_VERSION:=3.0.6
-+RSYNC_VERSION:=3.0.7
- RSYNC_SOURCE:=rsync-$(RSYNC_VERSION).tar.gz
--RSYNC_SITE:=http://rsync.samba.org/ftp/rsync
-+RSYNC_SITE:=http://rsync.samba.org/ftp/rsync/src
- RSYNC_INSTALL_STAGING:=NO
- RSYNC_INSTALL_TARGET:=YES
- RSYNC_CONF_OPT=$(if $(BR2_ENABLE_DEBUG),--enable-debug,--disable-debug)
--- 
-1.6.0.4
+I tried recompiling the kernel and of course make linux26 but no effect.
+Running make linux26-modules created the following output:
+
+$ make linux26-modules
+cp -dpf
+/usr/cross/GL4200/buildroot-2009.11/output/build/u-boot-2009.06/tools/mkimage
+/usr/cross/GL4200/buildroot-2009.11/output/staging/usr/bin/
+
+
+Did I miss something?
+
+Thanks in advance,
+	akuehn
