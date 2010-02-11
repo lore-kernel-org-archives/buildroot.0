@@ -1,40 +1,44 @@
-From: Makis Tsimaras <tsigian@gmail.com>
-Date: Thu, 11 Feb 2010 16:58:07 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 11 Feb 2010 16:35:47 +0100
 Subject: [Buildroot] asterisk works in buildroot?
-Message-ID: <e42c80a1002110658y6dd628bbg419a1062d8f8019@mail.gmail.com>
+In-Reply-To: <e42c80a1002110658y6dd628bbg419a1062d8f8019@mail.gmail.com>
+References: <e42c80a1002110658y6dd628bbg419a1062d8f8019@mail.gmail.com>
+Message-ID: <20100211163547.66d65e17@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello everyone.
+Hello Makis,
 
-I try to build an asterisk system for an Alixd1 board with Buildroot but i
-can't so far.
+On Thu, 11 Feb 2010 16:58:07 +0200
+Makis Tsimaras <tsigian@gmail.com> wrote:
 
-I read the docs and i tried to include the asterisk-1.4.29 into the building
-by following the instructions.
-It actually worked and when i copied the image into a CF card, and boot the
-Alixd1 board with..., i could see the asterisk binary in the /sbin
-directory.
+> My question is that is the "depends on BROKEN" line in the
+> "package/multimedia/asterisk/Config.in" means that asterisk cannot
+> compile and work with Buildroot at all?
 
-The problem is while i could start it and also connect to the asterisk CLI
-prompt with "asterisk -rvv",... i couldn't see the service at all with the
-"netstat" command from inside the Alixd1 board,  and also with "nmap" from
-an external host,....while at the same time i could scan and use other
-service daemons like SSHD and VSFTPD.
+It was marked BROKEN because it was known not to work and nobody was
+working on getting it working. As it was marked BROKEN since a long
+time, Peter Korsgaard (Buildroot maintainer) recently removed asterisk
+from the list of available packages.
 
-Maybe i miss something but this is where im now.
+However, this does not mean that Asterisk cannot be built at all with
+Buildroot. It just means that someones needs to make the integration.
+So you have basically two choices:
 
-My question is that is the "depends on BROKEN" line in the
-"package/multimedia/asterisk/Config.in" means that asterisk cannot compile
-and work with Buildroot at all?
+ 1) Do the work by yourself if you have the skills and the time.
 
+ 2) Hire a consultant with expertise in Buildroot to do the
+    integration. It happens that I'm both a Buildroot developer and a
+    consultant :-)
 
-Is there anyone who successfully compiled asterisk with Buildroot?
-I would appreciate any help please.
-Thank you anyway.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100211/946c00cd/attachment.htm>
+Cheers!
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
