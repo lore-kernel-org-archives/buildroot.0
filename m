@@ -1,246 +1,40 @@
-From: Mike Crowe <mac@mcrowe.com>
-Date: Thu, 11 Feb 2010 13:32:49 +0000
-Subject: [Buildroot] [PATCH] Upgrade libusb to v1.0.3 and add new
-	libusb-compat package	for compatibility with old packages
-	that expect the pre-1.0 API.
-Message-ID: <20100211133249.GA32287@mcrowe.com>
+From: Makis Tsimaras <tsigian@gmail.com>
+Date: Thu, 11 Feb 2010 16:58:07 +0200
+Subject: [Buildroot] asterisk works in buildroot?
+Message-ID: <e42c80a1002110658y6dd628bbg419a1062d8f8019@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switch to using AUTOTARGETS while we're at it.
+Hello everyone.
 
-I'm not certain that libusb-compat-0.1.3-pkgconfig.patch is essential
-but it doesn't seem to do any harm.
+I try to build an asterisk system for an Alixd1 board with Buildroot but i
+can't so far.
 
-Also update usb_modeswitch to depend on libusb-compat rather than
-libusb.
+I read the docs and i tried to include the asterisk-1.4.29 into the building
+by following the instructions.
+It actually worked and when i copied the image into a CF card, and boot the
+Alixd1 board with..., i could see the asterisk binary in the /sbin
+directory.
 
-Signed-off-by: Mike Crowe <mac@mcrowe.com>
----
+The problem is while i could start it and also connect to the asterisk CLI
+prompt with "asterisk -rvv",... i couldn't see the service at all with the
+"netstat" command from inside the Alixd1 board,  and also with "nmap" from
+an external host,....while at the same time i could scan and use other
+service daemons like SSHD and VSFTPD.
 
- package/Config.in                                  |    1 +
- package/libusb-compat/Config.in                    |    7 ++
- .../libusb-compat-0.1.3-pkgconfig.patch            |   10 +++
- package/libusb-compat/libusb-compat.mk             |   15 ++++
- package/libusb/libusb-0.1.12-nocpp.patch           |   20 -----
- package/libusb/libusb.mk                           |   86 +++-----------------
- package/usb_modeswitch/Config.in                   |    2 +-
- package/usb_modeswitch/usb_modeswitch.mk           |    2 +-
- 8 files changed, 45 insertions(+), 98 deletions(-)
- create mode 100644 package/libusb-compat/Config.in
- create mode 100644 package/libusb-compat/libusb-compat-0.1.3-pkgconfig.patch
- create mode 100644 package/libusb-compat/libusb-compat.mk
- delete mode 100644 package/libusb/libusb-0.1.12-nocpp.patch
+Maybe i miss something but this is where im now.
 
-diff --git a/package/Config.in b/package/Config.in
-index 5ddd63c..72f65b6 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -251,6 +251,7 @@ source "package/iostat/Config.in"
- source "package/libaio/Config.in"
- source "package/libraw1394/Config.in"
- source "package/libusb/Config.in"
-+source "package/libusb-compat/Config.in"
- source "package/lm-sensors/Config.in"
- source "package/lvm2/Config.in"
- source "package/mdadm/Config.in"
-diff --git a/package/libusb-compat/Config.in b/package/libusb-compat/Config.in
-new file mode 100644
-index 0000000..f6f49ca
---- /dev/null
-+++ b/package/libusb-compat/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LIBUSB_COMPAT
-+	bool "libusb-compat"
-+	depends on BR2_PACKAGE_LIBUSB
-+	help
-+	  libusb-0.1 compatibility layer for libusb-1.0.
-+
-+	  http://libusb.sourceforge.net/
-diff --git a/package/libusb-compat/libusb-compat-0.1.3-pkgconfig.patch b/package/libusb-compat/libusb-compat-0.1.3-pkgconfig.patch
-new file mode 100644
-index 0000000..e5ba786
---- /dev/null
-+++ b/package/libusb-compat/libusb-compat-0.1.3-pkgconfig.patch
-@@ -0,0 +1,10 @@
-+--- libusb-compat-0.1.3.orig/libusb.pc.in	2008-06-18 00:13:02.000000000 +0100
-++++ libusb-compat-0.1.3/libusb.pc.in	2009-09-16 12:06:50.000000000 +0100
-+@@ -9,6 +9,7 @@ emulated_by=libusb-1.0
-+ Name: libusb
-+ Description: USB access library (libusb-1.0 compat wrapper)
-+ Version: @LIBUSB01_VERSION@
-++Requires: libusb-1.0
-+ Libs: -L${libdir} -lusb
-+ Cflags: -I${includedir}
-+ 
-diff --git a/package/libusb-compat/libusb-compat.mk b/package/libusb-compat/libusb-compat.mk
-new file mode 100644
-index 0000000..e61bbd4
---- /dev/null
-+++ b/package/libusb-compat/libusb-compat.mk
-@@ -0,0 +1,15 @@
-+#############################################################
-+#
-+# libusb-compat
-+#
-+#############################################################
-+LIBUSB_COMPAT_VERSION = 0.1.3
-+LIBUSB_COMPAT_SOURCE = libusb-compat-$(LIBUSB_COMPAT_VERSION).tar.bz2
-+LIBUSB_COMPAT_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/libusb/libusb-compat-0.1/libusb-compat-$(LIBUSB_COMPAT_VERSION)
-+LIBUSB_COMPAT_AUTOCONF = NO
-+LIBUSB_COMPAT_LIBTOOL_PATCH = NO
-+LIBUSB_COMPAT_DEPENDENCIES = uclibc host-pkg-config libusb
-+LIBUSB_COMPAT_INSTALL_STAGING = YES
-+LIBUSB_COMPAT_INSTALL_TARGET = YES
-+
-+$(eval $(call AUTOTARGETS,package,libusb-compat))
-diff --git a/package/libusb/libusb-0.1.12-nocpp.patch b/package/libusb/libusb-0.1.12-nocpp.patch
-deleted file mode 100644
-index de1a8c7..0000000
---- a/package/libusb/libusb-0.1.12-nocpp.patch
-+++ /dev/null
-@@ -1,20 +0,0 @@
----- libusb-0.1.12/Makefile.am	2006-03-04 13:52:46.000000000 +1100
--+++ libusb-0.1.12/Makefile.am.new	2007-11-08 16:25:38.000000000 +1100
--@@ -4,7 +4,7 @@
-- # gnu strictness chokes on README being autogenerated
-- AUTOMAKE_OPTIONS = 1.4 foreign
-- 
---SUBDIRS = . tests doc
--+SUBDIRS = . doc
-- 
-- AM_CFLAGS = -Werror
-- 
--@@ -19,7 +19,7 @@
--              apidocs/footer.html apidocs/doxygen.css apidocs/doxygen.png libusb.pc.in
-- EXTRA_libusb_la_SOURCE = linux.c linux.h bsd.c darwin.c
-- 
---lib_LTLIBRARIES = libusb.la libusbpp.la
--+lib_LTLIBRARIES = libusb.la
-- 
-- pkgconfig_DATA = libusb.pc
-- 
-diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
-index adf3e20..3a8bbd7 100644
---- a/package/libusb/libusb.mk
-+++ b/package/libusb/libusb.mk
-@@ -3,79 +3,13 @@
- # libusb
- #
- #############################################################
--LIBUSB_VERSION:=0.1.12
--LIBUSB_PATCH_FILE:=libusb_$(LIBUSB_VERSION)-10.diff.gz
--LIBUSB_SOURCE:=libusb_$(LIBUSB_VERSION).orig.tar.gz
--LIBUSB_SITE:=http://snapshot.debian.net/archive/2008/04/27/debian/pool/main/libu/libusb
--LIBUSB_DIR:=$(BUILD_DIR)/libusb-$(LIBUSB_VERSION)
--LIBUSB_CAT:=$(ZCAT)
--LIBUSB_BINARY:=usr/lib/libusb.so
--
--ifneq ($(LIBUSB_PATCH_FILE),)
--LIBUSB_PATCH=$(DL_DIR)/$(LIBUSB_PATCH_FILE)
--$(LIBUSB_PATCH):
--	$(call DOWNLOAD,$(LIBUSB_SITE),$(LIBUSB_PATCH_FILE))
--endif
--$(DL_DIR)/$(LIBUSB_SOURCE): $(LIBUSB_PATCH)
--	$(call DOWNLOAD,$(LIBUSB_SITE),$(LIBUSB_SOURCE))
--	touch -c $@
--
--libusb-source: $(DL_DIR)/$(LIBUSB_SOURCE) $(LIBUSB_PATCH)
--
--libusb-unpacked: $(LIBUSB_DIR)/.unpacked
--$(LIBUSB_DIR)/.unpacked: $(DL_DIR)/$(LIBUSB_SOURCE)
--	$(LIBUSB_CAT) $(DL_DIR)/$(LIBUSB_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--ifneq ($(LIBUSB_PATCH_FILE),)
--	(cd $(LIBUSB_DIR) && $(LIBUSB_CAT) $(LIBUSB_PATCH) | patch -p1)
--endif
--	toolchain/patch-kernel.sh $(LIBUSB_DIR) package/libusb/ libusb-$(LIBUSB_VERSION)\*.patch*
--	$(SED) 's,^all:.*,all:,g' $(LIBUSB_DIR)/tests/Makefile.in
--	$(SED) 's,^install:.*,install:,g' $(LIBUSB_DIR)/tests/Makefile.in
--	$(CONFIG_UPDATE) $(LIBUSB_DIR)
--	cd $(LIBUSB_DIR) && $(AUTORECONF)
--	touch $@
--
--$(LIBUSB_DIR)/.configured: $(LIBUSB_DIR)/.unpacked
--	(cd $(LIBUSB_DIR); rm -rf config.cache; \
--		$(TARGET_CONFIGURE_OPTS) \
--		$(TARGET_CONFIGURE_ARGS) \
--		ac_cv_header_regex_h=no \
--		./configure $(QUIET) \
--		--target=$(GNU_TARGET_NAME) \
--		--host=$(GNU_TARGET_NAME) \
--		--build=$(GNU_HOST_NAME) \
--		--prefix=$(STAGING_DIR)/usr \
--		--disable-debug \
--		--disable-build-docs \
--	)
--	touch $@
--
--$(STAGING_DIR)/usr/lib/libusb.so: $(LIBUSB_DIR)/.configured
--	$(MAKE) -C $(LIBUSB_DIR)
--	$(MAKE) -C $(LIBUSB_DIR) install
--
--$(TARGET_DIR)/$(LIBUSB_BINARY): $(STAGING_DIR)/usr/lib/libusb.so
--	cp -dpf $(STAGING_DIR)/usr/lib/libusb*.so* $(TARGET_DIR)/usr/lib/
--	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libusb*.so*
--
--libusb: host-pkg-config host-autoconf host-automake host-libtool $(TARGET_DIR)/$(LIBUSB_BINARY)
--
--libusb-clean:
--	rm -f $(STAGING_DIR)/bin/libusb-config
--	rm -f $(STAGING_DIR)/usr/includes/usb*.h
--	rm -f $(STAGING_DIR)/lib/libusb*
--	rm -rf $(STAGING_DIR)/lib/pkgconfig
--	rm -f $(TARGET_DIR)/usr/lib/libusb*
--	-$(MAKE) -C $(LIBUSB_DIR) clean
--
--libusb-dirclean:
--	rm -rf $(LIBUSB_DIR)
--
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(BR2_PACKAGE_LIBUSB),y)
--TARGETS+=libusb
--endif
-+LIBUSB_VERSION = 1.0.3
-+LIBUSB_SOURCE = libusb-$(LIBUSB_VERSION).tar.bz2
-+LIBUSB_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/libusb/libusb-1.0/libusb-$(LIBUSB_VERSION)
-+LIBUSB_AUTORECONF = NO
-+LIBUSB_LIBTOOL_PATCH = NO
-+LIBUSB_DEPENDENCIES = uclibc host-pkg-config
-+LIBUSB_INSTALL_STAGING = YES
-+LIBUSB_INSTALL_TARGET = YES
-+
-+$(eval $(call AUTOTARGETS,package,libusb))
-diff --git a/package/usb_modeswitch/Config.in b/package/usb_modeswitch/Config.in
-index 41cd3a0..f9fa76e 100644
---- a/package/usb_modeswitch/Config.in
-+++ b/package/usb_modeswitch/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_USB_MODESWITCH
- 	bool "usb_modeswitch"
--	select BR2_PACKAGE_LIBUSB
-+	select BR2_PACKAGE_LIBUSB_COMPAT
- 	help
- 	  USB mode switcher.
- 	  Used to switch mode on multiple-function devices
-diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
-index 306d803..377bc3b 100644
---- a/package/usb_modeswitch/usb_modeswitch.mk
-+++ b/package/usb_modeswitch/usb_modeswitch.mk
-@@ -8,7 +8,7 @@ USB_MODESWITCH_VERSION = 1.0.7
- USB_MODESWITCH_SOURCE = usb_modeswitch-$(USB_MODESWITCH_VERSION).tar.bz2
- USB_MODESWITCH_SITE = http://www.draisberghof.de/usb_modeswitch
- USB_MODESWITCH_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
--USB_MODESWITCH_DEPENDENCIES = libusb
-+USB_MODESWITCH_DEPENDENCIES = libusb-compat
- USB_MODESWITCH_MAKE_OPT = CC="$(TARGET_CC)" OPTS="$(TARGET_CFLAGS)"
- 
- $(eval $(call AUTOTARGETS,package,usb_modeswitch))
--- 
-1.5.6.5
+My question is that is the "depends on BROKEN" line in the
+"package/multimedia/asterisk/Config.in" means that asterisk cannot compile
+and work with Buildroot at all?
+
+
+Is there anyone who successfully compiled asterisk with Buildroot?
+I would appreciate any help please.
+Thank you anyway.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100211/946c00cd/attachment.htm>
