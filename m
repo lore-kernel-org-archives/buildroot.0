@@ -1,31 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 Feb 2010 19:48:12 +0100
-Subject: [Buildroot] undefined reference to copysignl
-In-Reply-To: <20100212193841.530e2caa@surf>
-References: <13abadeb1002120953q24b91634j5f17c9ce93cc634a@mail.gmail.com>
-	<13abadeb1002120954l10e05e25y36f5738a02d16d1c@mail.gmail.com>
-	<20100212193841.530e2caa@surf>
-Message-ID: <20100212194812.388ecf4b@surf>
+From: julien.boibessot at free.fr <julien.boibessot@free.fr>
+Date: Fri, 12 Feb 2010 23:47:37 +0100
+Subject: [Buildroot] [PATCH] gstreamer-good: add speex dependancy
+Message-ID: <1266014857-16015-1-git-send-email-julien.boibessot@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 12 Feb 2010 19:38:41 +0100
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+From: Julien Boibessot <julien.boibessot@armadeus.com>
 
-> Something like
->  http://gcc.gnu.org/ml/gcc-patches/2008-10/msg00237.html
-> maybe ?
+Otherwise, even if speex is selected, as gstreamer is compiled first,
+speex plugin is not activated/built.
 
-Well, this patch was controversial it seems. The OpenWRT guys have
-instead integrated a fix for uClibc:
- https://dev.openwrt.org/browser/trunk/toolchain/uClibc/patches-0.9.30.1/450-powerpc_copysignl.patch?rev=18178
+Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+---
+ package/multimedia/gst-plugins-good/Config.in      |    4 ++++
+ .../gst-plugins-good/gst-plugins-good.mk           |    7 +++++++
+ 2 files changed, 11 insertions(+), 0 deletions(-)
 
-Thomas
+diff --git a/package/multimedia/gst-plugins-good/Config.in b/package/multimedia/gst-plugins-good/Config.in
+index fdb6646..a326dc9 100644
+--- a/package/multimedia/gst-plugins-good/Config.in
++++ b/package/multimedia/gst-plugins-good/Config.in
+@@ -172,4 +172,8 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_SOUPHTTPSRC
+ 	bool "souphttpsrc (http client)"
+ 	select BR2_PACKAGE_LIBSOUP
+ 
++config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_SPEEX
++	bool "speex"
++	select BR2_PACKAGE_SPEEX
++
+ endif
+diff --git a/package/multimedia/gst-plugins-good/gst-plugins-good.mk b/package/multimedia/gst-plugins-good/gst-plugins-good.mk
+index 7b6f02b..19a53e6 100644
+--- a/package/multimedia/gst-plugins-good/gst-plugins-good.mk
++++ b/package/multimedia/gst-plugins-good/gst-plugins-good.mk
+@@ -318,4 +318,11 @@ else
+ GST_PLUGINS_GOOD_CONF_OPT += --disable-soup
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_SPEEX),y)
++GST_PLUGINS_GOOD_CONF_OPT += --enable-speex
++GST_PLUGINS_GOOD_DEPENDENCIES += speex
++else
++GST_PLUGINS_GOOD_CONF_OPT += --disable-speex
++endif
++
+ $(eval $(call AUTOTARGETS,package/multimedia,gst-plugins-good))
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.6.0.4
