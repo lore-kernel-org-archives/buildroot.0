@@ -1,120 +1,184 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 13 Feb 2010 16:13:57 +0100
-Subject: [Buildroot] [PATCH 1/3] gtk-doc: add gtk-doc.m4 to satisfy aclocal
+Date: Sat, 13 Feb 2010 16:13:59 +0100
+Subject: [Buildroot] [PATCH 3/3] Bump TCL version and switch to the
+	autotools infrastructure
 In-Reply-To: <cover.1266074036.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1266074036.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <61f677cb060732316b41f072210986e97ae9379f.1266074036.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <155667c237ac77ba64d984feb01dbad34ff1189d.1266074036.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When packages using gtk-doc are autoreconfigured, aclocal complains
-because it cannot find the macros defined in gtk-doc.m4. We could
-compile the gtk-doc package for the host, but it depends on
-gnome-doc-utils, which depends on libxml2, libxslt, and other packages
-as well.
+The version of TCL is bumped from 8.4.9 to 8.4.19, which fixes the
+build breakage reported by Maxime Ripard <maxime.ripard@anandra.org>
+on January, 6th, 2010.
 
-Since we don't care about the documentation, all is needed is in fact
-the gtk-doc.m4, so that the configure script can be generated, and we
-can use the --disable-gtk-doc to not generate the documentation.
+The tcl-strtod patch is kept since it is still needed, the two other
+patches are no longer useful.
 
-To solve this, we include a gtk-doc.m4 file in package/automake/, and
-it gets installed in $(STAGING_DIR)/usr/share/aclocal/ during the
-installation of the host automake (used for autoreconfiguration of
-packages).
+At the same time, the package is converted to the autotools
+infrastructure.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/automake/automake.mk |    6 ++++
- package/automake/gtk-doc.m4  |   61 ++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 67 insertions(+), 0 deletions(-)
- create mode 100644 package/automake/gtk-doc.m4
+ .../{tcl-strtod.patch => tcl-8.4.19-strtod.patch}  |    0
+ package/tcl/tcl-configure-syntax-error.patch       |   42 ---------------
+ package/tcl/tcl-strstr.patch                       |   11 ----
+ package/tcl/tcl.mk                                 |   56 +++-----------------
+ 4 files changed, 8 insertions(+), 101 deletions(-)
+ rename package/tcl/{tcl-strtod.patch => tcl-8.4.19-strtod.patch} (100%)
+ delete mode 100644 package/tcl/tcl-configure-syntax-error.patch
+ delete mode 100644 package/tcl/tcl-strstr.patch
 
-diff --git a/package/automake/automake.mk b/package/automake/automake.mk
-index 65db386..eb3b375 100644
---- a/package/automake/automake.mk
-+++ b/package/automake/automake.mk
-@@ -15,6 +15,12 @@ AUTOMAKE_DEPENDENCIES = autoconf microperl
+diff --git a/package/tcl/tcl-strtod.patch b/package/tcl/tcl-8.4.19-strtod.patch
+similarity index 100%
+rename from package/tcl/tcl-strtod.patch
+rename to package/tcl/tcl-8.4.19-strtod.patch
+diff --git a/package/tcl/tcl-configure-syntax-error.patch b/package/tcl/tcl-configure-syntax-error.patch
+deleted file mode 100644
+index b22e974..0000000
+--- a/package/tcl/tcl-configure-syntax-error.patch
++++ /dev/null
+@@ -1,42 +0,0 @@
+-diff -ur tcl8.4.9/unix/configure tcl8.4.9-patched/unix/configure
+---- tcl8.4.9/unix/configure	2004-12-06 18:23:45.000000000 -0600
+-+++ tcl8.4.9-patched/unix/configure	2006-07-06 21:02:18.884355250 -0500
+-@@ -2131,7 +2131,7 @@
+- 	    # results, and the version is kept in special file).
+- 	
+- 	    if test -r /etc/.relid -a "X`uname -n`" = "X`uname -s`" ; then
+--		system=MP-RAS-`awk '{print }' /etc/.relid'`
+-+		system=MP-RAS-`awk '{print }' /etc/.relid`
+- 	    fi
+- 	    if test "`uname -s`" = "AIX" ; then
+- 		system=AIX-`uname -v`.`uname -r`
+-@@ -7322,7 +7322,7 @@
+- 	    # results, and the version is kept in special file).
+- 	
+- 	    if test -r /etc/.relid -a "X`uname -n`" = "X`uname -s`" ; then
+--		system=MP-RAS-`awk '{print }' /etc/.relid'`
+-+		system=MP-RAS-`awk '{print }' /etc/.relid`
+- 	    fi
+- 	    if test "`uname -s`" = "AIX" ; then
+- 		system=AIX-`uname -v`.`uname -r`
+-diff -ur tcl8.4.9/unix/tcl.m4 tcl8.4.9-patched/unix/tcl.m4
+---- tcl8.4.9/unix/tcl.m4	2004-12-06 18:23:45.000000000 -0600
+-+++ tcl8.4.9-patched/unix/tcl.m4	2006-07-06 21:02:35.653403250 -0500
+-@@ -844,7 +844,7 @@
+- 	    # results, and the version is kept in special file).
+- 	
+- 	    if test -r /etc/.relid -a "X`uname -n`" = "X`uname -s`" ; then
+--		system=MP-RAS-`awk '{print $3}' /etc/.relid'`
+-+		system=MP-RAS-`awk '{print $3}' /etc/.relid`
+- 	    fi
+- 	    if test "`uname -s`" = "AIX" ; then
+- 		system=AIX-`uname -v`.`uname -r`
+-@@ -2190,7 +2190,7 @@
+- 	    # results, and the version is kept in special file).
+- 	
+- 	    if test -r /etc/.relid -a "X`uname -n`" = "X`uname -s`" ; then
+--		system=MP-RAS-`awk '{print $3}' /etc/.relid'`
+-+		system=MP-RAS-`awk '{print $3}' /etc/.relid`
+- 	    fi
+- 	    if test "`uname -s`" = "AIX" ; then
+- 		system=AIX-`uname -v`.`uname -r`
+diff --git a/package/tcl/tcl-strstr.patch b/package/tcl/tcl-strstr.patch
+deleted file mode 100644
+index 3bed414..0000000
+--- a/package/tcl/tcl-strstr.patch
++++ /dev/null
+@@ -1,11 +0,0 @@
+---- tcl8.4.9/compat/strstr.c	2002-01-26 03:10:08.000000000 +0200
+-+++ tcl8.4.9/compat/strstr.c	2005-05-30 06:53:40.000000000 +0300
+-@@ -33,6 +33,8 @@
+-  *----------------------------------------------------------------------
+-  */
+- 
+-+#include <unistd.h>
+-+
+- char *
+- strstr(string, substring)
+-     register char *string;	/* String to search. */
+diff --git a/package/tcl/tcl.mk b/package/tcl/tcl.mk
+index a30cce2..edcc441 100644
+--- a/package/tcl/tcl.mk
++++ b/package/tcl/tcl.mk
+@@ -3,66 +3,26 @@
+ # TCL8.4
+ #
+ #############################################################
+-TCL_VERSION:=8.4.9
++TCL_VERSION:=8.4.19
+ TCL_SOURCE:=tcl$(TCL_VERSION)-src.tar.gz
+ TCL_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/tcl
+-TCL_DIR:=$(BUILD_DIR)/tcl$(TCL_VERSION)
+-
+-$(DL_DIR)/$(TCL_SOURCE):
+-	$(call DOWNLOAD,$(TCL_SITE),$(TCL_SOURCE))
+-
+-$(TCL_DIR)/.source: $(DL_DIR)/$(TCL_SOURCE)
+-	$(ZCAT) $(DL_DIR)/$(TCL_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(TCL_DIR) package/tcl/ tcl\*.patch
+-	touch $(TCL_DIR)/.source
+-
+-$(TCL_DIR)/.configured: $(TCL_DIR)/.source
+-	(cd $(TCL_DIR)/unix; rm -f config.cache; \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		$(TARGET_CONFIGURE_ARGS) \
+-		./configure $(QUIET) \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		--prefix=/usr \
+-		--sysconfdir=/etc \
++TCL_SUBDIR = unix
++TCL_CONF_OPT = \
+ 		--enable-shared \
+ 		--disable-symbols \
+ 		--disable-langinfo \
+-		--disable-framework \
+-	)
+-	touch $(TCL_DIR)/.configured
++		--disable-framework
  
- HOST_AUTOMAKE_DEPENDENCIES = host-autoconf
- 
-+define GTK_DOC_M4_INSTALL
-+ $(INSTALL) -m 0644 package/automake/gtk-doc.m4 $(STAGING_DIR)/usr/share/aclocal/
+-$(TCL_DIR)/unix/libtcl8.4.so: $(TCL_DIR)/.configured
+-	$(MAKE) CC=$(TARGET_CC) -C $(TCL_DIR)/unix
+-
+-$(TARGET_DIR)/usr/lib/libtcl8.4.so: $(TCL_DIR)/unix/libtcl8.4.so
+-	$(MAKE) INSTALL_ROOT=$(TARGET_DIR) -C $(TCL_DIR)/unix install
++define TCL_POST_INSTALL_CLEANUP
+ 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libtcl8.4.so
+-	rm -Rf $(TARGET_DIR)/usr/man
+ 	-if [ "$(BR2_PACKAGE_TCL_DEL_ENCODINGS)" == "y" ]; then \
+ 	rm -Rf $(TARGET_DIR)/usr/lib/tcl8.4/encoding/*; \
+ 	fi
+ 	-if [ "$(BR2_PACKAGE_TCL_SHLIB_ONLY)" == "y" ]; then \
+ 	rm -f $(TARGET_DIR)/usr/bin/tclsh8.4; \
+ 	fi
 +endef
-+
-+HOST_AUTOMAKE_POST_INSTALL_HOOKS += GTK_DOC_M4_INSTALL
-+
- $(eval $(call AUTOTARGETS,package,automake))
- $(eval $(call AUTOTARGETS,package,automake,host))
  
-diff --git a/package/automake/gtk-doc.m4 b/package/automake/gtk-doc.m4
-new file mode 100644
-index 0000000..2cfa1e7
---- /dev/null
-+++ b/package/automake/gtk-doc.m4
-@@ -0,0 +1,61 @@
-+dnl -*- mode: autoconf -*-
-+
-+# serial 1
-+
-+dnl Usage:
-+dnl   GTK_DOC_CHECK([minimum-gtk-doc-version])
-+AC_DEFUN([GTK_DOC_CHECK],
-+[
-+  AC_BEFORE([AC_PROG_LIBTOOL],[$0])dnl setup libtool first
-+  AC_BEFORE([AM_PROG_LIBTOOL],[$0])dnl setup libtool first
-+
-+  dnl check for tools we added during development
-+  AC_PATH_PROG([GTKDOC_CHECK],[gtkdoc-check])
-+  AC_PATH_PROGS([GTKDOC_REBASE],[gtkdoc-rebase],[true])
-+  AC_PATH_PROG([GTKDOC_MKPDF],[gtkdoc-mkpdf])
-+
-+  dnl for overriding the documentation installation directory
-+  AC_ARG_WITH([html-dir],
-+    AS_HELP_STRING([--with-html-dir=PATH], [path to installed docs]),,
-+    [with_html_dir='${datadir}/gtk-doc/html'])
-+  HTML_DIR="$with_html_dir"
-+  AC_SUBST([HTML_DIR])
-+
-+  dnl enable/disable documentation building
-+  AC_ARG_ENABLE([gtk-doc],
-+    AS_HELP_STRING([--enable-gtk-doc],
-+                   [use gtk-doc to build documentation [[default=no]]]),,
-+    [enable_gtk_doc=no])
-+
-+  if test x$enable_gtk_doc = xyes; then
-+    ifelse([$1],[],
-+      [PKG_CHECK_EXISTS([gtk-doc],,
-+                        AC_MSG_ERROR([gtk-doc not installed and --enable-gtk-doc requested]))],
-+      [PKG_CHECK_EXISTS([gtk-doc >= $1],,
-+                        AC_MSG_ERROR([You need to have gtk-doc >= $1 installed to build $PACKAGE_NAME]))])
-+  fi
-+
-+  AC_MSG_CHECKING([whether to build gtk-doc documentation])
-+  AC_MSG_RESULT($enable_gtk_doc)
-+
-+  dnl enable/disable output formats
-+  AC_ARG_ENABLE([gtk-doc-html],
-+    AS_HELP_STRING([--enable-gtk-doc-html],
-+                   [build documentation in html format [[default=yes]]]),,
-+    [enable_gtk_doc_html=yes])
-+    AC_ARG_ENABLE([gtk-doc-pdf],
-+      AS_HELP_STRING([--enable-gtk-doc-pdf],
-+                     [build documentation in pdf format [[default=no]]]),,
-+      [enable_gtk_doc_pdf=no])
-+
-+  if test -z "$GTKDOC_MKPDF"; then
-+    enable_gtk_doc_pdf=no
-+  fi
-+
-+
-+  AM_CONDITIONAL([ENABLE_GTK_DOC], [test x$enable_gtk_doc = xyes])
-+  AM_CONDITIONAL([GTK_DOC_BUILD_HTML], [test x$enable_gtk_doc_html = xyes])
-+  AM_CONDITIONAL([GTK_DOC_BUILD_PDF], [test x$enable_gtk_doc_pdf = xyes])
-+  AM_CONDITIONAL([GTK_DOC_USE_LIBTOOL], [test -n "$LIBTOOL"])
-+  AM_CONDITIONAL([GTK_DOC_USE_REBASE], [test -n "$GTKDOC_REBASE"])
-+])
+-tcl: $(TARGET_DIR)/usr/lib/libtcl8.4.so
+-
+-tcl-source: $(DL_DIR)/$(TCL_SOURCE)
+-
+-tcl-clean:
+-	$(MAKE) prefix=$(TARGET_DIR)/usr -C $(TCL_DIR)/unix uninstall
+-	-$(MAKE) -C $(TCL_DIR)/unix clean
++TCL_POST_INSTALL_TARGET_HOOKS += TCL_POST_INSTALL_CLEANUP
+ 
+-tcl-dirclean:
+-	rm -rf $(TCL_DIR)
+-
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_TCL),y)
+-TARGETS+=tcl
+-endif
++$(eval $(call AUTOTARGETS,package,tcl))
 -- 
 1.6.3.3
