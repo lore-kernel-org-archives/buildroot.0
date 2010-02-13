@@ -1,33 +1,30 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Sat, 13 Feb 2010 17:52:08 +0100
-Subject: [Buildroot] [PATCH 1/3] gtk-doc: add gtk-doc.m4 to satisfy
- aclocal
-In-Reply-To: <61f677cb060732316b41f072210986e97ae9379f.1266074036.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1266074036.git.thomas.petazzoni@free-electrons.com>
-	<61f677cb060732316b41f072210986e97ae9379f.1266074036.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <1266079928.2185.18.camel@coalu.atr>
+From: Jim Thomas <jimthomasembedded@yahoo.com>
+Date: Sat, 13 Feb 2010 13:51:26 -0800 (PST)
+Subject: [Buildroot] Persistent U-Boot environment variables under QEMU
+Message-ID: <727912.43003.qm@web44816.mail.sp1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le samedi 13 f?vrier 2010 ? 16:13 +0100, Thomas Petazzoni a ?crit :
-> When packages using gtk-doc are autoreconfigured, aclocal complains
-> because it cannot find the macros defined in gtk-doc.m4. We could
-> compile the gtk-doc package for the host, but it depends on
-> gnome-doc-utils, which depends on libxml2, libxslt, and other packages
-> as well.
-> 
-> Since we don't care about the documentation, all is needed is in fact
-> the gtk-doc.m4, so that the configure script can be generated, and we
-> can use the --disable-gtk-doc to not generate the documentation.
-> 
-> To solve this, we include a gtk-doc.m4 file in package/automake/, and
-> it gets installed in $(STAGING_DIR)/usr/share/aclocal/ during the
-> installation of the host automake (used for autoreconfiguration of
-> packages).
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+I am experimenting with Buildroot under QEMU, using buildroot-2009.11 and buildroot-2010.02-rc1.
 
-Acked-by: Lionel Landwerlin <llandwerlin@gmail.com>
+So far, so good.  I can boot a Linux kernel and RFS built by Buildroot under QEMU (versatilepb) where the RFS is exported via NFS.
+
+QEMU includes a boot loader, so U-Boot is not needed.  But I use U-Boot with real ARM hardware, so I would like to experiment with U-Boot under QEMU, adding DHCP and TFTP to the mix.
+
+With real hardware, the U-Boot environment variables are persistent in flash memory.
+
+Is there a way to simulate this with QEMU?  I would not go to the trouble to manually enter the U-Boot environment variables each time I boot under QEMU, but if there is a persistence mechanism available then including U-Boot might be practical.
+
+Thanks.
+
+Jim
+
+
+
+      
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100213/f1ccaebb/attachment-0001.htm>
