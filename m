@@ -1,47 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 13 Feb 2010 16:13:58 +0100
-Subject: [Buildroot] [PATCH 2/3] Fix dependencies for TrapProto
-In-Reply-To: <cover.1266074036.git.thomas.petazzoni@free-electrons.com>
+From: Lionel Landwerlin <llandwerlin@gmail.com>
+Date: Sat, 13 Feb 2010 17:52:08 +0100
+Subject: [Buildroot] [PATCH 1/3] gtk-doc: add gtk-doc.m4 to satisfy
+ aclocal
+In-Reply-To: <61f677cb060732316b41f072210986e97ae9379f.1266074036.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1266074036.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <60ff66d8075184855fbffee65cc3506aa12c8a75.1266074036.git.thomas.petazzoni@free-electrons.com>
+	<61f677cb060732316b41f072210986e97ae9379f.1266074036.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <1266079928.2185.18.camel@coalu.atr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The .pc file of TrapProto says that it depends on xt, even through it
-doesn't depend on it at compile time. However, if xt isn't present
-when TrapProto has been installed, the compilation of Xserver fails
-telling that there is a missing dependency in TrapProto on Xt.
+Le samedi 13 f?vrier 2010 ? 16:13 +0100, Thomas Petazzoni a ?crit :
+> When packages using gtk-doc are autoreconfigured, aclocal complains
+> because it cannot find the macros defined in gtk-doc.m4. We could
+> compile the gtk-doc package for the host, but it depends on
+> gnome-doc-utils, which depends on libxml2, libxslt, and other packages
+> as well.
+> 
+> Since we don't care about the documentation, all is needed is in fact
+> the gtk-doc.m4, so that the configure script can be generated, and we
+> can use the --disable-gtk-doc to not generate the documentation.
+> 
+> To solve this, we include a gtk-doc.m4 file in package/automake/, and
+> it gets installed in $(STAGING_DIR)/usr/share/aclocal/ during the
+> installation of the host automake (used for autoreconfiguration of
+> packages).
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/x11r7/xproto_trapproto/Config.in           |    1 +
- package/x11r7/xproto_trapproto/xproto_trapproto.mk |    1 +
- 2 files changed, 2 insertions(+), 0 deletions(-)
-
-diff --git a/package/x11r7/xproto_trapproto/Config.in b/package/x11r7/xproto_trapproto/Config.in
-index 3d2868f..0f9c470 100644
---- a/package/x11r7/xproto_trapproto/Config.in
-+++ b/package/x11r7/xproto_trapproto/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_XPROTO_TRAPPROTO
- 	bool "trapproto"
-+	select BR2_PACKAGE_XLIB_LIBXT
- 	help
- 	  trapproto 3.4.3
- 	  X.Org Trap protocol headers
-diff --git a/package/x11r7/xproto_trapproto/xproto_trapproto.mk b/package/x11r7/xproto_trapproto/xproto_trapproto.mk
-index 5ef5fa5..29c4356 100644
---- a/package/x11r7/xproto_trapproto/xproto_trapproto.mk
-+++ b/package/x11r7/xproto_trapproto/xproto_trapproto.mk
-@@ -10,5 +10,6 @@ XPROTO_TRAPPROTO_SITE = http://xorg.freedesktop.org/releases/individual/proto
- XPROTO_TRAPPROTO_AUTORECONF = NO
- XPROTO_TRAPPROTO_INSTALL_STAGING = YES
- XPROTO_TRAPPROTO_INSTALL_TARGET = NO
-+XPROTO_TRAPPROTO_DEPENDENCIES = xlib_libXt
- 
- $(eval $(call AUTOTARGETS,package/x11r7,xproto_trapproto))
--- 
-1.6.3.3
+Acked-by: Lionel Landwerlin <llandwerlin@gmail.com>
