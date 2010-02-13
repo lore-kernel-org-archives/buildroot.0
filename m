@@ -1,52 +1,28 @@
-From: julien.boibessot at free.fr <julien.boibessot@free.fr>
-Date: Fri, 12 Feb 2010 23:47:37 +0100
-Subject: [Buildroot] [PATCH] gstreamer-good: add speex dependancy
-Message-ID: <1266014857-16015-1-git-send-email-julien.boibessot@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 13 Feb 2010 12:27:51 +0100
+Subject: [Buildroot] [pull request] Pull request for branch uclibc-iconv-fix
+Message-ID: <cover.1266060467.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Julien Boibessot <julien.boibessot@armadeus.com>
+The following changes since commit f0bdacdb5b8fe0fbc276ed510fc58e9a219f5cf8:
+  Peter Korsgaard (1):
+        update for 2010.02-rc1
 
-Otherwise, even if speex is selected, as gstreamer is compiled first,
-speex plugin is not activated/built.
+are available in the git repository at:
 
-Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
----
- package/multimedia/gst-plugins-good/Config.in      |    4 ++++
- .../gst-plugins-good/gst-plugins-good.mk           |    7 +++++++
- 2 files changed, 11 insertions(+), 0 deletions(-)
+  git://git.busybox.net/~tpetazzoni/git/buildroot uclibc-iconv-fix
 
-diff --git a/package/multimedia/gst-plugins-good/Config.in b/package/multimedia/gst-plugins-good/Config.in
-index fdb6646..a326dc9 100644
---- a/package/multimedia/gst-plugins-good/Config.in
-+++ b/package/multimedia/gst-plugins-good/Config.in
-@@ -172,4 +172,8 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_SOUPHTTPSRC
- 	bool "souphttpsrc (http client)"
- 	select BR2_PACKAGE_LIBSOUP
- 
-+config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_SPEEX
-+	bool "speex"
-+	select BR2_PACKAGE_SPEEX
-+
- endif
-diff --git a/package/multimedia/gst-plugins-good/gst-plugins-good.mk b/package/multimedia/gst-plugins-good/gst-plugins-good.mk
-index 7b6f02b..19a53e6 100644
---- a/package/multimedia/gst-plugins-good/gst-plugins-good.mk
-+++ b/package/multimedia/gst-plugins-good/gst-plugins-good.mk
-@@ -318,4 +318,11 @@ else
- GST_PLUGINS_GOOD_CONF_OPT += --disable-soup
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_SPEEX),y)
-+GST_PLUGINS_GOOD_CONF_OPT += --enable-speex
-+GST_PLUGINS_GOOD_DEPENDENCIES += speex
-+else
-+GST_PLUGINS_GOOD_CONF_OPT += --disable-speex
-+endif
-+
- $(eval $(call AUTOTARGETS,package/multimedia,gst-plugins-good))
+Thomas Petazzoni (1):
+      Add patch to fix uClibc build failure with locale enabled
+
+ ...libc-0.9.30.2-fix-make-install-host-utils.patch |  153 ++++++++++++++++++++
+ 1 files changed, 153 insertions(+), 0 deletions(-)
+ create mode 100644 toolchain/uClibc/uClibc-0.9.30.2-fix-make-install-host-utils.patch
+
+Thanks,
 -- 
-1.6.0.4
+Thomas Petazzoni
