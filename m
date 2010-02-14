@@ -1,32 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Feb 2010 11:43:04 +0100
-Subject: [Buildroot] Best way to run ntpdate at startup
-In-Reply-To: <368044.7338.qm@web44815.mail.sp1.yahoo.com>
-References: <368044.7338.qm@web44815.mail.sp1.yahoo.com>
-Message-ID: <20100214114304.4d4f7eeb@surf>
+Date: Sun, 14 Feb 2010 11:44:40 +0100
+Subject: [Buildroot] backtrace patch and execinfo.h missing on uclibc
+In-Reply-To: <9e4ade691002132326i3d3261afja3e4513ec7c07f07@mail.gmail.com>
+References: <9e4ade691002132326i3d3261afja3e4513ec7c07f07@mail.gmail.com>
+Message-ID: <20100214114440.10260f67@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Jim,
+On Sun, 14 Feb 2010 04:26:28 -0300
+Sebasti?n Treu <sebastian.treu@gmail.com> wrote:
 
-On Sat, 13 Feb 2010 22:27:11 -0800 (PST)
-Jim Thomas <jimthomasembedded@yahoo.com> wrote:
+> I have read another threads about it without any success on solve my
+> problem. I also ask in IRC and gently they told me about a patch. But
+> without any more information, and I didn't continue asking to don't
+> bother people there. I don't like to bother anywhere, but I can't
+> manage to solve my problem.
 
-> Where should I configure NTPDATE=yes and NTPSERVERS=0.us.pool.ntp.org?
-> 
-> I could add this to the top of S49ntp, but is there some other
-> startup config file that is intended for such options so S49ntp
-> remains unaltered?
-> 
-> Is this done manually, or through Buildroot 'make menuconfig'?
+Can you explain what your problem is ?
 
-The ntpd script reads /etc/default/ntpd, in which you can set NTPDATE,
-NTPD and other variables.
+I.e: give your .config file, tell us about the error you're having, how
+we can reproduce it, etc.
 
-Cheers,
+Thanks,
 
 Thomas
 -- 
