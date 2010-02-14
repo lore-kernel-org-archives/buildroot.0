@@ -1,44 +1,40 @@
-From: =?ISO-8859-1?Q?Sebasti=E1n_Treu?= <sebastian.treu@gmail.com>
-Date: Sun, 14 Feb 2010 04:26:28 -0300
-Subject: [Buildroot] backtrace patch and execinfo.h missing on uclibc
-Message-ID: <9e4ade691002132326i3d3261afja3e4513ec7c07f07@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 14 Feb 2010 11:39:20 +0100
+Subject: [Buildroot] Persistent U-Boot environment variables under QEMU
+In-Reply-To: <727912.43003.qm@web44816.mail.sp1.yahoo.com>
+References: <727912.43003.qm@web44816.mail.sp1.yahoo.com>
+Message-ID: <20100214113920.153e393f@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,o
 
-I have read another threads about it without any success on solve my
-problem. I also ask in IRC and gently they told me about a patch. But
-without any more information, and I didn't continue asking to don't
-bother people there. I don't like to bother anywhere, but I can't
-manage to solve my problem.
+On Sat, 13 Feb 2010 13:51:26 -0800 (PST)
+Jim Thomas <jimthomasembedded@yahoo.com> wrote:
 
-I patched manually with the patch:
-http://repo.or.cz/w/buildroot.git/blob_plain/HEAD:/toolchain/gcc/4.4.1/301-missing-execinfo_h.patch
+> With real hardware, the U-Boot environment variables are persistent
+> in flash memory.
+> 
+> Is there a way to simulate this with QEMU?  I would not go to the
+> trouble to manually enter the U-Boot environment variables each time
+> I boot under QEMU, but if there is a persistence mechanism available
+> then including U-Boot might be practical.
 
-But execinfo.h does not appears on the include directory. I'm not
-really looking for a solution, I mean, If someone tell me that it's
-imposible to build that package with uclibc toolchain, then I'll see
-what to do. Maybe I'll switch to glibc and make all the systems
-again...such a pitty.
+Qemu can emulate flash memory, so U-Boot can be used "normally". In
+2008, I managed to get U-Boot working on the versatilepb board
+emulation of Qemu, with few changes to Qemu and U-Boot. See
+http://thomas.enix.org/Blog-20081002153859-Technologie for details. The
+three first patches have been merged into Qemu since then, but the last
+(and most important) patch was never merged.
 
-I have also tried pasting the execinfo.h file from glibc toolchain
-made by the openwrt source without success. It found the file
-included, but errors on function definitions arrives.
+Cheers,
 
-I thought in building that package only with glibc, and I asked that
-on IRC. They told me that it's hard to get it working like that.
-
-If someone can reply this with the no-solution or the solution I will
-be pleased.
-
-Thanks in advance,
-Best regards,
+Thomas
 -- 
-If you want freedom, compile the source. Get gentoo.
-
-Sebasti?n Treu
-http://labombiya.com.ar
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
