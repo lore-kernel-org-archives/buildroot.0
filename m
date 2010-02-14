@@ -1,30 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Feb 2010 12:41:26 +0100
-Subject: [Buildroot] Remove the Glib 1.x / Gtk 1.x stack ?
-In-Reply-To: <20100214122934.5aae9b87@surf>
-References: <20100214122934.5aae9b87@surf>
-Message-ID: <20100214124126.2b388c5c@surf>
+From: Makis Tsimaras <tsigian@gmail.com>
+Date: Sun, 14 Feb 2010 17:10:09 +0200
+Subject: [Buildroot] which uid?
+Message-ID: <e42c80a1002140710h66681551qb9f2f29f6dc82c75@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 14 Feb 2010 12:29:34 +0100
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+Hello everybody.
 
-> Can't we just remove it from Buildroot ? If so, both libgtk12 and
-> libglib12 can be removed.
+I was doing a build for x86 target, and during the beginning (after i run
+make),.. buildroot downloaded the linux kernel, extract it,.. and after
+about 20-30 lines it stopped with an error like:
 
-Dillo needs to be removed as well. The version of Dillo we package,
-0.8.6 is ancient, and depends on Gtk 1.2. However, the latest version
-of Dillo available is 2.2, and relies on FLTK instead of GTK.
+"Insecure dependency in open while running setuid at scripts/
+headers_install.pl line 31"
 
-So either we remove Dillo as well, or we update it to 2.2.
+I tried it a few times (as a normal user) and the same happened.
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+When i tried it as root, the building didn't stop and continued normally.
+
+Am i gonna have any problem running the "make" command as root?
+
+
+Thanks in advanced
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100214/0d9c8ce7/attachment.htm>
