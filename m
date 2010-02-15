@@ -1,50 +1,55 @@
-From: Marc Garnier <marc.garnier@heig-vd.ch>
-Date: Mon, 15 Feb 2010 12:22:16 +0100
-Subject: [Buildroot] Using an external Linux tree
-Message-ID: <4B792E68.6020907@heig-vd.ch>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 15 Feb 2010 15:56:20 +0000 (UTC)
+Subject: [Buildroot] [Bug 1093] New: [PATCH] Upgrade libusb to v1.0.3 and
+ add new libusb-compat package for compatibility with old packages that
+ expect the pre-1.0 API.
+Message-ID: <bug-1093-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+https://bugs.busybox.net/show_bug.cgi?id=1093
 
-Have you found the solution?
+           Summary: [PATCH] Upgrade libusb to v1.0.3 and add new libusb-
+                    compat package for compatibility with old packages that
+                    expect the pre-1.0 API.
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: mac at mcrowe.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-*Cliff Holden* Cliff.Holden at Atheros.com 
-<mailto:buildroot%40busybox.net?Subject=Re%3A%20%5BBuildroot%5D%20Using%20an%20external%20Linux%20tree&In-Reply-To=%3CD302D58E77B2A2448F54114C6F143271EC45E9F17E%40SC1EXMB-MBCL.global.atheros.com%3E>
-/Mon May 11 17:53:32 UTC 2009/
-------------------------------------------------------------------------
 
-Hi all,
+Created an attachment (id=1099)
+ --> (https://bugs.busybox.net/attachment.cgi?id=1099)
+Upgrade to libusb v1.0.3 and introduce libusb-compat
 
-I'm somewhat new to buildroot, but have been building kernels for a while.  I have a general question:
+Upgrade libusb to v1.0.3.
 
-What is the proper procedure for using an external linux kernel tree in the build?  
-Our SCC system (source code control) is set up to have various kernel versions located in a particular location.  
-If I could get buildroot to "point" to this external kernel, it would be helpful.
+Add new libusb-compat package for compatibility with old packages.
 
-I did try the "advanced" options that allows the specification of a kernel version and an external "patch" file, 
-which is close, but the custom kernel I have is not set up as a set of patches.  
-I would like an option to simply specify the path of the kernel source for the build to use.
+Switch to using AUTOTARGETS while we're at it.
 
-Any suggestions would be appreciated.
+I'm not certain that libusb-compat-0.1.3-pkgconfig.patch is essential
+but it doesn't seem to do any harm.
 
-Thanks!!
+Also update usb_modeswitch to depend on libusb-compat rather than
+libusb.
+
+Originally posted to mailing list at:
+http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/19727
 
 
 -- 
-///////////////////////////////////////////// 
-Marc Garnier
-R&D Certified Engineer
-
-eMbedded Information Systems Institute (MIS)
-University of Applied Sciences, Vaud
-rue Galil?e 15
-1400 Yverdon-les-Bains
-Switzerland
-
-Tel : +41 (0)24 423 97 71
-Fax : +41 (0)24 423 97 59
-URL : http://mis.heig-vd.ch
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
