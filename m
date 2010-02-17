@@ -1,8 +1,7 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Wed, 17 Feb 2010 11:10:23 +0100
-Subject: [Buildroot] [git commit master] Create $(STAGING_DIR)/usr/bin
-	unconditionnally
-Message-ID: <20100217101056.0179C7770C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] CHANGES: add argus/at/libpcap
+Message-ID: <20100217101057.840017770C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,28 +9,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a05c337de5d86f9494fdc6a950e5121256de6ba3
+commit: http://git.buildroot.net/buildroot/commit/?id=23c8c8800abf438490b412a1455b3162b7f0e07b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This fixes the build of libcap, with external toolchain, when it is
-the first package being built.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- Makefile |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ CHANGES |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index a0c18ba..76eeddb 100644
---- a/Makefile
-+++ b/Makefile
-@@ -371,6 +371,7 @@ ifneq ($(BR2_TOOLCHAIN_EXTERNAL),y)
- endif
- endif
- 	@mkdir -p $(STAGING_DIR)/usr/include
-+	@mkdir -p $(STAGING_DIR)/usr/bin
+diff --git a/CHANGES b/CHANGES
+index c8ddc6e..5de44dc 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,9 @@
++2010.02-rc2, Not yet released:
++
++	Fixes all over the tree and new features.
++
++	Updated/fixed packages: argus, at, libpcap
++
+ 2010.02-rc1, Released February 9th, 2010:
  
- $(BUILD_DIR)/.root:
- 	mkdir -p $(TARGET_DIR)
+ 	Fixes all over the tree and new features.
 -- 
 1.6.3.3
