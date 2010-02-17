@@ -1,13 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 17 Feb 2010 11:28:22 +0100
-Subject: [Buildroot] [PATCH 1/1] Add patch to fix uClibc build failure
-	with locale enabled
-In-Reply-To: <2bf5840e578bf5ac8245f6ce27eb395acdbfd805.1266060467.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Sat, 13 Feb 2010 12:27:52 +0100")
+Date: Wed, 17 Feb 2010 11:28:38 +0100
+Subject: [Buildroot] [pull request] Pull request for branch
+	uclibc-iconv-fix
+In-Reply-To: <cover.1266060467.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Sat, 13 Feb 2010 12:27:51 +0100")
 References: <cover.1266060467.git.thomas.petazzoni@free-electrons.com>
-	<cover.1266060467.git.thomas.petazzoni@free-electrons.com>
-	<2bf5840e578bf5ac8245f6ce27eb395acdbfd805.1266060467.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87pr442m2h.fsf@macbook.be.48ers.dk>
+Message-ID: <87ljes2m21.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,15 +14,18 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> This patch fixes the undefined reference to `__iconv_codesets'
- Thomas> reported at
- Thomas> http://www.mail-archive.com/uclibc at uclibc.org/msg04970.html. The patch
- Thomas> has been taken from the upstream Git repository, and will be part of
- Thomas> uClibc 0.9.30.3. In the mean time, let's integrate it.
+ Thomas> The following changes since commit f0bdacdb5b8fe0fbc276ed510fc58e9a219f5cf8:
+ Thomas>   Peter Korsgaard (1):
+ Thomas>         update for 2010.02-rc1
 
-Thanks. Aything else in the stable branch we should take? Bernhard
-mentioned that the ETA for 0.9.30.3 was ~2 weeks, so we might end up
-releasing 2010.02 before then.
+ Thomas> are available in the git repository at:
+
+ Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot uclibc-iconv-fix
+
+ Thomas> Thomas Petazzoni (1):
+ Thomas>       Add patch to fix uClibc build failure with locale enabled
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
