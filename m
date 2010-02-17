@@ -1,10 +1,13 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 17 Feb 2010 11:05:48 +0100
-Subject: [Buildroot] [pull request] Pull request for branch fixes
-In-Reply-To: <cover.1265759162.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Wed, 10 Feb 2010 00:46:05 +0100")
+Date: Wed, 17 Feb 2010 11:07:08 +0100
+Subject: [Buildroot] [PATCH 3/3] at: fix compile breakage when flex
+	isn't on the target
+In-Reply-To: <93df31e4047f0c5708605570de65bcd1d777c01d.1265759162.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Wed, 10 Feb 2010 00:46:08 +0100")
 References: <cover.1265759162.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87k4uc41oj.fsf@macbook.be.48ers.dk>
+	<cover.1265759162.git.thomas.petazzoni@free-electrons.com>
+	<93df31e4047f0c5708605570de65bcd1d777c01d.1265759162.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87fx5041mb.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,15 +16,12 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> The following changes since commit f0bdacdb5b8fe0fbc276ed510fc58e9a219f5cf8:
- Thomas>   Peter Korsgaard (1):
- Thomas>         update for 2010.02-rc1
+ Thomas> Add a patch that makes sure config.h gets included in a file that uses
+ Thomas> some of the NEEDS_* macros. The yywrap() function was missing when
+ Thomas> flex was not available on the target, even though this configuration
+ Thomas> is supposed to be supported by at (and handled by NEEDS_YYWRAP).
 
- Thomas> are available in the git repository at:
-
- Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot fixes
-
-Committed, thanks!
+Thanks - Please also send upstream and CC crossdev at send-patches.org
 
 -- 
 Bye, Peter Korsgaard
