@@ -1,34 +1,41 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 17 Feb 2010 11:04:47 +0000 (UTC)
-Subject: [Buildroot] [Bug 1069] [PATCH] The AT91BOOTSTRAP makefile contains
-	a typo
-In-Reply-To: <bug-1069-163@https.bugs.busybox.net/>
-References: <bug-1069-163@https.bugs.busybox.net/>
-Message-ID: <20100217110447.D17C0776C6@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 17 Feb 2010 12:12:53 +0100
+Subject: [Buildroot] -sh: lrzsz: not found
+In-Reply-To: <19bf.4b79c31a.526aa@getafix.xdna.net> (Cameron Hutchison's
+	message of "Mon, 15 Feb 2010 21:56:42 -0000")
+References: <SNT129-W3519623AE8254A748FDB73B94A0@phx.gbl>
+	<19bf.4b79c31a.526aa@getafix.xdna.net>
+Message-ID: <87hbpg2k0a.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1069
+>>>>> "Cameron" == Cameron Hutchison <lists@xdna.net> writes:
 
+ Cameron> Tony Mozi <spooflinux@hotmail.fr> writes:
+ >> I copy the new image rootfs in the board.
+ >> The directory lrzsz is present in buildroot-2009.11/package/lrzsz.
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+ >> However, in serial console : 
+ >> # lrzsz
+ >> -sh: lrzsz: not found
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+ Cameron> It appears to be installed as /usr/bin/sz and /usr/bin/rz.
 
+Yes, just like upstream does.
 
+It's the same on my Debian machin:
 
-
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2010-02-17 11:04:45 UTC ---
-Committed, thanks!
-
+dpkg -L lrzsz|grep bin
+/usr/bin
+/usr/bin/rx
+/usr/bin/rz
+/usr/bin/sz
+/usr/bin/sx
+/usr/bin/rb
+/usr/bin/sb
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
