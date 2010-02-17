@@ -1,25 +1,27 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Wed, 17 Feb 2010 01:05:09 +0100
-Subject: [Buildroot] udev hidden by busybox
-Message-ID: <EFAB42F6B6E0488D9548C40B17BA6052@apexjs>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 17 Feb 2010 11:05:48 +0100
+Subject: [Buildroot] [pull request] Pull request for branch fixes
+In-Reply-To: <cover.1265759162.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Wed, 10 Feb 2010 00:46:05 +0100")
+References: <cover.1265759162.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87k4uc41oj.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
- 
-While testing the 2010-rc1  i discovered  that udev was not build.
- 
-It seems to be hidden by BR2_BUSYBOX_SHOW_OTHERS
- 
-busybox provides mdev, but i tried it before and i had problems with it so i
-went back to udev.
- 
-Personally i would not hide udev when BR2_BUSYBOX_SHOW_OTHERS is not set.
- 
-Johan
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100217/4b441be3/attachment.htm>
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+
+ Thomas> The following changes since commit f0bdacdb5b8fe0fbc276ed510fc58e9a219f5cf8:
+ Thomas>   Peter Korsgaard (1):
+ Thomas>         update for 2010.02-rc1
+
+ Thomas> are available in the git repository at:
+
+ Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot fixes
+
+Committed, thanks!
+
+-- 
+Bye, Peter Korsgaard
