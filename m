@@ -1,8 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 17 Feb 2010 11:23:43 +0100
-Subject: [Buildroot] [git commit master] Temporary fix for alsa-lib breakage
-	with --disable-pcm
-Message-ID: <20100217102509.A37867770C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] Fix dependencies for TrapProto
+Message-ID: <20100217102508.D73F47770C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,34 +9,41 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=94e172c8e7660213d29cb37ff760f5abf8886c31
+commit: http://git.buildroot.net/buildroot/commit/?id=60ff66d8075184855fbffee65cc3506aa12c8a75
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The current version of alsa-lib (1.0.22) does not build when
---disable-pcm is used at configure time. I've reported the issue at
-https://bugtrack.alsa-project.org/alsa-bug/view.php?id=4913.
-
-In the mean time, we can prevent the user from not selecting PCM
-support by using the following patch.
+The .pc file of TrapProto says that it depends on xt, even through it
+doesn't depend on it at compile time. However, if xt isn't present
+when TrapProto has been installed, the compilation of Xserver fails
+telling that there is a missing dependency in TrapProto on Xt.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/multimedia/alsa-lib/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/x11r7/xproto_trapproto/Config.in           |    1 +
+ package/x11r7/xproto_trapproto/xproto_trapproto.mk |    1 +
+ 2 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/multimedia/alsa-lib/Config.in b/package/multimedia/alsa-lib/Config.in
-index 84629e6..98b8313 100644
---- a/package/multimedia/alsa-lib/Config.in
-+++ b/package/multimedia/alsa-lib/Config.in
-@@ -1,5 +1,9 @@
- config BR2_PACKAGE_ALSA_LIB
- 	bool "alsa-lib"
-+	# Temporary until
-+	# https://bugtrack.alsa-project.org/alsa-bug/view.php?id=4913
-+	# is fixed
-+	select BR2_PACKAGE_ALSA_LIB_PCM
+diff --git a/package/x11r7/xproto_trapproto/Config.in b/package/x11r7/xproto_trapproto/Config.in
+index 3d2868f..0f9c470 100644
+--- a/package/x11r7/xproto_trapproto/Config.in
++++ b/package/x11r7/xproto_trapproto/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_XPROTO_TRAPPROTO
+ 	bool "trapproto"
++	select BR2_PACKAGE_XLIB_LIBXT
  	help
- 	  The Advanced Linux Sound Architecture (ALSA) provides audio and MIDI
- 	  functionality to the Linux operating system.
+ 	  trapproto 3.4.3
+ 	  X.Org Trap protocol headers
+diff --git a/package/x11r7/xproto_trapproto/xproto_trapproto.mk b/package/x11r7/xproto_trapproto/xproto_trapproto.mk
+index 5ef5fa5..29c4356 100644
+--- a/package/x11r7/xproto_trapproto/xproto_trapproto.mk
++++ b/package/x11r7/xproto_trapproto/xproto_trapproto.mk
+@@ -10,5 +10,6 @@ XPROTO_TRAPPROTO_SITE = http://xorg.freedesktop.org/releases/individual/proto
+ XPROTO_TRAPPROTO_AUTORECONF = NO
+ XPROTO_TRAPPROTO_INSTALL_STAGING = YES
+ XPROTO_TRAPPROTO_INSTALL_TARGET = NO
++XPROTO_TRAPPROTO_DEPENDENCIES = xlib_libXt
+ 
+ $(eval $(call AUTOTARGETS,package/x11r7,xproto_trapproto))
 -- 
 1.6.3.3
