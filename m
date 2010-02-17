@@ -1,32 +1,43 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 17 Feb 2010 11:24:21 +0100
-Subject: [Buildroot] [pull request] Pull request for branch misc-fixes1
-In-Reply-To: <cover.1266074036.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Sat, 13 Feb 2010 16:13:56 +0100")
-References: <cover.1266074036.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87y6is2m96.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 17 Feb 2010 11:23:43 +0100
+Subject: [Buildroot] [git commit master] Temporary fix for alsa-lib breakage
+	with --disable-pcm
+Message-ID: <20100217102509.A37867770C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> The following changes since commit f0bdacdb5b8fe0fbc276ed510fc58e9a219f5cf8:
- Thomas>   Peter Korsgaard (1):
- Thomas>         update for 2010.02-rc1
+commit: http://git.buildroot.net/buildroot/commit/?id=94e172c8e7660213d29cb37ff760f5abf8886c31
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> are available in the git repository at:
+The current version of alsa-lib (1.0.22) does not build when
+--disable-pcm is used at configure time. I've reported the issue at
+https://bugtrack.alsa-project.org/alsa-bug/view.php?id=4913.
 
- Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot misc-fixes1
+In the mean time, we can prevent the user from not selecting PCM
+support by using the following patch.
 
- Thomas> Thomas Petazzoni (3):
- Thomas>       gtk-doc: add gtk-doc.m4 to satisfy aclocal
- Thomas>       Fix dependencies for TrapProto
- Thomas>       Bump TCL version and switch to the autotools infrastructure
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/multimedia/alsa-lib/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-Committed, thanks - Much appreciated.
-
+diff --git a/package/multimedia/alsa-lib/Config.in b/package/multimedia/alsa-lib/Config.in
+index 84629e6..98b8313 100644
+--- a/package/multimedia/alsa-lib/Config.in
++++ b/package/multimedia/alsa-lib/Config.in
+@@ -1,5 +1,9 @@
+ config BR2_PACKAGE_ALSA_LIB
+ 	bool "alsa-lib"
++	# Temporary until
++	# https://bugtrack.alsa-project.org/alsa-bug/view.php?id=4913
++	# is fixed
++	select BR2_PACKAGE_ALSA_LIB_PCM
+ 	help
+ 	  The Advanced Linux Sound Architecture (ALSA) provides audio and MIDI
+ 	  functionality to the Linux operating system.
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
