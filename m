@@ -1,31 +1,26 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 17 Feb 2010 11:16:39 +0100
-Subject: [Buildroot] [pull request] Pull request for branch misc-fixes2
-In-Reply-To: <cover.1266145868.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Sun, 14 Feb 2010 12:11:10 +0100")
-References: <cover.1266145868.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87bpfo416g.fsf@macbook.be.48ers.dk>
+Date: Wed, 17 Feb 2010 11:19:01 +0100
+Subject: [Buildroot] [PATCH] get_linux_config.sh: sets THIS_MINOR to 0
+	if not valid.
+In-Reply-To: <1265731864-30953-1-git-send-email-julien.boibessot@free.fr>
+	(julien boibessot's message of "Tue, 9 Feb 2010 17:11:04 +0100")
+References: <1265731864-30953-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <877hqc412i.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "julien" == julien boibessot <julien.boibessot@free.fr> writes:
 
- Thomas> The following changes since commit f0bdacdb5b8fe0fbc276ed510fc58e9a219f5cf8:
- Thomas>   Peter Korsgaard (1):
- Thomas>         update for 2010.02-rc1
+ julien> From: Julien Boibessot <julien.boibessot@armadeus.com>
+ julien> Sets THIS_MINOR to 0 if not valid, ie when processing a Linux config file who do not
+ julien> have a minor number extension; ex: "<name>-linux-2.6.<major>.config"
+ julien> Otherwise bash is raising an error/exception (line 59) and script can not complete.
 
- Thomas> are available in the git repository at:
-
- Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot misc-fixes2
-
- Thomas> Thomas Petazzoni (1):
- Thomas>       Temporary fix for alsa-lib breakage with --disable-pcm
 
 Committed, thanks.
-
 
 -- 
 Bye, Peter Korsgaard
