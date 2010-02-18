@@ -1,37 +1,40 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 18 Feb 2010 11:57:37 +0100
-Subject: [Buildroot] [git commit master] at91sam9260pf_defconfig: use
-	standard download dir location
-Message-ID: <20100218110142.2A14C77683@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 18 Feb 2010 17:22:38 +0000 (UTC)
+Subject: [Buildroot] [Bug 1105] New: Add new netperf package
+Message-ID: <bug-1105-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=1105
 
-commit: http://git.buildroot.net/buildroot/commit/?id=68d2f4564eaeb7770dbc0fe3f1ddf09833765550
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+              Host: i686-linux
+            Target: arm-softfloat-linux-uclibcgnueabi
+           Summary: Add new netperf package
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: gustavo at zacarias.com.ar
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Based on patch by Roo <roo.watt@gmail.com>
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- configs/at91sam9260pf_defconfig |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Created an attachment (id=1105)
+ --> (https://bugs.busybox.net/attachment.cgi?id=1105)
+Add new netperf package
 
-diff --git a/configs/at91sam9260pf_defconfig b/configs/at91sam9260pf_defconfig
-index c668e03..de513a6 100644
---- a/configs/at91sam9260pf_defconfig
-+++ b/configs/at91sam9260pf_defconfig
-@@ -58,7 +58,7 @@ BR2_SVN="svn co"
- BR2_ZCAT="gzip -d -c"
- BR2_BZCAT="bzcat"
- BR2_TAR_OPTIONS=""
--BR2_DL_DIR="/usr/local/install/downloads"
-+BR2_DL_DIR="$(TOPDIR)/dl"
- 
- #
- # Mirrors and Download locations
+Add new package: netperf, for your network benchmark needs.
+
+
 -- 
-1.6.3.3
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
