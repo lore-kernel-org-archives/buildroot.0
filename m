@@ -1,8 +1,8 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 18 Feb 2010 22:02:03 +0100
-Subject: [Buildroot] [git commit master] kernel-headers: bump 2.6.32.x
-	version
-Message-ID: <20100218210246.6C801776A8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] alsa-utils: force the variant of
+	ncurses library
+Message-ID: <20100218210248.61C26776A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +10,42 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d6bcd43dd767053d012620b1ac6957d1a99827bf
+commit: http://git.buildroot.net/buildroot/commit/?id=1072cf190cb9ce2a0cd7269065bcc07922211998
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- toolchain/kernel-headers/Config.in                 |    2 +-
- ...types-for-headers-exported-to-user-space.patch} |    0
- 2 files changed, 1 insertions(+), 1 deletions(-)
- rename toolchain/kernel-headers/{linux-2.6.32.7-scsi-use-__uX-types-for-headers-exported-to-user-space.patch => linux-2.6.32.8-scsi-use-__uX-types-for-headers-exported-to-user-space.patch} (100%)
+Two variants of the ncurses library exist: the normal one, and the
+ncursesw one, which has support for wide char. Currently, Buildroot
+only builds the normal variant (the second variant requires
+--enable-widec while compiling ncurses).
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index 713bc56..a0e21a8 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -71,6 +71,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "2.6.29.6"	if BR2_KERNEL_HEADERS_2_6_29
- 	default "2.6.30.10"	if BR2_KERNEL_HEADERS_2_6_30
- 	default "2.6.31.12"	if BR2_KERNEL_HEADERS_2_6_31
--	default "2.6.32.7"	if BR2_KERNEL_HEADERS_2_6_32
-+	default "2.6.32.8"	if BR2_KERNEL_HEADERS_2_6_32
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
-diff --git a/toolchain/kernel-headers/linux-2.6.32.7-scsi-use-__uX-types-for-headers-exported-to-user-space.patch b/toolchain/kernel-headers/linux-2.6.32.8-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
-similarity index 100%
-rename from toolchain/kernel-headers/linux-2.6.32.7-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
-rename to toolchain/kernel-headers/linux-2.6.32.8-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
+Unfortunately, when libncursesw is installed on the host, the
+configure script of alsa-utils finds /usr/bin/ncursesw5-config and
+thinks that the target has this version. Unfortunately, as this is not
+the case, it causes a configure failure when trying to link a sample
+program against libpanelw (which is part of ncurses).
+
+Therefore, we force the libncurses variant used by alsa-utils to the
+normal variant.
+
+Later on, if needed, support for the wide-char variant of the
+libncurses library could be added.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/multimedia/alsa-utils/alsa-utils.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/package/multimedia/alsa-utils/alsa-utils.mk b/package/multimedia/alsa-utils/alsa-utils.mk
+index f98b9cd..99d85ce 100644
+--- a/package/multimedia/alsa-utils/alsa-utils.mk
++++ b/package/multimedia/alsa-utils/alsa-utils.mk
+@@ -39,6 +39,7 @@ $(ALSA_UTILS_DIR)/.configured: $(ALSA_UTILS_DIR)/.unpacked
+ 		--prefix=/usr \
+ 		$(ALSA_UTILS_CONFIGURE_OPTS) \
+ 		--disable-xmlto \
++		--with-curses=ncurses \
+ 	)
+ 	touch $@
+ 
 -- 
 1.6.3.3
