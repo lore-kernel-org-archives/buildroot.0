@@ -1,35 +1,40 @@
-From: sm_here <sayantan.majumder@gmail.com>
-Date: Wed, 17 Feb 2010 23:28:52 -0800 (PST)
-Subject: [Buildroot]  Unable to build kernel & FS image using buildroot
-Message-ID: <27635129.post@talk.nabble.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 18 Feb 2010 09:37:11 +0100
+Subject: [Buildroot] Reduce time for a make, possible?
+In-Reply-To: <20100215194451.0aee0f65@surf> (Thomas Petazzoni's message of
+	"Mon, 15 Feb 2010 19:44:51 +0100")
+References: <SNT129-W199BB281476B38B7CFC464B94A0@phx.gbl>
+	<20100215194451.0aee0f65@surf>
+Message-ID: <87zl370wjs.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-I am using qemu 0.12.2. I am trying to build the kernel and file system image
-using buildroot. After configuring buildroot, when I try to build the kernel
-and file system image, i am getting the error:
-"In function '__do_global_dtors_aux':
-'__DTOR_LIST__' undeclared (first use in this function)"
+ Thomas> Hello,
+ Thomas> On Mon, 15 Feb 2010 15:29:48 +0100
+ Thomas> Tony Mozi <spooflinux@hotmail.fr> wrote:
 
-I have set the following configuration options for buildroot:
-# Target Architecture option -- arm
-# Target Architecture Variant option --arm926t
-# Target options menu -- "ARM Ltd. Device Support" is enabled, and inside it
-"Integrator arm926" option is chosen
-# Toolchain menu -- "Build gdb server for the Target" option, has been
-chosen
-# Target filesystem options menu -- "cpio the root filesystem" option is
-chosen, and the "gzip" compression method is chosen
-# Kernel menu -- "linux (Advanced configuration)" option is chosen, and
-Linux kernel version 2.6.31 is chosen. Also,the "zImage" binary format has
-been selected.
-Also the gcc version used id 4.3.4.
+ >> When we make a change in the buildroot like add or remove an option,
+ >> it's necessary to do 'make clean' then a 'make'. Is it possible to
+ >> reduce the time of this operation which is very long?
 
-Do i need to configure differently?
+ Thomas> For the moment, it is not possible safely. However, during the
+ Thomas> last Buildroot Working Day last week, this was one of the main
+ Thomas> topic that we discussed. So it's definitely not a feature that
+ Thomas> will be available in the coming weeks, but pretty likely in the
+ Thomas> coming months or so.
+
+Yes. For most situations you can safely add new applications without
+rebuilding everything (the problem is with libraries as other
+libs/programs might want to enable support for that library). Removing
+stuff is more difficult, so there you need to rebuild.
+
+Once the external toolchain stuff is more robust and we have better
+package removal/addition tracking things will get better.
+
 -- 
-View this message in context: http://old.nabble.com/Unable-to-build-kernel---FS-image-using-buildroot-tp27635129p27635129.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+Bye, Peter Korsgaard
