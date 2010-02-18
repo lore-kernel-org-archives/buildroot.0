@@ -1,40 +1,62 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 18 Feb 2010 09:37:11 +0100
-Subject: [Buildroot] Reduce time for a make, possible?
-In-Reply-To: <20100215194451.0aee0f65@surf> (Thomas Petazzoni's message of
-	"Mon, 15 Feb 2010 19:44:51 +0100")
-References: <SNT129-W199BB281476B38B7CFC464B94A0@phx.gbl>
-	<20100215194451.0aee0f65@surf>
-Message-ID: <87zl370wjs.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 18 Feb 2010 11:11:43 +0100
+Subject: [Buildroot] [git commit master] alsa-utils: alsamixer need libform,
+	libmenu & libpanel (from ncurses)
+Message-ID: <20100218101224.C45D1776F4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> Hello,
- Thomas> On Mon, 15 Feb 2010 15:29:48 +0100
- Thomas> Tony Mozi <spooflinux@hotmail.fr> wrote:
+commit: http://git.buildroot.net/buildroot/commit/?id=909fb5be4b69359f93fef419592dfcb5174480ed
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- >> When we make a change in the buildroot like add or remove an option,
- >> it's necessary to do 'make clean' then a 'make'. Is it possible to
- >> reduce the time of this operation which is very long?
+Without this patch alsamixer complains about missing libs and
+ldd says:
+        libform.so.5 => not found
+        libmenu.so.5 => not found
+        libpanel.so.5 => not found
+        libncurses.so.5 => /usr/lib/libncurses.so.5 (0x4000e000)
+        libasound.so.2 => /usr/lib/libasound.so.2 (0x40056000)
+        ... <cut>
 
- Thomas> For the moment, it is not possible safely. However, during the
- Thomas> last Buildroot Working Day last week, this was one of the main
- Thomas> topic that we discussed. So it's definitely not a feature that
- Thomas> will be available in the coming weeks, but pretty likely in the
- Thomas> coming months or so.
+Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES                                 |    4 ++--
+ package/multimedia/alsa-utils/Config.in |    3 +++
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-Yes. For most situations you can safely add new applications without
-rebuilding everything (the problem is with libraries as other
-libs/programs might want to enable support for that library). Removing
-stuff is more difficult, so there you need to rebuild.
-
-Once the external toolchain stuff is more robust and we have better
-package removal/addition tracking things will get better.
-
+diff --git a/CHANGES b/CHANGES
+index 05cb4ae..c03760c 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -2,8 +2,8 @@
+ 
+ 	Fixes all over the tree and new features.
+ 
+-	Updated/fixed packages: alsa-lib, argus, at, gst-plugins-good,
+-	libpcap, rsync, tcl, xproto_trapproto
++	Updated/fixed packages: alsa-lib, alsa-utils, argus, at,
++	gst-plugins-good, libpcap, rsync, tcl, xproto_trapproto
+ 
+ 	Issues resolved (http://bugs.uclibc.org):
+ 
+diff --git a/package/multimedia/alsa-utils/Config.in b/package/multimedia/alsa-utils/Config.in
+index 54ab3f9..04057f4 100644
+--- a/package/multimedia/alsa-utils/Config.in
++++ b/package/multimedia/alsa-utils/Config.in
+@@ -24,6 +24,9 @@ config BR2_PACKAGE_ALSA_UTILS_ALSACTL
+ config BR2_PACKAGE_ALSA_UTILS_ALSAMIXER
+ 	bool "alsamixer"
+ 	select BR2_PACKAGE_NCURSES
++	select BR2_PACKAGE_NCURSES_TARGET_PANEL
++	select BR2_PACKAGE_NCURSES_TARGET_FORM
++	select BR2_PACKAGE_NCURSES_TARGET_MENU
+ 	default y
+ 
+ config BR2_PACKAGE_ALSA_UTILS_AMIDI
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
