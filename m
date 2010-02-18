@@ -1,35 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 18 Feb 2010 12:01:06 +0100
-Subject: [Buildroot] [PATCH] 2010.02-rc1 at91sam9260pf_defconfig
-In-Reply-To: <815f0bd71002171828u4ac0f44dgc0df709ef7278a3d@mail.gmail.com>
-	(Roo's message of "Thu, 18 Feb 2010 13:28:03 +1100")
-References: <815f0bd71002171828u4ac0f44dgc0df709ef7278a3d@mail.gmail.com>
-Message-ID: <87fx4y24gd.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 18 Feb 2010 11:57:37 +0100
+Subject: [Buildroot] [git commit master] at91sam9260pf_defconfig: use
+	standard download dir location
+Message-ID: <20100218110142.2A14C77683@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Roo" == Roo  <roo.watt@gmail.com> writes:
 
-Hi,
+commit: http://git.buildroot.net/buildroot/commit/?id=68d2f4564eaeb7770dbc0fe3f1ddf09833765550
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Roo> I am new to buildroot, so if I should have done anything
- Roo> differently please let me know. I promise not to take in
- Roo> personally. :)
+Based on patch by Roo <roo.watt@gmail.com>
 
-Thanks, committed. The patch contents was fine, but you made a few small
-mistakes:
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ configs/at91sam9260pf_defconfig |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-- You didn't configure your email program to use your full name /
-  address
-- Your commit message (top of mail) didn't explain what your patch fixes
-- You didn't sign off on the change (git format-patch -s)
-- Your patch was line wrapped by your mailer.
-
-Please consider using git format-patch -s / git send-email in the
-future, that will ensure you get (most) of those details correct.
-
+diff --git a/configs/at91sam9260pf_defconfig b/configs/at91sam9260pf_defconfig
+index c668e03..de513a6 100644
+--- a/configs/at91sam9260pf_defconfig
++++ b/configs/at91sam9260pf_defconfig
+@@ -58,7 +58,7 @@ BR2_SVN="svn co"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+-BR2_DL_DIR="/usr/local/install/downloads"
++BR2_DL_DIR="$(TOPDIR)/dl"
+ 
+ #
+ # Mirrors and Download locations
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
