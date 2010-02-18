@@ -1,19 +1,19 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 18 Feb 2010 19:18:50 +0000 (UTC)
-Subject: [Buildroot] [Bug 1123] New: Bump less to 436 and migrate to
- Makefile.autotools.in
-Message-ID: <bug-1123-163@https.bugs.busybox.net/>
+Date: Thu, 18 Feb 2010 19:51:33 +0000 (UTC)
+Subject: [Buildroot] [Bug 1129] New: Bump memstat to 0.8 and migrate to
+ Makefile.package.in
+Message-ID: <bug-1129-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1123
+https://bugs.busybox.net/show_bug.cgi?id=1129
 
               Host: i686-linux
             Target: arm-softfloat-linux-uclibcgnueabi
-           Summary: Bump less to 436 and migrate to Makefile.autotools.in
+           Summary: Bump memstat to 0.8 and migrate to Makefile.package.in
            Product: buildroot
            Version: unspecified
           Platform: PC
@@ -28,12 +28,12 @@ https://bugs.busybox.net/show_bug.cgi?id=1123
    Estimated Hours: 0.0
 
 
-Created an attachment (id=1123)
- --> (https://bugs.busybox.net/attachment.cgi?id=1123)
-Bump less to 436 and migrate to Makefile.autotools.in
+Created an attachment (id=1129)
+ --> (https://bugs.busybox.net/attachment.cgi?id=1129)
+Bump memstat to 0.8 and migrate to Makefile.package.in
 
-Bump less to version 436.
-Migrate to Makefile.autotools.in
+Bump memstat to version 0.8
+Migrate to Makefile.package.in
 
 
 -- 
