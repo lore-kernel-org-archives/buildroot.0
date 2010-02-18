@@ -1,46 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 19 Feb 2010 00:36:05 +0100
-Subject: [Buildroot] [PATCH 2/3] Fix build failure of rubix
-In-Reply-To: <cover.1266536162.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1266536162.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <161afc186256b05b2b1af0b3cfa909e104529ed6.1266536162.git.thomas.petazzoni@free-electrons.com>
+Date: Fri, 19 Feb 2010 00:36:03 +0100
+Subject: [Buildroot] [pull request] Pull request for branch misc-fixes4
+Message-ID: <cover.1266536162.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch to use strstr() instead of index().
+The following changes since commit ac8329cff0a969bec23be7871bfaf394e369be7c:
+  Peter Korsgaard (1):
+        Merge branch 'misc-fixes3' of git://git.busybox.net/~tpetazzoni/git/buildroot
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../rubix-1.0.5-dont-use-legacy-functions.patch    |   18 ++++++++++++++++++
- 1 files changed, 18 insertions(+), 0 deletions(-)
+are available in the git repository at:
+
+  git://git.busybox.net/~tpetazzoni/git/buildroot misc-fixes4
+
+Thomas Petazzoni (3):
+      Add libxpm as a dependency of ace_of_penguins
+      Fix build failure of rubix
+      xboard: remove package
+
+ package/games/Config.in                            |    1 -
+ package/games/ace_of_penguins/Config.in            |    1 +
+ package/games/ace_of_penguins/ace_of_penguins.mk   |    2 +-
+ .../rubix-1.0.5-dont-use-legacy-functions.patch    |   18 ++++++
+ package/games/xboard/Config.in                     |    8 ---
+ package/games/xboard/xboard-4.2.7-installer.patch  |   55 --------------------
+ package/games/xboard/xboard.mk                     |   16 ------
+ 7 files changed, 20 insertions(+), 81 deletions(-)
  create mode 100644 package/games/rubix/rubix-1.0.5-dont-use-legacy-functions.patch
+ delete mode 100644 package/games/xboard/Config.in
+ delete mode 100644 package/games/xboard/xboard-4.2.7-installer.patch
+ delete mode 100644 package/games/xboard/xboard.mk
 
-diff --git a/package/games/rubix/rubix-1.0.5-dont-use-legacy-functions.patch b/package/games/rubix/rubix-1.0.5-dont-use-legacy-functions.patch
-new file mode 100644
-index 0000000..9c34aee
---- /dev/null
-+++ b/package/games/rubix/rubix-1.0.5-dont-use-legacy-functions.patch
-@@ -0,0 +1,18 @@
-+Use strstr() instead of index(), since index() is a legacy function
-+and it may not be available in uClibc, depending on the configuration.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: rubix-1.0.5/cube.c
-+===================================================================
-+--- rubix-1.0.5.orig/cube.c	2010-02-14 14:19:05.000000000 +0100
-++++ rubix-1.0.5/cube.c	2010-02-14 14:19:14.000000000 +0100
-+@@ -257,7 +257,7 @@
-+     if (i==-1) goto finish;
-+     if (buffer[0]=='%') goto new_section;
-+     buffer[0]=toupper(buffer[0]);
-+-    ptr = index(buffer, '=');
-++    ptr = strstr(buffer, '=');
-+     if (ptr) {
-+       ++ptr;
-+       while (isspace(*ptr)) ++ptr;
+Thanks,
 -- 
-1.6.3.3
+Thomas Petazzoni
