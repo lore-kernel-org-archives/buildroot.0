@@ -1,18 +1,19 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 18 Feb 2010 17:22:38 +0000 (UTC)
-Subject: [Buildroot] [Bug 1105] New: Add new netperf package
-Message-ID: <bug-1105-163@https.bugs.busybox.net/>
+Date: Thu, 18 Feb 2010 17:55:00 +0000 (UTC)
+Subject: [Buildroot] [Bug 1111] New: Bump wget to 1.12 and migrate to
+ Makefile.autotools.in
+Message-ID: <bug-1111-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1105
+https://bugs.busybox.net/show_bug.cgi?id=1111
 
               Host: i686-linux
             Target: arm-softfloat-linux-uclibcgnueabi
-           Summary: Add new netperf package
+           Summary: Bump wget to 1.12 and migrate to Makefile.autotools.in
            Product: buildroot
            Version: unspecified
           Platform: PC
@@ -20,18 +21,20 @@ https://bugs.busybox.net/show_bug.cgi?id=1105
             Status: NEW
           Severity: enhancement
           Priority: P5
-         Component: Other
+         Component: Outdated package
         AssignedTo: unassigned at buildroot.uclibc.org
         ReportedBy: gustavo at zacarias.com.ar
                 CC: buildroot at uclibc.org
    Estimated Hours: 0.0
 
 
-Created an attachment (id=1105)
- --> (https://bugs.busybox.net/attachment.cgi?id=1105)
-Add new netperf package
+Created an attachment (id=1111)
+ --> (https://bugs.busybox.net/attachment.cgi?id=1111)
+Bump wget to 1.12 and migrate to Makefile.autotools.in
 
-Add new package: netperf, for your network benchmark needs.
+Bump wget from version 1.10.2 to 1.12.
+Migrate package to Makefile.autotools.in
+Enable ssl support when openssl is installed.
 
 
 -- 
