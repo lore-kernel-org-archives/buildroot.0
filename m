@@ -1,42 +1,27 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 18 Feb 2010 19:51:33 +0000 (UTC)
-Subject: [Buildroot] [Bug 1129] New: Bump memstat to 0.8 and migrate to
- Makefile.package.in
-Message-ID: <bug-1129-163@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 18 Feb 2010 21:45:45 +0100
+Subject: [Buildroot] [pull request] Pull request for branch misc-fixes3
+Message-ID: <cover.1266525942.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1129
+The following changes since commit f0bdacdb5b8fe0fbc276ed510fc58e9a219f5cf8:
+  Peter Korsgaard (1):
+        update for 2010.02-rc1
 
-              Host: i686-linux
-            Target: arm-softfloat-linux-uclibcgnueabi
-           Summary: Bump memstat to 0.8 and migrate to Makefile.package.in
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: enhancement
-          Priority: P5
-         Component: Outdated package
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: gustavo at zacarias.com.ar
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+are available in the git repository at:
 
+  git://git.busybox.net/~tpetazzoni/git/buildroot misc-fixes3
 
-Created an attachment (id=1129)
- --> (https://bugs.busybox.net/attachment.cgi?id=1129)
-Bump memstat to 0.8 and migrate to Makefile.package.in
+Thomas Petazzoni (1):
+      alsa-utils: force the variant of ncurses library
 
-Bump memstat to version 0.8
-Migrate to Makefile.package.in
+ package/multimedia/alsa-utils/alsa-utils.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-
+Thanks,
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni
