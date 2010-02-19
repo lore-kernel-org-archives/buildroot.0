@@ -1,38 +1,24 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 19 Feb 2010 13:03:43 +0000 (UTC)
-Subject: [Buildroot] [Bug 1147] New: Remove obsolete hostap package
-Message-ID: <bug-1147-163@https.bugs.busybox.net/>
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Fri, 19 Feb 2010 15:17:17 +0000 (UTC)
+Subject: [Buildroot] [Bug 1135] New: Package customize. Wrong copying
+References: <bug-1135-163@https.bugs.busybox.net/>
+Message-ID: <hlma1t$h9p$1@ger.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1147
+On 2010-02-19, bugzilla at busybox.net <bugzilla@busybox.net> wrote:
+> https://bugs.busybox.net/show_bug.cgi?id=1135
+>
+>            Summary: Package customize. Wrong copying
 
-           Summary: Remove obsolete hostap package
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Outdated package
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: gustavo at zacarias.com.ar
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
-
-
-Created an attachment (id=1147)
- --> (https://bugs.busybox.net/attachment.cgi?id=1147)
-Remove obsolete hostap package
-
-Remove the obsolete hostap package, it's been superceeded by hostapd.
-
+Yup.  I reported this and submitted a patch a while back:
+             
+   https://bugs.busybox.net/show_bug.cgi?id=849
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Grant Edwards                   grante             Yow! I feel partially
+                                  at               hydrogenated!
+                               visi.com            
