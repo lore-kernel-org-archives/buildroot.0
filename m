@@ -1,67 +1,68 @@
-From: Tony Mozi <spooflinux@hotmail.fr>
-Date: Fri, 19 Feb 2010 16:31:45 +0100
-Subject: [Buildroot] create device nodes,
- edit mini_device_table.txt (cross compilation for an ARM)
-Message-ID: <SNT129-W625BE919D415C537295C37B9460@phx.gbl>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 19 Feb 2010 15:58:59 +0000 (UTC)
+Subject: [Buildroot] [Bug 1153] New: Buildroot fails to build packages if
+ BR2_GCC_SHARED_LIBGCC=y
+Message-ID: <bug-1153-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=1153
 
-Hi,
-In fact, if I modify the mini_device_table.txt there is no effect.
-But if I modify device_table.txt, it's ok, the node is created.
-What is the difference between the two files??
-
-BR
-
-From: spooflinux@hotmail.fr
-To: buildroot at busybox.net
-Subject: create device nodes, edit mini_device_table.txt (cross compilation for an ARM)
-Date: Tue, 16 Feb 2010 10:11:55 +0100
-
-
-
-
-
-
-
-
-
+              Host: i686
+            Target: ARM
+           Summary: Buildroot fails to build packages if
+                    BR2_GCC_SHARED_LIBGCC=y
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Keywords: link-failure
+          Severity: major
+          Priority: P2
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: akennedy at drs-tem.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
 
+Created an attachment (id=1153)
+ --> (https://bugs.busybox.net/attachment.cgi?id=1153)
+Config file for building an NFS buildroot for development purposes.
+
+The config file attached has left off these two, but these were giving me
+errors as well:
+
+docker
+xstroke
+
+These would NOT compile unless BR2_GCC_SHARED_LIBGCC is not set:
+uemacs
+nano
+vim
+
+The error was undefined hidden symbol in libgcc.a(xxxxxxx.o)  '__xxxxx()'
+referenced by DSO.
+
+The xxx was different for each of these (I attempted to compile each with a
+shared libgcc) but seemed to center on references to g_printerr, g_print,
+g_slist_length, g_malloc0, g_free, g_slist_append, g_slist_Remove_link, and
+g_strdup_printf.  These seem to be calling functions from the EABI as some were
+like ul_div32_helper() -- though some were not referred to as EABI but AABI,
+which greatly confuse me.
+
+It appeared that the source of the problem was in glib2, but I cannot verify
+this and could not locate any way around this issue.
+
+My gut tells me that linking libgcc.a in statically is "bad" and I prefer not
+to do that, but I'm in a bit over my head with where the problem is.
 
 
-Hi,
-In order to create nodes for my device, I edit /buildroot-2009.11/target/generic/mini_device_table.txt
-
-In the bottom, I add :
-/dev/lba        b       660     0       0       207     0       -       -       -
-/dev/lba        b       660     0       0       207     0       0       1       4
-
-And I rebuild my linux and my buildroot.
-
-I search this directory by serial console :
-# cat /proc/partitions                                                          
-major minor  #blocks  name                                                      
-                                                                                
- 207     0    3906560 lba                                                       
- 207     1     204800 lba1                                                      
- 207     2    3701760 lba2 
-
-# ls /dev/lba                                                                   
-ls: /dev/lba: No such file or directory
-
-An idea?
-
-BR
- 		 	   		  
-Faites une bonne action avec Bing Solidaire ! C'est ici ! 		 	   		  
-_________________________________________________________________
-Tchattez en direct en en vid?o avec vos amis !  
-http://www.windowslive.fr/messenger/
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100219/9907344e/attachment.htm>
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
