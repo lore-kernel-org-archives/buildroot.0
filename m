@@ -1,7 +1,7 @@
-From: sm_here <sayantan.majumder@gmail.com>
-Date: Fri, 19 Feb 2010 04:17:05 -0800 (PST)
-Subject: [Buildroot]  issue with buildroot
-Message-ID: <27652571.post@talk.nabble.com>
+From: Tony Mozi <spooflinux@hotmail.fr>
+Date: Fri, 19 Feb 2010 14:00:55 +0100
+Subject: [Buildroot] Add nodes, major, how values are defined?
+Message-ID: <SNT129-W4523AD7F98DFC8D76EAB00B9460@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,27 +9,19 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-I am using qemu 0.12.2. I am trying to build the kernel and file system image
-using buildroot. After configuring buildroot, when I try to build the kernel
-and file system image, i am getting the error:
-"In function '__do_global_dtors_aux':
-'__DTOR_LIST__' undeclared (first use in this function)"
+Hi all,
+In order to add node for my project, I read the file 'mini_device_table.txt' which is buildroot-2009.11/target/generic.
+For more information, I read 'devices.txt' in linux-2.6.22.2/Documentation.
 
-I have set the following configuration options for buildroot:
-# Target Architecture option -- arm
-# Target Architecture Variant option --arm926t
-# Target options menu -- "ARM Ltd. Device Support" is enabled, and inside it
-"Integrator arm926" option is chosen
-# Toolchain menu -- "Build gdb server for the Target" option, has been
-chosen
-# Target filesystem options menu -- "cpio the root filesystem" option is
-chosen, and the "gzip" compression method is chosen
-# Kernel menu -- "linux (Advanced configuration)" option is chosen, and
-Linux kernel version 2.6.31 is chosen. Also,the "zImage" binary format has
-been selected.
-Also the gcc version used id 4.3.4.
+The general presentation is : # <name>    <type>      <mode>  <uid>   <gid>   <major> <minor> <start> <inc>   <count>
+I do not understand how some points are defined (<major> <minor> <start> <inc>   <count>). 
+Is there a list? Sometimes there is '-', what does it mean?
 
-What changes do i need to make to the configuration?
--- 
-View this message in context: http://old.nabble.com/issue-with-buildroot-tp27652571p27652571.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+BR
+ 		 	   		  
+_________________________________________________________________
+D?couvrez Windows 7 en 7 secondes?!
+http://clk.atdmt.com/FRM/go/181574577/direct/01/
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100219/39508a03/attachment.htm>
