@@ -1,7 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 19 Feb 2010 09:50:40 +0000 (UTC)
-Subject: [Buildroot] [Bug 1135] New: Package customize. Wrong copying
-Message-ID: <bug-1135-163@https.bugs.busybox.net/>
+Date: Fri, 19 Feb 2010 09:58:31 +0000 (UTC)
+Subject: [Buildroot] [Bug 1135] Package customize. Wrong copying
+In-Reply-To: <bug-1135-163@https.bugs.busybox.net/>
+References: <bug-1135-163@https.bugs.busybox.net/>
+Message-ID: <20100219095831.5F3E57774C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,32 +12,14 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=1135
 
-           Summary: Package customize. Wrong copying
-           Product: buildroot
-           Version: 2009.11
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: serj.kalichev at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
 
 
-The package "customize" copies custom files in wrong way. It create "series"
-file contain names of files and directories in the user's custom directory.
-Then it copies them to the target dir with its names. The result is target tree
-like this:
 
-/etc/etc/inittab
-/usr/usr/bin/foo
 
-custom tree:
-/etc/inittab
-/usr/bin/foo
+--- Comment #1 from serj.kalichev at gmail.com  2010-02-19 09:58:30 UTC ---
+Created an attachment (id=1135)
+ --> (https://bugs.busybox.net/attachment.cgi?id=1135)
+Patch to fix copying problem
 
 
 -- 
