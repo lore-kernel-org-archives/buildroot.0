@@ -1,8 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 19 Feb 2010 11:30:54 +0100
-Subject: [Buildroot] [git commit master] Add libxpm as a dependency of
-	ace_of_penguins
-Message-ID: <20100219103248.BED367772A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] Fix build failure of rubix
+Message-ID: <20100219103249.0EB0C7772A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,44 +9,40 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3df93063da925eb9787be0a98ce88d079173f762
+commit: http://git.buildroot.net/buildroot/commit/?id=161afc186256b05b2b1af0b3cfa909e104529ed6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-ace_of_penguins fails to build when xlib_libXpm is not selected. Add
-it has a dependency. However, contrary to normal dependencies to
-libraries (where we use 'select') we use 'depends on' here, otherwise
-the X.org server will be get selected automatically without the user
-noticing.
+Add a patch to use strstr() instead of index().
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/games/ace_of_penguins/Config.in          |    1 +
- package/games/ace_of_penguins/ace_of_penguins.mk |    2 +-
- 2 files changed, 2 insertions(+), 1 deletions(-)
+ .../rubix-1.0.5-dont-use-legacy-functions.patch    |   18 ++++++++++++++++++
+ 1 files changed, 18 insertions(+), 0 deletions(-)
+ create mode 100644 package/games/rubix/rubix-1.0.5-dont-use-legacy-functions.patch
 
-diff --git a/package/games/ace_of_penguins/Config.in b/package/games/ace_of_penguins/Config.in
-index edbaf26..1d5a367 100644
---- a/package/games/ace_of_penguins/Config.in
-+++ b/package/games/ace_of_penguins/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_ACE_OF_PENGUINS
- 	bool "ace_of_penguins"
- 	select BR2_PACKAGE_LIBPNG
- 	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_PACKAGE_XLIB_LIBXPM
- 	help
- 	  The Ace of Penguins is a set of Unix/X solitaire games based
- 	  on the ones available for Windows but with a number of
-diff --git a/package/games/ace_of_penguins/ace_of_penguins.mk b/package/games/ace_of_penguins/ace_of_penguins.mk
-index 65a2667..fe3e204 100644
---- a/package/games/ace_of_penguins/ace_of_penguins.mk
-+++ b/package/games/ace_of_penguins/ace_of_penguins.mk
-@@ -10,6 +10,6 @@ ACE_OF_PENGUINS_AUTORECONF = YES
- ACE_OF_PENGUINS_STAGING = NO
- ACE_OF_PENGUINS_TARGET = YES
- 
--ACE_OF_PENGUINS_DEPENDENCIES = libpng xserver_xorg-server
-+ACE_OF_PENGUINS_DEPENDENCIES = libpng xserver_xorg-server xlib_libXpm
- 
- $(eval $(call AUTOTARGETS,package/games,ace_of_penguins))
+diff --git a/package/games/rubix/rubix-1.0.5-dont-use-legacy-functions.patch b/package/games/rubix/rubix-1.0.5-dont-use-legacy-functions.patch
+new file mode 100644
+index 0000000..9c34aee
+--- /dev/null
++++ b/package/games/rubix/rubix-1.0.5-dont-use-legacy-functions.patch
+@@ -0,0 +1,18 @@
++Use strstr() instead of index(), since index() is a legacy function
++and it may not be available in uClibc, depending on the configuration.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: rubix-1.0.5/cube.c
++===================================================================
++--- rubix-1.0.5.orig/cube.c	2010-02-14 14:19:05.000000000 +0100
+++++ rubix-1.0.5/cube.c	2010-02-14 14:19:14.000000000 +0100
++@@ -257,7 +257,7 @@
++     if (i==-1) goto finish;
++     if (buffer[0]=='%') goto new_section;
++     buffer[0]=toupper(buffer[0]);
++-    ptr = index(buffer, '=');
+++    ptr = strstr(buffer, '=');
++     if (ptr) {
++       ++ptr;
++       while (isspace(*ptr)) ++ptr;
 -- 
 1.6.3.3
