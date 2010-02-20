@@ -1,35 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Feb 2010 19:43:04 +0100
-Subject: [Buildroot] [PATCH 13/16] ace_of_penguins: add dependency on
-	host-libpng
+Date: Sat, 20 Feb 2010 19:43:07 +0100
+Subject: [Buildroot] [PATCH 16/16] dependencies: add gzip and bzip2 as base
+	dependencies
 In-Reply-To: <cover.1266691382.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1266691382.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <da6e8e3596a64bc188dfa550960a7ef208ad8201.1266691382.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <7c035fada796848c9957c414a8b7f47dea4f8c3b.1266691382.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libpng is needed on the host to build the make-imglib utility, built
-during the compilation of ace_of_penguins for the target.
+They are needed to uncompress the tarballs we download. bzip2, for
+instance, is not necessarly installed by default on basic Debian
+systems.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/games/ace_of_penguins/ace_of_penguins.mk |    2 +-
+ toolchain/dependencies/dependencies.sh |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/games/ace_of_penguins/ace_of_penguins.mk b/package/games/ace_of_penguins/ace_of_penguins.mk
-index fe3e204..a106d14 100644
---- a/package/games/ace_of_penguins/ace_of_penguins.mk
-+++ b/package/games/ace_of_penguins/ace_of_penguins.mk
-@@ -10,6 +10,6 @@ ACE_OF_PENGUINS_AUTORECONF = YES
- ACE_OF_PENGUINS_STAGING = NO
- ACE_OF_PENGUINS_TARGET = YES
+diff --git a/toolchain/dependencies/dependencies.sh b/toolchain/dependencies/dependencies.sh
+index f5b2621..d0190fd 100755
+--- a/toolchain/dependencies/dependencies.sh
++++ b/toolchain/dependencies/dependencies.sh
+@@ -122,7 +122,7 @@ if ! $SHELL --version 2>&1 | grep -q '^GNU bash'; then
+ fi;
  
--ACE_OF_PENGUINS_DEPENDENCIES = libpng xserver_xorg-server xlib_libXpm
-+ACE_OF_PENGUINS_DEPENDENCIES = libpng host-libpng xserver_xorg-server xlib_libXpm
- 
- $(eval $(call AUTOTARGETS,package/games,ace_of_penguins))
+ # Check that a few mandatory programs are installed
+-for prog in awk bison flex msgfmt makeinfo patch ; do
++for prog in awk bison flex msgfmt makeinfo patch gzip bzip2 ; do
+     if ! which $prog > /dev/null ; then
+ 	/bin/echo -e "\nYou must install '$prog' on your build machine";
+ 	if test $prog = "makeinfo" ; then
 -- 
 1.6.3.3
