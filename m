@@ -1,32 +1,55 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Sat, 20 Feb 2010 17:58:01 +0100
-Subject: [Buildroot] [PATCH 08/10] external toolchain: fix strip of
- libraries
-In-Reply-To: <20100220162006.4606227c@surf>
-References: <1265561742-5924-1-git-send-email-llandwerlin@gmail.com>
-	<1265561742-5924-9-git-send-email-llandwerlin@gmail.com>
-	<20100220162006.4606227c@surf>
-Message-ID: <1266685081.25727.0.camel@coalu.atr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 20 Feb 2010 19:37:16 +0100
+Subject: [Buildroot] avahi build failure on intltool-update
+In-Reply-To: <20100214120039.2c7ff159@surf>
+References: <20100214120039.2c7ff159@surf>
+Message-ID: <20100220193716.3a92b370@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le samedi 20 f?vrier 2010 ? 16:20 +0100, Thomas Petazzoni a ?crit :
-> This is needed and should be included in 2010.02.
-> 
-> Lionel, for your next patches, would it be possible to give a slightly
-> more detailed commit message ? Just "fix strip of libraries" is not
-> enough to understand what you are fixing, and therefore does not make
-> the review of your patches easy. Thanks! :-)
-> 
-> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> 
+Hello,
 
-I will, thanks for the review.
+On Sun, 14 Feb 2010 12:00:39 +0100
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-Regards,
+> With the attached .config, I get the following build failure on avahi
+> (and I must leave so I don't have the time to dig into it now) :
+> 
+> =============================================================================================
+> checking for intltool >= 0.35.0... ./configure: line 28714:
+> intltool-update: command not found found
+> configure: error: Your intltool is too old.  You need intltool 0.35.0
+> or later.
+> =============================================================================================
 
+This problem occurs with several other packages as well, if intltool is
+not installed on the host system.
+
+Two options :
+
+ 1. Build intltool. intltool depends on Perl and the XML::Parser Perl
+    module. Which of these do we build, and which of these do we
+    require ?
+
+ 2. Depend on intltool unconditionnally in
+    toolchain/dependencies/depencies.sh. This is the simplest solution,
+    but would mean that all of our users would have to install intltool
+    even if they don't build one the packages using it.
+
+ 3. Depend on intltool only if one of the packages needing it is
+    enabled. But we could still do the check at the beginning of the
+    build process.
+
+Which solution?
+
+Cheers,
+
+Thomas
 -- 
-Lionel Landwerlin
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
