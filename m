@@ -1,42 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Feb 2010 19:42:55 +0100
-Subject: [Buildroot] [PATCH 04/16] libxslt: enable compilation on host
+Date: Sat, 20 Feb 2010 19:42:54 +0100
+Subject: [Buildroot] [PATCH 03/16] libxml2: do not apply libtool patch when
+	compiling for host
 In-Reply-To: <cover.1266691382.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1266691382.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <73c937229bff334c9e4b88b7cc094ff4e576cdf4.1266691382.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <e81149c54301f88ae64bd85caa6d0f29e879d064.1266691382.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Compiling libxcb (from the X.org stack) requires xsltproc on the host,
-which is part of libxslt.
+The libtool patch is not applied when building for the target because
+it does not apply, so do not attempt to apply it when building for the
+host. This fixes libxml2 build for the host.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libxslt/libxslt.mk |    8 ++++++++
- 1 files changed, 8 insertions(+), 0 deletions(-)
+ package/libxml2/libxml2.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
-index 03c1131..4bf61b5 100644
---- a/package/libxslt/libxslt.mk
-+++ b/package/libxslt/libxslt.mk
-@@ -25,7 +25,15 @@ LIBXSLT_CONF_OPT = --with-gnu-ld --enable-shared \
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index e598d36..31fdabf 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -28,6 +28,8 @@ HOST_LIBXML2_CONF_OPT = \
+ 		--enable-shared --without-debugging --without-python \
+ 		--without-threads
  
- LIBXSLT_DEPENDENCIES = libxml2 $(LIBXSLT_DEPENDENCIES_EXTRA)
- 
-+HOST_LIBXSLT_CONF_OPT = --enable-shared \
-+			--without-debugging \
-+			--without-python \
-+			--without-threads
++HOST_LIBXML2_LIBTOOL_PATCH = NO
 +
-+HOST_LIBXSLT_DEPENDENCIES = host-libxml2
-+
- $(eval $(call AUTOTARGETS,package,libxslt))
-+$(eval $(call AUTOTARGETS,package,libxslt,host))
+ $(eval $(call AUTOTARGETS,package,libxml2))
+ $(eval $(call AUTOTARGETS,package,libxml2,host))
  
- $(LIBXSLT_HOOK_POST_INSTALL):
- 	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/xslt-config
 -- 
 1.6.3.3
