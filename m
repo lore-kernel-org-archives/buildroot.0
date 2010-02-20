@@ -1,34 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Feb 2010 19:42:58 +0100
-Subject: [Buildroot] [PATCH 07/16] xfont_encoding: add mkfontscale on the
-	host as dependency
+Date: Sat, 20 Feb 2010 19:42:56 +0100
+Subject: [Buildroot] [PATCH 05/16] libxcb: fix build with Buildroot compiled
+	xsltproc
 In-Reply-To: <cover.1266691382.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1266691382.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <b5d695eb36ed0d29e60e3d8dee75a7584323caa3.1266691382.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <e5d1244a747a3863b9f53c80c3ad3f0d60fbe8cd.1266691382.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mkfontscale on the host is needed to build xfont_encoding, therefore
-we add host-xapp_mkfontscale as a dependency.
+Make sure that libxcb depends on host-xsltproc, since xsltproc is
+required for the compilation of libxcb.
+
+Moreover, remove the XSLTPROC=/usr/bin/xsltproc variable definition,
+which was assuming that XSLTPROC was installed on the host. xsltproc
+should just be part of the PATH.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xfont_encodings/xfont_encodings.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/x11r7/libxcb/libxcb.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xfont_encodings/xfont_encodings.mk b/package/x11r7/xfont_encodings/xfont_encodings.mk
-index 74256d1..9097735 100644
---- a/package/x11r7/xfont_encodings/xfont_encodings.mk
-+++ b/package/x11r7/xfont_encodings/xfont_encodings.mk
-@@ -9,5 +9,6 @@ XFONT_ENCODINGS_SOURCE = encodings-$(XFONT_ENCODINGS_VERSION).tar.bz2
- XFONT_ENCODINGS_SITE = http://xorg.freedesktop.org/releases/individual/font
- XFONT_ENCODINGS_AUTORECONF = NO
- XFONT_ENCODINGS_MAKE_OPT =
-+XFONT_ENCODINGS_DEPENDENCIES = host-xapp_mkfontscale
+diff --git a/package/x11r7/libxcb/libxcb.mk b/package/x11r7/libxcb/libxcb.mk
+index b79addd..19cfc6a 100644
+--- a/package/x11r7/libxcb/libxcb.mk
++++ b/package/x11r7/libxcb/libxcb.mk
+@@ -10,9 +10,9 @@ LIBXCB_SITE = http://xcb.freedesktop.org/dist/
+ LIBXCB_INSTALL_STAGING = YES
  
- $(eval $(call AUTOTARGETS,package/x11r7,xfont_encodings))
+ LIBXCB_AUTORECONF = NO
+-LIBXCB_DEPENDENCIES = pthread-stubs xcb-proto xlib_libXdmcp xlib_libXau
++LIBXCB_DEPENDENCIES = host-libxslt pthread-stubs xcb-proto xlib_libXdmcp xlib_libXau
+ LIBXCB_CONF_ENV = STAGING_DIR="$(STAGING_DIR)"
+-LIBXCB_MAKE_OPT = XCBPROTO_XCBINCLUDEDIR=$(STAGING_DIR)/usr/share/xcb XSLTPROC=/usr/bin/xsltproc
++LIBXCB_MAKE_OPT = XCBPROTO_XCBINCLUDEDIR=$(STAGING_DIR)/usr/share/xcb
+ 
+ $(eval $(call AUTOTARGETS,package/x11r7,libxcb))
+ 
 -- 
 1.6.3.3
