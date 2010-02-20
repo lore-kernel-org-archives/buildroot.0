@@ -1,41 +1,108 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Feb 2010 19:42:52 +0100
-Subject: [Buildroot] [PATCH 01/16] automake: add build dependency on
-	host-autoconf
+Date: Sat, 20 Feb 2010 19:43:01 +0100
+Subject: [Buildroot] [PATCH 10/16] xfont_font-util: convert to the autotools
+	infrastructure
 In-Reply-To: <cover.1266691382.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1266691382.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <f03faaf3ab5bbd5f375c47c3cf12f1254d1237bd.1266691382.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <f0655171e21a813a1fa784d06962c25267eac7e7.1266691382.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-automake for the target fails to build if autoconf is not installed on
-the host:
-
-checking whether autoconf is installed... no
-configure: error: Autoconf 2.58 or better is required.
-    Please make sure it is installed and in your PATH.
-make: *** [/home/test/brbuilttest/build/automake-1.10/.stamp_configured] Error 1
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/automake/automake.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/x11r7/xfont_font-util/xfont_font-util.mk |   74 ++--------------------
+ 1 files changed, 6 insertions(+), 68 deletions(-)
 
-diff --git a/package/automake/automake.mk b/package/automake/automake.mk
-index eb3b375..db935a4 100644
---- a/package/automake/automake.mk
-+++ b/package/automake/automake.mk
-@@ -11,7 +11,7 @@ ifeq ($(BR2_ENABLE_DEBUG),y) # install-exec doesn't install aclocal stuff
- AUTOMAKE_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
- endif
+diff --git a/package/x11r7/xfont_font-util/xfont_font-util.mk b/package/x11r7/xfont_font-util/xfont_font-util.mk
+index 38e7e80..88dce38 100644
+--- a/package/x11r7/xfont_font-util/xfont_font-util.mk
++++ b/package/x11r7/xfont_font-util/xfont_font-util.mk
+@@ -5,76 +5,14 @@
+ ################################################################################
  
--AUTOMAKE_DEPENDENCIES = autoconf microperl
-+AUTOMAKE_DEPENDENCIES = host-autoconf autoconf microperl
+ XFONT_FONT_UTIL_VERSION = 1.0.1
+-XFONT_FONT_UTIL_NAME = font-util-$(XFONT_FONT_UTIL_VERSION)
+ XFONT_FONT_UTIL_SOURCE = font-util-$(XFONT_FONT_UTIL_VERSION).tar.bz2
+ XFONT_FONT_UTIL_SITE = http://xorg.freedesktop.org/releases/individual/font
+-XFONT_FONT_UTIL_AUTORECONF = NO
+-XFONT_FONT_UTIL_DIR=$(BUILD_DIR)/$(XFONT_FONT_UTIL_NAME)
+-XFONT_FONT_UTIL_CAT:=$(BZCAT)
++XFONT_FONT_UTIL_DEPENDENCIES = host-pkg-config
  
- HOST_AUTOMAKE_DEPENDENCIES = host-autoconf
+-$(DL_DIR)/$(XFONT_FONT_UTIL_SOURCE):
+-	 $(call DOWNLOAD,$(XFONT_FONT_UTIL_SITE),$(XFONT_FONT_UTIL_SOURCE))
++define XFONT_FONT_UTIL_POST_INSTALL_FIXES
++ $(@D)/post-install.sh $(STAGING_DIR)
++endef
  
+-xfont_font-util-source: $(DL_DIR)/$(XFONT_FONT_UTIL_SOURCE)
+-
+-$(XFONT_FONT_UTIL_DIR)/.unpacked: $(DL_DIR)/$(XFONT_FONT_UTIL_SOURCE)
+-	$(XFONT_FONT_UTIL_CAT) $(DL_DIR)/$(XFONT_FONT_UTIL_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(XFONT_FONT_UTIL_DIR) package/x11r7/xfont_font-util/ \*.patch
+-	$(CONFIG_UPDATE) $(XFONT_FONT_UTIL_DIR)
+-	touch $@
+-
+-$(XFONT_FONT_UTIL_DIR)/.configured: $(XFONT_FONT_UTIL_DIR)/.unpacked
+-	(cd $(XFONT_FONT_UTIL_DIR) && rm -rf config.cache)
+-	(cd $(XFONT_FONT_UTIL_DIR) && \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		$(TARGET_CONFIGURE_ARGS) \
+-		./configure $(QUIET) \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		--prefix=/usr \
+-		--exec-prefix=/usr \
+-		--bindir=/usr/bin \
+-		--sbindir=/usr/sbin \
+-		--libdir=/usr/lib \
+-		--libexecdir=/usr/lib \
+-		--sysconfdir=/etc \
+-		--datadir=/usr/share \
+-		--localstatedir=/var \
+-		--includedir=/usr/include \
+-		--mandir=/usr/share/man \
+-		--infodir=/usr/share/info \
+-	)
+-	touch $@
+-
+-$(XFONT_FONT_UTIL_DIR)/.compiled: $(XFONT_FONT_UTIL_DIR)/.configured
+-	$(MAKE) -C $(XFONT_FONT_UTIL_DIR)
+-	touch $@
+-
+-$(XFONT_FONT_UTIL_DIR)/.installed: $(XFONT_FONT_UTIL_DIR)/.compiled
+-	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(XFONT_FONT_UTIL_DIR) install
+-	touch $@
+-
+-$(XFONT_FONT_UTIL_DIR)/.hacked: $(XFONT_FONT_UTIL_DIR)/.installed
+-	( package/x11r7/xfont_font-util/post-install.sh $(STAGING_DIR) )
+-	touch $@
+-
+-xfont_font-util: host-pkg-config $(XFONT_FONT_UTIL_DIR)/.hacked
+-
+-xfont_font-util-unpacked: $(XFONT_FONT_UTIL_DIR)/.unpacked
+-
+-xfont_font-util-clean:
+-	-$(MAKE) -C $(XFONT_FONT_UTIL_DIR) clean
+-
+-xfont_font-util-dirclean:
+-	rm -rf $(XFONT_FONT_UTIL_DIR)
+-
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_XFONT_FONT_UTIL),y)
+-TARGETS+=xfont_font-util
+-endif
++XFONT_FONT_UTIL_POST_INSTALL_STAGING_HOOKS += XFONT_FONT_UTIL_POST_INSTALL_FIXES
+ 
++$(eval $(call AUTOTARGETS,package/x11r7,xfont_font-util))
+\ No newline at end of file
 -- 
 1.6.3.3
