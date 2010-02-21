@@ -1,44 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Feb 2010 20:07:35 +0100
-Subject: [Buildroot] Multiple architectures best practices?
-In-Reply-To: <BLU148-W126CE5F8A30A9DD8A9BAA5EB7A0@phx.gbl>
-References: <BLU148-W126CE5F8A30A9DD8A9BAA5EB7A0@phx.gbl>
-Message-ID: <20100220200735.495486b5@surf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 21 Feb 2010 10:46:16 +0000 (UTC)
+Subject: [Buildroot] [Bug 459] libgtk2 autoreconf
+In-Reply-To: <bug-459-163@https.bugs.busybox.net/>
+References: <bug-459-163@https.bugs.busybox.net/>
+Message-ID: <20100221104617.013C97775B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Terry,
+https://bugs.busybox.net/show_bug.cgi?id=459
 
-On Tue, 29 Dec 2009 14:44:51 -0500
-Terry Forrest <zippybot7@hotmail.com> wrote:
 
-> Hi All - new to buildroot and am impressed!  Nice design
-> and implementation.
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Thanks!
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-> We would like to use BR to build for two architectures from
-> the same tree.  We can use a local x86 for a "simulation" mode,
-> and the target is arm.  I see that this is cleanly supported in the
-> 2009.11 release.
-> 
-> My question is on a "best practice" for this.  I've set up 
-> a top-level Makefile that goes something like this:
 
-> This seems to work okay - any comments or warnings?
-> Again, I'm new to BR and want to make sure I'm not 
-> gonna step in anything.
 
-Your Makefile looks good to me.
 
-Cheers,
+--- Comment #6 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2010-02-21 10:46:15 UTC ---
+Both patches have been merged:
 
-Thomas
+5b5cf3bf3630352e8c24f9185d7795ec0f503cb4 for the test directory removal
+61f677cb060732316b41f072210986e97ae9379f for the gtk-doc.m4 thing
+
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
