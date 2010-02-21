@@ -1,36 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2010 18:46:40 +0100
-Subject: [Buildroot] [PATCH 02/38] ccache: remove cleanup of documentation
+Date: Sun, 21 Feb 2010 18:46:44 +0100
+Subject: [Buildroot] [PATCH 06/38] xapp_mkfontscale: enable compilation for
+	the host
 In-Reply-To: <cover.1266774432.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1266774432.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <53f670ac06837e0517cffad747435e5d1677d3fa.1266774432.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <e87463aceffce66c0aa82dbdf66fe66cf0cc770c.1266774432.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The cleanup of documentation is handled in a global way, in the main
-Makefile.
+mkfontscale on the host is required to build xfonts-encoding for the
+target.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/ccache/ccache.mk |    3 ---
- 1 files changed, 0 insertions(+), 3 deletions(-)
+ package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/toolchain/ccache/ccache.mk b/toolchain/ccache/ccache.mk
-index c98937d..8e414b2 100644
---- a/toolchain/ccache/ccache.mk
-+++ b/toolchain/ccache/ccache.mk
-@@ -163,9 +163,6 @@ $(CCACHE_DIR2)/$(CCACHE_BINARY): $(CCACHE_DIR2)/.configured
+diff --git a/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk b/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk
+index 05a3f81..e94312a 100644
+--- a/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk
++++ b/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk
+@@ -8,6 +8,8 @@ XAPP_MKFONTSCALE_VERSION = 1.0.5
+ XAPP_MKFONTSCALE_SOURCE = mkfontscale-$(XAPP_MKFONTSCALE_VERSION).tar.bz2
+ XAPP_MKFONTSCALE_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_MKFONTSCALE_AUTORECONF = NO
+-XAPP_MKFONTSCALE_DEPENDENCIES = freetype xlib_libX11 xlib_libfontenc
++XAPP_MKFONTSCALE_DEPENDENCIES = zlib freetype xlib_libX11 xlib_libfontenc
++HOST_XAPP_MKFONTSCALE_DEPENDENCIES = host-zlib host-freetype host-xlib_libfontenc
  
- $(TARGET_DIR)/$(CCACHE_TARGET_BINARY): $(CCACHE_DIR2)/$(CCACHE_BINARY)
- 	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(CCACHE_DIR2) install
--ifneq ($(BR2_HAVE_MANPAGES),y)
--	rm -rf $(TARGET_DIR)/usr/man
--endif
- 	# put a bunch of symlinks into /bin, since that is earlier
- 	# in the default PATH than /usr/bin where gcc lives
- 	(cd $(TARGET_DIR)/bin; \
+ $(eval $(call AUTOTARGETS,package/x11r7,xapp_mkfontscale))
++$(eval $(call AUTOTARGETS,package/x11r7,xapp_mkfontscale,host))
 -- 
 1.6.3.3
