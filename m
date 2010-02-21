@@ -1,16 +1,16 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 21 Feb 2010 18:51:40 +0000 (UTC)
-Subject: [Buildroot] [Bug 829] Webkit r44552 needs libXt
-In-Reply-To: <bug-829-163@https.bugs.busybox.net/>
-References: <bug-829-163@https.bugs.busybox.net/>
-Message-ID: <20100221185140.50F2D77762@busybox.osuosl.org>
+Date: Sun, 21 Feb 2010 18:51:32 +0000 (UTC)
+Subject: [Buildroot] [Bug 543] ATK requires X11 on DirectFB target
+In-Reply-To: <bug-543-163@https.bugs.busybox.net/>
+References: <bug-543-163@https.bugs.busybox.net/>
+Message-ID: <20100221185132.DF55577762@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=829
+https://bugs.busybox.net/show_bug.cgi?id=543
 
 
 Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
