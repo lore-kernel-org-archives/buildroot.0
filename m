@@ -1,16 +1,17 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 21 Feb 2010 22:33:08 +0000 (UTC)
-Subject: [Buildroot] [Bug 807] [PATCH] samba - make iconv and smbd optional
-In-Reply-To: <bug-807-163@https.bugs.busybox.net/>
-References: <bug-807-163@https.bugs.busybox.net/>
-Message-ID: <20100221223308.974CF77769@busybox.osuosl.org>
+Date: Sun, 21 Feb 2010 22:33:09 +0000 (UTC)
+Subject: [Buildroot] [Bug 851] Add option to specify --sysroot value for
+ external toolchain
+In-Reply-To: <bug-851-163@https.bugs.busybox.net/>
+References: <bug-851-163@https.bugs.busybox.net/>
+Message-ID: <20100221223309.A52CD77769@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=807
+https://bugs.busybox.net/show_bug.cgi?id=851
 
 
 Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
@@ -22,7 +23,7 @@ Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
 
 
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2010-02-21 22:33:08 UTC ---
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2010-02-21 22:33:09 UTC ---
 Move milestone to 2010.05 since enhancements will not be handled before the
 release of 2010.02.
 
