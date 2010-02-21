@@ -1,36 +1,34 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 21 Feb 2010 10:46:16 +0000 (UTC)
-Subject: [Buildroot] [Bug 459] libgtk2 autoreconf
-In-Reply-To: <bug-459-163@https.bugs.busybox.net/>
-References: <bug-459-163@https.bugs.busybox.net/>
-Message-ID: <20100221104617.013C97775B@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 21 Feb 2010 18:47:01 +0100
+Subject: [Buildroot] [pull request] Pull request for branch misc-fixes5
+In-Reply-To: <cover.1266691382.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1266691382.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <20100221184701.3f9c5111@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=459
+Hello,
 
+On Sat, 20 Feb 2010 19:42:51 +0100
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+> The following changes since commit
+> c8ff60c8283b0ad116fcf43f485f199c29432c9d: Peter Korsgaard (1):
+>         CHANGES: add ace_of_penguins, rubix and xboard
+> 
+> are available in the git repository at:
+> 
+>   git://git.busybox.net/~tpetazzoni/git/buildroot misc-fixes5
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+Please ignore this pull request and don't merge the patches. I'll send a
+new one, with more fixes.
 
-
-
-
---- Comment #6 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2010-02-21 10:46:15 UTC ---
-Both patches have been merged:
-
-5b5cf3bf3630352e8c24f9185d7795ec0f503cb4 for the test directory removal
-61f677cb060732316b41f072210986e97ae9379f for the gtk-doc.m4 thing
-
-
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
