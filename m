@@ -1,18 +1,30 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Sun, 21 Feb 2010 22:31:16 +0100
-Subject: [Buildroot] [PATCH 12/16] libpng: enable compilation on the host
-In-Reply-To: <8e8a4ee518b84a7e5f16764022ea2cf8ba455627.1266691382.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1266691382.git.thomas.petazzoni@free-electrons.com>
-	<8e8a4ee518b84a7e5f16764022ea2cf8ba455627.1266691382.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <1266787876.25727.2.camel@coalu.atr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 21 Feb 2010 21:35:33 +0000 (UTC)
+Subject: [Buildroot] [Bug 671] Bash fails to build when building buildront
+	on Ubuntu 9.04
+In-Reply-To: <bug-671-163@https.bugs.busybox.net/>
+References: <bug-671-163@https.bugs.busybox.net/>
+Message-ID: <20100221213533.D674A7777D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le samedi 20 f?vrier 2010 ? 19:43 +0100, Thomas Petazzoni a ?crit :
-> libpng is needed on the host to build ace_of_penguins.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Lionel Landwerlin <llandwerlin@gmail.com>
+https://bugs.busybox.net/show_bug.cgi?id=671
+
+
+
+
+
+--- Comment #1 from Lionel Landwerlin <llandwerlin@gmail.com>  2010-02-21 21:35:32 UTC ---
+I had this problem too.
+I think
+http://git.buildroot.org/buildroot/commit/?id=5082e476d1af0c1f5977a138146c9634f0b2f994
+fixed this one.
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
