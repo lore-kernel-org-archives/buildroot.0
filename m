@@ -1,29 +1,36 @@
-From: Will Newton <will.newton@gmail.com>
-Date: Sun, 21 Feb 2010 18:10:11 +0000
-Subject: [Buildroot] [PATCH 36/38] webkit: make sure that people don't
-	try to build with uClibc
-In-Reply-To: <1c517be59aac9a3569bd10769125d5f7229e0111.1266774432.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1266774432.git.thomas.petazzoni@free-electrons.com>
-	<1c517be59aac9a3569bd10769125d5f7229e0111.1266774432.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87a5b0801002211010k3c846965t835414641992044b@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 21 Feb 2010 18:13:12 +0000 (UTC)
+Subject: [Buildroot] [Bug 695] Build using reconfigured external toolchain
+	fails
+In-Reply-To: <bug-695-163@https.bugs.busybox.net/>
+References: <bug-695-163@https.bugs.busybox.net/>
+Message-ID: <20100221181312.583C37776C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Feb 21, 2010 at 5:47 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=695
 
-Hi Thomas,
 
-> Currently, webkit uses the pthread_getattr_np() function (in
-> JavaScriptCore/runtime/Collector.cpp), and this function isn't
-> implemented by uClibc (see pthread.h).
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-This isn't strictly true - the newer version of LinuxThreads and NPTL
-for uClibc both implement this function.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |DUPLICATE
 
-I build and run WebKit with uClibc so I would rather this change did not go in.
 
-Thanks,
+
+
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2010-02-21 18:13:11 UTC ---
+
+
+*** This bug has been marked as a duplicate of bug 693 ***
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
