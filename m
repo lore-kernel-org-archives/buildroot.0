@@ -1,43 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2010 18:47:16 +0100
-Subject: [Buildroot] [PATCH 38/38] mplayer: use UTF-8 charset to avoid iconv
-	dependency
+Date: Sun, 21 Feb 2010 18:46:49 +0100
+Subject: [Buildroot] [PATCH 11/38] package infrastructure: add
+	LD_LIBRARY_PATH
 In-Reply-To: <cover.1266774432.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1266774432.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <fb726c99311084963127977b96cb51967ba882cb.1266774432.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <14420c94fda9f27c457b671f0da2a278cba23ac6.1266774432.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The mplayer configure script was failing with:
-
-  Checking for iconv program ... no
-  No working iconv program found, use
-  --charset=UTF-8 to continue anyway.
-  If you also have problems with iconv library functions use --charset=noconv.
-  Messages in the GTK-2 interface will be broken then.
-
-Therefore, we pass --charset=UTF-8 instead of --charset=US-ASCII.
+During the compilation of target packages, host tools might be used,
+and in turn, they might use host libraries installed in
+$(HOST_DIR)/usr/lib. Therefore, we pass a LD_LIBRARY_PATH variable
+when building packages.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/multimedia/mplayer/mplayer.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/Makefile.in |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
 
-diff --git a/package/multimedia/mplayer/mplayer.mk b/package/multimedia/mplayer/mplayer.mk
-index 3d56ee0..538bac9 100644
---- a/package/multimedia/mplayer/mplayer.mk
-+++ b/package/multimedia/mplayer/mplayer.mk
-@@ -54,7 +54,7 @@ $(MPLAYER_DIR)/.configured: $(MPLAYER_DIR)/.unpacked
- 		--as=$(TARGET_CROSS)as \
- 		--with-extraincdir=$(STAGING_DIR)/usr/include \
- 		--with-extralibdir=$(STAGING_DIR)/lib \
--		--charset=US-ASCII \
-+		--charset=UTF-8 \
- 		--enable-mad \
- 		--enable-fbdev \
- 		$(MPLAYER_ENDIAN) \
+diff --git a/package/Makefile.in b/package/Makefile.in
+index bc0ac7c..d976481 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -236,7 +236,11 @@ TARGET_CONFIGURE_ENV=\
+ 	LDFLAGS="$(TARGET_LDFLAGS)" \
+ 	FCFLAGS="$(TARGET_FCFLAGS)" \
+ 
+-TARGET_MAKE_ENV=PATH=$(TARGET_PATH)
++# During the compilation of target packages, host tools might be used,
++# and in turn, they might use host libraries installed in
++# $(HOST_DIR)/usr/lib
++TARGET_MAKE_ENV=PATH=$(TARGET_PATH) \
++		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib"
+ 
+ HOST_CONFIGURE_OPTS=PATH=$(HOST_PATH) \
+ 		AR="$(HOSTAR)" \
 -- 
 1.6.3.3
