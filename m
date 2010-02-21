@@ -1,92 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2010 18:46:55 +0100
-Subject: [Buildroot] [PATCH 17/38] libxml-parser-perl: new package
+Date: Sun, 21 Feb 2010 18:46:56 +0100
+Subject: [Buildroot] [PATCH 18/38] package infrastructure: add PERLLIB and
+	LD_LIBRARY_PATH
 In-Reply-To: <cover.1266774432.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1266774432.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <fac4d6f24ebf9312fd1c7a714100c4e2a859e647.1266774432.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <51a8aa7821b9dc833ee40176f1b08f28dd2a69ca.1266774432.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This Perl module is needed to build intltool, which in turn is needed
-to build several of our packages. We assume that Perl is installed on
-the host.
+Now that we build Perl modules in $(HOST_DIR), PERLLIB must be defined
+to $(HOST_DIR)/usr/lib/perl.
 
-Only the host variant of this package has been tested and is used.
+Moreover, several utilities built into $(HOST_DIR) depend on libraries
+installed in $(HOST_DIR)/usr/lib. We must therefore pass the
+appropriate LD_LIBRARY_PATH variable.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                                |    1 +
- package/libxml-parser-perl/Config.in             |    6 ++++
- package/libxml-parser-perl/libxml-parser-perl.mk |   32 ++++++++++++++++++++++
- 3 files changed, 39 insertions(+), 0 deletions(-)
- create mode 100644 package/libxml-parser-perl/Config.in
- create mode 100644 package/libxml-parser-perl/libxml-parser-perl.mk
+ package/Makefile.in |   12 +++++++++---
+ 1 files changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 5ddd63c..00f3401 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -412,6 +412,7 @@ source "package/ezxml/Config.in"
- source "package/libxml2/Config.in"
- source "package/libxslt/Config.in"
- source "package/xerces/Config.in"
-+source "package/libxml-parser-perl/Config.in"
- endmenu
+diff --git a/package/Makefile.in b/package/Makefile.in
+index d976481..1f1f18b 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -228,6 +228,8 @@ TARGET_CONFIGURE_OPTS=PATH=$(TARGET_PATH) \
+ 		PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)" \
+ 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+ 		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig:$(PKG_CONFIG_PATH)" \
++		PERLLIB="$(HOST_DIR)/usr/lib/perl" \
++		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib" \
+ 		STAGING_DIR="$(STAGING_DIR)"
  
- # java support
-diff --git a/package/libxml-parser-perl/Config.in b/package/libxml-parser-perl/Config.in
-new file mode 100644
-index 0000000..c96e9ee
---- /dev/null
-+++ b/package/libxml-parser-perl/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_LIBXML_PARSER_PERL
-+       bool "libxml-parser-perl"
-+       help
-+         The Perl XML::Parser module.
-+
-+	 http://www.cpan.org/modules/by-module/XML/
-\ No newline at end of file
-diff --git a/package/libxml-parser-perl/libxml-parser-perl.mk b/package/libxml-parser-perl/libxml-parser-perl.mk
-new file mode 100644
-index 0000000..08446d5
---- /dev/null
-+++ b/package/libxml-parser-perl/libxml-parser-perl.mk
-@@ -0,0 +1,32 @@
-+#############################################################
-+#
-+# libxml-parser-perl
-+#
-+#############################################################
-+LIBXML_PARSER_PERL_VERSION:=2.36
-+LIBXML_PARSER_PERL_SOURCE:=XML-Parser-$(LIBXML_PARSER_PERL_VERSION).tar.gz
-+LIBXML_PARSER_PERL_SITE:=http://www.cpan.org/modules/by-module/XML/
-+
-+HOST_LIBXML_PARSER_PERL_DEPENDENCIES = host-expat
-+
-+define HOST_LIBXML_PARSER_PERL_CONFIGURE_CMDS
-+ (cd $(@D) ; \
-+   perl Makefile.PL \
-+        PREFIX=$(HOST_DIR)/usr \
-+        EXPATLIBPATH=$(HOST_DIR)/usr/lib \
-+        EXPATINCPATH=$(HOST_DIR)/usr/include \
-+        INSTALLDIRS=site \
-+        INSTALLSITELIB=$(HOST_DIR)/usr/lib/perl \
-+ )
-+endef
-+
-+define HOST_LIBXML_PARSER_PERL_BUILD_CMDS
-+ $(HOST_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+define HOST_LIBXML_PARSER_PERL_INSTALL_CMDS
-+ $(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
-+endef
-+
-+$(eval $(call GENTARGETS,package,libxml-parser-perl))
-+$(eval $(call GENTARGETS,package,libxml-parser-perl,host))
+ TARGET_CONFIGURE_ENV=\
+@@ -240,7 +242,8 @@ TARGET_CONFIGURE_ENV=\
+ # and in turn, they might use host libraries installed in
+ # $(HOST_DIR)/usr/lib
+ TARGET_MAKE_ENV=PATH=$(TARGET_PATH) \
+-		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib"
++		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib" \
++		PERLLIB="$(HOST_DIR)/usr/lib/perl"
+ 
+ HOST_CONFIGURE_OPTS=PATH=$(HOST_PATH) \
+ 		AR="$(HOSTAR)" \
+@@ -278,11 +281,14 @@ HOST_CONFIGURE_OPTS=PATH=$(HOST_PATH) \
+ 		ORIGINAL_NM_FOR_TARGET="$(TARGET_NM)" \
+ 		ORIGINAL_OBJDUMP_FOR_TARGET="$(TARGET_OBJDUMP)" \
+ 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+-		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig"
++		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig" \
++		PERLLIB="$(HOST_DIR)/usr/lib/perl"
+ 
+ HOST_MAKE_ENV=PATH=$(HOST_PATH) \
+ 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+-		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig"
++		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig" \
++		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib" \
++		PERLLIB="$(HOST_DIR)/usr/lib/perl"
+ 
+ 
+ #######################################################################
 -- 
 1.6.3.3
