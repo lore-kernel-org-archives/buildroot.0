@@ -1,83 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2010 18:47:10 +0100
-Subject: [Buildroot] [PATCH 32/38] dosfstools: make sure install targets
-	aren't run everytime
+Date: Sun, 21 Feb 2010 18:46:42 +0100
+Subject: [Buildroot] [PATCH 04/38] libxslt: enable compilation on host
 In-Reply-To: <cover.1266774432.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1266774432.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <37c63d7f332d5c0358e85abd7e9bc77598c384ca.1266774432.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <73c937229bff334c9e4b88b7cc094ff4e576cdf4.1266774432.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adding real targets to $(TARGETS) doesn't work, since they are
-prefixed __real_tgt by the main Makefile. 'make' then always thinks
-that these targets aren't up-to-date, and re-generate them every time.
-
-Therefore, we switch dosfstools to the more common way of handling
-packages, with a phony target added to $(TARGETS), this phony target
-depending on real targets.
+Compiling libxcb (from the X.org stack) requires xsltproc on the host,
+which is part of libxslt.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dosfstools/dosfstools.mk |   32 +++++++++++++++++++-------------
- 1 files changed, 19 insertions(+), 13 deletions(-)
+ package/libxslt/libxslt.mk |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
 
-diff --git a/package/dosfstools/dosfstools.mk b/package/dosfstools/dosfstools.mk
-index e1e9fe3..b826ab1 100644
---- a/package/dosfstools/dosfstools.mk
-+++ b/package/dosfstools/dosfstools.mk
-@@ -32,7 +32,8 @@ $(DOSFSTOOLS_DIR)/.built : $(DOSFSTOOLS_DIR)/.unpacked
- 	$(STRIPCMD) $(DOSFSTOOLS_DIR)/$(DOSFSLABEL_BINARY)
- 	touch $@
+diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
+index 03c1131..4bf61b5 100644
+--- a/package/libxslt/libxslt.mk
++++ b/package/libxslt/libxslt.mk
+@@ -25,7 +25,15 @@ LIBXSLT_CONF_OPT = --with-gnu-ld --enable-shared \
  
--$(TARGET_DIR)/$(MKDOSFS_TARGET_BINARY): $(DOSFSTOOLS_DIR)/.built
-+$(TARGET_DIR)/$(MKDOSFS_TARGET_BINARY): # $(DOSFSTOOLS_DIR)/.built
-+	echo foo
- 	cp -a $(DOSFSTOOLS_DIR)/$(MKDOSFS_BINARY) $@
- 	touch -c $@
+ LIBXSLT_DEPENDENCIES = libxml2 $(LIBXSLT_DEPENDENCIES_EXTRA)
  
-@@ -44,7 +45,20 @@ $(TARGET_DIR)/$(DOSFSLABEL_TARGET_BINARY): $(DOSFSTOOLS_DIR)/.built
- 	cp -a $(DOSFSTOOLS_DIR)/$(DOSFSLABEL_BINARY) $@
- 	touch -c $@
- 
--dosfstools: $(TARGET_DIR)/$(DOSFSTOOLS_TARGET_BINARY) $(TARGET_DIR)/$(DOSFSCK_TARGET_BINARY)
-+DOSFSTOOLS=
-+ifeq ($(BR2_PACKAGE_DOSFSTOOLS_MKDOSFS),y)
-+DOSFSTOOLS+=$(TARGET_DIR)/$(MKDOSFS_TARGET_BINARY)
-+endif
++HOST_LIBXSLT_CONF_OPT = --enable-shared \
++			--without-debugging \
++			--without-python \
++			--without-threads
 +
-+ifeq ($(BR2_PACKAGE_DOSFSTOOLS_DOSFSCK),y)
-+DOSFSTOOLS+=$(TARGET_DIR)/$(DOSFSCK_TARGET_BINARY)
-+endif
++HOST_LIBXSLT_DEPENDENCIES = host-libxml2
 +
-+ifeq ($(BR2_PACKAGE_DOSFSTOOLS_DOSFSLABEL),y)
-+DOSFSTOOLS+=$(TARGET_DIR)/$(DOSFSLABEL_TARGET_BINARY)
-+endif
-+
-+dosfstools: $(DOSFSTOOLS)
+ $(eval $(call AUTOTARGETS,package,libxslt))
++$(eval $(call AUTOTARGETS,package,libxslt,host))
  
- dosfstools-clean:
- 	rm -f $(TARGET_DIR)/$(MKDOSFS_TARGET_BINARY)
-@@ -60,14 +74,6 @@ dosfstools-dirclean:
- # Toplevel Makefile options
- #
- #############################################################
--ifeq ($(BR2_PACKAGE_DOSFSTOOLS_MKDOSFS),y)
--TARGETS+=$(TARGET_DIR)/$(MKDOSFS_TARGET_BINARY)
--endif
--
--ifeq ($(BR2_PACKAGE_DOSFSTOOLS_DOSFSCK),y)
--TARGETS+=$(TARGET_DIR)/$(DOSFSCK_TARGET_BINARY)
--endif
--
--ifeq ($(BR2_PACKAGE_DOSFSTOOLS_DOSFSLABEL),y)
--TARGETS+=$(TARGET_DIR)/$(DOSFSLABEL_TARGET_BINARY)
--endif
-+ifeq ($(BR2_PACKAGE_DOSFSTOOLS),y)
-+TARGETS+=dosfstools
-+endif
-\ No newline at end of file
+ $(LIBXSLT_HOOK_POST_INSTALL):
+ 	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/xslt-config
 -- 
 1.6.3.3
