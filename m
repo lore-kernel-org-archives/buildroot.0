@@ -1,16 +1,16 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 21 Feb 2010 22:33:03 +0000 (UTC)
-Subject: [Buildroot] [Bug 661] lmbench: new package
-In-Reply-To: <bug-661-163@https.bugs.busybox.net/>
-References: <bug-661-163@https.bugs.busybox.net/>
-Message-ID: <20100221223303.9E0F777769@busybox.osuosl.org>
+Date: Sun, 21 Feb 2010 22:33:04 +0000 (UTC)
+Subject: [Buildroot] [Bug 719] Add lua option to haserl
+In-Reply-To: <bug-719-163@https.bugs.busybox.net/>
+References: <bug-719-163@https.bugs.busybox.net/>
+Message-ID: <20100221223304.389BE77769@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=661
+https://bugs.busybox.net/show_bug.cgi?id=719
 
 
 Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
