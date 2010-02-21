@@ -1,42 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2010 18:46:49 +0100
-Subject: [Buildroot] [PATCH 11/38] package infrastructure: add
-	LD_LIBRARY_PATH
+Date: Sun, 21 Feb 2010 18:46:57 +0100
+Subject: [Buildroot] [PATCH 19/38] intltool: new package
 In-Reply-To: <cover.1266774432.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1266774432.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <14420c94fda9f27c457b671f0da2a278cba23ac6.1266774432.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <62cb8cab08684497ba5b5af9aec30ae193ab9787.1266774432.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-During the compilation of target packages, host tools might be used,
-and in turn, they might use host libraries installed in
-$(HOST_DIR)/usr/lib. Therefore, we pass a LD_LIBRARY_PATH variable
-when building packages.
+This XML internationalization set of tools is required to build
+several of our packages, and may not be available on the host machine.
+
+Only the host variant has been tested.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Makefile.in |    6 +++++-
- 1 files changed, 5 insertions(+), 1 deletions(-)
+ package/Config.in            |    1 +
+ package/intltool/Config.in   |    6 ++++++
+ package/intltool/intltook.mk |   16 ++++++++++++++++
+ 3 files changed, 23 insertions(+), 0 deletions(-)
+ create mode 100644 package/intltool/Config.in
+ create mode 100644 package/intltool/intltook.mk
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index bc0ac7c..d976481 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -236,7 +236,11 @@ TARGET_CONFIGURE_ENV=\
- 	LDFLAGS="$(TARGET_LDFLAGS)" \
- 	FCFLAGS="$(TARGET_FCFLAGS)" \
+diff --git a/package/Config.in b/package/Config.in
+index 00f3401..37cae2e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -46,6 +46,7 @@ source "package/pkg-config/Config.in"
+ source "package/readline/Config.in"
+ source "package/valgrind/Config.in"
+ source "package/pcre/Config.in"
++source "package/intltool/Config.in"
  
--TARGET_MAKE_ENV=PATH=$(TARGET_PATH)
-+# During the compilation of target packages, host tools might be used,
-+# and in turn, they might use host libraries installed in
-+# $(HOST_DIR)/usr/lib
-+TARGET_MAKE_ENV=PATH=$(TARGET_PATH) \
-+		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib"
- 
- HOST_CONFIGURE_OPTS=PATH=$(HOST_PATH) \
- 		AR="$(HOSTAR)" \
+ comment "Other stuff"
+ source "package/at/Config.in"
+diff --git a/package/intltool/Config.in b/package/intltool/Config.in
+new file mode 100644
+index 0000000..94b34f7
+--- /dev/null
++++ b/package/intltool/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_INTLTOOL
++       bool "intltool"
++       help
++         Utility scripts for internationalizing XML
++
++	 http://www.freedesktop.org/wiki/Software/intltool
+\ No newline at end of file
+diff --git a/package/intltool/intltook.mk b/package/intltool/intltook.mk
+new file mode 100644
+index 0000000..746ebb1
+--- /dev/null
++++ b/package/intltool/intltook.mk
+@@ -0,0 +1,16 @@
++#############################################################
++#
++# intltool
++#
++#############################################################
++INTLTOOL_VERSION:=0.40.6
++INTLTOOL_SOURCE:=intltool-$(INTLTOOL_VERSION).tar.bz2
++INTLTOOL_SITE:=http://ftp.acc.umu.se/pub/GNOME/sources/intltool/0.40/
++
++HOST_INTLTOOL_DEPENDENCIES = host-libxml-parser-perl
++HOST_INTLTOOL_CONF_OPT = \
++  PERLLIB=$(HOST_DIR)/usr/lib/perl
++
++$(eval $(call AUTOTARGETS,package,intltool))
++$(eval $(call AUTOTARGETS,package,intltool,host))
++
 -- 
 1.6.3.3
