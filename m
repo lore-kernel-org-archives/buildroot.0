@@ -1,40 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2010 18:47:07 +0100
-Subject: [Buildroot] [PATCH 29/38] matchbox: apply libtool patch to
-	matchbox-desktop
+Date: Sun, 21 Feb 2010 18:47:06 +0100
+Subject: [Buildroot] [PATCH 28/38] kexec: bump version to fix build failure
 In-Reply-To: <cover.1266774432.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1266774432.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <5f57d0558a77857902d047164b22fed0d072f28f.1266774432.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <153403f4a2527bc8d8e019bad6ae927f285d71e3.1266774432.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-matchbox-desktop fails to build because it tries to read
-/usr/lib/libxcb.la, which doesn't exist on a very basic system with no
-development files instead. The buildroot-libtool.patch must therefore
-be applied.
-
-Unfortunately, matchbox doesn't yet use the autotools infrastructure,
-so we have to manually apply the patch.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/matchbox/matchbox.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/kexec/kexec.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
-index 06e94cd..8665d41 100644
---- a/package/matchbox/matchbox.mk
-+++ b/package/matchbox/matchbox.mk
-@@ -141,6 +141,7 @@ $(MATCHBOX_PL_DIR)/.unpacked: $(DL_DIR)/$(MATCHBOX_PL_SOURCE)
- $(MATCHBOX_DP_DIR)/.unpacked: $(DL_DIR)/$(MATCHBOX_DP_SOURCE)
- 	$(MATCHBOX_CAT) $(DL_DIR)/$(MATCHBOX_DP_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
- 	$(SED) 's:mbfolder\.png:mbtasks\.png:g' $(MATCHBOX_DP_DIR)/modules/tasks.c
-+	toolchain/patch-kernel.sh $(MATCHBOX_DP_DIR) package/ buildroot-libtool.patch
- 	touch $(MATCHBOX_DP_DIR)/.unpacked
- 
- $(MATCHBOX_FK_DIR)/.unpacked: $(DL_DIR)/$(MATCHBOX_FK_SOURCE)
+diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
+index a0fb2fd..4367885 100644
+--- a/package/kexec/kexec.mk
++++ b/package/kexec/kexec.mk
+@@ -3,7 +3,7 @@
+ # kexec
+ #
+ #############################################################
+-KEXEC_VERSION = 2.0.0
++KEXEC_VERSION = 2.0.1
+ KEXEC_SOURCE = kexec-tools-$(KEXEC_VERSION).tar.bz2
+ KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/horms/kexec-tools/
+ # no install-strip/install-exec
 -- 
 1.6.3.3
