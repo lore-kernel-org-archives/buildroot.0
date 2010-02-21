@@ -1,29 +1,28 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 21 Feb 2010 22:33:04 +0000 (UTC)
-Subject: [Buildroot] [Bug 743] Add Transmission bit torrent option to
-	buildroot
-In-Reply-To: <bug-743-163@https.bugs.busybox.net/>
-References: <bug-743-163@https.bugs.busybox.net/>
-Message-ID: <20100221223305.0443677769@busybox.osuosl.org>
+Date: Sun, 21 Feb 2010 22:33:08 +0000 (UTC)
+Subject: [Buildroot] [Bug 805] [PATCH] mdadm - version update
+In-Reply-To: <bug-805-163@https.bugs.busybox.net/>
+References: <bug-805-163@https.bugs.busybox.net/>
+Message-ID: <20100221223308.1FA2777769@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=743
+https://bugs.busybox.net/show_bug.cgi?id=805
 
 
 Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-   Target Milestone|2010.02                     |2010.05
+   Target Milestone|---                         |2010.05
 
 
 
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2010-02-21 22:33:04 UTC ---
+--- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2010-02-21 22:33:07 UTC ---
 Move milestone to 2010.05 since enhancements will not be handled before the
 release of 2010.02.
 
