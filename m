@@ -1,16 +1,17 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 21 Feb 2010 22:33:13 +0000 (UTC)
-Subject: [Buildroot] [Bug 1105] Add new netperf package
-In-Reply-To: <bug-1105-163@https.bugs.busybox.net/>
-References: <bug-1105-163@https.bugs.busybox.net/>
-Message-ID: <20100221223313.15C1F77769@busybox.osuosl.org>
+Date: Sun, 21 Feb 2010 22:33:14 +0000 (UTC)
+Subject: [Buildroot] [Bug 1117] Bump nano to 2.2.3 and migrate to
+	Makefile.autotools.in
+In-Reply-To: <bug-1117-163@https.bugs.busybox.net/>
+References: <bug-1117-163@https.bugs.busybox.net/>
+Message-ID: <20100221223314.2E45477769@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1105
+https://bugs.busybox.net/show_bug.cgi?id=1117
 
 
 Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
@@ -22,7 +23,7 @@ Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
 
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2010-02-21 22:33:12 UTC ---
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2010-02-21 22:33:13 UTC ---
 Move milestone to 2010.05 since enhancements will not be handled before the
 release of 2010.02.
 
