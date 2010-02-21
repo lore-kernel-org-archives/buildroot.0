@@ -1,61 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2010 18:47:12 +0100
-Subject: [Buildroot] [PATCH 34/38] libeXosip: do not re-run targets at every
-	invocation of 'make'
+Date: Sun, 21 Feb 2010 18:47:14 +0100
+Subject: [Buildroot] [PATCH 36/38] webkit: make sure that people don't try
+	to build with uClibc
 In-Reply-To: <cover.1266774432.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1266774432.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <c8dd0c725465573827bf521e29eccd1a956c2aa8.1266774432.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <1c517be59aac9a3569bd10769125d5f7229e0111.1266774432.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Make sure that we touch the target so that the target is newer than
-the .compiled stamp file.
+Currently, webkit uses the pthread_getattr_np() function (in
+JavaScriptCore/runtime/Collector.cpp), and this function isn't
+implemented by uClibc (see pthread.h).
+
+So, we enforce the fact that a glibc external toolchain should be used
+to build Webkit.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libeXosip2/libeXosip2.mk |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+ package/webkit/Config.in |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/libeXosip2/libeXosip2.mk b/package/libeXosip2/libeXosip2.mk
-index 09b6022..7f282b7 100644
---- a/package/libeXosip2/libeXosip2.mk
-+++ b/package/libeXosip2/libeXosip2.mk
-@@ -43,27 +43,33 @@ $(LIBEXOSIP2_DIR)/.compiled: $(LIBEXOSIP2_DIR)/.configured
+diff --git a/package/webkit/Config.in b/package/webkit/Config.in
+index 3c669a5..720121d 100644
+--- a/package/webkit/Config.in
++++ b/package/webkit/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_WEBKIT
+ 	bool "webkit"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
++	depends on BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_PACKAGE_LIBGTK2
+ 	select BR2_PACKAGE_ICU
+ 	select BR2_PACKAGE_CURL
+@@ -16,8 +17,8 @@ config BR2_PACKAGE_WEBKIT
  
- $(STAGING_DIR)/usr/lib/libeXosip2.so: $(LIBEXOSIP2_DIR)/.compiled
- 	cp -dpf $(LIBEXOSIP2_DIR)/src/.libs/libeXosip2.so* $(STAGING_DIR)/usr/lib
-+	touch $@
+ 	  http://webkit.org/
  
- $(STAGING_DIR)/usr/lib/libeXosip2.a: $(LIBEXOSIP2_DIR)/.compiled
- 	cp -dpf $(LIBEXOSIP2_DIR)/src/.libs/libeXosip2.a $(STAGING_DIR)/usr/lib
- 	cp -dpf $(LIBEXOSIP2_DIR)/include/*.h $(STAGING_DIR)/usr/include
-+	touch $@
+-comment "webkit requires a toolchain with C++ support and WCHAR enabled"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
++comment "webkit requires a glibc toolchain with C++ support and WCHAR enabled"
++	depends on !BR2_TOOLCHAIN_EXTERNAL_GLIBC || !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
  
- $(STAGING_DIR)/usr/lib/libeXosip2.la: $(LIBEXOSIP2_DIR)/.compiled
- 	cp -dpf $(LIBEXOSIP2_DIR)/src/libeXosip2.la $(STAGING_DIR)/usr/lib
- 	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libeXosip2.la
-+	touch $@
- 
- $(STAGING_DIR)/usr/bin/sip_reg: $(LIBEXOSIP2_DIR)/.compiled
- 	cp -dpf $(LIBEXOSIP2_DIR)/tools/.libs/sip_reg $(STAGING_DIR)/usr/bin
-+	touch $@
- 
- 
- $(TARGET_DIR)/usr/lib/libeXosip2.so: $(STAGING_DIR)/usr/lib/libeXosip2.so
- 	mkdir -p $(TARGET_DIR)/usr/lib
- 	cp -dpf $(STAGING_DIR)/usr/lib/libeXosip2.so* $(TARGET_DIR)/usr/lib/
- 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libeXosip2.so*
-+	touch $@
- 
- $(TARGET_DIR)/usr/bin/sip_reg: $(STAGING_DIR)/usr/bin/sip_reg
- 	mkdir -p $(TARGET_DIR)/usr/bin
- 	cp -dpf $(STAGING_DIR)/usr/bin/sip_reg $(TARGET_DIR)/usr/bin
-+	touch $@
- 
- 
+ if BR2_PACKAGE_WEBKIT
  
 -- 
 1.6.3.3
