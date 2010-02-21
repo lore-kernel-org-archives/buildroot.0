@@ -1,27 +1,30 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 21 Feb 2010 18:13:26 +0000 (UTC)
-Subject: [Buildroot] [Bug 699] Buildroot fails to copy libstdc++ to target
- when using external toolchain
-In-Reply-To: <bug-699-163@https.bugs.busybox.net/>
-References: <bug-699-163@https.bugs.busybox.net/>
-Message-ID: <20100221181326.305D97776C@busybox.osuosl.org>
+Date: Sun, 21 Feb 2010 18:49:19 +0000 (UTC)
+Subject: [Buildroot] [Bug 799] [PATCH] e2fsprogs small fix
+In-Reply-To: <bug-799-163@https.bugs.busybox.net/>
+References: <bug-799-163@https.bugs.busybox.net/>
+Message-ID: <20100221184919.E633F7777C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=699
+https://bugs.busybox.net/show_bug.cgi?id=799
 
 
 Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-         AssignedTo|unassigned at buildroot.uclibc.|thomas.petazzoni at free-
-                   |org                         |electrons.com
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
 
+
+
+--- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2010-02-21 18:49:18 UTC ---
+Thanks, merged into my bug-fixes branch that will be soon sent to Peter.
 
 
 -- 
