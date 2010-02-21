@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2010 18:47:08 +0100
-Subject: [Buildroot] [PATCH 30/38] matchbox: fix dependency to not always
-	rebuilt libmatchbox
+Date: Sun, 21 Feb 2010 18:47:09 +0100
+Subject: [Buildroot] [PATCH 31/38] shared-mime-info: do not depend on phony
+	target in hook
 In-Reply-To: <cover.1266774432.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1266774432.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <67f0e558cb1494f4dd8a225621355d49c5610aa8.1266774432.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <3955f0a48eaccd31940beb7dd8ae8c4239dbb24b.1266774432.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,34 +12,34 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Real targets should not depend on phony targets, otherwise they get
-rebuilt every time.
+rebuilt everytime.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/matchbox/matchbox.mk |    4 ++--
+ package/shared-mime-info/shared-mime-info.mk |    4 ++--
  1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
-index 8665d41..4abc9d6 100644
---- a/package/matchbox/matchbox.mk
-+++ b/package/matchbox/matchbox.mk
-@@ -219,7 +219,7 @@ else
- endif
+diff --git a/package/shared-mime-info/shared-mime-info.mk b/package/shared-mime-info/shared-mime-info.mk
+index 80b0ccc..7f89148 100644
+--- a/package/shared-mime-info/shared-mime-info.mk
++++ b/package/shared-mime-info/shared-mime-info.mk
+@@ -12,7 +12,7 @@ SHARED_MIME_INFO_INSTALL_TARGET = NO
  
+ SHARED_MIME_INFO_AUTORECONF = NO
+ SHARED_MIME_INFO_CONF_ENV = XMLLINT=$(HOST_DIR)/usr/bin/xmllint
+-SHARED_MIME_INFO_DEPENDENCIES = host-pkg-config host-libglib2 host-libxml2 libxml2 libglib2
++SHARED_MIME_INFO_DEPENDENCIES = host-pkg-config host-libglib2 host-libxml2 host-shared-mime-info libxml2 libglib2
  
--$(MATCHBOX_LIB_DIR)/.configured: $(MATCHBOX_LIB_DIR)/.unpacked xlib_libXext-install-staging
-+$(MATCHBOX_LIB_DIR)/.configured: $(MATCHBOX_LIB_DIR)/.unpacked
- 	(cd $(MATCHBOX_LIB_DIR); rm -f config.cache; \
- 	$(TARGET_CONFIGURE_OPTS) \
- 	./configure $(QUIET) \
-@@ -610,7 +610,7 @@ $(TARGET_DIR)/usr/bin/$(MATCHBOX_KB_BIN): $(STAGING_DIR)/usr/bin/$(MATCHBOX_KB_B
- 	cp -af $(STAGING_DIR)/usr/share/matchbox/matchbox-keyboard $(TARGET_DIR)/usr/share/matchbox/
- 	cp -dpf ./package/matchbox/mb-applet-kbd-wrapper.sh $(TARGET_DIR)/usr/bin/
+ SHARED_MIME_INFO_CONF_OPT = --disable-update-mimedb
  
--matchbox: host-pkg-config expat $(MATCHBOX_WM_DEPS) $(MATCHBOX_SNOTIFY_DEPS) $(MATCHBOX_LIB_DEPS) $(TARGET_DIR)/usr/lib/libmb.so $(TARGET_DIR)/usr/bin/$(MATCHBOX_WM_BIN)
-+matchbox: host-pkg-config expat xlib_libXext $(MATCHBOX_WM_DEPS) $(MATCHBOX_SNOTIFY_DEPS) $(MATCHBOX_LIB_DEPS) $(TARGET_DIR)/usr/lib/libmb.so $(TARGET_DIR)/usr/bin/$(MATCHBOX_WM_BIN)
+@@ -28,7 +28,7 @@ $(eval $(call AUTOTARGETS,package,shared-mime-info,host))
+ SHARED_MIME_INFO_HOST_BINARY:=$(HOST_DIR)/usr/bin/update-mime-database
  
- matchbox-panel: matchbox $(TARGET_DIR)/usr/bin/$(MATCHBOX_PL_BIN) $(TARGET_DIR)/usr/bin/matchbox-session $(MATCHBOX_PANEL_DEPS)
- 
+ # update the shared-mime-info database in the target
+-$(SHARED_MIME_INFO_HOOK_POST_INSTALL): host-shared-mime-info
++$(SHARED_MIME_INFO_HOOK_POST_INSTALL): 
+ 	$(HOST_MAKE_ENV) $(SHARED_MIME_INFO_HOST_BINARY) $(STAGING_DIR)/usr/share/mime
+ 	$(INSTALL) -D $(STAGING_DIR)/usr/share/mime/mime.cache $(TARGET_DIR)/usr/share/mime/mime.cache
+ 	touch $@
 -- 
 1.6.3.3
