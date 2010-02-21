@@ -1,41 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2010 18:47:02 +0100
-Subject: [Buildroot] [PATCH 24/38] shared-mime-info: run
-	update-mime-database with correct env variables
+Date: Sun, 21 Feb 2010 18:47:04 +0100
+Subject: [Buildroot] [PATCH 26/38] imagemagick: use internal libtool
 In-Reply-To: <cover.1266774432.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1266774432.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <1a85abb8410d6828470d26cc16124f4f708d0887.1266774432.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <0a8a8bcf04c28a89ce20421acf6501d88437cbab.1266774432.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When installing shared-mime-info on the target, we runn
-update-mime-database, which has been built previously by building and
-installing shared-mime-info for the host. However, for
-update-mime-database (host version) to run properly, we must pass the
-appropriate LD_LIBRARY_PATH variable.
-
-We re-use the existing $(HOST_MAKE_ENV) variable to pass all the
-appropriate variables.
+For some reason, our imagemagick.mk file calls libtool, but assumes
+that libtool is available on the host, which may not be
+true. Therefore, we use ImageMagick's internal libtool, which has been
+used for compiling/linking all the rest of ImageMagic anyway.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/shared-mime-info/shared-mime-info.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/imagemagick/imagemagick.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/shared-mime-info/shared-mime-info.mk b/package/shared-mime-info/shared-mime-info.mk
-index cfd3521..80b0ccc 100644
---- a/package/shared-mime-info/shared-mime-info.mk
-+++ b/package/shared-mime-info/shared-mime-info.mk
-@@ -29,6 +29,6 @@ SHARED_MIME_INFO_HOST_BINARY:=$(HOST_DIR)/usr/bin/update-mime-database
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index e858430..00895f5 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -83,8 +83,8 @@ $(IMAGEMAGICK_LIB): $(STAGING_DIR)/usr/lib/libMagickCore.a
+ 	touch -c $@
  
- # update the shared-mime-info database in the target
- $(SHARED_MIME_INFO_HOOK_POST_INSTALL): host-shared-mime-info
--	$(SHARED_MIME_INFO_HOST_BINARY) $(STAGING_DIR)/usr/share/mime
-+	$(HOST_MAKE_ENV) $(SHARED_MIME_INFO_HOST_BINARY) $(STAGING_DIR)/usr/share/mime
- 	$(INSTALL) -D $(STAGING_DIR)/usr/share/mime/mime.cache $(TARGET_DIR)/usr/share/mime/mime.cache
+ $(IMAGEMAGICK_DIR)/.libinstall: $(IMAGEMAGICK_LIB)
+-	libtool --finish $(TARGET_DIR)/usr/lib/ImageMagick-$(IMAGEMAGICK_MAJOR)/modules-Q16/coders
+-	libtool --finish $(TARGET_DIR)/usr/lib/ImageMagick-$(IMAGEMAGICK_MAJOR)/modules-Q16/filters
++	$(IMAGEMAGICK_DIR)/libtool --finish $(TARGET_DIR)/usr/lib/ImageMagick-$(IMAGEMAGICK_MAJOR)/modules-Q16/coders
++	$(IMAGEMAGICK_DIR)/libtool --finish $(TARGET_DIR)/usr/lib/ImageMagick-$(IMAGEMAGICK_MAJOR)/modules-Q16/filters
  	touch $@
+ 
+ $(TARGET_DIR)/usr/bin/animate: $(IMAGEMAGICK_LIB)
 -- 
 1.6.3.3
