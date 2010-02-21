@@ -1,32 +1,30 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 21 Feb 2010 18:05:11 +0000 (UTC)
-Subject: [Buildroot] [Bug 1039] Not compiled on ubuntu karmic
-In-Reply-To: <bug-1039-163@https.bugs.busybox.net/>
-References: <bug-1039-163@https.bugs.busybox.net/>
-Message-ID: <20100221180512.20DE37776C@busybox.osuosl.org>
+Date: Sun, 21 Feb 2010 18:07:15 +0000 (UTC)
+Subject: [Buildroot] [Bug 453] libglib2 autoreconf
+In-Reply-To: <bug-453-163@https.bugs.busybox.net/>
+References: <bug-453-163@https.bugs.busybox.net/>
+Message-ID: <20100221180715.657027776C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1039
+https://bugs.busybox.net/show_bug.cgi?id=453
 
 
 Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-             Status|REOPENED                    |RESOLVED
+             Status|NEW                         |RESOLVED
          Resolution|                            |FIXED
 
 
 
 
---- Comment #5 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2010-02-21 18:05:10 UTC ---
-The at problem as been fixed by 93df31e4047f0c5708605570de65bcd1d777c01d.
-
-Please open a separate bug for the icu issue. Thanks!
+--- Comment #10 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2010-02-21 18:07:14 UTC ---
+This problem has been fixed by 61f677cb060732316b41f072210986e97ae9379f.
 
 
 -- 
