@@ -1,75 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2010 18:46:57 +0100
-Subject: [Buildroot] [PATCH 19/38] intltool: new package
+Date: Sun, 21 Feb 2010 18:46:59 +0100
+Subject: [Buildroot] [PATCH 21/38] gmpc: add dependency on host-intltool
 In-Reply-To: <cover.1266774432.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1266774432.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <62cb8cab08684497ba5b5af9aec30ae193ab9787.1266774432.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <5ea2ac5c14ba7fc5db21b94a97e7bb22adad8756.1266774432.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This XML internationalization set of tools is required to build
-several of our packages, and may not be available on the host machine.
-
-Only the host variant has been tested.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in            |    1 +
- package/intltool/Config.in   |    6 ++++++
- package/intltool/intltook.mk |   16 ++++++++++++++++
- 3 files changed, 23 insertions(+), 0 deletions(-)
- create mode 100644 package/intltool/Config.in
- create mode 100644 package/intltool/intltook.mk
+ package/gmpc/gmpc.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 00f3401..37cae2e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -46,6 +46,7 @@ source "package/pkg-config/Config.in"
- source "package/readline/Config.in"
- source "package/valgrind/Config.in"
- source "package/pcre/Config.in"
-+source "package/intltool/Config.in"
+diff --git a/package/gmpc/gmpc.mk b/package/gmpc/gmpc.mk
+index 7110d15..0db89b9 100644
+--- a/package/gmpc/gmpc.mk
++++ b/package/gmpc/gmpc.mk
+@@ -11,7 +11,7 @@ GMPC_CONF_ENV = ac_cv_lib_curl_curl_global_init=yes \
+ 		ac_cv_path_GOB2=$(GOB2_HOST_BINARY)
+ GMPC_CONF_OPT = --disable-mmkeys
  
- comment "Other stuff"
- source "package/at/Config.in"
-diff --git a/package/intltool/Config.in b/package/intltool/Config.in
-new file mode 100644
-index 0000000..94b34f7
---- /dev/null
-+++ b/package/intltool/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_INTLTOOL
-+       bool "intltool"
-+       help
-+         Utility scripts for internationalizing XML
-+
-+	 http://www.freedesktop.org/wiki/Software/intltool
-\ No newline at end of file
-diff --git a/package/intltool/intltook.mk b/package/intltool/intltook.mk
-new file mode 100644
-index 0000000..746ebb1
---- /dev/null
-+++ b/package/intltool/intltook.mk
-@@ -0,0 +1,16 @@
-+#############################################################
-+#
-+# intltool
-+#
-+#############################################################
-+INTLTOOL_VERSION:=0.40.6
-+INTLTOOL_SOURCE:=intltool-$(INTLTOOL_VERSION).tar.bz2
-+INTLTOOL_SITE:=http://ftp.acc.umu.se/pub/GNOME/sources/intltool/0.40/
-+
-+HOST_INTLTOOL_DEPENDENCIES = host-libxml-parser-perl
-+HOST_INTLTOOL_CONF_OPT = \
-+  PERLLIB=$(HOST_DIR)/usr/lib/perl
-+
-+$(eval $(call AUTOTARGETS,package,intltool))
-+$(eval $(call AUTOTARGETS,package,intltool,host))
-+
+-GMPC_DEPENDENCIES = libglib2 libgtk2 libglade libcurl libmpd host-gob2
++GMPC_DEPENDENCIES = libglib2 libgtk2 libglade libcurl libmpd host-gob2 host-intltool
+ 
+ ifeq ($(BR2_PACKAGE_XLIB_LIBSM),y)
+ GMPC_DEPENENCIES += xlib_libSM
 -- 
 1.6.3.3
