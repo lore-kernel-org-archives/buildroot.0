@@ -1,16 +1,16 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 21 Feb 2010 22:32:57 +0000 (UTC)
-Subject: [Buildroot] [Bug 401] new package: ffmpeg
-In-Reply-To: <bug-401-163@https.bugs.busybox.net/>
-References: <bug-401-163@https.bugs.busybox.net/>
-Message-ID: <20100221223257.93F2877769@busybox.osuosl.org>
+Date: Sun, 21 Feb 2010 22:33:00 +0000 (UTC)
+Subject: [Buildroot] [Bug 505] live555: new package
+In-Reply-To: <bug-505-163@https.bugs.busybox.net/>
+References: <bug-505-163@https.bugs.busybox.net/>
+Message-ID: <20100221223300.710A777769@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=401
+https://bugs.busybox.net/show_bug.cgi?id=505
 
 
 Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
@@ -22,7 +22,7 @@ Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
 
 
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2010-02-21 22:32:57 UTC ---
+--- Comment #7 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2010-02-21 22:33:00 UTC ---
 Move milestone to 2010.05 since enhancements will not be handled before the
 release of 2010.02.
 
