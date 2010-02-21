@@ -1,34 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2010 18:47:05 +0100
-Subject: [Buildroot] [PATCH 27/38] iw: give path to pkg-config
+Date: Sun, 21 Feb 2010 18:47:07 +0100
+Subject: [Buildroot] [PATCH 29/38] matchbox: apply libtool patch to
+	matchbox-desktop
 In-Reply-To: <cover.1266774432.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1266774432.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <aa63fef21d4a31b49729a3bf5c8ae859170df214.1266774432.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <5f57d0558a77857902d047164b22fed0d072f28f.1266774432.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-At install stage, iw needs pkg-config, through the PKG_CONFIG
-environment variable.
+matchbox-desktop fails to build because it tries to read
+/usr/lib/libxcb.la, which doesn't exist on a very basic system with no
+development files instead. The buildroot-libtool.patch must therefore
+be applied.
+
+Unfortunately, matchbox doesn't yet use the autotools infrastructure,
+so we have to manually apply the patch.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/iw/iw.mk |    1 +
+ package/matchbox/matchbox.mk |    1 +
  1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/iw/iw.mk b/package/iw/iw.mk
-index 2dd1cd4..89fd604 100644
---- a/package/iw/iw.mk
-+++ b/package/iw/iw.mk
-@@ -11,6 +11,7 @@ IW_DEPENDENCIES = libnl
- IW_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
- IW_CONFIG = $(IW_DIR)/.config
- IW_MAKE_ENV = PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
-+	PKG_CONFIG="$(HOST_DIR)/usr/bin/pkg-config" \
- 	GIT_DIR=$(IW_DIR)
+diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
+index 06e94cd..8665d41 100644
+--- a/package/matchbox/matchbox.mk
++++ b/package/matchbox/matchbox.mk
+@@ -141,6 +141,7 @@ $(MATCHBOX_PL_DIR)/.unpacked: $(DL_DIR)/$(MATCHBOX_PL_SOURCE)
+ $(MATCHBOX_DP_DIR)/.unpacked: $(DL_DIR)/$(MATCHBOX_DP_SOURCE)
+ 	$(MATCHBOX_CAT) $(DL_DIR)/$(MATCHBOX_DP_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+ 	$(SED) 's:mbfolder\.png:mbtasks\.png:g' $(MATCHBOX_DP_DIR)/modules/tasks.c
++	toolchain/patch-kernel.sh $(MATCHBOX_DP_DIR) package/ buildroot-libtool.patch
+ 	touch $(MATCHBOX_DP_DIR)/.unpacked
  
- $(eval $(call AUTOTARGETS,package,iw))
+ $(MATCHBOX_FK_DIR)/.unpacked: $(DL_DIR)/$(MATCHBOX_FK_SOURCE)
 -- 
 1.6.3.3
