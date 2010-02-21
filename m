@@ -1,16 +1,17 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 21 Feb 2010 18:51:33 +0000 (UTC)
-Subject: [Buildroot] [Bug 561] ltp-testsuite failed to install
-In-Reply-To: <bug-561-163@https.bugs.busybox.net/>
-References: <bug-561-163@https.bugs.busybox.net/>
-Message-ID: <20100221185133.3FCFC77762@busybox.osuosl.org>
+Date: Sun, 21 Feb 2010 18:51:31 +0000 (UTC)
+Subject: [Buildroot] [Bug 531] let e2fsprogs package to export headers to
+ staging dir if needed
+In-Reply-To: <bug-531-163@https.bugs.busybox.net/>
+References: <bug-531-163@https.bugs.busybox.net/>
+Message-ID: <20100221185131.B649177762@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=561
+https://bugs.busybox.net/show_bug.cgi?id=531
 
 
 Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
