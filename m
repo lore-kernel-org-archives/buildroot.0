@@ -1,34 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2010 18:47:01 +0100
-Subject: [Buildroot] [pull request] Pull request for branch misc-fixes5
-In-Reply-To: <cover.1266691382.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1266691382.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <20100221184701.3f9c5111@surf>
+Date: Sun, 21 Feb 2010 18:46:39 +0100
+Subject: [Buildroot] [PATCH 01/38] automake: add build dependency on
+	host-autoconf
+In-Reply-To: <cover.1266774432.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1266774432.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <f03faaf3ab5bbd5f375c47c3cf12f1254d1237bd.1266774432.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+automake for the target fails to build if autoconf is not installed on
+the host:
 
-On Sat, 20 Feb 2010 19:42:51 +0100
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+checking whether autoconf is installed... no
+configure: error: Autoconf 2.58 or better is required.
+    Please make sure it is installed and in your PATH.
+make: *** [/home/test/brbuilttest/build/automake-1.10/.stamp_configured] Error 1
 
-> The following changes since commit
-> c8ff60c8283b0ad116fcf43f485f199c29432c9d: Peter Korsgaard (1):
->         CHANGES: add ace_of_penguins, rubix and xboard
-> 
-> are available in the git repository at:
-> 
->   git://git.busybox.net/~tpetazzoni/git/buildroot misc-fixes5
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/automake/automake.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Please ignore this pull request and don't merge the patches. I'll send a
-new one, with more fixes.
-
-Thomas
+diff --git a/package/automake/automake.mk b/package/automake/automake.mk
+index eb3b375..db935a4 100644
+--- a/package/automake/automake.mk
++++ b/package/automake/automake.mk
+@@ -11,7 +11,7 @@ ifeq ($(BR2_ENABLE_DEBUG),y) # install-exec doesn't install aclocal stuff
+ AUTOMAKE_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
+ endif
+ 
+-AUTOMAKE_DEPENDENCIES = autoconf microperl
++AUTOMAKE_DEPENDENCIES = host-autoconf autoconf microperl
+ 
+ HOST_AUTOMAKE_DEPENDENCIES = host-autoconf
+ 
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.6.3.3
