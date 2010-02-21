@@ -1,16 +1,16 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
 Date: Sun, 21 Feb 2010 18:51:29 +0000 (UTC)
-Subject: [Buildroot] [Bug 155] uClibc 0.9.28.3 fails to build
-In-Reply-To: <bug-155-163@https.bugs.busybox.net/>
-References: <bug-155-163@https.bugs.busybox.net/>
-Message-ID: <20100221185129.24F5977762@busybox.osuosl.org>
+Subject: [Buildroot] [Bug 165] openmotif does not build
+In-Reply-To: <bug-165-163@https.bugs.busybox.net/>
+References: <bug-165-163@https.bugs.busybox.net/>
+Message-ID: <20100221185129.B20E577762@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=155
+https://bugs.busybox.net/show_bug.cgi?id=165
 
 
 Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
