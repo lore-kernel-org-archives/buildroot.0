@@ -1,34 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2010 18:46:45 +0100
-Subject: [Buildroot] [PATCH 07/38] xfont_encoding: add mkfontscale on the
-	host as dependency
+Date: Sun, 21 Feb 2010 18:46:47 +0100
+Subject: [Buildroot] [PATCH 09/38] zlib: enable compilation on the host
 In-Reply-To: <cover.1266774432.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1266774432.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <b5d695eb36ed0d29e60e3d8dee75a7584323caa3.1266774432.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <5066eaf316f958a96d7034c7c2b7954609384914.1266774432.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mkfontscale on the host is needed to build xfont_encoding, therefore
-we add host-xapp_mkfontscale as a dependency.
+zlib is needed on the host, to build xlib_libfontenc on the host, to
+build xapp_mkfontscale on the host, in order to finally build xfonts
+encodings on the target.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xfont_encodings/xfont_encodings.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/zlib/zlib.mk |   24 ++++++++++++++++++++++++
+ 1 files changed, 24 insertions(+), 0 deletions(-)
 
-diff --git a/package/x11r7/xfont_encodings/xfont_encodings.mk b/package/x11r7/xfont_encodings/xfont_encodings.mk
-index 74256d1..9097735 100644
---- a/package/x11r7/xfont_encodings/xfont_encodings.mk
-+++ b/package/x11r7/xfont_encodings/xfont_encodings.mk
-@@ -9,5 +9,6 @@ XFONT_ENCODINGS_SOURCE = encodings-$(XFONT_ENCODINGS_VERSION).tar.bz2
- XFONT_ENCODINGS_SITE = http://xorg.freedesktop.org/releases/individual/font
- XFONT_ENCODINGS_AUTORECONF = NO
- XFONT_ENCODINGS_MAKE_OPT =
-+XFONT_ENCODINGS_DEPENDENCIES = host-xapp_mkfontscale
+diff --git a/package/zlib/zlib.mk b/package/zlib/zlib.mk
+index 7432473..35b79d6 100644
+--- a/package/zlib/zlib.mk
++++ b/package/zlib/zlib.mk
+@@ -30,10 +30,26 @@ define ZLIB_CONFIGURE_CMDS
+ 	)
+ endef
  
- $(eval $(call AUTOTARGETS,package/x11r7,xfont_encodings))
++define HOST_ZLIB_CONFIGURE_CMDS
++	(cd $(@D); rm -rf config.cache; \
++		$(HOST_CONFIGURE_ARGS) \
++		$(HOST_CONFIGURE_OPTS) \
++		CFLAGS="$(ZLIB_PIC)" \
++		./configure \
++		$(ZLIB_SHARED) \
++		--prefix="$(HOST_DIR)/usr" \
++		--sysconfdir="$(HOST_DIR)/etc" \
++	)
++endef
++
+ define ZLIB_BUILD_CMDS
+ 	$(MAKE) -C $(@D) all libz.a
+ endef
+ 
++define HOST_ZLIB_BUILD_CMDS
++	$(MAKE) -C $(@D) all libz.a
++endef
++
+ define ZLIB_INSTALL_STAGING_CMDS
+ 	$(INSTALL) -D $(@D)/libz.a $(STAGING_DIR)/usr/lib/libz.a
+ 	$(INSTALL) -D $(@D)/zlib.h $(STAGING_DIR)/usr/include/zlib.h
+@@ -41,6 +57,13 @@ define ZLIB_INSTALL_STAGING_CMDS
+ 	cp -dpf $(@D)/libz.so* $(STAGING_DIR)/usr/lib/
+ endef
+ 
++define HOST_ZLIB_INSTALL_CMDS
++	$(INSTALL) -D $(@D)/libz.a $(HOST_DIR)/usr/lib/libz.a
++	$(INSTALL) -D $(@D)/zlib.h $(HOST_DIR)/usr/include/zlib.h
++	$(INSTALL) $(@D)/zconf.h $(HOST_DIR)/usr/include/
++	cp -dpf $(@D)/libz.so* $(HOST_DIR)/usr/lib/
++endef
++
+ ifeq ($(BR2_HAVE_DEVFILES),y)
+ define ZLIB_INSTALL_TARGET_HEADERS
+ 	$(INSTALL) -D $(@D)/zlib.h $(TARGET_DIR)/usr/include/zlib.h
+@@ -57,3 +80,4 @@ define ZLIB_INSTALL_TARGET_CMDS
+ endef
+ 
+ $(eval $(call GENTARGETS,package,zlib))
++$(eval $(call GENTARGETS,package,zlib,host))
+\ No newline at end of file
 -- 
 1.6.3.3
