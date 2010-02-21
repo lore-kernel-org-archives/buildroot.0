@@ -1,17 +1,17 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 21 Feb 2010 22:33:13 +0000 (UTC)
-Subject: [Buildroot] [Bug 1111] Bump wget to 1.12 and migrate to
+Date: Sun, 21 Feb 2010 22:33:14 +0000 (UTC)
+Subject: [Buildroot] [Bug 1123] Bump less to 436 and migrate to
 	Makefile.autotools.in
-In-Reply-To: <bug-1111-163@https.bugs.busybox.net/>
-References: <bug-1111-163@https.bugs.busybox.net/>
-Message-ID: <20100221223313.9AB3777769@busybox.osuosl.org>
+In-Reply-To: <bug-1123-163@https.bugs.busybox.net/>
+References: <bug-1123-163@https.bugs.busybox.net/>
+Message-ID: <20100221223314.AC5A277769@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1111
+https://bugs.busybox.net/show_bug.cgi?id=1123
 
 
 Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
@@ -23,7 +23,7 @@ Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
 
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2010-02-21 22:33:13 UTC ---
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2010-02-21 22:33:14 UTC ---
 Move milestone to 2010.05 since enhancements will not be handled before the
 release of 2010.02.
 
