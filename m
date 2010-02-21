@@ -1,34 +1,35 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 21 Feb 2010 17:59:12 +0000 (UTC)
-Subject: [Buildroot] [Bug 457] e2fsprogs link problem
-In-Reply-To: <bug-457-163@https.bugs.busybox.net/>
-References: <bug-457-163@https.bugs.busybox.net/>
-Message-ID: <20100221175912.3A4407776C@busybox.osuosl.org>
+Date: Sun, 21 Feb 2010 18:03:13 +0000 (UTC)
+Subject: [Buildroot] [Bug 335] atk looks for the path to the gnome library
+	on the host
+In-Reply-To: <bug-335-163@https.bugs.busybox.net/>
+References: <bug-335-163@https.bugs.busybox.net/>
+Message-ID: <20100221180313.3D4467776C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=457
+https://bugs.busybox.net/show_bug.cgi?id=335
 
 
 Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-             Status|ASSIGNED                    |RESOLVED
-         Resolution|                            |FIXED
+             Status|NEW                         |RESOLVED
+         Resolution|                            |WORKSFORME
 
 
 
 
---- Comment #7 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2010-02-21 17:59:11 UTC ---
-The package has been switched to the autotools infrastructure since then, and
-with the autotools infrastructure, $(TARGET_CONFIGURE_ENV) is passed to the
-./configure script, and this variable contains LDFLAGS.
+--- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2010-02-21 18:03:12 UTC ---
+No info since May 2009. atk builds fine for the target and the host, on both
+systems with and without atk development files installed.
 
-So this bug is fixed.
+Please re-open the bug with the .config file and the build log if it still
+occurs.
 
 
 -- 
