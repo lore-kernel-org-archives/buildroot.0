@@ -1,16 +1,16 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 21 Feb 2010 18:51:33 +0000 (UTC)
-Subject: [Buildroot] [Bug 583] build fails with external x86_64 toolchain
-In-Reply-To: <bug-583-163@https.bugs.busybox.net/>
-References: <bug-583-163@https.bugs.busybox.net/>
-Message-ID: <20100221185133.B630177762@busybox.osuosl.org>
+Date: Sun, 21 Feb 2010 18:51:34 +0000 (UTC)
+Subject: [Buildroot] [Bug 635] util-linux fails to build in 2009.08
+In-Reply-To: <bug-635-163@https.bugs.busybox.net/>
+References: <bug-635-163@https.bugs.busybox.net/>
+Message-ID: <20100221185134.540B777762@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=583
+https://bugs.busybox.net/show_bug.cgi?id=635
 
 
 Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
