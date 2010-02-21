@@ -1,38 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2010 18:46:50 +0100
-Subject: [Buildroot] [PATCH 12/38] libpng: enable compilation on the host
+Date: Sun, 21 Feb 2010 18:46:51 +0100
+Subject: [Buildroot] [PATCH 13/38] ace_of_penguins: add dependency on
+	host-libpng
 In-Reply-To: <cover.1266774432.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1266774432.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <4829ea9e91eb7a9dde697d83670bc129f17a2cb1.1266774432.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <843ab1702b43c86195461f93cdef0ca8bd0901d6.1266774432.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libpng is needed on the host to build ace_of_penguins.
+libpng is needed on the host to build the make-imglib utility, built
+during the compilation of ace_of_penguins for the target.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libpng/libpng.mk |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ package/games/ace_of_penguins/ace_of_penguins.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
-index 1297c89..0303d51 100644
---- a/package/libpng/libpng.mk
-+++ b/package/libpng/libpng.mk
-@@ -11,7 +11,12 @@ LIBPNG_INSTALL_STAGING = YES
- LIBPNG_CONF_OPT = --without-libpng-compat
- LIBPNG_DEPENDENCIES = host-pkg-config zlib
+diff --git a/package/games/ace_of_penguins/ace_of_penguins.mk b/package/games/ace_of_penguins/ace_of_penguins.mk
+index fe3e204..a106d14 100644
+--- a/package/games/ace_of_penguins/ace_of_penguins.mk
++++ b/package/games/ace_of_penguins/ace_of_penguins.mk
+@@ -10,6 +10,6 @@ ACE_OF_PENGUINS_AUTORECONF = YES
+ ACE_OF_PENGUINS_STAGING = NO
+ ACE_OF_PENGUINS_TARGET = YES
  
-+HOST_LIBPNG_LIBTOOL_PATCH = NO
-+HOST_LIBPNG_CONF_OPT = --without-libpng-compat
-+HOST_LIBPNG_DEPENDENCIES = host-zlib
-+
- $(eval $(call AUTOTARGETS,package,libpng))
-+$(eval $(call AUTOTARGETS,package,libpng,host))
+-ACE_OF_PENGUINS_DEPENDENCIES = libpng xserver_xorg-server xlib_libXpm
++ACE_OF_PENGUINS_DEPENDENCIES = libpng host-libpng xserver_xorg-server xlib_libXpm
  
- $(LIBPNG_HOOK_POST_INSTALL):
- 	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" \
+ $(eval $(call AUTOTARGETS,package/games,ace_of_penguins))
 -- 
 1.6.3.3
