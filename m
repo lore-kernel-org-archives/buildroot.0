@@ -1,17 +1,16 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 21 Feb 2010 18:51:40 +0000 (UTC)
-Subject: [Buildroot] [Bug 835] Package Dataflashboot-1.05 does not compile
- with builroot toolchain
-In-Reply-To: <bug-835-163@https.bugs.busybox.net/>
-References: <bug-835-163@https.bugs.busybox.net/>
-Message-ID: <20100221185140.B18BE77762@busybox.osuosl.org>
+Date: Sun, 21 Feb 2010 18:51:43 +0000 (UTC)
+Subject: [Buildroot] [Bug 1135] Package customize. Wrong copying
+In-Reply-To: <bug-1135-163@https.bugs.busybox.net/>
+References: <bug-1135-163@https.bugs.busybox.net/>
+Message-ID: <20100221185144.0208677762@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=835
+https://bugs.busybox.net/show_bug.cgi?id=1135
 
 
 Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
