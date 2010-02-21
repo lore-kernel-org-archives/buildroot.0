@@ -1,17 +1,16 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 21 Feb 2010 18:51:30 +0000 (UTC)
-Subject: [Buildroot] [Bug 361] linux kernel configuration choice works
-	incorrectly
-In-Reply-To: <bug-361-163@https.bugs.busybox.net/>
-References: <bug-361-163@https.bugs.busybox.net/>
-Message-ID: <20100221185130.B349C77762@busybox.osuosl.org>
+Date: Sun, 21 Feb 2010 18:51:31 +0000 (UTC)
+Subject: [Buildroot] [Bug 387] Tremor not installed to toolchain
+In-Reply-To: <bug-387-163@https.bugs.busybox.net/>
+References: <bug-387-163@https.bugs.busybox.net/>
+Message-ID: <20100221185131.3A2F677762@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=361
+https://bugs.busybox.net/show_bug.cgi?id=387
 
 
 Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
