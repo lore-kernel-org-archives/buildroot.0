@@ -1,25 +1,32 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 21 Feb 2010 18:51:43 +0000 (UTC)
-Subject: [Buildroot] [Bug 1135] Package customize. Wrong copying
-In-Reply-To: <bug-1135-163@https.bugs.busybox.net/>
-References: <bug-1135-163@https.bugs.busybox.net/>
-Message-ID: <20100221185144.0208677762@busybox.osuosl.org>
+Date: Sun, 21 Feb 2010 18:53:40 +0000 (UTC)
+Subject: [Buildroot] [Bug 821] cp: illegal operation
+In-Reply-To: <bug-821-163@https.bugs.busybox.net/>
+References: <bug-821-163@https.bugs.busybox.net/>
+Message-ID: <20100221185340.BF8DB77762@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1135
+https://bugs.busybox.net/show_bug.cgi?id=821
 
 
 Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-   Target Milestone|---                         |2010.02
+             Status|NEW                         |RESOLVED
+    Remaining Hours|0.5                         |0.0
+         Resolution|                            |WONTFIX
 
 
+
+
+--- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2010-02-21 18:53:40 UTC ---
+We do not support building on Mac OS X at the moment, unless someone with
+access to this system steps in to maintain such a port.
 
 
 -- 
