@@ -1,75 +1,61 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 21 Feb 2010 23:49:59 +0000 (UTC)
-Subject: [Buildroot] [Bug 1171] New: Linuxthreads new cannot find sysdep.h
-Message-ID: <bug-1171-163@https.bugs.busybox.net/>
+From: Tony Mozi <spooflinux@hotmail.fr>
+Date: Mon, 22 Feb 2010 14:31:12 +0100
+Subject: [Buildroot] Add nodes, major, how values are defined?
+In-Reply-To: <4bf8.4b7f1e86.3c1b9@getafix.xdna.net>
+References: <SNT129-W4523AD7F98DFC8D76EAB00B9460@phx.gbl>,
+	<4bf8.4b7f1e86.3c1b9@getafix.xdna.net>
+Message-ID: <SNT129-W2221D0A3A1144EB7DDE9D7B9430@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1171
 
-              Host: i686-pc-linux-gnu
-            Target: i686-pc-linux-uclibc
-             Build: i686-pc-linux-uclibc
-           Summary: Linuxthreads new cannot find sysdep.h
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: enhancement
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: dandart at googlemail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Thank you for your answer.
+In the target/generic/device-table.txt, there is not explanation concerning <major> <minor> <start> <inc>   <count>
+ Now, it's clear. 
+
+BR
 
 
-Making with Linuxthreads new comes up with this error:
-
-/usr/bin/make -j1 -C /home/dan/xenon/buildroot/output/toolchain/uClibc-0.9.30.2
-\
-                ARCH="i386" \
-                PREFIX= \
-                DEVEL_PREFIX=/ \
-                RUNTIME_PREFIX=/ \
-                HOSTCC="/usr/bin/gcc" \
-                all
-make[1]: Entering directory
-`/home/dan/xenon/buildroot/output/toolchain/uClibc-0.9.30.2'
-  CC ldso/ldso/ldso.oS
-In file included from
-./libpthread/linuxthreads/sysdeps/i386/i686/pt-machine.h:73,
-                 from ./libpthread/linuxthreads/sysdeps/i386/pt-machine.h:24,
-                 from ./libpthread/linuxthreads/sysdeps/i386/tls.h:23,
-                 from ./include/bits/uClibc_errno.h:35,
-                 from ./include/errno.h:62,
-                 from ./include/bits/syscalls.h:14,
-                 from ./include/sys/syscall.h:34,
-                 from ./ldso/ldso/i386/dl-syscalls.h:3,
-                 from ./ldso/include/dl-syscall.h:12,
-                 from ./ldso/include/ldso.h:37,
-                 from ldso/ldso/ldso.c:33:
-./libpthread/linuxthreads/sysdeps/i386/i686/../useldt.h:25:20: error: sysdep.h:
-No such file or directory
-make[1]: *** [ldso/ldso/ldso.oS] Error 1
-make[1]: Leaving directory
-`/home/dan/xenon/buildroot/output/toolchain/uClibc-0.9.30.2'
-make: ***
-[/home/dan/xenon/buildroot/output/toolchain/uClibc-0.9.30.2/lib/libc.a] Error 2
-
-
-Replacing sysdep.h with sys/syscall.h seems to work, as per
-http://old.nabble.com/-Bug-153--New:-not-able-to-build-buildroot-td22372229.html
-
-This still hasn't been updated in the git tree however, or fixed any other way.
-I am still getting this in 02/2010.
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+> To: buildroot at busybox.net
+> From: lists at xdna.net
+> Date: Fri, 19 Feb 2010 23:28:06 +0000
+> Subject: Re: [Buildroot] Add nodes, major, how values are defined?
+> 
+> Tony Mozi <spooflinux@hotmail.fr> writes:
+> 
+> >The general presentation is : 
+> ># <name>    <type>      <mode>  <uid>   <gid>   <major> <minor> <start> <inc>   <count>
+> >I do not understand how some points are defined (<major> <minor> <start> <inc>   <count>). 
+> >Is there a list? Sometimes there is '-', what does it mean?
+> 
+> Not all files created by makedevs needs all the fields. For instance,
+> directories and files do not use anything from <major> onwards. They are
+> only used by character and block device nodes. For those file types that
+> do not use a field, a '-' is used there.
+> 
+> Also, one line in the device_table.txt file can create many sequential
+> nodes. For example, /dev/mtd0, /dev/mtd1, /dev/mtd2... A line that
+> creates multiple sequential nodes use the fields <start> <inc> and
+> <count>. Nodes that are singular (such as /dev/null) do not use these
+> fields, and will have a '-' in these places. Some lines seem to use 0
+> instead of '-' - I guess the field is just ignored so it wont matter
+> what you put there.
+> 
+> This is all described in more detail at the top of
+> target/generic/device-table.txt. Is there something about that description
+> that is unclear?
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+ 		 	   		  
+_________________________________________________________________
+Discutez en direct avec vos amis sur Messenger !
+http://www.windowslive.fr/messenger
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100222/2f2db7f0/attachment.htm>
