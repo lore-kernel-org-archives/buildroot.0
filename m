@@ -1,13 +1,13 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 22 Feb 2010 16:47:59 +0100
-Subject: [Buildroot] [PATCH 03/16] libxml2: do not apply libtool patch
-	when compiling for host
-In-Reply-To: <e81149c54301f88ae64bd85caa6d0f29e879d064.1266691382.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Sat, 20 Feb 2010 19:42:54 +0100")
+Date: Mon, 22 Feb 2010 16:51:32 +0100
+Subject: [Buildroot] [PATCH 01/16] automake: add build dependency on
+	host-autoconf
+In-Reply-To: <f03faaf3ab5bbd5f375c47c3cf12f1254d1237bd.1266691382.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Sat, 20 Feb 2010 19:42:52 +0100")
 References: <cover.1266691382.git.thomas.petazzoni@free-electrons.com>
 	<cover.1266691382.git.thomas.petazzoni@free-electrons.com>
-	<e81149c54301f88ae64bd85caa6d0f29e879d064.1266691382.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87k4u5jmq8.fsf@macbook.be.48ers.dk>
+	<f03faaf3ab5bbd5f375c47c3cf12f1254d1237bd.1266691382.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87fx4tjmkb.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,17 +16,16 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Hi,
+ Thomas> automake for the target fails to build if autoconf is not installed on
+ Thomas> the host:
 
- Thomas> The libtool patch is not applied when building for the target because
- Thomas> it does not apply, so do not attempt to apply it when building for the
- Thomas> host. This fixes libxml2 build for the host.
- 
- Thomas> +HOST_LIBXML2_LIBTOOL_PATCH = NO
+ Thomas> checking whether autoconf is installed... no
+ Thomas> configure: error: Autoconf 2.58 or better is required.
+ Thomas>     Please make sure it is installed and in your PATH.
+ Thomas> make: *** [/home/test/brbuilttest/build/automake-1.10/.stamp_configured] Error 1
 
-Is there ever any situation where {HOST,}_<PACKAGE>_LIBTOOL_PATCH will
-differ, or should we just use the host build use the normal variable,
-just like we are doing for _SOURCE/_SITE/_VERSION?
+It doesn't look like it really needs it for anything at build time, but
+ok - It doesn't hurt building autoconf.
 
 -- 
 Bye, Peter Korsgaard
