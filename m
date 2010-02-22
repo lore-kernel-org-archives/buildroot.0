@@ -1,43 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 Feb 2010 20:34:19 +0100
-Subject: [Buildroot] [pull request] Pull request for branch misc-fixes5
-In-Reply-To: <cover.1266774432.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1266774432.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <20100222203419.6f725023@surf>
+From: Miguel Angel Brintrup <mbrintrup@tecnocal.cl>
+Date: Mon, 22 Feb 2010 17:13:06 -0300
+Subject: [Buildroot] problem with execution ./mai -sh: ./main not found
+Message-ID: <3ce6ccff1002221213o212936c2ub3937bedbb55f7e@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter, Hi All,
+Hi to all I have a big but dummy problem. I have a main file compiled with
+gcc (usr/local/arm/3.4.1/bin/arm-linux-gcc) but when I try to run the
+program appears this problem:
 
-On Sun, 21 Feb 2010 18:46:38 +0100
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+# ./main
+-sh: ./main: not found
 
-> The following changes since commit c8ff60c8283b0ad116fcf43f485f199c29432c9d:
->   Peter Korsgaard (1):
->         CHANGES: add ace_of_penguins, rubix and xboard
-> 
-> are available in the git repository at:
-> 
->   git://git.busybox.net/~tpetazzoni/git/buildroot misc-fixes5
-> 
-> Thomas Petazzoni (38):
+The main file is already exist:
 
-How do you want me to handle your review remarks ?
+# ls
+DocumentacionDoxygen       headers
+Doxyfile                   libmcuinterface.a
+Makefile                   main
+buffer.c                   main.c
+buffer.o                   mcu_interface.c
+communication_interface.c  mcu_interface.o
+communication_interface.o  rs232.c
+crc16.c                    rs232.o
+crc16.o
 
-Should I fix them in my branch (which means doing a rebase), and send
-another pull request ?
+And PATH is:
 
-Or do you want to pick the patches that you agree with and wait for me
-to send a pull request only for the patches that required fixes ?
+# echo $PATH
+/bin:/sbin:/usr/bin:/usr/sbin:/usr/bin/X11:/usr/local/bin
 
-Thanks for your review!
+I try with different kernels and file systems based in buildroot, but the
+problem stay here.
+I'm using a at91sam9261ek board and SAM-BA software to load the kernel
+images and file systems.
+I have a second board and I charge a kernel with file system with uboot and
+this work without problems.
 
-Thomas
+Anyone have any ideas?
+
+Thanks in Advanced
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Miguel Angel Brintrup B.
+skype: miguel.brintrup
+
+Atenci?n: Piense bien antes de imprimir este correo electr?nico, el medio
+ambiente debe ser preocupaci?n de todos.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100222/44cc3aaf/attachment.htm>
