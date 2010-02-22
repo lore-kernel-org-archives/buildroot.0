@@ -1,34 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 Feb 2010 20:21:10 +0100
-Subject: [Buildroot] [PATCH 11/16] package infrastructure: add
- LD_LIBRARY_PATH
-In-Reply-To: <87ocjhi7md.fsf@macbook.be.48ers.dk>
+Date: Mon, 22 Feb 2010 20:21:40 +0100
+Subject: [Buildroot] [PATCH 12/16] libpng: enable compilation on the host
+In-Reply-To: <87k4u5i7ld.fsf@macbook.be.48ers.dk>
 References: <cover.1266691382.git.thomas.petazzoni@free-electrons.com>
 	<cover.1266691382.git.thomas.petazzoni@free-electrons.com>
-	<14420c94fda9f27c457b671f0da2a278cba23ac6.1266691382.git.thomas.petazzoni@free-electrons.com>
-	<87ocjhi7md.fsf@macbook.be.48ers.dk>
-Message-ID: <20100222202110.4880af25@surf>
+	<8e8a4ee518b84a7e5f16764022ea2cf8ba455627.1266691382.git.thomas.petazzoni@free-electrons.com>
+	<87k4u5i7ld.fsf@macbook.be.48ers.dk>
+Message-ID: <20100222202140.1c470356@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 22 Feb 2010 16:59:38 +0100
+On Mon, 22 Feb 2010 17:00:14 +0100
 Peter Korsgaard <jacmet@uclibc.org> wrote:
 
->  Thomas> -TARGET_MAKE_ENV=PATH=$(TARGET_PATH)
->  Thomas> +# During the compilation of target packages, host tools might be used,
->  Thomas> +# and in turn, they might use host libraries installed in
->  Thomas> +# $(HOST_DIR)/usr/lib
->  Thomas> +TARGET_MAKE_ENV=PATH=$(TARGET_PATH) \
->  Thomas> +		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib"
+>  Thomas>  LIBPNG_CONF_OPT = --without-libpng-compat
+>  Thomas>  LIBPNG_DEPENDENCIES = host-pkg-config zlib
+>  
+>  Thomas> +HOST_LIBPNG_CONF_OPT = --without-libpng-compat
+>  Thomas> +HOST_LIBPNG_DEPENDENCIES = host-zlib
+>  Thomas> +
 > 
-> We should probably append to LD_LIBRARY_PATH in case it is set already.
+> What about host-pkg-config?
 
-Sure, you're right.
-
-Thanks,
+Right, you're correct.
 
 Thomas
 -- 
