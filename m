@@ -1,13 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 22 Feb 2010 16:52:39 +0100
-Subject: [Buildroot] [PATCH 06/16] xapp_mkfontscale: enable compilation
-	for the host
-In-Reply-To: <e87463aceffce66c0aa82dbdf66fe66cf0cc770c.1266691382.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Sat, 20 Feb 2010 19:42:57 +0100")
+Date: Mon, 22 Feb 2010 16:54:40 +0100
+Subject: [Buildroot] [PATCH 15/16] ace_of_penguins: mark as BROKEN
+In-Reply-To: <bf37d2e1dfc2249239e95c5a83fbcad4441e6670.1266691382.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Sat, 20 Feb 2010 19:43:06 +0100")
 References: <cover.1266691382.git.thomas.petazzoni@free-electrons.com>
 	<cover.1266691382.git.thomas.petazzoni@free-electrons.com>
-	<e87463aceffce66c0aa82dbdf66fe66cf0cc770c.1266691382.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87bpfhjmig.fsf@macbook.be.48ers.dk>
+	<bf37d2e1dfc2249239e95c5a83fbcad4441e6670.1266691382.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <877hq5jmf3.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,22 +15,34 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> mkfontscale on the host is required to build xfonts-encoding for the
- Thomas> target.
+ Thomas> This package is BROKEN in the way it compiles make-imglib and text2c
+ Thomas> for the host while being in cross-compiled mode. It does not use
+ Thomas> CC_FOR_BUILD and CFLAGS_FOR_BUILD as it should.
 
- Thomas> diff --git a/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk b/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk
- Thomas> index 05a3f81..e94312a 100644
- Thomas> --- a/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk
- Thomas> +++ b/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk
- Thomas> @@ -8,6 +8,8 @@ XAPP_MKFONTSCALE_VERSION = 1.0.5
- Thomas>  XAPP_MKFONTSCALE_SOURCE = mkfontscale-$(XAPP_MKFONTSCALE_VERSION).tar.bz2
- Thomas>  XAPP_MKFONTSCALE_SITE = http://xorg.freedesktop.org/releases/individual/app
- Thomas>  XAPP_MKFONTSCALE_AUTORECONF = NO
- Thomas> -XAPP_MKFONTSCALE_DEPENDENCIES = freetype xlib_libX11 xlib_libfontenc
- Thomas> +XAPP_MKFONTSCALE_DEPENDENCIES = zlib freetype xlib_libX11 xlib_libfontenc
- Thomas> +HOST_XAPP_MKFONTSCALE_DEPENDENCIES = host-zlib host-freetype host-xlib_libfontenc
+ Thomas> No upstream release has been made since 2001 and since it is a
+ Thomas> relatively useless package, I don't think it's worth the trouble to
+ Thomas> sanitize its build system.
 
-No host-xlib_libX11?
+I agree.
+
+ Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Thomas> ---
+ Thomas>  package/games/ace_of_penguins/Config.in |    1 +
+ Thomas>  1 files changed, 1 insertions(+), 0 deletions(-)
+
+ Thomas> diff --git a/package/games/ace_of_penguins/Config.in b/package/games/ace_of_penguins/Config.in
+ Thomas> index 1d5a367..2240e7c 100644
+ Thomas> --- a/package/games/ace_of_penguins/Config.in
+ Thomas> +++ b/package/games/ace_of_penguins/Config.in
+ Thomas> @@ -3,6 +3,7 @@ config BR2_PACKAGE_ACE_OF_PENGUINS
+ Thomas>  	select BR2_PACKAGE_LIBPNG
+ Thomas>  	depends on BR2_PACKAGE_XORG7
+ Thomas>  	depends on BR2_PACKAGE_XLIB_LIBXPM
+ Thomas> +	depends on BROKEN
+
+It's nice to add a short # comment about why it's broken, like:
+
+games/vice/Config.in:   depends on BROKEN # doesn't build, wrong dependencie
 
 -- 
 Bye, Peter Korsgaard
