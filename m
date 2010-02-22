@@ -1,35 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 Feb 2010 20:22:33 +0100
-Subject: [Buildroot] [PATCH 18/38] package infrastructure: add PERLLIB
- and LD_LIBRARY_PATH
-In-Reply-To: <878wali6mb.fsf@macbook.be.48ers.dk>
+Date: Mon, 22 Feb 2010 20:34:19 +0100
+Subject: [Buildroot] [pull request] Pull request for branch misc-fixes5
+In-Reply-To: <cover.1266774432.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1266774432.git.thomas.petazzoni@free-electrons.com>
-	<cover.1266774432.git.thomas.petazzoni@free-electrons.com>
-	<51a8aa7821b9dc833ee40176f1b08f28dd2a69ca.1266774432.git.thomas.petazzoni@free-electrons.com>
-	<878wali6mb.fsf@macbook.be.48ers.dk>
-Message-ID: <20100222202233.7d8f849f@surf>
+Message-ID: <20100222203419.6f725023@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 22 Feb 2010 17:21:16 +0100
-Peter Korsgaard <jacmet@uclibc.org> wrote:
+Hi Peter, Hi All,
 
->  Thomas> Now that we build Perl modules in $(HOST_DIR), PERLLIB must be defined
->  Thomas> to $(HOST_DIR)/usr/lib/perl.
+On Sun, 21 Feb 2010 18:46:38 +0100
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+
+> The following changes since commit c8ff60c8283b0ad116fcf43f485f199c29432c9d:
+>   Peter Korsgaard (1):
+>         CHANGES: add ace_of_penguins, rubix and xboard
 > 
->  Thomas> Moreover, several utilities built into $(HOST_DIR) depend on libraries
->  Thomas> installed in $(HOST_DIR)/usr/lib. We must therefore pass the
->  Thomas> appropriate LD_LIBRARY_PATH variable.
+> are available in the git repository at:
 > 
-> Same comment as the other one setting LD_LIBRARY_PATH - Perhaps the two
-> patches should get merged?
+>   git://git.busybox.net/~tpetazzoni/git/buildroot misc-fixes5
+> 
+> Thomas Petazzoni (38):
 
-Will do.
+How do you want me to handle your review remarks ?
 
-Thanks,
+Should I fix them in my branch (which means doing a rebase), and send
+another pull request ?
+
+Or do you want to pick the patches that you agree with and wait for me
+to send a pull request only for the patches that required fixes ?
+
+Thanks for your review!
 
 Thomas
 -- 
