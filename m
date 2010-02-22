@@ -1,32 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 Feb 2010 20:22:18 +0100
-Subject: [Buildroot] [PATCH 17/38] libxml-parser-perl: new package
-In-Reply-To: <87fx4ti6q0.fsf@macbook.be.48ers.dk>
+Date: Mon, 22 Feb 2010 20:22:33 +0100
+Subject: [Buildroot] [PATCH 18/38] package infrastructure: add PERLLIB
+ and LD_LIBRARY_PATH
+In-Reply-To: <878wali6mb.fsf@macbook.be.48ers.dk>
 References: <cover.1266774432.git.thomas.petazzoni@free-electrons.com>
 	<cover.1266774432.git.thomas.petazzoni@free-electrons.com>
-	<fac4d6f24ebf9312fd1c7a714100c4e2a859e647.1266774432.git.thomas.petazzoni@free-electrons.com>
-	<87fx4ti6q0.fsf@macbook.be.48ers.dk>
-Message-ID: <20100222202218.29917c34@surf>
+	<51a8aa7821b9dc833ee40176f1b08f28dd2a69ca.1266774432.git.thomas.petazzoni@free-electrons.com>
+	<878wali6mb.fsf@macbook.be.48ers.dk>
+Message-ID: <20100222202233.7d8f849f@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 22 Feb 2010 17:19:03 +0100
+On Mon, 22 Feb 2010 17:21:16 +0100
 Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-> Missing newline.
+>  Thomas> Now that we build Perl modules in $(HOST_DIR), PERLLIB must be defined
+>  Thomas> to $(HOST_DIR)/usr/lib/perl.
 > 
-> It should presumably select EXPAT?
-
-Yes.
-
->  Thomas> +HOST_LIBXML_PARSER_PERL_DEPENDENCIES = host-expat
+>  Thomas> Moreover, several utilities built into $(HOST_DIR) depend on libraries
+>  Thomas> installed in $(HOST_DIR)/usr/lib. We must therefore pass the
+>  Thomas> appropriate LD_LIBRARY_PATH variable.
 > 
-> And have a similar line for the TARGET.
+> Same comment as the other one setting LD_LIBRARY_PATH - Perhaps the two
+> patches should get merged?
 
-Yes.
+Will do.
+
+Thanks,
 
 Thomas
 -- 
