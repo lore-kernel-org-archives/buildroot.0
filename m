@@ -1,39 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 Feb 2010 22:09:53 +0100
-Subject: [Buildroot] problem with execution ./mai -sh: ./main not found
-In-Reply-To: <3ce6ccff1002221213o212936c2ub3937bedbb55f7e@mail.gmail.com>
-References: <3ce6ccff1002221213o212936c2ub3937bedbb55f7e@mail.gmail.com>
-Message-ID: <20100222220953.0b9fa22b@surf>
+From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+Date: Mon, 22 Feb 2010 23:49:51 +0200
+Subject: [Buildroot] [PATCH] Fix GDB BFD test linking
+Message-ID: <20100222214951.8779.6936.stgit@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+When compiling GDB for the same architecture as host it links
+wrong BFD library from host OS. This prevents GDB from compiling
+support for ELF and thus GDB unusable on target.
 
-On Mon, 22 Feb 2010 17:13:06 -0300
-Miguel Angel Brintrup <mbrintrup@tecnocal.cl> wrote:
+Fix this by moving BFD and libiberty directories before CFLAGS, since
+"wrong" path comes from CFLAGS.
 
-> Hi to all I have a big but dummy problem. I have a main file compiled
-> with gcc (usr/local/arm/3.4.1/bin/arm-linux-gcc) but when I try to
-> run the program appears this problem:
-> 
-> # ./main
-> -sh: ./main: not found
+More about this issue was already posted at:
+http://lists.uclibc.org/pipermail/buildroot/2009-March/026585.html
 
-It is usually the error displayed when the shared library loader cannot
-be found.
+Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+---
 
-Run arm-linux-readelf -a on your program, and check what the "Program
-Interpreter" is. Then verify that it exists with this *exact* same name
-on your target.
+ .../6.8/700-fix-linking-directory-priority.patch   |   13 +++++++++++++
+ 1 files changed, 13 insertions(+), 0 deletions(-)
+ create mode 100644 toolchain/gdb/6.8/700-fix-linking-directory-priority.patch
 
-Sincerely,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/toolchain/gdb/6.8/700-fix-linking-directory-priority.patch b/toolchain/gdb/6.8/700-fix-linking-directory-priority.patch
+new file mode 100644
+index 0000000..5dff5aa
+--- /dev/null
++++ b/toolchain/gdb/6.8/700-fix-linking-directory-priority.patch
+@@ -0,0 +1,13 @@
++--- gdb-6.8/gdb/configure.orig	2008-01-13 14:23:04.000000000 +0200
+++++ gdb-6.8/gdb/configure	2009-12-06 18:32:27.065376339 +0200
++@@ -22994,8 +22994,8 @@ esac
++ OLD_CFLAGS=$CFLAGS
++ OLD_LDFLAGS=$LDFLAGS
++ OLD_LIBS=$LIBS
++-CFLAGS="$CFLAGS -I${srcdir}/../include -I../bfd -I${srcdir}/../bfd"
++-LDFLAGS="$LDFLAGS -L../bfd -L../libiberty"
+++CFLAGS="-L../bfd -L../libiberty $CFLAGS -I${srcdir}/../include -I../bfd -I${srcdir}/../bfd"
+++LDFLAGS="$LDFLAGS"
++ intl=`echo $LIBINTL | sed 's,${top_builddir}/,,g'`
++ LIBS="$LIBS -lbfd -liberty $intl"
++ echo "$as_me:$LINENO: checking for ELF support in BFD" >&5
