@@ -1,83 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Feb 2010 21:06:56 +0100
-Subject: [Buildroot] [PATCH 32/40] dosfstools: make sure install targets
-	aren't run everytime
+Date: Tue, 23 Feb 2010 21:06:57 +0100
+Subject: [Buildroot] [PATCH 33/40] lvm2: prevent dmsetup from being
+	re-installed every time
 In-Reply-To: <cover.1266955555.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1266955555.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <e83529882b71cb8a2c6ba2c997308196a2857af0.1266955555.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <3b5d95be8dfc8a23f4e4619686215a9c99a1a9a6.1266955555.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adding real targets to $(TARGETS) doesn't work, since they are
-prefixed __real_tgt by the main Makefile. 'make' then always thinks
-that these targets aren't up-to-date, and re-generate them every time.
-
-Therefore, we switch dosfstools to the more common way of handling
-packages, with a phony target added to $(TARGETS), this phony target
-depending on real targets.
+After being copied to target/, touch dmsetup so that its date is newer
+than the .built stamp file in lvm2 source directory. This prevents
+make from re-installing dmsetup every time.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dosfstools/dosfstools.mk |   32 +++++++++++++++++++-------------
- 1 files changed, 19 insertions(+), 13 deletions(-)
+ package/lvm2/lvm2.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/dosfstools/dosfstools.mk b/package/dosfstools/dosfstools.mk
-index e1e9fe3..b826ab1 100644
---- a/package/dosfstools/dosfstools.mk
-+++ b/package/dosfstools/dosfstools.mk
-@@ -32,7 +32,8 @@ $(DOSFSTOOLS_DIR)/.built : $(DOSFSTOOLS_DIR)/.unpacked
- 	$(STRIPCMD) $(DOSFSTOOLS_DIR)/$(DOSFSLABEL_BINARY)
- 	touch $@
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index d190be2..bc6f458 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -86,9 +86,11 @@ $(LVM2_DIR)/.built: $(LVM2_DIR)/.configured
  
--$(TARGET_DIR)/$(MKDOSFS_TARGET_BINARY): $(DOSFSTOOLS_DIR)/.built
-+$(TARGET_DIR)/$(MKDOSFS_TARGET_BINARY): # $(DOSFSTOOLS_DIR)/.built
-+	echo foo
- 	cp -a $(DOSFSTOOLS_DIR)/$(MKDOSFS_BINARY) $@
- 	touch -c $@
+ $(LVM2_TARGET_SBINS) $(LVM2_TARGET_DMSETUP_SBINS): $(LVM2_DIR)/.built
+ 	cp -a $(STAGING_DIR)/sbin/$(notdir $@) $@
++	touch $@
  
-@@ -44,7 +45,20 @@ $(TARGET_DIR)/$(DOSFSLABEL_TARGET_BINARY): $(DOSFSTOOLS_DIR)/.built
- 	cp -a $(DOSFSTOOLS_DIR)/$(DOSFSLABEL_BINARY) $@
- 	touch -c $@
+ $(LVM2_TARGET_LIBS): $(LVM2_DIR)/.built
+ 	cp -a $(STAGING_DIR)/lib/$(notdir $@) $@
++	touch $@
  
--dosfstools: $(TARGET_DIR)/$(DOSFSTOOLS_TARGET_BINARY) $(TARGET_DIR)/$(DOSFSCK_TARGET_BINARY)
-+DOSFSTOOLS=
-+ifeq ($(BR2_PACKAGE_DOSFSTOOLS_MKDOSFS),y)
-+DOSFSTOOLS+=$(TARGET_DIR)/$(MKDOSFS_TARGET_BINARY)
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DOSFSTOOLS_DOSFSCK),y)
-+DOSFSTOOLS+=$(TARGET_DIR)/$(DOSFSCK_TARGET_BINARY)
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DOSFSTOOLS_DOSFSLABEL),y)
-+DOSFSTOOLS+=$(TARGET_DIR)/$(DOSFSLABEL_TARGET_BINARY)
-+endif
-+
-+dosfstools: $(DOSFSTOOLS)
  
- dosfstools-clean:
- 	rm -f $(TARGET_DIR)/$(MKDOSFS_TARGET_BINARY)
-@@ -60,14 +74,6 @@ dosfstools-dirclean:
- # Toplevel Makefile options
- #
- #############################################################
--ifeq ($(BR2_PACKAGE_DOSFSTOOLS_MKDOSFS),y)
--TARGETS+=$(TARGET_DIR)/$(MKDOSFS_TARGET_BINARY)
--endif
--
--ifeq ($(BR2_PACKAGE_DOSFSTOOLS_DOSFSCK),y)
--TARGETS+=$(TARGET_DIR)/$(DOSFSCK_TARGET_BINARY)
--endif
--
--ifeq ($(BR2_PACKAGE_DOSFSTOOLS_DOSFSLABEL),y)
--TARGETS+=$(TARGET_DIR)/$(DOSFSLABEL_TARGET_BINARY)
--endif
-+ifeq ($(BR2_PACKAGE_DOSFSTOOLS),y)
-+TARGETS+=dosfstools
-+endif
-\ No newline at end of file
+ ifeq ($(BR2_PACKAGE_LVM2_DMSETUP_ONLY),y)
 -- 
 1.6.3.3
