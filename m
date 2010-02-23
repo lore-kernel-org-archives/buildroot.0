@@ -1,8 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 23 Feb 2010 21:27:28 +0100
-Subject: [Buildroot] [git commit master] imagemagick: help configure to
-	detect file_offset_bits
-Message-ID: <20100223202931.9E390776A1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] imagemagick: use internal libtool
+Message-ID: <20100223202932.1215B776A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,43 +9,33 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cf04b9e0c5f7b55817999a5dd01d7ce740fd3d8e
+commit: http://git.buildroot.net/buildroot/commit/?id=b7ea597dd2f3553f2bc44e441011e68f999c7768
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-imagemagick configure script wants to run programs to detect the
-file_offset_bits, but fails since it is running cross-compile
-mode. Therefore, we help the configure script by passing the
-appropriate ac_cv variable.
+For some reason, our imagemagick.mk file calls libtool, but assumes
+that libtool is available on the host, which may not be
+true. Therefore, we use ImageMagick's internal libtool, which has been
+used for compiling/linking all the rest of ImageMagic anyway.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/imagemagick/imagemagick.mk |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+ package/imagemagick/imagemagick.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 2bcd076..e858430 100644
+index e858430..00895f5 100644
 --- a/package/imagemagick/imagemagick.mk
 +++ b/package/imagemagick/imagemagick.mk
-@@ -31,6 +31,12 @@ $(IMAGEMAGICK_DIR)/.unpacked: $(DL_DIR)/$(IMAGEMAGICK_SOURCE)
- 	$(CONFIG_UPDATE) $(IMAGEMAGICK_DIR)/config
+@@ -83,8 +83,8 @@ $(IMAGEMAGICK_LIB): $(STAGING_DIR)/usr/lib/libMagickCore.a
+ 	touch -c $@
+ 
+ $(IMAGEMAGICK_DIR)/.libinstall: $(IMAGEMAGICK_LIB)
+-	libtool --finish $(TARGET_DIR)/usr/lib/ImageMagick-$(IMAGEMAGICK_MAJOR)/modules-Q16/coders
+-	libtool --finish $(TARGET_DIR)/usr/lib/ImageMagick-$(IMAGEMAGICK_MAJOR)/modules-Q16/filters
++	$(IMAGEMAGICK_DIR)/libtool --finish $(TARGET_DIR)/usr/lib/ImageMagick-$(IMAGEMAGICK_MAJOR)/modules-Q16/coders
++	$(IMAGEMAGICK_DIR)/libtool --finish $(TARGET_DIR)/usr/lib/ImageMagick-$(IMAGEMAGICK_MAJOR)/modules-Q16/filters
  	touch $@
  
-+ifeq ($(BR2_LARGEFILE),y)
-+IMAGEMAGICK_CONF_OPTS = ac_cv_sys_file_offset_bits=64
-+else
-+IMAGEMAGICK_CONF_OPTS = ac_cv_sys_file_offset_bits=32
-+endif
-+
- $(IMAGEMAGICK_DIR)/.configured: $(IMAGEMAGICK_DIR)/.unpacked
- 	(cd $(IMAGEMAGICK_DIR); rm -f config.cache; \
- 		$(TARGET_CONFIGURE_OPTS) \
-@@ -55,6 +61,7 @@ $(IMAGEMAGICK_DIR)/.configured: $(IMAGEMAGICK_DIR)/.unpacked
- 		--without-fpx \
- 		--without-freetype \
- 		--without-x \
-+		$(IMAGEMAGICK_CONF_OPTS) \
- 	)
- 	touch $@
- 
+ $(TARGET_DIR)/usr/bin/animate: $(IMAGEMAGICK_LIB)
 -- 
 1.6.3.3
