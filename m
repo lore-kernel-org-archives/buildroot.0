@@ -1,7 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 23 Feb 2010 21:27:28 +0100
-Subject: [Buildroot] [git commit master] imagemagick: use internal libtool
-Message-ID: <20100223202932.1215B776A1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] libxml-parser-perl: new package
+Message-ID: <20100223202928.09CBB776A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,33 +9,95 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b7ea597dd2f3553f2bc44e441011e68f999c7768
+commit: http://git.buildroot.net/buildroot/commit/?id=c13460f769bb4fe88e23a8070b00bab46005cbf2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For some reason, our imagemagick.mk file calls libtool, but assumes
-that libtool is available on the host, which may not be
-true. Therefore, we use ImageMagick's internal libtool, which has been
-used for compiling/linking all the rest of ImageMagic anyway.
+This Perl module is needed to build intltool, which in turn is needed
+to build several of our packages. We assume that Perl is installed on
+the host.
+
+Only the host variant of this package has been tested and is used. The
+code for the target variant (what to do at the configure, build and
+install steps) isn't implemented, but the GENTARGETS call for the
+target is mandatory, due to limitations of the Makefile.package.in
+infrastructure (if one wants the host package to be implemented, then
+the target package *must* exist). This limitation will be removed
+after 2010.02.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/imagemagick/imagemagick.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/Config.in                                |    1 +
+ package/libxml-parser-perl/Config.in             |    8 +++++
+ package/libxml-parser-perl/libxml-parser-perl.mk |   34 ++++++++++++++++++++++
+ 3 files changed, 43 insertions(+), 0 deletions(-)
+ create mode 100644 package/libxml-parser-perl/Config.in
+ create mode 100644 package/libxml-parser-perl/libxml-parser-perl.mk
 
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index e858430..00895f5 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -83,8 +83,8 @@ $(IMAGEMAGICK_LIB): $(STAGING_DIR)/usr/lib/libMagickCore.a
- 	touch -c $@
+diff --git a/package/Config.in b/package/Config.in
+index 5ddd63c..00f3401 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -412,6 +412,7 @@ source "package/ezxml/Config.in"
+ source "package/libxml2/Config.in"
+ source "package/libxslt/Config.in"
+ source "package/xerces/Config.in"
++source "package/libxml-parser-perl/Config.in"
+ endmenu
  
- $(IMAGEMAGICK_DIR)/.libinstall: $(IMAGEMAGICK_LIB)
--	libtool --finish $(TARGET_DIR)/usr/lib/ImageMagick-$(IMAGEMAGICK_MAJOR)/modules-Q16/coders
--	libtool --finish $(TARGET_DIR)/usr/lib/ImageMagick-$(IMAGEMAGICK_MAJOR)/modules-Q16/filters
-+	$(IMAGEMAGICK_DIR)/libtool --finish $(TARGET_DIR)/usr/lib/ImageMagick-$(IMAGEMAGICK_MAJOR)/modules-Q16/coders
-+	$(IMAGEMAGICK_DIR)/libtool --finish $(TARGET_DIR)/usr/lib/ImageMagick-$(IMAGEMAGICK_MAJOR)/modules-Q16/filters
- 	touch $@
- 
- $(TARGET_DIR)/usr/bin/animate: $(IMAGEMAGICK_LIB)
+ # java support
+diff --git a/package/libxml-parser-perl/Config.in b/package/libxml-parser-perl/Config.in
+new file mode 100644
+index 0000000..d20a401
+--- /dev/null
++++ b/package/libxml-parser-perl/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LIBXML_PARSER_PERL
++       bool "libxml-parser-perl"
++       select BR2_PACKAGE_EXPAT
++       help
++         The Perl XML::Parser module.
++
++	 http://www.cpan.org/modules/by-module/XML/
++
+diff --git a/package/libxml-parser-perl/libxml-parser-perl.mk b/package/libxml-parser-perl/libxml-parser-perl.mk
+new file mode 100644
+index 0000000..52d89d5
+--- /dev/null
++++ b/package/libxml-parser-perl/libxml-parser-perl.mk
+@@ -0,0 +1,34 @@
++#############################################################
++#
++# libxml-parser-perl
++#
++#############################################################
++LIBXML_PARSER_PERL_VERSION:=2.36
++LIBXML_PARSER_PERL_SOURCE:=XML-Parser-$(LIBXML_PARSER_PERL_VERSION).tar.gz
++LIBXML_PARSER_PERL_SITE:=http://www.cpan.org/modules/by-module/XML/
++
++LIBXML_PARSER_PERL_DEPENDENCIES = expat
++HOST_LIBXML_PARSER_PERL_DEPENDENCIES = host-expat
++
++define HOST_LIBXML_PARSER_PERL_CONFIGURE_CMDS
++ (cd $(@D) ; \
++   perl Makefile.PL \
++        PREFIX=$(HOST_DIR)/usr \
++        EXPATLIBPATH=$(HOST_DIR)/usr/lib \
++        EXPATINCPATH=$(HOST_DIR)/usr/include \
++        INSTALLDIRS=site \
++        INSTALLSITELIB=$(HOST_DIR)/usr/lib/perl \
++ )
++endef
++
++define HOST_LIBXML_PARSER_PERL_BUILD_CMDS
++ $(HOST_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define HOST_LIBXML_PARSER_PERL_INSTALL_CMDS
++ $(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
++endef
++
++$(eval $(call GENTARGETS,package,libxml-parser-perl))
++$(eval $(call GENTARGETS,package,libxml-parser-perl,host))
++
 -- 
 1.6.3.3
