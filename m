@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 23 Feb 2010 21:27:28 +0100
-Subject: [Buildroot] [git commit master] shared-mime-info: do not depend on
-	phony target in hook
-Message-ID: <20100223202934.4E4B9776A1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] matchbox: apply libtool patch to
+	matchbox-desktop
+Message-ID: <20100223202933.6D944776A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,38 +10,33 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=520dd9fbe5896175285a494aeeabe221bce9db62
+commit: http://git.buildroot.net/buildroot/commit/?id=b5e742a642fc40b802a4d0ec1d6a762a89bee635
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Real targets should not depend on phony targets, otherwise they get
-rebuilt everytime.
+matchbox-desktop fails to build because it tries to read
+/usr/lib/libxcb.la, which doesn't exist on a very basic system with no
+development files instead. The buildroot-libtool.patch must therefore
+be applied.
+
+Unfortunately, matchbox doesn't yet use the autotools infrastructure,
+so we have to manually apply the patch.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/shared-mime-info/shared-mime-info.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/matchbox/matchbox.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/shared-mime-info/shared-mime-info.mk b/package/shared-mime-info/shared-mime-info.mk
-index 80b0ccc..fe14142 100644
---- a/package/shared-mime-info/shared-mime-info.mk
-+++ b/package/shared-mime-info/shared-mime-info.mk
-@@ -12,7 +12,7 @@ SHARED_MIME_INFO_INSTALL_TARGET = NO
+diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
+index 06e94cd..8665d41 100644
+--- a/package/matchbox/matchbox.mk
++++ b/package/matchbox/matchbox.mk
+@@ -141,6 +141,7 @@ $(MATCHBOX_PL_DIR)/.unpacked: $(DL_DIR)/$(MATCHBOX_PL_SOURCE)
+ $(MATCHBOX_DP_DIR)/.unpacked: $(DL_DIR)/$(MATCHBOX_DP_SOURCE)
+ 	$(MATCHBOX_CAT) $(DL_DIR)/$(MATCHBOX_DP_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+ 	$(SED) 's:mbfolder\.png:mbtasks\.png:g' $(MATCHBOX_DP_DIR)/modules/tasks.c
++	toolchain/patch-kernel.sh $(MATCHBOX_DP_DIR) package/ buildroot-libtool.patch
+ 	touch $(MATCHBOX_DP_DIR)/.unpacked
  
- SHARED_MIME_INFO_AUTORECONF = NO
- SHARED_MIME_INFO_CONF_ENV = XMLLINT=$(HOST_DIR)/usr/bin/xmllint
--SHARED_MIME_INFO_DEPENDENCIES = host-pkg-config host-libglib2 host-libxml2 libxml2 libglib2
-+SHARED_MIME_INFO_DEPENDENCIES = host-pkg-config host-libglib2 host-libxml2 host-shared-mime-info libxml2 libglib2
- 
- SHARED_MIME_INFO_CONF_OPT = --disable-update-mimedb
- 
-@@ -28,7 +28,7 @@ $(eval $(call AUTOTARGETS,package,shared-mime-info,host))
- SHARED_MIME_INFO_HOST_BINARY:=$(HOST_DIR)/usr/bin/update-mime-database
- 
- # update the shared-mime-info database in the target
--$(SHARED_MIME_INFO_HOOK_POST_INSTALL): host-shared-mime-info
-+$(SHARED_MIME_INFO_HOOK_POST_INSTALL):
- 	$(HOST_MAKE_ENV) $(SHARED_MIME_INFO_HOST_BINARY) $(STAGING_DIR)/usr/share/mime
- 	$(INSTALL) -D $(STAGING_DIR)/usr/share/mime/mime.cache $(TARGET_DIR)/usr/share/mime/mime.cache
- 	touch $@
+ $(MATCHBOX_FK_DIR)/.unpacked: $(DL_DIR)/$(MATCHBOX_FK_SOURCE)
 -- 
 1.6.3.3
