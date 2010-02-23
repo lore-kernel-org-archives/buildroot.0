@@ -1,27 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 23 Feb 2010 21:06:02 +0100
-Subject: [Buildroot] [pull request] Pull request for branch misc-fixes6
-In-Reply-To: <cover.1266781929.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Sun, 21 Feb 2010 20:52:11 +0100")
-References: <cover.1266781929.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87vddnemz9.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 23 Feb 2010 21:06:26 +0100
+Subject: [Buildroot] [PATCH 02/40] ccache: remove cleanup of documentation
+In-Reply-To: <cover.1266955555.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1266955555.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <53f670ac06837e0517cffad747435e5d1677d3fa.1266955555.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+The cleanup of documentation is handled in a global way, in the main
+Makefile.
 
- Thomas> The following changes since commit c8ff60c8283b0ad116fcf43f485f199c29432c9d:
- Thomas>   Peter Korsgaard (1):
- Thomas>         CHANGES: add ace_of_penguins, rubix and xboard
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/ccache/ccache.mk |    3 ---
+ 1 files changed, 0 insertions(+), 3 deletions(-)
 
- Thomas> are available in the git repository at:
-
- Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot misc-fixes6
-
-This one is also gone, so I have committed it manually - Thanks.
-
+diff --git a/toolchain/ccache/ccache.mk b/toolchain/ccache/ccache.mk
+index c98937d..8e414b2 100644
+--- a/toolchain/ccache/ccache.mk
++++ b/toolchain/ccache/ccache.mk
+@@ -163,9 +163,6 @@ $(CCACHE_DIR2)/$(CCACHE_BINARY): $(CCACHE_DIR2)/.configured
+ 
+ $(TARGET_DIR)/$(CCACHE_TARGET_BINARY): $(CCACHE_DIR2)/$(CCACHE_BINARY)
+ 	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(CCACHE_DIR2) install
+-ifneq ($(BR2_HAVE_MANPAGES),y)
+-	rm -rf $(TARGET_DIR)/usr/man
+-endif
+ 	# put a bunch of symlinks into /bin, since that is earlier
+ 	# in the default PATH than /usr/bin where gcc lives
+ 	(cd $(TARGET_DIR)/bin; \
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
