@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 23 Feb 2010 21:27:28 +0100
-Subject: [Buildroot] [git commit master] package infrastructure: add
-	LD_LIBRARY_PATH
-Message-ID: <20100223202925.536EE776A1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] xfont_font-util: convert to the
+	autotools infrastructure
+Message-ID: <20100223202924.D6947776A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,40 +10,101 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c1b6242fdcf2cff7ebf09fec4cc1be58963e8427
+commit: http://git.buildroot.net/buildroot/commit/?id=abc1479ea795a18a743ea513e33179058bdfe6b6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-During the compilation of target or host packages, host tools might be
-used, and in turn, they might use host libraries installed in
-$(HOST_DIR)/usr/lib. Therefore, we pass a LD_LIBRARY_PATH variable
-when building packages.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Makefile.in |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ package/x11r7/xfont_font-util/xfont_font-util.mk |   74 ++--------------------
+ 1 files changed, 6 insertions(+), 68 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index bc0ac7c..043ef3e 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -236,7 +236,8 @@ TARGET_CONFIGURE_ENV=\
- 	LDFLAGS="$(TARGET_LDFLAGS)" \
- 	FCFLAGS="$(TARGET_FCFLAGS)" \
+diff --git a/package/x11r7/xfont_font-util/xfont_font-util.mk b/package/x11r7/xfont_font-util/xfont_font-util.mk
+index 38e7e80..88dce38 100644
+--- a/package/x11r7/xfont_font-util/xfont_font-util.mk
++++ b/package/x11r7/xfont_font-util/xfont_font-util.mk
+@@ -5,76 +5,14 @@
+ ################################################################################
  
--TARGET_MAKE_ENV=PATH=$(TARGET_PATH)
-+TARGET_MAKE_ENV=PATH=$(TARGET_PATH) \
-+		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)"
+ XFONT_FONT_UTIL_VERSION = 1.0.1
+-XFONT_FONT_UTIL_NAME = font-util-$(XFONT_FONT_UTIL_VERSION)
+ XFONT_FONT_UTIL_SOURCE = font-util-$(XFONT_FONT_UTIL_VERSION).tar.bz2
+ XFONT_FONT_UTIL_SITE = http://xorg.freedesktop.org/releases/individual/font
+-XFONT_FONT_UTIL_AUTORECONF = NO
+-XFONT_FONT_UTIL_DIR=$(BUILD_DIR)/$(XFONT_FONT_UTIL_NAME)
+-XFONT_FONT_UTIL_CAT:=$(BZCAT)
++XFONT_FONT_UTIL_DEPENDENCIES = host-pkg-config
  
- HOST_CONFIGURE_OPTS=PATH=$(HOST_PATH) \
- 		AR="$(HOSTAR)" \
-@@ -277,6 +278,7 @@ HOST_CONFIGURE_OPTS=PATH=$(HOST_PATH) \
- 		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig"
+-$(DL_DIR)/$(XFONT_FONT_UTIL_SOURCE):
+-	 $(call DOWNLOAD,$(XFONT_FONT_UTIL_SITE),$(XFONT_FONT_UTIL_SOURCE))
++define XFONT_FONT_UTIL_POST_INSTALL_FIXES
++ $(@D)/post-install.sh $(STAGING_DIR)
++endef
  
- HOST_MAKE_ENV=PATH=$(HOST_PATH) \
-+		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)" \
- 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
- 		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig"
+-xfont_font-util-source: $(DL_DIR)/$(XFONT_FONT_UTIL_SOURCE)
+-
+-$(XFONT_FONT_UTIL_DIR)/.unpacked: $(DL_DIR)/$(XFONT_FONT_UTIL_SOURCE)
+-	$(XFONT_FONT_UTIL_CAT) $(DL_DIR)/$(XFONT_FONT_UTIL_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(XFONT_FONT_UTIL_DIR) package/x11r7/xfont_font-util/ \*.patch
+-	$(CONFIG_UPDATE) $(XFONT_FONT_UTIL_DIR)
+-	touch $@
+-
+-$(XFONT_FONT_UTIL_DIR)/.configured: $(XFONT_FONT_UTIL_DIR)/.unpacked
+-	(cd $(XFONT_FONT_UTIL_DIR) && rm -rf config.cache)
+-	(cd $(XFONT_FONT_UTIL_DIR) && \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		$(TARGET_CONFIGURE_ARGS) \
+-		./configure $(QUIET) \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		--prefix=/usr \
+-		--exec-prefix=/usr \
+-		--bindir=/usr/bin \
+-		--sbindir=/usr/sbin \
+-		--libdir=/usr/lib \
+-		--libexecdir=/usr/lib \
+-		--sysconfdir=/etc \
+-		--datadir=/usr/share \
+-		--localstatedir=/var \
+-		--includedir=/usr/include \
+-		--mandir=/usr/share/man \
+-		--infodir=/usr/share/info \
+-	)
+-	touch $@
+-
+-$(XFONT_FONT_UTIL_DIR)/.compiled: $(XFONT_FONT_UTIL_DIR)/.configured
+-	$(MAKE) -C $(XFONT_FONT_UTIL_DIR)
+-	touch $@
+-
+-$(XFONT_FONT_UTIL_DIR)/.installed: $(XFONT_FONT_UTIL_DIR)/.compiled
+-	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(XFONT_FONT_UTIL_DIR) install
+-	touch $@
+-
+-$(XFONT_FONT_UTIL_DIR)/.hacked: $(XFONT_FONT_UTIL_DIR)/.installed
+-	( package/x11r7/xfont_font-util/post-install.sh $(STAGING_DIR) )
+-	touch $@
+-
+-xfont_font-util: host-pkg-config $(XFONT_FONT_UTIL_DIR)/.hacked
+-
+-xfont_font-util-unpacked: $(XFONT_FONT_UTIL_DIR)/.unpacked
+-
+-xfont_font-util-clean:
+-	-$(MAKE) -C $(XFONT_FONT_UTIL_DIR) clean
+-
+-xfont_font-util-dirclean:
+-	rm -rf $(XFONT_FONT_UTIL_DIR)
+-
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_XFONT_FONT_UTIL),y)
+-TARGETS+=xfont_font-util
+-endif
++XFONT_FONT_UTIL_POST_INSTALL_STAGING_HOOKS += XFONT_FONT_UTIL_POST_INSTALL_FIXES
  
++$(eval $(call AUTOTARGETS,package/x11r7,xfont_font-util))
+\ No newline at end of file
 -- 
 1.6.3.3
