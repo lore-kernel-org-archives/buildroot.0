@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 23 Feb 2010 21:27:28 +0100
-Subject: [Buildroot] [git commit master] dependencies: add perl as a
-	mandatory dependency
-Message-ID: <20100223202929.7290E776A1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] gmpc: add dependency on
+	host-intltool
+Message-ID: <20100223202929.D9446776A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +10,26 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=496078a0a0530dad1206be6257f1bc91a70b645a
+commit: http://git.buildroot.net/buildroot/commit/?id=364555d9fff02e02f96f92f6f8b080663c424c89
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Now that we might happen to build libxml-parser-perl and intltool,
-Perl becomes a mandatory dependency. This shouldn't be a problem since
-most distributions install Perl by default anyway.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/dependencies/dependencies.sh |    2 +-
+ package/gmpc/gmpc.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/toolchain/dependencies/dependencies.sh b/toolchain/dependencies/dependencies.sh
-index d0190fd..146e080 100755
---- a/toolchain/dependencies/dependencies.sh
-+++ b/toolchain/dependencies/dependencies.sh
-@@ -122,7 +122,7 @@ if ! $SHELL --version 2>&1 | grep -q '^GNU bash'; then
- fi;
+diff --git a/package/gmpc/gmpc.mk b/package/gmpc/gmpc.mk
+index 7110d15..0db89b9 100644
+--- a/package/gmpc/gmpc.mk
++++ b/package/gmpc/gmpc.mk
+@@ -11,7 +11,7 @@ GMPC_CONF_ENV = ac_cv_lib_curl_curl_global_init=yes \
+ 		ac_cv_path_GOB2=$(GOB2_HOST_BINARY)
+ GMPC_CONF_OPT = --disable-mmkeys
  
- # Check that a few mandatory programs are installed
--for prog in awk bison flex msgfmt makeinfo patch gzip bzip2 ; do
-+for prog in awk bison flex msgfmt makeinfo patch gzip bzip2 perl ; do
-     if ! which $prog > /dev/null ; then
- 	/bin/echo -e "\nYou must install '$prog' on your build machine";
- 	if test $prog = "makeinfo" ; then
+-GMPC_DEPENDENCIES = libglib2 libgtk2 libglade libcurl libmpd host-gob2
++GMPC_DEPENDENCIES = libglib2 libgtk2 libglade libcurl libmpd host-gob2 host-intltool
+ 
+ ifeq ($(BR2_PACKAGE_XLIB_LIBSM),y)
+ GMPC_DEPENENCIES += xlib_libSM
 -- 
 1.6.3.3
