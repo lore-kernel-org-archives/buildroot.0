@@ -1,7 +1,7 @@
-From: Paul Jones <Paul.Jones@iwtech.com.au>
-Date: Tue, 23 Feb 2010 14:17:40 +1100
-Subject: [Buildroot] Beginner documentation
-Message-ID: <3B941116898CDA489B91563DEF88F4B61CAD8E@iwt-server.iwt.local>
+From: Roo <roo.watt@gmail.com>
+Date: Tue, 23 Feb 2010 14:51:37 +1100
+Subject: [Buildroot] Newbie: AT91SAM9260 NAND Boot
+Message-ID: <815f0bd71002221951v606dbdddn381587fdd662e485@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,28 +10,26 @@ To: buildroot@busybox.net
 
 Hi,
 
- 
+I am new to buildroot and have been given a AT91SAM9260 SOM to work
+with. The latest buildroot does not appear to include a defconfig for
+a NAND boot system. The module in question is
+http://www.otech.cn/chinese/ProductShow.asp?ID=103 and they do not
+provide a build system, just a rootfs image and kernel image etc,
+unfortunately that is nearly all the information I have on the board.
 
-I'm trying to build a basic buildroot i686 system that I can use for
-learning buildroot. When doing "make linux26-menuconfig" it failed
-because it couldn't find the .config file. From past experience I
-remembered that I have to do make defconfig before that would work, but
-there seems to be no mention of this in the documentation. It would be
-good if something could be added.
+I would like to use buildroot to build the rootfs, kernel and tools
+required for our application. I would appreciate any advice on where
+to start with this, is there any reason that a NAND boot defconfig
+does not exist currently? Will it be a difficult job to develop one? I
+know that there is a rootsf image and kernel image at at91.com but I
+see more value in supporting the latest buildroot particularly as I
+would like to integrate our own packages.
 
- 
+Also can anyone advise whether there are issues building on a 64bit host?
 
-I assume http://buildroot.uclibc.org/buildroot.html is the right page to
-be looking at?
+Any advice appreciated.
 
- 
 
- 
+Kind regards,
 
-Thanks
-
-Paul.
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100223/7a417a1a/attachment.htm>
+Cameron.
