@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 23 Feb 2010 21:27:28 +0100
-Subject: [Buildroot] [git commit master] flex: install in the staging
-	directory
-Message-ID: <20100223202930.50103776A1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] dependencies: add gzip and bzip2 as
+	base dependencies
+Message-ID: <20100223202927.249E3776A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +10,30 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3502bb056f0de1e4eecd7b0de6156daf18a2162c
+commit: http://git.buildroot.net/buildroot/commit/?id=a47ce9d3df148cbfbd38355c80624fb5abc78a77
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Flex contains a libfl.a directory, which programs for the target might
-link against. Therefore, we need to install flex to the staging
-directory. An example of such a program is gob2, which needs the
-yywrap() function, which is implemented by libfl.
+They are needed to uncompress the tarballs we download. bzip2, for
+instance, is not necessarly installed by default on basic Debian
+systems.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/flex/flex.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ toolchain/dependencies/dependencies.sh |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/flex/flex.mk b/package/flex/flex.mk
-index fed0d77..43e7d57 100644
---- a/package/flex/flex.mk
-+++ b/package/flex/flex.mk
-@@ -9,6 +9,7 @@ FLEX_SOURCE:=flex_$(FLEX_VERSION).orig.tar.gz
- FLEX_PATCH:=flex_$(FLEX_VERSION)-$(FLEX_PATCH_VERSION).diff.gz
- FLEX_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/f/flex
- FLEX_DIR:=$(BUILD_DIR)/flex-$(FLEX_VERSION)
-+FLEX_INSTALL_STAGING=YES
+diff --git a/toolchain/dependencies/dependencies.sh b/toolchain/dependencies/dependencies.sh
+index f5b2621..d0190fd 100755
+--- a/toolchain/dependencies/dependencies.sh
++++ b/toolchain/dependencies/dependencies.sh
+@@ -122,7 +122,7 @@ if ! $SHELL --version 2>&1 | grep -q '^GNU bash'; then
+ fi;
  
- # lex -> flex
- define FLEX_INSTALL_LEX
+ # Check that a few mandatory programs are installed
+-for prog in awk bison flex msgfmt makeinfo patch ; do
++for prog in awk bison flex msgfmt makeinfo patch gzip bzip2 ; do
+     if ! which $prog > /dev/null ; then
+ 	/bin/echo -e "\nYou must install '$prog' on your build machine";
+ 	if test $prog = "makeinfo" ; then
 -- 
 1.6.3.3
