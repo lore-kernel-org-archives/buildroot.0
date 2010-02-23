@@ -1,7 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 23 Feb 2010 21:27:28 +0100
-Subject: [Buildroot] [git commit master] zlib: enable compilation on the host
-Message-ID: <20100223202924.6805D776A1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] ace_of_penguins: add dependency on
+	host-libpng
+Message-ID: <20100223202926.3D7CF776A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,68 +10,28 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a55cd51b855fc2749bc7db972ae353177eaa7d79
+commit: http://git.buildroot.net/buildroot/commit/?id=3422dc5efe3557f32ea9f71ec2e27c512288015b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-zlib is needed on the host, to build xlib_libfontenc on the host, to
-build xapp_mkfontscale on the host, in order to finally build xfonts
-encodings on the target.
+libpng is needed on the host to build the make-imglib utility, built
+during the compilation of ace_of_penguins for the target.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/zlib/zlib.mk |   25 +++++++++++++++++++++++++
- 1 files changed, 25 insertions(+), 0 deletions(-)
+ package/games/ace_of_penguins/ace_of_penguins.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/zlib/zlib.mk b/package/zlib/zlib.mk
-index 7432473..3144ae9 100644
---- a/package/zlib/zlib.mk
-+++ b/package/zlib/zlib.mk
-@@ -30,10 +30,26 @@ define ZLIB_CONFIGURE_CMDS
- 	)
- endef
+diff --git a/package/games/ace_of_penguins/ace_of_penguins.mk b/package/games/ace_of_penguins/ace_of_penguins.mk
+index fe3e204..a106d14 100644
+--- a/package/games/ace_of_penguins/ace_of_penguins.mk
++++ b/package/games/ace_of_penguins/ace_of_penguins.mk
+@@ -10,6 +10,6 @@ ACE_OF_PENGUINS_AUTORECONF = YES
+ ACE_OF_PENGUINS_STAGING = NO
+ ACE_OF_PENGUINS_TARGET = YES
  
-+define HOST_ZLIB_CONFIGURE_CMDS
-+	(cd $(@D); rm -rf config.cache; \
-+		$(HOST_CONFIGURE_ARGS) \
-+		$(HOST_CONFIGURE_OPTS) \
-+		CFLAGS="$(ZLIB_PIC)" \
-+		./configure \
-+		$(ZLIB_SHARED) \
-+		--prefix="$(HOST_DIR)/usr" \
-+		--sysconfdir="$(HOST_DIR)/etc" \
-+	)
-+endef
-+
- define ZLIB_BUILD_CMDS
- 	$(MAKE) -C $(@D) all libz.a
- endef
+-ACE_OF_PENGUINS_DEPENDENCIES = libpng xserver_xorg-server xlib_libXpm
++ACE_OF_PENGUINS_DEPENDENCIES = libpng host-libpng xserver_xorg-server xlib_libXpm
  
-+define HOST_ZLIB_BUILD_CMDS
-+	$(MAKE) -C $(@D) all libz.a
-+endef
-+
- define ZLIB_INSTALL_STAGING_CMDS
- 	$(INSTALL) -D $(@D)/libz.a $(STAGING_DIR)/usr/lib/libz.a
- 	$(INSTALL) -D $(@D)/zlib.h $(STAGING_DIR)/usr/include/zlib.h
-@@ -41,6 +57,13 @@ define ZLIB_INSTALL_STAGING_CMDS
- 	cp -dpf $(@D)/libz.so* $(STAGING_DIR)/usr/lib/
- endef
- 
-+define HOST_ZLIB_INSTALL_CMDS
-+	$(INSTALL) -D $(@D)/libz.a $(HOST_DIR)/usr/lib/libz.a
-+	$(INSTALL) -D $(@D)/zlib.h $(HOST_DIR)/usr/include/zlib.h
-+	$(INSTALL) $(@D)/zconf.h $(HOST_DIR)/usr/include/
-+	cp -dpf $(@D)/libz.so* $(HOST_DIR)/usr/lib/
-+endef
-+
- ifeq ($(BR2_HAVE_DEVFILES),y)
- define ZLIB_INSTALL_TARGET_HEADERS
- 	$(INSTALL) -D $(@D)/zlib.h $(TARGET_DIR)/usr/include/zlib.h
-@@ -57,3 +80,5 @@ define ZLIB_INSTALL_TARGET_CMDS
- endef
- 
- $(eval $(call GENTARGETS,package,zlib))
-+$(eval $(call GENTARGETS,package,zlib,host))
-+
+ $(eval $(call AUTOTARGETS,package/games,ace_of_penguins))
 -- 
 1.6.3.3
