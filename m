@@ -1,7 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 23 Feb 2010 21:27:28 +0100
-Subject: [Buildroot] [git commit master] libxslt: enable compilation on host
-Message-ID: <20100223202922.33D7C776A1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] libxcb: fix build with Buildroot
+	compiled xsltproc
+Message-ID: <20100223202922.9DC6D776A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,36 +10,36 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=73c937229bff334c9e4b88b7cc094ff4e576cdf4
+commit: http://git.buildroot.net/buildroot/commit/?id=e5d1244a747a3863b9f53c80c3ad3f0d60fbe8cd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Compiling libxcb (from the X.org stack) requires xsltproc on the host,
-which is part of libxslt.
+Make sure that libxcb depends on host-xsltproc, since xsltproc is
+required for the compilation of libxcb.
+
+Moreover, remove the XSLTPROC=/usr/bin/xsltproc variable definition,
+which was assuming that XSLTPROC was installed on the host. xsltproc
+should just be part of the PATH.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libxslt/libxslt.mk |    8 ++++++++
- 1 files changed, 8 insertions(+), 0 deletions(-)
+ package/x11r7/libxcb/libxcb.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
-index 03c1131..4bf61b5 100644
---- a/package/libxslt/libxslt.mk
-+++ b/package/libxslt/libxslt.mk
-@@ -25,7 +25,15 @@ LIBXSLT_CONF_OPT = --with-gnu-ld --enable-shared \
+diff --git a/package/x11r7/libxcb/libxcb.mk b/package/x11r7/libxcb/libxcb.mk
+index b79addd..19cfc6a 100644
+--- a/package/x11r7/libxcb/libxcb.mk
++++ b/package/x11r7/libxcb/libxcb.mk
+@@ -10,9 +10,9 @@ LIBXCB_SITE = http://xcb.freedesktop.org/dist/
+ LIBXCB_INSTALL_STAGING = YES
  
- LIBXSLT_DEPENDENCIES = libxml2 $(LIBXSLT_DEPENDENCIES_EXTRA)
+ LIBXCB_AUTORECONF = NO
+-LIBXCB_DEPENDENCIES = pthread-stubs xcb-proto xlib_libXdmcp xlib_libXau
++LIBXCB_DEPENDENCIES = host-libxslt pthread-stubs xcb-proto xlib_libXdmcp xlib_libXau
+ LIBXCB_CONF_ENV = STAGING_DIR="$(STAGING_DIR)"
+-LIBXCB_MAKE_OPT = XCBPROTO_XCBINCLUDEDIR=$(STAGING_DIR)/usr/share/xcb XSLTPROC=/usr/bin/xsltproc
++LIBXCB_MAKE_OPT = XCBPROTO_XCBINCLUDEDIR=$(STAGING_DIR)/usr/share/xcb
  
-+HOST_LIBXSLT_CONF_OPT = --enable-shared \
-+			--without-debugging \
-+			--without-python \
-+			--without-threads
-+
-+HOST_LIBXSLT_DEPENDENCIES = host-libxml2
-+
- $(eval $(call AUTOTARGETS,package,libxslt))
-+$(eval $(call AUTOTARGETS,package,libxslt,host))
+ $(eval $(call AUTOTARGETS,package/x11r7,libxcb))
  
- $(LIBXSLT_HOOK_POST_INSTALL):
- 	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/xslt-config
 -- 
 1.6.3.3
