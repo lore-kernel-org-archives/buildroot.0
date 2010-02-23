@@ -1,238 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Feb 2010 21:27:28 +0100
-Subject: [Buildroot] [git commit master] webkit: several build fixes
-Message-ID: <20100223202936.210C1776A1@busybox.osuosl.org>
+From: Matthew Davison <matt.davison@lantronix.com>
+Date: Tue, 23 Feb 2010 12:56:10 -0800
+Subject: [Buildroot] make -C <buildroot_directory> failed
+Message-ID: <8128F0FD6C26E14C8EB4BFDB92B8D6B2134B26@2putt.int.lantronix.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-commit: http://git.buildroot.net/buildroot/commit/?id=09216ec22b2590b0e5fb5f50ed98bc0f6fd313d5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This patch fixes different problems:
-
- * The autogen script of Webkit did not find autoconf, automake and
-   aclocal since they are not installed in the host, but in
-   $(HOST_DIR). Therefore we pass HOST_CONFIGURE_OPTS to autogen.sh so
-   that the PATH is correct.
-
- * The autogen script was complaining that gtk-doc.make could not be
-   find. As compiling gtk-doc completely is a pain (depends on
-   Docbook), we just include gtk-doc.make into package/webkit/, and
-   copy it to the source directory.
-
- * The autogen script was complaining about macros used in
-   gtk-doc.make that did not exist. This is because aclocal was not
-   run with $(STAGING_DIR)/usr/share/aclocal/ in the include
-   path. Therefore, we fix ACLOCAL_FLAGS of Webkit's autogen script
-   before running it.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/webkit/gtk-doc.make |  173 +++++++++++++++++++++++++++++++++++++++++++
- package/webkit/webkit.mk    |    4 +-
- 2 files changed, 176 insertions(+), 1 deletions(-)
- create mode 100644 package/webkit/gtk-doc.make
-
-diff --git a/package/webkit/gtk-doc.make b/package/webkit/gtk-doc.make
-new file mode 100644
-index 0000000..354ffb7
---- /dev/null
-+++ b/package/webkit/gtk-doc.make
-@@ -0,0 +1,173 @@
-+# -*- mode: makefile -*-
-+
-+####################################
-+# Everything below here is generic #
-+####################################
-+
-+if GTK_DOC_USE_LIBTOOL
-+GTKDOC_CC = $(LIBTOOL) --mode=compile $(CC) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-+GTKDOC_LD = $(LIBTOOL) --mode=link $(CC) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS)
-+else
-+GTKDOC_CC = $(CC) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-+GTKDOC_LD = $(CC) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS)
-+endif
-+
-+# We set GPATH here; this gives us semantics for GNU make
-+# which are more like other make's VPATH, when it comes to
-+# whether a source that is a target of one rule is then
-+# searched for in VPATH/GPATH.
-+#
-+GPATH = $(srcdir)
-+
-+TARGET_DIR=$(HTML_DIR)/$(DOC_MODULE)
-+
-+EXTRA_DIST = 				\
-+	$(content_files)		\
-+	$(HTML_IMAGES)			\
-+	$(DOC_MAIN_SGML_FILE)		\
-+	$(DOC_MODULE)-sections.txt	\
-+	$(DOC_MODULE)-overrides.txt
-+
-+DOC_STAMPS=scan-build.stamp tmpl-build.stamp sgml-build.stamp html-build.stamp \
-+	   $(srcdir)/tmpl.stamp $(srcdir)/sgml.stamp $(srcdir)/html.stamp
-+
-+SCANOBJ_FILES = 		 \
-+	$(DOC_MODULE).args 	 \
-+	$(DOC_MODULE).hierarchy  \
-+	$(DOC_MODULE).interfaces \
-+	$(DOC_MODULE).prerequisites \
-+	$(DOC_MODULE).signals
-+
-+REPORT_FILES = \
-+	$(DOC_MODULE)-undocumented.txt \
-+	$(DOC_MODULE)-undeclared.txt \
-+	$(DOC_MODULE)-unused.txt
-+
-+CLEANFILES = $(SCANOBJ_FILES) $(REPORT_FILES) $(DOC_STAMPS)
-+
-+if ENABLE_GTK_DOC
-+all-local: html-build.stamp
-+else
-+all-local:
-+endif
-+
-+docs: html-build.stamp
-+
-+#### scan ####
-+
-+scan-build.stamp: $(HFILE_GLOB) $(CFILE_GLOB)
-+	@echo 'gtk-doc: Scanning header files'
-+	@-chmod -R u+w $(srcdir)
-+	cd $(srcdir) && \
-+	  gtkdoc-scan --module=$(DOC_MODULE) --source-dir=$(DOC_SOURCE_DIR) --ignore-headers="$(IGNORE_HFILES)" $(SCAN_OPTIONS) $(EXTRA_HFILES)
-+	if grep -l '^..*$$' $(srcdir)/$(DOC_MODULE).types > /dev/null 2>&1 ; then \
-+	    CC="$(GTKDOC_CC)" LD="$(GTKDOC_LD)" CFLAGS="$(GTKDOC_CFLAGS)" LDFLAGS="$(GTKDOC_LIBS)" gtkdoc-scangobj $(SCANGOBJ_OPTIONS) --module=$(DOC_MODULE) --output-dir=$(srcdir) ; \
-+	else \
-+	    cd $(srcdir) ; \
-+	    for i in $(SCANOBJ_FILES) ; do \
-+               test -f $$i || touch $$i ; \
-+	    done \
-+	fi
-+	touch scan-build.stamp
-+
-+$(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(DOC_MODULE)-sections.txt $(DOC_MODULE)-overrides.txt: scan-build.stamp
-+	@true
-+
-+#### templates ####
-+
-+tmpl-build.stamp: $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(DOC_MODULE)-sections.txt $(DOC_MODULE)-overrides.txt
-+	@echo 'gtk-doc: Rebuilding template files'
-+	@-chmod -R u+w $(srcdir)
-+	cd $(srcdir) && gtkdoc-mktmpl --module=$(DOC_MODULE) $(MKTMPL_OPTIONS)
-+	touch tmpl-build.stamp
-+
-+tmpl.stamp: tmpl-build.stamp
-+	@true
-+
-+tmpl/*.sgml:
-+	@true
-+
-+
-+#### xml ####
-+
-+sgml-build.stamp: tmpl.stamp $(HFILE_GLOB) $(CFILE_GLOB) $(DOC_MODULE)-sections.txt $(srcdir)/tmpl/*.sgml $(expand_content_files)
-+	@echo 'gtk-doc: Building XML'
-+	@-chmod -R u+w $(srcdir)
-+	cd $(srcdir) && \
-+	gtkdoc-mkdb --module=$(DOC_MODULE) --source-dir=$(DOC_SOURCE_DIR) --output-format=xml --expand-content-files="$(expand_content_files)" --main-sgml-file=$(DOC_MAIN_SGML_FILE) $(MKDB_OPTIONS)
-+	touch sgml-build.stamp
-+
-+sgml.stamp: sgml-build.stamp
-+	@true
-+
-+#### html ####
-+
-+html-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
-+	@echo 'gtk-doc: Building HTML'
-+	@-chmod -R u+w $(srcdir)
-+	rm -rf $(srcdir)/html
-+	mkdir $(srcdir)/html
-+	cd $(srcdir)/html && gtkdoc-mkhtml $(DOC_MODULE) ../$(DOC_MAIN_SGML_FILE)
-+	test "x$(HTML_IMAGES)" = "x" || ( cd $(srcdir) && cp $(HTML_IMAGES) html )
-+	@echo 'gtk-doc: Fixing cross-references'
-+	cd $(srcdir) && gtkdoc-fixxref --module-dir=html --html-dir=$(HTML_DIR) $(FIXXREF_OPTIONS)
-+	touch html-build.stamp
-+
-+##############
-+
-+clean-local:
-+	rm -f *~ *.bak
-+	rm -rf .libs
-+
-+distclean-local:
-+	cd $(srcdir) && \
-+	  rm -rf xml $(REPORT_FILES) \
-+	         $(DOC_MODULE)-decl-list.txt $(DOC_MODULE)-decl.txt
-+
-+maintainer-clean-local: clean
-+	cd $(srcdir) && rm -rf xml html
-+
-+install-data-local:
-+	-installfiles=`echo $(srcdir)/html/*`; \
-+	if test "$$installfiles" = '$(srcdir)/html/*'; \
-+	then echo '-- Nothing to install' ; \
-+	else \
-+	  $(mkinstalldirs) $(DESTDIR)$(TARGET_DIR); \
-+	  for i in $$installfiles; do \
-+	    echo '-- Installing '$$i ; \
-+	    $(INSTALL_DATA) $$i $(DESTDIR)$(TARGET_DIR); \
-+	  done; \
-+	  echo '-- Installing $(srcdir)/html/index.sgml' ; \
-+	  $(INSTALL_DATA) $(srcdir)/html/index.sgml $(DESTDIR)$(TARGET_DIR) || :; \
-+	  which gtkdoc-rebase >/dev/null && \
-+	    gtkdoc-rebase --relative --dest-dir=$(DESTDIR) --html-dir=$(DESTDIR)$(TARGET_DIR) ; \
-+	fi
-+	
-+
-+uninstall-local:
-+	rm -f $(DESTDIR)$(TARGET_DIR)/*
-+
-+#
-+# Require gtk-doc when making dist
-+#
-+if ENABLE_GTK_DOC
-+dist-check-gtkdoc:
-+else
-+dist-check-gtkdoc:
-+	@echo "*** gtk-doc must be installed and enabled in order to make dist"
-+	@false
-+endif
-+
-+dist-hook: dist-check-gtkdoc dist-hook-local
-+	mkdir $(distdir)/tmpl
-+	mkdir $(distdir)/xml
-+	mkdir $(distdir)/html
-+	-cp $(srcdir)/tmpl/*.sgml $(distdir)/tmpl
-+	-cp $(srcdir)/xml/*.xml $(distdir)/xml
-+	cp $(srcdir)/html/* $(distdir)/html
-+	-cp $(srcdir)/$(DOC_MODULE).types $(distdir)/
-+	-cp $(srcdir)/$(DOC_MODULE)-sections.txt $(distdir)/
-+	cd $(distdir) && rm -f $(DISTCLEANFILES)
-+	-gtkdoc-rebase --online --relative --html-dir=$(distdir)/html
-+
-+.PHONY : dist-hook-local docs
-diff --git a/package/webkit/webkit.mk b/package/webkit/webkit.mk
-index 389a5fc..2121f4b 100644
---- a/package/webkit/webkit.mk
-+++ b/package/webkit/webkit.mk
-@@ -25,10 +25,12 @@ endif
- WEBKIT_CONF_OPT += --disable-video
+Attempting to invoke the top level buildroot makefile from a higher
+level Makefile or simply with make -C <buildroot_directory> fails during
+the kernel build. This is even true if 'make -C .' is invoked from the
+top level buildroot directory, as long as a kernel build is enabled. It
+appears that the problem has something to do with make's
+"Entering/Leaving directory" messages, as the output below suggests.
+When I passed the --no-print-directory option to make, I was able to
+build without problems.
  
- define WEBKIT_AUTOGEN_PATCH
-+$(SED) 's%ACLOCAL_FLAGS=.*%ACLOCAL_FLAGS="-I autotools -I $(STAGING_DIR)/usr/share/aclocal"%' $(WEBKIT_DIR)/autogen.sh
- $(SED) 's/AUTOMAKE_FLAGS=.*/AUTOMAKE_FLAGS="--foreign --add-missing --copy"/' $(WEBKIT_DIR)/autogen.sh
- $(SED) 's/LIBTOOLIZE_FLAGS=.*/LIBTOOLIZE_FLAGS="--force --automake --copy"/' $(WEBKIT_DIR)/autogen.sh
-+cp package/webkit/gtk-doc.make $(WEBKIT_DIR)/
- # Don't run the configure step yet
--cd $(WEBKIT_DIR); AUTOGEN_CONFIGURE_ARGS=--version ./autogen.sh
-+cd $(WEBKIT_DIR); $(HOST_CONFIGURE_OPTS) AUTOGEN_CONFIGURE_ARGS=--version ./autogen.sh
- endef
+Below is the output from my failed build.
  
- WEBKIT_POST_EXTRACT_HOOKS += WEBKIT_AUTOGEN_PATCH
--- 
-1.6.3.3
+  INSTALL
+/home/lars/mdavison/buildroot-2009.11/output/target/lib/firmware/sb16/im
+a_adpcm_init.csp
+  INSTALL
+/home/lars/mdavison/buildroot-2009.11/output/target/lib/firmware/sb16/im
+a_adpcm_playback.csp
+  INSTALL
+/home/lars/mdavison/buildroot-2009.11/output/target/lib/firmware/sb16/im
+a_adpcm_capture.csp
+  DEPMOD  2.6.30.2
+make[1]: Leaving directory
+`/home/lars/mdavison/buildroot-2009.11/output/build/linux-2.6.30.2'
+WARNING: Can't read module make[1]:: No such file or directory
+WARNING: Can't read module Entering: No such file or directory
+WARNING: Can't read module directory: No such file or directory
+WARNING: Can't read module
+`/home/lars/mdavison/buildroot-2009.11/output/build/linux-2.6.30.2': No
+such file or directory
+WARNING: Can't read module 2.6.30.2: No such file or directory
+WARNING: Can't read module make[1]:: No such file or directory
+WARNING: Can't read module Leaving: No such file or directory
+WARNING: Can't read module directory: No such file or directory
+WARNING: Can't read module
+`/home/lars/mdavison/buildroot-2009.11/output/build/linux-2.6.30.2': No
+such file or directory
+FATAL: Could not open
+/home/lars/mdavison/buildroot-2009.11/output/target/lib/modules/2.6.28-1
+5-generic/modules.dep.temp for writing: No such file or directory
+make: ***
+[/home/lars/mdavison/buildroot-2009.11/output/stamps/linux_modules_targe
+t_installed] Error 1
+make: Leaving directory `/home/lars/mdavison/buildroot-2009.11'
+ 
+**********************************************************************
+This e-mail is the property of Lantronix. It is intended only for the person or entity to which it is addressed and may contain information that is privileged, confidential, or otherwise protected from disclosure. Distribution or copying of this e-mail, or the information contained herein, to anyone other than the intended recipient is prohibited.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100223/7858341e/attachment.htm>
