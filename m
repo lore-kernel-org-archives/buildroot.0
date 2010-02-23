@@ -1,37 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Feb 2010 21:06:44 +0100
-Subject: [Buildroot] [PATCH 20/40] dependencies: add perl as a mandatory
-	dependency
+Date: Tue, 23 Feb 2010 21:06:46 +0100
+Subject: [Buildroot] [PATCH 22/40] flex: install in the staging directory
 In-Reply-To: <cover.1266955555.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1266955555.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <496078a0a0530dad1206be6257f1bc91a70b645a.1266955555.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <3502bb056f0de1e4eecd7b0de6156daf18a2162c.1266955555.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that we might happen to build libxml-parser-perl and intltool,
-Perl becomes a mandatory dependency. This shouldn't be a problem since
-most distributions install Perl by default anyway.
+Flex contains a libfl.a directory, which programs for the target might
+link against. Therefore, we need to install flex to the staging
+directory. An example of such a program is gob2, which needs the
+yywrap() function, which is implemented by libfl.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/dependencies/dependencies.sh |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/flex/flex.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/dependencies/dependencies.sh b/toolchain/dependencies/dependencies.sh
-index d0190fd..146e080 100755
---- a/toolchain/dependencies/dependencies.sh
-+++ b/toolchain/dependencies/dependencies.sh
-@@ -122,7 +122,7 @@ if ! $SHELL --version 2>&1 | grep -q '^GNU bash'; then
- fi;
+diff --git a/package/flex/flex.mk b/package/flex/flex.mk
+index fed0d77..43e7d57 100644
+--- a/package/flex/flex.mk
++++ b/package/flex/flex.mk
+@@ -9,6 +9,7 @@ FLEX_SOURCE:=flex_$(FLEX_VERSION).orig.tar.gz
+ FLEX_PATCH:=flex_$(FLEX_VERSION)-$(FLEX_PATCH_VERSION).diff.gz
+ FLEX_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/f/flex
+ FLEX_DIR:=$(BUILD_DIR)/flex-$(FLEX_VERSION)
++FLEX_INSTALL_STAGING=YES
  
- # Check that a few mandatory programs are installed
--for prog in awk bison flex msgfmt makeinfo patch gzip bzip2 ; do
-+for prog in awk bison flex msgfmt makeinfo patch gzip bzip2 perl ; do
-     if ! which $prog > /dev/null ; then
- 	/bin/echo -e "\nYou must install '$prog' on your build machine";
- 	if test $prog = "makeinfo" ; then
+ # lex -> flex
+ define FLEX_INSTALL_LEX
 -- 
 1.6.3.3
