@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 23 Feb 2010 21:27:28 +0100
-Subject: [Buildroot] [git commit master] webkit: mention build failure with
-	old linuxthread toolchains
-Message-ID: <20100223202937.5DF9D776A1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] mplayer: use UTF-8 charset to avoid
+	iconv dependency
+Message-ID: <20100223202936.EECE0776A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +10,36 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=596bcb63fb26052b86c1271913747e701883dbfa
+commit: http://git.buildroot.net/buildroot/commit/?id=ca2293b3645452e58c9236ac0d8ab6e1be2fa2f0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I could have created a !dependency on !BR2_PTHREADS_OLD, but that
-wouldn't work with external toolchains. So, let's just add a notice in
-the help message of WebKit.
+The mplayer configure script was failing with:
+
+  Checking for iconv program ... no
+  No working iconv program found, use
+  --charset=UTF-8 to continue anyway.
+  If you also have problems with iconv library functions use --charset=noconv.
+  Messages in the GTK-2 interface will be broken then.
+
+Therefore, we pass --charset=UTF-8 instead of --charset=US-ASCII.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/webkit/Config.in |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/multimedia/mplayer/mplayer.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/webkit/Config.in b/package/webkit/Config.in
-index 3c669a5..10c8b38 100644
---- a/package/webkit/Config.in
-+++ b/package/webkit/Config.in
-@@ -14,6 +14,9 @@ config BR2_PACKAGE_WEBKIT
- 	help
- 	  WebKit is an open source, standards compliant web browser engine.
- 
-+	  Note that WebKit does not build with a toolchain using the
-+	  old linuxthreads library.
-+
- 	  http://webkit.org/
- 
- comment "webkit requires a toolchain with C++ support and WCHAR enabled"
+diff --git a/package/multimedia/mplayer/mplayer.mk b/package/multimedia/mplayer/mplayer.mk
+index 3d56ee0..538bac9 100644
+--- a/package/multimedia/mplayer/mplayer.mk
++++ b/package/multimedia/mplayer/mplayer.mk
+@@ -54,7 +54,7 @@ $(MPLAYER_DIR)/.configured: $(MPLAYER_DIR)/.unpacked
+ 		--as=$(TARGET_CROSS)as \
+ 		--with-extraincdir=$(STAGING_DIR)/usr/include \
+ 		--with-extralibdir=$(STAGING_DIR)/lib \
+-		--charset=US-ASCII \
++		--charset=UTF-8 \
+ 		--enable-mad \
+ 		--enable-fbdev \
+ 		$(MPLAYER_ENDIAN) \
 -- 
 1.6.3.3
