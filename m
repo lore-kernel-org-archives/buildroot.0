@@ -1,103 +1,49 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Tue, 23 Feb 2010 22:22:51 +0100
-Subject: [Buildroot] Newbie: AT91SAM9260 NAND Boot
-Message-ID: <D3796D57A9CF4CBE9A4A46D52BE466DE@apexjs>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 23 Feb 2010 22:40:28 +0100
+Subject: [Buildroot] make -C <buildroot_directory> failed
+In-Reply-To: <8128F0FD6C26E14C8EB4BFDB92B8D6B2134B26@2putt.int.lantronix.com>
+	(Matthew Davison's message of "Tue, 23 Feb 2010 12:56:10 -0800")
+References: <8128F0FD6C26E14C8EB4BFDB92B8D6B2134B26@2putt.int.lantronix.com>
+Message-ID: <87eikbeilv.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
- 
-I use buildroot to build a tarred rootfs
- 
-Then i confure U-boot to boot from NFS :
- 
-setenv bootfile uImage
+>>>>> "Matthew" == Matthew Davison <matt.davison@lantronix.com> writes:
 
-setenv serverip 192.168.1.110
+Hi,
 
-setenv bootargs mem=64M console=ttyS0,115200 root=/dev/nfs rw
-nfsroot=192.168.1.110:/home/johan/srcmain ip=dhcp
+ Matthew> Attempting to invoke the top level buildroot makefile from a
+ Matthew> higher level Makefile or simply with make -C
+ Matthew> <buildroot_directory> fails during the kernel build. This is
+ Matthew> even true if 'make -C .' is invoked from the top level
+ Matthew> buildroot directory, as long as a kernel build is enabled. It
+ Matthew> appears that the problem has something to do with make's
+ Matthew> "Entering/Leaving directory" messages, as the output below
+ Matthew> suggests. When I passed the --no-print-directory option to
+ Matthew> make, I was able to build without problems.
+ 
+ Matthew> Below is the output from my failed build.
+ 
+ Matthew>   INSTALL /home/lars/mdavison/buildroot-2009.11/output/target/lib/firmware/
+ Matthew> sb16/ima_adpcm_init.csp
+ Matthew>   INSTALL /home/lars/mdavison/buildroot-2009.11/output/target/lib/firmware/
+ Matthew> sb16/ima_adpcm_playback.csp
+ Matthew>   INSTALL /home/lars/mdavison/buildroot-2009.11/output/target/lib/firmware/
+ Matthew> sb16/ima_adpcm_capture.csp
+ Matthew>   DEPMOD  2.6.30.2
+ Matthew> make[1]: Leaving directory `/home/lars/mdavison/buildroot-2009.11/output/build
+ Matthew> /linux-2.6.30.2'
 
-tftpboot 0x21000000
+It looks to be an issue with the makefile of the Linux kernel. Please
+post your .config so we can try to reproduce the problem. Do you only
+have this issue with 2.6.30, or also other kernel versions? (perhaps
+give buildroot-2010.02-rc1 a try)
 
-bootm 0x21000000
-i use UBIFS on the nandflash : it seems to be the best choice
-once booted ftom nfs (for my board )
-#partition info
+Remember that you cannot build buildroot with a parallel toplevel make
+(-jX).
 
-#mtd
-#0  0x00000000-0x00040000 : "bootstrap"
-
-#1  0x00040000-0x00080000 : "u-boot"
-
-#2  0x00080000-0x00200000 : "u-boot environment"
-
-#3  0x00200000-0x00800000 : "kernel"
-
-#4  0x00800000-0x40000000 : "filesystems"
-then 
-
-#erasing mtd3 partition for the kernel 
-flash_eraseall /dev/mtd3
-#write the kernel image to mtd3
-nandwrite -p /dev/mtd3 /uImage
- 
-
-#erase mtd4 partition
-flash_eraseall /dev/mtd4
- 
-
-# attach mtd4 to the ubi driver
-# -m 4-->mtd block 4
-ubiattach /dev/ubi_ctrl -m 4
-
-#create a 128 Mbyte volume in ubi0 (partition 0)
-#-N rootfs ---> partition name
-# -s   	   --->size
-ubimkvol /dev/ubi0 -N rootfs -s 128MiB
-#rest of the nand 
-
-ubimkvol /dev/ubi0 -N data -m
- 
-
-#create mountpoint
-mkdir /mnt/vol0
-#mount the ubi volume named rootfs to /mnt/vol0
-mount -t ubifs ubi0:rootfs /mnt/vol0
-#cd into it
-cd /mnt/vol0
-#untar the tar containing the rootfilesystem generated with buildroot
-tar xf /at91sam9260dfc-rootfs.arm.tar
-sync
- 
-then reboot and setup u-boot to boot from nand
- 
-
-setenv bootargs mem=64M console=ttyS0,115200n8 ubi.mtd=4 root=ubi0:rootfs rw
-rootfstype=ubifs
-
-nand read 0x21000000 0x00200000 0x200000
-bootm 0x21000000
- 
-this should help you
- 
-Johan
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100223/55742d82/attachment.htm>
+-- 
+Bye, Peter Korsgaard
