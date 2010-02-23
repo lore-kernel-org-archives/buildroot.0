@@ -1,38 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Feb 2010 21:06:36 +0100
-Subject: [Buildroot] [PATCH 12/40] libpng: enable compilation on the host
+Date: Tue, 23 Feb 2010 21:06:25 +0100
+Subject: [Buildroot] [PATCH 01/40] automake: add build dependency on
+	host-autoconf
 In-Reply-To: <cover.1266955555.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1266955555.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <988b4d8d1cce4187bb0600cebd31dcff7c726056.1266955555.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <f03faaf3ab5bbd5f375c47c3cf12f1254d1237bd.1266955555.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libpng is needed on the host to build ace_of_penguins.
+automake for the target fails to build if autoconf is not installed on
+the host:
+
+checking whether autoconf is installed... no
+configure: error: Autoconf 2.58 or better is required.
+    Please make sure it is installed and in your PATH.
+make: *** [/home/test/brbuilttest/build/automake-1.10/.stamp_configured] Error 1
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libpng/libpng.mk |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ package/automake/automake.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
-index 1297c89..86e943c 100644
---- a/package/libpng/libpng.mk
-+++ b/package/libpng/libpng.mk
-@@ -11,7 +11,12 @@ LIBPNG_INSTALL_STAGING = YES
- LIBPNG_CONF_OPT = --without-libpng-compat
- LIBPNG_DEPENDENCIES = host-pkg-config zlib
+diff --git a/package/automake/automake.mk b/package/automake/automake.mk
+index eb3b375..db935a4 100644
+--- a/package/automake/automake.mk
++++ b/package/automake/automake.mk
+@@ -11,7 +11,7 @@ ifeq ($(BR2_ENABLE_DEBUG),y) # install-exec doesn't install aclocal stuff
+ AUTOMAKE_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
+ endif
  
-+HOST_LIBPNG_LIBTOOL_PATCH = NO
-+HOST_LIBPNG_CONF_OPT = --without-libpng-compat
-+HOST_LIBPNG_DEPENDENCIES = host-pkg-config host-zlib
-+
- $(eval $(call AUTOTARGETS,package,libpng))
-+$(eval $(call AUTOTARGETS,package,libpng,host))
+-AUTOMAKE_DEPENDENCIES = autoconf microperl
++AUTOMAKE_DEPENDENCIES = host-autoconf autoconf microperl
  
- $(LIBPNG_HOOK_POST_INSTALL):
- 	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" \
+ HOST_AUTOMAKE_DEPENDENCIES = host-autoconf
+ 
 -- 
 1.6.3.3
