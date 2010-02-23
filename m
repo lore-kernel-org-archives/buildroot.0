@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 23 Feb 2010 21:27:28 +0100
-Subject: [Buildroot] [git commit master] dosfstools: make sure install
-	targets aren't run everytime
-Message-ID: <20100223202934.B6206776A1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] libeXosip: do not re-run targets at
+	every invocation of 'make'
+Message-ID: <20100223202935.9D936776A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,76 +10,54 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e83529882b71cb8a2c6ba2c997308196a2857af0
+commit: http://git.buildroot.net/buildroot/commit/?id=1cd56dc514cc4da46cd7abc1782fe258ae1b3dcb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Adding real targets to $(TARGETS) doesn't work, since they are
-prefixed __real_tgt by the main Makefile. 'make' then always thinks
-that these targets aren't up-to-date, and re-generate them every time.
-
-Therefore, we switch dosfstools to the more common way of handling
-packages, with a phony target added to $(TARGETS), this phony target
-depending on real targets.
+Make sure that we touch the target so that the target is newer than
+the .compiled stamp file.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dosfstools/dosfstools.mk |   32 +++++++++++++++++++-------------
- 1 files changed, 19 insertions(+), 13 deletions(-)
+ package/libeXosip2/libeXosip2.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-diff --git a/package/dosfstools/dosfstools.mk b/package/dosfstools/dosfstools.mk
-index e1e9fe3..b826ab1 100644
---- a/package/dosfstools/dosfstools.mk
-+++ b/package/dosfstools/dosfstools.mk
-@@ -32,7 +32,8 @@ $(DOSFSTOOLS_DIR)/.built : $(DOSFSTOOLS_DIR)/.unpacked
- 	$(STRIPCMD) $(DOSFSTOOLS_DIR)/$(DOSFSLABEL_BINARY)
- 	touch $@
+diff --git a/package/libeXosip2/libeXosip2.mk b/package/libeXosip2/libeXosip2.mk
+index 09b6022..7f282b7 100644
+--- a/package/libeXosip2/libeXosip2.mk
++++ b/package/libeXosip2/libeXosip2.mk
+@@ -43,27 +43,33 @@ $(LIBEXOSIP2_DIR)/.compiled: $(LIBEXOSIP2_DIR)/.configured
  
--$(TARGET_DIR)/$(MKDOSFS_TARGET_BINARY): $(DOSFSTOOLS_DIR)/.built
-+$(TARGET_DIR)/$(MKDOSFS_TARGET_BINARY): # $(DOSFSTOOLS_DIR)/.built
-+	echo foo
- 	cp -a $(DOSFSTOOLS_DIR)/$(MKDOSFS_BINARY) $@
- 	touch -c $@
+ $(STAGING_DIR)/usr/lib/libeXosip2.so: $(LIBEXOSIP2_DIR)/.compiled
+ 	cp -dpf $(LIBEXOSIP2_DIR)/src/.libs/libeXosip2.so* $(STAGING_DIR)/usr/lib
++	touch $@
  
-@@ -44,7 +45,20 @@ $(TARGET_DIR)/$(DOSFSLABEL_TARGET_BINARY): $(DOSFSTOOLS_DIR)/.built
- 	cp -a $(DOSFSTOOLS_DIR)/$(DOSFSLABEL_BINARY) $@
- 	touch -c $@
+ $(STAGING_DIR)/usr/lib/libeXosip2.a: $(LIBEXOSIP2_DIR)/.compiled
+ 	cp -dpf $(LIBEXOSIP2_DIR)/src/.libs/libeXosip2.a $(STAGING_DIR)/usr/lib
+ 	cp -dpf $(LIBEXOSIP2_DIR)/include/*.h $(STAGING_DIR)/usr/include
++	touch $@
  
--dosfstools: $(TARGET_DIR)/$(DOSFSTOOLS_TARGET_BINARY) $(TARGET_DIR)/$(DOSFSCK_TARGET_BINARY)
-+DOSFSTOOLS=
-+ifeq ($(BR2_PACKAGE_DOSFSTOOLS_MKDOSFS),y)
-+DOSFSTOOLS+=$(TARGET_DIR)/$(MKDOSFS_TARGET_BINARY)
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DOSFSTOOLS_DOSFSCK),y)
-+DOSFSTOOLS+=$(TARGET_DIR)/$(DOSFSCK_TARGET_BINARY)
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DOSFSTOOLS_DOSFSLABEL),y)
-+DOSFSTOOLS+=$(TARGET_DIR)/$(DOSFSLABEL_TARGET_BINARY)
-+endif
-+
-+dosfstools: $(DOSFSTOOLS)
+ $(STAGING_DIR)/usr/lib/libeXosip2.la: $(LIBEXOSIP2_DIR)/.compiled
+ 	cp -dpf $(LIBEXOSIP2_DIR)/src/libeXosip2.la $(STAGING_DIR)/usr/lib
+ 	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libeXosip2.la
++	touch $@
  
- dosfstools-clean:
- 	rm -f $(TARGET_DIR)/$(MKDOSFS_TARGET_BINARY)
-@@ -60,14 +74,6 @@ dosfstools-dirclean:
- # Toplevel Makefile options
- #
- #############################################################
--ifeq ($(BR2_PACKAGE_DOSFSTOOLS_MKDOSFS),y)
--TARGETS+=$(TARGET_DIR)/$(MKDOSFS_TARGET_BINARY)
--endif
--
--ifeq ($(BR2_PACKAGE_DOSFSTOOLS_DOSFSCK),y)
--TARGETS+=$(TARGET_DIR)/$(DOSFSCK_TARGET_BINARY)
--endif
--
--ifeq ($(BR2_PACKAGE_DOSFSTOOLS_DOSFSLABEL),y)
--TARGETS+=$(TARGET_DIR)/$(DOSFSLABEL_TARGET_BINARY)
--endif
-+ifeq ($(BR2_PACKAGE_DOSFSTOOLS),y)
-+TARGETS+=dosfstools
-+endif
-\ No newline at end of file
+ $(STAGING_DIR)/usr/bin/sip_reg: $(LIBEXOSIP2_DIR)/.compiled
+ 	cp -dpf $(LIBEXOSIP2_DIR)/tools/.libs/sip_reg $(STAGING_DIR)/usr/bin
++	touch $@
+ 
+ 
+ $(TARGET_DIR)/usr/lib/libeXosip2.so: $(STAGING_DIR)/usr/lib/libeXosip2.so
+ 	mkdir -p $(TARGET_DIR)/usr/lib
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libeXosip2.so* $(TARGET_DIR)/usr/lib/
+ 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libeXosip2.so*
++	touch $@
+ 
+ $(TARGET_DIR)/usr/bin/sip_reg: $(STAGING_DIR)/usr/bin/sip_reg
+ 	mkdir -p $(TARGET_DIR)/usr/bin
+ 	cp -dpf $(STAGING_DIR)/usr/bin/sip_reg $(TARGET_DIR)/usr/bin
++	touch $@
+ 
+ 
+ 
 -- 
 1.6.3.3
