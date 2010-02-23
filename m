@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 23 Feb 2010 21:27:28 +0100
-Subject: [Buildroot] [git commit master] ace_of_penguins: add dependency on
-	host-libpng
-Message-ID: <20100223202926.3D7CF776A1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] libpng: enable compilation on the
+	host
+Message-ID: <20100223202925.BCD81776A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,28 +10,32 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3422dc5efe3557f32ea9f71ec2e27c512288015b
+commit: http://git.buildroot.net/buildroot/commit/?id=988b4d8d1cce4187bb0600cebd31dcff7c726056
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libpng is needed on the host to build the make-imglib utility, built
-during the compilation of ace_of_penguins for the target.
+libpng is needed on the host to build ace_of_penguins.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/games/ace_of_penguins/ace_of_penguins.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/libpng/libpng.mk |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/package/games/ace_of_penguins/ace_of_penguins.mk b/package/games/ace_of_penguins/ace_of_penguins.mk
-index fe3e204..a106d14 100644
---- a/package/games/ace_of_penguins/ace_of_penguins.mk
-+++ b/package/games/ace_of_penguins/ace_of_penguins.mk
-@@ -10,6 +10,6 @@ ACE_OF_PENGUINS_AUTORECONF = YES
- ACE_OF_PENGUINS_STAGING = NO
- ACE_OF_PENGUINS_TARGET = YES
+diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+index 1297c89..86e943c 100644
+--- a/package/libpng/libpng.mk
++++ b/package/libpng/libpng.mk
+@@ -11,7 +11,12 @@ LIBPNG_INSTALL_STAGING = YES
+ LIBPNG_CONF_OPT = --without-libpng-compat
+ LIBPNG_DEPENDENCIES = host-pkg-config zlib
  
--ACE_OF_PENGUINS_DEPENDENCIES = libpng xserver_xorg-server xlib_libXpm
-+ACE_OF_PENGUINS_DEPENDENCIES = libpng host-libpng xserver_xorg-server xlib_libXpm
++HOST_LIBPNG_LIBTOOL_PATCH = NO
++HOST_LIBPNG_CONF_OPT = --without-libpng-compat
++HOST_LIBPNG_DEPENDENCIES = host-pkg-config host-zlib
++
+ $(eval $(call AUTOTARGETS,package,libpng))
++$(eval $(call AUTOTARGETS,package,libpng,host))
  
- $(eval $(call AUTOTARGETS,package/games,ace_of_penguins))
+ $(LIBPNG_HOOK_POST_INSTALL):
+ 	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" \
 -- 
 1.6.3.3
