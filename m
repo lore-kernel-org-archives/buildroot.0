@@ -1,42 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Feb 2010 21:06:28 +0100
-Subject: [Buildroot] [PATCH 04/40] libxslt: enable compilation on host
+Date: Tue, 23 Feb 2010 21:06:36 +0100
+Subject: [Buildroot] [PATCH 12/40] libpng: enable compilation on the host
 In-Reply-To: <cover.1266955555.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1266955555.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <73c937229bff334c9e4b88b7cc094ff4e576cdf4.1266955555.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <988b4d8d1cce4187bb0600cebd31dcff7c726056.1266955555.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Compiling libxcb (from the X.org stack) requires xsltproc on the host,
-which is part of libxslt.
+libpng is needed on the host to build ace_of_penguins.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libxslt/libxslt.mk |    8 ++++++++
- 1 files changed, 8 insertions(+), 0 deletions(-)
+ package/libpng/libpng.mk |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
-index 03c1131..4bf61b5 100644
---- a/package/libxslt/libxslt.mk
-+++ b/package/libxslt/libxslt.mk
-@@ -25,7 +25,15 @@ LIBXSLT_CONF_OPT = --with-gnu-ld --enable-shared \
+diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+index 1297c89..86e943c 100644
+--- a/package/libpng/libpng.mk
++++ b/package/libpng/libpng.mk
+@@ -11,7 +11,12 @@ LIBPNG_INSTALL_STAGING = YES
+ LIBPNG_CONF_OPT = --without-libpng-compat
+ LIBPNG_DEPENDENCIES = host-pkg-config zlib
  
- LIBXSLT_DEPENDENCIES = libxml2 $(LIBXSLT_DEPENDENCIES_EXTRA)
- 
-+HOST_LIBXSLT_CONF_OPT = --enable-shared \
-+			--without-debugging \
-+			--without-python \
-+			--without-threads
++HOST_LIBPNG_LIBTOOL_PATCH = NO
++HOST_LIBPNG_CONF_OPT = --without-libpng-compat
++HOST_LIBPNG_DEPENDENCIES = host-pkg-config host-zlib
 +
-+HOST_LIBXSLT_DEPENDENCIES = host-libxml2
-+
- $(eval $(call AUTOTARGETS,package,libxslt))
-+$(eval $(call AUTOTARGETS,package,libxslt,host))
+ $(eval $(call AUTOTARGETS,package,libpng))
++$(eval $(call AUTOTARGETS,package,libpng,host))
  
- $(LIBXSLT_HOOK_POST_INSTALL):
- 	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/xslt-config
+ $(LIBPNG_HOOK_POST_INSTALL):
+ 	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" \
 -- 
 1.6.3.3
