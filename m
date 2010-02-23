@@ -1,40 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Feb 2010 21:06:30 +0100
-Subject: [Buildroot] [PATCH 06/40] xapp_mkfontscale: enable compilation for
-	the host and fix deps
+Date: Tue, 23 Feb 2010 21:06:47 +0100
+Subject: [Buildroot] [PATCH 23/40] gob2: update dependency on flex
 In-Reply-To: <cover.1266955555.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1266955555.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <1786b39f0b85f2efa383ca8714ca88fdecafba84.1266955555.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <1844bd894194d44472d7e1f41e3e0f52a6359117.1266955555.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mkfontscale on the host is required to build xfonts-encoding for the
-target.
-
-We also fix the dependencies. xlib_libX11 is not needed to compile
-xapp_mkfontscale. However, xproto_xproto is needed.
+gob2 for the target needs both flex on the host (for running the flex
+program at compile time) and flex on the target (so that it can link
+against libfl.a).
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ package/gob2/Config.in |    1 +
+ package/gob2/gob2.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk b/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk
-index 05a3f81..1cbe0b4 100644
---- a/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk
-+++ b/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk
-@@ -8,6 +8,8 @@ XAPP_MKFONTSCALE_VERSION = 1.0.5
- XAPP_MKFONTSCALE_SOURCE = mkfontscale-$(XAPP_MKFONTSCALE_VERSION).tar.bz2
- XAPP_MKFONTSCALE_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_MKFONTSCALE_AUTORECONF = NO
--XAPP_MKFONTSCALE_DEPENDENCIES = freetype xlib_libX11 xlib_libfontenc
-+XAPP_MKFONTSCALE_DEPENDENCIES = zlib freetype xlib_libfontenc xproto_xproto
-+HOST_XAPP_MKFONTSCALE_DEPENDENCIES = host-zlib host-freetype host-xlib_libfontenc host-xproto_xproto
+diff --git a/package/gob2/Config.in b/package/gob2/Config.in
+index 314a1da..2545baf 100644
+--- a/package/gob2/Config.in
++++ b/package/gob2/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_GOB2
+ 	bool "gob2"
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_FLEX
++	select BR2_PACKAGE_FLEX_LIBFL
+ 	select BR2_PACKAGE_BISON
+ 	help
+ 	  GOB (GTK+ Object Builder) is a preprocessor which simplifies
+diff --git a/package/gob2/gob2.mk b/package/gob2/gob2.mk
+index cdf7961..5d50ed6 100644
+--- a/package/gob2/gob2.mk
++++ b/package/gob2/gob2.mk
+@@ -7,7 +7,7 @@ GOB2_VERSION = 2.0.15
+ GOB2_SOURCE = gob2-$(GOB2_VERSION).tar.gz
+ GOB2_SITE = http://ftp.5z.com/pub/gob/
  
- $(eval $(call AUTOTARGETS,package/x11r7,xapp_mkfontscale))
-+$(eval $(call AUTOTARGETS,package/x11r7,xapp_mkfontscale,host))
+-GOB2_DEPENDENCIES = libglib2 flex bison host-pkg-config
++GOB2_DEPENDENCIES = libglib2 flex bison host-pkg-config host-flex
+ 
+ HOST_GOB2_DEPENDENCIES = host-libglib2
+ 
 -- 
 1.6.3.3
