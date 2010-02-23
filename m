@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 23 Feb 2010 21:27:28 +0100
-Subject: [Buildroot] [git commit master] shared-mime-info: run
-	update-mime-database with correct env variables
-Message-ID: <20100223202931.35D20776A1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] kexec: bump version to fix build
+	failure
+Message-ID: <20100223202933.0214C776A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,34 +10,26 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=253f240cc5804bde4fab685cefa1f4479e5c6586
+commit: http://git.buildroot.net/buildroot/commit/?id=fbcedeab9dc3122658af2034d39fbde820c8a8e9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-When installing shared-mime-info on the target, we runn
-update-mime-database, which has been built previously by building and
-installing shared-mime-info for the host. However, for
-update-mime-database (host version) to run properly, we must pass the
-appropriate LD_LIBRARY_PATH variable.
-
-We re-use the existing $(HOST_MAKE_ENV) variable to pass all the
-appropriate variables.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/shared-mime-info/shared-mime-info.mk |    2 +-
+ package/kexec/kexec.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/shared-mime-info/shared-mime-info.mk b/package/shared-mime-info/shared-mime-info.mk
-index cfd3521..80b0ccc 100644
---- a/package/shared-mime-info/shared-mime-info.mk
-+++ b/package/shared-mime-info/shared-mime-info.mk
-@@ -29,6 +29,6 @@ SHARED_MIME_INFO_HOST_BINARY:=$(HOST_DIR)/usr/bin/update-mime-database
- 
- # update the shared-mime-info database in the target
- $(SHARED_MIME_INFO_HOOK_POST_INSTALL): host-shared-mime-info
--	$(SHARED_MIME_INFO_HOST_BINARY) $(STAGING_DIR)/usr/share/mime
-+	$(HOST_MAKE_ENV) $(SHARED_MIME_INFO_HOST_BINARY) $(STAGING_DIR)/usr/share/mime
- 	$(INSTALL) -D $(STAGING_DIR)/usr/share/mime/mime.cache $(TARGET_DIR)/usr/share/mime/mime.cache
- 	touch $@
+diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
+index a0fb2fd..4367885 100644
+--- a/package/kexec/kexec.mk
++++ b/package/kexec/kexec.mk
+@@ -3,7 +3,7 @@
+ # kexec
+ #
+ #############################################################
+-KEXEC_VERSION = 2.0.0
++KEXEC_VERSION = 2.0.1
+ KEXEC_SOURCE = kexec-tools-$(KEXEC_VERSION).tar.bz2
+ KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/horms/kexec-tools/
+ # no install-strip/install-exec
 -- 
 1.6.3.3
