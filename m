@@ -1,8 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 23 Feb 2010 21:27:28 +0100
-Subject: [Buildroot] [git commit master] xfont_font-util: convert to the
-	autotools infrastructure
-Message-ID: <20100223202924.D6947776A1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] ace_of_penguins: mark as BROKEN
+Message-ID: <20100223202926.AF482776A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,101 +9,35 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=abc1479ea795a18a743ea513e33179058bdfe6b6
+commit: http://git.buildroot.net/buildroot/commit/?id=7452b4edfa1c8385d602950bcaeb2cb3afdfdf3c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+This package is BROKEN in the way it compiles make-imglib and text2c
+for the host while being in cross-compiled mode. It does not use
+CC_FOR_BUILD and CFLAGS_FOR_BUILD as it should.
+
+No upstream release has been made since 2001 and since it is a
+relatively useless package, I don't think it's worth the trouble to
+sanitize its build system.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xfont_font-util/xfont_font-util.mk |   74 ++--------------------
- 1 files changed, 6 insertions(+), 68 deletions(-)
+ package/games/ace_of_penguins/Config.in |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/package/x11r7/xfont_font-util/xfont_font-util.mk b/package/x11r7/xfont_font-util/xfont_font-util.mk
-index 38e7e80..88dce38 100644
---- a/package/x11r7/xfont_font-util/xfont_font-util.mk
-+++ b/package/x11r7/xfont_font-util/xfont_font-util.mk
-@@ -5,76 +5,14 @@
- ################################################################################
- 
- XFONT_FONT_UTIL_VERSION = 1.0.1
--XFONT_FONT_UTIL_NAME = font-util-$(XFONT_FONT_UTIL_VERSION)
- XFONT_FONT_UTIL_SOURCE = font-util-$(XFONT_FONT_UTIL_VERSION).tar.bz2
- XFONT_FONT_UTIL_SITE = http://xorg.freedesktop.org/releases/individual/font
--XFONT_FONT_UTIL_AUTORECONF = NO
--XFONT_FONT_UTIL_DIR=$(BUILD_DIR)/$(XFONT_FONT_UTIL_NAME)
--XFONT_FONT_UTIL_CAT:=$(BZCAT)
-+XFONT_FONT_UTIL_DEPENDENCIES = host-pkg-config
- 
--$(DL_DIR)/$(XFONT_FONT_UTIL_SOURCE):
--	 $(call DOWNLOAD,$(XFONT_FONT_UTIL_SITE),$(XFONT_FONT_UTIL_SOURCE))
-+define XFONT_FONT_UTIL_POST_INSTALL_FIXES
-+ $(@D)/post-install.sh $(STAGING_DIR)
-+endef
- 
--xfont_font-util-source: $(DL_DIR)/$(XFONT_FONT_UTIL_SOURCE)
--
--$(XFONT_FONT_UTIL_DIR)/.unpacked: $(DL_DIR)/$(XFONT_FONT_UTIL_SOURCE)
--	$(XFONT_FONT_UTIL_CAT) $(DL_DIR)/$(XFONT_FONT_UTIL_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(XFONT_FONT_UTIL_DIR) package/x11r7/xfont_font-util/ \*.patch
--	$(CONFIG_UPDATE) $(XFONT_FONT_UTIL_DIR)
--	touch $@
--
--$(XFONT_FONT_UTIL_DIR)/.configured: $(XFONT_FONT_UTIL_DIR)/.unpacked
--	(cd $(XFONT_FONT_UTIL_DIR) && rm -rf config.cache)
--	(cd $(XFONT_FONT_UTIL_DIR) && \
--		$(TARGET_CONFIGURE_OPTS) \
--		$(TARGET_CONFIGURE_ARGS) \
--		./configure $(QUIET) \
--		--target=$(GNU_TARGET_NAME) \
--		--host=$(GNU_TARGET_NAME) \
--		--build=$(GNU_HOST_NAME) \
--		--prefix=/usr \
--		--exec-prefix=/usr \
--		--bindir=/usr/bin \
--		--sbindir=/usr/sbin \
--		--libdir=/usr/lib \
--		--libexecdir=/usr/lib \
--		--sysconfdir=/etc \
--		--datadir=/usr/share \
--		--localstatedir=/var \
--		--includedir=/usr/include \
--		--mandir=/usr/share/man \
--		--infodir=/usr/share/info \
--	)
--	touch $@
--
--$(XFONT_FONT_UTIL_DIR)/.compiled: $(XFONT_FONT_UTIL_DIR)/.configured
--	$(MAKE) -C $(XFONT_FONT_UTIL_DIR)
--	touch $@
--
--$(XFONT_FONT_UTIL_DIR)/.installed: $(XFONT_FONT_UTIL_DIR)/.compiled
--	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(XFONT_FONT_UTIL_DIR) install
--	touch $@
--
--$(XFONT_FONT_UTIL_DIR)/.hacked: $(XFONT_FONT_UTIL_DIR)/.installed
--	( package/x11r7/xfont_font-util/post-install.sh $(STAGING_DIR) )
--	touch $@
--
--xfont_font-util: host-pkg-config $(XFONT_FONT_UTIL_DIR)/.hacked
--
--xfont_font-util-unpacked: $(XFONT_FONT_UTIL_DIR)/.unpacked
--
--xfont_font-util-clean:
--	-$(MAKE) -C $(XFONT_FONT_UTIL_DIR) clean
--
--xfont_font-util-dirclean:
--	rm -rf $(XFONT_FONT_UTIL_DIR)
--
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(BR2_PACKAGE_XFONT_FONT_UTIL),y)
--TARGETS+=xfont_font-util
--endif
-+XFONT_FONT_UTIL_POST_INSTALL_STAGING_HOOKS += XFONT_FONT_UTIL_POST_INSTALL_FIXES
- 
-+$(eval $(call AUTOTARGETS,package/x11r7,xfont_font-util))
-\ No newline at end of file
+diff --git a/package/games/ace_of_penguins/Config.in b/package/games/ace_of_penguins/Config.in
+index 1d5a367..b3015c6 100644
+--- a/package/games/ace_of_penguins/Config.in
++++ b/package/games/ace_of_penguins/Config.in
+@@ -3,6 +3,9 @@ config BR2_PACKAGE_ACE_OF_PENGUINS
+ 	select BR2_PACKAGE_LIBPNG
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on BR2_PACKAGE_XLIB_LIBXPM
++	# Build system is broken for tools that need to be compiled
++	# on the host
++	depends on BROKEN
+ 	help
+ 	  The Ace of Penguins is a set of Unix/X solitaire games based
+ 	  on the ones available for Windows but with a number of
 -- 
 1.6.3.3
