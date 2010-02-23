@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 23 Feb 2010 21:27:28 +0100
-Subject: [Buildroot] [git commit master] libeXosip: do not re-run targets at
-	every invocation of 'make'
-Message-ID: <20100223202935.9D936776A1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] package infrastructure: add
+	LD_LIBRARY_PATH
+Message-ID: <20100223202925.536EE776A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,54 +10,40 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1cd56dc514cc4da46cd7abc1782fe258ae1b3dcb
+commit: http://git.buildroot.net/buildroot/commit/?id=c1b6242fdcf2cff7ebf09fec4cc1be58963e8427
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Make sure that we touch the target so that the target is newer than
-the .compiled stamp file.
+During the compilation of target or host packages, host tools might be
+used, and in turn, they might use host libraries installed in
+$(HOST_DIR)/usr/lib. Therefore, we pass a LD_LIBRARY_PATH variable
+when building packages.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libeXosip2/libeXosip2.mk |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+ package/Makefile.in |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/libeXosip2/libeXosip2.mk b/package/libeXosip2/libeXosip2.mk
-index 09b6022..7f282b7 100644
---- a/package/libeXosip2/libeXosip2.mk
-+++ b/package/libeXosip2/libeXosip2.mk
-@@ -43,27 +43,33 @@ $(LIBEXOSIP2_DIR)/.compiled: $(LIBEXOSIP2_DIR)/.configured
+diff --git a/package/Makefile.in b/package/Makefile.in
+index bc0ac7c..043ef3e 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -236,7 +236,8 @@ TARGET_CONFIGURE_ENV=\
+ 	LDFLAGS="$(TARGET_LDFLAGS)" \
+ 	FCFLAGS="$(TARGET_FCFLAGS)" \
  
- $(STAGING_DIR)/usr/lib/libeXosip2.so: $(LIBEXOSIP2_DIR)/.compiled
- 	cp -dpf $(LIBEXOSIP2_DIR)/src/.libs/libeXosip2.so* $(STAGING_DIR)/usr/lib
-+	touch $@
+-TARGET_MAKE_ENV=PATH=$(TARGET_PATH)
++TARGET_MAKE_ENV=PATH=$(TARGET_PATH) \
++		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)"
  
- $(STAGING_DIR)/usr/lib/libeXosip2.a: $(LIBEXOSIP2_DIR)/.compiled
- 	cp -dpf $(LIBEXOSIP2_DIR)/src/.libs/libeXosip2.a $(STAGING_DIR)/usr/lib
- 	cp -dpf $(LIBEXOSIP2_DIR)/include/*.h $(STAGING_DIR)/usr/include
-+	touch $@
+ HOST_CONFIGURE_OPTS=PATH=$(HOST_PATH) \
+ 		AR="$(HOSTAR)" \
+@@ -277,6 +278,7 @@ HOST_CONFIGURE_OPTS=PATH=$(HOST_PATH) \
+ 		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig"
  
- $(STAGING_DIR)/usr/lib/libeXosip2.la: $(LIBEXOSIP2_DIR)/.compiled
- 	cp -dpf $(LIBEXOSIP2_DIR)/src/libeXosip2.la $(STAGING_DIR)/usr/lib
- 	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libeXosip2.la
-+	touch $@
- 
- $(STAGING_DIR)/usr/bin/sip_reg: $(LIBEXOSIP2_DIR)/.compiled
- 	cp -dpf $(LIBEXOSIP2_DIR)/tools/.libs/sip_reg $(STAGING_DIR)/usr/bin
-+	touch $@
- 
- 
- $(TARGET_DIR)/usr/lib/libeXosip2.so: $(STAGING_DIR)/usr/lib/libeXosip2.so
- 	mkdir -p $(TARGET_DIR)/usr/lib
- 	cp -dpf $(STAGING_DIR)/usr/lib/libeXosip2.so* $(TARGET_DIR)/usr/lib/
- 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libeXosip2.so*
-+	touch $@
- 
- $(TARGET_DIR)/usr/bin/sip_reg: $(STAGING_DIR)/usr/bin/sip_reg
- 	mkdir -p $(TARGET_DIR)/usr/bin
- 	cp -dpf $(STAGING_DIR)/usr/bin/sip_reg $(TARGET_DIR)/usr/bin
-+	touch $@
- 
- 
+ HOST_MAKE_ENV=PATH=$(HOST_PATH) \
++		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)" \
+ 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+ 		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig"
  
 -- 
 1.6.3.3
