@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 23 Feb 2010 21:27:28 +0100
-Subject: [Buildroot] [git commit master] xfont_encoding: add mkfontscale on
-	the host as dependency
-Message-ID: <20100223202923.81DCE776A1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] imagemagick: help configure to
+	detect file_offset_bits
+Message-ID: <20100223202931.9E390776A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,27 +10,43 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d61ed6f32207ced6d7afa0d45473b63a0acf248d
+commit: http://git.buildroot.net/buildroot/commit/?id=cf04b9e0c5f7b55817999a5dd01d7ce740fd3d8e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-mkfontscale on the host is needed to build xfont_encoding, therefore
-we add host-xapp_mkfontscale as a dependency.
+imagemagick configure script wants to run programs to detect the
+file_offset_bits, but fails since it is running cross-compile
+mode. Therefore, we help the configure script by passing the
+appropriate ac_cv variable.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xfont_encodings/xfont_encodings.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/imagemagick/imagemagick.mk |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
 
-diff --git a/package/x11r7/xfont_encodings/xfont_encodings.mk b/package/x11r7/xfont_encodings/xfont_encodings.mk
-index 74256d1..9097735 100644
---- a/package/x11r7/xfont_encodings/xfont_encodings.mk
-+++ b/package/x11r7/xfont_encodings/xfont_encodings.mk
-@@ -9,5 +9,6 @@ XFONT_ENCODINGS_SOURCE = encodings-$(XFONT_ENCODINGS_VERSION).tar.bz2
- XFONT_ENCODINGS_SITE = http://xorg.freedesktop.org/releases/individual/font
- XFONT_ENCODINGS_AUTORECONF = NO
- XFONT_ENCODINGS_MAKE_OPT =
-+XFONT_ENCODINGS_DEPENDENCIES = host-xapp_mkfontscale
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 2bcd076..e858430 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -31,6 +31,12 @@ $(IMAGEMAGICK_DIR)/.unpacked: $(DL_DIR)/$(IMAGEMAGICK_SOURCE)
+ 	$(CONFIG_UPDATE) $(IMAGEMAGICK_DIR)/config
+ 	touch $@
  
- $(eval $(call AUTOTARGETS,package/x11r7,xfont_encodings))
++ifeq ($(BR2_LARGEFILE),y)
++IMAGEMAGICK_CONF_OPTS = ac_cv_sys_file_offset_bits=64
++else
++IMAGEMAGICK_CONF_OPTS = ac_cv_sys_file_offset_bits=32
++endif
++
+ $(IMAGEMAGICK_DIR)/.configured: $(IMAGEMAGICK_DIR)/.unpacked
+ 	(cd $(IMAGEMAGICK_DIR); rm -f config.cache; \
+ 		$(TARGET_CONFIGURE_OPTS) \
+@@ -55,6 +61,7 @@ $(IMAGEMAGICK_DIR)/.configured: $(IMAGEMAGICK_DIR)/.unpacked
+ 		--without-fpx \
+ 		--without-freetype \
+ 		--without-x \
++		$(IMAGEMAGICK_CONF_OPTS) \
+ 	)
+ 	touch $@
+ 
 -- 
 1.6.3.3
