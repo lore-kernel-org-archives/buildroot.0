@@ -1,34 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Feb 2010 21:06:51 +0100
-Subject: [Buildroot] [PATCH 27/40] iw: give path to pkg-config
+Date: Tue, 23 Feb 2010 21:06:39 +0100
+Subject: [Buildroot] [PATCH 15/40] dependencies: add gzip and bzip2 as base
+	dependencies
 In-Reply-To: <cover.1266955555.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1266955555.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <d5ffabd4c33c7d2a37ca8c7b98601a19286bfe12.1266955555.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <a47ce9d3df148cbfbd38355c80624fb5abc78a77.1266955555.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-At install stage, iw needs pkg-config, through the PKG_CONFIG
-environment variable.
+They are needed to uncompress the tarballs we download. bzip2, for
+instance, is not necessarly installed by default on basic Debian
+systems.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/iw/iw.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ toolchain/dependencies/dependencies.sh |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/iw/iw.mk b/package/iw/iw.mk
-index 2dd1cd4..89fd604 100644
---- a/package/iw/iw.mk
-+++ b/package/iw/iw.mk
-@@ -11,6 +11,7 @@ IW_DEPENDENCIES = libnl
- IW_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
- IW_CONFIG = $(IW_DIR)/.config
- IW_MAKE_ENV = PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
-+	PKG_CONFIG="$(HOST_DIR)/usr/bin/pkg-config" \
- 	GIT_DIR=$(IW_DIR)
+diff --git a/toolchain/dependencies/dependencies.sh b/toolchain/dependencies/dependencies.sh
+index f5b2621..d0190fd 100755
+--- a/toolchain/dependencies/dependencies.sh
++++ b/toolchain/dependencies/dependencies.sh
+@@ -122,7 +122,7 @@ if ! $SHELL --version 2>&1 | grep -q '^GNU bash'; then
+ fi;
  
- $(eval $(call AUTOTARGETS,package,iw))
+ # Check that a few mandatory programs are installed
+-for prog in awk bison flex msgfmt makeinfo patch ; do
++for prog in awk bison flex msgfmt makeinfo patch gzip bzip2 ; do
+     if ! which $prog > /dev/null ; then
+ 	/bin/echo -e "\nYou must install '$prog' on your build machine";
+ 	if test $prog = "makeinfo" ; then
 -- 
 1.6.3.3
