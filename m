@@ -1,60 +1,32 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 24 Feb 2010 00:40:20 +0100
-Subject: [Buildroot] [git commit master] qt: fix the patch name for qt-4.5.3
-	version
-Message-ID: <20100223234242.2DC9C77716@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 24 Feb 2010 00:48:51 +0100
+Subject: [Buildroot] qt package patch
+In-Reply-To: <201002240001.39372.gzmorell@gmail.com>
+References: <201002240001.39372.gzmorell@gmail.com>
+Message-ID: <20100224004851.6e58876b@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Wed, 24 Feb 2010 00:01:39 +0100
+Francisco Gonzalez Morell <gzmorell@gmail.com> wrote:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f4f157041eb53f674d21d9a323f7245bc14fd844
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> Attached is a patch for qt package. It solves a simple failure. Here is a 
+> little description:
+> This package includes a patch for qt version 4.5.2. But the present version is 
+> 4.5.3. The patch can not be applied, being still necessary for version 4.5.3.
+> The patch works for 4.5.3 with simply changing file name, and the file names of 
+> the files to apply the patch.
 
-Signed-off-by: Francisco Gonzalez Morell <gzmorell@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES                                            |    6 ++++++
- ...uild.patch => qt-4.5.3-fix-qt-zlib-build.patch} |    6 +++---
- 2 files changed, 9 insertions(+), 3 deletions(-)
- rename package/qt/{qt-4.5.2-fix-qt-zlib-build.patch => qt-4.5.3-fix-qt-zlib-build.patch} (74%)
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-diff --git a/CHANGES b/CHANGES
-index d308e93..ec71d4e 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,9 @@
-+2010.02, Not yet released:
-+
-+	Fixes all over the tree.
-+
-+	Updated/fixed packages: qt
-+
- 2010.02-rc2, Released February 23th, 2010:
- 
- 	Fixes all over the tree and new features.
-diff --git a/package/qt/qt-4.5.2-fix-qt-zlib-build.patch b/package/qt/qt-4.5.3-fix-qt-zlib-build.patch
-similarity index 74%
-rename from package/qt/qt-4.5.2-fix-qt-zlib-build.patch
-rename to package/qt/qt-4.5.3-fix-qt-zlib-build.patch
-index b191cc7..47fc92f 100644
---- a/package/qt/qt-4.5.2-fix-qt-zlib-build.patch
-+++ b/package/qt/qt-4.5.3-fix-qt-zlib-build.patch
-@@ -7,10 +7,10 @@ include path to fix this issue.
-  src/gui/painting/painting.pri |    3 +++
-  1 file changed, 3 insertions(+)
- 
--Index: qt-embedded-linux-opensource-src-4.5.2/src/gui/painting/painting.pri
-+Index: qt-embedded-linux-opensource-src-4.5.3/src/gui/painting/painting.pri
- ===================================================================
----- qt-embedded-linux-opensource-src-4.5.2.orig/src/gui/painting/painting.pri
--+++ qt-embedded-linux-opensource-src-4.5.2/src/gui/painting/painting.pri
-+--- qt-embedded-linux-opensource-src-4.5.3.orig/src/gui/painting/painting.pri
-++++ qt-embedded-linux-opensource-src-4.5.3/src/gui/painting/painting.pri
- @@ -367,3 +367,6 @@
-          SOURCES += painting/qwindowsurface_d3d.cpp
-  }
+Thanks Francisco!
+
+Thomas
 -- 
-1.6.3.3
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
