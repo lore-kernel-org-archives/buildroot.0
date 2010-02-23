@@ -1,49 +1,55 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 23 Feb 2010 22:40:28 +0100
-Subject: [Buildroot] make -C <buildroot_directory> failed
-In-Reply-To: <8128F0FD6C26E14C8EB4BFDB92B8D6B2134B26@2putt.int.lantronix.com>
-	(Matthew Davison's message of "Tue, 23 Feb 2010 12:56:10 -0800")
-References: <8128F0FD6C26E14C8EB4BFDB92B8D6B2134B26@2putt.int.lantronix.com>
-Message-ID: <87eikbeilv.fsf@macbook.be.48ers.dk>
+From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+Date: Tue, 23 Feb 2010 23:43:24 +0200
+Subject: [Buildroot] [git commit master] xfont_font-util: convert to the
+ autotools infrastructure
+In-Reply-To: <20100223202924.D6947776A1@busybox.osuosl.org>
+References: <20100223202924.D6947776A1@busybox.osuosl.org>
+Message-ID: <4B844BFC.6030906@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Matthew" == Matthew Davison <matt.davison@lantronix.com> writes:
+On 02/23/2010 10:27 PM, Thomas Petazzoni wrote:
+>
+> commit: http://git.buildroot.net/buildroot/commit/?id=abc1479ea795a18a743ea513e33179058bdfe6b6
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>
+> Signed-off-by: Thomas Petazzoni<thomas.petazzoni@free-electrons.com>
+> ---
+>   package/x11r7/xfont_font-util/xfont_font-util.mk |   74 ++--------------------
+>   1 files changed, 6 insertions(+), 68 deletions(-)
+>
+> diff --git a/package/x11r7/xfont_font-util/xfont_font-util.mk b/package/x11r7/xfont_font-util/xfont_font-util.mk
+> index 38e7e80..88dce38 100644
+> --- a/package/x11r7/xfont_font-util/xfont_font-util.mk
+> +++ b/package/x11r7/xfont_font-util/xfont_font-util.mk
+> @@ -5,76 +5,14 @@
+>   ################################################################################
+>
+>   XFONT_FONT_UTIL_VERSION = 1.0.1
+> -XFONT_FONT_UTIL_NAME = font-util-$(XFONT_FONT_UTIL_VERSION)
+>   XFONT_FONT_UTIL_SOURCE = font-util-$(XFONT_FONT_UTIL_VERSION).tar.bz2
+>   XFONT_FONT_UTIL_SITE = http://xorg.freedesktop.org/releases/individual/font
+> -XFONT_FONT_UTIL_AUTORECONF = NO
+> -XFONT_FONT_UTIL_DIR=$(BUILD_DIR)/$(XFONT_FONT_UTIL_NAME)
+> -XFONT_FONT_UTIL_CAT:=$(BZCAT)
+> +XFONT_FONT_UTIL_DEPENDENCIES = host-pkg-config
 
-Hi,
+[...]
 
- Matthew> Attempting to invoke the top level buildroot makefile from a
- Matthew> higher level Makefile or simply with make -C
- Matthew> <buildroot_directory> fails during the kernel build. This is
- Matthew> even true if 'make -C .' is invoked from the top level
- Matthew> buildroot directory, as long as a kernel build is enabled. It
- Matthew> appears that the problem has something to do with make's
- Matthew> "Entering/Leaving directory" messages, as the output below
- Matthew> suggests. When I passed the --no-print-directory option to
- Matthew> make, I was able to build without problems.
- 
- Matthew> Below is the output from my failed build.
- 
- Matthew>   INSTALL /home/lars/mdavison/buildroot-2009.11/output/target/lib/firmware/
- Matthew> sb16/ima_adpcm_init.csp
- Matthew>   INSTALL /home/lars/mdavison/buildroot-2009.11/output/target/lib/firmware/
- Matthew> sb16/ima_adpcm_playback.csp
- Matthew>   INSTALL /home/lars/mdavison/buildroot-2009.11/output/target/lib/firmware/
- Matthew> sb16/ima_adpcm_capture.csp
- Matthew>   DEPMOD  2.6.30.2
- Matthew> make[1]: Leaving directory `/home/lars/mdavison/buildroot-2009.11/output/build
- Matthew> /linux-2.6.30.2'
+> -$(XFONT_FONT_UTIL_DIR)/.installed: $(XFONT_FONT_UTIL_DIR)/.compiled
+> -	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(XFONT_FONT_UTIL_DIR) install
+> -	touch $@
+> -
 
-It looks to be an issue with the makefile of the Linux kernel. Please
-post your .config so we can try to reproduce the problem. Do you only
-have this issue with 2.6.30, or also other kernel versions? (perhaps
-give buildroot-2010.02-rc1 a try)
+Shouldn't font-utils be installed to STAGING instead of TARGET?
+Originally it was installed to STAGING.
+I would suggest adding:
 
-Remember that you cannot build buildroot with a parallel toplevel make
-(-jX).
+XFONT_FONT_UTIL_INSTALL_STAGING = YES
+XFONT_FONT_UTIL_INSTALL_TARGET = NO
 
--- 
-Bye, Peter Korsgaard
+BR,
+Paulius Zaleckas
