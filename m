@@ -1,8 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 23 Feb 2010 21:27:28 +0100
-Subject: [Buildroot] [git commit master] uclibc: do not allow the selection
-	of NPTL if snapshot is not selected
-Message-ID: <20100223202937.C0E73776A1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] gob2: update dependency on flex
+Message-ID: <20100223202930.BF579776A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,29 +9,43 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=58a45bf66ba1787d9ac25c0fa8df4672bc705358
+commit: http://git.buildroot.net/buildroot/commit/?id=1844bd894194d44472d7e1f41e3e0f52a6359117
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In uClibc, NPTL support does not exist in the 0.9.30 branch, that we
-are using in Buildroot. It is only available in the uClibc daily
-snapshot, extracted from uClibc master branch.
+gob2 for the target needs both flex on the host (for running the flex
+program at compile time) and flex on the target (so that it can link
+against libfl.a).
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/Config.in.2 |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/gob2/Config.in |    1 +
+ package/gob2/gob2.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/toolchain/Config.in.2 b/toolchain/Config.in.2
-index 6317ff4..234e31f 100644
---- a/toolchain/Config.in.2
-+++ b/toolchain/Config.in.2
-@@ -120,6 +120,7 @@ choice
+diff --git a/package/gob2/Config.in b/package/gob2/Config.in
+index 314a1da..2545baf 100644
+--- a/package/gob2/Config.in
++++ b/package/gob2/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_GOB2
+ 	bool "gob2"
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_FLEX
++	select BR2_PACKAGE_FLEX_LIBFL
+ 	select BR2_PACKAGE_BISON
+ 	help
+ 	  GOB (GTK+ Object Builder) is a preprocessor which simplifies
+diff --git a/package/gob2/gob2.mk b/package/gob2/gob2.mk
+index cdf7961..5d50ed6 100644
+--- a/package/gob2/gob2.mk
++++ b/package/gob2/gob2.mk
+@@ -7,7 +7,7 @@ GOB2_VERSION = 2.0.15
+ GOB2_SOURCE = gob2-$(GOB2_VERSION).tar.gz
+ GOB2_SITE = http://ftp.5z.com/pub/gob/
  
- 	config BR2_PTHREADS_NATIVE
- 		bool "Native POSIX Threading (NPTL)"
-+		depends on BR2_UCLIBC_VERSION_SNAPSHOT
- endchoice
+-GOB2_DEPENDENCIES = libglib2 flex bison host-pkg-config
++GOB2_DEPENDENCIES = libglib2 flex bison host-pkg-config host-flex
  
- config BR2_PROGRAM_INVOCATION
+ HOST_GOB2_DEPENDENCIES = host-libglib2
+ 
 -- 
 1.6.3.3
