@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Tue, 23 Feb 2010 21:06:54 +0100
-Subject: [Buildroot] [git commit master] CHANGES: add recently resolved
-	issues (335, 355, 453, 457, 459, 469, 671, 711, 821, 1039)
-Message-ID: <20100223200733.8B6867773B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] uclibc: do not allow the selection
+	of NPTL if snapshot is not selected
+Message-ID: <20100223200734.235B17773B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,36 +10,30 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5239be04c918f9776db59c2ebb273ece140cb17c
+commit: http://git.buildroot.net/buildroot/commit/?id=52fcd86f2ba1249e74ed04ef39cb3cbea16024c7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks to Thomas for doing this work.
+In uClibc, NPTL support does not exist in the 0.9.30 branch, that we
+are using in Buildroot. It is only available in the uClibc daily
+snapshot, extracted from uClibc master branch.
 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES |   10 ++++++++++
- 1 files changed, 10 insertions(+), 0 deletions(-)
+ toolchain/Config.in.2 |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 7c46336..09abc3a 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -9,6 +9,16 @@
+diff --git a/toolchain/Config.in.2 b/toolchain/Config.in.2
+index 6317ff4..234e31f 100644
+--- a/toolchain/Config.in.2
++++ b/toolchain/Config.in.2
+@@ -120,6 +120,7 @@ choice
  
- 	Issues resolved (http://bugs.uclibc.org):
+ 	config BR2_PTHREADS_NATIVE
+ 		bool "Native POSIX Threading (NPTL)"
++		depends on BR2_UCLIBC_VERSION_SNAPSHOT
+ endchoice
  
-+	#335: atk looks for the path to the gnome library on the host
-+	#355: Please update WebKit - it doesn't compile!
-+	#453: libglib2 autoreconf
-+	#457: e2fsprogs link problem
-+	#459: libgtk2 autoreconf
-+	#469: build of libgtk2 for host incorrectly assumes that X.org ...
-+	#671: Bash fails to build when building buildront on Ubuntu 9.04
-+	#711: WebKit host dependencies problems
-+	#821: cp: illegal operation
-+	#1039: Not compiled on ubuntu karmic
- 	#1069: [PATCH] The AT91BOOTSTRAP makefile contains a typo
- 
- 2010.02-rc1, Released February 9th, 2010:
+ config BR2_PROGRAM_INVOCATION
 -- 
 1.6.3.3
