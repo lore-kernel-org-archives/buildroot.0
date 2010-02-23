@@ -1,7 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 23 Feb 2010 21:27:28 +0100
-Subject: [Buildroot] [git commit master] iw: give path to pkg-config
-Message-ID: <20100223202932.7EA3D776A1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] shared-mime-info: do not depend on
+	phony target in hook
+Message-ID: <20100223202934.4E4B9776A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,28 +10,38 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d5ffabd4c33c7d2a37ca8c7b98601a19286bfe12
+commit: http://git.buildroot.net/buildroot/commit/?id=520dd9fbe5896175285a494aeeabe221bce9db62
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-At install stage, iw needs pkg-config, through the PKG_CONFIG
-environment variable.
+Real targets should not depend on phony targets, otherwise they get
+rebuilt everytime.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/iw/iw.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/shared-mime-info/shared-mime-info.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/iw/iw.mk b/package/iw/iw.mk
-index 2dd1cd4..89fd604 100644
---- a/package/iw/iw.mk
-+++ b/package/iw/iw.mk
-@@ -11,6 +11,7 @@ IW_DEPENDENCIES = libnl
- IW_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
- IW_CONFIG = $(IW_DIR)/.config
- IW_MAKE_ENV = PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
-+	PKG_CONFIG="$(HOST_DIR)/usr/bin/pkg-config" \
- 	GIT_DIR=$(IW_DIR)
+diff --git a/package/shared-mime-info/shared-mime-info.mk b/package/shared-mime-info/shared-mime-info.mk
+index 80b0ccc..fe14142 100644
+--- a/package/shared-mime-info/shared-mime-info.mk
++++ b/package/shared-mime-info/shared-mime-info.mk
+@@ -12,7 +12,7 @@ SHARED_MIME_INFO_INSTALL_TARGET = NO
  
- $(eval $(call AUTOTARGETS,package,iw))
+ SHARED_MIME_INFO_AUTORECONF = NO
+ SHARED_MIME_INFO_CONF_ENV = XMLLINT=$(HOST_DIR)/usr/bin/xmllint
+-SHARED_MIME_INFO_DEPENDENCIES = host-pkg-config host-libglib2 host-libxml2 libxml2 libglib2
++SHARED_MIME_INFO_DEPENDENCIES = host-pkg-config host-libglib2 host-libxml2 host-shared-mime-info libxml2 libglib2
+ 
+ SHARED_MIME_INFO_CONF_OPT = --disable-update-mimedb
+ 
+@@ -28,7 +28,7 @@ $(eval $(call AUTOTARGETS,package,shared-mime-info,host))
+ SHARED_MIME_INFO_HOST_BINARY:=$(HOST_DIR)/usr/bin/update-mime-database
+ 
+ # update the shared-mime-info database in the target
+-$(SHARED_MIME_INFO_HOOK_POST_INSTALL): host-shared-mime-info
++$(SHARED_MIME_INFO_HOOK_POST_INSTALL):
+ 	$(HOST_MAKE_ENV) $(SHARED_MIME_INFO_HOST_BINARY) $(STAGING_DIR)/usr/share/mime
+ 	$(INSTALL) -D $(STAGING_DIR)/usr/share/mime/mime.cache $(TARGET_DIR)/usr/share/mime/mime.cache
+ 	touch $@
 -- 
 1.6.3.3
