@@ -1,75 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Feb 2010 21:06:43 +0100
-Subject: [Buildroot] [PATCH 19/40] intltool: new package
+Date: Tue, 23 Feb 2010 21:06:30 +0100
+Subject: [Buildroot] [PATCH 06/40] xapp_mkfontscale: enable compilation for
+	the host and fix deps
 In-Reply-To: <cover.1266955555.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1266955555.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <570e1b77c285be7b19d0be3dda27853b06b58ae8.1266955555.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <1786b39f0b85f2efa383ca8714ca88fdecafba84.1266955555.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This XML internationalization set of tools is required to build
-several of our packages, and may not be available on the host machine.
+mkfontscale on the host is required to build xfonts-encoding for the
+target.
 
-Only the host variant has been tested.
+We also fix the dependencies. xlib_libX11 is not needed to compile
+xapp_mkfontscale. However, xproto_xproto is needed.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in            |    1 +
- package/intltool/Config.in   |    6 ++++++
- package/intltool/intltook.mk |   16 ++++++++++++++++
- 3 files changed, 23 insertions(+), 0 deletions(-)
- create mode 100644 package/intltool/Config.in
- create mode 100644 package/intltool/intltook.mk
+ package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 00f3401..37cae2e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -46,6 +46,7 @@ source "package/pkg-config/Config.in"
- source "package/readline/Config.in"
- source "package/valgrind/Config.in"
- source "package/pcre/Config.in"
-+source "package/intltool/Config.in"
+diff --git a/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk b/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk
+index 05a3f81..1cbe0b4 100644
+--- a/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk
++++ b/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk
+@@ -8,6 +8,8 @@ XAPP_MKFONTSCALE_VERSION = 1.0.5
+ XAPP_MKFONTSCALE_SOURCE = mkfontscale-$(XAPP_MKFONTSCALE_VERSION).tar.bz2
+ XAPP_MKFONTSCALE_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_MKFONTSCALE_AUTORECONF = NO
+-XAPP_MKFONTSCALE_DEPENDENCIES = freetype xlib_libX11 xlib_libfontenc
++XAPP_MKFONTSCALE_DEPENDENCIES = zlib freetype xlib_libfontenc xproto_xproto
++HOST_XAPP_MKFONTSCALE_DEPENDENCIES = host-zlib host-freetype host-xlib_libfontenc host-xproto_xproto
  
- comment "Other stuff"
- source "package/at/Config.in"
-diff --git a/package/intltool/Config.in b/package/intltool/Config.in
-new file mode 100644
-index 0000000..94b34f7
---- /dev/null
-+++ b/package/intltool/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_INTLTOOL
-+       bool "intltool"
-+       help
-+         Utility scripts for internationalizing XML
-+
-+	 http://www.freedesktop.org/wiki/Software/intltool
-\ No newline at end of file
-diff --git a/package/intltool/intltook.mk b/package/intltool/intltook.mk
-new file mode 100644
-index 0000000..746ebb1
---- /dev/null
-+++ b/package/intltool/intltook.mk
-@@ -0,0 +1,16 @@
-+#############################################################
-+#
-+# intltool
-+#
-+#############################################################
-+INTLTOOL_VERSION:=0.40.6
-+INTLTOOL_SOURCE:=intltool-$(INTLTOOL_VERSION).tar.bz2
-+INTLTOOL_SITE:=http://ftp.acc.umu.se/pub/GNOME/sources/intltool/0.40/
-+
-+HOST_INTLTOOL_DEPENDENCIES = host-libxml-parser-perl
-+HOST_INTLTOOL_CONF_OPT = \
-+  PERLLIB=$(HOST_DIR)/usr/lib/perl
-+
-+$(eval $(call AUTOTARGETS,package,intltool))
-+$(eval $(call AUTOTARGETS,package,intltool,host))
-+
+ $(eval $(call AUTOTARGETS,package/x11r7,xapp_mkfontscale))
++$(eval $(call AUTOTARGETS,package/x11r7,xapp_mkfontscale,host))
 -- 
 1.6.3.3
