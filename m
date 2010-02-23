@@ -1,32 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Feb 2010 21:06:52 +0100
-Subject: [Buildroot] [PATCH 28/40] kexec: bump version to fix build failure
+Date: Tue, 23 Feb 2010 21:06:53 +0100
+Subject: [Buildroot] [PATCH 29/40] matchbox: apply libtool patch to
+	matchbox-desktop
 In-Reply-To: <cover.1266955555.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1266955555.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <fbcedeab9dc3122658af2034d39fbde820c8a8e9.1266955555.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <b5e742a642fc40b802a4d0ec1d6a762a89bee635.1266955555.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+matchbox-desktop fails to build because it tries to read
+/usr/lib/libxcb.la, which doesn't exist on a very basic system with no
+development files instead. The buildroot-libtool.patch must therefore
+be applied.
+
+Unfortunately, matchbox doesn't yet use the autotools infrastructure,
+so we have to manually apply the patch.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/kexec/kexec.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/matchbox/matchbox.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
-index a0fb2fd..4367885 100644
---- a/package/kexec/kexec.mk
-+++ b/package/kexec/kexec.mk
-@@ -3,7 +3,7 @@
- # kexec
- #
- #############################################################
--KEXEC_VERSION = 2.0.0
-+KEXEC_VERSION = 2.0.1
- KEXEC_SOURCE = kexec-tools-$(KEXEC_VERSION).tar.bz2
- KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/horms/kexec-tools/
- # no install-strip/install-exec
+diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
+index 06e94cd..8665d41 100644
+--- a/package/matchbox/matchbox.mk
++++ b/package/matchbox/matchbox.mk
+@@ -141,6 +141,7 @@ $(MATCHBOX_PL_DIR)/.unpacked: $(DL_DIR)/$(MATCHBOX_PL_SOURCE)
+ $(MATCHBOX_DP_DIR)/.unpacked: $(DL_DIR)/$(MATCHBOX_DP_SOURCE)
+ 	$(MATCHBOX_CAT) $(DL_DIR)/$(MATCHBOX_DP_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+ 	$(SED) 's:mbfolder\.png:mbtasks\.png:g' $(MATCHBOX_DP_DIR)/modules/tasks.c
++	toolchain/patch-kernel.sh $(MATCHBOX_DP_DIR) package/ buildroot-libtool.patch
+ 	touch $(MATCHBOX_DP_DIR)/.unpacked
+ 
+ $(MATCHBOX_FK_DIR)/.unpacked: $(DL_DIR)/$(MATCHBOX_FK_SOURCE)
 -- 
 1.6.3.3
