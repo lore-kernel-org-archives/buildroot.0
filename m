@@ -1,7 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 23 Feb 2010 21:27:28 +0100
-Subject: [Buildroot] [git commit master] ace_of_penguins: mark as BROKEN
-Message-ID: <20100223202926.AF482776A1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] flex: install in the staging
+	directory
+Message-ID: <20100223202930.50103776A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,35 +10,30 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7452b4edfa1c8385d602950bcaeb2cb3afdfdf3c
+commit: http://git.buildroot.net/buildroot/commit/?id=3502bb056f0de1e4eecd7b0de6156daf18a2162c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This package is BROKEN in the way it compiles make-imglib and text2c
-for the host while being in cross-compiled mode. It does not use
-CC_FOR_BUILD and CFLAGS_FOR_BUILD as it should.
-
-No upstream release has been made since 2001 and since it is a
-relatively useless package, I don't think it's worth the trouble to
-sanitize its build system.
+Flex contains a libfl.a directory, which programs for the target might
+link against. Therefore, we need to install flex to the staging
+directory. An example of such a program is gob2, which needs the
+yywrap() function, which is implemented by libfl.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/games/ace_of_penguins/Config.in |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/flex/flex.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/games/ace_of_penguins/Config.in b/package/games/ace_of_penguins/Config.in
-index 1d5a367..b3015c6 100644
---- a/package/games/ace_of_penguins/Config.in
-+++ b/package/games/ace_of_penguins/Config.in
-@@ -3,6 +3,9 @@ config BR2_PACKAGE_ACE_OF_PENGUINS
- 	select BR2_PACKAGE_LIBPNG
- 	depends on BR2_PACKAGE_XORG7
- 	depends on BR2_PACKAGE_XLIB_LIBXPM
-+	# Build system is broken for tools that need to be compiled
-+	# on the host
-+	depends on BROKEN
- 	help
- 	  The Ace of Penguins is a set of Unix/X solitaire games based
- 	  on the ones available for Windows but with a number of
+diff --git a/package/flex/flex.mk b/package/flex/flex.mk
+index fed0d77..43e7d57 100644
+--- a/package/flex/flex.mk
++++ b/package/flex/flex.mk
+@@ -9,6 +9,7 @@ FLEX_SOURCE:=flex_$(FLEX_VERSION).orig.tar.gz
+ FLEX_PATCH:=flex_$(FLEX_VERSION)-$(FLEX_PATCH_VERSION).diff.gz
+ FLEX_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/f/flex
+ FLEX_DIR:=$(BUILD_DIR)/flex-$(FLEX_VERSION)
++FLEX_INSTALL_STAGING=YES
+ 
+ # lex -> flex
+ define FLEX_INSTALL_LEX
 -- 
 1.6.3.3
