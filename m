@@ -1,7 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 23 Feb 2010 21:27:28 +0100
-Subject: [Buildroot] [git commit master] libxml-parser-perl: new package
-Message-ID: <20100223202928.09CBB776A1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] matchbox: fix dependency to not
+	always rebuilt libmatchbox
+Message-ID: <20100223202933.D4821776A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,95 +10,38 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c13460f769bb4fe88e23a8070b00bab46005cbf2
+commit: http://git.buildroot.net/buildroot/commit/?id=ec5ab1dbd7def2276b13800e05cdc248edae6caa
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This Perl module is needed to build intltool, which in turn is needed
-to build several of our packages. We assume that Perl is installed on
-the host.
-
-Only the host variant of this package has been tested and is used. The
-code for the target variant (what to do at the configure, build and
-install steps) isn't implemented, but the GENTARGETS call for the
-target is mandatory, due to limitations of the Makefile.package.in
-infrastructure (if one wants the host package to be implemented, then
-the target package *must* exist). This limitation will be removed
-after 2010.02.
+Real targets should not depend on phony targets, otherwise they get
+rebuilt every time.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                                |    1 +
- package/libxml-parser-perl/Config.in             |    8 +++++
- package/libxml-parser-perl/libxml-parser-perl.mk |   34 ++++++++++++++++++++++
- 3 files changed, 43 insertions(+), 0 deletions(-)
- create mode 100644 package/libxml-parser-perl/Config.in
- create mode 100644 package/libxml-parser-perl/libxml-parser-perl.mk
+ package/matchbox/matchbox.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 5ddd63c..00f3401 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -412,6 +412,7 @@ source "package/ezxml/Config.in"
- source "package/libxml2/Config.in"
- source "package/libxslt/Config.in"
- source "package/xerces/Config.in"
-+source "package/libxml-parser-perl/Config.in"
- endmenu
+diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
+index 8665d41..4abc9d6 100644
+--- a/package/matchbox/matchbox.mk
++++ b/package/matchbox/matchbox.mk
+@@ -219,7 +219,7 @@ else
+ endif
  
- # java support
-diff --git a/package/libxml-parser-perl/Config.in b/package/libxml-parser-perl/Config.in
-new file mode 100644
-index 0000000..d20a401
---- /dev/null
-+++ b/package/libxml-parser-perl/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_LIBXML_PARSER_PERL
-+       bool "libxml-parser-perl"
-+       select BR2_PACKAGE_EXPAT
-+       help
-+         The Perl XML::Parser module.
-+
-+	 http://www.cpan.org/modules/by-module/XML/
-+
-diff --git a/package/libxml-parser-perl/libxml-parser-perl.mk b/package/libxml-parser-perl/libxml-parser-perl.mk
-new file mode 100644
-index 0000000..52d89d5
---- /dev/null
-+++ b/package/libxml-parser-perl/libxml-parser-perl.mk
-@@ -0,0 +1,34 @@
-+#############################################################
-+#
-+# libxml-parser-perl
-+#
-+#############################################################
-+LIBXML_PARSER_PERL_VERSION:=2.36
-+LIBXML_PARSER_PERL_SOURCE:=XML-Parser-$(LIBXML_PARSER_PERL_VERSION).tar.gz
-+LIBXML_PARSER_PERL_SITE:=http://www.cpan.org/modules/by-module/XML/
-+
-+LIBXML_PARSER_PERL_DEPENDENCIES = expat
-+HOST_LIBXML_PARSER_PERL_DEPENDENCIES = host-expat
-+
-+define HOST_LIBXML_PARSER_PERL_CONFIGURE_CMDS
-+ (cd $(@D) ; \
-+   perl Makefile.PL \
-+        PREFIX=$(HOST_DIR)/usr \
-+        EXPATLIBPATH=$(HOST_DIR)/usr/lib \
-+        EXPATINCPATH=$(HOST_DIR)/usr/include \
-+        INSTALLDIRS=site \
-+        INSTALLSITELIB=$(HOST_DIR)/usr/lib/perl \
-+ )
-+endef
-+
-+define HOST_LIBXML_PARSER_PERL_BUILD_CMDS
-+ $(HOST_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+define HOST_LIBXML_PARSER_PERL_INSTALL_CMDS
-+ $(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
-+endef
-+
-+$(eval $(call GENTARGETS,package,libxml-parser-perl))
-+$(eval $(call GENTARGETS,package,libxml-parser-perl,host))
-+
+ 
+-$(MATCHBOX_LIB_DIR)/.configured: $(MATCHBOX_LIB_DIR)/.unpacked xlib_libXext-install-staging
++$(MATCHBOX_LIB_DIR)/.configured: $(MATCHBOX_LIB_DIR)/.unpacked
+ 	(cd $(MATCHBOX_LIB_DIR); rm -f config.cache; \
+ 	$(TARGET_CONFIGURE_OPTS) \
+ 	./configure $(QUIET) \
+@@ -610,7 +610,7 @@ $(TARGET_DIR)/usr/bin/$(MATCHBOX_KB_BIN): $(STAGING_DIR)/usr/bin/$(MATCHBOX_KB_B
+ 	cp -af $(STAGING_DIR)/usr/share/matchbox/matchbox-keyboard $(TARGET_DIR)/usr/share/matchbox/
+ 	cp -dpf ./package/matchbox/mb-applet-kbd-wrapper.sh $(TARGET_DIR)/usr/bin/
+ 
+-matchbox: host-pkg-config expat $(MATCHBOX_WM_DEPS) $(MATCHBOX_SNOTIFY_DEPS) $(MATCHBOX_LIB_DEPS) $(TARGET_DIR)/usr/lib/libmb.so $(TARGET_DIR)/usr/bin/$(MATCHBOX_WM_BIN)
++matchbox: host-pkg-config expat xlib_libXext $(MATCHBOX_WM_DEPS) $(MATCHBOX_SNOTIFY_DEPS) $(MATCHBOX_LIB_DEPS) $(TARGET_DIR)/usr/lib/libmb.so $(TARGET_DIR)/usr/bin/$(MATCHBOX_WM_BIN)
+ 
+ matchbox-panel: matchbox $(TARGET_DIR)/usr/bin/$(MATCHBOX_PL_BIN) $(TARGET_DIR)/usr/bin/matchbox-session $(MATCHBOX_PANEL_DEPS)
+ 
 -- 
 1.6.3.3
