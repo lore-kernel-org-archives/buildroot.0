@@ -1,46 +1,37 @@
-From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
-Date: Mon, 22 Feb 2010 23:49:51 +0200
-Subject: [Buildroot] [PATCH] Fix GDB BFD test linking
-Message-ID: <20100222214951.8779.6936.stgit@localhost.localdomain>
+From: Paul Jones <Paul.Jones@iwtech.com.au>
+Date: Tue, 23 Feb 2010 14:17:40 +1100
+Subject: [Buildroot] Beginner documentation
+Message-ID: <3B941116898CDA489B91563DEF88F4B61CAD8E@iwt-server.iwt.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When compiling GDB for the same architecture as host it links
-wrong BFD library from host OS. This prevents GDB from compiling
-support for ELF and thus GDB unusable on target.
+Hi,
 
-Fix this by moving BFD and libiberty directories before CFLAGS, since
-"wrong" path comes from CFLAGS.
+ 
 
-More about this issue was already posted at:
-http://lists.uclibc.org/pipermail/buildroot/2009-March/026585.html
+I'm trying to build a basic buildroot i686 system that I can use for
+learning buildroot. When doing "make linux26-menuconfig" it failed
+because it couldn't find the .config file. From past experience I
+remembered that I have to do make defconfig before that would work, but
+there seems to be no mention of this in the documentation. It would be
+good if something could be added.
 
-Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
----
+ 
 
- .../6.8/700-fix-linking-directory-priority.patch   |   13 +++++++++++++
- 1 files changed, 13 insertions(+), 0 deletions(-)
- create mode 100644 toolchain/gdb/6.8/700-fix-linking-directory-priority.patch
+I assume http://buildroot.uclibc.org/buildroot.html is the right page to
+be looking at?
 
-diff --git a/toolchain/gdb/6.8/700-fix-linking-directory-priority.patch b/toolchain/gdb/6.8/700-fix-linking-directory-priority.patch
-new file mode 100644
-index 0000000..5dff5aa
---- /dev/null
-+++ b/toolchain/gdb/6.8/700-fix-linking-directory-priority.patch
-@@ -0,0 +1,13 @@
-+--- gdb-6.8/gdb/configure.orig	2008-01-13 14:23:04.000000000 +0200
-++++ gdb-6.8/gdb/configure	2009-12-06 18:32:27.065376339 +0200
-+@@ -22994,8 +22994,8 @@ esac
-+ OLD_CFLAGS=$CFLAGS
-+ OLD_LDFLAGS=$LDFLAGS
-+ OLD_LIBS=$LIBS
-+-CFLAGS="$CFLAGS -I${srcdir}/../include -I../bfd -I${srcdir}/../bfd"
-+-LDFLAGS="$LDFLAGS -L../bfd -L../libiberty"
-++CFLAGS="-L../bfd -L../libiberty $CFLAGS -I${srcdir}/../include -I../bfd -I${srcdir}/../bfd"
-++LDFLAGS="$LDFLAGS"
-+ intl=`echo $LIBINTL | sed 's,${top_builddir}/,,g'`
-+ LIBS="$LIBS -lbfd -liberty $intl"
-+ echo "$as_me:$LINENO: checking for ELF support in BFD" >&5
+ 
+
+ 
+
+Thanks
+
+Paul.
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100223/7a417a1a/attachment.htm>
