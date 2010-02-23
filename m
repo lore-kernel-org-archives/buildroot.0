@@ -1,31 +1,65 @@
-From: Roo <roo.watt@gmail.com>
-Date: Wed, 24 Feb 2010 10:30:53 +1100
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Tue, 23 Feb 2010 23:32:21 +0000 (UTC)
 Subject: [Buildroot] Newbie: AT91SAM9260 NAND Boot
-In-Reply-To: <D3796D57A9CF4CBE9A4A46D52BE466DE@apexjs>
-References: <D3796D57A9CF4CBE9A4A46D52BE466DE@apexjs>
-Message-ID: <815f0bd71002231530v3f7eeca9g23c1849996ff1b28@mail.gmail.com>
+References: <815f0bd71002221951v606dbdddn381587fdd662e485@mail.gmail.com>
+	<hm0su3$h9k$1@dough.gmane.org>
+	<815f0bd71002231515m11ed502bxa3268af876dcdafb@mail.gmail.com>
+Message-ID: <hm1oi5$1dg$1@dough.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 24 February 2010 08:22, Sagaert Johan <sagaert.johan@skynet.be> wrote:
-
-> i use UBIFS on the nandflash : it seems to be the best choice
+On Wed, Feb 24, 2010 at 10:15:18AM +1100, Roo wrote:
+ 
+>>> I am new to buildroot and have been given a AT91SAM9260 SOM to
+>>> work with. The latest buildroot does not appear to include a
+>>> defconfig for a NAND boot system.
+>>
+>> Can you explain what a "NAND boot system" is?
+>>
+>> When I boot an AT91SAM9xxx from NAND, I tell buildroot to
+>> build a JFFS2 root image, a uImage kernel with MTD/JFFS2
+>> support, put the resulting kernel and root image into NAND,
+>> and configure U-Boot to boot from NAND.
 >
-> once booted from nfs (for my board )
+> I believe that I had some of the terminology wrong.
+>
+> I would like a jffs (or a readonly FS) to reside in NAND as
+> you had described, but I was confused by the
+> dataflash/dataflashcard terminology. I thought it was
+> referring to a SD or micro SD card and I do not want the
+> rootfs or kernel to reside on the card.
 
-Thanks for the quick run down, that will be very helpful. I have done
-some reading about file system and comparisons, it seemed the
-conclusion was that jffs2 might be better under powercuts. Do you
-think this is the case.
+Dataflash is a serial NOR-flash part that's attached to an SPI
+interface.  It's sort of similar to an SD-card, but the
+interface/protocol is a little different.
 
-The current plan is to mount the rootfs read only (or use a read only
-fs) and use a tmpfs for /var/{log,run} etc. The application uses an
-embedded database and it seems we will need to place that on a sd card
-due to its size.
+> My understanding now is that configurations relate to where
+> the bootloader resides rather than where the rootfs resides. I
+> am little embarrassed that I didn't realise this earlier and
+> if I am right this just got easier. :)
 
-Thanks for you help, it's really appreciated.
+You're probably right.  Buildroot can build U-Boot and, IIRC,
+also the low-level SAM9 bootloader: it's what is initially
+loaded by the MCU's built-in bootloader from somewhere (NAND,
+NOR, SDcard, dataflash) into internal SRAM and run -- it
+enables SDRAM, and then loads U-Boot from somewhere (same
+choices as before) into SDRAM, and then runs U-Boot.  U-Boot
+then loads a kernel image into SDRAM (and optionally loads a
+rootfs into SDRAM), and boots the kernel.
 
-Cameron.
+And there's no rule that says the low-level SAM9 bootloader,
+U-Boot, the kernel, and the rootfs can't all be on different
+media.
+
+I've never selected either the bootloader or U-Boot in
+buildroot, so I don't know what configuration options are
+available for them -- but I would guess that support for the
+various boot media are configurable.
+
+-- 
+Grant Edwards                   grante             Yow! World War III?
+                                  at               No thanks!
+                               visi.com            
