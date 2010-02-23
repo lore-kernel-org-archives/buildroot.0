@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 23 Feb 2010 21:27:28 +0100
-Subject: [Buildroot] [git commit master] ccache: remove cleanup of
-	documentation
-Message-ID: <20100223202921.44111776A1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] libxml2: do not apply libtool patch
+	when compiling for host
+Message-ID: <20100223202921.C0395776A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +10,30 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=53f670ac06837e0517cffad747435e5d1677d3fa
+commit: http://git.buildroot.net/buildroot/commit/?id=e81149c54301f88ae64bd85caa6d0f29e879d064
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The cleanup of documentation is handled in a global way, in the main
-Makefile.
+The libtool patch is not applied when building for the target because
+it does not apply, so do not attempt to apply it when building for the
+host. This fixes libxml2 build for the host.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/ccache/ccache.mk |    3 ---
- 1 files changed, 0 insertions(+), 3 deletions(-)
+ package/libxml2/libxml2.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/ccache/ccache.mk b/toolchain/ccache/ccache.mk
-index c98937d..8e414b2 100644
---- a/toolchain/ccache/ccache.mk
-+++ b/toolchain/ccache/ccache.mk
-@@ -163,9 +163,6 @@ $(CCACHE_DIR2)/$(CCACHE_BINARY): $(CCACHE_DIR2)/.configured
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index e598d36..31fdabf 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -28,6 +28,8 @@ HOST_LIBXML2_CONF_OPT = \
+ 		--enable-shared --without-debugging --without-python \
+ 		--without-threads
  
- $(TARGET_DIR)/$(CCACHE_TARGET_BINARY): $(CCACHE_DIR2)/$(CCACHE_BINARY)
- 	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(CCACHE_DIR2) install
--ifneq ($(BR2_HAVE_MANPAGES),y)
--	rm -rf $(TARGET_DIR)/usr/man
--endif
- 	# put a bunch of symlinks into /bin, since that is earlier
- 	# in the default PATH than /usr/bin where gcc lives
- 	(cd $(TARGET_DIR)/bin; \
++HOST_LIBXML2_LIBTOOL_PATCH = NO
++
+ $(eval $(call AUTOTARGETS,package,libxml2))
+ $(eval $(call AUTOTARGETS,package,libxml2,host))
+ 
 -- 
 1.6.3.3
