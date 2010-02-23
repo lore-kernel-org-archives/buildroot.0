@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 23 Feb 2010 21:03:51 +0100
-Subject: [Buildroot] [pull request] Pull request for branch bug-fixes
-In-Reply-To: <cover.1266779207.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Sun, 21 Feb 2010 20:06:49 +0100")
-References: <cover.1266779207.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87zl2zen2w.fsf@macbook.be.48ers.dk>
+Date: Tue, 23 Feb 2010 21:06:02 +0100
+Subject: [Buildroot] [pull request] Pull request for branch misc-fixes6
+In-Reply-To: <cover.1266781929.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Sun, 21 Feb 2010 20:52:11 +0100")
+References: <cover.1266781929.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87vddnemz9.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,15 +19,9 @@ To: buildroot@busybox.net
 
  Thomas> are available in the git repository at:
 
- Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot bug-fixes
+ Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot misc-fixes6
 
-Thanks, but:
-
-fatal: Couldn't find remote ref bug-fixes
-
-
-So I've committed it myself manually.
-
+This one is also gone, so I have committed it manually - Thanks.
 
 -- 
 Bye, Peter Korsgaard
