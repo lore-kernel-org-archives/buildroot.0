@@ -1,36 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Feb 2010 21:06:46 +0100
-Subject: [Buildroot] [PATCH 22/40] flex: install in the staging directory
+Date: Tue, 23 Feb 2010 21:06:50 +0100
+Subject: [Buildroot] [PATCH 26/40] imagemagick: use internal libtool
 In-Reply-To: <cover.1266955555.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1266955555.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <3502bb056f0de1e4eecd7b0de6156daf18a2162c.1266955555.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <b7ea597dd2f3553f2bc44e441011e68f999c7768.1266955555.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Flex contains a libfl.a directory, which programs for the target might
-link against. Therefore, we need to install flex to the staging
-directory. An example of such a program is gob2, which needs the
-yywrap() function, which is implemented by libfl.
+For some reason, our imagemagick.mk file calls libtool, but assumes
+that libtool is available on the host, which may not be
+true. Therefore, we use ImageMagick's internal libtool, which has been
+used for compiling/linking all the rest of ImageMagic anyway.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/flex/flex.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/imagemagick/imagemagick.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/flex/flex.mk b/package/flex/flex.mk
-index fed0d77..43e7d57 100644
---- a/package/flex/flex.mk
-+++ b/package/flex/flex.mk
-@@ -9,6 +9,7 @@ FLEX_SOURCE:=flex_$(FLEX_VERSION).orig.tar.gz
- FLEX_PATCH:=flex_$(FLEX_VERSION)-$(FLEX_PATCH_VERSION).diff.gz
- FLEX_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/f/flex
- FLEX_DIR:=$(BUILD_DIR)/flex-$(FLEX_VERSION)
-+FLEX_INSTALL_STAGING=YES
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index e858430..00895f5 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -83,8 +83,8 @@ $(IMAGEMAGICK_LIB): $(STAGING_DIR)/usr/lib/libMagickCore.a
+ 	touch -c $@
  
- # lex -> flex
- define FLEX_INSTALL_LEX
+ $(IMAGEMAGICK_DIR)/.libinstall: $(IMAGEMAGICK_LIB)
+-	libtool --finish $(TARGET_DIR)/usr/lib/ImageMagick-$(IMAGEMAGICK_MAJOR)/modules-Q16/coders
+-	libtool --finish $(TARGET_DIR)/usr/lib/ImageMagick-$(IMAGEMAGICK_MAJOR)/modules-Q16/filters
++	$(IMAGEMAGICK_DIR)/libtool --finish $(TARGET_DIR)/usr/lib/ImageMagick-$(IMAGEMAGICK_MAJOR)/modules-Q16/coders
++	$(IMAGEMAGICK_DIR)/libtool --finish $(TARGET_DIR)/usr/lib/ImageMagick-$(IMAGEMAGICK_MAJOR)/modules-Q16/filters
+ 	touch $@
+ 
+ $(TARGET_DIR)/usr/bin/animate: $(IMAGEMAGICK_LIB)
 -- 
 1.6.3.3
