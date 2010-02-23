@@ -1,32 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Feb 2010 21:06:45 +0100
-Subject: [Buildroot] [PATCH 21/40] gmpc: add dependency on host-intltool
+Date: Tue, 23 Feb 2010 21:06:32 +0100
+Subject: [Buildroot] [PATCH 08/40] xlib_libfontenc: enable compilation on
+	the host
 In-Reply-To: <cover.1266955555.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1266955555.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <364555d9fff02e02f96f92f6f8b080663c424c89.1266955555.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <d65e627432af8fce1c41df67ca48ce926b5a7300.1266955555.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+xlib_libfontenc is required to build xapp_mkfontscale on the host,
+which in turn is needed to build font encodings for the target.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gmpc/gmpc.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/x11r7/xlib_libfontenc/xlib_libfontenc.mk |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/package/gmpc/gmpc.mk b/package/gmpc/gmpc.mk
-index 7110d15..0db89b9 100644
---- a/package/gmpc/gmpc.mk
-+++ b/package/gmpc/gmpc.mk
-@@ -11,7 +11,7 @@ GMPC_CONF_ENV = ac_cv_lib_curl_curl_global_init=yes \
- 		ac_cv_path_GOB2=$(GOB2_HOST_BINARY)
- GMPC_CONF_OPT = --disable-mmkeys
+diff --git a/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk b/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk
+index b03697a..7ab4511 100644
+--- a/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk
++++ b/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk
+@@ -12,4 +12,7 @@ XLIB_LIBFONTENC_INSTALL_STAGING = YES
+ XLIB_LIBFONTENC_DEPENDENCIES = zlib xproto_xproto
+ XLIB_LIBFONTENC_CONF_OPT = --enable-shared --disable-static
  
--GMPC_DEPENDENCIES = libglib2 libgtk2 libglade libcurl libmpd host-gob2
-+GMPC_DEPENDENCIES = libglib2 libgtk2 libglade libcurl libmpd host-gob2 host-intltool
- 
- ifeq ($(BR2_PACKAGE_XLIB_LIBSM),y)
- GMPC_DEPENENCIES += xlib_libSM
++HOST_XLIB_LIBFONTENC_DEPENDENCIES = host-zlib host-xproto_xproto
++
+ $(eval $(call AUTOTARGETS,package/x11r7,xlib_libfontenc))
++$(eval $(call AUTOTARGETS,package/x11r7,xlib_libfontenc,host))
 -- 
 1.6.3.3
