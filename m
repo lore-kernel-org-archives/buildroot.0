@@ -1,47 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Feb 2010 21:06:35 +0100
-Subject: [Buildroot] [PATCH 11/40] package infrastructure: add
-	LD_LIBRARY_PATH
+Date: Tue, 23 Feb 2010 21:06:51 +0100
+Subject: [Buildroot] [PATCH 27/40] iw: give path to pkg-config
 In-Reply-To: <cover.1266955555.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1266955555.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <c1b6242fdcf2cff7ebf09fec4cc1be58963e8427.1266955555.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <d5ffabd4c33c7d2a37ca8c7b98601a19286bfe12.1266955555.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-During the compilation of target or host packages, host tools might be
-used, and in turn, they might use host libraries installed in
-$(HOST_DIR)/usr/lib. Therefore, we pass a LD_LIBRARY_PATH variable
-when building packages.
+At install stage, iw needs pkg-config, through the PKG_CONFIG
+environment variable.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Makefile.in |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ package/iw/iw.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index bc0ac7c..043ef3e 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -236,7 +236,8 @@ TARGET_CONFIGURE_ENV=\
- 	LDFLAGS="$(TARGET_LDFLAGS)" \
- 	FCFLAGS="$(TARGET_FCFLAGS)" \
+diff --git a/package/iw/iw.mk b/package/iw/iw.mk
+index 2dd1cd4..89fd604 100644
+--- a/package/iw/iw.mk
++++ b/package/iw/iw.mk
+@@ -11,6 +11,7 @@ IW_DEPENDENCIES = libnl
+ IW_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
+ IW_CONFIG = $(IW_DIR)/.config
+ IW_MAKE_ENV = PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
++	PKG_CONFIG="$(HOST_DIR)/usr/bin/pkg-config" \
+ 	GIT_DIR=$(IW_DIR)
  
--TARGET_MAKE_ENV=PATH=$(TARGET_PATH)
-+TARGET_MAKE_ENV=PATH=$(TARGET_PATH) \
-+		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)"
- 
- HOST_CONFIGURE_OPTS=PATH=$(HOST_PATH) \
- 		AR="$(HOSTAR)" \
-@@ -277,6 +278,7 @@ HOST_CONFIGURE_OPTS=PATH=$(HOST_PATH) \
- 		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig"
- 
- HOST_MAKE_ENV=PATH=$(HOST_PATH) \
-+		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)" \
- 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
- 		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig"
- 
+ $(eval $(call AUTOTARGETS,package,iw))
 -- 
 1.6.3.3
