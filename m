@@ -1,62 +1,155 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Feb 2010 21:06:42 +0100
-Subject: [Buildroot] [PATCH 18/40] package infrastructure: add PERLLIB
-In-Reply-To: <cover.1266955555.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1266955555.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <405a7ecaa19d229e144062a338d5a3b8cd21c96c.1266955555.git.thomas.petazzoni@free-electrons.com>
+Date: Tue, 23 Feb 2010 21:06:24 +0100
+Subject: [Buildroot] [pull request] Pull request for branch misc-fixes5
+Message-ID: <cover.1266955555.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that we build Perl modules in $(HOST_DIR), PERLLIB must be defined
-to $(HOST_DIR)/usr/lib/perl.
+Hello,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Makefile.in |   11 ++++++++---
- 1 files changed, 8 insertions(+), 3 deletions(-)
+I've rebased my patch set, taking into account Peter's and Will's
+comments. I've also integrated the two other patches from my
+misc-fixes6 and bug-fixes branches, so you don't need to pull them
+anymore.
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 043ef3e..1e412a6 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -228,6 +228,8 @@ TARGET_CONFIGURE_OPTS=PATH=$(TARGET_PATH) \
- 		PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)" \
- 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
- 		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig:$(PKG_CONFIG_PATH)" \
-+		PERLLIB="$(HOST_DIR)/usr/lib/perl" \
-+		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib" \
- 		STAGING_DIR="$(STAGING_DIR)"
- 
- TARGET_CONFIGURE_ENV=\
-@@ -237,7 +239,8 @@ TARGET_CONFIGURE_ENV=\
- 	FCFLAGS="$(TARGET_FCFLAGS)" \
- 
- TARGET_MAKE_ENV=PATH=$(TARGET_PATH) \
--		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)"
-+		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)" \
-+		PERLLIB="$(HOST_DIR)/usr/lib/perl"
- 
- HOST_CONFIGURE_OPTS=PATH=$(HOST_PATH) \
- 		AR="$(HOSTAR)" \
-@@ -275,12 +278,14 @@ HOST_CONFIGURE_OPTS=PATH=$(HOST_PATH) \
- 		ORIGINAL_NM_FOR_TARGET="$(TARGET_NM)" \
- 		ORIGINAL_OBJDUMP_FOR_TARGET="$(TARGET_OBJDUMP)" \
- 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
--		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig"
-+		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig" \
-+		PERLLIB="$(HOST_DIR)/usr/lib/perl"
- 
- HOST_MAKE_ENV=PATH=$(HOST_PATH) \
- 		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)" \
- 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
--		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig"
-+		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig" \
-+		PERLLIB="$(HOST_DIR)/usr/lib/perl"
- 
- 
- #######################################################################
+List of changes :
+
+ * Fixed depencies of xapp_mkfontscale
+
+ * Re-use the existing value of LD_LIBRARY. The same commit adds the
+   LD_LIBRARY_PATH value to both TARGET_MAKE_ENV and
+   HOST_MAKE_ENV. The other commit only adds PERLLIB (I preferred to
+   keep both things separate).
+
+ * libpng dependency fixes
+
+ * Added missing newlines to zlib, xfont_font-util
+
+ * Removed trailing whitespace added in shared-mime-info
+
+ * Improved the comment in ace_of_penguins for marking the package as
+   BROKEN
+
+ * Added dependency of libxml-parser-perl on expat for the target. But
+   this still isn't sufficient for having the package to build for the
+   target (which isn't what we are interested in in the first
+   place). The improved commit log explains why we need both the
+   target and host packages even if we care only about the host one.
+
+ * Removed the webkit dependency on an external toolchain based on
+   Glibc. Instead, I've simply added a comment in the Config.in
+   stating that WebKit does not build with old linuxthreads. I don't
+   want to add a dependency, since it is complicated to handle with
+   external toolchains for the moment.
+
+Sincerely,
+
+Thomas
+
+The following changes since commit c8ff60c8283b0ad116fcf43f485f199c29432c9d:
+  Peter Korsgaard (1):
+        CHANGES: add ace_of_penguins, rubix and xboard
+
+are available in the git repository at:
+
+  git://git.busybox.net/~tpetazzoni/git/buildroot misc-fixes5
+
+Richard van Paasen (1):
+      e2fsprogs: fix lsattr chattr and e2label e2undo mixup
+
+Thomas Petazzoni (39):
+      automake: add build dependency on host-autoconf
+      ccache: remove cleanup of documentation
+      libxml2: do not apply libtool patch when compiling for host
+      libxslt: enable compilation on host
+      libxcb: fix build with Buildroot compiled xsltproc
+      xapp_mkfontscale: enable compilation for the host and fix deps
+      xfont_encoding: add mkfontscale on the host as dependency
+      xlib_libfontenc: enable compilation on the host
+      zlib: enable compilation on the host
+      xfont_font-util: convert to the autotools infrastructure
+      package infrastructure: add LD_LIBRARY_PATH
+      libpng: enable compilation on the host
+      ace_of_penguins: add dependency on host-libpng
+      ace_of_penguins: mark as BROKEN
+      dependencies: add gzip and bzip2 as base dependencies
+      libgtk2: break the dependency of host-libgtk2 on host-cairo
+      libxml-parser-perl: new package
+      package infrastructure: add PERLLIB
+      intltool: new package
+      dependencies: add perl as a mandatory dependency
+      gmpc: add dependency on host-intltool
+      flex: install in the staging directory
+      gob2: update dependency on flex
+      shared-mime-info: run update-mime-database with correct env variables
+      imagemagick: help configure to detect file_offset_bits
+      imagemagick: use internal libtool
+      iw: give path to pkg-config
+      kexec: bump version to fix build failure
+      matchbox: apply libtool patch to matchbox-desktop
+      matchbox: fix dependency to not always rebuilt libmatchbox
+      shared-mime-info: do not depend on phony target in hook
+      dosfstools: make sure install targets aren't run everytime
+      lvm2: prevent dmsetup from being re-installed every time
+      libeXosip: do not re-run targets at every invocation of 'make'
+      webkit: several build fixes
+      libsoup: remove --without-html-dir
+      mplayer: use UTF-8 charset to avoid iconv dependency
+      webkit: mention build failure with old linuxthread toolchains
+      uclibc: do not allow the selection of NPTL if snapshot is not selected
+
+ package/Config.in                                  |    2 +
+ package/Makefile.in                                |   13 +-
+ package/automake/automake.mk                       |    2 +-
+ package/dosfstools/dosfstools.mk                   |   32 ++--
+ package/e2fsprogs/Config.in                        |    4 +-
+ package/flex/flex.mk                               |    1 +
+ package/games/ace_of_penguins/Config.in            |    3 +
+ package/games/ace_of_penguins/ace_of_penguins.mk   |    2 +-
+ package/gmpc/gmpc.mk                               |    2 +-
+ package/gob2/Config.in                             |    1 +
+ package/gob2/gob2.mk                               |    2 +-
+ package/imagemagick/imagemagick.mk                 |   11 +-
+ package/intltool/Config.in                         |    6 +
+ package/intltool/intltook.mk                       |   16 ++
+ package/iw/iw.mk                                   |    1 +
+ package/kexec/kexec.mk                             |    2 +-
+ package/libeXosip2/libeXosip2.mk                   |    6 +
+ .../host-libgtk2-2.12.12-reduce-dependencies.patch |  200 ++++++++++++++++++++
+ package/libgtk2/libgtk2.mk                         |   29 +++-
+ package/libpng/libpng.mk                           |    5 +
+ package/libsoup/libsoup.mk                         |    2 +-
+ package/libxml-parser-perl/Config.in               |    8 +
+ package/libxml-parser-perl/libxml-parser-perl.mk   |   34 ++++
+ package/libxml2/libxml2.mk                         |    2 +
+ package/libxslt/libxslt.mk                         |    8 +
+ package/lvm2/lvm2.mk                               |    2 +
+ package/matchbox/matchbox.mk                       |    5 +-
+ package/multimedia/mplayer/mplayer.mk              |    2 +-
+ package/shared-mime-info/shared-mime-info.mk       |    6 +-
+ package/webkit/Config.in                           |    3 +
+ package/webkit/gtk-doc.make                        |  173 +++++++++++++++++
+ package/webkit/webkit.mk                           |    4 +-
+ package/x11r7/libxcb/libxcb.mk                     |    4 +-
+ package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk |    4 +-
+ package/x11r7/xfont_encodings/xfont_encodings.mk   |    1 +
+ package/x11r7/xfont_font-util/xfont_font-util.mk   |   74 +-------
+ package/x11r7/xlib_libfontenc/xlib_libfontenc.mk   |    3 +
+ package/zlib/zlib.mk                               |   25 +++
+ toolchain/Config.in.2                              |    1 +
+ toolchain/ccache/ccache.mk                         |    3 -
+ toolchain/dependencies/dependencies.sh             |    2 +-
+ 41 files changed, 595 insertions(+), 111 deletions(-)
+ create mode 100644 package/intltool/Config.in
+ create mode 100644 package/intltool/intltook.mk
+ create mode 100644 package/libgtk2/host-libgtk2-2.12.12-reduce-dependencies.patch
+ create mode 100644 package/libxml-parser-perl/Config.in
+ create mode 100644 package/libxml-parser-perl/libxml-parser-perl.mk
+ create mode 100644 package/webkit/gtk-doc.make
+
+Thanks,
 -- 
-1.6.3.3
+Thomas Petazzoni
