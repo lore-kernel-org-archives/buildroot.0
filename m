@@ -1,7 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 23 Feb 2010 21:27:28 +0100
-Subject: [Buildroot] [git commit master] package infrastructure: add PERLLIB
-Message-ID: <20100223202928.7ED38776A1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] dependencies: add perl as a
+	mandatory dependency
+Message-ID: <20100223202929.7290E776A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,56 +10,30 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=405a7ecaa19d229e144062a338d5a3b8cd21c96c
+commit: http://git.buildroot.net/buildroot/commit/?id=496078a0a0530dad1206be6257f1bc91a70b645a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now that we build Perl modules in $(HOST_DIR), PERLLIB must be defined
-to $(HOST_DIR)/usr/lib/perl.
+Now that we might happen to build libxml-parser-perl and intltool,
+Perl becomes a mandatory dependency. This shouldn't be a problem since
+most distributions install Perl by default anyway.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Makefile.in |   11 ++++++++---
- 1 files changed, 8 insertions(+), 3 deletions(-)
+ toolchain/dependencies/dependencies.sh |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 043ef3e..1e412a6 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -228,6 +228,8 @@ TARGET_CONFIGURE_OPTS=PATH=$(TARGET_PATH) \
- 		PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)" \
- 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
- 		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig:$(PKG_CONFIG_PATH)" \
-+		PERLLIB="$(HOST_DIR)/usr/lib/perl" \
-+		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib" \
- 		STAGING_DIR="$(STAGING_DIR)"
+diff --git a/toolchain/dependencies/dependencies.sh b/toolchain/dependencies/dependencies.sh
+index d0190fd..146e080 100755
+--- a/toolchain/dependencies/dependencies.sh
++++ b/toolchain/dependencies/dependencies.sh
+@@ -122,7 +122,7 @@ if ! $SHELL --version 2>&1 | grep -q '^GNU bash'; then
+ fi;
  
- TARGET_CONFIGURE_ENV=\
-@@ -237,7 +239,8 @@ TARGET_CONFIGURE_ENV=\
- 	FCFLAGS="$(TARGET_FCFLAGS)" \
- 
- TARGET_MAKE_ENV=PATH=$(TARGET_PATH) \
--		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)"
-+		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)" \
-+		PERLLIB="$(HOST_DIR)/usr/lib/perl"
- 
- HOST_CONFIGURE_OPTS=PATH=$(HOST_PATH) \
- 		AR="$(HOSTAR)" \
-@@ -275,12 +278,14 @@ HOST_CONFIGURE_OPTS=PATH=$(HOST_PATH) \
- 		ORIGINAL_NM_FOR_TARGET="$(TARGET_NM)" \
- 		ORIGINAL_OBJDUMP_FOR_TARGET="$(TARGET_OBJDUMP)" \
- 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
--		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig"
-+		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig" \
-+		PERLLIB="$(HOST_DIR)/usr/lib/perl"
- 
- HOST_MAKE_ENV=PATH=$(HOST_PATH) \
- 		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)" \
- 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
--		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig"
-+		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig" \
-+		PERLLIB="$(HOST_DIR)/usr/lib/perl"
- 
- 
- #######################################################################
+ # Check that a few mandatory programs are installed
+-for prog in awk bison flex msgfmt makeinfo patch gzip bzip2 ; do
++for prog in awk bison flex msgfmt makeinfo patch gzip bzip2 perl ; do
+     if ! which $prog > /dev/null ; then
+ 	/bin/echo -e "\nYou must install '$prog' on your build machine";
+ 	if test $prog = "makeinfo" ; then
 -- 
 1.6.3.3
