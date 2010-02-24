@@ -1,41 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 24 Feb 2010 18:11:12 +0000 (UTC)
-Subject: [Buildroot] [Bug 1153] Buildroot fails to build packages if
- BR2_GCC_SHARED_LIBGCC=y
-In-Reply-To: <bug-1153-163@https.bugs.busybox.net/>
-References: <bug-1153-163@https.bugs.busybox.net/>
-Message-ID: <20100224181113.0CC9277769@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 24 Feb 2010 20:22:25 +0100
+Subject: [Buildroot] [git commit master] kernel-headers: bump 2.6.32.x
+	version
+Message-ID: <20100224192406.11C0A77698@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1153
 
+commit: http://git.buildroot.net/buildroot/commit/?id=3c7e344c1bbbca111420a466069cec40de7eb8c0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Andy Kennedy <akennedy@drs-tem.com> changed:
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/kernel-headers/Config.in                 |    2 +-
+ ...types-for-headers-exported-to-user-space.patch} |    0
+ 2 files changed, 1 insertions(+), 1 deletions(-)
+ rename toolchain/kernel-headers/{linux-2.6.32.8-scsi-use-__uX-types-for-headers-exported-to-user-space.patch => linux-2.6.32.9-scsi-use-__uX-types-for-headers-exported-to-user-space.patch} (100%)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |WORKSFORME
-
-
-
-
---- Comment #2 from Andy Kennedy <akennedy@drs-tem.com>  2010-02-24 18:11:11 UTC ---
-After shutting down my computer over the weekend, and then attempting to build
-again today, the build was successful.  This must mean that, after the many
-attempts to build the system, I had an environmental variable set that was
-mucking around with the build.  I'm closing this issue for now, but I will
-attempt the build again today to see if it still works (If it fails, I'll
-reopen with an env dump).
-
--- This makes me feel all dirty, like working with Windows.
-
-
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index a0e21a8..2c1c8e2 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -71,6 +71,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.29.6"	if BR2_KERNEL_HEADERS_2_6_29
+ 	default "2.6.30.10"	if BR2_KERNEL_HEADERS_2_6_30
+ 	default "2.6.31.12"	if BR2_KERNEL_HEADERS_2_6_31
+-	default "2.6.32.8"	if BR2_KERNEL_HEADERS_2_6_32
++	default "2.6.32.9"	if BR2_KERNEL_HEADERS_2_6_32
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-2.6.32.8-scsi-use-__uX-types-for-headers-exported-to-user-space.patch b/toolchain/kernel-headers/linux-2.6.32.9-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-2.6.32.8-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
+rename to toolchain/kernel-headers/linux-2.6.32.9-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.6.3.3
