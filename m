@@ -1,62 +1,58 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 24 Feb 2010 09:42:30 +0100
-Subject: [Buildroot] [git commit master] buildroot: we're in 2010 now
-Message-ID: <20100224084255.35DD577672@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 24 Feb 2010 09:59:33 +0100
+Subject: [Buildroot] madplay build failure
+In-Reply-To: <99b73aa81002232342sc7823d6oda84f4e766122832@mail.gmail.com>
+References: <99b73aa81002232342sc7823d6oda84f4e766122832@mail.gmail.com>
+Message-ID: <20100224095933.77a91600@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Josh,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=eb057575108d069e53c8aff4675d8505f817721a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, 24 Feb 2010 15:42:59 +0800
+Josh Wu <rainyfeeling@gmail.com> wrote:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- Makefile           |    2 +-
- docs/copyright.txt |    2 +-
- docs/footer.html   |    3 ++-
- 3 files changed, 4 insertions(+), 3 deletions(-)
+> I am new in buildroot, when building madplay, I get the following build
+> failure. Does anybody can point out a hint for me why this happened?
+> I use the today's snapshot. 2010.02_rc2. Attached is the configuration file.
 
-diff --git a/Makefile b/Makefile
-index 76eeddb..fed6e12 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1,7 +1,7 @@
- # Makefile for buildroot2
- #
- # Copyright (C) 1999-2005 by Erik Andersen <andersen@codepoet.org>
--# Copyright (C) 2006-2009 by the Buildroot developers <buildroot@uclibc.org>
-+# Copyright (C) 2006-2010 by the Buildroot developers <buildroot@uclibc.org>
- #
- # This program is free software; you can redistribute it and/or modify
- # it under the terms of the GNU General Public License as published by
-diff --git a/docs/copyright.txt b/docs/copyright.txt
-index 77fb560..d4712a7 100644
---- a/docs/copyright.txt
-+++ b/docs/copyright.txt
-@@ -1,6 +1,6 @@
- 
- The code and graphics on this website (and it's mirror sites, if any) are
--Copyright (c) 1999-2005 by Erik Andersen, 2006-2009 The Buildroot
-+Copyright (c) 1999-2005 by Erik Andersen, 2006-2010 The Buildroot
- developers. All rights reserved.
- 
- Documents on this Web site including their graphical elements, design, and
-diff --git a/docs/footer.html b/docs/footer.html
-index d8db037..11bfec2 100644
---- a/docs/footer.html
-+++ b/docs/footer.html
-@@ -9,7 +9,8 @@
- 
-     <p>
-     <font face="arial, helvetica, sans-serif" size="-1">
--	<a HREF="/copyright.txt">Copyright &copy; 1999-2009 Erik Andersen</a>
-+	<a HREF="/copyright.txt">Copyright &copy; 1999-2005 Erik Andersen,
-+	2006-2010 The Buildroot developers</a>
- 	<br>
- 	Mail all comments, insults, suggestions and bribes to
- 	<br>
+> -Wl,/home/josh/buildroot/latest_version/buildroot/output/staging/usr/lib
+> audio_alsa.o: In function `config':
+> audio_alsa.c:(.text+0x200): undefined reference to
+> `snd_pcm_hw_params_set_rate_near at ALSA_0.9'
+> audio_alsa.c:(.text+0x25c): undefined reference to
+> `snd_pcm_hw_params_set_buffer_time_near at ALSA_0.9'
+> audio_alsa.c:(.text+0x284): undefined reference to
+> `snd_pcm_hw_params_get_buffer_size at ALSA_0.9'
+> audio_alsa.c:(.text+0x2a4): undefined reference to
+> `snd_pcm_hw_params_set_period_time_near at ALSA_0.9'
+> audio_alsa.c:(.text+0x2d4): undefined reference to
+> `snd_pcm_hw_params_get_period_size at ALSA_0.9'
+> collect2: ld returned 1 exit status
+
+I've reproduced your problem with the same .config. The problem is that
+we build alsa-lib without symbol versioning (the "@ALSA_0.9" thing at
+the end of symbol names), but madplay thinks that we compiled alsa-lib
+with symbol versioning. This is probably due to the fact that the
+alsa-lib installed on the host system (x86 or x86_64) is indeed
+compiled with symbol versioning. So it's a typical case of host
+information leaking into the target build.
+
+However, I don't yet know how to prevent this information leakage. In
+the mean time, two possible workarounds:
+
+ * Uninstall alsa-lib from your host. But you'll loose sound and
+   probably all your desktop :-)
+
+ * Try to compile alsa-lib for the target without the
+   --without-versioned option.
+
+Thomas
 -- 
-1.6.3.3
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
