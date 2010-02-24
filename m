@@ -1,43 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 Feb 2010 22:59:32 +0100
-Subject: [Buildroot] [git commit master] ipsec-tools: add host-flex
-	dependency
-Message-ID: <20100224220113.17A6477798@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 24 Feb 2010 23:01:35 +0100
+Subject: [Buildroot] [pull request] Pull request for branch fixes
+In-Reply-To: <cover.1267046193.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Wed, 24 Feb 2010 22:16:47 +0100")
+References: <cover.1267046193.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87mxyy70ow.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=088a04041e93c3cef484fa6ae3a4f6820f56adb9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Thomas> The following changes since commit 4f05a61b33e5d87f23837109fb0dd538a5bd5d62:
+ Thomas>   Peter Korsgaard (1):
+ Thomas>         Merge branch 'misc-fixes5' of git://git.busybox.net/~tpetazzoni/git/buildroot
 
-This fixes the following build failure:
+ Thomas> are available in the git repository at:
 
-checking lex output file root...
-configure: error: cannot find output from flex; giving up
+ Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot fixes
 
-Caused by the fact that a host version of flex is missing
-in $(HOST_DIR).
+Thanks! I'm not feeling confident about the pango change (as discussed
+on IRC), but the rest has been pulled and pushed.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ipsec-tools/ipsec-tools.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/package/ipsec-tools/ipsec-tools.mk b/package/ipsec-tools/ipsec-tools.mk
-index a8b87a6..38cd57b 100644
---- a/package/ipsec-tools/ipsec-tools.mk
-+++ b/package/ipsec-tools/ipsec-tools.mk
-@@ -145,7 +145,7 @@ ifeq ($(BR2_PACKAGE_IPSEC_TOOLS_ADMINPORT), y)
- IPSEC_TOOLS_PROGS+= $(TARGET_DIR)/$(IPSEC_TOOLS_TARGET_BINARY_RACOONCTL)
- endif
- 
--ipsec-tools: openssl flex $(IPSEC_TOOLS_PROGS)
-+ipsec-tools: openssl flex host-flex $(IPSEC_TOOLS_PROGS)
- 
- ipsec-tools-source: $(DL_DIR)/$(IPSEC_TOOLS_SOURCE)
- 
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
