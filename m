@@ -1,8 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 24 Feb 2010 22:59:32 +0100
-Subject: [Buildroot] [git commit master] libgtk2: host version needs
-	host-libpng
-Message-ID: <20100224220114.B7BB177798@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] sylpheed: add dependency on libgtk2
+Message-ID: <20100224220117.27C29775F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,26 +9,38 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2edfc313c0c996c7c3d815c722b68c37fbf5950c
+commit: http://git.buildroot.net/buildroot/commit/?id=ae6a7222ea8a8e9dbfd864de641de09f9c6968e3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libgtk2/libgtk2.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/sylpheed/Config.in   |    1 +
+ package/sylpheed/sylpheed.mk |    2 +-
+ 2 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
-index cc62c73..1e732d0 100644
---- a/package/libgtk2/libgtk2.mk
-+++ b/package/libgtk2/libgtk2.mk
-@@ -126,7 +126,7 @@ endif
- # gtk-update-icon-cache, which are the host tools needed to build Gtk
- # for the target.
+diff --git a/package/sylpheed/Config.in b/package/sylpheed/Config.in
+index 2c4aa3a..fe5aee6 100644
+--- a/package/sylpheed/Config.in
++++ b/package/sylpheed/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_SYLPHEED
+ 	bool "sylpheed"
++	select BR2_PACKAGE_LIBGTK2
+ 	help
+ 	  lightweight and user-friendly e-mail client.
  
--HOST_LIBGTK2_DEPENDENCIES = host-libglib2
-+HOST_LIBGTK2_DEPENDENCIES = host-libglib2 host-libpng
- HOST_LIBGTK2_AUTORECONF = YES
- HOST_LIBGTK2_CONF_OPT = \
- 		--disable-static \
+diff --git a/package/sylpheed/sylpheed.mk b/package/sylpheed/sylpheed.mk
+index 96eca9c..bc2872d 100644
+--- a/package/sylpheed/sylpheed.mk
++++ b/package/sylpheed/sylpheed.mk
+@@ -13,7 +13,7 @@ SYLPHEED_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
+ 
+ SYLPHEED_CONF_OPT = --disable-gtkspell --program-prefix=""
+ 
+-SYLPHEED_DEPENDENCIES = host-pkg-config
++SYLPHEED_DEPENDENCIES = host-pkg-config libgtk2
+ 
+ $(eval $(call AUTOTARGETS,package,sylpheed))
+ 
 -- 
 1.6.3.3
