@@ -1,41 +1,41 @@
-From: Wu, Josh <Josh.wu@atmel.com>
-Date: Wed, 24 Feb 2010 12:00:12 +0100
-Subject: [Buildroot]  madplay build failure
-In-Reply-To: <20100224095933.77a91600@surf>
-References: <99b73aa81002232342sc7823d6oda84f4e766122832@mail.gmail.com>
-	<20100224095933.77a91600@surf>
-Message-ID: <C83D7CE8356557448A893798C8F9931D04DEFD1D@frimb01.corp.atmel.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 24 Feb 2010 18:11:12 +0000 (UTC)
+Subject: [Buildroot] [Bug 1153] Buildroot fails to build packages if
+ BR2_GCC_SHARED_LIBGCC=y
+In-Reply-To: <bug-1153-163@https.bugs.busybox.net/>
+References: <bug-1153-163@https.bugs.busybox.net/>
+Message-ID: <20100224181113.0CC9277769@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=1153
 
-Hi, Thomas
 
->I've reproduced your problem with the same .config. The problem is that
->we build alsa-lib without symbol versioning (the "@ALSA_0.9" thing at
->the end of symbol names), but madplay thinks that we compiled alsa-lib
->with symbol versioning. This is probably due to the fact that the
->alsa-lib installed on the host system (x86 or x86_64) is indeed
->compiled with symbol versioning. So it's a typical case of host
->information leaking into the target build.
+Andy Kennedy <akennedy@drs-tem.com> changed:
 
->However, I don't yet know how to prevent this information leakage. In
->the mean time, two possible workarounds:
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |WORKSFORME
 
-> * Uninstall alsa-lib from your host. But you'll loose sound and
->   probably all your desktop :-)
 
-> * Try to compile alsa-lib for the target without the
->   --without-versioned option.
 
-I try the second workaround, it works well. 
-Thank you very much for the solution.
 
-So is there any way to detect the host information leaking? I mean in that way we will know host has impact in Buildroot. To avoid that same configuration file but get different build result in different host.
+--- Comment #2 from Andy Kennedy <akennedy@drs-tem.com>  2010-02-24 18:11:11 UTC ---
+After shutting down my computer over the weekend, and then attempting to build
+again today, the build was successful.  This must mean that, after the many
+attempts to build the system, I had an environmental variable set that was
+mucking around with the build.  I'm closing this issue for now, but I will
+attempt the build again today to see if it still works (If it fails, I'll
+reopen with an env dump).
 
-Thanks.
-Best Regards,
-Josh Wu
+-- This makes me feel all dirty, like working with Windows.
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
