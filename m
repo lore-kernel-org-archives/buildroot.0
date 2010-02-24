@@ -1,33 +1,20 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 24 Feb 2010 21:59:24 +0000 (UTC)
-Subject: [Buildroot] [Bug 165] openmotif does not build
-In-Reply-To: <bug-165-163@https.bugs.busybox.net/>
-References: <bug-165-163@https.bugs.busybox.net/>
-Message-ID: <20100224215924.CC12D7777D@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 24 Feb 2010 22:59:32 +0100
+Subject: [Buildroot] [git commit master] openmotif: remove package
+Message-ID: <20100224220113.D5B1D77798@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=165
 
+commit: http://git.buildroot.net/buildroot/commit/?id=3bd68817173de6b5f14b6f2f123d56e7acee32b0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+This is an old package. It is currently broken, and probably nobody
+uses it. So let's get rid of it.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-
-
-
---- Comment #4 from Peter Korsgaard <jacmet@uclibc.org>  2010-02-24 21:59:23 UTC ---
-openmotif has been removed from git, so closing issue.
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Patch is too large, so refusing to show it
