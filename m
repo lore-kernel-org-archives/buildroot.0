@@ -1,27 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 Feb 2010 09:47:38 +0100
-Subject: [Buildroot] [pull request] Pull request for branch gcc-target-fix
-Message-ID: <cover.1267087639.git.thomas.petazzoni@free-electrons.com>
+Date: Thu, 25 Feb 2010 09:47:39 +0100
+Subject: [Buildroot] [PATCH 1/1] gcc on target: add missing definitions for
+	gcc 4.4
+In-Reply-To: <cover.1267087639.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1267087639.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <a35d48f984fa7e499292baec85eba6c9fd5bf28c.1267087639.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The following changes since commit ba50538cfa513f7155f9c7fd30df22047f6eb751:
-  Peter Korsgaard (1):
-        CHANGES: add ipsec-tools/libgtk2/madplay/netsnmp/pango/sylpheed/openmotif/xpdf
+Depending on the gcc version, the gcc include and lib directories have
+changed. We include support for gcc 4.4 by copy/pasting the support
+for gcc 4.3. Locations don't seem to have changed between 4.3 and
+4.4. This allows the syslimits.h fixup to succeed.
 
-are available in the git repository at:
-
-  git://git.busybox.net/~tpetazzoni/git/buildroot gcc-target-fix
-
-Thomas Petazzoni (1):
-      gcc on target: add missing definitions for gcc 4.4
-
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
  toolchain/gcc/gcc-uclibc-4.x.mk |    4 ++++
  1 files changed, 4 insertions(+), 0 deletions(-)
 
-Thanks,
+diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
+index 6f65cb3..dcca431 100644
+--- a/toolchain/gcc/gcc-uclibc-4.x.mk
++++ b/toolchain/gcc/gcc-uclibc-4.x.mk
+@@ -459,6 +459,10 @@ ifeq ($(findstring x4.3,x$(GCC_VERSION)),x4.3)
+ GCC_LIB_SUBDIR=lib/gcc/$(REAL_GNU_TARGET_NAME)/$(GCC_VERSION)
+ GCC_INCLUDE_DIR:=include-fixed
+ endif
++ifeq ($(findstring x4.4,x$(GCC_VERSION)),x4.4)
++GCC_LIB_SUBDIR=lib/gcc/$(REAL_GNU_TARGET_NAME)/$(GCC_VERSION)
++GCC_INCLUDE_DIR:=include-fixed
++endif
+ 
+ $(TARGET_DIR)/usr/bin/gcc: $(GCC_BUILD_DIR3)/.compiled
+ 	PATH=$(TARGET_PATH) DESTDIR=$(TARGET_DIR) \
 -- 
-Thomas Petazzoni
+1.6.3.3
