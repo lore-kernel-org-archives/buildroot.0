@@ -1,40 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 Feb 2010 15:42:02 +0100
-Subject: [Buildroot] buildroot for older uClibc
-In-Reply-To: <fa63ee051002250621t4e0c2cbdk94c9dfa165a297d8@mail.gmail.com>
-References: <fa63ee051002250621t4e0c2cbdk94c9dfa165a297d8@mail.gmail.com>
-Message-ID: <20100225154202.53c82f09@surf>
+From: William Wagner <will_wagner@carallon.com>
+Date: Thu, 25 Feb 2010 16:00:34 +0000
+Subject: [Buildroot] buildroot-libtool.patch problem
+Message-ID: <4B869EA2.1070800@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 25 Feb 2010 14:21:02 +0000
-daniel wilson <daniel.a.wilson@gmail.com> wrote:
+When updating a number of packages I am running into problems with the 
+libtool patch. The updated version of the package I am trying to build 
+has a newer version of ltmain.sh (2.2.6) for which the patch in 
+buildroot does not apply.
 
-> I'm working with a legacy embedded platform which has some closed
-> binaries that are linked against uClibc 0.9.28.  Much as I would like
-> to bring this platform up-to-date, I'm reliant on these utilities for
-> the correct operation of various bits of hardware.  To cut a long
-> story short, I think I'm going to have to build myself a toolchain
-> which links against uClibc 0.9.28 to produce software for this
-> platform.
-> 
-> I've downloaded various older versions of buildroot, but none of them
-> seem to have this version of uClibc as an option.
+Example output of it failing is:
+for file in config.guess config.sub; do for i in $(find 
+/home/willw/martin/glowworm/controller/buildroot/build/host-xlib_libfontenc-1.0.5 
+-name $file); do cp package/gnuconfig/$file $i; done; done
+ >>>   Patching libtool
 
-In the current version of Buildroot, we still offer 0.9.28.3 as a
-choice, but you have to enable BR2_DEPRECATED to see it.
+Applying buildroot-libtool.patch using plaintext:
+patching file ltmain.sh
+Hunk #1 FAILED at 273.
+Hunk #2 succeeded at 5413 (offset 3005 lines).
+Hunk #3 FAILED at 5557.
+Hunk #4 FAILED at 5901.
+Hunk #5 succeeded at 8069 with fuzz 1 (offset 2446 lines).
+Hunk #6 FAILED at 8394.
+4 out of 6 hunks FAILED -- saving rejects to file ltmain.sh.rej
+Patch failed!  Please fix buildroot-libtool.patch!
+make[1]: *** 
+[/home/willw/martin/glowworm/controller/buildroot/build/host-xlib_libfontenc-1.0.5/.stamp_patched] 
+Error 1
+make[1]: Leaving directory `/home/willw/buildroot'
+make: *** [all] Error 2
 
-However, be warned that the version of uClibc is not the only thing.
-You have to create a uClibc with a configuration that is similar to the
-uClibc that was used by the binaries at the time they were generated.
-Depending on the configuration, the uClibc API/ABI changes.
+I have been fixing this by setting LIBTOOL_PATCH = NO which seems to 
+work, although I am not certain if some of the changes in the patch are 
+still needed.
 
-Thomas
+Can anyone offer some insight into this? Do we need to use a different 
+version of the patch depending on the version of ltmain.sh?
+
+Thanks
+Will
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+------------------------------------------------------------------------
+Will Wagner                                     will_wagner at carallon.com
+Development Manager                      Office Tel: +44 (0)20 7371 2032
+Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
+------------------------------------------------------------------------
