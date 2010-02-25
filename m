@@ -1,54 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 Feb 2010 08:41:30 +0100
-Subject: [Buildroot] [PATCH 1/1] xfont_font-util: install in staging as it
-	used to be
-In-Reply-To: <cover.1267083682.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1267083682.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <2972d5ebc84ea1e641e3c10c38854dbd5ab563d7.1267083682.git.thomas.petazzoni@free-electrons.com>
+Date: Thu, 25 Feb 2010 08:44:22 +0100
+Subject: [Buildroot] [git commit master] xfont_font-util: convert to the
+ autotools infrastructure
+In-Reply-To: <4B85ACF0.4000005@carallon.com>
+References: <20100223202924.D6947776A1@busybox.osuosl.org>
+	<4B844BFC.6030906@gmail.com> <87aauzei61.fsf@macbook.be.48ers.dk>
+	<4B8589C4.5060206@gmail.com> <4B85ACF0.4000005@carallon.com>
+Message-ID: <20100225084422.63ef8c84@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Before the autotools conversion, xfont_font-util was installed in
-staging, so keep this.
+On Wed, 24 Feb 2010 22:49:20 +0000
+Will Wagner <will_wagner@carallon.com> wrote:
 
-However, the current way of handling xfont_font-util is ugly. The
-post-install.sh script removes the binaries compiled for the target
-from the staging directory and replaces them by symbolic links to
-utils installed on the host (making the incorrect assumption that they
-are available).
+> > Why do we need POST_INSTALL_STAGING hook when we installed only to 
+> > TARGET?
+> 
+> I also have done a similar fix. I believe it is need in staging so
+> that the pkgconfig info is correct, otherwise other things don't build
 
-It looks like xfont_font-util needs to be built for the host (using
-the new infrastructure for host autotools package). This is certainly
-post-2010.02 though.
+Ok. I've just sent a patch to fix this.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/x11r7/xfont_font-util/xfont_font-util.mk |    5 ++++-
- 1 files changed, 4 insertions(+), 1 deletions(-)
+However, the way xfont_font-util is handled today is horrible. The
+post-install script removes binaries compiled for the target from the
+staging directory, and replaces them by symbolic links to binaries on
+the host (making the incorrect assumption that they are available).
 
-diff --git a/package/x11r7/xfont_font-util/xfont_font-util.mk b/package/x11r7/xfont_font-util/xfont_font-util.mk
-index 88dce38..015e98b 100644
---- a/package/x11r7/xfont_font-util/xfont_font-util.mk
-+++ b/package/x11r7/xfont_font-util/xfont_font-util.mk
-@@ -8,6 +8,8 @@ XFONT_FONT_UTIL_VERSION = 1.0.1
- XFONT_FONT_UTIL_SOURCE = font-util-$(XFONT_FONT_UTIL_VERSION).tar.bz2
- XFONT_FONT_UTIL_SITE = http://xorg.freedesktop.org/releases/individual/font
- XFONT_FONT_UTIL_DEPENDENCIES = host-pkg-config
-+XFONT_FONT_UTIL_INSTALL_STAGING = YES
-+XFONT_FONT_UTIL_INSTALL_TARGET = NO
- 
- define XFONT_FONT_UTIL_POST_INSTALL_FIXES
-  $(@D)/post-install.sh $(STAGING_DIR)
-@@ -15,4 +17,5 @@ endef
- 
- XFONT_FONT_UTIL_POST_INSTALL_STAGING_HOOKS += XFONT_FONT_UTIL_POST_INSTALL_FIXES
- 
--$(eval $(call AUTOTARGETS,package/x11r7,xfont_font-util))
-\ No newline at end of file
-+$(eval $(call AUTOTARGETS,package/x11r7,xfont_font-util))
-+
+So, xfont_font-util needs be compiled for the host (using the new
+infrastructure we have).
+
+I haven't looked at the details, why are pkgconfig files needed for
+font-utils ?
+
+> I have also have patches to submit for X.Org 7.5, was just waiting
+> for 2.10 release before submitting.
+
+Great!
+
+Could you cooperate with Paulius on this ? Like setting up a git tree
+somewhere where you can collaborate and show us your code before
+submitting it ?
+
+Thanks !
+
+Thomas
 -- 
-1.6.3.3
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
