@@ -1,27 +1,27 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 25 Feb 2010 09:19:49 +0100
-Subject: [Buildroot] [pull request] Pull request for branch font-util-fix
-In-Reply-To: <cover.1267083682.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Thu, 25 Feb 2010 08:41:29 +0100")
-References: <cover.1267083682.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87eik97mmy.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 25 Feb 2010 09:47:38 +0100
+Subject: [Buildroot] [pull request] Pull request for branch gcc-target-fix
+Message-ID: <cover.1267087639.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+The following changes since commit ba50538cfa513f7155f9c7fd30df22047f6eb751:
+  Peter Korsgaard (1):
+        CHANGES: add ipsec-tools/libgtk2/madplay/netsnmp/pango/sylpheed/openmotif/xpdf
 
- Thomas> The following changes since commit ba50538cfa513f7155f9c7fd30df22047f6eb751:
- Thomas>   Peter Korsgaard (1):
- Thomas>         CHANGES: add ipsec-tools/libgtk2/madplay/netsnmp/pango/sylpheed/openmotif/xpdf
+are available in the git repository at:
 
- Thomas> are available in the git repository at:
+  git://git.busybox.net/~tpetazzoni/git/buildroot gcc-target-fix
 
- Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot font-util-fix
+Thomas Petazzoni (1):
+      gcc on target: add missing definitions for gcc 4.4
 
-Committed, thanks!
+ toolchain/gcc/gcc-uclibc-4.x.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
+Thanks,
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni
