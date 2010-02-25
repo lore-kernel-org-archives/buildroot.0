@@ -1,42 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 Feb 2010 10:27:44 +0100
-Subject: [Buildroot] [git commit master] gcc on target: add missing
-	definitions for gcc 4.4
-Message-ID: <20100225092812.0CA047775F@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 25 Feb 2010 10:17:22 +0100
+Subject: [Buildroot] Add verbose of compilling
+In-Reply-To: <4B86362F.7020009@18r.ru> (=?utf-8?B?ItCU0LzQuNGC0YDQuNC5Iidz?=
+	message of "Thu, 25 Feb 2010 12:34:55 +0400")
+References: <4B862786.5090309@18r.ru> <87iq9l7msn.fsf@macbook.be.48ers.dk>
+	<4B86362F.7020009@18r.ru>
+Message-ID: <87aaux7jz1.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "???????" == ???????  <dima@18r.ru> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a35d48f984fa7e499292baec85eba6c9fd5bf28c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Depending on the gcc version, the gcc include and lib directories have
-changed. We include support for gcc 4.4 by copy/pasting the support
-for gcc 4.3. Locations don't seem to have changed between 4.3 and
-4.4. This allows the syslimits.h fixup to succeed.
+ ???????> Sorry for my English, if i have wrong commented my wish.
+ ???????> export PS1="Now compilling: xorg-server, packets 10 of 100"
+ ???????> it's an example. i want to see what packet is compilling now.
+ ???????> want to information about building in terminal header.
+ ???????> Thanks.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/gcc/gcc-uclibc-4.x.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+Ahh, that should be relatively easy to do - The "package X out of Y" is
+hard as we use make and the individual targets don't know what else
+needs to be be built, but the current step (package + part) could be
+done using a slight tweak of the MESSAGE macro in
+package/Makefile.package.in:
 
-diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
-index 6f65cb3..dcca431 100644
---- a/toolchain/gcc/gcc-uclibc-4.x.mk
-+++ b/toolchain/gcc/gcc-uclibc-4.x.mk
-@@ -459,6 +459,10 @@ ifeq ($(findstring x4.3,x$(GCC_VERSION)),x4.3)
- GCC_LIB_SUBDIR=lib/gcc/$(REAL_GNU_TARGET_NAME)/$(GCC_VERSION)
- GCC_INCLUDE_DIR:=include-fixed
- endif
-+ifeq ($(findstring x4.4,x$(GCC_VERSION)),x4.4)
-+GCC_LIB_SUBDIR=lib/gcc/$(REAL_GNU_TARGET_NAME)/$(GCC_VERSION)
-+GCC_INCLUDE_DIR:=include-fixed
-+endif
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+index fbd7f69..c40f83f 100644
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -34,7 +34,7 @@ INFLATE.tgz = $(ZCAT)
+ INFLATE.tar = cat
  
- $(TARGET_DIR)/usr/bin/gcc: $(GCC_BUILD_DIR3)/.compiled
- 	PATH=$(TARGET_PATH) DESTDIR=$(TARGET_DIR) \
+ # MESSAGE Macro -- display a message in bold type
+-MESSAGE = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION) $(1)$(TERM_RES
++MESSAGE = echo -e "\033]0;$($(PKG)_NAME) $($(PKG)_VERSION) $(1)\007"
+ TERM_BOLD := $(shell tput smso)
+ TERM_RESET := $(shell tput rmso)
+ 
+
+This only works for new-style packages (and not the toolchain build) though.
+
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
