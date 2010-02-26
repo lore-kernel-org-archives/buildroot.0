@@ -1,29 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 26 Feb 2010 10:43:25 +0100
-Subject: [Buildroot] [pull request] Pull request for branch misc-fixes
-In-Reply-To: <cover.1267172039.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Fri, 26 Feb 2010 09:14:30 +0100")
-References: <cover.1267172039.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87sk8o49j6.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 26 Feb 2010 09:59:32 +0000 (UTC)
+Subject: [Buildroot] [Bug 1189] New: Wrong u-boot configuration name for
+ integrator926 target
+Message-ID: <bug-1189-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=1189
 
- Thomas> The following changes since commit 0f40a46a54a3620c88fbd52e38a0f29c6aedb9a0:
- Thomas>   Gustavo Zacarias (1):
- Thomas>         Remove obsolete hostap package
+           Summary: Wrong u-boot configuration name for integrator926 target
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: johan at thelins.se
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
- Thomas> are available in the git repository at:
 
- Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot misc-fixes
+The integrator926_defconfig wants to use the integrator926 configuration for
+u-boot. This configuration does not exist, the proper name is integratorcp.
 
-Pulled and pushed, thanks!
-
-Anything else missing before 2010.20?
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
