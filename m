@@ -1,7 +1,8 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Fri, 26 Feb 2010 10:42:26 +0100
-Subject: [Buildroot] [git commit master] busybox: add upstream 1.16 fix
-Message-ID: <20100226094313.C4AD47775C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] CHANGES: add
+	avahi/cramfs/libcgicc/libraw1394/squashfs
+Message-ID: <20100226094314.5FA9F7775C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,36 +10,29 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1d7b6f65c633865b25c8603975f9aec88e4e1275
+commit: http://git.buildroot.net/buildroot/commit/?id=b209f227988447cddf5ade3040fb6633f93793e4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes https://bugs.busybox.net/show_bug.cgi?id=1177, available at
-http://busybox.net/downloads/fixes-1.16.0/busybox-1.16.0-fsync.patch.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/busybox/busybox-1.16.0-fsync.patch |   13 +++++++++++++
- 1 files changed, 13 insertions(+), 0 deletions(-)
- create mode 100644 package/busybox/busybox-1.16.0-fsync.patch
+ CHANGES |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/busybox/busybox-1.16.0-fsync.patch b/package/busybox/busybox-1.16.0-fsync.patch
-new file mode 100644
-index 0000000..b0d73ee
---- /dev/null
-+++ b/package/busybox/busybox-1.16.0-fsync.patch
-@@ -0,0 +1,13 @@
-+diff -urpN busybox-1.16.0/coreutils/fsync.c busybox-1.16.0-fsync/coreutils/fsync.c
-+--- busybox-1.16.0/coreutils/fsync.c	2010-01-25 01:59:38.000000000 +0100
-++++ busybox-1.16.0-fsync/coreutils/fsync.c	2010-02-26 08:24:59.000000000 +0100
-+@@ -7,6 +7,9 @@
-+  * Licensed under GPLv2 or later, see file LICENSE in this tarball for details.
-+  */
-+ #include "libbb.h"
-++#ifndef O_NOATIME
-++# define O_NOATIME 0
-++#endif
-+ 
-+ /* This is a NOFORK applet. Be very careful! */
-+ 
+diff --git a/CHANGES b/CHANGES
+index 3a1d1f6..e6a656b 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -2,8 +2,9 @@
+ 
+ 	Fixes all over the tree.
+ 
+-	Updated/fixed packages: busybox, ipsec-tools, libgtk2, madplay,
+-	netsnmp, pango, sylpheed, qt, xfont_font-util
++	Updated/fixed packages: avahi, busybox, cramfs, ipsec-tools, libcgicc,
++	libgtk2, libraw1394, madplay, netsnmp, pango, squashfs, sylpheed, qt,
++	xfont_font-util
+ 
+ 	Removed packages: hostap, openmotif, xpdf
+ 
 -- 
 1.6.3.3
