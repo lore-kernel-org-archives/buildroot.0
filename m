@@ -1,38 +1,29 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 26 Feb 2010 10:42:26 +0100
-Subject: [Buildroot] [git commit master] CHANGES: add
-	avahi/cramfs/libcgicc/libraw1394/squashfs
-Message-ID: <20100226094314.5FA9F7775C@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 26 Feb 2010 10:43:25 +0100
+Subject: [Buildroot] [pull request] Pull request for branch misc-fixes
+In-Reply-To: <cover.1267172039.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Fri, 26 Feb 2010 09:14:30 +0100")
+References: <cover.1267172039.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87sk8o49j6.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b209f227988447cddf5ade3040fb6633f93793e4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Thomas> The following changes since commit 0f40a46a54a3620c88fbd52e38a0f29c6aedb9a0:
+ Thomas>   Gustavo Zacarias (1):
+ Thomas>         Remove obsolete hostap package
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+ Thomas> are available in the git repository at:
 
-diff --git a/CHANGES b/CHANGES
-index 3a1d1f6..e6a656b 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -2,8 +2,9 @@
- 
- 	Fixes all over the tree.
- 
--	Updated/fixed packages: busybox, ipsec-tools, libgtk2, madplay,
--	netsnmp, pango, sylpheed, qt, xfont_font-util
-+	Updated/fixed packages: avahi, busybox, cramfs, ipsec-tools, libcgicc,
-+	libgtk2, libraw1394, madplay, netsnmp, pango, squashfs, sylpheed, qt,
-+	xfont_font-util
- 
- 	Removed packages: hostap, openmotif, xpdf
- 
+ Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot misc-fixes
+
+Pulled and pushed, thanks!
+
+Anything else missing before 2010.20?
+
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
