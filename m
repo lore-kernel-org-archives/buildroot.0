@@ -1,32 +1,44 @@
-From: Mario Augusto Souza Nunes <marioaugustorama@yahoo.com.br>
-Date: Fri, 26 Feb 2010 08:35:00 -0300
-Subject: [Buildroot] I can't download dropbear.
-In-Reply-To: <87sk8p5w76.fsf@macbook.be.48ers.dk>
-References: <4B866976.5070306@yahoo.com.br>
-	<87sk8p5w76.fsf@macbook.be.48ers.dk>
-Message-ID: <4B87B1E4.10701@yahoo.com.br>
+From: Heiko Zuerker <heiko@zuerker.org>
+Date: Fri, 26 Feb 2010 07:26:21 -0600
+Subject: [Buildroot] mkfs.jffs2 can't find zlib.h
+Message-ID: <20100226072621.16992lq3smxxymm8@www.home.zuerker.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard escreveu:
->>>>>> "Mario" == Mario Augusto Souza Nunes <marioaugustorama@yahoo.com.br> writes:
->>>>>>             
->
->  Mario> I can not download dropbear, already tested by dives connections and
->  Mario> can not, generates timeout.
->
->  Mario> Someone heave one mirror link?
->
-> http://buildroot.net/downloads/sources/dropbear-0.52.tar.gz
->
-> But buildroot should automatically fall back to this if matt.ucc.asn.au
-> times out, what is the error message you get exactly?
->
->   
-After time-out the make exit.
-I'm at work now, but coming home at night to inform the error
+Hey guys,
 
-Thanks for the answer.
+mkfs.jffs2 fails to compile because it can't find zlib.h.
+I'm using the latest GIT version of buildroot and an external toolchain.
+
+Thanks
+   Heiko
+
+buildroot.git/output/build/mtd-utils-1.3.1/mkfs.jffs2.o mkfs.jffs2.c  
+-g  
+-Wp,-MD,/udi/buildroot.git/output/build/mtd-utils-1.3.1/.mkfs.jffs2.c.dep
+/usr/local/arm-unknown-linux-gnueabi/bin/arm-unknown-linux-gnueabi-gcc  
+-I./include   -DWITHOUT_XATTR -O2 -g -Wall -Wextra -Wwrite-strings  
+-Wno-sign-compare -c -o  
+/udi/buildroot.git/output/build/mtd-utils-1.3.1/compr_rtime.o  
+compr_rtime.c -g  
+-Wp,-MD,/udi/buildroot.git/output/build/mtd-utils-1.3.1/.compr_rtime.c.dep
+mkfs.jffs2.c:73:18: error: zlib.h: No such file or directory
+mkfs.jffs2.c:1519: warning: initialization discards qualifiers from  
+pointer target type
+mkfs.jffs2.c:1521: warning: initialization discards qualifiers from  
+pointer target type
+mkfs.jffs2.c: In function 'main':
+mkfs.jffs2.c:1881: warning: passing argument 2 of  
+'recursive_add_host_directory' discards qualifiers from pointer target  
+type
+make[1]: ***  
+[/udi/buildroot.git/output/build/mtd-utils-1.3.1/mkfs.jffs2.o] Error 1
+make[1]: *** Waiting for unfinished jobs....
+
+
+
+----------------------------------------------------------------
+This message was sent using IMP, the Internet Messaging Program.
