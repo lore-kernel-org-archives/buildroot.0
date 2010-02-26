@@ -1,44 +1,49 @@
-From: Heiko Zuerker <heiko@zuerker.org>
-Date: Fri, 26 Feb 2010 07:26:21 -0600
-Subject: [Buildroot] mkfs.jffs2 can't find zlib.h
-Message-ID: <20100226072621.16992lq3smxxymm8@www.home.zuerker.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 26 Feb 2010 15:23:57 +0100
+Subject: [Buildroot] [git commit master] busybox: add upstream 1.16 fix
+In-Reply-To: <20100226094313.C4AD47775C@busybox.osuosl.org> (Thomas
+	Petazzoni's message of "Fri, 26 Feb 2010 10:42:26 +0100")
+References: <20100226094313.C4AD47775C@busybox.osuosl.org>
+Message-ID: <87k4u03wjm.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey guys,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-mkfs.jffs2 fails to compile because it can't find zlib.h.
-I'm using the latest GIT version of buildroot and an external toolchain.
+ Thomas> commit: http://git.buildroot.net/buildroot/commit/?id=1d7b6f65c633865b25c8603975f9aec88e4e1275
+ Thomas> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks
-   Heiko
+ Thomas> Fixes https://bugs.busybox.net/show_bug.cgi?id=1177, available at
+ Thomas> http://busybox.net/downloads/fixes-1.16.0/busybox-1.16.0-fsync.patch.
 
-buildroot.git/output/build/mtd-utils-1.3.1/mkfs.jffs2.o mkfs.jffs2.c  
--g  
--Wp,-MD,/udi/buildroot.git/output/build/mtd-utils-1.3.1/.mkfs.jffs2.c.dep
-/usr/local/arm-unknown-linux-gnueabi/bin/arm-unknown-linux-gnueabi-gcc  
--I./include   -DWITHOUT_XATTR -O2 -g -Wall -Wextra -Wwrite-strings  
--Wno-sign-compare -c -o  
-/udi/buildroot.git/output/build/mtd-utils-1.3.1/compr_rtime.o  
-compr_rtime.c -g  
--Wp,-MD,/udi/buildroot.git/output/build/mtd-utils-1.3.1/.compr_rtime.c.dep
-mkfs.jffs2.c:73:18: error: zlib.h: No such file or directory
-mkfs.jffs2.c:1519: warning: initialization discards qualifiers from  
-pointer target type
-mkfs.jffs2.c:1521: warning: initialization discards qualifiers from  
-pointer target type
-mkfs.jffs2.c: In function 'main':
-mkfs.jffs2.c:1881: warning: passing argument 2 of  
-'recursive_add_host_directory' discards qualifiers from pointer target  
-type
-make[1]: ***  
-[/udi/buildroot.git/output/build/mtd-utils-1.3.1/mkfs.jffs2.o] Error 1
-make[1]: *** Waiting for unfinished jobs....
+ Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Thomas> ---
+ Thomas>  package/busybox/busybox-1.16.0-fsync.patch |   13 +++++++++++++
+ Thomas>  1 files changed, 13 insertions(+), 0 deletions(-)
+ Thomas>  create mode 100644 package/busybox/busybox-1.16.0-fsync.patch
 
+ Thomas> diff --git a/package/busybox/busybox-1.16.0-fsync.patch b/package/busybox/busybox-1.16.0-fsync.patch
+ Thomas> new file mode 100644
+ Thomas> index 0000000..b0d73ee
+ Thomas> --- /dev/null
+ Thomas> +++ b/package/busybox/busybox-1.16.0-fsync.patch
+ Thomas> @@ -0,0 +1,13 @@
+ Thomas> +diff -urpN busybox-1.16.0/coreutils/fsync.c busybox-1.16.0-fsync/coreutils/fsync.c
+ Thomas> +--- busybox-1.16.0/coreutils/fsync.c	2010-01-25 01:59:38.000000000 +0100
+ Thomas> ++++ busybox-1.16.0-fsync/coreutils/fsync.c	2010-02-26 08:24:59.000000000 +0100
+ Thomas> +@@ -7,6 +7,9 @@
+ Thomas> +  * Licensed under GPLv2 or later, see file LICENSE in this tarball for details.
+ Thomas> +  */
+ Thomas> + #include "libbb.h"
+ Thomas> ++#ifndef O_NOATIME
+ Thomas> ++# define O_NOATIME 0
+ Thomas> ++#endif
 
+Hmm, this conflicts with the -compat patch, which also adds this - So
+I'll revert.
 
-----------------------------------------------------------------
-This message was sent using IMP, the Internet Messaging Program.
+-- 
+Bye, Peter Korsgaard
