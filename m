@@ -1,54 +1,44 @@
-From: Michael S. Zick <minimod@morethan.org>
-Date: Sun, 31 Jan 2010 15:36:01 -0600
-Subject: [Buildroot] BE: Buildroot How-To for QEMU/ARM (Jim Thomas)
-In-Reply-To: <hk4kaq$l50$1@ger.gmane.org>
-References: <mailman.7759.1264608677.5110.buildroot@busybox.net>
-	<411591.91959.qm@web44811.mail.sp1.yahoo.com>
-	<hk4kaq$l50$1@ger.gmane.org>
-Message-ID: <201001311536.04491.minimod@morethan.org>
+From: proclus at gnu-darwin.org <proclus@gnu-darwin.org>
+Date: Sun, 28 Feb 2010 23:15:53 -0500 (EST)
+Subject: [Buildroot] radical mormons
+Message-ID: <20100301041553.17256D5C0D3@gnu-darwin.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun January 31 2010, Grant Edwards wrote:
-> On 2010-01-31, Jim Thomas <jimthomasembedded@yahoo.com> wrote:
-> 
-> > I think the Buildroot adoption rate might be higher if there
-> > were a documented, streamlined way to build the kernel/RFS and
-> > execute it under QEMU, with an end-to-end Buildroot build
-> > process triggered by a single 'some_arm_defconfig'.  It might
-> > serve as a very useful hardware independent reference
-> > platform.
-> 
-> I think that would be usefull as well.  Building for ARM boards
-> and then running on Qemu is how I got up to speed on the
-> Buildroot "environment", but it was harder than it could have
-> been because the tutorials for buildroot/ARM/Qemu were out of
-> date and the default configs for the two platforms I tried were
-> broken (wouldn't build).
-> 
-> Keeping a tutorial up-to-date would take some effort. It might
-> be easier if it were in a Wiki format that didn't require
-> wrestling with the bug-tracker and the submissions and approval
-> of patches.
-> 
-> If the default configs aren't going to be kept up to date, it
-> would be nice if there was something to indicate which
-> version(s) of Buildroot they did work with.
-> 
 
-depends on Broken
-At the appropriate places would do that trick.
+Those of you who have been following mormonism on the web
+for many years will probably recognize The Radical Mormon
+publication.  This was likely the first attempt to make
+a web portal for latter-day saint people, and this pioneering
+effort helped to inspire many other sites to do likewise.  
+Radical set itself apart as a place where devout and sincere
+LDS and mormons could intelligently discuss controversial
+doctrines in a positive light, at a time when the anti-mormon
+forces were very powerful on the web.  The publication has been
+active off and on ever since that time.  If you are not
+familiar with it, you might want to have a look at it.  This
+site broke new ground at the time that it was started in 1999.
 
-But don't ask for that - you'll probably get one of those:
-"That requires the purchase of a commercial support contract."
-answers since it involves the function of what is actually
-produced by the build system, not the build system itself.
+http://proclus.tripod.com/radical/
 
-Mike
-> It would be easy enough to set up an automated test to check
-> that all of the default configs build, but checking to see if
-> they work is obviously a lot harder.
-> 
+For those who are already familiar with The Radical Mormon,
+you might be interested to know that the editors and 
+contributors have recently started work on some historical
+information regarding the publication, which provides many
+links to related websites.  You can have an advance look, 
+and see as it evolves.  
+
+http://proclus.tripod.com/radical/editor.html
+
+Some of you may even like to contribute something; help us
+fix broken links, contribute a news item, editorial, or
+personal story.  If you were a part of the activity that
+spawned The Radical Mormon, you might like to submit your
+link for inclusion on our contributors page.
+
+Regards,
+proclus
+http://www.gnu-darwin.org/
