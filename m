@@ -1,10 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  2 Mar 2010 12:46:07 +0000 (UTC)
+Date: Tue,  2 Mar 2010 13:10:47 +0000 (UTC)
 Subject: [Buildroot] [Bug 1219] kernel headers not correctly installed into
  toolchain/staging
 In-Reply-To: <bug-1219-163@https.bugs.busybox.net/>
 References: <bug-1219-163@https.bugs.busybox.net/>
-Message-ID: <20100302124607.5F4637775F@busybox.osuosl.org>
+Message-ID: <20100302131048.1EF9477731@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,15 +14,17 @@ To: buildroot@busybox.net
 https://bugs.busybox.net/show_bug.cgi?id=1219
 
 
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+   Target Milestone|---                         |2010.05
 
 
 
---- Comment #1 from Will Wagner <will_wagner@carallon.com>  2010-03-02 12:46:06 UTC ---
-Created an attachment (id=1183)
- --> (https://bugs.busybox.net/attachment.cgi?id=1183)
-Fix for copying kernel headers
 
-Helps if I attach the patch...
+--- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2010-03-02 13:10:47 UTC ---
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 
 -- 
