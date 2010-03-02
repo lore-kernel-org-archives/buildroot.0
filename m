@@ -1,29 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 2 Mar 2010 10:15:05 +0100
-Subject: [Buildroot] X11R7.5 git branch
-In-Reply-To: <4B8CD582.7060500@carallon.com>
-References: <4B8AB776.40204@gmail.com> <4B8BD799.3040008@carallon.com>
-	<4B8C27DD.5000006@gmail.com> <4B8CD582.7060500@carallon.com>
-Message-ID: <20100302101505.250c919f@surf>
+From: Tony Mozi <spooflinux@hotmail.fr>
+Date: Tue, 2 Mar 2010 11:51:34 +0100
+Subject: [Buildroot] add application for an ARM
+Message-ID: <SNT129-W1349076A4FA2B477A273AFB93B0@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 02 Mar 2010 09:08:18 +0000
-William Wagner <will_wagner@carallon.com> wrote:
 
-> I might be browsing gitorious wrong but it appears you have patches
-> for devtmpfs, gdb and the autotools infrastructure in there.
 
-It is likely a gitorious browsing problem, because I cloned the
-git tree, and the x11r75 branch pointed by Paulius really only
-contained changes to package/x11r7/.
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+
+
+
+Hi all,
+Currently, I do the cross-compilation of linux for an ARM.
+Well, I create some .exe like 'hello', ... and I need to do './hello' to execute it. It is not the problem.
+I want to use the power of the ARM, like a Timer but I have no idea how to do. For example, I want to use a Timer in order to flash a Led.
+Have you got an idea? a documentation?? a readme?
+BR
+ 		 	   		  
+_________________________________________________________________
+Hotmail et MSN dans la poche? HOTMAIL et MSN sont dispo gratuitement sur votre t?l?phone!
+http://www.messengersurvotremobile.com/?d=Hotmail
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100302/d0dc15d5/attachment.htm>
