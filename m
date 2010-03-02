@@ -1,54 +1,41 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  2 Mar 2010 20:25:47 +0000 (UTC)
-Subject: [Buildroot] [Bug 1225] New: Buildroot fails to account for "nof"
- subdirectory (no floating point)
-Message-ID: <bug-1225-163@https.bugs.busybox.net/>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 02 Mar 2010 21:38:41 +0100
+Subject: [Buildroot] uClibc-0.9.30.3-rc1
+In-Reply-To: <29ad16f61003020918q282ddabfmfe2b3730783194b4@mail.gmail.com>
+	(Sergey Yakoushkin's message of "Tue, 2 Mar 2010 20:18:09 +0300")
+References: <20100220182228.GN30265@mx.loc> <4B8D0758.907@digi.com>
+	<87mxyqvfuo.fsf@macbook.be.48ers.dk>
+	<29ad16f61003020918q282ddabfmfe2b3730783194b4@mail.gmail.com>
+Message-ID: <87iq9ev4q6.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1225
+>>>>> "Sergey" == Sergey Yakoushkin <sergey.yakoushkin@gmail.com> writes:
 
-           Summary: Buildroot fails to account for "nof" subdirectory (no
-                    floating point)
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: gnemesure at avtec.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+ Sergey> Hello,
 
+ Sergey> I?m working on tool chain for embedded processor. I?m would like to
+ Sergey> use uClibc and buildroot.
+ Sergey> However, my tool chain is based on LLVM compiler (llvm.org).
 
-I am using buildroot-2010.2 to target a 440GP processor with no hardware
-floating point.
+ Sergey> I?ve adopted buildroot scripts for LLVM-GCC (C compiler with gcc
+ Sergey> front-end and llvm back-end).
+ Sergey> Ideally I would prefer to compile uClibc using clang (clang.llvm.org)
+ Sergey> and build complete LLVM based tool chain using buildroot.
 
-When software floating point is enabled (BR2_SOFT_FLOAT), the gcc build puts
-libgcc_s.so, libstdc++.so, etc. in an "nof" subdirectory that buildroot is not
-accommodating. These are deposited in
+ Sergey> Are there any plans to support LLVM/clang in buildroot/uClibc?
 
-   $(STAGING_DIR)/usr/powerpc-linux-uclibc/lib/nof
+Not that I'm aware of. If you manage to get uclibc built using llvm,
+then you can probably use the external toolchain support we alredy have
+in buildroot without too much trouble.
 
-but the toolchain/gcc/gcc-uclibc-4.x.mk makefile tries to copy these files from
+You might want to take a look at crosstool-ng for toolchain building
+support/automation.
 
-   $(STAGING_DIR)/usr/powerpc-linux-uclibc/lib
-
-which results in failure to copy the libraries to the target filesystem.
-
-This is with GCC 4.3.4. I'm not sure if this applies to other versions as well.
-
-As a workaround, I think I can enable floating point in the kernel, and then
-enable hardware floating point in the toolchain.
-
+http://ymorin.is-a-geek.org/projects/crosstool
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
