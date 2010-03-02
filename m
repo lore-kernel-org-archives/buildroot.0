@@ -1,57 +1,47 @@
 From: William Wagner <will_wagner@carallon.com>
-Date: Tue, 02 Mar 2010 09:02:27 +0000
+Date: Tue, 02 Mar 2010 09:08:18 +0000
 Subject: [Buildroot] X11R7.5 git branch
-In-Reply-To: <20100302094355.58cb7de8@surf>
-References: <4B8AB776.40204@gmail.com> <20100302094355.58cb7de8@surf>
-Message-ID: <4B8CD423.1060403@carallon.com>
+In-Reply-To: <4B8C27DD.5000006@gmail.com>
+References: <4B8AB776.40204@gmail.com> <4B8BD799.3040008@carallon.com>
+	<4B8C27DD.5000006@gmail.com>
+Message-ID: <4B8CD582.7060500@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/03/2010 08:43, Thomas Petazzoni wrote:
-> Hi Paulius,
->
-> On Sun, 28 Feb 2010 20:35:34 +0200
-> Paulius Zaleckas<paulius.zaleckas@gmail.com>  wrote:
->
->    
->> As we have discussed earlier I have put all my X11R7.5 work in:
+
+
+On 01/03/2010 20:47, Paulius Zaleckas wrote:
+> On 03/01/2010 05:04 PM, William Wagner wrote:
+>> On 28/02/2010 18:35, Paulius Zaleckas wrote:
+>>> Hi,
+>>>
+>>> As we have discussed earlier I have put all my X11R7.5 work in:
+>>>
+>>> git://gitorious.org/takeme-buildroot/takeme-buildroot.git x11r75
+>>>
+>>> Should I post patch series to the list?
+>>> I am waiting for your comments on my work!
 >>
->> git://gitorious.org/takeme-buildroot/takeme-buildroot.git x11r75
->>
->> Should I post patch series to the list?
->>      
-> For me, having your git tree was enough.
+>> Paulius, have started look at what you have done. Good work,
+>> depressingly similar to all the work I have done, but oh well.
 >
-> Generally, it looks very good and I think it can be merged as is. I
-> appreciate the removal of all obsolete packages.
+> Fonts are the most boring part ;)
 >
-> I have a few questions though :
+>> One thing I have noticed is that you have quite a few changes in there
+>> that are not related to x11, any chance of splitting those out as
+>> separate patches as don't want them to complicate review.
 >
->   *) On many packages, but not all, you added FOOBAR_LIBTOOL_PATCH=NO.
->      What has driven your choice of applying or not applying the libtool
->      patch ?
->    
+> Which changes are not related?
 
-This is the same problem I saw and posted about here 
-http://lists.busybox.net/pipermail/buildroot/2010-February/032446.html. 
-It looks like the package has a newer version of ltmain.sh (2.2.6). Not 
-sure if it no longer needs the patch of if that version needs a 
-different version of the patch. I found most xorg packages needed the 
-change.
+I might be browsing gitorious wrong but it appears you have patches for 
+devtmpfs, gdb and the autotools infrastructure in there.
 
->   *) I imagine that all the patches you are dropping for the different
->      packages have been merged upstream and are no longer needed ?
->
->   *) I think the xf86-video-wsfb could just be removed. But this can be
->      done later, if you don't want to rebase all your patch set.
->    
-
-I think there are a lot of drivers that could be dropped, most of the 
-video drivers are for hardware that has not been made for years so could 
-be removed or marked deprecated.
+As far as other changes I made a few more changes to xserver and a few 
+other packages but it is perhaps easiest for me to submit patches once 
+yours have hit the tree if people are prepared to do things like that.
 
 -- 
 ------------------------------------------------------------------------
