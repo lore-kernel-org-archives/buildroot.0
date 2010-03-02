@@ -1,61 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 2 Mar 2010 09:43:55 +0100
+From: William Wagner <will_wagner@carallon.com>
+Date: Tue, 02 Mar 2010 09:02:27 +0000
 Subject: [Buildroot] X11R7.5 git branch
-In-Reply-To: <4B8AB776.40204@gmail.com>
-References: <4B8AB776.40204@gmail.com>
-Message-ID: <20100302094355.58cb7de8@surf>
+In-Reply-To: <20100302094355.58cb7de8@surf>
+References: <4B8AB776.40204@gmail.com> <20100302094355.58cb7de8@surf>
+Message-ID: <4B8CD423.1060403@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Paulius,
+On 02/03/2010 08:43, Thomas Petazzoni wrote:
+> Hi Paulius,
+>
+> On Sun, 28 Feb 2010 20:35:34 +0200
+> Paulius Zaleckas<paulius.zaleckas@gmail.com>  wrote:
+>
+>    
+>> As we have discussed earlier I have put all my X11R7.5 work in:
+>>
+>> git://gitorious.org/takeme-buildroot/takeme-buildroot.git x11r75
+>>
+>> Should I post patch series to the list?
+>>      
+> For me, having your git tree was enough.
+>
+> Generally, it looks very good and I think it can be merged as is. I
+> appreciate the removal of all obsolete packages.
+>
+> I have a few questions though :
+>
+>   *) On many packages, but not all, you added FOOBAR_LIBTOOL_PATCH=NO.
+>      What has driven your choice of applying or not applying the libtool
+>      patch ?
+>    
 
-On Sun, 28 Feb 2010 20:35:34 +0200
-Paulius Zaleckas <paulius.zaleckas@gmail.com> wrote:
+This is the same problem I saw and posted about here 
+http://lists.busybox.net/pipermail/buildroot/2010-February/032446.html. 
+It looks like the package has a newer version of ltmain.sh (2.2.6). Not 
+sure if it no longer needs the patch of if that version needs a 
+different version of the patch. I found most xorg packages needed the 
+change.
 
-> As we have discussed earlier I have put all my X11R7.5 work in:
-> 
-> git://gitorious.org/takeme-buildroot/takeme-buildroot.git x11r75
-> 
-> Should I post patch series to the list?
+>   *) I imagine that all the patches you are dropping for the different
+>      packages have been merged upstream and are no longer needed ?
+>
+>   *) I think the xf86-video-wsfb could just be removed. But this can be
+>      done later, if you don't want to rebase all your patch set.
+>    
 
-For me, having your git tree was enough.
+I think there are a lot of drivers that could be dropped, most of the 
+video drivers are for hardware that has not been made for years so could 
+be removed or marked deprecated.
 
-Generally, it looks very good and I think it can be merged as is. I
-appreciate the removal of all obsolete packages.
-
-I have a few questions though :
-
- *) On many packages, but not all, you added FOOBAR_LIBTOOL_PATCH=NO.
-    What has driven your choice of applying or not applying the libtool
-    patch ?
-
- *) I imagine that all the patches you are dropping for the different
-    packages have been merged upstream and are no longer needed ?
-
- *) I think the xf86-video-wsfb could just be removed. But this can be
-    done later, if you don't want to rebase all your patch set.
-
- *) Concerning the dependency of xcb-util on gperf on the host, we have
-    to decide whether gperf is a mandatory tool for Buildroot (in which
-    case it should be added to toolchain/dependencies/dependencies.sh)
-    or if we should build it, in which case, we need to add a
-    host-gperf dependency.
-
- *) The xfont_font-util package should be fixed, as we discussed
-    recently on the list. This post-install.sh script assuming that
-    some tools are installed on the host is ugly. We must determine
-    whether xfont_font-util should be built for the host, for the
-    target or for both. But this can be done after merging your patch
-    set, of course.
-
-Thanks a lot for all this work!
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+------------------------------------------------------------------------
+Will Wagner                                     will_wagner at carallon.com
+Development Manager                      Office Tel: +44 (0)20 7371 2032
+Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
+------------------------------------------------------------------------
