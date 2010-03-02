@@ -1,35 +1,36 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  2 Mar 2010 13:12:43 +0000 (UTC)
-Subject: [Buildroot] [Bug 907] mkisofs: No such file or directory
-In-Reply-To: <bug-907-163@https.bugs.busybox.net/>
-References: <bug-907-163@https.bugs.busybox.net/>
-Message-ID: <20100302131243.86EE777731@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 2 Mar 2010 17:42:23 +0100
+Subject: [Buildroot] [git commit master] Config.in: Bump version
+Message-ID: <20100302164423.799ED7777C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=907
 
+commit: http://git.buildroot.net/buildroot/commit/?id=291fedce66e808c65a3ce6388b0fa48052ab69f8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+Tree is open for development again.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         AssignedTo|unassigned at buildroot.uclibc.|thomas.petazzoni at free-
-                   |org                         |electrons.com
-   Target Milestone|2010.02                     |2010.05
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-
-
-
---- Comment #4 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2010-03-02 13:12:42 UTC ---
-I'm taking this bug, since I'm currently re-working completely the root
-filesystem generation code of Buildroot.
-
-
+diff --git a/Config.in b/Config.in
+index ef5d2a0..4505578 100644
+--- a/Config.in
++++ b/Config.in
+@@ -8,7 +8,7 @@ config BR2_HAVE_DOT_CONFIG
+ 
+ config BR2_VERSION
+ 	string
+-	default "2010.02"
++	default "2010.05-git"
+ 
+ source "target/Config.in.arch"
+ source "target/device/Config.in"
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.6.3.3
