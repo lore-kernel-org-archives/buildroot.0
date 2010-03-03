@@ -1,32 +1,27 @@
-From: Sergey Yakoushkin <sergey.yakoushkin@gmail.com>
-Date: Wed, 3 Mar 2010 06:34:02 +0300
-Subject: [Buildroot] uClibc-0.9.30.3-rc1
-In-Reply-To: <87iq9ev4q6.fsf@macbook.be.48ers.dk>
-References: <20100220182228.GN30265@mx.loc> <4B8D0758.907@digi.com>
-	<87mxyqvfuo.fsf@macbook.be.48ers.dk>
-	<29ad16f61003020918q282ddabfmfe2b3730783194b4@mail.gmail.com>
-	<87iq9ev4q6.fsf@macbook.be.48ers.dk>
-Message-ID: <29ad16f61003021934x7530b248n3f1162db0642d6b6@mail.gmail.com>
+From: Sergey Naumov <sknaumov@gmail.com>
+Date: Wed, 3 Mar 2010 13:51:05 +0300
+Subject: [Buildroot] Modules architecture
+Message-ID: <7627a87b1003030251o5313e124ofd6b99e7f0a55cc@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello, Peter
+Hello.
 
-Sergey> Are there any plans to support LLVM/clang in buildroot/uClibc?
+There is a problem with kernel building when .config contains processor
+architecture that differs from BR2_ARCH. Then kernel will have architecture
+as in BR2_ARCH and modules as in .config.
+Expectable behavior is to apply BR2_ARCH to both of them, or ignore it.
 
-> Not that I'm aware of. If you manage to get uclibc built using llvm,
-> then you can probably use the external toolchain support we alredy have
-> in buildroot without too much trouble.
-Actually, I've was able to extend BuildRoot to support LLVM and
-LLVM-GCC natively (not as external).
-Now I'm wondering if it is possible to built uClibc with Clang? Have
-anyone tried?
+As a result of the current implementation I got "invalid module format" for
+all modules compiled with the kernel.
 
-> You might want to take a look at crosstool-ng for toolchain building support/automation.
-Thanks for interesting link.
+What should I do to avoid it "through buildroot configs", but not through
+changing architecture in kernel config?
 
-Regards,
-Sergey Yakoushkin
+Sergey.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100303/7a0395e9/attachment.htm>
