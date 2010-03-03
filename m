@@ -1,10 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  3 Mar 2010 16:06:25 +0000 (UTC)
+Date: Wed,  3 Mar 2010 23:15:54 +0000 (UTC)
 Subject: [Buildroot] [Bug 1225] Buildroot fails to account for "nof"
  subdirectory (no floating point)
 In-Reply-To: <bug-1225-163@https.bugs.busybox.net/>
 References: <bug-1225-163@https.bugs.busybox.net/>
-Message-ID: <20100303160625.9207677727@busybox.osuosl.org>
+Message-ID: <20100303231554.58C297775E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,41 +17,12 @@ https://bugs.busybox.net/show_bug.cgi?id=1225
 
 
 
---- Comment #4 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2010-03-03 16:06:24 UTC ---
-Ok, thanks, got it. I think I missed it the previous time because the error is
-ignored and the build continues:
+--- Comment #5 from gnemesure <gnemesure@avtec.com>  2010-03-03 23:15:53 UTC ---
+The use of an "nof" subdirectory is to support the multilib capability enabled
+by BR2_ENABLE_MULTILIB. When this is disabled, the "nof" directory is not used,
+and the original problem does not occur.
 
-==================================================================
-
-# These are in /lib, so...
-rm -rf /home/test/buildroot/output/target/usr/lib/libgcc_s*.so*
-cp -dpf
-/home/test/buildroot/output/staging/usr/powerpc-linux-uclibc/lib*/libgcc_s* \
-                /home/test/buildroot/output/target/lib/
-cp: cannot stat
-`/home/test/buildroot/output/staging/usr/powerpc-linux-uclibc/lib*/libgcc_s*':
-No such file or directory
-make: [/home/test/buildroot/output/stamps/gcc_libs_target_installed] Error 1
-(ignored)
-/home/test/buildroot/output/staging/usr/bin/powerpc-linux-uclibc-strip
---remove-section=.comment --remove-section=.note --strip-unneeded
-/home/test/buildroot/output/target/lib/libgcc_s*
-/home/test/buildroot/output/staging/usr/bin/powerpc-linux-uclibc-strip:
-'/home/test/buildroot/output/target/lib/libgcc_s*': No such file
-make: [/home/test/buildroot/output/stamps/gcc_libs_target_installed] Error 1
-(ignored)
-mkdir -p /home/test/buildroot/output/target/usr/lib
-cp -dpf
-/home/test/buildroot/output/staging/usr/powerpc-linux-uclibc/lib*/libstdc++.so*
-\
-                /home/test/buildroot/output/target/usr/lib/
-cp: cannot stat
-`/home/test/buildroot/output/staging/usr/powerpc-linux-uclibc/lib*/libstdc++.so*':
-No such file or directory
-make: [/home/test/buildroot/output/stamps/gcc_libs_target_installed] Error 1
-(ignored)
-
-==================================================================
+Probably need to check this flag in the gcc-uclibc-*.mk makefile.
 
 
 -- 
