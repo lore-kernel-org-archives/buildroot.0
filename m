@@ -1,38 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 3 Mar 2010 16:03:21 +0100
-Subject: [Buildroot] Modules architecture
-In-Reply-To: <7627a87b1003030251o5313e124ofd6b99e7f0a55cc@mail.gmail.com>
-References: <7627a87b1003030251o5313e124ofd6b99e7f0a55cc@mail.gmail.com>
-Message-ID: <20100303160321.5ff87861@surf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed,  3 Mar 2010 15:05:48 +0000 (UTC)
+Subject: [Buildroot] [Bug 1225] Buildroot fails to account for "nof"
+ subdirectory (no floating point)
+In-Reply-To: <bug-1225-163@https.bugs.busybox.net/>
+References: <bug-1225-163@https.bugs.busybox.net/>
+Message-ID: <20100303150548.A37A7760E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 3 Mar 2010 13:51:05 +0300
-Sergey Naumov <sknaumov@gmail.com> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=1225
 
-> There is a problem with kernel building when .config contains
-> processor architecture that differs from BR2_ARCH. Then kernel will
-> have architecture as in BR2_ARCH and modules as in .config.
-> Expectable behavior is to apply BR2_ARCH to both of them, or ignore
-> it.
-> 
-> As a result of the current implementation I got "invalid module
-> format" for all modules compiled with the kernel.
-> 
-> What should I do to avoid it "through buildroot configs", but not
-> through changing architecture in kernel config?
 
-Could you give a specific configuration example with which you have
-problem ?
 
-Thanks,
 
-Thomas
+
+--- Comment #2 from gnemesure <gnemesure@avtec.com>  2010-03-03 15:05:46 UTC ---
+Created an attachment (id=1189)
+ --> (https://bugs.busybox.net/attachment.cgi?id=1189)
+Buildroot .config file demonstrating libgcc_s issue
+
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
