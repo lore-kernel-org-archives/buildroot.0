@@ -1,34 +1,25 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Wed, 3 Mar 2010 11:54:22 +0100
+From: Sergey Naumov <sknaumov@gmail.com>
+Date: Wed, 3 Mar 2010 16:13:57 +0300
 Subject: [Buildroot] Modules architecture
-In-Reply-To: <7627a87b1003030251o5313e124ofd6b99e7f0a55cc@mail.gmail.com>
+In-Reply-To: <4d28d4b51003030254r2541e9b6k5ef9678a69f35953@mail.gmail.com>
 References: <7627a87b1003030251o5313e124ofd6b99e7f0a55cc@mail.gmail.com>
-Message-ID: <4d28d4b51003030254r2541e9b6k5ef9678a69f35953@mail.gmail.com>
+	<4d28d4b51003030254r2541e9b6k5ef9678a69f35953@mail.gmail.com>
+Message-ID: <7627a87b1003030513n6103f53agd48bd06599ba4129@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use KERNEL_ARCH variable.
-It's computed from BR2_ARCH in buildroot's makefiles.
+KERNEL_ARCH variable is set to i386 for my configuration, as I understand it
+from Makefile, but as I saw in Makefiles its rather makes influence on paths
+to modules than on .config file.
+Is it possible to avoid buildroot's interference in the build process of
+kernel with standard options, but keep all other useful features of
+buildroot (so I want kernel to build on a toolchain, but along with
+modules.)?
 
---
-Lionel
-
-On Wed, Mar 3, 2010 at 11:51 AM, Sergey Naumov <sknaumov@gmail.com> wrote:
-> Hello.
-> There is a problem with kernel building when .config contains processor
-> architecture that differs from BR2_ARCH. Then kernel will have architecture
-> as in BR2_ARCH and modules as in?.config.
-> Expectable behavior is to apply BR2_ARCH to both of them, or ignore it.
-> As a result of the current implementation I got "invalid module format" for
-> all modules compiled with the kernel.
-> What should I do to avoid it "through buildroot configs", but not through
-> changing architecture in kernel config?
-> Sergey.
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+Sergey.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100303/ebcbcff7/attachment.htm>
