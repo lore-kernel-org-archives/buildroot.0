@@ -1,31 +1,28 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  3 Mar 2010 23:15:54 +0000 (UTC)
-Subject: [Buildroot] [Bug 1225] Buildroot fails to account for "nof"
- subdirectory (no floating point)
-In-Reply-To: <bug-1225-163@https.bugs.busybox.net/>
-References: <bug-1225-163@https.bugs.busybox.net/>
-Message-ID: <20100303231554.58C297775E@busybox.osuosl.org>
+From: Sergey Naumov <sknaumov@gmail.com>
+Date: Thu, 4 Mar 2010 18:52:07 +0300
+Subject: [Buildroot] Modules architecture
+In-Reply-To: <7627a87b1003030746r4cdb3cc3l99d1d2ffafcf6950@mail.gmail.com>
+References: <7627a87b1003030251o5313e124ofd6b99e7f0a55cc@mail.gmail.com>
+	<20100303160321.5ff87861@surf>
+	<7627a87b1003030746r4cdb3cc3l99d1d2ffafcf6950@mail.gmail.com>
+Message-ID: <7627a87b1003040752l20d7121fm9f180b3f55f620b9@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1225
+>
+> Hello again.
+If it is interesting for you, I overcome the problem with "invalid module
+format" through deleting target "modules" in
+./target/linux/Makefile.in.advanced in modules-building section, so "make"
+is invoked there without targets. So now my kernel image builds along with
+modules.
+But the question is should it be considered as buildroot bug or as my fault
+with configs?
 
-
-
-
-
---- Comment #5 from gnemesure <gnemesure@avtec.com>  2010-03-03 23:15:53 UTC ---
-The use of an "nof" subdirectory is to support the multilib capability enabled
-by BR2_ENABLE_MULTILIB. When this is disabled, the "nof" directory is not used,
-and the original problem does not occur.
-
-Probably need to check this flag in the gcc-uclibc-*.mk makefile.
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Sergey.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100304/ca74d756/attachment.htm>
