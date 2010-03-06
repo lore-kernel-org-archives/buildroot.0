@@ -1,33 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 5 Mar 2010 20:22:19 +0100
-Subject: [Buildroot] arm-linux-as available in buildroot?
-In-Reply-To: <SNT129-W43F44E6D9F28F855B5F85FB9380@phx.gbl>
-References: <SNT129-W43F44E6D9F28F855B5F85FB9380@phx.gbl>
-Message-ID: <20100305202219.4fe09a1b@surf>
+From: Thomas <tokant@gmx.net>
+Date: Sat, 06 Mar 2010 07:19:20 +0100
+Subject: [Buildroot] Error in 'e2fsprogs 1.41.9 Post installing'
+Message-ID: <1267856360.13606.11.camel@bernd-desktop>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 5 Mar 2010 18:05:22 +0100
-Tony Mozi <spooflinux@hotmail.fr> wrote:
+Hello,
 
-> I have not find arm-linux-as in the buildroot, there are a lot of
-> language but asm seems to be absent. Is it possible to add it? By a
-> patch? or another way?
+I tried the latest buildroot-2010.02:
+make at91rm9200df_defconfig
+make menuconfig
+make
 
-If you use an Buildroot toolchain (i.e a toolchain that Buildroot
-generates), then it is in $(STAGING_DIR)/usr/bin/arm-*-as. If you use an
-external toolchain, then it is inside your external toolchain.
+buildroot terminates with:
 
-Just run "find output/ -name 'arm-*-as'
+make: ***
+[/media/disk/br1002/buildroot-2010.02/output/build/e2fsprogs-1.41.9/.stamp_hook_post_install] Error 1
 
-Regards,
+Earlier in the console window, I found:
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+/media/disk/br1002/buildroot-2010.02/output/staging/usr/bin/ldconfig:
+can't link /usr/lib/libgnuintl.so.8 to preloadable_libintl.so:
+Permission denied
+/media/disk/br1002/buildroot-2010.02/output/staging/usr/bin/ldconfig:
+skipping /usr/X11R6/lib: No such file or directory
+
+My host system is Ubuntu 8.04/32 Bit. buildroot-2009.05 runs fine.
+
+Thanks, Thomas.
