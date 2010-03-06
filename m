@@ -1,33 +1,31 @@
-From: Thomas <tokant@gmx.net>
-Date: Sat, 06 Mar 2010 07:19:20 +0100
-Subject: [Buildroot] Error in 'e2fsprogs 1.41.9 Post installing'
-Message-ID: <1267856360.13606.11.camel@bernd-desktop>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 06 Mar 2010 22:51:52 +0100
+Subject: [Buildroot] Patch to allow iproute2 without IPv6 requirement
+In-Reply-To: <1267473268.25711.10.camel@localhost.localdomain> (Darcy
+	L. Watkins's message of "Mon, 01 Mar 2010 11:54:28 -0800")
+References: <D61182AC8012EA4EBC531B3AF23BE10992A96A@tranzeo-mail2.12stewart.tranzeo.com>
+	<1267220120.28886.99.camel@localhost.localdomain>
+	<1267473268.25711.10.camel@localhost.localdomain>
+Message-ID: <87aaul15l3.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Darcy" == Darcy L Watkins <dwatkins@tranzeo.com> writes:
 
-I tried the latest buildroot-2010.02:
-make at91rm9200df_defconfig
-make menuconfig
-make
+ Darcy> Hello,
+ Darcy> I noticed that when I upgraded from 2009.02 to 2010.02 I lost iproute2
+ Darcy> in my config that doesn't use IPv6.  The patch below applies to 2010.02
+ Darcy> and should allow the iproute2 to build without IPv6.  It builds OK (and
+ Darcy> doesn't appear to misbehave) on my powerpc 405 platform and I am also
+ Darcy> building it to try out later today on an ARM11 platform.
 
-buildroot terminates with:
+ Darcy> Anyone else who wants to test drive it is welcome to do so.
 
-make: ***
-[/media/disk/br1002/buildroot-2010.02/output/build/e2fsprogs-1.41.9/.stamp_hook_post_install] Error 1
+Thanks, looks sane. Please submit it to iproute upstream so we don't
+need to maintain this in the future.
 
-Earlier in the console window, I found:
-
-/media/disk/br1002/buildroot-2010.02/output/staging/usr/bin/ldconfig:
-can't link /usr/lib/libgnuintl.so.8 to preloadable_libintl.so:
-Permission denied
-/media/disk/br1002/buildroot-2010.02/output/staging/usr/bin/ldconfig:
-skipping /usr/X11R6/lib: No such file or directory
-
-My host system is Ubuntu 8.04/32 Bit. buildroot-2009.05 runs fine.
-
-Thanks, Thomas.
+-- 
+Bye, Peter Korsgaard
