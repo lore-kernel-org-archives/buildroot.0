@@ -1,107 +1,52 @@
-From: Drasko DRASKOVIC <drasko.draskovic@gmail.com>
-Date: Sun, 7 Mar 2010 20:28:04 +0100
+From: Jim Thomas <jimthomasembedded@yahoo.com>
+Date: Sun, 7 Mar 2010 12:26:38 -0800 (PST)
 Subject: [Buildroot] TFTP performance with U-Boot running under QEMU
-In-Reply-To: <729565.36936.qm@web44806.mail.sp1.yahoo.com>
+In-Reply-To: <c166aa9f1003071049k3207b922ge5849c3cc3292653@mail.gmail.com>
 References: <729565.36936.qm@web44806.mail.sp1.yahoo.com>
-Message-ID: <5ec3d7931003071128h4bc08fedhdbf22403bf3918d7@mail.gmail.com>
+	<c166aa9f1003071049k3207b922ge5849c3cc3292653@mail.gmail.com>
+Message-ID: <501849.68346.qm@web44805.mail.sp1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Mar 7, 2010 at 7:19 PM, Jim Thomas <jimthomasembedded@yahoo.com>wrote:
->
+Thanks, that is a good suggestion.  I will try that.
+
+
+
+________________________________
+From: Andrew Dyer <amdyer@gmail.com>
+To: Jim Thomas <jimthomasembedded@yahoo.com>
+Sent: Sun, March 7, 2010 12:49:15 PM
+Subject: Re: [Buildroot] TFTP performance with U-Boot running under QEMU
+
+On Sun, Mar 7, 2010 at 12:19 PM, Jim Thomas <jimthomasembedded@yahoo.com> wrote:
+> Hello,
+> I previously got the Buildroot generated Linux kernel and
+> RFS running in a QEMU VM (ARM versatilepb) , where the Linux
+> kernel zImage is passed to QEMU directly as a startup command
+> line option.
 > Now I am exploring adding U-Boot to the mix, where QEMU
 > executes u-boot.bin, and U-Boot first transfers the Linux
 > kernel uImage via TFTP and then executes it in the QEMU VM.
->
-
-Cool idea, and very close to reality. I tried to do the same thing (I saw
-your very nice instructions, thanks!)
-
-
->
+> I currently hard-code a few U-Boot environment variables in
+> ./include/configs/versatile.h.  That is inflexible, but very
+> convenient since it eliminates having to manually re-enter the
+> IP addresses, kernel parameters, and boot commands manually
+> each time the QEMU VM and U-Boot are restarted.
 > It works:
->
->   $ ./run-uboot.sh
->
->   U-Boot 2009.11 (Mar 07 2010 - 11:10:57)
->   DRAM:   0 kB
->   ## Unknown FLASH on Bank 1 - Size = 0x00000000 = 0 MB
->   Flash:  0 kB
->   *** Warning - bad CRC, using default environment
->   In:    serial
->   Out:   serial
->   Err:   serial
->   Net:   SMC91111-0
->   Hit any key to stop autoboot:  0
->   SMC91111: MAC 52:54:00:12:34:56
->   Using SMC91111-0 device
->   TFTP from server 192.168.32.140; our IP address is 192.168.32.150
->   Filename 'uImage'.
->   Load address: 0x7fc0
->   Loading:
-> #################################################################
->
-> #################################################################
->
-> #################################################################
->
-> #################################################################
->            ############################
->   done
->
-> But the problem is, the TFTP transfer of the 1.4 MB Linux kernel
-> takes a full 80 seconds (!) to complete.
->
 
-
-I have to complain even more:
-
-VersatilePB # tftp uImage
-SMC91111: PHY auto-negotiate timed out
-SMC91111: MAC 52:54:00:12:34:56
-Using SMC91111-0 device
-TFTP from server 192.168.0.10; our IP address is 192.168.0.150
-Filename 'uImage'.
-Load address: 0x7fc0
-Loading: #T T T #T T T T #T T T
-Retry count exceeded; starting again
-SMC91111: PHY auto-negotiate timed out
-SMC91111: MAC 52:54:00:12:34:56
-Using SMC91111-0 device
-TFTP from server 192.168.0.10; our IP address is 192.168.0.150
-Filename 'uImage'.
-Load address: 0x7fc0
-Loading: #T T T #T T T T #T T T
-Retry count exceeded; starting again
+I haven't specifically looked at qemu, but usually when u-boot tftp is
+problematic it has to do with timeouts and retries and the u-boot
+timers.  The u-boot code wants to be set up with CONFIG_HZ == 1000 and
+if the timer subsystem is running faster than that, the delays and
+timeouts start to happen and everything bogs down, as TFTP is a
+response-ack kind of protocol
 
 
 
-> When U-Boot is idling at the U-Boot prompt in the QEMU VM, I can
-> see by running 'top' in another terminal session in the Ubuntu VM
-> that hosts the QEMU VM that the QEMU VM is consuming 99% of the CPU.
->
-
-Same thing here... Even ping takes 20 seconds. Something is fishy in
-NetLoop.
-
-
-
-> It may also explain the slow TFTP tranfer.  I suspect the QEMU VM
-> running U-Boot superloop, consuming 99% of the Ubuntu VM CPU, is
-> starving the TFTP server that is also running as a daemon on that
-> same Ubuntu VM.  Running QEMU/U-Boot with 'nice' does not improve
-> the file transfer performance.
->
-
-> Have you observed this same slow TFTP file transfer under QEMU?
-> Is there any known workaround?
->
-
-I would also like to know this. It would be rely interesting to see what is
-going on here.
+      
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100307/c55ab741/attachment-0001.htm>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100307/f26309c1/attachment.htm>
