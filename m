@@ -1,31 +1,68 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 07 Mar 2010 23:04:58 +0100
-Subject: [Buildroot] Error in 'e2fsprogs 1.41.9 Post installing'
-In-Reply-To: <1267856360.13606.11.camel@bernd-desktop> (Thomas's message of
-	"Sat, 06 Mar 2010 07:19:20 +0100")
-References: <1267856360.13606.11.camel@bernd-desktop>
-Message-ID: <87ocizzt2t.fsf@macbook.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Sun, 7 Mar 2010 23:26:15 +0100
+Subject: [Buildroot] How to build crosstools-ng and commonc++ POSIX
+	framework library
+In-Reply-To: <190455.98316.qm@web44814.mail.sp1.yahoo.com>
+References: <190455.98316.qm@web44814.mail.sp1.yahoo.com>
+Message-ID: <201003072326.15905.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas  <tokant@gmx.net> writes:
+Hello Jim, All.
 
- Thomas> Hello,
- Thomas> I tried the latest buildroot-2010.02:
- Thomas> make at91rm9200df_defconfig
- Thomas> make menuconfig
- Thomas> make
+On Sunday 07 March 2010 22:00:30 Jim Thomas wrote:
+[--SNIP--]
+> Install commonc++:
 
- Thomas> buildroot terminates with:
+Disclaimer: I know nothing about commonc++.
 
- Thomas> make: ***
- Thomas> [/media/disk/br1002/buildroot-2010.02/output/build/e2fsprogs-1.41.9/.stamp_hook_post_install] Error 1
+> Configure commonc++, using exports to avoid 'realloc' compile error, and the prefix for the crosstools:
+[--SNIP--]
+>   $ ./configure --host=arm-linux --prefix=/home/jthomas/work/libcommonc++-0.6.2/usr
 
-Fixed in git. The reason why it fails is that the e2fsprogs package is
-selected, but no e2fsprogs binaries/libraries are enabled.
+It should be noted that the prefix is the _runtime_ prefix, not the install
+directory. Normally, auto-stuff based packages will support the DESTDIR
+directive. Use that way:
+  ./configure --host=arm-linux --prefix=/usr
+  make
+  make DESTDIR="/home/jthomas/work/libcommonc++-0.6.2"
+
+This is very important because the path given to --prefix might/will be
+hard-coded in the generated files (eg. to search for runtime configuration
+files, yo search for resource files...), whereas DESTDIR is just used
+during the installation, and thus do not leak into the target files.
+  http://www.gnu.org/prep/standards/html_node/DESTDIR.html
+
+[--SNIP--]
+> The commonc++ cross-build for ARM was successful.
+
+Well, that was a very detailed tutorial. Great! :-)
+
+> Need to coordinate toolchain build options between Buildroot and
+> crosstools-NG for Buildroot package build compatibility.
+
+> Need to coordinate kernel headers version used by Buildroot and
+> crosstools-NG.
+
+> Configure Buildroot and crosstools-NG to use the same tarball
+> directory, external to both project directories.
+
+There is work under way for buildroot to use crostool-NG as a backend to
+generate the toolchains. I am working on that, but it takes much more time
+that I expected, and I have much less time available than I expected. :-(
+
+Really, I do apologise for the delay...
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
