@@ -1,51 +1,97 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 7 Mar 2010 00:13:53 +0100
-Subject: [Buildroot] [git commit master] dosfstools: unbreak build
-Message-ID: <20100306231924.8142577715@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 7 Mar 2010 11:21:47 +0100
+Subject: [Buildroot] Compilation error of Buildroot with X server
+In-Reply-To: <4B9124F4.40206@terawatt.fr>
+References: <4B9124F4.40206@terawatt.fr>
+Message-ID: <20100307112147.55145b25@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello Damien,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9b592eb06e91306de1ee14861680326ca24c81dd
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 05 Mar 2010 16:36:20 +0100
+Damien Borie <dbe@terawatt.fr> wrote:
 
-Unbreak build after e8352988 (make sure install targets aren't run everytime)
+> The situation : we use Buildroot to create a embedded distribution
+> for a device with Touchscreen and a beautiful GUI.
+> We've just changed the hardware for the same model has before, but
+> with a larger screen. So now it's seems impossible to manage display
+> with only the framebuffer and Vesa drivers. So I must create a new
+> version of the distribution which will allow me to install the
+> specific driver of the graphic chipset.
 
-Reported-by: Darcy Watkins <DWatkins@tranzeo.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES                          |    2 +-
- package/dosfstools/dosfstools.mk |    3 +--
- 2 files changed, 2 insertions(+), 3 deletions(-)
+Ok.
 
-diff --git a/CHANGES b/CHANGES
-index 76d9aee..bd999db 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,6 +1,6 @@
- 2010.05, Not yet released
- 
--	 Updated/fixed packages: squashfs
-+	 Updated/fixed packages: dosfstools, squashfs
- 
- 2010.02, Release February 26th, 2010:
- 
-diff --git a/package/dosfstools/dosfstools.mk b/package/dosfstools/dosfstools.mk
-index b826ab1..a7f59f0 100644
---- a/package/dosfstools/dosfstools.mk
-+++ b/package/dosfstools/dosfstools.mk
-@@ -32,8 +32,7 @@ $(DOSFSTOOLS_DIR)/.built : $(DOSFSTOOLS_DIR)/.unpacked
- 	$(STRIPCMD) $(DOSFSTOOLS_DIR)/$(DOSFSLABEL_BINARY)
- 	touch $@
- 
--$(TARGET_DIR)/$(MKDOSFS_TARGET_BINARY): # $(DOSFSTOOLS_DIR)/.built
--	echo foo
-+$(TARGET_DIR)/$(MKDOSFS_TARGET_BINARY): $(DOSFSTOOLS_DIR)/.built
- 	cp -a $(DOSFSTOOLS_DIR)/$(MKDOSFS_BINARY) $@
- 	touch -c $@
- 
+> As it's the same hardware (except screen, which only change size 
+> anyway), I took the old configurations file (for Kernel, Busybox, and 
+> Buildroot). I only add the option "Enable loadable module support" in 
+> Kernel configuration, so I'll can install my drivers.
+> In Buildroot configuration, I'm a bit lost but I only have to active
+> X server. So I choose X Window system server "tinyX" instead of
+> "none". Then I check "Xorg X window system X11r7 release 7.4"
+> options, and choose xorg-server. And, that's all for a first test.
+
+I think you're using an old version of Buildroot, because the options
+are now organized in a different way (I've cleaned them up because
+they were quite messy).
+
+Now, we have a top-level option
+
+ [ ] X.org X Window System, X11R7, release 7.4
+
+Inside this options, we have :
+
+ X Window System server type (TinyX)  --->
+ X11R7 Servers  --->
+ X11R7 Libraries --->
+ X11R7 Applications -->
+ X11R7 Fonts -->
+ X11R7 X Protocols -->
+ X11R7 Utilities -->
+ X11R7 Other data -->
+
+So, once you've enabled X.org X Window System, X11R7, release 7.4, you
+are able to choose the server type, and there you have two choices :
+
+ * TinyX, which is in fact now known as Kdrive. It is a standalone X
+   server, which only supports a few hardware access solutions:
+   framebuffer, VESA, etc. If you want video-card specific drivers,
+   then, from my understanding, you cannot use TinyX/Kdrive
+
+ * The modular X.org, which is similar to the one you have in any
+   Linux distro, which allows you to compile hardware-specific drivers.
+   If you select this type, a new entry "X11R7 Drivers --->" will
+   appear.
+
+In your case, you probably want the modular X.org.
+
+> Here comes the problem. During compiling, I got the following error
+> log. I think it is strange that it is searching for a file with a
+> long path like this, which doesn't exists of course. The file 
+> /usr/local/toolchain/i486-twa-linux-gnu//usr/lib//libXau.la exists.
+> I search for long hours but didn't found something really
+> interesting. All I know is Libtool sometimes need to the librairies
+> to be installed on the host to compile them successfully, so I just
+> installed libXau but nothing changes.
+
+No, libtool doesn't need the libraries to be installed on the host. It
+might work-around some Buildroot issue, but it shouldn't be needed.
+
+> I really think the path is the problem, but I don't know how to
+> change it as I'm not familiar at all with Libtool.
+> Some advices for me?
+
+Could you try with Buildroot 2010.02, and if it still doesn't work,
+send us your .config ?
+
+Thanks!
+
+Thomas
 -- 
-1.6.3.3
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
