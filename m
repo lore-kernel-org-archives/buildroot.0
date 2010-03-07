@@ -1,705 +1,406 @@
 From: Jim Thomas <jimthomasembedded@yahoo.com>
-Date: Sun, 7 Mar 2010 12:28:20 -0800 (PST)
-Subject: [Buildroot] TFTP performance with U-Boot running under QEMU
-In-Reply-To: <5ec3d7931003071121i77632726i48ab4047e89096f1@mail.gmail.com>
-References: <729565.36936.qm@web44806.mail.sp1.yahoo.com>
-	<5ec3d7931003071121i77632726i48ab4047e89096f1@mail.gmail.com>
-Message-ID: <943046.82953.qm@web44814.mail.sp1.yahoo.com>
+Date: Sun, 7 Mar 2010 13:00:30 -0800 (PST)
+Subject: [Buildroot] How to build crosstools-ng and commonc++ POSIX
+	framework library
+Message-ID: <190455.98316.qm@web44814.mail.sp1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I think I can help you with a couple of issues here:
+FYI, notes on how to build crosstools-ng and commonc++ for QEMU ARM versatilepb.
 
-  > I have to complain even more:
+My objective is to get the commonc++ POSIX framework running in a Buildroot RFS
+under QEMU.
 
-  > VersatilePB # tftp uImage
-  > SMC91111: PHY auto-negotiate timed out
-  > SMC91111: MAC 52:54:00:12:34:56
-  > Using SMC91111-0 device
-  > TFTP from server 192.168.0.10; our IP address is 192.168.0.150
-  > Filename 'uImage'.
-  > Load address: 0x7fc0
-  > Loading: #T T T #T T T T #T T T 
-  > Retry count exceeded; starting again
-  > SMC91111: PHY auto-negotiate timed out
-  > SMC91111: MAC 52:54:00:12:34:56
-  > Using SMC91111-0 device
-  > TFTP from server 192.168.0.10; our IP address is 192.168.0.150
-  > Filename 'uImage'.
-  > Load address: 0x7fc0
-  > Loading: #T T T #T T T T #T T T 
-  > Retry count exceeded; starting again
+Disclaimer:  I am a crosstools-ng/commonc++ rookie.  This seems to work, but
+so did fusion in a bottle.
 
-I encountered both issues last night.
+Jim Thomas
 
-First, the 'PHY auto-negotiate timed out' adds an annoying
-delay at startup.  The solution for that is to change a U-Boot
-#undef to #define in ./u-boot-2009.11/include/configs/versatile.h:
 
-  #define CONFIG_SMC91111_EXT_PHY
+Sat 6 Mar 2010
 
-With that change, U-Boot blows right past the PHY at startup.
-No delay, and no timeout logged to the console.
-
-Second, the excessive timeouts '#T T T #T T T T # T T T' are exactly
-what I observed until long past midnight.  This one took me a while
-to figure out, and I had to get lucky just trying things -- I don't
-really understand the workaround that seems to solve it.
-
-The IP address of my Ubuntu VM hosting the TFTP server is
-192.168.32.133.  When I configured U-Boot to use that IP address, I
-got the timeout pattern above and it never ran to completion.  Running
-tcpdump on the Ubuntu VM, I could see lots of associated packet activity.
-
-At some point, just trying things, I configured U-Boot to use
-192.168.32.140 instead, and suddenly the timeouts went away and the
-TFTP download was successful (albeit requiring 80 seconds to complete).
-
-What is 192.168.32.140?  It is the IP address of the TUN interface that
-I configure for QEMU in qemu-ifup.sh.  I don't understand (yet) why that
-works, whereas using the actual IP address of the Ubuntu VM times out
-(although a few TFTP packets get through).
-
-I will include my initial setup notes below.  These are rough-cut.  I
-will revise them and repost to the mailing list if I come up with a better
-procedure, or a workaround for the slow TFTP transfer from QEMU/U-Boot.
-
-Please note that the procedure below uses an ARM cross-toolchain created
-using crosstools-ng.  You should be able to use your own equivalent
-toolchain.  (My objective is to get Mark Lindner's commonc++ POSIX framework
-library working on Buildroot.  Since commonc++ requires aio.h, and uClibc
-does not support async I/O, I am moving towards a crosstools-ng glibc based
-toolchain.  I am looking forward to the next Buildroot release where the
-roadmap mentions improved support for external crosstools-ng toolchains
-for an integrated environment.  In the meantime, I got crosstools-ng and
-commonc++ built -- but have not tried a commonc++ hello world program yet.
-Ran out of weekend.)
-
-Thanks.
-
-Jim
-
-Sat 6 Mar 2010 / Sun 7 Mar 2010
-
-On the Ubuntu 9.10 Server VM:
-
-  $ sudo apt-get install xinetd
-  $ sudo apt-get install tftpd
-  $ sudo apt-get install tftp
-
-Create the file /etc/xinetd.d/tftp as root:
-
-  service tftp
-  {
-    protocol    = udp
-    port        = 69
-    socket_type = dgram
-    wait        = yes
-    user        = nobody
-    server      = /usr/sbin/in.tftpd
-    server_args = -s /tftpboot
-    disable     = no
-  }
-
-Create tftpboot directory:
-
-  $ sudo mkdir /tftpboot
-  $ sudo chmod 777 /tftpboot
-  $ sudo chown nobody /tftpboot/
-
-  $ ls -ld /tftpboot
-  drwxrwxrwx 2 nobody root 4096 2010-03-06 17:45 /tftpboot
-
-  $ grep nobody /etc/passwd
-  nobody:x:65534:65534:nobody:/nonexistent:/bin/sh
-
-Start tftpd using xinetd:
-
-  $ sudo /etc/init.d/xinetd restart
-   * Stopping internet superserver xinetd  [ OK ] 
-   * Starting internet superserver xinetd  [ OK ] 
-
-Use Buildroot 'make menuconfig' and 'make' to select and build Linux
-kernel 'uImage' for U-Boot instead of the usual 'zImage'.  Copy the
-new uImage to the /tftpboot directory:
-
-  /tftpboot
-
-  -rw-r--r-- 1 jthomas swdev 1473140 2010-03-07 10:01 uImage
-
-Verify that tftpd is functional by copying uImage to a local tmp directory:
-
-  /home/jthomas/tmp
-
-  $ tftp 192.168.32.133
-  tftp> binary
-  tftp> get uImage
-  Received 1473140 bytes in 0.2 seconds
-  tftp> quit
-
-  $ ls -l
-  -rw-r--r-- 1 jthomas swdev 1473140 2010-03-07 10:47 uImage
-
-Create a standalone U-Boot build environment independent of Buildroot:
+Download and expand crosstools-ng:
 
   /home/jthomas/work
 
-  -rw-r--r-- 1 jthomas swdev 8856614 2010-03-07 10:23 u-boot-2009.11.tar.bz2
+  $ wget http://ymorin.is-a-geek.org/download/crosstool-ng/crosstool-ng-1.6.0.tar.bz2 
 
-  $ tar xfj u-boot-2009.11.tar.bz2 
+  -rw-r--r--  1 jthomas swdev 1830798 2010-01-31 16:14 crosstool-ng-1.6.0.tar.bz2
 
-NOTE:  *_EXT_PHY below is to avoid lengthy delay and timeout at U-Boot startup
-due to there being no PHY in the QEMU execution environment.
+  $ tar xfj crosstool-ng-1.6.0.tar.bz2 
 
-NOTE:  The hard-coded IP addresses below are inflexible, but very convenient
-since the U-Boot environment variables need not be manually entered each time.
+Install gawk:
 
-Customize the U-Boot source for the Versatile platform:
+  $ sudo apt-get install gawk
 
-  /home/jthomas/work/u-boot-2009.11/include/configs/versatile.h 
+Create directory where crosstools-ng will store downloaded tarballs:
 
-  Modify:
+  $ mkdir ~/src
 
-    #define CONFIG_SMC91111_EXT_PHY
+Build crosstools-ng:
 
-    #define CONFIG_BOOTFILE   "uImage"
+  /home/jthomas/work/crosstool-ng-1.6.0
 
-    #define CONFIG_BOOTARGS   "console=ttyAMA0 mem=128M " \
-      "root=/dev/nfs rw nfsroot=192.168.32.133:/home/jthomas/arm-vm/rfs " \
-      "ip=192.168.32.150:192.168.32.133:192.168.32.2:255.255.255.0"
+  $ ./configure --local
 
-  Add:
+    <snip>
 
-    #define CONFIG_IPADDR    192.168.32.150
-    #define CONFIG_NETMASK   255.255.255.0
-    #define CONFIG_SERVERIP  192.168.32.140
+    Building up Makefile... done
 
-Set PATH to toolchain built using crosstools-ng:
+    crosstool-NG configured as follows:
+      PREFIX='/home/jthomas/work/crosstool-ng-1.6.0'
+      BINDIR='/home/jthomas/work/crosstool-ng-1.6.0'
+      LIBDIR='/home/jthomas/work/crosstool-ng-1.6.0'
+      DOCDIR='/home/jthomas/work/crosstool-ng-1.6.0/docs'
+      MANDIR='/home/jthomas/work/crosstool-ng-1.6.0/docs'
 
-  $ export PATH=$PATH:/home/jthomas/x-tools/arm-unknown-linux-gnueabi/bin
+    Now run:
+      make
 
-Build U-Boot:
+  $ make
 
-  /home/jthomas/work/u-boot-2009.11
+  $ ./ct-ng help
 
-  $ make versatile
+NOTE: Select 'arm' (not 'armeb') to match little endian versatilepb and G20.
 
-The build completes in ~2 minutes, and creates:
+  $ ./ct-ng arm-unknown-linux-gnueabi
+
+  $ ./ct-ng menuconfig
+
+     Toolchain options
+       Tuple's alias
+         arm-linux       <-- alias for arm-unknown-linux-gnueabi
+     Operating System
+       Linux kernel version
+         2.6.32.7        <-- closest to Buildroot 2.6.32.9
+     C compiler
+       gcc version
+         4.3.2           <-- Buildroot uses 4.3.4
+       [*] C++
+       [ ] Fortran       <-- deselect
+       [ ] Java          <-- deselect
+     Debug facilities
+       strace
+         strace version
+           4.5.19        <-- 4.5.18 build fails
+     Tools facilities
+       [ ] sstrip        <-- deselect
+
+  $ ./ct-ng build
+
+The build completes successfully in 1 hour 40 minutes.
+
+The build consumes:
+
+  /home/jthomas/work/crosstool-ng-1.6.0
+
+  $ du -sh
+  2.1G    .
+
+  /home/jthomas/x-tools
+
+  $ du -sh
+  162M    .
+
+  /home/jthomas/src
+
+  $ du -sh
+  171M    .
+
+The build installs the following tarballs:
+
+  /home/jthomas/src
+
+  -rw-r--r-- 1 jthomas swdev 16245771 2010-03-06 12:52 binutils-2.19.1.tar.bz2
+  -rw-r--r-- 1 jthomas swdev   666608 2007-05-14 12:26 dmalloc-5.5.2.tgz
+  -rw-r--r-- 1 jthomas swdev   240479 2009-04-11 17:29 duma_2_5_15.tar.gz
+  -rw-r--r-- 1 jthomas swdev 58929447 2010-03-06 12:52 gcc-4.3.2.tar.bz2
+  -rw-r--r-- 1 jthomas swdev 15581509 2010-03-06 12:53 gdb-6.8.tar.bz2
+  -rw-r--r-- 1 jthomas swdev 16079568 2010-03-06 12:53 glibc-2.9.tar.bz2
+  -rw-r--r-- 1 jthomas swdev   457264 2010-03-06 12:53 glibc-ports-2.9.tar.bz2
+  -rw-r--r-- 1 jthomas swdev  1881090 2010-03-06 12:51 gmp-4.3.1.tar.bz2
+  -rw-r--r-- 1 jthomas swdev   147553 2009-05-22 12:20 libelf-0.8.11.tar.gz
+  -rw-r--r-- 1 jthomas swdev 64385857 2010-03-06 12:51 linux-2.6.32.7.tar.bz2
+  -rw-r--r-- 1 jthomas swdev   210152 2010-03-06 12:53 ltrace_0.5.2.orig.tar.gz
+  -rw-r--r-- 1 jthomas swdev  1064281 2009-02-25 17:02 mpfr-2.4.1.tar.bz2
+  -rw-r--r-- 1 jthomas swdev  2445052 2010-03-06 12:53 ncurses-5.7.tar.gz
+  -rw-r--r-- 1 jthomas swdev   499565 2009-10-21 12:43 strace-4.5.19.tar.bz2
+
+The build creates toolchain executables:
+
+  /home/jthomas/x-tools/arm-unknown-linux-gnueabi/bin
+
+  lrwxrwxrwx  1 jthomas swdev  35 2010-03-06 14:28 arm-linux-addr2line -> arm-unknown-linux-gnueabi-addr2line
+  lrwxrwxrwx  1 jthomas swdev  28 2010-03-06 14:28 arm-linux-ar -> arm-unknown-linux-gnueabi-ar
+  lrwxrwxrwx  1 jthomas swdev  28 2010-03-06 14:28 arm-linux-as -> arm-unknown-linux-gnueabi-as
+  lrwxrwxrwx  1 jthomas swdev  29 2010-03-06 14:28 arm-linux-c++ -> arm-unknown-linux-gnueabi-c++
+  lrwxrwxrwx  1 jthomas swdev  28 2010-03-06 14:28 arm-linux-cc -> arm-unknown-linux-gnueabi-cc
+  lrwxrwxrwx  1 jthomas swdev  33 2010-03-06 14:28 arm-linux-c++filt -> arm-unknown-linux-gnueabi-c++filt
+  lrwxrwxrwx  1 jthomas swdev  29 2010-03-06 14:28 arm-linux-cpp -> arm-unknown-linux-gnueabi-cpp
+  lrwxrwxrwx  1 jthomas swdev  38 2010-03-06 14:28 arm-linux-ct-ng.config -> arm-unknown-linux-gnueabi-ct-ng.config
+  lrwxrwxrwx  1 jthomas swdev  29 2010-03-06 14:28 arm-linux-g++ -> arm-unknown-linux-gnueabi-g++
+  lrwxrwxrwx  1 jthomas swdev  29 2010-03-06 14:28 arm-linux-gcc -> arm-unknown-linux-gnueabi-gcc
+  lrwxrwxrwx  1 jthomas swdev  35 2010-03-06 14:28 arm-linux-gcc-4.3.2 -> arm-unknown-linux-gnueabi-gcc-4.3.2
+  lrwxrwxrwx  1 jthomas swdev  32 2010-03-06 14:28 arm-linux-gccbug -> arm-unknown-linux-gnueabi-gccbug
+  lrwxrwxrwx  1 jthomas swdev  30 2010-03-06 14:28 arm-linux-gcov -> arm-unknown-linux-gnueabi-gcov
+  lrwxrwxrwx  1 jthomas swdev  29 2010-03-06 14:28 arm-linux-gdb -> arm-unknown-linux-gnueabi-gdb
+  lrwxrwxrwx  1 jthomas swdev  32 2010-03-06 14:28 arm-linux-gdbtui -> arm-unknown-linux-gnueabi-gdbtui
+  lrwxrwxrwx  1 jthomas swdev  31 2010-03-06 14:28 arm-linux-gprof -> arm-unknown-linux-gnueabi-gprof
+  lrwxrwxrwx  1 jthomas swdev  28 2010-03-06 14:28 arm-linux-ld -> arm-unknown-linux-gnueabi-ld
+  lrwxrwxrwx  1 jthomas swdev  28 2010-03-06 14:28 arm-linux-nm -> arm-unknown-linux-gnueabi-nm
+  lrwxrwxrwx  1 jthomas swdev  33 2010-03-06 14:28 arm-linux-objcopy -> arm-unknown-linux-gnueabi-objcopy
+  lrwxrwxrwx  1 jthomas swdev  33 2010-03-06 14:28 arm-linux-objdump -> arm-unknown-linux-gnueabi-objdump
+  lrwxrwxrwx  1 jthomas swdev  34 2010-03-06 14:28 arm-linux-populate -> arm-unknown-linux-gnueabi-populate
+  lrwxrwxrwx  1 jthomas swdev  32 2010-03-06 14:28 arm-linux-ranlib -> arm-unknown-linux-gnueabi-ranlib
+  lrwxrwxrwx  1 jthomas swdev  33 2010-03-06 14:28 arm-linux-readelf -> arm-unknown-linux-gnueabi-readelf
+  lrwxrwxrwx  1 jthomas swdev  29 2010-03-06 14:28 arm-linux-run -> arm-unknown-linux-gnueabi-run
+  lrwxrwxrwx  1 jthomas swdev  30 2010-03-06 14:28 arm-linux-size -> arm-unknown-linux-gnueabi-size
+  lrwxrwxrwx  1 jthomas swdev  33 2010-03-06 14:28 arm-linux-strings -> arm-unknown-linux-gnueabi-strings
+  lrwxrwxrwx  1 jthomas swdev  31 2010-03-06 14:28 arm-linux-strip -> arm-unknown-linux-gnueabi-strip
+
+  -r-xr-xr-x 26 jthomas swdev 395 2010-03-06 14:28 arm-unknown-linux-gnueabi-addr2line
+  -r-xr-xr-x 26 jthomas swdev 395 2010-03-06 14:28 arm-unknown-linux-gnueabi-ar
+  -r-xr-xr-x 26 jthomas swdev 395 2010-03-06 14:28 arm-unknown-linux-gnueabi-as
+  -r-xr-xr-x 26 jthomas swdev 395 2010-03-06 14:28 arm-unknown-linux-gnueabi-c++
+  lrwxrwxrwx  1 jthomas swdev  29 2010-03-06 14:01 arm-unknown-linux-gnueabi-cc -> arm-unknown-linux-gnueabi-gcc
+  -r-xr-xr-x 26 jthomas swdev 395 2010-03-06 14:28 arm-unknown-linux-gnueabi-c++filt
+  -r-xr-xr-x 26 jthomas swdev 395 2010-03-06 14:28 arm-unknown-linux-gnueabi-cpp
+  -r-xr-xr-x 26 jthomas swdev 395 2010-03-06 14:28 arm-unknown-linux-gnueabi-ct-ng.config
+  -r-xr-xr-x 26 jthomas swdev 395 2010-03-06 14:28 arm-unknown-linux-gnueabi-g++
+  -r-xr-xr-x 26 jthomas swdev 395 2010-03-06 14:28 arm-unknown-linux-gnueabi-gcc
+  -r-xr-xr-x 26 jthomas swdev 395 2010-03-06 14:28 arm-unknown-linux-gnueabi-gcc-4.3.2
+  -r-xr-xr-x 26 jthomas swdev 395 2010-03-06 14:28 arm-unknown-linux-gnueabi-gccbug
+  -r-xr-xr-x 26 jthomas swdev 395 2010-03-06 14:28 arm-unknown-linux-gnueabi-gcov
+  -r-xr-xr-x 26 jthomas swdev 395 2010-03-06 14:28 arm-unknown-linux-gnueabi-gdb
+  -r-xr-xr-x 26 jthomas swdev 395 2010-03-06 14:28 arm-unknown-linux-gnueabi-gdbtui
+  -r-xr-xr-x 26 jthomas swdev 395 2010-03-06 14:28 arm-unknown-linux-gnueabi-gprof
+  -r-xr-xr-x 26 jthomas swdev 395 2010-03-06 14:28 arm-unknown-linux-gnueabi-ld
+  -r-xr-xr-x 26 jthomas swdev 395 2010-03-06 14:28 arm-unknown-linux-gnueabi-nm
+  -r-xr-xr-x 26 jthomas swdev 395 2010-03-06 14:28 arm-unknown-linux-gnueabi-objcopy
+  -r-xr-xr-x 26 jthomas swdev 395 2010-03-06 14:28 arm-unknown-linux-gnueabi-objdump
+  -r-xr-xr-x 26 jthomas swdev 395 2010-03-06 14:28 arm-unknown-linux-gnueabi-populate
+  -r-xr-xr-x 26 jthomas swdev 395 2010-03-06 14:28 arm-unknown-linux-gnueabi-ranlib
+  -r-xr-xr-x 26 jthomas swdev 395 2010-03-06 14:28 arm-unknown-linux-gnueabi-readelf
+  -r-xr-xr-x 26 jthomas swdev 395 2010-03-06 14:28 arm-unknown-linux-gnueabi-run
+  -r-xr-xr-x 26 jthomas swdev 395 2010-03-06 14:28 arm-unknown-linux-gnueabi-size
+  -r-xr-xr-x 26 jthomas swdev 395 2010-03-06 14:28 arm-unknown-linux-gnueabi-strings
+  -r-xr-xr-x 26 jthomas swdev 395 2010-03-06 14:28 arm-unknown-linux-gnueabi-strip
+
+The cross-compiler executes properly:
+
+  /home/jthomas/x-tools/arm-unknown-linux-gnueabi/bin
+
+  $ ./arm-linux-g++ --version
+  .arm-unknown-linux-gnueabi-g++ (crosstool-NG-1.6.0) 4.3.2
+
+The lib files for the ARM target RFS are:
+
+  /home/jthomas/x-tools/arm-unknown-linux-gnueabi/arm-unknown-linux-gnueabi/sys-root/lib
+
+  -r-xr-xr-x 1 jthomas swdev  161510 2010-03-06 13:47 ld-2.9.so
+  lrwxrwxrwx 1 jthomas swdev       9 2010-03-06 13:47 ld-linux.so.3 -> ld-2.9.so
+  dr-xr-xr-x 2 jthomas swdev    4096 2010-03-06 13:06 ldscripts
+  -r-xr-xr-x 1 jthomas swdev   15640 2010-03-06 13:47 libanl-2.9.so
+  lrwxrwxrwx 1 jthomas swdev      13 2010-03-06 13:47 libanl.so.1 -> libanl-2.9.so
+  -r-xr-xr-x 1 jthomas swdev    8957 2010-03-06 13:45 libBrokenLocale-2.9.so
+  lrwxrwxrwx 1 jthomas swdev      22 2010-03-06 13:45 libBrokenLocale.so.1 -> libBrokenLocale-2.9.so
+  -r-xr-xr-x 1 jthomas swdev 1522723 2010-03-06 13:47 libc-2.9.so
+  -r-xr-xr-x 1 jthomas swdev   45794 2010-03-06 13:46 libcrypt-2.9.so
+  lrwxrwxrwx 1 jthomas swdev      15 2010-03-06 13:46 libcrypt.so.1 -> libcrypt-2.9.so
+  lrwxrwxrwx 1 jthomas swdev      11 2010-03-06 13:45 libc.so.6 -> libc-2.9.so
+  -r-xr-xr-x 1 jthomas swdev   15887 2010-03-06 13:46 libdl-2.9.so
+  lrwxrwxrwx 1 jthomas swdev      12 2010-03-06 13:46 libdl.so.2 -> libdl-2.9.so
+  lrwxrwxrwx 1 jthomas swdev      13 2010-03-06 14:01 libgcc_s.so -> libgcc_s.so.1
+  -r--r--r-- 1 jthomas swdev  178607 2010-03-06 14:01 libgcc_s.so.1
+  -r--r--r-- 1 jthomas swdev  206918 2010-03-06 14:01 libgomp.a
+  -r-xr-xr-x 1 jthomas swdev    1014 2010-03-06 14:01 libgomp.la
+  lrwxrwxrwx 1 jthomas swdev      16 2010-03-06 14:01 libgomp.so -> libgomp.so.1.0.0
+  lrwxrwxrwx 1 jthomas swdev      16 2010-03-06 14:01 libgomp.so.1 -> libgomp.so.1.0.0
+  -r-xr-xr-x 1 jthomas swdev  140073 2010-03-06 14:01 libgomp.so.1.0.0
+  -r--r--r-- 1 jthomas swdev     170 2010-03-06 14:01 libgomp.spec
+  -r--r--r-- 1 jthomas swdev  541708 2010-03-06 14:01 libiberty.a
+  -r-xr-xr-x 1 jthomas swdev  758718 2010-03-06 13:46 libm-2.9.so
+  -r-xr-xr-x 1 jthomas swdev   24769 2010-03-06 13:46 libmemusage.so
+  lrwxrwxrwx 1 jthomas swdev      11 2010-03-06 13:46 libm.so.6 -> libm-2.9.so
+  -r--r--r-- 1 jthomas swdev  339774 2010-03-06 14:01 libmudflap.a
+  -r-xr-xr-x 1 jthomas swdev    1035 2010-03-06 14:01 libmudflap.la
+  lrwxrwxrwx 1 jthomas swdev      19 2010-03-06 14:01 libmudflap.so -> libmudflap.so.0.0.0
+  lrwxrwxrwx 1 jthomas swdev      19 2010-03-06 14:01 libmudflap.so.0 -> libmudflap.so.0.0.0
+  -r-xr-xr-x 1 jthomas swdev  249337 2010-03-06 14:01 libmudflap.so.0.0.0
+  -r--r--r-- 1 jthomas swdev  272248 2010-03-06 14:01 libmudflapth.a
+  -r-xr-xr-x 1 jthomas swdev    1049 2010-03-06 14:01 libmudflapth.la
+  lrwxrwxrwx 1 jthomas swdev      21 2010-03-06 14:01 libmudflapth.so -> libmudflapth.so.0.0.0
+  lrwxrwxrwx 1 jthomas swdev      21 2010-03-06 14:01 libmudflapth.so.0 -> libmudflapth.so.0.0.0
+  -r-xr-xr-x 1 jthomas swdev  255715 2010-03-06 14:01 libmudflapth.so.0.0.0
+  -r-xr-xr-x 1 jthomas swdev   98636 2010-03-06 13:47 libnsl-2.9.so
+  lrwxrwxrwx 1 jthomas swdev      13 2010-03-06 13:47 libnsl.so.1 -> libnsl-2.9.so
+  -r-xr-xr-x 1 jthomas swdev   34908 2010-03-06 13:47 libnss_compat-2.9.so
+  lrwxrwxrwx 1 jthomas swdev      20 2010-03-06 13:47 libnss_compat.so.2 -> libnss_compat-2.9.so
+  -r-xr-xr-x 1 jthomas swdev   23578 2010-03-06 13:47 libnss_dns-2.9.so
+  lrwxrwxrwx 1 jthomas swdev      17 2010-03-06 13:47 libnss_dns.so.2 -> libnss_dns-2.9.so
+  -r-xr-xr-x 1 jthomas swdev   54538 2010-03-06 13:47 libnss_files-2.9.so
+  lrwxrwxrwx 1 jthomas swdev      19 2010-03-06 13:47 libnss_files.so.2 -> libnss_files-2.9.so
+  -r-xr-xr-x 1 jthomas swdev   20168 2010-03-06 13:47 libnss_hesiod-2.9.so
+  lrwxrwxrwx 1 jthomas swdev      20 2010-03-06 13:47 libnss_hesiod.so.2 -> libnss_hesiod-2.9.so
+  -r-xr-xr-x 1 jthomas swdev   50067 2010-03-06 13:47 libnss_nis-2.9.so
+  -r-xr-xr-x 1 jthomas swdev   59773 2010-03-06 13:47 libnss_nisplus-2.9.so
+  lrwxrwxrwx 1 jthomas swdev      21 2010-03-06 13:47 libnss_nisplus.so.2 -> libnss_nisplus-2.9.so
+  lrwxrwxrwx 1 jthomas swdev      17 2010-03-06 13:47 libnss_nis.so.2 -> libnss_nis-2.9.so
+  -r-xr-xr-x 1 jthomas swdev    9200 2010-03-06 13:47 libpcprofile.so
+  -r-xr-xr-x 1 jthomas swdev  126578 2010-03-06 13:46 libpthread-2.9.so
+  lrwxrwxrwx 1 jthomas swdev      17 2010-03-06 13:46 libpthread.so.0 -> libpthread-2.9.so
+  -r-xr-xr-x 1 jthomas swdev   88535 2010-03-06 13:47 libresolv-2.9.so
+  lrwxrwxrwx 1 jthomas swdev      16 2010-03-06 13:47 libresolv.so.2 -> libresolv-2.9.so
+  -r-xr-xr-x 1 jthomas swdev   40065 2010-03-06 13:47 librt-2.9.so
+  lrwxrwxrwx 1 jthomas swdev      12 2010-03-06 13:47 librt.so.1 -> librt-2.9.so
+  -r-xr-xr-x 1 jthomas swdev   13930 2010-03-06 13:47 libSegFault.so
+  -r--r--r-- 1 jthomas swdev   46522 2010-03-06 14:01 libssp.a
+  -r-xr-xr-x 1 jthomas swdev    1002 2010-03-06 14:01 libssp.la
+  -r--r--r-- 1 jthomas swdev    2622 2010-03-06 14:01 libssp_nonshared.a
+  -r-xr-xr-x 1 jthomas swdev     984 2010-03-06 14:01 libssp_nonshared.la
+  lrwxrwxrwx 1 jthomas swdev      15 2010-03-06 14:01 libssp.so -> libssp.so.0.0.0
+  lrwxrwxrwx 1 jthomas swdev      15 2010-03-06 14:01 libssp.so.0 -> libssp.so.0.0.0
+  -r-xr-xr-x 1 jthomas swdev   30039 2010-03-06 14:01 libssp.so.0.0.0
+  -r--r--r-- 1 jthomas swdev 7519394 2010-03-06 14:01 libstdc++.a
+  -r-xr-xr-x 1 jthomas swdev    1029 2010-03-06 14:01 libstdc++.la
+  -r--r--r-- 1 jthomas swdev 7655126 2010-03-06 14:01 libstdc++_pic.a
+  lrwxrwxrwx 1 jthomas swdev      19 2010-03-06 14:01 libstdc++.so -> libstdc++.so.6.0.10
+  lrwxrwxrwx 1 jthomas swdev      19 2010-03-06 14:01 libstdc++.so.6 -> libstdc++.so.6.0.10
+  -r-xr-xr-x 1 jthomas swdev 3721562 2010-03-06 14:01 libstdc++.so.6.0.10
+  -r--r--r-- 1 jthomas swdev  582470 2010-03-06 14:01 libsupc++.a
+  -r-xr-xr-x 1 jthomas swdev     967 2010-03-06 14:01 libsupc++.la
+  -r-xr-xr-x 1 jthomas swdev   36837 2010-03-06 13:47 libthread_db-1.0.so
+  lrwxrwxrwx 1 jthomas swdev      19 2010-03-06 13:47 libthread_db.so.1 -> libthread_db-1.0.so
+  -r-xr-xr-x 1 jthomas swdev   14770 2010-03-06 13:47 libutil-2.9.so
+  lrwxrwxrwx 1 jthomas swdev      14 2010-03-06 13:47 libutil.so.1 -> libutil-2.9.so
+
+  $ du -sh
+  24M     .
+
+---------------------------------------
+
+Sat 6 Mar 2010
+
+Install commonc++:
+
+  /home/jthomas/work
+
+  $ wget www.hyperrealm.com/commoncpp/libcommonc++-0.6.2.tar.gz
+
+  -rw-r--r-- 1 jthomas swdev 8215617 2010-01-04 23:40 libcommonc++-0.6.2.tar.gz
+
+  $ tar xfz libcommonc++-0.6.2.tar.gz
+
+Modify source to avoid compile error:
+
+  /home/jthomas/work/libcommonc++-0.6.2/lib/CharTraits.c++
+
+  Change from:
+
+    return(std::strtof(str, endptr));
+
+  to:
+
+    return(strtof(str, endptr));
+
+Use cross-compiler built using crosstools-ng:
+
+  /home/jthomas/work/libcommonc++-0.6.2
+
+  $ export PATH=$PATH:/home/jthomas/x-tools/arm-unknown-linux-gnueabi/bin/
+
+  $ which arm-linux-g++
+  /home/jthomas/x-tools/arm-unknown-linux-gnueabi/bin//arm-linux-g++
+
+  $ arm-linux-g++ --version
+  .arm-unknown-linux-gnueabi-g++ (crosstool-NG-1.6.0) 4.3.2
+
+Configure commonc++, using exports to avoid 'realloc' compile error, and the prefix for the crosstools:
+
+  /home/jthomas/work/libcommonc++-0.6.2
+
+  $ export ac_cv_func_malloc_0_nonnull=yes
+
+  $ export ac_cv_func_realloc_0_nonnull=yes
+
+  $ ./configure --host=arm-linux --prefix=/home/jthomas/work/libcommonc++-0.6.2/usr
+
+  $ make
+
+The configure completes in ~2 minutes.  The make completes in ~6 minutes.
+
+Install the libraries:
+
+  $ make install
+
+These directories and files are installed per '--prefix=' above:
+
+  /home/jthomas/work/libcommonc++-0.6.2/usr
+
+  drwxr-xr-x 3 jthomas swdev 4096 2010-03-06 17:10 include
+  drwxr-xr-x 3 jthomas swdev 4096 2010-03-06 17:10 lib
+  drwxr-xr-x 3 jthomas swdev 4096 2010-03-06 17:10 share
+
+  /home/jthomas/work/libcommonc++-0.6.2/usr/lib
+
+  -rw-r--r-- 1 jthomas swdev 12199738 2010-03-06 17:10 libcommonc++.a
+  -rw-r--r-- 1 jthomas swdev   368826 2010-03-06 17:10 libcommonc++db.a
+  -rwxr-xr-x 1 jthomas swdev     1526 2010-03-06 17:10 libcommonc++db.la
+  lrwxrwxrwx 1 jthomas swdev       23 2010-03-06 17:10 libcommonc++db.so -> libcommonc++db.so.8.0.0
+  lrwxrwxrwx 1 jthomas swdev       23 2010-03-06 17:10 libcommonc++db.so.8 -> libcommonc++db.so.8.0.0
+  -rwxr-xr-x 1 jthomas swdev   915597 2010-03-06 17:10 libcommonc++db.so.8.0.0
+  -rwxr-xr-x 1 jthomas swdev     1449 2010-03-06 17:10 libcommonc++.la
+  lrwxrwxrwx 1 jthomas swdev       21 2010-03-06 17:10 libcommonc++.so -> libcommonc++.so.8.0.0
+  lrwxrwxrwx 1 jthomas swdev       21 2010-03-06 17:10 libcommonc++.so.8 -> libcommonc++.so.8.0.0
+  -rwxr-xr-x 1 jthomas swdev  6954844 2010-03-06 17:10 libcommonc++.so.8.0.0
+
+  /home/jthomas/work/libcommonc++-0.6.2/usr/include/commonc++
+
+  $ ls *.h++ | wc -l
+  158
+
+  $ ls -l | head -n 5
+  -rw-r--r-- 1 jthomas swdev  2603 2010-03-06 17:10 AbstractBuffer.h++
+  -rw-r--r-- 1 jthomas swdev  1811 2010-03-06 17:10 AbstractBufferImpl.h++
+  -rw-r--r-- 1 jthomas swdev  2358 2010-03-06 17:10 AllocationMap.h++
+  -rw-r--r-- 1 jthomas swdev  7314 2010-03-06 17:10 Application.h++
+
+  $ ls -l | tail -n 5
+  -rw-r--r-- 1 jthomas swdev  1847 2010-03-06 17:10 UUID.h++
+  -rw-r--r-- 1 jthomas swdev 17782 2010-03-06 17:10 Variant.h++
+  -rw-r--r-- 1 jthomas swdev  6394 2010-03-06 17:10 Version.h++
+  -rw-r--r-- 1 jthomas swdev  6182 2010-03-06 17:10 XDRDecoder.h++
+  -rw-r--r-- 1 jthomas swdev  5864 2010-03-06 17:10 XDREncoder.h++
+
+The build consumes:
+
+  /home/jthomas/work/libcommonc++-0.6.2
+
+  $ du -sh
+  130M    .
+
+Add to ~/.vimrc:
+
+  au BufNewFile,BufRead *.h++ set filetype=cpp
+
+The commonc++ cross-build for ARM was successful.
+
+Need to build a hello world test program using commonc++ and execute it in the QEMU ARM VM.
+
+Need to understand how to install the glibc libraries in the Buildroot RFS.  Add glibc to uClibc, or rebuild Buildroot with external toolchain and glibc only?
+
+Need to coordinate toolchain build options between Buildroot and crosstools-NG for Buildroot package build compatibility.
+
+Need to coordinate kernel headers version used by Buildroot and crosstools-NG.
+
+Configure Buildroot and crosstools-NG to use the same tarball directory, external to both project directories.
 
-  /home/jthomas/work/u-boot-2009.11
-
-  -rwxr-xr-x 1 jthomas swdev 91580 2010-03-07 10:36 u-boot.bin
-
-Create script to run U-Boot in QEMU:
-
-  /home/jthomas/arm-vm/run-uboot.sh 
-
-  #!/bin/sh
-
-  TARGET=versatilepb
-
-  CONSOLE=ttyAMA0
-
-  SCRIPT=qemu-ifup.sh
-
-  RFS=~/arm-vm/rfs
-
-  UBOOT=/home/jthomas/work/u-boot-2009.11/u-boot.bin
-
-  QEMU=~/arm-vm/qemu-0.12.3/arm-softmmu/qemu-system-arm
-
-  sudo $QEMU -M $TARGET -nographic \
-    -net nic,vlan=0 -net tap,ifname=tap0,script=$SCRIPT \
-    -append "console=$CONSOLE" \
-    -kernel $UBOOT
-
-Run U-Boot and boot Linux in QEMU VM:
-
-  /home/jthomas/arm-vm
-
-  $ ./run-uboot.sh 
-
-  U-Boot 2009.11 (Mar 07 2010 - 10:34:48)
-
-  DRAM:   0 kB
-  ## Unknown FLASH on Bank 1 - Size = 0x00000000 = 0 MB
-  Flash:  0 kB
-  *** Warning - bad CRC, using default environment
-
-  In:    serial
-  Out:   serial
-  Err:   serial
-  Net:   SMC91111-0
-  VersatilePB # 
-
-  VersatilePB # printenv
-
-  bootargs=console=ttyAMA0 mem=128M root=/dev/nfs rw 
-    nfsroot=192.168.32.133:/home/jthomas/arm-vm/rfs 
-    ip=192.168.32.150:192.168.32.133:192.168.32.2:255.255.255.0
-  bootdelay=2
-  baudrate=38400
-  ipaddr=192.168.32.150
-  serverip=192.168.32.140
-  netmask=255.255.255.0
-  bootfile="uImage"
-  stdin=serial
-  stdout=serial
-  stderr=serial
-  verify=n
-  ethact=SMC91111-0
-  Environment size: 341/8188 bytes
-
-  VersatilePB # tftpboot
-
-  SMC91111: MAC 52:54:00:12:34:56
-  Using SMC91111-0 device
-  TFTP from server 192.168.32.140; our IP address is 192.168.32.150
-  Filename 'uImage'.
-  Load address: 0x7fc0
-  Loading: #################################################################
-           #################################################################
-           #################################################################
-           #################################################################
-           ############################
-  done
-  Bytes transferred = 1473140 (167a74 hex)
-
-  VersatilePB # bootm
-
-  ## Booting kernel from Legacy Image at 00007fc0 ...
-     Image Name:   Linux-2.6.32.9
-     Image Type:   ARM Linux Kernel Image (uncompressed)
-     Data Size:    1473076 Bytes =  1.4 MB
-     Load Address: 00008000
-     Entry Point:  00008000
-     Loading Kernel Image ... OK
-  OK
-
-  Starting kernel ...
-
-  Uncompressing Linux................................... done, booting the kernel.
-  Linux version 2.6.32.9 (jthomas at pangaea) (gcc version 4.3.4 (Buildroot 2010.02) )
-    #2 Sun Mar 7 09:46:53 CST 2010
-  CPU: ARM926EJ-S [41069265] revision 5 (ARMv5TEJ), cr=00093177
-  CPU: VIVT data cache, VIVT instruction cache
-  Machine: ARM-Versatile PB
-  Memory policy: ECC disabled, Data cache writeback
-  Built 1 zonelists in Zone order, mobility grouping on.  Total pages: 32512
-  Kernel command line: console=ttyAMA0 mem=128M root=/dev/nfs rw 
-    nfsroot=192.168.32.133:/home/jthomas/arm-vm/rfs 
-    ip=192.168.32.150:192.168.32.133:192.168.32.2:255.255.255.0
-  PID hash table entries: 512 (order: -1, 2048 bytes)
-  Dentry cache hash table entries: 16384 (order: 4, 65536 bytes)
-  Inode-cache hash table entries: 8192 (order: 3, 32768 bytes)
-  Memory: 128MB = 128MB total
-  Memory: 126748KB available (2596K code, 227K data, 108K init, 0K highmem)
-  Hierarchical RCU implementation.
-  NR_IRQS:192
-  VIC @f1140000: id 0x00041190, vendor 0x41
-  Console: colour dummy device 80x30
-  Calibrating delay loop... 197.83 BogoMIPS (lpj=989184)
-  Mount-cache hash table entries: 512
-  CPU: Testing write buffer coherency: ok
-  NET: Registered protocol family 16
-  Serial: AMBA PL011 UART driver
-  dev:f1: ttyAMA0 at MMIO 0x101f1000 (irq = 12) is a AMBA/PL011
-  console [ttyAMA0] enabled
-  dev:f2: ttyAMA1 at MMIO 0x101f2000 (irq = 13) is a AMBA/PL011
-  dev:f3: ttyAMA2 at MMIO 0x101f3000 (irq = 14) is a AMBA/PL011
-  fpga:09: ttyAMA3 at MMIO 0x10009000 (irq = 38) is a AMBA/PL011
-  bio: create slab <bio-0> at 0
-  Switching to clocksource timer3
-  NET: Registered protocol family 2
-  IP route cache hash table entries: 1024 (order: 0, 4096 bytes)
-  TCP established hash table entries: 4096 (order: 3, 32768 bytes)
-  TCP bind hash table entries: 4096 (order: 2, 16384 bytes)
-  TCP: Hash tables configured (established 4096 bind 4096)
-  TCP reno registered
-  NET: Registered protocol family 1
-  RPC: Registered udp transport module.
-  RPC: Registered tcp transport module.
-  RPC: Registered tcp NFSv4.1 backchannel transport module.
-  Installing knfsd (copyright (C) 1996 okir at monad.swb.de).
-  JFFS2 version 2.2. (NAND) ?? 2001-2006 Red Hat, Inc.
-  ROMFS MTD (C) 2007 Red Hat, Inc.
-  msgmni has been set to 247
-  Block layer SCSI generic (bsg) driver version 0.4 loaded (major 254)
-  io scheduler noop registered
-  io scheduler anticipatory registered (default)
-  io scheduler deadline registered
-  io scheduler cfq registered
-  CLCD: unknown LCD panel ID 0x00001000, using VGA
-  CLCD: Versatile hardware, VGA display
-  Console: switching to colour frame buffer device 80x60
-  brd: module loaded
-  smc91x.c: v1.1, sep 22 2004 by Nicolas Pitre <nico@fluxnic.net>
-  eth0: SMC91C11xFD (rev 1) at c8800000 IRQ 25 [nowait]
-  eth0: Ethernet addr: 52:54:00:12:34:56
-  mice: PS/2 mouse device common for all mice
-  TCP cubic registered
-  NET: Registered protocol family 17
-  VFP support v0.3: implementor 41 architecture 1 part 10 variant 9 rev 0
-  input: AT Raw Set 2 keyboard as /devices/fpga:06/serio0/input/input0
-  input: ImExPS/2 Generic Explorer Mouse as /devices/fpga:07/serio1/input/input1
-  eth0: link up
-  IP-Config: Complete:
-       device=eth0, addr=192.168.32.150, mask=255.255.255.0, gw=192.168.32.2,
-       host=192.168.32.150, domain=, nis-domain=(none),
-       bootserver=192.168.32.133, rootserver=192.168.32.133, rootpath=
-  Looking up port of RPC 100003/2 on 192.168.32.133
-  Looking up port of RPC 100005/1 on 192.168.32.133
-  VFS: Mounted root (nfs filesystem) on device 0:11.
-  Freeing init memory: 108K
-  mount: mounting none on /dev failed: Invalid argument
-  mkdir: cannot create directory '/dev/pts': File exists
-  mount: mounting tmpfs on /tmp failed: Invalid argument
-  mount: mounting configfs on /config failed: No such device
-  Initializing random number generator... done.
-  Starting network...
-  ifup: interface lo already configured
-  Getting initial time via ntp.
-  Starting network time protocol daemon: ntpd.
-  Starting sshd: OK
-
-  Welcome to Buildroot
-  buildroot login: root
-
-  # date
-  Sun Mar  7 09:56:10 MST 2010
-
-  # halt
-  The system is going down NOW!
-  Sending SIGTERM to all processes
-  Sending SIGKILL to all processes
-  Requesting system halt
-  System halted.
-
-Enter Ctrl-a-x to exit QEMU:
-
-  QEMU: Terminated
-  jthomas at pangaea:~/arm-vm$ 
-
-Modify U-Boot to boot Linux without manual U-Boot command entry.
-
-Customize the U-Boot source for the Versatile platform:
-
-  /home/jthomas/work/u-boot-2009.11/include/configs/versatile.h 
-
-  Modify:
-
-    #define CONFIG_BOOTDELAY  5
-
-  Add:
-
-    #define CONFIG_BOOTCOMMAND "tftpboot; bootm"
-
-Set PATH to toolchain built using crosstools-ng:
-
-  $ export PATH=$PATH:/home/jthomas/x-tools/arm-unknown-linux-gnueabi/bin
-
-Build U-Boot:
-
-  /home/jthomas/work/u-boot-2009.11
-
-  $ make versatile
-
-The build completes in ~2 minutes, and creates:
-
-  /home/jthomas/work/u-boot-2009.11
-
-  -rwxr-xr-x 1 jthomas swdev 91604 2010-03-07 11:13 u-boot.bin
-
-Run U-Boot and boot Linux in QEMU VM.  Verify keyboard intercept counts
-down from '5', and U-Boot is intercepted when spacebar is pressed:
-
-  /home/jthomas/arm-vm
-
-  $ ./run-uboot.sh 
-
-  U-Boot 2009.11 (Mar 07 2010 - 11:10:57)
-
-  DRAM:   0 kB
-  ## Unknown FLASH on Bank 1 - Size = 0x00000000 = 0 MB
-  Flash:  0 kB
-  *** Warning - bad CRC, using default environment
-
-  In:    serial
-  Out:   serial
-  Err:   serial
-  Net:   SMC91111-0
-  Hit any key to stop autoboot:  0 
-  VersatilePB # 
-
-  <Ctrl-a-x>
-
-  QEMU: Terminated
-  $
-
-Run U-Boot and boot Linux in QEMU VM.  Verify Linux boots automatically,
-without manual entry of U-Boot commands:
-
-  /home/jthomas/arm-vm
-
-  $ ./run-uboot.sh 
-
-  U-Boot 2009.11 (Mar 07 2010 - 11:10:57)
-
-  DRAM:   0 kB
-  ## Unknown FLASH on Bank 1 - Size = 0x00000000 = 0 MB
-  Flash:  0 kB
-  *** Warning - bad CRC, using default environment
-
-  In:    serial
-  Out:   serial
-  Err:   serial
-  Net:   SMC91111-0
-  Hit any key to stop autoboot:  0 
-  SMC91111: MAC 52:54:00:12:34:56
-  Using SMC91111-0 device
-  TFTP from server 192.168.32.140; our IP address is 192.168.32.150
-  Filename 'uImage'.
-  Load address: 0x7fc0
-  Loading: #################################################################
-           #################################################################
-           #################################################################
-           #################################################################
-           ############################
-  done
-  Bytes transferred = 1473140 (167a74 hex)
-  ## Booting kernel from Legacy Image at 00007fc0 ...
-     Image Name:   Linux-2.6.32.9
-     Image Type:   ARM Linux Kernel Image (uncompressed)
-     Data Size:    1473076 Bytes =  1.4 MB
-     Load Address: 00008000
-     Entry Point:  00008000
-     Loading Kernel Image ... OK
-  OK
-
-  Starting kernel ...
-
-  Uncompressing Linux................................... done, booting the kernel.
-  Linux version 2.6.32.9 (jthomas at pangaea) (gcc version 4.3.4 (Buildroot 2010.02) )
-    #2 Sun Mar 7 09:46:53 CST 2010
-  CPU: ARM926EJ-S [41069265] revision 5 (ARMv5TEJ), cr=00093177
-  CPU: VIVT data cache, VIVT instruction cache
-  Machine: ARM-Versatile PB
-  Memory policy: ECC disabled, Data cache writeback
-  Built 1 zonelists in Zone order, mobility grouping on.  Total pages: 32512
-  Kernel command line: console=ttyAMA0 mem=128M root=/dev/nfs rw 
-    nfsroot=192.168.32.133:/home/jthomas/arm-vm/rfs 
-    ip=192.168.32.150:192.168.32.133:192.168.32.2:255.255.255.0
-  PID hash table entries: 512 (order: -1, 2048 bytes)
-  Dentry cache hash table entries: 16384 (order: 4, 65536 bytes)
-  Inode-cache hash table entries: 8192 (order: 3, 32768 bytes)
-  Memory: 128MB = 128MB total
-  Memory: 126748KB available (2596K code, 227K data, 108K init, 0K highmem)
-  Hierarchical RCU implementation.
-  NR_IRQS:192
-  VIC @f1140000: id 0x00041190, vendor 0x41
-  Console: colour dummy device 80x30
-  Calibrating delay loop... 234.29 BogoMIPS (lpj=1171456)
-  Mount-cache hash table entries: 512
-  CPU: Testing write buffer coherency: ok
-  NET: Registered protocol family 16
-  Serial: AMBA PL011 UART driver
-  dev:f1: ttyAMA0 at MMIO 0x101f1000 (irq = 12) is a AMBA/PL011
-  console [ttyAMA0] enabled
-  dev:f2: ttyAMA1 at MMIO 0x101f2000 (irq = 13) is a AMBA/PL011
-  dev:f3: ttyAMA2 at MMIO 0x101f3000 (irq = 14) is a AMBA/PL011
-  fpga:09: ttyAMA3 at MMIO 0x10009000 (irq = 38) is a AMBA/PL011
-  bio: create slab <bio-0> at 0
-  Switching to clocksource timer3
-  NET: Registered protocol family 2
-  IP route cache hash table entries: 1024 (order: 0, 4096 bytes)
-  TCP established hash table entries: 4096 (order: 3, 32768 bytes)
-  TCP bind hash table entries: 4096 (order: 2, 16384 bytes)
-  TCP: Hash tables configured (established 4096 bind 4096)
-  TCP reno registered
-  NET: Registered protocol family 1
-  RPC: Registered udp transport module.
-  RPC: Registered tcp transport module.
-  RPC: Registered tcp NFSv4.1 backchannel transport module.
-  Installing knfsd (copyright (C) 1996 okir at monad.swb.de).
-  JFFS2 version 2.2. (NAND) ?? 2001-2006 Red Hat, Inc.
-  ROMFS MTD (C) 2007 Red Hat, Inc.
-  msgmni has been set to 247
-  Block layer SCSI generic (bsg) driver version 0.4 loaded (major 254)
-  io scheduler noop registered
-  io scheduler anticipatory registered (default)
-  io scheduler deadline registered
-  io scheduler cfq registered
-  CLCD: unknown LCD panel ID 0x00001000, using VGA
-  CLCD: Versatile hardware, VGA display
-  Console: switching to colour frame buffer device 80x60
-  brd: module loaded
-  smc91x.c: v1.1, sep 22 2004 by Nicolas Pitre <nico@fluxnic.net>
-  eth0: SMC91C11xFD (rev 1) at c8800000 IRQ 25 [nowait]
-  eth0: Ethernet addr: 52:54:00:12:34:56
-  mice: PS/2 mouse device common for all mice
-  TCP cubic registered
-  NET: Registered protocol family 17
-  VFP support v0.3: implementor 41 architecture 1 part 10 variant 9 rev 0
-  input: AT Raw Set 2 keyboard as /devices/fpga:06/serio0/input/input0
-  input: ImExPS/2 Generic Explorer Mouse as /devices/fpga:07/serio1/input/input1
-  eth0: link up
-  IP-Config: Complete:
-       device=eth0, addr=192.168.32.150, mask=255.255.255.0, gw=192.168.32.2,
-       host=192.168.32.150, domain=, nis-domain=(none),
-       bootserver=192.168.32.133, rootserver=192.168.32.133, rootpath=
-  Looking up port of RPC 100003/2 on 192.168.32.133
-  Looking up port of RPC 100005/1 on 192.168.32.133
-  VFS: Mounted root (nfs filesystem) on device 0:11.
-  Freeing init memory: 108K
-  mount: mounting none on /dev failed: Invalid argument
-  mkdir: cannot create directory '/dev/pts': File exists
-  mount: mounting tmpfs on /tmp failed: Invalid argument
-  mount: mounting configfs on /config failed: No such device
-  Initializing random number generator... done.
-  Starting network...
-  ifup: interface lo already configured
-  Getting initial time via ntp.
-  Starting network time protocol daemon: ntpd.
-  Starting sshd: OK
-
-  Welcome to Buildroot
-  buildroot login: root
-
-  # date
-  Sun Mar  7 10:20:42 MST 2010
-
-  # halt
-  The system is going down NOW!
-  Sending SIGTERM to all processes
-  Sending SIGKILL to all processes
-  Requesting system halt
-  System halted.
-
-  <Ctrl-a-x>
-
-  QEMU: Terminated
-
-It works.  Can run U-Boot in the QEMU VM, and U-Boot loads the Linux kernel
-using TFTP and executes it without manual intervention.
-
-However -- The TFTP transfer of the Linux kernel is very time consuming, at
-around 80 seconds.  Why so slow?
-
-The QEMU VM is running in the same Ubuntu VM that operates the TFTP server.
-
-Can see in 'top' on the Ubuntu VM that the QEMU process consumes 99% of the
-CPU when U-Boot is running in the QEMU VM.  That is probably to be expected,
-since U-Boot is a low-level boot loader that runs superloop.
-
-The 99% superloop overhead induced by U-Boot/QEMU probably greatly reduces
-the CPU cycles available for TFTP on the Ubuntu VM to respond quickly.
-
-Tried running QEMU/U-Boot with various 'nice' values, without improvement.
-
-Need to explore this further.  Will ask for guidance at the Buildroot mailing
-list.
-
-
-
-
-
-
-________________________________
-From: Drasko DRASKOVIC <drasko.draskovic@gmail.com>
-To: Jim Thomas <jimthomasembedded@yahoo.com>
-Sent: Sun, March 7, 2010 1:21:15 PM
-Subject: Re: [Buildroot] TFTP performance with U-Boot running under QEMU
-
-
-
-
-On Sun, Mar 7, 2010 at 7:19 PM, Jim Thomas <jimthomasembedded@yahoo.com> wrote:
-I currently hard-code a few U-Boot environment variables in
->./include/configs/versatile.h.  That is inflexible, but very
->convenient since it eliminates having to manually re-enter the
->IP addresses, kernel parameters, and boot commands manually
->each
-> time the QEMU VM and U-Boot are restarted.
-
-Cool idea, and very close to reality. I tried to do the same thing (I saw your very nice instructions, thanks!) 
-
-
->
->>It works:
->
->
->  $ ./run-uboot.sh 
->
->
->  U-Boot 2009.11 (Mar 07 2010 - 11:10:57)
->  DRAM:   0 kB
->  ## Unknown FLASH on Bank 1 - Size = 0x00000000 = 0 MB
->>  Flash:  0 kB
->  *** Warning - bad CRC, using default environment
->  In:    serial
->  Out:   serial
->  Err:   serial
->  Net:   SMC91111-0
->  Hit any key to stop autoboot:  0 
->  SMC91111: MAC 52:54:00:12:34:56
->  Using SMC91111-0 device
->  TFTP from server 192.168.32.140; our IP address is 192.168.32.150
->  Filename 'uImage'.
->  Load address:
-> 0x7fc0
->  Loading: #################################################################
->           #################################################################
->           #################################################################
->           #################################################################
->           ############################
->  done
-But the problem is, the TFTP transfer of
-> the 1.4 MB Linux kernel
->takes a full 80 seconds (!) to complete
-
-
-I have to complain even more:
-
-VersatilePB # tftp uImage
-SMC91111: PHY auto-negotiate timed out
-SMC91111: MAC 52:54:00:12:34:56
-Using SMC91111-0 device
-TFTP from server 192.168.0.10; our IP address is 192.168.0.150
-Filename 'uImage'.
-Load address: 0x7fc0
-Loading: #T T T #T T T T #T T T 
-Retry count exceeded; starting again
-SMC91111: PHY auto-negotiate timed out
-SMC91111: MAC 52:54:00:12:34:56
-Using SMC91111-0 device
-TFTP from server 192.168.0.10; our IP address is 192.168.0.150
-Filename 'uImage'.
-Load address: 0x7fc0
-Loading: #T T T #T T T T #T T T 
-Retry count exceeded; starting again
- 
- 
-
->
->When U-Boot is idling at the U-Boot prompt in the QEMU VM, I can
->see by running 'top' in another terminal session in the Ubuntu VM
->that hosts the QEMU VM that the QEMU VM is consuming 99% of the CPU.
-
-Same thing here... Even ping takes 20 seconds. Something is fishy in NetLoop.
- 
-
->
->Have you observed this same slow TFTP file transfer under QEMU?
->Is there any known
-> workaround?
-
-I would like to know this also. 
 
 
       
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100307/aec3dc4e/attachment-0001.htm>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100307/6a15ced1/attachment-0001.htm>
