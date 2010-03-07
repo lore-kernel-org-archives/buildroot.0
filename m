@@ -1,47 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Mar 2010 16:04:02 +0100
-Subject: [Buildroot] Login troubles
-In-Reply-To: <4B93A1AE.8070406@iwtech.com.au>
-References: <4B93A1AE.8070406@iwtech.com.au>
-Message-ID: <20100307160402.09f0825a@surf>
+From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+Date: Sun, 07 Mar 2010 17:33:59 +0200
+Subject: [Buildroot] [PATCH RESEND] Fix autotools instalation with symbols
+Message-ID: <20100307153359.10213.62431.stgit@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Paul,
+When installing without symbols install-strip is used,
+with symbols - install-exec.
+Since install-exec installs only executables, we should use
+simple install, to install other needed files also
+(like files in /usr/shared) as install-strip does.
 
-On Sun, 07 Mar 2010 23:53:02 +1100
-Paul Jones <paul.jones@iwtech.com.au> wrote:
+Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+Acked-by: Lionel Landwerlin <llandwerlin@gmail.com>
+---
 
-> I've just built a basic buildroot for my mini2440 ARM board and it 
-> successfully boots to the buildroot login: prompt.
-> My problem is that I can't seem to login - I haven't touched any of
-> the config files and looking at /etc/passwd|shadow the login should
-> be root with a blank password?
+ package/Makefile.autotools.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Right, no password, just press enter.
-
-> I've tried to login both from the serial console (which I set in the 
-> buildroot menu to /dev/ttySAC0) and the normal console with a usb 
-> keyboard - no luck.
-
-> buildroot login: root
-> Password:
-> Login incorrect
-
-Are you sure that you haven't made any change to /etc/securetty ? It
-must contain at least /dev/ttySAC0 to allow login as root from this
-console. The default target skeleton has a /etc/securetty that
-contains /dev/ttySAC0, so it should be ok, unless you made any change
-to the skeleton, of course, or used a different skeleton.
-
-Regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/package/Makefile.autotools.in b/package/Makefile.autotools.in
+index 7114bba..a8dd051 100644
+--- a/package/Makefile.autotools.in
++++ b/package/Makefile.autotools.in
+@@ -60,7 +60,7 @@ $(2)_LIBTOOL_PATCH		?= YES
+ $(2)_USE_CONFIG_CACHE           ?= $(if $(BR2_CONFIG_CACHE),YES,NO)
+ $(2)_INSTALL_STAGING_OPT	?= DESTDIR=$$(STAGING_DIR) install
+ ifeq ($(BR2_ENABLE_DEBUG),y)
+-$(2)_INSTALL_TARGET_OPT		?= DESTDIR=$$(TARGET_DIR)  install-exec
++$(2)_INSTALL_TARGET_OPT		?= DESTDIR=$$(TARGET_DIR)  install
+ else
+ $(2)_INSTALL_TARGET_OPT		?= DESTDIR=$$(TARGET_DIR)  install-strip
+ endif
