@@ -1,7 +1,7 @@
 From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
 Date: Mon, 8 Mar 2010 14:29:48 +0100
-Subject: [Buildroot] [git commit master] Bump font-screen-cyrillic to 1.0.2
-Message-ID: <20100308133712.58D58776E3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] Bump xf86-video-ati to 6.12.4
+Message-ID: <20100308133626.36808776E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,38 +9,38 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a57972c76af79a5d84da093b277ab6830d9aa8f2
+commit: http://git.buildroot.net/buildroot/commit/?id=6142424e348c9f39fb89d71385a1e318b559a3cf
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
 ---
- package/x11r7/xfont_font-screen-cyrillic/Config.in |    2 +-
- .../xfont_font-screen-cyrillic.mk                  |    2 +-
+ package/x11r7/xdriver_xf86-video-ati/Config.in     |    2 +-
+ .../xdriver_xf86-video-ati.mk                      |    2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xfont_font-screen-cyrillic/Config.in b/package/x11r7/xfont_font-screen-cyrillic/Config.in
-index be5fb30..2def7b9 100644
---- a/package/x11r7/xfont_font-screen-cyrillic/Config.in
-+++ b/package/x11r7/xfont_font-screen-cyrillic/Config.in
-@@ -1,5 +1,5 @@
- config BR2_PACKAGE_XFONT_FONT_SCREEN_CYRILLIC
- 	bool "font-screen-cyrillic"
+diff --git a/package/x11r7/xdriver_xf86-video-ati/Config.in b/package/x11r7/xdriver_xf86-video-ati/Config.in
+index 2957e20..ee4dd1a 100644
+--- a/package/x11r7/xdriver_xf86-video-ati/Config.in
++++ b/package/x11r7/xdriver_xf86-video-ati/Config.in
+@@ -12,5 +12,5 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_ATI
+ 	select BR2_PACKAGE_XPROTO_XINERAMAPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
  	help
--	  font-screen-cyrillic 1.0.1
-+	  font-screen-cyrillic 1.0.2
- 	  No description available
-diff --git a/package/x11r7/xfont_font-screen-cyrillic/xfont_font-screen-cyrillic.mk b/package/x11r7/xfont_font-screen-cyrillic/xfont_font-screen-cyrillic.mk
-index d982e6c..14fcd70 100644
---- a/package/x11r7/xfont_font-screen-cyrillic/xfont_font-screen-cyrillic.mk
-+++ b/package/x11r7/xfont_font-screen-cyrillic/xfont_font-screen-cyrillic.mk
+-	  xf86-video-ati 6.6.3
++	  xf86-video-ati 6.12.4
+ 	  ATI video driver
+diff --git a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
+index b592015..e2c40da 100644
+--- a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
++++ b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XFONT_FONT_SCREEN_CYRILLIC_VERSION = 1.0.1
-+XFONT_FONT_SCREEN_CYRILLIC_VERSION = 1.0.2
- XFONT_FONT_SCREEN_CYRILLIC_SOURCE = font-screen-cyrillic-$(XFONT_FONT_SCREEN_CYRILLIC_VERSION).tar.bz2
- XFONT_FONT_SCREEN_CYRILLIC_SITE = http://xorg.freedesktop.org/releases/individual/font
- XFONT_FONT_SCREEN_CYRILLIC_AUTORECONF = NO
+-XDRIVER_XF86_VIDEO_ATI_VERSION = 6.11.0
++XDRIVER_XF86_VIDEO_ATI_VERSION = 6.12.4
+ XDRIVER_XF86_VIDEO_ATI_SOURCE = xf86-video-ati-$(XDRIVER_XF86_VIDEO_ATI_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_ATI_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_ATI_AUTORECONF = YES
 -- 
 1.6.3.3
