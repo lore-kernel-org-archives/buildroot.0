@@ -1,7 +1,7 @@
 From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
 Date: Mon, 8 Mar 2010 14:29:48 +0100
-Subject: [Buildroot] [git commit master] Bump xf86-input-synaptics to 1.2.0
-Message-ID: <20100308133624.5B958776E3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] Bump font-sun-misc to 1.0.1
+Message-ID: <20100308133712.CE81F776E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,58 +9,38 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f54ca4a4ca9c676aaf349563a04397ef58803c3f
+commit: http://git.buildroot.net/buildroot/commit/?id=94dc634d66fd9c9d2e55ed07b5d51314f82e8250
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
 ---
- .../x11r7/xdriver_xf86-input-synaptics/Config.in   |    2 +-
- ...ver_xf86-input-synaptics-0.15.0-configure.patch |    8 --------
- .../xdriver_xf86-input-synaptics.mk                |    3 ++-
- 3 files changed, 3 insertions(+), 10 deletions(-)
- delete mode 100644 package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics-0.15.0-configure.patch
+ package/x11r7/xfont_font-sun-misc/Config.in        |    2 +-
+ .../xfont_font-sun-misc/xfont_font-sun-misc.mk     |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-input-synaptics/Config.in b/package/x11r7/xdriver_xf86-input-synaptics/Config.in
-index 66af793..9b5da84 100644
---- a/package/x11r7/xdriver_xf86-input-synaptics/Config.in
-+++ b/package/x11r7/xdriver_xf86-input-synaptics/Config.in
-@@ -5,5 +5,5 @@ config BR2_PACKAGE_XDRIVER_XF86_INPUT_SYNAPTICS
- 	select BR2_PACKAGE_XPROTO_RANDRPROTO
- 	select BR2_PACKAGE_XPROTO_XPROTO
+diff --git a/package/x11r7/xfont_font-sun-misc/Config.in b/package/x11r7/xfont_font-sun-misc/Config.in
+index 86337d3..ce41c62 100644
+--- a/package/x11r7/xfont_font-sun-misc/Config.in
++++ b/package/x11r7/xfont_font-sun-misc/Config.in
+@@ -1,5 +1,5 @@
+ config BR2_PACKAGE_XFONT_FONT_SUN_MISC
+ 	bool "font-sun-misc"
  	help
--	  xf86-input-synaptics 0.14.7
-+	  xf86-input-synaptics 1.2.0
- 	  X.Org driver for synaptics input devices
-diff --git a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics-0.15.0-configure.patch b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics-0.15.0-configure.patch
-deleted file mode 100644
-index 524af1d..0000000
---- a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics-0.15.0-configure.patch
-+++ /dev/null
-@@ -1,8 +0,0 @@
--diff -Nwrup xfree86-driver-synaptics_0.15.0.orig/configure xdriver_xf86-input-synaptics-0.15.0/configure
----- a/.stamp_configured	1969-12-31 19:00:00.000000000 -0500
--+++ b/.stamp_configured	2008-06-23 11:01:16.000000000 -0400
--@@ -0,0 +1,4 @@
--+#!/bin/sh
--+
--+echo "Dummy configure"
--+ 
-diff --git a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
-index 9146ba6..387d6b4 100644
---- a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
-+++ b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
-@@ -4,10 +4,11 @@
+-	  font-sun-misc 1.0.0
++	  font-sun-misc 1.0.1
+ 	  No description available
+diff --git a/package/x11r7/xfont_font-sun-misc/xfont_font-sun-misc.mk b/package/x11r7/xfont_font-sun-misc/xfont_font-sun-misc.mk
+index 15acf4e..f06ecf7 100644
+--- a/package/x11r7/xfont_font-sun-misc/xfont_font-sun-misc.mk
++++ b/package/x11r7/xfont_font-sun-misc/xfont_font-sun-misc.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_INPUT_SYNAPTICS_VERSION = 0.15.0
-+XDRIVER_XF86_INPUT_SYNAPTICS_VERSION = 1.2.0
- XDRIVER_XF86_INPUT_SYNAPTICS_SOURCE = xf86-input-synaptics-$(XDRIVER_XF86_INPUT_SYNAPTICS_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_SYNAPTICS_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_SYNAPTICS_AUTORECONF = NO
-+XDRIVER_XF86_INPUT_SYNAPTICS_LIBTOOL_PATCH = NO
- XDRIVER_XF86_INPUT_SYNAPTICS_DEPENDENCIES = xserver_xorg-server xproto_inputproto xproto_randrproto xproto_xproto
- XDRIVER_XF86_INPUT_SYNAPTICS_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
- 
+-XFONT_FONT_SUN_MISC_VERSION = 1.0.0
++XFONT_FONT_SUN_MISC_VERSION = 1.0.1
+ XFONT_FONT_SUN_MISC_SOURCE = font-sun-misc-$(XFONT_FONT_SUN_MISC_VERSION).tar.bz2
+ XFONT_FONT_SUN_MISC_SITE = http://xorg.freedesktop.org/releases/individual/font
+ XFONT_FONT_SUN_MISC_AUTORECONF = NO
 -- 
 1.6.3.3
