@@ -1,42 +1,48 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 8 Mar 2010 22:44:28 +0100
-Subject: [Buildroot] [git commit master] mtd-utils: fix build with external
-	toolchain
-Message-ID: <20100308214621.980A977708@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 08 Mar 2010 22:46:56 +0100
+Subject: [Buildroot] mtd-utils fails to build
+In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE190902242788@mi8nycmail19.Mi8.com>
+	(H. Hartley Sweeten's message of "Mon, 8 Mar 2010 16:04:46 -0500")
+References: <BD79186B4FD85F4B8E60E381CAEE190902242788@mi8nycmail19.Mi8.com>
+Message-ID: <877hpmv63z.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "H" == H Hartley Sweeten <hartleys@visionengravers.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d5bf5f967009733da99c55febacb3fb0be686cad
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ H> Hello all,
+ H> I am trying to do a clean build using the current git pull of buildroot.
 
-Reported by H Hartley Sweeten.
+ H> Everything goes as expected until trying to build mtd-utils. When trying
+ H> to build mkfs.jffs2 the build cannot find zlib.h and errors out.
 
-Make sure we pass proper CFLAGS to mtd-utils, so builds needing --sysroot
-works (E.G. external toolchains).
+ H> It appears that a compile and assemble, but do not link (option -c), happens
+ H> first for each file followed by compile and place output into <file>
+ H> (option -o).
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES            |    2 +-
- package/mtd/mtd.mk |    4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ H> The problem appears to be that the -c option happens without passing the
+ H> --sysroot configuration so the compiler cannot locate the external headers.
 
-diff --git a/CHANGES b/CHANGES
-index 9111344..9746c60 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -2,7 +2,7 @@
- 
- 	 X.org updated to 7.5.
- 
--	 Updated/fixed packages: dosfstools, e2fsprogs, squashfs
-+	 Updated/fixed packages: dosfstools, e2fsprogs, mtd-utils, squashfs
- 
- 2010.02, Release February 26th, 2010:
- 
+ H> Following is a snip of the last part of the build:
+
+Thanks, fixed in git:
+
+commit d5bf5f967009733da99c55febacb3fb0be686cad
+Author: Peter Korsgaard <jacmet@sunsite.dk>
+Date:   Mon Mar 8 22:44:28 2010 +0100
+
+    mtd-utils: fix build with external toolchain
+    
+    Reported by H Hartley Sweeten.
+    
+    Make sure we pass proper CFLAGS to mtd-utils, so builds needing --sysroot
+    works (E.G. external toolchains).
+    
+    Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+
 diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
 index 244fd8e..3e0fcaf 100644
 --- a/package/mtd/mtd.mk
@@ -45,18 +51,19 @@ index 244fd8e..3e0fcaf 100644
  
  $(MTD_BUILD_TARGETS): $(MTD_DIR)/.unpacked
  ifneq ($(MTD_TARGETS),)
--	$(MAKE) LDFLAGS="$(TARGET_LDFLAGS)" \
-+	$(MAKE) $(TARGET_CONFIGURE_ENV) \
- 		BUILDDIR=$(MTD_DIR) \
- 		CROSS=$(TARGET_CROSS) CC=$(TARGET_CC) \
- 		WITHOUT_XATTR=1 WITHOUT_LARGEFILE=1 \
- 		-C $(MTD_DIR) $(MTD_TARGETS)
+-       $(MAKE) LDFLAGS="$(TARGET_LDFLAGS)" \
++       $(MAKE) $(TARGET_CONFIGURE_ENV) \
+                BUILDDIR=$(MTD_DIR) \
+                CROSS=$(TARGET_CROSS) CC=$(TARGET_CC) \
+                WITHOUT_XATTR=1 WITHOUT_LARGEFILE=1 \
+                -C $(MTD_DIR) $(MTD_TARGETS)
  endif
  ifneq ($(MTD_UBI_TARGETS),)
--	$(MAKE) LDFLAGS="$(TARGET_LDFLAGS)" \
-+	$(MAKE) $(TARGET_CONFIGURE_ENV) \
- 		BUILDDIR=$(MTD_DIR)/ubi-utils \
- 		CROSS=$(TARGET_CROSS) CC=$(TARGET_CC) \
- 		WITHOUT_XATTR=1 WITHOUT_LARGEFILE=1 \
+-       $(MAKE) LDFLAGS="$(TARGET_LDFLAGS)" \
++       $(MAKE) $(TARGET_CONFIGURE_ENV) \
+                BUILDDIR=$(MTD_DIR)/ubi-utils \
+                CROSS=$(TARGET_CROSS) CC=$(TARGET_CC) \
+                WITHOUT_XATTR=1 WITHOUT_LARGEFILE=1 \
+
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
