@@ -1,58 +1,93 @@
-From: Darcy Watkins <DWatkins@tranzeo.com>
-Date: Mon, 8 Mar 2010 06:49:15 -0800
-Subject: [Buildroot] Patch to allow iproute2 without IPv6 requirement
-In-Reply-To: <87aaul15l3.fsf@macbook.be.48ers.dk>
-References: <D61182AC8012EA4EBC531B3AF23BE10992A96A@tranzeo-mail2.12stewart.tranzeo.com><1267220120.28886.99.camel@localhost.localdomain><1267473268.25711.10.camel@localhost.localdomain>
-	<87aaul15l3.fsf@macbook.be.48ers.dk>
-Message-ID: <D61182AC8012EA4EBC531B3AF23BE10992AA56@tranzeo-mail2.12stewart.tranzeo.com>
+From: Jim Thomas <jimthomasembedded@yahoo.com>
+Date: Mon, 8 Mar 2010 10:45:00 -0800 (PST)
+Subject: [Buildroot] How to build crosstools-ng and commonc++ POSIX
+	framework library
+In-Reply-To: <201003072326.15905.yann.morin.1998@anciens.enib.fr>
+References: <190455.98316.qm@web44814.mail.sp1.yahoo.com>
+	<201003072326.15905.yann.morin.1998@anciens.enib.fr>
+Message-ID: <100422.20458.qm@web44804.mail.sp1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Yann,
 
-After some second thought, the "IPV6_OPT" variable I used in the patch
-part to iproute2.mk should probably have an appropriate prefix prepended
-to it to avoid potential for future namespace conflicts in case
-something similar happens for another package.
+Thank you for your guidance.? I will explore DESTDIR next weekend and update my build procedure.
 
-For example use "IPROUTE2_IPV6_OPT" or something similar instead of
-"IPV6_OPT".
+Thank you also for your fine work on crosstool-ng.
 
-I've also just submitted the patch to iproute2 code itself upstream.
+Jim
+
+
+
+
+________________________________
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+To: buildroot at busybox.net
+Cc: Jim Thomas <jimthomasembedded@yahoo.com>
+Sent: Sun, March 7, 2010 4:26:15 PM
+Subject: Re: [Buildroot] How to build crosstools-ng and commonc++ POSIX framework library
+
+Hello Jim, All.
+
+On Sunday 07 March 2010 22:00:30 Jim Thomas wrote:
+[--SNIP--]
+> Install commonc++:
+
+Disclaimer: I know nothing about commonc++.
+
+> Configure commonc++, using exports to avoid 'realloc' compile error, and the prefix for the crosstools:
+[--SNIP--]
+>? $ ./configure --host=arm-linux --prefix=/home/jthomas/work/libcommonc++-0.6.2/usr
+
+It should be noted that the prefix is the _runtime_ prefix, not the install
+directory. Normally, auto-stuff based packages will support the DESTDIR
+directive. Use that way:
+? ./configure --host=arm-linux --prefix=/usr
+? make
+? make DESTDIR="/home/jthomas/work/libcommonc++-0.6.2"
+
+This is very important because the path given to --prefix might/will be
+hard-coded in the generated files (eg. to search for runtime configuration
+files, yo search for resource files...), whereas DESTDIR is just used
+during the installation, and thus do not leak into the target files.
+? http://www.gnu.org/prep/standards/html_node/DESTDIR.html
+
+[--SNIP--]
+> The commonc++ cross-build for ARM was successful.
+
+Well, that was a very detailed tutorial. Great! :-)
+
+> Need to coordinate toolchain build options between Buildroot and
+> crosstools-NG for Buildroot package build compatibility.
+
+> Need to coordinate kernel headers version used by Buildroot and
+> crosstools-NG.
+
+> Configure Buildroot and crosstools-NG to use the same tarball
+> directory, external to both project directories.
+
+There is work under way for buildroot to use crostool-NG as a backend to
+generate the toolchains. I am working on that, but it takes much more time
+that I expected, and I have much less time available than I expected. :-(
+
+Really, I do apologise for the delay...
 
 Regards,
-
-Darcy
-
-
------Original Message-----
-From: Peter Korsgaard [mailto:jacmet at gmail.com] On Behalf Of Peter
-Korsgaard
-Sent: Saturday, March 06, 2010 1:52 PM
-To: Darcy Watkins
-Cc: buildroot at busybox.net
-Subject: Re: Patch to allow iproute2 without IPv6 requirement
-
->>>>> "Darcy" == Darcy L Watkins <dwatkins@tranzeo.com> writes:
-
- Darcy> Hello,
- Darcy> I noticed that when I upgraded from 2009.02 to 2010.02 I lost
-iproute2
- Darcy> in my config that doesn't use IPv6.  The patch below applies to
-2010.02
- Darcy> and should allow the iproute2 to build without IPv6.  It builds
-OK (and
- Darcy> doesn't appear to misbehave) on my powerpc 405 platform and I am
-also
- Darcy> building it to try out later today on an ARM11 platform.
-
- Darcy> Anyone else who wants to test drive it is welcome to do so.
-
-Thanks, looks sane. Please submit it to iproute upstream so we don't
-need to maintain this in the future.
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|? Yann E. MORIN? | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software? Designer | \ / CAMPAIGN? ? |? ___? ? ? ? ? ? ? |
+| +33 223 225 172 `------------.-------:? X? AGAINST? ? ? |? \e/? There is no? |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL? ? |? v? conspiracy.? |
+'------------------------------^-------^------------------^--------------------'
+
+
+      
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100308/4b20beb1/attachment.htm>
