@@ -1,8 +1,7 @@
 From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
 Date: Mon, 8 Mar 2010 14:29:48 +0100
-Subject: [Buildroot] [git commit master] Bump font-adobe-utopia-type1 to
-	1.0.2
-Message-ID: <20100308133703.7328F776E3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] Remove obsolete xfindproxy
+Message-ID: <20100308133621.97774776E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,38 +9,62 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=93963b2633d2decf4b56fc8b47a7ea0247d57ab6
+commit: http://git.buildroot.net/buildroot/commit/?id=2d3df1508f694a3964033100e61a391002c4332a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
 ---
- .../x11r7/xfont_font-adobe-utopia-type1/Config.in  |    2 +-
- .../xfont_font-adobe-utopia-type1.mk               |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/x11r7/Config.in                          |    1 -
+ package/x11r7/xapp_xfindproxy/Config.in          |    8 --------
+ package/x11r7/xapp_xfindproxy/xapp_xfindproxy.mk |   13 -------------
+ 3 files changed, 0 insertions(+), 22 deletions(-)
+ delete mode 100644 package/x11r7/xapp_xfindproxy/Config.in
+ delete mode 100644 package/x11r7/xapp_xfindproxy/xapp_xfindproxy.mk
 
-diff --git a/package/x11r7/xfont_font-adobe-utopia-type1/Config.in b/package/x11r7/xfont_font-adobe-utopia-type1/Config.in
-index 0e82f7b..7cd11ff 100644
---- a/package/x11r7/xfont_font-adobe-utopia-type1/Config.in
-+++ b/package/x11r7/xfont_font-adobe-utopia-type1/Config.in
-@@ -1,5 +1,5 @@
- config BR2_PACKAGE_XFONT_FONT_ADOBE_UTOPIA_TYPE1
- 	bool "font-adobe-utopia-type1"
- 	help
--	  font-adobe-utopia-type1 1.0.1
-+	  font-adobe-utopia-type1 1.0.2
- 	  No description available
-diff --git a/package/x11r7/xfont_font-adobe-utopia-type1/xfont_font-adobe-utopia-type1.mk b/package/x11r7/xfont_font-adobe-utopia-type1/xfont_font-adobe-utopia-type1.mk
-index 16ed319..daa5f37 100644
---- a/package/x11r7/xfont_font-adobe-utopia-type1/xfont_font-adobe-utopia-type1.mk
-+++ b/package/x11r7/xfont_font-adobe-utopia-type1/xfont_font-adobe-utopia-type1.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XFONT_FONT_ADOBE_UTOPIA_TYPE1_VERSION = 1.0.1
-+XFONT_FONT_ADOBE_UTOPIA_TYPE1_VERSION = 1.0.2
- XFONT_FONT_ADOBE_UTOPIA_TYPE1_SOURCE = font-adobe-utopia-type1-$(XFONT_FONT_ADOBE_UTOPIA_TYPE1_VERSION).tar.bz2
- XFONT_FONT_ADOBE_UTOPIA_TYPE1_SITE = http://xorg.freedesktop.org/releases/individual/font
- XFONT_FONT_ADOBE_UTOPIA_TYPE1_AUTORECONF = NO
+diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
+index 8ac4bd7..fcd0793 100644
+--- a/package/x11r7/Config.in
++++ b/package/x11r7/Config.in
+@@ -132,7 +132,6 @@ endmenu
+ 		source package/x11r7/xapp_xeyes/Config.in
+ 		source package/x11r7/xapp_xf86dga/Config.in
+ 		source package/x11r7/xapp_xfd/Config.in
+-		source package/x11r7/xapp_xfindproxy/Config.in
+ 		source package/x11r7/xapp_xfontsel/Config.in
+ 		source package/x11r7/xapp_xfs/Config.in
+ 		source package/x11r7/xapp_xfsinfo/Config.in
+diff --git a/package/x11r7/xapp_xfindproxy/Config.in b/package/x11r7/xapp_xfindproxy/Config.in
+deleted file mode 100644
+index c9ecc58..0000000
+--- a/package/x11r7/xapp_xfindproxy/Config.in
++++ /dev/null
+@@ -1,8 +0,0 @@
+-config BR2_PACKAGE_XAPP_XFINDPROXY
+-	bool "xfindproxy"
+-	select BR2_PACKAGE_XLIB_LIBICE
+-	select BR2_PACKAGE_XLIB_LIBX11
+-	select BR2_PACKAGE_XLIB_LIBXT
+-	help
+-	  xfindproxy 1.0.1
+-	  X.Org xfindproxy application
+diff --git a/package/x11r7/xapp_xfindproxy/xapp_xfindproxy.mk b/package/x11r7/xapp_xfindproxy/xapp_xfindproxy.mk
+deleted file mode 100644
+index 842a3fc..0000000
+--- a/package/x11r7/xapp_xfindproxy/xapp_xfindproxy.mk
++++ /dev/null
+@@ -1,13 +0,0 @@
+-################################################################################
+-#
+-# xapp_xfindproxy -- X.Org xfindproxy application
+-#
+-################################################################################
+-
+-XAPP_XFINDPROXY_VERSION = 1.0.1
+-XAPP_XFINDPROXY_SOURCE = xfindproxy-$(XAPP_XFINDPROXY_VERSION).tar.bz2
+-XAPP_XFINDPROXY_SITE = http://xorg.freedesktop.org/releases/individual/app
+-XAPP_XFINDPROXY_AUTORECONF = NO
+-XAPP_XFINDPROXY_DEPENDENCIES = xlib_libICE xlib_libX11 xlib_libXt xproto_xproxymanagementprotocol
+-
+-$(eval $(call AUTOTARGETS,package/x11r7,xapp_xfindproxy))
 -- 
 1.6.3.3
