@@ -1,7 +1,7 @@
 From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
 Date: Mon, 8 Mar 2010 14:29:48 +0100
-Subject: [Buildroot] [git commit master] Bump font-schumacher-misc to 1.1.0
-Message-ID: <20100308133712.1C177776E3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] Bump font-winitzki-cyrillic to 1.0.1
+Message-ID: <20100308133713.166B0776E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,38 +9,38 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a65577f858d9ba4498d51d8c35d4d2b398acbf50
+commit: http://git.buildroot.net/buildroot/commit/?id=cdca8d6a23cb590fe81cbc396237e7cd29fb17fb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
 ---
- package/x11r7/xfont_font-schumacher-misc/Config.in |    2 +-
- .../xfont_font-schumacher-misc.mk                  |    2 +-
+ .../x11r7/xfont_font-winitzki-cyrillic/Config.in   |    2 +-
+ .../xfont_font-winitzki-cyrillic.mk                |    2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xfont_font-schumacher-misc/Config.in b/package/x11r7/xfont_font-schumacher-misc/Config.in
-index a43115a..2d4c1c9 100644
---- a/package/x11r7/xfont_font-schumacher-misc/Config.in
-+++ b/package/x11r7/xfont_font-schumacher-misc/Config.in
+diff --git a/package/x11r7/xfont_font-winitzki-cyrillic/Config.in b/package/x11r7/xfont_font-winitzki-cyrillic/Config.in
+index f88e93f..4d321df 100644
+--- a/package/x11r7/xfont_font-winitzki-cyrillic/Config.in
++++ b/package/x11r7/xfont_font-winitzki-cyrillic/Config.in
 @@ -1,5 +1,5 @@
- config BR2_PACKAGE_XFONT_FONT_SCHUMACHER_MISC
- 	bool "font-schumacher-misc"
+ config BR2_PACKAGE_XFONT_FONT_WINITZKI_CYRILLIC
+ 	bool "font-winitzki-cyrillic"
  	help
--	  font-schumacher-misc 1.0.0
-+	  font-schumacher-misc 1.1.0
+-	  font-winitzki-cyrillic 1.0.0
++	  font-winitzki-cyrillic 1.0.1
  	  No description available
-diff --git a/package/x11r7/xfont_font-schumacher-misc/xfont_font-schumacher-misc.mk b/package/x11r7/xfont_font-schumacher-misc/xfont_font-schumacher-misc.mk
-index 5cedda2..6c8af16 100644
---- a/package/x11r7/xfont_font-schumacher-misc/xfont_font-schumacher-misc.mk
-+++ b/package/x11r7/xfont_font-schumacher-misc/xfont_font-schumacher-misc.mk
+diff --git a/package/x11r7/xfont_font-winitzki-cyrillic/xfont_font-winitzki-cyrillic.mk b/package/x11r7/xfont_font-winitzki-cyrillic/xfont_font-winitzki-cyrillic.mk
+index 1a062fe..4578236 100644
+--- a/package/x11r7/xfont_font-winitzki-cyrillic/xfont_font-winitzki-cyrillic.mk
++++ b/package/x11r7/xfont_font-winitzki-cyrillic/xfont_font-winitzki-cyrillic.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XFONT_FONT_SCHUMACHER_MISC_VERSION = 1.0.0
-+XFONT_FONT_SCHUMACHER_MISC_VERSION = 1.1.0
- XFONT_FONT_SCHUMACHER_MISC_SOURCE = font-schumacher-misc-$(XFONT_FONT_SCHUMACHER_MISC_VERSION).tar.bz2
- XFONT_FONT_SCHUMACHER_MISC_SITE = http://xorg.freedesktop.org/releases/individual/font
- XFONT_FONT_SCHUMACHER_MISC_AUTORECONF = NO
+-XFONT_FONT_WINITZKI_CYRILLIC_VERSION = 1.0.0
++XFONT_FONT_WINITZKI_CYRILLIC_VERSION = 1.0.1
+ XFONT_FONT_WINITZKI_CYRILLIC_SOURCE = font-winitzki-cyrillic-$(XFONT_FONT_WINITZKI_CYRILLIC_VERSION).tar.bz2
+ XFONT_FONT_WINITZKI_CYRILLIC_SITE = http://xorg.freedesktop.org/releases/individual/font
+ XFONT_FONT_WINITZKI_CYRILLIC_AUTORECONF = NO
 -- 
 1.6.3.3
