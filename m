@@ -1,23 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 08 Mar 2010 22:48:08 +0100
-Subject: [Buildroot] mkfs.jffs2 can't find zlib.h
-In-Reply-To: <20100226072621.16992lq3smxxymm8@www.home.zuerker.org> (Heiko
-	Zuerker's message of "Fri, 26 Feb 2010 07:26:21 -0600")
-References: <20100226072621.16992lq3smxxymm8@www.home.zuerker.org>
-Message-ID: <873a0av61z.fsf@macbook.be.48ers.dk>
+From: H Hartley Sweeten <hartleys@visionengravers.com>
+Date: Mon, 8 Mar 2010 16:51:44 -0500
+Subject: [Buildroot] mtd-utils fails to build
+In-Reply-To: <877hpmv63z.fsf@macbook.be.48ers.dk>
+References: <BD79186B4FD85F4B8E60E381CAEE190902242788@mi8nycmail19.Mi8.com>
+	<877hpmv63z.fsf@macbook.be.48ers.dk>
+Message-ID: <BD79186B4FD85F4B8E60E381CAEE19090224279E@mi8nycmail19.Mi8.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Heiko" == Heiko Zuerker <heiko@zuerker.org> writes:
+On Monday, March 08, 2010 2:47 PM, Peter Korsgaard wrote:
+>>>>>> "H" == H Hartley Sweeten <hartleys@visionengravers.com> writes:
 
- Heiko> Hey guys,
- Heiko> mkfs.jffs2 fails to compile because it can't find zlib.h.
- Heiko> I'm using the latest GIT version of buildroot and an external toolchain.
+ H> Hello all,
+ H> I am trying to do a clean build using the current git pull of buildroot.
 
-Thanks, fixed in git (d5bf5f967009).
+ H> Everything goes as expected until trying to build mtd-utils. When trying
+ H> to build mkfs.jffs2 the build cannot find zlib.h and errors out.
 
--- 
-Bye, Peter Korsgaard
+ H> It appears that a compile and assemble, but do not link (option -c), happens
+ H> first for each file followed by compile and place output into <file>
+ H> (option -o).
+
+ H> The problem appears to be that the -c option happens without passing the
+ H> --sysroot configuration so the compiler cannot locate the external headers.
+
+ H> Following is a snip of the last part of the build:
+
+> Thanks, fixed in git:
+
+That fixed it!  Thanks for the quick feedback!
+
+Regards,
+Hartley
