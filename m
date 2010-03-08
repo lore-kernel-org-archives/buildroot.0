@@ -1,44 +1,27 @@
-From: Craig Lawton-Devine <craig.lawtondevine@googlemail.com>
-Date: Mon, 8 Mar 2010 11:12:27 +0000
-Subject: [Buildroot] seg fault in pthread_exit only when dynamically built
-Message-ID: <d51100e91003080312n6eac2148s435213aede83fa4a@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 08 Mar 2010 14:30:45 +0100
+Subject: [Buildroot] X11R7.5 git branch
+In-Reply-To: <4B8AB776.40204@gmail.com> (Paulius Zaleckas's message of "Sun,
+	28 Feb 2010 20:35:34 +0200")
+References: <4B8AB776.40204@gmail.com>
+Message-ID: <87hborym7u.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+>>>>> "Paulius" == Paulius Zaleckas <paulius.zaleckas@gmail.com> writes:
 
-I have seen a problem with my application when building it dynamically
-linked to uclibc, but the problem doesn't occur when building
-statically.
+ Paulius> Hi,
+ Paulius> As we have discussed earlier I have put all my X11R7.5 work in:
 
-I have reproduced the problem with a small test app, version
-buildroot-2010.02 of buildroot using uClibc-0.9.30.2.
+ Paulius> git://gitorious.org/takeme-buildroot/takeme-buildroot.git x11r75
 
-The test app simply creates a given number of threads waits for 30s
-and then quits. In the meantime each thread will print a message, wait
-5s print another message and then quit.
-Example output:
-/ # pthreadtest 3
-Creating 3 threads
-Thread 1 started
-Thread 2 started
-Thread 3 started
-Thread 1 completed
-Thread 2 completed
-Thread 3 completed
-/ #
+ Paulius> Should I post patch series to the list?
+ Paulius> I am waiting for your comments on my work!
 
-All works as expected either statically or dynamically linked until
-the number of threads approaches 60 (it varies), after this all the
-threads are started ok but the app will seg fault in pthread_exit if
-dynamically built. If statically built the app is fine up to 100
-threads (the most I tested so far).
+Thanks, looks good - Pulled and pushed.
 
-Can someone help me to debug this problem or understand if further please?
-I can post my test application if it helps.
-
-Many thanks,
-Craig Lawton-Devine
+-- 
+Bye, Peter Korsgaard
