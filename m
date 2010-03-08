@@ -1,7 +1,7 @@
 From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
 Date: Mon, 8 Mar 2010 14:29:48 +0100
-Subject: [Buildroot] [git commit master] Add dri2proto 2.1
-Message-ID: <20100308133619.D54A7776E3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] Bump xinput to 1.5.0
+Message-ID: <20100308133646.4C8F2776E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,60 +9,38 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e99c060399c34112d9fcda363ab0851d04b239b4
+commit: http://git.buildroot.net/buildroot/commit/?id=18c46966a635e80b18ec34f6226aa650e557cff6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
 ---
- package/x11r7/Config.in                            |    1 +
- package/x11r7/xproto_dri2proto/Config.in           |    5 +++++
- package/x11r7/xproto_dri2proto/xproto_dri2proto.mk |   14 ++++++++++++++
- 3 files changed, 20 insertions(+), 0 deletions(-)
- create mode 100644 package/x11r7/xproto_dri2proto/Config.in
- create mode 100644 package/x11r7/xproto_dri2proto/xproto_dri2proto.mk
+ package/x11r7/xapp_xinput/Config.in          |    2 +-
+ package/x11r7/xapp_xinput/xapp_xbacklight.mk |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index 9a5a564..a457b9f 100644
---- a/package/x11r7/Config.in
-+++ b/package/x11r7/Config.in
-@@ -290,6 +290,7 @@ endmenu
- 		source package/x11r7/xproto_compositeproto/Config.in
- 		source package/x11r7/xproto_damageproto/Config.in
- 		source package/x11r7/xproto_dmxproto/Config.in
-+		source package/x11r7/xproto_dri2proto/Config.in
- 		source package/x11r7/xproto_evieext/Config.in
- 		source package/x11r7/xproto_fixesproto/Config.in
- 		source package/x11r7/xproto_fontcacheproto/Config.in
-diff --git a/package/x11r7/xproto_dri2proto/Config.in b/package/x11r7/xproto_dri2proto/Config.in
-new file mode 100644
-index 0000000..4ab5ccd
---- /dev/null
-+++ b/package/x11r7/xproto_dri2proto/Config.in
-@@ -0,0 +1,5 @@
-+config BR2_PACKAGE_XPROTO_DRI2PROTO
-+	bool "dri2proto"
-+	help
-+	  dri2proto 2.1
-+	  X.Org DRI2 protocol headers
-diff --git a/package/x11r7/xproto_dri2proto/xproto_dri2proto.mk b/package/x11r7/xproto_dri2proto/xproto_dri2proto.mk
-new file mode 100644
-index 0000000..2d7de30
---- /dev/null
-+++ b/package/x11r7/xproto_dri2proto/xproto_dri2proto.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# xproto_dri2proto -- X.Org DRI2 protocol headers
-+#
-+################################################################################
-+
-+XPROTO_DRI2PROTO_VERSION = 2.1
-+XPROTO_DRI2PROTO_SOURCE = dri2proto-$(XPROTO_DRI2PROTO_VERSION).tar.bz2
-+XPROTO_DRI2PROTO_SITE = http://xorg.freedesktop.org/releases/individual/proto
-+XPROTO_DRI2PROTO_AUTORECONF = NO
-+XPROTO_DRI2PROTO_INSTALL_STAGING = YES
-+XPROTO_DRI2PROTO_INSTALL_TARGET = NO
-+
-+$(eval $(call AUTOTARGETS,package/x11r7,xproto_dri2proto))
+diff --git a/package/x11r7/xapp_xinput/Config.in b/package/x11r7/xapp_xinput/Config.in
+index 133499a..3899a9a 100644
+--- a/package/x11r7/xapp_xinput/Config.in
++++ b/package/x11r7/xapp_xinput/Config.in
+@@ -2,5 +2,5 @@ config BR2_PACKAGE_XAPP_XINPUT
+ 	bool "xinput"
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	help
+-	  xinput 1.3.0
++	  xinput 1.5.0
+ 	  xinput
+diff --git a/package/x11r7/xapp_xinput/xapp_xbacklight.mk b/package/x11r7/xapp_xinput/xapp_xbacklight.mk
+index eb4f1e1..20d23f2 100644
+--- a/package/x11r7/xapp_xinput/xapp_xbacklight.mk
++++ b/package/x11r7/xapp_xinput/xapp_xbacklight.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XAPP_XINPUT_VERSION = 1.3.0
++XAPP_XINPUT_VERSION = 1.5.0
+ XAPP_XINPUT_SOURCE = xinput-$(XAPP_XINPUT_VERSION).tar.bz2
+ XAPP_XINPUT_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XINPUT_AUTORECONF = NO
 -- 
 1.6.3.3
