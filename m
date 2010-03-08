@@ -1,12 +1,27 @@
 From: H Hartley Sweeten <hartleys@visionengravers.com>
-Date: Mon, 8 Mar 2010 16:04:46 -0500
+Date: Mon, 8 Mar 2010 16:27:14 -0500
 Subject: [Buildroot] mtd-utils fails to build
-Message-ID: <BD79186B4FD85F4B8E60E381CAEE190902242788@mi8nycmail19.Mi8.com>
+In-Reply-To: <BD79186B4FD85F4B8E60E381CAEE190902242788@mi8nycmail19.Mi8.com>
+References: <BD79186B4FD85F4B8E60E381CAEE190902242788@mi8nycmail19.Mi8.com>
+Message-ID: <BD79186B4FD85F4B8E60E381CAEE190902242793@mi8nycmail19.Mi8.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+FYI, I just found another post about this same issue:
+
+http://lists.busybox.net/pipermail/buildroot/2010-February/032479.html
+
+Regards,
+Hartley
+
+-----Original Message-----
+From: buildroot-bounces@busybox.net [mailto:buildroot-bounces at busybox.net] On Behalf Of H Hartley Sweeten
+Sent: Monday, March 08, 2010 2:05 PM
+To: buildroot at busybox.net
+Subject: [Buildroot] mtd-utils fails to build
 
 Hello all,
 
@@ -44,3 +59,7 @@ Any ideas how to fix this?
 
 Regards,
 Hartley
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
