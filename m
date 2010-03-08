@@ -1,7 +1,7 @@
 From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
 Date: Mon, 8 Mar 2010 14:29:48 +0100
-Subject: [Buildroot] [git commit master] Bump libICE to 1.0.6
-Message-ID: <20100308133651.CE8B5776E3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] Bump libSM to 1.1.1
+Message-ID: <20100308133652.1629A776E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,42 +9,38 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ad29d46c60b9fcb36ecfd6737b06fc23eee5bb60
+commit: http://git.buildroot.net/buildroot/commit/?id=3374d4f9652a7fb03e75bb7aef914b47fa4548ee
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
 ---
- package/x11r7/xlib_libICE/Config.in      |    2 +-
- package/x11r7/xlib_libICE/xlib_libICE.mk |    3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/x11r7/xlib_libSM/Config.in     |    2 +-
+ package/x11r7/xlib_libSM/xlib_libSM.mk |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xlib_libICE/Config.in b/package/x11r7/xlib_libICE/Config.in
-index 5866bc1..1fc57cf 100644
---- a/package/x11r7/xlib_libICE/Config.in
-+++ b/package/x11r7/xlib_libICE/Config.in
-@@ -3,5 +3,5 @@ config BR2_PACKAGE_XLIB_LIBICE
+diff --git a/package/x11r7/xlib_libSM/Config.in b/package/x11r7/xlib_libSM/Config.in
+index 217e0e3..0267335 100644
+--- a/package/x11r7/xlib_libSM/Config.in
++++ b/package/x11r7/xlib_libSM/Config.in
+@@ -4,5 +4,5 @@ config BR2_PACKAGE_XLIB_LIBSM
  	select BR2_PACKAGE_XLIB_XTRANS
  	select BR2_PACKAGE_XPROTO_XPROTO
  	help
--	  libICE 1.0.3
-+	  libICE 1.0.6
- 	  X.Org ICE library
-diff --git a/package/x11r7/xlib_libICE/xlib_libICE.mk b/package/x11r7/xlib_libICE/xlib_libICE.mk
-index 044b091..0d2a480 100644
---- a/package/x11r7/xlib_libICE/xlib_libICE.mk
-+++ b/package/x11r7/xlib_libICE/xlib_libICE.mk
-@@ -4,10 +4,11 @@
+-	  libSM 1.0.2
++	  libSM 1.1.1
+ 	  X.Org SM library
+diff --git a/package/x11r7/xlib_libSM/xlib_libSM.mk b/package/x11r7/xlib_libSM/xlib_libSM.mk
+index 70df5f0..5aeb42d 100644
+--- a/package/x11r7/xlib_libSM/xlib_libSM.mk
++++ b/package/x11r7/xlib_libSM/xlib_libSM.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBICE_VERSION = 1.0.4
-+XLIB_LIBICE_VERSION = 1.0.6
- XLIB_LIBICE_SOURCE = libICE-$(XLIB_LIBICE_VERSION).tar.bz2
- XLIB_LIBICE_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBICE_AUTORECONF = NO
-+XLIB_LIBICE_LIBTOOL_PATCH = NO
- XLIB_LIBICE_INSTALL_STAGING = YES
- XLIB_LIBICE_DEPENDENCIES = xlib_xtrans xproto_xproto
- XLIB_LIBICE_CONF_OPT = --enable-shared --disable-static
+-XLIB_LIBSM_VERSION = 1.1.0
++XLIB_LIBSM_VERSION = 1.1.1
+ XLIB_LIBSM_SOURCE = libSM-$(XLIB_LIBSM_VERSION).tar.bz2
+ XLIB_LIBSM_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBSM_AUTORECONF = NO
 -- 
 1.6.3.3
