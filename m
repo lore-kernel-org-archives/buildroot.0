@@ -1,37 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 08 Mar 2010 20:29:43 +0100
-Subject: [Buildroot] Patch to allow iproute2 without IPv6 requirement
-In-Reply-To: <D61182AC8012EA4EBC531B3AF23BE10992AA56@tranzeo-mail2.12stewart.tranzeo.com>
-	(Darcy Watkins's message of "Mon, 8 Mar 2010 06:49:15 -0800")
-References: <D61182AC8012EA4EBC531B3AF23BE10992A96A@tranzeo-mail2.12stewart.tranzeo.com>
-	<1267220120.28886.99.camel@localhost.localdomain>
-	<1267473268.25711.10.camel@localhost.localdomain>
-	<87aaul15l3.fsf@macbook.be.48ers.dk>
-	<D61182AC8012EA4EBC531B3AF23BE10992AA56@tranzeo-mail2.12stewart.tranzeo.com>
-Message-ID: <87d3zezk60.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 8 Mar 2010 21:45:00 +0100
+Subject: [Buildroot] Buildroot 2010.02 on LinuxFr.org
+Message-ID: <20100308214500.34290fb1@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Darcy" == Darcy Watkins <DWatkins@tranzeo.com> writes:
+Hello,
 
- Darcy> Hi Peter,
- Darcy> After some second thought, the "IPV6_OPT" variable I used in the patch
- Darcy> part to iproute2.mk should probably have an appropriate prefix prepended
- Darcy> to it to avoid potential for future namespace conflicts in case
- Darcy> something similar happens for another package.
+I have submitted a news heading about Buildroot 2010.02 on LinuxFr.org,
+the most important french news website of the open-source / free
+software community. The news has been published at:
 
-Yes, I was thinking the same thig.
+ http://linuxfr.org/2010/03/08/26560.html
 
- Darcy> For example use "IPROUTE2_IPV6_OPT" or something similar instead of
- Darcy> "IPV6_OPT".
+In the news, I sum up what Buildroot is for, what the history of the
+project is, what changes have been made in 2010.02, and some of the
+changes we intend to do in 2010.05.
 
- Darcy> I've also just submitted the patch to iproute2 code itself upstream.
+I also mention that the french Linux Magazine will publish on March,
+12th a new issue, with two articles about Buildroot. I have no idea
+what their contents will be, nor who has written them. I'll report
+about them as soon as the magazine will be available.
 
-Great. Do you have a URL to the mailing list archive and/or bug tracker,
-then I'll add that to the patch header.
+Regards,
 
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
