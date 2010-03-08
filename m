@@ -1,27 +1,46 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 08 Mar 2010 14:30:45 +0100
-Subject: [Buildroot] X11R7.5 git branch
-In-Reply-To: <4B8AB776.40204@gmail.com> (Paulius Zaleckas's message of "Sun,
-	28 Feb 2010 20:35:34 +0200")
-References: <4B8AB776.40204@gmail.com>
-Message-ID: <87hborym7u.fsf@macbook.be.48ers.dk>
+From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+Date: Mon, 8 Mar 2010 14:29:48 +0100
+Subject: [Buildroot] [git commit master] Bump randrproto to 1.3.1
+Message-ID: <20100308133614.2617A776E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Paulius" == Paulius Zaleckas <paulius.zaleckas@gmail.com> writes:
 
- Paulius> Hi,
- Paulius> As we have discussed earlier I have put all my X11R7.5 work in:
+commit: http://git.buildroot.net/buildroot/commit/?id=c480192f32b1a3557f00010edaad4ee1da13eb33
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Paulius> git://gitorious.org/takeme-buildroot/takeme-buildroot.git x11r75
+Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+---
+ package/x11r7/xproto_randrproto/Config.in          |    2 +-
+ .../x11r7/xproto_randrproto/xproto_randrproto.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- Paulius> Should I post patch series to the list?
- Paulius> I am waiting for your comments on my work!
-
-Thanks, looks good - Pulled and pushed.
-
+diff --git a/package/x11r7/xproto_randrproto/Config.in b/package/x11r7/xproto_randrproto/Config.in
+index b17f430..4b54775 100644
+--- a/package/x11r7/xproto_randrproto/Config.in
++++ b/package/x11r7/xproto_randrproto/Config.in
+@@ -1,5 +1,5 @@
+ config BR2_PACKAGE_XPROTO_RANDRPROTO
+ 	bool "randrproto"
+ 	help
+-	  randrproto 1.1.2
++	  randrproto 1.3.1
+ 	  X.Org Randr protocol headers
+diff --git a/package/x11r7/xproto_randrproto/xproto_randrproto.mk b/package/x11r7/xproto_randrproto/xproto_randrproto.mk
+index dee2b13..e6befea 100644
+--- a/package/x11r7/xproto_randrproto/xproto_randrproto.mk
++++ b/package/x11r7/xproto_randrproto/xproto_randrproto.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XPROTO_RANDRPROTO_VERSION = 1.2.1
++XPROTO_RANDRPROTO_VERSION = 1.3.1
+ XPROTO_RANDRPROTO_SOURCE = randrproto-$(XPROTO_RANDRPROTO_VERSION).tar.bz2
+ XPROTO_RANDRPROTO_SITE = http://xorg.freedesktop.org/releases/individual/proto
+ XPROTO_RANDRPROTO_AUTORECONF = NO
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
