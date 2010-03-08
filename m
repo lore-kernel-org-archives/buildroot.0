@@ -1,7 +1,7 @@
-From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Mon, 8 Mar 2010 14:29:48 +0100
-Subject: [Buildroot] [git commit master] Bump font-sony-misc to 1.0.1
-Message-ID: <20100308133712.942D1776E3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] CHANGES: add X.org 7.5
+Message-ID: <20100308133714.408AA776E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,38 +9,25 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=815560045203dbcaee165912792f51ec1ca19c6d
+commit: http://git.buildroot.net/buildroot/commit/?id=c9d195ed84110cc7bb2b7895cb5bc883ce9e3ae8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/x11r7/xfont_font-sony-misc/Config.in       |    2 +-
- .../xfont_font-sony-misc/xfont_font-sony-misc.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ CHANGES |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/x11r7/xfont_font-sony-misc/Config.in b/package/x11r7/xfont_font-sony-misc/Config.in
-index 76bdd41..2a831ab 100644
---- a/package/x11r7/xfont_font-sony-misc/Config.in
-+++ b/package/x11r7/xfont_font-sony-misc/Config.in
-@@ -1,5 +1,5 @@
- config BR2_PACKAGE_XFONT_FONT_SONY_MISC
- 	bool "font-sony-misc"
- 	help
--	  font-sony-misc 1.0.0
-+	  font-sony-misc 1.0.1
- 	  No description available
-diff --git a/package/x11r7/xfont_font-sony-misc/xfont_font-sony-misc.mk b/package/x11r7/xfont_font-sony-misc/xfont_font-sony-misc.mk
-index 669ce46..7f825c8 100644
---- a/package/x11r7/xfont_font-sony-misc/xfont_font-sony-misc.mk
-+++ b/package/x11r7/xfont_font-sony-misc/xfont_font-sony-misc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/CHANGES b/CHANGES
+index 4857fd1..9111344 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,5 +1,7 @@
+ 2010.05, Not yet released
  
--XFONT_FONT_SONY_MISC_VERSION = 1.0.0
-+XFONT_FONT_SONY_MISC_VERSION = 1.0.1
- XFONT_FONT_SONY_MISC_SOURCE = font-sony-misc-$(XFONT_FONT_SONY_MISC_VERSION).tar.bz2
- XFONT_FONT_SONY_MISC_SITE = http://xorg.freedesktop.org/releases/individual/font
- XFONT_FONT_SONY_MISC_AUTORECONF = NO
++	 X.org updated to 7.5.
++
+ 	 Updated/fixed packages: dosfstools, e2fsprogs, squashfs
+ 
+ 2010.02, Release February 26th, 2010:
 -- 
 1.6.3.3
