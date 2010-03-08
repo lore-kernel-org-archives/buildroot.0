@@ -1,8 +1,7 @@
 From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
 Date: Mon, 8 Mar 2010 14:29:48 +0100
-Subject: [Buildroot] [git commit master] Bump font-bh-lucidatypewriter-75dpi
-	to 1.0.1
-Message-ID: <20100308133705.B50FC776E3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] Bump font-adobe-100dpi to 1.0.1
+Message-ID: <20100308133702.6AC5E776E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,38 +9,38 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6019f75be65ff6a826df27fc31d4cdbacf30e211
+commit: http://git.buildroot.net/buildroot/commit/?id=fd8de54bec88d6d0fdf246e57e55b8110cabf447
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
 ---
- .../xfont_font-bh-lucidatypewriter-75dpi/Config.in |    2 +-
- .../xfont_font-bh-lucidatypewriter-75dpi.mk        |    2 +-
+ package/x11r7/xfont_font-adobe-100dpi/Config.in    |    2 +-
+ .../xfont_font-adobe-100dpi.mk                     |    2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xfont_font-bh-lucidatypewriter-75dpi/Config.in b/package/x11r7/xfont_font-bh-lucidatypewriter-75dpi/Config.in
-index fec1781..6916e4e 100644
---- a/package/x11r7/xfont_font-bh-lucidatypewriter-75dpi/Config.in
-+++ b/package/x11r7/xfont_font-bh-lucidatypewriter-75dpi/Config.in
+diff --git a/package/x11r7/xfont_font-adobe-100dpi/Config.in b/package/x11r7/xfont_font-adobe-100dpi/Config.in
+index 55541a6..cf6d857 100644
+--- a/package/x11r7/xfont_font-adobe-100dpi/Config.in
++++ b/package/x11r7/xfont_font-adobe-100dpi/Config.in
 @@ -1,5 +1,5 @@
- config BR2_PACKAGE_XFONT_FONT_BH_LUCIDATYPEWRITER_75DPI
- 	bool "font-bh-lucidatypewriter-75dpi"
+ config BR2_PACKAGE_XFONT_FONT_ADOBE_100DPI
+ 	bool "font-adobe-100dpi"
  	help
--	  font-bh-lucidatypewriter-75dpi 1.0.0
-+	  font-bh-lucidatypewriter-75dpi 1.0.1
+-	  font-adobe-100dpi 1.0.0
++	  font-adobe-100dpi 1.0.1
  	  No description available
-diff --git a/package/x11r7/xfont_font-bh-lucidatypewriter-75dpi/xfont_font-bh-lucidatypewriter-75dpi.mk b/package/x11r7/xfont_font-bh-lucidatypewriter-75dpi/xfont_font-bh-lucidatypewriter-75dpi.mk
-index e575df7..a327015 100644
---- a/package/x11r7/xfont_font-bh-lucidatypewriter-75dpi/xfont_font-bh-lucidatypewriter-75dpi.mk
-+++ b/package/x11r7/xfont_font-bh-lucidatypewriter-75dpi/xfont_font-bh-lucidatypewriter-75dpi.mk
+diff --git a/package/x11r7/xfont_font-adobe-100dpi/xfont_font-adobe-100dpi.mk b/package/x11r7/xfont_font-adobe-100dpi/xfont_font-adobe-100dpi.mk
+index 1f13880..6705f67 100644
+--- a/package/x11r7/xfont_font-adobe-100dpi/xfont_font-adobe-100dpi.mk
++++ b/package/x11r7/xfont_font-adobe-100dpi/xfont_font-adobe-100dpi.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XFONT_FONT_BH_LUCIDATYPEWRITER_75DPI_VERSION = 1.0.0
-+XFONT_FONT_BH_LUCIDATYPEWRITER_75DPI_VERSION = 1.0.1
- XFONT_FONT_BH_LUCIDATYPEWRITER_75DPI_SOURCE = font-bh-lucidatypewriter-75dpi-$(XFONT_FONT_BH_LUCIDATYPEWRITER_75DPI_VERSION).tar.bz2
- XFONT_FONT_BH_LUCIDATYPEWRITER_75DPI_SITE = http://xorg.freedesktop.org/releases/individual/font
- XFONT_FONT_BH_LUCIDATYPEWRITER_75DPI_AUTORECONF = NO
+-XFONT_FONT_ADOBE_100DPI_VERSION = 1.0.0
++XFONT_FONT_ADOBE_100DPI_VERSION = 1.0.1
+ XFONT_FONT_ADOBE_100DPI_SOURCE = font-adobe-100dpi-$(XFONT_FONT_ADOBE_100DPI_VERSION).tar.bz2
+ XFONT_FONT_ADOBE_100DPI_SITE = http://xorg.freedesktop.org/releases/individual/font
+ XFONT_FONT_ADOBE_100DPI_AUTORECONF = NO
 -- 
 1.6.3.3
