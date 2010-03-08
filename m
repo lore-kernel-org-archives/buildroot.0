@@ -1,7 +1,7 @@
 From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
 Date: Mon, 8 Mar 2010 14:29:48 +0100
-Subject: [Buildroot] [git commit master] Bump xf86-video-intel to 2.9.1
-Message-ID: <20100308133619.54689776E3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] Bump libdrm to 2.4.11
+Message-ID: <20100308133619.9BA8F776E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,112 +9,107 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7f26cbb479151a9232d3bd7f0b506c953d48ce2f
+commit: http://git.buildroot.net/buildroot/commit/?id=82f079c3af56c0d4b54a2d8b548bdd1bc48c6b68
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Also convert to autotools
 
 Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
 ---
- package/x11r7/xdriver_xf86-video-intel/Config.in   |    3 +-
- ...iver_xf86-video-intel-2.4.2-cross-compile.patch |   26 --------------------
- ...iver_xf86-video-intel-2.9.1-cross-compile.patch |   25 +++++++++++++++++++
- .../xdriver_xf86-video-intel.mk                    |    4 +-
- 4 files changed, 29 insertions(+), 29 deletions(-)
- delete mode 100644 package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel-2.4.2-cross-compile.patch
- create mode 100644 package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel-2.9.1-cross-compile.patch
+ package/libdrm/libdrm.mk |   84 +++++-----------------------------------------
+ 1 files changed, 9 insertions(+), 75 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-intel/Config.in b/package/x11r7/xdriver_xf86-video-intel/Config.in
-index 3de2845..80678d5 100644
---- a/package/x11r7/xdriver_xf86-video-intel/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-intel/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL
- 	select BR2_PACKAGE_XPROTO_RANDRPROTO
- 	select BR2_PACKAGE_XPROTO_RENDERPROTO
- 	select BR2_PACKAGE_XPROTO_XPROTO
-+	select BR2_PACKAGE_XPROTO_DRI2PROTO
- 	help
--	  xf86-video-intel 2.1.1
-+	  xf86-video-intel 2.9.1
- 	  Intel video driver
-diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel-2.4.2-cross-compile.patch b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel-2.4.2-cross-compile.patch
-deleted file mode 100644
-index ecf1571..0000000
---- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel-2.4.2-cross-compile.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--diff -ruN xf86-video-intel-2.4.2/configure.ac xf86-video-intel-2.4.2-patched/configure.ac
----- xf86-video-intel-2.4.2/configure.ac	2008-08-26 03:28:31.000000000 +0200
--+++ xf86-video-intel-2.4.2-patched/configure.ac	2009-07-27 13:39:49.000000000 +0200
--@@ -91,6 +91,7 @@
-- # Checks for header files.
-- AC_HEADER_STDC
-- 
--+if test "$cross_compiling" = "no" ; then
-- if test x$DRI != xno; then
--         AC_CHECK_FILE([${sdkdir}/dri.h],
--                       [have_dri_h="yes"], [have_dri_h="no"])
--@@ -111,6 +112,14 @@
--                 DRI="no"
--         fi
-- fi
--+else
--+if test x$DRI != xno; then
--+	have_dri_h="yes"
--+	have_sarea_h="yes"
--+	have_dristruct_h="yes"
--+	DRI="yes"
--+fi
--+fi
-- AC_MSG_RESULT([$DRI])
-- 
-- save_CFLAGS="$CFLAGS"
-diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel-2.9.1-cross-compile.patch b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel-2.9.1-cross-compile.patch
-new file mode 100644
-index 0000000..76a33eb
---- /dev/null
-+++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel-2.9.1-cross-compile.patch
-@@ -0,0 +1,25 @@
-+--- xdriver_xf86-video-intel-2.9.1/configure.ac.orig	2010-01-28 11:18:27.526329157 +0200
-++++ xdriver_xf86-video-intel-2.9.1/configure.ac	2010-01-28 11:21:38.065198735 +0200
-+@@ -114,6 +114,7 @@ save_CFLAGS="$CFLAGS"
-+ CFLAGS="$XORG_CFLAGS $DRI_CFLAGS $drm_cflags"
-+ CPPFLAGS="$XORG_CFLAGS $DRI_CFLAGS $drm_cflags"
-+ AC_MSG_CHECKING([whether to include DRI support])
-++if test "$cross_compiling" = "no" ; then
-+ if test x$DRI != xno; then
-+         AC_CHECK_FILE([${sdkdir}/dri.h],
-+                       [have_dri_h="yes"], [have_dri_h="no"])
-+@@ -132,6 +133,14 @@ if test x$DRI = xauto; then
-+                 DRI="no"
-+         fi
-+ fi
-++else
-++if test x$DRI != xno; then
-++	have_dri_h="yes"
-++	have_sarea_h="yes"
-++	have_dristruct_h="yes"
-++	DRI="yes"
-++fi
-++fi
-+ AC_MSG_RESULT([$DRI])
-+ CFLAGS="$save_CFLAGS $DEBUGFLAGS"
-+ 
-diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-index 829cc3a..6bec2d6 100644
---- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-+++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-@@ -4,11 +4,11 @@
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index 53284b3..eb04867 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -3,78 +3,12 @@
+ # libdrm
  #
- ################################################################################
- 
--XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.4.2
-+XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.9.1
- XDRIVER_XF86_VIDEO_INTEL_SOURCE = xf86-video-intel-$(XDRIVER_XF86_VIDEO_INTEL_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_INTEL_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_INTEL_AUTORECONF = YES
--XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xproto
-+XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xproto xproto_dri2proto
- XDRIVER_XF86_VIDEO_INTEL_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
- 
- $(eval $(call AUTOTARGETS,package/x11r7,xdriver_xf86-video-intel))
+ #############################################################
+-LIBDRM_VERSION:=2.3.0
+-LIBDRM_SOURCE:=libdrm-$(LIBDRM_VERSION).tar.bz2
+-LIBDRM_SITE:=http://dri.freedesktop.org/libdrm/
+-LIBDRM_CAT:=$(BZCAT)
+-LIBDRM_DIR:=$(BUILD_DIR)/libdrm-$(LIBDRM_VERSION)
+-
+-$(DL_DIR)/$(LIBDRM_SOURCE):
+-	$(call DOWNLOAD,$(LIBDRM_SITE),$(LIBDRM_SOURCE))
+-
+-libdrm-source: $(DL_DIR)/$(LIBDRM_SOURCE)
+-
+-$(LIBDRM_DIR)/.unpacked: $(DL_DIR)/$(LIBDRM_SOURCE)
+-	$(LIBDRM_CAT) $(DL_DIR)/$(LIBDRM_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	$(CONFIG_UPDATE) $(LIBDRM_DIR)
+-	touch $@
+-
+-$(LIBDRM_DIR)/.configured: $(LIBDRM_DIR)/.unpacked
+-	(cd $(LIBDRM_DIR); rm -f config.cache; \
+-	$(TARGET_CONFIGURE_OPTS) \
+-	CFLAGS="$(TARGET_CFLAGS) " \
+-	LDFLAGS="$(TARGET_LDFLAGS)" \
+-	./configure $(QUIET) \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		--prefix=/usr \
+-		--exec-prefix=/usr \
+-		--bindir=/usr/bin \
+-		--sbindir=/usr/sbin \
+-		--libdir=/usr/lib \
+-		--libexecdir=/usr/lib \
+-		--sysconfdir=/etc \
+-		--datadir=/usr/share \
+-		--localstatedir=/var \
+-		--includedir=/usr/include \
+-		--mandir=/usr/man \
+-		--infodir=/usr/info \
+-	)
+-	touch $@
+-
+-$(LIBDRM_DIR)/.compiled: $(LIBDRM_DIR)/.configured
+-	$(MAKE) CCexe="$(HOSTCC)" -C $(LIBDRM_DIR)
+-	touch $(LIBDRM_DIR)/.compiled
+-
+-$(STAGING_DIR)/usr/lib/libdrm.so: $(LIBDRM_DIR)/.compiled
+-	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(LIBDRM_DIR) install
+-	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libdrm.la
+-	#$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)\',g" \
+-	# -e "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" \
+-	# -e "s,^includedir=.*,includedir=\'$(STAGING_DIR)/usr/include\',g" \
+-	# -e "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" \
+-	# $(STAGING_DIR)/usr/bin/libdrm-config
+-	touch -c $(STAGING_DIR)/usr/lib/libdrm.so
+-
+-$(TARGET_DIR)/usr/lib/libdrm.so: $(STAGING_DIR)/usr/lib/libdrm.so
+-	cp -dpf $(STAGING_DIR)/usr/lib/libdrm.so* $(TARGET_DIR)/usr/lib/
+-	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libdrm.so
+-
+-libdrm: host-pkg-config $(TARGET_DIR)/usr/lib/libdrm.so
+-
+-libdrm-clean:
+-	-$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(LIBDRM_DIR) uninstall
+-	-$(MAKE) -C $(LIBDRM_DIR) clean
+-
+-libdrm-dirclean:
+-	rm -rf $(LIBDRM_DIR)
+-
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_LIBDRM),y)
+-TARGETS+=libdrm
+-endif
++LIBDRM_VERSION = 2.4.11
++LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
++LIBDRM_SITE = http://dri.freedesktop.org/libdrm/
++LIBDRM_AUTORECONF = NO
++LIBDRM_LIBTOOL_PATCH = NO
++LIBDRM_INSTALL_STAGING = YES
++LIBDRM_INSTALL_TARGET = YES
++
++$(eval $(call AUTOTARGETS,package,libdrm))
 -- 
 1.6.3.3
