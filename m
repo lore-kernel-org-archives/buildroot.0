@@ -1,35 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Mar 2010 21:45:00 +0100
-Subject: [Buildroot] Buildroot 2010.02 on LinuxFr.org
-Message-ID: <20100308214500.34290fb1@surf>
+From: H Hartley Sweeten <hartleys@visionengravers.com>
+Date: Mon, 8 Mar 2010 16:04:46 -0500
+Subject: [Buildroot] mtd-utils fails to build
+Message-ID: <BD79186B4FD85F4B8E60E381CAEE190902242788@mi8nycmail19.Mi8.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello all,
 
-I have submitted a news heading about Buildroot 2010.02 on LinuxFr.org,
-the most important french news website of the open-source / free
-software community. The news has been published at:
+I am trying to do a clean build using the current git pull of buildroot.
 
- http://linuxfr.org/2010/03/08/26560.html
+Everything goes as expected until trying to build mtd-utils. When trying
+to build mkfs.jffs2 the build cannot find zlib.h and errors out.
 
-In the news, I sum up what Buildroot is for, what the history of the
-project is, what changes have been made in 2010.02, and some of the
-changes we intend to do in 2010.05.
+It appears that a compile and assemble, but do not link (option -c), happens
+first for each file followed by compile and place output into <file>
+(option -o).
 
-I also mention that the french Linux Magazine will publish on March,
-12th a new issue, with two articles about Buildroot. I have no idea
-what their contents will be, nor who has written them. I'll report
-about them as soon as the magazine will be available.
+The problem appears to be that the -c option happens without passing the
+--sysroot configuration so the compiler cannot locate the external headers.
+
+Following is a snip of the last part of the build:
+
+
+...
+/home/bigguiness/toolchain/x-tools/arm-unknown-linux-gnueabi/bin/arm-unknown-linux-gnueabi-gcc -I./include   -DWITHOUT_XATTR -O2 -g -Wall -Wextra -Wwrite-strings -Wno-sign-compare -c -o /home/bigguiness/buildroot/output/build/mtd-utils-1.3.1/jffs2dump.o jffs2dump.c -g -Wp,-MD,/home/bigguiness/buildroot/output/build/mtd-utils-1.3.1/.jffs2dump.c.dep
+/home/bigguiness/toolchain/x-tools/arm-unknown-linux-gnueabi/bin/arm-unknown-linux-gnueabi-gcc -O2 -g -Wall -Wextra -Wwrite-strings -Wno-sign-compare --sysroot /home/bigguiness/buildroot/output/staging/  -g -o /home/bigguiness/buildroot/output/build/mtd-utils-1.3.1/jffs2dump /home/bigguiness/buildroot/output/build/mtd-utils-1.3.1/jffs2dump.o /home/bigguiness/buildroot/output/build/mtd-utils-1.3.1/crc32.o  
+/home/bigguiness/toolchain/x-tools/arm-unknown-linux-gnueabi/bin/arm-unknown-linux-gnueabi-gcc -I./include   -DWITHOUT_XATTR -O2 -g -Wall -Wextra -Wwrite-strings -Wno-sign-compare -c -o /home/bigguiness/buildroot/output/build/mtd-utils-1.3.1/mkfs.jffs2.o mkfs.jffs2.c -g -Wp,-MD,/home/bigguiness/buildroot/output/build/mtd-utils-1.3.1/.mkfs.jffs2.c.dep
+mkfs.jffs2.c:73:18: error: zlib.h: No such file or directory
+mkfs.jffs2.c:1519: warning: initialization discards qualifiers from pointer target type
+mkfs.jffs2.c:1521: warning: initialization discards qualifiers from pointer target type
+mkfs.jffs2.c: In function 'main':
+mkfs.jffs2.c:1881: warning: passing argument 2 of 'recursive_add_host_directory' discards qualifiers from pointer target type
+make[1]: *** [/home/bigguiness/buildroot/output/build/mtd-utils-1.3.1/mkfs.jffs2.o] Error 1
+rm /home/bigguiness/buildroot/output/build/mtd-utils-1.3.1/ftl_check.o /home/bigguiness/buildroot/output/build/mtd-utils-1.3.1/docfdisk.o /home/bigguiness/buildroot/output/build/mtd-utils-1.3.1/flash_unlock.o /home/bigguiness/buildroot/output/build/mtd-utils-1.3.1/flash_lock.o /home/bigguiness/buildroot/output/build/mtd-utils-1.3.1/flashcp.o /home/bigguiness/buildroot/output/build/mtd-utils-1.3.1/doc_loadbios.o /home/bigguiness/buildroot/output/build/mtd-utils-1.3.1/flash_erase.o /home/bigguiness/buildroot/output/build/mtd-utils-1.3.1/ftl_format.o /home/bigguiness/buildroot/output/build/mtd-utils-1.3.1/flash_info.o
+make[1]: Leaving directory `/home/bigguiness/buildroot/output/build/mtd-utils-1.3.1'
+make: *** [/home/bigguiness/buildroot/output/build/mtd-utils-1.3.1/docfdisk] Error 2
+
+
+Any ideas how to fix this?
 
 Regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Hartley
