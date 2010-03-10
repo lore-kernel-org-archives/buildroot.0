@@ -1,68 +1,55 @@
-From: Wade Maxfield <wmaxfield@gmail.com>
-Date: Tue, 9 Mar 2010 17:44:37 -0600
-Subject: [Buildroot] Newbie PPC build
-Message-ID: <45a1b53e1003091544w202cb0a8v200255a9085be68d@mail.gmail.com>
+From: Wu, Josh <Josh.wu@atmel.com>
+Date: Wed, 10 Mar 2010 07:18:10 +0100
+Subject: [Buildroot] AT91bootstrap code in git cannot be cloned
+Message-ID: <C83D7CE8356557448A893798C8F9931D04EBFBEF@frimb01.corp.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- I apologize for answering my own question, (where to go next) but here
-goes:
+Hi, Ulf
 
-Problem: xilinx powerpc linux boots to the point where ram is released, and
-hangs.
+ 
 
-Solution:
- In the Xilinx forums, someone doing an ML507 board was having the same
-problem I was having.
+Nice to meet you. I got a problem when clones your git code of at91bootstrap, Could you help me to check this? Thank you very much.
 
-  The issue is in the default inittab in the buildroot generic.  In the
-default inittab, the console tty is commented out, and some other tty's are
-commented in.
+ 
 
-   If you are running Xilinx power pc, and you are bootstrapping up with the
-initial baud rate that Xilinx likes to use (9600 baud), change the image's
-inittab to contain the following:
-----------------------------------------------
+Following is the details what I got:
 
-# Set up a couple of getty's
+$ git clone git://git.busybox.net/~ulf/git/at91bootstrap
 
-#comment out the tty1 and tty2
-#tty1::respawn:/sbin/getty 38400 tty1
-#tty2::respawn:/sbin/getty 38400 tty2
+Initialized empty Git repository in /home/josh/buildroot/temp/at91bootstrap/.git/
 
-#null::respawn:/usr/sbin/inetd
+remote: Counting objects: 9, done.
 
-# Put a getty on the serial port
-ttyS0::respawn:/sbin/getty -L ttyS0 9600 vt100
+remote: Compressing objects: 100% (9/9), done.
 
- --------------------------------
+remote: Total 9 (delta 0), reused 0 (delta 0)
 
- NOTE: if you are using UartLite, change ttyS0 to ttyUL0
+remote: aborting due to possible repository corruption on the remote side.
 
+Receiving objects: 100% (9/9), done.
 
-  For a quick change to the image built by buildroot, change into the
-buildroot/output/images directory and mount the image similar to the
-following line (assuming /mnt/ramdisk directory exists and you have sudo
-privs, and the file system is named rootfs.powerpc.ext2):
+fatal: error in sideband demultiplexer
 
-sudo mount ./rootfs.powerpc.ext2 /mnt/ramdisk -t ext2 -o loop=/dev/loop3
+$   
 
+  
 
-  In addition, the linuxrc located in the root of the file system won't work
-for a test init.  If you are trying to do a test init for your boot, add the
-line
+  
 
-init=/bin/sh
+Thank you again.
 
-to your linux boot line, rather than init=/linuxrc, as that will fail.
- Busybox pays attention to how it is linked, which causes certain patterns
-to fail.
+Best Regards,
 
+Josh Wu
 
-wade
+ 
+
+ 
+
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100309/710d1b7b/attachment.htm>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100310/24cda9a0/attachment-0001.htm>
