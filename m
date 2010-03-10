@@ -1,33 +1,29 @@
-From: H Hartley Sweeten <hartleys@visionengravers.com>
-Date: Wed, 10 Mar 2010 10:50:56 -0600
-Subject: [Buildroot] [PATCH] remove -mm linux patch options
-In-Reply-To: <87sk881e33.fsf@macbook.be.48ers.dk>
-References: <0D753D10438DA54287A00B027084269763682CDACA@AUSP01VMBX24.collaborationhost.net>
-	<87sk881e33.fsf@macbook.be.48ers.dk>
-Message-ID: <0D753D10438DA54287A00B027084269763683A7147@AUSP01VMBX24.collaborationhost.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 10 Mar 2010 20:41:58 +0100
+Subject: [Buildroot] Pull request for branch x11r75patches
+In-Reply-To: <4B96D33F.9010107@carallon.com>
+References: <4B96D09D.4070100@carallon.com>
+	<0D753D10438DA54287A00B027084269763682CDFC9@AUSP01VMBX24.collaborationhost.net>
+	<4B96D33F.9010107@carallon.com>
+Message-ID: <20100310204158.44d268ff@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday, March 10, 2010 6:50 AM, Peter Korsgaard wrote:
->>>>>> "H" == H Hartley Sweeten <hartleys@visionengravers.com> writes:
->
-> H> The -mm tree is really no longer available since the -next tree 
-> H> was created for testing.  It's not even listed on the kernel.org
-> H> site any longer.  Plus, the last one that was published as
-> H> available was pretty old, 2.6.28-rc2-mm1.
->
-> H> Remove all the -mm patch stuff from Buildroot to clean up the
-> H> Linux kernel selection.
->
-> Committed, thanks.
+On Tue, 09 Mar 2010 23:01:19 +0000
+Will Wagner <will_wagner@carallon.com> wrote:
 
-Thanks.
+> I would agree completely, updating all the Confin.in files was a real 
+> time waster when updating x11. Guess I could generate new patches
+> that remove it if people are interested.
 
-I have a follow-up patch to remove the config options from the various
-defconfig's if you want it.  Or are they handled a different way?
+I think that would be good.
 
-Regards,
-Hartley
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
