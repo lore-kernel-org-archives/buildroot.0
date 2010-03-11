@@ -1,29 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 Mar 2010 20:41:58 +0100
-Subject: [Buildroot] Pull request for branch x11r75patches
-In-Reply-To: <4B96D33F.9010107@carallon.com>
-References: <4B96D09D.4070100@carallon.com>
-	<0D753D10438DA54287A00B027084269763682CDFC9@AUSP01VMBX24.collaborationhost.net>
-	<4B96D33F.9010107@carallon.com>
-Message-ID: <20100310204158.44d268ff@surf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 11 Mar 2010 05:47:27 +0000 (UTC)
+Subject: [Buildroot] [Bug 1261] New: The getline() in
+ output/build/linux-2.6.28/scripts/unifdef.c in buildroot is buggy
+Message-ID: <bug-1261-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 09 Mar 2010 23:01:19 +0000
-Will Wagner <will_wagner@carallon.com> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=1261
 
-> I would agree completely, updating all the Confin.in files was a real 
-> time waster when updating x11. Guess I could generate new patches
-> that remove it if people are interested.
+           Summary: The getline() in output/build/linux-
+                    2.6.28/scripts/unifdef.c in buildroot is buggy
+           Product: buildroot
+           Version: unspecified
+          Platform: Other
+        OS/Version: Linux
+            Status: NEW
+          Keywords: link-failure
+          Severity: enhancement
+          Priority: P3
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: vikki.km at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-I think that would be good.
 
-Thomas
+Hi,
+
+Yesterday i was trying to buildroot for my ARM920t and i think this is the bug.
+
+Target: ARM920t
+OS: Fedora 12 ( 2.6.31 using)
+Kernel Headers: 2.6.32
+Kernel used: 2.6.28
+
+output/build/linux-2.6.28/scripts/unifdef.c
+
+the getline() function in unidef.c contradicts with the already present getline
+function in stdio.h and gives this error
+
+error:
+/usr/include/stdio.h:653: note: previous declaration of ?getline? was here
+
+How i fixed the error?
+
+i changed the getline function in unidef.c to get_line ie. other than getline
+and it works fine.
+
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
