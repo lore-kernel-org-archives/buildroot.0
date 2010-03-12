@@ -1,33 +1,34 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Fri, 12 Mar 2010 09:51:17 -0600
-Subject: [Buildroot] [Bug 1135] New: Package customize. Wrong copying
-In-Reply-To: <405ddebe1003120745j4ede0f26me0ec43aff5fcd064@mail.gmail.com>
-References: <bug-1135-163@https.bugs.busybox.net/> <hlma1t$h9p$1@ger.gmane.org>
-	<405ddebe1003120745j4ede0f26me0ec43aff5fcd064@mail.gmail.com>
-Message-ID: <20100312155117.GA24311@grante>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 12 Mar 2010 17:43:31 +0000 (UTC)
+Subject: [Buildroot] [Bug 849] "customize" package copies files to wrong
+ place in target tree
+In-Reply-To: <bug-849-163@https.bugs.busybox.net/>
+References: <bug-849-163@https.bugs.busybox.net/>
+Message-ID: <20100312174331.F1B487775A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Mar 12, 2010 at 06:45:02PM +0300, Pkun wrote:
+https://bugs.busybox.net/show_bug.cgi?id=849
 
-> 2010/2/19 Grant Edwards <grant.b.edwards@gmail.com>
-> > On 2010-02-19, bugzilla at busybox.net <bugzilla@busybox.net> wrote:
-> > > https://bugs.busybox.net/show_bug.cgi?id=1135
-> > >
-> > >            Summary: Package customize. Wrong copying
-> >
-> > Yup.  I reported this and submitted a patch a while back:
-> >
-> >   https://bugs.busybox.net/show_bug.cgi?id=849
->
-> This simple bug was not fixed in 2010.02
-> :(
 
-I know.  There's been no comment on the bug, so I'm not sure why,
-unless there are people depending on the older, broken behavior.
+Paulius Zaleckas <paulius.zaleckas@gmail.com> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |paulius.zaleckas at gmail.com
+
+
+
+
+--- Comment #1 from Paulius Zaleckas <paulius.zaleckas@gmail.com>  2010-03-12 17:43:31 UTC ---
+Wrong. Then it will copy wrongly files that needs new directory to be created.
+I think we should use install instead of cp.
+
 
 -- 
-Grant
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
