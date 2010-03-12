@@ -1,21 +1,45 @@
-From: matthieu castet <castet.matthieu@free.fr>
-Date: Thu, 11 Mar 2010 23:04:48 +0000 (UTC)
-Subject: [Buildroot] sstrip bug
-Message-ID: <loom.20100311T235032-41@post.gmane.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 12 Mar 2010 15:13:45 +0000 (UTC)
+Subject: [Buildroot] [Bug 1267] New: Wrong BR2_EXTRA_VERSION
+Message-ID: <bug-1267-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-sstrip porting from 
-http://www.muppetlabs.com/~breadbox/software/elfkickers.html to multi
-endianess/class broke program header patching.
+https://bugs.busybox.net/show_bug.cgi?id=1267
 
-Now Dynamic entry is wrong (it works for linker, but not for tools like readelf)
-: the offset is wrong.
+           Summary: Wrong BR2_EXTRA_VERSION
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: serj.kalichev at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-you can find a patch and an example at https://dev.openwrt.org/ticket/6847
+
+Created an attachment (id=1201)
+ --> (https://bugs.busybox.net/attachment.cgi?id=1201)
+BR2_EXTRA_VERSION patch
+
+Buildroot version 2010.02. (Bugtracker does not have 2010.02 version choice)
+
+I try to build kernel with custom version number (2.6.33). The full version of
+kernel become something like "2.6.332.6.33". And the modules dir is
+/lib/modules/2.6.332.6.33.
+
+The target/linux/Config.in.advanced contain wrong default for
+BR2_EXTRA_VERSION.
 
 
-Thanks
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
