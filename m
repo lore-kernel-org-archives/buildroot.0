@@ -1,10 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 13 Mar 2010 14:07:31 +0000 (UTC)
+Date: Sat, 13 Mar 2010 14:07:53 +0000 (UTC)
 Subject: [Buildroot] [Bug 1279] Buildroot compiled Busybox and Coreutils LFS
 	issues
 In-Reply-To: <bug-1279-163@https.bugs.busybox.net/>
 References: <bug-1279-163@https.bugs.busybox.net/>
-Message-ID: <20100313140731.BC280776BC@busybox.osuosl.org>
+Message-ID: <20100313140753.9B215776BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,10 +17,10 @@ https://bugs.busybox.net/show_bug.cgi?id=1279
 
 
 
---- Comment #5 from Richard Weinberger <richard-bugs@nod.at>  2010-03-13 14:07:30 UTC ---
-Created an attachment (id=1255)
- --> (https://bugs.busybox.net/attachment.cgi?id=1255)
-strace testtool
+--- Comment #6 from Richard Weinberger <richard-bugs@nod.at>  2010-03-13 14:07:53 UTC ---
+Created an attachment (id=1261)
+ --> (https://bugs.busybox.net/attachment.cgi?id=1261)
+the testtool
 
 
 -- 
