@@ -1,43 +1,30 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 12 Mar 2010 23:45:10 +0000 (UTC)
-Subject: [Buildroot] [Bug 1273] New: BR2_INET_IPV6 does not enable IPv6 in
-	pppd
-Message-ID: <bug-1273-163@https.bugs.busybox.net/>
+From: Nataraj S Narayan <natarajsn@gmail.com>
+Date: Sat, 13 Mar 2010 13:24:43 +0530
+Subject: [Buildroot] jffs2 problem
+Message-ID: <630286c71003122354rb2e6146ofe939c85465b74e5@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1273
+Hi Jacmet
 
-           Summary: BR2_INET_IPV6 does not enable IPv6 in pppd
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Keywords: patch
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: alex at digriz.org.uk
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+ rootfs.arm.jffs2  from BR git. gives me at boot
 
+ CLEANMARKER node found at 0x00660000 has totlen 0xc != normal 0x0
+ jffs2_scan_eraseblock(): Magic bitmask 0x1985 not found at
+0x01f86ef0: 0x5feb instead
 
-Created an attachment (id=1213)
- --> (https://bugs.busybox.net/attachment.cgi?id=1213)
-enable ipv6 in pppd
+ and finally
 
-IPv6 is not enabled in pppd when BR2_INET_IPV6 is selected.  I have attached a
-trival patch is attached that fixes this.
+ Kernel panic - not syncing: Attempted to kill init!
 
-Cheers
+When doing by hand, which works , i use:-
 
+#sudo mkfs.jffs2 --pad --little-endian --eraseblock=0x20000 -n -o
+last.jffs2  -s 0x800 -r /media/usb/
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+regards
+
+Nataraj
