@@ -1,27 +1,46 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 14 Mar 2010 08:20:19 +0100
-Subject: [Buildroot] [PATCH] remove -mm linux patch options
-In-Reply-To: <0D753D10438DA54287A00B027084269763683A7147@AUSP01VMBX24.collaborationhost.net>
-	(H. Hartley Sweeten's message of "Wed, 10 Mar 2010 10:50:56 -0600")
-References: <0D753D10438DA54287A00B027084269763682CDACA@AUSP01VMBX24.collaborationhost.net>
-	<87sk881e33.fsf@macbook.be.48ers.dk>
-	<0D753D10438DA54287A00B027084269763683A7147@AUSP01VMBX24.collaborationhost.net>
-Message-ID: <87sk83z7ws.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 14 Mar 2010 07:26:14 +0000 (UTC)
+Subject: [Buildroot] [Bug 1261] The getline() in
+ output/build/linux-2.6.28/scripts/unifdef.c in buildroot is buggy
+In-Reply-To: <bug-1261-163@https.bugs.busybox.net/>
+References: <bug-1261-163@https.bugs.busybox.net/>
+Message-ID: <20100314072614.500C577615@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "H" == H Hartley Sweeten <hartleys@visionengravers.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=1261
 
-Hi,
 
- H> I have a follow-up patch to remove the config options from the various
- H> defconfig's if you want it.  Or are they handled a different way?
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-Yes please. We'll have to check the various defconfigs for bitrot soon,
-but we might as well get rid of the MM stuff now.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
+
+
+
+
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2010-03-14 07:26:13 UTC ---
+(In reply to comment #0)
+
+> /usr/include/stdio.h:653: note: previous declaration of ?getline? was here
+> 
+> How i fixed the error?
+> 
+> i changed the getline function in unidef.c to get_line ie. other than getline
+> and it works fine.
+
+That's a known problem in older versions of the Linux kernel when building on
+new distributions. The official fix (which is included in 2.6.29+) is like you
+describe (getline -> get_line).
+
+Any reason why you want to use such an old kernel for a new project?
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
