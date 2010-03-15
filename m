@@ -1,41 +1,42 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 15 Mar 2010 03:37:39 +0000 (UTC)
-Subject: [Buildroot] [Bug 1291] New: Add support for Faraday 526 arm
-	processor (fa526)
-Message-ID: <bug-1291-163@https.bugs.busybox.net/>
+From: cmc2001 <craig.mcfarlane@pri.com.au>
+Date: Sun, 14 Mar 2010 21:43:17 -0700 (PDT)
+Subject: [Buildroot]  Core Files on ARM
+Message-ID: <27900409.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1291
 
-           Summary: Add support for Faraday 526 arm processor (fa526)
-           Product: buildroot
-           Version: 2010.02
-          Platform: Other
-        OS/Version: Linux
-            Status: NEW
-          Severity: enhancement
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: cls at seawood.org
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+TWIMC,
+Forgive the noob question, but we have a busybox'd target which we've
+configured to produce partial core files when our app crashes.  However, it
+seems to only have spotty backtrace information - specifically, only a stack
+trace for one thread.
 
+Busybox 1.13.4
+g++ 4.2.1
+kernel 2.6.28.2
 
-Created an attachment (id=1267)
- --> (https://bugs.busybox.net/attachment.cgi?id=1267)
-v1.0
+I know I'm not alone after trawling google, but I'm yet to find anything
+approaching a definitive answer.
 
-The Patriot Corza NAS (and a bunch of others) uses the Faraday 526 processor. 
-This patch allows us to use buildroot to create a compatible sysroot for
-extending the box.
+I've been banging my head on this problem for several days now and the more
+I dig, the more possible problems I discover (the latest being the g++ ARM
+toolchain and its limitations).  Would this corefile problem be resolved if
+I moved up to:
 
+Busybox 1.15.3
+gcc 4.4.3
+kernel 2.6.29.4
 
+Also, if Busybox's menus is dumbing down my control of corefiles a little
+too much, is there an agreed way of subverting it that won't get me into
+trouble down the track?
+
+cya
+Craig
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+View this message in context: http://old.nabble.com/Core-Files-on-ARM-tp27900409p27900409.html
+Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
