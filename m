@@ -1,29 +1,24 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 16 Mar 2010 18:05:28 +0000 (UTC)
-Subject: [Buildroot] [Bug 1315] Allow use of older external toolchains
- without sysroot support
-In-Reply-To: <bug-1315-163@https.bugs.busybox.net/>
-References: <bug-1315-163@https.bugs.busybox.net/>
-Message-ID: <20100316180528.9B211774CF@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 16 Mar 2010 19:43:39 +0100
+Subject: [Buildroot] libgtk2 version bump
+In-Reply-To: <20100316174618.GC10082@codepoet.org> (Erik Andersen's message of
+	"Tue, 16 Mar 2010 11:46:18 -0600")
+References: <20100316174618.GC10082@codepoet.org>
+Message-ID: <87d3z4hztw.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1315
+>>>>> "Erik" == Erik Andersen <andersen@codepoet.org> writes:
 
+ Erik>  -Erik
 
+Hi Erik, long time ago!
 
-
-
---- Comment #3 from Chris Seawood <cls@seawood.org>  2010-03-16 18:05:26 UTC ---
-I have not systematically tested every package in the tree.  I only tested the
-ones needed for the Corza packages.  However, I just tried Qt and it built
-fine.
-
+Have you tested this with directfb? Newer libgtk2 versions didn't used
+to work properly with the directfb backend.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
