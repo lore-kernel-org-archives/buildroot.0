@@ -1,29 +1,35 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Tue, 16 Mar 2010 18:50:18 +0000 (UTC)
-Subject: [Buildroot] Lots of warnings: dereferencing type-punned pointer
-	will break...
-Message-ID: <hnojta$qc0$1@dough.gmane.org>
+From: Nuno Pereira <fxss@iol.pt>
+Date: Tue, 16 Mar 2010 19:00:31 +0000
+Subject: [Buildroot] copysignl.c
+In-Reply-To: <87ocirz7gz.fsf@macbook.be.48ers.dk>
+References: <13abadeb1003100227q6e3bf7e8x68669e87263decfc@mail.gmail.com>
+	<87ocirz7gz.fsf@macbook.be.48ers.dk>
+Message-ID: <13abadeb1003161200r4cad3717g8fe47b784fef2274@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-After uptading from a December git snapshot to 2010.2 (which included
-moving from gcc 4.3 to 4.4), I've noticed that there are a _lot_ of
-warnings from the compiler:
+Hi,
 
-  findutils/grep.c:617: warning: dereferencing type-punned pointer will break strict-aliasing rules
-  findutils/grep.c:623: warning: dereferencing type-punned pointer will break strict-aliasing rules
-  findutils/grep.c:626: warning: dereferencing type-punned pointer will break strict-aliasing rules
-  findutils/grep.c:628: warning: dereferencing type-punned pointer will break strict-aliasing rules
-  findutils/grep.c:634: warning: dereferencing type-punned pointer will break strict-aliasing rules
-  findutils/grep.c:636: warning: dereferencing type-punned pointer will break strict-aliasing rules
+In the latest release of Buildroot, I think that fix should be included:
 
-There are now thousands of lines like that, and I don't remember that
-being the case before the update.  Have I broken something?
+http://lists.busybox.net/pipermail/buildroot/2010-February/031987.html
 
--- 
-Grant Edwards               grant.b.edwards        Yow! And then we could sit
-                                  at               on the hoods of cars at
-                              gmail.com            stop lights!
+Regards,
+Nuno
+
+On 14 March 2010 07:29, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Nuno" == Nuno Pereira <fxss@iol.pt> writes:
+>
+> ?Nuno> Hi,
+> ?Nuno> Why copysignl.c is not included in Buildroot in order to be possible
+> ?Nuno> to compile shared libgcc with software floating-point support
+> ?Nuno> out-of-box?
+>
+> copysignl.c? What package, what .config? Please provide more details.
+>
+> --
+> Bye, Peter Korsgaard
+>
