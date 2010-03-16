@@ -1,30 +1,23 @@
 From: Erik Andersen <andersen@codepoet.org>
-Date: Tue, 16 Mar 2010 14:33:45 -0600
-Subject: [Buildroot] libgtk2 version bump
-In-Reply-To: <87d3z4hztw.fsf@macbook.be.48ers.dk>
-References: <20100316174618.GC10082@codepoet.org>
-	<87d3z4hztw.fsf@macbook.be.48ers.dk>
-Message-ID: <20100316203345.GF10082@codepoet.org>
+Date: Tue, 16 Mar 2010 14:36:47 -0600
+Subject: [Buildroot] Bump cairo version
+In-Reply-To: <1268771185.5202.19.camel@coalu.atr>
+References: <20100316175039.GE10082@codepoet.org>
+	<1268771185.5202.19.camel@coalu.atr>
+Message-ID: <20100316203647.GG10082@codepoet.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue Mar 16, 2010 at 07:43:39PM +0100, Peter Korsgaard wrote:
-> >>>>> "Erik" == Erik Andersen <andersen@codepoet.org> writes:
-> 
->  Erik>  -Erik
-> 
-> Hi Erik, long time ago!
+On Tue Mar 16, 2010 at 09:26:25PM +0100, Lionel Landwerlin wrote:
+> it seems you dropped the directfb patch for cairo. Are you aware of its
+> behavior ?
 
-Yeah, it has been a while.  I'm pleased to see buildroot
-continues to prosper.  :-)
-
-> Have you tested this with directfb? Newer libgtk2 versions didn't used
-> to work properly with the directfb backend.
-
-Nope.  I have not tried or tested directfb -- just X.
+Nope.  It didn't apply and I did not forward port it, I wasn't
+even certain if such a patch was still necessary as I have not
+had a recent use for directfb.  I defer to the directfb experts.
 
  -Erik
 
