@@ -1,35 +1,30 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Tue, 16 Mar 2010 21:39:06 +0000 (UTC)
-Subject: [Buildroot] make distclean leaves ~200 files under
-	package/config/
+From: Will Wagner <will_wagner@carallon.com>
+Date: Tue, 16 Mar 2010 23:13:14 +0000
+Subject: [Buildroot] make distclean leaves ~200 files
+	under	package/config/
+In-Reply-To: <hnotpq$1pr$1@dough.gmane.org>
 References: <hnoqma$lhv$1@dough.gmane.org> <20100316223047.44094042@surf>
-Message-ID: <hnotpq$1pr$1@dough.gmane.org>
+	<hnotpq$1pr$1@dough.gmane.org>
+Message-ID: <4BA0108A.1070607@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2010-03-16, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
-> On Tue, 16 Mar 2010 20:46:02 +0000 (UTC)
-> Grant Edwards <grant.b.edwards@gmail.com> wrote:
+On 16/03/2010 21:39, Grant Edwards wrote:
+> output/ by default).
+>    
+> Ah, I see find that a patch has already been submitted:
 >
->> After doing a "make distclean", there a couple hundred files under
->> package/config that seeming shouldn't be there:
-[...]
->> Shouldn't "make distclean" get rid of those?
+>    https://bugs.uclibc.org/show_bug.cgi?id=1213
 >
-> In fact, those should be moved somewhere into the $(O) directory
-> (output/ by default).
+> I thought I remembered this having been discussed before, but I didn't
+> search for the right words the first time I looked...
+>
+>    
 
-Ah, I see find that a patch has already been submitted:
+Would be great if you could test my patch. If someone else signs off on 
+it, there's a better chance of inclusion ;)
 
-  https://bugs.uclibc.org/show_bug.cgi?id=1213
-
-I thought I remembered this having been discussed before, but I didn't
-search for the right words the first time I looked...
-  
--- 
-Grant Edwards               grant.b.edwards        Yow! Will it improve my
-                                  at               CASH FLOW?
-                              gmail.com            
+Will
