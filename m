@@ -1,33 +1,44 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Tue, 16 Mar 2010 20:46:02 +0000 (UTC)
-Subject: [Buildroot] make distclean leaves ~200 files under package/config/
-Message-ID: <hnoqma$lhv$1@dough.gmane.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 16 Mar 2010 22:30:47 +0100
+Subject: [Buildroot] make distclean leaves ~200 files under
+ package/config/
+In-Reply-To: <hnoqma$lhv$1@dough.gmane.org>
+References: <hnoqma$lhv$1@dough.gmane.org>
+Message-ID: <20100316223047.44094042@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-After doing a "make distclean", there a couple hundred files under
-package/config that seeming shouldn't be there:
+On Tue, 16 Mar 2010 20:46:02 +0000 (UTC)
+Grant Edwards <grant.b.edwards@gmail.com> wrote:
 
-  package/config/conf
-  package/config/mconf.o
-  package/config/.depend
-  package/config/zconf.tab.o
-  package/config/conf.o
-  package/config/kxgettext.o
-  package/config/buildroot-config  [contains 190+ files]
-  package/config/lxdialog/yesno.o
-  package/config/lxdialog/textbox.o
-  package/config/lxdialog/inputbox.o
-  package/config/lxdialog/checklist.o
-  package/config/lxdialog/menubox.o
-  package/config/lxdialog/util.o
+> After doing a "make distclean", there a couple hundred files under
+> package/config that seeming shouldn't be there:
+> 
+>   package/config/conf
+>   package/config/mconf.o
+>   package/config/.depend
+>   package/config/zconf.tab.o
+>   package/config/conf.o
+>   package/config/kxgettext.o
+>   package/config/buildroot-config  [contains 190+ files]
+>   package/config/lxdialog/yesno.o
+>   package/config/lxdialog/textbox.o
+>   package/config/lxdialog/inputbox.o
+>   package/config/lxdialog/checklist.o
+>   package/config/lxdialog/menubox.o
+>   package/config/lxdialog/util.o
+> 
+> Shouldn't "make distclean" get rid of those?
 
-Shouldn't "make distclean" get rid of those?
+In fact, those should be moved somewhere into the $(O) directory
+(output/ by default).
 
+Thomas
 -- 
-Grant Edwards               grant.b.edwards        Yow! I am covered with
-                                  at               pure vegetable oil and I am
-                              gmail.com            writing a best seller!
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
