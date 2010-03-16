@@ -1,58 +1,109 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Tue, 16 Mar 2010 20:00:20 +0000 (UTC)
-Subject: [Buildroot] Packages won't build after update to 2010.2
-References: <hnom3e$46n$1@dough.gmane.org>
-Message-ID: <hnoo0k$9t2$1@dough.gmane.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 16 Mar 2010 20:04:17 +0000 (UTC)
+Subject: [Buildroot] [Bug 1321] New: Buildroot link fails due to lack of
+	--sysroot option
+Message-ID: <bug-1321-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2010-03-16, Grant Edwards <grant.b.edwards@gmail.com> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=1321
 
-> After updating to 2010.2, the updated versions of a several packages
-> won't build.  For example, busybox-1.16 fails like this:
-[...]
->    /home/nextgen/buildroot/toolchain/usr/bin/arm-linux-gcc -Wall -Wshadow -Wwrite-strings -Wundef -Wstrict-prototypes -Wunused -Wunused-parameter -Wunused-function -$
->    ==========
->    /home/nextgen/buildroot/toolchain/usr/bin/../lib/gcc/arm-linux-uclibc/4.4.3/../../../../arm-linux-uclibc/bin/ld: crt1.o: No such file: No such file or directory
->    collect2: ld returned 1 exit status
+              Host: Gentoo Linux
+            Target: Atmel ARM9
+             Build: 2010.2
+           Summary: Buildroot link fails due to lack of --sysroot option
+           Product: buildroot
+           Version: 2010.02
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: grant.b.edwards at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-> I believe the failure is due to the fact that no --sysroot option is
-> being specified in the link command.
 
-The patch below seems to fix the problem.  I don't really understand
-why it worked before. That was with gcc 4.3 instead of gcc 4.4, so it
-could be that 4.4 is pickier about locating library files.
+Created an attachment (id=1297)
+ --> (https://bugs.busybox.net/attachment.cgi?id=1297)
+Patch to fix busybox link failure by setting EXTRA_LDFLAGS appropriately
 
-I'll file a bug report and submit the patch.
+Buildroot link fails:
+
+   make[1]: Leaving directory
+`/home/nextgen/buildroot/buildroot/output/build/busybox-1.16.0'
+   touch /home/nextgen/buildroot/buildroot/output/build/busybox-1.16.0/.config
+   /usr/bin/make -j2 CC=/home/nextgen/buildroot/toolchain/usr/bin/arm-linux-gcc
+CROSS_COMPILE="/home/nextgen/buildroot/toolchain/usr/bin/arm-linux-" \
+                   CROSS="/home/nextgen/buildroot/toolchain/usr/bin/arm-linux-"
+PREFIX="/home/nextgen/buildroot/buildroot/output/target" \
+                   ARCH=arm \
+                   EXTRA_CFLAGS="-Os -pipe -O2  --sysroot
+/home/nextgen/buildroot/buildroot/output/staging/
+-I/home/nextgen/buildroot/buildroot/output/toolchain/linu$
+   make[1]: Entering directory
+`/home/nextgen/buildroot/buildroot/output/build/busybox-1.16.0'
+   scripts/kconfig/conf -s Config.in
+   #
+   # using defaults found in .config
+   #
+     SPLIT   include/autoconf.h -> include/config/*
+     HOSTCC  applets/usage
+   applets/usage.c: In function 'main':
+   applets/usage.c:32: warning: ignoring return value of 'write', declared with
+attribute warn_unused_result
+     GEN     include/bbconfigopts.h
+     HOSTCC  applets/applet_tables
+     GEN     include/usage_compressed.h
+     GEN     include/applet_tables.h
+     CC      applets/applets.o
+     HOSTCC  applets/usage_pod
+   applets/usage_pod.c: In function 'main':
+   applets/usage_pod.c:58: warning: format not a string literal and no format
+arguments
+     LD      applets/built-in.o
+     DOC     busybox.pod
+     DOC     BusyBox.txt
+
+   [1431 warnings about type punned pointers later]
+
+     CC      util-linux/switch_root.o
+     CC      util-linux/umount.o
+     AR      util-linux/lib.a
+     LINK    busybox_unstripped
+   Trying libraries: crypt m
+   Failed: -Wl,--start-group -lcrypt -lm -Wl,--end-group
+   Output of:
+   /home/nextgen/buildroot/toolchain/usr/bin/arm-linux-gcc -Wall -Wshadow
+-Wwrite-strings -Wundef -Wstrict-prototypes -Wunused -Wunused-parameter
+-Wunused-function -$
+   ==========
+  
+/home/nextgen/buildroot/toolchain/usr/bin/../lib/gcc/arm-linux-uclibc/4.4.3/../../../../arm-linux-uclibc/bin/ld:
+crt1.o: No such file: No such file or directory
+   collect2: ld returned 1 exit status
+   make[1]: *** [busybox_unstripped] Error 1
+   make[1]: Leaving directory
+`/home/nextgen/buildroot/buildroot/output/build/busybox-1.16.0'
+   make: ***
+[/home/nextgen/buildroot/buildroot/output/build/busybox-1.16.0/busybox] Error 2
+
+Though the proper --sysroot option is being used during compilation
+(see the EXTRA_CFLAGS value at the beginning of the log) no --sysroot
+option is used for the linking.  Thus the linker can't find crt1.o.
+
+The EXTRA_LDFLAGS needs to be passed to buildroot's "make" with the
+appropriate --sysroot option (already set up in TARGET_LDFLAGS).
+
+Patch is attached.
 
 
-Index: busybox.mk
-===================================================================
---- busybox.mk	(revision 11)
-+++ busybox.mk	(working copy)
-@@ -101,12 +101,14 @@
- 	$(MAKE) CC=$(TARGET_CC) CROSS_COMPILE="$(TARGET_CROSS)" \
- 		CROSS="$(TARGET_CROSS)" PREFIX="$(TARGET_DIR)" \
- 		ARCH=$(KERNEL_ARCH) \
-+		EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
- 		EXTRA_CFLAGS="$(BUSYBOX_CFLAGS)" -C $(BUSYBOX_DIR)
- ifeq ($(BR2_PREFER_IMA)$(BR2_PACKAGE_BUSYBOX_SNAPSHOT),yy)
- 	rm -f $@
- 	$(MAKE) CC=$(TARGET_CC) CROSS_COMPILE="$(TARGET_CROSS)" \
- 		CROSS="$(TARGET_CROSS)" PREFIX="$(TARGET_DIR)" \
- 		ARCH=$(KERNEL_ARCH) STRIP="$(STRIPCMD)" \
-+		EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
- 		EXTRA_CFLAGS="$(BUSYBOX_CFLAGS)" -C $(BUSYBOX_DIR) \
- 		-f scripts/Makefile.IMA
- endif
-@@ -116,6 +118,7 @@
- 	$(MAKE) CC=$(TARGET_CC) CROSS_COMPILE="$(TARGET_CROSS)" \
- 		CROSS="$(TARGET_CROSS)" PREFIX="$(TARGET_DIR)" \
- 		ARCH=$(KERNEL_ARCH) \
-+		EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
- 		EXTRA_CFLAGS="$(BUSYBOX_CFLAGS)" -C $(BUSYBOX_DIR) install
- else
- 	install -D -m 0755 $(BUSYBOX_DIR)/busybox $(TARGET_DIR)/bin/busybox
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
