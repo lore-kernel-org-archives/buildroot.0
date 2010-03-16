@@ -1,26 +1,33 @@
-From: Erik Andersen <andersen@codepoet.org>
-Date: Tue, 16 Mar 2010 14:36:47 -0600
-Subject: [Buildroot] Bump cairo version
-In-Reply-To: <1268771185.5202.19.camel@coalu.atr>
-References: <20100316175039.GE10082@codepoet.org>
-	<1268771185.5202.19.camel@coalu.atr>
-Message-ID: <20100316203647.GG10082@codepoet.org>
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Tue, 16 Mar 2010 20:46:02 +0000 (UTC)
+Subject: [Buildroot] make distclean leaves ~200 files under package/config/
+Message-ID: <hnoqma$lhv$1@dough.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue Mar 16, 2010 at 09:26:25PM +0100, Lionel Landwerlin wrote:
-> it seems you dropped the directfb patch for cairo. Are you aware of its
-> behavior ?
+After doing a "make distclean", there a couple hundred files under
+package/config that seeming shouldn't be there:
 
-Nope.  It didn't apply and I did not forward port it, I wasn't
-even certain if such a patch was still necessary as I have not
-had a recent use for directfb.  I defer to the directfb experts.
+  package/config/conf
+  package/config/mconf.o
+  package/config/.depend
+  package/config/zconf.tab.o
+  package/config/conf.o
+  package/config/kxgettext.o
+  package/config/buildroot-config  [contains 190+ files]
+  package/config/lxdialog/yesno.o
+  package/config/lxdialog/textbox.o
+  package/config/lxdialog/inputbox.o
+  package/config/lxdialog/checklist.o
+  package/config/lxdialog/menubox.o
+  package/config/lxdialog/util.o
 
- -Erik
+Shouldn't "make distclean" get rid of those?
 
---
-Erik B. Andersen             http://codepoet-consulting.com/
---This message was written using 73% post-consumer electrons--
+-- 
+Grant Edwards               grant.b.edwards        Yow! I am covered with
+                                  at               pure vegetable oil and I am
+                              gmail.com            writing a best seller!
