@@ -1,42 +1,48 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 16 Mar 2010 07:42:51 +0000 (UTC)
-Subject: [Buildroot] [Bug 1315] Allow use of older external toolchains
- without sysroot support
-In-Reply-To: <bug-1315-163@https.bugs.busybox.net/>
-References: <bug-1315-163@https.bugs.busybox.net/>
-Message-ID: <20100316074251.EF93F776F4@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 16 Mar 2010 16:30:00 +0100
+Subject: [Buildroot] [git commit master] libglib2: bump version
+Message-ID: <20100316153020.D4CE9776C5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1315
 
+commit: http://git.buildroot.net/buildroot/commit/?id=d3ea4f4cf52eea9bfe8e3837f66e199f1d6b7e04
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES                      |    2 +-
+ package/libglib2/libglib2.mk |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         AssignedTo|unassigned at buildroot.uclibc.|thomas.petazzoni at free-
-                   |org                         |electrons.com
-
-
-
-
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2010-03-16 07:42:50 UTC ---
-Thanks for this patch.
-
-In the past, we tried to handle toolchains not supporting --sysroot, but that
-proved to be very difficult with packages such as the Gtk stack or Qt. See for
-example the thread at
-http://lists.busybox.net/pipermail/buildroot/2008-November/023870.html or
-http://lists.busybox.net/pipermail/buildroot/2008-December/024147.html.
-
-Does your patch works when compiling Qt, for example ?
-
-
+diff --git a/CHANGES b/CHANGES
+index dce7efb..95af76a 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -6,7 +6,7 @@
+ 	X.org updated to 7.5.
+ 
+ 	Updated/fixed packages: busybox, dosfstools, e2fsprogs,
+-	mtd-utils, setserial, squashfs
++	libglib2, mtd-utils, setserial, squashfs
+ 
+ 	Issues resolved (http://bugs.uclibc.org):
+ 
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index 6e110f6..f122491 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ LIBGLIB2_VERSION_MAJOR = 2.22
+-LIBGLIB2_VERSION_MINOR = 4
++LIBGLIB2_VERSION_MINOR = 5
+ LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).$(LIBGLIB2_VERSION_MINOR)
+ LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.bz2
+ LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.6.3.3
