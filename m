@@ -1,29 +1,33 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 16 Mar 2010 20:33:31 +0000 (UTC)
-Subject: [Buildroot] [Bug 1327] mtd-utils compile failure due to lack of
- --sysroot in CFLAGS
-In-Reply-To: <bug-1327-163@https.bugs.busybox.net/>
-References: <bug-1327-163@https.bugs.busybox.net/>
-Message-ID: <20100316203331.4F76A7769A@busybox.osuosl.org>
+From: Erik Andersen <andersen@codepoet.org>
+Date: Tue, 16 Mar 2010 14:33:45 -0600
+Subject: [Buildroot] libgtk2 version bump
+In-Reply-To: <87d3z4hztw.fsf@macbook.be.48ers.dk>
+References: <20100316174618.GC10082@codepoet.org>
+	<87d3z4hztw.fsf@macbook.be.48ers.dk>
+Message-ID: <20100316203345.GF10082@codepoet.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1327
+On Tue Mar 16, 2010 at 07:43:39PM +0100, Peter Korsgaard wrote:
+> >>>>> "Erik" == Erik Andersen <andersen@codepoet.org> writes:
+> 
+>  Erik>  -Erik
+> 
+> Hi Erik, long time ago!
 
+Yeah, it has been a while.  I'm pleased to see buildroot
+continues to prosper.  :-)
 
+> Have you tested this with directfb? Newer libgtk2 versions didn't used
+> to work properly with the directfb backend.
 
+Nope.  I have not tried or tested directfb -- just X.
 
+ -Erik
 
---- Comment #1 from Grant Edwards <grant.b.edwards@gmail.com>  2010-03-16 20:33:30 UTC ---
-Created an attachment (id=1303)
- --> (https://bugs.busybox.net/attachment.cgi?id=1303)
-Patch to correctly set CFLAGS when building mtd utils for use on target
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+--
+Erik B. Andersen             http://codepoet-consulting.com/
+--This message was written using 73% post-consumer electrons--
