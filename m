@@ -1,16 +1,16 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 16 Mar 2010 00:25:52 +0000 (UTC)
-Subject: [Buildroot] [Bug 1303] New: Add librsync package
-Message-ID: <bug-1303-163@https.bugs.busybox.net/>
+Date: Tue, 16 Mar 2010 00:27:37 +0000 (UTC)
+Subject: [Buildroot] [Bug 1309] New: Add rdiff-backup package
+Message-ID: <bug-1309-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1303
+https://bugs.busybox.net/show_bug.cgi?id=1309
 
-           Summary: Add librsync package
+           Summary: Add rdiff-backup package
            Product: buildroot
            Version: 2010.02
           Platform: PC
@@ -22,16 +22,15 @@ https://bugs.busybox.net/show_bug.cgi?id=1303
         AssignedTo: unassigned at buildroot.uclibc.org
         ReportedBy: cls at seawood.org
                 CC: buildroot at uclibc.org
-        Depends on: 1297
    Estimated Hours: 0.0
 
 
-Created an attachment (id=1279)
- --> (https://bugs.busybox.net/attachment.cgi?id=1279)
+Created an attachment (id=1285)
+ --> (https://bugs.busybox.net/attachment.cgi?id=1285)
 v1.0
 
-The attached patch adds support for building librsync.  It requires the patch
-from bug 1297 in order to properly download the source from sourceforge.
+The attached patch adds the ability to build rdiff-backup to buildroot.  It
+requires python and librsync (bug 1303).
 
 
 -- 
