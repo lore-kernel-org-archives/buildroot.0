@@ -1,33 +1,35 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 18 Mar 2010 09:02:04 +0000 (UTC)
-Subject: [Buildroot] [Bug 1351] host-libxslt-1.1.24 fails to build
-In-Reply-To: <bug-1351-163@https.bugs.busybox.net/>
-References: <bug-1351-163@https.bugs.busybox.net/>
-Message-ID: <20100318090204.A0E7D77515@busybox.osuosl.org>
+Date: Thu, 18 Mar 2010 14:31:03 +0000 (UTC)
+Subject: [Buildroot] [Bug 1357] New: Add bluez to buildroot system
+Message-ID: <bug-1357-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1351
+https://bugs.busybox.net/show_bug.cgi?id=1357
+
+           Summary: Add bluez to buildroot system
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: kanis at in.tum.de
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
 
+Created an attachment (id=1333)
+ --> (https://bugs.busybox.net/attachment.cgi?id=1333)
+Add bluez to buildroot
 
-
-
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2010-03-18 09:02:03 UTC ---
-My guess is that there is a confusion with the libxml2 library installed on the
-host. Could you put the full build log somewhere ?
-
-We might need to :
-
- * Add a post install hook to the libxml2 package, so that
-$(HOST_DIR)/usr/bin/xml2-config gets fixed just as we already fix
-$(TARGET_DIR)/usr/bin/xml2-config
-
- * Pass the LIBXML_CONFIG_PREFIX variable to libxslt's configure script, so
-that it uses $(HOST_DIR)/usr/bin/xml2-config instead of /usr/bin/xml2-config
+I made a patch to add current bluez to buildroot.
 
 
 -- 
