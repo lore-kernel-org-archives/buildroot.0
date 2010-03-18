@@ -1,186 +1,36 @@
-From: Damien Borie <dbe@terawatt.fr>
-Date: Thu, 18 Mar 2010 17:41:08 +0100
-Subject: [Buildroot] Compilation error of Buildroot with X server
-In-Reply-To: <4B978247.3030707@terawatt.fr>
-References: <4B9124F4.40206@terawatt.fr>	<20100307112147.55145b25@surf>	<4B9652A7.1080103@terawatt.fr>	<4B9656D6.3070202@terawatt.fr>
-	<4B978247.3030707@terawatt.fr>
-Message-ID: <4BA257A4.6040009@terawatt.fr>
+From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+Date: Thu, 18 Mar 2010 20:22:32 +0200
+Subject: [Buildroot] [PATCH RESEND] Fix autotools instalation with
+	symbols
+In-Reply-To: <20100307173913.401faec3@surf>
+References: <20100307153359.10213.62431.stgit@localhost.localdomain>
+	<20100307173913.401faec3@surf>
+Message-ID: <4BA26F68.8020407@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-
-So, I finally successfully created my distribution. So if anybody 
-encounter the same problems, I send my solution here.
-In fact, the .la files, used by Libtool for linking libraries, were 
-filled with bad paths. The error was to define the same path for the 
-External Toolchain Location option and the Toolchain Header Location 
-option. The second is where libraries are copied by Buildroot, and must 
-be in the Buildroot tree. I don't know why, in my configuration, it was 
-the path to my Toolchain (the 2 options had the same value).
-I never understood why the problem only comes with X libraries 
-compilation and no with other libraries.
-I reset this option to the default value (output/staging or something 
-like that), and, it's work fine. I encountered some errors during Vesa 
-drivers and XGI drivers compilation, but I resolved them (some include 
-to modify in some .h files).
-So now I got a working distribution.
-
-Thanks,
-Damien.
-
-
-Damien Borie a ?crit :
-> I tried some changes in the configuration but with no results. But I 
-> think it must be a problem with my toolchain. So I made a new 
-> toolchain with latest version of Crosstool-ng. It's very long (about 
-> 18h).
-> Unfortunately, when I've try a "make clean" in buildroot directory, to 
-> restart compilation at beginning, it deleted my newly created 
-> toolchain, whereas it's an external toolchain. I report this since I 
-> don't know if it's normal.
-> Here we go again for the toolchain compilation :(
-> If nothing changes with the new toolchain, I will need some help as 
-> I'm a bit lost in Buildroot Xorg/X11 configuration. So, if anybody has 
-> an idea to solve my problem...
+On 03/07/2010 06:39 PM, Thomas Petazzoni wrote:
+> On Sun, 07 Mar 2010 17:33:59 +0200
+> Paulius Zaleckas<paulius.zaleckas@gmail.com>  wrote:
 >
-> Thanks.
-> Damien.
->
-> Damien Borie a ?crit :
->> Oups, sorry, here is the correct .config.
+>> When installing without symbols install-strip is used,
+>> with symbols - install-exec.
+>> Since install-exec installs only executables, we should use
+>> simple install, to install other needed files also
+>> (like files in /usr/shared) as install-strip does.
 >>
->> Damien.
->>
->> Damien Borie a ?crit :
->>> OK. So I have restarted everything with the new buildroot version. I 
->>> have started configuration from the beginning, but based on my old 
->>> .config. Compilation has been long (QT...). Now I got a cleaner 
->>> project!
->>> But finally, I have the same error exactly.
->>> I forgot a detail : I use a external toolchain made with Crosstool, 
->>> and, as it was working for the precedent target (and it's the same 
->>> target), I used the same toolchain.
->>> I join the .config. For all X11 parameters, I kept default.
->>>
->>> Thanks.
->>> Damien.
->>>
->>> Thomas Petazzoni a ?crit :
->>>> Hello Damien,
->>>>
->>>> On Fri, 05 Mar 2010 16:36:20 +0100
->>>> Damien Borie <dbe@terawatt.fr> wrote:
->>>>
->>>>  
->>>>> The situation : we use Buildroot to create a embedded distribution
->>>>> for a device with Touchscreen and a beautiful GUI.
->>>>> We've just changed the hardware for the same model has before, but
->>>>> with a larger screen. So now it's seems impossible to manage display
->>>>> with only the framebuffer and Vesa drivers. So I must create a new
->>>>> version of the distribution which will allow me to install the
->>>>> specific driver of the graphic chipset.
->>>>>     
->>>>
->>>> Ok.
->>>>
->>>>  
->>>>> As it's the same hardware (except screen, which only change size 
->>>>> anyway), I took the old configurations file (for Kernel, Busybox, 
->>>>> and Buildroot). I only add the option "Enable loadable module 
->>>>> support" in Kernel configuration, so I'll can install my drivers.
->>>>> In Buildroot configuration, I'm a bit lost but I only have to active
->>>>> X server. So I choose X Window system server "tinyX" instead of
->>>>> "none". Then I check "Xorg X window system X11r7 release 7.4"
->>>>> options, and choose xorg-server. And, that's all for a first test.
->>>>>     
->>>>
->>>> I think you're using an old version of Buildroot, because the options
->>>> are now organized in a different way (I've cleaned them up because
->>>> they were quite messy).
->>>>
->>>> Now, we have a top-level option
->>>>
->>>>  [ ] X.org X Window System, X11R7, release 7.4
->>>>
->>>> Inside this options, we have :
->>>>
->>>>  X Window System server type (TinyX)  --->
->>>>  X11R7 Servers  --->
->>>>  X11R7 Libraries --->
->>>>  X11R7 Applications -->
->>>>  X11R7 Fonts -->
->>>>  X11R7 X Protocols -->
->>>>  X11R7 Utilities -->
->>>>  X11R7 Other data -->
->>>>
->>>> So, once you've enabled X.org X Window System, X11R7, release 7.4, you
->>>> are able to choose the server type, and there you have two choices :
->>>>
->>>>  * TinyX, which is in fact now known as Kdrive. It is a standalone X
->>>>    server, which only supports a few hardware access solutions:
->>>>    framebuffer, VESA, etc. If you want video-card specific drivers,
->>>>    then, from my understanding, you cannot use TinyX/Kdrive
->>>>
->>>>  * The modular X.org, which is similar to the one you have in any
->>>>    Linux distro, which allows you to compile hardware-specific 
->>>> drivers.
->>>>    If you select this type, a new entry "X11R7 Drivers --->" will
->>>>    appear.
->>>>
->>>> In your case, you probably want the modular X.org.
->>>>
->>>>  
->>>>> Here comes the problem. During compiling, I got the following error
->>>>> log. I think it is strange that it is searching for a file with a
->>>>> long path like this, which doesn't exists of course. The file 
->>>>> /usr/local/toolchain/i486-twa-linux-gnu//usr/lib//libXau.la exists.
->>>>> I search for long hours but didn't found something really
->>>>> interesting. All I know is Libtool sometimes need to the librairies
->>>>> to be installed on the host to compile them successfully, so I just
->>>>> installed libXau but nothing changes.
->>>>>     
->>>>
->>>> No, libtool doesn't need the libraries to be installed on the host. It
->>>> might work-around some Buildroot issue, but it shouldn't be needed.
->>>>
->>>>  
->>>>> I really think the path is the problem, but I don't know how to
->>>>> change it as I'm not familiar at all with Libtool.
->>>>> Some advices for me?
->>>>>     
->>>>
->>>> Could you try with Buildroot 2010.02, and if it still doesn't work,
->>>> send us your .config ?
->>>>
->>>> Thanks!
->>>>
->>>> Thomas
->>>>   
->>>
->>> ------------------------------------------------------------------------ 
->>>
->>>
->>> _______________________________________________
->>> buildroot mailing list
->>> buildroot at busybox.net
->>> http://lists.busybox.net/mailman/listinfo/buildroot
->>
->> ------------------------------------------------------------------------
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
+>> Signed-off-by: Paulius Zaleckas<paulius.zaleckas@gmail.com>
+>> Acked-by: Lionel Landwerlin<llandwerlin@gmail.com>
 >
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
->
+> Acked-by: Thomas Petazzoni<thomas.petazzoni@free-electrons.com>
+
+Peter,
+
+Please take this patch as now for example X11 drivers are not
+installed for the target. There are also various other problems
+without this patch.
+
+Paulius
