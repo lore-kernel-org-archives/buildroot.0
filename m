@@ -1,26 +1,24 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 20 Mar 2010 16:24:20 +0000 (UTC)
-Subject: [Buildroot] [Bug 1369] cannot build radvd (flex problem)
-In-Reply-To: <bug-1369-163@https.bugs.busybox.net/>
-References: <bug-1369-163@https.bugs.busybox.net/>
-Message-ID: <20100320162420.2ED03776E4@busybox.osuosl.org>
+From: Paul Jones <paul.jones@iwtech.com.au>
+Date: Sun, 21 Mar 2010 15:06:50 +1100
+Subject: [Buildroot] [Bug 1351] host-libxslt-1.1.24 fails to build
+In-Reply-To: <20100318090204.A0E7D77515@busybox.osuosl.org>
+References: <bug-1351-163@https.bugs.busybox.net/>
+	<20100318090204.A0E7D77515@busybox.osuosl.org>
+Message-ID: <4BA59B5A.6090701@iwtech.com.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1369
+On 03/18/10 20:02, bugzilla at busybox.net wrote:
+> --- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2010-03-18 09:02:03 UTC ---
+> My guess is that there is a confusion with the libxml2 library installed on the
+> host. Could you put the full build log somewhere ?
+>   
+How do I get a build log?
+make > buildlog.txt ?
 
 
-
-
-
---- Comment #1 from Alexander Clouter <alex@digriz.org.uk>  2010-03-20 16:24:19 UTC ---
-re: version 1.6, I meant to say you only pull version 1.5
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thanks.
+Paul.
