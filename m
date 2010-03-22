@@ -1,16 +1,17 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 22 Mar 2010 15:54:09 +0000 (UTC)
-Subject: [Buildroot] [Bug 1303] Add librsync package
-In-Reply-To: <bug-1303-163@https.bugs.busybox.net/>
-References: <bug-1303-163@https.bugs.busybox.net/>
-Message-ID: <20100322155410.080B077658@busybox.osuosl.org>
+Date: Mon, 22 Mar 2010 15:59:28 +0000 (UTC)
+Subject: [Buildroot] [Bug 1297] Add ability to give additional args to
+ $(DOWNLOAD) for sourceforge pkgs
+In-Reply-To: <bug-1297-163@https.bugs.busybox.net/>
+References: <bug-1297-163@https.bugs.busybox.net/>
+Message-ID: <20100322155928.B3E58776B4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1303
+https://bugs.busybox.net/show_bug.cgi?id=1297
 
 
 Peter Korsgaard <jacmet@uclibc.org> changed:
@@ -18,20 +19,15 @@ Peter Korsgaard <jacmet@uclibc.org> changed:
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
              Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+         Resolution|                            |INVALID
 
 
 
 
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2010-03-22 15:54:09 UTC ---
-Thanks, committed with minor changes.
-
-A few comments:
-- Please commit changes locally (on a seperate branch) and use git format-patch
-to generate the patch so I can just git-am it
-- You need to specify the dependencies in Config.in as well
-- sourceforge workaround not needed, see other packages (like haserl) how the
-direct download URL is used
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2010-03-22 15:59:28 UTC ---
+Thanks, but this isn't needed if the direct download URLS (like the other
+packages using sourceforge) is used. See package/haserl/haserl.mk for an
+example.
 
 
 -- 
