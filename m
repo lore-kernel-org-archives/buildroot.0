@@ -1,28 +1,33 @@
-From: William Wagner <will_wagner@carallon.com>
-Date: Mon, 22 Mar 2010 19:49:42 +0000
-Subject: [Buildroot] [Patch]matchbox: convert to autotools
-Message-ID: <4BA7C9D6.8060208@carallon.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 22 Mar 2010 22:48:42 +0000 (UTC)
+Subject: [Buildroot] [Bug 535] gawk can't find libintl
+In-Reply-To: <bug-535-163@https.bugs.busybox.net/>
+References: <bug-535-163@https.bugs.busybox.net/>
+Message-ID: <20100322224842.D085C7771C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The patch converts matchbox to use the autotools. In addition it fixes 
-buildinf with libxft and fixes building with start-notification
+https://bugs.busybox.net/show_bug.cgi?id=535
 
-The conversion to autotools meant I split it into a number of sub 
-packages so each could be build separately with the autotools 
-infrastructure.
+
+Peter Korsgaard <jacmet@uclibc.org> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|ASSIGNED                    |RESOLVED
+         Resolution|                            |INVALID
+
+
+
+
+--- Comment #6 from Peter Korsgaard <jacmet@uclibc.org>  2010-03-22 22:48:41 UTC ---
+No feedback for +6 months, closing
+
 
 -- 
-------------------------------------------------------------------------
-Will Wagner                                     will_wagner at carallon.com
-Development Manager                      Office Tel: +44 (0)20 7371 2032
-Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
-------------------------------------------------------------------------
-
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: 0001-matchbox-convert-to-autotools-fix-build-with-start-n.patch
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100322/bde9bd78/attachment-0001.diff>
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
