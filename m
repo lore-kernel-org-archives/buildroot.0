@@ -1,37 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Mar 2010 08:51:19 +0100
-Subject: [Buildroot] [Bug 1351] host-libxslt-1.1.24 fails to build
-In-Reply-To: <4BA59B5A.6090701@iwtech.com.au>
-References: <bug-1351-163@https.bugs.busybox.net/>
-	<20100318090204.A0E7D77515@busybox.osuosl.org>
-	<4BA59B5A.6090701@iwtech.com.au>
-Message-ID: <20100321085119.3d9104eb@surf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 22 Mar 2010 02:31:46 +0000 (UTC)
+Subject: [Buildroot] [Bug 1387] New: xlib_libX11-1.3.2 can's find libjpeg
+Message-ID: <bug-1387-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=1387
 
-On Sun, 21 Mar 2010 15:06:50 +1100
-Paul Jones <paul.jones@iwtech.com.au> wrote:
+              Host: X86_64
+            Target: ARM
+             Build: buildroot-git
+           Summary: xlib_libX11-1.3.2 can's find libjpeg
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: paul.jones at iwtech.com.au
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-> How do I get a build log?
-> make > buildlog.txt ?
 
-I usually do something like:
+Created an attachment (id=1357)
+ --> (https://bugs.busybox.net/attachment.cgi?id=1357)
+Buildroot config
 
- make 2>&1 | tee build.log
+X.Org should select jpeg, but for whatever reason it didn't. When I selected it
+manually it didn't appear to get built before it was needed by X11.
 
-The problem with "make > buildlog.txt" is that error messages will not
-be sent to your log file.
 
-Regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
