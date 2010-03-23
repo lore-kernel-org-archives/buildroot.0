@@ -1,35 +1,33 @@
-From: Muhammed ER <er.muhammed@gmail.com>
-Date: Tue, 23 Mar 2010 11:01:24 +0200
-Subject: [Buildroot] Qt error.
-Message-ID: <f70863321003230201l3573678cx3eaf40954eec82dc@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 23 Mar 2010 09:12:15 +0000 (UTC)
+Subject: [Buildroot] [Bug 635] util-linux fails to build in 2009.08
+In-Reply-To: <bug-635-163@https.bugs.busybox.net/>
+References: <bug-635-163@https.bugs.busybox.net/>
+Message-ID: <20100323091215.BCB20776D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
-This is my fist post. If I send e-mail wrong place, remind me.
+https://bugs.busybox.net/show_bug.cgi?id=635
 
-I need a RootFS which includes, Qt.
 
-For adding Qt, It need c++ library. ok, I opened it.
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-In "qt.mk" file,
-I commet
-line 489 #        -nomake examples \
-line 490 #        -nomake demos \
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|ASSIGNED                    |RESOLVED
+         Resolution|                            |WORKSFORME
 
-So it tries to install /usr which is in MY PC.
 
-I think,
-line 485:       -prefix /usr \
-and it doesn't write because of permissions.
 
-will be $(TARGET)/usr or something like this.
 
-Thanks,
-Muhammed ER.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100323/5a1704f2/attachment.htm>
+--- Comment #3 from Peter Korsgaard <jacmet@uclibc.org>  2010-03-23 09:12:14 UTC ---
+Still unable to reproduce, so closing.
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
