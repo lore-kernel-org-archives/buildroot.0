@@ -1,33 +1,24 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 23 Mar 2010 09:12:15 +0000 (UTC)
-Subject: [Buildroot] [Bug 635] util-linux fails to build in 2009.08
-In-Reply-To: <bug-635-163@https.bugs.busybox.net/>
-References: <bug-635-163@https.bugs.busybox.net/>
-Message-ID: <20100323091215.BCB20776D1@busybox.osuosl.org>
+From: Paul Jones <paul.jones@iwtech.com.au>
+Date: Tue, 23 Mar 2010 20:15:05 +1100
+Subject: [Buildroot] Qt error.
+In-Reply-To: <f70863321003230201l3573678cx3eaf40954eec82dc@mail.gmail.com>
+References: <f70863321003230201l3573678cx3eaf40954eec82dc@mail.gmail.com>
+Message-ID: <4BA88699.6090809@iwtech.com.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=635
+On 23/03/2010 8:01 PM, Muhammed ER wrote:
+>
+> line 489 #        -nomake examples \
+> line 490 #        -nomake demos \
 
-
-Peter Korsgaard <jacmet@uclibc.org> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|ASSIGNED                    |RESOLVED
-         Resolution|                            |WORKSFORME
-
+An unrelated comment:
+It would be nice if there was an option to enable the demos and examples 
+for newbies like myself trying to learn QT.
 
 
 
---- Comment #3 from Peter Korsgaard <jacmet@uclibc.org>  2010-03-23 09:12:14 UTC ---
-Still unable to reproduce, so closing.
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Paul.
