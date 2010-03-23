@@ -1,71 +1,81 @@
-From: Damien Borie <dbe@terawatt.fr>
-Date: Tue, 23 Mar 2010 17:04:36 +0100
-Subject: [Buildroot] Xorg configuration for XGI chip
-In-Reply-To: <4BA3AAC2.9050400@gmail.com>
-References: <4BA3A72B.3010009@terawatt.fr> <4BA3AAC2.9050400@gmail.com>
-Message-ID: <4BA8E694.3080809@terawatt.fr>
+From: Ravi Kumar Kulkarni <ravilinux4u@gmail.com>
+Date: Tue, 23 Mar 2010 23:23:15 +0530
+Subject: [Buildroot] understanding and using buildroot
+Message-ID: <532dd5841003231053w2b88f147ne655bc7985e65aff@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi.
+Hello everybody,
+finally after 2 weeks of struggling i managed to build buildroot!
+ i have some doubts to clarify on usage of buildroot and regarding some packages
+i have built buildroot jffs2 image from using daily snapshot and
+booted onto target.
+but
+a)when i get login prompt what password should i enter for a user and for root?
+b)and what should be enabled to so as to login as root?
 
-I tried with latest snapshot. I still have problems to launch a X server.
-With vesa and fbdev X drivers, it's OK, I can launch X server but only 
-with depth 8, and resolution 800x600 for vesa and 600x480 for fbdev 
-(framebuffer limit?). The problem is that I need depth 16 and 1024x600 
-resolution.
+my /etc/passwd file is as belw
 
-With XGi driver built in Buildroot, I got an error :
-"LoadModule: Module xgi does not have a xgiModuleData data object."
-I don't know how to correct that, I think it's the result of a version 
-compatibility problem.
+root:x:0:0:root:/root:/bin/sh
+daemon:x:1:1:daemon:/usr/sbin:/bin/sh
+bin:x:2:2:bin:/bin:/bin/sh
+sys:x:3:3:sys:/dev:/bin/sh
+sync:x:4:100:sync:/bin:/bin/sync
+mail:x:8:8:mail:/var/spool/mail:/bin/sh
+proxy:x:13:13:proxy:/bin:/bin/sh
+www-data:x:33:33:www-data:/var/www:/bin/sh
+backup:x:34:34:backup:/var/backups:/bin/sh
+operator:x:37:37:Operator:/var:/bin/sh
+haldaemon:x:68:68:hald:/:/bin/sh
+dbus:x:81:81:dbus:/var/run/dbus:/bin/sh
+nobody:x:99:99:nobody:/home:/bin/sh
+sshd:x:103:99:Operator:/var:/bin/sh
+default:x:1000:1000:Default non-root user:/home/default:/bin/sh
 
-With XGIz driver, download from XGI website, I got another error :
-"dlopen: /usr/lib/xorg/modules/drivers/xgiz_drv.so: undefined symbol: 
-resVgaMemShared"
-Here again I think it's a problem of version. However I tried with all 
-versions of this driver I found.
 
-With SIS driver built in Buildroot, everything seems ok, no errors, but 
-I only get a black screen. I tried a lot of options of the driver which 
-seems to be useful but with no results.
-I don't know how to resolve this problem. I need a working displaying in 
-1024x600x16 mode but this chip doesn't seems to be very used with Linux.
+and my /etc/securetty file is below
 
-So if somebody has the begin of an idea to solve this, I accept everything.
+tty1
+tty2
+tty3
+tty4
+tty5
+tty6
+tty7
+tty8
+ttyS0
+ttyS1
+ttyS2
+ttyS3
+ttyAMA0
+ttyAMA1
+ttyAMA2
+ttyAMA3
+ttySAC0
+ttySAC1
+ttySAC2
+ttySAC3
+ttyUL0
+ttyUL1
+ttyUL2
+ttyUL3
+ttyPSC0
+ttyPSC1
+ttyPSC2
+ttyPSC3
+ttyCPM0
+ttyCPM1
+ttyCPM2
+ttyCPM3
 
-Thanks
-Damien.
 
-Paulius Zaleckas a ?crit :
-> On 03/19/2010 06:32 PM, Damien Borie wrote:
->> Hi.
->>
->> I have to configure my Xorg X server to use a XGI Volari z9s chip. I'm
->> not very familiar with this and all I tried for now only make a black
->> screen.
->> I tried to use XGI driver from Buildroot, SIS driver from Buildroot, and
->> tried to install XGIZ driver downloaded from XGI website, but it's not
->> working.
->> I think I must insist with one of these drivers but I don't know which
->> one really works.
->
-> [...]
->
->> The errors don't seems to be important as I don't use 3D and OpenGL.
->
-> I get similar errors with Intel GPU and it works OK.
->
->> If someone has already work on this chip XGI z9s, which driver must be
->> used and how to configure it?
->
-> I have almost no experience with XGI... But can you try latest buildroot
-> from git or just download daily snapshot. There was massive X11 update.
->
->> Thanks,
->> Damien.
->
->
+ now apart from this to build a ubifs file system image what should i configure?
+im building kernel outside buildroot . is there no way to  build ubifs
+without configuring kernelin buildroot?
+
+i would be thankful if anybody clarifies the above doubts.
+warm regards,
+Ravi Kulkarni.
