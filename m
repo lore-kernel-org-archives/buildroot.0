@@ -1,21 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 22 Mar 2010 23:59:47 +0100
-Subject: [Buildroot] [Patch]freetype: bump to 2.3.12
-In-Reply-To: <4BA7C918.6000509@carallon.com> (William Wagner's message of
-	"Mon, 22 Mar 2010 19:46:32 +0000")
-References: <4BA7C918.6000509@carallon.com>
-Message-ID: <87634oj730.fsf@macbook.be.48ers.dk>
+From: Muhammed ER <er.muhammed@gmail.com>
+Date: Tue, 23 Mar 2010 11:01:24 +0200
+Subject: [Buildroot] Qt error.
+Message-ID: <f70863321003230201l3573678cx3eaf40954eec82dc@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "William" == William Wagner <will_wagner@carallon.com> writes:
+Hi all,
+This is my fist post. If I send e-mail wrong place, remind me.
 
- William> Trivial bump
+I need a RootFS which includes, Qt.
 
-Committed, thanks.
+For adding Qt, It need c++ library. ok, I opened it.
 
--- 
-Bye, Peter Korsgaard
+In "qt.mk" file,
+I commet
+line 489 #        -nomake examples \
+line 490 #        -nomake demos \
+
+So it tries to install /usr which is in MY PC.
+
+I think,
+line 485:       -prefix /usr \
+and it doesn't write because of permissions.
+
+will be $(TARGET)/usr or something like this.
+
+Thanks,
+Muhammed ER.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100323/5a1704f2/attachment.htm>
