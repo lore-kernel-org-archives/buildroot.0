@@ -1,16 +1,16 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 23 Mar 2010 22:08:10 +0000 (UTC)
-Subject: [Buildroot] [Bug 661] lmbench: new package
-In-Reply-To: <bug-661-163@https.bugs.busybox.net/>
-References: <bug-661-163@https.bugs.busybox.net/>
-Message-ID: <20100323220810.811A57769F@busybox.osuosl.org>
+Date: Wed, 24 Mar 2010 08:23:05 +0000 (UTC)
+Subject: [Buildroot] [Bug 513] Add new squid package
+In-Reply-To: <bug-513-163@https.bugs.busybox.net/>
+References: <bug-513-163@https.bugs.busybox.net/>
+Message-ID: <20100324082305.6D34E776F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=661
+https://bugs.busybox.net/show_bug.cgi?id=513
 
 
 Peter Korsgaard <jacmet@uclibc.org> changed:
@@ -23,7 +23,7 @@ Peter Korsgaard <jacmet@uclibc.org> changed:
 
 
 
---- Comment #4 from Peter Korsgaard <jacmet@uclibc.org>  2010-03-23 22:08:09 UTC ---
+--- Comment #12 from Peter Korsgaard <jacmet@uclibc.org>  2010-03-24 08:23:04 UTC ---
 Committed, thanks
 
 
