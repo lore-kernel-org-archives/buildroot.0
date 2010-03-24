@@ -1,40 +1,68 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 24 Mar 2010 10:53:31 +0000 (UTC)
-Subject: [Buildroot] [Bug 1387] xlib_libX11-1.3.2 can's find libjpeg
-In-Reply-To: <bug-1387-163@https.bugs.busybox.net/>
-References: <bug-1387-163@https.bugs.busybox.net/>
-Message-ID: <20100324105331.C04AC776EA@busybox.osuosl.org>
+From: Muhammed ER <er.muhammed@gmail.com>
+Date: Wed, 24 Mar 2010 13:43:02 +0200
+Subject: [Buildroot] Qt Phonon Sound problem
+Message-ID: <f70863321003240443n22a999a2k7a7b5ae60103e619@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1387
+Hi,
+I make a simple example Phonon sound program. But there is error.
 
+---------------
+music = Phonon::createPlayer(Phonon::MusicCategory,
+Phonon::MediaSource("/test/file.mp3"));
+music->play();
+----------------
 
-Paul Jones <paul.jones@iwtech.com.au> changed:
+When I clicked, nothing happens, but on console output is:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |WORKSFORME
+-----------------------------------------------------------------------------------------------------------------
+./phonon_play_wav: can't resolve symbol 'theora_control'
+Phonon::GStreamer::Backend: Failed to initialize GStreamer
 
+(<unknown>:635): GStreamer-CRITICAL **: gst_object_ref: assertion `object !=
+NULL' failed
 
+(<unknown>:635): GStreamer-CRITICAL **: gst_object_sink: assertion
+`GST_IS_OBJECT (object)' failed
 
+(<unknown>:635): GLib-GObject-CRITICAL **: g_object_set: assertion
+`G_IS_OBJECT (object)' failed
 
---- Comment #2 from Paul Jones <paul.jones@iwtech.com.au>  2010-03-24 10:53:30 UTC ---
-Sorry for the false alarm. It turns out that I misread the error message and
-misread the package help in menuconfig.
+(<unknown>:635): GStreamer-CRITICAL **: gst_object_ref: assertion `object !=
+NULL' failed
 
-The problem was actually that the ps2pdf utility is needed (on the host
-machine) from ghostscript to build documentation, and I had to recompile it to
-fix the linking error (I'm a Gentoo user.)
+(<unknown>:635): GStreamer-CRITICAL **: gst_object_sink: assertion
+`GST_IS_OBJECT (object)' failed
 
-Once Ghostscript was working correctly the problem was solved.
+(<unknown>:635): GStreamer-CRITICAL **: gst_object_ref: assertion `object !=
+NULL' failed
 
+(<unknown>:635): GStreamer-CRITICAL **: gst_object_sink: assertion
+`GST_IS_OBJECT (object)' failed
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+(<unknown>:635): GLib-GObject-CRITICAL **: g_object_set: assertion
+`G_IS_OBJECT (object)' failed
+
+(<unknown>:635): GStreamer-CRITICAL **: gst_object_ref: assertion `object !=
+NULL' failed
+
+(<unknown>:635): GStreamer-CRITICAL **: gst_object_sink: assertion
+`GST_IS_OBJECT (object)' failed
+
+(<unknown>:635): GStreamer-CRITICAL **: gst_element_set_state: assertion
+`GST_IS_ELEMENT (element)' failed
+WARNING: Phonon::createPath: Cannot connect  Phonon::MediaObject ( no
+objectName ) to  Phonon::AudioOutput ( no objectName ).
+-----------------------------------------------------------------------------------------------------------------
+
+What is the problem? I can not solve it.
+
+Regards,
+Muhammed ER.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100324/1342714e/attachment.htm>
