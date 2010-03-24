@@ -1,68 +1,55 @@
-From: Muhammed ER <er.muhammed@gmail.com>
-Date: Wed, 24 Mar 2010 13:43:02 +0200
-Subject: [Buildroot] Qt Phonon Sound problem
-Message-ID: <f70863321003240443n22a999a2k7a7b5ae60103e619@mail.gmail.com>
+From: Sebastian <bastisoft@arcor.de>
+Date: Wed, 24 Mar 2010 13:46:00 +0100
+Subject: [Buildroot] Xorg configuration for XGI chip
+In-Reply-To: <4BA8E694.3080809@terawatt.fr>
+References: <4BA3A72B.3010009@terawatt.fr> <4BA3AAC2.9050400@gmail.com>
+	<4BA8E694.3080809@terawatt.fr>
+Message-ID: <4BAA0988.9050708@arcor.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-I make a simple example Phonon sound program. But there is error.
+Hello,
 
----------------
-music = Phonon::createPlayer(Phonon::MusicCategory,
-Phonon::MediaSource("/test/file.mp3"));
-music->play();
-----------------
+> I tried with latest snapshot. I still have problems to launch a X server.
+> With vesa and fbdev X drivers, it's OK, I can launch X server but only 
+> with depth 8, and resolution 800x600 for vesa and 600x480 for fbdev 
+> (framebuffer limit?). The problem is that I need depth 16 and 1024x600 
+> resolution.
 
-When I clicked, nothing happens, but on console output is:
+You could check if the video BIOS allows higher resolutions for the 
+framebuffer. But you probably won't get widescreen this way.
 
------------------------------------------------------------------------------------------------------------------
-./phonon_play_wav: can't resolve symbol 'theora_control'
-Phonon::GStreamer::Backend: Failed to initialize GStreamer
+About the compiling and loading issues, I have no idea.
 
-(<unknown>:635): GStreamer-CRITICAL **: gst_object_ref: assertion `object !=
-NULL' failed
+> With SIS driver built in Buildroot, everything seems ok, no errors, but 
+> I only get a black screen. I tried a lot of options of the driver which 
+> seems to be useful but with no results.
 
-(<unknown>:635): GStreamer-CRITICAL **: gst_object_sink: assertion
-`GST_IS_OBJECT (object)' failed
+Newer versions of the Xorg server won't display the black-and-white 
+pattern anymore, but instead a black screen. Try to run some application 
+from the same console device and watch the screen, like in:
 
-(<unknown>:635): GLib-GObject-CRITICAL **: g_object_set: assertion
-`G_IS_OBJECT (object)' failed
+# Xorg &
+# DISPLAY=:0.0 xclock &
 
-(<unknown>:635): GStreamer-CRITICAL **: gst_object_ref: assertion `object !=
-NULL' failed
+maybe the server is up and running, but you don't think it is?
 
-(<unknown>:635): GStreamer-CRITICAL **: gst_object_sink: assertion
-`GST_IS_OBJECT (object)' failed
+> I don't know how to resolve this problem. I need a working displaying in 
+> 1024x600x16 mode but this chip doesn't seems to be very used with Linux.
 
-(<unknown>:635): GStreamer-CRITICAL **: gst_object_ref: assertion `object !=
-NULL' failed
+I had some fun with SiS chipsets (SiS 315) myself, so I'm avoiding it. 
+Probably it isn't an option for you...
 
-(<unknown>:635): GStreamer-CRITICAL **: gst_object_sink: assertion
-`GST_IS_OBJECT (object)' failed
+> So if somebody has the begin of an idea to solve this, I accept everything.
 
-(<unknown>:635): GLib-GObject-CRITICAL **: g_object_set: assertion
-`G_IS_OBJECT (object)' failed
+Try to post a full Xorg.0.log using the SiS driver, as it seems to be 
+the best working one for now.
 
-(<unknown>:635): GStreamer-CRITICAL **: gst_object_ref: assertion `object !=
-NULL' failed
+I do not know if the driver supports full modesetting (i.e. widescreen 
+resolutions not offered by the video BIOS).
 
-(<unknown>:635): GStreamer-CRITICAL **: gst_object_sink: assertion
-`GST_IS_OBJECT (object)' failed
-
-(<unknown>:635): GStreamer-CRITICAL **: gst_element_set_state: assertion
-`GST_IS_ELEMENT (element)' failed
-WARNING: Phonon::createPath: Cannot connect  Phonon::MediaObject ( no
-objectName ) to  Phonon::AudioOutput ( no objectName ).
------------------------------------------------------------------------------------------------------------------
-
-What is the problem? I can not solve it.
-
-Regards,
-Muhammed ER.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100324/1342714e/attachment.htm>
+Best regards,
+Sebastian
