@@ -1,17 +1,16 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 25 Mar 2010 10:50:15 +0000 (UTC)
-Subject: [Buildroot] [Bug 1123] Bump less to 436 and migrate to
-	Makefile.autotools.in
-In-Reply-To: <bug-1123-163@https.bugs.busybox.net/>
-References: <bug-1123-163@https.bugs.busybox.net/>
-Message-ID: <20100325105015.711A88A4D2@busybox.osuosl.org>
+Date: Thu, 25 Mar 2010 10:56:05 +0000 (UTC)
+Subject: [Buildroot] [Bug 1105] Add new netperf package
+In-Reply-To: <bug-1105-163@https.bugs.busybox.net/>
+References: <bug-1105-163@https.bugs.busybox.net/>
+Message-ID: <20100325105605.4A0A87FA6A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1123
+https://bugs.busybox.net/show_bug.cgi?id=1105
 
 
 Peter Korsgaard <jacmet@uclibc.org> changed:
@@ -24,7 +23,7 @@ Peter Korsgaard <jacmet@uclibc.org> changed:
 
 
 
---- Comment #2 from Peter Korsgaard <jacmet@uclibc.org>  2010-03-25 10:50:15 UTC ---
+--- Comment #2 from Peter Korsgaard <jacmet@uclibc.org>  2010-03-25 10:56:05 UTC ---
 Committed, thanks
 
 
