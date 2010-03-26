@@ -1,46 +1,61 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Fri, 26 Mar 2010 01:04:33 +0000 (UTC)
-Subject: [Buildroot] external toolchain and sysroot
-References: <1272730299.20100325182803@ya.ru> <hog24r$1nu$1@dough.gmane.org>
-	<93399903.20100325201240@ya.ru> <44830928.20100325201616@ya.ru>
-	<hog8rg$sis$1@dough.gmane.org> <20100325233452.3794166b@surf>
-Message-ID: <hoh171$jf0$1@dough.gmane.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 26 Mar 2010 06:42:20 +0000 (UTC)
+Subject: [Buildroot] [Bug 1399] New: xfont_font-adobe-100dpi does not build
+Message-ID: <bug-1399-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2010-03-25, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
-> On Thu, 25 Mar 2010 18:08:49 +0000 (UTC)
-> Grant Edwards <grant.b.edwards@gmail.com> wrote:
->
->> Based on my sample of three packages (two had the problem), I'm
->> guessing it's a very common problem.  It looks like the buildroot
->> developers use external toolchains that don't require a --sysroot
->> option. 
->
-> They do.
->
-> What we do to support external toolchains is :
->
->  * We copy the full sysroot of the toolchain into $(STAGING_DIR)
->  * We copy just the C library and related libraries from the sysroot to
->    the $(TARGET_DIR)
+https://bugs.busybox.net/show_bug.cgi?id=1399
 
-Agreed.
+              Host: X86_64
+            Target: ARM
+             Build: buildroot-git
+           Summary: xfont_font-adobe-100dpi does not build
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: paul.jones at iwtech.com.au
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
->  * We pass --sysroot $(STAGING_DIR) to every gcc/ld invocation, so that
->    gcc/ld find the libraries and header files correctly.
 
-Perhaps that's what's supposed to happen, but there appear to be a lot
-of packages where it doesn't happen (at least for some of us).
+Created an attachment (id=1363)
+ --> (https://bugs.busybox.net/attachment.cgi?id=1363)
+Build log
 
-> Actually, this mechanism *only* works with toolchain supporting
-> --sysroot. Toolchains *not* supporting --sysroot are rejected (see
-> toolchain/external-toolchain/ext-tool.mk).
+GEN    symb08.pcf.gz
+  GEN    symb10.pcf.gz
+  GEN    symb12.pcf.gz
+  GEN    symb14.pcf.gz
+  GEN    symb18.pcf.gz
+  GEN    symb24.pcf.gz
+  GEN    courB08-ISO8859-1.bdf
+/bin/sh: courB08.bdf: command not found
+make[1]: *** [courB08-ISO8859-1.bdf] Error 127
+make[1]: *** Waiting for unfinished jobs....
+  GEN    courB10-ISO8859-1.bdf
+  GEN    courB12-ISO8859-1.bdf
+/bin/sh: courB10.bdf: command not found
+/bin/sh: courB12.bdf: command not found
+make[1]: *** [courB10-ISO8859-1.bdf] Error 127
+make[1]: *** [courB12-ISO8859-1.bdf] Error 127
+make[1]: Leaving directory
+`/media/stuff/kisssroot/output/build/xfont_font-adobe-100dpi-1.0.1'
+make: ***
+[/media/stuff/kisssroot/output/build/xfont_font-adobe-100dpi-1.0.1/.stamp_built]
+Error 2
 
-True.
 
 -- 
-Grant
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
