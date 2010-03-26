@@ -1,18 +1,18 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 26 Mar 2010 13:28:17 +0000 (UTC)
-Subject: [Buildroot] [Bug 1417] New: Bump iptables to 1.4.7
-Message-ID: <bug-1417-163@https.bugs.busybox.net/>
+Date: Fri, 26 Mar 2010 13:30:36 +0000 (UTC)
+Subject: [Buildroot] [Bug 1423] New: Bump e2fsprogs to 1.41.11
+Message-ID: <bug-1423-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1417
+https://bugs.busybox.net/show_bug.cgi?id=1423
 
               Host: i686-linux
             Target: arm-softfloat-linux-uclibcgnueabi
-           Summary: Bump iptables to 1.4.7
+           Summary: Bump e2fsprogs to 1.41.11
            Product: buildroot
            Version: unspecified
           Platform: PC
@@ -27,11 +27,12 @@ https://bugs.busybox.net/show_bug.cgi?id=1417
    Estimated Hours: 0.0
 
 
-Created an attachment (id=1381)
- --> (https://bugs.busybox.net/attachment.cgi?id=1381)
-Bump iptables to 1.4.7
+Created an attachment (id=1387)
+ --> (https://bugs.busybox.net/attachment.cgi?id=1387)
+Bump e2fsprogs to 1.41.11
 
-Bump iptables to 1.4.7, adds support for kernel 2.6.33 features.
+Lots of bugfixes in 1.41.11 and also new support for BLKDISCARD on mke2fs for
+SSD devices.
 
 
 -- 
