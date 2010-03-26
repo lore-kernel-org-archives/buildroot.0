@@ -1,40 +1,39 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 26 Mar 2010 08:36:25 +0000 (UTC)
-Subject: [Buildroot] [Bug 1405] New: WebKit fails to build because
- pthread_getattr_np is not implemented in uClibc
-Message-ID: <bug-1405-163@https.bugs.busybox.net/>
+Date: Fri, 26 Mar 2010 08:42:09 +0000 (UTC)
+Subject: [Buildroot] [Bug 1399] xfont_font-adobe-100dpi does not build
+In-Reply-To: <bug-1399-163@https.bugs.busybox.net/>
+References: <bug-1399-163@https.bugs.busybox.net/>
+Message-ID: <20100326084209.84CB6211AD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1405
-
-             Build: buildroot-git
-           Summary: WebKit fails to build because pthread_getattr_np is not
-                    implemented in uClibc
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: paul.jones at iwtech.com.au
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+https://bugs.busybox.net/show_bug.cgi?id=1399
 
 
-Created an attachment (id=1369)
- --> (https://bugs.busybox.net/attachment.cgi?id=1369)
-Patch WebKit because pthread_getattr_np is not implemented in uClibc
 
-WebKit fails to build because pthread_getattr_np is not implemented in uClibc.
 
-Attached patch fixes the problem.
+
+--- Comment #1 from Paul Jones <paul.jones@iwtech.com.au>  2010-03-26 08:42:08 UTC ---
+Same problem occurs with xfont_font-adobe-75dpi-1.0.1
+
+  GEN    timR24.pcf.gz
+  GEN    symb12.pcf.gz
+  GEN    symb10.pcf.gz
+  GEN    symb14.pcf.gz
+  GEN    symb18.pcf.gz
+  GEN    symb24.pcf.gz
+  GEN    courB08-ISO8859-1.bdf
+/bin/sh: courB08.bdf: command not found
+make[1]: *** [courB08-ISO8859-1.bdf] Error 127
+make[1]: *** Waiting for unfinished jobs....
+make[1]: Leaving directory
+`/media/stuff/kisssroot/output/build/xfont_font-adobe-75dpi-1.0.1'
+make: ***
+[/media/stuff/kisssroot/output/build/xfont_font-adobe-75dpi-1.0.1/.stamp_built]
+Error 2
 
 
 -- 
