@@ -1,71 +1,43 @@
-From: William Wagner <will_wagner@carallon.com>
-Date: Fri, 26 Mar 2010 12:17:51 +0000
-Subject: [Buildroot] [Patch]matchbox: convert to autotools
-In-Reply-To: <20100325234920.5dae5e04@surf>
-References: <4BA7C9D6.8060208@carallon.com> <20100325234920.5dae5e04@surf>
-Message-ID: <4BACA5EF.3000400@carallon.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 26 Mar 2010 13:24:23 +0000 (UTC)
+Subject: [Buildroot] [Bug 1411] New: [SECURITY] Update openssl package to
+	0.9.8n
+Message-ID: <bug-1411-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 25/03/2010 22:49, Thomas Petazzoni wrote:
-> Hello William,
->
-> Thanks a lot for doing this work! Next time, to ease the review process,
-> could you send your patch inline ? git send-email will do it for you.
->    
+https://bugs.busybox.net/show_bug.cgi?id=1411
 
-Will give git send-email a try. have to resolve some dependency problems 
-on my debian box before I can install it, but I'm sure it shouldn't be 
-too hard.
+              Host: i686-linux
+            Target: arm-softfloat-linux-uclibcgnueabi
+           Summary: [SECURITY] Update openssl package to 0.9.8n
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: major
+          Priority: P5
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: gustavo at zacarias.com.ar
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-> A few minor comments below :
->
-> On Mon, 22 Mar 2010 19:49:42 +0000
-> William Wagner<will_wagner@carallon.com>  wrote:
->
->    
->> +++ b/package/matchbox/matchbox-common/matchbox-common.mk
->> @@ -0,0 +1,16 @@
->> +#############################################################
->> +#
->> +# MatchBox Common
->> +#
->> +#############################################################
->> +
->> +MATCHBOX_COMMON_VERSION = 0.9.1
->> +MATCHBOX_COMMON_SOURCE = matchbox-common-$(MATCHBOX_COMMON_VERSION).tar.bz2
->> +MATCHBOX_COMMON_SITE = http://matchbox-project.org/sources/matchbox-common/$(MATCHBOX_COMMON_VERSION)
->> +MATCHBOX_COMMON_AUTORECONF = NO
->>      
-> Unneeded, this is the default value.
->    
 
-Wasn't aware that was the default. Will update accordingly and resubmit 
-patch.
+Created an attachment (id=1375)
+ --> (https://bugs.busybox.net/attachment.cgi?id=1375)
+[SECURITY] Bump openssl to 0.9.8n
 
->> +++ b/package/matchbox/matchbox-lib/matchbox-lib.mk
->> @@ -0,0 +1,59 @@
->> +#############################################################
->> +#
->> +# MatchBox LIB
->> +#
->> +#############################################################
->>      
-> Is it expected that this package isn't associated with any
-> configuration option ?
->
->    
-I have just copied how matchbox worked before. By adding the window 
-manager the library is automatically build, so it's not visible in the 
-config menu. Not difficult to change, nut the library is very unlikely 
-to be of use on it's own.
+openssl-0.9.8n fixes vulnerabilities:
+http://nvd.nist.gov/nvd.cfm?cvename=CVE-2009-3245 (from <= 0.9.8l)
+http://nvd.nist.gov/nvd.cfm?cvename=CVE-2010-0433 (from <= 0.9.8m)
+
 
 -- 
-------------------------------------------------------------------------
-Will Wagner                                     will_wagner at carallon.com
-Development Manager                      Office Tel: +44 (0)20 7371 2032
-Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
-------------------------------------------------------------------------
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
