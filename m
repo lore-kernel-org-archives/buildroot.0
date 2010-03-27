@@ -1,103 +1,46 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Sat, 27 Mar 2010 14:36:21 +0100
-Subject: [Buildroot] libcrypt is old..
-Message-ID: <C6BCD100D28544B39631404B23D05B40@apexjs>
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Sat, 27 Mar 2010 15:05:40 +0000 (UTC)
+Subject: [Buildroot] external toolchain and sysroot
+References: <1272730299.20100325182803@ya.ru> <hog24r$1nu$1@dough.gmane.org>
+	<93399903.20100325201240@ya.ru> <44830928.20100325201616@ya.ru>
+	<hog8rg$sis$1@dough.gmane.org> <20100325233452.3794166b@surf>
+	<hoh171$jf0$1@dough.gmane.org> <20100326202442.7ef0e1ae@surf>
+	<hojlto$f4c$1@dough.gmane.org> <20100327092219.0489cc08@surf>
+Message-ID: <hol6s4$66h$1@dough.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
- 
-Here is my patch for libgcrypt (against 2010-02 )
- 
- 
-diff -rupN
-buildroot-2010.02/package/libgcrypt/libgcrypt-00-ac_cv_sys_symbol_underscore
-.patch
-buildroot/package/libgcrypt/libgcrypt-00-ac_cv_sys_symbol_underscore.patch
----
-buildroot-2010.02/package/libgcrypt/libgcrypt-00-ac_cv_sys_symbol_underscore
-.patch 2010-02-26 15:52:48.000000000 +0100
-+++
-buildroot/package/libgcrypt/libgcrypt-00-ac_cv_sys_symbol_underscore.patch
-1970-01-01 01:00:00.000000000 +0100
-@@ -1,24 +0,0 @@
--diff -u libgcrypt-1.2.4.oorig/acinclude.m4 libgcrypt-1.2.4/acinclude.m4
----- libgcrypt-1.2.4.oorig/acinclude.m4 2005-07-29 15:45:48.000000000 +0200
--+++ libgcrypt-1.2.4/acinclude.m4 2007-09-19 13:33:19.000000000 +0200
--@@ -99,12 +99,14 @@
--     i386-emx-os2 | i[3456]86-pc-os2*emx | i386-pc-msdosdjgpp)
--         ac_cv_sys_symbol_underscore=yes
--         ;;
---    *)
---      if test "$cross_compiling" = yes; then
---         ac_cv_sys_symbol_underscore=yes
---      else
---         tmp_do_check="yes"
---      fi
--+    *) if test -z "$ac_cv_sys_symbol_underscore"; then
--+         if test "$cross_compiling" = yes && 
--+         then
--+           ac_cv_sys_symbol_underscore=yes
--+         else
--+           tmp_do_check="yes"
--+         fi
--+        fi
--        ;;
-- esac
-- if test "$tmp_do_check" = "yes"; then
-diff -rupN
-buildroot-2010.02/package/libgcrypt/libgcrypt-01-reconfigure.patch
-buildroot/package/libgcrypt/libgcrypt-01-reconfigure.patch
---- buildroot-2010.02/package/libgcrypt/libgcrypt-01-reconfigure.patch
-2010-02-26 15:52:48.000000000 +0100
-+++ buildroot/package/libgcrypt/libgcrypt-01-reconfigure.patch 1970-01-01
-01:00:00.000000000 +0100
-@@ -1,17 +0,0 @@
----- libgcrypt-1.2.4.oorig/configure 2007-09-19 13:40:48.000000000 +0200
--+++ libgcrypt-1.2.4/configure 2007-09-19 13:41:44.000000000 +0200
--@@ -27370,12 +27370,13 @@
--     i386-emx-os2 | i345686-pc-os2*emx | i386-pc-msdosdjgpp)
--         ac_cv_sys_symbol_underscore=yes
--         ;;
---    *)
--+    *)if test -z "$ac_cv_sys_symbol_underscore";then
--       if test "$cross_compiling" = yes; then
--          ac_cv_sys_symbol_underscore=yes
--       else
--          tmp_do_check="yes"
--       fi
--+      fi
--        ;;
-- esac
-- if test "$tmp_do_check" = "yes"; then
-diff -rupN buildroot-2010.02/package/libgcrypt/libgcrypt.mk
-buildroot/package/libgcrypt/libgcrypt.mk
---- buildroot-2010.02/package/libgcrypt/libgcrypt.mk 2010-02-26
-15:52:48.000000000 +0100
-+++ buildroot/package/libgcrypt/libgcrypt.mk 2010-03-27 14:26:47.000000000
-+0100
-@@ -3,7 +3,7 @@
- # libgcrypt
- #
- #############################################################
--LIBGCRYPT_VERSION:=1.2.4
-+LIBGCRYPT_VERSION:=1.4.5
- LIBGCRYPT_SOURCE:=libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
- LIBGCRYPT_SITE:=ftp://gd.tuwien.ac.at/privacy/gnupg/libgcrypt/
- LIBGCRYPT_DIR:=$(BUILD_DIR)/libgcrypt-$(LIBGCRYPT_VERSION)
- 
- 
+On 2010-03-27, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100327/cebc53e7/attachment.htm>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: br_libgcrypt.patch
-Type: application/octet-stream
-Size: 2758 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100327/cebc53e7/attachment.obj>
+> Oh, yes, sorry, my wording was maybe confusing (english is not my
+> native language). To make external toolchain work, --sysroot *must* be
+> passed to every gcc/ld invocation, but it's clearly not the case in
+> many non-autotools packages.
+>
+>> What I'm still puzzled about out is why builds fail for some external
+>> toolchains and not others.  I'm pretty sure that I wasn't the first
+>> person to attempt to build 2010.02 busybox with an external toolchain,
+>> yet nobody else seems to have had the link failure due to the missing
+>> --sysroot.  OTOH, --sysroot was clearly not present in the link flags.
+>
+> I'm also a bit puzzled by the problem you had on Busybox, since I'm
+> definitely able to build it with 2010.02, as it is, with a Crosstool-NG
+> external toolchain (but not with a Buildroot external toolchain). I'll
+> try to reproduce.
+
+The other odd thing is that _I_ didn't used to have that problem, yet
+it seems obvious that --sysroot was being passed. When I was using a
+git snapshot from sometime in November/December which used gcc 4.3,
+both busybox and mtd-utils built fine.  The external toolchain in both
+cases was built by buildroot using exactly the same shell-script. 
+AFAICT, the .mk files didn't change with respect to the --sysroot
+option.  The only significant thing that seems to have changed was the
+gcc version. I haven't had a chance to dig out a copy of my gcc 4.3
+toolchain and verify that the toolchain change caused the problem in
+my case.
+
+-- 
+Grant
