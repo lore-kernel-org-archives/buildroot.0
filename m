@@ -1,46 +1,206 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Sat, 27 Mar 2010 15:05:40 +0000 (UTC)
-Subject: [Buildroot] external toolchain and sysroot
-References: <1272730299.20100325182803@ya.ru> <hog24r$1nu$1@dough.gmane.org>
-	<93399903.20100325201240@ya.ru> <44830928.20100325201616@ya.ru>
-	<hog8rg$sis$1@dough.gmane.org> <20100325233452.3794166b@surf>
-	<hoh171$jf0$1@dough.gmane.org> <20100326202442.7ef0e1ae@surf>
-	<hojlto$f4c$1@dough.gmane.org> <20100327092219.0489cc08@surf>
-Message-ID: <hol6s4$66h$1@dough.gmane.org>
+From: llandwerlin at gmail.com <llandwerlin@gmail.com>
+Date: Sat, 27 Mar 2010 16:11:25 +0100
+Subject: [Buildroot] [PATCH] libgcrypt: bump to 1.4.5
+In-Reply-To: <20100327092241.572378c0@surf>
+References: <20100327092241.572378c0@surf>
+Message-ID: <1269702685-21666-1-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2010-03-27, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+From: Lionel Landwerlin <llandwerlin@gmail.com>
 
-> Oh, yes, sorry, my wording was maybe confusing (english is not my
-> native language). To make external toolchain work, --sysroot *must* be
-> passed to every gcc/ld invocation, but it's clearly not the case in
-> many non-autotools packages.
->
->> What I'm still puzzled about out is why builds fail for some external
->> toolchains and not others.  I'm pretty sure that I wasn't the first
->> person to attempt to build 2010.02 busybox with an external toolchain,
->> yet nobody else seems to have had the link failure due to the missing
->> --sysroot.  OTOH, --sysroot was clearly not present in the link flags.
->
-> I'm also a bit puzzled by the problem you had on Busybox, since I'm
-> definitely able to build it with 2010.02, as it is, with a Crosstool-NG
-> external toolchain (but not with a Buildroot external toolchain). I'll
-> try to reproduce.
+Also autotools.in conversion and change source location from gd.tuwien.ac.at to ftp.gnupg.org
 
-The other odd thing is that _I_ didn't used to have that problem, yet
-it seems obvious that --sysroot was being passed. When I was using a
-git snapshot from sometime in November/December which used gcc 4.3,
-both busybox and mtd-utils built fine.  The external toolchain in both
-cases was built by buildroot using exactly the same shell-script. 
-AFAICT, the .mk files didn't change with respect to the --sysroot
-option.  The only significant thing that seems to have changed was the
-gcc version. I haven't had a chance to dig out a copy of my gcc 4.3
-toolchain and verify that the toolchain change caused the problem in
-my case.
+Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
+---
+ .../libgcrypt-00-ac_cv_sys_symbol_underscore.patch |   27 ++++---
+ package/libgcrypt/libgcrypt-01-reconfigure.patch   |   28 +++++--
+ package/libgcrypt/libgcrypt.mk                     |   85 ++-----------------
+ 3 files changed, 43 insertions(+), 97 deletions(-)
 
+diff --git a/package/libgcrypt/libgcrypt-00-ac_cv_sys_symbol_underscore.patch b/package/libgcrypt/libgcrypt-00-ac_cv_sys_symbol_underscore.patch
+index fe71360..95db0fb 100644
+--- a/package/libgcrypt/libgcrypt-00-ac_cv_sys_symbol_underscore.patch
++++ b/package/libgcrypt/libgcrypt-00-ac_cv_sys_symbol_underscore.patch
+@@ -1,24 +1,27 @@
+-diff -u libgcrypt-1.2.4.oorig/acinclude.m4 libgcrypt-1.2.4/acinclude.m4
+---- libgcrypt-1.2.4.oorig/acinclude.m4	2005-07-29 15:45:48.000000000 +0200
+-+++ libgcrypt-1.2.4/acinclude.m4	2007-09-19 13:33:19.000000000 +0200
+-@@ -99,12 +99,14 @@
++diff --git a/acinclude.m4 b/acinclude.m4
++index a7bc0fa..1a5bffc 100644
++--- a/acinclude.m4
+++++ b/acinclude.m4
++@@ -76,13 +76,14 @@ case "${host}" in
+      i386-emx-os2 | i[3456]86-pc-os2*emx | i386-pc-msdosdjgpp)
+          ac_cv_sys_symbol_underscore=yes
+          ;;
+ -    *)
+ -      if test "$cross_compiling" = yes; then
+--         ac_cv_sys_symbol_underscore=yes
++-        if test "x$ac_cv_sys_symbol_underscore" = x ; then
++-           ac_cv_sys_symbol_underscore=yes
++-        fi
+ -      else
+ -         tmp_do_check="yes"
+--      fi
+ +    *) if test -z "$ac_cv_sys_symbol_underscore"; then
+-+         if test "$cross_compiling" = yes && 
+-+         then
+-+           ac_cv_sys_symbol_underscore=yes
+++         if test "$cross_compiling" = yes; then
+++           if test "x$ac_cv_sys_symbol_underscore" = x ; then
+++              ac_cv_sys_symbol_underscore=yes
+++           fi
+ +         else
+-+           tmp_do_check="yes"
+++            tmp_do_check="yes"
+ +         fi
+-+        fi
++       fi
+         ;;
+  esac
+- if test "$tmp_do_check" = "yes"; then
++ 
+diff --git a/package/libgcrypt/libgcrypt-01-reconfigure.patch b/package/libgcrypt/libgcrypt-01-reconfigure.patch
+index 963ae8b..87d29a2 100644
+--- a/package/libgcrypt/libgcrypt-01-reconfigure.patch
++++ b/package/libgcrypt/libgcrypt-01-reconfigure.patch
+@@ -1,17 +1,27 @@
+---- libgcrypt-1.2.4.oorig/configure	2007-09-19 13:40:48.000000000 +0200
+-+++ libgcrypt-1.2.4/configure	2007-09-19 13:41:44.000000000 +0200
+-@@ -27370,12 +27370,13 @@
++diff --git a/configure b/configure
++index 70a6d50..8f55d95 100755
++--- a/configure
+++++ b/configure
++@@ -22306,14 +22306,15 @@ case "${host}" in
+      i386-emx-os2 | i345686-pc-os2*emx | i386-pc-msdosdjgpp)
+          ac_cv_sys_symbol_underscore=yes
+          ;;
+ -    *)
++-      if test "$cross_compiling" = yes; then
++-        if test "x$ac_cv_sys_symbol_underscore" = x ; then
++-           ac_cv_sys_symbol_underscore=yes
+ +    *)if test -z "$ac_cv_sys_symbol_underscore";then
+-       if test "$cross_compiling" = yes; then
+-          ac_cv_sys_symbol_underscore=yes
+-       else
+-          tmp_do_check="yes"
+-       fi
+-+      fi
+++        if test "$cross_compiling" = yes; then
+++            if test "x$ac_cv_sys_symbol_underscore" = x ; then
+++                ac_cv_sys_symbol_underscore=yes
+++            fi
+++        else
+++            tmp_do_check="yes"
+++        fi
++         fi
++-      else
++-         tmp_do_check="yes"
++-      fi
+         ;;
+  esac
+  if test "$tmp_do_check" = "yes"; then
+diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
+index 89856c1..69b0ed0 100644
+--- a/package/libgcrypt/libgcrypt.mk
++++ b/package/libgcrypt/libgcrypt.mk
+@@ -3,82 +3,15 @@
+ # libgcrypt
+ #
+ #############################################################
+-LIBGCRYPT_VERSION:=1.2.4
++LIBGCRYPT_VERSION:=1.4.5
+ LIBGCRYPT_SOURCE:=libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
+-LIBGCRYPT_SITE:=ftp://gd.tuwien.ac.at/privacy/gnupg/libgcrypt/
+-LIBGCRYPT_DIR:=$(BUILD_DIR)/libgcrypt-$(LIBGCRYPT_VERSION)
+-LIBGCRYPT_LIBRARY:=src/libgcrypt.la
+-LIBGCRYPT_DESTDIR:=usr/lib
+-LIBGCRYPT_TARGET_LIBRARY=$(LIBGCRYPT_DESTDIR)/libgcrypt.so
++LIBGCRYPT_SITE:=ftp://ftp.gnupg.org/gcrypt/libgcrypt
++LIBGCRYPT_INSTALL_STAGING = YES
++LIBGCRYPT_INSTALL_TARGET = YES
+ 
+-$(DL_DIR)/$(LIBGCRYPT_SOURCE):
+-	$(call DOWNLOAD,$(LIBGCRYPT_SITE),$(LIBGCRYPT_SOURCE))
++LIBGCRYPT_CONF_ENV = \
++	ac_cv_sys_symbol_underscore=no
++LIBGCRYPT_CONF_OPT = \
++	--disable-optimization
+ 
+-$(LIBGCRYPT_DIR)/.source: $(DL_DIR)/$(LIBGCRYPT_SOURCE)
+-	$(BZCAT) $(DL_DIR)/$(LIBGCRYPT_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(LIBGCRYPT_DIR) package/libgcrypt/ libgcrypt\*.patch
+-	$(CONFIG_UPDATE) $(LIBGCRYPT_DIR)
+-	# This is incorrectly hardwired to yes for cross-compiles with no
+-	# sane way to pass pre-existing knowledge so fix it with the chainsaw..
+-	$(SED) '/GNUPG_SYS_SYMBOL_UNDERSCORE/d' $(LIBGCRYPT_DIR)/configure
+-	touch $@
+-
+-$(LIBGCRYPT_DIR)/.configured: $(LIBGCRYPT_DIR)/.source
+-	(cd $(LIBGCRYPT_DIR); rm -f config.cache; \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		$(TARGET_CONFIGURE_ARGS) \
+-		ac_cv_sys_symbol_underscore=no \
+-		./configure $(QUIET) \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		--prefix=/usr \
+-		--exec-prefix=/usr \
+-		--bindir=/usr/bin \
+-		--sbindir=/usr/sbin \
+-		--libdir=/usr/lib \
+-		--libexecdir=/$(LIBGCRYPT_DESTDIR) \
+-		--sysconfdir=/etc \
+-		--datadir=/usr/share \
+-		--localstatedir=/var \
+-		--includedir=/usr/include \
+-		--mandir=/usr/share/man \
+-		--infodir=/usr/share/info \
+-		--disable-optimization \
+-	)
+-	touch $@
+-
+-$(LIBGCRYPT_DIR)/$(LIBGCRYPT_LIBRARY): $(LIBGCRYPT_DIR)/.configured
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(LIBGCRYPT_DIR)
+-
+-$(STAGING_DIR)/$(LIBGCRYPT_TARGET_LIBRARY): $(LIBGCRYPT_DIR)/$(LIBGCRYPT_LIBRARY)
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) DESTDIR=$(STAGING_DIR) -C $(LIBGCRYPT_DIR) install
+-	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libgcrypt.la
+-	touch -c $@
+-
+-$(TARGET_DIR)/$(LIBGCRYPT_TARGET_LIBRARY): $(STAGING_DIR)/$(LIBGCRYPT_TARGET_LIBRARY)
+-	cp -dpf $<* $(TARGET_DIR)/$(LIBGCRYPT_DESTDIR)
+-ifneq ($(BR2_HAVE_INFOPAGES),y)
+-	rm -rf $(STAGING_DIR)/usr/share/info
+-endif
+-
+-libgcrypt: libgpg-error $(TARGET_DIR)/$(LIBGCRYPT_TARGET_LIBRARY)
+-
+-libgcrypt-source: $(DL_DIR)/$(LIBGCRYPT_SOURCE)
+-
+-libgcrypt-clean:
+-	rm -f $(TARGET_DIR)/$(LIBGCRYPT_TARGET_LIBRARY)*
+-	-$(MAKE) -C $(LIBGCRYPT_DIR) clean
+-	rm -rf $(STAGING_DIR)/$(LIBGCRYPT_TARGET_LIBRARY)\*
+-
+-libgcrypt-dirclean:
+-	rm -rf $(LIBGCRYPT_DIR)
+-
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
+-TARGETS+=libgcrypt
+-endif
++$(eval $(call AUTOTARGETS,package,libgcrypt))
 -- 
-Grant
+1.7.0.2
