@@ -1,51 +1,50 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Sat, 27 Mar 2010 01:10:16 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 27 Mar 2010 09:22:19 +0100
 Subject: [Buildroot] external toolchain and sysroot
+In-Reply-To: <hojlto$f4c$1@dough.gmane.org>
 References: <1272730299.20100325182803@ya.ru> <hog24r$1nu$1@dough.gmane.org>
 	<93399903.20100325201240@ya.ru> <44830928.20100325201616@ya.ru>
 	<hog8rg$sis$1@dough.gmane.org> <20100325233452.3794166b@surf>
 	<hoh171$jf0$1@dough.gmane.org> <20100326202442.7ef0e1ae@surf>
-Message-ID: <hojlto$f4c$1@dough.gmane.org>
+	<hojlto$f4c$1@dough.gmane.org>
+Message-ID: <20100327092219.0489cc08@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2010-03-26, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
-> On Fri, 26 Mar 2010 01:04:33 +0000 (UTC)
-> Grant Edwards <grant.b.edwards@gmail.com> wrote:
->
->> >  * We pass --sysroot $(STAGING_DIR) to every gcc/ld invocation, so that
->> >    gcc/ld find the libraries and header files correctly.
->> 
->> Perhaps that's what's supposed to happen, but there appear to be a lot
->> of packages where it doesn't happen (at least for some of us).
->
-> As I said in my other mail in this thread, yes, there are many packages
-> that are broken with regard to --sysroot.
+Hello,
 
-Sorry, I guess I got confused by the contradiction.  Stating that
---sysroot is passed to every gcc/ld invocation meant to me that you
-believed there were no packages that are broken with regard to
---sysroot.
+On Sat, 27 Mar 2010 01:10:16 +0000 (UTC)
+Grant Edwards <grant.b.edwards@gmail.com> wrote:
 
-> Packages that use the Makefile.autotools.in infrastructure should all
-> work, but for all the other packages, they should be fixed one by
-> one.
+> Sorry, I guess I got confused by the contradiction.  Stating that
+> --sysroot is passed to every gcc/ld invocation meant to me that you
+> believed there were no packages that are broken with regard to
+> --sysroot.
 
-OK, that's all I was trying to establish: that some/many packages are
-broken when used with external toolchains and not every gcc/ld
-invocation is being passed --sysroot.
+Oh, yes, sorry, my wording was maybe confusing (english is not my
+native language). To make external toolchain work, --sysroot *must* be
+passed to every gcc/ld invocation, but it's clearly not the case in
+many non-autotools packages.
 
-What I'm still puzzled about out is why builds fail for some external
-toolchains and not others.  I'm pretty sure that I wasn't the first
-person to attempt to build 2010.02 busybox with an external toolchain,
-yet nobody else seems to have had the link failure due to the missing
---sysroot.  OTOH, --sysroot was clearly not present in the link flags.
+> What I'm still puzzled about out is why builds fail for some external
+> toolchains and not others.  I'm pretty sure that I wasn't the first
+> person to attempt to build 2010.02 busybox with an external toolchain,
+> yet nobody else seems to have had the link failure due to the missing
+> --sysroot.  OTOH, --sysroot was clearly not present in the link flags.
 
-I can't find any gcc/binutils config options that should cause a
-difference like that.
+I'm also a bit puzzled by the problem you had on Busybox, since I'm
+definitely able to build it with 2010.02, as it is, with a Crosstool-NG
+external toolchain (but not with a Buildroot external toolchain). I'll
+try to reproduce.
 
+Regards,
+
+Thomas
 -- 
-Grant
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
