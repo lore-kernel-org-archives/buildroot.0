@@ -1,21 +1,13 @@
-From: Thomas Brandstetter <thomas.brandstetter@me.com>
-Date: Sat, 27 Mar 2010 21:12:39 +0100
-Subject: [Buildroot] uclibc and gcc tls
-Message-ID: <81E98B2D-4CAA-4230-80C3-4F78CF7C5F76@me.com>
+From: Nils Glatze <oiermann@web.de>
+Date: Sun, 28 Mar 2010 12:42:47 +0200 (CEST)
+Subject: [Buildroot] Troubles getting /proc mounted, no root rights? (ARM,
+	mini2440)
+Message-ID: <20524281.611559.1269772967253.JavaMail.fmail@mwmweb063>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-
-I'm building Buildroot with Uclibc and gcc 4.4.3. Actually, I got an error during the pcre build:
-
-i686-linux-uclibc/lib/libstdc++.so: undefined reference to `___tls_get_addr'
-
-I searched for uclibc problems and found out that uclibc doesn't support tls. Can you please integrate a check which disables the BR2_GCC_ENABLE_TLS option for uclibc building toolchains?
-
-thx
-
-cheers Thomas
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100328/ca919757/attachment.htm>
