@@ -1,41 +1,58 @@
-From: oiermann <oiermann@web.de>
-Date: Sun, 28 Mar 2010 12:47:27 +0200
-Subject: [Buildroot] Troubles getting /proc mounted, no root rights? (ARM,
- mini2440)
-Message-ID: <4BAF33BF.7000007@web.de>
+From: Sergey Naumov <sknaumov@gmail.com>
+Date: Sun, 28 Mar 2010 15:56:58 +0400
+Subject: [Buildroot] uclibc and key parsing
+Message-ID: <7627a87b1003280456hb6b359csa93bc9fd52b1adde@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi there,
+Hello all.
 
-First, i have to say sorry for the first E-Mail with scrubbed HTML :( 
-here in plain text:
+I am a newbie to the uClibc library.
+I have made my own function to get escape sequences from keyboard using
+glibc, particularly libio.h:
 
-  I've built an image for my mini2440-board and can't get proc mounted.
-If i try to get the list of mounted devices, he tells me:
+int KBD_get_sequence(unsigned char * _buf)
+{
+    int result;
+    _IO_FILE * _fp = _IO_stdin;
 
- >warning: can't open /etc/mtab: No such file or directory
+    if (_IO_BE ((_fp)->_IO_read_ptr >= (_fp)->_IO_read_end, 0))
+    {
+        result = __uflow (_fp);
+        _buf[0] = (unsigned char) result;
+    }
+    else
+    {
+        _buf[0] = *(unsigned char *) (_fp)->_IO_read_ptr++;
+        result = (int)_buf[0];
+    }
 
-Ok i thought, lets mount proc:
+    if ((_fp)->_IO_read_ptr < (_fp)->_IO_read_end && result == '\033')
+    {
+        int _i = 1;
+        while(_IO_BE ((_fp)->_IO_read_ptr < (_fp)->_IO_read_end, 0))
+        {
+            _buf[_i] = *(unsigned char *) (_fp)->_IO_read_ptr++;
+            ++_i;
+        }
+        _buf[_i] = '\0';
+    }
+    return result;
+}
 
-$ mount -t proc proc /proc
-or
-$ mount -t prc none /proc
+This function writes the whole ESC sequence to the buffer _buf.
+But in the uClibc there is no libio.h file. As I discovered, there is
+read_key function in busybox, but this function is quite complex and uses
+knowledge about ESC sequences which we expect to get. Is there a way to add
+similar libio.h file to uClibc headers or get the same functionality in
+another way?
 
-But none of both worked:
- >mount: only root can do that
+Thanks in advance.
 
-I log in with root and my password, if i try "whoami" and "cd ~ && pwd" 
-he tells me "root" and "/root"... I've got the needed rights to write 
-for example to /bin...
-
-I've got the daily snapshot of buildroot from yesterday (march, 27th, 2010)
-
-I hope anyone of you can help me.
-
+Sergey Naumov, Saint-Petersburg, Russia.
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100328/b15d9158/attachment.htm>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100328/e38ffcec/attachment.htm>
