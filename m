@@ -1,35 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Mar 2010 19:57:39 +0200
-Subject: [Buildroot] Buildroot with uClibc 0.9.29
-In-Reply-To: <6fff79821003291020h7e96dc68ufa227f5df3a96cb0@mail.gmail.com>
-References: <6fff79820910130628peb87f9bo9c41414b461c0d@mail.gmail.com>
-	<6fff79821003290958r5f66ddc1hd35a193848c61b74@mail.gmail.com>
-	<6fff79821003291020h7e96dc68ufa227f5df3a96cb0@mail.gmail.com>
-Message-ID: <20100329195739.5e9e621a@surf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 29 Mar 2010 18:06:47 +0000 (UTC)
+Subject: [Buildroot] [Bug 1447] Package installation on target with debug
+ symbols is broken
+In-Reply-To: <bug-1447-163@https.bugs.busybox.net/>
+References: <bug-1447-163@https.bugs.busybox.net/>
+Message-ID: <20100329180647.4389D7F97B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 29 Mar 2010 22:50:42 +0530
-Souvik Ghosh <mailtosouvik@gmail.com> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=1447
 
-> I tried with gcc 4.3.2 and uclibc 0.9.30 as well. But same result has been
-> produces. Can anybody please help me out.
 
-Please do not use Buildroot 2009.02 anymore, but 2010.02 instead.
 
-The problem is probably that you must remove all the output directories
-and rebuild everything from scratch. This is cumbersome with Buildroot
-2009.02, but very easy with Buildroot 2010.02. Could you please
-upgrade ?
 
-Thanks!
 
-Thomas
+--- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2010-03-29 18:06:46 UTC ---
+I've just ping-ed Peter on IRC to get his attention on this. I agree that we
+should merge this, and that you have already sent this numerous times without
+having the attention we should have given to it.
+
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
