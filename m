@@ -1,45 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 29 Mar 2010 16:45:26 +0200
-Subject: [Buildroot] [PATCH] Bump libdrm to 2.4.14
-In-Reply-To: <1269849170-13244-1-git-send-email-paul@pauljones.id.au> (Paul
-	Jones's message of "Mon, 29 Mar 2010 18:52:50 +1100")
-References: <1269849170-13244-1-git-send-email-paul@pauljones.id.au>
-Message-ID: <87bpe7chkp.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 29 Mar 2010 15:03:25 +0000 (UTC)
+Subject: [Buildroot] [Bug 1441] New: Add binutils 2.20.1
+Message-ID: <bug-1441-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Paul" == Paul Jones <paul@pauljones.id.au> writes:
+https://bugs.busybox.net/show_bug.cgi?id=1441
 
- Paul> Also adds proper dependency information to stop build errors.
- Paul> Signed-off-by: Paul Jones <paul@pauljones.id.au>
- Paul> ---
- Paul>  package/libdrm/Config.in |    6 ++++++
- Paul>  package/libdrm/libdrm.mk |    4 +++-
- Paul>  2 files changed, 9 insertions(+), 1 deletions(-)
+              Host: i686-linux
+            Target: arm-softfloat-linux-uclibcgnueabi
+           Summary: Add binutils 2.20.1
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: gustavo at zacarias.com.ar
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
- Paul> diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
- Paul> index 3d8a731..e1d35ad 100644
- Paul> --- a/package/libdrm/Config.in
- Paul> +++ b/package/libdrm/Config.in
- Paul> @@ -1,5 +1,11 @@
- Paul>  config BR2_PACKAGE_LIBDRM
- Paul>  	bool "libdrm"
- Paul> +	select BR2_PACKAGE_XPROTO_GLPROTO
- Paul> +	select BR2_PACKAGE_XPROTO_XF86VIDMODEPROTO
- Paul> +	select BR2_PACKAGE_XLIB_LIBXXF86VM
- Paul> +	select BR2_PACKAGE_XLIB_LIBXMU
- Paul> +	select BR2_PACKAGE_XPROTO_DRI2PROTO
- Paul> +	select BR2_PACKAGE_PTHREAD_STUBS
 
-That won't work unless we make libdrm depend on the X stuff, as those
-packages are only available when BR2_PACKAGE_XORG7 is enabled - E.G.:
+Created an attachment (id=1405)
+ --> (https://bugs.busybox.net/attachment.cgi?id=1405)
+Add binutils 2.20.1
 
-make: *** No rule to make target `xproto_glproto', needed by `libdrm-depends'.  Stop.
+Binutils 2.20.1 is out.
+Tested for ARM targets.
 
-Care to fix?
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
