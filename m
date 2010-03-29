@@ -1,45 +1,38 @@
-From: Muhammed ER <er.muhammed@gmail.com>
-Date: Mon, 29 Mar 2010 22:36:13 +0300
-Subject: [Buildroot] Qt Phonon GStreamer
-Message-ID: <f70863321003291236l217efdc0r3a644dcafdae51a5@mail.gmail.com>
+From: Lionel Landwerlin <llandwerlin@gmail.com>
+Date: Mon, 29 Mar 2010 21:42:23 +0200
+Subject: [Buildroot] Fwd: AIX /RS 6000
+In-Reply-To: <20100329192903.DFD76389BCC@pombo.ieav.cta.br>
+References: <20100329192903.DFD76389BCC@pombo.ieav.cta.br>
+Message-ID: <1269891743.31425.5.camel@coalu.atr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-For last week, I try to solve this problem,
+Le lundi 29 mars 2010 ? 16:29 -0300, gilmar a ?crit :
+> >
+> >
+> >
+> >         Hi
+> >
+> >
+> >         I need to build/install a C compiler in 
+> > plataform AIX /PowerPC RS64 processors ( RS6000 ).
+> >
+> >         I am using buildroot but , i don?t find 
+> > option to change of Linux to AIX .
+> >
+> >         where i can find this option  ?
+> >
+> >
+> >         My PC have instaled Linux / GCC
+> 
 
-WARNING: bool Phonon::FactoryPrivate::
-createBackend() phonon backend plugin could not be loaded
-WARNING: bool Phonon::FactoryPrivate::createBackend() phonon backend plugin
-could not be loaded
-WARNING: bool Phonon::FactoryPrivate::createBackend() phonon backend plugin
-could not be loaded
-WARNING: bool Phonon::FactoryPrivate::createBackend() phonon backend plugin
-could not be loaded
-WARNING: bool Phonon::FactoryPrivate::createBackend() phonon backend plugin
-could not be loaded
-WARNING: Phonon::createPath: Cannot connect  Phonon::MediaObject ( no
-objectName ) to  Phonon::AudioOutput ( no objectName ).
-WARNING: bool Phonon::FactoryPrivate::createBackend() phonon backend plugin
-could not be loaded
-WARNING: Phonon::createPath: Cannot connect  Phonon::MediaObject ( no
-objectName ) to  Phonon::VideoWidget ( no objectName ).
-WARNING: bool Phonon::FactoryPrivate::createBackend() phonon backend plugin
-could not be loaded
-WARNING: bool Phonon::FactoryPrivate::createBackend() phonon backend plugin
-could not be loaded
+The only target system supported by Buildroot is Linux.
+There is no plan to support AIX.
 
-But I did not solve it.
+Regards,
 
-I used, buildroot and add Qt, phonon, gstreamer (base and good).
-
-What is need in buildroot that I should add to my compilation.
-
-Thanks,
-Muhammed ER.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100329/92329162/attachment.htm>
+-- 
+Lionel Landwerlin
