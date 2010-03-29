@@ -1,8 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Mon, 29 Mar 2010 13:43:56 +0200
-Subject: [Buildroot] [git commit master] xlib_libXfont: don't build devel
-	documentation
-Message-ID: <20100329114443.10C4E7FB8A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] libgcrypt: bump to 1.4.5
+Message-ID: <20100329114443.6A2537FB8A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,42 +9,218 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8a5e8e2d009b809e99990eba90085df67c9fbfe9
+commit: http://git.buildroot.net/buildroot/commit/?id=22521b7c2a0c7cec11fc2703d3f477982b096648
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Adds to the build time and brings in an xmlto dependency
+Also autotools.in conversion and change source location from
+gd.tuwien.ac.at to ftp.gnupg.org
 
+[Peter: add missing libgpg-error makefile dependency]
+Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                                      |    3 ++-
- package/x11r7/xlib_libXfont/xlib_libXfont.mk |    2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ CHANGES                                            |    4 +-
+ .../libgcrypt-00-ac_cv_sys_symbol_underscore.patch |   27 ++++---
+ package/libgcrypt/libgcrypt-01-reconfigure.patch   |   28 +++++--
+ package/libgcrypt/libgcrypt.mk                     |   85 +++-----------------
+ 4 files changed, 46 insertions(+), 98 deletions(-)
 
 diff --git a/CHANGES b/CHANGES
-index bd8d658..b5337db 100644
+index b5337db..2ebdca9 100644
 --- a/CHANGES
 +++ b/CHANGES
-@@ -9,7 +9,8 @@
+@@ -8,8 +8,8 @@
+ 	New packages: librsync, lmbench, netperf, squid
  
  	Updated/fixed packages: busybox, dosfstools, e2fsprogs,
- 	freetype, iperf, less, libglib2, libpng, mdadm, memstat,
--	mtd-utils, nano, pppd, setserial, squashfs, wget
-+	mtd-utils, nano, pppd, setserial, squashfs, wget,
-+	xlib_libXfont
+-	freetype, iperf, less, libglib2, libpng, mdadm, memstat,
+-	mtd-utils, nano, pppd, setserial, squashfs, wget,
++	freetype, iperf, less, libgcrypt, libglib2, libpng, mdadm,
++	memstat, mtd-utils, nano, pppd, setserial, squashfs, wget,
+ 	xlib_libXfont
  
  	Issues resolved (http://bugs.uclibc.org):
+diff --git a/package/libgcrypt/libgcrypt-00-ac_cv_sys_symbol_underscore.patch b/package/libgcrypt/libgcrypt-00-ac_cv_sys_symbol_underscore.patch
+index fe71360..95db0fb 100644
+--- a/package/libgcrypt/libgcrypt-00-ac_cv_sys_symbol_underscore.patch
++++ b/package/libgcrypt/libgcrypt-00-ac_cv_sys_symbol_underscore.patch
+@@ -1,24 +1,27 @@
+-diff -u libgcrypt-1.2.4.oorig/acinclude.m4 libgcrypt-1.2.4/acinclude.m4
+---- libgcrypt-1.2.4.oorig/acinclude.m4	2005-07-29 15:45:48.000000000 +0200
+-+++ libgcrypt-1.2.4/acinclude.m4	2007-09-19 13:33:19.000000000 +0200
+-@@ -99,12 +99,14 @@
++diff --git a/acinclude.m4 b/acinclude.m4
++index a7bc0fa..1a5bffc 100644
++--- a/acinclude.m4
+++++ b/acinclude.m4
++@@ -76,13 +76,14 @@ case "${host}" in
+      i386-emx-os2 | i[3456]86-pc-os2*emx | i386-pc-msdosdjgpp)
+          ac_cv_sys_symbol_underscore=yes
+          ;;
+ -    *)
+ -      if test "$cross_compiling" = yes; then
+--         ac_cv_sys_symbol_underscore=yes
++-        if test "x$ac_cv_sys_symbol_underscore" = x ; then
++-           ac_cv_sys_symbol_underscore=yes
++-        fi
+ -      else
+ -         tmp_do_check="yes"
+--      fi
+ +    *) if test -z "$ac_cv_sys_symbol_underscore"; then
+-+         if test "$cross_compiling" = yes && 
+-+         then
+-+           ac_cv_sys_symbol_underscore=yes
+++         if test "$cross_compiling" = yes; then
+++           if test "x$ac_cv_sys_symbol_underscore" = x ; then
+++              ac_cv_sys_symbol_underscore=yes
+++           fi
+ +         else
+-+           tmp_do_check="yes"
+++            tmp_do_check="yes"
+ +         fi
+-+        fi
++       fi
+         ;;
+  esac
+- if test "$tmp_do_check" = "yes"; then
++ 
+diff --git a/package/libgcrypt/libgcrypt-01-reconfigure.patch b/package/libgcrypt/libgcrypt-01-reconfigure.patch
+index 963ae8b..87d29a2 100644
+--- a/package/libgcrypt/libgcrypt-01-reconfigure.patch
++++ b/package/libgcrypt/libgcrypt-01-reconfigure.patch
+@@ -1,17 +1,27 @@
+---- libgcrypt-1.2.4.oorig/configure	2007-09-19 13:40:48.000000000 +0200
+-+++ libgcrypt-1.2.4/configure	2007-09-19 13:41:44.000000000 +0200
+-@@ -27370,12 +27370,13 @@
++diff --git a/configure b/configure
++index 70a6d50..8f55d95 100755
++--- a/configure
+++++ b/configure
++@@ -22306,14 +22306,15 @@ case "${host}" in
+      i386-emx-os2 | i345686-pc-os2*emx | i386-pc-msdosdjgpp)
+          ac_cv_sys_symbol_underscore=yes
+          ;;
+ -    *)
++-      if test "$cross_compiling" = yes; then
++-        if test "x$ac_cv_sys_symbol_underscore" = x ; then
++-           ac_cv_sys_symbol_underscore=yes
+ +    *)if test -z "$ac_cv_sys_symbol_underscore";then
+-       if test "$cross_compiling" = yes; then
+-          ac_cv_sys_symbol_underscore=yes
+-       else
+-          tmp_do_check="yes"
+-       fi
+-+      fi
+++        if test "$cross_compiling" = yes; then
+++            if test "x$ac_cv_sys_symbol_underscore" = x ; then
+++                ac_cv_sys_symbol_underscore=yes
+++            fi
+++        else
+++            tmp_do_check="yes"
+++        fi
++         fi
++-      else
++-         tmp_do_check="yes"
++-      fi
+         ;;
+  esac
+  if test "$tmp_do_check" = "yes"; then
+diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
+index 89856c1..ef13de7 100644
+--- a/package/libgcrypt/libgcrypt.mk
++++ b/package/libgcrypt/libgcrypt.mk
+@@ -3,82 +3,17 @@
+ # libgcrypt
+ #
+ #############################################################
+-LIBGCRYPT_VERSION:=1.2.4
++LIBGCRYPT_VERSION:=1.4.5
+ LIBGCRYPT_SOURCE:=libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
+-LIBGCRYPT_SITE:=ftp://gd.tuwien.ac.at/privacy/gnupg/libgcrypt/
+-LIBGCRYPT_DIR:=$(BUILD_DIR)/libgcrypt-$(LIBGCRYPT_VERSION)
+-LIBGCRYPT_LIBRARY:=src/libgcrypt.la
+-LIBGCRYPT_DESTDIR:=usr/lib
+-LIBGCRYPT_TARGET_LIBRARY=$(LIBGCRYPT_DESTDIR)/libgcrypt.so
++LIBGCRYPT_SITE:=ftp://ftp.gnupg.org/gcrypt/libgcrypt
++LIBGCRYPT_INSTALL_STAGING = YES
++LIBGCRYPT_INSTALL_TARGET = YES
  
-diff --git a/package/x11r7/xlib_libXfont/xlib_libXfont.mk b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
-index ba22805..df4ecec 100644
---- a/package/x11r7/xlib_libXfont/xlib_libXfont.mk
-+++ b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
-@@ -10,6 +10,6 @@ XLIB_LIBXFONT_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXFONT_AUTORECONF = YES
- XLIB_LIBXFONT_INSTALL_STAGING = YES
- XLIB_LIBXFONT_DEPENDENCIES = freetype xlib_libfontenc xlib_xtrans xproto_fontcacheproto xproto_fontsproto xproto_xproto xfont_encodings
--XLIB_LIBXFONT_CONF_OPT = --enable-shared --disable-static
-+XLIB_LIBXFONT_CONF_OPT = --enable-shared --disable-static --disable-devel-docs
+-$(DL_DIR)/$(LIBGCRYPT_SOURCE):
+-	$(call DOWNLOAD,$(LIBGCRYPT_SITE),$(LIBGCRYPT_SOURCE))
++LIBGCRYPT_CONF_ENV = \
++	ac_cv_sys_symbol_underscore=no
++LIBGCRYPT_CONF_OPT = \
++	--disable-optimization
  
- $(eval $(call AUTOTARGETS,package/x11r7,xlib_libXfont))
+-$(LIBGCRYPT_DIR)/.source: $(DL_DIR)/$(LIBGCRYPT_SOURCE)
+-	$(BZCAT) $(DL_DIR)/$(LIBGCRYPT_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(LIBGCRYPT_DIR) package/libgcrypt/ libgcrypt\*.patch
+-	$(CONFIG_UPDATE) $(LIBGCRYPT_DIR)
+-	# This is incorrectly hardwired to yes for cross-compiles with no
+-	# sane way to pass pre-existing knowledge so fix it with the chainsaw..
+-	$(SED) '/GNUPG_SYS_SYMBOL_UNDERSCORE/d' $(LIBGCRYPT_DIR)/configure
+-	touch $@
++LIBGCRYPT_DEPENDENCIES = libgpg-error
+ 
+-$(LIBGCRYPT_DIR)/.configured: $(LIBGCRYPT_DIR)/.source
+-	(cd $(LIBGCRYPT_DIR); rm -f config.cache; \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		$(TARGET_CONFIGURE_ARGS) \
+-		ac_cv_sys_symbol_underscore=no \
+-		./configure $(QUIET) \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		--prefix=/usr \
+-		--exec-prefix=/usr \
+-		--bindir=/usr/bin \
+-		--sbindir=/usr/sbin \
+-		--libdir=/usr/lib \
+-		--libexecdir=/$(LIBGCRYPT_DESTDIR) \
+-		--sysconfdir=/etc \
+-		--datadir=/usr/share \
+-		--localstatedir=/var \
+-		--includedir=/usr/include \
+-		--mandir=/usr/share/man \
+-		--infodir=/usr/share/info \
+-		--disable-optimization \
+-	)
+-	touch $@
+-
+-$(LIBGCRYPT_DIR)/$(LIBGCRYPT_LIBRARY): $(LIBGCRYPT_DIR)/.configured
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(LIBGCRYPT_DIR)
+-
+-$(STAGING_DIR)/$(LIBGCRYPT_TARGET_LIBRARY): $(LIBGCRYPT_DIR)/$(LIBGCRYPT_LIBRARY)
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) DESTDIR=$(STAGING_DIR) -C $(LIBGCRYPT_DIR) install
+-	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libgcrypt.la
+-	touch -c $@
+-
+-$(TARGET_DIR)/$(LIBGCRYPT_TARGET_LIBRARY): $(STAGING_DIR)/$(LIBGCRYPT_TARGET_LIBRARY)
+-	cp -dpf $<* $(TARGET_DIR)/$(LIBGCRYPT_DESTDIR)
+-ifneq ($(BR2_HAVE_INFOPAGES),y)
+-	rm -rf $(STAGING_DIR)/usr/share/info
+-endif
+-
+-libgcrypt: libgpg-error $(TARGET_DIR)/$(LIBGCRYPT_TARGET_LIBRARY)
+-
+-libgcrypt-source: $(DL_DIR)/$(LIBGCRYPT_SOURCE)
+-
+-libgcrypt-clean:
+-	rm -f $(TARGET_DIR)/$(LIBGCRYPT_TARGET_LIBRARY)*
+-	-$(MAKE) -C $(LIBGCRYPT_DIR) clean
+-	rm -rf $(STAGING_DIR)/$(LIBGCRYPT_TARGET_LIBRARY)\*
+-
+-libgcrypt-dirclean:
+-	rm -rf $(LIBGCRYPT_DIR)
+-
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
+-TARGETS+=libgcrypt
+-endif
++$(eval $(call AUTOTARGETS,package,libgcrypt))
 -- 
 1.6.3.3
