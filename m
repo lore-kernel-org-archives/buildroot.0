@@ -1,41 +1,52 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 29 Mar 2010 15:03:25 +0000 (UTC)
-Subject: [Buildroot] [Bug 1441] New: Add binutils 2.20.1
-Message-ID: <bug-1441-163@https.bugs.busybox.net/>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 29 Mar 2010 17:42:12 +0200
+Subject: [Buildroot] [git commit master] libxml2: bump version
+Message-ID: <20100329154235.C375E7FBA0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1441
 
-              Host: i686-linux
-            Target: arm-softfloat-linux-uclibcgnueabi
-           Summary: Add binutils 2.20.1
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Outdated package
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: gustavo at zacarias.com.ar
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+commit: http://git.buildroot.net/buildroot/commit/?id=a88d0ea6252f2d499efcfb0b96615baf10bb05e6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES                    |    6 +++---
+ package/libxml2/libxml2.mk |    2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Created an attachment (id=1405)
- --> (https://bugs.busybox.net/attachment.cgi?id=1405)
-Add binutils 2.20.1
-
-Binutils 2.20.1 is out.
-Tested for ARM targets.
-
-
+diff --git a/CHANGES b/CHANGES
+index 2ebdca9..de41091 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -8,9 +8,9 @@
+ 	New packages: librsync, lmbench, netperf, squid
+ 
+ 	Updated/fixed packages: busybox, dosfstools, e2fsprogs,
+-	freetype, iperf, less, libgcrypt, libglib2, libpng, mdadm,
+-	memstat, mtd-utils, nano, pppd, setserial, squashfs, wget,
+-	xlib_libXfont
++	freetype, iperf, less, libgcrypt, libglib2, libpng, libxml2,
++	mdadm, memstat, mtd-utils, nano, pppd, setserial, squashfs,
++	wget, xlib_libXfont
+ 
+ 	Issues resolved (http://bugs.uclibc.org):
+ 
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index 16f83a9..0cffa06 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -3,7 +3,7 @@
+ # libxml2
+ #
+ #############################################################
+-LIBXML2_VERSION = 2.7.6
++LIBXML2_VERSION = 2.7.7
+ LIBXML2_SOURCE = libxml2-sources-$(LIBXML2_VERSION).tar.gz
+ LIBXML2_SITE = ftp://xmlsoft.org/libxml2
+ LIBXML2_INSTALL_STAGING = YES
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.6.3.3
