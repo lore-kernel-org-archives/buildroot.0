@@ -1,32 +1,20 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 Mar 2010 22:34:48 +0200
+From: Eric BENARD <ebenard@free.fr>
+Date: Wed, 31 Mar 2010 00:20:58 +0200
 Subject: [Buildroot] init segfaults when compiled with glibc
-In-Reply-To: <4BB2592B.4080502@browserseal.com>
-References: <4BB2592B.4080502@browserseal.com>
-Message-ID: <20100330223448.0dd60fa9@surf>
+In-Reply-To: <4BB20A06.1090407@browserseal.com>
+References: <4BB20A06.1090407@browserseal.com>
+Message-ID: <4BB2794A.3030400@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Sasha,
+Le 30/03/2010 16:26, Sasha Sirotkin a ?crit :
+> As I already mentioned, it works fine with uClibc, so it is definitely
+> not a CPU instructions issue. At any rate, my CPU is AT91, i.e. armvte
+> instruction set.
+>
+AT91RM9200 is armv4
 
-On Tue, 30 Mar 2010 23:03:55 +0300
-Sasha Sirotkin <buildroot@browserseal.com> wrote:
-
-> It looks like glibc does not work at all with buildroot right now. 
-> Should I open a bug ticket or something?
-
-Unfortunately, without more details, a bug report would be fairly
-useless. Can you send your Buildroot .config and kernel .config so that
-I can try to reproduce your problem on my AT91 systems ?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Eric
