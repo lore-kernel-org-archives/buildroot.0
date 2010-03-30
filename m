@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Tue, 30 Mar 2010 17:23:23 +0200
-Subject: [Buildroot] [git commit master] binutils: simplify BINUTILS_SITE
-	selection
-Message-ID: <20100330152415.186B621342@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] binutils: default to 2.20.1,
+	mark 2.19.1 as deprecated
+Message-ID: <20100330152414.C046021340@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,49 +10,40 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8628082b83110acad71c27b79edd5f5345c405b0
+commit: http://git.buildroot.net/buildroot/commit/?id=9cca84cd079866ff0fd1c3b34fb06122170a7ace
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-All versions are available on gnu.org.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/binutils/binutils.mk |   21 ++-------------------
- 1 files changed, 2 insertions(+), 19 deletions(-)
+ toolchain/binutils/Config.in |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/binutils/binutils.mk b/toolchain/binutils/binutils.mk
-index b02bcdf..3f48c18 100644
---- a/toolchain/binutils/binutils.mk
-+++ b/toolchain/binutils/binutils.mk
-@@ -6,27 +6,10 @@
- BINUTILS_VERSION:=$(call qstrip,$(BR2_BINUTILS_VERSION))
+diff --git a/toolchain/binutils/Config.in b/toolchain/binutils/Config.in
+index 57bddfc..602d696 100644
+--- a/toolchain/binutils/Config.in
++++ b/toolchain/binutils/Config.in
+@@ -4,7 +4,7 @@ comment "Binutils Options"
  
- EXTRA_BINUTILS_CONFIG_OPTIONS=$(call qstrip,$(BR2_EXTRA_BINUTILS_CONFIG_OPTIONS))
--BINUTILS_SITE:=$(BR2_KERNEL_MIRROR)/linux/devel/binutils
--ifeq ($(BINUTILS_VERSION),2.20.1)
--BINUTILS_SITE:=$(BR2_GNU_MIRROR)/binutils/
--endif
--ifeq ($(BINUTILS_VERSION),2.20)
--BINUTILS_SITE:=$(BR2_GNU_MIRROR)/binutils/
--endif
--ifeq ($(BINUTILS_VERSION),2.19.1)
--BINUTILS_SITE:=$(BR2_GNU_MIRROR)/binutils/
--endif
--ifeq ($(BINUTILS_VERSION),2.19)
--BINUTILS_SITE:=$(BR2_GNU_MIRROR)/binutils/
--endif
--ifeq ($(BINUTILS_VERSION),2.18)
--BINUTILS_SITE:=$(BR2_GNU_MIRROR)/binutils/
--endif
--ifeq ($(BINUTILS_VERSION),2.17)
--BINUTILS_SITE:=$(BR2_GNU_MIRROR)/binutils/
--endif
- ifeq ($(findstring avr32,$(BINUTILS_VERSION)),avr32)
- BINUTILS_SITE:=ftp://www.at91.com/pub/buildroot/
-+else
-+BINUTILS_SITE:=$(BR2_GNU_MIRROR)/binutils/
- endif
+ choice
+ 	prompt "Binutils Version"
+-	default BR2_BINUTILS_VERSION_2_20
++	default BR2_BINUTILS_VERSION_2_20_1
+ 	help
+ 	  Select the version of binutils you wish to use.
  
- # We do not rely on the host's gmp/mpfr but use a known working one
+@@ -34,11 +34,12 @@ choice
+ 
+ 	config BR2_BINUTILS_VERSION_2_19_1
+ 		depends on !BR2_avr32 && !BR2_nios2
+-		depends on BR2_DEPRECATED || BR2_RECENT
++		depends on BR2_DEPRECATED
+ 		bool "binutils 2.19.1"
+ 
+ 	config BR2_BINUTILS_VERSION_2_20
+ 		depends on !BR2_avr32 && !BR2_nios2
++		depends on BR2_DEPRECATED || BR2_RECENT
+ 		bool "binutils 2.20"
+ 
+ 	config BR2_BINUTILS_VERSION_2_20_1
 -- 
 1.6.3.3
