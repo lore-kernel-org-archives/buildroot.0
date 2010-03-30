@@ -1,34 +1,33 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 30 Mar 2010 15:23:55 +0000 (UTC)
-Subject: [Buildroot] [Bug 1447] Package installation on target with debug
- symbols is broken
-In-Reply-To: <bug-1447-163@https.bugs.busybox.net/>
-References: <bug-1447-163@https.bugs.busybox.net/>
-Message-ID: <20100330152355.94C7E212E0@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 30 Mar 2010 17:23:23 +0200
+Subject: [Buildroot] [git commit master] classpath: trivial Config.in
+	whitespace fix
+Message-ID: <20100330152414.5A5262133E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1447
 
+commit: http://git.buildroot.net/buildroot/commit/?id=c772e2c1554f8a58d781898c91d84b94d8e731d3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/java/classpath/Config.in |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
-
-
-
-
---- Comment #3 from Peter Korsgaard <jacmet@uclibc.org>  2010-03-30 15:23:54 UTC ---
-Committed, thanks - And sorry for the slow response.
-
-
+diff --git a/package/java/classpath/Config.in b/package/java/classpath/Config.in
+index c6b5e52..5677f8c 100644
+--- a/package/java/classpath/Config.in
++++ b/package/java/classpath/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_CLASSPATH
+ 	bool "classpath"
+-
+ 	help
+ 	  GNU Classpath, Essential Libraries for Java, is a GNU
+ 	  project to create free core class libraries for use with
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.6.3.3
