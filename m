@@ -1,11 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 31 Mar 2010 10:50:30 +0200
-Subject: [Buildroot] [PATCH] external toolchain: fix sysroot location if
-	the toolchain was	moved
-In-Reply-To: <20100324224238.1489.74099.stgit@roazhon.bzh.lan> (Yann
-	E. MORIN's message of "Wed, 24 Mar 2010 23:42:42 +0100")
-References: <20100324224238.1489.74099.stgit@roazhon.bzh.lan>
-Message-ID: <87y6h8an8p.fsf@macbook.be.48ers.dk>
+Date: Wed, 31 Mar 2010 10:53:34 +0200
+Subject: [Buildroot] [PATCH] toolchain: prepare for more than two
+	alternatives
+In-Reply-To: <20100326194637.8693.94538.stgit@roazhon.bzh.lan> (Yann
+	E. MORIN's message of "Fri, 26 Mar 2010 20:46:37 +0100")
+References: <20100326194619.8693.69302.stgit@roazhon.bzh.lan>
+	<20100326194637.8693.94538.stgit@roazhon.bzh.lan>
+Message-ID: <87r5n0an3l.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,10 +16,13 @@ To: buildroot@busybox.net
 >>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
 
  Yann> From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
- Yann> Sysrooted toolchain can be relocated. In this case, the sysroot is no
- Yann> longer located at the place it was configured at.
-
- Yann> Signed-off-by: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+ Yann> Lay down the path to add more than two toolchain kinds:
+ Yann> - check the type of toolchain as:
+ Yann>     ifeq (toolchain_buildroot,y)
+ Yann>         blabla buildroot-specific
+ Yann>     else ifeq (toolchain_external,y)
+ Yann>         blabla external-specific
+ Yann>     endif
 
 Committed, thanks.
 
