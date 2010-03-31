@@ -1,44 +1,39 @@
-From: Sasha Sirotkin <buildroot@browserseal.com>
-Date: Wed, 31 Mar 2010 22:02:15 +0300
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 31 Mar 2010 20:52:47 +0200
 Subject: [Buildroot] init segfaults when compiled with glibc
-In-Reply-To: <0D753D10438DA54287A00B02708426976369248B23@AUSP01VMBX24.collaborationhost.net>
-References: <4BB20A06.1090407@browserseal.com>	<4BB2794A.3030400@free.fr>	<j2i478c82f01003310718gbaf125f7t382a3dd8ac5b3823@mail.gmail.com>	<hovmml$391$1@dough.gmane.org>	<x2g478c82f01003310848x8e42f326v263e14193e0972a6@mail.gmail.com>	<87mxxo8ipp.fsf@macbook.be.48ers.dk>
-	<4BB3944D.2080301@browserseal.com>
-	<0D753D10438DA54287A00B02708426976369248B23@AUSP01VMBX24.collaborationhost.net>
-Message-ID: <4BB39C37.7060001@browserseal.com>
+In-Reply-To: <4BB32831.6080306@browserseal.com>
+References: <4BB32831.6080306@browserseal.com>
+Message-ID: <20100331205247.765bc46e@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-H Hartley Sweeten wrote:
-> On Wednesday, March 31, 2010 11:28 AM, Sasha Sirotkin wrote:
->   
->> Peter Korsgaard wrote:
->>     
->>>>>>>> "Alexander" == Alexander (Sasha) Sirotkin <buildroot@browserseal.com> writes:
->>>>>>>>             
->>>>>>>>                 
->>>  Alexander> I did not manage to compile crosstoll-ng with eglibc yet. It
->>>  Alexander> looks like eglibc support is broken in crosstool-ng and
->>>  Alexander> glibc support is broken in buildroot.
->>>
->>> uClibc? We don't have glibc support (except for external toolchains), so
->>> it cannot really be broken ;)
->>>
->>>   
->>>       
->> Well... it is broken in a sense that buildroot does not work with an 
->> external toolchain based on glibc. Please see above.
->>     
->
-> FWIW, I'm using an external glibc toolchain (created with crosstoo-NG)
-> with no problems.
->
-> Regards,
-> Hartley
-I'd be extremely grateful to know how you managed to do this. As you can 
-see above I could not compile crosstool-ng with eglibc and when I used 
-glibc version created with crosstool-ng I ran into this "init death" 
-problem that at least one other person could reproduce.
+On Wed, 31 Mar 2010 13:47:13 +0300
+Sasha Sirotkin <buildroot@browserseal.com> wrote:
+
+> Attached please find both config files. 
+
+Which exact AT91 CPU are you using ?
+
+Your Buildroot .config specifies an ARM926 core, which is ARMv5.
+However, if you use AT91RM9200, as ?ric B?nard noted, you have an
+ARM920 core, which is ARMv4. Therefore, if you have an AT91RM9200 CPU,
+it is normal that the Buildroot configuration you sent does not work.
+Select BR2_arm920t instead of BR2_arm926t.
+
+Your .config also states that you're using a crosstool-NG external
+toolchain. Can you send the .config you used in Crosstool-NG to
+generate the toolchain ?
+
+In other words:
+ * Give us more details about your hardware
+ * Give us your Crosstool-NG configuration file
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
