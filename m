@@ -1,44 +1,37 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 31 Mar 2010 18:36:28 +0000 (UTC)
-Subject: [Buildroot] [Bug 1459] New: Misc QA fixes
-Message-ID: <bug-1459-163@https.bugs.busybox.net/>
+From: H Hartley Sweeten <hartleys@visionengravers.com>
+Date: Wed, 31 Mar 2010 13:58:58 -0500
+Subject: [Buildroot] init segfaults when compiled with glibc
+In-Reply-To: <4BB3944D.2080301@browserseal.com>
+References: <4BB20A06.1090407@browserseal.com>	<4BB2794A.3030400@free.fr>
+	<j2i478c82f01003310718gbaf125f7t382a3dd8ac5b3823@mail.gmail.com>
+	<hovmml$391$1@dough.gmane.org>
+	<x2g478c82f01003310848x8e42f326v263e14193e0972a6@mail.gmail.com>
+	<87mxxo8ipp.fsf@macbook.be.48ers.dk> <4BB3944D.2080301@browserseal.com>
+Message-ID: <0D753D10438DA54287A00B02708426976369248B23@AUSP01VMBX24.collaborationhost.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1459
+On Wednesday, March 31, 2010 11:28 AM, Sasha Sirotkin wrote:
+> Peter Korsgaard wrote:
+>>>>>>> "Alexander" == Alexander (Sasha) Sirotkin <buildroot@browserseal.com> writes:
+>>>>>>>             
+>>
+>>  Alexander> I did not manage to compile crosstoll-ng with eglibc yet. It
+>>  Alexander> looks like eglibc support is broken in crosstool-ng and
+>>  Alexander> glibc support is broken in buildroot.
+>>
+>> uClibc? We don't have glibc support (except for external toolchains), so
+>> it cannot really be broken ;)
+>>
+>>   
+> Well... it is broken in a sense that buildroot does not work with an 
+> external toolchain based on glibc. Please see above.
 
-              Host: i686-linux
-            Target: arm-softfloat-linux-uclibcgnueabi
-           Summary: Misc QA fixes
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: gustavo at zacarias.com.ar
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+FWIW, I'm using an external glibc toolchain (created with crosstoo-NG)
+with no problems.
 
-
-Created an attachment (id=1423)
- --> (https://bugs.busybox.net/attachment.cgi?id=1423)
-Fix dnsmasq & iw packages
-
-Some miscellaneous quality fixes:
-
-* dnsmasq CFLAGS go in make options rather than environment.
-
-* iw depends on host-pkg-config.
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Regards,
+Hartley
