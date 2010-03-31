@@ -1,57 +1,32 @@
-From: Paul Jones <paul@pauljones.id.au>
-Date: Wed, 31 Mar 2010 21:15:02 +1100
-Subject: [Buildroot] [PATCH] Bump libdrm to 2.4.19
-Message-ID: <1270030502-31235-1-git-send-email-paul@pauljones.id.au>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 31 Mar 2010 10:16:44 +0000 (UTC)
+Subject: [Buildroot] [Bug 1387] xlib_libX11-1.3.2 can's find libjpeg
+In-Reply-To: <bug-1387-163@https.bugs.busybox.net/>
+References: <bug-1387-163@https.bugs.busybox.net/>
+Message-ID: <20100331101644.86D7B7FA49@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also adds proper dependency information to stop build errors.
+https://bugs.busybox.net/show_bug.cgi?id=1387
 
-Signed-off-by: Paul Jones <paul@pauljones.id.au>
----
- package/libdrm/Config.in |    7 +++++++
- package/libdrm/libdrm.mk |    4 +++-
- 2 files changed, 10 insertions(+), 1 deletions(-)
 
-diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
-index 3d8a731..116bf13 100644
---- a/package/libdrm/Config.in
-+++ b/package/libdrm/Config.in
-@@ -1,5 +1,12 @@
- config BR2_PACKAGE_LIBDRM
- 	bool "libdrm"
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XPROTO_GLPROTO
-+	select BR2_PACKAGE_XPROTO_XF86VIDMODEPROTO
-+	select BR2_PACKAGE_XLIB_LIBXXF86VM
-+	select BR2_PACKAGE_XLIB_LIBXMU
-+	select BR2_PACKAGE_XPROTO_DRI2PROTO
-+	select BR2_PACKAGE_PTHREAD_STUBS
- 	help
- 	  Direct Rendering Manager
- 
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index eb04867..791e67d 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -3,7 +3,7 @@
- # libdrm
- #
- #############################################################
--LIBDRM_VERSION = 2.4.11
-+LIBDRM_VERSION = 2.4.19
- LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
- LIBDRM_SITE = http://dri.freedesktop.org/libdrm/
- LIBDRM_AUTORECONF = NO
-@@ -11,4 +11,6 @@ LIBDRM_LIBTOOL_PATCH = NO
- LIBDRM_INSTALL_STAGING = YES
- LIBDRM_INSTALL_TARGET = YES
- 
-+LIBDRM_DEPENDENCIES = xproto_glproto xproto_xf86vidmodeproto xlib_libXxf86vm xlib_libXmu xproto_dri2proto pthread-stubs
-+
- $(eval $(call AUTOTARGETS,package,libdrm))
+Peter Korsgaard <jacmet@uclibc.org> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|WORKSFORME                  |FIXED
+
+
+
+
+--- Comment #5 from Peter Korsgaard <jacmet@uclibc.org>  2010-03-31 10:16:44 UTC ---
+Added --disable-specs to the configure args in git, should disable doc build.
+
+
 -- 
-1.6.4.4
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
