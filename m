@@ -1,40 +1,33 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 31 Mar 2010 11:05:12 +0200
-Subject: [Buildroot] [git commit master] Config.in: bump default JLEVEL to 2
-Message-ID: <20100331090755.549247F9CA@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 31 Mar 2010 09:52:40 +0000 (UTC)
+Subject: [Buildroot] [Bug 1387] xlib_libX11-1.3.2 can's find libjpeg
+In-Reply-To: <bug-1387-163@https.bugs.busybox.net/>
+References: <bug-1387-163@https.bugs.busybox.net/>
+Message-ID: <20100331095240.DAF1C23480@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=1387
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2bbbe05b9a5c694d154a4227956ee0b379f269f6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-With multicores everywhere, 2 is probably a bit low - But atleast it's
-better than the current default.
 
-This extra parallelism also ensures we get to test the make dependencies
-a bit more.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index 4505578..4f567d0 100644
---- a/Config.in
-+++ b/Config.in
-@@ -132,7 +132,7 @@ config BR2_GNU_TARGET_SUFFIX
- 
- config BR2_JLEVEL
- 	int "Number of jobs to run simultaneously"
--	default "1"
-+	default "2"
- 	help
- 	  Number of jobs to run simultaneously
- 
+--- Comment #4 from Paul Jones <paul.jones@iwtech.com.au>  2010-03-31 09:52:40 UTC ---
+> 
+> What package needed ps2pdf? Perhaps we can disable the doc build.
+
+xlib_libX11
+
+I just uninstalled ghostscript and tried it again and it automatically skiped
+the ps2pdf step, so it appears it will only try and use it if it is already on
+the host system.
+
+
 -- 
-1.6.3.3
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
