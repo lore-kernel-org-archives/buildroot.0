@@ -1,7 +1,7 @@
 From: Paul Jones <paul@pauljones.id.au>
-Date: Wed, 31 Mar 2010 21:02:32 +1100
-Subject: [Buildroot] [PATCH] Bump libdrm to 2.4.14
-Message-ID: <1270029752-21544-1-git-send-email-paul@pauljones.id.au>
+Date: Wed, 31 Mar 2010 21:15:02 +1100
+Subject: [Buildroot] [PATCH] Bump libdrm to 2.4.19
+Message-ID: <1270030502-31235-1-git-send-email-paul@pauljones.id.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -34,7 +34,7 @@ index 3d8a731..116bf13 100644
  	  Direct Rendering Manager
  
 diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index eb04867..e56f542 100644
+index eb04867..791e67d 100644
 --- a/package/libdrm/libdrm.mk
 +++ b/package/libdrm/libdrm.mk
 @@ -3,7 +3,7 @@
@@ -42,7 +42,7 @@ index eb04867..e56f542 100644
  #
  #############################################################
 -LIBDRM_VERSION = 2.4.11
-+LIBDRM_VERSION = 2.4.14
++LIBDRM_VERSION = 2.4.19
  LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
  LIBDRM_SITE = http://dri.freedesktop.org/libdrm/
  LIBDRM_AUTORECONF = NO
