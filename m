@@ -1,33 +1,26 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 31 Mar 2010 08:48:06 +0000 (UTC)
-Subject: [Buildroot] [Bug 1387] xlib_libX11-1.3.2 can's find libjpeg
-In-Reply-To: <bug-1387-163@https.bugs.busybox.net/>
-References: <bug-1387-163@https.bugs.busybox.net/>
-Message-ID: <20100331084806.105A48D1CB@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 31 Mar 2010 10:50:30 +0200
+Subject: [Buildroot] [PATCH] external toolchain: fix sysroot location if
+	the toolchain was	moved
+In-Reply-To: <20100324224238.1489.74099.stgit@roazhon.bzh.lan> (Yann
+	E. MORIN's message of "Wed, 24 Mar 2010 23:42:42 +0100")
+References: <20100324224238.1489.74099.stgit@roazhon.bzh.lan>
+Message-ID: <87y6h8an8p.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1387
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
 
+ Yann> From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+ Yann> Sysrooted toolchain can be relocated. In this case, the sysroot is no
+ Yann> longer located at the place it was configured at.
 
+ Yann> Signed-off-by: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
 
-
-
---- Comment #3 from Peter Korsgaard <jacmet@uclibc.org>  2010-03-31 08:48:05 UTC ---
-(In reply to comment #2)
-> The problem was actually that the ps2pdf utility is needed (on the host
-> machine) from ghostscript to build documentation, and I had to recompile it to
-> fix the linking error (I'm a Gentoo user.)
-> 
-> Once Ghostscript was working correctly the problem was solved.
-
-What package needed ps2pdf? Perhaps we can disable the doc build.
-
+Committed, thanks.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
