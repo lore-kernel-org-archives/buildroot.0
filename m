@@ -1,33 +1,57 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 31 Mar 2010 09:52:40 +0000 (UTC)
-Subject: [Buildroot] [Bug 1387] xlib_libX11-1.3.2 can's find libjpeg
-In-Reply-To: <bug-1387-163@https.bugs.busybox.net/>
-References: <bug-1387-163@https.bugs.busybox.net/>
-Message-ID: <20100331095240.DAF1C23480@busybox.osuosl.org>
+From: Paul Jones <paul@pauljones.id.au>
+Date: Wed, 31 Mar 2010 21:02:32 +1100
+Subject: [Buildroot] [PATCH] Bump libdrm to 2.4.14
+Message-ID: <1270029752-21544-1-git-send-email-paul@pauljones.id.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1387
+Also adds proper dependency information to stop build errors.
 
+Signed-off-by: Paul Jones <paul@pauljones.id.au>
+---
+ package/libdrm/Config.in |    7 +++++++
+ package/libdrm/libdrm.mk |    4 +++-
+ 2 files changed, 10 insertions(+), 1 deletions(-)
 
-
-
-
---- Comment #4 from Paul Jones <paul.jones@iwtech.com.au>  2010-03-31 09:52:40 UTC ---
-> 
-> What package needed ps2pdf? Perhaps we can disable the doc build.
-
-xlib_libX11
-
-I just uninstalled ghostscript and tried it again and it automatically skiped
-the ps2pdf step, so it appears it will only try and use it if it is already on
-the host system.
-
-
+diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
+index 3d8a731..116bf13 100644
+--- a/package/libdrm/Config.in
++++ b/package/libdrm/Config.in
+@@ -1,5 +1,12 @@
+ config BR2_PACKAGE_LIBDRM
+ 	bool "libdrm"
++	depends on BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XPROTO_GLPROTO
++	select BR2_PACKAGE_XPROTO_XF86VIDMODEPROTO
++	select BR2_PACKAGE_XLIB_LIBXXF86VM
++	select BR2_PACKAGE_XLIB_LIBXMU
++	select BR2_PACKAGE_XPROTO_DRI2PROTO
++	select BR2_PACKAGE_PTHREAD_STUBS
+ 	help
+ 	  Direct Rendering Manager
+ 
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index eb04867..e56f542 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -3,7 +3,7 @@
+ # libdrm
+ #
+ #############################################################
+-LIBDRM_VERSION = 2.4.11
++LIBDRM_VERSION = 2.4.14
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ LIBDRM_SITE = http://dri.freedesktop.org/libdrm/
+ LIBDRM_AUTORECONF = NO
+@@ -11,4 +11,6 @@ LIBDRM_LIBTOOL_PATCH = NO
+ LIBDRM_INSTALL_STAGING = YES
+ LIBDRM_INSTALL_TARGET = YES
+ 
++LIBDRM_DEPENDENCIES = xproto_glproto xproto_xf86vidmodeproto xlib_libXxf86vm xlib_libXmu xproto_dri2proto pthread-stubs
++
+ $(eval $(call AUTOTARGETS,package,libdrm))
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.6.4.4
