@@ -1,26 +1,23 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 31 Mar 2010 15:53:02 +0000 (UTC)
-Subject: [Buildroot] [Bug 1453] OpenSSL0.9.8n fails to compile
-In-Reply-To: <bug-1453-163@https.bugs.busybox.net/>
-References: <bug-1453-163@https.bugs.busybox.net/>
-Message-ID: <20100331155302.A01CC8B78F@busybox.osuosl.org>
+From: Sasha Sirotkin <buildroot@browserseal.com>
+Date: Wed, 31 Mar 2010 21:03:30 +0300
+Subject: [Buildroot] uClibc snapshot does not work
+Message-ID: <4BB38E72.6060102@browserseal.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1453
+When I chose uClibc snapshot the compilation fails with the following 
+message:
 
-
-
-
-
---- Comment #3 from Nazarenko Nikita <nnazarenko@radiofid.ru>  2010-03-31 15:53:02 UTC ---
-Ok, I'll check patch applying on my system. Thanks.
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+bzcat /unpackaged/KwikByte/buildroot-2010.02/dl/uClibc-snapshot.tar.bz2 
+| tar -C /unpackaged/KwikByte/buildroot-2010.02/output/toolchain  -xf -
+touch 
+/unpackaged/KwikByte/buildroot-2010.02/output/toolchain/uClibc-snapshot/.unpacked
+touch: cannot touch 
+`/unpackaged/KwikByte/buildroot-2010.02/output/toolchain/uClibc-snapshot/.unpacked': 
+No such file or directory
+make: *** 
+[/unpackaged/KwikByte/buildroot-2010.02/output/toolchain/uClibc-snapshot/.unpacked] 
+Error 1
