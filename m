@@ -1,82 +1,39 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  1 Apr 2010 14:21:30 +0000 (UTC)
-Subject: [Buildroot] [Bug 1477] New: Installing gfortran on PowerPC
-Message-ID: <bug-1477-163@https.bugs.busybox.net/>
+From: Will Wagner <will_wagner@carallon.com>
+Date: Thu, 01 Apr 2010 15:42:31 +0100
+Subject: [Buildroot] QT embedded working with Xorg?
+In-Reply-To: <4BB20147.50404@terawatt.fr>
+References: <4BB1EE15.6000505@browserseal.com> <4BB1F87D.4050706@terawatt.fr>
+	<4BB1FA0F.5070703@carallon.com> <4BB20147.50404@terawatt.fr>
+Message-ID: <4BB4B0D7.4080002@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1477
+On 30/03/2010 14:48, Damien Borie wrote:
+> Hi,
+>
+> Thank you for your answer.
+> If you can send it it's great. But maybe you can first say me what the 
+> modifications are?
+> Modifying some line in configure file may be sufficient for some test? 
+> I noticed an option PLATFORM_X11...
+> I could always make it cleaner when you send your clean patch but if 
+> there is only a few things to change I can do it dirtily for now and 
+> continue working.
+Damien,
 
-              Host: powerpc-unknown-linux-uclibc
-            Target: powerpc-unknown-linux-uclibc
-             Build: x86_64-pc-linux-gnu
-           Summary: Installing gfortran on PowerPC
-           Product: buildroot
-           Version: 2010.02
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: critical
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: foucher at unice.fr
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Attached is my patch to get this working. he main thing to do is to 
+trick the build into thinking it is doing a cross compile even though it 
+is building for XOrg. Although not officially support the Trolltech guys 
+confirmed that it should work.
 
+There are various bits i the patch you may not like, not least that it 
+is setup for a commercial Qt license.
 
-Created an attachment (id=1447)
- --> (https://bugs.busybox.net/attachment.cgi?id=1447)
-Buildroot gcc building log
-
-I had a buildroot install that worked fine, but I needed to add fortran
-support.
-But adding fortran support broke the building process on this message:
-
-checking whether the GNU Fortran compiler is working... no
-configure: error: GNU Fortran is not working; please report a bug in
-http://gcc.gnu.org/bugzilla, attaching
-/home/foucher/These/toolchain/buildroot-2010.02/output/build/gcc-4.3.4-target/powerpc-linux-uclibc/libgfortran/config.log
-make[2]: *** [configure-target-libgfortran] Erreur 1
-make[2]: quittant le r?pertoire ?
-/home/foucher/These/toolchain/buildroot-2010.02/output/build/gcc-4.3.4-target
-?
-make[1]: *** [all] Erreur 2
-make[1]: quittant le r?pertoire ?
-/home/foucher/These/toolchain/buildroot-2010.02/output/build/gcc-4.3.4-target
-?
-make: ***
-[/home/foucher/Bureau/These/toolchain/buildroot-2010.02/output/build/gcc-4.3.4-target/.compiled]
-Erreur 2
-
-
-After checking the log (attached), I see that the error was simply that
-gfortran was not found:
-
-/home/foucher/Bureau/These/toolchain/buildroot-2010.02/output/toolchain/gcc-4.3.4/libgfortran/configure:
-line 11234: powerpc-linux-uclibc-gfortran: command not found
-
-... It seems that buildroot searches for the powerpc version of gfortran and
-does not find it... But a few line before trying using it, there is the
-following lines, like if the program were found:
-
-configure:10198: checking for powerpc-linux-uclibc-gfortran
-configure:10224: result: powerpc-linux-uclibc-gfortran 
-
-
-
-Any idea that could help?
-
-
-Regards,
-
-         Cl?ment
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Will.
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: qt-x11.patch
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100401/60f79536/attachment-0001.diff>
