@@ -1,42 +1,82 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Thu, 1 Apr 2010 14:54:36 +0200
-Subject: [Buildroot] [PATCH 02/16] pixman: bump version
-In-Reply-To: <1270126006-22405-2-git-send-email-will_wagner@carallon.com>
-References: <1270126006-22405-1-git-send-email-will_wagner@carallon.com>
-	<1270126006-22405-2-git-send-email-will_wagner@carallon.com>
-Message-ID: <g2k4d28d4b51004010554t859acbbbn63e6141320b3b173@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu,  1 Apr 2010 14:21:30 +0000 (UTC)
+Subject: [Buildroot] [Bug 1477] New: Installing gfortran on PowerPC
+Message-ID: <bug-1477-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pixman 0.18.0 has been released today. One more bump ? :)
+https://bugs.busybox.net/show_bug.cgi?id=1477
 
-On Thu, Apr 1, 2010 at 2:46 PM, Will Wagner <will_wagner@carallon.com> wrote:
-> ---
-> ?package/pixman/pixman.mk | ? ?2 +-
-> ?1 files changed, 1 insertions(+), 1 deletions(-)
->
-> diff --git a/package/pixman/pixman.mk b/package/pixman/pixman.mk
-> index 087ab12..8c7a233 100644
-> --- a/package/pixman/pixman.mk
-> +++ b/package/pixman/pixman.mk
-> @@ -3,7 +3,7 @@
-> ?# pixman
-> ?#
-> ?################################################################################
-> -PIXMAN_VERSION = 0.17.4
-> +PIXMAN_VERSION = 0.17.6
-> ?PIXMAN_SOURCE = pixman-$(PIXMAN_VERSION).tar.gz
-> ?PIXMAN_SITE = http://cairographics.org/releases/
-> ?PIXMAN_AUTORECONF = NO
-> --
-> 1.7.0
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+              Host: powerpc-unknown-linux-uclibc
+            Target: powerpc-unknown-linux-uclibc
+             Build: x86_64-pc-linux-gnu
+           Summary: Installing gfortran on PowerPC
+           Product: buildroot
+           Version: 2010.02
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: critical
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: foucher at unice.fr
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
+
+
+Created an attachment (id=1447)
+ --> (https://bugs.busybox.net/attachment.cgi?id=1447)
+Buildroot gcc building log
+
+I had a buildroot install that worked fine, but I needed to add fortran
+support.
+But adding fortran support broke the building process on this message:
+
+checking whether the GNU Fortran compiler is working... no
+configure: error: GNU Fortran is not working; please report a bug in
+http://gcc.gnu.org/bugzilla, attaching
+/home/foucher/These/toolchain/buildroot-2010.02/output/build/gcc-4.3.4-target/powerpc-linux-uclibc/libgfortran/config.log
+make[2]: *** [configure-target-libgfortran] Erreur 1
+make[2]: quittant le r?pertoire ?
+/home/foucher/These/toolchain/buildroot-2010.02/output/build/gcc-4.3.4-target
+?
+make[1]: *** [all] Erreur 2
+make[1]: quittant le r?pertoire ?
+/home/foucher/These/toolchain/buildroot-2010.02/output/build/gcc-4.3.4-target
+?
+make: ***
+[/home/foucher/Bureau/These/toolchain/buildroot-2010.02/output/build/gcc-4.3.4-target/.compiled]
+Erreur 2
+
+
+After checking the log (attached), I see that the error was simply that
+gfortran was not found:
+
+/home/foucher/Bureau/These/toolchain/buildroot-2010.02/output/toolchain/gcc-4.3.4/libgfortran/configure:
+line 11234: powerpc-linux-uclibc-gfortran: command not found
+
+... It seems that buildroot searches for the powerpc version of gfortran and
+does not find it... But a few line before trying using it, there is the
+following lines, like if the program were found:
+
+configure:10198: checking for powerpc-linux-uclibc-gfortran
+configure:10224: result: powerpc-linux-uclibc-gfortran 
+
+
+
+Any idea that could help?
+
+
+Regards,
+
+         Cl?ment
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
