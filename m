@@ -1,74 +1,28 @@
 From: Will Wagner <will_wagner@carallon.com>
-Date: Thu,  1 Apr 2010 13:46:46 +0100
-Subject: [Buildroot] [PATCH 16/16] xdriver_xf86-video-intel: bump version
-	Signed-off-by: Will Wagner <will_wagner@carallon.com>
+Date: Thu, 01 Apr 2010 13:51:48 +0100
+Subject: [Buildroot] [PATCH 01/16] libdrm: bump version to 2.4.19
 In-Reply-To: <1270126006-22405-1-git-send-email-will_wagner@carallon.com>
 References: <1270126006-22405-1-git-send-email-will_wagner@carallon.com>
-Message-ID: <1270126006-22405-16-git-send-email-will_wagner@carallon.com>
+Message-ID: <4BB496E4.3050102@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
----
- package/x11r7/xdriver_xf86-video-intel/Config.in   |    5 +++--
- ...ver_xf86-video-intel-2.10.0-cross-compile.patch |   11 +++++++++++
- .../xdriver_xf86-video-intel.mk                    |    6 ++++--
- 3 files changed, 18 insertions(+), 4 deletions(-)
- create mode 100644 package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel-2.10.0-cross-compile.patch
+Still learning how to use got send-email, was hoping it would let me 
+write some covering words, I'm sure it can, just need to work out the 
+option.
 
-diff --git a/package/x11r7/xdriver_xf86-video-intel/Config.in b/package/x11r7/xdriver_xf86-video-intel/Config.in
-index 80678d5..b69c23a 100644
---- a/package/x11r7/xdriver_xf86-video-intel/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-intel/Config.in
-@@ -5,7 +5,8 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL
- 	select BR2_PACKAGE_XPROTO_RANDRPROTO
- 	select BR2_PACKAGE_XPROTO_RENDERPROTO
- 	select BR2_PACKAGE_XPROTO_XPROTO
--	select BR2_PACKAGE_XPROTO_DRI2PROTO
-+	select BR2_PACKAGE_XLIB_LIBPCIACCESS
-+	select BR2_PACKAGE_LIBDRM
- 	help
--	  xf86-video-intel 2.9.1
-+	  xf86-video-intel 2.10.0
- 	  Intel video driver
-diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel-2.10.0-cross-compile.patch b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel-2.10.0-cross-compile.patch
-new file mode 100644
-index 0000000..0b020ac
---- /dev/null
-+++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel-2.10.0-cross-compile.patch
-@@ -0,0 +1,11 @@
-+--- a/configure.ac.orig	2010-01-04 22:20:07.000000000 +0000
-++++ b/configure.ac	2010-02-19 12:12:50.000000000 +0000
-+@@ -103,7 +103,7 @@
-+ CFLAGS="$XORG_CFLAGS $DRI_CFLAGS $DRM_CFLAGS"
-+ CPPFLAGS="$XORG_CFLAGS $DRI_CFLAGS $DRM_CFLAGS"
-+ AC_MSG_CHECKING([whether to include DRI support])
-+-if test x$DRI != xno; then
-++if test "$cross_compiling" = "no" -a test x$DRI != xno; then
-+         AC_CHECK_FILE([${sdkdir}/dri.h],
-+                       [have_dri_h="yes"], [have_dri_h="no"])
-+         AC_CHECK_FILE([${sdkdir}/sarea.h],
-diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-index 6bec2d6..c77b61e 100644
---- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-+++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-@@ -4,11 +4,13 @@
- #
- ################################################################################
- 
--XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.9.1
-+XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.10.0
- XDRIVER_XF86_VIDEO_INTEL_SOURCE = xf86-video-intel-$(XDRIVER_XF86_VIDEO_INTEL_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_INTEL_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_INTEL_AUTORECONF = YES
--XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xproto xproto_dri2proto
-+XDRIVER_XF86_VIDEO_INTEL_LIBTOOL_PATCH = NO
-+XDRIVER_XF86_VIDEO_INTEL_CONF_OPT = --enable-dri
-+XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xproto libdrm xlib_libpciaccess
- XDRIVER_XF86_VIDEO_INTEL_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
- 
- $(eval $(call AUTOTARGETS,package/x11r7,xdriver_xf86-video-intel))
--- 
-1.7.0
+This patch series builds on Paulius's work on x11r7.
+
+It bumps the version of a number of patches (including Paul Jones' 
+libdrm bump), but it also changes over to use Kernel Mode Settings for 
+the graphics drivers. Not sure how to specify in a package that a 
+certain kernel version is needed.
+
+The patch series is also available via git at:
+
+git://gitorious.org/willw-buildroot/willw-buildroot.git x11r75patches
+
+Will
