@@ -1,9 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  1 Apr 2010 16:04:30 +0000 (UTC)
+Date: Thu,  1 Apr 2010 16:06:42 +0000 (UTC)
 Subject: [Buildroot] [Bug 1213] Move .config into output directory
 In-Reply-To: <bug-1213-163@https.bugs.busybox.net/>
 References: <bug-1213-163@https.bugs.busybox.net/>
-Message-ID: <20100401160430.264D47F90E@busybox.osuosl.org>
+Message-ID: <20100401160643.0449D7F9A5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,24 +17,17 @@ Will Wagner <will_wagner@carallon.com> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-Attachment #1177 is|0                           |1
+Attachment #1453 is|0                           |1
            obsolete|                            |
 
 
 
 
---- Comment #3 from Will Wagner <will_wagner@carallon.com>  2010-04-01 16:04:29 UTC ---
-Created an attachment (id=1453)
- --> (https://bugs.busybox.net/attachment.cgi?id=1453)
-Revised patch following feedback
+--- Comment #4 from Will Wagner <will_wagner@carallon.com>  2010-04-01 16:06:42 UTC ---
+(From update of attachment 1453)
+Sorry this patch is bogus, my text editor has converted all the tabs to spaces.
 
-Have updated the patch to fix both the issues.
-
-Change to have .config files in buildroot dir id O= not specified was simple.
-
-Modifying config to put temp files in O= folder was relatively straight
-forward, although obviously it is straying quite a long way from the original
-kernel source.
+Will fix and attach a new patch
 
 
 -- 
