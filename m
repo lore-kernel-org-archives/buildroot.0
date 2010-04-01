@@ -1,56 +1,37 @@
-From: Damien Borie <dbe@terawatt.fr>
-Date: Thu, 01 Apr 2010 17:21:23 +0200
-Subject: [Buildroot] QT embedded working with Xorg?
-In-Reply-To: <4BB4B0D7.4080002@carallon.com>
-References: <4BB1EE15.6000505@browserseal.com> <4BB1F87D.4050706@terawatt.fr>
-	<4BB1FA0F.5070703@carallon.com> <4BB20147.50404@terawatt.fr>
-	<4BB4B0D7.4080002@carallon.com>
-Message-ID: <4BB4B9F3.2010905@terawatt.fr>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 1 Apr 2010 17:44:28 +0200
+Subject: [Buildroot] [git commit master] iw: needs host-pkg-config
+Message-ID: <20100401154535.F3A357FB82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-Thanks a lot. I'll look at it  now and tomorrow and see what I need to 
-change (to use open source QT for example).
+commit: http://git.buildroot.net/buildroot/commit/?id=259d6fc0e097685a1340ab56e666ab384884bbc2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thank you for your help.
+Closes #1459
 
-Damien Borie
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/iw/iw.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-TERAWATT / AENERGIA S.A.S.
-ZA DUBOSCOA
-64990 Villefranque
-FRANCE 
-
-tel : +33 (0)5 59 44 26 08
-fax : +33 (0)5 59 31 15 11 
-
-
-
-Will Wagner a ?crit :
-> On 30/03/2010 14:48, Damien Borie wrote:
->> Hi,
->>
->> Thank you for your answer.
->> If you can send it it's great. But maybe you can first say me what 
->> the modifications are?
->> Modifying some line in configure file may be sufficient for some 
->> test? I noticed an option PLATFORM_X11...
->> I could always make it cleaner when you send your clean patch but if 
->> there is only a few things to change I can do it dirtily for now and 
->> continue working.
-> Damien,
->
-> Attached is my patch to get this working. he main thing to do is to 
-> trick the build into thinking it is doing a cross compile even though 
-> it is building for XOrg. Although not officially support the Trolltech 
-> guys confirmed that it should work.
->
-> There are various bits i the patch you may not like, not least that it 
-> is setup for a commercial Qt license.
->
-> Will.
+diff --git a/package/iw/iw.mk b/package/iw/iw.mk
+index 89fd604..e6a3418 100644
+--- a/package/iw/iw.mk
++++ b/package/iw/iw.mk
+@@ -7,7 +7,7 @@
+ IW_VERSION = 0.9.19
+ IW_SOURCE = iw-$(IW_VERSION).tar.bz2
+ IW_SITE = http://wireless.kernel.org/download/iw
+-IW_DEPENDENCIES = libnl
++IW_DEPENDENCIES = host-pkg-config libnl
+ IW_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
+ IW_CONFIG = $(IW_DIR)/.config
+ IW_MAKE_ENV = PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
+-- 
+1.6.3.3
