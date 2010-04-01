@@ -1,26 +1,54 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 31 Mar 2010 22:21:51 +0200
-Subject: [Buildroot] Add new target to buildroot
-In-Reply-To: <l2k5fbe85791003311317g4cf40db1n31ccaedee33d203e@mail.gmail.com>
-	(Atom Proton's message of "Wed, 31 Mar 2010 22:17:06 +0200")
-References: <l2k5fbe85791003311317g4cf40db1n31ccaedee33d203e@mail.gmail.com>
-Message-ID: <87iq8c8co0.fsf@macbook.be.48ers.dk>
+From: Alexander (Sasha) Sirotkin <buildroot@browserseal.com>
+Date: Thu, 1 Apr 2010 10:48:34 +0300
+Subject: [Buildroot] init segfaults when compiled with glibc
+In-Reply-To: <hovmml$391$1@dough.gmane.org>
+References: <4BB20A06.1090407@browserseal.com> <4BB2794A.3030400@free.fr>
+	<j2i478c82f01003310718gbaf125f7t382a3dd8ac5b3823@mail.gmail.com>
+	<hovmml$391$1@dough.gmane.org>
+Message-ID: <g2k478c82f01004010048k4be4d5b6k45052abe0249f81e@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Atom" == Atom Proton <atomx01@gmail.com> writes:
+On Wed, Mar 31, 2010 at 5:37 PM, Javier Viguera <javier.viguera@digi.com> wrote:
+> Alexander (Sasha) Sirotkin wrote:
+>>
+>> You are right, nevertheless the isssue, i.e. init sudden death is not
+>> related to the instruction set - as I already mentioned, it works just fine
+>> with uClibc. The problem appears only when I use external glibc based
+>> toolchain.
+>
+> I had the same problem a month ago more or less. With a glibc toolchain
+> built with crosstool-NG the init process was dying and the kernel panic'ing
+> as a result because init (pid=1) was not supposed to die.
+>
+> Unfortunately i could not manage to find what the problem was. All i found
+> is that it was happening with some versions of glibc while it was working
+> with other versions: glibc-2.9 was failing, so my workaround was finally to
+> select EGLIBC-2.10 to build the toolchain. With that version it worked for
+> me.
+>
+> Give it a try to a newer version of glibc/eglibc (starting with 2.10) and
+> let us know if it works.
 
- Atom> Im looking for some tutorial or manual for adding nev target to
- Atom> buildroot. Can somebody help me ? Martin
+Eventually I managed to compile crosstool-ng with eglibc 2.10 after
+downgrading the compiler to 4.3.2 from 4.4.1 and binutils to 2.19 from
+2.20. This one seems to work OK with buildroot.
 
-What do you exactly mean about "a new target"?
-
-The documentation has a section about adding new packages:
-
-http://buildroot.net/buildroot.html#add_packages
-
--- 
-Bye, Peter Korsgaard
+>
+> --
+> Regards,
+>
+> Javier Viguera
+> Software Engineer
+>
+> Digi International Spain, S.A.
+> http://www.digi.com
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
