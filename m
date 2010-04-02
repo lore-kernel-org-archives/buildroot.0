@@ -1,25 +1,33 @@
-From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
-Date: Fri, 02 Apr 2010 16:09:25 +0300
-Subject: [Buildroot] [PATCH] Add missing directories to Busybox skeleton
-Message-ID: <20100402130925.2348.84418.stgit@localhost.localdomain>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri,  2 Apr 2010 13:14:25 +0000 (UTC)
+Subject: [Buildroot] [Bug 1369] cannot build radvd (flex problem)
+In-Reply-To: <bug-1369-163@https.bugs.busybox.net/>
+References: <bug-1369-163@https.bugs.busybox.net/>
+Message-ID: <20100402131425.986578A66B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
----
+https://bugs.busybox.net/show_bug.cgi?id=1369
 
- target/generic/target_busybox_skeleton/proc/.empty |    0 
- target/generic/target_busybox_skeleton/root/.empty |    0 
- 2 files changed, 0 insertions(+), 0 deletions(-)
- create mode 100644 target/generic/target_busybox_skeleton/proc/.empty
- create mode 100644 target/generic/target_busybox_skeleton/root/.empty
 
-diff --git a/target/generic/target_busybox_skeleton/proc/.empty b/target/generic/target_busybox_skeleton/proc/.empty
-new file mode 100644
-index 0000000..e69de29
-diff --git a/target/generic/target_busybox_skeleton/root/.empty b/target/generic/target_busybox_skeleton/root/.empty
-new file mode 100644
-index 0000000..e69de29
+Peter Korsgaard <jacmet@uclibc.org> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
+
+
+
+
+--- Comment #2 from Peter Korsgaard <jacmet@uclibc.org>  2010-04-02 13:14:25 UTC ---
+Fixed in git (0a179adef3e62)
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
