@@ -1,29 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 1 Apr 2010 23:12:21 +0200
-Subject: [Buildroot] [PATCH 01/16] libdrm: bump version to 2.4.19
-In-Reply-To: <4BB4EF29.4040406@gmail.com>
-References: <1270126006-22405-1-git-send-email-will_wagner@carallon.com>
-	<4BB496E4.3050102@carallon.com> <4BB4EF29.4040406@gmail.com>
-Message-ID: <20100401231221.6611dd3b@surf>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 2 Apr 2010 09:28:07 +0200
+Subject: [Buildroot] [git commit master] kernel-headers: bump 2.6.{27, 31, 32,
+	33} stable versions
+Message-ID: <20100402072901.A20598B6BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 01 Apr 2010 22:08:25 +0300
-Paulius Zaleckas <paulius.zaleckas@gmail.com> wrote:
 
-> I am using StGit for managing my patches. It also supports patch sending
-> and has option to add/edit cover letter.
+commit: http://git.buildroot.net/buildroot/commit/?id=0c7090f1895948d2fd166320fc5a59a92c49acd7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Git also has one :
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/kernel-headers/Config.in                 |    8 ++++----
+ ...types-for-headers-exported-to-user-space.patch} |    0
+ ...types-for-headers-exported-to-user-space.patch} |    0
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+ rename toolchain/kernel-headers/{linux-2.6.31.12-scsi-use-__uX-types-for-headers-exported-to-user-space.patch => linux-2.6.31.13-scsi-use-__uX-types-for-headers-exported-to-user-space.patch} (100%)
+ rename toolchain/kernel-headers/{linux-2.6.32.10-scsi-use-__uX-types-for-headers-exported-to-user-space.patch => linux-2.6.32.11-scsi-use-__uX-types-for-headers-exported-to-user-space.patch} (100%)
 
- git send-email --compose
-
-Thomas
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index a0f7aec..8f7f720 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -59,12 +59,12 @@ config BR2_DEFAULT_KERNEL_VERSION
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "2.6.27.45"	if BR2_KERNEL_HEADERS_2_6_27
++	default "2.6.27.46"	if BR2_KERNEL_HEADERS_2_6_27
+ 	default "2.6.28.10"	if BR2_KERNEL_HEADERS_2_6_28
+ 	default "2.6.29.6"	if BR2_KERNEL_HEADERS_2_6_29
+ 	default "2.6.30.10"	if BR2_KERNEL_HEADERS_2_6_30
+-	default "2.6.31.12"	if BR2_KERNEL_HEADERS_2_6_31
+-	default "2.6.32.10"	if BR2_KERNEL_HEADERS_2_6_32
+-	default "2.6.33.1"	if BR2_KERNEL_HEADERS_2_6_33
++	default "2.6.31.13"	if BR2_KERNEL_HEADERS_2_6_31
++	default "2.6.32.11"	if BR2_KERNEL_HEADERS_2_6_32
++	default "2.6.33.2"	if BR2_KERNEL_HEADERS_2_6_33
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-2.6.31.12-scsi-use-__uX-types-for-headers-exported-to-user-space.patch b/toolchain/kernel-headers/linux-2.6.31.13-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-2.6.31.12-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
+rename to toolchain/kernel-headers/linux-2.6.31.13-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
+diff --git a/toolchain/kernel-headers/linux-2.6.32.10-scsi-use-__uX-types-for-headers-exported-to-user-space.patch b/toolchain/kernel-headers/linux-2.6.32.11-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-2.6.32.10-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
+rename to toolchain/kernel-headers/linux-2.6.32.11-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.6.3.3
