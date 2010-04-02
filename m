@@ -1,8 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Fri, 2 Apr 2010 15:13:46 +0200
-Subject: [Buildroot] [git commit master] u-boot: add 2010.03,
-	adapt target mkimage step to work with 2010.03
-Message-ID: <20100402131535.241F18B48A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] radvd: needs host-flex
+Message-ID: <20100402131535.6298C8B48A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,57 +9,50 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=deb5f91336e13eb93533502111c5cdc807d81bf4
+commit: http://git.buildroot.net/buildroot/commit/?id=0a179adef3e6233752d501fe0039496d2b669cd1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Closes #1369
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- target/u-boot/Config.in   |    7 ++++++-
- target/u-boot/Makefile.in |    2 +-
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ CHANGES                |    3 ++-
+ package/radvd/radvd.mk |    2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/target/u-boot/Config.in b/target/u-boot/Config.in
-index 2689f69..f84d181 100644
---- a/target/u-boot/Config.in
-+++ b/target/u-boot/Config.in
-@@ -13,12 +13,16 @@ config BR2_TARGET_UBOOT_BOARDNAME
+diff --git a/CHANGES b/CHANGES
+index d963a44..174c73f 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -12,7 +12,7 @@
+ 	Updated/fixed packages: busybox, dnsmasq, dosfstools, e2fsprogs,
+ 	freetype, iperf, iptables, iw, less, libgcrypt, libglib2, libpng,
+ 	libxml2, mdadm, memstat, mtd-utils, nano, openssl, php, pppd,
+-	setserial, squashfs, wget, xlib_libX11, xlib_libXfont
++	radvd, setserial, squashfs, wget, xlib_libX11, xlib_libXfont
  
- choice
- 	prompt "U-Boot Version"
--	default BR2_TARGET_UBOOT_2009_11
-+	default BR2_TARGET_UBOOT_2010_03
- 	help
- 	  Select the specific U-Boot version you want to use
+ 	Issues resolved (http://bugs.uclibc.org):
  
-+config BR2_TARGET_UBOOT_2010_03
-+	bool "u-boot-2010.03"
-+
- config BR2_TARGET_UBOOT_2009_11
- 	bool "u-boot-2009.11"
-+	depends on BR2_DEPRECATED || BR2_RECENT
+@@ -29,6 +29,7 @@
+ 	#1303: Add librsync package
+ 	#1327: mtd-utils compile failure due to lack of --sysroot in CFLAGS
+ 	#1345: Bump pppd to 2.4.5 and convert to Makefile.autotools.in
++	#1369: cannot build radvd (flex problem)
+ 	#1387: xlib_libX11-1.3.2 can't find libjpeg
+ 	#1411: [SECURITY] Update openssl package to 0.9.8n
+ 	#1417: Bump iptables to 1.4.7
+diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
+index bf1ac77..defcf4b 100644
+--- a/package/radvd/radvd.mk
++++ b/package/radvd/radvd.mk
+@@ -9,7 +9,7 @@ RADVD_SITE:=http://www.litech.org/radvd/dist/
+ RADVD_AUTORECONF:=no
+ RADVD_INSTALL_STAGING:=no
+ RADVD_INSTALL_TARGET:=YES
+-RADVD_DEPENDENCIES:=flex
++RADVD_DEPENDENCIES:=flex host-flex
+ RADVD_MAKE:=$(MAKE1)
+ RADVD_CONF_OPT:= --program-prefix=''
  
- config BR2_TARGET_UBOOT_2009_08
- 	bool "u-boot-2009.08"
-@@ -48,6 +52,7 @@ endchoice
- 
- config BR2_UBOOT_VERSION
- 	string
-+	default "2010.03"	if BR2_TARGET_UBOOT_2010_03
- 	default "2009.11"	if BR2_TARGET_UBOOT_2009_11
- 	default "2009.08"	if BR2_TARGET_UBOOT_2009_08
- 	default "2009.06"	if BR2_TARGET_UBOOT_2009_06
-diff --git a/target/u-boot/Makefile.in b/target/u-boot/Makefile.in
-index 5efbd54..d1bb5e5 100644
---- a/target/u-boot/Makefile.in
-+++ b/target/u-boot/Makefile.in
-@@ -177,7 +177,7 @@ $(TARGET_DIR)/usr/bin/mkimage: $(U_BOOT_DIR)/$(U_BOOT_BIN)
- 		-DUSE_HOSTCC -o $@ \
- 		$(U_BOOT_DIR)/common/image.c \
- 		$(wildcard $(addprefix $(U_BOOT_DIR)/tools/,default_image.c \
--			fit_image.c kwbimage.c mkimage.c)) \
-+			fit_image.c imximage.c kwbimage.c mkimage.c)) \
- 		$(addprefix $(U_BOOT_DIR)/lib_generic/,crc32.c md5.c sha1.c) \
- 		$(U_BOOT_DIR)/tools/os_support.c \
- 		$(U_BOOT_DIR)/libfdt/fdt*.c
 -- 
 1.6.3.3
