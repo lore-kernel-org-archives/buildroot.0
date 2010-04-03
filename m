@@ -1,22 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 03 Apr 2010 10:44:49 +0200
-Subject: [Buildroot] [PATCH] Bump libdrm to 2.4.19
-In-Reply-To: <1270030502-31235-1-git-send-email-paul@pauljones.id.au> (Paul
-	Jones's message of "Wed, 31 Mar 2010 21:15:02 +1100")
-References: <1270030502-31235-1-git-send-email-paul@pauljones.id.au>
-Message-ID: <87mxxkvsam.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat,  3 Apr 2010 08:49:28 +0000 (UTC)
+Subject: [Buildroot] [Bug 1189] Wrong u-boot configuration name for
+	integrator926 target
+In-Reply-To: <bug-1189-163@https.bugs.busybox.net/>
+References: <bug-1189-163@https.bugs.busybox.net/>
+Message-ID: <20100403084928.EFE1C7FBF7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Paul" == Paul Jones <paul@pauljones.id.au> writes:
+https://bugs.busybox.net/show_bug.cgi?id=1189
 
- Paul> Also adds proper dependency information to stop build errors.
- Paul> Signed-off-by: Paul Jones <paul@pauljones.id.au>
 
-Committed, thanks.
+Peter Korsgaard <jacmet@uclibc.org> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
+
+
+
+
+--- Comment #2 from Peter Korsgaard <jacmet@uclibc.org>  2010-04-03 08:49:28 UTC ---
+Committed, thanks
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
