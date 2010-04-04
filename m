@@ -1,40 +1,41 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun,  4 Apr 2010 19:02:36 +0000 (UTC)
-Subject: [Buildroot] [Bug 851] Add option to specify --sysroot value for
- external toolchain
-In-Reply-To: <bug-851-163@https.bugs.busybox.net/>
-References: <bug-851-163@https.bugs.busybox.net/>
-Message-ID: <20100404190236.41D558B7BF@busybox.osuosl.org>
+Date: Sun,  4 Apr 2010 19:26:55 +0000 (UTC)
+Subject: [Buildroot] [Bug 1489] New: radvd update to 1.6
+Message-ID: <bug-1489-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=851
+https://bugs.busybox.net/show_bug.cgi?id=1489
+
+           Summary: radvd update to 1.6
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: alex at digriz.org.uk
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
 
+Created an attachment (id=1477)
+ --> (https://bugs.busybox.net/attachment.cgi?id=1477)
+update radvd package information
 
+As well as updating the version of radvd that is pulled down (from 1.5 to 1.6)
+I also removed the unneeded cruft from radvd.mk (just reflects the defaults)
+and since version 1.5 radvd is fixed for parallel building so $(MAKE1) is no
+longer needed.
 
-
---- Comment #6 from Grant Edwards <grant.b.edwards@gmail.com>  2010-04-04 19:02:35 UTC ---
-
-It looks like that commit addresses the same problem except that it's
-unconditional.  I made my change configurable because I assumed there
-was a reason why it was the way it was and that somebody was depending
-on the extant behavior. Though I couldn't figure out exactly how that
-behavior would be desirable, it looked like somebody went to extra
-effort to extract the "as built" sysroot rather than use the path that
-was already known for the current location of the toolchain.
-
-I must admit I'm a bit confused by the effort the committed patch goes
-to to figure out the value to use for sysroot.  Isn't it always going
-to be "$(BR2_TOOLCHAIN_EXTERNAL_PATH)/.."?  Or does crosstool-ng
-structure the toolchain install directory tree differently than does
-buildroot?
-
-Trying out that commit will require changes to my build script, so I can't
-do it right now.  I'll give it go it when I have some spare time.
+I also updated Config.in to also reflect it's dependency on
+BR2_PACKAGE_FLEX_LIBFL (similarly to how gob2/ipsec-tools does).
 
 
 -- 
