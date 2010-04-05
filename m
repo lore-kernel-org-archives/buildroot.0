@@ -1,40 +1,60 @@
-From: Paul Jones <paul.jones@iwtech.com.au>
-Date: Tue, 06 Apr 2010 07:34:18 +1000
-Subject: [Buildroot] QT embedded working with Xorg?
-In-Reply-To: <4BBA28D4.2040702@carallon.com>
-References: <4BB1EE15.6000505@browserseal.com>	<4BB1F87D.4050706@terawatt.fr>	<4BB1FA0F.5070703@carallon.com>	<4BB20147.50404@terawatt.fr>	<4BB4B0D7.4080002@carallon.com>	<4BB4B9F3.2010905@terawatt.fr>	<4BB5D9C3.1020209@terawatt.fr>
-	<4BB9BC7C.4030404@iwtech.com.au> <4BBA28D4.2040702@carallon.com>
-Message-ID: <4BBA575A.5060403@iwtech.com.au>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 05 Apr 2010 23:44:39 +0200
+Subject: [Buildroot] [PATCH 1/1] libaio: convert to the GENTARGETS
+	infrastructure
+In-Reply-To: <0254addf9b7aee9429122d5d6934adbe88b904d4.1270499953.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Mon, 5 Apr 2010 22:39:19 +0200")
+References: <cover.1270499953.git.thomas.petazzoni@free-electrons.com>
+	<cover.1270499953.git.thomas.petazzoni@free-electrons.com>
+	<0254addf9b7aee9429122d5d6934adbe88b904d4.1270499953.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87mxxhshfc.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 6/04/2010 4:15 AM, Will Wagner wrote:
-> On 05/04/2010 11:33, Paul Jones wrote:
->> On 04/02/10 22:49, Damien Borie wrote:
->>> Hi,
->>>
->>> It's working fine! I only changed X11-commercial to X11-opensource and
->>> it's ok. I got problems with font or encoding but it will be cleared
->>> soon I think.
->>> Thank you, your patch was very useful.
->> What arch are you building for? I'm building for ARM and I'm getting
->> build errors.
->>
-> If you are using the patch I submitted to the list without 
-> modification then i don't think it will work. I had hard coded into 
-> that patch that Qt was being built for x86 (also being built on x64 
-> machine). The patch was not meant to be for the general case and would 
-> need more work for that. If there is interest I will look at doing a 
-> better patch for submission.
->
-> Will
->
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Ahh ok. I saw that i386 in there but I wasn't sure what it was for. I'll 
-have a fiddle with it and see if I can get it to work.
+ Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Thomas> ---
+ Thomas>  package/libaio/libaio.mk |   52 +++++++++++----------------------------------
+ Thomas>  1 files changed, 13 insertions(+), 39 deletions(-)
 
+ Thomas> diff --git a/package/libaio/libaio.mk b/package/libaio/libaio.mk
+ Thomas> index f1bb603..58cdf6c 100644
+ Thomas> --- a/package/libaio/libaio.mk
+ Thomas> +++ b/package/libaio/libaio.mk
+ Thomas> @@ -3,48 +3,22 @@
+ Thomas>  # libaio
+ Thomas>  #
+ Thomas>  #############################################################
+ Thomas> -LIBAIO_VERSION=0.3.106-avr32
+ Thomas> +LIBAIO_VERSION=0.3.109
+ Thomas>  LIBAIO_SOURCE=libaio-$(LIBAIO_VERSION).tar.bz2
+ Thomas> -LIBAIO_SITE=http://avr32linux.org/twiki/pub/Main/LibAio/
+ Thomas> -LIBAIO_DIR=$(BUILD_DIR)/libaio-$(LIBAIO_VERSION)
+ Thomas> -LIBAIO_SOVER=1.0.1
+ Thomas> +LIBAIO_SITE=ftp://ftp.kernel.org/pub/linux/libs/aio/
 
-Paul.
+We have BR2_KERNEL_MIRROR, might be good to use.
+
+ Thomas> +define LIBAIO_INSTALL_STAGING_CMDS
+ Thomas> +  $(TARGET_CONFIGURE_OPTS) $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
+ Thomas> +endef
+
+Are you missing a patch? I don't see any DESTDIR handling in the libaio
+build system, and I get:
+
+make[1]: Entering directory `/tmp/br/build/libaio-0.3.109'
+make[2]: Entering directory `/tmp/br/build/libaio-0.3.109/src'
+install -D -m 644 libaio.h /usr/include/libaio.h
+install: cannot create regular file `/usr/include/libaio.h': Permission denied
+make[2]: *** [install] Error 1
+make[2]: Leaving directory `/tmp/br/build/libaio-0.3.109/src'
+make[1]: *** [install] Error 2
+make[1]: Leaving directory `/tmp/br/build/libaio-0.3.109'
+make: *** [/tmp/br/build/libaio-0.3.109/.stamp_staging_installed] Error 2
+
+-- 
+Bye, Peter Korsgaard
