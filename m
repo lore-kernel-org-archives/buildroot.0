@@ -1,27 +1,41 @@
-From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
-Date: Mon, 05 Apr 2010 19:58:10 +0300
-Subject: [Buildroot] [git commit master] matchbox: convert to autotools,
- fix build with start-notification, libxft
-In-Reply-To: <20100405092238.EDD8888D31@busybox.osuosl.org>
-References: <20100405092238.EDD8888D31@busybox.osuosl.org>
-Message-ID: <4BBA16A2.7050701@gmail.com>
+From: Souf Oued <souf_oued@yahoo.fr>
+Date: Mon, 05 Apr 2010 19:21:32 +0200
+Subject: [Buildroot] [01/03] gmp: convert to autotools infrastructure
+In-Reply-To: <4BBA0051.50006@yahoo.fr>
+References: <4BBA0051.50006@yahoo.fr>
+Message-ID: <4BBA1C1C.7090905@yahoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/05/2010 11:47 AM, Will Wagner wrote:
->
-> commit: http://git.buildroot.net/buildroot/commit/?id=f94830d0e5a409b2e2dc30a4e002c180fe09ec4e
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->
-> Signed-off-by: Will Wagner<will_wagner@carallon.com>
-> Signed-off-by: Peter Korsgaard<jacmet@sunsite.dk>
+I'm sorry, I made a mistake when I submit patches... so:
 
-Previously matchbox-commons were installed, now there is even no way to select
-it, but .mk file is there :)
-Don't know if it should be selectable or just added to root matchbox.mk...
+1- buildroot-gmp.patch: convert gmp to autotools and bump to 5.0.1
+2- buildroot-mpfr.patch: convert mpfr to autotools and bump to 2.4.2
+3- buildroot-mpc.patch: add mpc package
 
-BR,
-Paulius
+
+Thanks.
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: buildroot-gmp.patch
+Type: text/x-patch
+Size: 8834 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100405/0708ba67/attachment-0003.bin>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: buildroot-mpfr.patch
+Type: text/x-patch
+Size: 7257 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100405/0708ba67/attachment-0004.bin>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: buildroot-mpc.patch
+Type: text/x-patch
+Size: 12029 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100405/0708ba67/attachment-0005.bin>
