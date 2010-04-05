@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Mon, 5 Apr 2010 13:48:10 +0200
-Subject: [Buildroot] [git commit master] uclibc: don't install libs to
-	target if BR2_PREFER_STATIC_LIB
-Message-ID: <20100405131722.65A857FA2B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] gcc: hide shared libgcc option if
+	BR2_PREFER_STATIC_LIB is enabled
+Message-ID: <20100405131722.B10D47FA2B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,28 +10,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c95174a8dfb6f72b80768b73b8f04448f846c122
+commit: http://git.buildroot.net/buildroot/commit/?id=6cdcc4d7d8134f4b60f0eb9039090f9ad4c38366
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Shared libgcc without shared libs doesn't make much sense.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/uClibc/uclibc.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ toolchain/gcc/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
-index 52a8ae9..3e69770 100644
---- a/toolchain/uClibc/uclibc.mk
-+++ b/toolchain/uClibc/uclibc.mk
-@@ -512,7 +512,10 @@ ifeq ($(BR2_CROSS_TOOLCHAIN_TARGET_UTILS),y)
- endif
- 	touch -c $@
+diff --git a/toolchain/gcc/Config.in b/toolchain/gcc/Config.in
+index ed0c108..97d5eb7 100644
+--- a/toolchain/gcc/Config.in
++++ b/toolchain/gcc/Config.in
+@@ -153,6 +153,7 @@ config BR2_INSTALL_FORTRAN
  
-+ifneq ($(BR2_PREFER_STATIC_LIB),y)
- UCLIBC_TARGETS=$(TARGET_DIR)/lib/libc.so.0
-+endif
-+
- ifeq ($(BR2_UCLIBC_INSTALL_TEST_SUITE),y)
- UCLIBC_TARGETS+=uclibc-test
- endif
+ config BR2_GCC_SHARED_LIBGCC
+ 	bool "Build/install a shared libgcc?"
++	depends on !BR2_PREFER_STATIC_LIB
+ 	default y
+ 	depends on !BR2_sparc && !BR2_sparc64
+ 	help
 -- 
 1.6.3.3
