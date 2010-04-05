@@ -1,43 +1,54 @@
 From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
-Date: Mon, 05 Apr 2010 23:49:06 +0300
+Date: Tue, 06 Apr 2010 00:24:49 +0300
 Subject: [Buildroot] [git commit master] matchbox: convert to autotools,
  fix build with start-notification, libxft
-In-Reply-To: <4BBA29A0.7000703@carallon.com>
+In-Reply-To: <20100405092238.EDD8888D31@busybox.osuosl.org>
 References: <20100405092238.EDD8888D31@busybox.osuosl.org>
-	<4BBA16A2.7050701@gmail.com> <4BBA29A0.7000703@carallon.com>
-Message-ID: <4BBA4CC2.1040308@gmail.com>
+Message-ID: <4BBA5521.40900@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/05/2010 09:19 PM, Will Wagner wrote:
-> On 05/04/2010 17:58, Paulius Zaleckas wrote:
->> On 04/05/2010 11:47 AM, Will Wagner wrote:
->>>
->>> commit:
->>> http://git.buildroot.net/buildroot/commit/?id=f94830d0e5a409b2e2dc30a4e002c180fe09ec4e
->>>
->>> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->>>
->>> Signed-off-by: Will Wagner<will_wagner@carallon.com>
->>> Signed-off-by: Peter Korsgaard<jacmet@sunsite.dk>
->>
->> Previously matchbox-commons were installed, now there is even no way
->> to select
->> it, but .mk file is there :)
->> Don't know if it should be selectable or just added to root
->> matchbox.mk...
->>
-> It gets built as a dependany of matchbox-wm. I did not make it an option
-> as you would only want that without the window manager if you were
-> trying to compile some custom app based on matchbox-common. Also it is
-> exactly the same behaviour as the old matchbox makefile, the reason I
-> spit it into seperate makefile was so it could be converted to autoools.
-> If there is some issie with what is ther I am happy to fix it.
+On 04/05/2010 11:47 AM, Will Wagner wrote:
+>
+> commit: http://git.buildroot.net/buildroot/commit/?id=f94830d0e5a409b2e2dc30a4e002c180fe09ec4e
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>
+> Signed-off-by: Will Wagner<will_wagner@carallon.com>
+> Signed-off-by: Peter Korsgaard<jacmet@sunsite.dk>
 
-matchbox-wm has no dependency on matchbox-common.
-I think you mixed it up with matchbox-lib...
+There is one more problem...
+matchbox-desktop fails to load its modules.
+Modules are installed to /usr/lib/matchbox/desktop
+but it doesn't try to load them from here.
 
-> Will
+strace output:
+write(1, "matchbox-desktop: loading /usr/li"..., 63) = 63
+open("/usr/lib/tasks.so", O_RDONLY)     = -1 ENOENT (No such file or directory)
+open("/home/paulius/buildroot/output/build/staging_dir/usr/lib/tasks.so", 
+O_RDONLY) = -1 ENOENT (No such file or directory)
+open("/lib/tasks.so", O_RDONLY)         = -1 ENOENT (No such file or directory)
+open("/lib/tasks.so", O_RDONLY)         = -1 ENOENT (No such file or directory)
+open("/usr/lib/tasks.so", O_RDONLY)     = -1 ENOENT (No such file or directory)
+open("/usr/X11R6/lib/tasks.so", O_RDONLY) = -1 ENOENT (No such file or directory)
+write(2, "File not found"..., 14)       = 14
+write(1, "matchbox-desktop: loading /usr/li"..., 68) = 68
+open("/usr/lib/dotdesktop.so", O_RDONLY) = -1 ENOENT (No such file or directory)
+open("/home/paulius/buildroot/output/build/staging_dir/usr/lib/dotdesktop.so", 
+O_RDONLY) = -1 ENOENT (No such file or directory)
+open("/lib/dotdesktop.so", O_RDONLY)    = -1 ENOENT (No such file or directory)
+open("/lib/dotdesktop.so", O_RDONLY)    = -1 ENOENT (No such file or directory)
+open("/usr/lib/dotdesktop.so", O_RDONLY) = -1 ENOENT (No such file or directory)
+open("/usr/X11R6/lib/dotdesktop.so", O_RDONLY) = -1 ENOENT (No such file or 
+directory)
+write(2, "File not found"..., 14)       = 14
+write(2, "matchbox-desktop: failed to load "..., 51) = 51
+
+> Patch is too large, so refusing to show it
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
