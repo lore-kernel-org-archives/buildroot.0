@@ -1,35 +1,39 @@
 From: Will Wagner <will_wagner@carallon.com>
-Date: Mon, 05 Apr 2010 19:15:48 +0100
-Subject: [Buildroot] QT embedded working with Xorg?
-In-Reply-To: <4BB9BC7C.4030404@iwtech.com.au>
-References: <4BB1EE15.6000505@browserseal.com>	<4BB1F87D.4050706@terawatt.fr>	<4BB1FA0F.5070703@carallon.com>	<4BB20147.50404@terawatt.fr>	<4BB4B0D7.4080002@carallon.com>	<4BB4B9F3.2010905@terawatt.fr>	<4BB5D9C3.1020209@terawatt.fr>
-	<4BB9BC7C.4030404@iwtech.com.au>
-Message-ID: <4BBA28D4.2040702@carallon.com>
+Date: Mon, 05 Apr 2010 19:19:12 +0100
+Subject: [Buildroot] [git commit master] matchbox: convert to autotools,
+ fix build with start-notification, libxft
+In-Reply-To: <4BBA16A2.7050701@gmail.com>
+References: <20100405092238.EDD8888D31@busybox.osuosl.org>
+	<4BBA16A2.7050701@gmail.com>
+Message-ID: <4BBA29A0.7000703@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/04/2010 11:33, Paul Jones wrote:
-> On 04/02/10 22:49, Damien Borie wrote:
->    
->> Hi,
+On 05/04/2010 17:58, Paulius Zaleckas wrote:
+> On 04/05/2010 11:47 AM, Will Wagner wrote:
 >>
->> It's working fine! I only changed X11-commercial to X11-opensource and
->> it's ok. I got problems with font or encoding but it will be cleared
->> soon I think.
->> Thank you, your patch was very useful.
->>      
-> What arch are you building for? I'm building for ARM and I'm getting
-> build errors.
+>> commit: 
+>> http://git.buildroot.net/buildroot/commit/?id=f94830d0e5a409b2e2dc30a4e002c180fe09ec4e 
+>>
+>> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>
+>> Signed-off-by: Will Wagner<will_wagner@carallon.com>
+>> Signed-off-by: Peter Korsgaard<jacmet@sunsite.dk>
 >
->    
-If you are using the patch I submitted to the list without modification 
-then i don't think it will work. I had hard coded into that patch that 
-Qt was being built for x86 (also being built on x64 machine). The patch 
-was not meant to be for the general case and would need more work for 
-that. If there is interest I will look at doing a better patch for 
-submission.
+> Previously matchbox-commons were installed, now there is even no way 
+> to select
+> it, but .mk file is there :)
+> Don't know if it should be selectable or just added to root 
+> matchbox.mk...
+>
+It gets built as a dependany of matchbox-wm. I did not make it an option 
+as you would only want that without the window manager if you were 
+trying to compile some custom app based on matchbox-common. Also it is 
+exactly the same behaviour as the old matchbox makefile, the reason I 
+spit it into seperate makefile was so it could be converted to autoools. 
+If there is some issie with what is ther I am happy to fix it.
 
 Will
