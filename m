@@ -1,58 +1,40 @@
-From: Paul Jones <paul.jones@iwtech.com.au>
-Date: Mon, 05 Apr 2010 20:33:32 +1000
-Subject: [Buildroot] QT embedded working with Xorg?
-In-Reply-To: <4BB5D9C3.1020209@terawatt.fr>
-References: <4BB1EE15.6000505@browserseal.com>	<4BB1F87D.4050706@terawatt.fr>	<4BB1FA0F.5070703@carallon.com>	<4BB20147.50404@terawatt.fr>	<4BB4B0D7.4080002@carallon.com>	<4BB4B9F3.2010905@terawatt.fr>
-	<4BB5D9C3.1020209@terawatt.fr>
-Message-ID: <4BB9BC7C.4030404@iwtech.com.au>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 5 Apr 2010 13:29:01 +0200
+Subject: [Buildroot] [git commit master] busybox: respect
+	BR2_PREFER_STATIC_LIB
+Message-ID: <20100405112952.02D938DCCD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/02/10 22:49, Damien Borie wrote:
-> Hi,
->
-> It's working fine! I only changed X11-commercial to X11-opensource and
-> it's ok. I got problems with font or encoding but it will be cleared
-> soon I think.
-> Thank you, your patch was very useful.
 
-What arch are you building for? I'm building for ARM and I'm getting
-build errors.
+commit: http://git.buildroot.net/buildroot/commit/?id=3ef9b6969c8ea5c6ff0e3cf5e40a4185a57999d3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Build static version if requested in BR config.
 
-compiling io/qabstractfileengine.cpp
-../../include/QtCore/../../src/corelib/arch/qatomic_i386.h: In function
-'char* HB_TextCodec_ConvertFromUnicode(void*, const HB_UChar16*,
-hb_uint32, hb_uint32*)':
-../../include/QtCore/../../src/corelib/arch/qatomic_i386.h:132: error:
-impossible constraint in 'asm'
-../../include/QtCore/../../src/corelib/arch/qatomic_i386.h:132: error:
-impossible constraint in 'asm'
-compiling io/qbuffer.cpp
-make[2]: *** [.obj/release-shared/qharfbuzz.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-In file included from io/qbuffer.cpp:473:
-../../include/QtCore/../../src/corelib/arch/qatomic_i386.h: In member
-function 'virtual bool QBuffer::seek(qint64)':
-../../include/QtCore/../../src/corelib/arch/qatomic_i386.h:132: error:
-impossible constraint in 'asm'
-../../include/QtCore/../../src/corelib/arch/qatomic_i386.h:132: error:
-impossible constraint in 'asm'
-make[2]: *** [.obj/release-shared/qbuffer.o] Error 1
-../../include/QtCore/../../src/corelib/arch/qatomic_i386.h: In member
-function 'virtual QString
-QAbstractFileEngine::fileName(QAbstractFileEngine::FileName) const':
-../../include/QtCore/../../src/corelib/arch/qatomic_i386.h:120: error:
-impossible constraint in 'asm'
-make[2]: *** [.obj/release-shared/qabstractfileengine.o] Error 1
-make[2]: Leaving directory
-`/media/stuff/buildroot/output/build/qt-everywhere-opensource-src-4.6.2/src/corelib'
-make[1]: *** [sub-corelib-make_default-ordered] Error 2
-make[1]: Leaving directory
-`/media/stuff/buildroot/output/build/qt-everywhere-opensource-src-4.6.2'
-make: ***
-[/media/stuff/buildroot/output/build/qt-everywhere-opensource-src-4.6.2/.compiled]
-Error 2
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/busybox/busybox.mk |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
+
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 7f2f171..cc2097e 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -78,6 +78,11 @@ ifeq ($(BR2_INET_RPC),y)
+ else
+ 	$(SED) "s/^.*CONFIG_FEATURE_MOUNT_NFS.*/CONFIG_FEATURE_MOUNT_NFS=n/;" $(BUSYBOX_DIR)/.config
+ endif
++ifeq ($(BR2_PREFER_STATIC_LIB),y)
++	$(SED) "s/^.*CONFIG_STATIC.*/CONFIG_STATIC=y/;" $(BUSYBOX_DIR)/.config
++else
++	$(SED) "s/^.*CONFIG_STATIC.*/CONFIG_STATIC=n/;" $(BUSYBOX_DIR)/.config
++endif
+ ifeq ($(BR2_PACKAGE_BUSYBOX_SKELETON),y)
+ 	# force mdev on
+ 	$(SED) "s/^.*CONFIG_MDEV.*/CONFIG_MDEV=y/" $(BUSYBOX_DIR)/.config
+-- 
+1.6.3.3
