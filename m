@@ -1,41 +1,35 @@
-From: Souf Oued <souf_oued@yahoo.fr>
-Date: Mon, 05 Apr 2010 19:21:32 +0200
-Subject: [Buildroot] [01/03] gmp: convert to autotools infrastructure
-In-Reply-To: <4BBA0051.50006@yahoo.fr>
-References: <4BBA0051.50006@yahoo.fr>
-Message-ID: <4BBA1C1C.7090905@yahoo.fr>
+From: Will Wagner <will_wagner@carallon.com>
+Date: Mon, 05 Apr 2010 19:15:48 +0100
+Subject: [Buildroot] QT embedded working with Xorg?
+In-Reply-To: <4BB9BC7C.4030404@iwtech.com.au>
+References: <4BB1EE15.6000505@browserseal.com>	<4BB1F87D.4050706@terawatt.fr>	<4BB1FA0F.5070703@carallon.com>	<4BB20147.50404@terawatt.fr>	<4BB4B0D7.4080002@carallon.com>	<4BB4B9F3.2010905@terawatt.fr>	<4BB5D9C3.1020209@terawatt.fr>
+	<4BB9BC7C.4030404@iwtech.com.au>
+Message-ID: <4BBA28D4.2040702@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm sorry, I made a mistake when I submit patches... so:
+On 05/04/2010 11:33, Paul Jones wrote:
+> On 04/02/10 22:49, Damien Borie wrote:
+>    
+>> Hi,
+>>
+>> It's working fine! I only changed X11-commercial to X11-opensource and
+>> it's ok. I got problems with font or encoding but it will be cleared
+>> soon I think.
+>> Thank you, your patch was very useful.
+>>      
+> What arch are you building for? I'm building for ARM and I'm getting
+> build errors.
+>
+>    
+If you are using the patch I submitted to the list without modification 
+then i don't think it will work. I had hard coded into that patch that 
+Qt was being built for x86 (also being built on x64 machine). The patch 
+was not meant to be for the general case and would need more work for 
+that. If there is interest I will look at doing a better patch for 
+submission.
 
-1- buildroot-gmp.patch: convert gmp to autotools and bump to 5.0.1
-2- buildroot-mpfr.patch: convert mpfr to autotools and bump to 2.4.2
-3- buildroot-mpc.patch: add mpc package
-
-
-Thanks.
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: buildroot-gmp.patch
-Type: text/x-patch
-Size: 8834 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100405/0708ba67/attachment-0003.bin>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: buildroot-mpfr.patch
-Type: text/x-patch
-Size: 7257 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100405/0708ba67/attachment-0004.bin>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: buildroot-mpc.patch
-Type: text/x-patch
-Size: 12029 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100405/0708ba67/attachment-0005.bin>
+Will
