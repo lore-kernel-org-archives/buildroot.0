@@ -1,36 +1,59 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  6 Apr 2010 20:09:14 +0000 (UTC)
-Subject: [Buildroot] [Bug 1093] [PATCH] Upgrade libusb to v1.0.3 and add new
- libusb-compat package for compatibility with old packages that expect the
- pre-1.0 API.
-In-Reply-To: <bug-1093-163@https.bugs.busybox.net/>
-References: <bug-1093-163@https.bugs.busybox.net/>
-Message-ID: <20100406200914.27A2B8B2C7@busybox.osuosl.org>
+From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+Date: Tue, 06 Apr 2010 23:36:53 +0300
+Subject: [Buildroot] [PATCH] matchbox-desktop: fix compilation and
+	installation
+Message-ID: <20100406203653.2470.27265.stgit@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1093
+Libtool patch applies just fine.
+mbdesktop_modules is installed by the matchbox-desktop and we
+don't have to overwrite it with our copy(contains wrong paths).
 
+Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+---
 
+ .../matchbox/matchbox-desktop/matchbox-desktop.mk  |    7 -------
+ .../matchbox/matchbox-desktop/mbdesktop_modules    |    9 ---------
+ 2 files changed, 0 insertions(+), 16 deletions(-)
+ delete mode 100644 package/matchbox/matchbox-desktop/mbdesktop_modules
 
-
-
---- Comment #3 from Mike <mac@mcrowe.com>  2010-04-06 20:09:13 UTC ---
-(In reply to comment #2)
-> Thanks Mike for working on this patch. It seems that usb_modeswitch is
-> available as a newer version (1.1.1), but this version only contains the
-> variant of usb_modeswitch that relies on udev and tcl. Do you have any interest
-> in this version ?
-
-I have no interest in usb_modeswitch at all. I just patched its makefile to
-make sure that it continued to compile after the rest of my changes were
-applied.
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+diff --git a/package/matchbox/matchbox-desktop/matchbox-desktop.mk b/package/matchbox/matchbox-desktop/matchbox-desktop.mk
+index a3312af..d5f61c1 100644
+--- a/package/matchbox/matchbox-desktop/matchbox-desktop.mk
++++ b/package/matchbox/matchbox-desktop/matchbox-desktop.mk
+@@ -7,16 +7,9 @@
+ MATCHBOX_DESKTOP_VERSION = 0.9.1
+ MATCHBOX_DESKTOP_SOURCE = matchbox-desktop-$(MATCHBOX_DESKTOP_VERSION).tar.bz2
+ MATCHBOX_DESKTOP_SITE = http://matchbox-project.org/sources/matchbox-desktop/$(MATCHBOX_DESKTOP_VERSION)
+-MATCHBOX_DESKTOP_LIBTOOL_PATCH = NO
+ MATCHBOX_DESKTOP_DEPENDENCIES = matchbox-lib
+ MATCHBOX_DESKTOP_CONF_OPT = --enable-expat
+ 
+-define MATCHBOX_DESKTOP_POST_INSTALL_FIXES
+- cp -f ./package/matchbox/matchbox-desktop/mbdesktop_modules $(TARGET_DIR)/etc/matchbox/
+-endef
+-
+-MATCHBOX_DESKTOP_POST_INSTALL_TARGET_HOOKS += MATCHBOX_DESKTOP_POST_INSTALL_FIXES
+-
+ #############################################################
+ 
+ ifeq ($(BR2_PACKAGE_STARTUP_NOTIFICATION),y)
+diff --git a/package/matchbox/matchbox-desktop/mbdesktop_modules b/package/matchbox/matchbox-desktop/mbdesktop_modules
+deleted file mode 100644
+index 8206dad..0000000
+--- a/package/matchbox/matchbox-desktop/mbdesktop_modules
++++ /dev/null
+@@ -1,9 +0,0 @@
+-# This file lists the 'plug-ins' with any arguments to be loaded by
+-# matchbox-desktop. 
+-#
+-# It can be overridden on a per-user basis by copying this file to ~/.matchbox/
+-# and editing. 
+-
+-/usr/lib/tasks.so
+-/usr/lib/dotdesktop.so
+-# /usr/lib/simplefilebrowser.so /
