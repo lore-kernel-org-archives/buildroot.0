@@ -1,79 +1,37 @@
-From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
-Date: Tue, 06 Apr 2010 22:24:12 +0300
-Subject: [Buildroot] [git commit master] matchbox: convert to autotools,
- fix build with start-notification, libxft
-In-Reply-To: <4BBA5521.40900@gmail.com>
-References: <20100405092238.EDD8888D31@busybox.osuosl.org>
-	<4BBA5521.40900@gmail.com>
-Message-ID: <4BBB8A5C.80403@gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 06 Apr 2010 21:53:51 +0200
+Subject: [Buildroot] [PATCH 1/1] libaio: convert to the GENTARGETS
+	infrastructure
+In-Reply-To: <1911edfc3f1f1e27098dca2e682f76bf7bc6f128.1270581037.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Tue, 6 Apr 2010 21:10:47 +0200")
+References: <cover.1270581037.git.thomas.petazzoni@free-electrons.com>
+	<cover.1270581037.git.thomas.petazzoni@free-electrons.com>
+	<1911edfc3f1f1e27098dca2e682f76bf7bc6f128.1270581037.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87tyroqrw0.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/06/2010 12:24 AM, Paulius Zaleckas wrote:
-> On 04/05/2010 11:47 AM, Will Wagner wrote:
->>
->> commit:
->> http://git.buildroot.net/buildroot/commit/?id=f94830d0e5a409b2e2dc30a4e002c180fe09ec4e
->>
->> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->>
->> Signed-off-by: Will Wagner<will_wagner@carallon.com>
->> Signed-off-by: Peter Korsgaard<jacmet@sunsite.dk>
->
-> There is one more problem...
-> matchbox-desktop fails to load its modules.
-> Modules are installed to /usr/lib/matchbox/desktop
-> but it doesn't try to load them from here.
->
-> strace output:
-> write(1, "matchbox-desktop: loading /usr/li"..., 63) = 63
-> open("/usr/lib/tasks.so", O_RDONLY) = -1 ENOENT (No such file or directory)
-> open("/home/paulius/buildroot/output/build/staging_dir/usr/lib/tasks.so", O_RDONLY)
-> = -1 ENOENT (No such file or directory)
-> open("/lib/tasks.so", O_RDONLY) = -1 ENOENT (No such file or directory)
-> open("/lib/tasks.so", O_RDONLY) = -1 ENOENT (No such file or directory)
-> open("/usr/lib/tasks.so", O_RDONLY) = -1 ENOENT (No such file or directory)
-> open("/usr/X11R6/lib/tasks.so", O_RDONLY) = -1 ENOENT (No such file or
-> directory)
-> write(2, "File not found"..., 14) = 14
-> write(1, "matchbox-desktop: loading /usr/li"..., 68) = 68
-> open("/usr/lib/dotdesktop.so", O_RDONLY) = -1 ENOENT (No such file or
-> directory)
-> open("/home/paulius/buildroot/output/build/staging_dir/usr/lib/dotdesktop.so",
-> O_RDONLY) = -1 ENOENT (No such file or directory)
-> open("/lib/dotdesktop.so", O_RDONLY) = -1 ENOENT (No such file or
-> directory)
-> open("/lib/dotdesktop.so", O_RDONLY) = -1 ENOENT (No such file or
-> directory)
-> open("/usr/lib/dotdesktop.so", O_RDONLY) = -1 ENOENT (No such file or
-> directory)
-> open("/usr/X11R6/lib/dotdesktop.so", O_RDONLY) = -1 ENOENT (No such file
-> or directory)
-> write(2, "File not found"..., 14) = 14
-> write(2, "matchbox-desktop: failed to load "..., 51) = 51
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-I have found the reason it worked earlier:
+ Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Thomas> ---
+ Thomas>  package/libaio/libaio-0.3.109-arches.patch  |  660 +++++++++++++++++++++++++++
+ Thomas>  package/libaio/libaio-0.3.109-destdir.patch |   17 +
 
--$(TARGET_DIR)/usr/bin/$(MATCHBOX_DP_BIN): $(STAGING_DIR)/usr/bin/$(MATCHBOX_DP_BIN)
-- cp -dpf $(STAGING_DIR)/usr/bin/$(MATCHBOX_DP_BIN) $(TARGET_DIR)/usr/bin/
-- -$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/bin/$(MATCHBOX_DP_BIN)
-- cp -dpf $(STAGING_DIR)/usr/lib/dotdesktop.so $(TARGET_DIR)/usr/lib/
-- -$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/dotdesktop.so
-- cp -dpf $(STAGING_DIR)/usr/lib/simplefilebrowser.so $(TARGET_DIR)/usr/lib/
-- -$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/simplefilebrowser.so
-- cp -dpf $(STAGING_DIR)/usr/lib/tasks.so $(TARGET_DIR)/usr/lib/
-- -$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/tasks.so
+Thanks, but I really think we should document the patches better. The
+ptxdist guys suggested some time ago to do it like the kernel -
+E.G. description header with Signed-off-by from the author.
+I've already done that for most of the newer patches. You mentioned
+something about these patches coming from OE - That would be useful info
+to mention (preferably with a link so people can go look if there's an
+updated version when we need to bump the version). The same about the
+upstream status - Has it been submitted? If so, link to mailing list
+archive / bugzilla.
 
-It was installing these plug-ins to /usr/lib and now they are installed
-to /usr/lib/matchbox/desktop
+Could you fix that and resend? Thanks!
 
->> Patch is too large, so refusing to show it
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->>
->
+-- 
+Bye, Peter Korsgaard
