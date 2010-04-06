@@ -1,59 +1,24 @@
-From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
-Date: Tue, 06 Apr 2010 23:36:53 +0300
-Subject: [Buildroot] [PATCH] matchbox-desktop: fix compilation and
-	installation
-Message-ID: <20100406203653.2470.27265.stgit@localhost.localdomain>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Wed, 07 Apr 2010 00:47:50 +0200
+Subject: [Buildroot] [PATCH] Fix external toolchain sysroot detection
+Message-ID: <20100406224729.23635.86404.stgit@roazhon.bzh.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Libtool patch applies just fine.
-mbdesktop_modules is installed by the matchbox-desktop and we
-don't have to overwrite it with our copy(contains wrong paths).
+This patch should fix the case when the external toolchain was built
+by buildroot. It also has the nice side-effect of being much more simpler.
 
-Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
 ---
 
- .../matchbox/matchbox-desktop/matchbox-desktop.mk  |    7 -------
- .../matchbox/matchbox-desktop/mbdesktop_modules    |    9 ---------
- 2 files changed, 0 insertions(+), 16 deletions(-)
- delete mode 100644 package/matchbox/matchbox-desktop/mbdesktop_modules
+Yann E. MORIN (1):
+      toolchain: fix using external toolchains built with buildroot
 
-diff --git a/package/matchbox/matchbox-desktop/matchbox-desktop.mk b/package/matchbox/matchbox-desktop/matchbox-desktop.mk
-index a3312af..d5f61c1 100644
---- a/package/matchbox/matchbox-desktop/matchbox-desktop.mk
-+++ b/package/matchbox/matchbox-desktop/matchbox-desktop.mk
-@@ -7,16 +7,9 @@
- MATCHBOX_DESKTOP_VERSION = 0.9.1
- MATCHBOX_DESKTOP_SOURCE = matchbox-desktop-$(MATCHBOX_DESKTOP_VERSION).tar.bz2
- MATCHBOX_DESKTOP_SITE = http://matchbox-project.org/sources/matchbox-desktop/$(MATCHBOX_DESKTOP_VERSION)
--MATCHBOX_DESKTOP_LIBTOOL_PATCH = NO
- MATCHBOX_DESKTOP_DEPENDENCIES = matchbox-lib
- MATCHBOX_DESKTOP_CONF_OPT = --enable-expat
- 
--define MATCHBOX_DESKTOP_POST_INSTALL_FIXES
-- cp -f ./package/matchbox/matchbox-desktop/mbdesktop_modules $(TARGET_DIR)/etc/matchbox/
--endef
--
--MATCHBOX_DESKTOP_POST_INSTALL_TARGET_HOOKS += MATCHBOX_DESKTOP_POST_INSTALL_FIXES
--
- #############################################################
- 
- ifeq ($(BR2_PACKAGE_STARTUP_NOTIFICATION),y)
-diff --git a/package/matchbox/matchbox-desktop/mbdesktop_modules b/package/matchbox/matchbox-desktop/mbdesktop_modules
-deleted file mode 100644
-index 8206dad..0000000
---- a/package/matchbox/matchbox-desktop/mbdesktop_modules
-+++ /dev/null
-@@ -1,9 +0,0 @@
--# This file lists the 'plug-ins' with any arguments to be loaded by
--# matchbox-desktop. 
--#
--# It can be overridden on a per-user basis by copying this file to ~/.matchbox/
--# and editing. 
--
--/usr/lib/tasks.so
--/usr/lib/dotdesktop.so
--# /usr/lib/simplefilebrowser.so /
+
+ toolchain/external-toolchain/ext-tool.mk |   10 ++--------
+ 1 files changed, 2 insertions(+), 8 deletions(-)
+
+-- 
+Signature
