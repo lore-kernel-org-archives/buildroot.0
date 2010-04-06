@@ -1,61 +1,54 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Tue, 6 Apr 2010 15:15:25 +0000 (UTC)
-Subject: [Buildroot] External toolchain built by buildroot no longer
-	supported.
-References: <hpfh61$drp$1@dough.gmane.org> <87y6h0r5e9.fsf@macbook.be.48ers.dk>
-Message-ID: <hpfj6c$mpa$1@dough.gmane.org>
+From: Thomas Brandstetter <thomas.brandstetter@me.com>
+Date: Tue, 06 Apr 2010 17:47:29 +0200
+Subject: [Buildroot] 2.6.33.2 kernel headers patch
+In-Reply-To: <3C3F38C6-6CB3-4F69-ACF7-3229CB42C39F@me.com>
+References: <3C3F38C6-6CB3-4F69-ACF7-3229CB42C39F@me.com>
+Message-ID: <A24AAD60-7EAA-49D9-B18C-28728690408D@me.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2010-04-06, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Grant" == Grant Edwards <grant.b.edwards@gmail.com> writes:
->
-> Grant> As of this commit
-> Grant>   http://git.buildroot.org/buildroot/commit/?id=3b7aee23f2ab732f06b8a090ca002fb102d547ee
->
-> Grant> use of of external toolchains built by buildroot is no longer
-> Grant> possible.
->
-> Grant> Are we to assume that crosstool-NG is now the "officially supported"
-> Grant> source for external toolchains?
->
-> Long term I think users are better off with using crosstool-NG for
-> their toolchains, as that has a more active development community.
+Ok,
 
-That seems to be the case.
+this is the third email from my side without any reply/feedback. Am I doing something wrong or is there a hidden "How to write an email to this mail archive list" paper I haven't seen?
 
-> The buildroot toolchains work, and I do small fixes / version
-> updates, but noone is really doing active development on them.
->
-> As an example, GDB 7.x is out since October, but still not in BR (I
-> had a quick look, but didn't get it to work).
->
-> With that said, I would very much like to support BR toolchains as
-> external toolchains if it's possible without too many dirty hacks
-> (sorry, haven't been following the recent discussion about it).
+If my writing is to harsh I apologize but this is frustrating.
 
-AFAICT, the recent commit relies on the assumption that both --prefix
-and --sysroot values are correct and that the "prefix" is a child of
-"sysroot".
+Cheers
 
-That's not the case for buildroot toolchains.  They have a prefix of
-"/usr" and a sysroot pointing to the output/staging directory.  I'm
-guessing that setting the buildroot toolchain's --prefix value to
-output/staging/usr should fix the problem, but I'm still a bit fuzzy
-on how the recently committed change works.
+Thomas
+ 
+On Apr 3, 2010, at 2:39 PM, Thomas Brandstetter wrote:
 
-> Besides the advantages you listed there's also the fact that it will
-> make migration easier in the future - E.G.:
->
-> BR with internal toolchain -> BR with external BR toolchain -> BR with
-> crosstool-NG toolchain.
-
-True.
-
--- 
-Grant Edwards               grant.b.edwards        Yow! My mind is making
-                                  at               ashtrays in Dayton ...
-                              gmail.com            
+> Today I tried buildroot with the latest kernel headers. I got the following error with udev:
+> 
+> 
+> /buildroot/build_x86/output/staging/usr/include/scsi/scsi.h:152: error: expected specifier-qualifier-list before 'u8'
+> /buildroot/build_x86/output/staging/usr/include/scsi/scsi.h: In function 'scsi_varlen_cdb_length':
+> /buildroot/build_x86/output/staging/usr/include/scsi/scsi.h:163: error: 'struct scsi_varlen_cdb_hdr' has no member named 'additional_cdb_length'
+> make[2]: *** [scsi_serial.o] Error 1
+> make[2]: *** Waiting for unfinished jobs....
+> make[2]: Leaving directory `/buildroot/build_x86/output/build/udev-114/extras/scsi_id'
+> make[1]: *** [all] Error 1
+> make[1]: Leaving directory `/buildroot/build_x86/output/build/
+> 
+> 
+> This error indicates, that the patch:
+> 
+> linux-2.6.32.11-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
+> 
+> should also be applied to the latest kernel headers eq.
+> 
+> linux-2.6.33.2-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
+> 
+> Can someone confirm this?
+> 
+> THX
+> 
+> Thomas
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
