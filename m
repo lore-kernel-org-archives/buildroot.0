@@ -1,43 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Apr 2010 20:12:25 +0200
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Tue, 6 Apr 2010 18:19:31 +0000 (UTC)
 Subject: [Buildroot] External toolchain built by buildroot no longer
- supported.
-In-Reply-To: <hpfh61$drp$1@dough.gmane.org>
+	supported.
 References: <hpfh61$drp$1@dough.gmane.org>
-Message-ID: <20100406201225.2b24b255@surf>
+	<87y6h0r5e9.fsf@macbook.be.48ers.dk> <hpfj6c$mpa$1@dough.gmane.org>
+	<201004061842.53138.yann.morin.1998@anciens.enib.fr>
+Message-ID: <hpftvj$3b3$2@dough.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Grant,
+On 2010-04-06, Yann E. MORIN <yann.morin.1998@anciens.enib.fr> wrote:
 
-On Tue, 6 Apr 2010 14:41:05 +0000 (UTC)
-Grant Edwards <grant.b.edwards@gmail.com> wrote:
+>>> Grant> use of of external toolchains built by buildroot is no longer
+>>> Grant> possible.
+>
+> We've discussed the issue on IRC yesterday evening, and I'm looking
+> if I can make a quick fix (something in between a proper fix and a
+> nice hack), but I'm not close to that yet.
 
-> Are we to assume that crosstool-NG is now the "officially supported"
-> source for external toolchains?
+I was going try changing the --prefix that buildroot uses to configure
+toolchain stuff to be consistent with the --sysroot value but...
 
-No. Yann (the author of the commit) and I have started discussing the
-issue yesterday evening, and tried to find a satisfying solution. We
-hope to get such a solution integrated before 2010.05.
+>> AFAICT, the recent commit relies on the assumption that both --prefix
+>> and --sysroot values are correct and that the "prefix" is a child of
+>> "sysroot".
+>
+> No, the other way around: prefix is a parent of sysroot
+> (directory-wise).
 
-> When I asked a few months ago if there was any reason I shouldn't use
-> external toolchains built by buildroot, I was told there were none.
-> 
-> Has that changed?
+For some reason I always have that backwared in my head.
 
-No, it hasn't changed. But there are bugs, and we need to fix them.
-External toolchain support is still in its early ages, and it needs to
-be improved. Your current feedback and comments are therefore very
-welcome.
+>> That's not the case for buildroot toolchains.  They have a prefix of
+>> "/usr" and a sysroot pointing to the output/staging directory.  I'm
+>
+> Yes, that's because buildroot plays trick with those values. The code
+> dates back June 2007, and the exact reason for doing so is not yet
+> known.
+>
+> I'm trying to bring buildroot toolchains more in sync with a
+> /standard/ way of handling paths, but I have to check regressions.
+>
+> Anyway, I think that 'old' toolchains build prior the change I'm
+> doing will not work.
 
-Regards,
+No worries.  I'll either use crosstool-NG or we can fix the way
+buildroot configures toolchains.
 
-Thomas
+>> guessing that setting the buildroot toolchain's --prefix value to
+>> output/staging/usr should fix the problem,
+>
+> More complex than that, unfortunately... :-( I tried, and it does not
+> work so far (a few other things to change as well, eg. binutils).
+
+Let me know if there's anything I can do to help.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Grant Edwards               grant.b.edwards        Yow! ONE LIFE TO LIVE for
+                                  at               ALL MY CHILDREN in ANOTHER
+                              gmail.com            WORLD all THE DAYS OF
+                                                   OUR LIVES.
