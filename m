@@ -1,51 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Wed, 07 Apr 2010 00:50:10 +0200
-Subject: [Buildroot] [PATCH] toolchain: fix using external toolchains built
-	with buildroot
-In-Reply-To: <20100406224918.23853.83103.stgit@roazhon.bzh.lan>
-References: <20100406224918.23853.83103.stgit@roazhon.bzh.lan>
-Message-ID: <20100406225010.23853.36745.stgit@roazhon.bzh.lan>
+From: Chris Kerios <ckerios@gmail.com>
+Date: Tue, 6 Apr 2010 21:09:50 -0400
+Subject: [Buildroot] module-init-tools build problem in Buildroot
+	buildroot-2010.02
+Message-ID: <w2p47b4a4c91004061809l6fbeffdz4cb71ef7d7a19557@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Hello,
+I am a relative noob when it comes to using buildroot as I am just getting
+started with embedded on an old AVR32ngw board.  I am running Fedora 12 as
+my host and I am trying to build the toolchain, kernel, etc. using buildroot
+from scratch.  Cool work/tool by the way!  Anyway I am getting the following
+error message attached below.  I have scoured the mailing list archive on
+this and can only find 1 reference in which the person asked the question
+and then followed up immediately with notice that he fixed the problem.  He
+only left a vague reference that it had something to do with glibc not being
+built for his target.  If this is the case, I can't figure it out as the
+module-init-tools is built after the successful build of gcc, ulibC, gdb,
+etc.  If it has anything to do with my host I have all the glibc and
+glibc-devel built on the Fedora side as well.  Dumb question here: Which C
+lib is it looking for?  The ulibC under the buildroot directory I am
+building the toolchain/cross-compiler in or the Fedora host glibc?
 
-The toolchains built with buildroot use specially crafted paths for their
-sysroot and prefix. Fix that by asking gcc where it finds a file we
-know by relative path to the sysroot.
+Am I missing something here?
+Thanks in Advance.
 
-This has the side effect of greatly simplifying the sysroot detection
-in every cases tested so far (BR toolchains, CT-NG toolchains, and
-CodeSourcery toolchains).
 
-Fixes bug #851.
-
-Thanks Thomas Petazzoni for the hint and some testings.
-Thanks Grant Edwards for the report and the comments.
----
- toolchain/external-toolchain/ext-tool.mk |    9 +--------
- 1 files changed, 1 insertions(+), 8 deletions(-)
-
-diff --git a/toolchain/external-toolchain/ext-tool.mk b/toolchain/external-toolchain/ext-tool.mk
-index 80bdae6..4493281 100644
---- a/toolchain/external-toolchain/ext-tool.mk
-+++ b/toolchain/external-toolchain/ext-tool.mk
-@@ -205,14 +205,7 @@ ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
- EXTERNAL_LIBS+=libstdc++.so
- endif
- 
--# This dance is needed because the toolchain may have been relocated, so the
--# configured paths may no longer match; fortunately, the sysroot moves along
--# the toolchain, so is always at the same place relative to the toolchain's
--# current location.
--CFG_PREFIX_DIR=$(shell LANG=C $(TARGET_CC) -v 2>&1 | grep ^Configured | tr " " "\n" | grep -- "--prefix=" | cut -f2 -d=)
--CFG_SYSROOT_DIR=$(shell LANG=C $(TARGET_CC) -v 2>&1 | grep ^Configured | tr " " "\n" | grep -- "--with-sysroot=" | cut -f2 -d=)
--REL_SYSROOT_DIR=$(shell echo "$(CFG_SYSROOT_DIR)" |sed -r -e 's:^$(CFG_PREFIX_DIR)::;')
--SYSROOT_DIR=$(TOOLCHAIN_EXTERNAL_PATH)/$(REL_SYSROOT_DIR)
-+SYSROOT_DIR=$(shell readlink -f $$(LANG=C $(TARGET_CC) -print-file-name=libc.a |sed -r -e 's:usr/lib/libc\.a::;'))
- 
- $(STAMP_DIR)/ext-toolchain-installed:
- 	@echo "Checking external toolchain settings"
+modinfo.c: In function ?main?:
+modinfo.c:338: warning: ?infosize? may be used uninitialized in this
+function
+/usr/lib/ccache/gcc  -g -O2 -Wunused -Wall   -o modinfo  modinfo.o
+zlibsupport.o
+/usr/lib/ccache/gcc  -g -O2 -Wunused -Wall   -o insmod.static -static
+insmod.o
+/usr/bin/ld: cannot find -lc
+collect2: ld returned 1 exit status
+make[1]: *** [insmod.static] Error 1
+make[1]: Leaving directory
+`/home/chris/buildroot-avr32-v2.3.0/toolchain_build_avr32/module-init-tools-3.2.2'
+make: ***
+[/home/chris/buildroot-avr32-v2.3.0/toolchain_build_avr32/module-init-tools-3.2.2/depmod]
+Error 2
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100406/f6ffc3e4/attachment-0001.htm>
