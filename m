@@ -1,37 +1,31 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 07 Apr 2010 09:25:18 +0200
-Subject: [Buildroot] 2.6.33.2 kernel headers patch
-In-Reply-To: <A24AAD60-7EAA-49D9-B18C-28728690408D@me.com> (Thomas
-	Brandstetter's message of "Tue, 06 Apr 2010 17:47:29 +0200")
-References: <3C3F38C6-6CB3-4F69-ACF7-3229CB42C39F@me.com>
-	<A24AAD60-7EAA-49D9-B18C-28728690408D@me.com>
-Message-ID: <87d3ybrag1.fsf@macbook.be.48ers.dk>
+Date: Wed, 07 Apr 2010 09:51:13 +0200
+Subject: [Buildroot] [PATCH] toolchain: fix using external toolchains
+	built with buildroot
+In-Reply-To: <20100406225010.23853.36745.stgit@roazhon.bzh.lan> (Yann
+	E. MORIN's message of "Wed, 07 Apr 2010 00:50:10 +0200")
+References: <20100406224918.23853.83103.stgit@roazhon.bzh.lan>
+	<20100406225010.23853.36745.stgit@roazhon.bzh.lan>
+Message-ID: <878w8zr98u.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Brandstetter <thomas.brandstetter@me.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
 
- Thomas> Ok,
+ Yann> From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+ Yann> The toolchains built with buildroot use specially crafted paths for their
+ Yann> sysroot and prefix. Fix that by asking gcc where it finds a file we
+ Yann> know by relative path to the sysroot.
 
- Thomas> this is the third email from my side without any
- Thomas> reply/feedback. Am I doing something wrong or is there a hidden
- Thomas> "How to write an email to this mail archive list" paper I
- Thomas> haven't seen?
+ Yann> This has the side effect of greatly simplifying the sysroot detection
+ Yann> in every cases tested so far (BR toolchains, CT-NG toolchains, and
+ Yann> CodeSourcery toolchains).
 
- Thomas> If my writing is to harsh I apologize but this is frustrating.
-
-I can understand that - But don't forget that buildroot is an open
-source project with people working on it in their spare time. You'll
-need to be more patient or assist yourself (E.G. for the issues you
-reported you could have tested your proposed fixes and/or sent patches).
-
-When using git rather than released versions, some amount of breakage is
-bound to happen.
-
-I believe this is pretty much like most other open source projects.
+Committed, thanks all of you. Yann, don' forget to sign off on your
+patches (-s option).
 
 -- 
 Bye, Peter Korsgaard
