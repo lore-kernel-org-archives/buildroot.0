@@ -1,36 +1,31 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 08 Apr 2010 10:23:18 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	codesourcery-toolchain-support
-In-Reply-To: <cover.1270502861.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Mon, 5 Apr 2010 23:27:57 +0200")
-References: <cover.1270502861.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87bpdupd3d.fsf@macbook.be.48ers.dk>
+From: Wu, Josh <Josh.wu@atmel.com>
+Date: Thu, 8 Apr 2010 11:06:50 +0200
+Subject: [Buildroot] [PATCH]Add a fbv-1.0b patch to support bgr555
+	framebuffer format.
+In-Reply-To: <87fx36pe16.fsf@macbook.be.48ers.dk>
+References: <C83D7CE8356557448A893798C8F9931D050E19B3@frimb01.corp.atmel.com>
+	<87fx36pe16.fsf@macbook.be.48ers.dk>
+Message-ID: <C83D7CE8356557448A893798C8F9931D050E1AD1@frimb01.corp.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hi, 
 
- Thomas> The following changes since commit 6cdcc4d7d8134f4b60f0eb9039090f9ad4c38366:
- Thomas>   Peter Korsgaard (1):
- Thomas>         gcc: hide shared libgcc option if BR2_PREFER_STATIC_LIB is enabled
+> Committed, thanks.
+Thanks.
 
- Thomas> are available in the git repository at:
+> I fixed two minor issues:
+> - The patch was marked executable (made on Windows?)
+I think it is because I copied the patch to Windows and copied it back. I will take care of this next time.
 
- Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot codesourcery-toolchain-support
+> - There was no patch header describing what the patch does and who made
+> it. See
+> http://lists.busybox.net/pipermail/buildroot/2010-April/033240.html for
+> more info about the format we would like to use.
+Ok. Understand.
 
-Looks good, but:
-
-From git://git.busybox.net/~tpetazzoni/git/buildroot
- * branch            codesourcery-toolchain-support -> FETCH_HEAD
-Auto-merging toolchain/external-toolchain/ext-tool.mk
-CONFLICT (content): Merge conflict in toolchain/external-toolchain/ext-tool.mk
-Automatic merge failed; fix conflicts and then commit the result.
-
-Could you rebase please?
-
--- 
-Bye, Peter Korsgaard
+Best Regards,
+Josh Wu
