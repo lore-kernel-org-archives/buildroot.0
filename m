@@ -1,11 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 08 Apr 2010 21:59:38 +0200
-Subject: [Buildroot] [PATCH 12/16] xkeyboard-config: bump version
-In-Reply-To: <1270126006-22405-12-git-send-email-will_wagner@carallon.com>
-	(Will Wagner's message of "Thu, 1 Apr 2010 13:46:42 +0100")
+Date: Thu, 08 Apr 2010 22:01:12 +0200
+Subject: [Buildroot] [PATCH 13/16] xproto_evieext: bump version
+In-Reply-To: <1270126006-22405-13-git-send-email-will_wagner@carallon.com>
+	(Will Wagner's message of "Thu, 1 Apr 2010 13:46:43 +0100")
 References: <1270126006-22405-1-git-send-email-will_wagner@carallon.com>
-	<1270126006-22405-12-git-send-email-will_wagner@carallon.com>
-Message-ID: <87bpdtn2ad.fsf@macbook.be.48ers.dk>
+	<1270126006-22405-13-git-send-email-will_wagner@carallon.com>
+Message-ID: <874ojln27r.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
