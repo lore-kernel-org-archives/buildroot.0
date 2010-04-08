@@ -1,49 +1,43 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 07 Apr 2010 22:06:16 +0200
-Subject: [Buildroot] 2.6.33.2 kernel headers patch
-In-Reply-To: <283831A4-C72C-440B-8959-4A1904239F54@me.com> (Thomas
-	Brandstetter's message of "Wed, 07 Apr 2010 21:51:39 +0200")
-References: <3C3F38C6-6CB3-4F69-ACF7-3229CB42C39F@me.com>
-	<A24AAD60-7EAA-49D9-B18C-28728690408D@me.com>
-	<87d3ybrag1.fsf@macbook.be.48ers.dk>
-	<283831A4-C72C-440B-8959-4A1904239F54@me.com>
-Message-ID: <87zl1fownb.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu,  8 Apr 2010 02:05:45 +0000 (UTC)
+Subject: [Buildroot] [Bug 1513] New: Enable powerpc e300c2,
+ e300c3 and e500mc optimization
+Message-ID: <bug-1513-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Brandstetter <thomas.brandstetter@me.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=1513
 
- Thomas> You're totally right, but I thought there is something wrong
- Thomas> with the mailing list because nobody wrote anything in reply
- Thomas> :-)
+              Host: i686-linux
+            Target: powerpc-linux
+           Summary: Enable powerpc e300c2, e300c3 and e500mc optimization
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: trivial
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: gustavo at zacarias.com.ar
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-You can always check the archive if you're in doubt:
 
-http://lists.busybox.net/pipermail/buildroot/
+Created an attachment (id=1489)
+ --> (https://bugs.busybox.net/attachment.cgi?id=1489)
+Enable powerpc e300c2, e300c3 and e500mc optimization
 
- Thomas> I'm not a developer and I'm not very familiar with git. Is
- Thomas> there a good documentation for Buildroot available how to send
- Thomas> git patches via the command line?
+This patch enables e300c2, e300c3 and e500mc powerpc gcc optimizations.
+These cores are present in some PowerQUICC and QorIQ processors from Freescale.
+Tested with e300c3 and a mpc8315e-rdba eval board.
 
-Buildroot is mainly a developer tool, but we do have documentation:
-
-http://buildroot.net/buildroot.html
-http://buildroot.net/git.html
-
-The last has a link to the git homepage. There's very little buildroot
-specific about how we use git, so a quick google search should find you
-plenty of info (hint: we use the same approach like many other projects
-like the Linux kernel, U-boot, ..).
-
-The git commands you are looking for are:
-
-git checkout -b <branch>
-git commit
-git format-patch -s master
-git send-email --to buildroot at uclibc.org 0*.patch
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
