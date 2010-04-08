@@ -1,24 +1,17 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 08 Apr 2010 07:40:52 +0200
-Subject: [Buildroot] [PATCH] matchbox-desktop: fix compilation and
-	installation
-In-Reply-To: <20100406203653.2470.27265.stgit@localhost.localdomain> (Paulius
-	Zaleckas's message of "Tue, 06 Apr 2010 23:36:53 +0300")
-References: <20100406203653.2470.27265.stgit@localhost.localdomain>
-Message-ID: <87r5mqpkm3.fsf@macbook.be.48ers.dk>
+From: Wu, Josh <Josh.wu@atmel.com>
+Date: Thu, 8 Apr 2010 08:35:45 +0200
+Subject: [Buildroot] [PATCH]Add a fbv-1.0b patch to support bgr555
+	framebuffer format.
+Message-ID: <C83D7CE8356557448A893798C8F9931D050E19B3@frimb01.corp.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Paulius" == Paulius Zaleckas <paulius.zaleckas@gmail.com> writes:
+Hi,
 
- Paulius> Libtool patch applies just fine.
- Paulius> mbdesktop_modules is installed by the matchbox-desktop and we
- Paulius> don't have to overwrite it with our copy(contains wrong paths).
+Here is a patch for fbv-1.0b to add support to bgr555 frame buffer format(at91sam9263ek using this format).
 
-Committed, thanks!
-
--- 
-Bye, Peter Korsgaard
+Best Regards,
+Josh Wu
