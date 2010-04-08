@@ -1,11 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 08 Apr 2010 21:51:57 +0200
-Subject: [Buildroot] [PATCH 09/16] xproto_xf86miscproto: bump version
-In-Reply-To: <1270126006-22405-9-git-send-email-will_wagner@carallon.com>
-	(Will Wagner's message of "Thu, 1 Apr 2010 13:46:39 +0100")
+Date: Thu, 08 Apr 2010 21:58:00 +0200
+Subject: [Buildroot] [PATCH 11/16] xlib_libXfontcache: bump version
+In-Reply-To: <1270126006-22405-11-git-send-email-will_wagner@carallon.com>
+	(Will Wagner's message of "Thu, 1 Apr 2010 13:46:41 +0100")
 References: <1270126006-22405-1-git-send-email-will_wagner@carallon.com>
-	<1270126006-22405-9-git-send-email-will_wagner@carallon.com>
-Message-ID: <87ochtn2n6.fsf@macbook.be.48ers.dk>
+	<1270126006-22405-11-git-send-email-will_wagner@carallon.com>
+Message-ID: <87k4shn2d3.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
