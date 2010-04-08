@@ -1,7 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 8 Apr 2010 22:10:18 +0200
-Subject: [Buildroot] [git commit master] xlib_libXfontcache: bump version
-Message-ID: <20100408201139.EFBAD8B35D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] xproto_xf86miscproto: bump version
+Message-ID: <20100408201139.7964C8B35D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,56 +9,53 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e9f9ef7d67a98a36182e4bf655f93be3d8a6cd1f
+commit: http://git.buildroot.net/buildroot/commit/?id=b7bf7f00770225c82563e3c396f8d36ee1af6bd3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 [Peter: remove version from Config.in help]
 Signed-off-by: Will Wagner <will_wagner@carallon.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                                            |    5 +++--
- package/x11r7/xlib_libXfontcache/Config.in         |    1 -
- .../x11r7/xlib_libXfontcache/xlib_libXfontcache.mk |    2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ CHANGES                                            |    2 +-
+ package/x11r7/xproto_xf86miscproto/Config.in       |    1 -
+ .../xproto_xf86miscproto/xproto_xf86miscproto.mk   |    2 +-
+ 3 files changed, 2 insertions(+), 3 deletions(-)
 
 diff --git a/CHANGES b/CHANGES
-index e8ca5b7..63aa0e7 100644
+index 703c459..12e66a2 100644
 --- a/CHANGES
 +++ b/CHANGES
-@@ -16,8 +16,9 @@
- 	libgcrypt, libglib2, libpng, libxml2, matchbox, mdadm,
+@@ -17,7 +17,7 @@
  	memstat, mesa3d, mtd-utils, nano, openssl, php, pixman, pppd,
  	pthread-stubs, qt, radvd, setserial, squashfs, usb_modeswith,
--	wget, xlib_libX11, xlib_libXfont, xlib_libpciaccess,
--	xproto_dri2proto, xproto_fontcacheproto, xproto_xf86miscproto
-+	wget, xlib_libX11, xlib_libXfont, xlib_libXfontcache,
-+	xlib_libpciaccess, xproto_dri2proto, xproto_fontcacheproto,
-+	xproto_xf86miscproto
+ 	wget, xlib_libX11, xlib_libXfont, xproto_dri2proto,
+-	xproto_fontcacheproto,
++	xproto_fontcacheproto, xproto_xf86miscproto
  
  	Issues resolved (http://bugs.uclibc.org):
  
-diff --git a/package/x11r7/xlib_libXfontcache/Config.in b/package/x11r7/xlib_libXfontcache/Config.in
-index 50d2cce..3a20451 100644
---- a/package/x11r7/xlib_libXfontcache/Config.in
-+++ b/package/x11r7/xlib_libXfontcache/Config.in
-@@ -4,5 +4,4 @@ config BR2_PACKAGE_XLIB_LIBXFONTCACHE
- 	select BR2_PACKAGE_XLIB_LIBXEXT
- 	select BR2_PACKAGE_XPROTO_FONTCACHEPROTO
+diff --git a/package/x11r7/xproto_xf86miscproto/Config.in b/package/x11r7/xproto_xf86miscproto/Config.in
+index e0b614c..cd19ff3 100644
+--- a/package/x11r7/xproto_xf86miscproto/Config.in
++++ b/package/x11r7/xproto_xf86miscproto/Config.in
+@@ -1,5 +1,4 @@
+ config BR2_PACKAGE_XPROTO_XF86MISCPROTO
+ 	bool "xf86miscproto"
  	help
--	  libXfontcache 1.0.4
- 	  X.Org Xfontcache library
-diff --git a/package/x11r7/xlib_libXfontcache/xlib_libXfontcache.mk b/package/x11r7/xlib_libXfontcache/xlib_libXfontcache.mk
-index b51d61b..a0d924b 100644
---- a/package/x11r7/xlib_libXfontcache/xlib_libXfontcache.mk
-+++ b/package/x11r7/xlib_libXfontcache/xlib_libXfontcache.mk
+-	  xf86miscproto 0.9.2
+ 	  X.Org XF86Misc protocol headers
+diff --git a/package/x11r7/xproto_xf86miscproto/xproto_xf86miscproto.mk b/package/x11r7/xproto_xf86miscproto/xproto_xf86miscproto.mk
+index c4317cc..8cf8482 100644
+--- a/package/x11r7/xproto_xf86miscproto/xproto_xf86miscproto.mk
++++ b/package/x11r7/xproto_xf86miscproto/xproto_xf86miscproto.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBXFONTCACHE_VERSION = 1.0.4
-+XLIB_LIBXFONTCACHE_VERSION = 1.0.5
- XLIB_LIBXFONTCACHE_SOURCE = libXfontcache-$(XLIB_LIBXFONTCACHE_VERSION).tar.bz2
- XLIB_LIBXFONTCACHE_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXFONTCACHE_AUTORECONF = NO
+-XPROTO_XF86MISCPROTO_VERSION = 0.9.2
++XPROTO_XF86MISCPROTO_VERSION = 0.9.3
+ XPROTO_XF86MISCPROTO_SOURCE = xf86miscproto-$(XPROTO_XF86MISCPROTO_VERSION).tar.bz2
+ XPROTO_XF86MISCPROTO_SITE = http://xorg.freedesktop.org/releases/individual/proto
+ XPROTO_XF86MISCPROTO_AUTORECONF = NO
 -- 
 1.6.3.3
