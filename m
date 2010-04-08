@@ -1,7 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 8 Apr 2010 22:10:18 +0200
-Subject: [Buildroot] [git commit master] pixman: bump version
-Message-ID: <20100408201137.62E5E8B352@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] pthread-stubs: bump version
+Message-ID: <20100408201138.7536A8B35D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,46 +9,47 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ff72acf78282c93a675eed81451b272e2ee828de
+commit: http://git.buildroot.net/buildroot/commit/?id=7e391f16228a2b05c173b542c4ff8c9fbf1c9c90
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Will Wagner <will_wagner@carallon.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                  |    7 ++++---
- package/pixman/pixman.mk |    2 +-
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ CHANGES                                      |    4 ++--
+ package/x11r7/pthread-stubs/pthread-stubs.mk |    3 ++-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
 diff --git a/CHANGES b/CHANGES
-index 4564aaa..12ba66e 100644
+index 4886a68..1e68d4b 100644
 --- a/CHANGES
 +++ b/CHANGES
-@@ -13,9 +13,10 @@
- 
- 	Updated/fixed packages: busybox, dnsmasq, dosfstools,
+@@ -15,8 +15,8 @@
  	e2fsprogs, fbv, freetype, iperf, iptables, iw, less, libdrm,
--	libgcrypt, libglib2, libpng, libxml2, matchbox, mdadm, memstat,
--	mtd-utils, nano, openssl, php, pppd, qt, radvd, setserial,
--	squashfs, usb_modeswith, wget, xlib_libX11, xlib_libXfont
-+	libgcrypt, libglib2, libpng, libxml2, matchbox, mdadm,
-+	memstat, mtd-utils, nano, openssl, php, pixman, pppd, qt,
-+	radvd, setserial, squashfs, usb_modeswith, wget, xlib_libX11,
-+	xlib_libXfont
+ 	libgcrypt, libglib2, libpng, libxml2, matchbox, mdadm,
+ 	memstat, mesa3d, mtd-utils, nano, openssl, php, pixman, pppd,
+-	qt, radvd, setserial, squashfs, usb_modeswith, wget,
+-	xlib_libX11, xlib_libXfont
++	pthread-stubs, qt, radvd, setserial, squashfs, usb_modeswith,
++	wget, xlib_libX11, xlib_libXfont
  
  	Issues resolved (http://bugs.uclibc.org):
  
-diff --git a/package/pixman/pixman.mk b/package/pixman/pixman.mk
-index 087ab12..8c7a233 100644
---- a/package/pixman/pixman.mk
-+++ b/package/pixman/pixman.mk
-@@ -3,7 +3,7 @@
- # pixman
+diff --git a/package/x11r7/pthread-stubs/pthread-stubs.mk b/package/x11r7/pthread-stubs/pthread-stubs.mk
+index b62084b..f40332a 100644
+--- a/package/x11r7/pthread-stubs/pthread-stubs.mk
++++ b/package/x11r7/pthread-stubs/pthread-stubs.mk
+@@ -3,10 +3,11 @@
+ # pthread-stubs
  #
- ################################################################################
--PIXMAN_VERSION = 0.17.4
-+PIXMAN_VERSION = 0.17.6
- PIXMAN_SOURCE = pixman-$(PIXMAN_VERSION).tar.gz
- PIXMAN_SITE = http://cairographics.org/releases/
- PIXMAN_AUTORECONF = NO
+ #############################################################
+-PTHREAD_STUBS_VERSION = 0.1
++PTHREAD_STUBS_VERSION = 0.3
+ PTHREAD_STUBS_SOURCE = libpthread-stubs-$(PTHREAD_STUBS_VERSION).tar.bz2
+ PTHREAD_STUBS_SITE = http://xcb.freedesktop.org/dist/
+ 
++PTHREAD_STUBS_LIBTOOL_PATCH = NO
+ PTHREAD_STUBS_INSTALL_STAGING = YES
+ 
+ $(eval $(call AUTOTARGETS,package/x11r7,pthread-stubs))
 -- 
 1.6.3.3
