@@ -1,8 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 9 Apr 2010 16:19:13 +0200
-Subject: [Buildroot] [git commit master] romfs: convert to ROOTFS_TARGET
-	infrastructure
-Message-ID: <20100409142129.C382120E64@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] cdrkit: new package
+Message-ID: <20100409142123.CE40A20E42@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,53 +9,118 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=aa50ffdbffde0d6012f50a433d0404186e74eacc
+commit: http://git.buildroot.net/buildroot/commit/?id=1ef21e7bd454e531286d33c720e9f49ace3ecc6a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Supported both for the target and the host. Will be used by the root
+filesystem generation code, thanks to genisoimage.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- target/romfs/romfs.mk |   30 ++++++------------------------
- 1 files changed, 6 insertions(+), 24 deletions(-)
+ package/Config.in        |    1 +
+ package/cdrkit/Config.in |   11 ++++++++
+ package/cdrkit/cdrkit.mk |   63 ++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 75 insertions(+), 0 deletions(-)
+ create mode 100644 package/cdrkit/Config.in
+ create mode 100644 package/cdrkit/cdrkit.mk
 
-diff --git a/target/romfs/romfs.mk b/target/romfs/romfs.mk
-index e4b8ff5..9719478 100644
---- a/target/romfs/romfs.mk
-+++ b/target/romfs/romfs.mk
-@@ -6,28 +6,10 @@
+diff --git a/package/Config.in b/package/Config.in
+index f3f4213..0dac949 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -146,6 +146,7 @@ endmenu
  
- ROMFS_TARGET=$(IMAGE).romfs
- 
--romfsroot: host-fakeroot host-genromfs makedevs
--	# Use fakeroot to pretend all target binaries are owned by root
--	rm -f $(BUILD_DIR)/_fakeroot.$(notdir $(ROMFS_TARGET))
--	touch $(BUILD_DIR)/.fakeroot.00000
--	cat $(BUILD_DIR)/.fakeroot* > $(BUILD_DIR)/_fakeroot.$(notdir $(ROMFS_TARGET))
--	echo "chown -R 0:0 $(TARGET_DIR)" >> $(BUILD_DIR)/_fakeroot.$(notdir $(ROMFS_TARGET))
--ifneq ($(TARGET_DEVICE_TABLE),)
--	# Use fakeroot to pretend to create all needed device nodes
--	echo "$(HOST_DIR)/usr/bin/makedevs -d $(TARGET_DEVICE_TABLE) $(TARGET_DIR)" \
--		>> $(BUILD_DIR)/_fakeroot.$(notdir $(ROMFS_TARGET))
--endif
--	# Use fakeroot so genromfs believes the previous fakery
--	echo "$(HOST_DIR)/usr/bin/genromfs -d $(TARGET_DIR) -f $(ROMFS_TARGET)" >> $(BUILD_DIR)/_fakeroot.$(notdir $(ROMFS_TARGET))
--	chmod a+x $(BUILD_DIR)/_fakeroot.$(notdir $(ROMFS_TARGET))
--	$(HOST_DIR)/usr/bin/fakeroot -- $(BUILD_DIR)/_fakeroot.$(notdir $(ROMFS_TARGET))
--	- at rm -f $(BUILD_DIR)/_fakeroot.$(notdir $(ROMFS_TARGET))
-+ROOTFS_ROMFS_DEPENDENCIES = host-genromfs
- 
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(BR2_TARGET_ROOTFS_ROMFS),y)
--TARGETS+=romfsroot
--endif
-+define ROOTFS_ROMFS_CMD
-+	$(HOST_DIR)/usr/bin/genromfs -d $(TARGET_DIR) -f $$@
+ menu "Hardware handling"
+ source "package/acpid/Config.in"
++source "package/cdrkit/Config.in"
+ source "package/cramfs/Config.in"
+ source "package/dbus/Config.in"
+ source "package/dbus-glib/Config.in"
+diff --git a/package/cdrkit/Config.in b/package/cdrkit/Config.in
+new file mode 100644
+index 0000000..2e25581
+--- /dev/null
++++ b/package/cdrkit/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_CDRKIT
++       # Needed for libbz
++       select BR2_PACKAGE_BZIP2
++       select BR2_PACKAGE_LIBCAP
++       bool "cdrkit"
++       help
++         cdrkit is a suite of programs for recording CDs and DVDs,
++         blanking CD-RW media, creating ISO-9660 filesystem images,
++         extracting audio CD data, and more.
++
++	 http://www.cdrkit.org/
+diff --git a/package/cdrkit/cdrkit.mk b/package/cdrkit/cdrkit.mk
+new file mode 100644
+index 0000000..a6a2e80
+--- /dev/null
++++ b/package/cdrkit/cdrkit.mk
+@@ -0,0 +1,63 @@
++CDRKIT_VERSION=1.1.10
++CDRKIT_SOURCE=cdrkit-$(CDRKIT_VERSION).tar.gz
++CDRKIT_SITE=http://www.cdrkit.org/releases/
++
++CDRKIT_DEPENDENCIES=libcap bzip2 host-cmake
++HOST_CDRKIT_DEPENDENCIES=host-libcap host-cmake host-bzip2
++
++ifeq ($(BR2_ENDIAN),"BIG")
++CMAKE_ENDIAN_OPT=-DBITFIELDS_HTOL=1
++else
++CMAKE_ENDIAN_OPT=-DBITFIELDS_HTOL=0
++endif
++
++define CDRKIT_CONFIGURE_CMDS
++ -mkdir $(@D)/build
++ (cd $(@D)/build ; \
++	$(HOST_DIR)/usr/bin/cmake .. \
++		-Wno-dev \
++		-DCMAKE_SYSTEM_NAME:STRING="Linux" \
++		-DCMAKE_C_COMPILER:FILEPATH="$(TARGET_CC)" \
++		-DCMAKE_CXX_COMPILER:FILEPATH="$(TARGET_CXX)" \
++		-DCMAKE_C_FLAGS:STRING="$(TARGET_CFLAGS)" \
++		-DCMAKE_EXE_LINKER_FLAGS:STRING="$(TARGET_LDFLAGS)" \
++		-DCMAKE_MODULE_LINKER_FLAGS:STRING="$(TARGET_LDFLAGS)" \
++		-DCMAKE_SHARED_LINKER_FLAGS:STRING="$(TARGET_LDFLAGS)" \
++		-DCMAKE_FIND_ROOT_PATH:PATH="$(STAGING_DIR)" \
++		-DCMAKE_INSTALL_PREFIX:PATH="$(TARGET_DIR)/usr" \
++		$(CMAKE_ENDIAN_OPT) \
++ )
 +endef
 +
-+$(eval $(call ROOTFS_TARGET,romfs))
-\ No newline at end of file
++define CDRKIT_BUILD_CMDS
++ $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/build
++endef
++
++define CDRKIT_INSTALL_TARGET_CMDS
++ $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/build install
++endef
++
++define HOST_CDRKIT_CONFIGURE_CMDS
++ -mkdir $(@D)/build
++ (cd $(@D)/build ; \
++	$(HOST_DIR)/usr/bin/cmake .. \
++		-Wno-dev \
++		-DCMAKE_C_FLAGS="$(HOST_CFLAGS)" \
++		-DCMAKE_EXE_LINKER_FLAGS:STRING="$(HOST_LDFLAGS)" \
++		-DCMAKE_MODULE_LINKER_FLAGS:STRING="$(HOST_LDFLAGS)" \
++		-DCMAKE_SHARED_LINKER_FLAGS:STRING="$(HOST_LDFLAGS)" \
++		-DCMAKE_INSTALL_PREFIX:STRING="$(HOST_DIR)/usr" \
++ )
++endef
++
++define HOST_CDRKIT_BUILD_CMDS
++ $(HOST_MAKE_ENV) $(MAKE) -C $(@D)/build
++endef
++
++define HOST_CDRKIT_INSTALL_CMDS
++ $(HOST_MAKE_ENV) $(MAKE) -C $(@D)/build  install
++endef
++
++$(eval $(call GENTARGETS,package,cdrkit))
++$(eval $(call GENTARGETS,package,cdrkit,host))
++
 -- 
 1.6.3.3
