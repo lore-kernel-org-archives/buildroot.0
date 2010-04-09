@@ -1,100 +1,127 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri,  9 Apr 2010 11:06:57 +0200
-Subject: [Buildroot] [PATCH 19/44] target/romfs: cleanup
+Date: Fri,  9 Apr 2010 11:07:00 +0200
+Subject: [Buildroot] [PATCH 22/44] target/ubifs: cleanup, unbroken
 In-Reply-To: <cover.1270803901.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1270803901.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <3cabc6cce153ee1265c477d840fe3887347053ae.1270803901.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <58a02b1e43c79543c3c9f46ad88ef68cc5cc70b0.1270803901.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove the code needed to build host genromfs, since it can now be
-done using package/genromfs.
+Use package/mtd to build the host mtd-utils, which contains
+mkfs.ubifs. Remove dependency on BR2_HOST_FAKEROOT.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- target/romfs/Config.in |    1 -
- target/romfs/romfs.mk  |   42 ++----------------------------------------
- 2 files changed, 2 insertions(+), 41 deletions(-)
+ target/ubifs/Config.in    |    2 -
+ target/ubifs/ubifsroot.mk |   50 +++-----------------------------------------
+ 2 files changed, 4 insertions(+), 48 deletions(-)
 
-diff --git a/target/romfs/Config.in b/target/romfs/Config.in
-index 03a23d4..7a8c663 100644
---- a/target/romfs/Config.in
-+++ b/target/romfs/Config.in
-@@ -1,6 +1,5 @@
- config BR2_TARGET_ROOTFS_ROMFS
- 	bool "romfs root filesystem"
+diff --git a/target/ubifs/Config.in b/target/ubifs/Config.in
+index 886c34b..1ce1ab0 100644
+--- a/target/ubifs/Config.in
++++ b/target/ubifs/Config.in
+@@ -1,7 +1,5 @@
+ config BR2_TARGET_ROOTFS_UBIFS
+ 	bool "ubifs root filesystem"
+-	depends on BROKEN # upstream git gone, should use mtd-utils
 -	select BR2_HOST_FAKEROOT
  	help
- 	  Build a romfs image of the root filesystem.
+ 	  Build a ubifs root filesystem
  
-diff --git a/target/romfs/romfs.mk b/target/romfs/romfs.mk
-index 6e7fbee..e4b8ff5 100644
---- a/target/romfs/romfs.mk
-+++ b/target/romfs/romfs.mk
-@@ -1,42 +1,12 @@
+diff --git a/target/ubifs/ubifsroot.mk b/target/ubifs/ubifsroot.mk
+index e73d4f9..b48e10f 100644
+--- a/target/ubifs/ubifsroot.mk
++++ b/target/ubifs/ubifsroot.mk
+@@ -1,37 +1,5 @@
  #############################################################
  #
--# genromfs to build to target romfs filesystems
+-# mkfs.ubifs to build to target ubifs filesystems
 -#
 -#############################################################
--ROMFS_VERSION=0.5.2
--ROMFS_DIR=$(BUILD_DIR)/genromfs-$(ROMFS_VERSION)
--ROMFS_SOURCE=genromfs-$(ROMFS_VERSION).tar.gz
--ROMFS_SITE=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/romfs
+-#MKFS_UBIFS_VERSION=2582f128dad78591bc3adcc87c343c690bb82e61
+-#MKFS_UBIFS_URL=http://git.infradead.org/users/dedekind/mkfs.ubifs.git?a=snapshot;h=$(MKFS_UBIFS_VERSION);sf=tgz
+-MKFS_UBIFS_VERSION=v0.4
+-MKFS_UBIFS_URL=http://git.infradead.org/users/dedekind/mkfs.ubifs.git?a=snapshot;h=refs/tags/mkfs.ubifs-$(MKFS_UBIFS_VERSION);sf=tgz
+-MKFS_UBIFS_SOURCE:=mkfs.ubifs-$(MKFS_UBIFS_VERSION).tar.gz
+-MKFS_UBIFS_DIR:= $(BUILD_DIR)/mkfs-ubifs-$(MKFS_UBIFS_VERSION)
+-MKFS_UBIFS_CAT:=$(ZCAT)
+-MKFS_UBIFS_NAME:=mkfs.ubifs
 -
--$(DL_DIR)/$(ROMFS_SOURCE):
--	 $(call DOWNLOAD,$(ROMFS_SITE),$(ROMFS_SOURCE))
+-$(DL_DIR)/$(MKFS_UBIFS_SOURCE):
+-	$(WGET) -O $(DL_DIR)/$(MKFS_UBIFS_SOURCE) "$(MKFS_UBIFS_URL)"
 -
--$(ROMFS_DIR): $(DL_DIR)/$(ROMFS_SOURCE)
--	$(ZCAT) $(DL_DIR)/$(ROMFS_SOURCE) | tar -C $(BUILD_DIR) -xvf -
+-$(MKFS_UBIFS_DIR)/.unpacked: $(DL_DIR)/$(MKFS_UBIFS_SOURCE)
+-	$(ZCAT) $(DL_DIR)/$(MKFS_UBIFS_SOURCE) | tar -C $(BUILD_DIR) -xvf -
+-	mv $(BUILD_DIR)/$(MKFS_UBIFS_NAME) $(MKFS_UBIFS_DIR)
+-	toolchain/patch-kernel.sh $(MKFS_UBIFS_DIR) target/ubifs/ mkfs-ubifs-\*.patch
+-	touch $@
 -
--$(ROMFS_DIR)/genromfs: $(ROMFS_DIR)
--	$(MAKE) -C $(ROMFS_DIR)
+-$(MKFS_UBIFS_DIR)/mkfs.ubifs: $(MKFS_UBIFS_DIR)/.unpacked
+-	$(MAKE) -C $(MKFS_UBIFS_DIR)
 -	touch -c $@
 -
--romfs: $(ROMFS_DIR)/genromfs
+-mkfs.ubifs-dirclean:
+-	rm -rf $(MKFS_UBIFS_DIR)
 -
--romfs-source: $(DL_DIR)/$(ROMFS_SOURCE)
--
--romfs-clean:
--	-$(MAKE) -C $(ROMFS_DIR) clean
--
--romfs-dirclean:
--	rm -rf $(ROMFS_DIR)
+-mkfs.ubifs: $(MKFS_UBIFS_DIR)/mkfs.ubifs
 -
 -#############################################################
 -#
- # Build the romfs root filesystem image
+ # Build the ubifs root filesystem image
  #
  #############################################################
- 
- ROMFS_TARGET=$(IMAGE).romfs
- 
--romfsroot: host-fakeroot makedevs romfs
-+romfsroot: host-fakeroot host-genromfs makedevs
- 	# Use fakeroot to pretend all target binaries are owned by root
- 	rm -f $(BUILD_DIR)/_fakeroot.$(notdir $(ROMFS_TARGET))
- 	touch $(BUILD_DIR)/.fakeroot.00000
-@@ -48,19 +18,11 @@ ifneq ($(TARGET_DEVICE_TABLE),)
- 		>> $(BUILD_DIR)/_fakeroot.$(notdir $(ROMFS_TARGET))
+@@ -56,17 +24,15 @@ UBIFS_ROOTFS_COMPRESSOR_PREREQ:=
+ ifeq ($(BR2_TARGET_ROOTFS_UBIFS_GZIP),y)
+ UBIFS_ROOTFS_COMPRESSOR:=gzip -9 -c
+ UBIFS_ROOTFS_COMPRESSOR_EXT:=gz
+-#UBIFS_ROOTFS_COMPRESSOR_PREREQ:= gzip-host
  endif
- 	# Use fakeroot so genromfs believes the previous fakery
--	echo "$(ROMFS_DIR)/genromfs -d $(TARGET_DIR) -f $(ROMFS_TARGET)" >> $(BUILD_DIR)/_fakeroot.$(notdir $(ROMFS_TARGET))
-+	echo "$(HOST_DIR)/usr/bin/genromfs -d $(TARGET_DIR) -f $(ROMFS_TARGET)" >> $(BUILD_DIR)/_fakeroot.$(notdir $(ROMFS_TARGET))
- 	chmod a+x $(BUILD_DIR)/_fakeroot.$(notdir $(ROMFS_TARGET))
- 	$(HOST_DIR)/usr/bin/fakeroot -- $(BUILD_DIR)/_fakeroot.$(notdir $(ROMFS_TARGET))
- 	- at rm -f $(BUILD_DIR)/_fakeroot.$(notdir $(ROMFS_TARGET))
+ ifeq ($(BR2_TARGET_ROOTFS_UBIFS_BZIP2),y)
+ UBIFS_ROOTFS_COMPRESSOR:=bzip2 -9 -c
+ UBIFS_ROOTFS_COMPRESSOR_EXT:=bz2
+-#UBIFS_ROOTFS_COMPRESSOR_PREREQ:= bzip2-host
+ endif
+ ifeq ($(BR2_TARGET_ROOTFS_UBIFS_LZMA),y)
+-UBIFS_ROOTFS_COMPRESSOR:=lzma -9 -c
++UBIFS_ROOTFS_COMPRESSOR:=$(LZMA) -9 -c
+ UBIFS_ROOTFS_COMPRESSOR_EXT:=lzma
+-UBIFS_ROOTFS_COMPRESSOR_PREREQ:= lzma-host
++UBIFS_ROOTFS_COMPRESSOR_PREREQ:= host-lzma
+ endif
  
--romfsroot-source: romfs-source
+ ifneq ($(UBIFS_ROOTFS_COMPRESSOR),)
+@@ -75,7 +41,7 @@ else
+ UBIFS_TARGET := $(UBIFS_BASE)
+ endif
+ 
+-$(UBIFS_BASE): host-fakeroot makedevs mkfs.ubifs
++$(UBIFS_BASE): host-fakeroot host-mtd makedevs
+ 	# Use fakeroot to pretend all target binaries are owned by root
+ 	rm -f $(BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
+ 	touch $(BUILD_DIR)/.fakeroot.00000
+@@ -87,7 +53,7 @@ ifneq ($(TARGET_DEVICE_TABLE),)
+ 		>> $(BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
+ endif
+ 	# Use fakeroot so mkfs.ubifs believes the previous fakery
+-	echo "$(MKFS_UBIFS_DIR)/mkfs.ubifs -d $(TARGET_DIR) " \
++	echo "$(HOST_DIR)/usr/sbin/mkfs.ubifs -d $(TARGET_DIR) " \
+ 		"$(UBIFS_OPTS) -o $(UBIFS_BASE)" >> $(BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
+ 	chmod a+x $(BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
+ 	$(HOST_DIR)/usr/bin/fakeroot -- $(BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
+@@ -106,14 +72,6 @@ ifneq ($(UBIFS_COPYTO),)
+ 	@cp -f $(UBIFS_TARGET) $(UBIFS_COPYTO)
+ endif
+ 
+-ubifsroot-source: $(DL_DIR)/$(MKFS_UBIFS_SOURCE)
 -
--romfsroot-clean:
--	-$(MAKE) -C $(ROMFS_DIR) clean
+-ubifsroot-clean:
+-	-$(MAKE) -C $(MKFS_UBIFS_DIR) clean
 -
--romfsroot-dirclean:
--	rm -rf $(ROMFS_DIR)
+-ubifsroot-dirclean:
+-	rm -rf $(MKFS_UBIFS_DIR)
 -
  #############################################################
  #
