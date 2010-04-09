@@ -1,35 +1,30 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  9 Apr 2010 14:41:47 +0000 (UTC)
-Subject: [Buildroot] [Bug 1093] [PATCH] Upgrade libusb to v1.0.3 and add new
- libusb-compat package for compatibility with old packages that expect the
- pre-1.0 API.
-In-Reply-To: <bug-1093-163@https.bugs.busybox.net/>
-References: <bug-1093-163@https.bugs.busybox.net/>
-Message-ID: <20100409144147.34A6020BCD@busybox.osuosl.org>
+Date: Fri,  9 Apr 2010 14:42:35 +0000 (UTC)
+Subject: [Buildroot] [Bug 1357] Add bluez to buildroot system
+In-Reply-To: <bug-1357-163@https.bugs.busybox.net/>
+References: <bug-1357-163@https.bugs.busybox.net/>
+Message-ID: <20100409144235.1DDFA20DD0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1093
+https://bugs.busybox.net/show_bug.cgi?id=1357
 
 
 Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+         AssignedTo|unassigned at buildroot.uclibc.|thomas.petazzoni at free-
+                   |org                         |electrons.com
 
 
 
 
---- Comment #4 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2010-04-09 14:41:46 UTC ---
-Fixed by
-http://git.buildroot.net/buildroot/commit/?id=e237c9935796445434a7888b9fe2aa84e3e7975a
-
-Thanks!
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2010-04-09 14:42:34 UTC ---
+I've started merging this patch, so I'm re-assigning this bug to me.
 
 
 -- 
