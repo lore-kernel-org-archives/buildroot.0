@@ -1,16 +1,16 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  9 Apr 2010 14:54:12 +0000 (UTC)
-Subject: [Buildroot] [Bug 1135] Package customize. Wrong copying
-In-Reply-To: <bug-1135-163@https.bugs.busybox.net/>
-References: <bug-1135-163@https.bugs.busybox.net/>
-Message-ID: <20100409145412.B1AC37FA1D@busybox.osuosl.org>
+Date: Fri,  9 Apr 2010 14:54:09 +0000 (UTC)
+Subject: [Buildroot] [Bug 829] Webkit r44552 needs libXt
+In-Reply-To: <bug-829-163@https.bugs.busybox.net/>
+References: <bug-829-163@https.bugs.busybox.net/>
+Message-ID: <20100409145409.ECA597FA1D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1135
+https://bugs.busybox.net/show_bug.cgi?id=829
 
 
 Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
