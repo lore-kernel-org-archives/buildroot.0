@@ -1,40 +1,32 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  9 Apr 2010 16:46:29 +0000 (UTC)
-Subject: [Buildroot] [Bug 1213] Move .config into output directory
-In-Reply-To: <bug-1213-163@https.bugs.busybox.net/>
-References: <bug-1213-163@https.bugs.busybox.net/>
-Message-ID: <20100409164629.469B220822@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 10 Apr 2010 00:12:31 +0200
+Subject: [Buildroot] bugzilla: problem with "content-disposition" for
+ patch files
+In-Reply-To: <hpnh5j$4bm$1@dough.gmane.org>
+References: <hpnh5j$4bm$1@dough.gmane.org>
+Message-ID: <20100410001231.01b7d6f5@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1213
+On Fri, 9 Apr 2010 15:29:55 +0000 (UTC)
+Grant Edwards <grant.b.edwards@gmail.com> wrote:
 
+> This may seem trivial, but it's getting to be pretty annoying.
+> 
+> When you click on a link to a patch file in bubzilla, the
+> content-disposition is sent as "attachment".  This disables the
+> ability of Firefox users to set a default action for that file type.
+> 
+> Can this be fixed?
 
-Will Wagner <will_wagner@carallon.com> changed:
+I agree, this would be nice.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-Attachment #1459 is|0                           |1
-           obsolete|                            |
-
-
-
-
---- Comment #7 from Will Wagner <will_wagner@carallon.com>  2010-04-09 16:46:28 UTC ---
-Created an attachment (id=1495)
- --> (https://bugs.busybox.net/attachment.cgi?id=1495)
-Fixed missed renames
-
-Your right, I missed a case. I also noticed I managed to build .auto.deps wrong
-(although I still think no one ever uses it).
-
-Please try this patch out, hopefully all done now.
-
-
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
