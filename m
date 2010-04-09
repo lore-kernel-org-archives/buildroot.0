@@ -1,17 +1,16 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  9 Apr 2010 14:54:07 +0000 (UTC)
-Subject: [Buildroot] [Bug 687] Are AT91 patches supplied with
- Buildroot-2009.08 out of date?
-In-Reply-To: <bug-687-163@https.bugs.busybox.net/>
-References: <bug-687-163@https.bugs.busybox.net/>
-Message-ID: <20100409145407.AE0147FA1D@busybox.osuosl.org>
+Date: Fri,  9 Apr 2010 14:54:09 +0000 (UTC)
+Subject: [Buildroot] [Bug 779] uClibc (re)building fail
+In-Reply-To: <bug-779-163@https.bugs.busybox.net/>
+References: <bug-779-163@https.bugs.busybox.net/>
+Message-ID: <20100409145409.779E17FA1D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=687
+https://bugs.busybox.net/show_bug.cgi?id=779
 
 
 Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
