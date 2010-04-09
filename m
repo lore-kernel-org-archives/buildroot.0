@@ -1,107 +1,137 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri,  9 Apr 2010 11:07:17 +0200
-Subject: [Buildroot] [PATCH 39/44] iso9660: rework in a similar way to
-	ROOTFS_TARGET
+Date: Fri,  9 Apr 2010 11:07:22 +0200
+Subject: [Buildroot] [PATCH 44/44] fs/*/Config.in: remove useless
+	configuration comments
 In-Reply-To: <cover.1270803901.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1270803901.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <eefa832dff6539f85f1ed9b3be1721da11107df3.1270803901.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <0b79c5022d32b15180a18087a0fba5a2f1af5cc7.1270803901.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Unfortunately, it cannot use the ROOTFS_TARGET infrastructure, due to
-the specifities of the iso9660 build process.
+The dependency on gzip, bzip2 and lzma are properly handled
+automatically. No need to tell the user about this.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- target/iso9660/Config.in  |    5 -----
- target/iso9660/iso9660.mk |   30 ++++++++++++++++--------------
- 2 files changed, 16 insertions(+), 19 deletions(-)
+ fs/cpio/Config.in  |    6 ------
+ fs/ext2/Config.in  |    6 ------
+ fs/tar/Config.in   |    6 ------
+ fs/ubifs/Config.in |    9 ---------
+ 4 files changed, 0 insertions(+), 27 deletions(-)
 
-diff --git a/target/iso9660/Config.in b/target/iso9660/Config.in
-index 40c93b3..ceee52f 100644
---- a/target/iso9660/Config.in
-+++ b/target/iso9660/Config.in
-@@ -7,11 +7,6 @@ config BR2_TARGET_ROOTFS_ISO9660
+diff --git a/fs/cpio/Config.in b/fs/cpio/Config.in
+index 02fd00d..374cfe0 100644
+--- a/fs/cpio/Config.in
++++ b/fs/cpio/Config.in
+@@ -19,22 +19,16 @@ config BR2_TARGET_ROOTFS_CPIO_GZIP
+         bool "gzip"
+         help
+          Do compress the cpio filesystem with gzip.
+-         Note that you either have to have gzip installed on your host
+-         or select to build a gzip for your host. See the packages submenu.
+ 
+ config BR2_TARGET_ROOTFS_CPIO_BZIP2
+         bool "bzip2"
+         help
+          Do compress the cpio filesystem with bzip2.
+-         Note that you either have to have bzip2 installed on your host
+-         or select to build a bzip2 for your host. See the packages submenu.
+ 
+ config BR2_TARGET_ROOTFS_CPIO_LZMA
+         bool "lzma"
+         help
+          Do compress the cpio filesystem with lzma.
+-         Note that you either have to have lzma installed on your host
+-         or select to build a lzma for your host. See the packages submenu.
+ 
+ endchoice
+ 
+diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
+index 02ec18f..5c041d9 100644
+--- a/fs/ext2/Config.in
++++ b/fs/ext2/Config.in
+@@ -40,22 +40,16 @@ config BR2_TARGET_ROOTFS_EXT2_GZIP
+ 	bool "gzip"
  	help
- 	  Build a bootable iso9660 image
+ 	  Do compress the ext2 filesystem with gzip.
+-	  Note that you either have to have gzip installed on your host
+-	  or select to build a gzip for your host. See the packages submenu.
  
--config BR2_TARGET_ROOTFS_ISO9660_OUTPUT
--	string "Output File"
--	depends on BR2_TARGET_ROOTFS_ISO9660
--	default "$(IMAGE).iso"
--
- config BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU
- 	string "Boot menu.lst file"
- 	depends on BR2_TARGET_ROOTFS_ISO9660
-diff --git a/target/iso9660/iso9660.mk b/target/iso9660/iso9660.mk
-index a198c17..66e2de2 100644
---- a/target/iso9660/iso9660.mk
-+++ b/target/iso9660/iso9660.mk
-@@ -2,10 +2,12 @@
- #
- # Build the iso96600 root filesystem image
- #
-+# Cannot be converted to the ROOTFS_TARGET infrastructure, because of
-+# the temporary construction in ISO9660_TARGET_DIR.
-+#
- #############################################################
+ config BR2_TARGET_ROOTFS_EXT2_BZIP2
+ 	bool "bzip2"
+ 	help
+ 	  Do compress the ext2 filesystem with bzip2.
+-	  Note that you either have to have bzip2 installed on your host
+-	  or select to build a bzip2 for your host. See the packages submenu.
  
- ISO9660_TARGET_DIR=$(BUILD_DIR)/iso9660
--ISO9660_TARGET:=$(call qstrip,$(BR2_TARGET_ROOTFS_ISO9660_OUTPUT))
- ISO9660_BOOT_MENU:=$(call qstrip,$(BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU))
- ISO9660_OPTS:=
+ config BR2_TARGET_ROOTFS_EXT2_LZMA
+ 	bool "lzma"
+ 	help
+ 	  Do compress the ext2 filesystem with lzma.
+-	  Note that you either have to have lzma installed on your host
+-	  or select to build a lzma for your host. See the packages submenu.
  
-@@ -13,7 +15,8 @@ ifeq ($(BR2_TARGET_ROOTFS_ISO9660_SQUASH),y)
- ISO9660_OPTS+=-U
- endif
+ endchoice
  
--$(ISO9660_TARGET): host-fakeroot host-cdrkit $(LINUX_KERNEL) $(EXT2_TARGET) grub
-+$(BINARIES_DIR)/rootfs.iso9660: host-cdrkit host-fakeroot $(LINUX_KERNEL) $(BINARIES_DIR)/rootfs.ext2 grub
-+	@$(call MESSAGE,"Generating root filesystem image rootfs.iso9660")
- 	mkdir -p $(ISO9660_TARGET_DIR)
- 	mkdir -p $(ISO9660_TARGET_DIR)/boot/grub
- 	cp $(GRUB_DIR)/stage2/stage2_eltorito $(ISO9660_TARGET_DIR)/boot/grub/
-@@ -21,21 +24,20 @@ $(ISO9660_TARGET): host-fakeroot host-cdrkit $(LINUX_KERNEL) $(EXT2_TARGET) grub
- 	cp $(LINUX_KERNEL) $(ISO9660_TARGET_DIR)/kernel
- 	cp $(EXT2_TARGET) $(ISO9660_TARGET_DIR)/initrd
- 	# Use fakeroot to pretend all target binaries are owned by root
--	rm -f $(BUILD_DIR)/_fakeroot.$(notdir $(ISO9660_TARGET))
-+	rm -f $(FAKEROOT_SCRIPT)
- 	touch $(BUILD_DIR)/.fakeroot.00000
--	cat $(BUILD_DIR)/.fakeroot* > $(BUILD_DIR)/_fakeroot.$(notdir $(ISO9660_TARGET))
--	echo "chown -R 0:0 $(ISO9660_TARGET_DIR)" >> $(BUILD_DIR)/_fakeroot.$(notdir $(ISO9660_TARGET))
-+	cat $(BUILD_DIR)/.fakeroot* > $(FAKEROOT_SCRIPT)
-+	echo "chown -R 0:0 $(ISO9660_TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
- 	# Use fakeroot so mkisofs believes the previous fakery
- 	echo "$(HOST_DIR)/usr/bin/genisoimage -R -b boot/grub/stage2_eltorito -no-emul-boot " \
--		"-boot-load-size 4 -boot-info-table -o $(ISO9660_TARGET) $(ISO9660_TARGET_DIR)" \
--		>> $(BUILD_DIR)/_fakeroot.$(notdir $(ISO9660_TARGET))
--	chmod a+x $(BUILD_DIR)/_fakeroot.$(notdir $(ISO9660_TARGET))
--	$(HOST_DIR)/usr/bin/fakeroot -- $(BUILD_DIR)/_fakeroot.$(notdir $(ISO9660_TARGET))
--	- at rm -f $(BUILD_DIR)/_fakeroot.$(notdir $(ISO9660_TARGET))
-+		"-boot-load-size 4 -boot-info-table -o $@ $(ISO9660_TARGET_DIR)" \
-+		>> $(FAKEROOT_SCRIPT)
-+	chmod a+x $(FAKEROOT_SCRIPT)
-+	$(HOST_DIR)/usr/bin/fakeroot -- $(FAKEROOT_SCRIPT)
-+	- at rm -f $(FAKEROOT_SCRIPT)
-+	- at rm -rf $(ISO9660_TARGET_DIR)
+diff --git a/fs/tar/Config.in b/fs/tar/Config.in
+index 0adca79..5aaf9bd 100644
+--- a/fs/tar/Config.in
++++ b/fs/tar/Config.in
+@@ -19,22 +19,16 @@ config BR2_TARGET_ROOTFS_TAR_GZIP
+ 	bool "gzip"
+ 	help
+ 	 Do compress the tarball with gzip.
+-	 Note that you either have to have gzip installed on your host
+-	 or select to build a gzip for your host. See the packages submenu.
  
--iso9660root: $(ISO9660_TARGET)
--	echo $(ISO9660_TARGET)
--	@ls -l $(ISO9660_TARGET)
-+iso9660-root: $(BINARIES_DIR)/rootfs.iso9660
+ config BR2_TARGET_ROOTFS_TAR_BZIP2
+ 	bool "bzip2"
+ 	help
+ 	 Do compress the tarball with bzip2.
+-	 Note that you either have to have bzip2 installed on your host
+-	 or select to build a bzip2 for your host. See the packages submenu.
  
- #############################################################
- #
-@@ -43,5 +45,5 @@ iso9660root: $(ISO9660_TARGET)
- #
- #############################################################
- ifeq ($(BR2_TARGET_ROOTFS_ISO9660),y)
--TARGETS+=iso9660root
-+TARGETS+=iso9660-root
- endif
+ config BR2_TARGET_ROOTFS_TAR_LZMA
+ 	bool "lzma"
+ 	help
+ 	 Do compress the tarball with lzma.
+-	 Note that you either have to have lzma installed on your host
+-	 or select to build a lzma for your host. See the packages submenu.
+ 
+ endchoice
+ 
+diff --git a/fs/ubifs/Config.in b/fs/ubifs/Config.in
+index 9fa510e..bcf409c 100644
+--- a/fs/ubifs/Config.in
++++ b/fs/ubifs/Config.in
+@@ -64,25 +64,16 @@ config BR2_TARGET_ROOTFS_UBIFS_GZIP
+ 	bool "gzip"
+ 	help
+ 	  Do compress the ubifs filesystem with gzip.
+-	  Note that you either have to have gzip installed on your
+-	  host or select to build a gzip for your host. See the
+-	  packages submenu.
+ 
+ config BR2_TARGET_ROOTFS_UBIFS_BZIP2
+ 	bool "bzip2"
+ 	help
+ 	  Do compress the ubifs filesystem with bzip2.
+-	  Note that you either have to have bzip2 installed on your
+-	  host or select to build a bzip2 for your host. See the
+-	  packages submenu.
+ 
+ config BR2_TARGET_ROOTFS_UBIFS_LZMA
+ 	bool "lzma"
+ 	help
+ 	  Do compress the ubifs filesystem with lzma.
+-	  Note that you either have to have lzma installed on your
+-	  host or select to build a lzma for your host. See the
+-	  packages submenu.
+ 
+ endchoice
+ 
 -- 
 1.6.3.3
