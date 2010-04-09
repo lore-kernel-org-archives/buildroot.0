@@ -1,59 +1,115 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri,  9 Apr 2010 11:06:56 +0200
-Subject: [Buildroot] [PATCH 18/44] target/jffs2: cleanup
+Date: Fri,  9 Apr 2010 11:06:55 +0200
+Subject: [Buildroot] [PATCH 17/44] target/iso9660: cleanup
 In-Reply-To: <cover.1270803901.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1270803901.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <16b1d2a734bde48c104eeef7e1a3287785ab2251.1270803901.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <a573150c199028c1d03713ca8c801e8187851544.1270803901.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove the code to build host MTD utils, since they can now be built
-using package/mtd.
+Remove the mkisofs host tools building process, which is now in
+package/cdrkit.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- target/jffs2/Config.in    |    1 -
- target/jffs2/jffs2root.mk |   10 +---------
- 2 files changed, 1 insertions(+), 10 deletions(-)
+ target/iso9660/Config.in  |    1 -
+ target/iso9660/iso9660.mk |   52 +-------------------------------------------
+ 2 files changed, 2 insertions(+), 51 deletions(-)
 
-diff --git a/target/jffs2/Config.in b/target/jffs2/Config.in
-index bcb4d51..bf4ac60 100644
---- a/target/jffs2/Config.in
-+++ b/target/jffs2/Config.in
-@@ -1,6 +1,5 @@
- config BR2_TARGET_ROOTFS_JFFS2
- 	bool "jffs2 root filesystem"
+diff --git a/target/iso9660/Config.in b/target/iso9660/Config.in
+index 0b82063..40c93b3 100644
+--- a/target/iso9660/Config.in
++++ b/target/iso9660/Config.in
+@@ -4,7 +4,6 @@ config BR2_TARGET_ROOTFS_ISO9660
+ 	depends on !BR2_KERNEL_none
+ 	select BR2_TARGET_ROOTFS_EXT2
+ 	select BR2_TARGET_GRUB
 -	select BR2_HOST_FAKEROOT
  	help
- 	  Build a jffs2 root filesystem
+ 	  Build a bootable iso9660 image
  
-diff --git a/target/jffs2/jffs2root.mk b/target/jffs2/jffs2root.mk
-index 7d31417..30ac86d 100644
---- a/target/jffs2/jffs2root.mk
-+++ b/target/jffs2/jffs2root.mk
-@@ -44,7 +44,7 @@ endif
- # value of MKFS_JFFS2 to either the previously installed copy or the one
- # just built.
+diff --git a/target/iso9660/iso9660.mk b/target/iso9660/iso9660.mk
+index 9571e47..a198c17 100644
+--- a/target/iso9660/iso9660.mk
++++ b/target/iso9660/iso9660.mk
+@@ -1,46 +1,5 @@
+ #############################################################
  #
--$(JFFS2_TARGET): host-fakeroot makedevs mtd-host
-+$(JFFS2_TARGET): host-fakeroot host-mtd makedevs
- 	# Use fakeroot to pretend all target binaries are owned by root
- 	rm -f $(BUILD_DIR)/_fakeroot.$(notdir $(JFFS2_TARGET))
- 	touch $(BUILD_DIR)/.fakeroot.00000
-@@ -81,14 +81,6 @@ ifneq ($(JFFS2_COPYTO),)
- 	@cp -f $(JFFS2_TARGET) $(JFFS2_COPYTO)
+-# mkisofs to build to target iso9660 filesystems
+-#
+-#############################################################
+-MKISOFS_SOURCE:=cdrtools-2.01.tar.bz2
+-MKISOFS_CAT:=$(BZCAT)
+-MKISOFS_SITE:=ftp://ftp.berlios.de/pub/cdrecord/
+-MKISOFS_DIR:=$(BUILD_DIR)/cdrtools-2.01
+-MKISOFS_TARGET=$(MKISOFS_DIR)/mkisofs/OBJ/$(HOST_ARCH)-linux-cc/mkisofs
+-
+-hest:
+-	@echo ARCH=$(BR2_ARCH) HOST_ARCH=$(HOST_ARCH)
+-$(DL_DIR)/$(MKISOFS_SOURCE):
+-	$(call DOWNLOAD,$(MKISOFS_SITE),$(MKISOFS_SOURCE))
+-
+-mkisofs-source: $(DL_DIR)/$(MKISOFS_SOURCE)
+-
+-$(MKISOFS_DIR)/.unpacked: $(DL_DIR)/$(MKISOFS_SOURCE)
+-	$(MKISOFS_CAT) $(DL_DIR)/$(MKISOFS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(MKISOFS_DIR) target/iso9660/ \*.patch
+-	touch $@
+-
+-$(MKISOFS_DIR)/.configured: $(MKISOFS_DIR)/.unpacked
+-	(cd $(MKISOFS_DIR); rm -rf config.cache; \
+-	);
+-	touch $@
+-
+-$(MKISOFS_TARGET): $(MKISOFS_DIR)/.configured
+-	$(MAKE) -C $(MKISOFS_DIR)
+-	touch -c $(MKISOFS_DIR)/mkisofs
+-
+-mkisofs: $(MKISOFS_TARGET)
+-
+-mkisofs-clean:
+-	-$(MAKE) -C $(MKISOFS_DIR) clean
+-
+-mkisofs-dirclean:
+-	rm -rf $(MKISOFS_DIR)
+-
+-
+-#############################################################
+-#
+ # Build the iso96600 root filesystem image
+ #
+ #############################################################
+@@ -54,7 +13,7 @@ ifeq ($(BR2_TARGET_ROOTFS_ISO9660_SQUASH),y)
+ ISO9660_OPTS+=-U
  endif
  
--jffs2root-source: mtd-host-source
+-$(ISO9660_TARGET): host-fakeroot $(LINUX_KERNEL) $(EXT2_TARGET) grub mkisofs
++$(ISO9660_TARGET): host-fakeroot host-cdrkit $(LINUX_KERNEL) $(EXT2_TARGET) grub
+ 	mkdir -p $(ISO9660_TARGET_DIR)
+ 	mkdir -p $(ISO9660_TARGET_DIR)/boot/grub
+ 	cp $(GRUB_DIR)/stage2/stage2_eltorito $(ISO9660_TARGET_DIR)/boot/grub/
+@@ -67,7 +26,7 @@ $(ISO9660_TARGET): host-fakeroot $(LINUX_KERNEL) $(EXT2_TARGET) grub mkisofs
+ 	cat $(BUILD_DIR)/.fakeroot* > $(BUILD_DIR)/_fakeroot.$(notdir $(ISO9660_TARGET))
+ 	echo "chown -R 0:0 $(ISO9660_TARGET_DIR)" >> $(BUILD_DIR)/_fakeroot.$(notdir $(ISO9660_TARGET))
+ 	# Use fakeroot so mkisofs believes the previous fakery
+-	echo "$(MKISOFS_TARGET) -R -b boot/grub/stage2_eltorito -no-emul-boot " \
++	echo "$(HOST_DIR)/usr/bin/genisoimage -R -b boot/grub/stage2_eltorito -no-emul-boot " \
+ 		"-boot-load-size 4 -boot-info-table -o $(ISO9660_TARGET) $(ISO9660_TARGET_DIR)" \
+ 		>> $(BUILD_DIR)/_fakeroot.$(notdir $(ISO9660_TARGET))
+ 	chmod a+x $(BUILD_DIR)/_fakeroot.$(notdir $(ISO9660_TARGET))
+@@ -78,13 +37,6 @@ iso9660root: $(ISO9660_TARGET)
+ 	echo $(ISO9660_TARGET)
+ 	@ls -l $(ISO9660_TARGET)
+ 
+-iso9660root-source: mkisofs-source
 -
--jffs2root-clean: mtd-host-clean
--	-rm -f $(JFFS2_TARGET)
+-iso9660root-clean: mkisofs-clean
 -
--jffs2root-dirclean: mtd-host-dirclean
--	-rm -f $(JFFS2_TARGET)
+-iso9660root-dirclean: mkisofs-dirclean
+-	rm -rf $(ISO9660_DIR)
 -
  #############################################################
  #
