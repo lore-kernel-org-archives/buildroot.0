@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 9 Apr 2010 16:19:13 +0200
-Subject: [Buildroot] [git commit master] Remove IMAGE and related
-	configuration options
-Message-ID: <20100409142132.9DBAF20E6E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] cloop: convert to ROOTFS_TARGET
+	infrastructure
+Message-ID: <20100409142129.0948120E61@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,61 +10,50 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=325bfd1cbae03fe286796d3fa7de7c0a3227f7a5
+commit: http://git.buildroot.net/buildroot/commit/?id=f57982ffd5c3e5f9abb63867950b148b0d36cfe3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Now, we just hardcode the image filenames to be rootfs.$(FSTYPE), in
-the $(BINARIES_DIR).
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Makefile.in |    4 ----
- target/Config.in    |   12 ------------
- 2 files changed, 0 insertions(+), 16 deletions(-)
+ target/cloop/cloop.mk |   26 +++++---------------------
+ 1 files changed, 5 insertions(+), 21 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 2bd3640..efb4dec 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -109,7 +109,6 @@ TOOLCHAIN_DIR=$(BASE_DIR)/toolchain
+diff --git a/target/cloop/cloop.mk b/target/cloop/cloop.mk
+index ccdb2b4..c1d6abb 100644
+--- a/target/cloop/cloop.mk
++++ b/target/cloop/cloop.mk
+@@ -4,26 +4,10 @@
+ #
+ #############################################################
  
- # Quotes are needed for spaces et al in path components.
- TARGET_PATH="$(TOOLCHAIN_DIR)/bin:$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin/:$(STAGING_DIR)/bin:$(STAGING_DIR)/usr/bin:$(PATH)"
--IMAGE:=$(BINARIES_DIR)/$(BR2_ROOTFS_PREFIX).$(ARCH)$(ROOTFS_SUFFIX)
- GNU_TARGET_NAME=$(OPTIMIZE_FOR_CPU)-linux
- REAL_GNU_TARGET_NAME=$(OPTIMIZE_FOR_CPU)$(GNU_TARGET_SUFFIX)
- TARGET_CROSS=$(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-
-@@ -119,9 +118,6 @@ TOOLCHAIN_EXTERNAL_PREFIX:=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))
- TOOLCHAIN_EXTERNAL_PATH:=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PATH))
- TOOLCHAIN_DIR=$(BASE_DIR)/toolchain
- TARGET_PATH="$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin/:$(TOOLCHAIN_DIR)/bin:$(TOOLCHAIN_EXTERNAL_PATH)/bin:$(PATH)"
--#IMAGE:=$(BINARIES_DIR)/$(BR2_ROOTFS_PREFIX).$(TOOLCHAIN_EXTERNAL_PREFIX)$(ROOTFS_SUFFIX)
--IMAGE:=$(BINARIES_DIR)/$(BR2_ROOTFS_PREFIX).$(ARCH)$(ROOTFS_SUFFIX)
--
- REAL_GNU_TARGET_NAME=$(TOOLCHAIN_EXTERNAL_PREFIX)
- GNU_TARGET_NAME=$(TOOLCHAIN_EXTERNAL_PREFIX)
- KERNEL_CROSS=$(TOOLCHAIN_EXTERNAL_PATH)/bin/$(TOOLCHAIN_EXTERNAL_PREFIX)-
-diff --git a/target/Config.in b/target/Config.in
-index 4cae66c..5d634ca 100644
---- a/target/Config.in
-+++ b/target/Config.in
-@@ -1,17 +1,5 @@
- menu "Target filesystem options"
+-CLOOP_TARGET=$(IMAGE).cloop
+-CLOOP_FAKEROOT_SCRIPT=$(BUILD_DIR)/_fakeroot.$(notdir $(CLOOP_TARGET))
++ROOTFS_CLOOP_DEPENDENCIES = host-cloop host-cdrkit
  
--config BR2_ROOTFS_PREFIX
--	string "Custom root fs prefix"
--	default "rootfs"
--	help
--	  Add a custom string to the beginning of the root file system name.
--
--config BR2_ROOTFS_SUFFIX
--	string "Custom root fs suffix"
--	default ""
--	help
--	  Add a custom string to the end of the root file system name.
--
- config BR2_ROOTFS_POST_BUILD_SCRIPT
- 	string "Custom script to run before packing files"
- 	default ""
+-clooproot: host-cloop host-cdrkit host-fakeroot
+-	rm -f $(CLOOP_FAKEROOT_SCRIPT)
+-	touch $(BUILD_DIR)/.fakeroot.00000
+-	cat $(BUILD_DIR)/.fakeroot* > $(CLOOP_FAKEROOT_SCRIPT)
+-	# Use fakeroot to pretend all target binaries are owned by root
+-	echo "chown -R 0:0 $(TARGET_DIR)" >> $(CLOOP_FAKEROOT_SCRIPT)
+-ifneq ($(TARGET_DEVICE_TABLE),)
+-	# Use fakeroot to pretend to create all needed device nodes
+-	echo "$(HOST_DIR)/usr/bin/makedevs -d $(TARGET_DEVICE_TABLE) $(TARGET_DIR)" \
+-		>> $(CLOOP_FAKEROOT_SCRIPT)
+-endif
+-	# Use fakeroot so genisoimage believes the previous fakery
+-	echo "$(HOST_DIR)/usr/bin/genisoimage -r $(TARGET_DIR) | $(HOST_DIR)/usr/bin/create_compressed_fs - 65536 > $(CLOOP_TARGET)" >> $(CLOOP_FAKEROOT_SCRIPT)
+-	chmod a+x $(CLOOP_FAKEROOT_SCRIPT)
+-	$(HOST_DIR)/usr/bin/fakeroot -- $(CLOOP_FAKEROOT_SCRIPT)
+-	- at rm -f $(CLOOP_FAKEROOT_SCRIPT)
++define ROOTFS_CLOOP_CMD
++	$(HOST_DIR)/usr/bin/genisoimage -r $(TARGET_DIR) | $(HOST_DIR)/usr/bin/create_compressed_fs - 65536 > $$@
++endef
+ 
+-ifeq ($(BR2_TARGET_ROOTFS_CLOOP),y)
+-TARGETS+=clooproot
+-endif
++$(eval $(call ROOTFS_TARGET,cloop))
+\ No newline at end of file
 -- 
 1.6.3.3
