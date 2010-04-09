@@ -1,8 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 9 Apr 2010 16:19:13 +0200
-Subject: [Buildroot] [git commit master] e2fsprogs: add support for host
-	package
-Message-ID: <20100409142124.086FF20E49@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] cloop: new package
+Message-ID: <20100409142124.77DBD20E4B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,33 +9,42 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e7cf05aebeea9485b538f6905818a5e888da2ff5
+commit: http://git.buildroot.net/buildroot/commit/?id=ae4c8a81d3ef9736998d157e9e989acab17e9cb2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Host package is needed to get libuuid installed for the host, needed
-to build the mtd utils for the host.
+Only the host variant is supported, which explains why there is no
+Config.in file. Will be used by the filesystem generation code.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/e2fsprogs/e2fsprogs.mk |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ package/cloop/cloop.mk |   18 ++++++++++++++++++
+ 1 files changed, 18 insertions(+), 0 deletions(-)
+ create mode 100644 package/cloop/cloop.mk
 
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index 09db996..af3c3ed 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -26,7 +26,12 @@ E2FSPROGS_CONF_OPT = \
- E2FSPROGS_MAKE_OPT = \
- 	LDCONFIG=true
- 
-+define HOST_E2FSPROGS_INSTALL_CMDS
-+ $(HOST_MAKE_ENV) $(MAKE) -C $(@D) install install-libs
+diff --git a/package/cloop/cloop.mk b/package/cloop/cloop.mk
+new file mode 100644
+index 0000000..f1c1e1c
+--- /dev/null
++++ b/package/cloop/cloop.mk
+@@ -0,0 +1,18 @@
++CLOOP_VERSION=2.631-1
++CLOOP_SOURCE=cloop_$(CLOOP_VERSION).tar.gz
++CLOOP_SITE=http://debian-knoppix.alioth.debian.org/sources/
++
++HOST_CLOOP_DEPENDENCIES = host-zlib
++
++define HOST_CLOOP_BUILD_CMDS
++ $(HOST_MAKE_ENV) $(MAKE1) \
++   CFLAGS="$(HOST_CFLAGS) -Wall -O2 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -DUSE_ERROR_SILENT" -C $(@D) APPSONLY=yes
 +endef
 +
- $(eval $(call AUTOTARGETS,package,e2fsprogs))
-+$(eval $(call AUTOTARGETS,package,e2fsprogs,host))
- 
- # binaries to keep or remove
- E2FSPROGS_BINTARGETS_$(BR2_PACKAGE_E2FSPROGS_BADBLOCKS) += usr/sbin/badblocks
++define HOST_CLOOP_INSTALL_CMDS
++ install -m 755 $(@D)/create_compressed_fs $(HOST_DIR)/usr/bin
++ install -m 755 $(@D)/extract_compressed_fs $(HOST_DIR)/usr/bin
++endef
++
++$(eval $(call GENTARGETS,package,cloop))
++$(eval $(call GENTARGETS,package,cloop,host))
+\ No newline at end of file
 -- 
 1.6.3.3
