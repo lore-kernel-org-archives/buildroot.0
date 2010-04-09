@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri,  9 Apr 2010 11:07:21 +0200
-Subject: [Buildroot] [PATCH 43/44] Update defconfigs after fs cleanup
+Date: Fri,  9 Apr 2010 11:07:19 +0200
+Subject: [Buildroot] [PATCH 41/44] Move all filesystem generation code to fs/
 In-Reply-To: <cover.1270803901.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1270803901.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <c1d601afff4ca569933e60281b363ead9f15a1f4.1270803901.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <0585241505cfaddc9db6ae92739bdfb5ce5f9794.1270803901.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,559 +12,286 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/at91rm9200df_defconfig       |    8 ++++----
- configs/at91rm9200df_ext_defconfig   |    8 ++++----
- configs/at91sam9260dfc_defconfig     |    8 ++++----
- configs/at91sam9260dfc_ext_defconfig |    8 ++++----
- configs/at91sam9260pf_defconfig      |    4 ++--
- configs/at91sam9261ek_defconfig      |    8 ++++----
- configs/at91sam9261ek_ext_defconfig  |    8 ++++----
- configs/at91sam9263ek_defconfig      |    8 ++++----
- configs/at91sam9263ek_ext_defconfig  |    8 ++++----
- configs/at91sam9g20dfc_defconfig     |    8 ++++----
- configs/at91sam9g20dfc_ext_defconfig |    8 ++++----
- configs/atngw100-base_defconfig      |    6 +++---
- configs/atngw100_defconfig           |    6 +++---
- configs/atstk1005_defconfig          |    6 +++---
- configs/atstk100x_defconfig          |    6 +++---
- configs/i386_defconfig               |    4 ++--
- configs/i686_defconfig               |    4 ++--
- configs/integrator926_defconfig      |    6 +++---
- configs/integrator926_huge_defconfig |    6 +++---
- configs/kb9202_defconfig             |    2 +-
- configs/v100sc2_defconfig            |    2 +-
- 21 files changed, 66 insertions(+), 66 deletions(-)
+ Config.in                                      |    2 +
+ Makefile                                       |    2 +
+ fs/Config.in                                   |   30 +++++++++++++++++++++
+ {target => fs}/cloop/Config.in                 |    0
+ {target => fs}/cloop/cloop.mk                  |    0
+ {target => fs}/common.mk                       |    2 +
+ {target => fs}/cpio/Config.in                  |    0
+ {target => fs}/cpio/cpioroot.mk                |    0
+ {target => fs}/cramfs/Config.in                |    0
+ {target => fs}/cramfs/cramfs.mk                |    0
+ {target => fs}/ext2/Config.in                  |    0
+ {target => fs}/ext2/ext2root.mk                |    0
+ {target => fs}/initramfs/Config.in             |    0
+ {target => fs}/initramfs/gen_initramfs_list.sh |    0
+ {target => fs}/initramfs/initramfs.mk          |    0
+ {target => fs}/iso9660/Config.in               |    0
+ {target => fs}/iso9660/iso9660.mk              |    0
+ {target => fs}/iso9660/menu.lst                |    0
+ {target => fs}/jffs2/Config.in                 |    0
+ {target => fs}/jffs2/jffs2root.mk              |    0
+ {target => fs}/romfs/Config.in                 |    0
+ {target => fs}/romfs/romfs.mk                  |    0
+ {target => fs}/squashfs/Config.in              |    0
+ {target => fs}/squashfs/squashfsroot.mk        |    0
+ {target => fs}/tar/Config.in                   |    0
+ {target => fs}/tar/tarroot.mk                  |    0
+ {target => fs}/ubifs/Config.in                 |    0
+ {target => fs}/ubifs/ubifsroot.mk              |    0
+ target/Config.in                               |   33 +-----------------------
+ target/Makefile.in                             |    2 -
+ 30 files changed, 37 insertions(+), 34 deletions(-)
+ create mode 100644 fs/Config.in
+ rename {target => fs}/cloop/Config.in (100%)
+ rename {target => fs}/cloop/cloop.mk (100%)
+ rename {target => fs}/common.mk (99%)
+ rename {target => fs}/cpio/Config.in (100%)
+ rename {target => fs}/cpio/cpioroot.mk (100%)
+ rename {target => fs}/cramfs/Config.in (100%)
+ rename {target => fs}/cramfs/cramfs.mk (100%)
+ rename {target => fs}/ext2/Config.in (100%)
+ rename {target => fs}/ext2/ext2root.mk (100%)
+ rename {target => fs}/initramfs/Config.in (100%)
+ rename {target => fs}/initramfs/gen_initramfs_list.sh (100%)
+ rename {target => fs}/initramfs/initramfs.mk (100%)
+ rename {target => fs}/iso9660/Config.in (100%)
+ rename {target => fs}/iso9660/iso9660.mk (100%)
+ rename {target => fs}/iso9660/menu.lst (100%)
+ rename {target => fs}/jffs2/Config.in (100%)
+ rename {target => fs}/jffs2/jffs2root.mk (100%)
+ rename {target => fs}/romfs/Config.in (100%)
+ rename {target => fs}/romfs/romfs.mk (100%)
+ rename {target => fs}/squashfs/Config.in (100%)
+ rename {target => fs}/squashfs/squashfsroot.mk (100%)
+ rename {target => fs}/tar/Config.in (100%)
+ rename {target => fs}/tar/tarroot.mk (100%)
+ rename {target => fs}/ubifs/Config.in (100%)
+ rename {target => fs}/ubifs/ubifsroot.mk (100%)
 
-diff --git a/configs/at91rm9200df_defconfig b/configs/at91rm9200df_defconfig
-index d5c5249..1fe6e3f 100644
---- a/configs/at91rm9200df_defconfig
-+++ b/configs/at91rm9200df_defconfig
-@@ -853,12 +853,12 @@ BR2_TARGET_ROOTFS_EXT2_BLOCKS=0
- BR2_TARGET_ROOTFS_EXT2_INODES=0
- BR2_TARGET_ROOTFS_EXT2_RESBLKS=0
- BR2_TARGET_ROOTFS_EXT2_SQUASH=y
--BR2_TARGET_ROOTFS_EXT2_OUTPUT="$(IMAGE).ext2"
-+
- BR2_TARGET_ROOTFS_EXT2_NONE=y
- # BR2_TARGET_ROOTFS_EXT2_GZIP is not set
- # BR2_TARGET_ROOTFS_EXT2_BZIP2 is not set
- # BR2_TARGET_ROOTFS_EXT2_LZMA is not set
--BR2_TARGET_ROOTFS_EXT2_COPYTO="/tftpboot"
-+
- BR2_TARGET_ROOTFS_JFFS2=y
- BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_1056=y
- # BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_528 is not set
-@@ -875,8 +875,8 @@ BR2_TARGET_ROOTFS_JFFS2_LE=y
- # BR2_TARGET_ROOTFS_JFFS2_BE is not set
- # BR2_TARGET_ROOTFS_JFFS2_SQUASH is not set
- # BR2_TARGET_ROOTFS_JFFS2_SUMMARY is not set
--BR2_TARGET_ROOTFS_JFFS2_OUTPUT="$(IMAGE).jffs2"
--BR2_TARGET_ROOTFS_JFFS2_COPYTO="/tftpboot"
-+
-+
- # BR2_TARGET_ROOTFS_UBIFS is not set
- # BR2_TARGET_ROOTFS_SQUASHFS is not set
- # BR2_TARGET_ROOTFS_TAR is not set
-diff --git a/configs/at91rm9200df_ext_defconfig b/configs/at91rm9200df_ext_defconfig
-index ca03b76..32843ba 100644
---- a/configs/at91rm9200df_ext_defconfig
-+++ b/configs/at91rm9200df_ext_defconfig
-@@ -778,12 +778,12 @@ BR2_TARGET_ROOTFS_EXT2_BLOCKS=0
- BR2_TARGET_ROOTFS_EXT2_INODES=0
- BR2_TARGET_ROOTFS_EXT2_RESBLKS=0
- BR2_TARGET_ROOTFS_EXT2_SQUASH=y
--BR2_TARGET_ROOTFS_EXT2_OUTPUT="$(IMAGE).ext2"
-+
- BR2_TARGET_ROOTFS_EXT2_NONE=y
- # BR2_TARGET_ROOTFS_EXT2_GZIP is not set
- # BR2_TARGET_ROOTFS_EXT2_BZIP2 is not set
- # BR2_TARGET_ROOTFS_EXT2_LZMA is not set
--BR2_TARGET_ROOTFS_EXT2_COPYTO="/tftpboot"
-+
- BR2_TARGET_ROOTFS_JFFS2=y
- BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_1056=y
- # BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_528 is not set
-@@ -800,8 +800,8 @@ BR2_TARGET_ROOTFS_JFFS2_LE=y
- # BR2_TARGET_ROOTFS_JFFS2_BE is not set
- # BR2_TARGET_ROOTFS_JFFS2_SQUASH is not set
- # BR2_TARGET_ROOTFS_JFFS2_SUMMARY is not set
--BR2_TARGET_ROOTFS_JFFS2_OUTPUT="$(IMAGE).jffs2"
--BR2_TARGET_ROOTFS_JFFS2_COPYTO="/tftpboot"
-+
-+
- # BR2_TARGET_ROOTFS_UBIFS is not set
- # BR2_TARGET_ROOTFS_SQUASHFS is not set
- # BR2_TARGET_ROOTFS_TAR is not set
-diff --git a/configs/at91sam9260dfc_defconfig b/configs/at91sam9260dfc_defconfig
-index 2d8961c..46166e0 100644
---- a/configs/at91sam9260dfc_defconfig
-+++ b/configs/at91sam9260dfc_defconfig
-@@ -867,12 +867,12 @@ BR2_TARGET_ROOTFS_EXT2_BLOCKS=0
- BR2_TARGET_ROOTFS_EXT2_INODES=0
- BR2_TARGET_ROOTFS_EXT2_RESBLKS=0
- BR2_TARGET_ROOTFS_EXT2_SQUASH=y
--BR2_TARGET_ROOTFS_EXT2_OUTPUT="$(IMAGE).ext2"
-+
- BR2_TARGET_ROOTFS_EXT2_NONE=y
- # BR2_TARGET_ROOTFS_EXT2_GZIP is not set
- # BR2_TARGET_ROOTFS_EXT2_BZIP2 is not set
- # BR2_TARGET_ROOTFS_EXT2_LZMA is not set
--BR2_TARGET_ROOTFS_EXT2_COPYTO="/tftpboot"
-+
- BR2_TARGET_ROOTFS_JFFS2=y
- BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_1056=y
- # BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_528 is not set
-@@ -889,8 +889,8 @@ BR2_TARGET_ROOTFS_JFFS2_LE=y
- # BR2_TARGET_ROOTFS_JFFS2_BE is not set
- # BR2_TARGET_ROOTFS_JFFS2_SQUASH is not set
- # BR2_TARGET_ROOTFS_JFFS2_SUMMARY is not set
--BR2_TARGET_ROOTFS_JFFS2_OUTPUT="$(IMAGE).jffs2"
--BR2_TARGET_ROOTFS_JFFS2_COPYTO="/tftpboot"
-+
-+
- # BR2_TARGET_ROOTFS_UBIFS is not set
- # BR2_TARGET_ROOTFS_SQUASHFS is not set
- # BR2_TARGET_ROOTFS_TAR is not set
-diff --git a/configs/at91sam9260dfc_ext_defconfig b/configs/at91sam9260dfc_ext_defconfig
-index ddd4b42..7f12884 100644
---- a/configs/at91sam9260dfc_ext_defconfig
-+++ b/configs/at91sam9260dfc_ext_defconfig
-@@ -786,12 +786,12 @@ BR2_TARGET_ROOTFS_EXT2_BLOCKS=0
- BR2_TARGET_ROOTFS_EXT2_INODES=0
- BR2_TARGET_ROOTFS_EXT2_RESBLKS=0
- BR2_TARGET_ROOTFS_EXT2_SQUASH=y
--BR2_TARGET_ROOTFS_EXT2_OUTPUT="$(IMAGE).ext2"
-+
- BR2_TARGET_ROOTFS_EXT2_NONE=y
- # BR2_TARGET_ROOTFS_EXT2_GZIP is not set
- # BR2_TARGET_ROOTFS_EXT2_BZIP2 is not set
- # BR2_TARGET_ROOTFS_EXT2_LZMA is not set
--BR2_TARGET_ROOTFS_EXT2_COPYTO="/tftpboot"
-+
- BR2_TARGET_ROOTFS_JFFS2=y
- BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_1056=y
- # BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_528 is not set
-@@ -808,8 +808,8 @@ BR2_TARGET_ROOTFS_JFFS2_LE=y
- # BR2_TARGET_ROOTFS_JFFS2_BE is not set
- # BR2_TARGET_ROOTFS_JFFS2_SQUASH is not set
- # BR2_TARGET_ROOTFS_JFFS2_SUMMARY is not set
--BR2_TARGET_ROOTFS_JFFS2_OUTPUT="$(IMAGE).jffs2"
--BR2_TARGET_ROOTFS_JFFS2_COPYTO="/tftpboot"
-+
-+
- # BR2_TARGET_ROOTFS_UBIFS is not set
- # BR2_TARGET_ROOTFS_SQUASHFS is not set
- # BR2_TARGET_ROOTFS_TAR is not set
-diff --git a/configs/at91sam9260pf_defconfig b/configs/at91sam9260pf_defconfig
-index 17477d2..b9e8a28 100644
---- a/configs/at91sam9260pf_defconfig
-+++ b/configs/at91sam9260pf_defconfig
-@@ -558,12 +558,12 @@ BR2_TARGET_ROOTFS_EXT2_BLOCKS=0
- BR2_TARGET_ROOTFS_EXT2_INODES=0
- BR2_TARGET_ROOTFS_EXT2_RESBLKS=0
- BR2_TARGET_ROOTFS_EXT2_SQUASH=y
--BR2_TARGET_ROOTFS_EXT2_OUTPUT="$(IMAGE).ext2"
-+
- BR2_TARGET_ROOTFS_EXT2_NONE=y
- # BR2_TARGET_ROOTFS_EXT2_GZIP is not set
- # BR2_TARGET_ROOTFS_EXT2_BZIP2 is not set
- # BR2_TARGET_ROOTFS_EXT2_LZMA is not set
--BR2_TARGET_ROOTFS_EXT2_COPYTO=""
-+
- # BR2_TARGET_ROOTFS_JFFS2 is not set
- # BR2_TARGET_ROOTFS_SQUASHFS is not set
- # BR2_TARGET_ROOTFS_TAR is not set
-diff --git a/configs/at91sam9261ek_defconfig b/configs/at91sam9261ek_defconfig
-index 824a503..1073e78 100644
---- a/configs/at91sam9261ek_defconfig
-+++ b/configs/at91sam9261ek_defconfig
-@@ -918,12 +918,12 @@ BR2_TARGET_ROOTFS_EXT2_BLOCKS=0
- BR2_TARGET_ROOTFS_EXT2_INODES=0
- BR2_TARGET_ROOTFS_EXT2_RESBLKS=0
- BR2_TARGET_ROOTFS_EXT2_SQUASH=y
--BR2_TARGET_ROOTFS_EXT2_OUTPUT="$(IMAGE).ext2"
-+
- BR2_TARGET_ROOTFS_EXT2_NONE=y
- # BR2_TARGET_ROOTFS_EXT2_GZIP is not set
- # BR2_TARGET_ROOTFS_EXT2_BZIP2 is not set
- # BR2_TARGET_ROOTFS_EXT2_LZMA is not set
--BR2_TARGET_ROOTFS_EXT2_COPYTO=""
-+
- BR2_TARGET_ROOTFS_JFFS2=y
- # BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_1056 is not set
- # BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_528 is not set
-@@ -941,8 +941,8 @@ BR2_TARGET_ROOTFS_JFFS2_LE=y
- # BR2_TARGET_ROOTFS_JFFS2_BE is not set
- # BR2_TARGET_ROOTFS_JFFS2_SQUASH is not set
- # BR2_TARGET_ROOTFS_JFFS2_SUMMARY is not set
--BR2_TARGET_ROOTFS_JFFS2_OUTPUT="$(IMAGE).jffs2"
--BR2_TARGET_ROOTFS_JFFS2_COPYTO=""
-+
-+
- # BR2_TARGET_ROOTFS_UBIFS is not set
- # BR2_TARGET_ROOTFS_SQUASHFS is not set
- # BR2_TARGET_ROOTFS_TAR is not set
-diff --git a/configs/at91sam9261ek_ext_defconfig b/configs/at91sam9261ek_ext_defconfig
-index 3ee047c..d7f9f4a 100644
---- a/configs/at91sam9261ek_ext_defconfig
-+++ b/configs/at91sam9261ek_ext_defconfig
-@@ -874,12 +874,12 @@ BR2_TARGET_ROOTFS_EXT2_BLOCKS=0
- BR2_TARGET_ROOTFS_EXT2_INODES=0
- BR2_TARGET_ROOTFS_EXT2_RESBLKS=0
- BR2_TARGET_ROOTFS_EXT2_SQUASH=y
--BR2_TARGET_ROOTFS_EXT2_OUTPUT="$(IMAGE).ext2"
-+
- BR2_TARGET_ROOTFS_EXT2_NONE=y
- # BR2_TARGET_ROOTFS_EXT2_GZIP is not set
- # BR2_TARGET_ROOTFS_EXT2_BZIP2 is not set
- # BR2_TARGET_ROOTFS_EXT2_LZMA is not set
--BR2_TARGET_ROOTFS_EXT2_COPYTO=""
-+
- BR2_TARGET_ROOTFS_JFFS2=y
- # BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_1056 is not set
- # BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_528 is not set
-@@ -897,8 +897,8 @@ BR2_TARGET_ROOTFS_JFFS2_LE=y
- # BR2_TARGET_ROOTFS_JFFS2_BE is not set
- # BR2_TARGET_ROOTFS_JFFS2_SQUASH is not set
- # BR2_TARGET_ROOTFS_JFFS2_SUMMARY is not set
--BR2_TARGET_ROOTFS_JFFS2_OUTPUT="$(IMAGE).jffs2"
--BR2_TARGET_ROOTFS_JFFS2_COPYTO=""
-+
-+
- # BR2_TARGET_ROOTFS_UBIFS is not set
- # BR2_TARGET_ROOTFS_SQUASHFS is not set
- # BR2_TARGET_ROOTFS_TAR is not set
-diff --git a/configs/at91sam9263ek_defconfig b/configs/at91sam9263ek_defconfig
-index 8dff3e4..74dbfcd 100644
---- a/configs/at91sam9263ek_defconfig
-+++ b/configs/at91sam9263ek_defconfig
-@@ -915,12 +915,12 @@ BR2_TARGET_ROOTFS_EXT2_BLOCKS=0
- BR2_TARGET_ROOTFS_EXT2_INODES=0
- BR2_TARGET_ROOTFS_EXT2_RESBLKS=0
- BR2_TARGET_ROOTFS_EXT2_SQUASH=y
--BR2_TARGET_ROOTFS_EXT2_OUTPUT="$(IMAGE).ext2"
-+
- BR2_TARGET_ROOTFS_EXT2_NONE=y
- # BR2_TARGET_ROOTFS_EXT2_GZIP is not set
- # BR2_TARGET_ROOTFS_EXT2_BZIP2 is not set
- # BR2_TARGET_ROOTFS_EXT2_LZMA is not set
--BR2_TARGET_ROOTFS_EXT2_COPYTO=""
-+
- BR2_TARGET_ROOTFS_JFFS2=y
- # BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_1056 is not set
- # BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_528 is not set
-@@ -938,8 +938,8 @@ BR2_TARGET_ROOTFS_JFFS2_LE=y
- # BR2_TARGET_ROOTFS_JFFS2_BE is not set
- # BR2_TARGET_ROOTFS_JFFS2_SQUASH is not set
- # BR2_TARGET_ROOTFS_JFFS2_SUMMARY is not set
--BR2_TARGET_ROOTFS_JFFS2_OUTPUT="$(IMAGE).jffs2"
--BR2_TARGET_ROOTFS_JFFS2_COPYTO=""
-+
-+
- # BR2_TARGET_ROOTFS_UBIFS is not set
- # BR2_TARGET_ROOTFS_SQUASHFS is not set
- # BR2_TARGET_ROOTFS_TAR is not set
-diff --git a/configs/at91sam9263ek_ext_defconfig b/configs/at91sam9263ek_ext_defconfig
-index a84cc7a..44c30e2 100644
---- a/configs/at91sam9263ek_ext_defconfig
-+++ b/configs/at91sam9263ek_ext_defconfig
-@@ -836,12 +836,12 @@ BR2_TARGET_ROOTFS_EXT2_BLOCKS=0
- BR2_TARGET_ROOTFS_EXT2_INODES=0
- BR2_TARGET_ROOTFS_EXT2_RESBLKS=0
- BR2_TARGET_ROOTFS_EXT2_SQUASH=y
--BR2_TARGET_ROOTFS_EXT2_OUTPUT="$(IMAGE).ext2"
-+
- BR2_TARGET_ROOTFS_EXT2_NONE=y
- # BR2_TARGET_ROOTFS_EXT2_GZIP is not set
- # BR2_TARGET_ROOTFS_EXT2_BZIP2 is not set
- # BR2_TARGET_ROOTFS_EXT2_LZMA is not set
--BR2_TARGET_ROOTFS_EXT2_COPYTO=""
-+
- BR2_TARGET_ROOTFS_JFFS2=y
- # BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_1056 is not set
- # BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_528 is not set
-@@ -859,8 +859,8 @@ BR2_TARGET_ROOTFS_JFFS2_LE=y
- # BR2_TARGET_ROOTFS_JFFS2_BE is not set
- # BR2_TARGET_ROOTFS_JFFS2_SQUASH is not set
- # BR2_TARGET_ROOTFS_JFFS2_SUMMARY is not set
--BR2_TARGET_ROOTFS_JFFS2_OUTPUT="$(IMAGE).jffs2"
--BR2_TARGET_ROOTFS_JFFS2_COPYTO=""
-+
-+
- # BR2_TARGET_ROOTFS_UBIFS is not set
- # BR2_TARGET_ROOTFS_SQUASHFS is not set
- # BR2_TARGET_ROOTFS_TAR is not set
-diff --git a/configs/at91sam9g20dfc_defconfig b/configs/at91sam9g20dfc_defconfig
-index 3f7da32..9b3af76 100644
---- a/configs/at91sam9g20dfc_defconfig
-+++ b/configs/at91sam9g20dfc_defconfig
-@@ -783,12 +783,12 @@ BR2_TARGET_ROOTFS_EXT2_BLOCKS=0
- BR2_TARGET_ROOTFS_EXT2_INODES=0
- BR2_TARGET_ROOTFS_EXT2_RESBLKS=0
- BR2_TARGET_ROOTFS_EXT2_SQUASH=y
--BR2_TARGET_ROOTFS_EXT2_OUTPUT="$(IMAGE).ext2"
-+
- BR2_TARGET_ROOTFS_EXT2_NONE=y
- # BR2_TARGET_ROOTFS_EXT2_GZIP is not set
- # BR2_TARGET_ROOTFS_EXT2_BZIP2 is not set
- # BR2_TARGET_ROOTFS_EXT2_LZMA is not set
--BR2_TARGET_ROOTFS_EXT2_COPYTO="/tftpboot"
-+
- BR2_TARGET_ROOTFS_JFFS2=y
- BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_1056=y
- # BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_528 is not set
-@@ -805,8 +805,8 @@ BR2_TARGET_ROOTFS_JFFS2_LE=y
- # BR2_TARGET_ROOTFS_JFFS2_BE is not set
- # BR2_TARGET_ROOTFS_JFFS2_SQUASH is not set
- # BR2_TARGET_ROOTFS_JFFS2_SUMMARY is not set
--BR2_TARGET_ROOTFS_JFFS2_OUTPUT="$(IMAGE).jffs2"
--BR2_TARGET_ROOTFS_JFFS2_COPYTO="/tftpboot"
-+
-+
- # BR2_TARGET_ROOTFS_UBIFS is not set
- # BR2_TARGET_ROOTFS_SQUASHFS is not set
- # BR2_TARGET_ROOTFS_TAR is not set
-diff --git a/configs/at91sam9g20dfc_ext_defconfig b/configs/at91sam9g20dfc_ext_defconfig
-index 84d703a..5bf6ea7 100644
---- a/configs/at91sam9g20dfc_ext_defconfig
-+++ b/configs/at91sam9g20dfc_ext_defconfig
-@@ -786,12 +786,12 @@ BR2_TARGET_ROOTFS_EXT2_BLOCKS=0
- BR2_TARGET_ROOTFS_EXT2_INODES=0
- BR2_TARGET_ROOTFS_EXT2_RESBLKS=0
- BR2_TARGET_ROOTFS_EXT2_SQUASH=y
--BR2_TARGET_ROOTFS_EXT2_OUTPUT="$(IMAGE).ext2"
-+
- BR2_TARGET_ROOTFS_EXT2_NONE=y
- # BR2_TARGET_ROOTFS_EXT2_GZIP is not set
- # BR2_TARGET_ROOTFS_EXT2_BZIP2 is not set
- # BR2_TARGET_ROOTFS_EXT2_LZMA is not set
--BR2_TARGET_ROOTFS_EXT2_COPYTO="/tftpboot"
-+
- BR2_TARGET_ROOTFS_JFFS2=y
- BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_1056=y
- # BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_528 is not set
-@@ -808,8 +808,8 @@ BR2_TARGET_ROOTFS_JFFS2_LE=y
- # BR2_TARGET_ROOTFS_JFFS2_BE is not set
- # BR2_TARGET_ROOTFS_JFFS2_SQUASH is not set
- # BR2_TARGET_ROOTFS_JFFS2_SUMMARY is not set
--BR2_TARGET_ROOTFS_JFFS2_OUTPUT="$(IMAGE).jffs2"
--BR2_TARGET_ROOTFS_JFFS2_COPYTO="/tftpboot"
-+
-+
- # BR2_TARGET_ROOTFS_UBIFS is not set
- # BR2_TARGET_ROOTFS_SQUASHFS is not set
- # BR2_TARGET_ROOTFS_TAR is not set
-diff --git a/configs/atngw100-base_defconfig b/configs/atngw100-base_defconfig
-index adae5c6..fe34989 100644
---- a/configs/atngw100-base_defconfig
-+++ b/configs/atngw100-base_defconfig
-@@ -723,8 +723,8 @@ BR2_TARGET_ROOTFS_JFFS2_PADSIZE=0x0
- # BR2_TARGET_ROOTFS_JFFS2_LE is not set
- BR2_TARGET_ROOTFS_JFFS2_BE=y
- # BR2_TARGET_ROOTFS_JFFS2_SUMMARY is not set
--BR2_TARGET_ROOTFS_JFFS2_OUTPUT="$(IMAGE).jffs2"
--BR2_TARGET_ROOTFS_JFFS2_COPYTO=""
-+
-+
- # BR2_TARGET_ROOTFS_UBIFS is not set
- # BR2_TARGET_ROOTFS_SQUASHFS is not set
- BR2_TARGET_ROOTFS_TAR=y
-@@ -733,7 +733,7 @@ BR2_TARGET_ROOTFS_TAR_NONE=y
- # BR2_TARGET_ROOTFS_TAR_BZIP2 is not set
- # BR2_TARGET_ROOTFS_TAR_LZMA is not set
- BR2_TARGET_ROOTFS_TAR_OPTIONS=""
--BR2_TARGET_ROOTFS_TAR_COPYTO=""
-+
- # BR2_TARGET_ROOTFS_CPIO is not set
- # BR2_TARGET_ROOTFS_INITRAMFS is not set
- # BR2_TARGET_ROOTFS_ROMFS is not set
-diff --git a/configs/atngw100_defconfig b/configs/atngw100_defconfig
-index 0c76398..4a702a5 100644
---- a/configs/atngw100_defconfig
-+++ b/configs/atngw100_defconfig
-@@ -713,8 +713,8 @@ BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER=y
- # BR2_TARGET_ROOTFS_JFFS2_LE is not set
- BR2_TARGET_ROOTFS_JFFS2_BE=y
- # BR2_TARGET_ROOTFS_JFFS2_SUMMARY is not set
--BR2_TARGET_ROOTFS_JFFS2_OUTPUT="$(IMAGE).jffs2"
--BR2_TARGET_ROOTFS_JFFS2_COPYTO="/tftpboot"
-+
-+
- # BR2_TARGET_ROOTFS_UBIFS is not set
- # BR2_TARGET_ROOTFS_SQUASHFS is not set
- BR2_TARGET_ROOTFS_TAR=y
-@@ -723,7 +723,7 @@ BR2_TARGET_ROOTFS_TAR_NONE=y
- # BR2_TARGET_ROOTFS_TAR_BZIP2 is not set
- # BR2_TARGET_ROOTFS_TAR_LZMA is not set
- BR2_TARGET_ROOTFS_TAR_OPTIONS=""
--BR2_TARGET_ROOTFS_TAR_COPYTO=""
-+
- # BR2_TARGET_ROOTFS_CPIO is not set
- # BR2_TARGET_ROOTFS_INITRAMFS is not set
- # BR2_TARGET_ROOTFS_ROMFS is not set
-diff --git a/configs/atstk1005_defconfig b/configs/atstk1005_defconfig
-index 8044b38..c829495 100644
---- a/configs/atstk1005_defconfig
-+++ b/configs/atstk1005_defconfig
-@@ -757,8 +757,8 @@ BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER=y
- BR2_TARGET_ROOTFS_JFFS2_BE=y
- # BR2_TARGET_ROOTFS_JFFS2_SQUASH is not set
- # BR2_TARGET_ROOTFS_JFFS2_SUMMARY is not set
--BR2_TARGET_ROOTFS_JFFS2_OUTPUT="$(IMAGE).jffs2"
--BR2_TARGET_ROOTFS_JFFS2_COPYTO="/tftpboot"
-+
-+
- # BR2_TARGET_ROOTFS_UBIFS is not set
- # BR2_TARGET_ROOTFS_SQUASHFS is not set
- BR2_TARGET_ROOTFS_TAR=y
-@@ -767,7 +767,7 @@ BR2_TARGET_ROOTFS_TAR_NONE=y
- # BR2_TARGET_ROOTFS_TAR_BZIP2 is not set
- # BR2_TARGET_ROOTFS_TAR_LZMA is not set
- BR2_TARGET_ROOTFS_TAR_OPTIONS=""
--BR2_TARGET_ROOTFS_TAR_COPYTO=""
-+
- # BR2_TARGET_ROOTFS_CPIO is not set
- # BR2_TARGET_ROOTFS_INITRAMFS is not set
- # BR2_TARGET_ROOTFS_ROMFS is not set
-diff --git a/configs/atstk100x_defconfig b/configs/atstk100x_defconfig
-index aac5aa8..c1398d4 100644
---- a/configs/atstk100x_defconfig
-+++ b/configs/atstk100x_defconfig
-@@ -848,12 +848,12 @@ BR2_TARGET_ROOTFS_EXT2_BLOCKS=0
- BR2_TARGET_ROOTFS_EXT2_INODES=0
- BR2_TARGET_ROOTFS_EXT2_RESBLKS=0
- BR2_TARGET_ROOTFS_EXT2_SQUASH=y
--BR2_TARGET_ROOTFS_EXT2_OUTPUT="$(IMAGE).ext2"
-+
- # BR2_TARGET_ROOTFS_EXT2_NONE is not set
- # BR2_TARGET_ROOTFS_EXT2_GZIP is not set
- BR2_TARGET_ROOTFS_EXT2_BZIP2=y
- # BR2_TARGET_ROOTFS_EXT2_LZMA is not set
--BR2_TARGET_ROOTFS_EXT2_COPYTO="/tftpboot"
-+
- # BR2_TARGET_ROOTFS_JFFS2 is not set
- # BR2_TARGET_ROOTFS_UBIFS is not set
- # BR2_TARGET_ROOTFS_SQUASHFS is not set
-@@ -863,7 +863,7 @@ BR2_TARGET_ROOTFS_TAR_NONE=y
- # BR2_TARGET_ROOTFS_TAR_BZIP2 is not set
- # BR2_TARGET_ROOTFS_TAR_LZMA is not set
- BR2_TARGET_ROOTFS_TAR_OPTIONS=""
--BR2_TARGET_ROOTFS_TAR_COPYTO=""
-+
- # BR2_TARGET_ROOTFS_CPIO is not set
- # BR2_TARGET_ROOTFS_INITRAMFS is not set
- # BR2_TARGET_ROOTFS_ROMFS is not set
-diff --git a/configs/i386_defconfig b/configs/i386_defconfig
-index f4506f1..4c2d092 100644
---- a/configs/i386_defconfig
-+++ b/configs/i386_defconfig
-@@ -701,8 +701,8 @@ BR2_TARGET_ROOTFS_JFFS2_EBSIZE=0x20000
- BR2_TARGET_ROOTFS_JFFS2_LE=y
- # BR2_TARGET_ROOTFS_JFFS2_BE is not set
- # BR2_TARGET_ROOTFS_JFFS2_SUMMARY is not set
--BR2_TARGET_ROOTFS_JFFS2_OUTPUT="$(IMAGE).jffs2"
--BR2_TARGET_ROOTFS_JFFS2_COPYTO=""
-+
-+
- # BR2_TARGET_ROOTFS_UBIFS is not set
- # BR2_TARGET_ROOTFS_SQUASHFS is not set
- # BR2_TARGET_ROOTFS_TAR is not set
-diff --git a/configs/i686_defconfig b/configs/i686_defconfig
-index fc1f278..dcf35d7 100644
---- a/configs/i686_defconfig
-+++ b/configs/i686_defconfig
-@@ -701,8 +701,8 @@ BR2_TARGET_ROOTFS_JFFS2_EBSIZE=0x20000
- BR2_TARGET_ROOTFS_JFFS2_LE=y
- # BR2_TARGET_ROOTFS_JFFS2_BE is not set
- # BR2_TARGET_ROOTFS_JFFS2_SUMMARY is not set
--BR2_TARGET_ROOTFS_JFFS2_OUTPUT="$(IMAGE).jffs2"
--BR2_TARGET_ROOTFS_JFFS2_COPYTO=""
-+
-+
- # BR2_TARGET_ROOTFS_UBIFS is not set
- # BR2_TARGET_ROOTFS_SQUASHFS is not set
- # BR2_TARGET_ROOTFS_TAR is not set
-diff --git a/configs/integrator926_defconfig b/configs/integrator926_defconfig
-index e985df4..e537b40 100644
---- a/configs/integrator926_defconfig
-+++ b/configs/integrator926_defconfig
-@@ -687,12 +687,12 @@ BR2_TARGET_ROOTFS_EXT2_BLOCKS=0
- BR2_TARGET_ROOTFS_EXT2_INODES=0
- BR2_TARGET_ROOTFS_EXT2_RESBLKS=0
- BR2_TARGET_ROOTFS_EXT2_SQUASH=y
--BR2_TARGET_ROOTFS_EXT2_OUTPUT="$(IMAGE).ext2"
-+
- BR2_TARGET_ROOTFS_EXT2_NONE=y
- # BR2_TARGET_ROOTFS_EXT2_GZIP is not set
- # BR2_TARGET_ROOTFS_EXT2_BZIP2 is not set
- # BR2_TARGET_ROOTFS_EXT2_LZMA is not set
--BR2_TARGET_ROOTFS_EXT2_COPYTO=""
-+
- # BR2_TARGET_ROOTFS_JFFS2 is not set
- # BR2_TARGET_ROOTFS_UBIFS is not set
- # BR2_TARGET_ROOTFS_SQUASHFS is not set
-@@ -702,7 +702,7 @@ BR2_TARGET_ROOTFS_TAR_NONE=y
- # BR2_TARGET_ROOTFS_TAR_BZIP2 is not set
- # BR2_TARGET_ROOTFS_TAR_LZMA is not set
- BR2_TARGET_ROOTFS_TAR_OPTIONS=""
--BR2_TARGET_ROOTFS_TAR_COPYTO=""
-+
- # BR2_TARGET_ROOTFS_CPIO is not set
- # BR2_TARGET_ROOTFS_INITRAMFS is not set
- # BR2_TARGET_ROOTFS_ROMFS is not set
-diff --git a/configs/integrator926_huge_defconfig b/configs/integrator926_huge_defconfig
-index b0d1dfe..276d69a 100644
---- a/configs/integrator926_huge_defconfig
-+++ b/configs/integrator926_huge_defconfig
-@@ -664,12 +664,12 @@ BR2_TARGET_ROOTFS_EXT2_BLOCKS=0
- BR2_TARGET_ROOTFS_EXT2_INODES=0
- BR2_TARGET_ROOTFS_EXT2_RESBLKS=0
- BR2_TARGET_ROOTFS_EXT2_SQUASH=y
--BR2_TARGET_ROOTFS_EXT2_OUTPUT="$(IMAGE).ext2"
-+
- BR2_TARGET_ROOTFS_EXT2_NONE=y
- # BR2_TARGET_ROOTFS_EXT2_GZIP is not set
- # BR2_TARGET_ROOTFS_EXT2_BZIP2 is not set
- # BR2_TARGET_ROOTFS_EXT2_LZMA is not set
--BR2_TARGET_ROOTFS_EXT2_COPYTO=""
-+
- # BR2_TARGET_ROOTFS_JFFS2 is not set
- # BR2_TARGET_ROOTFS_UBIFS is not set
- # BR2_TARGET_ROOTFS_SQUASHFS is not set
-@@ -679,7 +679,7 @@ BR2_TARGET_ROOTFS_CPIO_NONE=y
- # BR2_TARGET_ROOTFS_CPIO_GZIP is not set
- # BR2_TARGET_ROOTFS_CPIO_BZIP2 is not set
- # BR2_TARGET_ROOTFS_CPIO_LZMA is not set
--BR2_TARGET_ROOTFS_CPIO_COPYTO=""
-+
- # BR2_TARGET_ROOTFS_INITRAMFS is not set
- # BR2_TARGET_ROOTFS_ROMFS is not set
+diff --git a/Config.in b/Config.in
+index 4f567d0..224a44a 100644
+--- a/Config.in
++++ b/Config.in
+@@ -346,4 +346,6 @@ source "toolchain/Config.in"
  
-diff --git a/configs/kb9202_defconfig b/configs/kb9202_defconfig
-index 3a0dfd6..67e6d68 100644
---- a/configs/kb9202_defconfig
-+++ b/configs/kb9202_defconfig
-@@ -672,7 +672,7 @@ BR2_TARGET_ROOTFS_TAR_NONE=y
- # BR2_TARGET_ROOTFS_TAR_BZIP2 is not set
- # BR2_TARGET_ROOTFS_TAR_LZMA is not set
- BR2_TARGET_ROOTFS_TAR_OPTIONS=""
--BR2_TARGET_ROOTFS_TAR_COPYTO=""
+ source "package/Config.in"
+ 
++source "fs/Config.in"
 +
- # BR2_TARGET_ROOTFS_CPIO is not set
- # BR2_TARGET_ROOTFS_INITRAMFS is not set
- # BR2_TARGET_ROOTFS_ROMFS is not set
-diff --git a/configs/v100sc2_defconfig b/configs/v100sc2_defconfig
-index 3c2afa4..836321a 100644
---- a/configs/v100sc2_defconfig
-+++ b/configs/v100sc2_defconfig
-@@ -703,7 +703,7 @@ BR2_TARGET_ROOTFS_TAR_NONE=y
- # BR2_TARGET_ROOTFS_TAR_BZIP2 is not set
- # BR2_TARGET_ROOTFS_TAR_LZMA is not set
- BR2_TARGET_ROOTFS_TAR_OPTIONS=""
--BR2_TARGET_ROOTFS_TAR_COPYTO=""
+ source "target/Config.in"
+diff --git a/Makefile b/Makefile
+index b47c0b0..ce6bf3d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -323,6 +323,8 @@ ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
+ TARGETS+=target-purgelocales
+ endif
+ 
++include fs/common.mk
 +
- # BR2_TARGET_ROOTFS_CPIO is not set
- # BR2_TARGET_ROOTFS_INITRAMFS is not set
- # BR2_TARGET_ROOTFS_ROMFS is not set
+ # target stuff is last so it can override anything else
+ include target/Makefile.in
+ 
+diff --git a/fs/Config.in b/fs/Config.in
+new file mode 100644
+index 0000000..f885c52
+--- /dev/null
++++ b/fs/Config.in
+@@ -0,0 +1,30 @@
++menu "Target filesystem options"
++
++config BR2_ROOTFS_POST_BUILD_SCRIPT
++	string "Custom script to run before packing files"
++	default ""
++	help
++	  Specify a script to be run after the build has finished and before
++	  the BR2 starts packing the files into selected packages.
++
++	  This gives users the oportunity to do board-specific cleanups,
++	  add-ons and the like, so the generated files can be used directly
++	  without further processing.
++
++	  The script is called with the target directory name as first and
++	  only argument. Make sure the exit code of that script is 0,
++	  otherwise make will stop after calling it.
++
++source "fs/cramfs/Config.in"
++source "fs/cloop/Config.in"
++source "fs/ext2/Config.in"
++source "fs/jffs2/Config.in"
++source "fs/ubifs/Config.in"
++source "fs/squashfs/Config.in"
++source "fs/tar/Config.in"
++source "fs/cpio/Config.in"
++source "fs/iso9660/Config.in"
++source "fs/initramfs/Config.in"
++source "fs/romfs/Config.in"
++
++endmenu
+diff --git a/target/cloop/Config.in b/fs/cloop/Config.in
+similarity index 100%
+rename from target/cloop/Config.in
+rename to fs/cloop/Config.in
+diff --git a/target/cloop/cloop.mk b/fs/cloop/cloop.mk
+similarity index 100%
+rename from target/cloop/cloop.mk
+rename to fs/cloop/cloop.mk
+diff --git a/target/common.mk b/fs/common.mk
+similarity index 99%
+rename from target/common.mk
+rename to fs/common.mk
+index cebe8c3..fa6afd9 100644
+--- a/target/common.mk
++++ b/fs/common.mk
+@@ -66,3 +66,5 @@ endef
+ define ROOTFS_TARGET
+ $(call ROOTFS_TARGET_INTERNAL,$(1),$(call UPPERCASE,$(1)))
+ endef
++
++include fs/*/*.mk
+diff --git a/target/cpio/Config.in b/fs/cpio/Config.in
+similarity index 100%
+rename from target/cpio/Config.in
+rename to fs/cpio/Config.in
+diff --git a/target/cpio/cpioroot.mk b/fs/cpio/cpioroot.mk
+similarity index 100%
+rename from target/cpio/cpioroot.mk
+rename to fs/cpio/cpioroot.mk
+diff --git a/target/cramfs/Config.in b/fs/cramfs/Config.in
+similarity index 100%
+rename from target/cramfs/Config.in
+rename to fs/cramfs/Config.in
+diff --git a/target/cramfs/cramfs.mk b/fs/cramfs/cramfs.mk
+similarity index 100%
+rename from target/cramfs/cramfs.mk
+rename to fs/cramfs/cramfs.mk
+diff --git a/target/ext2/Config.in b/fs/ext2/Config.in
+similarity index 100%
+rename from target/ext2/Config.in
+rename to fs/ext2/Config.in
+diff --git a/target/ext2/ext2root.mk b/fs/ext2/ext2root.mk
+similarity index 100%
+rename from target/ext2/ext2root.mk
+rename to fs/ext2/ext2root.mk
+diff --git a/target/initramfs/Config.in b/fs/initramfs/Config.in
+similarity index 100%
+rename from target/initramfs/Config.in
+rename to fs/initramfs/Config.in
+diff --git a/target/initramfs/gen_initramfs_list.sh b/fs/initramfs/gen_initramfs_list.sh
+similarity index 100%
+rename from target/initramfs/gen_initramfs_list.sh
+rename to fs/initramfs/gen_initramfs_list.sh
+diff --git a/target/initramfs/initramfs.mk b/fs/initramfs/initramfs.mk
+similarity index 100%
+rename from target/initramfs/initramfs.mk
+rename to fs/initramfs/initramfs.mk
+diff --git a/target/iso9660/Config.in b/fs/iso9660/Config.in
+similarity index 100%
+rename from target/iso9660/Config.in
+rename to fs/iso9660/Config.in
+diff --git a/target/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+similarity index 100%
+rename from target/iso9660/iso9660.mk
+rename to fs/iso9660/iso9660.mk
+diff --git a/target/iso9660/menu.lst b/fs/iso9660/menu.lst
+similarity index 100%
+rename from target/iso9660/menu.lst
+rename to fs/iso9660/menu.lst
+diff --git a/target/jffs2/Config.in b/fs/jffs2/Config.in
+similarity index 100%
+rename from target/jffs2/Config.in
+rename to fs/jffs2/Config.in
+diff --git a/target/jffs2/jffs2root.mk b/fs/jffs2/jffs2root.mk
+similarity index 100%
+rename from target/jffs2/jffs2root.mk
+rename to fs/jffs2/jffs2root.mk
+diff --git a/target/romfs/Config.in b/fs/romfs/Config.in
+similarity index 100%
+rename from target/romfs/Config.in
+rename to fs/romfs/Config.in
+diff --git a/target/romfs/romfs.mk b/fs/romfs/romfs.mk
+similarity index 100%
+rename from target/romfs/romfs.mk
+rename to fs/romfs/romfs.mk
+diff --git a/target/squashfs/Config.in b/fs/squashfs/Config.in
+similarity index 100%
+rename from target/squashfs/Config.in
+rename to fs/squashfs/Config.in
+diff --git a/target/squashfs/squashfsroot.mk b/fs/squashfs/squashfsroot.mk
+similarity index 100%
+rename from target/squashfs/squashfsroot.mk
+rename to fs/squashfs/squashfsroot.mk
+diff --git a/target/tar/Config.in b/fs/tar/Config.in
+similarity index 100%
+rename from target/tar/Config.in
+rename to fs/tar/Config.in
+diff --git a/target/tar/tarroot.mk b/fs/tar/tarroot.mk
+similarity index 100%
+rename from target/tar/tarroot.mk
+rename to fs/tar/tarroot.mk
+diff --git a/target/ubifs/Config.in b/fs/ubifs/Config.in
+similarity index 100%
+rename from target/ubifs/Config.in
+rename to fs/ubifs/Config.in
+diff --git a/target/ubifs/ubifsroot.mk b/fs/ubifs/ubifsroot.mk
+similarity index 100%
+rename from target/ubifs/ubifsroot.mk
+rename to fs/ubifs/ubifsroot.mk
+diff --git a/target/Config.in b/target/Config.in
+index 5d634ca..5d53635 100644
+--- a/target/Config.in
++++ b/target/Config.in
+@@ -1,35 +1,4 @@
+-menu "Target filesystem options"
+-
+-config BR2_ROOTFS_POST_BUILD_SCRIPT
+-	string "Custom script to run before packing files"
+-	default ""
+-	help
+-	  Specify a script to be run after the build has finished and before
+-	  the BR2 starts packing the files into selected packages.
+-
+-	  This gives users the oportunity to do board-specific cleanups,
+-	  add-ons and the like, so the generated files can be used directly
+-	  without further processing.
+-
+-	  The script is called with the target directory name as first and
+-	  only argument. Make sure the exit code of that script is 0,
+-	  otherwise make will stop after calling it.
+-
+-comment "filesystem for target device"
+-
+-source "target/cramfs/Config.in"
+-source "target/cloop/Config.in"
+-source "target/ext2/Config.in"
+-source "target/jffs2/Config.in"
+-source "target/ubifs/Config.in"
+-source "target/squashfs/Config.in"
+-source "target/tar/Config.in"
+-source "target/cpio/Config.in"
+-source "target/iso9660/Config.in"
+-source "target/initramfs/Config.in"
+-source "target/romfs/Config.in"
+-
+-comment "bootloader for target device"
++menu "Bootloaders"
+ 
+ source "target/x86/grub/Config.in"
+ #source "target/x86/grub2/Config.in"
+diff --git a/target/Makefile.in b/target/Makefile.in
+index 38993e5..48396d5 100644
+--- a/target/Makefile.in
++++ b/target/Makefile.in
+@@ -62,8 +62,6 @@ ifeq ($(BR2_TARGET_UBOOT),y)
+ include target/u-boot/Makefile.in
+ endif
+ 
+-# and finally build the filesystems/tarballs
+-include target/common.mk
+ include target/*/*.mk
+ 
+ # kernel rules
 -- 
 1.6.3.3
