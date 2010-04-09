@@ -1,17 +1,17 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  9 Apr 2010 14:54:14 +0000 (UTC)
-Subject: [Buildroot] [Bug 1279] Buildroot compiled Busybox and Coreutils LFS
-	issues
-In-Reply-To: <bug-1279-163@https.bugs.busybox.net/>
-References: <bug-1279-163@https.bugs.busybox.net/>
-Message-ID: <20100409145414.EE0017FA1D@busybox.osuosl.org>
+Date: Fri,  9 Apr 2010 14:54:15 +0000 (UTC)
+Subject: [Buildroot] [Bug 1321] Busybox link fails due to lack of --sysroot
+	option
+In-Reply-To: <bug-1321-163@https.bugs.busybox.net/>
+References: <bug-1321-163@https.bugs.busybox.net/>
+Message-ID: <20100409145415.B77FB7FA1D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1279
+https://bugs.busybox.net/show_bug.cgi?id=1321
 
 
 Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
