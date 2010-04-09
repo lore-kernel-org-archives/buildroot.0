@@ -1,7 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 9 Apr 2010 16:19:13 +0200
-Subject: [Buildroot] [git commit master] target/romfs: cleanup
-Message-ID: <20100409142126.CFDFF20E59@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] mtd: convert to gentargets,
+	add host package
+Message-ID: <20100409142124.4069720E4A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,97 +10,180 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3cabc6cce153ee1265c477d840fe3887347053ae
+commit: http://git.buildroot.net/buildroot/commit/?id=de4cf4e9135e198d4c3beefc8ad63c03870eb78a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Remove the code needed to build host genromfs, since it can now be
-done using package/genromfs.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- target/romfs/Config.in |    1 -
- target/romfs/romfs.mk  |   42 ++----------------------------------------
- 2 files changed, 2 insertions(+), 41 deletions(-)
+ package/mtd/mtd.mk |  144 +++++++++++++++++-----------------------------------
+ 1 files changed, 46 insertions(+), 98 deletions(-)
 
-diff --git a/target/romfs/Config.in b/target/romfs/Config.in
-index 03a23d4..7a8c663 100644
---- a/target/romfs/Config.in
-+++ b/target/romfs/Config.in
-@@ -1,6 +1,5 @@
- config BR2_TARGET_ROOTFS_ROMFS
- 	bool "romfs root filesystem"
--	select BR2_HOST_FAKEROOT
- 	help
- 	  Build a romfs image of the root filesystem.
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index 3e0fcaf..5a449f2 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
+@@ -6,65 +6,21 @@
+ MTD_VERSION:=1.3.1
+ MTD_SOURCE:=mtd-utils-$(MTD_VERSION).tar.bz2
+ MTD_SITE:=ftp://ftp.infradead.org/pub/mtd-utils
+-MTD_DIR:=$(BUILD_DIR)/mtd-utils-$(MTD_VERSION)
+-MTD_HOST_DIR:= $(MTD_DIR)-host
+-MTD_CAT:=$(BZCAT)
  
-diff --git a/target/romfs/romfs.mk b/target/romfs/romfs.mk
-index 6e7fbee..e4b8ff5 100644
---- a/target/romfs/romfs.mk
-+++ b/target/romfs/romfs.mk
-@@ -1,42 +1,12 @@
- #############################################################
- #
--# genromfs to build to target romfs filesystems
--#
--#############################################################
--ROMFS_VERSION=0.5.2
--ROMFS_DIR=$(BUILD_DIR)/genromfs-$(ROMFS_VERSION)
--ROMFS_SOURCE=genromfs-$(ROMFS_VERSION).tar.gz
--ROMFS_SITE=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/romfs
--
--$(DL_DIR)/$(ROMFS_SOURCE):
--	 $(call DOWNLOAD,$(ROMFS_SITE),$(ROMFS_SOURCE))
--
--$(ROMFS_DIR): $(DL_DIR)/$(ROMFS_SOURCE)
--	$(ZCAT) $(DL_DIR)/$(ROMFS_SOURCE) | tar -C $(BUILD_DIR) -xvf -
--
--$(ROMFS_DIR)/genromfs: $(ROMFS_DIR)
--	$(MAKE) -C $(ROMFS_DIR)
--	touch -c $@
--
--romfs: $(ROMFS_DIR)/genromfs
--
--romfs-source: $(DL_DIR)/$(ROMFS_SOURCE)
--
--romfs-clean:
--	-$(MAKE) -C $(ROMFS_DIR) clean
--
--romfs-dirclean:
--	rm -rf $(ROMFS_DIR)
--
 -#############################################################
 -#
- # Build the romfs root filesystem image
- #
- #############################################################
+-# Build mkfs.jffs2 and sumtool for use on the local host system if
+-# needed by target/jffs2root.
+-#
+-#############################################################
+-MKFS_JFFS2 := $(HOST_DIR)/usr/sbin/mkfs.jffs2
+-SUMTOOL := $(HOST_DIR)/usr/sbin/sumtool
+-
+-$(DL_DIR)/$(MTD_SOURCE):
+-	$(call DOWNLOAD,$(MTD_SITE),$(MTD_SOURCE))
+-
+-$(MTD_HOST_DIR)/.unpacked: $(DL_DIR)/$(MTD_SOURCE)
+-	mkdir -p $(@D)
+-	$(MTD_CAT) $^ | tar $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(MTD_HOST_DIR) \
+-		package/mtd/ mtd-utils-\*.patch
+-	touch $@
+-
+-$(MTD_HOST_DIR)/mkfs.jffs2: $(MTD_HOST_DIR)/.unpacked
+-	CC="$(HOSTCC)" CFLAGS="$(HOST_CFLAGS)" LDFLAGS="$(HOST_LDFLAGS)" \
+-		CROSS= $(MAKE) BUILDDIR=$(MTD_HOST_DIR) \
+-		WITHOUT_XATTR=1 -C $(MTD_HOST_DIR) $@
++HOST_MTD_DEPENDENCIES = host-lzo host-e2fsprogs
  
- ROMFS_TARGET=$(IMAGE).romfs
+-$(MKFS_JFFS2): $(MTD_HOST_DIR)/mkfs.jffs2
+-	install -m 0755 -D $^ $@
+-
+-$(MTD_HOST_DIR)/sumtool: $(MTD_HOST_DIR)/.unpacked
++define HOST_MTD_BUILD_CMDS
+ 	CC="$(HOSTCC)" CFLAGS="$(HOST_CFLAGS)" LDFLAGS="$(HOST_LDFLAGS)" \
+-		CROSS= $(MAKE) BUILDDIR=$(MTD_HOST_DIR) \
+-		WITHOUT_XATTR=1 -C $(MTD_HOST_DIR) $@
+-
+-$(SUMTOOL): $(MTD_HOST_DIR)/sumtool
+-	install -m 0755 $^ $@
+-
+-mtd-host: host-lzo $(MKFS_JFFS2) $(SUMTOOL)
+-
+-mtd-host-source: $(DL_DIR)/$(MTD_SOURCE)
++		CROSS= $(MAKE) BUILDDIR=$(@D) \
++		WITHOUT_XATTR=1 -C $(@D)
++endef
  
--romfsroot: host-fakeroot makedevs romfs
-+romfsroot: host-fakeroot host-genromfs makedevs
- 	# Use fakeroot to pretend all target binaries are owned by root
- 	rm -f $(BUILD_DIR)/_fakeroot.$(notdir $(ROMFS_TARGET))
- 	touch $(BUILD_DIR)/.fakeroot.00000
-@@ -48,19 +18,11 @@ ifneq ($(TARGET_DEVICE_TABLE),)
- 		>> $(BUILD_DIR)/_fakeroot.$(notdir $(ROMFS_TARGET))
+-mtd-host-clean:
+-	-$(MAKE) -C $(MTD_HOST_DIR) clean
+-	rm -f $(MKFS_JFFS2) $(SUMTOOL)
++define HOST_MTD_INSTALL_CMDS
++	$(MAKE) BUILDDIR=$(@D) DESTDIR=$(HOST_DIR) -C $(@D) install
++endef
+ 
+-mtd-host-dirclean:
+-	rm -rf $(MTD_HOST_DIR)
+-
+-#############################################################
+-#
+-# build mtd for use on the target system
+-#
+-#############################################################
+-$(MTD_DIR)/.unpacked: $(DL_DIR)/$(MTD_SOURCE)
+-	$(MTD_CAT) $(DL_DIR)/$(MTD_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(MTD_DIR) package/mtd/ mtd-utils-\*.patch
+-	touch $@
++MKFS_JFFS2=$(HOST_DIR)/usr/sbin/mkfs.jffs2
++SUMTOOL=$(HOST_DIR)/usr/sbin/sumtool
+ 
+ MTD_TARGETS_$(BR2_PACKAGE_MTD_DOCFDISK)		+= docfdisk
+ MTD_TARGETS_$(BR2_PACKAGE_MTD_DOC_LOADBIOS)	+= doc_loadbios
+@@ -105,50 +61,42 @@ MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIRMVOL)	+= ubirmvol
+ MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIRSVOL)	+= ubirsvol
+ MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIUPDATEVOL)	+= ubiupdatevol
+ 
+-MTD_TARGETS := $(addprefix $(MTD_DIR)/, $(MTD_TARGETS_y))
+-MTD_UBI_TARGETS := $(addprefix $(MTD_DIR)/ubi-utils/, $(MTD_TARGETS_UBI_y))
+-MTD_BUILD_TARGETS := $(MTD_TARGETS) $(MTD_UBI_TARGETS)
+-
+-$(MTD_BUILD_TARGETS): $(MTD_DIR)/.unpacked
+-ifneq ($(MTD_TARGETS),)
+-	$(MAKE) $(TARGET_CONFIGURE_ENV) \
+-		BUILDDIR=$(MTD_DIR) \
+-		CROSS=$(TARGET_CROSS) CC=$(TARGET_CC) \
+-		WITHOUT_XATTR=1 WITHOUT_LARGEFILE=1 \
+-		-C $(MTD_DIR) $(MTD_TARGETS)
++MTD_MAKE_COMMON_FLAGS = \
++	$(TARGET_CONFIGURE_ENV) \
++	CROSS=$(TARGET_CROSS) CC=$(TARGET_CC) \
++	WITHOUT_XATTR=1 WITHOUT_LARGEFILE=1
++
++ifneq ($(MTD_TARGETS_y),)
++define MTD_TARGETS_BUILD
++	$(MAKE) $(MTD_MAKE_COMMON_FLAGS) \
++		BUILDDIR=$(@D) \
++		-C $(@D) \
++		$(addprefix $(@D)/, $(MTD_TARGETS_y))
++endef
  endif
- 	# Use fakeroot so genromfs believes the previous fakery
--	echo "$(ROMFS_DIR)/genromfs -d $(TARGET_DIR) -f $(ROMFS_TARGET)" >> $(BUILD_DIR)/_fakeroot.$(notdir $(ROMFS_TARGET))
-+	echo "$(HOST_DIR)/usr/bin/genromfs -d $(TARGET_DIR) -f $(ROMFS_TARGET)" >> $(BUILD_DIR)/_fakeroot.$(notdir $(ROMFS_TARGET))
- 	chmod a+x $(BUILD_DIR)/_fakeroot.$(notdir $(ROMFS_TARGET))
- 	$(HOST_DIR)/usr/bin/fakeroot -- $(BUILD_DIR)/_fakeroot.$(notdir $(ROMFS_TARGET))
- 	- at rm -f $(BUILD_DIR)/_fakeroot.$(notdir $(ROMFS_TARGET))
+-ifneq ($(MTD_UBI_TARGETS),)
+-	$(MAKE) $(TARGET_CONFIGURE_ENV) \
+-		BUILDDIR=$(MTD_DIR)/ubi-utils \
+-		CROSS=$(TARGET_CROSS) CC=$(TARGET_CC) \
+-		WITHOUT_XATTR=1 WITHOUT_LARGEFILE=1 \
+-		-C $(MTD_DIR)/ubi-utils $(MTD_UBI_TARGETS)
+-endif
+-
+-MTD_TARGET_BINS := $(addprefix $(TARGET_DIR)/usr/sbin/,\
+-		 $(MTD_TARGETS_y) $(MTD_TARGETS_UBI_y))
+-
+-$(MTD_TARGET_BINS): $(MTD_BUILD_TARGETS)
+-	mkdir -p $(TARGET_DIR)/usr/sbin
+-	$(INSTALL) -m 0755 $^ $(TARGET_DIR)/usr/sbin
+-
+-mtd: $(if $(BR2_PACKAGE_MTD_MKFSJFFS2),zlib lzo) $(MTD_TARGET_BINS)
+-
+-mtd-source: $(DL_DIR)/$(MTD_SOURCE)
+-
+-mtd-clean:
+-	-$(MAKE) -C $(MTD_DIR) clean
+-	rm -f $(MTD_TARGET_BINS)
  
--romfsroot-source: romfs-source
+-mtd-dirclean:
+-	rm -rf $(MTD_DIR)
 -
--romfsroot-clean:
--	-$(MAKE) -C $(ROMFS_DIR) clean
 -
--romfsroot-dirclean:
--	rm -rf $(ROMFS_DIR)
--
- #############################################################
- #
- # Toplevel Makefile options
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_MTD),y)
+-TARGETS+=mtd
++ifneq ($(MTD_TARGETS_UBI_y),)
++define MTD_TARGETS_UBI_BUILD
++	$(MAKE) $(MTD_MAKE_COMMON_FLAGS) \
++		BUILDDIR=$(@D)/ubi-utils/ \
++		-C $(@D)/ubi-utils \
++		$(addprefix $(@D)/ubi-utils/, $(MTD_TARGETS_UBI_y))
++endef
+ endif
++
++define MTD_BUILD_CMDS
++ $(MTD_TARGETS_BUILD)
++ $(MTD_TARGETS_UBI_BUILD)
++endef
++
++define MTD_INSTALL_TARGET_CMDS
++ for f in $(MTD_TARGETS_y) ; do \
++  install -m 0755 $(@D)/$$f $(TARGET_DIR)/usr/sbin/$$f ; \
++ done ; \
++ for f in $(MTD_TARGETS_UBI_y) ; do \
++  install -m 0755 $(@D)/ubi-utils/$$f $(TARGET_DIR)/usr/sbin/$$f ; \
++ done
++endef
++
++$(eval $(call GENTARGETS,package,mtd))
++$(eval $(call GENTARGETS,package,mtd,host))
 -- 
 1.6.3.3
