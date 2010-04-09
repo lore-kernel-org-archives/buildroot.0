@@ -1,51 +1,38 @@
-From: Jens <irimi@gmx.de>
-Date: Fri, 09 Apr 2010 17:23:52 +0200
-Subject: [Buildroot] [Bug 849] "customize" package copies files to wrong
- place in target tree
-In-Reply-To: <20100409145501.366AD8A341@busybox.osuosl.org>
-References: <bug-849-163@https.bugs.busybox.net/>
-	<20100409145501.366AD8A341@busybox.osuosl.org>
-Message-ID: <4BBF4688.3040008@gmx.de>
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Fri, 9 Apr 2010 15:29:55 +0000 (UTC)
+Subject: [Buildroot] bugzilla: problem with "content-disposition" for patch
+	files
+Message-ID: <hpnh5j$4bm$1@dough.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+This may seem trivial, but it's getting to be pretty annoying.
 
-that simple patch works fine for me (just using cp with  'r' option):
+When you click on a link to a patch file in bubzilla, the
+content-disposition is sent as "attachment".  This disables the
+ability of Firefox users to set a default action for that file type.
 
-BR,
-Jens
+Can this be fixed?
 
-diff -Nur --exclude=config buildroot.orig/package/customize/customize.mk 
-buildroot/package/customize/customize.mk
---- buildroot.orig/package/customize/customize.mk    2010-02-26 
-15:52:48.000000000 +0100
-+++ buildroot/package/customize/customize.mk    2010-04-05 
-00:59:40.000000000 +0200
-@@ -6,14 +6,8 @@
- CUST_DIR:=package/customize/source
- 
- $(BUILD_DIR)/.customize:
--    rm -f $(BUILD_DIR)/series
--    (cd $(CUST_DIR); \
--     /bin/ls -d * > $(BUILD_DIR)/series || \
--     touch $(BUILD_DIR)/series )
--    for f in `cat $(BUILD_DIR)/series`; do \
--        cp -af $(CUST_DIR)/$$f $(TARGET_DIR)/$$f; \
--    done
--    rm -f $(BUILD_DIR)/series
-+    cp -arf $(CUST_DIR)/* $(TARGET_DIR)/
-+#    rm -f $(BUILD_DIR)/series
-     touch $@
- 
- customize: $(BUILD_DIR)/.customize
+A brief explanation of the problem from http://kb.mozillazine.org/File_types_and_download_actions#Unable_to_set_an_automatic_action
 
+   In some cases, you may not be able to set an automatic download
+   action. This can occur when a misconfigured web server assigns an
+   incorrect MIME type, such as "application/octet-stream" (shown
+   above in SeaMonkey 1.x) or if the server assigns
+   "Content-Disposition: attachment" to the file download (shown at
+   right in SeaMonkey 1.x). [6] When this happens, the option to
+   always perform the same action will either be "grayed-out" (as
+   shown here in SeaMonkey 1.x) or, in Firefox, selecting the "Do this
+   automatically" option will not seem to have an effect and you will
+   again be asked what to do when you next encounter that file type
+   (see below for related bug reports). There is little you can do in
+   these cases because the problem is at the server end. 
 
-> https://bugs.busybox.net/show_bug.cgi?id=849
->
-> --- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2010-04-09 14:55:00 UTC ---
-> *** Bug 1135 has been marked as a duplicate of this bug. ***
->   
+-- 
+Grant Edwards               grant.b.edwards        Yow! NANCY!!  Why is
+                                  at               everything RED?!
+                              gmail.com            
