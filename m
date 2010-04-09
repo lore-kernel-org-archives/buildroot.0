@@ -1,8 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 9 Apr 2010 16:19:13 +0200
-Subject: [Buildroot] [git commit master] jffs2: convert to ROOTFS_TARGET
-	infrastructure
-Message-ID: <20100409142130.B281F20E68@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] target/common: do not use IMAGE
+Message-ID: <20100409142131.F3D9420E6C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,107 +9,44 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bd36a7273a6fa2d21589a1ab6e99bb231e0e868e
+commit: http://git.buildroot.net/buildroot/commit/?id=d2b07919ac2ffe94053ac6eef6bf4367b86dc139
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-We also remove the BR2_TARGET_ROOTFS_JFFS2_OUTPUT option, that could
-be used to specify an alternate name for the generated image file.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- target/jffs2/Config.in    |    4 ---
- target/jffs2/jffs2root.mk |   57 ++++++++++++--------------------------------
- 2 files changed, 16 insertions(+), 45 deletions(-)
+ target/common.mk |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/target/jffs2/Config.in b/target/jffs2/Config.in
-index a216a27..b787ec9 100644
---- a/target/jffs2/Config.in
-+++ b/target/jffs2/Config.in
-@@ -114,8 +114,4 @@ config BR2_TARGET_ROOTFS_JFFS2_SUMMARY
- 	  A summarised image can be mounted faster if support is
- 	  enabled in the kernel (CONFIG_JFFS2_SUMMARY)
+diff --git a/target/common.mk b/target/common.mk
+index c7eff74..cebe8c3 100644
+--- a/target/common.mk
++++ b/target/common.mk
+@@ -31,8 +31,8 @@ FAKEROOT_SCRIPT = $(BUILD_DIR)/_fakeroot.fs
  
--config BR2_TARGET_ROOTFS_JFFS2_OUTPUT
--	string "Output File"
--	default "$(IMAGE).jffs2"
--
- endif
-diff --git a/target/jffs2/jffs2root.mk b/target/jffs2/jffs2root.mk
-index eea0e3a..a0a563d 100644
---- a/target/jffs2/jffs2root.mk
-+++ b/target/jffs2/jffs2root.mk
-@@ -32,55 +32,30 @@ JFFS2_OPTS += -n
- SUMTOOL_OPTS += -n
+ define ROOTFS_TARGET_INTERNAL
+ 
+-$(IMAGE).$(1): $(ROOTFS_$(2)_DEPENDENCIES) host-fakeroot makedevs $(if $(BR2_TARGET_ROOTFS_$(2)_LZMA),host-lzma)
+-	@$(call MESSAGE,"Generating root filesystem image $(IMAGE).$(1)")
++$(BINARIES_DIR)/rootfs.$(1): $(ROOTFS_$(2)_DEPENDENCIES) host-fakeroot makedevs $(if $(BR2_TARGET_ROOTFS_$(2)_LZMA),host-lzma)
++	@$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
+ 	$(foreach hook,$(ROOTFS_$(2)_PRE_GEN_HOOKS),$(call $(hook))$(sep))
+ 	rm -f $(FAKEROOT_SCRIPT)
+ 	touch $(BUILD_DIR)/.fakeroot.00000
+@@ -56,7 +56,7 @@ ifeq ($$(BR2_TARGET_ROOTFS_$(2)_LZMA),y)
+ 	$(LZMA) -9 -c $$@ > $$@.lzma
  endif
  
--JFFS2_TARGET := $(call qstrip,$(BR2_TARGET_ROOTFS_JFFS2_OUTPUT))
- ifneq ($(TARGET_DEVICE_TABLE),)
- JFFS2_OPTS += -D $(TARGET_DEVICE_TABLE)
- endif
+-$(1)-root: $(IMAGE).$(1)
++$(1)-root: $(BINARIES_DIR)/rootfs.$(1)
  
-+ROOTFS_JFFS2_DEPENDENCIES = host-mtd
+ ifeq ($$(BR2_TARGET_ROOTFS_$(2)),y)
+ TARGETS += $(1)-root
+@@ -65,4 +65,4 @@ endef
  
--#
--# mtd-host is a dependency which builds a local copy of mkfs.jffs2 if it is needed.
--# the actual build is done from package/mtd/mtd.mk and it sets the
--# value of MKFS_JFFS2 to either the previously installed copy or the one
--# just built.
--#
--$(JFFS2_TARGET): host-fakeroot host-mtd makedevs
--	# Use fakeroot to pretend all target binaries are owned by root
--	rm -f $(BUILD_DIR)/_fakeroot.$(notdir $(JFFS2_TARGET))
--	touch $(BUILD_DIR)/.fakeroot.00000
--	cat $(BUILD_DIR)/.fakeroot* > $(BUILD_DIR)/_fakeroot.$(notdir $(JFFS2_TARGET))
--	echo "chown -R 0:0 $(TARGET_DIR)" >> $(BUILD_DIR)/_fakeroot.$(notdir $(JFFS2_TARGET))
--ifneq ($(TARGET_DEVICE_TABLE),)
--	# Use fakeroot to pretend to create all needed device nodes
--	echo "$(HOST_DIR)/usr/bin/makedevs -d $(TARGET_DEVICE_TABLE) $(TARGET_DIR)" \
--		>> $(BUILD_DIR)/_fakeroot.$(notdir $(JFFS2_TARGET))
--endif
--	# Use fakeroot so mkfs.jffs2 believes the previous fakery
- ifneq ($(BR2_TARGET_ROOTFS_JFFS2_SUMMARY),)
--	echo "$(MKFS_JFFS2) $(JFFS2_OPTS) -d $(TARGET_DIR) -o $(JFFS2_TARGET).nosummary && " \
--		"$(SUMTOOL) $(SUMTOOL_OPTS) -i $(JFFS2_TARGET).nosummary -o $(JFFS2_TARGET) && " \
--		"rm $(JFFS2_TARGET).nosummary" \
--		>> $(BUILD_DIR)/_fakeroot.$(notdir $(JFFS2_TARGET))
-+define ROOTFS_JFFS2_CMD
-+	$(MKFS_JFFS2) $(JFFS2_OPTS) -d $(TARGET_DIR) -o $$@.nosummary && \
-+	$(SUMTOOL) $(SUMTOOL_OPTS) -i $$@.nosummary -o $$@ && \
-+	rm $$@.nosummary
-+endef
- else
--	echo "$(MKFS_JFFS2) $(JFFS2_OPTS) -d $(TARGET_DIR) -o $(JFFS2_TARGET)" \
--		>> $(BUILD_DIR)/_fakeroot.$(notdir $(JFFS2_TARGET))
--endif
--	chmod a+x $(BUILD_DIR)/_fakeroot.$(notdir $(JFFS2_TARGET))
--	$(HOST_DIR)/usr/bin/fakeroot -- $(BUILD_DIR)/_fakeroot.$(notdir $(JFFS2_TARGET))
--	- at rm -f $(BUILD_DIR)/_fakeroot.$(notdir $(JFFS2_TARGET))
--	@ls -l $(JFFS2_TARGET)
--ifeq ($(BR2_JFFS2_TARGET_SREC),y)
--	$(TARGET_CROSS)objcopy -I binary -O srec --adjust-vma 0xa1000000 $(JFFS2_TARGET) $(JFFS2_TARGET).srec
--	@ls -l $(JFFS2_TARGET).srec
-+define ROOTFS_JFFS2_CMD
-+	$(MKFS_JFFS2) $(JFFS2_OPTS) -d $(TARGET_DIR) -o $$@
-+endef
- endif
- 
--jffs2root: $(JFFS2_TARGET)
-+define JFFS2_GEN_SREC
-+	$(TARGET_CROSS)objcopy -I binary -O srec --adjust-vma 0xa1000000 $$@ $$@.srec
-+endef
- 
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(BR2_TARGET_ROOTFS_JFFS2),y)
--TARGETS+=jffs2root
-+ifeq ($(BR2_JFFS2_TARGET_SREC),y)
-+ROOTFS_JFFS2_POST_GEN_HOOKS += JFFS2_GEN_SREC
- endif
-+
-+$(eval $(call ROOTFS_TARGET,jffs2))
+ define ROOTFS_TARGET
+ $(call ROOTFS_TARGET_INTERNAL,$(1),$(call UPPERCASE,$(1)))
+-endef
 \ No newline at end of file
++endef
 -- 
 1.6.3.3
