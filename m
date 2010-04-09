@@ -1,17 +1,16 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  9 Apr 2010 14:48:01 +0000 (UTC)
-Subject: [Buildroot] [Bug 693] setting an external toolchain makes the
-	compilation fail
-In-Reply-To: <bug-693-163@https.bugs.busybox.net/>
-References: <bug-693-163@https.bugs.busybox.net/>
-Message-ID: <20100409144801.45A5221031@busybox.osuosl.org>
+Date: Fri,  9 Apr 2010 14:49:54 +0000 (UTC)
+Subject: [Buildroot] [Bug 907] mkisofs: No such file or directory
+In-Reply-To: <bug-907-163@https.bugs.busybox.net/>
+References: <bug-907-163@https.bugs.busybox.net/>
+Message-ID: <20100409144954.4B24C210E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=693
+https://bugs.busybox.net/show_bug.cgi?id=907
 
 
 Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
@@ -24,9 +23,8 @@ Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
 
 
---- Comment #4 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2010-04-09 14:48:00 UTC ---
-This has been fixed by
-http://git.buildroot.net/buildroot/commit/?id=6db57c69360087b3b7b8fc2b7764d2911ec24d43.
+--- Comment #5 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2010-04-09 14:49:53 UTC ---
+Should have been fixed by the filesystem generation code cleanup merged today.
 
 
 -- 
