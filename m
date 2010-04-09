@@ -1,7 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 9 Apr 2010 16:19:13 +0200
-Subject: [Buildroot] [git commit master] target/cpio: cleanup
-Message-ID: <20100409142125.82F5920E54@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] ubifs: convert to ROOTFS_TARGET
+	infrastructure
+Message-ID: <20100409142131.315B020E69@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,103 +10,114 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4bcefe826bbc1bf550a091e7ae86ad5ee7946909
+commit: http://git.buildroot.net/buildroot/commit/?id=99eb1dc9690de73d743327ae7976c925aa31af03
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- * Remove the dependency on BR2_HOST_FAKEROOT, since we don't have
-   config option for host tools.
-
- * Remove a few useless things.
-
- * Check that cpio is available on the host in
-   toolchain/dependencies/dependencies.sh.
+We also remove the BR2_TARGET_ROOTFS_UBIFS_OUTPUT option, that could
+be used to specify an alternate name for the generated image file.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- target/cpio/Config.in                  |    1 -
- target/cpio/cpioroot.mk                |   17 +++--------------
- toolchain/dependencies/dependencies.sh |    2 +-
- 3 files changed, 4 insertions(+), 16 deletions(-)
+ target/ubifs/Config.in    |    5 ---
+ target/ubifs/ubifsroot.mk |   63 +++-----------------------------------------
+ 2 files changed, 5 insertions(+), 63 deletions(-)
 
-diff --git a/target/cpio/Config.in b/target/cpio/Config.in
-index 83bdd21..4ee1037 100644
---- a/target/cpio/Config.in
-+++ b/target/cpio/Config.in
-@@ -1,6 +1,5 @@
- config BR2_TARGET_ROOTFS_CPIO
- 	bool "cpio the root filesystem"
--	select BR2_HOST_FAKEROOT
+diff --git a/target/ubifs/Config.in b/target/ubifs/Config.in
+index 3222fea..9fa510e 100644
+--- a/target/ubifs/Config.in
++++ b/target/ubifs/Config.in
+@@ -22,11 +22,6 @@ config BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT
  	help
- 	  Build a cpio archive of the root filesystem
+ 	  Some comment required here
  
-diff --git a/target/cpio/cpioroot.mk b/target/cpio/cpioroot.mk
-index 2197d10..021847f 100644
---- a/target/cpio/cpioroot.mk
-+++ b/target/cpio/cpioroot.mk
-@@ -12,17 +12,15 @@ CPIO_ROOTFS_COMPRESSOR_PREREQ:=
- ifeq ($(BR2_TARGET_ROOTFS_CPIO_GZIP),y)
- CPIO_ROOTFS_COMPRESSOR:=gzip -9 -c
- CPIO_ROOTFS_COMPRESSOR_EXT:=gz
--#CPIO_ROOTFS_COMPRESSOR_PREREQ:= gzip-host
- endif
- ifeq ($(BR2_TARGET_ROOTFS_CPIO_BZIP2),y)
- CPIO_ROOTFS_COMPRESSOR:=bzip2 -9 -c
- CPIO_ROOTFS_COMPRESSOR_EXT:=bz2
--#CPIO_ROOTFS_COMPRESSOR_PREREQ:= bzip2-host
- endif
- ifeq ($(BR2_TARGET_ROOTFS_CPIO_LZMA),y)
--CPIO_ROOTFS_COMPRESSOR:=lzma -9 -c
-+CPIO_ROOTFS_COMPRESSOR:=$(LZMA) -9 -c
- CPIO_ROOTFS_COMPRESSOR_EXT:=lzma
--CPIO_ROOTFS_COMPRESSOR_PREREQ:= lzma-host
-+CPIO_ROOTFS_COMPRESSOR_PREREQ:= host-lzma
- endif
+-config BR2_TARGET_ROOTFS_UBIFS_OUTPUT
+-	string "Output File"
+-	depends on BR2_TARGET_ROOTFS_UBIFS
+-	default "$(IMAGE).ubifs"
+-
+ choice
+ 	prompt "ubifs runtime compression"
+ 	default BR2_TARGET_ROOTFS_UBIFS_RT_LZO
+diff --git a/target/ubifs/ubifsroot.mk b/target/ubifs/ubifsroot.mk
+index d0f3885..0fad234 100644
+--- a/target/ubifs/ubifsroot.mk
++++ b/target/ubifs/ubifsroot.mk
+@@ -6,8 +6,6 @@
  
- ifneq ($(CPIO_ROOTFS_COMPRESSOR),)
-@@ -32,7 +30,6 @@ CPIO_TARGET := $(CPIO_BASE)
+ UBIFS_OPTS := -e $(BR2_TARGET_ROOTFS_UBIFS_LEBSIZE) -c $(BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT) -m $(BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE)
+ 
+-UBIFS_BASE := $(call qstrip,$(BR2_TARGET_ROOTFS_UBIFS_OUTPUT))
+-
+ ifeq ($(BR2_TARGET_ROOTFS_UBIFS_RT_ZLIB),y)
+ UBIFS_OPTS += -x zlib
+ endif
+@@ -18,61 +16,10 @@ ifeq ($(BR2_TARGET_ROOTFS_UBIFS_RT_NONE),y)
+ UBIFS_OPTS += -x none
  endif
  
- ROOTFS_CPIO_COPYTO:=$(call qstrip,$(BR2_TARGET_ROOTFS_CPIO_COPYTO))
+-UBIFS_ROOTFS_COMPRESSOR:=
+-UBIFS_ROOTFS_COMPRESSOR_EXT:=
+-UBIFS_ROOTFS_COMPRESSOR_PREREQ:=
+-ifeq ($(BR2_TARGET_ROOTFS_UBIFS_GZIP),y)
+-UBIFS_ROOTFS_COMPRESSOR:=gzip -9 -c
+-UBIFS_ROOTFS_COMPRESSOR_EXT:=gz
+-endif
+-ifeq ($(BR2_TARGET_ROOTFS_UBIFS_BZIP2),y)
+-UBIFS_ROOTFS_COMPRESSOR:=bzip2 -9 -c
+-UBIFS_ROOTFS_COMPRESSOR_EXT:=bz2
+-endif
+-ifeq ($(BR2_TARGET_ROOTFS_UBIFS_LZMA),y)
+-UBIFS_ROOTFS_COMPRESSOR:=$(LZMA) -9 -c
+-UBIFS_ROOTFS_COMPRESSOR_EXT:=lzma
+-UBIFS_ROOTFS_COMPRESSOR_PREREQ:= host-lzma
+-endif
+-
+-ifneq ($(UBIFS_ROOTFS_COMPRESSOR),)
+-UBIFS_TARGET := $(UBIFS_BASE).$(UBIFS_ROOTFS_COMPRESSOR_EXT)
+-else
+-UBIFS_TARGET := $(UBIFS_BASE)
+-endif
+-
+-$(UBIFS_BASE): host-fakeroot host-mtd makedevs
+-	# Use fakeroot to pretend all target binaries are owned by root
+-	rm -f $(BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
+-	touch $(BUILD_DIR)/.fakeroot.00000
+-	cat $(BUILD_DIR)/.fakeroot* > $(BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
+-	echo "chown -R 0:0 $(TARGET_DIR)" >> $(BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
+-ifneq ($(TARGET_DEVICE_TABLE),)
+-	# Use fakeroot to pretend to create all needed device nodes
+-	echo "$(HOST_DIR)/usr/bin/makedevs -d $(TARGET_DEVICE_TABLE) $(TARGET_DIR)" \
+-		>> $(BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
+-endif
+-	# Use fakeroot so mkfs.ubifs believes the previous fakery
+-	echo "$(HOST_DIR)/usr/sbin/mkfs.ubifs -d $(TARGET_DIR) " \
+-		"$(UBIFS_OPTS) -o $(UBIFS_BASE)" >> $(BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
+-	chmod a+x $(BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
+-	$(HOST_DIR)/usr/bin/fakeroot -- $(BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
+-	- at rm -f $(BUILD_DIR)/_fakeroot.$(notdir $(UBIFS_TARGET))
+-
+-ifneq ($(UBIFS_ROOTFS_COMPRESSOR),)
+-$(UBIFS_BASE).$(UBIFS_ROOTFS_COMPRESSOR_EXT): $(UBIFS_ROOTFS_COMPRESSOR_PREREQ) $(UBIFS_BASE)
+-	$(UBIFS_ROOTFS_COMPRESSOR) $(UBIFS_BASE) > $(UBIFS_TARGET)
+-endif
+-
+-ubifsroot: $(UBIFS_TARGET)
+-	@ls -l $(UBIFS_TARGET)
++ROOTFS_UBIFS_DEPENDENCIES = host-mtd
+ 
+-#############################################################
 -#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_TARGET_ROOTFS_UBIFS),y)
+-TARGETS+=ubifsroot
+-endif
++define ROOTFS_UBIFS_CMD
++	$(HOST_DIR)/usr/sbin/mkfs.ubifs -d $(TARGET_DIR) $(UBIFS_OPTS) -o $$@
++endef
  
- cpioroot-init:
- 	rm -f $(TARGET_DIR)/init
-@@ -54,7 +51,7 @@ endif
- 		>> $(BUILD_DIR)/_fakeroot.$(notdir $(CPIO_BASE))
- 	chmod a+x $(BUILD_DIR)/_fakeroot.$(notdir $(CPIO_BASE))
- 	$(HOST_DIR)/usr/bin/fakeroot -- $(BUILD_DIR)/_fakeroot.$(notdir $(CPIO_BASE))
--	#- at rm -f $(BUILD_DIR)/_fakeroot.$(notdir $(CPIO_BASE))
-+	- at rm -f $(BUILD_DIR)/_fakeroot.$(notdir $(CPIO_BASE))
- ifeq ($(CPIO_ROOTFS_COMPRESSOR),)
- ifneq ($(ROOTFS_CPIO_COPYTO),)
- 	$(Q)cp -f $(CPIO_BASE) $(ROOTFS_CPIO_COPYTO)
-@@ -69,14 +66,6 @@ ifneq ($(ROOTFS_CPIO_COPYTO),)
- endif
- endif
- 
--cpioroot: $(CPIO_TARGET)
--
--cpioroot-source:
--
--cpioroot-clean:
--
--cpioroot-dirclean:
--
- #############################################################
- #
- # Toplevel Makefile options
-diff --git a/toolchain/dependencies/dependencies.sh b/toolchain/dependencies/dependencies.sh
-index 68b2751..013c1d5 100755
---- a/toolchain/dependencies/dependencies.sh
-+++ b/toolchain/dependencies/dependencies.sh
-@@ -122,7 +122,7 @@ if ! $SHELL --version 2>&1 | grep -q '^GNU bash'; then
- fi;
- 
- # Check that a few mandatory programs are installed
--for prog in awk bison flex msgfmt makeinfo patch gzip bzip2 perl tar wget ; do
-+for prog in awk bison flex msgfmt makeinfo patch gzip bzip2 perl tar wget cpio ; do
-     if ! which $prog > /dev/null ; then
- 	/bin/echo -e "\nYou must install '$prog' on your build machine";
- 	if test $prog = "makeinfo" ; then
++$(eval $(call ROOTFS_TARGET,ubifs))
+\ No newline at end of file
 -- 
 1.6.3.3
