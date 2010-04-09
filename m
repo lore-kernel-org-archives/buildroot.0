@@ -1,16 +1,16 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
 Date: Fri,  9 Apr 2010 14:54:06 +0000 (UTC)
-Subject: [Buildroot] [Bug 543] ATK requires X11 on DirectFB target
-In-Reply-To: <bug-543-163@https.bugs.busybox.net/>
-References: <bug-543-163@https.bugs.busybox.net/>
-Message-ID: <20100409145406.8B51F7FA1D@busybox.osuosl.org>
+Subject: [Buildroot] [Bug 561] ltp-testsuite failed to install
+In-Reply-To: <bug-561-163@https.bugs.busybox.net/>
+References: <bug-561-163@https.bugs.busybox.net/>
+Message-ID: <20100409145406.D427B7FA1D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=543
+https://bugs.busybox.net/show_bug.cgi?id=561
 
 
 Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
