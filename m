@@ -1,30 +1,26 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  9 Apr 2010 14:49:54 +0000 (UTC)
-Subject: [Buildroot] [Bug 907] mkisofs: No such file or directory
-In-Reply-To: <bug-907-163@https.bugs.busybox.net/>
-References: <bug-907-163@https.bugs.busybox.net/>
-Message-ID: <20100409144954.4B24C210E0@busybox.osuosl.org>
+Date: Fri,  9 Apr 2010 14:54:04 +0000 (UTC)
+Subject: [Buildroot] [Bug 321] alsa-lib uses host include files for python
+ which breaks builds on 64 bit Linux
+In-Reply-To: <bug-321-163@https.bugs.busybox.net/>
+References: <bug-321-163@https.bugs.busybox.net/>
+Message-ID: <20100409145404.ABB0E7FA1D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=907
+https://bugs.busybox.net/show_bug.cgi?id=321
 
 
 Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+   Target Milestone|2010.02                     |2010.05
 
 
-
-
---- Comment #5 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2010-04-09 14:49:53 UTC ---
-Should have been fixed by the filesystem generation code cleanup merged today.
 
 
 -- 
