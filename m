@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 9 Apr 2010 16:19:13 +0200
-Subject: [Buildroot] [git commit master] ext2: convert to ROOTFS_TARGET
+Subject: [Buildroot] [git commit master] jffs2: convert to ROOTFS_TARGET
 	infrastructure
-Message-ID: <20100409142130.6B3E020E67@busybox.osuosl.org>
+Message-ID: <20100409142130.B281F20E68@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,112 +10,93 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=208d06abf9e3e36d87042c8dc6fe4a6f1e0d9575
+commit: http://git.buildroot.net/buildroot/commit/?id=bd36a7273a6fa2d21589a1ab6e99bb231e0e868e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We also remove the BR2_TARGET_ROOTFS_EXT2_OUTPUT option, that could be
-used to specify an alternate name for the generated image file.
+We also remove the BR2_TARGET_ROOTFS_JFFS2_OUTPUT option, that could
+be used to specify an alternate name for the generated image file.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- target/ext2/Config.in   |    5 ---
- target/ext2/ext2root.mk |   76 +++++++----------------------------------------
- 2 files changed, 11 insertions(+), 70 deletions(-)
+ target/jffs2/Config.in    |    4 ---
+ target/jffs2/jffs2root.mk |   57 ++++++++++++--------------------------------
+ 2 files changed, 16 insertions(+), 45 deletions(-)
 
-diff --git a/target/ext2/Config.in b/target/ext2/Config.in
-index 0047309..02ec18f 100644
---- a/target/ext2/Config.in
-+++ b/target/ext2/Config.in
-@@ -24,11 +24,6 @@ config BR2_TARGET_ROOTFS_EXT2_SQUASH
- 	depends on  BR2_TARGET_ROOTFS_EXT2
- 	default y
+diff --git a/target/jffs2/Config.in b/target/jffs2/Config.in
+index a216a27..b787ec9 100644
+--- a/target/jffs2/Config.in
++++ b/target/jffs2/Config.in
+@@ -114,8 +114,4 @@ config BR2_TARGET_ROOTFS_JFFS2_SUMMARY
+ 	  A summarised image can be mounted faster if support is
+ 	  enabled in the kernel (CONFIG_JFFS2_SUMMARY)
  
--config BR2_TARGET_ROOTFS_EXT2_OUTPUT
+-config BR2_TARGET_ROOTFS_JFFS2_OUTPUT
 -	string "Output File"
--	depends on BR2_TARGET_ROOTFS_EXT2
--	default "$(IMAGE).ext2"
+-	default "$(IMAGE).jffs2"
 -
- choice
- 	prompt "Compression method"
- 	default BR2_TARGET_ROOTFS_EXT2_NONE
-diff --git a/target/ext2/ext2root.mk b/target/ext2/ext2root.mk
-index 145b182..68b3b81 100644
---- a/target/ext2/ext2root.mk
-+++ b/target/ext2/ext2root.mk
-@@ -22,73 +22,19 @@ ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)),)
- EXT2_OPTS += -m $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)
+ endif
+diff --git a/target/jffs2/jffs2root.mk b/target/jffs2/jffs2root.mk
+index eea0e3a..a0a563d 100644
+--- a/target/jffs2/jffs2root.mk
++++ b/target/jffs2/jffs2root.mk
+@@ -32,55 +32,30 @@ JFFS2_OPTS += -n
+ SUMTOOL_OPTS += -n
  endif
  
--EXT2_BASE := $(call qstrip,$(BR2_TARGET_ROOTFS_EXT2_OUTPUT))
-+ROOTFS_EXT2_DEPENDENCIES = host-genext2fs
+-JFFS2_TARGET := $(call qstrip,$(BR2_TARGET_ROOTFS_JFFS2_OUTPUT))
+ ifneq ($(TARGET_DEVICE_TABLE),)
+ JFFS2_OPTS += -D $(TARGET_DEVICE_TABLE)
+ endif
  
--EXT2_ROOTFS_COMPRESSOR:=
--EXT2_ROOTFS_COMPRESSOR_EXT:=
--EXT2_ROOTFS_COMPRESSOR_PREREQ:=
--ifeq ($(BR2_TARGET_ROOTFS_EXT2_GZIP),y)
--EXT2_ROOTFS_COMPRESSOR:=gzip -9 -c
--EXT2_ROOTFS_COMPRESSOR_EXT:=gz
--endif
--ifeq ($(BR2_TARGET_ROOTFS_EXT2_BZIP2),y)
--EXT2_ROOTFS_COMPRESSOR:=bzip2 -9 -c
--EXT2_ROOTFS_COMPRESSOR_EXT:=bz2
--endif
--ifeq ($(BR2_TARGET_ROOTFS_EXT2_LZMA),y)
--EXT2_ROOTFS_COMPRESSOR:=$(LZMA) -9 -c
--EXT2_ROOTFS_COMPRESSOR_EXT:=lzma
--EXT2_ROOTFS_COMPRESSOR_PREREQ:=host-lzma
--endif
--
--ifneq ($(EXT2_ROOTFS_COMPRESSOR),)
--EXT2_TARGET := $(EXT2_BASE).$(EXT2_ROOTFS_COMPRESSOR_EXT)
--else
--EXT2_TARGET := $(EXT2_BASE)
--endif
--
--$(EXT2_BASE): host-fakeroot host-genext2fs makedevs
++ROOTFS_JFFS2_DEPENDENCIES = host-mtd
+ 
+-#
+-# mtd-host is a dependency which builds a local copy of mkfs.jffs2 if it is needed.
+-# the actual build is done from package/mtd/mtd.mk and it sets the
+-# value of MKFS_JFFS2 to either the previously installed copy or the one
+-# just built.
+-#
+-$(JFFS2_TARGET): host-fakeroot host-mtd makedevs
 -	# Use fakeroot to pretend all target binaries are owned by root
--	rm -f $(BUILD_DIR)/_fakeroot.$(notdir $(EXT2_TARGET))
+-	rm -f $(BUILD_DIR)/_fakeroot.$(notdir $(JFFS2_TARGET))
 -	touch $(BUILD_DIR)/.fakeroot.00000
--	cat $(BUILD_DIR)/.fakeroot* > $(BUILD_DIR)/_fakeroot.$(notdir $(EXT2_TARGET))
--	echo "chown -R 0:0 $(TARGET_DIR)" >> $(BUILD_DIR)/_fakeroot.$(notdir $(EXT2_TARGET))
+-	cat $(BUILD_DIR)/.fakeroot* > $(BUILD_DIR)/_fakeroot.$(notdir $(JFFS2_TARGET))
+-	echo "chown -R 0:0 $(TARGET_DIR)" >> $(BUILD_DIR)/_fakeroot.$(notdir $(JFFS2_TARGET))
 -ifneq ($(TARGET_DEVICE_TABLE),)
 -	# Use fakeroot to pretend to create all needed device nodes
 -	echo "$(HOST_DIR)/usr/bin/makedevs -d $(TARGET_DEVICE_TABLE) $(TARGET_DIR)" \
--		>> $(BUILD_DIR)/_fakeroot.$(notdir $(EXT2_TARGET))
+-		>> $(BUILD_DIR)/_fakeroot.$(notdir $(JFFS2_TARGET))
 -endif
--	# Use fakeroot so genext2fs believes the previous fakery
- ifeq ($(strip $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)),0)
--	GENEXT2_REALSIZE=`LC_ALL=C du -s -c -k $(TARGET_DIR) | grep total | sed -e "s/total//"`; \
--	GENEXT2_ADDTOROOTSIZE=`if [ $$GENEXT2_REALSIZE -ge 20000 ]; then echo 16384; else echo 2400; fi`; \
--	GENEXT2_SIZE=`expr $$GENEXT2_REALSIZE + $$GENEXT2_ADDTOROOTSIZE`; \
--	GENEXT2_ADDTOINODESIZE=`find $(TARGET_DIR) | wc -l`; \
--	GENEXT2_INODES=`expr $$GENEXT2_ADDTOINODESIZE + 400`; \
--	set -x; \
--	echo "$(HOST_DIR)/usr/bin/genext2fs -b $$GENEXT2_SIZE " \
--		"-N $$GENEXT2_INODES -d $(TARGET_DIR) " \
--		"$(EXT2_OPTS) $(EXT2_BASE)" >> $(BUILD_DIR)/_fakeroot.$(notdir $(EXT2_TARGET))
--else
--	echo "$(HOST_DIR)/usr/bin/genext2fs -d $(TARGET_DIR) " \
--		"$(EXT2_OPTS) $(EXT2_BASE)" >> $(BUILD_DIR)/_fakeroot.$(notdir $(EXT2_TARGET))
-+GENEXT2_REALSIZE=$(shell LC_ALL=C du -s -c -k $(TARGET_DIR) | grep total | sed -e "s/total//")
-+GENEXT2_ADDTOROOTSIZE=$(shell if [ $(GENEXT2_REALSIZE) -ge 20000 ]; then echo 16384; else echo 2400; fi)
-+GENEXT2_SIZE=$(shell expr $(GENEXT2_REALSIZE) + $(GENEXT2_ADDTOROOTSIZE))
-+GENEXT2_ADDTOINODESIZE=$(shell find $(TARGET_DIR) | wc -l)
-+GENEXT2_INODES=$(shell expr $(GENEXT2_ADDTOINODESIZE) + 400)
-+EXT2_OPTS += -b $(GENEXT2_SIZE) -N $(GENEXT2_INODES)
+-	# Use fakeroot so mkfs.jffs2 believes the previous fakery
+ ifneq ($(BR2_TARGET_ROOTFS_JFFS2_SUMMARY),)
+-	echo "$(MKFS_JFFS2) $(JFFS2_OPTS) -d $(TARGET_DIR) -o $(JFFS2_TARGET).nosummary && " \
+-		"$(SUMTOOL) $(SUMTOOL_OPTS) -i $(JFFS2_TARGET).nosummary -o $(JFFS2_TARGET) && " \
+-		"rm $(JFFS2_TARGET).nosummary" \
+-		>> $(BUILD_DIR)/_fakeroot.$(notdir $(JFFS2_TARGET))
++define ROOTFS_JFFS2_CMD
++	$(MKFS_JFFS2) $(JFFS2_OPTS) -d $(TARGET_DIR) -o $$@.nosummary && \
++	$(SUMTOOL) $(SUMTOOL_OPTS) -i $$@.nosummary -o $$@ && \
++	rm $$@.nosummary
++endef
+ else
+-	echo "$(MKFS_JFFS2) $(JFFS2_OPTS) -d $(TARGET_DIR) -o $(JFFS2_TARGET)" \
+-		>> $(BUILD_DIR)/_fakeroot.$(notdir $(JFFS2_TARGET))
+-endif
+-	chmod a+x $(BUILD_DIR)/_fakeroot.$(notdir $(JFFS2_TARGET))
+-	$(HOST_DIR)/usr/bin/fakeroot -- $(BUILD_DIR)/_fakeroot.$(notdir $(JFFS2_TARGET))
+-	- at rm -f $(BUILD_DIR)/_fakeroot.$(notdir $(JFFS2_TARGET))
+-	@ls -l $(JFFS2_TARGET)
+-ifeq ($(BR2_JFFS2_TARGET_SREC),y)
+-	$(TARGET_CROSS)objcopy -I binary -O srec --adjust-vma 0xa1000000 $(JFFS2_TARGET) $(JFFS2_TARGET).srec
+-	@ls -l $(JFFS2_TARGET).srec
++define ROOTFS_JFFS2_CMD
++	$(MKFS_JFFS2) $(JFFS2_OPTS) -d $(TARGET_DIR) -o $$@
++endef
  endif
--	chmod a+x $(BUILD_DIR)/_fakeroot.$(notdir $(EXT2_TARGET))
--	$(HOST_DIR)/usr/bin/fakeroot -- $(BUILD_DIR)/_fakeroot.$(notdir $(EXT2_TARGET))
--	- at rm -f $(BUILD_DIR)/_fakeroot.$(notdir $(EXT2_TARGET))
  
--ifneq ($(EXT2_ROOTFS_COMPRESSOR),)
--$(EXT2_BASE).$(EXT2_ROOTFS_COMPRESSOR_EXT): $(EXT2_ROOTFS_COMPRESSOR_PREREQ) $(EXT2_BASE)
--	$(EXT2_ROOTFS_COMPRESSOR) $(EXT2_BASE) > $(EXT2_TARGET)
--endif
--
--ext2root: $(EXT2_TARGET)
-+define ROOTFS_EXT2_CMD
-+	$(HOST_DIR)/usr/bin/genext2fs -d $(TARGET_DIR) $(EXT2_OPTS) $$@
+-jffs2root: $(JFFS2_TARGET)
++define JFFS2_GEN_SREC
++	$(TARGET_CROSS)objcopy -I binary -O srec --adjust-vma 0xa1000000 $$@ $$@.srec
 +endef
  
 -#############################################################
@@ -123,10 +104,13 @@ index 145b182..68b3b81 100644
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_TARGET_ROOTFS_EXT2),y)
--TARGETS+=ext2root
--endif
-+$(eval $(call ROOTFS_TARGET,ext2))
+-ifeq ($(BR2_TARGET_ROOTFS_JFFS2),y)
+-TARGETS+=jffs2root
++ifeq ($(BR2_JFFS2_TARGET_SREC),y)
++ROOTFS_JFFS2_POST_GEN_HOOKS += JFFS2_GEN_SREC
+ endif
++
++$(eval $(call ROOTFS_TARGET,jffs2))
 \ No newline at end of file
 -- 
 1.6.3.3
