@@ -1,33 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri,  9 Apr 2010 11:07:15 +0200
-Subject: [Buildroot] [PATCH 37/44] busybox initramfs: do not use the IMAGE
-	variable
-In-Reply-To: <cover.1270803901.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1270803901.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <f840a2b28cf37c63f529fece9e58bed457e684c7.1270803901.git.thomas.petazzoni@free-electrons.com>
+From: Purnendu Kapadia <purnendukapadia@gmail.com>
+Date: Fri, 9 Apr 2010 10:17:37 +0100
+Subject: [Buildroot] problems with [PATCH] [RFC] Add mx25_3stack support
+Message-ID: <v2j11b870eb1004090217p6a514f22j4950feb86f16c38c@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/busybox/initramfs.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Hello All,
 
-diff --git a/package/busybox/initramfs.mk b/package/busybox/initramfs.mk
-index afb80f9..394f483 100644
---- a/package/busybox/initramfs.mk
-+++ b/package/busybox/initramfs.mk
-@@ -7,7 +7,7 @@ ifeq ($(BR2_PACKAGE_BUSYBOX_INITRAMFS),y)
- 
- BUSYBOX_INITRAMFS_DIR:=$(BUSYBOX_DIR)-initramfs
- BR2_INITRAMFS_DIR:=$(BUILD_DIR)/initramfs
--BB_INITRAMFS_TARGET:=$(IMAGE).initramfs_lst
-+BB_INITRAMFS_TARGET:=rootfs.initramfs_lst
- 
- $(BUSYBOX_INITRAMFS_DIR)/.unpacked: $(DL_DIR)/$(BUSYBOX_SOURCE)
- 	rm -rf $(BUILD_DIR)/tmp $(BUSYBOX_INITRAMFS_DIR)
--- 
-1.6.3.3
+I am trying the patch to get buildroot daily snapshot based system working.
+
+As I could not apply the patch, I manually applied the changes to get
+kernel,
+uboot, filesystem built using buildroot. Please suggest a command to apply
+the
+patch. When I apply the patch I get following message :
+
+cat imx25_support_buildroot.patch | patch -p1
+patch: **** Only garbage was found in the patch input.
+
+Now when I boot the iMX25 3stack board via NFS, I get following :
+
+VFS: Mounted root (nfs filesystem).
+Freeing init memory: 112K
+init_post() : after free_initmem()
+init_post() : after free_initmem()
+init_post() : after sys_open(/dev/console)
+init_post() : after run_init_process(ramdisk_execute_command)
+init_post() : after run_init_process(execute_command)
+
+It seems that the init from busybox is not starting.
+
+Any suggestions are very welcome.
+
+Purnendu
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100409/bfc2ed3a/attachment.htm>
