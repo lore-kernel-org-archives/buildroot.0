@@ -1,8 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 9 Apr 2010 16:19:13 +0200
-Subject: [Buildroot] [git commit master] initramfs: convert to ROOTFS_TARGET
-	infrastructure
-Message-ID: <20100409142131.6B97C20E6A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] target/iso9660: cleanup
+Message-ID: <20100409142126.5EC5A20E57@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,63 +9,112 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9d8e1b69ab342320c448091f78a3a93da2dbdf82
+commit: http://git.buildroot.net/buildroot/commit/?id=a573150c199028c1d03713ca8c801e8187851544
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Remove the mkisofs host tools building process, which is now in
+package/cdrkit.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- target/initramfs/initramfs.mk |   37 ++++++-------------------------------
- 1 files changed, 6 insertions(+), 31 deletions(-)
+ target/iso9660/Config.in  |    1 -
+ target/iso9660/iso9660.mk |   52 +-------------------------------------------
+ 2 files changed, 2 insertions(+), 51 deletions(-)
 
-diff --git a/target/initramfs/initramfs.mk b/target/initramfs/initramfs.mk
-index 0030278..cf1fcdb 100644
---- a/target/initramfs/initramfs.mk
-+++ b/target/initramfs/initramfs.mk
-@@ -6,38 +6,13 @@
+diff --git a/target/iso9660/Config.in b/target/iso9660/Config.in
+index 0b82063..40c93b3 100644
+--- a/target/iso9660/Config.in
++++ b/target/iso9660/Config.in
+@@ -4,7 +4,6 @@ config BR2_TARGET_ROOTFS_ISO9660
+ 	depends on !BR2_KERNEL_none
+ 	select BR2_TARGET_ROOTFS_EXT2
+ 	select BR2_TARGET_GRUB
+-	select BR2_HOST_FAKEROOT
+ 	help
+ 	  Build a bootable iso9660 image
+ 
+diff --git a/target/iso9660/iso9660.mk b/target/iso9660/iso9660.mk
+index 9571e47..a198c17 100644
+--- a/target/iso9660/iso9660.mk
++++ b/target/iso9660/iso9660.mk
+@@ -1,46 +1,5 @@
+ #############################################################
+ #
+-# mkisofs to build to target iso9660 filesystems
+-#
+-#############################################################
+-MKISOFS_SOURCE:=cdrtools-2.01.tar.bz2
+-MKISOFS_CAT:=$(BZCAT)
+-MKISOFS_SITE:=ftp://ftp.berlios.de/pub/cdrecord/
+-MKISOFS_DIR:=$(BUILD_DIR)/cdrtools-2.01
+-MKISOFS_TARGET=$(MKISOFS_DIR)/mkisofs/OBJ/$(HOST_ARCH)-linux-cc/mkisofs
+-
+-hest:
+-	@echo ARCH=$(BR2_ARCH) HOST_ARCH=$(HOST_ARCH)
+-$(DL_DIR)/$(MKISOFS_SOURCE):
+-	$(call DOWNLOAD,$(MKISOFS_SITE),$(MKISOFS_SOURCE))
+-
+-mkisofs-source: $(DL_DIR)/$(MKISOFS_SOURCE)
+-
+-$(MKISOFS_DIR)/.unpacked: $(DL_DIR)/$(MKISOFS_SOURCE)
+-	$(MKISOFS_CAT) $(DL_DIR)/$(MKISOFS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(MKISOFS_DIR) target/iso9660/ \*.patch
+-	touch $@
+-
+-$(MKISOFS_DIR)/.configured: $(MKISOFS_DIR)/.unpacked
+-	(cd $(MKISOFS_DIR); rm -rf config.cache; \
+-	);
+-	touch $@
+-
+-$(MKISOFS_TARGET): $(MKISOFS_DIR)/.configured
+-	$(MAKE) -C $(MKISOFS_DIR)
+-	touch -c $(MKISOFS_DIR)/mkisofs
+-
+-mkisofs: $(MKISOFS_TARGET)
+-
+-mkisofs-clean:
+-	-$(MAKE) -C $(MKISOFS_DIR) clean
+-
+-mkisofs-dirclean:
+-	rm -rf $(MKISOFS_DIR)
+-
+-
+-#############################################################
+-#
+ # Build the iso96600 root filesystem image
  #
  #############################################################
+@@ -54,7 +13,7 @@ ifeq ($(BR2_TARGET_ROOTFS_ISO9660_SQUASH),y)
+ ISO9660_OPTS+=-U
+ endif
  
--ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
--INITRAMFS_TARGET:=$(IMAGE).initramfs_list
--else
--INITRAMFS_TARGET:= #nothing
--endif
--
--TARGETS+=$(INITRAMFS_TARGET)
--
--$(INITRAMFS_TARGET) initramfs: host-fakeroot makedevs
-+define ROOTFS_INITRAMFS_INIT_SYMLINK
- 	rm -f $(TARGET_DIR)/init
- 	ln -s sbin/init $(TARGET_DIR)/init
--	# Use fakeroot to pretend all target binaries are owned by root
--	rm -f $(BUILD_DIR)/_fakeroot.$(notdir $(TAR_TARGET))
--	touch $(BUILD_DIR)/.fakeroot.00000
--	cat $(BUILD_DIR)/.fakeroot* > $(BUILD_DIR)/_fakeroot.$(notdir $(TAR_TARGET))
--	echo "chown -R 0:0 $(TARGET_DIR)" >> $(BUILD_DIR)/_fakeroot.$(notdir $(TAR_TARGET))
--	# Use fakeroot to pretend to create all needed device nodes
--	echo "$(HOST_DIR)/usr/bin/makedevs -d $(TARGET_DEVICE_TABLE) $(TARGET_DIR)" \
--		>> $(BUILD_DIR)/_fakeroot.$(notdir $(TAR_TARGET))
--	# Use fakeroot so gen_initramfs_list.sh believes the previous fakery
--	echo "$(SHELL) target/initramfs/gen_initramfs_list.sh -u 0 -g 0 $(TARGET_DIR) > $(INITRAMFS_TARGET)" \
--		>> $(BUILD_DIR)/_fakeroot.$(notdir $(TAR_TARGET))
--	chmod a+x $(BUILD_DIR)/_fakeroot.$(notdir $(TAR_TARGET))
--	$(HOST_DIR)/usr/bin/fakeroot -- $(BUILD_DIR)/_fakeroot.$(notdir $(TAR_TARGET))
--	-rm -f $(BUILD_DIR)/_fakeroot.$(notdir $(TAR_TARGET))
--
--initramfs-source:
--
--initramfs-clean:
--ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
--	-rm -f $(INITRAMFS_TARGET)
--endif
--initramfs-dirclean:
-+endef
+-$(ISO9660_TARGET): host-fakeroot $(LINUX_KERNEL) $(EXT2_TARGET) grub mkisofs
++$(ISO9660_TARGET): host-fakeroot host-cdrkit $(LINUX_KERNEL) $(EXT2_TARGET) grub
+ 	mkdir -p $(ISO9660_TARGET_DIR)
+ 	mkdir -p $(ISO9660_TARGET_DIR)/boot/grub
+ 	cp $(GRUB_DIR)/stage2/stage2_eltorito $(ISO9660_TARGET_DIR)/boot/grub/
+@@ -67,7 +26,7 @@ $(ISO9660_TARGET): host-fakeroot $(LINUX_KERNEL) $(EXT2_TARGET) grub mkisofs
+ 	cat $(BUILD_DIR)/.fakeroot* > $(BUILD_DIR)/_fakeroot.$(notdir $(ISO9660_TARGET))
+ 	echo "chown -R 0:0 $(ISO9660_TARGET_DIR)" >> $(BUILD_DIR)/_fakeroot.$(notdir $(ISO9660_TARGET))
+ 	# Use fakeroot so mkisofs believes the previous fakery
+-	echo "$(MKISOFS_TARGET) -R -b boot/grub/stage2_eltorito -no-emul-boot " \
++	echo "$(HOST_DIR)/usr/bin/genisoimage -R -b boot/grub/stage2_eltorito -no-emul-boot " \
+ 		"-boot-load-size 4 -boot-info-table -o $(ISO9660_TARGET) $(ISO9660_TARGET_DIR)" \
+ 		>> $(BUILD_DIR)/_fakeroot.$(notdir $(ISO9660_TARGET))
+ 	chmod a+x $(BUILD_DIR)/_fakeroot.$(notdir $(ISO9660_TARGET))
+@@ -78,13 +37,6 @@ iso9660root: $(ISO9660_TARGET)
+ 	echo $(ISO9660_TARGET)
+ 	@ls -l $(ISO9660_TARGET)
  
-+define ROOTFS_INITRAMFS_CMD
-+	$(SHELL) target/initramfs/gen_initramfs_list.sh -u 0 -g 0 $(TARGET_DIR) > $$@
-+endef
- 
-+$(eval $(call ROOTFS_TARGET,initramfs))
-\ No newline at end of file
+-iso9660root-source: mkisofs-source
+-
+-iso9660root-clean: mkisofs-clean
+-
+-iso9660root-dirclean: mkisofs-dirclean
+-	rm -rf $(ISO9660_DIR)
+-
+ #############################################################
+ #
+ # Toplevel Makefile options
 -- 
 1.6.3.3
