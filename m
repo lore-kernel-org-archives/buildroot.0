@@ -1,115 +1,253 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri,  9 Apr 2010 11:06:55 +0200
-Subject: [Buildroot] [PATCH 17/44] target/iso9660: cleanup
+Date: Fri,  9 Apr 2010 11:06:58 +0200
+Subject: [Buildroot] [PATCH 20/44] target/squashfs: cleanup,
+	remove support for 3.x
 In-Reply-To: <cover.1270803901.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1270803901.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <a573150c199028c1d03713ca8c801e8187851544.1270803901.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <1f5c3ccdceac58b2a4af6fc22fb49041462cc04f.1270803901.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove the mkisofs host tools building process, which is now in
-package/cdrkit.
+Remove the code to build squashfs-tools for the host, since they can
+now be built using package/squashfs.
+
+We also remove support for Squashfs 3.x, because the Squashfs driver
+merged inside the mainline kernel is a 4.x driver. So 3.x is only
+useful for old kernels using a Squashfs patch.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- target/iso9660/Config.in  |    1 -
- target/iso9660/iso9660.mk |   52 +-------------------------------------------
- 2 files changed, 2 insertions(+), 51 deletions(-)
+ target/squashfs/Config.in                          |   28 ---------
+ .../squashfs/squashfs-3.4-build-system-fix.patch   |   28 ---------
+ .../squashfs/squashfs-4.0-build-system-fix.patch   |   65 --------------------
+ target/squashfs/squashfsroot.mk                    |   52 +---------------
+ 4 files changed, 2 insertions(+), 171 deletions(-)
+ delete mode 100644 target/squashfs/squashfs-3.4-build-system-fix.patch
+ delete mode 100644 target/squashfs/squashfs-4.0-build-system-fix.patch
 
-diff --git a/target/iso9660/Config.in b/target/iso9660/Config.in
-index 0b82063..40c93b3 100644
---- a/target/iso9660/Config.in
-+++ b/target/iso9660/Config.in
-@@ -4,7 +4,6 @@ config BR2_TARGET_ROOTFS_ISO9660
- 	depends on !BR2_KERNEL_none
- 	select BR2_TARGET_ROOTFS_EXT2
- 	select BR2_TARGET_GRUB
+diff --git a/target/squashfs/Config.in b/target/squashfs/Config.in
+index 9259ba3..6cc8fca 100644
+--- a/target/squashfs/Config.in
++++ b/target/squashfs/Config.in
+@@ -1,32 +1,4 @@
+ config BR2_TARGET_ROOTFS_SQUASHFS
+ 	bool "squashfs root filesystem"
 -	select BR2_HOST_FAKEROOT
  	help
- 	  Build a bootable iso9660 image
+ 	  Build a squashfs root filesystem
+-
+-choice
+-	prompt "Squashfs version"
+-	default BR2_TARGET_ROOTFS_SQUASHFS_4
+-	depends on BR2_TARGET_ROOTFS_SQUASHFS
+-	help
+-	  Select squashfs version - This must match what your kernel
+-	  supports. Select 3.x if you use the legacy 3.x kernel
+-	  patches (pre 2.6.29), and 4.x otherwise.
+-
+-config BR2_TARGET_ROOTFS_SQUASHFS_3
+-       depends on BR2_DEPRECATED || BR2_RECENT
+-       bool "3.x"
+-       help
+-         Select this if you use the legacy 3.x kernel patches (pre 2.6.29)
+-
+-config BR2_TARGET_ROOTFS_SQUASHFS_4
+-       bool "4.x"
+-       help
+-         Select this if you use the squashfs version in mainline (from 2.6.29)
+-
+-endchoice
+-
+-config BR2_TARGET_ROOTFS_SQUASHFS_VERSION
+-	string
+-	default "3.4"	if BR2_TARGET_ROOTFS_SQUASHFS_3
+-	default "4.0"	if BR2_TARGET_ROOTFS_SQUASHFS_4
+diff --git a/target/squashfs/squashfs-3.4-build-system-fix.patch b/target/squashfs/squashfs-3.4-build-system-fix.patch
+deleted file mode 100644
+index 5b86b00..0000000
+--- a/target/squashfs/squashfs-3.4-build-system-fix.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-[PATCH]: squashfs-tools: Handle user supplied CFLAGS/LDFLAGS
+-
+-Properly handle make CFLAGS=.. LDFLAGS=..
+-
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+----
+- squashfs-tools/Makefile |    4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-Index: squashfs3.4/squashfs-tools/Makefile
+-===================================================================
+---- squashfs3.4.orig/squashfs-tools/Makefile
+-+++ squashfs3.4/squashfs-tools/Makefile
+-@@ -2,12 +2,12 @@ INSTALL_DIR = /usr/local/bin
+- 
+- INCLUDEDIR = .
+- 
+--CFLAGS := -I$(INCLUDEDIR) -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -O2
+-+override CFLAGS += -I$(INCLUDEDIR) -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -O2
+- 
+- all: mksquashfs unsquashfs
+- 
+- mksquashfs: mksquashfs.o read_fs.o sort.o
+--	$(CC) mksquashfs.o read_fs.o sort.o -lz -lpthread -lm -o $@
+-+	$(CC) $(LDFLAGS) mksquashfs.o read_fs.o sort.o -lz -lpthread -lm -o $@
+- 
+- mksquashfs.o: mksquashfs.c squashfs_fs.h mksquashfs.h global.h sort.h
+- 
+diff --git a/target/squashfs/squashfs-4.0-build-system-fix.patch b/target/squashfs/squashfs-4.0-build-system-fix.patch
+deleted file mode 100644
+index 7ba0ab9..0000000
+--- a/target/squashfs/squashfs-4.0-build-system-fix.patch
++++ /dev/null
+@@ -1,65 +0,0 @@
+-Fix the build system so that CFLAGS can be overriden on the command
+-line to pass additionnal -I options.
+-
+-Patch borrowed from OpenEmbedded.
+-
+-Index: squashfs-4.0/squashfs-tools/Makefile
+-===================================================================
+---- squashfs-4.0.orig/squashfs-tools.orig/Makefile	2009-04-19 01:47:43.000000000 +0200
+-+++ squashfs-4.0/squashfs-tools/Makefile	2009-04-19 01:52:36.000000000 +0200
+-@@ -1,36 +1,48 @@
+- INSTALL_DIR = /usr/local/bin
+- 
+- INCLUDEDIR = .
+-+CFLAGS_R = -I$(INCLUDEDIR) -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE
+-+LIBS = -lz -lpthread
+- 
+- CFLAGS := -I$(INCLUDEDIR) -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -O2
+- 
+- all: mksquashfs unsquashfs
+- 
+- mksquashfs: mksquashfs.o read_fs.o sort.o swap.o pseudo.o
+--	$(CC) mksquashfs.o read_fs.o sort.o swap.o pseudo.o -lz -lpthread -lm -o $@
+-+	$(CC) $(LDFLAGS) mksquashfs.o read_fs.o sort.o swap.o pseudo.o -lz -lpthread -lm -o $@
+- 
+- mksquashfs.o: mksquashfs.c squashfs_fs.h mksquashfs.h global.h sort.h squashfs_swap.h Makefile
+-+	$(CC) $(CFLAGS_R) $(CFLAGS) -c -o $@ $<
+- 
+- read_fs.o: read_fs.c squashfs_fs.h read_fs.h global.h squashfs_swap.h Makefile
+-+	$(CC) $(CFLAGS_R) $(CFLAGS) -c -o $@ $<
+- 
+- sort.o: sort.c squashfs_fs.h global.h sort.h Makefile
+-+	$(CC) $(CFLAGS_R) $(CFLAGS) -c -o $@ $<
+- 
+- swap.o: swap.c Makefile
+-+	$(CC) $(CFLAGS_R) $(CFLAGS) -c -o $@ $<
+- 
+- pseudo.o: pseudo.c pseudo.h Makefile
+-+	$(CC) $(CFLAGS_R) $(CFLAGS) -c -o $@ $<
+- 
+- unsquashfs: unsquashfs.o unsquash-1.o unsquash-2.o unsquash-3.o unsquash-4.o swap.o
+--	$(CC) unsquashfs.o unsquash-1.o unsquash-2.o unsquash-3.o unsquash-4.o swap.o -lz -lpthread -lm -o $@
+-+	$(CC) $(LDFLAGS) unsquashfs.o unsquash-1.o unsquash-2.o unsquash-3.o unsquash-4.o swap.o -lz -lpthread -lm -o $@
+- 
+--unsquashfs.o: unsquashfs.h unsquashfs.c squashfs_fs.h squashfs_swap.h squashfs_compat.h global.h Makefile
+-+unsquashfs.o: unsquashfs.c unsquashfs.h squashfs_fs.h squashfs_swap.h squashfs_compat.h global.h Makefile
+-+	$(CC) $(CFLAGS_R) $(CFLAGS) -c -o $@ $<
+- 
+--unsquash-1.o: unsquashfs.h unsquash-1.c squashfs_fs.h squashfs_compat.h global.h Makefile
+-+unsquash-1.o: unsquash-1.c unsquashfs.h squashfs_fs.h squashfs_compat.h global.h Makefile
+-+	$(CC) $(CFLAGS_R) $(CFLAGS) -c -o $@ $<
+- 
+--unsquash-2.o: unsquashfs.h unsquash-2.c unsquashfs.h squashfs_fs.h squashfs_compat.h global.h Makefile
+-+unsquash-2.o: unsquash-2.c unsquashfs.h unsquashfs.h squashfs_fs.h squashfs_compat.h global.h Makefile
+-+	$(CC) $(CFLAGS_R) $(CFLAGS) -c -o $@ $<
+- 
+--unsquash-3.o: unsquashfs.h unsquash-3.c squashfs_fs.h squashfs_compat.h global.h Makefile
+-+unsquash-3.o: unsquash-3.c unsquashfs.h squashfs_fs.h squashfs_compat.h global.h Makefile
+-+	$(CC) $(CFLAGS_R) $(CFLAGS) -c -o $@ $<
+- 
+--unsquash-4.o: unsquashfs.h unsquash-4.c squashfs_fs.h squashfs_swap.h global.h Makefile
+-+unsquash-4.o: unsquash-4.c unsquashfs.h squashfs_fs.h squashfs_swap.h global.h Makefile
+-+	$(CC) $(CFLAGS_R) $(CFLAGS) -c -o $@ $<
+- 
+- clean:
+- 	-rm -f *.o mksquashfs unsquashfs
+diff --git a/target/squashfs/squashfsroot.mk b/target/squashfs/squashfsroot.mk
+index 63adc5c..01c4dab 100644
+--- a/target/squashfs/squashfsroot.mk
++++ b/target/squashfs/squashfsroot.mk
+@@ -1,52 +1,12 @@
+ #############################################################
+ #
+-# mksquashfs to build to target squashfs filesystems
+-#
+-#############################################################
+-SQUASHFS_VERSION:=$(call qstrip,$(BR2_TARGET_ROOTFS_SQUASHFS_VERSION))
+-SQUASHFS_DIR:=$(BUILD_DIR)/squashfs$(SQUASHFS_VERSION)
+-SQUASHFS_SOURCE:=squashfs$(SQUASHFS_VERSION).tar.gz
+-SQUASHFS_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/squashfs
+-SQUASHFS_CAT:=$(ZCAT)
+-
+-$(DL_DIR)/$(SQUASHFS_SOURCE):
+-	 $(call DOWNLOAD,$(SQUASHFS_SITE),$(SQUASHFS_SOURCE))
+-
+-$(SQUASHFS_DIR)/.unpacked: $(DL_DIR)/$(SQUASHFS_SOURCE) #$(SQUASHFS_PATCH)
+-	$(SQUASHFS_CAT) $(DL_DIR)/$(SQUASHFS_SOURCE) | tar -C $(BUILD_DIR) -xvf -
+-	toolchain/patch-kernel.sh $(SQUASHFS_DIR) target/squashfs/ squashfs-$(SQUASHFS_VERSION)-\*.patch
+-	touch $@
+-
+-$(SQUASHFS_DIR)/squashfs-tools/mksquashfs: $(SQUASHFS_DIR)/.unpacked
+-	$(MAKE) CFLAGS="$(HOST_CFLAGS)" LDFLAGS="$(HOST_LDFLAGS)" -C $(SQUASHFS_DIR)/squashfs-tools
+-
+-squashfs: host-zlib $(SQUASHFS_DIR)/squashfs-tools/mksquashfs
+-
+-squashfs-source: $(DL_DIR)/$(SQUASHFS_SOURCE)
+-
+-squashfs-clean:
+-	-$(MAKE) -C $(SQUASHFS_DIR)/squashfs-tools clean
+-
+-squashfs-dirclean:
+-	rm -rf $(SQUASHFS_DIR)
+-
+-#############################################################
+-#
+ # Build the squashfs root filesystem image
+ #
+ #############################################################
+-ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS_3),y)
+-# 4.x is always little endian
+-ifeq ($(BR2_ENDIAN),"BIG")
+-SQUASHFS_ENDIANNESS=-be
+-else
+-SQUASHFS_ENDIANNESS=-le
+-endif
+-endif
  
-diff --git a/target/iso9660/iso9660.mk b/target/iso9660/iso9660.mk
-index 9571e47..a198c17 100644
---- a/target/iso9660/iso9660.mk
-+++ b/target/iso9660/iso9660.mk
-@@ -1,46 +1,5 @@
- #############################################################
- #
--# mkisofs to build to target iso9660 filesystems
--#
--#############################################################
--MKISOFS_SOURCE:=cdrtools-2.01.tar.bz2
--MKISOFS_CAT:=$(BZCAT)
--MKISOFS_SITE:=ftp://ftp.berlios.de/pub/cdrecord/
--MKISOFS_DIR:=$(BUILD_DIR)/cdrtools-2.01
--MKISOFS_TARGET=$(MKISOFS_DIR)/mkisofs/OBJ/$(HOST_ARCH)-linux-cc/mkisofs
--
--hest:
--	@echo ARCH=$(BR2_ARCH) HOST_ARCH=$(HOST_ARCH)
--$(DL_DIR)/$(MKISOFS_SOURCE):
--	$(call DOWNLOAD,$(MKISOFS_SITE),$(MKISOFS_SOURCE))
--
--mkisofs-source: $(DL_DIR)/$(MKISOFS_SOURCE)
--
--$(MKISOFS_DIR)/.unpacked: $(DL_DIR)/$(MKISOFS_SOURCE)
--	$(MKISOFS_CAT) $(DL_DIR)/$(MKISOFS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(MKISOFS_DIR) target/iso9660/ \*.patch
--	touch $@
--
--$(MKISOFS_DIR)/.configured: $(MKISOFS_DIR)/.unpacked
--	(cd $(MKISOFS_DIR); rm -rf config.cache; \
--	);
--	touch $@
--
--$(MKISOFS_TARGET): $(MKISOFS_DIR)/.configured
--	$(MAKE) -C $(MKISOFS_DIR)
--	touch -c $(MKISOFS_DIR)/mkisofs
--
--mkisofs: $(MKISOFS_TARGET)
--
--mkisofs-clean:
--	-$(MAKE) -C $(MKISOFS_DIR) clean
--
--mkisofs-dirclean:
--	rm -rf $(MKISOFS_DIR)
--
--
--#############################################################
--#
- # Build the iso96600 root filesystem image
- #
- #############################################################
-@@ -54,7 +13,7 @@ ifeq ($(BR2_TARGET_ROOTFS_ISO9660_SQUASH),y)
- ISO9660_OPTS+=-U
+ SQUASHFS_TARGET:=$(IMAGE).squashfs
+ 
+-squashfsroot: host-fakeroot makedevs squashfs
++squashfsroot: host-fakeroot host-squashfs makedevs
+ 	# Use fakeroot to pretend all target binaries are owned by root
+ 	rm -f $(BUILD_DIR)/_fakeroot.$(notdir $(SQUASHFS_TARGET))
+ 	touch $(BUILD_DIR)/.fakeroot.00000
+@@ -58,7 +18,7 @@ ifneq ($(TARGET_DEVICE_TABLE),)
+ 		>> $(BUILD_DIR)/_fakeroot.$(notdir $(SQUASHFS_TARGET))
  endif
+ 	# Use fakeroot so mksquashfs believes the previous fakery
+-	echo "$(SQUASHFS_DIR)/squashfs-tools/mksquashfs " \
++	echo "$(HOST_DIR)/usr/bin/mksquashfs " \
+ 		    "$(TARGET_DIR) $(SQUASHFS_TARGET) " \
+ 		    "-noappend $(SQUASHFS_ENDIANNESS)" \
+ 		>> $(BUILD_DIR)/_fakeroot.$(notdir $(SQUASHFS_TARGET))
+@@ -67,14 +27,6 @@ endif
+ 	chmod 0644 $(SQUASHFS_TARGET)
+ 	- at rm -f $(BUILD_DIR)/_fakeroot.$(notdir $(SQUASHFS_TARGET))
  
--$(ISO9660_TARGET): host-fakeroot $(LINUX_KERNEL) $(EXT2_TARGET) grub mkisofs
-+$(ISO9660_TARGET): host-fakeroot host-cdrkit $(LINUX_KERNEL) $(EXT2_TARGET) grub
- 	mkdir -p $(ISO9660_TARGET_DIR)
- 	mkdir -p $(ISO9660_TARGET_DIR)/boot/grub
- 	cp $(GRUB_DIR)/stage2/stage2_eltorito $(ISO9660_TARGET_DIR)/boot/grub/
-@@ -67,7 +26,7 @@ $(ISO9660_TARGET): host-fakeroot $(LINUX_KERNEL) $(EXT2_TARGET) grub mkisofs
- 	cat $(BUILD_DIR)/.fakeroot* > $(BUILD_DIR)/_fakeroot.$(notdir $(ISO9660_TARGET))
- 	echo "chown -R 0:0 $(ISO9660_TARGET_DIR)" >> $(BUILD_DIR)/_fakeroot.$(notdir $(ISO9660_TARGET))
- 	# Use fakeroot so mkisofs believes the previous fakery
--	echo "$(MKISOFS_TARGET) -R -b boot/grub/stage2_eltorito -no-emul-boot " \
-+	echo "$(HOST_DIR)/usr/bin/genisoimage -R -b boot/grub/stage2_eltorito -no-emul-boot " \
- 		"-boot-load-size 4 -boot-info-table -o $(ISO9660_TARGET) $(ISO9660_TARGET_DIR)" \
- 		>> $(BUILD_DIR)/_fakeroot.$(notdir $(ISO9660_TARGET))
- 	chmod a+x $(BUILD_DIR)/_fakeroot.$(notdir $(ISO9660_TARGET))
-@@ -78,13 +37,6 @@ iso9660root: $(ISO9660_TARGET)
- 	echo $(ISO9660_TARGET)
- 	@ls -l $(ISO9660_TARGET)
- 
--iso9660root-source: mkisofs-source
+-squashfsroot-source: squashfs-source
 -
--iso9660root-clean: mkisofs-clean
+-squashfsroot-clean:
+-	-$(MAKE) -C $(SQUASHFS_DIR) clean
 -
--iso9660root-dirclean: mkisofs-dirclean
--	rm -rf $(ISO9660_DIR)
+-squashfsroot-dirclean:
+-	rm -rf $(SQUASHFS_DIR)
 -
  #############################################################
  #
