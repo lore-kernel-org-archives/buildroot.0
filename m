@@ -1,30 +1,27 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  9 Apr 2010 14:42:35 +0000 (UTC)
-Subject: [Buildroot] [Bug 1357] Add bluez to buildroot system
-In-Reply-To: <bug-1357-163@https.bugs.busybox.net/>
-References: <bug-1357-163@https.bugs.busybox.net/>
-Message-ID: <20100409144235.1DDFA20DD0@busybox.osuosl.org>
+Date: Fri,  9 Apr 2010 14:43:09 +0000 (UTC)
+Subject: [Buildroot] [Bug 1213] Move .config into output directory
+In-Reply-To: <bug-1213-163@https.bugs.busybox.net/>
+References: <bug-1213-163@https.bugs.busybox.net/>
+Message-ID: <20100409144309.8253820EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1357
+https://bugs.busybox.net/show_bug.cgi?id=1213
 
 
 Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-         AssignedTo|unassigned at buildroot.uclibc.|thomas.petazzoni at free-
-                   |org                         |electrons.com
+         AssignedTo|unassigned at buildroot.uclibc.|will_wagner at carallon.com
+                   |org                         |
+             Status|ASSIGNED                    |NEW
 
 
-
-
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2010-04-09 14:42:34 UTC ---
-I've started merging this patch, so I'm re-assigning this bug to me.
 
 
 -- 
