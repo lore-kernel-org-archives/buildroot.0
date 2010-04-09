@@ -1,7 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 9 Apr 2010 16:19:13 +0200
-Subject: [Buildroot] [git commit master] target/common: do not use IMAGE
-Message-ID: <20100409142131.F3D9420E6C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] Add version selection for the
+	SquashFS root filesystem
+Message-ID: <20100409142134.151C120E74@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,44 +10,57 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d2b07919ac2ffe94053ac6eef6bf4367b86dc139
+commit: http://git.buildroot.net/buildroot/commit/?id=b8cee9fb4380a8d58a324d141dcab68a4c3aa29c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- target/common.mk |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+ fs/squashfs/Config.in   |   19 +++++++++++++++++++
+ fs/squashfs/squashfs.mk |    4 ++++
+ 2 files changed, 23 insertions(+), 0 deletions(-)
 
-diff --git a/target/common.mk b/target/common.mk
-index c7eff74..cebe8c3 100644
---- a/target/common.mk
-+++ b/target/common.mk
-@@ -31,8 +31,8 @@ FAKEROOT_SCRIPT = $(BUILD_DIR)/_fakeroot.fs
+diff --git a/fs/squashfs/Config.in b/fs/squashfs/Config.in
+index 6cc8fca..bcc93b9 100644
+--- a/fs/squashfs/Config.in
++++ b/fs/squashfs/Config.in
+@@ -2,3 +2,22 @@ config BR2_TARGET_ROOTFS_SQUASHFS
+ 	bool "squashfs root filesystem"
+ 	help
+ 	  Build a squashfs root filesystem
++
++if BR2_TARGET_ROOTFS_SQUASHFS
++choice
++	prompt "SquashFS version"
++	default BR2_TARGET_ROOTFS_SQUASHFS4
++	help
++	  Select the Squash filesystem version to use to generate the
++	  root filesystem.
++
++config BR2_TARGET_ROOTFS_SQUASHFS4
++       bool "4.x"
++
++config BR2_TARGET_ROOTFS_SQUASHFS3
++       depends on BR2_DEPRECATED
++       bool "3.x"
++
++endchoice
++endif
++
+diff --git a/fs/squashfs/squashfs.mk b/fs/squashfs/squashfs.mk
+index d72388e..f11ba20 100644
+--- a/fs/squashfs/squashfs.mk
++++ b/fs/squashfs/squashfs.mk
+@@ -4,7 +4,11 @@
+ #
+ #############################################################
  
- define ROOTFS_TARGET_INTERNAL
++ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4),y)
+ ROOTFS_SQUASHFS_DEPENDENCIES = host-squashfs
++else
++ROOTFS_SQUASHFS_DEPENDENCIES = host-squashfs3
++endif
  
--$(IMAGE).$(1): $(ROOTFS_$(2)_DEPENDENCIES) host-fakeroot makedevs $(if $(BR2_TARGET_ROOTFS_$(2)_LZMA),host-lzma)
--	@$(call MESSAGE,"Generating root filesystem image $(IMAGE).$(1)")
-+$(BINARIES_DIR)/rootfs.$(1): $(ROOTFS_$(2)_DEPENDENCIES) host-fakeroot makedevs $(if $(BR2_TARGET_ROOTFS_$(2)_LZMA),host-lzma)
-+	@$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
- 	$(foreach hook,$(ROOTFS_$(2)_PRE_GEN_HOOKS),$(call $(hook))$(sep))
- 	rm -f $(FAKEROOT_SCRIPT)
- 	touch $(BUILD_DIR)/.fakeroot.00000
-@@ -56,7 +56,7 @@ ifeq ($$(BR2_TARGET_ROOTFS_$(2)_LZMA),y)
- 	$(LZMA) -9 -c $$@ > $$@.lzma
- endif
- 
--$(1)-root: $(IMAGE).$(1)
-+$(1)-root: $(BINARIES_DIR)/rootfs.$(1)
- 
- ifeq ($$(BR2_TARGET_ROOTFS_$(2)),y)
- TARGETS += $(1)-root
-@@ -65,4 +65,4 @@ endef
- 
- define ROOTFS_TARGET
- $(call ROOTFS_TARGET_INTERNAL,$(1),$(call UPPERCASE,$(1)))
--endef
-\ No newline at end of file
-+endef
+ define ROOTFS_SQUASHFS_CMD
+ 	$(HOST_DIR)/usr/bin/mksquashfs $(TARGET_DIR) $$@ -noappend
 -- 
 1.6.3.3
