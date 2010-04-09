@@ -1,68 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri,  9 Apr 2010 11:07:18 +0200
-Subject: [Buildroot] [PATCH 40/44] Remove IMAGE and related configuration
-	options
+Date: Fri,  9 Apr 2010 11:07:08 +0200
+Subject: [Buildroot] [PATCH 30/44] romfs: convert to ROOTFS_TARGET
+	infrastructure
 In-Reply-To: <cover.1270803901.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1270803901.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <325bfd1cbae03fe286796d3fa7de7c0a3227f7a5.1270803901.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <aa50ffdbffde0d6012f50a433d0404186e74eacc.1270803901.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now, we just hardcode the image filenames to be rootfs.$(FSTYPE), in
-the $(BINARIES_DIR).
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Makefile.in |    4 ----
- target/Config.in    |   12 ------------
- 2 files changed, 0 insertions(+), 16 deletions(-)
+ target/romfs/romfs.mk |   30 ++++++------------------------
+ 1 files changed, 6 insertions(+), 24 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 2bd3640..efb4dec 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -109,7 +109,6 @@ TOOLCHAIN_DIR=$(BASE_DIR)/toolchain
+diff --git a/target/romfs/romfs.mk b/target/romfs/romfs.mk
+index e4b8ff5..9719478 100644
+--- a/target/romfs/romfs.mk
++++ b/target/romfs/romfs.mk
+@@ -6,28 +6,10 @@
  
- # Quotes are needed for spaces et al in path components.
- TARGET_PATH="$(TOOLCHAIN_DIR)/bin:$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin/:$(STAGING_DIR)/bin:$(STAGING_DIR)/usr/bin:$(PATH)"
--IMAGE:=$(BINARIES_DIR)/$(BR2_ROOTFS_PREFIX).$(ARCH)$(ROOTFS_SUFFIX)
- GNU_TARGET_NAME=$(OPTIMIZE_FOR_CPU)-linux
- REAL_GNU_TARGET_NAME=$(OPTIMIZE_FOR_CPU)$(GNU_TARGET_SUFFIX)
- TARGET_CROSS=$(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-
-@@ -119,9 +118,6 @@ TOOLCHAIN_EXTERNAL_PREFIX:=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))
- TOOLCHAIN_EXTERNAL_PATH:=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PATH))
- TOOLCHAIN_DIR=$(BASE_DIR)/toolchain
- TARGET_PATH="$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin/:$(TOOLCHAIN_DIR)/bin:$(TOOLCHAIN_EXTERNAL_PATH)/bin:$(PATH)"
--#IMAGE:=$(BINARIES_DIR)/$(BR2_ROOTFS_PREFIX).$(TOOLCHAIN_EXTERNAL_PREFIX)$(ROOTFS_SUFFIX)
--IMAGE:=$(BINARIES_DIR)/$(BR2_ROOTFS_PREFIX).$(ARCH)$(ROOTFS_SUFFIX)
--
- REAL_GNU_TARGET_NAME=$(TOOLCHAIN_EXTERNAL_PREFIX)
- GNU_TARGET_NAME=$(TOOLCHAIN_EXTERNAL_PREFIX)
- KERNEL_CROSS=$(TOOLCHAIN_EXTERNAL_PATH)/bin/$(TOOLCHAIN_EXTERNAL_PREFIX)-
-diff --git a/target/Config.in b/target/Config.in
-index 4cae66c..5d634ca 100644
---- a/target/Config.in
-+++ b/target/Config.in
-@@ -1,17 +1,5 @@
- menu "Target filesystem options"
+ ROMFS_TARGET=$(IMAGE).romfs
  
--config BR2_ROOTFS_PREFIX
--	string "Custom root fs prefix"
--	default "rootfs"
--	help
--	  Add a custom string to the beginning of the root file system name.
--
--config BR2_ROOTFS_SUFFIX
--	string "Custom root fs suffix"
--	default ""
--	help
--	  Add a custom string to the end of the root file system name.
--
- config BR2_ROOTFS_POST_BUILD_SCRIPT
- 	string "Custom script to run before packing files"
- 	default ""
+-romfsroot: host-fakeroot host-genromfs makedevs
+-	# Use fakeroot to pretend all target binaries are owned by root
+-	rm -f $(BUILD_DIR)/_fakeroot.$(notdir $(ROMFS_TARGET))
+-	touch $(BUILD_DIR)/.fakeroot.00000
+-	cat $(BUILD_DIR)/.fakeroot* > $(BUILD_DIR)/_fakeroot.$(notdir $(ROMFS_TARGET))
+-	echo "chown -R 0:0 $(TARGET_DIR)" >> $(BUILD_DIR)/_fakeroot.$(notdir $(ROMFS_TARGET))
+-ifneq ($(TARGET_DEVICE_TABLE),)
+-	# Use fakeroot to pretend to create all needed device nodes
+-	echo "$(HOST_DIR)/usr/bin/makedevs -d $(TARGET_DEVICE_TABLE) $(TARGET_DIR)" \
+-		>> $(BUILD_DIR)/_fakeroot.$(notdir $(ROMFS_TARGET))
+-endif
+-	# Use fakeroot so genromfs believes the previous fakery
+-	echo "$(HOST_DIR)/usr/bin/genromfs -d $(TARGET_DIR) -f $(ROMFS_TARGET)" >> $(BUILD_DIR)/_fakeroot.$(notdir $(ROMFS_TARGET))
+-	chmod a+x $(BUILD_DIR)/_fakeroot.$(notdir $(ROMFS_TARGET))
+-	$(HOST_DIR)/usr/bin/fakeroot -- $(BUILD_DIR)/_fakeroot.$(notdir $(ROMFS_TARGET))
+-	- at rm -f $(BUILD_DIR)/_fakeroot.$(notdir $(ROMFS_TARGET))
++ROOTFS_ROMFS_DEPENDENCIES = host-genromfs
+ 
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_TARGET_ROOTFS_ROMFS),y)
+-TARGETS+=romfsroot
+-endif
++define ROOTFS_ROMFS_CMD
++	$(HOST_DIR)/usr/bin/genromfs -d $(TARGET_DIR) -f $$@
++endef
++
++$(eval $(call ROOTFS_TARGET,romfs))
+\ No newline at end of file
 -- 
 1.6.3.3
