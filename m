@@ -1,137 +1,150 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri,  9 Apr 2010 11:07:22 +0200
-Subject: [Buildroot] [PATCH 44/44] fs/*/Config.in: remove useless
-	configuration comments
+Date: Fri,  9 Apr 2010 11:06:43 +0200
+Subject: [Buildroot] [PATCH 05/44] libcap: new package
 In-Reply-To: <cover.1270803901.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1270803901.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <0b79c5022d32b15180a18087a0fba5a2f1af5cc7.1270803901.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <7ec49b9af7eef4cb43615e58e7f166fddaae94e6.1270803901.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The dependency on gzip, bzip2 and lzma are properly handled
-automatically. No need to tell the user about this.
+Needed as a dependency of cdrkit, which contains genisomage, useful
+for generating ISO9660 filesystem images.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- fs/cpio/Config.in  |    6 ------
- fs/ext2/Config.in  |    6 ------
- fs/tar/Config.in   |    6 ------
- fs/ubifs/Config.in |    9 ---------
- 4 files changed, 0 insertions(+), 27 deletions(-)
+ package/Config.in                             |    1 +
+ package/libcap/Config.in                      |   10 +++++
+ package/libcap/libcap-2.19-build-system.patch |   55 +++++++++++++++++++++++++
+ package/libcap/libcap.mk                      |   27 ++++++++++++
+ 4 files changed, 93 insertions(+), 0 deletions(-)
+ create mode 100644 package/libcap/Config.in
+ create mode 100644 package/libcap/libcap-2.19-build-system.patch
+ create mode 100644 package/libcap/libcap.mk
 
-diff --git a/fs/cpio/Config.in b/fs/cpio/Config.in
-index 02fd00d..374cfe0 100644
---- a/fs/cpio/Config.in
-+++ b/fs/cpio/Config.in
-@@ -19,22 +19,16 @@ config BR2_TARGET_ROOTFS_CPIO_GZIP
-         bool "gzip"
-         help
-          Do compress the cpio filesystem with gzip.
--         Note that you either have to have gzip installed on your host
--         or select to build a gzip for your host. See the packages submenu.
+diff --git a/package/Config.in b/package/Config.in
+index a742063..f3f4213 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -295,6 +295,7 @@ source "package/libupnp/Config.in"
+ endmenu
  
- config BR2_TARGET_ROOTFS_CPIO_BZIP2
-         bool "bzip2"
-         help
-          Do compress the cpio filesystem with bzip2.
--         Note that you either have to have bzip2 installed on your host
--         or select to build a bzip2 for your host. See the packages submenu.
- 
- config BR2_TARGET_ROOTFS_CPIO_LZMA
-         bool "lzma"
-         help
-          Do compress the cpio filesystem with lzma.
--         Note that you either have to have lzma installed on your host
--         or select to build a lzma for your host. See the packages submenu.
- 
- endchoice
- 
-diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
-index 02ec18f..5c041d9 100644
---- a/fs/ext2/Config.in
-+++ b/fs/ext2/Config.in
-@@ -40,22 +40,16 @@ config BR2_TARGET_ROOTFS_EXT2_GZIP
- 	bool "gzip"
- 	help
- 	  Do compress the ext2 filesystem with gzip.
--	  Note that you either have to have gzip installed on your host
--	  or select to build a gzip for your host. See the packages submenu.
- 
- config BR2_TARGET_ROOTFS_EXT2_BZIP2
- 	bool "bzip2"
- 	help
- 	  Do compress the ext2 filesystem with bzip2.
--	  Note that you either have to have bzip2 installed on your host
--	  or select to build a bzip2 for your host. See the packages submenu.
- 
- config BR2_TARGET_ROOTFS_EXT2_LZMA
- 	bool "lzma"
- 	help
- 	  Do compress the ext2 filesystem with lzma.
--	  Note that you either have to have lzma installed on your host
--	  or select to build a lzma for your host. See the packages submenu.
- 
- endchoice
- 
-diff --git a/fs/tar/Config.in b/fs/tar/Config.in
-index 0adca79..5aaf9bd 100644
---- a/fs/tar/Config.in
-+++ b/fs/tar/Config.in
-@@ -19,22 +19,16 @@ config BR2_TARGET_ROOTFS_TAR_GZIP
- 	bool "gzip"
- 	help
- 	 Do compress the tarball with gzip.
--	 Note that you either have to have gzip installed on your host
--	 or select to build a gzip for your host. See the packages submenu.
- 
- config BR2_TARGET_ROOTFS_TAR_BZIP2
- 	bool "bzip2"
- 	help
- 	 Do compress the tarball with bzip2.
--	 Note that you either have to have bzip2 installed on your host
--	 or select to build a bzip2 for your host. See the packages submenu.
- 
- config BR2_TARGET_ROOTFS_TAR_LZMA
- 	bool "lzma"
- 	help
- 	 Do compress the tarball with lzma.
--	 Note that you either have to have lzma installed on your host
--	 or select to build a lzma for your host. See the packages submenu.
- 
- endchoice
- 
-diff --git a/fs/ubifs/Config.in b/fs/ubifs/Config.in
-index 9fa510e..bcf409c 100644
---- a/fs/ubifs/Config.in
-+++ b/fs/ubifs/Config.in
-@@ -64,25 +64,16 @@ config BR2_TARGET_ROOTFS_UBIFS_GZIP
- 	bool "gzip"
- 	help
- 	  Do compress the ubifs filesystem with gzip.
--	  Note that you either have to have gzip installed on your
--	  host or select to build a gzip for your host. See the
--	  packages submenu.
- 
- config BR2_TARGET_ROOTFS_UBIFS_BZIP2
- 	bool "bzip2"
- 	help
- 	  Do compress the ubifs filesystem with bzip2.
--	  Note that you either have to have bzip2 installed on your
--	  host or select to build a bzip2 for your host. See the
--	  packages submenu.
- 
- config BR2_TARGET_ROOTFS_UBIFS_LZMA
- 	bool "lzma"
- 	help
- 	  Do compress the ubifs filesystem with lzma.
--	  Note that you either have to have lzma installed on your
--	  host or select to build a lzma for your host. See the
--	  packages submenu.
- 
- endchoice
- 
+ menu "Other"
++source "package/libcap/Config.in"
+ source "package/libdaemon/Config.in"
+ source "package/libelf/Config.in"
+ source "package/libevent/Config.in"
+diff --git a/package/libcap/Config.in b/package/libcap/Config.in
+new file mode 100644
+index 0000000..f1fc8fa
+--- /dev/null
++++ b/package/libcap/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_LIBCAP
++	bool "libcap"
++	help
++	 This library implements the user-space interfaces to the
++	 POSIX 1003.1e capabilities available in Linux kernels. These
++	 capabilities are a partitioning of the all powerful root
++	 privilege into a set of distinct privileges.
++
++	 http://sites.google.com/site/fullycapable/
++
+diff --git a/package/libcap/libcap-2.19-build-system.patch b/package/libcap/libcap-2.19-build-system.patch
+new file mode 100644
+index 0000000..42a5518
+--- /dev/null
++++ b/package/libcap/libcap-2.19-build-system.patch
+@@ -0,0 +1,55 @@
++---
++ Make.Rules      |   15 ++++++++-------
++ libcap/Makefile |    2 +-
++ 2 files changed, 9 insertions(+), 8 deletions(-)
++
++Index: libcap-2.19/Make.Rules
++===================================================================
++--- libcap-2.19.orig/Make.Rules
+++++ libcap-2.19/Make.Rules
++@@ -45,24 +45,25 @@
++ KERNEL_HEADERS := $(topdir)/libcap/include
++ IPATH += -I$(topdir)/libcap/include -I$(KERNEL_HEADERS)
++ 
++-CC := gcc
++-CFLAGS := -O2
++-BUILD_CC := $(CC)
++-BUILD_CFLAGS := $(CFLAGS) $(IPATH)
++-AR := ar
++-RANLIB := ranlib
+++CC ?= gcc
+++CFLAGS ?= -O2
+++CC_FOR_BUILD ?= $(CC)
+++CFLAGS_FOR_BUILD ?= $(CFLAGS)
+++AR ?= ar
+++RANLIB ?= ranlib
++ DEBUG = -g #-DDEBUG
++ WARNINGS=-fPIC -Wall -Wwrite-strings \
++         -Wpointer-arith -Wcast-qual -Wcast-align \
++         -Wstrict-prototypes -Wmissing-prototypes \
++         -Wnested-externs -Winline -Wshadow
++ LD=$(CC) -Wl,-x -shared
++-LDFLAGS := #-g
+++LDFLAGS ?= #-g
++ 
++ SYSTEM_HEADERS = /usr/include
++ INCS=$(topdir)/libcap/include/sys/capability.h
++ LDFLAGS += -L$(topdir)/libcap
++ CFLAGS += -Dlinux $(WARNINGS) $(DEBUG) $(IPATH)
+++CFLAGS_FOR_BUILD += $(IPATH)
++ PAM_CAP := $(shell if [ -f /usr/include/security/pam_modules.h ]; then echo yes ; else echo no ; fi)
++ INDENT := $(shell if [ -n "$(which indent 2>/dev/null)" ]; then echo "| indent -kr" ; fi)
++ DYNAMIC := $(shell if [ ! -d "$(topdir)/.git" ]; then echo yes; fi)
++Index: libcap-2.19/libcap/Makefile
++===================================================================
++--- libcap-2.19.orig/libcap/Makefile
+++++ libcap-2.19/libcap/Makefile
++@@ -33,7 +33,7 @@
++ endif
++ 
++ _makenames: _makenames.c cap_names.list.h
++-	$(BUILD_CC) $(BUILD_CFLAGS) $< -o $@
+++	$(CC_FOR_BUILD) $(CFLAGS_FOR_BUILD) $< -o $@
++ 
++ cap_names.h: _makenames
++ 	./_makenames > cap_names.h
+diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
+new file mode 100644
+index 0000000..3ea5e51
+--- /dev/null
++++ b/package/libcap/libcap.mk
+@@ -0,0 +1,27 @@
++LIBCAP_VERSION=2.19
++LIBCAP_SOURCE=libcap-$(LIBCAP_VERSION).tar.bz2
++LIBCAP_SITE=http://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2/
++LIBCAP_INSTALL_STAGING=YES
++
++define LIBCAP_BUILD_CMDS
++ $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) LIBATTR=no
++endef
++
++define LIBCAP_INSTALL_STAGING_CMDS
++ $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) LIBATTR=no DESTDIR=$(STAGING_DIR) install
++endef
++
++define LIBCAP_INSTALL_TARGET_CMDS
++ install -D $(STAGING_DIR)/usr/lib/libcap.so.* $(TARGET_DIR)/usr/lib
++endef
++
++define HOST_LIBCAP_BUILD_CMDS
++ $(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) LIBATTR=no
++endef
++
++define HOST_LIBCAP_INSTALL_CMDS
++ $(HOST_MAKE_ENV) $(MAKE) -C $(@D) LIBATTR=no DESTDIR=$(HOST_DIR) install
++endef
++
++$(eval $(call GENTARGETS,package,libcap))
++$(eval $(call GENTARGETS,package,libcap,host))
 -- 
 1.6.3.3
