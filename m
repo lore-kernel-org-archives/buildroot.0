@@ -1,17 +1,16 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  9 Apr 2010 14:54:10 +0000 (UTC)
-Subject: [Buildroot] [Bug 847] Compiling target-gcc v4.4 fails with
- "libc.so.0: cannot open shared object file: No such file or directory"
-In-Reply-To: <bug-847-163@https.bugs.busybox.net/>
-References: <bug-847-163@https.bugs.busybox.net/>
-Message-ID: <20100409145410.A407D7FA1D@busybox.osuosl.org>
+Date: Fri,  9 Apr 2010 14:54:11 +0000 (UTC)
+Subject: [Buildroot] [Bug 949] compile with debug info
+In-Reply-To: <bug-949-163@https.bugs.busybox.net/>
+References: <bug-949-163@https.bugs.busybox.net/>
+Message-ID: <20100409145411.8AE6A7FA1D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=847
+https://bugs.busybox.net/show_bug.cgi?id=949
 
 
 Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
