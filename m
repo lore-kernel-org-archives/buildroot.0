@@ -1,1700 +1,318 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri,  9 Apr 2010 11:06:53 +0200
-Subject: [Buildroot] [PATCH 15/44] target/cramfs: cleanup
+Date: Fri,  9 Apr 2010 11:07:02 +0200
+Subject: [Buildroot] [PATCH 24/44] fakeroot: remove all references to
+	BR2_HOST_FAKEROOT
 In-Reply-To: <cover.1270803901.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1270803901.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <e01de2e7d6b5402a9dd5e9b2754035676a542a1e.1270803901.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <77ab5443080dd994dd9dbe9c9eec302f83525dde.1270803901.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove the cramfs host tools building process, which is now in
-package/cramfs.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- target/cramfs/Config.in                 |    1 -
- target/cramfs/cramfs-01-devtable.patch  | 1269 -------------------------------
- target/cramfs/cramfs-02-endian.patch    |  284 -------
- target/cramfs/cramfs-03-cygwin_IO.patch |   13 -
- target/cramfs/cramfs.mk                 |   47 +--
- 5 files changed, 2 insertions(+), 1612 deletions(-)
- delete mode 100644 target/cramfs/cramfs-01-devtable.patch
- delete mode 100644 target/cramfs/cramfs-02-endian.patch
- delete mode 100644 target/cramfs/cramfs-03-cygwin_IO.patch
+ configs/at91rm9200df_defconfig       |    1 -
+ configs/at91rm9200df_ext_defconfig   |    1 -
+ configs/at91sam9260dfc_defconfig     |    1 -
+ configs/at91sam9260dfc_ext_defconfig |    1 -
+ configs/at91sam9260pf_defconfig      |    1 -
+ configs/at91sam9261ek_defconfig      |    1 -
+ configs/at91sam9261ek_ext_defconfig  |    1 -
+ configs/at91sam9263ek_defconfig      |    1 -
+ configs/at91sam9263ek_ext_defconfig  |    1 -
+ configs/at91sam9g20dfc_defconfig     |    1 -
+ configs/at91sam9g20dfc_ext_defconfig |    1 -
+ configs/atngw100-base_defconfig      |    1 -
+ configs/atngw100_defconfig           |    1 -
+ configs/atstk1005_defconfig          |    1 -
+ configs/atstk100x_defconfig          |    1 -
+ configs/i386_defconfig               |    1 -
+ configs/i686_defconfig               |    1 -
+ configs/integrator926_defconfig      |    1 -
+ configs/integrator926_huge_defconfig |    1 -
+ configs/kb9202_defconfig             |    1 -
+ configs/v100sc2_defconfig            |    1 -
+ scripts/test/Config.in.test.buildall |    1 -
+ target/xtensa/defconfig              |    1 -
+ 23 files changed, 0 insertions(+), 23 deletions(-)
 
-diff --git a/target/cramfs/Config.in b/target/cramfs/Config.in
-index 0c1cb78..1a4e326 100644
---- a/target/cramfs/Config.in
-+++ b/target/cramfs/Config.in
-@@ -1,6 +1,5 @@
- config BR2_TARGET_ROOTFS_CRAMFS
- 	bool "cramfs root filesystem"
+diff --git a/configs/at91rm9200df_defconfig b/configs/at91rm9200df_defconfig
+index 3d98b0f..d5c5249 100644
+--- a/configs/at91rm9200df_defconfig
++++ b/configs/at91rm9200df_defconfig
+@@ -353,7 +353,6 @@ BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.13.x.config"
+ # BR2_PACKAGE_DISTCC is not set
+ # BR2_PACKAGE_DMALLOC is not set
+ # BR2_PACKAGE_FAKEROOT is not set
+-BR2_HOST_FAKEROOT=y
+ BR2_PACKAGE_GETTEXT=y
+ # BR2_PACKAGE_GETTEXT_STATIC is not set
+ BR2_PACKAGE_LIBINTL=y
+diff --git a/configs/at91rm9200df_ext_defconfig b/configs/at91rm9200df_ext_defconfig
+index 1dea062..ca03b76 100644
+--- a/configs/at91rm9200df_ext_defconfig
++++ b/configs/at91rm9200df_ext_defconfig
+@@ -278,7 +278,6 @@ BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.13.x.config"
+ # BR2_PACKAGE_DISTCC is not set
+ # BR2_PACKAGE_DMALLOC is not set
+ # BR2_PACKAGE_FAKEROOT is not set
+-BR2_HOST_FAKEROOT=y
+ BR2_PACKAGE_GETTEXT=y
+ # BR2_PACKAGE_GETTEXT_STATIC is not set
+ BR2_PACKAGE_LIBINTL=y
+diff --git a/configs/at91sam9260dfc_defconfig b/configs/at91sam9260dfc_defconfig
+index 1b4094e..2d8961c 100644
+--- a/configs/at91sam9260dfc_defconfig
++++ b/configs/at91sam9260dfc_defconfig
+@@ -365,7 +365,6 @@ BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.13.x.config"
+ # BR2_PACKAGE_DISTCC is not set
+ # BR2_PACKAGE_DMALLOC is not set
+ # BR2_PACKAGE_FAKEROOT is not set
+-BR2_HOST_FAKEROOT=y
+ BR2_PACKAGE_GETTEXT=y
+ # BR2_PACKAGE_GETTEXT_STATIC is not set
+ BR2_PACKAGE_LIBINTL=y
+diff --git a/configs/at91sam9260dfc_ext_defconfig b/configs/at91sam9260dfc_ext_defconfig
+index 14bdc7a..ddd4b42 100644
+--- a/configs/at91sam9260dfc_ext_defconfig
++++ b/configs/at91sam9260dfc_ext_defconfig
+@@ -286,7 +286,6 @@ BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.13.x.config"
+ # BR2_PACKAGE_DISTCC is not set
+ # BR2_PACKAGE_DMALLOC is not set
+ # BR2_PACKAGE_FAKEROOT is not set
+-BR2_HOST_FAKEROOT=y
+ BR2_PACKAGE_GETTEXT=y
+ # BR2_PACKAGE_GETTEXT_STATIC is not set
+ BR2_PACKAGE_LIBINTL=y
+diff --git a/configs/at91sam9260pf_defconfig b/configs/at91sam9260pf_defconfig
+index de513a6..17477d2 100644
+--- a/configs/at91sam9260pf_defconfig
++++ b/configs/at91sam9260pf_defconfig
+@@ -275,7 +275,6 @@ BR2_PACKAGE_DISTCC=y
+ BR2_PACKAGE_DMALLOC=y
+ BR2_PACKAGE_EXPAT=y
+ # BR2_PACKAGE_FAKEROOT is not set
+-BR2_HOST_FAKEROOT=y
+ BR2_PACKAGE_GETTEXT=y
+ # BR2_PACKAGE_GETTEXT_STATIC is not set
+ BR2_PACKAGE_LIBINTL=y
+diff --git a/configs/at91sam9261ek_defconfig b/configs/at91sam9261ek_defconfig
+index 9598085..824a503 100644
+--- a/configs/at91sam9261ek_defconfig
++++ b/configs/at91sam9261ek_defconfig
+@@ -359,7 +359,6 @@ BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.13.x.config"
+ # BR2_PACKAGE_DISTCC is not set
+ # BR2_PACKAGE_DMALLOC is not set
+ # BR2_PACKAGE_FAKEROOT is not set
+-BR2_HOST_FAKEROOT=y
+ BR2_PACKAGE_GETTEXT=y
+ # BR2_PACKAGE_GETTEXT_STATIC is not set
+ BR2_PACKAGE_LIBINTL=y
+diff --git a/configs/at91sam9261ek_ext_defconfig b/configs/at91sam9261ek_ext_defconfig
+index e7da95a..3ee047c 100644
+--- a/configs/at91sam9261ek_ext_defconfig
++++ b/configs/at91sam9261ek_ext_defconfig
+@@ -317,7 +317,6 @@ BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.13.x.config"
+ # BR2_PACKAGE_DISTCC is not set
+ # BR2_PACKAGE_DMALLOC is not set
+ # BR2_PACKAGE_FAKEROOT is not set
+-BR2_HOST_FAKEROOT=y
+ BR2_PACKAGE_GETTEXT=y
+ # BR2_PACKAGE_GETTEXT_STATIC is not set
+ BR2_PACKAGE_LIBINTL=y
+diff --git a/configs/at91sam9263ek_defconfig b/configs/at91sam9263ek_defconfig
+index 145700d..8dff3e4 100644
+--- a/configs/at91sam9263ek_defconfig
++++ b/configs/at91sam9263ek_defconfig
+@@ -358,7 +358,6 @@ BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.13.x.config"
+ # BR2_PACKAGE_DISTCC is not set
+ # BR2_PACKAGE_DMALLOC is not set
+ # BR2_PACKAGE_FAKEROOT is not set
+-BR2_HOST_FAKEROOT=y
+ BR2_PACKAGE_GETTEXT=y
+ # BR2_PACKAGE_GETTEXT_STATIC is not set
+ BR2_PACKAGE_LIBINTL=y
+diff --git a/configs/at91sam9263ek_ext_defconfig b/configs/at91sam9263ek_ext_defconfig
+index 15b4d3b..a84cc7a 100644
+--- a/configs/at91sam9263ek_ext_defconfig
++++ b/configs/at91sam9263ek_ext_defconfig
+@@ -279,7 +279,6 @@ BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.13.x.config"
+ # BR2_PACKAGE_DISTCC is not set
+ # BR2_PACKAGE_DMALLOC is not set
+ # BR2_PACKAGE_FAKEROOT is not set
+-BR2_HOST_FAKEROOT=y
+ BR2_PACKAGE_GETTEXT=y
+ # BR2_PACKAGE_GETTEXT_STATIC is not set
+ BR2_PACKAGE_LIBINTL=y
+diff --git a/configs/at91sam9g20dfc_defconfig b/configs/at91sam9g20dfc_defconfig
+index a6ef10c..3f7da32 100644
+--- a/configs/at91sam9g20dfc_defconfig
++++ b/configs/at91sam9g20dfc_defconfig
+@@ -358,7 +358,6 @@ BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.13.x.config"
+ # BR2_PACKAGE_DISTCC is not set
+ # BR2_PACKAGE_DMALLOC is not set
+ # BR2_PACKAGE_FAKEROOT is not set
+-BR2_HOST_FAKEROOT=y
+ BR2_PACKAGE_GETTEXT=y
+ # BR2_PACKAGE_GETTEXT_STATIC is not set
+ BR2_PACKAGE_LIBINTL=y
+diff --git a/configs/at91sam9g20dfc_ext_defconfig b/configs/at91sam9g20dfc_ext_defconfig
+index 96d9793..84d703a 100644
+--- a/configs/at91sam9g20dfc_ext_defconfig
++++ b/configs/at91sam9g20dfc_ext_defconfig
+@@ -286,7 +286,6 @@ BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.13.x.config"
+ # BR2_PACKAGE_DISTCC is not set
+ # BR2_PACKAGE_DMALLOC is not set
+ # BR2_PACKAGE_FAKEROOT is not set
+-BR2_HOST_FAKEROOT=y
+ BR2_PACKAGE_GETTEXT=y
+ # BR2_PACKAGE_GETTEXT_STATIC is not set
+ BR2_PACKAGE_LIBINTL=y
+diff --git a/configs/atngw100-base_defconfig b/configs/atngw100-base_defconfig
+index 6fbc0de..adae5c6 100644
+--- a/configs/atngw100-base_defconfig
++++ b/configs/atngw100-base_defconfig
+@@ -275,7 +275,6 @@ BR2_PACKAGE_BUSYBOX_SKELETON=y
+ # BR2_PACKAGE_DISTCC is not set
+ # BR2_PACKAGE_DMALLOC is not set
+ # BR2_PACKAGE_FAKEROOT is not set
+-BR2_HOST_FAKEROOT=y
+ # BR2_PACKAGE_GETTEXT is not set
+ # BR2_PACKAGE_LIBINTL is not set
+ # BR2_PACKAGE_LIBGMP is not set
+diff --git a/configs/atngw100_defconfig b/configs/atngw100_defconfig
+index 7a6cba4..0c76398 100644
+--- a/configs/atngw100_defconfig
++++ b/configs/atngw100_defconfig
+@@ -286,7 +286,6 @@ BR2_PACKAGE_BUSYBOX_SKELETON=y
+ # BR2_PACKAGE_DISTCC is not set
+ # BR2_PACKAGE_DMALLOC is not set
+ # BR2_PACKAGE_FAKEROOT is not set
+-BR2_HOST_FAKEROOT=y
+ BR2_PACKAGE_GETTEXT=y
+ BR2_PACKAGE_LIBINTL=y
+ # BR2_PACKAGE_LIBGMP is not set
+diff --git a/configs/atstk1005_defconfig b/configs/atstk1005_defconfig
+index 309ac08..8044b38 100644
+--- a/configs/atstk1005_defconfig
++++ b/configs/atstk1005_defconfig
+@@ -297,7 +297,6 @@ BR2_PACKAGE_BUSYBOX_SKELETON=y
+ # BR2_PACKAGE_DISTCC is not set
+ # BR2_PACKAGE_DMALLOC is not set
+ # BR2_PACKAGE_FAKEROOT is not set
+-BR2_HOST_FAKEROOT=y
+ BR2_PACKAGE_GETTEXT=y
+ BR2_PACKAGE_LIBINTL=y
+ # BR2_PACKAGE_LIBGMP is not set
+diff --git a/configs/atstk100x_defconfig b/configs/atstk100x_defconfig
+index b4abff9..aac5aa8 100644
+--- a/configs/atstk100x_defconfig
++++ b/configs/atstk100x_defconfig
+@@ -297,7 +297,6 @@ BR2_PACKAGE_BZIP2=y
+ # BR2_PACKAGE_DISTCC is not set
+ # BR2_PACKAGE_DMALLOC is not set
+ # BR2_PACKAGE_FAKEROOT is not set
+-BR2_HOST_FAKEROOT=y
+ BR2_PACKAGE_GETTEXT=y
+ BR2_PACKAGE_LIBINTL=y
+ # BR2_PACKAGE_LIBGMP is not set
+diff --git a/configs/i386_defconfig b/configs/i386_defconfig
+index 97067c4..f4506f1 100644
+--- a/configs/i386_defconfig
++++ b/configs/i386_defconfig
+@@ -285,7 +285,6 @@ BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.13.x.config"
+ # BR2_PACKAGE_DISTCC is not set
+ # BR2_PACKAGE_DMALLOC is not set
+ # BR2_PACKAGE_FAKEROOT is not set
+-BR2_HOST_FAKEROOT=y
+ # BR2_PACKAGE_GETTEXT is not set
+ # BR2_PACKAGE_LIBINTL is not set
+ # BR2_PACKAGE_LIBGMP is not set
+diff --git a/configs/i686_defconfig b/configs/i686_defconfig
+index a3a2683..fc1f278 100644
+--- a/configs/i686_defconfig
++++ b/configs/i686_defconfig
+@@ -285,7 +285,6 @@ BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.13.x.config"
+ # BR2_PACKAGE_DISTCC is not set
+ # BR2_PACKAGE_DMALLOC is not set
+ # BR2_PACKAGE_FAKEROOT is not set
+-BR2_HOST_FAKEROOT=y
+ # BR2_PACKAGE_GETTEXT is not set
+ # BR2_PACKAGE_LIBINTL is not set
+ # BR2_PACKAGE_LIBGMP is not set
+diff --git a/configs/integrator926_defconfig b/configs/integrator926_defconfig
+index 63bc68d..e985df4 100644
+--- a/configs/integrator926_defconfig
++++ b/configs/integrator926_defconfig
+@@ -282,7 +282,6 @@ BR2_PACKAGE_BUSYBOX_SKELETON=y
+ # BR2_PACKAGE_DISTCC is not set
+ # BR2_PACKAGE_DMALLOC is not set
+ # BR2_PACKAGE_FAKEROOT is not set
+-BR2_HOST_FAKEROOT=y
+ # BR2_PACKAGE_GETTEXT is not set
+ # BR2_PACKAGE_LIBINTL is not set
+ # BR2_PACKAGE_LIBGMP is not set
+diff --git a/configs/integrator926_huge_defconfig b/configs/integrator926_huge_defconfig
+index 357e143..b0d1dfe 100644
+--- a/configs/integrator926_huge_defconfig
++++ b/configs/integrator926_huge_defconfig
+@@ -286,7 +286,6 @@ BR2_PACKAGE_BISON=y
+ # BR2_PACKAGE_DISTCC is not set
+ # BR2_PACKAGE_DMALLOC is not set
+ # BR2_PACKAGE_FAKEROOT is not set
+-BR2_HOST_FAKEROOT=y
+ BR2_PACKAGE_GETTEXT=y
+ # BR2_PACKAGE_GETTEXT_STATIC is not set
+ BR2_PACKAGE_LIBINTL=y
+diff --git a/configs/kb9202_defconfig b/configs/kb9202_defconfig
+index 608eb86..3a0dfd6 100644
+--- a/configs/kb9202_defconfig
++++ b/configs/kb9202_defconfig
+@@ -286,7 +286,6 @@ BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
+ # BR2_PACKAGE_DISTCC is not set
+ # BR2_PACKAGE_DMALLOC is not set
+ # BR2_PACKAGE_FAKEROOT is not set
+-BR2_HOST_FAKEROOT=y
+ # BR2_PACKAGE_GETTEXT is not set
+ # BR2_PACKAGE_LIBINTL is not set
+ # BR2_PACKAGE_LIBGMP is not set
+diff --git a/configs/v100sc2_defconfig b/configs/v100sc2_defconfig
+index 336953e..3c2afa4 100644
+--- a/configs/v100sc2_defconfig
++++ b/configs/v100sc2_defconfig
+@@ -267,7 +267,6 @@ BR2_PACKAGE_BASH=y
+ # BR2_PACKAGE_DISTCC is not set
+ # BR2_PACKAGE_DMALLOC is not set
+ # BR2_PACKAGE_FAKEROOT is not set
+-BR2_HOST_FAKEROOT=y
+ BR2_PACKAGE_GETTEXT=y
+ BR2_PACKAGE_LIBINTL=y
+ # BR2_PACKAGE_LIBGMP is not set
+diff --git a/scripts/test/Config.in.test.buildall b/scripts/test/Config.in.test.buildall
+index b5bb050..1acb466 100644
+--- a/scripts/test/Config.in.test.buildall
++++ b/scripts/test/Config.in.test.buildall
+@@ -29,7 +29,6 @@ config BR2_TARGET_TEST_PACKAGES
+ 	select BR2_PACKAGE_DISTCC
+ 	select BR2_PACKAGE_DMALLOC
+ 	select BR2_PACKAGE_FAKEROOT
 -	select BR2_HOST_FAKEROOT
- 	help
- 	  Build a cramfs root filesystem
- 
-diff --git a/target/cramfs/cramfs-01-devtable.patch b/target/cramfs/cramfs-01-devtable.patch
-deleted file mode 100644
-index 884eb8c..0000000
---- a/target/cramfs/cramfs-01-devtable.patch
-+++ /dev/null
-@@ -1,1269 +0,0 @@
----- cramfs-1.1.orig/cramfsck.c	2002-02-22 17:00:42.000000000 -0700
--+++ cramfs-1.1/cramfsck.c	2002-12-21 01:25:17.000000000 -0700
--@@ -51,10 +51,11 @@
-- #include <utime.h>
-- #include <sys/ioctl.h>
-- #define _LINUX_STRING_H_
---#include <linux/fs.h>
---#include <linux/cramfs_fs.h>
--+#include "linux/cramfs_fs.h"
-- #include <zlib.h>
-- 
--+#define BLKGETSIZE	_IO(0x12,96) /* return device size /512 (long *arg) */
--+
-- /* Exit codes used by fsck-type programs */
-- #define FSCK_OK          0	/* No errors */
-- #define FSCK_NONDESTRUCT 1	/* File system errors corrected */
--@@ -75,7 +76,7 @@
-- static int opt_verbose = 0;	/* 1 = verbose (-v), 2+ = very verbose (-vv) */
-- #ifdef INCLUDE_FS_TESTS
-- static int opt_extract = 0;		/* extract cramfs (-x) */
---static char *extract_dir = "root";	/* extraction directory (-x) */
--+static char *extract_dir = "/";	/* extraction directory (-x) */
-- static uid_t euid;			/* effective UID */
-- 
-- /* (cramfs_super + start) <= start_dir < end_dir <= start_data <= end_data */
--@@ -155,7 +156,7 @@
-- 	}
-- 
-- 	if (*length < sizeof(struct cramfs_super)) {
---		die(FSCK_UNCORRECTED, 0, "file length too short");
--+		die(FSCK_UNCORRECTED, 0, "filesystem smaller than a cramfs superblock!");
-- 	}
-- 
-- 	/* find superblock */
--@@ -190,7 +191,8 @@
-- 			die(FSCK_UNCORRECTED, 0, "zero file count");
-- 		}
-- 		if (*length < super.size) {
---			die(FSCK_UNCORRECTED, 0, "file length too short");
--+			die(FSCK_UNCORRECTED, 0, "file length too short, %lu is smaller than %lu",
--+				*length, super.size);
-- 		}
-- 		else if (*length > super.size) {
-- 			fprintf(stderr, "warning: file extends past end of filesystem\n");
--@@ -267,11 +269,11 @@
-- #ifdef INCLUDE_FS_TESTS
-- static void print_node(char type, struct cramfs_inode *i, char *name)
-- {
---	char info[10];
--+	char info[11];
-- 
-- 	if (S_ISCHR(i->mode) || (S_ISBLK(i->mode))) {
-- 		/* major/minor numbers can be as high as 2^12 or 4096 */
---		snprintf(info, 10, "%4d,%4d", major(i->size), minor(i->size));
--+		snprintf(info, 11, "%4d,%4d", major(i->size), minor(i->size));
-- 	}
-- 	else {
-- 		/* size be as high as 2^24 or 16777216 */
--@@ -445,8 +447,10 @@
-- 	}
-- 	/* TODO: Do we need to check end_dir for empty case? */
-- 	memcpy(newpath, path, pathlen);
---	newpath[pathlen] = '/';
---	pathlen++;
--+	if (pathlen > 1) {
--+	    newpath[pathlen] = '/';
--+	    pathlen++;
--+	}
-- 	if (opt_verbose) {
-- 		print_node('d', i, path);
-- 	}
----- cramfs-1.1.orig/device_table.txt	1969-12-31 17:00:00.000000000 -0700
--+++ cramfs-1.1/device_table.txt	2003-01-01 05:13:44.000000000 -0700
--@@ -0,0 +1,129 @@
--+# When building a target filesystem, it is desirable to not have to
--+# become root and then run 'mknod' a thousand times.  Using a device 
--+# table you can create device nodes and directories "on the fly".
--+#
--+# This is a sample device table file for use with mkcramfs.  You can
--+# do all sorts of interesting things with a device table file.  For
--+# example, if you want to adjust the permissions on a particular file
--+# you can just add an entry like:
--+#   /sbin/foobar	f	2755	0	0	-	-	-	-	-
--+# and (assuming the file /sbin/foobar exists) it will be made setuid
--+# root (regardless of what its permissions are on the host filesystem.
--+# Furthermore, you can use a single table entry to create a many device
--+# minors.  For example, if I wanted to create /dev/hda and /dev/hda[0-15]
--+# I could just use the following two table entries:
--+#   /dev/hda	b	640	0	0	3	0	0	0	-
--+#   /dev/hda	b	640	0	0	3	1	1	1	15
--+# 
--+# Device table entries take the form of:
--+# <name>    <type>	<mode>	<uid>	<gid>	<major>	<minor>	<start>	<inc>	<count>
--+# where name is the file name,  type can be one of: 
--+#	f	A regular file
--+#	d	Directory
--+#	c	Character special device file
--+#	b	Block special device file
--+#	p	Fifo (named pipe)
--+# uid is the user id for the target file, gid is the group id for the
--+# target file.  The rest of the entries (major, minor, etc) apply only 
--+# to device special files.
--+
--+# Have fun
--+# -Erik Andersen <andersen@codepoet.org>
--+#
--+
--+#<name>		<type>	<mode>	<uid>	<gid>	<major>	<minor>	<start>	<inc>	<count>
--+/dev		d	755	0	0	-	-	-	-	-
--+/dev/mem	c	640	0	0	1	1	0	0	-
--+/dev/kmem	c	640	0	0	1	2	0	0	-
--+/dev/null	c	640	0	0	1	3	0	0	-
--+/dev/zero	c	640	0	0	1	5	0	0	-
--+/dev/random	c	640	0	0	1	8	0	0	-
--+/dev/urandom	c	640	0	0	1	9	0	0	-
--+/dev/tty	c	666	0	0	5	0	0	0	-
--+/dev/tty	c	666	0	0	4	0	0	1	6
--+/dev/console	c	640	0	0	5	1	0	0	-
--+/dev/ram	b	640	0	0	1	1	0	0	-
--+/dev/ram	b	640	0	0	1	0	0	1	4
--+/dev/loop	b	640	0	0	7	0	0	1	2
--+/dev/ptmx	c	666	0	0	5	2	0	0	-
--+#/dev/ttyS	c	640	0	0	4	64	0	1	4
--+#/dev/psaux	c	640	0	0	10	1	0	0	-
--+#/dev/rtc	c	640	0	0	10	135	0	0	-
--+
--+# Adjust permissions on some normal files
--+#/etc/shadow	f	600	0	0	-	-	-	-	-
--+#/bin/tinylogin	f	4755	0	0	-	-	-	-	-
--+
--+# User-mode Linux stuff
--+/dev/ubda	b	640	0	0	98	0	0	0	-
--+/dev/ubda	b	640	0	0	98	1	1	1	15
--+
--+# IDE Devices
--+/dev/hda	b	640	0	0	3	0	0	0	-
--+/dev/hda	b	640	0	0	3	1	1	1	15
--+/dev/hdb	b	640	0	0	3	64	0	0	-
--+/dev/hdb	b	640	0	0	3	65	1	1	15
--+#/dev/hdc	b	640	0	0	22	0	0	0	-
--+#/dev/hdc	b	640	0	0	22	1	1	1	15
--+#/dev/hdd	b	640	0	0	22	64	0	0	-
--+#/dev/hdd	b	640	0	0	22	65	1	1	15
--+#/dev/hde	b	640	0	0	33	0	0	0	-
--+#/dev/hde	b	640	0	0	33	1	1	1	15
--+#/dev/hdf	b	640	0	0	33	64	0	0	-
--+#/dev/hdf	b	640	0	0	33	65	1	1	15
--+#/dev/hdg	b	640	0	0	34	0	0	0	-
--+#/dev/hdg	b	640	0	0	34	1	1	1	15
--+#/dev/hdh	b	640	0	0	34	64	0	0	-
--+#/dev/hdh	b	640	0	0	34	65	1	1	15
--+
--+# SCSI Devices
--+#/dev/sda	b	640	0	0	8	0	0	0	-
--+#/dev/sda	b	640	0	0	8	1	1	1	15
--+#/dev/sdb	b	640	0	0	8	16	0	0	-
--+#/dev/sdb	b	640	0	0	8	17	1	1	15
--+#/dev/sdc	b	640	0	0	8	32	0	0	-
--+#/dev/sdc	b	640	0	0	8	33	1	1	15
--+#/dev/sdd	b	640	0	0	8	48	0	0	-
--+#/dev/sdd	b	640	0	0	8	49	1	1	15
--+#/dev/sde	b	640	0	0	8	64	0	0	-
--+#/dev/sde	b	640	0	0	8	65	1	1	15
--+#/dev/sdf	b	640	0	0	8	80	0	0	-
--+#/dev/sdf	b	640	0	0	8	81	1	1	15
--+#/dev/sdg	b	640	0	0	8	96	0	0	-
--+#/dev/sdg	b	640	0	0	8	97	1	1	15
--+#/dev/sdh	b	640	0	0	8	112	0	0	-
--+#/dev/sdh	b	640	0	0	8	113	1	1	15
--+#/dev/sg		c	640	0	0	21	0	0	1	15
--+#/dev/scd	b	640	0	0	11	0	0	1	15
--+#/dev/st		c	640	0	0	9	0	0	1	8
--+#/dev/nst	c	640	0	0	9	128	0	1	8
--+#/dev/st	c	640	0	0	9	32	1	1	4
--+#/dev/st	c	640	0	0	9	64	1	1	4
--+#/dev/st	c	640	0	0	9	96	1	1	4
--+
--+# Floppy disk devices
--+#/dev/fd		b	640	0	0	2	0	0	1	2
--+#/dev/fd0d360	b	640	0	0	2	4	0	0	-
--+#/dev/fd1d360	b	640	0	0	2	5	0	0	-
--+#/dev/fd0h1200	b	640	0	0	2	8	0	0	-
--+#/dev/fd1h1200	b	640	0	0	2	9	0	0	-
--+#/dev/fd0u1440	b	640	0	0	2	28	0	0	-
--+#/dev/fd1u1440	b	640	0	0	2	29	0	0	-
--+#/dev/fd0u2880	b	640	0	0	2	32	0	0	-
--+#/dev/fd1u2880	b	640	0	0	2	33	0	0	-
--+
--+# All the proprietary cdrom devices in the world
--+#/dev/aztcd	b	640	0	0	29	0	0	0	-
--+#/dev/bpcd	b	640	0	0	41	0	0	0	-
--+#/dev/capi20	c	640	0	0	68	0	0	1	2
--+#/dev/cdu31a	b	640	0	0	15	0	0	0	-
--+#/dev/cdu535	b	640	0	0	24	0	0	0	-
--+#/dev/cm206cd	b	640	0	0	32	0	0	0	-
--+#/dev/sjcd	b	640	0	0	18	0	0	0	-
--+#/dev/sonycd	b	640	0	0	15	0	0	0	-
--+#/dev/gscd	b	640	0	0	16	0	0	0	-
--+#/dev/sbpcd	b	640	0	0	25	0	0	0	-
--+#/dev/sbpcd	b	640	0	0	25	0	0	1	4
--+#/dev/mcd	b	640	0	0	23	0	0	0	-
--+#/dev/optcd	b	640	0	0	17	0	0	0	-
--+
----- cramfs-1.1.orig/mkcramfs.c	2002-02-20 01:03:32.000000000 -0700
--+++ cramfs-1.1/mkcramfs.c	2002-12-21 01:25:17.000000000 -0700
--@@ -1,3 +1,4 @@
--+/* vi: set sw=8 ts=8: */
-- /*
--  * mkcramfs - make a cramfs file system
--  *
--@@ -16,12 +17,21 @@
--  * You should have received a copy of the GNU General Public License
--  * along with this program; if not, write to the Free Software
--  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
--+ *
--+ * Added device table support (code taken from mkfs.jffs2.c, credit to
--+ * Erik Andersen <andersen@codepoet.org>) as well as an option to squash
--+ * permissions. - Russ Dill <Russ.Dill@asu.edu> September 2002
--+ *
--+ * Reworked, cleaned up, and updated for cramfs-1.1, December 2002
--+ *  - Erik Andersen <andersen@codepoet.org>
--+ *
--  */
-- 
-- /*
--  * If you change the disk format of cramfs, please update fs/cramfs/README.
--  */
-- 
--+#define _GNU_SOURCE
-- #include <sys/types.h>
-- #include <stdio.h>
-- #include <sys/stat.h>
--@@ -33,8 +43,15 @@
-- #include <errno.h>
-- #include <string.h>
-- #include <stdarg.h>
--+#include <libgen.h>
--+#include <ctype.h>
--+#include <assert.h>
--+#include <getopt.h>
-- #include <linux/cramfs_fs.h>
-- #include <zlib.h>
--+#ifdef DMALLOC
--+#include <dmalloc.h>
--+#endif
-- 
-- /* Exit codes used by mkfs-type programs */
-- #define MKFS_OK          0	/* No errors */
--@@ -71,11 +88,17 @@
-- 		  + (1 << CRAMFS_SIZE_WIDTH) - 1 /* filesize */ \
-- 		  + (1 << CRAMFS_SIZE_WIDTH) * 4 / PAGE_CACHE_SIZE /* block pointers */ )
-- 
--+
--+/* The kernel assumes PAGE_CACHE_SIZE as block size. */
--+#define PAGE_CACHE_SIZE (4096)
--+
--+
-- static const char *progname = "mkcramfs";
-- static unsigned int blksize = PAGE_CACHE_SIZE;
-- static long total_blocks = 0, total_nodes = 1; /* pre-count the root node */
-- static int image_length = 0;
-- 
--+
-- /*
--  * If opt_holes is set, then mkcramfs can create explicit holes in the
--  * data, which saves 26 bytes per hole (which is a lot smaller a
--@@ -91,10 +114,12 @@
-- static int opt_holes = 0;
-- static int opt_pad = 0;
-- static int opt_verbose = 0;
--+static int opt_squash = 0;
-- static char *opt_image = NULL;
-- static char *opt_name = NULL;
-- 
-- static int warn_dev, warn_gid, warn_namelen, warn_skip, warn_size, warn_uid;
--+static const char *const memory_exhausted = "memory exhausted";
-- 
-- /* In-core version of inode / directory entry. */
-- struct entry {
--@@ -123,7 +148,7 @@
-- {
-- 	FILE *stream = status ? stderr : stdout;
-- 
---	fprintf(stream, "usage: %s [-h] [-e edition] [-i file] [-n name] dirname outfile\n"
--+	fprintf(stream, "usage: %s [-h] [-e edition] [-i file] [-n name] [-D file] dirname outfile\n"
-- 		" -h         print this help\n"
-- 		" -E         make all warnings errors (non-zero exit status)\n"
-- 		" -e edition set edition number (part of fsid)\n"
--@@ -133,39 +158,157 @@
-- 		" -s         sort directory entries (old option, ignored)\n"
-- 		" -v         be more verbose\n"
-- 		" -z         make explicit holes (requires >= 2.3.39)\n"
---		" dirname    root of the directory tree to be compressed\n"
--+		" -D         Use the named FILE as a device table file\n"
--+		" -q         squash permissions (make everything owned by root)\n"
--+		" dirname    root of the filesystem to be compressed\n"
-- 		" outfile    output file\n", progname, PAD_SIZE);
-- 
-- 	exit(status);
-- }
-- 
---static void die(int status, int syserr, const char *fmt, ...)
--+static void verror_msg(const char *s, va_list p)
--+{
--+	fflush(stdout);
--+	fprintf(stderr, "mkcramfs: ");
--+	vfprintf(stderr, s, p);
--+}
--+
--+static void vperror_msg(const char *s, va_list p)
--+{
--+	int err = errno;
--+
--+	if (s == 0)
--+		s = "";
--+	verror_msg(s, p);
--+	if (*s)
--+		s = ": ";
--+	fprintf(stderr, "%s%s\n", s, strerror(err));
--+}
--+
--+static void perror_msg(const char *s, ...)
--+{
--+	va_list p;
--+
--+	va_start(p, s);
--+	vperror_msg(s, p);
--+	va_end(p);
--+}
--+
--+static void error_msg_and_die(const char *s, ...)
--+{
--+	va_list p;
--+
--+	va_start(p, s);
--+	verror_msg(s, p);
--+	va_end(p);
--+	putc('\n', stderr);
--+	exit(MKFS_ERROR);
--+}
--+
--+static void perror_msg_and_die(const char *s, ...)
--+{
--+	va_list p;
--+
--+	va_start(p, s);
--+	vperror_msg(s, p);
--+	va_end(p);
--+	exit(MKFS_ERROR);
--+}
--+#ifndef DMALLOC
--+extern char *xstrdup(const char *s)
--+{
--+	char *t;
--+
--+	if (s == NULL)
--+		return NULL;
--+	t = strdup(s);
--+	if (t == NULL)
--+		error_msg_and_die(memory_exhausted);
--+	return t;
--+}
--+
--+extern void *xmalloc(size_t size)
--+{
--+	void *ptr = malloc(size);
--+
--+	if (ptr == NULL && size != 0)
--+		error_msg_and_die(memory_exhausted);
--+	return ptr;
--+}
--+
--+extern void *xcalloc(size_t nmemb, size_t size)
--+{
--+	void *ptr = calloc(nmemb, size);
--+
--+	if (ptr == NULL && nmemb != 0 && size != 0)
--+		error_msg_and_die(memory_exhausted);
--+	return ptr;
--+}
--+
--+extern void *xrealloc(void *ptr, size_t size)
--+{
--+	ptr = realloc(ptr, size);
--+	if (ptr == NULL && size != 0)
--+		error_msg_and_die(memory_exhausted);
--+	return ptr;
--+}
--+#endif
--+
--+static FILE *xfopen(const char *path, const char *mode)
-- {
---	va_list arg_ptr;
---	int save = errno;
--+	FILE *fp;
--+
--+	if ((fp = fopen(path, mode)) == NULL)
--+		perror_msg_and_die("%s", path);
--+	return fp;
--+}
-- 
---	fflush(0);
---	va_start(arg_ptr, fmt);
---	fprintf(stderr, "%s: ", progname);
---	vfprintf(stderr, fmt, arg_ptr);
---	if (syserr) {
---		fprintf(stderr, ": %s", strerror(save));
--+extern int xopen(const char *pathname, int flags, mode_t mode)
--+{
--+	int ret;
--+	
--+	if (flags & O_CREAT)
--+		ret = open(pathname, flags, mode);
--+	else
--+		ret = open(pathname, flags);
--+	if (ret == -1) {
--+		perror_msg_and_die("%s", pathname);
-- 	}
---	fprintf(stderr, "\n");
---	va_end(arg_ptr);
---	exit(status);
--+	return ret;
-- }
-- 
--+extern char *xreadlink(const char *path)
--+{                       
--+	static const int GROWBY = 80; /* how large we will grow strings by */
--+
--+	char *buf = NULL;   
--+	int bufsize = 0, readsize = 0;
--+
--+	do {
--+		buf = xrealloc(buf, bufsize += GROWBY);
--+		readsize = readlink(path, buf, bufsize); /* 1st try */
--+		if (readsize == -1) {
--+		    perror_msg("%s:%s", progname, path);
--+		    return NULL;
--+		}
--+	}           
--+	while (bufsize < readsize + 1);
--+
--+	buf[readsize] = '\0';
--+
--+	return buf;
--+}       
--+
-- static void map_entry(struct entry *entry)
-- {
-- 	if (entry->path) {
-- 		entry->fd = open(entry->path, O_RDONLY);
-- 		if (entry->fd < 0) {
---			die(MKFS_ERROR, 1, "open failed: %s", entry->path);
--+			error_msg_and_die("open failed: %s", entry->path);
-- 		}
-- 		entry->uncompressed = mmap(NULL, entry->size, PROT_READ, MAP_PRIVATE, entry->fd, 0);
-- 		if (entry->uncompressed == MAP_FAILED) {
---			die(MKFS_ERROR, 1, "mmap failed: %s", entry->path);
--+			error_msg_and_die("mmap failed: %s", entry->path);
-- 		}
-- 	}
-- }
--@@ -174,8 +317,9 @@
-- {
-- 	if (entry->path) {
-- 		if (munmap(entry->uncompressed, entry->size) < 0) {
---			die(MKFS_ERROR, 1, "munmap failed: %s", entry->path);
--+			error_msg_and_die("munmap failed: %s", entry->path);
-- 		}
--+		entry->uncompressed=NULL;
-- 		close(entry->fd);
-- 	}
-- }
--@@ -204,7 +348,8 @@
-- 		find_identical_file(orig->next, newfile));
-- }
-- 
---static void eliminate_doubles(struct entry *root, struct entry *orig) {
--+static void eliminate_doubles(struct entry *root, struct entry *orig) 
--+{
-- 	if (orig) {
-- 		if (orig->size && (orig->path || orig->uncompressed))
-- 			find_identical_file(root, orig);
--@@ -232,10 +377,7 @@
-- 
-- 	/* Set up the path. */
-- 	/* TODO: Reuse the parent's buffer to save memcpy'ing and duplication. */
---	path = malloc(len + 1 + MAX_INPUT_NAMELEN + 1);
---	if (!path) {
---		die(MKFS_ERROR, 1, "malloc failed");
---	}
--+	path = xmalloc(len + 1 + MAX_INPUT_NAMELEN + 1);
-- 	memcpy(path, name, len);
-- 	endpath = path + len;
-- 	*endpath = '/';
--@@ -245,7 +387,7 @@
-- 	dircount = scandir(name, &dirlist, 0, cramsort);
-- 
-- 	if (dircount < 0) {
---		die(MKFS_ERROR, 1, "scandir failed: %s", name);
--+		error_msg_and_die("scandir failed: %s", name);
-- 	}
-- 
-- 	/* process directory */
--@@ -269,25 +411,20 @@
-- 		}
-- 		namelen = strlen(dirent->d_name);
-- 		if (namelen > MAX_INPUT_NAMELEN) {
---			die(MKFS_ERROR, 0,
---				"very long (%u bytes) filename found: %s\n"
---				"please increase MAX_INPUT_NAMELEN in mkcramfs.c and recompile",
--+			error_msg_and_die(
--+				"Very long (%u bytes) filename `%s' found.\n"
--+				" Please increase MAX_INPUT_NAMELEN in mkcramfs.c and recompile.  Exiting.\n",
-- 				namelen, dirent->d_name);
-- 		}
-- 		memcpy(endpath, dirent->d_name, namelen + 1);
-- 
-- 		if (lstat(path, &st) < 0) {
--+			perror(endpath);
-- 			warn_skip = 1;
-- 			continue;
-- 		}
---		entry = calloc(1, sizeof(struct entry));
---		if (!entry) {
---			die(MKFS_ERROR, 1, "calloc failed");
---		}
---		entry->name = strdup(dirent->d_name);
---		if (!entry->name) {
---			die(MKFS_ERROR, 1, "strdup failed");
---		}
--+		entry = xcalloc(1, sizeof(struct entry));
--+		entry->name = xstrdup(dirent->d_name);
-- 		/* truncate multi-byte UTF-8 filenames on character boundary */
-- 		if (namelen > CRAMFS_MAXPATHLEN) {
-- 			namelen = CRAMFS_MAXPATHLEN;
--@@ -297,24 +434,25 @@
-- 				namelen--;
-- 				/* are we reasonably certain it was UTF-8 ? */
-- 				if (entry->name[namelen] < 0x80 || !namelen) {
---					die(MKFS_ERROR, 0, "cannot truncate filenames not encoded in UTF-8");
--+					error_msg_and_die("cannot truncate filenames not encoded in UTF-8");
-- 				}
-- 			}
-- 			entry->name[namelen] = '\0';
-- 		}
-- 		entry->mode = st.st_mode;
-- 		entry->size = st.st_size;
---		entry->uid = st.st_uid;
--+		entry->uid = opt_squash ? 0 : st.st_uid;
-- 		if (entry->uid >= 1 << CRAMFS_UID_WIDTH)
-- 			warn_uid = 1;
---		entry->gid = st.st_gid;
---		if (entry->gid >= 1 << CRAMFS_GID_WIDTH)
--+		entry->gid = opt_squash ? 0 : st.st_gid;
--+		if (entry->gid >= 1 << CRAMFS_GID_WIDTH) {
-- 			/* TODO: We ought to replace with a default
-- 			   gid instead of truncating; otherwise there
-- 			   are security problems.  Maybe mode should
-- 			   be &= ~070.  Same goes for uid once Linux
-- 			   supports >16-bit uids. */
-- 			warn_gid = 1;
--+		}
-- 		size = sizeof(struct cramfs_inode) + ((namelen + 3) & ~3);
-- 		*fslen_ub += size;
-- 		if (S_ISDIR(st.st_mode)) {
--@@ -325,21 +463,15 @@
-- 					warn_skip = 1;
-- 					continue;
-- 				}
---				entry->path = strdup(path);
---				if (!entry->path) {
---					die(MKFS_ERROR, 1, "strdup failed");
---				}
--+				entry->path = xstrdup(path);
-- 				if ((entry->size >= 1 << CRAMFS_SIZE_WIDTH)) {
-- 					warn_size = 1;
-- 					entry->size = (1 << CRAMFS_SIZE_WIDTH) - 1;
-- 				}
-- 			}
-- 		} else if (S_ISLNK(st.st_mode)) {
---			entry->uncompressed = malloc(entry->size);
--+			entry->uncompressed = xreadlink(path);
-- 			if (!entry->uncompressed) {
---				die(MKFS_ERROR, 1, "malloc failed");
---			}
---			if (readlink(path, entry->uncompressed, entry->size) < 0) {
-- 				warn_skip = 1;
-- 				continue;
-- 			}
--@@ -351,7 +483,7 @@
-- 			if (entry->size & -(1<<CRAMFS_SIZE_WIDTH))
-- 				warn_dev = 1;
-- 		} else {
---			die(MKFS_ERROR, 0, "bogus file type: %s", entry->name);
--+			error_msg_and_die("bogus file type: %s", entry->name);
-- 		}
-- 
-- 		if (S_ISREG(st.st_mode) || S_ISLNK(st.st_mode)) {
--@@ -378,7 +510,9 @@
-- 	struct cramfs_super *super = (struct cramfs_super *) base;
-- 	unsigned int offset = sizeof(struct cramfs_super) + image_length;
-- 
---	offset += opt_pad;	/* 0 if no padding */
--+	if (opt_pad) {
--+		offset += opt_pad;	/* 0 if no padding */
--+	}
-- 
-- 	super->magic = CRAMFS_MAGIC;
-- 	super->flags = CRAMFS_FLAG_FSID_VERSION_2 | CRAMFS_FLAG_SORTED_DIRS;
--@@ -414,10 +548,10 @@
-- 	struct cramfs_inode *inode = (struct cramfs_inode *) (base + entry->dir_offset);
-- 
-- 	if ((offset & 3) != 0) {
---		die(MKFS_ERROR, 0, "illegal offset of %lu bytes", offset);
--+		error_msg_and_die("illegal offset of %lu bytes", offset);
-- 	}
-- 	if (offset >= (1 << (2 + CRAMFS_OFFSET_WIDTH))) {
---		die(MKFS_ERROR, 0, "filesystem too big");
--+		error_msg_and_die("filesystem too big");
-- 	}
-- 	inode->offset = (offset >> 2);
-- }
--@@ -429,7 +563,7 @@
--  */
-- static void print_node(struct entry *e)
-- {
---	char info[10];
--+	char info[12];
-- 	char type = '?';
-- 
-- 	if (S_ISREG(e->mode)) type = 'f';
--@@ -442,11 +576,11 @@
-- 
-- 	if (S_ISCHR(e->mode) || (S_ISBLK(e->mode))) {
-- 		/* major/minor numbers can be as high as 2^12 or 4096 */
---		snprintf(info, 10, "%4d,%4d", major(e->size), minor(e->size));
--+		snprintf(info, 11, "%4d,%4d", major(e->size), minor(e->size));
-- 	}
-- 	else {
-- 		/* size be as high as 2^24 or 16777216 */
---		snprintf(info, 10, "%9d", e->size);
--+		snprintf(info, 11, "%9d", e->size);
-- 	}
-- 
-- 	printf("%c %04o %s %5d:%-3d %s\n",
--@@ -462,17 +596,9 @@
-- {
-- 	int stack_entries = 0;
-- 	int stack_size = 64;
---	struct entry **entry_stack;
---
---	entry_stack = malloc(stack_size * sizeof(struct entry *));
---	if (!entry_stack) {
---		die(MKFS_ERROR, 1, "malloc failed");
---	}
---
---	if (opt_verbose) {
---		printf("root:\n");
---	}
--+	struct entry **entry_stack = NULL;
-- 
--+	entry_stack = xmalloc(stack_size * sizeof(struct entry *));
-- 	for (;;) {
-- 		int dir_start = stack_entries;
-- 		while (entry) {
--@@ -506,10 +632,7 @@
-- 			if (entry->child) {
-- 				if (stack_entries >= stack_size) {
-- 					stack_size *= 2;
---					entry_stack = realloc(entry_stack, stack_size * sizeof(struct entry *));
---					if (!entry_stack) {
---						die(MKFS_ERROR, 1, "realloc failed");
---					}
--+					entry_stack = xrealloc(entry_stack, stack_size * sizeof(struct entry *));
-- 				}
-- 				entry_stack[stack_entries] = entry;
-- 				stack_entries++;
--@@ -543,7 +666,7 @@
-- 
-- 		set_data_offset(entry, base, offset);
-- 		if (opt_verbose) {
---			printf("%s:\n", entry->name);
--+		    printf("'%s':\n", entry->name);
-- 		}
-- 		entry = entry->child;
-- 	}
--@@ -553,16 +676,21 @@
-- 
-- static int is_zero(char const *begin, unsigned len)
-- {
---	/* Returns non-zero iff the first LEN bytes from BEGIN are all NULs. */
---	return (len-- == 0 ||
---		(begin[0] == '\0' &&
---		 (len-- == 0 ||
---		  (begin[1] == '\0' &&
---		   (len-- == 0 ||
---		    (begin[2] == '\0' &&
---		     (len-- == 0 ||
---		      (begin[3] == '\0' &&
---		       memcmp(begin, begin + 4, len) == 0))))))));
--+	if (opt_holes)
--+		/* Returns non-zero iff the first LEN bytes from BEGIN are
--+		   all NULs. */
--+		return (len-- == 0 ||
--+			(begin[0] == '\0' &&
--+			 (len-- == 0 ||
--+			  (begin[1] == '\0' &&
--+			   (len-- == 0 ||
--+			    (begin[2] == '\0' &&
--+			     (len-- == 0 ||
--+			      (begin[3] == '\0' &&
--+			       memcmp(begin, begin + 4, len) == 0))))))));
--+	else
--+		/* Never create holes. */
--+		return 0;
-- }
-- 
-- /*
--@@ -575,37 +703,34 @@
--  * Note that size > 0, as a zero-sized file wouldn't ever
--  * have gotten here in the first place.
--  */
---static unsigned int do_compress(char *base, unsigned int offset, char const *name, char *uncompressed, unsigned int size)
--+static unsigned int do_compress(char *base, unsigned int offset, struct entry *entry)
-- {
--+	unsigned int size = entry->size;
-- 	unsigned long original_size = size;
-- 	unsigned long original_offset = offset;
-- 	unsigned long new_size;
-- 	unsigned long blocks = (size - 1) / blksize + 1;
-- 	unsigned long curr = offset + 4 * blocks;
-- 	int change;
--+	char *uncompressed = entry->uncompressed;
-- 
---	total_blocks += blocks;
--+	total_blocks += blocks; 
-- 
-- 	do {
-- 		unsigned long len = 2 * blksize;
-- 		unsigned int input = size;
---		int err;
---
-- 		if (input > blksize)
-- 			input = blksize;
-- 		size -= input;
---		if (!(opt_holes && is_zero (uncompressed, input))) {
---			err = compress2(base + curr, &len, uncompressed, input, Z_BEST_COMPRESSION);
---			if (err != Z_OK) {
---				die(MKFS_ERROR, 0, "compression error: %s", zError(err));
---			}
--+		if (!is_zero (uncompressed, input)) {
--+			compress(base + curr, &len, uncompressed, input);
-- 			curr += len;
-- 		}
-- 		uncompressed += input;
-- 
-- 		if (len > blksize*2) {
-- 			/* (I don't think this can happen with zlib.) */
---			die(MKFS_ERROR, 0, "AIEEE: block \"compressed\" to > 2*blocklength (%ld)", len);
--+			error_msg_and_die("AIEEE: block \"compressed\" to > 2*blocklength (%ld)\n", len);
-- 		}
-- 
-- 		*(u32 *) (base + offset) = curr;
--@@ -618,10 +743,12 @@
-- 	   st_blocks * 512.  But if you say that then perhaps
-- 	   administrative data should also be included in both. */
-- 	change = new_size - original_size;
---	if (opt_verbose > 1) {
---		printf("%6.2f%% (%+d bytes)\t%s\n",
---		       (change * 100) / (double) original_size, change, name);
--+#if 0
--+	if (opt_verbose) {
--+	    printf("%6.2f%% (%+d bytes)\t%s\n",
--+		    (change * 100) / (double) original_size, change, entry->name);
-- 	}
--+#endif
-- 
-- 	return curr;
-- }
--@@ -644,7 +771,7 @@
-- 				set_data_offset(entry, base, offset);
-- 				entry->offset = offset;
-- 				map_entry(entry);
---				offset = do_compress(base, offset, entry->name, entry->uncompressed, entry->size);
--+				offset = do_compress(base, offset, entry);
-- 				unmap_entry(entry);
-- 			}
-- 		}
--@@ -660,13 +787,10 @@
-- 	int fd;
-- 	char *buf;
-- 
---	fd = open(file, O_RDONLY);
---	if (fd < 0) {
---		die(MKFS_ERROR, 1, "open failed: %s", file);
---	}
--+	fd = xopen(file, O_RDONLY, 0);
-- 	buf = mmap(NULL, image_length, PROT_READ, MAP_PRIVATE, fd, 0);
-- 	if (buf == MAP_FAILED) {
---		die(MKFS_ERROR, 1, "mmap failed");
--+		error_msg_and_die("mmap failed");
-- 	}
-- 	memcpy(base + offset, buf, image_length);
-- 	munmap(buf, image_length);
--@@ -679,6 +803,328 @@
-- 	return (offset + image_length);
-- }
-- 
--+static struct entry *find_filesystem_entry(struct entry *dir, char *name, mode_t type)
--+{
--+	struct entry *e = dir;
--+
--+	if (S_ISDIR(dir->mode)) {
--+		e = dir->child;
--+	}
--+	while (e) {
--+		/* Only bother to do the expensive strcmp on matching file types */
--+		if (type == (e->mode & S_IFMT) && e->name) {
--+			if (S_ISDIR(e->mode)) {
--+				int len = strlen(e->name);
--+
--+				/* Check if we are a parent of the correct path */
--+				if (strncmp(e->name, name, len) == 0) {
--+					/* Is this an _exact_ match? */
--+					if (strcmp(name, e->name) == 0) {
--+						return (e);
--+					}
--+					/* Looks like we found a parent of the correct path */
--+					if (name[len] == '/') {
--+						if (e->child) {
--+							return (find_filesystem_entry (e, name + len + 1, type));
--+						} else {
--+							return NULL;
--+						}
--+					}
--+				}
--+			} else {
--+				if (strcmp(name, e->name) == 0) {
--+					return (e);
--+				}
--+			}
--+		}
--+		e = e->next;
--+	}
--+	return (NULL);
--+}
--+
--+void modify_entry(char *full_path, unsigned long uid, unsigned long gid, 
--+	unsigned long mode, unsigned long rdev, struct entry *root, loff_t *fslen_ub)
--+{
--+	char *name, *path, *full;
--+	struct entry *curr, *parent, *entry, *prev;
--+	
--+	full = xstrdup(full_path);
--+	path = xstrdup(dirname(full));
--+	name = full_path + strlen(path) + 1;
--+	free(full);
--+	if (strcmp(path, "/") == 0) {
--+		parent = root;
--+		name = full_path + 1;
--+	} else {
--+		if (!(parent = find_filesystem_entry(root, path+1, S_IFDIR)))
--+			error_msg_and_die("%s/%s: could not find parent\n", path, name);
--+	}
--+	if ((entry = find_filesystem_entry(parent, name, (mode & S_IFMT)))) {
--+		/* its there, just modify permissions */
--+		entry->mode = mode;
--+		entry->uid = uid;
--+		entry->gid = gid;
--+	} else { /* make a new entry */
--+	
--+		/* code partially replicated from parse_directory() */
--+		size_t namelen;
--+		if (S_ISREG(mode)) {
--+			error_msg_and_die("%s: regular file from device_table file must exist on disk!", full_path);
--+		}
--+
--+		namelen = strlen(name);
--+		if (namelen > MAX_INPUT_NAMELEN) {
--+			error_msg_and_die(
--+				"Very long (%u bytes) filename `%s' found.\n"
--+				" Please increase MAX_INPUT_NAMELEN in mkcramfs.c and recompile.  Exiting.\n",
--+				namelen, name);
--+		}
--+		entry = xcalloc(1, sizeof(struct entry));
--+		entry->name = xstrdup(name);
--+		/* truncate multi-byte UTF-8 filenames on character boundary */
--+		if (namelen > CRAMFS_MAXPATHLEN) {
--+			namelen = CRAMFS_MAXPATHLEN;
--+			warn_namelen = 1;
--+			/* the first lost byte must not be a trail byte */
--+			while ((entry->name[namelen] & 0xc0) == 0x80) {
--+				namelen--;
--+				/* are we reasonably certain it was UTF-8 ? */
--+				if (entry->name[namelen] < 0x80 || !namelen) {
--+					error_msg_and_die("cannot truncate filenames not encoded in UTF-8");
--+				}
--+			}
--+			entry->name[namelen] = '\0';
--+		}
--+		entry->mode = mode;
--+		entry->uid = uid;
--+		entry->gid = gid;
--+		entry->size = 0;
--+		if (S_ISBLK(mode) || S_ISCHR(mode)) {
--+			entry->size = rdev;
--+			if (entry->size & -(1<<CRAMFS_SIZE_WIDTH))
--+				warn_dev = 1;
--+		}
--+		
--+		/* ok, now we have to backup and correct the size of all the entries above us */
--+		*fslen_ub += sizeof(struct cramfs_inode) + ((namelen + 3) & ~3);
--+		parent->size += sizeof(struct cramfs_inode) + ((namelen + 3) & ~3);
--+
--+		/* alright, time to link us in */
--+		curr = parent->child;
--+		prev = NULL;
--+		while (curr && strcmp(name, curr->name) > 0) {
--+			prev = curr;
--+			curr = curr->next;
--+		}
--+		if (!prev) parent->child = entry;
--+		else prev->next = entry;
--+		entry->next = curr;
--+		entry->child = NULL;
--+	}
--+	if (entry->uid >= 1 << CRAMFS_UID_WIDTH)
--+		warn_uid = 1;
--+	if (entry->gid >= 1 << CRAMFS_GID_WIDTH) {
--+		/* TODO: We ought to replace with a default
--+		   gid instead of truncating; otherwise there
--+		   are security problems.  Maybe mode should
--+		   be &= ~070.  Same goes for uid once Linux
--+		   supports >16-bit uids. */
--+		warn_gid = 1;
--+	}
--+	free(path);
--+}
--+
--+/* the GNU C library has a wonderful scanf("%as", string) which will
--+ allocate the string with the right size, good to avoid buffer overruns. 
--+ the following macros use it if available or use a hacky workaround...
--+ */
--+
--+#ifdef __GNUC__
--+#define SCANF_PREFIX "a"
--+#define SCANF_STRING(s) (&s)
--+#define GETCWD_SIZE 0
--+#else
--+#define SCANF_PREFIX "511"
--+#define SCANF_STRING(s) (s = xmalloc(512))
--+#define GETCWD_SIZE -1
--+inline int snprintf(char *str, size_t n, const char *fmt, ...)
--+{
--+	int ret;
--+	va_list ap;
--+
--+	va_start(ap, fmt);
--+	ret = vsprintf(str, fmt, ap);
--+	va_end(ap);
--+	return ret;
--+}
--+#endif
--+
--+/*  device table entries take the form of:
--+    <path>	<type> <mode>	<uid>	<gid>	<major>	<minor>	<start>	<inc>	<count>
--+    /dev/mem     c    640       0       0         1       1       0     0         -
--+
--+    type can be one of: 
--+	f	A regular file
--+	d	Directory
--+	c	Character special device file
--+	b	Block special device file
--+	p	Fifo (named pipe)
--+
--+    I don't bother with symlinks (permissions are irrelevant), hard
--+    links (special cases of regular files), or sockets (why bother).
--+
--+    Regular files must exist in the target root directory.  If a char,
--+    block, fifo, or directory does not exist, it will be created.
--+*/
--+
--+static int interpret_table_entry(char *line, struct entry *root, loff_t *fslen_ub)
--+{
--+	char type, *name = NULL;
--+	unsigned long mode = 0755, uid = 0, gid = 0, major = 0, minor = 0;
--+	unsigned long start = 0, increment = 1, count = 0;
--+
--+	if (sscanf (line, "%" SCANF_PREFIX "s %c %lo %lu %lu %lu %lu %lu %lu %lu",
--+		 SCANF_STRING(name), &type, &mode, &uid, &gid, &major, &minor,
--+		 &start, &increment, &count) < 0) 
--+	{
--+		return 1;
--+	}
--+
--+	if (!strcmp(name, "/")) {
--+		error_msg_and_die("Device table entries require absolute paths");
--+	}
--+
--+	switch (type) {
--+	case 'd':
--+		mode |= S_IFDIR;
--+		modify_entry(name, uid, gid, mode, 0, root, fslen_ub);
--+		break;
--+	case 'f':
--+		mode |= S_IFREG;
--+		modify_entry(name, uid, gid, mode, 0, root, fslen_ub);
--+		break;
--+	case 'p':
--+		mode |= S_IFIFO;
--+		modify_entry(name, uid, gid, mode, 0, root, fslen_ub);
--+		break;
--+	case 'c':
--+	case 'b':
--+		mode |= (type == 'c') ? S_IFCHR : S_IFBLK;
--+		if (count > 0) {
--+			char *buf;
--+			unsigned long i;
--+			dev_t rdev;
--+
--+			for (i = start; i < count; i++) {
--+				asprintf(&buf, "%s%lu", name, i);
--+				rdev = makedev(major, minor + (i * increment - start));
--+				modify_entry(buf, uid, gid, mode, rdev, root, fslen_ub);
--+				free(buf);
--+			}
--+		} else {
--+			dev_t rdev = makedev(major, minor);
--+			modify_entry(name, uid, gid, mode, rdev, root, fslen_ub);
--+		}
--+		break;
--+	default:
--+		error_msg_and_die("Unsupported file type");
--+	}
--+	free(name);
--+	return 0;
--+}
--+
--+static int parse_device_table(FILE *file, struct entry *root, loff_t *fslen_ub)
--+{
--+	char *line;
--+	int status = 0;
--+	size_t length = 0;
--+
--+	/* Turn off squash, since we must ensure that values
--+	 * entered via the device table are not squashed */
--+	opt_squash = 0;
--+
--+	/* Looks ok so far.  The general plan now is to read in one
--+	 * line@a time, check for leading comment delimiters ('#'),
--+	 * then try and parse the line as a device table.  If we fail
--+	 * to parse things, try and help the poor fool to fix their
--+	 * device table with a useful error msg... */
--+	line = NULL;
--+	while (getline(&line, &length, file) != -1) {
--+		/* First trim off any whitespace */
--+		int len = strlen(line);
--+
--+		/* trim trailing whitespace */
--+		while (len > 0 && isspace(line[len - 1]))
--+			line[--len] = '\0';
--+		/* trim leading whitespace */
--+		memmove(line, &line[strspn(line, " \n\r\t\v")], len);
--+
--+		/* How long are we after trimming? */
--+		len = strlen(line);
--+
--+		/* If this is NOT a comment line, try to interpret it */
--+		if (len && *line != '#') {
--+			if (interpret_table_entry(line, root, fslen_ub))
--+				status = 1;
--+		}
--+
--+		free(line);
--+		line = NULL;
--+	}
--+	free(line);
--+	fclose(file);
--+
--+	return status;
--+}
--+
--+void traverse(struct entry *entry, int depth)
--+{
--+	struct entry *curr = entry;
--+	int i;
--+
--+	while (curr) {
--+		for (i = 0; i < depth; i++) putchar(' ');
--+		printf("%s: size=%d mode=%d same=%p\n",
--+			(curr->name)? (char*)curr->name : "/", 
--+			curr->size, curr->mode, curr->same);
--+		if (curr->child) traverse(curr->child, depth + 4);
--+		curr = curr->next;
--+	}
--+}
--+
--+static void free_filesystem_entry(struct entry *dir)
--+{
--+	struct entry *e = dir, *last;
--+
--+	if (S_ISDIR(dir->mode)) {
--+		e = dir->child;
--+	}
--+	while (e) {
--+		if (e->name)
--+			free(e->name);
--+		if (e->path)
--+			free(e->path);
--+		if (e->uncompressed)
--+			free(e->uncompressed);
--+		last = e;
--+		if (e->child) {
--+			free_filesystem_entry(e);
--+		}
--+		e = e->next;
--+		free(last);
--+	}
--+}
--+
--+
--+/*
--+ * Usage:
--+ *
--+ *      mkcramfs directory-name outfile
--+ *
--+ * where "directory-name" is simply the root of the directory
--+ * tree that we want to generate a compressed filesystem out
--+ * of.
--+ */
-- int main(int argc, char **argv)
-- {
-- 	struct stat st;		/* used twice... */
--@@ -692,6 +1138,7 @@
-- 	u32 crc;
-- 	int c;			/* for getopt */
-- 	char *ep;		/* for strtoul */
--+	FILE *devtable = NULL;
-- 
-- 	total_blocks = 0;
-- 
--@@ -699,7 +1146,7 @@
-- 		progname = argv[0];
-- 
-- 	/* command line options */
---	while ((c = getopt(argc, argv, "hEe:i:n:psvz")) != EOF) {
--+	while ((c = getopt(argc, argv, "hEe:i:n:psvzD:q")) != EOF) {
-- 		switch (c) {
-- 		case 'h':
-- 			usage(MKFS_OK);
--@@ -715,7 +1162,7 @@
-- 		case 'i':
-- 			opt_image = optarg;
-- 			if (lstat(opt_image, &st) < 0) {
---				die(MKFS_ERROR, 1, "lstat failed: %s", opt_image);
--+				error_msg_and_die("lstat failed: %s", opt_image);
-- 			}
-- 			image_length = st.st_size; /* may be padded later */
-- 			fslen_ub += (image_length + 3); /* 3 is for padding */
--@@ -736,6 +1183,16 @@
-- 		case 'z':
-- 			opt_holes = 1;
-- 			break;
--+		case 'q':
--+			opt_squash = 1;
--+			break;
--+		case 'D':
--+			devtable = xfopen(optarg, "r");
--+			if (fstat(fileno(devtable), &st) < 0)
--+				perror_msg_and_die(optarg);
--+			if (st.st_size < 10)
--+				error_msg_and_die("%s: not a proper device table file\n", optarg);
--+			break;
-- 		}
-- 	}
-- 
--@@ -745,25 +1202,23 @@
-- 	outfile = argv[optind + 1];
-- 
-- 	if (stat(dirname, &st) < 0) {
---		die(MKFS_USAGE, 1, "stat failed: %s", dirname);
---	}
---	fd = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0666);
---	if (fd < 0) {
---		die(MKFS_USAGE, 1, "open failed: %s", outfile);
--+		error_msg_and_die("stat failed: %s", dirname);
-- 	}
--+	fd = xopen(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0666);
-- 
---	root_entry = calloc(1, sizeof(struct entry));
---	if (!root_entry) {
---		die(MKFS_ERROR, 1, "calloc failed");
---	}
--+	root_entry = xcalloc(1, sizeof(struct entry));
-- 	root_entry->mode = st.st_mode;
-- 	root_entry->uid = st.st_uid;
-- 	root_entry->gid = st.st_gid;
-- 
-- 	root_entry->size = parse_directory(root_entry, dirname, &root_entry->child, &fslen_ub);
-- 
--+	if (devtable) {
--+		parse_device_table(devtable, root_entry, &fslen_ub);
--+	}
--+
-- 	/* always allocate a multiple of blksize bytes because that's
---	   what we're going to write later on */
--+           what we're going to write later on */
-- 	fslen_ub = ((fslen_ub - 1) | (blksize - 1)) + 1;
-- 
-- 	if (fslen_ub > MAXFSLEN) {
--@@ -790,7 +1245,7 @@
-- 	rom_image = mmap(NULL, fslen_ub?fslen_ub:1, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-- 
-- 	if (rom_image == MAP_FAILED) {
---		die(MKFS_ERROR, 1, "mmap failed");
--+		error_msg_and_die("mmap failed");
-- 	}
-- 
-- 	/* Skip the first opt_pad bytes for boot loader code */
--@@ -807,6 +1262,7 @@
-- 	}
-- 
-- 	offset = write_directory_structure(root_entry->child, rom_image, offset);
--+	if (opt_verbose)
-- 	printf("Directory data: %d bytes\n", offset);
-- 
-- 	offset = write_data(root_entry, rom_image, offset);
--@@ -814,30 +1270,38 @@
-- 	/* We always write a multiple of blksize bytes, so that
-- 	   losetup works. */
-- 	offset = ((offset - 1) | (blksize - 1)) + 1;
--+	if (opt_verbose)
-- 	printf("Everything: %d kilobytes\n", offset >> 10);
-- 
-- 	/* Write the superblock now that we can fill in all of the fields. */
-- 	write_superblock(root_entry, rom_image+opt_pad, offset);
--+	if (opt_verbose)
-- 	printf("Super block: %d bytes\n", sizeof(struct cramfs_super));
-- 
-- 	/* Put the checksum in. */
-- 	crc = crc32(0L, Z_NULL, 0);
-- 	crc = crc32(crc, (rom_image+opt_pad), (offset-opt_pad));
-- 	((struct cramfs_super *) (rom_image+opt_pad))->fsid.crc = crc;
--+	if (opt_verbose)
-- 	printf("CRC: %x\n", crc);
-- 
-- 	/* Check to make sure we allocated enough space. */
-- 	if (fslen_ub < offset) {
---		die(MKFS_ERROR, 0, "not enough space allocated for ROM image (%Ld allocated, %d used)", fslen_ub, offset);
--+		error_msg_and_die("not enough space allocated for ROM "
--+			"image (%Ld allocated, %d used)", fslen_ub, offset);
-- 	}
-- 
-- 	written = write(fd, rom_image, offset);
-- 	if (written < 0) {
---		die(MKFS_ERROR, 1, "write failed");
--+		error_msg_and_die("write failed");
-- 	}
-- 	if (offset != written) {
---		die(MKFS_ERROR, 0, "ROM image write failed (wrote %d of %d bytes)", written, offset);
--+		error_msg_and_die("ROM image write failed (wrote %d of %d bytes)", written, offset);
-- 	}
--+	
--+	/* Free up memory */
--+	free_filesystem_entry(root_entry);
--+	free(root_entry);
-- 
-- 	/* (These warnings used to come@the start, but they scroll off the
-- 	   screen too quickly.) */
-diff --git a/target/cramfs/cramfs-02-endian.patch b/target/cramfs/cramfs-02-endian.patch
-deleted file mode 100644
-index 0da55bf..0000000
---- a/target/cramfs/cramfs-02-endian.patch
-+++ /dev/null
-@@ -1,284 +0,0 @@
----- cramfs-1.1/mkcramfs.c.orig	2005-04-13 05:55:57.000000000 -0600
--+++ cramfs-1.1/mkcramfs.c	2005-04-13 16:19:57.000000000 -0600
--@@ -117,6 +117,7 @@
-- static int opt_squash = 0;
-- static char *opt_image = NULL;
-- static char *opt_name = NULL;
--+static int swap_endian = 0;
-- 
-- static int warn_dev, warn_gid, warn_namelen, warn_skip, warn_size, warn_uid;
-- static const char *const memory_exhausted = "memory exhausted";
--@@ -155,6 +156,8 @@
-- 		" -i file    insert a file image into the filesystem (requires >= 2.4.0)\n"
-- 		" -n name    set name of cramfs filesystem\n"
-- 		" -p         pad by %d bytes for boot code\n"
--+		" -l         litte endian filesystem\n"
--+		" -b         big endian filesystem\n"
-- 		" -s         sort directory entries (old option, ignored)\n"
-- 		" -v         be more verbose\n"
-- 		" -z         make explicit holes (requires >= 2.3.39)\n"
--@@ -504,6 +506,50 @@
-- 	return totalsize;
-- }
-- 
--+/* routines to swap endianness/bitfields in inode/superblock block data */
--+static void fix_inode(struct cramfs_inode *inode)
--+{
--+#define wswap(x)    (((x)>>24) | (((x)>>8)&0xff00) | (((x)&0xff00)<<8) | (((x)&0xff)<<24))
--+	/* attempt #2 */
--+	inode->mode = (inode->mode >> 8) | ((inode->mode&0xff)<<8);
--+	inode->uid = (inode->uid >> 8) | ((inode->uid&0xff)<<8);
--+	inode->size = (inode->size >> 16) | (inode->size&0xff00) |
--+		((inode->size&0xff)<<16);
--+	((u32*)inode)[2] = wswap(inode->offset | (inode->namelen<<26));
--+}
--+
--+static void fix_offset(struct cramfs_inode *inode, u32 offset)
--+{
--+	u32 tmp = wswap(((u32*)inode)[2]);
--+	((u32*)inode)[2] = wswap((offset >> 2) | (tmp&0xfc000000));
--+}
--+
--+static void fix_block_pointer(u32 *p)
--+{
--+	*p = wswap(*p);
--+}
--+
--+static void fix_super(struct cramfs_super *super)
--+{
--+	u32 *p = (u32*)super;
--+
--+	/* fix superblock fields */
--+	p[0] = wswap(p[0]);	/* magic */
--+	p[1] = wswap(p[1]);	/* size */
--+	p[2] = wswap(p[2]);	/* flags */
--+	p[3] = wswap(p[3]);	/* future */
--+
--+	/* fix filesystem info fields */
--+	p = (u32*)&super->fsid;
--+	p[0] = wswap(p[0]);	/* crc */
--+	p[1] = wswap(p[1]);	/* edition */
--+	p[2] = wswap(p[2]);	/* blocks */
--+	p[3] = wswap(p[3]);	/* files */
--+
--+	fix_inode(&super->root);
--+#undef wswap
--+}
--+
-- /* Returns sizeof(struct cramfs_super), which includes the root inode. */
-- static unsigned int write_superblock(struct entry *root, char *base, int size)
-- {
--@@ -539,6 +585,7 @@
-- 	super->root.gid = root->gid;
-- 	super->root.size = root->size;
-- 	super->root.offset = offset >> 2;
--+	if (swap_endian) fix_super(super);
-- 
-- 	return offset;
-- }
--@@ -553,7 +600,10 @@
-- 	if (offset >= (1 << (2 + CRAMFS_OFFSET_WIDTH))) {
-- 		error_msg_and_die("filesystem too big");
-- 	}
---	inode->offset = (offset >> 2);
--+	if (swap_endian)
--+		fix_offset(inode, offset);
--+	else
--+		inode->offset = (offset >> 2);
-- }
-- 
-- /*
--@@ -638,6 +688,7 @@
-- 				stack_entries++;
-- 			}
-- 			entry = entry->next;
--+			if (swap_endian) fix_inode(inode);
-- 		}
-- 
-- 		/*
--@@ -734,6 +785,7 @@
-- 		}
-- 
-- 		*(u32 *) (base + offset) = curr;
--+		if (swap_endian) fix_block_pointer((u32*)(base + offset));
-- 		offset += 4;
-- 	} while (size);
-- 
--@@ -1146,7 +1198,7 @@
-- 		progname = argv[0];
-- 
-- 	/* command line options */
---	while ((c = getopt(argc, argv, "hEe:i:n:psvzD:q")) != EOF) {
--+	while ((c = getopt(argc, argv, "hEe:i:n:psvzD:qlb")) != EOF) {
-- 		switch (c) {
-- 		case 'h':
-- 			usage(MKFS_OK);
--@@ -1174,6 +1227,18 @@
-- 			opt_pad = PAD_SIZE;
-- 			fslen_ub += PAD_SIZE;
-- 			break;
--+		case 'b':
--+#if __BYTE_ORDER == __LITTLE_ENDIAN
--+			swap_endian = 1;
--+			printf("Swapping filesystem endian-ness\n");
--+#endif
--+			break;
--+		case 'l':
--+#if __BYTE_ORDER == __BIG_ENDIAN
--+			swap_endian = 1;
--+			printf("Swapping filesystem endian-ness\n");
--+#endif
--+			break;
-- 		case 's':
-- 			/* old option, ignored */
-- 			break;
----- cramfs-1.1/cramfsck.c.orig	2005-04-25 11:50:31.000000000 -0700
--+++ cramfs-1.1/cramfsck.c	2005-04-25 16:53:25.000000000 -0700
--@@ -30,6 +30,7 @@
--  * 2000/07/15: Daniel Quinlan (initial support for block devices)
--  * 2002/01/10: Daniel Quinlan (additional checks, test more return codes,
--  *                            use read if mmap fails, standardize messages)
--+ * 2004/09/01: Alfonso Acosta (Add swapping support)
--  */
-- 
-- /* compile-time options */
--@@ -51,6 +52,7 @@
-- #include <utime.h>
-- #include <sys/ioctl.h>
-- #define _LINUX_STRING_H_
--+#include <byteswap.h>
-- #include "linux/cramfs_fs.h"
-- #include <zlib.h>
-- 
--@@ -74,6 +76,7 @@
-- static char *filename;		/* ROM image filename */
-- struct cramfs_super super;	/* just find the cramfs superblock once */
-- static int opt_verbose = 0;	/* 1 = verbose (-v), 2+ = very verbose (-vv) */
--+static int need_swapping = 0;   /* fs and host dont have the same endianness */
-- #ifdef INCLUDE_FS_TESTS
-- static int opt_extract = 0;		/* extract cramfs (-x) */
-- static char *extract_dir = "/";	/* extraction directory (-x) */
--@@ -85,6 +88,9 @@
-- static unsigned long start_data = ~0UL;	/* start of the data (256 MB = max) */
-- static unsigned long end_data = 0;	/* end of the data */
-- 
--+/* access 32 byte variables */
--+#define CRAMFS_32(x)  (need_swapping ? bswap_32(x) : x)
--+
-- /* Guarantee access to at least 8kB at a time */
-- #define ROMBUFFER_BITS	13
-- #define ROMBUFFERSIZE	(1 << ROMBUFFER_BITS)
--@@ -166,20 +172,34 @@
-- 	if (super.magic == CRAMFS_MAGIC) {
-- 		*start = 0;
-- 	}
--+	else if (super.magic == bswap_32(CRAMFS_MAGIC)) {
--+		*start = 0;
--+		need_swapping = 1;
--+	}
--+
-- 	else if (*length >= (PAD_SIZE + sizeof(super))) {
-- 		lseek(fd, PAD_SIZE, SEEK_SET);
-- 		if (read(fd, &super, sizeof(super)) != sizeof(super)) {
-- 			die(FSCK_ERROR, 1, "read failed: %s", filename);
-- 		}
---		if (super.magic == CRAMFS_MAGIC) {
--+		if (super.magic == CRAMFS_32(CRAMFS_MAGIC)) {
-- 			*start = PAD_SIZE;
-- 		}
-- 	}
-- 
-- 	/* superblock tests */
---	if (super.magic != CRAMFS_MAGIC) {
--+	if (super.magic != CRAMFS_32(CRAMFS_MAGIC)) {
-- 		die(FSCK_UNCORRECTED, 0, "superblock magic not found");
-- 	}
--+	if (need_swapping){
--+		super.size = bswap_32(super.size);
--+		super.flags = bswap_32(super.flags);
--+		super.future = bswap_32(super.future);
--+		super.fsid.crc = bswap_32(super.fsid.crc);
--+		super.fsid.edition = bswap_32(super.fsid.edition);
--+		super.fsid.blocks = bswap_32(super.fsid.blocks);
--+		super.fsid.files = bswap_32(super.fsid.files); 
--+	}	
-- 	if (super.flags & ~CRAMFS_SUPPORTED_FLAGS) {
-- 		die(FSCK_ERROR, 0, "unsupported filesystem features");
-- 	}
--@@ -215,7 +235,10 @@
-- 		die(FSCK_USAGE, 0, "unable to test CRC: old cramfs format");
-- #endif /* not INCLUDE_FS_TESTS */
-- 	}
---
--+	else if (need_swapping) {
--+       /* crc checking in this case would mean  translating the whole file */
--+		return;
--+	}
-- 	crc = crc32(0L, Z_NULL, 0);
-- 
-- 	buf = mmap(NULL, super.size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
--@@ -300,12 +323,23 @@
-- 
-- static struct cramfs_inode *cramfs_iget(struct cramfs_inode * i)
-- {
--+#define wswap(x)    (((x)>>24) | (((x)>>8)&0xff00) | (((x)&0xff00)<<8) | (((x)&0xff)<<24))
-- 	struct cramfs_inode *inode = malloc(sizeof(struct cramfs_inode));
-- 
-- 	if (!inode) {
-- 		die(FSCK_ERROR, 1, "malloc failed");
-- 	}
---	*inode = *i;
--+	if(!need_swapping) {
--+		*inode = *i;
--+	}
--+	else { 
--+		inode->mode=bswap_16(i->mode);
--+		inode->uid=bswap_16(i->uid);
--+		inode->size=bswap_32(i->size << 8);
--+		inode->gid=i->gid;
--+		inode->namelen = bswap_32(((u32*)i)[2]) >> 26;
--+		inode->offset = bswap_32(((u32*)i)[2]) & 0x3FFFFFFF;
--+	}
-- 	return inode;
-- }
-- 
--@@ -324,9 +358,9 @@
--  */
-- static struct cramfs_inode *read_super(void)
-- {
---	unsigned long offset = super.root.offset << 2;
---
---	if (!S_ISDIR(super.root.mode))
--+	struct cramfs_inode *root = cramfs_iget(&super.root);
--+	unsigned long offset = root->offset << 2; 
--+	if (!S_ISDIR(root->mode))
-- 		die(FSCK_UNCORRECTED, 0, "root inode is not directory");
-- 	if (!(super.flags & CRAMFS_FLAG_SHIFTED_ROOT_OFFSET) &&
-- 	    ((offset != sizeof(struct cramfs_super)) &&
--@@ -334,7 +368,7 @@
-- 	{
-- 		die(FSCK_UNCORRECTED, 0, "bad root offset (%lu)", offset);
-- 	}
---	return cramfs_iget(&super.root);
--+	return root;
-- }
-- 
-- static int uncompress_block(void *src, int len)
--@@ -366,7 +400,7 @@
-- 
-- 	do {
-- 		unsigned long out = PAGE_CACHE_SIZE;
---		unsigned long next = *(u32 *) romfs_read(offset);
--+		unsigned long next = CRAMFS_32(*(u32 *) romfs_read(offset));
-- 
-- 		if (next > end_data) {
-- 			end_data = next;
--@@ -529,7 +563,7 @@
-- {
-- 	unsigned long offset = i->offset << 2;
-- 	unsigned long curr = offset + 4;
---	unsigned long next = *(u32 *) romfs_read(offset);
--+	unsigned long next = CRAMFS_32(*(u32 *) romfs_read(offset));
-- 	unsigned long size;
-- 
-- 	if (offset == 0) {
-diff --git a/target/cramfs/cramfs-03-cygwin_IO.patch b/target/cramfs/cramfs-03-cygwin_IO.patch
-deleted file mode 100644
-index 4ea358e..0000000
---- a/target/cramfs/cramfs-03-cygwin_IO.patch
-+++ /dev/null
-@@ -1,13 +0,0 @@
----- cramfs-1.1/cramfsck.c.orig	2006-12-22 22:16:59.328125000 +1100
--+++ cramfs-1.1/cramfsck.c	2006-12-19 01:02:05.531250000 +1100
--@@ -56,6 +56,10 @@
-- #include "linux/cramfs_fs.h"
-- #include <zlib.h>
-- 
--+#ifdef __CYGWIN__
--+#define _IO(type,nr)	_IOC(_IOC_NONE,(type),(nr),0)
--+#endif /* __CYGWIN__ */
--+
-- #define BLKGETSIZE	_IO(0x12,96) /* return device size /512 (long *arg) */
-- 
-- /* Exit codes used by fsck-type programs */
-diff --git a/target/cramfs/cramfs.mk b/target/cramfs/cramfs.mk
-index e6d63ed..f431629 100644
---- a/target/cramfs/cramfs.mk
-+++ b/target/cramfs/cramfs.mk
-@@ -1,40 +1,5 @@
- #############################################################
+ 	select BR2_PACKAGE_GETTEXT
+ 	select BR2_PACKAGE_GETTEXT_STATIC
+ 	select BR2_PACKAGE_LIBINTL
+diff --git a/target/xtensa/defconfig b/target/xtensa/defconfig
+index 07ab10b..f9b53a3 100644
+--- a/target/xtensa/defconfig
++++ b/target/xtensa/defconfig
+@@ -94,7 +94,6 @@ BR2_TOOLCHAIN_BUILDROOT=y
  #
--# mkcramfs to build to target cramfs filesystems
--#
--#############################################################
--CRAMFS_DIR=$(BUILD_DIR)/cramfs-1.1
--CRAMFS_SOURCE=cramfs-1.1.tar.gz
--ifeq ($(call qstrip,$(BR2_SOURCEFORGE_MIRROR)),unc)
--# UNC does not seem to have cramfs
--CRAMFS_SITE=http://internap.dl.sourceforge.net/sourceforge/cramfs
--else
--CRAMFS_SITE=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/cramfs
--endif
--
--$(DL_DIR)/$(CRAMFS_SOURCE):
--	 $(call DOWNLOAD,$(CRAMFS_SITE),$(CRAMFS_SOURCE))
--
--$(CRAMFS_DIR): $(DL_DIR)/$(CRAMFS_SOURCE)
--	$(ZCAT) $(DL_DIR)/$(CRAMFS_SOURCE) | tar -C $(BUILD_DIR) -xvf -
--	toolchain/patch-kernel.sh $(CRAMFS_DIR) target/cramfs/ cramfs\*.patch
--
--$(CRAMFS_DIR)/mkcramfs: $(CRAMFS_DIR)
--	$(MAKE) CFLAGS="$(HOST_CFLAGS) -Wall -O2 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64" LDFLAGS="$(HOST_LDFLAGS)" -C $(CRAMFS_DIR)
--	touch -c $@
--
--cramfs: host-zlib $(CRAMFS_DIR)/mkcramfs
--
--cramfs-source: $(DL_DIR)/$(CRAMFS_SOURCE)
--
--cramfs-clean:
--	-$(MAKE) -C $(CRAMFS_DIR) clean
--
--cramfs-dirclean:
--	rm -rf $(CRAMFS_DIR)
--
--#############################################################
--#
- # Build the cramfs root filesystem image
+ # Other development stuff
  #
- #############################################################
-@@ -50,7 +15,7 @@ endif
- 
- CRAMFS_TARGET=$(IMAGE).cramfs
- 
--cramfsroot: host-fakeroot makedevs cramfs
-+cramfsroot: host-fakeroot host-cramfs makedevs
- 	# Use fakeroot to pretend all target binaries are owned by root
- 	rm -f $(BUILD_DIR)/_fakeroot.$(notdir $(CRAMFS_TARGET))
- 	touch $(BUILD_DIR)/.fakeroot.00000
-@@ -62,20 +27,12 @@ ifneq ($(TARGET_DEVICE_TABLE),)
- 		>> $(BUILD_DIR)/_fakeroot.$(notdir $(CRAMFS_TARGET))
- endif
- 	# Use fakeroot so mkcramfs believes the previous fakery
--	echo "$(CRAMFS_DIR)/mkcramfs -q $(CRAMFS_OPTS) " \
-+	echo "$(HOST_DIR)/usr/bin/mkcramfs -q $(CRAMFS_OPTS) " \
- 		"$(TARGET_DIR) $(CRAMFS_TARGET)" >> $(BUILD_DIR)/_fakeroot.$(notdir $(CRAMFS_TARGET))
- 	chmod a+x $(BUILD_DIR)/_fakeroot.$(notdir $(CRAMFS_TARGET))
- 	$(HOST_DIR)/usr/bin/fakeroot -- $(BUILD_DIR)/_fakeroot.$(notdir $(CRAMFS_TARGET))
- 	- at rm -f $(BUILD_DIR)/_fakeroot.$(notdir $(CRAMFS_TARGET))
- 
--cramfsroot-source: cramfs-source
--
--cramfsroot-clean:
--	-$(MAKE) -C $(CRAMFS_DIR) clean
--
--cramfsroot-dirclean:
--	rm -rf $(CRAMFS_DIR)
--
- #############################################################
- #
- # Toplevel Makefile options
+-BR2_HOST_FAKEROOT=y
+ # BR2_PACKAGE_LIBINTL is not set
+ #  For NFS mount:
+ BR2_PACKAGE_PORTMAP=y
 -- 
 1.6.3.3
