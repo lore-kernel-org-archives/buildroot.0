@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sun, 11 Apr 2010 21:10:35 +0200
-Subject: [Buildroot] [git commit master] Remove
-	BR2_ENABLE_LOCALE_PREGENERATED
-Message-ID: <20100411195037.A0F2120B98@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] Guess build system and remove
+	BR2_GNU_BUILD_SUFFIX
+Message-ID: <20100411195036.709B920B98@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,87 +10,108 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=51a7a978a36e7f779ca7987ca2ec4ef817a3edcb
+commit: http://git.buildroot.net/buildroot/commit/?id=60281cbfe4f4f5087d0f77e5b3b7b1a46edc741d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The option is marked broken since october 2009, and even the uClibc
-configuration help text says that using pregenerated locales is highly
-discouraged.
+Instead of having a configuration option BR2_GNU_BUILD_SUFFIX, let's
+use config.guess to guess the build system type.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/Config.in.2      |   10 ----------
- toolchain/uClibc/uclibc.mk |   21 +--------------------
- 2 files changed, 1 insertions(+), 30 deletions(-)
+ Config.in           |   13 -------------
+ Makefile            |   10 ++++++----
+ package/Makefile.in |    1 -
+ package/qt/qt.mk    |    2 +-
+ 4 files changed, 7 insertions(+), 19 deletions(-)
 
-diff --git a/toolchain/Config.in.2 b/toolchain/Config.in.2
-index 17830c0..f04f18a 100644
---- a/toolchain/Config.in.2
-+++ b/toolchain/Config.in.2
-@@ -35,16 +35,6 @@ config BR2_ENABLE_LOCALE
- 	  If you have an external binary toolchain that has been 
- 	  built with locale/i18n support then enable this option.
+diff --git a/Config.in b/Config.in
+index 78e6666..6a66d50 100644
+--- a/Config.in
++++ b/Config.in
+@@ -103,19 +103,6 @@ config BR2_STAGING_DIR
  
--config BR2_ENABLE_LOCALE_PREGENERATED
--	bool "Use pregenerated locale data?"
--	depends on BR2_ENABLE_LOCALE && BR2_TOOLCHAIN_BUILDROOT && BROKEN # tarball missing
+ source	"target/device/Config.in.mirrors"
+ 
+-config BR2_GNU_BUILD_SUFFIX
+-	string "GNU build hostname suffix"
+-	default "pc-linux-gnu"
 -	help
--	  Instead of generating the locale data locally you can optionally
--	  download a pregenerated set of locales.
+-	  The string used to pass to configure scripts via the
+-	  --build= option.  Just specify the suffix here, the leading
+-	  arch will be filled in automatically.
 -
--	  Say N here unless your buildhost lacks locale support and you
--	  desparately want to use internationalization on your target.
+-	  Here's some copy and paste build host options for you:
+-	      linux:   pc-linux-gnu
+-	      cygwin:  pc-cygwin
+-	      os x:    apple-darwin7 / apple-darwin8
 -
- config BR2_ENABLE_LOCALE_PURGE
- 	bool "Purge unwanted locales"
- 	help
-diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
-index ddeb395..a9ee609 100644
---- a/toolchain/uClibc/uclibc.mk
-+++ b/toolchain/uClibc/uclibc.mk
-@@ -68,20 +68,8 @@ UCLIBC_SPARC_TYPE:=CONFIG_SPARC_$(call qstrip,$(BR2_SPARC_TYPE))
- $(DL_DIR)/$(UCLIBC_SOURCE):
- 	$(call DOWNLOAD,$(UCLIBC_SITE),$(UCLIBC_SOURCE))
+ config BR2_GNU_TARGET_SUFFIX
+ 	string "GNU target suffix"
+ 	default "linux-uclibcgnueabi" if BR2_ARM_EABI
+diff --git a/Makefile b/Makefile
+index 03ed4c5..7fdf697 100644
+--- a/Makefile
++++ b/Makefile
+@@ -153,29 +153,31 @@ cc-option=$(shell if $(TARGET_CC) $(TARGET_CFLAGS) $(1) -S -o /dev/null -xc /dev
+ unexport CROSS_COMPILE
+ unexport ARCH
  
--ifneq ($(BR2_ENABLE_LOCALE_PREGENERATED),)
--UCLIBC_SITE_LOCALE:=http://www.uclibc.org/downloads
--UCLIBC_SOURCE_LOCALE:=uClibc-locale-030818.tgz
--
--$(DL_DIR)/$(UCLIBC_SOURCE_LOCALE):
--	$(call DOWNLOAD,$(UCLIBC_SITE_LOCALE),$(UCLIBC_SOURCE_LOCALE))
--
--UCLIBC_LOCALE_DATA:=$(DL_DIR)/$(UCLIBC_SOURCE_LOCALE)
--else
--UCLIBC_LOCALE_DATA=
--endif
--
- uclibc-unpacked: $(UCLIBC_DIR)/.unpacked
--$(UCLIBC_DIR)/.unpacked: $(DL_DIR)/$(UCLIBC_SOURCE) $(UCLIBC_LOCALE_DATA)
-+$(UCLIBC_DIR)/.unpacked: $(DL_DIR)/$(UCLIBC_SOURCE)
- 	mkdir -p $(TOOLCHAIN_DIR)
- 	rm -rf $(UCLIBC_DIR)
- 	$(UCLIBC_CAT) $(DL_DIR)/$(UCLIBC_SOURCE) | tar -C $(TOOLCHAIN_DIR) $(TAR_OPTIONS) -
-@@ -97,9 +85,6 @@ else
- 	toolchain/patch-kernel.sh $(UCLIBC_DIR) $(UCLIBC_PATCH_DIR) \
- 		uClibc.\*.patch uClibc.\*.patch.$(ARCH)
++GNU_HOST_NAME=$(shell package/gnuconfig/config.guess)
++
+ #############################################################
+ #
+ # Setup the proper filename extensions for the host
+ #
+ ##############################################################
+-ifneq ($(findstring linux,$(BR2_GNU_BUILD_SUFFIX)),)
++ifneq ($(findstring linux,$(GNU_HOST_NAME)),)
+ HOST_EXEEXT:=
+ HOST_LIBEXT:=.a
+ HOST_SHREXT:=.so
  endif
--ifneq ($(BR2_ENABLE_LOCALE_PREGENERATED),)
--	cp -dpf $(DL_DIR)/$(UCLIBC_SOURCE_LOCALE) $(UCLIBC_DIR)/extra/locale/
--endif
- 	touch $@
- 
- 
-@@ -329,11 +314,7 @@ else
- 	echo "# PTHREADS_DEBUG_SUPPORT is not set" >> $(UCLIBC_DIR)/.oldconfig
+-ifneq ($(findstring apple,$(BR2_GNU_BUILD_SUFFIX)),)
++ifneq ($(findstring apple,$(GNU_HOST_NAME)),)
+ HOST_EXEEXT:=
+ HOST_LIBEXT:=.a
+ HOST_SHREXT:=.dylib
  endif
- ifeq ($(BR2_ENABLE_LOCALE),y)
--ifeq ($(BR2_ENABLE_LOCALE_PREGENERATED),y)
--	$(SED) 's,^.*UCLIBC_HAS_LOCALE.*,UCLIBC_HAS_LOCALE=y\nUCLIBC_PREGENERATED_LOCALE_DATA=y\nUCLIBC_DOWNLOAD_PREGENERATED_LOCALE_DATA=y\nUCLIBC_HAS_XLOCALE=y\nUCLIBC_HAS_GLIBC_DIGIT_GROUPING=n\n,g' $(UCLIBC_DIR)/.oldconfig
--else
- 	$(SED) 's,^.*UCLIBC_HAS_LOCALE.*,UCLIBC_HAS_LOCALE=y\nUCLIBC_PREGENERATED_LOCALE_DATA=n\nUCLIBC_DOWNLOAD_PREGENERATED_LOCALE_DATA=n\nUCLIBC_HAS_XLOCALE=y\nUCLIBC_HAS_GLIBC_DIGIT_GROUPING=n\n,g' $(UCLIBC_DIR)/.oldconfig
--endif
- else
- 	$(SED) 's,^.*UCLIBC_HAS_LOCALE.*,UCLIBC_HAS_LOCALE=n,g' $(UCLIBC_DIR)/.oldconfig
+-ifneq ($(findstring cygwin,$(BR2_GNU_BUILD_SUFFIX)),)
++ifneq ($(findstring cygwin,$(GNU_HOST_NAME)),)
+ HOST_EXEEXT:=.exe
+ HOST_LIBEXT:=.lib
+ HOST_SHREXT:=.dll
+ HOST_LOADLIBES="-lcurses -lintl"
+ export HOST_LOADLIBES
+ endif
+-ifneq ($(findstring mingw,$(BR2_GNU_BUILD_SUFFIX)),)
++ifneq ($(findstring mingw,$(GNU_HOST_NAME)),)
+ HOST_EXEEXT:=.exe
+ HOST_LIBEXT:=.lib
+ HOST_SHREXT:=.dll
+diff --git a/package/Makefile.in b/package/Makefile.in
+index efb4dec..8f1a29d 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -187,7 +187,6 @@ HOST_ARCH:=$(shell $(HOSTCC) -dumpmachine | sed -e s'/-.*//' \
+ 	-e 's/i[3-9]86/i386/' \
+ 	-e 's/xtensa.*/xtensa/' \
+ 	)
+-GNU_HOST_NAME:=$(HOST_ARCH)-$(call qstrip,$(BR2_GNU_BUILD_SUFFIX))
+ 
+ TARGET_CONFIGURE_OPTS=PATH=$(TARGET_PATH) \
+ 		AR="$(TARGET_AR)" \
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index 9167349..4f42e59 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -372,7 +372,7 @@ BR2_PACKAGE_QT_EMB_PLATFORM:=$(call qstrip,$(BR2_PACKAGE_QT_EMB_PLATFORM))
+ # x86x86fix
+ # Workaround Qt Embedded bug when crosscompiling for x86 under x86 with linux
+ # host. It's unclear if this would happen on other hosts.
+-ifneq ($(findstring pc-linux,$(BR2_GNU_BUILD_SUFFIX)),)
++ifneq ($(findstring unknown-linux,$(GNU_HOST_NAME)),)
+ ifneq ($(findstring x86,$(BR2_PACKAGE_QT_EMB_PLATFORM)),)
+ QT_CONFIGURE+= -platform linux-g++
  endif
 -- 
 1.6.3.3
