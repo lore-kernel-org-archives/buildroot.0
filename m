@@ -1,29 +1,29 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 11 Apr 2010 14:58:10 +0000 (UTC)
-Subject: [Buildroot] [Bug 1399] xfont_font-adobe-100dpi does not build
-In-Reply-To: <bug-1399-163@https.bugs.busybox.net/>
-References: <bug-1399-163@https.bugs.busybox.net/>
-Message-ID: <20100411145810.B79617FA3D@busybox.osuosl.org>
+From: Tom Parkin <tom.parkin@gmail.com>
+Date: Sun, 11 Apr 2010 16:14:45 +0100
+Subject: [Buildroot] Which commercial products use buildroot?
+In-Reply-To: <4BC1BBBD.3000703@free.fr>
+References: <w2k2facd6dc1004110431idf465b71za05aef84eed86ad4@mail.gmail.com>
+	<4BC1BBBD.3000703@free.fr>
+Message-ID: <x2i2facd6dc1004110814y1471cf44k16cb92c325242833@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1399
+Hi Cyril,
 
+On 11 April 2010 13:08, Cyril HAENEL <chaenel@free.fr> wrote:
+> There is at least my product I developped for the french laboratory
+> "Arc'Antique", which is specialized in heritage restauration.
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+Thanks for the reply -- it looks like a cool project ;-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         AssignedTo|unassigned at buildroot.uclibc.|paulius.zaleckas at gmail.com
-                   |org                         |
+Do you have any website about the project that I could link to?
 
-
-
-
+All the best,
+Tom
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Tom Parkin
+www.thhp.org.uk
+Morality, like art, means drawing a line someplace /Wilde/
