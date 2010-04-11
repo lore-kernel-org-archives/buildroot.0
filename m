@@ -1,148 +1,137 @@
-From: Chris Kerios <ckerios@gmail.com>
-Date: Sat, 10 Apr 2010 10:11:11 -0400
-Subject: [Buildroot] module-init-tools build problem in Buildroot
-	buildroot-2010.02
-In-Reply-To: <j2r532dd5841004082152z14e3a4a6y98097dbbe7f75680@mail.gmail.com>
-References: <w2p47b4a4c91004061809l6fbeffdz4cb71ef7d7a19557@mail.gmail.com>
-	<x2i532dd5841004062307z6b769350p63d09e0b90226dea@mail.gmail.com>
-	<q2u47b4a4c91004070743w5498b7ddu8e3d4ca048202da0@mail.gmail.com>
-	<j2r532dd5841004082152z14e3a4a6y98097dbbe7f75680@mail.gmail.com>
-Message-ID: <n2z47b4a4c91004100711h5517cedfx17cfde4953402a3@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 11 Apr 2010 06:04:56 +0200
+Subject: [Buildroot] [pull request] Pull request for branch various-fixes
+Message-ID: <cover.1270958653.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixed it!!!
+Hello,
 
-Sometimes when we have too much knowledge it kills us, we just don't look at
-what's in front of our faces!
+During the flight to San Francisco today (to go to the Embedded Linux
+Conference), I had the time to work on a few Buildroot cleanups. Most
+of them have been discussed during the Buildroot Working Day that took
+place in February 2010, right after FOSDEM, in Brussels.
 
-As it turns out the system was telling me just what I needed to know.  The
-build was looking for libc, but it was looking for libc.a.  Fedora 12
-doesn't install the statically linked version by default and only installs
-the dynamic libs...
+Enjoy :-)
 
-Went to Fedora site and downloaded the static version of the library and
-everything runs just fine.  What I don't know is why.  I would think that
-the dynamic library would have resolved just as well but it doesn't appear
-to.  This I believe is beyond my learning at this point.  Anybody out there
-that can explain to me what is going on?  Just trying to learn...
+Thomas
 
-Tha
+The following changes since commit e7b72e11dc2fb7d15440dca32cff59869dc1c2c3:
+  Peter Korsgaard (1):
+        cramfs: fix help text typo
 
-On Fri, Apr 9, 2010 at 12:52 AM, Ravi Kumar Kulkarni
-<ravilinux4u@gmail.com>wrote:
+are available in the git repository at:
 
-> Hi Chris
->
-> On Wed, Apr 7, 2010 at 8:13 PM, Chris Kerios <ckerios@gmail.com> wrote:
-> > Hi Ravi,
-> > Thanks for your prompt reply.  I have been playing with this all morning
-> and
-> > am at my wits end.  So far I am still unsuccessful.  I understand what
-> you
-> > are saying about the build not finding the "c" library.  I have looked
-> all
-> > over my system (Fedora 12) and the C libs and links to those libs all
-> look
-> > to be in place and with the right permissions.  I have tried all sorts of
-> > tricks including exporting the LD_LIBRARY_PATH variable and editing the
-> > Makefile to force it to look in the system lib directories.  ldconfig -p
-> > shows:
-> >
-> > libc.so.6 (libc6, hwcap: 0x0018000000000000, OS ABI: Linux 2.6.18) =>
-> > /lib/i686/nosegneg/libc.so.6
-> >     libc.so.6 (libc6, OS ABI: Linux 2.6.18) => /lib/libc.so.6
->
->  all i could say is try to make sure the link u av given is correct by ldd.
->
-> warm regards,
-> Ravi Kulkarni.
-> >any ideas???  I'm sinking here and exceeded any knowledge I have on this
-> > one.
-> > Regards,
-> > Chris
-> >
-> > On Wed, Apr 7, 2010 at 2:07 AM, Ravi Kumar Kulkarni <
-> ravilinux4u at gmail.com>
-> > wrote:
-> >>
-> >> Hi Chris
-> >>
-> >> On Wed, Apr 7, 2010 at 6:39 AM, Chris Kerios <ckerios@gmail.com> wrote:
-> >> > Hello,
-> >> > I am a relative noob when it comes to using buildroot as I am just
-> >> > getting
-> >> > started with embedded on an old AVR32ngw board.  I am running Fedora
-> 12
-> >> > as
-> >> > my host and I am trying to build the toolchain, kernel, etc. using
-> >> > buildroot
-> >> > from scratch.  Cool work/tool by the way!  Anyway I am getting the
-> >> > following
-> >> > error message attached below.  I have scoured the mailing list archive
-> >> > on
-> >> > this and can only find 1 reference in which the person asked the
-> >> > question
-> >> > and then followed up immediately with notice that he fixed the
-> problem.
-> >> > He
-> >> > only left a vague reference that it had something to do with glibc not
-> >> > being
-> >> > built for his target.  If this is the case, I can't figure it out as
-> the
-> >> > module-init-tools is built after the successful build of gcc, ulibC,
-> >> > gdb,
-> >> > etc.  If it has anything to do with my host I have all the glibc and
-> >> > glibc-devel built on the Fedora side as well.  Dumb question here:
-> Which
-> >> > C
-> >> > lib is it looking for?  The ulibC under the buildroot directory I am
-> >> > building the toolchain/cross-compiler in or the Fedora host glibc?
-> >> >
-> >> > Am I missing something here?
-> >> > Thanks in Advance.
-> >> >
-> >> >
-> >> > modinfo.c: In function ?main?:
-> >> > modinfo.c:338: warning: ?infosize? may be used uninitialized in this
-> >> > function
-> >> > /usr/lib/ccache/gcc  -g -O2 -Wunused -Wall   -o modinfo  modinfo.o
-> >> > zlibsupport.o
-> >> > /usr/lib/ccache/gcc  -g -O2 -Wunused -Wall   -o insmod.static -static
-> >> > insmod.o
-> >> > /usr/bin/ld: cannot find -lc
-> >>
-> >> lc means tat GCC does not find link to C library ,which  is something
-> >> strange.
-> >> try to create a symbolink for lc and tat should hopefull work.please
-> >> try n let me know.
-> >>
-> >>
-> >> > collect2: ld returned 1 exit status
-> >> > make[1]: *** [insmod.static] Error 1
-> >> > make[1]: Leaving directory
-> >> >
-> >> >
-> `/home/chris/buildroot-avr32-v2.3.0/toolchain_build_avr32/module-init-tools-3.2.2'
-> >> > make: ***
-> >> >
-> >> >
-> [/home/chris/buildroot-avr32-v2.3.0/toolchain_build_avr32/module-init-tools-3.2.2/depmod]
-> >> > Error 2
-> >> >
-> >> warm regards,
-> >> Ravi Kulkarni.
-> >
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> >
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100410/68d91b1b/attachment.htm>
+  git://git.busybox.net/~tpetazzoni/git/buildroot various-fixes
+
+Thomas Petazzoni (25):
+      Remove BR2_PREFER_IMA
+      Update defconfig after BR2_PREFER_IMA removal
+      Update config.{guess,sub} unconditionally
+      Update defconfigs after BR2_UPDATE_CONFIG removal
+      Do not let packages remove man pages, info pages and documentation
+      Remove all documentation when BR2_HAVE_DOCUMENTATION is not set
+      Do not remove documentation on a per-package basis
+      Use BR2_HAVE_DOCUMENTATION instead of BR2_HAVE_{MANPAGES,INFOPAGES}
+      Get rid of BR2_HAVE_{MANPAGES,INFOPAGES} config options
+      Update defconfigs after BR2_HAVE_{INFOPAGES,MANPAGES} removal
+      Get rid of all usages of BR2_RECENT
+      Remove the BR2_RECENT option
+      Update defconfigs after BR2_RECENT removal
+      Move the command-related options to a submenu
+      Bring the three path-related options together
+      Move the global config cache option to an Advanced submenu
+      Guess build system and remove BR2_GNU_BUILD_SUFFIX
+      Update defconfigs after BR2_GNU_BUILD_SUFFIX removal
+      Get rid of now unused HOST_ARCH computation code
+      Remove BR2_ENABLE_LOCALE_PREGENERATED
+      Update defconfigs after BR2_ENABLE_LOCALE_PREGENERATED removal
+      Get rid of unused variables
+      Remove variables useless after BR2_PREFER_IMA removal
+      Get rid of useless OpenMP related code
+      Get rid of the OPTIMIZE_FOR_CPU variable
+
+ Config.in                                 |   73 +++++++----------------------
+ Makefile                                  |   22 +++------
+ configs/arm_toolchain_defconfig           |    7 ---
+ configs/at91rm9200df_defconfig            |    7 ---
+ configs/at91rm9200df_ext_bare_defconfig   |    6 --
+ configs/at91rm9200df_ext_defconfig        |    6 --
+ configs/at91sam9260dfc_defconfig          |    7 ---
+ configs/at91sam9260dfc_ext_bare_defconfig |    6 --
+ configs/at91sam9260dfc_ext_defconfig      |    6 --
+ configs/at91sam9260pf_defconfig           |    3 -
+ configs/at91sam9261ek_defconfig           |    7 ---
+ configs/at91sam9261ek_ext_bare_defconfig  |    6 --
+ configs/at91sam9261ek_ext_defconfig       |    6 --
+ configs/at91sam9263ek_defconfig           |    7 ---
+ configs/at91sam9263ek_ext_bare_defconfig  |    6 --
+ configs/at91sam9263ek_ext_defconfig       |    6 --
+ configs/at91sam9g20dfc_defconfig          |    7 ---
+ configs/at91sam9g20dfc_ext_bare_defconfig |    6 --
+ configs/at91sam9g20dfc_ext_defconfig      |    6 --
+ configs/atngw100-base_defconfig           |    6 --
+ configs/atngw100_defconfig                |    7 ---
+ configs/atstk1005_defconfig               |    7 ---
+ configs/atstk100x_defconfig               |    7 ---
+ configs/i386_defconfig                    |    7 ---
+ configs/i686_defconfig                    |    7 ---
+ configs/integrator926_defconfig           |    6 --
+ configs/integrator926_huge_defconfig      |    6 --
+ configs/kb9202_defconfig                  |    6 --
+ configs/v100sc2_defconfig                 |    6 --
+ package/Makefile.autotools.in             |    2 -
+ package/Makefile.in                       |   19 +-------
+ package/Makefile.package.in               |    9 ----
+ package/avahi/avahi.mk                    |    2 +-
+ package/axel/axel.mk                      |    2 +-
+ package/bash/bash.mk                      |    7 ---
+ package/berkeleydb/berkeleydb.mk          |    7 ---
+ package/bison/bison.mk                    |    7 ---
+ package/busybox/Config.in                 |    4 +-
+ package/busybox/busybox.mk                |    8 ---
+ package/busybox/initramfs.mk              |    8 ---
+ package/coreutils/coreutils.mk            |    7 ---
+ package/dhcp/dhcp.mk                      |   25 ----------
+ package/dialog/dialog.mk                  |    3 -
+ package/diffutils/diffutils.mk            |    6 --
+ package/file/file.mk                      |    7 ---
+ package/findutils/findutils.mk            |    7 ---
+ package/gawk/gawk.mk                      |    7 ---
+ package/gettext/gettext.mk                |   11 +----
+ package/gnuconfig/Config.in               |    8 ---
+ package/gzip/gzip.mk                      |    6 --
+ package/hdparm/hdparm.mk                  |    2 +-
+ package/ipsec-tools/ipsec-tools.mk        |    7 ---
+ package/liblockfile/liblockfile.mk        |    3 -
+ package/ltrace/ltrace.mk                  |    2 +-
+ package/microcom/microcom.mk              |    7 ---
+ package/netsnmp/netsnmp.mk                |    9 +---
+ package/pppd/pppd.mk                      |    2 +-
+ package/pptp-linux/pptp-linux.mk          |    2 +-
+ package/qt/qt.mk                          |    2 +-
+ package/quagga/quagga.mk                  |    6 --
+ package/rp-pppoe/rp-pppoe.mk              |    2 +-
+ package/sed/sed.mk                        |   12 -----
+ package/setserial/setserial.mk            |    4 --
+ package/udpcast/udpcast.mk                |    4 --
+ target/u-boot/Config.in                   |    4 +-
+ target/xtensa/defconfig                   |    1 -
+ toolchain/Config.in.2                     |   10 ----
+ toolchain/Makefile.in                     |   14 ------
+ toolchain/binutils/Config.in              |    2 +-
+ toolchain/binutils/binutils.mk            |    8 +---
+ toolchain/gcc/Config.in                   |    4 +-
+ toolchain/gcc/Makefile.in                 |    4 --
+ toolchain/kernel-headers/Config.in        |    2 +-
+ toolchain/uClibc/Config.in                |    2 +-
+ toolchain/uClibc/uclibc.mk                |   21 +--------
+ 75 files changed, 50 insertions(+), 513 deletions(-)
+ delete mode 100644 package/gnuconfig/Config.in
+
+Thanks,
+-- 
+Thomas Petazzoni
