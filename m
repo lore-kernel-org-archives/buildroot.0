@@ -1,9 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 11 Apr 2010 22:16:02 +0000 (UTC)
+Date: Sun, 11 Apr 2010 22:40:23 +0000 (UTC)
 Subject: [Buildroot] [Bug 1399] xfont_font-adobe-100dpi does not build
 In-Reply-To: <bug-1399-163@https.bugs.busybox.net/>
 References: <bug-1399-163@https.bugs.busybox.net/>
-Message-ID: <20100411221602.1542199B79@busybox.osuosl.org>
+Message-ID: <20100411224023.DDA9C8D70D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,12 +16,8 @@ https://bugs.busybox.net/show_bug.cgi?id=1399
 
 
 
---- Comment #4 from Paulius Zaleckas <paulius.zaleckas@gmail.com>  2010-04-11 22:16:01 UTC ---
-(In reply to comment #2)
-> Very strange... does any other font build OK?
-> I suspect that it may be some utility missing on the host.
-
-I have checked Makefile and I think it may be bdftopcf missing on your host.
+--- Comment #5 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2010-04-11 22:40:23 UTC ---
+Then, we should build bdftopcf for the host, and install it in $(HOST_DIR).
 
 
 -- 
