@@ -1,137 +1,135 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 11 Apr 2010 06:04:56 +0200
-Subject: [Buildroot] [pull request] Pull request for branch various-fixes
-Message-ID: <cover.1270958653.git.thomas.petazzoni@free-electrons.com>
+Date: Sun, 11 Apr 2010 06:04:57 +0200
+Subject: [Buildroot] [PATCH 01/25] Remove BR2_PREFER_IMA
+In-Reply-To: <cover.1270958653.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1270958653.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <7a0263525fe723c2f4bb2d4e78eaf785137ebbdd.1270958653.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This option is barely used, no-one is maintaining it or extending
+it. So let's remove it.
 
-During the flight to San Francisco today (to go to the Embedded Linux
-Conference), I had the time to work on a few Buildroot cleanups. Most
-of them have been discussed during the Buildroot Working Day that took
-place in February 2010, right after FOSDEM, in Brussels.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Config.in                      |   11 -----------
+ package/busybox/busybox.mk     |    8 --------
+ package/busybox/initramfs.mk   |    8 --------
+ package/microcom/microcom.mk   |    7 -------
+ package/setserial/setserial.mk |    4 ----
+ toolchain/gcc/Makefile.in      |    4 ----
+ 6 files changed, 0 insertions(+), 42 deletions(-)
 
-Enjoy :-)
-
-Thomas
-
-The following changes since commit e7b72e11dc2fb7d15440dca32cff59869dc1c2c3:
-  Peter Korsgaard (1):
-        cramfs: fix help text typo
-
-are available in the git repository at:
-
-  git://git.busybox.net/~tpetazzoni/git/buildroot various-fixes
-
-Thomas Petazzoni (25):
-      Remove BR2_PREFER_IMA
-      Update defconfig after BR2_PREFER_IMA removal
-      Update config.{guess,sub} unconditionally
-      Update defconfigs after BR2_UPDATE_CONFIG removal
-      Do not let packages remove man pages, info pages and documentation
-      Remove all documentation when BR2_HAVE_DOCUMENTATION is not set
-      Do not remove documentation on a per-package basis
-      Use BR2_HAVE_DOCUMENTATION instead of BR2_HAVE_{MANPAGES,INFOPAGES}
-      Get rid of BR2_HAVE_{MANPAGES,INFOPAGES} config options
-      Update defconfigs after BR2_HAVE_{INFOPAGES,MANPAGES} removal
-      Get rid of all usages of BR2_RECENT
-      Remove the BR2_RECENT option
-      Update defconfigs after BR2_RECENT removal
-      Move the command-related options to a submenu
-      Bring the three path-related options together
-      Move the global config cache option to an Advanced submenu
-      Guess build system and remove BR2_GNU_BUILD_SUFFIX
-      Update defconfigs after BR2_GNU_BUILD_SUFFIX removal
-      Get rid of now unused HOST_ARCH computation code
-      Remove BR2_ENABLE_LOCALE_PREGENERATED
-      Update defconfigs after BR2_ENABLE_LOCALE_PREGENERATED removal
-      Get rid of unused variables
-      Remove variables useless after BR2_PREFER_IMA removal
-      Get rid of useless OpenMP related code
-      Get rid of the OPTIMIZE_FOR_CPU variable
-
- Config.in                                 |   73 +++++++----------------------
- Makefile                                  |   22 +++------
- configs/arm_toolchain_defconfig           |    7 ---
- configs/at91rm9200df_defconfig            |    7 ---
- configs/at91rm9200df_ext_bare_defconfig   |    6 --
- configs/at91rm9200df_ext_defconfig        |    6 --
- configs/at91sam9260dfc_defconfig          |    7 ---
- configs/at91sam9260dfc_ext_bare_defconfig |    6 --
- configs/at91sam9260dfc_ext_defconfig      |    6 --
- configs/at91sam9260pf_defconfig           |    3 -
- configs/at91sam9261ek_defconfig           |    7 ---
- configs/at91sam9261ek_ext_bare_defconfig  |    6 --
- configs/at91sam9261ek_ext_defconfig       |    6 --
- configs/at91sam9263ek_defconfig           |    7 ---
- configs/at91sam9263ek_ext_bare_defconfig  |    6 --
- configs/at91sam9263ek_ext_defconfig       |    6 --
- configs/at91sam9g20dfc_defconfig          |    7 ---
- configs/at91sam9g20dfc_ext_bare_defconfig |    6 --
- configs/at91sam9g20dfc_ext_defconfig      |    6 --
- configs/atngw100-base_defconfig           |    6 --
- configs/atngw100_defconfig                |    7 ---
- configs/atstk1005_defconfig               |    7 ---
- configs/atstk100x_defconfig               |    7 ---
- configs/i386_defconfig                    |    7 ---
- configs/i686_defconfig                    |    7 ---
- configs/integrator926_defconfig           |    6 --
- configs/integrator926_huge_defconfig      |    6 --
- configs/kb9202_defconfig                  |    6 --
- configs/v100sc2_defconfig                 |    6 --
- package/Makefile.autotools.in             |    2 -
- package/Makefile.in                       |   19 +-------
- package/Makefile.package.in               |    9 ----
- package/avahi/avahi.mk                    |    2 +-
- package/axel/axel.mk                      |    2 +-
- package/bash/bash.mk                      |    7 ---
- package/berkeleydb/berkeleydb.mk          |    7 ---
- package/bison/bison.mk                    |    7 ---
- package/busybox/Config.in                 |    4 +-
- package/busybox/busybox.mk                |    8 ---
- package/busybox/initramfs.mk              |    8 ---
- package/coreutils/coreutils.mk            |    7 ---
- package/dhcp/dhcp.mk                      |   25 ----------
- package/dialog/dialog.mk                  |    3 -
- package/diffutils/diffutils.mk            |    6 --
- package/file/file.mk                      |    7 ---
- package/findutils/findutils.mk            |    7 ---
- package/gawk/gawk.mk                      |    7 ---
- package/gettext/gettext.mk                |   11 +----
- package/gnuconfig/Config.in               |    8 ---
- package/gzip/gzip.mk                      |    6 --
- package/hdparm/hdparm.mk                  |    2 +-
- package/ipsec-tools/ipsec-tools.mk        |    7 ---
- package/liblockfile/liblockfile.mk        |    3 -
- package/ltrace/ltrace.mk                  |    2 +-
- package/microcom/microcom.mk              |    7 ---
- package/netsnmp/netsnmp.mk                |    9 +---
- package/pppd/pppd.mk                      |    2 +-
- package/pptp-linux/pptp-linux.mk          |    2 +-
- package/qt/qt.mk                          |    2 +-
- package/quagga/quagga.mk                  |    6 --
- package/rp-pppoe/rp-pppoe.mk              |    2 +-
- package/sed/sed.mk                        |   12 -----
- package/setserial/setserial.mk            |    4 --
- package/udpcast/udpcast.mk                |    4 --
- target/u-boot/Config.in                   |    4 +-
- target/xtensa/defconfig                   |    1 -
- toolchain/Config.in.2                     |   10 ----
- toolchain/Makefile.in                     |   14 ------
- toolchain/binutils/Config.in              |    2 +-
- toolchain/binutils/binutils.mk            |    8 +---
- toolchain/gcc/Config.in                   |    4 +-
- toolchain/gcc/Makefile.in                 |    4 --
- toolchain/kernel-headers/Config.in        |    2 +-
- toolchain/uClibc/Config.in                |    2 +-
- toolchain/uClibc/uclibc.mk                |   21 +--------
- 75 files changed, 50 insertions(+), 513 deletions(-)
- delete mode 100644 package/gnuconfig/Config.in
-
-Thanks,
+diff --git a/Config.in b/Config.in
+index 224a44a..b82a11b 100644
+--- a/Config.in
++++ b/Config.in
+@@ -136,17 +136,6 @@ config BR2_JLEVEL
+ 	help
+ 	  Number of jobs to run simultaneously
+ 
+-config BR2_PREFER_IMA
+-	bool "prefer IMA compiles"
+-	help
+-	  Where possible, compile package with Inter Module Analysis.
+-	  This potentially uses alot of system resources on your compile
+-	  host with the benefit of creating smaller binaries for the target.
+-
+-	  If unsure, say No.
+-
+-	  WARNING: This is highly experimental at the moment.
+-
+ config BR2_DEPRECATED
+ 	bool "Show packages that are deprecated or obsolete"
+ 	help
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index cc2097e..c93f33a 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -107,14 +107,6 @@ $(BUSYBOX_DIR)/busybox: $(BUSYBOX_DIR)/.config
+ 		CROSS="$(TARGET_CROSS)" PREFIX="$(TARGET_DIR)" \
+ 		ARCH=$(KERNEL_ARCH) \
+ 		EXTRA_CFLAGS="$(BUSYBOX_CFLAGS)" -C $(BUSYBOX_DIR)
+-ifeq ($(BR2_PREFER_IMA)$(BR2_PACKAGE_BUSYBOX_SNAPSHOT),yy)
+-	rm -f $@
+-	$(MAKE) CC=$(TARGET_CC) CROSS_COMPILE="$(TARGET_CROSS)" \
+-		CROSS="$(TARGET_CROSS)" PREFIX="$(TARGET_DIR)" \
+-		ARCH=$(KERNEL_ARCH) STRIP="$(STRIPCMD)" \
+-		EXTRA_CFLAGS="$(BUSYBOX_CFLAGS)" -C $(BUSYBOX_DIR) \
+-		-f scripts/Makefile.IMA
+-endif
+ 
+ $(TARGET_DIR)/bin/busybox: $(BUSYBOX_DIR)/busybox
+ ifeq ($(BR2_PACKAGE_BUSYBOX_FULLINSTALL),y)
+diff --git a/package/busybox/initramfs.mk b/package/busybox/initramfs.mk
+index 394f483..2f1e34c 100644
+--- a/package/busybox/initramfs.mk
++++ b/package/busybox/initramfs.mk
+@@ -86,14 +86,6 @@ $(BUSYBOX_INITRAMFS_DIR)/busybox: $(BUSYBOX_INITRAMFS_DIR)/.configured
+ 		ARCH=$(KERNEL_ARCH) \
+ 		EXTRA_CFLAGS="$(TARGET_CFLAGS)" -C $(BUSYBOX_INITRAMFS_DIR) \
+ 		busybox.links busybox
+-ifeq ($(BR2_PREFER_IMA)$(BR2_PACKAGE_BUSYBOX_SNAPSHOT),yy)
+-	rm -f $@
+-	$(MAKE) CC=$(TARGET_CC) CROSS_COMPILE="$(TARGET_CROSS)" \
+-		CROSS="$(TARGET_CROSS)" PREFIX="$(TARGET_DIR)" \
+-		ARCH=$(KERNEL_ARCH) STRIP="$(STRIPCMD)" \
+-		EXTRA_CFLAGS="$(TARGET_CFLAGS)" -C $(BUSYBOX_INITRAMFS_DIR) \
+-		-f scripts/Makefile.IMA
+-endif
+ 
+ $(BR2_INITRAMFS_DIR)/bin/busybox: $(BUSYBOX_INITRAMFS_DIR)/busybox
+ 	$(MAKE) CC=$(TARGET_CC) CROSS_COMPILE="$(TARGET_CROSS)" \
+diff --git a/package/microcom/microcom.mk b/package/microcom/microcom.mk
+index d171be9..f691723 100644
+--- a/package/microcom/microcom.mk
++++ b/package/microcom/microcom.mk
+@@ -46,14 +46,7 @@ $(MICROCOM_DIR)/.configured: $(MICROCOM_DIR)/.unpacked
+ 	touch $@
+ 
+ $(MICROCOM_DIR)/microcom: $(MICROCOM_DIR)/.configured
+-ifeq ($(BR2_PREFER_IMA),y)
+-	(cd $(MICROCOM_DIR); \
+-	 $(TARGET_CC) $(TARGET_CFLAGS) $(CFLAGS_COMBINE) \
+-	 	$(CFLAGS_WHOLE_PROGRAM) -o $@ $(wildcard $(MICROCOM_DIR)/*.c); \
+-	)
+-else
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(MICROCOM_DIR)
+-endif
+ 	$(STRIPCMD) $(STRIP_STRIP_ALL) $@
+ 
+ $(TARGET_DIR)/usr/bin/microcom: $(MICROCOM_DIR)/microcom
+diff --git a/package/setserial/setserial.mk b/package/setserial/setserial.mk
+index a1d5ab7..9667637 100644
+--- a/package/setserial/setserial.mk
++++ b/package/setserial/setserial.mk
+@@ -36,10 +36,6 @@ endif
+ 	touch $(SETSERIAL_DIR)/gorhack.h
+ 	touch $@
+ 
+-ifeq ($(BR2_PREFER_IMA),y)
+-SETSERIAL_CFLAGS=$(CFLAGS_COMBINE) $(CFLAGS_WHOLE_PROGRAM)
+-endif
+-
+ $(SETSERIAL_DIR)/.configured: $(SETSERIAL_DIR)/.unpacked
+ 	(cd $(SETSERIAL_DIR); rm -rf config.cache; \
+ 		$(TARGET_CONFIGURE_OPTS) \
+diff --git a/toolchain/gcc/Makefile.in b/toolchain/gcc/Makefile.in
+index c3e21cf..23b5c73 100644
+--- a/toolchain/gcc/Makefile.in
++++ b/toolchain/gcc/Makefile.in
+@@ -74,9 +74,5 @@ endif
+ # and finally pull in config opts from the user
+ EXTRA_TARGET_GCC_CONFIG_OPTIONS+=$(call qstrip,$(BR2_EXTRA_TARGET_GCC_CONFIG_OPTIONS))
+ 
+-ifeq ($(BR2_PREFER_IMA),y)
+-EXTRA_TARGET_GCC_CONFIG_OPTIONS+=--enable-intermodule
+-endif # BR2_PREFER_IMA=y
+-
+ TARGETS+=gcc_target
+ endif
 -- 
-Thomas Petazzoni
+1.6.3.3
