@@ -1,93 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 11 Apr 2010 06:05:16 +0200
-Subject: [Buildroot] [PATCH 20/25] Remove BR2_ENABLE_LOCALE_PREGENERATED
+Date: Sun, 11 Apr 2010 06:05:21 +0200
+Subject: [Buildroot] [PATCH 25/25] Get rid of the OPTIMIZE_FOR_CPU variable
 In-Reply-To: <cover.1270958653.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1270958653.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <6c969c00b553924184fe15d526d60daf23984924.1270958653.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <58d7ab13783fde007a9987e333721c17764f25ee.1270958653.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The option is marked broken since october 2009, and even the uClibc
-configuration help text says that using pregenerated locales is highly
-discouraged.
+This variable, together with the FIXME comment, has been added has
+part of Eric Andersen's ? Major buildroot facelift, step one ? commit
+that occured in October 2004.
+
+Since then, no real usage has been made of OPTIMIZE_FOR_CPU, and the
+initial intention has probably been lost in the memories of the
+implementors.
+
+Therefore, get rid of the variable, and just use $(ARCH) at the two
+locations the variable was used.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/Config.in.2      |   10 ----------
- toolchain/uClibc/uclibc.mk |   21 +--------------------
- 2 files changed, 1 insertions(+), 30 deletions(-)
+ package/Makefile.in   |    4 ++--
+ toolchain/Makefile.in |    3 ---
+ 2 files changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/toolchain/Config.in.2 b/toolchain/Config.in.2
-index 17830c0..f04f18a 100644
---- a/toolchain/Config.in.2
-+++ b/toolchain/Config.in.2
-@@ -35,16 +35,6 @@ config BR2_ENABLE_LOCALE
- 	  If you have an external binary toolchain that has been 
- 	  built with locale/i18n support then enable this option.
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 43ff2dd..983caf3 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -109,8 +109,8 @@ TOOLCHAIN_DIR=$(BASE_DIR)/toolchain
  
--config BR2_ENABLE_LOCALE_PREGENERATED
--	bool "Use pregenerated locale data?"
--	depends on BR2_ENABLE_LOCALE && BR2_TOOLCHAIN_BUILDROOT && BROKEN # tarball missing
--	help
--	  Instead of generating the locale data locally you can optionally
--	  download a pregenerated set of locales.
--
--	  Say N here unless your buildhost lacks locale support and you
--	  desparately want to use internationalization on your target.
--
- config BR2_ENABLE_LOCALE_PURGE
- 	bool "Purge unwanted locales"
- 	help
-diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
-index ddeb395..a9ee609 100644
---- a/toolchain/uClibc/uclibc.mk
-+++ b/toolchain/uClibc/uclibc.mk
-@@ -68,20 +68,8 @@ UCLIBC_SPARC_TYPE:=CONFIG_SPARC_$(call qstrip,$(BR2_SPARC_TYPE))
- $(DL_DIR)/$(UCLIBC_SOURCE):
- 	$(call DOWNLOAD,$(UCLIBC_SITE),$(UCLIBC_SOURCE))
- 
--ifneq ($(BR2_ENABLE_LOCALE_PREGENERATED),)
--UCLIBC_SITE_LOCALE:=http://www.uclibc.org/downloads
--UCLIBC_SOURCE_LOCALE:=uClibc-locale-030818.tgz
--
--$(DL_DIR)/$(UCLIBC_SOURCE_LOCALE):
--	$(call DOWNLOAD,$(UCLIBC_SITE_LOCALE),$(UCLIBC_SOURCE_LOCALE))
--
--UCLIBC_LOCALE_DATA:=$(DL_DIR)/$(UCLIBC_SOURCE_LOCALE)
--else
--UCLIBC_LOCALE_DATA=
--endif
--
- uclibc-unpacked: $(UCLIBC_DIR)/.unpacked
--$(UCLIBC_DIR)/.unpacked: $(DL_DIR)/$(UCLIBC_SOURCE) $(UCLIBC_LOCALE_DATA)
-+$(UCLIBC_DIR)/.unpacked: $(DL_DIR)/$(UCLIBC_SOURCE)
- 	mkdir -p $(TOOLCHAIN_DIR)
- 	rm -rf $(UCLIBC_DIR)
- 	$(UCLIBC_CAT) $(DL_DIR)/$(UCLIBC_SOURCE) | tar -C $(TOOLCHAIN_DIR) $(TAR_OPTIONS) -
-@@ -97,9 +85,6 @@ else
- 	toolchain/patch-kernel.sh $(UCLIBC_DIR) $(UCLIBC_PATCH_DIR) \
- 		uClibc.\*.patch uClibc.\*.patch.$(ARCH)
+ # Quotes are needed for spaces et al in path components.
+ TARGET_PATH="$(TOOLCHAIN_DIR)/bin:$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin/:$(STAGING_DIR)/bin:$(STAGING_DIR)/usr/bin:$(PATH)"
+-GNU_TARGET_NAME=$(OPTIMIZE_FOR_CPU)-linux
+-REAL_GNU_TARGET_NAME=$(OPTIMIZE_FOR_CPU)$(GNU_TARGET_SUFFIX)
++GNU_TARGET_NAME=$(ARCH)-linux
++REAL_GNU_TARGET_NAME=$(ARCH)$(GNU_TARGET_SUFFIX)
+ TARGET_CROSS=$(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-
+ KERNEL_CROSS=$(TARGET_CROSS)
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
+diff --git a/toolchain/Makefile.in b/toolchain/Makefile.in
+index 91aa17a..57d84a3 100644
+--- a/toolchain/Makefile.in
++++ b/toolchain/Makefile.in
+@@ -30,8 +30,5 @@ BR2_SYSROOT=# nothing
+ BR2_ISYSROOT=#nothing
  endif
--ifneq ($(BR2_ENABLE_LOCALE_PREGENERATED),)
--	cp -dpf $(DL_DIR)/$(UCLIBC_SOURCE_LOCALE) $(UCLIBC_DIR)/extra/locale/
--endif
- 	touch $@
  
- 
-@@ -329,11 +314,7 @@ else
- 	echo "# PTHREADS_DEBUG_SUPPORT is not set" >> $(UCLIBC_DIR)/.oldconfig
- endif
- ifeq ($(BR2_ENABLE_LOCALE),y)
--ifeq ($(BR2_ENABLE_LOCALE_PREGENERATED),y)
--	$(SED) 's,^.*UCLIBC_HAS_LOCALE.*,UCLIBC_HAS_LOCALE=y\nUCLIBC_PREGENERATED_LOCALE_DATA=y\nUCLIBC_DOWNLOAD_PREGENERATED_LOCALE_DATA=y\nUCLIBC_HAS_XLOCALE=y\nUCLIBC_HAS_GLIBC_DIGIT_GROUPING=n\n,g' $(UCLIBC_DIR)/.oldconfig
--else
- 	$(SED) 's,^.*UCLIBC_HAS_LOCALE.*,UCLIBC_HAS_LOCALE=y\nUCLIBC_PREGENERATED_LOCALE_DATA=n\nUCLIBC_DOWNLOAD_PREGENERATED_LOCALE_DATA=n\nUCLIBC_HAS_XLOCALE=y\nUCLIBC_HAS_GLIBC_DIGIT_GROUPING=n\n,g' $(UCLIBC_DIR)/.oldconfig
--endif
- else
- 	$(SED) 's,^.*UCLIBC_HAS_LOCALE.*,UCLIBC_HAS_LOCALE=n,g' $(UCLIBC_DIR)/.oldconfig
- endif
+-# FIXME -- this is temporary
+-OPTIMIZE_FOR_CPU=$(ARCH)
+-
+ # gcc has a bunch of needed stuff....
+ include toolchain/gcc/Makefile.in
 -- 
 1.6.3.3
