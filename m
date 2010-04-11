@@ -1,33 +1,27 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 11 Apr 2010 21:51:48 +0200
-Subject: [Buildroot] [pull request] Pull request for branch various-fixes
-In-Reply-To: <cover.1270958653.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Sun, 11 Apr 2010 06:04:56 +0200")
-References: <cover.1270958653.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87ljctkbsb.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 11 Apr 2010 22:07:09 +0000 (UTC)
+Subject: [Buildroot] [Bug 1399] xfont_font-adobe-100dpi does not build
+In-Reply-To: <bug-1399-163@https.bugs.busybox.net/>
+References: <bug-1399-163@https.bugs.busybox.net/>
+Message-ID: <20100411220709.2C6578B621@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=1399
 
- Thomas> Hello,
- Thomas> During the flight to San Francisco today (to go to the Embedded Linux
- Thomas> Conference), I had the time to work on a few Buildroot cleanups. Most
- Thomas> of them have been discussed during the Buildroot Working Day that took
- Thomas> place in February 2010, right after FOSDEM, in Brussels.
 
- Thomas> Enjoy :-)
 
- Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot various-fixes
 
-Thanks, pulled and pushed everything except for the BR2_RECENT stuff
-(patch 11-13), that I'm not quite sure about yet.
 
-Enjoy ELC - I think we need to send you on transatlantic flights more
-often ;)
+--- Comment #2 from Paulius Zaleckas <paulius.zaleckas@gmail.com>  2010-04-11 22:07:08 UTC ---
+Very strange... does any other font build OK?
+I suspect that it may be some utility missing on the host.
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
