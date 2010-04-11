@@ -1,49 +1,134 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Apr 2010 22:16:51 +0200
-Subject: [Buildroot] [PATCH 2/7] Remove XTrap (app,
- lib & proto) as removed from X11R7.5
-In-Reply-To: <4BC61598.8090907@gmail.com>
-References: <1271264806-23336-1-git-send-email-will_wagner@carallon.com>
-	<1271264806-23336-3-git-send-email-will_wagner@carallon.com>
-	<4BC61598.8090907@gmail.com>
-Message-ID: <20100414221651.6e201c9c@surf>
+From: thomas.brandstetter at me.com <thomas.brandstetter@me.com>
+Date: Sun, 11 Apr 2010 10:26:24 +0200
+Subject: [Buildroot] [PATCH] pciutils: convert to the generic-tools
+	infrastructure
+Message-ID: <1270974384-11461-1-git-send-email-thomas.brandstetter@me.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 14 Apr 2010 22:20:56 +0300
-Paulius Zaleckas <paulius.zaleckas@gmail.com> wrote:
+From: Thomas Brandstetter <thomas.brandstetter@me.com>
 
-> No, it is not removed, please see documentation:
-> http://www.x.org/releases/X11R7.5/doc/man/man1/
 
-Well, http://www.x.org/releases/X11R7.5/doc/RELNOTES.html#AEN620 says:
+Signed-off-by: Thomas Brandstetter <thomas.brandstetter@me.com>
+---
+ package/pciutils/pciutils.mk |   96 ++++++++++++-----------------------------
+ 1 files changed, 28 insertions(+), 68 deletions(-)
 
-?
-Support has been removed from the X servers for the following
-extensions, which were obsolete, not widely used, or not working:
-
- * AppGroup
- * EVI
- * FontCache
- * MIT-SUNDRY-NONSTANDARD
- * TOG-CUP
- * XTrap
- * XFree86-Misc
- * XEvIE
-?
-
-Since the support for these extensions has been removed in the X
-server, keeping the corresponding libraries doesn't make a lot of
-sense, does it ?
-
-Regards,
-
-Thomas
+diff --git a/package/pciutils/pciutils.mk b/package/pciutils/pciutils.mk
+index 7b19c5b..393162f 100644
+--- a/package/pciutils/pciutils.mk
++++ b/package/pciutils/pciutils.mk
+@@ -1,80 +1,40 @@
+ #############################################################
+ #
+-# pciutils
++# PCIUTILS
+ #
+ #############################################################
+-PCIUTILS_VERSION:=3.0.1
+-PCIUTILS_SOURCE:=pciutils-$(PCIUTILS_VERSION).tar.gz
+-PCIUTILS_CAT:=$(ZCAT)
+-PCIUTILS_SITE:=ftp://atrey.karlin.mff.cuni.cz/pub/linux/pci
+-PCIUTILS_DIR:=$(BUILD_DIR)/pciutils-$(PCIUTILS_VERSION)
+-
+-# Yet more targets...
+-PCIIDS_SITE:=http://pciids.sourceforge.net/
+-PCIIDS_SOURCE:=pci.ids.bz2
+-PCIIDS_CAT:=$(BZCAT)
+ 
++PCIUTILS_VERSION = 3.1.7
++PCIUTILS_SITE = ftp://atrey.karlin.mff.cuni.cz/pub/linux/pci
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+-PCIUTILS_HAVE_ZLIB=yes
+-PCIIDS_FILE=pci.ids.gz
+-PCIIDS_COMPRESSOR=gzip -9 -c
++	PCIUTILS_ZLIB=yes
+ else
+-PCIUTILS_HAVE_ZLIB=no
+-PCIIDS_FILE=pci.ids
+-PCIIDS_COMPRESSOR=cat
++	PCIUTILS_ZLIB=no
+ endif
++PCIUTILS_DNS=no
++PCIUTILS_SHARED=yes
+ 
+-$(DL_DIR)/$(PCIUTILS_SOURCE):
+-	 $(call DOWNLOAD,$(PCIUTILS_SITE),$(PCIUTILS_SOURCE))
+-
+-$(DL_DIR)/$(PCIIDS_SOURCE):
+-	$(call DOWNLOAD,$(PCIIDS_SITE),$(PCIIDS_SOURCE))
+-
+-$(PCIUTILS_DIR)/.unpacked: $(DL_DIR)/$(PCIUTILS_SOURCE) $(DL_DIR)/$(PCIIDS_SOURCE)
+-	$(PCIUTILS_CAT) $(DL_DIR)/$(PCIUTILS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	$(PCIIDS_CAT) $(DL_DIR)/$(PCIIDS_SOURCE) | $(PCIIDS_COMPRESSOR) > $(PCIUTILS_DIR)/$(PCIIDS_FILE)
+-	toolchain/patch-kernel.sh $(PCIUTILS_DIR) package/pciutils pciutils-$(PCIUTILS_VERSION)\*.patch
+-	#$(CONFIG_UPDATE) $(@D)
++define PCIUTILS_CONFIGURE_CMDS
+ 	$(SED) 's/uname -s/echo Linux/' \
+ 		-e 's/uname -r/echo $(LINUX_HEADERS_VERSION)/' \
+ 		$(PCIUTILS_DIR)/lib/configure
+-	touch $@
+-
+-$(PCIUTILS_DIR)/.compiled: $(PCIUTILS_DIR)/.unpacked
+-	$(MAKE1) CC="$(TARGET_CC)" OPT="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)" RANLIB=$(TARGET_RANLIB) AR=$(TARGET_AR) -C $(PCIUTILS_DIR) \
+-		SHAREDIR="/usr/share/misc" \
+-		ZLIB=$(PCIUTILS_HAVE_ZLIB) \
+-		HOST=$(KERNEL_ARCH)-linux \
+-		PREFIX=/usr
+-	touch $@
+-
+-$(TARGET_DIR)/sbin/lspci: $(PCIUTILS_DIR)/.compiled
+-	$(INSTALL) $(PCIUTILS_DIR)/lspci $(TARGET_DIR)/sbin/lspci
+-	$(STRIPCMD) $(STRIP_STRIP_ALL) $@
+-
+-$(TARGET_DIR)/sbin/setpci: $(PCIUTILS_DIR)/.compiled
+-	$(INSTALL) $(PCIUTILS_DIR)/setpci $(TARGET_DIR)/sbin/setpci
+-	$(STRIPCMD) $(STRIP_STRIP_ALL) $@
+-
+-$(TARGET_DIR)/usr/share/misc/$(PCIIDS_FILE): $(PCIUTILS_DIR)/.unpacked
+-	$(INSTALL) -D $(PCIUTILS_DIR)/$(PCIIDS_FILE) $@
+-
+-pciutils: $(if $(BR2_PACKAGE_ZLIB),zlib) $(TARGET_DIR)/sbin/setpci $(TARGET_DIR)/sbin/lspci $(TARGET_DIR)/usr/share/misc/$(PCIIDS_FILE)
+-
+-pciutils-source: $(DL_DIR)/$(PCIUTILS_SOURCE) $(DL_DIR)/$(PCIIDS_SOURCE)
+-
+-pciutils-clean:
+-	-$(MAKE) -C $(PCIUTILS_DIR) clean
+-	rm -f $(TARGET_DIR)/sbin/lspci $(TARGET_DIR)/sbin/setpci $(TARGET_DIR)/usr/share/misc/pci.ids*
+-
+-pciutils-dirclean:
+-	rm -rf $(PCIUTILS_DIR)
+-
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_PCIUTILS),y)
+-TARGETS+=pciutils
+-endif
++endef
++
++define PCIUTILS_BUILD_CMDS
++	$(MAKE) CC="$(TARGET_CC)" \
++		OPT="$(TARGET_CFLAGS)" \
++		LDFLAGS="$(TARGET_LDFLAGS)" \
++		RANLIB=$(TARGET_RANLIB) \
++		AR=$(TARGET_AR) \
++		-C $(PCIUTILS_DIR) \
++		SHARED=$(PCIUTILS_SHARED) \
++		ZLIB=$(PCIUTILS_ZLIB) \
++		DNS=$(PCIUTILS_DNS) \
++		SHAREDIR=/usr/share/misc
++endef
++
++define PCIUTILS_INSTALL_TARGET_CMDS
++	$(MAKE) BUILDDIR=$(@D) -C $(@D) PREFIX=$(TARGET_DIR)/usr install
++endef
++
++$(eval $(call GENTARGETS,package,pciutils))
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.6.3.3
