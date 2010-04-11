@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 11 Apr 2010 06:05:18 +0200
-Subject: [Buildroot] [PATCH 22/25] Get rid of unused variables
+Date: Sun, 11 Apr 2010 06:05:19 +0200
+Subject: [Buildroot] [PATCH 23/25] Remove variables useless after
+	BR2_PREFER_IMA removal
 In-Reply-To: <cover.1270958653.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1270958653.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <bb5482644685dcd9dea282de0a27069ea42f8a59.1270958653.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <2876c46cd40e81e866259b7636cca9a8f4348f8d.1270958653.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,26 +13,22 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile |    7 -------
- 1 files changed, 0 insertions(+), 7 deletions(-)
+ toolchain/Makefile.in |    4 ----
+ 1 files changed, 0 insertions(+), 4 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 7fdf697..54dd4f1 100644
---- a/Makefile
-+++ b/Makefile
-@@ -268,13 +268,6 @@ STAMP_DIR:=$(BASE_DIR)/stamps
- BINARIES_DIR:=$(BASE_DIR)/images
- TARGET_DIR:=$(BASE_DIR)/target
+diff --git a/toolchain/Makefile.in b/toolchain/Makefile.in
+index db1a87a..16451ee 100644
+--- a/toolchain/Makefile.in
++++ b/toolchain/Makefile.in
+@@ -40,9 +40,5 @@ endif
+ # FIXME -- this is temporary
+ OPTIMIZE_FOR_CPU=$(ARCH)
  
--# define values for prepatched source trees for toolchains
--VENDOR_SITE:=$(call qstrip,$(BR2_VENDOR_SITE))
--VENDOR_BINUTILS_RELEASE:=$(call qstrip,$(BR2_VENDOR_BINUTILS_RELEASE))
--VENDOR_GCC_RELEASE:=$(call qstrip,$(BR2_VENDOR_GCC_RELEASE))
--VENDOR_UCLIBC_RELEASE:=$(call qstrip,$(BR2_VENDOR_UCLIBC_RELEASE))
--VENDOR_PATCH_DIR:=$(call qstrip,$(BR2_VENDOR_PATCH_DIR))
+-# late binding check to see if the target cc supports -fwhole-program
+-CFLAGS_WHOLE_PROGRAM = $(call cc-option,-fwhole-program,)
+-CFLAGS_COMBINE = $(call cc-option,-combine,)
 -
- BR2_DEPENDS_DIR=$(BUILD_DIR)/buildroot-config
- 
- include toolchain/Makefile.in
+ # gcc has a bunch of needed stuff....
+ include toolchain/gcc/Makefile.in
 -- 
 1.6.3.3
