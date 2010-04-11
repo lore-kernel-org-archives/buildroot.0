@@ -1,7 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sun, 11 Apr 2010 21:10:35 +0200
-Subject: [Buildroot] [git commit master] Get rid of unused variables
-Message-ID: <20100411195038.4170A20B98@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] Get rid of the OPTIMIZE_FOR_CPU
+	variable
+Message-ID: <20100411195039.3C95520B98@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,31 +10,53 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=72f913bb3b395de14d0dfa1bc8096d943ffd9750
+commit: http://git.buildroot.net/buildroot/commit/?id=04ba0089a672863e333a2de6b19d9b77fd0b26c1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+This variable, together with the FIXME comment, has been added has
+part of Eric Andersen's ? Major buildroot facelift, step one ? commit
+that occured in October 2004.
+
+Since then, no real usage has been made of OPTIMIZE_FOR_CPU, and the
+initial intention has probably been lost in the memories of the
+implementors.
+
+Therefore, get rid of the variable, and just use $(ARCH) at the two
+locations the variable was used.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile |    7 -------
- 1 files changed, 0 insertions(+), 7 deletions(-)
+ package/Makefile.in   |    4 ++--
+ toolchain/Makefile.in |    3 ---
+ 2 files changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 7fdf697..54dd4f1 100644
---- a/Makefile
-+++ b/Makefile
-@@ -268,13 +268,6 @@ STAMP_DIR:=$(BASE_DIR)/stamps
- BINARIES_DIR:=$(BASE_DIR)/images
- TARGET_DIR:=$(BASE_DIR)/target
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 43ff2dd..983caf3 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -109,8 +109,8 @@ TOOLCHAIN_DIR=$(BASE_DIR)/toolchain
  
--# define values for prepatched source trees for toolchains
--VENDOR_SITE:=$(call qstrip,$(BR2_VENDOR_SITE))
--VENDOR_BINUTILS_RELEASE:=$(call qstrip,$(BR2_VENDOR_BINUTILS_RELEASE))
--VENDOR_GCC_RELEASE:=$(call qstrip,$(BR2_VENDOR_GCC_RELEASE))
--VENDOR_UCLIBC_RELEASE:=$(call qstrip,$(BR2_VENDOR_UCLIBC_RELEASE))
--VENDOR_PATCH_DIR:=$(call qstrip,$(BR2_VENDOR_PATCH_DIR))
+ # Quotes are needed for spaces et al in path components.
+ TARGET_PATH="$(TOOLCHAIN_DIR)/bin:$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin/:$(STAGING_DIR)/bin:$(STAGING_DIR)/usr/bin:$(PATH)"
+-GNU_TARGET_NAME=$(OPTIMIZE_FOR_CPU)-linux
+-REAL_GNU_TARGET_NAME=$(OPTIMIZE_FOR_CPU)$(GNU_TARGET_SUFFIX)
++GNU_TARGET_NAME=$(ARCH)-linux
++REAL_GNU_TARGET_NAME=$(ARCH)$(GNU_TARGET_SUFFIX)
+ TARGET_CROSS=$(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-
+ KERNEL_CROSS=$(TARGET_CROSS)
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
+diff --git a/toolchain/Makefile.in b/toolchain/Makefile.in
+index 91aa17a..57d84a3 100644
+--- a/toolchain/Makefile.in
++++ b/toolchain/Makefile.in
+@@ -30,8 +30,5 @@ BR2_SYSROOT=# nothing
+ BR2_ISYSROOT=#nothing
+ endif
+ 
+-# FIXME -- this is temporary
+-OPTIMIZE_FOR_CPU=$(ARCH)
 -
- BR2_DEPENDS_DIR=$(BUILD_DIR)/buildroot-config
- 
- include toolchain/Makefile.in
+ # gcc has a bunch of needed stuff....
+ include toolchain/gcc/Makefile.in
 -- 
 1.6.3.3
