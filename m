@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Apr 2010 15:11:13 +0200
-Subject: [Buildroot] [PATCH 01/21] vtun: convert to the autotools
-	infrastructure
+Date: Mon, 12 Apr 2010 15:11:14 +0200
+Subject: [Buildroot] [PATCH 02/21] x11vnc: cleanup useless config options
 In-Reply-To: <cover.1271077873.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1271077873.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <27b70d5c46678912c185a9f0998fa78a47c385ee.1271077873.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <ab44e72f30233e07b0164b923906b001d24a30dd.1271077873.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,100 +12,27 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/vtun/vtun.mk |   76 +++----------------------------------------------
- 1 files changed, 5 insertions(+), 71 deletions(-)
+ package/x11vnc/x11vnc.mk |    7 ++-----
+ 1 files changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/package/vtun/vtun.mk b/package/vtun/vtun.mk
-index 15eba01..04df75b 100644
---- a/package/vtun/vtun.mk
-+++ b/package/vtun/vtun.mk
-@@ -6,81 +6,15 @@
- # to enable that within busybox
- #
- #############################################################
--#Old version 2.6
- VTUN_VERSION:=3.0.2
- VTUN_SOURCE:=vtun-$(VTUN_VERSION).tar.gz
- VTUN_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/vtun/
--VTUN_DIR:=$(BUILD_DIR)/vtun-$(VTUN_VERSION)
--VTUN_CAT:=$(ZCAT)
--VTUN_BINARY:=vtund
--VTUN_TARGET_BINARY:=usr/sbin/vtund
-+VTUN_INSTALL_TARGET_OPT=DESTDIR=$(TARGET_DIR) install
-+VTUN_DEPENDENCIES = zlib lzo openssl
+diff --git a/package/x11vnc/x11vnc.mk b/package/x11vnc/x11vnc.mk
+index 4def7d4..f71350d 100644
+--- a/package/x11vnc/x11vnc.mk
++++ b/package/x11vnc/x11vnc.mk
+@@ -8,12 +8,9 @@ X11VNC_SOURCE = x11vnc-$(X11VNC_VERSION).tar.gz
+ X11VNC_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/libvncserver
+ X11VNC_INSTALL_STAGING = NO
+ X11VNC_INSTALL_TARGET = YES
+-#X11VNCINSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
  
--$(DL_DIR)/$(VTUN_SOURCE):
--	 $(call DOWNLOAD,$(VTUN_SITE),$(VTUN_SOURCE))
--
--vtun-source: $(DL_DIR)/$(VTUN_SOURCE)
--
--$(VTUN_DIR)/.unpacked: $(DL_DIR)/$(VTUN_SOURCE)
--	$(VTUN_CAT) $(DL_DIR)/$(VTUN_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	touch $@
--
--$(VTUN_DIR)/.patched: $(VTUN_DIR)/.unpacked
--	toolchain/patch-kernel.sh $(VTUN_DIR) package/vtun/ vtun-$(VTUN_VERSION)\*.patch
--	touch $@
--
--
--
--$(VTUN_DIR)/.configured: $(VTUN_DIR)/.patched
--	(cd $(VTUN_DIR); rm -rf config.cache; \
--		$(TARGET_CONFIGURE_OPTS) \
--		$(TARGET_CONFIGURE_ARGS) \
--		./configure $(QUIET) \
--		--target=$(GNU_TARGET_NAME) \
--		--host=$(GNU_TARGET_NAME) \
--		--build=$(GNU_HOST_NAME) \
--		--prefix=/usr \
--		--exec-prefix=/usr \
--		--bindir=/usr/bin \
--		--sbindir=/usr/sbin \
--		--libdir=/lib \
--		--libexecdir=/usr/lib \
--		--sysconfdir=/etc \
--		--datadir=/usr/share \
--		--localstatedir=/var \
--		--mandir=/usr/man \
--		--infodir=/usr/info \
-+VTUN_CONF_OPT = \
- 		--with-ssl-headers=$(STAGING_DIR)/usr/include/openssl \
- 		--with-lzo-headers=$(STAGING_DIR)/usr/include/lzo \
--		--with-lzo-lib=$(STAGING_DIR)/usr/lib \
--	)
--	touch $(VTUN_DIR)/.configured
--
--$(VTUN_DIR)/$(VTUN_BINARY): $(VTUN_DIR)/.configured
--	$(MAKE) -C $(VTUN_DIR)
--
--$(TARGET_DIR)/$(VTUN_TARGET_BINARY): $(VTUN_DIR)/$(VTUN_BINARY)
--	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(VTUN_DIR) install
--	rm -rf $(TARGET_DIR)/share/locale $(TARGET_DIR)/usr/info \
--		$(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc
--
--vtun: zlib lzo openssl $(TARGET_DIR)/$(VTUN_TARGET_BINARY)
-+		--with-lzo-lib=$(STAGING_DIR)/usr/lib
+-X11VNC_CONF_OPT = --target=$(GNU_TARGET_NAME) --host=$(GNU_TARGET_NAME) \
+-        --build=$(GNU_HOST_NAME) --prefix=/usr \
+-        --includedir=/usr/include \
+-		--without-avahi
++X11VNC_CONF_OPT = \
++	--without-avahi
  
--vtun-unpacked: $(VTUN_DIR)/.unpacked
--
--vtun-patched: $(VTUN_DIR)/.patched
--
--vtun-clean:
--	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(VTUN_DIR) uninstall
--	-$(MAKE) -C $(VTUN_DIR) clean
--
--vtun-dirclean:
--	rm -rf $(VTUN_DIR)
--
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(BR2_PACKAGE_VTUN),y)
--TARGETS+=vtun
--endif
-+$(eval $(call AUTOTARGETS,package,vtun))
-\ No newline at end of file
+ X11VNC_DEPENDENCIES = xserver_xorg-server
+ 
 -- 
 1.6.3.3
