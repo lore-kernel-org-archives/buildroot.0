@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Apr 2010 15:11:21 +0200
-Subject: [Buildroot] [PATCH 09/21] libraw1394: convert to the autotools
+Date: Mon, 12 Apr 2010 15:11:22 +0200
+Subject: [Buildroot] [PATCH 10/21] libsysfs: convert to the autotools
 	infrastructure
 In-Reply-To: <cover.1271077873.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1271077873.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <c3ffac321f024712321d4366cb58ef9df98e6af2.1271077873.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <c04476a83fad3f5fb2f119e8471e527667d85d87.1271077873.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,32 +13,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libraw1394/libraw1394.mk |   64 +------------------------------------
- 1 files changed, 2 insertions(+), 62 deletions(-)
+ package/libsysfs/libsysfs.mk |   59 +----------------------------------------
+ 1 files changed, 2 insertions(+), 57 deletions(-)
 
-diff --git a/package/libraw1394/libraw1394.mk b/package/libraw1394/libraw1394.mk
-index 045cc82..002cafe 100644
---- a/package/libraw1394/libraw1394.mk
-+++ b/package/libraw1394/libraw1394.mk
-@@ -3,69 +3,9 @@
- # libraw1394
- #
- #############################################################
+diff --git a/package/libsysfs/libsysfs.mk b/package/libsysfs/libsysfs.mk
+index a590151..8bf9ca5 100644
+--- a/package/libsysfs/libsysfs.mk
++++ b/package/libsysfs/libsysfs.mk
+@@ -22,63 +22,8 @@
+ # USA
+ 
+ LIBSYSFS_VERSION:=2.1.0
+-LIBSYSFS_DIR:=$(BUILD_DIR)/sysfsutils-$(LIBSYSFS_VERSION)
+ LIBSYSFS_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/linux-diag
+ LIBSYSFS_SOURCE:=sysfsutils-$(LIBSYSFS_VERSION).tar.gz
+-LIBSYSFS_CAT:=$(ZCAT)
++LIBSYSFS_INSTALL_STAGING=YES
+ 
+-$(DL_DIR)/$(LIBSYSFS_SOURCE):
+-	 $(call DOWNLOAD,$(LIBSYSFS_SITE),$(LIBSYSFS_SOURCE))
 -
- LIBRAW1394_VERSION:=1.2.1
- LIBRAW1394_SOURCE:=libraw1394-$(LIBRAW1394_VERSION).tar.gz
- LIBRAW1394_SITE:=http://www.kernel.org/pub/linux/libs/ieee1394/
--LIBRAW1394_DIR:=$(BUILD_DIR)/libraw1394-$(LIBRAW1394_VERSION)
+-libsysfs-source: $(DL_DIR)/$(LIBSYSFS_SOURCE)
 -
--$(DL_DIR)/$(LIBRAW1394_SOURCE):
--	$(call DOWNLOAD,$(LIBRAW1394_SITE),$(LIBRAW1394_SOURCE))
--
--$(LIBRAW1394_DIR)/.unpacked: $(DL_DIR)/$(LIBRAW1394_SOURCE)
--	$(ZCAT) $(DL_DIR)/$(LIBRAW1394_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-$(LIBSYSFS_DIR)/.unpacked: $(DL_DIR)/$(LIBSYSFS_SOURCE)
+-	$(LIBSYSFS_CAT) $(DL_DIR)/$(LIBSYSFS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	$(CONFIG_UPDATE) $(@D)
 -	touch $@
 -
--$(LIBRAW1394_DIR)/.configured: $(LIBRAW1394_DIR)/.unpacked
--	(cd $(LIBRAW1394_DIR); rm -rf config.cache; \
+-$(LIBSYSFS_DIR)/.configured: $(LIBSYSFS_DIR)/.unpacked
+-	(cd $(LIBSYSFS_DIR); rm -rf config.cache; \
 -		$(TARGET_CONFIGURE_OPTS) \
 -		$(TARGET_CONFIGURE_ARGS) \
 -		./configure $(QUIET) \
@@ -46,52 +49,43 @@ index 045cc82..002cafe 100644
 -		--host=$(GNU_TARGET_NAME) \
 -		--build=$(GNU_HOST_NAME) \
 -		--prefix=/usr \
--		--exec-prefix=/usr \
--		--bindir=/usr/bin \
--		--sbindir=/usr/sbin \
--		--libdir=/usr/lib \
--		--libexecdir=/usr/lib \
 -		--sysconfdir=/etc \
--		--datadir=/usr/share \
--		--localstatedir=/var \
--		--includedir=/include \
--		--mandir=/usr/man \
--		--infodir=/usr/info \
 -	)
 -	touch $@
 -
--$(LIBRAW1394_DIR)/.compiled: $(LIBRAW1394_DIR)/.configured
--	$(MAKE) -C $(LIBRAW1394_DIR)
+-$(LIBSYSFS_DIR)/.compiled: $(LIBSYSFS_DIR)/.configured
+-	$(MAKE) -C $(LIBSYSFS_DIR)
 -	touch $@
 -
--$(STAGING_DIR)/usr/lib/libraw1394.so: $(LIBRAW1394_DIR)/.compiled
--	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(LIBRAW1394_DIR)/src install
+-$(STAGING_DIR)/usr/lib/libsysfs.so: $(LIBSYSFS_DIR)/.compiled
+-	$(MAKE) -C $(LIBSYSFS_DIR) DESTDIR=$(STAGING_DIR) install
+-	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" \
+-		$(STAGING_DIR)/usr/lib/libsysfs.la
+-	touch -c $@
 -
--$(TARGET_DIR)/usr/lib/libraw1394.so: $(STAGING_DIR)/usr/lib/libraw1394.so
--	cp -dpf $(STAGING_DIR)/usr/lib/libraw1394.so* $(TARGET_DIR)/usr/lib/
+-$(TARGET_DIR)/usr/lib/libsysfs.so: $(STAGING_DIR)/usr/lib/libsysfs.so
+-	cp -dpf $(STAGING_DIR)/usr/lib/libsysfs.so* $(TARGET_DIR)/usr/lib/
+-	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libsysfs.so
 -
--libraw1394: $(TARGET_DIR)/usr/lib/libraw1394.so
+-libsysfs: $(TARGET_DIR)/usr/lib/libsysfs.so
 -
--libraw1394-source: $(DL_DIR)/$(LIBRAW1394_SOURCE)
+-libsysfs-clean:
+-	-$(MAKE) -C $(LIBSYSFS_DIR) clean
+-	-$(MAKE) -C $(LIBSYSFS_DIR) DESTDIR=$(STAGING_DIR) uninstall
+-	rm -f $(TARGET_DIR)/usr/lib/libsysfs.so*
 -
--libraw1394-clean:
--	rm $(TARGET_DIR)/usr/lib/libraw1394.so*
--	-$(MAKE) -C $(LIBRAW1394_DIR) clean
--
--libraw1394-dirclean:
--	rm -rf $(LIBRAW1394_DIR)
+-libsysfs-dirclean:
+-	rm -rf $(LIBSYSFS_DIR)
 -
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_LIBRAW1394),y)
--TARGETS+=libraw1394
+-ifeq ($(BR2_PACKAGE_LIBSYSFS),y)
+-TARGETS+=libsysfs
 -endif
-+LIBRAW1394_INSTALL_STAGING=YES
- 
-+$(eval $(call AUTOTARGETS,package,libraw1394))
++$(eval $(call AUTOTARGETS,package,libsysfs))
 \ No newline at end of file
 -- 
 1.6.3.3
