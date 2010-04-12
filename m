@@ -1,29 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 12 Apr 2010 19:55:41 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	br2-recent-removal
-In-Reply-To: <cover.1271078939.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Mon, 12 Apr 2010 15:31:36 +0200")
-References: <cover.1271078939.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <878w8sk12a.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 12 Apr 2010 15:28:12 +0200
+Subject: [Buildroot] [git commit master] Remove the BR2_RECENT option
+Message-ID: <20100412175557.271C221289@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> Hello,
- Thomas> Here is a new try for the BR2_RECENT configuration option
- Thomas> removal. Instead of converting all entries marked BR2_RECENT into
- Thomas> BR2_DEPRECATED entries (which would make them disappear in the default
- Thomas> Buildroot configuration), we just get rid of BR2_RECENT *and*
- Thomas> BR2_DEPRECATED on these entries. Therefore, they still appear in the
- Thomas> default Buildroot configuration, and we can then later decide, on a
- Thomas> per-entry basis, whether they should be marked BR2_DEPRECATED or not.
+commit: http://git.buildroot.net/buildroot/commit/?id=e5d07810b29da13f7544f14135cc57033b960fb9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Pulled and pushed, thanks!
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Config.in |    6 ------
+ 1 files changed, 0 insertions(+), 6 deletions(-)
 
+diff --git a/Config.in b/Config.in
+index 6a66d50..bc4fec2 100644
+--- a/Config.in
++++ b/Config.in
+@@ -132,12 +132,6 @@ config BR2_DEPRECATED
+ 	help
+ 	  This option hides outdated/obsolete versions of packages.
+ 
+-config BR2_RECENT
+-	bool "Show packages that are of the latest major version"
+-	default y
+-	help
+-	  This option show recent versions of packages.
+-
+ config BR2_ENABLE_DEBUG
+ 	bool "build packages with debugging symbols"
+ 	select BR2_PACKAGE_GDB_SERVER
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
