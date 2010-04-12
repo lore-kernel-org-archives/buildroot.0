@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Apr 2010 15:11:19 +0200
-Subject: [Buildroot] [PATCH 07/21] libosip2: convert to the autotools
+Date: Mon, 12 Apr 2010 15:11:20 +0200
+Subject: [Buildroot] [PATCH 08/21] libcgicc: convert to the autotools
 	infrastructure
 In-Reply-To: <cover.1271077873.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1271077873.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <f11fde0a3532034609f3d68c95857e1cc36ba6f7.1271077873.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <e81107484f504fd8580b79942018fe503b9a71de.1271077873.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,34 +13,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libosip2/libosip2.mk |   83 +++---------------------------------------
- 1 files changed, 6 insertions(+), 77 deletions(-)
+ package/libcgicc/libcgicc.mk |   64 +++--------------------------------------
+ 1 files changed, 5 insertions(+), 59 deletions(-)
 
-diff --git a/package/libosip2/libosip2.mk b/package/libosip2/libosip2.mk
-index 04a75c5..59cabac 100644
---- a/package/libosip2/libosip2.mk
-+++ b/package/libosip2/libosip2.mk
-@@ -3,85 +3,14 @@
- # libosip2
+diff --git a/package/libcgicc/libcgicc.mk b/package/libcgicc/libcgicc.mk
+index b4cf567..d792375 100644
+--- a/package/libcgicc/libcgicc.mk
++++ b/package/libcgicc/libcgicc.mk
+@@ -3,67 +3,13 @@
+ # libcgicc
  #
  #############################################################
 -
- LIBOSIP2_VERSION=3.1.0
- LIBOSIP2_SOURCE=libosip2-$(LIBOSIP2_VERSION).tar.gz
- LIBOSIP2_SITE=http://www.antisip.com/download/exosip2
--LIBOSIP2_DIR=$(BUILD_DIR)/libosip2-$(LIBOSIP2_VERSION)
--LIBOSIP2_CAT:=$(ZCAT)
+ LIBCGICC_VERSION=3.2.9
+-LIBCGICC_DIR=$(BUILD_DIR)/cgicc-$(LIBCGICC_VERSION)
+ LIBCGICC_SITE=$(BR2_GNU_MIRROR)/cgicc
+ LIBCGICC_SOURCE=cgicc-$(LIBCGICC_VERSION).tar.gz
+-LIBCGICC_CAT:=$(ZCAT)
 -
--$(DL_DIR)/$(LIBOSIP2_SOURCE):
--	$(call DOWNLOAD,$(LIBOSIP2_SITE),$(LIBOSIP2_SOURCE))
+-$(DL_DIR)/$(LIBCGICC_SOURCE):
+-	$(call DOWNLOAD,$(LIBCGICC_SITE),$(LIBCGICC_SOURCE))
 -
--$(LIBOSIP2_DIR)/.unpacked: $(DL_DIR)/$(LIBOSIP2_SOURCE)
--	$(LIBOSIP2_CAT) $(DL_DIR)/$(LIBOSIP2_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	$(CONFIG_UPDATE) $(LIBOSIP2_DIR)
--	touch $(LIBOSIP2_DIR)/.unpacked
+-libcgicc-source: $(DL_DIR)/$(LIBCGICC_SOURCE)
 -
--$(LIBOSIP2_DIR)/.configured: $(LIBOSIP2_DIR)/.unpacked
--	(cd $(LIBOSIP2_DIR); rm -rf config.cache; \
+-$(LIBCGICC_DIR)/.unpacked: $(DL_DIR)/$(LIBCGICC_SOURCE)
+-	$(LIBCGICC_CAT) $(DL_DIR)/$(LIBCGICC_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(LIBCGICC_DIR) package/libcgicc cgicc\*.patch
+-	touch $@
+-
+-$(LIBCGICC_DIR)/.configured: $(LIBCGICC_DIR)/.unpacked
+-	(cd $(LIBCGICC_DIR); rm -f config.cache; \
+-		$(AUTORECONF); \
 -		$(TARGET_CONFIGURE_OPTS) \
 -		$(TARGET_CONFIGURE_ARGS) \
 -		./configure $(QUIET) \
@@ -49,69 +52,47 @@ index 04a75c5..59cabac 100644
 -		--build=$(GNU_HOST_NAME) \
 -		--prefix=/usr \
 -		--exec-prefix=/usr \
--		--bindir=/usr/bin \
--		--sbindir=/usr/sbin \
--		--libexecdir=/usr/lib \
 -		--sysconfdir=/etc \
--		--datadir=/usr/share \
 -		--localstatedir=/var \
--		--mandir=/usr/man \
--		--infodir=/usr/info \
--		--includedir=/usr/include \
--		--with-gnu-ld \
--		--enable-shared \
--		--enable-static \
--		$(DISABLE_NLS) \
+-		--disable-demos \
+-		--disable-doc \
 -	)
--	touch $(LIBOSIP2_DIR)/.configured
+-	touch $@
 -
--$(LIBOSIP2_DIR)/libosip2.so: $(LIBOSIP2_DIR)/.configured
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(LIBOSIP2_DIR)
+-$(LIBCGICC_DIR)/.compiled: $(LIBCGICC_DIR)/.configured
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(LIBCGICC_DIR)
+-	touch $@
 -
--$(STAGING_DIR)/usr/lib/libosip2.so: $(LIBOSIP2_DIR)/.configured
--	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(LIBOSIP2_DIR) install
--	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libosip2.la
--	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libosipparser2.la
+-$(STAGING_DIR)/usr/lib/libcgicc.so: $(LIBCGICC_DIR)/.compiled
+-	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(STAGING_DIR) -C $(LIBCGICC_DIR) install
+-	touch -c $(STAGING_DIR)/usr/lib/libcgicc.so
 -
--$(TARGET_DIR)/usr/lib/libosip2.so: $(STAGING_DIR)/usr/lib/libosip2.so
--	mkdir -p $(TARGET_DIR)/usr/lib
--	cp -dpf $(STAGING_DIR)/usr/lib/libosip2.so* $(TARGET_DIR)/usr/lib/
--	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libosip2.so*
--
--$(TARGET_DIR)/usr/lib/libosipparser2.so: $(STAGING_DIR)/usr/lib/libosip2.so
--	mkdir -p $(TARGET_DIR)/usr/lib
--	cp -dpf $(STAGING_DIR)/usr/lib/libosipparser2.so* $(TARGET_DIR)/usr/lib/
--	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libosipparser2.so*
-+LIBOSIP2_INSTALL_STAGING=YES
+-$(TARGET_DIR)/usr/lib/libcgicc.so: $(STAGING_DIR)/usr/lib/libcgicc.so
+-	cp -dpf $(STAGING_DIR)/usr/lib/libcgicc.so* $(TARGET_DIR)/usr/lib/
++LIBCGICC_INSTALL_STAGING=YES
  
--libosip2: $(TARGET_DIR)/usr/lib/libosip2.so $(TARGET_DIR)/usr/lib/libosipparser2.so
-+LIBOSIP2_CONF_OPT = \
-+	--with-gnu-ld \
-+	--enable-shared \
-+	--enable-static
+-libcgicc: $(TARGET_DIR)/usr/lib/libcgicc.so
++LIBCGICC_CONF_OPT = \
++	--disable-demos \
++	--disable-doc
  
--libosip2-source: $(DL_DIR)/$(LIBOSIP2_SOURCE)
+-libcgicc-unpacked: $(LIBCGICC_DIR)/.unpacked
 -
--libosip2-clean:
--	-$(MAKE) -C $(LIBOSIP2_DIR) clean
--	-rm -f $(STAGING_DIR)/usr/lib/libosip2.*
--	-rm -f $(STAGING_DIR)/usr/lib/libosipparser2.*
--	-rm -f $(TARGET_DIR)/usr/lib/libosip2.*
--	-rm -f $(TARGET_DIR)/usr/lib/libosipparser2.*
+-libcgicc-clean:
+-		-$(MAKE) -C $(LIBCGICC_DIR) clean
 -
--libosip2-dirclean:
--	rm -rf $(LIBOSIP2_DIR)
+-libcgicc-dirclean:
+-	rm -rf $(LIBCGICC_DIR)
 -
--.PHONY: libosip2-headers libosip2-target-headers
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_LIBOSIP2),y)
--TARGETS+=libosip2
+-ifeq ($(BR2_PACKAGE_LIBCGICC),y)
+-TARGETS+=libcgicc
 -endif
-+$(eval $(call AUTOTARGETS,package,libosip2))
++$(eval $(call AUTOTARGETS,package,libcgicc))
 \ No newline at end of file
 -- 
 1.6.3.3
