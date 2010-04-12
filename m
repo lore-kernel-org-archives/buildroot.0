@@ -1,47 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Apr 2010 15:11:17 +0200
-Subject: [Buildroot] [PATCH 05/21] smartmontools: convert to the autotools
-	infrastructure
+Date: Mon, 12 Apr 2010 15:11:18 +0200
+Subject: [Buildroot] [PATCH 06/21] patch: convert to the autotools
+	infrastructure and bump version
 In-Reply-To: <cover.1271077873.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1271077873.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <73871ed02a6409c7ba436d8d731793a4389de7a3.1271077873.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <8af84ff5ffae7288b23715766d91287a8ebd614a.1271077873.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Bumping the version from 2.5.9 to 2.6 allows to avoid adding a patch
+(merged upstream) to fix patch's Makefile install target.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/smartmontools/smartmontools.mk |   69 +-------------------------------
- 1 files changed, 1 insertions(+), 68 deletions(-)
+ package/patch/patch.mk |   69 +++--------------------------------------------
+ 1 files changed, 5 insertions(+), 64 deletions(-)
 
-diff --git a/package/smartmontools/smartmontools.mk b/package/smartmontools/smartmontools.mk
-index fde76b0..5fe0a41 100644
---- a/package/smartmontools/smartmontools.mk
-+++ b/package/smartmontools/smartmontools.mk
-@@ -7,72 +7,5 @@ SMARTMONTOOLS_VERSION:=5.33
- SMARTMONTOOLS_SOURCE:=smartmontools-$(SMARTMONTOOLS_VERSION).tar.gz
- SMARTMONTOOLS_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/smartmontools
- SMARTMONTOOLS_DIR:=$(BUILD_DIR)/smartmontools-$(SMARTMONTOOLS_VERSION)
--SMARTMONTOOLS_CAT:=$(ZCAT)
--SMARTMONTOOLS_BINARY:=smartctl
--SMARTMONTOOLS_BINARY2:=smartd
--SMARTMONTOOLS_TARGET_BINARY:=usr/sbin/smartctl
--SMARTMONTOOLS_TARGET_BINARY2:=usr/sbin/smartd
+diff --git a/package/patch/patch.mk b/package/patch/patch.mk
+index 2c1e394..3e20b6b 100644
+--- a/package/patch/patch.mk
++++ b/package/patch/patch.mk
+@@ -3,68 +3,9 @@
+ # patch
+ #
+ #############################################################
+-GNUPATCH_VERSION:=2.5.9
+-GNUPATCH_SOURCE:=patch_$(GNUPATCH_VERSION).orig.tar.gz
+-GNUPATCH_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/p/patch
+-GNUPATCH_CAT:=$(ZCAT)
+-GNUPATCH_DIR:=$(BUILD_DIR)/patch-$(GNUPATCH_VERSION)
+-GNUPATCH_BINARY:=patch
+-GNUPATCH_TARGET_BINARY:=usr/bin/patch
++PATCH_VERSION:=2.6
++PATCH_SOURCE:=patch_$(PATCH_VERSION).orig.tar.gz
++PATCH_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/p/patch
++PATCH_INSTALL_TARGET_OPT=DESTDIR=$(TARGET_DIR) install
  
--$(DL_DIR)/$(SMARTMONTOOLS_SOURCE):
--	 $(call DOWNLOAD,$(SMARTMONTOOLS_SITE),$(SMARTMONTOOLS_SOURCE))
+-$(DL_DIR)/$(GNUPATCH_SOURCE):
+-	 $(call DOWNLOAD,$(GNUPATCH_SITE),$(GNUPATCH_SOURCE))
 -
--smartmontools-source: $(DL_DIR)/$(SMARTMONTOOLS_SOURCE)
+-patch-source: $(DL_DIR)/$(GNUPATCH_SOURCE)
 -
--$(SMARTMONTOOLS_DIR)/.unpacked: $(DL_DIR)/$(SMARTMONTOOLS_SOURCE)
--	$(SMARTMONTOOLS_CAT) $(DL_DIR)/$(SMARTMONTOOLS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(SMARTMONTOOLS_DIR) package/smartmontools/ \*.patch
--	touch $(SMARTMONTOOLS_DIR)/.unpacked
+-$(GNUPATCH_DIR)/.unpacked: $(DL_DIR)/$(GNUPATCH_SOURCE)
+-	$(GNUPATCH_CAT) $(DL_DIR)/$(GNUPATCH_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	$(CONFIG_UPDATE) $(GNUPATCH_DIR)
+-	touch $(GNUPATCH_DIR)/.unpacked
 -
--$(SMARTMONTOOLS_DIR)/.configured: $(SMARTMONTOOLS_DIR)/.unpacked
--	(cd $(SMARTMONTOOLS_DIR); rm -rf config.cache; \
+-$(GNUPATCH_DIR)/.configured: $(GNUPATCH_DIR)/.unpacked
+-	(cd $(GNUPATCH_DIR); rm -rf config.cache; \
 -		$(TARGET_CONFIGURE_OPTS) \
 -		$(TARGET_CONFIGURE_ARGS) \
 -		./configure $(QUIET) \
@@ -62,38 +71,32 @@ index fde76b0..5fe0a41 100644
 -		$(DISABLE_NLS) \
 -		$(DISABLE_LARGEFILE) \
 -	)
--	touch $(SMARTMONTOOLS_DIR)/.configured
+-	touch $(GNUPATCH_DIR)/.configured
 -
--$(SMARTMONTOOLS_DIR)/$(SMARTMONTOOLS_BINARY): $(SMARTMONTOOLS_DIR)/.configured
--	$(MAKE) -C $(SMARTMONTOOLS_DIR)
--	$(STRIPCMD) $(SMARTMONTOOLS_DIR)/$(SMARTMONTOOLS_BINARY)
--	$(STRIPCMD) $(SMARTMONTOOLS_DIR)/$(SMARTMONTOOLS_BINARY2)
--	touch -c $(SMARTMONTOOLS_DIR)/$(SMARTMONTOOLS_BINARY)
+-$(GNUPATCH_DIR)/$(GNUPATCH_BINARY): $(GNUPATCH_DIR)/.configured
+-	$(MAKE) CC=$(TARGET_CC) -C $(GNUPATCH_DIR)
 -
--$(TARGET_DIR)/$(SMARTMONTOOLS_TARGET_BINARY): $(SMARTMONTOOLS_DIR)/$(SMARTMONTOOLS_BINARY)
--	cp $(SMARTMONTOOLS_DIR)/$(SMARTMONTOOLS_BINARY) $(TARGET_DIR)/usr/sbin/
+-$(TARGET_DIR)/$(GNUPATCH_TARGET_BINARY): $(GNUPATCH_DIR)/$(GNUPATCH_BINARY)
+-	rm -f $(TARGET_DIR)/$(GNUPATCH_TARGET_BINARY)
+-	cp -a $(GNUPATCH_DIR)/$(GNUPATCH_BINARY) $(TARGET_DIR)/$(GNUPATCH_TARGET_BINARY)
 -
--$(TARGET_DIR)/$(SMARTMONTOOLS_TARGET_BINARY2): $(SMARTMONTOOLS_DIR)/$(SMARTMONTOOLS_BINARY)
--	cp $(SMARTMONTOOLS_DIR)/$(SMARTMONTOOLS_BINARY2) $(TARGET_DIR)/usr/sbin/
+-patch: $(TARGET_DIR)/$(GNUPATCH_TARGET_BINARY)
 -
--smartmontools: $(TARGET_DIR)/$(SMARTMONTOOLS_TARGET_BINARY)
+-patch-clean:
+-	rm -f $(TARGET_DIR)/$(GNUPATCH_TARGET_BINARY)
 -
--smartmontools-clean:
--	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(SMARTMONTOOLS_DIR) uninstall
--	-$(MAKE) -C $(SMARTMONTOOLS_DIR) clean
--
--smartmontools-dirclean:
--	rm -rf $(SMARTMONTOOLS_DIR)
+-patch-dirclean:
+-	rm -rf $(GNUPATCH_DIR)
 -
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_SMARTMONTOOLS),y)
--TARGETS+=smartmontools
+-ifeq ($(BR2_PACKAGE_PATCH),y)
+-TARGETS+=patch
 -endif
-+$(eval $(call AUTOTARGETS,package,smartmontools))
++$(eval $(call AUTOTARGETS,package,patch))
 \ No newline at end of file
 -- 
 1.6.3.3
