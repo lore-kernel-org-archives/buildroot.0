@@ -1,73 +1,112 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Apr 2010 15:11:12 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	autotools-conversion
-Message-ID: <cover.1271077873.git.thomas.petazzoni@free-electrons.com>
+Date: Mon, 12 Apr 2010 15:11:13 +0200
+Subject: [Buildroot] [PATCH 01/21] vtun: convert to the autotools
+	infrastructure
+In-Reply-To: <cover.1271077873.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1271077873.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <27b70d5c46678912c185a9f0998fa78a47c385ee.1271077873.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The following changes since commit 04ba0089a672863e333a2de6b19d9b77fd0b26c1:
-  Thomas Petazzoni (1):
-        Get rid of the OPTIMIZE_FOR_CPU variable
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/vtun/vtun.mk |   76 +++----------------------------------------------
+ 1 files changed, 5 insertions(+), 71 deletions(-)
 
-are available in the git repository at:
-
-  git://git.busybox.net/~tpetazzoni/git/buildroot autotools-conversion
-
-Thomas Petazzoni (21):
-      vtun: convert to the autotools infrastructure
-      x11vnc: cleanup useless config options
-      udpcast: convert to the autotools infrastructure
-      setserial: convert to the autotools infrastructure
-      smartmontools: convert to the autotools infrastructure
-      patch: convert to the autotools infrastructure and bump version
-      libosip2: convert to the autotools infrastructure
-      libcgicc: convert to the autotools infrastructure
-      libraw1394: convert to the autotools infrastructure
-      libsysfs: convert to the autotools infrastructure
-      libcgi: convert to the autotools infrastructure
-      Remove incorrect 'dummy' example
-      bison: convert to the autotools infrastructure
-      tar: convert to the autotools infrastructure
-      argus: convert to the autotools infrastructure
-      ipkg: remove useless configure options
-      findutils: convert to the autotools infrastructure
-      madplay: convert to the autotools infrastructure
-      aumix: convert to the autotools infrastructure
-      libmad: convert to the autotools infrastructure
-      libid3tag: convert to the autotools infrastructure
-
- package/argus/argus.mk                             |   64 ++------------
- package/bison/bison.mk                             |   69 +--------------
- package/dummy/Config.in                            |    7 --
- package/dummy/dummy.mk                             |   93 --------------------
- package/findutils/findutils.mk                     |   75 +----------------
- package/ipkg/ipkg.mk                               |    3 -
- package/libcgi/libcgi.mk                           |   68 +--------------
- package/libcgicc/libcgicc.mk                       |   64 +------------
- package/libosip2/libosip2.mk                       |   83 ++----------------
- package/libraw1394/libraw1394.mk                   |   64 +-------------
- package/libsysfs/libsysfs.mk                       |   59 +------------
- .../aumix-2.8-fix-incorrect-makefile-am.patch      |   29 ++++++
- package/multimedia/aumix/aumix.mk                  |   60 ++-----------
- package/multimedia/libid3tag/libid3tag.mk          |   62 +------------
- package/multimedia/libmad/libmad.mk                |   77 ++--------------
- package/multimedia/madplay/madplay.mk              |   64 +------------
- package/patch/patch.mk                             |   69 +--------------
- package/setserial/setserial.mk                     |   73 ++--------------
- package/smartmontools/smartmontools.mk             |   69 +--------------
- package/tar/tar.mk                                 |   82 +----------------
- package/udpcast/udpcast.mk                         |   93 +++-----------------
- package/vtun/vtun.mk                               |   76 +---------------
- package/x11vnc/x11vnc.mk                           |    7 +-
- 23 files changed, 127 insertions(+), 1283 deletions(-)
- delete mode 100644 package/dummy/Config.in
- delete mode 100644 package/dummy/dummy.mk
- create mode 100644 package/multimedia/aumix/aumix-2.8-fix-incorrect-makefile-am.patch
-
-Thanks,
+diff --git a/package/vtun/vtun.mk b/package/vtun/vtun.mk
+index 15eba01..04df75b 100644
+--- a/package/vtun/vtun.mk
++++ b/package/vtun/vtun.mk
+@@ -6,81 +6,15 @@
+ # to enable that within busybox
+ #
+ #############################################################
+-#Old version 2.6
+ VTUN_VERSION:=3.0.2
+ VTUN_SOURCE:=vtun-$(VTUN_VERSION).tar.gz
+ VTUN_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/vtun/
+-VTUN_DIR:=$(BUILD_DIR)/vtun-$(VTUN_VERSION)
+-VTUN_CAT:=$(ZCAT)
+-VTUN_BINARY:=vtund
+-VTUN_TARGET_BINARY:=usr/sbin/vtund
++VTUN_INSTALL_TARGET_OPT=DESTDIR=$(TARGET_DIR) install
++VTUN_DEPENDENCIES = zlib lzo openssl
+ 
+-$(DL_DIR)/$(VTUN_SOURCE):
+-	 $(call DOWNLOAD,$(VTUN_SITE),$(VTUN_SOURCE))
+-
+-vtun-source: $(DL_DIR)/$(VTUN_SOURCE)
+-
+-$(VTUN_DIR)/.unpacked: $(DL_DIR)/$(VTUN_SOURCE)
+-	$(VTUN_CAT) $(DL_DIR)/$(VTUN_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	touch $@
+-
+-$(VTUN_DIR)/.patched: $(VTUN_DIR)/.unpacked
+-	toolchain/patch-kernel.sh $(VTUN_DIR) package/vtun/ vtun-$(VTUN_VERSION)\*.patch
+-	touch $@
+-
+-
+-
+-$(VTUN_DIR)/.configured: $(VTUN_DIR)/.patched
+-	(cd $(VTUN_DIR); rm -rf config.cache; \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		$(TARGET_CONFIGURE_ARGS) \
+-		./configure $(QUIET) \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		--prefix=/usr \
+-		--exec-prefix=/usr \
+-		--bindir=/usr/bin \
+-		--sbindir=/usr/sbin \
+-		--libdir=/lib \
+-		--libexecdir=/usr/lib \
+-		--sysconfdir=/etc \
+-		--datadir=/usr/share \
+-		--localstatedir=/var \
+-		--mandir=/usr/man \
+-		--infodir=/usr/info \
++VTUN_CONF_OPT = \
+ 		--with-ssl-headers=$(STAGING_DIR)/usr/include/openssl \
+ 		--with-lzo-headers=$(STAGING_DIR)/usr/include/lzo \
+-		--with-lzo-lib=$(STAGING_DIR)/usr/lib \
+-	)
+-	touch $(VTUN_DIR)/.configured
+-
+-$(VTUN_DIR)/$(VTUN_BINARY): $(VTUN_DIR)/.configured
+-	$(MAKE) -C $(VTUN_DIR)
+-
+-$(TARGET_DIR)/$(VTUN_TARGET_BINARY): $(VTUN_DIR)/$(VTUN_BINARY)
+-	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(VTUN_DIR) install
+-	rm -rf $(TARGET_DIR)/share/locale $(TARGET_DIR)/usr/info \
+-		$(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc
+-
+-vtun: zlib lzo openssl $(TARGET_DIR)/$(VTUN_TARGET_BINARY)
++		--with-lzo-lib=$(STAGING_DIR)/usr/lib
+ 
+-vtun-unpacked: $(VTUN_DIR)/.unpacked
+-
+-vtun-patched: $(VTUN_DIR)/.patched
+-
+-vtun-clean:
+-	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(VTUN_DIR) uninstall
+-	-$(MAKE) -C $(VTUN_DIR) clean
+-
+-vtun-dirclean:
+-	rm -rf $(VTUN_DIR)
+-
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_VTUN),y)
+-TARGETS+=vtun
+-endif
++$(eval $(call AUTOTARGETS,package,vtun))
+\ No newline at end of file
 -- 
-Thomas Petazzoni
+1.6.3.3
