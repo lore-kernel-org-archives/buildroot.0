@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Apr 2010 15:11:22 +0200
-Subject: [Buildroot] [PATCH 10/21] libsysfs: convert to the autotools
+Date: Mon, 12 Apr 2010 15:11:23 +0200
+Subject: [Buildroot] [PATCH 11/21] libcgi: convert to the autotools
 	infrastructure
 In-Reply-To: <cover.1271077873.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1271077873.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <c04476a83fad3f5fb2f119e8471e527667d85d87.1271077873.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <515708c94a7c5ce8eb5bd1432f1fc00c4fcb3a25.1271077873.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,35 +13,34 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libsysfs/libsysfs.mk |   59 +----------------------------------------
- 1 files changed, 2 insertions(+), 57 deletions(-)
+ package/libcgi/libcgi.mk |   68 ++-------------------------------------------
+ 1 files changed, 3 insertions(+), 65 deletions(-)
 
-diff --git a/package/libsysfs/libsysfs.mk b/package/libsysfs/libsysfs.mk
-index a590151..8bf9ca5 100644
---- a/package/libsysfs/libsysfs.mk
-+++ b/package/libsysfs/libsysfs.mk
-@@ -22,63 +22,8 @@
- # USA
+diff --git a/package/libcgi/libcgi.mk b/package/libcgi/libcgi.mk
+index 23c5fdd..cd23b0c 100644
+--- a/package/libcgi/libcgi.mk
++++ b/package/libcgi/libcgi.mk
+@@ -6,69 +6,7 @@
+ LIBCGI_VERSION:=1.0
+ LIBCGI_SOURCE:=libcgi-$(LIBCGI_VERSION).tar.gz
+ LIBCGI_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/libcgi
+-LIBCGI_DIR:=$(BUILD_DIR)/libcgi-$(LIBCGI_VERSION)
+-LIBCGI_LIBRARY:=src/libcgi.so
+-LIBCGI_DESTDIR:=usr/lib
+-LIBCGI_TARGET_LIBRARY=$(LIBCGI_DESTDIR)/libcgi.so
++LIBCGI_INSTALL_STAGING=YES
++LIBCGI_INSTALL_TARGET_OPT=DESTDIR=$(TARGET_DIR) install
  
- LIBSYSFS_VERSION:=2.1.0
--LIBSYSFS_DIR:=$(BUILD_DIR)/sysfsutils-$(LIBSYSFS_VERSION)
- LIBSYSFS_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/linux-diag
- LIBSYSFS_SOURCE:=sysfsutils-$(LIBSYSFS_VERSION).tar.gz
--LIBSYSFS_CAT:=$(ZCAT)
-+LIBSYSFS_INSTALL_STAGING=YES
- 
--$(DL_DIR)/$(LIBSYSFS_SOURCE):
--	 $(call DOWNLOAD,$(LIBSYSFS_SITE),$(LIBSYSFS_SOURCE))
+-$(DL_DIR)/$(LIBCGI_SOURCE):
+-	$(call DOWNLOAD,$(LIBCGI_SITE),$(LIBCGI_SOURCE))
 -
--libsysfs-source: $(DL_DIR)/$(LIBSYSFS_SOURCE)
+-$(LIBCGI_DIR)/.source: $(DL_DIR)/$(LIBCGI_SOURCE)
+-	$(ZCAT) $(DL_DIR)/$(LIBCGI_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(LIBCGI_DIR) package/libcgi/ libcgi\*.patch
+-	touch $(LIBCGI_DIR)/.source
 -
--$(LIBSYSFS_DIR)/.unpacked: $(DL_DIR)/$(LIBSYSFS_SOURCE)
--	$(LIBSYSFS_CAT) $(DL_DIR)/$(LIBSYSFS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	$(CONFIG_UPDATE) $(@D)
--	touch $@
--
--$(LIBSYSFS_DIR)/.configured: $(LIBSYSFS_DIR)/.unpacked
--	(cd $(LIBSYSFS_DIR); rm -rf config.cache; \
+-$(LIBCGI_DIR)/.configured: $(LIBCGI_DIR)/.source
+-	(cd $(LIBCGI_DIR); rm -f config.cache; \
 -		$(TARGET_CONFIGURE_OPTS) \
 -		$(TARGET_CONFIGURE_ARGS) \
 -		./configure $(QUIET) \
@@ -49,43 +48,51 @@ index a590151..8bf9ca5 100644
 -		--host=$(GNU_TARGET_NAME) \
 -		--build=$(GNU_HOST_NAME) \
 -		--prefix=/usr \
+-		--exec-prefix=/usr \
+-		--bindir=/usr/bin \
+-		--sbindir=/usr/sbin \
+-		--libdir=/lib \
+-		--libexecdir=/$(LIBCGI_DESTDIR) \
 -		--sysconfdir=/etc \
+-		--datadir=/usr/share \
+-		--localstatedir=/var \
+-		--includedir=/include \
+-		--mandir=/usr/man \
+-		--infodir=/usr/info \
 -	)
--	touch $@
+-	touch $(LIBCGI_DIR)/.configured
 -
--$(LIBSYSFS_DIR)/.compiled: $(LIBSYSFS_DIR)/.configured
--	$(MAKE) -C $(LIBSYSFS_DIR)
--	touch $@
+-$(LIBCGI_DIR)/$(LIBCGI_LIBRARY): $(LIBCGI_DIR)/.configured
+-	$(MAKE) CC=$(TARGET_CC) -C $(LIBCGI_DIR)
 -
--$(STAGING_DIR)/usr/lib/libsysfs.so: $(LIBSYSFS_DIR)/.compiled
--	$(MAKE) -C $(LIBSYSFS_DIR) DESTDIR=$(STAGING_DIR) install
--	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" \
--		$(STAGING_DIR)/usr/lib/libsysfs.la
+-$(STAGING_DIR)/$(LIBCGI_TARGET_LIBRARY): $(LIBCGI_DIR)/$(LIBCGI_LIBRARY)
+-	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(LIBCGI_DIR) install
 -	touch -c $@
 -
--$(TARGET_DIR)/usr/lib/libsysfs.so: $(STAGING_DIR)/usr/lib/libsysfs.so
--	cp -dpf $(STAGING_DIR)/usr/lib/libsysfs.so* $(TARGET_DIR)/usr/lib/
--	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libsysfs.so
+-$(TARGET_DIR)/$(LIBCGI_TARGET_LIBRARY): $(STAGING_DIR)/$(LIBCGI_TARGET_LIBRARY)
+-	cp -dpf $<* $(TARGET_DIR)/$(LIBCGI_DESTDIR)
 -
--libsysfs: $(TARGET_DIR)/usr/lib/libsysfs.so
+-libcgi: $(TARGET_DIR)/$(LIBCGI_TARGET_LIBRARY)
 -
--libsysfs-clean:
--	-$(MAKE) -C $(LIBSYSFS_DIR) clean
--	-$(MAKE) -C $(LIBSYSFS_DIR) DESTDIR=$(STAGING_DIR) uninstall
--	rm -f $(TARGET_DIR)/usr/lib/libsysfs.so*
+-libcgi-source: $(DL_DIR)/$(LIBCGI_SOURCE)
 -
--libsysfs-dirclean:
--	rm -rf $(LIBSYSFS_DIR)
+-libcgi-clean:
+-	rm -f $(TARGET_DIR)/$(LIBCGI_TARGET_LIBRARY)*
+-	-$(MAKE) -C $(LIBCGI_DIR) clean
 -
+-libcgi-dirclean:
+-	rm -rf $(LIBCGI_DIR)
+-
+-.PHONY: libcgi
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_LIBSYSFS),y)
--TARGETS+=libsysfs
+-ifeq ($(BR2_PACKAGE_LIBCGI),y)
+-TARGETS+=libcgi
 -endif
-+$(eval $(call AUTOTARGETS,package,libsysfs))
-\ No newline at end of file
++$(eval $(call AUTOTARGETS,package,libcgi))
+\ No newline@end of file
 -- 
 1.6.3.3
