@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Apr 2010 15:11:25 +0200
-Subject: [Buildroot] [PATCH 13/21] bison: convert to the autotools
+Date: Mon, 12 Apr 2010 15:11:26 +0200
+Subject: [Buildroot] [PATCH 14/21] tar: convert to the autotools
 	infrastructure
 In-Reply-To: <cover.1271077873.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1271077873.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <5d40ecba81c9bf762e669c6e0ec8bedac75b2833.1271077873.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <f79e223cfaf7e833c44e5862682535e21068a19b.1271077873.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,41 +13,46 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/bison/bison.mk |   69 +++--------------------------------------------
- 1 files changed, 5 insertions(+), 64 deletions(-)
+ package/tar/tar.mk |   82 ++-------------------------------------------------
+ 1 files changed, 4 insertions(+), 78 deletions(-)
 
-diff --git a/package/bison/bison.mk b/package/bison/bison.mk
-index f29259f..9e28e85 100644
---- a/package/bison/bison.mk
-+++ b/package/bison/bison.mk
-@@ -6,70 +6,11 @@
- BISON_VERSION:=2.3
- BISON_SOURCE:=bison-$(BISON_VERSION).tar.bz2
- BISON_SITE:=$(BR2_GNU_MIRROR)/bison
--BISON_DIR:=$(BUILD_DIR)/bison-$(BISON_VERSION)
--BISON_CAT:=$(BZCAT)
--BISON_BINARY:=src/bison
--BISON_TARGET_BINARY:=usr/bin/bison
+diff --git a/package/tar/tar.mk b/package/tar/tar.mk
+index 32189b5..9a362d3 100644
+--- a/package/tar/tar.mk
++++ b/package/tar/tar.mk
+@@ -3,82 +3,8 @@
+ # tar
+ #
+ #############################################################
+-GNUTAR_VERSION:=1.21
+-GNUTAR_SOURCE:=tar-$(GNUTAR_VERSION).tar.bz2
+-GNUTAR_SITE:=$(BR2_GNU_MIRROR)/tar/
+-GNUTAR_DIR:=$(BUILD_DIR)/tar-$(GNUTAR_VERSION)
+-GNUTAR_CAT:=$(BZCAT)
+-GNUTAR_BINARY:=src/tar
+-GNUTAR_TARGET_BINARY:=bin/tar
++TAR_VERSION:=1.21
++TAR_SOURCE:=tar-$(TAR_VERSION).tar.bz2
++TAR_SITE:=$(BR2_GNU_MIRROR)/tar/
  
--$(DL_DIR)/$(BISON_SOURCE):
--	 $(call DOWNLOAD,$(BISON_SITE),$(BISON_SOURCE))
-+define BISON_DISABLE_EXAMPLES
-+	echo 'all install:' > $(@D)/examples/Makefile
-+endef
- 
--bison-source: $(DL_DIR)/$(BISON_SOURCE)
-+BISON_POST_CONFIGURE_HOOKS += BISON_DISABLE_EXAMPLES
- 
--$(BISON_DIR)/.unpacked: $(DL_DIR)/$(BISON_SOURCE)
--	$(BISON_CAT) $(DL_DIR)/$(BISON_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	$(CONFIG_UPDATE) $(BISON_DIR)/build-aux
+-$(DL_DIR)/$(GNUTAR_SOURCE):
+-	 $(call DOWNLOAD,$(GNUTAR_SITE),$(GNUTAR_SOURCE))
+-
+-tar-source: $(DL_DIR)/$(GNUTAR_SOURCE)
+-
+-$(GNUTAR_DIR)/.unpacked: $(DL_DIR)/$(GNUTAR_SOURCE)
+-	$(GNUTAR_CAT) $(DL_DIR)/$(GNUTAR_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(GNUTAR_DIR) package/tar/ tar\*.patch
+-	$(CONFIG_UPDATE) $(GNUTAR_DIR)
+-	$(CONFIG_UPDATE) $(GNUTAR_DIR)/build-aux
 -	touch $@
 -
--$(BISON_DIR)/.configured: $(BISON_DIR)/.unpacked
--	(cd $(BISON_DIR); rm -rf config.cache; \
+-$(GNUTAR_DIR)/.configured: $(GNUTAR_DIR)/.unpacked
+-	(cd $(GNUTAR_DIR); rm -rf config.cache; \
 -		$(TARGET_CONFIGURE_OPTS) \
 -		$(TARGET_CONFIGURE_ARGS) \
--		gt_cv_func_gnugettext2_libintl=yes \
+-		ac_cv_func_chown_works=yes \
+-		gl_cv_func_chown_follows_symlink=yes \
 -		./configure $(QUIET) \
 -		--target=$(GNU_TARGET_NAME) \
 -		--host=$(GNU_TARGET_NAME) \
@@ -61,40 +66,47 @@ index f29259f..9e28e85 100644
 -		--sysconfdir=/etc \
 -		--datadir=/usr/share \
 -		--localstatedir=/var \
--		--mandir=/usr/share/man \
--		--infodir=/usr/share/info \
--		--includedir=/usr/include \
+-		--mandir=/usr/man \
+-		--infodir=/usr/info \
 -		$(DISABLE_NLS) \
+-		$(DISABLE_LARGEFILE) \
 -	)
--	echo 'all install:' > $(BISON_DIR)/examples/Makefile
 -	touch $@
 -
--$(BISON_DIR)/$(BISON_BINARY): $(BISON_DIR)/.configured
--	$(MAKE) CC=$(TARGET_CC) -C $(BISON_DIR)
+-$(GNUTAR_DIR)/$(GNUTAR_BINARY): $(GNUTAR_DIR)/.configured
+-	$(MAKE) -C $(GNUTAR_DIR)
 -
--$(TARGET_DIR)/$(BISON_TARGET_BINARY): $(BISON_DIR)/$(BISON_BINARY)
--	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(BISON_DIR) install
--	rm -rf $(TARGET_DIR)/share/locale
--	cp -a package/bison/yacc $(TARGET_DIR)/usr/bin/yacc
+-# This stuff is needed to work around GNU make deficiencies
+-tar-target_binary: $(GNUTAR_DIR)/$(GNUTAR_BINARY)
+-	@if [ -L $(TARGET_DIR)/$(GNUTAR_TARGET_BINARY) ]; then \
+-		rm -f $(TARGET_DIR)/$(GNUTAR_TARGET_BINARY); \
+-	fi
+-	@if [ ! -f $(GNUTAR_DIR)/$(GNUTAR_BINARY) -o $(TARGET_DIR)/$(GNUTAR_TARGET_BINARY) \
+-	-ot $(GNUTAR_DIR)/$(GNUTAR_BINARY) ]; then \
+-		set -x; \
+-		rm -f $(TARGET_DIR)/$(GNUTAR_TARGET_BINARY); \
+-		cp -a $(GNUTAR_DIR)/$(GNUTAR_BINARY) \
+-			$(TARGET_DIR)/$(GNUTAR_TARGET_BINARY); \
+-	fi
 -
--bison: $(TARGET_DIR)/$(BISON_TARGET_BINARY)
+-tar: tar-target_binary
 -
--bison-clean:
--	-$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(BISON_DIR) uninstall
--	rm -f $(TARGET_DIR)/$(BISON_TARGET_BINARY)
--	-$(MAKE) -C $(BISON_DIR) clean
+-tar-clean:
+-	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(GNUTAR_DIR) uninstall
+-	-$(MAKE) -C $(GNUTAR_DIR) clean
 -
--bison-dirclean:
--	rm -rf $(BISON_DIR)
+-tar-dirclean:
+-	rm -rf $(GNUTAR_DIR)
 -
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_BISON),y)
--TARGETS+=bison
+-ifeq ($(BR2_PACKAGE_TAR),y)
+-TARGETS+=tar
 -endif
-+$(eval $(call AUTOTARGETS,package,bison))
++$(eval $(call AUTOTARGETS,package,tar))
+\ No newline at end of file
 -- 
 1.6.3.3
