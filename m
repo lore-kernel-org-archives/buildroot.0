@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Apr 2010 15:11:29 +0200
-Subject: [Buildroot] [PATCH 17/21] findutils: convert to the autotools
+Date: Mon, 12 Apr 2010 15:11:31 +0200
+Subject: [Buildroot] [PATCH 19/21] aumix: convert to the autotools
 	infrastructure
 In-Reply-To: <cover.1271077873.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1271077873.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <74385f57801a5de56c8610d586a8ae031d4e5be5.1271077873.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <49c103c62577f3498419c1b53a27e9d0ccbc1ad7.1271077873.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,93 +13,117 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/findutils/findutils.mk |   75 +---------------------------------------
- 1 files changed, 1 insertions(+), 74 deletions(-)
+ .../aumix-2.8-fix-incorrect-makefile-am.patch      |   29 ++++++++++
+ package/multimedia/aumix/aumix.mk                  |   60 +++-----------------
+ 2 files changed, 38 insertions(+), 51 deletions(-)
+ create mode 100644 package/multimedia/aumix/aumix-2.8-fix-incorrect-makefile-am.patch
 
-diff --git a/package/findutils/findutils.mk b/package/findutils/findutils.mk
-index 96e2682..a1893ad 100644
---- a/package/findutils/findutils.mk
-+++ b/package/findutils/findutils.mk
-@@ -5,79 +5,6 @@
- #############################################################
- FINDUTILS_VERSION:=4.2.31
- FINDUTILS_SOURCE:=findutils-$(FINDUTILS_VERSION).tar.gz
--#FINDUTILS_SITE:=ftp://alpha.gnu.org/gnu/findutils
- FINDUTILS_SITE:=$(BR2_GNU_MIRROR)/findutils/
--FINDUTILS_CAT:=$(ZCAT)
--FINDUTILS_DIR:=$(BUILD_DIR)/findutils-$(FINDUTILS_VERSION)
--FINDUTILS_BINARY:=find/find
--FINDUTILS_TARGET_BINARY:=usr/bin/find
+diff --git a/package/multimedia/aumix/aumix-2.8-fix-incorrect-makefile-am.patch b/package/multimedia/aumix/aumix-2.8-fix-incorrect-makefile-am.patch
+new file mode 100644
+index 0000000..8d55218
+--- /dev/null
++++ b/package/multimedia/aumix/aumix-2.8-fix-incorrect-makefile-am.patch
+@@ -0,0 +1,29 @@
++Aumix's src/Makefile.am incorrect adds @includedir@ to the list of
++include paths and @libdir@ to the list of libraries paths. This is
++incorrect, as @includedir@ and @libdir@ are respectively /usr/include
++and /usr/lib, even in cross-compilation mode.
++
++At the same time, use AM_CFLAGS instead of CFLAGS, as is done on the
++similar patch found in OpenEmbedded.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ src/Makefile.am |    5 ++---
++ 1 file changed, 2 insertions(+), 3 deletions(-)
++
++Index: aumix-2.8/src/Makefile.am
++===================================================================
++--- aumix-2.8.orig/src/Makefile.am
+++++ aumix-2.8/src/Makefile.am
++@@ -7,9 +7,8 @@
++ 		mouse.c common.h curses.h gpm-xterm.h gtk.h interactive.h  \
++ 		mouse.h play.xpm record.xpm
++ localedir	= $(datadir)/locale
++-INCLUDES	= -I../intl -DLOCALEDIR=\"$(localedir)\" -I at includedir@
++-CFLAGS		= @CFLAGS@ @GLIB_CFLAGS@ @GTK_CFLAGS@
++-LDADD		= -L at libdir@
+++INCLUDES	= -I../intl -DLOCALEDIR=\"$(localedir)\"
+++AM_CFLAGS	= @CFLAGS@ @GLIB_CFLAGS@ @GTK_CFLAGS@
++ LIBS		= @LIBS@ @GTK_LIBS@ @INTLLIBS@
++ DEFS		= @DEFS@
++ 
+diff --git a/package/multimedia/aumix/aumix.mk b/package/multimedia/aumix/aumix.mk
+index 64fadc0..f835bd9 100644
+--- a/package/multimedia/aumix/aumix.mk
++++ b/package/multimedia/aumix/aumix.mk
+@@ -7,57 +7,15 @@
+ AUMIX_VERSION=2.8
+ AUMIX_SOURCE=aumix-$(AUMIX_VERSION).tar.bz2
+ AUMIX_SITE=http://jpj.net/~trevor/aumix
+-AUMIX_DIR=$(BUILD_DIR)/aumix-$(AUMIX_VERSION)
+-AUMIX_CAT:=$(BZCAT)
++AUMIX_AUTORECONF=YES
  
--$(DL_DIR)/$(FINDUTILS_SOURCE):
--	 $(call DOWNLOAD,$(FINDUTILS_SITE),$(FINDUTILS_SOURCE))
--
--findutils-source: $(DL_DIR)/$(FINDUTILS_SOURCE)
--
--$(FINDUTILS_DIR)/.unpacked: $(DL_DIR)/$(FINDUTILS_SOURCE)
--	$(FINDUTILS_CAT) $(DL_DIR)/$(FINDUTILS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	$(CONFIG_UPDATE) $(FINDUTILS_DIR)
+-$(DL_DIR)/$(AUMIX_SOURCE):
+-	$(call DOWNLOAD,$(AUMIX_SITE),$(AUMIX_SOURCE))
++AUMIX_CONF_OPT = \
++	--without-gtk \
++	--without-gtk1 \
++	--without-alsa \
++	--without-gpm \
++	--without-sysmouse
+ 
+-$(AUMIX_DIR)/.unpacked: $(DL_DIR)/$(AUMIX_SOURCE)
+-	$(AUMIX_CAT) $(DL_DIR)/$(AUMIX_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
 -	touch $@
--
--$(FINDUTILS_DIR)/.configured: $(FINDUTILS_DIR)/.unpacked
--	(cd $(FINDUTILS_DIR); rm -rf config.cache; \
++AUMIX_DEPENDENCIES = ncurses
+ 
+-$(AUMIX_DIR)/.configured: $(AUMIX_DIR)/.unpacked
+-	(cd $(AUMIX_DIR); rm -rf config.cache; \
 -		$(TARGET_CONFIGURE_OPTS) \
 -		$(TARGET_CONFIGURE_ARGS) \
--		ac_cv_func_setvbuf_reversed=no \
 -		./configure $(QUIET) \
 -		--target=$(GNU_TARGET_NAME) \
 -		--host=$(GNU_TARGET_NAME) \
 -		--build=$(GNU_HOST_NAME) \
 -		--prefix=/usr \
--		--exec-prefix=/usr \
--		--bindir=/usr/bin \
--		--sbindir=/usr/sbin \
--		--libdir=/lib \
--		--libexecdir=/usr/lib/locate \
 -		--sysconfdir=/etc \
--		--datadir=/usr/share \
--		--localstatedir=/var/lib \
--		--mandir=/usr/share/man \
--		--infodir=/usr/share/info \
+-		--libdir=$(STAGING_DIR)/lib \
+-		--includedir=$(STAGING_DIR)/usr/include \
+-		--without-gtk \
+-		--without-gtk1 \
+-		--without-alsa \
+-		--without-gpm \
+-		--without-sysmouse \
 -		$(DISABLE_NLS) \
--		$(DISABLE_LARGEFILE) \
 -	)
 -	touch $@
 -
--$(FINDUTILS_DIR)/$(FINDUTILS_BINARY): $(FINDUTILS_DIR)/.configured
--	$(MAKE) CC=$(TARGET_CC) -C $(FINDUTILS_DIR)
+-$(AUMIX_DIR)/src/aumix: $(AUMIX_DIR)/.configured
+-	$(MAKE) CC=$(TARGET_CC) -C $(AUMIX_DIR)
 -
--# This stuff is needed to work around GNU make deficiencies
--findutils-target_binary: $(FINDUTILS_DIR)/$(FINDUTILS_BINARY)
--	@if [ -L $(TARGET_DIR)/$(FINDUTILS_TARGET_BINARY) ]; then \
--		rm -f $(TARGET_DIR)/$(FINDUTILS_TARGET_BINARY); \
--	fi
--	@if [ ! -f $(FINDUTILS_DIR)/$(FINDUTILS_BINARY) \
--		-o $(TARGET_DIR)/$(FINDUTILS_TARGET_BINARY) \
--		-ot $(FINDUTILS_DIR)/$(FINDUTILS_BINARY) ]; then \
--		set -x; \
--		$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(FINDUTILS_DIR) install-strip; \
--		$(STRIPCMD) $(TARGET_DIR)/usr/lib/locate/* > /dev/null 2>&1; \
--	fi
--	rm -rf $(TARGET_DIR)/share/locale
+-$(TARGET_DIR)/usr/bin/aumix: $(AUMIX_DIR)/src/aumix
+-	$(MAKE) -C $(AUMIX_DIR) DESTDIR=$(TARGET_DIR) install
 -
--findutils: findutils-target_binary
+-aumix: ncurses $(TARGET_DIR)/usr/bin/aumix
 -
--findutils-clean:
--	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(FINDUTILS_DIR) uninstall
--	-$(MAKE) -C $(FINDUTILS_DIR) clean
+-aumix-source: $(DL_DIR)/$(AUMIX_SOURCE)
 -
--findutils-dirclean:
--	rm -rf $(FINDUTILS_DIR)
+-aumix-clean:
+-	-$(MAKE) -C $(AUMIX_DIR) clean
 -
+-aumix-dirclean:
+-	rm -rf $(AUMIX_DIR)
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_FINDUTILS),y)
--TARGETS+=findutils
+-ifeq ($(BR2_PACKAGE_AUMIX),y)
+-TARGETS+=aumix
 -endif
-+$(eval $(call AUTOTARGETS,package,findutils))
++$(eval $(call AUTOTARGETS,package/multimedia,aumix))
+\ No newline at end of file
 -- 
 1.6.3.3
