@@ -1,56 +1,73 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 12 Apr 2010 09:35:31 +0000 (UTC)
-Subject: [Buildroot] [Bug 1399] xfont_font-adobe-100dpi does not build
-In-Reply-To: <bug-1399-163@https.bugs.busybox.net/>
-References: <bug-1399-163@https.bugs.busybox.net/>
-Message-ID: <20100412093531.9FA3B8DCAE@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 12 Apr 2010 15:11:12 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	autotools-conversion
+Message-ID: <cover.1271077873.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1399
+The following changes since commit 04ba0089a672863e333a2de6b19d9b77fd0b26c1:
+  Thomas Petazzoni (1):
+        Get rid of the OPTIMIZE_FOR_CPU variable
 
+are available in the git repository at:
 
+  git://git.busybox.net/~tpetazzoni/git/buildroot autotools-conversion
 
+Thomas Petazzoni (21):
+      vtun: convert to the autotools infrastructure
+      x11vnc: cleanup useless config options
+      udpcast: convert to the autotools infrastructure
+      setserial: convert to the autotools infrastructure
+      smartmontools: convert to the autotools infrastructure
+      patch: convert to the autotools infrastructure and bump version
+      libosip2: convert to the autotools infrastructure
+      libcgicc: convert to the autotools infrastructure
+      libraw1394: convert to the autotools infrastructure
+      libsysfs: convert to the autotools infrastructure
+      libcgi: convert to the autotools infrastructure
+      Remove incorrect 'dummy' example
+      bison: convert to the autotools infrastructure
+      tar: convert to the autotools infrastructure
+      argus: convert to the autotools infrastructure
+      ipkg: remove useless configure options
+      findutils: convert to the autotools infrastructure
+      madplay: convert to the autotools infrastructure
+      aumix: convert to the autotools infrastructure
+      libmad: convert to the autotools infrastructure
+      libid3tag: convert to the autotools infrastructure
 
+ package/argus/argus.mk                             |   64 ++------------
+ package/bison/bison.mk                             |   69 +--------------
+ package/dummy/Config.in                            |    7 --
+ package/dummy/dummy.mk                             |   93 --------------------
+ package/findutils/findutils.mk                     |   75 +----------------
+ package/ipkg/ipkg.mk                               |    3 -
+ package/libcgi/libcgi.mk                           |   68 +--------------
+ package/libcgicc/libcgicc.mk                       |   64 +------------
+ package/libosip2/libosip2.mk                       |   83 ++----------------
+ package/libraw1394/libraw1394.mk                   |   64 +-------------
+ package/libsysfs/libsysfs.mk                       |   59 +------------
+ .../aumix-2.8-fix-incorrect-makefile-am.patch      |   29 ++++++
+ package/multimedia/aumix/aumix.mk                  |   60 ++-----------
+ package/multimedia/libid3tag/libid3tag.mk          |   62 +------------
+ package/multimedia/libmad/libmad.mk                |   77 ++--------------
+ package/multimedia/madplay/madplay.mk              |   64 +------------
+ package/patch/patch.mk                             |   69 +--------------
+ package/setserial/setserial.mk                     |   73 ++--------------
+ package/smartmontools/smartmontools.mk             |   69 +--------------
+ package/tar/tar.mk                                 |   82 +----------------
+ package/udpcast/udpcast.mk                         |   93 +++-----------------
+ package/vtun/vtun.mk                               |   76 +---------------
+ package/x11vnc/x11vnc.mk                           |    7 +-
+ 23 files changed, 127 insertions(+), 1283 deletions(-)
+ delete mode 100644 package/dummy/Config.in
+ delete mode 100644 package/dummy/dummy.mk
+ create mode 100644 package/multimedia/aumix/aumix-2.8-fix-incorrect-makefile-am.patch
 
---- Comment #6 from Paul Jones <paul.jones@iwtech.com.au>  2010-04-12 09:35:31 UTC ---
-I just tried to manually build the package without any cross compiling
-make distclean
-./configure
-
-and this is the output I get:
-checking for fc-cache... /usr/bin/fc-cache
-checking for mkfontdir... /usr/bin/mkfontdir
-checking for bdftopcf... /usr/bin/bdftopcf
-checking font compression method... gzip
-checking for gzip... /bin/gzip
-checking for ucs2any... no
-checking for MAPS... configure: error: Package requirements (fontutil) were not
-met:
-
-No package 'fontutil' found
-
-Consider adjusting the PKG_CONFIG_PATH environment variable if you
-installed software in a non-standard prefix.
-
-Alternatively, you may set the environment variables MAPS_CFLAGS
-and MAPS_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details.
-
-
-I am sure I tried installing font-utils on the host which I remember didn't
-work so I uninstalled it.
-I just reinstalled fontutils and now this builds ok so I assume this package
-isn't finding the buildroot fontutils.
-
-I checked for bdftopcf on the host and it is there even without fontutils
-installed.
-
-
+Thanks,
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni
