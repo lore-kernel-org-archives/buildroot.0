@@ -1,74 +1,124 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Apr 2010 15:31:36 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	br2-recent-removal
-Message-ID: <cover.1271078939.git.thomas.petazzoni@free-electrons.com>
+Date: Mon, 12 Apr 2010 15:31:37 +0200
+Subject: [Buildroot] [PATCH 1/3] Get rid of all usages of BR2_RECENT
+In-Reply-To: <cover.1271078939.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1271078939.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <02bc426214a0705293f9c86fcd5fc47387d4f503.1271078939.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Since BR2_RECENT was enabled by default, we do not want entries marked
+BR2_RECENT (and thus appearing by default in Buildroot) to disappear.
 
-Here is a new try for the BR2_RECENT configuration option
-removal. Instead of converting all entries marked BR2_RECENT into
-BR2_DEPRECATED entries (which would make them disappear in the default
-Buildroot configuration), we just get rid of BR2_RECENT *and*
-BR2_DEPRECATED on these entries. Therefore, they still appear in the
-default Buildroot configuration, and we can then later decide, on a
-per-entry basis, whether they should be marked BR2_DEPRECATED or not.
+Therefore, all the entries marked BR2_RECENT are converted as
+non-deprecated. We can later decide, on a per-entry basis, to add
+BR2_DEPRECATED to some of them. But at least, this commit doesn't
+change the default current behaviour of Buildroot.
 
-Thomas
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/busybox/Config.in          |    2 --
+ target/u-boot/Config.in            |    2 --
+ toolchain/binutils/Config.in       |    1 -
+ toolchain/gcc/Config.in            |    2 --
+ toolchain/kernel-headers/Config.in |    1 -
+ toolchain/uClibc/Config.in         |    1 -
+ 6 files changed, 0 insertions(+), 9 deletions(-)
 
-The following changes since commit 04ba0089a672863e333a2de6b19d9b77fd0b26c1:
-  Thomas Petazzoni (1):
-        Get rid of the OPTIMIZE_FOR_CPU variable
-
-are available in the git repository at:
-
-  git://git.busybox.net/~tpetazzoni/git/buildroot br2-recent-removal
-
-Thomas Petazzoni (3):
-      Get rid of all usages of BR2_RECENT
-      Remove the BR2_RECENT option
-      Update defconfigs after BR2_RECENT removal
-
- Config.in                                 |    6 ------
- configs/arm_toolchain_defconfig           |    1 -
- configs/at91rm9200df_defconfig            |    1 -
- configs/at91rm9200df_ext_bare_defconfig   |    1 -
- configs/at91rm9200df_ext_defconfig        |    1 -
- configs/at91sam9260dfc_defconfig          |    1 -
- configs/at91sam9260dfc_ext_bare_defconfig |    1 -
- configs/at91sam9260dfc_ext_defconfig      |    1 -
- configs/at91sam9261ek_defconfig           |    1 -
- configs/at91sam9261ek_ext_bare_defconfig  |    1 -
- configs/at91sam9261ek_ext_defconfig       |    1 -
- configs/at91sam9263ek_defconfig           |    1 -
- configs/at91sam9263ek_ext_bare_defconfig  |    1 -
- configs/at91sam9263ek_ext_defconfig       |    1 -
- configs/at91sam9g20dfc_defconfig          |    1 -
- configs/at91sam9g20dfc_ext_bare_defconfig |    1 -
- configs/at91sam9g20dfc_ext_defconfig      |    1 -
- configs/atngw100-base_defconfig           |    1 -
- configs/atngw100_defconfig                |    1 -
- configs/atstk1005_defconfig               |    1 -
- configs/atstk100x_defconfig               |    1 -
- configs/i386_defconfig                    |    1 -
- configs/i686_defconfig                    |    1 -
- configs/integrator926_defconfig           |    1 -
- configs/integrator926_huge_defconfig      |    1 -
- configs/kb9202_defconfig                  |    1 -
- configs/v100sc2_defconfig                 |    1 -
- package/busybox/Config.in                 |    2 --
- target/u-boot/Config.in                   |    2 --
- toolchain/binutils/Config.in              |    1 -
- toolchain/gcc/Config.in                   |    2 --
- toolchain/kernel-headers/Config.in        |    1 -
- toolchain/uClibc/Config.in                |    1 -
- 33 files changed, 0 insertions(+), 41 deletions(-)
-
-Thanks,
+diff --git a/package/busybox/Config.in b/package/busybox/Config.in
+index 7110f0f..68abf16 100644
+--- a/package/busybox/Config.in
++++ b/package/busybox/Config.in
+@@ -23,7 +23,6 @@ choice
+ 
+ 	config BR2_BUSYBOX_VERSION_1_13_X
+ 		bool "BusyBox 1.13.x"
+-		depends on BR2_RECENT
+ 
+ 	config BR2_BUSYBOX_VERSION_1_14_X
+ 		bool "BusyBox 1.14.x"
+@@ -31,7 +30,6 @@ choice
+ 
+ 	config BR2_BUSYBOX_VERSION_1_15_X
+ 		bool "BusyBox 1.15.x"
+-		depends on BR2_DEPRECATED || BR2_RECENT
+ 
+ 	config BR2_BUSYBOX_VERSION_1_16_X
+ 		bool "BusyBox 1.16.x"
+diff --git a/target/u-boot/Config.in b/target/u-boot/Config.in
+index f84d181..ca47e18 100644
+--- a/target/u-boot/Config.in
++++ b/target/u-boot/Config.in
+@@ -22,11 +22,9 @@ config BR2_TARGET_UBOOT_2010_03
+ 
+ config BR2_TARGET_UBOOT_2009_11
+ 	bool "u-boot-2009.11"
+-	depends on BR2_DEPRECATED || BR2_RECENT
+ 
+ config BR2_TARGET_UBOOT_2009_08
+ 	bool "u-boot-2009.08"
+-	depends on BR2_DEPRECATED || BR2_RECENT
+ 
+ config BR2_TARGET_UBOOT_2009_06
+ 	bool "u-boot-2009.06"
+diff --git a/toolchain/binutils/Config.in b/toolchain/binutils/Config.in
+index 003d0ee..165b43e 100644
+--- a/toolchain/binutils/Config.in
++++ b/toolchain/binutils/Config.in
+@@ -34,7 +34,6 @@ choice
+ 
+ 	config BR2_BINUTILS_VERSION_2_20
+ 		depends on !BR2_avr32
+-		depends on BR2_DEPRECATED || BR2_RECENT
+ 		bool "binutils 2.20"
+ 
+ 	config BR2_BINUTILS_VERSION_2_20_1
+diff --git a/toolchain/gcc/Config.in b/toolchain/gcc/Config.in
+index 97d5eb7..73edd38 100644
+--- a/toolchain/gcc/Config.in
++++ b/toolchain/gcc/Config.in
+@@ -35,7 +35,6 @@ choice
+ 
+ 	config BR2_GCC_VERSION_4_2_4
+ 		depends on !BR2_avr32
+-		depends on BR2_RECENT || BR2_DEPRECATED
+ 		bool "gcc 4.2.4"
+ 
+ 	config BR2_GCC_VERSION_4_3_2
+@@ -45,7 +44,6 @@ choice
+ 
+ 	config BR2_GCC_VERSION_4_3_3
+ 		depends on !BR2_avr32
+-		depends on BR2_RECENT || BR2_DEPRECATED
+ 		bool "gcc 4.3.3"
+ 
+ 	config BR2_GCC_VERSION_4_3_4
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 8f7f720..3f2d435 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -38,7 +38,6 @@ choice
+ 
+ 	config BR2_KERNEL_HEADERS_2_6_32
+ 		bool "Linux 2.6.32.x kernel headers"
+-		depends on BR2_DEPRECATED || BR2_RECENT
+ 
+ 	config BR2_KERNEL_HEADERS_2_6_33
+ 		bool "Linux 2.6.33.x kernel headers"
+diff --git a/toolchain/uClibc/Config.in b/toolchain/uClibc/Config.in
+index e254f28..f29ec64 100644
+--- a/toolchain/uClibc/Config.in
++++ b/toolchain/uClibc/Config.in
+@@ -20,7 +20,6 @@ choice
+ 		bool "uClibc 0.9.29"
+ 
+ 	config BR2_UCLIBC_VERSION_0_9_30
+-		depends on BR2_DEPRECATED || BR2_RECENT
+ 		bool "uClibc 0.9.30.x"
+ 
+ 	config BR2_UCLIBC_VERSION_0_9_31
 -- 
-Thomas Petazzoni
+1.6.3.3
