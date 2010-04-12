@@ -1,56 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Apr 2010 15:11:18 +0200
-Subject: [Buildroot] [PATCH 06/21] patch: convert to the autotools
-	infrastructure and bump version
+Date: Mon, 12 Apr 2010 15:11:19 +0200
+Subject: [Buildroot] [PATCH 07/21] libosip2: convert to the autotools
+	infrastructure
 In-Reply-To: <cover.1271077873.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1271077873.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <8af84ff5ffae7288b23715766d91287a8ebd614a.1271077873.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <f11fde0a3532034609f3d68c95857e1cc36ba6f7.1271077873.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bumping the version from 2.5.9 to 2.6 allows to avoid adding a patch
-(merged upstream) to fix patch's Makefile install target.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/patch/patch.mk |   69 +++--------------------------------------------
- 1 files changed, 5 insertions(+), 64 deletions(-)
+ package/libosip2/libosip2.mk |   83 +++---------------------------------------
+ 1 files changed, 6 insertions(+), 77 deletions(-)
 
-diff --git a/package/patch/patch.mk b/package/patch/patch.mk
-index 2c1e394..3e20b6b 100644
---- a/package/patch/patch.mk
-+++ b/package/patch/patch.mk
-@@ -3,68 +3,9 @@
- # patch
+diff --git a/package/libosip2/libosip2.mk b/package/libosip2/libosip2.mk
+index 04a75c5..59cabac 100644
+--- a/package/libosip2/libosip2.mk
++++ b/package/libosip2/libosip2.mk
+@@ -3,85 +3,14 @@
+ # libosip2
  #
  #############################################################
--GNUPATCH_VERSION:=2.5.9
--GNUPATCH_SOURCE:=patch_$(GNUPATCH_VERSION).orig.tar.gz
--GNUPATCH_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/p/patch
--GNUPATCH_CAT:=$(ZCAT)
--GNUPATCH_DIR:=$(BUILD_DIR)/patch-$(GNUPATCH_VERSION)
--GNUPATCH_BINARY:=patch
--GNUPATCH_TARGET_BINARY:=usr/bin/patch
-+PATCH_VERSION:=2.6
-+PATCH_SOURCE:=patch_$(PATCH_VERSION).orig.tar.gz
-+PATCH_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/p/patch
-+PATCH_INSTALL_TARGET_OPT=DESTDIR=$(TARGET_DIR) install
- 
--$(DL_DIR)/$(GNUPATCH_SOURCE):
--	 $(call DOWNLOAD,$(GNUPATCH_SITE),$(GNUPATCH_SOURCE))
 -
--patch-source: $(DL_DIR)/$(GNUPATCH_SOURCE)
+ LIBOSIP2_VERSION=3.1.0
+ LIBOSIP2_SOURCE=libosip2-$(LIBOSIP2_VERSION).tar.gz
+ LIBOSIP2_SITE=http://www.antisip.com/download/exosip2
+-LIBOSIP2_DIR=$(BUILD_DIR)/libosip2-$(LIBOSIP2_VERSION)
+-LIBOSIP2_CAT:=$(ZCAT)
 -
--$(GNUPATCH_DIR)/.unpacked: $(DL_DIR)/$(GNUPATCH_SOURCE)
--	$(GNUPATCH_CAT) $(DL_DIR)/$(GNUPATCH_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	$(CONFIG_UPDATE) $(GNUPATCH_DIR)
--	touch $(GNUPATCH_DIR)/.unpacked
+-$(DL_DIR)/$(LIBOSIP2_SOURCE):
+-	$(call DOWNLOAD,$(LIBOSIP2_SITE),$(LIBOSIP2_SOURCE))
 -
--$(GNUPATCH_DIR)/.configured: $(GNUPATCH_DIR)/.unpacked
--	(cd $(GNUPATCH_DIR); rm -rf config.cache; \
+-$(LIBOSIP2_DIR)/.unpacked: $(DL_DIR)/$(LIBOSIP2_SOURCE)
+-	$(LIBOSIP2_CAT) $(DL_DIR)/$(LIBOSIP2_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	$(CONFIG_UPDATE) $(LIBOSIP2_DIR)
+-	touch $(LIBOSIP2_DIR)/.unpacked
+-
+-$(LIBOSIP2_DIR)/.configured: $(LIBOSIP2_DIR)/.unpacked
+-	(cd $(LIBOSIP2_DIR); rm -rf config.cache; \
 -		$(TARGET_CONFIGURE_OPTS) \
 -		$(TARGET_CONFIGURE_ARGS) \
 -		./configure $(QUIET) \
@@ -61,42 +51,67 @@ index 2c1e394..3e20b6b 100644
 -		--exec-prefix=/usr \
 -		--bindir=/usr/bin \
 -		--sbindir=/usr/sbin \
--		--libdir=/lib \
 -		--libexecdir=/usr/lib \
 -		--sysconfdir=/etc \
 -		--datadir=/usr/share \
 -		--localstatedir=/var \
 -		--mandir=/usr/man \
 -		--infodir=/usr/info \
+-		--includedir=/usr/include \
+-		--with-gnu-ld \
+-		--enable-shared \
+-		--enable-static \
 -		$(DISABLE_NLS) \
--		$(DISABLE_LARGEFILE) \
 -	)
--	touch $(GNUPATCH_DIR)/.configured
+-	touch $(LIBOSIP2_DIR)/.configured
 -
--$(GNUPATCH_DIR)/$(GNUPATCH_BINARY): $(GNUPATCH_DIR)/.configured
--	$(MAKE) CC=$(TARGET_CC) -C $(GNUPATCH_DIR)
+-$(LIBOSIP2_DIR)/libosip2.so: $(LIBOSIP2_DIR)/.configured
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(LIBOSIP2_DIR)
 -
--$(TARGET_DIR)/$(GNUPATCH_TARGET_BINARY): $(GNUPATCH_DIR)/$(GNUPATCH_BINARY)
--	rm -f $(TARGET_DIR)/$(GNUPATCH_TARGET_BINARY)
--	cp -a $(GNUPATCH_DIR)/$(GNUPATCH_BINARY) $(TARGET_DIR)/$(GNUPATCH_TARGET_BINARY)
+-$(STAGING_DIR)/usr/lib/libosip2.so: $(LIBOSIP2_DIR)/.configured
+-	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(LIBOSIP2_DIR) install
+-	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libosip2.la
+-	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libosipparser2.la
 -
--patch: $(TARGET_DIR)/$(GNUPATCH_TARGET_BINARY)
+-$(TARGET_DIR)/usr/lib/libosip2.so: $(STAGING_DIR)/usr/lib/libosip2.so
+-	mkdir -p $(TARGET_DIR)/usr/lib
+-	cp -dpf $(STAGING_DIR)/usr/lib/libosip2.so* $(TARGET_DIR)/usr/lib/
+-	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libosip2.so*
 -
--patch-clean:
--	rm -f $(TARGET_DIR)/$(GNUPATCH_TARGET_BINARY)
+-$(TARGET_DIR)/usr/lib/libosipparser2.so: $(STAGING_DIR)/usr/lib/libosip2.so
+-	mkdir -p $(TARGET_DIR)/usr/lib
+-	cp -dpf $(STAGING_DIR)/usr/lib/libosipparser2.so* $(TARGET_DIR)/usr/lib/
+-	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libosipparser2.so*
++LIBOSIP2_INSTALL_STAGING=YES
+ 
+-libosip2: $(TARGET_DIR)/usr/lib/libosip2.so $(TARGET_DIR)/usr/lib/libosipparser2.so
++LIBOSIP2_CONF_OPT = \
++	--with-gnu-ld \
++	--enable-shared \
++	--enable-static
+ 
+-libosip2-source: $(DL_DIR)/$(LIBOSIP2_SOURCE)
 -
--patch-dirclean:
--	rm -rf $(GNUPATCH_DIR)
+-libosip2-clean:
+-	-$(MAKE) -C $(LIBOSIP2_DIR) clean
+-	-rm -f $(STAGING_DIR)/usr/lib/libosip2.*
+-	-rm -f $(STAGING_DIR)/usr/lib/libosipparser2.*
+-	-rm -f $(TARGET_DIR)/usr/lib/libosip2.*
+-	-rm -f $(TARGET_DIR)/usr/lib/libosipparser2.*
 -
+-libosip2-dirclean:
+-	rm -rf $(LIBOSIP2_DIR)
+-
+-.PHONY: libosip2-headers libosip2-target-headers
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_PATCH),y)
--TARGETS+=patch
+-ifeq ($(BR2_PACKAGE_LIBOSIP2),y)
+-TARGETS+=libosip2
 -endif
-+$(eval $(call AUTOTARGETS,package,patch))
++$(eval $(call AUTOTARGETS,package,libosip2))
 \ No newline at end of file
 -- 
 1.6.3.3
