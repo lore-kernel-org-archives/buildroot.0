@@ -1,9 +1,10 @@
 From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Wed, 14 Apr 2010 01:05:46 +0200
-Subject: [Buildroot] [PATCH 13/41] package: added lirc
+Date: Wed, 14 Apr 2010 01:05:50 +0200
+Subject: [Buildroot] [PATCH 17/41] pixman: disable GTK+ tests,
+	let the others => remove patch to disable tests
 In-Reply-To: <1271199974-30434-1-git-send-email-llandwerlin@gmail.com>
 References: <1271199974-30434-1-git-send-email-llandwerlin@gmail.com>
-Message-ID: <1271199974-30434-14-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1271199974-30434-18-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,146 +15,43 @@ From: Lionel Landwerlin <llandwerlin@gmail.com>
 
 Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 ---
- package/Config.in      |    2 ++
- package/lirc/Config.in |   32 ++++++++++++++++++++++++++++++++
- package/lirc/S70lircd  |   24 ++++++++++++++++++++++++
- package/lirc/lirc.mk   |   38 ++++++++++++++++++++++++++++++++++++++
- 4 files changed, 96 insertions(+), 0 deletions(-)
- create mode 100644 package/lirc/Config.in
- create mode 100644 package/lirc/S70lircd
- create mode 100644 package/lirc/lirc.mk
+ package/pixman/pixman-0.10.0-no-tests.patch |   11 -----------
+ package/pixman/pixman.mk                    |    4 +++-
+ 2 files changed, 3 insertions(+), 12 deletions(-)
+ delete mode 100644 package/pixman/pixman-0.10.0-no-tests.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index 877a87e..582d435 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -269,6 +269,7 @@ endmenu
- menu "Hardware handling"
- source "package/libaio/Config.in"
- source "package/libraw1394/Config.in"
-+source "package/lirc/Config.in"
- source "package/tslib/Config.in"
- source "package/libusb/Config.in"
- source "package/libusb-compat/Config.in"
-@@ -429,6 +430,7 @@ endmenu
- menu "Package managers"
- source "package/ipkg/Config.in"
- source "package/portage/Config.in"
+diff --git a/package/pixman/pixman-0.10.0-no-tests.patch b/package/pixman/pixman-0.10.0-no-tests.patch
+deleted file mode 100644
+index fbd0d26..0000000
+--- a/package/pixman/pixman-0.10.0-no-tests.patch
++++ /dev/null
+@@ -1,11 +0,0 @@
+---- a/Makefile.in.orig	2008-05-23 14:04:37.000000000 +0000
+-+++ b/Makefile.in	2008-05-23 14:04:50.000000000 +0000
+-@@ -198,7 +198,7 @@ sysconfdir = @sysconfdir@
+- target_alias = @target_alias@
+- top_builddir = @top_builddir@
+- top_srcdir = @top_srcdir@
+--SUBDIRS = pixman test
+-+SUBDIRS = pixman
+- pkgconfigdir = $(libdir)/pkgconfig
+- pkgconfig_DATA = pixman-1.pc
+- USERNAME = $$USER
+diff --git a/package/pixman/pixman.mk b/package/pixman/pixman.mk
+index 8c7a233..64083fe 100644
+--- a/package/pixman/pixman.mk
++++ b/package/pixman/pixman.mk
+@@ -6,8 +6,10 @@
+ PIXMAN_VERSION = 0.17.6
+ PIXMAN_SOURCE = pixman-$(PIXMAN_VERSION).tar.gz
+ PIXMAN_SITE = http://cairographics.org/releases/
+-PIXMAN_AUTORECONF = NO
++PIXMAN_LIBTOOL_PATCH = NO
+ PIXMAN_INSTALL_STAGING = YES
+ 
++PIXMAN_CONF_OPT = --disable-gtk
 +
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/rpm/Config.in"
- endif
-diff --git a/package/lirc/Config.in b/package/lirc/Config.in
-new file mode 100644
-index 0000000..a8a2bb6
---- /dev/null
-+++ b/package/lirc/Config.in
-@@ -0,0 +1,32 @@
-+config BR2_PACKAGE_LIRC
-+	bool "lirc"
-+	help
-+          LIRC is a package that supports receiving and sending IR
-+          signals of the most common IR remote controls. It contains a
-+          daemon that decodes and sends IR signals, a mouse daemon
-+          that translates IR signals to mouse movements and a couple
-+          of user programs that allow to control your computer with a
-+          remote control.
-+
-+          A list of supported hardware is available on the main page.
-+
-+	  http://www.lirc.org/
-+
-+if BR2_PACKAGE_LIRC
-+
-+choice
-+	prompt "lirc drivers"
-+	default BR2_PACKAGE_LIRC_USERSPACE
-+
-+	config BR2_PACKAGE_LIRC_ALL
-+		bool "all"
-+
-+	config BR2_PACKAGE_LIRC_USERSPACE
-+		bool "userspace"
-+
-+	config BR2_PACKAGE_LIRC_NONE
-+		bool "none"
-+endchoice
-+
-+endif # BR2_PACKAGE_LIRC
-+
-diff --git a/package/lirc/S70lircd b/package/lirc/S70lircd
-new file mode 100644
-index 0000000..770bef5
---- /dev/null
-+++ b/package/lirc/S70lircd
-@@ -0,0 +1,24 @@
-+#!/bin/sh
-+
-+LIRCD=/usr/sbin/lircd
-+PID_FILE=/var/run/lircd.pid
-+LIRCFLAGS="-o /dev/lircd -P $PID_FILE"
-+
-+case "$1" in
-+    start)
-+	echo -n "Starting daemon lircd: "
-+        start-stop-daemon --start --quiet --pidfile $PID_FILE --exec $LIRCD -- $LIRCFLAGS
-+        echo "done"
-+	;;
-+    stop)
-+	echo -n "Shutting down daemon lircd: "
-+	start-stop-daemon --stop --quiet --pidfile $PID_FILE --exec $LIRCD
-+        echo "done"
-+	;;
-+    *)
-+        echo "Usage: $0 {start|stop}"
-+        exit 1
-+	;;
-+esac
-+
-+exit 0
-diff --git a/package/lirc/lirc.mk b/package/lirc/lirc.mk
-new file mode 100644
-index 0000000..12168f3
---- /dev/null
-+++ b/package/lirc/lirc.mk
-@@ -0,0 +1,38 @@
-+#############################################################
-+#
-+# lirc
-+#
-+#############################################################
-+
-+LIRC_VERSION = 0.8.6
-+LIRC_SOURCE = lirc-$(LIRC_VERSION).tar.bz2
-+LIRC_SITE = http://prdownloads.sourceforge.net/lirc
-+LIRC_LIBTOOL_PATCH = NO
-+LIRC_INSTALL_STAGING = YES
-+
-+LIRC_CONF_OPT = --without-x
-+
-+ifeq ($(BR2_PACKAGE_LIRC_ALL),y)
-+LIRC_CONF_OPT += --with-driver=all
-+endif
-+ifeq ($(BR2_PACKAGE_LIRC_USERSPACE),y)
-+LIRC_CONF_OPT += --with-driver=userspace
-+endif
-+ifeq ($(BR2_PACKAGE_LIRC_NONE),y)
-+LIRC_CONF_OPT += --with-driver=none
-+endif
-+
-+define LIRC_INSTALL_TARGET_SCRIPTS
-+	mkdir -p $(TARGET_DIR)/etc/init.d
-+	$(INSTALL) -m 0755 package/lirc/S70lircd $(TARGET_DIR)/etc/init.d/
-+endef
-+
-+LIRC_POST_INSTALL_TARGET_HOOKS += LIRC_INSTALL_TARGET_SCRIPTS
-+
-+define LIRC_UNINSTALL_TARGET_SCRIPTS
-+	rm -f $(TARGET_DIR)/etc/init.d/S70lircd
-+endef
-+
-+LIRC_POST_UNINSTALL_TARGET_HOOKS += LIRC_UNINSTALL_TARGET_SCRIPTS
-+
-+$(eval $(call AUTOTARGETS,package,lirc))
+ $(eval $(call AUTOTARGETS,package,pixman))
+ $(eval $(call AUTOTARGETS,package,pixman,host))
 -- 
 1.7.0.4
