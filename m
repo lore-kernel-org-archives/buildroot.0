@@ -1,9 +1,9 @@
 From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Wed, 14 Apr 2010 01:05:54 +0200
-Subject: [Buildroot] [PATCH 21/41] automake: bump to 1.11
+Date: Wed, 14 Apr 2010 01:05:58 +0200
+Subject: [Buildroot] [PATCH 25/41] openssh: added empty login option
 In-Reply-To: <1271199974-30434-1-git-send-email-llandwerlin@gmail.com>
 References: <1271199974-30434-1-git-send-email-llandwerlin@gmail.com>
-Message-ID: <1271199974-30434-22-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1271199974-30434-26-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,21 +14,40 @@ From: Lionel Landwerlin <llandwerlin@gmail.com>
 
 Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 ---
- package/automake/automake.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/openssh/Config.in  |    4 ++++
+ package/openssh/openssh.mk |    8 ++++++++
+ 2 files changed, 12 insertions(+), 0 deletions(-)
 
-diff --git a/package/automake/automake.mk b/package/automake/automake.mk
-index db935a4..e413287 100644
---- a/package/automake/automake.mk
-+++ b/package/automake/automake.mk
-@@ -3,7 +3,7 @@
- # automake
- #
- #############################################################
--AUTOMAKE_VERSION = 1.10
-+AUTOMAKE_VERSION = 1.11
- AUTOMAKE_SOURCE = automake-$(AUTOMAKE_VERSION).tar.bz2
- AUTOMAKE_SITE = $(BR2_GNU_MIRROR)/automake
+diff --git a/package/openssh/Config.in b/package/openssh/Config.in
+index 0c3d993..fb5daf8 100644
+--- a/package/openssh/Config.in
++++ b/package/openssh/Config.in
+@@ -7,3 +7,7 @@ config BR2_PACKAGE_OPENSSH
+ 	  tools.  The standard 'ssh', 'sshd', 'scp', and friends.
  
+ 	  http://www.openssh.com/
++
++config BR2_PACKAGE_OPENSSH_EMPTY_PASSWORDS
++	bool "allow empty passwords"
++        depends on BR2_PACKAGE_OPENSSH
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index 9a06d12..b499075 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -14,6 +14,14 @@ OPENSSH_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
+ 
+ OPENSSH_DEPENDENCIES = zlib openssl
+ 
++define OPENSSH_CONFIG_EMPTY_PASSWORDS
++	$(SED) "s/^.*PermitEmptyPasswords.*/PermitEmptyPasswords yes/;" $(TARGET_DIR)/etc/sshd_config
++endef
++
++ifeq ($(BR2_PACKAGE_OPENSSH_EMPTY_PASSWORDS),y)
++OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_CONFIG_EMPTY_PASSWORDS
++endif
++
+ $(eval $(call AUTOTARGETS,package,openssh))
+ 
+ $(OPENSSH_HOOK_POST_INSTALL):
 -- 
 1.7.0.4
