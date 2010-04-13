@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 Apr 2010 17:05:18 +0200
-Subject: [Buildroot] [PATCH 06/35] u-boot: rename Makefile.in to u-boot.mk
-	for coherency
+Date: Tue, 13 Apr 2010 17:05:19 +0200
+Subject: [Buildroot] [PATCH 07/35] u-boot: remove option to configure
+	download site
 In-Reply-To: <cover.1271170913.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1271170913.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <f9730e88257a47d0aca430a0353ad7a33c096084.1271170913.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <a33f1420bd3f0513184c1b570c2423724deea775.1271170913.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,13 +13,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/u-boot/{Makefile.in => u-boot.mk} |    0
- 1 files changed, 0 insertions(+), 0 deletions(-)
- rename boot/u-boot/{Makefile.in => u-boot.mk} (100%)
+ boot/u-boot/Config.in |    4 ----
+ boot/u-boot/u-boot.mk |    2 +-
+ 2 files changed, 1 insertions(+), 5 deletions(-)
 
-diff --git a/boot/u-boot/Makefile.in b/boot/u-boot/u-boot.mk
-similarity index 100%
-rename from boot/u-boot/Makefile.in
-rename to boot/u-boot/u-boot.mk
+diff --git a/boot/u-boot/Config.in b/boot/u-boot/Config.in
+index 8a49b37..165ea32 100644
+--- a/boot/u-boot/Config.in
++++ b/boot/u-boot/Config.in
+@@ -35,10 +35,6 @@ config BR2_UBOOT_VERSION
+ 	default "2009.11"	if BR2_TARGET_UBOOT_2009_11
+ 	default "2009.08"	if BR2_TARGET_UBOOT_2009_08
+ 
+-config BR2_U_BOOT_SITE
+-	string
+-	default "ftp://ftp.denx.de/pub/u-boot"
+-
+ source "target/device/Config.in.u-boot"
+ 
+ config BR2_TARGET_UBOOT_CUSTOM_PATCH
+diff --git a/boot/u-boot/u-boot.mk b/boot/u-boot/u-boot.mk
+index a875f2b..7e98ca8 100644
+--- a/boot/u-boot/u-boot.mk
++++ b/boot/u-boot/u-boot.mk
+@@ -7,7 +7,7 @@ U_BOOT_VERSION:=$(call qstrip,$(BR2_UBOOT_VERSION))
+ 
+ U_BOOT_SOURCE:=u-boot-$(U_BOOT_VERSION).tar.bz2
+ 
+-U_BOOT_SITE:=$(call qstrip,$(BR2_U_BOOT_SITE))
++U_BOOT_SITE:=ftp://ftp.denx.de/pub/u-boot
+ U_BOOT_DIR:=$(BUILD_DIR)/u-boot-$(U_BOOT_VERSION)
+ U_BOOT_PATCH_DIR:=$(BUILD_DIR)/u-boot-$(U_BOOT_VERSION)-patches
+ U_BOOT_CAT:=$(BZCAT)
 -- 
 1.6.3.3
