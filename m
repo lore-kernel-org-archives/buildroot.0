@@ -1,112 +1,120 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 Apr 2010 21:50:46 +0200
-Subject: [Buildroot] [git commit master] libmad: convert to the autotools
+From: Thomas Brandstetter <thomas.brandstetter@me.com>
+Date: Tue, 13 Apr 2010 23:49:17 +0200
+Subject: [Buildroot] [PATCH] pciutils: convert to the autotools
 	infrastructure
-Message-ID: <20100413195159.03EB120F99@busybox.osuosl.org>
+Message-ID: <78409DB4-3D71-4100-81B8-653F239F8E31@me.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-commit: http://git.buildroot.net/buildroot/commit/?id=7100a85e3726cdc8775a143e86ec3c7c7d57f49e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Brandstetter <tbrandstetter@me.com>
 ---
- package/multimedia/libmad/libmad.mk |   77 +++++------------------------------
- 1 files changed, 10 insertions(+), 67 deletions(-)
+ package/pciutils/pciutils.mk |   81 ++++++++---------------------------------
+ 1 files changed, 16 insertions(+), 65 deletions(-)
 
-diff --git a/package/multimedia/libmad/libmad.mk b/package/multimedia/libmad/libmad.mk
-index 83be902..ae83725 100644
---- a/package/multimedia/libmad/libmad.mk
-+++ b/package/multimedia/libmad/libmad.mk
-@@ -7,75 +7,18 @@
- LIBMAD_VERSION=0.15.1b
- LIBMAD_SOURCE=libmad-$(LIBMAD_VERSION).tar.gz
- LIBMAD_SITE=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/mad/
--LIBMAD_DIR=$(BUILD_DIR)/libmad-$(LIBMAD_VERSION)
--LIBMAD_CAT:=$(ZCAT)
-+LIBMAD_INSTALL_STAGING=YES
-+LIBMAD_LIBTOOL_PATCH=NO
+diff --git a/package/pciutils/pciutils.mk b/package/pciutils/pciutils.mk
+index 7b19c5b..12d45f3 100644
+--- a/package/pciutils/pciutils.mk
++++ b/package/pciutils/pciutils.mk
+@@ -1,80 +1,31 @@
+ #############################################################
+ #
+-# pciutils
++# PCIUTILS
+ #
+ #############################################################
+-PCIUTILS_VERSION:=3.0.1
+-PCIUTILS_SOURCE:=pciutils-$(PCIUTILS_VERSION).tar.gz
+-PCIUTILS_CAT:=$(ZCAT)
+-PCIUTILS_SITE:=ftp://atrey.karlin.mff.cuni.cz/pub/linux/pci
+-PCIUTILS_DIR:=$(BUILD_DIR)/pciutils-$(PCIUTILS_VERSION)
+-
+-# Yet more targets...
+-PCIIDS_SITE:=http://pciids.sourceforge.net/
+-PCIIDS_SOURCE:=pci.ids.bz2
+-PCIIDS_CAT:=$(BZCAT)
  
--$(DL_DIR)/$(LIBMAD_SOURCE):
--	$(call DOWNLOAD,$(LIBMAD_SITE),$(LIBMAD_SOURCE))
--
--$(LIBMAD_DIR)/.unpacked: $(DL_DIR)/$(LIBMAD_SOURCE)
--	$(LIBMAD_CAT) $(DL_DIR)/$(LIBMAD_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	$(CONFIG_UPDATE) $(LIBMAD_DIR)
--	toolchain/patch-kernel.sh $(LIBMAD_DIR) package/multimedia/libmad/ libmad-$(LIBMAD_VERSION)\*.patch
--	toolchain/patch-kernel.sh $(LIBMAD_DIR) package/multimedia/libmad/ libmad-$(LIBMAD_VERSION)\*.patch.$(ARCH)
-+define LIBMAD_PREVENT_AUTOMAKE
- 	# Prevent automake from running.
--	(cd $(LIBMAD_DIR); touch -c config* aclocal.m4 Makefile*);
--	touch $@
--
--$(LIBMAD_DIR)/.configured: $(LIBMAD_DIR)/.unpacked
--	(cd $(LIBMAD_DIR); rm -rf config.cache; \
--		$(TARGET_CONFIGURE_OPTS) \
--		$(TARGET_CONFIGURE_ARGS) \
--		./configure $(QUIET) \
--		--target=$(GNU_TARGET_NAME) \
--		--host=$(GNU_TARGET_NAME) \
--		--build=$(GNU_HOST_NAME) \
--		--prefix=/usr \
--		--sysconfdir=/etc \
--		--disable-debugging \
--		--enable-speed \
--		$(DISABLE_NLS) \
--	)
--	touch $@
--
--$(LIBMAD_DIR)/libmad.la: $(LIBMAD_DIR)/.configured
--	rm -f $@
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(LIBMAD_DIR)
--
--$(STAGING_DIR)/usr/lib/libmad.so.0: $(LIBMAD_DIR)/libmad.la
--	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(LIBMAD_DIR) install
--	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libmad.la
--
--$(TARGET_DIR)/usr/lib/libmad.so.0: $(STAGING_DIR)/usr/lib/libmad.so.0
--ifeq ($(BR2_HAVE_DEVFILES),y)
--	mkdir -p $(TARGET_DIR)/usr/include
--	cp -dpf $(STAGING_DIR)/usr/include/mad.h $(TARGET_DIR)/usr/include/
--	cp -dpf $(STAGING_DIR)/usr/lib/libmad.la $(TARGET_DIR)/usr/lib/
--	cp -dpf $(STAGING_DIR)/usr/lib/libmad.so $(TARGET_DIR)/usr/lib/
--	cp -dpf $(STAGING_DIR)/usr/lib/libmad.a $(TARGET_DIR)/usr/lib/
--endif
--	cp -dpf $(STAGING_DIR)/usr/lib/libmad.so.* $(TARGET_DIR)/usr/lib/
--	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libmad.so.*
--
--libmad: $(TARGET_DIR)/usr/lib/libmad.so.0
-+	(cd $(@D); touch -c config* aclocal.m4 Makefile*);
-+endef
++PCIUTILS_VERSION = 3.1.7
++PCIUTILS_SITE = ftp://atrey.karlin.mff.cuni.cz/pub/linux/pci
++PCIUTILS_CONFIGURE_CMDS = echo ""
++PCIUTILS_INSTALL_TARGET_OPT = PREFIX=$(TARGET_DIR)/usr install
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+-PCIUTILS_HAVE_ZLIB=yes
+-PCIIDS_FILE=pci.ids.gz
+-PCIIDS_COMPRESSOR=gzip -9 -c
++	PCIUTILS_ZLIB=yes
+ else
+-PCIUTILS_HAVE_ZLIB=no
+-PCIIDS_FILE=pci.ids
+-PCIIDS_COMPRESSOR=cat
++	PCIUTILS_ZLIB=no
+ endif
++PCIUTILS_DNS=no
++PCIUTILS_SHARED=yes
++PCIUTILS_MAKE_OPT = CC="$(TARGET_CC)" OPT="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)" RANLIB=$(TARGET_RANLIB) AR=$(TARGET_AR) -C $(PCIUTILS_DIR) SHARED=$
+(PCIUTILS_SHARED) ZLIB=$(PCIUTILS_ZLIB) DNS=$(PCIUTILS_DNS) SHAREDIR=/usr/share/misc
  
--libmad-source: $(DL_DIR)/$(LIBMAD_SOURCE)
+-$(DL_DIR)/$(PCIUTILS_SOURCE):
+-	 $(call DOWNLOAD,$(PCIUTILS_SITE),$(PCIUTILS_SOURCE))
 -
--libmad-clean:
--	-$(MAKE) -C $(LIBMAD_DIR) clean
--	-rm -f $(STAGING_DIR)/usr/lib/libmad.*
--	rm -f $(STAGING_DIR)/usr/include/mad.h
--	-rm -f $(TARGET_DIR)/usr/lib/libmad.*
--	rm -f $(TARGET_DIR)/usr/include/mad.h
-+LIBMAD_POST_PATCH_HOOKS += LIBMAD_PREVENT_AUTOMAKE
+-$(DL_DIR)/$(PCIIDS_SOURCE):
+-	$(call DOWNLOAD,$(PCIIDS_SITE),$(PCIIDS_SOURCE))
++$(eval $(call AUTOTARGETS,package,pciutils))
  
-+LIBMAD_CONF_OPT = \
-+		--disable-debugging \
-+		--enable-speed
+-$(PCIUTILS_DIR)/.unpacked: $(DL_DIR)/$(PCIUTILS_SOURCE) $(DL_DIR)/$(PCIIDS_SOURCE)
+-	$(PCIUTILS_CAT) $(DL_DIR)/$(PCIUTILS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	$(PCIIDS_CAT) $(DL_DIR)/$(PCIIDS_SOURCE) | $(PCIIDS_COMPRESSOR) > $(PCIUTILS_DIR)/$(PCIIDS_FILE)
+-	toolchain/patch-kernel.sh $(PCIUTILS_DIR) package/pciutils pciutils-$(PCIUTILS_VERSION)\*.patch
+-	#$(CONFIG_UPDATE) $(@D)
++$(PCIUTILS_HOOK_POST_EXTRACT):
+ 	$(SED) 's/uname -s/echo Linux/' \
+ 		-e 's/uname -r/echo $(LINUX_HEADERS_VERSION)/' \
+-		$(PCIUTILS_DIR)/lib/configure
++		$(PCIUTILS_DIR)/lib/configure	
+ 	touch $@
  
--libmad-dirclean:
--	rm -rf $(LIBMAD_DIR)
+-$(PCIUTILS_DIR)/.compiled: $(PCIUTILS_DIR)/.unpacked
+-	$(MAKE1) CC="$(TARGET_CC)" OPT="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)" RANLIB=$(TARGET_RANLIB) AR=$(TARGET_AR) -C $(PCIUTILS_DIR) \
+-		SHAREDIR="/usr/share/misc" \
+-		ZLIB=$(PCIUTILS_HAVE_ZLIB) \
+-		HOST=$(KERNEL_ARCH)-linux \
+-		PREFIX=/usr
++$(PCIUTILS_HOOK_POST_INSTALL):
++	$(STRIPCMD) $(TARGET_DIR)/usr/sbin/lspci
++	$(STRIPCMD) $(TARGET_DIR)/usr/sbin/setpci
+ 	touch $@
+-
+-$(TARGET_DIR)/sbin/lspci: $(PCIUTILS_DIR)/.compiled
+-	$(INSTALL) $(PCIUTILS_DIR)/lspci $(TARGET_DIR)/sbin/lspci
+-	$(STRIPCMD) $(STRIP_STRIP_ALL) $@
+-
+-$(TARGET_DIR)/sbin/setpci: $(PCIUTILS_DIR)/.compiled
+-	$(INSTALL) $(PCIUTILS_DIR)/setpci $(TARGET_DIR)/sbin/setpci
+-	$(STRIPCMD) $(STRIP_STRIP_ALL) $@
+-
+-$(TARGET_DIR)/usr/share/misc/$(PCIIDS_FILE): $(PCIUTILS_DIR)/.unpacked
+-	$(INSTALL) -D $(PCIUTILS_DIR)/$(PCIIDS_FILE) $@
+-
+-pciutils: $(if $(BR2_PACKAGE_ZLIB),zlib) $(TARGET_DIR)/sbin/setpci $(TARGET_DIR)/sbin/lspci $(TARGET_DIR)/usr/share/misc/$(PCIIDS_FILE)
+-
+-pciutils-source: $(DL_DIR)/$(PCIUTILS_SOURCE) $(DL_DIR)/$(PCIIDS_SOURCE)
+-
+-pciutils-clean:
+-	-$(MAKE) -C $(PCIUTILS_DIR) clean
+-	rm -f $(TARGET_DIR)/sbin/lspci $(TARGET_DIR)/sbin/setpci $(TARGET_DIR)/usr/share/misc/pci.ids*
+-
+-pciutils-dirclean:
+-	rm -rf $(PCIUTILS_DIR)
+-
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_LIBMAD),y)
--TARGETS+=libmad
+-ifeq ($(BR2_PACKAGE_PCIUTILS),y)
+-TARGETS+=pciutils
 -endif
-+$(eval $(call AUTOTARGETS,package/multimedia,libmad))
 -- 
 1.6.3.3
