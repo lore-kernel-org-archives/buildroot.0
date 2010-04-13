@@ -1,9 +1,10 @@
 From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Wed, 14 Apr 2010 01:05:40 +0200
-Subject: [Buildroot] [PATCH 07/41] external toolchain: fix strip of libraries
+Date: Wed, 14 Apr 2010 01:05:43 +0200
+Subject: [Buildroot] [PATCH 10/41] package: added PKG_CONF_ENV variables to
+	host packages
 In-Reply-To: <1271199974-30434-1-git-send-email-llandwerlin@gmail.com>
 References: <1271199974-30434-1-git-send-email-llandwerlin@gmail.com>
-Message-ID: <1271199974-30434-8-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1271199974-30434-11-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,24 +15,20 @@ From: Lionel Landwerlin <llandwerlin@gmail.com>
 
 Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 ---
- toolchain/external-toolchain/ext-tool.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/Makefile.autotools.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/external-toolchain/ext-tool.mk b/toolchain/external-toolchain/ext-tool.mk
-index 4493281..235e68c 100644
---- a/toolchain/external-toolchain/ext-tool.mk
-+++ b/toolchain/external-toolchain/ext-tool.mk
-@@ -56,9 +56,9 @@ copy_toolchain_lib_root = \
- 			elif test -f $${LIB_DIR}/$${LIB}; then \
- 				$(INSTALL) -D -m0755 $${LIB_DIR}/$${LIB} $(TARGET_DIR)$${DST}/$${LIB}; \
- 				case "$${STRIP}" in \
--				(0 | n | no) \
--;; \
- 				(*) \
-+;; \
-+				(y) \
- 					$(TARGET_CROSS)strip "$(TARGET_DIR)$${DST}/$${LIB}"; \
- ;; \
- 				esac; \
+diff --git a/package/Makefile.autotools.in b/package/Makefile.autotools.in
+index 38e57cd..b7a7103 100644
+--- a/package/Makefile.autotools.in
++++ b/package/Makefile.autotools.in
+@@ -108,6 +108,7 @@ define $(2)_CONFIGURE_CMDS
+ 	        $$(HOST_CONFIGURE_OPTS) \
+ 		CFLAGS="$$(HOST_CFLAGS)" \
+ 		LDFLAGS="$$(HOST_LDFLAGS)" \
++                $$($$(PKG)_CONF_ENV) \
+ 		./configure \
+ 		--prefix="$$(HOST_DIR)/usr" \
+ 		--sysconfdir="$$(HOST_DIR)/etc" \
 -- 
 1.7.0.4
