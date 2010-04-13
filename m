@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 Apr 2010 17:05:15 +0200
-Subject: [Buildroot] [PATCH 03/35] boot: remove references to COPYTO
+Date: Tue, 13 Apr 2010 17:05:16 +0200
+Subject: [Buildroot] [PATCH 04/35] u-boot: do not default to $(BOARD_NAME)
+	for the board name
 In-Reply-To: <cover.1271170913.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1271170913.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <c4d5301c7befa0417f60682c353ab3a516ab1e84.1271170913.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <cb17d76126f7178af32e36f8bab77ab34836c01e.1271170913.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,50 +13,20 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/at91bootstrap/at91bootstrap.mk         |    6 ------
- boot/at91dataflashboot/at91dataflashboot.mk |    3 +--
- 2 files changed, 1 insertions(+), 8 deletions(-)
+ boot/u-boot/Config.in |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
-index 2072c6b..dc475e4 100644
---- a/boot/at91bootstrap/at91bootstrap.mk
-+++ b/boot/at91bootstrap/at91bootstrap.mk
-@@ -63,22 +63,16 @@ $(AT91BOOTSTRAP_DIR)/.installed:: $(AT91BOOTSTRAP_TARGET)
- 	mkdir -p $(BINARIES_DIR)
- ifeq	($(AT91BOOTSTRAP_VERSION),2.3)
- 	cp $(AT91BOOTSTRAP_TARGET) $(BINARIES_DIR)/$(AT91BOOTSTRAP_BINARY)
--	$(call COPY_FILE, $(AT91BOOTSTRAP_TARGET), $(BR2_TARGET_ATMEL_COPYTO), $(AT91BOOTSTRAP_BINARY))
- else
- 	make MEMORY=$(AT91BOOTSTRAP_MEMORY) \
- 		CROSS_COMPILE=$(TARGET_CROSS) \
- 		-C $(AT91BOOTSTRAP_DIR) boot
- 	make DESTDIR=$(BINARIES_DIR) -C $(AT91BOOTSTRAP_DIR) install || \
- 		echo "Could not copy bootstrap to BINARIES_DIR"
--ifneq ($(BR2_TARGET_ATMEL_COPYTO),)
--	make DESTDIR=$(BR2_TARGET_ATMEL_COPYTO) -C $(AT91BOOTSTRAP_DIR) install || \
--		echo "Could not copy bootstrap to BR2_ATMEL_COPYTO"
--endif
- endif
- 	touch $@
- 
- #	cp $(AT91BOOTSTRAP_TARGET) $(BINARIES_DIR)/$(AT91BOOTSTRAP_BINARY)
--#	cp $(AT91BOOTSTRAP_TARGET) $(BR2_TARGET_ATMEL_COPYTO)/$(AT91BOOTSTRAP_BINARY)
- 
- .PHONY: at91bootstrap at91bootstrap-source
- 
-diff --git a/boot/at91dataflashboot/at91dataflashboot.mk b/boot/at91dataflashboot/at91dataflashboot.mk
-index 8939c28..519328c 100644
---- a/boot/at91dataflashboot/at91dataflashboot.mk
-+++ b/boot/at91dataflashboot/at91dataflashboot.mk
-@@ -31,8 +31,7 @@ DataflashBoot-dirclean:
- 	rm -rf $(DATAFLASHBOOT_DIR)
- 
- dataflash:	 $(DATAFLASHBOOT_DIR)/$(DATAFLASHBOOT_BINARY)
--	$(call COPY_FILE, $(DATAFLASHBOOT_DIR)/$(DATAFLASHBOOT_BINARY), $(TARGET_ATMEL_COPYTO),	$(BOARD_NAME)-$(DATAFLASHBOOT_BINARY))
--
-+	cp $(DATAFLASHBOOT_DIR)/$(DATAFLASHBOOT_BINARY) $(BINARIES_DIR)
- 
- #############################################################
- #
+diff --git a/boot/u-boot/Config.in b/boot/u-boot/Config.in
+index f84d181..70d9eb8 100644
+--- a/boot/u-boot/Config.in
++++ b/boot/u-boot/Config.in
+@@ -6,7 +6,6 @@ menuconfig BR2_TARGET_UBOOT
+ if BR2_TARGET_UBOOT
+ config BR2_TARGET_UBOOT_BOARDNAME
+ 	string "board name"
+-	default "$(BOARD_NAME)"
+ 	help
+ 	  One of U-Boot supported boards to be built.
+ 	  This will be suffixed with _config to meet U-Boot standard naming.
 -- 
 1.6.3.3
