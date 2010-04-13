@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 Apr 2010 17:05:37 +0200
-Subject: [Buildroot] [PATCH 25/35] at91bootstrap: do not default to
-	$(BOARD_NAME)
+Date: Tue, 13 Apr 2010 17:05:36 +0200
+Subject: [Buildroot] [PATCH 24/35] syslinux: remove the unnecessary
+	SYSLINUX_SUPPORTED_ARCH check
 In-Reply-To: <cover.1271170913.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1271170913.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <ee9349cc95db557a95318bb22789d1a3b72b5d55.1271170913.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <a1fc3e017dc6be1bbd70a77da573f6db1b3ca062.1271170913.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +13,43 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/at91bootstrap/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ boot/syslinux/syslinux.mk |   20 --------------------
+ 1 files changed, 0 insertions(+), 20 deletions(-)
 
-diff --git a/boot/at91bootstrap/Config.in b/boot/at91bootstrap/Config.in
-index 44db8f5..8514ccc 100644
---- a/boot/at91bootstrap/Config.in
-+++ b/boot/at91bootstrap/Config.in
-@@ -6,7 +6,7 @@ if	BR2_TARGET_AT91BOOTSTRAP
+diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
+index f4e431d..048153b 100644
+--- a/boot/syslinux/syslinux.mk
++++ b/boot/syslinux/syslinux.mk
+@@ -1,21 +1,3 @@
+-SYSLINUX_SUPPORTED_ARCH=n
+-ifeq ($(ARCH),i386)
+-SYSLINUX_SUPPORTED_ARCH=y
+-endif
+-ifeq ($(ARCH),i486)
+-SYSLINUX_SUPPORTED_ARCH=y
+-endif
+-ifeq ($(ARCH),i586)
+-SYSLINUX_SUPPORTED_ARCH=y
+-endif
+-ifeq ($(ARCH),i686)
+-SYSLINUX_SUPPORTED_ARCH=y
+-endif
+-ifeq ($(ARCH),x86_64)
+-SYSLINUX_SUPPORTED_ARCH=y
+-endif
+-ifeq ($(SYSLINUX_SUPPORTED_ARCH),y)
+-
+ #############################################################
+ #
+ # syslinux to make target msdos/iso9660 filesystems bootable
+@@ -59,8 +41,6 @@ pxelinux-clean syslinux-clean:
+ pxelinux-dirclean syslinux-dirclean:
+ 	rm -rf $(SYSLINUX_DIR)
  
- config BR2_TARGET_AT91BOOTSTRAP_BOARD
- 	string "Bootstrap board"
--	default "$(BOARD_NAME)"
-+	default ""
- 	help
- 	  This is used to do a make <board>_config
- 
+-endif
+-
+ #############################################################
+ #
+ # Toplevel Makefile options
 -- 
 1.6.3.3
