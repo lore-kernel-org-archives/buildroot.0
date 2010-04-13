@@ -1,10 +1,9 @@
 From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Wed, 14 Apr 2010 01:05:44 +0200
-Subject: [Buildroot] [PATCH 11/41] sysstat: drop target installation option
-	(it's on by default)
+Date: Wed, 14 Apr 2010 01:05:47 +0200
+Subject: [Buildroot] [PATCH 14/41] directfb: added support for lirc
 In-Reply-To: <1271199974-30434-1-git-send-email-llandwerlin@gmail.com>
 References: <1271199974-30434-1-git-send-email-llandwerlin@gmail.com>
-Message-ID: <1271199974-30434-12-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1271199974-30434-15-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,20 +14,40 @@ From: Lionel Landwerlin <llandwerlin@gmail.com>
 
 Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 ---
- package/sysstat/sysstat.mk |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ package/directfb/Config.in   |    5 +++++
+ package/directfb/directfb.mk |    4 ++++
+ 2 files changed, 9 insertions(+), 0 deletions(-)
 
-diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
-index 324580e..2b220d6 100644
---- a/package/sysstat/sysstat.mk
-+++ b/package/sysstat/sysstat.mk
-@@ -10,7 +10,6 @@ SYSSTAT_SITE = http://pagesperso-orange.fr/sebastien.godard/
- SYSSTAT_AUTORECONF = NO
- SYSSTAT_LIBTOOL_PATCH = NO
- SYSSTAT_INSTALL_STAGING = NO
--SYSSTAT_INSTALL_TARGET = YES
+diff --git a/package/directfb/Config.in b/package/directfb/Config.in
+index 7c41cdf..6c78597 100644
+--- a/package/directfb/Config.in
++++ b/package/directfb/Config.in
+@@ -65,6 +65,11 @@ config BR2_PACKAGE_DIRECTFB_KEYBOARD
+ 	bool "compile keyboard input driver"
+ 	default y
  
- # Should be --disable-man-group, it might be a little mistake in the
- # configure.in script.
++config BR2_PACKAGE_DIRECTFB_LIRC
++	bool "compile lirc input driver"
++	select BR2_PACKAGE_LIRC
++	default n
++
+ config BR2_PACKAGE_DIRECTFB_PS2MOUSE
+ 	bool "compile PS2 mouse input driver"
+ 	default y
+diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
+index 2f095ee..a065a22 100644
+--- a/package/directfb/directfb.mk
++++ b/package/directfb/directfb.mk
+@@ -80,6 +80,10 @@ endif
+ ifeq ($(BR2_PACKAGE_DIRECTFB_KEYBOARD),y)
+ DIRECTFB_INPUT+= keyboard
+ endif
++ifeq ($(BR2_PACKAGE_DIRECTFB_KEYBOARD),y)
++DIRECTFB_INPUT+= lirc
++DIRECTFB_DEP+= lirc
++endif
+ ifeq ($(BR2_PACKAGE_DIRECTFB_PS2MOUSE),y)
+ DIRECTFB_INPUT+= ps2mouse
+ endif
 -- 
 1.7.0.4
