@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 13 Apr 2010 21:50:46 +0200
-Subject: [Buildroot] [git commit master] aumix: convert to the autotools
+Subject: [Buildroot] [git commit master] madplay: convert to the autotools
 	infrastructure
-Message-ID: <20100413195158.A4D4A20F99@busybox.osuosl.org>
+Message-ID: <20100413195158.79A1120F99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,121 +10,91 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3b838d864076ebcd54565c9f91cd62b2b9729ce2
+commit: http://git.buildroot.net/buildroot/commit/?id=8e4a53cf8c5ddb3f0ea5b8d084e1b8b2b81139d4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../aumix-2.8-fix-incorrect-makefile-am.patch      |   29 ++++++++++
- package/multimedia/aumix/aumix.mk                  |   60 +++-----------------
- 2 files changed, 38 insertions(+), 51 deletions(-)
- create mode 100644 package/multimedia/aumix/aumix-2.8-fix-incorrect-makefile-am.patch
+ package/multimedia/madplay/madplay.mk |   64 +++------------------------------
+ 1 files changed, 5 insertions(+), 59 deletions(-)
 
-diff --git a/package/multimedia/aumix/aumix-2.8-fix-incorrect-makefile-am.patch b/package/multimedia/aumix/aumix-2.8-fix-incorrect-makefile-am.patch
-new file mode 100644
-index 0000000..8d55218
---- /dev/null
-+++ b/package/multimedia/aumix/aumix-2.8-fix-incorrect-makefile-am.patch
-@@ -0,0 +1,29 @@
-+Aumix's src/Makefile.am incorrect adds @includedir@ to the list of
-+include paths and @libdir@ to the list of libraries paths. This is
-+incorrect, as @includedir@ and @libdir@ are respectively /usr/include
-+and /usr/lib, even in cross-compilation mode.
-+
-+At the same time, use AM_CFLAGS instead of CFLAGS, as is done on the
-+similar patch found in OpenEmbedded.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ src/Makefile.am |    5 ++---
-+ 1 file changed, 2 insertions(+), 3 deletions(-)
-+
-+Index: aumix-2.8/src/Makefile.am
-+===================================================================
-+--- aumix-2.8.orig/src/Makefile.am
-++++ aumix-2.8/src/Makefile.am
-+@@ -7,9 +7,8 @@
-+ 		mouse.c common.h curses.h gpm-xterm.h gtk.h interactive.h  \
-+ 		mouse.h play.xpm record.xpm
-+ localedir	= $(datadir)/locale
-+-INCLUDES	= -I../intl -DLOCALEDIR=\"$(localedir)\" -I at includedir@
-+-CFLAGS		= @CFLAGS@ @GLIB_CFLAGS@ @GTK_CFLAGS@
-+-LDADD		= -L at libdir@
-++INCLUDES	= -I../intl -DLOCALEDIR=\"$(localedir)\"
-++AM_CFLAGS	= @CFLAGS@ @GLIB_CFLAGS@ @GTK_CFLAGS@
-+ LIBS		= @LIBS@ @GTK_LIBS@ @INTLLIBS@
-+ DEFS		= @DEFS@
-+ 
-diff --git a/package/multimedia/aumix/aumix.mk b/package/multimedia/aumix/aumix.mk
-index 64fadc0..e28a720 100644
---- a/package/multimedia/aumix/aumix.mk
-+++ b/package/multimedia/aumix/aumix.mk
-@@ -7,57 +7,15 @@
- AUMIX_VERSION=2.8
- AUMIX_SOURCE=aumix-$(AUMIX_VERSION).tar.bz2
- AUMIX_SITE=http://jpj.net/~trevor/aumix
--AUMIX_DIR=$(BUILD_DIR)/aumix-$(AUMIX_VERSION)
--AUMIX_CAT:=$(BZCAT)
-+AUMIX_AUTORECONF=YES
+diff --git a/package/multimedia/madplay/madplay.mk b/package/multimedia/madplay/madplay.mk
+index fce9a61..a2ac14d 100644
+--- a/package/multimedia/madplay/madplay.mk
++++ b/package/multimedia/madplay/madplay.mk
+@@ -6,68 +6,14 @@
+ MADPLAY_VERSION:=0.15.2b
+ MADPLAY_SOURCE:=madplay-$(MADPLAY_VERSION).tar.gz
+ MADPLAY_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/mad
+-MADPLAY_CAT:=$(ZCAT)
+-MADPLAY_DIR:=$(BUILD_DIR)/madplay-$(MADPLAY_VERSION)
+-MADPLAY_BIN:=madplay
+-MADPLAY_TARGET_BIN:=usr/bin/$(MADPLAY_BIN)
++MADPLAY_LIBTOOL_PATCH=NO
++MADPLAY_DEPENDENCIES=libmad libid3tag
  
--$(DL_DIR)/$(AUMIX_SOURCE):
--	$(call DOWNLOAD,$(AUMIX_SITE),$(AUMIX_SOURCE))
-+AUMIX_CONF_OPT = \
-+	--without-gtk \
-+	--without-gtk1 \
-+	--without-alsa \
-+	--without-gpm \
-+	--without-sysmouse
+ # Check if ALSA is built, then we should configure after alsa-lib so
+ # ./configure can find alsa-lib.
+ ifeq ($(BR2_PACKAGE_MADPLAY_ALSA),y)
+-MADPLAY_USE_ALSA:=--with-alsa
+-MADPLAY_ALSA_DEP:=alsa-lib
++MADPLAY_CONF_OPT+=--with-alsa
++MADPLAY_DEPENDENCIES+=alsa-lib
+ endif
  
--$(AUMIX_DIR)/.unpacked: $(DL_DIR)/$(AUMIX_SOURCE)
--	$(AUMIX_CAT) $(DL_DIR)/$(AUMIX_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-$(DL_DIR)/$(MADPLAY_SOURCE):
+-	 $(call DOWNLOAD,$(MADPLAY_SITE),$(MADPLAY_SOURCE))
+-
+-$(MADPLAY_DIR)/.unpacked: $(DL_DIR)/$(MADPLAY_SOURCE)
+-	$(MADPLAY_CAT) $(DL_DIR)/$(MADPLAY_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(MADPLAY_DIR) package/multimedia/madplay madplay\*.patch\*
+-	$(CONFIG_UPDATE) $(MADPLAY_DIR)
 -	touch $@
-+AUMIX_DEPENDENCIES = ncurses
- 
--$(AUMIX_DIR)/.configured: $(AUMIX_DIR)/.unpacked
--	(cd $(AUMIX_DIR); rm -rf config.cache; \
--		$(TARGET_CONFIGURE_OPTS) \
+-
+-$(MADPLAY_DIR)/.configured: $(MADPLAY_DIR)/.unpacked
+-	(cd $(MADPLAY_DIR); rm -rf config.cache; \
 -		$(TARGET_CONFIGURE_ARGS) \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		CFLAGS="$(TARGET_CFLAGS) $(BR2_MADPLAY_CFLAGS)" \
+-		LDFLAGS="$(TARGET_LDFLAGS)" \
 -		./configure $(QUIET) \
--		--target=$(GNU_TARGET_NAME) \
--		--host=$(GNU_TARGET_NAME) \
+-		--target=$(REAL_GNU_TARGET_NAME) \
+-		--host=$(REAL_GNU_TARGET_NAME) \
 -		--build=$(GNU_HOST_NAME) \
 -		--prefix=/usr \
 -		--sysconfdir=/etc \
--		--libdir=$(STAGING_DIR)/lib \
--		--includedir=$(STAGING_DIR)/usr/include \
--		--without-gtk \
--		--without-gtk1 \
--		--without-alsa \
--		--without-gpm \
--		--without-sysmouse \
+-		$(MADPLAY_USE_ALSA) \
 -		$(DISABLE_NLS) \
+-		$(DISABLE_LARGEFILE) \
 -	)
 -	touch $@
 -
--$(AUMIX_DIR)/src/aumix: $(AUMIX_DIR)/.configured
--	$(MAKE) CC=$(TARGET_CC) -C $(AUMIX_DIR)
+-$(MADPLAY_DIR)/$(MADPLAY_BIN): $(MADPLAY_DIR)/.configured
+-	$(MAKE) -C $(MADPLAY_DIR)
 -
--$(TARGET_DIR)/usr/bin/aumix: $(AUMIX_DIR)/src/aumix
--	$(MAKE) -C $(AUMIX_DIR) DESTDIR=$(TARGET_DIR) install
+-$(TARGET_DIR)/$(MADPLAY_TARGET_BIN): $(MADPLAY_DIR)/$(MADPLAY_BIN)
+-	$(INSTALL) -D $(MADPLAY_DIR)/$(MADPLAY_BIN) $(TARGET_DIR)/$(MADPLAY_TARGET_BIN)
+-	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/$(MADPLAY_TARGET_BIN)
 -
--aumix: ncurses $(TARGET_DIR)/usr/bin/aumix
+-madplay: $(MADPLAY_ALSA_DEP) libmad libid3tag $(TARGET_DIR)/$(MADPLAY_TARGET_BIN)
 -
--aumix-source: $(DL_DIR)/$(AUMIX_SOURCE)
+-madplay-clean:
+-	rm -f $(TARGET_DIR)/$(MADPLAY_TARGET_BIN)
+-	-$(MAKE) -C $(MADPLAY_DIR) clean
 -
--aumix-clean:
--	-$(MAKE) -C $(AUMIX_DIR) clean
+-madplay-dirclean:
+-	rm -rf $(MADPLAY_DIR)
 -
--aumix-dirclean:
--	rm -rf $(AUMIX_DIR)
+-madplay-source: $(DL_DIR)/$(MADPLAY_SOURCE)
+-
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_AUMIX),y)
--TARGETS+=aumix
+-ifeq ($(BR2_PACKAGE_MADPLAY),y)
+-TARGETS+=madplay
 -endif
-+$(eval $(call AUTOTARGETS,package/multimedia,aumix))
++$(eval $(call AUTOTARGETS,package/multimedia,madplay))
 -- 
 1.6.3.3
