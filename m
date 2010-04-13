@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 13 Apr 2010 21:50:46 +0200
-Subject: [Buildroot] [git commit master] madplay: convert to the autotools
+Subject: [Buildroot] [git commit master] libmad: convert to the autotools
 	infrastructure
-Message-ID: <20100413195158.79A1120F99@busybox.osuosl.org>
+Message-ID: <20100413195159.03EB120F99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,91 +10,103 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8e4a53cf8c5ddb3f0ea5b8d084e1b8b2b81139d4
+commit: http://git.buildroot.net/buildroot/commit/?id=7100a85e3726cdc8775a143e86ec3c7c7d57f49e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/multimedia/madplay/madplay.mk |   64 +++------------------------------
- 1 files changed, 5 insertions(+), 59 deletions(-)
+ package/multimedia/libmad/libmad.mk |   77 +++++------------------------------
+ 1 files changed, 10 insertions(+), 67 deletions(-)
 
-diff --git a/package/multimedia/madplay/madplay.mk b/package/multimedia/madplay/madplay.mk
-index fce9a61..a2ac14d 100644
---- a/package/multimedia/madplay/madplay.mk
-+++ b/package/multimedia/madplay/madplay.mk
-@@ -6,68 +6,14 @@
- MADPLAY_VERSION:=0.15.2b
- MADPLAY_SOURCE:=madplay-$(MADPLAY_VERSION).tar.gz
- MADPLAY_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/mad
--MADPLAY_CAT:=$(ZCAT)
--MADPLAY_DIR:=$(BUILD_DIR)/madplay-$(MADPLAY_VERSION)
--MADPLAY_BIN:=madplay
--MADPLAY_TARGET_BIN:=usr/bin/$(MADPLAY_BIN)
-+MADPLAY_LIBTOOL_PATCH=NO
-+MADPLAY_DEPENDENCIES=libmad libid3tag
+diff --git a/package/multimedia/libmad/libmad.mk b/package/multimedia/libmad/libmad.mk
+index 83be902..ae83725 100644
+--- a/package/multimedia/libmad/libmad.mk
++++ b/package/multimedia/libmad/libmad.mk
+@@ -7,75 +7,18 @@
+ LIBMAD_VERSION=0.15.1b
+ LIBMAD_SOURCE=libmad-$(LIBMAD_VERSION).tar.gz
+ LIBMAD_SITE=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/mad/
+-LIBMAD_DIR=$(BUILD_DIR)/libmad-$(LIBMAD_VERSION)
+-LIBMAD_CAT:=$(ZCAT)
++LIBMAD_INSTALL_STAGING=YES
++LIBMAD_LIBTOOL_PATCH=NO
  
- # Check if ALSA is built, then we should configure after alsa-lib so
- # ./configure can find alsa-lib.
- ifeq ($(BR2_PACKAGE_MADPLAY_ALSA),y)
--MADPLAY_USE_ALSA:=--with-alsa
--MADPLAY_ALSA_DEP:=alsa-lib
-+MADPLAY_CONF_OPT+=--with-alsa
-+MADPLAY_DEPENDENCIES+=alsa-lib
- endif
- 
--$(DL_DIR)/$(MADPLAY_SOURCE):
--	 $(call DOWNLOAD,$(MADPLAY_SITE),$(MADPLAY_SOURCE))
+-$(DL_DIR)/$(LIBMAD_SOURCE):
+-	$(call DOWNLOAD,$(LIBMAD_SITE),$(LIBMAD_SOURCE))
 -
--$(MADPLAY_DIR)/.unpacked: $(DL_DIR)/$(MADPLAY_SOURCE)
--	$(MADPLAY_CAT) $(DL_DIR)/$(MADPLAY_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(MADPLAY_DIR) package/multimedia/madplay madplay\*.patch\*
--	$(CONFIG_UPDATE) $(MADPLAY_DIR)
+-$(LIBMAD_DIR)/.unpacked: $(DL_DIR)/$(LIBMAD_SOURCE)
+-	$(LIBMAD_CAT) $(DL_DIR)/$(LIBMAD_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	$(CONFIG_UPDATE) $(LIBMAD_DIR)
+-	toolchain/patch-kernel.sh $(LIBMAD_DIR) package/multimedia/libmad/ libmad-$(LIBMAD_VERSION)\*.patch
+-	toolchain/patch-kernel.sh $(LIBMAD_DIR) package/multimedia/libmad/ libmad-$(LIBMAD_VERSION)\*.patch.$(ARCH)
++define LIBMAD_PREVENT_AUTOMAKE
+ 	# Prevent automake from running.
+-	(cd $(LIBMAD_DIR); touch -c config* aclocal.m4 Makefile*);
 -	touch $@
 -
--$(MADPLAY_DIR)/.configured: $(MADPLAY_DIR)/.unpacked
--	(cd $(MADPLAY_DIR); rm -rf config.cache; \
--		$(TARGET_CONFIGURE_ARGS) \
+-$(LIBMAD_DIR)/.configured: $(LIBMAD_DIR)/.unpacked
+-	(cd $(LIBMAD_DIR); rm -rf config.cache; \
 -		$(TARGET_CONFIGURE_OPTS) \
--		CFLAGS="$(TARGET_CFLAGS) $(BR2_MADPLAY_CFLAGS)" \
--		LDFLAGS="$(TARGET_LDFLAGS)" \
+-		$(TARGET_CONFIGURE_ARGS) \
 -		./configure $(QUIET) \
--		--target=$(REAL_GNU_TARGET_NAME) \
--		--host=$(REAL_GNU_TARGET_NAME) \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
 -		--build=$(GNU_HOST_NAME) \
 -		--prefix=/usr \
 -		--sysconfdir=/etc \
--		$(MADPLAY_USE_ALSA) \
+-		--disable-debugging \
+-		--enable-speed \
 -		$(DISABLE_NLS) \
--		$(DISABLE_LARGEFILE) \
 -	)
 -	touch $@
 -
--$(MADPLAY_DIR)/$(MADPLAY_BIN): $(MADPLAY_DIR)/.configured
--	$(MAKE) -C $(MADPLAY_DIR)
+-$(LIBMAD_DIR)/libmad.la: $(LIBMAD_DIR)/.configured
+-	rm -f $@
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(LIBMAD_DIR)
 -
--$(TARGET_DIR)/$(MADPLAY_TARGET_BIN): $(MADPLAY_DIR)/$(MADPLAY_BIN)
--	$(INSTALL) -D $(MADPLAY_DIR)/$(MADPLAY_BIN) $(TARGET_DIR)/$(MADPLAY_TARGET_BIN)
--	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/$(MADPLAY_TARGET_BIN)
+-$(STAGING_DIR)/usr/lib/libmad.so.0: $(LIBMAD_DIR)/libmad.la
+-	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(LIBMAD_DIR) install
+-	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libmad.la
 -
--madplay: $(MADPLAY_ALSA_DEP) libmad libid3tag $(TARGET_DIR)/$(MADPLAY_TARGET_BIN)
+-$(TARGET_DIR)/usr/lib/libmad.so.0: $(STAGING_DIR)/usr/lib/libmad.so.0
+-ifeq ($(BR2_HAVE_DEVFILES),y)
+-	mkdir -p $(TARGET_DIR)/usr/include
+-	cp -dpf $(STAGING_DIR)/usr/include/mad.h $(TARGET_DIR)/usr/include/
+-	cp -dpf $(STAGING_DIR)/usr/lib/libmad.la $(TARGET_DIR)/usr/lib/
+-	cp -dpf $(STAGING_DIR)/usr/lib/libmad.so $(TARGET_DIR)/usr/lib/
+-	cp -dpf $(STAGING_DIR)/usr/lib/libmad.a $(TARGET_DIR)/usr/lib/
+-endif
+-	cp -dpf $(STAGING_DIR)/usr/lib/libmad.so.* $(TARGET_DIR)/usr/lib/
+-	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libmad.so.*
 -
--madplay-clean:
--	rm -f $(TARGET_DIR)/$(MADPLAY_TARGET_BIN)
--	-$(MAKE) -C $(MADPLAY_DIR) clean
+-libmad: $(TARGET_DIR)/usr/lib/libmad.so.0
++	(cd $(@D); touch -c config* aclocal.m4 Makefile*);
++endef
+ 
+-libmad-source: $(DL_DIR)/$(LIBMAD_SOURCE)
 -
--madplay-dirclean:
--	rm -rf $(MADPLAY_DIR)
--
--madplay-source: $(DL_DIR)/$(MADPLAY_SOURCE)
--
+-libmad-clean:
+-	-$(MAKE) -C $(LIBMAD_DIR) clean
+-	-rm -f $(STAGING_DIR)/usr/lib/libmad.*
+-	rm -f $(STAGING_DIR)/usr/include/mad.h
+-	-rm -f $(TARGET_DIR)/usr/lib/libmad.*
+-	rm -f $(TARGET_DIR)/usr/include/mad.h
++LIBMAD_POST_PATCH_HOOKS += LIBMAD_PREVENT_AUTOMAKE
+ 
++LIBMAD_CONF_OPT = \
++		--disable-debugging \
++		--enable-speed
+ 
+-libmad-dirclean:
+-	rm -rf $(LIBMAD_DIR)
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_MADPLAY),y)
--TARGETS+=madplay
+-ifeq ($(BR2_PACKAGE_LIBMAD),y)
+-TARGETS+=libmad
 -endif
-+$(eval $(call AUTOTARGETS,package/multimedia,madplay))
++$(eval $(call AUTOTARGETS,package/multimedia,libmad))
 -- 
 1.6.3.3
