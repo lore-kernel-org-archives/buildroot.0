@@ -1,7 +1,7 @@
 From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
-Date: Tue, 13 Apr 2010 16:56:10 +0300
-Subject: [Buildroot] [PATCH] usbutils need libusb-compat
-Message-ID: <20100413135610.20865.97660.stgit@localhost.localdomain>
+Date: Tue, 13 Apr 2010 17:00:09 +0300
+Subject: [Buildroot] [PATCH] Fix xserver dependency on pciaccess lib.
+Message-ID: <20100413140009.20951.93624.stgit@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,32 +11,31 @@ To: buildroot@busybox.net
 Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
 ---
 
- package/usbutils/Config.in   |    2 +-
- package/usbutils/usbutils.mk |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/x11r7/xserver_xorg-server/Config.in        |    1 +
+ .../xserver_xorg-server/xserver_xorg-server.mk     |    1 +
+ 2 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/usbutils/Config.in b/package/usbutils/Config.in
-index 23004d9..6e54352 100644
---- a/package/usbutils/Config.in
-+++ b/package/usbutils/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_USBUTILS
- 	bool "usbutils"
--	select BR2_PACKAGE_LIBUSB
-+	select BR2_PACKAGE_LIBUSB_COMPAT
- 	help
- 	  USB enumeration utilities
+diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
+index 86909d1..807f7bb 100644
+--- a/package/x11r7/xserver_xorg-server/Config.in
++++ b/package/x11r7/xserver_xorg-server/Config.in
+@@ -12,6 +12,7 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER
+ 	select BR2_PACKAGE_XFONT_FONT_ALIAS if !BR2_PACKAGE_XSERVER_XORG_SERVER_BUILTIN_FONTS
+ 	select BR2_PACKAGE_XFONT_FONT_MISC_MISC if !BR2_PACKAGE_XSERVER_XORG_SERVER_BUILTIN_FONTS
+ 	select BR2_PACKAGE_XFONT_FONT_CURSOR_MISC if !BR2_PACKAGE_XSERVER_XORG_SERVER_BUILTIN_FONTS
++	select BR2_PACKAGE_XLIB_LIBPCIACCESS
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBXAU
+ 	select BR2_PACKAGE_XLIB_LIBXDMCP
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 950c2ca..a3975a0 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -15,6 +15,7 @@ XSERVER_XORG_SERVER_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install install
  
-diff --git a/package/usbutils/usbutils.mk b/package/usbutils/usbutils.mk
-index ef01403..880a2c8 100644
---- a/package/usbutils/usbutils.mk
-+++ b/package/usbutils/usbutils.mk
-@@ -6,7 +6,7 @@
- 
- USBUTILS_VERSION = 0.86
- USBUTILS_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/linux-usb/
--USBUTILS_DEPENDENCIES = host-pkg-config
-+USBUTILS_DEPENDENCIES = host-pkg-config libusb-compat
- 
- ifeq ($(BR2_PACKAGE_USBUTILS_ZLIB),y)
- 	USBUTILS_DEPENDENCIES += zlib
+ XSERVER_XORG_SERVER_DEPENDENCIES = 	\
+ 	xutil_util-macros 		\
++	xlib_libpciaccess		\
+ 	xlib_libXfont 			\
+ 	xlib_libX11 			\
+ 	xlib_libXau 			\
