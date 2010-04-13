@@ -1,41 +1,55 @@
-From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
-Date: Tue, 13 Apr 2010 17:00:09 +0300
-Subject: [Buildroot] [PATCH] Fix xserver dependency on pciaccess lib.
-Message-ID: <20100413140009.20951.93624.stgit@localhost.localdomain>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 13 Apr 2010 16:59:03 +0200
+Subject: [Buildroot] [PATCH 03/21] udpcast: convert to the autotools
+ infrastructure
+In-Reply-To: <87d3y4k1dq.fsf@macbook.be.48ers.dk>
+References: <cover.1271077873.git.thomas.petazzoni@free-electrons.com>
+	<cover.1271077873.git.thomas.petazzoni@free-electrons.com>
+	<b7fe41a1f4c9fc78ea89fe332a7d98d2922ed83f.1271077873.git.thomas.petazzoni@free-electrons.com>
+	<87d3y4k1dq.fsf@macbook.be.48ers.dk>
+Message-ID: <20100413165903.33f58597@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
----
+Hello,
 
- package/x11r7/xserver_xorg-server/Config.in        |    1 +
- .../xserver_xorg-server/xserver_xorg-server.mk     |    1 +
- 2 files changed, 2 insertions(+), 0 deletions(-)
+On Mon, 12 Apr 2010 19:48:49 +0200
+Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
-index 86909d1..807f7bb 100644
---- a/package/x11r7/xserver_xorg-server/Config.in
-+++ b/package/x11r7/xserver_xorg-server/Config.in
-@@ -12,6 +12,7 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER
- 	select BR2_PACKAGE_XFONT_FONT_ALIAS if !BR2_PACKAGE_XSERVER_XORG_SERVER_BUILTIN_FONTS
- 	select BR2_PACKAGE_XFONT_FONT_MISC_MISC if !BR2_PACKAGE_XSERVER_XORG_SERVER_BUILTIN_FONTS
- 	select BR2_PACKAGE_XFONT_FONT_CURSOR_MISC if !BR2_PACKAGE_XSERVER_XORG_SERVER_BUILTIN_FONTS
-+	select BR2_PACKAGE_XLIB_LIBPCIACCESS
- 	select BR2_PACKAGE_XLIB_LIBX11
- 	select BR2_PACKAGE_XLIB_LIBXAU
- 	select BR2_PACKAGE_XLIB_LIBXDMCP
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 950c2ca..a3975a0 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -15,6 +15,7 @@ XSERVER_XORG_SERVER_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install install
- 
- XSERVER_XORG_SERVER_DEPENDENCIES = 	\
- 	xutil_util-macros 		\
-+	xlib_libpciaccess		\
- 	xlib_libXfont 			\
- 	xlib_libX11 			\
- 	xlib_libXau 			\
+>  Thomas> +UDPCAST_CONF_ENV = ac_cv_type_stat64=yes
+> 
+>  Thomas> -		$(if
+>  Thomas> $(BR_LARGEFILE),ac_cv_type_stat64=yes,ac_cv_type_stat64=no) \
+> 
+> Why are you now forcing 64bit here?
+
+Good question. When I wrote the change, I remember thinking about this,
+but I really don't remember why I did the change this way. Definitely,
+we should be conservative and keep it as it was.
+
+> Not a big deal, but you seem to forgot the final newline in several
+> files - Is there any reason why?
+
+Simply because in the text editor I'm using, having a final newline or
+not does not make any visible difference, so I always forget about this.
+
+I've pushed updated versions of the patches, to fix the udpcast large
+file thing, and to add the newlines at the end of files. You can pull
+from:
+
+ git://git.busybox.net/~tpetazzoni/git/buildroot autotools-conversion
+
+I'm not spamming again the list by resending everything, but if you
+think it's worth, I'll do so.
+
+Regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
