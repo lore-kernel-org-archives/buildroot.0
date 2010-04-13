@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 13 Apr 2010 21:50:46 +0200
-Subject: [Buildroot] [git commit master] bison: convert to the autotools
+Subject: [Buildroot] [git commit master] argus: convert to the autotools
 	infrastructure
-Message-ID: <20100413195156.D6B1020F99@busybox.osuosl.org>
+Message-ID: <20100413195157.53B9C20F99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,93 +10,89 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=98611b3a5ec060c8564a0ed7188abbeb15a8dfd4
+commit: http://git.buildroot.net/buildroot/commit/?id=3be78a238e573c34397a1f4f59af3270328a0a9d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/bison/bison.mk |   69 +++--------------------------------------------
- 1 files changed, 5 insertions(+), 64 deletions(-)
+ package/argus/argus.mk |   64 ++++++------------------------------------------
+ 1 files changed, 8 insertions(+), 56 deletions(-)
 
-diff --git a/package/bison/bison.mk b/package/bison/bison.mk
-index f29259f..9e28e85 100644
---- a/package/bison/bison.mk
-+++ b/package/bison/bison.mk
-@@ -6,70 +6,11 @@
- BISON_VERSION:=2.3
- BISON_SOURCE:=bison-$(BISON_VERSION).tar.bz2
- BISON_SITE:=$(BR2_GNU_MIRROR)/bison
--BISON_DIR:=$(BUILD_DIR)/bison-$(BISON_VERSION)
--BISON_CAT:=$(BZCAT)
--BISON_BINARY:=src/bison
--BISON_TARGET_BINARY:=usr/bin/bison
+diff --git a/package/argus/argus.mk b/package/argus/argus.mk
+index 57d0789..6653d06 100644
+--- a/package/argus/argus.mk
++++ b/package/argus/argus.mk
+@@ -7,63 +7,15 @@ ARGUS_VERSION:=3.0.0.rc.34
+ ARGUS_SOURCE:=argus_$(ARGUS_VERSION).orig.tar.gz
+ ARGUS_PATCH:=argus_$(ARGUS_VERSION)-1.diff.gz
+ ARGUS_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/a/argus/
+-ARGUS_DIR:=$(BUILD_DIR)/argus-$(ARGUS_VERSION)
+-ARGUS_CAT:=$(ZCAT)
+-ARGUS_BINARY:=bin/argus
+-ARGUS_TARGET_BINARY:=usr/sbin/argus
++ARGUS_DEPENDENCIES=libpcap
++ARGUS_INSTALL_TARGET_OPT=DESTDIR=$(TARGET_DIR) install
  
--$(DL_DIR)/$(BISON_SOURCE):
--	 $(call DOWNLOAD,$(BISON_SITE),$(BISON_SOURCE))
-+define BISON_DISABLE_EXAMPLES
-+	echo 'all install:' > $(@D)/examples/Makefile
-+endef
- 
--bison-source: $(DL_DIR)/$(BISON_SOURCE)
-+BISON_POST_CONFIGURE_HOOKS += BISON_DISABLE_EXAMPLES
- 
--$(BISON_DIR)/.unpacked: $(DL_DIR)/$(BISON_SOURCE)
--	$(BISON_CAT) $(DL_DIR)/$(BISON_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	$(CONFIG_UPDATE) $(BISON_DIR)/build-aux
+-$(DL_DIR)/$(ARGUS_SOURCE):
+-	$(call DOWNLOAD,$(ARGUS_SITE),$(ARGUS_SOURCE))
+-
+-$(DL_DIR)/$(ARGUS_PATCH):
+-	$(call DOWNLOAD,$(ARGUS_SITE),$(ARGUS_PATCH))
+-
+-argus-source: $(DL_DIR)/$(ARGUS_SOURCE) $(DL_DIR)/$(ARGUS_PATCH)
+-
+-$(ARGUS_DIR)/.unpacked: $(DL_DIR)/$(ARGUS_SOURCE) $(DL_DIR)/$(ARGUS_PATCH)
+-	$(ARGUS_CAT) $(DL_DIR)/$(ARGUS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(ARGUS_DIR) package/argus/ argus\*.patch
+-ifneq ($(ARGUS_PATCH),)
+-	(cd $(ARGUS_DIR) && $(ARGUS_CAT) $(DL_DIR)/$(ARGUS_PATCH) | patch -p1)
+-	if [ -d $(ARGUS_DIR)/debian/patches ]; then \
+-		toolchain/patch-kernel.sh $(ARGUS_DIR) $(ARGUS_DIR)/debian/patches \*.patch; \
++define ARGUS_DEBIAN_PATCH_APPLY
++	if [ -d $(@D)/debian/patches ]; then \
++		toolchain/patch-kernel.sh $(@D) $(@D)/debian/patches \*.patch; \
+ 	fi
+-endif
 -	touch $@
 -
--$(BISON_DIR)/.configured: $(BISON_DIR)/.unpacked
--	(cd $(BISON_DIR); rm -rf config.cache; \
+-$(ARGUS_DIR)/.configured: $(ARGUS_DIR)/.unpacked
+-	(cd $(ARGUS_DIR); rm -rf config.cache; \
 -		$(TARGET_CONFIGURE_OPTS) \
 -		$(TARGET_CONFIGURE_ARGS) \
--		gt_cv_func_gnugettext2_libintl=yes \
 -		./configure $(QUIET) \
 -		--target=$(GNU_TARGET_NAME) \
 -		--host=$(GNU_TARGET_NAME) \
 -		--build=$(GNU_HOST_NAME) \
 -		--prefix=/usr \
--		--exec-prefix=/usr \
--		--bindir=/usr/bin \
--		--sbindir=/usr/sbin \
--		--libdir=/lib \
--		--libexecdir=/usr/lib \
--		--sysconfdir=/etc \
--		--datadir=/usr/share \
--		--localstatedir=/var \
--		--mandir=/usr/share/man \
--		--infodir=/usr/share/info \
--		--includedir=/usr/include \
--		$(DISABLE_NLS) \
+-		$(DISABLE_LARGEFILE) \
 -	)
--	echo 'all install:' > $(BISON_DIR)/examples/Makefile
 -	touch $@
 -
--$(BISON_DIR)/$(BISON_BINARY): $(BISON_DIR)/.configured
--	$(MAKE) CC=$(TARGET_CC) -C $(BISON_DIR)
+-$(ARGUS_DIR)/$(ARGUS_BINARY): $(ARGUS_DIR)/.configured
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(ARGUS_DIR)
 -
--$(TARGET_DIR)/$(BISON_TARGET_BINARY): $(BISON_DIR)/$(BISON_BINARY)
--	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(BISON_DIR) install
--	rm -rf $(TARGET_DIR)/share/locale
--	cp -a package/bison/yacc $(TARGET_DIR)/usr/bin/yacc
+-$(TARGET_DIR)/$(ARGUS_TARGET_BINARY): $(ARGUS_DIR)/$(ARGUS_BINARY)
+-	cp -dpf $(ARGUS_DIR)/$(ARGUS_BINARY) $@
+-	$(STRIPCMD) $(STRIP_STRIP_ALL) $@
++endef
+ 
+-argus: libpcap $(TARGET_DIR)/$(ARGUS_TARGET_BINARY)
++ARGUS_POST_PATCH_HOOKS += ARGUS_DEBIAN_PATCH_APPLY
+ 
+-argus-clean:
+-	-$(MAKE) -C $(ARGUS_DIR) clean
+-	rm -f $(TARGET_DIR)/$(ARGUS_TARGET_BINARY)
 -
--bison: $(TARGET_DIR)/$(BISON_TARGET_BINARY)
--
--bison-clean:
--	-$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(BISON_DIR) uninstall
--	rm -f $(TARGET_DIR)/$(BISON_TARGET_BINARY)
--	-$(MAKE) -C $(BISON_DIR) clean
--
--bison-dirclean:
--	rm -rf $(BISON_DIR)
--
+-argus-dirclean:
+-	rm -rf $(ARGUS_DIR)
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_BISON),y)
--TARGETS+=bison
+-ifeq ($(BR2_PACKAGE_ARGUS),y)
+-TARGETS+=argus
 -endif
-+$(eval $(call AUTOTARGETS,package,bison))
++$(eval $(call AUTOTARGETS,package,argus))
 -- 
 1.6.3.3
