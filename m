@@ -1,10 +1,10 @@
 From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Wed, 14 Apr 2010 01:05:42 +0200
-Subject: [Buildroot] [PATCH 09/41] scripts: force copy of files to erase
-	already present and readonly files
+Date: Wed, 14 Apr 2010 01:05:41 +0200
+Subject: [Buildroot] [PATCH 08/41] ext-toolchain: remove pkgconfig files
+	from the external toolchain
 In-Reply-To: <1271199974-30434-1-git-send-email-llandwerlin@gmail.com>
 References: <1271199974-30434-1-git-send-email-llandwerlin@gmail.com>
-Message-ID: <1271199974-30434-10-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1271199974-30434-9-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,30 +15,22 @@ From: Lionel Landwerlin <llandwerlin@gmail.com>
 
 Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 ---
- scripts/copy.sh |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ toolchain/external-toolchain/ext-tool.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/scripts/copy.sh b/scripts/copy.sh
-index 410606d..508ed56 100755
---- a/scripts/copy.sh
-+++ b/scripts/copy.sh
-@@ -5,7 +5,7 @@ TARGET_DIR=$2
+diff --git a/toolchain/external-toolchain/ext-tool.mk b/toolchain/external-toolchain/ext-tool.mk
+index 235e68c..0b6af52 100644
+--- a/toolchain/external-toolchain/ext-tool.mk
++++ b/toolchain/external-toolchain/ext-tool.mk
+@@ -80,7 +80,8 @@ copy_toolchain_lib_root = \
+ copy_toolchain_sysroot = \
+ 	SYSROOT_DIR="$(strip $1)"; \
+ 	cp -a $${SYSROOT_DIR}/* $(STAGING_DIR)/ ; \
+-	find $(STAGING_DIR) -type d | xargs chmod 755
++	find $(STAGING_DIR) -type d | xargs chmod 755; \
++	rm -rf $(STAGING_DIR)/usr/lib/pkgconfig
  
- echo "Copying development files to target..."
- 
--cp -a ${STAGING_DIR}/usr/include ${TARGET_DIR}/usr
-+cp -af ${STAGING_DIR}/usr/include ${TARGET_DIR}/usr
- 
- for LIBSDIR in /lib /usr/lib; do
- 	for WILDCARD in *.a *.la; do
-@@ -13,7 +13,7 @@ for LIBSDIR in /lib /usr/lib; do
- 			STAGING_STRIPPED=${FILE_PATH##${STAGING_DIR}}
- 			EXTENDED_DIR=${STAGING_STRIPPED%/${WILDCARD}}
- 			mkdir -p ${TARGET_DIR}${EXTENDED_DIR}
--			cp ${FILE_PATH} ${TARGET_DIR}${STAGING_STRIPPED}
-+			cp -fa ${FILE_PATH} ${TARGET_DIR}${STAGING_STRIPPED}
- 			#echo ${TARGET_DIR}${STAGING_STRIPPED}
- 		done
- 	done
+ #
+ # Check the availability of a particular glibc feature. We assume that
 -- 
 1.7.0.4
