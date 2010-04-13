@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 13 Apr 2010 21:50:46 +0200
-Subject: [Buildroot] [git commit master] libraw1394: convert to the
-	autotools infrastructure
-Message-ID: <20100413195155.C31BA20F99@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] udpcast: convert to the autotools
+	infrastructure
+Message-ID: <20100413195154.3FAC720F94@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,89 +10,122 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=503062a3556c2d2f0d73d524fc0b4ec08be5f8fb
+commit: http://git.buildroot.net/buildroot/commit/?id=55184f55a8446f0e81c95d93b27997ccc4fa00d4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libraw1394/libraw1394.mk |   64 +------------------------------------
- 1 files changed, 2 insertions(+), 62 deletions(-)
+ package/udpcast/udpcast.mk |   93 +++++++-------------------------------------
+ 1 files changed, 14 insertions(+), 79 deletions(-)
 
-diff --git a/package/libraw1394/libraw1394.mk b/package/libraw1394/libraw1394.mk
-index 045cc82..196c721 100644
---- a/package/libraw1394/libraw1394.mk
-+++ b/package/libraw1394/libraw1394.mk
-@@ -3,69 +3,9 @@
- # libraw1394
- #
- #############################################################
+diff --git a/package/udpcast/udpcast.mk b/package/udpcast/udpcast.mk
+index 3e0823a..d290cc9 100644
+--- a/package/udpcast/udpcast.mk
++++ b/package/udpcast/udpcast.mk
+@@ -6,90 +6,25 @@
+ UDPCAST_VERSION:=20071228
+ UDPCAST_SOURCE:=udpcast-$(UDPCAST_VERSION).tar.gz
+ UDPCAST_SITE:=http://www.udpcast.linux.lu/download
+-UDPCAST_CAT:=$(ZCAT)
+-UDPCAST_DIR:=$(BUILD_DIR)/udpcast-$(UDPCAST_VERSION)
++UDPCAST_INSTALL_TARGET_OPT=DESTDIR=$(TARGET_DIR) install
++UDPCAST_CONF_ENV = $(if $(BR_LARGEFILE),ac_cv_type_stat64=yes,ac_cv_type_stat64=no)
+ 
+-BR2_UDPCAST_CFLAGS:=
 -
- LIBRAW1394_VERSION:=1.2.1
- LIBRAW1394_SOURCE:=libraw1394-$(LIBRAW1394_VERSION).tar.gz
- LIBRAW1394_SITE:=http://www.kernel.org/pub/linux/libs/ieee1394/
--LIBRAW1394_DIR:=$(BUILD_DIR)/libraw1394-$(LIBRAW1394_VERSION)
+-$(DL_DIR)/$(UDPCAST_SOURCE):
+-	 $(call DOWNLOAD,$(UDPCAST_SITE),$(UDPCAST_SOURCE))
 -
--$(DL_DIR)/$(LIBRAW1394_SOURCE):
--	$(call DOWNLOAD,$(LIBRAW1394_SITE),$(LIBRAW1394_SOURCE))
+-udpcast-source: $(DL_DIR)/$(UDPCAST_SOURCE)
 -
--$(LIBRAW1394_DIR)/.unpacked: $(DL_DIR)/$(LIBRAW1394_SOURCE)
--	$(ZCAT) $(DL_DIR)/$(LIBRAW1394_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	touch $@
+-$(UDPCAST_DIR)/.unpacked: $(DL_DIR)/$(UDPCAST_SOURCE)
+-	$(UDPCAST_CAT) $(DL_DIR)/$(UDPCAST_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(UDPCAST_DIR) package/udpcast udpcast\*.patch
+-	$(CONFIG_UPDATE) $(UDPCAST_DIR)
+-	touch $(UDPCAST_DIR)/.unpacked
 -
--$(LIBRAW1394_DIR)/.configured: $(LIBRAW1394_DIR)/.unpacked
--	(cd $(LIBRAW1394_DIR); rm -rf config.cache; \
+-$(UDPCAST_DIR)/.configured: $(UDPCAST_DIR)/.unpacked
+-	(cd $(UDPCAST_DIR); rm -rf config.cache; \
+-		$(if $(BR_LARGEFILE),ac_cv_type_stat64=yes,ac_cv_type_stat64=no) \
 -		$(TARGET_CONFIGURE_OPTS) \
 -		$(TARGET_CONFIGURE_ARGS) \
+-		CFLAGS="$(TARGET_CFLAGS) $(BR2_UDPCAST_CFLAGS)" \
 -		./configure $(QUIET) \
--		--target=$(GNU_TARGET_NAME) \
--		--host=$(GNU_TARGET_NAME) \
+-		--target=$(REAL_GNU_TARGET_NAME) \
+-		--host=$(REAL_GNU_TARGET_NAME) \
 -		--build=$(GNU_HOST_NAME) \
 -		--prefix=/usr \
 -		--exec-prefix=/usr \
 -		--bindir=/usr/bin \
 -		--sbindir=/usr/sbin \
--		--libdir=/usr/lib \
+-		--libdir=/lib \
 -		--libexecdir=/usr/lib \
 -		--sysconfdir=/etc \
 -		--datadir=/usr/share \
 -		--localstatedir=/var \
--		--includedir=/include \
 -		--mandir=/usr/man \
 -		--infodir=/usr/info \
+-		$(DISABLE_NLS) \
 -	)
--	touch $@
+-	touch $(UDPCAST_DIR)/.configured
 -
--$(LIBRAW1394_DIR)/.compiled: $(LIBRAW1394_DIR)/.configured
--	$(MAKE) -C $(LIBRAW1394_DIR)
--	touch $@
+-UDPCAST_BINARIES:=udp-sender udp-receiver
 -
--$(STAGING_DIR)/usr/lib/libraw1394.so: $(LIBRAW1394_DIR)/.compiled
--	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(LIBRAW1394_DIR)/src install
+-UDPCAST_BUILD_TARGETS:=$(addprefix $(UDPCAST_DIR)/,$(UDPCAST_BINARIES))
 -
--$(TARGET_DIR)/usr/lib/libraw1394.so: $(STAGING_DIR)/usr/lib/libraw1394.so
--	cp -dpf $(STAGING_DIR)/usr/lib/libraw1394.so* $(TARGET_DIR)/usr/lib/
+-$(UDPCAST_BUILD_TARGETS): $(UDPCAST_DIR)/.configured
+-	$(MAKE) CC=$(TARGET_CC) -C $(UDPCAST_DIR)
 -
--libraw1394: $(TARGET_DIR)/usr/lib/libraw1394.so
+-UDPCAST_PROGS:=$(addprefix $(TARGET_DIR)/usr/sbin/,$(UDPCAST_BINARIES))
 -
--libraw1394-source: $(DL_DIR)/$(LIBRAW1394_SOURCE)
+-UDPCAST_INSTALL_MANPAGES=$(addprefix $(TARGET_DIR)/usr/man/, $(addsuffix .1,$(UDPCAST_BINARIES)))
 -
--libraw1394-clean:
--	rm $(TARGET_DIR)/usr/lib/libraw1394.so*
--	-$(MAKE) -C $(LIBRAW1394_DIR) clean
+-UDPCAST_INSTALL_FILES:=$(UDPCAST_PROGS) $(UDPCAST_INSTALL_MANPAGES)
 -
--libraw1394-dirclean:
--	rm -rf $(LIBRAW1394_DIR)
+-$(UDPCAST_PROGS): $(UDPCAST_BUILD_TARGETS)
+-	$(MAKE) -C $(UDPCAST_DIR) DESTDIR=$(TARGET_DIR) install
+-	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(REMOVE_SECTION_COMMENT) \
+-	  $(REMOVE_SECTION_NOTE) \
+-	  $(UDPCAST_PROGS)
+-ifneq ($(BR2_PACKAGE_UDPCAST_SENDER),y)
++define UDPCAST_REMOVE_UDP_SENDER
+ 	rm -f $(TARGET_DIR)/usr/sbin/udp-sender
+ 	rm -f $(TARGET_DIR)/usr/sbin/udp-sender.1
++endef
++
++ifneq ($(BR2_PACKAGE_UDPCAST_SENDER),y)
++UDPCAST_HOOK_POST_INSTALL_TARGET_HOOKS += UDPCAST_REMOVE_UDP_SENDER
+ endif
+-ifneq ($(BR2_PACKAGE_UDPCAST_RECEIVER),y)
++
++define UDPCAST_REMOVE_UDP_RECEIVER
+ 	rm -f $(TARGET_DIR)/usr/sbin/udp-receiver
+ 	rm -f $(TARGET_DIR)/usr/sbin/udp-receiver.1
+-endif
 -
+-udpcast: $(UDPCAST_PROGS)
+-
+-udpcast-clean:
+-	rm -f $(UDPCAST_INSTALL_FILES)
+-	$(MAKE) -C $(UDPCAST_DIR) clean
+-	rm -f $(UDPCAST_DIR)/.configured
+-
+-udpcast-dirclean:
+-	rm -rf $(UDPCAST_DIR)
+-
++endef
+ 
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_LIBRAW1394),y)
--TARGETS+=libraw1394
--endif
-+LIBRAW1394_INSTALL_STAGING=YES
- 
-+$(eval $(call AUTOTARGETS,package,libraw1394))
+-ifeq ($(BR2_PACKAGE_UDPCAST),y)
+-TARGETS+=udpcast
++ifneq ($(BR2_PACKAGE_UDPCAST_RECEIVER),y)
++UDPCAST_HOOK_POST_INSTALL_TARGET_HOOKS += UDPCAST_REMOVE_UDP_RECEIVER
+ endif
++
++$(eval $(call AUTOTARGETS,package,udpcast))
 -- 
 1.6.3.3
