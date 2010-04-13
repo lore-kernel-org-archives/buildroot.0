@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 13 Apr 2010 21:50:46 +0200
-Subject: [Buildroot] [git commit master] tar: convert to the autotools
-	infrastructure
-Message-ID: <20100413195157.1F6E420F99@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] patch: convert to the autotools
+	infrastructure and bump version
+Message-ID: <20100413195155.29E4C20F99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,51 +10,51 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e300d684bcb3816be6e50f42f0b9ae47f28e8fe0
+commit: http://git.buildroot.net/buildroot/commit/?id=0dae022b7a8745d62a3f275b9e7c9a0cdef700c0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Bumping the version from 2.5.9 to 2.6 allows to avoid adding a patch
+(merged upstream) to fix patch's Makefile install target.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/tar/tar.mk |   82 ++-------------------------------------------------
- 1 files changed, 4 insertions(+), 78 deletions(-)
+ package/patch/patch.mk |   69 +++--------------------------------------------
+ 1 files changed, 5 insertions(+), 64 deletions(-)
 
-diff --git a/package/tar/tar.mk b/package/tar/tar.mk
-index 32189b5..f9ee74b 100644
---- a/package/tar/tar.mk
-+++ b/package/tar/tar.mk
-@@ -3,82 +3,8 @@
- # tar
+diff --git a/package/patch/patch.mk b/package/patch/patch.mk
+index 2c1e394..31de4bb 100644
+--- a/package/patch/patch.mk
++++ b/package/patch/patch.mk
+@@ -3,68 +3,9 @@
+ # patch
  #
  #############################################################
--GNUTAR_VERSION:=1.21
--GNUTAR_SOURCE:=tar-$(GNUTAR_VERSION).tar.bz2
--GNUTAR_SITE:=$(BR2_GNU_MIRROR)/tar/
--GNUTAR_DIR:=$(BUILD_DIR)/tar-$(GNUTAR_VERSION)
--GNUTAR_CAT:=$(BZCAT)
--GNUTAR_BINARY:=src/tar
--GNUTAR_TARGET_BINARY:=bin/tar
-+TAR_VERSION:=1.21
-+TAR_SOURCE:=tar-$(TAR_VERSION).tar.bz2
-+TAR_SITE:=$(BR2_GNU_MIRROR)/tar/
+-GNUPATCH_VERSION:=2.5.9
+-GNUPATCH_SOURCE:=patch_$(GNUPATCH_VERSION).orig.tar.gz
+-GNUPATCH_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/p/patch
+-GNUPATCH_CAT:=$(ZCAT)
+-GNUPATCH_DIR:=$(BUILD_DIR)/patch-$(GNUPATCH_VERSION)
+-GNUPATCH_BINARY:=patch
+-GNUPATCH_TARGET_BINARY:=usr/bin/patch
++PATCH_VERSION:=2.6
++PATCH_SOURCE:=patch_$(PATCH_VERSION).orig.tar.gz
++PATCH_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/p/patch
++PATCH_INSTALL_TARGET_OPT=DESTDIR=$(TARGET_DIR) install
  
--$(DL_DIR)/$(GNUTAR_SOURCE):
--	 $(call DOWNLOAD,$(GNUTAR_SITE),$(GNUTAR_SOURCE))
+-$(DL_DIR)/$(GNUPATCH_SOURCE):
+-	 $(call DOWNLOAD,$(GNUPATCH_SITE),$(GNUPATCH_SOURCE))
 -
--tar-source: $(DL_DIR)/$(GNUTAR_SOURCE)
+-patch-source: $(DL_DIR)/$(GNUPATCH_SOURCE)
 -
--$(GNUTAR_DIR)/.unpacked: $(DL_DIR)/$(GNUTAR_SOURCE)
--	$(GNUTAR_CAT) $(DL_DIR)/$(GNUTAR_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(GNUTAR_DIR) package/tar/ tar\*.patch
--	$(CONFIG_UPDATE) $(GNUTAR_DIR)
--	$(CONFIG_UPDATE) $(GNUTAR_DIR)/build-aux
--	touch $@
+-$(GNUPATCH_DIR)/.unpacked: $(DL_DIR)/$(GNUPATCH_SOURCE)
+-	$(GNUPATCH_CAT) $(DL_DIR)/$(GNUPATCH_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	$(CONFIG_UPDATE) $(GNUPATCH_DIR)
+-	touch $(GNUPATCH_DIR)/.unpacked
 -
--$(GNUTAR_DIR)/.configured: $(GNUTAR_DIR)/.unpacked
--	(cd $(GNUTAR_DIR); rm -rf config.cache; \
+-$(GNUPATCH_DIR)/.configured: $(GNUPATCH_DIR)/.unpacked
+-	(cd $(GNUPATCH_DIR); rm -rf config.cache; \
 -		$(TARGET_CONFIGURE_OPTS) \
 -		$(TARGET_CONFIGURE_ARGS) \
--		ac_cv_func_chown_works=yes \
--		gl_cv_func_chown_follows_symlink=yes \
 -		./configure $(QUIET) \
 -		--target=$(GNU_TARGET_NAME) \
 -		--host=$(GNU_TARGET_NAME) \
@@ -73,41 +73,31 @@ index 32189b5..f9ee74b 100644
 -		$(DISABLE_NLS) \
 -		$(DISABLE_LARGEFILE) \
 -	)
--	touch $@
+-	touch $(GNUPATCH_DIR)/.configured
 -
--$(GNUTAR_DIR)/$(GNUTAR_BINARY): $(GNUTAR_DIR)/.configured
--	$(MAKE) -C $(GNUTAR_DIR)
+-$(GNUPATCH_DIR)/$(GNUPATCH_BINARY): $(GNUPATCH_DIR)/.configured
+-	$(MAKE) CC=$(TARGET_CC) -C $(GNUPATCH_DIR)
 -
--# This stuff is needed to work around GNU make deficiencies
--tar-target_binary: $(GNUTAR_DIR)/$(GNUTAR_BINARY)
--	@if [ -L $(TARGET_DIR)/$(GNUTAR_TARGET_BINARY) ]; then \
--		rm -f $(TARGET_DIR)/$(GNUTAR_TARGET_BINARY); \
--	fi
--	@if [ ! -f $(GNUTAR_DIR)/$(GNUTAR_BINARY) -o $(TARGET_DIR)/$(GNUTAR_TARGET_BINARY) \
--	-ot $(GNUTAR_DIR)/$(GNUTAR_BINARY) ]; then \
--		set -x; \
--		rm -f $(TARGET_DIR)/$(GNUTAR_TARGET_BINARY); \
--		cp -a $(GNUTAR_DIR)/$(GNUTAR_BINARY) \
--			$(TARGET_DIR)/$(GNUTAR_TARGET_BINARY); \
--	fi
+-$(TARGET_DIR)/$(GNUPATCH_TARGET_BINARY): $(GNUPATCH_DIR)/$(GNUPATCH_BINARY)
+-	rm -f $(TARGET_DIR)/$(GNUPATCH_TARGET_BINARY)
+-	cp -a $(GNUPATCH_DIR)/$(GNUPATCH_BINARY) $(TARGET_DIR)/$(GNUPATCH_TARGET_BINARY)
 -
--tar: tar-target_binary
+-patch: $(TARGET_DIR)/$(GNUPATCH_TARGET_BINARY)
 -
--tar-clean:
--	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(GNUTAR_DIR) uninstall
--	-$(MAKE) -C $(GNUTAR_DIR) clean
+-patch-clean:
+-	rm -f $(TARGET_DIR)/$(GNUPATCH_TARGET_BINARY)
 -
--tar-dirclean:
--	rm -rf $(GNUTAR_DIR)
+-patch-dirclean:
+-	rm -rf $(GNUPATCH_DIR)
 -
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_TAR),y)
--TARGETS+=tar
+-ifeq ($(BR2_PACKAGE_PATCH),y)
+-TARGETS+=patch
 -endif
-+$(eval $(call AUTOTARGETS,package,tar))
++$(eval $(call AUTOTARGETS,package,patch))
 -- 
 1.6.3.3
