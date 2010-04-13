@@ -1,85 +1,61 @@
-From: Jonathan dumaresq <jdumaresq@cimeq.qc.ca>
-Date: Tue, 13 Apr 2010 11:13:19 -0400
-Subject: [Buildroot] [PATCH 05/35] u-boot: remove ancient versions
-In-Reply-To: <0317d23e36901cf689a8e298a5b3d1513f50254d.1271170913.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1271170913.git.thomas.petazzoni@free-electrons.com>
-	<0317d23e36901cf689a8e298a5b3d1513f50254d.1271170913.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <79D4CF185FBB4873B0FA52EA76F44C97@cimeq.ca>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 13 Apr 2010 15:33:36 +0000 (UTC)
+Subject: [Buildroot] [Bug 851] Add option to specify --sysroot value for
+ external toolchain
+In-Reply-To: <bug-851-163@https.bugs.busybox.net/>
+References: <bug-851-163@https.bugs.busybox.net/>
+Message-ID: <20100413153337.049BA7F9A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-
-I think you should keep the U-boot-2008.10 one. This is the only one that
-work with AP7000 target. 
-
-I don't think that u-boot have fixed the caching issue with the AP7000. 
-
-Regards
-
-Jonathan
+https://bugs.busybox.net/show_bug.cgi?id=851
 
 
-buildroot-bounces at busybox.net wrote:
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  boot/u-boot/Config.in |   26 --------------------------
->  1 files changed, 0 insertions(+), 26 deletions(-)
-> 
-> diff --git a/boot/u-boot/Config.in b/boot/u-boot/Config.in index
-> 70d9eb8..8a49b37 100644 --- a/boot/u-boot/Config.in
-> +++ b/boot/u-boot/Config.in
-> @@ -27,26 +27,6 @@ config BR2_TARGET_UBOOT_2009_08
->  	bool "u-boot-2009.08"
->  	depends on BR2_DEPRECATED || BR2_RECENT
-> 
-> -config BR2_TARGET_UBOOT_2009_06
-> -	bool "u-boot-2009.06"
-> -	depends on BR2_DEPRECATED
-> -
-> -config BR2_TARGET_UBOOT_2009_03
-> -	bool "u-boot-2009.03"
-> -	depends on BR2_DEPRECATED
-> -
-> -config BR2_TARGET_UBOOT_2009_01
-> -	bool "u-boot-2009.01"
-> -	depends on BR2_DEPRECATED
-> -
-> -config BR2_TARGET_UBOOT_2008_10
-> -	bool "u-boot-2008.10"
-> -	depends on BR2_DEPRECATED
-> -
-> -config BR2_TARGET_UBOOT_1_2_0_ATMEL
-> -	bool "u-boot-1.2.0-atmel"
-> -	depends on BR2_TARGET_AT91
-> -
->  endchoice
-> 
->  config BR2_UBOOT_VERSION
-> @@ -54,15 +34,9 @@ config BR2_UBOOT_VERSION
->  	default "2010.03"	if BR2_TARGET_UBOOT_2010_03
->  	default "2009.11"	if BR2_TARGET_UBOOT_2009_11
->  	default "2009.08"	if BR2_TARGET_UBOOT_2009_08
-> -	default "2009.06"	if BR2_TARGET_UBOOT_2009_06
-> -	default "2009.03"	if BR2_TARGET_UBOOT_2009_03
-> -	default "2009.01"	if BR2_TARGET_UBOOT_2009_01
-> -	default "2008.10"	if BR2_TARGET_UBOOT_2008_10
-> -	default "1.2.0-atmel"	if BR2_TARGET_UBOOT_1_2_0_ATMEL
-> 
->  config BR2_U_BOOT_SITE
->  	string
-> -	default "$(BR2_ATMEL_MIRROR)"		if
-BR2_TARGET_UBOOT_1_2_0_ATMEL
->  	default "ftp://ftp.denx.de/pub/u-boot"
-> 
->  source "target/device/Config.in.u-boot"
-> --
-> 1.6.3.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+
+--- Comment #12 from Grant Edwards <grant.b.edwards@gmail.com>  2010-04-13 15:33:35 UTC ---
+
+I didn't save the .config file for my production toolchain (the one
+that just prints "libc.a").  So, I rebuilt it, and now I see the same
+behavior that you do: after being relocated it always prints the
+original path for the file (e.g.
+<whaterver>/buildroot/output/staging/usr/lib/libc.a.
+
+In either case, the current fix doesn't work for toolchains built
+using buildroot.
+
+I'm going to continue trying to build a toolchain built using
+crosstool-ng. So far, it's been rather futile.  The "example"
+configuration for arm/linux/uclibc builds fine, but as soon as I try
+the current version of anything (gcc, uclibc) the uclibc build fails
+due to a bunch of unresolved symbols.
+
+> So, with Buildroot toolchains, the result is not correct:
+> -print-file-name keeps returning paths to the original location.
+
+I thought that _was_ the expected behavior and that's why we need to
+pass the -sysroot option to the toolchain.
+
+> With Crosstool-NG toolchains, it works as expected. Something is
+> definitely wrong in the way Buildroot generates toolchains, IMO.
+
+Now I'm confused again (shocker, eh?): if a gcc toolchain is expected
+to be able to find its files after it's been relocated, then it
+doesn't need to be passed the -sysroot option. If that's true, why
+does buildroot require support for the -sysroot option and try to
+figure out what to pass as the sysroot value?
+
+[Is there any way to prevent bugzilla from wrapping comments?
+ Presumably that's done in an attempt to render illegible the code
+ examples and program output that pastes into comments. It works quite
+ well.]
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
