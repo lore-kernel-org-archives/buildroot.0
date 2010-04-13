@@ -1,10 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 12 Apr 2010 22:58:17 +0000 (UTC)
+Date: Tue, 13 Apr 2010 05:34:53 +0000 (UTC)
 Subject: [Buildroot] [Bug 851] Add option to specify --sysroot value for
  external toolchain
 In-Reply-To: <bug-851-163@https.bugs.busybox.net/>
 References: <bug-851-163@https.bugs.busybox.net/>
-Message-ID: <20100412225817.45E6820DF2@busybox.osuosl.org>
+Message-ID: <20100413053453.19F2A7FAC8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,57 +17,37 @@ https://bugs.busybox.net/show_bug.cgi?id=851
 
 
 
---- Comment #10 from Grant Edwards <grant.b.edwards@gmail.com>  2010-04-12 22:58:16 UTC ---
+--- Comment #11 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  2010-04-13 05:34:51 UTC ---
+Could you the .config you used to generate the toolchain ? I don't get the same
+behaviour here.
 
-The "fix" doesn't work for me.
+However, I've tried with a Buildroot generated toolchain, that I moved, and I
+keep getting the old path.
 
-The fix in ext-tool.mk uses the following line to figure out what
-the sysroot directory is:
+Buildroot external toolchain, at its original location:
 
-SYSROOT_DIR=$(shell readlink -f $$(LANG=C $(TARGET_CC) -print-file-name=libc.a
-|sed -r -e 's:usr/lib/libc\.a::;'))
+$ ./arm-br/usr/bin/arm-linux-gcc -print-file-name=libc.a
+/home/thomas/x-tools/arm-br//usr/lib/libc.a
 
-All that does for me is print "libc.a":
+Buildroot external toolchain, in a different location:
 
-  $ LANG=C /home/nextgen/buildroot/toolchain/usr/bin/arm-linux-gcc
--print-file-name=libc.a
-  libc.a
+$ ./arm-br.moved/usr/bin/arm-linux-gcc -print-file-name=libc.a
+/home/thomas/x-tools/arm-br//usr/lib/libc.a
 
-The only way I get the desired path for libc.a is to pass gcc the
-correct sysroot value:
+Crosstool-NG toolchain, original location:
 
-  $ LANG=C /home/nextgen/buildroot/toolchain/usr/bin/arm-linux-gcc
---sysroot=/home/nextgen/buildroot/toolchain -print-file-name=libc.so
-  /home/nextgen/buildroot/toolchain/usr/lib/libc.so
+$ ./arm-unknown-linux-uclibcgnueabi/bin/arm-linux-gcc -print-file-name=libc.a
+/home/thomas/x-tools/arm-unknown-linux-uclibcgnueabi/arm-unknown-linux-uclibcgnueabi//sys-root/usr/lib/libc.a
 
+Crosstool-NG toolchain, in a different location:
 
-But the correct sysroot value is what that line in ext-tool.mk is
-supposed to be figuring out.
+$ ./arm2/bin/arm-linux-gcc -print-file-name=libc.a
+/home/thomas/x-tools/arm2/bin/../arm-unknown-linux-uclibcgnueabi//sys-root/usr/lib/libc.a
 
-Can somebody explain to me how that line is supposed to work for a
-relocated external toolchain?
-
-BTW, this is with a toolchain built by buildroot:
-
-  $ /home/nextgen/buildroot/toolchain/usr/bin/arm-linux-gcc -v
-  Using built-in specs.
-  Target: arm-linux-uclibc
-  Configured with:
-/home/nextgen/buildroot-test/buildroot/output/toolchain/gcc-4.4.3/configure
---prefix=/usr --build=i386-pc-linux-gnu --host=i386-pc-linux-gnu
---target=arm-linux-uclibc --enable-languages=c,c++
---with-sysroot=/home/nextgen/buildroot-test/buildroot/output/staging
---with-build-time-tools=/home/nextgen/buildroot-test/buildroot/output/staging/usr/arm-linux-uclibc/bin
---disable-__cxa_atexit --enable-target-optspace --with-gnu-ld --disable-libssp
---disable-tls --enable-shared
---with-gmp=/home/nextgen/buildroot-test/buildroot/output/toolchain/gmp
---with-mpfr=/home/nextgen/buildroot-test/buildroot/output/toolchain/mpfr
---enable-threads --disable-multilib --disable-decimal-float --with-float=soft
---with-abi=apcs-gnu --with-arch=armv5te --with-tune=arm9tdmi
---with-pkgversion='Buildroot 2010.02-git'
---with-bugurl=http://bugs.buildroot.net/
-  Thread model: posix
-  gcc version 4.4.3 (Buildroot 2010.02-git) 
+So, with Buildroot toolchains, the result is not correct: -print-file-name
+keeps returning paths to the original location. With Crosstool-NG toolchains,
+it works as expected. Something is definitely wrong in the way Buildroot
+generates toolchains, IMO.
 
 
 -- 
