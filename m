@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 13 Apr 2010 21:50:46 +0200
-Subject: [Buildroot] [git commit master] libosip2: convert to the autotools
+Subject: [Buildroot] [git commit master] findutils: convert to the autotools
 	infrastructure
-Message-ID: <20100413195155.5D1B720F99@busybox.osuosl.org>
+Message-ID: <20100413195158.0519920F99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,41 +10,44 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=aca0487261702a0cdf16551c262d83f8879329d1
+commit: http://git.buildroot.net/buildroot/commit/?id=c901bef2c80d9e2eac3ca482c40019957d8b3fe7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libosip2/libosip2.mk |   83 +++---------------------------------------
- 1 files changed, 6 insertions(+), 77 deletions(-)
+ package/findutils/findutils.mk |   75 +---------------------------------------
+ 1 files changed, 1 insertions(+), 74 deletions(-)
 
-diff --git a/package/libosip2/libosip2.mk b/package/libosip2/libosip2.mk
-index 04a75c5..441b84c 100644
---- a/package/libosip2/libosip2.mk
-+++ b/package/libosip2/libosip2.mk
-@@ -3,85 +3,14 @@
- # libosip2
- #
+diff --git a/package/findutils/findutils.mk b/package/findutils/findutils.mk
+index 96e2682..a1893ad 100644
+--- a/package/findutils/findutils.mk
++++ b/package/findutils/findutils.mk
+@@ -5,79 +5,6 @@
  #############################################################
+ FINDUTILS_VERSION:=4.2.31
+ FINDUTILS_SOURCE:=findutils-$(FINDUTILS_VERSION).tar.gz
+-#FINDUTILS_SITE:=ftp://alpha.gnu.org/gnu/findutils
+ FINDUTILS_SITE:=$(BR2_GNU_MIRROR)/findutils/
+-FINDUTILS_CAT:=$(ZCAT)
+-FINDUTILS_DIR:=$(BUILD_DIR)/findutils-$(FINDUTILS_VERSION)
+-FINDUTILS_BINARY:=find/find
+-FINDUTILS_TARGET_BINARY:=usr/bin/find
+ 
+-$(DL_DIR)/$(FINDUTILS_SOURCE):
+-	 $(call DOWNLOAD,$(FINDUTILS_SITE),$(FINDUTILS_SOURCE))
 -
- LIBOSIP2_VERSION=3.1.0
- LIBOSIP2_SOURCE=libosip2-$(LIBOSIP2_VERSION).tar.gz
- LIBOSIP2_SITE=http://www.antisip.com/download/exosip2
--LIBOSIP2_DIR=$(BUILD_DIR)/libosip2-$(LIBOSIP2_VERSION)
--LIBOSIP2_CAT:=$(ZCAT)
+-findutils-source: $(DL_DIR)/$(FINDUTILS_SOURCE)
 -
--$(DL_DIR)/$(LIBOSIP2_SOURCE):
--	$(call DOWNLOAD,$(LIBOSIP2_SITE),$(LIBOSIP2_SOURCE))
+-$(FINDUTILS_DIR)/.unpacked: $(DL_DIR)/$(FINDUTILS_SOURCE)
+-	$(FINDUTILS_CAT) $(DL_DIR)/$(FINDUTILS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	$(CONFIG_UPDATE) $(FINDUTILS_DIR)
+-	touch $@
 -
--$(LIBOSIP2_DIR)/.unpacked: $(DL_DIR)/$(LIBOSIP2_SOURCE)
--	$(LIBOSIP2_CAT) $(DL_DIR)/$(LIBOSIP2_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	$(CONFIG_UPDATE) $(LIBOSIP2_DIR)
--	touch $(LIBOSIP2_DIR)/.unpacked
--
--$(LIBOSIP2_DIR)/.configured: $(LIBOSIP2_DIR)/.unpacked
--	(cd $(LIBOSIP2_DIR); rm -rf config.cache; \
+-$(FINDUTILS_DIR)/.configured: $(FINDUTILS_DIR)/.unpacked
+-	(cd $(FINDUTILS_DIR); rm -rf config.cache; \
 -		$(TARGET_CONFIGURE_OPTS) \
 -		$(TARGET_CONFIGURE_ARGS) \
+-		ac_cv_func_setvbuf_reversed=no \
 -		./configure $(QUIET) \
 -		--target=$(GNU_TARGET_NAME) \
 -		--host=$(GNU_TARGET_NAME) \
@@ -53,66 +56,52 @@ index 04a75c5..441b84c 100644
 -		--exec-prefix=/usr \
 -		--bindir=/usr/bin \
 -		--sbindir=/usr/sbin \
--		--libexecdir=/usr/lib \
+-		--libdir=/lib \
+-		--libexecdir=/usr/lib/locate \
 -		--sysconfdir=/etc \
 -		--datadir=/usr/share \
--		--localstatedir=/var \
--		--mandir=/usr/man \
--		--infodir=/usr/info \
--		--includedir=/usr/include \
--		--with-gnu-ld \
--		--enable-shared \
--		--enable-static \
+-		--localstatedir=/var/lib \
+-		--mandir=/usr/share/man \
+-		--infodir=/usr/share/info \
 -		$(DISABLE_NLS) \
+-		$(DISABLE_LARGEFILE) \
 -	)
--	touch $(LIBOSIP2_DIR)/.configured
+-	touch $@
 -
--$(LIBOSIP2_DIR)/libosip2.so: $(LIBOSIP2_DIR)/.configured
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(LIBOSIP2_DIR)
+-$(FINDUTILS_DIR)/$(FINDUTILS_BINARY): $(FINDUTILS_DIR)/.configured
+-	$(MAKE) CC=$(TARGET_CC) -C $(FINDUTILS_DIR)
 -
--$(STAGING_DIR)/usr/lib/libosip2.so: $(LIBOSIP2_DIR)/.configured
--	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(LIBOSIP2_DIR) install
--	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libosip2.la
--	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libosipparser2.la
+-# This stuff is needed to work around GNU make deficiencies
+-findutils-target_binary: $(FINDUTILS_DIR)/$(FINDUTILS_BINARY)
+-	@if [ -L $(TARGET_DIR)/$(FINDUTILS_TARGET_BINARY) ]; then \
+-		rm -f $(TARGET_DIR)/$(FINDUTILS_TARGET_BINARY); \
+-	fi
+-	@if [ ! -f $(FINDUTILS_DIR)/$(FINDUTILS_BINARY) \
+-		-o $(TARGET_DIR)/$(FINDUTILS_TARGET_BINARY) \
+-		-ot $(FINDUTILS_DIR)/$(FINDUTILS_BINARY) ]; then \
+-		set -x; \
+-		$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(FINDUTILS_DIR) install-strip; \
+-		$(STRIPCMD) $(TARGET_DIR)/usr/lib/locate/* > /dev/null 2>&1; \
+-	fi
+-	rm -rf $(TARGET_DIR)/share/locale
 -
--$(TARGET_DIR)/usr/lib/libosip2.so: $(STAGING_DIR)/usr/lib/libosip2.so
--	mkdir -p $(TARGET_DIR)/usr/lib
--	cp -dpf $(STAGING_DIR)/usr/lib/libosip2.so* $(TARGET_DIR)/usr/lib/
--	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libosip2.so*
+-findutils: findutils-target_binary
 -
--$(TARGET_DIR)/usr/lib/libosipparser2.so: $(STAGING_DIR)/usr/lib/libosip2.so
--	mkdir -p $(TARGET_DIR)/usr/lib
--	cp -dpf $(STAGING_DIR)/usr/lib/libosipparser2.so* $(TARGET_DIR)/usr/lib/
--	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libosipparser2.so*
-+LIBOSIP2_INSTALL_STAGING=YES
- 
--libosip2: $(TARGET_DIR)/usr/lib/libosip2.so $(TARGET_DIR)/usr/lib/libosipparser2.so
-+LIBOSIP2_CONF_OPT = \
-+	--with-gnu-ld \
-+	--enable-shared \
-+	--enable-static
- 
--libosip2-source: $(DL_DIR)/$(LIBOSIP2_SOURCE)
+-findutils-clean:
+-	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(FINDUTILS_DIR) uninstall
+-	-$(MAKE) -C $(FINDUTILS_DIR) clean
 -
--libosip2-clean:
--	-$(MAKE) -C $(LIBOSIP2_DIR) clean
--	-rm -f $(STAGING_DIR)/usr/lib/libosip2.*
--	-rm -f $(STAGING_DIR)/usr/lib/libosipparser2.*
--	-rm -f $(TARGET_DIR)/usr/lib/libosip2.*
--	-rm -f $(TARGET_DIR)/usr/lib/libosipparser2.*
+-findutils-dirclean:
+-	rm -rf $(FINDUTILS_DIR)
 -
--libosip2-dirclean:
--	rm -rf $(LIBOSIP2_DIR)
--
--.PHONY: libosip2-headers libosip2-target-headers
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_LIBOSIP2),y)
--TARGETS+=libosip2
+-ifeq ($(BR2_PACKAGE_FINDUTILS),y)
+-TARGETS+=findutils
 -endif
-+$(eval $(call AUTOTARGETS,package,libosip2))
++$(eval $(call AUTOTARGETS,package,findutils))
 -- 
 1.6.3.3
