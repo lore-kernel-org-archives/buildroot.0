@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 13 Apr 2010 21:50:46 +0200
-Subject: [Buildroot] [git commit master] smartmontools: convert to the
+Subject: [Buildroot] [git commit master] libraw1394: convert to the
 	autotools infrastructure
-Message-ID: <20100413195154.D338F20F94@busybox.osuosl.org>
+Message-ID: <20100413195155.C31BA20F99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,40 +10,37 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=25afa562f6a20eaa538ff7ae93ab60e94680dee4
+commit: http://git.buildroot.net/buildroot/commit/?id=503062a3556c2d2f0d73d524fc0b4ec08be5f8fb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/smartmontools/smartmontools.mk |   69 +-------------------------------
- 1 files changed, 1 insertions(+), 68 deletions(-)
+ package/libraw1394/libraw1394.mk |   64 +------------------------------------
+ 1 files changed, 2 insertions(+), 62 deletions(-)
 
-diff --git a/package/smartmontools/smartmontools.mk b/package/smartmontools/smartmontools.mk
-index fde76b0..d768b34 100644
---- a/package/smartmontools/smartmontools.mk
-+++ b/package/smartmontools/smartmontools.mk
-@@ -7,72 +7,5 @@ SMARTMONTOOLS_VERSION:=5.33
- SMARTMONTOOLS_SOURCE:=smartmontools-$(SMARTMONTOOLS_VERSION).tar.gz
- SMARTMONTOOLS_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/smartmontools
- SMARTMONTOOLS_DIR:=$(BUILD_DIR)/smartmontools-$(SMARTMONTOOLS_VERSION)
--SMARTMONTOOLS_CAT:=$(ZCAT)
--SMARTMONTOOLS_BINARY:=smartctl
--SMARTMONTOOLS_BINARY2:=smartd
--SMARTMONTOOLS_TARGET_BINARY:=usr/sbin/smartctl
--SMARTMONTOOLS_TARGET_BINARY2:=usr/sbin/smartd
- 
--$(DL_DIR)/$(SMARTMONTOOLS_SOURCE):
--	 $(call DOWNLOAD,$(SMARTMONTOOLS_SITE),$(SMARTMONTOOLS_SOURCE))
+diff --git a/package/libraw1394/libraw1394.mk b/package/libraw1394/libraw1394.mk
+index 045cc82..196c721 100644
+--- a/package/libraw1394/libraw1394.mk
++++ b/package/libraw1394/libraw1394.mk
+@@ -3,69 +3,9 @@
+ # libraw1394
+ #
+ #############################################################
 -
--smartmontools-source: $(DL_DIR)/$(SMARTMONTOOLS_SOURCE)
+ LIBRAW1394_VERSION:=1.2.1
+ LIBRAW1394_SOURCE:=libraw1394-$(LIBRAW1394_VERSION).tar.gz
+ LIBRAW1394_SITE:=http://www.kernel.org/pub/linux/libs/ieee1394/
+-LIBRAW1394_DIR:=$(BUILD_DIR)/libraw1394-$(LIBRAW1394_VERSION)
 -
--$(SMARTMONTOOLS_DIR)/.unpacked: $(DL_DIR)/$(SMARTMONTOOLS_SOURCE)
--	$(SMARTMONTOOLS_CAT) $(DL_DIR)/$(SMARTMONTOOLS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(SMARTMONTOOLS_DIR) package/smartmontools/ \*.patch
--	touch $(SMARTMONTOOLS_DIR)/.unpacked
+-$(DL_DIR)/$(LIBRAW1394_SOURCE):
+-	$(call DOWNLOAD,$(LIBRAW1394_SITE),$(LIBRAW1394_SOURCE))
 -
--$(SMARTMONTOOLS_DIR)/.configured: $(SMARTMONTOOLS_DIR)/.unpacked
--	(cd $(SMARTMONTOOLS_DIR); rm -rf config.cache; \
+-$(LIBRAW1394_DIR)/.unpacked: $(DL_DIR)/$(LIBRAW1394_SOURCE)
+-	$(ZCAT) $(DL_DIR)/$(LIBRAW1394_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	touch $@
+-
+-$(LIBRAW1394_DIR)/.configured: $(LIBRAW1394_DIR)/.unpacked
+-	(cd $(LIBRAW1394_DIR); rm -rf config.cache; \
 -		$(TARGET_CONFIGURE_OPTS) \
 -		$(TARGET_CONFIGURE_ARGS) \
 -		./configure $(QUIET) \
@@ -54,47 +51,48 @@ index fde76b0..d768b34 100644
 -		--exec-prefix=/usr \
 -		--bindir=/usr/bin \
 -		--sbindir=/usr/sbin \
--		--libdir=/lib \
+-		--libdir=/usr/lib \
 -		--libexecdir=/usr/lib \
 -		--sysconfdir=/etc \
 -		--datadir=/usr/share \
 -		--localstatedir=/var \
+-		--includedir=/include \
 -		--mandir=/usr/man \
 -		--infodir=/usr/info \
--		$(DISABLE_NLS) \
--		$(DISABLE_LARGEFILE) \
 -	)
--	touch $(SMARTMONTOOLS_DIR)/.configured
+-	touch $@
 -
--$(SMARTMONTOOLS_DIR)/$(SMARTMONTOOLS_BINARY): $(SMARTMONTOOLS_DIR)/.configured
--	$(MAKE) -C $(SMARTMONTOOLS_DIR)
--	$(STRIPCMD) $(SMARTMONTOOLS_DIR)/$(SMARTMONTOOLS_BINARY)
--	$(STRIPCMD) $(SMARTMONTOOLS_DIR)/$(SMARTMONTOOLS_BINARY2)
--	touch -c $(SMARTMONTOOLS_DIR)/$(SMARTMONTOOLS_BINARY)
+-$(LIBRAW1394_DIR)/.compiled: $(LIBRAW1394_DIR)/.configured
+-	$(MAKE) -C $(LIBRAW1394_DIR)
+-	touch $@
 -
--$(TARGET_DIR)/$(SMARTMONTOOLS_TARGET_BINARY): $(SMARTMONTOOLS_DIR)/$(SMARTMONTOOLS_BINARY)
--	cp $(SMARTMONTOOLS_DIR)/$(SMARTMONTOOLS_BINARY) $(TARGET_DIR)/usr/sbin/
+-$(STAGING_DIR)/usr/lib/libraw1394.so: $(LIBRAW1394_DIR)/.compiled
+-	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(LIBRAW1394_DIR)/src install
 -
--$(TARGET_DIR)/$(SMARTMONTOOLS_TARGET_BINARY2): $(SMARTMONTOOLS_DIR)/$(SMARTMONTOOLS_BINARY)
--	cp $(SMARTMONTOOLS_DIR)/$(SMARTMONTOOLS_BINARY2) $(TARGET_DIR)/usr/sbin/
+-$(TARGET_DIR)/usr/lib/libraw1394.so: $(STAGING_DIR)/usr/lib/libraw1394.so
+-	cp -dpf $(STAGING_DIR)/usr/lib/libraw1394.so* $(TARGET_DIR)/usr/lib/
 -
--smartmontools: $(TARGET_DIR)/$(SMARTMONTOOLS_TARGET_BINARY)
+-libraw1394: $(TARGET_DIR)/usr/lib/libraw1394.so
 -
--smartmontools-clean:
--	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(SMARTMONTOOLS_DIR) uninstall
--	-$(MAKE) -C $(SMARTMONTOOLS_DIR) clean
+-libraw1394-source: $(DL_DIR)/$(LIBRAW1394_SOURCE)
 -
--smartmontools-dirclean:
--	rm -rf $(SMARTMONTOOLS_DIR)
+-libraw1394-clean:
+-	rm $(TARGET_DIR)/usr/lib/libraw1394.so*
+-	-$(MAKE) -C $(LIBRAW1394_DIR) clean
+-
+-libraw1394-dirclean:
+-	rm -rf $(LIBRAW1394_DIR)
 -
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_SMARTMONTOOLS),y)
--TARGETS+=smartmontools
+-ifeq ($(BR2_PACKAGE_LIBRAW1394),y)
+-TARGETS+=libraw1394
 -endif
-+$(eval $(call AUTOTARGETS,package,smartmontools))
++LIBRAW1394_INSTALL_STAGING=YES
+ 
++$(eval $(call AUTOTARGETS,package,libraw1394))
 -- 
 1.6.3.3
