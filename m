@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 13 Apr 2010 21:50:46 +0200
-Subject: [Buildroot] [git commit master] libcgi: convert to the autotools
+Subject: [Buildroot] [git commit master] bison: convert to the autotools
 	infrastructure
-Message-ID: <20100413195156.4CD3120F99@busybox.osuosl.org>
+Message-ID: <20100413195156.D6B1020F99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,41 +10,46 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=73e346effcf7f2dcbcb5b414dd105723ec6beafc
+commit: http://git.buildroot.net/buildroot/commit/?id=98611b3a5ec060c8564a0ed7188abbeb15a8dfd4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libcgi/libcgi.mk |   68 ++-------------------------------------------
- 1 files changed, 3 insertions(+), 65 deletions(-)
+ package/bison/bison.mk |   69 +++--------------------------------------------
+ 1 files changed, 5 insertions(+), 64 deletions(-)
 
-diff --git a/package/libcgi/libcgi.mk b/package/libcgi/libcgi.mk
-index 23c5fdd..85f35a2 100644
---- a/package/libcgi/libcgi.mk
-+++ b/package/libcgi/libcgi.mk
-@@ -6,69 +6,7 @@
- LIBCGI_VERSION:=1.0
- LIBCGI_SOURCE:=libcgi-$(LIBCGI_VERSION).tar.gz
- LIBCGI_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/libcgi
--LIBCGI_DIR:=$(BUILD_DIR)/libcgi-$(LIBCGI_VERSION)
--LIBCGI_LIBRARY:=src/libcgi.so
--LIBCGI_DESTDIR:=usr/lib
--LIBCGI_TARGET_LIBRARY=$(LIBCGI_DESTDIR)/libcgi.so
-+LIBCGI_INSTALL_STAGING=YES
-+LIBCGI_INSTALL_TARGET_OPT=DESTDIR=$(TARGET_DIR) install
+diff --git a/package/bison/bison.mk b/package/bison/bison.mk
+index f29259f..9e28e85 100644
+--- a/package/bison/bison.mk
++++ b/package/bison/bison.mk
+@@ -6,70 +6,11 @@
+ BISON_VERSION:=2.3
+ BISON_SOURCE:=bison-$(BISON_VERSION).tar.bz2
+ BISON_SITE:=$(BR2_GNU_MIRROR)/bison
+-BISON_DIR:=$(BUILD_DIR)/bison-$(BISON_VERSION)
+-BISON_CAT:=$(BZCAT)
+-BISON_BINARY:=src/bison
+-BISON_TARGET_BINARY:=usr/bin/bison
  
--$(DL_DIR)/$(LIBCGI_SOURCE):
--	$(call DOWNLOAD,$(LIBCGI_SITE),$(LIBCGI_SOURCE))
+-$(DL_DIR)/$(BISON_SOURCE):
+-	 $(call DOWNLOAD,$(BISON_SITE),$(BISON_SOURCE))
++define BISON_DISABLE_EXAMPLES
++	echo 'all install:' > $(@D)/examples/Makefile
++endef
+ 
+-bison-source: $(DL_DIR)/$(BISON_SOURCE)
++BISON_POST_CONFIGURE_HOOKS += BISON_DISABLE_EXAMPLES
+ 
+-$(BISON_DIR)/.unpacked: $(DL_DIR)/$(BISON_SOURCE)
+-	$(BISON_CAT) $(DL_DIR)/$(BISON_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	$(CONFIG_UPDATE) $(BISON_DIR)/build-aux
+-	touch $@
 -
--$(LIBCGI_DIR)/.source: $(DL_DIR)/$(LIBCGI_SOURCE)
--	$(ZCAT) $(DL_DIR)/$(LIBCGI_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(LIBCGI_DIR) package/libcgi/ libcgi\*.patch
--	touch $(LIBCGI_DIR)/.source
--
--$(LIBCGI_DIR)/.configured: $(LIBCGI_DIR)/.source
--	(cd $(LIBCGI_DIR); rm -f config.cache; \
+-$(BISON_DIR)/.configured: $(BISON_DIR)/.unpacked
+-	(cd $(BISON_DIR); rm -rf config.cache; \
 -		$(TARGET_CONFIGURE_OPTS) \
 -		$(TARGET_CONFIGURE_ARGS) \
+-		gt_cv_func_gnugettext2_libintl=yes \
 -		./configure $(QUIET) \
 -		--target=$(GNU_TARGET_NAME) \
 -		--host=$(GNU_TARGET_NAME) \
@@ -54,46 +59,44 @@ index 23c5fdd..85f35a2 100644
 -		--bindir=/usr/bin \
 -		--sbindir=/usr/sbin \
 -		--libdir=/lib \
--		--libexecdir=/$(LIBCGI_DESTDIR) \
+-		--libexecdir=/usr/lib \
 -		--sysconfdir=/etc \
 -		--datadir=/usr/share \
 -		--localstatedir=/var \
--		--includedir=/include \
--		--mandir=/usr/man \
--		--infodir=/usr/info \
+-		--mandir=/usr/share/man \
+-		--infodir=/usr/share/info \
+-		--includedir=/usr/include \
+-		$(DISABLE_NLS) \
 -	)
--	touch $(LIBCGI_DIR)/.configured
+-	echo 'all install:' > $(BISON_DIR)/examples/Makefile
+-	touch $@
 -
--$(LIBCGI_DIR)/$(LIBCGI_LIBRARY): $(LIBCGI_DIR)/.configured
--	$(MAKE) CC=$(TARGET_CC) -C $(LIBCGI_DIR)
+-$(BISON_DIR)/$(BISON_BINARY): $(BISON_DIR)/.configured
+-	$(MAKE) CC=$(TARGET_CC) -C $(BISON_DIR)
 -
--$(STAGING_DIR)/$(LIBCGI_TARGET_LIBRARY): $(LIBCGI_DIR)/$(LIBCGI_LIBRARY)
--	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(LIBCGI_DIR) install
--	touch -c $@
+-$(TARGET_DIR)/$(BISON_TARGET_BINARY): $(BISON_DIR)/$(BISON_BINARY)
+-	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(BISON_DIR) install
+-	rm -rf $(TARGET_DIR)/share/locale
+-	cp -a package/bison/yacc $(TARGET_DIR)/usr/bin/yacc
 -
--$(TARGET_DIR)/$(LIBCGI_TARGET_LIBRARY): $(STAGING_DIR)/$(LIBCGI_TARGET_LIBRARY)
--	cp -dpf $<* $(TARGET_DIR)/$(LIBCGI_DESTDIR)
+-bison: $(TARGET_DIR)/$(BISON_TARGET_BINARY)
 -
--libcgi: $(TARGET_DIR)/$(LIBCGI_TARGET_LIBRARY)
+-bison-clean:
+-	-$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(BISON_DIR) uninstall
+-	rm -f $(TARGET_DIR)/$(BISON_TARGET_BINARY)
+-	-$(MAKE) -C $(BISON_DIR) clean
 -
--libcgi-source: $(DL_DIR)/$(LIBCGI_SOURCE)
+-bison-dirclean:
+-	rm -rf $(BISON_DIR)
 -
--libcgi-clean:
--	rm -f $(TARGET_DIR)/$(LIBCGI_TARGET_LIBRARY)*
--	-$(MAKE) -C $(LIBCGI_DIR) clean
--
--libcgi-dirclean:
--	rm -rf $(LIBCGI_DIR)
--
--.PHONY: libcgi
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_LIBCGI),y)
--TARGETS+=libcgi
+-ifeq ($(BR2_PACKAGE_BISON),y)
+-TARGETS+=bison
 -endif
-+$(eval $(call AUTOTARGETS,package,libcgi))
++$(eval $(call AUTOTARGETS,package,bison))
 -- 
 1.6.3.3
