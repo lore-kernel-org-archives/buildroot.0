@@ -1,66 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Tue, 13 Apr 2010 20:51:47 +0200
-Subject: [Buildroot] Question about external toolchain configuration
-	"options"
-In-Reply-To: <hq2d7t$5ut$1@dough.gmane.org>
-References: <hq2d7t$5ut$1@dough.gmane.org>
-Message-ID: <201004132051.48176.yann.morin.1998@anciens.enib.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 13 Apr 2010 21:51:18 +0200
+Subject: [Buildroot] [PATCH 03/21] udpcast: convert to the autotools
+	infrastructure
+In-Reply-To: <20100413165903.33f58597@surf> (Thomas Petazzoni's message of
+	"Tue, 13 Apr 2010 16:59:03 +0200")
+References: <cover.1271077873.git.thomas.petazzoni@free-electrons.com>
+	<cover.1271077873.git.thomas.petazzoni@free-electrons.com>
+	<b7fe41a1f4c9fc78ea89fe332a7d98d2922ed83f.1271077873.git.thomas.petazzoni@free-electrons.com>
+	<87d3y4k1dq.fsf@macbook.be.48ers.dk> <20100413165903.33f58597@surf>
+Message-ID: <87hbnfi11l.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Grant, All,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Tuesday 13 April 2010 20:30:21 Grant Edwards wrote:
-> When using an external toolchain, there are a bunch of toolchain 
-> toolchain "configuration options" in the buildroot .config file (e.g.
-> support for locale/i18n, wchar, ipv6, program_invokation, etc.).
-> 
-> However, these "options" don't really seem to be options.
-> 
-> There's only one correct choice for each, and buildroot figures out
-> what those correct choices are at build-time and aborts if the user
-> has picked the wrong values.
-> 
-> Why are they presented to the user as "choices" when the user doesn't
-> get to choose their values?  They only seem to be user-configurable
-> when building a toolchain.  When using an external toolchain, why not
-> just determine the correct values and do the build?
-> 
+ >> Why are you now forcing 64bit here?
 
-Some packages depends on these 'options', so we have to know their values.
-The packages are shown/hidden in the menuconfig.
+ Thomas> Good question. When I wrote the change, I remember thinking
+ Thomas> about this, but I really don't remember why I did the change
+ Thomas> this way. Definitely, we should be conservative and keep it as
+ Thomas> it was.
 
-To determine these 'options', we need to know the external toolchain location
-first. The external toolchain location is also specified in the menuconfig.
+Ok.
 
-So there is no way to detect those values, and properly show/hide the
-affected packages.
+ >> Not a big deal, but you seem to forgot the final newline in several
+ >> files - Is there any reason why?
 
-Then there is two solutions:
-- present toolchain 'options', and have proper package hidding, but implies
-  checking the user did not make a mistake in the toolchain 'options',
-or:
-- present all packages, and then check that selected packages are buildable.
+ Thomas> Simply because in the text editor I'm using, having a final
+ Thomas> newline or not does not make any visible difference, so I
+ Thomas> always forget about this.
 
-buildroot choosed the first solution. It has the advantage of using the
-same package dependency rules as when using the built-in toolchain mechanism.
+Ok.
 
-Maybe the prompts should be reworked with smthg like (when external toolchain
-is selected):
-  [ ] Toolchain has IPv6
-  [ ] Toolchain has locales
-and so on...
+ Thomas> I've pushed updated versions of the patches, to fix the udpcast large
+ Thomas> file thing, and to add the newlines at the end of files. You can pull
+ Thomas> from:
 
-Regards,
-Yann E. MORIN.
+ Thomas>  git://git.busybox.net/~tpetazzoni/git/buildroot autotools-conversion
+
+ Thomas> I'm not spamming again the list by resending everything, but if you
+ Thomas> think it's worth, I'll do so.
+
+No, it's fine - Pulled and pushed, thanks!
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
