@@ -1,50 +1,113 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 13 Apr 2010 21:51:18 +0200
-Subject: [Buildroot] [PATCH 03/21] udpcast: convert to the autotools
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 13 Apr 2010 21:50:46 +0200
+Subject: [Buildroot] [git commit master] vtun: convert to the autotools
 	infrastructure
-In-Reply-To: <20100413165903.33f58597@surf> (Thomas Petazzoni's message of
-	"Tue, 13 Apr 2010 16:59:03 +0200")
-References: <cover.1271077873.git.thomas.petazzoni@free-electrons.com>
-	<cover.1271077873.git.thomas.petazzoni@free-electrons.com>
-	<b7fe41a1f4c9fc78ea89fe332a7d98d2922ed83f.1271077873.git.thomas.petazzoni@free-electrons.com>
-	<87d3y4k1dq.fsf@macbook.be.48ers.dk> <20100413165903.33f58597@surf>
-Message-ID: <87hbnfi11l.fsf@macbook.be.48ers.dk>
+Message-ID: <20100413195153.A361620F94@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- >> Why are you now forcing 64bit here?
+commit: http://git.buildroot.net/buildroot/commit/?id=516708f94fa1ed9f23c680e7fee6dce78b05f09f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> Good question. When I wrote the change, I remember thinking
- Thomas> about this, but I really don't remember why I did the change
- Thomas> this way. Definitely, we should be conservative and keep it as
- Thomas> it was.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/vtun/vtun.mk |   76 +++----------------------------------------------
+ 1 files changed, 5 insertions(+), 71 deletions(-)
 
-Ok.
-
- >> Not a big deal, but you seem to forgot the final newline in several
- >> files - Is there any reason why?
-
- Thomas> Simply because in the text editor I'm using, having a final
- Thomas> newline or not does not make any visible difference, so I
- Thomas> always forget about this.
-
-Ok.
-
- Thomas> I've pushed updated versions of the patches, to fix the udpcast large
- Thomas> file thing, and to add the newlines at the end of files. You can pull
- Thomas> from:
-
- Thomas>  git://git.busybox.net/~tpetazzoni/git/buildroot autotools-conversion
-
- Thomas> I'm not spamming again the list by resending everything, but if you
- Thomas> think it's worth, I'll do so.
-
-No, it's fine - Pulled and pushed, thanks!
-
+diff --git a/package/vtun/vtun.mk b/package/vtun/vtun.mk
+index 15eba01..0990820 100644
+--- a/package/vtun/vtun.mk
++++ b/package/vtun/vtun.mk
+@@ -6,81 +6,15 @@
+ # to enable that within busybox
+ #
+ #############################################################
+-#Old version 2.6
+ VTUN_VERSION:=3.0.2
+ VTUN_SOURCE:=vtun-$(VTUN_VERSION).tar.gz
+ VTUN_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/vtun/
+-VTUN_DIR:=$(BUILD_DIR)/vtun-$(VTUN_VERSION)
+-VTUN_CAT:=$(ZCAT)
+-VTUN_BINARY:=vtund
+-VTUN_TARGET_BINARY:=usr/sbin/vtund
++VTUN_INSTALL_TARGET_OPT=DESTDIR=$(TARGET_DIR) install
++VTUN_DEPENDENCIES = zlib lzo openssl
+ 
+-$(DL_DIR)/$(VTUN_SOURCE):
+-	 $(call DOWNLOAD,$(VTUN_SITE),$(VTUN_SOURCE))
+-
+-vtun-source: $(DL_DIR)/$(VTUN_SOURCE)
+-
+-$(VTUN_DIR)/.unpacked: $(DL_DIR)/$(VTUN_SOURCE)
+-	$(VTUN_CAT) $(DL_DIR)/$(VTUN_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	touch $@
+-
+-$(VTUN_DIR)/.patched: $(VTUN_DIR)/.unpacked
+-	toolchain/patch-kernel.sh $(VTUN_DIR) package/vtun/ vtun-$(VTUN_VERSION)\*.patch
+-	touch $@
+-
+-
+-
+-$(VTUN_DIR)/.configured: $(VTUN_DIR)/.patched
+-	(cd $(VTUN_DIR); rm -rf config.cache; \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		$(TARGET_CONFIGURE_ARGS) \
+-		./configure $(QUIET) \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		--prefix=/usr \
+-		--exec-prefix=/usr \
+-		--bindir=/usr/bin \
+-		--sbindir=/usr/sbin \
+-		--libdir=/lib \
+-		--libexecdir=/usr/lib \
+-		--sysconfdir=/etc \
+-		--datadir=/usr/share \
+-		--localstatedir=/var \
+-		--mandir=/usr/man \
+-		--infodir=/usr/info \
++VTUN_CONF_OPT = \
+ 		--with-ssl-headers=$(STAGING_DIR)/usr/include/openssl \
+ 		--with-lzo-headers=$(STAGING_DIR)/usr/include/lzo \
+-		--with-lzo-lib=$(STAGING_DIR)/usr/lib \
+-	)
+-	touch $(VTUN_DIR)/.configured
+-
+-$(VTUN_DIR)/$(VTUN_BINARY): $(VTUN_DIR)/.configured
+-	$(MAKE) -C $(VTUN_DIR)
+-
+-$(TARGET_DIR)/$(VTUN_TARGET_BINARY): $(VTUN_DIR)/$(VTUN_BINARY)
+-	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(VTUN_DIR) install
+-	rm -rf $(TARGET_DIR)/share/locale $(TARGET_DIR)/usr/info \
+-		$(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc
+-
+-vtun: zlib lzo openssl $(TARGET_DIR)/$(VTUN_TARGET_BINARY)
++		--with-lzo-lib=$(STAGING_DIR)/usr/lib
+ 
+-vtun-unpacked: $(VTUN_DIR)/.unpacked
+-
+-vtun-patched: $(VTUN_DIR)/.patched
+-
+-vtun-clean:
+-	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(VTUN_DIR) uninstall
+-	-$(MAKE) -C $(VTUN_DIR) clean
+-
+-vtun-dirclean:
+-	rm -rf $(VTUN_DIR)
+-
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_VTUN),y)
+-TARGETS+=vtun
+-endif
++$(eval $(call AUTOTARGETS,package,vtun))
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
