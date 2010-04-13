@@ -1,10 +1,9 @@
 From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Wed, 14 Apr 2010 01:05:55 +0200
-Subject: [Buildroot] [PATCH 22/41] libtool: added LIBTOOLIZE variable to
-	point on $(HOST_DIR)/usr/bin/libtoolize
+Date: Wed, 14 Apr 2010 01:05:54 +0200
+Subject: [Buildroot] [PATCH 21/41] automake: bump to 1.11
 In-Reply-To: <1271199974-30434-1-git-send-email-llandwerlin@gmail.com>
 References: <1271199974-30434-1-git-send-email-llandwerlin@gmail.com>
-Message-ID: <1271199974-30434-23-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1271199974-30434-22-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,17 +14,21 @@ From: Lionel Landwerlin <llandwerlin@gmail.com>
 
 Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 ---
- package/libtool/libtool.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/automake/automake.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libtool/libtool.mk b/package/libtool/libtool.mk
-index bbabbb0..4278029 100644
---- a/package/libtool/libtool.mk
-+++ b/package/libtool/libtool.mk
-@@ -25,3 +25,4 @@ $(eval $(call AUTOTARGETS,package,libtool,host))
+diff --git a/package/automake/automake.mk b/package/automake/automake.mk
+index db935a4..e413287 100644
+--- a/package/automake/automake.mk
++++ b/package/automake/automake.mk
+@@ -3,7 +3,7 @@
+ # automake
+ #
+ #############################################################
+-AUTOMAKE_VERSION = 1.10
++AUTOMAKE_VERSION = 1.11
+ AUTOMAKE_SOURCE = automake-$(AUTOMAKE_VERSION).tar.bz2
+ AUTOMAKE_SITE = $(BR2_GNU_MIRROR)/automake
  
- # variables used by other packages
- LIBTOOL:=$(HOST_DIR)/usr/bin/libtool
-+LIBTOOLIZE:=$(HOST_DIR)/usr/bin/libtoolize
 -- 
 1.7.0.4
