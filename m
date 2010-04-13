@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 13 Apr 2010 21:50:46 +0200
-Subject: [Buildroot] [git commit master] setserial: convert to the autotools
-	infrastructure
-Message-ID: <20100413195154.8F9BC20F94@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] smartmontools: convert to the
+	autotools infrastructure
+Message-ID: <20100413195154.D338F20F94@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,98 +10,91 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=61fc526a16e5e204e1f4a8e4294725fe30f762e1
+commit: http://git.buildroot.net/buildroot/commit/?id=25afa562f6a20eaa538ff7ae93ab60e94680dee4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/setserial/setserial.mk |   73 ++++------------------------------------
- 1 files changed, 7 insertions(+), 66 deletions(-)
+ package/smartmontools/smartmontools.mk |   69 +-------------------------------
+ 1 files changed, 1 insertions(+), 68 deletions(-)
 
-diff --git a/package/setserial/setserial.mk b/package/setserial/setserial.mk
-index 9667637..1c222a2 100644
---- a/package/setserial/setserial.mk
-+++ b/package/setserial/setserial.mk
-@@ -8,73 +8,14 @@ SETSERIAL_PATCH_VERSION:=.orig
- SETSERIAL_PATCH_FILE:=setserial_2.17-45.diff.gz
- SETSERIAL_SOURCE:=setserial_$(SETSERIAL_VERSION)$(SETSERIAL_PATCH_VERSION).tar.gz
- SETSERIAL_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/s/setserial/
--SETSERIAL_DIR:=$(BUILD_DIR)/setserial-$(SETSERIAL_VERSION)
--SETSERIAL_BINARY:=setserial
--SETSERIAL_TARGET_BINARY:=usr/bin/setserial
-+SETSERIAL_INSTALL_TARGET_OPT=DESTDIR=$(TARGET_DIR) install
+diff --git a/package/smartmontools/smartmontools.mk b/package/smartmontools/smartmontools.mk
+index fde76b0..d768b34 100644
+--- a/package/smartmontools/smartmontools.mk
++++ b/package/smartmontools/smartmontools.mk
+@@ -7,72 +7,5 @@ SMARTMONTOOLS_VERSION:=5.33
+ SMARTMONTOOLS_SOURCE:=smartmontools-$(SMARTMONTOOLS_VERSION).tar.gz
+ SMARTMONTOOLS_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/smartmontools
+ SMARTMONTOOLS_DIR:=$(BUILD_DIR)/smartmontools-$(SMARTMONTOOLS_VERSION)
+-SMARTMONTOOLS_CAT:=$(ZCAT)
+-SMARTMONTOOLS_BINARY:=smartctl
+-SMARTMONTOOLS_BINARY2:=smartd
+-SMARTMONTOOLS_TARGET_BINARY:=usr/sbin/smartctl
+-SMARTMONTOOLS_TARGET_BINARY2:=usr/sbin/smartd
  
--$(DL_DIR)/$(SETSERIAL_SOURCE):
--	$(call DOWNLOAD,$(SETSERIAL_SITE),$(SETSERIAL_SOURCE))
+-$(DL_DIR)/$(SMARTMONTOOLS_SOURCE):
+-	 $(call DOWNLOAD,$(SMARTMONTOOLS_SITE),$(SMARTMONTOOLS_SOURCE))
 -
--ifneq ($(SETSERIAL_PATCH_FILE),)
--SETSERIAL_PATCH:=$(DL_DIR)/$(SETSERIAL_PATCH_FILE)
--$(SETSERIAL_PATCH):
--	$(call DOWNLOAD,$(SETSERIAL_SITE),$(SETSERIAL_PATCH_FILE))
--else
--SETSERIAL_PATCH:=
--endif
+-smartmontools-source: $(DL_DIR)/$(SMARTMONTOOLS_SOURCE)
 -
--$(SETSERIAL_DIR)/.unpacked: $(DL_DIR)/$(SETSERIAL_SOURCE) $(SETSERIAL_PATCH)
--	$(ZCAT) $(DL_DIR)/$(SETSERIAL_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	$(CONFIG_UPDATE) $(SETSERIAL_DIR)
--	toolchain/patch-kernel.sh $(SETSERIAL_DIR) package/setserial setserial\*.patch
--ifneq ($(SETSERIAL_PATCH_FILE),)
--	toolchain/patch-kernel.sh $(SETSERIAL_DIR) $(DL_DIR) $(SETSERIAL_PATCH_FILE)
--	if [ -d $(SETSERIAL_DIR)/debian/patches ]; then \
--		toolchain/patch-kernel.sh $(SETSERIAL_DIR) $(SETSERIAL_DIR)/debian/patches \*.patch; \
-+define SETSERIAL_APPLY_DEBIAN_PATCHES
-+	if [ -d $(@D)/debian/patches ]; then \
-+		toolchain/patch-kernel.sh $(@D) $(@D)/debian/patches \*.patch; \
- 	fi
--endif
--	touch $(SETSERIAL_DIR)/gorhack.h
--	touch $@
+-$(SMARTMONTOOLS_DIR)/.unpacked: $(DL_DIR)/$(SMARTMONTOOLS_SOURCE)
+-	$(SMARTMONTOOLS_CAT) $(DL_DIR)/$(SMARTMONTOOLS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(SMARTMONTOOLS_DIR) package/smartmontools/ \*.patch
+-	touch $(SMARTMONTOOLS_DIR)/.unpacked
 -
--$(SETSERIAL_DIR)/.configured: $(SETSERIAL_DIR)/.unpacked
--	(cd $(SETSERIAL_DIR); rm -rf config.cache; \
+-$(SMARTMONTOOLS_DIR)/.configured: $(SMARTMONTOOLS_DIR)/.unpacked
+-	(cd $(SMARTMONTOOLS_DIR); rm -rf config.cache; \
 -		$(TARGET_CONFIGURE_OPTS) \
 -		$(TARGET_CONFIGURE_ARGS) \
--		CFLAGS="$(TARGET_CFLAGS) $(SETSERIAL_CFLAGS)" \
 -		./configure $(QUIET) \
 -		--target=$(GNU_TARGET_NAME) \
 -		--host=$(GNU_TARGET_NAME) \
 -		--build=$(GNU_HOST_NAME) \
 -		--prefix=/usr \
+-		--exec-prefix=/usr \
+-		--bindir=/usr/bin \
+-		--sbindir=/usr/sbin \
+-		--libdir=/lib \
+-		--libexecdir=/usr/lib \
 -		--sysconfdir=/etc \
+-		--datadir=/usr/share \
+-		--localstatedir=/var \
+-		--mandir=/usr/man \
+-		--infodir=/usr/info \
+-		$(DISABLE_NLS) \
+-		$(DISABLE_LARGEFILE) \
 -	)
--	touch $@
+-	touch $(SMARTMONTOOLS_DIR)/.configured
 -
--$(SETSERIAL_DIR)/$(SETSERIAL_BINARY): $(SETSERIAL_DIR)/.configured
--	$(MAKE) CC=$(TARGET_CC) -C $(SETSERIAL_DIR)
+-$(SMARTMONTOOLS_DIR)/$(SMARTMONTOOLS_BINARY): $(SMARTMONTOOLS_DIR)/.configured
+-	$(MAKE) -C $(SMARTMONTOOLS_DIR)
+-	$(STRIPCMD) $(SMARTMONTOOLS_DIR)/$(SMARTMONTOOLS_BINARY)
+-	$(STRIPCMD) $(SMARTMONTOOLS_DIR)/$(SMARTMONTOOLS_BINARY2)
+-	touch -c $(SMARTMONTOOLS_DIR)/$(SMARTMONTOOLS_BINARY)
 -
--$(TARGET_DIR)/$(SETSERIAL_TARGET_BINARY): $(SETSERIAL_DIR)/$(SETSERIAL_BINARY)
--	install -c $(SETSERIAL_DIR)/$(SETSERIAL_BINARY) $(TARGET_DIR)/$(SETSERIAL_TARGET_BINARY)
--	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/$(SETSERIAL_TARGET_BINARY)
+-$(TARGET_DIR)/$(SMARTMONTOOLS_TARGET_BINARY): $(SMARTMONTOOLS_DIR)/$(SMARTMONTOOLS_BINARY)
+-	cp $(SMARTMONTOOLS_DIR)/$(SMARTMONTOOLS_BINARY) $(TARGET_DIR)/usr/sbin/
 -
--setserial: $(TARGET_DIR)/$(SETSERIAL_TARGET_BINARY)
+-$(TARGET_DIR)/$(SMARTMONTOOLS_TARGET_BINARY2): $(SMARTMONTOOLS_DIR)/$(SMARTMONTOOLS_BINARY)
+-	cp $(SMARTMONTOOLS_DIR)/$(SMARTMONTOOLS_BINARY2) $(TARGET_DIR)/usr/sbin/
 -
--setserial-source: $(DL_DIR)/$(SETSERIAL_SOURCE) $(SETSERIAL_PATCH)
-+endef
- 
--setserial-unpacked: $(SETSERIAL_DIR)/.unpacked
-+SETSERIAL_POST_PATCH_HOOKS += SETSERIAL_APPLY_DEBIAN_PATCHES
- 
--setserial-clean:
--	rm -f $(TARGET_DIR)/$(SETSERIAL_TARGET_BINARY)
--	-$(MAKE) -C $(SETSERIAL_DIR) clean
+-smartmontools: $(TARGET_DIR)/$(SMARTMONTOOLS_TARGET_BINARY)
 -
--setserial-dirclean:
--	rm -rf $(SETSERIAL_DIR)
+-smartmontools-clean:
+-	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(SMARTMONTOOLS_DIR) uninstall
+-	-$(MAKE) -C $(SMARTMONTOOLS_DIR) clean
+-
+-smartmontools-dirclean:
+-	rm -rf $(SMARTMONTOOLS_DIR)
 -
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_SETSERIAL),y)
--TARGETS+=setserial
+-ifeq ($(BR2_PACKAGE_SMARTMONTOOLS),y)
+-TARGETS+=smartmontools
 -endif
-+$(eval $(call AUTOTARGETS,package,setserial))
++$(eval $(call AUTOTARGETS,package,smartmontools))
 -- 
 1.6.3.3
