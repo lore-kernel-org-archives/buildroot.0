@@ -1,10 +1,9 @@
 From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Wed, 14 Apr 2010 01:05:43 +0200
-Subject: [Buildroot] [PATCH 10/41] package: added PKG_CONF_ENV variables to
-	host packages
+Date: Wed, 14 Apr 2010 01:05:45 +0200
+Subject: [Buildroot] [PATCH 12/41] directfb: bump to 1.4.3
 In-Reply-To: <1271199974-30434-1-git-send-email-llandwerlin@gmail.com>
 References: <1271199974-30434-1-git-send-email-llandwerlin@gmail.com>
-Message-ID: <1271199974-30434-11-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1271199974-30434-13-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,20 +14,62 @@ From: Lionel Landwerlin <llandwerlin@gmail.com>
 
 Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 ---
- package/Makefile.autotools.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ ...rectfb-gfxcard-fix-build-error-with-debug.patch |   33 --------------------
+ package/directfb/directfb.mk                       |    2 +-
+ 2 files changed, 1 insertions(+), 34 deletions(-)
+ delete mode 100644 package/directfb/directfb-gfxcard-fix-build-error-with-debug.patch
 
-diff --git a/package/Makefile.autotools.in b/package/Makefile.autotools.in
-index 38e57cd..b7a7103 100644
---- a/package/Makefile.autotools.in
-+++ b/package/Makefile.autotools.in
-@@ -108,6 +108,7 @@ define $(2)_CONFIGURE_CMDS
- 	        $$(HOST_CONFIGURE_OPTS) \
- 		CFLAGS="$$(HOST_CFLAGS)" \
- 		LDFLAGS="$$(HOST_LDFLAGS)" \
-+                $$($$(PKG)_CONF_ENV) \
- 		./configure \
- 		--prefix="$$(HOST_DIR)/usr" \
- 		--sysconfdir="$$(HOST_DIR)/etc" \
+diff --git a/package/directfb/directfb-gfxcard-fix-build-error-with-debug.patch b/package/directfb/directfb-gfxcard-fix-build-error-with-debug.patch
+deleted file mode 100644
+index 2c1d459..0000000
+--- a/package/directfb/directfb-gfxcard-fix-build-error-with-debug.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From fab69ff2e063f0b6a4b13139f100ff01aa4cae84 Mon Sep 17 00:00:00 2001
+-From: Peter Korsgaard <jacmet@sunsite.dk>
+-Date: Fri, 2 Oct 2009 12:20:31 +0200
+-Subject: [PATCH] gfxcard: fix build error with --enable-debug
+-
+-Commit fdc611ea (Added support for colors and multiple layers in a
+-glyph implementing outlines) changed dfb_gfxcard_drawglyph() to take
+-a layers argument instead of index, but the D_DEBUG_AT call wasn't
+-changed to match.
+-
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+----
+- src/core/gfxcard.c |    4 ++--
+- 1 files changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/src/core/gfxcard.c b/src/core/gfxcard.c
+-index 127e30e..0020103 100644
+---- a/src/core/gfxcard.c
+-+++ b/src/core/gfxcard.c
+-@@ -2335,8 +2335,8 @@ void dfb_gfxcard_drawglyph( CoreGlyphData **glyph, int x, int y,
+-      DFBSurfaceBlendFunction  orig_srcblend;
+-      DFBSurfaceBlendFunction  orig_dstblend;
+- 
+--     D_DEBUG_AT( Core_GraphicsOps, "%s( %u, %d,%d, %p, %p )\n",
+--                 __FUNCTION__, index, x, y, font, state );
+-+     D_DEBUG_AT( Core_GraphicsOps, "%s( %d,%d, %u, %p, %p )\n",
+-+                 __FUNCTION__, x, y, layers, font, state );
+- 
+-      D_ASSERT( card != NULL );
+-      D_ASSERT( card->shared != NULL );
+--- 
+-1.6.3.3
+-
+diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
+index a4ee3bc..2f095ee 100644
+--- a/package/directfb/directfb.mk
++++ b/package/directfb/directfb.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ DIRECTFB_VERSION_MAJOR:=1.4
+-DIRECTFB_VERSION:=1.4.2
++DIRECTFB_VERSION:=1.4.3
+ DIRECTFB_SITE:=http://www.directfb.org/downloads/Core/DirectFB-$(DIRECTFB_VERSION_MAJOR)
+ DIRECTFB_SOURCE:=DirectFB-$(DIRECTFB_VERSION).tar.gz
+ DIRECTFB_AUTORECONF = NO
 -- 
 1.7.0.4
