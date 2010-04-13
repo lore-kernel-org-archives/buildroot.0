@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 13 Apr 2010 21:50:46 +0200
-Subject: [Buildroot] [git commit master] libid3tag: convert to the autotools
+Subject: [Buildroot] [git commit master] libosip2: convert to the autotools
 	infrastructure
-Message-ID: <20100413195159.427DD20F99@busybox.osuosl.org>
+Message-ID: <20100413195155.5D1B720F99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,41 +10,39 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=157526cb051ef24de552082c3444bde1a81a40e4
+commit: http://git.buildroot.net/buildroot/commit/?id=aca0487261702a0cdf16551c262d83f8879329d1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/multimedia/libid3tag/libid3tag.mk |   62 ++---------------------------
- 1 files changed, 4 insertions(+), 58 deletions(-)
+ package/libosip2/libosip2.mk |   83 +++---------------------------------------
+ 1 files changed, 6 insertions(+), 77 deletions(-)
 
-diff --git a/package/multimedia/libid3tag/libid3tag.mk b/package/multimedia/libid3tag/libid3tag.mk
-index ba2f1d0..bcb110f 100644
---- a/package/multimedia/libid3tag/libid3tag.mk
-+++ b/package/multimedia/libid3tag/libid3tag.mk
-@@ -7,62 +7,8 @@
- LIBID3TAG_VERSION:=0.15.1b
- LIBID3TAG_SOURCE:=libid3tag-$(LIBID3TAG_VERSION).tar.gz
- LIBID3TAG_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/mad
--LIBID3TAG_DIR:=$(BUILD_DIR)/libid3tag-$(LIBID3TAG_VERSION)
--LIBID3TAG_CAT:=$(ZCAT)
--LIBID3TAG_BIN:=libid3tag.so.0.3.0
--LIBID3TAG_TARGET_BIN:=usr/lib/$(LIBID3TAG_BIN)
-+LIBID3TAG_INSTALL_STAGING=YES
-+LIBID3TAG_DEPENDENCIES=zlib
-+LIBID3TAG_LIBTOOL_PATCH=NO
- 
--$(DL_DIR)/$(LIBID3TAG_SOURCE):
--	$(call DOWNLOAD,$(LIBID3TAG_SITE),$(LIBID3TAG_SOURCE))
+diff --git a/package/libosip2/libosip2.mk b/package/libosip2/libosip2.mk
+index 04a75c5..441b84c 100644
+--- a/package/libosip2/libosip2.mk
++++ b/package/libosip2/libosip2.mk
+@@ -3,85 +3,14 @@
+ # libosip2
+ #
+ #############################################################
 -
--$(LIBID3TAG_DIR)/.unpacked: $(DL_DIR)/$(LIBID3TAG_SOURCE)
--	$(LIBID3TAG_CAT) $(DL_DIR)/$(LIBID3TAG_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(LIBID3TAG_DIR) package/multimedia/libid3tag/ libid3tag-$(LIBID3TAG_VERSION)\*.patch\*
--	$(CONFIG_UPDATE) $(LIBID3TAG_DIR)
--	touch $@
+ LIBOSIP2_VERSION=3.1.0
+ LIBOSIP2_SOURCE=libosip2-$(LIBOSIP2_VERSION).tar.gz
+ LIBOSIP2_SITE=http://www.antisip.com/download/exosip2
+-LIBOSIP2_DIR=$(BUILD_DIR)/libosip2-$(LIBOSIP2_VERSION)
+-LIBOSIP2_CAT:=$(ZCAT)
 -
--$(LIBID3TAG_DIR)/.configured: $(LIBID3TAG_DIR)/.unpacked
--	(cd $(LIBID3TAG_DIR); rm -rf config.cache; \
+-$(DL_DIR)/$(LIBOSIP2_SOURCE):
+-	$(call DOWNLOAD,$(LIBOSIP2_SITE),$(LIBOSIP2_SOURCE))
+-
+-$(LIBOSIP2_DIR)/.unpacked: $(DL_DIR)/$(LIBOSIP2_SOURCE)
+-	$(LIBOSIP2_CAT) $(DL_DIR)/$(LIBOSIP2_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	$(CONFIG_UPDATE) $(LIBOSIP2_DIR)
+-	touch $(LIBOSIP2_DIR)/.unpacked
+-
+-$(LIBOSIP2_DIR)/.configured: $(LIBOSIP2_DIR)/.unpacked
+-	(cd $(LIBOSIP2_DIR); rm -rf config.cache; \
 -		$(TARGET_CONFIGURE_OPTS) \
 -		$(TARGET_CONFIGURE_ARGS) \
 -		./configure $(QUIET) \
@@ -52,42 +50,69 @@ index ba2f1d0..bcb110f 100644
 -		--host=$(GNU_TARGET_NAME) \
 -		--build=$(GNU_HOST_NAME) \
 -		--prefix=/usr \
+-		--exec-prefix=/usr \
+-		--bindir=/usr/bin \
+-		--sbindir=/usr/sbin \
+-		--libexecdir=/usr/lib \
 -		--sysconfdir=/etc \
+-		--datadir=/usr/share \
+-		--localstatedir=/var \
+-		--mandir=/usr/man \
+-		--infodir=/usr/info \
+-		--includedir=/usr/include \
+-		--with-gnu-ld \
+-		--enable-shared \
+-		--enable-static \
 -		$(DISABLE_NLS) \
 -	)
--	touch $@
+-	touch $(LIBOSIP2_DIR)/.configured
 -
--$(LIBID3TAG_DIR)/.libs/$(LIBID3TAG_BIN): $(LIBID3TAG_DIR)/.configured
--	$(MAKE) -C $(LIBID3TAG_DIR)
+-$(LIBOSIP2_DIR)/libosip2.so: $(LIBOSIP2_DIR)/.configured
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(LIBOSIP2_DIR)
 -
--$(STAGING_DIR)/$(LIBID3TAG_TARGET_BIN): $(LIBID3TAG_DIR)/.libs/$(LIBID3TAG_BIN)
--	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(LIBID3TAG_DIR) install
--	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libid3tag.la
+-$(STAGING_DIR)/usr/lib/libosip2.so: $(LIBOSIP2_DIR)/.configured
+-	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(LIBOSIP2_DIR) install
+-	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libosip2.la
+-	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libosipparser2.la
 -
--$(TARGET_DIR)/$(LIBID3TAG_TARGET_BIN): $(STAGING_DIR)/$(LIBID3TAG_TARGET_BIN)
--	cp -dpf $(STAGING_DIR)/usr/lib/libid3tag.so* $(TARGET_DIR)/usr/lib/
--	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libid3tag.so*
+-$(TARGET_DIR)/usr/lib/libosip2.so: $(STAGING_DIR)/usr/lib/libosip2.so
+-	mkdir -p $(TARGET_DIR)/usr/lib
+-	cp -dpf $(STAGING_DIR)/usr/lib/libosip2.so* $(TARGET_DIR)/usr/lib/
+-	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libosip2.so*
 -
--libid3tag: zlib $(TARGET_DIR)/$(LIBID3TAG_TARGET_BIN)
+-$(TARGET_DIR)/usr/lib/libosipparser2.so: $(STAGING_DIR)/usr/lib/libosip2.so
+-	mkdir -p $(TARGET_DIR)/usr/lib
+-	cp -dpf $(STAGING_DIR)/usr/lib/libosipparser2.so* $(TARGET_DIR)/usr/lib/
+-	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libosipparser2.so*
++LIBOSIP2_INSTALL_STAGING=YES
+ 
+-libosip2: $(TARGET_DIR)/usr/lib/libosip2.so $(TARGET_DIR)/usr/lib/libosipparser2.so
++LIBOSIP2_CONF_OPT = \
++	--with-gnu-ld \
++	--enable-shared \
++	--enable-static
+ 
+-libosip2-source: $(DL_DIR)/$(LIBOSIP2_SOURCE)
 -
--libid3tag-source: $(DL_DIR)/$(LIBID3TAG_SOURCE)
+-libosip2-clean:
+-	-$(MAKE) -C $(LIBOSIP2_DIR) clean
+-	-rm -f $(STAGING_DIR)/usr/lib/libosip2.*
+-	-rm -f $(STAGING_DIR)/usr/lib/libosipparser2.*
+-	-rm -f $(TARGET_DIR)/usr/lib/libosip2.*
+-	-rm -f $(TARGET_DIR)/usr/lib/libosipparser2.*
 -
--libid3tag-clean:
--	-$(MAKE) -C $(LIBID3TAG_DIR) clean
--	rm -f $(STAGING_DIR)/$(LIBID3TAG_TARGET_BIN)
--	rm -f $(TARGET_DIR)/$(LIBID3TAG_TARGET_BIN) \
--		$(TARGET_DIR)/usr/lib/libid3tag*
+-libosip2-dirclean:
+-	rm -rf $(LIBOSIP2_DIR)
 -
--libid3tag-dirclean:
--	rm -rf $(LIBID3TAG_DIR)
+-.PHONY: libosip2-headers libosip2-target-headers
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_LIBID3TAG),y)
--TARGETS+=libid3tag
+-ifeq ($(BR2_PACKAGE_LIBOSIP2),y)
+-TARGETS+=libosip2
 -endif
-+$(eval $(call AUTOTARGETS,package/multimedia,libid3tag))
++$(eval $(call AUTOTARGETS,package,libosip2))
 -- 
 1.6.3.3
