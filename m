@@ -1,34 +1,37 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Wed, 14 Apr 2010 13:42:18 +0000 (UTC)
-Subject: [Buildroot] external toolchain and sysroot
-References: <1272730299.20100325182803@ya.ru> <hog24r$1nu$1@dough.gmane.org>
-	<93399903.20100325201240@ya.ru> <44830928.20100325201616@ya.ru>
-	<hog8rg$sis$1@dough.gmane.org> <20100325233452.3794166b@surf>
-Message-ID: <hq4gnq$pd0$1@dough.gmane.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 14 Apr 2010 15:42:44 +0200
+Subject: [Buildroot] [PATCH 08/41] ext-toolchain: remove pkgconfig files
+ from the external toolchain
+In-Reply-To: <1271199974-30434-9-git-send-email-llandwerlin@gmail.com>
+References: <1271199974-30434-1-git-send-email-llandwerlin@gmail.com>
+	<1271199974-30434-9-git-send-email-llandwerlin@gmail.com>
+Message-ID: <20100414154244.5d7ae3c1@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2010-03-25, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
-> On Thu, 25 Mar 2010 18:08:49 +0000 (UTC)
-> Grant Edwards <grant.b.edwards@gmail.com> wrote:
->
->> Based on my sample of three packages (two had the problem), I'm
->> guessing it's a very common problem.  It looks like the buildroot
->> developers use external toolchains that don't require a --sysroot
->> option. 
->
-> They do. What we do to support external toolchains is :
+On Wed, 14 Apr 2010 01:05:41 +0200
+llandwerlin at gmail.com wrote:
 
-Recent testing has confirmed that relocated toolchains built by
-crosstool-NG can find library files without a --sysroot option.
-Toolchains built by buildroot can't.  This explains the spate of
-"missing --sysroot" bugs that affect people using relocated buildroot
-toolchains and not people using relocated crosstool-NG toolchains.
+> --- a/toolchain/external-toolchain/ext-tool.mk
+> +++ b/toolchain/external-toolchain/ext-tool.mk
+> @@ -80,7 +80,8 @@ copy_toolchain_lib_root = \
+>  copy_toolchain_sysroot = \
+>  	SYSROOT_DIR="$(strip $1)"; \
+>  	cp -a $${SYSROOT_DIR}/* $(STAGING_DIR)/ ; \
+> -	find $(STAGING_DIR) -type d | xargs chmod 755
+> +	find $(STAGING_DIR) -type d | xargs chmod 755; \
+> +	rm -rf $(STAGING_DIR)/usr/lib/pkgconfig
 
+Just curious, which toolchain has pkgconfig files in its sysroot dir ?
+If it has pkgconfig files in its sysroot dir, doesn't it also have
+other libraries than the C library in /usr/lib ?
+
+Thomas
 -- 
-Grant Edwards               grant.b.edwards        Yow! You can't hurt me!!
-                                  at               I have an ASSUMABLE
-                              gmail.com            MORTGAGE!!
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
