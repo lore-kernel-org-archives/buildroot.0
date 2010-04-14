@@ -1,37 +1,45 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 14 Apr 2010 19:24:12 +0200
-Subject: [Buildroot] [PATCH 04/41] lua: conversion to new package
-	infrastructure
-In-Reply-To: <20100414172514.69accf2c@surf> (Thomas Petazzoni's message of
-	"Wed, 14 Apr 2010 17:25:14 +0200")
-References: <1271199974-30434-1-git-send-email-llandwerlin@gmail.com>
-	<1271199974-30434-5-git-send-email-llandwerlin@gmail.com>
-	<20100414151957.425aafc4@surf> <20100414172514.69accf2c@surf>
-Message-ID: <87wrwadk1v.fsf@macbook.be.48ers.dk>
+From: Jonathan dumaresq <jdumaresq@cimeq.qc.ca>
+Date: Wed, 14 Apr 2010 13:26:02 -0400
+Subject: [Buildroot] [PATCH 05/35] u-boot: remove ancient versions
+In-Reply-To: <20100414165422.55d74e12@surf>
+References: <cover.1271170913.git.thomas.petazzoni@free-electrons.com><0317d23e36901cf689a8e298a5b3d1513f50254d.1271170913.git.thomas.petazzoni@free-electrons.com><79D4CF185FBB4873B0FA52EA76F44C97@cimeq.ca>
+	<20100414165422.55d74e12@surf>
+Message-ID: <1802D4036B4D47D093AB32B3E9839DF2@cimeq.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hi Thomas,
 
- Thomas> On Wed, 14 Apr 2010 15:19:57 +0200
- Thomas> Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+There are at least 2 people that tried to get the upstream fixed, but both
+of them get their patch rejected. Included the ATMEL guy Haavard Skinnemoen
 
- >> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+So i don't think this will be fixed in a near future...
 
- Thomas> Actually, after discussing with Gustavo on IRC, I think we should first
- Thomas> merge Gustavo's work. It has been sitting in our Bugzilla for way too
- Thomas> long.
+Jonathan
 
- Thomas> See
- Thomas>  https://bugs.busybox.net/show_bug.cgi?id=803
- Thomas>  https://bugs.busybox.net/show_bug.cgi?id=719
-
-Yes, it has been on my todo list for a while.
-
-There's afaik also some other lua patches in BZ.
-
--- 
-Bye, Peter Korsgaard
+buildroot-bounces at busybox.net wrote:
+> Hello,
+> 
+> On Tue, 13 Apr 2010 11:13:19 -0400
+> "Jonathan dumaresq" <jdumaresq@cimeq.qc.ca> wrote:
+> 
+>> I think you should keep the U-boot-2008.10 one. This is the only one
+>> that work with AP7000 target.
+> 
+> Ok, we can  keep it, marked deprecated. But I'd strongly suggest to
+> get the issue fixed upstream. 
+> 
+> Thanks,
+> 
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux development,
+> consulting, training and support. http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
