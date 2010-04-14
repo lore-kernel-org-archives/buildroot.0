@@ -1,25 +1,28 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 14 Apr 2010 12:37:27 +0200
-Subject: [Buildroot] [PATCH]Add support to linux 2.6.30 kernel patches
-	for Atmel arm in menuconfig
-In-Reply-To: <C83D7CE8356557448A893798C8F9931D050E1FA9@frimb01.corp.atmel.com>
-	(Josh Wu's message of "Fri, 9 Apr 2010 11:27:27 +0200")
-References: <C83D7CE8356557448A893798C8F9931D050E1FA9@frimb01.corp.atmel.com>
-Message-ID: <87d3y2fhg8.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 14 Apr 2010 10:56:47 +0000 (UTC)
+Subject: [Buildroot] [Bug 1213] Move .config into output directory
+In-Reply-To: <bug-1213-163@https.bugs.busybox.net/>
+References: <bug-1213-163@https.bugs.busybox.net/>
+Message-ID: <20100414105647.C8903620@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Josh" == Wu, Josh <Josh.wu@atmel.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=1213
 
- Josh> Hi, 
 
- Josh> Here is a patch to add support to Linux 2.6.30 kernel patches for
- Josh> Atmel arm in menuconfig.
 
-Thanks, but why only 2.6.30? That's almost a year old by now.
+
+
+--- Comment #9 from Nick Leverton <nick@leverton.org>  2010-04-14 10:56:47 UTC ---
+Created an attachment (id=1507)
+ --> (https://bugs.busybox.net/attachment.cgi?id=1507)
+As in "Fixed missed renames" but based on clean BR2010.02
+
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
