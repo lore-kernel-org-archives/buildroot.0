@@ -1,34 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Apr 2010 17:25:14 +0200
-Subject: [Buildroot] [PATCH 04/41] lua: conversion to new package
- infrastructure
-In-Reply-To: <20100414151957.425aafc4@surf>
+Date: Wed, 14 Apr 2010 17:26:22 +0200
+Subject: [Buildroot] [PATCH 32/41] package: add libgnutls package
+In-Reply-To: <1271199974-30434-33-git-send-email-llandwerlin@gmail.com>
 References: <1271199974-30434-1-git-send-email-llandwerlin@gmail.com>
-	<1271199974-30434-5-git-send-email-llandwerlin@gmail.com>
-	<20100414151957.425aafc4@surf>
-Message-ID: <20100414172514.69accf2c@surf>
+	<1271199974-30434-33-git-send-email-llandwerlin@gmail.com>
+Message-ID: <20100414172622.0a873e4e@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 14 Apr 2010 15:19:57 +0200
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+On Wed, 14 Apr 2010 01:06:05 +0200
+llandwerlin at gmail.com wrote:
 
-> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> From: Lionel Landwerlin <llandwerlin@gmail.com>
+> 
+> Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 
-Actually, after discussing with Gustavo on IRC, I think we should first
-merge Gustavo's work. It has been sitting in our Bugzilla for way too
-long.
+Besides Peter's comment on indentation:
 
-See
- https://bugs.busybox.net/show_bug.cgi?id=803
- https://bugs.busybox.net/show_bug.cgi?id=719
-
-Cheers,
-
-Thomas
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -- 
 Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
