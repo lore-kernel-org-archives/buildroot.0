@@ -1,45 +1,28 @@
-From: Jonathan dumaresq <jdumaresq@cimeq.qc.ca>
-Date: Wed, 14 Apr 2010 13:26:02 -0400
-Subject: [Buildroot] [PATCH 05/35] u-boot: remove ancient versions
-In-Reply-To: <20100414165422.55d74e12@surf>
-References: <cover.1271170913.git.thomas.petazzoni@free-electrons.com><0317d23e36901cf689a8e298a5b3d1513f50254d.1271170913.git.thomas.petazzoni@free-electrons.com><79D4CF185FBB4873B0FA52EA76F44C97@cimeq.ca>
-	<20100414165422.55d74e12@surf>
-Message-ID: <1802D4036B4D47D093AB32B3E9839DF2@cimeq.ca>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 14 Apr 2010 19:38:00 +0300
+Subject: [Buildroot] Problems with i686_defconfig
+In-Reply-To: <4BC59A02.40804@carallon.com>
+References: <4BC59A02.40804@carallon.com>
+Message-ID: <20100414163800.GD2212@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Will,
 
-There are at least 2 people that tried to get the upstream fixed, but both
-of them get their patch rejected. Included the ATMEL guy Haavard Skinnemoen
+On Wed, Apr 14, 2010 at 11:33:38AM +0100, Will Wagner wrote:
+> Finally the build fails in either gdbserver (if selected) or
+> busybox, complaining the symbol usleep is undefined. Anyone seen
+> this before? Is it some config problem with uClibc 0.9.31?
 
-So i don't think this will be fixed in a near future...
+usleep() is not available when UCLIBC_SUSV3_LEGACY is disabled. See 
+http://lists.busybox.net/pipermail/busybox/2010-April/072031.html.
 
-Jonathan
+baruch
 
-buildroot-bounces at busybox.net wrote:
-> Hello,
-> 
-> On Tue, 13 Apr 2010 11:13:19 -0400
-> "Jonathan dumaresq" <jdumaresq@cimeq.qc.ca> wrote:
-> 
->> I think you should keep the U-boot-2008.10 one. This is the only one
->> that work with AP7000 target.
-> 
-> Ok, we can  keep it, marked deprecated. But I'd strongly suggest to
-> get the issue fixed upstream. 
-> 
-> Thanks,
-> 
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux development,
-> consulting, training and support. http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+-- 
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
