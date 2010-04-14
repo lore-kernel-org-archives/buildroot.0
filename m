@@ -1,12 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 14 Apr 2010 10:16:46 +0200
-Subject: [Buildroot] [PATCH 27/41] linux-fusion: drop target
-	installation option (it's on by default)
-In-Reply-To: <1271199974-30434-28-git-send-email-llandwerlin@gmail.com>
-	(llandwerlin@gmail.com's message of "Wed, 14 Apr 2010 01:06:00 +0200")
+Date: Wed, 14 Apr 2010 10:18:54 +0200
+Subject: [Buildroot] [PATCH 23/41] autoconf: added AUTOHEADER variable
+In-Reply-To: <1271199974-30434-24-git-send-email-llandwerlin@gmail.com>
+	(llandwerlin@gmail.com's message of "Wed, 14 Apr 2010 01:05:56 +0200")
 References: <1271199974-30434-1-git-send-email-llandwerlin@gmail.com>
-	<1271199974-30434-28-git-send-email-llandwerlin@gmail.com>
-Message-ID: <877hoah2j5.fsf@macbook.be.48ers.dk>
+	<1271199974-30434-24-git-send-email-llandwerlin@gmail.com>
+Message-ID: <87zl16fnv5.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,20 +17,29 @@ To: buildroot@busybox.net
  llandwerlin> From: Lionel Landwerlin <llandwerlin@gmail.com>
  llandwerlin> Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
  llandwerlin> ---
- llandwerlin>  package/linux-fusion/linux-fusion.mk |    1 -
- llandwerlin>  1 files changed, 0 insertions(+), 1 deletions(-)
+ llandwerlin>  package/autoconf/autoconf.mk |    3 ++-
+ llandwerlin>  1 files changed, 2 insertions(+), 1 deletions(-)
 
- llandwerlin> diff --git a/package/linux-fusion/linux-fusion.mk b/package/linux-fusion/linux-fusion.mk
- llandwerlin> index abce465..4dbf45e 100644
- llandwerlin> --- a/package/linux-fusion/linux-fusion.mk
- llandwerlin> +++ b/package/linux-fusion/linux-fusion.mk
- llandwerlin> @@ -7,7 +7,6 @@ LINUX_FUSION_VERSION = 8.1.1
- llandwerlin>  LINUX_FUSION_SOURCE = linux-fusion-$(LINUX_FUSION_VERSION).tar.gz
- llandwerlin>  LINUX_FUSION_SITE = http://directfb.org/downloads/Core/linux-fusion
- llandwerlin>  LINUX_FUSION_INSTALL_STAGING = YES
- llandwerlin> -LINUX_FUSION_INSTALL_TARGET = YES
+ llandwerlin> diff --git a/package/autoconf/autoconf.mk b/package/autoconf/autoconf.mk
+ llandwerlin> index d82c2c5..81233a5 100644
+ llandwerlin> --- a/package/autoconf/autoconf.mk
+ llandwerlin> +++ b/package/autoconf/autoconf.mk
+ llandwerlin> @@ -17,7 +17,7 @@ AUTOCONF_CONF_ENV = EMACS="no" ac_cv_path_M4=$(HOST_DIR)/usr/bin/m4 \
+ llandwerlin>  AUTOCONF_DEPENDENCIES = microperl host-m4
+ 
+ llandwerlin>  HOST_AUTOCONF_CONF_ENV = ac_cv_path_M4=$(HOST_DIR)/usr/bin/m4 \
+ llandwerlin> -                    	 ac_cv_prog_gnu_m4_gnu=no
+ llandwerlin> +			ac_cv_prog_gnu_m4_gnu=no
+ 
+ llandwerlin>  HOST_AUTOCONF_DEPENDENCIES = host-m4 host-libtool
+ 
+ llandwerlin> @@ -26,4 +26,5 @@ $(eval $(call AUTOTARGETS,package,autoconf,host))
+ 
+ llandwerlin>  # variables used by other packages
+ llandwerlin>  AUTOCONF:=$(HOST_DIR)/usr/bin/autoconf
+ llandwerlin> +AUTOHEADER:=$(HOST_DIR)/usr/bin/autoheader
 
-You might as well just not add it in patch #26.
+Why? What uses it?
 
 -- 
 Bye, Peter Korsgaard
