@@ -1,30 +1,25 @@
-From: Will Wagner <will_wagner@carallon.com>
-Date: Wed, 14 Apr 2010 11:33:38 +0100
-Subject: [Buildroot] Problems with i686_defconfig
-Message-ID: <4BC59A02.40804@carallon.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 14 Apr 2010 12:37:27 +0200
+Subject: [Buildroot] [PATCH]Add support to linux 2.6.30 kernel patches
+	for Atmel arm in menuconfig
+In-Reply-To: <C83D7CE8356557448A893798C8F9931D050E1FA9@frimb01.corp.atmel.com>
+	(Josh Wu's message of "Fri, 9 Apr 2010 11:27:27 +0200")
+References: <C83D7CE8356557448A893798C8F9931D050E1FA9@frimb01.corp.atmel.com>
+Message-ID: <87d3y2fhg8.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Josh" == Wu, Josh <Josh.wu@atmel.com> writes:
 
-Using latest from git I am trying to build i686_defconfig but I am 
-having problems.
+ Josh> Hi, 
 
-The first annoyance is that the defconfig is so old that you have go 
-through selecting the defaults for all the new config options. 
-Presumably we should update the defconfigs so they contain all the 
-default options already set? If so I'm happy to look at a patch.
+ Josh> Here is a patch to add support to Linux 2.6.30 kernel patches for
+ Josh> Atmel arm in menuconfig.
 
-If I select all the defaults I end up with kernel headers 2.6.33.2, 
-uClibc 0.9.31, binutils 2.20.1, gcc 4.4.3 and linux 2.6.33.2
+Thanks, but why only 2.6.30? That's almost a year old by now.
 
-You then get the same problems again with uClibc config and linux 
-config, both ask about config options, should we be updating our 
-defaults so this step is not necessary?
-
-Finally the build fails in either gdbserver (if selected) or busybox, 
-complaining the symbol usleep is undefined. Anyone seen this before? Is 
-it some config problem with uClibc 0.9.31?
+-- 
+Bye, Peter Korsgaard
