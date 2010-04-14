@@ -1,10 +1,10 @@
 From: Will Wagner <will_wagner@carallon.com>
-Date: Wed, 14 Apr 2010 17:31:56 +0100
+Date: Wed, 14 Apr 2010 18:06:45 +0100
 Subject: [Buildroot] [PATCH 6/7] X11R7.5 - remove all version information
 	from Config.in files
-In-Reply-To: <1271262717-2253-1-git-send-email-will_wagner@carallon.com>
-References: <1271262717-2253-1-git-send-email-will_wagner@carallon.com>
-Message-ID: <1271262717-2253-7-git-send-email-will_wagner@carallon.com>
+In-Reply-To: <1271264806-23336-1-git-send-email-will_wagner@carallon.com>
+References: <1271264806-23336-1-git-send-email-will_wagner@carallon.com>
+Message-ID: <1271264806-23336-7-git-send-email-will_wagner@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -53,7 +53,6 @@ Signed-off-by: Will Wagner <will_wagner@carallon.com>
  package/x11r7/xapp_xditview/Config.in              |    1 -
  package/x11r7/xapp_xdm/Config.in                   |    1 -
  package/x11r7/xapp_xdpyinfo/Config.in              |    1 -
- package/x11r7/xapp_xdpyinfo/xapp_xdpyinfo.mk       |    2 +-
  package/x11r7/xapp_xdriinfo/Config.in              |    1 -
  package/x11r7/xapp_xedit/Config.in                 |    1 -
  package/x11r7/xapp_xev/Config.in                   |    1 -
@@ -115,7 +114,6 @@ Signed-off-by: Will Wagner <will_wagner@carallon.com>
  package/x11r7/xdriver_xf86-video-ark/Config.in     |    1 -
  package/x11r7/xdriver_xf86-video-ast/Config.in     |    1 -
  package/x11r7/xdriver_xf86-video-ati/Config.in     |    1 -
- .../xdriver_xf86-video-ati.mk                      |    2 +-
  package/x11r7/xdriver_xf86-video-chips/Config.in   |    1 -
  package/x11r7/xdriver_xf86-video-cirrus/Config.in  |    1 -
  package/x11r7/xdriver_xf86-video-dummy/Config.in   |    1 -
@@ -137,9 +135,7 @@ Signed-off-by: Will Wagner <will_wagner@carallon.com>
  package/x11r7/xdriver_xf86-video-savage/Config.in  |    1 -
  .../xdriver_xf86-video-siliconmotion/Config.in     |    1 -
  package/x11r7/xdriver_xf86-video-sis/Config.in     |    1 -
- .../xdriver_xf86-video-sis.mk                      |    2 +-
  package/x11r7/xdriver_xf86-video-sisusb/Config.in  |    1 -
- .../xdriver_xf86-video-sisusb.mk                   |    2 +-
  package/x11r7/xdriver_xf86-video-suncg14/Config.in |    1 -
  package/x11r7/xdriver_xf86-video-suncg3/Config.in  |    1 -
  package/x11r7/xdriver_xf86-video-suncg6/Config.in  |    1 -
@@ -261,7 +257,7 @@ Signed-off-by: Will Wagner <will_wagner@carallon.com>
  package/x11r7/xproto_xproto/Config.in              |    1 -
  package/x11r7/xutil_makedepend/Config.in           |    1 -
  package/x11r7/xutil_util-macros/Config.in          |    1 -
- 245 files changed, 4 insertions(+), 245 deletions(-)
+ 241 files changed, 0 insertions(+), 241 deletions(-)
 
 diff --git a/package/x11r7/xapp_appres/Config.in b/package/x11r7/xapp_appres/Config.in
 index 2a6b503..7574659 100644
@@ -633,18 +629,6 @@ index ffe579d..ad6bd05 100644
  	help
 -	  xdpyinfo 1.1.0
  	  display information utility for X
-diff --git a/package/x11r7/xapp_xdpyinfo/xapp_xdpyinfo.mk b/package/x11r7/xapp_xdpyinfo/xapp_xdpyinfo.mk
-index 64ef8a0..36cc067 100644
---- a/package/x11r7/xapp_xdpyinfo/xapp_xdpyinfo.mk
-+++ b/package/x11r7/xapp_xdpyinfo/xapp_xdpyinfo.mk
-@@ -8,6 +8,6 @@ XAPP_XDPYINFO_VERSION = 1.1.0
- XAPP_XDPYINFO_SOURCE = xdpyinfo-$(XAPP_XDPYINFO_VERSION).tar.bz2
- XAPP_XDPYINFO_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XDPYINFO_AUTORECONF = NO
--XAPP_XDPYINFO_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXi xlib_libXp xlib_libXrender xlib_libXtst xlib_libXxf86dga xlib_libXxf86misc xlib_libXxf86vm xproto_inputproto xproto_kbproto xproto_printproto xproto_renderproto xproto_xf86dgaproto xproto_xf86miscproto xproto_xf86vidmodeproto xlib_libdmx
-+XAPP_XDPYINFO_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXi xlib_libXp xlib_libXrender xlib_libXtst xlib_libXxf86dga xlib_libXxf86vm xproto_inputproto xproto_kbproto xproto_printproto xproto_renderproto xproto_xf86dgaproto xproto_xf86vidmodeproto xlib_libdmx
- 
- $(eval $(call AUTOTARGETS,package/x11r7,xapp_xdpyinfo))
 diff --git a/package/x11r7/xapp_xdriinfo/Config.in b/package/x11r7/xapp_xdriinfo/Config.in
 index aa2aaca..7442690 100644
 --- a/package/x11r7/xapp_xdriinfo/Config.in
@@ -1255,19 +1239,6 @@ index ee4dd1a..967cc66 100644
  	help
 -	  xf86-video-ati 6.12.4
  	  ATI video driver
-diff --git a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
-index e2c40da..59c9acf 100644
---- a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
-+++ b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
-@@ -8,7 +8,7 @@ XDRIVER_XF86_VIDEO_ATI_VERSION = 6.12.4
- XDRIVER_XF86_VIDEO_ATI_SOURCE = xf86-video-ati-$(XDRIVER_XF86_VIDEO_ATI_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_ATI_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_ATI_AUTORECONF = YES
--XDRIVER_XF86_VIDEO_ATI_DEPENDENCIES = xserver_xorg-server libdrm xproto_fontsproto xproto_glproto xproto_randrproto xproto_videoproto xproto_xextproto xproto_xf86driproto xproto_xf86miscproto xproto_xineramaproto xproto_xproto
-+XDRIVER_XF86_VIDEO_ATI_DEPENDENCIES = xserver_xorg-server libdrm xproto_fontsproto xproto_glproto xproto_randrproto xproto_videoproto xproto_xextproto xproto_xf86driproto xproto_xineramaproto xproto_xproto
- XDRIVER_XF86_VIDEO_ATI_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
- 
- $(eval $(call AUTOTARGETS,package/x11r7,xdriver_xf86-video-ati))
 diff --git a/package/x11r7/xdriver_xf86-video-chips/Config.in b/package/x11r7/xdriver_xf86-video-chips/Config.in
 index c0b8271..29a99ec 100644
 --- a/package/x11r7/xdriver_xf86-video-chips/Config.in
@@ -1478,19 +1449,6 @@ index aac628e..184b770 100644
  	help
 -	  xf86-video-sis 0.10.2
  	  SiS and XGI video driver
-diff --git a/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk b/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
-index cfcb3f1..40ccab5 100644
---- a/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
-+++ b/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
-@@ -8,7 +8,7 @@ XDRIVER_XF86_VIDEO_SIS_VERSION = 0.10.2
- XDRIVER_XF86_VIDEO_SIS_SOURCE = xf86-video-sis-$(XDRIVER_XF86_VIDEO_SIS_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_SIS_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_SIS_AUTORECONF = YES
--XDRIVER_XF86_VIDEO_SIS_DEPENDENCIES = xserver_xorg-server libdrm xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xf86dgaproto xproto_xf86driproto xproto_xf86miscproto xproto_xineramaproto xproto_xproto
-+XDRIVER_XF86_VIDEO_SIS_DEPENDENCIES = xserver_xorg-server libdrm xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xf86dgaproto xproto_xf86driproto xproto_xineramaproto xproto_xproto
- XDRIVER_XF86_VIDEO_SIS_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
- 
- $(eval $(call AUTOTARGETS,package/x11r7,xdriver_xf86-video-sis))
 diff --git a/package/x11r7/xdriver_xf86-video-sisusb/Config.in b/package/x11r7/xdriver_xf86-video-sisusb/Config.in
 index af68d89..ffce940 100644
 --- a/package/x11r7/xdriver_xf86-video-sisusb/Config.in
@@ -1501,19 +1459,6 @@ index af68d89..ffce940 100644
  	help
 -	  xf86-video-sisusb 0.9.3
  	  SiS USB video driver
-diff --git a/package/x11r7/xdriver_xf86-video-sisusb/xdriver_xf86-video-sisusb.mk b/package/x11r7/xdriver_xf86-video-sisusb/xdriver_xf86-video-sisusb.mk
-index 36a683f..5068606 100644
---- a/package/x11r7/xdriver_xf86-video-sisusb/xdriver_xf86-video-sisusb.mk
-+++ b/package/x11r7/xdriver_xf86-video-sisusb/xdriver_xf86-video-sisusb.mk
-@@ -8,7 +8,7 @@ XDRIVER_XF86_VIDEO_SISUSB_VERSION = 0.9.3
- XDRIVER_XF86_VIDEO_SISUSB_SOURCE = xf86-video-sisusb-$(XDRIVER_XF86_VIDEO_SISUSB_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_SISUSB_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_SISUSB_AUTORECONF = NO
--XDRIVER_XF86_VIDEO_SISUSB_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xf86miscproto xproto_xineramaproto xproto_xproto
-+XDRIVER_XF86_VIDEO_SISUSB_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xineramaproto xproto_xproto
- XDRIVER_XF86_VIDEO_SISUSB_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
- 
- $(eval $(call AUTOTARGETS,package/x11r7,xdriver_xf86-video-sisusb))
 diff --git a/package/x11r7/xdriver_xf86-video-suncg14/Config.in b/package/x11r7/xdriver_xf86-video-suncg14/Config.in
 index 977095b..661c179 100644
 --- a/package/x11r7/xdriver_xf86-video-suncg14/Config.in
