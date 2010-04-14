@@ -1,28 +1,21 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 14 Apr 2010 19:38:00 +0300
-Subject: [Buildroot] Problems with i686_defconfig
-In-Reply-To: <4BC59A02.40804@carallon.com>
-References: <4BC59A02.40804@carallon.com>
-Message-ID: <20100414163800.GD2212@tarshish>
+From: Will Wagner <will_wagner@carallon.com>
+Date: Wed, 14 Apr 2010 19:33:51 +0100
+Subject: [Buildroot] [PATCH 7/7] pixman: bump version to 0.18.0
+In-Reply-To: <1271264806-23336-8-git-send-email-will_wagner@carallon.com>
+References: <1271264806-23336-1-git-send-email-will_wagner@carallon.com>
+	<1271264806-23336-8-git-send-email-will_wagner@carallon.com>
+Message-ID: <4BC60A8F.4020109@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Will,
+On 14/04/2010 18:06, Will Wagner wrote:
+> Signed-off-by: Will Wagner<will_wagner@carallon.com>
+>    
+Not having a good day. Have found a combination of settings where this 
+does not work, so need to nack this for now. Will to fixup what's broken 
+and resubmit.
 
-On Wed, Apr 14, 2010 at 11:33:38AM +0100, Will Wagner wrote:
-> Finally the build fails in either gdbserver (if selected) or
-> busybox, complaining the symbol usleep is undefined. Anyone seen
-> this before? Is it some config problem with uClibc 0.9.31?
-
-usleep() is not available when UCLIBC_SUSV3_LEGACY is disabled. See 
-http://lists.busybox.net/pipermail/busybox/2010-April/072031.html.
-
-baruch
-
--- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Will
