@@ -1,95 +1,200 @@
 From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
-Date: Wed, 14 Apr 2010 16:00:00 +0300
+Date: Wed, 14 Apr 2010 16:09:10 +0300
 Subject: [Buildroot] [PATCH 15/16] xserver_xorg-server: bump version,
 	improve option support
-In-Reply-To: <4BC5AC04.90408@carallon.com>
+In-Reply-To: <1270126006-22405-15-git-send-email-will_wagner@carallon.com>
 References: <1270126006-22405-1-git-send-email-will_wagner@carallon.com>
 	<1270126006-22405-15-git-send-email-will_wagner@carallon.com>
-	<87vdc1lnbs.fsf@macbook.be.48ers.dk> <4BC5AC04.90408@carallon.com>
-Message-ID: <k2xbadfd5ba1004140600s5ad633c8z407d2f10a627ae3@mail.gmail.com>
+Message-ID: <m2kbadfd5ba1004140609pa2dc67cv5396a684c87bebbd@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Apr 14, 2010 at 2:50 PM, Will Wagner <will_wagner@carallon.com> wrote:
-> On 08/04/2010 21:08, Peter Korsgaard wrote:
->>>>>>>
->>>>>>> "Will" == Will Wagner<will_wagner@carallon.com> ?writes:
->>>>>>>
->>
->> Hi,
->>
->> ?Will> ?Later version of xserver no longer need configure hack to say
->> where
->> ?Will> ?mesa3d is located.
->>
->> Thanks, but ..
->>
->> ?Will> ?--- a/package/x11r7/xserver_xorg-server/Config.in
->> ?Will> ?+++ b/package/x11r7/xserver_xorg-server/Config.in
->> ?Will> ?@@ -1,23 +1,26 @@
->> ?Will> ? config BR2_PACKAGE_XSERVER_XORG_SERVER
->> ?Will> ? ? ? ? bool "xorg-server"
->> ?Will> ?- ? ? ?select BR2_PACKAGE_XLIB_LIBXFONT
->> ?Will> ? ? ? ? select BR2_PACKAGE_LIBDRM
->> ?Will> ?+ ? ? ?select BR2_PACKAGE_MCOOKIE
->> ?Will> ?+ ? ? ?select BR2_PACKAGE_MESA3D if BR2_PACKAGE_XSERVER_xorg
->> ?Will> ? ? ? ? select BR2_PACKAGE_OPENSSL
->> ?Will> ?- ? ? ?select BR2_PACKAGE_XPROTO_COMPOSITEPROTO
->> ?Will> ?- ? ? ?select BR2_PACKAGE_XPROTO_DAMAGEPROTO
->> ?Will> ?- ? ? ?select BR2_PACKAGE_XPROTO_FIXESPROTO
->> ?Will> ?- ? ? ?select BR2_PACKAGE_XPROTO_GLPROTO
->> ?Will> ?- ? ? ?select BR2_PACKAGE_XPROTO_KBPROTO
->> ?Will> ?- ? ? ?select BR2_PACKAGE_XPROTO_RANDRPROTO
->>
->> ?Will> ?@@ -38,6 +38,7 @@ XSERVER_XORG_SERVER_DEPENDENCIES = ? \
->> ?Will> ? ? ? ? xproto_bigreqsproto ? ? ? ? ? ? \
->> ?Will> ? ? ? ? xproto_compositeproto ? ? ? ? ? \
->> ?Will> ? ? ? ? xproto_damageproto ? ? ? ? ? ? ?\
->> ?Will> ?+ ? ? ?xproto_dri2proto ? ? ? ? ? ? ? ?\
->> ?Will> ? ? ? ? xproto_evieext ? ? ? ? ? ? ? ? ?\
->> ?Will> ? ? ? ? xproto_fixesproto ? ? ? ? ? ? ? \
->> ?Will> ? ? ? ? xproto_fontsproto ? ? ? ? ? ? ? \
->>
->> Why are you removing these selects if they are still Makefile
->> dependencies?
->>
+On Thu, Apr 1, 2010 at 3:46 PM, Will Wagner <will_wagner@carallon.com> wrote:
+> Later version of xserver no longer need configure hack to say where
+> mesa3d is located.
 >
-> As I said previously, no dependencies are removed, there are just so many I
-> have reordered them alphabetically. Also worth noting that this patch has
-> the dependacy fix for libpciaccess that Paulis posted.
->
->> ?Will> ?-config BR2_PACKAGE_XSERVER_XORG_SERVER_BUILTIN_FONTS
->> ?Will> ?- ? ?bool "Use Builtin Fonts"
->> ?Will> ?- ? ?depends on BR2_PACKAGE_XSERVER_XORG_SERVER
->> ?Will> ?- ? ?help
->> ?Will> ?- ? ? ? ?Enable/Use Builtin fonts.
->>
->> Is this gone? Should we select a font or 2 then so the user doesn't end
->> up with a broken system?
->>
->
-> This option has gone from xserver.
->
-> The package font-misc-misc gets selected, so you will always have a font.
->
->>
->> ?Will> ? ifeq ($(BR2_PACKAGE_FREETYPE),y)
->> ?Will> ? XSERVER_XORG_SERVER_DEPENDENCIES += freetype
->> ?Will> ?-XSERVER_XORG_SERVER_CONF_OPT += --enable-freetype
->>
->> Is this option gone? Does it still work to build without freetype?
->>
->>
->
-> This option has gone from xserver.
->
-> If you selected xserver then freetype is selected for you by a number of
-> packages (xlib_libXfont, xlib_libXft, fontconfig... ) so you can not select
-> this without freetype.
->
-> Does that answer your queries? Can this get applied?
+> Signed-off-by: Will Wagner <will_wagner@carallon.com>
 
-Acked-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+Seems that my ACK was little bit too early...
+
+> ---
+> ?package/x11r7/xserver_xorg-server/Config.in ? ? ? ?| ? 36 ++++++++++---------
+> ?.../xserver_xorg-server/xserver_xorg-server.mk ? ? | ? 34 +++++++++++++-----
+> ?2 files changed, 43 insertions(+), 27 deletions(-)
+>
+> diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
+> index 86909d1..2342fb5 100644
+> --- a/package/x11r7/xserver_xorg-server/Config.in
+> +++ b/package/x11r7/xserver_xorg-server/Config.in
+> @@ -1,23 +1,26 @@
+> ?config BR2_PACKAGE_XSERVER_XORG_SERVER
+> ? ? ? ?bool "xorg-server"
+> - ? ? ? select BR2_PACKAGE_XLIB_LIBXFONT
+> ? ? ? ?select BR2_PACKAGE_LIBDRM
+> + ? ? ? select BR2_PACKAGE_MCOOKIE
+> + ? ? ? select BR2_PACKAGE_MESA3D if BR2_PACKAGE_XSERVER_xorg
+> ? ? ? ?select BR2_PACKAGE_OPENSSL
+> - ? ? ? select BR2_PACKAGE_XPROTO_COMPOSITEPROTO
+> - ? ? ? select BR2_PACKAGE_XPROTO_DAMAGEPROTO
+> - ? ? ? select BR2_PACKAGE_XPROTO_FIXESPROTO
+> - ? ? ? select BR2_PACKAGE_XPROTO_GLPROTO
+> - ? ? ? select BR2_PACKAGE_XPROTO_KBPROTO
+> - ? ? ? select BR2_PACKAGE_XPROTO_RANDRPROTO
+> + ? ? ? select BR2_PACKAGE_PIXMAN
+> ? ? ? ?select BR2_PACKAGE_XFONT_FONT_ALIAS if !BR2_PACKAGE_XSERVER_XORG_SERVER_BUILTIN_FONTS
+> ? ? ? ?select BR2_PACKAGE_XFONT_FONT_MISC_MISC if !BR2_PACKAGE_XSERVER_XORG_SERVER_BUILTIN_FONTS
+> ? ? ? ?select BR2_PACKAGE_XFONT_FONT_CURSOR_MISC if !BR2_PACKAGE_XSERVER_XORG_SERVER_BUILTIN_FONTS
+> + ? ? ? select BR2_PACKAGE_XLIB_LIBPCIACCESS
+> ? ? ? ?select BR2_PACKAGE_XLIB_LIBX11
+> ? ? ? ?select BR2_PACKAGE_XLIB_LIBXAU
+> + ? ? ? select BR2_PACKAGE_XLIB_LIBXCURSOR
+> + ? ? ? select BR2_PACKAGE_XLIB_LIBXDAMAGE
+> ? ? ? ?select BR2_PACKAGE_XLIB_LIBXDMCP
+> ? ? ? ?select BR2_PACKAGE_XLIB_LIBXEXT
+> ? ? ? ?select BR2_PACKAGE_XLIB_LIBXFIXES
+> + ? ? ? select BR2_PACKAGE_XLIB_LIBXFONT
+> + ? ? ? select BR2_PACKAGE_XLIB_LIBXFT
+> ? ? ? ?select BR2_PACKAGE_XLIB_LIBXI
+> + ? ? ? select BR2_PACKAGE_XLIB_LIBXINERAMA
+> + ? ? ? select BR2_PACKAGE_XLIB_LIBXRANDR
+> ? ? ? ?select BR2_PACKAGE_XLIB_LIBXRENDER
+> ? ? ? ?select BR2_PACKAGE_XLIB_LIBXRES
+> ? ? ? ?select BR2_PACKAGE_XLIB_LIBXXF86MISC
+> @@ -26,9 +29,16 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER
+> ? ? ? ?select BR2_PACKAGE_XLIB_XTRANS
+> ? ? ? ?select BR2_PACKAGE_XDATA_XBITMAPS
+> ? ? ? ?select BR2_PACKAGE_XPROTO_BIGREQSPROTO
+> + ? ? ? select BR2_PACKAGE_XPROTO_COMPOSITEPROTO
+> + ? ? ? select BR2_PACKAGE_XPROTO_DAMAGEPROTO
+> + ? ? ? select BR2_PACKAGE_XPROTO_DRI2PROTO
+
+You have added select here...
+
+> ? ? ? ?select BR2_PACKAGE_XPROTO_EVIEEXT
+> + ? ? ? select BR2_PACKAGE_XPROTO_FIXESPROTO
+> ? ? ? ?select BR2_PACKAGE_XPROTO_FONTSPROTO
+> + ? ? ? select BR2_PACKAGE_XPROTO_GLPROTO
+> ? ? ? ?select BR2_PACKAGE_XPROTO_INPUTPROTO
+> + ? ? ? select BR2_PACKAGE_XPROTO_KBPROTO
+> + ? ? ? select BR2_PACKAGE_XPROTO_RANDRPROTO
+> ? ? ? ?select BR2_PACKAGE_XPROTO_RENDERPROTO
+> ? ? ? ?select BR2_PACKAGE_XPROTO_RESOURCEPROTO
+> ? ? ? ?select BR2_PACKAGE_XPROTO_VIDEOPROTO
+> @@ -41,12 +51,10 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER
+> ? ? ? ?select BR2_PACKAGE_XPROTO_XF86RUSHPROTO
+> ? ? ? ?select BR2_PACKAGE_XPROTO_XF86VIDMODEPROTO
+> ? ? ? ?select BR2_PACKAGE_XPROTO_XPROTO
+> - ? ? ? select BR2_PACKAGE_PIXMAN
+> - ? ? ? select BR2_PACKAGE_XLIB_LIBXSCRNSAVER
+> - ? ? ? select BR2_PACKAGE_MESA3D if BR2_PACKAGE_XSERVER_xorg
+> + ? ? ? select BR2_PACKAGE_XUTIL_UTIL_MACROS
+> ? ? ? ?depends on !BR2_avr32
+> ? ? ? ?help
+> - ? ? ? ? xorg-server 1.7.1
+> + ? ? ? ? xorg-server 1.7.5
+> ? ? ? ? ?No description available
+[...]
+
+> diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+> index 950c2ca..ba8cf9d 100644
+> --- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+> +++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+> @@ -4,7 +4,7 @@
+> ?#
+> ?################################################################################
+>
+> -XSERVER_XORG_SERVER_VERSION = 1.7.1
+> +XSERVER_XORG_SERVER_VERSION = 1.7.5
+> ?XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.bz2
+> ?XSERVER_XORG_SERVER_SITE = http://xorg.freedesktop.org/releases/individual/xserver
+> ?XSERVER_XORG_SERVER_AUTORECONF = NO
+> @@ -15,11 +15,11 @@ XSERVER_XORG_SERVER_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install install
+>
+> ?XSERVER_XORG_SERVER_DEPENDENCIES = ? ? \
+> ? ? ? ?xutil_util-macros ? ? ? ? ? ? ? \
+> + ? ? ? xlib_libpciaccess ? ? ? ? ? ? ? \
+> ? ? ? ?xlib_libXfont ? ? ? ? ? ? ? ? ? \
+> ? ? ? ?xlib_libX11 ? ? ? ? ? ? ? ? ? ? \
+> ? ? ? ?xlib_libXau ? ? ? ? ? ? ? ? ? ? \
+> ? ? ? ?xlib_libXdmcp ? ? ? ? ? ? ? ? ? \
+> - ? ? ? xlib_libXScrnSaver ? ? ? ? ? ? ?\
+> ? ? ? ?xlib_libXext ? ? ? ? ? ? ? ? ? ?\
+> ? ? ? ?xlib_libXfixes ? ? ? ? ? ? ? ? ?\
+> ? ? ? ?xlib_libXi ? ? ? ? ? ? ? ? ? ? ?\
+> @@ -38,6 +38,7 @@ XSERVER_XORG_SERVER_DEPENDENCIES = ? ?\
+> ? ? ? ?xproto_bigreqsproto ? ? ? ? ? ? \
+> ? ? ? ?xproto_compositeproto ? ? ? ? ? \
+> ? ? ? ?xproto_damageproto ? ? ? ? ? ? ?\
+> + ? ? ? xproto_dri2proto ? ? ? ? ? ? ? ?\
+
+And here...
+
+> ? ? ? ?xproto_evieext ? ? ? ? ? ? ? ? ?\
+> ? ? ? ?xproto_fixesproto ? ? ? ? ? ? ? \
+> ? ? ? ?xproto_fontsproto ? ? ? ? ? ? ? \
+> @@ -69,7 +70,7 @@ XSERVER_XORG_SERVER_CONF_OPT = --disable-config-hal \
+>
+> ?ifeq ($(BR2_PACKAGE_XSERVER_xorg),y)
+> ?XSERVER_XORG_SERVER_DEPENDENCIES += mesa3d
+> -XSERVER_XORG_SERVER_CONF_OPT += --with-mesa-source="$(BUILD_DIR)/Mesa-$(MESA3D_VERSION)" --enable-xorg
+> +XSERVER_XORG_SERVER_CONF_OPT += --enable-xorg --disable-glx
+> ?else
+> ?XSERVER_XORG_SERVER_CONF_OPT += --disable-xorg
+> ?endif
+> @@ -86,12 +87,6 @@ else
+> ?XSERVER_XORG_SERVER_CONF_OPT += --disable-null-root-cursor
+> ?endif
+>
+> -ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_BUILTIN_FONTS),y)
+> -XSERVER_XORG_SERVER_CONF_OPT += --enable-builtin-fonts
+> -else
+> -XSERVER_XORG_SERVER_CONF_OPT += --disable-builtin-fonts
+> -endif
+> -
+> ?ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_AIGLX),y)
+> ?XSERVER_XORG_SERVER_CONF_OPT += --enable-aiglx
+> ?else
+> @@ -111,7 +106,6 @@ endif
+>
+> ?ifeq ($(BR2_PACKAGE_FREETYPE),y)
+> ?XSERVER_XORG_SERVER_DEPENDENCIES += freetype
+> -XSERVER_XORG_SERVER_CONF_OPT += --enable-freetype
+> ?endif
+>
+> ?ifeq ($(BR2_PACKAGE_XPROTO_TRAPPROTO),y)
+> @@ -124,9 +118,29 @@ XSERVER_XORG_SERVER_DEPENDENCIES += xproto_recordproto
+> ?XSERVER_XORG_SERVER_CONF_OPT += --enable-record
+> ?endif
+>
+> +ifneq ($(BR2_PACKAGE_XLIB_LIBXVMC),y)
+> +XSERVER_XORG_SERVER_CONF_OPT += --disable-xvmc
+> +endif
+> +
+> +ifneq ($(BR2_PACKAGE_XLIB_LIBXCOMPOSITE),y)
+> +XSERVER_XORG_SERVER_CONF_OPT += --disable-composite
+> +endif
+> +
+> ?ifeq ($(BR2_PACKAGE_XPROTO_DRI2PROTO),y)
+> ?XSERVER_XORG_SERVER_DEPENDENCIES += xproto_dri2proto
+> ?XSERVER_XORG_SERVER_CONF_OPT += --enable-dri2
+> ?endif
+
+But I have added this in my previous patches! And I think it is more correct,
+since not all drivers need it.
+
+> +ifeq ($(BR2_PACKAGE_XLIB_LIBXSCRNSAVER),y)
+> +XSERVER_XORG_SERVER_DEPENDENCIES += xlib_libXScrnSaver
+> +XSERVER_XORG_SERVER_CONF_OPT += --enable-screensaver
+> +else
+> +XSERVER_XORG_SERVER_CONF_OPT += --disable-screensaver
+> +endif
+> +
+> +ifneq ($(BR2_PACKAGE_XLIB_LIBDMX),y)
+> +XSERVER_XORG_SERVER_CONF_OPT += --disable-dmx
+> +endif
+> +
+> +
+> ?$(eval $(call AUTOTARGETS,package/x11r7,xserver_xorg-server))
