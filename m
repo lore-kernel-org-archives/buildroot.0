@@ -1,63 +1,62 @@
 From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
-Date: Wed, 14 Apr 2010 15:30:52 +0300
-Subject: [Buildroot] [PATCH 1/2] Add libatomic_ops 1.2 needed by libdrm
-	Intel support
+Date: Wed, 14 Apr 2010 15:31:02 +0300
+Subject: [Buildroot] [PATCH 2/2] libdrm: enable/disable features according
+	to driver	selection
 In-Reply-To: <20100414122805.17586.64124.stgit@localhost.localdomain>
 References: <20100414122805.17586.64124.stgit@localhost.localdomain>
-Message-ID: <20100414123052.17586.33962.stgit@localhost.localdomain>
+Message-ID: <20100414123102.17586.38501.stgit@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Also cleanup autotools symbols and add libatomic_ops dependency
+for Intel part.
+
 Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
 ---
 
- package/Config.in                      |    1 +
- package/libatomic_ops/Config.in        |    4 ++++
- package/libatomic_ops/libatomic_ops.mk |   12 ++++++++++++
- 3 files changed, 17 insertions(+), 0 deletions(-)
- create mode 100644 package/libatomic_ops/Config.in
- create mode 100644 package/libatomic_ops/libatomic_ops.mk
+ package/libdrm/Config.in |    1 +
+ package/libdrm/libdrm.mk |   13 +++++++++++--
+ 2 files changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 2501903..25cfdb9 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -300,6 +300,7 @@ source "package/libupnp/Config.in"
- endmenu
+diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
+index 445eb72..ab8c2d8 100644
+--- a/package/libdrm/Config.in
++++ b/package/libdrm/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_LIBDRM
+ 	select BR2_PACKAGE_XLIB_LIBXMU
+ 	select BR2_PACKAGE_XPROTO_DRI2PROTO
+ 	select BR2_PACKAGE_PTHREAD_STUBS
++	select BR2_PACKAGE_LIBATOMIC_OPS if BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL
+ 	help
+ 	  Direct Rendering Manager
  
- menu "Other"
-+source "package/libatomic_ops/Config.in"
- source "package/libcap/Config.in"
- source "package/libdaemon/Config.in"
- source "package/libelf/Config.in"
-diff --git a/package/libatomic_ops/Config.in b/package/libatomic_ops/Config.in
-new file mode 100644
-index 0000000..b9f14d1
---- /dev/null
-+++ b/package/libatomic_ops/Config.in
-@@ -0,0 +1,4 @@
-+config BR2_PACKAGE_LIBATOMIC_OPS
-+	bool "libatomic_ops"
-+	help
-+	  Atomic operations library
-diff --git a/package/libatomic_ops/libatomic_ops.mk b/package/libatomic_ops/libatomic_ops.mk
-new file mode 100644
-index 0000000..f26a5fa
---- /dev/null
-+++ b/package/libatomic_ops/libatomic_ops.mk
-@@ -0,0 +1,12 @@
-+#############################################################
-+#
-+# Atomic_ops library
-+#
-+#############################################################
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index 791e67d..38cb636 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -6,11 +6,20 @@
+ LIBDRM_VERSION = 2.4.19
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ LIBDRM_SITE = http://dri.freedesktop.org/libdrm/
+-LIBDRM_AUTORECONF = NO
+ LIBDRM_LIBTOOL_PATCH = NO
+ LIBDRM_INSTALL_STAGING = YES
+-LIBDRM_INSTALL_TARGET = YES
+ 
+ LIBDRM_DEPENDENCIES = xproto_glproto xproto_xf86vidmodeproto xlib_libXxf86vm xlib_libXmu xproto_dri2proto pthread-stubs
+ 
++ifeq ($(BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL),y)
++LIBDRM_CONF_OPT += --enable-intel
++LIBDRM_DEPENDENCIES += libatomic_ops
++else
++LIBDRM_CONF_OPT += --disable-intel
++endif
 +
-+LIBATOMIC_OPS_VERSION = 1.2
-+LIBATOMIC_OPS_SOURCE = libatomic_ops-$(LIBATOMIC_OPS_VERSION).tar.gz
-+LIBATOMIC_OPS_SITE = http://www.hpl.hp.com/research/linux/atomic_ops/download
-+LIBATOMIC_OPS_INSTALL_STAGING = YES
++ifneq ($(BR2_PACKAGE_XDRIVER_XF86_VIDEO_ATI),y)
++LIBDRM_CONF_OPT += --disable-radeon
++endif
 +
-+$(eval $(call AUTOTARGETS,package,libatomic_ops))
+ $(eval $(call AUTOTARGETS,package,libdrm))
