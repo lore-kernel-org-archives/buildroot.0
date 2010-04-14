@@ -1,62 +1,95 @@
 From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
-Date: Wed, 14 Apr 2010 15:31:02 +0300
-Subject: [Buildroot] [PATCH 2/2] libdrm: enable/disable features according
-	to driver	selection
-In-Reply-To: <20100414122805.17586.64124.stgit@localhost.localdomain>
-References: <20100414122805.17586.64124.stgit@localhost.localdomain>
-Message-ID: <20100414123102.17586.38501.stgit@localhost.localdomain>
+Date: Wed, 14 Apr 2010 16:00:00 +0300
+Subject: [Buildroot] [PATCH 15/16] xserver_xorg-server: bump version,
+	improve option support
+In-Reply-To: <4BC5AC04.90408@carallon.com>
+References: <1270126006-22405-1-git-send-email-will_wagner@carallon.com>
+	<1270126006-22405-15-git-send-email-will_wagner@carallon.com>
+	<87vdc1lnbs.fsf@macbook.be.48ers.dk> <4BC5AC04.90408@carallon.com>
+Message-ID: <k2xbadfd5ba1004140600s5ad633c8z407d2f10a627ae3@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also cleanup autotools symbols and add libatomic_ops dependency
-for Intel part.
+On Wed, Apr 14, 2010 at 2:50 PM, Will Wagner <will_wagner@carallon.com> wrote:
+> On 08/04/2010 21:08, Peter Korsgaard wrote:
+>>>>>>>
+>>>>>>> "Will" == Will Wagner<will_wagner@carallon.com> ?writes:
+>>>>>>>
+>>
+>> Hi,
+>>
+>> ?Will> ?Later version of xserver no longer need configure hack to say
+>> where
+>> ?Will> ?mesa3d is located.
+>>
+>> Thanks, but ..
+>>
+>> ?Will> ?--- a/package/x11r7/xserver_xorg-server/Config.in
+>> ?Will> ?+++ b/package/x11r7/xserver_xorg-server/Config.in
+>> ?Will> ?@@ -1,23 +1,26 @@
+>> ?Will> ? config BR2_PACKAGE_XSERVER_XORG_SERVER
+>> ?Will> ? ? ? ? bool "xorg-server"
+>> ?Will> ?- ? ? ?select BR2_PACKAGE_XLIB_LIBXFONT
+>> ?Will> ? ? ? ? select BR2_PACKAGE_LIBDRM
+>> ?Will> ?+ ? ? ?select BR2_PACKAGE_MCOOKIE
+>> ?Will> ?+ ? ? ?select BR2_PACKAGE_MESA3D if BR2_PACKAGE_XSERVER_xorg
+>> ?Will> ? ? ? ? select BR2_PACKAGE_OPENSSL
+>> ?Will> ?- ? ? ?select BR2_PACKAGE_XPROTO_COMPOSITEPROTO
+>> ?Will> ?- ? ? ?select BR2_PACKAGE_XPROTO_DAMAGEPROTO
+>> ?Will> ?- ? ? ?select BR2_PACKAGE_XPROTO_FIXESPROTO
+>> ?Will> ?- ? ? ?select BR2_PACKAGE_XPROTO_GLPROTO
+>> ?Will> ?- ? ? ?select BR2_PACKAGE_XPROTO_KBPROTO
+>> ?Will> ?- ? ? ?select BR2_PACKAGE_XPROTO_RANDRPROTO
+>>
+>> ?Will> ?@@ -38,6 +38,7 @@ XSERVER_XORG_SERVER_DEPENDENCIES = ? \
+>> ?Will> ? ? ? ? xproto_bigreqsproto ? ? ? ? ? ? \
+>> ?Will> ? ? ? ? xproto_compositeproto ? ? ? ? ? \
+>> ?Will> ? ? ? ? xproto_damageproto ? ? ? ? ? ? ?\
+>> ?Will> ?+ ? ? ?xproto_dri2proto ? ? ? ? ? ? ? ?\
+>> ?Will> ? ? ? ? xproto_evieext ? ? ? ? ? ? ? ? ?\
+>> ?Will> ? ? ? ? xproto_fixesproto ? ? ? ? ? ? ? \
+>> ?Will> ? ? ? ? xproto_fontsproto ? ? ? ? ? ? ? \
+>>
+>> Why are you removing these selects if they are still Makefile
+>> dependencies?
+>>
+>
+> As I said previously, no dependencies are removed, there are just so many I
+> have reordered them alphabetically. Also worth noting that this patch has
+> the dependacy fix for libpciaccess that Paulis posted.
+>
+>> ?Will> ?-config BR2_PACKAGE_XSERVER_XORG_SERVER_BUILTIN_FONTS
+>> ?Will> ?- ? ?bool "Use Builtin Fonts"
+>> ?Will> ?- ? ?depends on BR2_PACKAGE_XSERVER_XORG_SERVER
+>> ?Will> ?- ? ?help
+>> ?Will> ?- ? ? ? ?Enable/Use Builtin fonts.
+>>
+>> Is this gone? Should we select a font or 2 then so the user doesn't end
+>> up with a broken system?
+>>
+>
+> This option has gone from xserver.
+>
+> The package font-misc-misc gets selected, so you will always have a font.
+>
+>>
+>> ?Will> ? ifeq ($(BR2_PACKAGE_FREETYPE),y)
+>> ?Will> ? XSERVER_XORG_SERVER_DEPENDENCIES += freetype
+>> ?Will> ?-XSERVER_XORG_SERVER_CONF_OPT += --enable-freetype
+>>
+>> Is this option gone? Does it still work to build without freetype?
+>>
+>>
+>
+> This option has gone from xserver.
+>
+> If you selected xserver then freetype is selected for you by a number of
+> packages (xlib_libXfont, xlib_libXft, fontconfig... ) so you can not select
+> this without freetype.
+>
+> Does that answer your queries? Can this get applied?
 
-Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
----
-
- package/libdrm/Config.in |    1 +
- package/libdrm/libdrm.mk |   13 +++++++++++--
- 2 files changed, 12 insertions(+), 2 deletions(-)
-
-diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
-index 445eb72..ab8c2d8 100644
---- a/package/libdrm/Config.in
-+++ b/package/libdrm/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_XLIB_LIBXMU
- 	select BR2_PACKAGE_XPROTO_DRI2PROTO
- 	select BR2_PACKAGE_PTHREAD_STUBS
-+	select BR2_PACKAGE_LIBATOMIC_OPS if BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL
- 	help
- 	  Direct Rendering Manager
- 
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index 791e67d..38cb636 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -6,11 +6,20 @@
- LIBDRM_VERSION = 2.4.19
- LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
- LIBDRM_SITE = http://dri.freedesktop.org/libdrm/
--LIBDRM_AUTORECONF = NO
- LIBDRM_LIBTOOL_PATCH = NO
- LIBDRM_INSTALL_STAGING = YES
--LIBDRM_INSTALL_TARGET = YES
- 
- LIBDRM_DEPENDENCIES = xproto_glproto xproto_xf86vidmodeproto xlib_libXxf86vm xlib_libXmu xproto_dri2proto pthread-stubs
- 
-+ifeq ($(BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL),y)
-+LIBDRM_CONF_OPT += --enable-intel
-+LIBDRM_DEPENDENCIES += libatomic_ops
-+else
-+LIBDRM_CONF_OPT += --disable-intel
-+endif
-+
-+ifneq ($(BR2_PACKAGE_XDRIVER_XF86_VIDEO_ATI),y)
-+LIBDRM_CONF_OPT += --disable-radeon
-+endif
-+
- $(eval $(call AUTOTARGETS,package,libdrm))
+Acked-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
