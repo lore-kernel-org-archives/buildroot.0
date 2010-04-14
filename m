@@ -1,28 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Apr 2010 16:02:46 +0200
-Subject: [Buildroot] [PATCH 14/41] directfb: added support for lirc
-In-Reply-To: <1271199974-30434-15-git-send-email-llandwerlin@gmail.com>
-References: <1271199974-30434-1-git-send-email-llandwerlin@gmail.com>
-	<1271199974-30434-15-git-send-email-llandwerlin@gmail.com>
-Message-ID: <20100414160246.68ab967a@surf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 14 Apr 2010 14:20:58 +0000 (UTC)
+Subject: [Buildroot] [Bug 1555] New: Fix default uclibc-0.9.31 configuration
+Message-ID: <bug-1555-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 14 Apr 2010 01:05:47 +0200
-llandwerlin at gmail.com wrote:
+https://bugs.busybox.net/show_bug.cgi?id=1555
 
-> From: Lionel Landwerlin <llandwerlin@gmail.com>
-> 
-> Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
+              Host: i686-linux
+            Target: powerpc-uclibc
+           Summary: Fix default uclibc-0.9.31 configuration
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: gustavo at zacarias.com.ar
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Thomas
+Created an attachment (id=1519)
+ --> (https://bugs.busybox.net/attachment.cgi?id=1519)
+Enable libresolv/libnsl stubs by default for uclibc 0.9.31
+
+Uclibc-0.9.31 has the (new) option to disable libresolv & libnsl stubs.
+However some packages try to link explicitly to them (example: pppoatm plugin
+from pppd).
+Since the 4.3BSD standard states to explicitly link to libresolv for res_*
+functions it'll be difficult to fix packages upstream with respect to this.
+The best solution would be to enable the stubs, expert users can disable them
+in their custom uclibc config to shave a few bytes from their target system if
+they don't need them.
+
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
