@@ -1,66 +1,76 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 14 Apr 2010 17:04:47 +0200
-Subject: [Buildroot] [git commit master] libdrm: enable/disable features
-	according to driver selection
-Message-ID: <20100414150704.819858AD9A@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 14 Apr 2010 17:18:21 +0200
+Subject: [Buildroot] [PATCH 06/41] Rework icu package on top of the
+ generic infrastructure
+In-Reply-To: <1271199974-30434-7-git-send-email-llandwerlin@gmail.com>
+References: <1271199974-30434-1-git-send-email-llandwerlin@gmail.com>
+	<1271199974-30434-7-git-send-email-llandwerlin@gmail.com>
+Message-ID: <20100414171821.721b5c8e@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Wed, 14 Apr 2010 01:05:39 +0200
+llandwerlin at gmail.com wrote:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c8b4f397e623c6a8672667866b2c541bf4d10cd6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> diff --git a/package/icu/icu-4c-3_8_1-fix-compilation-with-gcc-4.4.patch b/package/icu/icu-4c-3_8_1-fix-compilation-with-gcc-4.4.patch
+> new file mode 100644
+> index 0000000..8c88f1c
+> --- /dev/null
+> +++ b/package/icu/icu-4c-3_8_1-fix-compilation-with-gcc-4.4.patch
 
-Also cleanup autotools symbols and add libatomic_ops dependency
-for Intel part.
+This patch contains a lot of whitespace changes that are not necessary.
+If I understand correctly, the patch should just be a one-liner
+s/#elif/#else/, shouldn't it ?
 
-Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/libdrm/Config.in |    1 +
- package/libdrm/libdrm.mk |   13 +++++++++++--
- 2 files changed, 12 insertions(+), 2 deletions(-)
+> ++GENCCODE = $(BINDIR)-host/genccode
+> ++ICUPKG   = $(BINDIR)-host/icupkg
+> ++GENCMN   = $(BINDIR)-host/gencmn
+> ++GENRB    = $(BINDIR)-host/genrb
+> ++PKGDATA  = $(BINDIR)-host/pkgdata
 
-diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
-index 445eb72..ab8c2d8 100644
---- a/package/libdrm/Config.in
-+++ b/package/libdrm/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_XLIB_LIBXMU
- 	select BR2_PACKAGE_XPROTO_DRI2PROTO
- 	select BR2_PACKAGE_PTHREAD_STUBS
-+	select BR2_PACKAGE_LIBATOMIC_OPS if BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL
- 	help
- 	  Direct Rendering Manager
- 
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index 791e67d..38cb636 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -6,11 +6,20 @@
- LIBDRM_VERSION = 2.4.19
- LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
- LIBDRM_SITE = http://dri.freedesktop.org/libdrm/
--LIBDRM_AUTORECONF = NO
- LIBDRM_LIBTOOL_PATCH = NO
- LIBDRM_INSTALL_STAGING = YES
--LIBDRM_INSTALL_TARGET = YES
- 
- LIBDRM_DEPENDENCIES = xproto_glproto xproto_xf86vidmodeproto xlib_libXxf86vm xlib_libXmu xproto_dri2proto pthread-stubs
- 
-+ifeq ($(BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL),y)
-+LIBDRM_CONF_OPT += --enable-intel
-+LIBDRM_DEPENDENCIES += libatomic_ops
-+else
-+LIBDRM_CONF_OPT += --disable-intel
-+endif
-+
-+ifneq ($(BR2_PACKAGE_XDRIVER_XF86_VIDEO_ATI),y)
-+LIBDRM_CONF_OPT += --disable-radeon
-+endif
-+
- $(eval $(call AUTOTARGETS,package,libdrm))
+I'm not really a fan of all this. Since you introduce a host-icu
+package in icu.mk, why not just use the host icu binaries installed in
+$(HOST_DIR)/usr/bin ?
+
+> diff --git a/package/icu/icu-config b/package/icu/icu-config
+> new file mode 100755
+> index 0000000..d6da4fc
+
+Why do we need this ?
+
+> +define HOST_ICU_CONFIGURE_CMDS
+> + (cd $(@D)/$(ICU_SUBDIR); \
+> + $(HOST_CONFIGURE_OPTS) \
+> + $(HOST_CONFIGURE_ARGS) \
+> + $(HOST_CONFIGURE_ENV)  \
+> + ./configure $(QUIET) --prefix=/usr)
+
+If icu is an autotools-based package, why not using the AUTOTARGETS
+infrastructure ? Of maybe it has a configure script, but it is not a
+properly autotools-based one ?
+
+> + ln -sf $(@D)/$(ICU_SUBDIR)/bin $(@D)/$(ICU_SUBDIR)/bin-host
+
+If we install binaries in $(HOST_DIR) as suggested above, can't we get
+rid of this ?
+
+> +define HOST_ICU_INSTALL_CMDS
+> + make -C $(@D)/$(ICU_SUBDIR) DESTDIR=$(HOST_DIR) install
+> + mkdir -p $(HOST_DIR)/usr/sbin
+> + cp -f $(addprefix $(@D)/$(ICU_SUBDIR)/bin/,$(ICU_BINARIES)) $(HOST_DIR)/usr/sbin/
+> +endef
+
+make install doesn't install the binaries ?
+
+In the mean time, I think these changes still improve the situation, so:
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Thomas
 -- 
-1.6.3.3
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
