@@ -1,10 +1,10 @@
 From: Will Wagner <will_wagner@carallon.com>
-Date: Wed, 14 Apr 2010 18:06:41 +0100
-Subject: [Buildroot] [PATCH 2/7] Remove XTrap (app,
-	lib & proto) as removed from X11R7.5
+Date: Wed, 14 Apr 2010 18:06:42 +0100
+Subject: [Buildroot] [PATCH 3/7] Remove XFree86-Misc (lib & proto) as
+	removed from X11R7.5
 In-Reply-To: <1271264806-23336-1-git-send-email-will_wagner@carallon.com>
 References: <1271264806-23336-1-git-send-email-will_wagner@carallon.com>
-Message-ID: <1271264806-23336-3-git-send-email-will_wagner@carallon.com>
+Message-ID: <1271264806-23336-4-git-send-email-will_wagner@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,149 +13,156 @@ To: buildroot@busybox.net
 
 Signed-off-by: Will Wagner <will_wagner@carallon.com>
 ---
- package/x11r7/Config.in                            |    3 ---
- package/x11r7/xapp_xtrap/Config.in                 |    7 -------
- package/x11r7/xapp_xtrap/xapp_xtrap.mk             |   13 -------------
- package/x11r7/xlib_libXTrap/Config.in              |    9 ---------
- package/x11r7/xlib_libXTrap/xlib_libXTrap.mk       |   15 ---------------
- package/x11r7/xproto_trapproto/Config.in           |    6 ------
- package/x11r7/xproto_trapproto/xproto_trapproto.mk |   15 ---------------
- 7 files changed, 0 insertions(+), 68 deletions(-)
- delete mode 100644 package/x11r7/xapp_xtrap/Config.in
- delete mode 100644 package/x11r7/xapp_xtrap/xapp_xtrap.mk
- delete mode 100644 package/x11r7/xlib_libXTrap/Config.in
- delete mode 100644 package/x11r7/xlib_libXTrap/xlib_libXTrap.mk
- delete mode 100644 package/x11r7/xproto_trapproto/Config.in
- delete mode 100644 package/x11r7/xproto_trapproto/xproto_trapproto.mk
+ package/x11r7/Config.in                            |    2 --
+ package/x11r7/xapp_xdpyinfo/xapp_xdpyinfo.mk       |    2 +-
+ .../xdriver_xf86-video-ati.mk                      |    2 +-
+ .../xdriver_xf86-video-sis.mk                      |    2 +-
+ .../xdriver_xf86-video-sisusb.mk                   |    2 +-
+ package/x11r7/xlib_libXxf86misc/Config.in          |    8 --------
+ .../x11r7/xlib_libXxf86misc/xlib_libXxf86misc.mk   |   15 ---------------
+ package/x11r7/xproto_xf86miscproto/Config.in       |    4 ----
+ .../xproto_xf86miscproto/xproto_xf86miscproto.mk   |   14 --------------
+ 9 files changed, 4 insertions(+), 47 deletions(-)
+ delete mode 100644 package/x11r7/xlib_libXxf86misc/Config.in
+ delete mode 100644 package/x11r7/xlib_libXxf86misc/xlib_libXxf86misc.mk
+ delete mode 100644 package/x11r7/xproto_xf86miscproto/Config.in
+ delete mode 100644 package/x11r7/xproto_xf86miscproto/xproto_xf86miscproto.mk
 
 diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index a333718..9c43aca 100644
+index 9c43aca..74c6510 100644
 --- a/package/x11r7/Config.in
 +++ b/package/x11r7/Config.in
-@@ -50,7 +50,6 @@ endmenu
- 		source package/x11r7/xlib_libSM/Config.in
- 		source package/x11r7/xlib_libX11/Config.in
- 		source package/x11r7/xlib_libXScrnSaver/Config.in
--		source package/x11r7/xlib_libXTrap/Config.in
- 		source package/x11r7/xlib_libXau/Config.in
- 		source package/x11r7/xlib_libXaw/Config.in
- 		source package/x11r7/xlib_libXcomposite/Config.in
-@@ -169,7 +168,6 @@ endmenu
- 		source package/x11r7/xapp_xsetroot/Config.in
- 		source package/x11r7/xapp_xsm/Config.in
- 		source package/x11r7/xapp_xstdcmap/Config.in
--		source package/x11r7/xapp_xtrap/Config.in
- 		source package/x11r7/xapp_xvidtune/Config.in
- 		source package/x11r7/xapp_xvinfo/Config.in
- 		source package/x11r7/xapp_xwd/Config.in
-@@ -295,7 +293,6 @@ endmenu
- 		source package/x11r7/xproto_renderproto/Config.in
- 		source package/x11r7/xproto_resourceproto/Config.in
- 		source package/x11r7/xproto_scrnsaverproto/Config.in
--		source package/x11r7/xproto_trapproto/Config.in
- 		source package/x11r7/xproto_videoproto/Config.in
- 		source package/x11r7/xproto_windowswmproto/Config.in
- 		source package/x11r7/xproto_xcmiscproto/Config.in
-diff --git a/package/x11r7/xapp_xtrap/Config.in b/package/x11r7/xapp_xtrap/Config.in
+@@ -77,7 +77,6 @@ endmenu
+ 		source package/x11r7/xlib_libXv/Config.in
+ 		source package/x11r7/xlib_libXvMC/Config.in
+ 		source package/x11r7/xlib_libXxf86dga/Config.in
+-		source package/x11r7/xlib_libXxf86misc/Config.in
+ 		source package/x11r7/xlib_libXxf86vm/Config.in
+ 		source package/x11r7/xlib_libdmx/Config.in
+ 		source package/x11r7/xlib_libfontenc/Config.in
+@@ -300,7 +299,6 @@ endmenu
+ 		source package/x11r7/xproto_xf86bigfontproto/Config.in
+ 		source package/x11r7/xproto_xf86dgaproto/Config.in
+ 		source package/x11r7/xproto_xf86driproto/Config.in
+-		source package/x11r7/xproto_xf86miscproto/Config.in
+ 		source package/x11r7/xproto_xf86rushproto/Config.in
+ 		source package/x11r7/xproto_xf86vidmodeproto/Config.in
+ 		source package/x11r7/xproto_xineramaproto/Config.in
+diff --git a/package/x11r7/xapp_xdpyinfo/xapp_xdpyinfo.mk b/package/x11r7/xapp_xdpyinfo/xapp_xdpyinfo.mk
+index 64ef8a0..36cc067 100644
+--- a/package/x11r7/xapp_xdpyinfo/xapp_xdpyinfo.mk
++++ b/package/x11r7/xapp_xdpyinfo/xapp_xdpyinfo.mk
+@@ -8,6 +8,6 @@ XAPP_XDPYINFO_VERSION = 1.1.0
+ XAPP_XDPYINFO_SOURCE = xdpyinfo-$(XAPP_XDPYINFO_VERSION).tar.bz2
+ XAPP_XDPYINFO_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XDPYINFO_AUTORECONF = NO
+-XAPP_XDPYINFO_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXi xlib_libXp xlib_libXrender xlib_libXtst xlib_libXxf86dga xlib_libXxf86misc xlib_libXxf86vm xproto_inputproto xproto_kbproto xproto_printproto xproto_renderproto xproto_xf86dgaproto xproto_xf86miscproto xproto_xf86vidmodeproto xlib_libdmx
++XAPP_XDPYINFO_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXi xlib_libXp xlib_libXrender xlib_libXtst xlib_libXxf86dga xlib_libXxf86vm xproto_inputproto xproto_kbproto xproto_printproto xproto_renderproto xproto_xf86dgaproto xproto_xf86vidmodeproto xlib_libdmx
+ 
+ $(eval $(call AUTOTARGETS,package/x11r7,xapp_xdpyinfo))
+diff --git a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
+index e2c40da..59c9acf 100644
+--- a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
++++ b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
+@@ -8,7 +8,7 @@ XDRIVER_XF86_VIDEO_ATI_VERSION = 6.12.4
+ XDRIVER_XF86_VIDEO_ATI_SOURCE = xf86-video-ati-$(XDRIVER_XF86_VIDEO_ATI_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_ATI_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_ATI_AUTORECONF = YES
+-XDRIVER_XF86_VIDEO_ATI_DEPENDENCIES = xserver_xorg-server libdrm xproto_fontsproto xproto_glproto xproto_randrproto xproto_videoproto xproto_xextproto xproto_xf86driproto xproto_xf86miscproto xproto_xineramaproto xproto_xproto
++XDRIVER_XF86_VIDEO_ATI_DEPENDENCIES = xserver_xorg-server libdrm xproto_fontsproto xproto_glproto xproto_randrproto xproto_videoproto xproto_xextproto xproto_xf86driproto xproto_xineramaproto xproto_xproto
+ XDRIVER_XF86_VIDEO_ATI_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
+ 
+ $(eval $(call AUTOTARGETS,package/x11r7,xdriver_xf86-video-ati))
+diff --git a/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk b/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
+index cfcb3f1..40ccab5 100644
+--- a/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
++++ b/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
+@@ -8,7 +8,7 @@ XDRIVER_XF86_VIDEO_SIS_VERSION = 0.10.2
+ XDRIVER_XF86_VIDEO_SIS_SOURCE = xf86-video-sis-$(XDRIVER_XF86_VIDEO_SIS_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_SIS_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_SIS_AUTORECONF = YES
+-XDRIVER_XF86_VIDEO_SIS_DEPENDENCIES = xserver_xorg-server libdrm xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xf86dgaproto xproto_xf86driproto xproto_xf86miscproto xproto_xineramaproto xproto_xproto
++XDRIVER_XF86_VIDEO_SIS_DEPENDENCIES = xserver_xorg-server libdrm xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xf86dgaproto xproto_xf86driproto xproto_xineramaproto xproto_xproto
+ XDRIVER_XF86_VIDEO_SIS_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
+ 
+ $(eval $(call AUTOTARGETS,package/x11r7,xdriver_xf86-video-sis))
+diff --git a/package/x11r7/xdriver_xf86-video-sisusb/xdriver_xf86-video-sisusb.mk b/package/x11r7/xdriver_xf86-video-sisusb/xdriver_xf86-video-sisusb.mk
+index 36a683f..5068606 100644
+--- a/package/x11r7/xdriver_xf86-video-sisusb/xdriver_xf86-video-sisusb.mk
++++ b/package/x11r7/xdriver_xf86-video-sisusb/xdriver_xf86-video-sisusb.mk
+@@ -8,7 +8,7 @@ XDRIVER_XF86_VIDEO_SISUSB_VERSION = 0.9.3
+ XDRIVER_XF86_VIDEO_SISUSB_SOURCE = xf86-video-sisusb-$(XDRIVER_XF86_VIDEO_SISUSB_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_SISUSB_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_SISUSB_AUTORECONF = NO
+-XDRIVER_XF86_VIDEO_SISUSB_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xf86miscproto xproto_xineramaproto xproto_xproto
++XDRIVER_XF86_VIDEO_SISUSB_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xineramaproto xproto_xproto
+ XDRIVER_XF86_VIDEO_SISUSB_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
+ 
+ $(eval $(call AUTOTARGETS,package/x11r7,xdriver_xf86-video-sisusb))
+diff --git a/package/x11r7/xlib_libXxf86misc/Config.in b/package/x11r7/xlib_libXxf86misc/Config.in
 deleted file mode 100644
-index 55cb418..0000000
---- a/package/x11r7/xapp_xtrap/Config.in
+index 205140c..0000000
+--- a/package/x11r7/xlib_libXxf86misc/Config.in
 +++ /dev/null
-@@ -1,7 +0,0 @@
--config BR2_PACKAGE_XAPP_XTRAP
--	bool "xtrap"
+@@ -1,8 +0,0 @@
+-config BR2_PACKAGE_XLIB_LIBXXF86MISC
+-	bool "libXxf86misc"
 -	select BR2_PACKAGE_XLIB_LIBX11
--	select BR2_PACKAGE_XLIB_LIBXTRAP
--	help
--	  xtrap 1.0.2
--	  X.Org xtrap application
-diff --git a/package/x11r7/xapp_xtrap/xapp_xtrap.mk b/package/x11r7/xapp_xtrap/xapp_xtrap.mk
-deleted file mode 100644
-index a31279b..0000000
---- a/package/x11r7/xapp_xtrap/xapp_xtrap.mk
-+++ /dev/null
-@@ -1,13 +0,0 @@
--################################################################################
--#
--# xapp_xtrap -- X.Org xtrap application
--#
--################################################################################
--
--XAPP_XTRAP_VERSION = 1.0.2
--XAPP_XTRAP_SOURCE = xtrap-$(XAPP_XTRAP_VERSION).tar.bz2
--XAPP_XTRAP_SITE = http://xorg.freedesktop.org/releases/individual/app
--XAPP_XTRAP_AUTORECONF = NO
--XAPP_XTRAP_DEPENDENCIES = xlib_libX11 xlib_libXTrap
--
--$(eval $(call AUTOTARGETS,package/x11r7,xapp_xtrap))
-diff --git a/package/x11r7/xlib_libXTrap/Config.in b/package/x11r7/xlib_libXTrap/Config.in
-deleted file mode 100644
-index 72ecf5b..0000000
---- a/package/x11r7/xlib_libXTrap/Config.in
-+++ /dev/null
-@@ -1,9 +0,0 @@
--config BR2_PACKAGE_XLIB_LIBXTRAP
--	bool "libXTrap"
--	select BR2_PACKAGE_XLIB_LIBX11
--	select BR2_PACKAGE_XLIB_LIBXT
 -	select BR2_PACKAGE_XLIB_LIBXEXT
--	select BR2_PACKAGE_XPROTO_TRAPPROTO
+-	select BR2_PACKAGE_XPROTO_XF86MISCPROTO
+-	select BR2_PACKAGE_XPROTO_XPROTO
 -	help
--	  libXTrap 1.0.0
--	  X.Org XTrap library
-diff --git a/package/x11r7/xlib_libXTrap/xlib_libXTrap.mk b/package/x11r7/xlib_libXTrap/xlib_libXTrap.mk
+-	  X.Org Xxf86misc library
+diff --git a/package/x11r7/xlib_libXxf86misc/xlib_libXxf86misc.mk b/package/x11r7/xlib_libXxf86misc/xlib_libXxf86misc.mk
 deleted file mode 100644
-index 5b7982a..0000000
---- a/package/x11r7/xlib_libXTrap/xlib_libXTrap.mk
+index 5f4b793..0000000
+--- a/package/x11r7/xlib_libXxf86misc/xlib_libXxf86misc.mk
 +++ /dev/null
 @@ -1,15 +0,0 @@
 -################################################################################
 -#
--# xlib_libXTrap -- X.Org XTrap library
+-# xlib_libXxf86misc -- X.Org Xxf86misc library
 -#
 -################################################################################
 -
--XLIB_LIBXTRAP_VERSION = 1.0.0
--XLIB_LIBXTRAP_SOURCE = libXTrap-$(XLIB_LIBXTRAP_VERSION).tar.bz2
--XLIB_LIBXTRAP_SITE = http://xorg.freedesktop.org/releases/individual/lib
--XLIB_LIBXTRAP_AUTORECONF = NO
--XLIB_LIBXTRAP_INSTALL_STAGING = YES
--XLIB_LIBXTRAP_DEPENDENCIES = xlib_libX11 xlib_libXt xlib_libXext xproto_trapproto
--XLIB_LIBXTRAP_CONF_OPT = --enable-shared --disable-static
+-XLIB_LIBXXF86MISC_VERSION = 1.0.2
+-XLIB_LIBXXF86MISC_SOURCE = libXxf86misc-$(XLIB_LIBXXF86MISC_VERSION).tar.bz2
+-XLIB_LIBXXF86MISC_SITE = http://xorg.freedesktop.org/releases/individual/lib
+-XLIB_LIBXXF86MISC_AUTORECONF = NO
+-XLIB_LIBXXF86MISC_INSTALL_STAGING = YES
+-XLIB_LIBXXF86MISC_DEPENDENCIES = xlib_libX11 xlib_libXext xproto_xf86miscproto xproto_xproto
+-XLIB_LIBXXF86MISC_CONF_OPT = --disable-malloc0returnsnull --enable-shared --disable-static
 -
--$(eval $(call AUTOTARGETS,package/x11r7,xlib_libXTrap))
-diff --git a/package/x11r7/xproto_trapproto/Config.in b/package/x11r7/xproto_trapproto/Config.in
+-$(eval $(call AUTOTARGETS,package/x11r7,xlib_libXxf86misc))
+diff --git a/package/x11r7/xproto_xf86miscproto/Config.in b/package/x11r7/xproto_xf86miscproto/Config.in
 deleted file mode 100644
-index 0f9c470..0000000
---- a/package/x11r7/xproto_trapproto/Config.in
+index cd19ff3..0000000
+--- a/package/x11r7/xproto_xf86miscproto/Config.in
 +++ /dev/null
-@@ -1,6 +0,0 @@
--config BR2_PACKAGE_XPROTO_TRAPPROTO
--	bool "trapproto"
--	select BR2_PACKAGE_XLIB_LIBXT
+@@ -1,4 +0,0 @@
+-config BR2_PACKAGE_XPROTO_XF86MISCPROTO
+-	bool "xf86miscproto"
 -	help
--	  trapproto 3.4.3
--	  X.Org Trap protocol headers
-diff --git a/package/x11r7/xproto_trapproto/xproto_trapproto.mk b/package/x11r7/xproto_trapproto/xproto_trapproto.mk
+-	  X.Org XF86Misc protocol headers
+diff --git a/package/x11r7/xproto_xf86miscproto/xproto_xf86miscproto.mk b/package/x11r7/xproto_xf86miscproto/xproto_xf86miscproto.mk
 deleted file mode 100644
-index 29c4356..0000000
---- a/package/x11r7/xproto_trapproto/xproto_trapproto.mk
+index 8cf8482..0000000
+--- a/package/x11r7/xproto_xf86miscproto/xproto_xf86miscproto.mk
 +++ /dev/null
-@@ -1,15 +0,0 @@
+@@ -1,14 +0,0 @@
 -################################################################################
 -#
--# xproto_trapproto -- X.Org Trap protocol headers
+-# xproto_xf86miscproto -- X.Org XF86Misc protocol headers
 -#
 -################################################################################
 -
--XPROTO_TRAPPROTO_VERSION = 3.4.3
--XPROTO_TRAPPROTO_SOURCE = trapproto-$(XPROTO_TRAPPROTO_VERSION).tar.bz2
--XPROTO_TRAPPROTO_SITE = http://xorg.freedesktop.org/releases/individual/proto
--XPROTO_TRAPPROTO_AUTORECONF = NO
--XPROTO_TRAPPROTO_INSTALL_STAGING = YES
--XPROTO_TRAPPROTO_INSTALL_TARGET = NO
--XPROTO_TRAPPROTO_DEPENDENCIES = xlib_libXt
+-XPROTO_XF86MISCPROTO_VERSION = 0.9.3
+-XPROTO_XF86MISCPROTO_SOURCE = xf86miscproto-$(XPROTO_XF86MISCPROTO_VERSION).tar.bz2
+-XPROTO_XF86MISCPROTO_SITE = http://xorg.freedesktop.org/releases/individual/proto
+-XPROTO_XF86MISCPROTO_AUTORECONF = NO
+-XPROTO_XF86MISCPROTO_INSTALL_STAGING = YES
+-XPROTO_XF86MISCPROTO_INSTALL_TARGET = NO
 -
--$(eval $(call AUTOTARGETS,package/x11r7,xproto_trapproto))
+-$(eval $(call AUTOTARGETS,package/x11r7,xproto_xf86miscproto))
 -- 
 1.7.0
