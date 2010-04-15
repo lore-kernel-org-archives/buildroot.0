@@ -1,33 +1,25 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 15 Apr 2010 14:27:07 +0000 (UTC)
-Subject: [Buildroot] [Bug 1567] openssl0.9.8n fails to compile
-In-Reply-To: <bug-1567-163@https.bugs.busybox.net/>
-References: <bug-1567-163@https.bugs.busybox.net/>
-Message-ID: <20100415142707.1C0B520D7C@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 15 Apr 2010 16:27:33 +0200
+Subject: [Buildroot] openssl 0.9.8.n compilation problem
+In-Reply-To: <q2je7c6a05e1004150424w61966695v31ec1ee0e1dfcb18@mail.gmail.com>
+	(Belisko Marek's message of "Thu, 15 Apr 2010 13:24:25 +0200")
+References: <q2je7c6a05e1004150424w61966695v31ec1ee0e1dfcb18@mail.gmail.com>
+Message-ID: <87tyrcdc4q.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1567
+>>>>> "Belisko" == Belisko Marek <marek.belisko@gmail.com> writes:
 
+ Belisko> Hi,
+ Belisko> I would like to build with buildroot transmission which
+ Belisko> is dependent on libcurl and openssl. I have a problems with building of ssl.
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+ Belisko> I build toolchain in buildroot with uclibc.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
-
-
-
-
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2010-04-15 14:27:06 UTC ---
-Fixed in git (65e209ca)
-
+Fixed in git (65e209ca).
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
