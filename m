@@ -1,26 +1,44 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Fri, 16 Apr 2010 16:49:50 +0000 (UTC)
-Subject: [Buildroot] Where does 'BOARD_NAME' Makefile.in variable come
-	from?
-References: <hqa2ka$uek$1@dough.gmane.org> <4BC89084.1090404@gogo-robot.com>
-Message-ID: <hqa4fe$7bh$1@dough.gmane.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 17 Apr 2010 02:12:18 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	codesourcery-toolchain-support
+Message-ID: <cover.1271463088.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2010-04-16, Andrew Porritt <aporritt@gogo-robot.com> wrote:
-> I think you pass it in on the command line. E.g.:
->
-> make BOARD_NAME=at91sam9261ek
+Hello,
 
-I've never done that, and I can't find it mentioned in any of the docs
-(either from buildroot or from Atmel).
+Here is a resend of my CodeSourcery external toolchain support patch
+set. I've fixed the merge conflict that Peter had, which was the only
+feedback I received on this patchset.
 
-I think it might be something Atmel-specific...
+Regards,
 
+Thomas
+
+The following changes since commit 65e209ca07416bc040fe98d16b60b6cb4304987f:
+  Peter Korsgaard (1):
+        openssl: fix build without ipv6 support
+
+are available in the git repository at:
+
+  git://git.busybox.net/~tpetazzoni/git/buildroot codesourcery-toolchain-support
+
+Thomas Petazzoni (4):
+      external toolchains: take into account architecture variant
+      external-toolchain: support libraries outside of /lib
+      external-toolchain: Support for multilib toolchains
+      busybox: make sure architecture flags are used at link time
+
+ package/Makefile.in                      |   22 +++---
+ package/busybox/busybox-1.13.x.config    |    1 +
+ package/busybox/busybox.mk               |    8 +-
+ toolchain/external-toolchain/ext-tool.mk |  109 ++++++++++++++++++++++++-----
+ 4 files changed, 106 insertions(+), 34 deletions(-)
+
+Thanks,
 -- 
-Grant Edwards               grant.b.edwards        Yow! Did I say I was
-                                  at               a sardine?  Or a bus???
-                              gmail.com            
+Thomas Petazzoni
