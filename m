@@ -1,25 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Apr 2010 02:14:49 +0200
-Subject: [Buildroot] X11 fixes and cleanups
-In-Reply-To: <4BC75FA0.4050303@gmail.com>
-References: <1271264806-23336-1-git-send-email-will_wagner@carallon.com>
-	<4BC75FA0.4050303@gmail.com>
-Message-ID: <20100417021449.1c0a29ec@surf>
+Date: Sat, 17 Apr 2010 02:16:17 +0200
+Subject: [Buildroot] codesourcery as external toolchain
+In-Reply-To: <n2k5fbe85791004140147maf9b040cx4f4adeda4ce1c339@mail.gmail.com>
+References: <n2k5fbe85791004140147maf9b040cx4f4adeda4ce1c339@mail.gmail.com>
+Message-ID: <20100417021617.502e76f8@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 15 Apr 2010 21:49:04 +0300
-Paulius Zaleckas <paulius.zaleckas@gmail.com> wrote:
+Hello Martin,
 
-> Since we sorted out that all packages were actually removed, but X11
-> documentation was not updated, all patches:
-> 
-> Acked-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+On Wed, 14 Apr 2010 10:47:39 +0200
+Atom Proton <atomx01@gmail.com> wrote:
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> How to use codesourcery toolchain
+> (http://www.codesourcery.com/downloads/public/gnu_toolchain/arm-uclinuxeabi/arm-2009q1-163-arm-uclinuxeabi-i686-pc-linux-gnu.tar.bz2)
+> in buildroot for ARM9 (AT91SAM9260) CPU. Can somebody help me, pleas.
+
+You have to apply my codesourcery-toolchain-support branch [1] to a
+recent Buildroot git tree. Hopefully, this branch will be merged soon
+and be part of the next 2010.05 release of Buildroot.
+
+Don't hesitate to let me know about your success or failure in using
+this patchset.
+
+[1]
+http://git.buildroot.net/~tpetazzoni/git/buildroot/commit/?h=codesourcery-toolchain-support
+
+Regards,
+
+Thomas
 -- 
 Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
