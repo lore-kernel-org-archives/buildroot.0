@@ -1,48 +1,40 @@
-From: =?UTF-8?B?5b6Q5byA?= <greatsnows@gmail.com>
-Date: Sat, 17 Apr 2010 09:20:12 +0800
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 17 Apr 2010 05:39:13 +0200
 Subject: [Buildroot] There are not device files in dev/ when I extract
-	tarball image as root. bug?
-Message-ID: <o2p2134af141004161820q79e42c27s847369b14bfa8c13@mail.gmail.com>
+ tarball image as root. bug?
+In-Reply-To: <o2p2134af141004161820q79e42c27s847369b14bfa8c13@mail.gmail.com>
+References: <o2p2134af141004161820q79e42c27s847369b14bfa8c13@mail.gmail.com>
+Message-ID: <20100417053913.528536ef@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Sat, 17 Apr 2010 09:20:12 +0800
+?? <greatsnows@gmail.com> wrote:
 
-I am trying to boot my board over NFS, but show some stuff like "not found
-/dev/ttySAC0".
+> And I followed it, but I did not get device files except this:
+> 
+> $ ls /tftpboot/rootfs/dev/ -l
+> ??? 1
+> lrwxrwxrwx 1 root root   10 2010-04-17 00:02 log -> ../tmp/log
+> drwxr-xr-x 2 root root 1024 2010-04-17 00:02 pts
+> 
+> Does it must mknod manually?
 
-I found this words on buildroot's website:
+No, it's a regression that I caused by the recent filesystem code
+cleanup. I'm working on the fix. As an ugly workaround you can add:
 
-target/ which contains *almost* the root filesystem for the target:
-everything needed is present except the device files in /dev/ (Buildroot
-can't create them because Buildroot doesn't run as root and does not want to
-run as root). Therefore, this directory *should not be used on your target*.
-Instead, you should use one of the images built in the images/ directory. If
-you need an extracted image of the root filesystem for booting over NFS,
-then use the tarball image generated in images/ and extract it as root.
+TARGET_DEVICE_TABLE=target/device/generic/device_table.txt
 
-And I followed it, but I did not get device files except this:
+at the beginning of fs/common.mk.
 
-$ ls /tftpboot/rootfs/dev/ -l
-??? 1
-lrwxrwxrwx 1 root root   10 2010-04-17 00:02 log -> ../tmp/log
-drwxr-xr-x 2 root root 1024 2010-04-17 00:02 pts
+Regards,
 
-Does it must mknod manually?
-
-
+Thomas
 -- 
-Aaron Xu
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100417/42227483/attachment-0001.htm>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: .config
-Type: application/octet-stream
-Size: 19468 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100417/42227483/attachment-0001.obj>
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
