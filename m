@@ -1,33 +1,32 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 18 Apr 2010 20:28:34 +0000 (UTC)
-Subject: [Buildroot] [Bug 1555] Fix default uclibc-0.9.31 configuration
-In-Reply-To: <bug-1555-163@https.bugs.busybox.net/>
-References: <bug-1555-163@https.bugs.busybox.net/>
-Message-ID: <20100418202834.EA1692AE0@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 18 Apr 2010 22:32:15 +0200
+Subject: [Buildroot] [pull request] Pull request for branch fs-fixes
+In-Reply-To: <cover.1271476803.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Sat, 17 Apr 2010 06:02:52 +0200")
+References: <cover.1271476803.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87pr1wcxio.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1555
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
+ Thomas> Hello,
+ Thomas> Here is the fix for bug #1537, i.e "device entries no longer
+ Thomas> created". It is a severe regression introduced by my filesystem
+ Thomas> cleanup code. The problem was that the TARGET_DEVICE_TABLE variable
+ Thomas> was no longer defined.
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+ Thomas> To fix it, I took the approach I intend to take to cleanup the rest of
+ Thomas> target/, i.e use normal configuration options instead of variables
+ Thomas> defined in board-specific Makefiles.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+ Thomas> Therefore, I've added a new BR2_ROOTFS_DEVICE_TABLE option, which
+ Thomas> contains the path to the device table that should be used.
 
-
-
-
---- Comment #2 from Peter Korsgaard <jacmet@uclibc.org>  2010-04-18 20:28:34 UTC ---
-committed, thanks
-
+Pulled and pushed, thanks!
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
