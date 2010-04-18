@@ -1,8 +1,8 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 18 Apr 2010 22:33:09 +0200
-Subject: [Buildroot] [git commit master] CHANGES: #1537 is now closed (dev
-	entries not created anymore)
-Message-ID: <20100418203520.8B01E309B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] documentation: update after
+	TARGET_DEVICE_TABLE removal
+Message-ID: <20100418203519.B680C309B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,25 +10,34 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6c5225b1593a4d4473168bca2cbab4c869b36f43
+commit: http://git.buildroot.net/buildroot/commit/?id=0b78722085ad0c678fca8ea5a8e39c206f66afae
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- CHANGES |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ docs/buildroot.html |   10 ----------
+ 1 files changed, 0 insertions(+), 10 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 0a275f8..e28903f 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -56,6 +56,7 @@
- 	#1459: Misc QA fixes
- 	#1489: radvd update to 1.6
- 	#1513: Enable powerpc e300c2, e300c3 and e500mc optimization
-+	#1537: dev entries not created anymore
- 	#1555: Fix default uclibc-0.9.31 configuration
- 	#1567: openssl0.9.8n fails to compile
+diff --git a/docs/buildroot.html b/docs/buildroot.html
+index dfa69e0..abe822f 100644
+--- a/docs/buildroot.html
++++ b/docs/buildroot.html
+@@ -661,16 +661,6 @@ endif
+ 	<code>$(BOARD_PATH)/target_skeleton</code> so that the target
+ 	skeleton is stored in the board specific directory.</li>
  
+-	<li><code>TARGET_DEVICE_TABLE</code> to a file that contains
+-	the target device table &mdash; the list of device files (in
+-	<code>/dev/</code>) to be created by the root filesystem build
+-	procedure. If this variable is defined, the given device table
+-	will be used instead of the default one. If defined, the
+-	convention is to define it to
+-	<code>$(BOARD_PATH)/target_device_table.txt</code>. See
+-	<code>target/generic/device_table.txt</code> for an example
+-	file.</li>
+-
+       </ul>
+ 
+       </li>
 -- 
 1.6.3.3
