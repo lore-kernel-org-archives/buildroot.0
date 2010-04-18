@@ -1,34 +1,77 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 18 Apr 2010 20:35:01 +0000 (UTC)
-Subject: [Buildroot] [Bug 1537] dev entries not created anymore
-In-Reply-To: <bug-1537-163@https.bugs.busybox.net/>
-References: <bug-1537-163@https.bugs.busybox.net/>
-Message-ID: <20100418203501.4A0803044@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 18 Apr 2010 22:33:09 +0200
+Subject: [Buildroot] [git commit master] fs: change the way the device table
+	is configured
+Message-ID: <20100418203519.323C8309B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1537
 
+commit: http://git.buildroot.net/buildroot/commit/?id=64ec20e6c019e329bf6923fbf330b86b3cfad524
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Until now, the location of the device table was specified by a
+variable in board Makefiles. Unfortunately, this variable is not
+accessible from fs/common.mk, since the target/ code is included
+*after* fs/common.mk.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+Anyway, the general idea is to move away from these boards Makefile,
+and provide configuration option for things like the device table
+location.
 
+Therefore, this patch adds a BR2_ROOTFS_DEVICE_TABLE option which
+allows to specify which device table should be used.
 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ fs/Config.in |    8 ++++++++
+ fs/common.mk |    5 +++--
+ 2 files changed, 11 insertions(+), 2 deletions(-)
 
-
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2010-04-18 20:35:00 UTC ---
-Fixed in git by Thomas with the introduction of the BR2_ROOTFS_DEVICE_TABLE
-kconfig setting.
-
-
+diff --git a/fs/Config.in b/fs/Config.in
+index f885c52..6865eea 100644
+--- a/fs/Config.in
++++ b/fs/Config.in
+@@ -15,6 +15,14 @@ config BR2_ROOTFS_POST_BUILD_SCRIPT
+ 	  only argument. Make sure the exit code of that script is 0,
+ 	  otherwise make will stop after calling it.
+ 
++config BR2_ROOTFS_DEVICE_TABLE
++       string "Path to the device table"
++       default "target/generic/device_table.txt"
++       help
++         Specify the location of a device table, that will be passed
++         to the makedevs utility to create all the special device
++         files in the target filesystem.
++
+ source "fs/cramfs/Config.in"
+ source "fs/cloop/Config.in"
+ source "fs/ext2/Config.in"
+diff --git a/fs/common.mk b/fs/common.mk
+index fa6afd9..cc94eb4 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -28,6 +28,7 @@
+ # macro will automatically generate a compressed filesystem image.
+ 
+ FAKEROOT_SCRIPT = $(BUILD_DIR)/_fakeroot.fs
++ROOTFS_DEVICE_TABLE = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE))
+ 
+ define ROOTFS_TARGET_INTERNAL
+ 
+@@ -38,8 +39,8 @@ $(BINARIES_DIR)/rootfs.$(1): $(ROOTFS_$(2)_DEPENDENCIES) host-fakeroot makedevs
+ 	touch $(BUILD_DIR)/.fakeroot.00000
+ 	cat $(BUILD_DIR)/.fakeroot* > $(FAKEROOT_SCRIPT)
+ 	echo "chown -R 0:0 $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
+-ifneq ($(TARGET_DEVICE_TABLE),)
+-	echo "$(HOST_DIR)/usr/bin/makedevs -d $(TARGET_DEVICE_TABLE) $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
++ifneq ($(ROOTFS_DEVICE_TABLE),)
++	echo "$(HOST_DIR)/usr/bin/makedevs -d $(ROOTFS_DEVICE_TABLE) $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
+ endif
+ 	echo "$(ROOTFS_$(2)_CMD)" >> $(FAKEROOT_SCRIPT)
+ 	chmod a+x $(FAKEROOT_SCRIPT)
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.6.3.3
