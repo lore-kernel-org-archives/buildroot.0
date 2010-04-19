@@ -1,31 +1,39 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 19 Apr 2010 07:19:26 +0000 (UTC)
-Subject: [Buildroot] [Bug 1591] portmap fails to compile
-In-Reply-To: <bug-1591-163@https.bugs.busybox.net/>
-References: <bug-1591-163@https.bugs.busybox.net/>
-Message-ID: <20100419071926.4C6B29A079@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 19 Apr 2010 11:05:30 +0200
+Subject: [Buildroot] [git commit master] fs/ext2: fix typo
+Message-ID: <20100419090622.1D4118B6C9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1591
 
+commit: http://git.buildroot.net/buildroot/commit/?id=7b7e1bc3fb490f7fb1f71b1df9a887ab30da0bbd
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+BR2_TARGET_ROOTFS_EXT2_RESBLKS is an int, so test against 0 rather than
+the empty string - Otherwise the test is always true and a -m option
+without arguments is added to the argument list, causing genext2fs to
+get confused.
 
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ fs/ext2/ext2.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-
---- Comment #4 from Kelvin Cheung <keguang.zhang@gmail.com>  2010-04-19 07:19:25 UTC ---
-(In reply to comment #3)
-> Thanks, but this is already done in git since yesterday (see bug #1555)
-> 
-
-I updated to the newest version just now.
-But the libutil is still disabled in the default configuration.
-
-
+diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
+index 68b3b81..f3d3ff9 100644
+--- a/fs/ext2/ext2.mk
++++ b/fs/ext2/ext2.mk
+@@ -18,7 +18,7 @@ ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_INODES)),0)
+ EXT2_OPTS += -N $(BR2_TARGET_ROOTFS_EXT2_INODES)
+ endif
+ 
+-ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)),)
++ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)),0)
+ EXT2_OPTS += -m $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)
+ endif
+ 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.6.3.3
