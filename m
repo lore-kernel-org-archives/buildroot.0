@@ -1,32 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Apr 2010 22:49:37 +0200
-Subject: [Buildroot] [PATCH 1/1] lsof: bump to 4.83
-In-Reply-To: <1271681108-923-1-git-send-email-mroth@nessie.de>
-References: <1271681108-923-1-git-send-email-mroth@nessie.de>
-Message-ID: <20100419224937.3c0e55fb@surf>
+Date: Mon, 19 Apr 2010 23:07:40 +0200
+Subject: [Buildroot] [PATCH] Repair initramfs dependancies after move to
+ fs
+In-Reply-To: <1271687689-344-1-git-send-email-will_wagner@carallon.com>
+References: <1271687689-344-1-git-send-email-will_wagner@carallon.com>
+Message-ID: <20100419230740.267afdad@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 19 Apr 2010 14:45:08 +0200
-Michael Roth <mroth@nessie.de> wrote:
+On Mon, 19 Apr 2010 15:34:49 +0100
+Will Wagner <will_wagner@carallon.com> wrote:
 
-> Bumped lsof to version 4.83 and decreased the patches theirs
-> root directory by one level to make future version bumps easier
-> because lsof has an unconventional directory structure.
+> The restructure for building root filesystems changed the target name
+> for the initramfs file, to build the file the trget is now
+> initramfs-root but the generated file is rootfs.initramfs
 > 
-> Reworked lsof.mk to remove some repeated typing.
+> Signed-off-by: Will Wagner <will_wagner@carallon.com>
 
-Thanks Michael for doing this. While you're at it, would you mind
-converting this package to the generic package infrastructure, as
-described at
-http://buildroot.org/downloads/buildroot.html#generic-tutorial
+I'm not a big fan of this "hidden" dependencies, but I believe in the
+case of the kernel and its initramfs there isn't a lot of choice.
+Therefore:
 
-Thanks!
-
-Thomas
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -- 
 Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
