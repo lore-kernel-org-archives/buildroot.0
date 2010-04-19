@@ -1,32 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Apr 2010 23:07:40 +0200
-Subject: [Buildroot] [PATCH] Repair initramfs dependancies after move to
- fs
-In-Reply-To: <1271687689-344-1-git-send-email-will_wagner@carallon.com>
-References: <1271687689-344-1-git-send-email-will_wagner@carallon.com>
-Message-ID: <20100419230740.267afdad@surf>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 19 Apr 2010 23:24:57 +0200
+Subject: [Buildroot] [git commit master] mtd: Add missing 'mtdinfo'
+Message-ID: <20100419212539.555FB23B37@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 19 Apr 2010 15:34:49 +0100
-Will Wagner <will_wagner@carallon.com> wrote:
 
-> The restructure for building root filesystems changed the target name
-> for the initramfs file, to build the file the trget is now
-> initramfs-root but the generated file is rootfs.initramfs
-> 
-> Signed-off-by: Will Wagner <will_wagner@carallon.com>
+commit: http://git.buildroot.net/buildroot/commit/?id=d496bc1f281180c57c32a485385236620ac63a6e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I'm not a big fan of this "hidden" dependencies, but I believe in the
-case of the kernel and its initramfs there isn't a lot of choice.
-Therefore:
+Commit 9277cb760a4cc6e62d0cd23fa938dd953e875a13 added support
+for mtdinfo to mtd.mk but missed corresponding Config.in stuff.
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Michael Roth <mroth@nessie.de>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/mtd/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+diff --git a/package/mtd/Config.in b/package/mtd/Config.in
+index 8e846a3..0ba71d3 100644
+--- a/package/mtd/Config.in
++++ b/package/mtd/Config.in
+@@ -93,6 +93,10 @@ config BR2_PACKAGE_MTD_SERVE_IMAGE
+ config BR2_PACKAGE_MTD_SUMTOOL
+ 	bool "sumtool"
+ 
++config BR2_PACKAGE_MTD_MTDINFO
++	bool "mtdinfo"
++	default y
++
+ config BR2_PACKAGE_MTD_UBIATTACH
+ 	bool "ubiattach"
+ 	default y
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.6.3.3
