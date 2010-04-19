@@ -1,35 +1,31 @@
-From: Michael Roth <mroth@nessie.de>
-Date: Mon, 19 Apr 2010 22:36:13 +0200
-Subject: [Buildroot] [PATCH 1/1] mtd: Add missing 'mtdinfo'
-Message-ID: <1271709373-11620-1-git-send-email-mroth@nessie.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 19 Apr 2010 22:53:50 +0200
+Subject: [Buildroot] [PATCH 1/2] makedevs: move to package/
+In-Reply-To: <cover.1271710428.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1271710428.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <5faae4869027d86cba895bf88b5b956c62310d30.1271710428.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 9277cb760a4cc6e62d0cd23fa938dd953e875a13 added support
-for mtdinfo to mtd.mk but missed corresponding Config.in stuff.
-
-Signed-off-by: Michael Roth <mroth@nessie.de>
+Since target/ doesn't contain any .mk file in subdirectories, also
+remove the include in target/Makefile.in.
 ---
- package/mtd/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ {target => package}/makedevs/makedevs.c  |    0
+ {target => package}/makedevs/makedevs.mk |    0
+ 2 files changed, 0 insertions(+), 0 deletions(-)
+ rename {target => package}/makedevs/makedevs.c (100%)
+ rename {target => package}/makedevs/makedevs.mk (100%)
 
-diff --git a/package/mtd/Config.in b/package/mtd/Config.in
-index 8e846a3..0ba71d3 100644
---- a/package/mtd/Config.in
-+++ b/package/mtd/Config.in
-@@ -93,6 +93,10 @@ config BR2_PACKAGE_MTD_SERVE_IMAGE
- config BR2_PACKAGE_MTD_SUMTOOL
- 	bool "sumtool"
- 
-+config BR2_PACKAGE_MTD_MTDINFO
-+	bool "mtdinfo"
-+	default y
-+
- config BR2_PACKAGE_MTD_UBIATTACH
- 	bool "ubiattach"
- 	default y
+diff --git a/target/makedevs/makedevs.c b/package/makedevs/makedevs.c
+similarity index 100%
+rename from target/makedevs/makedevs.c
+rename to package/makedevs/makedevs.c
+diff --git a/target/makedevs/makedevs.mk b/package/makedevs/makedevs.mk
+similarity index 100%
+rename from target/makedevs/makedevs.mk
+rename to package/makedevs/makedevs.mk
 -- 
-1.6.4.4
+1.6.3.3
