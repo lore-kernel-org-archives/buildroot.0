@@ -1,30 +1,18 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 19 Apr 2010 23:29:26 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	makedevs-cleanup
-In-Reply-To: <cover.1271710428.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Mon, 19 Apr 2010 22:53:49 +0200")
-References: <cover.1271710428.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87vdbnb07d.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 19 Apr 2010 23:28:26 +0200
+Subject: [Buildroot] [git commit master] makedevs: move to package/
+Message-ID: <20100419213703.A99392646F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> The following changes since commit 7b3a6f0aab19c147ad28f74e3b410c4a8bb2f38f:
- Thomas>   Peter Korsgaard (1):
- Thomas>         python: needs WCHAR support in toolchain
+commit: http://git.buildroot.net/buildroot/commit/?id=5faae4869027d86cba895bf88b5b956c62310d30
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> are available in the git repository at:
+Since target/ doesn't contain any .mk file in subdirectories, also
+remove the include in target/Makefile.in.
 
- Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot makedevs-cleanup
-
-Pulled and pushed, thanks!
-
-You are btw still forgetting the trailing newline on your files.
-
--- 
-Bye, Peter Korsgaard
+Patch is too large, so refusing to show it
