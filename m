@@ -1,31 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Apr 2010 22:53:50 +0200
-Subject: [Buildroot] [PATCH 1/2] makedevs: move to package/
-In-Reply-To: <cover.1271710428.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1271710428.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <5faae4869027d86cba895bf88b5b956c62310d30.1271710428.git.thomas.petazzoni@free-electrons.com>
+Date: Mon, 19 Apr 2010 22:53:49 +0200
+Subject: [Buildroot] [pull request] Pull request for branch makedevs-cleanup
+Message-ID: <cover.1271710428.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since target/ doesn't contain any .mk file in subdirectories, also
-remove the include in target/Makefile.in.
----
- {target => package}/makedevs/makedevs.c  |    0
- {target => package}/makedevs/makedevs.mk |    0
- 2 files changed, 0 insertions(+), 0 deletions(-)
- rename {target => package}/makedevs/makedevs.c (100%)
- rename {target => package}/makedevs/makedevs.mk (100%)
+The following changes since commit 7b3a6f0aab19c147ad28f74e3b410c4a8bb2f38f:
+  Peter Korsgaard (1):
+        python: needs WCHAR support in toolchain
 
-diff --git a/target/makedevs/makedevs.c b/package/makedevs/makedevs.c
-similarity index 100%
-rename from target/makedevs/makedevs.c
-rename to package/makedevs/makedevs.c
-diff --git a/target/makedevs/makedevs.mk b/package/makedevs/makedevs.mk
-similarity index 100%
-rename from target/makedevs/makedevs.mk
-rename to package/makedevs/makedevs.mk
+are available in the git repository at:
+
+  git://git.busybox.net/~tpetazzoni/git/buildroot makedevs-cleanup
+
+Thomas Petazzoni (2):
+      makedevs: move to package/
+      makedevs: convert to a more normal way of building packages
+
+ fs/common.mk                            |    2 +-
+ package/Config.in                       |    1 +
+ package/makedevs/Config.in              |    5 ++++
+ {target => package}/makedevs/makedevs.c |    0
+ package/makedevs/makedevs.mk            |   35 +++++++++++++++++++++++++++++++
+ target/makedevs/makedevs.mk             |   30 --------------------------
+ 6 files changed, 42 insertions(+), 31 deletions(-)
+ create mode 100644 package/makedevs/Config.in
+ rename {target => package}/makedevs/makedevs.c (100%)
+ create mode 100644 package/makedevs/makedevs.mk
+ delete mode 100644 target/makedevs/makedevs.mk
+
+Thanks,
 -- 
-1.6.3.3
+Thomas Petazzoni
