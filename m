@@ -1,225 +1,101 @@
-From: Belisko Marek <marek.belisko@gmail.com>
-Date: Mon, 19 Apr 2010 13:58:32 +0200
-Subject: [Buildroot] [PATCH] transmission: convert to autotools
-	infrastructure
-In-Reply-To: <1271671416-756-1-git-send-email-keguang.zhang@gmail.com>
-References: <1271671416-756-1-git-send-email-keguang.zhang@gmail.com>
-Message-ID: <r2ve7c6a05e1004190458u531e7305p55ac3694a562c1ee@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 19 Apr 2010 14:33:14 +0200
+Subject: [Buildroot] [git commit master] fs/ext2: fix blocks/inodes
+	calculation
+Message-ID: <20100419123424.5CC5E20B7D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Apr 19, 2010 at 12:03 PM,  <keguang.zhang@gmail.com> wrote:
-> From: Kelvin Cheung <keguang.zhang@gmail.com>
->
-> Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
-> ---
-> ?package/Config.in ? ? ? ? ? ? ? ? ? ?| ? ?1 +
-> ?package/transmission/Config.in ? ? ? | ? 23 +++++++++
-> ?package/transmission/S92transmission | ? 88 ++++++++++++++++++++++++++++++++++
-> ?package/transmission/transmission.mk | ? 22 ++++++++
-> ?4 files changed, 134 insertions(+), 0 deletions(-)
-> ?create mode 100755 package/transmission/Config.in
-> ?create mode 100755 package/transmission/S92transmission
-> ?create mode 100644 package/transmission/transmission.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 6104903..5fa3b26 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -413,6 +413,7 @@ source "package/thttpd/Config.in"
-> ?source "package/tinyhttpd/Config.in"
-> ?endif
-> ?source "package/tn5250/Config.in"
-> +source "package/transmission/Config.in"
-> ?source "package/ttcp/Config.in"
-> ?source "package/udpcast/Config.in"
-> ?source "package/vpnc/Config.in"
-> diff --git a/package/transmission/Config.in b/package/transmission/Config.in
-> new file mode 100755
-> index 0000000..f42c79d
-> --- /dev/null
-> +++ b/package/transmission/Config.in
-> @@ -0,0 +1,23 @@
-> +config BR2_PACKAGE_TRANSMISSION
-> + ? ? ? bool "transmission"
-> + ? ? ? select BR2_PACKAGE_ZLIB
-> + ? ? ? select BR2_PACKAGE_OPENSSL
-> + ? ? ? select BR2_PACKAGE_LIBCURL
-> + ? ? ? select BR2_PACKAGE_LIBEVENT
-> + ? ? ? default n
-> + ? ? ? help
-> + ? ? ? ? transmission - Transmission BitTorrent Client
-> +
-> +config BR2_PACKAGE_TRANSMISSION_CLI
-> + ? ? ? bool "transmissioncli"
-> + ? ? ? depends on BR2_PACKAGE_TRANSMISSION
-> + ? ? ? default no
-> + ? ? ? help
-> + ? ? ? ? Install transmission command line interface.
-> +
-> +config BR2_PACKAGE_TRANSMISSION_REMOTE
-> + ? ? ? bool "transmission-remote"
-> + ? ? ? depends on BR2_PACKAGE_TRANSMISSION
-> + ? ? ? default no
-> + ? ? ? help
-> + ? ? ? ? Install transmission remote management tool.
-> diff --git a/package/transmission/S92transmission b/package/transmission/S92transmission
-> new file mode 100755
-> index 0000000..9c15aae
-> --- /dev/null
-> +++ b/package/transmission/S92transmission
-> @@ -0,0 +1,88 @@
-> +#!/bin/sh
-> +if [ ! -z "$2" ]; then
-> + ? ? ? TRANSMISSION_ARGS="$2"
-> +else
-> + ? ? ? TRANSMISSION_ARGS=""
-> +fi
-> +
-> +if [ ! -z "$3" ]; then
-> + ? ? ? NET_INTERFACE="$3"
-> +else
-> + ? ? ? NET_INTERFACE=""
-> +fi
-> +
-> +DESC="bittorrent client"
-> +NAME=transmission-daemon
-> +DAEMON=$(which $NAME)
-> +SCRIPTNAME=/etc/init.d/$0
-> +
-> +[ -x "$DAEMON" ] || exit 0
-> +
-> +do_start()
-> +{
-> + ? ? ? if [ ! -z "$NET_INTERFACE" ]; then
-> + ? ? ? ? ? ? ? # poll network interface
-> + ? ? ? ? ? ? ? IFCONFIG_OUTPUT=`ifconfig $NET_INTERFACE`
-> + ? ? ? ? ? ? ? IP_ADDR=`expr match "$IFCONFIG_OUTPUT" '.*inet addr:\([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\).*'`
-> + ? ? ? ? ? ? ? while [ -z "$IP_ADDR" ]
-> + ? ? ? ? ? ? ? do
-> + ? ? ? ? ? ? ? ? ? ? ? sleep 5
-> + ? ? ? ? ? ? ? ? ? ? ? IFCONFIG_OUTPUT=`ifconfig $NET_INTERFACE`
-> + ? ? ? ? ? ? ? ? ? ? ? IP_ADDR=`expr match "$IFCONFIG_OUTPUT" '.*inet addr:\([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\).*'`
-> + ? ? ? ? ? ? ? done
-> + ? ? ? fi
-> + ? ? ? if [ -z "$TRANSMISSION_ARGS" ]; then
-> + ? ? ? ? ? ? ? start-stop-daemon -S -b -x ${DAEMON}
-> + ? ? ? else
-> + ? ? ? ? ? ? ? start-stop-daemon -S -b -x ${DAEMON} -- ${TRANSMISSION_ARGS}
-> + ? ? ? fi
-> + ? ? ? return $?
-> +}
-> +
-> +do_stop()
-> +{
-> + ? ? ? start-stop-daemon -K -b -x ${DAEMON}
-> + ? ? ? return $?
-> +}
-> +
-> +case "$1" in
-> + ? ? ? start)
-> + ? ? ? ? ? ? ? echo "Starting $DESC" "$NAME..."
-> + ? ? ? ? ? ? ? do_start
-> + ? ? ? ? ? ? ? case "$?" in
-> + ? ? ? ? ? ? ? ? ? ? ? 0) echo " ? Start $DESC $NAME: SUCCESS" ;;
-> + ? ? ? ? ? ? ? ? ? ? ? *)
-> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? echo " ? Start $DESC $NAME: FAILED"
-> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? exit 3
-> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ;;
-> + ? ? ? ? ? ? ? esac
-> + ? ? ? ? ? ? ? ;;
-> + ? ? ? stop)
-> + ? ? ? ? ? ? ? echo "Stopping $DESC $NAME..."
-> + ? ? ? ? ? ? ? do_stop
-> + ? ? ? ? ? ? ? case "$?" in
-> + ? ? ? ? ? ? ? ? ? ? ? 0) echo " ? Stop $DESC $NAME: SUCCESS" ;;
-> + ? ? ? ? ? ? ? ? ? ? ? *)
-> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? echo " ? Stop $DESC $NAME: FAILED"
-> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? exit 3
-> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ;;
-> + ? ? ? ? ? ? ? esac
-> + ? ? ? ? ? ? ? ;;
-> + ? ? ? restart|force-reload)
-> + ? ? ? ? ? ? ? echo "Restarting $DESC $NAME..."
-> + ? ? ? ? ? ? ? do_stop
-> + ? ? ? ? ? ? ? sleep 2
-> + ? ? ? ? ? ? ? do_start
-> + ? ? ? ? ? ? ? case "$?" in
-> + ? ? ? ? ? ? ? ? ? ? ? 0) echo " ? Restart $DESC $NAME: SUCCESS" ;;
-> + ? ? ? ? ? ? ? ? ? ? ? *)
-> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? echo " ? Restart $DESC $NAME: FAILED: couldn't start $NAME"
-> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? exit 3
-> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ;;
-> + ? ? ? ? ? ? ? esac
-> + ? ? ? ? ? ? ? ;;
-> + ? ? ? *)
-> + ? ? ? ? ? ? ? echo "Usage: $SCRIPTNAME {start|stop|restart|force-reload}" >&2
-> + ? ? ? ? ? ? ? exit 3
-> + ? ? ? ? ? ? ? ;;
-> +esac
-> diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
-> new file mode 100644
-> index 0000000..2dc0d04
-> --- /dev/null
-> +++ b/package/transmission/transmission.mk
-> @@ -0,0 +1,22 @@
-> +#############################################################
-> +#
-> +# transmission
-> +#
-> +#############################################################
-> +TRANSMISSION_VERSION:=1.92
-> +TRANSMISSION_SOURCE:=transmission-$(TRANSMISSION_VERSION).tar.bz2
-> +TRANSMISSION_SITE:=http://mirrors.m0k.org/transmission/files/
-> +TRANSMISSION_LIBTOOL_PATCH=NO
-> +TRANSMISSION_DEPENDENCIES:= host-pkg-config host-intltool zlib openssl libcurl libevent
-> +
-> +TRANSMISSION_CONF_OPT = --prefix=/usr \
-> + ? ? ? ? ? ? ? ? ? ? ? --localstatedir=/var \
-> + ? ? ? ? ? ? ? ? ? ? ? --disable-gtk \
-> + ? ? ? ? ? ? ? ? ? ? ? --disable-libnotify \
-> + ? ? ? ? ? ? ? ? ? ? ? --enable-cli \
-> + ? ? ? ? ? ? ? ? ? ? ? --enable-daemon \
-> + ? ? ? ? ? ? ? ? ? ? ? --with-zlib=$(STAGING_DIR) \
-> + ? ? ? ? ? ? ? ? ? ? ? $(DISABLE_NLS) \
-> + ? ? ? ? ? ? ? ? ? ? ? $(DISABLE_LARGEFILE)
-> +
-> +$(eval $(call AUTOTARGETS,package,transmission))
 
-Extend for copying init script to /etc/init.d:
+commit: http://git.buildroot.net/buildroot/commit/?id=fb951b93423356a7b648a8e268cd5af57d964f45
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-+$(TRANSMISSION_HOOK_POST_INSTALL):
-+	 $(call MESSAGE,"Post installing")
+With the ROOTFS_TARGET conversion, EXT2_OPTS gets evaluated very early
+(before TARGET_DIR is populated with files), so the calculated
+blocks/inodes numbers are wrong.
+
+Fix it by moving the calculation to a shell script wrapper around
+genext2fs, so it only gets executed just before genext2fs runs.
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ fs/ext2/ext2.mk      |   13 ++-----------
+ fs/ext2/genext2fs.sh |   39 +++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 41 insertions(+), 11 deletions(-)
+ create mode 100755 fs/ext2/genext2fs.sh
+
+diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
+index f3d3ff9..18a6df4 100644
+--- a/fs/ext2/ext2.mk
++++ b/fs/ext2/ext2.mk
+@@ -24,17 +24,8 @@ endif
+ 
+ ROOTFS_EXT2_DEPENDENCIES = host-genext2fs
+ 
+-ifeq ($(strip $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)),0)
+-GENEXT2_REALSIZE=$(shell LC_ALL=C du -s -c -k $(TARGET_DIR) | grep total | sed -e "s/total//")
+-GENEXT2_ADDTOROOTSIZE=$(shell if [ $(GENEXT2_REALSIZE) -ge 20000 ]; then echo 16384; else echo 2400; fi)
+-GENEXT2_SIZE=$(shell expr $(GENEXT2_REALSIZE) + $(GENEXT2_ADDTOROOTSIZE))
+-GENEXT2_ADDTOINODESIZE=$(shell find $(TARGET_DIR) | wc -l)
+-GENEXT2_INODES=$(shell expr $(GENEXT2_ADDTOINODESIZE) + 400)
+-EXT2_OPTS += -b $(GENEXT2_SIZE) -N $(GENEXT2_INODES)
+-endif
+-
+ define ROOTFS_EXT2_CMD
+-	$(HOST_DIR)/usr/bin/genext2fs -d $(TARGET_DIR) $(EXT2_OPTS) $$@
++	PATH=$(TARGET_PATH) fs/ext2/genext2fs.sh -d $(TARGET_DIR) $(EXT2_OPTS) $$@
+ endef
+ 
+-$(eval $(call ROOTFS_TARGET,ext2))
+\ No newline at end of file
++$(eval $(call ROOTFS_TARGET,ext2))
+diff --git a/fs/ext2/genext2fs.sh b/fs/ext2/genext2fs.sh
+new file mode 100755
+index 0000000..b315ec3
+--- /dev/null
++++ b/fs/ext2/genext2fs.sh
+@@ -0,0 +1,39 @@
++#!/bin/sh
++# genext2fs wrapper calculating needed blocks/inodes values if not specified
 +
-+	# install start/stop script
-+	@if [ ! -f $(TARGET_DIR)/etc/init.d/S92transmission ]; then \
-+		$(INSTALL) -m 0755 -D package/transmission/S92transmission
-$(TARGET_DIR)/etc/init.d/S92transmission; \
-+	fi
-+	$(Q)touch $@
-
-> --
-> 1.6.3.3
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
-
-Marek
-
++export LC_ALL=C
++
++CALC_BLOCKS=1
++CALC_INODES=1
++
++while getopts x:d:D:b:i:N:m:g:e:zfqUPhVv f
++do
++    case $f in
++	b) CALC_BLOCKS=0 ;;
++	N) CALC_INODES=0 ;;
++	d) TARGET_DIR=$OPTARG ;;
++    esac
++done
++
++# calculate needed blocks
++if [ $CALC_BLOCKS -eq 1 ];
++then
++    BLOCKS=$(du -s -c -k $TARGET_DIR | grep total | sed -e "s/total//")
++    if [ $BLOCKS -ge 20000 ];
++    then
++	BLOCKS=$(expr $BLOCKS + 16384)
++    else
++	BLOCKS=$(expr $BLOCKS + 2400)
++    fi
++    set -- $@ -b $BLOCKS
++fi
++
++# calculate needed inodes
++if [ $CALC_INODES -eq 1 ];
++then
++    INODES=$(find $TARGET_DIR | wc -l)
++    INODES=$(expr $INODES + 400)
++    set -- $@ -N $INODES
++fi
++
++exec genext2fs $@
 -- 
-as simple and primitive as possible
--------------------------------------------------
-Marek Belisko - OPEN-NANDRA
-Freelance Developer
-
-Ruska Nova Ves 219 | Presov, 08005 Slovak Republic
-Tel: +421 915 052 184
-skype: marekwhite
-icq: 290551086
-web: http://open-nandra.com
+1.6.3.3
