@@ -1,38 +1,34 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 19 Apr 2010 11:19:38 +0200
-Subject: [Buildroot] [git commit master] Enable libutil by default for
-	uclibc 0.9.31
-Message-ID: <20100419092015.01FD88DE34@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 19 Apr 2010 09:21:48 +0000 (UTC)
+Subject: [Buildroot] [Bug 1591] portmap fails to compile
+In-Reply-To: <bug-1591-163@https.bugs.busybox.net/>
+References: <bug-1591-163@https.bugs.busybox.net/>
+Message-ID: <20100419092148.EB3CE9994E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=1591
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f7f01e18e77dd43d535002783e9a40deedd2d924
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Closes #1591
 
-Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- toolchain/uClibc/uClibc-0.9.31.config |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/toolchain/uClibc/uClibc-0.9.31.config b/toolchain/uClibc/uClibc-0.9.31.config
-index a69f5b1..091f179 100644
---- a/toolchain/uClibc/uClibc-0.9.31.config
-+++ b/toolchain/uClibc/uClibc-0.9.31.config
-@@ -94,7 +94,7 @@ UCLIBC_HAS_PTY=y
- ASSUME_DEVPTS=y
- UNIX98PTY_ONLY=y
- # UCLIBC_HAS_GETPT is not set
--# UCLIBC_HAS_LIBUTIL is not set
-+UCLIBC_HAS_LIBUTIL=y
- UCLIBC_HAS_TM_EXTENSIONS=y
- UCLIBC_HAS_TZ_CACHING=y
- UCLIBC_HAS_TZ_FILE=y
+
+--- Comment #5 from Peter Korsgaard <jacmet@uclibc.org>  2010-04-19 09:21:48 UTC ---
+(In reply to comment #4)
+> (In reply to comment #3)
+> > Thanks, but this is already done in git since yesterday (see bug #1555)
+> > 
+> 
+> I updated to the newest version just now.
+> But the libutil is still disabled in the default configuration.
+
+Sorry, I mixed up the libresolv / libutil patches - Committed now.
+
+
 -- 
-1.6.3.3
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
