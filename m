@@ -1,40 +1,30 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 19 Apr 2010 23:24:57 +0200
-Subject: [Buildroot] [git commit master] mtd: Add missing 'mtdinfo'
-Message-ID: <20100419212539.555FB23B37@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 19 Apr 2010 23:29:26 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	makedevs-cleanup
+In-Reply-To: <cover.1271710428.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Mon, 19 Apr 2010 22:53:49 +0200")
+References: <cover.1271710428.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87vdbnb07d.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d496bc1f281180c57c32a485385236620ac63a6e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Thomas> The following changes since commit 7b3a6f0aab19c147ad28f74e3b410c4a8bb2f38f:
+ Thomas>   Peter Korsgaard (1):
+ Thomas>         python: needs WCHAR support in toolchain
 
-Commit 9277cb760a4cc6e62d0cd23fa938dd953e875a13 added support
-for mtdinfo to mtd.mk but missed corresponding Config.in stuff.
+ Thomas> are available in the git repository at:
 
-Signed-off-by: Michael Roth <mroth@nessie.de>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/mtd/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot makedevs-cleanup
 
-diff --git a/package/mtd/Config.in b/package/mtd/Config.in
-index 8e846a3..0ba71d3 100644
---- a/package/mtd/Config.in
-+++ b/package/mtd/Config.in
-@@ -93,6 +93,10 @@ config BR2_PACKAGE_MTD_SERVE_IMAGE
- config BR2_PACKAGE_MTD_SUMTOOL
- 	bool "sumtool"
- 
-+config BR2_PACKAGE_MTD_MTDINFO
-+	bool "mtdinfo"
-+	default y
-+
- config BR2_PACKAGE_MTD_UBIATTACH
- 	bool "ubiattach"
- 	default y
+Pulled and pushed, thanks!
+
+You are btw still forgetting the trailing newline on your files.
+
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
