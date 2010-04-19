@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Mon, 19 Apr 2010 11:05:30 +0200
-Subject: [Buildroot] [git commit master] toolchain/gdb: target-gdb needs
-	wchar support in toolchain
-Message-ID: <20100419090622.5D56F8B6C9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] CHANGES: #1591 is now closed
+	(portmap fails to compile)
+Message-ID: <20100419090621.D994F8B6C9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,33 +10,25 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=816e724a460bcd4b64d4f9cbfd812f90a85efd94
+commit: http://git.buildroot.net/buildroot/commit/?id=ab1f6e5cc09c3206dd458a2ac50c7e2509fe3c07
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-For the embedded readline/gettext stuff.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/gdb/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ CHANGES |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/gdb/Config.in b/toolchain/gdb/Config.in
-index 0e17ff6..e383949 100644
---- a/toolchain/gdb/Config.in
-+++ b/toolchain/gdb/Config.in
-@@ -3,9 +3,13 @@ comment "Gdb Options"
- config BR2_PACKAGE_GDB
- 	bool "Build gdb debugger for the Target"
- 	select BR2_PACKAGE_NCURSES
-+	depends on BR2_USE_WCHAR
- 	help
- 	    Build the full gdb debugger to run on the target.
+diff --git a/CHANGES b/CHANGES
+index e28903f..315a1e6 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -59,6 +59,7 @@
+ 	#1537: dev entries not created anymore
+ 	#1555: Fix default uclibc-0.9.31 configuration
+ 	#1567: openssl0.9.8n fails to compile
++	#1591: portmap fails to compile
  
-+comment "Gdb debugger for the target needs WCHAR support in toolchain"
-+	depends on !BR2_USE_WHCAR
-+
- config BR2_PACKAGE_GDB_SERVER
- 	bool "Build gdb server for the Target"
- 	help
+ 2010.02, Release February 26th, 2010:
+ 
 -- 
 1.6.3.3
