@@ -1,19 +1,15 @@
 From: Belisko Marek <marek.belisko@gmail.com>
-Date: Mon, 19 Apr 2010 13:03:42 +0200
+Date: Mon, 19 Apr 2010 13:58:32 +0200
 Subject: [Buildroot] [PATCH] transmission: convert to autotools
 	infrastructure
 In-Reply-To: <1271671416-756-1-git-send-email-keguang.zhang@gmail.com>
 References: <1271671416-756-1-git-send-email-keguang.zhang@gmail.com>
-Message-ID: <q2ye7c6a05e1004190403y334fffb8u29e247a28e42aef5@mail.gmail.com>
+Message-ID: <r2ve7c6a05e1004190458u531e7305p55ac3694a562c1ee@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
-
-Hi,
-
-thanks for patch.
 
 On Mon, Apr 19, 2010 at 12:03 PM,  <keguang.zhang@gmail.com> wrote:
 > From: Kelvin Cheung <keguang.zhang@gmail.com>
@@ -54,8 +50,6 @@ On Mon, Apr 19, 2010 at 12:03 PM,  <keguang.zhang@gmail.com> wrote:
 > + ? ? ? select BR2_PACKAGE_LIBCURL
 > + ? ? ? select BR2_PACKAGE_LIBEVENT
 > + ? ? ? default n
-For all Config.in entries: default n isn't necessary because default
-is no anyway.
 > + ? ? ? help
 > + ? ? ? ? transmission - Transmission BitTorrent Client
 > +
@@ -194,6 +188,19 @@ is no anyway.
 > + ? ? ? ? ? ? ? ? ? ? ? $(DISABLE_LARGEFILE)
 > +
 > +$(eval $(call AUTOTARGETS,package,transmission))
+
+Extend for copying init script to /etc/init.d:
+
++$(TRANSMISSION_HOOK_POST_INSTALL):
++	 $(call MESSAGE,"Post installing")
++
++	# install start/stop script
++	@if [ ! -f $(TARGET_DIR)/etc/init.d/S92transmission ]; then \
++		$(INSTALL) -m 0755 -D package/transmission/S92transmission
+$(TARGET_DIR)/etc/init.d/S92transmission; \
++	fi
++	$(Q)touch $@
+
 > --
 > 1.6.3.3
 >
@@ -203,7 +210,6 @@ is no anyway.
 > http://lists.busybox.net/mailman/listinfo/buildroot
 >
 
-good luck,
 Marek
 
 -- 
