@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 19 Apr 2010 11:05:30 +0200
-Subject: [Buildroot] [git commit master] CHANGES: #1591 is now closed
-	(portmap fails to compile)
-Message-ID: <20100419090621.D994F8B6C9@busybox.osuosl.org>
+Date: Mon, 19 Apr 2010 11:19:38 +0200
+Subject: [Buildroot] [git commit master] Enable libutil by default for
+	uclibc 0.9.31
+Message-ID: <20100419092015.01FD88DE34@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,25 +10,29 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ab1f6e5cc09c3206dd458a2ac50c7e2509fe3c07
+commit: http://git.buildroot.net/buildroot/commit/?id=f7f01e18e77dd43d535002783e9a40deedd2d924
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Closes #1591
+
+Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ toolchain/uClibc/uClibc-0.9.31.config |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index e28903f..315a1e6 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -59,6 +59,7 @@
- 	#1537: dev entries not created anymore
- 	#1555: Fix default uclibc-0.9.31 configuration
- 	#1567: openssl0.9.8n fails to compile
-+	#1591: portmap fails to compile
- 
- 2010.02, Release February 26th, 2010:
- 
+diff --git a/toolchain/uClibc/uClibc-0.9.31.config b/toolchain/uClibc/uClibc-0.9.31.config
+index a69f5b1..091f179 100644
+--- a/toolchain/uClibc/uClibc-0.9.31.config
++++ b/toolchain/uClibc/uClibc-0.9.31.config
+@@ -94,7 +94,7 @@ UCLIBC_HAS_PTY=y
+ ASSUME_DEVPTS=y
+ UNIX98PTY_ONLY=y
+ # UCLIBC_HAS_GETPT is not set
+-# UCLIBC_HAS_LIBUTIL is not set
++UCLIBC_HAS_LIBUTIL=y
+ UCLIBC_HAS_TM_EXTENSIONS=y
+ UCLIBC_HAS_TZ_CACHING=y
+ UCLIBC_HAS_TZ_FILE=y
 -- 
 1.6.3.3
