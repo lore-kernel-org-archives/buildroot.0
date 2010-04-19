@@ -1,34 +1,26 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 19 Apr 2010 09:21:48 +0000 (UTC)
-Subject: [Buildroot] [Bug 1591] portmap fails to compile
-In-Reply-To: <bug-1591-163@https.bugs.busybox.net/>
-References: <bug-1591-163@https.bugs.busybox.net/>
-Message-ID: <20100419092148.EB3CE9994E@busybox.osuosl.org>
+From: Muhammed ER <er.muhammed@gmail.com>
+Date: Mon, 19 Apr 2010 12:59:53 +0300
+Subject: [Buildroot] Missing something. (Error?)
+Message-ID: <q2nf70863321004190259lbcec9a85u99a62dcfc1d332e3@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1591
+Hi,
+I use buildroot last stable version
+( http://buildroot.net/downloads/buildroot-2010.02.tar.gz )
 
+Selected : Build/install Objective-C compiler and runtime?
 
+I was thinking this configuration includes "gcc compiler" in it. But there
+is no compiler.
 
+Did I understand true??? Or it is an error?
 
-
---- Comment #5 from Peter Korsgaard <jacmet@uclibc.org>  2010-04-19 09:21:48 UTC ---
-(In reply to comment #4)
-> (In reply to comment #3)
-> > Thanks, but this is already done in git since yesterday (see bug #1555)
-> > 
-> 
-> I updated to the newest version just now.
-> But the libutil is still disabled in the default configuration.
-
-Sorry, I mixed up the libresolv / libutil patches - Committed now.
-
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thanks,
+Muhammed ER.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100419/80da5306/attachment.htm>
