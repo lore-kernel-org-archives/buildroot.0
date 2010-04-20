@@ -1,41 +1,170 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 20 Apr 2010 13:19:30 +0200
-Subject: [Buildroot] makedev questions
-In-Reply-To: <4BCD83D4.6000306@carallon.com> (William Wagner's message of
-	"Tue, 20 Apr 2010 11:37:08 +0100")
-References: <4BCD83D4.6000306@carallon.com>
-Message-ID: <8739yqbccd.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 20 Apr 2010 13:20:56 +0200
+Subject: [Buildroot] [git commit master] busybox: get rid of unused
+	initramfs.mk file
+Message-ID: <20100420112126.5E27520949@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "William" == William Wagner <will_wagner@carallon.com> writes:
 
- William> Hello,
- William> Just trying to get everything working again following recent changes
- William> in git. After the makedev change I have a couple of questions.
+commit: http://git.buildroot.net/buildroot/commit/?id=b0432db6977228b11105c6997766b76bc9cf197f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- William> Should the default value for BR2_PACKAGE_MAKEDEVS not be y?
- William> Without it you get a rootfs without any device nodes. Or am I
- William> missing something?
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/busybox/initramfs.mk |  141 ------------------------------------------
+ 1 files changed, 0 insertions(+), 141 deletions(-)
+ delete mode 100644 package/busybox/initramfs.mk
 
-No, BR2_PACKAGE_MAKEDEVS is for compiling makedevs to run on the target
-(unlikely to be interesting).
-
-Don't you have build/host-makedevs built? It seems to work here.
-
- William> Also am I right to think that TARGET_DEVICE_TABLE has been removed?
-
-Yes, it was removed in 64ec20e6c0 - Replaced by BR2_ROOTFS_DEVICE_TABLE.
-
- William> There still appears to be a reference to it at
- William> package\busybox\initramfs.mk(106): echo "$(HOST_DIR)/usr/bin/makedevs
- William> -d 
- William> $(TARGET_DEVICE_TABLE) $(BUILD_DIR)/initramfs"; \
-
-That file isn't used anywhere - I've removed it now.
-
+diff --git a/package/busybox/initramfs.mk b/package/busybox/initramfs.mk
+deleted file mode 100644
+index 2f1e34c..0000000
+--- a/package/busybox/initramfs.mk
++++ /dev/null
+@@ -1,141 +0,0 @@
+-#############################################################
+-#
+-# busybox image for initramfs
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_BUSYBOX_INITRAMFS),y)
+-
+-BUSYBOX_INITRAMFS_DIR:=$(BUSYBOX_DIR)-initramfs
+-BR2_INITRAMFS_DIR:=$(BUILD_DIR)/initramfs
+-BB_INITRAMFS_TARGET:=rootfs.initramfs_lst
+-
+-$(BUSYBOX_INITRAMFS_DIR)/.unpacked: $(DL_DIR)/$(BUSYBOX_SOURCE)
+-	rm -rf $(BUILD_DIR)/tmp $(BUSYBOX_INITRAMFS_DIR)
+-	mkdir -p $(BUILD_DIR)/tmp
+-	$(BUSYBOX_UNZIP) $(DL_DIR)/$(BUSYBOX_SOURCE) | tar -C $(BUILD_DIR)/tmp $(TAR_OPTIONS) -
+-ifeq ($(BR2_PACKAGE_BUSYBOX_SNAPSHOT),y)
+-	mv $(BUILD_DIR)/tmp/busybox $(BUSYBOX_INITRAMFS_DIR)
+-else
+-	mv $(BUILD_DIR)/tmp/busybox-$(BUSYBOX_VERSION) $(BUSYBOX_INITRAMFS_DIR)
+-endif
+-	touch $@
+-
+-$(BUSYBOX_INITRAMFS_DIR)/.config $(BUSYBOX_INITRAMFS_DIR)/.configured: $(BUSYBOX_INITRAMFS_DIR)/.unpacked
+-	$(MAKE) CC=$(TARGET_CC) CROSS_COMPILE="$(TARGET_CROSS)" \
+-		CROSS="$(TARGET_CROSS)" -C $(BUSYBOX_INITRAMFS_DIR) \
+-		allnoconfig
+-	mv $(BUSYBOX_INITRAMFS_DIR)/.config $(BUSYBOX_INITRAMFS_DIR)/.config.no
+-	(echo CONFIG_PREFIX=\"$(BR2_INITRAMFS_DIR)\"; \
+-	 echo CONFIG_NITPICK=y; \
+-	 echo CONFIG_FEATURE_BUFFERS_USE_MALLOC=y; \
+-	 echo CONFIG_INCLUDE_SUSv2=n; \
+-	 echo CONFIG_CAT=y; \
+-	 echo CONFIG_CHROOT=y; \
+-	 echo CONFIG_DD=y; \
+-	 echo CONFIG_FEATURE_DD_IBS_OBS=y; \
+-	 echo CONFIG_FALSE=y; \
+-	 echo CONFIG_GUNZIP=y; \
+-	 echo CONFIG_HALT=y; \
+-	 echo CONFIG_INIT=y; \
+-	 echo CONFIG_INSMOD=y; \
+-	 echo CONFIG_KILL=y; \
+-	 echo CONFIG_LN=y; \
+-	 echo CONFIG_MDEV=y; \
+-	 echo CONFIG_MKDIR=y; \
+-	 echo CONFIG_MKFIFO=y; \
+-	 echo CONFIG_MKNOD=y; \
+-	 echo CONFIG_MODPROBE=y; \
+-	 echo CONFIG_FEATURE_MODPROBE_MULTIPLE_OPTIONS=y; \
+-	 echo CONFIG_FEATURE_MODPROBE_FANCY_ALIAS=y; \
+-	 echo CONFIG_FEATURE_CHECK_TAINTED_MODULE=n; \
+-	 echo CONFIG_FEATURE_2_4_MODULES=n; \
+-	 echo CONFIG_MOUNT=y; \
+-	 echo CONFIG_MSH=y; \
+-	 echo CONFIG_FEATURE_SH_IS_MSH=y; \
+-	 echo CONFIG_PS=y; \
+-	 echo CONFIG_READLINK=y; \
+-	 echo CONFIG_RMMOD=y; \
+-	 echo CONFIG_STATIC=y; \
+-	 echo CONFIG_SWITCH_ROOT=y; \
+-	 echo CONFIG_SYNC=y; \
+-	 echo CONFIG_TFTP=y; \
+-	 echo CONFIG_FEATURE_TFTP_GET=y; \
+-	 echo CONFIG_FEATURE_TFTP_PUT=y; \
+-	 echo CONFIG_TRUE=y; \
+-	 echo CONFIG_UMOUNT=y; \
+-	 echo CONFIG_FEATURE_UMOUNT_ALL=y; \
+-	 echo CONFIG_UNAME=y; \
+-	) > $(BUSYBOX_INITRAMFS_DIR)/.config
+-	cp -f $(BUSYBOX_INITRAMFS_DIR)/.config \
+-		$(BUSYBOX_INITRAMFS_DIR)/.config.prune
+-	$(SED) 's|\([^=]*\)=.*|/\1[^_]*/d|g' \
+-		$(BUSYBOX_INITRAMFS_DIR)/.config.prune
+-	$(SED) '' -f $(BUSYBOX_INITRAMFS_DIR)/.config.prune \
+-		$(BUSYBOX_INITRAMFS_DIR)/.config.no
+-	cat $(BUSYBOX_INITRAMFS_DIR)/.config.no >> \
+-		$(BUSYBOX_INITRAMFS_DIR)/.config
+-	yes "" | $(MAKE) CC=$(TARGET_CC) CROSS_COMPILE="$(TARGET_CROSS)" \
+-		CROSS="$(TARGET_CROSS)" -C $(BUSYBOX_INITRAMFS_DIR) \
+-		oldconfig
+-	touch $@
+-
+-
+-$(BUSYBOX_INITRAMFS_DIR)/busybox: $(BUSYBOX_INITRAMFS_DIR)/.configured
+-	$(MAKE) CC=$(TARGET_CC) CROSS_COMPILE="$(TARGET_CROSS)" \
+-		CROSS="$(TARGET_CROSS)" PREFIX="$(TARGET_DIR)" \
+-		ARCH=$(KERNEL_ARCH) \
+-		EXTRA_CFLAGS="$(TARGET_CFLAGS)" -C $(BUSYBOX_INITRAMFS_DIR) \
+-		busybox.links busybox
+-
+-$(BR2_INITRAMFS_DIR)/bin/busybox: $(BUSYBOX_INITRAMFS_DIR)/busybox
+-	$(MAKE) CC=$(TARGET_CC) CROSS_COMPILE="$(TARGET_CROSS)" \
+-		CROSS="$(TARGET_CROSS)" \
+-		ARCH=$(KERNEL_ARCH) STRIP="$(STRIPCMD)" \
+-		EXTRA_CFLAGS="$(TARGET_CFLAGS)" -C $(BUSYBOX_INITRAMFS_DIR) \
+-		install
+-	$(STRIPCMD) $(STRIP_STRIP_ALL) $@
+-
+-
+-$(BB_INITRAMFS_TARGET): host-fakeroot $(BR2_INITRAMFS_DIR)/bin/busybox
+-	ln -fs bin/busybox $(BUILD_DIR)/initramfs/init
+-	mkdir -p $(BUILD_DIR)/initramfs/etc
+-	cat target/generic/target_busybox_skeleton/etc/inittab > \
+-		$(BUILD_DIR)/initramfs/etc/inittab
+-	rm -f $(BUILD_DIR)/_fakeroot.$(notdir $(BB_INITRAMFS_TARGET))
+-	(echo "chown -R 0:0 $(BUILD_DIR)/initramfs"; \
+-	 echo "$(HOST_DIR)/usr/bin/makedevs -d $(TARGET_DEVICE_TABLE) $(BUILD_DIR)/initramfs"; \
+-	 echo "$(SHELL) target/initramfs/gen_initramfs_list.sh -u 0 -g 0 $(BUILD_DIR)/initramfs > $(BB_INITRAMFS_TARGET)"; \
+-	) > $(BUILD_DIR)/_fakeroot.$(notdir $(BB_INITRAMFS_TARGET))
+-	chmod +x $(BUILD_DIR)/_fakeroot.$(notdir $(BB_INITRAMFS_TARGET))
+-	$(HOST_DIR)/usr/bin/fakeroot -- \
+-		$(BUILD_DIR)/_fakeroot.$(notdir $(BB_INITRAMFS_TARGET))
+-	rm -f $(BUILD_DIR)/_fakeroot.$(notdir $(BB_INITRAMFS_TARGET))
+-	touch -c $@
+-
+-$(BUILD_DIR)/.initramfs_done: $(BR2_INITRAMFS_DIR)/bin/busybox \
+-					$(BB_INITRAMFS_TARGET)
+-	touch $@
+-
+-busybox-initramfs-source:
+-busybox-initramfs: $(BUILD_DIR)/.initramfs_done
+-
+-busybox-initramfs-menuconfig: host-sed $(BUILD_DIR) busybox-source $(BUSYBOX_INITRAMFS_DIR)/.configured
+-	$(MAKE) __TARGET_ARCH=$(ARCH) -C $(BUSYBOX_INITRAMFS_DIR) menuconfig
+-
+-busybox-initramfs-clean:
+-	rm -f $(BUSYBOX_INITRAMFS_DIR)/busybox $(BUILD_DIR)/.initramfs_*
+-	rm -rf $(BR2_INITRAMFS_DIR) $(BB_INITRAMFS_TARGET)
+-	-$(MAKE) -C $(BUSYBOX_INITRAMFS_DIR) clean
+-
+-busybox-initramfs-dirclean:
+-	rm -rf $(BUSYBOX_INITRAMFS_DIR) $(BR2_INITRAMFS_DIR) \
+-		$(BUILD_DIR)/.initramfs_*
+-endif
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_BUSYBOX_INITRAMFS),y)
+-TARGETS+=busybox-initramfs
+-endif
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
