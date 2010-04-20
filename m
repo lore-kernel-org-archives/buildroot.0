@@ -1,17 +1,22 @@
-From: Will Wagner <will_wagner@carallon.com>
-Date: Tue, 20 Apr 2010 15:31:01 +0100
-Subject: [Buildroot] [PATCH] initramfs: fix init symlink
-Message-ID: <1271773861-26198-1-git-send-email-will_wagner@carallon.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 20 Apr 2010 16:54:50 +0200
+Subject: [Buildroot] [git commit master] initramfs: fix init symlink
+Message-ID: <20100420145504.2255920BA9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+
+commit: http://git.buildroot.net/buildroot/commit/?id=4ddb427ef96ac5e1786a9ea00e38ebc65cb2d166
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
 When initramfs was ported to the new fs structure the init symlink
 macro was defined, but forgot to add it to PRE_GEN_HOOKS
 
 Signed-off-by: Will Wagner <will_wagner@carallon.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
  fs/initramfs/initramfs.mk |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
@@ -30,4 +35,4 @@ index 9aaf1b0..3e81567 100644
  	$(SHELL) fs/initramfs/gen_initramfs_list.sh -u 0 -g 0 $(TARGET_DIR) > $$@
  endef
 -- 
-1.7.0
+1.6.3.3
