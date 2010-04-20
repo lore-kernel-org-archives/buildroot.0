@@ -1,38 +1,26 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 20 Apr 2010 09:12:39 +0200
-Subject: [Buildroot] [git commit master] target: really remove the
-	target/*/*.mk include
-Message-ID: <20100420071958.1C9968B79D@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 20 Apr 2010 09:30:32 +0200
+Subject: [Buildroot] [PATCH v2] toolchain/binutils: Improve arm linking
+	performance
+In-Reply-To: <1271713291-27457-1-git-send-email-lwalkera@ieee.org> (Laine
+	Walker-Avina's message of "Mon, 19 Apr 2010 14:41:31 -0700")
+References: <78w8jcma5.fsf@macbook.be.48ers.dk>
+	<1271713291-27457-1-git-send-email-lwalkera@ieee.org>
+Message-ID: <87mxwybmxz.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Laine" == Laine Walker-Avina <lwalkera@ieee.org> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d3a1233fbaa434b24291b6f5f245d2a748e70510
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Laine> Backported a patch from CVS that improves linking times for large
+ Laine> projects (eg 700s to 6s). See
+ Laine> http://old.nabble.com/-PATCH--Reduce-ARM-linking-time-tt27961038.html
+ Laine> for the original.
 
-Commit 5faae4869027 claimed to do this, but it didn't - Causing
-make to error out.
+Committed, thanks.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- target/Makefile.in |    2 --
- 1 files changed, 0 insertions(+), 2 deletions(-)
-
-diff --git a/target/Makefile.in b/target/Makefile.in
-index 48396d5..afe96a7 100644
---- a/target/Makefile.in
-+++ b/target/Makefile.in
-@@ -62,8 +62,6 @@ ifeq ($(BR2_TARGET_UBOOT),y)
- include target/u-boot/Makefile.in
- endif
- 
--include target/*/*.mk
--
- # kernel rules
- # We already did add the kernel target to TARGETS and now just pull in the rules
- # to actually build this target.
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
