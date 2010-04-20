@@ -1,33 +1,31 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 20 Apr 2010 11:50:33 +0200
-Subject: [Buildroot] Missing something. (Error?)
-In-Reply-To: <q2nf70863321004190259lbcec9a85u99a62dcfc1d332e3@mail.gmail.com>
-	(Muhammed ER's message of "Mon, 19 Apr 2010 12:59:53 +0300")
-References: <q2nf70863321004190259lbcec9a85u99a62dcfc1d332e3@mail.gmail.com>
-Message-ID: <87fx2qbggm.fsf@macbook.be.48ers.dk>
+Date: Tue, 20 Apr 2010 11:53:53 +0200
+Subject: [Buildroot] ARM build fails on 64-bit host (tries linking with
+	host libs?)
+In-Reply-To: <L163I0$91EE4FE6D33E4ACEA13C654C3E2F6E7E@aruba.it> (Luca
+	Ceresoli's message of "Tue, 20 Apr 2010 10:56:24 +0200")
+References: <L163I0$91EE4FE6D33E4ACEA13C654C3E2F6E7E@aruba.it>
+Message-ID: <87bpdebgb2.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Muhammed" == Muhammed ER <er.muhammed@gmail.com> writes:
+>>>>> "Luca" == Luca Ceresoli <list@lucaceresoli.net> writes:
 
- Muhammed> Hi,
- Muhammed> I use buildroot last stable version
- Muhammed> ( http://buildroot.net/downloads/buildroot-2010.02.tar.gz )
+Hi,
 
- Muhammed> Selected : Build/install Objective-C compiler and runtime?
+ Luca> But my point in this ml is: why does the compilation of directfb have
+ Luca> -L/usr/lib in its commandline?
 
-Are you really sure you need an objective C compiler? Objc is normally
-only used by Apple developers. The objC stuff was added long time ago,
-and I don't recall anyone ever using it, so it might very well be
-broken.
+That seems wrong indeed.
 
-Are you perhaps looking for C++ support instead?
+ Luca> Any clues?
+ Luca> Anybody else working on 64-bit machines?
 
-I gather we should get rid of the ObjC and Fortran options as they
-probably don't work anyway.
+Yes, I'm building directfb and Qt here on 64bit (Debian) without any
+problems, but with an internal toolchain, rather than CT-NG.
 
 -- 
 Bye, Peter Korsgaard
