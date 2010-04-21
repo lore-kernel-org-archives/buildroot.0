@@ -1,7 +1,9 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Wed, 21 Apr 2010 18:33:02 +0000 (UTC)
-Subject: [Buildroot] Still can't build
-	workingrootfswith	crosstool-NGtoolchain
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 21 Apr 2010 20:43:59 +0200
+Subject: [Buildroot] Still can't build working
+	rootfswith	crosstool-NGtoolchain
+In-Reply-To: <hqn98s$5sn$1@dough.gmane.org> (Grant Edwards's message of "Wed, 
+	21 Apr 2010 16:31:24 +0000 (UTC)")
 References: <hqhq8e$uau$1@dough.gmane.org>
 	<8D63FCBEC4B04D56B92C74260683A038@development>
 	<028801cae0e3$3ebe5720$bc3b0560$@com>
@@ -9,40 +11,40 @@ References: <hqhq8e$uau$1@dough.gmane.org>
 	<hqn0op$14i$1@dough.gmane.org>
 	<82069254E03F44CB90EDB741DB18CBF9@development>
 	<hqn98s$5sn$1@dough.gmane.org>
-	<8035C465416D4C9D8992B2CB364F236E@development>
-Message-ID: <hqngcu$47r$1@dough.gmane.org>
+Message-ID: <87sk6o7ij4.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2010-04-21, Microbit_P43000 <microbit@virginbroadband.com.au> wrote:
+>>>>> "Grant" == Grant Edwards <grant.b.edwards@gmail.com> writes:
 
-> Indeed, the time I mention is a complete make from scratch.
-> Xcompiler, utils, libc, busybox, rootfs, etc.... It doesn't have to
-> include the kernel, that takes all but 5 mins. This is on a P4 dual
-> CPU 3 GHz (albeit with only 1 GB ram).
+Hi,
 
-The toolchain is probably 90+ percent of that.  I think you'll be far
-happier if you use an external toolchain.
+ >> At one stage the whole cycle took ~ 1 hour 15 mins. Common sense had
+ >> to prevail I guess - it's just a lot faster than chasing ghosts - it
+ >> seems that your experience matches the observations I made.
 
-> I've tried external tools like codesourcery (which I dislike) and
-> arm-elf-gcc and likes. Either I ran into sysroot problems, or their
-> were hissies being thrown about 90% through building, that sort of
-> stuff - yet again off a Sherlock Holmes to figure out in scripts
-> where these mysterious 'issues' come from.
+ Grant> If it's taking that long, I suspect you're also building a
+ Grant> toolchain and kernel everytime.  When I realized that partial
+ Grant> rebuilds weren't practical, I switched to using an external
+ Grant> toolchain.  With an external toolchain and an external download
+ Grant> directory, doing a from-scratch basic rootfs build takes about
+ Grant> 6-7 minutes on a single CPU, 2GHz AMD Athlon64.
 
-AFAIK, most of the buildroot developers use external toolchains built
-by crosstools-NG (and that's what I'm now using), so that's probably
-the path of least resistance.  If you like, I can send you the
-crosstools-NG and uClibc config files I'm using for ARM9, but 
-Crosstools-NG comes with quite a few sample configs -- one of them is
-probably pretty close to what you want.
+FYI, I do full builds (internal toolchain including C++, a number of
+packages including Qt, U-Boot and Linux kernel) in about 25 mins on a
+2.8GHz i7 (buildbot server)
 
-Just pay close attention to ARM EABI vs. OABI.
+ Grant> Once you've got a kernel configuration figured out and set in stone,
+ Grant> it could be useful to have the kernel built by buildroot, but it
+ Grant> doesn't seem to be a paractical way to do kernel development.
+
+Agreed. Doing these things with BR is mainly interesting as a
+structured integration tool when the basics are stable - E.G. to ensure
+you have everything under configuration control and can reproduce the
+build.
 
 -- 
-Grant Edwards               grant.b.edwards        Yow! As President I have
-                                  at               to go vacuum my coin
-                              gmail.com            collection!
+Bye, Peter Korsgaard
