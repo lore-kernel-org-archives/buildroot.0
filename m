@@ -1,48 +1,35 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 21 Apr 2010 16:02:29 +0200
-Subject: [Buildroot] [git commit master] usbutils need libusb-compat
-Message-ID: <20100421140604.067D98DC92@busybox.osuosl.org>
+From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+Date: Wed, 21 Apr 2010 17:06:19 +0300
+Subject: [Buildroot] Anyone working on install-able packages (ipkg)
+In-Reply-To: <20100417023037.1bd96a69@surf>
+References: <4BC61E50.4000902@gmail.com> <20100415164504.11822b4a@surf>
+	<20100417023037.1bd96a69@surf>
+Message-ID: <n2sbadfd5ba1004210706ycdefbd3eva241366c36c86d83@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Sat, Apr 17, 2010 at 3:30 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> On Thu, 15 Apr 2010 16:45:04 +0200
+> Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+>
+> Paulius, do you have an idea on how you'd like to handle ipkg
+> generation ? I have questions like :
+>
+> ?* How do you handle dependencies ? As of today, the dependencies in
+> ? Buildroot are expressed in terms of *source* dependencies, not
+> ? *binary* dependencies.
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ab0a176febabb9762ee0c9c04eac1ed45cb74947
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Yes, that is problem... but source dependencies are quite close to binary ones.
+Bigger problem is host dependencies and here we may need to split dependencies.
 
-Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/usbutils/Config.in   |    2 +-
- package/usbutils/usbutils.mk |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> ?* What do you put in the package ? The files usually installed in
+> ? $(TARGET_DIR) ? How do we modify the package infrastructure so that
+> ? the package installs its files to another location ?
 
-diff --git a/package/usbutils/Config.in b/package/usbutils/Config.in
-index 23004d9..6e54352 100644
---- a/package/usbutils/Config.in
-+++ b/package/usbutils/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_USBUTILS
- 	bool "usbutils"
--	select BR2_PACKAGE_LIBUSB
-+	select BR2_PACKAGE_LIBUSB_COMPAT
- 	help
- 	  USB enumeration utilities
- 
-diff --git a/package/usbutils/usbutils.mk b/package/usbutils/usbutils.mk
-index ef01403..880a2c8 100644
---- a/package/usbutils/usbutils.mk
-+++ b/package/usbutils/usbutils.mk
-@@ -6,7 +6,7 @@
- 
- USBUTILS_VERSION = 0.86
- USBUTILS_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/linux-usb/
--USBUTILS_DEPENDENCIES = host-pkg-config
-+USBUTILS_DEPENDENCIES = host-pkg-config libusb-compat
- 
- ifeq ($(BR2_PACKAGE_USBUTILS_ZLIB),y)
- 	USBUTILS_DEPENDENCIES += zlib
--- 
-1.6.3.3
+Yes, files usually installed into TARGET_DIR would be installed into some temp
+dir and then packaged with ipkg. I have no idea how to modify
+infrastructure yet.
