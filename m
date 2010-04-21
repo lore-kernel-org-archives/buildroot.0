@@ -1,27 +1,25 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 21 Apr 2010 10:38:40 +0200
-Subject: [Buildroot] [PATCH]Add support to linux 2.6.30 kernel patches
-	for Atmel arm in menuconfig
-In-Reply-To: <C83D7CE8356557448A893798C8F9931D053694E2@frimb01.corp.atmel.com>
-	(Josh Wu's message of "Wed, 21 Apr 2010 07:21:08 +0200")
-References: <C83D7CE8356557448A893798C8F9931D050E1FA9@frimb01.corp.atmel.com>
-	<87d3y2fhg8.fsf@macbook.be.48ers.dk>
-	<C83D7CE8356557448A893798C8F9931D053694E2@frimb01.corp.atmel.com>
-Message-ID: <87ljch8ajz.fsf@macbook.be.48ers.dk>
+Date: Wed, 21 Apr 2010 10:40:44 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	codesourcery-toolchain-support
+In-Reply-To: <cover.1271463088.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Sat, 17 Apr 2010 02:12:18 +0200")
+References: <cover.1271463088.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87hbn58agj.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Josh" == Wu, Josh <Josh.wu@atmel.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Josh> Hi, Peter
- Josh> Sorry for the late response since I was in travel those days.
- Josh> Now the latest kernel support is 2.6.30. In the near future we
- Josh> will update the latest version.
+ Thomas> Hello,
+ Thomas> Here is a resend of my CodeSourcery external toolchain support patch
+ Thomas> set. I've fixed the merge conflict that Peter had, which was the only
+ Thomas> feedback I received on this patchset.
 
-Ok, committed - Thanks.
+Pulled and pushed, thanks!
 
 -- 
 Bye, Peter Korsgaard
