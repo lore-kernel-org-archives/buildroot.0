@@ -1,35 +1,38 @@
-From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
-Date: Wed, 21 Apr 2010 17:06:19 +0300
-Subject: [Buildroot] Anyone working on install-able packages (ipkg)
-In-Reply-To: <20100417023037.1bd96a69@surf>
-References: <4BC61E50.4000902@gmail.com> <20100415164504.11822b4a@surf>
-	<20100417023037.1bd96a69@surf>
-Message-ID: <n2sbadfd5ba1004210706ycdefbd3eva241366c36c86d83@mail.gmail.com>
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Wed, 21 Apr 2010 14:06:18 +0000 (UTC)
+Subject: [Buildroot] Still can't build working rootfs
+	with	crosstool-NGtoolchain
+References: <hqhq8e$uau$1@dough.gmane.org>
+	<8D63FCBEC4B04D56B92C74260683A038@development>
+	<028801cae0e3$3ebe5720$bc3b0560$@com>
+	<5D7DDABC417D46CFACF64003BB0EBC2F@development>
+Message-ID: <hqn0op$14i$1@dough.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Apr 17, 2010 at 3:30 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> On Thu, 15 Apr 2010 16:45:04 +0200
-> Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+On 2010-04-21, Microbit_P43000 <microbit@virginbroadband.com.au> wrote:
+
+> It's a while ago I've been through this - but the common denominator
+> of course is the fact that the lib is dynamically linked. The config
+> of float/lib is just fine - it compiles on a fresh install - or
+> consequent builds for my rootfs, Nano runs perfect - no problemo.
 >
-> Paulius, do you have an idea on how you'd like to handle ipkg
-> generation ? I have questions like :
->
-> ?* How do you handle dependencies ? As of today, the dependencies in
-> ? Buildroot are expressed in terms of *source* dependencies, not
-> ? *binary* dependencies.
+> I just couldn't pin down _what_ exactly triggers BR2 to "remake"
+> itself completely. It mostly would happen *after* I change a simple
+> option in Busybox - of all things. How exactly does that warrant
+> RE-building the whole install (incl internal toolchain) ???
 
-Yes, that is problem... but source dependencies are quite close to binary ones.
-Bigger problem is host dependencies and here we may need to split dependencies.
+I never do anything with buildroot other than complete ground-up
+builds from scratch.  Despite the documented ways to do partial
+rebuilds, I was never able to reliably do a parial rebuild.  After
+several instances of spending hours or days chasing problems that went
+away after a complete re-build, I simply gave up on doing anything
+other than building from zero.
 
-> ?* What do you put in the package ? The files usually installed in
-> ? $(TARGET_DIR) ? How do we modify the package infrastructure so that
-> ? the package installs its files to another location ?
-
-Yes, files usually installed into TARGET_DIR would be installed into some temp
-dir and then packaged with ipkg. I have no idea how to modify
-infrastructure yet.
+-- 
+Grant Edwards               grant.b.edwards        Yow! Where do your SOCKS
+                                  at               go when you lose them in
+                              gmail.com            th' WASHER?
