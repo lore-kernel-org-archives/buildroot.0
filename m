@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 21 Apr 2010 10:40:30 +0200
-Subject: [Buildroot] [git commit master] external-toolchain: support
-	libraries outside of /lib
-Message-ID: <20100421084101.3CD5F20E96@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] busybox: make sure architecture
+	flags are used at link time
+Message-ID: <20100421084101.AA87E20E9E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,71 +10,68 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ea2505ee567f716f6b2aeae45ccfe2555c0bcb97
+commit: http://git.buildroot.net/buildroot/commit/?id=55098e50488eeb163af8f63445bd3e7c52850410
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The copy_toolchain_lib_root function was making the assumption that
-all libraries were stored inside the /lib directory of the sysroot
-directory. However, this isn't true for certain toolchains,
-particularly for the libstdc++ library.
+When compiling Busybox, according to readelf -A, all object files were
+properly compiled according to the select architecture (-march=armv4t
+for example), but the final busybox binary could be of a different
+architecture (ARMv5t even if ARMv4t was selected).
 
-The function is therefore reworked to find the library and its related
-symlink either in /lib or /usr/lib in the sysroot, and copies it at
-the same location in the target directory.
+This patch changes the way we configure/compile Busybox so that our
+CFLAGS aren't anymore passed through the make EXTRA_CFLAGS variable,
+but through the .config CONFIG_EXTRA_CFLAGS variable. Unfortunately,
+those variables don't have exactly the same semantic for the Busybox
+build system.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/external-toolchain/ext-tool.mk |   23 +++++++++++++----------
- 1 files changed, 13 insertions(+), 10 deletions(-)
+ package/busybox/busybox-1.13.x.config |    1 +
+ package/busybox/busybox.mk            |    8 ++++----
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/toolchain/external-toolchain/ext-tool.mk b/toolchain/external-toolchain/ext-tool.mk
-index 4493281..29a5cca 100644
---- a/toolchain/external-toolchain/ext-tool.mk
-+++ b/toolchain/external-toolchain/ext-tool.mk
-@@ -1,3 +1,4 @@
-+
+diff --git a/package/busybox/busybox-1.13.x.config b/package/busybox/busybox-1.13.x.config
+index ee59162..059a0b3 100644
+--- a/package/busybox/busybox-1.13.x.config
++++ b/package/busybox/busybox-1.13.x.config
+@@ -47,6 +47,7 @@ CONFIG_FEATURE_SYSLOG=y
+ # CONFIG_FEATURE_SHARED_BUSYBOX is not set
+ # CONFIG_LFS is not set
+ CONFIG_CROSS_COMPILER_PREFIX=""
++CONFIG_EXTRA_CFLAGS=""
+ 
  #
- # This file implements the support for external toolchains, i.e
- # toolchains that have not been produced by Buildroot itself and that
-@@ -45,27 +46,29 @@ copy_toolchain_lib_root = \
- 	DST="$(strip $3)"; \
- 	STRIP="$(strip $4)"; \
-  \
--	LIB_DIR="$${SYSROOT_DIR}/lib" ; \
--	for FILE in `find $${LIB_DIR} -maxdepth 1 -name "$${LIB}.*"`; do \
-+	LIBS=`(cd $${SYSROOT_DIR}; find . -path "./lib/$${LIB}.*" -o -path "./usr/lib/$${LIB}.*")` ; \
-+	for FILE in $${LIBS} ; do \
- 		LIB=`basename $${FILE}`; \
-+		LIBDIR=`dirname $${FILE}` ; \
- 		while test \! -z "$${LIB}"; do \
--			rm -fr $(TARGET_DIR)$${DST}/$${LIB}; \
--			mkdir -p $(TARGET_DIR)$${DST}; \
--			if test -h $${LIB_DIR}/$${LIB}; then \
--				cp -d $${LIB_DIR}/$${LIB} $(TARGET_DIR)$${DST}/; \
--			elif test -f $${LIB_DIR}/$${LIB}; then \
--				$(INSTALL) -D -m0755 $${LIB_DIR}/$${LIB} $(TARGET_DIR)$${DST}/$${LIB}; \
-+			FULLPATH="$${SYSROOT_DIR}/$${LIBDIR}/$${LIB}" ; \
-+			rm -fr $(TARGET_DIR)/$${LIBDIR}/$${LIB}; \
-+			mkdir -p $(TARGET_DIR)/$${LIBDIR}; \
-+			if test -h $${FULLPATH} ; then \
-+				cp -d $${FULLPATH} $(TARGET_DIR)/$${LIBDIR}/; \
-+			elif test -f $${FULLPATH}; then \
-+				$(INSTALL) -D -m0755 $${FULLPATH} $(TARGET_DIR)/$${LIBDIR}/$${LIB}; \
- 				case "$${STRIP}" in \
- 				(0 | n | no) \
- ;; \
- 				(*) \
--					$(TARGET_CROSS)strip "$(TARGET_DIR)$${DST}/$${LIB}"; \
-+					$(TARGET_CROSS)strip "$(TARGET_DIR)/$${LIBDIR}/$${LIB}"; \
- ;; \
- 				esac; \
- 			else \
- 				exit -1; \
- 			fi; \
--			LIB="`readlink $${LIB_DIR}/$${LIB}`"; \
-+			LIB="`readlink $${FULLPATH}`"; \
- 		done; \
- 	done; \
-  \
+ # Debugging Options
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index c93f33a..05a6d94 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -45,6 +45,8 @@ $(BUSYBOX_DIR)/.config: $(BUSYBOX_DIR)/.unpacked $(BUSYBOX_CONFIG_FILE)
+ 	cp -f $(BUSYBOX_CONFIG_FILE) $(BUSYBOX_DIR)/.config
+ 	$(SED) s,^CONFIG_PREFIX=.*,CONFIG_PREFIX=\"$(TARGET_DIR)\", \
+ 		$(BUSYBOX_DIR)/.config
++	$(SED) 's,^CONFIG_EXTRA_CFLAGS=.*,CONFIG_EXTRA_CFLAGS=\"$(BUSYBOX_CFLAGS)\",' \
++		$(BUSYBOX_DIR)/.config
+ # id applet breaks on >=1.13.0 with old uclibc unless the bb pwd routines are used
+ ifeq ($(BR2_BUSYBOX_VERSION_1_13_X)$(BR2_BUSYBOX_VERSION_1_14_X)$(BR2_UCLIBC_VERSION_0_9_28_3)$(BR2_UCLIBC_VERSION_0_9_29),yy)
+ 	if grep -q 'CONFIG_ID=y' $(BUSYBOX_DIR)/.config; \
+@@ -105,15 +107,13 @@ endif
+ $(BUSYBOX_DIR)/busybox: $(BUSYBOX_DIR)/.config
+ 	$(MAKE) CC=$(TARGET_CC) CROSS_COMPILE="$(TARGET_CROSS)" \
+ 		CROSS="$(TARGET_CROSS)" PREFIX="$(TARGET_DIR)" \
+-		ARCH=$(KERNEL_ARCH) \
+-		EXTRA_CFLAGS="$(BUSYBOX_CFLAGS)" -C $(BUSYBOX_DIR)
++		ARCH=$(KERNEL_ARCH) -C $(BUSYBOX_DIR)
+ 
+ $(TARGET_DIR)/bin/busybox: $(BUSYBOX_DIR)/busybox
+ ifeq ($(BR2_PACKAGE_BUSYBOX_FULLINSTALL),y)
+ 	$(MAKE) CC=$(TARGET_CC) CROSS_COMPILE="$(TARGET_CROSS)" \
+ 		CROSS="$(TARGET_CROSS)" PREFIX="$(TARGET_DIR)" \
+-		ARCH=$(KERNEL_ARCH) \
+-		EXTRA_CFLAGS="$(BUSYBOX_CFLAGS)" -C $(BUSYBOX_DIR) install
++		ARCH=$(KERNEL_ARCH) -C $(BUSYBOX_DIR) install
+ else
+ 	install -D -m 0755 $(BUSYBOX_DIR)/busybox $(TARGET_DIR)/bin/busybox
+ endif
 -- 
 1.6.3.3
