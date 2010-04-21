@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 21 Apr 2010 10:40:30 +0200
-Subject: [Buildroot] [git commit master] external toolchains: take into
-	account architecture variant
-Message-ID: <20100421084100.DEC3620E96@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] external-toolchain: Support for
+	multilib toolchains
+Message-ID: <20100421084101.6EFE420E9E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,14 +10,234 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7b7a4be0e1d59b9218b6145331c700ac8199e24e
+commit: http://git.buildroot.net/buildroot/commit/?id=05c75314c9f8f06522d520d2ea9e6d84d3db3668
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Until now, many TARGET_CFLAGS where missing when using an external
-toolchain, due to how package/Makefile.in was written. Now, a lot more
-definitions are common between the Buildroot toolchain case and the
-external toolchain case.
+Multilib toolchains provide different versions of the base libraries
+for different architecture variants. For example, the ARM Codesourcery
+toolchain provides base libraries for ARMv5 (default), ARMv4t and
+Thumb2.
+
+Depending on the -march= argument passed to gcc, the sysroot used by
+the compiler is therefore different. This means that the sysroot
+location in CROSS-gcc -v cannot be used. Instead, we must use
+CROSS-gcc -print-sysroot when available and fall back to the old way
+if unavailable.
+
+Moreover, we cannot simply copy the full sysroot as we used to do,
+because the sysroot organization of multilib toolchain is more
+complicated. In Codesourcery toolchains, we have :
+
+ /
+   etc      -- for ARMv5
+   lib      -- for ARMv5
+   sbin     -- for ARMv5
+   usr      -- for ARMv5 (includes headers)
+   armv4t
+     etc    -- for ARMv4t
+     lib    -- for ARMv4t
+     sbin   -- for ARMv4t
+     usr    -- for ARMv4t (no headers!)
+   thumb2
+     etc    -- for Thumb2
+     lib    -- for Thumb2
+     sbin   -- for Thumb2
+     usr    -- for Thumb2 (no headers!)
+
+So we have the default ARMv5 architecture variant that is installed in
+the main directory, and we have subdirectories for the ARMv4t and
+Thumb2 architecture variants.
+
+Copying the full sysroot to the staging directory doesn't work. All
+our packages are based on the fact that they should install libraries
+in staging/usr/lib. But if ARMv4t is used, the compiler would only
+look in staging/armv4t/usr/lib for libraries (even when overriding the
+sysroot with the --sysroot option, the multilib compiler suffixes the
+sysroot directory with the architecture variant if it matches a
+recognized one).
+
+Therefore, we have to copy only the sysroot that we are interested
+in. This is rendered a little bit complicated by the fact that the
+armv4t and thumb2 sysroot do not contain the headers since they are
+shared with the armv5 sysroot.
+
+So, this patch :
+
+ * Modifies how we compute SYSROOT_DIR in order to use -print-sysroot
+   if it exists. SYSROOT_DIR contains the location of the main sysroot
+   directory, i.e the sysroot for the default architecture variant.
+
+ * Defines ARCH_SUBDIR as the subdirectory in the main sysroot for the
+   currently selected architecture variant (in our case, it can be
+   ".", "armv4t" or "thumb2"). ARCH_SYSROOT_DIR is defined as the full
+   path to the sysroot of the currently selected architecture variant.
+
+ * Modifies copy_toolchain_lib_root (which copies a library to the
+   target/ directory) so that libraries are taken from
+   ARCH_SYSROOT_DIR instead of SYSROOT_DIR. This ensures that
+   libraries for the correct architecture variant are properly copied
+   to the target.
+
+ * Modifies copy_toolchain_sysroot (which copies the sysroot to the
+   staging/ directory), so that it copies the contents of
+   ARCH_SYSROOT_DIR, and if needed, adds the headers from the main
+   sysroot directory and a symbolic link (armv4t -> . or thumb2 -> .)
+   to make the compiler believe that its sysroot is really in armv4t/
+   or thumb2/.
+
+Tested with Codesourcery 2009q1 ARM toolchain, Crosstool-NG ARM glibc
+and ARM uClibc toolchains.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/external-toolchain/ext-tool.mk |   90 ++++++++++++++++++++++++++----
+ 1 files changed, 79 insertions(+), 11 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/toolchain/external-toolchain/ext-tool.mk b/toolchain/external-toolchain/ext-tool.mk
+index 29a5cca..2c2562c 100644
+--- a/toolchain/external-toolchain/ext-tool.mk
++++ b/toolchain/external-toolchain/ext-tool.mk
+@@ -2,7 +2,12 @@
+ #
+ # This file implements the support for external toolchains, i.e
+ # toolchains that have not been produced by Buildroot itself and that
+-# are already available on the system on which Buildroot runs.
++# are already available on the system on which Buildroot runs. So far,
++# we have tested this with:
++#
++#  * Toolchains generated by Crosstool-NG
++#  * Toolchains generated by Buildroot
++#  * ARM toolchains made available by Codesourcery
+ #
+ # The basic principle is the following
+ #
+@@ -35,23 +40,22 @@
+ # directory to the target directory. Also optionaly strips the
+ # library.
+ #
+-# $1: sysroot directory
++# $1: arch specific sysroot directory
+ # $2: library name
+ # $3: destination directory
+ # $4: strip (y|n), default is to strip
+ #
+ copy_toolchain_lib_root = \
+-	SYSROOT_DIR="$(strip $1)"; \
++	ARCH_SYSROOT_DIR="$(strip $1)"; \
+ 	LIB="$(strip $2)"; \
+-	DST="$(strip $3)"; \
+ 	STRIP="$(strip $4)"; \
+  \
+-	LIBS=`(cd $${SYSROOT_DIR}; find . -path "./lib/$${LIB}.*" -o -path "./usr/lib/$${LIB}.*")` ; \
++	LIBS=`(cd $${ARCH_SYSROOT_DIR}; find . -path "./lib/$${LIB}.*" -o -path "./usr/lib/$${LIB}.*")` ; \
+ 	for FILE in $${LIBS} ; do \
+ 		LIB=`basename $${FILE}`; \
+ 		LIBDIR=`dirname $${FILE}` ; \
+ 		while test \! -z "$${LIB}"; do \
+-			FULLPATH="$${SYSROOT_DIR}/$${LIBDIR}/$${LIB}" ; \
++			FULLPATH="$${ARCH_SYSROOT_DIR}/$${LIBDIR}/$${LIB}" ; \
+ 			rm -fr $(TARGET_DIR)/$${LIBDIR}/$${LIB}; \
+ 			mkdir -p $(TARGET_DIR)/$${LIBDIR}; \
+ 			if test -h $${FULLPATH} ; then \
+@@ -76,13 +80,54 @@ copy_toolchain_lib_root = \
+ 
+ #
+ # Copy the full external toolchain sysroot directory to the staging
+-# dir
++# dir. The operation of this function is rendered a little bit
++# complicated by the support for multilib toolchains.
+ #
+-# $1: sysroot directory
++# We start by copying etc, lib, sbin and usr from the sysroot of the
++# selected architecture variant (as pointed by ARCH_SYSROOT_DIR). This
++# allows to import into the staging directory the C library and
++# companion libraries for the correct architecture variant. We
++# explictly only copy etc, lib, sbin and usr since other directories
++# might exist for other architecture variants (on Codesourcery
++# toolchain, the sysroot for the default architecture variant contains
++# the armv4t and thumb2 subdirectories, which are the sysroot for the
++# corresponding architecture variants), and we don't want to import
++# them.
++#
++# Then, if the selected architecture variant is not the default one
++# (i.e, if SYSROOT_DIR != ARCH_SYSROOT_DIR), then we :
++#
++#  * Import the header files from the default architecture
++#    variant. Header files are typically shared between the sysroots
++#    for the different architecture variants. If we use the
++#    non-default one, header files were not copied by the previous
++#    step, so we copy them here from the sysroot of the default
++#    architecture variant.
++#
++#  * Create a symbolic link that matches the name of the subdirectory
++#    for the architecture variant in the original sysroot. This is
++#    required as the compiler will by default look in
++#    sysroot_dir/arch_variant/ for libraries and headers, when the
++#    non-default architecture variant is used. Without this, the
++#    compiler fails to find libraries and headers.
++#
++# $1: main sysroot directory of the toolchain
++# $2: arch specific sysroot directory of the toolchain
++# $3: arch specific subdirectory in the sysroot
+ #
+ copy_toolchain_sysroot = \
+ 	SYSROOT_DIR="$(strip $1)"; \
+-	cp -a $${SYSROOT_DIR}/* $(STAGING_DIR)/ ; \
++	ARCH_SYSROOT_DIR="$(strip $2)"; \
++	ARCH_SUBDIR="$(strip $3)"; \
++	for i in etc lib sbin usr ; do \
++		cp -a $${ARCH_SYSROOT_DIR}/$$i $(STAGING_DIR)/ ; \
++	done ; \
++	if [ `readlink -f $${SYSROOT_DIR}` != `readlink -f $${ARCH_SYSROOT_DIR}` ] ; then \
++		if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
++			cp -a $${SYSROOT_DIR}/usr/include $(STAGING_DIR)/usr ; \
++		fi ; \
++		ln -s . $(STAGING_DIR)/$(ARCH_SUBDIR) ; \
++	fi ; \
+ 	find $(STAGING_DIR) -type d | xargs chmod 755
+ 
+ #
+@@ -208,7 +253,30 @@ ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+ EXTERNAL_LIBS+=libstdc++.so
+ endif
+ 
++# SYSROOT_DIR selection. We first try the -print-sysroot option,
++# available in gcc 4.4.x and in some Codesourcery toolchains. If this
++# option is not available, we fallback to the value of --with-sysroot
++# as visible in CROSS-gcc -v. We don't pass the -march= option to gcc
++# as we want the "main" sysroot, which contains all variants of the C
++# library in the case of multilib toolchains.
++SYSROOT_DIR=$(shell $(TARGET_CC) -print-sysroot 2>/dev/null)
++ifeq ($(SYSROOT_DIR),)
+ SYSROOT_DIR=$(shell readlink -f $$(LANG=C $(TARGET_CC) -print-file-name=libc.a |sed -r -e 's:usr/lib/libc\.a::;'))
++endif
++
++# Now, find if the toolchain specifies a sub-directory for the
++# specific architecture variant we're interested in. This is the case
++# with multilib toolchain, when the selected architecture variant is
++# not the default one. To do so, we ask the compiler by passing the
++# appropriate -march= flags. ARCH_SUBDIR will contain the
++# subdirectory, in the main SYSROOT_DIR, that corresponds to the
++# selected architecture variant. ARCH_SYSROOT_DIR will contain the
++# full path to this location.
++ifneq ($(CC_TARGET_ARCH_),)
++TARGET_CC_ARCH_CFLAGS+=-march=$(CC_TARGET_ARCH_)
++endif
++ARCH_SUBDIR=$(shell $(TARGET_CC) $(TARGET_CC_ARCH_CFLAGS) -print-multi-directory)
++ARCH_SYSROOT_DIR=$(SYSROOT_DIR)/$(ARCH_SUBDIR)
+ 
+ $(STAMP_DIR)/ext-toolchain-installed:
+ 	@echo "Checking external toolchain settings"
+@@ -228,8 +296,8 @@ endif
+ 	mkdir -p $(TARGET_DIR)/lib
+ 	@echo "Copy external toolchain libraries to target..."
+ 	$(Q)for libs in $(EXTERNAL_LIBS); do \
+-		$(call copy_toolchain_lib_root,$(SYSROOT_DIR),$$libs,/lib,$(BR2_TOOLCHAIN_EXTERNAL_STRIP)); \
++		$(call copy_toolchain_lib_root,$(ARCH_SYSROOT_DIR),$$libs,$(BR2_TOOLCHAIN_EXTERNAL_STRIP)); \
+ 	done
+ 	@echo "Copy external toolchain sysroot to staging..."
+-	$(Q)$(call copy_toolchain_sysroot,$(SYSROOT_DIR))
++	$(Q)$(call copy_toolchain_sysroot,$(SYSROOT_DIR),$(ARCH_SYSROOT_DIR),$(ARCH_SUBDIR))
+ 	@touch $@
+-- 
+1.6.3.3
