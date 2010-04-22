@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 22 Apr 2010 12:26:54 +0200
-Subject: [Buildroot] [git commit master] xserver_xorg-server: bump version,
-	improve option support
-Message-ID: <20100422102759.31E2020324@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] Remove XTrap (app,
+	lib & proto) as removed from X11R7.5
+Message-ID: <20100422102759.7A8D020324@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,231 +10,171 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=09729b5e63b0659a434b28d9b82bc892c017dfa4
+commit: http://git.buildroot.net/buildroot/commit/?id=9638be1acfb1b1d8f1e492efa6cae70335422d9c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Later version of xserver no longer need configure hack to say where
-mesa3d is located.
 
 Signed-off-by: Will Wagner <will_wagner@carallon.com>
 Acked-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
 Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                                            |    2 +-
- package/x11r7/xserver_xorg-server/Config.in        |   35 +++++++++--------
- .../xserver_xorg-server/xserver_xorg-server.mk     |   41 +++++++++++---------
- 3 files changed, 42 insertions(+), 36 deletions(-)
+ CHANGES                                            |    2 ++
+ package/x11r7/Config.in                            |    3 ---
+ package/x11r7/xapp_xtrap/Config.in                 |    7 -------
+ package/x11r7/xapp_xtrap/xapp_xtrap.mk             |   13 -------------
+ package/x11r7/xlib_libXTrap/Config.in              |    9 ---------
+ package/x11r7/xlib_libXTrap/xlib_libXTrap.mk       |   15 ---------------
+ package/x11r7/xproto_trapproto/Config.in           |    6 ------
+ package/x11r7/xproto_trapproto/xproto_trapproto.mk |   15 ---------------
+ 8 files changed, 2 insertions(+), 68 deletions(-)
+ delete mode 100644 package/x11r7/xapp_xtrap/Config.in
+ delete mode 100644 package/x11r7/xapp_xtrap/xapp_xtrap.mk
+ delete mode 100644 package/x11r7/xlib_libXTrap/Config.in
+ delete mode 100644 package/x11r7/xlib_libXTrap/xlib_libXTrap.mk
+ delete mode 100644 package/x11r7/xproto_trapproto/Config.in
+ delete mode 100644 package/x11r7/xproto_trapproto/xproto_trapproto.mk
 
 diff --git a/CHANGES b/CHANGES
-index 3956ca9..bc9315e 100644
+index bc9315e..0a3314f 100644
 --- a/CHANGES
 +++ b/CHANGES
-@@ -21,7 +21,7 @@
- 	xdriver_xf86-video-intel, xkeyboard-config, xlib_libX11,
- 	xlib_libXfont, xlib_libXfontcache, xlib_libXxf86misc,
+@@ -23,6 +23,8 @@
  	xlib_libpciaccess, xproto_dri2proto, xproto_eviext,
--	xproto_fontcacheproto, xproto_xf86miscproto
-+	xproto_fontcacheproto, xproto_xf86miscproto, xserver_xorg-server
+ 	xproto_fontcacheproto, xproto_xf86miscproto, xserver_xorg-server
  
++	Removed packages: xapp_xtrap, xlib_libXTrap, xproto_trapproto
++
  	Issues resolved (http://bugs.uclibc.org):
  
-diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
-index 86909d1..e850aba 100644
---- a/package/x11r7/xserver_xorg-server/Config.in
-+++ b/package/x11r7/xserver_xorg-server/Config.in
-@@ -1,23 +1,26 @@
- config BR2_PACKAGE_XSERVER_XORG_SERVER
- 	bool "xorg-server"
--	select BR2_PACKAGE_XLIB_LIBXFONT
- 	select BR2_PACKAGE_LIBDRM
-+	select BR2_PACKAGE_MCOOKIE
-+	select BR2_PACKAGE_MESA3D if BR2_PACKAGE_XSERVER_xorg
- 	select BR2_PACKAGE_OPENSSL
--	select BR2_PACKAGE_XPROTO_COMPOSITEPROTO
--	select BR2_PACKAGE_XPROTO_DAMAGEPROTO
--	select BR2_PACKAGE_XPROTO_FIXESPROTO
--	select BR2_PACKAGE_XPROTO_GLPROTO
--	select BR2_PACKAGE_XPROTO_KBPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
-+	select BR2_PACKAGE_PIXMAN
- 	select BR2_PACKAGE_XFONT_FONT_ALIAS if !BR2_PACKAGE_XSERVER_XORG_SERVER_BUILTIN_FONTS
- 	select BR2_PACKAGE_XFONT_FONT_MISC_MISC if !BR2_PACKAGE_XSERVER_XORG_SERVER_BUILTIN_FONTS
- 	select BR2_PACKAGE_XFONT_FONT_CURSOR_MISC if !BR2_PACKAGE_XSERVER_XORG_SERVER_BUILTIN_FONTS
-+	select BR2_PACKAGE_XLIB_LIBPCIACCESS
- 	select BR2_PACKAGE_XLIB_LIBX11
- 	select BR2_PACKAGE_XLIB_LIBXAU
-+	select BR2_PACKAGE_XLIB_LIBXCURSOR
-+	select BR2_PACKAGE_XLIB_LIBXDAMAGE
- 	select BR2_PACKAGE_XLIB_LIBXDMCP
- 	select BR2_PACKAGE_XLIB_LIBXEXT
- 	select BR2_PACKAGE_XLIB_LIBXFIXES
-+	select BR2_PACKAGE_XLIB_LIBXFONT
-+	select BR2_PACKAGE_XLIB_LIBXFT
- 	select BR2_PACKAGE_XLIB_LIBXI
-+	select BR2_PACKAGE_XLIB_LIBXINERAMA
-+	select BR2_PACKAGE_XLIB_LIBXRANDR
- 	select BR2_PACKAGE_XLIB_LIBXRENDER
- 	select BR2_PACKAGE_XLIB_LIBXRES
- 	select BR2_PACKAGE_XLIB_LIBXXF86MISC
-@@ -26,9 +29,15 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER
- 	select BR2_PACKAGE_XLIB_XTRANS
- 	select BR2_PACKAGE_XDATA_XBITMAPS
- 	select BR2_PACKAGE_XPROTO_BIGREQSPROTO
-+	select BR2_PACKAGE_XPROTO_COMPOSITEPROTO
-+	select BR2_PACKAGE_XPROTO_DAMAGEPROTO
- 	select BR2_PACKAGE_XPROTO_EVIEEXT
-+	select BR2_PACKAGE_XPROTO_FIXESPROTO
- 	select BR2_PACKAGE_XPROTO_FONTSPROTO
-+	select BR2_PACKAGE_XPROTO_GLPROTO
- 	select BR2_PACKAGE_XPROTO_INPUTPROTO
-+	select BR2_PACKAGE_XPROTO_KBPROTO
-+	select BR2_PACKAGE_XPROTO_RANDRPROTO
- 	select BR2_PACKAGE_XPROTO_RENDERPROTO
- 	select BR2_PACKAGE_XPROTO_RESOURCEPROTO
- 	select BR2_PACKAGE_XPROTO_VIDEOPROTO
-@@ -41,12 +50,10 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER
- 	select BR2_PACKAGE_XPROTO_XF86RUSHPROTO
- 	select BR2_PACKAGE_XPROTO_XF86VIDMODEPROTO
- 	select BR2_PACKAGE_XPROTO_XPROTO
--	select BR2_PACKAGE_PIXMAN
--	select BR2_PACKAGE_XLIB_LIBXSCRNSAVER
--	select BR2_PACKAGE_MESA3D if BR2_PACKAGE_XSERVER_xorg
-+	select BR2_PACKAGE_XUTIL_UTIL_MACROS
- 	depends on !BR2_avr32
- 	help
--	  xorg-server 1.7.1
-+	  xorg-server 1.7.5
- 	  No description available
- 
- comment "xorg-xserver is BROKEN on AVR32"
-@@ -58,12 +65,6 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER_NULL_CURSOR
-     help
-         Don't display root cursor.
- 
--config BR2_PACKAGE_XSERVER_XORG_SERVER_BUILTIN_FONTS
--    bool "Use Builtin Fonts"
--    depends on BR2_PACKAGE_XSERVER_XORG_SERVER
--    help
--        Enable/Use Builtin fonts.
+ 	#513: Add new squid package
+diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
+index a333718..9c43aca 100644
+--- a/package/x11r7/Config.in
++++ b/package/x11r7/Config.in
+@@ -50,7 +50,6 @@ endmenu
+ 		source package/x11r7/xlib_libSM/Config.in
+ 		source package/x11r7/xlib_libX11/Config.in
+ 		source package/x11r7/xlib_libXScrnSaver/Config.in
+-		source package/x11r7/xlib_libXTrap/Config.in
+ 		source package/x11r7/xlib_libXau/Config.in
+ 		source package/x11r7/xlib_libXaw/Config.in
+ 		source package/x11r7/xlib_libXcomposite/Config.in
+@@ -169,7 +168,6 @@ endmenu
+ 		source package/x11r7/xapp_xsetroot/Config.in
+ 		source package/x11r7/xapp_xsm/Config.in
+ 		source package/x11r7/xapp_xstdcmap/Config.in
+-		source package/x11r7/xapp_xtrap/Config.in
+ 		source package/x11r7/xapp_xvidtune/Config.in
+ 		source package/x11r7/xapp_xvinfo/Config.in
+ 		source package/x11r7/xapp_xwd/Config.in
+@@ -295,7 +293,6 @@ endmenu
+ 		source package/x11r7/xproto_renderproto/Config.in
+ 		source package/x11r7/xproto_resourceproto/Config.in
+ 		source package/x11r7/xproto_scrnsaverproto/Config.in
+-		source package/x11r7/xproto_trapproto/Config.in
+ 		source package/x11r7/xproto_videoproto/Config.in
+ 		source package/x11r7/xproto_windowswmproto/Config.in
+ 		source package/x11r7/xproto_xcmiscproto/Config.in
+diff --git a/package/x11r7/xapp_xtrap/Config.in b/package/x11r7/xapp_xtrap/Config.in
+deleted file mode 100644
+index 55cb418..0000000
+--- a/package/x11r7/xapp_xtrap/Config.in
++++ /dev/null
+@@ -1,7 +0,0 @@
+-config BR2_PACKAGE_XAPP_XTRAP
+-	bool "xtrap"
+-	select BR2_PACKAGE_XLIB_LIBX11
+-	select BR2_PACKAGE_XLIB_LIBXTRAP
+-	help
+-	  xtrap 1.0.2
+-	  X.Org xtrap application
+diff --git a/package/x11r7/xapp_xtrap/xapp_xtrap.mk b/package/x11r7/xapp_xtrap/xapp_xtrap.mk
+deleted file mode 100644
+index a31279b..0000000
+--- a/package/x11r7/xapp_xtrap/xapp_xtrap.mk
++++ /dev/null
+@@ -1,13 +0,0 @@
+-################################################################################
+-#
+-# xapp_xtrap -- X.Org xtrap application
+-#
+-################################################################################
 -
- config BR2_PACKAGE_XSERVER_XORG_SERVER_AIGLX
-     bool "Enable AIGLX Extension"
-     depends on BR2_PACKAGE_XSERVER_XORG_SERVER
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 950c2ca..0dd6127 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XSERVER_XORG_SERVER_VERSION = 1.7.1
-+XSERVER_XORG_SERVER_VERSION = 1.7.5
- XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.bz2
- XSERVER_XORG_SERVER_SITE = http://xorg.freedesktop.org/releases/individual/xserver
- XSERVER_XORG_SERVER_AUTORECONF = NO
-@@ -15,11 +15,11 @@ XSERVER_XORG_SERVER_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install install
- 
- XSERVER_XORG_SERVER_DEPENDENCIES = 	\
- 	xutil_util-macros 		\
-+	xlib_libpciaccess		\
- 	xlib_libXfont 			\
- 	xlib_libX11 			\
- 	xlib_libXau 			\
- 	xlib_libXdmcp 			\
--	xlib_libXScrnSaver 		\
- 	xlib_libXext 			\
- 	xlib_libXfixes 			\
- 	xlib_libXi 			\
-@@ -30,7 +30,6 @@ XSERVER_XORG_SERVER_DEPENDENCIES = 	\
- 	xlib_libXinerama 		\
- 	xlib_libXrandr 			\
- 	xlib_libXdamage 		\
--	xlib_libXxf86misc 		\
- 	xlib_libXxf86vm 		\
- 	xlib_libxkbfile 		\
- 	xlib_xtrans 			\
-@@ -38,7 +37,6 @@ XSERVER_XORG_SERVER_DEPENDENCIES = 	\
- 	xproto_bigreqsproto 		\
- 	xproto_compositeproto 		\
- 	xproto_damageproto 		\
--	xproto_evieext 			\
- 	xproto_fixesproto 		\
- 	xproto_fontsproto 		\
- 	xproto_glproto 			\
-@@ -53,7 +51,6 @@ XSERVER_XORG_SERVER_DEPENDENCIES = 	\
- 	xproto_xf86bigfontproto 	\
- 	xproto_xf86dgaproto 		\
- 	xproto_xf86driproto	 	\
--	xproto_xf86miscproto 		\
- 	xproto_xf86rushproto 		\
- 	xproto_xf86vidmodeproto 	\
- 	xproto_xproto 			\
-@@ -69,7 +66,7 @@ XSERVER_XORG_SERVER_CONF_OPT = --disable-config-hal \
- 
- ifeq ($(BR2_PACKAGE_XSERVER_xorg),y)
- XSERVER_XORG_SERVER_DEPENDENCIES += mesa3d
--XSERVER_XORG_SERVER_CONF_OPT += --with-mesa-source="$(BUILD_DIR)/Mesa-$(MESA3D_VERSION)" --enable-xorg
-+XSERVER_XORG_SERVER_CONF_OPT += --enable-xorg --disable-glx
- else
- XSERVER_XORG_SERVER_CONF_OPT += --disable-xorg
- endif
-@@ -86,12 +83,6 @@ else
- XSERVER_XORG_SERVER_CONF_OPT += --disable-null-root-cursor
- endif
- 
--ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_BUILTIN_FONTS),y)
--XSERVER_XORG_SERVER_CONF_OPT += --enable-builtin-fonts
--else
--XSERVER_XORG_SERVER_CONF_OPT += --disable-builtin-fonts
--endif
+-XAPP_XTRAP_VERSION = 1.0.2
+-XAPP_XTRAP_SOURCE = xtrap-$(XAPP_XTRAP_VERSION).tar.bz2
+-XAPP_XTRAP_SITE = http://xorg.freedesktop.org/releases/individual/app
+-XAPP_XTRAP_AUTORECONF = NO
+-XAPP_XTRAP_DEPENDENCIES = xlib_libX11 xlib_libXTrap
 -
- ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_AIGLX),y)
- XSERVER_XORG_SERVER_CONF_OPT += --enable-aiglx
- else
-@@ -111,12 +102,6 @@ endif
- 
- ifeq ($(BR2_PACKAGE_FREETYPE),y)
- XSERVER_XORG_SERVER_DEPENDENCIES += freetype
--XSERVER_XORG_SERVER_CONF_OPT += --enable-freetype
--endif
+-$(eval $(call AUTOTARGETS,package/x11r7,xapp_xtrap))
+diff --git a/package/x11r7/xlib_libXTrap/Config.in b/package/x11r7/xlib_libXTrap/Config.in
+deleted file mode 100644
+index 72ecf5b..0000000
+--- a/package/x11r7/xlib_libXTrap/Config.in
++++ /dev/null
+@@ -1,9 +0,0 @@
+-config BR2_PACKAGE_XLIB_LIBXTRAP
+-	bool "libXTrap"
+-	select BR2_PACKAGE_XLIB_LIBX11
+-	select BR2_PACKAGE_XLIB_LIBXT
+-	select BR2_PACKAGE_XLIB_LIBXEXT
+-	select BR2_PACKAGE_XPROTO_TRAPPROTO
+-	help
+-	  libXTrap 1.0.0
+-	  X.Org XTrap library
+diff --git a/package/x11r7/xlib_libXTrap/xlib_libXTrap.mk b/package/x11r7/xlib_libXTrap/xlib_libXTrap.mk
+deleted file mode 100644
+index 5b7982a..0000000
+--- a/package/x11r7/xlib_libXTrap/xlib_libXTrap.mk
++++ /dev/null
+@@ -1,15 +0,0 @@
+-################################################################################
+-#
+-# xlib_libXTrap -- X.Org XTrap library
+-#
+-################################################################################
 -
--ifeq ($(BR2_PACKAGE_XPROTO_TRAPPROTO),y)
--XSERVER_XORG_SERVER_DEPENDENCIES += xproto_trapproto
--XSERVER_XORG_SERVER_CONF_OPT += --enable-xtrap
- endif
- 
- ifeq ($(BR2_PACKAGE_XPROTO_RECORDPROTO),y)
-@@ -124,9 +109,29 @@ XSERVER_XORG_SERVER_DEPENDENCIES += xproto_recordproto
- XSERVER_XORG_SERVER_CONF_OPT += --enable-record
- endif
- 
-+ifneq ($(BR2_PACKAGE_XLIB_LIBXVMC),y)
-+XSERVER_XORG_SERVER_CONF_OPT += --disable-xvmc
-+endif
-+
-+ifneq ($(BR2_PACKAGE_XLIB_LIBXCOMPOSITE),y)
-+XSERVER_XORG_SERVER_CONF_OPT += --disable-composite
-+endif
-+
- ifeq ($(BR2_PACKAGE_XPROTO_DRI2PROTO),y)
- XSERVER_XORG_SERVER_DEPENDENCIES += xproto_dri2proto
- XSERVER_XORG_SERVER_CONF_OPT += --enable-dri2
- endif
- 
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXSCRNSAVER),y)
-+XSERVER_XORG_SERVER_DEPENDENCIES += xlib_libXScrnSaver
-+XSERVER_XORG_SERVER_CONF_OPT += --enable-screensaver
-+else
-+XSERVER_XORG_SERVER_CONF_OPT += --disable-screensaver
-+endif
-+
-+ifneq ($(BR2_PACKAGE_XLIB_LIBDMX),y)
-+XSERVER_XORG_SERVER_CONF_OPT += --disable-dmx
-+endif
-+
-+
- $(eval $(call AUTOTARGETS,package/x11r7,xserver_xorg-server))
+-XLIB_LIBXTRAP_VERSION = 1.0.0
+-XLIB_LIBXTRAP_SOURCE = libXTrap-$(XLIB_LIBXTRAP_VERSION).tar.bz2
+-XLIB_LIBXTRAP_SITE = http://xorg.freedesktop.org/releases/individual/lib
+-XLIB_LIBXTRAP_AUTORECONF = NO
+-XLIB_LIBXTRAP_INSTALL_STAGING = YES
+-XLIB_LIBXTRAP_DEPENDENCIES = xlib_libX11 xlib_libXt xlib_libXext xproto_trapproto
+-XLIB_LIBXTRAP_CONF_OPT = --enable-shared --disable-static
+-
+-$(eval $(call AUTOTARGETS,package/x11r7,xlib_libXTrap))
+diff --git a/package/x11r7/xproto_trapproto/Config.in b/package/x11r7/xproto_trapproto/Config.in
+deleted file mode 100644
+index 0f9c470..0000000
+--- a/package/x11r7/xproto_trapproto/Config.in
++++ /dev/null
+@@ -1,6 +0,0 @@
+-config BR2_PACKAGE_XPROTO_TRAPPROTO
+-	bool "trapproto"
+-	select BR2_PACKAGE_XLIB_LIBXT
+-	help
+-	  trapproto 3.4.3
+-	  X.Org Trap protocol headers
+diff --git a/package/x11r7/xproto_trapproto/xproto_trapproto.mk b/package/x11r7/xproto_trapproto/xproto_trapproto.mk
+deleted file mode 100644
+index 29c4356..0000000
+--- a/package/x11r7/xproto_trapproto/xproto_trapproto.mk
++++ /dev/null
+@@ -1,15 +0,0 @@
+-################################################################################
+-#
+-# xproto_trapproto -- X.Org Trap protocol headers
+-#
+-################################################################################
+-
+-XPROTO_TRAPPROTO_VERSION = 3.4.3
+-XPROTO_TRAPPROTO_SOURCE = trapproto-$(XPROTO_TRAPPROTO_VERSION).tar.bz2
+-XPROTO_TRAPPROTO_SITE = http://xorg.freedesktop.org/releases/individual/proto
+-XPROTO_TRAPPROTO_AUTORECONF = NO
+-XPROTO_TRAPPROTO_INSTALL_STAGING = YES
+-XPROTO_TRAPPROTO_INSTALL_TARGET = NO
+-XPROTO_TRAPPROTO_DEPENDENCIES = xlib_libXt
+-
+-$(eval $(call AUTOTARGETS,package/x11r7,xproto_trapproto))
 -- 
 1.6.3.3
