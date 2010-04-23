@@ -1,50 +1,55 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 22 Apr 2010 19:11:11 +0000 (UTC)
-Subject: [Buildroot] [Bug 985] Bump usb_modeswitch package to 1.1.0
-In-Reply-To: <bug-985-163@https.bugs.busybox.net/>
-References: <bug-985-163@https.bugs.busybox.net/>
-Message-ID: <20100422191111.81AC72F@busybox.osuosl.org>
+From: luca at lucaceresoli.net <luca@lucaceresoli.net>
+Date: Fri, 23 Apr 2010 10:24:53 +0200
+Subject: [Buildroot] [PATCH] tslib: fix use of open()
+Message-ID: <1272011093-4995-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=985
+From: Luca Ceresoli <luca@lucaceresoli.net>
 
+Fixes error: "open with O_CREAT in second argument needs 3 arguments".
 
-Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
+Original patch: svn://svn.berlios.de/tslib/trunk/tslib r72.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-Attachment #1003 is|0                           |1
-           obsolete|                            |
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+---
+ ...b-1.0-open-with-O_CREAT-needs-3-arguments.patch |   25 ++++++++++++++++++++
+ 1 files changed, 25 insertions(+), 0 deletions(-)
+ create mode 100644 package/tslib/tslib-1.0-open-with-O_CREAT-needs-3-arguments.patch
 
-
-
-
---- Comment #2 from Gustavo Zacarias <gustavo@zacarias.com.ar>  2010-04-22 19:11:10 UTC ---
-Created an attachment (id=1555)
- --> (https://bugs.busybox.net/attachment.cgi?id=1555)
-Bump usb_modeswitch to 1.1.2
-
-
-This patch takes up to usb_modeswitch 1.1.2.
-
-Udev support isn't included because the wrapper script is now tclsh which would
-pull in TCL as a dependency.
-
-What would be needed for this is to enable the TCL package if UDEV=y in
-usb_modeswitch.mk/Config.in, install usb_modeswitch.conf (config file for the
-wrapper script in udev) and install the wrapper script in the udev directory
-(commented out by my makefile patch).
-And also clean up that in the uninstall hook.
-
-I personally don't use udev and just call usb_modeswitch with the expected
-VID/PID pairs so i've got no quick way of testing it.
-
-
+diff --git a/package/tslib/tslib-1.0-open-with-O_CREAT-needs-3-arguments.patch b/package/tslib/tslib-1.0-open-with-O_CREAT-needs-3-arguments.patch
+new file mode 100644
+index 0000000..92b33f8
+--- /dev/null
++++ b/package/tslib/tslib-1.0-open-with-O_CREAT-needs-3-arguments.patch
+@@ -0,0 +1,25 @@
++diff -ur a/tests/ts_calibrate.c b/tests/ts_calibrate.c
++--- a/tests/ts_calibrate.c	2010-04-22 17:36:33.000000000 +0200
+++++ b/tests/ts_calibrate.c	2010-04-22 17:38:09.000000000 +0200
++@@ -21,6 +21,7 @@
++ #include <sys/ioctl.h>
++ #include <sys/mman.h>
++ #include <sys/time.h>
+++#include <sys/stat.h>
++ #include <linux/kd.h>
++ #include <linux/vt.h>
++ #include <linux/fb.h>
++@@ -224,9 +225,11 @@
++ 		for (i = 0; i < 7; i++) printf("%d ", cal.a [i]);
++ 		printf("\n");
++ 		if ((calfile = getenv("TSLIB_CALIBFILE")) != NULL) {
++-			cal_fd = open (calfile, O_CREAT | O_RDWR);
+++		  cal_fd = open (calfile, O_CREAT | O_RDWR,
+++		                 S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
++ 		} else {
++-			cal_fd = open ("/etc/pointercal", O_CREAT | O_RDWR);
+++			cal_fd = open ("/etc/pointercal", O_CREAT | O_RDWR,
+++		                 S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
++ 		}
++ 		sprintf (cal_buffer,"%d %d %d %d %d %d %d",
++ 			 cal.a[1], cal.a[2], cal.a[0],
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.6.3.3
