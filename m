@@ -1,38 +1,28 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 26 Apr 2010 09:02:15 +0200
+Date: Mon, 26 Apr 2010 09:20:17 +0200
 Subject: [Buildroot] /dev/bus/usb on BR
-In-Reply-To: <p2l630286c71004252341l5ed447f0sd5cb0c0bf3c68a75@mail.gmail.com>
-	(Nataraj S. Narayan's message of "Mon, 26 Apr 2010 06:41:21 +0000")
+In-Reply-To: <m2k532dd5841004252352jdc881088y588d57d5fbde19a6@mail.gmail.com>
+	(Ravi Kumar Kulkarni's message of "Mon, 26 Apr 2010 12:37:44 +0545")
 References: <p2l630286c71004252341l5ed447f0sd5cb0c0bf3c68a75@mail.gmail.com>
-Message-ID: <87tyqy4ryg.fsf@macbook.be.48ers.dk>
+	<m2k532dd5841004252352jdc881088y588d57d5fbde19a6@mail.gmail.com>
+Message-ID: <87pr1m4r4e.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Nataraj" == Nataraj S Narayan <natarajsn@gmail.com> writes:
+>>>>> "Ravi" == Ravi Kumar Kulkarni <ravilinux4u@gmail.com> writes:
 
- Nataraj> Hi
- Nataraj> I am on BR git latest.
+Hi,
 
- Nataraj> I am connecting a Upek fingerprint device to my At91sam9263ek SBC with
- Nataraj> linux-2.6.32 and BR file system using glibc based Codesourcery
- Nataraj> external toolchain.
+ Ravi> sometimes the buildroot doesnt create nodes in /dev/sda1 or
+ Ravi> /dev/bus/ create manually by using mknod with device major n
+ Ravi> minor no from Documentation/devices.txt from the kernel source
+ Ravi> which u are running on target.
 
- Nataraj> Adding the device doesn't add nodes into /proc/bus/usb even though i
- Nataraj> get the following after connecting device.
-
-Your title said /dev/bus/usb, but here you say /proc - /proc/bus/usb is
-handled by usbfs, whereas /dev/bus/usb is handled by udev/mdev. Which
-one do you mean?
-
- Nataraj> The same code works well on qemu emulated arm-linux libc
- Nataraj> system ,where the usb system got /dev/bus/usb with populated
- Nataraj> nodes.
-
-What's the difference between that rootfs and this one? Does it work on
-your AT91 if you use the qemu rootfs?
+What do you mean? At BR compile time (static device nodes) or at runtime
+using udev/mdev?
 
 -- 
 Bye, Peter Korsgaard
