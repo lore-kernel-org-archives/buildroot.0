@@ -1,46 +1,38 @@
 From: Nataraj S Narayan <natarajsn@gmail.com>
-Date: Sat, 24 Apr 2010 07:30:11 +0000
-Subject: [Buildroot] uclibc / glibc rfs issues
-In-Reply-To: <87ocha5s1z.fsf@macbook.be.48ers.dk>
-References: <j2n630286c71004230401i8b185fd2jd5fa0a5465b577f@mail.gmail.com>
-	<87ocha5s1z.fsf@macbook.be.48ers.dk>
-Message-ID: <j2s630286c71004240030z4d6a6cfftad29674b4d4827c0@mail.gmail.com>
+Date: Mon, 26 Apr 2010 06:41:21 +0000
+Subject: [Buildroot] /dev/bus/usb on BR
+Message-ID: <p2l630286c71004252341l5ed447f0sd5cb0c0bf3c68a75@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Jacmet
+Hi
 
-When I try the external Codesourcery tool chain on * v2010.02 branch, I get
+I am on BR git latest.
 
-cp -dpRf package/config/buildroot-config
-/home/noy/buildroot/output/build/buildroot-config
-Checking external toolchain settings
-Incorrect selection of the C library
-make: *** [/home/noy/buildroot/output/stamps/ext-toolchain-installed] Error 255
+I am connecting a Upek fingerprint device to my At91sam9263ek SBC with
+linux-2.6.32 and BR file system using glibc based Codesourcery
+external toolchain.
 
+Adding the device doesn't add nodes into /proc/bus/usb even though i
+get the following after connecting device.
 
-Does that mean latest stable won't work for external toolchain?
+# usb 1-1: new full speed USB device using at91_ohci and address 4
+usb 1-1: configuration #1 chosen from 1 choice
 
-regards
+I use udev.
 
-Nataraj
+My code needs to to open the Usb port using:-
 
+status = PTOpen ("usb, timeout=2000", &mConn);
 
-On Fri, Apr 23, 2010 at 11:25 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Nataraj" == Nataraj S Narayan <natarajsn@gmail.com> writes:
->
-> ?Nataraj> TCP cubic registered
-> ?Nataraj> NET: Registered protocol family 17
-> ?Nataraj> VFS: Mounted root (jffs2 filesystem) on device 31:0.
-> ?Nataraj> Freeing init memory: 136K
-> ?Nataraj> g_ether gadget: full speed config #1: CDC Ethernet (ECM)
-> ?Nataraj> mount: mounting none on /proc failed: No such file or directory
->
-> Sounds like you don't have a /proc directory in your rootfs.
->
-> --
-> Bye, Peter Korsgaard
->
+The same code works well on qemu emulated arm-linux libc system ,where
+the usb system got /dev/bus/usb with populated nodes.
+
+What am I lacking in the file system?
+
+Warm regards
+
+nataraj
