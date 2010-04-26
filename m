@@ -1,31 +1,42 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 26 Apr 2010 09:26:53 +0200
+Date: Mon, 26 Apr 2010 09:25:22 +0200
 Subject: [Buildroot] /dev/bus/usb on BR
-In-Reply-To: <i2s532dd5841004260024r41596833pd07cced09efc5c28@mail.gmail.com>
-	(Ravi Kumar Kulkarni's message of "Mon, 26 Apr 2010 13:09:52 +0545")
+In-Reply-To: <x2j630286c71004260020s9acd6240u55ed0215380bc461@mail.gmail.com>
+	(Nataraj S. Narayan's message of "Mon, 26 Apr 2010 07:20:54 +0000")
 References: <p2l630286c71004252341l5ed447f0sd5cb0c0bf3c68a75@mail.gmail.com>
-	<m2k532dd5841004252352jdc881088y588d57d5fbde19a6@mail.gmail.com>
-	<87pr1m4r4e.fsf@macbook.be.48ers.dk>
-	<i2s532dd5841004260024r41596833pd07cced09efc5c28@mail.gmail.com>
-Message-ID: <87hbmy4qte.fsf@macbook.be.48ers.dk>
+	<87tyqy4ryg.fsf@macbook.be.48ers.dk>
+	<x2j630286c71004260020s9acd6240u55ed0215380bc461@mail.gmail.com>
+Message-ID: <87ljca4qvx.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ravi" == Ravi Kumar Kulkarni <ravilinux4u@gmail.com> writes:
+>>>>> "Nataraj" == Nataraj S Narayan <natarajsn@gmail.com> writes:
 
-Hi,
+Please keep mails on the buildroot list, thanks.
 
- Ravi> i meant at BR compile time (static device nodes) from device
- Ravi> table (target/device/Atmel/root/device_table.txt).im using
- Ravi> at91sam9261ek.  even though there is sda1,sda2 in device table
- Ravi> but on my target /dev/dir it was not there.
+ Nataraj> Hi
+ Nataraj> As per strace of the code, it seems first it tries to open
+ Nataraj> /dev/bus/usb then checks for /proc/bus/usb.
 
-And sometimes just those 2 nodes are not created but the rest is? This
-is the first time I hear something like this - Could you send your
-.config please, so I can try to figure out what goes wrong.
+ Nataraj> As for udev, i didn't find an option in 'make menuconfig' to enable.
+ Nataraj> Hence did a "make udev" and copied the *udev* files onto target. Hope
+ Nataraj> that was ok.
+
+It's there (do "/ udev in make menuconfig to search):
+
+    Symbol: BR2_PACKAGE_UDEV [=n]
+  ? Prompt: udev
+  ?   Defined at package/udev/Config.in:1
+  ?   Depends on: BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+  ?   Location:
+  ?     -> Package Selection for the target
+  ?       -> Hardware handling
+  ?   Selected by: BR2_PACKAGE_HAL
+
+Make sure you have BR2_PACKAGE_BUSYBOX_SHOW_OTHERS enabled.
 
 -- 
 Bye, Peter Korsgaard
