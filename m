@@ -1,34 +1,59 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 26 Apr 2010 20:59:13 +0000 (UTC)
-Subject: [Buildroot] [Bug 1573] Alsa-utils alsactl/init/* not installed to
-	target
-In-Reply-To: <bug-1573-163@https.bugs.busybox.net/>
-References: <bug-1573-163@https.bugs.busybox.net/>
-Message-ID: <20100426205913.CCAD38B5BC@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 26 Apr 2010 23:01:14 +0200
+Subject: [Buildroot] [git commit master] samba: bump version
+Message-ID: <20100426210141.CA07F202FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1573
 
+commit: http://git.buildroot.net/buildroot/commit/?id=ba9ed1370808f94f8d24d4a16467db620d159af1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Closes #1561
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES                |    3 ++-
+ package/samba/samba.mk |    2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-
-
-
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  2010-04-26 20:59:13 UTC ---
-Fixed in git (5ad267247) - Thanks.
-
-
+diff --git a/CHANGES b/CHANGES
+index 3f18ec6..2e4cdeb 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -17,7 +17,7 @@
+ 	libaio,libdrm, libgcrypt, libglib2, libpng, libxml2, matchbox,
+ 	mdadm, memstat, mesa3d, mtd-utils, nano, openssl, pciutils,
+ 	php, pixman, portage, pppd, pthread-stubs, python, qt, radvd,
+-	setserial, squashfs, tslib, usb_modeswith, wget,
++	samba, setserial, squashfs, tslib, usb_modeswith, wget,
+ 	xdriver_xf86-video-intel, xkeyboard-config, xlib_libX11,
+ 	xlib_libXaw, xlib_libXfont, xlib_libXfontcache, xlib_libXxf86misc,
+ 	xlib_libpciaccess, xproto_dri2proto, xproto_eviext,
+@@ -62,6 +62,7 @@
+ 	#1513: Enable powerpc e300c2, e300c3 and e500mc optimization
+ 	#1537: dev entries not created anymore
+ 	#1555: Fix default uclibc-0.9.31 configuration
++	#1561: [SECURITY] Update samba to 3.3.12
+ 	#1567: openssl0.9.8n fails to compile
+ 	#1591: portmap fails to compile
+ 
+diff --git a/package/samba/samba.mk b/package/samba/samba.mk
+index 9ff2bb1..4115363 100644
+--- a/package/samba/samba.mk
++++ b/package/samba/samba.mk
+@@ -3,7 +3,7 @@
+ # samba
+ #
+ #############################################################
+-SAMBA_VERSION:=3.3.8
++SAMBA_VERSION:=3.3.12
+ SAMBA_SOURCE:=samba-$(SAMBA_VERSION).tar.gz
+ SAMBA_SITE:=http://samba.org/samba/ftp/stable/
+ 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.6.3.3
