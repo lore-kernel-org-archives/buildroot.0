@@ -1,51 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 28 Apr 2010 23:40:51 +0200
-Subject: [Buildroot] [PATCH 10/19] uclibc: make sure the default
-	configuration doesn't ask questions
+Date: Wed, 28 Apr 2010 23:40:52 +0200
+Subject: [Buildroot] [PATCH 11/19] Commonalize the definition of
+	TOOLCHAIN_DIR
 In-Reply-To: <cover.1272490771.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1272490771.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <741b47e2a65e767bc93ab4ed094248617c5e1298.1272490771.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <88870569c2ac04c0b589dd0f3c2ae886334f6fba.1272490771.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since new configuration options have been added in 0.9.31, the value
-of these configuration options should be determined, either by the
-default configuration file we provide, or by uclibc.mk process.
-
-The locale generation process should probably be improved in order to
-allow building other locales than just en_US.
+The definition of TOOLCHAIN_DIR is the same regardless of whether
+external or internal toolchains are used. Moreover, move its
+definition together with all the other *_DIR definitions.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/uClibc/uclibc.mk |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ Makefile            |    1 +
+ package/Makefile.in |    2 --
+ 2 files changed, 1 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
-index a9ee609..e8556d0 100644
---- a/toolchain/uClibc/uclibc.mk
-+++ b/toolchain/uClibc/uclibc.mk
-@@ -314,7 +314,7 @@ else
- 	echo "# PTHREADS_DEBUG_SUPPORT is not set" >> $(UCLIBC_DIR)/.oldconfig
+diff --git a/Makefile b/Makefile
+index 54dd4f1..271db9c 100644
+--- a/Makefile
++++ b/Makefile
+@@ -267,6 +267,7 @@ STAMP_DIR:=$(BASE_DIR)/stamps
+ 
+ BINARIES_DIR:=$(BASE_DIR)/images
+ TARGET_DIR:=$(BASE_DIR)/target
++TOOLCHAIN_DIR=$(BASE_DIR)/toolchain
+ 
+ BR2_DEPENDS_DIR=$(BUILD_DIR)/buildroot-config
+ 
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 3dfc712..396187d 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -105,7 +105,6 @@ ROOTFS_SUFFIX:=-$(BR2_ROOTFS_SUFFIX)
  endif
- ifeq ($(BR2_ENABLE_LOCALE),y)
--	$(SED) 's,^.*UCLIBC_HAS_LOCALE.*,UCLIBC_HAS_LOCALE=y\nUCLIBC_PREGENERATED_LOCALE_DATA=n\nUCLIBC_DOWNLOAD_PREGENERATED_LOCALE_DATA=n\nUCLIBC_HAS_XLOCALE=y\nUCLIBC_HAS_GLIBC_DIGIT_GROUPING=n\n,g' $(UCLIBC_DIR)/.oldconfig
-+	$(SED) 's,^.*UCLIBC_HAS_LOCALE.*,UCLIBC_HAS_LOCALE=y\nUCLIBC_BUILD_MINIMAL_LOCALE=y\nUCLIBC_BUILD_MINIMAL_LOCALES="en_US"\nUCLIBC_PREGENERATED_LOCALE_DATA=n\nUCLIBC_DOWNLOAD_PREGENERATED_LOCALE_DATA=n\nUCLIBC_HAS_XLOCALE=y\nUCLIBC_HAS_GLIBC_DIGIT_GROUPING=n\n,g' $(UCLIBC_DIR)/.oldconfig
- else
- 	$(SED) 's,^.*UCLIBC_HAS_LOCALE.*,UCLIBC_HAS_LOCALE=n,g' $(UCLIBC_DIR)/.oldconfig
- endif
-@@ -325,8 +325,10 @@ else
- endif
- ifeq ($(BR2_PROGRAM_INVOCATION),y)
- 	$(SED) 's,^.*UCLIBC_HAS_PROGRAM_INVOCATION_NAME.*,UCLIBC_HAS_PROGRAM_INVOCATION_NAME=y,g' $(UCLIBC_DIR)/.oldconfig
-+	$(SED) 's,^.*UCLIBC_HAS___PROGNAME.*,UCLIBC_HAS___PROGNAME=y,g' $(UCLIBC_DIR)/.oldconfig
- else
- 	$(SED) 's,^.*UCLIBC_HAS_PROGRAM_INVOCATION_NAME.*,UCLIBC_HAS_PROGRAM_INVOCATION_NAME=n,g' $(UCLIBC_DIR)/.oldconfig
-+	$(SED) 's,^.*UCLIBC_HAS___PROGNAME.*,UCLIBC_HAS___PROGNAME=n,g' $(UCLIBC_DIR)/.oldconfig
- endif
- ifeq ("$(KERNEL_ARCH)","i386")
- 	/bin/echo "# CONFIG_GENERIC_386 is not set" >> $(UCLIBC_DIR)/.oldconfig
+ 
+ ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+-TOOLCHAIN_DIR=$(BASE_DIR)/toolchain
+ 
+ # Quotes are needed for spaces et al in path components.
+ TARGET_PATH="$(TOOLCHAIN_DIR)/bin:$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin/:$(STAGING_DIR)/bin:$(STAGING_DIR)/usr/bin:$(PATH)"
+@@ -116,7 +115,6 @@ KERNEL_CROSS=$(TARGET_CROSS)
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
+ TOOLCHAIN_EXTERNAL_PREFIX:=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))
+ TOOLCHAIN_EXTERNAL_PATH:=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PATH))
+-TOOLCHAIN_DIR=$(BASE_DIR)/toolchain
+ TARGET_PATH="$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin/:$(TOOLCHAIN_DIR)/bin:$(TOOLCHAIN_EXTERNAL_PATH)/bin:$(PATH)"
+ REAL_GNU_TARGET_NAME=$(TOOLCHAIN_EXTERNAL_PREFIX)
+ GNU_TARGET_NAME=$(TOOLCHAIN_EXTERNAL_PREFIX)
 -- 
 1.6.3.3
