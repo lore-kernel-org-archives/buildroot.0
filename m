@@ -1,41 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 28 Apr 2010 23:40:50 +0200
-Subject: [Buildroot] [PATCH 09/19] uClibc: add UCLIBC_HAS_NFTW to default
-	configuration
+Date: Wed, 28 Apr 2010 23:40:48 +0200
+Subject: [Buildroot] [PATCH 07/19] freetype: disable autoreconf
 In-Reply-To: <cover.1272490771.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1272490771.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <e82324c6cae0bbdc5c05e693c878505f6523a9ec.1272490771.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <8f7798bec30f2e0fbc7896018a70d8de542cd4f9.1272490771.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-UCLIBC_HAS_NFTW is a new knob in 0.9.31, which allows the obsolete and
-deprecated ftw() to be compiled-out separatly from nftw(), which is
-part of POSIX. nftw() should probably be enabled by default in uClibc,
-and a bug has been opened about this on uClibc bug tracker
-(https://bugs.busybox.net/show_bug.cgi?id=1597).
+Freetype is unfortunately not a normal autotools-based package. Its
+real configure script is in builds/unix/, but the build cannot be
+started from here. And it doesn't rely on automake.
 
-nftw() is, for example, used in Gtk+.
+For absolute perfection, the package should probably be converted to
+the GENTARGETS infrastructure, but it will generate a much, much
+longer .mk file that the one we have today.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/uClibc/uClibc-0.9.31.config |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/freetype/freetype.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/uClibc/uClibc-0.9.31.config b/toolchain/uClibc/uClibc-0.9.31.config
-index 091f179..d2e54ad 100644
---- a/toolchain/uClibc/uClibc-0.9.31.config
-+++ b/toolchain/uClibc/uClibc-0.9.31.config
-@@ -191,7 +191,7 @@ UCLIBC_HAS_REGEX=y
- UCLIBC_HAS_FNMATCH=y
- # UCLIBC_HAS_FNMATCH_OLD is not set
- # UCLIBC_HAS_WORDEXP is not set
--# UCLIBC_HAS_NFTW is not set
-+UCLIBC_HAS_NFTW=y
- UCLIBC_HAS_FTW=y
- UCLIBC_HAS_GLOB=y
- UCLIBC_HAS_GNU_GLOB=y
+diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+index f19b854..e9a270f 100644
+--- a/package/freetype/freetype.mk
++++ b/package/freetype/freetype.mk
+@@ -7,6 +7,7 @@ FREETYPE_VERSION = 2.3.12
+ FREETYPE_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/freetype
+ FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
+ FREETYPE_LIBTOOL_PATCH = NO
++FREETYPE_AUTORECONF = NO
+ FREETYPE_INSTALL_STAGING = YES
+ FREETYPE_INSTALL_TARGET = YES
+ FREETYPE_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
 -- 
 1.6.3.3
