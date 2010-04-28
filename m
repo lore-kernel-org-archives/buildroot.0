@@ -1,48 +1,143 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 28 Apr 2010 23:40:42 +0200
-Subject: [Buildroot] [PATCH 01/19] autotools: fix autoreconf check
+Date: Wed, 28 Apr 2010 23:40:44 +0200
+Subject: [Buildroot] [PATCH 03/19] openssl: convert to the generic
+	infrastructure
 In-Reply-To: <cover.1272490771.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1272490771.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <de4a337f16aaf9c7ec73339bff28f21264c32dc6.1272490771.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <2ee9708a26bd44a3c597f83c45d8cddb8cf0015f.1272490771.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The autoreconf check was incorrect, missing a $ sign to properly
-reference a package-specific variable. There was no visible effect
-until now since :
-
- * The existing syntax allowed to access the value defined in the
-   package specific .mk file, so when AUTORECONF was set to YES by a
-   package, it was working.
-
- * The default value in Makefile.autotools.in was NO. In fact, when a
-   package .mkf file wasn't defining the AUTORECONF variable, the
-   Makefile.autotools.in test was testing the empty string against
-   'YES', which was false, leading to the AUTORECONF not being done,
-   which was the desired effect.
-
-However, in a later patch, we intend to change this default value.
+OpenSSL is not using the autotools as its build system. Therefore, we
+must use the generic infrastructure instead of the autotools one.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Makefile.autotools.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/openssl/openssl.mk |   85 ++++++++++++++++++++++++++-----------------
+ 1 files changed, 51 insertions(+), 34 deletions(-)
 
-diff --git a/package/Makefile.autotools.in b/package/Makefile.autotools.in
-index a4be8c8..d624881 100644
---- a/package/Makefile.autotools.in
-+++ b/package/Makefile.autotools.in
-@@ -161,7 +161,7 @@ define AUTORECONF_HOOK
- 	fi
- endef
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index 0f8c83c..f1b8b9f 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -5,6 +5,8 @@
+ #############################################################
+ OPENSSL_VERSION:=0.9.8n
+ OPENSSL_SITE:=http://www.openssl.org/source
++OPENSSL_INSTALL_STAGING = YES
++OPENSSL_DEPENDENCIES = zlib
  
--ifeq ($($(2)_AUTORECONF),YES)
-+ifeq ($$($(2)_AUTORECONF),YES)
- $(2)_POST_PATCH_HOOKS += AUTORECONF_HOOK
- $(2)_DEPENDENCIES += host-automake host-autoconf host-libtool
+ OPENSSL_TARGET_ARCH=generic32
+ 
+@@ -19,17 +21,8 @@ ifeq ($(ARCH),x86_64)
+ OPENSSL_TARGET_ARCH=x86_64
  endif
+ 
+-OPENSSL_INSTALL_STAGING = YES
+-OPENSSL_INSTALL_STAGING_OPT = INSTALL_PREFIX=$(STAGING_DIR) install
+-
+-OPENSSL_INSTALL_TARGET_OPT = INSTALL_PREFIX=$(TARGET_DIR) install
+-
+-OPENSSL_DEPENDENCIES = zlib
+-
+-$(eval $(call AUTOTARGETS,package,openssl))
+-
+-$(OPENSSL_TARGET_CONFIGURE):
+-	(cd $(OPENSSL_DIR); \
++define OPENSSL_CONFIGURE_CMDS
++	(cd $(@D); \
+ 		$(TARGET_CONFIGURE_ARGS) \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		./Configure \
+@@ -43,38 +36,62 @@ $(OPENSSL_TARGET_CONFIGURE):
+ 			no-rc5 \
+ 			zlib-dynamic \
+ 	)
+-	$(SED) "s:-march=[-a-z0-9] ::" -e "s:-mcpu=[-a-z0-9] ::g" $(OPENSSL_DIR)/Makefile
+-	$(SED) "s:-O[0-9]:$(TARGET_CFLAGS):" $(OPENSSL_DIR)/Makefile
+-	touch $@
+-
+-$(OPENSSL_TARGET_BUILD):
+-	$(MAKE1) CC=$(TARGET_CC) -C $(OPENSSL_DIR) all build-shared
+-	$(MAKE1) CC=$(TARGET_CC) -C $(OPENSSL_DIR) do_linux-shared
+-	touch $@
+-
+-$(OPENSSL_HOOK_POST_INSTALL):
+-	$(if $(BR2_HAVE_DEVFILES),,rm -rf $(TARGET_DIR)/usr/lib/ssl)
+-ifeq ($(BR2_PACKAGE_OPENSSL_BIN),y)
+-	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/usr/bin/openssl
+-else
++	$(SED) "s:-march=[-a-z0-9] ::" -e "s:-mcpu=[-a-z0-9] ::g" $(@D)/Makefile
++	$(SED) "s:-O[0-9]:$(TARGET_CFLAGS):" $(@D)/Makefile
++endef
++
++define OPENSSL_BUILD_CMDS
++	$(MAKE1) CC=$(TARGET_CC) -C $(@D) all build-shared
++	$(MAKE1) CC=$(TARGET_CC) -C $(@D) do_linux-shared
++endef
++
++define OPENSSL_INSTALL_STAGING_CMDS
++	$(MAKE1) -C $(@D) INSTALL_PREFIX=$(STAGING_DIR) install
++endef
++
++define OPENSSL_INSTALL_TARGET_CMDS
++	$(MAKE1) -C $(@D) INSTALL_PREFIX=$(TARGET_DIR) install
++endef
++
++define OPENSSL_REMOVE_DEV_FILES
++	rm -rf $(TARGET_DIR)/usr/lib/ssl
++endef
++
++ifneq ($(BR2_HAVE_DEVFILES),y)
++OPENSSL_POST_INSTALL_TARGET_HOOKS += OPENSSL_REMOVE_DEV_FILES
++endif
++
++define OPENSSL_REMOVE_OPENSSL_BIN
+ 	rm -f $(TARGET_DIR)/usr/bin/openssl
++endef
++
++ifneq ($(BR2_PACKAGE_OPENSSL_BIN),y)
++OPENSSL_POST_INSTALL_TARGET_HOOKS += OPENSSL_REMOVE_OPENSSL_BIN
+ endif
++
++define OPENSSL_INSTALL_FIXUPS
+ 	rm -f $(TARGET_DIR)/usr/bin/c_rehash
+ 	# libraries gets installed read only, so strip fails
++	chmod +w $(TARGET_DIR)/usr/lib/engines/lib*.so
+ 	for i in $(addprefix $(TARGET_DIR)/usr/lib/,libcrypto.so.* libssl.so.*); \
+-	do chmod +w $$i; $(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $$i; done
+-ifneq ($(BR2_PACKAGE_OPENSSL_ENGINES),y)
++	do chmod +w $$i; done
++endef
++
++OPENSSL_POST_INSTALL_TARGET_HOOKS += OPENSSL_INSTALL_FIXUPS
++
++define OPENSSL_REMOVE_OPENSSL_ENGINES
+ 	rm -rf $(TARGET_DIR)/usr/lib/engines
+-else
+-	chmod +w $(TARGET_DIR)/usr/lib/engines/lib*.so
+-	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/engines/lib*.so
++endef
++
++ifneq ($(BR2_PACKAGE_OPENSSL_ENGINES),y)
++OPENSSL_POST_INSTALL_TARGET_HOOKS += OPENSSL_REMOVE_OPENSSL_ENGINES
+ endif
+-	touch $@
+ 
+-$(OPENSSL_TARGET_UNINSTALL):
+-	$(call MESSAGE,"Uninstalling")
++define OPENSSL_UNINSTALL_CMDS
+ 	rm -rf $(addprefix $(TARGET_DIR)/,etc/ssl usr/bin/openssl usr/include/openssl)
+ 	rm -rf $(addprefix $(TARGET_DIR)/usr/lib/,ssl engines libcrypto* libssl* pkgconfig/libcrypto.pc)
+ 	rm -rf $(addprefix $(STAGING_DIR)/,etc/ssl usr/bin/openssl usr/include/openssl)
+ 	rm -rf $(addprefix $(STAGING_DIR)/usr/lib/,ssl engines libcrypto* libssl* pkgconfig/libcrypto.pc)
+-	rm -f $(OPENSSL_TARGET_INSTALL_TARGET) $(OPENSSL_HOOK_POST_INSTALL)
++endef
++
++$(eval $(call GENTARGETS,package,openssl))
+\ No newline at end of file
 -- 
 1.6.3.3
