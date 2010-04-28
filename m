@@ -1,110 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 28 Apr 2010 23:40:41 +0200
-Subject: [Buildroot] [pull request] Pull request for branch misc-fixes
-Message-ID: <cover.1272490771.git.thomas.petazzoni@free-electrons.com>
+Date: Wed, 28 Apr 2010 23:40:42 +0200
+Subject: [Buildroot] [PATCH 01/19] autotools: fix autoreconf check
+In-Reply-To: <cover.1272490771.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1272490771.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <de4a337f16aaf9c7ec73339bff28f21264c32dc6.1272490771.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The autoreconf check was incorrect, missing a $ sign to properly
+reference a package-specific variable. There was no visible effect
+until now since :
 
-Here is a set of patches, some of them are important fixes that should
-really be merged before 2010.05, some other are improvements and
-cleanups that can be postponed if needed.
+ * The existing syntax allowed to access the value defined in the
+   package specific .mk file, so when AUTORECONF was set to YES by a
+   package, it was working.
 
-The important ones are :
+ * The default value in Makefile.autotools.in was NO. In fact, when a
+   package .mkf file wasn't defining the AUTORECONF variable, the
+   Makefile.autotools.in test was testing the empty string against
+   'YES', which was false, leading to the AUTORECONF not being done,
+   which was the desired effect.
 
-      libxslt: fix host compilation
-      uClibc: add UCLIBC_HAS_NFTW to default configuration
-      uclibc: make sure the default configuration doesn't ask questions
-      Fix autotools configuration cache handling
+However, in a later patch, we intend to change this default value.
 
-Best regards,
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Makefile.autotools.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thomas
-
-The following changes since commit 671ec3917b7b8d9e6a22c1f881ff46808e3d8806:
-  Peter Korsgaard (1):
-        alsa-utils: alsamixer needs WCHAR
-
-are available in the git repository at:
-
-  git://git.busybox.net/~tpetazzoni/git/buildroot misc-fixes
-
-Thomas Petazzoni (19):
-      autotools: fix autoreconf check
-      libxslt: fix host compilation
-      openssl: convert to the generic infrastructure
-      autotools: inherit LIBTOOL_PATCH for host packages
-      packages: remove useless HOST_*_LIBTOOL_PATCH
-      autotools: fix referencing to LIBTOOL_PATCH variable
-      freetype: disable autoreconf
-      packages: handle interrupted downloads
-      uClibc: add UCLIBC_HAS_NFTW to default configuration
-      uclibc: make sure the default configuration doesn't ask questions
-      Commonalize the definition of TOOLCHAIN_DIR
-      Get rid of KERNEL_CROSS
-      Remove latest users of the ROOTFS_SUFFIX thing
-      Get rid of the code computing ROOTFS_SUFFIX
-      Update defconfigs after BR2_ROOTFS_SUFFIX removal
-      Remove BR2_GNU_TARGET_SUFFIX and compute GNU_TARGET_NAME
-      Update defconfigs after BR2_GNU_TARGET_SUFFIX removal
-      Unverbosify autoreconf output
-      Fix autotools configuration cache handling
-
- Config.in                                        |   18 -----
- Makefile                                         |    2 +
- configs/arm_toolchain_defconfig                  |    2 -
- configs/at91rm9200df_defconfig                   |    2 -
- configs/at91rm9200df_ext_bare_defconfig          |    2 -
- configs/at91rm9200df_ext_defconfig               |    2 -
- configs/at91sam9260dfc_defconfig                 |    2 -
- configs/at91sam9260dfc_ext_bare_defconfig        |    2 -
- configs/at91sam9260dfc_ext_defconfig             |    2 -
- configs/at91sam9260pf_defconfig                  |    1 -
- configs/at91sam9261ek_defconfig                  |    2 -
- configs/at91sam9261ek_ext_bare_defconfig         |    2 -
- configs/at91sam9261ek_ext_defconfig              |    2 -
- configs/at91sam9263ek_defconfig                  |    2 -
- configs/at91sam9263ek_ext_bare_defconfig         |    2 -
- configs/at91sam9263ek_ext_defconfig              |    2 -
- configs/at91sam9g20dfc_defconfig                 |    2 -
- configs/at91sam9g20dfc_ext_bare_defconfig        |    2 -
- configs/at91sam9g20dfc_ext_defconfig             |    2 -
- configs/atngw100-base_defconfig                  |    2 -
- configs/atngw100_defconfig                       |    2 -
- configs/atstk1005_defconfig                      |    2 -
- configs/atstk100x_defconfig                      |    2 -
- configs/i386_defconfig                           |    2 -
- configs/i686_defconfig                           |    2 -
- configs/integrator926_defconfig                  |    2 -
- configs/integrator926_huge_defconfig             |    2 -
- configs/kb9202_defconfig                         |    2 -
- configs/v100sc2_defconfig                        |    2 -
- package/Makefile.autotools.in                    |   15 +++-
- package/Makefile.in                              |   29 ++++----
- package/Makefile.package.in                      |    8 ++-
- package/autoconf/autoconf.mk                     |    2 +-
- package/dbus/dbus.mk                             |    1 -
- package/directfb/directfb.mk                     |    1 -
- package/expat/expat.mk                           |    1 -
- package/fakeroot/fakeroot.mk                     |    1 -
- package/freetype/freetype.mk                     |    2 +-
- package/libglib2/libglib2.mk                     |    1 -
- package/libpng/libpng.mk                         |    1 -
- package/libxml2/libxml2.mk                       |    2 -
- package/libxslt/libxslt.mk                       |    3 +-
- package/openssl/openssl.mk                       |   85 +++++++++++++---------
- package/pcmcia/pcmcia.mk                         |    2 +-
- package/x11r7/xlib_libfontenc/xlib_libfontenc.mk |    1 -
- target/linux/Makefile.in                         |    5 +-
- target/linux/Makefile.in.advanced                |    5 +-
- toolchain/uClibc/uClibc-0.9.31.config            |    2 +-
- toolchain/uClibc/uclibc.mk                       |    4 +-
- 49 files changed, 98 insertions(+), 146 deletions(-)
-
-Thanks,
+diff --git a/package/Makefile.autotools.in b/package/Makefile.autotools.in
+index a4be8c8..d624881 100644
+--- a/package/Makefile.autotools.in
++++ b/package/Makefile.autotools.in
+@@ -161,7 +161,7 @@ define AUTORECONF_HOOK
+ 	fi
+ endef
+ 
+-ifeq ($($(2)_AUTORECONF),YES)
++ifeq ($$($(2)_AUTORECONF),YES)
+ $(2)_POST_PATCH_HOOKS += AUTORECONF_HOOK
+ $(2)_DEPENDENCIES += host-automake host-autoconf host-libtool
+ endif
 -- 
-Thomas Petazzoni
+1.6.3.3
