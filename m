@@ -1,67 +1,45 @@
-From: Alexander (Sasha) Sirotkin <buildroot@browserseal.com>
-Date: Wed, 28 Apr 2010 20:55:11 +0300
-Subject: [Buildroot] ARM default configuration
-In-Reply-To: <g2r532dd5841004280628rea2fe08fp29443cb916b4a52c@mail.gmail.com>
-References: <t2n478c82f01004270125q2970af56odc45550d676618d8@mail.gmail.com>
-	<6053D9B413B89B4B8F9BE37E4B6F594702FB5473@nwap-auck-ex2.NW.local>
-	<q2z478c82f01004280524p8e938cd3o809611d38b31babb@mail.gmail.com>
-	<g2r532dd5841004280628rea2fe08fp29443cb916b4a52c@mail.gmail.com>
-Message-ID: <x2s478c82f01004281055k67cc9a9aq1be16eb79b330556@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 28 Apr 2010 18:14:21 +0000 (UTC)
+Subject: [Buildroot] [Bug 1645] New: Bump hostapd package to 0.7.2
+Message-ID: <bug-1645-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Apr 28, 2010 at 4:28 PM, Ravi Kumar Kulkarni
-<ravilinux4u@gmail.com>wrote:
+https://bugs.busybox.net/show_bug.cgi?id=1645
 
-> On Wed, Apr 28, 2010 at 5:54 PM, Alexander (Sasha) Sirotkin
-> <buildroot@browserseal.com> wrote:
-> >
-> >
-> > On Wed, Apr 28, 2010 at 1:39 AM, Rob Alley <Rob.Alley@navmanwireless.com
-> >
-> > wrote:
-> >>
-> >> > What ARM default configurations are supposed to work ? I tried a few,
-> >> including  integrator926_defconfig, but none of them compiled.
-> >> > Or maybe I do not understand the idea of default configuration. Isn't
-> >> it supposed to compile without errors and without asking the user for
-> >> input ?
-> >>
-> >> I believe they are all **supposed** to work.  The at91sam9260 and
-> >> at91sam9g20 defconfigs work for me.  You may still be prompted for user
-> >> inputs the first time - buildroot is constantly being updated but the
-> >> default configs get left behind, this results in prompting for new
-> >> packages etc.
-> >>
-> >
-> >  at91sam9260dfc_defconfig fails with the following error:
-> >
-> /home/sashas/buildroot-2010.02/output/staging/usr/bin/arm-linux-uclibc-ld:
-> > error
-> > :
-> >
-> /home/sashas/buildroot-2010.02/output/staging/usr/bin-ccache/../lib/gcc/arm-li
-> > nux-uclibc/4.3.4/libgcc.a(_ashrdi3.o) uses hardware FP, whereas u-boot
-> uses
-> > soft
-> > ware FP
->
-Thanks. I know how to fix it. I was just trying to make a point that most of
-the default configurations do not work.
+              Host: i686-linux
+            Target: powerpc-uclibc
+           Summary: Bump hostapd package to 0.7.2
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: gustavo at zacarias.com.ar
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-> >
->
-> when u make defconfig the toolchain selects hardware floating point by
-> default . so
-> so go to  make menuconfig
-> and select  toolchain->use software floating point by default . tat
-> will solve problem.
-> warm regards,
-> Ravi Kulkarni.
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100428/bad458db/attachment.htm>
+
+Created an attachment (id=1585)
+ --> (https://bugs.busybox.net/attachment.cgi?id=1585)
+Bump hostapd to 0.7.2
+
+Bump hostapd package to version 0.7.2 since it works better with newer
+(2.6.32+) kernels.
+Latest stable (0.6.10) doesn't play nicely with ath5k hardware which is pretty
+common in the form of minipci cards.
+Also forcibly enabled the NL80211 driver since it's mostly pointless to use it
+without it.
+
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
