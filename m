@@ -1,44 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 28 Apr 2010 23:40:43 +0200
-Subject: [Buildroot] [PATCH 02/19] libxslt: fix host compilation
+Date: Wed, 28 Apr 2010 23:40:47 +0200
+Subject: [Buildroot] [PATCH 06/19] autotools: fix referencing to
+	LIBTOOL_PATCH variable
 In-Reply-To: <cover.1272490771.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1272490771.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <f27aa7c43b67738a8dc641fa309516e6c9a6f813.1272490771.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <88318c2d7ddd7df42d024237057b47b97b9d9029.1272490771.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Do not build against libgcrypt on the host, since we don't build
-libgcrypt ourself, and it might fail even when libgcrypt is installed
-on the host:
-
-...configure...
-checking for libgcrypt-config... /usr/bin/libgcrypt-config
-Crypto extensions will be available.
-
-...build...
-gcc: /usr/lib/libgcrypt.so: No such file or directory
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libxslt/libxslt.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/Makefile.autotools.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
-index 407924d..e77663d 100644
---- a/package/libxslt/libxslt.mk
-+++ b/package/libxslt/libxslt.mk
-@@ -27,7 +27,8 @@ LIBXSLT_DEPENDENCIES = libxml2 $(LIBXSLT_DEPENDENCIES_EXTRA)
- HOST_LIBXSLT_CONF_OPT = --enable-shared \
- 			--without-debugging \
- 			--without-python \
--			--without-threads
-+			--without-threads \
-+			--without-crypto
+diff --git a/package/Makefile.autotools.in b/package/Makefile.autotools.in
+index d8404d9..96ff91f 100644
+--- a/package/Makefile.autotools.in
++++ b/package/Makefile.autotools.in
+@@ -151,7 +151,7 @@ define LIBTOOL_PATCH_HOOK
+ endef
  
- HOST_LIBXSLT_DEPENDENCIES = host-libxml2
+ # default values are not evaluated yet, so don't rely on this defaulting to YES
+-ifneq ($($(2)_LIBTOOL_PATCH),NO)
++ifneq ($$($(2)_LIBTOOL_PATCH),NO)
+ $(2)_POST_PATCH_HOOKS += LIBTOOL_PATCH_HOOK
+ endif
  
 -- 
 1.6.3.3
