@@ -1,107 +1,370 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 28 Apr 2010 23:40:57 +0200
-Subject: [Buildroot] [PATCH 16/19] Remove BR2_GNU_TARGET_SUFFIX and compute
-	GNU_TARGET_NAME
+Date: Wed, 28 Apr 2010 23:40:58 +0200
+Subject: [Buildroot] [PATCH 17/19] Update defconfigs after
+	BR2_GNU_TARGET_SUFFIX removal
 In-Reply-To: <cover.1272490771.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1272490771.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <3e832d4442a3260a0c82c33a63196ee22bae373c.1272490772.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <a3ddfb2e5c125ec3648cb3c3f1805e86d6ee25e3.1272490772.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Instead of asking the user about the GNU target suffix, just compute
-it automatically from the other configuration options.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in           |   18 ------------------
- Makefile            |    1 +
- package/Makefile.in |   21 +++++++++++++++++----
- 3 files changed, 18 insertions(+), 22 deletions(-)
+ configs/arm_toolchain_defconfig           |    1 -
+ configs/at91rm9200df_defconfig            |    1 -
+ configs/at91rm9200df_ext_bare_defconfig   |    1 -
+ configs/at91rm9200df_ext_defconfig        |    1 -
+ configs/at91sam9260dfc_defconfig          |    1 -
+ configs/at91sam9260dfc_ext_bare_defconfig |    1 -
+ configs/at91sam9260dfc_ext_defconfig      |    1 -
+ configs/at91sam9260pf_defconfig           |    1 -
+ configs/at91sam9261ek_defconfig           |    1 -
+ configs/at91sam9261ek_ext_bare_defconfig  |    1 -
+ configs/at91sam9261ek_ext_defconfig       |    1 -
+ configs/at91sam9263ek_defconfig           |    1 -
+ configs/at91sam9263ek_ext_bare_defconfig  |    1 -
+ configs/at91sam9263ek_ext_defconfig       |    1 -
+ configs/at91sam9g20dfc_defconfig          |    1 -
+ configs/at91sam9g20dfc_ext_bare_defconfig |    1 -
+ configs/at91sam9g20dfc_ext_defconfig      |    1 -
+ configs/atngw100-base_defconfig           |    1 -
+ configs/atngw100_defconfig                |    1 -
+ configs/atstk1005_defconfig               |    1 -
+ configs/atstk100x_defconfig               |    1 -
+ configs/i386_defconfig                    |    1 -
+ configs/i686_defconfig                    |    1 -
+ configs/integrator926_defconfig           |    1 -
+ configs/integrator926_huge_defconfig      |    1 -
+ configs/kb9202_defconfig                  |    1 -
+ configs/v100sc2_defconfig                 |    1 -
+ 27 files changed, 0 insertions(+), 27 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index bc4fec2..b051a37 100644
---- a/Config.in
-+++ b/Config.in
-@@ -103,24 +103,6 @@ config BR2_STAGING_DIR
- 
- source	"target/device/Config.in.mirrors"
- 
--config BR2_GNU_TARGET_SUFFIX
--	string "GNU target suffix"
--	default "linux-uclibcgnueabi" if BR2_ARM_EABI
--	default "linux-uclibc"
--	help
--	  The string used to pass to configure scripts via the
--	  --target= option.  Just specify the suffix here, the leading
--	  arch will be filled in automatically.
--
--	  Most users will want to stick with the default setting, though
--	  other users (most notably ARM EABI) like to add on to this in
--	  order to stay in line with gcc conventions.
--
--	  Default options are:
--	      linux-uclibcgnueabi for ARM EABI
--	      linux-uclibc for the rest
--	      gnuhurd-uclibc for the hurd
--
- config BR2_JLEVEL
- 	int "Number of jobs to run simultaneously"
- 	default "2"
-diff --git a/Makefile b/Makefile
-index 271db9c..607ec6d 100644
---- a/Makefile
-+++ b/Makefile
-@@ -214,6 +214,7 @@ ARCH:=$(call qstrip,$(BR2_ARCH))
- ifeq ($(ARCH),xtensa)
- ARCH:=$(ARCH)_$(call qstrip,$(BR2_xtensa_core_name))
- endif
-+
- WGET:=$(call qstrip,$(BR2_WGET)) $(SPIDER) $(QUIET)
- SVN_CO:=$(call qstrip,$(BR2_SVN_CO)) $(QUIET)
- SVN_UP:=$(call qstrip,$(BR2_SVN_UP)) $(QUIET)
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 5f7af99..acba382 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -96,19 +96,32 @@ TARGET_LDFLAGS=--sysroot $(STAGING_DIR)/
- endif
- #########################################################################
- 
-+# Compute GNU_TARGET_NAME and REAL_GNU_TARGET_NAME
-+GNU_TARGET_NAME=$(ARCH)-linux
-+
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
-+LIBC=uclibc
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
-+LIBC=uclibc
-+else
-+LIBC=glibc
-+endif
-+
-+ifeq ($(BR2_ARM_EABI),y)
-+ABI=gnueabi
-+endif
-+
-+REAL_GNU_TARGET_NAME=$(ARCH)-unknown-linux-$(LIBC)$(ABI)
-+
- ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
- 
- # Quotes are needed for spaces et al in path components.
- TARGET_PATH="$(TOOLCHAIN_DIR)/bin:$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin/:$(STAGING_DIR)/bin:$(STAGING_DIR)/usr/bin:$(PATH)"
--GNU_TARGET_NAME=$(ARCH)-linux
--REAL_GNU_TARGET_NAME=$(ARCH)$(GNU_TARGET_SUFFIX)
- TARGET_CROSS=$(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
- TOOLCHAIN_EXTERNAL_PREFIX:=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))
- TOOLCHAIN_EXTERNAL_PATH:=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PATH))
- TARGET_PATH="$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin/:$(TOOLCHAIN_DIR)/bin:$(TOOLCHAIN_EXTERNAL_PATH)/bin:$(PATH)"
--REAL_GNU_TARGET_NAME=$(TOOLCHAIN_EXTERNAL_PREFIX)
--GNU_TARGET_NAME=$(TOOLCHAIN_EXTERNAL_PREFIX)
- TARGET_CROSS=$(TOOLCHAIN_EXTERNAL_PATH)/bin/$(TOOLCHAIN_EXTERNAL_PREFIX)-
- endif
- TARGET_AR=$(TARGET_CROSS)ar
+diff --git a/configs/arm_toolchain_defconfig b/configs/arm_toolchain_defconfig
+index 2ad9e63..460fe95 100644
+--- a/configs/arm_toolchain_defconfig
++++ b/configs/arm_toolchain_defconfig
+@@ -161,7 +161,6 @@ BR2_STAGING_DIR="$(BASE_DIR)/staging"
+ BR2_TOPDIR_PREFIX=""
+ BR2_TOPDIR_SUFFIX=""
+ BR2_ROOTFS_PREFIX="rootfs"
+-BR2_GNU_TARGET_SUFFIX="linux-uclibc"
+ BR2_JLEVEL=2
+ # BR2_DEPRECATED is not set
+ BR2_CONFIG_CACHE=y
+diff --git a/configs/at91rm9200df_defconfig b/configs/at91rm9200df_defconfig
+index e07ef84..7d2bcfd 100644
+--- a/configs/at91rm9200df_defconfig
++++ b/configs/at91rm9200df_defconfig
+@@ -166,7 +166,6 @@ BR2_STAGING_DIR="$(BASE_DIR)/staging"
+ BR2_TOPDIR_PREFIX=""
+ BR2_TOPDIR_SUFFIX=""
+ BR2_ROOTFS_PREFIX="at91sam9260dfc"
+-BR2_GNU_TARGET_SUFFIX="linux-uclibc"
+ BR2_JLEVEL=2
+ # BR2_DEPRECATED is not set
+ # BR2_CONFIG_CACHE is not set
+diff --git a/configs/at91rm9200df_ext_bare_defconfig b/configs/at91rm9200df_ext_bare_defconfig
+index 2198cb2..436c8ff 100644
+--- a/configs/at91rm9200df_ext_bare_defconfig
++++ b/configs/at91rm9200df_ext_bare_defconfig
+@@ -161,7 +161,6 @@ BR2_STAGING_DIR="$(BASE_DIR)/staging"
+ BR2_TOPDIR_PREFIX=""
+ BR2_TOPDIR_SUFFIX=""
+ BR2_ROOTFS_PREFIX="at91rm9200df-rootfs"
+-BR2_GNU_TARGET_SUFFIX="linux-uclibc"
+ BR2_JLEVEL=2
+ # BR2_DEPRECATED is not set
+ # BR2_CONFIG_CACHE is not set
+diff --git a/configs/at91rm9200df_ext_defconfig b/configs/at91rm9200df_ext_defconfig
+index 5957a68..79e55fc 100644
+--- a/configs/at91rm9200df_ext_defconfig
++++ b/configs/at91rm9200df_ext_defconfig
+@@ -172,7 +172,6 @@ BR2_STAGING_DIR="$(BASE_DIR)/staging"
+ BR2_TOPDIR_PREFIX=""
+ BR2_TOPDIR_SUFFIX=""
+ BR2_ROOTFS_PREFIX="at91rm9200df-rootfs"
+-BR2_GNU_TARGET_SUFFIX="linux-uclibc"
+ BR2_JLEVEL=2
+ # BR2_DEPRECATED is not set
+ # BR2_CONFIG_CACHE is not set
+diff --git a/configs/at91sam9260dfc_defconfig b/configs/at91sam9260dfc_defconfig
+index daa1c82..087067f 100644
+--- a/configs/at91sam9260dfc_defconfig
++++ b/configs/at91sam9260dfc_defconfig
+@@ -179,7 +179,6 @@ BR2_STAGING_DIR="$(BASE_DIR)/staging"
+ BR2_TOPDIR_PREFIX=""
+ BR2_TOPDIR_SUFFIX=""
+ BR2_ROOTFS_PREFIX="at91sam9260dfc-rootfs"
+-BR2_GNU_TARGET_SUFFIX="linux-uclibc"
+ BR2_JLEVEL=2
+ # BR2_DEPRECATED is not set
+ # BR2_CONFIG_CACHE is not set
+diff --git a/configs/at91sam9260dfc_ext_bare_defconfig b/configs/at91sam9260dfc_ext_bare_defconfig
+index d53b294..92704d9 100644
+--- a/configs/at91sam9260dfc_ext_bare_defconfig
++++ b/configs/at91sam9260dfc_ext_bare_defconfig
+@@ -161,7 +161,6 @@ BR2_STAGING_DIR="$(BASE_DIR)/staging"
+ BR2_TOPDIR_PREFIX=""
+ BR2_TOPDIR_SUFFIX=""
+ BR2_ROOTFS_PREFIX="at91sam9260dfc-rootfs"
+-BR2_GNU_TARGET_SUFFIX="linux-uclibc"
+ BR2_JLEVEL=2
+ # BR2_DEPRECATED is not set
+ # BR2_CONFIG_CACHE is not set
+diff --git a/configs/at91sam9260dfc_ext_defconfig b/configs/at91sam9260dfc_ext_defconfig
+index cab9a4c..e52cd2d 100644
+--- a/configs/at91sam9260dfc_ext_defconfig
++++ b/configs/at91sam9260dfc_ext_defconfig
+@@ -180,7 +180,6 @@ BR2_STAGING_DIR="$(BASE_DIR)/staging"
+ BR2_TOPDIR_PREFIX=""
+ BR2_TOPDIR_SUFFIX=""
+ BR2_ROOTFS_PREFIX="at91sam9260dfc-rootfs"
+-BR2_GNU_TARGET_SUFFIX="linux-uclibc"
+ BR2_JLEVEL=2
+ # BR2_DEPRECATED is not set
+ # BR2_CONFIG_CACHE is not set
+diff --git a/configs/at91sam9260pf_defconfig b/configs/at91sam9260pf_defconfig
+index a2b8695..b45271c 100644
+--- a/configs/at91sam9260pf_defconfig
++++ b/configs/at91sam9260pf_defconfig
+@@ -72,7 +72,6 @@ BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
+ BR2_STAGING_DIR="$(BASE_DIR)/staging"
+ BR2_TOPDIR_PREFIX=""
+ BR2_TOPDIR_SUFFIX="wchar"
+-BR2_GNU_TARGET_SUFFIX="linux-uclibc"
+ BR2_JLEVEL=1
+ # BR2_DEPRECATED is not set
+ BR2_STRIP_strip=y
+diff --git a/configs/at91sam9261ek_defconfig b/configs/at91sam9261ek_defconfig
+index 7d79611..cd7483b 100644
+--- a/configs/at91sam9261ek_defconfig
++++ b/configs/at91sam9261ek_defconfig
+@@ -182,7 +182,6 @@ BR2_STAGING_DIR="$(BASE_DIR)/staging"
+ BR2_TOPDIR_PREFIX=""
+ BR2_TOPDIR_SUFFIX=""
+ BR2_ROOTFS_PREFIX="at91sam9261ek-NAND"
+-BR2_GNU_TARGET_SUFFIX="linux-uclibc"
+ BR2_JLEVEL=2
+ # BR2_DEPRECATED is not set
+ BR2_CONFIG_CACHE=y
+diff --git a/configs/at91sam9261ek_ext_bare_defconfig b/configs/at91sam9261ek_ext_bare_defconfig
+index 346b9b6..b687190 100644
+--- a/configs/at91sam9261ek_ext_bare_defconfig
++++ b/configs/at91sam9261ek_ext_bare_defconfig
+@@ -164,7 +164,6 @@ BR2_STAGING_DIR="$(BASE_DIR)/staging"
+ BR2_TOPDIR_PREFIX=""
+ BR2_TOPDIR_SUFFIX=""
+ BR2_ROOTFS_PREFIX="at91sam9261ek-rootfs"
+-BR2_GNU_TARGET_SUFFIX="linux-uclibc"
+ BR2_JLEVEL=2
+ # BR2_DEPRECATED is not set
+ # BR2_CONFIG_CACHE is not set
+diff --git a/configs/at91sam9261ek_ext_defconfig b/configs/at91sam9261ek_ext_defconfig
+index 1819442..5ab47ad 100644
+--- a/configs/at91sam9261ek_ext_defconfig
++++ b/configs/at91sam9261ek_ext_defconfig
+@@ -183,7 +183,6 @@ BR2_STAGING_DIR="$(BASE_DIR)/staging"
+ BR2_TOPDIR_PREFIX=""
+ BR2_TOPDIR_SUFFIX=""
+ BR2_ROOTFS_PREFIX="at91sam9261ek-NAND"
+-BR2_GNU_TARGET_SUFFIX="linux-uclibc"
+ BR2_JLEVEL=2
+ # BR2_DEPRECATED is not set
+ BR2_CONFIG_CACHE=y
+diff --git a/configs/at91sam9263ek_defconfig b/configs/at91sam9263ek_defconfig
+index 87db7a0..bc95b6b 100644
+--- a/configs/at91sam9263ek_defconfig
++++ b/configs/at91sam9263ek_defconfig
+@@ -180,7 +180,6 @@ BR2_STAGING_DIR="$(BASE_DIR)/staging"
+ BR2_TOPDIR_PREFIX=""
+ BR2_TOPDIR_SUFFIX=""
+ BR2_ROOTFS_PREFIX="at91sam9263ek-NAND"
+-BR2_GNU_TARGET_SUFFIX="linux-uclibc"
+ BR2_JLEVEL=2
+ # BR2_DEPRECATED is not set
+ BR2_CONFIG_CACHE=y
+diff --git a/configs/at91sam9263ek_ext_bare_defconfig b/configs/at91sam9263ek_ext_bare_defconfig
+index 58ce35d..4ec46b3 100644
+--- a/configs/at91sam9263ek_ext_bare_defconfig
++++ b/configs/at91sam9263ek_ext_bare_defconfig
+@@ -163,7 +163,6 @@ BR2_STAGING_DIR="$(BASE_DIR)/staging"
+ BR2_TOPDIR_PREFIX=""
+ BR2_TOPDIR_SUFFIX=""
+ BR2_ROOTFS_PREFIX="at91sam9263ek-rootfs"
+-BR2_GNU_TARGET_SUFFIX="linux-uclibc"
+ BR2_JLEVEL=2
+ # BR2_DEPRECATED is not set
+ # BR2_CONFIG_CACHE is not set
+diff --git a/configs/at91sam9263ek_ext_defconfig b/configs/at91sam9263ek_ext_defconfig
+index 49466fc..9771c83 100644
+--- a/configs/at91sam9263ek_ext_defconfig
++++ b/configs/at91sam9263ek_ext_defconfig
+@@ -182,7 +182,6 @@ BR2_STAGING_DIR="$(BASE_DIR)/staging"
+ BR2_TOPDIR_PREFIX=""
+ BR2_TOPDIR_SUFFIX=""
+ BR2_ROOTFS_PREFIX="at91sam9263ek-NAND"
+-BR2_GNU_TARGET_SUFFIX="linux-uclibc"
+ BR2_JLEVEL=2
+ # BR2_DEPRECATED is not set
+ BR2_CONFIG_CACHE=y
+diff --git a/configs/at91sam9g20dfc_defconfig b/configs/at91sam9g20dfc_defconfig
+index 7eac58c..30cc4e1 100644
+--- a/configs/at91sam9g20dfc_defconfig
++++ b/configs/at91sam9g20dfc_defconfig
+@@ -180,7 +180,6 @@ BR2_STAGING_DIR="$(BASE_DIR)/staging"
+ BR2_TOPDIR_PREFIX=""
+ BR2_TOPDIR_SUFFIX=""
+ BR2_ROOTFS_PREFIX="at91sam92g20ek-rootfs"
+-BR2_GNU_TARGET_SUFFIX="linux-uclibc"
+ BR2_JLEVEL=2
+ # BR2_DEPRECATED is not set
+ # BR2_CONFIG_CACHE is not set
+diff --git a/configs/at91sam9g20dfc_ext_bare_defconfig b/configs/at91sam9g20dfc_ext_bare_defconfig
+index 0feba79..75f65ea 100644
+--- a/configs/at91sam9g20dfc_ext_bare_defconfig
++++ b/configs/at91sam9g20dfc_ext_bare_defconfig
+@@ -161,7 +161,6 @@ BR2_STAGING_DIR="$(BASE_DIR)/staging"
+ BR2_TOPDIR_PREFIX=""
+ BR2_TOPDIR_SUFFIX=""
+ BR2_ROOTFS_PREFIX="at91sam9g20dfc-rootfs"
+-BR2_GNU_TARGET_SUFFIX="linux-uclibc"
+ BR2_JLEVEL=2
+ # BR2_DEPRECATED is not set
+ # BR2_CONFIG_CACHE is not set
+diff --git a/configs/at91sam9g20dfc_ext_defconfig b/configs/at91sam9g20dfc_ext_defconfig
+index a9fa530..e18754e 100644
+--- a/configs/at91sam9g20dfc_ext_defconfig
++++ b/configs/at91sam9g20dfc_ext_defconfig
+@@ -180,7 +180,6 @@ BR2_STAGING_DIR="$(BASE_DIR)/staging"
+ BR2_TOPDIR_PREFIX=""
+ BR2_TOPDIR_SUFFIX=""
+ BR2_ROOTFS_PREFIX="at91sam9g20dfc-rootfs"
+-BR2_GNU_TARGET_SUFFIX="linux-uclibc"
+ BR2_JLEVEL=2
+ # BR2_DEPRECATED is not set
+ # BR2_CONFIG_CACHE is not set
+diff --git a/configs/atngw100-base_defconfig b/configs/atngw100-base_defconfig
+index cc6ccf9..d3092df 100644
+--- a/configs/atngw100-base_defconfig
++++ b/configs/atngw100-base_defconfig
+@@ -113,7 +113,6 @@ BR2_STAGING_DIR="$(BASE_DIR)/staging"
+ # BR2_FPU_SUFFIX is not set
+ BR2_TOPDIR_PREFIX=""
+ BR2_TOPDIR_SUFFIX=""
+-BR2_GNU_TARGET_SUFFIX="linux-uclibc"
+ BR2_JLEVEL=1
+ # BR2_DEPRECATED is not set
+ # BR2_CONFIG_CACHE is not set
+diff --git a/configs/atngw100_defconfig b/configs/atngw100_defconfig
+index 7c5be16..995aee1 100644
+--- a/configs/atngw100_defconfig
++++ b/configs/atngw100_defconfig
+@@ -113,7 +113,6 @@ BR2_STAGING_DIR="$(BASE_DIR)/staging"
+ # BR2_FPU_SUFFIX is not set
+ BR2_TOPDIR_PREFIX=""
+ BR2_TOPDIR_SUFFIX=""
+-BR2_GNU_TARGET_SUFFIX="linux-uclibc"
+ BR2_JLEVEL=3
+ # BR2_DEPRECATED is not set
+ BR2_CONFIG_CACHE=y
+diff --git a/configs/atstk1005_defconfig b/configs/atstk1005_defconfig
+index 0a7a7d8..a1fe0b7 100644
+--- a/configs/atstk1005_defconfig
++++ b/configs/atstk1005_defconfig
+@@ -112,7 +112,6 @@ BR2_STAGING_DIR="$(BASE_DIR)/staging"
+ BR2_TOPDIR_PREFIX=""
+ BR2_TOPDIR_SUFFIX=""
+ BR2_ROOTFS_PREFIX="rootfs"
+-BR2_GNU_TARGET_SUFFIX="linux-uclibc"
+ BR2_JLEVEL=2
+ # BR2_DEPRECATED is not set
+ # BR2_CONFIG_CACHE is not set
+diff --git a/configs/atstk100x_defconfig b/configs/atstk100x_defconfig
+index 8be238e..0fbbf14 100644
+--- a/configs/atstk100x_defconfig
++++ b/configs/atstk100x_defconfig
+@@ -112,7 +112,6 @@ BR2_STAGING_DIR="$(BASE_DIR)/staging"
+ # BR2_FPU_SUFFIX is not set
+ BR2_TOPDIR_PREFIX=""
+ BR2_TOPDIR_SUFFIX=""
+-BR2_GNU_TARGET_SUFFIX="linux-uclibc"
+ BR2_JLEVEL=2
+ # BR2_DEPRECATED is not set
+ # BR2_CONFIG_CACHE is not set
+diff --git a/configs/i386_defconfig b/configs/i386_defconfig
+index 09a960e..2481412 100644
+--- a/configs/i386_defconfig
++++ b/configs/i386_defconfig
+@@ -113,7 +113,6 @@ BR2_STAGING_DIR="$(BASE_DIR)/staging"
+ # BR2_FPU_SUFFIX is not set
+ BR2_TOPDIR_PREFIX=""
+ BR2_TOPDIR_SUFFIX=""
+-BR2_GNU_TARGET_SUFFIX="linux-uclibc"
+ BR2_JLEVEL=1
+ # BR2_DEPRECATED is not set
+ # BR2_CONFIG_CACHE is not set
+diff --git a/configs/i686_defconfig b/configs/i686_defconfig
+index eb7b180..066842f 100644
+--- a/configs/i686_defconfig
++++ b/configs/i686_defconfig
+@@ -113,7 +113,6 @@ BR2_STAGING_DIR="$(BASE_DIR)/staging"
+ # BR2_FPU_SUFFIX is not set
+ BR2_TOPDIR_PREFIX=""
+ BR2_TOPDIR_SUFFIX=""
+-BR2_GNU_TARGET_SUFFIX="linux-uclibc"
+ BR2_JLEVEL=1
+ # BR2_DEPRECATED is not set
+ # BR2_CONFIG_CACHE is not set
+diff --git a/configs/integrator926_defconfig b/configs/integrator926_defconfig
+index 7270bcb..3879272 100644
+--- a/configs/integrator926_defconfig
++++ b/configs/integrator926_defconfig
+@@ -110,7 +110,6 @@ BR2_STAGING_DIR="$(BASE_DIR)/staging"
+ BR2_TOPDIR_PREFIX=""
+ BR2_TOPDIR_SUFFIX=""
+ BR2_ROOTFS_PREFIX="rootfs"
+-BR2_GNU_TARGET_SUFFIX="linux-uclibcgnueabi"
+ BR2_JLEVEL=1
+ # BR2_DEPRECATED is not set
+ # BR2_CONFIG_CACHE is not set
+diff --git a/configs/integrator926_huge_defconfig b/configs/integrator926_huge_defconfig
+index 77f9548..86443db 100644
+--- a/configs/integrator926_huge_defconfig
++++ b/configs/integrator926_huge_defconfig
+@@ -110,7 +110,6 @@ BR2_STAGING_DIR="$(BASE_DIR)/staging"
+ BR2_TOPDIR_PREFIX=""
+ BR2_TOPDIR_SUFFIX=""
+ BR2_ROOTFS_PREFIX="$(BOARD_NAME)-rootfs"
+-BR2_GNU_TARGET_SUFFIX="linux-uclibcgnueabi"
+ BR2_JLEVEL=1
+ # BR2_DEPRECATED is not set
+ # BR2_CONFIG_CACHE is not set
+diff --git a/configs/kb9202_defconfig b/configs/kb9202_defconfig
+index 3c865ea..4c84b9e 100644
+--- a/configs/kb9202_defconfig
++++ b/configs/kb9202_defconfig
+@@ -118,7 +118,6 @@ BR2_STAGING_DIR="$(BASE_DIR)/staging"
+ BR2_TOPDIR_PREFIX=""
+ BR2_TOPDIR_SUFFIX=""
+ BR2_ROOTFS_PREFIX="rootfs"
+-BR2_GNU_TARGET_SUFFIX="linux-uclibc"
+ BR2_JLEVEL=1
+ # BR2_DEPRECATED is not set
+ # BR2_ENABLE_DEBUG is not set
+diff --git a/configs/v100sc2_defconfig b/configs/v100sc2_defconfig
+index c47e0e1..0ad7ab0 100644
+--- a/configs/v100sc2_defconfig
++++ b/configs/v100sc2_defconfig
+@@ -89,7 +89,6 @@ BR2_STAGING_DIR="$(BASE_DIR)/staging"
+ BR2_TOPDIR_PREFIX=""
+ BR2_TOPDIR_SUFFIX=""
+ BR2_ROOTFS_PREFIX="rootfs"
+-BR2_GNU_TARGET_SUFFIX="linux-uclibc"
+ BR2_JLEVEL=1
+ # BR2_DEPRECATED is not set
+ # BR2_ENABLE_DEBUG is not set
 -- 
 1.6.3.3
