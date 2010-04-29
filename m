@@ -1,41 +1,54 @@
 From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
-Date: Thu, 29 Apr 2010 22:44:20 +0300
-Subject: [Buildroot] [PATCH] Add GDB 7.0.1 and 7.1 support
-Message-ID: <20100429194420.6657.9268.stgit@localhost.localdomain>
+Date: Thu, 29 Apr 2010 22:50:46 +0300
+Subject: [Buildroot] [PATCH] Fix build of matchbox-keyboard and matchbox-wm
+Message-ID: <20100429195046.6772.8942.stgit@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Darius Augulis <augulis.darius@gmail.com>
+
+These packages have buggy configure script. It adds -L/lib flag
+for linker and thus wrong libraries are linked in.
+Workaround this issue by setting expat=yes in configure
+environment.
+
+Signed-off-by: Darius Augulis <augulis.darius@gmail.com>
 Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
 ---
 
- toolchain/gdb/Config.in |   10 ++++++++++
- 1 files changed, 10 insertions(+), 0 deletions(-)
+ .../matchbox-keyboard/matchbox-keyboard.mk         |    4 +++-
+ package/matchbox/matchbox-wm/matchbox-wm.mk        |    3 +++
+ 2 files changed, 6 insertions(+), 1 deletions(-)
 
-diff --git a/toolchain/gdb/Config.in b/toolchain/gdb/Config.in
-index e383949..f4fbaab 100644
---- a/toolchain/gdb/Config.in
-+++ b/toolchain/gdb/Config.in
-@@ -56,6 +56,14 @@ choice
- 		bool "gdb 6.8"
- 		depends on !BR2_avr32
- 
-+	config BR2_GDB_VERSION_7_0_1
-+		bool "gdb 7.0.1"
-+		select BR2_PTHREAD_DEBUG if !BR2_PTHREADS_NONE
+diff --git a/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk b/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
+index 7c6d455..3d7178d 100644
+--- a/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
++++ b/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
+@@ -8,7 +8,9 @@ MATCHBOX_KEYBOARD_VERSION = 0.1
+ MATCHBOX_KEYBOARD_SOURCE = matchbox-keyboard-$(MATCHBOX_KEYBOARD_VERSION).tar.bz2
+ MATCHBOX_KEYBOARD_SITE = http://matchbox-project.org/sources/matchbox-keyboard/$(MATCHBOX_KEYBOARD_VERSION)
+ MATCHBOX_KEYBOARD_DEPENDENCIES = matchbox-lib matchbox-fakekey
+-MATCHBOX_KEYBOARD_CONF_OPT = --enable-expat
 +
-+	config BR2_GDB_VERSION_7_1
-+		bool "gdb 7.1"
-+		select BR2_PTHREAD_DEBUG if !BR2_PTHREADS_NONE
-+
- endchoice
++# Workaround bug in configure script
++MATCHBOX_KEYBOARD_CONF_ENV = expat=yes
  
- config BR2_GDB_VERSION
-@@ -66,3 +74,5 @@ config BR2_GDB_VERSION
- 	default "6.7.1"    if BR2_GDB_VERSION_6_7_1
- 	default "6.7.1-avr32-2.1.5" if BR2_GDB_VERSION_6_7_1_AVR32_2_1_5
- 	default "6.8"      if BR2_GDB_VERSION_6_8
-+	default "7.0.1"    if BR2_GDB_VERSION_7_0_1
-+	default "7.1"      if BR2_GDB_VERSION_7_1
+ define MATCHBOX_KEYBOARD_POST_INSTALL_FIXES
+  cp -dpf ./package/matchbox/matchbox-keyboard/mb-applet-kbd-wrapper.sh $(TARGET_DIR)/usr/bin/
+diff --git a/package/matchbox/matchbox-wm/matchbox-wm.mk b/package/matchbox/matchbox-wm/matchbox-wm.mk
+index fbf3456..0334d0f 100644
+--- a/package/matchbox/matchbox-wm/matchbox-wm.mk
++++ b/package/matchbox/matchbox-wm/matchbox-wm.mk
+@@ -10,6 +10,9 @@ MATCHBOX_WM_SITE = http://matchbox-project.org/sources/matchbox-window-manager/$
+ MATCHBOX_WM_DEPENDENCIES = matchbox-lib
+ MATCHBOX_WM_CONF_OPT = --enable-expat
+ 
++# Workaround bug in configure script
++MATCHBOX_WM_CONF_ENV = expat=yes
++
+ #############################################################
+ 
+ ifeq ($(BR2_PACKAGE_X11R7_LIBXCOMPOSITE),y)
