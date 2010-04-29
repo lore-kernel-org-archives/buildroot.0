@@ -1,59 +1,41 @@
-From: Bart Otten <bartotten@gmail.com>
-Date: Thu, 29 Apr 2010 21:40:49 +0200
-Subject: [Buildroot] Mplayer
-Message-ID: <w2w76d09b281004291240oe35449fdz226a42e12a5097a0@mail.gmail.com>
+From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+Date: Thu, 29 Apr 2010 22:44:20 +0300
+Subject: [Buildroot] [PATCH] Add GDB 7.0.1 and 7.1 support
+Message-ID: <20100429194420.6657.9268.stgit@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I get a error building mplayer with buildroot, how can i fix it?
+Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+---
 
-make[1]: Entering directory
-`/home/Bart/Downloads/buildroot-2010.02/output/build/MPlayer-1.0rc2'
-/home/Bart/Downloads/buildroot-2010.02/output/staging/usr/bin/i586-linux-uclibc-gcc
--I./libavcodec -I./libavformat -Wdisabled-optimization -Wno-pointer-sign
--Wdeclaration-after-statement -I. -I. -I./libavutil -Os -pipe -Os
--I/home/Bart/Downloads/buildroot-2010.02/output/staging/usr/include
--I/home/Bart/Downloads/buildroot-2010.02/output/staging/include
---sysroot=/home/Bart/Downloads/buildroot-2010.02/output/staging/ -isysroot
-/home/Bart/Downloads/buildroot-2010.02/output/staging -mtune=geode
--march=geode -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -fomit-frame-pointer -D_REENTRANT -D_LARGEFILE_SOURCE
--D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE -DHAVE_CONFIG_H
--I/home/Bart/Downloads/buildroot-2010.02/output/staging/usr/include
--I/usr/X11/include -c -o mplayer.o mplayer.c
-/home/Bart/Downloads/buildroot-2010.02/output/staging/usr/bin/i586-linux-uclibc-gcc
--I./libavcodec -I./libavformat -Wdisabled-optimization -Wno-pointer-sign
--Wdeclaration-after-statement -I. -I. -I./libavutil -Os -pipe -Os
--I/home/Bart/Downloads/buildroot-2010.02/output/staging/usr/include
--I/home/Bart/Downloads/buildroot-2010.02/output/staging/include
---sysroot=/home/Bart/Downloads/buildroot-2010.02/output/staging/ -isysroot
-/home/Bart/Downloads/buildroot-2010.02/output/staging -mtune=geode
--march=geode -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -fomit-frame-pointer -D_REENTRANT -D_LARGEFILE_SOURCE
--D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE -DHAVE_CONFIG_H
--I/home/Bart/Downloads/buildroot-2010.02/output/staging/usr/include
--I/usr/X11/include -c -o m_property.o m_property.c
-In file included from /usr/X11/include/features.h:354,
-from /usr/X11/include/stdio.h:28,
-from mplayer.c:5:
-/usr/X11/include/gnu/stubs.h:7:27: error: gnu/stubs-32.h: No such file or
-directory
-In file included from /usr/X11/include/features.h:354,
-from /usr/X11/include/stdlib.h:25,
-from m_property.c:7:
-/usr/X11/include/gnu/stubs.h:7:27: error: gnu/stubs-32.h: No such file or
-directory
-make[1]: *** [m_property.o] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make[1]: *** [mplayer.o] Error 1
-make[1]: Leaving directory
-`/home/Bart/Downloads/buildroot-2010.02/output/build/MPlayer-1.0rc2'
-make: ***
-[/home/Bart/Downloads/buildroot-2010.02/output/build/MPlayer-1.0rc2/mplayer]
-Error 2
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100429/a3bb2c39/attachment-0001.htm>
+ toolchain/gdb/Config.in |   10 ++++++++++
+ 1 files changed, 10 insertions(+), 0 deletions(-)
+
+diff --git a/toolchain/gdb/Config.in b/toolchain/gdb/Config.in
+index e383949..f4fbaab 100644
+--- a/toolchain/gdb/Config.in
++++ b/toolchain/gdb/Config.in
+@@ -56,6 +56,14 @@ choice
+ 		bool "gdb 6.8"
+ 		depends on !BR2_avr32
+ 
++	config BR2_GDB_VERSION_7_0_1
++		bool "gdb 7.0.1"
++		select BR2_PTHREAD_DEBUG if !BR2_PTHREADS_NONE
++
++	config BR2_GDB_VERSION_7_1
++		bool "gdb 7.1"
++		select BR2_PTHREAD_DEBUG if !BR2_PTHREADS_NONE
++
+ endchoice
+ 
+ config BR2_GDB_VERSION
+@@ -66,3 +74,5 @@ config BR2_GDB_VERSION
+ 	default "6.7.1"    if BR2_GDB_VERSION_6_7_1
+ 	default "6.7.1-avr32-2.1.5" if BR2_GDB_VERSION_6_7_1_AVR32_2_1_5
+ 	default "6.8"      if BR2_GDB_VERSION_6_8
++	default "7.0.1"    if BR2_GDB_VERSION_7_0_1
++	default "7.1"      if BR2_GDB_VERSION_7_1
