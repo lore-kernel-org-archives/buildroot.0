@@ -1,48 +1,47 @@
-From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
-Date: Thu, 29 Apr 2010 09:52:06 +0300
-Subject: [Buildroot] [PATCH 09/19] uClibc: add UCLIBC_HAS_NFTW to
-	default configuration
-In-Reply-To: <e82324c6cae0bbdc5c05e693c878505f6523a9ec.1272490771.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1272490771.git.thomas.petazzoni@free-electrons.com>
-	<e82324c6cae0bbdc5c05e693c878505f6523a9ec.1272490771.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <v2qbadfd5ba1004282352x3324b525y64f0c033cb299acf@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 29 Apr 2010 12:03:54 +0200
+Subject: [Buildroot] Still can't build working rootfswith
+ crosstool-NGtoolchain
+In-Reply-To: <hqn98s$5sn$1@dough.gmane.org>
+References: <hqhq8e$uau$1@dough.gmane.org>
+	<8D63FCBEC4B04D56B92C74260683A038@development>
+	<028801cae0e3$3ebe5720$bc3b0560$@com>
+	<5D7DDABC417D46CFACF64003BB0EBC2F@development>
+	<hqn0op$14i$1@dough.gmane.org>
+	<82069254E03F44CB90EDB741DB18CBF9@development>
+	<hqn98s$5sn$1@dough.gmane.org>
+Message-ID: <20100429120354.2f09a799@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Apr 29, 2010 at 12:40 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> UCLIBC_HAS_NFTW is a new knob in 0.9.31, which allows the obsolete and
-> deprecated ftw() to be compiled-out separatly from nftw(), which is
-> part of POSIX. nftw() should probably be enabled by default in uClibc,
-> and a bug has been opened about this on uClibc bug tracker
-> (https://bugs.busybox.net/show_bug.cgi?id=1597).
->
-> nftw() is, for example, used in Gtk+.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+On Wed, 21 Apr 2010 16:31:24 +0000 (UTC)
+Grant Edwards <grant.b.edwards@gmail.com> wrote:
 
-Acked-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+> If it's taking that long, I suspect you're also building a toolchain
+> and kernel everytime.  When I realized that partial rebuilds weren't
+> practical, I switched to using an external toolchain.  With an
+> external toolchain and an external download directory, doing a
+> from-scratch basic rootfs build takes about 6-7 minutes on a single
+> CPU, 2GHz AMD Athlon64.
+> 
+> I also switched to building my kernel outside of buildroot.  If you're
+> doing any sort of kernel development (or just want to try
+> experimenting with kernel configurations), doing the kernel builds
+> with buildroot is pretty clumsy.
+> 
+> Once you've got a kernel configuration figured out and set in stone,
+> it could be useful to have the kernel built by buildroot, but it
+> doesn't seem to be a paractical way to do kernel development.
 
-> ---
-> ?toolchain/uClibc/uClibc-0.9.31.config | ? ?2 +-
-> ?1 files changed, 1 insertions(+), 1 deletions(-)
->
-> diff --git a/toolchain/uClibc/uClibc-0.9.31.config b/toolchain/uClibc/uClibc-0.9.31.config
-> index 091f179..d2e54ad 100644
-> --- a/toolchain/uClibc/uClibc-0.9.31.config
-> +++ b/toolchain/uClibc/uClibc-0.9.31.config
-> @@ -191,7 +191,7 @@ UCLIBC_HAS_REGEX=y
-> ?UCLIBC_HAS_FNMATCH=y
-> ?# UCLIBC_HAS_FNMATCH_OLD is not set
-> ?# UCLIBC_HAS_WORDEXP is not set
-> -# UCLIBC_HAS_NFTW is not set
-> +UCLIBC_HAS_NFTW=y
-> ?UCLIBC_HAS_FTW=y
-> ?UCLIBC_HAS_GLOB=y
-> ?UCLIBC_HAS_GNU_GLOB=y
-> --
-> 1.6.3.3
->
+This is also exactly what I do. We should probably document a bit more
+some typical "use cases" in the Buildroot documentation.
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
