@@ -1,43 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 29 Apr 2010 12:03:54 +0200
-Subject: [Buildroot] Still can't build working rootfswith
+Date: Thu, 29 Apr 2010 12:07:00 +0200
+Subject: [Buildroot] Still can't build working rootfs with
  crosstool-NGtoolchain
-In-Reply-To: <hqn98s$5sn$1@dough.gmane.org>
+In-Reply-To: <hqn0op$14i$1@dough.gmane.org>
 References: <hqhq8e$uau$1@dough.gmane.org>
 	<8D63FCBEC4B04D56B92C74260683A038@development>
 	<028801cae0e3$3ebe5720$bc3b0560$@com>
 	<5D7DDABC417D46CFACF64003BB0EBC2F@development>
 	<hqn0op$14i$1@dough.gmane.org>
-	<82069254E03F44CB90EDB741DB18CBF9@development>
-	<hqn98s$5sn$1@dough.gmane.org>
-Message-ID: <20100429120354.2f09a799@surf>
+Message-ID: <20100429120700.45af880e@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 21 Apr 2010 16:31:24 +0000 (UTC)
+On Wed, 21 Apr 2010 14:06:18 +0000 (UTC)
 Grant Edwards <grant.b.edwards@gmail.com> wrote:
 
-> If it's taking that long, I suspect you're also building a toolchain
-> and kernel everytime.  When I realized that partial rebuilds weren't
-> practical, I switched to using an external toolchain.  With an
-> external toolchain and an external download directory, doing a
-> from-scratch basic rootfs build takes about 6-7 minutes on a single
-> CPU, 2GHz AMD Athlon64.
-> 
-> I also switched to building my kernel outside of buildroot.  If you're
-> doing any sort of kernel development (or just want to try
-> experimenting with kernel configurations), doing the kernel builds
-> with buildroot is pretty clumsy.
-> 
-> Once you've got a kernel configuration figured out and set in stone,
-> it could be useful to have the kernel built by buildroot, but it
-> doesn't seem to be a paractical way to do kernel development.
+> I never do anything with buildroot other than complete ground-up
+> builds from scratch.  Despite the documented ways to do partial
+> rebuilds, I was never able to reliably do a parial rebuild.  After
+> several instances of spending hours or days chasing problems that went
+> away after a complete re-build, I simply gave up on doing anything
+> other than building from zero.
 
-This is also exactly what I do. We should probably document a bit more
-some typical "use cases" in the Buildroot documentation.
+Yes, building from zero is the only way of being sure of what is
+happening. As soon as *any* system-wide change, such as a toolchain
+configuration change, is made, then a rebuild from zero is needed.
+
+Partial rebuilds, as documented in the documentation, are possible on a
+per-package basis, when you fully understand what you're doing and how
+Buildroot uses the stamp files. You can very easily break things, or on
+the opposite, get something working that wouldn't work with a build
+starting from zero.
+
+When doing work on packages, I do use partial rebuilds a lot, but I
+also make sure to do a full rebuild at the end to make sure everything
+is in order.
 
 Thomas
 -- 
