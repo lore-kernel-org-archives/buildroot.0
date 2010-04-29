@@ -1,35 +1,51 @@
-From: Tom Parkin <tom.parkin@gmail.com>
-Date: Thu, 29 Apr 2010 16:40:10 +0100
-Subject: [Buildroot] Buildroot on LWN
-In-Reply-To: <20100429142257.4f36a448@surf>
-References: <20100429142257.4f36a448@surf>
-Message-ID: <m2i2facd6dc1004290840k7197fe97o28cd32dc2b3260fd@mail.gmail.com>
+From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+Date: Thu, 29 Apr 2010 18:44:49 +0300
+Subject: [Buildroot] Use case: initrd + NFS
+In-Reply-To: <4BD9959C.5000905@triumf.ca>
+References: <4BD9959C.5000905@triumf.ca>
+Message-ID: <4BD9A971.7040404@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+On 04/29/2010 05:20 PM, Rod Nussbaumer wrote:
+> Hi all. First post here. Thanks for the great tool.
+>
+> Someone mentioned use-cases, and I thought I would jump in with what I
+> was hoping to be able to build, but so far it looks like I will have to
+> work outside the the box. I'm wondering if anyone is working on or sees
+> a need for the configuration I would like to achieve.
+> I am targeting diskless, headless CPUs that boot entirely from a network
+> server using PXE.
+> In my world, it would be ideal to have a system that includes a minimal
+> initrd filesystem, plus a more substantial filesystem which would be
+> suitable for exporting via NFS. In this scenario, the target would boot,
+> and the init process would connect to the NFS server to mount the rest
+> of the filesystem which would contain applications and the majority of
+> the tools that the target host would use.
+> Using such a scheme would allow a lot of 'offline' upgrades to be added
+> without requiring the target to be rebooted; simply replace the content
+> of the filesystem on the NFS server to upgrade the target. Also, part of
+> my intent is to get a system that boots as quickly as possible, and the
+> minimal initrd seems to aid in accomplishing this.
+> I am still quite green with the use of buildroot, and not sure how much
+> effort is required to add this kind of capability. If someone can assure
+> me that it isn't a giant project, I may try to undertake it. Of course
+> any pointers about how to accomplish it would be gratefully accepted,
+> and the result of my effort would be available to roll back into the
+> buildroot tool, if it was wanted. Or, perhaps I've simply overlooked an
+> existing configuration option that would produce such a system.
+> Thanks for listening.
 
-On 29 April 2010 13:22, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> LWN has published an article entitled ? Tools and distributions for
-> embedded Linux development ?, written by Tom Parkin
+I am booting my Asus EEE PC 701 through PXE (without initrd) and I pass
+options for kernel to mount NFS root file system. Everything works just
+fine.
 
-Thanks for posting a link to my article -- I had meant to post it here
-myself but I was torn between waiting until it is freely available and
-getting something out quickly.  You probably made the best choice ;-)
-
-Whilst we're on the subject, I just wanted to say thanks again to the
-folks who chimed in on my earlier thread about Buildroot's use in
-embedded projects.  Although I wasn't able to use all the examples, I
-think it really helps to be able to point to some real-life usage
-examples to help ground the discussion in something concrete.
-
-Cheers,
-Tom
--- 
-Tom Parkin
-www.thhp.org.uk
-Morality, like art, means drawing a line someplace /Wilde/
+> --- rod.
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
