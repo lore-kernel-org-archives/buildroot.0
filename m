@@ -1,33 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 May 2010 13:15:51 +0200
-Subject: [Buildroot] [pull request] directfb/linux-fusion bumps + lirc
- integration
-In-Reply-To: <1272589129-21443-1-git-send-email-llandwerlin@gmail.com>
-References: <1272589129-21443-1-git-send-email-llandwerlin@gmail.com>
-Message-ID: <20100501131551.67cb7744@surf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat,  1 May 2010 11:20:47 +0000 (UTC)
+Subject: [Buildroot] [Bug 1615] Convert eeprog package to gentargets
+In-Reply-To: <bug-1615-163@https.bugs.busybox.net/>
+References: <bug-1615-163@https.bugs.busybox.net/>
+Message-ID: <20100501112047.3F6DC8D470@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 30 Apr 2010 02:58:43 +0200
-llandwerlin at gmail.com wrote:
+https://bugs.busybox.net/show_bug.cgi?id=1615
 
-> Available at :
->            git://git.potipota.net/buildroot 2010.05-directfb-lirc
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         AssignedTo|unassigned at buildroot.uclibc |jacmet at uclibc.org
+                   |.org                        |
 
-There are a few strange things in the linux-fusion package (no
-BUILD_CMDS variable, strange relation to the kernel variable), but I
-think we can merge as it is and improve later if needed.
-
-Regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
