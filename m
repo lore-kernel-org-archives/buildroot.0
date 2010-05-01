@@ -1,25 +1,28 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat,  1 May 2010 20:50:53 +0000 (UTC)
-Subject: [Buildroot] [Bug 803] [PATCH] lua - add shared library patch and
- config option for readline/ncurses support
-In-Reply-To: <bug-803-163@https.bugs.busybox.net/>
-References: <bug-803-163@https.bugs.busybox.net/>
-Message-ID: <20100501205053.AA6FA8B3FB@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 01 May 2010 22:54:14 +0200
+Subject: [Buildroot] [PATCH] Fix GDB BFD test linking
+In-Reply-To: <20100429191920.6133.88233.stgit@localhost.localdomain> (Paulius
+	Zaleckas's message of "Thu, 29 Apr 2010 22:19:20 +0300")
+References: <20100429191920.6133.88233.stgit@localhost.localdomain>
+Message-ID: <87k4rn5ond.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=803
+>>>>> "Paulius" == Paulius Zaleckas <paulius.zaleckas@gmail.com> writes:
 
---- Comment #8 from Gustavo Zacarias <gustavo@zacarias.com.ar>  ---
-Sure about that?
-lua/luac just link to liblua.so only when it's built.
-When the SHARED option is disabled liblua.so isn't built so they just link
-statically against liblua.a ...
+ Paulius> When compiling GDB for target (in my case i386) it links
+ Paulius> wrong BFD library from host OS. This prevents GDB from compiling
+ Paulius> support for ELF and thus GDB is unusable on target.
+
+ Paulius> More about this issue was already posted at:
+ Paulius> http://lists.uclibc.org/pipermail/buildroot/2009-March/026585.html
+
+ Paulius> Fix this issue by forcing ELF support.
+
+Committed, thanks.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
