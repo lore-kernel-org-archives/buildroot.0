@@ -1,26 +1,22 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 01 May 2010 22:54:14 +0200
-Subject: [Buildroot] [PATCH] Fix GDB BFD test linking
-In-Reply-To: <20100429191920.6133.88233.stgit@localhost.localdomain> (Paulius
-	Zaleckas's message of "Thu, 29 Apr 2010 22:19:20 +0300")
-References: <20100429191920.6133.88233.stgit@localhost.localdomain>
-Message-ID: <87k4rn5ond.fsf@macbook.be.48ers.dk>
+Date: Sat, 01 May 2010 22:56:37 +0200
+Subject: [Buildroot] [PATCH] tslib: fix plugin linking
+In-Reply-To: <1272487338-9314-1-git-send-email-luca@lucaceresoli.net>
+	(luca@lucaceresoli.net's message of "Wed, 28 Apr 2010 22:42:18 +0200")
+References: <1272487338-9314-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <87fx2b5oje.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Paulius" == Paulius Zaleckas <paulius.zaleckas@gmail.com> writes:
+>>>>> "luca" == luca  <luca@lucaceresoli.net> writes:
 
- Paulius> When compiling GDB for target (in my case i386) it links
- Paulius> wrong BFD library from host OS. This prevents GDB from compiling
- Paulius> support for ELF and thus GDB is unusable on target.
+ luca> From: Luca Ceresoli <luca@lucaceresoli.net>
+ luca> Fixes error: "Couldnt load module pthres" and similar.
 
- Paulius> More about this issue was already posted at:
- Paulius> http://lists.uclibc.org/pipermail/buildroot/2009-March/026585.html
-
- Paulius> Fix this issue by forcing ELF support.
+ luca> Original patch: svn://svn.berlios.de/tslib/trunk at 56.
 
 Committed, thanks.
 
