@@ -1,7 +1,7 @@
-From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
 Date: Sun, 2 May 2010 09:41:29 +0200
-Subject: [Buildroot] [git commit master] xlib_libXtst: depends on libXi
-Message-ID: <20100502074442.01E778A56B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] tslib: fix plugin linking
+Message-ID: <20100502074443.7ED368A56B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,63 +9,73 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f421f557f52818ba835b1aa55f93682a76b0ee3c
+commit: http://git.buildroot.net/buildroot/commit/?id=ec45e2bad4e26d193f3c1ff5ffafe82f98161d14
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+Fixes error: "Couldnt load module pthres" and similar.
+
+Original patch: svn://svn.berlios.de/tslib/trunk at 56.
+
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                                    |    2 +-
- package/x11r7/xlib_libXtst/Config.in       |    1 +
- package/x11r7/xlib_libXtst/xlib_libXtst.mk |    9 +++++++--
- 3 files changed, 9 insertions(+), 3 deletions(-)
+ .../tslib-1.0-link-plugins-against-libts.patch     |   48 ++++++++++++++++++++
+ 1 files changed, 48 insertions(+), 0 deletions(-)
+ create mode 100644 package/tslib/tslib-1.0-link-plugins-against-libts.patch
 
-diff --git a/CHANGES b/CHANGES
-index d1372ad..8cb3c6e 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -20,7 +20,7 @@
- 	samba, setserial, squashfs, tslib, usb_modeswith, wget,
- 	xdriver_xf86-video-intel, xkeyboard-config, xlib_libX11,
- 	xlib_libXaw, xlib_libXfont, xlib_libXfontcache, xlib_libXxf86misc,
--	xlib_libpciaccess, xproto_dri2proto, xproto_eviext,
-+	xlib_libXtst, xlib_libpciaccess, xproto_dri2proto, xproto_eviext,
- 	xproto_fontcacheproto, xproto_xf86miscproto, xserver_xorg-server
- 
- 	Removed packages: xapp_xtrap, xlib_libXTrap, xlib_libXevie,
-diff --git a/package/x11r7/xlib_libXtst/Config.in b/package/x11r7/xlib_libXtst/Config.in
-index a8de203..8853bde 100644
---- a/package/x11r7/xlib_libXtst/Config.in
-+++ b/package/x11r7/xlib_libXtst/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_XLIB_LIBXTST
- 	bool "libXtst"
- 	select BR2_PACKAGE_XLIB_LIBX11
-+	select BR2_PACKAGE_XLIB_LIBXI
- 	select BR2_PACKAGE_XLIB_LIBXEXT
- 	select BR2_PACKAGE_XPROTO_RECORDPROTO
- 	help
-diff --git a/package/x11r7/xlib_libXtst/xlib_libXtst.mk b/package/x11r7/xlib_libXtst/xlib_libXtst.mk
-index 7e6427e..e89cf11 100644
---- a/package/x11r7/xlib_libXtst/xlib_libXtst.mk
-+++ b/package/x11r7/xlib_libXtst/xlib_libXtst.mk
-@@ -7,10 +7,15 @@
- XLIB_LIBXTST_VERSION = 1.1.0
- XLIB_LIBXTST_SOURCE = libXtst-$(XLIB_LIBXTST_VERSION).tar.bz2
- XLIB_LIBXTST_SITE = http://xorg.freedesktop.org/releases/individual/lib
--XLIB_LIBXTST_AUTORECONF = NO
- XLIB_LIBXTST_LIBTOOL_PATCH = NO
- XLIB_LIBXTST_INSTALL_STAGING = YES
--XLIB_LIBXTST_DEPENDENCIES = xlib_libX11 xlib_libXext xproto_recordproto
+diff --git a/package/tslib/tslib-1.0-link-plugins-against-libts.patch b/package/tslib/tslib-1.0-link-plugins-against-libts.patch
+new file mode 100644
+index 0000000..d60b6a1
+--- /dev/null
++++ b/package/tslib/tslib-1.0-link-plugins-against-libts.patch
+@@ -0,0 +1,48 @@
++commit 12435b337ea074bd31ccb03aff58c7eefa86f31c
++Author: kergoth <kergoth@a933c7a4-9bf7-0310-9141-a2e45189604d>
++Date:   Sat Nov 1 20:46:07 2008 +0000
 +
-+XLIB_LIBXTST_DEPENDENCIES = \
-+	xlib_libX11 \
-+	xlib_libXext \
-+	xlib_libXi \
-+	xproto_recordproto
++    Link plugins against libts
++    
++    Some plugins use tslib functions. Link those plugins against libts.
++    The problem is easy to see with LDFLAGS="-Wl,-no-undefined".
++    Without this change DirectFB in unable to use tslib because symbols
++    in the tslib plugins can't be resolved.
++    
++    Signed-off-by: Ville Syrjala <syrjala@sci.fi>
++    Signed-off-by: Chris Larson <clarson@kergoth.com>
++    
++    git-svn-id: svn://svn.berlios.de/tslib/trunk/tslib at 56 a933c7a4-9bf7-0310-9141-a2e45189604d
 +
- XLIB_LIBXTST_CONF_OPT = --enable-shared --disable-static
- 
- $(eval $(call AUTOTARGETS,package/x11r7,xlib_libXtst))
++diff --git a/plugins/Makefile.am b/plugins/Makefile.am
++index 3b902c2..4c4ef8b 100644
++--- a/plugins/Makefile.am
+++++ b/plugins/Makefile.am
++@@ -114,15 +114,19 @@ pluginexec_LTLIBRARIES = \
++   
++ variance_la_SOURCES	= variance.c
++ variance_la_LDFLAGS	= -module $(LTVSN)
+++variance_la_LIBADD	= $(top_builddir)/src/libts.la
++   
++ dejitter_la_SOURCES	= dejitter.c
++ dejitter_la_LDFLAGS	= -module $(LTVSN)
+++dejitter_la_LIBADD	= $(top_builddir)/src/libts.la
++   
++ linear_la_SOURCES	= linear.c
++ linear_la_LDFLAGS	= -module $(LTVSN)
+++linear_la_LIBADD	= $(top_builddir)/src/libts.la
++ 
++ pthres_la_SOURCES	= pthres.c
++ pthres_la_LDFLAGS	= -module $(LTVSN)
+++pthres_la_LIBADD	= $(top_builddir)/src/libts.la
++ 
++ # hw access
++ corgi_la_SOURCES	= corgi-raw.c
++@@ -148,6 +152,7 @@ tatung_la_LDFLAGS	= -module $(LTVSN)
++ 
++ input_la_SOURCES	= input-raw.c
++ input_la_LDFLAGS	= -module $(LTVSN)
+++input_la_LIBADD		= $(top_builddir)/src/libts.la
++ 
++ linear_h2200_la_SOURCES	= linear-h2200.c
++ linear_h2200_la_LDFLAGS	= -module $(LTVSN)
 -- 
 1.6.3.3
