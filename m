@@ -1,32 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 03 May 2010 00:03:19 +0200
-Subject: [Buildroot] [pull request] Pull request for branch misc-fixes
-In-Reply-To: <cover.1272490771.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Wed, 28 Apr 2010 23:40:41 +0200")
-References: <cover.1272490771.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <874oiqezbs.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 3 May 2010 00:00:10 +0200
+Subject: [Buildroot] [git commit master] lua: fix pkgconfig installation
+Message-ID: <20100502220948.A74B38A6CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> Hello,
- Thomas> Here is a set of patches, some of them are important fixes that should
- Thomas> really be merged before 2010.05, some other are improvements and
- Thomas> cleanups that can be postponed if needed.
+commit: http://git.buildroot.net/buildroot/commit/?id=8471827f32e92c12e90ba2a534d00873845617c2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> The important ones are :
+install -D needs the destination filename, not just it's directory,
+otherwise we end up with a pkgconfig file instead.
 
- Thomas>       libxslt: fix host compilation
- Thomas>       uClibc: add UCLIBC_HAS_NFTW to default configuration
- Thomas>       uclibc: make sure the default configuration doesn't ask questions
- Thomas>       Fix autotools configuration cache handling
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/lua/lua.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thanks, I've committed everything except for 7 and 8 (freetype +
-interrupted downloads).
-
+diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+index 9b23021..d66be9f 100644
+--- a/package/lua/lua.mk
++++ b/package/lua/lua.mk
+@@ -39,7 +39,7 @@ endif
+ 
+ define LUA_INSTALL_STAGING_CMDS
+ 	$(INSTALL) -m 0644 -D $(@D)/etc/lua.pc \
+-		$(STAGING_DIR)/usr/lib/pkgconfig
++		$(STAGING_DIR)/usr/lib/pkgconfig/lua.pc
+ 	$(INSTALL) $(@D)/src/liblua.a $(STAGING_DIR)/usr/lib
+ 	$(INSTALL) $(@D)/src/lua $(STAGING_DIR)/usr/bin
+ 	$(INSTALL) $(@D)/src/luac $(STAGING_DIR)/usr/bin
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
