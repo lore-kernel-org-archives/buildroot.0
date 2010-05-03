@@ -1,29 +1,260 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon,  3 May 2010 06:59:54 +0000 (UTC)
-Subject: [Buildroot] [Bug 1669] Busybox failed to compile when using an
- external toolchain
-In-Reply-To: <bug-1669-163@https.bugs.busybox.net/>
-References: <bug-1669-163@https.bugs.busybox.net/>
-Message-ID: <20100503065954.D49318F4D5@busybox.osuosl.org>
+From: Lionel Landwerlin <llandwerlin@gmail.com>
+Date: Mon, 3 May 2010 09:02:51 +0200
+Subject: [Buildroot] [git commit master] ncurses: convert to autotools
+	infrastructure
+Message-ID: <20100503070353.98CFD7FD56@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1669
 
---- Comment #3 from Anthony Groyer <anthony.groyer@airliquide.com>  ---
-(In reply to comment #1)
-> Do you have a specific Busybox configuration file or are you using Buildroot's
-> default one ?
-> 
-> What is your Buildroot .config file ?
+commit: http://git.buildroot.net/buildroot/commit/?id=92d69b9713f9e4c47cce79fc79cd8e45c836d61d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I use the Buildroot's default busybox configuration file.
-I have added my Buildroot .config file as an attachment.
+Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES                    |    2 +-
+ package/ncurses/ncurses.mk |  188 ++++++++++++++++----------------------------
+ 2 files changed, 68 insertions(+), 122 deletions(-)
 
+diff --git a/CHANGES b/CHANGES
+index 57d6de1..b1eca30 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -16,7 +16,7 @@
+ 	dosfstools, e2fsprogs, eeprog, fbv, freetype, haserl, hostapd,
+ 	iperf, iptables, iw, less, libaio,libdrm, libgcrypt, libglib2,
+ 	libpng, libxml2, libxslt, lua, matchbox, mdadm, memstat, mesa3d,
+-	mtd-utils, nano, openssl, pciutils, php, pixman, portage,
++	mtd-utils, nano, ncurses, openssl, pciutils, php, pixman, portage,
+ 	pppd, pthread-stubs, python, qt, radvd, samba, setserial,
+ 	squashfs, tslib, usb_modeswith, wget, xdata_xcursor-themes,
+ 	xdriver_xf86-video-intel, xkeyboard-config, xlib_libX11,
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index fb22c6c..79560b1 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -23,99 +23,88 @@
+ # USA
+ 
+ # TARGETS
+-NCURSES_VERSION:=5.6
+-NCURSES_SITE:=$(BR2_GNU_MIRROR)/ncurses
+-NCURSES_DIR:=$(BUILD_DIR)/ncurses-$(NCURSES_VERSION)
+-NCURSES_SOURCE:=ncurses-$(NCURSES_VERSION).tar.gz
+-NCURSES_CAT:=$(ZCAT)
++NCURSES_VERSION = 5.6
++NCURSES_SITE = $(BR2_GNU_MIRROR)/ncurses
++NCURSES_SOURCE = ncurses-$(NCURSES_VERSION).tar.gz
++NCURSES_INSTALL_STAGING = YES
++
++NCURSES_CONF_OPT = \
++	--with-shared \
++	--without-cxx \
++	--without-cxx-binding \
++	--without-ada \
++	--without-progs \
++	--disable-big-core \
++	--without-profile \
++	--disable-rpath \
++	--enable-echo \
++	--enable-const \
++	--enable-overwrite \
++	--enable-broken_linker
+ 
+ ifneq ($(BR2_PACKAGE_NCURSES_TARGET_HEADERS),y)
+-NCURSES_WANT_STATIC=--disable-static
++NCURSES_CONF_OPT += --disable-static
+ endif
+ 
+-$(DL_DIR)/$(NCURSES_SOURCE):
+-	$(call DOWNLOAD,$(NCURSES_SITE),$(NCURSES_SOURCE))
+-
+-$(NCURSES_DIR)/.patched: $(DL_DIR)/$(NCURSES_SOURCE)
+-	$(NCURSES_CAT) $(DL_DIR)/$(NCURSES_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	#use the local tic and not whatever the build system was going to find.
+-	$(SED) 's~\$$srcdir/shlib tic\$$suffix~/usr/bin/tic~' \
+-		$(NCURSES_DIR)/misc/run_tic.in
+-	toolchain/patch-kernel.sh $(NCURSES_DIR) package/ncurses/ ncurses\*.patch
+-	$(CONFIG_UPDATE) $(NCURSES_DIR)
+-	touch $@
++ifneq ($(BR2_ENABLE_DEBUG),y)
++NCURSES_CONF_OPT += --without-debug
++endif
+ 
+-$(NCURSES_DIR)/.configured: $(NCURSES_DIR)/.patched
+-	(cd $(NCURSES_DIR); rm -rf config.cache; \
+-		BUILD_CC="$(HOSTCC)" \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		$(TARGET_CONFIGURE_ARGS) \
+-		./configure $(QUIET) \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(REAL_GNU_TARGET_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		--prefix=/usr \
+-		--exec-prefix=/usr \
+-		--bindir=/usr/bin \
+-		--sbindir=/usr/sbin \
+-		--libdir=/usr/lib \
+-		--libexecdir=/usr/lib \
+-		--sysconfdir=/etc \
+-		--datadir=/usr/share \
+-		--localstatedir=/var \
+-		--includedir=/usr/include \
+-		--mandir=/usr/man \
+-		--infodir=/usr/info \
+-		--with-terminfo-dirs=/usr/share/terminfo \
+-		--with-default-terminfo-dir=/usr/share/terminfo \
+-		--with-shared --without-cxx --without-cxx-binding \
+-		--without-ada --without-progs --disable-big-core \
+-		$(DISABLE_NLS) $(DISABLE_LARGEFILE) \
+-		--without-profile --without-debug --disable-rpath \
+-		--enable-echo --enable-const --enable-overwrite \
+-		--enable-broken_linker \
+-		$(NCURSES_WANT_STATIC) \
+-	)
+-	touch $@
+ 
+-$(NCURSES_DIR)/lib/libncurses.so.$(NCURSES_VERSION): $(NCURSES_DIR)/.configured
+-	$(MAKE1) DESTDIR=$(STAGING_DIR) -C $(NCURSES_DIR) \
+-		libs panel menu form headers
++define NCURSES_BUILD_CMDS
++	$(MAKE1) -C $(@D) DESTDIR=$(STAGING_DIR)
++endef
+ 
+-$(STAGING_DIR)/usr/lib/libncurses.so.$(NCURSES_VERSION): $(NCURSES_DIR)/lib/libncurses.so.$(NCURSES_VERSION)
+-	$(MAKE1) \
+-	    prefix=$(STAGING_DIR)/usr/ \
+-	    exec_prefix=$(STAGING_DIR) \
+-	    bindir=$(STAGING_DIR)/bin \
+-	    sbindir=$(STAGING_DIR)/sbin \
+-	    libexecdir=$(STAGING_DIR)/usr/lib \
+-	    datadir=$(STAGING_DIR)/usr/share \
+-	    sysconfdir=$(STAGING_DIR)/etc \
+-	    localstatedir=$(STAGING_DIR)/var \
+-	    libdir=$(STAGING_DIR)/usr/lib \
+-	    infodir=$(STAGING_DIR)/usr/info \
+-	    mandir=$(STAGING_DIR)/usr/man \
+-	    includedir=$(STAGING_DIR)/usr/include \
+-	    gxx_include_dir=$(STAGING_DIR)/usr/include/c++ \
+-	    ticdir=$(STAGING_DIR)/usr/share/terminfo \
+-	    -C $(NCURSES_DIR) install
+-	chmod a-x $(NCURSES_DIR)/lib/libncurses.so*
++define NCURSES_PATCH_NCURSES_CONFIG
+ 	$(SED) 's^prefix="^prefix="$(STAGING_DIR)^' \
+ 		$(STAGING_DIR)/bin/ncurses5-config
+-	touch -c $@
++endef
++
++NCURSES_POST_BUILD_HOOKS += NCURSES_PATCH_NCURSES_CONFIG
++
++ifeq ($(BR2_HAVE_DEVFILES),y)
++define NCURSES_INSTALL_TARGET_DEVFILES
++	mkdir -p $(TARGET_DIR)/usr/include
++	cp -dpf $(NCURSES_DIR)/include/curses.h $(TARGET_DIR)/usr/include/curses.h
++	cp -dpf $(NCURSES_DIR)/include/ncurses_dll.h $(TARGET_DIR)/usr/include/ncurses_dll.h
++	cp -dpf $(NCURSES_DIR)/include/term.h $(TARGET_DIR)/usr/include/
++	cp -dpf $(NCURSES_DIR)/include/unctrl.h $(TARGET_DIR)/usr/include/
++	cp -dpf $(NCURSES_DIR)/include/termcap.h $(TARGET_DIR)/usr/include/
++	cp -dpf $(NCURSES_DIR)/lib/libncurses.a $(TARGET_DIR)/usr/lib/
++	(cd $(TARGET_DIR)/usr/lib; \
++	 ln -fs libncurses.a libcurses.a; \
++	 ln -fs libncurses.a libtermcap.a; \
++	)
++	(cd $(TARGET_DIR)/usr/include; ln -fs curses.h ncurses.h)
++	rm -f $(TARGET_DIR)/usr/lib/libncurses.so
++	(cd $(TARGET_DIR)/usr/lib; ln -fs libncurses.so.$(NCURSES_VERSION) libncurses.so)
++endef
++endif
+ 
+-$(TARGET_DIR)/usr/lib/libncurses.so.$(NCURSES_VERSION): $(STAGING_DIR)/usr/lib/libncurses.so.$(NCURSES_VERSION)
+-	mkdir -p $(TARGET_DIR)/usr/lib
+-	cp -dpf $(NCURSES_DIR)/lib/libncurses.so* $(TARGET_DIR)/usr/lib/
+ ifeq ($(BR2_PACKAGE_NCURSES_TARGET_PANEL),y)
++define NCURSES_INSTALL_TARGET_PANEL
+ 	cp -dpf $(NCURSES_DIR)/lib/libpanel.so* $(TARGET_DIR)/usr/lib/
++endef
+ endif
++
+ ifeq ($(BR2_PACKAGE_NCURSES_TARGET_FORM),y)
++define NCURSES_INSTALL_TARGET_FORM
+ 	cp -dpf $(NCURSES_DIR)/lib/libform.so* $(TARGET_DIR)/usr/lib/
++endef
+ endif
++
+ ifeq ($(BR2_PACKAGE_NCURSES_TARGET_MENU),y)
++define NCURSES_INSTALL_TARGET_MENU
+ 	cp -dpf $(NCURSES_DIR)/lib/libmenu.so* $(TARGET_DIR)/usr/lib/
++endef
+ endif
++
++define NCURSES_INSTALL_TARGET_CMDS
++	mkdir -p $(TARGET_DIR)/usr/lib
++	cp -dpf $(NCURSES_DIR)/lib/libncurses.so* $(TARGET_DIR)/usr/lib/
++	$(NCURSES_INSTALL_TARGET_PANEL)
++	$(NCURSES_INSTALL_TARGET_FORM)
++	$(NCURSES_INSTALL_TARGET_MENU)
+ 	ln -snf /usr/share/terminfo $(TARGET_DIR)/usr/lib/terminfo
+ 	mkdir -p $(TARGET_DIR)/usr/share/terminfo/x
+ 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm $(TARGET_DIR)/usr/share/terminfo/x
+@@ -130,51 +119,8 @@ endif
+ 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/a/ansi $(TARGET_DIR)/usr/share/terminfo/a
+ 	mkdir -p $(TARGET_DIR)/usr/share/terminfo/l
+ 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/l/linux $(TARGET_DIR)/usr/share/terminfo/l
+-	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $@
+-	touch -c $@
++	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libncurses.so*
++	$(NCURSES_INSTALL_TARGET_DEVFILES)
++endef # NCURSES_INSTALL_TARGET_CMDS
+ 
+-$(NCURSES_DIR)/lib/libncurses.a: $(NCURSES_DIR)/lib/libncurses.so.$(NCURSES_VERSION)
+-
+-$(TARGET_DIR)/usr/lib/libncurses.a: $(NCURSES_DIR)/lib/libncurses.a
+-	mkdir -p $(TARGET_DIR)/usr/include
+-	cp -dpf $(NCURSES_DIR)/include/curses.h $(TARGET_DIR)/usr/include/curses.h
+-	cp -dpf $(NCURSES_DIR)/include/ncurses_dll.h $(TARGET_DIR)/usr/include/ncurses_dll.h
+-	cp -dpf $(NCURSES_DIR)/include/term.h $(TARGET_DIR)/usr/include/
+-	cp -dpf $(NCURSES_DIR)/include/unctrl.h $(TARGET_DIR)/usr/include/
+-	cp -dpf $(NCURSES_DIR)/include/termcap.h $(TARGET_DIR)/usr/include/
+-	cp -dpf $(NCURSES_DIR)/lib/libncurses.a $(TARGET_DIR)/usr/lib/
+-	(cd $(TARGET_DIR)/usr/lib; \
+-	 ln -fs libncurses.a libcurses.a; \
+-	 ln -fs libncurses.a libtermcap.a; \
+-	)
+-	(cd $(TARGET_DIR)/usr/include; ln -fs curses.h ncurses.h)
+-	rm -f $(TARGET_DIR)/usr/lib/libncurses.so
+-	(cd $(TARGET_DIR)/usr/lib; ln -fs libncurses.so.$(NCURSES_VERSION) libncurses.so)
+-	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libncurses.so.$(NCURSES_VERSION)
+-	touch -c $@
+-
+-ncurses: $(TARGET_DIR)/usr/lib/libncurses.so.$(NCURSES_VERSION) \
+-	$(if $(BR2_HAVE_DEVFILES),$(TARGET_DIR)/usr/lib/libncurses.a)
+-
+-ncurses-unpacked: $(NCURSES_DIR)/.patched
+-
+-ncurses-source: $(DL_DIR)/$(NCURSES_SOURCE)
+-
+-ncurses-clean:
+-	rm -f $(STAGING_DIR)/usr/lib/libncurses.so* $(TARGET_DIR)/usr/lib/libncurses.so*
+-	rm -rf $(STAGING_DIR)/usr/share/tabset $(TARGET_DIR)/usr/share/tabset
+-	rm -rf $(STAGING_DIR)/usr/share/terminfo $(TARGET_DIR)/usr/share/terminfo
+-	rm -rf $(TARGET_DIR)/usr/lib/terminfo
+-	-$(MAKE) -C $(NCURSES_DIR) clean
+-
+-ncurses-dirclean:
+-	rm -rf $(NCURSES_DIR)
+-
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_NCURSES),y)
+-TARGETS+=ncurses
+-endif
++$(eval $(call AUTOTARGETS,package,ncurses))
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.6.3.3
