@@ -1,59 +1,50 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 03 May 2010 16:31:45 +0200
-Subject: [Buildroot] Buildroot 2010.05-rc1 released
-Message-ID: <876335dpke.fsf@macbook.be.48ers.dk>
+From: Javier Viguera <javier.viguera@digi.com>
+Date: Mon, 3 May 2010 16:57:06 +0200
+Subject: [Buildroot] buildroot 2010.05-rc1 fail to build gst-plugins-ugly
+Message-ID: <4BDEE442.4060006@digi.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi all,
 
-Buildroot 2010.05-rc1 is released - Go download it at:
+Same problem again with 2010.05-rc1.
 
-http://buildroot.net/downloads/buildroot-2010.05-rc1.tar.gz
+Seems that the patch applied by Peter is not exactly the same than 
+Lionel's because Lionel's was working and current RC1 is not:
 
-or
+Now is trying to link to a host libmad.
 
-http://buildroot.net/downloads/buildroot-2010.05-rc1.tar.bz2
+libtool: link: 
+/usr/local/DigiEL-5.5/x-tools/arm-unknown-linux-gnueabi/bin/arm-linux-gcc 
+-O3 -mcpu=cortex-a8 -mfpu=neon -ftree-vectorize -mfloat-abi=softfp -O3 
+-mabi=aapcs-linux -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE 
+-D_FILE_OFFSET_BITS=64 --sysroot 
+/data/repo/buildroot.git/output/staging/ -shared 
+.libs/libgstmad_la-gstmad.o .libs/libgstmad_la-gstid3tag.o 
+-lgstreamer-0.10 -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lrt -lxml2 
+-lglib-2.0 -lintl -lgsttag-0.10 -lgstaudio-0.10 /usr/lib/libmad.so 
+/usr/lib/libid3tag.so -lz  -mcpu=cortex-a8 -mfpu=neon -mfloat-abi=softfp 
+-mabi=aapcs-linux -mcpu=cortex-a8 -mfpu=neon -mfloat-abi=softfp 
+-mabi=aapcs-linux -pthread   -pthread -Wl,-soname -Wl,libgstmad.so 
+-Wl,-version-script -Wl,.libs/libgstmad.ver -o .libs/libgstmad.so
 
-Or get it from Git:
+/usr/lib/libmad.so: could not read symbols: File in wrong format
+collect2: ld returned 1 exit status
 
-git://git.buildroot.net/buildroot
-
-Please give it a spin and report any problems to the mailing list or bug
-tracker. Many thanks to the people contributing to this release:
-
- git shortlog -s -n 2010.02..
-   220  Paulius Zaleckas
-   123  Thomas Petazzoni
-   220  Paulius Zaleckas
-   123  Thomas Petazzoni
-    92  Peter Korsgaard
-    26  Will Wagner
-    22  Gustavo Zacarias
-    14  Lionel Landwerlin
-     3  Darius Augulis
-     3  H Hartley Sweeten
-     3  Josh.Wu
-     3  Yann E. MORIN
-     2  Alexander Clouter
-     2  Kelvin Cheung
-     2  Luca Ceresoli
-     2  Richard van Paasen
-     1  Chris Seawood
-     1  Frederik Vannoote
-     1  Grant Edwards
-     1  Johan Thelin
-     1  Laine Walker-Avina
-     1  Michael Roth
-     1  Mike Crowe
-     1  Paul Jones
-     1  Thomas Brandstetter
-
-From now on the tree is closed for new features until after the 2010.05
-release (expected at end of month).
+Again attached buildroot's config file.
 
 -- 
-Bye, Peter Korsgaard
+Regards,
+
+Javier Viguera
+Software Engineer
+
+Digi International Spain, S.A.
+http://www.digi.com
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: br.config
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100503/b764ac41/attachment-0001.diff>
