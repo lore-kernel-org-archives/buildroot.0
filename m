@@ -1,46 +1,26 @@
-From: Microbit_Ubuntu <microbit@virginbroadband.com.au>
-Date: Tue, 04 May 2010 08:06:48 +1000
-Subject: [Buildroot] ext x-tools (ct-ng-1.6.1) make error for LIB path with
-	2010.02
-Message-ID: <1272924408.17672.12.camel@ubuntu>
+From: Mark Fisher <fobs12@ymail.com>
+Date: Tue, 4 May 2010 05:49:30 -0700 (PDT)
+Subject: [Buildroot] Threading library setting for buildroot-2010.05-rc1
+	with external toolchain and glibc library
+Message-ID: <454730.54720.qm@web114218.mail.gq1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Hi,
 
-I wonder if someone can enlighten me on this.
-After setting up x-tools (ct-ng 1.6.1) and building BR2 2010.02, 
+What is the correct value to set for the thread library implementation option, when the external toolchain with glibc is selected, for NPTL threading?
+I had expected to see a selection for NPTL in the?list for thread library, but one isn't shown.
 
-1. links-2.2
-The configure scripts seem to lose the LIB include for links package :
-original error = "cannot find -lz"
-After checking around, turns out that the path to staging/usr/lib is
-simply not found. I worked around it by making links_LDFLAGS =
--L/path/to/buildroot/output/staging/usr/lib
+Thanks,
 
-2. ltrace-0.5
-the OS path for sysdeps gets set to :
-OS := linux-uclibcgnueabi
-whereas internal toolchain 2010.02 produces at start of Makefile :
-OS = linux-gnu
-This results in an unknown path to /sysdeps/
+Mark
 
 
-Has anyone come across this behaviour before ?
-I can workaround for now by manually changing Makefile and then resuming
-build.
 
-I can't find the common denominator - I think it has to do with CC being
-set --sysroot=......
-whereas the internal toolchain produces
---isysroot=......   ?????
-
-Any input would be very welcome !!!
-TIA
-
--- 
-Best regards,
-Kris
+      
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100504/e0cc7199/attachment.htm>
