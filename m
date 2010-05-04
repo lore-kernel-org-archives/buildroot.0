@@ -1,30 +1,43 @@
-From: Mike <mike-gmanemailinglistnospam@tiedyenetworks.com>
-Date: Tue, 04 May 2010 07:51:27 -0700
-Subject: [Buildroot] package selections vs openwrt
-Message-ID: <hrpc9h$cha$1@dough.gmane.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue,  4 May 2010 17:04:43 +0000 (UTC)
+Subject: [Buildroot] [Bug 1681] New: Cross-compiled binaries should be
+ installed into staging
+Message-ID: <bug-1681-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Howdy,
+https://bugs.busybox.net/show_bug.cgi?id=1681
 
-	I was just wondering if anyone had any comment on the size of the 
-'feeds' available from OpenWRT vs Buildroot. It seems there's a lot more 
-packages that have been pulled into that system (742 for feeds alone) 
-even tho there's a common heritage, those have not been similarly pulled 
-into buildroot and it's seems a bit duplicitous? Openwrt has a full on 
-build of perl 5.10 for example, which appears to be a very hairy and 
-non-trivial job to import as a buildroot project for example (but very 
-desirable for me). On the other end of scale however many of those 
-packages also appear to be old, insecure / known buggy versions. It 
-would just be great for there to be some sort of import of those 
-packages so at least they could be updated and used within the general 
-buildroot system and not tailored just for the more narrow focused 
-openwrt effort. I guess Im just wondering why there doesn't seem to be 
-much overlap or cross project collaboration ?
+              Host: i686-linux
+            Target: arm-softfloat-linux-uclibcgnueabi
+           Summary: Cross-compiled binaries should be installed into
+                    staging
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: major
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: gustavo at zacarias.com.ar
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Thanks.
 
-Mike-
+Created attachment 1633
+  --> https://bugs.busybox.net/attachment.cgi?id=1633
+Lua: don't install binaries into staging dir
+
+Some packages install cross-compiled binaries into the staging dir.
+This is wrong since they could predate host tools in the PATH and usually
+aren't host-executable anyway.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
