@@ -1,25 +1,30 @@
-From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
-Date: Tue, 4 May 2010 16:47:31 +0300
-Subject: [Buildroot] gdb-7.1
-In-Reply-To: <20FBADA317BBB748B1065DA12DE0DCF0152AD143A4@eu1rdcrdc1wx032.exi.nxp.com>
-References: <20FBADA317BBB748B1065DA12DE0DCF0152AD143A4@eu1rdcrdc1wx032.exi.nxp.com>
-Message-ID: <j2ubadfd5ba1005040647id0b62672o42eb21da59e014f3@mail.gmail.com>
+From: Mike <mike-gmanemailinglistnospam@tiedyenetworks.com>
+Date: Tue, 04 May 2010 07:51:27 -0700
+Subject: [Buildroot] package selections vs openwrt
+Message-ID: <hrpc9h$cha$1@dough.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, May 4, 2010 at 4:32 PM, Christophe Doumenc
-<christophe.doumenc@nxp.com> wrote:
->
->
-> Hi,
->
->
->
-> I would like to know if it is planned to include gdb-7.1 in a buildroot
-> version soon ?
+Howdy,
 
-It is already included in the mainline and will be in 2010.05 release.
-You can try 2010.05-rc1 already with GDB 7.1
+	I was just wondering if anyone had any comment on the size of the 
+'feeds' available from OpenWRT vs Buildroot. It seems there's a lot more 
+packages that have been pulled into that system (742 for feeds alone) 
+even tho there's a common heritage, those have not been similarly pulled 
+into buildroot and it's seems a bit duplicitous? Openwrt has a full on 
+build of perl 5.10 for example, which appears to be a very hairy and 
+non-trivial job to import as a buildroot project for example (but very 
+desirable for me). On the other end of scale however many of those 
+packages also appear to be old, insecure / known buggy versions. It 
+would just be great for there to be some sort of import of those 
+packages so at least they could be updated and used within the general 
+buildroot system and not tailored just for the more narrow focused 
+openwrt effort. I guess Im just wondering why there doesn't seem to be 
+much overlap or cross project collaboration ?
+
+Thanks.
+
+Mike-
