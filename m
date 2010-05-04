@@ -1,29 +1,38 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  4 May 2010 21:14:11 +0000 (UTC)
-Subject: [Buildroot] [Bug 1525] Package hal deletes a whole
-	<target>/etc/rc.d directory
-In-Reply-To: <bug-1525-163@https.bugs.busybox.net/>
-References: <bug-1525-163@https.bugs.busybox.net/>
-Message-ID: <20100504211411.F1C628D287@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 4 May 2010 23:11:20 +0200
+Subject: [Buildroot] [git commit master] mplayer: disable parallel builds
+	(make -jX)
+Message-ID: <20100504211440.530E48D361@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1525
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+commit: http://git.buildroot.net/buildroot/commit/?id=32ed97007509228e0b4aa1050dd1d017118d0d7a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+The build system races with itself when building the internal vidix stuff
+(x86 only), so use MAKE1.
 
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  ---
-Fixed in git (79db1ff5ac)
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/multimedia/mplayer/mplayer.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
+diff --git a/package/multimedia/mplayer/mplayer.mk b/package/multimedia/mplayer/mplayer.mk
+index 50afcfb..6e03cff 100644
+--- a/package/multimedia/mplayer/mplayer.mk
++++ b/package/multimedia/mplayer/mplayer.mk
+@@ -71,7 +71,7 @@ $(MPLAYER_DIR)/.configured: $(MPLAYER_DIR)/.unpacked
+ 	touch $@
+ 
+ $(MPLAYER_DIR)/$(MPLAYER_BINARY): $(MPLAYER_DIR)/.configured
+-	$(MAKE) -C $(MPLAYER_DIR)
++	$(MAKE1) -C $(MPLAYER_DIR)
+ 	touch -c $@
+ 
+ $(TARGET_DIR)/$(MPLAYER_TARGET_BINARY): $(MPLAYER_DIR)/$(MPLAYER_BINARY)
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.6.3.3
