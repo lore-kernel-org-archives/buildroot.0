@@ -1,101 +1,56 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 4 May 2010 23:11:20 +0200
-Subject: [Buildroot] [git commit master] hal: cleanup package
-Message-ID: <20100504211440.A36C88D361@busybox.osuosl.org>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Wed, 05 May 2010 00:15:09 +0200
+Subject: [Buildroot] [PATCH 33/41] libsoup: bump to 2.28.2
+In-Reply-To: <87r5mih3dm.fsf@macbook.be.48ers.dk>
+References: <1271199974-30434-1-git-send-email-llandwerlin@gmail.com>
+	<1271199974-30434-34-git-send-email-llandwerlin@gmail.com>
+	<87r5mih3dm.fsf@macbook.be.48ers.dk>
+Message-ID: <1273011309.27748.3.camel@bender>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Wed, 2010-04-14 at 09:58 +0200, Peter Korsgaard wrote:
+> >>>>> "llandwerlin" == llandwerlin  <llandwerlin@gmail.com> writes:
+> 
+>  llandwerlin> From: Lionel Landwerlin <llandwerlin@gmail.com>
+>  llandwerlin> Also, remove --disable-gtk-doc (it's already in package/Makefile.in)
+>  llandwerlin> and fix libsoup dependencies. When compiled with ssl support it
+>  llandwerlin> requires libgnutls and libgcrypt.
+> 
+>  llandwerlin> Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
+>  llandwerlin> ---
+>  llandwerlin>  package/libsoup/Config.in  |    1 +
+>  llandwerlin>  package/libsoup/libsoup.mk |   13 ++++++-------
+>  llandwerlin>  2 files changed, 7 insertions(+), 7 deletions(-)
+> 
+>  llandwerlin> diff --git a/package/libsoup/Config.in b/package/libsoup/Config.in
+>  llandwerlin> index 6bccd11..596a638 100644
+>  llandwerlin> --- a/package/libsoup/Config.in
+>  llandwerlin> +++ b/package/libsoup/Config.in
+>  llandwerlin> @@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBSOUP
+>  llandwerlin>  	bool "libsoup"
+>  llandwerlin>  	select BR2_PACKAGE_LIBXML2
+>  llandwerlin>  	select BR2_PACKAGE_LIBGLIB2
+>  llandwerlin> +        select BR2_PACKAGE_LIBGNUTLS
+> 
+> <tab> please.
+>  
+>  llandwerlin> -LIBSOUP_DEPENDENCIES = gettext libintl host-pkg-config host-libglib2 libglib2 libxml2
+>  llandwerlin> +LIBSOUP_DEPENDENCIES = gettext libintl host-pkg-config host-libglib2 libglib2 libxml2 libgnutls libgcrypt
+>  
+> 
+> So how do you compile it WITHOUT ssl support?
 
-commit: http://git.buildroot.net/buildroot/commit/?id=79db1ff5ac3c5f32ba473258bef1f8328564ca77
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+I have a patch sitting in our repository that adds
+BR2_PACKAGE_LIBSOUP_SSL to make SSL support optional. Would you be
+interested in that patch?
 
-Closes #1525
+I very much hope that we will get the time next week to update our
+buildroot tree to the latest version. That would finally allow me to
+submit patches again...
 
-Kconfig selects are not recursive, so ensure we select the dependencies
-of our dependencies as well.
 
-Cleanup target installation:
-- Remove tasks handled by the generic post-build cleanup
-- Hal doesn't install etc/rc.d, so don't try to delete it
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES               |    5 +++--
- package/hal/Config.in |    6 ++++++
- package/hal/hal.mk    |    8 --------
- 3 files changed, 9 insertions(+), 10 deletions(-)
-
-diff --git a/CHANGES b/CHANGES
-index 2d2b9e2..19cb486 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -2,12 +2,13 @@
- 
- 	Fixes all over the tree.
- 
--	Updated/fixed packages: mplayer, xdriver_xf86-video-openchrome,
--	usb_modeswitch
-+	Updated/fixed packages: hal, mplayer,
-+	xdriver_xf86-video-openchrome, usb_modeswitch
- 
- 	Issues resolved (http://bugs.uclibc.org):
- 
- 	#985: Bump usb_modeswitch package to 1.1.0
-+	#1525: Package hal deletes a whole <target>/etc/rc.d directory
- 
- 2010.05-rc1, Released May 3rd, 2010:
- 
-diff --git a/package/hal/Config.in b/package/hal/Config.in
-index 623825c..250e005 100644
---- a/package/hal/Config.in
-+++ b/package/hal/Config.in
-@@ -1,6 +1,12 @@
- config BR2_PACKAGE_HAL
- 	bool "hal"
-+	select BR2_PACKAGE_EXPAT
-+	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_GETTEXT
-+	select BR2_PACKAGE_LIBINTL
-+	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	select BR2_PACKAGE_DBUS
-+	select BR2_PACKAGE_DBUS_EXPAT
- 	select BR2_PACKAGE_DBUS_GLIB
- 	select BR2_PACKAGE_HWDATA
- 	select BR2_PACKAGE_UDEV
-diff --git a/package/hal/hal.mk b/package/hal/hal.mk
-index 754ed85..0c362b0 100644
---- a/package/hal/hal.mk
-+++ b/package/hal/hal.mk
-@@ -63,19 +63,12 @@ $(HAL_DIR)/hald/hald: $(HAL_DIR)/.configured
- 
- $(TARGET_DIR)/$(HAL_TARGET_BINARY): $(HAL_DIR)/hald/hald
- 	$(MAKE) STAGING_DIR="$(STAGING_DIR)" DESTDIR="$(TARGET_DIR)" -C $(HAL_DIR) install
--	rm -rf $(TARGET_DIR)/usr/share/locale
--	rm -rf $(TARGET_DIR)/usr/share/doc
- 	rm -rf $(TARGET_DIR)/usr/share/gtk-doc
- 	rm -rf $(TARGET_DIR)/usr/share/hal/device-manager
--	rm -rf $(TARGET_DIR)/usr/lib/pkgconfig
--	# remove _everything_ in $(TARGET_DIR)/usr/include?
--	# rm -rf $(TARGET_DIR)/usr/include
- 	rm -rf $(TARGET_DIR)/usr/lib/libhal*.so
--	rm -rf $(TARGET_DIR)/usr/lib/libhal*.la
- 	rm -rf $(TARGET_DIR)/usr/lib/hal
- 	rm -rf $(TARGET_DIR)/etc/PolicyKit
- 	$(INSTALL) -m 0755 -D package/hal/S98haldaemon $(TARGET_DIR)/etc/init.d
--	rm -rf $(TARGET_DIR)/etc/rc.d
- 	for file in hald-addon-acpi* hald-addon-cpufreq \
- 		hald-addon-keyboard hald-addon-pmu \
- 		hald-probe-pc-floppy hald-probe-printer \
-@@ -86,7 +79,6 @@ $(TARGET_DIR)/$(HAL_TARGET_BINARY): $(HAL_DIR)/hald/hald
- 	do \
- 		rm -f $(TARGET_DIR)/usr/libexec/$$file; \
- 	done
--	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libhal*
- 
- hal: host-pkg-config dbus-glib hwdata udev $(TARGET_DIR)/$(HAL_TARGET_BINARY)
- 
--- 
-1.6.3.3
+Sven
