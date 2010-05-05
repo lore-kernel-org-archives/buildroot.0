@@ -1,34 +1,28 @@
-From: luca at lucaceresoli.net <luca@lucaceresoli.net>
-Date: Thu,  6 May 2010 00:16:59 +0200
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Wed, 5 May 2010 22:51:06 +0000 (UTC)
 Subject: [Buildroot] [PATCH] customize: fix copy paths
-Message-ID: <1273097819-8002-1-git-send-email-luca@lucaceresoli.net>
+References: <1273097819-8002-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <hrssoq$a34$1@dough.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Luca Ceresoli <luca@lucaceresoli.net>
+On 2010-05-05, luca at lucaceresoli.net <luca@lucaceresoli.net> wrote:
 
-customize.mk used to copy files with a wrong command, resulting in one
-directory level in excess. For example, source/etc/myfile would have
-produced /etc/etc/myfile in the target filesystem instead of /etc/myfile.
----
- package/customize/customize.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+> From: Luca Ceresoli <luca@lucaceresoli.net>
+>
+> customize.mk used to copy files with a wrong command, resulting in one
+> directory level in excess. For example, source/etc/myfile would have
+> produced /etc/etc/myfile in the target filesystem instead of /etc/myfile.
 
-diff --git a/package/customize/customize.mk b/package/customize/customize.mk
-index 780e42b..d2b8518 100644
---- a/package/customize/customize.mk
-+++ b/package/customize/customize.mk
-@@ -11,7 +11,7 @@ $(BUILD_DIR)/.customize:
- 	 /bin/ls -d * > $(BUILD_DIR)/series || \
- 	 touch $(BUILD_DIR)/series )
- 	for f in `cat $(BUILD_DIR)/series`; do \
--		cp -af $(CUST_DIR)/$$f $(TARGET_DIR)/$$f; \
-+		cp -af $(CUST_DIR)/$$f $(TARGET_DIR); \
- 	done
- 	rm -f $(BUILD_DIR)/series
- 	touch $@
+Yup:
+
+  https://bugs.busybox.net/show_bug.cgi?id=849
+  https://bugs.busybox.net/show_bug.cgi?id=1135
+
 -- 
-1.5.4.3
+Grant Edwards               grant.b.edwards        Yow! Thank god!! ... It's
+                                  at               HENNY YOUNGMAN!!
+                              gmail.com            
