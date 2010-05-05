@@ -1,24 +1,55 @@
-From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
-Date: Wed, 5 May 2010 09:46:05 +0300
-Subject: [Buildroot] Target Native Compiler
-In-Reply-To: <r2i85e413fb1005042036j3259173lec6941e35470512@mail.gmail.com>
-References: <r2i85e413fb1005042036j3259173lec6941e35470512@mail.gmail.com>
-Message-ID: <l2gbadfd5ba1005042346mb1d91bc7hdd3fab19781d4bd7@mail.gmail.com>
+From: Ben Kloosterman <bklooste@gmail.com>
+Date: Wed, 5 May 2010 15:10:07 +0800
+Subject: [Buildroot] How to create a non mmu toolchain
+In-Reply-To: <876332df2k.fsf@macbook.be.48ers.dk>
+References: <20100504211440.530E48D361@busybox.osuosl.org>	<03af01caebda$ba829b80$2f87d280$@com>
+	<876332df2k.fsf@macbook.be.48ers.dk>
+Message-ID: <03ec01caec22$0049a4f0$00dceed0$@com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, May 5, 2010 at 6:36 AM, Piyush Verma <piyush.pv@gmail.com> wrote:
-> Hello All
->
-> I have checked every option very carefully but can't find option to build
-> native GCC for Target Device.
->
-> I am using Stable Release 2010.02.
->
-> This common option really not available or it's my wrong I can't figure it
-> out ?
+Thx for your reply .
 
-BR2_PACKAGE_GCC_TARGET
+So which chain supports Nommu ?
+
+Br no mmu support
+Crosstool no mmu support. 
+Ct-ng no mmu 
+Uclinux support but requires a no mmu tool chain. 
+
+Building a toolchain by hand.
+
+The reason why we dont want to use an mmu is complex , there is a thread on
+it in ucLinux but basically building a type safe , memory safe micro kernel
+OS since we run a single address space with compiler based checks an MMU
+just becomes an overhead. Rather than the green field code we have been
+working on for 2 years we can start with uClinux which will help things
+along . 
+
+Regards, 
+
+Ben
+
+
+ >-----Original Message-----
+ >From: Peter Korsgaard [mailto:jacmet at gmail.com] On Behalf Of Peter
+ >Korsgaard
+ >Sent: Wednesday, May 05, 2010 2:43 PM
+ >To: bklooste at gmail.com
+ >Cc: buildroot at busybox.net
+ >Subject: Re: How to create a non mmu toolchain
+ >
+ >>>>>> "Ben" == Ben Kloosterman <bklooste@gmail.com> writes:
+ >
+ > Ben> How to create an i386/686 or x86-64 No mmu ( eg ARCH-USE-MMU =
+ >false)
+ > Ben> toolchain ?
+ >
+ >Sorry, we don't have any non-mmu support. Why would you not want to use
+ >the MMU on the i386/x86-64?
+ >
+ >--
+ >Bye, Peter Korsgaard
