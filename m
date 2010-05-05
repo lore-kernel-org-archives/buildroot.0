@@ -1,24 +1,24 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 05 May 2010 08:42:59 +0200
-Subject: [Buildroot] How to create a non mmu toolchain
-In-Reply-To: <03af01caebda$ba829b80$2f87d280$@com> (Ben Kloosterman's message
-	of "Wed, 5 May 2010 06:39:56 +0800")
-References: <20100504211440.530E48D361@busybox.osuosl.org>
-	<03af01caebda$ba829b80$2f87d280$@com>
-Message-ID: <876332df2k.fsf@macbook.be.48ers.dk>
+From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+Date: Wed, 5 May 2010 09:46:05 +0300
+Subject: [Buildroot] Target Native Compiler
+In-Reply-To: <r2i85e413fb1005042036j3259173lec6941e35470512@mail.gmail.com>
+References: <r2i85e413fb1005042036j3259173lec6941e35470512@mail.gmail.com>
+Message-ID: <l2gbadfd5ba1005042346mb1d91bc7hdd3fab19781d4bd7@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ben" == Ben Kloosterman <bklooste@gmail.com> writes:
+On Wed, May 5, 2010 at 6:36 AM, Piyush Verma <piyush.pv@gmail.com> wrote:
+> Hello All
+>
+> I have checked every option very carefully but can't find option to build
+> native GCC for Target Device.
+>
+> I am using Stable Release 2010.02.
+>
+> This common option really not available or it's my wrong I can't figure it
+> out ?
 
- Ben> How to create an i386/686 or x86-64 No mmu ( eg ARCH-USE-MMU = false)
- Ben> toolchain ?
-
-Sorry, we don't have any non-mmu support. Why would you not want to use
-the MMU on the i386/x86-64?
-
--- 
-Bye, Peter Korsgaard
+BR2_PACKAGE_GCC_TARGET
