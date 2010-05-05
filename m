@@ -1,55 +1,85 @@
-From: Ben Kloosterman <bklooste@gmail.com>
-Date: Wed, 5 May 2010 15:10:07 +0800
-Subject: [Buildroot] How to create a non mmu toolchain
-In-Reply-To: <876332df2k.fsf@macbook.be.48ers.dk>
-References: <20100504211440.530E48D361@busybox.osuosl.org>	<03af01caebda$ba829b80$2f87d280$@com>
-	<876332df2k.fsf@macbook.be.48ers.dk>
-Message-ID: <03ec01caec22$0049a4f0$00dceed0$@com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed,  5 May 2010 08:18:25 +0000 (UTC)
+Subject: [Buildroot] [Bug 1687] New: libcurl fails to compile
+Message-ID: <bug-1687-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thx for your reply .
+https://bugs.busybox.net/show_bug.cgi?id=1687
 
-So which chain supports Nommu ?
-
-Br no mmu support
-Crosstool no mmu support. 
-Ct-ng no mmu 
-Uclinux support but requires a no mmu tool chain. 
-
-Building a toolchain by hand.
-
-The reason why we dont want to use an mmu is complex , there is a thread on
-it in ucLinux but basically building a type safe , memory safe micro kernel
-OS since we run a single address space with compiler based checks an MMU
-just becomes an overhead. Rather than the green field code we have been
-working on for 2 years we can start with uClinux which will help things
-along . 
-
-Regards, 
-
-Ben
+              Host: Kubuntu 9.10
+            Target: armv4
+           Summary: libcurl fails to compile
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: keguang.zhang at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
 
- >-----Original Message-----
- >From: Peter Korsgaard [mailto:jacmet at gmail.com] On Behalf Of Peter
- >Korsgaard
- >Sent: Wednesday, May 05, 2010 2:43 PM
- >To: bklooste at gmail.com
- >Cc: buildroot at busybox.net
- >Subject: Re: How to create a non mmu toolchain
- >
- >>>>>> "Ben" == Ben Kloosterman <bklooste@gmail.com> writes:
- >
- > Ben> How to create an i386/686 or x86-64 No mmu ( eg ARCH-USE-MMU =
- >false)
- > Ben> toolchain ?
- >
- >Sorry, we don't have any non-mmu support. Why would you not want to use
- >the MMU on the i386/x86-64?
- >
- >--
- >Bye, Peter Korsgaard
+While building libcurl with uClibc-0.9.31 and buildroot toolchain:
+binutils-2.20.1 gcc-4.4.4, build fails with error:
+
+ /opt/buildroot/output/staging/usr/bin/arm-unknown-linux-uclibcgnueabi-gcc -Os
+-pipe -Os -mtune=arm920t -march=armv4t -mabi=aapcs-linux -msoft-float
+-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+-I/opt/buildroot/output/staging/usr/include
+-I/opt/buildroot/output/staging/include
+--sysroot=/opt/buildroot/output/staging/ -isysroot
+/opt/buildroot/output/staging -DHAVE_CONFIG_H -I../include -I../include
+-I../lib -I../lib -I/opt/buildroot/output/staging/usr/include/openssl
+-I/opt/buildroot/output/staging/usr/include -Os -pipe -Os -mtune=arm920t
+-march=armv4t -mabi=aapcs-linux -msoft-float -D_LARGEFILE_SOURCE
+-D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -isystem
+/opt/buildroot/output/staging/usr/include -isystem
+/opt/buildroot/output/staging/include --sysroot=/opt/buildroot/output/staging/
+-isysroot /opt/buildroot/output/staging -g0 -Wno-system-headers -MT file.lo -MD
+-MP -MF .deps/file.Tpo -c file.c  -fPIC -DPIC -o .libs/file.o
+In file included from setup.h:478,
+                 from file.c:24:
+setup_once.h:265: error: two or more data types in declaration specifiers
+setup_once.h:265: warning: useless type name in empty declaration
+ /opt/buildroot/output/staging/usr/bin/arm-unknown-linux-uclibcgnueabi-gcc -Os
+-pipe -Os -mtune=arm920t -march=armv4t -mabi=aapcs-linux -msoft-float
+-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+-I/opt/buildroot/output/staging/usr/include
+-I/opt/buildroot/output/staging/include
+--sysroot=/opt/buildroot/output/staging/ -isysroot
+/opt/buildroot/output/staging -DHAVE_CONFIG_H -I../include -I../include
+-I../lib -I../lib -I/opt/buildroot/output/staging/usr/include/openssl
+-I/opt/buildroot/output/staging/usr/include -Os -pipe -Os -mtune=arm920t
+-march=armv4t -mabi=aapcs-linux -msoft-float -D_LARGEFILE_SOURCE
+-D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -isystem
+/opt/buildroot/output/staging/usr/include -isystem
+/opt/buildroot/output/staging/include --sysroot=/opt/buildroot/output/staging/
+-isysroot /opt/buildroot/output/staging -g0 -Wno-system-headers -MT timeval.lo
+-MD -MP -MF .deps/timeval.Tpo -c timeval.c  -fPIC -DPIC -o .libs/timeval.o
+In file included from setup.h:478,
+                 from timeval.h:31,
+                 from timeval.c:24:
+setup_once.h:265: error: two or more data types in declaration specifiers
+setup_once.h:265: warning: useless type name in empty declaration
+make[3]: *** [timeval.lo] ?? 1
+make[3]: *** ??????????....
+make[3]: *** [file.lo] ?? 1
+make[3]:?????? `/opt/buildroot/output/build/libcurl-7.19.2/lib'
+make[2]: *** [all] ?? 2
+make[2]:?????? `/opt/buildroot/output/build/libcurl-7.19.2/lib'
+make[1]: *** [all-recursive] ?? 1
+make[1]:?????? `/opt/buildroot/output/build/libcurl-7.19.2'
+make: *** [/opt/buildroot/output/build/libcurl-7.19.2/.stamp_built] ?? 2
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
