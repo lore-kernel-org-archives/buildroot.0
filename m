@@ -1,59 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu,  6 May 2010 20:20:01 +0200
-Subject: [Buildroot] [PATCH 1/7] Add -rpath option for host package
-	compilation
-In-Reply-To: <cover.1273169997.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1273169997.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <6b939d40f6a29a43277566adc9d4312d49cb3abf.1273169997.git.thomas.petazzoni@free-electrons.com>
+Date: Thu,  6 May 2010 20:20:00 +0200
+Subject: [Buildroot] [pull request] Pull request for branch misc-fixes2
+Message-ID: <cover.1273169997.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In c1b6242fdcf2cff7ebf09fec4cc1be58963e8427, we added
-$(HOST_DIR)/usr/lib to LD_LIBRARY_PATH when building target packages,
-because the build of target packages sometimes require host tools
-installed in $(HOST_DIR)/usr/bin which themselves require host
-libaries installed in $(HOST_DIR)/usr/lib.
+The following changes since commit d701a82321ad2f3e5bfa16639e93532294cad4ce:
+  Paulius Zaleckas (1):
+        Remove gtk-doc documentations from target
 
-Unfortunately, this solution didn't work, as libtool then tried to
-link target binaries against host libraries. So $(HOST_DIR)/usr/lib
-got removed from LD_LIBRARY_PATH in
-0d1830b07db4ebfd14e77a258de6fb391e57e960.
+are available in the git repository at:
 
-However, this meant that we went back to the previous situation, in
-which host tools used during compilation of target components might
-require host libraries. An example :
+  git://git.busybox.net/~tpetazzoni/git/buildroot misc-fixes2
 
-make[2]: Entering directory `/home/test/buildroot/output.ctng-arm-eglibc-2010-05-04-12-41-00/build/xfont_font-adobe-100dpi-1.0.1'
-/home/test/buildroot/output.ctng-arm-eglibc-2010-05-04-12-41-00/host/usr/bin/mkfontdir /home/test/buildroot/output.ctng-arm-eglibc-2010-05-04-12-41-00/target/usr/share/fonts/X11/100dpi
-/home/test/buildroot/output.ctng-arm-eglibc-2010-05-04-12-41-00/host/usr/bin/mkfontscale: error while loading shared libraries: libfontenc.so.1: cannot open shared object file: No such file or directory
+Thomas Petazzoni (7):
+      Add -rpath option for host package compilation
+      Add staging libraries directories to -L in external case
+      xfont_font-util: enable host package
+      xapp_bdftopcf: enable for the host
+      Enable xapp_bdftopcf dependencies for the host
+      xapp_mkfontdir: enable for the host
+      xfonts: fix dependencies and build process
 
-Therefore, we try another solution: make sure that host binaries are
-linked with an -rpath option, so that $(HOST_DIR)/usr/lib doesn't need
-to be in LD_LIBRARY_PATH for them to find their libraries.
+ package/Makefile.in                                |    6 ++++
+ package/x11r7/xapp_bdftopcf/xapp_bdftopcf.mk       |    2 +
+ package/x11r7/xapp_mkfontdir/xapp_mkfontdir.mk     |    2 +
+ package/x11r7/xfont_encodings/xfont_encodings.mk   |    2 +
+ .../xfont_font-adobe-100dpi.mk                     |    6 ++--
+ .../xfont_font-adobe-75dpi.mk                      |    6 ++--
+ .../xfont_font-adobe-utopia-100dpi.mk              |    6 ++--
+ .../xfont_font-adobe-utopia-75dpi.mk               |    6 ++--
+ .../xfont_font-adobe-utopia-type1.mk               |    6 ++--
+ package/x11r7/xfont_font-alias/xfont_font-alias.mk |    6 ++--
+ .../xfont_font-arabic-misc.mk                      |    6 ++--
+ .../xfont_font-bh-100dpi/xfont_font-bh-100dpi.mk   |    6 ++--
+ .../xfont_font-bh-75dpi/xfont_font-bh-75dpi.mk     |    6 ++--
+ .../xfont_font-bh-lucidatypewriter-100dpi.mk       |    6 ++--
+ .../xfont_font-bh-lucidatypewriter-75dpi.mk        |    6 ++--
+ .../x11r7/xfont_font-bh-ttf/xfont_font-bh-ttf.mk   |    6 ++--
+ .../xfont_font-bh-type1/xfont_font-bh-type1.mk     |    6 ++--
+ .../xfont_font-bitstream-100dpi.mk                 |    6 ++--
+ .../xfont_font-bitstream-75dpi.mk                  |    6 ++--
+ .../xfont_font-bitstream-speedo.mk                 |    6 ++--
+ .../xfont_font-bitstream-type1.mk                  |    6 ++--
+ .../xfont_font-cronyx-cyrillic.mk                  |    6 ++--
+ .../xfont_font-cursor-misc.mk                      |    6 ++--
+ .../xfont_font-daewoo-misc.mk                      |    6 ++--
+ .../xfont_font-dec-misc/xfont_font-dec-misc.mk     |    6 ++--
+ .../xfont_font-ibm-type1/xfont_font-ibm-type1.mk   |    6 ++--
+ .../xfont_font-isas-misc/xfont_font-isas-misc.mk   |    6 ++--
+ .../xfont_font-jis-misc/xfont_font-jis-misc.mk     |    6 ++--
+ .../xfont_font-micro-misc/xfont_font-micro-misc.mk |    6 ++--
+ .../xfont_font-misc-cyrillic.mk                    |    6 ++--
+ .../xfont_font-misc-ethiopic.mk                    |    6 ++--
+ .../xfont_font-misc-meltho.mk                      |    6 ++--
+ .../xfont_font-misc-misc/xfont_font-misc-misc.mk   |    6 ++--
+ .../xfont_font-mutt-misc/xfont_font-mutt-misc.mk   |    6 ++--
+ .../xfont_font-schumacher-misc.mk                  |    6 ++--
+ .../xfont_font-screen-cyrillic.mk                  |    6 ++--
+ .../xfont_font-sony-misc/xfont_font-sony-misc.mk   |    6 ++--
+ .../xfont_font-sun-misc/xfont_font-sun-misc.mk     |    6 ++--
+ package/x11r7/xfont_font-util/post-install.sh      |   28 --------------------
+ package/x11r7/xfont_font-util/xfont_font-util.mk   |    7 ++++-
+ .../xfont_font-winitzki-cyrillic.mk                |    6 ++--
+ .../xfont_font-xfree86-type1.mk                    |    6 ++--
+ package/x11r7/xlib_libXfont/xlib_libXfont.mk       |    3 ++
+ package/x11r7/xlib_xtrans/xlib_xtrans.mk           |    1 +
+ .../xproto_fontcacheproto/xproto_fontcacheproto.mk |    1 +
+ .../x11r7/xproto_fontsproto/xproto_fontsproto.mk   |    1 +
+ 46 files changed, 132 insertions(+), 137 deletions(-)
+ delete mode 100755 package/x11r7/xfont_font-util/post-install.sh
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Makefile.in |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
-
-diff --git a/package/Makefile.in b/package/Makefile.in
-index eab9168..0bec9a1 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -77,6 +77,11 @@ ifeq ($(BR2_LARGEFILE),y)
- TARGET_CFLAGS+=-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
- endif
- 
-+# Host packages are sometimes linked against host libraries installed
-+# in $(HOST_DIR)/usr/lib. As we cannot add $(HOST_DIR)/usr/lib to
-+# LD_LIBRARY_PATH when building target packages because it causes
-+# libtool breakage, we force a rpath to be added to host binaries.
-+HOST_CFLAGS+=-Wl,-rpath -Wl,$(HOST_DIR)/usr/lib
- 
- #########################################################################
- ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+Thanks,
 -- 
-1.6.3.3
+Thomas Petazzoni
