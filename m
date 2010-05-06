@@ -1,29 +1,51 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 06 May 2010 17:38:27 +0200
-Subject: [Buildroot] [git commit master] package: Add
-	$(HOST_DIR)/usr/lib to LD_LIBRARY_PATH for host but not target
-In-Reply-To: <20100506173139.6962b92d@surf> (Thomas Petazzoni's message of
-	"Thu, 6 May 2010 17:31:39 +0200")
-References: <20100503113725.506018D55F@busybox.osuosl.org>
-	<20100506173139.6962b92d@surf>
-Message-ID: <877hnh9h1o.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu,  6 May 2010 15:45:07 +0000 (UTC)
+Subject: [Buildroot] [Bug 1711] New: Should libtool package install
+ ltmain.sh into staging ?
+Message-ID: <bug-1711-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=1711
+
+           Summary: Should libtool package install ltmain.sh into staging
+                    ?
+           Product: buildroot
+           Version: 2010.02
+          Platform: Other
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: nick at leverton.org
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
 
- Thomas> What do you think of such a change ? Would it be acceptable ? Of
- Thomas> course, I would add a comment before that HOST_CFLAGS line explaining
- Thomas> what the intention is.
+Created attachment 1669
+  --> https://bugs.busybox.net/attachment.cgi?id=1669
+Patch to copy ltmain.sh to the staging area.
 
-Yes, it won't win any prices for prettyness, but I think it's the best
-we can do.
+I'm no libtool expert and I'm struggling to adapt a couple of packages which
+use it to Buildroot.  Instead trying to find the incompatibilities and then to
+generate patches which mung the package's existing ltmain.sh, and which may
+well break when the package is updated, I'd like to be able to copy in the
+latest ltmain.sh, as is already done by gnuconfig for config.{guess,sub}.
 
-Thanks.
+At present I am doing this when required with a PACKAGE_POST_PATCH_HOOKS
+target.  So there is no need to add extra Buildroot config items, potentially 
+breaking other packages, as long as ltmain.sh is available in a known place.
+
+If there's some reason why this is silly or otherwise not the best way to work,
+I'd welcome any advice.  Otherwise please would you consider the attached patch
+to add ltmain.sh to the libtool staging files ?
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
