@@ -1,38 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 May 2010 18:06:31 +0200
-Subject: [Buildroot] Commit "Remove BR2_GNU_TARGET_SUFFIX and compute
- GNU_TARGET_NAME"
-In-Reply-To: <i2h32a6c48b1005060824nb4df8741p655241e4ce1b0f7e@mail.gmail.com>
-References: <i2h32a6c48b1005060824nb4df8741p655241e4ce1b0f7e@mail.gmail.com>
-Message-ID: <20100506180631.3333594c@surf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu,  6 May 2010 16:35:29 +0000 (UTC)
+Subject: [Buildroot] [Bug 1717] New: External toolchain fixes for hostapd &
+ wpa_supplicant
+Message-ID: <bug-1717-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 6 May 2010 16:24:58 +0100
-Quotient Remainder <quotientvremainder@gmail.com> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=1717
 
-> http://git.buildroot.net/buildroot/commit/?id=65e80a0b0bf275e0ffdbb611706bec4b1b4719b1
-> 
-> This patch would seem to prevent Codesourcery toolchains from working.  They
-> use "arm-none-linux-gnueabi-*" (no $(LIB) part).
-> I suppose you can't take everyone into account but was just curious to know
-> if this was taken into account.
+              Host: i686-linux
+            Target: powerpc-uclibc
+           Summary: External toolchain fixes for hostapd & wpa_supplicant
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: gustavo at zacarias.com.ar
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-The GNU target name is distinct from the toolchain prefix. For external
-toolchains, the toolchain prefix is still configurable using the
-BR2_TOOLCHAIN_EXTERNAL_PREFIX configuration option.
 
-If you have any issue, could you post the corresponding build log
-and .config file ?
+Created attachment 1675
+  --> https://bugs.busybox.net/attachment.cgi?id=1675
+Fix wpa_supplicant build with external toolchain
 
-Best regards,
+wpa_supplicant doesn't like external toolchain, so fix it.
+Tested by Marc-Andr? H?bert.
 
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
