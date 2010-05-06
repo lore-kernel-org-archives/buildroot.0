@@ -1,8 +1,8 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 6 May 2010 23:27:58 +0200
-Subject: [Buildroot] [git commit master] usbutils: fix recursive LIBUSB
-	Kconfig issue and bump to 0.87
-Message-ID: <20100506212939.454D08B86C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] Fix the computation of
+	REAL_GNU_TARGET_NAME
+Message-ID: <20100506212939.C7E3D8B86C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,72 +10,36 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dfb503937df53cb1e43a33f264b561bc99acf6ff
+commit: http://git.buildroot.net/buildroot/commit/?id=5e1fbd2c33452bd7480583ccc5cfc50546ac010d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Closes #1699
+When the selected C library is glibc, the C library shouldn't be
+mentionned in REAL_GNU_TARGET_NAME. In other words:
 
-[Peter: Use BR2_KERNEL_MIRROR]
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ arm-unknown-linux-uclibcgnueabi must be used for uClibc
+ arm-unknown-linux-gnueabi must be used for glibc
+
+This fixes the build of GDB on the target, as reported by Quotient
+Remainder <quotientvremainder@gmail.com>.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                      |    3 ++-
- package/usbutils/Config.in   |    1 +
- package/usbutils/usbutils.mk |    7 +++++--
- 3 files changed, 8 insertions(+), 3 deletions(-)
+ package/Makefile.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 19cb486..525db27 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -3,12 +3,13 @@
- 	Fixes all over the tree.
- 
- 	Updated/fixed packages: hal, mplayer,
--	xdriver_xf86-video-openchrome, usb_modeswitch
-+	xdriver_xf86-video-openchrome, usb_modeswitch, usbutils
- 
- 	Issues resolved (http://bugs.uclibc.org):
- 
- 	#985: Bump usb_modeswitch package to 1.1.0
- 	#1525: Package hal deletes a whole <target>/etc/rc.d directory
-+	#1699: Fix usbutils dependencies and bump
- 
- 2010.05-rc1, Released May 3rd, 2010:
- 
-diff --git a/package/usbutils/Config.in b/package/usbutils/Config.in
-index 6e54352..4273252 100644
---- a/package/usbutils/Config.in
-+++ b/package/usbutils/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_USBUTILS
- 	bool "usbutils"
-+	select BR2_PACKAGE_LIBUSB
- 	select BR2_PACKAGE_LIBUSB_COMPAT
- 	help
- 	  USB enumeration utilities
-diff --git a/package/usbutils/usbutils.mk b/package/usbutils/usbutils.mk
-index 880a2c8..f095297 100644
---- a/package/usbutils/usbutils.mk
-+++ b/package/usbutils/usbutils.mk
-@@ -4,8 +4,8 @@
- #
- #############################################################
- 
--USBUTILS_VERSION = 0.86
--USBUTILS_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/linux-usb/
-+USBUTILS_VERSION = 0.87
-+USBUTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/usb/usbutils
- USBUTILS_DEPENDENCIES = host-pkg-config libusb-compat
- 
- ifeq ($(BR2_PACKAGE_USBUTILS_ZLIB),y)
-@@ -25,4 +25,7 @@ ifeq ($(BR2_PACKAGE_USBUTILS_ZLIB),y)
+diff --git a/package/Makefile.in b/package/Makefile.in
+index eab9168..cd492f1 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -104,7 +104,7 @@ LIBC=uclibc
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
+ LIBC=uclibc
  else
- 	rm -f $(TARGET_DIR)/usr/share/usb.ids.gz
+-LIBC=glibc
++LIBC=
  endif
-+ifneq ($(BR2_HAVE_DEVFILES),y)
-+	rm -f $(TARGET_DIR)/usr/bin/libusb-config
-+endif
- 	touch $@
+ 
+ ifeq ($(BR2_ARM_EABI),y)
 -- 
 1.6.3.3
