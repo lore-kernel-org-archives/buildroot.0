@@ -1,29 +1,24 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  6 May 2010 21:29:00 +0000 (UTC)
-Subject: [Buildroot] [Bug 849] "customize" package copies files to wrong
- place in target tree
-In-Reply-To: <bug-849-163@https.bugs.busybox.net/>
-References: <bug-849-163@https.bugs.busybox.net/>
-Message-ID: <20100506212900.750298B3DA@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 06 May 2010 23:29:10 +0200
+Subject: [Buildroot] [PATCH] customize: fix copy paths
+In-Reply-To: <1273097819-8002-1-git-send-email-luca@lucaceresoli.net>
+	(luca@lucaceresoli.net's message of "Thu, 6 May 2010 00:16:59 +0200")
+References: <1273097819-8002-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <87hbmk90t5.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=849
+>>>>> "luca" == luca  <luca@lucaceresoli.net> writes:
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+ luca> From: Luca Ceresoli <luca@lucaceresoli.net>
+ luca> customize.mk used to copy files with a wrong command, resulting in one
+ luca> directory level in excess. For example, source/etc/myfile would have
+ luca> produced /etc/etc/myfile in the target filesystem instead of /etc/myfile.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
-
---- Comment #4 from Peter Korsgaard <jacmet@uclibc.org>  ---
-Fixed in git (ea0695ff5ed) - Thanks, and sorry for the slow response.
+Committed, thanks.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
