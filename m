@@ -1,49 +1,37 @@
-From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Thu,  6 May 2010 21:12:49 +0200
-Subject: [Buildroot] [PATCH] package: Add staging libraries paths in target
-	LDFLAGS
-Message-ID: <1273173169-32078-1-git-send-email-llandwerlin@gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 6 May 2010 21:17:01 +0200
+Subject: [Buildroot] [git commit master] boa: use BOA_VERSION instead of
+	spawning a shell/basename for build dir
+Message-ID: <20100506192021.541688A2C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Lionel Landwerlin <llandwerlin@gmail.com>
 
-Recently some problem have been raised about libtooled packages trying
-to link with host's libraries. The problem is that at some point in
-the compilation process, options like "-rpath /usr/lib" are added to
-the link flags. It seems libtool add the -L$(DIR) if -rpath $(DIR).
+commit: http://git.buildroot.net/buildroot/commit/?id=6947eabea1cb2bf0b16567b2180e94007e151b2e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The short term fix is to add the -L$(STAGING_DIR)/lib and
--L$(STAGING_DIR)/usr/lib options to TARGET_LDFLAGS variable (it's
-already done for buildroot generated toolchains). This way, the linker
-will look at $(STAGING_DIR)/* libraries paths first, and try to link
-with them. It remains that the linker will fail if a "-L/usr/lib"
-option is found before the "-L$(STAGING_DIR)/lib
--L$(STAGING_DIR)/usr/lib" options. Hopefully it's not the case.
+And as it is a recursive variable, this is done twice during startup.
 
-The long term fix would be to teach libtool about sysroots, which is a
-complicated task for many reasons.
-
-Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Makefile.in |    2 +-
+ package/boa/boa.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index eab9168..d8c9ecb 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -92,7 +92,7 @@ endif
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
- TARGET_CFLAGS+=--sysroot $(STAGING_DIR)/
- TARGET_CXXFLAGS=$(TARGET_CFLAGS)
--TARGET_LDFLAGS=--sysroot $(STAGING_DIR)/
-+TARGET_LDFLAGS=--sysroot $(STAGING_DIR)/ -L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib
- endif
- #########################################################################
+diff --git a/package/boa/boa.mk b/package/boa/boa.mk
+index 9356d52..a51de96 100644
+--- a/package/boa/boa.mk
++++ b/package/boa/boa.mk
+@@ -12,7 +12,7 @@ BOA_VERSION=0.94.14rc21
+ BOA_SOURCE=boa-$(BOA_VERSION).tar.gz
+ BOA_CAT:=$(ZCAT)
+ BOA_SITE=http://www.boa.org/
+-BOA_DIR=$(BUILD_DIR)/${shell basename $(BOA_SOURCE) .tar.gz}
++BOA_DIR=$(BUILD_DIR)/boa-$(BOA_VERSION)
+ BOA_WORKDIR=$(BUILD_DIR)/boa_workdir
  
+ $(DL_DIR)/$(BOA_SOURCE):
 -- 
-1.7.0.4
+1.6.3.3
