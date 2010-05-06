@@ -1,29 +1,22 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 06 May 2010 23:08:54 +0200
-Subject: [Buildroot] [PATCH 1/1] Fix the computation of
-	REAL_GNU_TARGET_NAME
-In-Reply-To: <c4c8601ed1df3f29c6ea87a8882340cb6486d7da.1273170989.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Thu, 6 May 2010 20:44:21 +0200")
-References: <cover.1273170989.git.thomas.petazzoni@free-electrons.com>
-	<cover.1273170989.git.thomas.petazzoni@free-electrons.com>
-	<c4c8601ed1df3f29c6ea87a8882340cb6486d7da.1273170989.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87pr1891qx.fsf@macbook.be.48ers.dk>
+Date: Thu, 06 May 2010 23:13:09 +0200
+Subject: [Buildroot] Problem building wpa_supplicant using external
+	toolchain
+In-Reply-To: <4BE2DBEF.8010702@zacarias.com.ar> (Gustavo Zacarias's message of
+	"Thu, 06 May 2010 12:10:39 -0300")
+References: <i2i3e7e6aaa1005060454sda263981v97a394b1818a8c85@mail.gmail.com>
+	<4BE2DBEF.8010702@zacarias.com.ar>
+Message-ID: <87ljbw91ju.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Thomas> When the selected C library is glibc, the C library shouldn't be
- Thomas> mentionned in REAL_GNU_TARGET_NAME. In other words:
-
- Thomas>  arm-unknown-linux-uclibcgnueabi must be used for uClibc
- Thomas>  arm-unknown-linux-gnueabi must be used for glibc
-
- Thomas> This fixes the build of GDB on the target, as reported by Quotient
- Thomas> Remainder <quotientvremainder@gmail.com>.
+ Gustavo> Try this patch to see if it fixes your problem...
+ Gustavo> Regards.
 
 Committed, thanks.
 
