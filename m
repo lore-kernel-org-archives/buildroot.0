@@ -1,52 +1,52 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  6 May 2010 14:30:53 +0000 (UTC)
-Subject: [Buildroot] [Bug 1705] New: Fix pciutils broken cross compiling
-Message-ID: <bug-1705-163@https.bugs.busybox.net/>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 06 May 2010 12:10:39 -0300
+Subject: [Buildroot] Problem building wpa_supplicant using external
+	toolchain
+In-Reply-To: <i2i3e7e6aaa1005060454sda263981v97a394b1818a8c85@mail.gmail.com>
+References: <i2i3e7e6aaa1005060454sda263981v97a394b1818a8c85@mail.gmail.com>
+Message-ID: <4BE2DBEF.8010702@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1705
+On 05/06/2010 08:54 AM, Marc-Andr? H?bert wrote:
 
-              Host: i686-linux
-            Target: powerpc-uclibc
-           Summary: Fix pciutils broken cross compiling
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: gustavo at zacarias.com.ar
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+> Hello,
+> 
+> I get an error when I try to get to building wpa_supplicant. I
+> configured buildroot to use CodeSourcery Lite 2009q1.
+> 
+> I tried both the 2010.02 stable release and the current git source
+> tree and obtained the same results.
+> 
+> The error I get is (I truncated the object list):
+> /home/vadmin/CodeSourcery/Sourcery_G++_Lite/bin/arm-none-linux-gnueabi-gcc
+> -o wpa_supplicant ... ../src/l2_packet/l2_packet_linux.o -lssl
+> -lcrypto -ldl
+> /home/vadmin/CodeSourcery/Sourcery_G++_Lite/bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/../../../../arm-none-linux-gnueabi/bin/ld:
+> cannot find -lssl
+> 
+> This fails because there is no libssl.so in the CodeSourcery
+> toolchain. But buildroot has built openssl just before so it is
+> available somewhere. It builds just fine if I manually instruct
+> wpa_supplicant to use the libssl from openssl.
+> 
+> Now if I understand how buildroot does things, I guess it should do
+> something like this:
+> -Copy libssl.so from openssl to the staging dir
+> -Configure wpa_supplicant to use --sysroot with the staging dir
+> -Copy the libssl.so to the target root fs
+> 
+> Or am I supposed to patch my external toolchain myself?
+> Thank you very much
+> Marc
 
+Try this patch to see if it fixes your problem...
+Regards.
 
-Created attachment 1663
-  --> https://bugs.busybox.net/attachment.cgi?id=1663
-Fix pciutils broken cross compiling
-
-The pciutils migration to gentargets broke cross compiling.
-First problem is the internal install always trying to strip stuff, that's
-wrong since native install doesn't know how to strip foreign binaries and also
-breaks debugging since it's not conditional.
-Second problem is the library isn't being cross compiled either (HOST variable
-never set so it assumes native).
-A third problem is the library never being installed and if the binaries link
-against it (which they always do) they fail to work properly (make install-lib
-needed).
-
-Also added a comment about pci.ids / pci.ids.gz not being installed this time
-around and being needed in the skeleton for a nice verbose lspci output.
-This will be addressed post-2010.05 release with new infrastructure to fetch
-files.
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: buildroot-wpa_supplicant-external-toolchain.patch
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100506/bc4cfa5d/attachment.diff>
