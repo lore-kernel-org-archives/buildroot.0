@@ -1,65 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 May 2010 11:17:21 +0200
-Subject: [Buildroot] [PATCH 2/3] libxcb: fix path to Python modules
-In-Reply-To: <87vdb19zix.fsf@macbook.be.48ers.dk>
-References: <cover.1273096504.git.thomas.petazzoni@free-electrons.com>
-	<cover.1273096504.git.thomas.petazzoni@free-electrons.com>
-	<ea5d9f4196b6fdcd1fc55428c058b1d83b430591.1273096504.git.thomas.petazzoni@free-electrons.com>
-	<87vdb19zix.fsf@macbook.be.48ers.dk>
-Message-ID: <20100506111721.3a74f00a@surf>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 06 May 2010 11:46:15 +0200
+Subject: [Buildroot] Graphing package dependencies
+In-Reply-To: <20100506101437.5e35c795@surf> (Thomas Petazzoni's message of
+	"Thu, 6 May 2010 10:14:37 +0200")
+References: <20100506101437.5e35c795@surf>
+Message-ID: <87r5lp9xco.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Thu, 06 May 2010 10:59:18 +0200
-Peter Korsgaard <jacmet@uclibc.org> wrote:
+ Thomas> Hello,
+ Thomas> Following the question asked by Will yesterday, I just went ahead and
+ Thomas> implement a small tool that generates a graph of dependencies for a
+ Thomas> given package.
 
-> So we depend on python being available on the host?
+ Thomas> The result of this tool for the libgtk2 package can be seen at
 
-Yes, we do.
+ Thomas>   http://free-electrons.com/~thomas/libgtk2-package-dependencies.pdf
 
-> Shouldn't we just use the hostpython stuff we already have and E.G
-> $(PYTHON_VERSION_MAJOR)?
+ Thomas> This is the kind of funny things we can do with a generic package
+ Thomas> infrastructure :-)
 
-Well, the hostpython stuff we already have only makes Python on the
-host available to build Python on the target. It isn't a normal host
-package in that it doesn't install anything in $(HOST_DIR). That could
-be changed, of course.
+Nice!
 
-So, you think we should consider not Python as being a mandatory system
-dependency, just as Perl is already ?
+ Thomas>  * package: optimize the implementation of UPPERCASE
 
-I have no strong opinion on this, but Python is nowadays installed on
-virtually every system, and rebuilding it from the host will probably
-take quite some time.
+ Thomas>    http://git.buildroot.net/~tpetazzoni/git/buildroot/commit/?h=graph-dependencies&id=b6a46aaed9e497503b66789d1b212473d7c78b58
 
-> Alternatively we should probably add a check in libxcb.mk and print an
-> $(error if it isn't there.
+My eyes! ;)
 
-Yes, we could do that as well.
+We could instead do something like gmsl does (http://gmsl.sf.net):
 
-The other ugly thing is that we are running a Python program on the
-host, while using modules installed in
-$(STAGING_DIR)/usr/lib/pythonX.Y/site-packages.
+az := a b c d e f g h i j k l m n o p q r s t u v w x y z . -
+AZ := A B C D E F G H I J K L M N O P Q R S T U V W X Y Z _ _
 
-BTW, I have another question regarding dependencies. For the moment,
-the X.org font packages do not build on a host were some X.org
-utilities are not available (mkfontdir, mkfontscale, pdftopcf and so
-on). I've fixed some of them already, but I'm now facing the problem of
-xapp_bdftopcf, which needs to be built for the host. Unfortunately,
-this tool depends on xlib_libXfont for the host, which itself would
-depend on freetype xlib_libfontenc xlib_xtrans xproto_fontcacheproto
-xproto_fontsproto xproto_xproto xfont_encodings.
+UPPERCASE = $(eval __tmp := $1) \
+     $(foreach c, $(join $(addsuffix :,$(az)),$(AZ)), \
+	$(eval __tmp :=	\
+		$(subst $(word 1,$(subst :, ,$c)),$(word 2,$(subst :, ,$c)),\
+			$(__tmp)))) \
+     $(__tmp)
 
-Do we build all these things for the host ?
+It loops through a character list of the form a:A b:B .., and
+substitutes the 1st charact for the second.
 
-Thomas
+This is written as a generic tr function, we could ofcourse merge az and
+A-Z if we only ever want to do uppercase.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
