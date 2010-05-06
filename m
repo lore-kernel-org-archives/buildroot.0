@@ -1,48 +1,35 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 06 May 2010 22:55:11 +0200
-Subject: [Buildroot] Mplayer
-In-Reply-To: <4BD9E3BF.8080106@gmail.com> (Paulius Zaleckas's message of "Thu, 
-	29 Apr 2010 22:53:35 +0300")
-References: <w2w76d09b281004291240oe35449fdz226a42e12a5097a0@mail.gmail.com>
-	<4BD9E3BF.8080106@gmail.com>
-Message-ID: <8739y4agy8.fsf@macbook.be.48ers.dk>
+Date: Thu, 06 May 2010 22:56:49 +0200
+Subject: [Buildroot] Mplayer -
+	libass/libass.a(ass_bitmap.o):ass_bitmap.c:(.text+0x24d):
+	more undefined references to `__assert_fail' follow
+In-Reply-To: <x2x76d09b281004301143w5b198666udda8c2292eb64242@mail.gmail.com>
+	(Bart Otten's message of "Fri, 30 Apr 2010 20:43:03 +0200")
+References: <x2x76d09b281004301143w5b198666udda8c2292eb64242@mail.gmail.com>
+Message-ID: <87y6fw92b2.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Paulius" == Paulius Zaleckas <paulius.zaleckas@gmail.com> writes:
+>>>>> "Bart" == Bart Otten <bartotten@gmail.com> writes:
 
- Paulius> On 04/29/2010 10:40 PM, Bart Otten wrote:
- >> I get a error building mplayer with buildroot, how can i fix it?
- >> 
- >> -mtune=geode -march=geode -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
- >> -D_FILE_OFFSET_BITS=64 -fomit-frame-pointer -D_REENTRANT
- >> -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE
- >> -DHAVE_CONFIG_H
- >> -I/home/Bart/Downloads/buildroot-2010.02/output/staging/usr/include
- >> -I/usr/X11/include -c -o m_property.o m_property.c
- >> In file included from /usr/X11/include/features.h:354,
- >> from /usr/X11/include/stdio.h:28,
- >> from mplayer.c:5:
- >> /usr/X11/include/gnu/stubs.h:7:27: error: gnu/stubs-32.h: No such file
- >> or directory
- >> In file included from /usr/X11/include/features.h:354,
- >> from /usr/X11/include/stdlib.h:25,
- >> from m_property.c:7:
- >> /usr/X11/include/gnu/stubs.h:7:27: error: gnu/stubs-32.h: No such file
+ Bart> How can i solve this error ?
+ Bart> ass_render.c:(.text+0x1b07): undefined reference to `__assert_fail'
+ Bart> libass/libass.a(ass_render.o): In function `ass_render_frame':
+ Bart> ass_render.c:(.text+0x3862): undefined reference to `__assert_fail'
+ Bart> libass/libass.a(ass_bitmap.o):ass_bitmap.c:(.text+0x24d): more undefined
+ Bart> references to `__assert_fail' follow
+ Bart> collect2: ld returned 1 exit status
+ Bart> make[1]: *** [mplayer] Error 1
+ Bart> make[1]: Leaving directory `/home/Bart/buildroot-2010.02/output/build/
+ Bart> MPlayer-1.0rc2'
+ Bart> make: *** [/home/Bart/buildroot-2010.02/output/build/MPlayer-1.0rc2/mplayer]
 
- Paulius> I think I had similar problem. Selecting i386 target
- Paulius> architecture instead of i586 solved my problem.
-
-Hmm, I did a i686 testbuild yesterday without problems (except for the
-largefile stuff I fixed).
-
-The problem above seems to be that it somehow end up using host headers
-(/usr/X11/) - Could you post your mplayer configure.log?
-
-The /usr/X11 btw looks a bit odd - What distribution is this?
+__assert_fail is a glibc symbol, so it must be trying to link to
+something on your host. Could you post your buildroot .config and your
+mplayer configure.log ?
 
 -- 
 Bye, Peter Korsgaard
