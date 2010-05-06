@@ -1,79 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 06 May 2010 11:55:08 +0200
-Subject: [Buildroot] [PATCH 2/3] libxcb: fix path to Python modules
-In-Reply-To: <20100506111721.3a74f00a@surf> (Thomas Petazzoni's message of
-	"Thu, 6 May 2010 11:17:21 +0200")
-References: <cover.1273096504.git.thomas.petazzoni@free-electrons.com>
-	<cover.1273096504.git.thomas.petazzoni@free-electrons.com>
-	<ea5d9f4196b6fdcd1fc55428c058b1d83b430591.1273096504.git.thomas.petazzoni@free-electrons.com>
-	<87vdb19zix.fsf@macbook.be.48ers.dk> <20100506111721.3a74f00a@surf>
-Message-ID: <87mxwd9wxv.fsf@macbook.be.48ers.dk>
+From: =?ISO-8859-1?Q?Marc=2DAndr=E9_H=E9bert?= <hebert.marcandre@gmail.com>
+Date: Thu, 6 May 2010 07:54:01 -0400
+Subject: [Buildroot] Problem building wpa_supplicant using external toolchain
+Message-ID: <i2i3e7e6aaa1005060454sda263981v97a394b1818a8c85@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hello,
 
- Thomas> Hello,
- Thomas> On Thu, 06 May 2010 10:59:18 +0200
- Thomas> Peter Korsgaard <jacmet@uclibc.org> wrote:
+I get an error when I try to get to building wpa_supplicant. I
+configured buildroot to use CodeSourcery Lite 2009q1.
 
- >> So we depend on python being available on the host?
+I tried both the 2010.02 stable release and the current git source
+tree and obtained the same results.
 
- Thomas> Yes, we do.
+The error I get is (I truncated the object list):
+/home/vadmin/CodeSourcery/Sourcery_G++_Lite/bin/arm-none-linux-gnueabi-gcc
+-o wpa_supplicant ... ../src/l2_packet/l2_packet_linux.o -lssl
+-lcrypto -ldl
+/home/vadmin/CodeSourcery/Sourcery_G++_Lite/bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/../../../../arm-none-linux-gnueabi/bin/ld:
+cannot find -lssl
 
- >> Shouldn't we just use the hostpython stuff we already have and E.G
- >> $(PYTHON_VERSION_MAJOR)?
+This fails because there is no libssl.so in the CodeSourcery
+toolchain. But buildroot has built openssl just before so it is
+available somewhere. It builds just fine if I manually instruct
+wpa_supplicant to use the libssl from openssl.
 
- Thomas> Well, the hostpython stuff we already have only makes Python on the
- Thomas> host available to build Python on the target. It isn't a normal host
- Thomas> package in that it doesn't install anything in $(HOST_DIR). That could
- Thomas> be changed, of course.
+Now if I understand how buildroot does things, I guess it should do
+something like this:
+-Copy libssl.so from openssl to the staging dir
+-Configure wpa_supplicant to use --sysroot with the staging dir
+-Copy the libssl.so to the target root fs
 
-Yes.
-
- Thomas> So, you think we should consider not Python as being a
- Thomas> mandatory system dependency, just as Perl is already ?
-
-Not necessarily, but we should check for it (either in dependencies.sh
-or in libxcb.mk if it is only needed there) so the user gets a sensible
-error message if it isn't available.
-
- Thomas> I have no strong opinion on this, but Python is nowadays
- Thomas> installed on virtually every system, and rebuilding it from the
- Thomas> host will probably take quite some time.
-
-Our Python stuff is quite weak, I could imagine that we might need a
-specific version of host python to build other stuff in the future, but
-that's not something we need to fix for 2010.05.
-
- >> Alternatively we should probably add a check in libxcb.mk and print an
- >> $(error if it isn't there.
-
- Thomas> Yes, we could do that as well.
-
- Thomas> The other ugly thing is that we are running a Python program on the
- Thomas> host, while using modules installed in
- Thomas> $(STAGING_DIR)/usr/lib/pythonX.Y/site-packages.
-
- Thomas> BTW, I have another question regarding dependencies. For the moment,
- Thomas> the X.org font packages do not build on a host were some X.org
- Thomas> utilities are not available (mkfontdir, mkfontscale, pdftopcf and so
- Thomas> on). I've fixed some of them already, but I'm now facing the problem of
- Thomas> xapp_bdftopcf, which needs to be built for the host. Unfortunately,
- Thomas> this tool depends on xlib_libXfont for the host, which itself would
- Thomas> depend on freetype xlib_libfontenc xlib_xtrans xproto_fontcacheproto
- Thomas> xproto_fontsproto xproto_xproto xfont_encodings.
-
- Thomas> Do we build all these things for the host ?
-
-Argh. How many of these are we already building for a "normal" Xorg
-build (E.G. probably most people use gtk as well) - freetype I guess
-would be. The *proto packages are tiny, so they shouldn't be a
-problem. That leaves the xlib_* stuff - Do you have any idea if they
-take significant time to build?
-
--- 
-Bye, Peter Korsgaard
+Or am I supposed to patch my external toolchain myself?
+Thank you very much
+Marc
