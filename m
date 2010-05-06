@@ -1,36 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu,  6 May 2010 20:20:02 +0200
-Subject: [Buildroot] [PATCH 2/7] Add staging libraries directories to -L in
-	external case
-In-Reply-To: <cover.1273169997.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1273169997.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <2eb4b09529a891e07d09ddf36c483b28edcd19ae.1273169997.git.thomas.petazzoni@free-electrons.com>
+Date: Thu, 6 May 2010 20:32:20 +0200
+Subject: [Buildroot] Commit "Remove BR2_GNU_TARGET_SUFFIX and compute
+ GNU_TARGET_NAME"
+In-Reply-To: <l2j32a6c48b1005060956vd07c3636u1e6105bcc2b5466c@mail.gmail.com>
+References: <i2h32a6c48b1005060824nb4df8741p655241e4ce1b0f7e@mail.gmail.com>
+	<20100506180631.3333594c@surf>
+	<l2j32a6c48b1005060956vd07c3636u1e6105bcc2b5466c@mail.gmail.com>
+Message-ID: <20100506203220.60d591d6@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In order to solve issues of libtool trying to link target components
-against host libraries, it seems that specifying -L$(STAGING_DIR)/lib
-and -L$(STAGING_DIR)/usr/lib works.
+On Thu, 6 May 2010 17:56:38 +0100
+Quotient Remainder <quotientvremainder@gmail.com> wrote:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Makefile.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+> The problem occurs at the configure stage of gdb (target):
+> 
+> checking build system type... i686-pc-linux-gnu
+> checking host system type... Invalid configuration
+> `arm-unknown-linux-glibcgnueabi': machine `arm-unknown-linux' not recognized
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 0bec9a1..2ed7f42 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -98,6 +98,7 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
- TARGET_CFLAGS+=--sysroot $(STAGING_DIR)/
- TARGET_CXXFLAGS=$(TARGET_CFLAGS)
- TARGET_LDFLAGS=--sysroot $(STAGING_DIR)/
-+TARGET_LDFLAGS+=-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib
- endif
- #########################################################################
- 
+Ok, reproduced. Fix implemented and being tested, should be sent to the
+list soon. Thanks for letting us now about the issue!
+
+Thomas
 -- 
-1.6.3.3
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
