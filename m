@@ -1,10 +1,13 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 06 May 2010 11:46:15 +0200
-Subject: [Buildroot] Graphing package dependencies
-In-Reply-To: <20100506101437.5e35c795@surf> (Thomas Petazzoni's message of
-	"Thu, 6 May 2010 10:14:37 +0200")
-References: <20100506101437.5e35c795@surf>
-Message-ID: <87r5lp9xco.fsf@macbook.be.48ers.dk>
+Date: Thu, 06 May 2010 11:55:08 +0200
+Subject: [Buildroot] [PATCH 2/3] libxcb: fix path to Python modules
+In-Reply-To: <20100506111721.3a74f00a@surf> (Thomas Petazzoni's message of
+	"Thu, 6 May 2010 11:17:21 +0200")
+References: <cover.1273096504.git.thomas.petazzoni@free-electrons.com>
+	<cover.1273096504.git.thomas.petazzoni@free-electrons.com>
+	<ea5d9f4196b6fdcd1fc55428c058b1d83b430591.1273096504.git.thomas.petazzoni@free-electrons.com>
+	<87vdb19zix.fsf@macbook.be.48ers.dk> <20100506111721.3a74f00a@surf>
+Message-ID: <87mxwd9wxv.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,42 +17,63 @@ To: buildroot@busybox.net
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
  Thomas> Hello,
- Thomas> Following the question asked by Will yesterday, I just went ahead and
- Thomas> implement a small tool that generates a graph of dependencies for a
- Thomas> given package.
+ Thomas> On Thu, 06 May 2010 10:59:18 +0200
+ Thomas> Peter Korsgaard <jacmet@uclibc.org> wrote:
 
- Thomas> The result of this tool for the libgtk2 package can be seen at
+ >> So we depend on python being available on the host?
 
- Thomas>   http://free-electrons.com/~thomas/libgtk2-package-dependencies.pdf
+ Thomas> Yes, we do.
 
- Thomas> This is the kind of funny things we can do with a generic package
- Thomas> infrastructure :-)
+ >> Shouldn't we just use the hostpython stuff we already have and E.G
+ >> $(PYTHON_VERSION_MAJOR)?
 
-Nice!
+ Thomas> Well, the hostpython stuff we already have only makes Python on the
+ Thomas> host available to build Python on the target. It isn't a normal host
+ Thomas> package in that it doesn't install anything in $(HOST_DIR). That could
+ Thomas> be changed, of course.
 
- Thomas>  * package: optimize the implementation of UPPERCASE
+Yes.
 
- Thomas>    http://git.buildroot.net/~tpetazzoni/git/buildroot/commit/?h=graph-dependencies&id=b6a46aaed9e497503b66789d1b212473d7c78b58
+ Thomas> So, you think we should consider not Python as being a
+ Thomas> mandatory system dependency, just as Perl is already ?
 
-My eyes! ;)
+Not necessarily, but we should check for it (either in dependencies.sh
+or in libxcb.mk if it is only needed there) so the user gets a sensible
+error message if it isn't available.
 
-We could instead do something like gmsl does (http://gmsl.sf.net):
+ Thomas> I have no strong opinion on this, but Python is nowadays
+ Thomas> installed on virtually every system, and rebuilding it from the
+ Thomas> host will probably take quite some time.
 
-az := a b c d e f g h i j k l m n o p q r s t u v w x y z . -
-AZ := A B C D E F G H I J K L M N O P Q R S T U V W X Y Z _ _
+Our Python stuff is quite weak, I could imagine that we might need a
+specific version of host python to build other stuff in the future, but
+that's not something we need to fix for 2010.05.
 
-UPPERCASE = $(eval __tmp := $1) \
-     $(foreach c, $(join $(addsuffix :,$(az)),$(AZ)), \
-	$(eval __tmp :=	\
-		$(subst $(word 1,$(subst :, ,$c)),$(word 2,$(subst :, ,$c)),\
-			$(__tmp)))) \
-     $(__tmp)
+ >> Alternatively we should probably add a check in libxcb.mk and print an
+ >> $(error if it isn't there.
 
-It loops through a character list of the form a:A b:B .., and
-substitutes the 1st charact for the second.
+ Thomas> Yes, we could do that as well.
 
-This is written as a generic tr function, we could ofcourse merge az and
-A-Z if we only ever want to do uppercase.
+ Thomas> The other ugly thing is that we are running a Python program on the
+ Thomas> host, while using modules installed in
+ Thomas> $(STAGING_DIR)/usr/lib/pythonX.Y/site-packages.
+
+ Thomas> BTW, I have another question regarding dependencies. For the moment,
+ Thomas> the X.org font packages do not build on a host were some X.org
+ Thomas> utilities are not available (mkfontdir, mkfontscale, pdftopcf and so
+ Thomas> on). I've fixed some of them already, but I'm now facing the problem of
+ Thomas> xapp_bdftopcf, which needs to be built for the host. Unfortunately,
+ Thomas> this tool depends on xlib_libXfont for the host, which itself would
+ Thomas> depend on freetype xlib_libfontenc xlib_xtrans xproto_fontcacheproto
+ Thomas> xproto_fontsproto xproto_xproto xfont_encodings.
+
+ Thomas> Do we build all these things for the host ?
+
+Argh. How many of these are we already building for a "normal" Xorg
+build (E.G. probably most people use gtk as well) - freetype I guess
+would be. The *proto packages are tiny, so they shouldn't be a
+problem. That leaves the xlib_* stuff - Do you have any idea if they
+take significant time to build?
 
 -- 
 Bye, Peter Korsgaard
