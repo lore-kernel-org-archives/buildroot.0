@@ -1,18 +1,18 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  6 May 2010 14:21:40 +0000 (UTC)
-Subject: [Buildroot] [Bug 1699] New: Fix usbutils dependencies and bump
-Message-ID: <bug-1699-163@https.bugs.busybox.net/>
+Date: Thu,  6 May 2010 14:30:53 +0000 (UTC)
+Subject: [Buildroot] [Bug 1705] New: Fix pciutils broken cross compiling
+Message-ID: <bug-1705-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1699
+https://bugs.busybox.net/show_bug.cgi?id=1705
 
               Host: i686-linux
             Target: powerpc-uclibc
-           Summary: Fix usbutils dependencies and bump
+           Summary: Fix pciutils broken cross compiling
            Product: buildroot
            Version: unspecified
           Platform: PC
@@ -27,15 +27,24 @@ https://bugs.busybox.net/show_bug.cgi?id=1699
    Estimated Hours: 0.0
 
 
-Created attachment 1657
-  --> https://bugs.busybox.net/attachment.cgi?id=1657
-Fix usbutils dependencies and bump
+Created attachment 1663
+  --> https://bugs.busybox.net/attachment.cgi?id=1663
+Fix pciutils broken cross compiling
 
-usbutils needs libusb-compat but just select libusb.
-Since kconfig doesn't recurse dependencies this could cause it to fail to
-build.
-While we're at it bump to version 0.87
-And remove libusb-config from target when we don't want devfiles.
+The pciutils migration to gentargets broke cross compiling.
+First problem is the internal install always trying to strip stuff, that's
+wrong since native install doesn't know how to strip foreign binaries and also
+breaks debugging since it's not conditional.
+Second problem is the library isn't being cross compiled either (HOST variable
+never set so it assumes native).
+A third problem is the library never being installed and if the binaries link
+against it (which they always do) they fail to work properly (make install-lib
+needed).
+
+Also added a comment about pci.ids / pci.ids.gz not being installed this time
+around and being needed in the skeleton for a nice verbose lspci output.
+This will be addressed post-2010.05 release with new infrastructure to fetch
+files.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
