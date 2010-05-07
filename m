@@ -1,7 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 8 May 2010 00:11:46 +0200
-Subject: [Buildroot] [git commit master] xapp_mkfontdir: enable for the host
-Message-ID: <20100507223515.9ADD18F341@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] Add staging libraries directories
+	to -L in external case
+Message-ID: <20100507223514.9A67B8F341@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,28 +10,29 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3be79ce2a5e05e0bac7bb130af1ad05d88a7d52a
+commit: http://git.buildroot.net/buildroot/commit/?id=2eb4b09529a891e07d09ddf36c483b28edcd19ae
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When compiling xfonts, mkfontdir is needed for the host, therefore,
-enable it.
+In order to solve issues of libtool trying to link target components
+against host libraries, it seems that specifying -L$(STAGING_DIR)/lib
+and -L$(STAGING_DIR)/usr/lib works.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xapp_mkfontdir/xapp_mkfontdir.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/Makefile.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/x11r7/xapp_mkfontdir/xapp_mkfontdir.mk b/package/x11r7/xapp_mkfontdir/xapp_mkfontdir.mk
-index ab9bf1b..443b44f 100644
---- a/package/x11r7/xapp_mkfontdir/xapp_mkfontdir.mk
-+++ b/package/x11r7/xapp_mkfontdir/xapp_mkfontdir.mk
-@@ -9,5 +9,7 @@ XAPP_MKFONTDIR_SOURCE = mkfontdir-$(XAPP_MKFONTDIR_VERSION).tar.bz2
- XAPP_MKFONTDIR_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_MKFONTDIR_AUTORECONF = NO
- XAPP_MKFONTDIR_DEPENDENCIES = xapp_mkfontscale
-+HOST_XAPP_MKFONTDIR_DEPENDENCIES = host-xapp_mkfontscale
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 0bec9a1..2ed7f42 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -98,6 +98,7 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
+ TARGET_CFLAGS+=--sysroot $(STAGING_DIR)/
+ TARGET_CXXFLAGS=$(TARGET_CFLAGS)
+ TARGET_LDFLAGS=--sysroot $(STAGING_DIR)/
++TARGET_LDFLAGS+=-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib
+ endif
+ #########################################################################
  
- $(eval $(call AUTOTARGETS,package/x11r7,xapp_mkfontdir))
-+$(eval $(call AUTOTARGETS,package/x11r7,xapp_mkfontdir,host))
 -- 
 1.6.3.3
