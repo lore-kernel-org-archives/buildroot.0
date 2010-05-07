@@ -1,29 +1,27 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  7 May 2010 22:03:39 +0000 (UTC)
-Subject: [Buildroot] [Bug 1717] External toolchain fixes for hostapd &
-	wpa_supplicant
-In-Reply-To: <bug-1717-163@https.bugs.busybox.net/>
-References: <bug-1717-163@https.bugs.busybox.net/>
-Message-ID: <20100507220339.D6F657F90C@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 08 May 2010 00:05:53 +0200
+Subject: [Buildroot] [pull request] Pull request for branch misc-fixes
+In-Reply-To: <cover.1273096504.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Wed, 5 May 2010 23:55:14 +0200")
+References: <cover.1273096504.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87r5ln74fy.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1717
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+ Thomas> The following changes since commit d701a82321ad2f3e5bfa16639e93532294cad4ce:
+ Thomas>   Paulius Zaleckas (1):
+ Thomas>         Remove gtk-doc documentations from target
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+ Thomas> are available in the git repository at:
 
---- Comment #2 from Peter Korsgaard <jacmet@uclibc.org>  ---
-Committed, thanks
+ Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot misc-fixes
+
+Pulled, thanks!
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
