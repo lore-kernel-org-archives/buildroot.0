@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 08 May 2010 00:05:53 +0200
-Subject: [Buildroot] [pull request] Pull request for branch misc-fixes
-In-Reply-To: <cover.1273096504.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Wed, 5 May 2010 23:55:14 +0200")
-References: <cover.1273096504.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87r5ln74fy.fsf@macbook.be.48ers.dk>
+Date: Sat, 08 May 2010 00:12:02 +0200
+Subject: [Buildroot] [pull request] Pull request for branch misc-fixes2
+In-Reply-To: <cover.1273169997.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Thu, 6 May 2010 20:20:00 +0200")
+References: <cover.1273169997.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87mxwb745p.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,7 +19,7 @@ To: buildroot@busybox.net
 
  Thomas> are available in the git repository at:
 
- Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot misc-fixes
+ Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot misc-fixes2
 
 Pulled, thanks!
 
