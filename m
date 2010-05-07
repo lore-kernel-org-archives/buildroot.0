@@ -1,7 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 8 May 2010 00:11:46 +0200
-Subject: [Buildroot] [git commit master] xfont_font-util: enable host package
-Message-ID: <20100507223514.D23928F341@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] busybox: disable MTD utils in
+	default configuration
+Message-ID: <20100507223516.13E638F341@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,81 +10,39 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4a57f7d261fdb93e4c8dac30907d7f06bf176f11
+commit: http://git.buildroot.net/buildroot/commit/?id=b65e735291fe91ae97b976be211c3e04e9d05d23
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When compiling xfonts, host utilities like bdftopcf or ucs2any, part
-of xfont_font-util are needed. Until now, xfont_font-util was
-installing ugly symbolic links, assuming that these tools were
-available on the development machine.
+The MTD utils require MTD headers in the toolchain, and in several
+external toolchains, they are not present. In order to make the build
+work by default, let's disable the MTD Busybox applets in our default
+configuration.
 
-This patch enables the host package for xfont_font-util, removes the
-post-install.sh script, and keeps only the useful part of this script
-in a post install hook.
-
-host-xfont_font-util will be used later by xfont packages.
+Fixes bug #1669
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xfont_font-util/post-install.sh    |   28 ----------------------
- package/x11r7/xfont_font-util/xfont_font-util.mk |    7 ++++-
- 2 files changed, 6 insertions(+), 29 deletions(-)
- delete mode 100755 package/x11r7/xfont_font-util/post-install.sh
+ package/busybox/busybox-1.16.x.config |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/x11r7/xfont_font-util/post-install.sh b/package/x11r7/xfont_font-util/post-install.sh
-deleted file mode 100755
-index 2cb54da..0000000
---- a/package/x11r7/xfont_font-util/post-install.sh
-+++ /dev/null
-@@ -1,28 +0,0 @@
--#!/bin/sh
--
--	STAGING_DIR=$1
--
--	# fix the fontutil pkgconfig file to cross-compile fonts after fontutil is installed
--	sed "s,^mapdir=.*,mapdir=${STAGING_DIR}/usr/share/fonts/X11/util,g" \
--		${STAGING_DIR}/usr/lib/pkgconfig/fontutil.pc > ${STAGING_DIR}/usr/lib/pkgconfig/fontutil.pc.new
--	mv ${STAGING_DIR}/usr/lib/pkgconfig/fontutil.pc.new ${STAGING_DIR}/usr/lib/pkgconfig/fontutil.pc
--	
--	# link to the build host's ucs2any and fc-cache  
--	rm ${STAGING_DIR}/usr/bin/ucs2any 
--
--	ln -s `which ucs2any` ${STAGING_DIR}/usr/bin
--	if [ "$?" != "0" ]; then
--		echo "Error linking to the build host's ucs2any font utility."
--		echo "Make sure that you have the xorg-x11-font-utils package installed."
--		exit 1
--	fi
--
--	rm ${STAGING_DIR}/usr/bin/fc-cache
--
--	ln -s `which fc-cache` ${STAGING_DIR}/usr/bin
--	if [ "$?" != "0" ]; then
--		echo "Error linking to the build host's fc-cache font utility."
--		echo "Make sure that you have the fontconfig package installed."
--		exit 1
--	fi
--
-diff --git a/package/x11r7/xfont_font-util/xfont_font-util.mk b/package/x11r7/xfont_font-util/xfont_font-util.mk
-index 3f59b17..3ca51ac 100644
---- a/package/x11r7/xfont_font-util/xfont_font-util.mk
-+++ b/package/x11r7/xfont_font-util/xfont_font-util.mk
-@@ -11,10 +11,15 @@ XFONT_FONT_UTIL_DEPENDENCIES = host-pkg-config
- XFONT_FONT_UTIL_INSTALL_STAGING = YES
- XFONT_FONT_UTIL_INSTALL_TARGET = NO
- 
-+HOST_XFONT_FONT_UTIL_DEPENDENCIES = host-pkg-config
-+
- define XFONT_FONT_UTIL_POST_INSTALL_FIXES
-- package/x11r7/xfont_font-util/post-install.sh $(STAGING_DIR)
-+	sed "s,^mapdir=.*,mapdir=$(STAGING_DIR)/usr/share/fonts/X11/util,g" \
-+		$(STAGING_DIR)/usr/lib/pkgconfig/fontutil.pc > $(STAGING_DIR)/usr/lib/pkgconfig/fontutil.pc.new
-+	mv $(STAGING_DIR)/usr/lib/pkgconfig/fontutil.pc.new $(STAGING_DIR)/usr/lib/pkgconfig/fontutil.pc
- endef
- 
- XFONT_FONT_UTIL_POST_INSTALL_STAGING_HOOKS += XFONT_FONT_UTIL_POST_INSTALL_FIXES
- 
- $(eval $(call AUTOTARGETS,package/x11r7,xfont_font-util))
-+$(eval $(call AUTOTARGETS,package/x11r7,xfont_font-util,host))
+diff --git a/package/busybox/busybox-1.16.x.config b/package/busybox/busybox-1.16.x.config
+index 0b3dcc5..e5f5102 100644
+--- a/package/busybox/busybox-1.16.x.config
++++ b/package/busybox/busybox-1.16.x.config
+@@ -604,10 +604,10 @@ CONFIG_DEVMEM=y
+ CONFIG_EJECT=y
+ # CONFIG_FEATURE_EJECT_SCSI is not set
+ # CONFIG_FBSPLASH is not set
+-CONFIG_FLASHCP=y
+-CONFIG_FLASH_LOCK=y
+-CONFIG_FLASH_UNLOCK=y
+-CONFIG_FLASH_ERASEALL=y
++# CONFIG_FLASHCP is not set
++# CONFIG_FLASH_LOCK is not set
++# CONFIG_FLASH_UNLOCK is not set
++# CONFIG_FLASH_ERASEALL is not set
+ # CONFIG_IONICE is not set
+ # CONFIG_INOTIFYD is not set
+ CONFIG_LAST=y
 -- 
 1.6.3.3
