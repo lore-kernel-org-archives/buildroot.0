@@ -1,32 +1,29 @@
-From: Amber <amberved@gmail.com>
-Date: Fri, 7 May 2010 14:21:18 -0700
-Subject: [Buildroot] u-boot build issue *** No rule to make target
-	`y_config'.
-Message-ID: <w2q11cd97431005071421of8e1c8c6id8057e544ad852e0@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri,  7 May 2010 22:03:39 +0000 (UTC)
+Subject: [Buildroot] [Bug 1717] External toolchain fixes for hostapd &
+	wpa_supplicant
+In-Reply-To: <bug-1717-163@https.bugs.busybox.net/>
+References: <bug-1717-163@https.bugs.busybox.net/>
+Message-ID: <20100507220339.D6F657F90C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I am new to buildroot (and linux too). I used build root to create
-toolchain, kernel and rootfs already.
+https://bugs.busybox.net/show_bug.cgi?id=1717
 
-But, I am getting the following error while trying to build a uboot
-image using buildroot for PowerPC.
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-/usr/bin/make -j1 -C
-/home/xxx/Downloads/buildroot-2010.02/output/build/u-boot-2009.11	\
-		y_config
-make[1]: Entering directory
-`/home/xxx/Downloads/buildroot-2010.02/output/build/u-boot-2009.11'
-make[1]: *** No rule to make target `y_config'.  Stop.
-make[1]: Leaving directory
-`/home/xxx/Downloads/buildroot-2010.02/output/build/u-boot-2009.11'
-make: *** [/home/xxx/Downloads/buildroot-2010.02/output/build/u-boot-2009.11/.configured]
-Error 2
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-I don't see any y_config file in the u-boot-2009.11 folder. Can
-someone please advice?
+--- Comment #2 from Peter Korsgaard <jacmet@uclibc.org>  ---
+Committed, thanks
 
-Thanks
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
