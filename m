@@ -1,8 +1,8 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 8 May 2010 00:11:46 +0200
-Subject: [Buildroot] [git commit master] hostapd: Fix build with external
-	toolchain
-Message-ID: <20100507223516.CC77D8F341@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] Enable xapp_bdftopcf dependencies
+	for the host
+Message-ID: <20100507223515.703948F341@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,54 +10,75 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6f4939d4c5624681bd7c0cbb92462f3d3fb941c3
+commit: http://git.buildroot.net/buildroot/commit/?id=a10439d3cd1d836fccf3fdf8e7949a71bf341ba9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Closes #1717
+Now that xapp_bdftopcf is enabled on the host, we also need its
+dependencies to be available for the host. The dependency of
+host-xapp_bdftopcf is host-xlib_libXfont, which itself depends on a
+bunch of other packages. Some of them were already available for the
+host, some not (xfont_encodings, xlib_xtrans, xproto_fontcacheproto,
+xproto_fontsproto) and are therefore added by this patch.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- CHANGES                    |    7 ++++---
- package/hostapd/hostapd.mk |    1 +
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/x11r7/xfont_encodings/xfont_encodings.mk   |    2 ++
+ package/x11r7/xlib_libXfont/xlib_libXfont.mk       |    3 +++
+ package/x11r7/xlib_xtrans/xlib_xtrans.mk           |    1 +
+ .../xproto_fontcacheproto/xproto_fontcacheproto.mk |    1 +
+ .../x11r7/xproto_fontsproto/xproto_fontsproto.mk   |    1 +
+ 5 files changed, 8 insertions(+), 0 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 10ca888..f2c324b 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -2,9 +2,9 @@
+diff --git a/package/x11r7/xfont_encodings/xfont_encodings.mk b/package/x11r7/xfont_encodings/xfont_encodings.mk
+index 20a192b..ed94e49 100644
+--- a/package/x11r7/xfont_encodings/xfont_encodings.mk
++++ b/package/x11r7/xfont_encodings/xfont_encodings.mk
+@@ -10,5 +10,7 @@ XFONT_ENCODINGS_SITE = http://xorg.freedesktop.org/releases/individual/font
+ XFONT_ENCODINGS_AUTORECONF = NO
+ XFONT_ENCODINGS_MAKE_OPT =
+ XFONT_ENCODINGS_DEPENDENCIES = host-xapp_mkfontscale
++HOST_XFONT_ENCODINGS_DEPENDENCIES = host-xapp_mkfontscale
  
- 	Fixes all over the tree.
+ $(eval $(call AUTOTARGETS,package/x11r7,xfont_encodings))
++$(eval $(call AUTOTARGETS,package/x11r7,xfont_encodings,host))
+diff --git a/package/x11r7/xlib_libXfont/xlib_libXfont.mk b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
+index df4ecec..3cb52c3 100644
+--- a/package/x11r7/xlib_libXfont/xlib_libXfont.mk
++++ b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
+@@ -12,4 +12,7 @@ XLIB_LIBXFONT_INSTALL_STAGING = YES
+ XLIB_LIBXFONT_DEPENDENCIES = freetype xlib_libfontenc xlib_xtrans xproto_fontcacheproto xproto_fontsproto xproto_xproto xfont_encodings
+ XLIB_LIBXFONT_CONF_OPT = --enable-shared --disable-static --disable-devel-docs
  
--	Updated/fixed packages: customize, hal, mplayer, pciutils,
--	xdriver_xf86-video-openchrome, usb_modeswitch, usbutils,
--	wpa_supplicant
-+	Updated/fixed packages: customize, hal, hostapd, mplayer,
-+	pciutils, xdriver_xf86-video-openchrome, usb_modeswitch,
-+	usbutils, wpa_supplicant
++HOST_XLIB_LIBXFONT_DEPENDENCIES = host-freetype host-xlib_libfontenc host-xlib_xtrans host-xproto_fontcacheproto host-xproto_fontsproto host-xproto_xproto host-xfont_encodings
++
+ $(eval $(call AUTOTARGETS,package/x11r7,xlib_libXfont))
++$(eval $(call AUTOTARGETS,package/x11r7,xlib_libXfont,host))
+diff --git a/package/x11r7/xlib_xtrans/xlib_xtrans.mk b/package/x11r7/xlib_xtrans/xlib_xtrans.mk
+index 0968bdf..aaf2208 100644
+--- a/package/x11r7/xlib_xtrans/xlib_xtrans.mk
++++ b/package/x11r7/xlib_xtrans/xlib_xtrans.mk
+@@ -11,3 +11,4 @@ XLIB_XTRANS_AUTORECONF = NO
+ XLIB_XTRANS_INSTALL_STAGING = YES
  
- 	Issues resolved (http://bugs.uclibc.org):
+ $(eval $(call AUTOTARGETS,package/x11r7,xlib_xtrans))
++$(eval $(call AUTOTARGETS,package/x11r7,xlib_xtrans,host))
+diff --git a/package/x11r7/xproto_fontcacheproto/xproto_fontcacheproto.mk b/package/x11r7/xproto_fontcacheproto/xproto_fontcacheproto.mk
+index 9c2ef47..40917cd 100644
+--- a/package/x11r7/xproto_fontcacheproto/xproto_fontcacheproto.mk
++++ b/package/x11r7/xproto_fontcacheproto/xproto_fontcacheproto.mk
+@@ -12,3 +12,4 @@ XPROTO_FONTCACHEPROTO_INSTALL_STAGING = YES
+ XPROTO_FONTCACHEPROTO_INSTALL_TARGET = NO
  
-@@ -14,6 +14,7 @@
- 	#1525: Package hal deletes a whole <target>/etc/rc.d directory
- 	#1699: Fix usbutils dependencies and bump
- 	#1705: Fix pciutils broken cross compiling
-+	#1717: External toolchain fixes for hostapd & wpa_supplicant
+ $(eval $(call AUTOTARGETS,package/x11r7,xproto_fontcacheproto))
++$(eval $(call AUTOTARGETS,package/x11r7,xproto_fontcacheproto,host))
+diff --git a/package/x11r7/xproto_fontsproto/xproto_fontsproto.mk b/package/x11r7/xproto_fontsproto/xproto_fontsproto.mk
+index dc18399..5e2a64a 100644
+--- a/package/x11r7/xproto_fontsproto/xproto_fontsproto.mk
++++ b/package/x11r7/xproto_fontsproto/xproto_fontsproto.mk
+@@ -12,3 +12,4 @@ XPROTO_FONTSPROTO_INSTALL_STAGING = YES
+ XPROTO_FONTSPROTO_INSTALL_TARGET = NO
  
- 2010.05-rc1, Released May 3rd, 2010:
- 
-diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
-index 5c5c1e3..2359fd3 100644
---- a/package/hostapd/hostapd.mk
-+++ b/package/hostapd/hostapd.mk
-@@ -20,6 +20,7 @@ $(HOSTAPD_TARGET_CONFIGURE):
- 	cp $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/defconfig $(HOSTAPD_CONFIG)
- 	$(SED) "s/\/local//" $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/Makefile
- 	echo "CFLAGS += $(TARGET_CFLAGS)" >>$(HOSTAPD_CONFIG)
-+	echo "LDFLAGS += $(TARGET_LDFLAGS)" >>$(HOSTAPD_CONFIG)
- 	echo "CC = $(TARGET_CC)" >>$(HOSTAPD_CONFIG)
- # IPv6
- ifneq ($(BR2_INET_IPV6),y)
+ $(eval $(call AUTOTARGETS,package/x11r7,xproto_fontsproto))
++$(eval $(call AUTOTARGETS,package/x11r7,xproto_fontsproto,host))
 -- 
 1.6.3.3
