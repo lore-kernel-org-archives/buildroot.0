@@ -1,27 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 07 May 2010 07:16:18 +0200
-Subject: [Buildroot] [PATCH] mplayer: convert to the generic-tools
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri,  7 May 2010 08:05:48 +0000 (UTC)
+Subject: [Buildroot] [Bug 1723] New: [PATCH] axel: convert to autotools
 	infrastructure
-In-Reply-To: <m2j48ab7e011005062122v5817701ai445a516782ae7c1b@mail.gmail.com>
-	(Kelvin Cheung's message of "Fri, 7 May 2010 12:22:55 +0800")
-References: <1271660805-23631-1-git-send-email-keguang.zhang@gmail.com>
-	<w2t48ab7e011005040335w5cb76dd1l7eec7db8faa35549@mail.gmail.com>
-	<m2j48ab7e011005062122v5817701ai445a516782ae7c1b@mail.gmail.com>
-Message-ID: <87d3x88f6l.fsf@macbook.be.48ers.dk>
+Message-ID: <bug-1723-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Kelvin" == Kelvin Cheung <keguang.zhang@gmail.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=1723
 
- Kelvin> Hi Peter and Thomas,
- Kelvin> ??? Should I submit this patch to the bugzilla ?
- Kelvin> ??? Wait for your reply.
+              Host: Kubuntu 9.10
+            Target: armv4
+           Summary: [PATCH] axel: convert to autotools infrastructure
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: keguang.zhang at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Yes, please - So we don't forget about it. I'm afraid it didn't make it
-into 2010.05, but I'll add it after the release.
+
+Convert axel to autotools infrastructure and bump to version 2.4.
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
