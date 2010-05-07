@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 8 May 2010 00:11:46 +0200
-Subject: [Buildroot] [git commit master] xlib_libX11: re-add a patch to fix
-	the keysymdef issue
-Message-ID: <20100507223516.8F5A28F341@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] Add -rpath option for host package
+	compilation
+Message-ID: <20100507223514.5B0FE8F341@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,62 +10,52 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e3963e90cc84df3a31b68768831fe07a0003e322
+commit: http://git.buildroot.net/buildroot/commit/?id=6b939d40f6a29a43277566adc9d4312d49cb3abf
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When xlib_libX11 was bumped to 1.3.2 in commit
-1d956c9190dafbe425e9e02255b540641e27f690, the keysymdef patch was
-dropped. However, this patch is still needed in order to be able to
-tell ./configure where the keysymdef header file is installed.
+In c1b6242fdcf2cff7ebf09fec4cc1be58963e8427, we added
+$(HOST_DIR)/usr/lib to LD_LIBRARY_PATH when building target packages,
+because the build of target packages sometimes require host tools
+installed in $(HOST_DIR)/usr/bin which themselves require host
+libaries installed in $(HOST_DIR)/usr/lib.
 
-The patch has been updated for 1.3.2.
+Unfortunately, this solution didn't work, as libtool then tried to
+link target binaries against host libraries. So $(HOST_DIR)/usr/lib
+got removed from LD_LIBRARY_PATH in
+0d1830b07db4ebfd14e77a258de6fb391e57e960.
+
+However, this meant that we went back to the previous situation, in
+which host tools used during compilation of target components might
+require host libraries. An example :
+
+make[2]: Entering directory `/home/test/buildroot/output.ctng-arm-eglibc-2010-05-04-12-41-00/build/xfont_font-adobe-100dpi-1.0.1'
+/home/test/buildroot/output.ctng-arm-eglibc-2010-05-04-12-41-00/host/usr/bin/mkfontdir /home/test/buildroot/output.ctng-arm-eglibc-2010-05-04-12-41-00/target/usr/share/fonts/X11/100dpi
+/home/test/buildroot/output.ctng-arm-eglibc-2010-05-04-12-41-00/host/usr/bin/mkfontscale: error while loading shared libraries: libfontenc.so.1: cannot open shared object file: No such file or directory
+
+Therefore, we try another solution: make sure that host binaries are
+linked with an -rpath option, so that $(HOST_DIR)/usr/lib doesn't need
+to be in LD_LIBRARY_PATH for them to find their libraries.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../xlib_libX11/xlib_libX11-1.3.2-keysymdef.patch  |   35 ++++++++++++++++++++
- 1 files changed, 35 insertions(+), 0 deletions(-)
- create mode 100644 package/x11r7/xlib_libX11/xlib_libX11-1.3.2-keysymdef.patch
+ package/Makefile.in |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11-1.3.2-keysymdef.patch b/package/x11r7/xlib_libX11/xlib_libX11-1.3.2-keysymdef.patch
-new file mode 100644
-index 0000000..9c4eae2
---- /dev/null
-+++ b/package/x11r7/xlib_libX11/xlib_libX11-1.3.2-keysymdef.patch
-@@ -0,0 +1,35 @@
-+[patch]: configure: add --with-keysymdef argument for cross compilation
-+
-+Based on a similar patch from Openembedded.
-+
-+The libX11 configure script hardcodes the location to keysymdef.h as
-+<prefix>/include/X11/keysymdef.h, which is fine for native compilation,
-+but breaks with cross compilation as that directory is a location on
-+the target, not the build host.
-+
-+Fix it by providing an explicit --with-keysymdef=<full-path-to-file>.
-+
-+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>Index: libX11-1.1.5/configure.ac
-+===================================================================
-+Index: xlib_libX11-1.3.2/configure.ac
-+===================================================================
-+--- xlib_libX11-1.3.2.orig/configure.ac	2009-10-23 22:55:03.000000000 +0200
-++++ xlib_libX11-1.3.2/configure.ac	2010-05-04 16:26:39.000000000 +0200
-+@@ -280,8 +280,15 @@
-+ # Find keysymdef.h
-+ #
-+ AC_MSG_CHECKING([keysymdef.h])
-+-dir=`pkg-config --variable=includedir xproto`
-+-KEYSYMDEF="$dir/X11/keysymdef.h"
-++AC_ARG_WITH(keysymdef,
-++      AC_HELP_STRING([--with-keysymdef=DIR/keysymdef.h], [The location of keysymdef.h]),
-++      KEYSYMDEF=$withval, KEYSYMDEF="")
-++
-++if test x$KEYSYMDEF = x; then
-++      dir=`pkg-config --variable=includedir xproto`
-++      KEYSYMDEF="$dir/X11/keysymdef.h"
-++fi
-++
-+ if test -f "$KEYSYMDEF"; then
-+         AC_MSG_RESULT([$KEYSYMDEF])
-+ else
+diff --git a/package/Makefile.in b/package/Makefile.in
+index eab9168..0bec9a1 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -77,6 +77,11 @@ ifeq ($(BR2_LARGEFILE),y)
+ TARGET_CFLAGS+=-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+ endif
+ 
++# Host packages are sometimes linked against host libraries installed
++# in $(HOST_DIR)/usr/lib. As we cannot add $(HOST_DIR)/usr/lib to
++# LD_LIBRARY_PATH when building target packages because it causes
++# libtool breakage, we force a rpath to be added to host binaries.
++HOST_CFLAGS+=-Wl,-rpath -Wl,$(HOST_DIR)/usr/lib
+ 
+ #########################################################################
+ ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
 -- 
 1.6.3.3
