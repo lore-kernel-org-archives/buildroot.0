@@ -1,46 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri,  7 May 2010 21:30:07 +0200
-Subject: [Buildroot] [PATCH 1/3] busybox: disable MTD utils in default
-	configuration
+Date: Fri,  7 May 2010 21:30:09 +0200
+Subject: [Buildroot] [PATCH 3/3] xlib_libX11: re-add a patch to fix the
+	keysymdef issue
 In-Reply-To: <cover.1273260574.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1273260574.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <b65e735291fe91ae97b976be211c3e04e9d05d23.1273260574.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <e3963e90cc84df3a31b68768831fe07a0003e322.1273260574.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The MTD utils require MTD headers in the toolchain, and in several
-external toolchains, they are not present. In order to make the build
-work by default, let's disable the MTD Busybox applets in our default
-configuration.
+When xlib_libX11 was bumped to 1.3.2 in commit
+1d956c9190dafbe425e9e02255b540641e27f690, the keysymdef patch was
+dropped. However, this patch is still needed in order to be able to
+tell ./configure where the keysymdef header file is installed.
 
-Fixes bug #1669
+The patch has been updated for 1.3.2.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/busybox/busybox-1.16.x.config |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+ .../xlib_libX11/xlib_libX11-1.3.2-keysymdef.patch  |   35 ++++++++++++++++++++
+ 1 files changed, 35 insertions(+), 0 deletions(-)
+ create mode 100644 package/x11r7/xlib_libX11/xlib_libX11-1.3.2-keysymdef.patch
 
-diff --git a/package/busybox/busybox-1.16.x.config b/package/busybox/busybox-1.16.x.config
-index 0b3dcc5..e5f5102 100644
---- a/package/busybox/busybox-1.16.x.config
-+++ b/package/busybox/busybox-1.16.x.config
-@@ -604,10 +604,10 @@ CONFIG_DEVMEM=y
- CONFIG_EJECT=y
- # CONFIG_FEATURE_EJECT_SCSI is not set
- # CONFIG_FBSPLASH is not set
--CONFIG_FLASHCP=y
--CONFIG_FLASH_LOCK=y
--CONFIG_FLASH_UNLOCK=y
--CONFIG_FLASH_ERASEALL=y
-+# CONFIG_FLASHCP is not set
-+# CONFIG_FLASH_LOCK is not set
-+# CONFIG_FLASH_UNLOCK is not set
-+# CONFIG_FLASH_ERASEALL is not set
- # CONFIG_IONICE is not set
- # CONFIG_INOTIFYD is not set
- CONFIG_LAST=y
+diff --git a/package/x11r7/xlib_libX11/xlib_libX11-1.3.2-keysymdef.patch b/package/x11r7/xlib_libX11/xlib_libX11-1.3.2-keysymdef.patch
+new file mode 100644
+index 0000000..9c4eae2
+--- /dev/null
++++ b/package/x11r7/xlib_libX11/xlib_libX11-1.3.2-keysymdef.patch
+@@ -0,0 +1,35 @@
++[patch]: configure: add --with-keysymdef argument for cross compilation
++
++Based on a similar patch from Openembedded.
++
++The libX11 configure script hardcodes the location to keysymdef.h as
++<prefix>/include/X11/keysymdef.h, which is fine for native compilation,
++but breaks with cross compilation as that directory is a location on
++the target, not the build host.
++
++Fix it by providing an explicit --with-keysymdef=<full-path-to-file>.
++
++Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>Index: libX11-1.1.5/configure.ac
++===================================================================
++Index: xlib_libX11-1.3.2/configure.ac
++===================================================================
++--- xlib_libX11-1.3.2.orig/configure.ac	2009-10-23 22:55:03.000000000 +0200
+++++ xlib_libX11-1.3.2/configure.ac	2010-05-04 16:26:39.000000000 +0200
++@@ -280,8 +280,15 @@
++ # Find keysymdef.h
++ #
++ AC_MSG_CHECKING([keysymdef.h])
++-dir=`pkg-config --variable=includedir xproto`
++-KEYSYMDEF="$dir/X11/keysymdef.h"
+++AC_ARG_WITH(keysymdef,
+++      AC_HELP_STRING([--with-keysymdef=DIR/keysymdef.h], [The location of keysymdef.h]),
+++      KEYSYMDEF=$withval, KEYSYMDEF="")
+++
+++if test x$KEYSYMDEF = x; then
+++      dir=`pkg-config --variable=includedir xproto`
+++      KEYSYMDEF="$dir/X11/keysymdef.h"
+++fi
+++
++ if test -f "$KEYSYMDEF"; then
++         AC_MSG_RESULT([$KEYSYMDEF])
++ else
 -- 
 1.6.3.3
