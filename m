@@ -1,8 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 8 May 2010 00:11:46 +0200
-Subject: [Buildroot] [git commit master] Add -rpath option for host package
-	compilation
-Message-ID: <20100507223514.5B0FE8F341@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] xapp_mkfontdir: enable for the host
+Message-ID: <20100507223515.9ADD18F341@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,52 +9,28 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6b939d40f6a29a43277566adc9d4312d49cb3abf
+commit: http://git.buildroot.net/buildroot/commit/?id=3be79ce2a5e05e0bac7bb130af1ad05d88a7d52a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In c1b6242fdcf2cff7ebf09fec4cc1be58963e8427, we added
-$(HOST_DIR)/usr/lib to LD_LIBRARY_PATH when building target packages,
-because the build of target packages sometimes require host tools
-installed in $(HOST_DIR)/usr/bin which themselves require host
-libaries installed in $(HOST_DIR)/usr/lib.
-
-Unfortunately, this solution didn't work, as libtool then tried to
-link target binaries against host libraries. So $(HOST_DIR)/usr/lib
-got removed from LD_LIBRARY_PATH in
-0d1830b07db4ebfd14e77a258de6fb391e57e960.
-
-However, this meant that we went back to the previous situation, in
-which host tools used during compilation of target components might
-require host libraries. An example :
-
-make[2]: Entering directory `/home/test/buildroot/output.ctng-arm-eglibc-2010-05-04-12-41-00/build/xfont_font-adobe-100dpi-1.0.1'
-/home/test/buildroot/output.ctng-arm-eglibc-2010-05-04-12-41-00/host/usr/bin/mkfontdir /home/test/buildroot/output.ctng-arm-eglibc-2010-05-04-12-41-00/target/usr/share/fonts/X11/100dpi
-/home/test/buildroot/output.ctng-arm-eglibc-2010-05-04-12-41-00/host/usr/bin/mkfontscale: error while loading shared libraries: libfontenc.so.1: cannot open shared object file: No such file or directory
-
-Therefore, we try another solution: make sure that host binaries are
-linked with an -rpath option, so that $(HOST_DIR)/usr/lib doesn't need
-to be in LD_LIBRARY_PATH for them to find their libraries.
+When compiling xfonts, mkfontdir is needed for the host, therefore,
+enable it.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Makefile.in |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ package/x11r7/xapp_mkfontdir/xapp_mkfontdir.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index eab9168..0bec9a1 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -77,6 +77,11 @@ ifeq ($(BR2_LARGEFILE),y)
- TARGET_CFLAGS+=-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
- endif
+diff --git a/package/x11r7/xapp_mkfontdir/xapp_mkfontdir.mk b/package/x11r7/xapp_mkfontdir/xapp_mkfontdir.mk
+index ab9bf1b..443b44f 100644
+--- a/package/x11r7/xapp_mkfontdir/xapp_mkfontdir.mk
++++ b/package/x11r7/xapp_mkfontdir/xapp_mkfontdir.mk
+@@ -9,5 +9,7 @@ XAPP_MKFONTDIR_SOURCE = mkfontdir-$(XAPP_MKFONTDIR_VERSION).tar.bz2
+ XAPP_MKFONTDIR_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_MKFONTDIR_AUTORECONF = NO
+ XAPP_MKFONTDIR_DEPENDENCIES = xapp_mkfontscale
++HOST_XAPP_MKFONTDIR_DEPENDENCIES = host-xapp_mkfontscale
  
-+# Host packages are sometimes linked against host libraries installed
-+# in $(HOST_DIR)/usr/lib. As we cannot add $(HOST_DIR)/usr/lib to
-+# LD_LIBRARY_PATH when building target packages because it causes
-+# libtool breakage, we force a rpath to be added to host binaries.
-+HOST_CFLAGS+=-Wl,-rpath -Wl,$(HOST_DIR)/usr/lib
- 
- #########################################################################
- ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+ $(eval $(call AUTOTARGETS,package/x11r7,xapp_mkfontdir))
++$(eval $(call AUTOTARGETS,package/x11r7,xapp_mkfontdir,host))
 -- 
 1.6.3.3
