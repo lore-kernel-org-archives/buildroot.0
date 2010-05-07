@@ -1,8 +1,8 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Date: Sat, 8 May 2010 00:11:46 +0200
-Subject: [Buildroot] [git commit master] Add staging libraries directories
-	to -L in external case
-Message-ID: <20100507223514.9A67B8F341@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] hostapd: Fix build with external
+	toolchain
+Message-ID: <20100507223516.CC77D8F341@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,29 +10,54 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2eb4b09529a891e07d09ddf36c483b28edcd19ae
+commit: http://git.buildroot.net/buildroot/commit/?id=6f4939d4c5624681bd7c0cbb92462f3d3fb941c3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In order to solve issues of libtool trying to link target components
-against host libraries, it seems that specifying -L$(STAGING_DIR)/lib
-and -L$(STAGING_DIR)/usr/lib works.
+Closes #1717
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Makefile.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ CHANGES                    |    7 ++++---
+ package/hostapd/hostapd.mk |    1 +
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 0bec9a1..2ed7f42 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -98,6 +98,7 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
- TARGET_CFLAGS+=--sysroot $(STAGING_DIR)/
- TARGET_CXXFLAGS=$(TARGET_CFLAGS)
- TARGET_LDFLAGS=--sysroot $(STAGING_DIR)/
-+TARGET_LDFLAGS+=-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib
- endif
- #########################################################################
+diff --git a/CHANGES b/CHANGES
+index 10ca888..f2c324b 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -2,9 +2,9 @@
  
+ 	Fixes all over the tree.
+ 
+-	Updated/fixed packages: customize, hal, mplayer, pciutils,
+-	xdriver_xf86-video-openchrome, usb_modeswitch, usbutils,
+-	wpa_supplicant
++	Updated/fixed packages: customize, hal, hostapd, mplayer,
++	pciutils, xdriver_xf86-video-openchrome, usb_modeswitch,
++	usbutils, wpa_supplicant
+ 
+ 	Issues resolved (http://bugs.uclibc.org):
+ 
+@@ -14,6 +14,7 @@
+ 	#1525: Package hal deletes a whole <target>/etc/rc.d directory
+ 	#1699: Fix usbutils dependencies and bump
+ 	#1705: Fix pciutils broken cross compiling
++	#1717: External toolchain fixes for hostapd & wpa_supplicant
+ 
+ 2010.05-rc1, Released May 3rd, 2010:
+ 
+diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+index 5c5c1e3..2359fd3 100644
+--- a/package/hostapd/hostapd.mk
++++ b/package/hostapd/hostapd.mk
+@@ -20,6 +20,7 @@ $(HOSTAPD_TARGET_CONFIGURE):
+ 	cp $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/defconfig $(HOSTAPD_CONFIG)
+ 	$(SED) "s/\/local//" $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/Makefile
+ 	echo "CFLAGS += $(TARGET_CFLAGS)" >>$(HOSTAPD_CONFIG)
++	echo "LDFLAGS += $(TARGET_LDFLAGS)" >>$(HOSTAPD_CONFIG)
+ 	echo "CC = $(TARGET_CC)" >>$(HOSTAPD_CONFIG)
+ # IPv6
+ ifneq ($(BR2_INET_IPV6),y)
 -- 
 1.6.3.3
