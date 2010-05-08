@@ -1,41 +1,53 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 08 May 2010 16:09:29 +0200
-Subject: [Buildroot] u-boot build issue *** No rule to make target
-	`y_config'.
-In-Reply-To: <w2q11cd97431005071421of8e1c8c6id8057e544ad852e0@mail.gmail.com>
-	(Amber's message of "Fri, 7 May 2010 14:21:18 -0700")
-References: <w2q11cd97431005071421of8e1c8c6id8057e544ad852e0@mail.gmail.com>
-Message-ID: <87632y7aee.fsf@macbook.be.48ers.dk>
+From: Bart Otten <bartotten@gmail.com>
+Date: Sat, 8 May 2010 16:09:47 +0200
+Subject: [Buildroot] Mplayer
+In-Reply-To: <87aasa7g4r.fsf@macbook.be.48ers.dk>
+References: <w2w76d09b281004291240oe35449fdz226a42e12a5097a0@mail.gmail.com>
+	<4BD9E3BF.8080106@gmail.com> <8739y4agy8.fsf@macbook.be.48ers.dk>
+	<AANLkTimwzzNwDOF4mOhtPDzOCvtSe9-MVpmrZHvBFveR@mail.gmail.com>
+	<87aasa7g4r.fsf@macbook.be.48ers.dk>
+Message-ID: <AANLkTikHUmI1rc-PHN-_DswuxT3RfnvP2G5p9FU5nS6r@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Amber" == Amber  <amberved@gmail.com> writes:
+2010/5/8 Peter Korsgaard <jacmet@uclibc.org>
 
- Amber> I am new to buildroot (and linux too). I used build root to create
- Amber> toolchain, kernel and rootfs already.
+> >>>>> "Bart" == Bart Otten <bartotten@gmail.com> writes:
+>
+> Please send BR mails to the buildroot list, and not only to me.
+>
+>  Peter> The problem above seems to be that it somehow end up using host
+> headers
+>  Peter> (/usr/X11/) - Could you post your mplayer configure.log?
+>
+>  Peter> The /usr/X11 btw looks a bit odd - What distribution is this?
+>
+>  Bart> I have Slackware
+>
+>  Bart> ============ Checking for X11 headers presence ============
+>  Bart> Result is: yes (using /usr/X11/include)
+>
+> So that seems to be the problem. Could you try adding --disable-x11 to
+> the other --disable- lines in package/multimedia/mplayer/mplayer.mk?
+>
+> --
+> Bye, Peter Korsgaard
+>
 
- Amber> But, I am getting the following error while trying to build a uboot
- Amber> image using buildroot for PowerPC.
 
- Amber> /usr/bin/make -j1 -C
- Amber> /home/xxx/Downloads/buildroot-2010.02/output/build/u-boot-2009.11	\
- Amber> 		y_config
- Amber> make[1]: Entering directory
- Amber> `/home/xxx/Downloads/buildroot-2010.02/output/build/u-boot-2009.11'
- Amber> make[1]: *** No rule to make target `y_config'.  Stop.
- Amber> make[1]: Leaving directory
- Amber> `/home/xxx/Downloads/buildroot-2010.02/output/build/u-boot-2009.11'
- Amber> make: *** [/home/xxx/Downloads/buildroot-2010.02/output/build/u-boot-2009.11/.configured]
- Amber> Error 2
-
- Amber> I don't see any y_config file in the u-boot-2009.11 folder. Can
- Amber> someone please advice?
-
-You have presumably set BR2_TARGET_UBOOT_BOARDNAME (the u-boot
-configuration to use) to "y"
-
--- 
-Bye, Peter Korsgaard
+ass_render.c:(.text+0x3862): undefined reference to `__assert_fail'
+libass/libass.a(ass_bitmap.o):ass_bitmap.c:(.text+0x24d): more undefined
+references to `__assert_fail' follow
+collect2: ld returned 1 exit status
+make[1]: *** [mplayer] Error 1
+make[1]: Leaving directory
+`/home/Bart/buildroot-2010.05-rc1/output/build/MPlayer-1.0rc2'
+make: ***
+[/home/Bart/buildroot-2010.05-rc1/output/build/MPlayer-1.0rc2/mplayer] Error
+2
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100508/4b457ced/attachment.htm>
