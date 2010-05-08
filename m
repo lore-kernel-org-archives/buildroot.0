@@ -1,23 +1,34 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat,  8 May 2010 11:48:22 +0000 (UTC)
-Subject: [Buildroot] [Bug 1399] xfont_font-adobe-100dpi does not build
-In-Reply-To: <bug-1399-163@https.bugs.busybox.net/>
-References: <bug-1399-163@https.bugs.busybox.net/>
-Message-ID: <20100508114822.1D53A8F34C@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 08 May 2010 14:05:40 +0200
+Subject: [Buildroot] Mplayer
+In-Reply-To: <AANLkTimwzzNwDOF4mOhtPDzOCvtSe9-MVpmrZHvBFveR@mail.gmail.com>
+	(Bart Otten's message of "Sat, 8 May 2010 13:49:24 +0200")
+References: <w2w76d09b281004291240oe35449fdz226a42e12a5097a0@mail.gmail.com>
+	<4BD9E3BF.8080106@gmail.com> <8739y4agy8.fsf@macbook.be.48ers.dk>
+	<AANLkTimwzzNwDOF4mOhtPDzOCvtSe9-MVpmrZHvBFveR@mail.gmail.com>
+Message-ID: <87aasa7g4r.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1399
+>>>>> "Bart" == Bart Otten <bartotten@gmail.com> writes:
 
---- Comment #12 from Paul Jones <paul.jones@iwtech.com.au>  ---
-Created attachment 1705
-  --> https://bugs.busybox.net/attachment.cgi?id=1705
-The output from make -n
+Please send BR mails to the buildroot list, and not only to me.
+
+ Peter> The problem above seems to be that it somehow end up using host headers
+ Peter> (/usr/X11/) - Could you post your mplayer configure.log?
+
+ Peter> The /usr/X11 btw looks a bit odd - What distribution is this?
+
+ Bart> I have Slackware
+
+ Bart> ============ Checking for X11 headers presence ============
+ Bart> Result is: yes (using /usr/X11/include)
+
+So that seems to be the problem. Could you try adding --disable-x11 to
+the other --disable- lines in package/multimedia/mplayer/mplayer.mk?
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
