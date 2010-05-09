@@ -1,54 +1,41 @@
-From: Paul Jones <paul@pauljones.id.au>
-Date: Sun,  9 May 2010 20:05:07 +1000
-Subject: [Buildroot] [PATCH] Bump xvkbd to 3.2
-Message-ID: <1273399507-4291-1-git-send-email-paul@pauljones.id.au>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Sun, 09 May 2010 15:19:10 +0200
+Subject: [Buildroot] [PATCH] package/config: really clean
+Message-ID: <20100509131909.25762.77096.stgit@roazhon.bzh.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-And fix dependencies while we're at it.
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
 
-Signed-off-by: Paul Jones <paul@pauljones.id.au>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
 ---
- package/xvkbd/Config.in |    1 +
- package/xvkbd/xvkbd.mk  |    4 ++--
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/config/Makefile.kconfig |   13 +++++++++----
+ 1 files changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/package/xvkbd/Config.in b/package/xvkbd/Config.in
-index 888367a..8a4b847 100644
---- a/package/xvkbd/Config.in
-+++ b/package/xvkbd/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_XVKBD
- 	bool "xvkbd"
- 	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXAW
- 	help
- 	  on-screen keyboard for X
+diff --git a/package/config/Makefile.kconfig b/package/config/Makefile.kconfig
+index 6974cc3..6d89e59 100644
+--- a/package/config/Makefile.kconfig
++++ b/package/config/Makefile.kconfig
+@@ -149,10 +149,15 @@ ifeq ($(gconf-target),1)
+ gconf-objs	:= gconf.o kconfig_load.o zconf.tab.o
+ endif
  
-diff --git a/package/xvkbd/xvkbd.mk b/package/xvkbd/xvkbd.mk
-index 8f02021..b7da396 100644
---- a/package/xvkbd/xvkbd.mk
-+++ b/package/xvkbd/xvkbd.mk
-@@ -3,7 +3,7 @@
- # xvkbd
- #
- #############################################################
--XVKBD_VERSION = 2.8
-+XVKBD_VERSION = 3.2
- XVKBD_SOURCE = xvkbd-$(XVKBD_VERSION).tar.gz
- XVKBD_SITE = http://homepage3.nifty.com/tsato/xvkbd
- XVKBD_AUTORECONF = NO
-@@ -15,7 +15,7 @@ XVKBD_MAKE_OPT = CC=$(TARGET_CC) CXX=$(TARGET_CXX) LD=$(TARGET_CC) \
+-clean-files	:= lkc_defs.h qconf.moc .tmp_qtcheck \
+-		   .tmp_gtkcheck zconf.tab.c lex.zconf.c zconf.hash.c gconf.glade.h
+-clean-files     += mconf qconf gconf
+-clean-files     += config.pot linux.pot
++clean-files := lkc_defs.h qconf.moc .tmp_qtcheck \
++               .tmp_gtkcheck zconf.tab.c lex.zconf.c zconf.hash.c gconf.glade.h
++clean-files += config.pot linux.pot
++clean-files += conf $(conf-objs)
++clean-files += mconf $(mconf-objs)
++clean-files += qconf qconf.o
++clean-files += gconf gconf.o
++clean-files += kconfig_load.o zconf.tab.o
++clean-files += $(kxgettext-objs)
  
- XVKBD_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
- 
--XVKBD_DEPENDENCIES = xserver_xorg-server
-+XVKBD_DEPENDENCIES = xserver_xorg-server xlib_libXaw
- 
- $(eval $(call AUTOTARGETS,package,xvkbd))
- 
--- 
-1.6.4.4
+ # Check that we have the required ncurses stuff installed for lxdialog (menuconfig)
+ PHONY += $(obj)/dochecklxdialog
