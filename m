@@ -1,41 +1,36 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Sun, 09 May 2010 15:19:10 +0200
-Subject: [Buildroot] [PATCH] package/config: really clean
-Message-ID: <20100509131909.25762.77096.stgit@roazhon.bzh.lan>
+From: Ossy <ossy1980@gmx.net>
+Date: Sun, 09 May 2010 22:04:58 +0200
+Subject: [Buildroot] netperf build failed with rc1 version of 8th May -
+	arm926t
+Message-ID: <4BE7156A.5050205@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Dear buildroot mailinglist,
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
----
- package/config/Makefile.kconfig |   13 +++++++++----
- 1 files changed, 9 insertions(+), 4 deletions(-)
+I tried to include the netperf tool using the current rc1, but 
+unfortunatly it failed with the below output:
+...
+netsh.c: In function 'parse_protocol':
+netsh.c:457: error: 'SOCK_DCCP' undeclared (first use in this function)
+...
 
-diff --git a/package/config/Makefile.kconfig b/package/config/Makefile.kconfig
-index 6974cc3..6d89e59 100644
---- a/package/config/Makefile.kconfig
-+++ b/package/config/Makefile.kconfig
-@@ -149,10 +149,15 @@ ifeq ($(gconf-target),1)
- gconf-objs	:= gconf.o kconfig_load.o zconf.tab.o
- endif
- 
--clean-files	:= lkc_defs.h qconf.moc .tmp_qtcheck \
--		   .tmp_gtkcheck zconf.tab.c lex.zconf.c zconf.hash.c gconf.glade.h
--clean-files     += mconf qconf gconf
--clean-files     += config.pot linux.pot
-+clean-files := lkc_defs.h qconf.moc .tmp_qtcheck \
-+               .tmp_gtkcheck zconf.tab.c lex.zconf.c zconf.hash.c gconf.glade.h
-+clean-files += config.pot linux.pot
-+clean-files += conf $(conf-objs)
-+clean-files += mconf $(mconf-objs)
-+clean-files += qconf qconf.o
-+clean-files += gconf gconf.o
-+clean-files += kconfig_load.o zconf.tab.o
-+clean-files += $(kxgettext-objs)
- 
- # Check that we have the required ncurses stuff installed for lxdialog (menuconfig)
- PHONY += $(obj)/dochecklxdialog
+Please find attached my configuration.
+
+I just skipped this tool and went on with further compilation.
+
+
+Kind regards,
+Marcus
+
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: netperf-failed.txt
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100509/91bbd0b2/attachment-0001.txt>
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: buildroot.config
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100509/91bbd0b2/attachment-0001.diff>
