@@ -1,36 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  9 May 2010 23:26:38 +0200
-Subject: [Buildroot] [PATCH 4/9] hal: add dependency on
-	host-libxml-parser-perl
+Date: Sun,  9 May 2010 23:26:37 +0200
+Subject: [Buildroot] [PATCH 3/9] gawk: remove CC override
 In-Reply-To: <cover.1273440344.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1273440344.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <f5ff8cdc62182e3452d5811f1f0a25d3318b66af.1273440344.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <e627989ad847f6c7b295117334ce0abeb84dbdbb.1273440344.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-hal integrates its own version of intltool tools, but they require
-libxml-parser-perl to be installed on the host.
+For some unknown reason, gawk.mk was overriding CC to $(TARGET_CC) at
+build time, while it had already been set at configure time to
+"$(TARGET_CC) $(TARGET_CFLAGS)" which is already the good value.
+
+Setting it to just $(TARGET_CC) breaks the compilation with external
+toolchains because we must pass the --sysroot option. But anyway, this
+was incorrect as we were loosing some CFLAGS set by Buildroot.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/hal/hal.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/gawk/gawk.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/hal/hal.mk b/package/hal/hal.mk
-index 746107b..262fc41 100644
---- a/package/hal/hal.mk
-+++ b/package/hal/hal.mk
-@@ -79,7 +79,7 @@ $(TARGET_DIR)/$(HAL_TARGET_BINARY): $(HAL_DIR)/hald/hald
- 		rm -f $(TARGET_DIR)/usr/libexec/$$file; \
- 	done
+diff --git a/package/gawk/gawk.mk b/package/gawk/gawk.mk
+index 8886e6b..4dd1085 100644
+--- a/package/gawk/gawk.mk
++++ b/package/gawk/gawk.mk
+@@ -48,7 +48,7 @@ $(GAWK_DIR)/.configured: $(GAWK_DIR)/.unpacked
+ 	touch $@
  
--hal: host-pkg-config dbus-glib hwdata udev $(TARGET_DIR)/$(HAL_TARGET_BINARY)
-+hal: host-pkg-config host-libxml-parser-perl dbus-glib hwdata udev $(TARGET_DIR)/$(HAL_TARGET_BINARY)
+ $(GAWK_DIR)/$(GAWK_BINARY): $(GAWK_DIR)/.configured
+-	$(MAKE) CC=$(TARGET_CC) -C $(GAWK_DIR)
++	$(MAKE) -C $(GAWK_DIR)
  
- hal-clean:
- 	rm -f $(TARGET_DIR)/etc/dbus-1/system.d/hal.conf
+ $(TARGET_DIR)/$(GAWK_TARGET_BINARY): $(GAWK_DIR)/$(GAWK_BINARY)
+ 	rm -f $(TARGET_DIR)/usr/bin/awk
+@@ -61,7 +61,7 @@ $(TARGET_DIR)/$(GAWK_TARGET_BINARY): $(GAWK_DIR)/$(GAWK_BINARY)
+ gawk: $(TARGET_DIR)/$(GAWK_TARGET_BINARY)
+ 
+ gawk-clean:
+-	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(GAWK_DIR) uninstall
++	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(GAWK_DIR) uninstall
+ 	-$(MAKE) -C $(GAWK_DIR) clean
+ 
+ gawk-dirclean:
 -- 
 1.6.3.3
