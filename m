@@ -1,7 +1,7 @@
 From: Paul Jones <paul@pauljones.id.au>
-Date: Sun,  9 May 2010 18:02:02 +1000
+Date: Sun,  9 May 2010 20:05:07 +1000
 Subject: [Buildroot] [PATCH] Bump xvkbd to 3.2
-Message-ID: <1273392122-9420-1-git-send-email-paul@pauljones.id.au>
+Message-ID: <1273399507-4291-1-git-send-email-paul@pauljones.id.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
