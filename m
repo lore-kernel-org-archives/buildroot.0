@@ -1,49 +1,53 @@
-From: Ossy <ossy1980@gmx.net>
-Date: Sun, 09 May 2010 22:18:39 +0200
-Subject: [Buildroot] u-boot failed for arm926t using the rc1 plus patches
-	until May 8th
-Message-ID: <4BE7189F.9000500@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun,  9 May 2010 23:26:34 +0200
+Subject: [Buildroot] [pull request] Pull request for branch build-fixes
+Message-ID: <cover.1273440344.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear buildroot mailinglist,
+Hello,
 
-I tried to use th U-Boot integration of buildroot, but it failed with 
-the following out put: "...no rule to make target integrator926_config. 
-Stop..."
+Here is a set of random fixes for various build failures encountered
+while using randpackageconfig in my controlled/limited chroot test
+environment.
 
-...
---sysroot=/home/ossy/buildroot/buildroot-dev/output/staging/"	\
-		 \
-		/usr/bin/make -j1 -C 
-/home/ossy/buildroot/buildroot-dev/output/build/u-boot-2010.03	\
-		integrator926_config
-make[1]: Entering directory 
-`/home/ossy/buildroot/buildroot-dev/output/build/u-boot-2010.03'
-make[1]: *** Keine Regel, um ??integrator926_config?? zu erstellen. 
-Schluss.
-make[1]: Leaving directory 
-`/home/ossy/buildroot/buildroot-dev/output/build/u-boot-2010.03'
-make: *** 
-[/home/ossy/buildroot/buildroot-dev/output/build/u-boot-2010.03/.configured] 
-Fehler 2
-...
+Thomas
 
-Please find attached my configuration.
-I am using an amd64 host with lenny to compile for target arm.
+The following changes since commit af850ce10fc490036247a8c0dd92c79f18b2281a:
+  Peter Korsgaard (1):
+        Merge branch 'squashfs-fixes' of git://git.busybox.net/~tpetazzoni/git/buildroot
 
-I skipped the compilation of u-boot and used an external one.
+are available in the git repository at:
 
-Kind regards,
-Marcus
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: uboot-failed.txt
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100509/2de7dc8e/attachment-0001.txt>
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: buildroot.config
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100509/2de7dc8e/attachment-0001.diff>
+  git://git.busybox.net/~tpetazzoni/git/buildroot build-fixes
+
+Thomas Petazzoni (9):
+      php: make sure either CLI or CGI is selected
+      gnuchess: add a patch to fix getline() conflict
+      gawk: remove CC override
+      hal: add dependency on host-libxml-parser-perl
+      libgcrypt: specify where gpg-error-config is
+      linux-fusion: add dependency on !BR2_KERNEL_none
+      vlc: mark as broken
+      sed: bump to 4.2.1 to fix build failure
+      ltp-testsuite: mark as broken
+
+ .../gnuchess/gnuchess-5.07-getline-conflicts.patch |   48 ++++++++++++++++++++
+ package/gawk/gawk.mk                               |    4 +-
+ package/hal/hal.mk                                 |    2 +-
+ package/libgcrypt/libgcrypt.mk                     |    3 +-
+ package/linux-fusion/Config.in                     |    1 +
+ package/ltp-testsuite/Config.in                    |    1 +
+ package/multimedia/vlc/Config.in                   |    1 +
+ package/php/Config.in                              |   38 +++++++++++----
+ package/sed/sed.mk                                 |    4 +-
+ package/shared-mime-info/shared-mime-info.mk       |    2 +-
+ 10 files changed, 87 insertions(+), 17 deletions(-)
+ create mode 100644 package/games/gnuchess/gnuchess-5.07-getline-conflicts.patch
+
+Thanks,
+-- 
+Thomas Petazzoni
