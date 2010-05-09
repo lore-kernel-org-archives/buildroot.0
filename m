@@ -1,35 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  9 May 2010 23:26:41 +0200
-Subject: [Buildroot] [PATCH 7/9] vlc: mark as broken
-In-Reply-To: <cover.1273440344.git.thomas.petazzoni@free-electrons.com>
+Date: Sun, 9 May 2010 23:34:17 +0200
+Subject: [Buildroot] [PATCH 9/9] ltp-testsuite: mark as broken
+In-Reply-To: <1fd6bd2a4cc3faff672265e78ed4d5f863be8908.1273440344.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1273440344.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <45c3fedd820039d865281a12b6b06c2b05a149bd.1273440344.git.thomas.petazzoni@free-electrons.com>
+	<1fd6bd2a4cc3faff672265e78ed4d5f863be8908.1273440344.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <20100509233417.21704e18@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Before 2010.02, VLC didn't build, because it didn't pass the
-appropriate --disable- options according to the libraries available in
-Buildroot. Now, 2010.05 is going to be released, and no one bothered
-to fix VLC. Therefore, let's mark VLC as broken.
+On Sun,  9 May 2010 23:26:43 +0200
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/multimedia/vlc/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+>  package/ltp-testsuite/Config.in              |    1 +
+>  package/shared-mime-info/shared-mime-info.mk |    2 +-
 
-diff --git a/package/multimedia/vlc/Config.in b/package/multimedia/vlc/Config.in
-index c8faaa7..a261607 100644
---- a/package/multimedia/vlc/Config.in
-+++ b/package/multimedia/vlc/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_VLC
- 	bool "vlc"
-+	depends on BROKEN
- 	help
- 	  a free cross-platform media player
- 
+This was a mistake. I've split these in two separate patches at
+http://git.buildroot.net/~tpetazzoni/git/buildroot/log/?h=build-fixes.
+
+Thomas
 -- 
-1.6.3.3
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
