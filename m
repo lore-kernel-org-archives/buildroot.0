@@ -1,50 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 10 May 2010 23:39:51 +0200
-Subject: [Buildroot] [PATCH 5/5] libnl: include limits.h to fix build failure
+Date: Mon, 10 May 2010 23:39:50 +0200
+Subject: [Buildroot] [PATCH 4/5] netplug: disable -Werror to fix build
+	failure
 In-Reply-To: <cover.1273527584.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1273527584.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <3457649b632f03157ec00eca12113ca032d03891.1273527584.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <75d008f9aea93d3dcdb9afa1526bfcaa8517c740.1273527584.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the ULONG_MAX definition problem:
+netplug uses nested functions, and gcc generates a warning that
+is turned into an error:
 
-In file included from cache.c:43:
-../include/netlink-local.h: In function '__str2type':../include/netlink-local.h:218: error: 'ULONG_MAX' undeclared (first use in this function)
+cc1: warnings being treated as errors
+if_info.c: In function 'ifsm_scriptdone':
+if_info.c:289: error: generating trampoline in object (requires executable stack)
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libnl/libnl-1.1-netlink-local-fix.patch |   19 +++++++++++++++++++
- 1 files changed, 19 insertions(+), 0 deletions(-)
- create mode 100644 package/libnl/libnl-1.1-netlink-local-fix.patch
+ package/netplug/netplug-1.2.9-disable-werror.patch |   22 ++++++++++++++++++++
+ 1 files changed, 22 insertions(+), 0 deletions(-)
+ create mode 100644 package/netplug/netplug-1.2.9-disable-werror.patch
 
-diff --git a/package/libnl/libnl-1.1-netlink-local-fix.patch b/package/libnl/libnl-1.1-netlink-local-fix.patch
+diff --git a/package/netplug/netplug-1.2.9-disable-werror.patch b/package/netplug/netplug-1.2.9-disable-werror.patch
 new file mode 100644
-index 0000000..79cda28
+index 0000000..d8a3e15
 --- /dev/null
-+++ b/package/libnl/libnl-1.1-netlink-local-fix.patch
-@@ -0,0 +1,19 @@
-+Fixes the ULONG_MAX definition problem:
++++ b/package/netplug/netplug-1.2.9-disable-werror.patch
+@@ -0,0 +1,22 @@
++netplug uses nested functions, and gcc generates a warning that
++is turned into an error:
 +
-+In file included from cache.c:43:
-+../include/netlink-local.h: In function '__str2type':../include/netlink-local.h:218: error: 'ULONG_MAX' undeclared (first use in this function)
++cc1: warnings being treated as errors
++if_info.c: In function 'ifsm_scriptdone':
++if_info.c:289: error: generating trampoline in object (requires executable stack)
 +
-+Patch borrowed from OpenEmbedded, recipes/libnl/files/netlink-local-fix.patch.
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +
-+Index: libnl-1.1/include/netlink-local.h
++Index: netplug-1.2.9/Makefile
 +===================================================================
-+--- libnl-1.1.orig/include/netlink-local.h	2009-06-18 15:28:32.614209645 +0400
-++++ libnl-1.1/include/netlink-local.h	2009-06-18 15:28:44.094190518 +0400
-+@@ -26,6 +26,7 @@
-+ #include <sys/socket.h>
-+ #include <inttypes.h>
-+ #include <assert.h>
-++#include <limits.h>
++--- netplug-1.2.9.orig/Makefile	2010-05-09 21:07:40.000000000 +0200
+++++ netplug-1.2.9/Makefile	2010-05-09 21:09:32.000000000 +0200
++@@ -9,7 +9,7 @@
 + 
-+ #include <arpa/inet.h>
-+ #include <netdb.h>
++ install_opts :=
++ 
++-CFLAGS += -Wall -Werror -std=gnu99 -DNP_ETC_DIR='"$(etcdir)"' \
+++CFLAGS += -Wall -std=gnu99 -DNP_ETC_DIR='"$(etcdir)"' \
++ 	-DNP_SCRIPT_DIR='"$(scriptdir)"' -ggdb3 -O3 -DNP_VERSION='"$(version)"'
++ 
++ netplugd: config.o netlink.o lib.o if_info.o main.o
 -- 
 1.6.3.3
