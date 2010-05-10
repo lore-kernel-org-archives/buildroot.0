@@ -1,21 +1,62 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 10 May 2010 22:36:13 +0200
-Subject: [Buildroot] [PATCH] Fix Python version detection for libxcb
-In-Reply-To: <20100510133852.26288.87834.stgit@pauliusz> (Paulius Zaleckas's
-	message of "Mon, 10 May 2010 16:38:53 +0300")
-References: <20100510133852.26288.87834.stgit@pauliusz>
-Message-ID: <87d3x34hqa.fsf@macbook.be.48ers.dk>
+From: Marcel <korgull@home.nl>
+Date: Mon, 10 May 2010 22:56:47 +0200
+Subject: [Buildroot] mdev
+In-Reply-To: <87hbmf4i6z.fsf@macbook.be.48ers.dk>
+References: <201005102040.46995.korgull@home.nl>
+	<87hbmf4i6z.fsf@macbook.be.48ers.dk>
+Message-ID: <201005102256.48413.korgull@home.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Paulius" == Paulius Zaleckas <paulius.zaleckas@gmail.com> writes:
+Hi Peter,
 
- Paulius> Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+Thanks for your reply.  I checked out devtmpfs and will try that. It looks 
+promising.
 
-Sorry, didn't see your patch before implementing it myself.
+For some reason assigning a fixed major to my devices stopped working. I still 
+used this with the 2.6.28 kernel but now with the 2.6.33 it just won't work.
+Perhaps I missed something to why this doesn't work.
 
--- 
-Bye, Peter Korsgaard
+Best regards,
+Marcel
+
+
+> >>>>> "Marcel" == Marcel  <korgull@home.nl> writes:
+>  Marcel> Hi,
+> 
+>  Marcel> I'm trying to create a couple of device nodes in /dev and
+>  Marcel> somehow doing this manually seems not preferred so I'm trying
+>  Marcel> to do this via mdev.
+> 
+>  Marcel> My first question is whether I'm on the right track by using mdev?
+> 
+> Yes, that's certainly an OK approach. For an even easier setup have a
+> look at devtmpfs in the kernel.
+> 
+>  Marcel> I tried mdev but I can't make it work. Probably this is because
+>  Marcel> I have something wrong in either the startup code , the
+>  Marcel> mdev.conf file or whatever.  Second I wonder how mdev works
+>  Marcel> because I think it needs MAKEDEV or something else) which I may
+>  Marcel> be missing and can't find in my buildroot. mknod is on my
+>  Marcel> system though.  mdev -s starts and returns after a second or
+>  Marcel> so, I see no errors and no other feedback.
+> 
+> Ok, good. To generate device nodes at runtime you then need tell the
+> kernel to use mdev as the hotplug agent. See
+> target/generic/target_busybox_skeleton/etc/inittab for an example of a
+> working setup.
+> 
+>  Marcel> I am looking for an example that works with spidev. My guess is
+>  Marcel> that the entry in mdev.conf should be something like :
+> 
+>  Marcel> spidev 0:153 0660
+> 
+> In general you only need entries in mdev.conf if you need special
+> handling (non-standard permissions or scripts executed).
+> 
+>  Marcel> Would my kernel need hotplug enabled ? (I guess it does).
+> 
+> Yes.
