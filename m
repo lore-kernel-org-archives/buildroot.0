@@ -1,22 +1,37 @@
-From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
-Date: Tue, 11 May 2010 00:30:07 +0300
-Subject: [Buildroot] [PATCH] Fix Python version detection for libxcb
-In-Reply-To: <87d3x34hqa.fsf@macbook.be.48ers.dk>
-References: <20100510133852.26288.87834.stgit@pauliusz>
-	<87d3x34hqa.fsf@macbook.be.48ers.dk>
-Message-ID: <4BE87ADF.6050203@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 10 May 2010 23:39:46 +0200
+Subject: [Buildroot] [pull request] Pull request for branch 2010-05-10-fixes
+Message-ID: <cover.1273527584.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/10/2010 11:36 PM, Peter Korsgaard wrote:
->>>>>> "Paulius" == Paulius Zaleckas<paulius.zaleckas@gmail.com>  writes:
->
->   Paulius>  Signed-off-by: Paulius Zaleckas<paulius.zaleckas@gmail.com>
->
-> Sorry, didn't see your patch before implementing it myself.
->
+The following changes since commit af850ce10fc490036247a8c0dd92c79f18b2281a:
+  Peter Korsgaard (1):
+        Merge branch 'squashfs-fixes' of git://git.busybox.net/~tpetazzoni/git/buildroot
 
-No problem. I believe your version is even better :)
+are available in the git repository at:
+
+  git://git.busybox.net/~tpetazzoni/git/buildroot 2010-05-10-fixes
+
+Thomas Petazzoni (5):
+      grep: give hints to ./configure on where gettext() is
+      hostapd: use internal crypto library
+      less: depends on curses
+      netplug: disable -Werror to fix build failure
+      libnl: include limits.h to fix build failure
+
+ package/grep/grep.mk                               |    1 +
+ package/hostapd/hostapd.mk                         |    1 +
+ package/less/less.mk                               |    1 +
+ package/libnl/libnl-1.1-netlink-local-fix.patch    |   19 +++++++++++++++++
+ package/netplug/netplug-1.2.9-disable-werror.patch |   22 ++++++++++++++++++++
+ 5 files changed, 44 insertions(+), 0 deletions(-)
+ create mode 100644 package/libnl/libnl-1.1-netlink-local-fix.patch
+ create mode 100644 package/netplug/netplug-1.2.9-disable-werror.patch
+
+Thanks,
+-- 
+Thomas Petazzoni
