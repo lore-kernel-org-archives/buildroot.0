@@ -1,56 +1,46 @@
-From: Paul Jones <Paul.Jones@iwtech.com.au>
-Date: Mon, 10 May 2010 15:02:42 +1000
-Subject: [Buildroot] [PATCH] Bump xvkbd to 3.2
-Message-ID: <3B941116898CDA489B91563DEF88F4B620339A@iwt-server.iwt.local>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 10 May 2010 09:29:12 +0000 (UTC)
+Subject: [Buildroot] [Bug 1741] New: external toolchain linking error
+Message-ID: <bug-1741-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=1741
 
-And fix dependencies while we're at it.
+           Summary: external toolchain linking error
+           Product: buildroot
+           Version: 2010.02
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: major
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: mensch0815 at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Signed-off-by: Paul Jones <paul@pauljones.id.au>
----
- package/xvkbd/Config.in |    1 +
- package/xvkbd/xvkbd.mk  |    4 ++--
- 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/xvkbd/Config.in b/package/xvkbd/Config.in index
-888367a..8a4b847 100644
---- a/package/xvkbd/Config.in
-+++ b/package/xvkbd/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_XVKBD
- 	bool "xvkbd"
- 	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXAW
- 	help
- 	  on-screen keyboard for X
- 
-diff --git a/package/xvkbd/xvkbd.mk b/package/xvkbd/xvkbd.mk index
-8f02021..b7da396 100644
---- a/package/xvkbd/xvkbd.mk
-+++ b/package/xvkbd/xvkbd.mk
-@@ -3,7 +3,7 @@
- # xvkbd
- #
- #############################################################
--XVKBD_VERSION = 2.8
-+XVKBD_VERSION = 3.2
- XVKBD_SOURCE = xvkbd-$(XVKBD_VERSION).tar.gz  XVKBD_SITE =
-http://homepage3.nifty.com/tsato/xvkbd
- XVKBD_AUTORECONF = NO
-@@ -15,7 +15,7 @@ XVKBD_MAKE_OPT = CC=$(TARGET_CC) CXX=$(TARGET_CXX)
-LD=$(TARGET_CC) \
- 
- XVKBD_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
- 
--XVKBD_DEPENDENCIES = xserver_xorg-server
-+XVKBD_DEPENDENCIES = xserver_xorg-server xlib_libXaw
- 
- $(eval $(call AUTOTARGETS,package,xvkbd))
- 
---
-1.6.4.4
+When you use an external toolchain to compile packages you get an error like:
+"cannot find /lib/libc.so.0"
+
+Fix this by changing the paths in toolchain-folder/usr/lib/libc.so :
+
+--- libc.so.old 2010-05-10 10:54:45.602118000 +0200
++++ libc.so 2010-05-10 11:05:57.337434000 +0200
+@@ -3,4 +3,4 @@
+* the static library, so try that secondarily. */
+OUTPUT_FORMAT("elf32-avr32", "elf32-avr32", "elf32-avr32")
+-GROUP ( /lib/libc.so.0 /usr/lib/uclibc_nonshared.a AS_NEEDED (
+/lib/ld-uClibc.so.0 ) )
++GROUP ( ../lib/libc.so.0 ../usr/lib/uclibc_nonshared.a AS_NEEDED ( ../lib
+ld-uClibc.so.0 ) )
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
