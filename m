@@ -1,46 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 10 May 2010 23:39:47 +0200
-Subject: [Buildroot] [PATCH 1/5] grep: give hints to ./configure on where
-	gettext() is
+Date: Mon, 10 May 2010 23:39:51 +0200
+Subject: [Buildroot] [PATCH 5/5] libnl: include limits.h to fix build failure
 In-Reply-To: <cover.1273527584.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1273527584.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <73fa57064639d2877081f70b1e176b1163cd4583.1273527584.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <3457649b632f03157ec00eca12113ca032d03891.1273527584.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The build of grep fails with:
+Fixes the ULONG_MAX definition problem:
 
-fgrep.o: In function `add_count':
-fgrep.c:(.text+0x90): undefined reference to `libintl_gettext'
-
-This is because the ./configure script of grep thought that gettext
-was part of the C library instead of part of libintl:
-
-checking for GNU gettext in libc... (cached) yes
-
-Therefore, it forgot to add -lintl while linking grep and related
-applications. Passing gt_cv_func_gnugettext_libc=no forces grep to use
-libintl instead.
+In file included from cache.c:43:
+../include/netlink-local.h: In function '__str2type':../include/netlink-local.h:218: error: 'ULONG_MAX' undeclared (first use in this function)
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/grep/grep.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/libnl/libnl-1.1-netlink-local-fix.patch |   19 +++++++++++++++++++
+ 1 files changed, 19 insertions(+), 0 deletions(-)
+ create mode 100644 package/libnl/libnl-1.1-netlink-local-fix.patch
 
-diff --git a/package/grep/grep.mk b/package/grep/grep.mk
-index acef6e9..3fa671c 100644
---- a/package/grep/grep.mk
-+++ b/package/grep/grep.mk
-@@ -6,6 +6,7 @@
- GREP_VERSION:=2.5.3
- GREP_SOURCE:=grep-$(GREP_VERSION).tar.bz2
- GREP_SITE:=$(BR2_GNU_MIRROR)/grep
-+GREP_CONF_ENV = gt_cv_func_gnugettext_libc=no
- GREP_CONF_OPT = --disable-perl-regexp --without-included-regex
- 
- GREP_DEPENDENCIES = $(if $(BR2_ENABLE_LOCALE),gettext libintl)
+diff --git a/package/libnl/libnl-1.1-netlink-local-fix.patch b/package/libnl/libnl-1.1-netlink-local-fix.patch
+new file mode 100644
+index 0000000..79cda28
+--- /dev/null
++++ b/package/libnl/libnl-1.1-netlink-local-fix.patch
+@@ -0,0 +1,19 @@
++Fixes the ULONG_MAX definition problem:
++
++In file included from cache.c:43:
++../include/netlink-local.h: In function '__str2type':../include/netlink-local.h:218: error: 'ULONG_MAX' undeclared (first use in this function)
++
++Patch borrowed from OpenEmbedded, recipes/libnl/files/netlink-local-fix.patch.
++
++Index: libnl-1.1/include/netlink-local.h
++===================================================================
++--- libnl-1.1.orig/include/netlink-local.h	2009-06-18 15:28:32.614209645 +0400
+++++ libnl-1.1/include/netlink-local.h	2009-06-18 15:28:44.094190518 +0400
++@@ -26,6 +26,7 @@
++ #include <sys/socket.h>
++ #include <inttypes.h>
++ #include <assert.h>
+++#include <limits.h>
++ 
++ #include <arpa/inet.h>
++ #include <netdb.h>
 -- 
 1.6.3.3
