@@ -1,29 +1,41 @@
-From: Will Moore <will.moore@beraninstruments.com>
-Date: Mon, 10 May 2010 10:24:52 +0100
-Subject: [Buildroot] Method of moving to new releases of buildroot
-References: <000c01caec58$eb209a20$6f01a8c0@apexlaptop>
-	<87bpcubgz5.fsf@macbook.be.48ers.dk> 
-Message-ID: <92845763320042419CF46BEE34059A68@AP366>
+From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+Date: Mon, 10 May 2010 15:33:47 +0300
+Subject: [Buildroot] [git commit master] libxcb: fix path to Python
+	modules
+In-Reply-To: <20100507223516.527CB8F341@busybox.osuosl.org>
+References: <20100507223516.527CB8F341@busybox.osuosl.org>
+Message-ID: <AANLkTiknUv3xy6Diwkz2xtOxwckUCAKuajGodk8OsxAa@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As a point of process, how is it intended that a user moves to a new version
-of buildroot?
+On Sat, May 8, 2010 at 1:11 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+>
+> commit: http://git.buildroot.net/buildroot/commit/?id=4880edd506a2c629efa4ccf38f27f47d5d5d8804
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>
+> When building libxcb, the variable XCBPROTO_XCBPYTHONDIR must point to
+> the location where the Python modules needed to run the c_client.py
+> program are installed. The path
+> $(STAGING_DIR)/usr/lib/python2.6/site-packages was hardcoded. However,
+> it doesn't work when the version of Python installed on the host is
+> Python 2.5.
+>
+> Therefore, add a little bit of magic to compute the host Python
+> version.
 
-I tried making 2010.05 rc1 with my 2010.02 buildroot, kernel and busybox
-.config files from 2010.02 (just accepting default new configuration
-options) but found the build failed due to the previously mentioned problem
-with uclibc and usleep when building gdbserver for the target.
+Unfortunately this fails on my system:
+$ python --version
+Python 2.6
+$ python --version | sed 's/Python \(2\.[0-9]\)\..*/\1/'
+Python 2.6
 
-Please can those with more experience of buildroot let me know if what I did
-was a) daft and bound to fail or b) acceptable practice but failed in this
-instance.  What do others do?
-
-Thanks,
-
-
-
-Will
+> We also verify that Python is available on the host, as we don't build
+> it in Buildroot.
+>
+> Fixes bug #1531.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
