@@ -1,26 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 10 May 2010 20:23:21 +0200
-Subject: [Buildroot] [PATCH] Fix Python version detection for libxcb
-In-Reply-To: <20100510133852.26288.87834.stgit@pauliusz>
-References: <20100510133852.26288.87834.stgit@pauliusz>
-Message-ID: <20100510202321.65f67f29@surf>
+From: Marcel <korgull@home.nl>
+Date: Mon, 10 May 2010 20:40:46 +0200
+Subject: [Buildroot] mdev
+Message-ID: <201005102040.46995.korgull@home.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 10 May 2010 16:38:53 +0300
-Paulius Zaleckas <paulius.zaleckas@gmail.com> wrote:
+Hi,
 
-> Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+I'm trying to create a couple of device nodes in /dev and somehow doing this 
+manually seems not preferred so I'm trying to do this via mdev. 
 
-On my system, the Python version was 2.6.4, not just 2.6, so my regexp
-was working. But obviously, yours is better, so:
+My first question is whether I'm on the right track by using mdev?
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+I tried mdev but I can't make it work. Probably this is because I have 
+something wrong in either the startup code , the mdev.conf file or whatever. 
+Second I wonder how mdev works because I think it needs MAKEDEV or something 
+else) which I may be missing and can't find in my buildroot. mknod is on my 
+system though.
+mdev -s starts and returns after a second or so, I see no errors and no other 
+feedback.
+
+I am looking for an example that works with spidev. My guess is that the entry 
+in mdev.conf should be something like :
+
+spidev 0:153 0660
+
+Would my kernel need hotplug enabled ? (I guess it does).
+
+I'm using a 2.6.33 kernel with a sam9g45 Atmel processor if that matters.
+
+Best regards,
+Marcel
