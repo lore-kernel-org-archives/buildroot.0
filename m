@@ -1,46 +1,29 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 10 May 2010 09:29:12 +0000 (UTC)
-Subject: [Buildroot] [Bug 1741] New: external toolchain linking error
-Message-ID: <bug-1741-163@https.bugs.busybox.net/>
+From: Will Moore <will.moore@beraninstruments.com>
+Date: Mon, 10 May 2010 10:24:52 +0100
+Subject: [Buildroot] Method of moving to new releases of buildroot
+References: <000c01caec58$eb209a20$6f01a8c0@apexlaptop>
+	<87bpcubgz5.fsf@macbook.be.48ers.dk> 
+Message-ID: <92845763320042419CF46BEE34059A68@AP366>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1741
+As a point of process, how is it intended that a user moves to a new version
+of buildroot?
 
-           Summary: external toolchain linking error
-           Product: buildroot
-           Version: 2010.02
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: major
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: mensch0815 at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+I tried making 2010.05 rc1 with my 2010.02 buildroot, kernel and busybox
+.config files from 2010.02 (just accepting default new configuration
+options) but found the build failed due to the previously mentioned problem
+with uclibc and usleep when building gdbserver for the target.
+
+Please can those with more experience of buildroot let me know if what I did
+was a) daft and bound to fail or b) acceptable practice but failed in this
+instance.  What do others do?
+
+Thanks,
 
 
-When you use an external toolchain to compile packages you get an error like:
-"cannot find /lib/libc.so.0"
 
-Fix this by changing the paths in toolchain-folder/usr/lib/libc.so :
-
---- libc.so.old 2010-05-10 10:54:45.602118000 +0200
-+++ libc.so 2010-05-10 11:05:57.337434000 +0200
-@@ -3,4 +3,4 @@
-* the static library, so try that secondarily. */
-OUTPUT_FORMAT("elf32-avr32", "elf32-avr32", "elf32-avr32")
--GROUP ( /lib/libc.so.0 /usr/lib/uclibc_nonshared.a AS_NEEDED (
-/lib/ld-uClibc.so.0 ) )
-+GROUP ( ../lib/libc.so.0 ../usr/lib/uclibc_nonshared.a AS_NEEDED ( ../lib
-ld-uClibc.so.0 ) )
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Will
