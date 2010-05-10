@@ -1,37 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 10 May 2010 23:39:49 +0200
-Subject: [Buildroot] [PATCH 3/5] less: depends on curses
-In-Reply-To: <cover.1273527584.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1273527584.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <515fb237f403407db71838013b7e8da60044e387.1273527584.git.thomas.petazzoni@free-electrons.com>
+Date: Mon, 10 May 2010 23:44:21 +0200
+Subject: [Buildroot] [pull request] Pull request for branch build-fixes
+In-Reply-To: <cover.1273440344.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1273440344.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <20100510234421.5ac0d4ce@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The less package already selects BR2_PACKAGE_CURSES, but it fails to
-depend on it in the makefile. Therefore, there are cases where less
-gets built before curses, and the build fails:
+On Sun,  9 May 2010 23:26:34 +0200
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-checking for working terminal libraries... Cannot find terminal libraries - configure failed
+> Here is a set of random fixes for various build failures encountered
+> while using randpackageconfig in my controlled/limited chroot test
+> environment.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/less/less.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+I've updated this branch at :
 
-diff --git a/package/less/less.mk b/package/less/less.mk
-index 706a3e0..bae1cf6 100644
---- a/package/less/less.mk
-+++ b/package/less/less.mk
-@@ -6,6 +6,7 @@
- 
- LESS_VERSION = 436
- LESS_SITE = http://www.greenwoodsoftware.com/less
-+LESS_DEPENDENCIES = ncurses
- 
- $(eval $(call AUTOTARGETS,package,less))
- 
+ git://git.busybox.net/~tpetazzoni/git/buildroot build-fixes
+
+with two changes :
+
+ * Add a reason for which VLC is marked broken
+
+ * Add a dependency on !BR2_KERNEL_none for BR2_PACKAGE_DIRECTFB_MULTI
+
+If you want me to resend a full pull request, don't hesitate to ask.
+
+Thomas
 -- 
-1.6.3.3
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
