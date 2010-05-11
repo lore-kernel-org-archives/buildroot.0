@@ -1,53 +1,53 @@
-From: William Wagner <will_wagner@carallon.com>
-Date: Tue, 11 May 2010 10:37:17 +0100
-Subject: [Buildroot] Allowing target to modify fs
-Message-ID: <4BE9254D.4050301@carallon.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 11 May 2010 14:14:01 +0000 (UTC)
+Subject: [Buildroot] [Bug 1759] New: qt.mk stops build to prompts user
+Message-ID: <bug-1759-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+https://bugs.busybox.net/show_bug.cgi?id=1759
 
-I am trying to update one of our projects to the latest snapshot in git. 
-I am having a problem following the new file system building changes.
+           Summary: qt.mk stops build to prompts user
+           Product: buildroot
+           Version: 2009.02
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: dave at thesmithfam.org
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-The problem I have is that previously I had a target that was making 
-changes to the target fs (Which perhaps may not be correct but that's a 
-side issue). The problem is that in the top level makefile the target is 
-included after the fs include so it is added to TARGETS after the step 
-to build the fs. This means it runs after the fs has already been built.
 
-I see there is the option to run a script to modify the target in 
-BR2_ROOTFS_POST_BUILD_SCRIPT but what I really want is to be able to 
-ensure a make target runs before the fs is built.
+The qt.mk makefile causes the build to stall as it prompts users during the
+configure step to ask them if they agree to the terms of the license. The
+following patch answers the prompt automatically so the build doesn't stall
+(this is also how the OpenWrt team does it):
 
-What would be the best way to solve this? I was thinking about doing 
-something similar to $(KERNEL_COND_PATCHES) which allows a target to 
-specify additional patches for linux. Something similar could be done with:
 
-diff --git a/Makefile b/Makefile
-index 2a70a5b..cf929b9 100644
---- a/Makefile
-+++ b/Makefile
-@@ -400,7 +400,7 @@ $(TARGET_DIR): $(BUILD_DIR)/.root
-  erase-fakeroots:
-         rm -f $(BUILD_DIR)/.fakeroot*
 
--target-finalize:
-+target-finalize: $(TARGET_COND_TARGETS)
-  ifeq ($(BR2_HAVE_DEVFILES),y)
-         ( scripts/copy.sh $(STAGING_DIR) $(TARGET_DIR) )
-  else
-
-What does anyone think?
-
-Will
+Index: qt.mk
+===================================================================
+--- qt.mk    (revision 14)
++++ qt.mk    (working copy)
+@@ -471,7 +471,7 @@
+         PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)" \
+         PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+         PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig:$(PKG_CONFIG_PATH)"
+\
+-        ./configure \
++        echo -e 'o\nyes\n' | ./configure \
+         $(if $(VERBOSE),-verbose,-silent) \
+         -force-pkg-config \
+         -embedded $(BR2_PACKAGE_QT_EMB_PLATFORM) \
 
 -- 
-------------------------------------------------------------------------
-Will Wagner                                     will_wagner at carallon.com
-Development Manager                      Office Tel: +44 (0)20 7371 2032
-Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
-------------------------------------------------------------------------
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
