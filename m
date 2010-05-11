@@ -1,13 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 11 May 2010 08:55:14 +0200
-Subject: [Buildroot] [PATCH 1/5] grep: give hints to ./configure on
-	where gettext() is
-In-Reply-To: <73fa57064639d2877081f70b1e176b1163cd4583.1273527584.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Mon, 10 May 2010 23:39:47 +0200")
+Date: Tue, 11 May 2010 09:02:40 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	2010-05-10-fixes
+In-Reply-To: <cover.1273527584.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Mon, 10 May 2010 23:39:46 +0200")
 References: <cover.1273527584.git.thomas.petazzoni@free-electrons.com>
-	<cover.1273527584.git.thomas.petazzoni@free-electrons.com>
-	<73fa57064639d2877081f70b1e176b1163cd4583.1273527584.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <871vdj3p2l.fsf@macbook.be.48ers.dk>
+Message-ID: <87wrva3oq7.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,17 +14,22 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> The build of grep fails with:
- Thomas> fgrep.o: In function `add_count':
- Thomas> fgrep.c:(.text+0x90): undefined reference to `libintl_gettext'
+ Thomas> The following changes since commit af850ce10fc490036247a8c0dd92c79f18b2281a:
+ Thomas>   Peter Korsgaard (1):
+ Thomas>         Merge branch 'squashfs-fixes' of git://git.busybox.net/~tpetazzoni/git/buildroot
 
- Thomas> This is because the ./configure script of grep thought that gettext
- Thomas> was part of the C library instead of part of libintl:
+ Thomas> are available in the git repository at:
 
- Thomas> checking for GNU gettext in libc... (cached) yes
+ Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot 2010-05-10-fixes
 
-That must mean some other package has loaded the cache with wrong info.
-We should fix that instead.
+ Thomas> Thomas Petazzoni (5):
+ Thomas>       grep: give hints to ./configure on where gettext() is
+ Thomas>       hostapd: use internal crypto library
+ Thomas>       less: depends on curses
+ Thomas>       netplug: disable -Werror to fix build failure
+ Thomas>       libnl: include limits.h to fix build failure
+
+Thanks, committed everything besides the grep fix.
 
 -- 
 Bye, Peter Korsgaard
