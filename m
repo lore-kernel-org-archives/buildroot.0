@@ -1,24 +1,32 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 11 May 2010 08:52:20 +0200
-Subject: [Buildroot] [PATCH] Bump xvkbd to 3.2
-In-Reply-To: <3B941116898CDA489B91563DEF88F4B620339A@iwt-server.iwt.local>
-	(Paul Jones's message of "Mon, 10 May 2010 15:02:42 +1000")
-References: <3B941116898CDA489B91563DEF88F4B620339A@iwt-server.iwt.local>
-Message-ID: <87632v3p7f.fsf@macbook.be.48ers.dk>
+Date: Tue, 11 May 2010 08:55:14 +0200
+Subject: [Buildroot] [PATCH 1/5] grep: give hints to ./configure on
+	where gettext() is
+In-Reply-To: <73fa57064639d2877081f70b1e176b1163cd4583.1273527584.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Mon, 10 May 2010 23:39:47 +0200")
+References: <cover.1273527584.git.thomas.petazzoni@free-electrons.com>
+	<cover.1273527584.git.thomas.petazzoni@free-electrons.com>
+	<73fa57064639d2877081f70b1e176b1163cd4583.1273527584.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <871vdj3p2l.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Paul" == Paul Jones <Paul.Jones@iwtech.com.au> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Paul> And fix dependencies while we're at it.
+ Thomas> The build of grep fails with:
+ Thomas> fgrep.o: In function `add_count':
+ Thomas> fgrep.c:(.text+0x90): undefined reference to `libintl_gettext'
 
-Committed, thanks.
+ Thomas> This is because the ./configure script of grep thought that gettext
+ Thomas> was part of the C library instead of part of libintl:
 
-Your patch was word wrapped, but I fixed it here. Please use git
-send-email in the future.
+ Thomas> checking for GNU gettext in libc... (cached) yes
+
+That must mean some other package has loaded the cache with wrong info.
+We should fix that instead.
 
 -- 
 Bye, Peter Korsgaard
