@@ -1,7 +1,9 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 11 May 2010 21:21:38 +0200
-Subject: [Buildroot] Buildroot 2010.05-rc2 released
-Message-ID: <87k4ra2qil.fsf@macbook.be.48ers.dk>
+From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
+Date: Tue, 11 May 2010 17:59:01 -0300
+Subject: [Buildroot] [Bug 1759] New: qt.mk stops build to prompts user
+In-Reply-To: <bug-1759-163@https.bugs.busybox.net/>
+References: <bug-1759-163@https.bugs.busybox.net/>
+Message-ID: <AANLkTikbTZTFAb33JN-Jhd7Ohy4TujJFgiIf3Y582L2j@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,32 +12,17 @@ To: buildroot@busybox.net
 
 Hi,
 
-Buildroot 2010.05-rc2 is released - Go download it at:
+On Tue, May 11, 2010 at 11:14 AM,  <bugzilla@busybox.net> wrote:
+> - ? ? ? ?./configure \
+> + ? ? ? ?echo -e 'o\nyes\n' | ./configure \
+> ? ? ? ? $(if $(VERBOSE),-verbose,-silent) \
+> ? ? ? ? -force-pkg-config \
+> ? ? ? ? -embedded $(BR2_PACKAGE_QT_EMB_PLATFORM) \
+>
 
-http://buildroot.net/downloads/buildroot-2010.05-rc2.tar.gz
+I haven't been using Buildroot and all, but what happened to
+--accept-license? AFAIK, it's still there in the latest Qt source
+package, and it was in the .mk file back when it was called qte
 
-or
-
-http://buildroot.net/downloads/buildroot-2010.05-rc2.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.net/buildroot
-
-Please give it a spin and report any problems to the mailing list or bug
-tracker. Many thanks to the people contributing to this release:
-
-git shortlog -s -n 2010.05_rc1..
-    27  Thomas Petazzoni
-    19  Peter Korsgaard
-     5  Gustavo Zacarias
-     2  Paulius Zaleckas
-     1  Luca Ceresoli
-     1  Paul Jones
-
-I'll be away for the rest of the week, but expect 2010.05-rc3 at the end
-of next week (unless no issues are found), and the final 2010.05 release
-hopefully soon thereafter - So please give it a good test.
-
--- 
-Bye, Peter Korsgaard
+Kind Regards,
+    Thiago A. Correa
