@@ -1,53 +1,89 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 11 May 2010 14:14:01 +0000 (UTC)
-Subject: [Buildroot] [Bug 1759] New: qt.mk stops build to prompts user
-Message-ID: <bug-1759-163@https.bugs.busybox.net/>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 11 May 2010 21:15:07 +0200
+Subject: [Buildroot] [git commit master] update for 2010.05-rc2
+Message-ID: <20100511191526.EFDED8F42C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1759
 
-           Summary: qt.mk stops build to prompts user
-           Product: buildroot
-           Version: 2009.02
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: dave at thesmithfam.org
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+commit: http://git.buildroot.net/buildroot/commit/?id=6d1ab151cb4a14a6ca29e692de26fefd2f453d0a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES            |    2 +-
+ Config.in          |    2 +-
+ docs/download.html |    6 +++---
+ docs/news.html     |   11 +++++++++++
+ 4 files changed, 16 insertions(+), 5 deletions(-)
 
-The qt.mk makefile causes the build to stall as it prompts users during the
-configure step to ask them if they agree to the terms of the license. The
-following patch answers the prompt automatically so the build doesn't stall
-(this is also how the OpenWrt team does it):
-
-
-
-Index: qt.mk
-===================================================================
---- qt.mk    (revision 14)
-+++ qt.mk    (working copy)
-@@ -471,7 +471,7 @@
-         PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)" \
-         PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
-         PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig:$(PKG_CONFIG_PATH)"
-\
--        ./configure \
-+        echo -e 'o\nyes\n' | ./configure \
-         $(if $(VERBOSE),-verbose,-silent) \
-         -force-pkg-config \
-         -embedded $(BR2_PACKAGE_QT_EMB_PLATFORM) \
-
+diff --git a/CHANGES b/CHANGES
+index 17a8126..3a12845 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,4 +1,4 @@
+-2010.05, Not yet released
++2010.05-rc2, Released May 11th, 2010:
+ 
+ 	Fixes all over the tree.
+ 
+diff --git a/Config.in b/Config.in
+index fc68bf9..c0151bd 100644
+--- a/Config.in
++++ b/Config.in
+@@ -8,7 +8,7 @@ config BR2_HAVE_DOT_CONFIG
+ 
+ config BR2_VERSION
+ 	string
+-	default "2010.05-rc1-git"
++	default "2010.05-rc2
+ 
+ source "target/Config.in.arch"
+ source "target/device/Config.in"
+diff --git a/docs/download.html b/docs/download.html
+index 63a5b33..d8801cd 100644
+--- a/docs/download.html
++++ b/docs/download.html
+@@ -14,12 +14,12 @@ or
+ <a href="/downloads/buildroot-2010.02.tar.bz2">buildroot-2010.02.tar.bz2</a>.
+ <p>
+ 
+-The latest release candidate is <b>2010.05-rc1</b>, which can be
++The latest release candidate is <b>2010.05-rc2</b>, which can be
+ downloaded here:<p>
+ 
+-<a href="/downloads/buildroot-2010.05-rc1.tar.gz">buildroot-2010.05-rc1.tar.gz</a>
++<a href="/downloads/buildroot-2010.05-rc2.tar.gz">buildroot-2010.05-rc2.tar.gz</a>
+ or
+-<a href="/downloads/buildroot-2010.05-rc1.tar.bz2">buildroot-2010.05-rc1.tar.bz2</a>.
++<a href="/downloads/buildroot-2010.05-rc2.tar.bz2">buildroot-2010.05-rc2.tar.bz2</a>.
+ <p>
+ 
+ This and earlier releases can always be downloaded from
+diff --git a/docs/news.html b/docs/news.html
+index 59373cd..bbebd60 100644
+--- a/docs/news.html
++++ b/docs/news.html
+@@ -5,6 +5,17 @@
+ <p>
+ 
+ <ul>
++  <li><b>11 May 2010 -- 2010.05-rc2 released</b>
++
++    <p>Another week, another release candidate with a bunch of
++    cleanups and build fixes.</p>
++
++    <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
++    <a href="/downloads/buildroot-2010.05-rc2.tar.bz2">2010.05-rc2
++    release candidate</a>, and report any problems found to the <a
++    href="lists.html">mailing list</a> or <a
++    href="https://bugs.uclibc.org">bug tracker</a>.</p>
++
+   <li><b>3 May 2010 -- 2010.05-rc1 released</b>
+ 
+     <p>We have a new release candidate! Lots of changes all over the
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.6.3.3
