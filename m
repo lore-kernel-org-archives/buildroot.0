@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 11 May 2010 09:13:14 +0200
-Subject: [Buildroot] [git commit master] linux-fusion: add dependency on
-	!BR2_KERNEL_none
-Message-ID: <20100511071422.76AE6AA7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] sed: bump to 4.2.1 to fix build
+	failure
+Message-ID: <20100511071423.05F6DAA7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,43 +10,38 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6040190e920674913c0dd3dc4391a8590735f0fb
+commit: http://git.buildroot.net/buildroot/commit/?id=844bbbb3fd10906d0c4e15ac57578f13b00fcf32
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-linux-fusion is composed of a kernel module, and linux-fusion.mk uses
-several variable definitions that only exist when Buildroot compiles a
-kernel.
-
-We also add the same dependency to BR2_PACKAGE_DIRECTFB_MULTI, which
-relies on linux-fusion.
+Version 4.1.5 fails to build due to the infamous getline() conflict
+issue. 4.2.1 doesn't have this problem.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/directfb/Config.in     |    1 +
- package/linux-fusion/Config.in |    1 +
- 2 files changed, 2 insertions(+), 0 deletions(-)
+ package/sed/sed.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/directfb/Config.in b/package/directfb/Config.in
-index 5e81b7e..8a0a736 100644
---- a/package/directfb/Config.in
-+++ b/package/directfb/Config.in
-@@ -10,6 +10,7 @@ if BR2_PACKAGE_DIRECTFB
- config BR2_PACKAGE_DIRECTFB_MULTI
- 	bool "directfb multi application"
- 	select BR2_PACKAGE_LINUX_FUSION
-+	depends on !BR2_KERNEL_none
- 	help
- 	  Enable use of multiple concurrent DirectFB applications
+diff --git a/package/sed/sed.mk b/package/sed/sed.mk
+index 35cedce..e5a5d00 100644
+--- a/package/sed/sed.mk
++++ b/package/sed/sed.mk
+@@ -3,7 +3,7 @@
+ # sed
+ #
+ #############################################################
+-SED_VERSION:=4.1.5
++SED_VERSION:=4.2.1
+ SED_SOURCE:=sed-$(SED_VERSION).tar.gz
+ SED_SITE:=$(BR2_GNU_MIRROR)/sed
+ SED_CAT:=$(ZCAT)
+@@ -100,7 +100,7 @@ endif
+ #############################################################
+ $(SED_DIR2)/.unpacked: $(DL_DIR)/$(SED_SOURCE)
+ 	$(SED_CAT) $(DL_DIR)/$(SED_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	$(CONFIG_UPDATE) $(SED_DIR2)/config
++	$(CONFIG_UPDATE) $(SED_DIR2)/build-aux
+ 	touch $@
  
-diff --git a/package/linux-fusion/Config.in b/package/linux-fusion/Config.in
-index 6fb5260..ebd00b4 100644
---- a/package/linux-fusion/Config.in
-+++ b/package/linux-fusion/Config.in
-@@ -1,4 +1,5 @@
- config BR2_PACKAGE_LINUX_FUSION
-+	depends on !BR2_KERNEL_none
- 	bool "linux-fusion communication layer for DirectFB multi"
- 	help
- 	  DirectFB Communication Layer allowing multiple DirectFB
+ $(SED_DIR2)/.configured: $(SED_DIR2)/.unpacked
 -- 
 1.6.3.3
