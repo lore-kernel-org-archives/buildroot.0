@@ -1,17 +1,41 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 11 May 2010 21:15:07 +0200
-Subject: [Buildroot] [git tag 2010.05_rc2] update for 2010.05-rc2
-Message-ID: <20100511191633.9B0858F657@busybox.osuosl.org>
+Date: Tue, 11 May 2010 21:21:38 +0200
+Subject: [Buildroot] Buildroot 2010.05-rc2 released
+Message-ID: <87k4ra2qil.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=712788423f8fec5192e378a735d7a96783ef6f5f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/tags/2010.05_rc2
+Buildroot 2010.05-rc2 is released - Go download it at:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+http://buildroot.net/downloads/buildroot-2010.05-rc2.tar.gz
 
-this is a tag, so no patch shown
+or
+
+http://buildroot.net/downloads/buildroot-2010.05-rc2.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.net/buildroot
+
+Please give it a spin and report any problems to the mailing list or bug
+tracker. Many thanks to the people contributing to this release:
+
+git shortlog -s -n 2010.05_rc1..
+    27  Thomas Petazzoni
+    19  Peter Korsgaard
+     5  Gustavo Zacarias
+     2  Paulius Zaleckas
+     1  Luca Ceresoli
+     1  Paul Jones
+
+I'll be away for the rest of the week, but expect 2010.05-rc3 at the end
+of next week (unless no issues are found), and the final 2010.05 release
+hopefully soon thereafter - So please give it a good test.
+
+-- 
+Bye, Peter Korsgaard
