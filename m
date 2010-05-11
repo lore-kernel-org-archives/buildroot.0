@@ -1,42 +1,27 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 11 May 2010 09:13:14 +0200
-Subject: [Buildroot] [git commit master] CHANGES: add updated packages from
-	Thomas' build-fixes branch
-Message-ID: <20100511071424.12922AA7@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 11 May 2010 08:45:04 +0000 (UTC)
+Subject: [Buildroot] [Bug 1747] external toolchain does not include mtd-util
+	headers
+In-Reply-To: <bug-1747-163@https.bugs.busybox.net/>
+References: <bug-1747-163@https.bugs.busybox.net/>
+Message-ID: <20100511084504.E7AFF8F5F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=1747
 
-commit: http://git.buildroot.net/buildroot/commit/?id=49ce10cb3c7de1f6b1e1eafa075fb631a08941cf
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+--- Comment #2 from Matthias Brugger <mensch0815@gmail.com>  ---
+(In reply to comment #1)
+> What would you want Buildroot to do in this case ?
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES |    9 +++++----
- 1 files changed, 5 insertions(+), 4 deletions(-)
+I think it should put the necessary headers in the toolchain folder, or add a
+include statement so that the program builds without manually copying the
+files.
 
-diff --git a/CHANGES b/CHANGES
-index 03eed65..17a8126 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -2,10 +2,11 @@
- 
- 	Fixes all over the tree.
- 
--	Updated/fixed packages: busybox, customize, hal, hostapd,
--	less, libnl, libxcb, mplayer, netplug, pciutils,
--	xdriver_xf86-video-openchrome, usb_modeswitch, usbutils,
--	wpa_supplicant, xapp_bdftopcf, xapp_mkfontdir,
-+	Updated/fixed packages: busybox, customize, gawk, gnuchess,
-+	hal, hostapd, less, libgcrypt, libnl, libxcb, linux-fusion,
-+	ltp-testsuite, mplayer, netplug, pciutils, php, sed,
-+	shared-mime-info usb_modeswitch, usbutils, vlc wpa_supplicant,
-+	xapp_bdftopcf, xapp_mkfontdir, xdriver_xf86-video-openchrome,
- 	xfont_encodings, xlib_libX11, xlib_libXfont, xlib_xtrans,
- 	xproto_fontcacheproto, xproto_fontsproto, xvkbd
- 
 -- 
-1.6.3.3
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
